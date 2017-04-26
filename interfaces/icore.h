@@ -71,6 +71,7 @@ class ITestController;
 class KDEVPLATFORMINTERFACES_EXPORT ICore: public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(KDevelop::IProjectController* projectController READ projectController)
 
 public:
     ~ICore() override;
@@ -79,46 +80,46 @@ public:
     static ICore *self();
 
     /** @return ui controller */
-    Q_SCRIPTABLE virtual KDevelop::IUiController *uiController() = 0;
+    virtual KDevelop::IUiController *uiController() = 0;
 
     /** @return plugin controller */
-    Q_SCRIPTABLE virtual KDevelop::IPluginController *pluginController() = 0;
+    virtual KDevelop::IPluginController *pluginController() = 0;
 
     /** @return project controller */
-    Q_SCRIPTABLE virtual KDevelop::IProjectController *projectController() = 0;
+    virtual KDevelop::IProjectController *projectController() = 0;
 
     /** @return language controller */
-    Q_SCRIPTABLE virtual KDevelop::ILanguageController *languageController() = 0;
+    virtual KDevelop::ILanguageController *languageController() = 0;
 
     /** @return part manager */
-    Q_SCRIPTABLE virtual KDevelop::IPartController *partController() = 0;
+    virtual KDevelop::IPartController *partController() = 0;
 
     /** @return document controller */
-    Q_SCRIPTABLE virtual KDevelop::IDocumentController *documentController() = 0;
+    virtual KDevelop::IDocumentController *documentController() = 0;
 
     /** @return run controller */
-    Q_SCRIPTABLE virtual KDevelop::IRunController *runController() = 0;
+    virtual KDevelop::IRunController *runController() = 0;
 
     /** @return the active session */
-    Q_SCRIPTABLE virtual KDevelop::ISession *activeSession() = 0;
+    virtual KDevelop::ISession *activeSession() = 0;
 
     /** @return the session lock for the active session */
-    Q_SCRIPTABLE virtual KDevelop::ISessionLock::Ptr activeSessionLock() = 0;
+    virtual KDevelop::ISessionLock::Ptr activeSessionLock() = 0;
 
     /** @return the sourceformatter controller */
-    Q_SCRIPTABLE virtual KDevelop::ISourceFormatterController *sourceFormatterController() = 0;
+    virtual KDevelop::ISourceFormatterController *sourceFormatterController() = 0;
 
     /** @return the selection controller */
-    Q_SCRIPTABLE virtual KDevelop::ISelectionController* selectionController() = 0;
+    virtual KDevelop::ISelectionController* selectionController() = 0;
 
     /** @return the documentation controller */
-    Q_SCRIPTABLE virtual KDevelop::IDocumentationController* documentationController() = 0;
+    virtual KDevelop::IDocumentationController* documentationController() = 0;
 
     /** @return the debug controller */
-    Q_SCRIPTABLE virtual KDevelop::IDebugController* debugController() = 0;
+    virtual KDevelop::IDebugController* debugController() = 0;
 
     /** @return the test controller */
-    Q_SCRIPTABLE virtual KDevelop::ITestController* testController() = 0;
+    virtual KDevelop::ITestController* testController() = 0;
 
     /** @return the about data of the framework, different from the main about data which is created by the application */
     virtual KAboutData aboutData() const = 0;

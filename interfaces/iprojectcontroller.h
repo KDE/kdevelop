@@ -46,31 +46,31 @@ public:
     explicit IProjectController( QObject *parent = nullptr );
     ~IProjectController() override;
 
-    Q_SCRIPTABLE virtual KDevelop::IProject* projectAt( int ) const = 0;
-    Q_SCRIPTABLE virtual int projectCount() const = 0;
-    Q_SCRIPTABLE virtual QList<IProject*> projects() const = 0;
+    Q_INVOKABLE virtual KDevelop::IProject* projectAt( int ) const = 0;
+    Q_INVOKABLE virtual int projectCount() const = 0;
+    Q_INVOKABLE virtual QList<IProject*> projects() const = 0;
 
     /**
      * Provides access to the model representing the open projects
      * @returns the model containing the projects and their items
      */
-    Q_SCRIPTABLE virtual ProjectModel* projectModel() = 0;
+    virtual ProjectModel* projectModel() = 0;
     
     
     /**
      * @returns an instance to the model that keeps track of the state 
      * of the files per project.
      */
-    Q_SCRIPTABLE virtual ProjectChangesModel* changesModel() = 0;
+    virtual ProjectChangesModel* changesModel() = 0;
 
-    Q_SCRIPTABLE virtual ProjectBuildSetModel* buildSetModel() = 0;
+    virtual ProjectBuildSetModel* buildSetModel() = 0;
 
     /**
      * Find an open project using the name of the project
      * @param name the name of the project to be found
      * @returns the project or null if no project with that name is open
      */
-    Q_SCRIPTABLE virtual KDevelop::IProject* findProjectByName( const QString& name ) = 0;
+    virtual KDevelop::IProject* findProjectByName( const QString& name ) = 0;
 
     /**
      * Finding an open project for a given file or folder in the project
@@ -78,7 +78,7 @@ public:
      * @returns the first open project containing the url or null if no such
      * project can be found
      */
-    Q_SCRIPTABLE virtual IProject* findProjectForUrl( const QUrl& url ) const = 0;
+    virtual IProject* findProjectForUrl( const QUrl& url ) const = 0;
 
     /**
      * Checks whether the given project name is used already or not. The project
@@ -86,7 +86,7 @@ public:
      * @param name the name of the project to be opened or created
      * @returns whether the name is already used for an open project
      */
-    Q_SCRIPTABLE virtual bool isProjectNameUsed( const QString& name ) const = 0;
+    virtual bool isProjectNameUsed( const QString& name ) const = 0;
 
     virtual QUrl projectsBaseDirectory() const = 0;
 
@@ -102,7 +102,7 @@ public:
      * The returned path always has a training slash.
      * @param format formatting used for the string
      */
-    Q_SCRIPTABLE virtual QString prettyFilePath(const QUrl& url, FormattingOptions format = FormatHtml) const = 0;
+    virtual QString prettyFilePath(const QUrl& url, FormattingOptions format = FormatHtml) const = 0;
     
     /**
      * Returns a pretty short representation of the given url, considering the currently loaded projects:
@@ -110,7 +110,7 @@ public:
      * the full file path.
      * @param format formatting used for the string
      */
-    Q_SCRIPTABLE virtual QString prettyFileName(const QUrl& url, FormattingOptions format = FormatHtml) const = 0;
+    virtual QString prettyFileName(const QUrl& url, FormattingOptions format = FormatHtml) const = 0;
 
     /**
      * @returns whether project files should be parsed or not

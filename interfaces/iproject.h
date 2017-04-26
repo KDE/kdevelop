@@ -77,47 +77,47 @@ public:
      *
      * @return the file manager for the project, if one exists; otherwise null
      */
-    Q_SCRIPTABLE virtual IProjectFileManager* projectFileManager() const = 0;
+    virtual IProjectFileManager* projectFileManager() const = 0;
 
     /**
      * Get the build system manager for the project
      *
      * @return the build system manager for the project, if one exists; otherwise null
      */
-    Q_SCRIPTABLE virtual IBuildSystemManager* buildSystemManager() const = 0;
+    virtual IBuildSystemManager* buildSystemManager() const = 0;
 
     /**
      * Get the plugin that manages the project
      * This can be used to get other interfaces like IBuildSystemManager
      */
-    Q_SCRIPTABLE virtual IPlugin* managerPlugin() const = 0;
+    virtual IPlugin* managerPlugin() const = 0;
 
     /**
      * Get the version control plugin for this project
      * This may return 0 if the project is not under version control
      * or version control has been disabled for this project
      */
-    Q_SCRIPTABLE virtual IPlugin* versionControlPlugin() const = 0;
+    virtual IPlugin* versionControlPlugin() const = 0;
 
     /**
      * With this the top-level project item can be retrieved
      */
-    Q_SCRIPTABLE virtual ProjectFolderItem* projectItem() const = 0;
+    virtual ProjectFolderItem* projectItem() const = 0;
 
     /**
      * @return all items with the corresponding @p path
      */
-    Q_SCRIPTABLE virtual QList<ProjectBaseItem*> itemsForPath( const IndexedString& path ) const = 0;
+    virtual QList<ProjectBaseItem*> itemsForPath( const IndexedString& path ) const = 0;
 
     /**
      * @return all file items with the corresponding @p file path
      */
-    Q_SCRIPTABLE virtual QList<ProjectFileItem*> filesForPath( const IndexedString& file ) const = 0;
+    virtual QList<ProjectFileItem*> filesForPath( const IndexedString& file ) const = 0;
 
     /**
      * @return all folder items with the corresponding @p folder path
      */
-    Q_SCRIPTABLE virtual QList<ProjectFolderItem*> foldersForPath( const IndexedString& folder ) const = 0;
+    virtual QList<ProjectFolderItem*> foldersForPath( const IndexedString& folder ) const = 0;
 
     /**
      * @return the path to the project file
@@ -151,7 +151,7 @@ public:
      *
      * @return true if the path @a path is a part of the project.
      */
-    virtual Q_SCRIPTABLE bool inProject(const IndexedString &path) const = 0;
+    virtual bool inProject(const IndexedString &path) const = 0;
 
     /**
      * @brief Tells the project what job is reloading it

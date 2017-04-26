@@ -122,14 +122,14 @@ public Q_SLOTS:
     @param buddy The buddy document
     @return The opened document
     */
-    Q_SCRIPTABLE IDocument* openDocument( const QUrl &url,
+    IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = nullptr,
             const QString& encoding = {},
             IDocument* buddy = nullptr ) override;
 
-    Q_SCRIPTABLE IDocument* openDocumentFromText( const QString& data ) override;
-    
+    IDocument* openDocumentFromText( const QString& data ) override;
+
     KDevelop::IDocument* openDocument( const QUrl &url, const QString& prefName ) override;
 
     virtual bool closeDocument( const QUrl &url );

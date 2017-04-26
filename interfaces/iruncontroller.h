@@ -47,7 +47,7 @@ public:
     /**
      * Interrogate the current managed jobs
      */
-    Q_SCRIPTABLE virtual QList<KJob*> currentJobs() const = 0;
+    virtual QList<KJob*> currentJobs() const = 0;
 
     /**
      * An enumeration of the possible states for the run controller.

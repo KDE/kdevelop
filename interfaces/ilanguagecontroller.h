@@ -47,12 +47,12 @@ public:
      *
      * The list is empty if the file's language is unsupported.
      */
-    Q_SCRIPTABLE virtual QList<ILanguageSupport*> activeLanguages() = 0;
+    virtual QList<ILanguageSupport*> activeLanguages() = 0;
 
     /**
      *@return the language for given @p name.
      */
-    Q_SCRIPTABLE virtual ILanguageSupport* language(const QString &name) const = 0;
+    virtual ILanguageSupport* language(const QString &name) const = 0;
 
     /**
      * @return the languages that support the MIME type of @p url.
@@ -61,19 +61,19 @@ public:
      *          If it is called from a background thread, it can not
      *          be loaded, and thus zero will be returned.
      */
-    Q_SCRIPTABLE virtual QList<ILanguageSupport*> languagesForUrl(const QUrl &url) = 0;
+    virtual QList<ILanguageSupport*> languagesForUrl(const QUrl &url) = 0;
 
     /** @return All languages currently loaded */
-    Q_SCRIPTABLE virtual QList<ILanguageSupport*> loadedLanguages() const = 0;
+    virtual QList<ILanguageSupport*> loadedLanguages() const = 0;
 
     /** @return the background parser used to parse source files */
-    Q_SCRIPTABLE virtual BackgroundParser *backgroundParser() const = 0;
+    virtual BackgroundParser *backgroundParser() const = 0;
 
     /** @return The global code assistant manager (manages assistants such as the RenameAssistant) */
-    Q_SCRIPTABLE virtual StaticAssistantsManager *staticAssistantsManager() const = 0;
+    virtual StaticAssistantsManager *staticAssistantsManager() const = 0;
 
     /** Access to the completion settings */
-    Q_SCRIPTABLE virtual ICompletionSettings *completionSettings() const = 0;
+    virtual ICompletionSettings *completionSettings() const = 0;
 
     virtual ProblemModelSet* problemModelSet() const = 0;
 };

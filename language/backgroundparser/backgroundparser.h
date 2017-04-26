@@ -80,28 +80,28 @@ public:
      * unless you call in from your job's ThreadWeaver::Job::aboutToBeQueued()
      * function.
      */
-    Q_SCRIPTABLE ParseJob* parseJobForDocument(const IndexedString& document) const;
+    ParseJob* parseJobForDocument(const IndexedString& document) const;
 
     /**
      * Set how many ThreadWeaver threads the background parser should set up and use.
      */
-    Q_SCRIPTABLE void setThreadCount(int threadCount);
+    void setThreadCount(int threadCount);
 
     /**
      * Return how many ThreadWeaver threads the background parser should set up and use.
      */
-    Q_SCRIPTABLE int threadCount() const;
+    int threadCount() const;
 
     /**
      * Set the delay in milliseconds before the background parser starts parsing.
      */
-    Q_SCRIPTABLE void setDelay(int milliseconds);
+    void setDelay(int milliseconds);
 
     /**
      * Returns all documents that were added through addManagedTopRange. This is typically the currently
      * open documents.
      */
-    Q_SCRIPTABLE QList<IndexedString> managedDocuments();
+    QList<IndexedString> managedDocuments();
 
     /**
      * Returns the tracker for the given url if the document is being tracked, else returns zero.

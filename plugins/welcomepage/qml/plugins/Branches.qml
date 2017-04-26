@@ -32,11 +32,11 @@ Column
     Repeater
     {
         width: parent.width
-        model: ICore.projectController().projectCount()
+        model: ICore.projectController.projectCount()
 
         delegate: Column {
             id: del
-            property variant project: ICore.projectController().projectAt(index)
+            property variant project: ICore.projectController.projectAt(index)
             width: parent.width
 
             Heading {

@@ -65,7 +65,7 @@ public:
   /**
    * Return a list of all chains available
    */
-  Q_SCRIPTABLE QList<TopDUContext*> allChains() const;
+  QList<TopDUContext*> allChains() const;
 
   /**
    * Makes sure the standard-context for the given url is up-to-date.
@@ -84,7 +84,7 @@ public:
    * @param priority An optional priority for the job. The lower the value, the higher it's priority.
    * @note The duchain must _not_ be locked when this is called!
    */
-   Q_SCRIPTABLE void updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = nullptr, int priority = 1) const;
+   void updateContextForUrl(const IndexedString& document, TopDUContext::Features minFeatures, QObject* notifyReady = nullptr, int priority = 1) const;
   
    /**
     * Convenience-function similar to updateContextForUrl that blocks this thread until the update of the given document is ready,
@@ -106,21 +106,21 @@ public:
    *
    * @note The duchain must be at least read-locked locked when this is called!
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const QUrl& document, bool proxyContext = false) const;
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document, bool proxyContext = false) const;
+  TopDUContext* chainForDocument(const QUrl& document, bool proxyContext = false) const;
+  TopDUContext* chainForDocument(const IndexedString& document, bool proxyContext = false) const;
 
   /**
    * Return all chains for the given document that are currently in memory.
    * This does not load any chains from disk.
    * */
-  Q_SCRIPTABLE QList<TopDUContext*> chainsForDocument(const QUrl& document) const;
+  QList<TopDUContext*> chainsForDocument(const QUrl& document) const;
 
   /**
    * Return all chains for the given document that are currently in memory.
    * This does not load any chains from disk.
    * Should be preferred over the QUrl version.
    * */
-  Q_SCRIPTABLE QList<TopDUContext*> chainsForDocument(const IndexedString& document) const;
+  QList<TopDUContext*> chainsForDocument(const IndexedString& document) const;
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
@@ -129,7 +129,7 @@ public:
    *
    * @note The duchain must be at least read-locked locked when this is called!
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const QUrl& document, const ParsingEnvironment* environment, bool proxyContext = false) const;
+  TopDUContext* chainForDocument(const QUrl& document, const ParsingEnvironment* environment, bool proxyContext = false) const;
 
   /**
    * Find a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
@@ -140,7 +140,7 @@ public:
    *
    * @note The duchain must be at least read-locked locked when this is called!
    * */
-  Q_SCRIPTABLE TopDUContext* chainForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool proxyContext = false) const;
+  TopDUContext* chainForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool proxyContext = false) const;
 
   /**
    * Find the environment-file of a chain that fits into the given environment. If no fitting chain is found, 0 is returned.
@@ -154,19 +154,19 @@ public:
    *
    * @note The duchain must be at least read-locked locked when this is called!
    * */
-  Q_SCRIPTABLE ParsingEnvironmentFilePointer environmentFileForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool proxyContext = false) const;  
+  ParsingEnvironmentFilePointer environmentFileForDocument(const IndexedString& document, const ParsingEnvironment* environment, bool proxyContext = false) const;
 
-  Q_SCRIPTABLE ParsingEnvironmentFilePointer environmentFileForDocument(IndexedTopDUContext topContext) const;  
+  ParsingEnvironmentFilePointer environmentFileForDocument(IndexedTopDUContext topContext) const;
   
   /**
    * Returns the list of the environment-infos of all versions of the given document.
    */
-  Q_SCRIPTABLE QList<ParsingEnvironmentFilePointer> allEnvironmentFiles(const IndexedString& document);
+  QList<ParsingEnvironmentFilePointer> allEnvironmentFiles(const IndexedString& document);
   
   ///Returns the top-context that has the given index assigned, or zero if it doesn't exist. @see TopDUContext::ownIndex
   ///The duchain must be read-locked when this is called
   ///This function is inlined because it is called in a very high frequency
-  Q_SCRIPTABLE inline TopDUContext* chainForIndex(uint index)
+  inline TopDUContext* chainForIndex(uint index)
   {
     if(m_deleted)
       return nullptr;
@@ -187,28 +187,28 @@ public:
   }
 
   ///Returns the url for the given top-context index if available. This does have some cost, so avoid it when possible.
-  Q_SCRIPTABLE IndexedString urlForIndex(uint index) const;
+  IndexedString urlForIndex(uint index) const;
   
   /// Only used for debugging at the moment
-  Q_SCRIPTABLE QList<QUrl> documents() const;
+  QList<QUrl> documents() const;
 
   /// Only used for debugging at the moment
   /// Prefer that over the QUrl version for performance reasons
-  Q_SCRIPTABLE QList<IndexedString> indexedDocuments() const;
+  QList<IndexedString> indexedDocuments() const;
 
   /**
    * Registers a new definition-use \a chain for the given \a document.
    */
-  Q_SCRIPTABLE void addDocumentChain(TopDUContext* chain);
+  void addDocumentChain(TopDUContext* chain);
 
   /// Returns true if the global duchain instance has already been deleted
-  Q_SCRIPTABLE static bool deleted();
+  static bool deleted();
   
   /// Returns the global static instance.
-  Q_SCRIPTABLE static DUChain* self();
+  static DUChain* self();
 
   /// Returns the structure that manages mapping between definitions and declarations
-  Q_SCRIPTABLE static Definitions* definitions();
+  static Definitions* definitions();
 
   /// Returns the structure that manages mapping between declarations, and which top level contexts contain uses of them.
   static Uses* uses();
@@ -223,15 +223,15 @@ public:
    *
    * \threadsafe
    */
-  Q_SCRIPTABLE static DUChainLock* lock();
+  static DUChainLock* lock();
 
   /// Returns whether the top-context with the given index is currently loaded in memory
-  Q_SCRIPTABLE bool isInMemory(uint topContextIndex) const;
+  bool isInMemory(uint topContextIndex) const;
   
   /**
    * Changes the environment attached to the given top-level context, and updates the management-structures to reflect that
    * */
-  Q_SCRIPTABLE void updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file );
+  void updateContextEnvironment( TopDUContext* context, ParsingEnvironmentFile* file );
 
   ///Allocates a new identity for a new top-context, no lock needed. The returned value is never zero
   static uint newTopContextIndex();

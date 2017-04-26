@@ -154,12 +154,12 @@ public:
     /**
      * Signal the plugin that it should cleanup since it will be unloaded soon.
      */
-    Q_SCRIPTABLE virtual void unload();
+    virtual void unload();
 
     /**
      * Provides access to the ICore implementation
      */
-    Q_SCRIPTABLE ICore *core() const;
+    ICore *core() const;
 
     /**
      * Convenience API to access an interface inherited by this plugin

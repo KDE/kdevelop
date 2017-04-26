@@ -128,7 +128,7 @@ public:
     void setSequentialProcessingFlags(SequentialProcessingFlags flags);
 
     /// \returns the indexed url of the document to be parsed.
-    Q_SCRIPTABLE KDevelop::IndexedString document() const;
+    KDevelop::IndexedString document() const;
 
     /**
     * Sets a list of QObjects that should contain a slot
@@ -136,28 +136,28 @@ public:
     * The notification is guaranteed to be called once the parse-job finishes, from within its destructor.
     * The given top-context may be invalid if the update failed.
     */
-    Q_SCRIPTABLE void setNotifyWhenReady(const QList<QPointer<QObject> >& notify);
+    void setNotifyWhenReady(const QList<QPointer<QObject> >& notify);
 
     /// Sets the du-context that was created by this parse-job
-    Q_SCRIPTABLE virtual void setDuChain(ReferencedTopDUContext duChain);
+    virtual void setDuChain(ReferencedTopDUContext duChain);
     /// Returns the set du-context, or zero of none was set.
-    Q_SCRIPTABLE virtual ReferencedTopDUContext duChain() const;
+    virtual ReferencedTopDUContext duChain() const;
 
     /// Overridden to allow jobs to determine if they've been requested to abort
-    Q_SCRIPTABLE void requestAbort() override;
+    void requestAbort() override;
     /// Determine if the job has been requested to abort
-    Q_SCRIPTABLE bool abortRequested() const;
+    bool abortRequested() const;
     /// Sets success to false, causing failed() to be emitted
-    Q_SCRIPTABLE void abortJob();
+    void abortJob();
 
     /// Overridden to convey whether the job succeeded or not.
-    Q_SCRIPTABLE bool success() const override;
+    bool success() const override;
 
     /// Set the minimum features the resulting top-context should have
-    Q_SCRIPTABLE void setMinimumFeatures(TopDUContext::Features features);
+    void setMinimumFeatures(TopDUContext::Features features);
 
     /// Minimum set of features the resulting top-context should have
-    Q_SCRIPTABLE TopDUContext::Features minimumFeatures() const;
+    TopDUContext::Features minimumFeatures() const;
 
     /// Allows statically specifying an amount of features required for an url.
     /// These features will automatically be or'ed with the minimumFeatures() returned

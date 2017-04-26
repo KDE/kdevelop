@@ -71,32 +71,32 @@ public:
      * @param url The Url of the document.
      * @return The corresponding document, or null if not found.
      */
-    Q_SCRIPTABLE virtual KDevelop::IDocument* documentForUrl( const QUrl & url ) const = 0;
+    virtual KDevelop::IDocument* documentForUrl( const QUrl & url ) const = 0;
 
     /// @return The list of all open documents
-    Q_SCRIPTABLE virtual QList<KDevelop::IDocument*> openDocuments() const = 0;
+    virtual QList<KDevelop::IDocument*> openDocuments() const = 0;
 
     /**
      * Returns the curently active or focused document.
      *
      * @return The active document.
      */
-    Q_SCRIPTABLE virtual KDevelop::IDocument* activeDocument() const = 0;
+    virtual KDevelop::IDocument* activeDocument() const = 0;
 
-    Q_SCRIPTABLE virtual void activateDocument( KDevelop::IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() ) = 0;
+    virtual void activateDocument( KDevelop::IDocument * document, const KTextEditor::Range& range = KTextEditor::Range::invalid() ) = 0;
 
     virtual void registerDocumentForMimetype( const QString&, KDevelop::IDocumentFactory* ) = 0;
 
-    Q_SCRIPTABLE virtual bool saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
-    Q_SCRIPTABLE virtual bool saveSomeDocuments(const QList<IDocument*>& list, KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
-    Q_SCRIPTABLE virtual bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false) = 0;
+    virtual bool saveAllDocuments(KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
+    virtual bool saveSomeDocuments(const QList<IDocument*>& list, KDevelop::IDocument::DocumentSaveMode mode = KDevelop::IDocument::Default) = 0;
+    virtual bool saveAllDocumentsForWindow(KParts::MainWindow* mw, IDocument::DocumentSaveMode mode, bool currentAreaOnly = false) = 0;
 
     /// Opens a text document containing the @p data text.
-    Q_SCRIPTABLE virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) = 0;
+    virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) = 0;
 
     virtual IDocumentFactory* factory(const QString& mime) const = 0;
     
-    Q_SCRIPTABLE virtual KTextEditor::Document* globalTextEditorInstance()=0;
+    virtual KTextEditor::Document* globalTextEditorInstance()=0;
 
     /**
      * @returns the KTextEditor::View of the current document, in case it is a text document
@@ -146,7 +146,7 @@ public Q_SLOTS:
      *              If a buddy was found (or passed) @p url will be opened next
      *              to its buddy.
      */
-    virtual Q_SCRIPTABLE bool openDocument(IDocument* doc,
+    virtual bool openDocument(IDocument* doc,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
             DocumentActivationParams activationParams = nullptr,
             IDocument* buddy = nullptr) = 0;

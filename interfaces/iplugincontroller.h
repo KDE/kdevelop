@@ -92,7 +92,7 @@ public:
     /**
      * Get a list of currently loaded plugins
      */
-    Q_SCRIPTABLE virtual QList<IPlugin*> loadedPlugins() const = 0;
+    virtual QList<IPlugin*> loadedPlugins() const = 0;
 
     /**
      * @brief Unloads the plugin specified by @p plugin
@@ -100,7 +100,7 @@ public:
      * @param plugin The name of the plugin as specified by the
      * X-KDE-PluginInfo-Name key of the .desktop file for the plugin
      */
-    Q_SCRIPTABLE virtual bool unloadPlugin( const QString & plugin ) = 0;
+    virtual bool unloadPlugin( const QString & plugin ) = 0;
 
     /**
      * @brief Loads the plugin specified by @p pluginName
@@ -108,7 +108,7 @@ public:
      * @param pluginName the name of the plugin, as given in the X-KDE-PluginInfo-Name property
      * @returns a pointer to the plugin instance or 0
      */
-    Q_SCRIPTABLE virtual IPlugin* loadPlugin( const QString & pluginName ) = 0;
+    virtual IPlugin* loadPlugin( const QString & pluginName ) = 0;
 
      /**
      * Retrieve a plugin which supports the given extension interface.
@@ -126,7 +126,7 @@ public:
      * @param constraints A map of constraints on other plugin info properties.
      * @return A KDevelop extension plugin for given service type or 0 if no plugin supports it
      */
-    Q_SCRIPTABLE virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) = 0;
+    virtual IPlugin *pluginForExtension(const QString &extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) = 0;
 
      /**
      * Retrieve a list of plugins which supports the given extension interface.

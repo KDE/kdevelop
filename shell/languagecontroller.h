@@ -47,7 +47,7 @@ public:
     /** @copydoc ILanguageController::languageForUrl() */
     QList<ILanguageSupport*> languagesForUrl(const QUrl &url) override;
     /** @copydoc ILanguageController::backgroundParser() */
-    Q_SCRIPTABLE BackgroundParser *backgroundParser() const override;
+    BackgroundParser *backgroundParser() const override;
 
     StaticAssistantsManager *staticAssistantsManager() const override;
 
