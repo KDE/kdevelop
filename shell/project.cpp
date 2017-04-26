@@ -26,7 +26,6 @@
 
 #include "project.h"
 
-#include <QDBusConnection>
 #include <QDebug>
 #include <QSet>
 #include <QTemporaryFile>
@@ -408,8 +407,6 @@ Project::Project( QObject *parent )
         : IProject( parent )
         , d( new ProjectPrivate )
 {
-    QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/Project"), this, QDBusConnection::ExportScriptableSlots );
-
     d->project = this;
     d->manager = nullptr;
     d->topItem = nullptr;
