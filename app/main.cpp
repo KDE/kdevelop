@@ -403,6 +403,10 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( i18n("Sascha Cunz") , i18n( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), "mail@sacu.de" );
     aboutData.addCredit( i18n("Zoran Karavla"), i18n( "Artwork for the ruby language" ), "webmaster@the-error.net", "http://the-error.net" );
 
+    KAboutData::setApplicationData(aboutData);
+    // set icon for shells which do not use desktop file metadata
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("kdevelop")));
+
     KCrash::initialize();
 
     Kdelibs4ConfigMigrator migrator(QStringLiteral("kdevelop"));
@@ -416,7 +420,6 @@ int main( int argc, char *argv[] )
     qCDebug(APP) << "Startup";
 
     QCommandLineParser parser;
-    KAboutData::setApplicationData(aboutData);
     parser.addVersionOption();
     parser.addHelpOption();
     aboutData.setupCommandLine(&parser);
