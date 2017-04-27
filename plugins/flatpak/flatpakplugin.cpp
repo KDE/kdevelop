@@ -42,6 +42,8 @@
 #include <KLocalizedString>
 #include <KParts/MainWindow>
 #include <KJob>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevFlatpakFactory, "kdevflatpak.json", registerPlugin<FlatpakPlugin>();)
 
@@ -199,7 +201,8 @@ void FlatpakPlugin::executeOnRemoteDevice()
     const auto runtime = qobject_cast<FlatpakRuntime*>(ICore::self()->runtimeController()->currentRuntime());
     Q_ASSERT(runtime);
 
-    static QString lastDeviceAddress;
+    KConfigGroup group(KSharedConfig::openConfig(), "Flatpak");
+    const QString lastDeviceAddress = group.readEntry("DeviceAddress");
     const QString host = QInputDialog::getText(
         ICore::self()->uiController()->activeMainWindow(), i18n("Choose tag name..."),
         i18n("Device hostname"),
@@ -207,7 +210,7 @@ void FlatpakPlugin::executeOnRemoteDevice()
     );
     if (host.isEmpty())
         return;
-    lastDeviceAddress = host;
+    group.writeEntry("DeviceAddress", host);
 
     QTemporaryFile* file = new QTemporaryFile(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1Char('/') + runtime->name() + "XXXXXX.flatpak");
     file->open();
