@@ -28,8 +28,6 @@
 #include "uicontroller.h"
 #include "mainwindow.h"
 
-#include "runtimesmodel.h"
-
 using namespace KDevelop;
 
 class IdentityRuntime : public IRuntime
@@ -56,7 +54,6 @@ class IdentityRuntime : public IRuntime
 KDevelop::RuntimeController::RuntimeController(KDevelop::Core* core)
     : m_runtimesMenu(new QMenu())
 {
-    m_model = new RuntimesModel(this);
     addRuntimes({new IdentityRuntime});
     setCurrentRuntime(m_runtimes.constFirst());
 
@@ -116,9 +113,7 @@ void KDevelop::RuntimeController::setCurrentRuntime(KDevelop::IRuntime* runtime)
 
 void KDevelop::RuntimeController::addRuntimes(const QVector<KDevelop::IRuntime *>& runtimes)
 {
-    m_model->beginInsertRows({}, m_runtimes.size(), m_runtimes.size()+runtimes.size());
     m_runtimes << runtimes;
-    m_model->endInsertRows();
 
     for(auto runtime : runtimes) {
         QAction* runtimeAction = new QAction(runtime->name(), m_runtimesMenu.data());
@@ -132,11 +127,6 @@ void KDevelop::RuntimeController::addRuntimes(const QVector<KDevelop::IRuntime *
 
         m_runtimesMenu->addAction(runtimeAction);
     }
-}
-
-KDevelop::RuntimesModel * KDevelop::RuntimeController::model() const
-{
-    return m_model;
 }
 
 void KDevelop::RuntimeController::setRuntimeAt(int pos)

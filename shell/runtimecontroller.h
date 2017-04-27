@@ -33,7 +33,6 @@ namespace KDevelop
 class Core;
 class Context;
 class ContextMenuExtension;
-class RuntimesModel;
 
 class RuntimeController : public IRuntimeController
 {
@@ -51,13 +50,10 @@ public:
     KDevelop::IRuntime * currentRuntime() const override;
     void setCurrentRuntime(KDevelop::IRuntime * runtime) override;
 
-    RuntimesModel* model() const;
-
 private:
     void setRuntimeAt(int pos);
 
     QScopedPointer<QMenu> const m_runtimesMenu;
-    RuntimesModel* m_model = nullptr;
     QVector<IRuntime*> m_runtimes;
     IRuntime* m_currentRuntime = nullptr;
 };
