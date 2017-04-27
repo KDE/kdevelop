@@ -59,7 +59,6 @@ class IndexedString;
 class KDEVPLATFORMINTERFACES_EXPORT IProject : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kdevelop.Project")
     Q_PROPERTY(QString projectName READ name CONSTANT)
 public:
     /**
