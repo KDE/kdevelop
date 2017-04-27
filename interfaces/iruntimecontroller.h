@@ -27,9 +27,17 @@ namespace KDevelop {
 class IRuntime;
 
 /**
- * Exposes runtimes.
+ * @brief Exposes runtimes
  *
- * @author Aleix Pol <aleixpol@kde.org>
+ * Makes it possible to have the IDE develop for different platforms other
+ * than the local host by having available different runtimes that will give
+ * access to the target systems.
+ *
+ * Allows to add runtimes, list them and offer a currentRuntime.
+ * The currentRuntime will be the runtime towards which all the runtime and build
+ * information * gathered by the IDE will be fetched from.
+ *
+ * @see IRuntime
  */
 class KDEVPLATFORMINTERFACES_EXPORT IRuntimeController: public QObject
 {
@@ -38,12 +46,25 @@ public:
     IRuntimeController();
     ~IRuntimeController() override;
 
+    /**
+     * Makes @p runtimes available to be used.
+     */
     virtual void addRuntimes(const QVector<KDevelop::IRuntime*> &runtimes) = 0;
 
+    /**
+     * Lists available runtimes
+     */
     virtual QVector<IRuntime*> availableRuntimes() const = 0;
 
-    virtual void setCurrentRuntime(IRuntime* doc) = 0;
+    /**
+     * Sets @p runtime as the currently used runtime and emits currentRuntimeChanged
+     * so the IDE can adapt, if necessary.
+     */
+    virtual void setCurrentRuntime(IRuntime* runtime) = 0;
 
+    /**
+     * @returns the current runtime
+     */
     virtual IRuntime* currentRuntime() const = 0;
 
 Q_SIGNALS:

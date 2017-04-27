@@ -32,13 +32,14 @@ namespace KDevelop
 class Path;
 
 /**
- * A runtime represents an environment that will be targetted
+ * A runtime represents an environment we develop against
  *
- * It allows the IDE to interact with virtual systems that live in different
- * namespaces.
+ * It allows the IDE to interact with systems that differ from process where
+ * the process we are running in.
  *
- * It allows to execute processes in them and translate the paths these runtimes
- * offer into ones that will be visible to our process to interact with.
+ * It allows to execute processes into them and translate the paths these runtimes
+ * offer into ones that will be visible to our process so we can introspect the
+ * platform we are developing for as well.
  */
 class KDEVPLATFORMINTERFACES_EXPORT IRuntime : public QObject
 {
@@ -49,13 +50,39 @@ public:
     /** @returns a display string that identifies the runtime */
     virtual QString name() const = 0;
 
+    /**
+     * Adapts the @p process and starts it within the environment
+     *
+     * Gives an opportunity to the runtime to set up environment variables
+     * or process the execution in any way necessary.
+     */
     virtual void startProcess(QProcess* process) = 0;
+
+    /**
+     * @see startProcess(QProcess*)
+     */
     virtual void startProcess(KProcess* process) = 0;
 
+    /**
+     * Given a @p localPath from our process's file system
+     * @returns the path that the runtime's environment can use
+     */
     virtual Path pathInRuntime(const Path& localPath) = 0;
+
+    /**
+     * Given a @p runtimePath from the runtime
+     * @returns the path in our file system scope that maps to the runtime's
+     */
     virtual Path pathInHost(const Path& runtimePath) = 0;
 
+protected:
+    friend class RuntimeController;
+
+    /**
+     * notifies the runtime about its availability
+     */
     virtual void setEnabled(bool enabled) = 0;
+
 };
 
 }
