@@ -10,12 +10,6 @@
     <height>94</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>250</width>
-    <height>50</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string>Address selector</string>
   </property>

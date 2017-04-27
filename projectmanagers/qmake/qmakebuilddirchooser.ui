@@ -10,12 +10,6 @@
     <height>200</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>600</width>
-    <height>200</height>
-   </size>
-  </property>
   <layout class="QFormLayout" name="formLayout">
    <property name="fieldGrowthPolicy">
     <enum>QFormLayout::ExpandingFieldsGrow</enum>
