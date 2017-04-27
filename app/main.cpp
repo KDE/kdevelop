@@ -306,6 +306,32 @@ int main( int argc, char *argv[] )
     }
 #endif
 
+    //we can't use KCmdLineArgs as it doesn't allow arguments for the debugee
+    //so lookup the --debug switch and eat everything behind by decrementing argc
+    //debugArgs is filled with args after --debug <debuger>
+    QStringList debugArgs;
+    QString debugeeName;
+    {
+        bool debugFound = false;
+        int c = argc;
+        for (int i=0; i < c; ++i) {
+            if (debugFound) {
+                debugArgs << argv[i];
+            } else if ((qstrcmp(argv[i], "--debug") == 0) || (qstrcmp(argv[i], "-d") == 0)) {
+                if (argc > (i + 1)) {
+                    i++;
+                }
+                argc = i + 1;
+                debugFound = true;
+            } else if (QString(argv[i]).startsWith(QLatin1String("--debug="))) {
+                argc = i + 1;
+                debugFound = true;
+            }
+        }
+    }
+
+    KDevelopApplication app(argc, argv);
+
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( QStringLiteral("kdevelop"), i18n( "KDevelop" ), QByteArray(VERSION), i18n(description), KAboutLicense::GPL,
                           i18n("Copyright 1999-2017, The KDevelop developers"), QString(), QStringLiteral("https://www.kdevelop.org/"));
@@ -370,32 +396,9 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( i18n("Sascha Cunz") , i18n( "Cleanup and bugfixes for qEditor, AutoMake and much other stuff" ), QStringLiteral("mail@sacu.de") );
     aboutData.addCredit( i18n("Zoran Karavla"), i18n( "Artwork for the ruby language" ), QStringLiteral("webmaster@the-error.net"), QStringLiteral("http://the-error.net") );
 
-
-    //we can't use KCmdLineArgs as it doesn't allow arguments for the debugee
-    //so lookup the --debug switch and eat everything behind by decrementing argc
-    //debugArgs is filled with args after --debug <debuger>
-    QStringList debugArgs;
-    QString debugeeName;
-    {
-        bool debugFound = false;
-        int c = argc;
-        for (int i=0; i < c; ++i) {
-            if (debugFound) {
-                debugArgs << argv[i];
-            } else if ((qstrcmp(argv[i], "--debug") == 0) || (qstrcmp(argv[i], "-d") == 0)) {
-                if (argc > (i + 1)) {
-                    i++;
-                }
-                argc = i + 1;
-                debugFound = true;
-            } else if (QString(argv[i]).startsWith(QLatin1String("--debug="))) {
-                argc = i + 1;
-                debugFound = true;
-            }
-        }
-    }
-
-    KDevelopApplication app(argc, argv);
+    KAboutData::setApplicationData(aboutData);
+    // set icon for shells which do not use desktop file metadata
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("kdevelop")));
 
     KCrash::initialize();
 
@@ -410,7 +413,6 @@ int main( int argc, char *argv[] )
     qCDebug(APP) << "Startup";
 
     QCommandLineParser parser;
-    KAboutData::setApplicationData(aboutData);
     parser.addVersionOption();
     parser.addHelpOption();
     aboutData.setupCommandLine(&parser);
@@ -645,8 +647,6 @@ int main( int argc, char *argv[] )
     // register a DBUS service for this process, so that we can open files in it from other invocations
     QDBusConnection::sessionBus().registerService(QStringLiteral("org.kdevelop.kdevelop-%1").arg(app.applicationPid()));
 
-//     TODO: port to kf5
-//     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
     if (!QProcessEnvironment::systemEnvironment().contains(QStringLiteral("KDEV_DISABLE_WELCOMEPAGE"))) {
         core->pluginController()->loadPlugin(QStringLiteral("KDevWelcomePage"));
