@@ -37,8 +37,13 @@ private:
     void runtimeChanged(KDevelop::IRuntime* newRuntime);
     void rebuildCurrent();
     void exportCurrent();
+    void setupArches();
+    void executeOnRemoteDevice();
+    void createRuntime(const KDevelop::Path &file, const QString &arch);
 
     QHash<KDevelop::Path, KDevelop::IRuntime *> m_runtimes;
+    QString m_defaultArch;
+    QStringList m_availableArches;
 };
 
 #endif

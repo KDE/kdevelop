@@ -4,6 +4,7 @@
  <Menu name="run">
   <Action name="runtime_flatpak_rebuild" group="runtime"/>
   <Action name="runtime_flatpak_export" group="runtime"/>
+  <Action name="runtime_flatpak_remote" group="runtime"/>
  </Menu>
 </MenuBar>
 </gui>

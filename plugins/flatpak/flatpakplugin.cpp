@@ -21,15 +21,21 @@
 #include <interfaces/icore.h>
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <project/projectmodel.h>
+#include <util/executecompositejob.h>
 #include <QDebug>
 #include <QStandardPaths>
 #include <QAction>
 #include <QProcess>
 #include <QRegularExpression>
+#include <QInputDialog>
 #include <QTemporaryDir>
+#include <QTemporaryFile>
+#include <QMenu>
 #include <QFileDialog>
 #include <KPluginFactory>
 #include <KActionCollection>
@@ -41,6 +47,32 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevFlatpakFactory, "kdevflatpak.json", registerPlugi
 
 using namespace KDevelop;
 
+void FlatpakPlugin::setupArches()
+{
+    QProcess* defaultArchProcess = new QProcess;
+    QProcess* supportedArchesProcess = new QProcess;
+
+    connect(supportedArchesProcess, QOverload<int>::of(&QProcess::finished), supportedArchesProcess, [this, supportedArchesProcess]() {
+        supportedArchesProcess->deleteLater();
+
+        QStringList arches;
+        QTextStream stream(supportedArchesProcess);
+        while (!stream.atEnd()) {
+            arches << stream.readLine();
+        }
+        qDebug() << "flatpak arches..." << arches;
+        m_availableArches = arches;
+    });
+    connect(defaultArchProcess, QOverload<int>::of(&QProcess::finished), defaultArchProcess, [this, defaultArchProcess]() {
+        defaultArchProcess->deleteLater();
+
+        m_defaultArch = QString::fromLatin1(defaultArchProcess->readAllStandardOutput()).trimmed();
+    });
+
+    supportedArchesProcess->start("flatpak", {"--supported-arches"});
+    defaultArchProcess->start("flatpak", {"--default-arch"});
+}
+
 FlatpakPlugin::FlatpakPlugin(QObject *parent, const QVariantList & /*args*/)
     : KDevelop::IPlugin( QStringLiteral("kdevflatpak"), parent )
 {
@@ -48,15 +80,22 @@ FlatpakPlugin::FlatpakPlugin(QObject *parent, const QVariantList & /*args*/)
 
     auto action = new QAction(QIcon::fromTheme(QStringLiteral("run-build-clean")), i18n("Rebuild environment"), this);
     action->setWhatsThis(i18n("Recompiles all dependencies for a fresh environment."));
-    action->setShortcut(Qt::CTRL | Qt::META | Qt::Key_X);
+    ac->setDefaultShortcut(action, Qt::CTRL | Qt::META | Qt::Key_X);
     connect(action, &QAction::triggered, this, &FlatpakPlugin::rebuildCurrent);
     ac->addAction(QStringLiteral("runtime_flatpak_rebuild"), action);
 
-    auto exportAction = new QAction(QIcon::fromTheme(QStringLiteral("document-export")), i18n("Export flatpak environment..."), this);
+    auto exportAction = new QAction(QIcon::fromTheme(QStringLiteral("document-export")), i18n("Export flatpak bundle..."), this);
     exportAction->setWhatsThis(i18n("Exports the current build into a 'bundle.flatpak' file."));
-    exportAction->setShortcut(Qt::CTRL | Qt::META | Qt::Key_E);
+    ac->setDefaultShortcut(exportAction, Qt::CTRL | Qt::META | Qt::Key_E);
     connect(exportAction, &QAction::triggered, this, &FlatpakPlugin::exportCurrent);
     ac->addAction(QStringLiteral("runtime_flatpak_export"), exportAction);
+
+    auto remoteAction = new QAction(QIcon::fromTheme(QStringLiteral("folder-remote-symbolic")), i18n("Send to device..."), this);
+    ac->setDefaultShortcut(remoteAction, Qt::CTRL | Qt::META | Qt::Key_D);
+    connect(remoteAction, &QAction::triggered, this, &FlatpakPlugin::executeOnRemoteDevice);
+    ac->addAction(QStringLiteral("runtime_flatpak_remote"), remoteAction);
+
+    setupArches();
 
     runtimeChanged(ICore::self()->runtimeController()->currentRuntime());
 
@@ -70,15 +109,16 @@ void FlatpakPlugin::runtimeChanged(KDevelop::IRuntime* newRuntime)
 {
     const bool isFlatpak = qobject_cast<FlatpakRuntime*>(newRuntime);
 
-    for(auto action: actionCollection()->actions())
+    for(auto action: actionCollection()->actions()) {
         action->setEnabled(isFlatpak);
+    }
 }
 
 void FlatpakPlugin::rebuildCurrent()
 {
     const auto runtime = qobject_cast<FlatpakRuntime*>(ICore::self()->runtimeController()->currentRuntime());
     Q_ASSERT(runtime);
-    runtime->rebuild();
+    ICore::self()->runController()->registerJob(runtime->rebuild());
 }
 
 void FlatpakPlugin::exportCurrent()
@@ -86,11 +126,27 @@ void FlatpakPlugin::exportCurrent()
     const auto runtime = qobject_cast<FlatpakRuntime*>(ICore::self()->runtimeController()->currentRuntime());
     Q_ASSERT(runtime);
 
-    const QString name = runtime->name();
-    const QString path = QFileDialog::getSaveFileName(ICore::self()->uiController()->activeMainWindow(), i18n("Export %1 to..."), {}, i18n("Flatpak Bundle (*.flatpak)"));
+    const QString path = QFileDialog::getSaveFileName(ICore::self()->uiController()->activeMainWindow(), i18n("Export %1 to...", runtime->name()), {}, i18n("Flatpak Bundle (*.flatpak)"));
     if (!path.isEmpty()) {
-        runtime->exportBundle(path);
+        ICore::self()->runController()->registerJob(new ExecuteCompositeJob(runtime, runtime->exportBundle(path)));
     }
+}
+
+void FlatpakPlugin::createRuntime(const KDevelop::Path &file, const QString &arch)
+{
+    QTemporaryDir dir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/kdevelop-flatpak-"));
+    dir.setAutoRemove(false);
+
+    const KDevelop::Path path(dir.path());
+
+    auto process = FlatpakRuntime::createBuildDirectory(path, file, arch);
+    connect(process, &KJob::finished, this, [this, path, file, arch] (KJob* job) {
+        if (job->error() != 0)
+            return;
+
+        ICore::self()->runtimeController()->addRuntimes({new FlatpakRuntime(path, file, arch)});
+    });
+    process->start();
 }
 
 KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Context* context)
@@ -123,24 +179,13 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
         foreach(const QUrl &url, urls) {
             const KDevelop::Path file(url);
 
-            auto action = new QAction(i18n("Create flatpak environment for %1", file.lastPathSegment()), this);
-            connect(action, &QAction::triggered, this, [this, file]() {
-                QTemporaryDir dir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/kdevelop-flatpak-"));
-                dir.setAutoRemove(false);
-
-                const KDevelop::Path path(dir.path());
-
-                auto process = FlatpakRuntime::createBuildDirectory(path, file);
-                connect(process, &KJob::finished, this, [this, path, file] (KJob* job) {
-                    if (job->error() != 0)
-                        return;
-
-                    auto runtime = new FlatpakRuntime(path, file);
-                    ICore::self()->runtimeController()->addRuntimes({runtime});
+            foreach(const QString &arch, m_availableArches) {
+                auto action = new QAction(i18n("Create flatpak environment for %1 for %2", file.lastPathSegment(), arch), this);
+                connect(action, &QAction::triggered, this, [this, file, arch]() {
+                    createRuntime(file, arch);
                 });
-                process->start();
-            });
-            ext.addAction(KDevelop::ContextMenuExtension::RunGroup, action);
+                ext.addAction(KDevelop::ContextMenuExtension::RunGroup, action);
+            }
         }
 
         return ext;
@@ -149,5 +194,28 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
     return KDevelop::IPlugin::contextMenuExtension( context );
 }
 
+void FlatpakPlugin::executeOnRemoteDevice()
+{
+    const auto runtime = qobject_cast<FlatpakRuntime*>(ICore::self()->runtimeController()->currentRuntime());
+    Q_ASSERT(runtime);
+
+    static QString lastDeviceAddress;
+    const QString host = QInputDialog::getText(
+        ICore::self()->uiController()->activeMainWindow(), i18n("Choose tag name..."),
+        i18n("Device hostname"),
+        QLineEdit::Normal, lastDeviceAddress
+    );
+    if (host.isEmpty())
+        return;
+    lastDeviceAddress = host;
+
+    QTemporaryFile* file = new QTemporaryFile(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1Char('/') + runtime->name() + "XXXXXX.flatpak");
+    file->open();
+    file->close();
+    auto job = runtime->executeOnDevice(host, file->fileName());
+    file->setParent(file);
+
+    ICore::self()->runController()->registerJob(job);
+}
 
 #include "flatpakplugin.moc"

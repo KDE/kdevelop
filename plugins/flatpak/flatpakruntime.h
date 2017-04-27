@@ -24,15 +24,16 @@
 #include <QAction>
 
 class KJob;
+class FlatpakPlugin;
 
 class FlatpakRuntime : public KDevelop::IRuntime
 {
     Q_OBJECT
 public:
-    FlatpakRuntime(const KDevelop::Path &buildDirectory, const KDevelop::Path &file);
+    FlatpakRuntime(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch);
     ~FlatpakRuntime() override;
 
-    QString name() const override { return m_file.lastPathSegment(); }
+    QString name() const override;
 
     void setEnabled(bool enabled) override;
 
@@ -41,14 +42,18 @@ public:
     KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) override { return runtimePath; }
     KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) override { return localPath; }
 
-    static KJob* createBuildDirectory(const KDevelop::Path &path, const KDevelop::Path &file);
+    static KJob* createBuildDirectory(const KDevelop::Path &path, const KDevelop::Path &file, const QString &arch);
 
-    void rebuild();
-    void exportBundle(const QString &path);
+    KJob* rebuild();
+    QList<KJob*> exportBundle(const QString &path);
+    KJob* executeOnDevice(const QString &host, const QString &path);
 
 private:
+    QJsonObject config() const;
+
     const KDevelop::Path m_file;
     const KDevelop::Path m_buildDirectory;
+    const QString m_arch;
 };
 
 #endif
