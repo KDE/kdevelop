@@ -471,7 +471,11 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex)
 
                 if(c.isCorrect()) {
                     QString key = keys.value(c.name());
-                    if (!key.isEmpty()) {
+
+                    // Use cache only when the config value is not set. Without this check we will always
+                    // overwrite values provided by the user in config dialog.
+                    if (!key.isEmpty() && !c.value().isEmpty() && buildDirGrp.readEntry(key).isEmpty())
+                    {
                         buildDirGrp.writeEntry( key, c.value() );
                     }
                 }
