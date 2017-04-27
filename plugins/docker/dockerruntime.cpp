@@ -18,6 +18,7 @@
 
 #include "dockerruntime.h"
 #include "dockerpreferencessettings.h"
+#include "debug_docker.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
@@ -72,7 +73,8 @@ void DockerRuntime::startProcess(QProcess* process)
     const QStringList args = QStringList{QStringLiteral("run"), "--rm"} << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program() << process->arguments();
     process->setProgram("docker");
     process->setArguments(args);
-    qDebug() << "run..." << process->program() << args;
+
+    qCDebug(DOCKER) << "starting qprocess" << process->program() << process->arguments();
     process->start();
 }
 
@@ -80,7 +82,7 @@ void DockerRuntime::startProcess(KProcess* process)
 {
     process->setProgram(QStringList{ "docker", "run", "--rm" } << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program());
 
-    qDebug() << "yokai!" << process << process->program().join(' ');
+    qCDebug(DOCKER) << "starting kprocess" << process->program().join(' ');
     process->start();
 }
 
@@ -93,7 +95,7 @@ KDevelop::Path DockerRuntime::pathInHost(const KDevelop::Path& runtimePath)
         const int index = relPath.indexOf(QLatin1Char('/'));
         auto project = ICore::self()->projectController()->findProjectByName(relPath.left(index));
         if (!project) {
-            qWarning() << "No project for" << relPath;
+            qCWarning(DOCKER) << "No project for" << relPath;
         } else {
             const auto repPathProject = relPath.mid(index+1);
             ret = Path(project->path(), repPathProject);;
@@ -112,7 +114,7 @@ KDevelop::Path DockerRuntime::pathInRuntime(const KDevelop::Path& localPath)
         qDebug() << "docker pathInRuntime..." << ret << project->path() << relpath;
         return ret;
     } else {
-        qWarning() << "only project files are available on the docker runtime" << localPath;
+        qCWarning(DOCKER) << "only project files are available on the docker runtime" << localPath;
     }
     return localPath;
 }

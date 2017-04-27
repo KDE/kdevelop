@@ -18,6 +18,7 @@
 
 #include "flatpakruntime.h"
 #include "flatpakplugin.h"
+#include "debug_flatpak.h"
 
 #include <util/executecompositejob.h>
 #include <outputview/outputexecutejob.h>
@@ -30,7 +31,6 @@
 #include <QProcess>
 #include <QTemporaryDir>
 #include <QDir>
-#include <QDebug>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
@@ -83,6 +83,8 @@ void FlatpakRuntime::startProcess(QProcess* process)
     const QStringList args = QStringList{"build", "--socket=x11", m_buildDirectory.toLocalFile(), process->program()} << process->arguments();
     process->setProgram("flatpak");
     process->setArguments(args);
+
+    qCDebug(FLATPAK) << "starting qprocess" << process->program() << process->arguments();
     process->start();
 }
 
@@ -90,7 +92,7 @@ void FlatpakRuntime::startProcess(KProcess* process)
 {
     process->setProgram(QStringList{ "flatpak", "--socket=x11", "build", m_buildDirectory.toLocalFile() } << process->program());
 
-    qDebug() << "yokai!" << process << process->program().join(' ');
+    qCDebug(FLATPAK) << "starting kprocess" << process->program().join(' ');
     process->start();
 }
 
@@ -107,7 +109,7 @@ QList<KJob*> FlatpakRuntime::exportBundle(const QString &path)
 
     QTemporaryDir* dir = new QTemporaryDir(QDir::tempPath()+"/flatpak-tmp-repo");
     if (!dir->isValid() || doc.isEmpty()) {
-        qWarning() << "Couldn't export:" << path << dir->isValid() << dir->path() << doc.isEmpty();
+        qCWarning(FLATPAK) << "Couldn't export:" << path << dir->isValid() << dir->path() << doc.isEmpty();
         return {};
     }
 
@@ -145,14 +147,14 @@ QJsonObject FlatpakRuntime::config() const
 {
     QFile f(m_file.toLocalFile());
     if (!f.open(QIODevice::ReadOnly)) {
-        qWarning() << "couldn't open" << m_file;
+        qCWarning(FLATPAK) << "couldn't open" << m_file;
         return {};
     }
 
     QJsonParseError error;
     auto doc = QJsonDocument::fromJson(f.readAll(), &error);
     if (error.error) {
-        qDebug() << "couldn't parse" << m_file << error.errorString();
+        qCWarning(FLATPAK) << "couldn't parse" << m_file << error.errorString();
         return {};
     }
 
