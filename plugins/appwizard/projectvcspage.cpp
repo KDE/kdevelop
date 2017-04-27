@@ -124,40 +124,37 @@ QString ProjectVcsPage::pluginName() const
 
 QString ProjectVcsPage::commitMessage() const
 {
-    int idx = m_ui->vcsTypes->currentIndex() - 1;
-    if ( idx < 0 || idx >= importWidgets.size())
+    if (!m_currentImportWidget) {
         return QString();
+    }
 
-    return importWidgets[idx]->message();
+    return m_currentImportWidget->message();
 }
 
 QUrl ProjectVcsPage::source() const
 {
-    int idx = m_ui->vcsTypes->currentIndex() - 1;
-    if ( idx < 0 || idx >= importWidgets.size())
+    if (!m_currentImportWidget) {
         return QUrl();
+    }
 
-    return importWidgets[idx]->source();
+    return m_currentImportWidget->source();
 }
 
 KDevelop::VcsLocation ProjectVcsPage::destination() const
 {
-    int idx = m_ui->vcsTypes->currentIndex() - 1;
-    if ( idx < 0 || idx >= importWidgets.size())
+    if (!m_currentImportWidget) {
         return KDevelop::VcsLocation();
+    }
 
-    return importWidgets[idx]->destination();
+    return m_currentImportWidget->destination();
 }
 
 
 bool ProjectVcsPage::shouldContinue()
 {
-    int idx = m_ui->vcsTypes->currentIndex() - 1;
-    if ( idx < 0 || idx >= importWidgets.size())
+    if (!m_currentImportWidget) {
         return true;
+    }
 
-    KDevelop::VcsImportMetadataWidget* widget = importWidgets[idx];
-
-    return widget->hasValidData();
+    return m_currentImportWidget->hasValidData();
 }
-
