@@ -126,7 +126,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
         foreach(const QUrl &url, urls) {
             const KDevelop::Path file(url);
 
-            auto action = new QAction(i18n("docker build '%1'", file.path()), this);
+            auto action = new QAction(QIcon::fromTheme("text-dockerfile"), i18n("docker build '%1'", file.path()), this);
             connect(action, &QAction::triggered, this, [this, file]() {
                 const auto dir = file.parent();
                 const QString name = QInputDialog::getText(
