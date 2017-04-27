@@ -59,3 +59,4 @@ kdevplatform_add_plugin(kdevgdb JSON kdevgdb.json SOURCES debuggerplugin.cpp )
 target_link_libraries(kdevgdb kdevgdb_static)
 
 add_subdirectory(unittests)
+add_subdirectory(printers)
