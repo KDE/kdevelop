@@ -134,3 +134,6 @@ target_link_libraries(kdevclangsupport
     KDev::Util
     KDev::Project
 )
+
+install(FILES kdevclang.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
+update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})

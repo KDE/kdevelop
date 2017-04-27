@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <!--
+    Will be part of shared-mime-info 1.9. Remove once 1.9 is the minimum dependency.
+    The mimetype id used here is disputable: is the one currently used in shared-mime-info,
+    though that one was created out-of-the-blue, without being backed by wider usage
+    or greater input from the OpenCL community. So needs more work.
+    -->
+    <mime-type type="text/x-opencl-src">
+        <comment>OpenCL C source code</comment>
+        <acronym>OpenCL</acronym>
+        <expanded-acronym>Open Computing Language</expanded-acronym>
+        <sub-class-of type="text/x-csrc"/>
+        <glob pattern="*.cl"/>
+        <alias type="text/x-opencl"/>
+    </mime-type>
+</mime-info>

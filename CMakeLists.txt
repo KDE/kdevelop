@@ -67,6 +67,8 @@ set_package_properties(KDevelop-PG-Qt PROPERTIES
 
 find_package(KDevPlatform ${KDEVELOP_VERSION} REQUIRED)
 
+find_package(SharedMimeInfo REQUIRED)
+
 add_definitions(
     -DQT_DEPRECATED_WARNINGS
     -DQT_DISABLE_DEPRECATED_BEFORE=0x050400

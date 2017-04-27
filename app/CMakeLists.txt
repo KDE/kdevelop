@@ -7,8 +7,6 @@ if(KF5Plasma_FOUND)
     add_subdirectory(plasma)
 endif()
 
-find_package(SharedMimeInfo REQUIRED)
-
 option(KDEVELOP_SINGLE_APP "Use QtSingleApplication as KDevelop's base" OFF)
 
 set(singleapp_SRCS qtlocalpeer.cpp qtsingleapplication.cpp qtlockedfile.cpp)
