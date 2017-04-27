@@ -654,8 +654,6 @@ int main( int argc, char *argv[] )
     // register a DBUS service for this process, so that we can open files in it from other invocations
     QDBusConnection::sessionBus().registerService(QString("org.kdevelop.kdevelop-%1").arg(app.applicationPid()));
 
-//     TODO: port to kf5
-//     KGlobal::locale()->insertCatalog( Core::self()->componentData().catalogName() );
     Core* core = Core::self();
     if (!QProcessEnvironment::systemEnvironment().contains("KDEV_DISABLE_WELCOMEPAGE")) {
         core->pluginController()->loadPlugin("KDevWelcomePage");
