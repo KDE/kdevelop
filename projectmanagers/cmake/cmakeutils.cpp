@@ -202,7 +202,7 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
 
         if (bd.reuseBuilddir())
         {
-            CMake::setBuildDirCount( project, bd.alreadyUsedIndex() );
+            CMake::setCurrentBuildDirIndex( project, bd.alreadyUsedIndex() );
         }
         else
         {
