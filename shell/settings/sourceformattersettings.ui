@@ -51,12 +51,6 @@
        <verstretch>129</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>66</height>
-      </size>
-     </property>
      <property name="title">
       <string>Formatting Styles</string>
      </property>
@@ -129,12 +123,6 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
           </property>
          </widget>
         </item>
