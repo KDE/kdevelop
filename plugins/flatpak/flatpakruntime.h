@@ -39,8 +39,8 @@ public:
 
     void startProcess(KProcess *process) override;
     void startProcess(QProcess *process) override;
-    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) override { return runtimePath; }
-    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) override { return localPath; }
+    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) override;
+    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) override;
 
     static KJob* createBuildDirectory(const KDevelop::Path &path, const KDevelop::Path &file, const QString &arch);
 
@@ -49,11 +49,13 @@ public:
     KJob* executeOnDevice(const QString &host, const QString &path);
 
 private:
+    void refreshJson();
     QJsonObject config() const;
 
     const KDevelop::Path m_file;
     const KDevelop::Path m_buildDirectory;
     const QString m_arch;
+    KDevelop::Path m_sdkPath;
 };
 
 #endif

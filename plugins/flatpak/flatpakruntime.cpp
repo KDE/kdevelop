@@ -67,11 +67,24 @@ FlatpakRuntime::FlatpakRuntime(const KDevelop::Path &buildDirectory, const KDeve
     , m_buildDirectory(buildDirectory)
     , m_arch(arch)
 {
+    refreshJson();
 }
 
 FlatpakRuntime::~FlatpakRuntime()
 {
     QDir(m_buildDirectory.toLocalFile()).removeRecursively();
+}
+
+void FlatpakRuntime::refreshJson()
+{
+    const auto doc = config();
+    const QString sdkName = doc[QLatin1String("sdk")].toString();
+    const QString runtimeVersion = doc.value(QLatin1String("runtime-version")).toString();
+    const QString usedRuntime = sdkName + QLatin1Char('/') + m_arch + QLatin1Char('/') + runtimeVersion;
+
+    m_sdkPath = KDevelop::Path("/var/lib/flatpak/runtime/" + usedRuntime + "/active/files");
+    qDebug() << "flatpak runtime path..." << name() << m_sdkPath;
+    Q_ASSERT(QFile::exists(m_sdkPath.toLocalFile()));
 }
 
 void FlatpakRuntime::setEnabled(bool /*enable*/)
@@ -100,6 +113,7 @@ KJob* FlatpakRuntime::rebuild()
 {
     QDir(m_buildDirectory.toLocalFile()).removeRecursively();
     auto job = createBuildDirectory(m_buildDirectory, m_file, m_arch);
+    refreshJson();
     return job;
 }
 
@@ -159,4 +173,31 @@ QJsonObject FlatpakRuntime::config() const
     }
 
     return doc.object();
+}
+
+Path FlatpakRuntime::pathInHost(const KDevelop::Path& runtimePath)
+{
+    if (runtimePath.isLocalFile() && runtimePath.segments().at(0) == QLatin1String("usr")) {
+        const auto relpath = runtimePath.relativePath(KDevelop::Path("/usr"));
+        return Path(m_sdkPath, relpath);
+    } else if (runtimePath.isLocalFile() && runtimePath.segments().at(0) == QLatin1String("app")) {
+        const auto relpath = runtimePath.relativePath(KDevelop::Path("/app"));
+        return Path(m_buildDirectory, "/active/files" + relpath);
+    } else
+        return runtimePath;
+}
+
+Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath)
+{
+    if (m_sdkPath.isParentOf(localPath)) {
+        const auto relpath = m_sdkPath.relativePath(localPath);
+        return Path(Path("/usr"), relpath);
+    } else {
+        const Path bdfiles(m_buildDirectory, "/active/flies");
+        if (bdfiles.isParentOf(localPath)) {
+            const auto relpath = bdfiles.relativePath(localPath);
+            return Path(Path("/app"), relpath);
+        }
+    }
+    return localPath;
 }

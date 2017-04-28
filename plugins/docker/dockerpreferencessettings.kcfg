@@ -5,8 +5,8 @@
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
 
   <group name="Docker">
-    <entry name="extraArguments" key="extraArguments" type="String" />
-    <entry name="projectsVolume" key="projectsVolume" type="String">
+    <entry name="extraArguments" type="String" />
+    <entry name="projectsVolume" type="String">
         <default>/src</default>
     </entry>
   </group>
