@@ -44,15 +44,12 @@ public:
     void initialize();
 
     void addRuntimes(const QVector<KDevelop::IRuntime *> &runtimes) override;
-//     void removeRuntimes(const QVector<KDevelop::IRuntime *> &runtimes) override;
     QVector<KDevelop::IRuntime *> availableRuntimes() const override;
 
     KDevelop::IRuntime * currentRuntime() const override;
     void setCurrentRuntime(KDevelop::IRuntime * runtime) override;
 
 private:
-    void setRuntimeAt(int pos);
-
     QScopedPointer<QMenu> const m_runtimesMenu;
     QVector<IRuntime*> m_runtimes;
     IRuntime* m_currentRuntime = nullptr;

@@ -128,9 +128,3 @@ void KDevelop::RuntimeController::addRuntimes(const QVector<KDevelop::IRuntime *
         m_runtimesMenu->addAction(runtimeAction);
     }
 }
-
-void KDevelop::RuntimeController::setRuntimeAt(int pos)
-{
-    setCurrentRuntime(m_runtimes.at(pos));
-}
-
