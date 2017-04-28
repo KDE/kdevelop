@@ -1,5 +1,13 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcppcheck\")
 
+find_package(Cppcheck QUIET)
+set_package_properties(Cppcheck PROPERTIES
+    DESCRIPTION "A tool for static C/C++ code analysis"
+    URL "http://cppcheck.sourceforge.net/"
+    PURPOSE "Required for the Cppcheck plugin"
+    TYPE RUNTIME
+)
+
 set(kdevcppcheck_SRCS
     plugin.cpp
     problemmodel.cpp
