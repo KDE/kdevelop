@@ -230,8 +230,8 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
             CMake::setCurrentBuildType( project, bd.buildType() );
             CMake::setCurrentCMakeExecutable(project, bd.cmakeExecutable());
             CMake::setCurrentEnvironment( project, QString() );
-            setBuildDirRuntime( project, currentRuntime );
         }
+        setBuildDirRuntime( project, currentRuntime );
 
         return true;
     } else if( !QFile::exists( KDevelop::Path(builddir, QStringLiteral("CMakeCache.txt")).toLocalFile() ) ||
