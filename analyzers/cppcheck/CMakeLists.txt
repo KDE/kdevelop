@@ -4,7 +4,7 @@ find_package(Cppcheck QUIET)
 set_package_properties(Cppcheck PROPERTIES
     DESCRIPTION "A tool for static C/C++ code analysis"
     URL "http://cppcheck.sourceforge.net/"
-    PURPOSE "Required for the Cppcheck plugin"
+    PURPOSE "Recommended: required by the non-essential Cppcheck plugin"
     TYPE RUNTIME
 )
 
