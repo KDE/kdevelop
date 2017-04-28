@@ -66,7 +66,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     connect(m_chooserUi->buildFolder, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->buildType, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->extraArguments, &KComboBox::editTextChanged, this, &CMakeBuildDirChooser::updated);
-    connect(m_chooserUi->availableBuildDirs, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::adoptPreviousBuildDirectory);
+    connect(m_chooserUi->availableBuildDirs, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::adoptPreviousBuildDirectory);
 
     updated();
 }
