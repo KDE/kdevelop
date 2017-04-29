@@ -36,7 +36,7 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
     auto str = clang_getCursorSpelling(cursor);
     auto fileStr = clang_getFileName(file);
     auto typeStr = clang_getCursorKindSpelling(cursor.kind);
-    printf("\"%s\" [(%d, %d), (%d, %d)] in %s | %s\n", clang_getCString(str),
+    printf("\"%s\" [(%u, %u), (%u, %u)] in %s | %s\n", clang_getCString(str),
            startLine, startColumn, endLine, endColumn,
            clang_getCString(fileStr), clang_getCString(typeStr));
 
