@@ -259,11 +259,11 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::buildItemsFromContextMenu );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
         action = new QAction( i18nc( "@action", "Install" ), this );
-        action->setIcon(QIcon::fromTheme(QStringLiteral("run-install")));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("run-build-install")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::installItemsFromContextMenu );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
         action = new QAction( i18nc( "@action", "Clean" ), this );
-        action->setIcon(QIcon::fromTheme(QStringLiteral("run-clean")));
+        action->setIcon(QIcon::fromTheme(QStringLiteral("run-build-clean")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::cleanItemsFromContextMenu );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
         action = new QAction( i18n( "Add to Build Set" ), this );
