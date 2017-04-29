@@ -176,6 +176,9 @@ install( EXPORT KDevPlatformTargets
          NAMESPACE KDev::
          FILE KDevPlatformTargets.cmake )
 
+# kdebugsettings file
+install( FILES kdevplatform.categories DESTINATION ${KDE_INSTALL_CONFDIR} )
+
 include(CTest)
 
 # CTestCustom.cmake has to be in the CTEST_BINARY_DIR.

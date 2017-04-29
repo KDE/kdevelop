@@ -1,0 +1,43 @@
+# KDebugSettings data file
+# Format:
+# logname<space>description
+
+# Libraries
+kdevplatform.debugger KDevPlatform lib: debugger
+kdevplatform.documentation KDevPlatform lib: documentation
+kdevplatform.filemanager KDevPlatform lib: filemanager
+kdevplatform.language KDevPlatform lib: language
+kdevplatform.outputview KDevPlatform lib: outputview
+kdevplatform.project KDevPlatform lib: project
+kdevplatform.serialization KDevPlatform lib: serialization
+kdevplatform.shell KDevPlatform lib: shell
+kdevplatform.sublime KDevPlatform lib: sublime
+kdevplatform.util KDevPlatform lib: util
+kdevplatform.vcs KDevPlatform lib: vcs
+
+# Plugins
+kdevplatform.plugins.appwizard KDevPlatform plugin: appwizard
+kdevplatform.plugins.classbrowser KDevPlatform plugin: classbrowser
+kdevplatform.plugins.codeutils KDevPlatform plugin: codeutils
+kdevplatform.plugins.contextbrowser KDevPlatform plugin: contextbrowser
+kdevplatform.plugins.cvs KDevPlatform plugin: cvs
+kdevplatform.plugins.documentswitcher KDevPlatform plugin: documentswitcher
+kdevplatform.plugins.execute KDevPlatform plugin: execute
+kdevplatform.plugins.executescript KDevPlatform plugin: executescript
+kdevplatform.plugins.externalscript KDevPlatform plugin: externalscript
+kdevplatform.plugins.filemanager KDevPlatform plugin: filemanager
+kdevplatform.plugins.filetemplates KDevPlatform plugin: filetemplates
+kdevplatform.plugins.git KDevPlatform plugin: git
+kdevplatform.plugins.grepview KDevPlatform plugin: grepview
+kdevplatform.plugins.konsole KDevPlatform plugin: konsole
+kdevplatform.plugins.outline KDevPlatform plugin: outline
+kdevplatform.plugins.patchreview KDevPlatform plugin: patchreview
+kdevplatform.plugins.perforce KDevPlatform plugin: perforce
+kdevplatform.plugins.problemreporter KDevPlatform plugin: problemreporter
+kdevplatform.plugins.projectfilter KDevPlatform plugin: projectfilter
+kdevplatform.plugins.projectmanagerview KDevPlatform plugin: projectmanagerview
+kdevplatform.plugins.quickopen KDevPlatform plugin: quickopen
+kdevplatform.plugins.standardoutputview KDevPlatform plugin: standardoutputview
+kdevplatform.plugins.svn KDevPlatform plugin: svn
+kdevplatform.plugins.switchtobuddy KDevPlatform plugin: switchtobuddy
+kdevplatform.plugins.testview KDevPlatform plugin: testview
