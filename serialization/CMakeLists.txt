@@ -5,7 +5,12 @@ set(KDevPlatformSerialization_LIB_SRCS
     indexedstring.cpp
     itemrepositoryregistry.cpp
     referencecounting.cpp
-    debug.cpp
+)
+
+ecm_qt_declare_logging_category(KDevPlatformSerialization_LIB_SRCS
+    HEADER debug.h
+    IDENTIFIER SERIALIZATION
+    CATEGORY_NAME "kdevplatform.serialization"
 )
 
 kdevplatform_add_library(KDevPlatformSerialization SOURCES ${KDevPlatformSerialization_LIB_SRCS})

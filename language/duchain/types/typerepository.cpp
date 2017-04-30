@@ -21,7 +21,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 
-#include "util/debug.h"
+#include <debug.h>
 #include "../types/typesystemdata.h"
 #include "../types/typeregister.h"
 #include <serialization/referencecounting.h>

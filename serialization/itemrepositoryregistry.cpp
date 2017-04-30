@@ -21,7 +21,6 @@
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QCoreApplication>
-#include <QDebug>
 #include <QDataStream>
 #include <QStandardPaths>
 

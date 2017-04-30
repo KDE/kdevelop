@@ -36,7 +36,7 @@
 #include "breakpointdetails.h"
 #include "../breakpoint/breakpoint.h"
 #include "../breakpoint/breakpointmodel.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <interfaces/idebugcontroller.h>
 #include <util/autoorientedsplitter.h>
 

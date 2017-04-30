@@ -23,7 +23,7 @@ Boston, MA 02110-1301, USA.
 #include <QList>
 #include <QListWidgetItem>
 #include <QMimeDatabase>
-#include <QDebug>
+
 #include <KMessageBox>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
@@ -40,7 +40,7 @@ Boston, MA 02110-1301, USA.
 #include <shell/languagecontroller.h>
 
 #include "editstyledialog.h"
-#include "../debug.h"
+#include "debug.h"
 
 #define STYLE_ROLE (Qt::UserRole+1)
 

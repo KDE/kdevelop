@@ -22,7 +22,6 @@
 #include "placeholderitemproxymodel.h"
 
 #include <KColorScheme>
-#include <QDebug>
 
 using namespace KDevelop;
 

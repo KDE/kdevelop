@@ -19,7 +19,6 @@
 
 #include "projectproxymodel.h"
 #include <project/projectmodel.h>
-#include <QDebug>
 
 ProjectProxyModel::ProjectProxyModel(QObject * parent)
     : QSortFilterProxyModel(parent)

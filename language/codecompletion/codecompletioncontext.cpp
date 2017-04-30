@@ -18,12 +18,10 @@
 
 #include "codecompletioncontext.h"
 
-#include "util/debug.h"
+#include <debug.h>
 
 #include <util/pushvalue.h>
 #include <language/duchain/ducontext.h>
-
-#include <QDebug>
 
 using namespace KDevelop;
 

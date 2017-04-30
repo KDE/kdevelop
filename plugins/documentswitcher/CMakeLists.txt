@@ -8,6 +8,12 @@ set(kdevdocumentswitcher_PART_SRCS
     documentswitchertreeview.cpp
 )
 
+ecm_qt_declare_logging_category(kdevdocumentswitcher_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER PLUGIN_DOCUMENTSWITCHER
+    CATEGORY_NAME "kdevplatform.plugins.documentswitcher"
+)
+
 qt5_add_resources(kdevdocumentswitcher_PART_SRCS kdevdocumentswitcher.qrc)
 kdevplatform_add_plugin(kdevdocumentswitcher JSON kdevdocumentswitcher.json SOURCES ${kdevdocumentswitcher_PART_SRCS})
 

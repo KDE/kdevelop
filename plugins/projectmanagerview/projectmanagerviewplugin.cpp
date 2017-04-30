@@ -54,7 +54,6 @@
 
 using namespace KDevelop;
 
-Q_LOGGING_CATEGORY(PLUGIN_PROJECTMANAGERVIEW, "kdevplatform.plugins.projectmanagerview")
 K_PLUGIN_FACTORY_WITH_JSON(ProjectManagerFactory, "kdevprojectmanagerview.json", registerPlugin<ProjectManagerViewPlugin>();)
 
 class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory

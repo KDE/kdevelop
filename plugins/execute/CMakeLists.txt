@@ -9,6 +9,12 @@ set(kdevexecute_PART_SRCS
     nativeappjob.cpp
 )
 
+ecm_qt_declare_logging_category(kdevexecute_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER PLUGIN_EXECUTE
+    CATEGORY_NAME "kdevplatform.plugins.execute"
+)
+
 ki18n_wrap_ui( kdevexecute_PART_SRCS nativeappconfig.ui)
 
 kdevplatform_add_plugin(kdevexecute JSON kdevexecute.json SOURCES ${kdevexecute_PART_SRCS})

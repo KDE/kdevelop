@@ -25,7 +25,7 @@
  ***************************************************************************/
 
 #include "dvcsjob.h"
-#include "../debug.h"
+#include "debug.h"
 
 #include <QFile>
 #include <QList>

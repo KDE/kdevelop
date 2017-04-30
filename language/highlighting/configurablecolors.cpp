@@ -26,7 +26,7 @@
 #include "codehighlighting.h"
 #include "colorcache.h"
 
-#include "util/debug.h"
+#include <debug.h>
 
 #define ifDebug(x)
 

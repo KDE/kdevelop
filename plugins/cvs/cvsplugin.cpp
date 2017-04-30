@@ -49,7 +49,6 @@
 #include <vcs/vcspluginhelper.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 
-Q_LOGGING_CATEGORY(PLUGIN_CVS, "kdevplatform.plugins.cvs")
 K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>();)
 // K_EXPORT_PLUGIN(KDevCvsFactory(KAboutData("kdevcvs", "kdevcvs", ki18n("CVS"), "0.1", ki18n("Support for CVS version control system"), KAboutData::License_GPL)))
 

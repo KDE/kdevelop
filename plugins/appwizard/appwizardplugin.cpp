@@ -14,7 +14,6 @@
 #include "appwizardplugin.h"
 
 #include <QAction>
-#include <QDebug>
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>
@@ -59,7 +58,6 @@
 
 using namespace KDevelop;
 
-Q_LOGGING_CATEGORY(PLUGIN_APPWIZARD, "kdevplatform.plugins.appwizard")
 K_PLUGIN_FACTORY_WITH_JSON(AppWizardFactory, "kdevappwizard.json", registerPlugin<AppWizardPlugin>();)
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)

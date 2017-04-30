@@ -23,7 +23,6 @@ Boston, MA 02110-1301, USA.
 */
 #include "plugincontroller.h"
 
-#include <QDebug>
 #include <QElapsedTimer>
 #include <QMap>
 

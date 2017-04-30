@@ -36,9 +36,7 @@
 #include "idealbuttonbarwidget.h"
 #include "idealcontroller.h"
 #include "holdupdates.h"
-#include "sublimedebug.h"
-
-Q_LOGGING_CATEGORY(SUBLIME, "kdevplatform.sublime")
+#include <debug.h>
 
 namespace Sublime {
 

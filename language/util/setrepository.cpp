@@ -12,7 +12,7 @@
  ***************************************************************************/
 
 #include "setrepository.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <list>
 #include <util/kdevvarlengtharray.h>
 #include <iostream>

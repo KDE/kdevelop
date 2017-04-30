@@ -20,7 +20,6 @@
 #include "documentswitcherplugin.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QDir>
 #include <QListView>
 #include <QStandardItemModel>
@@ -39,13 +38,13 @@
 #include <sublime/document.h>
 
 #include "documentswitchertreeview.h"
+#include "debug.h"
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/idocument.h>
 #include <interfaces/iproject.h>
 
 #include <algorithm>
 
-Q_LOGGING_CATEGORY(PLUGIN_DOCUMENTSWITCHER, "kdevplatform.plugins.documentswitcher")
 K_PLUGIN_FACTORY_WITH_JSON(DocumentSwitcherFactory, "kdevdocumentswitcher.json", registerPlugin<DocumentSwitcherPlugin>();)
 
 //TODO: Show frame around view's widget while walking through

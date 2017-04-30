@@ -23,7 +23,7 @@
 #include "ducontext.h"
 #include "duchainregister.h"
 #include "types/functiontype.h"
-#include "util/debug.h"
+#include <debug.h>
 
 namespace KDevelop
 {

@@ -23,7 +23,6 @@
 #include "codecompletionmodel.h"
 
 #include <QThread>
-#include <QDebug>
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
@@ -41,7 +40,7 @@
 #include "../interfaces/icore.h"
 #include "../interfaces/ilanguagecontroller.h"
 #include "../interfaces/icompletionsettings.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include "codecompletionworker.h"
 #include "codecompletioncontext.h"

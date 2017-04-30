@@ -9,7 +9,6 @@ set(KDevPlatformDebugger_LIB_SRCS
     util/treemodel.cpp
     util/treeview.cpp
     util/pathmappings.cpp
-    util/debug.cpp
     breakpoint/breakpoint.cpp
     breakpoint/breakpointmodel.cpp
     breakpoint/breakpointwidget.cpp
@@ -20,6 +19,11 @@ set(KDevPlatformDebugger_LIB_SRCS
     variable/variablesortmodel.cpp
     framestack/framestackmodel.cpp
     framestack/framestackwidget.cpp
+)
+ecm_qt_declare_logging_category(KDevPlatformDebugger_LIB_SRCS
+    HEADER debug.h
+    IDENTIFIER DEBUGGER
+    CATEGORY_NAME "kdevplatform.debugger"
 )
 kdevplatform_add_library(KDevPlatformDebugger SOURCES ${KDevPlatformDebugger_LIB_SRCS})
 target_link_libraries(KDevPlatformDebugger

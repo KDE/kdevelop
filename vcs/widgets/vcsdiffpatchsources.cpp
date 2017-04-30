@@ -39,7 +39,7 @@
 #include <interfaces/isession.h>
 #include "vcsdiff.h"
 #include "vcsjob.h"
-#include "../debug.h"
+#include "debug.h"
 
 
 using namespace KDevelop;

@@ -40,7 +40,7 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../interfaces/idebugsession.h"
 #include "../interfaces/ivariablecontroller.h"
-#include "util/debug.h"
+#include <debug.h>
 #include "util/texteditorhelpers.h"
 #include "variabletooltip.h"
 #include <sublime/area.h>

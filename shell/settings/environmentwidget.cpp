@@ -38,7 +38,7 @@ Boston, MA 02110-1301, USA.
 #include "environmentprofilelistmodel.h"
 #include "environmentprofilemodel.h"
 #include "placeholderitemproxymodel.h"
-#include "../debug.h"
+#include "debug.h"
 
 using namespace KDevelop;
 

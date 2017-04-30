@@ -7,7 +7,12 @@ set(kdevexternalscript_PART_SRCS
     externalscriptitem.cpp
     externalscriptjob.cpp
     editexternalscript.cpp
-    externalscriptdebug.cpp
+)
+
+ecm_qt_declare_logging_category(kdevexternalscript_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER PLUGIN_EXTERNALSCRIPT
+    CATEGORY_NAME "kdevplatform.plugins.externalscript"
 )
 
 set(kdevexternalscript_PART_UI

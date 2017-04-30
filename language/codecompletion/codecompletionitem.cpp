@@ -30,7 +30,7 @@
 #include <ktexteditor/view.h>
 #include <ktexteditor/document.h>
 
-#include "util/debug.h"
+#include <debug.h>
 #include "../duchain/declaration.h"
 #include "../duchain/duchainutils.h"
 

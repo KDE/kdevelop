@@ -28,7 +28,7 @@
 #include "../duchain/types/enumeratortype.h"
 #include "../duchain/duchainutils.h"
 #include "../duchain/navigation/abstractdeclarationnavigationcontext.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>

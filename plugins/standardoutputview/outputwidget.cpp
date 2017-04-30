@@ -47,9 +47,8 @@
 
 #include "outputmodel.h"
 #include "toolviewdata.h"
-#include "debug.h"
+#include <debug.h>
 
-Q_LOGGING_CATEGORY(PLUGIN_STANDARDOUTPUTVIEW, "kdevplatform.plugins.standardoutputview")
 Q_DECLARE_METATYPE(QTreeView*)
 
 OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)

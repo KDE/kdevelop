@@ -29,7 +29,7 @@
 #include "../namespacealiasdeclaration.h"
 #include "../types/functiontype.h"
 #include "../types/structuretype.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <interfaces/icontextbrowser.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>

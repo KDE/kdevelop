@@ -22,7 +22,6 @@
 
 #include <QPushButton>
 #include <QVBoxLayout>
-#include <QDebug>
 
 #include "debug.h"
 #include "core.h"

@@ -20,7 +20,8 @@
 */
 
 #include "pathmappings.h"
-#include "debug.h"
+
+#include <debug.h>
 
 #include <QAbstractTableModel>
 #include <QVBoxLayout>

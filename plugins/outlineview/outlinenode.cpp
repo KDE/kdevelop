@@ -32,7 +32,7 @@
 
 #include <KTextEditor/CodeCompletionModel>
 
-#include "debug_outline.h"
+#include <debug.h>
 
 using namespace KDevelop;
 

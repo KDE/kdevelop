@@ -17,7 +17,7 @@
 */
 
 #include "modificationrevisionset.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>

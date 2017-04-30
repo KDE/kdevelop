@@ -24,14 +24,14 @@
 #include <QAbstractProxyModel>
 #include <QModelIndex>
 #include <QBrush>
+#include <QApplication>
 
 #include <ktexteditor/codecompletionmodel.h>
 #include <ktextedit.h>
 #include <kcolorutils.h>
 
 #include "expandingdelegate.h"
-#include <qapplication.h>
-#include "../debug.h"
+#include <debug.h>
 
 QIcon ExpandingWidgetModel::m_expandedIcon;
 QIcon ExpandingWidgetModel::m_collapsedIcon;

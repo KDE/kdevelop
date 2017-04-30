@@ -40,10 +40,10 @@
 #include "../interfaces/ibasicversioncontrol.h"
 #include "../models/vcseventmodel.h"
 #include "../models/vcsitemeventmodel.h"
-#include "../debug.h"
 #include "../vcsevent.h"
 #include "../vcsjob.h"
 #include "../vcsrevision.h"
+#include "debug.h"
 
 
 namespace KDevelop

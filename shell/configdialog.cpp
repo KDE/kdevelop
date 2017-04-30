@@ -23,7 +23,6 @@
 #include "debug.h"
 
 #include <QCloseEvent>
-#include <QDebug>
 #include <QPushButton>
 #include <QPointer>
 

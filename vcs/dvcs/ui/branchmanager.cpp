@@ -29,7 +29,7 @@
 #include <vcs/vcsjob.h>
 #include <vcs/models/brancheslistmodel.h>
 #include "ui_branchmanager.h"
-#include "../../debug.h"
+#include "debug.h"
 #include "widgets/vcsdiffpatchsources.h"
 
 #include <interfaces/icore.h>

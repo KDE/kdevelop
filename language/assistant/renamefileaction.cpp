@@ -19,7 +19,7 @@
 
 #include "renamefileaction.h"
 
-#include "util/debug.h"
+#include <debug.h>
 
 #include <language/codegen/documentchangeset.h>
 #include <language/codegen/basicrefactoring.h>

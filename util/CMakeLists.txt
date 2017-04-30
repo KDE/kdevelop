@@ -24,7 +24,6 @@ set(KDevPlatformUtil_LIB_SRCS
     projecttestjob.cpp
     widgetcolorizer.cpp
     path.cpp
-    debug.cpp
     texteditorhelpers.cpp
     stack.cpp
 )
@@ -40,6 +39,12 @@ endif()
 add_subdirectory(duchainify)
 
 add_subdirectory(tests)
+
+ecm_qt_declare_logging_category(KDevPlatformUtil_LIB_SRCS
+    HEADER debug.h
+    IDENTIFIER UTIL
+    CATEGORY_NAME "kdevplatform.util"
+)
 
 ki18n_wrap_ui(KDevPlatformUtil_LIB_SRCS ${KDevPlatformUtil_LIB_US})
 kdevplatform_add_library(KDevPlatformUtil SOURCES ${KDevPlatformUtil_LIB_SRCS})

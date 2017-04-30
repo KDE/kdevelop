@@ -34,7 +34,7 @@
 #include "duchainregister.h"
 #include "serialization/itemrepository.h"
 #include "problem.h"
-#include "util/debug.h"
+#include <debug.h>
 
 //#define DEBUG_DATA_INFO
 

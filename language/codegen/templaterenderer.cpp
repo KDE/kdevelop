@@ -25,13 +25,12 @@
 #include "templateengine.h"
 #include "templateengine_p.h"
 #include "archivetemplateloader.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <serialization/indexedstring.h>
 
 #include <grantlee/context.h>
 
-#include <QDebug>
 #include <QDir>
 #include <QFile>
 #include <QUrl>

@@ -1,8 +1,10 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgit\")
 
-add_subdirectory(tests)
-add_subdirectory(icons)
-
+ecm_qt_declare_logging_category(kdevgit_LOG_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER PLUGIN_GIT
+    CATEGORY_NAME "kdevplatform.plugins.git"
+)
 set(kdevgit_PART_SRCS
     stashmanagerdialog.cpp
     stashpatchsource.cpp
@@ -13,6 +15,7 @@ set(kdevgit_PART_SRCS
     gitjob.cpp
     gitplugincheckinrepositoryjob.cpp
     gitnameemaildialog.cpp
+    ${kdevgit_LOG_PART_SRCS}
 )
 ki18n_wrap_ui(kdevgit_PART_SRCS stashmanagerdialog.ui)
 ki18n_wrap_ui(kdevgit_PART_SRCS gitnameemaildialog.ui)
@@ -24,3 +27,6 @@ target_link_libraries(kdevgit
     KDev::Project
     KF5::SonnetUi
 )
+
+add_subdirectory(tests)
+add_subdirectory(icons)

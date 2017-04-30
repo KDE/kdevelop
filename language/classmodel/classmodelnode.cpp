@@ -35,7 +35,7 @@
 #include "../duchain/types/functiontype.h"
 #include "../duchain/types/enumerationtype.h"
 
-#include "util/debug.h"
+#include <debug.h>
 
 using namespace KDevelop;
 using namespace ClassModelNodes;

@@ -81,8 +81,6 @@
 
 #include <sublime/mainwindow.h>
 
-Q_LOGGING_CATEGORY(PLUGIN_CONTEXTBROWSER, "kdevplatform.plugins.contextbrowser")
-
 using KTextEditor::Attribute;
 using KTextEditor::View;
 

@@ -36,7 +36,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iuicontroller.h>
 
-#include "projectfilterdebug.h"
+#include <debug.h>
 #include "projectfilterconfigpage.h"
 #include <project/projectmodel.h>
 
@@ -135,7 +135,7 @@ void ProjectFilterProvider::updateProjectFilters(IProject* project)
     Filters newFilters = deserialize(readFilters(project->projectConfiguration()));
     Filters& filters = m_filters[project];
     if (filters != newFilters) {
-        projectFilterDebug() << "project filter changed:" << project->name();
+        qCDebug(PLUGIN_PROJECTFILTER) << "project filter changed:" << project->name();
         filters = newFilters;
         emit filterChanged(this, project);
     }

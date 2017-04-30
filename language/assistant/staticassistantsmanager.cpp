@@ -18,7 +18,7 @@
 */
 
 #include "staticassistantsmanager.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <KTextEditor/Document>
 #include <KTextEditor/View>

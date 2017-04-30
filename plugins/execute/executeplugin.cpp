@@ -21,8 +21,6 @@
 
 #include "executeplugin.h"
 
-#include <QDebug>
-
 #include <KConfigGroup>
 #include <KJob>
 #include <KLocalizedString>
@@ -59,7 +57,6 @@ QString ExecutePlugin::projectTargetEntry = QStringLiteral("Project Target");
 
 using namespace KDevelop;
 
-Q_LOGGING_CATEGORY(PLUGIN_EXECUTE, "kdevplatform.plugins.execute")
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecute.json", registerPlugin<ExecutePlugin>();)
 
 ExecutePlugin::ExecutePlugin(QObject *parent, const QVariantList&)

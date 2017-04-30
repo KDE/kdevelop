@@ -18,7 +18,7 @@
 
 #include "stringhelpers.h"
 #include "safetycounter.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <QString>
 #include <QStringList>

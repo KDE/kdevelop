@@ -45,8 +45,7 @@
 #include <language/codegen/templaterenderer.h>
 #include <language/codegen/codedescription.h>
 #include <language/interfaces/ilanguagesupport.h>
-
-Q_LOGGING_CATEGORY(PLUGIN_CODEUTILS, "kdevplatform.plugins.codeutils")
+#include <debug.h>
 
 
 using namespace KDevelop;

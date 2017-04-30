@@ -38,7 +38,7 @@
 #include <interfaces/idebugsession.h>
 #include <interfaces/ibreakpointcontroller.h>
 #include <interfaces/isession.h>
-#include "util/debug.h"
+#include <debug.h>
 #include "breakpoint.h"
 #include <KConfigGroup>
 #include <QAction>

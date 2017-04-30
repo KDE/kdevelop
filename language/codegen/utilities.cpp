@@ -17,7 +17,7 @@
 */
 
 #include "utilities.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <serialization/indexedstring.h>
 #include <duchain/identifier.h>

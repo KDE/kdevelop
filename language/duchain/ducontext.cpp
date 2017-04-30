@@ -44,7 +44,7 @@
 #include "navigation/abstractdeclarationnavigationcontext.h"
 #include "navigation/abstractnavigationwidget.h"
 #include "ducontextdynamicdata.h"
-#include "util/debug.h"
+#include <debug.h>
 
 // maximum depth for DUContext::findDeclarationsInternal searches
 const uint maxParentDepth = 20;

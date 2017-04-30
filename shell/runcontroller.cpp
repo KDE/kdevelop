@@ -20,7 +20,6 @@ Boston, MA 02110-1301, USA.
 
 #include "runcontroller.h"
 
-#include <QDebug>
 #include <QDBusConnection>
 #include <QPalette>
 #include <QSignalMapper>

@@ -20,7 +20,6 @@ set(KDevPlatformVcs_LIB_SRCS
     vcsdiff.cpp
     vcsevent.cpp
     vcsstatusinfo.cpp
-    debug.cpp
     widgets/vcsimportmetadatawidget.cpp
     widgets/vcseventwidget.cpp
     widgets/vcsdiffwidget.cpp
@@ -42,6 +41,13 @@ set(KDevPlatformVcs_LIB_SRCS
     interfaces/ipatchdocument.cpp
     interfaces/ipatchsource.cpp
 )
+
+ecm_qt_declare_logging_category(KDevPlatformVcs_LIB_SRCS
+    HEADER debug.h
+    IDENTIFIER VCS
+    CATEGORY_NAME "kdevplatform.vcs"
+)
+
 ki18n_wrap_ui(KDevPlatformVcs_LIB_SRCS ${KDevPlatformVcs_UIS})
 kdevplatform_add_library(KDevPlatformVcs SOURCES ${KDevPlatformVcs_LIB_SRCS})
 target_link_libraries(KDevPlatformVcs

@@ -1,3 +1,7 @@
+include_directories(
+    ..
+    ${CMAKE_CURRENT_BINARY_DIR}/..
+)
 set(findReplaceTest_SRCS 
     test_findreplace.cpp
     ../grepviewplugin.cpp
@@ -8,6 +12,7 @@ set(findReplaceTest_SRCS
     ../grepfindthread.cpp
     ../grepoutputview.cpp
     ../greputil.cpp
+    ${kdevgrepview_LOG_PART_SRCS}
 )
 set(kdevgrepview_PART_UI
     ../grepwidget.ui

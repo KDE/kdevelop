@@ -17,7 +17,8 @@ find_program(CVS NAMES cvs
 
 if (CVS)
 	include_directories(
-		${KDevPlatform_SOURCE_DIR}/plugins/cvs
+		..
+		${CMAKE_CURRENT_BINARY_DIR}/..
 	)
     set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 	set(test_cvs_SRCS test_cvs.cpp
@@ -27,6 +28,7 @@ if (CVS)
         ../cvslogjob.cpp
         ../cvsstatusjob.cpp
         ../cvsdiffjob.cpp
+        ${kdevcvs_LOG_PART_SRCS}
     )
     ecm_add_test(${test_cvs_SRCS}
         TEST_NAME test_cvs

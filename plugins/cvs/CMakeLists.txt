@@ -1,8 +1,12 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcvs\")
-add_subdirectory(tests)
-
 
 ########### next target ###############
+
+ecm_qt_declare_logging_category(kdevcvs_LOG_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER PLUGIN_CVS
+    CATEGORY_NAME "kdevplatform.plugins.cvs"
+)
 
 set(kdevcvs_PART_SRCS
     cvsplugin.cpp
@@ -19,6 +23,7 @@ set(kdevcvs_PART_SRCS
     cvslogjob.cpp
     cvsdiffjob.cpp
     cvsstatusjob.cpp
+    ${kdevcvs_LOG_PART_SRCS}
 )
 
 set(kdevcvs_PART_UI
@@ -44,3 +49,5 @@ target_link_libraries(kdevcvs
     KDev::Project
     KDev::Language
 )
+
+add_subdirectory(tests)

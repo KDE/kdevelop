@@ -39,7 +39,7 @@
 #include "idealcontroller.h"
 #include "holdupdates.h"
 #include "idealbuttonbarwidget.h"
-#include "sublimedebug.h"
+#include <debug.h>
 
 class IdealToolBar : public QToolBar
 {

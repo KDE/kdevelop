@@ -24,7 +24,7 @@
 #include "typeregister.h"
 #include "typesystem.h"
 #include "typerepository.h"
-#include "util/debug.h"
+#include <debug.h>
 
 namespace KDevelop
 {

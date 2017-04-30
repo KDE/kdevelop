@@ -38,7 +38,6 @@
 #include <util/kdevstringhandler.h>
 #include "projecttargetscombobox.h"
 
-#include <QDebug>
 #include <QIcon>
 #include <QMenu>
 

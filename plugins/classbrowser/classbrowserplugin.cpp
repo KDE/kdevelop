@@ -48,7 +48,6 @@
 #include <language/duchain/functiondefinition.h>
 #include <interfaces/iprojectcontroller.h>
 
-Q_LOGGING_CATEGORY(PLUGIN_CLASSBROWSER, "kdevplatform.plugins.classbrowser")
 K_PLUGIN_FACTORY_WITH_JSON(KDevClassBrowserFactory, "kdevclassbrowser.json", registerPlugin<ClassBrowserPlugin>(); )
 
 using namespace KDevelop;

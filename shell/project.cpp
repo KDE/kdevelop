@@ -26,7 +26,6 @@
 
 #include "project.h"
 
-#include <QDebug>
 #include <QSet>
 #include <QTemporaryFile>
 #include <QTimer>

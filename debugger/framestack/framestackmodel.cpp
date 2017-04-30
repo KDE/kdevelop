@@ -31,7 +31,7 @@
 #include "../../interfaces/icore.h"
 #include "../../interfaces/iprojectcontroller.h"
 #include "../interfaces/isession.h"
-#include "util/debug.h"
+#include <debug.h>
 
 namespace KDevelop {
 

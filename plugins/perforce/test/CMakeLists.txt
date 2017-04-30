@@ -1,8 +1,12 @@
+include_directories(
+    ..
+    ${CMAKE_CURRENT_BINARY_DIR}/..
+)
 set(perforceplugintest_SRCS
     test_perforce.cpp
     ../perforceplugin.cpp
+    ${kdevperforce_LOG_PART_SRCS}
 )
-include_directories(../)
 
 add_definitions( "-DP4_CLIENT_STUB_EXE=\"${CMAKE_CURRENT_BINARY_DIR}/../p4clientstub/p4clientstub\"" )
 

@@ -22,7 +22,7 @@
 #include "../duchain/duchain.h"
 
 #include "language/interfaces/iastcontainer.h"
-#include "util/debug.h"
+#include <debug.h>
 
 namespace KDevelop
 {

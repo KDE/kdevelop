@@ -30,7 +30,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include "backgroundparser.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <QApplication>
 
 // Can be used to disable the 'clever' updating logic that ignores whitespace-only changes and such.

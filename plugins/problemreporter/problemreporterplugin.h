@@ -30,9 +30,6 @@
 #include <serialization/indexedstring.h>
 #include <language/duchain/topducontext.h>
 
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(PLUGIN_PROBLEMREPORTER)
-
 namespace KTextEditor
 {
 class Document;

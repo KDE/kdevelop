@@ -22,7 +22,7 @@
 */
 
 #include "progressmanager.h"
-#include "../debug.h"
+#include "debug.h"
 
 #include <KLocalizedString>
 

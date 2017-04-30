@@ -25,7 +25,6 @@
 #include <KLocalizedString>
 #include <QIcon>
 #include <QAction>
-#include <QDebug>
 #include <QRegularExpression>
 
 using namespace KDevelop;

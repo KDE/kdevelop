@@ -29,7 +29,7 @@
 #include <KLocalizedString>
 
 #include "../duchainlock.h"
-#include "util/debug.h"
+#include <debug.h>
 
 namespace {
 const int maxNavigationWidgetWidth = 580;

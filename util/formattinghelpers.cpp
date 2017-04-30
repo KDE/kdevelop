@@ -22,7 +22,6 @@
 #include "debug.h"
 
 #include <QString>
-#include <QDebug>
 
 namespace KDevelop
 {

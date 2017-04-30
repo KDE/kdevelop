@@ -23,7 +23,6 @@
 #include "gitplugin.h"
 
 #include <QDateTime>
-#include <QDebug>
 #include <QProcess>
 #include <QDir>
 #include <QFileInfo>
@@ -59,8 +58,6 @@
 #include "gitplugincheckinrepositoryjob.h"
 #include "gitnameemaildialog.h"
 #include "debug.h"
-
-Q_LOGGING_CATEGORY(PLUGIN_GIT, "kdevplatform.plugins.git")
 
 using namespace KDevelop;
 

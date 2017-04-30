@@ -17,7 +17,7 @@
 */
 
 #include "workingset.h"
-#include "../debug.h"
+#include "debug.h"
 
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>

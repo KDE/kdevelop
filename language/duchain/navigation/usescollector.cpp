@@ -32,7 +32,7 @@
 #include "../classmemberdeclaration.h"
 #include "../abstractfunctiondeclaration.h"
 #include "../functiondefinition.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <interfaces/iuicontroller.h>
 #include <codegen/coderepresentation.h>
 #include <KLocalizedString>

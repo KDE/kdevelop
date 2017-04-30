@@ -16,6 +16,12 @@ set(kdevappwizard_PART_UI
     projectvcspage.ui
 )
 
+ecm_qt_declare_logging_category(kdevappwizard_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER PLUGIN_APPWIZARD
+    CATEGORY_NAME "kdevplatform.plugins.appwizard"
+)
+
 ki18n_wrap_ui(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})
 
 qt5_add_resources(kdevappwizard_PART_SRCS kdevappwizard.qrc)

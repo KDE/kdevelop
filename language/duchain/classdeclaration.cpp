@@ -23,7 +23,7 @@
 #include <language/duchain/appendedlist.h>
 #include <language/duchain/duchainregister.h>
 #include "types/structuretype.h"
-#include "util/debug.h"
+#include <debug.h>
 
 namespace KDevelop {
 

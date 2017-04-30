@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 #include "brancheslistmodel.h"
-#include "../debug.h"
+#include "debug.h"
 #include <vcs/interfaces/ibranchingversioncontrol.h>
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>

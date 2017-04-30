@@ -23,7 +23,7 @@
 #include "duchain.h"
 #include "duchainlock.h"
 #include "topducontextdata.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <language/backgroundparser/parsejob.h>
 
 #define ENSURE_READ_LOCKED   if(indexedTopContext().isValid()) { ENSURE_CHAIN_READ_LOCKED }

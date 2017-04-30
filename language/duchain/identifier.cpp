@@ -24,7 +24,7 @@
 #include "appendedlist_static.h"
 #include "serialization/itemrepository.h"
 #include "util/kdevhash.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <serialization/indexedstring.h>
 #include <utility>

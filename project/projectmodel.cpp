@@ -21,7 +21,6 @@
 
 #include "projectmodel.h"
 
-#include <QDebug>
 #include <QIcon>
 #include <QMimeDatabase>
 #include <QMimeType>

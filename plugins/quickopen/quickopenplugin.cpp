@@ -65,8 +65,6 @@
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>
 
-Q_LOGGING_CATEGORY(PLUGIN_QUICKOPEN, "kdevplatform.plugins.quickopen")
-
 using namespace KDevelop;
 
 const bool noHtmlDestriptionInOutline = true;

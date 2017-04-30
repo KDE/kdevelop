@@ -18,7 +18,7 @@
 
 #include "parseprojectjob.h"
 
-#include "util/debug.h"
+#include <debug.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>

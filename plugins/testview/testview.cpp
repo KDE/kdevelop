@@ -19,7 +19,7 @@
 
 #include "testview.h"
 #include "testviewplugin.h"
-#include "testviewdebug.h"
+#include <debug.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>

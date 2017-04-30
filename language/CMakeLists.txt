@@ -139,7 +139,6 @@ set(KDevPlatformLanguage_LIB_SRCS
     util/setrepository.cpp
     util/includeitem.cpp
     util/navigationtooltip.cpp
-    util/debug.cpp
 
     highlighting/colorcache.cpp
     highlighting/configurablecolors.cpp
@@ -169,6 +168,12 @@ set(grantlee_LIB_SRCS
 if (Grantlee5_FOUND)
     list(APPEND KDevPlatformLanguage_LIB_SRCS ${grantlee_LIB_SRCS})
 endif()
+
+ecm_qt_declare_logging_category(KDevPlatformLanguage_LIB_SRCS
+    HEADER debug.h
+    IDENTIFIER LANGUAGE
+    CATEGORY_NAME "kdevplatform.language"
+)
 
 ki18n_wrap_ui(KDevPlatformLanguage_LIB_SRCS
     codegen/basicrefactoring.ui

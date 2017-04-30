@@ -39,9 +39,6 @@
 #include "documentationfindwidget.h"
 #include "debug.h"
 
-Q_LOGGING_CATEGORY(DOCUMENTATION, "kdevplatform.documentation")
-
-
 using namespace KDevelop;
 
 DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)

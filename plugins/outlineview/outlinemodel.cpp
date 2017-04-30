@@ -28,7 +28,7 @@
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 
-#include "debug_outline.h"
+#include <debug.h>
 #include "outlinenode.h"
 
 using namespace KDevelop;

@@ -3,6 +3,12 @@ project(grepview)
 
 ########### next target ###############
 
+ecm_qt_declare_logging_category(kdevgrepview_LOG_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER PLUGIN_GREPVIEW
+    CATEGORY_NAME "kdevplatform.plugins.grepview"
+)
+
 set(kdevgrepview_PART_SRCS
     grepviewplugin.cpp
     grepviewpluginmetadata.cpp
@@ -13,6 +19,7 @@ set(kdevgrepview_PART_SRCS
     grepfindthread.cpp
     grepoutputview.cpp
     greputil.cpp
+    ${kdevgrepview_LOG_PART_SRCS}
 )
 
 set(kdevgrepview_PART_UI

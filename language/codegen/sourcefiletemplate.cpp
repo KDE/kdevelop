@@ -20,7 +20,7 @@
 
 #include "sourcefiletemplate.h"
 #include "templaterenderer.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <interfaces/icore.h>
 
@@ -34,7 +34,6 @@
 #include <QDomDocument>
 #include <QStandardPaths>
 #include <QDir>
-#include <QDebug>
 
 using namespace KDevelop;
 typedef SourceFileTemplate::ConfigOption ConfigOption;

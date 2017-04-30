@@ -20,8 +20,6 @@
 #include "kdevkonsoleview.h"
 #include "debug.h"
 
-Q_LOGGING_CATEGORY(PLUGIN_KONSOLE, "kdevplatform.plugins.konsole")
-
 QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
 {
     KService::Ptr service = KService::serviceByDesktopName(QStringLiteral("konsolepart"));

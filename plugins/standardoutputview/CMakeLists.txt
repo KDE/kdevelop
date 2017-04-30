@@ -1,13 +1,19 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevstandardoutputview\")
-add_subdirectory(tests)
 
 ########### next target ###############
+
+ecm_qt_declare_logging_category(standardoutputview_LOG_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER PLUGIN_STANDARDOUTPUTVIEW
+    CATEGORY_NAME "kdevplatform.plugins.standardoutputview"
+)
 
 set(standardoutputview_LIB_SRCS
     standardoutputview.cpp
     outputwidget.cpp
     toolviewdata.cpp
     standardoutputviewmetadata.cpp
+    ${standardoutputview_LOG_PART_SRCS}
 )
 
 qt5_add_resources(standardoutputview_LIB_SRCS kdevstandardoutputview.qrc)
@@ -20,3 +26,4 @@ target_link_libraries(kdevstandardoutputview
     KDev::OutputView
 )
 
+add_subdirectory(tests)

@@ -22,7 +22,6 @@
 #include "partcontroller.h"
 
 #include <QAction>
-#include <QDebug>
 #include <QMimeDatabase>
 #include <QMimeType>
 

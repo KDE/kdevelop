@@ -18,7 +18,7 @@
 */
 
 #include "codedescription.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>

@@ -19,7 +19,7 @@
 #include "codemodel.h"
 
 #include "appendedlist.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <serialization/itemrepository.h>
 #include "identifier.h"
 #include <serialization/indexedstring.h>

@@ -44,7 +44,7 @@
 #include <duchain/use.h>
 
 #include "progressdialogs/refactoringdialog.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include "ui_basicrefactoring.h"
 

@@ -53,7 +53,6 @@ QString ExecuteScriptPlugin::outputFilteringEntry = QStringLiteral("Output Filte
 
 using namespace KDevelop;
 
-Q_LOGGING_CATEGORY(PLUGIN_EXECUTESCRIPT, "kdevplatform.plugins.executescript")
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecuteFactory, "kdevexecutescript.json", registerPlugin<ExecuteScriptPlugin>();)
 
 ExecuteScriptPlugin::ExecuteScriptPlugin(QObject *parent, const QVariantList&)

@@ -24,12 +24,10 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
 
-#include "debug_outline.h"
+#include <debug.h>
 #include "outlinewidget.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevOutlineViewFactory, "kdevoutlineview.json", registerPlugin<OutlineViewPlugin>();)
-
-Q_LOGGING_CATEGORY(PLUGIN_OUTLINE, "kdevplatform.plugins.outline")
 
 using namespace KDevelop;
 

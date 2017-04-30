@@ -28,7 +28,7 @@
 
 #include "ui_projectfiltersettings.h"
 
-#include "projectfilterdebug.h"
+#include <debug.h>
 #include "filtermodel.h"
 #include "comboboxdelegate.h"
 #include "projectfilterprovider.h"

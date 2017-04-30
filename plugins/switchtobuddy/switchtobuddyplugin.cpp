@@ -41,8 +41,7 @@
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
-
-Q_LOGGING_CATEGORY(PLUGIN_SWITCHTOBUDDY, "kdevplatform.plugins.switchtobuddy")
+#include <debug.h>
 
 using namespace KDevelop;
 

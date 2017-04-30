@@ -17,7 +17,7 @@ set(KDEVPLATFORM_LIB_SOVERSION 10)
 project(KDevPlatform)
 
 # we need some parts of the ECM CMake helpers
-find_package (ECM 0.0.9 REQUIRED NO_MODULE)
+find_package (ECM "5.14.0" REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDECompilerSettings NO_POLICY_SCOPE)
@@ -29,6 +29,7 @@ include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 include(ECMPackageConfigHelpers)
+include(ECMQtDeclareLoggingCategory)
 include(GenerateExportHeader)
 include(FeatureSummary)
 include(WriteBasicConfigVersionFile)

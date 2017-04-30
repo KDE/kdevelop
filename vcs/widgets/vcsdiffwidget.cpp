@@ -28,7 +28,7 @@
 #include "../vcsjob.h"
 #include "../vcsrevision.h"
 #include "../vcsdiff.h"
-#include "../debug.h"
+#include "debug.h"
 
 #include "ui_vcsdiffwidget.h"
 #include "vcsdiffpatchsources.h"

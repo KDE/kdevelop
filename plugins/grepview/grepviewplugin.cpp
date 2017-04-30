@@ -40,8 +40,6 @@
 #include <util/path.h>
 #include <language/interfaces/editorcontext.h>
 
-Q_LOGGING_CATEGORY(PLUGIN_GREPVIEW, "kdevplatform.plugins.grepview")
-
 static QString patternFromSelection(const KDevelop::IDocument* doc)
 {
     if (!doc)

@@ -19,7 +19,6 @@
 #include "textdocument.h"
 
 #include <QAction>
-#include <QDebug>
 #include <QFile>
 #include <QMenu>
 #include <QMimeDatabase>

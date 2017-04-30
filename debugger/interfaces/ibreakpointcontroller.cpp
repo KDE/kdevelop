@@ -34,7 +34,7 @@
 #include "../../interfaces/idebugcontroller.h"
 #include "../breakpoint/breakpoint.h"
 #include "../../interfaces/iuicontroller.h"
-#include "util/debug.h"
+#include <debug.h>
 
 namespace KDevelop {
 

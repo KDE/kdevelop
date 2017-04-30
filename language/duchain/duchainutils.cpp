@@ -29,7 +29,7 @@
 
 #include "../interfaces/ilanguagesupport.h"
 #include "../assistant/staticassistantsmanager.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include "declaration.h"
 #include "classfunctiondeclaration.h"

@@ -19,7 +19,6 @@
 
 #include "nativeappjob.h"
 
-#include <QDebug>
 #include <QFileInfo>
 #include <QMessageBox>
 

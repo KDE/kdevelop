@@ -29,8 +29,6 @@
 #include "../duchain/duchainlock.h"
 #include "codecompletionmodel.h"
 
-#include <QDebug>
-
 namespace KDevelop {
 
 //A completion item used for completing include-files

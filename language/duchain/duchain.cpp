@@ -37,7 +37,7 @@
 #include "../interfaces/ilanguagesupport.h"
 #include "../interfaces/icodehighlighting.h"
 #include "../backgroundparser/backgroundparser.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include "language-features.h"
 #include "topducontext.h"

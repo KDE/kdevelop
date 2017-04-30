@@ -21,8 +21,8 @@
 #include "externalscriptjob.h"
 
 #include "externalscriptitem.h"
-#include "externalscriptdebug.h"
 #include "externalscriptplugin.h"
+#include <debug.h>
 
 #include <QFileInfo>
 #include <QApplication>

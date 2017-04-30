@@ -48,7 +48,6 @@ set(KDevPlatformShell_LIB_SRCS
     loadedpluginsdialog.cpp
     testcontroller.cpp
     projectsourcepage.cpp
-    debug.cpp
     configdialog.cpp
     editorconfigpage.cpp
     environmentconfigurebutton.cpp
@@ -90,6 +89,12 @@ if(APPLE)
         macdockprogressview.mm
     )
 endif()
+
+ecm_qt_declare_logging_category(KDevPlatformShell_LIB_SRCS
+    HEADER debug.h
+    IDENTIFIER SHELL
+    CATEGORY_NAME "kdevplatform.shell"
+)
 
 kconfig_add_kcfg_files(KDevPlatformShell_LIB_SRCS
     settings/uiconfig.kcfgc

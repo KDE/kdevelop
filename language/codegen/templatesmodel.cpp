@@ -21,7 +21,7 @@
 #include "templatesmodel.h"
 
 #include "templatepreviewicon.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <interfaces/icore.h>
 
 #include <KConfig>

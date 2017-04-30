@@ -21,7 +21,6 @@
 
 #include <QTreeView>
 #include <QTimer>
-#include <QDebug>
 
 #include <ktexteditor/codecompletionmodel.h>
 #include <typeinfo>

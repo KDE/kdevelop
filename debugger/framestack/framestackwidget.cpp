@@ -44,7 +44,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/idocumentcontroller.h>
-#include "util/debug.h"
+#include <debug.h>
 #include "framestackmodel.h"
 
 namespace KDevelop {

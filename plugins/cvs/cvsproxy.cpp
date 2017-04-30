@@ -24,7 +24,7 @@
 #include "cvslogjob.h"
 #include "cvsstatusjob.h"
 #include "cvsdiffjob.h"
-#include "debug.h"
+#include <debug.h>
 
 #include <interfaces/iplugin.h>
 

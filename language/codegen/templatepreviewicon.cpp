@@ -19,7 +19,7 @@
 
 #include "templatepreviewicon.h"
 
-#include "util/debug.h"
+#include <debug.h>
 
 #include <KTar>
 #include <KZip>

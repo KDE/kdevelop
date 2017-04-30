@@ -21,7 +21,6 @@
 #include "loadedpluginsdialog.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QDialogButtonBox>
 #include <QListView>
 #include <QPainter>

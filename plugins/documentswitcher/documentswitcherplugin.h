@@ -21,8 +21,6 @@
 
 #include <interfaces/iplugin.h>
 #include <QVariant>
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(PLUGIN_DOCUMENTSWITCHER)
 
 class QStandardItemModel;
 namespace Sublime

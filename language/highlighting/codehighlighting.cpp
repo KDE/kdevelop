@@ -29,7 +29,7 @@
 #include "../../interfaces/ilanguagecontroller.h"
 #include "../../interfaces/icompletionsettings.h"
 #include "../../util/foregroundlock.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include "../duchain/declaration.h"
 #include "../duchain/types/functiontype.h"

@@ -27,7 +27,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include <QDebug>
 #include <QDBusConnectionInterface>
 #include <QFile>
 #include <QDir>

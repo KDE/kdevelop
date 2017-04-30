@@ -21,7 +21,6 @@
 #include "scriptappjob.h"
 #include "executescriptplugin.h"
 
-#include <QDebug>
 #include <QFileInfo>
 
 #include <KLocalizedString>

@@ -19,7 +19,7 @@
 #include "documentchangeset.h"
 
 #include "coderepresentation.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <algorithm>
 

@@ -14,6 +14,11 @@ set(kdevclassbrowser_PART_SRCS
     classwidget.cpp
     classtree.cpp
 )
+ecm_qt_declare_logging_category(kdevclassbrowser_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER PLUGIN_CLASSBROWSER
+    CATEGORY_NAME "kdevplatform.plugins.classbrowser"
+)
 qt5_add_resources(kdevclassbrowser_PART_SRCS kdevclassbrowser.qrc)
 kdevplatform_add_plugin(kdevclassbrowser JSON kdevclassbrowser.json SOURCES ${kdevclassbrowser_PART_SRCS})
 target_link_libraries(kdevclassbrowser KF5::TextEditor KDev::Util KDev::Language KDev::Interfaces)

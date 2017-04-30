@@ -21,7 +21,7 @@
 
 #include "renameaction.h"
 #include "renamefileaction.h"
-#include "util/debug.h"
+#include <debug.h>
 #include "../codegen/basicrefactoring.h"
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"

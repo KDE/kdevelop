@@ -24,7 +24,7 @@
 #include "externalscriptview.h"
 #include "externalscriptitem.h"
 #include "externalscriptjob.h"
-#include "externalscriptdebug.h"
+#include <debug.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>

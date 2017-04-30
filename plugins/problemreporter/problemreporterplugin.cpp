@@ -51,10 +51,10 @@
 
 #include "shell/problemmodelset.h"
 #include "problemsview.h"
+#include <debug.h>
 
 #include <shell/problem.h>
 
-Q_LOGGING_CATEGORY(PLUGIN_PROBLEMREPORTER, "kdevplatform.plugins.problemreporter")
 K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevproblemreporter.json",
                            registerPlugin<ProblemReporterPlugin>();)
 

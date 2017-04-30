@@ -18,9 +18,7 @@
 
 #include "problemnavigationcontext.h"
 
-#include "util/debug.h"
-
-#include <QDebug>
+#include <debug.h>
 
 #include <KIconLoader>
 #include <KLocalizedString>

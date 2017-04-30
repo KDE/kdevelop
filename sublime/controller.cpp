@@ -30,7 +30,7 @@
 #include "view.h"
 #include "document.h"
 #include "mainwindow.h"
-#include "sublimedebug.h"
+#include <debug.h>
 
 namespace Sublime {
 

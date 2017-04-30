@@ -36,7 +36,7 @@
 #include "topducontextdata.h"
 #include "duchainregister.h"
 #include "topducontextdynamicdata.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <language/interfaces/iastcontainer.h>
 

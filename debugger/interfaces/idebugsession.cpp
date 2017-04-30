@@ -21,7 +21,7 @@
 #include "idebugsession.h"
 #include "iframestackmodel.h"
 #include "ivariablecontroller.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <QFileInfo>
 

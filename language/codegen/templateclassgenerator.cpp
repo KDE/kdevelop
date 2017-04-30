@@ -19,7 +19,7 @@
 
 #include "templateclassgenerator.h"
 #include "archivetemplateloader.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <interfaces/iproject.h>
 #include "language/codegen/documentchangeset.h"

@@ -25,14 +25,13 @@
 #include <QFile>
 #include <QMutex>
 #include <QMutexLocker>
-#include <QDebug>
 
 #include <KLocalizedString>
 #include <KFormat>
 #include <ktexteditor/movinginterface.h>
 
 #include "backgroundparser.h"
-#include "util/debug.h"
+#include <debug.h>
 #include "duchain/topducontext.h"
 
 #include "duchain/duchainlock.h"

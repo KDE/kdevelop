@@ -33,7 +33,7 @@
 #include "../interfaces/ivariablecontroller.h"
 #include "variablecollection.h"
 #include "variablesortmodel.h"
-#include "util/debug.h"
+#include <debug.h>
 
 /** The variables widget is passive, and is invoked by the rest of the
     code via two main Q_SLOTS:

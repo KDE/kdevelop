@@ -20,7 +20,6 @@
 
 #include "pluginpreferences.h"
 
-#include <QDebug>
 #include <QVBoxLayout>
 
 #include <KPluginSelector>
@@ -30,7 +29,7 @@
 
 #include "../core.h"
 #include "../plugincontroller.h"
-#include "../debug.h"
+#include "debug.h"
 
 
 namespace KDevelop

@@ -15,7 +15,6 @@
 #include <QPushButton>
 #include <QFileInfo>
 #include <QFileDialog>
-#include <QDebug>
 
 #include <KColorScheme>
 #include <KIO/StatJob>
@@ -29,6 +28,7 @@
 #include "mainwindow.h"
 #include "shellextension.h"
 #include "projectsourcepage.h"
+#include <debug.h>
 #include <interfaces/iprojectcontroller.h>
 
 namespace
@@ -257,7 +257,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                 }
             }
             Q_FOREACH ( const auto& plugin, m_projectFilters.keys() ) {
-                qDebug() << plugin << m_projectFilters.value(plugin);
+                qCDebug(SHELL) << plugin << m_projectFilters.value(plugin);
                 if ( m_projectFilters.value(plugin).isEmpty() ) {
                     // that works in any case
                     auto meta = m_projectPlugins.value(plugin);

@@ -50,7 +50,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 
-#include "util/debug.h"
+#include <debug.h>
 
 #include "parsejob.h"
 

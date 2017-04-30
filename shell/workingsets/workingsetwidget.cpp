@@ -18,7 +18,7 @@
 */
 
 #include "workingsetwidget.h"
-#include "../debug.h"
+#include "debug.h"
 
 #include <sublime/area.h>
 

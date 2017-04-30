@@ -30,7 +30,7 @@
 
 #include "workingset.h"
 #include "workingsettoolbutton.h"
-#include "../debug.h"
+#include "debug.h"
 
 using namespace KDevelop;
 

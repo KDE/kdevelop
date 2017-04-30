@@ -11,7 +11,6 @@
 #include "test_cvs.h"
 
 #include <QTest>
-#include <QLoggingCategory>
 #include <QUrl>
 
 #include <KIO/DeleteJob>
@@ -27,9 +26,6 @@
 #define CVS_IMPORT              CVSTEST_BASEDIR "import/"
 #define CVS_TESTFILE_NAME       "testfile"
 #define CVS_CHECKOUT            CVSTEST_BASEDIR "working/"
-
-// we need to add this since it is declared in cvsplugin.cpp which we don't compile here
-Q_LOGGING_CATEGORY(PLUGIN_CVS, "kdevplatform.plugins.cvs")
 
 void TestCvs::initTestCase()
 {

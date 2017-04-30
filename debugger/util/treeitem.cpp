@@ -23,7 +23,7 @@
 
 #include <QModelIndex>
 
-#include "debug.h"
+#include <debug.h>
 #include "treemodel.h"
 
 using namespace KDevelop;

@@ -17,7 +17,7 @@
 */
 
 #include "useswidget.h"
-#include "util/debug.h"
+#include <debug.h>
 
 #include <QIcon>
 #include <QLabel>

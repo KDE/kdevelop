@@ -3,7 +3,10 @@
 find_program(GIT_FOUND NAMES git)
 
 if (GIT_FOUND)
-
+    include_directories(
+        ..
+        ${CMAKE_CURRENT_BINARY_DIR}/..
+    )
     set(gittest_SRCS
         test_git.cpp
         ../gitplugin.cpp
@@ -14,6 +17,7 @@ if (GIT_FOUND)
         ../gitmessagehighlighter.cpp
         ../gitplugincheckinrepositoryjob.cpp
         ../gitnameemaildialog.cpp
+        ${kdevgit_LOG_PART_SRCS}
     )
     ki18n_wrap_ui(gittest_SRCS ../stashmanagerdialog.ui)
     ki18n_wrap_ui(gittest_SRCS ../gitnameemaildialog.ui)

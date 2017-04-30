@@ -26,7 +26,6 @@
 #include <QDir>
 #include <QProcessEnvironment>
 #include <QMenu>
-#include <QDebug>
 
 #include <kmessagebox.h>
 #include <vcs/vcsjob.h>
@@ -107,8 +106,6 @@ QDir urlDir(const QUrl& url)
 }
 
 }
-
-Q_LOGGING_CATEGORY(PLUGIN_PERFORCE, "kdevplatform.plugins.perforce")
 
 PerforcePlugin::PerforcePlugin(QObject* parent, const QVariantList&):
     KDevelop::IPlugin(QStringLiteral("kdevperforce"), parent)

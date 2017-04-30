@@ -28,7 +28,7 @@
 #include "document.h"
 #include "areaindex.h"
 #include "controller.h"
-#include "sublimedebug.h"
+#include <debug.h>
 
 namespace Sublime {
 

@@ -63,8 +63,6 @@
 #include "debug.h"
 
 
-Q_LOGGING_CATEGORY(PLUGIN_PATCHREVIEW, "kdevplatform.plugins.patchreview")
-
 using namespace KDevelop;
 
 namespace

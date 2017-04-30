@@ -36,7 +36,7 @@
 #include "../types/typeutils.h"
 #include "../types/typesystem.h"
 #include "../persistentsymboltable.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 #include <duchain/types/typealiastype.h>

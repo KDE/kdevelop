@@ -23,7 +23,7 @@
 #include "../declaration.h"
 #include "../duchainpointer.h"
 #include "../declarationid.h"
-#include "util/debug.h"
+#include <debug.h>
 
 namespace KDevelop
 {

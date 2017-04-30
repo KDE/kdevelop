@@ -24,7 +24,7 @@
 #include "../../interfaces/icore.h"
 #include "../../interfaces/idebugcontroller.h"
 #include "../variable/variablecollection.h"
-#include "util/debug.h"
+#include <debug.h>
 #include "iframestackmodel.h"
 
 

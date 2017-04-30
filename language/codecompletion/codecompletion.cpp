@@ -32,7 +32,7 @@
 
 #include "../duchain/duchain.h"
 #include "../duchain/topducontext.h"
-#include "util/debug.h"
+#include <debug.h>
 #include "codecompletionmodel.h"
 #include <interfaces/idocumentcontroller.h>
 

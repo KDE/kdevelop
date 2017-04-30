@@ -17,7 +17,7 @@
 */
 
 #include "duchainchangeset.h"
-#include "util/debug.h"
+#include <debug.h>
 #include <serialization/indexedstring.h>
 
 namespace KDevelop

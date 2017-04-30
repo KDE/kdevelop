@@ -30,7 +30,7 @@
 #include <language/duchain/duchainlock.h>
 
 #include "applychangeswidget.h"
-#include "util/debug.h"
+#include <debug.h>
 
 namespace KDevelop
 {

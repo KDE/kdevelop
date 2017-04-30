@@ -34,7 +34,7 @@
 #include "../interfaces/ilanguagesupport.h"
 #include "../duchain/duchain.h"
 #include "../duchain/duchainlock.h"
-#include "util/debug.h"
+#include <debug.h>
 #include "widgetcolorizer.h"
 
 #include <KTextEditor/Document>

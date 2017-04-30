@@ -29,7 +29,7 @@
 #include "../duchain/ducontext.h"
 #include "../duchain/duchainlock.h"
 #include "../duchain/duchain.h"
-#include "util/debug.h"
+#include <debug.h>
 #include "codecompletion.h"
 #include "codecompletionitem.h"
 #include "codecompletionmodel.h"

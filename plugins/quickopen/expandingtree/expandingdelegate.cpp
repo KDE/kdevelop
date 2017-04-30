@@ -28,7 +28,7 @@
 #include <QApplication>
 
 #include "expandingwidgetmodel.h"
-#include "../debug.h"
+#include <debug.h>
 
 ExpandingDelegate::ExpandingDelegate(ExpandingWidgetModel* model, QObject* parent)
     : QItemDelegate(parent)
