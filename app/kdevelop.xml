@@ -6,6 +6,7 @@
     <comment xml:lang="es">Archivo de proyecto de KDevelop</comment>
     <comment xml:lang="nl">Projectbestand van KDevelop</comment>
     <comment xml:lang="pt">Ficheiro de Projecto do KDevelop</comment>
+    <comment xml:lang="sk">Súbor projektu KDevelop</comment>
     <comment xml:lang="sv">KDevelop-projektfil</comment>
     <comment xml:lang="uk">файл проекту KDevelop</comment>
     <glob pattern="*.kdev4"/>
