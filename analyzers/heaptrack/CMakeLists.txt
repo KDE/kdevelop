@@ -3,14 +3,14 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevheaptrack\")
 find_package(heaptrack QUIET)
 set_package_properties(heaptrack PROPERTIES
     DESCRIPTION "A heap memory profiler for Linux"
-    URL "https://cgit.kde.org/heaptrack.git"
+    URL "https://phabricator.kde.org/dashboard/view/28"
     PURPOSE "Recommended: required by the non-essential heaptrack plugin"
     TYPE RUNTIME
 )
 find_package(heaptrack_gui QUIET)
 set_package_properties(heaptrack_gui PROPERTIES
     DESCRIPTION "Analyzer gui for heaptrack, a heap memory profiler for Linux"
-    URL "https://cgit.kde.org/heaptrack.git"
+    URL "https://phabricator.kde.org/dashboard/view/28"
     PURPOSE "Recommended: required by the non-essential heaptrack plugin"
     TYPE RUNTIME
 )
