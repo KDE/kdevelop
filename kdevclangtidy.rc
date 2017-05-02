@@ -1,10 +1,13 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="ClangTidy" library="libclangtidyplugin" version="2">
+<gui name="ClangTidy" library="libclangtidyplugin" version="3">
 <MenuBar>
- <Menu name="analyze">
-   <text context="@title:menu">Analyze</text>
-     <Action name="clangtidy_file" group="run_operations"/>
-     <Action name="clangtidy_all" group="run_operations"/>
- </Menu>
+  <Menu name="code">
+    <Menu name="analyze_file">
+      <Action name="clangtidy_file"/>
+    </Menu>
+    <Menu name="analyze_project">
+      <Action name="clangtidy_all"/>
+    </Menu>
+  </Menu>
 </MenuBar>
 </gui>

@@ -274,7 +274,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
         if (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc")) {
             auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), this);
             connect(action, &QAction::triggered, this, &Plugin::runClangTidyFile);
-            extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
+            extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, action);
         }
     }
 
@@ -297,7 +297,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
         connect(action, &QAction::triggered, this, [this, item]() {
             runClangTidy(item->path().toUrl());
         });
-        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeGroup, action);
+        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeProjectGroup, action);
     }
 
     return extension;
