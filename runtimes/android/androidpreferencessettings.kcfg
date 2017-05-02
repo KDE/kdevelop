@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+
+  <group name="Android">
+    <entry name="cmakeToolchain" type="Path"><default code="true">QStandardPaths::locate(QStandardPaths::GenericDataLocation, "ECM/toolchain/Android.cmake")</default></entry>
+    <entry name="ndk" type="Path"><default code="true">qgetenv("ANDROID_NDK")</default></entry>
+    <entry name="sdk" type="Path"><default code="true">qgetenv("ANDROID_HOME")</default></entry>
+    <entry name="arch" type="String"><default>arm</default></entry>
+    <entry name="toolchain" type="String"><default>arm-linux-androideabi</default></entry>
+    <entry name="abi" type="String"><default>armeabi-v7a</default></entry>
+    <entry name="gcc" type="String"><default>4.9</default></entry>
+    <entry name="api" type="String"><default>14</default></entry>
+    <entry name="buildtools" type="String"><default>21.1.1</default></entry>
+  </group>
+</kcfg>

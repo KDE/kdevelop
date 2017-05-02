@@ -124,6 +124,7 @@ add_subdirectory(kdeintegration)
 add_subdirectory(utils)
 add_subdirectory(file_templates)
 add_subdirectory(providers)
+add_subdirectory(runtimes)
 add_subdirectory(shortcuts)
 add_subdirectory(doc)
 

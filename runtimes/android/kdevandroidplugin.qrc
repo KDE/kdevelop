@@ -1,0 +1,6 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/kxmlgui5/kdevandroid">
+        <file>kdevandroidplugin.rc</file>
+    </qresource>
+</RCC>

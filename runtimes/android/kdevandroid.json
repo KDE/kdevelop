@@ -1,0 +1,17 @@
+{
+    "KPlugin": {
+        "Authors": [
+            { "Name": "Aleix Pol", "Email": "aleixpol@kde.org" }
+        ],
+        "Category": "Global",
+        "Description": "Exposes Android runtimes",
+        "Icon": "android",
+        "Id": "kdevandroid",
+        "License": "GPL",
+        "Name": "Android Support",
+        "ServiceTypes": [ "KDevelop/Plugin" ],
+        "Version": "0.1"
+    },
+    "X-KDevelop-Category": "Global",
+    "X-KDevelop-Mode": "NoGUI"
+}

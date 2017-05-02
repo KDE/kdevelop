@@ -1,0 +1,7 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="kdevandroid" version="1" translationDomain="kdevandroid">
+<MenuBar>
+ <Menu name="run">
+ </Menu>
+</MenuBar>
+</gui>
