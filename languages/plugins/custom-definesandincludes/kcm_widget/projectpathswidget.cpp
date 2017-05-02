@@ -58,6 +58,7 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
 
     ui->addPath->setIcon(QIcon::fromTheme("list-add"));
     ui->removePath->setIcon(QIcon::fromTheme("list-remove"));
+    ui->batchEdit->setIcon(QIcon::fromTheme(QStringLiteral("format-list-unordered")));
 
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addPath->setFixedHeight( ui->projectPaths->sizeHint().height() );
