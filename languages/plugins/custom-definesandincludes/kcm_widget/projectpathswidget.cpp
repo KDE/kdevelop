@@ -55,6 +55,7 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
 
     ui->addPath->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
     ui->removePath->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
+    ui->batchEdit->setIcon(QIcon::fromTheme(QStringLiteral("format-list-unordered")));
 
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addPath->setFixedHeight( ui->projectPaths->sizeHint().height() );
@@ -227,7 +228,7 @@ void ProjectPathsWidget::batchEdit()
         auto defines = pathsModel->data(midx, ProjectPathsModel::DefinesDataRole).value<Defines>();
 
         for (auto it = defines.constBegin(); it != defines.constEnd(); it++) {
-            be.textEdit->append(it.key() + "=" + it.value());
+            be.textEdit->appendPlainText(it.key() + "=" + it.value());
         }
 
         dialog.setWindowTitle(i18n("Edit defined macros"));
