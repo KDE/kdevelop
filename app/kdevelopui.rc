@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui version="144" name="kdevelop" translationDomain="kdevelop">
+<gui version="145" name="kdevelop" translationDomain="kdevelop">
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -57,11 +57,6 @@
     <Merge />
   </Menu>
 
-  <Menu name="analyze" append="first_menu">
-    <text name="@title:menu">Analy&amp;ze</text>
-    <Merge />
-  </Menu>
-
   <Menu name="navigation" append="first_menu">
     <text context="@title:menu">&amp;Navigation</text>
     <DefineGroup name="navigation_file"/>
@@ -112,6 +107,14 @@
 
   <Menu name="code">
     <text context="@title:menu">Code</text>
+    <Menu name="analyze_file">
+      <text name="@title:menu">Analyze Current File With</text>
+      <Merge />
+    </Menu>
+    <Menu name="analyze_project">
+      <text name="@title:menu">Analyze Current Project With</text>
+      <Merge />
+    </Menu>
     <Merge/>
   </Menu>
 

@@ -1,10 +1,13 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="kdevcppcheck" version="8" translationDomain="kdevcppcheck">
+<gui name="kdevcppcheck" version="9" translationDomain="kdevcppcheck">
 <MenuBar>
-  <Menu name="analyze">
-    <Action name="cppcheck_file"/>
-    <Action name="cppcheck_project"/>
-    <Separator/>
+  <Menu name="code">
+    <Menu name="analyze_file">
+      <Action name="cppcheck_file"/>
+    </Menu>
+    <Menu name="analyze_project">
+      <Action name="cppcheck_project"/>
+    </Menu>
   </Menu>
 </MenuBar>
 </gui>

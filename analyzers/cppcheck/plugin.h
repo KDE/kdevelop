@@ -75,9 +75,11 @@ private:
 
     KDevelop::IProject* m_currentProject;
 
-    QAction* m_actionFile;
-    QAction* m_actionProject;
-    QAction* m_actionProjectItem;
+    QAction* m_menuActionFile;
+    QAction* m_menuActionProject;
+    QAction* m_contextActionFile;
+    QAction* m_contextActionProject;
+    QAction* m_contextActionProjectItem;
 
     QScopedPointer<ProblemModel> m_model;
 };
