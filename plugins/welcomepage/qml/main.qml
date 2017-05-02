@@ -34,7 +34,9 @@ Rectangle {
 
         anchors.fill: parent
 
-        source: "qrc:/qml/area_"+area+".qml"
+        // non-code areas are broken ATM, so just go blank for them
+        // old: source: "qrc:///qml/area_"+area+".qml"
+        source: area === "code" ? "qrc:///qml/area_code.qml" : ""
         asynchronous: true
         opacity: status === Loader.Ready
 
