@@ -68,7 +68,7 @@ set( cmakedoc_SRCS
 
 remove_definitions( -DQT_NO_STL )
 
-if(WIN32)
+if(MSVC)
     add_definitions(-DYY_NO_UNISTD_H)
 endif()
 
