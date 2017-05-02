@@ -30,6 +30,7 @@
 #include <QHash>
 #include <QLocale>
 #include <QUrl>
+#include <QApplication>
 
 #include <KLocalizedString>
 
@@ -103,6 +104,40 @@ static QString abbreviateLastName(const QString& author) {
     return onlyOneFragment ? parts.first() : parts.first() + QStringLiteral(" %1.").arg(parts.last()[0]);
 }
 
+static QString annotationToolTip(const VcsAnnotationLine& aline)
+{
+    const bool textIsLeftToRight = (QApplication::layoutDirection() == Qt::LeftToRight);
+
+    const QString boldStyle = QStringLiteral(";font-weight:bold");
+    const QString one = QStringLiteral("1");
+    const QString two = QStringLiteral("2");
+    const QString line = QStringLiteral(
+        "<tr>"
+          "<td align=\"right\" style=\"white-space:nowrap%1\">%%2</td>"
+          "<td align=\"left\" style=\"white-space:nowrap%3\">%%4</td>"
+        "</tr>").arg(
+            (textIsLeftToRight ? boldStyle : QString()),
+            (textIsLeftToRight ? one : two),
+            (textIsLeftToRight ? QString() : boldStyle),
+            (textIsLeftToRight ? two : one)
+        );
+
+    const QString authorLabel = i18n("Author:").toHtmlEscaped();
+    const QString dateLabel = i18n("Date:").toHtmlEscaped();
+    const QString messageLabel = i18n("Commit message:").toHtmlEscaped();
+
+    const QString author = aline.author().toHtmlEscaped();
+    const QString date = QLocale().toString(aline.date()).toHtmlEscaped();
+    const QString message = aline.commitMessage().toHtmlEscaped().replace(QLatin1Char('\n'), QLatin1String("<br/>"));
+
+    return
+        QLatin1String("<table>") +
+        line.arg(authorLabel, author) +
+        line.arg(dateLabel, date) +
+        line.arg(messageLabel, message) +
+        QLatin1String("</table>");
+}
+
 QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
 {
     if( line < 0 || !d->m_annotation.containsLine( line ) )
@@ -126,8 +161,7 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
         return aline.revision().revisionValue();
     } else if( role == Qt::ToolTipRole )
     {
-        return QVariant( i18n("Author: %1\nDate: %2\nCommit Message: %3",
-                              aline.author(), QLocale().toString( aline.date() ), aline.commitMessage() ) );
+        return QVariant(annotationToolTip(aline));
     }
     return QVariant();
 }
