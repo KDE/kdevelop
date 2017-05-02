@@ -42,7 +42,8 @@ const QString ContextMenuExtension::VcsGroup      = QStringLiteral("VcsGroup");
 const QString ContextMenuExtension::ProjectGroup  = QStringLiteral("ProjectGroup");
 const QString ContextMenuExtension::OpenEmbeddedGroup  = QStringLiteral("OpenEmbeddedGroup");
 const QString ContextMenuExtension::OpenExternalGroup  = QStringLiteral("OpenExternalGroup");
-const QString ContextMenuExtension::AnalyzeGroup = QStringLiteral("AnalyzeGroup");
+const QString ContextMenuExtension::AnalyzeFileGroup = QStringLiteral("AnalyzeFileGroup");
+const QString ContextMenuExtension::AnalyzeProjectGroup = QStringLiteral("AnalyzeProjectGroup");
 const QString ContextMenuExtension::NavigationGroup = QStringLiteral("NavigationGroup");
 const QString ContextMenuExtension::ExtensionGroup  = QStringLiteral("ExtensionGroup");
 
@@ -98,7 +99,9 @@ void populateMenuWithGroup(
     QMenu* menu,
     const QList<ContextMenuExtension>& extensions,
     const QString& groupName,
-    const QString& groupDisplayName = QString())
+    const QString& groupDisplayName = QString(),
+    bool forceAddMenu = false,
+    bool addSeparator = true)
 {
     QList<QAction*> groupActions;
     for (const ContextMenuExtension& extension : extensions) {
@@ -113,7 +116,8 @@ void populateMenuWithGroup(
     }
 
     QMenu* groupMenu = menu;
-    if (groupActions.count() > 1 && !groupDisplayName.isEmpty()) {
+    if ((groupActions.count() > 1 && !groupDisplayName.isEmpty()) ||
+        (!groupDisplayName.isEmpty() && forceAddMenu)) {
         groupMenu = menu->addMenu(groupDisplayName);
     }
 
@@ -121,7 +125,9 @@ void populateMenuWithGroup(
         groupMenu->addAction(action);
     }
 
-    menu->addSeparator();
+    if (addSeparator) {
+        menu->addSeparator();
+    }
 }
 
 void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExtension>& extensions)
@@ -132,7 +138,8 @@ void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExte
     populateMenuWithGroup(menu, extensions, DebugGroup, i18n("Debug"));
     populateMenuWithGroup(menu, extensions, RefactorGroup, i18n("Refactor"));
     populateMenuWithGroup(menu, extensions, NavigationGroup);
-    populateMenuWithGroup(menu, extensions, AnalyzeGroup, i18n("Analyze With"));
+    populateMenuWithGroup(menu, extensions, AnalyzeFileGroup, i18n("Analyze Current File With"), true, false);
+    populateMenuWithGroup(menu, extensions, AnalyzeProjectGroup, i18n("Analyze Current Project With"), true);
     populateMenuWithGroup(menu, extensions, VcsGroup);
     populateMenuWithGroup(menu, extensions, ExtensionGroup);
 }

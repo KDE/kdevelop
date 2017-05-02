@@ -58,8 +58,10 @@ public:
     static const QString OpenEmbeddedGroup;
     /** menu group to contain open with external application actions */
     static const QString OpenExternalGroup;
-    /** menu group to contain analyze actions */
-    static const QString AnalyzeGroup;
+    /** menu group to contain file analysis actions */
+    static const QString AnalyzeFileGroup;
+    /** menu group to contain project analysis actions */
+    static const QString AnalyzeProjectGroup;
     /** The menu group containing navigation actions */
     static const QString NavigationGroup;
 

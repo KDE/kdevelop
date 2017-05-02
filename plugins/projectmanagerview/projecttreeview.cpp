@@ -354,7 +354,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         fileActions += ext.actions(ContextMenuExtension::FileGroup);
         projectActions += ext.actions(ContextMenuExtension::ProjectGroup);
         vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
-        analyzeActions += ext.actions(ContextMenuExtension::AnalyzeGroup);
+        analyzeActions += ext.actions(ContextMenuExtension::AnalyzeProjectGroup);
         extActions += ext.actions(ContextMenuExtension::ExtensionGroup);
         runActions += ext.actions(ContextMenuExtension::RunGroup);
     }
