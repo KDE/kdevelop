@@ -67,7 +67,6 @@ void TestTemplatesModel::descriptionParsing()
     QStandardItem* item = items.first();
 
     QCOMPARE(item->data(TemplatesModel::CommentRole).toString(), QStringLiteral("Describes a class using YAML syntax"));
-    QVERIFY(item->data(TemplatesModel::IconNameRole).toString().isEmpty());
 
     QString descriptionFile = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/kdevcodegentest/template_descriptions/test_yaml.desktop";
 
