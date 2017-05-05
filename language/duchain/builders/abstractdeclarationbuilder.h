@@ -85,6 +85,7 @@ protected:
    * \return the new declaration created
    */
   template<class DeclarationT>
+  Q_DECL_DEPRECATED_X("Use openDeclaration(Identifier) instead")
   DeclarationT* openDeclaration(const QualifiedIdentifier& id, const RangeInRevision& newRange, DeclarationFlags flags = NoFlags)
   {
     if (id.count() > 1) {
