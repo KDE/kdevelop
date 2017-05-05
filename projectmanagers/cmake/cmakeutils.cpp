@@ -60,9 +60,15 @@ static const QString projectRootRelativeKey = QStringLiteral("ProjectRootRelativ
 static const QString projectBuildDirs = QStringLiteral("BuildDirs");
 }
 
-static const QString buildDirIndexKey = QStringLiteral("Current Build Directory Index");
+static const QString buildDirIndexKey_ = QStringLiteral("Current Build Directory Index");
 static const QString buildDirOverrideIndexKey = QStringLiteral("Temporary Build Directory Index");
 static const QString buildDirCountKey = QStringLiteral("Build Directory Count");
+
+//the used builddir will change for every runtime
+static QString buildDirIndexKey() {
+    const QString currentRuntime = ICore::self()->runtimeController()->currentRuntime()->name();
+    return buildDirIndexKey_ + '-' + currentRuntime;
+}
 
 namespace Specific
 {
@@ -397,13 +403,15 @@ int currentBuildDirIndex( KDevelop::IProject* project )
     if ( baseGrp.hasKey( Config::buildDirOverrideIndexKey ) )
         return baseGrp.readEntry<int>( Config::buildDirOverrideIndexKey, 0 );
 
+    else if (baseGrp.hasKey(Config::buildDirIndexKey()))
+        return baseGrp.readEntry<int>( Config::buildDirIndexKey(), 0 );
     else
-        return baseGrp.readEntry<int>( Config::buildDirIndexKey, 0 ); // default is 0 because QString::number(0) apparently returns an empty string
+        return baseGrp.readEntry<int>( Config::buildDirIndexKey_, 0 ); // backwards compatibility
 }
 
 void setCurrentBuildDirIndex( KDevelop::IProject* project, int buildDirIndex )
 {
-    writeProjectBaseParameter( project, Config::buildDirIndexKey, QString::number (buildDirIndex) );
+    writeProjectBaseParameter( project, Config::buildDirIndexKey(), QString::number (buildDirIndex) );
 }
 
 void setCurrentEnvironment( KDevelop::IProject* project, const QString& environment )
@@ -548,7 +556,7 @@ void attemptMigrate( KDevelop::IProject* project )
     qCDebug(CMAKE) << "CMake settings migration: current build directory" << buildDir << "(index" << buildDirIndex << ")";
 
     baseGrp.writeEntry( Config::buildDirCountKey, buildDirsCount );
-    baseGrp.writeEntry( Config::buildDirIndexKey, buildDirIndex );
+    baseGrp.writeEntry( Config::buildDirIndexKey(), buildDirIndex );
 
     for (int i = 0; i < buildDirsCount; ++i)
     {
@@ -579,7 +587,7 @@ void removeOverrideBuildDirIndex( KDevelop::IProject* project, bool writeToMainI
     if( !baseGrp.hasKey(Config::buildDirOverrideIndexKey) )
         return;
     if( writeToMainIndex )
-        baseGrp.writeEntry( Config::buildDirIndexKey, baseGrp.readEntry(Config::buildDirOverrideIndexKey) );
+        baseGrp.writeEntry( Config::buildDirIndexKey(), baseGrp.readEntry(Config::buildDirOverrideIndexKey) );
 
     baseGrp.deleteEntry(Config::buildDirOverrideIndexKey);
 }
