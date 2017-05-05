@@ -19,16 +19,29 @@
  */
 
 #include <cmakeserver.h>
+#include <tests/autotestshell.h>
+#include <tests/testproject.h>
+#include <tests/testcore.h>
 #include "testhelpers.h"
 
 #include <QTest>
 #include <QJsonObject>
+#include <QLoggingCategory>
 
 using namespace KDevelop;
 
 class CMakeServerTest : public QObject
 {
     Q_OBJECT
+public:
+    CMakeServerTest()
+    {
+        QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.projectmanagers.cmake.debug=true\n"));
+
+        AutoTestShell::init();
+        TestCore::initialize();
+    }
+
 private slots:
     void testRun()
     {
