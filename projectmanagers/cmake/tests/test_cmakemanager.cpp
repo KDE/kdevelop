@@ -39,7 +39,7 @@ using namespace KDevelop;
 
 void TestCMakeManager::initTestCase()
 {
-    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.projectmanagers.cmake.debug=true\n"));
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
 
     AutoTestShell::init();
     TestCore::initialize();
@@ -80,10 +80,10 @@ void TestCMakeManager::testIncludePaths()
     Path::List includeDirs = project->buildSystemManager()->includeDirectories(fooCppItem);
     QVERIFY(includeDirs.size() >= 3);
 
-    Path buildDir(sourceDir, QStringLiteral("build/"));
+    Path buildDir(project->buildSystemManager()->buildDirectory(fooCppItem));
     QVERIFY(includeDirs.contains(buildDir));
 
-    Path subBuildDir(sourceDir, QStringLiteral("build/subdir/"));
+    Path subBuildDir(buildDir, QStringLiteral("subdir/"));
     QVERIFY(includeDirs.contains(subBuildDir));
 
     Path subDir(sourceDir, QStringLiteral("subdir/"));
@@ -339,10 +339,6 @@ void TestCMakeManager::testParenthesesInTestArguments()
 {
     IProject* project = loadProject(QStringLiteral("parentheses_in_test_arguments"));
 
-    Path sourceDir = project->path();
-    Path buildDir(sourceDir, QStringLiteral("build/"));
-
     auto job = new CMakeImportJsonJob(project, this);
-    job->start();
-
+    QVERIFY(job->exec());
 }

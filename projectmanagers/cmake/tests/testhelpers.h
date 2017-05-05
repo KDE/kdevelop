@@ -30,6 +30,8 @@
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <interfaces/iruntimecontroller.h>
+#include <interfaces/iruntime.h>
 #include <QSignalSpy>
 
 static QString currentBuildDirKey = QStringLiteral("Build Directory Path");
@@ -41,6 +43,7 @@ static QString currentBuildDirectoryIndexKey = QStringLiteral("Current Build Dir
 static QString projectBuildDirectoryCount = QStringLiteral("Build Directory Count");
 static QString projectRootRelativeKey = QStringLiteral("ProjectRootRelative");
 static QString projectBuildDirs = QStringLiteral("BuildDirs");
+static const QString buildDirRuntime = QStringLiteral("Runtime");
 
 struct TestProjectPaths {
     // foo/
@@ -93,6 +96,7 @@ void defaultConfigure(const TestProjectPaths& paths)
     // apply default configuration
     CMakeBuildDirChooser bd;
     bd.setSourceFolder(paths.sourceDir);
+    bd.setBuildFolder(KDevelop::Path(CMAKE_TESTS_BINARY_DIR + QStringLiteral("/build-") + paths.sourceDir.lastPathSegment()));
     // we don't want to execute, just pick the defaults from the dialog
 
     KConfigGroup cmakeGrp = config.group("CMake");
@@ -115,6 +119,7 @@ void defaultConfigure(const TestProjectPaths& paths)
     buildDirGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
     buildDirGrp.writeEntry( currentBuildTypeKey, bd.buildType() );
     buildDirGrp.writeEntry( projectBuildDirs, QStringList() << bd.buildFolder().toLocalFile());
+    buildDirGrp.writeEntry( buildDirRuntime, KDevelop::ICore::self()->runtimeController()->currentRuntime()->name());
 
     config.sync();
 }
