@@ -157,22 +157,27 @@ KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path)
     return new KDevelop::ExecuteCompositeJob( this, jobs );
 }
 
-QJsonObject FlatpakRuntime::config() const
+QJsonObject FlatpakRuntime::config(const KDevelop::Path& path)
 {
-    QFile f(m_file.toLocalFile());
+    QFile f(path.toLocalFile());
     if (!f.open(QIODevice::ReadOnly)) {
-        qCWarning(FLATPAK) << "couldn't open" << m_file;
+        qCWarning(FLATPAK) << "couldn't open" << path;
         return {};
     }
 
     QJsonParseError error;
     auto doc = QJsonDocument::fromJson(f.readAll(), &error);
     if (error.error) {
-        qCWarning(FLATPAK) << "couldn't parse" << m_file << error.errorString();
+        qCWarning(FLATPAK) << "couldn't parse" << path << error.errorString();
         return {};
     }
 
     return doc.object();
+}
+
+QJsonObject FlatpakRuntime::config() const
+{
+    return config(m_file);
 }
 
 Path FlatpakRuntime::pathInHost(const KDevelop::Path& runtimePath)

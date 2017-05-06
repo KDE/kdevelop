@@ -42,8 +42,6 @@ private:
     void createRuntime(const KDevelop::Path &file, const QString &arch);
 
     QHash<KDevelop::Path, KDevelop::IRuntime *> m_runtimes;
-    QString m_defaultArch;
-    QStringList m_availableArches;
 };
 
 #endif

@@ -48,6 +48,8 @@ public:
     QList<KJob*> exportBundle(const QString &path);
     KJob* executeOnDevice(const QString &host, const QString &path);
 
+    static QJsonObject config(const KDevelop::Path& path);
+
 private:
     void refreshJson();
     QJsonObject config() const;

@@ -49,32 +49,6 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevFlatpakFactory, "kdevflatpak.json", registerPlugi
 
 using namespace KDevelop;
 
-void FlatpakPlugin::setupArches()
-{
-    QProcess* defaultArchProcess = new QProcess;
-    QProcess* supportedArchesProcess = new QProcess;
-
-    connect(supportedArchesProcess, QOverload<int>::of(&QProcess::finished), supportedArchesProcess, [this, supportedArchesProcess]() {
-        supportedArchesProcess->deleteLater();
-
-        QStringList arches;
-        QTextStream stream(supportedArchesProcess);
-        while (!stream.atEnd()) {
-            arches << stream.readLine();
-        }
-        qDebug() << "flatpak arches..." << arches;
-        m_availableArches = arches;
-    });
-    connect(defaultArchProcess, QOverload<int>::of(&QProcess::finished), defaultArchProcess, [this, defaultArchProcess]() {
-        defaultArchProcess->deleteLater();
-
-        m_defaultArch = QString::fromLatin1(defaultArchProcess->readAllStandardOutput()).trimmed();
-    });
-
-    supportedArchesProcess->start("flatpak", {"--supported-arches"});
-    defaultArchProcess->start("flatpak", {"--default-arch"});
-}
-
 FlatpakPlugin::FlatpakPlugin(QObject *parent, const QVariantList & /*args*/)
     : KDevelop::IPlugin( QStringLiteral("kdevflatpak"), parent )
 {
@@ -96,8 +70,6 @@ FlatpakPlugin::FlatpakPlugin(QObject *parent, const QVariantList & /*args*/)
     ac->setDefaultShortcut(remoteAction, Qt::CTRL | Qt::META | Qt::Key_D);
     connect(remoteAction, &QAction::triggered, this, &FlatpakPlugin::executeOnRemoteDevice);
     ac->addAction(QStringLiteral("runtime_flatpak_remote"), remoteAction);
-
-    setupArches();
 
     runtimeChanged(ICore::self()->runtimeController()->currentRuntime());
 
@@ -151,6 +123,29 @@ void FlatpakPlugin::createRuntime(const KDevelop::Path &file, const QString &arc
     process->start();
 }
 
+static QStringList availableArches(const KDevelop::Path& url)
+{
+    QProcess supportedArchesProcess;
+    QStringList ret;
+
+    QObject::connect(&supportedArchesProcess, QOverload<int>::of(&QProcess::finished), &supportedArchesProcess, [&supportedArchesProcess, &ret]() {
+        supportedArchesProcess.deleteLater();
+
+        QTextStream stream(&supportedArchesProcess);
+        while (!stream.atEnd()) {
+            const QString line = stream.readLine();
+            ret << line.splitRef('/')[2].toString();
+        }
+    });
+
+    const auto doc = FlatpakRuntime::config(url);
+    const QString sdkName = doc[QLatin1String("sdk")].toString();
+    const QString runtimeVersion = doc.value(QLatin1String("runtime-version")).toString();
+    supportedArchesProcess.start("flatpak", {"info", "-r", sdkName + "//" + runtimeVersion });
+    supportedArchesProcess.waitForFinished();
+    return ret;
+}
+
 KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Context* context)
 {
     QList<QUrl> urls;
@@ -181,7 +176,7 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
         foreach(const QUrl &url, urls) {
             const KDevelop::Path file(url);
 
-            foreach(const QString &arch, m_availableArches) {
+            foreach(const QString &arch, availableArches(file)) {
                 auto action = new QAction(i18n("Create flatpak environment for %1 for %2", file.lastPathSegment(), arch), this);
                 connect(action, &QAction::triggered, this, [this, file, arch]() {
                     createRuntime(file, arch);
