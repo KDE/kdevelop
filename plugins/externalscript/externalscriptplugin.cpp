@@ -139,7 +139,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
 
     item = new ExternalScriptItem;
     item->setText( i18n("Google Selection") );
-    item->setCommand( QStringLiteral("xdg-open \"http://www.google.de/search?q=%s\"") );
+    item->setCommand( QStringLiteral("xdg-open \"https://www.google.com/search?q=%s\"") );
     item->setShowOutput( false );
     m_model->appendRow( item );
 
