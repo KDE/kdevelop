@@ -18,8 +18,8 @@
  */
 
 
-#ifndef PROBLEMNODE_H
-#define PROBLEMNODE_H
+#ifndef KDEVPLATFORM_PROBLEMSTORENODE_H
+#define KDEVPLATFORM_PROBLEMSTORENODE_H
 
 #include <QString>
 #include <interfaces/iproblem.h>

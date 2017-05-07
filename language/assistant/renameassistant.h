@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPLATFORM_RENAMEEASSISTANT_H
-#define KDEVPLATFORM_RENAMEEASSISTANT_H
+#ifndef KDEVPLATFORM_RENAMEASSISTANT_H
+#define KDEVPLATFORM_RENAMEASSISTANT_H
 
 #include <language/assistant/staticassistant.h>
 #include <language/duchain/identifier.h>
@@ -52,4 +52,4 @@ private:
 
 }
 
-#endif // KDEVPLATFORM_RENAMEEASSISTANT_H
+#endif // KDEVPLATFORM_RENAMEASSISTANT_H

@@ -10,8 +10,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef GREPVIEWPART_H_
-#define GREPVIEWPART_H_
+#ifndef KDEVPLATFORM_PLUGIN_GREPVIEWPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_GREPVIEWPLUGIN_H
 
 #include <interfaces/iplugin.h>
 #include <interfaces/contextmenuextension.h>
