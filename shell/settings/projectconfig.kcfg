@@ -6,7 +6,7 @@
   <include>QtCore/QDir</include>
   <kcfgfile name="kdeveloprc"/>
   <group name="Project Manager">
-    <entry name="parseAllProjectSources" key="Parse All Project Sources" type="Bool" default="true">
+    <entry name="parseAllProjectSources" key="Parse All Project Sources" type="Bool">
         <default>true</default>
         <label>Schedule all project source code to be parsed by the language support in the background</label>
         <whatsthis>If this option is set, KDevelop will schedule all source code
@@ -18,7 +18,7 @@
         <default code="true">QUrl::fromLocalFile(QDir::homePath()+"/projects")</default>
         <whatsthis>Chooses the base directory where new projects are created.</whatsthis>
     </entry>
-    <entry name="saveDocuments" key="Save All Documents Before Building" type="Bool" default="true">
+    <entry name="saveDocuments" key="Save All Documents Before Building" type="Bool">
         <default>true</default>
         <label>Save all open documents before building anything</label>
         <whatsthis>If this option is set all open documents will be automatically saved before any build is started.</whatsthis>
