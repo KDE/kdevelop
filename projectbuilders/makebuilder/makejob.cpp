@@ -181,6 +181,14 @@ QStringList MakeJob::privilegedExecutionCommand() const
         bool suCommandIsDigit;
         QStringList suCommandWithArg;
         int suCommandNum = suCommand.toInt(&suCommandIsDigit);
+
+        /*
+         * "if(suCommandIsDigit)" block exists only because of backwards compatibility
+         * reasons, In earlier versions of KDevelop, suCommand's type was
+         * int, if a user upgrades to current version from an older version,
+         * suCommandIsDigit will become "true" and we will set suCommand according
+         * to the stored config entry.
+         */
         if(suCommandIsDigit)
         {
             switch(suCommandNum)
