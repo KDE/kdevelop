@@ -128,8 +128,9 @@ QList<KJob*> FlatpakRuntime::exportBundle(const QString &path)
     }
 
     const QString name = doc[QLatin1String("id")].toString();
+    const QStringList finishArgs = kTransform<QStringList>(doc["finish-args"].toArray(), [](const QJsonValue& val){ return val.toString(); });
     const QList<KJob*> jobs = {
-        createExecuteJob(QStringList{ "flatpak", "build-finish", m_buildDirectory.toLocalFile()} << kTransform<QStringList>(doc["finish-args"].toArray(), [](const QJsonValue& val){ return val.toString(); }), {}),
+        createExecuteJob(QStringList{ "flatpak", "build-finish", m_buildDirectory.toLocalFile()} << finishArgs, {}),
         createExecuteJob(QStringList{ "flatpak", "build-export", "--arch="+m_arch, dir->path(), m_buildDirectory.toLocalFile()}, {}),
         createExecuteJob(QStringList{ "flatpak", "build-bundle", "--arch="+m_arch, dir->path(), path, name }, i18n("Exporting %1", path))
     };

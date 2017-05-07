@@ -134,13 +134,13 @@ static QStringList availableArches(const KDevelop::Path& url)
         QTextStream stream(&supportedArchesProcess);
         while (!stream.atEnd()) {
             const QString line = stream.readLine();
-            ret << line.splitRef('/')[2].toString();
+            ret << line.section(QLatin1Char('/'), 2, 2);
         }
     });
 
     const auto doc = FlatpakRuntime::config(url);
     const QString sdkName = doc[QLatin1String("sdk")].toString();
-    const QString runtimeVersion = doc.value(QLatin1String("runtime-version")).toString();
+    const QString runtimeVersion = doc[QLatin1String("runtime-version")].toString();
     supportedArchesProcess.start("flatpak", {"info", "-r", sdkName + "//" + runtimeVersion });
     supportedArchesProcess.waitForFinished();
     return ret;
