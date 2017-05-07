@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.1">
+<ui version="4.0">
  <class>MakeConfig</class>
  <widget class="QWidget" name="MakeConfig">
   <property name="geometry">
