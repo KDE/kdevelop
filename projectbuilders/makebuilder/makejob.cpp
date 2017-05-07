@@ -177,19 +177,41 @@ QStringList MakeJob::privilegedExecutionCommand() const
     bool runAsRoot = builderGroup.readEntry( "Install As Root", false );
     if ( runAsRoot && m_command == InstallCommand )
     {
-        int suCommand = builderGroup.readEntry( "Su Command", 0 );
-        QStringList arguments;
-        QString suCommandName;
-        switch( suCommand ) {
-            case 1:
-                return QStringList() << QStringLiteral("kdesudo") << QStringLiteral("-t");
+        QString suCommand = builderGroup.readEntry( "Su Command", QString() );
+        bool suCommandIsDigit;
+        QStringList suCommandWithArg;
+        int suCommandNum = suCommand.toInt(&suCommandIsDigit);
+        if(suCommandIsDigit)
+        {
+            switch(suCommandNum)
+            {
+                case 1:
+                {
+                    suCommand = QStringLiteral("kdesudo");
+                    break;
+                }
+                case 2:
+                {
+                    suCommand = QStringLiteral("sudo");
+                    break;
+                }
+                default:
+                    suCommand = QStringLiteral("kdesu");
+            }
 
-            case 2:
-                return QStringList() << QStringLiteral("sudo");
-
-            default:
-                return QStringList() << QStringLiteral("kdesu") << QStringLiteral("-t");
+            builderGroup.writeEntry("Su Command", suCommand);
+            //so that suCommandIsDigit becomes false next time
+            //project is opened.
         }
+
+        QRegExp regEx(" ");
+        suCommandWithArg = suCommand.split(regEx);
+        if( suCommandWithArg.isEmpty() )
+        {
+            suCommandWithArg << QStringLiteral("kdesu") << QStringLiteral("-t");
+        }
+
+        return suCommandWithArg;
     }
     return QStringList();
 }
