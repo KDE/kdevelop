@@ -18,8 +18,8 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#ifndef PROGRESSDIALOGS_H
-#define PROGRESSDIALOGS_H
+#ifndef KDEVPLATFORM_REFACTORINGDIALOG_H
+#define KDEVPLATFORM_REFACTORINGDIALOG_H
 
 #include <QDialog>
 #include <language/duchain/topducontext.h>

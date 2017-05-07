@@ -19,8 +19,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_PLUGIN_ACTIONSPROVIDER_H
-#define KDEVPLATFORM_PLUGIN_ACTIONSPROVIDER_H
+#ifndef KDEVPLATFORM_PLUGIN_ACTIONSQUICKOPENPROVIDER_H
+#define KDEVPLATFORM_PLUGIN_ACTIONSQUICKOPENPROVIDER_H
 
 #include <language/interfaces/quickopendataprovider.h>
 #include <QVector>
@@ -41,4 +41,4 @@ private:
     QVector<KDevelop::QuickOpenDataPointer> m_results;
 };
 
-#endif // KDEVPLATFORM_PLUGIN_ACTIONSPROVIDER_H
+#endif // KDEVPLATFORM_PLUGIN_ACTIONSQUICKOPENPROVIDER_H

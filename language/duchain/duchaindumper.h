@@ -20,8 +20,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPLATFORM_DUMPCHAIN_H
-#define KDEVPLATFORM_DUMPCHAIN_H
+#ifndef KDEVPLATFORM_DUCHAINDUMPER_H
+#define KDEVPLATFORM_DUCHAINDUMPER_H
 
 #include <language/languageexport.h>
 
@@ -69,4 +69,4 @@ private:
 };
 
 }
-#endif // KDEVPLATFORM_DUMPCHAIN_H
+#endif // KDEVPLATFORM_DUCHAINDUMPER_H

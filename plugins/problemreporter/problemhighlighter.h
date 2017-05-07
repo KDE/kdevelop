@@ -20,8 +20,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H
-#define KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H
+#ifndef KDEVPLATFORM_PLUGIN_PROBLEMHIGHLIGHTER_H
+#define KDEVPLATFORM_PLUGIN_PROBLEMHIGHLIGHTER_H
 
 #include <language/duchain/problem.h>
 #include <qpointer.h>
@@ -50,4 +50,4 @@ public slots:
     void settingsChanged();
 };
 
-#endif // KDEVPLATFORM_PLUGIN_PROBLEM_HIGHLIGHT_H
+#endif // KDEVPLATFORM_PLUGIN_PROBLEMHIGHLIGHTER_H
