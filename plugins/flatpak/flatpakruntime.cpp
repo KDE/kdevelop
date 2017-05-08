@@ -183,27 +183,33 @@ QJsonObject FlatpakRuntime::config() const
 
 Path FlatpakRuntime::pathInHost(const KDevelop::Path& runtimePath)
 {
+    KDevelop::Path ret = runtimePath;
     if (runtimePath.isLocalFile() && runtimePath.segments().at(0) == QLatin1String("usr")) {
-        const auto relpath = runtimePath.relativePath(KDevelop::Path("/usr"));
-        return Path(m_sdkPath, relpath);
+        const auto relpath = KDevelop::Path("/usr").relativePath(runtimePath);
+        ret = Path(m_sdkPath, relpath);
     } else if (runtimePath.isLocalFile() && runtimePath.segments().at(0) == QLatin1String("app")) {
-        const auto relpath = runtimePath.relativePath(KDevelop::Path("/app"));
-        return Path(m_buildDirectory, "/active/files" + relpath);
-    } else
-        return runtimePath;
+        const auto relpath = KDevelop::Path("/app").relativePath(runtimePath);
+        ret = Path(m_buildDirectory, "/active/files/" + relpath);
+    }
+
+    qCDebug(FLATPAK) << "path in host" << runtimePath << ret;
+    return ret;
 }
 
 Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath)
 {
+    KDevelop::Path ret = localPath;
     if (m_sdkPath.isParentOf(localPath)) {
         const auto relpath = m_sdkPath.relativePath(localPath);
-        return Path(Path("/usr"), relpath);
+        ret = Path(Path("/usr"), relpath);
     } else {
         const Path bdfiles(m_buildDirectory, "/active/flies");
         if (bdfiles.isParentOf(localPath)) {
             const auto relpath = bdfiles.relativePath(localPath);
-            return Path(Path("/app"), relpath);
+            ret = Path(Path("/app"), relpath);
         }
     }
-    return localPath;
+
+    qCDebug(FLATPAK) << "path in runtime" << localPath << ret;
+    return ret;
 }
