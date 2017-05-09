@@ -12,6 +12,7 @@
     <comment xml:lang="sk">Súbor projektu KDevelop</comment>
     <comment xml:lang="sv">KDevelop-projektfil</comment>
     <comment xml:lang="uk">файл проекту KDevelop</comment>
+    <comment xml:lang="zh_CN">KDevelop 工程文件</comment>
     <glob pattern="*.kdev4"/>
   </mime-type>
 </mime-info>
