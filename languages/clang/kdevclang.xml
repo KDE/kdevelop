@@ -14,4 +14,11 @@
         <glob pattern="*.cl"/>
         <alias type="text/x-opencl"/>
     </mime-type>
+
+    <!-- Not yet registered, mimetype based on proposal in https://bugs.freedesktop.org/show_bug.cgi?id=23700 -->
+    <mime-type type="text/vnd.nvidia.cuda.csrc">
+        <comment>NVIDIA CUDA C source code</comment>
+        <sub-class-of type="text/x-csrc"/>
+        <glob pattern="*.cu"/>
+    </mime-type>
 </mime-info>
