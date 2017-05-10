@@ -40,7 +40,9 @@ class TemplatesModelPrivate;
  * We use QStandardPaths with the GenericData type and create a filter string as such:
  * \li templates: typePrefix "/templates/"
  * \li descriptions: typePrefix "/template_descriptions/"
- * \li previews: typePrefix "/template_previews/"
+ *
+ * Preview images are directly read from the archives on demand (or for legacy
+ * template installations from typePrefix "/template_previews/").
  *
  * @sa ITemplateProvider::templatesModel()
  **/
@@ -56,7 +58,7 @@ public:
     enum TemplateRole
     {
         DescriptionFileRole = Qt::UserRole + 1, ///< Template description file name
-        IconNameRole = Qt::UserRole + 2, ///< Template icon name
+        PreviewIconRole = Qt::UserRole + 2, ///< Template preview icon, provides a TemplatePreviewIcon
         CommentRole = Qt::UserRole + 3, ///< Template comment
         ArchiveFileRole = Qt::UserRole + 4 ///< Template archive file name
     };

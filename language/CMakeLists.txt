@@ -158,6 +158,7 @@ set(KDevPlatformLanguage_LIB_SRCS
 
 set(grantlee_LIB_SRCS
     codegen/templatesmodel.cpp
+    codegen/templatepreviewicon.cpp
     codegen/templateclassgenerator.cpp
     codegen/sourcefiletemplate.cpp
     codegen/templaterenderer.cpp
@@ -352,6 +353,7 @@ install(FILES
     codegen/coderepresentation.h
     codegen/utilities.h
     codegen/templatesmodel.h
+    codegen/templatepreviewicon.h
     codegen/templaterenderer.h
     codegen/templateengine.h
     codegen/sourcefiletemplate.h

@@ -23,6 +23,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
+#include <language/codegen/templatepreviewicon.h>
 
 #include <util/multilevellistview.h>
 
@@ -122,16 +123,11 @@ void ProjectSelectionPage::templateChanged(int current)
 
 void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 {
-    QString picPath = current.data( KDevelop::TemplatesModel::IconNameRole ).toString();
-    if( picPath.isEmpty() ) {
-        const QIcon icon = QIcon::fromTheme(QStringLiteral("kdevelop"));
-        ui->icon->setPixmap(icon.pixmap(128, 128));
-        ui->icon->setFixedHeight(128);
-    } else {
-        QPixmap pixmap( picPath );
-        ui->icon->setPixmap( pixmap );
-        ui->icon->setFixedHeight( pixmap.height() );
-    }
+    TemplatePreviewIcon icon = current.data(KDevelop::TemplatesModel::PreviewIconRole).value<TemplatePreviewIcon>();
+
+    QPixmap pixmap = icon.pixmap();
+    ui->icon->setPixmap(pixmap);
+    ui->icon->setFixedHeight(pixmap.height());
     // header name is either from this index directly or the parents if we show the combo box
     const QVariant headerData = ui->templateType->isVisible()
                                     ? current.parent().data()

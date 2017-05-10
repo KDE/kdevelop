@@ -19,6 +19,8 @@
 */
 
 #include "templatesmodel.h"
+
+#include "templatepreviewicon.h"
 #include "util/debug.h"
 #include <interfaces/icore.h>
 
@@ -146,20 +148,13 @@ void TemplatesModel::refresh()
                 QString name = general.readEntry("Name");
                 QString category = general.readEntry("Category");
                 QString comment = general.readEntry("Comment");
+                TemplatePreviewIcon icon(general.readEntry("Icon"), templateArchive, d->resourceFilter(TemplatesModelPrivate::Preview));
 
                 QStandardItem *templateItem = d->createItem(name, category, invisibleRootItem());
                 templateItem->setData(templateDescription, DescriptionFileRole);
                 templateItem->setData(templateArchive, ArchiveFileRole);
                 templateItem->setData(comment, CommentRole);
-
-                if (general.hasKey("Icon"))
-                {
-                    QString icon = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                             d->resourceFilter(TemplatesModelPrivate::Preview, general.readEntry("Icon")));
-                    if (QFile::exists(icon)) {
-                        templateItem->setData(icon, IconNameRole);
-                    }
-                }
+                templateItem->setData(QVariant::fromValue<TemplatePreviewIcon>(icon), PreviewIconRole);
             }
         }
 
@@ -300,25 +295,6 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
             QFileInfo descriptionInfo(localDescriptionsDir + templateEntry->name());
             QString destinationName = localDescriptionsDir + templateInfo.baseName() + '.' + descriptionInfo.suffix();
             QFile::rename(descriptionInfo.absoluteFilePath(), destinationName);
-
-            KConfig config(destinationName);
-            KConfigGroup group(&config, "General");
-            if (group.hasKey("Icon"))
-            {
-                const KArchiveEntry* iconEntry = templateArchive->directory()->entry(group.readEntry("Icon"));
-                if (iconEntry && iconEntry->isFile())
-                {
-                    const KArchiveFile* iconFile = static_cast<const KArchiveFile*>(iconEntry);
-                    const QString saveDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ resourceFilter(Preview);
-                    QDir dir(saveDir);
-                    if (!dir.exists()) {
-                        dir.mkpath(QStringLiteral("."));
-                    }
-                    iconFile->copyTo(saveDir);
-                    QFileInfo iconInfo(saveDir + templateEntry->name());
-                    QFile::rename(iconInfo.absoluteFilePath(), saveDir + templateInfo.baseName() + '.' + iconInfo.suffix());
-                }
-            }
         }
         else
         {

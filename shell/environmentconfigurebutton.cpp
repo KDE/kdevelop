@@ -65,7 +65,7 @@ public:
         dlg.setLayout(layout);
         dlg.setWindowTitle(prefs.fullName());
         dlg.setWindowIcon(prefs.icon());
-        dlg.resize(480, 320);
+        dlg.resize(800, 600);
         if (dlg.exec() == QDialog::Accepted) {
             prefs.apply();
             emit q->environmentConfigured();
