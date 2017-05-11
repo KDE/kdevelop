@@ -8,6 +8,12 @@
     -->
     <mime-type type="text/x-opencl-src">
         <comment>OpenCL C source code</comment>
+        <comment xml:lang="ca">Codi font en C per a OpenCL</comment>
+        <comment xml:lang="ca@valencia">Codi font en C per a OpenCL</comment>
+        <comment xml:lang="de">OpenCL C Quelltext</comment>
+        <comment xml:lang="nl">OpenCL C broncode</comment>
+        <comment xml:lang="sv">OpenCL C-källkod</comment>
+        <comment xml:lang="uk">початковий код C OpenCL</comment>
         <acronym>OpenCL</acronym>
         <expanded-acronym>Open Computing Language</expanded-acronym>
         <sub-class-of type="text/x-csrc"/>
