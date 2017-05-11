@@ -75,6 +75,7 @@ KDevelop::RuntimeController::RuntimeController(KDevelop::Core* core)
 
 KDevelop::RuntimeController::~RuntimeController()
 {
+    m_currentRuntime->setEnabled(false);
     m_currentRuntime = nullptr;
     qDeleteAll(m_runtimes);
 }
@@ -106,9 +107,8 @@ void KDevelop::RuntimeController::setCurrentRuntime(KDevelop::IRuntime* runtime)
     }
     qDebug() << "setting runtime..." << runtime->name() << "was" << m_currentRuntime;
     m_currentRuntime = runtime;
+    m_currentRuntime->setEnabled(true);
     Q_EMIT currentRuntimeChanged(runtime);
-
-    m_currentRuntime->setEnabled(false);
 }
 
 void KDevelop::RuntimeController::addRuntimes(const QVector<KDevelop::IRuntime *>& runtimes)
