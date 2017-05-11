@@ -6,8 +6,7 @@
 
   <group name="Docker">
     <entry name="extraArguments" type="String" />
-    <entry name="projectsVolume" type="String">
-        <default>/src</default>
-    </entry>
+    <entry name="projectsVolume" type="String"><default>/src</default></entry>
+    <entry name="buildDirsVolume" type="String"><default>/build</default></entry>
   </group>
 </kcfg>

@@ -23,6 +23,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <project/interfaces/ibuildsystemmanager.h>
 
 #include <KLocalizedString>
 #include <KProcess>
@@ -51,19 +52,26 @@ void DockerRuntime::setEnabled(bool /*enable*/)
 {
 }
 
+QString ensureEndsSlash(const QString &string)
+{
+    return string.endsWith('/') ? string : (string + QLatin1Char('/'));
+}
+
 static QStringList projectVolumes()
 {
     QStringList ret;
-    QString dir = DockerRuntime::s_settings->projectsVolume();
-    if (!dir.endsWith(QLatin1Char('/'))) {
-        dir.append(QLatin1Char('/'));
-    }
+    const QString dir = ensureEndsSlash(DockerRuntime::s_settings->projectsVolume());
+    const QString buildDir = ensureEndsSlash(DockerRuntime::s_settings->buildDirsVolume());
 
     for(IProject* project: ICore::self()->projectController()->projects()) {
         const Path path = project->path();
         if (path.isLocalFile()) {
             ret << "--volume" << QStringLiteral("%1:%2").arg(path.toLocalFile(), dir + path.lastPathSegment());
         }
+
+        const auto ibsm = project->buildSystemManager();
+        if (ibsm)
+            ret << "--volume" << QStringLiteral("%1:%2").arg(path.toLocalFile(), buildDir + path.lastPathSegment());
     }
     return ret;
 }
