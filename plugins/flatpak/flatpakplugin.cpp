@@ -177,7 +177,7 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
             const KDevelop::Path file(url);
 
             foreach(const QString &arch, availableArches(file)) {
-                auto action = new QAction(i18n("Create flatpak environment for %1 for %2", file.lastPathSegment(), arch), this);
+                auto action = new QAction(i18n("Build flatpak %1 for %2", file.lastPathSegment(), arch), this);
                 connect(action, &QAction::triggered, this, [this, file, arch]() {
                     createRuntime(file, arch);
                 });
