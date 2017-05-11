@@ -45,7 +45,11 @@ public:
     static DockerPreferencesSettings* s_settings;
 
 private:
+    void inspectImage();
+
     const QString m_tag;
+    KDevelop::Path m_upperDir;
+    KDevelop::Path m_userUpperDir;
 };
 
 #endif

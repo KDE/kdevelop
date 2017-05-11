@@ -23,6 +23,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
 #include <KLocalizedString>
@@ -42,17 +43,49 @@ DockerRuntime::DockerRuntime(const QString &tag)
     : KDevelop::IRuntime()
     , m_tag(tag)
 {
+    inspectImage();
+}
+
+void DockerRuntime::inspectImage()
+{
+    QProcess* process = new QProcess(this);
+    connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [process, this](int code, QProcess::ExitStatus status){
+        process->deleteLater();
+        qDebug() << "inspect upper dir" << code << status;
+        if (code || status)
+            return;
+        m_upperDir = Path(QFile::decodeName(process->readAll().trimmed()));
+        qCDebug(DOCKER) << "upper dir:" << m_tag << m_upperDir;
+    });
+    process->start("docker", {"image", "inspect", m_tag, "--format", "{{.GraphDriver.Data.UpperDir}}"});
 }
 
 DockerRuntime::~DockerRuntime()
 {
 }
 
-void DockerRuntime::setEnabled(bool /*enable*/)
 {
 }
 
-QString ensureEndsSlash(const QString &string)
+void DockerRuntime::setEnabled(bool enable)
+{
+    if (enable) {
+        m_userUpperDir = KDevelop::Path(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/docker-" + QString(m_tag).replace('/', '_'));
+        QDir().mkpath(m_userUpperDir.toLocalFile());
+
+        const QStringList cmd = {"pkexec", "bindfs", "--map=root/"+qgetenv("USER"), m_upperDir.toLocalFile(), m_userUpperDir.toLocalFile() };
+        QProcess p;
+        p.start(cmd.first(), cmd.mid(1));
+        p.waitForFinished();
+        if (p.exitCode())
+            qCDebug(DOCKER) << "bindfs returned" << m_upperDir << m_userUpperDir << cmd << p.exitCode() << p.readAll();
+    } else {
+        int code = QProcess::execute(QStringLiteral("pkexec"), {m_userUpperDir.toLocalFile()});
+        qCDebug(DOCKER) << "umount returned" << code;
+    }
+}
+
+static QString ensureEndsSlash(const QString &string)
 {
     return string.endsWith('/') ? string : (string + QLatin1Char('/'));
 }
@@ -71,14 +104,14 @@ static QStringList projectVolumes()
 
         const auto ibsm = project->buildSystemManager();
         if (ibsm)
-            ret << "--volume" << QStringLiteral("%1:%2").arg(path.toLocalFile(), buildDir + path.lastPathSegment());
+            ret << "--volume" << QStringLiteral("%1:%2").arg(ibsm->buildDirectory(project->projectItem()).toLocalFile(), buildDir + path.lastPathSegment());
     }
     return ret;
 }
 
 void DockerRuntime::startProcess(QProcess* process)
 {
-    const QStringList args = QStringList{QStringLiteral("run"), "--rm"} << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program() << process->arguments();
+    const QStringList args = QStringList{"run", "--rm", "-w", pathInRuntime(KDevelop::Path(process->workingDirectory())).toLocalFile()} << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program() << process->arguments();
     process->setProgram("docker");
     process->setArguments(args);
 
@@ -88,7 +121,7 @@ void DockerRuntime::startProcess(QProcess* process)
 
 void DockerRuntime::startProcess(KProcess* process)
 {
-    process->setProgram(QStringList{ "docker", "run", "--rm" } << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program());
+    process->setProgram(QStringList{ "docker", "run", "--rm", "-w", pathInRuntime(KDevelop::Path(process->workingDirectory())).toLocalFile() } << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program());
 
     qCDebug(DOCKER) << "starting kprocess" << process->program().join(' ');
     process->start();
@@ -96,7 +129,7 @@ void DockerRuntime::startProcess(KProcess* process)
 
 KDevelop::Path DockerRuntime::pathInHost(const KDevelop::Path& runtimePath)
 {
-    Path ret = runtimePath;
+    Path ret;
     const Path projectsDir(DockerRuntime::s_settings->projectsVolume());
     if (projectsDir.isParentOf(runtimePath)) {
         const auto relPath = runtimePath.relativePath(projectsDir);
@@ -108,22 +141,44 @@ KDevelop::Path DockerRuntime::pathInHost(const KDevelop::Path& runtimePath)
             const auto repPathProject = relPath.mid(index+1);
             ret = Path(project->path(), repPathProject);;
         }
+    } else {
+        ret = KDevelop::Path(m_userUpperDir, KDevelop::Path(QStringLiteral("/")).relativePath(runtimePath));
     }
+    qCDebug(DOCKER) << "pathInHost" << ret << runtimePath;
     return ret;
 }
 
 KDevelop::Path DockerRuntime::pathInRuntime(const KDevelop::Path& localPath)
 {
-    auto project = ICore::self()->projectController()->findProjectForUrl(localPath.toUrl());
-    if (project) {
+    if (m_userUpperDir.isParentOf(localPath)) {
+        KDevelop::Path ret(m_userUpperDir.relativePath(localPath));
+        qCDebug(DOCKER) << "docker runtime pathInRuntime..." << ret << localPath;
+        return ret;
+    } else if (auto project = ICore::self()->projectController()->findProjectForUrl(localPath.toUrl())) {
         const Path projectsDir(DockerRuntime::s_settings->projectsVolume());
         const QString relpath = project->path().relativePath(localPath);
         const KDevelop::Path ret(projectsDir, project->name() + QLatin1Char('/') + relpath);
-        qDebug() << "docker pathInRuntime..." << ret << project->path() << relpath;
+        qCDebug(DOCKER) << "docker user pathInRuntime..." << ret << project->path() << relpath;
         return ret;
     } else {
+        const auto projects = ICore::self()->projectController()->projects();
+        for(auto project : projects) {
+            auto ibsm = project->buildSystemManager();
+            if (ibsm) {
+                const auto builddir = ibsm->buildDirectory(project->projectItem());
+                if (builddir != localPath && !builddir.isParentOf(localPath))
+                    continue;
+
+                const Path builddirs(DockerRuntime::s_settings->buildDirsVolume());
+                const QString relpath = builddir.relativePath(localPath);
+                const KDevelop::Path ret(builddirs, project->name() + QLatin1Char('/') + relpath);
+                qCDebug(DOCKER) << "docker build pathInRuntime..." << ret << project->path() << relpath;
+                return ret;
+            }
+        }
         qCWarning(DOCKER) << "only project files are available on the docker runtime" << localPath;
     }
+    qDebug() << "bypass..." << localPath;
     return localPath;
 }
 
