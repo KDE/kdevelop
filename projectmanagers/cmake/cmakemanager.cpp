@@ -953,6 +953,7 @@ void CMakeManager::reloadProjects()
     for(IProject* project: m_projects.keys()) {
         CMake::checkForNeedingConfigure(project);
         reload(project->projectItem());
+        KDevelop::ICore::self()->projectController()->reparseProject(project, true);
     }
 }
 
