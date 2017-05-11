@@ -40,7 +40,7 @@ CMakeServer::CMakeServer(QObject* parent)
 {
     QString path;
     {
-        QTemporaryFile file(QDir::tempPath() + "/kdevelopcmake-");
+        QTemporaryFile file(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/kdevelopcmake-");
         file.open();
         file.close();
         path = file.fileName();
@@ -70,7 +70,7 @@ CMakeServer::CMakeServer(QObject* parent)
 
     connect(&m_process, &QProcess::started, this, [this, path](){
         //Once the process has started, wait for the file to be created, then connect to it
-        QTimer::singleShot(100, this, [this, path]() {
+        QTimer::singleShot(1000, this, [this, path]() {
             m_localSocket->connectToServer(path, QIODevice::ReadWrite);
         });
     });
