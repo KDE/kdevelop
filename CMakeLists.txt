@@ -147,6 +147,9 @@ install(FILES
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}" )
 install(EXPORT KDevelopTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" NAMESPACE KDev:: FILE KDevelopTargets.cmake)
 
+# kdebugsettings file
+install(FILES kdevelop.categories DESTINATION ${KDE_INSTALL_CONFDIR})
+
 # CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.
 configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCustom.cmake)

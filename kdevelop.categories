@@ -1,0 +1,30 @@
+# KDebugSettings data file
+# Format:
+# logname<space>description
+
+# Plugins
+kdevelop.languages.clang KDevelop plugin: clang-based language support
+kdevelop.projectmanagers.qmake KDevelop plugin: qmake
+kdevelop.projectmanagers.cmake KDevelop plugin: cmake
+kdevelop.projectmanagers.custommake KDevelop plugin: custommake
+kdevelop.projectmanagers.custombuildsystem KDevelop plugin: custombuildsystem
+kdevelop.languages.qmljs.duchain KDevelop plugin: qmljs duchain
+kdevelop.languages.qmljs KDevelop plugin: qmljs
+kdevelop.definesandincludes KDevelop plugin: definesandincludes
+kdevelop.launchers.executeplasmoid KDevelop plugin: executeplasmoid
+kdevelop.analyzers.cppcheck KDevelop plugin: cppcheck
+kdevelop.analyzers.heaptrack KDevelop plugin: heaptrack
+kdevelop.formatters.astyle KDevelop plugin: astyle
+kdevelop.formatters.customscript KDevelop plugin: customscript
+kdevelop.debuggers.lldb KDevelop plugin: lldb
+kdevelop.debuggers.gdb KDevelop plugin: gdb
+kdevelop.debuggers.common KDevelop plugin: debuggers common
+kdevelop.providers.ghprovider KDevelop plugin: githubprovider
+kdevelop.documentation.qthelp KDevelop plugin: qthelp
+kdevelop.projectbuilders.cmakebuilder KDevelop plugin: cmakebuilder
+kdevelop.projectbuilders.qmakebuilder KDevelop plugin: qmakebuilder
+kdevelop.projectbuilders.ninjabuilder KDevelop plugin: ninjabuilder
+kdevelop.projectbuilders.makebuilder KDevelop plugin: makebuilder
+
+# Programs
+kdevelop.app KDevelop app 
