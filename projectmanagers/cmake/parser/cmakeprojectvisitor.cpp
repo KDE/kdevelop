@@ -24,7 +24,7 @@
 #include "astfactory.h"
 #include "cmakeduchaintypes.h"
 #include "cmakeparserutils.h"
-#include "../debug.h"
+#include <debug.h>
 
 #include <language/duchain/topducontext.h>
 #include <language/duchain/duchain.h>

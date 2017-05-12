@@ -1,11 +1,17 @@
 include_directories(lib)
 
+ecm_qt_declare_logging_category(kdevastyle_LOG_SRCS
+    HEADER debug.h
+    IDENTIFIER KDEV_ASTYLE
+    CATEGORY_NAME "kdevelop.formatters.astyle"
+)
+
 set(kdevastyle_PART_SRCS
     astyle_plugin.cpp
     astyle_preferences.cpp
     astyle_formatter.cpp
     astyle_stringiterator.cpp
-    debug.cpp
+    ${kdevastyle_LOG_SRCS}
 )
 
 set(astyle_preferences_UI

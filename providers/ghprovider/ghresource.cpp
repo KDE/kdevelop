@@ -23,11 +23,10 @@
 #include <kio/transferjob.h>
 #include <kio/storedtransferjob.h>
 #include <QJsonDocument>
-#include <QDebug>
 #include <QHostInfo>
 #include <QDateTime>
 
-#include "debug.h"
+#include <debug.h>
 #include <ghresource.h>
 #include <ghprovidermodel.h>
 

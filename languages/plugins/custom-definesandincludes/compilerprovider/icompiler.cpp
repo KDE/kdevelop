@@ -23,8 +23,6 @@
 
 #include "icompiler.h"
 
-#include <QDebug>
-
 using namespace KDevelop;
 
 ICompiler::ICompiler(const QString& name, const QString& path, const QString& factoryName, bool editable):

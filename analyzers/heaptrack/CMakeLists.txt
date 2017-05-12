@@ -16,13 +16,17 @@ set_package_properties(heaptrack_gui PROPERTIES
 )
 
 set(kdevheaptrack_SRCS
-    debug.cpp
     job.cpp
     plugin.cpp
     utils.cpp
     visualizer.cpp
 
     config/globalconfigpage.cpp
+)
+ecm_qt_declare_logging_category(kdevheaptrack_SRCS
+    HEADER debug.h
+    IDENTIFIER KDEV_HEAPTRACK
+    CATEGORY_NAME "kdevelop.analyzers.heaptrack"
 )
 ki18n_wrap_ui(kdevheaptrack_SRCS
     config/globalconfigpage.ui

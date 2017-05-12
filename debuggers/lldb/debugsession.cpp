@@ -226,9 +226,9 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     const EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
     QString envProfileName = iexec->environmentProfileName(cfg);
     if (envProfileName.isEmpty()) {
-        qCWarning(DEBUGGERCOMMON) << i18n("No environment profile specified, looks like a broken "
-                                          "configuration, please check run configuration '%1'. "
-                                          "Using default environment profile.", cfg->name());
+        qCWarning(DEBUGGERLLDB) << i18n("No environment profile specified, looks like a broken "
+                                        "configuration, please check run configuration '%1'. "
+                                        "Using default environment profile.", cfg->name());
         envProfileName = environmentProfiles.defaultProfileName();
     }
     QStringList vars;
@@ -262,12 +262,12 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     setDebuggerStateOn(s_dbgBusy);
     raiseEvent(debugger_ready);
 
-    qCDebug(DEBUGGERGDB) << "Per inferior configuration done";
+    qCDebug(DEBUGGERLLDB) << "Per inferior configuration done";
 }
 
 bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *, const QString &)
 {
-    qCDebug(DEBUGGERGDB) << "Executing inferior";
+    qCDebug(DEBUGGERLLDB) << "Executing inferior";
 
     KConfigGroup grp = cfg->config();
 

@@ -19,7 +19,7 @@
 
 #include "ctestsuite.h"
 #include "ctestrunjob.h"
-#include "../debug.h"
+#include <debug.h>
 
 #include <interfaces/itestcontroller.h>
 #include <interfaces/iproject.h>

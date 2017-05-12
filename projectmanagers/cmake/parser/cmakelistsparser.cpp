@@ -20,7 +20,7 @@
  */
 
 #include "cmakelistsparser.h"
-#include "../debug.h"
+#include <debug.h>
 
 #include <util/stack.h>
 #include <QDir>

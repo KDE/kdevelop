@@ -60,7 +60,7 @@ void AStyleFormatter::setOption(const QString &key, const QVariant &value)
 
 void AStyleFormatter::updateFormatter()
 {
-    qCDebug(ASTYLE) << "Updating option with: " << ISourceFormatter::optionMapToString(m_options) << endl;
+    qCDebug(KDEV_ASTYLE) << "Updating option with: " << ISourceFormatter::optionMapToString(m_options) << endl;
     // fill
     int wsCount = m_options[QStringLiteral("FillCount")].toInt();
     if(m_options[QStringLiteral("Fill")].toString() == QLatin1String("Tabs")) {
@@ -309,7 +309,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
 QVariant AStyleFormatter::option(const QString &key)
 {
     if(!m_options.contains(key))
-        qCDebug(ASTYLE) << "Missing option name " << key << endl;
+        qCDebug(KDEV_ASTYLE) << "Missing option name " << key << endl;
     return m_options[key];
 }
 

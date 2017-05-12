@@ -1,3 +1,7 @@
+include_directories(
+    ${KDEVPGQT_INCLUDE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/..
+)
 set(kdevqmakeparser_SRCS
     qmakeast.cpp
     qmakedriver.cpp
@@ -12,14 +16,11 @@ kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO
     "${CMAKE_CURRENT_SOURCE_DIR}/qmake.g"
     "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.h")
 
-include_directories(
-    ${KDEVPGQT_INCLUDE_DIR} )
-
 add_subdirectory(tests)
 
 option(BUILD_qmake_parser "Build the qmake-parser debugging tool" OFF)
 if(BUILD_qmake_parser)
-  add_executable(qmake-parser ../debug.cpp main.cpp)
+  add_executable(qmake-parser ${qmakecommon_LOG_SRCS} main.cpp)
   target_link_libraries(qmake-parser kdevqmakeparser KF5::CoreAddons Qt5::Core)
   install(TARGETS qmake-parser ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 endif()

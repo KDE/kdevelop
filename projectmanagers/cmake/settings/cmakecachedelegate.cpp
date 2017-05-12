@@ -19,7 +19,7 @@
  */
 
 #include "cmakecachedelegate.h"
-#include "../debug.h"
+#include <debug.h>
 
 #include <QLineEdit>
 #include <QCheckBox>

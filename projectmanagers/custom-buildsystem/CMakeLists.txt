@@ -1,8 +1,11 @@
 project(kdevelop4-custom-buildsystem)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustombuildsystem\")
-## Unittests
-add_subdirectory( tests )
 
+ecm_qt_declare_logging_category(custom_LOG_SRCS
+    HEADER debug.h
+    IDENTIFIER CUSTOMBUILDSYSTEM
+    CATEGORY_NAME "kdevelop.projectmanagers.custombuildsystem"
+)
 ## KDevelop Plugin
 set(custom_SRCS
     custombuildsystemconfig.cpp
@@ -12,7 +15,7 @@ set(custom_SRCS
     configwidget.cpp
     custombuildsystemconfigwidget.cpp
     kcm_custombuildsystem.cpp
-    debugarea.cpp
+    ${custom_LOG_SRCS}
 )
 ki18n_wrap_ui(custom_SRCS configwidget.ui custombuildsystemconfigwidget.ui)
 kconfig_add_kcfg_files(custom_SRCS kcfg_custombuildsystemconfig.kcfgc )
@@ -24,3 +27,6 @@ target_link_libraries(kdevcustombuildsystem
       KDev::Util
       KDev::OutputView
 )
+
+## Unittests
+add_subdirectory( tests )

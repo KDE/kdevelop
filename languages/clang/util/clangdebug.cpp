@@ -27,7 +27,12 @@
 #include <language/editor/documentcursor.h>
 #include <language/editor/documentrange.h>
 
-Q_LOGGING_CATEGORY(KDEV_CLANG, "kdevelop.plugins.clang")
+#if QT_VERSION >= 0x050500
+const QtMsgType defaultMsgType = QtInfoMsg;
+#else
+const QtMsgType defaultMsgType = QtWarningMsg;
+#endif
+Q_LOGGING_CATEGORY(KDEV_CLANG, "kdevelop.languages.clang", defaultMsgType)
 
 using namespace KDevelop;
 

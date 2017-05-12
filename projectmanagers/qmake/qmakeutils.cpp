@@ -20,7 +20,7 @@
  */
 
 #include "qmakeutils.h"
-#include "debug.h"
+#include <debug.h>
 
 #include "qmakebuilddirchooserdialog.h"
 #include "qmakeconfig.h"

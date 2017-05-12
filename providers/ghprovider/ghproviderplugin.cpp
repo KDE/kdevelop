@@ -21,15 +21,13 @@
 #include <KLocalizedString>
 #include <KPluginFactory>
 
-#include "debug.h"
+#include <debug.h>
 #include <ghproviderplugin.h>
 #include <ghproviderwidget.h>
 
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevGHProviderFactory, "kdevghprovider.json", registerPlugin<gh::ProviderPlugin>();)
-
-Q_LOGGING_CATEGORY(GHPROVIDER, "kdevelop.providers.ghprovider")
 
 namespace gh
 {

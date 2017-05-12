@@ -5,6 +5,11 @@ set(kdevcustommakemanager_PART_SRCS
     custommakemodelitems.cpp
 )
 
+ecm_qt_declare_logging_category(kdevcustommakemanager_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER CUSTOMMAKE
+    CATEGORY_NAME "kdevelop.projectmanagers.custommake"
+)
 qt5_add_resources(kdevcustommakemanager_PART_SRCS kdevcustommakemanager.qrc)
 kdevplatform_add_plugin(kdevcustommakemanager JSON kdevcustommakemanager.json SOURCES ${kdevcustommakemanager_PART_SRCS})
 target_link_libraries(kdevcustommakemanager

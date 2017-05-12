@@ -22,7 +22,7 @@
 
 #include "astfactory.h"
 #include "cmakeparserutils.h"
-#include "../debug.h"
+#include <debug.h>
 
 QMap<QString, CMakeCondition::conditionToken> initNameToToken()
 {

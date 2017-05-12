@@ -23,7 +23,6 @@
 #include "settingsmanager.h"
 
 #include <QDataStream>
-#include <QDebug>
 #include <QThread>
 #include <QCoreApplication>
 #include <QMimeDatabase>

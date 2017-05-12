@@ -21,6 +21,7 @@
 
 #include "ninjajob.h"
 #include "ninjabuilderpreferences.h"
+#include <debug.h>
 
 #include <KPluginFactory>
 #include <KConfigGroup>
@@ -31,11 +32,7 @@
 #include <interfaces/iproject.h>
 
 #include <QFile>
-#include <QLoggingCategory>
 
-Q_DECLARE_LOGGING_CATEGORY(NINJABUILDER)
-
-Q_LOGGING_CATEGORY(NINJABUILDER, "kdevelop.projectbuilders.ninjabuilder")
 K_PLUGIN_FACTORY_WITH_JSON(NinjaBuilderFactory, "kdevninja.json", registerPlugin<NinjaBuilder>(); )
 
 NinjaBuilder::NinjaBuilder(QObject* parent, const QVariantList&)

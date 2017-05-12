@@ -28,7 +28,7 @@
 #include <QRegularExpression>
 #include <QMap>
 
-#include "../debugarea.h"
+#include <debug.h>
 
 using namespace KDevelop;
 
@@ -97,7 +97,7 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     proc.start(path(), compilerArguments);
 
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
-        definesAndIncludesDebug() <<  "Unable to read standard macro definitions from "<< path();
+        qCDebug(DEFINESANDINCLUDES) <<  "Unable to read standard macro definitions from "<< path();
         return {};
     }
 
@@ -142,7 +142,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     proc.start(path(), compilerArguments);
 
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
-        definesAndIncludesDebug() <<  "Unable to read standard include paths from " << path();
+        qCDebug(DEFINESANDINCLUDES) <<  "Unable to read standard include paths from " << path();
         return {};
     }
 

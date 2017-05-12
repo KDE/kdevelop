@@ -33,7 +33,7 @@
 #include <KConfig>
 
 #include "custombuildsystemconfigwidget.h"
-#include "../debug.h"
+#include <debug.h>
 
 static const char description[] =
     I18N_NOOP("CustomBuildSystem Config Ui Test App");

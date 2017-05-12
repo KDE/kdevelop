@@ -23,7 +23,7 @@
 
 #include "../ui_defineswidget.h"
 #include "definesmodel.h"
-#include "debugarea.h"
+#include <debug.h>
 
 using namespace KDevelop;
 
@@ -57,7 +57,7 @@ void DefinesWidget::setDefines( const Defines& defines )
 
 void DefinesWidget::definesChanged()
 {
-    definesAndIncludesDebug() << "defines changed";
+    qCDebug(DEFINESANDINCLUDES) << "defines changed";
     emit definesChanged( definesModel->defines() );
 }
 
@@ -68,7 +68,7 @@ void DefinesWidget::clear()
 
 void DefinesWidget::deleteDefine()
 {
-    definesAndIncludesDebug() << "Deleting defines";
+    qCDebug(DEFINESANDINCLUDES) << "Deleting defines";
     QModelIndexList selection = ui->defines->selectionModel()->selectedRows();
     foreach( const QModelIndex& row, selection ) {
         definesModel->removeRow( row.row() );

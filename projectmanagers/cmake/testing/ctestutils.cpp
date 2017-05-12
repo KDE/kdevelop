@@ -24,7 +24,7 @@
 #include "ctestutils.h"
 #include "ctestsuite.h"
 #include "ctestfindjob.h"
-#include "../debug.h"
+#include <debug.h>
 
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>

@@ -23,7 +23,7 @@
 #include <KLocalizedString>
 
 #include "cmakecachereader.h"
-#include "../debug.h"
+#include <debug.h>
 
 //4 columns: name, type, value, comment
 //name:type=value - comment

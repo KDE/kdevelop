@@ -24,7 +24,6 @@
 #include "qmakeconfig.h"
 #include "qmakeutils.h"
 
-#include <QDebug>
 #include <project/projectmodel.h>
 
 #include <interfaces/iproject.h>
@@ -35,7 +34,7 @@
 #include <kpluginfactory.h>
 
 #include "qmakejob.h"
-#include "qmakebuilderdebug.h"
+#include <debug.h>
 
 using namespace KDevelop;
 

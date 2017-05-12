@@ -181,9 +181,9 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     const EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
     QString envProfileName = iexec->environmentProfileName(cfg);
     if (envProfileName.isEmpty()) {
-        qCWarning(DEBUGGERCOMMON) << i18n("No environment profile specified, looks like a broken "
-                                          "configuration, please check run configuration '%1'. "
-                                          "Using default environment profile.", cfg->name());
+        qCWarning(DEBUGGERGDB) << i18n("No environment profile specified, looks like a broken "
+                                       "configuration, please check run configuration '%1'. "
+                                       "Using default environment profile.", cfg->name());
         envProfileName = environmentProfiles.defaultProfileName();
     }
     for (const auto &envvar : environmentProfiles.createEnvironment(envProfileName, {})) {

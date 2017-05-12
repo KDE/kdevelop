@@ -23,7 +23,7 @@
 #include "cmakeprojectvisitor.h"
 #include "astfactory.h"
 #include "cmake-test-paths.h"
-#include "../debug.h"
+#include <debug.h>
 
 #include <QProcess>
 

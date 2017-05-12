@@ -21,7 +21,6 @@
 #include "qmakemanager.h"
 
 #include <QAction>
-#include <QDebug>
 #include <QDir>
 #include <QIcon>
 #include <QFileInfo>
@@ -55,7 +54,7 @@
 #include "qmakebuilddirchooserdialog.h"
 #include "qmakeconfig.h"
 #include "qmakeutils.h"
-#include "debug.h"
+#include <debug.h>
 
 using namespace KDevelop;
 

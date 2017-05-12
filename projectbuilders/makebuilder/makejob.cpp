@@ -104,7 +104,7 @@ MakeJob::~MakeJob()
 void MakeJob::start()
 {
     ProjectBaseItem* it = item();
-    qCDebug(MAKEBUILDER) << "Building with make" << m_command << m_overrideTargets.join(QStringLiteral(" "));
+    qCDebug(KDEV_MAKEBUILDER) << "Building with make" << m_command << m_overrideTargets.join(QStringLiteral(" "));
     if (!it)
     {
         setError(ItemNoLongerValidError);

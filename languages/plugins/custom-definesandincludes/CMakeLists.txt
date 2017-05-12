@@ -1,12 +1,17 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustomdefinesandincludes\")
 
+ecm_qt_declare_logging_category(kdevdefinesandincludesmanager_LOG_SRCS
+    HEADER debug.h
+    IDENTIFIER DEFINESANDINCLUDES
+    CATEGORY_NAME "kdevelop.definesandincludes"
+)
+
 add_subdirectory(tests)
 add_subdirectory(compilerprovider)
 add_subdirectory(noprojectincludesanddefines)
 
 set( kdevdefinesandincludesmanager_SRCS
         definesandincludesmanager.cpp
-        debugarea.cpp
         kcm_widget/projectpathsmodel.cpp
         kcm_widget/definesmodel.cpp
         kcm_widget/includesmodel.cpp

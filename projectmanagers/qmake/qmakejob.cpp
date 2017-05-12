@@ -20,14 +20,13 @@
 
 #include "qmakejob.h"
 #include <QDir>
-#include <QDebug>
 #include <QProcess>
 #include <KLocalizedString>
 #include <KShell>
 #include <util/processlinemaker.h>
 #include <outputview/outputmodel.h>
 #include <outputview/ioutputview.h>
-#include "debug.h"
+#include <debug.h>
 
 using namespace KDevelop;
 

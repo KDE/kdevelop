@@ -24,10 +24,9 @@
 
 #include <QStringList>
 #include <QFileInfo>
-#include <QDebug>
 #include <QProcessEnvironment>
 
-#include "debug.h"
+#include <debug.h>
 #define ifDebug(x)
 
 // BEGIN QMakeFileVisitor

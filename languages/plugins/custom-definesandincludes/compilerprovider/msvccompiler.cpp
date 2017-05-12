@@ -30,7 +30,7 @@
 
 #include <KProcess>
 
-#include "../debugarea.h"
+#include <debug.h>
 
 using namespace KDevelop;
 
@@ -53,7 +53,7 @@ Defines MsvcCompiler::defines(const QString&) const
 
         while ( proc.canReadLine() ) {
             QByteArray buff = proc.readLine();
-            definesAndIncludesDebug() << "msvcstandardmacros:" << buff;
+            qCDebug(DEFINESANDINCLUDES) << "msvcstandardmacros:" << buff;
             if ( !buff.isEmpty() ) {
                 line = buff;
                 if ( line.startsWith( QLatin1String("#define ") ) ) {
@@ -69,11 +69,11 @@ Defines MsvcCompiler::defines(const QString&) const
             }
         }
     } else {
-        definesAndIncludesDebug() << "Unable to read standard c++ macro definitions from " + path();
+        qCDebug(DEFINESANDINCLUDES) << "Unable to read standard c++ macro definitions from " + path();
         while ( proc.canReadLine() ){
-            definesAndIncludesDebug()  << proc.readLine();
+            qCDebug(DEFINESANDINCLUDES)  << proc.readLine();
         }
-        definesAndIncludesDebug()  << proc.exitCode();
+        qCDebug(DEFINESANDINCLUDES)  << proc.exitCode();
     }
 
     // MSVC builtin attributes

@@ -20,12 +20,10 @@
 
 #include "qmakedebugvisitor.h"
 
-#include <QDebug>
-
 #include "qmakeparser.h"
 #include "qmakeast.h"
 #include "kdev-pg-token-stream.h"
-#include "../debug.h"
+#include <debug.h>
 
 namespace QMake {
 

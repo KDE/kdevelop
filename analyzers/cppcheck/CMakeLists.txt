@@ -8,6 +8,30 @@ set_package_properties(Cppcheck PROPERTIES
     TYPE RUNTIME
 )
 
+set(kdevcppcheck_core_SRCS
+    parser.cpp
+    job.cpp
+    parameters.cpp
+    utils.cpp
+)
+ecm_qt_declare_logging_category(kdevcppcheck_core_SRCS
+    HEADER debug.h
+    IDENTIFIER KDEV_CPPCHECK
+    CATEGORY_NAME "kdevelop.analyzers.cppcheck"
+)
+kconfig_add_kcfg_files(kdevcppcheck_core_SRCS
+    config/globalsettings.kcfgc
+    config/projectsettings.kcfgc
+)
+add_library(kdevcppcheck_core STATIC
+    ${kdevcppcheck_core_SRCS}
+)
+target_link_libraries(kdevcppcheck_core
+    KDev::Language
+    KDev::Project
+    KDev::Shell
+)
+
 set(kdevcppcheck_SRCS
     plugin.cpp
     problemmodel.cpp
@@ -21,24 +45,6 @@ ki18n_wrap_ui(kdevcppcheck_SRCS
 )
 qt5_add_resources(kdevcppcheck_SRCS
     kdevcppcheck.qrc
-)
-kconfig_add_kcfg_files(kdevcppcheck_CONFIG_SRCS
-    config/globalsettings.kcfgc
-    config/projectsettings.kcfgc
-)
-add_library(kdevcppcheck_core STATIC
-    debug.cpp
-    parser.cpp
-    job.cpp
-    parameters.cpp
-    utils.cpp
-
-    ${kdevcppcheck_CONFIG_SRCS}
-)
-target_link_libraries(kdevcppcheck_core
-    KDev::Language
-    KDev::Project
-    KDev::Shell
 )
 kdevplatform_add_plugin(kdevcppcheck
     JSON kdevcppcheck.json

@@ -21,11 +21,10 @@
 
 #include "qmakebuilddirchooserdialog.h"
 
-#include "debug.h"
+#include <debug.h>
 #include "qmakebuilddirchooser.h"
 #include "qmakeconfig.h"
 
-#include <QDebug>
 #include <QDialogButtonBox>
 #include <KLocalizedString>
 

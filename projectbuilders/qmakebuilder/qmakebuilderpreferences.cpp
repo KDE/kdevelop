@@ -22,7 +22,6 @@
 #include "qmakebuilderpreferences.h"
 
 #include <QIcon>
-#include <QDebug>
 
 #include <kio/deletejob.h>
 #include <klocalizedstring.h>
@@ -34,7 +33,7 @@
 #include "qmakebuilddirchooserdialog.h"
 #include "qmakeconfig.h"
 #include "qmakebuilderconfig.h"
-#include "qmakebuilderdebug.h"
+#include <debug.h>
 
 #include <interfaces/iproject.h>
 

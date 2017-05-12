@@ -37,8 +37,6 @@
 #include <kjob.h>
 #include <QUrl>
 
-Q_LOGGING_CATEGORY(CMAKEBUILDER, "kdevelop.projectbuilders.cmakebuilder")
-
 #include "cmakejob.h"
 #include "prunejob.h"
 #include "cmakebuilderpreferences.h"
@@ -93,10 +91,10 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
             connect(i, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)), this, SIGNAL(cleaned(KDevelop::ProjectBaseItem*)));
             connect(i, SIGNAL(installed(KDevelop::ProjectBaseItem*)), this, SIGNAL(installed(KDevelop::ProjectBaseItem*)));
 
-            qCDebug(CMAKEBUILDER) << "Added builder " << i->metaObject()->className() << "for" << neededfile;
+            qCDebug(KDEV_CMAKEBUILDER) << "Added builder " << i->metaObject()->className() << "for" << neededfile;
         }
         else
-            qCWarning(CMAKEBUILDER) << "Couldn't add" << i->metaObject()->className();
+            qCWarning(KDEV_CMAKEBUILDER) << "Couldn't add" << i->metaObject()->className();
     }
 }
 
@@ -120,16 +118,16 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
             int lastDot = file->text().lastIndexOf('.');
             QString target = file->text().mid(0, lastDot)+".o";
             build = makeBuilder->executeMakeTarget(dom->parent(), target);
-            qCDebug(CMAKEBUILDER) << "create build job for target" << build << dom << target;
+            qCDebug(KDEV_CMAKEBUILDER) << "create build job for target" << build << dom << target;
         }
-        qCDebug(CMAKEBUILDER) << "Building with" << builder;
+        qCDebug(KDEV_CMAKEBUILDER) << "Building with" << builder;
         if (!build)
         {
             build = builder->build(dom);
         }
         if( configure )
         {
-            qCDebug(CMAKEBUILDER) << "creating composite job";
+            qCDebug(KDEV_CMAKEBUILDER) << "creating composite job";
             KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
             builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, dom );
             builderJob->addCustomJob( KDevelop::BuilderJob::Build, build, dom );
@@ -153,7 +151,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         if(dom->file()) //It doesn't work to compile a file
             item=(KDevelop::ProjectBaseItem*) dom->parent();
 
-        qCDebug(CMAKEBUILDER) << "Cleaning with" << builder;
+        qCDebug(KDEV_CMAKEBUILDER) << "Cleaning with" << builder;
         KJob* clean = builder->clean(item);
         if( configure ) {
             KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
@@ -179,7 +177,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installP
         if(dom->file())
             item=(KDevelop::ProjectBaseItem*) dom->parent();
 
-        qCDebug(CMAKEBUILDER) << "Installing with" << builder;
+        qCDebug(KDEV_CMAKEBUILDER) << "Installing with" << builder;
         KJob* install = builder->install(item, installPrefix);
         if( configure ) {
             KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;

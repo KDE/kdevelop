@@ -9,6 +9,12 @@ add_subdirectory(icons)
 # the debug visitor prints out the Ast for the CMakeLists.txt file.
 #add_definitions( -DCMAKEDEBUGVISITOR )
 
+ecm_qt_declare_logging_category(cmake_LOG_SRCS
+    HEADER debug.h
+    IDENTIFIER CMAKE
+    CATEGORY_NAME "kdevelop.projectmanagers.cmake"
+)
+
 set( cmakecommon_SRCS
   parser/cmListFileLexer.c
   parser/cmakecachereader.cpp
@@ -18,9 +24,8 @@ set( cmakecommon_SRCS
   cmakeextraargumentshistory.cpp
   cmakebuilddirchooser.cpp
   cmakeserver.cpp
-  debug.cpp
-
- )
+  ${cmake_LOG_SRCS}
+)
 
 set( cmakecommon_UI
   cmakebuilddirchooser.ui
@@ -45,7 +50,7 @@ set( cmakemanager_SRCS
   cmakecodecompletionmodel.cpp
 #   cmakecommitchangesjob.cpp
 #   cmakeedit.cpp
-  debug.cpp
+  ${cmake_LOG_SRCS}
 )
 
 set( cmakemanager_UI
@@ -57,7 +62,6 @@ set( cmakesettings_SRCS
   settings/cmakecachemodel.cpp
   settings/cmakecachedelegate.cpp
   settings/cmakecachemodel.cpp
-  debug.cpp
 )
 ki18n_wrap_ui(cmakesettings_SRCS settings/cmakebuildsettings.ui)
 

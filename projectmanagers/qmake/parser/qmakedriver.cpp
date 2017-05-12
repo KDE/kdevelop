@@ -23,9 +23,8 @@
 #include <QTextStream>
 #include <QTextCodec>
 #include <QFile>
-#include <QDebug>
 
-#include "../debug.h"
+#include <debug.h>
 #include "qmakeparser.h"
 #include "qmakeast.h"
 

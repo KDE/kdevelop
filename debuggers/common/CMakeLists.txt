@@ -6,7 +6,6 @@ set(debuggercommon_SRCS
     mi/micommand.cpp
     mi/micommandqueue.cpp
     dialogs/selectcoredialog.cpp
-    debuglog.cpp
     # debug session & debugger
     midebugger.cpp
     midebugsession.cpp
@@ -36,6 +35,12 @@ if(KF5SysGuard_FOUND)
         dialogs/processselection.cpp
     )
 endif()
+
+ecm_qt_declare_logging_category(debuggercommon_SRCS
+    HEADER debuglog.h
+    IDENTIFIER DEBUGGERCOMMON
+    CATEGORY_NAME "kdevelop.debuggers.common"
+)
 
 ki18n_wrap_ui(debuggercommon_SRCS
     dialogs/selectcoredialog.ui

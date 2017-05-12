@@ -22,8 +22,6 @@
 #include "parsesession.h"
 #include "qmljsducontext.h"
 
-#include <QDebug>
-
 using namespace KDevelop;
 
 ContextBuilder::ContextBuilder()

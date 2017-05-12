@@ -47,10 +47,6 @@
 #include <QTextStream>
 #include <QDBusInterface>
 #include <QDBusReply>
-#include <QLoggingCategory>
-
-Q_DECLARE_LOGGING_CATEGORY(APP)
-Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 
 #include <shell/core.h>
 #include <shell/mainwindow.h>
@@ -65,6 +61,7 @@ Q_LOGGING_CATEGORY(APP, "kdevelop.app")
 #include <interfaces/iproject.h>
 #include <interfaces/launchconfigurationtype.h>
 #include <util/path.h>
+#include <debug.h>
 
 #include "kdevideextension.h"
 #if KDEVELOP_SINGLE_APP

@@ -1,6 +1,6 @@
 configure_file(testconfig.h.in testconfig.h)
 
-ecm_add_test(test_custombuildsystemplugin.cpp ../debugarea.cpp
+ecm_add_test(test_custombuildsystemplugin.cpp ${custom_LOG_SRCS}
     TEST_NAME test_custombuildsystemplugin
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Project)
 
@@ -10,9 +10,12 @@ set( kcm_uitest_SRCS kcmuitestmain.cpp
                      ../custombuildsystemconfigwidget.cpp
                      ../configconstants.cpp
                      ../configwidget.cpp
-                     ../debugarea.cpp
+                     ${custom_LOG_SRCS}
    )
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_BINARY_DIR}/..
+)
 ki18n_wrap_ui( kcm_uitest_SRCS
                         ../configwidget.ui
                         ../custombuildsystemconfigwidget.ui

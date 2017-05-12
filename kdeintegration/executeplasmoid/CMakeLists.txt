@@ -5,6 +5,11 @@ set(kdevexecuteplasmoid_PART_SRCS
     plasmoidexecutionconfig.cpp
     plasmoidexecutionjob.cpp
 )
+ecm_qt_declare_logging_category(kdevexecuteplasmoid_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER EXECUTEPLASMOID
+    CATEGORY_NAME "kdevelop.launchers.executeplasmoid"
+)
 ki18n_wrap_ui(kdevexecuteplasmoid_PART_SRCS
     plasmoidexecutionconfig.ui
 )

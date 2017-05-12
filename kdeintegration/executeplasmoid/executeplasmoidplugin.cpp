@@ -32,7 +32,6 @@
 
 using namespace KDevelop;
 
-Q_LOGGING_CATEGORY(EXECUTEPLASMOID, "kdevelop.kdeintegration.executeplasmoid")
 K_PLUGIN_FACTORY_WITH_JSON(KDevExecutePlasmoidFactory,"kdevexecuteplasmoid.json", registerPlugin<ExecutePlasmoidPlugin>(); )
 
 ExecutePlasmoidPlugin::ExecutePlasmoidPlugin(QObject *parent, const QVariantList&)

@@ -20,7 +20,7 @@
 
 #include "cmakedebugvisitor.h"
 #include "astfactory.h"
-#include "../debug.h"
+#include <debug.h>
 
 
 #define WRITEOUT qCDebug(CMAKE) << ast->line()

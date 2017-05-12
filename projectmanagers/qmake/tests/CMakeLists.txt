@@ -5,7 +5,7 @@ file(COPY ${QMAKE_TESTS_PROJECTS_SOURCE_DIR} DESTINATION "${QMAKE_TESTS_PROJECTS
 get_property(QMAKE_EXECUTABLE_LOCATION TARGET Qt5::qmake PROPERTY LOCATION)
 configure_file(qmaketestconfig.h.in ${CMAKE_CURRENT_BINARY_DIR}/qmaketestconfig.h)
 
-set(test_qmakefile_SRCS test_qmakefile.cpp ../debug.cpp)
+set(test_qmakefile_SRCS test_qmakefile.cpp)
 ecm_add_test(${test_qmakefile_SRCS} TEST_NAME test_qmakefile LINK_LIBRARIES
     Qt5::Test
     KDev::Tests
@@ -13,7 +13,7 @@ ecm_add_test(${test_qmakefile_SRCS} TEST_NAME test_qmakefile LINK_LIBRARIES
     kdevqmakecommon
 )
 
-set(test_qmakeproject_SRCS test_qmakeproject.cpp ../debug.cpp)
+set(test_qmakeproject_SRCS test_qmakeproject.cpp)
 ecm_add_test(${test_qmakeproject_SRCS} TEST_NAME test_qmakeproject LINK_LIBRARIES
     Qt5::Test
     KDev::Tests

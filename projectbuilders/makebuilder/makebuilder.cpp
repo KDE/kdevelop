@@ -31,7 +31,6 @@
 #include <KPluginFactory>
 #include <KConfigGroup>
 
-Q_LOGGING_CATEGORY(MAKEBUILDER, "kdevelop.projectbuilders.makebuilder")
 K_PLUGIN_FACTORY_WITH_JSON(MakeBuilderFactory, "kdevmakebuilder.json", registerPlugin<MakeBuilder>(); )
 
 MakeBuilder::MakeBuilder(QObject *parent, const QVariantList &)
@@ -128,7 +127,7 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
     foreach (MakeJob* makeJob, m_activeMakeJobs.data())
     {
         if(item && makeJob->item() && makeJob->item()->project() == item->project() && makeJob->commandType() == c) {
-            qCDebug(MAKEBUILDER) << "killing running make job, due to new started build on same project:" << makeJob;
+            qCDebug(KDEV_MAKEBUILDER) << "killing running make job, due to new started build on same project:" << makeJob;
             makeJob->kill(KJob::EmitResult);
         }
     }

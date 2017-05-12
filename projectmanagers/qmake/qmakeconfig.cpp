@@ -19,7 +19,6 @@
 #include "qmakeconfig.h"
 
 #include <QMutex>
-#include <QDebug>
 #include <QFileInfo>
 #include <QStandardPaths>
 
@@ -28,7 +27,7 @@
 
 #include <interfaces/iproject.h>
 #include <util/path.h>
-#include "debug.h"
+#include <debug.h>
 
 const char QMakeConfig::CONFIG_GROUP[] = "QMake_Builder";
 

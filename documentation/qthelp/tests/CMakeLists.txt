@@ -1,3 +1,5 @@
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
+
 configure_file(testqthelpconfig.h.in testqthelpconfig.h)
 
 set(test_qthelpplugin_SRCS
@@ -8,8 +10,8 @@ set(test_qthelpplugin_SRCS
     ../qthelpdocumentation.cpp
     ../qthelpqtdoc.cpp
     ../qthelp_config_shared.cpp
-    ../debug.cpp
     ../qthelpconfig.cpp
+    ${kdevqthelp_LOG_SRCS}
 )
 ki18n_wrap_ui(test_qthelpplugin_SRCS
    ../qthelpconfig.ui

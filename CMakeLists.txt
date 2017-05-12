@@ -9,7 +9,7 @@ set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDE
 project(KDevelop)
 
 # we need some parts of the ECM CMake helpers
-find_package (ECM 0.0.9 REQUIRED NO_MODULE)
+find_package (ECM 5.14.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDECompilerSettings NO_POLICY_SCOPE) # needs to be first, as set policies influence following macros
@@ -21,6 +21,7 @@ include(ECMAddTests)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 include(ECMPackageConfigHelpers)
+include(ECMQtDeclareLoggingCategory)
 
 include(CTest)
 include(GenerateExportHeader)

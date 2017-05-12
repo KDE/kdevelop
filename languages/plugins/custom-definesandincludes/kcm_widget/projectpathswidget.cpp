@@ -33,7 +33,7 @@
 #include "ui_projectpathswidget.h"
 #include "ui_batchedit.h"
 #include "projectpathsmodel.h"
-#include "debugarea.h"
+#include <debug.h>
 
 using namespace KDevelop;
 
@@ -117,13 +117,13 @@ void ProjectPathsWidget::setPaths( const QVector<ConfigEntry>& paths )
 
 void ProjectPathsWidget::definesChanged( const Defines& defines )
 {
-    definesAndIncludesDebug() << "defines changed";
+    qCDebug(DEFINESANDINCLUDES) << "defines changed";
     updatePathsModel( QVariant::fromValue(defines), ProjectPathsModel::DefinesDataRole );
 }
 
 void ProjectPathsWidget::includesChanged( const QStringList& includes )
 {
-    definesAndIncludesDebug() << "includes changed";
+    qCDebug(DEFINESANDINCLUDES) << "includes changed";
     updatePathsModel( includes, ProjectPathsModel::IncludesDataRole );
 }
 

@@ -30,9 +30,6 @@
 #include <interfaces/isourceformatter.h>
 #include <memory>
 #include <QDir>
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(CUSTOMSCRIPT)
-Q_LOGGING_CATEGORY(CUSTOMSCRIPT, "kdevelop.formatters.customscript")
 
 #include <util/formattinghelpers.h>
 #include <interfaces/iprojectcontroller.h>
@@ -44,6 +41,7 @@ Q_LOGGING_CATEGORY(CUSTOMSCRIPT, "kdevelop.formatters.customscript")
 #include <interfaces/ilanguagecontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <util/path.h>
+#include <debug.h>
 
 using namespace KDevelop;
 

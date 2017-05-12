@@ -1,25 +1,25 @@
-ecm_add_test(parsetest.cpp ../../debug.cpp
+ecm_add_test(parsetest.cpp ${qmakecommon_LOG_SRCS}
     TEST_NAME test_qmakeparse
     LINK_LIBRARIES
         Qt5::Test
         kdevqmakeparser
 )
 
-ecm_add_test(assignmenttest.cpp ../../debug.cpp
+ecm_add_test(assignmenttest.cpp ${qmakecommon_LOG_SRCS}
     TEST_NAME test_qmakeassignment
     LINK_LIBRARIES
         Qt5::Test
         kdevqmakeparser
 )
 
-ecm_add_test(functionscopetest.cpp testhelpers.cpp ../../debug.cpp
+ecm_add_test(functionscopetest.cpp testhelpers.cpp ${qmakecommon_LOG_SRCS}
     TEST_NAME test_qmakefunctionscope
     LINK_LIBRARIES
         Qt5::Test
         kdevqmakeparser
 )
 
-ecm_add_test(scopetest.cpp testhelpers.cpp ../../debug.cpp
+ecm_add_test(scopetest.cpp testhelpers.cpp ${qmakecommon_LOG_SRCS}
     TEST_NAME test_qmakescope
     LINK_LIBRARIES
         Qt5::Test

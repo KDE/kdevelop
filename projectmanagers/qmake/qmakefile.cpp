@@ -22,9 +22,8 @@
 
 #include <QDir>
 #include <QFileInfo>
-#include <QDebug>
 
-#include "debug.h"
+#include <debug.h>
 #include "parser/ast.h"
 #include "qmakedriver.h"
 

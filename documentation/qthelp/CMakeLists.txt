@@ -1,5 +1,10 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevqthelp\")
 
+ecm_qt_declare_logging_category(kdevqthelp_LOG_SRCS
+    HEADER debug.h
+    IDENTIFIER QTHELP
+    CATEGORY_NAME "kdevelop.documentation.qthelp"
+)
 set(kdevqthelp_SRCS
     qthelpplugin.cpp
     qthelpproviderabstract.cpp
@@ -7,8 +12,8 @@ set(kdevqthelp_SRCS
     qthelpdocumentation.cpp
     qthelpqtdoc.cpp
     qthelp_config_shared.cpp
-    debug.cpp
     qthelpconfig.cpp # Configuration module for QtHelp plugin
+    ${kdevqthelp_LOG_SRCS}
 )
 
 ki18n_wrap_ui(kdevqthelp_SRCS

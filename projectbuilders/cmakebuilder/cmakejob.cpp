@@ -53,7 +53,7 @@ CMakeJob::CMakeJob(QObject* parent)
 
 void CMakeJob::start()
 {
-    qCDebug(CMAKEBUILDER) << "Configuring cmake" << workingDirectory();
+    qCDebug(KDEV_CMAKEBUILDER) << "Configuring cmake" << workingDirectory();
 
     if( !m_project ) {
         setError(NoProjectError);
@@ -71,7 +71,7 @@ void CMakeJob::start()
 QUrl CMakeJob::workingDirectory() const
 {
     KDevelop::Path path = CMake::currentBuildDir( m_project );
-    qCDebug(CMAKEBUILDER) << "builddir: " << path;
+    qCDebug(KDEV_CMAKEBUILDER) << "builddir: " << path;
     Q_ASSERT(path.isValid()); //We cannot get the project folder as a build directory!
     return path.toUrl();
 }
@@ -110,11 +110,11 @@ QStringList CMakeJob::commandLine() const
         if( err == KShell::NoError ) {
             args += tmp;
         } else {
-            qCWarning(CMAKEBUILDER) << "Ignoring cmake Extra arguments";
+            qCWarning(KDEV_CMAKEBUILDER) << "Ignoring cmake Extra arguments";
             if( err == KShell::BadQuoting ) {
-                qCWarning(CMAKEBUILDER) << "CMake arguments badly quoted:" << cmakeargs;
+                qCWarning(KDEV_CMAKEBUILDER) << "CMake arguments badly quoted:" << cmakeargs;
             } else {
-                qCWarning(CMAKEBUILDER) << "CMake arguments had meta character:" << cmakeargs;
+                qCWarning(KDEV_CMAKEBUILDER) << "CMake arguments had meta character:" << cmakeargs;
             }
         }
     }

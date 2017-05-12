@@ -13,6 +13,11 @@ set(kdevghprovider_PART_SRCS
     ghaccount.cpp
     ghdialog.cpp
 )
+ecm_qt_declare_logging_category(kdevghprovider_PART_SRCS
+    HEADER debug.h
+    IDENTIFIER GHPROVIDER
+    CATEGORY_NAME "kdevelop.providers.ghprovider"
+)
 
 kdevplatform_add_plugin(kdevghprovider JSON kdevghprovider.json	SOURCES ${kdevghprovider_PART_SRCS})
 target_link_libraries(kdevghprovider

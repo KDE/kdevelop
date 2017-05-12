@@ -28,7 +28,7 @@
 
 #include "../ui_includeswidget.h"
 #include "includesmodel.h"
-#include "debugarea.h"
+#include <debug.h>
 #include <QShortcut>
 
 IncludesWidget::IncludesWidget( QWidget* parent )
@@ -81,7 +81,7 @@ void IncludesWidget::setIncludes( const QStringList& paths )
 }
 void IncludesWidget::includesChanged()
 {
-    definesAndIncludesDebug() << "includes changed";
+    qCDebug(DEFINESANDINCLUDES) << "includes changed";
     emit includesChanged( includesModel->includes() );
     checkIfIncludePathExist();
 }
@@ -111,7 +111,7 @@ void IncludesWidget::addIncludePath()
 
 void IncludesWidget::deleteIncludePath()
 {
-    definesAndIncludesDebug() << "deleting include path" << ui->includePaths->currentIndex();
+    qCDebug(DEFINESANDINCLUDES) << "deleting include path" << ui->includePaths->currentIndex();
     const QModelIndex curidx = ui->includePaths->currentIndex();
     if (curidx.isValid()) {
         includesModel->removeRows(curidx.row(), 1);

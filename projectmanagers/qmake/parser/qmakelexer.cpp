@@ -21,7 +21,6 @@
 #include "qmakelexer.h"
 
 #include <QString>
-#include <QDebug>
 #include "qmakeparser.h"
 #include <kdev-pg-location-table.h>
 #include <kdev-pg-token-stream.h>

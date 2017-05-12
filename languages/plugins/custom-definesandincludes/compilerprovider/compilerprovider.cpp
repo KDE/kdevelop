@@ -23,7 +23,7 @@
 
 #include "compilerprovider.h"
 
-#include "../debugarea.h"
+#include <debug.h>
 
 #include "compilerfactories.h"
 #include "settingsmanager.h"

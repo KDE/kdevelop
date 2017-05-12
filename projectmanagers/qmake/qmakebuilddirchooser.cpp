@@ -25,7 +25,6 @@
 #include <KLocalizedString>
 #include <KMessageWidget>
 
-#include <QDebug>
 #include <QSignalBlocker>
 #include <QUrl>
 
@@ -35,7 +34,7 @@
 #include <project/interfaces/iprojectbuilder.h>
 
 #include <interfaces/iproject.h>
-#include "debug.h"
+#include <debug.h>
 
 using namespace KDevelop;
 

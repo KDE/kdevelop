@@ -11,6 +11,7 @@
 
 #include "custommakemanager.h"
 #include "custommakemodelitems.h"
+#include <debug.h>
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
@@ -24,9 +25,6 @@
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(CUSTOMMAKE)
-Q_LOGGING_CATEGORY(CUSTOMMAKE, "kdevelop.projectmanagers.custommake")
 
 #include <KLocalizedString>
 

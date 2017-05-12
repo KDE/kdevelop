@@ -36,9 +36,9 @@
 
 #include "ui_compilerswidget.h"
 #include "compilersmodel.h"
-#include "../../debugarea.h"
 #include "../compilerprovider/settingsmanager.h"
 #include "../compilerprovider/compilerprovider.h"
+#include <debug.h>
 
 using namespace KDevelop;
 
@@ -115,7 +115,7 @@ void CompilersWidget::clear()
 
 void CompilersWidget::deleteCompiler()
 {
-    definesAndIncludesDebug() << "Deleting compiler";
+    qCDebug(DEFINESANDINCLUDES) << "Deleting compiler";
     auto selectionModel = m_ui->compilers->selectionModel();
     foreach (const QModelIndex& row, selectionModel->selectedIndexes()) {
         if (row.column() == 1) {

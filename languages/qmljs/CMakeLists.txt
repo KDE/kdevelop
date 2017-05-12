@@ -12,12 +12,17 @@ add_subdirectory(nodejsmodules)
 add_subdirectory(tests)
 add_subdirectory(codecompletion)
 
+ecm_qt_declare_logging_category(kdevqmljslanguagesupport_LOG_SRCS
+    HEADER debug.h
+    IDENTIFIER KDEV_QMLJS
+    CATEGORY_NAME "kdevelop.languages.qmljs"
+)
 kdevplatform_add_plugin(kdevqmljslanguagesupport JSON kdevqmljs.json SOURCES
     qmljsparsejob.cpp
     qmljshighlighting.cpp
     kdevqmljsplugin.cpp
-    debug.cpp
     navigation/propertypreviewwidget.cpp
+    ${kdevqmljslanguagesupport_LOG_SRCS}
 )
 target_link_libraries(kdevqmljslanguagesupport
     kdevqmljsduchain

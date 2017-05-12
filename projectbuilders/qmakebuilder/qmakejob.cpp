@@ -21,7 +21,7 @@
 
 #include "qmakejob.h"
 
-#include "debug.h"
+#include <debug.h>
 #include "qmakeconfig.h"
 
 #include <interfaces/iproject.h>
@@ -50,7 +50,7 @@ QMakeJob::QMakeJob(QObject* parent)
 
 void QMakeJob::start()
 {
-    qCDebug(KDEV_QMAKE) << "Running qmake in" << workingDirectory();
+    qCDebug(KDEV_QMAKEBUILDER) << "Running qmake in" << workingDirectory();
 
     if (!m_project) {
         setError(NoProjectError);
@@ -97,7 +97,7 @@ void QMakeJob::setProject(KDevelop::IProject* project)
 
 void QMakeJob::slotFailed(QProcess::ProcessError error)
 {
-    qCDebug(KDEV_QMAKE) << error;
+    qCDebug(KDEV_QMAKEBUILDER) << error;
 
     if (!m_killed) {
         setError(ConfigureError);

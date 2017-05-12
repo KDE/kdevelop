@@ -147,9 +147,8 @@ namespace QMake
 
 [:
 #include "qmakelexer.h"
-#include <QDebug>
 #include <QString>
-#include "../debug.h"
+#include <debug.h>
 
 namespace QMake
 {

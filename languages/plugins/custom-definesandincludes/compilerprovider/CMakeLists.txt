@@ -1,3 +1,5 @@
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/..)
+
 set( compilerprovider_SRCS
         compilerprovider.cpp
         icompiler.cpp
@@ -5,9 +7,9 @@ set( compilerprovider_SRCS
         msvccompiler.cpp
         compilerfactories.cpp
         settingsmanager.cpp
-        ../debugarea.cpp
         widget/compilersmodel.cpp
         widget/compilerswidget.cpp
+        ${kdevdefinesandincludesmanager_LOG_SRCS}
     )
 
 ki18n_wrap_ui(compilerprovider_SRCS

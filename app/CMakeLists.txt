@@ -21,6 +21,11 @@ if(KDEVELOP_SINGLE_APP)
     set(kdevelop_SRCS ${kdevelop_SRCS} ${singleapp_SRCS})
 endif()
 
+ecm_qt_declare_logging_category(kdevelop_SRCS
+    HEADER debug.h
+    IDENTIFIER APP
+    CATEGORY_NAME "kdevelop.app"
+)
 qt5_add_resources(kdevelop_SRCS kdevelop.qrc)
 
 #TODO: remove CMAKE_CURRENT_SOURCE_DIR prefix when ECM is fixed

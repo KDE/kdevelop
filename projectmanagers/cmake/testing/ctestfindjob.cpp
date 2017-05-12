@@ -19,7 +19,7 @@
 
 #include "ctestfindjob.h"
 #include "ctestsuite.h"
-#include "../debug.h"
+#include <debug.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/itestcontroller.h>

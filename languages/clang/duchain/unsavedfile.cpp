@@ -21,8 +21,6 @@
 
 #include "unsavedfile.h"
 
-#include <QDebug>
-
 #include <clang-c/Index.h>
 
 #include <algorithm>

@@ -21,7 +21,7 @@
 #include "cmakeparsejob.h"
 #include "declarationbuilder.h"
 #include "usebuilder.h"
-#include "../debug.h"
+#include <debug.h>
 #include <cmakelistsparser.h>
 #include <cmakemanager.h>
 #include <language/backgroundparser/urlparselock.h>
