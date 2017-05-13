@@ -8,11 +8,12 @@ set(VERSION_PATCH 1)
 # KDevplatform dependency version
 set(KDEVPLATFORM_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-find_package (ECM 0.0.9 REQUIRED NO_MODULE)
+find_package (ECM "5.14.0" REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMAddTests)
+include(ECMQtDeclareLoggingCategory)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(FeatureSummary)
@@ -28,8 +29,14 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+ecm_qt_declare_logging_category(kdevclangtidy_LOG_SRCS
+    HEADER debug.h
+    IDENTIFIER KDEV_CLANGTIDY
+    CATEGORY_NAME "kdevelop.analyzers.clangtidy"
+)
+
+
 set(kdevclangtidy_PART_SRCS
-    src/debug.cpp
     src/job.cpp
     src/plugin.cpp
 
@@ -39,6 +46,8 @@ set(kdevclangtidy_PART_SRCS
 
     src/parsers/clangtidyparser.cpp
     src/parsers/replacementparser.cpp
+
+    ${kdevclangtidy_LOG_SRCS}
 )
 
 include (cmake/ClangFormatAll.cmake)
