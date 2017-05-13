@@ -81,5 +81,8 @@ target_link_libraries(kdevclangtidy
 
 add_subdirectory(tests)
 
+# kdebugsettings file
+install(FILES kdevclangtidy.categories DESTINATION ${KDE_INSTALL_CONFDIR})
+
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
