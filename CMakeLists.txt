@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.12)
+
 project(kdev-clangtidy)
 
 set(VERSION_MAJOR 0)
@@ -6,7 +8,6 @@ set(VERSION_PATCH 1)
 # KDevplatform dependency version
 set(KDEVPLATFORM_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
-cmake_minimum_required(VERSION 2.8.12)
 find_package (ECM 0.0.9 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
