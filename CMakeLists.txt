@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12)
 # kdevplatform version
 set(KDEVPLATFORM_VERSION_MAJOR 5)
 set(KDEVPLATFORM_VERSION_MINOR 1)
-set(KDEVPLATFORM_VERSION_PATCH 0)
+set(KDEVPLATFORM_VERSION_PATCH 1)
 
 # plugin versions listed in the .desktop files
 set(KDEV_PLUGIN_VERSION 27)
