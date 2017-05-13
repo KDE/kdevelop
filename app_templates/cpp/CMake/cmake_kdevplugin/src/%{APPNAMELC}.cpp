@@ -1,6 +1,6 @@
 #include "%{APPNAMELC}.h"
 
-#include <QDebug>
+#include <debug.h>
 
 #include <KPluginFactory>
 
@@ -11,7 +11,7 @@ K_PLUGIN_FACTORY_WITH_JSON(%{APPNAME}Factory, "%{APPNAMELC}.json", registerPlugi
 {
     Q_UNUSED(args);
 
-    qDebug() << "Hello world, my plugin is loaded!";
+    qCDebug(PLUGIN_%{APPNAMEUC}) << "Hello world, my plugin is loaded!";
 }
 
 // needed for QObject class created from K_PLUGIN_FACTORY_WITH_JSON
