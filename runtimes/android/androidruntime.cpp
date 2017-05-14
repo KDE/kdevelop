@@ -63,7 +63,7 @@ static QStringList args()
     };
 }
 
-void AndroidRuntime::startProcess(QProcess* process)
+void AndroidRuntime::startProcess(QProcess* process) const
 {
     if (process->program().endsWith(QLatin1String("cmake"))) {
         process->setArguments(process->arguments() << args());
@@ -74,7 +74,7 @@ void AndroidRuntime::startProcess(QProcess* process)
     process->start();
 }
 
-void AndroidRuntime::startProcess(KProcess* process)
+void AndroidRuntime::startProcess(KProcess* process) const
 {
     if (process->program().constFirst().endsWith(QLatin1String("cmake"))) {
         process->setProgram(process->program() << args());

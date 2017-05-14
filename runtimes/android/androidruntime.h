@@ -37,10 +37,10 @@ public:
 
     void setEnabled(bool enabled) override;
 
-    void startProcess(KProcess *process) override;
-    void startProcess(QProcess *process) override;
-    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) override { return runtimePath; }
-    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) override { return localPath; }
+    void startProcess(KProcess *process) const override;
+    void startProcess(QProcess *process) const override;
+    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) const override { return runtimePath; }
+    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) const override { return localPath; }
     QByteArray getenv(const QByteArray &varname) const override;
 
     static AndroidPreferencesSettings* s_settings;
