@@ -58,13 +58,33 @@ void DockerRuntime::inspectImage()
         qCDebug(DOCKER) << "upper dir:" << m_tag << m_upperDir;
     });
     process->start("docker", {"image", "inspect", m_tag, "--format", "{{.GraphDriver.Data.UpperDir}}"});
+
+    QProcess* processEnvs = new QProcess(this);
+    connect(processEnvs, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [processEnvs, this](int code, QProcess::ExitStatus status){
+        processEnvs->deleteLater();
+        qDebug() << "inspect envs" << code << status;
+        if (code || status)
+            return;
+
+        while(!processEnvs->atEnd()) {
+            const auto line = processEnvs->readLine().split('=');
+            if (line.count() != 2)
+                continue;
+            m_envs.insert(line[0], line[1]);
+        }
+
+        qCDebug(DOCKER) << "envs:" << m_tag << m_envs;
+    });
+    processEnvs->start("docker", {"image", "inspect", m_tag, "--format", "{{.Config.Env}}"});
 }
 
 DockerRuntime::~DockerRuntime()
 {
 }
 
+QByteArray DockerRuntime::getenv(const QByteArray& varname) const
 {
+    return m_envs.value(varname);
 }
 
 void DockerRuntime::setEnabled(bool enable)

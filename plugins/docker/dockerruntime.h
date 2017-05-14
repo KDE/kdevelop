@@ -42,12 +42,15 @@ public:
     KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) override;
     KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) override;
 
+    QByteArray getenv(const QByteArray & varname) const override;
+
     static DockerPreferencesSettings* s_settings;
 
 private:
     void inspectImage();
 
     const QString m_tag;
+    QHash<QByteArray,QByteArray> m_envs;
     KDevelop::Path m_upperDir;
     KDevelop::Path m_userUpperDir;
 };

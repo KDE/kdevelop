@@ -215,3 +215,8 @@ Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath)
     qCDebug(FLATPAK) << "path in runtime" << localPath << ret;
     return ret;
 }
+
+QByteArray FlatpakRuntime::getenv(const QByteArray& varname) const
+{
+    return qgetenv(varname);
+}

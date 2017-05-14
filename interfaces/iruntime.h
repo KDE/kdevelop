@@ -75,6 +75,11 @@ public:
      */
     virtual Path pathInHost(const Path& runtimePath) = 0;
 
+    /**
+     * @returns the value for an environment variable in the runtime
+     */
+    virtual QByteArray getenv(const QByteArray& varname) const = 0;
+
 protected:
     friend class RuntimeController;
 
