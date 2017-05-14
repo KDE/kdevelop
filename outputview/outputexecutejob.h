@@ -222,6 +222,12 @@ public:
 
     void start() override;
 
+    /**
+     * If @p executeHost is enabled, the process will be executed in the local host.
+     * Otherwise the currentRuntime will be used to execute the process.
+     *
+     * @sa IRuntimeController::setCurrentRuntime()
+     */
     void setExecuteOnHost(bool executeHost);
     bool executeOnHost() const;
 

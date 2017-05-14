@@ -43,7 +43,7 @@ public:
 
     void initialize();
 
-    void addRuntimes(const QVector<KDevelop::IRuntime *> &runtimes) override;
+    void addRuntimes(KDevelop::IRuntime * runtimes) override;
     QVector<KDevelop::IRuntime *> availableRuntimes() const override;
 
     KDevelop::IRuntime * currentRuntime() const override;

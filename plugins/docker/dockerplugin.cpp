@@ -56,7 +56,7 @@ DockerPlugin::DockerPlugin(QObject *parent, const QVariantList & /*args*/)
     connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, &DockerPlugin::runtimeChanged);
 
     QProcess* process = new QProcess(this);
-    connect(process, QOverload<int>::of(&QProcess::finished), this, &DockerPlugin::imagesListFinished);
+    connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &DockerPlugin::imagesListFinished);
     process->start(QStringLiteral("docker"), {QStringLiteral("images"), QStringLiteral("--filter"), QStringLiteral("dangling=false"), QStringLiteral("--format"), QStringLiteral("{{.Repository}}:{{.Tag}}\t{{.ID}}")}, QIODevice::ReadOnly);
 
     DockerRuntime::s_settings = m_settings.data();
@@ -75,17 +75,14 @@ void DockerPlugin::imagesListFinished(int code)
     QProcess* process = qobject_cast<QProcess*>(sender());
     Q_ASSERT(process);
     QTextStream stream(process);
-    QVector<IRuntime*> runtimes;
     while(!stream.atEnd()) {
         const QString line = stream.readLine();
         const QStringList parts = line.split(QLatin1Char('\t'));
 
         const QString tag = parts[0] == QLatin1String("<none>") ? parts[1] : parts[0];
-        runtimes << new DockerRuntime(tag);
+        ICore::self()->runtimeController()->addRuntimes(new DockerRuntime(tag));
     }
 
-    if (!runtimes.isEmpty())
-        ICore::self()->runtimeController()->addRuntimes(runtimes);
     process->deleteLater();
 }
 
@@ -93,8 +90,9 @@ void DockerPlugin::runtimeChanged(KDevelop::IRuntime* newRuntime)
 {
     const bool isDocker = qobject_cast<DockerRuntime*>(newRuntime);
 
-    for(auto action: actionCollection()->actions())
+    for(auto action: actionCollection()->actions()) {
         action->setEnabled(isDocker);
+    }
 }
 
 KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Context* context)

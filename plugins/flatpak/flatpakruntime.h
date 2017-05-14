@@ -37,17 +37,17 @@ public:
 
     void setEnabled(bool enabled) override;
 
-    void startProcess(KProcess *process) override;
-    void startProcess(QProcess *process) override;
-    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) override;
-    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) override;
+    void startProcess(KProcess *process) const override;
+    void startProcess(QProcess *process) const override;
+    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) const override;
+    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) const override;
     QByteArray getenv(const QByteArray &varname) const override;
 
     static KJob* createBuildDirectory(const KDevelop::Path &path, const KDevelop::Path &file, const QString &arch);
 
     KJob* rebuild();
-    QList<KJob*> exportBundle(const QString &path);
-    KJob* executeOnDevice(const QString &host, const QString &path);
+    QList<KJob*> exportBundle(const QString &path) const;
+    KJob* executeOnDevice(const QString &host, const QString &path) const;
 
     static QJsonObject config(const KDevelop::Path& path);
 

@@ -72,7 +72,6 @@ FlatpakRuntime::FlatpakRuntime(const KDevelop::Path &buildDirectory, const KDeve
 
 FlatpakRuntime::~FlatpakRuntime()
 {
-    QDir(m_buildDirectory.toLocalFile()).removeRecursively();
 }
 
 void FlatpakRuntime::refreshJson()
@@ -91,7 +90,7 @@ void FlatpakRuntime::setEnabled(bool /*enable*/)
 {
 }
 
-void FlatpakRuntime::startProcess(QProcess* process)
+void FlatpakRuntime::startProcess(QProcess* process) const
 {
     const QStringList args = QStringList{"build", "--socket=x11", m_buildDirectory.toLocalFile(), process->program()} << process->arguments();
     process->setProgram("flatpak");
@@ -101,7 +100,7 @@ void FlatpakRuntime::startProcess(QProcess* process)
     process->start();
 }
 
-void FlatpakRuntime::startProcess(KProcess* process)
+void FlatpakRuntime::startProcess(KProcess* process) const
 {
     process->setProgram(QStringList{ "flatpak", "--socket=x11", "build", m_buildDirectory.toLocalFile() } << process->program());
 
@@ -117,7 +116,7 @@ KJob* FlatpakRuntime::rebuild()
     return job;
 }
 
-QList<KJob*> FlatpakRuntime::exportBundle(const QString &path)
+QList<KJob*> FlatpakRuntime::exportBundle(const QString &path) const
 {
     const auto doc = config();
 
@@ -145,7 +144,7 @@ QString FlatpakRuntime::name() const
     return m_file.lastPathSegment() + QLatin1Char(':') + m_arch;
 }
 
-KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path)
+KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path) const
 {
     const QString name = config()[QLatin1String("id")].toString();
     const QString destPath = QStringLiteral("/tmp/kdevelop-test-app.flatpak");
@@ -157,7 +156,7 @@ KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path)
         createExecuteJob({ "ssh", host, "flatpak", "install", "--user", "--bundle", destPath}, i18n("Installing %1 to %2", name, host)),
         createExecuteJob({ "ssh", host, "flatpak", "run", name }, i18n("Running %1 on %2", name, host)),
     };
-    return new KDevelop::ExecuteCompositeJob( this, jobs );
+    return new KDevelop::ExecuteCompositeJob( parent(), jobs );
 }
 
 QJsonObject FlatpakRuntime::config(const KDevelop::Path& path)
@@ -183,7 +182,7 @@ QJsonObject FlatpakRuntime::config() const
     return config(m_file);
 }
 
-Path FlatpakRuntime::pathInHost(const KDevelop::Path& runtimePath)
+Path FlatpakRuntime::pathInHost(const KDevelop::Path& runtimePath) const
 {
     KDevelop::Path ret = runtimePath;
     if (runtimePath.isLocalFile() && runtimePath.segments().at(0) == QLatin1String("usr")) {
@@ -198,7 +197,7 @@ Path FlatpakRuntime::pathInHost(const KDevelop::Path& runtimePath)
     return ret;
 }
 
-Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath)
+Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath) const
 {
     KDevelop::Path ret = localPath;
     if (m_sdkPath.isParentOf(localPath)) {

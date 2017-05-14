@@ -33,15 +33,46 @@ public:
     DockerRuntime(const QString& tag);
     ~DockerRuntime() override;
 
+    /**
+     * @returns the docker tagname as a text identifier
+     */
     QString name() const override { return m_tag; }
 
+    /**
+     * if @p enabled
+     * Mounts the docker image's file system into a subdirectory the user can read.
+     * if not @p enabled, it unmounts the image file system
+     *
+     * See GraphDriver.Data.UpperDir value in docker image inspect imagename
+     *
+     * Both require root privileges for now
+     */
     void setEnabled(bool enabled) override;
 
-    void startProcess(KProcess *process) override;
-    void startProcess(QProcess *process) override;
-    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) override;
-    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) override;
+    /**
+     * Call processes using "docker run..." passing on the proper environment and volumes
+     *
+     * Volumes will include source and build directories that need to be exposed
+     * into the container.
+     */
+    void startProcess(KProcess *process) const override;
+    void startProcess(QProcess *process) const override;
 
+    /**
+     * Translates @p runtimePath from within the image into the host
+     *
+     * Takes into account the mounted upperDir and the different volumes set up
+     */
+    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) const override;
+
+    /**
+     * Translates @p localPath into a path that can be accessed by the runtime
+     */
+    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) const override;
+
+    /**
+     * @returns the environment variable with @p varname set by the recipe (usually the Dockerfile)
+     */
     QByteArray getenv(const QByteArray & varname) const override;
 
     static DockerPreferencesSettings* s_settings;

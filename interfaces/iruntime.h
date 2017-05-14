@@ -56,24 +56,24 @@ public:
      * Gives an opportunity to the runtime to set up environment variables
      * or process the execution in any way necessary.
      */
-    virtual void startProcess(QProcess* process) = 0;
+    virtual void startProcess(QProcess* process) const = 0;
 
     /**
      * @see startProcess(QProcess*)
      */
-    virtual void startProcess(KProcess* process) = 0;
+    virtual void startProcess(KProcess* process) const = 0;
 
     /**
      * Given a @p localPath from our process's file system
      * @returns the path that the runtime's environment can use
      */
-    virtual Path pathInRuntime(const Path& localPath) = 0;
+    virtual Path pathInRuntime(const Path& localPath) const = 0;
 
     /**
      * Given a @p runtimePath from the runtime
      * @returns the path in our file system scope that maps to the runtime's
      */
-    virtual Path pathInHost(const Path& runtimePath) = 0;
+    virtual Path pathInHost(const Path& runtimePath) const = 0;
 
     /**
      * @returns the value for an environment variable in the runtime
@@ -84,7 +84,11 @@ protected:
     friend class RuntimeController;
 
     /**
-     * notifies the runtime about its availability
+     * notifies the runtime about its availability.
+     *
+     * This will be called exclusively from the IRuntimeController implementation.
+     *
+     * @see IRuntimeController::setCurrentRuntime
      */
     virtual void setEnabled(bool enabled) = 0;
 

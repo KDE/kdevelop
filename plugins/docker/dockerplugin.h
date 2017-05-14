@@ -28,7 +28,7 @@ class DockerPreferencesSettings;
 
 class DockerPlugin : public KDevelop::IPlugin
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     DockerPlugin(QObject *parent, const QVariantList & args);
     ~DockerPlugin() override;

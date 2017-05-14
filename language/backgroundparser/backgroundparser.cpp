@@ -589,7 +589,7 @@ void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Featu
                                    QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags, int delay)
 {
     qCDebug(LANGUAGE) << "BackgroundParser::addDocument" << url.toUrl();
-//     Q_ASSERT(isValidURL(url));
+    Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
     {
         DocumentParseTarget target;
@@ -822,7 +822,7 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
     if ( !isValidURL(url) ) {
         qCWarning(LANGUAGE) << "Tracker requested for invalild URL:" << url.toUrl();
     }
-//     Q_ASSERT(isValidURL(url));
+    Q_ASSERT(isValidURL(url));
 
     QMutexLocker l(&d->m_managedMutex);
     return d->m_managed.value(url, nullptr);

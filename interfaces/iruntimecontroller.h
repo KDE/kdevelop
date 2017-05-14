@@ -49,7 +49,7 @@ public:
     /**
      * Makes @p runtimes available to be used.
      */
-    virtual void addRuntimes(const QVector<KDevelop::IRuntime*> &runtimes) = 0;
+    virtual void addRuntimes(KDevelop::IRuntime* runtimes) = 0;
 
     /**
      * Lists available runtimes

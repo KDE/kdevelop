@@ -108,17 +108,19 @@ void FlatpakPlugin::exportCurrent()
 
 void FlatpakPlugin::createRuntime(const KDevelop::Path &file, const QString &arch)
 {
-    QTemporaryDir dir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/kdevelop-flatpak-"));
-    dir.setAutoRemove(false);
-
-    const KDevelop::Path path(dir.path());
+    QTemporaryDir* dir = new QTemporaryDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/kdevelop-flatpak-"));
+    const KDevelop::Path path(dir->path());
 
     auto process = FlatpakRuntime::createBuildDirectory(path, file, arch);
-    connect(process, &KJob::finished, this, [this, path, file, arch] (KJob* job) {
-        if (job->error() != 0)
+    connect(process, &KJob::finished, this, [this, path, file, arch, dir] (KJob* job) {
+        if (job->error() != 0) {
+            delete dir;
             return;
+        }
 
-        ICore::self()->runtimeController()->addRuntimes({new FlatpakRuntime(path, file, arch)});
+        auto rt = new FlatpakRuntime(path, file, arch);
+        connect(rt, &QObject::destroyed, rt, [dir]() { delete dir; });
+        ICore::self()->runtimeController()->addRuntimes(rt);
     });
     process->start();
 }

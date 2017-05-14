@@ -27,6 +27,7 @@
 #include "core.h"
 #include "uicontroller.h"
 #include "mainwindow.h"
+#include "debug.h"
 
 using namespace KDevelop;
 
@@ -34,20 +35,20 @@ class IdentityRuntime : public IRuntime
 {
     QString name() const override { return i18n("Host System"); }
 
-    void startProcess(KProcess *process) override {
+    void startProcess(KProcess *process) const override {
         connect(process, &QProcess::errorOccurred, this, [process](QProcess::ProcessError error) {
-            qWarning() << "error!!!" << error << process->program();
+            qCWarning(SHELL) << "error:" << error << process->program() << process->errorString();
         });
         process->start();
     }
-    void startProcess(QProcess *process) override {
+    void startProcess(QProcess *process) const override {
         connect(process, &QProcess::errorOccurred, this, [process](QProcess::ProcessError error) {
-            qWarning() << "error!!!" << error << process->program();
+            qCWarning(SHELL) << "error:" << error << process->program() << process->errorString();
         });
         process->start();
     }
-    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) override { return runtimePath; }
-    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) override { return localPath; }
+    KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) const override { return runtimePath; }
+    KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) const override { return localPath; }
     void setEnabled(bool /*enabled*/) override {}
     QByteArray getenv(const QByteArray & varname) const override { return qgetenv(varname); }
 };
@@ -78,7 +79,6 @@ KDevelop::RuntimeController::~RuntimeController()
 {
     m_currentRuntime->setEnabled(false);
     m_currentRuntime = nullptr;
-    qDeleteAll(m_runtimes);
 }
 
 void KDevelop::RuntimeController::initialize()
@@ -112,20 +112,23 @@ void KDevelop::RuntimeController::setCurrentRuntime(KDevelop::IRuntime* runtime)
     Q_EMIT currentRuntimeChanged(runtime);
 }
 
-void KDevelop::RuntimeController::addRuntimes(const QVector<KDevelop::IRuntime *>& runtimes)
+void KDevelop::RuntimeController::addRuntimes(KDevelop::IRuntime * runtime)
 {
-    m_runtimes << runtimes;
+    if (!runtime->parent())
+        runtime->setParent(this);
+    QAction* runtimeAction = new QAction(runtime->name(), m_runtimesMenu.data());
+    runtimeAction->setCheckable(true);
+    connect(runtimeAction, &QAction::triggered, runtime, [this, runtime]() {
+        setCurrentRuntime(runtime);
+    });
+    connect(this, &RuntimeController::currentRuntimeChanged, runtimeAction, [runtimeAction, runtime](IRuntime* currentRuntime) {
+        runtimeAction->setChecked(runtime == currentRuntime);
+    });
 
-    for(auto runtime : runtimes) {
-        QAction* runtimeAction = new QAction(runtime->name(), m_runtimesMenu.data());
-        runtimeAction->setCheckable(true);
-        connect(runtimeAction, &QAction::triggered, runtime, [this, runtime]() {
-            setCurrentRuntime(runtime);
-        });
-        connect(this, &RuntimeController::currentRuntimeChanged, runtimeAction, [runtimeAction, runtime](IRuntime* currentRuntime) {
-            runtimeAction->setChecked(runtime == currentRuntime);
-        });
-
-        m_runtimesMenu->addAction(runtimeAction);
-    }
+    connect(runtime, &QObject::destroyed, this, [this, runtimeAction](QObject* obj) {
+        Q_ASSERT(m_currentRuntime != obj);
+        m_runtimes.removeAll(qobject_cast<KDevelop::IRuntime *>(obj));
+        delete runtimeAction;
+    });
+    m_runtimes << runtime;
 }

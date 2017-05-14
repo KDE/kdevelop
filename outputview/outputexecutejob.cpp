@@ -106,7 +106,7 @@ OutputExecuteJob::~OutputExecuteJob()
         killSuccessful = doKill();
     }
 
-    Q_ASSERT( d->m_process->state() != QProcess::Running || !killSuccessful );
+    Q_ASSERT( d->m_process->state() == QProcess::NotRunning || !killSuccessful );
     delete d;
 }
 
@@ -304,7 +304,6 @@ bool OutputExecuteJob::doKill()
     if( d->m_status != JobRunning ) {
         return true;
     }
-
     d->m_status = JobCanceled;
 
     d->m_process->terminate();

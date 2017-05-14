@@ -27,13 +27,13 @@ namespace Ui { class DockerPreferences; }
 class DockerPreferences : public KDevelop::ConfigPage
 {
     Q_OBJECT
-    public:
-        explicit DockerPreferences(KDevelop::IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent = nullptr);
-        ~DockerPreferences() override;
+public:
+    explicit DockerPreferences(KDevelop::IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent = nullptr);
+    ~DockerPreferences() override;
 
-        QString name() const override;
-    private:
-        QScopedPointer<Ui::DockerPreferences> m_prefsUi;
+    QString name() const override;
+private:
+    QScopedPointer<Ui::DockerPreferences> m_prefsUi;
 };
 
 #endif
