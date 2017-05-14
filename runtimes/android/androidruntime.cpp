@@ -85,3 +85,7 @@ void AndroidRuntime::startProcess(KProcess* process)
     process->start();
 }
 
+QByteArray AndroidRuntime::getenv(const QByteArray &varname) const
+{
+    return qgetenv(varname);
+}

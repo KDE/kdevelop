@@ -41,6 +41,7 @@ public:
     void startProcess(QProcess *process) override;
     KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) override { return runtimePath; }
     KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) override { return localPath; }
+    QByteArray getenv(const QByteArray &varname) const override;
 
     static AndroidPreferencesSettings* s_settings;
 };
