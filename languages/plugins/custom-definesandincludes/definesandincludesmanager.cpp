@@ -223,10 +223,11 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
         }
         includes += newItems;
     }
+    includes = runtimePathsInHost(includes);
 
     includes += m_noProjectIPM->includesAndDefines(item->path().path()).first;
 
-    return runtimePathsInHost(includes);
+    return includes;
 }
 
 Path::List DefinesAndIncludesManager::frameworkDirectories( ProjectBaseItem* item, Type type ) const
