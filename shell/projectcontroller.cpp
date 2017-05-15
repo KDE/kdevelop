@@ -719,7 +719,10 @@ void ProjectController::openProjectForUrlSlot(bool) {
 
 void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
     Q_ASSERT(!sourceUrl.isRelative());
-    QUrl dirUrl = sourceUrl.adjusted(QUrl::RemoveFilename);
+    QUrl dirUrl = sourceUrl;
+    if (sourceUrl.isLocalFile() && !QFileInfo(sourceUrl.toLocalFile()).isDir()) {
+        dirUrl = dirUrl.adjusted(QUrl::RemoveFilename);
+    }
     QUrl testAt = dirUrl;
 
     d->m_foundProjectFile = false;
