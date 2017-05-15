@@ -86,6 +86,11 @@ public:
         }
     }
 
+    bool isDirectory() const
+    {
+        return url.isLocalFile() && QFileInfo(url.toLocalFile()).isDir() && !cursor.isValid();
+    }
+
     /**
      * url computed out of the passed path
      */

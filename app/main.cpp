@@ -91,9 +91,9 @@ QString serializeOpenFilesMessage(const QVector<UrlInfo> &infos)
 
 void openFiles(const QVector<UrlInfo>& infos)
 {
-    foreach (const UrlInfo& file, infos) {
-        if (!ICore::self()->documentController()->openDocument(file.url, file.cursor)) {
-            qWarning() << i18n("Could not open %1", file.url.toDisplayString(QUrl::PreferLocalFile));
+    foreach (const UrlInfo& info, infos) {
+        if (!ICore::self()->documentController()->openDocument(info.url, info.cursor)) {
+            qWarning() << i18n("Could not open %1", info.url.toDisplayString(QUrl::PreferLocalFile));
         }
     }
 }
@@ -135,7 +135,17 @@ public Q_SLOTS:
         if (command == "open") {
             QVector<UrlInfo> infos;
             stream >> infos;
-            openFiles(infos);
+
+            QVector<UrlInfo> files, directories;
+            for (const auto& info : infos)
+                if (info.isDirectory())
+                    directories << info;
+                else
+                    files << info;
+
+            openFiles(files);
+            for(const auto &urlinfo : directories)
+                ICore::self()->projectController()->openProjectForUrl(urlinfo.url);
         } else {
             qCWarning(APP) << "Unknown remote command: " << command;
         }
@@ -195,7 +205,7 @@ static int openFilesInRunningInstance(const QVector<UrlInfo>& files, qint64 pid)
         QDBusReply<bool> result = iface.call(QStringLiteral("openDocumentSimple"), file.url.toString(), file.cursor.line(), file.cursor.column());
         if ( ! result.value() ) {
             QTextStream err(stderr);
-            err << i18n("Could not open file %1.", file.url.toDisplayString(QUrl::PreferLocalFile)) << "\n";
+            err << i18n("Could not open file '%1'.", file.url.toDisplayString(QUrl::PreferLocalFile)) << "\n";
             errors_occured = true;
         }
     }
@@ -204,6 +214,29 @@ static int openFilesInRunningInstance(const QVector<UrlInfo>& files, qint64 pid)
                                                                QStringLiteral("ensureVisible") );
     QDBusConnection::sessionBus().asyncCall( makeVisible );
     return errors_occured;
+}
+
+/// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid
+/// Returns the exit status
+static int openProjectInRunningInstance(const QVector<UrlInfo>& paths, qint64 pid)
+{
+    const QString service = QStringLiteral("org.kdevelop.kdevelop-%1").arg(pid);
+    QDBusInterface iface(service, QStringLiteral("/org/kdevelop/ProjectController"), QStringLiteral("org.kdevelop.ProjectController"));
+    int errors = 0;
+
+    foreach ( const UrlInfo& path, paths ) {
+        QDBusReply<void> result = iface.call(QStringLiteral("openProjectForUrl"), path.url.toString());
+        if ( !result.isValid() ) {
+            QTextStream err(stderr);
+            err << i18n("Could not open project '%1': %2", path.url.toDisplayString(QUrl::PreferLocalFile), result.error().message()) << "\n";
+            ++errors;
+        }
+    }
+    // make the window visible
+    QDBusMessage makeVisible = QDBusMessage::createMethodCall( service, QStringLiteral("/kdevelop/MainWindow"), QStringLiteral("org.kdevelop.MainWindow"),
+                                                               QStringLiteral("ensureVisible") );
+    QDBusConnection::sessionBus().asyncCall( makeVisible );
+    return errors;
 }
 
 /// Gets the PID of a running KDevelop instance, eventually asking the user if there is more than one.
@@ -462,16 +495,22 @@ int main( int argc, char *argv[] )
 
     // Handle extra arguments, which stand for files to open
     QVector<UrlInfo> initialFiles;
+    QVector<UrlInfo> initialDirectories;
     foreach (const QString &file, parser.positionalArguments()) {
-        initialFiles.append(UrlInfo(file));
+        const UrlInfo info(file);
+        if (info.isDirectory()) {
+            initialDirectories.append(info);
+        } else {
+            initialFiles.append(info);
+        }
     }
 
     const auto availableSessionInfos = KDevelop::SessionController::availableSessionInfos();
 
-    if (!initialFiles.isEmpty() && !parser.isSet(QStringLiteral("new-session"))) {
+    if ((!initialFiles.isEmpty() || !initialDirectories.isEmpty()) && !parser.isSet(QStringLiteral("new-session"))) {
 #if KDEVELOP_SINGLE_APP
         if (app.isRunning()) {
-            bool success = app.sendMessage(serializeOpenFilesMessage(initialFiles));
+            bool success = app.sendMessage(serializeOpenFilesMessage(initialFiles << initialDirectories));
             if (success) {
                 return 0;
             }
@@ -488,8 +527,9 @@ int main( int argc, char *argv[] )
         } else {
             pid = getRunningSessionPid();
         }
+
         if ( pid > 0 ) {
-            return openFilesInRunningInstance(initialFiles, pid);
+            return openFilesInRunningInstance(initialFiles, pid) + openProjectInRunningInstance(initialDirectories, pid);
         }
         // else there are no running sessions, and the generated list of files will be opened below.
 #endif
@@ -721,6 +761,9 @@ int main( int argc, char *argv[] )
         core->runControllerInternal()->execute(debugStr, launch);
     } else {
         openFiles(initialFiles);
+
+        for(const auto &urlinfo: initialDirectories)
+            core->projectController()->openProjectForUrl(urlinfo.url);
     }
 
 #if KDEVELOP_SINGLE_APP
