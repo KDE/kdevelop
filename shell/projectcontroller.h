@@ -99,6 +99,7 @@ public:
     void fetchProjectFromUrl(const QUrl& repoUrl, IPlugin* vcsOrProviderPlugin);
 
 public Q_SLOTS:
+    Q_SCRIPTABLE void openProjectForUrl( const QString &sourceUrl ) { openProjectForUrl(QUrl(sourceUrl)); }
     void openProjectForUrl( const QUrl &sourceUrl ) override;
     void fetchProject();
     void openProject( const QUrl &KDev4ProjectFile = QUrl() ) override;
@@ -179,4 +180,3 @@ public Q_SLOTS:
 
 }
 #endif
-
