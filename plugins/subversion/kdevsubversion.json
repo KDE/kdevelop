@@ -21,6 +21,7 @@
         "Description[sk]": "Tento plugin integruje subversion do KDevelop.",
         "Description[sl]": "Vstavek v KDevelop vgradi Subversion.",
         "Description[sv]": "Insticksprogrammet integrerar Subversion i KDevelop.",
+        "Description[tr]": "Bu eklenti Subversion'u KDevelop'a bütünleştirir.",
         "Description[uk]": "Цей додаток інтегрує Subversion із KDevelop.",
         "Description[x-test]": "xxThis plugin integrates Subversion to KDevelop.xx",
         "Icon": "subversion",
