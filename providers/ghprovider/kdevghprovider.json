@@ -20,6 +20,7 @@
         "Description[sk]": "Tento modul pomáha získavať projekty z GitHub",
         "Description[sl]": "Ta vstavek pomaga pri pridobivanju projektov iz GitHub-a",
         "Description[sv]": "Insticksprogrammet hjälper till att erhålla projekt från Github",
+        "Description[tr]": "Bu eklenti Github'tan projeleri almanıza yardımcı olur",
         "Description[uk]": "За допомогою цього додатка можна отримувати проекти з GitHub",
         "Description[x-test]": "xxThis plugin helps to obtain projects from GitHubxx",
         "Icon": "kdevgh",
@@ -39,6 +40,7 @@
         "Name[sk]": "Poskytovateľ GitHub",
         "Name[sl]": "Ponudnik za GitHub",
         "Name[sv]": "Github-leverantör",
+        "Name[tr]": "GitHub Sağlayıcı",
         "Name[uk]": "Надавач даних GitHub",
         "Name[x-test]": "xxGitHub Providerxx",
         "ServiceTypes": [
