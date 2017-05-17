@@ -1690,8 +1690,6 @@ KDevelop::ReferencedTopDUContext DUChain::waitForUpdate(const KDevelop::IndexedS
   WaitForUpdate waiter;
   updateContextForUrl(document, minFeatures, &waiter);
 
-//   waiter.m_waitMutex.lock();
-//   waiter.m_dataMutex.unlock();
   while(!waiter.m_ready) {
     // we might have been shut down in the meanwhile
     if (!ICore::self()) {
