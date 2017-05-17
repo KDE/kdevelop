@@ -130,5 +130,6 @@ void KDevelop::RuntimeController::addRuntimes(KDevelop::IRuntime * runtime)
         m_runtimes.removeAll(qobject_cast<KDevelop::IRuntime *>(obj));
         delete runtimeAction;
     });
+    m_runtimesMenu->addAction(runtimeAction);
     m_runtimes << runtime;
 }
