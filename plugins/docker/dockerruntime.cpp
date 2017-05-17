@@ -160,22 +160,34 @@ void DockerRuntime::startProcess(KProcess* process) const
     process->start();
 }
 
+static Path projectRelPath(const KDevelop::Path & projectsDir, const KDevelop::Path& runtimePath, bool sourceDir)
+{
+    const auto relPath = projectsDir.relativePath(runtimePath);
+    const int index = relPath.indexOf(QLatin1Char('/'));
+    auto project = ICore::self()->projectController()->findProjectByName(relPath.left(index));
+
+    if (!project) {
+        qCWarning(DOCKER) << "No project for" << relPath;
+    } else {
+        const auto repPathProject = relPath.mid(index+1);
+        const auto rootPath = sourceDir ? project->path() : project->buildSystemManager()->buildDirectory(project->projectItem());
+        return Path(rootPath, repPathProject);
+    }
+    return {};
+}
+
 KDevelop::Path DockerRuntime::pathInHost(const KDevelop::Path& runtimePath) const
 {
     Path ret;
     const Path projectsDir(DockerRuntime::s_settings->projectsVolume());
     if (projectsDir.isParentOf(runtimePath)) {
-        const auto relPath = runtimePath.relativePath(projectsDir);
-        const int index = relPath.indexOf(QLatin1Char('/'));
-        auto project = ICore::self()->projectController()->findProjectByName(relPath.left(index));
-        if (!project) {
-            qCWarning(DOCKER) << "No project for" << relPath;
-        } else {
-            const auto repPathProject = relPath.mid(index+1);
-            ret = Path(project->path(), repPathProject);;
-        }
+        ret = projectRelPath(projectsDir, runtimePath, true);
     } else {
-        ret = KDevelop::Path(m_userUpperDir, KDevelop::Path(QStringLiteral("/")).relativePath(runtimePath));
+        const Path buildDirs(DockerRuntime::s_settings->buildDirsVolume());
+        if (buildDirs.isParentOf(runtimePath)) {
+            ret = projectRelPath(buildDirs, runtimePath, false);
+        } else
+            ret = KDevelop::Path(m_userUpperDir, KDevelop::Path(QStringLiteral("/")).relativePath(runtimePath));
     }
     qCDebug(DOCKER) << "pathInHost" << ret << runtimePath;
     return ret;
