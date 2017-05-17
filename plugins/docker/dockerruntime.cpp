@@ -136,9 +136,15 @@ static QStringList projectVolumes()
     return ret;
 }
 
+QStringList DockerRuntime::workingDirArgs(QProcess* process) const
+{
+    const auto wd = process->workingDirectory();
+    return wd.isEmpty() ? QStringList{} : QStringList{"-w", pathInRuntime(KDevelop::Path(wd)).toLocalFile()};
+}
+
 void DockerRuntime::startProcess(QProcess* process) const
 {
-    const QStringList args = QStringList{"run", "--rm", "-w", pathInRuntime(KDevelop::Path(process->workingDirectory())).toLocalFile()} << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program() << process->arguments();
+    const QStringList args = QStringList{"run", "--rm"} << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program() << process->arguments();
     process->setProgram("docker");
     process->setArguments(args);
 
@@ -148,7 +154,7 @@ void DockerRuntime::startProcess(QProcess* process) const
 
 void DockerRuntime::startProcess(KProcess* process) const
 {
-    process->setProgram(QStringList{ "docker", "run", "--rm", "-w", pathInRuntime(KDevelop::Path(process->workingDirectory())).toLocalFile() } << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program());
+    process->setProgram(QStringList{ "docker", "run", "--rm" } << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program());
 
     qCDebug(DOCKER) << "starting kprocess" << process->program().join(' ');
     process->start();

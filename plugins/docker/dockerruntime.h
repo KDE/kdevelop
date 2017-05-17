@@ -79,6 +79,7 @@ public:
 
 private:
     void inspectImage();
+    QStringList workingDirArgs(QProcess* process) const;
 
     const QString m_tag;
     QHash<QByteArray,QByteArray> m_envs;
