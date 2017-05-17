@@ -106,7 +106,7 @@ void DockerRuntime::setEnabled(bool enable)
             qCDebug(DOCKER) << "bindfs returned" << m_upperDir << m_userUpperDir << cmd << p.exitCode() << p.readAll();
         }
     } else {
-        int code = QProcess::execute(QStringLiteral("pkexec"), {m_userUpperDir.toLocalFile()});
+        int code = QProcess::execute(QStringLiteral("pkexec"), {"umount", m_userUpperDir.toLocalFile()});
         qCDebug(DOCKER) << "umount returned" << code;
     }
 }
