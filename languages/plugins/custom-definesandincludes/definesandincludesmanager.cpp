@@ -29,8 +29,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
-#include <interfaces/iruntimecontroller.h>
-#include <interfaces/iruntime.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 
@@ -120,16 +118,6 @@ QString argumentsForPath(const Path& path, const ParserArguments& arguments)
     }
     Q_UNREACHABLE();
     return QString();
-}
-
-Path::List runtimePathsInHost(const Path::List& runtimePaths)
-{
-    Path::List ret;
-    ret.reserve(runtimePaths.count());
-    const auto rt = ICore::self()->runtimeController()->currentRuntime();
-    for(const auto& runtimePath: runtimePaths)
-        ret += rt->pathInHost(runtimePath);
-    return ret;
 }
 
 }
@@ -223,7 +211,6 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
         }
         includes += newItems;
     }
-    includes = runtimePathsInHost(includes);
 
     includes += m_noProjectIPM->includesAndDefines(item->path().path()).first;
 
@@ -253,7 +240,7 @@ Path::List DefinesAndIncludesManager::frameworkDirectories( ProjectBaseItem* ite
         }
     }
 
-    return runtimePathsInHost(frameworkDirectories);
+    return frameworkDirectories;
 }
 
 bool DefinesAndIncludesManager::unregisterProvider(IDefinesAndIncludesManager::Provider* provider)
@@ -286,13 +273,13 @@ Defines DefinesAndIncludesManager::defines(const QString& path) const
 
 Path::List DefinesAndIncludesManager::includes(const QString& path) const
 {
-    return runtimePathsInHost(m_settings->provider()->includes(nullptr)
-           + m_noProjectIPM->includesAndDefines(path).first);
+    return m_settings->provider()->includes(nullptr) 
+           + m_noProjectIPM->includesAndDefines(path).first;
 }
 
 Path::List DefinesAndIncludesManager::frameworkDirectories(const QString& /* path */) const
 {
-    return runtimePathsInHost(m_settings->provider()->frameworkDirectories(nullptr));
+    return m_settings->provider()->frameworkDirectories(nullptr);
 }
 
 void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFile)
@@ -312,7 +299,7 @@ Path::List DefinesAndIncludesManager::includesInBackground(const QString& path) 
         includes += provider->includesInBackground(path);
     }
 
-    return runtimePathsInHost(includes);
+    return includes;
 }
 
 Path::List DefinesAndIncludesManager::frameworkDirectoriesInBackground(const QString& path) const
@@ -323,7 +310,7 @@ Path::List DefinesAndIncludesManager::frameworkDirectoriesInBackground(const QSt
         fwDirs += provider->frameworkDirectoriesInBackground(path);
     }
 
-    return runtimePathsInHost(fwDirs);
+    return fwDirs;
 }
 
 Defines DefinesAndIncludesManager::definesInBackground(const QString& path) const
