@@ -27,6 +27,8 @@
 #include <QProcess>
 #include <QRegularExpression>
 #include <QMap>
+#include <interfaces/iruntime.h>
+#include <interfaces/iruntimecontroller.h>
 
 #include <debug.h>
 
@@ -85,6 +87,7 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     // #define a
     QRegExp defineExpression( "#define\\s+(\\S+)(?:\\s+(.*)\\s*)?");
 
+    const auto rt = ICore::self()->runtimeController()->currentRuntime();
     QProcess proc;
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
@@ -94,7 +97,9 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     compilerArguments.append(QStringLiteral("-E"));
     compilerArguments.append(QProcess::nullDevice());
 
-    proc.start(path(), compilerArguments);
+    proc.setProgram(path());
+    proc.setArguments(compilerArguments);
+    rt->startProcess(&proc);
 
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
         qCDebug(DEFINESANDINCLUDES) <<  "Unable to read standard macro definitions from "<< path();
@@ -118,6 +123,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
         return m_definesIncludes.value(arguments).includePaths;
     }
 
+    const auto rt = ICore::self()->runtimeController()->currentRuntime();
     QProcess proc;
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
@@ -139,7 +145,9 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     compilerArguments.append(QStringLiteral("-v"));
     compilerArguments.append(QProcess::nullDevice());
 
-    proc.start(path(), compilerArguments);
+    proc.setProgram(path());
+    proc.setArguments(compilerArguments);
+    rt->startProcess(&proc);
 
     if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
         qCDebug(DEFINESANDINCLUDES) <<  "Unable to read standard include paths from " << path();
@@ -155,6 +163,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     };
     Status mode = Initial;
 
+    Path::List ret;
     foreach( const QString &line, QString::fromLocal8Bit( proc.readAllStandardOutput() ).split( '\n' ) ) {
         switch ( mode ) {
             case Initial:
@@ -174,7 +183,8 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
                     mode = Finished;
                 } else {
                     // This is an include path, add it to the list.
-                    m_definesIncludes[arguments].includePaths << Path(QFileInfo(line.trimmed()).canonicalFilePath());
+                    auto hostPath = rt->pathInHost(Path(line.trimmed()));
+                    ret << Path(QFileInfo(hostPath.toLocalFile()).canonicalFilePath());
                 }
                 break;
             default:
@@ -185,9 +195,17 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
         }
     }
 
-    return m_definesIncludes[arguments].includePaths;
+    m_definesIncludes[arguments].includePaths = ret;
+    return ret;
+}
+
+void GccLikeCompiler::invalidateCache()
+{
+    m_definesIncludes.clear();
 }
 
 GccLikeCompiler::GccLikeCompiler(const QString& name, const QString& path, bool editable, const QString& factoryName):
     ICompiler(name, path, factoryName, editable)
-{}
+{
+    connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, &GccLikeCompiler::invalidateCache);
+}

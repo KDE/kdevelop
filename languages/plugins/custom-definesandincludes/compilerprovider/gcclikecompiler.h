@@ -26,8 +26,9 @@
 
 #include "icompiler.h"
 
-class GccLikeCompiler : public ICompiler
+class GccLikeCompiler : public QObject, public ICompiler
 {
+    Q_OBJECT
 public:
     GccLikeCompiler( const QString& name, const QString& path, bool editable, const QString& factoryName );
 
@@ -36,6 +37,8 @@ public:
     KDevelop::Path::List includes(const QString& arguments) const override;
 
 private:
+    void invalidateCache();
+
     struct DefinesIncludes {
         KDevelop::Defines definedMacros;
         KDevelop::Path::List includePaths;
