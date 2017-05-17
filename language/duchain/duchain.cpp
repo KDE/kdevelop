@@ -26,8 +26,8 @@
 #include <QReadWriteLock>
 #include <QAtomicInt>
 #include <QThread>
-#include <QWaitCondition>
 #include <QMutex>
+#include <QTimer>
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
@@ -68,6 +68,7 @@ namespace {
 //short times, which leads to no lockup in the UI.
 const int SOFT_CLEANUP_STEPS = 1;
 
+// seconds to wait before trying to cleanup the DUChain
 const uint cleanupEverySeconds = 200;
 
 ///Approximate maximum count of top-contexts that are checked during final cleanup
@@ -258,41 +259,29 @@ class DUChainPrivate
 {
   class CleanupThread : public QThread {
     public:
-      explicit CleanupThread(DUChainPrivate* data) : m_stopRunning(false), m_data(data) {
+      explicit CleanupThread(DUChainPrivate* data)
+        : m_data(data)
+      {
       }
 
-      void stopThread() {
-        {
-          QMutexLocker lock(&m_waitMutex);
-          m_stopRunning = true;
-          m_wait.wakeAll(); //Wakes the thread up, so it notices it should exit
-        }
+      void stopThread()
+      {
+        quit();
         wait();
       }
 
     private:
       void run() override {
-        while(1) {
-          for(uint s = 0; s < cleanupEverySeconds; ++s) {
-            if(m_stopRunning)
-              break;
-            QMutexLocker lock(&m_waitMutex);
-            m_wait.wait(&m_waitMutex, 1000);
-          }
-          if(m_stopRunning)
-            break;
-
+        QTimer timer;
+        connect(&timer, &QTimer::timeout, [this]() {
           //Just to make sure the cache is cleared periodically
           ModificationRevisionSet::clearCache();
 
           m_data->doMoreCleanup(SOFT_CLEANUP_STEPS, TryLock);
-          if(m_stopRunning)
-            break;
-        }
+        });
+        timer.start(cleanupEverySeconds * 1000);
+        exec();
       }
-      bool m_stopRunning;
-      QWaitCondition m_wait;
-      QMutex m_waitMutex;
       DUChainPrivate* m_data;
   };
 public:
