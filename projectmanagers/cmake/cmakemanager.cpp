@@ -183,7 +183,7 @@ private:
             addSubjob(manager->builder()->configure(project));
         }
 
-        connect(job, &CMakeImportJsonJob::result, this, [this, job](){
+        connect(job, &CMakeImportJsonJob::result, this, [this, job]() {
             if (job->error() == 0) {
                 manager->integrateData(job->projectData(), job->project());
             }
@@ -305,6 +305,14 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
     KJob *job = createImportJob(folder);
     project->setReloadJob(job);
     ICore::self()->runController()->registerJob( job );
+    if (folder == project->projectItem()) {
+        connect(job, &KJob::finished, this, [project](KJob* job) {
+            if (job->error())
+                return;
+            KDevelop::ICore::self()->projectController()->reparseProject(project, true);
+        });
+    }
+
     return true;
 }
 
@@ -953,7 +961,6 @@ void CMakeManager::reloadProjects()
     for(IProject* project: m_projects.keys()) {
         CMake::checkForNeedingConfigure(project);
         reload(project->projectItem());
-        KDevelop::ICore::self()->projectController()->reparseProject(project, true);
     }
 }
 
