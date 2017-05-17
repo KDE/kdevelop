@@ -262,15 +262,6 @@ void OutputExecuteJob::start()
         startOutput();
     }
 
-    const QString joinedCommandLine = d->joinCommandLine();
-    QString headerLine;
-    if( !effectiveWorkingDirectory.isEmpty() ) {
-        headerLine = effectiveWorkingDirectory.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ) + "> " + joinedCommandLine;
-    } else {
-        headerLine = joinedCommandLine;
-    }
-    model()->appendLine( headerLine );
-
     if( !effectiveWorkingDirectory.isEmpty() ) {
         d->m_process->setWorkingDirectory( effectiveWorkingDirectory.toLocalFile() );
     }
@@ -287,13 +278,13 @@ void OutputExecuteJob::start()
         } else {
             KDevelop::ICore::self()->runtimeController()->currentRuntime()->startProcess(d->m_process);
         }
+        model()->appendLine(d->m_process->workingDirectory() + QStringLiteral("> ") + KShell::joinArgs(d->m_process->program()));
     } else {
-        QString errorMessage = i18n("Failed to specify program to start");
+        QString errorMessage = i18n("Failed to specify program to start: %1", d->joinCommandLine());
         model()->appendLine( i18n( "*** %1 ***", errorMessage) );
         setErrorText(errorMessage);
         setError( FailedShownError );
         emitResult();
-        return;
     }
 }
 
