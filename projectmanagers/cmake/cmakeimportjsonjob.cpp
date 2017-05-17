@@ -29,6 +29,9 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/duchainlock.h>
 #include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iruntime.h>
+#include <interfaces/iruntimecontroller.h>
 
 #include <KShell>
 #include <QJsonDocument>
@@ -41,6 +44,16 @@
 using namespace KDevelop;
 
 namespace {
+
+template <typename T, typename Q, typename W>
+static T kTransform(const Q& list, W func)
+{
+    T ret;
+    ret.reserve(list.size());
+    for (auto it = list.constBegin(), itEnd = list.constEnd(); it!=itEnd; ++it)
+        ret += func(*it);
+    return ret;
+}
 
 CMakeFilesCompilationData importCommands(const Path& commandsFile)
 {
@@ -71,6 +84,7 @@ CMakeFilesCompilationData importCommands(const Path& commandsFile)
     static const QString KEY_COMMAND = QStringLiteral("command");
     static const QString KEY_DIRECTORY = QStringLiteral("directory");
     static const QString KEY_FILE = QStringLiteral("file");
+    auto rt = ICore::self()->runtimeController()->currentRuntime();
     foreach(const QJsonValue& value, document.array()) {
         if (!value.isObject()) {
             qCWarning(CMAKE) << "JSON command file entry is not an object:" << value;
@@ -84,13 +98,14 @@ CMakeFilesCompilationData importCommands(const Path& commandsFile)
 
         PathResolutionResult result = resolver.processOutput(entry[KEY_COMMAND].toString(), entry[KEY_DIRECTORY].toString());
 
+        auto convert = [rt](const Path &path) { return rt->pathInHost(path); };
+
         CMakeFile ret;
-        ret.includes = result.paths;
-        ret.frameworkDirectories = result.frameworkDirectories;
+        ret.includes = kTransform<Path::List>(result.paths, convert);
+        ret.frameworkDirectories = kTransform<Path::List>(result.frameworkDirectories, convert);
         ret.defines = result.defines;
-        // NOTE: we use the canonical file path to prevent issues with symlinks in the path
-        //       leading to lookup failures
-        const auto path = Path(QFileInfo(entry[KEY_FILE].toString()).canonicalFilePath());
+        const Path path(rt->pathInHost(Path(entry[KEY_FILE].toString())));
+        qDebug() << "entering..." << path << entry[KEY_FILE];
         data.files[path] = ret;
     }
 

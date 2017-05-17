@@ -100,8 +100,9 @@ QStringList CMakeJob::commandLine() const
         args << QStringLiteral("-D%1=%2").arg(it.key()).arg(it.value().toString());
     }
 
+    auto rt = ICore::self()->runtimeController()->currentRuntime();
     //if we are creating a new build directory, we'll want to specify the generator
-    QDir builddir(ICore::self()->runtimeController()->currentRuntime()->pathInRuntime(CMake::currentBuildDir( m_project )).toLocalFile());
+    QDir builddir(rt->pathInRuntime(CMake::currentBuildDir( m_project )).toLocalFile());
     if(!builddir.exists() || !builddir.exists(QStringLiteral("CMakeCache.txt"))) {
         CMakeBuilderSettings::self()->load();
         args << QStringLiteral("-G") << CMake::defaultGenerator();
@@ -121,7 +122,7 @@ QStringList CMakeJob::commandLine() const
             }
         }
     }
-    args << ICore::self()->runtimeController()->currentRuntime()->pathInRuntime(CMake::projectRoot( m_project )).toLocalFile();
+    args << rt->pathInRuntime(CMake::projectRoot( m_project )).toLocalFile();
 
     return args;
 }

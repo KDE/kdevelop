@@ -23,6 +23,9 @@
 #include "cmakeserver.h"
 
 #include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iruntime.h>
+#include <interfaces/iruntimecontroller.h>
 #include <projectmanagers/custommake/makefileresolver/makefileresolver.h>
 
 #include <QJsonObject>
@@ -90,13 +93,15 @@ void CMakeServerImportJob::processFileData(const QJsonObject &response, CMakePro
 {
     const auto configs = response.value(QStringLiteral("configurations")).toArray();
     qCDebug(CMAKE) << "process response" << response;
+
+    const auto rt = KDevelop::ICore::self()->runtimeController()->currentRuntime();
     for (const auto &config: configs) {
         const auto projects = config.toObject().value(QStringLiteral("projects")).toArray();
         for (const auto &project: projects) {
             const auto targets = project.toObject().value(QStringLiteral("targets")).toArray();
             for (const auto &targetObject: targets) {
                 const auto target = targetObject.toObject();
-                const KDevelop::Path targetDir(target.value(QStringLiteral("sourceDirectory")).toString());
+                const KDevelop::Path targetDir = rt->pathInHost(KDevelop::Path(target.value(QStringLiteral("sourceDirectory")).toString()));
 
                 data.targets[targetDir] += target.value(QStringLiteral("name")).toString();
 
@@ -112,9 +117,9 @@ void CMakeServerImportJob::processFileData(const QJsonObject &response, CMakePro
                     for (const auto& source: sources) {
                         // NOTE: we use the canonical file path to prevent issues with symlinks in the path
                         //       leading to lookup failures
-                        const auto localFile = source.toLocalFile();
+                        const auto localFile = rt->pathInHost(source);
                         const auto canonicalFile = QFileInfo(source.toLocalFile()).canonicalFilePath();
-                        const auto sourcePath = localFile == canonicalFile ? source : KDevelop::Path(canonicalFile);
+                        const auto sourcePath = localFile.toLocalFile() == canonicalFile ? localFile : KDevelop::Path(canonicalFile);
                         data.compilationData.files[sourcePath] = file;
                     }
                     qCDebug(CMAKE) << "registering..." << sources << file;
