@@ -107,7 +107,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
         KDevelop::ProjectItemContext* projctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
         foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
             if ( item->file() ) {
-                urls << item->file()->path().toUrl();
+                urls << item->path().toUrl();
             }
         }
     }

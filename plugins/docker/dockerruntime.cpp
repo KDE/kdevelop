@@ -72,11 +72,15 @@ void DockerRuntime::inspectImage()
             return;
         }
 
-        while(!processEnvs->atEnd()) {
-            const auto line = processEnvs->readLine().split('=');
-            if (line.count() != 2)
+        const auto list = processEnvs->readAll();
+        const auto data = list.mid(1, list.size()-3);
+        const auto entries = data.split(' ');
+
+        for (auto entry : entries) {
+            const auto content = entry.split('=');
+            if (content.count() != 2)
                 continue;
-            m_envs.insert(line[0], line[1]);
+            m_envs.insert(content[0], content[1]);
         }
 
         qCDebug(DOCKER) << "envs:" << m_tag << m_envs;
@@ -170,7 +174,7 @@ static Path projectRelPath(const KDevelop::Path & projectsDir, const KDevelop::P
     if (!project) {
         qCWarning(DOCKER) << "No project for" << relPath;
     } else {
-        const auto repPathProject = relPath.mid(index+1);
+        const auto repPathProject = index < 0 ? QString() : relPath.mid(index+1);
         const auto rootPath = sourceDir ? project->path() : project->buildSystemManager()->buildDirectory(project->projectItem());
         return Path(rootPath, repPathProject);
     }
@@ -181,11 +185,11 @@ KDevelop::Path DockerRuntime::pathInHost(const KDevelop::Path& runtimePath) cons
 {
     Path ret;
     const Path projectsDir(DockerRuntime::s_settings->projectsVolume());
-    if (projectsDir.isParentOf(runtimePath)) {
+    if (runtimePath==projectsDir || projectsDir.isParentOf(runtimePath)) {
         ret = projectRelPath(projectsDir, runtimePath, true);
     } else {
         const Path buildDirs(DockerRuntime::s_settings->buildDirsVolume());
-        if (buildDirs.isParentOf(runtimePath)) {
+        if (runtimePath==buildDirs || buildDirs.isParentOf(runtimePath)) {
             ret = projectRelPath(buildDirs, runtimePath, false);
         } else
             ret = KDevelop::Path(m_userUpperDir, KDevelop::Path(QStringLiteral("/")).relativePath(runtimePath));
@@ -196,15 +200,15 @@ KDevelop::Path DockerRuntime::pathInHost(const KDevelop::Path& runtimePath) cons
 
 KDevelop::Path DockerRuntime::pathInRuntime(const KDevelop::Path& localPath) const
 {
-    if (m_userUpperDir.isParentOf(localPath)) {
-        KDevelop::Path ret(m_userUpperDir.relativePath(localPath));
+    if (m_userUpperDir==localPath || m_userUpperDir.isParentOf(localPath)) {
+        KDevelop::Path ret(KDevelop::Path("/"), m_userUpperDir.relativePath(localPath));
         qCDebug(DOCKER) << "docker runtime pathInRuntime..." << ret << localPath;
         return ret;
     } else if (auto project = ICore::self()->projectController()->findProjectForUrl(localPath.toUrl())) {
         const Path projectsDir(DockerRuntime::s_settings->projectsVolume());
         const QString relpath = project->path().relativePath(localPath);
         const KDevelop::Path ret(projectsDir, project->name() + QLatin1Char('/') + relpath);
-        qCDebug(DOCKER) << "docker user pathInRuntime..." << ret << project->path() << relpath;
+        qCDebug(DOCKER) << "docker user pathInRuntime..." << ret << localPath;
         return ret;
     } else {
         const auto projects = ICore::self()->projectController()->projects();
@@ -218,7 +222,7 @@ KDevelop::Path DockerRuntime::pathInRuntime(const KDevelop::Path& localPath) con
                 const Path builddirs(DockerRuntime::s_settings->buildDirsVolume());
                 const QString relpath = builddir.relativePath(localPath);
                 const KDevelop::Path ret(builddirs, project->name() + QLatin1Char('/') + relpath);
-                qCDebug(DOCKER) << "docker build pathInRuntime..." << ret << project->path() << relpath;
+                qCDebug(DOCKER) << "docker build pathInRuntime..." << ret << localPath;
                 return ret;
             }
         }
