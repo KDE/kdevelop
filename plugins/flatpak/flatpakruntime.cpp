@@ -48,18 +48,19 @@ static T kTransform(const Q& list, W func)
     return ret;
 }
 
-static KJob* createExecuteJob(const QStringList &program, const QString &title)
+static KJob* createExecuteJob(const QStringList &program, const QString &title, const QUrl &wd = {})
 {
     OutputExecuteJob* process = new OutputExecuteJob;
     process->setExecuteOnHost(true);
     process->setJobName(title);
+    process->setWorkingDirectory(wd);
     *process << program;
     return process;
 }
 
 KJob* FlatpakRuntime::createBuildDirectory(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
 {
-    return createExecuteJob(QStringList{ "flatpak-builder", "--arch="+arch, "--build-only", buildDirectory.toLocalFile(), file.toLocalFile() }, i18n("Creating Flatpak %1", file.lastPathSegment()));
+    return createExecuteJob(QStringList{ "flatpak-builder", "--arch="+arch, "--build-only", buildDirectory.toLocalFile(), file.toLocalFile() }, i18n("Creating Flatpak %1", file.lastPathSegment()), file.parent().toUrl());
 }
 
 FlatpakRuntime::FlatpakRuntime(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
