@@ -34,6 +34,7 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QStandardPaths>
 
 using namespace KDevelop;
 
@@ -148,13 +149,15 @@ KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path)
 {
     const QString name = config()[QLatin1String("id")].toString();
     const QString destPath = QStringLiteral("/tmp/kdevelop-test-app.flatpak");
-
-//     const QString copyPlasmashellEnvironment = QStringLiteral("`export $(xargs --null --max-args=1 < /proc/$(pidof plasmashell)/environ)`");
+    const QString replicatePath = QStringLiteral("/tmp/replicate.sh");
+    const QString localReplicatePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("kdevflatpak/replicate.sh"));
+    const QString process;
 
     const QList<KJob*> jobs = exportBundle(path) << QList<KJob*> {
-        createExecuteJob({ "scp", path, host+QLatin1Char(':')+destPath}, i18n("Transferring to %1", host)),
+        createExecuteJob({ "scp", path, host+QLatin1Char(':')+destPath}, i18n("Transferring flatpak to %1", host)),
+        createExecuteJob({ "scp", localReplicatePath, host+QLatin1Char(':')+replicatePath}, i18n("Transferring replicate.sh to %1", host)),
         createExecuteJob({ "ssh", host, "flatpak", "install", "--user", "--bundle", destPath}, i18n("Installing %1 to %2", name, host)),
-        createExecuteJob({ "ssh", host, "flatpak", "run", name }, i18n("Running %1 on %2", name, host)),
+        createExecuteJob({ "ssh", host, "bash", replicatePath, "plasmashell", "flatpak", "run", name }, i18n("Running %1 on %2", name, host)),
     };
     return new KDevelop::ExecuteCompositeJob( parent(), jobs );
 }

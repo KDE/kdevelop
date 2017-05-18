@@ -15,3 +15,5 @@ target_link_libraries(kdevflatpak
     KDev::OutputView
     KDev::Project
 )
+
+install(FILES replicate.sh DESTINATION ${SHARE_INSTALL_PREFIX}/kdevelop/kdevflatpak/)
