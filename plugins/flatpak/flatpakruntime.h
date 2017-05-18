@@ -58,6 +58,7 @@ private:
     const KDevelop::Path m_file;
     const KDevelop::Path m_buildDirectory;
     const QString m_arch;
+    QStringList m_finishArgs;
     KDevelop::Path m_sdkPath;
 };
 

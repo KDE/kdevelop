@@ -86,6 +86,8 @@ void FlatpakRuntime::refreshJson()
     m_sdkPath = KDevelop::Path("/var/lib/flatpak/runtime/" + usedRuntime + "/active/files");
     qDebug() << "flatpak runtime path..." << name() << m_sdkPath;
     Q_ASSERT(QFile::exists(m_sdkPath.toLocalFile()));
+
+    m_finishArgs = kTransform<QStringList>(doc["finish-args"].toArray(), [](const QJsonValue& val){ return val.toString(); });
 }
 
 void FlatpakRuntime::setEnabled(bool /*enable*/)
@@ -94,7 +96,7 @@ void FlatpakRuntime::setEnabled(bool /*enable*/)
 
 void FlatpakRuntime::startProcess(QProcess* process) const
 {
-    const QStringList args = QStringList{"build", "--socket=x11", m_buildDirectory.toLocalFile(), process->program()} << process->arguments();
+    const QStringList args = m_finishArgs + QStringList{"build", "--socket=x11", m_buildDirectory.toLocalFile(), process->program()} << process->arguments();
     process->setProgram("flatpak");
     process->setArguments(args);
 
@@ -104,7 +106,7 @@ void FlatpakRuntime::startProcess(QProcess* process) const
 
 void FlatpakRuntime::startProcess(KProcess* process) const
 {
-    process->setProgram(QStringList{ "flatpak", "--socket=x11", "build", m_buildDirectory.toLocalFile() } << process->program());
+    process->setProgram(QStringList{ "flatpak" } << m_finishArgs << QStringList{ "build", m_buildDirectory.toLocalFile() } << process->program());
 
     qCDebug(FLATPAK) << "starting kprocess" << process->program().join(' ');
     process->start();
@@ -129,11 +131,11 @@ QList<KJob*> FlatpakRuntime::exportBundle(const QString &path) const
     }
 
     const QString name = doc[QLatin1String("id")].toString();
-    QStringList finishArgs = kTransform<QStringList>(doc["finish-args"].toArray(), [](const QJsonValue& val){ return val.toString(); });
+    QStringList args = m_finishArgs;
     if (doc.contains("command"))
-        finishArgs << "--command="+doc["command"].toString();
+        args << "--command="+doc["command"].toString();
     const QList<KJob*> jobs = {
-        createExecuteJob(QStringList{ "flatpak", "build-finish", m_buildDirectory.toLocalFile()} << finishArgs, {}),
+        createExecuteJob(QStringList{ "flatpak", "build-finish", m_buildDirectory.toLocalFile()} << args, {}),
         createExecuteJob(QStringList{ "flatpak", "build-export", "--arch="+m_arch, dir->path(), m_buildDirectory.toLocalFile()}, {}),
         createExecuteJob(QStringList{ "flatpak", "build-bundle", "--arch="+m_arch, dir->path(), path, name }, i18n("Exporting %1", path))
     };
