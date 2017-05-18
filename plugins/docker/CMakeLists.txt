@@ -1,3 +1,5 @@
+add_subdirectory(tests)
+
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevdocker\")
 
 ecm_qt_declare_logging_category(dockerplugin_SRCS

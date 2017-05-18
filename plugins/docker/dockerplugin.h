@@ -40,6 +40,10 @@ public:
     int configPages() const override;
     KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
 
+Q_SIGNALS:
+    ///only used by the test
+    void imagesListed();
+
 private:
     void runtimeChanged(KDevelop::IRuntime* newRuntime);
 

@@ -44,6 +44,7 @@ DockerRuntime::DockerRuntime(const QString &tag)
     : KDevelop::IRuntime()
     , m_tag(tag)
 {
+    setObjectName(tag);
     inspectImage();
 }
 

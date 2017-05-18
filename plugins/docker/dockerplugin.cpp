@@ -84,6 +84,7 @@ void DockerPlugin::imagesListFinished(int code)
     }
 
     process->deleteLater();
+    Q_EMIT imagesListed();
 }
 
 void DockerPlugin::runtimeChanged(KDevelop::IRuntime* newRuntime)
