@@ -25,6 +25,9 @@
 
 #include <project/helper.h>
 #include <interfaces/iproject.h>
+#include <interfaces/icore.h>
+#include <interfaces/iruntime.h>
+#include <interfaces/iruntimecontroller.h>
 
 #include <KColorScheme>
 #include <KLocalizedString>
@@ -38,7 +41,7 @@ using namespace KDevelop;
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     : QDialog(parent)
 {
-    setWindowTitle(i18n("Configure a build directory"));
+    setWindowTitle(i18n("Configure a build directory - %1", ICore::self()->runtimeController()->currentRuntime()->name()));
 
     m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     m_buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
