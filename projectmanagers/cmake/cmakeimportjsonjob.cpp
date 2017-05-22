@@ -181,8 +181,9 @@ void CMakeImportJsonJob::start()
 
     const Path targetsFilePath = CMake::targetDirectoriesFile(m_project);
     const QString sourceDir = m_project->path().toLocalFile();
+    auto rt = ICore::self()->runtimeController()->currentRuntime();
 
-    auto future = QtConcurrent::run(import, commandsFile, targetsFilePath, sourceDir, currentBuildDir);
+    auto future = QtConcurrent::run(import, commandsFile, targetsFilePath, sourceDir, rt->pathInRuntime(currentBuildDir));
     m_futureWatcher.setFuture(future);
 }
 
