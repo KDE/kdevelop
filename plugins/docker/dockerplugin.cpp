@@ -141,7 +141,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
                     if (job->error() != 0)
                         return;
 
-                    ICore::self()->runtimeController()->addRuntimes({ new DockerRuntime(name) });
+                    ICore::self()->runtimeController()->addRuntimes(new DockerRuntime(name));
                 });
                 process->start();
             });
