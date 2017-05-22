@@ -49,8 +49,8 @@ QStringList languageOptions(const QString& arguments)
     // see gcc manpage or llvm/tools/clang/include/clang/Frontend/LangStandards.def for list of valid language options
     auto result = regexp.match(arguments);
     if(result.hasMatch()){
-        auto standard = result.captured(0);
-        QString mode = result.captured(1);
+        const auto standard = result.captured(0);
+        const auto mode = result.capturedRef(1);
         QString language;
         if (mode.startsWith(QLatin1String("c++")) || mode.startsWith(QLatin1String("gnu++"))) {
             language = minusXCPlusPlus();
@@ -79,8 +79,9 @@ QStringList languageOptions(const QString& arguments)
 
 Defines GccLikeCompiler::defines(const QString& arguments) const
 {
-    if (!m_definesIncludes.value(arguments).definedMacros.isEmpty() ) {
-        return m_definesIncludes.value(arguments).definedMacros;
+    auto& data = m_definesIncludes[arguments];
+    if (!data.definedMacros.isEmpty() ) {
+        return data.definedMacros;
     }
 
     // #define a 1
@@ -101,8 +102,13 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     proc.setArguments(compilerArguments);
     rt->startProcess(&proc);
 
-    if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
+    if ( !proc.waitForStarted( 2000 ) || !proc.waitForFinished( 2000 ) ) {
         qCDebug(DEFINESANDINCLUDES) <<  "Unable to read standard macro definitions from "<< path();
+        return {};
+    }
+
+    if (proc.exitCode() != 0) {
+        qCWarning(DEFINESANDINCLUDES) <<  "error while fetching defines for the compiler:" << path() << proc.readAll();
         return {};
     }
 
@@ -110,17 +116,18 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
         auto line = proc.readLine();
 
         if ( defineExpression.indexIn( line ) != -1 ) {
-            m_definesIncludes[arguments].definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 2 ).trimmed();
+            data.definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 2 ).trimmed();
         }
     }
 
-    return m_definesIncludes[arguments].definedMacros;
+    return data.definedMacros;
 }
 
 Path::List GccLikeCompiler::includes(const QString& arguments) const
 {
-    if ( !m_definesIncludes.value(arguments).includePaths.isEmpty() ) {
-        return m_definesIncludes.value(arguments).includePaths;
+    auto& data = m_definesIncludes[arguments];
+    if ( !data.includePaths.isEmpty() ) {
+        return data.includePaths;
     }
 
     const auto rt = ICore::self()->runtimeController()->currentRuntime();
@@ -149,8 +156,13 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     proc.setArguments(compilerArguments);
     rt->startProcess(&proc);
 
-    if ( !proc.waitForStarted( 1000 ) || !proc.waitForFinished( 1000 ) ) {
+    if ( !proc.waitForStarted( 2000 ) || !proc.waitForFinished( 2000 ) ) {
         qCDebug(DEFINESANDINCLUDES) <<  "Unable to read standard include paths from " << path();
+        return {};
+    }
+
+    if (proc.exitCode() != 0) {
+        qCWarning(DEFINESANDINCLUDES) <<  "error while fetching includes for the compiler:" << path() << proc.readAll();
         return {};
     }
 
@@ -163,8 +175,8 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     };
     Status mode = Initial;
 
-    Path::List ret;
-    foreach( const QString &line, QString::fromLocal8Bit( proc.readAllStandardOutput() ).split( '\n' ) ) {
+    const auto output = QString::fromLocal8Bit( proc.readAllStandardOutput() );
+    foreach( const QString &line, output.split( '\n' ) ) {
         switch ( mode ) {
             case Initial:
                 if ( line.indexOf( QLatin1String("#include \"...\"") ) != -1 ) {
@@ -184,7 +196,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
                 } else {
                     // This is an include path, add it to the list.
                     auto hostPath = rt->pathInHost(Path(line.trimmed()));
-                    ret << Path(QFileInfo(hostPath.toLocalFile()).canonicalFilePath());
+                    data.includePaths << Path(QFileInfo(hostPath.toLocalFile()).canonicalFilePath());
                 }
                 break;
             default:
@@ -195,8 +207,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
         }
     }
 
-    m_definesIncludes[arguments].includePaths = ret;
-    return ret;
+    return data.includePaths;
 }
 
 void GccLikeCompiler::invalidateCache()
