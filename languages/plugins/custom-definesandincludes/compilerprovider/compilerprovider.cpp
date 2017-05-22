@@ -28,11 +28,14 @@
 #include "compilerfactories.h"
 #include "settingsmanager.h"
 
+#include <interfaces/iruntime.h>
+#include <interfaces/iruntimecontroller.h>
 #include <interfaces/iproject.h>
 #include <project/projectmodel.h>
 
 #include <KLocalizedString>
 #include <QStandardPaths>
+#include <QDir>
 
 using namespace KDevelop;
 
@@ -122,6 +125,8 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
 
     registerCompiler(createDummyCompiler());
     retrieveUserDefinedCompilers();
+
+    connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, [this]() { m_defaultProvider.clear(); });
 }
 
 CompilerProvider::~CompilerProvider() = default;
@@ -158,26 +163,28 @@ IDefinesAndIncludesManager::Type CompilerProvider::type() const
     return IDefinesAndIncludesManager::CompilerSpecific;
 }
 
-CompilerPointer CompilerProvider::checkCompilerExists( const CompilerPointer& compiler ) const
+CompilerPointer CompilerProvider::defaultCompiler() const
 {
-    //This may happen for opened for the first time projects
-    if ( !compiler ) {
-        for ( auto& compiler : m_compilers ) {
-            if ( QStandardPaths::findExecutable( compiler->path() ).isEmpty() ) {
-                continue;
-            }
+    if (m_defaultProvider)
+        return m_defaultProvider;
 
-            return compiler;
+    auto rt = ICore::self()->runtimeController()->currentRuntime();
+    const auto path = QFile::decodeName(rt->getenv("PATH")).split(':');
+
+    for ( const CompilerPointer& compiler : m_compilers ) {
+        const bool absolutePath = QDir::isAbsolutePath(compiler->path());
+        if ((absolutePath && QFileInfo::exists(rt->pathInHost(Path(compiler->path())).toLocalFile()))
+            || QStandardPaths::findExecutable( compiler->path(), path).isEmpty() ) {
+            continue;
         }
-    } else {
-        for ( auto it = m_compilers.constBegin(); it != m_compilers.constEnd(); it++ ) {
-            if ( (*it)->name() == compiler->name() ) {
-                return *it;
-            }
-        }
+
+        m_defaultProvider = compiler;
     }
+    if (!m_defaultProvider)
+        m_defaultProvider = createDummyCompiler();
 
-    return createDummyCompiler();
+    qDebug() << "new default compiler" << rt->name() << m_defaultProvider->name() << m_defaultProvider->path();
+    return m_defaultProvider;
 }
 
 QVector< CompilerPointer > CompilerProvider::compilers() const

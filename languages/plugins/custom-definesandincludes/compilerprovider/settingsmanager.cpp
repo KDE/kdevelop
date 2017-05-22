@@ -96,7 +96,7 @@ CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
     auto grp = cfg.group("Compiler");
     auto name = grp.readEntry( ConfigConstants::compilerNameKey, QString() );
     if (name.isEmpty()) {
-        return SettingsManager::globalInstance()->provider()->checkCompilerExists({});
+        return SettingsManager::globalInstance()->provider()->defaultCompiler();
     }
 
     for (auto c : SettingsManager::globalInstance()->provider()->compilers()) {
@@ -106,7 +106,7 @@ CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
     }
 
     // Otherwise we have no such compiler registered (broken config file), return default one
-    return SettingsManager::globalInstance()->provider()->checkCompilerExists({});
+    return SettingsManager::globalInstance()->provider()->defaultCompiler();
 }
 
 void writeCompilerToConfig(KConfigGroup& cfg, const CompilerPointer& compiler)
@@ -381,7 +381,7 @@ ParserArguments SettingsManager::defaultParserArguments() const
 
 ConfigEntry::ConfigEntry(const QString& path)
     : path(path)
-    , compiler(SettingsManager::globalInstance()->provider()->checkCompilerExists({}))
+    , compiler(SettingsManager::globalInstance()->provider()->defaultCompiler())
     , parserArguments(defaultArguments())
 {}
 
