@@ -149,7 +149,11 @@ QStringList DockerRuntime::workingDirArgs(QProcess* process) const
 
 void DockerRuntime::startProcess(QProcess* process) const
 {
-    const QStringList args = QStringList{"run", "--rm"} << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program() << process->arguments();
+    auto program = process->program();
+    if (program.contains('/'))
+        program = pathInRuntime(Path(program)).toLocalFile();
+
+    const QStringList args = QStringList{"run", "--rm"} << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << program << process->arguments();
     process->setProgram("docker");
     process->setArguments(args);
 
@@ -159,7 +163,10 @@ void DockerRuntime::startProcess(QProcess* process) const
 
 void DockerRuntime::startProcess(KProcess* process) const
 {
-    process->setProgram(QStringList{ "docker", "run", "--rm" } << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << process->program());
+    auto program = process->program();
+    if (program[0].contains('/'))
+        program[0] = pathInRuntime(Path(program[0])).toLocalFile();
+    process->setProgram(QStringList{ "docker", "run", "--rm" } << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << program);
 
     qCDebug(DOCKER) << "starting kprocess" << process->program().join(' ');
     process->start();
