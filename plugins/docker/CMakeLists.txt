@@ -1,3 +1,5 @@
+kdevplatform_add_file_templates(dockerfile-template)
+
 add_subdirectory(tests)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevdocker\")
