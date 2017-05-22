@@ -96,7 +96,7 @@ void FlatpakRuntime::setEnabled(bool /*enable*/)
 
 void FlatpakRuntime::startProcess(QProcess* process) const
 {
-    const QStringList args = m_finishArgs + QStringList{"build", "--socket=x11", m_buildDirectory.toLocalFile(), process->program()} << process->arguments();
+    const QStringList args = m_finishArgs + QStringList{"build", "--talk-name=org.freedesktop.DBus", m_buildDirectory.toLocalFile(), process->program()} << process->arguments();
     process->setProgram("flatpak");
     process->setArguments(args);
 
@@ -106,7 +106,7 @@ void FlatpakRuntime::startProcess(QProcess* process) const
 
 void FlatpakRuntime::startProcess(KProcess* process) const
 {
-    process->setProgram(QStringList{ "flatpak" } << m_finishArgs << QStringList{ "build", m_buildDirectory.toLocalFile() } << process->program());
+    process->setProgram(QStringList{ "flatpak" } << m_finishArgs << QStringList{ "build", "--talk-name=org.freedesktop.DBus", m_buildDirectory.toLocalFile() } << process->program());
 
     qCDebug(FLATPAK) << "starting kprocess" << process->program().join(' ');
     process->start();
