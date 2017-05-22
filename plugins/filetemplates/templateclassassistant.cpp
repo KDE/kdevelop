@@ -104,7 +104,6 @@ public:
     TemplateClassGenerator* generator;
     TemplateRenderer* renderer;
 
-    QString type;
     QVariantHash templateOptions;
 };
 
@@ -318,7 +317,7 @@ void TemplateClassAssistant::setup()
 void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 {
     d->fileTemplate.setTemplateDescription(templateDescription);
-    d->type = d->fileTemplate.type();
+    const auto type = d->fileTemplate.type();
 
     d->generator = nullptr;
 
@@ -327,7 +326,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         return;
     }
 
-    qCDebug(PLUGIN_FILETEMPLATES) << "Selected template" << templateDescription << "of type" << d->type;
+    qCDebug(PLUGIN_FILETEMPLATES) << "Selected template" << templateDescription << "of type" << type;
     removePage(d->dummyPage);
 
     if (d->baseUrl.isValid())
@@ -341,7 +340,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         setWindowTitle(xi18n("Create Files from Template <filename>%1</filename>", d->fileTemplate.name()));
     }
 
-    if (d->type == QLatin1String("Class"))
+    if (type == QLatin1String("Class"))
     {
         d->classIdentifierPageWidget = new ClassIdentifierPage(this);
         d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18n("Class Basics"));
@@ -380,7 +379,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     }
     else
     {
-        if (d->type == QLatin1String("Test"))
+        if (type == QLatin1String("Test"))
         {
             d->testCasesPageWidget = new TestCasesPage(this);
             d->testCasesPage = addPage(d->testCasesPageWidget, i18n("Test Cases"));
