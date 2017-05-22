@@ -1,0 +1,13 @@
+[General]
+Name=Flatpak Builder Manifest
+Comment=A file to configure how a project is built by flatpak
+Category=Flatpak/Builder Manifest
+Language=JSON
+Files=Implementation
+OptionsFile=options.kcfg
+
+[Implementation]
+Name=Implementation
+File=flatpakbuilder.json
+OutputFile={{ name }}.json
+

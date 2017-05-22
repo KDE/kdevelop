@@ -1,3 +1,5 @@
+kdevplatform_add_file_templates(flatpak-template)
+
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevflatpak\")
 
 ecm_qt_declare_logging_category(flatpakplugin_SRCS
