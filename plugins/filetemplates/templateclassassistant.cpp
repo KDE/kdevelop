@@ -293,7 +293,7 @@ void TemplateClassAssistant::setup()
 {
     if (d->baseUrl.isValid())
     {
-        setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString()));
+        setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString(QUrl::PreferLocalFile)));
     }
     else
     {
@@ -334,7 +334,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     {
         setWindowTitle(xi18n("Create Files from Template <filename>%1</filename> in <filename>%2</filename>",
                             d->fileTemplate.name(),
-                            d->baseUrl.toDisplayString()));
+                            d->baseUrl.toDisplayString(QUrl::PreferLocalFile)));
     }
     else
     {
@@ -539,7 +539,7 @@ void TemplateClassAssistant::back()
 
         if (d->baseUrl.isValid())
         {
-            setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString()));
+            setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString(QUrl::PreferLocalFile)));
         }
         else
         {
