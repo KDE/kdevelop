@@ -27,7 +27,6 @@
 #include <interfaces/contextmenuextension.h>
 #include <outputview/outputexecutejob.h>
 #include <project/projectmodel.h>
-#include <QDebug>
 #include <QStandardPaths>
 #include <QAction>
 #include <QProcess>

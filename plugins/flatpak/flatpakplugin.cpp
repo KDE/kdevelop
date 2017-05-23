@@ -27,7 +27,8 @@
 #include <interfaces/contextmenuextension.h>
 #include <project/projectmodel.h>
 #include <util/executecompositejob.h>
-#include <QDebug>
+
+#include <QTextStream>
 #include <QStandardPaths>
 #include <QAction>
 #include <QProcess>

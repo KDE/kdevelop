@@ -33,7 +33,6 @@
 #include <KUser>
 #include <QProcess>
 #include <QDir>
-#include <QDebug>
 #include <outputview/outputexecutejob.h>
 
 using namespace KDevelop;
