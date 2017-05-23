@@ -105,7 +105,7 @@ CMakeFilesCompilationData importCommands(const Path& commandsFile)
         ret.frameworkDirectories = kTransform<Path::List>(result.frameworkDirectories, convert);
         ret.defines = result.defines;
         const Path path(rt->pathInHost(Path(entry[KEY_FILE].toString())));
-        qDebug() << "entering..." << path << entry[KEY_FILE];
+        qCDebug(CMAKE) << "entering..." << path << entry[KEY_FILE];
         data.files[path] = ret;
     }
 

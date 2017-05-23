@@ -183,7 +183,7 @@ CompilerPointer CompilerProvider::defaultCompiler() const
     if (!m_defaultProvider)
         m_defaultProvider = createDummyCompiler();
 
-    qDebug() << "new default compiler" << rt->name() << m_defaultProvider->name() << m_defaultProvider->path();
+    qCDebug(DEFINESANDINCLUDES) << "new default compiler" << rt->name() << m_defaultProvider->name() << m_defaultProvider->path();
     return m_defaultProvider;
 }
 

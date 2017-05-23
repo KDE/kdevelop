@@ -171,7 +171,7 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
 
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), jobs );
     }
-    qWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
+    qCWarning(EXECUTEPLASMOID) << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return nullptr;
 }
 
