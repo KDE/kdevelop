@@ -617,6 +617,7 @@ void OutputWidget::copySelection()
     Q_FOREACH( const QModelIndex& index, indexes) {
       content += index.data().toString() + '\n';
     }
+    content.chop(1);
     cb->setText(content);
 }
 
