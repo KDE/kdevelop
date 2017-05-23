@@ -3,6 +3,7 @@
 # logname<space>description
 
 # Plugins
+kdevplatform.plugins.android KDevelop plugin: android
 kdevelop.languages.clang KDevelop plugin: clang-based language support
 kdevelop.projectmanagers.qmake KDevelop plugin: qmake
 kdevelop.projectmanagers.cmake KDevelop plugin: cmake
