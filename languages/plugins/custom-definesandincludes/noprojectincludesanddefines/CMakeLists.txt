@@ -14,7 +14,6 @@ target_link_libraries( kdevnoprojectincludesanddefines
 LINK_PRIVATE
     KDev::Util
     KDev::Language
-    ${KDE4_THREADWEAVER_LIBRARIES}
 )
 
 set_target_properties(kdevnoprojectincludesanddefines PROPERTIES POSITION_INDEPENDENT_CODE ON)
