@@ -1,7 +1,11 @@
 {
     "KPlugin": {
         "Authors": [
-            { "Name": "Aleix Pol", "Email": "aleixpol@kde.org" }
+            {
+                "Email": "aleixpol@kde.org",
+                "Name": "Aleix Pol",
+                "Name[x-test]": "xxAleix Polxx"
+            }
         ],
         "Category": "Global",
         "Description": "Exposes Flatpak runtimes",
@@ -9,7 +13,9 @@
         "Id": "kdevflatpak",
         "License": "GPL",
         "Name": "Flatpak Support",
-        "ServiceTypes": [ "KDevelop/Plugin" ],
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ],
         "Version": "0.1"
     },
     "X-KDevelop-Category": "Global",
