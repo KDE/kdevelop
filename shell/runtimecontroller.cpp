@@ -18,7 +18,6 @@
 
 #include "runtimecontroller.h"
 #include <QProcess>
-#include <QDebug>
 #include <QComboBox>
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -106,7 +105,7 @@ void KDevelop::RuntimeController::setCurrentRuntime(KDevelop::IRuntime* runtime)
     if (m_currentRuntime) {
         m_currentRuntime->setEnabled(false);
     }
-    qDebug() << "setting runtime..." << runtime->name() << "was" << m_currentRuntime;
+    qCDebug(SHELL) << "setting runtime..." << runtime->name() << "was" << m_currentRuntime;
     m_currentRuntime = runtime;
     m_currentRuntime->setEnabled(true);
     Q_EMIT currentRuntimeChanged(runtime);

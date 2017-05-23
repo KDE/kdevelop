@@ -237,8 +237,8 @@ LicensePage::~LicensePage()
     }
     else
     {
-        qWarning() << "Attempted to save an invalid license number: " << index
-                   << ". Number of licenses:" << d->availableLicenses.size();
+        qCWarning(PLUGIN_FILETEMPLATES) << "Attempted to save an invalid license number: " << index
+                                        << ". Number of licenses:" << d->availableLicenses.size();
     }
 
     delete d->license;

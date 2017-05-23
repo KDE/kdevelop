@@ -252,7 +252,7 @@ void ExternalScriptJob::start()
       m_proc->closeWriteChannel();
     }
   } else {
-    qWarning() << "No process, something went wrong when creating the job";
+    qCWarning(PLUGIN_EXTERNALSCRIPT) << "No process, something went wrong when creating the job";
     // No process means we've returned early on from the constructor, some bad error happened
     emitResult();
   }

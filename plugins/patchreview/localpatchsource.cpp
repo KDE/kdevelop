@@ -67,7 +67,7 @@ void LocalPatchSource::update()
             qCDebug(PLUGIN_PATCHREVIEW) << "calling " << m_command;
 
             if ( proc.execute() ) {
-                qWarning() << "returned with bad exit code";
+                qCWarning(PLUGIN_PATCHREVIEW) << "returned with bad exit code";
                 return;
             }
             if ( !m_filename.isEmpty() ) {
@@ -76,7 +76,7 @@ void LocalPatchSource::update()
             m_filename = QUrl::fromLocalFile( filename );
             qCDebug(PLUGIN_PATCHREVIEW) << "success, diff: " << m_filename;
         }else{
-            qWarning() << "PROBLEM";
+            qCWarning(PLUGIN_PATCHREVIEW) << "PROBLEM";
         }
     }
     if (m_widget) {

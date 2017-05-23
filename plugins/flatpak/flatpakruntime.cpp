@@ -84,7 +84,7 @@ void FlatpakRuntime::refreshJson()
     const QString usedRuntime = sdkName + QLatin1Char('/') + m_arch + QLatin1Char('/') + runtimeVersion;
 
     m_sdkPath = KDevelop::Path("/var/lib/flatpak/runtime/" + usedRuntime + "/active/files");
-    qDebug() << "flatpak runtime path..." << name() << m_sdkPath;
+    qCDebug(FLATPAK) << "flatpak runtime path..." << name() << m_sdkPath;
     Q_ASSERT(QFile::exists(m_sdkPath.toLocalFile()));
 
     m_finishArgs = kTransform<QStringList>(doc["finish-args"].toArray(), [](const QJsonValue& val){ return val.toString(); });

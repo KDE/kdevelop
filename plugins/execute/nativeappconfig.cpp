@@ -200,7 +200,7 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
 
     }
-    qWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
+    qCWarning(PLUGIN_EXECUTE) << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return nullptr;
 }
 

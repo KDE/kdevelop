@@ -28,7 +28,7 @@ QObject* createKonsoleView( QWidget*, QObject* op, const QVariantList& args)
         factory = KPluginLoader(*service.data()).factory();
     }
     if (!factory) {
-        qWarning() << "Failed to load 'konsolepart' plugin";
+        qCWarning(PLUGIN_KONSOLE) << "Failed to load 'konsolepart' plugin";
     }
     return new KDevKonsoleViewPlugin(factory, op, args);
 }

@@ -90,7 +90,7 @@ QUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
     if( !script.isLocalFile() || script.isEmpty() )
     {
         err_ = i18n("No valid executable specified");
-        qWarning() << "Launch Configuration:" << cfg->name() << "no valid script set";
+        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "no valid script set";
     } else
     {
         KShell::Errors err;
@@ -108,7 +108,7 @@ QUrl ExecuteScriptPlugin::script( KDevelop::ILaunchConfiguration* cfg, QString& 
                 "script for the launch configuration '%1', "
                 "this is not supported currently. Aborting start.", cfg->name() );
             }
-            qWarning() << "Launch Configuration:" << cfg->name() << "script has meta characters";
+            qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "script has meta characters";
         }
     }
     return script;
@@ -123,7 +123,7 @@ QString ExecuteScriptPlugin::remoteHost(ILaunchConfiguration* cfg, QString& err)
         if (host.isEmpty()) {
             err = i18n("No remote host set for launch configuration '%1'. "
             "Aborting start.", cfg->name() );
-            qWarning() << "Launch Configuration:" << cfg->name() << "no remote host set";
+            qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "no remote host set";
         }
         return host;
     }
@@ -153,7 +153,7 @@ QStringList ExecuteScriptPlugin::arguments( KDevelop::ILaunchConfiguration* cfg,
             "this is not supported currently. Aborting start.", cfg->name() );
         }
         args = QStringList();
-        qWarning() << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
+        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "arguments have meta characters";
     }
     return args;
 }
@@ -202,7 +202,7 @@ QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, Q
     if( interpreter.isEmpty() )
     {
         err = i18n("No valid interpreter specified");
-        qWarning() << "Launch Configuration:" << cfg->name() << "no valid interpreter set";
+        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "no valid interpreter set";
     } else
     {
         KShell::Errors err_;
@@ -220,7 +220,7 @@ QString ExecuteScriptPlugin::interpreter( KDevelop::ILaunchConfiguration* cfg, Q
                 "interpreter for the launch configuration '%1', "
                 "this is not supported currently. Aborting start.", cfg->name() );
             }
-            qWarning() << "Launch Configuration:" << cfg->name() << "interpreter has meta characters";
+            qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "interpreter has meta characters";
         }
     }
     return interpreter;

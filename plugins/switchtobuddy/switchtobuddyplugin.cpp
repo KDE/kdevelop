@@ -300,7 +300,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
         }
         return;
     } else if (!wasSignal) {
-        qWarning() << "Found no definition assigned to cursor position";
+        qCWarning(PLUGIN_SWITCHTOBUDDY) << "Found no definition assigned to cursor position";
     }
 
     lock.unlock();

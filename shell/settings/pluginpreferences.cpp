@@ -70,7 +70,7 @@ PluginPreferences::PluginPreferences(QWidget* parent)
             kpi.setPluginEnabled(Core::self()->pluginControllerInternal()->isEnabled(info));
             plugins[category] << kpi;
         } else
-            qDebug() << "skipping..." << info.pluginId() << info.value(QStringLiteral("X-KDevelop-Category")) << loadMode;
+            qCDebug(SHELL) << "skipping..." << info.pluginId() << info.value(QStringLiteral("X-KDevelop-Category")) << loadMode;
     }
 
     for (auto it = plugins.constBegin(), end = plugins.constEnd(); it != end; ++it) {

@@ -166,11 +166,11 @@ QVector<KDevelop::Problem::Ptr> KDevelop::StaticAssistantsManager::problemsForCo
             continue;
 
         if (assistant->isUseful()) {
-            qDebug() << "assistant is now useful:" << assistant.data();
+            qCDebug(LANGUAGE) << "assistant is now useful:" << assistant.data();
 
             auto p = new KDevelop::StaticAssistantProblem();
             auto range = assistant->displayRange();
-            qDebug() << "range:" << range;
+            qCDebug(LANGUAGE) << "range:" << range;
             p->setFinalLocation(DocumentRange(doc, range));
             p->setSource(KDevelop::IProblem::SemanticAnalysis);
             p->setSeverity(KDevelop::IProblem::Warning);

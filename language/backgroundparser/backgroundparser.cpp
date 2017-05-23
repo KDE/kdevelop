@@ -319,7 +319,7 @@ public:
                 }
                 m_documents.erase(parsePlanIt);
             } else {
-                qWarning(LANGUAGE) << "Document got removed during parse job creation:" << url;
+                qCWarning(LANGUAGE) << "Document got removed during parse job creation:" << url;
             }
 
             if (decorator) {

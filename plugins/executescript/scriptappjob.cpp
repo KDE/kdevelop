@@ -66,7 +66,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     QStringList interpreter = KShell::splitArgs( interpreterString, KShell::TildeExpand | KShell::AbortOnMeta, &err_ );
     if ( interpreter.isEmpty() ) {
         // This should not happen, because of the checks done in the executescript plugin
-        qWarning() << "no interpreter specified";
+        qCWarning(PLUGIN_EXECUTESCRIPT) << "no interpreter specified";
         return;
     }
 
@@ -108,7 +108,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     }
 
     if (envProfileName.isEmpty()) {
-        qWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment profile specified, looks like a broken "
+        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << i18n("No environment profile specified, looks like a broken "
                        "configuration, please check run configuration '%1'. "
                        "Using default environment profile.", cfg->name() );
         envProfileName = environmentProfiles.defaultProfileName();
@@ -123,7 +123,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
 
     if( error() != 0 )
     {
-        qWarning() << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
+        qCWarning(PLUGIN_EXECUTESCRIPT) << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
         return;
     }
 
@@ -184,7 +184,7 @@ void ScriptAppJob::start()
         ICore::self()->runtimeController()->currentRuntime()->startProcess(proc);
     } else
     {
-        qWarning() << "No process, something went wrong when creating the job";
+        qCWarning(PLUGIN_EXECUTESCRIPT) << "No process, something went wrong when creating the job";
         // No process means we've returned early on from the constructor, some bad error happened
         emitResult();
     }

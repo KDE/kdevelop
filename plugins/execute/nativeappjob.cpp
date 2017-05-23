@@ -63,7 +63,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     }
 
     if (envProfileName.isEmpty()) {
-        qWarning() << "Launch Configuration:" << cfg->name() << i18n("No environment profile specified, looks like a broken "
+        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << i18n("No environment profile specified, looks like a broken "
                        "configuration, please check run configuration '%1'. "
                        "Using default environment profile.", cfg->name() );
         envProfileName = environmentProfiles.defaultProfileName();
@@ -79,7 +79,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
 
     if( error() != 0 )
     {
-        qWarning() << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
+        qCWarning(PLUGIN_EXECUTE) << "Launch Configuration:" << cfg->name() << "oops, problem" << errorText();
         return;
     }
 

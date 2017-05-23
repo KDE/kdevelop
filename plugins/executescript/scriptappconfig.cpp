@@ -39,6 +39,7 @@
 #include "executescriptplugin.h"
 #include <util/kdevstringhandler.h>
 #include <util/path.h>
+#include <debug.h>
 
 using namespace KDevelop;
 
@@ -164,7 +165,7 @@ KJob* ScriptAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     {
         return new ScriptAppJob( m_plugin, cfg);
     }
-    qWarning() << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
+    qCWarning(PLUGIN_EXECUTESCRIPT) << "Unknown launch mode " << launchMode << "for config:" << cfg->name();
     return nullptr;
 }
 

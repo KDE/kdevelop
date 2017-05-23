@@ -230,7 +230,7 @@ KTextEditor::Range KDevelop::RenameAssistant::displayRange() const
         return {};
     }
     auto range = d->m_lastChangedDocument->wordRangeAt(d->m_lastChangedLocation);
-    qDebug() << "range:" << range;
+    qCDebug(LANGUAGE) << "range:" << range;
     return range;
 }
 
