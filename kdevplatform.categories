@@ -21,12 +21,14 @@ kdevplatform.plugins.classbrowser KDevelop plugin: classbrowser
 kdevplatform.plugins.codeutils KDevelop plugin: codeutils
 kdevplatform.plugins.contextbrowser KDevelop plugin: contextbrowser
 kdevplatform.plugins.cvs KDevelop plugin: cvs
+kdevplatform.plugins.docker KDevelop plugin: docker
 kdevplatform.plugins.documentswitcher KDevelop plugin: documentswitcher
 kdevplatform.plugins.execute KDevelop plugin: execute
 kdevplatform.plugins.executescript KDevelop plugin: executescript
 kdevplatform.plugins.externalscript KDevelop plugin: externalscript
 kdevplatform.plugins.filemanager KDevelop plugin: filemanager
 kdevplatform.plugins.filetemplates KDevelop plugin: filetemplates
+kdevplatform.plugins.flatpak KDevelop plugin: flatpak
 kdevplatform.plugins.git KDevelop plugin: git
 kdevplatform.plugins.grepview KDevelop plugin: grepview
 kdevplatform.plugins.konsole KDevelop plugin: konsole
