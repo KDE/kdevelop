@@ -20,8 +20,8 @@
 #define KDEVPLATFORM_IRUNTIMECONTROLLER_H
 
 #include <interfaces/idocumentation.h>
-#include <QtCore/QObject>
-#include <QtCore/QVector>
+#include <QObject>
+#include <QVector>
 
 namespace KDevelop {
 class IRuntime;
