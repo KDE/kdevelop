@@ -228,6 +228,8 @@ fi
 
 # KDE Plasma
 build_project libksysguard $KDE_PLASMA_VERSION
+build_project kdecoration $KDE_PLASMA_VERSION # for breeze
+build_project breeze $KDE_PLASMA_VERSION
 
 # KDE Applications
 build_project libkomparediff2 $KDE_APPLICATION_VERSION
