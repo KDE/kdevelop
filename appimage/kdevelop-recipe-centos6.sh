@@ -17,6 +17,8 @@ git_pull_rebase_helper()
     git stash pop || true
 }
 
+SCRIPT_DIR=$(dirname "$0")
+
 QTVERSION=5.7.1
 QVERSION_SHORT=5.7
 QTDIR=/usr/local/Qt-${QTVERSION}/
@@ -243,7 +245,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
 build_project kdev-python $KDEVELOP_VERSION
 
 # Install some colorschemes
-./install_colorschemes.sh
+$SCRIPT_DIR/install_colorschemes.sh
 
 cd /kdevelop.appdir
 
