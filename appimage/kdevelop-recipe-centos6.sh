@@ -68,6 +68,9 @@ cd /
 # Use the new compiler
 . /opt/rh/devtoolset-4/enable
 
+# TODO: Use these vars more
+export FAKEROOT=/kdevelop.appdir
+export PREFIX=/kdevelop.appdir/usr/
 export CMAKE_PREFIX_PATH=$QTDIR:/kdevelop.appdir/share/llvm/
 
 # if the library path doesn't point to our usr/lib, linking will be broken and we won't find all deps either
@@ -96,7 +99,6 @@ function build_project
 { (
     SRC=$HOME/src/
     BUILD=$HOME/build
-    PREFIX=/kdevelop.appdir/usr/
 
     PROJECT=$1
     VERSION=$2
@@ -239,6 +241,9 @@ build_project kdev-php $KDEVELOP_VERSION
 # Build kdev-python
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
 build_project kdev-python $KDEVELOP_VERSION
+
+# Install some colorschemes
+./install_colorschemes.sh
 
 cd /kdevelop.appdir
 
