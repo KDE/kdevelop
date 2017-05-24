@@ -17,7 +17,7 @@ git_pull_rebase_helper()
     git stash pop || true
 }
 
-SCRIPT_DIR=$(dirname "$0")
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 QTVERSION=5.7.1
 QVERSION_SHORT=5.7
@@ -87,16 +87,18 @@ export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/kdevelop.appdir/usr/lib:$QTDIR/lib/
 ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
 
 # Prepare the install location
-rm -rf /kdevelop.appdir/ || true
-mkdir -p /kdevelop.appdir/usr
+if [ -z "$SKIP_PRUNE" ]; then
+    rm -rf /kdevelop.appdir/ || true
+    mkdir -p /kdevelop.appdir/usr
 
-# refresh ldconfig cache
-ldconfig
+    # refresh ldconfig cache
+    ldconfig
 
-# make sure lib and lib64 are the same thing
-mkdir -p /kdevelop.appdir/usr/lib
-cd  /kdevelop.appdir/usr
-ln -s lib lib64
+    # make sure lib and lib64 are the same thing
+    mkdir -p /kdevelop.appdir/usr/lib
+    cd  /kdevelop.appdir/usr
+    ln -s lib lib64
+fi
 
 # start building the deps
 function build_project
@@ -179,6 +181,7 @@ function build_framework
 ) }
 
 # KDE Frameworks
+if [ -z "$SKIP_FRAMEWORKS" ]; then
 build_framework extra-cmake-modules
 
 build_framework kconfig
@@ -221,6 +224,7 @@ build_framework kdoctools
 build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
 build_framework kpty
 build_framework kinit 
+fi
 
 # KDE Plasma
 build_project libksysguard $KDE_PLASMA_VERSION
