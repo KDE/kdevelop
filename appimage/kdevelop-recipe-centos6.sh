@@ -160,13 +160,13 @@ EOF
     cd $BUILD/$PROJECT
 
     # cmake it
-    cmake3 $SRC/$PROJECT -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $3
+    cmake3 $SRC/$PROJECT -G Ninja -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $3
 
     # make
-    make -j$(nproc)
+    ninja
 
     # install
-    make install
+    ninja install
 ) }
 
 function build_framework
