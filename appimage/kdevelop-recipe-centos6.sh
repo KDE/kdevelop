@@ -73,6 +73,8 @@ cd /
 # TODO: Use these vars more
 export FAKEROOT=/kdevelop.appdir
 export PREFIX=/kdevelop.appdir/usr/
+export SRC=$HOME/src/
+export BUILD=$HOME/build
 export CMAKE_PREFIX_PATH=$QTDIR:/kdevelop.appdir/share/llvm/
 
 # if the library path doesn't point to our usr/lib, linking will be broken and we won't find all deps either
@@ -99,9 +101,6 @@ ln -s lib lib64
 # start building the deps
 function build_project
 { (
-    SRC=$HOME/src/
-    BUILD=$HOME/build
-
     PROJECT=$1
     VERSION=$2
 
@@ -245,6 +244,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
 build_project kdev-python $KDEVELOP_VERSION
 
 # Install some colorschemes
+cd $SRC
 $SCRIPT_DIR/install_colorschemes.sh
 
 cd /kdevelop.appdir
