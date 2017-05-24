@@ -176,7 +176,6 @@ function build_framework
 ) }
 
 # KDE Frameworks
-
 build_framework extra-cmake-modules
 
 build_framework kconfig
@@ -228,8 +227,10 @@ build_project libkomparediff2 $KDE_APPLICATION_VERSION
 build_project kate $KDE_APPLICATION_VERSION # for snippet plugin, see T3826
 build_project konsole $KDE_APPLICATION_VERSION
 
+# Extra
 (CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git build_project grantlee $GRANTLEE_VERSION)
 
+# KDevelop
 build_project kdevelop-pg-qt $KDEV_PG_QT_VERSION
 build_project kdevplatform $KDEVELOP_VERSION
 build_project kdevelop $KDEVELOP_VERSION
