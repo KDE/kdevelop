@@ -16,4 +16,6 @@ RUN bash -c "mkdir -p /llvm && cd /llvm && wget http://llvm.org/releases/3.9.0/l
 
 RUN bash -c "mkdir -p /python && cd /python && wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz && tar xvf Python-3.6.0.tar.xz && cd /python/Python-3.6.0 && mkdir -p /usr/lib/pkgconfig && ./configure --prefix=/usr --enable-shared && make -j$(nproc) install && rm -Rf /python"
 
+RUN bash -c "mkdir -p /tmp/deploy && cd /tmp/deploy && wget <https://github.com/ninja-build/ninja/releases/download/v1.7.2/ninja-linux.zip> && unzip ninja-linux.zip && mv -f ninja /usr/local/bin && cd .. && rm -Rf deploy"
+
 CMD /bin/bash
