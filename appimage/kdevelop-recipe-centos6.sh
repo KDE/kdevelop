@@ -52,15 +52,15 @@ fi
 cd  /
 
 # Build AppImageKit
-rm -Rf /AppImageKit
+#rm -Rf /AppImageKit
 if [ ! -d AppImageKit ] ; then
   git clone  --depth 1 https://github.com/probonopd/AppImageKit.git /AppImageKit
 fi
 
 cd /AppImageKit/
-git checkout master
+git checkout stable/v1.0
 git_pull_rebase_helper
-git reset --hard remotes/origin/stable/v1.0
+git reset --hard
 ./build.sh
 cd /
 
