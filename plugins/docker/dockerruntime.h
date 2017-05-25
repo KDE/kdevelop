@@ -30,7 +30,7 @@ class DockerRuntime : public KDevelop::IRuntime
 {
     Q_OBJECT
 public:
-    DockerRuntime(const QString& tag);
+    explicit DockerRuntime(const QString& tag);
     ~DockerRuntime() override;
 
     /**
