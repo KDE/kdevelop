@@ -4,6 +4,7 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
 
+  <kcfgfile />
   <group name="Android">
     <entry name="cmakeToolchain" type="Path"><default code="true">QStandardPaths::locate(QStandardPaths::GenericDataLocation, "ECM/toolchain/Android.cmake")</default></entry>
     <entry name="ndk" type="Path"><default code="true">qgetenv("ANDROID_NDK")</default></entry>
