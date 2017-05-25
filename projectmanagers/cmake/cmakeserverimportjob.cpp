@@ -35,17 +35,6 @@
 
 #include "debug.h"
 
-
-template <typename T, typename Q, typename W>
-static T kTransform(const Q& list, W func)
-{
-    T ret;
-    ret.reserve(list.size());
-    for (auto it = list.constBegin(), itEnd = list.constEnd(); it!=itEnd; ++it)
-        ret += func(*it);
-    return ret;
-}
-
 static QString unescape(const QStringRef& input)
 {
   QString output;
@@ -89,6 +78,20 @@ static QHash<QString, QString> processDefines(const QString &compileFlags, const
     return ret;
 }
 
+CMakeTarget::Type typeToEnum(const QJsonObject& target)
+{
+    static const QHash<QString, CMakeTarget::Type> s_types = {
+        {QStringLiteral("EXECUTABLE"), CMakeTarget::Executable},
+        {QStringLiteral("STATIC_LIBRARY"), CMakeTarget::Library},
+        {QStringLiteral("MODULE_LIBRARY"), CMakeTarget::Library},
+        {QStringLiteral("SHARED_LIBRARY"), CMakeTarget::Library},
+        {QStringLiteral("OBJECT_LIBRARY"), CMakeTarget::Library},
+        {QStringLiteral("INTERFACE_LIBRARY"), CMakeTarget::Library}
+    };
+    const auto value = target.value(QLatin1String("type")).toString();
+    return s_types.value(value, CMakeTarget::Custom);
+}
+
 void CMakeServerImportJob::processFileData(const QJsonObject &response, CMakeProjectData &data)
 {
     const auto configs = response.value(QStringLiteral("configurations")).toArray();
@@ -103,7 +106,7 @@ void CMakeServerImportJob::processFileData(const QJsonObject &response, CMakePro
                 const auto target = targetObject.toObject();
                 const KDevelop::Path targetDir = rt->pathInHost(KDevelop::Path(target.value(QStringLiteral("sourceDirectory")).toString()));
 
-                data.targets[targetDir] += target.value(QStringLiteral("name")).toString();
+                data.targets[targetDir] += {typeToEnum(target), target.value(QStringLiteral("name")).toString()};
 
                 const auto fileGroups = target.value(QStringLiteral("fileGroups")).toArray();
                 for (const auto &fileGroupValue: fileGroups) {

@@ -35,6 +35,7 @@
 #include "testing/ctestutils.h"
 #include "cmakeserverimportjob.h"
 #include "cmakeserver.h"
+#include "cmakeutils.h"
 
 #include <QDir>
 #include <QReadWriteLock>
@@ -316,15 +317,16 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
     return true;
 }
 
-static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Path, QStringList>& targets)
+static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets)
 {
-    QStringList dirTargets = targets[folder->path()];
+    auto dirTargets = targets[folder->path()];
 
     foreach (ProjectTargetItem* item, folder->targetList()) {
-        if(!dirTargets.contains(item->text())) {
+        const auto idx = kIndexOf(dirTargets, [item](const CMakeTarget& target) { return target.name == item->text(); });
+        if(idx<0) {
             delete item;
         } else {
-            dirTargets.removeAll(item->text());
+            dirTargets.removeAt(idx);
         }
     }
 
@@ -336,12 +338,23 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
 
     };
 
-    foreach (const QString& name, dirTargets) {
-        if (!name.endsWith(QLatin1String("_automoc"))
-            && !standardTargets.contains(name)
-            && !name.startsWith(QLatin1String("install/"))
-        )
-            new CMakeTargetItem(folder, name);
+    foreach (const auto& target, dirTargets) {
+        if (!target.name.endsWith(QLatin1String("_automoc"))
+            && !standardTargets.contains(target.name)
+            && !target.name.startsWith(QLatin1String("install/"))
+        ) {
+            switch(target.type) {
+                case CMakeTarget::Executable:
+                    new CMakeTargetItem(folder, target.name);
+                    break;
+                case CMakeTarget::Library:
+                    new ProjectLibraryTargetItem(folder->project(), target.name, folder);
+                    break;
+                case CMakeTarget::Custom:
+                    new ProjectTargetItem(folder->project(), target.name, folder);
+                    break;
+            }
+        }
     }
 
     foreach (ProjectFolderItem* children, folder->folderList()) {

@@ -49,7 +49,6 @@ struct Target
     CMakeFunctionDesc desc;
     QString name;
 };
-typedef Target CMakeTarget; //Workaround for namespacing. fix me!
 
 struct Subdirectory
 {

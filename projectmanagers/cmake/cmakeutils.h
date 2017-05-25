@@ -36,6 +36,28 @@ namespace KDevelop
 class ICMakeDocumentation;
 class CMakeCacheModel;
 
+template <typename T, typename Q, typename W>
+static T kTransform(const Q& list, W func)
+{
+    T ret;
+    ret.reserve(list.size());
+    for (auto it = list.constBegin(), itEnd = list.constEnd(); it!=itEnd; ++it)
+        ret += func(*it);
+    return ret;
+}
+
+template <typename Q, typename W>
+static int kIndexOf(const Q& list, W func)
+{
+    int i = 0;
+    for (auto it = list.constBegin(), itEnd = list.constEnd(); it!=itEnd; ++it) {
+        if (func(*it))
+            return i;
+        ++i;
+    }
+    return -1;
+}
+
 namespace CMake
 {
     /**

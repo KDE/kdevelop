@@ -53,15 +53,23 @@ struct CMakeFilesCompilationData
     bool isValid = false;
 };
 
+struct CMakeTarget
+{
+    enum Type { Library, Executable, Custom };
+    Type type;
+    QString name;
+};
+Q_DECLARE_TYPEINFO(CMakeTarget, Q_MOVABLE_TYPE);
+
 struct CMakeProjectData
 {
-    CMakeProjectData(const QHash<KDevelop::Path, QStringList> &targets, const CMakeFilesCompilationData &data, const QVector<Test> &tests);
+    CMakeProjectData(const QHash<KDevelop::Path, QVector<CMakeTarget>> &targets, const CMakeFilesCompilationData &data, const QVector<Test> &tests);
 
     CMakeProjectData() : watcher(new QFileSystemWatcher) {}
     ~CMakeProjectData() {}
 
     CMakeFilesCompilationData compilationData;
-    QHash<KDevelop::Path, QStringList> targets;
+    QHash<KDevelop::Path, QVector<CMakeTarget>> targets;
     QSharedPointer<QFileSystemWatcher> watcher;
     QSharedPointer<CMakeServer> m_server;
 

@@ -45,16 +45,6 @@ using namespace KDevelop;
 
 namespace {
 
-template <typename T, typename Q, typename W>
-static T kTransform(const Q& list, W func)
-{
-    T ret;
-    ret.reserve(list.size());
-    for (auto it = list.constBegin(), itEnd = list.constEnd(); it!=itEnd; ++it)
-        ret += func(*it);
-    return ret;
-}
-
 CMakeFilesCompilationData importCommands(const Path& commandsFile)
 {
     // NOTE: to get compile_commands.json, you need -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
@@ -147,9 +137,17 @@ QVector<Test> importTestSuites(const Path &buildDir)
 
 ImportData import(const Path& commandsFile, const Path &targetsFilePath, const QString &sourceDir, const KDevelop::Path &buildPath)
 {
+    QHash<KDevelop::Path, QVector<CMakeTarget>> cmakeTargets;
+
+    //we don't have target type information in json, so we just announce all of them as exes
+    const auto targets = CMake::enumerateTargets(targetsFilePath, sourceDir, buildPath);
+    for(auto it = targets.constBegin(), itEnd = targets.constEnd(); it!=itEnd; ++it) {
+        cmakeTargets[it.key()] = kTransform<QVector<CMakeTarget>>(*it, [](const QString &targetName) { return CMakeTarget{CMakeTarget::Executable, targetName}; });
+    }
+
     return ImportData {
         importCommands(commandsFile),
-        CMake::enumerateTargets(targetsFilePath, sourceDir, buildPath),
+        cmakeTargets,
         importTestSuites(buildPath)
     };
 }
