@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FLATPAKRUNTIMEPROVIDER_H
-#define FLATPAKRUNTIMEPROVIDER_H
+#ifndef FLATPAKPLUGIN_H
+#define FLATPAKPLUGIN_H
 
 #include <interfaces/iruntime.h>
 #include <interfaces/iplugin.h>

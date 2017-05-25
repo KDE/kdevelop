@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef DOCKERRUNTIMEPROVIDER_H
-#define DOCKERRUNTIMEPROVIDER_H
+#ifndef DOCKERPLUGIN_H
+#define DOCKERPLUGIN_H
 
 #include <interfaces/iruntime.h>
 #include <interfaces/iplugin.h>

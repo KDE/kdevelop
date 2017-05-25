@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef KDEVPLATFORM_PLUGIN_KDEVELOPDASBOARDDECLARATIVE_H
-#define KDEVPLATFORM_PLUGIN_KDEVELOPDASBOARDDECLARATIVE_H
+#ifndef KDEVPLATFORM_PLUGIN_KDEVPLATFORMDECLARATIVEPLUGIN_H
+#define KDEVPLATFORM_PLUGIN_KDEVPLATFORMDECLARATIVEPLUGIN_H
 
 #include <QQmlExtensionPlugin>
 
@@ -30,4 +30,4 @@ public:
     void registerTypes(const char* uri) override;
 };
 
-#endif // KDEVPLATFORM_PLUGIN_PLUGIN_KDEVELOPDASBOARDDECLARATIVE_H
+#endif // KDEVPLATFORM_PLUGIN_KDEVPLATFORMDECLARATIVEPLUGIN_H
