@@ -57,10 +57,11 @@ void TestCheckerStatus::cleanupTestCase()
 void TestCheckerStatus::testName()
 {
     QString name = QStringLiteral("TESTNAME");
-    QString s = QStringLiteral("Running ") + name;
+    QString s = i18nc("@info:progress", "Running %1", name);
+
     m_status->setCheckerName(name);
 
-    QCOMPARE(m_status->statusName(), i18nc("@info:progress", s.toUtf8().data()));
+    QCOMPARE(m_status->statusName(), s);
 }
 
 bool checkValues(const QList<QVariant> &signal, int min, int max, int value)
