@@ -103,38 +103,6 @@ CMakeFilesCompilationData importCommands(const Path& commandsFile)
     return data;
 }
 
-QVector<Test> importTestSuites(const Path &buildDir)
-{
-    QVector<Test> ret;
-#pragma message("TODO use subdirs instead of this")
-    foreach(const QFileInfo &info, QDir(buildDir.toLocalFile()).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        ret += importTestSuites(Path(buildDir, info.fileName()));
-    }
-
-    QFile file(buildDir.toLocalFile()+"/CTestTestfile.cmake");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return ret;
-    }
-
-    const QRegularExpression rx(QStringLiteral("add_test *\\((.+?) (.*?)\\) *$"));
-    Q_ASSERT(rx.isValid());
-    for (; !file.atEnd();) {
-        QByteArray line = file.readLine();
-        line.chop(1);
-        const auto match = rx.match(QString::fromLocal8Bit(line));
-        if (match.hasMatch()) {
-            Test test;
-            QStringList args = KShell::splitArgs(match.captured(2));
-            test.name = match.captured(1);
-            test.executable = Path(buildDir, args.takeFirst());
-            test.arguments = args;
-            ret += test;
-        }
-    }
-
-    return ret;
-}
-
 ImportData import(const Path& commandsFile, const Path &targetsFilePath, const QString &sourceDir, const KDevelop::Path &buildPath)
 {
     QHash<KDevelop::Path, QVector<CMakeTarget>> cmakeTargets;
@@ -148,7 +116,7 @@ ImportData import(const Path& commandsFile, const Path &targetsFilePath, const Q
     return ImportData {
         importCommands(commandsFile),
         cmakeTargets,
-        importTestSuites(buildPath)
+        CMake::importTestSuites(buildPath)
     };
 }
 

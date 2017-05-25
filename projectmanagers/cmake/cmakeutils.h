@@ -31,8 +31,10 @@ namespace KDevelop
 {
     class ProjectBaseItem;
     class IProject;
+    class Path;
 }
 
+struct Test;
 class ICMakeDocumentation;
 class CMakeCacheModel;
 
@@ -247,8 +249,8 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT QStringList supportedGenerators();
 
     KDEVCMAKECOMMON_EXPORT QString defaultGenerator();
+
+    KDEVCMAKECOMMON_EXPORT QVector<Test> importTestSuites(const KDevelop::Path &buildDir);
 }
 
 #endif
-
-

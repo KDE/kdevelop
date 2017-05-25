@@ -20,7 +20,7 @@
 #ifndef CTESTUTILS_H
 #define CTESTUTILS_H
 
-#include <cmaketypes.h>
+#include "cmakeprojectdata.h"
 
 namespace KDevelop
 {

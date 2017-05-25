@@ -24,8 +24,8 @@
 #include <QSharedPointer>
 #include <QStringList>
 #include <QFileSystemWatcher>
-#include "cmaketypes.h"
 #include <util/path.h>
+#include <QDebug>
 
 class CMakeServer;
 
@@ -60,6 +60,18 @@ struct CMakeTarget
     QString name;
 };
 Q_DECLARE_TYPEINFO(CMakeTarget, Q_MOVABLE_TYPE);
+
+
+struct Test
+{
+    Test() {}
+    QString name;
+    KDevelop::Path executable;
+    QStringList arguments;
+    QHash<QString, QString> properties;
+};
+
+Q_DECLARE_TYPEINFO(Test, Q_MOVABLE_TYPE);
 
 struct CMakeProjectData
 {

@@ -26,7 +26,6 @@
 #include <interfaces/iproject.h>
 #include <language/duchain/topducontext.h>
 #include <parser/cmakelistsparser.h>
-#include <parser/cmaketypes.h>
 #include <util/path.h>
 
 class CMakeTargetItem : public KDevelop::ProjectExecutableTargetItem
