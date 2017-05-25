@@ -53,13 +53,31 @@ class IdentityRuntime : public IRuntime
 };
 
 KDevelop::RuntimeController::RuntimeController(KDevelop::Core* core)
-    : m_runtimesMenu(new QMenu())
+    : m_core(core)
 {
+    const bool haveUI = (core->setupFlags() != Core::NoUi);
+    if (haveUI) {
+        m_runtimesMenu.reset(new QMenu());
+    }
+
     addRuntimes({new IdentityRuntime});
     setCurrentRuntime(m_runtimes.constFirst());
 
+    if (haveUI) {
+        setupActions();
+    }
+}
+
+KDevelop::RuntimeController::~RuntimeController()
+{
+    m_currentRuntime->setEnabled(false);
+    m_currentRuntime = nullptr;
+}
+
+void RuntimeController::setupActions()
+{
     // TODO not multi-window friendly, FIXME
-    KActionCollection* ac = core->uiControllerInternal()->defaultMainWindow()->actionCollection();
+    KActionCollection* ac = m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
     auto action = new QAction(this);
     action->setStatusTip(i18n("Allows to select a runtime"));
@@ -72,12 +90,6 @@ KDevelop::RuntimeController::RuntimeController(KDevelop::Core* core)
     updateActionText(m_currentRuntime);
 
     ac->addAction(QStringLiteral("switch_runtimes"), action);
-}
-
-KDevelop::RuntimeController::~RuntimeController()
-{
-    m_currentRuntime->setEnabled(false);
-    m_currentRuntime = nullptr;
 }
 
 void KDevelop::RuntimeController::initialize()
@@ -115,20 +127,29 @@ void KDevelop::RuntimeController::addRuntimes(KDevelop::IRuntime * runtime)
 {
     if (!runtime->parent())
         runtime->setParent(this);
-    QAction* runtimeAction = new QAction(runtime->name(), m_runtimesMenu.data());
-    runtimeAction->setCheckable(true);
-    connect(runtimeAction, &QAction::triggered, runtime, [this, runtime]() {
-        setCurrentRuntime(runtime);
-    });
-    connect(this, &RuntimeController::currentRuntimeChanged, runtimeAction, [runtimeAction, runtime](IRuntime* currentRuntime) {
-        runtimeAction->setChecked(runtime == currentRuntime);
-    });
 
-    connect(runtime, &QObject::destroyed, this, [this, runtimeAction](QObject* obj) {
-        Q_ASSERT(m_currentRuntime != obj);
-        m_runtimes.removeAll(qobject_cast<KDevelop::IRuntime *>(obj));
-        delete runtimeAction;
-    });
-    m_runtimesMenu->addAction(runtimeAction);
+    if (m_core->setupFlags() != Core::NoUi) {
+        QAction* runtimeAction = new QAction(runtime->name(), m_runtimesMenu.data());
+        runtimeAction->setCheckable(true);
+        connect(runtimeAction, &QAction::triggered, runtime, [this, runtime]() {
+            setCurrentRuntime(runtime);
+        });
+        connect(this, &RuntimeController::currentRuntimeChanged, runtimeAction, [runtimeAction, runtime](IRuntime* currentRuntime) {
+            runtimeAction->setChecked(runtime == currentRuntime);
+        });
+
+        connect(runtime, &QObject::destroyed, this, [this, runtimeAction](QObject* obj) {
+            Q_ASSERT(m_currentRuntime != obj);
+            m_runtimes.removeAll(qobject_cast<KDevelop::IRuntime *>(obj));
+            delete runtimeAction;
+        });
+        m_runtimesMenu->addAction(runtimeAction);
+    } else {
+        connect(runtime, &QObject::destroyed, this, [this](QObject* obj) {
+            Q_ASSERT(m_currentRuntime != obj);
+            m_runtimes.removeAll(qobject_cast<KDevelop::IRuntime *>(obj));
+        });
+    }
+
     m_runtimes << runtime;
 }

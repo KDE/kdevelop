@@ -50,9 +50,13 @@ public:
     void setCurrentRuntime(KDevelop::IRuntime * runtime) override;
 
 private:
-    QScopedPointer<QMenu> const m_runtimesMenu;
+    void setupActions();
+
+private:
+    QScopedPointer<QMenu> m_runtimesMenu;
     QVector<IRuntime*> m_runtimes;
     IRuntime* m_currentRuntime = nullptr;
+    Core* m_core = nullptr;
 };
 
 }
