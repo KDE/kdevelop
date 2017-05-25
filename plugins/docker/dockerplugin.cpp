@@ -29,7 +29,6 @@
 #include <project/projectmodel.h>
 #include <QStandardPaths>
 #include <QAction>
-#include <QProcess>
 #include <QRegularExpression>
 #include <QTemporaryDir>
 #include <QFileDialog>

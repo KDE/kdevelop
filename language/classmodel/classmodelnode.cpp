@@ -21,7 +21,6 @@
  */
 
 #include "classmodelnode.h"
-#include "debug.h"
 
 #include <typeinfo>
 #include <KLocalizedString>
