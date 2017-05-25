@@ -16,6 +16,7 @@ Comment[x-test]=xxA Dockerfile is a text document that contains all the commands
 Category=Docker/Dockerfile
 Language=JSON
 Language[ca]=JSON
+Language[es]=JSON
 Language[nl]=JSON
 Language[pt]=JSON
 Language[sv]=JSON

@@ -16,6 +16,7 @@ Comment[x-test]=xxA file to configure how a project is built by flatpakxx
 Category=Flatpak/Builder Manifest
 Language=JSON
 Language[ca]=JSON
+Language[es]=JSON
 Language[nl]=JSON
 Language[pt]=JSON
 Language[sv]=JSON
