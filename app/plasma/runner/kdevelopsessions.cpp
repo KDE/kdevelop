@@ -56,7 +56,7 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     // listen for changes to the list of kdevelop sessions
     KDirWatch *historyWatch = new KDirWatch(this);
     const QStringList sessiondirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                              QStringLiteral("kdevelop/sessions"));
+                                                              QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory);
     foreach (const QString &dir, sessiondirs) {
         historyWatch->addDir(dir);
     }
