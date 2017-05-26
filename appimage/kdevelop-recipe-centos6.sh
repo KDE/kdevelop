@@ -17,6 +17,8 @@ git_pull_rebase_helper()
     git stash pop || true
 }
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 QTVERSION=5.7.1
 QVERSION_SHORT=5.7
 QTDIR=/usr/local/Qt-${QTVERSION}/
@@ -28,6 +30,7 @@ if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=2.0
 fi
 KF5_VERSION=v5.32.0
+KDE_PLASMA_VERSION=master # need libksysguard master (contains a0e69617442d720c76da5ebe3323e7a977929db4 -- patch which makes plasma dep optional)
 KDE_APPLICATION_VERSION=v16.12.3
 GRANTLEE_VERSION=v5.1.0
 
@@ -52,21 +55,26 @@ fi
 cd  /
 
 # Build AppImageKit
-rm -Rf /AppImageKit
+#rm -Rf /AppImageKit
 if [ ! -d AppImageKit ] ; then
   git clone  --depth 1 https://github.com/probonopd/AppImageKit.git /AppImageKit
 fi
 
 cd /AppImageKit/
-git checkout master
+git checkout stable/v1.0
 git_pull_rebase_helper
-git reset --hard remotes/origin/stable/v1.0
+git reset --hard
 ./build.sh
 cd /
 
 # Use the new compiler
 . /opt/rh/devtoolset-4/enable
 
+# TODO: Use these vars more
+export FAKEROOT=/kdevelop.appdir
+export PREFIX=/kdevelop.appdir/usr/
+export SRC=$HOME/src/
+export BUILD=$HOME/build
 export CMAKE_PREFIX_PATH=$QTDIR:/kdevelop.appdir/share/llvm/
 
 # if the library path doesn't point to our usr/lib, linking will be broken and we won't find all deps either
@@ -79,24 +87,22 @@ export LD_LIBRARY_PATH=/usr/lib64/:/usr/lib:/kdevelop.appdir/usr/lib:$QTDIR/lib/
 ln -sf /usr/share/pkgconfig /usr/lib/pkgconfig
 
 # Prepare the install location
-rm -rf /kdevelop.appdir/ || true
-mkdir -p /kdevelop.appdir/usr
+if [ -z "$SKIP_PRUNE" ]; then
+    rm -rf /kdevelop.appdir/ || true
+    mkdir -p /kdevelop.appdir/usr
 
-# refresh ldconfig cache
-ldconfig
+    # refresh ldconfig cache
+    ldconfig
 
-# make sure lib and lib64 are the same thing
-mkdir -p /kdevelop.appdir/usr/lib
-cd  /kdevelop.appdir/usr
-ln -s lib lib64
+    # make sure lib and lib64 are the same thing
+    mkdir -p /kdevelop.appdir/usr/lib
+    cd  /kdevelop.appdir/usr
+    ln -s lib lib64
+fi
 
 # start building the deps
 function build_project
 { (
-    SRC=$HOME/src/
-    BUILD=$HOME/build
-    PREFIX=/kdevelop.appdir/usr/
-
     PROJECT=$1
     VERSION=$2
 
@@ -160,13 +166,13 @@ EOF
     cd $BUILD/$PROJECT
 
     # cmake it
-    cmake3 $SRC/$PROJECT -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $3
+    cmake3 $SRC/$PROJECT -G Ninja -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $3
 
     # make
-    make -j$(nproc)
+    ninja
 
     # install
-    make install
+    ninja install
 ) }
 
 function build_framework
@@ -174,7 +180,10 @@ function build_framework
     build_project $1 $KF5_VERSION $2
 ) }
 
+# KDE Frameworks
+if [ -z "$SKIP_FRAMEWORKS" ]; then
 build_framework extra-cmake-modules
+
 build_framework kconfig
 build_framework kguiaddons
 build_framework ki18n
@@ -215,13 +224,22 @@ build_framework kdoctools
 build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
 build_framework kpty
 build_framework kinit 
+fi
 
+# KDE Plasma
+build_project libksysguard $KDE_PLASMA_VERSION
+build_project kdecoration $KDE_PLASMA_VERSION # for breeze
+build_project breeze $KDE_PLASMA_VERSION
+
+# KDE Applications
 build_project libkomparediff2 $KDE_APPLICATION_VERSION
 build_project kate $KDE_APPLICATION_VERSION # for snippet plugin, see T3826
 build_project konsole $KDE_APPLICATION_VERSION
 
+# Extra
 (CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git build_project grantlee $GRANTLEE_VERSION)
 
+# KDevelop
 build_project kdevelop-pg-qt $KDEV_PG_QT_VERSION
 build_project kdevplatform $KDEVELOP_VERSION
 build_project kdevelop $KDEVELOP_VERSION
@@ -230,6 +248,10 @@ build_project kdev-php $KDEVELOP_VERSION
 # Build kdev-python
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
 build_project kdev-python $KDEVELOP_VERSION
+
+# Install some colorschemes
+cd $SRC
+$SCRIPT_DIR/install_colorschemes.sh
 
 cd /kdevelop.appdir
 
