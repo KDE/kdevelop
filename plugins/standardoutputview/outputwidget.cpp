@@ -159,7 +159,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(filterInput);
         filterAction->setText(filterInput->placeholderText());
-        connect(filterAction, &QAction::triggered, this, [this]() {m_filterInput->setFocus();});
+        connect(filterAction, &QAction::triggered, this, [this]() {filterInput->setFocus();});
         addAction(filterAction);
 
         connect(filterInput, &QLineEdit::textEdited,
