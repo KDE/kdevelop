@@ -114,16 +114,14 @@ QtHelpDocumentation::~QtHelpDocumentation()
 
 QString QtHelpDocumentation::description() const
 {
-    QUrl url(m_current.value());
-    QByteArray data = m_provider->engine()->fileData(url);
-
+    const QUrl url(m_current.value());
     //Extract a short description from the html data
-    const QString dataString = QString::fromLatin1(data); ///@todo encoding
+    const QString dataString = QString::fromLatin1(m_provider->engine()->fileData(url)); ///@todo encoding
 
     const QString fragment = url.fragment();
     const QString p = QStringLiteral("((\\\")|(\\\'))");
-    const QString optionalSpace = QStringLiteral("( )*");
-    const QString exp = QString("< a name = " + p + fragment + p + " > < / a >").replace(' ', optionalSpace);
+    const QString optionalSpace = QStringLiteral(" *");
+    const QString exp = QString(QStringLiteral("< a name = ") + p + fragment + p + QStringLiteral(" > < / a >")).replace(' ', optionalSpace);
 
     const QRegularExpression findFragment(exp);
     QRegularExpressionMatch findFragmentMatch;
@@ -147,7 +145,7 @@ QString QtHelpDocumentation::description() const
     }
 
     if(pos != -1) {
-        const QString exp = QString("< a name = " + p + "((\\S)*)" + p + " > < / a >").replace(' ', optionalSpace);
+        const QString exp = QString(QStringLiteral("< a name = ") + p + QStringLiteral("((\\S)*)") + p + QStringLiteral(" > < / a >")).replace(' ', optionalSpace);
         const QRegularExpression nextFragmentExpression(exp);
         int endPos = dataString.indexOf(nextFragmentExpression, pos+(fragment.size() ? findFragmentMatch.capturedLength() : 0));
         if(endPos == -1) {
@@ -213,7 +211,7 @@ QString QtHelpDocumentation::description() const
 
         {
             //Remove links, because they won't work
-            const QString link = QString("< a href = " + p + ".*?" + p).replace(' ', optionalSpace);
+            const QString link = QString(QStringLiteral("< a href = ") + p + QStringLiteral(".*?") + p).replace(' ', optionalSpace);
             const QRegularExpression exp(link, QRegularExpression::CaseInsensitiveOption);
             thisFragment.replace(exp, QStringLiteral("<a "));
         }
@@ -226,7 +224,6 @@ QString QtHelpDocumentation::description() const
 
 void QtHelpDocumentation::setUserStyleSheet(StandardDocumentationView* view, const QUrl& url)
 {
-
     QTemporaryFile* file = new QTemporaryFile(view);
     file->open();
 
