@@ -421,25 +421,23 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory* dir, const QString&
 
     bool ret = true;
 
-    foreach (const QString& entry, entries)
-    {
-        if (skipList.contains(entry)) {
+    for (const auto& entryName : entries) {
+        if (skipList.contains(entryName)) {
             continue;
         }
 
-        if (dir->entry(entry)->isDirectory())
-        {
-            const KArchiveDirectory *file = (KArchiveDirectory *)dir->entry(entry);
-            QString newdest = dest + '/' + KMacroExpander::expandMacros(file->name(), m_variables);
+        const auto entry = dir->entry(entryName);
+        if (entry->isDirectory()) {
+            const KArchiveDirectory* subdir = static_cast<const KArchiveDirectory*>(entry);
+            QString newdest = dest + '/' + KMacroExpander::expandMacros(subdir->name(), m_variables);
             if( !QFileInfo::exists( newdest ) )
             {
                 QDir::root().mkdir( newdest  );
             }
-            ret |= unpackArchive(file, newdest);
+            ret |= unpackArchive(subdir, newdest);
         }
-        else if (dir->entry(entry)->isFile())
-        {
-            const KArchiveFile *file = (KArchiveFile *)dir->entry(entry);
+        else if (entry->isFile()) {
+            const KArchiveFile* file = static_cast<const KArchiveFile*>(entry);
             file->copyTo(tdir.path());
             QString destName = dest + '/' + file->name();
             if (!copyFileAndExpandMacros(QDir::cleanPath(tdir.path()+'/'+file->name()),
