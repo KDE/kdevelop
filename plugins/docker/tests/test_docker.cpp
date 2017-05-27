@@ -41,10 +41,13 @@ class DockerTest: public QObject
 public:
 
     DockerTest() {
-        QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.projectmanagers.cmake.debug=true\n"));
+        QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevplatform.plugins.docker=true\n"));
 
         auto ret = QProcess::execute("docker", {"pull", s_testedImage});
-        Q_ASSERT(ret == 0);
+        if (ret != 0) {
+            QSKIP("Couldn't successfully call docker");
+            return;
+        }
 
         AutoTestShell::init({QStringLiteral("kdevdocker")});
         TestCore::initialize();
