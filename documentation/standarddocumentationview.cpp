@@ -230,18 +230,26 @@ void KDevelop::StandardDocumentationView::setNetworkAccessManager(QNetworkAccess
 class PageInterceptor : public QWebEnginePage
 {
 public:
-    PageInterceptor(KDevelop::StandardDocumentationView* parent) : QWebEnginePage(parent), m_view(parent) {}
+    PageInterceptor(bool delegate, KDevelop::StandardDocumentationView* parent)
+        : QWebEnginePage(parent), m_view(parent), m_delegate(delegate)
+    {
+    }
 
     bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool /*isMainFrame*/) override {
         qCDebug(DOCUMENTATION) << "navigating to..." << url << type;
+
         if (type == NavigationTypeLinkClicked) {
-            m_view->load(url);
+            if (m_delegate)
+                m_view->linkClicked(url);
+            else
+                m_view->load(url);
             return false;
         }
         return true;
     }
 
-    KDevelop::StandardDocumentationView* m_view;
+    KDevelop::StandardDocumentationView* const m_view;
+    const bool m_delegate;
 };
 #endif
 
@@ -250,10 +258,7 @@ void KDevelop::StandardDocumentationView::setDelegateLinks(bool delegate)
 #ifdef USE_QTWEBKIT
     d->m_view->page()->setLinkDelegationPolicy(delegate ? QWebPage::DelegateAllLinks : QWebPage::DontDelegateLinks);
 #else
-    if (delegate)
-        d->m_view->setPage(new PageInterceptor(this));
-    else
-        d->m_view->setPage(new QWebEnginePage(this));
+    d->m_view->setPage(new PageInterceptor(delegate, this));
 #endif
 }
 
