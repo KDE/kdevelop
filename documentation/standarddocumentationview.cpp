@@ -171,7 +171,7 @@ void KDevelop::StandardDocumentationView::setOverrideCss(const QUrl& url)
 #else
     d->m_view->page()->runJavaScript(
         "var link = document.createElement( 'link' );"
-        "link.href = " + url.toString().toUtf8() + ";"
+        "link.href = '" + url.toString().toUtf8() + "';"
         "link.type = 'text/css';"
         "link.rel = 'stylesheet';"
         "link.media = 'screen,print';"
