@@ -158,6 +158,8 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         filterInput->setToolTip(i18n("Enter a wild card string to filter the output view"));
         filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(filterInput);
+        filterAction->setText(filterInput->placeholderText());
+        connect(filterAction, &QAction::triggered, this, [this]() {m_filterInput->setFocus();});
         addAction(filterAction);
 
         connect(filterInput, &QLineEdit::textEdited,
