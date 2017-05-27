@@ -60,7 +60,7 @@ KDevelop::RuntimeController::RuntimeController(KDevelop::Core* core)
         m_runtimesMenu.reset(new QMenu());
     }
 
-    addRuntimes({new IdentityRuntime});
+    addRuntimes(new IdentityRuntime);
     setCurrentRuntime(m_runtimes.constFirst());
 
     if (haveUI) {
