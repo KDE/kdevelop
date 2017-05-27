@@ -133,7 +133,7 @@ void ProjectModelItemDelegate::drawStyledBackground(QPainter* painter, const QSt
 void ProjectModelItemDelegate::drawDisplay(QPainter* painter, const QStyleOptionViewItem& option,
                                            const QRect& rect, const QString& text) const
 {
-    QPalette::ColorGroup cg = option.state & QStyle::State_Enabled
+    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled)
                             ? QPalette::Normal : QPalette::Disabled;
     if (option.state & QStyle::State_Editing) {
         painter->save();

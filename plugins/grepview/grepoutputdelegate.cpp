@@ -69,9 +69,9 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
     QTextDocument doc;
     QTextCursor cur(&doc);
     
-    QPalette::ColorGroup cg = options.state & QStyle::State_Enabled
+    QPalette::ColorGroup cg = (options.state & QStyle::State_Enabled)
                                 ? QPalette::Normal : QPalette::Disabled;
-    QPalette::ColorRole cr  = options.state & QStyle::State_Selected
+    QPalette::ColorRole cr  = (options.state & QStyle::State_Selected)
                                 ? QPalette::HighlightedText : QPalette::Text;
     QTextCharFormat fmt = cur.charFormat();
     fmt.setFont(options.font);
