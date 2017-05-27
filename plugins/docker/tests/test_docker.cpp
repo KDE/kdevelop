@@ -25,6 +25,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iruntime.h>
+#include <project/projectmodel.h>
 
 #include <QJsonObject>
 #include <QLoggingCategory>
@@ -96,8 +97,10 @@ private Q_SLOTS:
         auto project = ICore::self()->projectController()->projects().first();
         QVERIFY(project);
 
-        const Path file = project->projectFile();
-        QCOMPARE(file, rt->pathInRuntime(rt->pathInHost(file)));
+        const Path file = project->projectItem()->folder()->fileList().first()->path();
+        const Path fileRuntime = rt->pathInRuntime(file);
+        QCOMPARE(fileRuntime, Path("/src/test/testfile.sh"));
+        QCOMPARE(rt->pathInHost(fileRuntime), file);
         QCOMPARE(project->path(), rt->pathInHost(rt->pathInRuntime(project->path())));
     }
 
@@ -106,6 +109,22 @@ private Q_SLOTS:
         QVERIFY(rt);
 
         QCOMPARE(rt->getenv("PATH"), QByteArray("/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"));
+    }
+
+    void runProcess() {
+        auto rt = ICore::self()->runtimeController()->currentRuntime();
+        QVERIFY(rt);
+        auto project = ICore::self()->projectController()->projects().first();
+        QVERIFY(project);
+
+        const Path projectPath = rt->pathInRuntime(project->path());
+        QProcess process;
+        process.setProgram("ls");
+        process.setArguments({projectPath.toLocalFile()});
+        rt->startProcess(&process);
+        QVERIFY(process.waitForFinished());
+        QCOMPARE(process.exitCode(), 0);
+        QCOMPARE(process.readAll(), QByteArray("test.kdev4\ntestfile.sh\n"));
     }
 
     void cleanupTestCase() {

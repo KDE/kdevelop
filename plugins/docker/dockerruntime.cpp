@@ -129,12 +129,12 @@ static QStringList projectVolumes()
     for (IProject* project: ICore::self()->projectController()->projects()) {
         const Path path = project->path();
         if (path.isLocalFile()) {
-            ret << "--volume" << QStringLiteral("%1:%2").arg(path.toLocalFile(), dir + path.lastPathSegment());
+            ret << "--volume" << QStringLiteral("%1:%2").arg(path.toLocalFile(), dir + project->name());
         }
 
         const auto ibsm = project->buildSystemManager();
         if (ibsm) {
-            ret << "--volume" << ibsm->buildDirectory(project->projectItem()).toLocalFile() + QLatin1Char(':') +  buildDir + path.lastPathSegment();
+            ret << "--volume" << ibsm->buildDirectory(project->projectItem()).toLocalFile() + QLatin1Char(':') +  buildDir + project->name();
         }
     }
     return ret;
