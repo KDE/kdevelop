@@ -27,6 +27,8 @@
 #include <QVariantList>
 #include <QHelpEngine>
 
+class HelpNetworkAccessManager;
+
 class QtHelpProviderAbstract : public QObject, public KDevelop::IDocumentationProvider
 {
     Q_OBJECT
@@ -45,12 +47,15 @@ public:
     bool isValid() const;
 
     QHelpEngine* engine() { return &m_engine; }
+
+    HelpNetworkAccessManager* networkAccess() const;
 public slots:
     void jumpedTo(const QUrl& newUrl) const;
 signals:
     void addHistory(const KDevelop::IDocumentation::Ptr& doc) const override;
 protected:
     QHelpEngine m_engine;
+    HelpNetworkAccessManager* const m_nam;
 };
 
 #endif // QTHELPPROVIDERABSTRACT_H

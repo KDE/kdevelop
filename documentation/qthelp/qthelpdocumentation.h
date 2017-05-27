@@ -71,7 +71,6 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 
         KDevelop::StandardDocumentationView* lastView;
         QPointer<QTemporaryFile> m_lastStyleSheet;
-        QScopedPointer<QNetworkAccessManager> m_sharedQNAM;
 };
 
 class HomeDocumentation : public KDevelop::IDocumentation

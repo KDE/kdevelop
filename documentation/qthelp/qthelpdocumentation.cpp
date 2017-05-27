@@ -250,11 +250,10 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
     } else {
         StandardDocumentationView* view = new StandardDocumentationView(findWidget, parent);
         view->initZoom(m_provider->name());
-        if (!m_sharedQNAM) {
-            m_sharedQNAM.reset(new HelpNetworkAccessManager(m_provider->engine()));
-        }
-        view->setNetworkAccessManager(m_sharedQNAM.data());
+        view->setDelegateLinks(true);
+        view->setNetworkAccessManager(m_provider->networkAccess());
         view->setContextMenuPolicy(Qt::CustomContextMenu);
+        QObject::connect(view, &StandardDocumentationView::linkClicked, this, &QtHelpDocumentation::jumpedTo);
         connect(view, &StandardDocumentationView::customContextMenuRequested, this, &QtHelpDocumentation::viewContextMenuRequested);
 
         setUserStyleSheet(view, m_current.value());
