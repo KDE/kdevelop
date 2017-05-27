@@ -168,6 +168,11 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
         command.replace( QLatin1String("%n"), KShell::quoteArg( info.fileName() ) );
         command.replace( QLatin1String("%d"), KShell::quoteArg( info.path() ) );
 
+        if ( view->document() ) {
+          command.replace( QLatin1String("%c"), KShell::quoteArg( QString::number(  view->cursorPosition().column() ) ) );
+          command.replace( QLatin1String("%l"), KShell::quoteArg( QString::number(  view->cursorPosition().line() ) ) );
+        }
+
         if ( view->document() && view->selection() ) {
           command.replace( QLatin1String("%s"), KShell::quoteArg( view->selectionText() ) );
         }
