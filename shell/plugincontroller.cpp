@@ -382,10 +382,9 @@ void PluginController::initialize()
     {
         const QString key = it.key();
         if (key.endsWith(KEY_Suffix_Enabled())) {
-            bool enabled = false;
             const QString pluginid = key.left(key.length() - 7);
             const bool defValue = pluginMap.value( pluginid, false );
-            enabled = grp.readEntry(key, defValue);
+            const bool enabled = grp.readEntry(key, defValue);
             pluginMap.insert( pluginid, enabled );
         }
     }

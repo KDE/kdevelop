@@ -437,10 +437,9 @@ void SessionController::loadDefaultSession( const QString& session )
 
     // Iteratively try to load the session, asking user what to do in case of failure
     // If showForceOpenDialog() returns empty string, stop trying
-    Session* s = nullptr;
     do
     {
-        s = this->session( load );
+        Session* s = this->session(load);
         if( !s ) {
             s = createSession( load );
         }

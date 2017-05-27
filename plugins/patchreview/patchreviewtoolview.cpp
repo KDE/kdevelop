@@ -177,12 +177,11 @@ void PatchReviewToolView::fillEditFromPatch() {
     }
 
     bool showTests = false;
-    IProject* project = nullptr;
     QMap<QUrl, VcsStatusInfo::State> files = ipatch->additionalSelectableFiles();
     QMap<QUrl, VcsStatusInfo::State>::const_iterator it = files.constBegin();
 
     for (; it != files.constEnd(); ++it) {
-        project = ICore::self()->projectController()->findProjectForUrl(it.key());
+        auto project = ICore::self()->projectController()->findProjectForUrl(it.key());
         if (project && !ICore::self()->testController()->testSuitesForProject(project).isEmpty()) {
             showTests = true;
             break;

@@ -320,10 +320,9 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         return false;
 
     //not a mouse button that should activate the widget? - return
-    QMouseEvent *mev = nullptr;
     if (ev->type() == QEvent::MouseButtonPress || ev->type() == QEvent::MouseButtonDblClick)
     {
-        mev = static_cast<QMouseEvent*>(ev);
+        QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
         int activationButtonMask = Qt::LeftButton | Qt::MidButton | Qt::RightButton;
         if ((mev->button() & activationButtonMask) == 0)
             return false;
