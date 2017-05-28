@@ -20,101 +20,112 @@
 
 #include <QUrl>
 #include <QString>
-#include <QFileInfo>
-
-#define PROJECTS_SOURCE_DIR
 
 namespace KDevelop
 {
 
-static QString projectPath()
-{
-    /// Use existing directory with one file
-    return QFileInfo(QStringLiteral(__FILE__)).absolutePath() + QLatin1String("/onefileproject");
+enum TestPathType {
+    UnixFilePathNoSpaces,
+    UnixFilePathWithSpaces
+};
+
 }
 
-QString buildCppCheckErrorLine()
+Q_DECLARE_METATYPE( KDevelop::TestPathType)
+
+namespace KDevelop
+{
+
+// TODO: extend with windows path and other potential path patterns (network shares?)
+static QString projectPath(TestPathType pathType = UnixFilePathNoSpaces)
+{
+    return
+        (pathType == UnixFilePathNoSpaces) ? QStringLiteral("/some/path/to/a/project") :
+        /* else, UnixFilePathWithSpaces) */  QStringLiteral("/some/path with spaces/to/a/project");
+}
+
+QString buildCppCheckErrorLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
     /// Test CPP check output
     QString outputline(QStringLiteral("["));
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("main.cpp:26]: (error) Memory leak: str");
     return outputline;
 }
 
-QString buildKrazyErrorLine()
+QString buildKrazyErrorLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
     /// Test krazy2 output
     QString outputline(QStringLiteral("\t"));
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("main.cpp: line#22 (1)");
     return outputline;
 }
 
-QString buildKrazyErrorLine2()
+QString buildKrazyErrorLine2(TestPathType pathType = UnixFilePathNoSpaces)
 {
     /// Test krazy2 output
     QString outputline(QStringLiteral("\t"));
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("main.cpp: missing tags: email address line#2  (1)");
     return outputline;
 }
 
-QString buildKrazyErrorLine3()
+QString buildKrazyErrorLine3(TestPathType pathType = UnixFilePathNoSpaces)
 {
     /// Test krazy2 output
     QString outputline(QStringLiteral("\t"));
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("main.cpp: non-const ref iterator line#451 (1)");
     return outputline;
 }
 
-QString buildKrazyErrorLineNoLineInfo()
+QString buildKrazyErrorLineNoLineInfo(TestPathType pathType = UnixFilePathNoSpaces)
 {
     /// Test krazy2 output
     QString outputline(QStringLiteral("\t"));
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("main.cpp: missing license");
     return outputline;
 }
 
-QString buildCompilerLine()
+QString buildCompilerLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
     /// Test with compiler output
     QString outputline;
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append(">make");
     return outputline;
 }
 
-QString buildCompilerErrorLine()
+QString buildCompilerErrorLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
     QString outputline;
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("main.cpp:5:5: error: ‘RingBuffer’ was not declared in this scope");
     return outputline;
 }
 
-QString buildCompilerInformationLine()
+QString buildCompilerInformationLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
     QString outputline;
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("main.cpp:6:14: instantiated from here");
     return outputline;
 }
 
-QString buildInfileIncludedFromFirstLine()
+QString buildInfileIncludedFromFirstLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
     QString outputline(QStringLiteral("In file included from "));
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("PriorityFactory.h:52:0,");
     return outputline;
 }
 
-QString buildInfileIncludedFromSecondLine()
+QString buildInfileIncludedFromSecondLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
     QString outputline(QStringLiteral("    from "));
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("PatchBasedInpainting.hxx:29,");
     return outputline;
 }
@@ -124,24 +135,24 @@ QString buildCompilerActionLine()
     return QStringLiteral("linking testCustombuild (g++)");
 }
 
-QString buildCmakeConfigureMultiLine()
+QString buildCmakeConfigureMultiLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
     QString outputline;
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("CMakeLists.txt:10:");
     return outputline;
 }
 
 
-QString buildLinkerErrorLine()
+QString buildLinkerErrorLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
-    return QStringLiteral("/path/to/file/Buffer.cpp:66: undefined reference to `Buffer::does_not_exist()'");
+    return projectPath(pathType) + QLatin1String("Buffer.cpp:66: undefined reference to `Buffer::does_not_exist()'");
 }
 
-QString buildPythonErrorLine()
+QString buildPythonErrorLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
     QString outputline(QStringLiteral("File \""));
-    outputline.append(projectPath());
+    outputline.append(projectPath(pathType));
     outputline.append("pythonExample.py\", line 10");
     return outputline;
 }

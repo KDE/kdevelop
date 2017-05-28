@@ -36,12 +36,14 @@ QStringList generateLines()
     const int numLines = 10000;
     QStringList outputlines;
     do {
-        outputlines << buildCompilerErrorLine();
-        outputlines << buildCompilerLine();
         outputlines << buildCompilerActionLine();
-        outputlines << buildCppCheckErrorLine();
         outputlines << buildCppCheckInformationLine();
-        outputlines << buildPythonErrorLine();
+        for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+            outputlines << buildCompilerErrorLine(pathType);
+            outputlines << buildCompilerLine(pathType);
+            outputlines << buildCppCheckErrorLine(pathType);
+            outputlines << buildPythonErrorLine(pathType);
+        }
     }
     while(outputlines.size() < numLines ); // gives us numLines (-ish)
     return outputlines;

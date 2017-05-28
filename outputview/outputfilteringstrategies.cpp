@@ -264,15 +264,15 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         // GCC
         ErrorFormat( QStringLiteral("^([^:\\t]+):([0-9]+):([^0-9]+)"), 1, 2, 3 ),
         // GCC
-        ErrorFormat( QStringLiteral("^(In file included from |[ ]+from )([^: \\t]+):([0-9]+)(:|,)(|[0-9]+)"), 2, 3, 5 ),
+        ErrorFormat( QStringLiteral("^(In file included from |[ ]+from )([^:\\t]+):([0-9]+)(:|,)(|[0-9]+)"), 2, 3, 5 ),
         // ICC
-        ErrorFormat( QStringLiteral("^([^: \\t]+)\\(([0-9]+)\\):([^0-9]+)"), 1, 2, 3, QStringLiteral("intel") ),
+        ErrorFormat( QStringLiteral("^([^:\\t]+)\\(([0-9]+)\\):([^0-9]+)"), 1, 2, 3, QStringLiteral("intel") ),
         //libtool link
         ErrorFormat( QStringLiteral("^(libtool):( link):( warning): "), 0, 0, 0 ),
         // make
         ErrorFormat( QStringLiteral("No rule to make target"), 0, 0, 0 ),
         // cmake
-        ErrorFormat( QStringLiteral("^([^: \\t]+):([0-9]+):"), 1, 2, 0, QStringLiteral("cmake") ),
+        ErrorFormat( QStringLiteral("^([^:\\t]+):([0-9]+):"), 1, 2, 0, QStringLiteral("cmake") ),
         // cmake
         ErrorFormat( QStringLiteral("CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)"), 4, 5, 1, QStringLiteral("cmake") ),
         // cmake/automoc
@@ -290,7 +290,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         // GFortran
         ErrorFormat( QStringLiteral("^(.*):([0-9]+)\\.([0-9]+):(.*)"), 1, 2, 4, QStringLiteral("gfortran"), 3 ),
         // Jade
-        ErrorFormat( QStringLiteral("^[a-zA-Z]+:([^: \\t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)"), 1, 2, 3 ),
+        ErrorFormat( QStringLiteral("^[a-zA-Z]+:([^:\\t]+):([0-9]+):[0-9]+:[a-zA-Z]:(.*)"), 1, 2, 3 ),
         // ifort
         ErrorFormat( QStringLiteral("^fortcom: (.*): (.*), line ([0-9]+):(.*)"), 2, 3, 1, QStringLiteral("intel") ),
         // PGI

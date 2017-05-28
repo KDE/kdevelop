@@ -51,6 +51,14 @@ inline char* toString(const FilteredItem::FilteredOutputItemType& type)
     return qstrdup("unknown");
 }
 
+inline QTestData& newRowForPathType(const char *dataTag, TestPathType pathType)
+{
+    if (pathType == UnixFilePathWithSpaces) {
+        return QTest::newRow(QString(QLatin1String(dataTag)+QLatin1String("-ws")).toUtf8().constData());
+    }
+    return QTest::newRow(dataTag);
+}
+
 }
 
 void TestFilteringStrategy::testNoFilterStrategy_data()
@@ -60,18 +68,22 @@ void TestFilteringStrategy::testNoFilterStrategy_data()
 
     QTest::newRow("cppcheck-info-line")
     << buildCppCheckInformationLine() << FilteredItem::InvalidItem;
-    QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-line")
-    << buildCompilerLine() << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << FilteredItem::InvalidItem;
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("cppcheck-error-line", pathType)
+        << buildCppCheckErrorLine(pathType) << FilteredItem::InvalidItem;
+        QTest::newRowForPathType("compiler-line", pathType)
+        << buildCompilerLine(pathType) << FilteredItem::InvalidItem;
+        QTest::newRowForPathType("compiler-error-line", pathType)
+        << buildCompilerErrorLine(pathType) << FilteredItem::InvalidItem;
+    }
     QTest::newRow("compiler-action-line")
     << buildCompilerActionLine() << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-information-line")
-    << buildCompilerInformationLine() << FilteredItem::InvalidItem;
-    QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << FilteredItem::InvalidItem;
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("compiler-information-line", pathType)
+        << buildCompilerInformationLine(pathType) << FilteredItem::InvalidItem;
+        QTest::newRowForPathType("python-error-line", pathType)
+        << buildPythonErrorLine(pathType) << FilteredItem::InvalidItem;
+    }
 }
 
 void TestFilteringStrategy::testNoFilterStrategy()
@@ -90,41 +102,48 @@ void TestFilteringStrategy::testCompilerFilterStrategy_data()
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedAction");
+    QTest::addColumn<TestPathType>("pathType");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-line")
-    << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-information-line")
-    << buildCompilerInformationLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-information-line2")
-    << buildInfileIncludedFromFirstLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-information-line3")
-    << buildInfileIncludedFromSecondLine() << FilteredItem::InformationItem << FilteredItem::InvalidItem;
+    << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("cppcheck-error-line", pathType)
+        << buildCppCheckErrorLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("compiler-line", pathType)
+        << buildCompilerLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("compiler-error-line", pathType)
+        << buildCompilerErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("compiler-information-line", pathType)
+        << buildCompilerInformationLine(pathType) << FilteredItem::InformationItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("compiler-information-line2", pathType)
+        << buildInfileIncludedFromFirstLine(pathType) << FilteredItem::InformationItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("compiler-information-line3", pathType)
+        << buildInfileIncludedFromSecondLine(pathType) << FilteredItem::InformationItem << FilteredItem::InvalidItem << pathType;
+    }
     QTest::newRow("cmake-error-line1")
-    << "CMake Error at CMakeLists.txt:2 (cmake_minimum_required):" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    << "CMake Error at CMakeLists.txt:2 (cmake_minimum_required):" << FilteredItem::ErrorItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
     QTest::newRow("cmake-error-multiline1")
-    << "CMake Error: Error in cmake code at" << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("cmake-error-multiline2")
-    << buildCmakeConfigureMultiLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    << "CMake Error: Error in cmake code at" << FilteredItem::InvalidItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("cmake-error-multiline2", pathType)
+        << buildCmakeConfigureMultiLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+    }
     QTest::newRow("cmake-warning-line")
-    << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem;
+    << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
     QTest::newRow("cmake-automoc-error")
-    << "AUTOMOC: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    << "AUTOMOC: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
     QTest::newRow("cmake-automoc4-error")
-    << "automoc4: The file \"/foo/bar.cpp\" includes the moc file \"bar1.moc\"" << FilteredItem::InformationItem << FilteredItem::InvalidItem;
+    << "automoc4: The file \"/foo/bar.cpp\" includes the moc file \"bar1.moc\"" << FilteredItem::InformationItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
     QTest::newRow("cmake-autogen-error")
-    << "AUTOGEN: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    << "AUTOGEN: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
     QTest::newRow("linker-action-line")
-    << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem;
-    QTest::newRow("linker-error-line")
-    << buildLinkerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
-    QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
+    << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem << UnixFilePathNoSpaces;
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("linker-error-line", pathType)
+        << buildLinkerErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("python-error-line", pathType)
+        << buildPythonErrorLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem << pathType;
+    }
 }
 
 void TestFilteringStrategy::testCompilerFilterStrategy()
@@ -132,7 +151,9 @@ void TestFilteringStrategy::testCompilerFilterStrategy()
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
-    QUrl projecturl = QUrl::fromLocalFile( projectPath() );
+    QFETCH(TestPathType, pathType);
+
+    QUrl projecturl = QUrl::fromLocalFile( projectPath(pathType) );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type, expectedError);
@@ -181,16 +202,20 @@ void TestFilteringStrategy::testScriptErrorFilterStrategy_data()
 
     QTest::newRow("cppcheck-info-line")
     << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-line")
-    << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("cppcheck-error-line", pathType)
+        << buildCppCheckErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+        QTest::newRowForPathType("compiler-line", pathType)
+        << buildCompilerLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
+        QTest::newRowForPathType("compiler-error-line", pathType)
+        << buildCompilerErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
+    }
     QTest::newRow("compiler-action-line")
     << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("python-error-line", pathType)
+        << buildPythonErrorLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
+    }
 }
 
 void TestFilteringStrategy::testScriptErrorFilterStrategy()
@@ -302,37 +327,44 @@ void TestFilteringStrategy::testStaticAnalysisFilterStrategy_data()
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedError");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expectedAction");
+    QTest::addColumn<TestPathType>("pathType");
 
     QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("cppcheck-error-line")
-    << buildCppCheckErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
-    QTest::newRow("krazy2-error-line")
-    << buildKrazyErrorLine() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
-    QTest::newRow("krazy2-error-line-two-colons")
-    << buildKrazyErrorLine2() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
-    QTest::newRow("krazy2-error-line-error-description")
-    << buildKrazyErrorLine3() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
-    QTest::newRow("krazy2-error-line-wo-line-info")
-    << buildKrazyErrorLineNoLineInfo() << FilteredItem::ErrorItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-line")
-    << buildCompilerLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("compiler-error-line")
-    << buildCompilerErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
+    << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("cppcheck-error-line", pathType)
+        << buildCppCheckErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;;
+        QTest::newRowForPathType("krazy2-error-line", pathType)
+        << buildKrazyErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("krazy2-error-line-two-colons", pathType)
+        << buildKrazyErrorLine2(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("krazy2-error-line-error-description", pathType)
+        << buildKrazyErrorLine3(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("krazy2-error-line-wo-line-info", pathType)
+        << buildKrazyErrorLineNoLineInfo(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("compiler-line", pathType)
+        << buildCompilerLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("compiler-error-line", pathType)
+        << buildCompilerErrorLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem << pathType;
+    }
     QTest::newRow("compiler-action-line")
-    << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
-    QTest::newRow("python-error-line")
-    << buildPythonErrorLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem;
+    << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("python-error-line", pathType)
+        << buildPythonErrorLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem << pathType;
+    }
 }
 
 void TestFilteringStrategy::testStaticAnalysisFilterStrategy()
 {
-    // Test that url's are extracted correctly as well
-    QString referencePath = projectPath() + "main.cpp";
-
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
+    QFETCH(TestPathType, pathType);
+
+    // Test that url's are extracted correctly as well
+    QString referencePath = projectPath(pathType) + "main.cpp";
+
     StaticAnalysisFilterStrategy testee;
     FilteredItem item1 = testee.errorInLine(line);
     QString extractedPath = item1.url.toLocalFile();
@@ -346,32 +378,38 @@ void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction_data()
 {
     QTest::addColumn<QString>("line");
     QTest::addColumn<QString>("expectedLastDir");
-    QString basepath = projectPath();
+    QTest::addColumn<TestPathType>("pathType");
 
-    QTest::newRow("cmake-line1")
-    << "[ 25%] Building CXX object path/to/one/CMakeFiles/file.o" << QString( basepath + "/path/to/one" );
-    QTest::newRow("cmake-line2")
-    << "[ 26%] Building CXX object path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two");
-    QTest::newRow("cmake-line3")
-    << "[ 26%] Building CXX object path/to/three/CMakeFiles/file.o" << QString( basepath + "/path/to/three");
-    QTest::newRow("cmake-line4")
-    << "[ 26%] Building CXX object path/to/four/CMakeFiles/file.o" << QString( basepath + "/path/to/four");
-    QTest::newRow("cmake-line5")
-    << "[ 26%] Building CXX object path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two");
-    QTest::newRow("cd-line6")
-    << QString("make[4]: Entering directory '" + basepath + "/path/to/one/'") << QString( basepath + "/path/to/one");
-    QTest::newRow("waf-cd")
-    << QString("Waf: Entering directory `" + basepath + "/path/to/two/'") << QString( basepath + "/path/to/two");
-    QTest::newRow("cmake-line7")
-    << QStringLiteral("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath);
+    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        const QString basepath = projectPath(pathType);
+
+        QTest::newRowForPathType("cmake-line1", pathType)
+        << "[ 25%] Building CXX object path/to/one/CMakeFiles/file.o" << QString( basepath + "/path/to/one" ) << pathType;
+        QTest::newRowForPathType("cmake-line2", pathType)
+        << "[ 26%] Building CXX object path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two") << pathType;
+        QTest::newRowForPathType("cmake-line3", pathType)
+        << "[ 26%] Building CXX object path/to/three/CMakeFiles/file.o" << QString( basepath + "/path/to/three") << pathType;
+        QTest::newRowForPathType("cmake-line4", pathType)
+        << "[ 26%] Building CXX object path/to/four/CMakeFiles/file.o" << QString( basepath + "/path/to/four") << pathType;
+        QTest::newRowForPathType("cmake-line5", pathType)
+        << "[ 26%] Building CXX object path/to/two/CMakeFiles/file.o" << QString( basepath + "/path/to/two") << pathType;
+        QTest::newRowForPathType("cd-line6", pathType)
+        << QString("make[4]: Entering directory '" + basepath + "/path/to/one/'") << QString( basepath + "/path/to/one") << pathType;
+        QTest::newRowForPathType("waf-cd", pathType)
+        << QString("Waf: Entering directory `" + basepath + "/path/to/two/'") << QString( basepath + "/path/to/two") << pathType;
+        QTest::newRowForPathType("cmake-line7", pathType)
+        << QStringLiteral("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath) << pathType;
+    }
 }
 
 void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction()
 {
     QFETCH(QString, line);
     QFETCH(QString, expectedLastDir);
-    QUrl projecturl = QUrl::fromLocalFile( projectPath() );
-    static CompilerFilterStrategy testee(projecturl);
+    QFETCH(TestPathType, pathType);
+
+    QUrl projecturl = QUrl::fromLocalFile( projectPath(pathType) );
+    CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.actionInLine(line);
     int last = testee.getCurrentDirs().size() - 1;
     QCOMPARE(testee.getCurrentDirs().at(last), expectedLastDir);
