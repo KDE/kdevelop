@@ -131,7 +131,7 @@ static QStringList availableArches(const KDevelop::Path& url)
     QProcess supportedArchesProcess;
     QStringList ret;
 
-    QObject::connect(&supportedArchesProcess, QOverload<int>::of(&QProcess::finished), &supportedArchesProcess, [&supportedArchesProcess, &ret]() {
+    QObject::connect(&supportedArchesProcess, static_cast<void (QProcess::*)(int)>(&QProcess::finished), &supportedArchesProcess, [&supportedArchesProcess, &ret]() {
         supportedArchesProcess.deleteLater();
 
         QTextStream stream(&supportedArchesProcess);
