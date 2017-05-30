@@ -76,8 +76,10 @@ PluginPreferences::PluginPreferences(QWidget* parent)
 
     for (auto it = plugins.constBegin(), end = plugins.constEnd(); it != end; ++it) {
         selector->addPlugins(it.value(), KPluginSelector::ReadConfigFile,
-                              categories.value(it.key()), it.key(),
-                              Core::self()->activeSession()->config() );
+                             categories.value(it.key()),
+                             // no filter by category key, we did it ourselves above & will not work with "Other"
+                             QString(),
+                             Core::self()->activeSession()->config());
     }
     connect(selector, &KPluginSelector::changed, this, &PluginPreferences::changed);
     selector->load();
