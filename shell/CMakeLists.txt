@@ -82,6 +82,7 @@ set(KDevPlatformShell_LIB_SRCS
     settings/templateconfig.cpp
     settings/templatepage.cpp
     settings/analyzerspreferences.cpp
+    settings/runtimespreferences.cpp
     settings/documentationpreferences.cpp
 )
 

@@ -66,7 +66,8 @@ public:
         DefaultConfigPage,
         LanguageConfigPage, ///< A config page that contains language specific settings. This page is appended as a child page to the "Language support" config page.
         AnalyzerConfigPage, ///< A config page that contains settings for some analyzer. This page is appended as a child page to the "Analyzers" config page.
-        DocumentationConfigPage ///< A config page that contains settings for some documentation plugin. This page is appended as a child page to the "Documentation" config page.
+        DocumentationConfigPage, ///< A config page that contains settings for some documentation plugin. This page is appended as a child page to the "Documentation" config page.
+        RuntimeConfigPage ///< A config page that contains settings for some runtime plugin. This page is appended as a child page to the "Runtimes" config page.
     };
 
     /**

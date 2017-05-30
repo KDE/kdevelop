@@ -31,6 +31,7 @@ public:
     explicit DockerPreferences(KDevelop::IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent = nullptr);
     ~DockerPreferences() override;
 
+    KDevelop::ConfigPage::ConfigPageType configPageType() const override;
     QString name() const override;
 private:
     QScopedPointer<Ui::DockerPreferences> m_prefsUi;

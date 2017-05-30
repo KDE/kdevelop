@@ -28,6 +28,11 @@ DockerPreferences::DockerPreferences(KDevelop::IPlugin* plugin, KCoreConfigSkele
 
 DockerPreferences::~DockerPreferences() = default;
 
+KDevelop::ConfigPage::ConfigPageType DockerPreferences::configPageType() const
+{
+    return KDevelop::ConfigPage::RuntimeConfigPage;
+}
+
 QString DockerPreferences::name() const
 {
     return QStringLiteral("Docker");

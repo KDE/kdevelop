@@ -57,6 +57,7 @@
 #include "settings/templateconfig.h"
 #include "settings/analyzerspreferences.h"
 #include "settings/documentationpreferences.h"
+#include "settings/runtimespreferences.h"
 
 namespace KDevelop {
 
@@ -494,6 +495,7 @@ void UiController::showSettingsDialog()
     auto languageConfigPage = new LanguagePreferences(&cfgDlg);
     auto analyzersPreferences = new AnalyzersPreferences(&cfgDlg);
     auto documentationPreferences = new DocumentationPreferences(&cfgDlg);
+    auto runtimesPreferences = new RuntimesPreferences(&cfgDlg);
 
     const auto configPages = QVector<KDevelop::ConfigPage*> {
         new UiPreferences(&cfgDlg),
@@ -519,6 +521,8 @@ void UiController::showSettingsDialog()
                 cfgDlg.addSubConfigPage(languageConfigPage, page);
             } else if (page->configPageType() == ConfigPage::AnalyzerConfigPage) {
                 cfgDlg.addSubConfigPage(analyzersPreferences, page);
+            } else if (page->configPageType() == ConfigPage::RuntimeConfigPage) {
+                cfgDlg.addSubConfigPage(runtimesPreferences, page);
             } else if (page->configPageType() == ConfigPage::DocumentationConfigPage) {
                 cfgDlg.addSubConfigPage(documentationPreferences, page);
             } else {
@@ -530,8 +534,9 @@ void UiController::showSettingsDialog()
 
     cfgDlg.addConfigPage(documentationPreferences, configPages[5]);
     cfgDlg.addConfigPage(analyzersPreferences, documentationPreferences);
+    cfgDlg.addConfigPage(runtimesPreferences, analyzersPreferences);
 
-    cfgDlg.addConfigPage(languageConfigPage, analyzersPreferences);
+    cfgDlg.addConfigPage(languageConfigPage, runtimesPreferences);
     cfgDlg.addSubConfigPage(languageConfigPage, new BGPreferences(&cfgDlg));
 
     foreach (IPlugin* plugin, ICore::self()->pluginController()->loadedPlugins()) {

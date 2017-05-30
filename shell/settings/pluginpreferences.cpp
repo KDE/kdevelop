@@ -53,6 +53,7 @@ PluginPreferences::PluginPreferences(QWidget* parent)
         { "Debugging", i18nc("@title:group", "Debugging") },
         { "Testing", i18nc("@title:group", "Testing") },
         { "Analyzers", i18nc("@title:group", "Analyzers") },
+        { "Runtimes", i18nc("@title:group", "Runtimes") },
         { "Other", i18nc("@title:group", "Other") }
     };
     foreach (const KPluginMetaData& info, Core::self()->pluginControllerInternal()->allPluginInfos()) {

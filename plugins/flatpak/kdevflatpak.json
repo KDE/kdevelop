@@ -7,7 +7,7 @@
                 "Name[x-test]": "xxAleix Polxx"
             }
         ],
-        "Category": "Global",
+        "Category": "Runtimes",
         "Description": "Exposes Flatpak runtimes",
         "Description[ca@valencia]": "Exposa el temps d'execució del Flatpak",
         "Description[ca]": "Exposa el temps d'execució del Flatpak",
