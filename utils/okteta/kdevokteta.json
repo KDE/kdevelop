@@ -48,6 +48,5 @@
         "Version": "0.1.0"
     },
     "X-KDevelop-Category": "Global",
-    "X-KDevelop-Mode": "GUI",
-    "X-KDevelop-Version": "@KDEV_PLUGIN_VERSION@"
+    "X-KDevelop-Mode": "GUI"
 }
