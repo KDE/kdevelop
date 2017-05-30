@@ -159,7 +159,8 @@ Path::List NodeJS::moduleDirectories(const QString& url)
     Path path(url);
     path.addPath(QStringLiteral(".."));
 
-    while (path.segments().size() > 1) {
+    const int maxPathSize = path.isLocalFile() ? 1 : 2;
+    while (path.segments().size() > maxPathSize) {
         paths.append(path.cd(QStringLiteral("node_modules")));
         path.addPath(QStringLiteral(".."));
     }
