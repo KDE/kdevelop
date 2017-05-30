@@ -109,7 +109,7 @@ public:
     
     bool openDocument(IDocument* doc,
                               const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-                              DocumentActivationParams activationParams = nullptr,
+                              DocumentActivationParams activationParams = {},
                               IDocument* buddy = nullptr) override;
 
     KTextEditor::Document* globalTextEditorInstance() override;
@@ -124,7 +124,7 @@ public Q_SLOTS:
     */
     IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-            DocumentActivationParams activationParams = nullptr,
+            DocumentActivationParams activationParams = {},
             const QString& encoding = {},
             IDocument* buddy = nullptr ) override;
 

@@ -113,7 +113,7 @@ public Q_SLOTS:
      */
     KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Cursor& cursor,
-            DocumentActivationParams activationParams = nullptr,
+            DocumentActivationParams activationParams = {},
             const QString& encoding = {});
 
     /**
@@ -131,7 +131,7 @@ public Q_SLOTS:
      */
     virtual KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-            DocumentActivationParams activationParams = nullptr,
+            DocumentActivationParams activationParams = {},
             const QString& encoding = {},
             IDocument* buddy = nullptr) = 0;
 
@@ -148,7 +148,7 @@ public Q_SLOTS:
      */
     virtual bool openDocument(IDocument* doc,
             const KTextEditor::Range& range = KTextEditor::Range::invalid(),
-            DocumentActivationParams activationParams = nullptr,
+            DocumentActivationParams activationParams = {},
             IDocument* buddy = nullptr) = 0;
 
     /**

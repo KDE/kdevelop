@@ -1064,8 +1064,8 @@ Qt::ItemFlags ProjectModel::flags(const QModelIndex& index) const
     ProjectBaseItem* item = itemFromIndex( index );
     if(item)
         return item->flags();
-    else
-        return nullptr;
+
+    return Qt::NoItemFlags;
 }
 
 bool ProjectModel::insertColumns(int, int, const QModelIndex&)

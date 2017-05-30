@@ -202,7 +202,7 @@ Qt::ItemFlags BreakpointModel::flags(const QModelIndex &index) const
 {
     /* FIXME: all this logic must be in item */
     if (!index.isValid())
-        return nullptr;
+        return Qt::NoItemFlags;
 
     if (index.column() == 0)
         return static_cast<Qt::ItemFlags>(
