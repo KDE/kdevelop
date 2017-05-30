@@ -508,7 +508,7 @@ void UiController::showSettingsDialog()
     };
 
     for (auto page : configPages) {
-        cfgDlg.addConfigPage(page);
+        cfgDlg.appendConfigPage(page);
     }
 
     auto addPluginPages = [&](IPlugin* plugin) {
@@ -518,26 +518,25 @@ void UiController::showSettingsDialog()
                 continue;
 
             if (page->configPageType() == ConfigPage::LanguageConfigPage) {
-                cfgDlg.addSubConfigPage(languageConfigPage, page);
+                cfgDlg.appendSubConfigPage(languageConfigPage, page);
             } else if (page->configPageType() == ConfigPage::AnalyzerConfigPage) {
-                cfgDlg.addSubConfigPage(analyzersPreferences, page);
+                cfgDlg.appendSubConfigPage(analyzersPreferences, page);
             } else if (page->configPageType() == ConfigPage::RuntimeConfigPage) {
-                cfgDlg.addSubConfigPage(runtimesPreferences, page);
+                cfgDlg.appendSubConfigPage(runtimesPreferences, page);
             } else if (page->configPageType() == ConfigPage::DocumentationConfigPage) {
-                cfgDlg.addSubConfigPage(documentationPreferences, page);
+                cfgDlg.appendSubConfigPage(documentationPreferences, page);
             } else {
-                // insert them before the editor config page
-                cfgDlg.addConfigPage(page, editorConfigPage);
+                cfgDlg.insertConfigPage(editorConfigPage, page);
             }
         }
     };
 
-    cfgDlg.addConfigPage(documentationPreferences, configPages[5]);
-    cfgDlg.addConfigPage(analyzersPreferences, documentationPreferences);
-    cfgDlg.addConfigPage(runtimesPreferences, analyzersPreferences);
+    cfgDlg.insertConfigPage(configPages[5], documentationPreferences);
+    cfgDlg.insertConfigPage(documentationPreferences, analyzersPreferences);
+    cfgDlg.insertConfigPage(analyzersPreferences, runtimesPreferences);
 
-    cfgDlg.addConfigPage(languageConfigPage, runtimesPreferences);
-    cfgDlg.addSubConfigPage(languageConfigPage, new BGPreferences(&cfgDlg));
+    cfgDlg.insertConfigPage(runtimesPreferences, languageConfigPage);
+    cfgDlg.appendSubConfigPage(languageConfigPage, new BGPreferences(&cfgDlg));
 
     foreach (IPlugin* plugin, ICore::self()->pluginController()->loadedPlugins()) {
         addPluginPages(plugin);

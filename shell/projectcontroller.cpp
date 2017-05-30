@@ -148,7 +148,7 @@ public:
         });
 
         for (auto page : configPages) {
-            cfgDlg->addConfigPage(page);
+            cfgDlg->appendConfigPage(page);
         }
 
         QObject::connect(cfgDlg, &ConfigDialog::configSaved, cfgDlg, [this, proj](ConfigPage* page) {

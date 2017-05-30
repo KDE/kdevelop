@@ -47,20 +47,26 @@ public Q_SLOTS:
      * Remove a config page
      */
     void removeConfigPage(ConfigPage* page);
+
+    /**
+     * Add a new config page to the end of the list of pages.
+     * @param page the new page to add
+     */
+    void appendConfigPage(ConfigPage* page);
+
     /**
      * Add a new config page.
+     * @param before the page before which the new page will be inserted.
      * @param page the new page to add
-     * @param next if this parameter is passed the new page will be before it, otherwise
-     * it will be inserted as the last config page.
      */
-    void addConfigPage(ConfigPage* page, ConfigPage* next = nullptr);
+    void insertConfigPage(ConfigPage* before, ConfigPage* page);
 
     /**
      * Add a new sub config page
      * @param parentPage the parent page
      * @param page the page to add
      */
-    void addSubConfigPage(ConfigPage* parentPage, ConfigPage* page);
+    void appendSubConfigPage(ConfigPage* parentPage, ConfigPage* page);
 
 Q_SIGNALS:
     void configSaved(ConfigPage* page);

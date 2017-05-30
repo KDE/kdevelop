@@ -143,18 +143,20 @@ void ConfigDialog::removePagesForPlugin(IPlugin* plugin)
     m_pages.removeAll(QPointer<KPageWidgetItem>());
 }
 
-void ConfigDialog::addConfigPage(ConfigPage* page, ConfigPage* previous)
+void ConfigDialog::appendConfigPage(ConfigPage* page)
 {
-    if (previous) {
-        auto previousItem = itemForPage(previous);
-        Q_ASSERT(previousItem);
-        addConfigPageInternal(insertPage(previousItem, page, page->name()), page);
-    } else {
-        addConfigPageInternal(addPage(page, page->name()), page);
-    }
+    addConfigPageInternal(addPage(page, page->name()), page);
 }
 
-void ConfigDialog::addSubConfigPage(ConfigPage* parentPage, ConfigPage* page)
+void ConfigDialog::insertConfigPage(ConfigPage* before, ConfigPage* page)
+{
+    Q_ASSERT(before);
+    auto beforeItem = itemForPage(before);
+    Q_ASSERT(beforeItem);
+    addConfigPageInternal(insertPage(beforeItem, page, page->name()), page);
+}
+
+void ConfigDialog::appendSubConfigPage(ConfigPage* parentPage, ConfigPage* page)
 {
     auto item = itemForPage(parentPage);
     Q_ASSERT(item);
@@ -172,7 +174,7 @@ void ConfigDialog::addConfigPageInternal(KPageWidgetItem* item, ConfigPage* page
     m_pages.append(item);
     for (int i = 0; i < page->childPages(); ++i) {
         auto child = page->childPage(i);
-        addSubConfigPage(page, child);
+        appendSubConfigPage(page, child);
     }
 }
 
