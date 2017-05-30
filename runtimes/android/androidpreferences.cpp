@@ -28,6 +28,11 @@ AndroidPreferences::AndroidPreferences(KDevelop::IPlugin* plugin, KCoreConfigSke
 
 AndroidPreferences::~AndroidPreferences() = default;
 
+KDevelop::ConfigPage::ConfigPageType AndroidPreferences::configPageType() const
+{
+    return KDevelop::ConfigPage::RuntimeConfigPage;
+}
+
 QString AndroidPreferences::name() const
 {
     return QStringLiteral("Android");

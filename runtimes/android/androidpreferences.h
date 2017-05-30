@@ -31,6 +31,7 @@ class AndroidPreferences : public KDevelop::ConfigPage
         explicit AndroidPreferences(KDevelop::IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent = nullptr);
         ~AndroidPreferences() override;
 
+        KDevelop::ConfigPage::ConfigPageType configPageType() const override;
         QString name() const override;
     private:
         QScopedPointer<Ui::AndroidPreferences> m_prefsUi;

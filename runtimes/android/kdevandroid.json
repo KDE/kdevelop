@@ -8,7 +8,7 @@
                 "Name[x-test]": "xxAleix Polxx"
             }
         ],
-        "Category": "Global",
+        "Category": "Runtimes",
         "Description": "Exposes Android runtimes",
         "Description[ca@valencia]": "Exposa el temps d'execució de l'Android",
         "Description[ca]": "Exposa el temps d'execució de l'Android",
