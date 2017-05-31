@@ -2,6 +2,7 @@
 Name=Dockerfile
 Name[ca]=Dockerfile
 Name[ca@valencia]=Dockerfile
+Name[de]=Dockerfile
 Name[nl]=Dockerfile
 Name[pt]=Dockerfile
 Name[sk]=Dockerfile
@@ -20,6 +21,7 @@ Category=Docker/Dockerfile
 Language=JSON
 Language[ca]=JSON
 Language[ca@valencia]=JSON
+Language[de]=JSON
 Language[es]=JSON
 Language[fr]=JSON
 Language[it]=JSON

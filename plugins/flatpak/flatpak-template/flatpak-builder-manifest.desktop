@@ -20,6 +20,7 @@ Category=Flatpak/Builder Manifest
 Language=JSON
 Language[ca]=JSON
 Language[ca@valencia]=JSON
+Language[de]=JSON
 Language[es]=JSON
 Language[fr]=JSON
 Language[it]=JSON
