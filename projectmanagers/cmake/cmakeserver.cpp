@@ -40,10 +40,14 @@ CMakeServer::CMakeServer(QObject* parent)
 {
     QString path;
     {
-        QTemporaryFile file(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/kdevelopcmake-");
+        const auto cacheLocation = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+        QDir::temp().mkpath(cacheLocation);
+
+        QTemporaryFile file(cacheLocation + "/kdevelopcmake");
         file.open();
         file.close();
         path = file.fileName();
+        Q_ASSERT(!path.isEmpty());
     }
 
     m_process.setProcessChannelMode(QProcess::ForwardedChannels);
