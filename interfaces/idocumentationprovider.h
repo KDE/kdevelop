@@ -25,7 +25,7 @@
 
 class QIcon;
 class QModelIndex;
-class QAbstractListModel;
+class QAbstractItemModel;
 namespace KDevelop
 {
 class Declaration;
@@ -38,8 +38,9 @@ public:
     /** @returns an IDocument instance for the specified declaration or a null pointer if none could be found.*/
     virtual IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const = 0;
 
-    /** @returns an instance of an interface to create an index for all the items provided by this class. */
-    virtual QAbstractListModel* indexModel() const = 0;
+    /** @returns an instance of an interface to create an index for all the items provided by this class.
+     *  Should have all items at the same level */
+    virtual QAbstractItemModel* indexModel() const = 0;
 
     /** @returns the documentation information related to the index in the model. */
     virtual IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const = 0;
