@@ -55,7 +55,7 @@ private slots:
         connect(&server, &CMakeServer::finished, this, &CMakeServerTest::disableTest);
         QSignalSpy spyConnected(&server, &CMakeServer::connected);
         QVERIFY(server.isServerAvailable() || spyConnected.wait() || !testAvailable);
-        if (!!testAvailable) {
+        if (!testAvailable) {
             QSKIP("need a newer cmake to test the cmakeserver");
             return;
         }
