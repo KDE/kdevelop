@@ -211,22 +211,17 @@
         </item>
         <item>
          <property name="text">
-          <string>c++03</string>
+          <string>CL1.1</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++11</string>
+          <string>CL1.2</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++14</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>c99</string>
+          <string>CL2.0</string>
          </property>
         </item>
        </widget>
