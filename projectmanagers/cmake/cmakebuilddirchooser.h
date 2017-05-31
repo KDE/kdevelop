@@ -47,7 +47,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
             BuildDirCreated = 1, 
             CorrectProject = 2, 
             BuildFolderEmpty = 4, 
-            HaveCMake = 8,
             CorrectBuildDir = 16,
             DirAlreadyCreated = 32 //Error message in case it's already configured
         };
@@ -56,7 +55,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
         explicit CMakeBuildDirChooser(QWidget* parent = nullptr);
         ~CMakeBuildDirChooser() override;
 
-        KDevelop::Path cmakeExecutable() const;
         KDevelop::Path installPrefix() const;
         KDevelop::Path buildFolder() const;
         QString buildType() const;
@@ -64,7 +62,6 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
         int alreadyUsedIndex() const;
         bool reuseBuilddir();
 
-        void setCMakeExecutable(const KDevelop::Path& path);
         void setInstallPrefix(const KDevelop::Path& path);
         void setBuildFolder(const KDevelop::Path& path);
         void setBuildType(const QString& buildType);

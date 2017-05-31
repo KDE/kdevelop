@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>605</width>
-    <height>547</height>
+    <height>607</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,16 @@
    </sizepolicy>
   </property>
   <layout class="QVBoxLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -215,7 +224,7 @@
        <widget class="KUrlRequester" name="cMakeExecutable"/>
       </item>
       <item row="4" column="0">
-       <widget class="QLabel">
+       <widget class="QLabel" name="label">
         <property name="text">
          <string>CMake executable:</string>
         </property>

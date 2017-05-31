@@ -61,11 +61,8 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
     m_chooserUi->installPrefix->setMode(KFile::Directory|KFile::ExistingOnly);
 
-    setCMakeExecutable(Path(CMake::findExecutable()));
-
     m_extraArgumentsHistory = new CMakeExtraArgumentsHistory(m_chooserUi->extraArguments);
 
-    connect(m_chooserUi->cmakeExecutable, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->buildFolder, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->buildType, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->extraArguments, &KComboBox::editTextChanged, this, &CMakeBuildDirChooser::updated);
@@ -150,20 +147,7 @@ void CMakeBuildDirChooser::buildDirSettings(
 
 void CMakeBuildDirChooser::updated()
 {
-    bool haveCMake=QFile::exists(m_chooserUi->cmakeExecutable->url().toLocalFile());
     StatusTypes st;
-    if( haveCMake ) st |= HaveCMake;
-
-    m_chooserUi->buildFolder->setEnabled(haveCMake);
-    m_chooserUi->installPrefix->setEnabled(haveCMake);
-    m_chooserUi->buildType->setEnabled(haveCMake);
-//  m_chooserUi->generator->setEnabled(haveCMake);
-    if(!haveCMake)
-    {
-        setStatus(i18n("You need to select a CMake executable."), false);
-        return;
-    }
-
     Path chosenBuildFolder(m_chooserUi->buildFolder->url());
     bool emptyUrl = chosenBuildFolder.isEmpty();
     if( emptyUrl ) st |= BuildFolderEmpty;
@@ -252,12 +236,6 @@ void CMakeBuildDirChooser::updated()
     }
 }
 
-void CMakeBuildDirChooser::setCMakeExecutable(const Path& path)
-{
-    m_chooserUi->cmakeExecutable->setUrl(path.toUrl());
-    updated();
-}
-
 void CMakeBuildDirChooser::setInstallPrefix(const Path& path)
 {
     m_chooserUi->installPrefix->setUrl(path.toUrl());
@@ -313,15 +291,12 @@ void CMakeBuildDirChooser::adoptPreviousBuildDirectory(int index)
 {
     if (index > 0) {
         Q_ASSERT(m_project);
-        m_chooserUi->cmakeExecutable->setUrl(CMake::currentCMakeExecutable(m_project, index -1).toUrl());
         m_chooserUi->buildFolder->setUrl(CMake::currentBuildDir(m_project, index -1).toUrl());
         m_chooserUi->installPrefix->setUrl(CMake::currentInstallDir(m_project, index -1).toUrl());
         m_chooserUi->buildType->setCurrentText(CMake::currentBuildType(m_project, index -1));
         m_chooserUi->extraArguments->setCurrentText(CMake::currentExtraArguments(m_project, index -1));
     }
 
-    m_chooserUi->label_5->setEnabled(index == 0);
-    m_chooserUi->cmakeExecutable->setEnabled(index == 0);
     m_chooserUi->label_3->setEnabled(index == 0);
     m_chooserUi->buildFolder->setEnabled(index == 0);
     m_chooserUi->label->setEnabled(index == 0);
@@ -348,8 +323,6 @@ void CMakeBuildDirChooser::setShowAvailableBuildDirs(bool show)
     m_chooserUi->availableLabel->setVisible(show);
     m_chooserUi->availableBuildDirs->setVisible(show);
 }
-
-Path CMakeBuildDirChooser::cmakeExecutable() const { return Path(m_chooserUi->cmakeExecutable->url()); }
 
 Path CMakeBuildDirChooser::installPrefix() const { return Path(m_chooserUi->installPrefix->url()); }
 

@@ -38,6 +38,7 @@
 #include <interfaces/icore.h>
 #include "cmakemanager.h"
 #include "cmakehelpdocumentation.h"
+#include "cmakebuilderconfig.h"
 #include "cmakedoc.h"
 #include "debug.h"
 
@@ -48,7 +49,7 @@ KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin( QStringLiteral("kdevcmakedocumentation"), parent )
-    , m_cmakeExecutable(CMake::findExecutable())
+    , m_cmakeExecutable(CMakeBuilderSettings::self()->cmakeExecutable())
     , m_index(nullptr)
 {
     if (m_cmakeExecutable.isEmpty()) {

@@ -114,7 +114,6 @@ void defaultConfigure(const TestProjectPaths& paths)
 
     KConfigGroup buildDirGrp = cmakeGrp.group(QStringLiteral("CMake Build Directory 0"));
     buildDirGrp.writeEntry( currentBuildDirKey, bd.buildFolder().toLocalFile() );
-    buildDirGrp.writeEntry(currentCMakeExecutableKey, bd.cmakeExecutable().toLocalFile());
     buildDirGrp.writeEntry( currentInstallDirKey, bd.installPrefix().toLocalFile() );
     buildDirGrp.writeEntry( currentExtraArgumentsKey, bd.extraArguments() );
     buildDirGrp.writeEntry( currentBuildTypeKey, bd.buildType() );

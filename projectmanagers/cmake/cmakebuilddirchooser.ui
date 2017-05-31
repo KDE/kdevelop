@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>611</width>
-    <height>200</height>
+    <height>244</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -26,30 +26,23 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_5">
+   <item row="0" column="0">
+    <widget class="QLabel" name="availableLabel">
      <property name="text">
-      <string>&amp;CMake executable:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>cmakeExecutable</cstring>
+      <string>Available build directories:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="KUrlRequester" name="cmakeExecutable">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="availableBuildDirs">
+     <item>
+      <property name="text">
+       <string>New build directory</string>
+      </property>
+     </item>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="2" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>Build &amp;directory:</string>
@@ -62,10 +55,10 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1">
+   <item row="2" column="1">
     <widget class="KUrlRequester" name="buildFolder"/>
    </item>
-   <item row="4" column="0">
+   <item row="3" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>&amp;Installation prefix:</string>
@@ -78,7 +71,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
+   <item row="3" column="1">
     <widget class="KUrlRequester" name="installPrefix">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -88,7 +81,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="4" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Build &amp;type:</string>
@@ -101,7 +94,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="4" column="1">
     <widget class="QComboBox" name="buildType">
      <property name="editable">
       <bool>true</bool>
@@ -131,17 +124,14 @@
      </item>
     </widget>
    </item>
-   <item row="7" column="0" colspan="2">
-    <widget class="QLabel" name="status">
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_4">
      <property name="text">
-      <string notr="true">Status Message...</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
+      <string>Extra arguments:</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="5" column="1">
     <widget class="KComboBox" name="extraArguments">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -154,26 +144,13 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_4">
+   <item row="6" column="0" colspan="2">
+    <widget class="QLabel" name="status">
      <property name="text">
-      <string>Extra arguments:</string>
+      <string notr="true">Status Message...</string>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="availableBuildDirs">
-     <item>
-      <property name="text">
-       <string>New build directory</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="availableLabel">
-     <property name="text">
-      <string>Available build directories:</string>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
