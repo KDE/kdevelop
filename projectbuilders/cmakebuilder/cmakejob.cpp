@@ -82,7 +82,7 @@ QUrl CMakeJob::workingDirectory() const
 QStringList CMakeJob::commandLine() const
 {
     QStringList args;
-    args << CMakeBuilderSettings::self()->cmakeExecutable();
+    args << CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile();
     args << QStringLiteral("-DCMAKE_EXPORT_COMPILE_COMMANDS=ON");
 
     QString installDir = CMake::currentInstallDir( m_project ).toLocalFile();

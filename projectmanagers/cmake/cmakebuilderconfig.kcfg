@@ -6,8 +6,8 @@
   <include>cmakeutils.h</include>
   <kcfgfile name="kdeveloprc"/>
   <group name="CMakeBuilder">
-    <entry name="cmakeExecutable" key="cmakeExe" type="String">
-        <default code="true">CMake::findExecutable()</default>
+    <entry name="cmakeExecutable" key="cmakeExe" type="Url">
+        <default code="true">QUrl::fromLocalFile(CMake::findExecutable())</default>
         <whatsthis>The path to the default CMake executable.</whatsthis>
     </entry>
     <entry name="generator" key="generator" type="Int">
