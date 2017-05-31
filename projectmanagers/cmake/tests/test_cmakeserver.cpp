@@ -42,12 +42,23 @@ public:
         TestCore::initialize();
     }
 
+    bool testAvailable = true;
 private slots:
+    void disableTest(int code)
+    {
+        testAvailable = code!=0;
+    }
+
     void testRun()
     {
         CMakeServer server(this);
+        connect(&server, &CMakeServer::finished, this, &CMakeServerTest::disableTest);
         QSignalSpy spyConnected(&server, &CMakeServer::connected);
-        QVERIFY(server.isServerAvailable() || spyConnected.wait());
+        QVERIFY(server.isServerAvailable() || spyConnected.wait() || !testAvailable);
+        if (!!testAvailable) {
+            QSKIP("need a newer cmake to test the cmakeserver");
+            return;
+        }
 
         QSignalSpy spy(&server, &CMakeServer::response);
 
