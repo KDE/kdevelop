@@ -156,7 +156,7 @@ struct MIBreakpointController::InsertedHandler : public MIBreakpointController::
 
 struct MIBreakpointController::DeleteHandler : MIBreakpointController::Handler {
     DeleteHandler(MIBreakpointController* c, const BreakpointDataPtr& b)
-        : Handler(c, b, nullptr) {}
+        : Handler(c, b, BreakpointModel::ColumnFlags()) {}
 
     void handle(const ResultRecord&) override
     {

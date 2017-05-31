@@ -126,11 +126,11 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
 Qt::ItemFlags DefinesModel::flags( const QModelIndex& index ) const
 {
     if( !index.isValid() ) {
-        return nullptr;
+        return Qt::NoItemFlags;
     }
 
     if( index.row() == m_defines.count() && index.column() == 1 ) {
-        return nullptr;
+        return Qt::NoItemFlags;
     }
     return Qt::ItemFlags( Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 }

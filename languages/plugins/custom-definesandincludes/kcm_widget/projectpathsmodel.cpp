@@ -135,7 +135,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
 Qt::ItemFlags ProjectPathsModel::flags( const QModelIndex& index ) const
 {
     if( !index.isValid() ) {
-        return nullptr;
+        return Qt::NoItemFlags;
     }
 
     if( index.row() == 0 ) {

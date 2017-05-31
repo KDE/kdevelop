@@ -199,7 +199,7 @@ QVariant CompilersModel::headerData(int section, Qt::Orientation orientation, in
 Qt::ItemFlags CompilersModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid()) {
-        return nullptr;
+        return Qt::NoItemFlags;
     }
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
