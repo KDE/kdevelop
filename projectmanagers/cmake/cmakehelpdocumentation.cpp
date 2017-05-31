@@ -24,17 +24,11 @@
 #include "cmakedoc.h"
 #include "icmakedocumentation.h"
 #include "cmakedocumentation.h"
+#include "cmakecommandscontents.h"
 #include <QHeaderView>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
-
-static QString modules [] = {
-    i18n("Commands"), i18n("Variables"), i18n("Modules"), i18n("Properties"), i18n("Policies")
-};
-
-CMakeContentsModel::CMakeContentsModel(QObject* parent)
-    : QAbstractItemModel(parent)
-{}
+#include <tests/modeltest.h>
 
 QString CMakeHomeDocumentation::name() const
 {
@@ -51,62 +45,7 @@ QWidget* CMakeHomeDocumentation::documentationWidget(KDevelop::DocumentationFind
     QTreeView* contents=new QTreeView(parent);
     contents->header()->setVisible(false);
 
-    CMakeContentsModel* model=new CMakeContentsModel(contents);
-    contents->setModel(model);
-    QObject::connect(contents, &QTreeView::clicked, model, &CMakeContentsModel::showItem);
+    contents->setModel(CMakeDoc::s_provider->model());
+    QObject::connect(contents, &QTreeView::clicked, CMakeDoc::s_provider->model(), &CMakeCommandsContents::showItemAt);
     return contents;
-}
-
-//Model methods implementation
-QModelIndex CMakeContentsModel::parent(const QModelIndex& child) const
-{
-    if(child.isValid() && child.column()==0 && int(child.internalId())>=0)
-        return createIndex(child.internalId(),0, -1);
-    return QModelIndex();
-}
-
-QModelIndex CMakeContentsModel::index(int row, int column, const QModelIndex& parent) const
-{
-    if(row<0 || column!=0)
-        return QModelIndex();
-    if(!parent.isValid() && row==ICMakeDocumentation::EOType)
-        return QModelIndex();
-
-    return createIndex(row,column, int(parent.isValid() ? parent.row() : -1));
-}
-
-int CMakeContentsModel::rowCount(const QModelIndex& parent) const
-{
-    if(!parent.isValid())
-        return ICMakeDocumentation::EOType;
-    else if(int(parent.internalId())<0) {
-        int ss=CMakeDoc::s_provider->names((ICMakeDocumentation::Type) parent.row()).size();
-        return ss;
-    }
-    return 0;
-}
-
-QVariant CMakeContentsModel::data(const QModelIndex& index, int role) const
-{
-    if (index.isValid()) {
-        if(role==Qt::DisplayRole) {
-            int internal(index.internalId());
-            if(internal>=0)
-                return CMakeDoc::s_provider->names((ICMakeDocumentation::Type) internal).at(index.row());
-            else
-                return modules[index.row()];
-        }
-    }
-    return QVariant();
-}
-
-void CMakeContentsModel::showItem(const QModelIndex& idx)
-{
-    if(idx.isValid() && int(idx.internalId())>=0) {
-        QString desc=CMakeDoc::s_provider->descriptionForIdentifier(idx.data().toString(),
-                                                                    (ICMakeDocumentation::Type) idx.parent().row());
-        CMakeDoc::Ptr doc(new CMakeDoc(idx.data().toString(), desc));
-
-        KDevelop::ICore::self()->documentationController()->showDocumentation(doc);
-    }
 }

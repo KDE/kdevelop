@@ -27,10 +27,11 @@
 #include <interfaces/iplugin.h>
 #include "icmakedocumentation.h"
 
-class QStringListModel;
 namespace KDevelop { class Declaration; }
 class CMakeManager;
 class QUrl;
+class CMakeCommandsContents;
+class KDescendantsProxyModel;
 
 class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
 {
@@ -43,8 +44,9 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const override;
         KDevelop::IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const override;
         
-        QStringList names(Type t) const override;
+        QVector<QString> names(Type t) const override;
         
+        CMakeCommandsContents* model() const { return m_index; }
         QAbstractItemModel* indexModel() const override;
         KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const override;
         
@@ -53,19 +55,13 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         KDevelop::IDocumentation::Ptr homePage() const override;
         
         QString descriptionForIdentifier(const QString& identifier, Type t) const;
-    public slots:
-        void delayedInitialization();
         
     Q_SIGNALS:
         void addHistory(const KDevelop::IDocumentation::Ptr& doc) const override;
     
     private:
-        void initializeModel() const;
-        void collectIds(const QString& param, Type type);
-        
-        QMap<QString, Type> m_typeForName;
-        const QString m_cmakeExecutable;
-        QStringListModel* m_index;
+        CMakeCommandsContents* m_index;
+        KDescendantsProxyModel* m_flatIndex;
 };
 
 #endif // CMAKEDOCUMENTATION_H

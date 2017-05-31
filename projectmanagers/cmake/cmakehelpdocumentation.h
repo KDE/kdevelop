@@ -24,22 +24,6 @@
 #include <interfaces/idocumentation.h>
 #include <QAbstractItemModel>
 
-class CMakeContentsModel : public QAbstractItemModel
-{
-    Q_OBJECT
-    public:       
-        explicit CMakeContentsModel(QObject* parent) ;
-        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-        
-        int columnCount(const QModelIndex&) const override { return 1; }
-        QModelIndex parent(const QModelIndex& child) const override;
-        
-        QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const override;
-        QVariant data(const QModelIndex& index, int role) const override;
-    public slots:
-        void showItem(const QModelIndex& idx);
-};
-
 class CMakeHomeDocumentation : public KDevelop::IDocumentation
 {
     public:

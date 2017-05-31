@@ -28,6 +28,7 @@
 #include <QStandardPaths>
 #include <QIcon>
 #include <KLocalizedString>
+#include <KDescendantsProxyModel>
 
 #include <interfaces/iproject.h>
 #include <KPluginFactory>
@@ -36,10 +37,12 @@
 #include <serialization/indexedstring.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/icore.h>
+
 #include "cmakemanager.h"
 #include "cmakehelpdocumentation.h"
 #include "cmakebuilderconfig.h"
 #include "cmakedoc.h"
+#include "cmakecommandscontents.h"
 #include "debug.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(CMakeSupportDocFactory, "kdevcmakedocumentation.json", registerPlugin<CMakeDocumentation>(); )
@@ -49,86 +52,37 @@ KDevelop::IDocumentationProvider* CMakeDoc::provider() const { return s_provider
 
 CMakeDocumentation::CMakeDocumentation(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin( QStringLiteral("kdevcmakedocumentation"), parent )
-    , m_cmakeExecutable(CMakeBuilderSettings::self()->cmakeExecutable())
-    , m_index(nullptr)
+    , m_index(new CMakeCommandsContents(this))
+    , m_flatIndex(new KDescendantsProxyModel(m_index))
 {
-    if (m_cmakeExecutable.isEmpty()) {
+    m_flatIndex->setSourceModel(m_index);
+    if (CMakeBuilderSettings::self()->cmakeExecutable().isEmpty()) {
         setErrorDescription(i18n("Unable to find a CMake executable. Is one installed on the system?"));
         return;
     }
 
     CMakeDoc::s_provider=this;
-    m_index= new QStringListModel(this);
-    initializeModel();
 }
 
-static const char* const args[] = { "--help-command", "--help-variable", "--help-module", "--help-property", nullptr, nullptr };
-
-void CMakeDocumentation::delayedInitialization()
+QVector<QString> CMakeDocumentation::names(CMakeDocumentation::Type t) const
 {
-    for(int i=0; i<=Property; i++) {
-        collectIds(QString(args[i])+"-list", (Type) i);
-    }
-
-    m_index->setStringList(m_typeForName.keys());
-}
-
-void CMakeDocumentation::collectIds(const QString& param, Type type)
-{
-    QStringList ids = CMake::executeProcess(m_cmakeExecutable, QStringList(param)).split(QLatin1Char('\n'));
-    ids.takeFirst();
-    foreach(const QString& name, ids)
-    {
-        m_typeForName[name]=type;
-    }
-}
-
-QStringList CMakeDocumentation::names(CMakeDocumentation::Type t) const
-{
-    return m_typeForName.keys(t);
+    return m_index->names(t);
 }
 
 QString CMakeDocumentation::descriptionForIdentifier(const QString& id, Type t) const
 {
-    QString desc;
-    if(args[t]) {
-        desc = CMake::executeProcess(m_cmakeExecutable, { args[t], id.simplified() });
-        desc = desc.remove(QStringLiteral(":ref:"));
-
-        const QString rst2html = QStandardPaths::findExecutable(QStringLiteral("rst2html"));
-        if (rst2html.isEmpty()) {
-            desc = ("<html><body style='background:#fff'><pre><code>" + desc.toHtmlEscaped() + "</code></pre>"
-                + i18n("<p>For better cmake documentation rendering, install rst2html</p>")
-                + "</body></html>");
-        } else {
-            QProcess p;
-            p.start(rst2html, { "--no-toc-backlinks" });
-            p.write(desc.toUtf8());
-            p.closeWriteChannel();
-            p.waitForFinished();
-            desc = QString::fromUtf8(p.readAllStandardOutput());
-        }
-    }
-
-    return desc;
+    return m_index->descriptionForIdentifier(id, t);
 }
 
 KDevelop::IDocumentation::Ptr CMakeDocumentation::description(const QString& identifier, const QUrl &file) const
 {
-    initializeModel(); //make it not queued
     if (!file.isEmpty() && !QMimeDatabase().mimeTypeForUrl(file).inherits(QStringLiteral("text/x-cmake"))) {
         return KDevelop::IDocumentation::Ptr();
     }
 
-    QString desc;
 
-    if(m_typeForName.contains(identifier)) {
-        desc=descriptionForIdentifier(identifier, m_typeForName[identifier]);
-    } else if(m_typeForName.contains(identifier.toLower())) {
-        desc=descriptionForIdentifier(identifier, m_typeForName[identifier.toLower()]);
-    } else if(m_typeForName.contains(identifier.toUpper())) {
-        desc=descriptionForIdentifier(identifier, m_typeForName[identifier.toUpper()]);
-    }
+    Type t = m_index->typeFor(identifier);
+    QString desc=descriptionForIdentifier(identifier, t);
 
     KDevelop::IProject* p=KDevelop::ICore::self()->projectController()->findProjectForUrl(file);
     ICMakeManager* m=nullptr;
@@ -162,8 +116,7 @@ KDevelop::IDocumentation::Ptr CMakeDocumentation::documentationForIndex(const QM
 
 QAbstractItemModel* CMakeDocumentation::indexModel() const
 {
-    initializeModel();
-    return m_index;
+    return m_flatIndex;
 }
 
 QIcon CMakeDocumentation::icon() const
@@ -178,18 +131,7 @@ QString CMakeDocumentation::name() const
 
 KDevelop::IDocumentation::Ptr CMakeDocumentation::homePage() const
 {
-    if(m_typeForName.isEmpty())
-        const_cast<CMakeDocumentation*>(this)->delayedInitialization();
-//     initializeModel();
     return KDevelop::IDocumentation::Ptr(new CMakeHomeDocumentation);
-}
-
-void CMakeDocumentation::initializeModel() const
-{
-    if(!m_typeForName.isEmpty())
-        return;
-
-    QMetaObject::invokeMethod(const_cast<CMakeDocumentation*>(this), "delayedInitialization", Qt::QueuedConnection);
 }
 
 //////////CMakeDoc

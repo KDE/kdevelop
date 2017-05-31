@@ -40,7 +40,7 @@
 using namespace KTextEditor;
 using namespace KDevelop;
 
-QStringList CMakeCodeCompletionModel::s_commands;
+QVector<QString> CMakeCodeCompletionModel::s_commands;
 
 CMakeCodeCompletionModel::CMakeCodeCompletionModel(QObject* parent)
     : CodeCompletionModel(parent)

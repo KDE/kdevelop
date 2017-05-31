@@ -68,6 +68,7 @@ ki18n_wrap_ui(cmakesettings_SRCS settings/cmakebuildsettings.ui)
 set( cmakedoc_SRCS
   cmakedocumentation.cpp
   cmakehelpdocumentation.cpp
+  cmakecommandscontents.cpp
 )
 
 remove_definitions( -DQT_NO_STL )
@@ -107,6 +108,8 @@ target_link_libraries( kdevcmakedocumentation
                         KDev::Interfaces kdevcmakecommon
                         KDev::Project KDev::Language
                         KDev::Documentation
+                        KDev::Tests
+                        KF5::ItemModels
                         KF5::TextEditor)
 
 install(TARGETS kdevcmakecommon ${INSTALL_TARGETS_DEFAULT_ARGS} )

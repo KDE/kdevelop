@@ -40,7 +40,7 @@ class CMakeCodeCompletionModel : public KTextEditor::CodeCompletionModel
     private:
         enum Type { Command, Variable, Macro, Path, Target };
         Type indexType(int row) const;
-        static QStringList s_commands;
+        static QVector<QString> s_commands;
         QList< KDevelop::IndexedDeclaration > m_declarations;
         bool m_inside;
         QStringList m_paths;
