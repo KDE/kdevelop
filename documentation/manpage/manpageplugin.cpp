@@ -137,7 +137,7 @@ KDevelop::IDocumentation::Ptr ManPagePlugin::documentationForIdentifier(const QS
     return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:/" + identifier)));
 }
 
-QAbstractListModel* ManPagePlugin::indexModel() const
+QAbstractItemModel* ManPagePlugin::indexModel() const
 {
     return m_model->indexList();
 }

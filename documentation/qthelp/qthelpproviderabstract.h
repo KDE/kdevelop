@@ -39,7 +39,7 @@ public:
     KDevelop::IDocumentation::Ptr documentationForDeclaration (KDevelop::Declaration*) const override;
 
     KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const override;
-    QAbstractListModel* indexModel() const override;
+    QAbstractItemModel* indexModel() const override;
 
     KDevelop::IDocumentation::Ptr homePage() const override;
 

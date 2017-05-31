@@ -160,7 +160,7 @@ KDevelop::IDocumentation::Ptr CMakeDocumentation::documentationForIndex(const QM
     return description(idx.data().toString(), QUrl());
 }
 
-QAbstractListModel* CMakeDocumentation::indexModel() const
+QAbstractItemModel* CMakeDocumentation::indexModel() const
 {
     initializeModel();
     return m_index;

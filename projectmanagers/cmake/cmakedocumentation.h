@@ -45,7 +45,7 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         
         QStringList names(Type t) const override;
         
-        QAbstractListModel* indexModel() const override;
+        QAbstractItemModel* indexModel() const override;
         KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const override;
         
         QIcon icon() const override;

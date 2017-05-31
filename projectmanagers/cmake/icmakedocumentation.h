@@ -30,7 +30,7 @@ public:
     
     virtual ~ICMakeDocumentation() {}
     virtual KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const=0;
-    virtual QStringList names(Type t) const=0;
+    virtual QVector<QString> names(Type t) const=0;
 };
 
 Q_DECLARE_INTERFACE( ICMakeDocumentation, "org.kdevelop.ICMakeDocumentation" )

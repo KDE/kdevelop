@@ -78,7 +78,7 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declarat
     return {};
 }
 
-QAbstractListModel* QtHelpProviderAbstract::indexModel() const
+QAbstractItemModel* QtHelpProviderAbstract::indexModel() const
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     return m_engine.indexModel();
