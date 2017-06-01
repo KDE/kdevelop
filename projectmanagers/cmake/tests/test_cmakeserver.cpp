@@ -36,32 +36,38 @@ class CMakeServerTest : public QObject
 public:
     CMakeServerTest()
     {
-        QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.projectmanagers.cmake.debug=true\n"));
+        QLoggingCategory::setFilterRules(QStringLiteral("default.debug=true\nkdevelop.projectmanagers.cmake.debug=true\n"));
 
         AutoTestShell::init();
         TestCore::initialize();
     }
 
-    bool testAvailable = true;
 private slots:
-    void disableTest(int code)
+    void initTestCase()
     {
-        testAvailable = code!=0;
+        QProcess p;
+        p.start("cmake", {"--version"});
+        QVERIFY(p.waitForFinished());
+        auto output = p.readAll();
+
+        QRegularExpression rx("cmake version (\\d\\.\\d).*");
+        const auto match = rx.match(output);
+        QVERIFY(match.isValid());
+        const auto capture = match.capturedRef(1);
+
+        const auto version = capture.split('.');
+        const bool versionWithServer = version[0] == "3" && version[1].toInt()>=8;
+        if (!versionWithServer)
+            QSKIP("cmake server not supported");
     }
 
     void testRun()
     {
         CMakeServer server(this);
-        connect(&server, &CMakeServer::finished, this, &CMakeServerTest::disableTest);
         QSignalSpy spyConnected(&server, &CMakeServer::connected);
-        QVERIFY(server.isServerAvailable() || spyConnected.wait() || !testAvailable);
-        if (!testAvailable) {
-            QSKIP("need a newer cmake to test the cmakeserver");
-            return;
-        }
+        QVERIFY(server.isServerAvailable() || spyConnected.wait());
 
         QSignalSpy spy(&server, &CMakeServer::response);
-
         QJsonObject codeModel;
         int errors = 0;
         connect(&server, &CMakeServer::response, this, [&errors, &codeModel, &server](const QJsonObject &response) {
