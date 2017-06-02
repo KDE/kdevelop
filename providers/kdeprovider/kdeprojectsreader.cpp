@@ -35,13 +35,11 @@ KDEProjectsReader::KDEProjectsReader(KDEProjectsModel* m, QObject* parent)
     connect(manager,&QNetworkAccessManager::finished, this, &KDEProjectsReader::downloadFinished);
 }
 
-QString readText(QXmlStreamReader* xml)
+static QString readText(QXmlStreamReader* xml)
 {
     QString ret;
-    QXmlStreamReader::TokenType token;
-
     for(int opened=1; opened>0 && !xml->atEnd(); ) {
-        token=xml->readNext();
+        const auto token=xml->readNext();
 
         if(token==QXmlStreamReader::StartElement)
             opened++;
