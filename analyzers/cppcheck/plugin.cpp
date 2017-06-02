@@ -42,6 +42,7 @@
 #include <util/jobstatus.h>
 
 #include <QAction>
+#include <QMimeDatabase>
 
 K_PLUGIN_FACTORY_WITH_JSON(CppcheckFactory, "kdevcppcheck.json", registerPlugin<cppcheck::Plugin>();)
 
@@ -223,11 +224,16 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
 {
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
 
-    if (context->hasType(KDevelop::Context::EditorContext) &&
-        m_currentProject && !isRunning()) {
+    if (context->hasType(KDevelop::Context::EditorContext) && m_currentProject && !isRunning()) {
+        auto eContext = dynamic_cast<KDevelop::EditorContext*>(context);
+        QMimeDatabase db;
+        const auto mime = db.mimeTypeForUrl(eContext->url());
 
-        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, m_contextActionFile);
-        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeProjectGroup, m_contextActionProject);
+        if (mime.name() == QLatin1String("text/x-c++src") || mime.name() == QLatin1String("text/x-c++hdr") ||
+            mime.name() == QLatin1String("text/x-chdr") || mime.name() == QLatin1String("text/x-csrc")) {
+            extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, m_contextActionFile);
+            extension.addAction(KDevelop::ContextMenuExtension::AnalyzeProjectGroup, m_contextActionProject);
+        }
     }
 
     if (context->hasType(KDevelop::Context::ProjectItemContext) && !isRunning()) {
