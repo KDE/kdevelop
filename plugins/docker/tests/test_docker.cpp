@@ -104,6 +104,19 @@ private Q_SLOTS:
         QCOMPARE(project->path(), rt->pathInHost(rt->pathInRuntime(project->path())));
     }
 
+    void projectDirectory() {
+        auto rt = ICore::self()->runtimeController()->currentRuntime();
+        QVERIFY(rt);
+        auto project = ICore::self()->projectController()->projects().first();
+        QVERIFY(project);
+
+        const Path projectDir = project->path();
+        const Path dirRuntime = rt->pathInRuntime(projectDir);
+        QCOMPARE(dirRuntime, Path("/src/test/"));
+        QCOMPARE(rt->pathInHost(dirRuntime), projectDir);
+        QCOMPARE(project->path(), rt->pathInHost(rt->pathInRuntime(project->path())));
+    }
+
     void envs() {
         auto rt = ICore::self()->runtimeController()->currentRuntime();
         QVERIFY(rt);
