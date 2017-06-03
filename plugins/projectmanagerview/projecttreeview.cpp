@@ -436,11 +436,6 @@ void ProjectTreeView::rowsInserted( const QModelIndex& parent, int start, int en
 {
     QTreeView::rowsInserted( parent, start, end );
 
-    // automatically select row if there is only one
-    if ( model()->rowCount() == 1 ) {
-        selectionModel()->select( model()->index( 0, 0 ), QItemSelectionModel::Select );
-    }
-
     if ( !parent.model() ) {
         for ( const auto& project: selectedProjects() ) {
             restoreState( project->project() );
@@ -450,11 +445,6 @@ void ProjectTreeView::rowsInserted( const QModelIndex& parent, int start, int en
 
 void ProjectTreeView::rowsAboutToBeRemoved( const QModelIndex& parent, int start, int end )
 {
-    // automatically select row if there is only one
-    if ( model()->rowCount() == 1 ) {
-        selectionModel()->select( model()->index( 0, 0 ), QItemSelectionModel::Select );
-    }
-
     if ( !parent.model() ) {
         for ( const auto& project: selectedProjects() ) {
             saveState( project->project() );
