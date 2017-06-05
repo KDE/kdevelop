@@ -97,6 +97,8 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
     const auto configs = response.value(QStringLiteral("configurations")).toArray();
     qCDebug(CMAKE) << "process response" << response;
 
+    data.targets.clear();
+    data.compilationData.files.clear();
     const auto rt = KDevelop::ICore::self()->runtimeController()->currentRuntime();
     for (const auto &config: configs) {
         const auto projects = config.toObject().value(QStringLiteral("projects")).toArray();
