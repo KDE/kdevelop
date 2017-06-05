@@ -257,6 +257,7 @@ QMenu* GrepDialog::createSyncButtonMenu()
         addUrlToMenu(ret, url);
     }
 
+    ret->addSeparator();
     addStringToMenu(ret, allOpenFilesString());
     addStringToMenu(ret, allOpenProjectsString());
     return ret;
