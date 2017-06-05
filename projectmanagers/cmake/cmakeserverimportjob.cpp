@@ -92,7 +92,7 @@ CMakeTarget::Type typeToEnum(const QJsonObject& target)
     return s_types.value(value, CMakeTarget::Custom);
 }
 
-void CMakeServerImportJob::processFileData(const QJsonObject &response, CMakeProjectData &data)
+void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakeProjectData &data)
 {
     const auto configs = response.value(QStringLiteral("configurations")).toArray();
     qCDebug(CMAKE) << "process response" << response;
@@ -171,7 +171,7 @@ void CMakeServerImportJob::processResponse(const QJsonObject& response)
         } else if (inReplyTo == QLatin1String("compute")) {
             m_server->codemodel();
         } else if(inReplyTo == QLatin1String("codemodel")) {
-            processFileData(response, m_data);
+            processCodeModel(response, m_data);
             m_data.m_testSuites = CMake::importTestSuites(CMake::currentBuildDir(m_project));
             m_data.m_server = m_server;
             emitResult();

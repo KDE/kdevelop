@@ -44,7 +44,7 @@ public:
 
     CMakeProjectData projectData() const { return m_data; }
 
-    static void processFileData(const QJsonObject &response, CMakeProjectData &data);
+    static void processCodeModel(const QJsonObject &response, CMakeProjectData &data);
 
 private:
     void doStart();

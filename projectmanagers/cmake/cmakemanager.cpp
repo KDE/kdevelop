@@ -393,7 +393,7 @@ void CMakeManager::serverResponse(KDevelop::IProject* project, const QJsonObject
             m_projects[project].m_server->codemodel();
         } else if(inReplyTo == QLatin1String("codemodel")) {
             auto &data = m_projects[project];
-            CMakeServerImportJob::processFileData(response, data);
+            CMakeServerImportJob::processCodeModel(response, data);
             populateTargets(project->projectItem(), data.targets);
         } else {
             qCDebug(CMAKE) << "unhandled reply response..." << project << response;
