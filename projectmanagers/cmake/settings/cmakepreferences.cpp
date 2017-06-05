@@ -122,6 +122,7 @@ void CMakePreferences::initAdvanced()
 {
     m_prefsUi->environment->setCurrentProfile( CMake::currentEnvironment(m_project) );
     m_prefsUi->installationPrefix->setText(CMake::currentInstallDir(m_project).toLocalFile());
+    m_prefsUi->installationPrefix->setMode(KFile::Directory);
     const QString buildType = CMake::currentBuildType(m_project);
     if (m_prefsUi->buildType->findText(buildType) == -1) {
         m_prefsUi->buildType->addItem(buildType);
