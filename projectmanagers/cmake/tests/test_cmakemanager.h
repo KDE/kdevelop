@@ -52,6 +52,7 @@ private slots:
     void testEnumerateTargets();
     void testFaultyTarget();
     void testParenthesesInTestArguments();
+    void testReload();
 };
 
 #endif // TEST_CMAKEMANAGER_H

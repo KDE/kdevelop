@@ -55,11 +55,18 @@ struct CMakeFilesCompilationData
 
 struct CMakeTarget
 {
+    Q_GADGET
+public:
     enum Type { Library, Executable, Custom };
+    Q_ENUM(Type)
+
     Type type;
     QString name;
 };
 Q_DECLARE_TYPEINFO(CMakeTarget, Q_MOVABLE_TYPE);
+inline QDebug &operator<<(QDebug debug, const CMakeTarget& target) {
+    debug << target.type << ':' << target.name; return debug.maybeSpace();
+}
 
 
 struct Test

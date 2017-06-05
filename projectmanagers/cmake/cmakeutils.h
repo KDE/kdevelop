@@ -60,6 +60,17 @@ static int kIndexOf(const Q& list, W func)
     return -1;
 }
 
+template <typename T, typename Q, typename _UnaryOperation>
+static T kFilter(const Q &input, _UnaryOperation op)
+{
+    T ret;
+    for(const auto& v : input) {
+        if (op(v))
+            ret += v;
+    }
+    return ret;
+}
+
 namespace CMake
 {
     /**

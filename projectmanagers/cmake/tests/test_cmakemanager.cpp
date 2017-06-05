@@ -22,13 +22,13 @@
 #include "cmakemodelitems.h"
 #include "cmakeutils.h"
 #include "cmakeimportjsonjob.h"
-#include <icmakemanager.h>
 
 #include <QLoggingCategory>
 #include <QTemporaryFile>
 
 #include <interfaces/icore.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <project/abstractfilemanagerplugin.h>
 #include <tests/autotestshell.h>
 #include <tests/testproject.h>
 #include <tests/testcore.h>
@@ -41,7 +41,7 @@ void TestCMakeManager::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
 
-    AutoTestShell::init();
+    AutoTestShell::init({"kdevcmakemanager"});
     TestCore::initialize();
 
     cleanup();
@@ -328,6 +328,29 @@ void TestCMakeManager::testEnumerateTargets()
     QCOMPARE(targets.value(Path(tempDir)).value(0), QStringLiteral("first_target"));
     QCOMPARE(targets.value(Path(tempDir)).value(1), QStringLiteral("second_target"));
     QCOMPARE(targets.value(Path(tempDir + "/" + subdir.path())).value(0), QStringLiteral("third_target"));
+}
+
+void TestCMakeManager::testReload()
+{
+    IProject* project = loadProject(QStringLiteral("tiny_project"));
+    const Path sourceDir = project->path();
+
+    auto fmp = dynamic_cast<AbstractFileManagerPlugin*>(project->projectFileManager());
+    QVERIFY(fmp);
+
+    auto projectItem = project->projectItem();
+    auto targets = projectItem->targetList();
+
+    auto job = fmp->createImportJob(project->projectItem());
+    project->setReloadJob(job);
+
+    QSignalSpy spy(job, &KJob::finished);
+    job->start();
+    QVERIFY(spy.wait());
+    QCOMPARE(spy.count(), 1);
+
+    QCOMPARE(projectItem, project->projectItem());
+    QCOMPARE(targets, projectItem->targetList());
 }
 
 void TestCMakeManager::testFaultyTarget()

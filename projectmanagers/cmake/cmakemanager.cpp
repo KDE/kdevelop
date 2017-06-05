@@ -319,17 +319,6 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
 
 static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets)
 {
-    auto dirTargets = targets[folder->path()];
-
-    foreach (ProjectTargetItem* item, folder->targetList()) {
-        const auto idx = kIndexOf(dirTargets, [item](const CMakeTarget& target) { return target.name == item->text(); });
-        if(idx<0) {
-            delete item;
-        } else {
-            dirTargets.removeAt(idx);
-        }
-    }
-
     static QSet<QString> standardTargets = {
         QStringLiteral("edit_cache"), QStringLiteral("rebuild_cache"),
         QStringLiteral("list_install_components"),
@@ -337,23 +326,36 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
         QStringLiteral("install")
 
     };
-
-    foreach (const auto& target, dirTargets) {
-        if (!target.name.endsWith(QLatin1String("_automoc"))
+    QList<CMakeTarget> dirTargets = kFilter<QList<CMakeTarget>>(targets[folder->path()], [](const CMakeTarget& target) -> bool {
+        return target.type != CMakeTarget::Custom ||
+              (!target.name.endsWith(QLatin1String("_automoc"))
+            && !target.name.endsWith(QLatin1String("_autogen"))
             && !standardTargets.contains(target.name)
             && !target.name.startsWith(QLatin1String("install/"))
-        ) {
-            switch(target.type) {
-                case CMakeTarget::Executable:
-                    new CMakeTargetItem(folder, target.name);
-                    break;
-                case CMakeTarget::Library:
-                    new ProjectLibraryTargetItem(folder->project(), target.name, folder);
-                    break;
-                case CMakeTarget::Custom:
-                    new ProjectTargetItem(folder->project(), target.name, folder);
-                    break;
-            }
+              );
+    });
+
+    const auto tl = folder->targetList();
+    foreach (ProjectTargetItem* item, tl) {
+        const auto idx = kIndexOf(dirTargets, [item](const CMakeTarget& target) { return target.name == item->text(); });
+        if (idx < 0) {
+            delete item;
+        } else {
+            dirTargets.removeAt(idx);
+        }
+    }
+
+    foreach (const auto& target, dirTargets) {
+        switch(target.type) {
+            case CMakeTarget::Executable:
+                new CMakeTargetItem(folder, target.name);
+                break;
+            case CMakeTarget::Library:
+                new ProjectLibraryTargetItem(folder->project(), target.name, folder);
+                break;
+            case CMakeTarget::Custom:
+                new ProjectTargetItem(folder->project(), target.name, folder);
+                break;
         }
     }
 
