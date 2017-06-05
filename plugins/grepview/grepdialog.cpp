@@ -13,6 +13,8 @@
 
 #include "grepdialog.h"
 
+#include <algorithm>
+
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QFileDialog>
@@ -240,11 +242,19 @@ QMenu* GrepDialog::createSyncButtonMenu()
         }
     }
 
+    QVector<QUrl> otherProjectUrls;
     foreach(IProject* project, m_plugin->core()->projectController()->projects())
     {
         if (!hadUrls.contains(project->path())) {
-            addUrlToMenu(ret, project->path().toUrl());
+            otherProjectUrls.append(project->path().toUrl());
         }
+    }
+
+    // sort the remaining project URLs alphabetically
+    std::sort(otherProjectUrls.begin(), otherProjectUrls.end());
+    foreach(const QUrl& url, otherProjectUrls)
+    {
+        addUrlToMenu(ret, url);
     }
 
     addStringToMenu(ret, allOpenFilesString());
