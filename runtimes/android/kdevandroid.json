@@ -17,6 +17,7 @@
         "Description[pt]": "Expõe as bibliotecas do Android",
         "Description[sl]": "Izpostavi izvajalne knjižnice za Android",
         "Description[sv]": "Exponerar Android-körtidsprogram",
+        "Description[tr]": "Android çalışma zamanlarını gösterir",
         "Description[uk]": "Надає доступ до середовищ виконання Android",
         "Description[x-test]": "xxExposes Android runtimesxx",
         "Icon": "android",
@@ -31,6 +32,7 @@
         "Name[pt]": "Suporte para Android",
         "Name[sl]": "Podpora za Android",
         "Name[sv]": "Android-stöd",
+        "Name[tr]": "Android Desteği",
         "Name[uk]": "Підтримка Android",
         "Name[x-test]": "xxAndroid Supportxx",
         "ServiceTypes": [
