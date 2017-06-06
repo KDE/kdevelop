@@ -20,7 +20,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include "cache.h"
+#include "debug.h"
 
 #include <QString>
 #include <QProcess>
@@ -172,8 +174,17 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
             qmlplugindump.setWorkingDirectory(fileInfo.absolutePath());
             qmlplugindump.start(executable.executable, args);
 
-            if (!qmlplugindump.waitForFinished(3000) ||
-                qmlplugindump.exitCode() != 0) {
+            qCDebug(KDEV_QMLJS_DUCHAIN) << "starting qmlplugindump with args:" << args;
+
+            if (!qmlplugindump.waitForFinished(3000)) {
+                qCWarning(KDEV_QMLJS_DUCHAIN) << "qmlplugindump didn't finish in time -- killing";
+                qmlplugindump.kill();
+                qmlplugindump.waitForFinished(100);
+                continue;
+            }
+
+            if (qmlplugindump.exitCode() != 0) {
+                qCWarning(KDEV_QMLJS_DUCHAIN) << "qmlplugindump finished with exit code:" << qmlplugindump.exitCode();
                 continue;
             }
 
