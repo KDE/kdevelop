@@ -16,6 +16,7 @@
         "Description[pt]": "Expõe as bibliotecas do Docker",
         "Description[sl]": "Izpostavi izvajalne knjižnice za Docker",
         "Description[sv]": "Exponerar Docker-körtidsprogram",
+        "Description[tr]": "Docker çalışma zamanlarını gösterir",
         "Description[uk]": "Надає доступ до середовищ виконання Docker",
         "Description[x-test]": "xxExposes Docker runtimesxx",
         "Icon": "docker",
@@ -30,6 +31,7 @@
         "Name[pt]": "Suporte para o Docker",
         "Name[sl]": "Podpora za Docker",
         "Name[sv]": "Docker-stöd",
+        "Name[tr]": "Docker Desteği",
         "Name[uk]": "Підтримка Docker",
         "Name[x-test]": "xxDocker Supportxx",
         "ServiceTypes": [

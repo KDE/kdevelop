@@ -16,6 +16,7 @@
         "Description[pt]": "Expõe as bibliotecas do Flatpak",
         "Description[sl]": "Izpostavi izvajalne knjižnice za Flatpak",
         "Description[sv]": "Exponerar Flatpak-körtidsprogram",
+        "Description[tr]": "Flatpak çalışma zamanlarını gösterir",
         "Description[uk]": "Надає доступ до середовищ виконання Flatpak",
         "Description[x-test]": "xxExposes Flatpak runtimesxx",
         "Icon": "flatpak",
@@ -30,6 +31,7 @@
         "Name[pt]": "Suporte para o Flatpak",
         "Name[sl]": "Podpora za Flatpak",
         "Name[sv]": "Flatpak-stöd",
+        "Name[tr]": "Flatpak Desteği",
         "Name[uk]": "Підтримка Flatpak",
         "Name[x-test]": "xxFlatpak Supportxx",
         "ServiceTypes": [
