@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>363</width>
-    <height>236</height>
+    <height>244</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -21,18 +21,15 @@
       </widget>
      </item>
      <item>
-      <widget class="KUrlRequester" name="buildDir">
+      <widget class="KUrlRequester" name="buildDir" native="true">
        <property name="toolTip">
         <string>Select the directory where the tools are being executed in.
 If this is the same as the source directory you can leave it empty.</string>
        </property>
-       <property name="mode">
-        <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
-       </property>
-       <property name="placeholderText">
+       <property name="placeholderText" stdset="0">
         <string>The directory where the tools are executed</string>
        </property>
-       <property name="text">
+       <property name="text" stdset="0">
         <string/>
        </property>
       </widget>
@@ -44,7 +41,7 @@ If this is the same as the source directory you can leave it empty.</string>
      <property name="title">
       <string>Build Tools</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
@@ -80,7 +77,7 @@ If this is the same as the source directory you can leave it empty.</string>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KUrlRequester" name="actionExecutable">
+       <widget class="KUrlRequester" name="actionExecutable" native="true">
         <property name="enabled">
          <bool>false</bool>
         </property>
