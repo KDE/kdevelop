@@ -62,7 +62,7 @@ void CustomBuildSystemKCModule::defaults()
 
 QString CustomBuildSystemKCModule::name() const
 {
-    return i18n("Custom BuildSystem");
+    return i18n("Custom Build System");
 }
 
 QString CustomBuildSystemKCModule::fullName() const

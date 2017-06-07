@@ -24,7 +24,7 @@
         "Description[zh_CN]": "允许对 KDevelop 工程使用自定义构建系统",
         "Icon": "kdevelop",
         "Id": "KDevCustomBuildSystem",
-        "Name": "Custom BuildSystem",
+        "Name": "Custom Build System",
         "Name[bs]": "Vlasititi sistem gradnje",
         "Name[ca@valencia]": "BuildSystem personalitzat",
         "Name[ca]": "BuildSystem personalitzat",
