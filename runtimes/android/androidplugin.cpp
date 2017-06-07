@@ -53,7 +53,7 @@ AndroidPlugin::AndroidPlugin(QObject *parent, const QVariantList & /*args*/)
 
     AndroidRuntime::s_settings = m_settings.data();
 
-    ICore::self()->runtimeController()->addRuntimes({ new AndroidRuntime });
+    ICore::self()->runtimeController()->addRuntimes(new AndroidRuntime);
 }
 
 AndroidPlugin::~AndroidPlugin()
