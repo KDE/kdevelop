@@ -560,9 +560,10 @@ private:
   friend class IndexedDeclaration;
   friend class LocalIndexedDeclaration;
   friend class TopDUContextDynamicData;
-  DUContext* m_context;
-  TopDUContext* m_topContext;
-  int m_indexInTopContext;
+
+  DUContext* m_context = nullptr;
+  TopDUContext* m_topContext = nullptr;
+  int m_indexInTopContext = 0;
 };
 
 }

@@ -53,9 +53,7 @@ namespace KDevelop
 REGISTER_DUCHAIN_ITEM(Declaration);
 
 DeclarationData::DeclarationData()
-  : m_comment(0)
-  , m_kind(Declaration::Instance)
-  , m_isDefinition(false)
+  : m_isDefinition(false)
   , m_inSymbolTable(false)
   , m_isTypeAlias(false)
   , m_anonymousInContext(false)
@@ -63,24 +61,6 @@ DeclarationData::DeclarationData()
   , m_alwaysForceDirect(false)
   , m_isAutoDeclaration(false)
   , m_isExplicitlyDeleted(false)
-{
-}
-
-DeclarationData::DeclarationData( const DeclarationData& rhs ) : DUChainBaseData(rhs),
-m_internalContext(rhs.m_internalContext),
-m_type(rhs.m_type),
-m_identifier(rhs.m_identifier),
-m_declaration(rhs.m_declaration),
-m_comment(rhs.m_comment),
-m_kind(rhs.m_kind),
-m_isDefinition(rhs.m_isDefinition),
-m_inSymbolTable(rhs.m_inSymbolTable),
-m_isTypeAlias(rhs.m_isTypeAlias),
-m_anonymousInContext(rhs.m_anonymousInContext),
-m_isDeprecated(rhs.m_isDeprecated),
-m_alwaysForceDirect(rhs.m_alwaysForceDirect),
-m_isAutoDeclaration(rhs.m_isAutoDeclaration),
-m_isExplicitlyDeleted(rhs.m_isExplicitlyDeleted)
 {
 }
 
@@ -134,25 +114,17 @@ uint Declaration::ownIndex() const
 }
 
 Declaration::Declaration(const Declaration& rhs)
-  : DUChainBase(*new DeclarationData( *rhs.d_func() )) {
-  m_topContext = nullptr;
-  m_context = nullptr;
-  m_indexInTopContext = 0;
+  : DUChainBase(*new DeclarationData( *rhs.d_func() ))
+{
 }
 
 Declaration::Declaration( DeclarationData & dd ) : DUChainBase(dd)
 {
-  m_topContext = nullptr;
-  m_context = nullptr;
-  m_indexInTopContext = 0;
 }
 
 Declaration::Declaration( DeclarationData & dd, const RangeInRevision& range )
   : DUChainBase(dd, range)
 {
-  m_topContext = nullptr;
-  m_context = nullptr;
-  m_indexInTopContext = 0;
 }
 
 bool Declaration::persistentlyDestroying() const

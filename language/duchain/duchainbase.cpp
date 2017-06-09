@@ -43,25 +43,25 @@ uint DUChainBaseData::classSize() const {
 }
 
 DUChainBase::DUChainBase(const RangeInRevision& range)
-  : d_ptr(new DUChainBaseData), m_ptr( nullptr )
+  : d_ptr(new DUChainBaseData)
 {
   d_func_dynamic()->m_range = range;
   d_func_dynamic()->setClassId(this);
 }
 
 DUChainBase::DUChainBase( DUChainBaseData & dd, const RangeInRevision& range )
-  : d_ptr( &dd ), m_ptr( nullptr )
+  : d_ptr( &dd )
 {
   d_func_dynamic()->m_range = range;
 }
 
 DUChainBase::DUChainBase( DUChainBaseData & dd )
-  : d_ptr( &dd ), m_ptr( nullptr )
+  : d_ptr( &dd )
 {
 }
 
 DUChainBase::DUChainBase( DUChainBase& rhs )
-  : d_ptr( new DUChainBaseData(*rhs.d_func()) ), m_ptr( nullptr )
+  : d_ptr( new DUChainBaseData(*rhs.d_func()) )
 {
   d_func_dynamic()->setClassId(this);
 }

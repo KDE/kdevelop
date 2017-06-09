@@ -91,10 +91,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironment
 ///ParsingEnvironmentFile
 class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFileData : public DUChainBaseData {
   public:
-  ParsingEnvironmentFileData() : m_isProxyContext(false), m_features(TopDUContext::VisibleDeclarationsAndContexts) {
-  }
-  bool m_isProxyContext;
-  TopDUContext::Features m_features;
+  bool m_isProxyContext = false;
+  TopDUContext::Features m_features = TopDUContext::VisibleDeclarationsAndContexts;
   KDevelop::ModificationRevision m_modificationTime;
   ModificationRevisionSet m_allModificationRevisions;
   KDevelop::IndexedString m_url;

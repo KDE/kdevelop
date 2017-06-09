@@ -32,7 +32,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclarationData : public Declaratio
 {
 public:
   ClassMemberDeclarationData();
-  ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs );
+  ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs ) = default;
 
   Declaration::AccessPolicy m_accessPolicy;
   bool m_isStatic: 1;

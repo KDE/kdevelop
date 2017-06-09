@@ -41,21 +41,6 @@ ClassMemberDeclarationData::ClassMemberDeclarationData()
     , m_isAbstract(false)
 {
 }
-ClassMemberDeclarationData::ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs )
-    : DeclarationData(rhs)
-    , m_accessPolicy(rhs.m_accessPolicy)
-    , m_isStatic(rhs.m_isStatic)
-    , m_isAuto(rhs.m_isAuto)
-    , m_isFriend(rhs.m_isFriend)
-    , m_isRegister(rhs.m_isRegister)
-    , m_isExtern(rhs.m_isExtern)
-    , m_isMutable(rhs.m_isMutable)
-    , m_isNative(rhs.m_isNative)
-    , m_isSynchronized(rhs.m_isSynchronized)
-    , m_isStrictFP(rhs.m_isStrictFP)
-    , m_isAbstract(rhs.m_isAbstract)
-{
-}
 
 ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationData(*rhs.d_func())) {
 }

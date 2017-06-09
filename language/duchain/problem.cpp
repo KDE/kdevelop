@@ -66,16 +66,12 @@ ProblemPointer LocalIndexedProblem::data(const TopDUContext* top) const
 
 Problem::Problem()
     : DUChainBase(*new ProblemData)
-    , m_topContext(nullptr)
-    , m_indexInTopContext(0)
 {
     d_func_dynamic()->setClassId(this);
 }
 
 Problem::Problem(ProblemData& data)
     : DUChainBase(data)
-    , m_topContext(nullptr)
-    , m_indexInTopContext(0)
 {
 }
 

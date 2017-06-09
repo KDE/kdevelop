@@ -38,8 +38,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationData : public DUChainBaseData
 {
 public:
   DeclarationData();
-
-  DeclarationData( const DeclarationData& rhs );
+  DeclarationData(const DeclarationData& rhs) = default;
 
   IndexedDUContext m_internalContext;
   IndexedType m_type;
@@ -50,9 +49,9 @@ public:
   DeclarationId m_declaration;
 
   //Index in the comment repository
-  uint m_comment;
+  uint m_comment = 0;
 
-  Declaration::Kind m_kind;
+  Declaration::Kind m_kind = Declaration::Instance;
 
   bool m_isDefinition  : 1;
   bool m_inSymbolTable : 1;
@@ -63,6 +62,7 @@ public:
   bool m_isAutoDeclaration : 1;
   bool m_isExplicitlyDeleted : 1;
 };
+
 }
 
 #endif

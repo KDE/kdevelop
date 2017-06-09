@@ -237,7 +237,7 @@ private:
     //BEGIN dynamic data
     TopDUContextPointer m_topContext;
     mutable QList<Ptr> m_diagnostics;
-    uint m_indexInTopContext;
+    uint m_indexInTopContext = 0;
     //END dynamic data
 };
 
