@@ -154,7 +154,9 @@ class Bucket {
         m_monsterBucketExtent = monsterBucketExtent;
         m_available = ItemRepositoryBucketSize;
         m_data = new char[ItemRepositoryBucketSize + monsterBucketExtent * DataSize];
+#ifndef QT_NO_DEBUG
         memset(m_data, 0, (ItemRepositoryBucketSize + monsterBucketExtent * DataSize) * sizeof(char));
+#endif
         //The bigger we make the map, the lower the probability of a clash(and thus bad performance). However it increases memory usage.
         m_objectMap = new short unsigned int[ObjectMapSize];
         memset(m_objectMap, 0, ObjectMapSize * sizeof(short unsigned int));
@@ -566,7 +568,9 @@ class Bucket {
       if(markForReferenceCounting)
         disableDUChainReferenceCounting(m_data);
 
+#ifndef QT_NO_DEBUG
       memset(item, 0, size); //For debugging, so we notice the data is wrong
+#endif
 
       if(m_monsterBucketExtent) {
         ///This is a monster-bucket. Make it completely empty again.
