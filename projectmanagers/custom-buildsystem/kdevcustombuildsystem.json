@@ -25,6 +25,12 @@
         "Icon": "kdevelop",
         "Id": "KDevCustomBuildSystem",
         "Name": "Custom Build System",
+        "Name[ca]": "Sistema de construcció personalitzat",
+        "Name[nl]": "Zelf gebouwd systeem",
+        "Name[pt]": "Sistema de Compilação Personalizado",
+        "Name[sv]": "Eget byggsystem",
+        "Name[uk]": "Нетипова система збирання",
+        "Name[x-test]": "xxCustom Build Systemxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
