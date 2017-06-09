@@ -76,7 +76,7 @@ struct TestItemRequest {
 
 uint smallItemsFraction = 20; //Fraction of items betwen 0 and 1 kb
 uint largeItemsFraction = 1; //Fraction of items between 0 and 200 kb
-uint cycles = 100000;
+uint cycles = 10000;
 uint deletionProbability = 1; //Percentual probability that a checked item is deleted. Per-cycle probability must be multiplied with checksPerCycle.
 uint checksPerCycle = 10;
 
@@ -99,7 +99,7 @@ class TestItemRepository : public QObject {
   Q_OBJECT
   private slots:
     void initTestCase() {
-      KDevelop::AutoTestShell::init();
+      KDevelop::AutoTestShell::init({{}}); // don't load any plugins
       KDevelop::TestCore* core = new KDevelop::TestCore();
       core->initialize(KDevelop::Core::NoUi);
     }
