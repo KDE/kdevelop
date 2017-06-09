@@ -178,9 +178,18 @@ class TestItemRepository : public QObject {
               }
            }
         }
-
-
       }
+
+      // cleanup
+      {
+        for (auto it = realItemsByIndex.constBegin(); it != realItemsByIndex.constEnd(); ++it) {
+          repository.deleteItem(it.key());
+          delete[] it.value();
+        }
+        realItemsById.clear();
+        realItemsByIndex.clear();
+      }
+
       qDebug() << "total insertions:" << totalInsertions << "total deletions:" << totalDeletions << "average item size:" << (totalSize / totalInsertions) << "biggest item size:" << maxSize;
 
       KDevelop::ItemRepository<TestItem, TestItemRequest>::Statistics stats = repository.statistics();
