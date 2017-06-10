@@ -26,6 +26,7 @@
         "Id": "KDevCustomBuildSystem",
         "Name": "Custom Build System",
         "Name[ca]": "Sistema de construcció personalitzat",
+        "Name[es]": "Sistema de construcción personalizado",
         "Name[nl]": "Zelf gebouwd systeem",
         "Name[pt]": "Sistema de Compilação Personalizado",
         "Name[sv]": "Eget byggsystem",
