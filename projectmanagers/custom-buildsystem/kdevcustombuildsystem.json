@@ -25,6 +25,7 @@
         "Icon": "kdevelop",
         "Id": "KDevCustomBuildSystem",
         "Name": "Custom Build System",
+        "Name[ca@valencia]": "Sistema de construcció personalitzat",
         "Name[ca]": "Sistema de construcció personalitzat",
         "Name[es]": "Sistema de construcción personalizado",
         "Name[nl]": "Zelf gebouwd systeem",
