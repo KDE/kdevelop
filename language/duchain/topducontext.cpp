@@ -85,17 +85,6 @@ DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_usedDeclarationIds, DeclarationId)
 DEFINE_LIST_MEMBER_HASH(TopDUContextData, m_problems, LocalIndexedProblem)
 REGISTER_DUCHAIN_ITEM(TopDUContext);
 
-template <class T>
-void removeFromVector(QVector<T>& vec, const T& t) {
-  for(int a  =0; a < vec.size(); ++a) {
-    if(vec[a] == t) {
-      vec.remove(a);
-      removeFromVector(vec, t);
-      return;
-    }
-  }
-}
-
 QMutex importStructureMutex(QMutex::Recursive);
 
 //Contains data that is not shared among top-contexts that share their duchain entries
@@ -196,8 +185,10 @@ public:
 
     context->m_local->m_directImporters.insert(m_ctxt);
 
-    if(local)
+    if(local) {
+      // note: m_importedContexts may end up with duplicate entries -- not sure whether we should protect against this --Kevin
       m_importedContexts << DUContext::Import(context, m_ctxt);
+    }
 
     if(!m_ctxt->usingImportsCache()) {
       addImportedContextRecursion(context, context, 1, temporary);
@@ -215,7 +206,7 @@ public:
     context->m_local->m_directImporters.remove(m_ctxt);
 
     if(local)
-      removeFromVector(m_importedContexts, DUContext::Import(context, m_ctxt));
+      m_importedContexts.removeAll(DUContext::Import(context, m_ctxt));
 
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
     if(!m_ctxt->usingImportsCache()) {
@@ -242,7 +233,7 @@ public:
       context->m_local->m_directImporters.remove(m_ctxt);
 
       if(local)
-        removeFromVector(m_importedContexts, DUContext::Import(context, m_ctxt));
+        m_importedContexts.removeAll(DUContext::Import(context, m_ctxt));
 
       if(!m_ctxt->usingImportsCache()) {
 
