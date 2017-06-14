@@ -114,7 +114,6 @@ Q_LOGGING_CATEGORY(PLUGIN_PERFORCE, "kdevplatform.plugins.perforce")
 PerforcePlugin::PerforcePlugin(QObject* parent, const QVariantList&):
     KDevelop::IPlugin("kdevperforce", parent)
     , m_common(new KDevelop::VcsPluginHelper(this, this))
-    , m_perforcemenu(nullptr)
     , m_perforceConfigName("p4config.txt")
     , m_perforceExecutable("p4")
     , m_edit_action(nullptr)

@@ -29,7 +29,6 @@
 
 #include <memory>
 
-class QMenu;
 class QFileInfo;
 class QDir;
 
@@ -167,7 +166,6 @@ private:
     QList<QVariant> getQvariantFromLogOutput(QStringList const& outputLines);
 
     std::unique_ptr<KDevelop::VcsPluginHelper> m_common;
-    QMenu* m_perforcemenu;
     QString m_perforceConfigName;
     QString m_perforceExecutable;
     QAction* m_edit_action;

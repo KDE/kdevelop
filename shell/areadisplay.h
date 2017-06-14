@@ -24,7 +24,6 @@
 
 class QLabel;
 class QToolButton;
-class QMenu;
 
 namespace KDevelop {
 class MainWindow;
@@ -56,7 +55,6 @@ private slots:
 
 private:
     QLabel* m_separator;
-    QMenu* m_menu;
     QToolButton* m_button;
     KDevelop::MainWindow* m_mainWindow;
 };
