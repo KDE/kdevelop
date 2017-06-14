@@ -134,8 +134,10 @@ public:
     virtual bool canLaunch( const QUrl& file ) const = 0;
 
     /**
-     * Returns a menu that will be added to the UI where the interface will be
+     * Creates and returns a menu that will be added to the UI where the interface will be
      * able to add any suggestion it needs, like default targets.
+     * Can be a nullptr if there are no suggestions.
+     * Caller takes ownership of the returned menu.
      */
     virtual QMenu* launcherSuggestions() { return nullptr; }
 

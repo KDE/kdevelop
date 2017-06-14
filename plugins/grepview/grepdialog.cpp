@@ -217,7 +217,7 @@ void GrepDialog::synchronizeDirActionTriggered(bool)
 
 QMenu* GrepDialog::createSyncButtonMenu()
 {
-    QMenu* ret = new QMenu;
+    QMenu* ret = new QMenu(this);
 
     QSet<Path> hadUrls;
 

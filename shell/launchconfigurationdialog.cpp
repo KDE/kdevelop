@@ -154,6 +154,8 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
         QMenu* suggestionsMenu = type->launcherSuggestions();
 
         if(suggestionsMenu) {
+            // take ownership
+            suggestionsMenu->setParent(m, suggestionsMenu->windowFlags());
             m->addMenu(suggestionsMenu);
         }
     }
