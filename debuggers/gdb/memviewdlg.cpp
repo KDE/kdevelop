@@ -272,8 +272,8 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     reload->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
     reload->setEnabled(app_running && !m_memData.isEmpty() );
 
-    QActionGroup *formatGroup = NULL;
-    QActionGroup *groupingGroup = NULL;
+    QActionGroup* formatGroup = nullptr;
+    QActionGroup* groupingGroup = nullptr;
     if (m_memViewModel && m_memViewView)
     {
         // make Format menu with action group
