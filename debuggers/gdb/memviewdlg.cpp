@@ -305,7 +305,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     KHE::BytesEditInterface *bytesEdit = KHE::bytesEditInterface(khexedit2_widget);
     KHE::ValueColumnInterface *valueColumn = KHE::valueColumnInterface(khexedit2_widget);
 
-    QMenu menu;
+    QMenu menu(this);
 
     bool app_running = !(debuggerState_ & s_appNotStarted);
 
@@ -444,7 +444,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     }
 
     if (result == close)
-        delete this;
+        deleteLater();
 }
 
 bool MemoryView::isOk() const
