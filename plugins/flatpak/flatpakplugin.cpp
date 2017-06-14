@@ -36,7 +36,6 @@
 #include <QInputDialog>
 #include <QTemporaryDir>
 #include <QTemporaryFile>
-#include <QMenu>
 #include <QFileDialog>
 #include <KPluginFactory>
 #include <KActionCollection>
