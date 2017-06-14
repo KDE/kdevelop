@@ -589,7 +589,7 @@ void Container::contextMenu( const QPoint& pos )
 
     int currentTab = d->tabBar->tabAt(pos);
 
-    QMenu menu;
+    QMenu menu(senderWidget);
 
     Sublime::View* view = viewForWidget(widget(currentTab));
     emit tabContextMenuRequested(view, &menu);

@@ -145,7 +145,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
     }
 
 
-    QMenu m;
+    QMenu m(this);
     m.setTitle( i18n("Build Set") );
     m.addAction( QIcon::fromTheme(QStringLiteral("list-remove")), i18n( "Remove From Build Set" ), this, SLOT(removeItems()) );
 
