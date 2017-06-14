@@ -150,6 +150,8 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
         QMenu* suggestionsMenu = type->launcherSuggestions();
 
         if(suggestionsMenu) {
+            // take ownership
+            suggestionsMenu->setParent(m, suggestionsMenu->windowFlags());
             m->addMenu(suggestionsMenu);
         }
     }
@@ -203,7 +205,7 @@ void LaunchConfigurationDialog::doTreeContextMenu(const QPoint& point)
         QModelIndex selected = tree->selectionModel()->selectedRows().first();
         if ( selected.parent().isValid() && ! selected.parent().parent().isValid() ) {
             // only display the menu if a launch config is clicked
-            QMenu menu;
+            QMenu menu(tree);
             QAction* rename = new QAction(QIcon::fromTheme(QStringLiteral("edit-rename")), i18n("Rename configuration"), &menu);
             QAction* delete_ = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("Delete configuration"), &menu);
             connect(rename, &QAction::triggered, this, &LaunchConfigurationDialog::renameSelected);

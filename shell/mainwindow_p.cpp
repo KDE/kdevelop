@@ -408,7 +408,7 @@ void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Contai
 
 void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position)
 {
-    QMenu menu;
+    QMenu menu(m_mainWindow);
     menu.addSection(QIcon::fromTheme(QStringLiteral("window-new")), i18n("Add Tool View"));
     QHash<IToolViewFactory*, Sublime::ToolDocument*> factories =
         Core::self()->uiControllerInternal()->factoryDocuments();

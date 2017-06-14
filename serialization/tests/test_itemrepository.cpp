@@ -76,7 +76,7 @@ struct TestItemRequest {
 
 uint smallItemsFraction = 20; //Fraction of items betwen 0 and 1 kb
 uint largeItemsFraction = 1; //Fraction of items between 0 and 200 kb
-uint cycles = 100000;
+uint cycles = 10000;
 uint deletionProbability = 1; //Percentual probability that a checked item is deleted. Per-cycle probability must be multiplied with checksPerCycle.
 uint checksPerCycle = 10;
 
@@ -99,7 +99,7 @@ class TestItemRepository : public QObject {
   Q_OBJECT
   private Q_SLOTS:
     void initTestCase() {
-      KDevelop::AutoTestShell::init();
+      KDevelop::AutoTestShell::init({{}}); // don't load any plugins
       KDevelop::TestCore* core = new KDevelop::TestCore();
       core->initialize(KDevelop::Core::NoUi);
     }
@@ -178,9 +178,18 @@ class TestItemRepository : public QObject {
               }
            }
         }
-
-
       }
+
+      // cleanup
+      {
+        for (auto it = realItemsByIndex.constBegin(); it != realItemsByIndex.constEnd(); ++it) {
+          repository.deleteItem(it.key());
+          delete[] it.value();
+        }
+        realItemsById.clear();
+        realItemsByIndex.clear();
+      }
+
       qDebug() << "total insertions:" << totalInsertions << "total deletions:" << totalDeletions << "average item size:" << (totalSize / totalInsertions) << "biggest item size:" << maxSize;
 
       KDevelop::ItemRepository<TestItem, TestItemRequest>::Statistics stats = repository.statistics();

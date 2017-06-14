@@ -45,7 +45,7 @@ private Q_SLOTS:
     void directoryChanged(const QString &dir);
     QMenu* createSyncButtonMenu();
     void addUrlToMenu(QMenu* ret, const QUrl& url);
-    void addStringToMenu(QMenu* ret, QString string);
+    void addStringToMenu(QMenu* ret, const QString& string);
     void synchronizeDirActionTriggered(bool);
 
     ///Opens the dialog to select a directory to search in, and inserts it into Location(s) field.

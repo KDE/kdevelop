@@ -381,7 +381,7 @@ void GrepOutputView::clearSearchHistory()
 void GrepOutputView::modelSelectorContextMenu(const QPoint& pos)
 {
     QPoint globalPos = modelSelector->mapToGlobal(pos);
-    QMenu myMenu;
+    QMenu myMenu(this);
     myMenu.addAction(m_clearSearchHistory);
     myMenu.exec(globalPos);
 }

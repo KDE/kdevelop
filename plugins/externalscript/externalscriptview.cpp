@@ -105,7 +105,7 @@ void ExternalScriptView::validateActions()
 
 void ExternalScriptView::contextMenu( const QPoint& pos )
 {
-  QMenu menu;
+  QMenu menu(this);
   menu.addActions( actions() );
 
   menu.exec( scriptTree->mapToGlobal( pos ) );

@@ -344,7 +344,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                     }
                     QStringList path = model->pathFromIndex(folder->index());
                     path.removeFirst();
-                    QMenu* submenu = new QMenu(path.join(QStringLiteral("/")));
+                    QMenu* submenu = new QMenu(path.join(QStringLiteral("/")), projectMenu);
                     std::sort(actions.begin(), actions.end(), actionLess);
                     submenu->addActions(actions);
                     submenus += submenu;

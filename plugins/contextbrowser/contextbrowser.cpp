@@ -173,7 +173,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
     m_previousButton->setEnabled(false);
     m_previousButton->setFocusPolicy(Qt::NoFocus);
-    m_previousMenu = new QMenu();
+    m_previousMenu = new QMenu(m_previousButton);
     m_previousButton->setMenu(m_previousMenu);
     connect(m_previousButton.data(), &QToolButton::clicked, this, &ContextBrowserPlugin::historyPrevious);
     connect(m_previousMenu.data(), &QMenu::aboutToShow, this, &ContextBrowserPlugin::previousMenuAboutToShow);
@@ -185,7 +185,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow( Sublime::MainWindow
     m_nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     m_nextButton->setEnabled(false);
     m_nextButton->setFocusPolicy(Qt::NoFocus);
-    m_nextMenu = new QMenu();
+    m_nextMenu = new QMenu(m_nextButton);
     m_nextButton->setMenu(m_nextMenu);
     connect(m_nextButton.data(), &QToolButton::clicked, this, &ContextBrowserPlugin::historyNext);
     connect(m_nextMenu.data(), &QMenu::aboutToShow, this, &ContextBrowserPlugin::nextMenuAboutToShow);

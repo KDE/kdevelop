@@ -201,7 +201,7 @@ void GrepDialog::addUrlToMenu(QMenu* menu, const QUrl& url)
     connect(action, &QAction::triggered, this, &GrepDialog::synchronizeDirActionTriggered);
 }
 
-void GrepDialog::addStringToMenu(QMenu* menu, QString string)
+void GrepDialog::addStringToMenu(QMenu* menu, const QString& string)
 {
     QAction* action = menu->addAction(string);
     action->setData(QVariant(string));
@@ -217,7 +217,7 @@ void GrepDialog::synchronizeDirActionTriggered(bool)
 
 QMenu* GrepDialog::createSyncButtonMenu()
 {
-    QMenu* ret = new QMenu;
+    QMenu* ret = new QMenu(this);
 
     QSet<Path> hadUrls;
 
