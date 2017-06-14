@@ -32,7 +32,6 @@
 
 #include "dbgglobal.h"
 
-class QMenu;
 class QTextEdit;
 class QToolBar;
 class KHistoryComboBox;
@@ -126,7 +125,6 @@ private:
     QAction *m_actCmdEditor;
 
     QTextEdit *m_textView;
-    QMenu *m_contextMenu;
     QToolBar *m_toolBar;
     KHistoryComboBox *m_cmdEditor;
 

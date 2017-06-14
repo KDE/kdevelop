@@ -33,6 +33,8 @@ ConfigWidget::ConfigWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
+    ui->buildDir->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
+
     ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Configure, i18n("Configure"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Install, i18n("Install"), QVariant() );

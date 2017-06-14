@@ -264,7 +264,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     if (!isOk())
         return;
 
-    QMenu menu;
+    QMenu menu(this);
 
     bool app_running = !(m_debuggerState & s_appNotStarted);
 
@@ -277,7 +277,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     if (m_memViewModel && m_memViewView)
     {
         // make Format menu with action group
-        QMenu *formatMenu = new QMenu(i18n("&Format"));
+        QMenu* formatMenu = menu.addMenu(i18n("&Format"));
         formatGroup = new QActionGroup(formatMenu);
 
         QAction *binary = formatGroup->addAction(i18n("&Binary"));
@@ -307,11 +307,9 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
             act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         }
 
-        menu.addMenu(formatMenu);
-
 
         // make Grouping menu with action group
-        QMenu *groupingMenu = new QMenu(i18n("&Grouping"));
+        QMenu* groupingMenu = menu.addMenu(i18n("&Grouping"));
         groupingGroup = new QActionGroup(groupingMenu);
 
         QAction *group0 = groupingGroup->addAction(i18n("&0"));
@@ -350,8 +348,6 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
             act->setChecked(act->data().toInt() == m_memViewView->noOfGroupedBytes());
             act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         }
-
-        menu.addMenu(groupingMenu);
     }
 
     QAction* write = menu.addAction(i18n("Write changes"));
@@ -407,7 +403,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
     }
 
     if (result == close)
-        delete this;
+        deleteLater();
 }
 
 bool MemoryView::isOk() const

@@ -266,7 +266,7 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
     if (!view)
         return;
 
-    QMenu menu;
+    QMenu menu(view);
     QAction* copyAction = view->copyAction();
     copyAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
     menu.addAction(copyAction);

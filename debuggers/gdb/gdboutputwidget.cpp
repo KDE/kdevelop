@@ -435,7 +435,7 @@ OutputTextEdit::OutputTextEdit(GDBOutputWidget * parent)
 
 void OutputTextEdit::contextMenuEvent(QContextMenuEvent * event)
 {
-    QMenu* popup = createStandardContextMenu();
+    QScopedPointer<QMenu> popup(createStandardContextMenu());
 
     QAction* action = popup->addAction(i18n("Show Internal Commands"),
                                parent(),
