@@ -260,7 +260,7 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_deselectAllAction, &QAction::triggered, this, &PatchReviewToolView::deselectAll );
 }
 
-void PatchReviewToolView::customContextMenuRequested(const QPoint& )
+void PatchReviewToolView::customContextMenuRequested(const QPoint& pos)
 {
     QList<QUrl> urls;
     QModelIndexList selectionIdxs = m_editPatch.filesList->selectionModel()->selectedIndexes();
@@ -285,7 +285,7 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& )
     menu->addAction(m_deselectAllAction);
     menu->addActions(vcsActions);
     if ( !menu->isEmpty() ) {
-        menu->exec(QCursor::pos());
+        menu->exec(m_editPatch.filesList->viewport()->mapToGlobal(pos));
     }
 
     delete menu;
