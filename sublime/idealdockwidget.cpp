@@ -113,7 +113,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     /// start position menu
     QMenu* positionMenu = menu.addMenu(i18n("Toolview Position"));
 
-    QActionGroup *g = new QActionGroup(this);
+    QActionGroup* g = new QActionGroup(positionMenu);
 
     QAction *left = new QAction(i18nc("toolview position", "Left"), g);
     QAction *bottom = new QAction(i18nc("toolview position", "Bottom"), g);

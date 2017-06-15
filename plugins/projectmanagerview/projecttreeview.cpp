@@ -379,7 +379,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
     if ( !itemlist.isEmpty() && itemlist.size() == 1 && itemlist[0]->folder() && !itemlist[0]->folder()->parent() )
     {
-        QAction* projectConfig = new QAction(i18n("Open Configuration..."), this);
+        QAction* projectConfig = new QAction(i18n("Open Configuration..."), &menu);
         projectConfig->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
         connect( projectConfig, &QAction::triggered, this, &ProjectTreeView::openProjectConfig );
         projectActions << projectConfig;
