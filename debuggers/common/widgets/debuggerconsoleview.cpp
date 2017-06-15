@@ -218,12 +218,15 @@ void DebuggerConsoleView::setShowInternalCommands(bool enable)
 
 void DebuggerConsoleView::showContextMenu(const QPoint &pos)
 {
+    // FIXME: QTextEdit::createStandardContextMenu takes position in document coordinates
+    // while pos is in QTextEdit::viewport coordinates.
+    // Seems not a big issue currently as menu content seems position indepedent, but still better fix
     QScopedPointer<QMenu> popup(m_textView->createStandardContextMenu(pos));
 
     popup->addSeparator();
     popup->addAction(m_actShowInternal);
 
-    popup->exec(m_textView->mapToGlobal(pos));
+    popup->exec(m_textView->viewport()->mapToGlobal(pos));
 }
 
 void DebuggerConsoleView::toggleRepeat(bool checked)
