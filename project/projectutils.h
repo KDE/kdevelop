@@ -47,12 +47,6 @@ private:
 };
 
 /**
- * Adds menu entries for all parent folders of the given item, each containing all the project
- * items for the folder, at the end of the given menu.
- * */
-KDEVPLATFORMPROJECT_EXPORT void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu );
-
-/**
  * Returns all the files that have @p projectItem as ancestor
  */
 KDEVPLATFORMPROJECT_EXPORT QList<ProjectFileItem*> allFiles(ProjectBaseItem* projectItem);
