@@ -75,7 +75,8 @@ public:
         {
             ev->accept();
 
-            int tab = tabAt(mapFromGlobal(QCursor::pos()));
+            QHelpEvent* helpEvent = static_cast<QHelpEvent*>(ev);
+            int tab = tabAt(helpEvent->pos());
 
             if(tab != -1)
             {
@@ -91,7 +92,7 @@ public:
         if (event->button() == Qt::MidButton) {
             // just close on midbutton, drag can still be done with left mouse button
 
-            int tab = tabAt(mapFromGlobal(QCursor::pos()));
+            int tab = tabAt(event->pos());
             if (tab != -1) {
                 emit tabCloseRequested(tab);
             }

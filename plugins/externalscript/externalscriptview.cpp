@@ -108,7 +108,7 @@ void ExternalScriptView::contextMenu( const QPoint& pos )
   QMenu menu(this);
   menu.addActions( actions() );
 
-  menu.exec( scriptTree->mapToGlobal( pos ) );
+  menu.exec(scriptTree->viewport()->mapToGlobal(pos));
 }
 
 bool ExternalScriptView::eventFilter( QObject* obj, QEvent* e )

@@ -50,7 +50,9 @@ public Q_SLOTS:
     void subtractSet();
     void intersectSet();
     void buttonTriggered();
-    void showTooltip();
+
+private Q_SLOTS:
+    void showTooltip(const QPoint& globalPos);
 
 private:
     void contextMenuEvent(QContextMenuEvent* ev) override;

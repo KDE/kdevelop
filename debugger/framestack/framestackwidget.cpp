@@ -224,7 +224,7 @@ void FramestackWidget::frameSelectionChanged(const QModelIndex& current /* previ
 
 void FramestackWidget::frameContextMenuRequested(const QPoint& pos)
 {
-    m_framesContextMenu->popup( m_framesTreeView->mapToGlobal(pos) + QPoint(0, m_framesTreeView->header()->height()) );
+    m_framesContextMenu->popup(m_framesTreeView->viewport()->mapToGlobal(pos));
 }
 
 void FramestackWidget::copySelection()

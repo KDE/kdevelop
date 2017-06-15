@@ -17,7 +17,6 @@
 
 #include <QApplication>
 #include <QAction>
-#include <QCursor>
 #include <QClipboard>
 #include <QContextMenuEvent>
 #include <QMenu>
@@ -340,7 +339,7 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
         if (controller()->stateIsOn(s_dbgNotStarted))
             reevaluate->setEnabled(false);
 
-        QAction* res = popup.exec(QCursor::pos());
+        QAction* res = popup.exec(event->globalPos());
 
         if (res == remove)
         {

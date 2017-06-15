@@ -59,7 +59,7 @@ void WorkingSetToolButton::setWorkingSet(WorkingSet* set)
 
 void WorkingSetToolButton::contextMenuEvent(QContextMenuEvent* ev)
 {
-    showTooltip();
+    showTooltip(ev->globalPos());
 
     ev->accept();
 }
@@ -129,7 +129,8 @@ void WorkingSetToolButton::closeSet(bool ask)
 bool WorkingSetToolButton::event(QEvent* e)
 {
     if(m_toolTipEnabled && e->type() == QEvent::ToolTip) {
-        showTooltip();
+        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(e);
+        showTooltip(helpEvent->globalPos());
         e->accept();
         return true;
     }
@@ -137,7 +138,7 @@ bool WorkingSetToolButton::event(QEvent* e)
     return QToolButton::event(e);
 }
 
-void WorkingSetToolButton::showTooltip()
+void WorkingSetToolButton::showTooltip(const QPoint& globalPos)
 {
     Q_ASSERT(m_set);
     static WorkingSetToolButton* oldTooltipButton;
@@ -149,7 +150,7 @@ void WorkingSetToolButton::showTooltip()
 
     oldTooltipButton = this;
 
-    controller->showToolTip(m_set, QCursor::pos() + QPoint(10, 20));
+    controller->showToolTip(m_set, globalPos + QPoint(10, 20));
 
     QRect extended(parentWidget()->mapToGlobal(geometry().topLeft()),
                     parentWidget()->mapToGlobal(geometry().bottomRight()));
@@ -161,7 +162,7 @@ void WorkingSetToolButton::buttonTriggered()
     Q_ASSERT(m_set);
 
     if(mainWindow()->area()->workingSet() == m_set->id()) {
-        showTooltip();
+        showTooltip(QCursor::pos());
     }else{
         //Only close the working-set if the file was saved before
         if(!Core::self()->documentControllerInternal()->saveAllDocumentsForWindow(mainWindow(), KDevelop::IDocument::Default, true))

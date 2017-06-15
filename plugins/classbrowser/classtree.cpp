@@ -94,7 +94,7 @@ void ClassTree::contextMenuEvent( QContextMenuEvent* e )
   }
 
   if ( !menu->actions().isEmpty() )
-    menu->exec( QCursor::pos() );
+    menu->exec(e->globalPos());
 }
 
 bool ClassTree::event( QEvent* event )
@@ -102,8 +102,8 @@ bool ClassTree::event( QEvent* event )
   if ( event->type() == QEvent::ToolTip )
   {
     // if we request a tooltip over a duobject item, show a tooltip for it
-    const QPoint &p = mapFromGlobal( QCursor::pos() );
-    const QModelIndex &idxView = indexAt( p );
+    QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
+    const QModelIndex idxView = indexAt(helpEvent->pos());
 
     DUChainReadLocker readLock( DUChain::lock() );
     if ( Declaration* decl = dynamic_cast<Declaration*>( model()->duObjectForIndex( idxView ) ) )
@@ -114,7 +114,7 @@ bool ClassTree::event( QEvent* event )
       QWidget* navigationWidget = decl->topContext()->createNavigationWidget( decl );
       if ( navigationWidget )
       {
-        m_tooltip = new KDevelop::NavigationToolTip( this, mapToGlobal( p ) + QPoint( 40, 0 ), navigationWidget );
+        m_tooltip = new KDevelop::NavigationToolTip(this, helpEvent->globalPos() + QPoint(40, 0), navigationWidget);
         m_tooltip->resize( navigationWidget->sizeHint() + QSize( 10, 10 ) );
         ActiveToolTip::showToolTip( m_tooltip );
         return true;

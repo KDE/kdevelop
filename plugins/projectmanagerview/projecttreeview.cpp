@@ -390,7 +390,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         KDevelop::populateParentItemsMenu(itemlist.front(), &menu);
 
     if ( !menu.isEmpty() ) {
-        menu.exec( mapToGlobal( pos ) );
+        menu.exec(viewport()->mapToGlobal(pos));
     }
 }
 
@@ -467,8 +467,8 @@ bool ProjectTreeView::event(QEvent* event)
 {
     if(event->type()==QEvent::ToolTip)
     {
-        QPoint p = mapFromGlobal(QCursor::pos());
-        QModelIndex idxView = indexAt(p);
+        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
+        QModelIndex idxView = indexAt(helpEvent->pos());
 
         ProjectBaseItem* it = idxView.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
         QModelIndex idx;
@@ -490,7 +490,7 @@ bool ProjectTreeView::event(QEvent* event)
                 QWidget* navigationWidget = top->createNavigationWidget();
                 if( navigationWidget )
                 {
-                    m_tooltip = new KDevelop::NavigationToolTip(this, mapToGlobal(p) + QPoint(40, 0), navigationWidget);
+                    m_tooltip = new KDevelop::NavigationToolTip(this, helpEvent->globalPos() + QPoint(40, 0), navigationWidget);
                     m_tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
                     qCDebug(PLUGIN_PROJECTMANAGERVIEW) << "tooltip size" << m_tooltip->size();
                     ActiveToolTip::showToolTip(m_tooltip);
