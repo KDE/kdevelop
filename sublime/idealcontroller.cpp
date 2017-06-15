@@ -220,7 +220,7 @@ IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) c
     }
 }
 
-void IdealController::slotDockBarContextMenuRequested(QPoint position)
+void IdealController::slotDockBarContextMenuRequested(const QPoint& position)
 {
     IdealButtonBarWidget* bar = qobject_cast<IdealButtonBarWidget*>(sender());
     Q_ASSERT(bar);

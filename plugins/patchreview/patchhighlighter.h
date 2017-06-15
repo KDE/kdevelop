@@ -73,7 +73,7 @@ private:
     bool m_applying;
 public Q_SLOTS:
     void markToolTipRequested( KTextEditor::Document*, const KTextEditor::Mark&, QPoint, bool & );
-    void showToolTipForMark( QPoint arg1, KTextEditor::MovingRange* arg2);
+    void showToolTipForMark(const QPoint& arg1, KTextEditor::MovingRange* arg2);
     bool isRemoval( Diff2::Difference* );
     bool isInsertion( Diff2::Difference* );
     void markClicked( KTextEditor::Document*, const KTextEditor::Mark&, bool& );

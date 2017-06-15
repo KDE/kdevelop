@@ -91,7 +91,7 @@ public:
     QList<Container*> containers() const;
 
     /**Returns the view that is closest to the given global position, or zero.*/
-    View* viewForPosition(QPoint globalPos) const;
+    View* viewForPosition(const QPoint& globalPos) const;
 
     /**Returns true if this main-window contains this view*/
     bool containsView(View* view) const;

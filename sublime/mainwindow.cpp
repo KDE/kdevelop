@@ -420,7 +420,7 @@ void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea , const QPoint& 
     // do nothing
 }
 
-View* MainWindow::viewForPosition(QPoint globalPos) const
+View* MainWindow::viewForPosition(const QPoint& globalPos) const
 {
     foreach(Container* container, d->viewContainers)
     {

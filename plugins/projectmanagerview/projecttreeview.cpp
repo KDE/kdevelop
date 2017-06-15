@@ -145,7 +145,7 @@ ProjectTreeView::~ProjectTreeView()
 {
 }
 
-ProjectBaseItem* ProjectTreeView::itemAtPos(QPoint pos)
+ProjectBaseItem* ProjectTreeView::itemAtPos(const QPoint& pos) const
 {
     return indexAt(pos).data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
 }

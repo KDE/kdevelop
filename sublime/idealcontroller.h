@@ -95,7 +95,7 @@ Q_SIGNALS:
     void widgetResized(Qt::DockWidgetArea dockArea, int thickness);
 
 private Q_SLOTS:
-    void slotDockBarContextMenuRequested(QPoint position);
+    void slotDockBarContextMenuRequested(const QPoint& position);
     void dockLocationChanged(Qt::DockWidgetArea);
     void loadSettings();
 

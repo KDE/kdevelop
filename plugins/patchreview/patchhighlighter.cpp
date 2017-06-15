@@ -70,7 +70,8 @@ QSize sizeHintForHtml( QString html, QSize maxSize ) {
 
 }
 
-void PatchHighlighter::showToolTipForMark( QPoint pos, KTextEditor::MovingRange* markRange) {
+void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::MovingRange* markRange)
+{
     if( currentTooltipMark == markRange && currentTooltip )
         return;
     delete currentTooltip;

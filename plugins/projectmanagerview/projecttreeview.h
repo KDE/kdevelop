@@ -66,7 +66,7 @@ class ProjectTreeView: public QTreeView
 
     private:
         QModelIndex mapFromItem(const KDevelop::ProjectBaseItem* item);
-        KDevelop::ProjectBaseItem* itemAtPos(QPoint pos);
+        KDevelop::ProjectBaseItem* itemAtPos(const QPoint& pos) const;
         QList<KDevelop::ProjectBaseItem*> selectedProjects();
         KDevelop::IProject* getCurrentProject();
 
