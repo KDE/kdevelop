@@ -95,6 +95,7 @@ void ClassTree::contextMenuEvent( QContextMenuEvent* e )
 
   if ( !menu->actions().isEmpty() )
     menu->exec(e->globalPos());
+  delete menu;
 }
 
 bool ClassTree::event( QEvent* event )

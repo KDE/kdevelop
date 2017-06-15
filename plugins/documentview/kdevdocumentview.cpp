@@ -217,7 +217,8 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
         appendActions(ctxMenu, extensionActions);
 
         connect(ctxMenu, &QMenu::aboutToHide, ctxMenu, &QMenu::deleteLater);
-        ctxMenu->popup( event->globalPos() );
+        ctxMenu->exec(event->globalPos());
+        delete ctxMenu;
     }
 }
 

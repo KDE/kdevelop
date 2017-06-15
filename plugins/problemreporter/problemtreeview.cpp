@@ -212,6 +212,7 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
     m->addActions(actions);
     m->exec(event->globalPos());
     delete m;
+    qDeleteAll(actions);
 }
 
 void ProblemTreeView::showEvent(QShowEvent* event)
