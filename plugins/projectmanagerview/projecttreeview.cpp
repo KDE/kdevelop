@@ -361,7 +361,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
     if ( analyzeActions.count() )
     {
-        QMenu* analyzeMenu = new QMenu( i18n("Analyze With"), this );
+        QMenu* analyzeMenu = new QMenu(i18n("Analyze With"), &menu);
         analyzeMenu->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
         foreach( QAction* act, analyzeActions )
         {
@@ -378,7 +378,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     popupContextMenu_appendActions(menu, extActions);
 
     if (itemlist.size() == 1 && itemlist.first()->folder() && !itemlist.first()->folder()->parent()) {
-        QAction* projectConfig = new QAction(i18n("Open Configuration..."), this);
+        QAction* projectConfig = new QAction(i18n("Open Configuration..."), &menu);
         projectConfig->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
         connect( projectConfig, &QAction::triggered, this, &ProjectTreeView::openProjectConfig );
         projectActions << projectConfig;
