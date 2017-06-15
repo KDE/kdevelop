@@ -132,7 +132,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     appendActions(menu, projectActions);
 
     if ( !menu->isEmpty() ) {
-        QAction* res = menu->exec( mapToGlobal( pos ) );
+        QAction* res = menu->exec(viewport()->mapToGlobal(pos));
         if(res == refreshAction) {
             if(!urls.isEmpty())
                 emit reload(urls);

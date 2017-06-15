@@ -216,7 +216,7 @@ void LaunchConfigurationDialog::doTreeContextMenu(QPoint point)
             connect(delete_, &QAction::triggered, this, &LaunchConfigurationDialog::deleteConfiguration);
             menu.addAction(rename);
             menu.addAction(delete_);
-            menu.exec(tree->mapToGlobal(point));
+            menu.exec(tree->viewport()->mapToGlobal(point));
         }
     }
 }

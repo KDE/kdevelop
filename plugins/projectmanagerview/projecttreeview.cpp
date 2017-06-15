@@ -390,7 +390,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
         KDevelop::populateParentItemsMenu(itemlist.front(), &menu);
 
     if ( !menu.isEmpty() ) {
-        menu.exec( mapToGlobal( pos ) );
+        menu.exec(viewport()->mapToGlobal(pos));
     }
 }
 
