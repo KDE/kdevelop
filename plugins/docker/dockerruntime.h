@@ -21,7 +21,8 @@
 
 #include <interfaces/iruntime.h>
 #include <util/path.h>
-#include <QAction>
+#include <QHash>
+#include <QByteArray>
 
 class KJob;
 class DockerPreferencesSettings;

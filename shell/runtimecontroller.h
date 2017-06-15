@@ -21,10 +21,8 @@
 
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iruntime.h>
-#include <QAbstractListModel>
 
 class RuntimeViewFactory;
-class QAction;
 class QMenu;
 
 namespace KDevelop
