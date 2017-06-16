@@ -322,11 +322,11 @@ void TestProblems::testMissingInclude_data()
     // cf. bug 375274
     QTest::newRow("ignore-moc-at-end")
         << "class Foo {};\n"
-        << "int main() { Foo foo; }\n#include \"dummyInclude\"\n"
+        << "#include <vector>\nint main() { Foo foo; }\n#include \"dummyInclude\"\n"
         << "/moc_fooXXXXXX.cpp"
         << QVector<ClangFixit>{
             ClangFixit{"class Foo;\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()},
-            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(0, 0, 0, 0)), QString()}
+            ClangFixit{"#include \"includeFile.h\"\n", DocumentRange(IndexedString(QDir::tempPath() + "/workingFile.h"), KTextEditor::Range(1, 0, 1, 0)), QString()}
         };
     QTest::newRow("ignore-moc-at-end2")
         << "class Foo {};\n"
