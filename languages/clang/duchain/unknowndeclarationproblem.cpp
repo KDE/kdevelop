@@ -180,7 +180,7 @@ KDevelop::DocumentRange includeDirectivePosition(const KDevelop::Path& source, c
         }
 
         const auto match = mocFilenameExpression.match(importFilename);
-        if (match.isValid()) {
+        if (match.hasMatch()) {
             clangDebug() << "moc file detected in" << source.toUrl().toDisplayString() << ":" << importFilename << "-- not using as include insertion location";
             continue;
         }
