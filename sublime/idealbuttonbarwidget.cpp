@@ -193,7 +193,7 @@ void IdealButtonBarWidget::removeAction(QAction* widgetAction)
     QWidget::removeAction(widgetAction);
 
     auto action = dynamic_cast<ToolViewAction*>(widgetAction);
-    delete action->button();
+    action->button()->deleteLater();
     delete action;
 
     if (layout()->isEmpty()) {
