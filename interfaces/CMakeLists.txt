@@ -41,6 +41,7 @@ set(KDevPlatformInterfaces_LIB_SRCS
     itoolviewactionlistener.cpp
     ilanguagecheck.cpp
     ilanguagecheckprovider.cpp
+    iproblem.cpp
 )
 configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 

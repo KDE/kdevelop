@@ -79,8 +79,8 @@ public:
         TrimmedLine
     };
 
-    IProblem(){}
-    virtual ~IProblem(){}
+    IProblem();
+    virtual ~IProblem();
 
     /// Returns the source of the problem
     virtual Source source() const = 0;
