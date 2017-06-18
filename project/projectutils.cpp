@@ -21,16 +21,7 @@
 #include "projectutils.h"
 #include <project/projectmodel.h>
 #include "path.h"
-#include <QMenu>
-#include <QIcon>
 
-#include <KLocalizedString>
-
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
-#include <interfaces/context.h>
-#include <interfaces/contextmenuextension.h>
-#include <interfaces/iplugincontroller.h>
 
 namespace KDevelop {
 
@@ -49,72 +40,6 @@ QList<QUrl> ProjectItemContextImpl::urls() const
         }
     }
     return urls;
-}
-
-class Populator : public QObject
-{
-    Q_OBJECT
-public:
-    Populator(KDevelop::ProjectBaseItem* item, QAction* action, const QPoint& pos, const QString& text)
-    : m_item(item)
-    , m_pos(pos)
-    , m_text(text)
-    {
-        connect(action, &QAction::destroyed, this, &Populator::deleteLater);
-        connect(action, &QAction::triggered, this, &Populator::populate);
-    }
-
-public Q_SLOTS:
-    void populate()
-    {
-        QMenu* menu = new QMenu(m_text);
-        connect(menu, &QMenu::aboutToHide, menu, &QMenu::deleteLater);
-        menu->addAction(QIcon::fromTheme(m_item->iconName()), m_text)->setEnabled(false);
-        ProjectItemContextImpl context({m_item});
-        QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
-        ContextMenuExtension::populateMenu(menu, extensions);
-        menu->popup(m_pos);
-    }
-
-private:
-    KDevelop::ProjectBaseItem* m_item;
-    QPoint m_pos;
-    QString m_text;
-};
-
-void populateParentItemsMenu( ProjectBaseItem* item, QMenu* menu )
-{
-    if(!item)
-        return;
-
-    ProjectBaseItem* parent = item->parent();
-    bool hasSeparator = false;
-    while(parent)
-    {
-        if(!parent->path().isValid())
-        {
-            if(!hasSeparator)
-            {
-                hasSeparator = true;
-                menu->addSeparator();
-            }
-
-            QString prettyName = ICore::self()->projectController()->prettyFileName(parent->path().toUrl(), IProjectController::FormatPlain);
-
-            QString text;
-            if(parent->parent())
-                text = i18n("Folder %1", prettyName);
-            else
-                text = i18n("Project %1", prettyName);
-
-            QAction* action = menu->addAction(text);
-            action->setIcon(QIcon::fromTheme(parent->iconName()));
-            // The populator will either spawn a menu when the action is triggered, or it will delete itself
-            new Populator(parent, action, QCursor::pos(), text);
-        }
-
-        parent = parent->parent();
-    }
 }
 
 QList<ProjectFileItem*> allFiles(ProjectBaseItem* projectItem)
@@ -148,5 +73,3 @@ QList<ProjectFileItem*> allFiles(ProjectBaseItem* projectItem)
 }
 
 }
-
-#include "projectutils.moc"

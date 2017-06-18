@@ -351,10 +351,12 @@ void TestBackgroundparser::testNoDeadlockInJobCreation()
     // make sure the foreground thread is inside the parse job ctor
     QSemaphore semaphoreB;
 
+    QObject lifetimeControl; // used to disconnect signal at end of scope
+
     // actually distribute the complicate code across threads to trigger the
     // deadlock reliably
     QObject::connect(m_langSupport, &TestLanguageSupport::aboutToCreateParseJob,
-                     m_langSupport, [&] (const IndexedString& url, ParseJob** job) {
+                     &lifetimeControl, [&] (const IndexedString& url, ParseJob** job) {
                         if (url == run) {
                             auto testJob = new TestParseJob(url, m_langSupport);
                             testJob->run_callback = [&] (const IndexedString& url) {

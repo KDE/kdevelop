@@ -20,12 +20,7 @@ include(CMakeParseArguments)
 macro(kdevplatform_create_template_archive _templateName)
     get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
     get_filename_component(_baseName ${_tmp_file} NAME_WE)
-    if(WIN32)
-        set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.zip)
-    else()
-        set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
-    endif()
-
+    set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
 
     file(GLOB _files "${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}/*")
     set(_deps)
@@ -47,7 +42,8 @@ macro(kdevplatform_create_template_archive _templateName)
 
     if(WIN32)
         add_custom_command(OUTPUT ${_template}
-            COMMAND zip ARGS -r ${_template} . -x .svn _svn .kdev_ignore
+            COMMAND ${CMAKE_COMMAND} -E tar
+            ARGS cfvz ${_template} -- ${_deps}
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
             DEPENDS ${_deps}
         )
@@ -80,11 +76,7 @@ macro(kdevplatform_add_template _installDirectory _templateName)
 
     get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
     get_filename_component(_baseName ${_tmp_file} NAME_WE)
-    if(WIN32)
-        set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.zip)
-    else()
-        set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
-    endif()
+    set(_template ${CMAKE_CURRENT_BINARY_DIR}/${_baseName}.tar.bz2)
 
     install( FILES ${_template} DESTINATION ${_installDirectory})
     GET_DIRECTORY_PROPERTY(_tmp_DIR_PROPS ADDITIONAL_MAKE_CLEAN_FILES )

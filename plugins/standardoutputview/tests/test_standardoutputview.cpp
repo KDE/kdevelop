@@ -49,7 +49,7 @@ const QString StandardOutputViewTest::toolviewTitle = QStringLiteral("my_toolvie
 
 void StandardOutputViewTest::initTestCase()
 {
-    KDevelop::AutoTestShell::init();
+    KDevelop::AutoTestShell::init({QStringLiteral("KDevStandardOutputView")});
     m_testCore = new KDevelop::TestCore();
     m_testCore->initialize(KDevelop::Core::Default);
 

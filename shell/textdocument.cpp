@@ -49,9 +49,6 @@
 #include <language/interfaces/editorcontext.h>
 #include <language/backgroundparser/backgroundparser.h>
 
-#include <project/projectutils.h>
-#include <project/projectmodel.h>
-
 #include "core.h"
 #include "mainwindow.h"
 #include "uicontroller.h"
@@ -731,14 +728,6 @@ void KDevelop::TextDocument::populateContextMenu( KTextEditor::View* v, QMenu* m
     auto extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions(&c);
 
     ContextMenuExtension::populateMenu(d->m_addedContextMenu, extensions);
-
-    {
-        QUrl url = v->document()->url();
-        QList< ProjectBaseItem* > items = Core::self()->projectController()->projectModel()->itemsForPath( IndexedString(url) );
-        if (!items.isEmpty()) {
-            populateParentItemsMenu( items.front(), d->m_addedContextMenu );
-        }
-    }
 
     foreach ( QAction* action, d->m_addedContextMenu->actions() ) {
         menu->addAction(action);
