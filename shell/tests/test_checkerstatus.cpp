@@ -32,6 +32,10 @@ using namespace KDevelop;
 class TestCheckerStatus : public QObject
 {
     Q_OBJECT
+
+public:
+    TestCheckerStatus();
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
@@ -44,6 +48,11 @@ private Q_SLOTS:
 private:
     QScopedPointer<CheckerStatus> m_status;
 };
+
+TestCheckerStatus::TestCheckerStatus()
+{
+    qRegisterMetaType<IStatus*>();
+}
 
 void TestCheckerStatus::initTestCase()
 {

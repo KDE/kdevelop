@@ -80,6 +80,7 @@ Q_SIGNALS:
 
 }
 
+Q_DECLARE_METATYPE(KDevelop::IStatus*)
 Q_DECLARE_INTERFACE( KDevelop::IStatus, "org.kdevelop.IStatus" )
 
 #endif
