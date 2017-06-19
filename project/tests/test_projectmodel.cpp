@@ -21,6 +21,7 @@
 
 #include <QTest>
 #include <QSortFilterProxyModel>
+#include <QDir>
 #include <QMimeType>
 #include <QMimeDatabase>
 #include <QSignalSpy>
@@ -480,13 +481,13 @@ void TestProjectModel::testItemsForPath_data()
     QTest::addColumn<int>("matches");
 
     {
-        ProjectFolderItem* root = new ProjectFolderItem(nullptr, Path(QUrl::fromLocalFile(QStringLiteral("/tmp/"))));
+        ProjectFolderItem* root = new ProjectFolderItem(nullptr, Path(QUrl::fromLocalFile(QDir::tempPath())));
         ProjectFileItem* file = new ProjectFileItem(QStringLiteral("a"), root);
         QTest::newRow("find one") << file->path() << static_cast<ProjectBaseItem*>(root) << 1;
     }
 
     {
-        ProjectFolderItem* root = new ProjectFolderItem(nullptr, Path(QUrl::fromLocalFile(QStringLiteral("/tmp/"))));
+        ProjectFolderItem* root = new ProjectFolderItem(nullptr, Path(QUrl::fromLocalFile(QDir::tempPath())));
         ProjectFolderItem* folder = new ProjectFolderItem(QStringLiteral("a"), root);
         ProjectFileItem* file = new ProjectFileItem(QStringLiteral("foo"), folder);
         ProjectTargetItem* target = new ProjectTargetItem(nullptr, QStringLiteral("b"), root);
@@ -498,7 +499,7 @@ void TestProjectModel::testItemsForPath_data()
 
 void TestProjectModel::testProjectProxyModel()
 {
-    ProjectFolderItem* root = new ProjectFolderItem(nullptr, Path(QUrl::fromLocalFile(QStringLiteral("/tmp/"))));
+    ProjectFolderItem* root = new ProjectFolderItem(nullptr, Path(QUrl::fromLocalFile(QDir::tempPath())));
     new ProjectFileItem(QStringLiteral("b1"), root);
     new ProjectFileItem(QStringLiteral("a1"), root);
     new ProjectFileItem(QStringLiteral("d1"), root);
@@ -521,7 +522,7 @@ void TestProjectModel::testProjectFileSet()
     TestProject* project = new TestProject;
 
     QVERIFY(project->fileSet().isEmpty());
-    Path path(QUrl::fromLocalFile(QStringLiteral("/tmp/a")));
+    Path path(QUrl::fromLocalFile(QDir::tempPath() + "/a"));
     ProjectFileItem* item = new ProjectFileItem(project, path, project->projectItem());
     QCOMPARE(project->fileSet().size(), 1);
     qDebug() << path << project->fileSet().toList().at(0).toUrl();
@@ -534,10 +535,10 @@ void TestProjectModel::testProjectFileIcon()
 {
     QMimeDatabase db;
 
-    ProjectFileItem* item = new ProjectFileItem(nullptr, Path(QStringLiteral("/tmp/foo.txt")));
+    ProjectFileItem* item = new ProjectFileItem(nullptr, Path(QDir::tempPath() + "/foo.txt"));
     const QString txtIcon = db.mimeTypeForUrl(item->path().toUrl()).iconName();
     QCOMPARE(item->iconName(), txtIcon);
-    item->setPath(Path(QStringLiteral("/tmp/bar.cpp")));
+    item->setPath(Path(QDir::tempPath() + "/bar.cpp"));
     QCOMPARE(item->iconName(), db.mimeTypeForUrl(item->path().toUrl()).iconName());
     QVERIFY(item->iconName() != txtIcon);
 }
