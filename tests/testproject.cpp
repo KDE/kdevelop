@@ -21,8 +21,9 @@
 #include "testproject.h"
 
 #include <project/projectmodel.h>
-
 #include <interfaces/icore.h>
+
+#include <QDir>
 
 using namespace KDevelop;
 
@@ -31,7 +32,7 @@ TestProject::TestProject(const Path& path, QObject* parent)
 , m_root(nullptr)
 , m_projectConfiguration(KSharedConfig::openConfig())
 {
-    m_path = path.isValid() ? path : Path(QStringLiteral("/tmp/kdev-testproject/"));
+    m_path = path.isValid() ? path : Path(QDir::tempPath() + "/kdev-testproject/");
     m_root = new ProjectFolderItem(this, m_path);
     ICore::self()->projectController()->projectModel()->appendRow( m_root );
 }
