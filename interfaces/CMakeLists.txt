@@ -41,6 +41,7 @@ set(KDevPlatformInterfaces_LIB_SRCS
     itoolviewactionlistener.cpp
     ilanguagecheck.cpp
     ilanguagecheckprovider.cpp
+    iproblem.cpp
     iruntime.cpp
     iruntimecontroller.cpp
 )
