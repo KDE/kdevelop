@@ -30,6 +30,8 @@
 #include <icore.h>
 #include <iuicontroller.h>
 
+#include <qtcompat_p.h>
+
 #include <QDialog>
 #include <QMenuBar>
 #include <QKeyEvent>
@@ -414,6 +416,7 @@ bool QuickOpenWidget::eventFilter ( QObject * watched, QEvent * event )
           }
           return false;
         }
+        Q_FALLTHROUGH();
       }
       case Qt::Key_PageUp:
       case Qt::Key_PageDown:
