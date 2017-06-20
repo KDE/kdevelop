@@ -21,6 +21,7 @@
         "Description[sk]": "Povolí prezeranie a editáciu raw dát súborov (založené na Okteta)",
         "Description[sl]": "Omogoča pregledovanje in urejanje surovih podatkov datotek (temelji na Okteti)",
         "Description[sv]": "Möjliggör granskning och redigering av rådata i filer (baserad på Okteta)",
+        "Description[tr]": "Dosyaların ham verisini okuma ve düzenlemeyi sağlar (Oktet-tabanlı)",
         "Description[uk]": "Уможливлює перегляд і редагування необроблених даних у файлах (на основі Okteta)",
         "Description[x-test]": "xxEnables viewing and editing of the raw data of files (Okteta-based)xx",
         "Icon": "okteta",
@@ -40,6 +41,7 @@
         "Name[sk]": "Hex editor",
         "Name[sl]": "Šestnajstiški urejevalnik",
         "Name[sv]": "Hexadecimaleditor",
+        "Name[tr]": "Hex Düzenleyici",
         "Name[uk]": "Шістнадцятковий редактор",
         "Name[x-test]": "xxHex Editorxx",
         "ServiceTypes": [
