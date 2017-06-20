@@ -638,6 +638,7 @@ QVariant LaunchConfigurationsModel::data(const QModelIndex& index, int role) con
                         return QIcon::fromTheme(QStringLiteral("folder-development"));
                     }
                 }
+                break;
             }
             case Qt::EditRole:
             {
