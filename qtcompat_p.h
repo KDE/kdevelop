@@ -39,3 +39,26 @@ void qAsConst(const T &&) Q_DECL_EQ_DELETE;
 #endif
 
 #endif
+
+// compat for Q_FALLTHROUGH
+#if QT_VERSION < QT_VERSION_CHECK(5,8,0)
+
+#if defined(__has_cpp_attribute)
+#    if __has_cpp_attribute(fallthrough)
+#        define Q_FALLTHROUGH() [[fallthrough]]
+#    elif __has_cpp_attribute(clang::fallthrough)
+#        define Q_FALLTHROUGH() [[clang::fallthrough]]
+#    elif __has_cpp_attribute(gnu::fallthrough)
+#        define Q_FALLTHROUGH() [[gnu::fallthrough]]
+#    endif
+#endif
+
+#ifndef Q_FALLTHROUGH
+#    if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 700)
+#        define Q_FALLTHROUGH() __attribute__((fallthrough))
+#    else
+#        define Q_FALLTHROUGH() (void)0
+#    endif
+#endif
+
+#endif

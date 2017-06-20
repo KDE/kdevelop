@@ -20,6 +20,8 @@
 #include "safetycounter.h"
 #include <debug.h>
 
+#include <qtcompat_p.h>
+
 #include <QString>
 #include <QStringList>
 
@@ -170,6 +172,7 @@ int findClose( const QString& str , int pos )
       break;
     case '>':
       if( last == '-' ) break;
+      Q_FALLTHROUGH();
     case ')':
       case ']':
         case '}':
@@ -233,6 +236,7 @@ int findCommaOrEnd( const QString& str , int pos, QChar validEnd)
         case '>':
         if( validEnd != ' ' && validEnd != str[a] )
           continue;
+        Q_FALLTHROUGH();
     case ',':
       return a;
     }

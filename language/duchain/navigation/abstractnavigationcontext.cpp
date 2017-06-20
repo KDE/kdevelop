@@ -20,6 +20,8 @@
 
 #include <KLocalizedString>
 
+#include <qtcompat_p.h>
+
 #include "abstractdeclarationnavigationcontext.h"
 #include "abstractnavigationwidget.h"
 #include "usesnavigationcontext.h"
@@ -213,7 +215,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
         browser->showUses(action.decl);
         return NavigationContextPointer(this);
       }
-      // fall-through
+      Q_FALLTHROUGH();
     }
     case NavigationAction::ShowUses: {
       return registerChild(new UsesNavigationContext(action.decl.data(), this));

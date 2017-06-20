@@ -1075,8 +1075,8 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
                 qCDebug(PLUGIN_QUICKOPEN) << "closing because of parent widget move";
                 deactivate();
             }
-            break;
         }
+        break;
     }
     case QEvent::FocusIn:
         if (dynamic_cast<QWidget*>(obj)) {
