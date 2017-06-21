@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 
 #include <QFileDialog>
+#include <QPointer>
 #include <QRegExp>
 
 #include <interfaces/iproject.h>
@@ -175,13 +176,15 @@ void ProjectPathsWidget::clear()
 void ProjectPathsWidget::addProjectPath()
 {
     const QUrl directory = pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).value<QUrl>();
-    QFileDialog dlg(this, i18n("Select Project Path"), directory.toLocalFile());
-    dlg.setFileMode(QFileDialog::Directory);
-    dlg.setOption(QFileDialog::ShowDirsOnly);
-    dlg.exec();
-    pathsModel->addPath(dlg.selectedUrls().value(0));
-    ui->projectPaths->setCurrentIndex(pathsModel->rowCount() - 1);
-    updateEnablements();
+    QPointer<QFileDialog> dlg = new QFileDialog(this, i18n("Select Project Path"), directory.toLocalFile());
+    dlg->setFileMode(QFileDialog::Directory);
+    dlg->setOption(QFileDialog::ShowDirsOnly);
+    if (dlg->exec()) {
+        pathsModel->addPath(dlg->selectedUrls().value(0));
+        ui->projectPaths->setCurrentIndex(pathsModel->rowCount() - 1);
+        updateEnablements();
+    }
+    delete dlg;
 }
 
 void ProjectPathsWidget::deleteProjectPath()
@@ -207,8 +210,8 @@ void ProjectPathsWidget::updateEnablements() {
 void ProjectPathsWidget::batchEdit()
 {
     Ui::BatchEdit be;
-    QDialog dialog(this);
-    be.setupUi(&dialog);
+    QPointer<QDialog> dialog = new QDialog(this);
+    be.setupUi(dialog);
 
     const int index = qMax(ui->projectPaths->currentIndex(), 0);
 
@@ -223,7 +226,7 @@ void ProjectPathsWidget::batchEdit()
         auto includes = pathsModel->data(midx, ProjectPathsModel::IncludesDataRole).toStringList();
         be.textEdit->setPlainText(includes.join(QStringLiteral("\n")));
 
-        dialog.setWindowTitle(i18n("Edit include directories/files"));
+        dialog->setWindowTitle(i18n("Edit include directories/files"));
     } else {
         auto defines = pathsModel->data(midx, ProjectPathsModel::DefinesDataRole).value<Defines>();
 
@@ -231,12 +234,14 @@ void ProjectPathsWidget::batchEdit()
             be.textEdit->appendPlainText(it.key() + "=" + it.value());
         }
 
-        dialog.setWindowTitle(i18n("Edit defined macros"));
+        dialog->setWindowTitle(i18n("Edit defined macros"));
     }
 
-    if (dialog.exec() != QDialog::Accepted) {
+    if (dialog->exec() != QDialog::Accepted) {
+        delete dialog;
         return;
     }
+    delete dialog;
 
     if (includesTab) {
         auto includes = be.textEdit->toPlainText().split('\n', QString::SkipEmptyParts);

@@ -50,6 +50,7 @@
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
 #include <QDBusServiceWatcher>
+#include <QPointer>
 #include <QSignalMapper>
 #include <QTimer>
 
@@ -238,12 +239,15 @@ void MIDebuggerPlugin::slotAttachProcess()
             return;
     }
 
-    ProcessSelectionDialog dlg(core()->uiController()->activeMainWindow());
-    if (!dlg.exec() || !dlg.pidSelected())
+    QPointer<ProcessSelectionDialog> dlg = new ProcessSelectionDialog(core()->uiController()->activeMainWindow());
+    if (!dlg->exec() || !dlg->pidSelected()) {
+        delete dlg;
         return;
+    }
 
     // TODO: move check into process selection dialog
-    int pid = dlg.pidSelected();
+    int pid = dlg->pidSelected();
+    delete dlg;
     if (QApplication::applicationPid() == pid)
         KMessageBox::error(core()->uiController()->activeMainWindow(),
                            i18n("Not attaching to process %1: cannot attach the debugger to itself.", pid));

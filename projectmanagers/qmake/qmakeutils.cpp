@@ -29,6 +29,7 @@
 #include <util/path.h>
 
 #include <QFile>
+#include <QPointer>
 #include <QString>
 
 using namespace KDevelop;
@@ -41,10 +42,12 @@ bool QMakeUtils::checkForNeedingConfigure(IProject* project)
 
     const auto buildDir = QMakeConfig::buildDirFromSrc(project, project->path());
     if (!buildDir.isValid()) {
-        QMakeBuildDirChooserDialog chooser(project);
-        if (chooser.exec() == QDialog::Rejected) {
+        QPointer<QMakeBuildDirChooserDialog> chooser = new QMakeBuildDirChooserDialog(project);
+        if (chooser->exec() == QDialog::Rejected) {
+            delete chooser;
             return false; // cancelled, can't configure => false
         }
+        delete chooser;
     }
 
     qCDebug(KDEV_QMAKE) << "Build directory for" << project->name() << "is" << buildDir;

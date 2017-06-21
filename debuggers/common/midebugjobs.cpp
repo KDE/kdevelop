@@ -41,6 +41,7 @@
 #include <KParts/MainWindow>
 
 #include <QFileInfo>
+#include <QPointer>
 
 using namespace KDevMI;
 using namespace KDevelop;
@@ -163,15 +164,17 @@ MIExamineCoreJob::MIExamineCoreJob(MIDebuggerPlugin *plugin, QObject *parent)
 
 void MIExamineCoreJob::start()
 {
-    SelectCoreDialog dlg(ICore::self()->uiController()->activeMainWindow());
-    if (dlg.exec() == QDialog::Rejected) {
+    QPointer<SelectCoreDialog> dlg = new SelectCoreDialog(ICore::self()->uiController()->activeMainWindow());
+    if (dlg->exec() == QDialog::Rejected) {
         done();
+        delete dlg;
         return;
     }
 
-    if (!m_session->examineCoreFile(dlg.executableFile(), dlg.core())) {
+    if (!m_session->examineCoreFile(dlg->executableFile(), dlg->core())) {
         done();
     }
+    delete dlg;
 }
 
 bool MIExamineCoreJob::doKill()

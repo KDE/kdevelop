@@ -21,6 +21,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QPointer>
 
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -104,19 +105,19 @@ Dialog::Dialog(QWidget *parent, Account *account)
 
 void Dialog::authorizeClicked()
 {
-    KPasswordDialog dlg(this, KPasswordDialog::ShowUsernameLine);
-    dlg.setPrompt(i18n("Enter a login and a password"));
-    if(!dlg.exec())
-        return;
+    QPointer<KPasswordDialog> dlg = new KPasswordDialog(this, KPasswordDialog::ShowUsernameLine);
+    dlg->setPrompt(i18n("Enter a login and a password"));
+    if(dlg->exec()) {
+        m_text->setAlignment(Qt::AlignCenter);
+        m_text->setText(i18n("Waiting for response"));
+        m_account->setName(dlg->username());
 
-    m_text->setAlignment(Qt::AlignCenter);
-    m_text->setText(i18n("Waiting for response"));
-    m_account->setName(dlg.username());
-
-    Resource *rs = m_account->resource();
-    rs->authenticate(dlg.username(), dlg.password());
-    connect(rs, &Resource::authenticated,
-            this, &Dialog::authorizeResponse);
+        Resource *rs = m_account->resource();
+        rs->authenticate(dlg->username(), dlg->password());
+        connect(rs, &Resource::authenticated,
+                this, &Dialog::authorizeResponse);
+    }
+    delete dlg;
 }
 
 void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token, const QString &tokenName)
@@ -171,13 +172,14 @@ void Dialog::updateOrgs(const QStringList& orgs)
 
 void Dialog::revokeAccess()
 {
-    KPasswordDialog dlg(this);
-    dlg.setPrompt(i18n("Please, write your password here."));
-    if(!dlg.exec())
-        return;
-    m_account->invalidate(dlg.password());
-    emit shouldUpdate();
-    close();
+    QPointer<KPasswordDialog> dlg = new KPasswordDialog(this);
+    dlg->setPrompt(i18n("Please, write your password here."));
+    if(dlg->exec()) {
+        m_account->invalidate(dlg->password());
+        emit shouldUpdate();
+        close();
+    }
+    delete dlg;
 }
 
 } // End of namespace gh

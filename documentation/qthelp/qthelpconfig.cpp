@@ -25,6 +25,7 @@
 #include <QHelpEngineCore>
 #include <QToolButton>
 #include <QHeaderView>
+#include <QPointer>
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -197,13 +198,13 @@ void QtHelpConfig::defaults()
 
 void QtHelpConfig::add()
 {
-    QtHelpConfigEditDialog dialog(nullptr, this);
-    if (!dialog.exec())
-        return;
-
-    QTreeWidgetItem* item = addTableItem(dialog.qchIcon->icon(), dialog.qchName->text(), dialog.qchRequester->text(), QStringLiteral("0"));
-    m_configWidget->qchTable->setCurrentItem(item);
-    emit changed();
+    QPointer<QtHelpConfigEditDialog> dialog = new QtHelpConfigEditDialog(nullptr, this);
+    if (dialog->exec()) {
+        QTreeWidgetItem* item = addTableItem(dialog->qchIcon->icon(), dialog->qchName->text(), dialog->qchRequester->text(), QStringLiteral("0"));
+        m_configWidget->qchTable->setCurrentItem(item);
+        emit changed();
+    }
+    delete dialog;
 }
 
 void QtHelpConfig::modify(QTreeWidgetItem* item)
@@ -211,27 +212,27 @@ void QtHelpConfig::modify(QTreeWidgetItem* item)
     if (!item)
         return;
 
-    QtHelpConfigEditDialog dialog(item, this);
+    QPointer<QtHelpConfigEditDialog> dialog = new QtHelpConfigEditDialog(item, this);
     if (item->text(GhnsColumn) != QLatin1String("0")) {
-        dialog.qchRequester->setText(i18n("Documentation provided by GHNS"));
-        dialog.qchRequester->setEnabled(false);
+        dialog->qchRequester->setText(i18n("Documentation provided by GHNS"));
+        dialog->qchRequester->setEnabled(false);
     } else {
-        dialog.qchRequester->setText(item->text(PathColumn));
-        dialog.qchRequester->setEnabled(true);
+        dialog->qchRequester->setText(item->text(PathColumn));
+        dialog->qchRequester->setEnabled(true);
     }
-    dialog.qchName->setText(item->text(NameColumn));
-    dialog.qchIcon->setIcon(item->text(IconColumn));
-    if (!dialog.exec()) {
-        return;
-    }
+    dialog->qchName->setText(item->text(NameColumn));
+    dialog->qchIcon->setIcon(item->text(IconColumn));
+    if (dialog->exec()) {
+        item->setIcon(NameColumn, QIcon(dialog->qchIcon->icon()));
+        item->setText(NameColumn, dialog->qchName->text());
+        item->setText(IconColumn, dialog->qchIcon->icon());
+        if(item->text(GhnsColumn) == QLatin1String("0")) {
+            item->setText(PathColumn, dialog->qchRequester->text());
+        }
 
-    item->setIcon(NameColumn, QIcon(dialog.qchIcon->icon()));
-    item->setText(NameColumn, dialog.qchName->text());
-    item->setText(IconColumn, dialog.qchIcon->icon());
-    if(item->text(GhnsColumn) == QLatin1String("0")) {
-        item->setText(PathColumn, dialog.qchRequester->text());
+        emit changed();
     }
-    emit changed();
+    delete dialog;
 }
 
 bool QtHelpConfig::checkNamespace(const QString& filename, QTreeWidgetItem* modifiedItem)

@@ -28,6 +28,7 @@
 #include "config.h"
 #if KF5SysGuard_FOUND
 #include "debuggers/common/dialogs/processselection.h"
+#include <QPointer>
 #endif
 
 #include <execute/iexecuteplugin.h>
@@ -110,12 +111,14 @@ void Plugin::launchHeaptrack()
 void Plugin::attachHeaptrack()
 {
 #if KF5SysGuard_FOUND
-    KDevMI::ProcessSelectionDialog dlg(activeMainWindow());
-    if (!dlg.exec() || !dlg.pidSelected()) {
+    QPointer<KDevMI::ProcessSelectionDialog> dlg = new KDevMI::ProcessSelectionDialog(activeMainWindow());
+    if (!dlg->exec() || !dlg->pidSelected()) {
+        delete dlg;
         return;
     }
 
-    auto heaptrackJob = new Job(dlg.pidSelected());
+    auto heaptrackJob = new Job(dlg->pidSelected());
+    delete dlg;
     connect(heaptrackJob, &Job::finished, this, &Plugin::jobFinished);
 
     heaptrackJob->setObjectName(heaptrackJob->statusName());
