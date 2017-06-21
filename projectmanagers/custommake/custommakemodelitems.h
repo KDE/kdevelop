@@ -16,7 +16,7 @@
 class CustomMakeTargetItem : public KDevelop::ProjectTargetItem
 {
 public:
-    CustomMakeTargetItem( KDevelop::IProject *project, const QString &name, ProjectBaseItem*parent=NULL );
+    CustomMakeTargetItem(KDevelop::IProject* project, const QString& name, ProjectBaseItem* parent = nullptr);
 
     virtual QList<QUrl> includeDirectories() const;
     virtual QHash<QString, QString> environment() const;
