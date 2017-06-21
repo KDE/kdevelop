@@ -22,24 +22,7 @@
 #include "androidpreferencessettings.h"
 #include <interfaces/icore.h>
 #include <interfaces/iruntimecontroller.h>
-#include <interfaces/iuicontroller.h>
-#include <interfaces/context.h>
-#include <interfaces/contextmenuextension.h>
-#include <outputview/outputexecutejob.h>
-#include <project/projectmodel.h>
-
-#include <QStandardPaths>
-#include <QAction>
-#include <QProcess>
-#include <QRegularExpression>
-#include <QTemporaryDir>
-#include <QFileDialog>
-#include <QInputDialog>
 #include <KPluginFactory>
-#include <KActionCollection>
-#include <KLocalizedString>
-#include <KParts/MainWindow>
-#include <KJob>
 
 K_PLUGIN_FACTORY_WITH_JSON(KDevAndroidFactory, "kdevandroid.json", registerPlugin<AndroidPlugin>();)
 

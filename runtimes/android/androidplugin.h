@@ -19,10 +19,7 @@
 #ifndef ANDROIDPLUGIN_H
 #define ANDROIDPLUGIN_H
 
-#include <interfaces/iruntime.h>
 #include <interfaces/iplugin.h>
-#include <util/path.h>
-#include <QProcess>
 
 class AndroidPreferencesSettings;
 

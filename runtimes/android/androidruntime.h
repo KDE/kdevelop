@@ -21,7 +21,6 @@
 
 #include <interfaces/iruntime.h>
 #include <util/path.h>
-#include <QAction>
 
 class KJob;
 class AndroidPreferencesSettings;
