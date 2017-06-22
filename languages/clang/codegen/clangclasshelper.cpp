@@ -71,8 +71,9 @@ QList<DeclarationPointer> ClangClassHelper::defaultMethods(const QString& name) 
     << "    ~" << name << "();\n"
     // assignment operator
     << "    " << name << "& operator=(const " << name << "& other);\n"
-    // equality operator
+    // equality operators
     << "    bool operator==(const " << name << "& other) const;\n"
+    << "    bool operator!=(const " << name << "& other) const;\n"
     << "};\n";
     file.close();
     ReferencedTopDUContext context(DUChain::self()->waitForUpdate(IndexedString(file.fileName()),
