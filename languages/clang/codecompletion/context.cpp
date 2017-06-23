@@ -1172,6 +1172,7 @@ void ClangCodeCompletionContext::addOverwritableItems()
     }
 
     QList<CompletionTreeItemPointer> overrides;
+    QList<CompletionTreeItemPointer> overridesAbstract;
     for (int i = 0; i < overrideList.count(); i++) {
         FuncOverrideInfo info = overrideList.at(i);
         QString nameAndParams = info.name + QLatin1Char('(') + info.params.join(QStringLiteral(", ")) + QLatin1Char(')');
@@ -1179,8 +1180,14 @@ void ClangCodeCompletionContext::addOverwritableItems()
             nameAndParams = nameAndParams + QLatin1String(" const");
         if(info.isVirtual)
             nameAndParams = nameAndParams + QLatin1String(" = 0");
-        overrides << CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
+
+        auto item = CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
+        if (info.isVirtual)
+            overridesAbstract << item;
+        else
+            overrides << item;
     }
+    eventuallyAddGroup(i18n("Abstract Override"), 0, overridesAbstract);
     eventuallyAddGroup(i18n("Virtual Override"), 0, overrides);
 }
 
