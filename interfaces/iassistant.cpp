@@ -32,7 +32,7 @@ void IAssistant::createActions()
 {
 }
 
-QAction* IAssistantAction::toKAction(QObject* parent) const
+QAction* IAssistantAction::toQAction(QObject* parent) const
 {
     Q_ASSERT(QThread::currentThread() == ICore::self()->thread() && "Actions must be created in the application main thread"
                                                     "(implement createActions() to create your actions)");
@@ -91,7 +91,7 @@ void AssistantLabelAction::execute()
     // do nothing
 }
 
-QAction* AssistantLabelAction::toKAction(QObject* parent) const
+QAction* AssistantLabelAction::toQAction(QObject* parent) const
 {
     Q_UNUSED(parent);
     return nullptr;

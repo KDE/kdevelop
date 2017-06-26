@@ -200,7 +200,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
                     if (solution) {
                         title = solution->title();
                         foreach (KDevelop::IAssistantAction::Ptr action, solution->actions())
-                            actions << action->toKAction();
+                            actions << action->toQAction();
                     }
                 }
             }

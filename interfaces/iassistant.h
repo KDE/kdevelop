@@ -42,7 +42,7 @@ public:
 
     ///Creates a QAction that represents this exact assistant action.
     ///The caller owns the action, and is responsible for deleting it.
-    virtual QAction* toKAction(QObject* parent = nullptr) const;
+    virtual QAction* toQAction(QObject* parent = nullptr) const;
 
     ///Should return a short description of the action.
     ///It may contain simple HTML formatting.
@@ -92,7 +92,7 @@ public:
     /**
      * No action is returned.
      */
-    QAction* toKAction(QObject* parent = nullptr) const override;
+    QAction* toQAction(QObject* parent = nullptr) const override;
 
 private:
     QString m_description;

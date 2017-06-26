@@ -196,7 +196,7 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
 
     QList<QAction*> actions;
     foreach (KDevelop::IAssistantAction::Ptr action, solution->actions()) {
-        actions << action->toKAction();
+        actions << action->toQAction();
     }
 
     if (actions.isEmpty()) {
