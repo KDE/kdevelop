@@ -14,10 +14,11 @@
 #ifndef KDEVPLATFORM_PLUGIN_PATCHHIGHLIGHTER_H
 #define KDEVPLATFORM_PLUGIN_PATCHHIGHLIGHTER_H
 
+#include <QMap>
 #include <QObject>
+#include <QPair>
 #include <QPoint>
 #include <QSet>
-#include <QMap>
 
 #include <ktexteditor/movingrangefeedback.h>
 
@@ -52,25 +53,23 @@ public:
     KDevelop::IDocument* doc();
     QList< KTextEditor::MovingRange* > ranges() const;
 private Q_SLOTS:
+    void documentReloaded( KTextEditor::Document* );
     void documentDestroyed();
     void aboutToDeleteMovingInterfaceContent( KTextEditor::Document* );
 private:
-    void highlightFromScratch(KTextEditor::Document* doc);
-
     void addLineMarker( KTextEditor::MovingRange* arg1, Diff2::Difference* arg2 );
     void removeLineMarker( KTextEditor::MovingRange* range );
-    QStringList splitAndAddNewlines( const QString& text ) const;
     void performContentChange( KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber );
 
-    KTextEditor::MovingRange* rangeForMark(const KTextEditor::Mark& mark);
+    QPair<KTextEditor::MovingRange*, Diff2::Difference*> rangeForMark(const KTextEditor::Mark &mark);
 
     void clear();
-    QSet< KTextEditor::MovingRange* > m_ranges;
-    QMap< KTextEditor::MovingRange*, Diff2::Difference* > m_differencesForRanges;
+    QMap< KTextEditor::MovingRange*, Diff2::Difference* > m_ranges;
     KDevelop::IDocument* m_doc;
     PatchReviewPlugin* m_plugin;
     Diff2::DiffModel* m_model;
     bool m_applying;
+    static const unsigned int m_allmarks;
 public Q_SLOTS:
     void markToolTipRequested( KTextEditor::Document*, const KTextEditor::Mark&, QPoint, bool & );
     void showToolTipForMark(const QPoint& arg1, KTextEditor::MovingRange* arg2);
@@ -78,7 +77,9 @@ public Q_SLOTS:
     bool isInsertion( Diff2::Difference* );
     void markClicked( KTextEditor::Document*, const KTextEditor::Mark&, bool& );
     void textInserted(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor, const QString& text);
+    void newlineInserted(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor);
     void textRemoved( KTextEditor::Document*, const KTextEditor::Range&, const QString& oldText );
+    void newlineRemoved(KTextEditor::Document*, int line);
 };
 
 #endif
