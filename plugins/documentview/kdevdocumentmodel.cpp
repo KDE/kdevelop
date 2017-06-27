@@ -96,7 +96,7 @@ QList<KDevFileItem*> KDevCategoryItem::fileList() const
 
     for ( int i = 0; i < rowCount(); ++i )
     {
-        if ( KDevFileItem * item = dynamic_cast<KDevDocumentItem*>( child( i ) ) ->fileItem() )
+        if (KDevFileItem* item = static_cast<KDevDocumentItem*>(child(i))->fileItem())
             lst.append( item );
     }
 
@@ -143,9 +143,7 @@ QList<KDevCategoryItem*> KDevDocumentModel::categoryList() const
     QList<KDevCategoryItem*> lst;
     for ( int i = 0; i < rowCount() ; ++i )
     {
-        if ( KDevCategoryItem * categoryitem = dynamic_cast<KDevDocumentItem*>( item( i ) ) ->categoryItem() )
-        {
-
+        if (KDevCategoryItem* categoryitem = static_cast<KDevDocumentItem*>(item(i))->categoryItem()) {
             lst.append( categoryitem );
         }
     }

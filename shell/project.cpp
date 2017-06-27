@@ -557,7 +557,7 @@ QList< ProjectFileItem* > Project::filesForPath(const IndexedString& file) const
     foreach(ProjectBaseItem* item,  d->itemsForPath( file ) )
     {
         if( item->type() == ProjectBaseItem::File )
-            items << dynamic_cast<ProjectFileItem*>( item );
+            items << static_cast<ProjectFileItem*>(item);
     }
     return items;
 }
@@ -568,7 +568,7 @@ QList<ProjectFolderItem*> Project::foldersForPath(const IndexedString& folder) c
     foreach(ProjectBaseItem* item,  d->itemsForPath( folder ) )
     {
         if( item->type() == ProjectBaseItem::Folder || item->type() == ProjectBaseItem::BuildFolder )
-            items << dynamic_cast<ProjectFolderItem*>( item );
+            items << static_cast<ProjectFolderItem*>(item);
     }
     return items;
 }

@@ -260,7 +260,7 @@ QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) co
         return QModelIndex();
     }
     else
-        current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
+        current_item = static_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
 
     if (current_item->parent() != nullptr) {
         int row = currentIdx.row();
@@ -299,10 +299,10 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
     if (!currentIdx.isValid()) {
         QStandardItem *it = item(0,0);
         if (!it) return QModelIndex();
-        current_item = dynamic_cast<GrepOutputItem*>(it);
+        current_item = static_cast<GrepOutputItem*>(it);
     }
     else
-        current_item = dynamic_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
+        current_item = static_cast<GrepOutputItem*>(itemFromIndex(currentIdx));
 
     if (current_item->parent() == nullptr) {
         // root item with overview of search results

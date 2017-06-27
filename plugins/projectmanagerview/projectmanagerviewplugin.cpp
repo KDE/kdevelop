@@ -199,7 +199,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     if( context->type() != KDevelop::Context::ProjectItemContext )
         return IPlugin::contextMenuExtension( context );
 
-    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+    KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(context);
     QList<KDevelop::ProjectBaseItem*> items = ctx->items();
 
     d->ctxProjectItemList.clear();
@@ -386,7 +386,7 @@ QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectItems()
 
     } else
     {
-        KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+        KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
         items = ctx->items();
     }
 
@@ -660,7 +660,7 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
 
 void ProjectManagerViewPlugin::copyFromContextMenu()
 {
-    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+    KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
     QList<QUrl> urls;
     foreach (ProjectBaseItem* item, ctx->items()) {
         if (item->folder() || item->file()) {
@@ -692,7 +692,7 @@ static void selectItemsByPaths(ProjectManagerView* view, const Path::List& paths
 
 void ProjectManagerViewPlugin::pasteFromContextMenu()
 {
-    KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+    KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
     if (ctx->items().count() != 1) {
         return; //do nothing if multiple or none items are selected
     }

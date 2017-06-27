@@ -192,7 +192,7 @@ void IdealButtonBarWidget::removeAction(QAction* widgetAction)
 {
     QWidget::removeAction(widgetAction);
 
-    auto action = dynamic_cast<ToolViewAction*>(widgetAction);
+    auto action = static_cast<ToolViewAction*>(widgetAction);
     action->button()->deleteLater();
     delete action;
 
@@ -332,7 +332,7 @@ void IdealButtonBarWidget::showWidget(bool checked)
 
 void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
 {
-    auto widgetAction = dynamic_cast<ToolViewAction*>(action);
+    auto widgetAction = static_cast<ToolViewAction*>(action);
 
     IdealToolButton* button = widgetAction->button();
     Q_ASSERT(button);
@@ -359,7 +359,7 @@ void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
 
 IdealDockWidget * IdealButtonBarWidget::widgetForAction(QAction *_action) const
 {
-    return dynamic_cast<ToolViewAction *>(_action)->dockWidget();
+    return static_cast<ToolViewAction*>(_action)->dockWidget();
 }
 
 #include "idealbuttonbarwidget.moc"

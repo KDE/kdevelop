@@ -214,7 +214,7 @@ public:
                                                             qMakePair( mode->id(), launcher->id() ),
                                                             contextItem->project(),
                                                             contextItem->text() );
-                    LaunchConfiguration* launch = dynamic_cast<LaunchConfiguration*>( ilaunch );
+                    LaunchConfiguration* launch = static_cast<LaunchConfiguration*>(ilaunch);
                     type->configureLaunchFromItem( launch->config(), contextItem );
                     launch->config().writeEntry(Strings::ConfiguredFromProjectItemEntry(), itemPath);
                     //qCDebug(SHELL) << "created config, launching";
@@ -401,7 +401,7 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
         qCDebug(SHELL) << "execute called without launch config!";
         return nullptr;
     }
-    LaunchConfiguration *run = dynamic_cast<LaunchConfiguration*>(launch);
+    LaunchConfiguration* run = static_cast<LaunchConfiguration*>(launch);
     //TODO: Port to launch framework, probably needs to be part of the launcher
     //if(!run.dependencies().isEmpty())
     //    ICore::self()->documentController()->saveAllDocuments(IDocument::Silent);
@@ -974,7 +974,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
     d->contextItem = nullptr;
     ContextMenuExtension ext;
     if( ctx->type() == Context::ProjectItemContext ) {
-        KDevelop::ProjectItemContext* prjctx = dynamic_cast<KDevelop::ProjectItemContext*>( ctx );
+        KDevelop::ProjectItemContext* prjctx = static_cast<KDevelop::ProjectItemContext*>(ctx);
         if( prjctx->items().count() == 1 )
         {
             ProjectBaseItem* itm = prjctx->items().at( 0 );

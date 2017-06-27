@@ -254,8 +254,7 @@ void KDevDocumentView::updateSelectedDocs()
     QList<QStandardItem*> allItems = m_documentModel->findItems(QStringLiteral("*"), Qt::MatchWildcard | Qt::MatchRecursive);
     foreach (QStandardItem* item, allItems)
     {
-        if (KDevFileItem * fileItem = dynamic_cast<KDevDocumentItem*>(item)->fileItem())
-        {
+        if (KDevFileItem* fileItem = static_cast<KDevDocumentItem*>(item)->fileItem()) {
             if (m_selectionModel->isSelected(m_proxy->mapFromSource(m_documentModel->indexFromItem(fileItem))))
                 m_selectedDocs << fileItem->url();
             else

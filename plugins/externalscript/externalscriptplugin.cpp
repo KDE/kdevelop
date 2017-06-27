@@ -173,10 +173,10 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
   int folderCount = 0;
 
   if ( context->type() == KDevelop::Context::FileContext ) {
-    KDevelop::FileContext* filectx = dynamic_cast<KDevelop::FileContext*>( context );
+    KDevelop::FileContext* filectx = static_cast<KDevelop::FileContext*>(context);
     m_urls = filectx->urls();
   } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
-    KDevelop::ProjectItemContext* projctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+    KDevelop::ProjectItemContext* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
     foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
       if ( item->file() ) {
         m_urls << item->file()->path().toUrl();
@@ -186,7 +186,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
       }
     }
   } else if ( context->type() == KDevelop::Context::EditorContext ) {
-      KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
+      KDevelop::EditorContext* econtext = static_cast<KDevelop::EditorContext*>(context);
       m_urls << econtext->url();
   }
 

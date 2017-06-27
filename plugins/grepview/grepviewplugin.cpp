@@ -126,7 +126,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
 {
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
     if( context->type() == KDevelop::Context::ProjectItemContext ) {
-        KDevelop::ProjectItemContext* ctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+        KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(context);
         QList<KDevelop::ProjectBaseItem*> items = ctx->items();
         // verify if there is only one folder selected
         if ((items.count() == 1) && (items.first()->folder())) {
@@ -139,7 +139,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     }
 
     if ( context->type() == KDevelop::Context::EditorContext ) {
-        KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
+        KDevelop::EditorContext* econtext = static_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
             QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Find/Replace in Files..."), this);
             connect(action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromMenu);
@@ -148,7 +148,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     }
 
     if(context->type() == KDevelop::Context::FileContext) {
-        KDevelop::FileContext *fcontext = dynamic_cast<KDevelop::FileContext*>(context);
+        KDevelop::FileContext* fcontext = static_cast<KDevelop::FileContext*>(context);
         // TODO: just stat() or QFileInfo().isDir() for local files? should be faster than mime type checking
         QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(fcontext->urls().at(0));
         static const QMimeType directoryMime = QMimeDatabase().mimeTypeForName(QStringLiteral("inode/directory"));

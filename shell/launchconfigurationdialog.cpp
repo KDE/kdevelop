@@ -956,7 +956,7 @@ void LaunchConfigPagesContainer::save()
 
 QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    const LaunchConfigurationsModel* model = dynamic_cast<const LaunchConfigurationsModel*>( index.model() );
+    const LaunchConfigurationsModel* model = static_cast<const LaunchConfigurationsModel*>(index.model());
     ILaunchMode* mode = model->modeForIndex( index );
     LaunchConfiguration* config = model->configForIndex( index );
     if( index.column() == 1 && mode && config )
@@ -986,7 +986,7 @@ QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const
 
 void LaunchConfigurationModelDelegate::setEditorData ( QWidget* editor, const QModelIndex& index ) const
 {
-    const LaunchConfigurationsModel* model = dynamic_cast<const LaunchConfigurationsModel*>( index.model() );
+    const LaunchConfigurationsModel* model = static_cast<const LaunchConfigurationsModel*>(index.model());
     LaunchConfiguration* config = model->configForIndex( index );
     if( index.column() == 1 && config )
     {
@@ -1001,7 +1001,7 @@ void LaunchConfigurationModelDelegate::setEditorData ( QWidget* editor, const QM
 
 void LaunchConfigurationModelDelegate::setModelData ( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const
 {
-    LaunchConfigurationsModel* lmodel = dynamic_cast<LaunchConfigurationsModel*>( model );
+    LaunchConfigurationsModel* lmodel = static_cast<LaunchConfigurationsModel*>(model);
     LaunchConfiguration* config = lmodel->configForIndex( index );
     if( index.column() == 1 && config )
     {

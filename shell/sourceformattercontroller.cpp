@@ -606,12 +606,12 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
         if(m_formatTextAction->isEnabled())
             ext.addAction(KDevelop::ContextMenuExtension::EditGroup, m_formatTextAction);
     } else if (context->hasType(KDevelop::Context::FileContext)) {
-        KDevelop::FileContext* filectx = dynamic_cast<KDevelop::FileContext*>(context);
+        KDevelop::FileContext* filectx = static_cast<KDevelop::FileContext*>(context);
         m_urls = filectx->urls();
         ext.addAction(KDevelop::ContextMenuExtension::EditGroup, m_formatFilesAction);
     } else if (context->hasType(KDevelop::Context::CodeContext)) {
     } else if (context->hasType(KDevelop::Context::ProjectItemContext)) {
-        KDevelop::ProjectItemContext* prjctx = dynamic_cast<KDevelop::ProjectItemContext*>(context);
+        KDevelop::ProjectItemContext* prjctx = static_cast<KDevelop::ProjectItemContext*>(context);
         m_prjItems = prjctx->items();
         if ( !m_prjItems.isEmpty() ) {
             ext.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_formatFilesAction);

@@ -153,10 +153,10 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
     QList<QUrl> urls;
 
     if ( context->type() == KDevelop::Context::FileContext ) {
-        KDevelop::FileContext* filectx = dynamic_cast<KDevelop::FileContext*>( context );
+        KDevelop::FileContext* filectx = static_cast<KDevelop::FileContext*>(context);
         urls = filectx->urls();
     } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
-        KDevelop::ProjectItemContext* projctx = dynamic_cast<KDevelop::ProjectItemContext*>( context );
+        KDevelop::ProjectItemContext* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
         foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
             if ( item->file() ) {
                 urls << item->file()->path().toUrl();
