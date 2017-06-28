@@ -74,7 +74,7 @@ QStringList templateParams(CXCursor cursor)
 
 FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
 {
-    QStringList params;
+    FuncParameterList params;
 
     int numArgs = clang_Cursor_getNumArguments(cursor);
     for (int i = 0; i < numArgs; i++) {
@@ -84,7 +84,10 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
         if (info->templateTypeMap.contains(type)) {
             type = info->templateTypeMap.value(type);
         }
-        params << type + QLatin1Char(' ') + id;
+        FuncParameterInfo param;
+        param.type = type;
+        param.id = id;
+        params << param;
     }
 
     FuncOverrideInfo fp;
@@ -96,7 +99,7 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
     fp.returnType = retType;
     fp.name = ClangString(clang_getCursorSpelling(cursor)).toString();
     fp.params =  params;
-    fp.isVirtual = clang_CXXMethod_isPureVirtual(cursor);
+    fp.isPureVirtual = clang_CXXMethod_isPureVirtual(cursor);
     fp.isConst = clang_CXXMethod_isConst(cursor);
 
     return fp;
@@ -142,7 +145,15 @@ CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor parent, CXClientDa
         return CXChildVisit_Continue;
     case CXCursor_CXXMethod:
         if (clang_CXXMethod_isVirtual(cursor)) {
-            info->functions->append(processCXXMethod(cursor, info));
+            auto methodInfo = processCXXMethod(cursor, info);
+            const int methodIndex = info->functions->indexOf(methodInfo);
+            if (methodIndex == -1) {
+                info->functions->append(methodInfo);
+            } else {
+                // update to subclass override
+                auto& listedMethodInfo = (*info->functions)[methodIndex];
+                listedMethodInfo.isPureVirtual = methodInfo.isPureVirtual;
+            }
         }
         return CXChildVisit_Continue;
     default:
@@ -164,10 +175,9 @@ CXChildVisitResult findBaseVisitor(CXCursor cursor, CXCursor parent, CXClientDat
 
         OverrideInfo overrideInfo {info, {}, {}};
         auto methodInfo = processCXXMethod(cursor, &overrideInfo);
-        if (info->contains(methodInfo)) {
-            // This method is already implemented, remove it from the list of methods that can be overridden.
-            info->remove(info->indexOf(methodInfo), 1);
-        }
+        // If this method is already implemented, remove it from the list of methods that can be overridden.
+        // If not implemented, this is a noop
+        info->removeOne(methodInfo);
     }
 
     return CXChildVisit_Continue;

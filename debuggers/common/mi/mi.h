@@ -294,7 +294,7 @@ namespace KDevMI { namespace MI {
     struct Record
     {
         virtual ~Record() {}
-        virtual QString toString() const { Q_ASSERT( 0 ); return QString::null; }
+        virtual QString toString() const { Q_ASSERT( 0 ); return QString(); }
 
         enum { Prompt, Stream, Result, Async } kind;
     };

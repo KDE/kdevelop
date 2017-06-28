@@ -351,7 +351,7 @@
   </connection>
   <connection>
    <sender>kcfg_overrideNumberOfJobs</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>kcfg_numberOfJobs</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -367,7 +367,7 @@
   </connection>
   <connection>
    <sender>kcfg_overrideNumberOfJobs</sender>
-   <signal>clicked(bool)</signal>
+   <signal>toggled(bool)</signal>
    <receiver>label</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
