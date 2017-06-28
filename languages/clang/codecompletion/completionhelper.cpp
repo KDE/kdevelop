@@ -96,7 +96,7 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
     fp.returnType = retType;
     fp.name = ClangString(clang_getCursorSpelling(cursor)).toString();
     fp.params =  params;
-    fp.isVirtual = clang_CXXMethod_isPureVirtual(cursor);
+    fp.isPureVirtual = clang_CXXMethod_isPureVirtual(cursor);
     fp.isConst = clang_CXXMethod_isConst(cursor);
 
     return fp;

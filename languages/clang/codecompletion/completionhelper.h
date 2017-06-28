@@ -33,7 +33,7 @@ struct FuncOverrideInfo
     QString returnType;
     QString name;
     QStringList params;
-    bool isVirtual;
+    bool isPureVirtual;
     bool isConst;
     bool operator==(const FuncOverrideInfo& rhs) const;
 };

@@ -1179,7 +1179,7 @@ void ClangCodeCompletionContext::addOverwritableItems()
         QString nameAndParams = info.name + QLatin1Char('(') + info.params.join(QLatin1String(", ")) + QLatin1Char(')');
         if(info.isConst)
             nameAndParams = nameAndParams + QLatin1String(" const");
-        if(info.isVirtual)
+        if(info.isPureVirtual)
             nameAndParams = nameAndParams + QLatin1String(" = 0");
         overrides << CompletionTreeItemPointer(new OverrideItem(nameAndParams, info.returnType));
     }
