@@ -560,10 +560,22 @@ void TestCodeCompletion::testVirtualOverride_data()
            "class Bar : Baz \n{int overridden(int i) overridden;\n}"
         << CompletionItems{{4, 1}, {"foo(int i)"}};
 
+    QTest::newRow("repeated")
+        << "class Foo { virtual int foo(int i); virtual int overridden(int i); };\n"
+           "class Baz : Foo { int foo(int i) override; };\n"
+           "class Bar : Baz \n{int overridden(int i) override;\n}"
+        << CompletionItems{{4, 1}, {"foo(int i)"}};
+
     QTest::newRow("pure")
         << "class Foo { virtual void foo() = 0; virtual void overridden() = 0;};\n"
            "class Bar : Foo \n{void overridden() override;\n};"
         << CompletionItems{{3, 0}, {"foo() = 0"}};
+
+    QTest::newRow("repeated-pure")
+        << "class Foo { virtual void foo() = 0; virtual void overridden() = 0; };\n"
+           "class Baz : Foo { void foo() override; };\n"
+           "class Bar : Baz \n{void overridden() override;\n}"
+        << CompletionItems{{4, 1}, {"foo()"}};
 
     QTest::newRow("const")
         << "class Foo { virtual void foo(const int b) const; virtual void overridden(const int b) const; }\n;"

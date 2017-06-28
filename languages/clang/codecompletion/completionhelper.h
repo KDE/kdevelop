@@ -28,13 +28,24 @@
 
 #include <language/duchain/duchainpointer.h>
 
+struct FuncParameterInfo
+{
+    QString type;
+    QString id;
+    /// Returns true if types are equal, id is ignored
+    bool operator==(const FuncParameterInfo& rhs) const { return type == rhs.type; }
+};
+Q_DECLARE_TYPEINFO(FuncParameterInfo, Q_MOVABLE_TYPE);
+using FuncParameterList = QVector<FuncParameterInfo>;
+
 struct FuncOverrideInfo
 {
     QString returnType;
     QString name;
-    QStringList params;
+    FuncParameterList params;
     bool isPureVirtual;
     bool isConst;
+    /// Returns true if equal, isPureVirtual & parameter ids are ignored
     bool operator==(const FuncOverrideInfo& rhs) const;
 };
 
