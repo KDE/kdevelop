@@ -191,6 +191,7 @@ bool isQtMocFunction(CXCursor cursor)
         QByteArrayLiteral("qt_metacast"),
         QByteArrayLiteral("qt_metacall"),
         QByteArrayLiteral("qt_static_metacall"),
+        QByteArrayLiteral("qt_check_for_QGADGET_macro")
     };
     const ClangString function(clang_getCursorSpelling(cursor));
     auto it = std::find(std::begin(mocFunctions), std::end(mocFunctions), function.toByteArray());
