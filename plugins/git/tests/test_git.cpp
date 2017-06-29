@@ -105,7 +105,7 @@ void GitInitTest::repoInit()
     //check if isValidDirectory works
     QVERIFY(m_plugin->isValidDirectory(QUrl::fromLocalFile(gitTest_BaseDir())));
     //and for non-git dir, I hope nobody has /tmp under git
-    QVERIFY(!m_plugin->isValidDirectory(QUrl::fromLocalFile(QStringLiteral("/tmp"))));
+    QVERIFY(!m_plugin->isValidDirectory(QUrl::fromLocalFile(tempDir())));
 
     //we have nothing, so output should be empty
     DVcsJob * j2 = m_plugin->gitRevParse(gitRepo(), QStringList(QStringLiteral("--branches")));

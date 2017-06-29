@@ -45,10 +45,10 @@ public:
     /** Return the corresponding documentation instance for a determinate declaration. */
     virtual IDocumentation::Ptr documentationForDeclaration(Declaration* declaration) = 0;
 
+public Q_SLOTS:
     /** Show the documentation specified by @p doc. */
     virtual void showDocumentation(const IDocumentation::Ptr& doc) = 0;
 
-public Q_SLOTS:
     /** Emit signal when the documentation providers list changed. */
     virtual void changedDocumentationProviders() = 0;
 
