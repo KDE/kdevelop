@@ -213,7 +213,10 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
       }
     case NavigationAction::ShowDocumentation: {
         auto doc = ICore::self()->documentationController()->documentationForDeclaration(action.decl.data());
-        ICore::self()->documentationController()->showDocumentation(doc);
+        // This is used to execute the slot delayed in the event-loop, so crashes are avoided
+        // which can happen e.g. due to focus change events resulting in tooltip destruction and thus this object
+        qRegisterMetaType<IDocumentation::Ptr>("IDocumentation::Ptr");
+        QMetaObject::invokeMethod(ICore::self()->documentationController(), "showDocumentation", Qt::QueuedConnection, Q_ARG(IDocumentation::Ptr, doc));
       }
       break;
   }
