@@ -294,6 +294,8 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject *parent, const QVariantList&)
     , m_nextHistoryIndex(0)
     , m_textHintProvider(this)
 {
+  qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
+
   core()->uiController()->addToolView(i18n("Code Browser"), m_viewFactory);
 
   connect( core()->documentController(), &IDocumentController::textDocumentCreated, this, &ContextBrowserPlugin::textDocumentCreated );
@@ -342,8 +344,6 @@ KDevelop::ContextMenuExtension ContextBrowserPlugin::contextMenuExtension(KDevel
 
   if(!codeContext->declaration().data())
     return menuExt;
-
-  qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
 
   menuExt.addAction(KDevelop::ContextMenuExtension::NavigationGroup, m_findUses);
 

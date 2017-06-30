@@ -91,6 +91,8 @@ GrepJob::GrepJob( QObject* parent )
     , m_fileIndex(0)
     , m_findSomething(false)
 {
+    qRegisterMetaType<GrepOutputItem::List>();
+
     setCapabilities(Killable);
     KDevelop::ICore::self()->uiController()->registerStatus(this);
 
@@ -234,7 +236,6 @@ void GrepJob::start()
     m_findSomething = false;
     m_outputModel->clear();
 
-    qRegisterMetaType<GrepOutputItem::List>();
     connect(this, &GrepJob::foundMatches,
             m_outputModel, &GrepOutputModel::appendOutputs, Qt::QueuedConnection);
 

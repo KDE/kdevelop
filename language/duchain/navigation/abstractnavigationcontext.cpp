@@ -80,6 +80,9 @@ AbstractNavigationContext::AbstractNavigationContext(const TopDUContextPointer& 
 {
   d->m_previousContext = previousContext;
   d->m_topContext = topContext;
+
+  qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
+  qRegisterMetaType<IDocumentation::Ptr>("IDocumentation::Ptr");
 }
 
 AbstractNavigationContext::~AbstractNavigationContext()
@@ -193,7 +196,6 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
       qCDebug(LANGUAGE) << "Navigation-action has invalid declaration" << endl;
       return NavigationContextPointer(this);
   }
-  qRegisterMetaType<KTextEditor::Cursor>("KTextEditor::Cursor");
 
   switch( action.type ) {
     case NavigationAction::ExecuteKey:
@@ -247,7 +249,6 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
         auto doc = ICore::self()->documentationController()->documentationForDeclaration(action.decl.data());
         // This is used to execute the slot delayed in the event-loop, so crashes are avoided
         // which can happen e.g. due to focus change events resulting in tooltip destruction and thus this object
-        qRegisterMetaType<IDocumentation::Ptr>("IDocumentation::Ptr");
         QMetaObject::invokeMethod(ICore::self()->documentationController(), "showDocumentation", Qt::QueuedConnection, Q_ARG(IDocumentation::Ptr, doc));
       }
       break;
