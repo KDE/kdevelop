@@ -516,7 +516,7 @@ void GitPlugin::addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files)
 
     if(!toadd.isEmpty()) {
         VcsJob* job = add(toadd);
-        job->exec();
+        job->exec(); // krazy:exclude=crashy
     }
 }
 

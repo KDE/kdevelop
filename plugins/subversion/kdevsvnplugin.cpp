@@ -404,7 +404,7 @@ void KDevSvnPlugin::ctxCopy()
             dlg.urlRequester()->setMode(KFile::Directory | KFile::LocalOnly);
         }
 
-        if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.exec() == QDialog::Accepted) { // krazy:exclude=crashy
             KDevelop::ICore::self()->runController()->registerJob(copy(source, dlg.selectedUrl()));
         }
     } else {
@@ -440,7 +440,7 @@ void KDevSvnPlugin::ctxMove()
             dlg.urlRequester()->setMode(KFile::Directory | KFile::LocalOnly);
         }
 
-        if (dlg.exec() == QDialog::Accepted) {
+        if (dlg.exec() == QDialog::Accepted) { // krazy:exclude=crashy
             KDevelop::ICore::self()->runController()->registerJob(move(source, dlg.selectedUrl()));
         }
     } else {

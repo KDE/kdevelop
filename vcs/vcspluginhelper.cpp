@@ -42,6 +42,7 @@
 #include <interfaces/isession.h>
 #include <interfaces/iuicontroller.h>
 #include <util/path.h>
+#include <util/scopeddialog.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>
 #include <vcs/widgets/vcseventwidget.h>
@@ -457,7 +458,7 @@ void VcsPluginHelper::commit()
     bool ret = showVcsDiff(patchSource);
 
     if(!ret) {
-        VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
+        ScopedDialog<VcsCommitDialog> commitDialog(patchSource);
         commitDialog->setCommitCandidates(patchSource->infos());
         commitDialog->exec();
     }

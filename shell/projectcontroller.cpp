@@ -29,6 +29,7 @@ Boston, MA 02110-1301, USA.
 #include <QLabel>
 #include <QList>
 #include <QMap>
+#include <QPointer>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QSet>
@@ -63,6 +64,7 @@ Boston, MA 02110-1301, USA.
 #include <projectconfigpage.h>
 #include <language/backgroundparser/parseprojectjob.h>
 #include <interfaces/iruncontroller.h>
+#include <util/scopeddialog.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
 
@@ -419,13 +421,15 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
                                                      const QUrl& repoUrl, IPlugin* vcsOrProviderPlugin)
 {
     Q_ASSERT(d);
-    OpenProjectDialog dlg(fetch, startUrl, repoUrl, vcsOrProviderPlugin, Core::self()->uiController()->activeMainWindow());
-    if(dlg.exec() == QDialog::Rejected)
+    ScopedDialog<OpenProjectDialog> dlg(fetch, startUrl, repoUrl, vcsOrProviderPlugin,
+                                         Core::self()->uiController()->activeMainWindow());
+    if(dlg->exec() == QDialog::Rejected) {
         return QUrl();
+    }
 
-    QUrl projectFileUrl = dlg.projectFileUrl();
-    qCDebug(SHELL) << "selected project:" << projectFileUrl << dlg.projectName() << dlg.projectManager();
-    if ( dlg.projectManager() == QLatin1String("<built-in>") ) {
+    QUrl projectFileUrl = dlg->projectFileUrl();
+    qCDebug(SHELL) << "selected project:" << projectFileUrl << dlg->projectName() << dlg->projectManager();
+    if ( dlg->projectManager() == QLatin1String("<built-in>") ) {
         return projectFileUrl;
     }
 
@@ -435,11 +439,11 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
     {
         // check whether config is equal
         bool shouldAsk = true;
-        if( projectFileUrl == dlg.selectedUrl() )
+        if( projectFileUrl == dlg->selectedUrl() )
         {
             if( projectFileUrl.isLocalFile() )
             {
-                shouldAsk = !equalProjectFile( projectFileUrl.toLocalFile(), &dlg );
+                shouldAsk = !equalProjectFile( projectFileUrl.toLocalFile(), dlg );
             } else {
                 shouldAsk = false;
 
@@ -448,7 +452,7 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
                     auto downloadJob = KIO::file_copy(projectFileUrl, QUrl::fromLocalFile(tmpFile.fileName()));
                     KJobWidgets::setWindow(downloadJob, qApp->activeWindow());
                     if (downloadJob->exec()) {
-                        shouldAsk = !equalProjectFile(tmpFile.fileName(), &dlg);
+                        shouldAsk = !equalProjectFile(tmpFile.fileName(), dlg);
                     }
                 }
             }
@@ -483,12 +487,13 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
     }
 
     if (writeProjectConfigToFile) {
-        if (!writeProjectSettingsToConfigFile(projectFileUrl, &dlg)) {
+        if (!writeProjectSettingsToConfigFile(projectFileUrl, dlg)) {
             KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
                 i18n("Unable to create configuration file %1", projectFileUrl.url()));
             return QUrl();
         }
     }
+
     return projectFileUrl;
 }
 
@@ -785,10 +790,10 @@ void ProjectController::openProject( const QUrl &projectFile )
     }
 
     if ( ! existingSessions.isEmpty() ) {
-        QDialog dialog(Core::self()->uiControllerInternal()->activeMainWindow());
-        dialog.setWindowTitle(i18n("Project Already Open"));
+        ScopedDialog<QDialog> dialog(Core::self()->uiControllerInternal()->activeMainWindow());
+        dialog->setWindowTitle(i18n("Project Already Open"));
 
-        auto mainLayout = new QVBoxLayout(&dialog);
+        auto mainLayout = new QVBoxLayout(dialog);
         mainLayout->addWidget(new QLabel(i18n("The project you're trying to open is already open in at least one "
                                                      "other session.<br>What do you want to do?")));
         QGroupBox sessions;
@@ -808,12 +813,11 @@ void ProjectController::openProject( const QUrl &projectFile )
         auto okButton = buttonBox->button(QDialogButtonBox::Ok);
         okButton->setDefault(true);
         okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-        connect(buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
-        connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+        connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+        connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
         mainLayout->addWidget(buttonBox);
 
-        bool success = dialog.exec();
-        if (!success)
+        if (!dialog->exec())
             return;
 
         foreach ( const QObject* obj, sessions.children() ) {
@@ -1158,7 +1162,7 @@ void ProjectController::commitCurrentProject()
             bool ret = showVcsDiff(patchSource);
 
             if(!ret) {
-                VcsCommitDialog *commitDialog = new VcsCommitDialog(patchSource);
+                ScopedDialog<VcsCommitDialog> commitDialog(patchSource);
                 commitDialog->setCommitCandidates(patchSource->infos());
                 commitDialog->exec();
             }

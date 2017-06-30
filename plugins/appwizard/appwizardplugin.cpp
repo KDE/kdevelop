@@ -46,6 +46,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <util/scopeddialog.h>
 #include <vcs/vcsjob.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>
@@ -84,16 +85,16 @@ void AppWizardPlugin::slotNewProject()
 {
     model()->refresh();
 
-    AppWizardDialog dlg(core()->pluginController(), m_templatesModel);
+    ScopedDialog<AppWizardDialog> dlg(core()->pluginController(), m_templatesModel);
 
-    if (dlg.exec() == QDialog::Accepted)
+    if (dlg->exec() == QDialog::Accepted)
     {
-        QString project = createProject( dlg.appInfo() );
+        QString project = createProject( dlg->appInfo() );
         if (!project.isEmpty())
         {
             core()->projectController()->openProject(QUrl::fromLocalFile(project));
 
-            KConfig templateConfig(dlg.appInfo().appTemplate);
+            KConfig templateConfig(dlg->appInfo().appTemplate);
             KConfigGroup general(&templateConfig, "General");
             const QStringList fileArgs = general.readEntry("ShowFilesAfterGeneration").split(QLatin1Char(','), QString::SkipEmptyParts);
             for (const auto& fileArg : fileArgs) {

@@ -68,11 +68,12 @@ void SvnJobBase::askForLogin( const QString& realm )
     qCDebug(PLUGIN_SVN) << "login";
     KPasswordDialog dlg( nullptr, KPasswordDialog::ShowUsernameLine | KPasswordDialog::ShowKeepPassword );
     dlg.setPrompt( i18n("Enter Login for: %1", realm ) );
-    dlg.exec();
-    internalJob()->m_login_username = dlg.username();
-    internalJob()->m_login_password = dlg.password();
-    internalJob()->m_maySave = dlg.keepPassword();
-    internalJob()->m_guiSemaphore.release( 1 );
+    if (dlg.exec()) { // krazy:exclude=crashy
+        internalJob()->m_login_username = dlg.username();
+        internalJob()->m_login_password = dlg.password();
+        internalJob()->m_maySave = dlg.keepPassword();
+        internalJob()->m_guiSemaphore.release( 1 );
+    }
 }
 
 void SvnJobBase::showNotification( const QString& path, const QString& msg )

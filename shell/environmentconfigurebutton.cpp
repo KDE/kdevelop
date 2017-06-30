@@ -29,6 +29,8 @@
 #include <QIcon>
 #include <QVBoxLayout>
 
+#include <util/scopeddialog.h>
+
 #include <KLocalizedString>
 
 namespace KDevelop {
@@ -43,31 +45,31 @@ public:
 
     void showDialog()
     {
-        QDialog dlg(qApp->activeWindow());
+        ScopedDialog<QDialog> dlg(qApp->activeWindow());
         QString selected;
         if (selectionWidget) {
             selected = selectionWidget->effectiveProfileName();
         }
 
-        EnvironmentPreferences prefs(selected, q);
+        auto prefs = new EnvironmentPreferences(selected, q);
 
         // TODO: This should be implicit when constructing EnvironmentPreferences
-        prefs.initConfigManager();
-        prefs.reset();
+        prefs->initConfigManager();
+        prefs->reset();
 
         auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                      | QDialogButtonBox::Cancel);
-        QObject::connect(buttonBox, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
-        QObject::connect(buttonBox, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+        QObject::connect(buttonBox, &QDialogButtonBox::accepted, dlg, &QDialog::accept);
+        QObject::connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
         auto layout = new QVBoxLayout;
-        layout->addWidget(&prefs);
+        layout->addWidget(prefs);
         layout->addWidget(buttonBox);
-        dlg.setLayout(layout);
-        dlg.setWindowTitle(prefs.fullName());
-        dlg.setWindowIcon(prefs.icon());
-        dlg.resize(800, 600);
-        if (dlg.exec() == QDialog::Accepted) {
-            prefs.apply();
+        dlg->setLayout(layout);
+        dlg->setWindowTitle(prefs->fullName());
+        dlg->setWindowIcon(prefs->icon());
+        dlg->resize(800, 600);
+        if (dlg->exec() == QDialog::Accepted) {
+            prefs->apply();
             emit q->environmentConfigured();
         }
     }

@@ -45,12 +45,12 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+#include <util/scopeddialog.h>
 
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QListWidget>
-#include <QPointer>
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -198,7 +198,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
     else if (targets.size() > 1)
     {
         // More than one candidate target, show the chooser dialog
-        QPointer<QDialog> d = new QDialog;
+        ScopedDialog<QDialog> d;
 
         auto mainLayout = new QVBoxLayout(d);
         mainLayout->addWidget(new QLabel(i18n("Choose one target to add the file or cancel if you do not want to do so.")));
@@ -215,8 +215,8 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
         QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
         okButton->setDefault(true);
         okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-        d->connect(buttonBox, &QDialogButtonBox::accepted, d.data(), &QDialog::accept);
-        d->connect(buttonBox, &QDialogButtonBox::rejected, d.data(), &QDialog::reject);
+        d->connect(buttonBox, &QDialogButtonBox::accepted, d, &QDialog::accept);
+        d->connect(buttonBox, &QDialogButtonBox::rejected, d, &QDialog::reject);
         mainLayout->addWidget(buttonBox);
 
         if(d->exec() == QDialog::Accepted)

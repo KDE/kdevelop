@@ -33,6 +33,8 @@ Boston, MA 02110-1301, USA.
 #include <QHBoxLayout>
 #include <QValidator>
 
+#include <util/scopeddialog.h>
+
 #include <KLocalizedString>
 
 #include "environmentprofilelistmodel.h"
@@ -176,10 +178,10 @@ void EnvironmentWidget::defaults( KConfig* config )
 
 QString EnvironmentWidget::askNewProfileName(const QString& defaultName)
 {
-    QDialog dialog(this);
-    dialog.setWindowTitle(i18n("Enter Name of New Environment Profile"));
+    ScopedDialog<QDialog> dialog(this);
+    dialog->setWindowTitle(i18n("Enter Name of New Environment Profile"));
 
-    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
 
     auto editLayout = new QHBoxLayout;
 
@@ -193,11 +195,11 @@ QString EnvironmentWidget::askNewProfileName(const QString& defaultName)
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setEnabled(false);
     okButton->setDefault(true);
-    dialog.connect(buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
-    dialog.connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    dialog->connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+    dialog->connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
     layout->addWidget(buttonBox);
 
-    auto validator = new ProfileNameValidator(m_environmentProfileListModel, &dialog);
+    auto validator = new ProfileNameValidator(m_environmentProfileListModel, dialog);
     connect(edit, &QLineEdit::textChanged, validator, [validator, okButton](const QString& text) {
         int pos;
         QString t(text);
@@ -208,7 +210,7 @@ QString EnvironmentWidget::askNewProfileName(const QString& defaultName)
     edit->setText(defaultName);
     edit->selectAll();
 
-    if (dialog.exec() != QDialog::Accepted) {
+    if (dialog->exec() != QDialog::Accepted) {
         return {};
     }
 
@@ -239,10 +241,10 @@ void EnvironmentWidget::onVariableInserted(int column, const QVariant& value)
 
 void EnvironmentWidget::batchModeEditButtonClicked()
 {
-    QDialog dialog(this);
-    dialog.setWindowTitle( i18n( "Batch Edit Mode" ) );
+    ScopedDialog<QDialog> dialog(this);
+    dialog->setWindowTitle( i18n( "Batch Edit Mode" ) );
 
-    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
 
     auto edit = new QPlainTextEdit;
     edit->setPlaceholderText(QStringLiteral("VARIABLE1=VALUE1\nVARIABLE2=VALUE2"));
@@ -259,13 +261,13 @@ void EnvironmentWidget::batchModeEditButtonClicked()
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    dialog.connect(buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
-    dialog.connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    dialog->connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
+    dialog->connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
     layout->addWidget(buttonBox);
 
-    dialog.resize(600, 400);
+    dialog->resize(600, 400);
 
-    if ( dialog.exec() != QDialog::Accepted ) {
+    if ( dialog->exec() != QDialog::Accepted ) {
         return;
     }
 

@@ -309,8 +309,7 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
     const auto text = renameDialog.edit->text().trimmed();
     RefactoringProgressDialog refactoringProgress(i18n("Renaming \"%1\" to \"%2\"", declarationName, text), collector.data());
     if (!collector->isReady()) {
-        refactoringProgress.exec();
-        if (refactoringProgress.result() != QDialog::Accepted) {
+        if (refactoringProgress.exec() != QDialog::Accepted) { // krazy:exclude=crashy
             return {};
         }
     }

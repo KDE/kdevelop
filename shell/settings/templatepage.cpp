@@ -22,6 +22,7 @@
 #include "ui_templatepage.h"
 
 #include "qtcompat_p.h"
+#include <QFileDialog>
 
 #include <interfaces/itemplateprovider.h>
 #include <language/codegen/templatesmodel.h>
@@ -32,7 +33,7 @@
 #include <KZip>
 #include <KTar>
 
-#include <QFileDialog>
+#include <util/scopeddialog.h>
 
 TemplatePage::TemplatePage (KDevelop::ITemplateProvider* provider, QWidget* parent) : QWidget (parent),
 m_provider(provider)
@@ -70,14 +71,14 @@ TemplatePage::~TemplatePage()
 
 void TemplatePage::loadFromFile()
 {
-    QFileDialog fileDialog(this);
-    fileDialog.setMimeTypeFilters(m_provider->supportedMimeTypes());
-    fileDialog.setFileMode(QFileDialog::ExistingFiles);
-    if (!fileDialog.exec()) {
+    KDevelop::ScopedDialog<QFileDialog> fileDialog(this);
+    fileDialog->setMimeTypeFilters(m_provider->supportedMimeTypes());
+    fileDialog->setFileMode(QFileDialog::ExistingFiles);
+    if (!fileDialog->exec()) {
         return;
     }
 
-    for (const auto& file : fileDialog.selectedFiles()) {
+    for (const auto& file : fileDialog->selectedFiles()) {
         m_provider->loadTemplate(file);
     }
 
@@ -86,10 +87,13 @@ void TemplatePage::loadFromFile()
 
 void TemplatePage::getMoreTemplates()
 {
-    KNS3::DownloadDialog dialog(m_provider->knsConfigurationFile(), this);
-    dialog.exec();
+    KDevelop::ScopedDialog<KNS3::DownloadDialog> dialog(m_provider->knsConfigurationFile(), this);
 
-    if (!dialog.changedEntries().isEmpty())
+    if (!dialog->exec()) {
+        return;
+    }
+
+    if (!dialog->changedEntries().isEmpty())
     {
         m_provider->reload();
     }
@@ -97,8 +101,8 @@ void TemplatePage::getMoreTemplates()
 
 void TemplatePage::shareTemplates()
 {
-    KNS3::UploadDialog dialog(m_provider->knsConfigurationFile(), this);
-    dialog.exec();
+    KDevelop::ScopedDialog<KNS3::UploadDialog> dialog(m_provider->knsConfigurationFile(), this);
+    dialog->exec();
 }
 
 void TemplatePage::currentIndexChanged(const QModelIndex& index)

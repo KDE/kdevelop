@@ -36,6 +36,7 @@
 #include <sublime/holdupdates.h>
 
 #include <interfaces/itoolviewactionlistener.h>
+#include <util/scopeddialog.h>
 
 #include "core.h"
 #include "configpage.h"
@@ -434,7 +435,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
     if (!mw || !mw->area())
         return;
 
-    QDialog *dia = new QDialog(mw);
+    ScopedDialog<QDialog> dia(mw);
     dia->setWindowTitle(i18n("Select Tool View to Add"));
 
     auto mainLayout = new QVBoxLayout(dia);
@@ -474,7 +475,6 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
             addNewToolView(mw, item);
         }
     }
-    delete dia;
 }
 
 void UiController::addNewToolView(MainWindow *mw, QListWidgetItem* item)

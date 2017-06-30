@@ -34,6 +34,8 @@
 #include <KTitleWidget>
 #include <KWidgetItemDelegate>
 
+#include <util/scopeddialog.h>
+
 #include "core.h"
 #include "plugincontroller.h"
 
@@ -240,8 +242,8 @@ private Q_SLOTS:
         if (p) {
             KAboutData aboutData = KAboutData::fromPluginMetaData(pluginInfo(p));
             if (!aboutData.componentName().isEmpty()) { // Be sure the about data is not completely empty
-                KAboutApplicationDialog aboutPlugin(aboutData, itemView());
-                aboutPlugin.exec();
+                KDevelop::ScopedDialog<KAboutApplicationDialog> aboutPlugin(aboutData, itemView());
+                aboutPlugin->exec();
                 return;
             }
         }

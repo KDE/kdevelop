@@ -54,6 +54,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iselectioncontroller.h>
 #include <interfaces/context.h>
 #include <project/projectmodel.h>
+#include <util/scopeddialog.h>
 #include <util/path.h>
 
 #include "core.h"
@@ -813,9 +814,8 @@ bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > 
         QList<IDocument*> checkSave = modifiedDocuments(list);
 
         if (!checkSave.isEmpty()) {
-            KSaveSelectDialog dialog(checkSave, qApp->activeWindow());
-            if (dialog.exec() == QDialog::Rejected)
-                return false;
+            ScopedDialog<KSaveSelectDialog> dialog(checkSave, qApp->activeWindow());
+            return dialog->exec();
         }
     }
 

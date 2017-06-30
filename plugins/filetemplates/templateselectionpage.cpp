@@ -32,6 +32,7 @@
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/isession.h>
+#include <util/scopeddialog.h>
 
 #include "ui_templateselection.h"
 
@@ -159,16 +160,16 @@ void TemplateSelectionPagePrivate::loadFileClicked()
         QStringLiteral("application/x-bzip-compressed-tar"),
         QStringLiteral("application/zip")
     };
-    QFileDialog dlg(page);
-    dlg.setMimeTypeFilters(filters);
-    dlg.setFileMode(QFileDialog::ExistingFiles);
+    ScopedDialog<QFileDialog> dlg(page);
+    dlg->setMimeTypeFilters(filters);
+    dlg->setFileMode(QFileDialog::ExistingFiles);
 
-    if (!dlg.exec())
+    if (!dlg->exec())
     {
         return;
     }
     
-    foreach(const QString& fileName, dlg.selectedFiles())
+    foreach(const QString& fileName, dlg->selectedFiles())
     {
         QString destination = model->loadTemplateFile(fileName);
         QModelIndexList indexes = model->templateIndexes(destination);

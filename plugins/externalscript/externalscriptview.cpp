@@ -32,6 +32,8 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
+#include <util/scopeddialog.h>
+
 
 ExternalScriptView::ExternalScriptView( ExternalScriptPlugin* plugin, QWidget* parent )
     : QWidget( parent ), m_plugin( plugin )
@@ -135,9 +137,8 @@ bool ExternalScriptView::eventFilter( QObject* obj, QEvent* e )
 void ExternalScriptView::addScript()
 {
   ExternalScriptItem* item = new ExternalScriptItem;
-  EditExternalScript dlg( item, this );
-  int ret = dlg.exec();
-  if ( ret == QDialog::Accepted) {
+  KDevelop::ScopedDialog<EditExternalScript> dlg( item, this );
+  if ( dlg->exec() == QDialog::Accepted) {
     m_plugin->model()->appendRow( item );
   } else {
     delete item;
@@ -170,9 +171,8 @@ void ExternalScriptView::editScript()
     return;
   }
 
-  EditExternalScript dlg( item, this );
-  int ret = dlg.exec();
-  if (ret == QDialog::Accepted) {
+  KDevelop::ScopedDialog<EditExternalScript> dlg( item, this );
+  if (dlg->exec() == QDialog::Accepted) {
     item->save();
   }
 }

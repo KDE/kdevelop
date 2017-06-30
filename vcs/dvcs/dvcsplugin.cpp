@@ -39,6 +39,7 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/idocumentcontroller.h>
+#include <util/scopeddialog.h>
 
 #include "dvcsjob.h"
 #include "ui/dvcsimportmetadatawidget.h"
@@ -128,9 +129,9 @@ void DistributedVersionControlPlugin::ctxBranchManager()
     
     ICore::self()->documentController()->saveAllDocuments();
 
-    BranchManager branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()),
-                                this, core()->uiController()->activeMainWindow());
-    branchManager.exec();
+    ScopedDialog<BranchManager> branchManager(stripPathToDir(ctxUrlList.front().toLocalFile()),
+                                               this, core()->uiController()->activeMainWindow());
+    branchManager->exec();
 }
 
 }

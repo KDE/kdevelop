@@ -26,6 +26,7 @@
 #include <language/codegen/templatepreviewicon.h>
 
 #include <util/multilevellistview.h>
+#include <util/scopeddialog.h>
 
 #include "ui_projectselectionpage.h"
 #include "projecttemplatesmodel.h"
@@ -305,15 +306,15 @@ void ProjectSelectionPage::loadFileClicked()
         QStringLiteral("application/x-bzip-compressed-tar"),
         QStringLiteral("application/zip")
     };
-    QFileDialog fileDialog(this, i18n("Load Template From File"));
-    fileDialog.setMimeTypeFilters(supportedMimeTypes);
-    fileDialog.setFileMode(QFileDialog::ExistingFiles);
+    ScopedDialog<QFileDialog> fileDialog(this, i18n("Load Template From File"));
+    fileDialog->setMimeTypeFilters(supportedMimeTypes);
+    fileDialog->setFileMode(QFileDialog::ExistingFiles);
 
-    if (!fileDialog.exec()) {
+    if (!fileDialog->exec()) {
         return;
     }
 
-    for (const auto& fileName : fileDialog.selectedFiles()) {
+    for (const auto& fileName : fileDialog->selectedFiles()) {
         QString destination = m_templatesModel->loadTemplateFile(fileName);
         QModelIndexList indexes = m_templatesModel->templateIndexes(destination);
         if (indexes.size() > 2)
@@ -326,10 +327,12 @@ void ProjectSelectionPage::loadFileClicked()
 
 void ProjectSelectionPage::moreTemplatesClicked()
 {
-    KNS3::DownloadDialog dialog(QStringLiteral("kdevappwizard.knsrc"), this);
-    dialog.exec();
+    ScopedDialog<KNS3::DownloadDialog> dialog(QStringLiteral("kdevappwizard.knsrc"), this);
 
-    auto entries = dialog.changedEntries();
+    if (!dialog->exec())
+        return;
+
+    auto entries = dialog->changedEntries();
     if (entries.isEmpty()) {
         return;
     }

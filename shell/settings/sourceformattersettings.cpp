@@ -38,6 +38,7 @@ Boston, MA 02110-1301, USA.
 #include <shell/core.h>
 #include <shell/plugincontroller.h>
 #include <shell/languagecontroller.h>
+#include <util/scopeddialog.h>
 
 #include "editstyledialog.h"
 #include "debug.h"
@@ -401,10 +402,10 @@ void SourceFormatterSettings::editStyle()
 
     QMimeType mimetype = l.mimetypes.first();
     if( QScopedPointer<QObject>(fmt->formatter->editStyleWidget( mimetype )) ) {
-        EditStyleDialog dlg( fmt->formatter, mimetype, *l.selectedStyle, this );
-        if( dlg.exec() == QDialog::Accepted )
+        KDevelop::ScopedDialog<EditStyleDialog> dlg(fmt->formatter, mimetype, *l.selectedStyle, this);
+        if( dlg->exec() == QDialog::Accepted )
         {
-            l.selectedStyle->setContent(dlg.content());
+            l.selectedStyle->setContent(dlg->content());
         }
         updatePreview();
         emit changed();

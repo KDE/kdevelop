@@ -614,7 +614,7 @@ QString SessionController::showSessionChooserDialog(QString headerText, bool onl
     ///@todo We need a way to get a proper size-hint from the view, but unfortunately, that only seems possible after the view was shown.
     dialog.resize(QSize(900, 600));
 
-    if(dialog.exec() != QDialog::Accepted)
+    if(dialog.exec() != QDialog::Accepted) // krazy:exclude=crashy
     {
         return QString();
     }
