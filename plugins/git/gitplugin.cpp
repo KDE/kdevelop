@@ -435,7 +435,7 @@ VcsJob* GitPlugin::revert(const QList<QUrl>& localLocations, IBasicVersionContro
         }
     }
     if (!modified.isEmpty()) {
-        auto res = KMessageBox::questionYesNo(nullptr, i18n("The following files have uncommited changes, "
+        auto res = KMessageBox::questionYesNo(nullptr, i18n("The following files have uncommitted changes, "
                                               "which will be lost. Continue?") + "<br/><br/>" + modified);
         if (res != KMessageBox::Yes) {
             return errorsFound(QString(), OutputJob::Silent);
