@@ -72,8 +72,11 @@ void SvnJobBase::askForLogin( const QString& realm )
         internalJob()->m_login_username = dlg.username();
         internalJob()->m_login_password = dlg.password();
         internalJob()->m_maySave = dlg.keepPassword();
-        internalJob()->m_guiSemaphore.release( 1 );
+    } else {
+        internalJob()->m_login_username.clear();
+        internalJob()->m_login_password.clear();
     }
+    internalJob()->m_guiSemaphore.release( 1 );
 }
 
 void SvnJobBase::showNotification( const QString& path, const QString& msg )
