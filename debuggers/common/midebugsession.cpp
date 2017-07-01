@@ -545,7 +545,7 @@ void MIDebugSession::stopDebugger()
     // Get debugger's attention if it's busy. We need debugger to be at the
     // command line so we can stop it.
     if (!m_debugger->isReady()) {
-        qCDebug(DEBUGGERCOMMON) << "debugger busy on shutdown - interruping";
+        qCDebug(DEBUGGERCOMMON) << "debugger busy on shutdown - interrupting";
         interruptDebugger();
     }
 

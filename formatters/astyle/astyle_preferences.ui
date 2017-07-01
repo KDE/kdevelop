@@ -71,7 +71,7 @@
            </property>
            <property name="toolTip">
             <string>Number of spaces that will be converted to a tab.
-The number of spaces per tab is controled by the editor.</string>
+The number of spaces per tab is controlled by the editor.</string>
            </property>
            <property name="minimum">
             <number>1</number>
