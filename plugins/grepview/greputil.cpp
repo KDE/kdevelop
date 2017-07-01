@@ -47,12 +47,13 @@ QStringList qCombo2StringList( QComboBox* combo, bool allowEmpty )
     if (!combo) {
         return list;
     }
-    int skippedItem = -1;
-    if (!combo->currentText().isEmpty() || allowEmpty) {
-        list << combo->currentText();
+    QString currentText = combo->currentText();
+    int skippedItem = combo->currentIndex();
+    if (!currentText.isEmpty() || allowEmpty) {
+        list << currentText;
     }
-    if (combo->currentIndex() != -1 && !combo->itemText(combo->currentIndex()).isEmpty()) {
-        skippedItem = combo->currentIndex();
+    if (skippedItem != -1 && currentText != combo->itemText(skippedItem)) {
+        skippedItem = -1;
     }
     for (int i = 0; i < std::min(MAX_LAST_SEARCH_ITEMS_COUNT, combo->count()); ++i) {
         if (i != skippedItem && !combo->itemText(i).isEmpty()) {

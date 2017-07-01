@@ -15,13 +15,16 @@
 
 #include <algorithm>
 
+#include <QCloseEvent>
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QFileDialog>
 #include <QLineEdit>
 #include <QMenu>
 #include <QPushButton>
+#include <QShowEvent>
 #include <QStringList>
+#include <QTimer>
 
 #include <KComboBox>
 #include <KCompletion>
@@ -107,14 +110,57 @@ inline QStringList excludepatterns() { return QStringList()
 ///Separator used to separate search paths.
 inline QString pathsSeparator() { return (QStringLiteral(";")); }
 
+///Returns the chosen directories or files (only the top directories, not subfiles)
+QList<QUrl> getDirectoryChoice(const QString& text)
+{
+    QList<QUrl> ret;
+    if (text == allOpenFilesString()) {
+        foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
+            ret << doc->url();
+    } else if (text == allOpenProjectsString()) {
+        foreach(IProject* project, ICore::self()->projectController()->projects())
+            ret << project->path().toUrl();
+    } else {
+        QStringList semicolonSeparatedFileList = text.split(pathsSeparator());
+        if (!semicolonSeparatedFileList.isEmpty() && QFileInfo::exists(semicolonSeparatedFileList[0])) {
+            // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
+            // a semicolon in the name.
+            foreach(const QString& file, semicolonSeparatedFileList)
+                ret << QUrl::fromLocalFile(file).adjusted(QUrl::StripTrailingSlash);
+        } else {
+            ret << QUrl::fromUserInput(text).adjusted(QUrl::StripTrailingSlash);
+        }
+    }
+    return ret;
+}
+
+///Check if all directories are part of a project
+bool directoriesInProject(const QString& dir)
+{
+    foreach (const QUrl& url, getDirectoryChoice(dir)) {
+        IProject *proj = ICore::self()->projectController()->findProjectForUrl(url);
+        if (!proj || !proj->path().toUrl().isLocalFile()) {
+           return false;
+        }
+    }
+
+    return true;
+}
+
 ///Max number of items in paths combo box.
 const int pathsMaxCount = 25;
 }
 
-GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
-    : QDialog(parent), Ui::GrepWidget(), m_plugin( plugin )
+GrepDialog::GrepDialog(GrepViewPlugin *plugin, QWidget *parent, bool show)
+    : QDialog(parent), Ui::GrepWidget(), m_plugin(plugin), m_show(show)
 {
     setAttribute(Qt::WA_DeleteOnClose);
+
+    // if we don't intend on showing the dialog, we can skip all UI setup
+    if (!m_show) {
+        return;
+    }
+
     setWindowTitle( i18n("Find/Replace in Files") );
 
     setupUi(this);
@@ -181,7 +227,6 @@ GrepDialog::GrepDialog( GrepViewPlugin * plugin, QWidget *parent )
 
     directorySelector->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     connect(directorySelector, &QPushButton::clicked, this, &GrepDialog::selectDirectoryDialog );
-    directoryChanged(directorySelector->text());
 }
 
 void GrepDialog::selectDirectoryDialog()
@@ -263,33 +308,22 @@ QMenu* GrepDialog::createSyncButtonMenu()
     return ret;
 }
 
-void GrepDialog::directoryChanged(const QString& dir)
-{
-    QUrl currentUrl = QUrl::fromLocalFile(dir);
-    if( !currentUrl.isValid() ) {
-        m_settings.projectFilesOnly = false;
-        return;
-    }
-
-    bool projectAvailable = true;
-
-    foreach(const QUrl& url, getDirectoryChoice())
-    {
-        IProject *proj = ICore::self()->projectController()->findProjectForUrl( url );
-        if( !proj || !proj->path().toUrl().isLocalFile() )
-            projectAvailable = false;
-    }
-
-    m_settings.projectFilesOnly =  projectAvailable;
-}
-
 GrepDialog::~GrepDialog()
 {
+}
+
+void GrepDialog::setVisible(bool visible)
+{
+    QDialog::setVisible(visible && m_show);
 }
 
 void GrepDialog::closeEvent(QCloseEvent* closeEvent)
 {
     Q_UNUSED(closeEvent);
+
+    if (!m_show) {
+        return;
+    }
 
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     // memorize the last patterns and paths
@@ -331,13 +365,27 @@ GrepJobSettings GrepDialog::settings() const
     return m_settings;
 }
 
-void GrepDialog::setSearchLocations(const QString &dir)
+void GrepDialog::historySearch(QList<GrepJobSettings> &settingsHistory)
 {
-    if(!dir.isEmpty()) {
-        if(QDir::isAbsolutePath(dir))
-        {
-            static_cast<KUrlCompletion*>(searchPaths->completionObject())->setDir( QUrl::fromLocalFile(dir) );
-        }
+    // clear the current settings history and pass it to a job list
+    m_historyJobSettings.clear();
+    m_historyJobSettings.swap(settingsHistory);
+
+    // check if anything is do be done and if all projects are loaded
+    if (!m_historyJobSettings.empty() && !checkProjectsOpened()) {
+        connect(KDevelop::ICore::self()->projectController(),
+                &KDevelop::IProjectController::projectOpened,
+                this, &GrepDialog::checkProjectsOpened);
+    }
+}
+
+void GrepDialog::setSearchLocations(const QString& dir)
+{
+    if (!dir.isEmpty()) {
+        if (m_show) {
+            if (QDir::isAbsolutePath(dir)) {
+                static_cast<KUrlCompletion*>(searchPaths->completionObject())->setDir( QUrl::fromLocalFile(dir) );
+            }
 
             if (searchPaths->contains(dir)) {
                 searchPaths->removeItem(searchPaths->findText(dir));
@@ -349,8 +397,11 @@ void GrepDialog::setSearchLocations(const QString &dir)
             if (searchPaths->count() > pathsMaxCount) {
                 searchPaths->removeItem(searchPaths->count() - 1);
             }
+        } else {
+            m_settings.searchPaths = dir;
+        }
     }
-    directoryChanged(dir);
+    m_settings.projectFilesOnly = directoriesInProject(dir);
 }
 
 void GrepDialog::patternComboEditTextChanged( const QString& text)
@@ -358,56 +409,63 @@ void GrepDialog::patternComboEditTextChanged( const QString& text)
     buttonBox->button(QDialogButtonBox::Ok)->setEnabled(!text.isEmpty());
 }
 
-QList< QUrl > GrepDialog::getDirectoryChoice() const
+bool GrepDialog::checkProjectsOpened()
 {
-    QList< QUrl > ret;
-    QString text = searchPaths->currentText();
-    if(text == allOpenFilesString())
-    {
-        foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
-            ret << doc->url();
-    }else if(text == allOpenProjectsString())
-    {
-        foreach(IProject* project, ICore::self()->projectController()->projects())
-            ret << project->path().toUrl();
-    }else{
-        QStringList semicolonSeparatedFileList = text.split(pathsSeparator());
-        if(!semicolonSeparatedFileList.isEmpty() && QFileInfo::exists(semicolonSeparatedFileList[0]))
-        {
-            // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
-            // a semicolon in the name.
-            foreach(const QString& file, semicolonSeparatedFileList)
-                ret << QUrl::fromLocalFile(file).adjusted(QUrl::StripTrailingSlash);
-        }else{
-            ret << QUrl::fromUserInput(searchPaths->currentText()).adjusted(QUrl::StripTrailingSlash);
-        }
+    // only proceed if all projects have been opened
+    if (KDevelop::ICore::self()->activeSession()->config()->group("General Options").readEntry("Open Projects", QList<QUrl>()).count() !=
+        KDevelop::ICore::self()->projectController()->projects().count())
+        return false;
+
+    foreach (IProject* p, KDevelop::ICore::self()->projectController()->projects()) {
+        if (!p->isReady())
+            return false;
     }
-    return ret;
+
+    // do the grep jobs one by one
+    connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepDialog::nextHistory);
+    QTimer::singleShot(0, this, &GrepDialog::nextHistory);
+
+    return true;
+}
+
+void GrepDialog::nextHistory()
+{
+    if (!m_historyJobSettings.empty()) {
+        m_settings = m_historyJobSettings.takeFirst();
+        startSearch();
+    } else {
+        close();
+    }
 }
 
 bool GrepDialog::isPartOfChoice(QUrl url) const
 {
-    foreach(const QUrl& choice, getDirectoryChoice())
+    foreach(const QUrl& choice, getDirectoryChoice(m_settings.searchPaths)) {
         if(choice.isParentOf(url) || choice == url)
             return true;
+    }
     return false;
 }
 
 void GrepDialog::startSearch()
 {
-    updateSettings();
+    // if m_show is false, all settings are fixed in m_settings
+    if (m_show)
+        updateSettings();
+
+    const QStringList include = GrepFindFilesThread::parseInclude(m_settings.files);
+    const QStringList exclude = GrepFindFilesThread::parseExclude(m_settings.exclude);
 
     // search for unsaved documents
     QList<IDocument*> unsavedFiles;
-    QStringList include = GrepFindFilesThread::parseInclude(m_settings.files);
-    QStringList exclude = GrepFindFilesThread::parseExclude(m_settings.exclude);
-
     foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
     {
         QUrl docUrl = doc->url();
-        if(doc->state() != IDocument::Clean && isPartOfChoice(docUrl) &&
-           QDir::match(include, docUrl.fileName()) && !QDir::match(exclude, docUrl.toLocalFile()))
-        {
+        if (doc->state() != IDocument::Clean &&
+            isPartOfChoice(docUrl) &&
+            QDir::match(include, docUrl.fileName()) &&
+            !QDir::match(exclude, docUrl.toLocalFile())
+        ) {
             unsavedFiles << doc;
         }
     }
@@ -418,12 +476,11 @@ void GrepDialog::startSearch()
         return;
     }
 
-    QList<QUrl> choice = getDirectoryChoice();
+    const QString descriptionOrUrl(m_settings.searchPaths);
+    QList<QUrl> choice = getDirectoryChoice(descriptionOrUrl);
+    QString description = descriptionOrUrl;
 
     GrepJob* job = m_plugin->newGrepJob();
-
-    const QString descriptionOrUrl(searchPaths->currentText());
-    QString description = descriptionOrUrl;
     // Shorten the description
     if(descriptionOrUrl != allOpenFilesString() && descriptionOrUrl != allOpenProjectsString()) {
         auto prettyFileName = [](const QUrl& url) {
@@ -439,7 +496,7 @@ void GrepDialog::startSearch()
 
     GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
                                findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
-    GrepOutputModel* outputModel = toolView->renewModel(m_settings.pattern, description);
+    GrepOutputModel* outputModel = toolView->renewModel(m_settings, description);
 
     connect(job, &GrepJob::showErrorMessage,
             toolView, &GrepOutputView::showErrorMessage);
@@ -461,7 +518,9 @@ void GrepDialog::startSearch()
 
     m_plugin->rememberSearchDirectory(descriptionOrUrl);
 
-    close();
+    // if m_show is false, the dialog is closed somewhere else
+    if (m_show)
+        close();
 }
 
 void GrepDialog::updateSettings()
@@ -479,5 +538,7 @@ void GrepDialog::updateSettings()
     m_settings.replacementTemplate = replacementTemplateEdit->currentText();
     m_settings.files = filesCombo->currentText();
     m_settings.exclude = excludeCombo->currentText();
+
+    m_settings.searchPaths = searchPaths->currentText();
 }
 

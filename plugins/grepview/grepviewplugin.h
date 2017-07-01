@@ -16,6 +16,7 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/contextmenuextension.h>
 
+#include <QList>
 #include <QPointer>
 #include <QVariant>
 
@@ -63,7 +64,7 @@ private Q_SLOTS:
 
 private:
     GrepJob *m_currentJob;
-    QPointer<GrepDialog> m_currentDialog;
+    QList<QPointer<GrepDialog> > m_currentDialogs;
     QString m_directory;
     QString m_contextMenuDirectory;
     GrepOutputViewFactory* m_factory;

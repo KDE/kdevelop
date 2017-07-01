@@ -106,9 +106,11 @@ GrepViewPlugin::~GrepViewPlugin()
 
 void GrepViewPlugin::unload()
 {
-    if (m_currentDialog) {
-        m_currentDialog->reject();
-        m_currentDialog->deleteLater();
+    foreach (const QPointer<GrepDialog> &p, m_currentDialogs) {
+        if (p) {
+            p->reject();
+            p->deleteLater();
+        }
     }
 
     core()->uiController()->removeToolView(m_factory);
@@ -163,8 +165,11 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
 
 void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool show)
 {
-    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow() );
-    m_currentDialog = dlg;
+    // check if dialog pointers are still valid, remove them otherwise
+    m_currentDialogs.removeAll(QPointer<GrepDialog>());
+
+    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow(), show );
+    m_currentDialogs << dlg;
 
     GrepJobSettings dlgSettings = dlg->settings();
     KDevelop::IDocument* doc = core()->documentController()->activeDocument();
@@ -232,7 +237,7 @@ void GrepViewPlugin::jobFinished(KJob* job)
 {
     if(job == m_currentJob)
     {
-        emit grepJobFinished();
         m_currentJob = nullptr;
+        emit grepJobFinished();
     }
 }

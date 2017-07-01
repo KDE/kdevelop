@@ -12,6 +12,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_GREPOUTPUTVIEW_H
 #define KDEVPLATFORM_PLUGIN_GREPOUTPUTVIEW_H
 
+#include <QList>
+
 #include <interfaces/iuicontroller.h>
 #include <interfaces/itoolviewactionlistener.h>
 
@@ -26,6 +28,7 @@ class QModelIndex;
 
 class GrepViewPlugin;
 class GrepOutputModel;
+struct GrepJobSettings;
 
 class GrepOutputViewFactory: public KDevelop::IToolViewFactory
 {
@@ -58,7 +61,7 @@ public:
      * Oldest models are deleted if needed.
      * @return pointer to the new model
      */
-    GrepOutputModel* renewModel(const QString& name, const QString& description);
+    GrepOutputModel* renewModel(const GrepJobSettings& settings, const QString& description);
     
     void setMessage(const QString& msg, MessageType type = Information);
 
@@ -78,10 +81,12 @@ private:
     QAction* m_prev;
     QAction* m_collapseAll;
     QAction* m_expandAll;
+    QAction* m_refresh;
     QAction* m_clearSearchHistory;
     QLabel*  m_statusLabel;
     GrepViewPlugin *m_plugin;
-    
+    QList<GrepJobSettings> m_settingsHistory;
+
 private Q_SLOTS:
     void selectPreviousItem() override;
     void selectNextItem() override;

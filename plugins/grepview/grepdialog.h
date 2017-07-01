@@ -27,13 +27,16 @@ class GrepDialog : public QDialog, private Ui::GrepWidget
     Q_OBJECT
 
 public:
-    explicit GrepDialog( GrepViewPlugin * plugin, QWidget *parent=nullptr );
+    explicit GrepDialog(GrepViewPlugin *plugin, QWidget *parent = nullptr, bool show = true);
     ~GrepDialog() override;
 
     void setSettings(const GrepJobSettings &settings);
     GrepJobSettings settings() const;
+    ///Rerun all grep jobs from a list of settings, called by GrepOutputView
+    void historySearch(QList<GrepJobSettings> &settingsHistory);
 
 public Q_SLOTS:
+    ///Start a new search
     void startSearch();
 
     ///Sets directory(ies)/files to search in. Also it can be semicolon separated list of directories/files or one of special strings: allOpenFilesString, allOpenProjectsString
@@ -42,29 +45,39 @@ public Q_SLOTS:
 private Q_SLOTS:
     void templateTypeComboActivated(int);
     void patternComboEditTextChanged( const QString& );
-    void directoryChanged(const QString &dir);
     QMenu* createSyncButtonMenu();
     void addUrlToMenu(QMenu* ret, const QUrl& url);
     void addStringToMenu(QMenu* ret, const QString& string);
     void synchronizeDirActionTriggered(bool);
 
+    ///Check if all projects have been loaded
+    bool checkProjectsOpened();
+    ///Call the next element in m_jobs_history or close the dialog if all jobs are done
+    void nextHistory();
+
     ///Opens the dialog to select a directory to search in, and inserts it into Location(s) field.
     void selectDirectoryDialog();
 
 protected:
+    ///Prevent showing the dialog if m_show is false
+    void setVisible(bool visible) override;
     void closeEvent(QCloseEvent* closeEvent) override;
 
 private:
-    // Returns the chosen directories or files (only the top directories, not subfiles)
-    QList< QUrl > getDirectoryChoice() const;
-    // Returns whether the given url is a subfile/subdirectory of one of the chosen directories/files
-    // This is slow, so don't call it too often
+    ///Returns whether the given url is a subfile/subdirectory of one of the chosen directories/files
+    ///
+    ///This is slow, so don't call it too often
     bool isPartOfChoice(QUrl url) const;
-    // Checks what a user has entered into the dialog and saves the data in m_settings
+    ///Checks what a user has entered into the dialog and saves the data in m_settings
     void updateSettings();
 
     GrepViewPlugin * m_plugin;
+    ///Allow to show a dialog
+    const bool m_show;
+    ///Current setting
     GrepJobSettings m_settings;
+    ///List of remaining grep job settings to be done
+    QList<GrepJobSettings> m_historyJobSettings;
 };
 
 

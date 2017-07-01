@@ -48,6 +48,7 @@ struct GrepJobSettings
     QString replacementTemplate;
     QString files;
     QString exclude;
+    QString searchPaths;
 };
 
 class GrepJob : public KJob, public KDevelop::IStatus

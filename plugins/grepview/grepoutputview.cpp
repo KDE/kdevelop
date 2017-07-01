@@ -60,6 +60,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
   , m_prev(nullptr)
   , m_collapseAll(nullptr)
   , m_expandAll(nullptr)
+  , m_refresh(nullptr)
   , m_clearSearchHistory(nullptr)
   , m_statusLabel(nullptr)
   , m_plugin(plugin)
@@ -80,8 +81,10 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     QAction *newSearchAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("New &Search"), this);
+    m_refresh = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Refresh"), this);
+    m_refresh->setEnabled(false);
     m_clearSearchHistory = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear Search History"), this);
-    QAction *refreshAction = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Refresh"), this);
+    m_clearSearchHistory->setEnabled(false);
 
     addAction(m_prev);
     addAction(m_next);
@@ -89,7 +92,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     addAction(m_expandAll);
     addAction(separator);
     addAction(newSearchAction);
-    addAction(refreshAction);
+    addAction(m_refresh);
     addAction(m_clearSearchHistory);
 
     separator = new QAction(this);
@@ -118,6 +121,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     connect(m_collapseAll, &QAction::triggered, this, &GrepOutputView::collapseAllItems);
     connect(m_expandAll, &QAction::triggered, this, &GrepOutputView::expandAllItems);
     connect(applyButton, &QPushButton::clicked,  this, &GrepOutputView::onApply);
+    connect(m_refresh, &QAction::triggered, this, &GrepOutputView::refresh);
     connect(m_clearSearchHistory, &QAction::triggered, this, &GrepOutputView::clearSearchHistory);
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     replacementCombo->addItems( cg.readEntry("LastReplacementItems", QStringList()) );
@@ -129,11 +133,31 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
 
-    connect(refreshAction, &QAction::triggered, this, &GrepOutputView::refresh);
-
     resultsTreeView->header()->setStretchLastSection(true);
 
     resultsTreeView->header()->setStretchLastSection(true);
+
+    // read Find/Replace settings history
+    QStringList s = cg.readEntry("LastSettings", QStringList());
+    while (!s.empty() && s.count() % 10 == 0) {
+        GrepJobSettings settings;
+        settings.projectFilesOnly = s.takeFirst().toUInt();
+        settings.caseSensitive = s.takeFirst().toUInt();
+        settings.regexp = s.takeFirst().toUInt();
+        settings.depth = s.takeFirst().toInt();
+        settings.pattern = s.takeFirst();
+        settings.searchTemplate = s.takeFirst();
+        settings.replacementTemplate = s.takeFirst();
+        settings.files = s.takeFirst();
+        settings.exclude = s.takeFirst();
+        settings.searchPaths = s.takeFirst();
+
+        m_settingsHistory << settings;
+    }
+
+    // rerun the grep jobs with settings from the history
+    GrepDialog* dlg = new GrepDialog(m_plugin, this, false);
+    dlg->historySearch(m_settingsHistory);
 
     updateCheckable();
 }
@@ -152,16 +176,36 @@ GrepOutputView::~GrepOutputView()
 {
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));
+    QStringList settingsStrings;
+    foreach (const GrepJobSettings & s, m_settingsHistory) {
+        settingsStrings << QStringList({
+            QString::number(s.projectFilesOnly),
+            QString::number(s.caseSensitive),
+            QString::number(s.regexp),
+            QString::number(s.depth),
+            s.pattern,
+            s.searchTemplate,
+            s.replacementTemplate,
+            s.files,
+            s.exclude,
+            s.searchPaths
+        });
+    }
+    cg.writeEntry("LastSettings", settingsStrings);
     emit outputViewIsClosed();
 }
 
-GrepOutputModel* GrepOutputView::renewModel(const QString& name, const QString& description)
+GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, const QString& description)
 {
-    // Crear oldest model
-    while(modelSelector->count() > GrepOutputView::HISTORY_SIZE) {
+    // clear oldest model
+    while(modelSelector->count() >= GrepOutputView::HISTORY_SIZE) {
         QVariant var = modelSelector->itemData(GrepOutputView::HISTORY_SIZE - 1);
         qvariant_cast<QObject*>(var)->deleteLater();
         modelSelector->removeItem(GrepOutputView::HISTORY_SIZE - 1);
+    }
+
+    while(m_settingsHistory.count() >= GrepOutputView::HISTORY_SIZE) {
+        m_settingsHistory.removeFirst();
     }
 
     replacementCombo->clearEditText();
@@ -179,10 +223,14 @@ GrepOutputModel* GrepOutputView::renewModel(const QString& name, const QString& 
     connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepOutputView::updateScrollArea);
 
     // appends new model to history
-    const QString displayName = i18n("Search \"%1\" in %2 (at time %3)", name, description, QTime::currentTime().toString(QStringLiteral("hh:mm")));
+    const QString displayName = i18n("Search \"%1\" in %2 (at time %3)",
+                                     settings.pattern, description,
+                                     QTime::currentTime().toString(QStringLiteral("hh:mm")));
     modelSelector->insertItem(0, displayName, qVariantFromValue<QObject*>(newModel));
 
     modelSelector->setCurrentIndex(0);//setCurrentItem(displayName);
+
+    m_settingsHistory.append(settings);
 
     updateCheckable();
 
@@ -229,6 +277,8 @@ void GrepOutputView::changeModel(int index)
 
     updateCheckable();
     updateApplyState(model()->index(0, 0), model()->index(0, 0));
+    m_refresh->setEnabled(true);
+    m_clearSearchHistory->setEnabled(true);
 }
 
 void GrepOutputView::setMessage(const QString& msg, MessageType type)
@@ -279,7 +329,19 @@ void GrepOutputView::showDialog()
 
 void GrepOutputView::refresh()
 {
-    m_plugin->showDialog(true, QString(), false);
+    int index = modelSelector->currentIndex();
+    if (index >= 0) {
+        QVariant var = modelSelector->currentData();
+        qvariant_cast<QObject*>(var)->deleteLater();
+        modelSelector->removeItem(index);
+
+        QList<GrepJobSettings> refresh_history({
+            m_settingsHistory.takeAt(m_settingsHistory.count() - 1 - index)
+        });
+
+        GrepDialog* dlg = new GrepDialog(m_plugin, this, false);
+        dlg->historySearch(refresh_history);
+    }
 }
 
 void GrepOutputView::expandElements(const QModelIndex& index)
@@ -374,7 +436,12 @@ void GrepOutputView::clearSearchHistory()
         qvariant_cast<QObject*>(var)->deleteLater();
         modelSelector->removeItem(0);
     }
+
+    m_settingsHistory.clear();
+
     applyButton->setEnabled(false);
+    m_refresh->setEnabled(false);
+    m_clearSearchHistory->setEnabled(false);
     m_statusLabel->setText(QString());
 }
 
