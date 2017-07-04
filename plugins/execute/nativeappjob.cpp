@@ -101,14 +101,10 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     qCDebug(PLUGIN_EXECUTE) << "setting app:" << executable << arguments;
 
     if (iface->useTerminal(cfg)) {
-        QStringList args = KShell::splitArgs(iface->terminal(cfg));
-        for (QStringList::iterator it = args.begin(); it != args.end(); ++it) {
-            if (*it == QLatin1String("%exe")) {
-                *it = KShell::quoteArg(executable.toLocalFile());
-            } else if (*it == QLatin1String("%workdir")) {
-                *it = KShell::quoteArg(wc.toLocalFile());
-            }
-        }
+        QString terminalCommand = iface->terminal(cfg);
+        terminalCommand.replace(QLatin1String("%exe"), KShell::quoteArg( executable.toLocalFile()) );
+        terminalCommand.replace(QLatin1String("%workdir"), KShell::quoteArg( wc.toLocalFile()) );
+        QStringList args = KShell::splitArgs(terminalCommand);
         args.append( arguments );
         *this << args;
     } else {
