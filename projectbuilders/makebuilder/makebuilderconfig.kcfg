@@ -15,6 +15,7 @@
         <default>false</default>
     </entry>
     <entry name="suCommand" key="Su Command" type="String">
+        <default>kdesu -t</default>
     </entry>
     <entry name="overrideNumberOfJobs" key="Override Number Of Jobs" type="Bool">
         <default>false</default>

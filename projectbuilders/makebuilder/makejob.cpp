@@ -212,8 +212,7 @@ QStringList MakeJob::privilegedExecutionCommand() const
             //project is opened.
         }
 
-        QRegExp regEx(" ");
-        suCommandWithArg = suCommand.split(regEx);
+        suCommandWithArg = KShell::splitArgs(suCommand);
         if( suCommandWithArg.isEmpty() )
         {
             suCommandWithArg << QStringLiteral("kdesu") << QStringLiteral("-t");
