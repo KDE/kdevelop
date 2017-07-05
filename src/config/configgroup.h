@@ -24,6 +24,8 @@
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+
+#include <array>
 #include <tuple>
 
 namespace ClangTidy
