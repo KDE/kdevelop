@@ -35,8 +35,6 @@ using namespace KDevelop;
 namespace {
 WelcomePageWidget* createWelcomePageWidget(QWidget* parent)
 {
-    // can't just include qsimd_p.h and use qCpuFeatures() -- it's a private header :\
-    // instead, use: https://stackoverflow.com/questions/28939652/how-to-detect-sse-avx-avx2-avx-512-availability-at-compile-time
     // don't attempt to load any QML if CPU doesn't have SSE2 support (cf. bug 381999)
 #if defined(Q_OS_LINUX) && (defined(Q_CC_GNU) || (defined(Q_CC_CLANG) && __clang_major__ >= 3 && __clang_minor__ >= 7))
     if (!__builtin_cpu_supports("sse2")) {
