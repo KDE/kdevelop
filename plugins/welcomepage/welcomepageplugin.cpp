@@ -26,15 +26,35 @@
 #include <interfaces/iuicontroller.h>
 #include <sublime/mainwindow.h>
 
+#include <QDebug>
+
 K_PLUGIN_FACTORY_WITH_JSON(KDevWelcomePagePluginFactory, "kdevwelcomepage.json", registerPlugin<KDevWelcomePagePlugin>();)
 
 using namespace KDevelop;
 
+namespace {
+WelcomePageWidget* createWelcomePageWidget(QWidget* parent)
+{
+    // can't just include qsimd_p.h and use qCpuFeatures() -- it's a private header :\
+    // instead, use: https://stackoverflow.com/questions/28939652/how-to-detect-sse-avx-avx2-avx-512-availability-at-compile-time
+    // don't attempt to load any QML if CPU doesn't have SSE2 support (cf. bug 381999)
+#if (defined(Q_CC_GNU) || defined(Q_CC_CLANG)) && !defined(__SSE2__)
+#  pragma message("Welcome Page won't load any QML -- lacking SSE2 support on this processor")
+    qWarning() << "Welcome Page won't load any QML -- lacking SSE2 support on this processor";
+    return nullptr;
+#endif
+
+    return new WelcomePageWidget({}, parent);
+}
+}
+
 KDevWelcomePagePlugin::KDevWelcomePagePlugin( QObject* parent, const QVariantList& )
     : IPlugin(QStringLiteral("kdevwelcomepage"), parent )
 {
-    Sublime::MainWindow* mw = qobject_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-    mw->setBackgroundCentralWidget(new WelcomePageWidget(QList<IProject*>(), mw));
+    auto mainWindow = qobject_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+    if (auto welcomePageWidget = createWelcomePageWidget(mainWindow)) {
+        mainWindow->setBackgroundCentralWidget(welcomePageWidget);
+    }
 }
 
 #include "welcomepageplugin.moc"
