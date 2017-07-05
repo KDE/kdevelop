@@ -31,15 +31,13 @@ class KDevDocumentModel;
 class KDevDocumentViewDelegate;
 class KDevDocumentSelection;
 class KDevFileItem;
+class KDevCategoryItem;
 namespace KDevelop
 {
     class IDocument;
     class IProject;
 }
 
-class KDevCategoryItem;
-class KDevDocumentModel;
-class KDevDocumentItem;
 
 class KDevDocumentView: public QTreeView
 {
