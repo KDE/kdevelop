@@ -22,7 +22,7 @@ endmacro(kdevcmake_add_test)
 # kdevcmake_add_test(cmakeparserutilstest KF5::TextEditor)
 # kdevcmake_add_test(cmakeloadprojecttest KDev::Language KDev::Tests)
 kdevcmake_add_test(test_cmakemanager KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
-# kdevcmake_add_test(ctestfindsuitestest KDev::Language KDev::Tests)
+kdevcmake_add_test(ctestfindsuitestest KDev::Language KDev::Tests)
 
 # this is not a unit test but a testing tool, kept here for convenience
 add_executable(kdevprojectopen kdevprojectopen.cpp)
