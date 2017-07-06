@@ -19,25 +19,21 @@
  * 02110-1301, USA.
  */
 
-#ifndef CTESTFINDSUITESTEST_H
-#define CTESTFINDSUITESTEST_H
+#ifndef TEST_CTESTFINDSUITES_H
+#define TEST_CTESTFINDSUITES_H
 
 #include <QtTest/QtTest>
 
-namespace KDevelop {
-class IProject;
-}
-
-class CTestFindSuitesTest : public QObject
+class TestCTestFindSuites : public QObject
 {
     Q_OBJECT
 
 private slots:
     void cleanup();
-    
+
     void initTestCase();
     void cleanupTestCase();
-    
+
     void testCTestSuite();
 };
 

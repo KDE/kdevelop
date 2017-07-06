@@ -19,7 +19,8 @@
  * 02110-1301, USA.
  */
 
-#include "ctestfindsuitestest.h"
+#include "test_ctestfindsuites.h"
+
 #include "testhelpers.h"
 #include "cmake-test-paths.h"
 
@@ -49,7 +50,7 @@ void waitForSuites(IProject* project, int count, int max)
     }
 }
 
-void CTestFindSuitesTest::initTestCase()
+void TestCTestFindSuites::initTestCase()
 {
     AutoTestShell::init({"kdevcmakemanager"});
     TestCore::initialize();
@@ -57,7 +58,7 @@ void CTestFindSuitesTest::initTestCase()
     cleanup();
 }
 
-void CTestFindSuitesTest::cleanup()
+void TestCTestFindSuites::cleanup()
 {
     foreach(IProject* p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
@@ -65,12 +66,12 @@ void CTestFindSuitesTest::cleanup()
     QVERIFY(ICore::self()->projectController()->projects().isEmpty());
 }
 
-void CTestFindSuitesTest::cleanupTestCase()
+void TestCTestFindSuites::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void CTestFindSuitesTest::testCTestSuite()
+void TestCTestFindSuites::testCTestSuite()
 {
     IProject* project = loadProject( "unit_tests" );
     QVERIFY2(project, "Project was not opened");
@@ -93,4 +94,4 @@ void CTestFindSuitesTest::testCTestSuite()
     }
 }
 
-QTEST_MAIN(CTestFindSuitesTest)
+QTEST_MAIN(TestCTestFindSuites)
