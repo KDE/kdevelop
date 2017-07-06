@@ -374,6 +374,7 @@ void MainWindow::updateCaption()
 {
     const auto activeSession = Core::self()->sessionController()->activeSession();
     QString title = activeSession ? activeSession->description() : QString();
+    QString localFilePath;
 
     if(area()->activeView())
     {
@@ -384,7 +385,9 @@ void MainWindow::updateCaption()
         Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(doc);
         if(urlDoc)
         {
-            setWindowFilePath(urlDoc->url().toLocalFile());
+            if (urlDoc->url().isLocalFile()) {
+                localFilePath = urlDoc->url().toLocalFile();
+            }
             title += Core::self()->projectController()->prettyFileName(urlDoc->url(), KDevelop::IProjectController::FormatPlain);
         }
         else
@@ -396,10 +399,8 @@ void MainWindow::updateCaption()
 
         title += QLatin1String(" ]");
     }
-    else {
-        setWindowFilePath({});
-    }
 
+    setWindowFilePath(localFilePath);
     setCaption(title);
 }
 
