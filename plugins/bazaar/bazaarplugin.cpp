@@ -66,7 +66,8 @@ bool BazaarPlugin::isValidRemoteRepositoryUrl(const QUrl& remoteLocation)
 {
     const QString scheme = remoteLocation.scheme();
     if (scheme == QLatin1String("bzr") ||
-        scheme == QLatin1String("bzr+ssh")) {
+        scheme == QLatin1String("bzr+ssh") ||
+        scheme == QLatin1String("lp")) {
         return true;
     }
     return false;
