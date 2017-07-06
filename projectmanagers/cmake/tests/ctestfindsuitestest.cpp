@@ -89,7 +89,7 @@ void CTestFindSuitesTest::testCTestSuite()
         QString exeSubdir = project->projectItem()->path().relativePath(ctestSuite->executable().parent());
         //Support for custom RUNTIME_OUTPUT_DIRECTORY target prop is broken
         //QCOMPARE(exeSubdir, ctestSuite->name() == "fail" ? QString("build/bin") : QString("build") );
-        QCOMPARE(exeSubdir, QStringLiteral("build"));
+        QCOMPARE(exeSubdir, ctestSuite->name() == "test_five" ? QString("build/five") : QString("build"));
     }
 }
 
