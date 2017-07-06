@@ -307,7 +307,7 @@ bool GitPlugin::isValidRemoteRepositoryUrl(const QUrl& remoteLocation)
         }
     } else {
         const QString scheme = remoteLocation.scheme();
-        if (scheme == QLatin1String("git")) {
+        if (scheme == QLatin1String("git") || scheme == QLatin1String("git+ssh")) {
             return true;
         }
         // heuristic check, anything better we can do here without talking to server?
