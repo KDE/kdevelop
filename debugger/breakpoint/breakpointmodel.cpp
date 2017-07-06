@@ -132,36 +132,58 @@ void BreakpointModel::textDocumentCreated(KDevelop::IDocument* doc)
 
 void BreakpointModel::markContextMenuRequested(Document* document, Mark mark, const QPoint &pos, bool& handled)
 {
-
     int type = mark.type;
     qCDebug(DEBUGGER) << type;
 
-    /* Is this a breakpoint mark, to begin with? */
-    if (!(type & AllBreakpointMarks)) return;
-
-    Breakpoint *b = breakpoint(document->url(), mark.line);
-    if (!b) {
-        QMessageBox::critical(nullptr, i18n("Breakpoint not found"), i18n("Couldn't find breakpoint at %1:%2", document->url().toString(), mark.line));
+    Breakpoint *b = nullptr;
+    if ((type & AllBreakpointMarks)) {
+        b = breakpoint(document->url(), mark.line);
+        if (!b) {
+            QMessageBox::critical(nullptr, i18n("Breakpoint not found"), i18n("Couldn't find breakpoint at %1:%2", document->url().toString(), mark.line));
+        }
+    } else if (!(type & MarkInterface::Bookmark)) // neither breakpoint nor bookmark
         return;
-    }
 
     QMenu menu;
-    QAction deleteAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("&Delete Breakpoint"), nullptr);
-    QAction disableAction(QIcon::fromTheme(QStringLiteral("dialog-cancel")), i18n("&Disable Breakpoint"), nullptr);
-    QAction enableAction(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")), i18n("&Enable Breakpoint"), nullptr);
-    menu.addAction(&deleteAction);
-    if (b->enabled()) {
-        menu.addAction(&disableAction);
-    } else {
-        menu.addAction(&enableAction);
+    QAction* breakpointAction = menu.addAction(QIcon::fromTheme(QStringLiteral("breakpoint")), i18n("&Breakpoint"));
+    breakpointAction->setCheckable(true);
+    breakpointAction->setChecked(b);
+    QAction* enableAction = nullptr;
+    if (b) {
+        enableAction = b->enabled() ?
+            menu.addAction(QIcon::fromTheme(QStringLiteral("dialog-cancel")), i18n("&Disable Breakpoint")) :
+            menu.addAction(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")), i18n("&Enable Breakpoint"));
     }
-    QAction *a = menu.exec(pos);
-    if (a == &deleteAction) {
-        b->setDeleted();
-    } else if (a == &disableAction) {
-        b->setData(Breakpoint::EnableColumn, Qt::Unchecked);
-    } else if (a == &enableAction) {
-        b->setData(Breakpoint::EnableColumn, Qt::Checked);
+    menu.addSeparator();
+    QAction* bookmarkAction = menu.addAction(QIcon::fromTheme(QStringLiteral("bookmark-new")), i18n("&Bookmark"));
+    bookmarkAction->setCheckable(true);
+    bookmarkAction->setChecked((type & MarkInterface::Bookmark));
+
+    QAction* triggeredAction = menu.exec(pos);
+    if (triggeredAction) {
+        if (triggeredAction == bookmarkAction) {
+            KTextEditor::MarkInterface *iface = qobject_cast<KTextEditor::MarkInterface*>(document);
+            if ((type & MarkInterface::Bookmark))
+                iface->removeMark(mark.line, MarkInterface::Bookmark);
+            else
+                iface->addMark(mark.line, MarkInterface::Bookmark);
+        } else if (triggeredAction == breakpointAction) {
+            if (b) {
+                b->setDeleted();
+            } else {
+                Breakpoint *breakpoint = addCodeBreakpoint(document->url(), mark.line);
+                MovingInterface *moving = qobject_cast<MovingInterface*>(document);
+                if (moving) {
+                    MovingCursor* cursor = moving->newMovingCursor(Cursor(mark.line, 0));
+                    // can't use new signal/slot syntax here, MovingInterface is not a QObject
+                    connect(document, SIGNAL(aboutToDeleteMovingInterfaceContent(Document*)),
+                            this, SLOT(aboutToDeleteMovingInterfaceContent(Document*)), Qt::UniqueConnection);
+                    breakpoint->setMovingCursor(cursor);
+                }
+            }
+        } else if (triggeredAction == enableAction) {
+            b->setData(Breakpoint::EnableColumn, b->enabled() ? Qt::Unchecked : Qt::Checked);
+        }
     }
 
     handled = true;

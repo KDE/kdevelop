@@ -353,11 +353,6 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
     if (KTextEditor::CodeCompletionInterface* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))
         cc->setAutomaticInvocationEnabled(core()->languageController()->completionSettings()->automaticCompletionEnabled());
 
-    if (KTextEditor::ConfigInterface *config = qobject_cast<KTextEditor::ConfigInterface*>(view)) {
-        config->setConfigValue(QStringLiteral("allow-mark-menu"), false);
-        config->setConfigValue(QStringLiteral("default-mark-type"), KTextEditor::MarkInterface::BreakpointActive);
-    }
-
     return view;
 }
 
