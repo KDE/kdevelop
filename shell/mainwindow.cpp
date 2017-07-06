@@ -442,6 +442,9 @@ void MainWindow::updateCaption()
 
         title += QLatin1String(" ]");
     }
+    else {
+        setWindowFilePath({});
+    }
 
     setCaption(title);
 }
