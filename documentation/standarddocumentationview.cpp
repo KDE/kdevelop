@@ -48,6 +48,36 @@
 
 using namespace KDevelop;
 
+#ifndef USE_QTWEBKIT
+class StandardDocumentationPage : public QWebEnginePage
+{
+public:
+    StandardDocumentationPage(QWebEngineProfile* profile, KDevelop::StandardDocumentationView* parent)
+        : QWebEnginePage(profile, parent),
+          m_view(parent)
+    {
+    }
+
+    bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame) override
+    {
+        qCDebug(DOCUMENTATION) << "navigating to..." << url << type;
+
+        if (type == NavigationTypeLinkClicked && m_isDelegating) {
+            emit m_view->linkClicked(url);
+            return false;
+        }
+
+        return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
+    }
+
+    void setLinkDelegating(bool isDelegating) { m_isDelegating = isDelegating; }
+
+private:
+    KDevelop::StandardDocumentationView* const m_view;
+    bool m_isDelegating = false;
+};
+#endif
+
 struct KDevelop::StandardDocumentationViewPrivate
 {
     ZoomController* m_zoomController = nullptr;
@@ -55,10 +85,24 @@ struct KDevelop::StandardDocumentationViewPrivate
 
 #ifdef USE_QTWEBKIT
     QWebView *m_view = nullptr;
-    void init(QWidget* parent) { m_view = new QWebView(parent); }
+    void init(StandardDocumentationView* parent)
+    {
+        m_view = new QWebView(parent);
+    }
 #else
     QWebEngineView* m_view = nullptr;
-    void init(QWidget* parent) { m_view = new QWebEngineView(parent); }
+    StandardDocumentationPage* m_page = nullptr;
+
+    void init(StandardDocumentationView* parent)
+    {
+        // not using the shared default profile here:
+        // prevents conflicts with qthelp scheme handler being registered onto that single default profile
+        // due to async deletion of old pages and their CustomSchemeHandler instance
+        auto* profile = new QWebEngineProfile(parent);
+        m_page = new StandardDocumentationPage(profile, parent);
+        m_view = new QWebEngineView(parent);
+        m_view->setPage(m_page);
+    }
 #endif
 };
 
@@ -226,39 +270,12 @@ void KDevelop::StandardDocumentationView::setNetworkAccessManager(QNetworkAccess
 #endif
 }
 
-#ifndef USE_QTWEBKIT
-class PageInterceptor : public QWebEnginePage
-{
-public:
-    PageInterceptor(bool delegate, KDevelop::StandardDocumentationView* parent)
-        : QWebEnginePage(parent), m_view(parent), m_delegate(delegate)
-    {
-    }
-
-    bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool /*isMainFrame*/) override {
-        qCDebug(DOCUMENTATION) << "navigating to..." << url << type;
-
-        if (type == NavigationTypeLinkClicked) {
-            if (m_delegate)
-                m_view->linkClicked(url);
-            else
-                m_view->load(url);
-            return false;
-        }
-        return true;
-    }
-
-    KDevelop::StandardDocumentationView* const m_view;
-    const bool m_delegate;
-};
-#endif
-
 void KDevelop::StandardDocumentationView::setDelegateLinks(bool delegate)
 {
 #ifdef USE_QTWEBKIT
     d->m_view->page()->setLinkDelegationPolicy(delegate ? QWebPage::DelegateAllLinks : QWebPage::DontDelegateLinks);
 #else
-    d->m_view->setPage(new PageInterceptor(delegate, this));
+    d->m_page->setLinkDelegating(delegate);
 #endif
 }
 
