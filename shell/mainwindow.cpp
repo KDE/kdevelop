@@ -383,7 +383,10 @@ void MainWindow::updateCaption()
         Sublime::Document* doc = area()->activeView()->document();
         Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(doc);
         if(urlDoc)
+        {
+            setWindowFilePath(urlDoc->url().toLocalFile());
             title += Core::self()->projectController()->prettyFileName(urlDoc->url(), KDevelop::IProjectController::FormatPlain);
+        }
         else
             title += doc->title();
 
