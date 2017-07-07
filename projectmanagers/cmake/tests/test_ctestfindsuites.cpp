@@ -1,6 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2012 Miha Čančula <miha@noughmad.eu>
+ * Copyright 2017 Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,6 +20,7 @@
  */
 
 #include "test_ctestfindsuites.h"
+
 #include "testhelpers.h"
 #include "cmake-test-paths.h"
 
@@ -32,28 +34,31 @@
 #include <testing/ctestsuite.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+#include <project/projectmodel.h>
 
-#include <QSignalSpy>
-
-#define WAIT_FOR_SUITES(n, max)    \
-for(int i = 0; ICore::self()->testController()->testSuitesForProject(project).size() < n && i < max*10; ++i) {\
-    QSignalSpy spy(ICore::self()->testController(), &ITestController::testSuiteAdded);\
-    QVERIFY(spy.wait());\
-}
-
-QTEST_MAIN( CTestFindSuitesTest )
+#include <QDir>
+#include <QtTest>
 
 using namespace KDevelop;
 
-void CTestFindSuitesTest::initTestCase()
+void waitForSuites(IProject* project, int count, int max)
 {
-    AutoTestShell::init();
+    auto testController = ICore::self()->testController();
+    for(int i = 0; testController->testSuitesForProject(project).size() < count && i < max * 10; ++i) {
+        QSignalSpy spy(testController, &ITestController::testSuiteAdded);
+        QVERIFY(spy.wait(1000));
+    }
+}
+
+void TestCTestFindSuites::initTestCase()
+{
+    AutoTestShell::init({"kdevcmakemanager"});
     TestCore::initialize();
 
     cleanup();
 }
 
-void CTestFindSuitesTest::cleanup()
+void TestCTestFindSuites::cleanup()
 {
     foreach(IProject* p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
@@ -61,53 +66,32 @@ void CTestFindSuitesTest::cleanup()
     QVERIFY(ICore::self()->projectController()->projects().isEmpty());
 }
 
-void CTestFindSuitesTest::cleanupTestCase()
+void TestCTestFindSuites::cleanupTestCase()
 {
     TestCore::shutdown();
 }
 
-void CTestFindSuitesTest::testCTestSuite()
+void TestCTestFindSuites::testCTestSuite()
 {
     IProject* project = loadProject( "unit_tests" );
     QVERIFY2(project, "Project was not opened");
-    WAIT_FOR_SUITES(5, 10)
+    waitForSuites(project, 5, 10);
     QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
-    
+
     QCOMPARE(suites.size(), 5);
-    
+
     DUChainReadLocker locker(DUChain::lock());
-    
-    foreach (ITestSuite* suite, suites)
+
+    foreach (auto suite, suites)
     {
         QCOMPARE(suite->cases(), QStringList());
         QVERIFY(!suite->declaration().isValid());
-        CTestSuite* ctest = (CTestSuite*)(suite);
-        Path exepath(project->path(), ctest->executable().toLocalFile());
-        QVERIFY(!exepath.isEmpty());
+        CTestSuite* ctestSuite = (CTestSuite*)(suite);
+        QString exeSubdir = project->projectItem()->path().relativePath(ctestSuite->executable().parent());
+        //Support for custom RUNTIME_OUTPUT_DIRECTORY target prop is broken
+        //QCOMPARE(exeSubdir, ctestSuite->name() == "fail" ? QString("build/bin") : QString("build") );
+        QCOMPARE(exeSubdir, ctestSuite->name() == "test_five" ? QString("build/five") : QString("build"));
     }
 }
 
-void CTestFindSuitesTest::testQtTestSuite()
-{
-    IProject* project = loadProject( "unit_tests_kde" );
-    QVERIFY2(project, "Project was not opened");
-    QSKIP("FIXME");
-    WAIT_FOR_SUITES(1, 10)
-    QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
-    
-    QCOMPARE(suites.size(), 1);
-    CTestSuite* suite = static_cast<CTestSuite*>(suites.first());
-    QVERIFY(suite);
-    QCOMPARE(suite->cases().size(), 5);
-
-    DUChainReadLocker locker(DUChain::lock());
-    QVERIFY(suite->declaration().isValid());
-
-    Path absoluteExe(project->path(), suite->executable().toLocalFile());
-    QCOMPARE(absoluteExe, Path("build") );
-
-    foreach (const QString& testCase, suite->cases())
-    {
-        QVERIFY(suite->caseDeclaration(testCase).isValid());
-    }
-}
+QTEST_MAIN(TestCTestFindSuites)

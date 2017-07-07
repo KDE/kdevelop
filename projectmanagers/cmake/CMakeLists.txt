@@ -71,8 +71,6 @@ set( cmakedoc_SRCS
   cmakecommandscontents.cpp
 )
 
-remove_definitions( -DQT_NO_STL )
-
 if(MSVC)
     add_definitions(-DYY_NO_UNISTD_H)
 endif()

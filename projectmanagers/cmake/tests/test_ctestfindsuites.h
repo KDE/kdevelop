@@ -1,6 +1,7 @@
 /* KDevelop CMake Support
  *
  * Copyright 2012 Miha Čančula <miha@noughmad.eu>
+ * Copyright 2017 Kevin Funk <kfunk@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -18,27 +19,22 @@
  * 02110-1301, USA.
  */
 
-#ifndef CTESTFINDSUITESTEST_H
-#define CTESTFINDSUITESTEST_H
+#ifndef TEST_CTESTFINDSUITES_H
+#define TEST_CTESTFINDSUITES_H
 
 #include <QTest>
 
-namespace KDevelop {
-class IProject;
-}
-
-class CTestFindSuitesTest : public QObject
+class TestCTestFindSuites : public QObject
 {
     Q_OBJECT
 
 private slots:
     void cleanup();
-    
+
     void initTestCase();
     void cleanupTestCase();
-    
+
     void testCTestSuite();
-    void testQtTestSuite();
 };
 
 #endif

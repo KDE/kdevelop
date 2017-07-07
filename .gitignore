@@ -1,5 +1,6 @@
 # general
 apidocs
+.directory
 .kdev4
 build
 *~

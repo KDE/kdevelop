@@ -24,6 +24,8 @@
 
 #include <language/duchain/indexeddeclaration.h>
 
+#include <QHash>
+
 struct Macro
 {
     QString name;
