@@ -22,6 +22,7 @@
 #include "test_ctestfindsuites.h"
 
 #include "testhelpers.h"
+#include "cmakeutils.h"
 #include "cmake-test-paths.h"
 
 #include <language/duchain/duchainlock.h>
@@ -87,10 +88,11 @@ void TestCTestFindSuites::testCTestSuite()
         QCOMPARE(suite->cases(), QStringList());
         QVERIFY(!suite->declaration().isValid());
         CTestSuite* ctestSuite = (CTestSuite*)(suite);
-        QString exeSubdir = project->projectItem()->path().relativePath(ctestSuite->executable().parent());
+        const auto buildDir = Path(CMake::allBuildDirs(project).at(0));
+        QString exeSubdir = buildDir.relativePath(ctestSuite->executable().parent());
         //Support for custom RUNTIME_OUTPUT_DIRECTORY target prop is broken
         //QCOMPARE(exeSubdir, ctestSuite->name() == "fail" ? QString("build/bin") : QString("build") );
-        QCOMPARE(exeSubdir, ctestSuite->name() == "test_five" ? QString("build/five") : QString("build"));
+        QCOMPARE(exeSubdir, ctestSuite->name() == "test_five" ? QString("five") : QString());
     }
 }
 
