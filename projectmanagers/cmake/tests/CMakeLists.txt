@@ -7,25 +7,12 @@ include_directories(
 
 configure_file("paths.h.cmake" "cmake-test-paths.h" ESCAPE_QUOTES)
 
-macro(kdevcmake_add_test testname)
-    ecm_add_test(${testname}.cpp
-        LINK_LIBRARIES Qt5::Test Qt5::Core KDev::Interfaces kdevcmakecommon ${ARGN})
-endmacro(kdevcmake_add_test)
+set(commonlibs Qt5::Test Qt5::Core KDev::Interfaces kdevcmakecommon)
 
-# kdevcmake_add_test(cmakeparsertest)
-# kdevcmake_add_test(cmakeastfactorytest)
-# kdevcmake_add_test(cmakeasttest)
-# kdevcmake_add_test(generationexpressionsolvertest)
-# kdevcmake_add_test(cmakecompliance KDev::Tests KDev::Language)
-# kdevcmake_add_test(cmakeconditiontest KDev::Language KF5::TextEditor)
-# kdevcmake_add_test(cmakeduchaintest KDev::Language KF5::TextEditor KDev::Tests)
-# kdevcmake_add_test(cmakeprojectvisitortest KDev::Language KF5::TextEditor  KDev::Tests)
-# kdevcmake_add_test(cmakeparserutilstest KF5::TextEditor)
-# kdevcmake_add_test(cmakeloadprojecttest KDev::Language KDev::Tests)
-kdevcmake_add_test(test_cmakemanager KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
-# kdevcmake_add_test(ctestfindsuitestest KDev::Language KDev::Tests)
-
-kdevcmake_add_test(test_cmakeserver KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
+ecm_add_test(cmakeparsertest.cpp ../parser/cmListFileLexer.c TEST_NAME test_cmakeparser LINK_LIBRARIES ${commonlibs})
+ecm_add_test(test_cmakemanager.cpp    LINK_LIBRARIES ${commonlibs} KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
+ecm_add_test(test_ctestfindsuites.cpp LINK_LIBRARIES ${commonlibs} KDev::Language KDev::Tests)
+ecm_add_test(test_cmakeserver.cpp     LINK_LIBRARIES ${commonlibs} KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
 
 # this is not a unit test but a testing tool, kept here for convenience
 add_executable(kdevprojectopen kdevprojectopen.cpp)

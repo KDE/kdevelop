@@ -23,9 +23,6 @@
 #include <QTemporaryFile>
 #include "cmListFileLexer.h"
 #include "cmakelistsparser.h"
-#include "cmakeast.h"
-
-QTEST_MAIN( CMakeParserTest )
 
 CMakeParserTest::CMakeParserTest()
 {}
@@ -54,7 +51,7 @@ void CMakeParserTest::testLexerWithFile()
     cmListFileLexer* lexer = cmListFileLexer_New();
     if ( !lexer )
         QFAIL( "unable to create lexer" );
-    QVERIFY( cmListFileLexer_SetFileName( lexer, qPrintable( tempName ) ) );
+    QVERIFY( cmListFileLexer_SetFileName( lexer, qPrintable( tempName ), nullptr ) );
     cmListFileLexer_Delete( lexer );
     tempFile.remove();
 }
@@ -128,4 +125,4 @@ void CMakeParserTest::testParserWithBadData_data()
 
 // }
 
-
+QTEST_GUILESS_MAIN( CMakeParserTest )

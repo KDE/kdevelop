@@ -1,11 +1,15 @@
+cmake_minimum_required(VERSION 3.0)
 project(unittestskde)
 
-enable_testing()
-set(KDE4_BUILD_TESTS ON)
+find_package(Qt5 CONFIG REQUIRED COMPONENTS Test)
 
-find_package(KDE4 REQUIRED)
+find_package(ECM 1.7.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
-include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} )
+include(ECMAddTests)
 
-kde4_add_unit_test(cmake-test-unittestskde test.cpp)
-target_link_libraries(cmake-test-unittestskde ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} ${KDE4_KDECORE_LIBS})
+set(ENABLE_TESTING ON)
+set(CMAKE_AUTOMOC ON)
+
+ecm_add_test(test.cpp TEST_NAME cmake-test-unittestskde)
+target_link_libraries(cmake-test-unittestskde Qt5::Test)

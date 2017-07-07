@@ -36,7 +36,7 @@ public:
     CMakeParserTest();
     ~CMakeParserTest();
 
-private slots:
+private Q_SLOTS:
     void testLexerCreation();
     void testLexerWithFile();
 

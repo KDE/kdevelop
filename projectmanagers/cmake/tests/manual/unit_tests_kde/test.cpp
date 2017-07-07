@@ -41,4 +41,4 @@ void KdeTest::cleanupTestCase()
     
 }
 
-QTEST_KDEMAIN( KdeTest, NoGUI )
+QTEST_GUILESS_MAIN( KdeTest )
