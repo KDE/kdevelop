@@ -176,6 +176,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeSystem {
     void registerTypeClassInternal(AbstractTypeFactory* repo, uint dataClassSize, uint identity);
     void unregisterTypeClassInternal(uint identity);
 
+    bool ensureFactoryLoaded(const AbstractTypeData& data) const;
+
     QHash<uint, AbstractTypeFactory*> m_factories;
     QHash<uint, uint> m_dataClassSizes;
 };
