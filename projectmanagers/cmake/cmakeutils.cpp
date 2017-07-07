@@ -639,34 +639,49 @@ QString defaultGenerator()
 
 QVector<Test> importTestSuites(const Path &buildDir)
 {
-    QVector<Test> ret;
-#pragma message("TODO use subdirs instead of this")
-    foreach(const QFileInfo &info, QDir(buildDir.toLocalFile()).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-        ret += importTestSuites(Path(buildDir, info.fileName()));
-    }
+    static const QRegularExpression addTestRE("add_test *\\((.+?) (.*?)\\) *$");
+    Q_ASSERT(addTestRE.isValid());
+    static const QRegularExpression subdirsRE("subdirs *\\(\"(.+?)\"\\) *$");
+    Q_ASSERT(subdirsRE.isValid());
 
-    QFile file(buildDir.toLocalFile()+"/CTestTestfile.cmake");
+    /* The file CTestTestfile looks like this:
+     *
+     * add_test(test_three "four_test" "3")
+     * add_test(test_four "four_test" "4")
+     * subdirs("five")
+     */
+    QFile file(buildDir.toLocalFile() + "/CTestTestfile.cmake");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return ret;
+        return {};
     }
 
-    const QRegularExpression rx(QStringLiteral("add_test *\\((.+?) (.*?)\\) *$"));
-    Q_ASSERT(rx.isValid());
-    for (; !file.atEnd();) {
-        QByteArray line = file.readLine();
-        line.chop(1);
-        const auto match = rx.match(QString::fromLocal8Bit(line));
-        if (match.hasMatch()) {
+    QVector<Test> tests;
+    QVector<QString> subdirs;
+    while (!file.atEnd()) {
+        const auto line = QString::fromLocal8Bit(file.readLine());
+
+        const auto addTestMatch = addTestRE.match(line);
+        if (addTestMatch.hasMatch()) {
             Test test;
-            QStringList args = KShell::splitArgs(match.captured(2));
-            test.name = match.captured(1);
+            QStringList args = KShell::splitArgs(addTestMatch.captured(2));
+            test.name = addTestMatch.captured(1);
             test.executable = Path(buildDir, args.takeFirst());
             test.arguments = args;
-            ret += test;
+            tests += test;
+            continue;
+        }
+        const auto subdirsMatch = subdirsRE.match(line);
+        if (subdirsMatch.hasMatch()) {
+            subdirs << subdirsMatch.captured(1);
         }
     }
 
-    return ret;
+    // recursive into subdirectories
+    for (auto subdir : subdirs) {
+        tests += importTestSuites(Path(buildDir, subdir));
+    }
+
+    return tests;
 }
 
 }
