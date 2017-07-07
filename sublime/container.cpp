@@ -589,27 +589,28 @@ void Container::contextMenu( const QPoint& pos )
 
     int currentTab = d->tabBar->tabAt(pos);
 
-    QMenu menu(senderWidget);
+    QPointer<QMenu> menu = new QMenu(senderWidget);
 
     Sublime::View* view = viewForWidget(widget(currentTab));
-    emit tabContextMenuRequested(view, &menu);
+    emit tabContextMenuRequested(view, menu);
 
-    menu.addSeparator();
+    menu->addSeparator();
     QAction* copyPathAction = nullptr;
     QAction* closeTabAction = nullptr;
     QAction* closeOtherTabsAction = nullptr;
     if (view) {
-        copyPathAction = menu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")),
+        copyPathAction = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-copy")),
                                         i18n("Copy Filename"));
-        menu.addSeparator();
-        closeTabAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
+        menu->addSeparator();
+        closeTabAction = menu->addAction(QIcon::fromTheme(QStringLiteral("document-close")),
                                         i18n("Close File"));
-        closeOtherTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
+        closeOtherTabsAction = menu->addAction(QIcon::fromTheme(QStringLiteral("document-close")),
                                               i18n("Close Other Files"));
     }
-    QAction* closeAllTabsAction = menu.addAction( QIcon::fromTheme(QStringLiteral("document-close")), i18n( "Close All Files" ) );
+    QAction* closeAllTabsAction = menu->addAction( QIcon::fromTheme(QStringLiteral("document-close")), i18n( "Close All Files" ) );
 
-    QAction* triggered = menu.exec(senderWidget->mapToGlobal(pos));
+    QAction* triggered = menu->exec(senderWidget->mapToGlobal(pos));
+    delete menu.data();
 
     if (triggered) {
         if ( triggered == closeTabAction ) {

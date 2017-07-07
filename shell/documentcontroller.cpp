@@ -1208,6 +1208,9 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
 void DocumentController::vcsAnnotateCurrentDocument()
 {
     IDocument* doc = activeDocument();
+    if (!doc)
+        return;
+
     QUrl url = doc->url();
     IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
     if(project && project->versionControlPlugin()) {

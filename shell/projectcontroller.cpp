@@ -38,6 +38,7 @@ Boston, MA 02110-1301, USA.
 
 #include <KActionCollection>
 #include <KConfigGroup>
+#include <KIO/DeleteJob>
 #include <KIO/FileCopyJob>
 #include <KIO/ListJob>
 #include <KIO/StatJob>
@@ -487,6 +488,11 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
     }
 
     if (writeProjectConfigToFile) {
+        Path projectConfigDir(projectFileUrl);
+        projectConfigDir.setLastPathSegment(QStringLiteral(".kdev4"));
+        auto delJob = KIO::del(projectConfigDir.toUrl());
+        delJob->exec();
+
         if (!writeProjectSettingsToConfigFile(projectFileUrl, dlg)) {
             KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
                 i18n("Unable to create configuration file %1", projectFileUrl.url()));

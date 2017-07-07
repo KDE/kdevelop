@@ -26,15 +26,34 @@
 #include <interfaces/iuicontroller.h>
 #include <sublime/mainwindow.h>
 
+#include <QDebug>
+
 K_PLUGIN_FACTORY_WITH_JSON(KDevWelcomePagePluginFactory, "kdevwelcomepage.json", registerPlugin<KDevWelcomePagePlugin>();)
 
 using namespace KDevelop;
 
+namespace {
+WelcomePageWidget* createWelcomePageWidget(QWidget* parent)
+{
+    // don't attempt to load any QML if CPU doesn't have SSE2 support (cf. bug 381999)
+#if defined(Q_OS_LINUX) && (defined(Q_CC_GNU) || (defined(Q_CC_CLANG) && __clang_major__ >= 3 && __clang_minor__ >= 7))
+    if (!__builtin_cpu_supports("sse2")) {
+        qWarning() << "Welcome Page won't load any QML -- lacking SSE2 support on this processor";
+        return nullptr;
+    }
+#endif
+
+    return new WelcomePageWidget({}, parent);
+}
+}
+
 KDevWelcomePagePlugin::KDevWelcomePagePlugin( QObject* parent, const QVariantList& )
     : IPlugin(QStringLiteral("kdevwelcomepage"), parent )
 {
-    Sublime::MainWindow* mw = qobject_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
-    mw->setBackgroundCentralWidget(new WelcomePageWidget(QList<IProject*>(), mw));
+    auto mainWindow = qobject_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+    if (auto welcomePageWidget = createWelcomePageWidget(mainWindow)) {
+        mainWindow->setBackgroundCentralWidget(welcomePageWidget);
+    }
 }
 
 #include "welcomepageplugin.moc"
