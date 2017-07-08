@@ -37,6 +37,7 @@ macro(kdevplatform_create_template_archive _templateName)
             set(_deps ${_deps} ${_file})
         endif ( _v1 AND NOT _v2 AND NOT _v3 )
     endforeach(_file)
+    list(SORT _deps)
 
     add_custom_target(${_baseName} ALL DEPENDS ${_template})
 
