@@ -71,13 +71,10 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     setWindowIcon(QIcon::fromTheme(QStringLiteral("edit-find"), windowIcon()));
 
     m_prev = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("&Previous Item"), this);
-    m_prev->setEnabled(false);
     m_next = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("&Next Item"), this);
-    m_next->setEnabled(false);
     m_collapseAll = new QAction(QIcon::fromTheme(QStringLiteral("arrow-left-double")), i18n("C&ollapse All"), this); // TODO change icon
-    m_collapseAll->setEnabled(false);
     m_expandAll = new QAction(QIcon::fromTheme(QStringLiteral("arrow-right-double")), i18n("&Expand All"), this); // TODO change icon
-    m_expandAll->setEnabled(false);
+    updateButtonState(false);
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     QAction *newSearchAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("New &Search"), this);
@@ -273,6 +270,9 @@ void GrepOutputView::changeModel(int index)
                                 !replacementCombo->currentText().isEmpty());
         if(model()->hasResults())
             expandElements(QModelIndex());
+        else {
+            updateButtonState(false);
+        }
     }
 
     updateCheckable();
@@ -346,12 +346,17 @@ void GrepOutputView::refresh()
 
 void GrepOutputView::expandElements(const QModelIndex& index)
 {
-    m_prev->setEnabled(true);
-    m_next->setEnabled(true);
-    m_collapseAll->setEnabled(true);
-    m_expandAll->setEnabled(true);
+    updateButtonState(true);
 
     resultsTreeView->expand(index);
+}
+
+void GrepOutputView::updateButtonState(bool enable)
+{
+    m_prev->setEnabled(enable);
+    m_next->setEnabled(enable);
+    m_collapseAll->setEnabled(enable);
+    m_expandAll->setEnabled(enable);
 }
 
 void GrepOutputView::selectPreviousItem()
@@ -386,8 +391,10 @@ void GrepOutputView::collapseAllItems()
     // Collapse everything
     resultsTreeView->collapseAll();
 
-    // Now reopen the first children, which correspond to the files.
-    resultsTreeView->expand(resultsTreeView->model()->index(0, 0));
+    if (resultsTreeView->model()) {
+        // Now reopen the first children, which correspond to the files.
+        resultsTreeView->expand(resultsTreeView->model()->index(0, 0));
+    }
 }
 
 void GrepOutputView::expandAllItems()
@@ -397,8 +404,7 @@ void GrepOutputView::expandAllItems()
 
 void GrepOutputView::rowsRemoved()
 {
-    m_prev->setEnabled(model()->rowCount());
-    m_next->setEnabled(model()->rowCount());
+    updateButtonState(model()->rowCount() > 0);
 }
 
 void GrepOutputView::updateApplyState(const QModelIndex& topLeft, const QModelIndex& bottomRight)
@@ -428,6 +434,7 @@ void GrepOutputView::clearSearchHistory()
     GrepJob *runningJob = m_plugin->grepJob();
     if(runningJob)
     {
+        connect(runningJob, &GrepJob::finished, this, [=]() {updateButtonState(false);});
         runningJob->kill();
     }
     while(modelSelector->count() > 0)
@@ -440,6 +447,8 @@ void GrepOutputView::clearSearchHistory()
     m_settingsHistory.clear();
 
     applyButton->setEnabled(false);
+
+    updateButtonState(false);
     m_refresh->setEnabled(false);
     m_clearSearchHistory->setEnabled(false);
     m_statusLabel->setText(QString());

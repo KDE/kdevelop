@@ -96,6 +96,7 @@ private Q_SLOTS:
     void showDialog();
     void refresh();
     void expandElements( const QModelIndex & parent );
+    void updateButtonState(bool enable);
     void rowsRemoved();
     void clearSearchHistory();
     void modelSelectorContextMenu(const QPoint& pos);

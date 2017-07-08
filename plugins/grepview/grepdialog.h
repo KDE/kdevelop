@@ -53,7 +53,8 @@ private Q_SLOTS:
     ///Check if all projects have been loaded
     bool checkProjectsOpened();
     ///Call the next element in m_jobs_history or close the dialog if all jobs are done
-    void nextHistory();
+    ///\param[in] next if false, skip pending jobs
+    void nextHistory(bool next);
 
     ///Opens the dialog to select a directory to search in, and inserts it into Location(s) field.
     void selectDirectoryDialog();

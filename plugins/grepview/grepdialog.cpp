@@ -423,14 +423,14 @@ bool GrepDialog::checkProjectsOpened()
 
     // do the grep jobs one by one
     connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepDialog::nextHistory);
-    QTimer::singleShot(0, this, &GrepDialog::nextHistory);
+    QTimer::singleShot(0, this, [=]() {nextHistory(true);});
 
     return true;
 }
 
-void GrepDialog::nextHistory()
+void GrepDialog::nextHistory(bool next)
 {
-    if (!m_historyJobSettings.empty()) {
+    if (next && !m_historyJobSettings.empty()) {
         m_settings = m_historyJobSettings.takeFirst();
         startSearch();
     } else {

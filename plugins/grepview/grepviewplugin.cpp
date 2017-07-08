@@ -238,6 +238,6 @@ void GrepViewPlugin::jobFinished(KJob* job)
     if(job == m_currentJob)
     {
         m_currentJob = nullptr;
-        emit grepJobFinished();
+        emit grepJobFinished(job->error() == KJob::NoError);
     }
 }
