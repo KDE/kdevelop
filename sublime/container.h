@@ -109,6 +109,9 @@ private:
     Sublime::View* currentView() const;
 
     struct ContainerPrivate * const d;
+
+protected:
+    void focusInEvent(QFocusEvent*) override;
 };
 
 }
