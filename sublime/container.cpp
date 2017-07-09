@@ -133,6 +133,11 @@ bool sortViews(const View* const lhs, const View* const rhs)
         return lhs->document()->title().compare(rhs->document()->title(), Qt::CaseInsensitive) < 0;
 }
 
+#ifdef Q_OS_MACOS
+// only one of these per process:
+static QMenu* currentDockMenu = nullptr;
+#endif
+
 struct ContainerPrivate {
     QBoxLayout* layout;
     QHash<QWidget*, View*> viewForWidget;
@@ -197,6 +202,28 @@ struct ContainerPrivate {
             ///FIXME: push this code somehow into shell, such that we can access the project model for
             ///       icons and also get a neat, short path like the document switcher.
         }
+
+        setAsDockMenu();
+    }
+
+    void setAsDockMenu()
+    {
+#ifdef Q_OS_MACOS
+        if (documentListMenu != currentDockMenu) {
+            documentListMenu->setAsDockMenu();
+            currentDockMenu = documentListMenu;
+        }
+#endif
+    }
+
+    ~ContainerPrivate()
+    {
+#ifdef Q_OS_MACOS
+        if (documentListMenu == currentDockMenu) {
+            QMenu().setAsDockMenu();
+            currentDockMenu = nullptr;
+        }
+#endif
     }
 };
 
@@ -284,6 +311,10 @@ Container::Container(QWidget *parent)
     d->documentListButton = new QToolButton(this);
     d->documentListButton->setIcon(QIcon::fromTheme(QStringLiteral("format-list-unordered")));
     d->documentListButton->setMenu(d->documentListMenu);
+#ifdef Q_OS_MACOS
+    // for maintaining the Dock menu:
+    setFocusPolicy(Qt::StrongFocus);
+#endif
     d->documentListButton->setPopupMode(QToolButton::InstantPopup);
     d->documentListButton->setAutoRaise(true);
     d->documentListButton->setToolTip(i18n("Show sorted list of opened documents"));
@@ -683,6 +714,12 @@ void Container::documentListActionTriggered(QAction* action)
 Sublime::View* Container::currentView() const
 {
     return d->viewForWidget.value(widget( d->tabBar->currentIndex() ));
+}
+
+void Container::focusInEvent(QFocusEvent* event)
+{
+    d->setAsDockMenu();
+    QWidget::focusInEvent(event);
 }
 
 }
