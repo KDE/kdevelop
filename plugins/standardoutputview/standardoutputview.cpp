@@ -309,5 +309,8 @@ void StandardOutputView::removeOutput( int outputId )
 
 void StandardOutputView::setTitle(int outputId, const QString& title)
 {
-    outputWidgetForId(outputId)->setTitle(outputId, title);
+    OutputWidget* widget = outputWidgetForId(outputId);
+    if (widget) {
+        widget->setTitle(outputId, title);
+    }
 }

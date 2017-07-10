@@ -675,8 +675,12 @@ void OutputWidget::updateFilter(int index)
 
 void OutputWidget::setTitle(int outputId, const QString& title)
 {
-    if( data->type & KDevelop::IOutputView::MultipleView ) {
-        m_tabwidget->setTabText(outputId - 1, title);
+    QTreeView* view = m_views.value(outputId, nullptr);
+    if(view && (data->type & KDevelop::IOutputView::MultipleView)) {
+        int idx = m_tabwidget->indexOf(view);
+        if (idx >= 0) {
+            m_tabwidget->setTabText(idx, title);
+        }
     }
 }
 
