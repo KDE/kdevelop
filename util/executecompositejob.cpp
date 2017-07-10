@@ -106,16 +106,18 @@ void ExecuteCompositeJob::slotResult(KJob* job)
     emitPercent(ratio * 100, 100);
 
     qCDebug(UTIL) << "finished: "<< job << job->error() << "percent:" << ratio * 100;
+    bool emitDone = false;
     if (d->m_abortOnError && job->error()) {
         qCDebug(UTIL) << "JOB ERROR:" << job->error() << job->errorString();
-        KCompositeJob::slotResult(job);
+        KCompositeJob::slotResult(job); // calls emitResult()
+        emitDone = true;
     } else
         removeSubjob(job);
 
     if (hasSubjobs() && !error() && !d->m_killing) {
         qCDebug(UTIL) << "remaining: " << subjobs().count() << subjobs();
         d->startNextJob(subjobs().first());
-    } else {
+    } else if (!emitDone) {
         setError(job->error());
         setErrorText(job->errorString());
         emitResult();
