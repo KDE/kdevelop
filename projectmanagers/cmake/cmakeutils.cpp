@@ -615,7 +615,7 @@ QStringList supportedGenerators()
 #ifdef Q_OS_WIN
     // Visual Studio solution is the standard generator under windows, but we don't want to use
     // the VS IDE, so we need nmake makefiles
-    generatorNames << "NMake Makefiles";
+    generatorNames << QStringLiteral("NMake Makefiles") << QStringLiteral("MinGW Makefiles");
 #endif
     generatorNames << QStringLiteral("Unix Makefiles");
 

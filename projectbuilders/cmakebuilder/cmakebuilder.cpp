@@ -66,7 +66,10 @@ private:
 CMakeBuilder::CMakeBuilder(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(QStringLiteral("kdevcmakebuilder"), parent)
 {
-    addBuilder(QStringLiteral("Makefile"), QStringList(QStringLiteral("Unix Makefiles")) << QStringLiteral("NMake Makefiles"), core()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IMakeBuilder")));
+    addBuilder(QStringLiteral("Makefile"), QStringList(QStringLiteral("Unix Makefiles"))
+                                                    << QStringLiteral("NMake Makefiles")
+                                                    << QStringLiteral("MinGW Makefiles"),
+               core()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IMakeBuilder")));
     addBuilder(QStringLiteral("build.ninja"), QStringList(QStringLiteral("Ninja")), core()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IProjectBuilder"), QStringLiteral("KDevNinjaBuilder")));
 }
 
