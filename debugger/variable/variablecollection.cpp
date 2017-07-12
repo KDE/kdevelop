@@ -499,6 +499,11 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
     iface->registerTextHintProvider(&m_textHintProvider);
 }
 
+Locals* VariableCollection::locals(const QString &name) const
+{
+    return m_universe->locals(name.isEmpty() ? i18n("Locals") : name);
+}
+
 VariableProvider::VariableProvider(VariableCollection* collection)
     : KTextEditor::TextHintProvider()
     , m_collection(collection)
