@@ -53,7 +53,7 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 }
 
 
-KJob* createTestJob(const QString& launchModeId, const QStringList& arguments )
+static KJob* createTestJob(const QString& launchModeId, const QStringList& arguments, const QString &workingDirectory)
 {
     LaunchConfigurationType* type = ICore::self()->runController()->launchConfigurationTypeForId( QStringLiteral("Native Application") );
     ILaunchMode* mode = ICore::self()->runController()->launchModeForId( launchModeId );
@@ -90,6 +90,8 @@ KJob* createTestJob(const QString& launchModeId, const QStringList& arguments )
     } else {
         //qCDebug(CMAKE) << "reusing generated config, launching";
     }
+    if (!workingDirectory.isEmpty())
+        ilaunch->config().writeEntry( "Working Directory", QUrl::fromLocalFile( workingDirectory ) );
     type->configureLaunchFromCmdLineArguments( ilaunch->config(), arguments );
     return ICore::self()->runController()->execute(launchModeId, ilaunch);
 }
@@ -112,7 +114,9 @@ void CTestRunJob::start()
 
     QStringList cases_selected = arguments;
     arguments.prepend(m_suite->executable().toLocalFile());
-    m_job = createTestJob(QStringLiteral("execute"), arguments);
+    const QString workingDirectory = m_suite->properties().value(QLatin1String("WORKING_DIRECTORY"), QString());
+
+    m_job = createTestJob(QStringLiteral("execute"), arguments, workingDirectory);
 
     if (ExecuteCompositeJob* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
         m_outputJob = cjob->findChild<OutputJob*>();
