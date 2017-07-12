@@ -69,10 +69,8 @@ void CMakeParserTest::testParserWithGoodData()
     tempFile.write( text.toUtf8() );
     QString tempName = tempFile.fileName();
     tempFile.close(); //hacks to the get name of the file
-//    CMakeAst* ast = new CMakeAst;
-//    bool parseError = CMakeListsParser::parseCMakeFile( ast, qPrintable( tempName ) );
-//    delete ast;
-//    QVERIFY( parseError == false );
+    const bool parseError = CMakeListsParser::readCMakeFile( tempName ).isEmpty();
+    QVERIFY( parseError == false );
     tempFile.remove();
 }
 
@@ -82,6 +80,7 @@ void CMakeParserTest::testParserWithGoodData_data()
     QTest::newRow( "good data1" ) << "project(foo)\nset(foobar_SRCS foo.h foo.c)";
     QTest::newRow( "good data2" ) << "set(foobar_SRCS foo.h foo.c)\n"
                                      "add_executable( foo ${foobar_SRCS})";
+    QTest::newRow( "test data" ) << "add_test(mytest \"mytest\")\n";
 }
 
 void CMakeParserTest::testParserWithBadData()

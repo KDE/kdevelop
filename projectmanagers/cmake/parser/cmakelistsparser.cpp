@@ -191,6 +191,7 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
             case cmListFileLexer_Token_ArgumentQuoted:
                 func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), true, token->line, token->column+1 );
                 break;
+            case cmListFileLexer_Token_Space:
             case cmListFileLexer_Token_Newline:
                 break;
             default:
@@ -199,7 +200,6 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
     }
 
     return false;
-
 }
 
 CMakeFunctionDesc::CMakeFunctionDesc(const QString& name, const QStringList& args)
