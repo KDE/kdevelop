@@ -35,6 +35,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QStandardPaths>
+#include <QTemporaryDir>
 
 using namespace KDevelop;
 
@@ -241,8 +242,9 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
              * so the kdevtemplate suffix must have priority.
              */
             QFileInfo templateInfo(archName);
+            QString suffix = QStringLiteral(".kdevtemplate");
             const KArchiveEntry *templateEntry =
-                templateArchive->directory()->entry(templateInfo.baseName() + ".kdevtemplate");
+                templateArchive->directory()->entry(templateInfo.baseName() + suffix);
 
             if (!templateEntry || !templateEntry->isFile())
             {
@@ -254,8 +256,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                  */
                 foreach (const QString& entryName, templateArchive->directory()->entries())
                 {
-                    if (entryName.endsWith(QLatin1String(".kdevtemplate")))
-                    {
+                    if (entryName.endsWith(suffix)) {
                         templateEntry = templateArchive->directory()->entry(entryName);
                         break;
                     }
@@ -264,15 +265,15 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
 
             if (!templateEntry || !templateEntry->isFile())
             {
-                templateEntry = templateArchive->directory()->entry(templateInfo.baseName() + ".desktop");
+                suffix = QStringLiteral(".desktop");
+                templateEntry = templateArchive->directory()->entry(templateInfo.baseName() + suffix);
             }
 
             if (!templateEntry || !templateEntry->isFile())
             {
                 foreach (const QString& entryName, templateArchive->directory()->entries())
                 {
-                    if (entryName.endsWith(QLatin1String(".desktop")))
-                    {
+                    if (entryName.endsWith(suffix)) {
                         templateEntry = templateArchive->directory()->entry(entryName);
                         break;
                     }
@@ -286,15 +287,19 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
             const KArchiveFile *templateFile = static_cast<const KArchiveFile*>(templateEntry);
 
             qCDebug(LANGUAGE) << "copy template description to" << localDescriptionsDir;
-            templateFile->copyTo(localDescriptionsDir);
-
-            /*
-             * Rename the extracted description
-             * so that its basename matches the basename of the template archive
-             */
-            QFileInfo descriptionInfo(localDescriptionsDir + templateEntry->name());
-            QString destinationName = localDescriptionsDir + templateInfo.baseName() + '.' + descriptionInfo.suffix();
-            QFile::rename(descriptionInfo.absoluteFilePath(), destinationName);
+            const QString descriptionFileName = templateInfo.baseName() + suffix;
+            if (templateFile->name() == descriptionFileName) {
+                templateFile->copyTo(localDescriptionsDir);
+            } else {
+                // Rename the extracted description
+                // so that its basename matches the basename of the template archive
+                // Use temporary dir to not overwrite other files with same name
+                QTemporaryDir dir;
+                templateFile->copyTo(dir.path());
+                const QString destinationPath = localDescriptionsDir + descriptionFileName;
+                QFile::remove(destinationPath);
+                QFile::rename(dir.path() + QLatin1Char('/') + templateFile->name(), destinationPath);
+            }
         }
         else
         {
