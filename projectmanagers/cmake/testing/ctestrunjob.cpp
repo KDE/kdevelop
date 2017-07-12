@@ -123,7 +123,7 @@ void CTestRunJob::start()
         Q_ASSERT(m_outputJob);
         m_outputJob->setVerbosity(m_verbosity);
 
-        QString testName = arguments.value(0).split('/').last();
+        QString testName = m_suite->name();
         QString title;
         if (cases_selected.count() == 1)
             title = i18nc("running test %1, %2 test case", "CTest %1: %2", testName, cases_selected.value(0));
