@@ -22,6 +22,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 
+#include <KConfigGroup>
 #include <KLocalizedString>
 #include <KShell>
 #include <KSharedConfig>
@@ -35,15 +36,21 @@
 #include <interfaces/iplugincontroller.h>
 #include <project/projectmodel.h>
 
-#include "iexecuteplugin.h"
+#include "executeplugin.h"
 #include "debug.h"
 
 using namespace KDevelop;
 
 NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     : KDevelop::OutputExecuteJob( parent )
-    , m_cfgname(cfg->name())
+    , m_name(cfg->name())
 {
+    {
+        auto cfgGroup = cfg->config();
+        if (cfgGroup.readEntry(ExecutePlugin::isExecutableEntry, false)) {
+            m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, cfg->name()).section('/', -1);
+        }
+    }
     setCapabilities(Killable);
 
     IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
@@ -110,7 +117,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
         *this << arguments;
     }
 
-    setJobName(cfg->name());
+    setJobName(m_name);
 }
 
 NativeAppJob* findNativeJob(KJob* j)
@@ -127,12 +134,18 @@ NativeAppJob* findNativeJob(KJob* j)
 void NativeAppJob::start()
 {
     // we kill any execution of the configuration
-    foreach(KJob* j, ICore::self()->runController()->currentJobs()) {
-        NativeAppJob* job = findNativeJob(j);
-        if (job && job != this && job->m_cfgname == m_cfgname) {
-            QMessageBox::StandardButton button = QMessageBox::question(nullptr, i18n("Job already running"), i18n("'%1' is already being executed. Should we kill the previous instance?", m_cfgname));
-            if (button != QMessageBox::No && ICore::self()->runController()->currentJobs().contains(j))
-                j->kill();
+    auto currentJobs = ICore::self()->runController()->currentJobs();
+    for (auto it = currentJobs.begin(); it != currentJobs.end();) {
+        NativeAppJob* job = findNativeJob(*it);
+        if (job && job != this && job->m_name == m_name) {
+            QMessageBox::StandardButton button = QMessageBox::question(nullptr, i18n("Job already running"), i18n("'%1' is already being executed. Should we kill the previous instance?", m_name));
+            if (button != QMessageBox::No && ICore::self()->runController()->currentJobs().contains(*it)) {
+                (*it)->kill();
+            }
+            currentJobs = ICore::self()->runController()->currentJobs();
+            it = currentJobs.begin();
+        } else {
+            ++it;
         }
     }
 

@@ -37,7 +37,7 @@ public:
     void start() override;
 
 private:
-    QString m_cfgname;
+    QString m_name;
 };
 
 #endif
