@@ -32,7 +32,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
-#include <QFileInfo>
+#include <QDir>
 
 using namespace KDevelop;
 
@@ -52,10 +52,19 @@ static CMakeTarget targetByName(const QHash< KDevelop::Path, QVector<CMakeTarget
 void CTestUtils::createTestSuites(const QVector<Test>& testSuites, const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, KDevelop::IProject* project)
 {
     foreach (const Test& test, testSuites) {
-        const auto target = targetByName(targets, test.executable);
+        KDevelop::Path executablePath;
+        if (QDir::isAbsolutePath(test.executable)) {
+            executablePath = KDevelop::Path(test.executable);
+        } else {
+            const auto target = targetByName(targets, test.executable);
+            if (target.artifacts.isEmpty()) {
+                continue;
+            }
+            executablePath = target.artifacts.constFirst();
+        }
 
         const bool willFail = test.properties.value(QStringLiteral("WILL_FAIL"), QStringLiteral("FALSE")) == QLatin1String("TRUE");
-        CTestSuite* suite = new CTestSuite(test.name, target.artifacts.constFirst(), {}, project, test.arguments, willFail);
+        CTestSuite* suite = new CTestSuite(test.name, executablePath, {}, project, test.arguments, willFail);
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

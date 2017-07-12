@@ -371,6 +371,7 @@ void TestCMakeManager::testParenthesesInTestArguments()
 
 void TestCMakeManager::testExecutableOutputPath()
 {
+    const auto prevSuitesCount = ICore::self()->testController()->testSuites().count();
     qRegisterMetaType<KDevelop::ITestSuite*>("KDevelop::ITestSuite*");
     QSignalSpy spy(ICore::self()->testController(), &ITestController::testSuiteAdded);
 
@@ -386,7 +387,7 @@ void TestCMakeManager::testExecutableOutputPath()
     QVERIFY(spy.count() || spy.wait(100000));
 
     auto suites = ICore::self()->testController()->testSuites();
-    QCOMPARE(suites.count(), 1);
-    const CTestSuite* suite = static_cast<CTestSuite*>(suites.constFirst());
+    QCOMPARE(suites.count(), prevSuitesCount + 1);
+    const CTestSuite* suite = static_cast<CTestSuite*>(ICore::self()->testController()->findTestSuite(project, "mytest"));
     QCOMPARE(suite->executable(), exePath);
 }
