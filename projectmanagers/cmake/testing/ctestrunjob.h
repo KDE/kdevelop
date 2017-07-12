@@ -30,7 +30,7 @@ class CTestRunJob : public KJob
 {
     Q_OBJECT
 public:
-    CTestRunJob(CTestSuite* suite, const QStringList& cases, KDevelop::OutputJob::OutputJobVerbosity verbosity, bool expectFail, QObject* parent = nullptr);
+    CTestRunJob(CTestSuite* suite, const QStringList& cases, KDevelop::OutputJob::OutputJobVerbosity verbosity, QObject* parent = nullptr);
     void start() override;
 
 protected:
@@ -47,7 +47,6 @@ private:
     KJob* m_job;
     KDevelop::OutputJob* m_outputJob;
     KDevelop::OutputJob::OutputJobVerbosity m_verbosity;
-    bool m_expectFail;
 };
 
 #endif // CTESTRUNJOB_H

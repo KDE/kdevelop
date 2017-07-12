@@ -87,10 +87,11 @@ void TestCTestFindSuites::testCTestSuite()
     {
         QCOMPARE(suite->cases(), QStringList());
         QVERIFY(!suite->declaration().isValid());
-        CTestSuite* ctestSuite = (CTestSuite*)(suite);
+        CTestSuite* ctestSuite = static_cast<CTestSuite*>(suite);
         const auto buildDir = Path(CMake::allBuildDirs(project).at(0));
         QString exeSubdir = buildDir.relativePath(ctestSuite->executable().parent());
         QCOMPARE(exeSubdir, ctestSuite->name() == "fail" ? QStringLiteral("bin") : QString() );
+        QVERIFY(ctestSuite->properties().isEmpty());
     }
 }
 

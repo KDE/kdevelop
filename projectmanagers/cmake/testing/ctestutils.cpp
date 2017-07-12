@@ -63,8 +63,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, const QHash< 
             executablePath = target.artifacts.constFirst();
         }
 
-        const bool willFail = test.properties.value(QStringLiteral("WILL_FAIL"), QStringLiteral("FALSE")) == QLatin1String("TRUE");
-        CTestSuite* suite = new CTestSuite(test.name, executablePath, {}, project, test.arguments, willFail);
+        CTestSuite* suite = new CTestSuite(test.name, executablePath, {}, project, test.arguments, test.properties);
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

@@ -32,26 +32,28 @@ class ReferencedTopDUContext;
 class CTestSuite : public KDevelop::ITestSuite
 {
 public:
-    CTestSuite(const QString& name, const KDevelop::Path &executable, const QList<KDevelop::Path>& files, KDevelop::IProject* project, const QStringList& args, bool expectFail);
+    CTestSuite(const QString& name, const KDevelop::Path &executable, const QList<KDevelop::Path>& files, KDevelop::IProject* project, const QStringList& args, const QHash<QString, QString>& properties);
     virtual ~CTestSuite();
-    
+
     virtual KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity);
     virtual KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity);
     virtual KJob* launchAllCases(TestJobVerbosity verbosity);
-    
+
     virtual KDevelop::Path executable() const;
     virtual QStringList cases() const;
     virtual QString name() const;
     virtual KDevelop::IProject* project() const;
-    
+
     virtual KDevelop::IndexedDeclaration declaration() const;
     virtual KDevelop::IndexedDeclaration caseDeclaration(const QString& testCase) const;
-    
+
+    virtual QHash<QString, QString> properties() const;
+
     QStringList arguments() const;
     void setTestCases(const QStringList& cases);
     QList<KDevelop::Path> sourceFiles() const;
     void loadDeclarations(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
-    
+
 private:
     KDevelop::Path m_executable;
     QString m_name;
@@ -59,11 +61,10 @@ private:
     QStringList m_args;
     QList<KDevelop::Path> m_files;
     KDevelop::IProject* m_project;
-    
-    QHash<QString, KDevelop::IndexedDeclaration> m_declarations;
-    KDevelop::IndexedDeclaration m_suiteDeclaration;
 
-    bool m_expectFail;
+    QHash<QString, KDevelop::IndexedDeclaration> m_declarations;
+    QHash<QString, QString> m_properties;
+    KDevelop::IndexedDeclaration m_suiteDeclaration;
 };
 
 #endif // CTESTSUITE_H

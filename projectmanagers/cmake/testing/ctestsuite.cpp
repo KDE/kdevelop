@@ -38,13 +38,13 @@
 
 using namespace KDevelop;
 
-CTestSuite::CTestSuite(const QString& name, const KDevelop::Path &executable, const QList<KDevelop::Path>& files, IProject* project, const QStringList& args, bool expectFail):
+CTestSuite::CTestSuite(const QString& name, const KDevelop::Path &executable, const QList<KDevelop::Path>& files, IProject* project, const QStringList& args, const QHash<QString, QString>& properties):
 m_executable(executable),
 m_name(name),
 m_args(args),
 m_files(files),
 m_project(project),
-m_expectFail(expectFail)
+m_properties(properties)
 {
     Q_ASSERT(project);
     qCDebug(CMAKE) << m_name << m_executable << m_project->name();
@@ -139,7 +139,7 @@ KJob* CTestSuite::launchCases(const QStringList& testCases, ITestSuite::TestJobV
     qCDebug(CMAKE) << "Launching test run" << m_name << "with cases" << testCases;
 
     OutputJob::OutputJobVerbosity outputVerbosity = (verbosity == Verbose) ? OutputJob::Verbose : OutputJob::Silent;
-    return new CTestRunJob(this, testCases, outputVerbosity, m_expectFail);
+    return new CTestRunJob(this, testCases, outputVerbosity);
 }
 
 KJob* CTestSuite::launchAllCases(TestJobVerbosity verbosity)
@@ -192,5 +192,7 @@ QList<KDevelop::Path> CTestSuite::sourceFiles() const
     return m_files;
 }
 
-
-
+QHash<QString, QString> CTestSuite::properties() const
+{
+    return m_properties;
+}

@@ -36,14 +36,13 @@
 
 using namespace KDevelop;
 
-CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, bool expectFail, QObject* parent)
+CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob::OutputJobVerbosity verbosity, QObject* parent)
 : KJob(parent)
 , m_suite(suite)
 , m_cases(cases)
 , m_job(nullptr)
 , m_outputJob(nullptr)
 , m_verbosity(verbosity)
-, m_expectFail(expectFail)
 {
     foreach (const QString& testCase, cases)
     {
@@ -188,13 +187,14 @@ void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endR
         if (prevResult == TestResult::Passed || prevResult == TestResult::NotRun)
         {
             TestResult::TestCaseResult result = TestResult::NotRun;
+            const bool expectFail = m_suite->properties().value(QStringLiteral("WILL_FAIL"), QStringLiteral("FALSE")) == QLatin1String("TRUE");
             if (line.startsWith(QLatin1String("PASS   :")))
             {
-                result = m_expectFail ? TestResult::UnexpectedPass : TestResult::Passed;
+                result = expectFail ? TestResult::UnexpectedPass : TestResult::Passed;
             }
             else if (line.startsWith(QLatin1String("FAIL!  :")))
             {
-                result = m_expectFail ? TestResult::ExpectedFail : TestResult::Failed;
+                result = expectFail ? TestResult::ExpectedFail : TestResult::Failed;
             }
             else if (line.startsWith(QLatin1String("XFAIL  :")))
             {
