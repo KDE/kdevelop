@@ -45,6 +45,7 @@
 #include "debug.h"
 #include "cmakebuilderconfig.h"
 #include <cmakecachereader.h>
+#include "parser/cmakelistsparser.h"
 
 using namespace KDevelop;
 
@@ -639,46 +640,23 @@ QString defaultGenerator()
 
 QVector<Test> importTestSuites(const Path &buildDir)
 {
-    static const QRegularExpression addTestRE("add_test *\\((.+?) (.*?)\\) *$");
-    Q_ASSERT(addTestRE.isValid());
-    static const QRegularExpression subdirsRE("subdirs *\\(\"(.+?)\"\\) *$");
-    Q_ASSERT(subdirsRE.isValid());
-
-    /* The file CTestTestfile looks like this:
-     *
-     * add_test(test_three "four_test" "3")
-     * add_test(test_four "four_test" "4")
-     * subdirs("five")
-     */
-    QFile file(buildDir.toLocalFile() + "/CTestTestfile.cmake");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return {};
-    }
+    const auto contents = CMakeListsParser::readCMakeFile(buildDir.toLocalFile() + "/CTestTestfile.cmake");
 
     QVector<Test> tests;
     QVector<QString> subdirs;
-    while (!file.atEnd()) {
-        const auto line = QString::fromLocal8Bit(file.readLine());
+    for (const auto& entry: contents) {
+        qDebug() << "lalala" << entry.name << kTransform<QStringList>(entry.arguments, [](const CMakeFunctionArgument& arg) { return arg.value; });
+        if (entry.name == QLatin1String("add_test")) {
+            auto args = entry.arguments;
 
-        const auto addTestMatch = addTestRE.match(line);
-        if (addTestMatch.hasMatch()) {
             Test test;
-            QStringList args = KShell::splitArgs(addTestMatch.captured(2));
-            test.name = addTestMatch.captured(1);
-            test.executable = Path(buildDir, args.takeFirst());
-            test.arguments = args;
+            test.name = args.takeFirst().value;
+            test.executable = Path(buildDir, args.takeFirst().value);
+            test.arguments = kTransform<QStringList>(args, [](const CMakeFunctionArgument& arg) { return arg.value; });
             tests += test;
-            continue;
+        } else if (entry.name == QLatin1String("add_test")) {
+            tests += importTestSuites(Path(buildDir, entry.arguments.constFirst().value));
         }
-        const auto subdirsMatch = subdirsRE.match(line);
-        if (subdirsMatch.hasMatch()) {
-            subdirs << subdirsMatch.captured(1);
-        }
-    }
-
-    // recursive into subdirectories
-    for (auto subdir : subdirs) {
-        tests += importTestSuites(Path(buildDir, subdir));
     }
 
     return tests;
