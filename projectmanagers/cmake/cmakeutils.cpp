@@ -643,7 +643,6 @@ QVector<Test> importTestSuites(const Path &buildDir)
     const auto contents = CMakeListsParser::readCMakeFile(buildDir.toLocalFile() + "/CTestTestfile.cmake");
 
     QVector<Test> tests;
-    QVector<QString> subdirs;
     for (const auto& entry: contents) {
         if (entry.name == QLatin1String("add_test")) {
             auto args = entry.arguments;
@@ -655,6 +654,25 @@ QVector<Test> importTestSuites(const Path &buildDir)
             tests += test;
         } else if (entry.name == QLatin1String("subdirs")) {
             tests += importTestSuites(Path(buildDir, entry.arguments.constFirst().value));
+        } else if (entry.name == QLatin1String("set_tests_properties")) {
+            if(entry.arguments.count() < 4 || entry.arguments.count() % 2) {
+                qCWarning(CMAKE) << "found set_tests_properties() with unexpected number of arguments:"
+                                 << entry.arguments.count();
+                continue;
+            }
+            if (tests.isEmpty() || entry.arguments.constFirst().value != tests.constLast().name) {
+                qCWarning(CMAKE) << "found set_tests_properties(" << entry.arguments.constFirst().value
+                                 << " ...), but expected test " << tests.constLast().name;
+                continue;
+            }
+            if (entry.arguments[1].value != QLatin1String("PROPERTIES")) {
+                qCWarning(CMAKE) << "found set_tests_properties(" << entry.arguments.constFirst().value
+                                 << entry.arguments.at(1).value << "...), but expected PROPERTIES as second argument";
+                continue;
+            }
+            Test &test = tests.last();
+            for (int i = 2; i < entry.arguments.count(); i += 2)
+                test.properties[entry.arguments[i].value] = entry.arguments[i + 1].value;
         }
     }
 
@@ -662,4 +680,3 @@ QVector<Test> importTestSuites(const Path &buildDir)
 }
 
 }
-

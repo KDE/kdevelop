@@ -85,13 +85,31 @@ void TestCTestFindSuites::testCTestSuite()
 
     foreach (auto suite, suites)
     {
+        qDebug() << "checking suite" << suite->name();
         QCOMPARE(suite->cases(), QStringList());
         QVERIFY(!suite->declaration().isValid());
         CTestSuite* ctestSuite = static_cast<CTestSuite*>(suite);
         const auto buildDir = Path(CMake::allBuildDirs(project).at(0));
         QString exeSubdir = buildDir.relativePath(ctestSuite->executable().parent());
         QCOMPARE(exeSubdir, ctestSuite->name() == "fail" ? QStringLiteral("bin") : QString() );
-        QVERIFY(ctestSuite->properties().isEmpty());
+        QString willFail;
+        const QString workingDirectory = ctestSuite->properties().value(QLatin1String("WORKING_DIRECTORY"), QString());
+        if (ctestSuite->name() == QLatin1String("fail")) {
+            willFail = QLatin1String("TRUE");
+            QCOMPARE(workingDirectory, QLatin1String("/bar/baz"));
+            QCOMPARE(ctestSuite->properties().value(QLatin1String("FOO"), QString()), QLatin1String("foo"));
+            QCOMPARE(ctestSuite->properties().value(QLatin1String("BAR"), QString()), QLatin1String("TRUE"));
+            QCOMPARE(ctestSuite->properties().value(QLatin1String("MULTILINE"), QString()), QLatin1String("this is \na multi\nline property"));
+            QCOMPARE(ctestSuite->properties().value(QLatin1String("QUOTES"), QString()), QLatin1String("\"\\\\\"\\\\\\"));
+        } else if (ctestSuite->name() == QLatin1String("test_three"))
+            QCOMPARE(workingDirectory, QLatin1String("/foo"));
+        else if (ctestSuite->name() == QLatin1String("test_three"))
+            QCOMPARE(workingDirectory, QLatin1String("/foo"));
+        else if (ctestSuite->name() == QLatin1String("test_five"))
+            QCOMPARE(workingDirectory, QString(buildDir.path() + QLatin1String("/bin")));
+        else
+            QCOMPARE(workingDirectory, QString());
+        QCOMPARE(ctestSuite->properties().value(QLatin1String("WILL_FAIL")), willFail);
     }
 }
 
