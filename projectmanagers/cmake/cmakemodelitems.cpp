@@ -22,12 +22,16 @@
 #include "cmakemodelitems.h"
 #include "cmakeutils.h"
 
-CMakeTargetItem::CMakeTargetItem(KDevelop::ProjectFolderItem* parent, const QString& name)
+CMakeTargetItem::CMakeTargetItem(KDevelop::ProjectFolderItem* parent, const QString& name, const KDevelop::Path &builtUrl)
     : KDevelop::ProjectExecutableTargetItem(parent->project(), name, parent)
+    , m_builtUrl(builtUrl)
 {}
 
 QUrl CMakeTargetItem::builtUrl() const
 {
+    if (!m_builtUrl.isEmpty())
+        return m_builtUrl.toUrl();
+
     const KDevelop::Path buildDir = CMake::currentBuildDir(project());
     if (buildDir.isEmpty())
         return QUrl();

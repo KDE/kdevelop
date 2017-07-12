@@ -108,7 +108,11 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
                 const auto target = targetObject.toObject();
                 const KDevelop::Path targetDir = rt->pathInHost(KDevelop::Path(target.value(QStringLiteral("sourceDirectory")).toString()));
 
-                data.targets[targetDir] += {typeToEnum(target), target.value(QStringLiteral("name")).toString()};
+                data.targets[targetDir] += CMakeTarget {
+                    typeToEnum(target),
+                    target.value(QStringLiteral("name")).toString(),
+                    kTransform<KDevelop::Path::List>(target[QLatin1String("artifacts")].toArray(), [](const QJsonValue& val) { return KDevelop::Path(val.toString()); })
+                };
 
                 const auto fileGroups = target.value(QStringLiteral("fileGroups")).toArray();
                 for (const auto &fileGroupValue: fileGroups) {

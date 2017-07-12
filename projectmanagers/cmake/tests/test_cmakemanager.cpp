@@ -365,3 +365,14 @@ void TestCMakeManager::testParenthesesInTestArguments()
     auto job = new CMakeImportJsonJob(project, this);
     QVERIFY(job->exec());
 }
+
+void TestCMakeManager::testExecutableOutputPath()
+{
+    IProject* project = loadProject(QStringLiteral("randomexe"));
+    const auto targets = project->projectItem()->targetList();
+    QCOMPARE(targets.count(), 1);
+
+    const auto target = targets.constFirst()->executable();
+    QVERIFY(target);
+    QCOMPARE(KDevelop::Path(target->builtUrl()), KDevelop::Path(project->buildSystemManager()->buildDirectory(project->projectItem()), QLatin1String("randomplace/mytest")));
+}

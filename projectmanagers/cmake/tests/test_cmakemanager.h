@@ -53,6 +53,7 @@ private slots:
     void testFaultyTarget();
     void testParenthesesInTestArguments();
     void testReload();
+    void testExecutableOutputPath();
 };
 
 #endif // TEST_CMAKEMANAGER_H

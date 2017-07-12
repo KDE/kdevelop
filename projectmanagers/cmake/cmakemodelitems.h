@@ -31,10 +31,13 @@
 class CMakeTargetItem : public KDevelop::ProjectExecutableTargetItem
 {
     public:
-        CMakeTargetItem(KDevelop::ProjectFolderItem* parent, const QString& name);
+        CMakeTargetItem(KDevelop::ProjectFolderItem* parent, const QString& name, const KDevelop::Path &builtUrl);
 
         QUrl builtUrl() const override;
         QUrl installedUrl() const override;
+
+    private:
+        KDevelop::Path m_builtUrl;
 };
 
 #endif
