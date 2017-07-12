@@ -377,7 +377,7 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
     m_projects[project] = data;
 
     populateTargets(project->projectItem(), data.targets);
-    CTestUtils::createTestSuites(data.m_testSuites, project);
+    CTestUtils::createTestSuites(data.m_testSuites, data.targets, project);
 }
 
 void CMakeManager::serverResponse(KDevelop::IProject* project, const QJsonObject& response)

@@ -27,11 +27,14 @@
 #include <QTemporaryFile>
 
 #include <interfaces/icore.h>
+#include <interfaces/itestsuite.h>
+#include <interfaces/itestcontroller.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/abstractfilemanagerplugin.h>
 #include <tests/autotestshell.h>
 #include <tests/testproject.h>
 #include <tests/testcore.h>
+#include <testing/ctestsuite.h>
 
 QTEST_MAIN(TestCMakeManager)
 
@@ -368,11 +371,22 @@ void TestCMakeManager::testParenthesesInTestArguments()
 
 void TestCMakeManager::testExecutableOutputPath()
 {
+    qRegisterMetaType<KDevelop::ITestSuite*>("KDevelop::ITestSuite*");
+    QSignalSpy spy(ICore::self()->testController(), &ITestController::testSuiteAdded);
+
     IProject* project = loadProject(QStringLiteral("randomexe"));
     const auto targets = project->projectItem()->targetList();
     QCOMPARE(targets.count(), 1);
 
     const auto target = targets.constFirst()->executable();
     QVERIFY(target);
-    QCOMPARE(KDevelop::Path(target->builtUrl()), KDevelop::Path(project->buildSystemManager()->buildDirectory(project->projectItem()), QLatin1String("randomplace/mytest")));
+    const KDevelop::Path exePath(target->executable()->builtUrl());
+    QCOMPARE(exePath, KDevelop::Path(project->buildSystemManager()->buildDirectory(project->projectItem()), QLatin1String("randomplace/mytest")));
+
+    QVERIFY(spy.count() || spy.wait(100000));
+
+    auto suites = ICore::self()->testController()->testSuites();
+    QCOMPARE(suites.count(), 1);
+    const CTestSuite* suite = static_cast<CTestSuite*>(suites.constFirst());
+    QCOMPARE(suite->executable(), exePath);
 }

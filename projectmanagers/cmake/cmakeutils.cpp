@@ -650,7 +650,7 @@ QVector<Test> importTestSuites(const Path &buildDir)
 
             Test test;
             test.name = args.takeFirst().value;
-            test.executable = Path(buildDir, args.takeFirst().value);
+            test.executable = args.takeFirst().value;
             test.arguments = kTransform<QStringList>(args, [](const CMakeFunctionArgument& arg) { return arg.value; });
             tests += test;
         } else if (entry.name == QLatin1String("subdirs")) {

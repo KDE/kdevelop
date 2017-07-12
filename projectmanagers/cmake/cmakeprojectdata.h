@@ -74,7 +74,7 @@ struct Test
 {
     Test() {}
     QString name;
-    KDevelop::Path executable;
+    QString executable;
     QStringList arguments;
     QHash<QString, QString> properties;
 };

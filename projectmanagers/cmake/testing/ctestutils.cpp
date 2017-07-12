@@ -38,7 +38,18 @@ using namespace KDevelop;
 
 #pragma message("TODO: we are lacking introspection into targets, to see what files belong to each target.")
 
-void CTestUtils::createTestSuites(const QVector<Test>& testSuites, KDevelop::IProject* project)
+static CMakeTarget targetByName(const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, const QString& name)
+{
+    for (const auto &subdir: targets.values()) {
+        for (const auto &target: subdir) {
+            if (target.name == name)
+                return target;
+        }
+    }
+    return {};
+}
+
+void CTestUtils::createTestSuites(const QVector<Test>& testSuites, const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, KDevelop::IProject* project)
 {
 //     IProject* project = folder->project();
 //     IBuildSystemManager* bsm = project->buildSystemManager();
@@ -47,27 +58,11 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, KDevelop::IPr
 //     const Path currentSourceDir = folder->path();
 //     QList<ProjectTargetItem*> items = bsm->targets(folder);
 
-    foreach (const Test& test, testSuites)
-    {
-        QList<KDevelop::Path> files;
-//         QString targetName = QFileInfo(test.executable).fileName();
-//         foreach (ProjectTargetItem* item, items)
-//         {
-//             ProjectExecutableTargetItem * exeTgt = item->executable();
-//             if (exeTgt && (exeTgt->text() == test.executable || exeTgt->text()==targetName))
-//             {
-//                 exe = exeTgt->builtUrl().toLocalFile();
-//                 qCDebug(CMAKE) << "Found proper test target path" << test.executable << "->" << exe;
-//                 foreach(ProjectFileItem* file, exeTgt->fileList()) {
-//                     files += file->url();
-//                 }
-//                 break;
-//             }
-//         }
-//         exe.replace("#[bin_dir]", binDir);
+    foreach (const Test& test, testSuites) {
+        const auto target = targetByName(targets, test.executable);
 
         const bool willFail = test.properties.value(QStringLiteral("WILL_FAIL"), QStringLiteral("FALSE")) == QLatin1String("TRUE");
-        CTestSuite* suite = new CTestSuite(test.name, test.executable, files, project, test.arguments, willFail);
+        CTestSuite* suite = new CTestSuite(test.name, target.artifacts.constFirst(), {}, project, test.arguments, willFail);
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }
