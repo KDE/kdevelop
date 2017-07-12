@@ -645,7 +645,6 @@ QVector<Test> importTestSuites(const Path &buildDir)
     QVector<Test> tests;
     QVector<QString> subdirs;
     for (const auto& entry: contents) {
-        qDebug() << "lalala" << entry.name << kTransform<QStringList>(entry.arguments, [](const CMakeFunctionArgument& arg) { return arg.value; });
         if (entry.name == QLatin1String("add_test")) {
             auto args = entry.arguments;
 
@@ -654,7 +653,7 @@ QVector<Test> importTestSuites(const Path &buildDir)
             test.executable = Path(buildDir, args.takeFirst().value);
             test.arguments = kTransform<QStringList>(args, [](const CMakeFunctionArgument& arg) { return arg.value; });
             tests += test;
-        } else if (entry.name == QLatin1String("add_test")) {
+        } else if (entry.name == QLatin1String("subdirs")) {
             tests += importTestSuites(Path(buildDir, entry.arguments.constFirst().value));
         }
     }
