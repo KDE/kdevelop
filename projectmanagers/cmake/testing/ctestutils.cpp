@@ -51,13 +51,6 @@ static CMakeTarget targetByName(const QHash< KDevelop::Path, QVector<CMakeTarget
 
 void CTestUtils::createTestSuites(const QVector<Test>& testSuites, const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, KDevelop::IProject* project)
 {
-//     IProject* project = folder->project();
-//     IBuildSystemManager* bsm = project->buildSystemManager();
-//     const QString binDir = bsm->buildDirectory(folder->project()->projectItem()).toLocalFile();
-//     const Path currentBinDir = bsm->buildDirectory(folder);
-//     const Path currentSourceDir = folder->path();
-//     QList<ProjectTargetItem*> items = bsm->targets(folder);
-
     foreach (const Test& test, testSuites) {
         const auto target = targetByName(targets, test.executable);
 

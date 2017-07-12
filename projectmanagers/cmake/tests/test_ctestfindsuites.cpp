@@ -90,9 +90,7 @@ void TestCTestFindSuites::testCTestSuite()
         CTestSuite* ctestSuite = (CTestSuite*)(suite);
         const auto buildDir = Path(CMake::allBuildDirs(project).at(0));
         QString exeSubdir = buildDir.relativePath(ctestSuite->executable().parent());
-        //Support for custom RUNTIME_OUTPUT_DIRECTORY target prop is broken
-        //QCOMPARE(exeSubdir, ctestSuite->name() == "fail" ? QString("build/bin") : QString("build") );
-        QCOMPARE(exeSubdir, ctestSuite->name() == "test_five" ? QString("five") : QString());
+        QCOMPARE(exeSubdir, ctestSuite->name() == "fail" ? QStringLiteral("bin") : QString() );
     }
 }
 
