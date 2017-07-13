@@ -40,10 +40,10 @@ protected:
   /// Determine if there is currently a declaration open. \returns true if a declaration is open, otherwise false.
   inline bool hasCurrentDeclaration() const { return !m_declarationStack.isEmpty(); }
   /// Access the current declaration. \returns the current declaration, or null if there is no current declaration.
-  inline Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : m_declarationStack.top(); }
+  inline Declaration* currentDeclaration() const { return m_declarationStack.isEmpty() ? nullptr : m_declarationStack.top(); }
   /// Access the current declaration, casted to type \a DeclarationType. \returns the current declaration if one exists and is an instance of the given \a DeclarationType.
   template<class DeclarationType>
-  inline DeclarationType* currentDeclaration() const { return m_declarationStack.isEmpty() ? 0 : dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
+  inline DeclarationType* currentDeclaration() const { return m_declarationStack.isEmpty() ? nullptr : dynamic_cast<DeclarationType*>(m_declarationStack.top()); }
 
   /// Access the current comment. \returns the current comment, or an empty string if none exists.
   inline const QByteArray& comment() const { return m_lastComment; }
@@ -110,7 +110,7 @@ protected:
   template<class DeclarationT>
   DeclarationT* openDeclaration(const Identifier& localId, const RangeInRevision& newRange, DeclarationFlags flags = NoFlags)
   {
-    DeclarationT* declaration = 0;
+    DeclarationT* declaration = nullptr;
 
     if (LanguageSpecificDeclarationBuilderBase::recompiling()) {
       // Seek a matching declaration

@@ -77,7 +77,7 @@ protected:
    * Perform initialisation at the start of a build, and check that all types
    * that were registered were also used.
    */
-  virtual void supportBuild(T* node, DUContext* context = 0)
+  virtual void supportBuild(T* node, DUContext* context = nullptr)
   {
     m_topTypes.clear();
 
@@ -108,7 +108,7 @@ protected:
   /// Clear the last encountered type.
   void clearLastType()
   {
-    m_lastType = 0;
+    m_lastType = nullptr;
   }
 
   /**
@@ -229,7 +229,7 @@ protected:
       if(!delay) {
         foreach( Declaration* decl, dec ) {
           // gcc 4.0.1 doesn't eath this // if( needClass && !decl->abstractType().cast<StructureType>() )
-          if( needClass && !decl->abstractType().cast(static_cast<StructureType *>(0)) )
+          if( needClass && !decl->abstractType().cast(static_cast<StructureType *>(nullptr)) )
             continue;
 
           if (decl->abstractType() ) {

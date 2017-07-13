@@ -59,7 +59,7 @@ public:
   /// Constructor.
   AbstractContextBuilder() : m_compilingContexts( false )
     , m_recompiling( false )
-    , m_lastContext( 0 )
+    , m_lastContext(nullptr)
   {
   }
 
@@ -119,7 +119,7 @@ protected:
    * Support another builder by tracking the current context.
    * @param context the context to use. Must be set when the given node has no context. When it has one attached, this parameter is not needed.
    */
-  virtual void supportBuild( T* node, DUContext* context = 0 )
+  virtual void supportBuild(T* node, DUContext* context = nullptr)
   {
     if (!context)
       context = contextFromNode(node);
@@ -219,7 +219,7 @@ protected:
    *
    * \returns the newly created context
    */
-  virtual TopDUContext* newTopContext(const RangeInRevision& range, ParsingEnvironmentFile* file = 0)
+  virtual TopDUContext* newTopContext(const RangeInRevision& range, ParsingEnvironmentFile* file = nullptr)
   {
     return new TopDUContext(m_url, range, file);
   }
@@ -229,7 +229,7 @@ protected:
   /// Determine the last closed context. \returns the last closed context.
   inline DUContext* lastContext() const { return m_lastContext; }
   /// Clears the last closed context.
-  inline void clearLastContext() { m_lastContext = 0; }
+  inline void clearLastContext() { m_lastContext = nullptr; }
 
   inline void setLastContext(DUContext* context) { m_lastContext = context; }
 
@@ -313,7 +313,7 @@ protected:
   void deleteContextOnNode( T* node )
   {
     delete contextFromNode( node );
-    setContextOnNode( node, 0 );
+    setContextOnNode(node, nullptr);
   }
 
   /**
@@ -324,7 +324,7 @@ protected:
    * \param identifier The range which encompasses the name of this context, if one exists.
    * \returns the opened context.
    */
-  DUContext* openContext( T* rangeNode, DUContext::ContextType type, NameT* identifier = 0)
+  DUContext* openContext(T* rangeNode, DUContext::ContextType type, NameT* identifier = nullptr)
   {
     if ( m_compilingContexts )
     {
@@ -348,7 +348,7 @@ protected:
    * \param identifier The range which encompasses the name of this context, if one exists.
    * \returns the opened context.
    */
-  DUContext* openContext(T* node, const RangeInRevision& range, DUContext::ContextType type, NameT* identifier = 0)
+  DUContext* openContext(T* node, const RangeInRevision& range, DUContext::ContextType type, NameT* identifier = nullptr)
   {
     if (m_compilingContexts) {
       DUContext* ret = openContextInternal(range, type, identifier ? identifierForNode(identifier) : QualifiedIdentifier());
@@ -569,7 +569,7 @@ protected:
   virtual DUContext* openContextInternal( const RangeInRevision& range, DUContext::ContextType type, const QualifiedIdentifier& identifier )
   {
     Q_ASSERT( m_compilingContexts );
-    DUContext* ret = 0L;
+    DUContext* ret = nullptr;
 
     {
       if ( recompiling() )
