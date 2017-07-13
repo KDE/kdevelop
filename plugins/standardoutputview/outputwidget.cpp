@@ -600,7 +600,7 @@ void OutputWidget::scrollToIndex( const QModelIndex& idx )
     QWidget* w = currentWidget();
     if( !w )
         return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(w);
+    QAbstractItemView *view = static_cast<QAbstractItemView*>(w);
     view->scrollTo( idx );
 }
 

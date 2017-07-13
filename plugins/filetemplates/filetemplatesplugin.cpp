@@ -94,7 +94,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
 
     if (context->type() == Context::ProjectItemContext)
     {
-        ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(context);
+        ProjectItemContext* projectContext = static_cast<ProjectItemContext*>(context);
         QList<ProjectBaseItem*> items = projectContext->items();
         if (items.size() != 1)
         {
@@ -127,7 +127,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension (Context* context
     }
     else if (context->type() == Context::EditorContext)
     {
-        KDevelop::EditorContext* editorContext = dynamic_cast<KDevelop::EditorContext*>(context);
+        KDevelop::EditorContext* editorContext = static_cast<KDevelop::EditorContext*>(context);
         fileUrl = editorContext->url();
     }
 

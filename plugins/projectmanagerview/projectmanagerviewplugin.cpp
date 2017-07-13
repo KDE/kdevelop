@@ -174,7 +174,7 @@ void ProjectManagerViewPlugin::updateActionState( KDevelop::Context* ctx )
     bool isEmpty = ICore::self()->projectController()->buildSetModel()->items().isEmpty();
     if( isEmpty )
     {
-        isEmpty = !ctx || ctx->type() != Context::ProjectItemContext || dynamic_cast<ProjectItemContext*>( ctx )->items().isEmpty();
+        isEmpty = !ctx || ctx->type() != Context::ProjectItemContext || static_cast<ProjectItemContext*>(ctx)->items().isEmpty();
     }
     d->m_build->setEnabled( !isEmpty );
     d->m_install->setEnabled( !isEmpty );
