@@ -51,6 +51,11 @@ public:
     void setupFromContext(KDevelop::Context*);
     void addContextDocument(const QUrl& url);
     QList<QUrl> contextUrlList() const;
+    /**
+     * Creates and returns a menu with common actions.
+     * Ownership of the menu itself is passed to the caller.
+     * Ownership of the actions in the menu stays with this VcsPluginHelper object.
+     */
     QMenu* commonActions();
 
 public Q_SLOTS:
