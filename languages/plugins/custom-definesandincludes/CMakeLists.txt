@@ -48,12 +48,12 @@ if(BUILD_kdev_includepathsconverter)
         KDev::Project
         kdevcompilerprovider
     )
-    install(TARGETS kdev_includepathsconverter ${INSTALL_TARGETS_DEFAULT_ARGS} )
+    install(TARGETS kdev_includepathsconverter ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 endif()
 
 install(FILES
     idefinesandincludesmanager.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/custom-definesandincludes COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevelop/custom-definesandincludes COMPONENT Devel
 )
 
 add_library(kdevdefinesandincludesmanager_interface INTERFACE)

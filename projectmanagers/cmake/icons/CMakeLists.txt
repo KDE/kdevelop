@@ -3,4 +3,4 @@ ecm_install_icons(ICONS
     16-apps-cmake.png
     32-apps-cmake.png
     64-apps-cmake.png
-    DESTINATION ${ICON_INSTALL_DIR})
+    DESTINATION ${KDE_INSTALL_ICONDIR})

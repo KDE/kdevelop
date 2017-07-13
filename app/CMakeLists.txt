@@ -39,7 +39,7 @@ set(kdevelop_ICONS
 )
 
 ecm_install_icons(ICONS ${kdevelop_ICONS}
-    DESTINATION ${ICON_INSTALL_DIR})
+    DESTINATION ${KDE_INSTALL_ICONDIR})
     
 ecm_add_app_icon(kdevelop_SRCS ICONS
     ${kdevelop_ICONS})

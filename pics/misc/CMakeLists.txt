@@ -1,2 +1,2 @@
 install(FILES qtlogo.svg
-    DESTINATION ${DATA_INSTALL_DIR}/kdevelop/pics )
+    DESTINATION ${KDE_INSTALL_DATADIR}/kdevelop/pics )

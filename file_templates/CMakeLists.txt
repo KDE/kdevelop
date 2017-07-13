@@ -42,5 +42,5 @@ install ( FILES
     common/cpp_header.h
     common/cpp_header_onlyfunctions.h
     common/cpp_implementation.cpp
-    DESTINATION ${DATA_INSTALL_DIR}/kdevcodegen/templates
+    DESTINATION ${KDE_INSTALL_DATADIR}/kdevcodegen/templates
 )

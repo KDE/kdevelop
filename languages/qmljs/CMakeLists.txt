@@ -32,4 +32,4 @@ target_link_libraries(kdevqmljslanguagesupport
     KF5::Declarative
 )
 
-install(DIRECTORY navigation/propertywidgets DESTINATION ${DATA_INSTALL_DIR}/kdevqmljssupport)
+install(DIRECTORY navigation/propertywidgets DESTINATION ${KDE_INSTALL_DATADIR}/kdevqmljssupport)

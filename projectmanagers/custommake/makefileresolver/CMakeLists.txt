@@ -19,7 +19,7 @@ if(BUILD_kdev_makefileresolver)
     set_target_properties( kdev_makefileresolver PROPERTIES COMPILE_FLAGS -DTEST )
     target_link_libraries(kdev_makefileresolver kdevmakefileresolver)
 
-    install(TARGETS kdev_makefileresolver ${INSTALL_TARGETS_DEFAULT_ARGS} )
+    install(TARGETS kdev_makefileresolver ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 endif()
 
 add_subdirectory(tests)

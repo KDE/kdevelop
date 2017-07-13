@@ -12,7 +12,7 @@ KDev::Documentation KDev::Interfaces KF5::KCMUtils)
 
 install(FILES
     manpagedocumentation.css
-    DESTINATION ${DATA_INSTALL_DIR}/kdevmanpage
+    DESTINATION ${KDE_INSTALL_DATADIR}/kdevmanpage
 )
 
 add_subdirectory(tests)

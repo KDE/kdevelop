@@ -1,3 +1,3 @@
 
-install(FILES QtCreator DESTINATION ${SHARE_INSTALL_PREFIX}/kdevelop/shortcuts/)
+install(FILES QtCreator DESTINATION ${KDE_INSTALL_DATAROOTDIR}/kdevelop/shortcuts/)
 

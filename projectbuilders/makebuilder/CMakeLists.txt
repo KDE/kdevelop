@@ -29,7 +29,7 @@ target_link_libraries(kdevmakebuilder
         KDev::Shell
 )
 
-install(FILES imakebuilder.h DESTINATION ${INCLUDE_INSTALL_DIR}/kdevelop/makebuilder COMPONENT Devel)
+install(FILES imakebuilder.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevelop/makebuilder COMPONENT Devel)
 
 add_library(KDevIMakeBuilder INTERFACE)
 add_library(KDev::IMakeBuilder ALIAS KDevIMakeBuilder)
