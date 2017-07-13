@@ -48,11 +48,9 @@ The second pass is the creation of uses, accomplished a subclass of both the \re
 
 \li \ref KDevelop::Declaration - an object which represents a single declaration.  Has several subclasses which store more information specific to the type of declaration which is being represented.
 
-\li \ref KDevelop::Definition - an object which represents a definition corresponding to a \ref KDevelop::Declaration "Declaration".
-
 \li \ref KDevelop::Use - an object which represents a use of a particular declaration.
 
-\li \ref KDevelop::SymbolTable - a hash which stores identifiers available in the top level context of a source file and their respective \ref KDevelop::Declaration "Declarations".
+\li \ref KDevelop::PersistentSymbolTable - a hash which stores identifiers available in the top level context of a source file and their respective \ref KDevelop::Declaration "Declarations".
 
 \li KDevelop::*Builder - objects whose purpose is to iterate the parsed AST and produce instances of the duchain objects.
 
