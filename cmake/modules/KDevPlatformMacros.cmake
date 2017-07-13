@@ -117,7 +117,7 @@ function(kdevplatform_add_library target)
 
     target_include_directories(${target} INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevplatform>")
     set_target_properties(${target} PROPERTIES
-        VERSION ${KDEVPLATFORM_LIB_VERSION}
+        VERSION ${KDEVPLATFORM_VERSION}
         SOVERSION ${KDEVPLATFORM_LIB_SOVERSION}
         EXPORT_NAME ${shortTargetName}
     )
