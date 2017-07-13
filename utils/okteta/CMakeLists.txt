@@ -25,5 +25,3 @@ TARGET_LINK_LIBRARIES( kdevokteta
     OktetaKastenControllers
     KastenControllers
 )
-
-install(TARGETS kdevokteta DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
