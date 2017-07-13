@@ -1,8 +1,6 @@
 project( okteta )
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevokteta\")
 
-include_directories( ${okteta_SOURCE_DIR} ${okteta_BINARY_DIR} )
-
 SET( kdevokteta_PART_SRCS
     kastentoolviewwidget.cpp
     oktetatoolviewfactory.cpp
