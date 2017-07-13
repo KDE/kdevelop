@@ -241,7 +241,7 @@ void MIDebugger::processLine(const QByteArray& line)
         }
 
         case MI::Record::Async: {
-            MI::AsyncRecord& async = dynamic_cast<MI::AsyncRecord&>(*r);
+            MI::AsyncRecord& async = static_cast<MI::AsyncRecord&>(*r);
 
             switch (async.subkind) {
             case MI::AsyncRecord::Exec: {
@@ -281,7 +281,7 @@ void MIDebugger::processLine(const QByteArray& line)
 
         case MI::Record::Stream: {
 
-            MI::StreamRecord& s = dynamic_cast<MI::StreamRecord&>(*r);
+            MI::StreamRecord& s = static_cast<MI::StreamRecord&>(*r);
 
             if (s.subkind == MI::StreamRecord::Target) {
                 emit applicationOutput(s.message);

@@ -85,7 +85,7 @@ void LldbFrameStackModel::handleThreadInfo(const ResultRecord& r)
         if (threadMI[QStringLiteral("state")].literal() == QLatin1String("stopped")) {
             // lldb-mi returns multiple frame entry for each thread
             // so can't directly use threadMI["frame"]
-            auto &th = dynamic_cast<const TupleValue&>(threadMI);
+            auto &th = static_cast<const TupleValue&>(threadMI);
             Value *topFrame = nullptr;
             for (auto res : th.results) {
                 if (res->variable == QLatin1String("frame")) {

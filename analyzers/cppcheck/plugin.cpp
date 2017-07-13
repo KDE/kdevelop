@@ -225,7 +225,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
 
     if (context->hasType(KDevelop::Context::EditorContext) && m_currentProject && !isRunning()) {
-        auto eContext = dynamic_cast<KDevelop::EditorContext*>(context);
+        auto eContext = static_cast<KDevelop::EditorContext*>(context);
         QMimeDatabase db;
         const auto mime = db.mimeTypeForUrl(eContext->url());
 
@@ -237,7 +237,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
     }
 
     if (context->hasType(KDevelop::Context::ProjectItemContext) && !isRunning()) {
-        auto pContext = dynamic_cast<KDevelop::ProjectItemContext*>(context);
+        auto pContext = static_cast<KDevelop::ProjectItemContext*>(context);
         if (pContext->items().size() != 1) {
             return extension;
         }

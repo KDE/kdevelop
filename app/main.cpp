@@ -752,7 +752,7 @@ int main( int argc, char *argv[] )
                 return 1;
             }
             KDevelop::ILaunchConfiguration* ilaunch = core->runController()->createLaunchConfiguration(type, launcher, nullptr, launchName);
-            launch = dynamic_cast<KDevelop::LaunchConfiguration*>(ilaunch);
+            launch = static_cast<KDevelop::LaunchConfiguration*>(ilaunch);
         }
 
         type->configureLaunchFromCmdLineArguments(launch->config(), debugArgs);
