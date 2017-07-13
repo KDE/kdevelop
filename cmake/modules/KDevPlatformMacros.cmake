@@ -87,13 +87,13 @@ endmacro(kdevplatform_add_template _installDirectory _templateName)
 
 macro(kdevplatform_add_app_templates _templateNames)
     foreach(_templateName ${ARGV})
-        kdevplatform_add_template(${DATA_INSTALL_DIR}/kdevappwizard/templates ${_templateName})
+        kdevplatform_add_template(${KDE_INSTALL_DATADIR}/kdevappwizard/templates ${_templateName})
     endforeach(_templateName ${ARGV}) 
 endmacro(kdevplatform_add_app_templates _templateNames)
 
 macro(kdevplatform_add_file_templates _templateNames)
     foreach(_templateName ${ARGV})
-        kdevplatform_add_template(${DATA_INSTALL_DIR}/kdevfiletemplates/templates ${_templateName})
+        kdevplatform_add_template(${KDE_INSTALL_DATADIR}/kdevfiletemplates/templates ${_templateName})
     endforeach(_templateName ${ARGV})
 endmacro(kdevplatform_add_file_templates _templateNames)
 
@@ -162,6 +162,6 @@ function(kdevplatform_add_plugin plugin)
     set_property(TARGET ${plugin} APPEND PROPERTY AUTOGEN_TARGET_DEPENDS ${json})
 
     if (NOT KDEV_ADD_PLUGIN_SKIP_INSTALL)
-        install(TARGETS ${plugin} DESTINATION ${PLUGIN_INSTALL_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
+        install(TARGETS ${plugin} DESTINATION ${KDE_INSTALL_PLUGINDIR}/kdevplatform/${KDEV_PLUGIN_VERSION})
     endif()
 endfunction()

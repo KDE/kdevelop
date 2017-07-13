@@ -65,7 +65,7 @@ target_link_libraries(kdev_format_source Qt5::Core)
 install(TARGETS kdev_format_source DESTINATION ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES .zshrc PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_EXECUTE WORLD_READ
-        DESTINATION ${SHARE_INSTALL_PREFIX}/kdevplatform/shellutils/)
+        DESTINATION ${KDE_INSTALL_DATAROOTDIR}/kdevplatform/shellutils/)
 
 ########### install files ###############
 

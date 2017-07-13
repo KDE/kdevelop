@@ -18,4 +18,4 @@ target_link_libraries(kdevflatpak
     KDev::Project
 )
 
-install(FILES replicate.sh DESTINATION ${SHARE_INSTALL_PREFIX}/kdevelop/kdevflatpak/)
+install(FILES replicate.sh DESTINATION ${KDE_INSTALL_DATAROOTDIR}/kdevelop/kdevflatpak/)
