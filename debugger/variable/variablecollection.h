@@ -226,7 +226,7 @@ public:
 
     VariablesRoot* root() const { return m_universe; }
     Watches* watches() const { return m_universe->watches(); }
-    Locals* locals(const QString &name = i18n("Locals")) const { return m_universe->locals(name); }
+    Locals* locals(const QString &name = QString()) const;
     QHash<QString, Locals*> allLocals() const { return m_universe->allLocals(); }
 
 public Q_SLOTS:

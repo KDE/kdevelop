@@ -32,6 +32,7 @@
 #include <QStylePainter>
 #include <QTabBar>
 #include <QToolButton>
+#include <QWindow>
 
 #include <KAcceleratorManager>
 #include <KConfigGroup>
@@ -620,28 +621,38 @@ void Container::contextMenu( const QPoint& pos )
 
     int currentTab = d->tabBar->tabAt(pos);
 
-    QPointer<QMenu> menu = new QMenu(senderWidget);
+    QMenu menu;
+    // At least for positioning on Wayland the window the menu belongs to
+    // needs to be set. We cannot set senderWidget as parent because some actions (e.g. split view)
+    // result in sync destruction of the senderWidget, which then would also prematurely
+    // destruct the menu object
+    // Workaround (best known currently, check again API of Qt >5.9):
+    menu.winId(); // trigger being a native widget already, to ensure windowHandle created
+    auto parentWindowHandle = senderWidget->windowHandle();
+    if (!parentWindowHandle) {
+        parentWindowHandle = senderWidget->nativeParentWidget()->windowHandle();
+    }
+    menu.windowHandle()->setTransientParent(parentWindowHandle);
 
     Sublime::View* view = viewForWidget(widget(currentTab));
-    emit tabContextMenuRequested(view, menu);
+    emit tabContextMenuRequested(view, &menu);
 
-    menu->addSeparator();
+    menu.addSeparator();
     QAction* copyPathAction = nullptr;
     QAction* closeTabAction = nullptr;
     QAction* closeOtherTabsAction = nullptr;
     if (view) {
-        copyPathAction = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-copy")),
+        copyPathAction = menu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")),
                                         i18n("Copy Filename"));
-        menu->addSeparator();
-        closeTabAction = menu->addAction(QIcon::fromTheme(QStringLiteral("document-close")),
+        menu.addSeparator();
+        closeTabAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
                                         i18n("Close File"));
-        closeOtherTabsAction = menu->addAction(QIcon::fromTheme(QStringLiteral("document-close")),
+        closeOtherTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
                                               i18n("Close Other Files"));
     }
-    QAction* closeAllTabsAction = menu->addAction( QIcon::fromTheme(QStringLiteral("document-close")), i18n( "Close All Files" ) );
+    QAction* closeAllTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n("Close All Files"));
 
-    QAction* triggered = menu->exec(senderWidget->mapToGlobal(pos));
-    delete menu.data();
+    QAction* triggered = menu.exec(senderWidget->mapToGlobal(pos));
 
     if (triggered) {
         if ( triggered == closeTabAction ) {
