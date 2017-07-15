@@ -49,7 +49,7 @@ class KDEVPLATFORMSUBLIME_EXPORT MainWindow: public KParts::MainWindow {
 Q_OBJECT
 public:
     /**Creates a mainwindow and adds it to the controller.*/
-    explicit MainWindow(Controller *controller, Qt::WindowFlags flags = KDE_DEFAULT_WINDOWFLAGS);
+    explicit MainWindow(Controller *controller, Qt::WindowFlags flags = {});
     ~MainWindow() override;
 
     /**@return the list of dockwidgets that contain area's toolviews.*/
