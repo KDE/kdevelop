@@ -28,8 +28,6 @@
 
 #include <QDebug>
 
-#include <stdint.h>
-
 K_PLUGIN_FACTORY_WITH_JSON(KDevWelcomePagePluginFactory, "kdevwelcomepage.json", registerPlugin<KDevWelcomePagePlugin>();)
 
 using namespace KDevelop;
@@ -39,7 +37,7 @@ WelcomePageWidget* createWelcomePageWidget(QWidget* parent)
 {
     // don't attempt to load any QML if CPU doesn't have SSE2 support (cf. bug 381999)
     // Note: Clang 4.0 moved the definition of __cpu_model (used by __builtin_cpu_supporst) into compiler-rt lib it seems -- let's just disable this feature on this compiler
-#if defined(Q_OS_LINUX) && INTPTR_MAX == INT32_MAX && (defined(Q_CC_GNU) || (defined(Q_CC_CLANG) && __clang_major__ >= 3 && __clang_minor__ >= 7 && __clang_major__ < 4))
+#if defined(Q_OS_LINUX) && defined(Q_PROCESSOR_X86_32) && (defined(Q_CC_GNU) || (defined(Q_CC_CLANG) && __clang_major__ >= 3 && __clang_minor__ >= 7 && __clang_major__ < 4))
     if (!__builtin_cpu_supports("sse2")) {
         qWarning() << "Welcome Page won't load any QML -- lacking SSE2 support on this processor";
         return nullptr;
