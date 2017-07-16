@@ -43,7 +43,7 @@ public:
     explicit QMakeBuilderPreferences(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent = nullptr);
     ~QMakeBuilderPreferences() override;
 
-public slots:
+public Q_SLOTS:
     void apply() override;
     void reset() override;
     QString name() const override;

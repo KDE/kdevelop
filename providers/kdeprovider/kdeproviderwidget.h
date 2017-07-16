@@ -35,7 +35,7 @@ class KDEProviderWidget : public KDevelop::IProjectProviderWidget
         KDevelop::VcsJob* createWorkingCopy(const QUrl &destinationDirectory) override;
         bool isCorrect() const override;
         
-    private slots:
+    private Q_SLOTS:
         void showSettings();
         void projectIndexChanged(const QModelIndex& currentIndex);
         

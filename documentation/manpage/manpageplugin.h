@@ -49,7 +49,7 @@ public:
     ManPageModel* model() const;
     QProgressBar* progressBar() const;
 
-signals:
+Q_SIGNALS:
     void addHistory(const KDevelop::IDocumentation::Ptr& doc ) const override;
 
 private:

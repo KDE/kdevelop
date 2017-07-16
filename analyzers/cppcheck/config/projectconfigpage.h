@@ -52,7 +52,7 @@ public:
     QIcon icon() const override;
     QString name() const override;
 
-public slots:
+public Q_SLOTS:
     void defaults() override;
     void reset() override;
 

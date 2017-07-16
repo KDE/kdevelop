@@ -93,7 +93,7 @@ private:
     // the SupportedProperty instance for this widget
     SupportedProperty const property;
 
-private slots:
+private Q_SLOTS:
     // updates the text in the document to contain the new value in valueRange
     void updateValue();
 };

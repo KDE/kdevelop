@@ -49,14 +49,14 @@ public:
      */
     explicit Dialog(QWidget *parent, Account *account);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal is emitted whenever the dialog has successfully performed
      * an action that may imply some changes on the UI of the plugin.
      */
     void shouldUpdate();
 
-private slots:
+private Q_SLOTS:
     /**
      * The "Authorize" button has been clicked. a KPasswordDialog will be
      * shown and a request will be sent to Github to authenticate the given

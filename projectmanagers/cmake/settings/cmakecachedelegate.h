@@ -39,7 +39,7 @@ class CMakeCacheDelegate : public QItemDelegate
         void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
         QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
 
-    private slots:
+    private Q_SLOTS:
         void closingEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint = NoHint);
         void checkboxToggled();
 

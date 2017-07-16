@@ -52,7 +52,7 @@ public:
     /// @p installPrefix will be passed as DESTDIR environment variable
     KJob* install( KDevelop::ProjectBaseItem* item, const QUrl &installPrefix ) override;
     KJob* configure( KDevelop::IProject* ) override;
-signals:
+Q_SIGNALS:
     void built( KDevelop::ProjectBaseItem *dom );
     void installed( KDevelop::ProjectBaseItem* );
     void cleaned( KDevelop::ProjectBaseItem* );

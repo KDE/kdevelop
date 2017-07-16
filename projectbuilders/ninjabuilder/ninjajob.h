@@ -63,11 +63,11 @@ public:
     QUrl workingDirectory() const override;
     QStringList privilegedExecutionCommand() const override;
 
-protected slots:
+protected Q_SLOTS:
     void postProcessStdout(const QStringList& lines) override;
     void postProcessStderr(const QStringList& lines) override;
 
-private slots:
+private Q_SLOTS:
     void emitProjectBuilderSignal(KJob* job);
 
 private:

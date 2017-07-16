@@ -718,7 +718,7 @@ public:
         ArrowToDot
     };
 
-public slots:
+public Q_SLOTS:
     void replaceCurrentAccess(MemberAccessReplacer::Type type)
     {
         if (auto document = ICore::self()->documentController()->activeDocument()) {

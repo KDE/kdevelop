@@ -58,7 +58,7 @@ public:
 protected:
     void updateLocals();
 
-private slots:
+private Q_SLOTS:
     void programStopped(const MI::AsyncRecord &r);
     void stateChanged(KDevelop::IDebugSession::DebuggerState);
 

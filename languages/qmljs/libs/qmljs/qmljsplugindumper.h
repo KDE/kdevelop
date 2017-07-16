@@ -58,7 +58,7 @@ public:
     void scheduleRedumpPlugins();
     void scheduleMaybeRedumpBuiltins(const QmlJS::ModelManagerInterface::ProjectInfo &info);
 
-private slots:
+private Q_SLOTS:
     void onLoadBuiltinTypes(const QmlJS::ModelManagerInterface::ProjectInfo &info,
                             bool force = false);
     void onLoadPluginTypes(const QString &libraryPath, const QString &importPath,

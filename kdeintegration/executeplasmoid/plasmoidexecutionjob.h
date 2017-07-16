@@ -47,7 +47,7 @@ public:
     static QStringList arguments(KDevelop::ILaunchConfiguration* cfg);
     static QString workingDirectory(KDevelop::ILaunchConfiguration* cfg);
 
-public slots:
+public Q_SLOTS:
     void slotCompleted(int);
     void slotFailed(QProcess::ProcessError);
 

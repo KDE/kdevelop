@@ -54,14 +54,14 @@ public:
     void setFindParentItem(bool find);
     virtual void start();
 
-public slots:
+public Q_SLOTS:
     void reloadFiles();
     void folderAvailable(KDevelop::ProjectFolderItem* item);
 
-signals:
+Q_SIGNALS:
     void folderCreated(KDevelop::ProjectFolderItem* item);
 
-private slots:
+private Q_SLOTS:
     void makeChanges();
 
 private:

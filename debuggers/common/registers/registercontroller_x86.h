@@ -34,7 +34,7 @@ class RegisterControllerGeneral_x86 : public IRegisterController
 public:
     QVector<GroupsName> namesOfRegisterGroups() const override;
 
-public slots:
+public Q_SLOTS:
     void updateRegisters(const GroupsName& group = GroupsName()) override;
 
 protected:

@@ -48,7 +48,7 @@ public:
 
     QString moveIntoSource(const KDevelop::IndexedDeclaration& iDecl);
 
-public slots:
+public Q_SLOTS:
     void executeMoveIntoSourceAction();
 
 protected:

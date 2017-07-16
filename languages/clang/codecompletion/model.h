@@ -43,7 +43,7 @@ public:
 
     bool shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::Range& range, const QString& currentCompletion) override;
 
-signals:
+Q_SIGNALS:
     void requestCompletion(const QUrl &url, const KTextEditor::Cursor& cursor, const QString& text, const QString& followingText);
 
 protected:

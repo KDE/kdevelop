@@ -38,7 +38,7 @@ class ScopeTest : public QObject
     public:
         explicit ScopeTest( QObject* parent = nullptr );
         ~ScopeTest() override;
-    private slots:
+    private Q_SLOTS:
         void init();
         void cleanup();
         void basicScope();

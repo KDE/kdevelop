@@ -45,7 +45,7 @@ protected:
     void setItemChecked(int idx, bool checked);
     void updateWidgets();
 
-private slots:
+private Q_SLOTS:
     void currentTabChanged();
     void indentChanged();
     void indentObjectsChanged(QListWidgetItem *item);

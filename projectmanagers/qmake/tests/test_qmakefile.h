@@ -26,7 +26,7 @@
 class TestQMakeFile : public QObject {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void varResolution_data();
     void varResolution();
 

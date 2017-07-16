@@ -117,7 +117,7 @@ private:
      */
     void retrieveOrgs(const QByteArray &data);
 
-signals:
+Q_SIGNALS:
     /**
      * This signal will eventually be sent when the authentication process
      * has finished. An empty id means that the authentication wasn't
@@ -145,7 +145,7 @@ signals:
      */
     void orgsUpdated(const QStringList &orgs);
 
-private slots:
+private Q_SLOTS:
     /**
      * Handle the response of the Github authentication process.
      *

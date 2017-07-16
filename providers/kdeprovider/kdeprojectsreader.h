@@ -33,11 +33,11 @@ class KDEProjectsReader : public QObject
         QStringList errors() const { return m_errors; }
         bool hasErrors() { return !m_errors.isEmpty(); }
         
-    public slots:
+    public Q_SLOTS:
         void downloadFinished(QNetworkReply* reply);
         void downloadError(QNetworkReply::NetworkError);
         
-    signals:
+    Q_SIGNALS:
         void downloadDone();
         
     private:

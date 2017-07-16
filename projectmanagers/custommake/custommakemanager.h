@@ -121,7 +121,7 @@ protected:
 
     void unload() override;
 
-private slots:
+private Q_SLOTS:
     void reloadMakefile(KDevelop::ProjectFileItem *item);
 
     void projectClosing(KDevelop::IProject*);

@@ -46,7 +46,7 @@ public:
     QVector<ConfigEntry> paths() const;
     void clear();
 
-signals:
+Q_SIGNALS:
     void changed();
 
 private:
@@ -54,7 +54,7 @@ private:
 
     CompilerPointer currentCompiler() const;
 
-private slots:
+private Q_SLOTS:
     // Handling of project-path combobox, add and remove buttons
     void projectPathSelected( int index );
     void addProjectPath();

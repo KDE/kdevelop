@@ -72,11 +72,11 @@ public:
     bool watchesDirectory(const QString &file) const;
     QStringList directories() const;
 
-private slots:
+private Q_SLOTS:
     void slotFileChanged(const QString &path);
     void slotDirectoryChanged(const QString &path);
 
-signals:
+Q_SIGNALS:
     void fileChanged(const QString &path);
     void directoryChanged(const QString &path);
 

@@ -42,9 +42,9 @@ public:
     explicit DefinesWidget( QWidget* parent = nullptr );
     void setDefines( const KDevelop::Defines& defines );
     void clear();
-signals:
+Q_SIGNALS:
     void definesChanged( const KDevelop::Defines& defines );
-private slots:
+private Q_SLOTS:
     // Forward defines model changes
     void definesChanged();
 

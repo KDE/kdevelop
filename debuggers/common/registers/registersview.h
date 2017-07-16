@@ -44,7 +44,7 @@ public:
 
     void setModel(ModelsManager* m);
 
-public slots:
+public Q_SLOTS:
     ///Updates registers for active views.
     void updateRegisters();
 
@@ -65,7 +65,7 @@ private:
     ///Sets name for the table with index @p idx to the @p name.
     void setNameForTable(int idx, const QString& name);
 
-private slots:
+private Q_SLOTS:
     ///Changes register formates/modes to @p formatOrMode.
     void menuTriggered(const QString& formatOrMode);
 

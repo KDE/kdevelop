@@ -38,7 +38,7 @@ public:
     explicit CTestFindJob(CTestSuite* suite, QObject* parent = nullptr);
     void start() override;
     
-private slots:
+private Q_SLOTS:
     void findTestCases();
     void updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context);
 

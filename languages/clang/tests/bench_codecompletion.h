@@ -34,7 +34,7 @@ public:
     BenchCodeCompletion();
     ~BenchCodeCompletion() override;
 
-private slots:
+private Q_SLOTS:
     void benchCodeCompletion_data();
     void benchCodeCompletion();
 

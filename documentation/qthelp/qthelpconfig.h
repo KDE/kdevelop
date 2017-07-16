@@ -51,7 +51,7 @@ public:
       QString fullName() const override;
       QIcon icon() const override;
 
-    private slots:
+    private Q_SLOTS:
       void add();
       void remove(QTreeWidgetItem* item);
       void modify(QTreeWidgetItem* item);

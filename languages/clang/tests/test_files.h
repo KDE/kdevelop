@@ -25,7 +25,7 @@
 class TestFiles : public QObject
 {
     Q_OBJECT
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
     void testFiles_data();

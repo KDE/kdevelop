@@ -35,7 +35,7 @@ class TestDUChain : public QObject
 public:
     ~TestDUChain() override;
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

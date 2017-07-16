@@ -50,7 +50,7 @@ public:
         connect(buttonBox, &QDialogButtonBox::clicked, this, &State::buttonClicked);
         connect(configWidget, &CustomBuildSystemConfigWidget::changed, this, &State::configChanged);
     }
-public slots:
+public Q_SLOTS:
     void buttonClicked(QAbstractButton* button)
     {
         if (button == buttonBox->button(QDialogButtonBox::Apply)) {

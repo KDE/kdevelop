@@ -46,7 +46,7 @@ class ManPageDocumentation : public KDevelop::IDocumentation
         KDevelop::IDocumentationProvider* provider() const override;
         static ManPagePlugin* s_provider;
 
-    private slots:
+    private Q_SLOTS:
         void finished(KJob*);
 
     private:

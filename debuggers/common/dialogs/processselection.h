@@ -38,7 +38,7 @@ class ProcessSelectionDialog : public QDialog
         long int pidSelected();
         QSize sizeHint() const override;
 
-    private slots:
+    private Q_SLOTS:
         void selectionChanged( const QItemSelection& selected );
 
     private:

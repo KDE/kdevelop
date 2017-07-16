@@ -42,9 +42,9 @@ public:
     void loadConfig( CustomBuildSystemConfig cfg );
     CustomBuildSystemConfig config() const;
     void clear();
-signals:
+Q_SIGNALS:
     void changed();
-private slots:
+private Q_SLOTS:
     void changeAction( int );
     void toggleActionEnablement( bool );
     void actionArgumentsEdited( const QString& );

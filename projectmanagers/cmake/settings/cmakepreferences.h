@@ -51,7 +51,7 @@ class CMakePreferences : public KDevelop::ConfigPage
         void reset() override;
         void defaults() override;
 
-    private slots:
+    private Q_SLOTS:
         void listSelectionChanged ( const QModelIndex& current, const QModelIndex& );
         void showInternal(int state);
         void cacheEdited(QStandardItem * ) { emit changed(); }

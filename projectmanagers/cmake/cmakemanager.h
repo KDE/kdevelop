@@ -136,11 +136,11 @@ public:
 
     void integrateData(const CMakeProjectData &data, KDevelop::IProject* project);
 
-signals:
+Q_SIGNALS:
     void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 
-private slots:
+private Q_SLOTS:
     void serverResponse(KDevelop::IProject* project, const QJsonObject &value);
 
 //     void jumpToDeclaration();

@@ -35,7 +35,7 @@ public:
     explicit TestQMakeProject(QObject* parent = nullptr);
     ~TestQMakeProject() override;
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 

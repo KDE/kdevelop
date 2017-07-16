@@ -50,7 +50,7 @@ public:
 protected:
     bool doKill() override;
 
-private slots:
+private Q_SLOTS:
   void processError( QProcess::ProcessError error );
   void processFinished( int exitCode, QProcess::ExitStatus status );
 

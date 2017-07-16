@@ -33,7 +33,7 @@ class ManPageDocumentationWidget : public QStackedWidget
     Q_OBJECT
 public:
     explicit ManPageDocumentationWidget(QWidget *parent = nullptr);
-public slots:
+public Q_SLOTS:
     void manIndexLoaded();
     void sectionListUpdated();
     void sectionParsed();

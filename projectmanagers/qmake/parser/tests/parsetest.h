@@ -35,7 +35,7 @@ class ParseTest : public QObject
     public:
         explicit ParseTest( QObject* parent = nullptr );
         ~ParseTest() override;
-    private slots:
+    private Q_SLOTS:
         void init();
         void cleanup();
         void successSimpleProject();

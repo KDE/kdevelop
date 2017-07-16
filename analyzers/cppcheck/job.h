@@ -51,7 +51,7 @@ public:
 Q_SIGNALS:
     void problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems);
 
-protected slots:
+protected Q_SLOTS:
     void postProcessStdout(const QStringList& lines) override;
     void postProcessStderr(const QStringList& lines) override;
 

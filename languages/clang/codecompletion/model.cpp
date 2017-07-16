@@ -76,7 +76,7 @@ public:
     {}
     ~ClangCodeCompletionWorker() override = default;
 
-public slots:
+public Q_SLOTS:
     void completionRequested(const QUrl &url, const KTextEditor::Cursor& position, const QString& text, const QString& followingText)
     {
         aborting() = false;

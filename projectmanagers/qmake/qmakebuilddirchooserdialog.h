@@ -45,10 +45,10 @@ public:
 
     QString buildDir() const;
 
-public slots:
+public Q_SLOTS:
     void accept() override;
 
-private slots:
+private Q_SLOTS:
     void validate();
 
 private:

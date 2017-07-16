@@ -49,10 +49,10 @@ public:
     void setParserArguments(const ParserArguments& arguments);
     ParserArguments parserArguments() const;
 
-signals:
+Q_SIGNALS:
     void changed();
 
-private slots:
+private Q_SLOTS:
     void textEdited();
     void languageStandardChangedC(const QString& standard);
     void languageStandardChangedCpp(const QString& standard);

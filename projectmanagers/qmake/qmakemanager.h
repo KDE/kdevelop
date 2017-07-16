@@ -85,7 +85,7 @@ public:
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const override;
     //END IBuildSystemManager
 
-private slots:
+private Q_SLOTS:
     void slotFolderAdded( KDevelop::ProjectFolderItem* folder );
     void slotRunQMake();
     void slotDirty(const QString& path);

@@ -54,10 +54,10 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 
         static QtHelpProviderAbstract* s_provider;
 
-    public slots:
+    public Q_SLOTS:
         void viewContextMenuRequested(const QPoint& pos);
 
-    private slots:
+    private Q_SLOTS:
         void jumpedTo(const QUrl& newUrl);
 
     private:
@@ -83,7 +83,7 @@ class HomeDocumentation : public KDevelop::IDocumentation
         QString name() const override;
         KDevelop::IDocumentationProvider* provider() const override;
 
-    public slots:
+    public Q_SLOTS:
         void clicked(const QModelIndex& idx);
     private:
         QtHelpProviderAbstract *m_provider;
@@ -95,7 +95,7 @@ class QtHelpAlternativeLink : public QAction
     public:
         QtHelpAlternativeLink(const QString& name, const QtHelpDocumentation* doc, QObject* parent);
 
-    public slots:
+    public Q_SLOTS:
         void showUrl();
 
     private:

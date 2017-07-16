@@ -42,7 +42,7 @@ public:
         TestCore::initialize();
     }
 
-private slots:
+private Q_SLOTS:
     void initTestCase()
     {
         QProcess p;

@@ -28,7 +28,7 @@ class TestCodeCompletion : public CodeCompletionTestBase
 {
     Q_OBJECT
 
-private slots:
+private Q_SLOTS:
     void testIncludePathCompletion_data();
     void testIncludePathCompletion();
     void testIncludePathCompletionLocal();

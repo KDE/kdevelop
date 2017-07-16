@@ -42,9 +42,9 @@ public:
     void setProject(KDevelop::IProject* w_project);
     void setIncludes( const QStringList& );
     void clear();
-signals:
+Q_SIGNALS:
     void includesChanged( const QStringList& );
-private slots:
+private Q_SLOTS:
     // Handling of include-path url-requester, add and remove buttons
     void includePathSelected( const QModelIndex& selected );
     void includePathEdited();

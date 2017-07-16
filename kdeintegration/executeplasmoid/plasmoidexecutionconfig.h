@@ -92,7 +92,7 @@ public:
 private:
     QList<KDevelop::LaunchConfigurationPageFactory*> factoryList;
 
-public slots:
+public Q_SLOTS:
     void suggestionTriggered();
 };
 #endif

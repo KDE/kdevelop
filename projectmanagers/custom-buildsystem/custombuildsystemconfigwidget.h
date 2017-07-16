@@ -45,9 +45,9 @@ public:
     void loadFrom( KConfig* );
     void saveTo( KConfig*, KDevelop::IProject* project );
     void loadDefaults();
-signals:
+Q_SIGNALS:
     void changed();
-private slots:
+private Q_SLOTS:
     void configChanged();
     void changeCurrentConfig(int);
     void renameCurrentConfig(const QString& name);

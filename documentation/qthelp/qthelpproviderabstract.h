@@ -49,9 +49,9 @@ public:
     QHelpEngine* engine() { return &m_engine; }
 
     HelpNetworkAccessManager* networkAccess() const;
-public slots:
+public Q_SLOTS:
     void jumpedTo(const QUrl& newUrl) const;
-signals:
+Q_SIGNALS:
     void addHistory(const KDevelop::IDocumentation::Ptr& doc) const override;
 protected:
     QHelpEngine m_engine;

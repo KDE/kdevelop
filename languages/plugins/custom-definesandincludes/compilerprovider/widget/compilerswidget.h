@@ -62,13 +62,13 @@ public:
     void reset() override;
     void defaults() override;
 
-private slots:
+private Q_SLOTS:
     void deleteCompiler();
     void addCompiler(const QString& factoryName);
     void compilerSelected(const QModelIndex& index);
     void compilerEdited();
 
-signals:
+Q_SIGNALS:
     void compilerChanged();
 
 private:

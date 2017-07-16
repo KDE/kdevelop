@@ -52,7 +52,7 @@ class CMakeCacheModel : public QStandardItemModel
         void read();
         QVariantMap changedValues() const;
         
-    public slots:
+    public Q_SLOTS:
         void reset();
         
     private:

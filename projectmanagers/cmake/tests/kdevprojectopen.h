@@ -34,7 +34,7 @@ public:
     explicit KDevProjectOpen(QObject* parent = nullptr);
     void openProject(const QUrl& path);
     void cleanup();
-private slots:
+private Q_SLOTS:
     void projectDone(KDevelop::IProject*);
 
 private:

@@ -97,7 +97,7 @@ private:
     QTimer* m_updateTimer;
     QPushButton* m_moreVariablesButton;
     KDevelop::SourceFormatterStyle m_style;
-private slots:
+private Q_SLOTS:
     void textEdited(const QString&)
     {
         m_updateTimer->start(1000);

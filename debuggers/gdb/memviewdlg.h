@@ -111,7 +111,7 @@ namespace GDB
         QByteArray m_memData;
         int m_debuggerState;
 
-    private slots:
+    private Q_SLOTS:
         void currentSessionChanged(KDevelop::IDebugSession* session);
     };
 

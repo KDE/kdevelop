@@ -89,7 +89,7 @@ public:
 
     //END IBuddyDocumentFinder
 
-private slots:
+private Q_SLOTS:
     void documentActivated(KDevelop::IDocument* doc);
     void disableKeywordCompletion(KTextEditor::View* view);
     void enableKeywordCompletion(KTextEditor::View* view);

@@ -36,7 +36,7 @@ class AssignmentTest : public QObject
     public:
         explicit AssignmentTest( QObject* parent = nullptr );
         ~AssignmentTest() override;
-    private slots:
+    private Q_SLOTS:
         void init();
         void cleanup();
         void simpleParsed();

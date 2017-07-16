@@ -59,17 +59,17 @@ public:
     bool hasError() const;
     const QString& errorString() const;
 
-signals:
+Q_SIGNALS:
     void sectionParsed();
     void sectionListUpdated();
     void manPagesLoaded();
     void error(const QString& errorString);
 
-public slots:
+public Q_SLOTS:
     void showItem(const QModelIndex& idx);
     void showItemFromUrl(const QUrl& url);
 
-private slots:
+private Q_SLOTS:
     void initModel();
 
     void indexEntries(KIO::Job* job, const KIO::UDSEntryList& entries);

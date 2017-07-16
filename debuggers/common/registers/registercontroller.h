@@ -145,11 +145,11 @@ public:
     ///Sets current mode for the @p group, if mode is supported. Does nothing otherwise.
     void setMode(Mode m, const GroupsName& group);
 
-signals:
+Q_SIGNALS:
     ///Emits @p group with updated registers.
     void registersChanged(const RegistersGroup& g);
 
-public slots:
+public Q_SLOTS:
     ///Updates registers in @p group. If @p group is empty - updates all registers.
     virtual void updateRegisters(const GroupsName& group = GroupsName());
 

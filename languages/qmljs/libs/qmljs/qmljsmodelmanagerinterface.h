@@ -209,17 +209,17 @@ public:
                     PathsAndLanguages paths,
                     ModelManagerInterface *modelManager,
                     bool emitDocChangedOnDisk, bool libOnly = true);
-public slots:
+public Q_SLOTS:
     virtual void resetCodeModel();
     void removeProjectInfo(ProjectExplorer::Project *project);
-signals:
+Q_SIGNALS:
     void documentUpdated(QmlJS::Document::Ptr doc);
     void documentChangedOnDisk(QmlJS::Document::Ptr doc);
     void aboutToRemoveFiles(const QStringList &files);
     void libraryInfoUpdated(const QString &path, const QmlJS::LibraryInfo &info);
     void projectInfoUpdated(const ProjectInfo &pinfo);
     void projectPathChanged(const QString &projectPath);
-protected slots:
+protected Q_SLOTS:
 //     void maybeQueueCppQmlTypeUpdate(const CPlusPlus::Document::Ptr &doc);
 //     void queueCppQmlTypeUpdate(const CPlusPlus::Document::Ptr &doc, bool scan);
     void asyncReset();

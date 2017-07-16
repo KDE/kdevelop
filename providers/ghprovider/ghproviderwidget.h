@@ -58,7 +58,7 @@ public:
     /// Re-implemented from KDevelop::IProjectProviderWidget.
     bool isCorrect() const override;
 
-private slots:
+private Q_SLOTS:
     /// Fill the m_combo member.
     void fillCombo();
 

@@ -32,7 +32,7 @@ public:
 private:
     KDevelop::TestCore* m_testCore;
     QtHelpPlugin *m_plugin;
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void init();
 

@@ -81,7 +81,7 @@ public:
                                      const QStringList& targetnames = QStringList(),
                                      const MakeVariables& variables = MakeVariables() ) = 0;
 
-signals:
+Q_SIGNALS:
     /**
      * Emitted every time a target is finished being built for a project item.
      */

@@ -53,7 +53,7 @@ public:
 
     void setInstallPrefix(const QUrl &installPrefix) { this->installPrefix=installPrefix; }
 
-private slots:
+private Q_SLOTS:
     void procFinished(int);
     void procError( QProcess::ProcessError );
 private:

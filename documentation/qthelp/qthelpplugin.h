@@ -46,9 +46,9 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
         int configPages() const override;
         KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
 
-    public slots:
+    public Q_SLOTS:
         void readConfig();
-    signals:
+    Q_SIGNALS:
         void changedProvidersList() const override;
     private:
         void loadQtDocumentation(bool loadQtDoc);

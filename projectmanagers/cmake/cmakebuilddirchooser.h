@@ -72,7 +72,7 @@ class KDEVCMAKECOMMON_EXPORT CMakeBuildDirChooser : public QDialog
         void setExtraArguments(const QString& args);
         void setShowAvailableBuildDirs(bool show);
 
-    private slots:
+    private Q_SLOTS:
         void updated();
     private:
         void adoptPreviousBuildDirectory(int index);

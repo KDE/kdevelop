@@ -32,7 +32,7 @@ class PruneJob : public KDevelop::OutputJob
         void start() override;
         bool doKill() override;
 
-    private slots:
+    private Q_SLOTS:
         void jobFinished(KJob* job);
 
     private:

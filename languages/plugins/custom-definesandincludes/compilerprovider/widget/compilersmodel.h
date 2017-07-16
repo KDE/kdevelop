@@ -48,7 +48,7 @@ public:
     QModelIndex addCompiler(const CompilerPointer& compiler);
     void updateCompiler(const QItemSelection& compiler);
 
-signals:
+Q_SIGNALS:
     /// emitted whenever new compiler added or existing one modified/deleted.
     void compilerChanged();
 

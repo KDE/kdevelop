@@ -52,7 +52,7 @@ protected:
     /// Overridden from QLineEdit.
     void keyPressEvent(QKeyEvent *e) override;
 
-private slots:
+private Q_SLOTS:
     /// The timer has timed out: stop it and emit the returnPressed signal.
     void timeOut();
 

@@ -40,7 +40,7 @@ class QtHelpQtDoc : public QtHelpProviderAbstract
     private:
         QString m_path;
 
-    private slots:
+    private Q_SLOTS:
         void lookupDone(int code);
 };
 

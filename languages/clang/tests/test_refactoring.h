@@ -33,7 +33,7 @@ class TestRefactoring : public QObject
 public:
     ~TestRefactoring() override;
 
-private slots:
+private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
