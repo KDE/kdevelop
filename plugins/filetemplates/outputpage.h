@@ -82,14 +82,6 @@ Q_SIGNALS:
 private:
     friend struct OutputPagePrivate;
     struct OutputPagePrivate* const d;
-
-    /**
-     * This implementation simply enables the position widgets on a file that exists.
-     * Derived classes should overload to set the ranges where class generation should be allowed
-     *
-     * @param field the name of the file to be generated (Header, Implementation, etc)
-     */
-    Q_PRIVATE_SLOT(d, void updateFileRange(const QString& field))
 };
 
 }
