@@ -110,4 +110,4 @@ target_link_libraries( kdevcmakedocumentation
                         KF5::ItemModels
                         KF5::TextEditor)
 
-install(TARGETS kdevcmakecommon ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kdevcmakecommon ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
