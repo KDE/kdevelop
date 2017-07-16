@@ -263,16 +263,19 @@ SessionController::SessionController( QObject *parent )
 
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
-    QAction* action = actionCollection()->addAction( QStringLiteral("new_session"), this, SLOT(newSession()) );
+    QAction* action = actionCollection()->addAction(QStringLiteral("new_session"));
+    connect(action, &QAction::triggered, this, [&] { d->newSession(); });
     action->setText( i18nc("@action:inmenu", "Start New Session") );
     action->setToolTip( i18nc("@info:tooltip", "Start a new KDevelop instance with an empty session") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
 
-    action = actionCollection()->addAction( QStringLiteral("rename_session"), this, SLOT(renameSession()) );
+    action = actionCollection()->addAction(QStringLiteral("rename_session"));
+    connect(action, &QAction::triggered, this, [&] { d->renameSession(); });
     action->setText( i18n("Rename Current Session...") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
 
-    action = actionCollection()->addAction( QStringLiteral("delete_session"), this, SLOT(deleteCurrentSession()) );
+    action = actionCollection()->addAction(QStringLiteral("delete_session"));
+    connect(action, &QAction::triggered, this, [&] { d->deleteCurrentSession(); });
     action->setText( i18n("Delete Current Session...") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
 

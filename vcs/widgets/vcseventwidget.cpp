@@ -87,9 +87,12 @@ void VcsEventWidgetPrivate::eventViewCustomContextMenuRequested( const QPoint &p
 
     QMenu menu( m_ui->eventView );
     menu.addAction(m_copyAction);
-    menu.addAction(i18n("Diff to previous revision"), q, SLOT(diffToPrevious()));
-    QAction* action = menu.addAction(i18n("Diff between revisions"), q, SLOT(diffRevisions()));
-    action->setEnabled(m_ui->eventView->selectionModel()->selectedRows().size()>=2);
+    auto diffToPreviousAction = menu.addAction(i18n("Diff to previous revision"));
+    QObject::connect(diffToPreviousAction, &QAction::triggered, q, [&] { diffToPrevious(); });
+
+    auto diffRevisionsAction = menu.addAction(i18n("Diff between revisions"));
+    QObject::connect(diffRevisionsAction, &QAction::triggered, q, [&] { diffRevisions(); });
+    diffRevisionsAction->setEnabled(m_ui->eventView->selectionModel()->selectedRows().size()>=2);
 
     menu.exec( m_ui->eventView->viewport()->mapToGlobal(point) );
 }

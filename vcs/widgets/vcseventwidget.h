@@ -41,8 +41,6 @@ public:
     ~VcsEventWidget() override;
 
 private:
-    Q_PRIVATE_SLOT(d, void diffToPrevious())
-    Q_PRIVATE_SLOT(d, void diffRevisions())
     class VcsEventWidgetPrivate* const d;
 };
 }

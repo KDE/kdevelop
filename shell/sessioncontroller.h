@@ -167,9 +167,6 @@ Q_SIGNALS:
     void sessionDeleted( const QString& id);
     void quitSession();
 private:
-    Q_PRIVATE_SLOT( d, void newSession() )
-    Q_PRIVATE_SLOT( d, void deleteCurrentSession() )
-    Q_PRIVATE_SLOT( d, void renameSession() )
     class SessionControllerPrivate* const d;
 };
 
