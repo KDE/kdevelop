@@ -284,9 +284,7 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& pos)
     menu->addAction(m_selectAllAction);
     menu->addAction(m_deselectAllAction);
     menu->addActions(vcsActions);
-    if ( !menu->isEmpty() ) {
-        menu->exec(m_editPatch.filesList->viewport()->mapToGlobal(pos));
-    }
+    menu->exec(m_editPatch.filesList->viewport()->mapToGlobal(pos));
 
     delete menu;
 }
