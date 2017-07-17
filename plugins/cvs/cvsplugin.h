@@ -20,11 +20,8 @@
 #include <qobject.h>
 
 class CvsProxy;
-namespace KDevelop
-{
-class ContextMenuExtension;
-}
 class CvsPluginPrivate;
+
 /**
  * This is the main class of KDevelop's CVS plugin.
  *

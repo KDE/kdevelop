@@ -33,9 +33,6 @@ namespace KDevelop
 class IPlugin;
 class IBasicVersionControl;
 class Context;
-class ContextMenuExtension;
-class VcsCommitDialog;
-class ProjectBaseItem;
 
 class KDEVPLATFORMVCS_EXPORT VcsPluginHelper
             : public QObject

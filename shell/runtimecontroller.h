@@ -29,8 +29,6 @@ namespace KDevelop
 {
 
 class Core;
-class Context;
-class ContextMenuExtension;
 
 class RuntimeController : public IRuntimeController
 {

@@ -33,7 +33,6 @@ class QFileInfo;
 
 namespace KDevelop
 {
-class ContextMenuExtension;
 class VcsPluginHelper;
 class DVcsJob;
 }

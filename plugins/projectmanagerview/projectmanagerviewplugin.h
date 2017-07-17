@@ -27,9 +27,6 @@
 namespace KDevelop
 {
 class ProjectBaseItem;
-class IProject;
-class ContextMenuExtension;
-class Context;
 }
 
 class ProjectManagerView;

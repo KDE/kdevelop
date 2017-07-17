@@ -30,12 +30,6 @@
 
 class QSignalMapper;
 
-namespace KDevelop
-{
-class ContextMenuExtension;
-class Context;
-}
-
 class OpenWithPlugin : public KDevelop::IPlugin, public KDevelop::IOpenWith
 {
     Q_OBJECT

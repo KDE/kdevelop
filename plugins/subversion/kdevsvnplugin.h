@@ -28,8 +28,6 @@ namespace ThreadWeaver
 
 namespace KDevelop
 {
-class VcsCommitDialog;
-class ContextMenuExtension;
 class VcsPluginHelper;
 }
 
