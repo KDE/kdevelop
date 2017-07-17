@@ -155,7 +155,7 @@ KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExt
 
         auto doc = documentationForDeclaration(ctx->declaration().data());
         if (doc) {
-            menuExt.addAction(ContextMenuExtension::ExtensionGroup, m_showDocumentation);;
+            menuExt.addAction(ContextMenuExtension::ExtensionGroup, m_showDocumentation);
         }
     }
 
