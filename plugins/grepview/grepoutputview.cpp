@@ -159,7 +159,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     updateCheckable();
 }
 
-void GrepOutputView::replacementTextChanged(QString)
+void GrepOutputView::replacementTextChanged()
 {
     updateCheckable();
 

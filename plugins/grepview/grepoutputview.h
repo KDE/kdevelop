@@ -70,7 +70,7 @@ public Q_SLOTS:
     void showMessage( KDevelop::IStatus*, const QString& message );
     void updateApplyState(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     void changeModel(int index);
-    void replacementTextChanged(QString);
+    void replacementTextChanged();
 
 Q_SIGNALS:
     void outputViewIsClosed();
