@@ -41,12 +41,12 @@ public:
     /**
      * @brief Parses include string to a list suitable for QDir::match
      */
-    static QStringList parseInclude(QString inc);
+    static QStringList parseInclude(const QString& inc);
     
     /**
      * @brief Parses exclude string to a list suitable for QDir::match
      */
-    static QStringList parseExclude(QString excl);
+    static QStringList parseExclude(const QString& excl);
     
 protected:
     void run() override;

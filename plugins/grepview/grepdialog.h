@@ -68,7 +68,7 @@ private:
     ///Returns whether the given url is a subfile/subdirectory of one of the chosen directories/files
     ///
     ///This is slow, so don't call it too often
-    bool isPartOfChoice(QUrl url) const;
+    bool isPartOfChoice(const QUrl& url) const;
     ///Checks what a user has entered into the dialog and saves the data in m_settings
     void updateSettings();
 

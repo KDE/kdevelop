@@ -438,7 +438,7 @@ void GrepDialog::nextHistory(bool next)
     }
 }
 
-bool GrepDialog::isPartOfChoice(QUrl url) const
+bool GrepDialog::isPartOfChoice(const QUrl& url) const
 {
     foreach(const QUrl& choice, getDirectoryChoice(m_settings.searchPaths)) {
         if(choice.isParentOf(url) || choice == url)

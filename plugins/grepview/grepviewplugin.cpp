@@ -116,7 +116,7 @@ void GrepViewPlugin::unload()
     core()->uiController()->removeToolView(m_factory);
 }
 
-void GrepViewPlugin::startSearch(QString pattern, QString directory, bool show)
+void GrepViewPlugin::startSearch(const QString& pattern, const QString& directory, bool show)
 {
     m_directory = directory;
     showDialog(false, pattern, show);
@@ -163,7 +163,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     return extension;
 }
 
-void GrepViewPlugin::showDialog(bool setLastUsed, QString pattern, bool show)
+void GrepViewPlugin::showDialog(bool setLastUsed, const QString& pattern, bool show)
 {
     // check if dialog pointers are still valid, remove them otherwise
     m_currentDialogs.removeAll(QPointer<GrepDialog>());

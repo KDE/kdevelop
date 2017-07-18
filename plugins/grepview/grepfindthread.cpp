@@ -160,7 +160,7 @@ QList<QUrl> GrepFindFilesThread::files() const {
     return tmpList;
 }
 
-QStringList GrepFindFilesThread::parseExclude(QString excl)
+QStringList GrepFindFilesThread::parseExclude(const QString& excl)
 {
     QStringList exclude;
     // Split around commas or spaces
@@ -169,7 +169,7 @@ QStringList GrepFindFilesThread::parseExclude(QString excl)
     return exclude;
 }
 
-QStringList GrepFindFilesThread::parseInclude(QString inc)
+QStringList GrepFindFilesThread::parseInclude(const QString& inc)
 {
     // Split around commas or spaces
     return inc.split(QRegExp(",|\\s"), QString::SkipEmptyParts);

@@ -50,7 +50,7 @@ private Q_SLOTS:
     void gotoUrl(const QUrl&);
     void updateNav( const QUrl& url );
     void syncCurrentDocumentDirectory();
-    void fillContextMenu(KFileItem item, QMenu *menu);
+    void fillContextMenu(const KFileItem& item, QMenu* menu);
     void createNewFile();
 
 private:

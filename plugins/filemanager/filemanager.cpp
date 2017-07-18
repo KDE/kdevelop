@@ -97,7 +97,7 @@ FileManager::~FileManager()
     cg.sync();
 }
 
-void FileManager::fillContextMenu(KFileItem item, QMenu* menu)
+void FileManager::fillContextMenu(const KFileItem& item, QMenu* menu)
 {
     foreach(QAction* a, contextActions){
         if(menu->actions().contains(a)){
