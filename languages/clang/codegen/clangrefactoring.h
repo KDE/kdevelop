@@ -32,8 +32,6 @@ class TestRefactoring;
 
 namespace KDevelop
 {
-class Context;
-class ContextMenuExtension;
 class Declaration;
 }
 
