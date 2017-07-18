@@ -104,13 +104,13 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
     documentController->registerDocumentForMimetype(QStringLiteral("application/octet-stream"), mDocumentFactory);
 }
 
-ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
+ContextMenuExtension OktetaPlugin::contextMenuExtension(Context* context, QWidget* parent)
 {
     OpenWithContext* openWithContext = dynamic_cast<OpenWithContext*>( context );
 
     if( openWithContext && !openWithContext->mimeType().inherits(QStringLiteral("inode/directory")))
     {
-        QAction* openAction = new QAction( i18n("Hex Editor"), this );
+        QAction* openAction = new QAction(i18n("Hex Editor"), parent);
         openAction->setIcon( QIcon::fromTheme(QStringLiteral("document-open")) );
         openAction->setData( QVariant::fromValue(openWithContext->urls()) );
         connect( openAction, &QAction::triggered, this, &OktetaPlugin::onOpenTriggered );
@@ -120,7 +120,7 @@ ContextMenuExtension OktetaPlugin::contextMenuExtension( Context* context )
         return contextMenuExtension;
     }
 
-    return KDevelop::IPlugin::contextMenuExtension( context );
+    return KDevelop::IPlugin::contextMenuExtension(context, parent);
 }
 
 void OktetaPlugin::onOpenTriggered()

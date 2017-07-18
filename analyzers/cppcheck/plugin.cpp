@@ -220,9 +220,9 @@ void Plugin::result(KJob*)
     updateActions();
 }
 
-KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
-    KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
+    KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context, parent);
 
     if (context->hasType(KDevelop::Context::EditorContext) && m_currentProject && !isRunning()) {
         auto eContext = static_cast<KDevelop::EditorContext*>(context);

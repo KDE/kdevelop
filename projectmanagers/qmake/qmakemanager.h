@@ -42,7 +42,7 @@ public:
 
     static QMakeProjectManager* self();
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     //BEGIN AbstractFileManager
     KDevelop::ProjectFolderItem* import( KDevelop::IProject* project ) override;

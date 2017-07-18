@@ -169,9 +169,9 @@ void MIDebuggerPlugin::slotCloseDrKonqi()
     }
 }
 
-ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context)
+ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QWidget* parent)
 {
-    ContextMenuExtension menuExt = IPlugin::contextMenuExtension(context);
+    ContextMenuExtension menuExt = IPlugin::contextMenuExtension(context, parent);
 
     if (context->type() != KDevelop::Context::EditorContext)
         return menuExt;
@@ -186,7 +186,7 @@ ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context)
     {
         QString squeezed = KStringHandler::csqueeze(contextIdent, 30);
 
-        QAction* action = new QAction(this);
+        QAction* action = new QAction(parent);
         action->setText(i18n("Evaluate: %1", squeezed));
         action->setWhatsThis(i18n("<b>Evaluate expression</b>"
                                   "<p>Shows the value of the expression under the cursor.</p>"));
@@ -195,7 +195,7 @@ ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context)
         });
         menuExt.addAction(ContextMenuExtension::DebugGroup, action);
 
-        action = new QAction(this);
+        action = new QAction(parent);
         action->setText(i18n("Watch: %1", squeezed));
         action->setWhatsThis(i18n("<b>Watch expression</b>"
                                   "<p>Adds the expression under the cursor to the Variables/Watch list.</p>"));

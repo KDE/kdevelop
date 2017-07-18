@@ -75,7 +75,7 @@ ClangRefactoring::ClangRefactoring(QObject* parent)
     qRegisterMetaType<IndexedDeclaration>();
 }
 
-void ClangRefactoring::fillContextMenu(ContextMenuExtension& extension, Context* context)
+void ClangRefactoring::fillContextMenu(ContextMenuExtension& extension, Context* context, QWidget* parent)
 {
     auto declContext = dynamic_cast<DeclarationContext*>(context);
     if (!declContext) {
@@ -94,7 +94,7 @@ void ClangRefactoring::fillContextMenu(ContextMenuExtension& extension, Context*
         return;
     }
 
-    auto action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), this);
+    auto action = new QAction(i18n("Rename %1", declaration->qualifiedIdentifier().toString()), parent);
     action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
     action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
     connect(action, &QAction::triggered, this, &ClangRefactoring::executeRenameAction);
@@ -106,7 +106,7 @@ void ClangRefactoring::fillContextMenu(ContextMenuExtension& extension, Context*
     }
 
     action = new QAction(
-        i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), this);
+        i18n("Create separate definition for %1", declaration->qualifiedIdentifier().toString()), parent);
     action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
     connect(action, &QAction::triggered, this, &ClangRefactoring::executeMoveIntoSourceAction);
     extension.addAction(ContextMenuExtension::RefactorGroup, action);

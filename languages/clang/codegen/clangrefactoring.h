@@ -42,7 +42,7 @@ class KDEVCLANGPRIVATE_EXPORT ClangRefactoring : public KDevelop::BasicRefactori
 public:
     explicit ClangRefactoring(QObject* parent = nullptr);
 
-    void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context) override;
+    void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context, QWidget* parent) override;
 
     QString moveIntoSource(const KDevelop::IndexedDeclaration& iDecl);
 

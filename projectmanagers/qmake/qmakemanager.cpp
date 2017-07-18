@@ -468,8 +468,10 @@ QMakeCache* QMakeProjectManager::findQMakeCache(IProject* project, const Path& p
     return nullptr;
 }
 
-ContextMenuExtension QMakeProjectManager::contextMenuExtension(Context* context)
+ContextMenuExtension QMakeProjectManager::contextMenuExtension(Context* context, QWidget* parent)
 {
+    Q_UNUSED(parent);
+
     ContextMenuExtension ext;
 
     if (context->hasType(Context::ProjectItemContext)) {

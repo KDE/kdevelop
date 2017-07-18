@@ -48,7 +48,7 @@ class OktetaPlugin: public IPlugin
     ~OktetaPlugin() override;
 
   public: // KDevelop::IPlugin API
-    ContextMenuExtension contextMenuExtension( Context* context ) override;
+    ContextMenuExtension contextMenuExtension(Context* context, QWidget* parent) override;
 
   public:
     Kasten::ByteArrayViewProfileManager* viewProfileManager() const { return mViewProfileManager; }

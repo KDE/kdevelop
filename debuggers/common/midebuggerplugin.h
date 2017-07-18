@@ -56,7 +56,7 @@ public:
     ~MIDebuggerPlugin() override;
 
     void unload() override;
-    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     virtual MIDebugSession *createSession() = 0;
 
