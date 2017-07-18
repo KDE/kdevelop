@@ -117,7 +117,7 @@ public:
      */
     void showConfigurationDialog() const override;
 
-    ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
+    ContextMenuExtension contextMenuExtension(KDevelop::Context* ctx, QWidget* parent);
 
 public Q_SLOTS:
     Q_SCRIPTABLE void executeDefaultLaunch(const QString& runMode) override;

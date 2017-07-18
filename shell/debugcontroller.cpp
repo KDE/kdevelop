@@ -447,8 +447,10 @@ void DebugController::setContinueStartsDebug(bool startsDebug)
     }
 }
 
-ContextMenuExtension DebugController::contextMenuExtension( Context* context )
+ContextMenuExtension DebugController::contextMenuExtension(Context* context, QWidget* parent)
 {
+    Q_UNUSED(parent);
+
     ContextMenuExtension menuExt;
 
     if( context->type() != Context::EditorContext )

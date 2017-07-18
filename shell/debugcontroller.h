@@ -62,7 +62,7 @@ public:
     void addSession(IDebugSession* session) override;
     IDebugSession* currentSession() override;
 
-    ContextMenuExtension contextMenuExtension( Context* context );
+    ContextMenuExtension contextMenuExtension(Context* context, QWidget* parent);
 
     BreakpointModel* breakpointModel() override;
     VariableCollection* variableCollection() override;

@@ -450,7 +450,7 @@ KDevelop::VcsJob* PerforcePlugin::import(const QString& /*commitMessage*/, const
     return nullptr;
 }
 
-KDevelop::ContextMenuExtension PerforcePlugin::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension PerforcePlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     m_common->setupFromContext(context);
 
@@ -465,9 +465,9 @@ KDevelop::ContextMenuExtension PerforcePlugin::contextMenuExtension(KDevelop::Co
     }
 
     if (!hasVersionControlledEntries)
-        return IPlugin::contextMenuExtension(context);
+        return IPlugin::contextMenuExtension(context, parent);
 
-    QMenu * perforceMenu = m_common->commonActions();
+    QMenu * perforceMenu = m_common->commonActions(parent);
     perforceMenu->addSeparator();
 
     perforceMenu->addSeparator();

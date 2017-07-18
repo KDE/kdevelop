@@ -37,7 +37,7 @@ public:
     void unload() override;
 
     void rememberSearchDirectory(QString const & directory);
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
     void showDialog(bool setLastUsed = false, const QString& pattern = QString(), bool show = true);
 
     /**

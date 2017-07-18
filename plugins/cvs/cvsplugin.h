@@ -46,7 +46,7 @@ public:
     KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;
 
     // From KDevelop::IPlugin
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     // Begin:  KDevelop::IBasicVersionControl
     bool isValidRemoteRepositoryUrl(const QUrl& remoteLocation) override;

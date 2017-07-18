@@ -595,8 +595,10 @@ void SourceFormatterController::formatFiles(QList<QUrl> &list)
     }
 }
 
-KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
+    Q_UNUSED(parent);
+
     KDevelop::ContextMenuExtension ext;
     m_urls.clear();
     m_prjItems.clear();

@@ -94,7 +94,7 @@ public:
     QString prettyFileName(const QUrl& url, FormattingOptions format = FormatHtml) const override;
     QString prettyFilePath(const QUrl& url, FormattingOptions format = FormatHtml) const override;
 
-    ContextMenuExtension contextMenuExtension( KDevelop::Context* ctx );
+    ContextMenuExtension contextMenuExtension(KDevelop::Context* ctx, QWidget* parent);
 
     void fetchProjectFromUrl(const QUrl& repoUrl, IPlugin* vcsOrProviderPlugin);
 

@@ -50,7 +50,7 @@ public:
     explicit SwitchToBuddyPlugin( QObject *parent, const QVariantList & = QVariantList());
     ~SwitchToBuddyPlugin() override;
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
     void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
 
 private Q_SLOTS:

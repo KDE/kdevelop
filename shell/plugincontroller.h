@@ -124,7 +124,7 @@ public:
 
     QVector<KPluginMetaData> queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = QVariantMap()) const override;
 
-    QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const override;
+    QList<ContextMenuExtension> queryPluginsForContextMenuExtensions(KDevelop::Context* context, QWidget* parent) const override;
 
     QStringList projectPlugins();
 

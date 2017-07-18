@@ -106,7 +106,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void registerToolView(ContextBrowserView* view);
     void unRegisterToolView(ContextBrowserView* view);
     
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     KXMLGUIClient* createGUIForMainWindow( Sublime::MainWindow* window ) override;
 

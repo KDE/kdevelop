@@ -83,7 +83,7 @@ public :
     QUrl urlForFileModel( const Diff2::DiffModel* model );
     QAction* finishReviewAction() const { return m_finishReview; }
 
-    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context ) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
 Q_SIGNALS:
     void startingNewReview();

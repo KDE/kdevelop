@@ -41,7 +41,7 @@ public:
 
     QSharedPointer<IProjectFilter> createFilter(IProject* project) const override;
 
-    ContextMenuExtension contextMenuExtension(Context* context) override;
+    ContextMenuExtension contextMenuExtension(Context* context, QWidget* parent) override;
 
     int perProjectConfigPages() const override;
     ConfigPage* perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent) override;

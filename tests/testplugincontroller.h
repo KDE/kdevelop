@@ -44,7 +44,7 @@ public:
     KDevelop::IPlugin* pluginForExtension(const QString& extension, const QString& pluginName = {}, const QVariantMap& constraints = QVariantMap()) override;
     KDevelop::IPlugin* loadPlugin(const QString& pluginName) override;
     KPluginMetaData pluginInfo(const KDevelop::IPlugin*) const override;
-    QList< KDevelop::ContextMenuExtension > queryPluginsForContextMenuExtensions(KDevelop::Context* context)const override ;
+    QList< KDevelop::ContextMenuExtension > queryPluginsForContextMenuExtensions(KDevelop::Context* context, QWidget* parent) const override ;
     QVector<KPluginMetaData> queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = QVariantMap()) const override;
     bool unloadPlugin(const QString& plugin) override;
     void initialize() override;

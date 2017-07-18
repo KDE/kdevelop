@@ -94,7 +94,7 @@ void DockerPlugin::runtimeChanged(KDevelop::IRuntime* newRuntime)
     }
 }
 
-KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     QList<QUrl> urls;
 
@@ -123,7 +123,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
         foreach(const QUrl &url, urls) {
             const KDevelop::Path file(url);
 
-            auto action = new QAction(QIcon::fromTheme("text-dockerfile"), i18n("docker build '%1'", file.path()), this);
+            auto action = new QAction(QIcon::fromTheme("text-dockerfile"), i18n("docker build '%1'", file.path()), parent);
             connect(action, &QAction::triggered, this, [this, file]() {
                 const auto dir = file.parent();
                 const QString name = QInputDialog::getText(
@@ -149,7 +149,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
         return ext;
     }
 
-    return KDevelop::IPlugin::contextMenuExtension( context );
+    return KDevelop::IPlugin::contextMenuExtension(context, parent);
 }
 
 int DockerPlugin::configPages() const

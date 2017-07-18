@@ -63,7 +63,7 @@ QSharedPointer<IProjectFilter> ProjectFilterProvider::createFilter(IProject* pro
     return QSharedPointer<IProjectFilter>(new ProjectFilter(project, m_filters[project]));
 }
 
-ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* context)
+ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* context, QWidget* parent)
 {
     ContextMenuExtension ret;
     if (!context->hasType(Context::ProjectItemContext)) {
@@ -89,7 +89,7 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
     QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("view-filter")),
                                   i18np("Exclude Item From Project",
                                         "Exclude Items From Project",
-                                        items.size()), this);
+                                        items.size()), parent);
     action->setData(QVariant::fromValue(items));
     connect(action, &QAction::triggered, this, &ProjectFilterProvider::addFilterFromContextMenu);
     ret.addAction(ContextMenuExtension::FileGroup, action);

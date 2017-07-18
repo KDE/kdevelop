@@ -84,7 +84,7 @@ DistributedVersionControlPlugin::createImportMetadataWidget(QWidget* parent)
 }
 
 KDevelop::ContextMenuExtension
-DistributedVersionControlPlugin::contextMenuExtension(Context* context)
+DistributedVersionControlPlugin::contextMenuExtension(Context* context, QWidget* parent)
 {
     d->m_common->setupFromContext(context);
     QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
@@ -101,7 +101,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context)
         return ContextMenuExtension();
     }
 
-    QMenu * menu = d->m_common->commonActions();
+    QMenu * menu = d->m_common->commonActions(parent);
     menu->addSeparator();
     menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
     additionalMenuEntries(menu, ctxUrlList);

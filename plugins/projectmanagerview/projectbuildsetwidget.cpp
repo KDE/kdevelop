@@ -147,7 +147,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
     if( !itemlist.isEmpty() )
     {
         KDevelop::ProjectItemContextImpl context(itemlist);
-        QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+        QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, &m);
 
         QList<QAction*> buildActions;
         QList<QAction*> vcsActions;

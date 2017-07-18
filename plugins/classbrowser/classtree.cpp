@@ -87,7 +87,7 @@ void ClassTree::contextMenuEvent( QContextMenuEvent* e )
     }
     _populatingClassBrowserContextMenu = true;
 
-    QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
+    QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(c, menu);
     ContextMenuExtension::populateMenu( menu, extensions );
 
     _populatingClassBrowserContextMenu = false;

@@ -172,7 +172,7 @@ void CvsPlugin::slotStatus()
 }
 
 
-KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     d->m_common->setupFromContext(context);
     QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
@@ -188,22 +188,22 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
     qCDebug(PLUGIN_CVS) << "version controlled?" << hasVersionControlledEntries;
 
     if (!hasVersionControlledEntries)
-        return IPlugin::contextMenuExtension(context);
+        return IPlugin::contextMenuExtension(context, parent);
 
-    QMenu* menu = d->m_common->commonActions();
+    QMenu* menu = d->m_common->commonActions(parent);
     menu->addSeparator();
 
     QAction *action;
     // Just add actions which are not covered by the cvscommon plugin
-    action = new QAction(i18n("Edit"), this);
+    action = new QAction(i18n("Edit"), menu);
     connect(action, &QAction::triggered, this, &CvsPlugin::ctxEdit);
     menu->addAction(action);
 
-    action = new QAction(i18n("Unedit"), this);
+    action = new QAction(i18n("Unedit"), menu);
     connect(action, &QAction::triggered, this, &CvsPlugin::ctxUnEdit);
     menu->addAction(action);
 
-    action = new QAction(i18n("Show Editors"), this);
+    action = new QAction(i18n("Show Editors"), menu);
     connect(action, &QAction::triggered, this, &CvsPlugin::ctxEditors);
     menu->addAction(action);
 

@@ -965,7 +965,7 @@ QItemDelegate * KDevelop::RunController::delegate() const
     return d->delegate;
 }
 
-ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
+ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* parent)
 {
     delete d->launchAsMapper;
     d->launchAsMapper = new QSignalMapper( this );
@@ -981,7 +981,7 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
             int i = 0;
             foreach( ILaunchMode* mode, d->launchModes )
             {
-                KActionMenu* menu = new KActionMenu( i18n("%1 As...", mode->name() ), this );
+                KActionMenu* menu = new KActionMenu(i18n("%1 As...", mode->name() ), parent);
                 foreach( LaunchConfigurationType* type, launchConfigurationTypes() )
                 {
                     bool hasLauncher = false;
@@ -1007,6 +1007,8 @@ ContextMenuExtension RunController::contextMenuExtension ( Context* ctx )
                 if( menu->menu()->actions().count() > 0 )
                 {
                     ext.addAction( ContextMenuExtension::RunGroup, menu);
+                } else {
+                    delete menu;
                 }
             }
             if( ext.actions( ContextMenuExtension::RunGroup ).count() > 0 )

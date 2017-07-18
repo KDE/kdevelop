@@ -177,7 +177,7 @@ public:
      */
     virtual QVector<KPluginMetaData> queryExtensionPlugins(const QString &extension, const QVariantMap& constraints = QVariantMap()) const = 0;
 
-    virtual QList<ContextMenuExtension> queryPluginsForContextMenuExtensions( KDevelop::Context* context ) const = 0;
+    virtual QList<ContextMenuExtension> queryPluginsForContextMenuExtensions(KDevelop::Context* context, QWidget* parent) const = 0;
 
 Q_SIGNALS:
     void loadingPlugin( const QString& );

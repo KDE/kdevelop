@@ -31,7 +31,7 @@ public:
     FlatpakPlugin(QObject *parent, const QVariantList & args);
     ~FlatpakPlugin() override;
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context * context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
 private:
     void runtimeChanged(KDevelop::IRuntime* newRuntime);

@@ -122,15 +122,15 @@ void GrepViewPlugin::startSearch(const QString& pattern, const QString& director
     showDialog(false, pattern, show);
 }
 
-KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
-    KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
+    KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context, parent);
     if( context->type() == KDevelop::Context::ProjectItemContext ) {
         KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(context);
         QList<KDevelop::ProjectBaseItem*> items = ctx->items();
         // verify if there is only one folder selected
         if ((items.count() == 1) && (items.first()->folder())) {
-            QAction* action = new QAction( i18n( "Find/Replace in This Folder..." ), this );
+            QAction* action = new QAction(i18n("Find/Replace in This Folder..."), parent);
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-find")));
             m_contextMenuDirectory = items.at(0)->folder()->path().toLocalFile();
             connect( action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromProject);
@@ -141,7 +141,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     if ( context->type() == KDevelop::Context::EditorContext ) {
         KDevelop::EditorContext* econtext = static_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
-            QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Find/Replace in Files..."), this);
+            QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Find/Replace in Files..."), parent);
             connect(action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromMenu);
             extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
         }
@@ -153,7 +153,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(fcontext->urls().at(0));
         static const QMimeType directoryMime = QMimeDatabase().mimeTypeForName(QStringLiteral("inode/directory"));
         if (mimetype == directoryMime) {
-            QAction* action = new QAction( i18n( "Find/Replace in This Folder..." ), this );
+            QAction* action = new QAction(i18n("Find/Replace in This Folder..."), parent);
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-find")));
             m_contextMenuDirectory = fcontext->urls().at(0).toLocalFile();
             connect( action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromProject);

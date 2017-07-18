@@ -143,8 +143,10 @@ void KDevelop::DocumentationController::doShowDocumentation()
     }
 }
 
-KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExtension ( Context* context )
+KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExtension(Context* context, QWidget* parent)
 {
+    Q_UNUSED(parent);
+
     ContextMenuExtension menuExt;
 
     DeclarationContext* ctx = dynamic_cast<DeclarationContext*>(context);

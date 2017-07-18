@@ -75,9 +75,10 @@ KPluginMetaData TestPluginController::pluginInfo(const IPlugin*) const
     return KPluginMetaData();
 }
 
-QList< ContextMenuExtension > TestPluginController::queryPluginsForContextMenuExtensions(Context* context) const
+QList< ContextMenuExtension > TestPluginController::queryPluginsForContextMenuExtensions(Context* context, QWidget* parent) const
 {
     Q_UNUSED(context);
+    Q_UNUSED(parent);
     return QList< ContextMenuExtension >();
 }
 

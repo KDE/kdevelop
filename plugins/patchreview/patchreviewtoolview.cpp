@@ -272,7 +272,7 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& pos)
     QList<ContextMenuExtension> extensions;
     if(!urls.isEmpty()) {
         KDevelop::FileContext context(urls);
-        extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+        extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, menu);
     }
 
     QList<QAction*> vcsActions;

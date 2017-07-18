@@ -185,7 +185,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 
         KDevelop::FileContext context(m_selectedDocs);
         QList<KDevelop::ContextMenuExtension> extensions =
-            m_plugin->core()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+            m_plugin->core()->pluginController()->queryPluginsForContextMenuExtensions(&context, ctxMenu);
 
         QList<QAction*> vcsActions;
         QList<QAction*> fileActions;

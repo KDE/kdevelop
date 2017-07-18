@@ -65,7 +65,7 @@ public:
     KDevelop::VcsJob* status(const QList<QUrl>& localLocations, RecursionMode recursion=Recursive) override;
     KDevelop::VcsJob* update(const QList<QUrl>& localLocations, const KDevelop::VcsRevision& rev, RecursionMode recursion=Recursive) override;
     KDevelop::VcsLocationWidget* vcsLocation(QWidget* parent) const override;
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
 private Q_SLOTS:
     void parseBzrStatus(KDevelop::DVcsJob* job);

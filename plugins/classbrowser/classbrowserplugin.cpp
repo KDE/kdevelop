@@ -97,9 +97,9 @@ void ClassBrowserPlugin::unload()
   core()->uiController()->removeToolView(m_factory);
 }
 
-KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension( KDevelop::Context* context)
+KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
-  KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension( context );
+  KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension(context, parent);
 
   // No context menu if we don't have a class browser at hand.
   if ( m_activeClassTree == nullptr )

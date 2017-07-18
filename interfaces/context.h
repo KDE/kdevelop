@@ -60,13 +60,13 @@ actions directly to the menu but instead use the same mechanism.
 -# Create a context: @code FileContext context(list). @endcode
 -# Query for plugins:
 @code QList<ContextMenuExtension> extensions =
-        ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( context ); @endcode
+        ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(context, &menu); @endcode
 -# Populate the menu:
 @code ContextMenuExtension::populateMenu(menu, extensions); @endcode
 -# Show the popup menu: @code menu.exec(mapToGlobal(pos)); @endcode
 
 <b>How to fill a context menu from a plugin:</b>
--# Implement the @code contextMenuExtension(Context*) @endcode
+-# Implement the @code contextMenuExtension(Context*, QWidget*) @endcode
    function in your plugin class.
 -# Depending on the context fill the returned ContextMenuExtension with actions:\n
 @code

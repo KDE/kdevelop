@@ -37,7 +37,7 @@ class OpenWithPlugin : public KDevelop::IPlugin, public KDevelop::IOpenWith
 public:
     OpenWithPlugin( QObject* parent, const QVariantList& args );
     ~OpenWithPlugin() override;
-    KDevelop::ContextMenuExtension contextMenuExtension ( KDevelop::Context* context ) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
 protected:
     void openFilesInternal( const QList<QUrl>& files ) override;
@@ -48,7 +48,7 @@ private Q_SLOTS:
     void openDefault();
 
 private:
-    QList<QAction*> actionsForServiceType( const QString& serviceType );
+    QList<QAction*> actionsForServiceType(const QString& serviceType, QWidget* parent);
     QScopedPointer<QSignalMapper> m_actionMap;
     QList<QUrl> m_urls;
     QString m_mimeType;

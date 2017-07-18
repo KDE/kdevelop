@@ -132,9 +132,10 @@ ICore *IPlugin::core() const
 
 }
 
-KDevelop::ContextMenuExtension KDevelop::IPlugin::contextMenuExtension(
-    KDevelop::Context* )
+KDevelop::ContextMenuExtension KDevelop::IPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
+    Q_UNUSED(context);
+    Q_UNUSED(parent);
     return KDevelop::ContextMenuExtension();
 }
 

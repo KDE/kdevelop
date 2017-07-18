@@ -47,10 +47,10 @@ public:
     QList<QUrl> contextUrlList() const;
     /**
      * Creates and returns a menu with common actions.
-     * Ownership of the menu itself is passed to the caller.
      * Ownership of the actions in the menu stays with this VcsPluginHelper object.
+     * @param parent the parent widget set for the QMenu for memory menagement
      */
-    QMenu* commonActions();
+    QMenu* commonActions(QWidget* parent);
 
 public Q_SLOTS:
     void commit();

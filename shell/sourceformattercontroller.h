@@ -119,7 +119,7 @@ public:
     */
     ISourceFormatter* findFirstFormatterForMimeType(const QMimeType& mime) const;
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context);
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent);
 
     KDevelop::SourceFormatterStyle styleForMimeType(const QMimeType& mime) override;
 

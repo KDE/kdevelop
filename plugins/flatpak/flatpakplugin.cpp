@@ -148,7 +148,7 @@ static QStringList availableArches(const KDevelop::Path& url)
     return ret;
 }
 
-KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     QList<QUrl> urls;
 
@@ -179,7 +179,7 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
             const KDevelop::Path file(url);
 
             foreach(const QString &arch, availableArches(file)) {
-                auto action = new QAction(i18n("Build flatpak %1 for %2", file.lastPathSegment(), arch), this);
+                auto action = new QAction(i18n("Build flatpak %1 for %2", file.lastPathSegment(), arch), parent);
                 connect(action, &QAction::triggered, this, [this, file, arch]() {
                     createRuntime(file, arch);
                 });
@@ -190,7 +190,7 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
         return ext;
     }
 
-    return KDevelop::IPlugin::contextMenuExtension( context );
+    return KDevelop::IPlugin::contextMenuExtension(context, parent);
 }
 
 void FlatpakPlugin::executeOnRemoteDevice()

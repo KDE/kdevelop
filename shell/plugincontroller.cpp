@@ -683,7 +683,7 @@ QStringList PluginController::allPluginNames()
     return names;
 }
 
-QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensions(KDevelop::Context* context) const
+QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensions(KDevelop::Context* context, QWidget* parent) const
 {
     // This fixes random order of extension menu items between different runs of KDevelop.
     // Without sorting we have random reordering of "Analyze With" submenu for example:
@@ -696,14 +696,14 @@ QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensio
 
     QList<ContextMenuExtension> exts;
     foreach (IPlugin* plugin, sortedPlugins) {
-        exts << plugin->contextMenuExtension(context);
+        exts << plugin->contextMenuExtension(context, parent);
     }
 
-    exts << Core::self()->debugControllerInternal()->contextMenuExtension(context);
-    exts << Core::self()->documentationControllerInternal()->contextMenuExtension(context);
-    exts << Core::self()->sourceFormatterControllerInternal()->contextMenuExtension(context);
-    exts << Core::self()->runControllerInternal()->contextMenuExtension(context);
-    exts << Core::self()->projectControllerInternal()->contextMenuExtension(context);
+    exts << Core::self()->debugControllerInternal()->contextMenuExtension(context, parent);
+    exts << Core::self()->documentationControllerInternal()->contextMenuExtension(context, parent);
+    exts << Core::self()->sourceFormatterControllerInternal()->contextMenuExtension(context, parent);
+    exts << Core::self()->runControllerInternal()->contextMenuExtension(context, parent);
+    exts << Core::self()->projectControllerInternal()->contextMenuExtension(context, parent);
 
     return exts;
 }

@@ -412,9 +412,9 @@ void QuickOpenPlugin::unload()
 {
 }
 
-ContextMenuExtension QuickOpenPlugin::contextMenuExtension(Context* context)
+ContextMenuExtension QuickOpenPlugin::contextMenuExtension(Context* context, QWidget* parent)
 {
-    KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension(context);
+    KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension(context, parent);
 
     KDevelop::DeclarationContext* codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
 

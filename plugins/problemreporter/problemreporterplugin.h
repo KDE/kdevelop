@@ -50,7 +50,7 @@ public:
     explicit ProblemReporterPlugin(QObject* parent, const QVariantList& = QVariantList());
     ~ProblemReporterPlugin() override;
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     // KDevelop::Plugin methods
     void unload() override;

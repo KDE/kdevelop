@@ -97,14 +97,14 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     QList<ContextMenuExtension> extensions;
     if(!urls.isEmpty()) {
         KDevelop::FileContext context(urls);
-        extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+        extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, menu);
     } else {
         QList<ProjectBaseItem*> items;
         foreach(IProject* p, projects)
             items += p->projectItem();
         
         KDevelop::ProjectItemContextImpl context(items);
-        extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+        extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, menu);
         
     }
 

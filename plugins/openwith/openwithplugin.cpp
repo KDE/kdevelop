@@ -97,7 +97,7 @@ OpenWithPlugin::~OpenWithPlugin()
 {
 }
 
-KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::Context* context )
+KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     // do not recurse
     if (context->hasType(KDevelop::Context::OpenWithContext)) {
@@ -136,18 +136,18 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(m_urls.first());
     m_mimeType = mimetype.name();
 
-    QList<QAction*> partActions = actionsForServiceType(QStringLiteral("KParts/ReadOnlyPart"));
-    QList<QAction*> appActions = actionsForServiceType(QStringLiteral("Application"));
+    QList<QAction*> partActions = actionsForServiceType(QStringLiteral("KParts/ReadOnlyPart"), parent);
+    QList<QAction*> appActions = actionsForServiceType(QStringLiteral("Application"), parent);
 
     OpenWithContext subContext(m_urls, mimetype);
-    QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &subContext );
+    QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &subContext, parent);
     foreach( const ContextMenuExtension& ext, extensions ) {
         appActions += ext.actions(ContextMenuExtension::OpenExternalGroup);
         partActions += ext.actions(ContextMenuExtension::OpenEmbeddedGroup);
     }
 
     {
-        auto other = new QAction(i18n("Other..."), this);
+        auto other = new QAction(i18n("Other..."), parent);
         connect(other, &QAction::triggered, this, [this] {
             auto dialog = new KOpenWithDialog(m_urls, ICore::self()->uiController()->activeMainWindow());
             if (dialog->exec() == QDialog::Accepted && dialog->service()) {
@@ -158,7 +158,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     }
 
     // Now setup a menu with actions for each part and app
-    QMenu* menu = new QMenu( i18n("Open With" ) );
+    QMenu* menu = new QMenu(i18n("Open With"), parent);
     auto documentOpenIcon = QIcon::fromTheme( QStringLiteral("document-open") );
     menu->setIcon( documentOpenIcon );
 
@@ -174,7 +174,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     KDevelop::ContextMenuExtension ext;
 
     if (canOpenDefault(m_mimeType)) {
-        QAction* openAction = new QAction( i18n( "Open" ), this );
+        QAction* openAction = new QAction(i18n("Open"), parent);
         openAction->setIcon( documentOpenIcon );
         connect( openAction, &QAction::triggered, this, &OpenWithPlugin::openDefault );
         ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
@@ -184,7 +184,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension( KDevelop::C
     return ext;
 }
 
-QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceType )
+QList<QAction*> OpenWithPlugin::actionsForServiceType(const QString& serviceType, QWidget* parent)
 {
     KService::List list = KMimeTypeTrader::self()->query( m_mimeType, serviceType );
     KService::Ptr pref = KMimeTypeTrader::self()->preferredService( m_mimeType, serviceType );
@@ -194,7 +194,7 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType( const QString& serviceTyp
     QAction* standardAction = nullptr;
     const QString defaultId = defaultForMimeType(m_mimeType);
     foreach( KService::Ptr svc, list ) {
-        QAction* act = new QAction( isTextEditor(svc) ? i18n("Default Editor") : svc->name(), this );
+        QAction* act = new QAction(isTextEditor(svc) ? i18n("Default Editor") : svc->name(), parent);
         act->setIcon( QIcon::fromTheme( svc->icon() ) );
         if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
             QFont font = act->font();

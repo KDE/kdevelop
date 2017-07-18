@@ -132,7 +132,7 @@ public:
                                     KDevelop::VcsRevision::RevisionType) override;
     // End:  KDevelop::ICentralizedVersionControl
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context*) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     ThreadWeaver::Queue* jobQueue() const;
 

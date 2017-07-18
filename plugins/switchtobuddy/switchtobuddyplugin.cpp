@@ -101,7 +101,7 @@ SwitchToBuddyPlugin::~SwitchToBuddyPlugin()
 {
 }
 
-ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
+ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context, QWidget* parent)
 {
     EditorContext* ctx = dynamic_cast<EditorContext*>(context);
     if (!ctx) {
@@ -129,7 +129,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context)
             continue;
         }
 
-        QAction* action = new QAction(i18n("Switch to '%1'", url.fileName()), this);
+        QAction* action = new QAction(i18n("Switch to '%1'", url.fileName()), parent);
         connect(action, &QAction::triggered, m_signalMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map), Qt::QueuedConnection);
         m_signalMapper->setMapping(action, url.toLocalFile());
         connect(m_signalMapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped),

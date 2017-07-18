@@ -176,7 +176,7 @@ void ProblemReporterPlugin::showModel(const QString& id)
       w->showModel(id);
 }
 
-KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     KDevelop::ContextMenuExtension extension;
 
@@ -200,7 +200,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
                     if (solution) {
                         title = solution->title();
                         foreach (KDevelop::IAssistantAction::Ptr action, solution->actions())
-                            actions << action->toQAction();
+                            actions << action->toQAction(parent);
                     }
                 }
             }
@@ -214,13 +214,11 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
                 text = i18n("Solve: %1", KDevelop::htmlToPlainText(title));
             }
 
-            QAction* menuAction = new QAction(text, nullptr);
-            QMenu* menu(new QMenu(text, nullptr));
-            menuAction->setMenu(menu);
+            QMenu* menu = new QMenu(text, parent);
             foreach (QAction* action, actions)
                 menu->addAction(action);
 
-            extension.addAction(ContextMenuExtension::ExtensionGroup, menuAction);
+            extension.addAction(ContextMenuExtension::ExtensionGroup, menu->menuAction());
         }
     }
     return extension;

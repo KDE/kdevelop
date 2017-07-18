@@ -166,7 +166,7 @@ ExternalScriptPlugin::~ExternalScriptPlugin()
   m_self = nullptr;
 }
 
-KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDevelop::Context* context )
+KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
   m_urls.clear();
 
@@ -192,8 +192,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
 
   if ( !m_urls.isEmpty() ) {
     KDevelop::ContextMenuExtension ext;
-    QMenu* menu = new QMenu();
-    menu->setTitle( i18n("External Scripts") );
+    QMenu* menu = nullptr;
 
     for ( int row = 0; row < m_model->rowCount(); ++row ) {
       ExternalScriptItem* item = dynamic_cast<ExternalScriptItem*>( m_model->item( row ) );
@@ -224,19 +223,24 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension( KDeve
         }
       }
 
-      QAction* scriptAction = new QAction( item->text(), this );
+      if (!menu) {
+        menu = new QMenu(i18n("External Scripts"), parent);
+      }
+
+      QAction* scriptAction = new QAction(item->text(), menu);
       scriptAction->setData( QVariant::fromValue<ExternalScriptItem*>( item ));
       connect( scriptAction, &QAction::triggered, this, &ExternalScriptPlugin::executeScriptFromContextMenu );
       menu->addAction( scriptAction );
     }
 
-    if (!menu->actions().isEmpty())
+    if (menu) {
       ext.addAction( KDevelop::ContextMenuExtension::ExtensionGroup, menu->menuAction() );
+    }
 
     return ext;
   }
 
-  return KDevelop::IPlugin::contextMenuExtension( context );
+  return KDevelop::IPlugin::contextMenuExtension(context, parent);
 }
 
 void ExternalScriptPlugin::unload()

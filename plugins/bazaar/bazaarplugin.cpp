@@ -317,7 +317,7 @@ VcsLocationWidget* BazaarPlugin::vcsLocation(QWidget* parent) const
     return new KDevelop::StandardVcsLocationWidget(parent);
 }
 
-ContextMenuExtension BazaarPlugin::contextMenuExtension(Context* context)
+ContextMenuExtension BazaarPlugin::contextMenuExtension(Context* context, QWidget* parent)
 {
     m_vcsPluginHelper->setupFromContext(context);
     QList<QUrl> const& ctxUrlList = m_vcsPluginHelper->contextUrlList();
@@ -334,7 +334,7 @@ ContextMenuExtension BazaarPlugin::contextMenuExtension(Context* context)
         return ContextMenuExtension();
     }
 
-    QMenu* menu = m_vcsPluginHelper->commonActions();
+    QMenu* menu = m_vcsPluginHelper->commonActions(parent);
 
     ContextMenuExtension menuExt;
     menuExt.addAction(ContextMenuExtension::VcsGroup, menu->menuAction());

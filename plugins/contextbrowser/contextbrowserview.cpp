@@ -166,7 +166,7 @@ void ContextBrowserView::declarationMenu() {
             KDevelop::DeclarationContext* c = new KDevelop::DeclarationContext(navigationContext->declaration().data());
             lock.unlock();
             QMenu menu(this);
-            QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( c );
+            QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(c, &menu);
 
             ContextMenuExtension::populateMenu(&menu, extensions);
             menu.exec(QCursor::pos());

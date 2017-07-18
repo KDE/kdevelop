@@ -70,7 +70,7 @@ public:
     explicit BasicRefactoring(QObject *parent = nullptr);
 
     /// Update the context menu with the "Rename" action.
-    virtual void fillContextMenu(KDevelop::ContextMenuExtension &extension, KDevelop::Context *context);
+    virtual void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context, QWidget* parent);
 
     struct NameAndCollector {
         QString newName;

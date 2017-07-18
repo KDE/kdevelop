@@ -30,7 +30,7 @@ class AppWizardPlugin: public KDevelop::IPlugin, public KDevelop::ITemplateProvi
 public:
     explicit AppWizardPlugin(QObject *parent, const QVariantList & = QVariantList());
     ~AppWizardPlugin() override;
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     QAbstractItemModel* templatesModel() override;
     QString knsConfigurationFile() const override;

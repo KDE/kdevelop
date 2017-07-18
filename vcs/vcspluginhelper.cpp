@@ -112,7 +112,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         return ret;
     }
 
-    QMenu* createMenu()
+    QMenu* createMenu(QWidget* parent)
     {
         bool allVersioned=true;
         foreach(const QUrl &url, ctxUrls) {
@@ -122,7 +122,7 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
                 break;
         }
 
-        QMenu* menu = new QMenu(vcs->name());
+        QMenu* menu = new QMenu(vcs->name(), parent);
         menu->setIcon(QIcon::fromTheme(ICore::self()->pluginController()->pluginInfo(plugin).iconName()));
         menu->addAction(commitAction);
         if(plugin->extension<IDistributedVersionControl>()) {
@@ -191,7 +191,7 @@ QList<QUrl> VcsPluginHelper::contextUrlList() const
     return d->ctxUrls;
 }
 
-QMenu* VcsPluginHelper::commonActions()
+QMenu* VcsPluginHelper::commonActions(QWidget* parent)
 {
     /* TODO: the following logic to determine which actions need to be enabled
      * or disabled does not work properly. What needs to be implemented is that
@@ -202,7 +202,7 @@ QMenu* VcsPluginHelper::commonActions()
      * one we assume the urls can be added but are not currently controlled. If
      * the url is already version controlled then just enable all except add
      */
-    return d->createMenu();
+    return d->createMenu(parent);
 }
 
 #define EXECUTE_VCS_METHOD( method ) \

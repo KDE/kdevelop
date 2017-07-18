@@ -94,7 +94,7 @@ BasicRefactoring::BasicRefactoring(QObject *parent)
     /* There's nothing to do here. */
 }
 
-void BasicRefactoring::fillContextMenu(ContextMenuExtension &extension, Context *context)
+void BasicRefactoring::fillContextMenu(ContextMenuExtension& extension, Context* context, QWidget* parent)
 {
     DeclarationContext *declContext = dynamic_cast<DeclarationContext *>(context);
     if (!declContext)
@@ -105,7 +105,7 @@ void BasicRefactoring::fillContextMenu(ContextMenuExtension &extension, Context 
     if (declaration && acceptForContextMenu(declaration)) {
         QFileInfo finfo(declaration->topContext()->url().str());
         if (finfo.isWritable()) {
-            QAction *action = new QAction(i18n("Rename \"%1\"...", declaration->qualifiedIdentifier().toString()), nullptr);
+            QAction* action = new QAction(i18n("Rename \"%1\"...", declaration->qualifiedIdentifier().toString()), parent);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
             connect(action, &QAction::triggered, this, &BasicRefactoring::executeRenameAction);

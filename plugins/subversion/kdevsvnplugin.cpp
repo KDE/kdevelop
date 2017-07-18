@@ -317,7 +317,7 @@ KDevelop::VcsJob* KDevSvnPlugin::createWorkingCopy(const KDevelop::VcsLocation &
 }
 
 
-KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Context* context)
+KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     m_common->setupFromContext(context);
 
@@ -334,10 +334,10 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
     qCDebug(PLUGIN_SVN) << "version controlled?" << hasVersionControlledEntries;
 
     if (!hasVersionControlledEntries)
-        return IPlugin::contextMenuExtension(context);
+        return IPlugin::contextMenuExtension(context, parent);
 
 
-    QMenu* svnmenu= m_common->commonActions();
+    QMenu* svnmenu = m_common->commonActions(parent);
     svnmenu->addSeparator();
 
     if( !copy_action )

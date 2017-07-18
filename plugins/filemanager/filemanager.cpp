@@ -109,7 +109,7 @@ void FileManager::fillContextMenu(const KFileItem& item, QMenu* menu)
     menu->addAction(newFileAction);
     contextActions.append(newFileAction);
     KDevelop::FileContext context(QList<QUrl>() << item.url());
-    QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &context );
+    QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, menu);
     KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
     QMenu* tmpMenu = new QMenu();
     KDevelop::ContextMenuExtension::populateMenu(tmpMenu, extensions);

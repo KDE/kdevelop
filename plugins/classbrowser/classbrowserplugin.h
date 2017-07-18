@@ -47,7 +47,7 @@ public:
 
 public: // KDevelop::Plugin overrides
   void unload() override;
-  KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
+  KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
   // The duchain must not be locked when this is called!
   void showDefinition(KDevelop::DeclarationPointer declaration);

@@ -43,7 +43,7 @@ public:
 
   ~ExternalScriptPlugin() override;
   void unload() override;
-  KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+  KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
   static ExternalScriptPlugin* self();
 

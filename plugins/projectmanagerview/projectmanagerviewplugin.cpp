@@ -194,10 +194,10 @@ void ProjectManagerViewPlugin::unload()
     core()->uiController()->removeToolView(d->factory);
 }
 
-ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::Context* context )
+ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     if( context->type() != KDevelop::Context::ProjectItemContext )
-        return IPlugin::contextMenuExtension( context );
+        return IPlugin::contextMenuExtension(context, parent);
 
     KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(context);
     QList<KDevelop::ProjectBaseItem*> items = ctx->items();
@@ -205,7 +205,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     d->ctxProjectItemList.clear();
 
     if( items.isEmpty() )
-        return IPlugin::contextMenuExtension( context );
+        return IPlugin::contextMenuExtension(context, parent);
 
     //TODO: also needs: removeTarget, removeFileFromTarget, runTargetsFromContextMenu
     ContextMenuExtension menuExt;
@@ -243,73 +243,73 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension( KDevelop::C
     }
 
     if ( needsCreateFile ) {
-        QAction* action = new QAction( i18n( "Create &File..." ), this );
+        QAction* action = new QAction(i18n("Create &File..."), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("document-new")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::createFileFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsCreateFolder ) {
-        QAction* action = new QAction( i18n( "Create F&older..." ), this );
+        QAction* action = new QAction(i18n("Create F&older..."), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("folder-new")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::createFolderFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
 
     if ( needsBuildItems ) {
-        QAction* action = new QAction( i18nc( "@action", "&Build" ), this );
+        QAction* action = new QAction(i18nc("@action", "&Build"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::buildItemsFromContextMenu );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new QAction( i18nc( "@action", "&Install" ), this );
+        action = new QAction(i18nc("@action", "&Install"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("run-build-install")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::installItemsFromContextMenu );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new QAction( i18nc( "@action", "&Clean" ), this );
+        action = new QAction(i18nc("@action", "&Clean"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("run-build-clean")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::cleanItemsFromContextMenu );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new QAction( i18n( "&Add to Build Set" ), this );
+        action = new QAction(i18n("&Add to Build Set"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
     }
 
     if ( needsCloseProjects ) {
-        QAction* close = new QAction( i18np( "C&lose Project", "Close Projects", items.count() ), this );
+        QAction* close = new QAction(i18np("C&lose Project", "Close Projects", items.count()), parent);
         close->setIcon(QIcon::fromTheme(QStringLiteral("project-development-close")));
         connect( close, &QAction::triggered, this, &ProjectManagerViewPlugin::closeProjects );
         menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
     }
     if ( needsFolderItems ) {
-        QAction* action = new QAction( i18n( "&Reload" ), this );
+        QAction* action = new QAction(i18n("&Reload"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::reloadFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsRemoveAndRename ) {
-        QAction* remove = new QAction( i18n( "Remo&ve" ), this );
+        QAction* remove = new QAction(i18n("Remo&ve"), parent);
         remove->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
         connect( remove, &QAction::triggered, this, &ProjectManagerViewPlugin::removeFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
-        QAction* rename = new QAction( i18n( "Re&name..." ), this );
+        QAction* rename = new QAction(i18n("Re&name..."), parent);
         rename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
         connect( rename, &QAction::triggered, this, &ProjectManagerViewPlugin::renameItemFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, rename );
     }
     if ( needsRemoveTargetFiles ) {
-        QAction* remove = new QAction( i18n( "Remove From &Target" ), this );
+        QAction* remove = new QAction(i18n("Remove From &Target"), parent);
         remove->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
         connect( remove, &QAction::triggered, this, &ProjectManagerViewPlugin::removeTargetFilesFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
     }
 
     {
-        QAction* copy = KStandardAction::copy(this, SLOT(copyFromContextMenu()), this);
+        QAction* copy = KStandardAction::copy(this, SLOT(copyFromContextMenu()), parent);
         copy->setShortcutContext(Qt::WidgetShortcut);
         menuExt.addAction( ContextMenuExtension::FileGroup, copy );
     }
     if (needsPaste) {
-        QAction* paste = KStandardAction::paste(this, SLOT(pasteFromContextMenu()), this);
+        QAction* paste = KStandardAction::paste(this, SLOT(pasteFromContextMenu()), parent);
         paste->setShortcutContext(Qt::WidgetShortcut);
         menuExt.addAction( ContextMenuExtension::FileGroup, paste );
     }

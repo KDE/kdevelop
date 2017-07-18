@@ -33,7 +33,7 @@ public:
     DockerPlugin(QObject *parent, const QVariantList & args);
     ~DockerPlugin() override;
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context * context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     void imagesListFinished(int code);
 

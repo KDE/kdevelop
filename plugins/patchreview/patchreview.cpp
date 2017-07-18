@@ -575,7 +575,7 @@ void PatchReviewPlugin::areaChanged(Sublime::Area* area)
     }
 }
 
-KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension( KDevelop::Context* context )
+KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     QList<QUrl> urls;
 
@@ -596,7 +596,7 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension( KDevelop
 
     if (urls.size() == 1) {
         QAction* reviewAction = new QAction( QIcon::fromTheme(QStringLiteral("text-x-patch")),
-                                             i18n( "Review Patch" ), this );
+                                             i18n("Review Patch"), parent);
         reviewAction->setData(QVariant(urls[0]));
         connect( reviewAction, &QAction::triggered, this, &PatchReviewPlugin::executeFileReviewAction );
         ContextMenuExtension cm;
@@ -604,7 +604,7 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension( KDevelop
         return cm;
     }
 
-    return KDevelop::IPlugin::contextMenuExtension( context );
+    return KDevelop::IPlugin::contextMenuExtension(context, parent);
 }
 
 void PatchReviewPlugin::executeFileReviewAction()

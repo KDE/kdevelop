@@ -43,7 +43,7 @@ public:
     // Plugin methods
     void unload() override;
 
-    KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* ) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     void removeItems(const QList<KDevelop::ProjectBaseItem*>& items);
     void renameItems(const QList< KDevelop::ProjectBaseItem* >& items);

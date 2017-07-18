@@ -45,7 +45,7 @@ public:
     QList<IDocumentationProvider*> documentationProviders() const override;
     IDocumentation::Ptr documentationForDeclaration(Declaration* declaration) override;
     void showDocumentation(const IDocumentation::Ptr& doc) override;
-    ContextMenuExtension contextMenuExtension( Context* context );
+    ContextMenuExtension contextMenuExtension(Context* context, QWidget* parent);
 
 public Q_SLOTS:
     void changedDocumentationProviders() override;

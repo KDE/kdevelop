@@ -1121,8 +1121,9 @@ QString ProjectController::prettyFileName(const QUrl& url, FormattingOptions for
     }
 }
 
-ContextMenuExtension ProjectController::contextMenuExtension ( Context* ctx )
+ContextMenuExtension ProjectController::contextMenuExtension(Context* ctx, QWidget* parent)
 {
+    Q_UNUSED(parent);
     ContextMenuExtension ext;
     if ( ctx->type() != Context::ProjectItemContext || !static_cast<ProjectItemContext*>(ctx)->items().isEmpty() ) {
         return ext;

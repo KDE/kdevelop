@@ -127,7 +127,7 @@ public:
     KDevelop::VcsJob* edit(const QList<QUrl>& localLocations);
 
 
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
 
 public Q_SLOTS:
