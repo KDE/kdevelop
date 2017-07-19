@@ -348,7 +348,7 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     foreach (const auto& target, dirTargets) {
         switch(target.type) {
             case CMakeTarget::Executable:
-                new CMakeTargetItem(folder, target.name, target.artifacts.constFirst());
+                new CMakeTargetItem(folder, target.name, target.artifacts.value(0));
                 break;
             case CMakeTarget::Library:
                 new ProjectLibraryTargetItem(folder->project(), target.name, folder);
