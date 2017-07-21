@@ -264,15 +264,15 @@ void Plugin::result(KJob* job)
     }
 }
 
-KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context)
+ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* parent)
 {
-    ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context);
+    ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context, parent);
 
     if (context->hasType(KDevelop::Context::EditorContext) && !isRunning()) {
         IDocument* doc = core()->documentController()->activeDocument();
         const auto mime = doc->mimeType().name();
         if (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc")) {
-            auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), this);
+            auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), parent);
             connect(action, &QAction::triggered, this, &Plugin::runClangTidyFile);
             extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, action);
         }
@@ -293,7 +293,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
                 return extension;
         }
 
-        auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), this);
+        auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), parent);
         connect(action, &QAction::triggered, this, [this, item]() {
             runClangTidy(item->path().toUrl());
         });

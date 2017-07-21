@@ -58,7 +58,7 @@ public:
     ~Plugin() = default;
 
     void unload() override;
-    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context) override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
     int configPages() const override { return 1; }
     /**
      * \function
