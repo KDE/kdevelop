@@ -646,11 +646,11 @@ void Container::contextMenu( const QPoint& pos )
                                         i18n("Copy Filename"));
         menu.addSeparator();
         closeTabAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
-                                        i18n("Close File"));
+                                        i18n("Close"));
         closeOtherTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
-                                              i18n("Close Other Files"));
+                                              i18n("Close All Other"));
     }
-    QAction* closeAllTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n("Close All Files"));
+    QAction* closeAllTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n("Close All"));
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(pos));
 

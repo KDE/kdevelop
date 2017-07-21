@@ -626,7 +626,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->close = ac->addAction( QStringLiteral("file_close") );
-    action->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_W );
     action->setText( i18n( "&Close" ) );
     connect( action, &QAction::triggered, this, &DocumentController::fileClose );
@@ -635,7 +635,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->closeAll = ac->addAction( QStringLiteral("file_close_all") );
-    action->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
     action->setText(i18n( "Clos&e All" ) );
     connect( action, &QAction::triggered, this, &DocumentController::closeAllDocuments );
     action->setToolTip( i18n( "Close all open documents" ) );
@@ -643,7 +643,7 @@ void DocumentController::setupActions()
     action->setEnabled(false);
 
     action = d->closeAllOthers = ac->addAction( QStringLiteral("file_closeother") );
-    action->setIcon(QIcon::fromTheme(QStringLiteral("window-close")));
+    action->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_W );
     action->setText(i18n( "Close All Ot&hers" ) );
     connect( action, &QAction::triggered, this, &DocumentController::closeAllOtherDocuments );

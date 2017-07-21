@@ -207,14 +207,12 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
         ctxMenu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n( "Reload" ), this, SLOT(reloadSelected()));
 
         appendActions(ctxMenu, editActions);
-
-        ctxMenu->addAction(KStandardAction::close(this, SLOT(closeSelected()), ctxMenu));
-        QAction* closeUnselected = ctxMenu->addAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n( "Close Other Files" ), this, SLOT(closeUnselected()));
-        closeUnselected->setEnabled(!m_unselectedDocs.isEmpty());
-
         appendActions(ctxMenu, vcsActions);
-
         appendActions(ctxMenu, extensionActions);
+
+        ctxMenu->addAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n("Close"), this, SLOT(closeSelected()));
+        QAction* closeUnselected = ctxMenu->addAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n( "Close All Other" ), this, SLOT(closeUnselected()));
+        closeUnselected->setEnabled(!m_unselectedDocs.isEmpty());
 
         ctxMenu->exec(event->globalPos());
         delete ctxMenu;
