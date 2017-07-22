@@ -386,6 +386,7 @@ void VcsPluginHelper::annotation()
         }
 
         if (annotateiface && viewiface) {
+            // TODO: only create model if there is none yet (e.g. from another view)
             KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
                                                                                    foreground, background);
             annotateiface->setAnnotationModel(model);
@@ -394,6 +395,8 @@ void VcsPluginHelper::annotation()
             connect(doc->activeTextView(),
                     SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
                     this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
+            connect(doc->activeTextView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
+                    this, SLOT(handleAnnotationBorderVisibilityChanged(View*,bool)));
         } else {
             KMessageBox::error(nullptr, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
             delete job;
@@ -433,6 +436,21 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
     connect(action, &QAction::triggered, this, [this, rev]() {
         history(rev);
     });
+}
+
+void VcsPluginHelper::handleAnnotationBorderVisibilityChanged(View* view, bool visible)
+{
+    if (visible) {
+        return;
+    }
+
+    disconnect(view, SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
+               this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
+
+    disconnect(view, SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
+               this, SLOT(handleAnnotationBorderVisibilityChanged(View*,bool)));
+
+    // TODO: remove the model if last user of it
 }
 
 void VcsPluginHelper::update()

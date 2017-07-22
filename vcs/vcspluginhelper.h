@@ -28,6 +28,13 @@ class View;
 class Document;
 }
 
+// KTextEditor::AnnotationViewInterface has a bad signature in the
+// annotationBorderVisibilityChanged signal, using type "View" instead
+// of "KTextEditor::View".
+// To enable a string based signal-slot connection, as needed due to
+// annotationBorderVisibilityChanged being an "interface" signal,
+// with the slot VcsPluginHelper::removeAnnotationModel,
+// make View known here
 using KTextEditor::View;
 
 namespace KDevelop
@@ -79,6 +86,8 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void delayedModificationWarningOn();
+    // namespace-less type "View" needed here, see comment above on "using KTextEditor::View;"
+    void handleAnnotationBorderVisibilityChanged(View* view, bool visible);
 
 private:
     void diffForRev(const QUrl& url);
