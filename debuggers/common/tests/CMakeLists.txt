@@ -7,3 +7,13 @@ endif()
 configure_file(debuggers-tests-config.h.in debuggers-tests-config.h)
 
 add_subdirectory(debuggees)
+
+add_library(kdevdbg_testhelper STATIC testhelper.cpp)
+target_link_libraries(kdevdbg_testhelper
+    PUBLIC
+    kdevdebuggercommon
+    KDev::Debugger
+    Qt5::Core
+    PRIVATE
+    Qt5::Test
+)

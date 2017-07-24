@@ -22,7 +22,7 @@
 
 #include "testhelper.h"
 
-#include "common/tests/debuggers-tests-config.h"
+#include "debuggers-tests-config.h"
 #include "midebugsession.h"
 
 #include <QApplication>
@@ -32,29 +32,21 @@
 #include <QRegularExpression>
 #include <QTest>
 
-namespace KDevMI { namespace LLDB {
+namespace KDevMI {
 
 QUrl findExecutable(const QString& name)
 {
-    QFileInfo info(QString("%1/%2").arg(QString::fromLocal8Bit(DEBUGGEE_BIN_DIR), name));
-    Q_ASSERT(info.exists());
+    QFileInfo info(QString::fromLocal8Bit(DEBUGGEE_BIN_DIR), name);
+    Q_ASSERT_X(info.exists(), "findExecutable", info.filePath().toLocal8Bit());
     Q_ASSERT(info.isExecutable());
     return QUrl::fromLocalFile(info.canonicalFilePath());
 }
 
-// Try to find file in the same folder as `file`,
-// if not found, go down to debugees folder.
-QString findSourceFile(const char *file, const QString& name)
+QString findSourceFile(const QString& name)
 {
-    QDir baseDir = QFileInfo(file).dir();
-    QFileInfo info(baseDir.absoluteFilePath(name));
-    if (info.exists()) {
-        return info.canonicalFilePath();
-    }
+    QFileInfo info(QString::fromLocal8Bit(DEBUGGEE_SRC_DIR), name);
+    Q_ASSERT_X(info.exists(), "findSourceFile", info.filePath().toLocal8Bit());
 
-    baseDir.cd(QStringLiteral("debugees"));
-    info = baseDir.absoluteFilePath(name);
-    Q_ASSERT(info.exists());
     return info.canonicalFilePath();
 }
 
@@ -174,5 +166,4 @@ bool TestWaiter::waitUnless(bool ok)
     return true;
 }
 
-} // end of namespace LLDB
 } // end of namespace KDevMI

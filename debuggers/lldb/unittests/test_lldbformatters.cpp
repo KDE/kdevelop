@@ -26,7 +26,7 @@
 #include "controllers/variablecontroller.h"
 #include "debugsession.h"
 #include "stringhelpers.h"
-#include "testhelper.h"
+#include "tests/testhelper.h"
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
@@ -48,25 +48,25 @@
 #include <vector>
 
 #define WAIT_FOR_STATE(session, state) \
-    do { if (!KDevMI::LLDB::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
+    do { if (!KDevMI::waitForState((session), (state), __FILE__, __LINE__)) return; } while (0)
 
 #define WAIT_FOR_STATE_AND_IDLE(session, state) \
-    do { if (!KDevMI::LLDB::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
+    do { if (!KDevMI::waitForState((session), (state), __FILE__, __LINE__, true)) return; } while (0)
 
 #define WAIT_FOR_A_WHILE_AND_IDLE(session, ms) \
-    do { if (!KDevMI::LLDB::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; \
-         if (!KDevMI::LLDB::waitForState((session), DebugSession::PausedState, __FILE__, __LINE__, true)) \
+    do { if (!KDevMI::waitForAWhile((session), (ms), __FILE__, __LINE__)) return; \
+         if (!KDevMI::waitForState((session), DebugSession::PausedState, __FILE__, __LINE__, true)) \
              return; \
     } while (0)
 
 #define WAIT_FOR(session, condition) \
     do { \
-        KDevMI::LLDB::TestWaiter w((session), #condition, __FILE__, __LINE__); \
+        KDevMI::TestWaiter w((session), #condition, __FILE__, __LINE__); \
         while (w.waitUnless((condition))) /* nothing */ ; \
     } while(0)
 
 #define COMPARE_DATA(index, expected) \
-    do { if (!KDevMI::LLDB::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
+    do { if (!KDevMI::compareData((index), (expected), __FILE__, __LINE__)) return; } while (0)
 
 #define VERIFY_LOCAL(row, name, summary, children) \
     do { \
@@ -80,11 +80,11 @@
             return; \
     } while (0)
 
-#define findSourceFile(name) \
-    findSourceFile(__FILE__, (name))
-
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
+using KDevMI::findExecutable;
+using KDevMI::findSourceFile;
+using KDevMI::compareData;
 
 class TestLaunchConfiguration : public ILaunchConfiguration
 {
@@ -122,7 +122,10 @@ public:
     TestDebugSession() : DebugSession()
     {
         setSourceInitFile(false);
-        setFormatterPath(findSourceFile("../formatters/all.py"));
+        // explicit set formatter path to force use in-tree formatters, not the one installed in system.
+        QFileInfo info(QFileInfo(__FILE__).path(), "../formatters/all.py");
+        Q_ASSERT(info.exists());
+        setFormatterPath(info.canonicalFilePath());
 
         KDevelop::ICore::self()->debugController()->addSession(this);
 

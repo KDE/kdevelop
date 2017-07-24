@@ -1,5 +1,5 @@
 /*
- * Helpers for LLDB debugger unit tests
+ * Helpers for MI debugger unit tests
  * Copyright 2016  Aetf <aetf@unlimitedcodeworks.xyz>
  *
  * This program is free software; you can redistribute it and/or
@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef LLDB_UNITTEST_H
-#define LLDB_UNITTEST_H
+#ifndef KDEVDBG_TESTHELPER_H
+#define KDEVDBG_TESTHELPER_H
 
 #include <debugger/interfaces/idebugsession.h>
 
@@ -34,10 +34,8 @@ namespace KDevMI {
 
 class MIDebugSession;
 
-namespace LLDB {
-
 QUrl findExecutable(const QString& name);
-QString findSourceFile(const char *file, const QString& name);
+QString findSourceFile(const QString& name);
 bool isAttachForbidden(const char *file, int line);
 
 bool compareData(QModelIndex index, const QString& expected, const char *file, int line, bool useRE = false);
@@ -62,8 +60,6 @@ private:
     int line;
 };
 
-
-} // end of namespace LLDB
 } // end of namespace KDevMI
 
-#endif // LLDB_UNITTEST_H
+#endif // KDEVDBG_TESTHELPER_H
