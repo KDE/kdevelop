@@ -231,8 +231,7 @@ Qt::ItemFlags BreakpointModel::flags(const QModelIndex &index) const
             Qt::ItemIsEnabled | Qt::ItemIsSelectable
             | Qt::ItemIsEditable | Qt::ItemIsUserCheckable);
 
-    if (index.column() == Breakpoint::LocationColumn
-        || index.column() == Breakpoint::ConditionColumn)
+    if (index.column() == Breakpoint::ConditionColumn)
         return static_cast<Qt::ItemFlags>(
             Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable);
 
