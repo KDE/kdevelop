@@ -66,6 +66,7 @@
 
 #include <QStringList>
 #include <QString>
+#include <QByteArray>
 #include <QChar>
 #include <QDataStream>
 #include <QVariant>
@@ -228,4 +229,18 @@ QString KDevelop::stripAnsiSequences(const QString& str)
         }
     }
     return result;
+}
+
+void KDevelop::normalizeLineEndings(QByteArray& text)
+{
+    for (int i = 0, s = text.size(); i < s; ++i) {
+        if (text[i] != '\r') {
+            continue;
+        }
+        if (i + 1 < s && text[i + 1] == '\n') {
+            text.remove(i, 1);
+        } else {
+            text[i] = '\n';
+        }
+    }
 }

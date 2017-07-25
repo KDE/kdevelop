@@ -73,3 +73,31 @@ void TestStringHandler::testStripAnsiSequences_data()
         << QStringLiteral("foo [31m[34mbar[0m:")
         << "foo bar:";
 }
+
+void TestStringHandler::testNormalizeLineEndings()
+{
+    QFETCH(QByteArray, text);
+    QFETCH(QByteArray, expectedOutput);
+
+    normalizeLineEndings(text);
+    QCOMPARE(text, expectedOutput);
+}
+
+void TestStringHandler::testNormalizeLineEndings_data()
+{
+    QTest::addColumn<QByteArray>("text");
+    QTest::addColumn<QByteArray>("expectedOutput");
+
+    QTest::newRow("trivial")
+        << QByteArray("foo\nbar\n")
+        << QByteArray("foo\nbar\n");
+    QTest::newRow("dos")
+        << QByteArray("foo\r\nbar\r\n")
+        << QByteArray("foo\nbar\n");
+    QTest::newRow("macos_classic")
+        << QByteArray("foo\rbar\r")
+        << QByteArray("foo\nbar\n");
+    QTest::newRow("mess")
+        << QByteArray("\r\n\n\r\r\r\n\r")
+        << QByteArray("\n\n\n\n\n\n");
+}

@@ -42,6 +42,7 @@
 #include "duchain/parsingenvironment.h"
 
 #include <util/foregroundlock.h>
+#include <util/kdevstringhandler.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <codegen/coderepresentation.h>
@@ -314,6 +315,9 @@ KDevelop::ProblemPointer ParseJob::readContents()
         }
 
         d->contents.contents = file.readAll(); ///@todo Convert from local encoding to utf-8 if they don't match
+
+        // This is consistent with KTextEditor::Document::text() as used for already-open files.
+        normalizeLineEndings(d->contents.contents);
         d->contents.modification = KDevelop::ModificationRevision(lastModified);
 
         file.close();
