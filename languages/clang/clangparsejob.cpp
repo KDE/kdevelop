@@ -52,6 +52,7 @@
 #include "duchain/clangparsingenvironmentfile.h"
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"
+#include "util/clangutils.h"
 
 #include "clangsupport.h"
 #include "duchain/documentfinderhelpers.h"
@@ -191,21 +192,18 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     }
     m_environment.setProjectPaths(projectPaths);
 
+    m_unsavedFiles = ClangUtils::unsavedFiles();
+
     foreach(auto document, ICore::self()->documentController()->openDocuments()) {
         auto textDocument = document->textDocument();
-        // TODO: Introduce a cache so we don't have to re-read all the open documents
-        // which were not changed since the last run
-        if (!textDocument || !textDocument->url().isLocalFile()
-            || !DocumentFinderHelpers::mimeTypesList().contains(textDocument->mimeType()))
-        {
+        if ( !textDocument ) {
             continue;
         }
-        m_unsavedFiles << UnsavedFile(textDocument->url().toLocalFile(), textDocument->textLines(textDocument->documentRange()));
         const IndexedString indexedUrl(textDocument->url());
-        m_unsavedRevisions.insert(indexedUrl, ModificationRevision::revisionForFile(indexedUrl));
         if (indexedUrl == tuUrl) {
             m_tuDocumentIsUnsaved = true;
         }
+        m_unsavedRevisions.insert(indexedUrl, ModificationRevision::revisionForFile(indexedUrl));
     }
 
     if (auto tracker = trackerForUrl(url)) {

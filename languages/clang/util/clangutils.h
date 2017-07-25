@@ -29,6 +29,7 @@
 #include <clang-c/Index.h>
 
 #include "clangprivateexport.h"
+#include "../duchain/unsavedfile.h"
 
 namespace ClangUtils
 {
@@ -68,6 +69,16 @@ namespace ClangUtils
      * @return true when the cursor kind references a named scope.
      */
     bool isScopeKind(CXCursorKind kind);
+
+    /**
+     * @brief Retrieve a list of all unsaved files.
+     *
+     * @note Since this reads text from the editor widget, it must be called from the
+     *       GUI thread or with the foreground lock held.
+     *
+     * @return vector of all unsaved files and their current contents
+     */
+    KDEVCLANGPRIVATE_EXPORT QVector<UnsavedFile> unsavedFiles();
 
     /**
      * Given a cursor and destination context, returns the string representing the

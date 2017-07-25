@@ -183,8 +183,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     : m_file(nullptr)
     , m_unit(nullptr)
 {
-    unsigned int flags = CXTranslationUnit_CXXChainedPCH
-        | CXTranslationUnit_DetailedPreprocessingRecord
+    unsigned int flags = CXTranslationUnit_DetailedPreprocessingRecord
 #if CINDEX_VERSION_MINOR >= 34
         | CXTranslationUnit_KeepGoing
 #endif
@@ -196,6 +195,9 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         flags |= CXTranslationUnit_ForSerialization;
     } else {
         flags |= CXTranslationUnit_CacheCompletionResults
+#if CINDEX_VERSION_MINOR >= 32
+              |  CXTranslationUnit_CreatePreambleOnFirstParse
+#endif
               |  CXTranslationUnit_PrecompiledPreamble;
         if (environment.quality() == ClangParsingEnvironment::Unknown) {
             flags |= CXTranslationUnit_Incomplete;

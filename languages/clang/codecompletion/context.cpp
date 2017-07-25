@@ -42,11 +42,14 @@
 #include <language/duchain/types/typeutils.h>
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
+#include <util/foregroundlock.h>
 
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
+#include "../util/clangutils.h"
 #include "../duchain/clangdiagnosticevaluator.h"
 #include "../duchain/parsesession.h"
+#include "../duchain/duchainutils.h"
 #include "../duchain/navigationwidget.h"
 #include "../clangsettings/clangsettingsmanager.h"
 
@@ -775,6 +778,14 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
     qRegisterMetaType<MemberAccessReplacer::Type>();
     const QByteArray file = url.toLocalFile().toUtf8();
     ParseSession session(m_parseSessionData);
+
+    QVector<UnsavedFile> otherUnsavedFiles;
+    {
+        ForegroundLock lock;
+        otherUnsavedFiles = ClangUtils::unsavedFiles();
+    }
+    QVector<CXUnsavedFile> allUnsaved;
+
     {
         const unsigned int completeOptions = clang_defaultCodeCompleteOptions();
 
@@ -782,11 +793,16 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         unsaved.Filename = file.constData();
         const QByteArray content = m_text.toUtf8();
         unsaved.Contents = content.constData();
-        unsaved.Length = content.size() + 1; // + \0-byte
+        unsaved.Length = content.size();
+
+        for ( const auto& f : otherUnsavedFiles ) {
+            allUnsaved.append(f.toClangApi());
+        }
+        allUnsaved.append(unsaved);
 
         m_results.reset(clang_codeCompleteAt(session.unit(), file.constData(),
                         position.line() + 1, position.column() + 1,
-                        content.isEmpty() ? nullptr : &unsaved, content.isEmpty() ? 0 : 1,
+                        allUnsaved.data(), allUnsaved.size(),
                         completeOptions));
 
         if (!m_results) {
@@ -833,11 +849,12 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
             unsaved.Filename = file.constData();
             const QByteArray content = m_text.toUtf8();
             unsaved.Contents = content.constData();
-            unsaved.Length = content.size() + 1;
+            unsaved.Length = content.size();
+            allUnsaved[allUnsaved.size() - 1] = unsaved;
 
             m_results.reset(clang_codeCompleteAt(session.unit(), file.constData(),
                                                  position.line() + 1, position.column() + 1 + 1,
-                                                 &unsaved, 1,
+                                                 allUnsaved.data(), allUnsaved.size(),
                                                  clang_defaultCodeCompleteOptions()));
 
             if (m_results && m_results->NumResults) {
