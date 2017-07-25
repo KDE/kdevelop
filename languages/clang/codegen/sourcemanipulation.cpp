@@ -250,11 +250,12 @@ bool SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Declaration* decla
     int line = findInsertionPoint();
 
     decl = QStringLiteral("\n\n") + applySubScope(decl);
+    const auto url = declaration->url().toUrl();
     QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForFile(declaration->url().str());
-    auto i = ICore::self()->sourceFormatterController()->formatterForMimeType(mime);
+    QMimeType mime = db.mimeTypeForUrl(url);
+    auto i = ICore::self()->sourceFormatterController()->formatterForUrl(url, mime);
     if (i) {
-        decl = i->formatSource(decl, declaration->url().toUrl(), mime);
+        decl = i->formatSource(decl, url, mime);
     }
 
     return m_changeSet.addChange(DocumentChange(m_context->url(), insertionRange(line), QString(), decl));

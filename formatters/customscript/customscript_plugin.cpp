@@ -203,7 +203,8 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 
 QString CustomScriptPlugin::formatSource(const QString& text, const QUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
 {
-    return formatSourceWithStyle(KDevelop::ICore::self()->sourceFormatterController()->styleForMimeType(mime), text, url, mime, leftContext, rightContext);
+	auto style = KDevelop::ICore::self()->sourceFormatterController()->styleForUrl(url, mime);
+    return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
 }
 
 static QList<SourceFormatterStyle> stylesFromLanguagePlugins()

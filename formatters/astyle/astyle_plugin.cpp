@@ -88,7 +88,8 @@ QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QStri
 
 QString AStylePlugin::formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
 {
-    return formatSourceWithStyle( ICore::self()->sourceFormatterController()->styleForMimeType( mime ), text, url, mime, leftContext, rightContext );
+    auto style = ICore::self()->sourceFormatterController()->styleForUrl(url, mime);
+    return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
 }
 
 static SourceFormatterStyle::MimeList supportedMimeTypes()
