@@ -165,8 +165,8 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
             case FirstSearch:
                 if ( line.indexOf( "#include <...>" ) != -1 ) {
                     mode = Includes;
-                    break;
                 }
+                break;
             case Includes:
                 //Detect the include-paths by the first space that is prepended. Reason: The list may contain relative paths like "."
                 if ( !line.startsWith( ' ' ) ) {
