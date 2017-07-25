@@ -44,6 +44,8 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/isession.h>
 #include <interfaces/isourceformatter.h>
@@ -62,6 +64,7 @@ namespace {
 
 namespace Strings {
 QString SourceFormatter() { return QStringLiteral("SourceFormatter"); }
+QString UseDefault() { return QStringLiteral("UseDefault"); }
 }
 
 }
@@ -161,8 +164,9 @@ void SourceFormatterController::documentLoaded( IDocument* doc )
     if (!doc->textDocument()) {
         return;
     }
-    QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
-    adaptEditorIndentationMode( doc->textDocument(), formatterForMimeType(mime) );
+    const auto url = doc->url();
+    const auto mime = QMimeDatabase().mimeTypeForUrl(url);
+    adaptEditorIndentationMode(doc->textDocument(), formatterForUrl(url, mime), url);
 }
 
 void SourceFormatterController::initialize()
@@ -176,7 +180,21 @@ SourceFormatterController::~SourceFormatterController()
 ISourceFormatter* SourceFormatterController::formatterForUrl(const QUrl &url)
 {
     QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
-    return formatterForMimeType(mime);
+    return formatterForUrl(url, mime);
+}
+
+KConfigGroup SourceFormatterController::configForUrl(const QUrl& url) const
+{
+    auto core = KDevelop::Core::self();
+    auto project = core->projectController()->findProjectForUrl(url);
+    if (project) {
+        auto config = project->projectConfiguration()->group(Strings::SourceFormatter());
+        if (config.isValid() && !config.readEntry(Strings::UseDefault(), true)) {
+            return config;
+        }
+    }
+
+    return core->activeSession()->config()->group( Strings::SourceFormatter() );
 }
 
 KConfigGroup SourceFormatterController::sessionConfig() const
@@ -238,12 +256,13 @@ SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceForm
     return formatter;
 }
 
-ISourceFormatter* SourceFormatterController::formatterForMimeType(const QMimeType& mime)
+ISourceFormatter* SourceFormatterController::formatterForUrl(const QUrl& url, const QMimeType& mime)
 {
     if (!d->enabled || !isMimeTypeSupported(mime)) {
         return nullptr;
     }
-    QString formatter = sessionConfig().readEntry( mime.name(), QString() );
+
+    const auto formatter = configForUrl(url).readEntry(mime.name(), QString());
 
     if( formatter.isEmpty() )
     {
@@ -287,11 +306,11 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 
     // If there already is a modeline in the document, adapt it while formatting, even
     // if "add modeline" is disabled.
-    if( !sessionConfig().readEntry( SourceFormatterController::kateModeLineConfigKey(), false ) &&
+    if (!configForUrl(url).readEntry(SourceFormatterController::kateModeLineConfigKey(), false) &&
             kateModelineWithNewline.indexIn( input ) == -1 )
         return input;
 
-    ISourceFormatter* fmt = formatterForMimeType( mime );
+    ISourceFormatter* fmt = formatterForUrl(url, mime);
     ISourceFormatter::Indentation indentation = fmt->indentation(url);
 
     if( !indentation.isValid() )
@@ -380,22 +399,23 @@ void SourceFormatterController::beautifySource()
         return;
     KTextEditor::Document* doc = view->document();
     // load the appropriate formatter
-    QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
-    ISourceFormatter *formatter = formatterForMimeType(mime);
+    const auto url = idoc->url();
+    const auto mime = QMimeDatabase().mimeTypeForUrl(url);
+    ISourceFormatter* formatter = formatterForUrl(url, mime);
         if( !formatter ) {
             qCDebug(SHELL) << "no formatter available for" << mime.name();
             return;
         }
 
     // Ignore the modeline, as the modeline will be changed anyway
-    adaptEditorIndentationMode( doc, formatter, true );
+    adaptEditorIndentationMode(doc, formatter, url, true);
 
     bool has_selection = view->selection();
 
     if (has_selection) {
         QString original = view->selectionText();
 
-        QString output = formatter->formatSource(view->selectionText(), doc->url(), mime,
+        QString output = formatter->formatSource(view->selectionText(), url, mime,
                                                 doc->text(KTextEditor::Range(KTextEditor::Cursor(0,0),view->selectionRange().start())),
                                                 doc->text(KTextEditor::Range(view->selectionRange().end(), doc->documentRange().end())));
 
@@ -425,8 +445,9 @@ void SourceFormatterController::beautifyLine()
     if (!view)
         return;
     // load the appropriate formatter
-    QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
-    ISourceFormatter *formatter = formatterForMimeType(mime);
+    const auto url = doc->url();
+    const auto mime = QMimeDatabase().mimeTypeForUrl(url);
+    ISourceFormatter* formatter = formatterForUrl(url, mime);
     if( !formatter ) {
         qCDebug(SHELL) << "no formatter available for" << mime.name();
         return;
@@ -470,9 +491,9 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument* doc, ISource
 
 void SourceFormatterController::settingsChanged()
 {
-    if( sessionConfig().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey(), false ) )
-        foreach( KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments() )
-            adaptEditorIndentationMode( doc->textDocument(), formatterForUrl(doc->url()) );
+    foreach (KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+        adaptEditorIndentationMode(doc->textDocument(), formatterForUrl(doc->url()), doc->url());
+    }
 }
 
 /**
@@ -487,12 +508,13 @@ void SourceFormatterController::settingsChanged()
 *   "set-tab-width X"
 * */
 
-void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document *doc, ISourceFormatter *formatter, bool ignoreModeline )
+void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document *doc, ISourceFormatter *formatter,
+                                                           const QUrl& url, bool ignoreModeline)
 {
-    if( !formatter  || !sessionConfig().readEntry( SourceFormatterController::kateOverrideIndentationConfigKey(), false ) || !doc )
+    if (!formatter || !configForUrl(url).readEntry(SourceFormatterController::kateOverrideIndentationConfigKey(), false) || !doc)
         return;
 
-    qCDebug(SHELL) << "adapting mode for" << doc->url();
+    qCDebug(SHELL) << "adapting mode for" << url;
 
     QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
 
@@ -503,7 +525,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
         return;
     }
 
-    ISourceFormatter::Indentation indentation = formatter->indentation(doc->url());
+    ISourceFormatter::Indentation indentation = formatter->indentation(url);
     if(indentation.isValid())
     {
         struct CommandCaller {
@@ -614,9 +636,9 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
     return ext;
 }
 
-SourceFormatterStyle SourceFormatterController::styleForMimeType(const QMimeType& mime)
+SourceFormatterStyle SourceFormatterController::styleForUrl(const QUrl& url, const QMimeType& mime)
 {
-    QStringList formatter = sessionConfig().readEntry( mime.name(), QString() ).split( QStringLiteral("||"), QString::SkipEmptyParts );
+    const auto formatter = configForUrl(url).readEntry(mime.name(), QString()).split(QStringLiteral("||"), QString::SkipEmptyParts);
     if( formatter.count() == 2 )
     {
         SourceFormatterStyle s( formatter.at( 1 ) );

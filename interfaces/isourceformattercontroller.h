@@ -44,19 +44,25 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		~ISourceFormatterController() override;
 
 		/** \return The formatter corresponding to the language
-		* of the document corresponding to the \arg url.
+		* of the document corresponding to the \p url.
+		* The language is then activated and the style is loaded.
+		* The source formatter is then ready to use.
+		* If mimetype of url is known already, use
+		* formatterForUrl(const QUrl& url, const QMimeType& mime) instead.
 		*/
 		virtual ISourceFormatter* formatterForUrl(const QUrl &url) = 0;
-		/** Loads and returns a source formatter for this mime type.
+		/** \return The formatter corresponding to the language
+		* of the document corresponding to the \p url.
 		* The language is then activated and the style is loaded.
-		* The source formatter is then ready to use on a file.
+		* The source formatter is then ready to use.
+		* @param mime known mimetype of the url
 		*/
-		virtual ISourceFormatter* formatterForMimeType(const QMimeType &mime) = 0;
+		virtual ISourceFormatter* formatterForUrl(const QUrl& url, const QMimeType& mime) = 0;
 		/** \return Whether this mime type is supported by any plugin.
 		*/
 		virtual bool isMimeTypeSupported(const QMimeType &mime) = 0;
 
-		virtual KDevelop::SourceFormatterStyle styleForMimeType( const QMimeType& mime ) = 0;
+		virtual KDevelop::SourceFormatterStyle styleForUrl(const QUrl& url, const QMimeType& mime) = 0;
 
 		///Set whether or not source formatting is disabled with \arg disable
 		virtual void disableSourceFormatting(bool disable) = 0;

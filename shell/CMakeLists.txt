@@ -52,6 +52,7 @@ set(KDevPlatformShell_LIB_SRCS
     configdialog.cpp
     editorconfigpage.cpp
     environmentconfigurebutton.cpp
+    sourceformatterselectionedit.cpp
     runtimecontroller.cpp
 
     checkerstatus.cpp
@@ -110,6 +111,7 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
     projectinfopage.ui
     launchconfigurationdialog.ui
     projectsourcepage.ui
+    sourceformatterselectionedit.ui
     settings/uiconfig.ui
     settings/editstyledialog.ui
     settings/sourceformattersettings.ui
@@ -181,6 +183,7 @@ install(FILES
     runcontroller.h
     launchconfiguration.h
     environmentconfigurebutton.h
+    sourceformatterselectionedit.h
     checkerstatus.h
     problem.h
     problemmodel.h

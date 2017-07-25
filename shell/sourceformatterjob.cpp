@@ -122,7 +122,7 @@ void SourceFormatterJob::formatFile(const QUrl& url)
     // check mimetype
     QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
     qCDebug(SHELL) << "Checking file " << url << " of mime type " << mime.name() << endl;
-    auto formatter = m_sourceFormatterController->formatterForMimeType(mime);
+    auto formatter = m_sourceFormatterController->formatterForUrl(url, mime);
     if (!formatter) // unsupported mime type
         return;
 

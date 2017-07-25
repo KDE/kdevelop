@@ -101,7 +101,7 @@ public:
     * The language is then activated and the style is loaded.
     * The source formatter is then ready to use on a file.
     */
-    ISourceFormatter* formatterForMimeType(const QMimeType& mime) override;
+    ISourceFormatter* formatterForUrl(const QUrl& url, const QMimeType& mime) override;
     /** \return Whether this mime type is supported by any plugin.
     */
     bool isMimeTypeSupported(const QMimeType& mime) override;
@@ -121,8 +121,9 @@ public:
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent);
 
-    KDevelop::SourceFormatterStyle styleForMimeType(const QMimeType& mime) override;
+    KDevelop::SourceFormatterStyle styleForUrl(const QUrl& url, const QMimeType& mime) override;
 
+    KConfigGroup configForUrl(const QUrl& url) const;
     KConfigGroup sessionConfig() const;
     KConfigGroup globalConfig() const;
 
@@ -148,7 +149,8 @@ private:
     QString indentationMode(const QMimeType& mime);
     void formatDocument(KDevelop::IDocument* doc, ISourceFormatter* formatter, const QMimeType& mime);
     // Adapts the mode of the editor regarding indentation-style
-    void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
+    void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter,
+                                    const QUrl& url, bool ignoreModeline = false);
 
 private:
     const QScopedPointer<class SourceFormatterControllerPrivate> d;

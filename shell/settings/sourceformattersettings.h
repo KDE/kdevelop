@@ -20,36 +20,9 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H
 #define KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H
 
-#include <QMimeType>
-
 #include <interfaces/configpage.h>
 
-#include "sourceformattercontroller.h"
-
 #include "ui_sourceformattersettings.h"
-
-class QListWidgetItem;
-
-namespace KTextEditor
-{
-class Document;
-class View;
-}
-
-namespace KDevelop
-{
-class ISourceFormatter;
-class SourceFormatterStyle;
-}
-
-struct LanguageSettings {
-    LanguageSettings();
-    QList<QMimeType> mimetypes;
-    QSet<KDevelop::SourceFormatter*> formatters;
-    // weak pointers to selected formatter and style, no ownership
-    KDevelop::SourceFormatter* selectedFormatter;     // Should never be zero
-    KDevelop::SourceFormatterStyle* selectedStyle;  // TODO: can this be zero? Assume that not
-};
 
 /** \short The settings modulefor the Source formatter plugin.
 * It supports predefined and custom styles. A live preview of the style
@@ -71,27 +44,8 @@ public Q_SLOTS:
     void reset() override;
     void apply() override;
     void defaults() override;
-private Q_SLOTS:
-    void deleteStyle();
-    void editStyle();
-    void newStyle();
-    void selectLanguage( int );
-    void selectFormatter( int );
-    void selectStyle( int );
-    void styleNameChanged( QListWidgetItem* );
-    void somethingChanged();
+
 private:
-    void updatePreview();
-    QListWidgetItem* addStyle( const KDevelop::SourceFormatterStyle& s );
-    void enableStyleButtons();
-    // Language name -> language settings
-    typedef QMap<QString, LanguageSettings> LanguageMap;
-    LanguageMap languages;
-    // formatter name -> formatter. Formatters owned by this
-    typedef QMap<QString, KDevelop::SourceFormatter*> FormatterMap;
-    FormatterMap formatters;
-    KTextEditor::Document* m_document;
-    KTextEditor::View* m_view;
 };
 
 #endif // KDEVPLATFORM_SOURCEFORMATTERSETTINGS_H
