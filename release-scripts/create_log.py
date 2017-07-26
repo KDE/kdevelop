@@ -11,6 +11,7 @@ import subprocess
 import sys
 import cgi
 
+
 def createLog(repositoryName, fromVersion, toVersion):
     p = subprocess.Popen('git fetch', shell=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -58,7 +59,7 @@ def createLog(repositoryName, fromVersion, toVersion):
         commits.append(commit)
 
     if len(commits):
-        print("<h3><a name='" + repositoryName + "' href='https://commits.kde.org/"+repositoryName+"'>" + repositoryName + "</a></h3>")
+        print("<h3><a name='" + repositoryName + "' href='https://commits.kde.org/" + repositoryName + "'>" + repositoryName + "</a></h3>")
         print("<ul id='ul" + repositoryName + "' style='display: block'>")
         for commit in commits:
             extra = ""
@@ -106,7 +107,7 @@ def createLog(repositoryName, fromVersion, toVersion):
                             changelog = feature
 
                 elif line.startswith("CHANGELOG:"):
-                    changelog = line[11:] # remove word "CHANGELOG: "
+                    changelog = line[11:]  # remove word "CHANGELOG: "
                 elif line.startswith("Merge Plasma"):
                     pass
 
@@ -117,7 +118,7 @@ def createLog(repositoryName, fromVersion, toVersion):
             # NOTE: Only showing interesting changes
             if extra:
                 capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
-                print("<li>" + capitalizedChangelog + " (<a href='https://commits.kde.org/"+repositoryName+"/"+commitHash+"'>commit.</a> " + extra + ")</li>")
+                print("<li>" + capitalizedChangelog + " (<a href='https://commits.kde.org/" + repositoryName + "/" + commitHash + "'>commit.</a> " + extra + ")</li>")
         print("</ul>\n\n")
 
     if p.wait() != 0:
