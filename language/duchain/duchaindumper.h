@@ -33,7 +33,7 @@ class QTextStream;
 namespace KDevelop
 {
 class DUContext;
-
+class DUChainDumperPrivate;
 
 /**
  * @brief Debugging utility function to dump a DUContext including contained declarations.
@@ -64,8 +64,7 @@ public:
   void dump(DUContext* context, int allowedDepth, QTextStream& out);
 
 private:
-  struct Private;
-  QScopedPointer<Private> d;
+  QScopedPointer<DUChainDumperPrivate> d;
 };
 
 }

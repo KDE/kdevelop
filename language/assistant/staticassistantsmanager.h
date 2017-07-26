@@ -41,6 +41,7 @@ namespace KDevelop {
 class IDocument;
 class DUContext;
 class TopDUContext;
+class StaticAssistantsManagerPrivate;
 
 /**
  * @brief Class managing instances of StaticAssistant
@@ -68,8 +69,7 @@ Q_SIGNALS:
     void problemsChanged(const IndexedString& url);
 
 private:
-    struct Private;
-    QScopedPointer<Private> const d;
+    QScopedPointer<StaticAssistantsManagerPrivate> const d;
 };
 
 }

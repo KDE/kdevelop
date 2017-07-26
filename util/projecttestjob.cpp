@@ -28,9 +28,10 @@
 
 using namespace KDevelop;
 
-struct ProjectTestJob::Private
+class KDevelop::ProjectTestJobPrivate
 {
-    explicit Private(ProjectTestJob* q)
+public:
+    explicit ProjectTestJobPrivate(ProjectTestJob* q)
         : q(q)
         , m_currentJob(nullptr)
         , m_currentSuite(nullptr)
@@ -47,14 +48,14 @@ struct ProjectTestJob::Private
     ProjectTestResult m_result;
 };
 
-void ProjectTestJob::Private::runNext()
+void ProjectTestJobPrivate::runNext()
 {
     m_currentSuite = m_suites.takeFirst();
     m_currentJob = m_currentSuite->launchAllCases(ITestSuite::Silent);
     m_currentJob->start();
 }
 
-void ProjectTestJob::Private::gotResult(ITestSuite* suite, const TestResult& result)
+void ProjectTestJobPrivate::gotResult(ITestSuite* suite, const TestResult& result)
 {
     if (suite == m_currentSuite) {
         m_result.total++;
@@ -88,7 +89,7 @@ void ProjectTestJob::Private::gotResult(ITestSuite* suite, const TestResult& res
 
 ProjectTestJob::ProjectTestJob(IProject* project, QObject* parent)
     : KJob(parent)
-    , d(new Private(this))
+    , d(new ProjectTestJobPrivate(this))
 {
     setCapabilities(Killable);
     setObjectName(i18n("Run all tests in %1", project->name()));

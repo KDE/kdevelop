@@ -39,9 +39,10 @@
 using namespace KDevelop;
 using namespace KTextEditor;
 
-struct StaticAssistantsManager::Private
+class KDevelop::StaticAssistantsManagerPrivate
 {
-    explicit Private(StaticAssistantsManager* qq)
+public:
+    explicit StaticAssistantsManagerPrivate(StaticAssistantsManager* qq)
         : q(qq)
     { }
 
@@ -57,7 +58,7 @@ struct StaticAssistantsManager::Private
 
 StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
     : QObject(parent)
-    , d(new Private(this))
+    , d(new StaticAssistantsManagerPrivate(this))
 {
     connect(KDevelop::ICore::self()->documentController(),
             &IDocumentController::documentLoaded,
@@ -92,22 +93,22 @@ QVector<StaticAssistant::Ptr> StaticAssistantsManager::registeredAssistants() co
     return d->m_registeredAssistants;
 }
 
-void StaticAssistantsManager::Private::documentLoaded(IDocument* document)
+void StaticAssistantsManagerPrivate::documentLoaded(IDocument* document)
 {
     if (document->textDocument()) {
         auto doc = document->textDocument();
-        connect(doc, &KTextEditor::Document::textInserted, q,
+        QObject::connect(doc, &KTextEditor::Document::textInserted, q,
                 [&] (KTextEditor::Document* doc, const Cursor& cursor, const QString& text) {
                     textInserted(doc, cursor, text);
                 });
-        connect(doc, &KTextEditor::Document::textRemoved, q,
+        QObject::connect(doc, &KTextEditor::Document::textRemoved, q,
                 [&] (KTextEditor::Document* doc, const Range& range, const QString& removedText) {
                     textRemoved(doc, range, removedText);
                 });
     }
 }
 
-void StaticAssistantsManager::Private::textInserted(Document* doc, const Cursor& cursor, const QString& text)
+void StaticAssistantsManagerPrivate::textInserted(Document* doc, const Cursor& cursor, const QString& text)
 {
     auto changed = false;
     Q_FOREACH ( auto assistant, m_registeredAssistants ) {
@@ -123,7 +124,7 @@ void StaticAssistantsManager::Private::textInserted(Document* doc, const Cursor&
     }
 }
 
-void StaticAssistantsManager::Private::textRemoved(Document* doc, const Range& range,
+void StaticAssistantsManagerPrivate::textRemoved(Document* doc, const Range& range,
                                       const QString& removedText)
 {
     auto changed = false;

@@ -119,7 +119,7 @@ public:
     QString name() const override { return i18n("Execute"); }
 };
 
-class RunController::RunControllerPrivate
+class KDevelop::RunControllerPrivate
 {
 public:
     QItemDelegate* delegate;

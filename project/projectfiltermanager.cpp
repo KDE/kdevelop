@@ -52,8 +52,9 @@ Q_DECLARE_TYPEINFO(Filter, Q_MOVABLE_TYPE);
 //END helper
 
 //BEGIN private
-struct ProjectFilterManager::Private
+class KDevelop::ProjectFilterManagerPrivate
 {
+public:
     void pluginLoaded(IPlugin* plugin);
     void unloadingPlugin(IPlugin* plugin);
     void filterChanged(IProjectFilterProvider* provider, IProject* project);
@@ -64,7 +65,7 @@ struct ProjectFilterManager::Private
     ProjectFilterManager* q;
 };
 
-void ProjectFilterManager::Private::pluginLoaded(IPlugin* plugin)
+void ProjectFilterManagerPrivate::pluginLoaded(IPlugin* plugin)
 {
     IProjectFilterProvider* filterProvider = plugin->extension<IProjectFilterProvider>();
     if (filterProvider) {
@@ -83,7 +84,7 @@ void ProjectFilterManager::Private::pluginLoaded(IPlugin* plugin)
     }
 }
 
-void ProjectFilterManager::Private::unloadingPlugin(IPlugin* plugin)
+void ProjectFilterManagerPrivate::unloadingPlugin(IPlugin* plugin)
 {
     IProjectFilterProvider* filterProvider = plugin->extension<IProjectFilterProvider>();
     if (filterProvider) {
@@ -106,7 +107,7 @@ void ProjectFilterManager::Private::unloadingPlugin(IPlugin* plugin)
     }
 }
 
-void ProjectFilterManager::Private::filterChanged(IProjectFilterProvider* provider, IProject* project)
+void ProjectFilterManagerPrivate::filterChanged(IProjectFilterProvider* provider, IProject* project)
 {
     if (!m_filters.contains(project)) {
         return;
@@ -130,7 +131,7 @@ void ProjectFilterManager::Private::filterChanged(IProjectFilterProvider* provid
 //BEGIN
 ProjectFilterManager::ProjectFilterManager(QObject* parent)
     : QObject(parent)
-    , d(new ProjectFilterManager::Private)
+    , d(new ProjectFilterManagerPrivate)
 {
     d->q = this;
 

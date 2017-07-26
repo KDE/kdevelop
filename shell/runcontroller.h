@@ -41,6 +41,7 @@ class IPlugin;
 class IProject;
 class LaunchConfiguration;
 class LaunchConfigurationType;
+class RunControllerPrivate;
 
 class KDEVPLATFORMSHELL_EXPORT RunController : public IRunController
 {
@@ -146,7 +147,6 @@ private:
     void checkState();
     void removeLaunchConfigurationInternal( LaunchConfiguration* l );
 
-    class RunControllerPrivate;
     RunControllerPrivate* const d;
 };
 

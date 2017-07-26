@@ -132,9 +132,6 @@ public:
      * Used in the DocumentController (shell).
      */
     static IBuddyDocumentFinder* finderForMimeType(const QString& mimeType);
-
-private:
-    struct Private;
 };
 
 }

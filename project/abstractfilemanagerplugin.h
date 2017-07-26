@@ -33,6 +33,8 @@ class KDirWatch;
 
 namespace KDevelop {
 
+class AbstractFileManagerPluginPrivate;
+
 /**
  * This class can be used as a common base for file managers.
  *
@@ -102,9 +104,8 @@ protected:
     KDirWatch* projectWatcher( IProject* project ) const;
 
 private:
-    struct Private;
-//     friend class Private;
-    Private* const d;
+    friend class AbstractFileManagerPluginPrivate;
+    AbstractFileManagerPluginPrivate* const d;
 
 Q_SIGNALS:
     void reloadedFileItem(KDevelop::ProjectFileItem* file);

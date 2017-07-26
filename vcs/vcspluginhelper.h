@@ -33,6 +33,7 @@ namespace KDevelop
 class IPlugin;
 class IBasicVersionControl;
 class Context;
+class VcsPluginHelperPrivate;
 
 class KDEVPLATFORMVCS_EXPORT VcsPluginHelper
             : public QObject
@@ -77,7 +78,6 @@ private Q_SLOTS:
 private:
     void diffForRev(const QUrl& url);
 
-    struct VcsPluginHelperPrivate;
     QScopedPointer<VcsPluginHelperPrivate> d;
 };
 

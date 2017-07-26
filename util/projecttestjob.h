@@ -29,6 +29,7 @@
 namespace KDevelop {
 
 class IProject;
+class ProjectTestJobPrivate;
 
 /**
  * A combined result of a project test job
@@ -107,8 +108,8 @@ protected:
     bool doKill() override;
 
 private:
-    struct Private;
-    QScopedPointer<Private> d;
+    friend class ProjectTestJobPrivate;
+    QScopedPointer<ProjectTestJobPrivate> d;
 };
 
 }

@@ -66,8 +66,10 @@ ProjectFolderItem* getParentFolder(ProjectBaseItem* item)
 
 //BEGIN Private
 
-struct AbstractFileManagerPlugin::Private {
-    explicit Private(AbstractFileManagerPlugin* qq)
+class KDevelop::AbstractFileManagerPluginPrivate
+{
+public:
+    explicit AbstractFileManagerPluginPrivate(AbstractFileManagerPlugin* qq)
         : q(qq)
     {
     }
@@ -104,7 +106,7 @@ struct AbstractFileManagerPlugin::Private {
     ProjectFilterManager m_filters;
 };
 
-void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
+void AbstractFileManagerPluginPrivate::projectClosing(IProject* project)
 {
     if ( m_projectJobs.contains(project) ) {
         // make sure the import job does not live longer than the project
@@ -119,7 +121,7 @@ void AbstractFileManagerPlugin::Private::projectClosing(IProject* project)
     m_filters.remove(project);
 }
 
-KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolderItem* item )
+KIO::Job* AbstractFileManagerPluginPrivate::eventuallyReadFolder(ProjectFolderItem* item)
 {
     FileManagerListJob* listJob = new FileManagerListJob( item );
     m_projectJobs[ item->project() ] << listJob;
@@ -135,7 +137,7 @@ KIO::Job* AbstractFileManagerPlugin::Private::eventuallyReadFolder( ProjectFolde
     return listJob;
 }
 
-void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
+void AbstractFileManagerPluginPrivate::jobFinished(KJob* job)
 {
     FileManagerListJob* gmlJob = qobject_cast<FileManagerListJob*>(job);
     if (gmlJob) {
@@ -152,7 +154,7 @@ void AbstractFileManagerPlugin::Private::jobFinished(KJob* job)
     }
 }
 
-void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
+void AbstractFileManagerPluginPrivate::addJobItems(FileManagerListJob* job,
                                                      ProjectFolderItem* baseItem,
                                                      const KIO::UDSEntryList& entries)
 {
@@ -245,7 +247,7 @@ void AbstractFileManagerPlugin::Private::addJobItems(FileManagerListJob* job,
     }
 }
 
-void AbstractFileManagerPlugin::Private::created(const QString &path_)
+void AbstractFileManagerPluginPrivate::created(const QString& path_)
 {
     qCDebug(FILEMANAGER) << "created:" << path_;
     QFileInfo info(path_);
@@ -301,7 +303,7 @@ void AbstractFileManagerPlugin::Private::created(const QString &path_)
     }
 }
 
-void AbstractFileManagerPlugin::Private::deleted(const QString &path_)
+void AbstractFileManagerPluginPrivate::deleted(const QString& path_)
 {
     if ( QFile::exists(path_) ) {
         // stopDirScan...
@@ -346,7 +348,7 @@ void AbstractFileManagerPlugin::Private::deleted(const QString &path_)
     }
 }
 
-bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const Path& newPath)
+bool AbstractFileManagerPluginPrivate::rename(ProjectBaseItem* item, const Path& newPath)
 {
     if ( !q->isValid(newPath, true, item->project()) ) {
         int cancel = KMessageBox::warningContinueCancel( qApp->activeWindow(),
@@ -381,7 +383,7 @@ bool AbstractFileManagerPlugin::Private::rename(ProjectBaseItem* item, const Pat
     return false;
 }
 
-void AbstractFileManagerPlugin::Private::stopWatcher(ProjectFolderItem* folder)
+void AbstractFileManagerPluginPrivate::stopWatcher(ProjectFolderItem* folder)
 {
     if ( !folder->path().isLocalFile() ) {
         return;
@@ -392,7 +394,7 @@ void AbstractFileManagerPlugin::Private::stopWatcher(ProjectFolderItem* folder)
     m_stoppedFolders.append(path);
 }
 
-void AbstractFileManagerPlugin::Private::continueWatcher(ProjectFolderItem* folder)
+void AbstractFileManagerPluginPrivate::continueWatcher(ProjectFolderItem* folder)
 {
     if ( !folder->path().isLocalFile() ) {
         return;
@@ -417,7 +419,7 @@ bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
     return false;
 }
 
-void AbstractFileManagerPlugin::Private::removeFolder(ProjectFolderItem* folder)
+void AbstractFileManagerPluginPrivate::removeFolder(ProjectFolderItem* folder)
 {
     ifDebug(qCDebug(FILEMANAGER) << "removing folder:" << folder << folder->path();)
     foreach(FileManagerListJob* job, m_projectJobs[folder->project()]) {
@@ -441,7 +443,7 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentNa
                                                       const QVariantList & /*args*/ )
     : IProjectFileManager(),
       IPlugin( componentName, parent ),
-      d(new Private(this))
+      d(new AbstractFileManagerPluginPrivate(this))
 {
     connect(core()->projectController(), &IProjectController::projectClosing,
             this, [&] (IProject* project) { d->projectClosing(project); });

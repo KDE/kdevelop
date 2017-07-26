@@ -59,7 +59,9 @@
 namespace KDevelop
 {
 
-struct VcsPluginHelper::VcsPluginHelperPrivate {
+class VcsPluginHelperPrivate
+{
+public:
     IPlugin * plugin;
     IBasicVersionControl * vcs;
 
@@ -89,17 +91,17 @@ struct VcsPluginHelper::VcsPluginHelperPrivate {
         pushAction = new QAction(QIcon::fromTheme(QStringLiteral("arrow-up-double")), i18n("Push"), parent);
         pullAction = new QAction(QIcon::fromTheme(QStringLiteral("arrow-down-double")), i18n("Pull"), parent);
 
-        connect(commitAction, &QAction::triggered, parent, &VcsPluginHelper::commit);
-        connect(addAction, &QAction::triggered, parent, &VcsPluginHelper::add);
-        connect(updateAction, &QAction::triggered, parent, &VcsPluginHelper::update);
-        connect(diffToBaseAction, &QAction::triggered, parent, &VcsPluginHelper::diffToBase);
-        connect(revertAction, &QAction::triggered, parent, &VcsPluginHelper::revert);
-        connect(historyAction, &QAction::triggered, parent, [=] { parent->history(); });
-        connect(annotationAction, &QAction::triggered, parent, &VcsPluginHelper::annotation);
-        connect(diffForRevAction, &QAction::triggered, parent, static_cast<void(VcsPluginHelper::*)()>(&VcsPluginHelper::diffForRev));
-        connect(diffForRevGlobalAction, &QAction::triggered, parent, &VcsPluginHelper::diffForRevGlobal);
-        connect(pullAction, &QAction::triggered, parent, &VcsPluginHelper::pull);
-        connect(pushAction, &QAction::triggered, parent, &VcsPluginHelper::push);
+        QObject::connect(commitAction, &QAction::triggered, parent, &VcsPluginHelper::commit);
+        QObject::connect(addAction, &QAction::triggered, parent, &VcsPluginHelper::add);
+        QObject::connect(updateAction, &QAction::triggered, parent, &VcsPluginHelper::update);
+        QObject::connect(diffToBaseAction, &QAction::triggered, parent, &VcsPluginHelper::diffToBase);
+        QObject::connect(revertAction, &QAction::triggered, parent, &VcsPluginHelper::revert);
+        QObject::connect(historyAction, &QAction::triggered, parent, [=] { parent->history(); });
+        QObject::connect(annotationAction, &QAction::triggered, parent, &VcsPluginHelper::annotation);
+        QObject::connect(diffForRevAction, &QAction::triggered, parent, static_cast<void(VcsPluginHelper::*)()>(&VcsPluginHelper::diffForRev));
+        QObject::connect(diffForRevGlobalAction, &QAction::triggered, parent, &VcsPluginHelper::diffForRevGlobal);
+        QObject::connect(pullAction, &QAction::triggered, parent, &VcsPluginHelper::pull);
+        QObject::connect(pushAction, &QAction::triggered, parent, &VcsPluginHelper::push);
     }
 
     bool allLocalFiles(const QList<QUrl>& urls)

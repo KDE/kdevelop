@@ -62,9 +62,10 @@ QString typeToString(DUContext::ContextType type)
 
 }
 
-struct DUChainDumper::Private
+class KDevelop::DUChainDumperPrivate
 {
-  Private()
+public:
+  DUChainDumperPrivate()
     : m_indent(0)
   {}
 
@@ -72,12 +73,12 @@ struct DUChainDumper::Private
   void dump(DUContext* context, int allowedDepth, bool isFromImport, QTextStream& out);
 
   int m_indent;
-  Features m_features;
+  DUChainDumper::Features m_features;
   QSet<DUContext*> m_visitedContexts;
 };
 
 DUChainDumper::DUChainDumper(Features features)
-  : d(new Private)
+  : d(new DUChainDumperPrivate)
 {
   d->m_features = features;
 }
@@ -102,7 +103,7 @@ private:
   int m_level;
 };
 
-void DUChainDumper::Private::dumpProblems(TopDUContext* top, QTextStream& out)
+void DUChainDumperPrivate::dumpProblems(TopDUContext* top, QTextStream& out)
 {
   QDebug qout = fromTextStream(out);
 
@@ -115,7 +116,7 @@ void DUChainDumper::Private::dumpProblems(TopDUContext* top, QTextStream& out)
   }
 }
 
-void DUChainDumper::Private::dump(DUContext * context, int allowedDepth, bool isFromImport, QTextStream& out)
+void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFromImport, QTextStream& out)
 {
   QDebug qout = fromTextStream(out);
 
