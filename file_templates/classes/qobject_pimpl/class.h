@@ -9,6 +9,11 @@
 {% endblock includes %}
 
 
+{% block forward_declarations %}
+class {{ name }}Private;
+{% endblock forward_declarations %}
+
+
 {% block class_declaration_open %}
 {% if base_classes %}
 {{ block.super }}
@@ -74,6 +79,6 @@ protected:
 
 
 private:
-    class {{ name }}Private* const d_ptr;
+    {{ name }}Private* const d_ptr;
     Q_DECLARE_PRIVATE({{ name }})
 {% endblock class_body %}
