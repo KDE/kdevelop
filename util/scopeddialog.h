@@ -64,6 +64,10 @@ class ScopedDialog {
             delete ptr;
         }
 
+        /// Access the raw pointer to the dialog
+        DialogType* data() const {
+            return ptr;
+        }
         /// Access members of the dialog
         DialogType* operator->() const {
             return ptr;

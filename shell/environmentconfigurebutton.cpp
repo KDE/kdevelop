@@ -59,8 +59,8 @@ public:
 
         auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                      | QDialogButtonBox::Cancel);
-        QObject::connect(buttonBox, &QDialogButtonBox::accepted, dlg, &QDialog::accept);
-        QObject::connect(buttonBox, &QDialogButtonBox::rejected, dlg, &QDialog::reject);
+        QObject::connect(buttonBox, &QDialogButtonBox::accepted, dlg.data(), &QDialog::accept);
+        QObject::connect(buttonBox, &QDialogButtonBox::rejected, dlg.data(), &QDialog::reject);
         auto layout = new QVBoxLayout;
         layout->addWidget(prefs);
         layout->addWidget(buttonBox);

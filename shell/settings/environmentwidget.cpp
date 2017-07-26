@@ -195,8 +195,8 @@ QString EnvironmentWidget::askNewProfileName(const QString& defaultName)
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setEnabled(false);
     okButton->setDefault(true);
-    dialog->connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
-    dialog->connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
+    dialog->connect(buttonBox, &QDialogButtonBox::accepted, dialog.data(), &QDialog::accept);
+    dialog->connect(buttonBox, &QDialogButtonBox::rejected, dialog.data(), &QDialog::reject);
     layout->addWidget(buttonBox);
 
     auto validator = new ProfileNameValidator(m_environmentProfileListModel, dialog);
@@ -261,8 +261,8 @@ void EnvironmentWidget::batchModeEditButtonClicked()
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    dialog->connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
-    dialog->connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);
+    dialog->connect(buttonBox, &QDialogButtonBox::accepted, dialog.data(), &QDialog::accept);
+    dialog->connect(buttonBox, &QDialogButtonBox::rejected, dialog.data(), &QDialog::reject);
     layout->addWidget(buttonBox);
 
     dialog->resize(600, 400);
