@@ -1,7 +1,8 @@
+{% with namespaces|join:"::"|default:"::"|add:"::"|cut:"::::"|add:name as ns_prefixed_name %}
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>{{ name }}</class>
- <widget class="QWidget" name="{{ name }}">
+ <class>{{ ns_prefixed_name }}</class>
+ <widget class="QWidget" name="{{ ns_prefixed_name }}">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,3 +15,4 @@
  <resources/>
  <connections/>
 </ui>
+{% endwith %}
