@@ -153,11 +153,20 @@ def printableQString(valobj):
 
 def QStringSummaryProvider(valobj, internal_dict):
     if valobj.IsValid():
-        content = valobj.GetChildMemberWithName('(content)')
-        if content.IsValid():
-            summary = content.GetSummary()
-            if summary is not None:
-                return summary
+        # content = valobj.GetChildMemberWithName('(content)')
+        # if content.IsValid():
+        #     try:
+        #         error = lldb.SBError()
+        #         rawprintable = content.GetData().GetString(error, 0)
+        #         if error.Success():
+        #             printable = rawprintable.decode()
+        #             return quote(printable)
+        #     except:
+        #         pass
+
+        # FIXME: there's no reliable way to pass data from formatter to
+        # summary provider currently. So directly pull data from inferior
+
         # Something wrong with synthetic provider, or
         # no synthetic provider installed, get the content by ourselves
         printable, _, _ = printableQString(valobj)
@@ -185,8 +194,7 @@ class QStringFormatter(HiddenMemberProvider):
                                                          dataPointer + idx * self._qchar_size,
                                                          self._qchar_type)
                 self._addChild(var)
-            quoted_printable_expr = quote(printable)
-            self._addChild(('(content)', quoted_printable_expr), hidden=True)
+            # self._addChild(('(content)', quote(printable)), hidden=True)
 
 
 def QCharSummaryProvider(valobj, internal_dict):
@@ -294,11 +302,8 @@ class QByteArrayFormatter(HiddenMemberProvider):
 
             # first replace " to \", and suround by "", no need to escape other things which
             # are handled in printableQByteArray.
-            printable = '"{}"'.format(printable.replace('"', '\\"'))
-            # then we need to quote again, as the quoted_printable_expr is parsed by the lldb to
-            # produce the final content, which removes one level of quotation
-            quoted_printable_expr = quote(printable)
-            self._addChild(('(content)', quoted_printable_expr), hidden=True)
+            printable = b'"{}"'.format(printable.replace(b'"', b'\\"'))
+            self._addChild(('(content)', printable), hidden=True)
 
 
 class BasicListFormatter(HiddenMemberProvider):
@@ -905,14 +910,14 @@ class QDateFormatter(HiddenMemberProvider):
             return
         # (ISO)
         iso_str = pydate.isoformat().decode().__repr__()[2:-1]
-        self._addChild(('(ISO)', quote(iso_str)))
+        self._addChild(('(ISO)', iso_str))
 
         # (Locale)
         locale_encoding = [locale.getlocale()[1]]
         if locale_encoding[0] is None:
             locale_encoding = []
         locale_str = pydate.strftime('%x').decode(*locale_encoding).__repr__()[2:-1]
-        self._addChild(('(Locale)', quote(locale_str)))
+        self._addChild(('(Locale)', locale_str))
 
 
 def QDateSummaryProvider(valobj, internal_dict):
@@ -967,14 +972,14 @@ class QTimeFormatter(HiddenMemberProvider):
             return
         # (ISO)
         iso_str = pytime.isoformat().decode().__repr__()[2:-1]
-        self._addChild(('(ISO)', quote(iso_str)))
+        self._addChild(('(ISO)', iso_str))
 
         # (Locale)
         locale_encoding = [locale.getlocale()[1]]
         if locale_encoding[0] is None:
             locale_encoding = []
         locale_str = pytime.strftime('%X').decode(*locale_encoding).__repr__()[2:-1]
-        self._addChild(('(Locale)', quote(locale_str)))
+        self._addChild(('(Locale)', locale_str))
 
 
 def QTimeSummaryProvider(valobj, internal_dict):
@@ -1033,11 +1038,11 @@ class QDateTimeFormatter(HiddenMemberProvider):
         # (ISO)
         formatted = time.strftime('%Y-%m-%d %H:%M:%S', utc_tt).decode(*locale_encoding).__repr__()
         formatted = formatted[2:-1]
-        self._addChild(('(ISO)', quote(formatted)))
+        self._addChild(('(ISO)', formatted))
 
         def locale_fmt(name, tt):
             formatted = time.strftime('%c', tt).decode(*locale_encoding).__repr__()[2:-1]
-            self._addChild((name, quote(formatted)))
+            self._addChild((name, formatted))
 
         # (Locale)
         locale_fmt('(Locale)', local_tt)
@@ -1067,7 +1072,9 @@ def QDateTimeSummaryProvider(valobj, internal_dict):
         # No synthetic provider installed, get the content by ourselves
         pytime = QDateTimeFormatter.parse(QDateTimeFormatter.getdata(valobj).GetValueAsUnsigned(0))
         if pytime is not None:
-            return pytime.isoformat().decode().__repr__()[2:-1]
+            formatted = time.strftime('%Y-%m-%d %H:%M:%S', pytime).decode().__repr__()
+            formatted = formatted[2:-1]
+            return formatted
     return None
 
 
@@ -1106,7 +1113,7 @@ class QUrlFormatter(HiddenMemberProvider):
                               printableQString(fragment)[0]))
             encoded = None
             if len(url) > 0:
-                encoded = ('(encoded)', quote(url))
+                encoded = ('(encoded)', url)
             return (encoded, port, scheme, username, password, host, path, query, fragment)
 
         # try if there's debug info available
@@ -1159,14 +1166,14 @@ class QUrlFormatter(HiddenMemberProvider):
                 return (None,) * 9
             res = urlsplit(url)
             port = dataobj.CreateValueFromExpression('(port)', str(res.port if res.port is not None else -1))
-            scheme = ('(scheme)', quote(res.scheme))
-            username = ('(username)', quote(res.username if res.username is not None else ''))
-            password = ('(password)', quote(res.password if res.password is not None else ''))
-            host = ('(host)', quote(res.hostname if res.hostname is not None else ''))
-            path = ('(path)', quote(res.path))
-            query = ('(query)', quote(res.query))
-            fragment = ('(fragment)', quote(res.fragment))
-            encoded = ('(encoded)', quote(url))
+            scheme = ('(scheme)', res.scheme)
+            username = ('(username)', res.username if res.username is not None else '')
+            password = ('(password)', res.password if res.password is not None else '')
+            host = ('(host)', res.hostname if res.hostname is not None else '')
+            path = ('(path)', res.path)
+            query = ('(query)', res.query)
+            fragment = ('(fragment)', res.fragment)
+            encoded = ('(encoded)', url)
             return (encoded, port, scheme, username, password, host, path, query, fragment)
 
         encodedOriginal = dataobj.GetChildMemberWithName('encodedOriginal')

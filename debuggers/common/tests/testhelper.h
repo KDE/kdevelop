@@ -23,6 +23,8 @@
 #ifndef KDEVDBG_TESTHELPER_H
 #define KDEVDBG_TESTHELPER_H
 
+#include "debuggers-tests-config.h"
+
 #include <debugger/interfaces/idebugsession.h>
 
 #include <QPointer>
@@ -30,33 +32,35 @@
 #include <QTime>
 #include <QUrl>
 
-namespace KDevMI {
+namespace KDevMI
+{
 
 class MIDebugSession;
 
 QUrl findExecutable(const QString& name);
 QString findSourceFile(const QString& name);
-bool isAttachForbidden(const char *file, int line);
+QString findFile(const char* dir, const QString& name);
+bool isAttachForbidden(const char* file, int line);
 
-bool compareData(QModelIndex index, const QString& expected, const char *file, int line, bool useRE = false);
+bool compareData(QModelIndex index, const QString& expected, const char* file, int line, bool useRE = false);
 
-bool waitForState(MIDebugSession *session, KDevelop::IDebugSession::DebuggerState state,
-                  const char *file, int line, bool waitForIdle = false);
+bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerState state, const char* file, int line,
+                  bool waitForIdle = false);
 
-bool waitForAWhile(MIDebugSession *session, int ms, const char *file, int line);
+bool waitForAWhile(MIDebugSession* session, int ms, const char* file, int line);
 
 class TestWaiter
 {
 public:
-    TestWaiter(MIDebugSession * session_, const char * condition_, const char * file_, int line_);
+    TestWaiter(MIDebugSession* session_, const char* condition_, const char* file_, int line_);
 
     bool waitUnless(bool ok);
 
 private:
     QTime stopWatch;
     QPointer<MIDebugSession> session;
-    const char * condition;
-    const char * file;
+    const char* condition;
+    const char* file;
     int line;
 };
 

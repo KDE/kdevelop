@@ -63,6 +63,7 @@
 using KDevelop::AutoTestShell;
 using KDevMI::findExecutable;
 using KDevMI::findSourceFile;
+using KDevMI::findFile;
 
 namespace KDevMI { namespace GDB {
 
@@ -547,7 +548,7 @@ void GdbTest::testBreakOnWriteBreakpoint()
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->line(), 23);
+    QCOMPARE(session->line(), 22); // line 23: ++i; int j = i;
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 24);
@@ -573,7 +574,7 @@ void GdbTest::testBreakOnWriteWithConditionBreakpoint()
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->line(), 23);
+    QCOMPARE(session->line(), 22); // line 23: ++i; int j = i;
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 24);
@@ -616,7 +617,11 @@ void GdbTest::testBreakOnReadBreakpoint2()
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->line(), 22);
+    QCOMPARE(session->line(), 22); // ++i
+
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 22); // int j = i
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -642,12 +647,15 @@ void GdbTest::testBreakOnAccessBreakpoint()
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->line(), 22);
+    QCOMPARE(session->line(), 22); // line 23: ++i (read)
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
-    QCOMPARE(session->line(), 23);
+    QCOMPARE(session->line(), 22); // line 23: ++i (write)
 
+    session->run();
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 22); // line 23: int j = i (read)
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
@@ -885,18 +893,18 @@ void GdbTest::testStackFetchMore()
     stackModel->fetchMoreFrames();
     QTest::qWait(200);
     QCOMPARE(stackModel->fetchFramesCalled, 4);
-    QCOMPARE(stackModel->rowCount(tIdx), 301);
+    QCOMPARE(stackModel->rowCount(tIdx), 299);
     COMPARE_DATA(stackModel->index(120, 0, tIdx), "120");
     COMPARE_DATA(stackModel->index(121, 0, tIdx), "121");
     COMPARE_DATA(stackModel->index(122, 0, tIdx), "122");
-    COMPARE_DATA(stackModel->index(300, 0, tIdx), "300");
-    COMPARE_DATA(stackModel->index(300, 1, tIdx), "main");
-    COMPARE_DATA(stackModel->index(300, 2, tIdx), fileName+":30");
+    COMPARE_DATA(stackModel->index(298, 0, tIdx), "298");
+    COMPARE_DATA(stackModel->index(298, 1, tIdx), "main");
+    COMPARE_DATA(stackModel->index(298, 2, tIdx), fileName+":30");
 
     stackModel->fetchMoreFrames(); //nothing to fetch, we are at the end
     QTest::qWait(200);
     QCOMPARE(stackModel->fetchFramesCalled, 4);
-    QCOMPARE(stackModel->rowCount(tIdx), 301);
+    QCOMPARE(stackModel->rowCount(tIdx), 299);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -1005,7 +1013,9 @@ void GdbTest::testManualAttach()
     TestDebugSession *session = new TestDebugSession;
 
     TestLaunchConfiguration cfg;
-    cfg.config().writeEntry(Config::RemoteGdbRunEntry, QUrl::fromLocalFile(findSourceFile(QStringLiteral("gdb_script_empty"))));
+    cfg.config().writeEntry(Config::RemoteGdbRunEntry,
+                            QUrl::fromLocalFile(findFile(GDB_SRC_DIR,
+                                                         QStringLiteral("unittests/gdb_script_empty"))));
     QVERIFY(session->startDebugging(&cfg, m_iface));
 
     session->addCommand(MI::NonMI, QStringLiteral("attach %0").arg(debugeeProcess.pid()));
@@ -1019,7 +1029,10 @@ void GdbTest::testManualAttach()
 void GdbTest::testCoreFile()
 {
     QFileInfo f(QStringLiteral("core"));
-    if (f.exists()) QFile::remove(f.canonicalFilePath());
+    f.setCaching(false); // don't cache information
+    if (f.exists()) {
+        QVERIFY(QFile::remove(f.canonicalFilePath()));
+    }
 
     KProcess debugeeProcess;
     debugeeProcess.setOutputChannelMode(KProcess::MergedChannels);
@@ -1035,7 +1048,7 @@ void GdbTest::testCoreFile()
         // Try to use coredumpctl
         auto coredumpctl = QStandardPaths::findExecutable(QStringLiteral("coredumpctl"));
         if (!coredumpctl.isEmpty()) {
-            KProcess::execute(coredumpctl, {"-1", "-o", f.canonicalFilePath(), "dump", "debugeecrash"});
+            KProcess::execute(coredumpctl, {"-1", "-o", f.absoluteFilePath(), "dump", "debuggee_crash"});
             coreFileFound = f.exists();
         }
     }
@@ -1080,14 +1093,18 @@ void GdbTest::testVariablesLocals()
     QCOMPARE(variableCollection()->rowCount(), 2);
     QModelIndex i = variableCollection()->index(1, 0);
     COMPARE_DATA(i, "Locals");
-    QCOMPARE(variableCollection()->rowCount(i), 1);
+    QCOMPARE(variableCollection()->rowCount(i), 2);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "0");
+    COMPARE_DATA(variableCollection()->index(1, 0, i), "j");
+    // COMPARE_DATA(variableCollection()->index(1, 1, i), "1"); // j is not initialized yet
     session->run();
     QTest::qWait(1000);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+    COMPARE_DATA(variableCollection()->index(1, 0, i), "j");
+    COMPARE_DATA(variableCollection()->index(1, 1, i), "1");
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -1338,9 +1355,10 @@ void GdbTest::testVariablesSwitchFrame()
 
     QModelIndex i = variableCollection()->index(1, 0);
     COMPARE_DATA(i, "Locals");
-    QCOMPARE(variableCollection()->rowCount(i), 1);
+    QCOMPARE(variableCollection()->rowCount(i), 2);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+    COMPARE_DATA(variableCollection()->index(1, 0, i), "j");
 
     stackModel->setCurrentFrame(1);
     QTest::qWait(200);
@@ -1371,9 +1389,10 @@ void GdbTest::testVariablesQuicklySwitchFrame()
 
     QModelIndex i = variableCollection()->index(1, 0);
     COMPARE_DATA(i, "Locals");
-    QCOMPARE(variableCollection()->rowCount(i), 1);
+    QCOMPARE(variableCollection()->rowCount(i), 2);
     COMPARE_DATA(variableCollection()->index(0, 0, i), "i");
     COMPARE_DATA(variableCollection()->index(0, 1, i), "1");
+    COMPARE_DATA(variableCollection()->index(1, 0, i), "j");
 
     stackModel->setCurrentFrame(1);
     QTest::qWait(300);

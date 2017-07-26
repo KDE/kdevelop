@@ -84,6 +84,7 @@ using namespace KDevelop;
 using namespace KDevMI::LLDB;
 using KDevMI::findExecutable;
 using KDevMI::findSourceFile;
+using KDevMI::findFile;
 using KDevMI::compareData;
 
 class TestLaunchConfiguration : public ILaunchConfiguration
@@ -123,9 +124,8 @@ public:
     {
         setSourceInitFile(false);
         // explicit set formatter path to force use in-tree formatters, not the one installed in system.
-        QFileInfo info(QFileInfo(__FILE__).path(), "../formatters/all.py");
-        Q_ASSERT(info.exists());
-        setFormatterPath(info.canonicalFilePath());
+        auto formatter = findFile(LLDB_SRC_DIR, "formatters/all.py");
+        setFormatterPath(formatter);
 
         KDevelop::ICore::self()->debugController()->addSession(this);
 
@@ -434,6 +434,8 @@ void LldbFormattersTest::testQListContainer()
     // <int>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 33); // line 34: intList << 10 << 20;
+
     auto var = variableCollection()->watches()->add(QStringLiteral("intList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
@@ -444,6 +446,7 @@ void LldbFormattersTest::testQListContainer()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 34); // line 35: intList << 30;
 
     variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
@@ -455,6 +458,7 @@ void LldbFormattersTest::testQListContainer()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 36); // line 37: Container<QString> stringList;
 
     if (!verifyVariable(0, QStringLiteral("intList"), QStringLiteral("<size=3>"), QStringList{"10", "20", "30"},
                         __FILE__, __LINE__, false, false, unordered)) {
@@ -465,6 +469,8 @@ void LldbFormattersTest::testQListContainer()
     // <QString>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 37); // line 38: stringList << "a" << "bc";
+
     var = variableCollection()->watches()->add(QStringLiteral("stringList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
@@ -475,6 +481,7 @@ void LldbFormattersTest::testQListContainer()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 38); // line 39: stringList << "d";
 
     variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
@@ -487,6 +494,7 @@ void LldbFormattersTest::testQListContainer()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 40); // line 41: Container<A> structList;
 
     if (!verifyVariable(0, QStringLiteral("stringList"), QStringLiteral("<size=3>"), QStringList{"\"a\"", "\"bc\"", "\"d\""},
                         __FILE__, __LINE__, false, false, unordered)) {
@@ -497,6 +505,8 @@ void LldbFormattersTest::testQListContainer()
     // <struct A>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 41); // line 42: structList << A(QStringLiteral("a"), QStringLiteral("b"), 100, -200);
+
     var = variableCollection()->watches()->add(QStringLiteral("structList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
@@ -505,8 +515,9 @@ void LldbFormattersTest::testQListContainer()
         return;
     }
 
-    m_session->stepOver();
+    m_session->runUntil({}, 43);
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 42); // line 43: structList << A();
 
     variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
@@ -518,6 +529,7 @@ void LldbFormattersTest::testQListContainer()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 44); // line 45: Container<int*> pointerList;
 
     if (!verifyVariable(0, QStringLiteral("structList"), QStringLiteral("<size=2>"), QStringList{"{...}", "{...}"},
                         __FILE__, __LINE__, false, false, unordered)) {
@@ -528,6 +540,8 @@ void LldbFormattersTest::testQListContainer()
     // <int*>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 45); // line 46: pointerList << new int(1) << new int(2);
+
     var = variableCollection()->watches()->add(QStringLiteral("pointerList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
@@ -538,6 +552,7 @@ void LldbFormattersTest::testQListContainer()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 46); // line 47: pointerList << new int(3);
 
     variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
@@ -549,6 +564,7 @@ void LldbFormattersTest::testQListContainer()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 47); // line 48: qDeleteAll(pointerList);
 
     if (!verifyVariable(0, QStringLiteral("pointerList"), QStringLiteral("<size=3>"), QStringList{"^0x[0-9A-Fa-f]+$", "^0x[0-9A-Fa-f]+$",
                                                                   "^0x[0-9A-Fa-f]+$"},
@@ -561,6 +577,8 @@ void LldbFormattersTest::testQListContainer()
     // <QPair<int, int>>
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 50); // line 51: pairList << QPair<int, int>(1, 2) << qMakePair(2, 3);
+
     var = variableCollection()->watches()->add(QStringLiteral("pairList"));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
@@ -568,6 +586,7 @@ void LldbFormattersTest::testQListContainer()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 51); // line 52: pairList << qMakePair(4, 5);
 
     variableCollection()->expanded(watchVariableIndexAt(0)); // expand this node for correct update.
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
@@ -579,6 +598,7 @@ void LldbFormattersTest::testQListContainer()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 54); // line 55: int i = 0;
 
     if (!verifyVariable(0, QStringLiteral("pairList"), QStringLiteral("<size=3>"), QStringList{"{...}", "{...}", "{...}"},
                         __FILE__, __LINE__, false, false, unordered)) {
@@ -668,6 +688,7 @@ void LldbFormattersTest::testQMapString()
 
     QVERIFY(m_session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
+    QCOMPARE(m_session->currentLine(), 7); // line 8: m[QStringLiteral("30")] = QStringLiteral("300");
 
     // Should be two rows ('auto', 'local')
     QCOMPARE(variableCollection()->rowCount(), 2);
@@ -679,7 +700,7 @@ void LldbFormattersTest::testQMapString()
 
     m_session->stepOver();
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
-    QCOMPARE(m_session->currentLine(), 8);
+    QCOMPARE(m_session->currentLine(), 8); // line 9: return 0;
 
     VERIFY_LOCAL(0, "m", "<size=3>",
                  (QStringList{"(\"10\", \"100\")", "(\"20\", \"200\")", "(\"30\", \"300\")"}));

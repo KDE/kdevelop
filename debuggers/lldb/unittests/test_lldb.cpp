@@ -79,6 +79,7 @@
 using namespace KDevelop;
 using namespace KDevMI::LLDB;
 using KDevMI::findExecutable;
+using KDevMI::findFile;
 using KDevMI::findSourceFile;
 
 namespace {
@@ -150,9 +151,8 @@ public:
     TestDebugSession() : DebugSession()
     {
         // explicit set formatter path to force use in-tree formatters, not the one installed in system.
-        QFileInfo info(QFileInfo(__FILE__).path(), "../formatters/all.py");
-        Q_ASSERT(info.exists());
-        setFormatterPath(info.canonicalFilePath());
+        auto formatter = findFile(LLDB_SRC_DIR, "formatters/all.py");
+        setFormatterPath(formatter);
 
         setSourceInitFile(false);
         m_frameStackModel = new TestFrameStackModel(this);
@@ -750,7 +750,6 @@ void LldbTest::testInsertBreakpointFunctionName()
 
 void LldbTest::testManualBreakpoint()
 {
-    QSKIP("Skipping... lldb-mi output malformated response which breaks this");
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
@@ -776,11 +775,14 @@ void LldbTest::testManualBreakpoint()
     session->addCommand(MI::NonMI, QStringLiteral("break modify -i 1 2"));
     WAIT_FOR_A_WHILE(session, 1000);
     QCOMPARE(b->enabled(), false);
+    QEXPECT_FAIL("", "LLDB 4.0 does not report condition in mi response", Continue);
     QCOMPARE(b->condition(), QString("i == 1"));
+    QEXPECT_FAIL("", "LLDB 4.0 does not report ignore hits in mi response", Continue);
     QCOMPARE(b->ignoreHits(), 1);
 
     session->addCommand(MI::NonMI, QStringLiteral("break delete 2"));
     WAIT_FOR_A_WHILE(session, 100);
+    QEXPECT_FAIL("", "LLDB 4.0 does not report breakpoint deletion as mi notification", Continue);
     QCOMPARE(breakpoints()->rowCount(), 0);
 
     session->run();
@@ -889,6 +891,7 @@ void LldbTest::testBreakpointDisabledOnStart()
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
+    QEXPECT_FAIL("", "See LLDB bug 28703: -d flag has no effect", Abort);
     QCOMPARE(session->currentLine(), 29);
     b->setData(KDevelop::Breakpoint::EnableColumn, Qt::Checked);
 
@@ -1313,7 +1316,10 @@ void LldbTest::testRemoteDebugging()
 void LldbTest::testCoreFile()
 {
     QFileInfo f(QStringLiteral("core"));
-    if (f.exists()) QFile::remove(f.canonicalFilePath());
+    f.setCaching(false); // don't cache information
+    if (f.exists()) {
+        QVERIFY(QFile::remove(f.canonicalFilePath()));
+    }
 
     KProcess debugeeProcess;
     debugeeProcess.setOutputChannelMode(KProcess::MergedChannels);
@@ -1327,9 +1333,10 @@ void LldbTest::testCoreFile()
     bool coreFileFound = f.exists();
     if (!coreFileFound) {
         // Try to use coredumpctl
+        qDebug() << "try to use coredumpctl";
         auto coredumpctl = QStandardPaths::findExecutable(QStringLiteral("coredumpctl"));
         if (!coredumpctl.isEmpty()) {
-            KProcess::execute(coredumpctl, {"-1", "-o", f.canonicalFilePath(), "dump", "debuggee_crash"});
+            KProcess::execute(coredumpctl, {"-1", "-o", f.absoluteFilePath(), "dump", "debuggee_crash"});
             coreFileFound = f.exists();
         }
     }
@@ -1492,6 +1499,10 @@ void LldbTest::testVariablesWatchesQuotes()
     QModelIndex i = variableCollection()->index(0, 0);
     QCOMPARE(variableCollection()->rowCount(i), 1);
     COMPARE_DATA(variableCollection()->index(0, 0, i), quotedTestString);
+
+    QEXPECT_FAIL("",
+                 "LLDB 4.0 cannot deal with string literal in expression when debugging, causing memory access error",
+                 Abort);
     COMPARE_DATA(variableCollection()->index(0, 1, i), quotedTestString);
 
     QModelIndex testStr = variableCollection()->index(0, 0, i);

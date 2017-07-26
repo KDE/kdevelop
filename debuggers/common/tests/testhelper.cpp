@@ -44,8 +44,13 @@ QUrl findExecutable(const QString& name)
 
 QString findSourceFile(const QString& name)
 {
-    QFileInfo info(QString::fromLocal8Bit(DEBUGGEE_SRC_DIR), name);
-    Q_ASSERT_X(info.exists(), "findSourceFile", info.filePath().toLocal8Bit());
+    return findFile(DEBUGGEE_SRC_DIR, name);
+}
+
+QString findFile(const char* dir, const QString& name)
+{
+    QFileInfo info(QString::fromLocal8Bit(dir), name);
+    Q_ASSERT_X(info.exists(), "findFile", info.filePath().toLocal8Bit());
 
     return info.canonicalFilePath();
 }
@@ -78,13 +83,9 @@ bool compareData(QModelIndex index, const QString& expected, const char *file, i
     } else {
         matched = s == expected;
     }
-    if (!matched) {
-        QTest::qFail(qPrintable(QString("'%0' didn't match expected '%1' in %2:%3")
-                                .arg(s).arg(expected).arg(file).arg(line)),
-                     file, line);
-        return false;
-    }
-    return true;
+    return QTest::qVerify(matched, "Comparsion of data", qPrintable(QString("'%0' didn't match expected '%1' in %2:%3")
+                                       .arg(s).arg(expected).arg(file).arg(line)),
+                          file, line);
 }
 
 bool waitForAWhile(MIDebugSession *session, int ms, const char *file, int line)

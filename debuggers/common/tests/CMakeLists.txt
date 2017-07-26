@@ -4,6 +4,8 @@ else()
     message(WARNING "Disabling 'path with spaces' test, this CMake version would create a faulty build.ninja file. Upgrade to at least CMake v3.0")
 endif()
 
+get_filename_component(GDB_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../gdb ABSOLUTE)
+get_filename_component(LLDB_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../lldb ABSOLUTE)
 configure_file(debuggers-tests-config.h.in debuggers-tests-config.h)
 
 add_subdirectory(debuggees)

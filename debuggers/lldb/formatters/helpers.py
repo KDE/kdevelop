@@ -184,6 +184,11 @@ class HiddenMemberProvider(object):
         self._name2idx = {}
         # whether to add original children
         self._add_original = True
+        # some useful info
+        process = self.valobj.GetProcess()
+        self._endianness = process.GetByteOrder()
+        self._pointer_size = process.GetAddressByteSize()
+        self._char_type = valobj.GetType().GetBasicType(lldb.eBasicTypeChar)
 
     def has_children(self):
         return self._num_children != 0
@@ -214,16 +219,7 @@ class HiddenMemberProvider(object):
         if isinstance(child, AutoCacheValue):
             child = child.get()
 
-        if isinstance(child, lldb.SBValue):
-            return child
-        else:
-            # we don't cache (const char[]) SBValue, ceate it on the fly
-            # LLDB tends to reuse a static data space for c-string literal type expressions,
-            # it might be overwriten by others if we cache them.
-            # child is a (name, expr) tuple in this case
-            if len(child) != 2:
-                print('error, const char[] value should be a tuple with two elements, it is', child)
-            return self.valobj.CreateValueFromExpression(*child)
+        return child
 
     @staticmethod
     def _getName(var):
@@ -270,5 +266,21 @@ class HiddenMemberProvider(object):
         pass
 
     def _addChild(self, var, hidden=False):
+        if not isinstance(var, lldb.SBValue):
+            # special handling for (name, expr) tuple of string constants
+            if len(var) != 2:
+                print('error, const char[] value should be a tuple with two elements, it is', var)
+            name, content = var
+
+            if isinstance(content, unicode):
+                content = content.encode()
+
+            try:
+                char_arr_type = self._char_type.GetArrayType(len(content));
+                strdata = lldb.SBData.CreateDataFromCString(self._endianness, self._pointer_size, content)
+                var = self.valobj.CreateValueFromData(name, strdata, char_arr_type)
+            except:
+                pass
+
         cache = self._hiddens if hidden else self._members
         cache.append(var)
