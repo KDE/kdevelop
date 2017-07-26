@@ -1,0 +1,29 @@
+[General]
+Name=Dialog (pimpl) with a UI File
+Comment=QDialog subclass with a separate Qt Designer file and private implementation
+Category=C++/Qt
+Language=C++
+Type=Class
+BaseClasses=public QDialog
+Files=Header,PrivateHeader,Implementation,UI
+OptionsFile=options.kcfg
+
+[Header]
+Name=Public Header
+File=class.h
+OutputFile={{ name }}.h
+
+[PrivateHeader]
+Name=Private Header
+File=class_p.h
+OutputFile={{ name }}_p.h
+
+[Implementation]
+Name=Implementation
+File=class.cpp
+OutputFile={{ name }}.cpp
+
+[UI]
+Name=User Interface
+File=class.ui
+OutputFile={{ name }}.ui

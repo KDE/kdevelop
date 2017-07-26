@@ -10,6 +10,7 @@ set(filetemplate_DIRS
     classes/c_gobject_properties
     classes/qt_shared
     classes/qt_interface
+    classes/qdialog_pimpl
 
     testing/cpp_cpputest
     testing/cpp_gtest
