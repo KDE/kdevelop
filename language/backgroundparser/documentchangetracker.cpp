@@ -58,6 +58,25 @@ using namespace KTextEditor;
 namespace KDevelop
 {
 
+/**
+ * Internal helper class for RevisionLockerAndClearer
+ * */
+class RevisionLockerAndClearerPrivate : public QObject
+{
+    Q_OBJECT
+public:
+    RevisionLockerAndClearerPrivate(DocumentChangeTracker* tracker, qint64 revision);
+    ~RevisionLockerAndClearerPrivate() override;
+    inline qint64 revision() const {
+        return m_revision;
+    }
+private:
+    friend class RevisionLockerAndClearer;
+    QPointer<DocumentChangeTracker> m_tracker;
+    qint64 m_revision;
+};
+
+
 DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     : m_needUpdate(false)
     , m_document(document)
@@ -466,3 +485,5 @@ RevisionReference DocumentChangeTracker::diskRevision() const
 }
 
 }
+
+#include "documentchangetracker.moc"

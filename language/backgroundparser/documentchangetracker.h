@@ -121,23 +121,6 @@ private:
 
 typedef RevisionLockerAndClearer::Ptr RevisionReference;
 
-/**
- * Internal helper class for RevisionLockerAndClearer
- * */
-class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearerPrivate : public QObject {
-    Q_OBJECT
-public:
-    RevisionLockerAndClearerPrivate(DocumentChangeTracker* tracker, qint64 revision);
-    ~RevisionLockerAndClearerPrivate() override;
-    inline qint64 revision() const {
-        return m_revision;
-    }
-private:
-    friend class RevisionLockerAndClearer;
-    QPointer<DocumentChangeTracker> m_tracker;
-    qint64 m_revision;
-};
-
 class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeTracker : public QObject
 {
     Q_OBJECT
