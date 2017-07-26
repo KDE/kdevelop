@@ -5,26 +5,13 @@
 
 from __future__ import print_function
 
-import configparser
+import argparse
 import os
 import subprocess
 import sys
 import cgi
 
-THIS_DIR = os.path.dirname(os.path.realpath(__file__))
-
-f = open(os.path.join(THIS_DIR, 'REPOSITORIES.inc'))
-srcdir = os.getcwd()
-repos = f.read().rstrip().split(" ")
-
-for repo in repos:
-    config = configparser.ConfigParser()
-    config.read(os.path.join(THIS_DIR, "VERSIONS.ini"))
-    fromVersion = config['default']['OLD_SHA1']
-    toVersion = config['default']['NEW_SHA1']
-
-    os.chdir(os.path.join(srcdir, repo))
-
+def createLog(repositoryName, fromVersion, toVersion):
     p = subprocess.Popen('git fetch', shell=True,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if p.wait() != 0:
@@ -71,8 +58,8 @@ for repo in repos:
         commits.append(commit)
 
     if len(commits):
-        print("<h3><a name='" + repo + "' href='https://commits.kde.org/"+repo+"'>" + repo + "</a></h3>")
-        print("<ul id='ul" + repo + "' style='display: block'>")
+        print("<h3><a name='" + repositoryName + "' href='https://commits.kde.org/"+repositoryName+"'>" + repositoryName + "</a></h3>")
+        print("<ul id='ul" + repositoryName + "' style='display: block'>")
         for commit in commits:
             extra = ""
             changelog = commit[1]
@@ -85,24 +72,24 @@ for repo in repos:
                         if bugNumber.isdigit():
                             if extra:
                                 extra += ". "
-                            extra += "Fixes bug <a href='https://bugs.kde.org/" + bugNumber + "'>#" + bugNumber + "</a>"
+                            extra += "fixes bug <a href='https://bugs.kde.org/" + bugNumber + "'>#" + bugNumber + "</a>"
                 elif line.startswith("BUG:"):
                     bugNumber = line[line.find(":") + 1:].strip()
                     if bugNumber.isdigit():
                         if extra:
                             extra += ". "
-                        extra += "Fixes bug <a href='https://bugs.kde.org/" + bugNumber + "'>#" + bugNumber + "</a>"
+                        extra += "fixes bug <a href='https://bugs.kde.org/" + bugNumber + "'>#" + bugNumber + "</a>"
                 elif line.startswith("REVIEW:"):
                     if extra:
                         extra += ". "
                     reviewNumber = line[line.find(":") + 1:].strip()
-                    extra += "Code review <a href='https://git.reviewboard.kde.org/r/" + reviewNumber + "'>#" + reviewNumber + "</a>"
+                    extra += "code review <a href='https://git.reviewboard.kde.org/r/" + reviewNumber + "'>#" + reviewNumber + "</a>"
                     # jr addition 2017-02 phab link
                 elif line.startswith("Differential Revision:"):
                     if extra:
                         extra += ". "
                     reviewNumber = line[line.find("org/") + 4:].strip()
-                    extra += "Phabricator Code review <a href='https://phabricator.kde.org/" + reviewNumber + "'>" + reviewNumber + "</a>"
+                    extra += "code review <a href='https://phabricator.kde.org/" + reviewNumber + "'>" + reviewNumber + "</a>"
                 elif line.startswith("CCBUG:"):
                     if extra:
                         extra += ". "
@@ -130,8 +117,18 @@ for repo in repos:
             # NOTE: Only showing interesting changes
             if extra:
                 capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
-                print("<li>" + capitalizedChangelog + " <a href='https://commits.kde.org/"+repo+"/"+commitHash+"'>Commit.</a> " + extra + "</li>")
+                print("<li>" + capitalizedChangelog + " (<a href='https://commits.kde.org/"+repositoryName+"/"+commitHash+"'>commit.</a> " + extra + ")</li>")
         print("</ul>\n\n")
 
     if p.wait() != 0:
-        raise NameError('git log failed', repo, fromVersion, toVersion)
+        raise NameError('git log failed', repositoryName, fromVersion, toVersion)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Create HTML log based on Git history in the current working directory')
+    parser.add_argument('--repositoryName', type=str, help='The path to the Git repositoryNamesitory (default: name of current working dir', default=os.path.split(os.getcwd())[1])
+    parser.add_argument('from_version', type=str, help='The start of the revision range (e.g. "v5.0.0")')
+    parser.add_argument('to_version', type=str, help='The end of the revision range (e.g. "v5.0.1"')
+    args = parser.parse_args()
+
+    createLog(args.repositoryName, args.from_version, args.to_version)
