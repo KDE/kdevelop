@@ -7,7 +7,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 
 # Find the QtWidgets library
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Widgets CONFIG REQUIRED)
 
 set(%{APPNAMELC}_SRC
   src/main.cpp

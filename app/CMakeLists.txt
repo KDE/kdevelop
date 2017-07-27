@@ -1,4 +1,4 @@
-find_package(KF5Plasma)
+find_package(KF5Plasma CONFIG)
 set_package_properties(KF5Plasma PROPERTIES
     PURPOSE "Plasma libraries for enabling the plasma addons"
     URL "http://www.kde.org"
