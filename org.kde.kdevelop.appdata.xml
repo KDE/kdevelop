@@ -47,6 +47,7 @@
   <summary xml:lang="tr">Tam özellikli, eklenti ile geliştirilebilir C/C++ ve diğer programlama dilleri için tümleşik geliştirme ortamı.</summary>
   <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
   <summary xml:lang="x-test">xxFeatureful, plugin-extensible IDE for C/C++ and other programming languagesxx</summary>
+  <summary xml:lang="zh-CN">全功能，可扩展的支持 C/C++ 和其他语言的集成开发环境。</summary>
   <description>
     <p>KDevelop is a Free and Open Source integrated development environment (IDE).</p>
     <p xml:lang="ca">El KDevelop és un entorn de desenvolupament integrat (IDE) lliure i de codi obert.</p>
@@ -64,6 +65,7 @@
     <p xml:lang="tr">KDevelop Özgür ve Açık Kaynaklı tümleşik geliştirme ortamıdır (IDE).</p>
     <p xml:lang="uk">KDevelop є вільним комплексним середовищем розробки (IDE) з відкритим кодом.</p>
     <p xml:lang="x-test">xxKDevelop is a Free and Open Source integrated development environment (IDE).xx</p>
+    <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
     <p>It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
     <p xml:lang="ca">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
     <p xml:lang="ca-valencia">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
