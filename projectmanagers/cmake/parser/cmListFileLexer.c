@@ -2397,7 +2397,8 @@ static void cmListFileLexerSetToken(cmListFileLexer* lexer, const char* text,
   /* Use the same buffer if possible.  */
   if (lexer->token.text) {
     if (text && length < lexer->size) {
-      strcpy(lexer->token.text, text);
+      memcpy(lexer->token.text, text, length);
+      lexer->token.text[length] = '\0';
       lexer->token.length = length;
       return;
     }
@@ -2408,7 +2409,9 @@ static void cmListFileLexerSetToken(cmListFileLexer* lexer, const char* text,
 
   /* Need to extend the buffer.  */
   if (text) {
-    lexer->token.text = strdup(text);
+    lexer->token.text = malloc(length + 1);
+    memcpy(lexer->token.text, text, length);
+    lexer->token.text[length] = '\0';
     lexer->token.length = length;
     lexer->size = length + 1;
   } else {
@@ -2426,7 +2429,8 @@ static void cmListFileLexerAppend(cmListFileLexer* lexer, const char* text,
   /* If the appended text will fit in the buffer, do not reallocate.  */
   newSize = lexer->token.length + length + 1;
   if (lexer->token.text && newSize <= lexer->size) {
-    strcpy(lexer->token.text + lexer->token.length, text);
+    memcpy(lexer->token.text + lexer->token.length, text, length);
+    lexer->token.text[length] = '\0';
     lexer->token.length += length;
     return;
   }
