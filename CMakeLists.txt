@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0)
+project(KDevPlatform)
 
 # kdevplatform version
 set(KDEVPLATFORM_VERSION_MAJOR 5)
@@ -14,8 +15,6 @@ set(KDEV_ITEMREPOSITORY_VERSION 86)
 # library version / SO version
 set(KDEVPLATFORM_LIB_SOVERSION 10)
 
-project(KDevPlatform)
-
 # we need some parts of the ECM CMake helpers
 find_package (ECM "5.14.0" REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
@@ -28,12 +27,12 @@ include(ECMSetupVersion)
 include(ECMMarkAsTest)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
-include(ECMPackageConfigHelpers)
 include(ECMQtDeclareLoggingCategory)
 include(GenerateExportHeader)
 include(FeatureSummary)
 include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
+include(CMakePackageConfigHelpers)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDevPlatformMacros)
@@ -151,7 +150,7 @@ add_subdirectory(plugins)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")
 
-ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
+configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
                               "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
                               INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
