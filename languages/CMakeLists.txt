@@ -1,7 +1,7 @@
 ecm_optional_add_subdirectory(plugins)
 ecm_optional_add_subdirectory(qmljs)
 
-find_package(Clang 3.5)
+find_package(Clang 3.8)
 set_package_properties(Clang PROPERTIES
     PURPOSE "Clang libraries. Used for KDevelop's C++/C support plugin. Please install a package providing libclang."
     TYPE REQUIRED
