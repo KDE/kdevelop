@@ -464,8 +464,8 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    dia->connect(buttonBox, &QDialogButtonBox::accepted, dia, &QDialog::accept);
-    dia->connect(buttonBox, &QDialogButtonBox::rejected, dia, &QDialog::reject);
+    dia->connect(buttonBox, &QDialogButtonBox::accepted, dia.data(), &QDialog::accept);
+    dia->connect(buttonBox, &QDialogButtonBox::rejected, dia.data(), &QDialog::reject);
     mainLayout->addWidget(buttonBox);
 
     if (dia->exec() == QDialog::Accepted)
