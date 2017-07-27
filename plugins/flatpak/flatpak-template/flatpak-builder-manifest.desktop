@@ -44,6 +44,7 @@ Language[sv]=JSON
 Language[tr]=JSON
 Language[uk]=JSON
 Language[x-test]=xxJSONxx
+Language[zh_CN]=JSON
 Files=Implementation
 OptionsFile=options.kcfg
 
