@@ -1,4 +1,4 @@
-find_package(LibKompareDiff2 5.0 REQUIRED)
+find_package(LibKompareDiff2 5.0 CONFIG REQUIRED)
 find_package(KDEExperimentalPurpose QUIET)
 set_package_properties(KDEExperimentalPurpose PROPERTIES DESCRIPTION "EXPERIMENTAL. Support for patch sharing"
                        URL "https://projects.kde.org/projects/playground/libs/purpose"

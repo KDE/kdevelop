@@ -41,7 +41,7 @@ include(KDevPlatformMacros)
 set(QT_MIN_VERSION "5.4.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Concurrent Test)
 
-find_package(Qt5QuickWidgets ${QT_MIN_VERSION})
+find_package(Qt5QuickWidgets ${QT_MIN_VERSION} CONFIG)
 set_package_properties(Qt5QuickWidgets PROPERTIES
     PURPOSE "Qt5 QuickWidgets library (part of Qt >=5.3). Required for the Welcome Page plugin."
 )
@@ -72,7 +72,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   XmlGui
 )
 
-find_package(Grantlee5)
+find_package(Grantlee5 CONFIG)
 set_package_properties(Grantlee5 PROPERTIES
     PURPOSE "Grantlee templating library, needed for file templates"
     URL "http://www.grantlee.org/"
