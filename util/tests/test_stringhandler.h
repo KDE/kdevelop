@@ -34,6 +34,9 @@ private Q_SLOTS:
 
     void testStripAnsiSequences();
     void testStripAnsiSequences_data();
+
+    void testNormalizeLineEndings();
+    void testNormalizeLineEndings_data();
 };
 
 #endif // TESTSTRINGHANDLER_H

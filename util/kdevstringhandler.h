@@ -23,6 +23,7 @@
 #include "utilexport.h"
 
 class QString;
+class QByteArray;
 class QChar;
 class QStringList;
 class QVariant;
@@ -66,6 +67,10 @@ namespace KDevelop
      */
     KDEVPLATFORMUTIL_EXPORT QString stripAnsiSequences(const QString& str);
 
+    /**
+     * Replace all occurrences of '\r' or '\r\n' in @p text with '\n'.
+     */
+    KDEVPLATFORMUTIL_EXPORT void normalizeLineEndings(QByteArray& text);
 }
 
 #endif // KDEVPLATFORM_KDEVSTRINGHANDLER_H

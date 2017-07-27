@@ -15,4 +15,5 @@ if(HAVE_MSG_NOSIGNAL)
 endif()
 
 add_executable(kdev_dbus_socket_transformer main.cpp)
+ecm_mark_nongui_executable(kdev_dbus_socket_transformer)
 install(TARGETS kdev_dbus_socket_transformer ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
