@@ -1,6 +1,18 @@
 [General]
 Name=Dialog (pimpl) with a UI File
+Name[ca]=Diàleg (pimpl) amb un fitxer IU
+Name[nl]=Dialoog (pimpl) met een UI-bestand
+Name[pt]=Janela (pimpl) com um Ficheiro UI
+Name[sv]=Dialogruta (pimpl) med en UI-fil
+Name[uk]=Діалогове вікно (pimpl) із файлом інтерфейсу користувача (UI)
+Name[x-test]=xxDialog (pimpl) with a UI Filexx
 Comment=QDialog subclass with a separate Qt Designer file and private implementation
+Comment[ca]=Subclasse QDialog amb un fitxer separat del Qt Designer i una implementació privada
+Comment[nl]=QDialog subklasse met een apart Qt Designer bestand en private implementatie
+Comment[pt]=Sub-classe de QDialog com um ficheiro separado do Qt Designer e uma implementação privada
+Comment[sv]=QDialog-delklass med en separat Qt Designer-fil och privat implementering
+Comment[uk]=Підклас QDialog із окремим файлом Qt і закритою (private) реалізацією
+Comment[x-test]=xxQDialog subclass with a separate Qt Designer file and private implementationxx
 Category=C++/Qt
 Language=C++
 Language[bs]=C++
