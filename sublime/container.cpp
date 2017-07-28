@@ -22,6 +22,7 @@
 #include <QBoxLayout>
 #include <QClipboard>
 #include <QEvent>
+#include <QSpacerItem>
 #include <QLabel>
 #include <QMenu>
 #include <QMouseEvent>
@@ -145,6 +146,7 @@ struct ContainerPrivate {
     ContainerTabBar *tabBar;
     QStackedWidget *stack;
     KSqueezedTextLabel *fileNameCorner;
+    QLabel *shortcutHelpLabel;
     QLabel *fileStatus;
     KSqueezedTextLabel *statusCorner;
     QPointer<QWidget> leftCornerWidget;
@@ -327,7 +329,18 @@ Container::Container(QWidget *parent)
     d->fileStatus->setFixedSize( QSize( 16, 16 ) );
     d->layout->addWidget(d->fileStatus);
     d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
+    d->fileNameCorner->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     d->layout->addWidget(d->fileNameCorner);
+    d->shortcutHelpLabel = new QLabel(i18n("(Press Ctrl+Tab to switch)"), this);
+    auto font = d->shortcutHelpLabel->font();
+    font.setPointSize(font.pointSize() - 2);
+    font.setItalic(true);
+    d->shortcutHelpLabel->setFont(font);
+    d->layout->addSpacerItem(new QSpacerItem(style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing), 0,
+                                             QSizePolicy::Fixed, QSizePolicy::Fixed));
+    d->shortcutHelpLabel->setAlignment(Qt::AlignCenter);
+    d->layout->addWidget(d->shortcutHelpLabel);
+    d->layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
     d->statusCorner = new StatusLabel(d->tabBar, this);
     d->layout->addWidget(d->statusCorner);
     l->addLayout(d->layout);
@@ -464,7 +477,7 @@ void Container::documentTitleChanged(Sublime::Document* doc)
         Sublime::View* view = it.next().value();
         if (view->document() == doc) {
             if (currentView() == view) {
-                d->fileNameCorner->setText( doc->title(Document::Extended) + i18n(" <i><small>(Press Ctrl+Tab to switch)</small></i>") );
+                d->fileNameCorner->setText( doc->title(Document::Extended) );
             }
             int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
