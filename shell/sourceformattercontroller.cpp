@@ -43,6 +43,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/isession.h>
 #include <interfaces/isourceformatter.h>
 #include <interfaces/iuicontroller.h>
@@ -54,6 +55,7 @@ Boston, MA 02110-1301, USA.
 #include "core.h"
 #include "debug.h"
 #include "plugincontroller.h"
+#include "sourceformatterjob.h"
 
 namespace {
 
@@ -565,41 +567,9 @@ void SourceFormatterController::formatFiles()
     msgBox.exec();
 
     if (msgBox.clickedButton() == okButton) {
-        formatFiles(m_urls);
-    }
-}
-
-void SourceFormatterController::formatFiles(QList<QUrl> &list)
-{
-    //! \todo IStatus
-    for (int fileCount = 0; fileCount < list.size(); fileCount++) {
-        // check mimetype
-        QMimeType mime = QMimeDatabase().mimeTypeForUrl(list[fileCount]);
-        qCDebug(SHELL) << "Checking file " << list[fileCount] << " of mime type " << mime.name() << endl;
-        ISourceFormatter *formatter = formatterForMimeType(mime);
-        if (!formatter) // unsupported mime type
-            continue;
-
-        // if the file is opened in the editor, format the text in the editor without saving it
-        KDevelop::IDocumentController *docController = KDevelop::ICore::self()->documentController();
-        KDevelop::IDocument *doc = docController->documentForUrl(list[fileCount]);
-        if (doc) {
-            qCDebug(SHELL) << "Processing file " << list[fileCount] << "opened in editor" << endl;
-            formatDocument(doc, formatter, mime);
-            continue;
-        }
-
-        qCDebug(SHELL) << "Processing file " << list[fileCount] << endl;
-        KIO::StoredTransferJob *job = KIO::storedGet(list[fileCount]);
-        if (job->exec()) {
-            QString text = QString::fromLocal8Bit(job->data());
-            text = formatter->formatSource(text, list[fileCount], mime);
-            text = addModelineForCurrentLang(text, list[fileCount], mime).toUtf8();
-            job = KIO::storedPut(text.toLocal8Bit(), list[fileCount], -1, KIO::Overwrite);
-            if (!job->exec())
-                KMessageBox::error(nullptr, job->errorString());
-        } else
-            KMessageBox::error(nullptr, job->errorString());
+        auto formatterJob = new SourceFormatterJob(this);
+        formatterJob->setFiles(m_urls);
+        ICore::self()->runController()->registerJob(formatterJob);
     }
 }
 

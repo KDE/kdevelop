@@ -36,6 +36,7 @@ set(KDevPlatformShell_LIB_SRCS
     sessionchooserdialog.cpp
     savedialog.cpp
     sourceformattercontroller.cpp
+    sourceformatterjob.cpp
     completionsettings.cpp
     openprojectpage.cpp
     openprojectdialog.cpp

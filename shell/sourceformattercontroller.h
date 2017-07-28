@@ -80,6 +80,9 @@ struct SourceFormatter
 class KDEVPLATFORMSHELL_EXPORT SourceFormatterController : public ISourceFormatterController, public KXMLGUIClient
 {
     Q_OBJECT
+
+    friend class SourceFormatterJob;
+
 public:
     static QString kateModeLineConfigKey();
     static QString kateOverrideIndentationConfigKey();
@@ -149,7 +152,6 @@ private:
     void formatDocument(KDevelop::IDocument* doc, ISourceFormatter* formatter, const QMimeType& mime);
     // Adapts the mode of the editor regarding indentation-style
     void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
-    void formatFiles(QList<QUrl> &list);
     // GUI actions
     QAction* m_formatTextAction;
     QAction* m_formatFilesAction;
