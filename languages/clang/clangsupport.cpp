@@ -410,12 +410,9 @@ static void setKeywordCompletion(KTextEditor::View* view, bool enabled)
 }
 
 int ClangSupport::suggestedReparseDelayForChange(KTextEditor::Document* /*doc*/, const KTextEditor::Range& /*changedRange*/,
-                                                 const QString& changedText, bool /*removal*/) const
+                                                 const QString& /*changedText*/, bool /*removal*/) const
 {
-    if ( changedText.contains(QLatin1Char('\n')) || changedText.contains(QLatin1Char(';')) ) {
-        return ILanguageSupport::DefaultDelay;
-    }
-    return 3000;
+    return ILanguageSupport::DefaultDelay;
 }
 
 void ClangSupport::disableKeywordCompletion(KTextEditor::View* view)
