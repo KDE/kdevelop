@@ -580,12 +580,14 @@ void Container::setTabBarHidden(bool hide)
         d->tabBar->hide();
         d->fileNameCorner->show();
         d->fileStatus->show();
+        d->shortcutHelpLabel->show();
     }
     else
     {
         d->fileNameCorner->hide();
         d->fileStatus->hide();
         d->tabBar->show();
+        d->shortcutHelpLabel->hide();
     }
     View* v = currentView();
     if (v) {
