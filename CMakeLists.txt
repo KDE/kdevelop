@@ -1,12 +1,11 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0)
+project(KDevelop)
 
 # KDevelop version
 set(KDEVELOP_VERSION_MAJOR 5)
 set(KDEVELOP_VERSION_MINOR 1)
 set(KDEVELOP_VERSION_PATCH 40)
 set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
-
-project(KDevelop)
 
 # we need some parts of the ECM CMake helpers
 find_package (ECM 5.14.0 REQUIRED NO_MODULE)
@@ -20,7 +19,6 @@ include(ECMSetupVersion)
 include(ECMAddTests)
 include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
-include(ECMPackageConfigHelpers)
 include(ECMQtDeclareLoggingCategory)
 
 include(CTest)
@@ -130,7 +128,7 @@ add_subdirectory(shortcuts)
 add_subdirectory(doc)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevelop")
-ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevelopConfig.cmake.in"
+configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevelopConfig.cmake.in"
                                   "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfig.cmake"
                                   INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
 )
