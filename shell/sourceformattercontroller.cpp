@@ -118,7 +118,7 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
     connect(m_formatLine, &QAction::triggered, this, &SourceFormatterController::beautifyLine);
 
     m_formatFilesAction = actionCollection()->addAction(QStringLiteral("tools_astyle"));
-    m_formatFilesAction->setText(i18n("Format Files"));
+    m_formatFilesAction->setText(i18n("Reformat Files..."));
     m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
     m_formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
     connect(m_formatFilesAction, &QAction::triggered, this, static_cast<void(SourceFormatterController::*)()>(&SourceFormatterController::formatFiles));
@@ -555,8 +555,16 @@ void SourceFormatterController::formatFiles()
     }
 
     auto win = ICore::self()->uiController()->activeMainWindow()->window();
-    auto reply = QMessageBox::question(win, i18n("Reformat files?"), i18n("Reformat all files in the selected folder?"));
-    if ( reply == QMessageBox::Yes ) {
+
+    QMessageBox msgBox(QMessageBox::Question, i18n("Reformat files?"),
+                       i18n("Reformat all files in the selected folder?"),
+                       QMessageBox::Ok|QMessageBox::Cancel, win);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    auto okButton = msgBox.button(QMessageBox::Ok);
+    okButton->setText(i18n("Reformat"));
+    msgBox.exec();
+
+    if (msgBox.clickedButton() == okButton) {
         formatFiles(m_urls);
     }
 }
