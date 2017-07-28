@@ -37,6 +37,8 @@ bool askUser( const QString& mainText,
               const QString& ttyPrompt,
               const QString& mboxTitle,
               const QString& mboxAdditionalText,
+              const QString& confirmText,
+              const QString& rejectText,
               bool ttyDefaultToYes )
 {
     if( !qobject_cast<QGuiApplication*>(qApp) ) {
@@ -61,11 +63,15 @@ bool askUser( const QString& mainText,
             }
         }
     } else {
+        auto okButton = KStandardGuiItem::ok();
+        okButton.setText(confirmText);
+        auto rejectButton = KStandardGuiItem::cancel();
+        rejectButton.setText(rejectText);
         int userAnswer = KMessageBox::questionYesNo( ICore::self()->uiController()->activeMainWindow(),
                                                      mainText + "\n\n" + mboxAdditionalText,
                                                      mboxTitle,
-                                                     KStandardGuiItem::ok(),
-                                                     KStandardGuiItem::cancel() );
+                                                     okButton,
+                                                     rejectButton );
         return userAnswer == KMessageBox::Yes;
     }
 }

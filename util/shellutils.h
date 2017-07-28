@@ -39,6 +39,8 @@ bool KDEVPLATFORMUTIL_EXPORT askUser( const QString& mainText,
                                       const QString& ttyPrompt,
                                       const QString& mboxTitle,
                                       const QString& mboxAdditionalText,
+                                      const QString& confirmText,
+                                      const QString& rejectText,
                                       bool ttyDefaultToYes = true );
 
 /**
