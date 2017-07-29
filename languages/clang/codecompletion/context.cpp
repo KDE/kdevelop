@@ -218,12 +218,14 @@ public:
                 }
             }
 
+            bool didAddParentheses = false;
             if ( !funcptr && doc->characterAt(word.end()) != QLatin1Char('(') ) {
                 repl += QLatin1String("()");
+                didAddParentheses = true;
             }
             view->document()->replaceText(word, repl);
             auto f = m_declaration->type<FunctionType>();
-            if (f && f->indexedArgumentsSize()) {
+            if (f && f->indexedArgumentsSize() && didAddParentheses) {
                 view->setCursorPosition(word.start() + KTextEditor::Cursor(0, repl.size() - 1));
             }
         } else {
