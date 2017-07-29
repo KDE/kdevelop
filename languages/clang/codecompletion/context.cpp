@@ -228,6 +228,19 @@ public:
             if (f && f->indexedArgumentsSize() && didAddParentheses) {
                 view->setCursorPosition(word.start() + KTextEditor::Cursor(0, repl.size() - 1));
             }
+            auto returnTypeIntegral = f->returnType().cast<IntegralType>();
+            if ( !funcptr && returnTypeIntegral && returnTypeIntegral->dataType() == IntegralType::TypeVoid ) {
+                // function returns void -- nothing can be done with the result
+                if ( f && f->indexedArgumentsSize() ) {
+                    // we placed the cursor inside the ()
+                    view->document()->insertText(view->cursorPosition() + KTextEditor::Cursor(0, 1), QStringLiteral(";"));
+                }
+                else {
+                    // we placed the cursor after the ()
+                    view->document()->insertText(view->cursorPosition(), QStringLiteral(";"));
+                    view->setCursorPosition(view->cursorPosition() + KTextEditor::Cursor{0, 1});
+                }
+            }
         } else {
             view->document()->replaceText(word, repl);
         }
