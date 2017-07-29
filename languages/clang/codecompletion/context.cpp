@@ -363,6 +363,7 @@ public:
         : CompletionItem<CompletionTreeItem>(display, prefix)
         , m_replacement(replacement)
         , m_icon(icon)
+        , m_unimportant(false)
     {
     }
 
@@ -376,12 +377,21 @@ public:
         if (role == Qt::DecorationRole && index.column() == KTextEditor::CodeCompletionModel::Icon) {
             return m_icon;
         }
+        if (role == KDevelop::CodeCompletionModel::UnimportantItemRole) {
+            return m_unimportant;
+        }
         return CompletionItem<CompletionTreeItem>::data(index, role, model);
+    }
+
+    void markAsUnimportant()
+    {
+        m_unimportant = true;
     }
 
 private:
     QString m_replacement;
     QIcon m_icon;
+    bool m_unimportant;
 };
 
 /**
@@ -1126,7 +1136,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 #endif
                     // still, let's trust that Clang found something useful and put it into the completion result list
                     clangDebug() << "Could not find declaration for" << qid;
-                    item = CompletionTreeItemPointer(new SimpleItem(typed + arguments, resultType, replacement));
+                    auto instance = new SimpleItem(typed + arguments, resultType, replacement);
+                    instance->markAsUnimportant();
+                    item = CompletionTreeItemPointer(instance);
 #if CINDEX_VERSION_MINOR >= 30
                 }
 #endif
@@ -1150,7 +1162,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             auto item = CompletionTreeItemPointer(new SimpleItem(typed + arguments, resultType, replacement, icon));
             macros.append(item);
         } else if (result.CursorKind == CXCursor_NotImplemented) {
-            auto item = CompletionTreeItemPointer(new SimpleItem(typed, resultType, replacement));
+            auto instance = new SimpleItem(typed, resultType, replacement);
+            instance->markAsUnimportant();
+            auto item = CompletionTreeItemPointer(instance);
             builtin.append(item);
         }
     }
