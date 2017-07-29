@@ -23,6 +23,7 @@
 #include "context.h"
 
 #include <QRegularExpression>
+#include <QStandardPaths>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -114,6 +115,7 @@ public:
         : Base()
         , m_display(display)
         , m_prefix(prefix)
+        , m_unimportant(false)
     {
     }
 
@@ -131,9 +133,15 @@ public:
         return {};
     }
 
+    void markAsUnimportant()
+    {
+        m_unimportant = true;
+    }
+
 protected:
     QString m_display;
     QString m_prefix;
+    bool m_unimportant;
 };
 
 class OverrideItem : public CompletionItem<CompletionTreeItem>
@@ -378,7 +386,6 @@ public:
         : CompletionItem<CompletionTreeItem>(display, prefix)
         , m_replacement(replacement)
         , m_icon(icon)
-        , m_unimportant(false)
     {
     }
 
@@ -398,15 +405,9 @@ public:
         return CompletionItem<CompletionTreeItem>::data(index, role, model);
     }
 
-    void markAsUnimportant()
-    {
-        m_unimportant = true;
-    }
-
 private:
     QString m_replacement;
     QIcon m_icon;
-    bool m_unimportant;
 };
 
 /**
@@ -1080,6 +1081,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         // ellide text to the right for overly long result types (templates especially)
         elideStringRight(resultType, MAX_RETURN_TYPE_STRING_LENGTH);
 
+        static const auto noIcon = QIcon(QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                                QStringLiteral("kdevelop/pics/namespace.png")));
+
         if (isDeclaration) {
             const Identifier id(typed);
             QualifiedIdentifier qid;
@@ -1122,7 +1126,8 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 const bool bestMatch = completionPriority <= CCP_SuperCompletion;
 
                 //don't set best match property for internal identifiers, also prefer declarations from current file
-                if (bestMatch && !found->indexedIdentifier().identifier().toString().startsWith(QLatin1String("__")) ) {
+                const auto isInternal = found->indexedIdentifier().identifier().toString().startsWith(QLatin1String("__"));
+                if (bestMatch && !isInternal ) {
                     const int matchQuality = codeCompletionPriorityToMatchQuality(completionPriority);
                     declarationItem->setMatchQuality(matchQuality);
 
@@ -1132,6 +1137,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     declarationItem->setInheritanceDepth(completionPriority);
 
                     lookAheadMatcher.addDeclarations(found);
+                }
+                if ( isInternal ) {
+                    declarationItem->markAsUnimportant();
                 }
 #if CINDEX_VERSION_MINOR >= 30
                 if (result.CursorKind == CXCursor_OverloadCandidate) {
@@ -1151,7 +1159,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 #endif
                     // still, let's trust that Clang found something useful and put it into the completion result list
                     clangDebug() << "Could not find declaration for" << qid;
-                    auto instance = new SimpleItem(typed + arguments, resultType, replacement);
+                    auto instance = new SimpleItem(typed + arguments, resultType, replacement, noIcon);
                     instance->markAsUnimportant();
                     item = CompletionTreeItemPointer(instance);
 #if CINDEX_VERSION_MINOR >= 30
@@ -1173,12 +1181,15 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
         if (result.CursorKind == CXCursor_MacroDefinition) {
             // TODO: grouping of macros and built-in stuff
-            static const QIcon icon = QIcon::fromTheme(QStringLiteral("code-macro"));
-            auto item = CompletionTreeItemPointer(new SimpleItem(typed + arguments, resultType, replacement, icon));
+            const auto text = QString(typed + arguments);
+            auto instance = new SimpleItem(text, resultType, replacement, noIcon);
+            auto item = CompletionTreeItemPointer(instance);
+            if ( text.startsWith(QLatin1String("_")) ) {
+                instance->markAsUnimportant();
+            }
             macros.append(item);
         } else if (result.CursorKind == CXCursor_NotImplemented) {
-            auto instance = new SimpleItem(typed, resultType, replacement);
-            instance->markAsUnimportant();
+            auto instance = new SimpleItem(typed, resultType, replacement, noIcon);
             auto item = CompletionTreeItemPointer(instance);
             builtin.append(item);
         }
