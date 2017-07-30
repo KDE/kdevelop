@@ -481,6 +481,7 @@ CustomScriptPreferences::CustomScriptPreferences()
     m_updateTimer->setSingleShot(true);
     connect(m_updateTimer, &QTimer::timeout, this, &CustomScriptPreferences::updateTimeout);
     m_vLayout = new QVBoxLayout(this);
+    m_vLayout->setMargin(0);
     m_captionLabel = new QLabel;
     m_vLayout->addWidget(m_captionLabel);
     m_vLayout->addSpacing(10);

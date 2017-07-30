@@ -11,6 +11,18 @@
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
@@ -125,9 +137,6 @@ The number of spaces per tab is controlled by the editor.</string>
           <widget class="QLabel" name="lblIndentObjects">
            <property name="text">
             <string>Indent</string>
-           </property>
-           <property name="margin">
-            <number>5</number>
            </property>
           </widget>
          </item>
@@ -281,9 +290,6 @@ relative to the previous line.</string>
               </property>
               <property name="text">
                <string>Type</string>
-              </property>
-              <property name="margin">
-               <number>6</number>
               </property>
              </widget>
             </item>
@@ -464,9 +470,6 @@ There is no unpad operator option.</string>
              <widget class="QLabel" name="lblParenthesis">
               <property name="text">
                <string>Pad parenthesis</string>
-              </property>
-              <property name="margin">
-               <number>6</number>
               </property>
              </widget>
             </item>
