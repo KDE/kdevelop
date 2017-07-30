@@ -37,6 +37,7 @@
   <summary xml:lang="en-GB">Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
   <summary xml:lang="es">Entorno de desarrollo integrado para C/C++ y otros lenguajes de programación con múltiples funcionalidades y que se puede extender con complementos.</summary>
   <summary xml:lang="fr">Environnement de développement complet et extensible pour le C/C++ et d'autres langages de programmation.</summary>
+  <summary xml:lang="gl">Potente ambiente de desenvolvemento integrado para C, C++ e outras linguaxes de programación. As súas funcionalidades poden estenderse mediante complementos.</summary>
   <summary xml:lang="it">IDE per C/C++ e altri linguaggi di programmazione completo ed estensibile</summary>
   <summary xml:lang="nl">IDE voor C/C++ en andere programmeertalen, vol functies en uit te breiden met plug-ins.</summary>
   <summary xml:lang="pl">Jest to w pełni funkcjonalne, z możliwością rozszerzenia przy użyciu wtyczek, zintegrowane środowisko programistyczne dla C/C++ i innych języków programowania.</summary>
@@ -55,6 +56,7 @@
     <p xml:lang="en-GB">KDevelop is a Free and Open Source integrated development environment (IDE).</p>
     <p xml:lang="es">KDevelop es un entorno de desarrollo integrado (IDE) libre y de código abierto.</p>
     <p xml:lang="fr">KDevelop est un environnement de développement intégré (IDE) libre et en open source.</p>
+    <p xml:lang="gl">KDevelop é un ambiente integrado de desenvolvemento (IDE) libre e de código aberto.</p>
     <p xml:lang="it">KDevelop è un ambiente di sviluppo integrato (IDE) libero e open source.</p>
     <p xml:lang="nl">KDevelop is een vrije geïntegreerde ontwikkelomgeving (IDE) binnen het open source principe.</p>
     <p xml:lang="pl">KDevelop to darmowe i otwartoźródłowe zintegrowane środkowisko programistyczne (IDE).</p>
