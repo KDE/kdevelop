@@ -511,6 +511,7 @@ CustomScriptPreferences::CustomScriptPreferences()
     m_moreVariablesButton = new QPushButton(i18n("More Variables"));
     connect(m_moreVariablesButton, &QPushButton::clicked, this, &CustomScriptPreferences::moreVariablesClicked);
     m_vLayout->addWidget(m_moreVariablesButton);
+    m_vLayout->addStretch();
 }
 
 void CustomScriptPreferences::load(const KDevelop::SourceFormatterStyle& style)
