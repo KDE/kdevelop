@@ -44,6 +44,8 @@ TemplatePreviewToolView::TemplatePreviewToolView(FileTemplatesPlugin* plugin, QW
 , m_plugin(plugin)
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("document-preview"), windowIcon()));
+
     ui->messageWidget->hide();
     ui->emptyLinesPolicyComboBox->setCurrentIndex(1);
 
