@@ -136,7 +136,7 @@ The number of spaces per tab is controlled by the editor.</string>
          <item row="0" column="0">
           <widget class="QLabel" name="lblIndentObjects">
            <property name="text">
-            <string>Indent</string>
+            <string>Indent:</string>
            </property>
           </widget>
          </item>
@@ -289,7 +289,7 @@ relative to the previous line.</string>
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Type</string>
+               <string>Type:</string>
               </property>
              </widget>
             </item>
@@ -469,7 +469,7 @@ There is no unpad operator option.</string>
             <item row="0" column="0">
              <widget class="QLabel" name="lblParenthesis">
               <property name="text">
-               <string>Pad parenthesis</string>
+               <string>Pad parenthesis:</string>
               </property>
              </widget>
             </item>
@@ -527,7 +527,7 @@ multiple single-statement lines.</string>
           <item row="0" column="0">
            <widget class="QLabel" name="lblPointerAlign">
             <property name="text">
-             <string>Pointer Alignment</string>
+             <string>Pointer Alignment:</string>
             </property>
            </widget>
           </item>
