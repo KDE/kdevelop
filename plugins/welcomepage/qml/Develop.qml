@@ -54,7 +54,7 @@ StandardPage
 
             Button {
                 text: i18n("Fetch Project")
-                iconName: "download"
+                iconName: "edit-download"
                 onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
             }
 
