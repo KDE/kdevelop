@@ -71,6 +71,7 @@ void EditStyleDialog::init()
     // add plugin settings widget
     if (m_settingsWidget) {
         QVBoxLayout* layout = new QVBoxLayout(m_ui.settingsWidgetParent);
+        layout->setMargin(0);
         layout->addWidget(m_settingsWidget);
         m_ui.settingsWidgetParent->setLayout(layout);
         connect(m_settingsWidget, &SettingsWidget::previewTextChanged,
@@ -83,6 +84,7 @@ void EditStyleDialog::init()
 
     m_view = m_document->createView(m_ui.textEditor);
     QVBoxLayout* layout2 = new QVBoxLayout(m_ui.textEditor);
+    layout2->setMargin(0);
     layout2->addWidget(m_view);
     m_ui.textEditor->setLayout(layout2);
     m_view->setStatusBarEnabled(false);
