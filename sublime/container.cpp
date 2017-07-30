@@ -329,10 +329,9 @@ Container::Container(QWidget *parent)
     d->fileStatus->setFixedSize( QSize( 16, 16 ) );
     d->layout->addWidget(d->fileStatus);
     d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
-    d->fileNameCorner->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    d->fileNameCorner->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     d->layout->addWidget(d->fileNameCorner);
     d->shortcutHelpLabel = new QLabel(i18n("(Press Ctrl+Tab to switch)"), this);
-    d->shortcutHelpLabel->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     auto font = d->shortcutHelpLabel->font();
     font.setPointSize(font.pointSize() - 2);
     font.setItalic(true);
@@ -479,6 +478,10 @@ void Container::documentTitleChanged(Sublime::Document* doc)
         if (view->document() == doc) {
             if (currentView() == view) {
                 d->fileNameCorner->setText( doc->title(Document::Extended) );
+                // TODO KF6: remove this as soon as it is included upstream and we reqire
+                // that version
+                // see https://phabricator.kde.org/D7010
+                d->fileNameCorner->updateGeometry();
             }
             int tabIndex = d->stack->indexOf(it.key());
             if (tabIndex != -1) {
@@ -578,9 +581,9 @@ void Container::setTabBarHidden(bool hide)
     if (hide)
     {
         d->tabBar->hide();
-        d->fileNameCorner->show();
         d->fileStatus->show();
         d->shortcutHelpLabel->show();
+        d->fileNameCorner->show();
     }
     else
     {
