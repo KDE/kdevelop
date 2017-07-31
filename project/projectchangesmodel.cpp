@@ -19,6 +19,8 @@
 
 #include "projectchangesmodel.h"
 
+#include "debug.h"
+
 #include <KLocalizedString>
 
 #include <vcs/interfaces/ibasicversioncontrol.h>
@@ -159,6 +161,10 @@ void ProjectChangesModel::statusReady(KJob* job)
     }
 
     QStandardItem* itProject = projectItem(project);
+    if (!itProject) {
+        qCDebug(PROJECT) << "Project no longer listed in model:" << project->name() << "- skipping update";
+        return;
+    }
 
     IBasicVersionControl::RecursionMode mode = IBasicVersionControl::RecursionMode(job->property("mode").toInt());
     QSet<QUrl> uncertainUrls = urls(itProject).toSet().subtract(foundUrls);
