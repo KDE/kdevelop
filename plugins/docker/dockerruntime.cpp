@@ -26,6 +26,10 @@
 #include <project/projectmodel.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
+
 #include <KLocalizedString>
 #include <KProcess>
 #include <KActionCollection>
@@ -44,47 +48,36 @@ DockerRuntime::DockerRuntime(const QString &tag)
     , m_tag(tag)
 {
     setObjectName(tag);
-    inspectImage();
 }
 
-void DockerRuntime::inspectImage()
+void DockerRuntime::inspectContainer()
 {
     QProcess* process = new QProcess(this);
     connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [process, this](int code, QProcess::ExitStatus status){
         process->deleteLater();
-        qCDebug(DOCKER) << "inspect upper dir" << code << status;
+        qCDebug(DOCKER) << "inspect container" << code << status;
         if (code || status) {
-            qCWarning(DOCKER) << "Could not figure out the upperDir of" << m_tag;
+            qCWarning(DOCKER) << "Could not figure out the container" << m_container;
             return;
         }
-        m_upperDir = Path(QFile::decodeName(process->readAll().trimmed()));
-        qCDebug(DOCKER) << "upper dir:" << m_tag << m_upperDir;
-    });
-    process->start("docker", {"image", "inspect", m_tag, "--format", "{{.GraphDriver.Data.UpperDir}}"});
+        const QJsonArray arr = QJsonDocument::fromJson(process->readAll()).array();
+        const QJsonObject obj = arr.constBegin()->toObject();
 
-    QProcess* processEnvs = new QProcess(this);
-    connect(processEnvs, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [processEnvs, this](int code, QProcess::ExitStatus status){
-        processEnvs->deleteLater();
-        qCDebug(DOCKER) << "inspect envs" << code << status;
-        if (code || status) {
-            qCWarning(DOCKER) << "Could not figure out the environment variables of" << m_tag;
-            return;
-        }
+        const QJsonObject objGraphDriverData = obj.value("GraphDriver").toObject().value("Data").toObject();
+        m_mergedDir = Path(objGraphDriverData.value("MergedDir").toString());
+        qCDebug(DOCKER) << "mergeddir:" << m_container << m_mergedDir;
 
-        const auto list = processEnvs->readAll();
-        const auto data = list.mid(1, list.size()-3);
-        const auto entries = data.split(' ');
-
-        for (auto entry : entries) {
-            const auto content = entry.split('=');
+        for (auto entry : obj["Config"].toObject()["Env"].toArray()) {
+            const auto content = entry.toString().split('=');
             if (content.count() != 2)
                 continue;
-            m_envs.insert(content[0], content[1]);
+            m_envs.insert(content[0].toLocal8Bit(), content[1].toLocal8Bit());
         }
-
-        qCDebug(DOCKER) << "envs:" << m_tag << m_envs;
+        qCDebug(DOCKER) << "envs:" << m_container << m_envs;
     });
-    processEnvs->start("docker", {"image", "inspect", m_tag, "--format", "{{.Config.Env}}"});
+    process->start("docker", {"container", "inspect", m_container});
+    process->waitForFinished();
+    qDebug() << "inspecting" << QStringList{"container", "inspect", m_container} << process->exitCode();
 }
 
 DockerRuntime::~DockerRuntime()
@@ -99,19 +92,34 @@ QByteArray DockerRuntime::getenv(const QByteArray& varname) const
 void DockerRuntime::setEnabled(bool enable)
 {
     if (enable) {
-        m_userUpperDir = KDevelop::Path(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/docker-" + QString(m_tag).replace('/', '_'));
-        QDir().mkpath(m_userUpperDir.toLocalFile());
+        m_userMergedDir = KDevelop::Path(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/docker-" + QString(m_tag).replace('/', '_'));
+        QDir().mkpath(m_userMergedDir.toLocalFile());
 
-        const QStringList cmd = {"pkexec", "bindfs", "--map=root/"+KUser().loginName(), m_upperDir.toLocalFile(), m_userUpperDir.toLocalFile() };
+        QProcess pCreateContainer;
+        pCreateContainer.start("docker", {"run", "-d", m_tag, "tail", "-f", "/dev/null"});
+        pCreateContainer.waitForFinished();
+        if (pCreateContainer.exitCode()) {
+            qCWarning(DOCKER) << "could not create the container" << pCreateContainer.readAll();
+        }
+        m_container = pCreateContainer.readAll().trimmed();
+
+        inspectContainer();
+
+        const QStringList cmd = {"pkexec", "bindfs", "--map=root/"+KUser().loginName(), m_mergedDir.toLocalFile(), m_userMergedDir.toLocalFile() };
         QProcess p;
         p.start(cmd.first(), cmd.mid(1));
         p.waitForFinished();
         if (p.exitCode()) {
-            qCDebug(DOCKER) << "bindfs returned" << m_upperDir << m_userUpperDir << cmd << p.exitCode() << p.readAll();
+            qCDebug(DOCKER) << "bindfs returned" << cmd << p.exitCode() << p.readAll();
         }
     } else {
-        int code = QProcess::execute(QStringLiteral("pkexec"), {"umount", m_userUpperDir.toLocalFile()});
+        int codeContainer = QProcess::execute("docker", {"kill", m_container});
+        qCDebug(DOCKER) << "docker kill returned" << codeContainer;
+
+        int code = QProcess::execute(QStringLiteral("pkexec"), {"umount", m_userMergedDir.toLocalFile()});
         qCDebug(DOCKER) << "umount returned" << code;
+
+        m_container.clear();
     }
 }
 
@@ -198,7 +206,7 @@ KDevelop::Path DockerRuntime::pathInHost(const KDevelop::Path& runtimePath) cons
         if (runtimePath==buildDirs || buildDirs.isParentOf(runtimePath)) {
             ret = projectRelPath(buildDirs, runtimePath, false);
         } else
-            ret = KDevelop::Path(m_userUpperDir, KDevelop::Path(QStringLiteral("/")).relativePath(runtimePath));
+            ret = KDevelop::Path(m_userMergedDir, KDevelop::Path(QStringLiteral("/")).relativePath(runtimePath));
     }
     qCDebug(DOCKER) << "pathInHost" << ret << runtimePath;
     return ret;
@@ -206,8 +214,8 @@ KDevelop::Path DockerRuntime::pathInHost(const KDevelop::Path& runtimePath) cons
 
 KDevelop::Path DockerRuntime::pathInRuntime(const KDevelop::Path& localPath) const
 {
-    if (m_userUpperDir==localPath || m_userUpperDir.isParentOf(localPath)) {
-        KDevelop::Path ret(KDevelop::Path("/"), m_userUpperDir.relativePath(localPath));
+    if (m_userMergedDir==localPath || m_userMergedDir.isParentOf(localPath)) {
+        KDevelop::Path ret(KDevelop::Path("/"), m_userMergedDir.relativePath(localPath));
         qCDebug(DOCKER) << "docker runtime pathInRuntime..." << ret << localPath;
         return ret;
     } else if (auto project = ICore::self()->projectController()->findProjectForUrl(localPath.toUrl())) {
@@ -232,7 +240,7 @@ KDevelop::Path DockerRuntime::pathInRuntime(const KDevelop::Path& localPath) con
                 return ret;
             }
         }
-        qCWarning(DOCKER) << "only project files are available on the docker runtime" << localPath;
+        qCWarning(DOCKER) << "only project files are accessible on the docker runtime" << localPath;
     }
     qCDebug(DOCKER) << "bypass..." << localPath;
     return localPath;

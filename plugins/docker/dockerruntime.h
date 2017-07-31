@@ -79,13 +79,14 @@ public:
     static DockerPreferencesSettings* s_settings;
 
 private:
-    void inspectImage();
+    void inspectContainer();
     QStringList workingDirArgs(QProcess* process) const;
 
     const QString m_tag;
+    QString m_container;
     QHash<QByteArray,QByteArray> m_envs;
-    KDevelop::Path m_upperDir;
-    KDevelop::Path m_userUpperDir;
+    KDevelop::Path m_mergedDir;
+    KDevelop::Path m_userMergedDir;
 };
 
 #endif
