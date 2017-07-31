@@ -22,6 +22,8 @@
 
 #include "vcsfilechangesmodel.h"
 
+#include "debug.h"
+
 #include <QIcon>
 #include <QMimeDatabase>
 
@@ -190,6 +192,12 @@ QVariant VcsFileChangesModel::data(const QModelIndex &index, int role) const
 
 QStandardItem* VcsFileChangesModel::fileItemForUrl(QStandardItem* parent, const QUrl& url) const
 {
+    Q_ASSERT(parent);
+    if (!parent) {
+        qCWarning(VCS) << "null QStandardItem passed to" << Q_FUNC_INFO;
+        return nullptr;
+    }
+
     for(int i=0, c=parent->rowCount(); i<c; i++) {
         QStandardItem* item = parent->child(i);
         if(indexFromItem(item).data(UrlRole).toUrl() == url) {
@@ -212,6 +220,12 @@ void VcsFileChangesModel::setAllChecked(bool checked)
 
 QList<QUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
 {
+    Q_ASSERT(parent);
+    if (!parent) {
+        qCWarning(VCS) << "null QStandardItem passed to" << Q_FUNC_INFO;
+        return {};
+    }
+
     QList<QUrl> ret;
     for(int i = 0, c = parent->rowCount(); i < c; i++) {
         QStandardItem* item = parent->child(i);
@@ -224,6 +238,12 @@ QList<QUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
 
 QList<QUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
 {
+    Q_ASSERT(parent);
+    if (!parent) {
+        qCWarning(VCS) << "null QStandardItem passed to" << Q_FUNC_INFO;
+        return {};
+    }
+
     QList<QUrl> ret;
     for(int i = 0, c = parent->rowCount(); i < c; i++) {
         QStandardItem* item = parent->child(i);
@@ -234,11 +254,16 @@ QList<QUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
 
 void VcsFileChangesModel::checkUrls(QStandardItem *parent, const QList<QUrl>& urls) const
 {
-    QSet<QUrl> urlSet(urls.toSet());
+    Q_ASSERT(parent);
+    if (!parent) {
+        qCWarning(VCS) << "null QStandardItem passed to" << Q_FUNC_INFO;
+        return;
+    }
 
     if(!d->allowSelection)
         return;
 
+    QSet<QUrl> urlSet(urls.toSet());
     for(int i = 0, c = parent->rowCount(); i < c; i++) {
         QStandardItem* item = parent->child(i);
         item->setCheckState(urlSet.contains(indexFromItem(item).data(UrlRole).toUrl()) ?
