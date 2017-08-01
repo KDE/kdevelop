@@ -92,7 +92,7 @@ bool shouldClear(const QString& path)
                                 i18nc("@title", "Session crashed"),
                                 i18n("The crash may be caused by a corruption of cached data.\n\n"
                                       "Press Clear if you want KDevelop to clear the cache, otherwise press Continue if you are sure the crash has another origin."),
-                                i18nc("@action", "Clear cache"),
+                                i18nc("@action", "Clear Cache"),
                                 i18n("Continue"));
       if (userAnswer) {
         qCDebug(SERIALIZATION) << "User chose to clean repository";
