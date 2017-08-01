@@ -95,10 +95,10 @@ QString highlightAndEscapeUseText(QString line, int cutOff, KTextEditor::Range r
   const QColor background(251, 250, 150);
   const QColor foreground(0, 0, 0);
 
-  return "<span style=\"font-family:'monospace'\">" + line.left(range.start().column()).toHtmlEscaped()
+  return "<code>" + line.left(range.start().column()).toHtmlEscaped()
                     + "<span style=\"background-color:" + background.name() + ";color:" + foreground.name() + ";\">"
                     + line.mid(range.start().column(), range.end().column() - range.start().column()).toHtmlEscaped()
-                    + "</span>" + line.mid(range.end().column(), line.length() - range.end().column()).toHtmlEscaped() + "</span>";
+                    + "</span>" + line.mid(range.end().column(), line.length() - range.end().column()).toHtmlEscaped() + "</code>";
 }
 
 /**
