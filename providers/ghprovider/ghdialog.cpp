@@ -22,6 +22,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QPointer>
+#include <QInputDialog>
 
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -114,6 +115,8 @@ void Dialog::authorizeClicked()
 
         Resource *rs = m_account->resource();
         rs->authenticate(dlg->username(), dlg->password());
+        connect(rs, &Resource::twoFactorAuthRequested,
+                this, &Dialog::twoFactorResponse);
         connect(rs, &Resource::authenticated,
                 this, &Dialog::authorizeResponse);
     }
@@ -146,6 +149,15 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token, co
     }
     m_account->saveToken(id, token);
     syncUser();
+}
+
+void Dialog::twoFactorResponse(const QString &transferHeader)
+{
+    auto code = QInputDialog::getText(this, i18n("Authentication Code"), i18n("OTP Code"));
+    Resource* rs = m_account->resource();
+    disconnect(rs, &Resource::twoFactorAuthRequested,
+               this, &Dialog::twoFactorResponse);
+    rs->twoFactorAuthenticate(transferHeader, code);
 }
 
 void Dialog::syncUser()

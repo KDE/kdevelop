@@ -83,6 +83,14 @@ public:
     void authenticate(const QString &name, const QString &password);
 
     /**
+     * Authenticate the current user with the two factor authentication code.
+     * Must be called after a call to authenticate.
+     *
+     * @param code The two factor authentication code.
+     */
+    void twoFactorAuthenticate(const QString &transferHeader, const QString &code);
+
+    /**
      * Revoke an access to the Github API (a.k.a. log out the current user).
      *
      * @param id The id of the currently valid authorization.
@@ -130,6 +138,11 @@ Q_SIGNALS:
      *   Empty if something went wrong.
      */
     void authenticated(const QByteArray &id, const QByteArray &token, const QString &tokenName);
+
+    /**
+     * This signal is sent if two factor authentication is requested by GitHub.
+     */
+    void twoFactorAuthRequested(const QString &transferHeader);
 
     /**
      * This signal is emitted when the model containing repos has

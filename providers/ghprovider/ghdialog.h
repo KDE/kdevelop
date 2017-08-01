@@ -74,6 +74,11 @@ private Q_SLOTS:
      */
     void authorizeResponse(const QByteArray &id, const QByteArray &token, const QString &tokenName);
 
+    /**
+     * Handle a two factor response from GitHub during the authorization process.
+     */
+    void twoFactorResponse(const QString &transferHeader);
+
     /// Sync the user's groups.
     void syncUser();
 
