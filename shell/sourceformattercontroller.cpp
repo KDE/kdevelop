@@ -526,7 +526,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 
 void SourceFormatterController::formatFiles()
 {
-    if (m_prjItems.isEmpty())
+    if (m_prjItems.isEmpty() && m_urls.isEmpty())
         return;
 
     //get a list of all files in this folder recursively
