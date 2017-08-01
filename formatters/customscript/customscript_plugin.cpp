@@ -244,12 +244,15 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
 	{
 		result.setCaption(i18n("Gnu Indent: GNU"));
 		result.setContent("indent");
+		result.setUsePreview(true);
 	} else if (name == "GNU_indent_KR") {
 		result.setCaption(i18n("Gnu Indent: Kernighan & Ritchie"));
 		result.setContent("indent -kr");
+		result.setUsePreview(true);
 	} else if (name == "GNU_indent_orig") {
 		result.setCaption(i18n("Gnu Indent: Original Berkeley indent style"));
 		result.setContent("indent -orig");
+		result.setUsePreview(true);
 	} else if(name == "kdev_format_source") {
 		result.setCaption("KDevelop: kdev_format_source");
 		result.setContent("kdev_format_source $FILE $TMPFILE");

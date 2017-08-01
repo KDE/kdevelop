@@ -113,6 +113,7 @@ SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption
     fmt.predefinedStyle( name );
     st.setContent( fmt.saveStyle() );
     st.setMimeTypes(supportedMimeTypes());
+    st.setUsePreview(true);
     return st;
 }
 
