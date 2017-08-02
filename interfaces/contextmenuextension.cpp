@@ -95,6 +95,7 @@ void ContextMenuExtension::addAction( const QString& group, QAction* action )
     }
 }
 
+static
 void populateMenuWithGroup(
     QMenu* menu,
     const QList<ContextMenuExtension>& extensions,
