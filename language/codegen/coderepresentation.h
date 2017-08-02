@@ -111,7 +111,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
       */
     virtual bool setText(const QString&) = 0;
     /** @return true if this representation represents an actual file on disk */
-    virtual bool fileExists() = 0;
+    virtual bool fileExists() const = 0;
     
     /** 
       * Can be used for example from tests to disallow on-disk changes. When such a change is done, an assertion is triggered.
@@ -166,7 +166,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation : public QS
         ~InsertArtificialCodeRepresentation();
         
         void setText(const QString& text);
-        QString text();
+        QString text() const;
         /**
           * Returns the file-name for this code-representation.
           */

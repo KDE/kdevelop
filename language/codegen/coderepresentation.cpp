@@ -118,7 +118,8 @@ class EditorCodeRepresentation : public DynamicCodeRepresentation {
     return ret;
   }
 
-  bool fileExists() override{
+  bool fileExists() const override
+  {
     return QFile(m_document->url().path()).exists();
   }
 
@@ -207,7 +208,8 @@ class FileCodeRepresentation : public CodeRepresentation {
       return false;
     }
 
-    bool fileExists() override{
+    bool fileExists() const override
+    {
       return m_exists;
     }
 
@@ -266,7 +268,8 @@ class StringCodeRepresentation : public CodeRepresentation {
         return true;
     }
 
-    bool fileExists() override{
+    bool fileExists() const override
+    {
         return false;
     }
 
@@ -367,7 +370,8 @@ void InsertArtificialCodeRepresentation::setText(const QString& text) {
     artificialStrings[m_file]->setData(text);
 }
 
-QString InsertArtificialCodeRepresentation::text() {
+QString InsertArtificialCodeRepresentation::text() const
+{
     Q_ASSERT(artificialStrings.contains(m_file));
     return artificialStrings[m_file]->data();
 }
