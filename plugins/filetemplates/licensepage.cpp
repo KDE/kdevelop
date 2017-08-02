@@ -117,6 +117,13 @@ QString LicensePagePrivate::readLicense(int licenseIndex)
                 newLicenseText.setAutoDetectUnicode(true);
                 licenseText = newLicenseText.readAll();
                 newLicense.close();
+
+                // license text files are stored with a trailing linebreak,
+                // as otherwise some tools complain about it
+                // so deal with that and remove any potential trailing linebreak
+                // which otherwise would result in a trailing empty line
+                QRegularExpression anyLinebreakAtEnd(QStringLiteral("(\n|\r\n)$"));
+                licenseText.remove(anyLinebreakAtEnd);
             }
             else
                 licenseText = QStringLiteral("Error, could not open license file.\n Was it deleted?");
