@@ -48,7 +48,7 @@ StandardPage
 
             Button {
                 text: i18n("Open Project")
-                iconName: "project-development-open"
+                iconName: "project-open"
                 onClicked: ICore.projectController().openProject()
             }
 
