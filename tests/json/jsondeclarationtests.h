@@ -30,7 +30,7 @@
 #include "language/duchain/duchain.h"
 #include "language/duchain/functiondefinition.h"
 #include "language/duchain/definitions.h"
-#include <language/duchain/classmemberdeclaration.h>
+#include <language/duchain/classfunctiondeclaration.h>
 #include "jsontesthelpers.h"
 
 /**
@@ -205,7 +205,7 @@ DeclarationTest(isVirtual)
 DeclarationTest(isAbstract)
 {
   const QString NOT_A_FUNCTION = QStringLiteral("Non-class-member declaration cannot be abstract.");
-  auto *absFuncDecl = dynamic_cast<ClassMemberDeclaration*>(decl);
+  auto *absFuncDecl = dynamic_cast<ClassFunctionDeclaration*>(decl);
   if (!absFuncDecl)
       return NOT_A_FUNCTION;
 

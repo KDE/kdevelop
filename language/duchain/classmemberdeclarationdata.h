@@ -45,7 +45,6 @@ public:
   bool m_isNative: 1;
   bool m_isSynchronized: 1;
   bool m_isStrictFP: 1;
-  bool m_isAbstract: 1;
 };
 
 }

@@ -38,7 +38,6 @@ ClassMemberDeclarationData::ClassMemberDeclarationData()
     , m_isNative(false)
     , m_isSynchronized(false)
     , m_isStrictFP(false)
-    , m_isAbstract(false)
 {
 }
 
@@ -173,16 +172,6 @@ void ClassMemberDeclaration::setSynchronized(bool synchronized)
   d_func_dynamic()->m_isSynchronized = synchronized;
 }
 
-bool ClassMemberDeclaration::isAbstract() const
-{
-  return d_func()->m_isAbstract;
-}
-
-void ClassMemberDeclaration::setAbstract(bool abstract)
-{
-  d_func_dynamic()->m_isAbstract = abstract;
-}
-
 
 void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
 {
@@ -197,6 +186,5 @@ void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
   d->m_isSynchronized = specifiers & SynchronizedSpecifier;
   d->m_isNative = specifiers & NativeSpecifier;
   d->m_isStrictFP = specifiers & StrictFPSpecifier;
-  d->m_isAbstract = specifiers & AbstractSpecifier;
 }
 }

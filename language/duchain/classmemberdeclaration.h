@@ -52,7 +52,6 @@ public:
     NativeSpecifier   = 0x80,
     SynchronizedSpecifier = 0x100,
     StrictFPSpecifier = 0x200,
-    AbstractSpecifier = 0x400
   };
   Q_DECLARE_FLAGS(StorageSpecifiers, StorageSpecifier)
 
@@ -84,9 +83,6 @@ public:
 
   bool isStrictFP() const;
   void setStrictFP(bool strictFP);
-
-  bool isAbstract() const;
-  void setAbstract(bool abstract);
 
   enum {
     Identity = 9
