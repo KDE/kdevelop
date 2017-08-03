@@ -27,7 +27,7 @@ class MainWindow;
 class WorkingSet;
 
 /**
- * @NOTE: This button should be hidden when it is not associated to any set!
+ * @note This button should be hidden when it is not associated to any set!
  */
 class WorkingSetToolButton : public QToolButton {
     Q_OBJECT

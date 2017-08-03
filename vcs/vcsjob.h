@@ -48,7 +48,7 @@ public:
     /**
      * To easily check which type of job this is.
      *
-     * @TODO: Check how this can be extended via plugins, maybe use QFlag? (not
+     * @todo Check how this can be extended via plugins, maybe use QFlag? (not
      * QFlags!)
      */
     enum JobType
