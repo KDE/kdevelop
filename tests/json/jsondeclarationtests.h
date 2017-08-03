@@ -204,12 +204,23 @@ DeclarationTest(isVirtual)
 ///@returns whether the (function) declaration's isAbstract matches the given value
 DeclarationTest(isAbstract)
 {
-  const QString NOT_A_FUNCTION = QStringLiteral("Non-class-member declaration cannot be abstract.");
+  const QString NOT_A_FUNCTION = QStringLiteral("Non-class-function declaration cannot be abstract.");
   auto *absFuncDecl = dynamic_cast<ClassFunctionDeclaration*>(decl);
   if (!absFuncDecl)
       return NOT_A_FUNCTION;
 
   return compareValues(absFuncDecl->isAbstract(), value, QStringLiteral("Declaration's isAbstract"));
+}
+///JSON type: bool
+///@returns whether the (function) declaration's isAbstract matches the given value
+DeclarationTest(isFinal)
+{
+  const QString NOT_A_FUNCTION = QStringLiteral("Non-class-function declaration cannot be final.");
+  auto *classFuncDecl = dynamic_cast<ClassFunctionDeclaration*>(decl);
+  if (!classFuncDecl)
+      return NOT_A_FUNCTION;
+
+  return compareValues(classFuncDecl->isFinal(), value, QStringLiteral("Declaration's isFinal"));
 }
 ///JSON type: bool
 ///@returns whether the (class-member) declaration's isStatic matches the given value
