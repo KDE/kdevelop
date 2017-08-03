@@ -44,6 +44,7 @@ public:
      * @param config the config skeleton that is used to store the preferences. If you don't use
      * a K(Core)ConfigSkeleton to save the settings you can also pass null here.
      * However this means that you will have to manually implement the apply(), defaults() and reset() slots
+     * @param parent parent widget
      */
     explicit ConfigPage(IPlugin* plugin, KCoreConfigSkeleton* config = nullptr, QWidget* parent = nullptr);
     ~ConfigPage() override;

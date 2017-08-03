@@ -110,6 +110,9 @@ public Q_SLOTS:
      * @param url The full Url of the document to open.
      * @param cursor The location information, if applicable.
      * @param activationParams Indicates whether to fully activate the document.
+     * @param encoding the encoding for the document, the name must be accepted by QTextCodec,
+     *                 if an empty encoding name is given, the document should fallback to its
+     *                 own default encoding, e.g. the system encoding or the global user settings
      */
     KDevelop::IDocument* openDocument( const QUrl &url,
             const KTextEditor::Cursor& cursor,
@@ -122,6 +125,9 @@ public Q_SLOTS:
      * @param url The full Url of the document to open.
      * @param range The range of text to select, if applicable.
      * @param activationParams Indicates whether to fully activate the document
+     * @param encoding the encoding for the document, the name must be accepted by QTextCodec,
+     *                 if an empty encoding name is given, the document should fallback to its
+     *                 own default encoding, e.g. the system encoding or the global user settings
      * @param buddy Optional buddy document. If 0, the registered IBuddyDocumentFinder
      *              for the URL's mimetype will be queried to find a fitting buddy.
      *              If a buddy was found (or passed) @p url will be opened next
