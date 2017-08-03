@@ -127,6 +127,9 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
             isConstructor = method->isConstructor();
             isDestructor = method->isDestructor();
             isVirtual = method->isVirtual();
+            isAbstract = method->isAbstract();
+            isFinal = method->isFinal();
+            isOverriding = (DUChainUtils::getOverridden(method.data()) != nullptr);
             isStatic = method->isStatic();
             isSlot = method->isSlot();
             isSignal = method->isSignal();

@@ -154,6 +154,18 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
      **/
     bool isVirtual : 1;
     /**
+     * Specifies whether this function is abstract and needs to be overridden by subclasses
+     **/
+    bool isAbstract : 1;
+    /**
+     * Specifies whether this function overrides a virtual method of a base class
+     **/
+    bool isOverriding : 1;
+    /**
+     * Specifies whether this function is final and cannot be overridden by subclasses
+     **/
+    bool isFinal : 1;
+    /**
      * Specifies whether this function is static and can be called without a class instance
      **/
     bool isStatic : 1;
