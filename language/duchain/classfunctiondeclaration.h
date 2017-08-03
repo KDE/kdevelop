@@ -29,7 +29,7 @@
 namespace KDevelop
 {
 
-enum ClassFunctionFlags
+enum ClassFunctionFlag
 {
   FunctionFlagNormal = 0,
   FunctionSignalFlag = 1 <<  1,
@@ -37,6 +37,7 @@ enum ClassFunctionFlags
   AbstractFunctionFlag = 1 << 3,
   FinalFunctionFlag = 1 << 4
 };
+Q_DECLARE_FLAGS(ClassFunctionFlags, ClassFunctionFlag)
 
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ClassFunctionDeclarationData, m_defaultParameters, IndexedString)
 
