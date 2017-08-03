@@ -35,9 +35,6 @@ ClassMemberDeclarationData::ClassMemberDeclarationData()
     , m_isRegister(false)
     , m_isExtern(false)
     , m_isMutable(false)
-    , m_isNative(false)
-    , m_isSynchronized(false)
-    , m_isStrictFP(false)
 {
 }
 
@@ -142,36 +139,6 @@ void ClassMemberDeclaration::setAccessPolicy(Declaration::AccessPolicy accessPol
   d_func_dynamic()->m_accessPolicy = accessPolicy;
 }
 
-bool ClassMemberDeclaration::isNative() const
-{
-  return d_func()->m_isNative;
-}
-
-void ClassMemberDeclaration::setNative(bool native)
-{
-  d_func_dynamic()->m_isNative = native;
-}
-
-bool ClassMemberDeclaration::isStrictFP() const
-{
-  return d_func()->m_isStrictFP;
-}
-
-void ClassMemberDeclaration::setStrictFP(bool strictFP)
-{
-  d_func_dynamic()->m_isStrictFP = strictFP;
-}
-
-bool ClassMemberDeclaration::isSynchronized() const
-{
-  return d_func()->m_isSynchronized;
-}
-
-void ClassMemberDeclaration::setSynchronized(bool synchronized)
-{
-  d_func_dynamic()->m_isSynchronized = synchronized;
-}
-
 
 void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
 {
@@ -182,9 +149,5 @@ void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
   d->m_isRegister = specifiers & RegisterSpecifier;
   d->m_isExtern = specifiers & ExternSpecifier;
   d->m_isMutable = specifiers & MutableSpecifier;
-  d->m_isFinal = specifiers & FinalSpecifier;
-  d->m_isSynchronized = specifiers & SynchronizedSpecifier;
-  d->m_isNative = specifiers & NativeSpecifier;
-  d->m_isStrictFP = specifiers & StrictFPSpecifier;
 }
 }

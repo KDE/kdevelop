@@ -47,11 +47,7 @@ public:
     FriendSpecifier   = 0x4  /**< indicates friend member */,
     ExternSpecifier   = 0x8  /**< indicates external declaration */,
     RegisterSpecifier = 0x10 /**< indicates register */,
-    MutableSpecifier  = 0x20 /**< indicates a mutable member */,
-    FinalSpecifier    = 0x40 /**< indicates a final declaration */,
-    NativeSpecifier   = 0x80,
-    SynchronizedSpecifier = 0x100,
-    StrictFPSpecifier = 0x200,
+    MutableSpecifier  = 0x20 /**< indicates a mutable member */
   };
   Q_DECLARE_FLAGS(StorageSpecifiers, StorageSpecifier)
 
@@ -74,15 +70,6 @@ public:
 
   bool isMutable() const;
   void setMutable(bool isMutable);
-
-  bool isNative() const;
-  void setNative(bool native);
-
-  bool isSynchronized() const;
-  void setSynchronized(bool synchronized);
-
-  bool isStrictFP() const;
-  void setStrictFP(bool strictFP);
 
   enum {
     Identity = 9

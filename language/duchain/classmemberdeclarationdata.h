@@ -41,10 +41,6 @@ public:
   bool m_isRegister: 1;
   bool m_isExtern: 1;
   bool m_isMutable: 1;
-  bool m_isFinal: 1;
-  bool m_isNative: 1;
-  bool m_isSynchronized: 1;
-  bool m_isStrictFP: 1;
 };
 
 }
