@@ -1071,7 +1071,7 @@ void Visitor::setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
 {
     setDeclData<CK>(cursor, static_cast<AbstractFunctionDeclaration*>(decl));
     setDeclData<CK>(cursor, static_cast<ClassMemberDeclaration*>(decl));
-    decl->setAbstract(clang_CXXMethod_isPureVirtual(cursor));
+    decl->setIsAbstract(clang_CXXMethod_isPureVirtual(cursor));
     decl->setStatic(clang_CXXMethod_isStatic(cursor));
     decl->setVirtual(clang_CXXMethod_isVirtual(cursor));
 
