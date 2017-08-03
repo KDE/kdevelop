@@ -135,9 +135,7 @@
  *       }
  *     }
  *   }
- *
- *
- *
+ * \endcode
  */
 
 // DOXYGEN_REFERENCES = language/editor language/duchain
