@@ -429,7 +429,7 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
     menu->addAction(d->diffForRevGlobalAction);
     QAction* action = nullptr;
     action = menu->addAction(QIcon::fromTheme(QStringLiteral("edit-copy")), i18n("Copy Revision"));
-    connect(action, &QAction::triggered, this, [this, rev]() {
+    connect(action, &QAction::triggered, this, [rev]() {
         QApplication::clipboard()->setText(rev.revisionValue().toString());
     });
     action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-history")), i18n("History..."));
