@@ -44,7 +44,7 @@ The second pass is the creation of uses, accomplished a subclass of both the \re
 
 \li \ref KDevelop::DUChain - a global object which keeps track of all loaded source files and the top level context of their definition-use chains.
 
-\li \ref KDevelop::DUContext - an object which represents a single context in a source file, and stores information about parent and child \ref KDevelop::DUContext "DUContexts", and \ref KDevelop::Declarations "Declarations", \ref KDevelop::Definitions "Definitions" and \ref KDevelop::Use "Uses" which occur in them.  Also provides convenience methods for searching the chain.
+\li \ref KDevelop::DUContext - an object which represents a single context in a source file, and stores information about parent and child \ref KDevelop::DUContext "DUContexts", and \ref KDevelop::Declaration "Declarations", \ref KDevelop::Definition "Definitions" and \ref KDevelop::Use "Uses" which occur in them.  Also provides convenience methods for searching the chain.
 
 \li \ref KDevelop::Declaration - an object which represents a single declaration.  Has several subclasses which store more information specific to the type of declaration which is being represented.
 
