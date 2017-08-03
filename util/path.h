@@ -87,9 +87,9 @@ public:
      * URLs without fragments, queries, sub-Paths and the like are supported.
      *
      * Empty paths or URLs containing one of the following are considered invalid:
-     * - URL fragments (i.e. ...#fragment)
-     * - URL queries (i.e. ...?query=)
-     * - sub-URLs (i.e. file:///tmp/kde.tgz#gzip:/#tar:/kdevelop)
+     * - URL fragments (i.e. "...#fragment")
+     * - URL queries (i.e. "...?query=")
+     * - sub-URLs (i.e. "file:///tmp/kde.tgz#gzip:/#tar:/kdevelop")
      *
      * @sa isValid()
      */
@@ -102,9 +102,9 @@ public:
      * URLs without fragments, queries, sub-Paths and the like are supported.
      *
      * Empty paths or URLs containing one of the following are considered invalid:
-     * - URL fragments (i.e. ...#fragment)
-     * - URL queries (i.e. ...?query=)
-     * - sub-URLs (i.e. file:///tmp/kde.tgz#gzip:/#tar:/kdevelop)
+     * - URL fragments (i.e. "...#fragment")
+     * - URL queries (i.e. "...?query=")
+     * - sub-URLs (i.e. "file:///tmp/kde.tgz#gzip:/#tar:/kdevelop")
      *
      * @sa isValid()
      */

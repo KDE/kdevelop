@@ -68,7 +68,7 @@ namespace KDevelop
     KDEVPLATFORMUTIL_EXPORT QString stripAnsiSequences(const QString& str);
 
     /**
-     * Replace all occurrences of '\r' or '\r\n' in @p text with '\n'.
+     * Replace all occurrences of "\r" or "\r\n" in @p text with "\n".
      */
     KDEVPLATFORMUTIL_EXPORT void normalizeLineEndings(QByteArray& text);
 }
