@@ -754,23 +754,21 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(Declaration
       details << QStringLiteral("volatile");
   }
   if( function ) {
-
     if( function->isInline() )
       details << QStringLiteral("inline");
-
     if( function->isExplicit() )
       details << QStringLiteral("explicit");
-
     if( function->isVirtual() )
       details << QStringLiteral("virtual");
 
     const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl.data());
-
     if( classFunDecl ) {
       if( classFunDecl->isSignal() )
         details << QStringLiteral("signal");
       if( classFunDecl->isSlot() )
         details << QStringLiteral("slot");
+      if( classFunDecl->isFinal() )
+        details << QStringLiteral("final");
       if( classFunDecl->isConstructor() )
         details << QStringLiteral("constructor");
       if( classFunDecl->isDestructor() )
