@@ -232,7 +232,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         virtual Qt::ItemFlags flags();
 
         /**
-         * Sets what flags should be returned by ::flags() method.
+         * Sets what flags should be returned by flags() method.
          */
         void setFlags(Qt::ItemFlags flags);
 

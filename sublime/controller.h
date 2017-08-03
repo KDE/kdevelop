@@ -57,7 +57,7 @@ The current implementation achieves those goals as follows.
 
 1. Controller keeps a list of default areas. Those areas are not shown by any
 main window, and never modified as result of user actions. They are directly 
-constructed by kdevelop core. Those areas are returned by the ::defaultAreas
+constructed by kdevelop core. Those areas are returned by the defaultAreas
 method. Each Area instance in the list provides area type id, and human name
 of the area -- via Area::objectName and Area::title methods respectively.
 All methods in this class accept area id, and human name of the area is only

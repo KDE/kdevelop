@@ -254,7 +254,7 @@ struct ProgressManagerPrivate;
  * and notifies observers (progress dialogs) when their progress percent value
  * changes, when they are completed (by their owner), and when they are canceled.
  * Each ProgressItem emits those signals individually and the singleton
- * broadcasts them. Use the ::createProgressItem() statics to acquire an item
+ * broadcasts them. Use the createProgressItem() statics to acquire an item
  * and then call ->setProgress( int percent ) on it every time you want to
  * update the item and ->setComplete() when the operation is done. This will
  * delete the item. Connect to the item's progressItemCanceled() signal to be
