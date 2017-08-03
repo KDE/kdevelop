@@ -106,15 +106,15 @@ public:
      * */
 
     /**Should return the local range within the given url that belongs to the
-      *special language-object that contains @param position , or (QUrl(), KTextEditor::Range:invalid()) */
+      *special language-object that contains @p position , or (QUrl(), KTextEditor::Range:invalid()) */
     virtual KTextEditor::Range specialLanguageObjectRange(const QUrl& url, const KTextEditor::Cursor& position);
 
     /**Should return the source-range and source-document that the
-      *special language-object that contains @param position refers to, or KTextEditor::Range:invalid(). */
+      *special language-object that contains @p position refers to, or KTextEditor::Range:invalid(). */
     virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl& url, const KTextEditor::Cursor& position);
 
     /**Should return a navigation-widget for the
-      *special language-object that contains @param position refers, or 0.
+      *special language-object that contains @p position refers, or 0.
       *If you setProperty("DoNotCloseOnCursorMove", true) on the widget returned,
       *then the widget will not close when the cursor moves in the document, which
       *enables you to change the document contents from the widget without immediately closing the widget.*/

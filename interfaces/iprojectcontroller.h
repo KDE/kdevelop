@@ -186,7 +186,7 @@ Q_SIGNALS:
     void projectClosed( KDevelop::IProject* project );
     /**
      * emitted when a project could not be loaded correctly or loading was aborted.
-     * @ref project contents may not be initialized properly.
+     * @p project contents may not be initialized properly.
      * @param project the project which loading has been aborted.
      */
     void projectOpeningAborted( KDevelop::IProject* project );

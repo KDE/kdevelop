@@ -99,7 +99,7 @@ public:
     ChangeResult addChange(const DocumentChange& change);
     ChangeResult addChange(const DocumentChangePointer& change);
 
-    ///given a file @old, rename it to the @newname
+    ///given a file @p oldFile, rename it to the @p newname
     ChangeResult addDocumentRenameChange(const IndexedString& oldFile, const IndexedString& newname);
 
     enum ReplacementPolicy {
