@@ -57,7 +57,7 @@ The second pass is the creation of uses, accomplished a subclass of both the \re
 \li \ref KDevelop::AbstractType - the base class for types.
 
 
-\section searching Definition-use chain searching
+\section searching-duchain Definition-use chain searching
 
 Because iterating a complete definition-use chain can become expensive when they are large, when a search is being performed (eg. for a declaration corresponding to a certain identifier) it is first performed up to the top level context, then the symbol table is consulted.  The symbol table is a hash of all identifiers which are known to the entire duchain.  All potential matches are evaluated to see if they are visible from the location of the use.
 
@@ -115,7 +115,7 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  * parser and AST are generated.  The parser will also need a lexer, common solutions are to
  * use flex to create one for you, or to create one by hand.
  *
- * \subsection Generic DUChain Builders
+ * \subsection builders DUChain Builders
  *
  * The abstract builder classes (detailed below) provide convenience functions for creating a
  * definition-use chain.  They are template classes which require 2 or 3 class
@@ -213,7 +213,7 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  *
  * For more information about duchain pointers, see KDevelop::DUChainPointer.
  *
- * \section searching Searching for declarations
+ * \section searching-declarations Searching for declarations
  * If you have a qualified identifier and want to retrieve declaration(s) which share the
  * identifier, you can do this by using the symbol table (KDevelop::PersistentSymbolTable):
  *
@@ -234,7 +234,7 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  * what the definitions of macros were when the files were parsed.  Because of this, the recommended
  * way to access the duchain for a document is via KDevelop::DUChainUtils.
  *
- * \subsection topcontext Accessing top level contexts
+ * \subsection accessing-topcontext Accessing top level contexts
  * \todo include a note on how to request loading of contexts from disk, and requesting parsing of files which
  *  are not currently in the duchain.
  *
@@ -243,7 +243,7 @@ The completed duchain should allow for code refactoring, intelligent navigation,
  * In case it is not the context which you are after, all contexts for a file can be retrieved via
  * KDevelop::DUChain::chainsForDocument().
  *
- * \subsection declaration Accessing declarations at a specific location
+ * \subsection accessing-declaration Accessing declarations at a specific location
  * If you have a url and a cursor location, you can attempt to retrieve the declaration located at that position
  * with KDevelop::DUChainUtils::itemUnderCursor().
  *
