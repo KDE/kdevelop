@@ -40,7 +40,7 @@ namespace KDevelop {
  * IBuddyDocumentFinder object that is registerd for this mimetype:
  *
  * This class provides static "registry" functions to handle a specific buddy finding
- * method (i.e. an object of class @class IBuddyDocumentFinder) for different
+ * method (i.e. an object of class IBuddyDocumentFinder) for different
  * mimetypes. Like this, you can have for example an IBuddyDocumentFinder
  * for C++ files which considers foo.cpp and foo.h as buddies, and an
  * IBuddyDocumentFinder for Ada files which considers bar.adb and bar.ads as
@@ -48,7 +48,7 @@ namespace KDevelop {
  * Like this, the concept of buddy documents is extensible for every language
  * for which support is added to KDevelop.
  *
- * If you want to add @class IBuddyDocumentFinder functionality to your language
+ * If you want to add IBuddyDocumentFinder functionality to your language
  * plugin, your main class will inherit from IBuddyDocumentFinder (or have an
  * attribute of this type). Then in your constructor, call
  * @code addFinder(mimetype, this) @endcode
