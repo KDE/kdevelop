@@ -71,7 +71,7 @@ void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* curren
 }
 
 ///The returned set does not include the file itself
-///@parm visited should be empty on each call, used to prevent endless recursion
+///@param visited should be empty on each call, used to prevent endless recursion
 void allImportedFiles(ParsingEnvironmentFilePointer file, QSet<IndexedString>& set, QSet<ParsingEnvironmentFilePointer>& visited) {
   foreach(const ParsingEnvironmentFilePointer &import, file->imports()) {
     if(!import) {

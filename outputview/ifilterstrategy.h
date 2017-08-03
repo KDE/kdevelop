@@ -73,7 +73,7 @@ public:
      * @code
      * [   5%] Doing something
      * [   6%] Doing something
-     * @encode
+     * @endcode
      *
      * @return Processed percent & status of the output, default implementation returns default-constructed value
      */
