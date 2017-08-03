@@ -19,7 +19,9 @@
 #define KDEVPLATFORM_OUTPUTFILTERINGSTRATEGIES_H
 
 /**
- * @file This file contains Concrete strategies for filtering output
+ * @file outputfilteringstrategies.h
+ *
+ * This file contains Concrete strategies for filtering output
  * in KDevelop output model. I.e. classes that inherit from ifilterstrategy.
  * New filtering strategies should be added here
  */
