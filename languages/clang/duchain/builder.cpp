@@ -1075,9 +1075,11 @@ void Visitor::setDeclData(CXCursor cursor, ClassFunctionDeclaration* decl) const
     decl->setStatic(clang_CXXMethod_isStatic(cursor));
     decl->setVirtual(clang_CXXMethod_isVirtual(cursor));
 
-    const auto qtAttribute = ClangUtils::specialQtAttributes(cursor);
-    decl->setIsSignal(qtAttribute == ClangUtils::QtSignalAttribute);
-    decl->setIsSlot(qtAttribute == ClangUtils::QtSlotAttribute);
+    // TODO: Set flags in one go? (needs new API in kdevplatform)
+    const auto attributes = ClangUtils::specialAttributes(cursor);
+    decl->setIsSignal(attributes & FunctionSignalFlag);
+    decl->setIsSlot(attributes & FunctionSlotFlag);
+    decl->setIsFinal(attributes & FinalFunctionFlag);
 }
 
 template<CXCursorKind CK>

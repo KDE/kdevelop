@@ -287,7 +287,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
         return CXChildVisit_Continue;
     }
 
-    if (isQtMocFunction(cursor) || ClangUtils::specialQtAttributes(cursor) == ClangUtils::QtSignalAttribute) {
+    if (isQtMocFunction(cursor) || ClangUtils::specialAttributes(cursor) & FunctionSignalFlag) {
         return CXChildVisit_Continue;
     }
 

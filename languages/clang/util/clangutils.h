@@ -31,6 +31,8 @@
 #include "clangprivateexport.h"
 #include "../duchain/unsavedfile.h"
 
+#include <language/duchain/classfunctiondeclaration.h>
+
 namespace ClangUtils
 {
     /**
@@ -163,15 +165,10 @@ namespace ClangUtils
     */
     KDEVCLANGPRIVATE_EXPORT KTextEditor::Range rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange = KTextEditor::Range());
 
-    enum SpecialQtAttributes {
-        NoQtAttribute,
-        QtSignalAttribute,
-        QtSlotAttribute
-    };
     /**
-     * Given a cursor representing a CXXmethod
+     * Returns special attributes (isFinal, isQtSlot, ...) given a @p cursor representing a CXXmethod
      */
-    SpecialQtAttributes specialQtAttributes(CXCursor cursor);
+    KDevelop::ClassFunctionFlags specialAttributes(CXCursor cursor);
 };
 
 #endif // CLANGUTILS_H

@@ -404,24 +404,33 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
     return false;
 }
 
-ClangUtils::SpecialQtAttributes ClangUtils::specialQtAttributes(CXCursor cursor)
+KDevelop::ClassFunctionFlags ClangUtils::specialAttributes(CXCursor cursor)
 {
     // check for our injected attributes to detect Qt signals and slots
     // see also the contents of wrappedQtHeaders/QtCore/qobjectdefs.h
-    SpecialQtAttributes qtAttribute = NoQtAttribute;
+    ClassFunctionFlags flags = {};
     if (cursor.kind == CXCursor_CXXMethod) {
         clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor /*parent*/, CXClientData data) -> CXChildVisitResult {
-            if (cursor.kind == CXCursor_AnnotateAttr) {
-                auto retVal = static_cast<SpecialQtAttributes*>(data);
+            auto& flags = *static_cast<ClassFunctionFlags*>(data);
+            switch (cursor.kind) {
+            case CXCursor_AnnotateAttr: {
                 ClangString attribute(clang_getCursorDisplayName(cursor));
                 if (attribute.c_str() == QByteArrayLiteral("qt_signal")) {
-                    *retVal = QtSignalAttribute;
+                    flags |= FunctionSignalFlag;
                 } else if (attribute.c_str() == QByteArrayLiteral("qt_slot")) {
-                    *retVal = QtSlotAttribute;
+                    flags |= FunctionSlotFlag;
                 }
+                break;
             }
+            case CXCursor_CXXFinalAttr:
+                flags |= FinalFunctionFlag;
+                break;
+            default:
+                break;
+            }
+
             return CXChildVisit_Break;
-        }, &qtAttribute);
+        }, &flags);
     }
-    return qtAttribute;
+    return flags;
 }
