@@ -107,7 +107,6 @@ OutputExecuteJob::~OutputExecuteJob()
     }
 
     Q_ASSERT( d->m_process->state() == QProcess::NotRunning || !killSuccessful );
-    delete d;
 }
 
 OutputExecuteJob::JobStatus OutputExecuteJob::status() const

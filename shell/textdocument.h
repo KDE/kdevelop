@@ -93,8 +93,9 @@ private:
     void documentSaved(KTextEditor::Document*,bool);
     void repositoryCheckFinished(bool);
 
-    struct TextDocumentPrivate * const d;
-    friend struct TextDocumentPrivate;
+private:
+    const QScopedPointer<class TextDocumentPrivate> d;
+    friend class TextDocumentPrivate;
 };
 
 class KDEVPLATFORMSHELL_EXPORT TextView : public Sublime::View
@@ -117,7 +118,9 @@ public:
 
 private:
     void sendStatusChanged();
-    struct TextViewPrivate* const d;
+
+private:
+    const QScopedPointer<class TextViewPrivate> d;
 };
 
 }

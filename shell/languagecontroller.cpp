@@ -58,8 +58,9 @@ namespace KDevelop {
 typedef QHash<QString, ILanguageSupport*> LanguageHash;
 typedef QHash<QString, QList<ILanguageSupport*> > LanguageCache;
 
-struct LanguageControllerPrivate
+class LanguageControllerPrivate
 {
+public:
     explicit LanguageControllerPrivate(LanguageController *controller)
         : dataMutex(QMutex::Recursive)
         , backgroundParser(new BackgroundParser(controller))
@@ -138,15 +139,12 @@ void LanguageControllerPrivate::addLanguageSupport(KDevelop::ILanguageSupport* l
 
 LanguageController::LanguageController(QObject *parent)
     : ILanguageController(parent)
+    , d(new LanguageControllerPrivate(this))
 {
     setObjectName(QStringLiteral("LanguageController"));
-    d = new LanguageControllerPrivate(this);
 }
 
-LanguageController::~LanguageController()
-{
-    delete d;
-}
+LanguageController::~LanguageController() = default;
 
 void LanguageController::initialize()
 {

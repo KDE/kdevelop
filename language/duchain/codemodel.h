@@ -21,6 +21,8 @@
 
 #include "identifier.h"
 
+#include <QScopedPointer>
+
 namespace KDevelop {
 
   class Declaration;
@@ -93,7 +95,7 @@ namespace KDevelop {
     static CodeModel& self();
 
     private:
-      class CodeModelPrivate* d;
+      const QScopedPointer<class CodeModelPrivate> d;
   };
 }
 

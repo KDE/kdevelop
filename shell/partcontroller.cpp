@@ -84,10 +84,7 @@ PartController::PartController(Core *core, QWidget *toplevel)
         setupActions();
 }
 
-PartController::~PartController()
-{
-    delete d;
-}
+PartController::~PartController() = default;
 
 bool PartController::showTextEditorStatusBar() const
 {

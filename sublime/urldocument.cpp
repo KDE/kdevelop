@@ -27,9 +27,11 @@
 
 namespace Sublime {
 
-// struct UrlDocumentPrivate
+// class UrlDocumentPrivate
 
-struct UrlDocumentPrivate {
+class UrlDocumentPrivate
+{
+public:
     QUrl url;
 };
 
@@ -43,10 +45,7 @@ UrlDocument::UrlDocument(Controller *controller, const QUrl &url)
     setUrl(url);
 }
 
-UrlDocument::~UrlDocument()
-{
-    delete d;
-}
+UrlDocument::~UrlDocument() = default;
 
 QUrl UrlDocument::url() const
 {

@@ -41,7 +41,7 @@ public:
     void defaults() override;
 
 private:
-    class EnvironmentPreferencesPrivate *const d;
+    const QScopedPointer<class EnvironmentPreferencesPrivate> d;
 };
 
 }

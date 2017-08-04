@@ -173,7 +173,7 @@ private:
     virtual void initialize();
 
 private:
-    class PluginControllerPrivate* const d;
+    const QScopedPointer<class PluginControllerPrivate> d;
 };
 
 }

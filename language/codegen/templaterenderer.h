@@ -198,7 +198,7 @@ public:
     QString errorString() const;
 
 private:
-    class TemplateRendererPrivate* const d;
+    const QScopedPointer<class TemplateRendererPrivate> d;
 };
 
 }

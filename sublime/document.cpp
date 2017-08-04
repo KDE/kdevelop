@@ -24,9 +24,11 @@
 
 namespace Sublime {
 
-// struct DocumentPrivate
+// class DocumentPrivate
 
-struct DocumentPrivate {
+class DocumentPrivate
+{
+public:
     explicit DocumentPrivate(Document *doc): m_document(doc) {}
 
     void removeView(Sublime::View* view)
@@ -64,10 +66,7 @@ Document::Document(const QString &title, Controller *controller)
             [controller] (QObject* obj) { controller->removeDocument(static_cast<Document*>(obj)); });
 }
 
-Document::~Document()
-{
-    delete d;
-}
+Document::~Document() = default;
 
 Controller *Document::controller() const
 {

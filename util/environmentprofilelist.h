@@ -138,8 +138,7 @@ protected:
     void removeProfile(const QString& profileName);
 
 private:
-    class EnvironmentProfileListPrivate* const d;
-
+    const QScopedPointer<class EnvironmentProfileListPrivate> d;
 };
 
 KDEVPLATFORMUTIL_EXPORT void expandVariables(QMap<QString, QString>& variables, const QProcessEnvironment& environment);

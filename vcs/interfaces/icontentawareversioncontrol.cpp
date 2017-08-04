@@ -23,7 +23,7 @@
 
 namespace KDevelop {
 
-struct CheckInRepositoryJobPrivate
+class CheckInRepositoryJobPrivate
 {
     explicit CheckInRepositoryJobPrivate(KTextEditor::Document* document)
         : document(document) { };
@@ -39,14 +39,11 @@ CheckInRepositoryJob::CheckInRepositoryJob(KTextEditor::Document* document)
     setCapabilities(Killable);
 };
 
+CheckInRepositoryJob::~CheckInRepositoryJob() = default;
+
 KTextEditor::Document* CheckInRepositoryJob::document() const
 {
     return d->document;
-}
-
-CheckInRepositoryJob::~CheckInRepositoryJob()
-{
-    delete d;
 }
 
 void CheckInRepositoryJob::abort()

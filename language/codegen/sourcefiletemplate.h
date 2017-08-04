@@ -328,7 +328,7 @@ public:
     void addAdditionalSearchLocation(const QString& location);
 
 private:
-    class SourceFileTemplatePrivate* const d;
+    const QScopedPointer<class SourceFileTemplatePrivate> d;
 };
 
 }

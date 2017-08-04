@@ -48,10 +48,7 @@ PartDocument::PartDocument(const QUrl& url, KDevelop::ICore* core, const QString
     d->preferredPart = preferredPart;
 }
 
-PartDocument::~PartDocument()
-{
-    delete d;
-}
+PartDocument::~PartDocument() = default;
 
 QWidget *PartDocument::createViewWidget(QWidget* /*parent*/)
 {

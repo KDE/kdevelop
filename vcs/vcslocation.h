@@ -25,6 +25,7 @@
 #include <QHash>
 #include <QUrl>
 #include <QMetaType>
+#include <QScopedPointer>
 
 class QVariant;
 
@@ -134,7 +135,7 @@ public:
     bool isValid() const;
 
 private:
-    class VcsLocationPrivate* d;
+    const QScopedPointer<class VcsLocationPrivate> d;
 };
 
 inline uint qHash( const KDevelop::VcsLocation& loc )

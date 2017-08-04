@@ -33,8 +33,6 @@ class ISession;
 class AbstractRepositoryManager;
 class AbstractItemRepository;
 
-struct ItemRepositoryRegistryPrivate;
-
 /**
  * Manages a set of item-repositores and allows loading/storing them all at once from/to disk.
  * Does not automatically store contained repositories on destruction.
@@ -101,7 +99,8 @@ class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
   private:
     explicit ItemRepositoryRegistry(const ISessionLock::Ptr& session);
 
-    ItemRepositoryRegistryPrivate* d;
+    const QScopedPointer<class ItemRepositoryRegistryPrivate> d;
+
     static ItemRepositoryRegistry* m_self;
 };
 

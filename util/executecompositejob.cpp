@@ -50,10 +50,7 @@ ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jo
     }
 }
 
-ExecuteCompositeJob::~ExecuteCompositeJob()
-{
-    delete d;
-}
+ExecuteCompositeJob::~ExecuteCompositeJob() = default;
 
 void ExecuteCompositeJobPrivate::startNextJob(KJob* job)
 {

@@ -20,6 +20,7 @@
 #define KDEVPLATFORM_DUCHAINLOCK_H
 
 #include <language/languageexport.h>
+#include <QScopedPointer>
 
 namespace KDevelop
 {
@@ -100,7 +101,7 @@ public:
   bool currentThreadHasWriteLock();
 
 private:
-  class DUChainLockPrivate* const d;
+  const QScopedPointer<class DUChainLockPrivate> d;
 };
 
 /**

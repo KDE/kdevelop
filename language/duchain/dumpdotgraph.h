@@ -15,6 +15,7 @@
 #define KDEVPLATFORM_DUMPDOTGRAPH_H
 
 #include <QtGlobal>
+#include <QScopedPointer>
 #include <language/languageexport.h>
 
 class QString;
@@ -38,7 +39,7 @@ namespace KDevelop {
       QString dotGraph(KDevelop::DUContext* context, bool shortened = false);
 
     private:
-      class DumpDotGraphPrivate* const d;
+      const QScopedPointer<class DumpDotGraphPrivate> d;
   };
 }
 

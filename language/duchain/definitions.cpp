@@ -144,10 +144,7 @@ Definitions::Definitions() : d(new DefinitionsPrivate())
 {
 }
 
-Definitions::~Definitions()
-{
-  delete d;
-}
+Definitions::~Definitions() = default;
 
 void Definitions::addDefinition(const DeclarationId& id, const IndexedDeclaration& definition)
 {

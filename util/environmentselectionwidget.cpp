@@ -30,8 +30,9 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-struct EnvironmentSelectionWidgetPrivate
+class EnvironmentSelectionWidgetPrivate
 {
+public:
     KComboBox* comboBox;
     EnvironmentSelectionModel* model;
     EnvironmentSelectionWidget* owner;
@@ -61,10 +62,7 @@ EnvironmentSelectionWidget::EnvironmentSelectionWidget( QWidget *parent )
             this, &EnvironmentSelectionWidget::currentProfileChanged);
 }
 
-EnvironmentSelectionWidget::~EnvironmentSelectionWidget()
-{
-    delete d;
-}
+EnvironmentSelectionWidget::~EnvironmentSelectionWidget() = default;
 
 QString EnvironmentSelectionWidget::currentProfile() const
 {

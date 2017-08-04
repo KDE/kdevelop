@@ -143,7 +143,6 @@ SourceFileTemplate::SourceFileTemplate (const SourceFileTemplate& other)
 SourceFileTemplate::~SourceFileTemplate()
 {
     delete d->archive;
-    delete d;
 }
 
 SourceFileTemplate& SourceFileTemplate::operator=(const SourceFileTemplate& other)

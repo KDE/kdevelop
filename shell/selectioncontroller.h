@@ -54,9 +54,9 @@ public Q_SLOTS:
      * @param context the new selection
      */
     void updateSelection( Context* context ) override;
-private:
-    class SelectionControllerPrivate* const d;
 
+private:
+    const QScopedPointer<class SelectionControllerPrivate> d;
 };
 
 }

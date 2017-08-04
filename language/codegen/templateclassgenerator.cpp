@@ -105,10 +105,7 @@ TemplateClassGenerator::TemplateClassGenerator(const QUrl& baseUrl)
     d->renderer.setEmptyLinesPolicy(TemplateRenderer::TrimEmptyLines);
 }
 
-TemplateClassGenerator::~TemplateClassGenerator()
-{
-    delete d;
-}
+TemplateClassGenerator::~TemplateClassGenerator() = default;
 
 void TemplateClassGenerator::setTemplateDescription(const SourceFileTemplate& fileTemplate)
 {

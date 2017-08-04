@@ -103,10 +103,6 @@ protected:
      */
     KDirWatch* projectWatcher( IProject* project ) const;
 
-private:
-    friend class AbstractFileManagerPluginPrivate;
-    AbstractFileManagerPluginPrivate* const d;
-
 Q_SIGNALS:
     void reloadedFileItem(KDevelop::ProjectFileItem* file);
     void reloadedFolderItem(KDevelop::ProjectFolderItem* folder);
@@ -118,6 +114,10 @@ Q_SIGNALS:
     void fileAdded(KDevelop::ProjectFileItem* file);
     void fileRemoved(KDevelop::ProjectFileItem* file);
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
+
+private:
+    const QScopedPointer<class AbstractFileManagerPluginPrivate> d;
+    friend class AbstractFileManagerPluginPrivate;
 };
 
 }

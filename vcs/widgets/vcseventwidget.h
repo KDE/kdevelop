@@ -41,7 +41,7 @@ public:
     ~VcsEventWidget() override;
 
 private:
-    class VcsEventWidgetPrivate* const d;
+    const QScopedPointer<class VcsEventWidgetPrivate> d;
 };
 }
 

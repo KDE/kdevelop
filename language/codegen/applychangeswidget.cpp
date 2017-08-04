@@ -94,10 +94,7 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     resize(QSize(800, 400));
 }
 
-ApplyChangesWidget::~ApplyChangesWidget()
-{
-    delete d;
-}
+ApplyChangesWidget::~ApplyChangesWidget() = default;
 
 bool ApplyChangesWidget::hasDocuments() const
 {

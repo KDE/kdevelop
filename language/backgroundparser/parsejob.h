@@ -230,7 +230,7 @@ protected:
     bool hasTracker() const;
 
 private:
-    class ParseJobPrivate* const d;
+    const QScopedPointer<class ParseJobPrivate> d;
 };
 
 }

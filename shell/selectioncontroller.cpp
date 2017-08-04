@@ -35,10 +35,7 @@ SelectionController::SelectionController( QObject* o )
 {
 }
 
-SelectionController::~SelectionController()
-{
-    delete d;
-}
+SelectionController::~SelectionController() = default;
 
 Context* SelectionController::currentSelection()
 {

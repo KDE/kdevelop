@@ -109,7 +109,7 @@ Q_SIGNALS:
     void receivedStderrLines( const QStringList& lines );
 
 private:
-    class ProcessLineMakerPrivate* const d;
+    const QScopedPointer<class ProcessLineMakerPrivate> d;
     friend class ProcessLineMakerPrivate;
 };
 

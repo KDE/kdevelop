@@ -116,10 +116,7 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
             this, updateState);
 }
 
-IPlugin::~IPlugin()
-{
-    delete d;
-}
+IPlugin::~IPlugin() = default;
 
 void IPlugin::unload()
 {

@@ -113,10 +113,7 @@ Importers::Importers() : d(new ImportersPrivate())
 {
 }
 
-Importers::~Importers()
-{
-  delete d;
-}
+Importers::~Importers() = default;
 
 void Importers::addImporter(const DeclarationId& id, const IndexedDUContext& use)
 {

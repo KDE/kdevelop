@@ -139,8 +139,8 @@ public Q_SLOTS:
     void setCurrentIndex(const QModelIndex& index);
 
 private:
+    const QScopedPointer<class MultiLevelListViewPrivate> d;
     friend class MultiLevelListViewPrivate;
-    class MultiLevelListViewPrivate* const d;
     Q_PRIVATE_SLOT(d, void ensureViewSelected(QTreeView* view))
 };
 

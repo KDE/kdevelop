@@ -46,10 +46,7 @@ VcsDiff::VcsDiff()
 {
 }
 
-VcsDiff::~VcsDiff()
-{
-    delete d;
-}
+VcsDiff::~VcsDiff() = default;
 
 VcsDiff::VcsDiff( const VcsDiff& rhs )
     : d(new VcsDiffPrivate)

@@ -70,9 +70,11 @@ struct ToolWidgetFinder {
 };
 
 
-// struct ControllerPrivate
+// class ControllerPrivate
 
-struct ControllerPrivate {
+class ControllerPrivate
+{
+public:
     ControllerPrivate()
     {
     }
@@ -108,7 +110,6 @@ void Controller::init()
 Controller::~Controller()
 {
     qDeleteAll(d->controlledWindows);
-    delete d;
 }
 
 void Controller::showArea(Area *area, MainWindow *mainWindow)

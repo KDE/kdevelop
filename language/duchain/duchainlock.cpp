@@ -74,10 +74,7 @@ DUChainLock::DUChainLock()
 {
 }
 
-DUChainLock::~DUChainLock()
-{
-  delete d;
-}
+DUChainLock::~DUChainLock() = default;
 
 bool DUChainLock::lockForRead(unsigned int timeout)
 {

@@ -75,8 +75,9 @@ public:
     void setActions( Actions );
 
     VcsItemEvent& operator=( const VcsItemEvent& rhs);
+
 private:
-    class VcsItemEventPrivate* const d;
+    const QScopedPointer<class VcsItemEventPrivate> d;
 };
 
 /**
@@ -107,8 +108,9 @@ public:
     void setItems( const QList<VcsItemEvent>& );
     void addItem(const VcsItemEvent& item);
     VcsEvent& operator=( const VcsEvent& rhs);
+
 private:
-    class VcsEventPrivate* const d;
+    const QScopedPointer<class VcsEventPrivate> d;
 };
 
 }

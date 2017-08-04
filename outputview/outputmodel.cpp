@@ -179,8 +179,9 @@ private:
 
 Q_GLOBAL_STATIC(ParsingThread, s_parsingThread);
 
-struct OutputModelPrivate
+class OutputModelPrivate
 {
+public:
     explicit OutputModelPrivate( OutputModel* model, const QUrl& builddir = QUrl() );
     ~OutputModelPrivate();
     bool isValidIndex( const QModelIndex&, int currentRowCount ) const;
@@ -248,10 +249,7 @@ OutputModel::OutputModel( QObject* parent )
 {
 }
 
-OutputModel::~OutputModel()
-{
-    delete d;
-}
+OutputModel::~OutputModel() = default;
 
 QVariant OutputModel::data(const QModelIndex& idx , int role ) const
 {

@@ -87,8 +87,7 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
 
 private:
-    struct AggregateModelPrivate *d;
-
+    const QScopedPointer<class AggregateModelPrivate> d;
 };
 
 }

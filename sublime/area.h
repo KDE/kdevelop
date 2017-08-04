@@ -275,8 +275,8 @@ private:
 
     void initialize();
 
-    struct AreaPrivate *const d;
-
+private:
+    const QScopedPointer<class AreaPrivate> d;
 };
 
 }

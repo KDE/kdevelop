@@ -131,8 +131,9 @@ Q_SIGNALS:
      * The @p code parameter indicates the return value from executing the process
      */
     void completed(int code);
+
 private:
-    class CommandExecutorPrivate* const d;
+    const QScopedPointer<class CommandExecutorPrivate> d;
     friend class CommandExecutorPrivate;
 };
 

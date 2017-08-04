@@ -173,7 +173,7 @@ public:
     TemplateRenderer* renderer() const;
 
 private:
-    class TemplateClassGeneratorPrivate* const d;
+    const QScopedPointer<class TemplateClassGeneratorPrivate> d;
 };
 
 }

@@ -22,6 +22,7 @@
 #include <language/languageexport.h>
 #include "declarationid.h"
 
+#include <QScopedPointer>
 
 namespace KDevelop {
 
@@ -58,7 +59,7 @@ namespace KDevelop {
     static Importers& self();
     
     private:
-      class ImportersPrivate* d;
+      const QScopedPointer<class ImportersPrivate> d;
   };
 }
 

@@ -289,10 +289,7 @@ SessionController::SessionController( QObject *parent )
     connect( d->grp, &QActionGroup::triggered, this, [&] (QAction* a) { d->loadSessionFromAction(a); } );
 }
 
-SessionController::~SessionController()
-{
-    delete d;
-}
+SessionController::~SessionController() = default;
 
 void SessionController::startNewSession()
 {

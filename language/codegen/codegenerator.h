@@ -136,9 +136,10 @@ protected:
     void clearChangeSets();
 
 private:
-    class CodeGeneratorPrivate * const d;
-
     bool displayChanges();
+
+private:
+    const QScopedPointer<class CodeGeneratorPrivate> d;
 };
 
 /**

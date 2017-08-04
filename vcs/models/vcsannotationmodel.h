@@ -48,7 +48,7 @@ public:
     QVariant data( int line, Qt::ItemDataRole role = Qt::DisplayRole ) const override;
 
 private:
-    class VcsAnnotationModelPrivate* const d;
+    const QScopedPointer<class VcsAnnotationModelPrivate> d;
     friend class VcsAnnotationModelPrivate;
 };
 

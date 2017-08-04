@@ -28,8 +28,9 @@ Boston, MA 02110-1301, USA.
 
 using namespace KDevelop;
 
-struct KDevelop::ProjectConfigSkeletonPrivate
+class KDevelop::ProjectConfigSkeletonPrivate
 {
+public:
     QString m_developerTempFile;
     QString m_projectTempFile;
     Path m_projectFile;
@@ -49,6 +50,8 @@ ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfigPtr config )
     Q_ASSERT(config);
     d->m_developerTempFile = config->name();
 }
+
+ProjectConfigSkeleton::~ProjectConfigSkeleton() = default;
 
 void ProjectConfigSkeleton::setDeveloperTempFile( const QString& cfg )
 {
@@ -163,9 +166,4 @@ bool ProjectConfigSkeleton::writeConfig()
 
     emit configChanged();
     return true;
-}
-
-ProjectConfigSkeleton::~ProjectConfigSkeleton()
-{
-    delete d;
 }

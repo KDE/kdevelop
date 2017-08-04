@@ -33,8 +33,6 @@ class QUrl;
 namespace KDevelop
 {
 
-struct OutputModelPrivate;
-
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT
@@ -84,8 +82,8 @@ Q_SIGNALS:
     void allDone();
 
 private:
-    OutputModelPrivate* const d;
-    friend struct OutputModelPrivate;
+    const QScopedPointer<class OutputModelPrivate> d;
+    friend class OutputModelPrivate;
 };
 
 }

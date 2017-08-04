@@ -48,7 +48,7 @@ Q_SIGNALS:
     void finished(bool canRecreate);
 
 protected:
-    struct CheckInRepositoryJobPrivate* d;
+    const QScopedPointer<class CheckInRepositoryJobPrivate> d;
 };
 
 /**

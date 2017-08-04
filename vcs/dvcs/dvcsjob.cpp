@@ -41,8 +41,9 @@
 
 using namespace KDevelop;
 
-struct DVcsJobPrivate
+class KDevelop::DVcsJobPrivate
 {
+public:
     DVcsJobPrivate() : childproc(new KProcess), vcsplugin(nullptr), ignoreError(false)
     {}
 
@@ -84,10 +85,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
 
 }
 
-DVcsJob::~DVcsJob()
-{
-    delete d;
-}
+DVcsJob::~DVcsJob() = default;
 
 QDir DVcsJob::directory() const
 {

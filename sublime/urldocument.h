@@ -55,8 +55,7 @@ protected:
     void setUrl(const QUrl& newUrl);
 
 private:
-    struct UrlDocumentPrivate * const d;
-
+    const QScopedPointer<class UrlDocumentPrivate> d;
 };
 
 }

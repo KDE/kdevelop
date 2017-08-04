@@ -76,7 +76,7 @@ public:
     static SessionInfo parse( const QString& id, bool mkdir = false );
 
 private:
-    class SessionPrivate* const d;
+    const QScopedPointer<class SessionPrivate> d;
     friend class SessionPrivate;
 };
 

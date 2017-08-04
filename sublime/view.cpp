@@ -28,8 +28,9 @@ namespace Sublime {
 class View;
 class Document;
 
-struct ViewPrivate
+class ViewPrivate
 {
+public:
     ViewPrivate();
     Document *doc;
     QWidget *widget;
@@ -61,7 +62,6 @@ View::~View()
         d->widget->setParent(nullptr);
         d->widget->deleteLater();
     }
-    delete d;
 }
 
 Document *View::document() const

@@ -28,8 +28,9 @@
 
 namespace KDevelop {
 
-struct TemplateEnginePrivate
+class TemplateEnginePrivate
 {
+public:
     Grantlee::Engine engine;
 };
 

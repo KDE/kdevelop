@@ -37,12 +37,15 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+class ContextPrivate
+{
+};
+
 Context::Context()
     : d(nullptr)
 {}
 
-Context::~Context()
-{}
+Context::~Context() = default;
 
 bool Context::hasType( int aType ) const
 {
@@ -63,10 +66,7 @@ FileContext::FileContext( const QList<QUrl> &urls )
         : Context(), d( new FileContextPrivate( urls ) )
 {}
 
-FileContext::~FileContext()
-{
-    delete d;
-}
+FileContext::~FileContext() = default;
 
 int FileContext::type() const
 {
@@ -92,10 +92,7 @@ ProjectItemContext::ProjectItemContext( const QList<ProjectBaseItem*> &items )
         : Context(), d( new ProjectItemContextPrivate( items ) )
 {}
 
-ProjectItemContext::~ProjectItemContext()
-{
-    delete d;
-}
+ProjectItemContext::~ProjectItemContext() = default;
 
 int ProjectItemContext::type() const
 {
@@ -125,10 +122,7 @@ OpenWithContext::OpenWithContext(const QList<QUrl>& urls, const QMimeType& mimeT
 {
 }
 
-OpenWithContext::~OpenWithContext()
-{
-    delete d;
-}
+OpenWithContext::~OpenWithContext() = default;
 
 int OpenWithContext::type() const
 {

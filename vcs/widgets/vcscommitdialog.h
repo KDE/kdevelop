@@ -38,7 +38,7 @@ private Q_SLOTS:
     void cancel();
 
 private:
-    class VcsCommitDialogPrivate* const d;
+    const QScopedPointer<class VcsCommitDialogPrivate> d;
 };
 
 }

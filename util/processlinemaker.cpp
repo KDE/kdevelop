@@ -95,10 +95,7 @@ ProcessLineMaker::ProcessLineMaker( QProcess* proc, QObject* parent )
             this, [&] { d->slotReadyReadStderr(); } );
 }
 
-ProcessLineMaker::~ProcessLineMaker()
-{
-     delete d;
-}
+ProcessLineMaker::~ProcessLineMaker() = default;
 
 void ProcessLineMaker::slotReceivedStdout( const QByteArray& buffer )
 {

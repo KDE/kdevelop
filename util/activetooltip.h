@@ -85,7 +85,8 @@ Q_SIGNALS:
 private:
     void closeEvent(QCloseEvent* ) override;
 
-    class ActiveToolTipPrivate* const d;
+private:
+    const QScopedPointer<class ActiveToolTipPrivate> d;
 };
 
 }

@@ -24,6 +24,7 @@
 
 #include "vcsexport.h"
 #include <QMetaType>
+#include <QScopedPointer>
 
 class QString;
 class QDateTime;
@@ -99,8 +100,9 @@ public:
     void setCommitMessage( const QString& msg );
     
     VcsAnnotationLine& operator=( const VcsAnnotationLine& rhs);
+
 private:
-    class VcsAnnotationLinePrivate* d;
+    const QScopedPointer<class VcsAnnotationLinePrivate> d;
 };
 
 /**
@@ -148,8 +150,9 @@ public:
     bool containsLine( int lineno ) const;
 
     VcsAnnotation& operator=( const VcsAnnotation& rhs);
+
 private:
-    class VcsAnnotationPrivate* const d;
+    const QScopedPointer<class VcsAnnotationPrivate> d;
 };
 
 }

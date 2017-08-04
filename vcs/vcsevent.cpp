@@ -42,10 +42,7 @@ VcsItemEvent::VcsItemEvent()
 {
 }
 
-VcsItemEvent::~VcsItemEvent()
-{
-    delete d;
-}
+VcsItemEvent::~VcsItemEvent() = default;
 
 VcsItemEvent::VcsItemEvent(const VcsItemEvent& rhs )
     : d(new VcsItemEventPrivate)
@@ -122,10 +119,7 @@ VcsEvent::VcsEvent()
 {
 }
 
-VcsEvent::~VcsEvent()
-{
-    delete d;
-}
+VcsEvent::~VcsEvent() = default;
 
 VcsEvent::VcsEvent( const VcsEvent& rhs )
     : d(new VcsEventPrivate)

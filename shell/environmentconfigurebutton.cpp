@@ -91,10 +91,7 @@ EnvironmentConfigureButton::EnvironmentConfigureButton(QWidget* parent)
             this, [&] { d->showDialog(); });
 }
 
-EnvironmentConfigureButton::~EnvironmentConfigureButton()
-{
-    delete d;
-}
+EnvironmentConfigureButton::~EnvironmentConfigureButton() = default;
 
 void EnvironmentConfigureButton::setSelectionWidget(EnvironmentSelectionWidget* widget)
 {

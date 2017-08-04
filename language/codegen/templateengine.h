@@ -31,7 +31,6 @@ class QStringList;
 namespace KDevelop {
 
 class TemplateRenderer;
-struct TemplateEnginePrivate;
 
 /**
  * Central template engine where template directories and archives can be registered.
@@ -53,7 +52,8 @@ private:
 
     Q_DISABLE_COPY(TemplateEngine)
 
-    const QScopedPointer<TemplateEnginePrivate> d;
+private:
+    const QScopedPointer<class TemplateEnginePrivate> d;
     friend class TemplateRenderer;
 };
 

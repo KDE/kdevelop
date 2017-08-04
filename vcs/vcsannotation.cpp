@@ -66,10 +66,7 @@ VcsAnnotationLine::VcsAnnotationLine( const VcsAnnotationLine& rhs )
     d->message = rhs.d->message;
 }
 
-VcsAnnotationLine::~VcsAnnotationLine()
-{
-    delete d;
-}
+VcsAnnotationLine::~VcsAnnotationLine() = default;
 
 int VcsAnnotationLine::lineNumber() const
 {
@@ -158,10 +155,7 @@ VcsAnnotation::VcsAnnotation( const VcsAnnotation& rhs )
     d->location = rhs.d->location;
 }
 
-VcsAnnotation::~VcsAnnotation()
-{
-    delete d;
-}
+VcsAnnotation::~VcsAnnotation() = default;
 
 QUrl VcsAnnotation::location() const
 {

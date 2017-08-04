@@ -54,10 +54,7 @@ EnvironmentPreferences::EnvironmentPreferences(const QString& preselectedProfile
     d->preselectedProfileName = preselectedProfileName;
 }
 
-EnvironmentPreferences::~EnvironmentPreferences( )
-{
-    delete d;
-}
+EnvironmentPreferences::~EnvironmentPreferences() = default;
 
 void EnvironmentPreferences::apply()
 {

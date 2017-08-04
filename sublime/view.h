@@ -96,7 +96,7 @@ protected:
 private:
     //copy is not allowed, create a new view from the document instead
     View(const View &v);
-    struct ViewPrivate *const d;
+    const QScopedPointer<class ViewPrivate> d;
 
     friend class Document;
 };

@@ -246,7 +246,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
          */
         void setText( const QString& text );
 
-        class ProjectBaseItemPrivate* const d_ptr;
+        const QScopedPointer<class ProjectBaseItemPrivate> d_ptr;
         void setRow( int row );
         void setModel( ProjectModel* model );
     private:
@@ -469,7 +469,7 @@ public:
     ProjectBaseItem* itemForPath(const IndexedString& path) const;
 
 private:
-    class ProjectModelPrivate* const d;
+    const QScopedPointer<class ProjectModelPrivate> d;
     friend class ProjectBaseItem;
 };
 

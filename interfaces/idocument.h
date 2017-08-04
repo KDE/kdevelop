@@ -22,6 +22,7 @@
 #define KDEVPLATFORM_IDOCUMENT_H
 
 #include <QUrl>
+#include <QScopedPointer>
 
 #include "interfacesexport.h"
 
@@ -209,8 +210,8 @@ protected:
     void notifyLoaded();
 
 private:
+    const QScopedPointer<class IDocumentPrivate> d;
     friend class IDocumentPrivate;
-    class IDocumentPrivate* const d;
 };
 
 }

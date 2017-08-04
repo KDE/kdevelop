@@ -613,7 +613,6 @@ ProjectController::~ProjectController()
 {
     delete d->model;
     delete d->dialog;
-    delete d;
 }
 
 void ProjectController::cleanup()
@@ -642,7 +641,7 @@ void ProjectController::initialize()
              d->buildset, &ProjectBuildSetModel::projectClosed );
 
     loadSettings(false);
-    d->dialog = new ProjectDialogProvider(d);
+    d->dialog = new ProjectDialogProvider(d.data());
 
     QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/ProjectController"),
         this, QDBusConnection::ExportScriptableSlots );

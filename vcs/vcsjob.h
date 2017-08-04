@@ -138,7 +138,7 @@ private Q_SLOTS:
     void delayedModelInitialize();
 
 private:
-    class VcsJobPrivate* const d;
+    const QScopedPointer<class VcsJobPrivate> d;
 };
 
 }

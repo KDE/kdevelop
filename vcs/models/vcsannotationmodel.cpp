@@ -93,10 +93,7 @@ VcsAnnotationModel::VcsAnnotationModel(VcsJob *job, const QUrl& url, QObject* pa
     ICore::self()->runController()->registerJob( d->job );
 }
 
-VcsAnnotationModel::~VcsAnnotationModel()
-{
-    delete d;
-}
+VcsAnnotationModel::~VcsAnnotationModel() = default;
 
 static QString abbreviateLastName(const QString& author) {
     auto parts = author.split(' ');

@@ -34,6 +34,7 @@ Boston, MA 02110-1301, USA.
 #include "interfacesexport.h"
 
 #include <QUrl>
+#include <QScopedPointer>
 
 class QMimeType;
 template <typename T> class QList;
@@ -120,7 +121,7 @@ protected:
     Context();
 
 private:
-    class ContextPrivate* const d;
+    const QScopedPointer<class ContextPrivate> d;
     Q_DISABLE_COPY(Context)
 };
 
@@ -143,7 +144,7 @@ public:
     QList<QUrl> urls() const override;
 
 private:
-    class FileContextPrivate* const d;
+    const QScopedPointer<class FileContextPrivate> d;
     Q_DISABLE_COPY(FileContext)
 };
 
@@ -168,7 +169,7 @@ public:
     QList<ProjectBaseItem*> items() const;
 
 private:
-    class ProjectItemContextPrivate* const d;
+    const QScopedPointer<class ProjectItemContextPrivate> d;
     Q_DISABLE_COPY(ProjectItemContext)
 };
 
@@ -202,7 +203,7 @@ public:
     QMimeType mimeType() const;
 
 private:
-    class OpenWithContextPrivate* const d;
+    const QScopedPointer<class OpenWithContextPrivate> d;
     Q_DISABLE_COPY(OpenWithContext)
 };
 

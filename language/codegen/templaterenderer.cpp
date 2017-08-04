@@ -92,10 +92,7 @@ TemplateRenderer::TemplateRenderer()
     d->emptyLinesPolicy = KeepEmptyLines;
 }
 
-TemplateRenderer::~TemplateRenderer()
-{
-    delete d;
-}
+TemplateRenderer::~TemplateRenderer() = default;
 
 void TemplateRenderer::addVariables(const QVariantHash& variables)
 {

@@ -81,10 +81,7 @@ Session::Session( const QString& id, QObject* parent )
 {
 }
 
-Session::~Session()
-{
-    delete d;
-}
+Session::~Session() = default;
 
 QString Session::name() const
 {

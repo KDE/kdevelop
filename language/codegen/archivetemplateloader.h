@@ -47,7 +47,7 @@ private:
     Q_DISABLE_COPY(ArchiveTemplateLoader)
     ArchiveTemplateLoader();
 
-    class ArchiveTemplateLoaderPrivate* const d;
+    const QScopedPointer<class ArchiveTemplateLoaderPrivate> d;
 };
 
 /**

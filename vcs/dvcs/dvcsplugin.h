@@ -35,7 +35,6 @@ class QMenu;
 
 namespace KDevelop
 {
-struct DistributedVersionControlPluginPrivate;
 class DVcsJob;
 
 /**
@@ -94,7 +93,7 @@ protected:
     virtual bool isValidDirectory(const QUrl &dirPath) = 0;
 
 private:
-    DistributedVersionControlPluginPrivate * const d;
+    const QScopedPointer<class DistributedVersionControlPluginPrivate> d;
 };
 
 }

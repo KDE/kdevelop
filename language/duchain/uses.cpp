@@ -113,10 +113,7 @@ Uses::Uses() : d(new UsesPrivate())
 {
 }
 
-Uses::~Uses()
-{
-  delete d;
-}
+Uses::~Uses() = default;
 
 void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
 {

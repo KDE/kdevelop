@@ -103,7 +103,8 @@ protected:
 private:
     void setupActions();
 
-    class PartControllerPrivate* const d;
+private:
+    const QScopedPointer<class PartControllerPrivate> d;
 };
 
 }

@@ -113,8 +113,6 @@ ParseJob::~ParseJob()
             QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->url), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
         }
     }
-
-    delete d;
 }
 
 ILanguageSupport* ParseJob::languageSupport() const

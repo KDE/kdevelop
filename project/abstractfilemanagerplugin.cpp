@@ -449,10 +449,7 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentNa
             this, [&] (IProject* project) { d->projectClosing(project); });
 }
 
-AbstractFileManagerPlugin::~AbstractFileManagerPlugin()
-{
-    delete d;
-}
+AbstractFileManagerPlugin::~AbstractFileManagerPlugin() = default;
 
 IProjectFileManager::Features AbstractFileManagerPlugin::features() const
 {

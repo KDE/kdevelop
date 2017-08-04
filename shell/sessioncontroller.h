@@ -166,8 +166,9 @@ Q_SIGNALS:
     void sessionLoaded( ISession* );
     void sessionDeleted( const QString& id);
     void quitSession();
+
 private:
-    class SessionControllerPrivate* const d;
+    const QScopedPointer<class SessionControllerPrivate> d;
 };
 
 

@@ -117,7 +117,9 @@ private:
                            Sublime::ToolDocument* doc,
                            Sublime::Area* area, Sublime::Position p=Sublime::AllPositions);
     void setupActions();
-    class UiControllerPrivate* const d;
+
+private:
+    const QScopedPointer<class UiControllerPrivate> d;
     friend class UiControllerPrivate;
 };
 

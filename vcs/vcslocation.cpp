@@ -57,10 +57,7 @@ VcsLocation::VcsLocation( const QString& s )
     setRepositoryServer( s );
 }
 
-VcsLocation::~VcsLocation()
-{
-    delete d;
-}
+VcsLocation::~VcsLocation() = default;
 
 VcsLocation::VcsLocation( const VcsLocation& rhs )
     : d(new VcsLocationPrivate)

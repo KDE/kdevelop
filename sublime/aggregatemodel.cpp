@@ -24,8 +24,9 @@
 
 namespace Sublime {
 
-struct AggregateModelPrivate {
-
+class AggregateModelPrivate
+{
+public:
     /*Instance of this class is used as an internal pointer to the aggregator items
     in the model to differentiate between aggregators and non-aggregators.*/
     class AggregateInternalData {
@@ -49,14 +50,11 @@ struct AggregateModelPrivate {
 
 AggregateModel::AggregateModel(QObject *parent)
     :QAbstractItemModel(parent)
+    ,d(new AggregateModelPrivate())
 {
-    d = new AggregateModelPrivate();
 }
 
-AggregateModel::~AggregateModel()
-{
-    delete d;
-}
+AggregateModel::~AggregateModel() = default;
 
 void AggregateModel::addModel(const QString &name, QStandardItemModel *model)
 {

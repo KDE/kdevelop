@@ -159,7 +159,7 @@ private:
     void initializePluginCleanup(IProject* proj);
 
 private:
-    class ProjectControllerPrivate* const d;
+    const QScopedPointer<class ProjectControllerPrivate> d;
     friend class ProjectControllerPrivate;
 };
 

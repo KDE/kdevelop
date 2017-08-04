@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <QList>
+#include <QScopedPointer>
 
 #include "interfacesexport.h"
 
@@ -101,7 +102,7 @@ public:
     static void populateMenu(QMenu* menu, const QList<ContextMenuExtension>& extensions);
 
 private:
-    class ContextMenuExtensionPrivate* const d;
+    const QScopedPointer<class ContextMenuExtensionPrivate> d;
 };
 
 }

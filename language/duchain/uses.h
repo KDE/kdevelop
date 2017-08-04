@@ -22,6 +22,8 @@
 #include <language/languageexport.h>
 #include <util/kdevvarlengtharray.h>
 
+#include <QScopedPointer>
+
 namespace KDevelop {
 
   class DeclarationId;
@@ -55,7 +57,7 @@ namespace KDevelop {
     KDevVarLengthArray<IndexedTopDUContext> uses(const DeclarationId& id) const;
 
     private:
-      class UsesPrivate* d;
+      const QScopedPointer<class UsesPrivate> d;
   };
 }
 

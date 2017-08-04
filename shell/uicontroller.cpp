@@ -228,10 +228,7 @@ UiController::UiController(Core *core)
     setupActions();
 }
 
-UiController::~UiController()
-{
-    delete d;
-}
+UiController::~UiController() = default;
 
 void UiController::setupActions()
 {

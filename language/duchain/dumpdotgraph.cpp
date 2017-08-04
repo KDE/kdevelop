@@ -60,9 +60,7 @@ DumpDotGraph::DumpDotGraph() : d(new DumpDotGraphPrivate()) {
 
 }
 
-DumpDotGraph::~DumpDotGraph() {
-  delete d;
-}
+DumpDotGraph::~DumpDotGraph() = default;
 
 void DumpDotGraphPrivate::addDeclaration(QTextStream& stream, Declaration* dec) {
   if( m_hadObjects.contains(dec) )

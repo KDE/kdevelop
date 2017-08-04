@@ -58,10 +58,7 @@ VcsRevision::VcsRevision( const VcsRevision& rhs )
     d->type = rhs.d->type;
 }
 
-VcsRevision::~VcsRevision()
-{
-    delete d;
-}
+VcsRevision::~VcsRevision() = default;
 
 VcsRevision& VcsRevision::operator=( const VcsRevision& rhs)
 {

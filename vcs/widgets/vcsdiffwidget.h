@@ -38,7 +38,7 @@ public:
     void setRevisions( const KDevelop::VcsRevision&, const KDevelop::VcsRevision& );
     
 private:
-    class VcsDiffWidgetPrivate* const d;
+    const QScopedPointer<class VcsDiffWidgetPrivate> d;
 };
 
 }

@@ -77,8 +77,9 @@ FilteredItem NoFilterStrategy::errorInLine(const QString& line)
 /// --- Compiler error filter strategy ---
 
 /// Impl. of CompilerFilterStrategy.
-struct CompilerFilterStrategyPrivate
+class CompilerFilterStrategyPrivate
 {
+public:
     explicit CompilerFilterStrategyPrivate(const QUrl& buildDir);
     Path pathForFile( const QString& ) const;
     bool isMultiLineCase(const ErrorFormat& curErrFilter) const;
@@ -145,10 +146,7 @@ CompilerFilterStrategy::CompilerFilterStrategy(const QUrl& buildDir)
 {
 }
 
-CompilerFilterStrategy::~CompilerFilterStrategy()
-{
-    delete d;
-}
+CompilerFilterStrategy::~CompilerFilterStrategy() = default;
 
 QVector<QString> CompilerFilterStrategy::getCurrentDirs()
 {

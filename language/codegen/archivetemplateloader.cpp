@@ -42,10 +42,7 @@ ArchiveTemplateLoader::ArchiveTemplateLoader()
 {
 }
 
-ArchiveTemplateLoader::~ArchiveTemplateLoader()
-{
-    delete d;
-}
+ArchiveTemplateLoader::~ArchiveTemplateLoader() = default;
 
 void ArchiveTemplateLoader::addLocation(ArchiveTemplateLocation* location)
 {

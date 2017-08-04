@@ -132,7 +132,7 @@ Q_SIGNALS:
     void aboutToOpen(KDevelop::IProject*);
 
 private:
-    class ProjectPrivate* const d;
+    const QScopedPointer<class ProjectPrivate> d;
 };
 
 } // namespace KDevelop

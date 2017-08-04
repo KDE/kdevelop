@@ -418,7 +418,6 @@ Project::Project( QObject *parent )
 Project::~Project()
 {
     delete d->progress;
-    delete d;
 }
 
 QString Project::name() const

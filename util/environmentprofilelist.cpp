@@ -106,19 +106,16 @@ EnvironmentProfileList& EnvironmentProfileList::operator=(const EnvironmentProfi
 EnvironmentProfileList::EnvironmentProfileList(KSharedConfigPtr config)
     : d( new EnvironmentProfileListPrivate )
 {
-    decode( config.data(), d );
+    decode(config.data(), d.data());
 }
 
 EnvironmentProfileList::EnvironmentProfileList(KConfig* config)
     : d(new EnvironmentProfileListPrivate)
 {
-    decode( config, d );
+    decode(config, d.data());
 }
 
-EnvironmentProfileList::~EnvironmentProfileList()
-{
-    delete d;
-}
+EnvironmentProfileList::~EnvironmentProfileList() = default;
 
 QMap<QString, QString> EnvironmentProfileList::variables(const QString& profileName) const
 {
@@ -148,14 +145,14 @@ void EnvironmentProfileList::setDefaultProfile(const QString& profileName)
 
 void EnvironmentProfileList::saveSettings(KConfig* config) const
 {
-    encode( config, d );
+    encode(config, d.data());
     config->sync();
 }
 
 void EnvironmentProfileList::loadSettings(KConfig* config)
 {
     d->m_profiles.clear();
-    decode( config, d );
+    decode(config, d.data());
 }
 
 QStringList EnvironmentProfileList::profileNames() const

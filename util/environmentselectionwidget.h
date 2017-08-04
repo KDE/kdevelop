@@ -80,8 +80,8 @@ Q_SIGNALS:
     void currentProfileChanged(const QString& currentProfile);
 
 private:
-    struct EnvironmentSelectionWidgetPrivate* const d;
-    friend struct EnvironmentSelectionWidgetPrivate;
+    const QScopedPointer<class EnvironmentSelectionWidgetPrivate> d;
+    friend class EnvironmentSelectionWidgetPrivate;
 };
 
 }

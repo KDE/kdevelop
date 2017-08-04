@@ -68,7 +68,7 @@ protected:
     void addLanguageSupport(KDevelop::ILanguageSupport* languageSupport, const QStringList& mimetypes);
 
 private:
-    struct LanguageControllerPrivate *d;
+    const QScopedPointer<class LanguageControllerPrivate> d;
 };
 
 }

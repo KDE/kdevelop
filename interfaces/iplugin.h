@@ -272,8 +272,8 @@ protected:
     virtual void initializeGuiState();
 
 private:
+    const QScopedPointer<class IPluginPrivate> d;
     friend class IPluginPrivate;
-    class IPluginPrivate* const d;
 };
 
 }

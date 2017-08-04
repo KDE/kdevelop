@@ -226,7 +226,6 @@ VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelo
 VcsEventWidget::~VcsEventWidget()
 {
     delete d->m_ui;
-    delete d;
 }
 
 }

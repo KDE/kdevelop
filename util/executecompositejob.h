@@ -49,7 +49,7 @@ protected:
     bool doKill() override;
 
 private:
-    class ExecuteCompositeJobPrivate* const d;
+    const QScopedPointer<class ExecuteCompositeJobPrivate> d;
 };
 
 }

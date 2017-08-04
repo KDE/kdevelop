@@ -314,8 +314,6 @@ PluginController::~PluginController()
     if ( d->cleanupMode != PluginControllerPrivate::CleanupDone ) {
         qCWarning(SHELL) << "Destructing plugin controller without going through the shutdown process!";
     }
-
-    delete d;
 }
 
 KPluginMetaData PluginController::pluginInfo( const IPlugin* plugin ) const

@@ -21,6 +21,7 @@
 
 #include <Qt>
 #include <QList>
+#include <QScopedPointer>
 
 #include "sublimeexport.h"
 
@@ -171,8 +172,8 @@ private:
     /**Copies the children indices from this index to @p target.*/
     void copyChildrenTo(AreaIndex *target);
 
-    struct AreaIndexPrivate * const d;
-
+private:
+    const QScopedPointer<class AreaIndexPrivate> d;
 };
 
 /**

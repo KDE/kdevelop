@@ -78,7 +78,9 @@ static void selectAndReveal( KTextEditor::View* view, const KTextEditor::Range& 
     }
 }
 
-struct TextDocumentPrivate {
+class TextDocumentPrivate
+{
+public:
     explicit TextDocumentPrivate(TextDocument *textDocument)
         : document(nullptr), state(IDocument::Clean), encoding(), q(textDocument)
         , m_loaded(false), m_addedContextMenu(nullptr)
@@ -236,8 +238,9 @@ struct TextDocumentPrivate {
     QMenu* m_addedContextMenu;
 };
 
-struct TextViewPrivate
+class TextViewPrivate
 {
+public:
     explicit TextViewPrivate(TextView* q) : q(q) {}
 
     TextView* const q;
@@ -251,10 +254,7 @@ TextDocument::TextDocument(const QUrl &url, ICore* core, const QString& encoding
     d->encoding = encoding;
 }
 
-TextDocument::~TextDocument()
-{
-    delete d;
-}
+TextDocument::~TextDocument() = default;
 
 bool TextDocument::isTextDocument() const
 {
@@ -572,10 +572,7 @@ KDevelop::TextView::TextView(TextDocument * doc)
 {
 }
 
-KDevelop::TextView::~TextView()
-{
-    delete d;
-}
+KDevelop::TextView::~TextView() = default;
 
 QWidget * KDevelop::TextView::createWidget(QWidget * parent)
 {

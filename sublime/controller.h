@@ -187,11 +187,11 @@ private:
     @todo adymo: refactor*/
     void addDocument(Document *document);
 
-    struct ControllerPrivate *const d;
+private:
+    const QScopedPointer<class ControllerPrivate> d;
 
     friend class Area;
     friend class Document;
-
 };
 
 }

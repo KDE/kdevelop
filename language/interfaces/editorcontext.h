@@ -70,7 +70,7 @@ public:
     KTextEditor::View* view() const;
 
 private:
-    class EditorContextPrivate* const d;
+    const QScopedPointer<class EditorContextPrivate> d;
 
     EditorContext( const EditorContext & );
     EditorContext &operator=( const EditorContext & );

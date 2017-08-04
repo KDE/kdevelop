@@ -108,10 +108,7 @@ TemplatesModel::TemplatesModel(const QString& typePrefix, QObject* parent)
     }
 }
 
-TemplatesModel::~TemplatesModel()
-{
-    delete d;
-}
+TemplatesModel::~TemplatesModel() = default;
 
 void TemplatesModel::refresh()
 {

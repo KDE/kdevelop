@@ -22,6 +22,7 @@
 #include <language/languageexport.h>
 
 #include <QChar>
+#include <QScopedPointer>
 
 class QByteArray;
 class QString;
@@ -132,7 +133,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator
     uint position() const;
 
   private:
-    class ParamIteratorPrivate* const d;
+    const QScopedPointer<class ParamIteratorPrivate> d;
 };
 
 }

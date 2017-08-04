@@ -31,7 +31,6 @@ class Document;
 namespace KDevelop
 {
 class IndexedString;
-class ApplyChangesWidgetPrivate;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public QDialog
 {
@@ -61,7 +60,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ApplyChangesWidget : public QDialog
         void indexChanged(int);
 
     private:
-        ApplyChangesWidgetPrivate * d;
+        const QScopedPointer<class ApplyChangesWidgetPrivate> d;
 };
 
 }

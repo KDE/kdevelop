@@ -58,10 +58,7 @@ ContextMenuExtension::ContextMenuExtension()
 {
 }
 
-ContextMenuExtension::~ContextMenuExtension()
-{
-    delete d;
-}
+ContextMenuExtension::~ContextMenuExtension() = default;
 
 
 ContextMenuExtension::ContextMenuExtension( const ContextMenuExtension& rhs )

@@ -24,6 +24,7 @@
 
 #include "vcsexport.h"
 #include <QMetaType>
+#include <QScopedPointer>
 
 class QUrl;
 
@@ -86,7 +87,7 @@ public:
     bool operator!=( const KDevelop::VcsStatusInfo& rhs) const;
 
 private:
-    class VcsStatusInfoPrivate* d;
+    const QScopedPointer<class VcsStatusInfoPrivate> d;
 };
 
 }

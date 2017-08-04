@@ -145,7 +145,7 @@ Q_SIGNALS:
     void signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration* launch);
 
 private:
-    class LaunchConfigurationTypePrivate* const d;
+    const QScopedPointer<class LaunchConfigurationTypePrivate> d;
 };
 
 }

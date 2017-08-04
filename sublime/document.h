@@ -134,9 +134,9 @@ protected:
     virtual void closeViews();
 
 private:
-    struct DocumentPrivate *const d;
+    const QScopedPointer<class DocumentPrivate> d;
 
-    friend struct DocumentPrivate;
+    friend class DocumentPrivate;
     friend class View;
 };
 

@@ -170,7 +170,8 @@ private:
     void saveGeometry(KConfigGroup &config);
     void loadGeometry(const KConfigGroup &config);
 
-    class MainWindowPrivate *const d;
+private:
+    const QScopedPointer<class MainWindowPrivate> d;
     friend class MainWindowOperator;
     friend class MainWindowPrivate;
 };

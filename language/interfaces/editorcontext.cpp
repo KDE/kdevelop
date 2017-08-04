@@ -53,10 +53,7 @@ EditorContext::EditorContext( KTextEditor::View* view, const KTextEditor::Cursor
         : DeclarationContext( view, position ), d( new EditorContextPrivate( view, position ) )
 {}
 
-EditorContext::~EditorContext()
-{
-    delete d;
-}
+EditorContext::~EditorContext() = default;
 
 int EditorContext::type() const
 {

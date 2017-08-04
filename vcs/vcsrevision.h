@@ -155,7 +155,7 @@ protected:
 
 
 private:
-    class VcsRevisionPrivate* const d;
+    const QScopedPointer<class VcsRevisionPrivate> d;
 };
 
 KDEVPLATFORMVCS_EXPORT uint qHash( const KDevelop::VcsRevision& rev);

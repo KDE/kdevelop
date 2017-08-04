@@ -116,7 +116,9 @@ bool shouldClear(const QString& path)
 
 namespace KDevelop {
 
-struct ItemRepositoryRegistryPrivate {
+class ItemRepositoryRegistryPrivate
+{
+public:
   ItemRepositoryRegistry* m_owner;
   bool m_shallDelete;
   QString m_path;
@@ -389,7 +391,6 @@ ItemRepositoryRegistry::~ItemRepositoryRegistry()
   foreach(QAtomicInt * counter, d->m_customCounters) {
     delete counter;
   }
-  delete d;
 }
 
 void ItemRepositoryRegistry::shutdown()

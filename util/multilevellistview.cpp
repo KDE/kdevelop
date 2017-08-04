@@ -269,10 +269,7 @@ MultiLevelListView::MultiLevelListView(QWidget* parent, Qt::WindowFlags f)
     qRegisterMetaType<QTreeView*>("QTreeView*");
 }
 
-MultiLevelListView::~MultiLevelListView()
-{
-    delete d;
-}
+MultiLevelListView::~MultiLevelListView() = default;
 
 int MultiLevelListView::levels() const
 {

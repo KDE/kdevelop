@@ -337,10 +337,7 @@ RunController::RunController(QObject *parent)
     }
 }
 
-RunController::~RunController()
-{
-    delete d;
-}
+RunController::~RunController() = default;
 
 void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 {

@@ -36,7 +36,6 @@
 
 class QDir;
 class QStringList;
-struct DVcsJobPrivate;
 
 /**
  * This class is capable of running our dvcs commands. 
@@ -222,7 +221,9 @@ protected:
 
 private:
     void jobIsReady();
-    DVcsJobPrivate* const d;
+
+private:
+    const QScopedPointer<class DVcsJobPrivate> d;
 };
 
 }

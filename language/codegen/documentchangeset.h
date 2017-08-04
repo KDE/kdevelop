@@ -30,8 +30,6 @@
 
 namespace KDevelop {
 
-struct DocumentChangeSetPrivate;
-
 class KDEVPLATFORMLANGUAGE_EXPORT DocumentChange : public QSharedData
 {
 public:
@@ -142,7 +140,7 @@ public:
     ChangeResult applyAllChanges();
 
 private:
-    DocumentChangeSetPrivate * d;
+    const QScopedPointer<class DocumentChangeSetPrivate> d;
 };
 }
 

@@ -26,9 +26,11 @@
 
 namespace Sublime {
 
-// struct AreaIndexPrivate
+// class AreaIndexPrivate
 
-struct AreaIndexPrivate {
+class AreaIndexPrivate
+{
+public:
     AreaIndexPrivate()
         :parent(nullptr), first(nullptr), second(nullptr), orientation(Qt::Horizontal)
     {
@@ -90,10 +92,7 @@ AreaIndex::AreaIndex(const AreaIndex &index)  : d(new AreaIndexPrivate( *(index.
         add(view->document()->createView());
 }
 
-AreaIndex::~AreaIndex()
-{
-    delete d;
-}
+AreaIndex::~AreaIndex() = default;
 
 void AreaIndex::add(View *view, View *after)
 {

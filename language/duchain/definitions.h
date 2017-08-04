@@ -23,6 +23,7 @@
 #include <language/languageexport.h>
 #include <util/kdevvarlengtharray.h>
 
+#include <QScopedPointer>
 
 class QTextStream;
 
@@ -56,7 +57,7 @@ namespace KDevelop {
     void dump(const QTextStream& out);
 
     private:
-      class DefinitionsPrivate* d;
+      const QScopedPointer<class DefinitionsPrivate> d;
   };
 }
 

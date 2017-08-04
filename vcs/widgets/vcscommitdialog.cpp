@@ -57,10 +57,7 @@ VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
     d->ui.files->setModel( d->m_model );
 }
 
-VcsCommitDialog::~VcsCommitDialog()
-{
-    delete d;
-}
+VcsCommitDialog::~VcsCommitDialog() = default;
 
 void VcsCommitDialog::setRecursive( bool recursive )
 {

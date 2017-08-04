@@ -59,7 +59,7 @@ protected:
     explicit ProjectConfigSkeleton( const QString & configname );
 
 private:
-    struct ProjectConfigSkeletonPrivate * const d;
+    const QScopedPointer<class ProjectConfigSkeletonPrivate> d;
 };
 
 }

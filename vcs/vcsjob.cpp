@@ -45,10 +45,7 @@ void VcsJob::delayedModelInitialize()
     startOutput();
 }
 
-VcsJob::~VcsJob()
-{
-    delete d;
-}
+VcsJob::~VcsJob() = default;
 
 VcsJob::JobType VcsJob::type() const
 {

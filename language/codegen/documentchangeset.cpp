@@ -54,8 +54,9 @@ namespace KDevelop {
 typedef QList<DocumentChangePointer> ChangesList;
 typedef QHash<IndexedString, ChangesList> ChangesHash;
 
-struct DocumentChangeSetPrivate
+class DocumentChangeSetPrivate
 {
+public:
     DocumentChangeSet::ReplacementPolicy replacePolicy;
     DocumentChangeSet::FormatPolicy formatPolicy;
     DocumentChangeSet::DUChainUpdateHandling updatePolicy;
@@ -152,10 +153,7 @@ DocumentChangeSet& DocumentChangeSet::operator=(const DocumentChangeSet& rhs)
     return *this;
 }
 
-DocumentChangeSet::~DocumentChangeSet()
-{
-    delete d;
-}
+DocumentChangeSet::~DocumentChangeSet() = default;
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChange& change)
 {

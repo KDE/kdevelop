@@ -74,8 +74,9 @@ namespace KDevelop
 {
 
 
-struct DocumentControllerPrivate
+class DocumentControllerPrivate
 {
+public:
     struct OpenFileResult
     {
         QList<QUrl> urls;
@@ -558,9 +559,9 @@ struct DocumentControllerPrivate
 
 DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )
+        , d(new DocumentControllerPrivate(this))
 {
     setObjectName(QStringLiteral("DocumentController"));
-    d = new DocumentControllerPrivate(this);
     QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/DocumentController"),
         this, QDBusConnection::ExportScriptableSlots );
 
@@ -584,10 +585,7 @@ void DocumentController::cleanup()
         doc->close(IDocument::Discard);
 }
 
-DocumentController::~DocumentController()
-{
-    delete d;
-}
+DocumentController::~DocumentController() = default;
 
 void DocumentController::setupActions()
 {

@@ -22,9 +22,11 @@
 
 namespace Sublime {
 
-// struct ToolDocumentPrivate
+// class ToolDocumentPrivate
 
-struct ToolDocumentPrivate {
+class ToolDocumentPrivate
+{
+public:
     ~ToolDocumentPrivate()
     {
         delete factory;
@@ -43,10 +45,7 @@ ToolDocument::ToolDocument(const QString &title, Controller *controller, ToolFac
     d->factory = factory;
 }
 
-ToolDocument::~ToolDocument()
-{
-    delete d;
-}
+ToolDocument::~ToolDocument() = default;
 
 ToolFactory *ToolDocument::factory() const
 {

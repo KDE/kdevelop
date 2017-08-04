@@ -49,7 +49,9 @@
 namespace KDevelop
 {
 
-struct DistributedVersionControlPluginPrivate {
+class DistributedVersionControlPluginPrivate
+{
+public:
     explicit DistributedVersionControlPluginPrivate(DistributedVersionControlPlugin * pThis)
             : m_common(new VcsPluginHelper(pThis, pThis)) {}
 
@@ -66,7 +68,6 @@ DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent
 DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
 {
     //TODO: Find out why this crashes on the svn tests delete d->m_factory;
-    delete d;
 }
 
 // End:  KDevelop::IBasicVersionControl

@@ -80,7 +80,7 @@ protected:
     ToolFactory *factory() const;
 
 private:
-    struct ToolDocumentPrivate * const d;
+    const QScopedPointer<class ToolDocumentPrivate> d;
 
     friend class View;
 };

@@ -152,10 +152,7 @@ BuilderJob::BuilderJob()
 {
 }
 
-BuilderJob::~BuilderJob()
-{
-    delete d;
-}
+BuilderJob::~BuilderJob() = default;
 
 void BuilderJob::addItems( BuildType t, const QList<ProjectBaseItem*>& items )
 {

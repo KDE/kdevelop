@@ -32,11 +32,10 @@
 
 #include <QVector>
 #include <QUrl>
+#include <QScopedPointer>
 
 namespace KDevelop
 {
-
-struct CompilerFilterStrategyPrivate;
 
 /**
  * This filter strategy is for not applying any filtering at all. Implementation of the
@@ -72,7 +71,7 @@ public:
     QVector<QString> getCurrentDirs();
 
 private:
-    CompilerFilterStrategyPrivate* const d;
+    const QScopedPointer<class CompilerFilterStrategyPrivate> d;
 };
 
 /**

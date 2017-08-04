@@ -187,7 +187,6 @@ ProjectBaseItem::~ProjectBaseItem()
         model()->takeRow( d->row );
     }
     removeRows(0, d->children.size());
-    delete d;
 }
 
 ProjectBaseItem* ProjectBaseItem::child( int row ) const
@@ -1017,7 +1016,6 @@ ProjectModel::~ProjectModel()
 {
     d->rootItem->setModel(nullptr);
     delete d->rootItem;
-    delete d;
 }
 
 

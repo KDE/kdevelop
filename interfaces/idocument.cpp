@@ -57,7 +57,6 @@ IDocument::IDocument( KDevelop::ICore* core )
 IDocument::~IDocument()
 {
     delete d->scriptWrapper;
-    delete d;
 }
 
 KDevelop::ICore* IDocument::core()

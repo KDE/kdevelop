@@ -32,9 +32,11 @@
 
 namespace Sublime {
 
-// struct AreaPrivate
+// class AreaPrivate
 
-struct AreaPrivate {
+class AreaPrivate
+{
+public:
     AreaPrivate()
         : rootIndex(new RootAreaIndex)
         , currentIndex(rootIndex.data())
@@ -148,10 +150,7 @@ void Area::initialize()
             [controller] (QObject* obj) { controller->removeArea(static_cast<Area*>(obj)); });
 }
 
-Area::~Area()
-{
-    delete d;
-}
+Area::~Area() = default;
 
 View* Area::activeView()
 {

@@ -39,10 +39,7 @@ VcsStatusInfo::VcsStatusInfo()
     d->state = VcsStatusInfo::ItemUnknown;
 }
 
-VcsStatusInfo::~VcsStatusInfo()
-{
-    delete d;
-}
+VcsStatusInfo::~VcsStatusInfo() = default;
 
 VcsStatusInfo::VcsStatusInfo( const VcsStatusInfo& rhs )
     : d(new VcsStatusInfoPrivate)

@@ -80,7 +80,6 @@ CommandExecutor::~CommandExecutor()
 {
     delete d->m_process;
     delete d->m_lineMaker;
-    delete d;
 }
 
 void CommandExecutor::setEnvironment( const QMap<QString,QString>& env )

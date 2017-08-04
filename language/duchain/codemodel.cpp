@@ -161,10 +161,7 @@ CodeModel::CodeModel() : d(new CodeModelPrivate())
 {
 }
 
-CodeModel::~CodeModel()
-{
-  delete d;
-}
+CodeModel::~CodeModel() = default;
 
 void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentifier& id, CodeModelItem::Kind kind)
 {

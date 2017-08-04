@@ -79,7 +79,7 @@ protected:
     void addPartForView(QWidget* widget, KParts::Part* part);
     
 private:
-    class PartDocumentPrivate * const d;
+    const QScopedPointer<class PartDocumentPrivate> d;
 };
 
 }

@@ -71,7 +71,6 @@ QList< Area* > MainWindow::areas() const
 MainWindow::~MainWindow()
 {
     qCDebug(SUBLIME) << "destroying mainwindow";
-    delete d;
 }
 
 void MainWindow::reconstructViews(QList<View*> topViews)
@@ -106,7 +105,7 @@ QList<Container*> MainWindow::containers() const
 void MainWindow::setArea(Area *area)
 {
     if (d->area)
-        disconnect(d->area, nullptr, d, nullptr);
+        disconnect(d->area, nullptr, d.data(), nullptr);
 
     bool differentArea = (area != d->area);
     /* All views will be removed from dock area now.  However, this does
@@ -135,13 +134,13 @@ void MainWindow::setArea(Area *area)
     hu.stop();
 
     loadSettings();
-    connect(area, &Area::viewAdded, d, &MainWindowPrivate::viewAdded);
-    connect(area, &Area::viewRemoved, d, &MainWindowPrivate::viewRemovedInternal);
-    connect(area, &Area::requestToolViewRaise, d, &MainWindowPrivate::raiseToolView);
-    connect(area, &Area::aboutToRemoveView, d, &MainWindowPrivate::aboutToRemoveView);
-    connect(area, &Area::toolViewAdded, d, &MainWindowPrivate::toolViewAdded);
-    connect(area, &Area::aboutToRemoveToolView, d, &MainWindowPrivate::aboutToRemoveToolView);
-    connect(area, &Area::toolViewMoved, d, &MainWindowPrivate::toolViewMoved);
+    connect(area, &Area::viewAdded, d.data(), &MainWindowPrivate::viewAdded);
+    connect(area, &Area::viewRemoved, d.data(), &MainWindowPrivate::viewRemovedInternal);
+    connect(area, &Area::requestToolViewRaise, d.data(), &MainWindowPrivate::raiseToolView);
+    connect(area, &Area::aboutToRemoveView, d.data(), &MainWindowPrivate::aboutToRemoveView);
+    connect(area, &Area::toolViewAdded, d.data(), &MainWindowPrivate::toolViewAdded);
+    connect(area, &Area::aboutToRemoveToolView, d.data(), &MainWindowPrivate::aboutToRemoveToolView);
+    connect(area, &Area::toolViewMoved, d.data(), &MainWindowPrivate::toolViewMoved);
 }
 
 void MainWindow::initializeStatusBar()

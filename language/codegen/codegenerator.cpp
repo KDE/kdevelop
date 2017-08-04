@@ -58,7 +58,6 @@ CodeGeneratorBase::CodeGeneratorBase()
 CodeGeneratorBase::~CodeGeneratorBase()
 {
     clearChangeSets();
-    delete d;
 }
 
 void CodeGeneratorBase::autoGenerate ( DUContext* context, const KDevelop::DocumentRange* range )

@@ -46,7 +46,7 @@
 
 namespace Sublime {
 
-// struct ContainerPrivate
+// class ContainerTabBar
 
 class ContainerTabBar : public QTabBar
 {
@@ -139,7 +139,9 @@ bool sortViews(const View* const lhs, const View* const rhs)
 static QMenu* currentDockMenu = nullptr;
 #endif
 
-struct ContainerPrivate {
+class ContainerPrivate
+{
+public:
     QBoxLayout* layout;
     QHash<QWidget*, View*> viewForWidget;
 
@@ -364,6 +366,8 @@ Container::Container(QWidget *parent)
     d->tabBar->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
 }
 
+Container::~Container() = default;
+
 bool Container::configTabBarVisible()
 {
     KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
@@ -385,11 +389,6 @@ void Container::setLeftCornerWidget(QWidget* widget)
     widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
     d->layout->insertWidget(0, widget);
     widget->show();
-}
-
-Container::~Container()
-{
-    delete d;
 }
 
 QList<View*> Container::views() const

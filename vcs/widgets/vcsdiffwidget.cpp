@@ -88,7 +88,6 @@ VcsDiffWidget::VcsDiffWidget( KDevelop::VcsJob* job, QWidget* parent )
 VcsDiffWidget::~VcsDiffWidget()
 {
     delete d->m_ui;
-    delete d;
 }
 
 void VcsDiffWidget::setRevisions( const KDevelop::VcsRevision& first,

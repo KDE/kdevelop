@@ -170,8 +170,9 @@ private:
 
     void setupActions();
 
-    friend struct DocumentControllerPrivate;
-    struct DocumentControllerPrivate *d;
+private:
+    const QScopedPointer<class DocumentControllerPrivate> d;
+    friend class DocumentControllerPrivate;
 };
 
 }

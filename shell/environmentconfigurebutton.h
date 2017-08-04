@@ -52,7 +52,7 @@ Q_SIGNALS:
     void environmentConfigured();
 
 private:
-    class EnvironmentConfigureButtonPrivate* const d;
+    const QScopedPointer<class EnvironmentConfigureButtonPrivate> d;
     friend class EnvironmentConfigureButtonPrivate;
 };
 

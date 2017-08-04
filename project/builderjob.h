@@ -108,7 +108,7 @@ public:
     void start() override;
 
 private:
-    class BuilderJobPrivate* const d;
+    const QScopedPointer<class BuilderJobPrivate> d;
     friend class BuilderJobPrivate;
 };
 

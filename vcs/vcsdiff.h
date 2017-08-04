@@ -134,7 +134,7 @@ public:
     bool isEmpty() const;
     
 private:
-    class VcsDiffPrivate* const d;
+    const QScopedPointer<class VcsDiffPrivate> d;
 };
 
 }

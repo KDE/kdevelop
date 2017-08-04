@@ -28,8 +28,6 @@
 namespace KDevelop
 {
 
-class OutputExecuteJobPrivate;
-
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputExecuteJob : public OutputJob
 {
     Q_OBJECT
@@ -248,8 +246,8 @@ protected Q_SLOTS:
     virtual void childProcessError( QProcess::ProcessError processError );
 
 private:
+    const QScopedPointer<class OutputExecuteJobPrivate> d;
     friend class OutputExecuteJobPrivate;
-    OutputExecuteJobPrivate* d;
 };
 
 } // namespace KDevelop

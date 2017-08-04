@@ -508,10 +508,7 @@ QString formatComment(const QString& comment)
 }
 
 
-ParamIterator::~ParamIterator()
-{
-  delete d;
-}
+ParamIterator::~ParamIterator() = default;
 
 ParamIterator::ParamIterator( QString parens, QString source, int offset ) : d(new ParamIteratorPrivate)
 {
