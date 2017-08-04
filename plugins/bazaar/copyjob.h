@@ -22,6 +22,7 @@
 #define BAZAAR_COPYJOB_H
 
 #include <QUrl>
+#include <QPointer>
 
 #include <vcs/vcsjob.h>
 

@@ -22,6 +22,7 @@
 #define BAZAAR_DIFFJOB_H
 
 #include <QVariant>
+#include <QPointer>
 
 #include <vcs/vcsjob.h>
 

@@ -20,13 +20,12 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_OUTPUTJOB_H
 #define KDEVPLATFORM_OUTPUTJOB_H
 
-#include <QIcon>
-#include <QPointer>
-
 #include <kjob.h>
 
 #include <outputview/ioutputview.h>
 #include <outputview/outputviewexport.h>
+
+class QIcon;
 
 namespace KDevelop
 {
@@ -43,6 +42,7 @@ public:
     enum OutputJobVerbosity { Silent, Verbose };
 
     explicit OutputJob(QObject* parent = nullptr, OutputJobVerbosity verbosity = OutputJob::Verbose);
+    ~OutputJob() override;
 
     void startOutput();
 
@@ -89,16 +89,7 @@ private Q_SLOTS:
     void outputViewRemoved(int , int id);
 
 private:
-    int m_standardToolView;
-    QString m_title, m_toolTitle;
-    QIcon m_toolIcon;
-    IOutputView::ViewType m_type;
-    IOutputView::Behaviours m_behaviours;
-    bool m_killJobOnOutputClose;
-    OutputJobVerbosity m_verbosity;
-    int m_outputId;
-    QPointer<QAbstractItemModel> m_outputModel;
-    QAbstractItemDelegate* m_outputDelegate;
+    const QScopedPointer<class OutputJobPrivate> d;
 };
 
 }

@@ -21,6 +21,8 @@ Boston, MA 02110-1301, USA.
 
 #include <QStandardItemModel>
 #include <QItemDelegate>
+#include <QIcon>
+#include <QPointer>
 
 #include "interfaces/icore.h"
 #include "interfaces/iplugincontroller.h"
@@ -28,17 +30,31 @@ Boston, MA 02110-1301, USA.
 
 using namespace KDevelop;
 
+class KDevelop::OutputJobPrivate
+{
+public:
+    explicit OutputJobPrivate(OutputJob::OutputJobVerbosity verbosity) : verbosity(verbosity) {}
+
+    int standardToolView = -1;
+    QString title;
+    QString toolTitle;
+    QIcon toolIcon;
+    IOutputView::ViewType type = IOutputView::OneView;
+    IOutputView::Behaviours behaviours = IOutputView::AllowUserClose;
+    bool killJobOnOutputClose = true;
+    OutputJob::OutputJobVerbosity verbosity;
+    int outputId = -1;
+    QPointer<QAbstractItemModel> outputModel;
+    QAbstractItemDelegate* outputDelegate = nullptr;
+};
+
 OutputJob::OutputJob(QObject* parent, OutputJobVerbosity verbosity)
     : KJob(parent)
-    , m_standardToolView(-1)
-    , m_type(IOutputView::OneView)
-    , m_behaviours(IOutputView::AllowUserClose)
-    , m_killJobOnOutputClose(true)
-    , m_verbosity(verbosity)
-    , m_outputId(-1)
-    , m_outputDelegate(nullptr)
+    , d(new OutputJobPrivate(verbosity))
 {
 }
+
+OutputJob::~OutputJob() = default;
 
 void OutputJob::startOutput()
 {
@@ -49,37 +65,37 @@ void OutputJob::startOutput()
         if( view )
         {
             int tvid;
-            if (m_standardToolView != -1) {
-                tvid = view->standardToolView( static_cast<IOutputView::StandardToolView>(m_standardToolView) );
+            if (d->standardToolView != -1) {
+                tvid = view->standardToolView(static_cast<IOutputView::StandardToolView>(d->standardToolView));
             } else {
-                tvid = view->registerToolView(m_toolTitle, m_type, m_toolIcon);
+                tvid = view->registerToolView(d->toolTitle, d->type, d->toolIcon);
             }
 
-            if (m_title.isEmpty())
-                m_title = objectName();
+            if (d->title.isEmpty())
+                d->title = objectName();
 
-            m_outputId = view->registerOutputInToolView( tvid, m_title, m_behaviours );
+            d->outputId = view->registerOutputInToolView(tvid, d->title, d->behaviours);
 
-            if (!m_outputModel) {
-                m_outputModel = new QStandardItemModel(nullptr);
+            if (!d->outputModel) {
+                d->outputModel = new QStandardItemModel(nullptr);
             }
 
             // Keep the item model around after the job is gone
-            view->setModel(m_outputId, m_outputModel);
+            view->setModel(d->outputId, d->outputModel);
 
-            if (!m_outputDelegate) {
-                m_outputDelegate = new QItemDelegate(nullptr);
+            if (!d->outputDelegate) {
+                d->outputDelegate = new QItemDelegate(nullptr);
             }
 
-            view->setDelegate(m_outputId, m_outputDelegate);
+            view->setDelegate(d->outputId, d->outputDelegate);
 
-            if (m_killJobOnOutputClose) {
+            if (d->killJobOnOutputClose) {
                 // can't use qt5 signal slot syntax here, IOutputView is no a QObject
                 connect(i, SIGNAL(outputRemoved(int,int)), this, SLOT(outputViewRemoved(int,int)));
             }
 
-            if (m_verbosity == OutputJob::Verbose)
-                view->raiseOutput(m_outputId);
+            if (d->verbosity == OutputJob::Verbose)
+                view->raiseOutput(d->outputId);
         }
     }
 }
@@ -87,8 +103,7 @@ void OutputJob::startOutput()
 void OutputJob::outputViewRemoved(int toolViewId, int id)
 {
     Q_UNUSED(toolViewId);
-    if (id == m_outputId && m_killJobOnOutputClose)
-    {
+    if (id == d->outputId && d->killJobOnOutputClose) {
         // Make sure that the job emits result signal as the job
         // might be used in composite jobs and that one depends
         // on result being emitted to know whether a subjob
@@ -99,15 +114,15 @@ void OutputJob::outputViewRemoved(int toolViewId, int id)
 
 void KDevelop::OutputJob::setTitle(const QString & title)
 {
-    m_title = title;
-    if (m_outputId >= 0 && m_standardToolView >= 0) {
+    d->title = title;
+    if (d->outputId >= 0 && d->standardToolView >= 0) {
         IPlugin* i = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
         if( i )
         {
             KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
             if( view )
             {
-                view->setTitle(m_outputId, title);
+                view->setTitle(d->outputId, title);
             }
         }
     }
@@ -115,69 +130,69 @@ void KDevelop::OutputJob::setTitle(const QString & title)
 
 void KDevelop::OutputJob::setViewType(IOutputView::ViewType type)
 {
-    m_type = type;
+    d->type = type;
 }
 
 void KDevelop::OutputJob::setBehaviours(IOutputView::Behaviours behaviours)
 {
-    m_behaviours = behaviours;
+    d->behaviours = behaviours;
 }
 
 void KDevelop::OutputJob::setKillJobOnOutputClose(bool killJobOnOutputClose)
 {
-    m_killJobOnOutputClose = killJobOnOutputClose;
+    d->killJobOnOutputClose = killJobOnOutputClose;
 }
 
 void KDevelop::OutputJob::setModel(QAbstractItemModel * model)
 {
-    if (m_outputModel) {
-        delete m_outputModel;
+    if (d->outputModel) {
+        delete d->outputModel;
     }
 
-    m_outputModel = model;
+    d->outputModel = model;
 
-    if (m_outputModel) {
-        m_outputModel->setParent(this);
+    if (d->outputModel) {
+        d->outputModel->setParent(this);
     }
 }
 
 void KDevelop::OutputJob::setDelegate(QAbstractItemDelegate * delegate)
 {
-    m_outputDelegate = delegate;
+    d->outputDelegate = delegate;
 }
 
 QAbstractItemModel * KDevelop::OutputJob::model() const
 {
-    return m_outputModel;
+    return d->outputModel;
 }
 
 void KDevelop::OutputJob::setStandardToolView(IOutputView::StandardToolView standard)
 {
-    m_standardToolView = standard;
+    d->standardToolView = standard;
 }
 
 void OutputJob::setToolTitle(const QString& title)
 {
-    m_toolTitle = title;
+    d->toolTitle = title;
 }
 
 void OutputJob::setToolIcon(const QIcon& icon)
 {
-    m_toolIcon = icon;
+    d->toolIcon = icon;
 }
 
 int OutputJob::outputId() const
 {
-    return m_outputId;
+    return d->outputId;
 }
 
 OutputJob::OutputJobVerbosity OutputJob::verbosity() const
 {
-    return m_verbosity;
+    return d->verbosity;
 }
 
 void OutputJob::setVerbosity(OutputJob::OutputJobVerbosity verbosity)
 {
-    m_verbosity = verbosity;
+    d->verbosity = verbosity;
 }
 

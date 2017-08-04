@@ -29,6 +29,7 @@
 #include <QMenu>
 #include <QTimer>
 #include <QRegularExpression>
+#include <QPointer>
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>

@@ -25,6 +25,7 @@
 #include <QHash>
 #include <QDir>
 #include <QUrl>
+#include <QPointer>
 
 #include <vcs/vcsevent.h>
 #include <vcs/vcsjob.h>

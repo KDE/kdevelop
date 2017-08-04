@@ -31,6 +31,8 @@
 
 #include <KLocalizedString>
 
+#include <QPointer>
+
 
 using namespace KDevelop;
 
