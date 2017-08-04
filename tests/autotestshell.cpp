@@ -30,5 +30,7 @@ void KDevelop::AutoTestShell::init(const QStringList& plugins)
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)
     qputenv("KDE_FORK_SLAVES", "1"); // KIO slaves will be forked off instead of being started via DBus
 #endif
+    qputenv("CLEAR_DUCHAIN_DIR", "1"); // Always clear duchain dir (also to avoid popups asking the user to clear it)
+
     s_instance = new AutoTestShell(plugins);
 }
