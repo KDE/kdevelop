@@ -29,8 +29,6 @@
 
 namespace KDevelop {
 
-class FrameStackModelPrivate;
-
 /** FIXME: This class needs rework, since at present it is not true model.
     Client cannot just obtain frames by grabbing a thread and listing
     children. It should first setCurrentThread beforehand, and it is the
@@ -93,9 +91,10 @@ private Q_SLOTS:
     void stateChanged(KDevelop::IDebugSession::DebuggerState state);
 
 private:
-    QScopedPointer<FrameStackModelPrivate> d;
-
     void handleEvent(IDebugSession::event_t event) override;
+
+private:
+    const QScopedPointer<class FrameStackModelPrivate> d;
 };
 
 }

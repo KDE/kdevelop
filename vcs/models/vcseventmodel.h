@@ -64,7 +64,7 @@ protected:
     void addEvents(const QList<KDevelop::VcsEvent>&);
 
 private:
-    QScopedPointer<class VcsBasicEventModelPrivate> d;
+    const QScopedPointer<class VcsBasicEventModelPrivate> d;
 };
 
 /**
@@ -88,7 +88,7 @@ private Q_SLOTS:
     void jobReceivedResults( KJob* job );
 
 private:
-    QScopedPointer<class VcsEventLogModelPrivate> d;
+    const QScopedPointer<class VcsEventLogModelPrivate> d;
 };
 
 }

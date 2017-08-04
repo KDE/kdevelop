@@ -51,9 +51,6 @@ public:
  * Also it is possible to provide tree like models by inheriting this class, see protected members.
  * All stuff should be pulled in by @p updateState.
  */
-
-class VcsFileChangesModelPrivate;
-
 class KDEVPLATFORMVCS_EXPORT VcsFileChangesModel : public QStandardItemModel
 {
     Q_OBJECT
@@ -146,7 +143,7 @@ protected:
     QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url) const;
 
 private:
-    QScopedPointer<VcsFileChangesModelPrivate> const d;
+    const QScopedPointer<class VcsFileChangesModelPrivate> d;
 };
 }
 

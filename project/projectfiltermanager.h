@@ -35,7 +35,6 @@ class IProjectFilterProvider;
 class IPlugin;
 class IProject;
 class Path;
-class ProjectFilterManagerPrivate;
 
 /**
  * @short A helper class to manage project filtering in file managers.
@@ -88,7 +87,7 @@ public:
     QVector<QSharedPointer<IProjectFilter> > filtersForProject(IProject* project) const;
 
 private:
-    QScopedPointer<ProjectFilterManagerPrivate> d;
+    const QScopedPointer<class ProjectFilterManagerPrivate> d;
 
     Q_PRIVATE_SLOT(d, void filterChanged( KDevelop::IProjectFilterProvider*, KDevelop::IProject* ) )
 };

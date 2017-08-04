@@ -41,7 +41,6 @@ namespace KDevelop {
 class BasicRefactoring;
 class IndexedString;
 class ParseJob;
-class ILanguageSupportPrivate;
 class TopDUContext;
 class ICodeHighlighting;
 class ICreateClassHelper;
@@ -162,7 +161,7 @@ public:
                                                const QString& changedText, bool removal) const;
 
 private:
-    QScopedPointer<ILanguageSupportPrivate> const d;
+    const QScopedPointer<class ILanguageSupportPrivate> d;
 };
 
 }

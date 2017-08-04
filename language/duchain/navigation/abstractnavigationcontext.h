@@ -54,7 +54,6 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
 
 class AbstractNavigationContext;
 typedef QExplicitlySharedDataPointer<AbstractNavigationContext> NavigationContextPointer;
-class AbstractNavigationContextPrivate;
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, public QSharedData
 {
@@ -170,7 +169,7 @@ public:
     static const Colorizer nameHighlight;
 
 private:
-    QScopedPointer<AbstractNavigationContextPrivate> d;
+    const QScopedPointer<class AbstractNavigationContextPrivate> d;
 };
 
 }

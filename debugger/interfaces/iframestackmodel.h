@@ -30,8 +30,6 @@
 
 namespace KDevelop {
 
-class IFrameStackModelPrivate;
-
 class KDEVPLATFORMDEBUGGER_EXPORT IFrameStackModel : public QAbstractItemModel
 {
     Q_OBJECT
@@ -86,10 +84,11 @@ Q_SIGNALS:
     void currentFrameChanged(int frame);
 
 private:
-    friend class IDebugSession;
-    QScopedPointer<IFrameStackModelPrivate> d;
-
     virtual void handleEvent(IDebugSession::event_t event) = 0;
+
+private:
+    friend class IDebugSession;
+    const QScopedPointer<class IFrameStackModelPrivate> d;
 };
 
 }

@@ -31,8 +31,6 @@ class KJob;
 
 namespace KDevelop {
 
-class JobStatusPrivate;
-
 /**
  * @brief Class for making KJobs exposable to the IStatus interface
  *
@@ -62,7 +60,7 @@ Q_SIGNALS:
     void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value) override;
 
 private:
-    QScopedPointer<JobStatusPrivate> const d;
+    const QScopedPointer<class JobStatusPrivate> d;
 
     Q_PRIVATE_SLOT(d, void slotPercent(KJob*, unsigned long))
 };

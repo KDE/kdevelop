@@ -28,7 +28,6 @@
 
 namespace KDevelop {
 
-class IDebugSessionPrivate;
 class IVariableController;
 class IBreakpointController;
 class IFrameStackModel;
@@ -188,8 +187,8 @@ protected:
     friend class FrameStackModel;
 
 private:
-    friend IDebugSessionPrivate;
-    QScopedPointer<IDebugSessionPrivate> d;
+    friend class IDebugSessionPrivate;
+    const QScopedPointer<class IDebugSessionPrivate> d;
 };
 
 }

@@ -29,7 +29,6 @@
 namespace KDevelop {
 
 class IProject;
-class ProjectTestJobPrivate;
 
 /**
  * A combined result of a project test job
@@ -109,7 +108,7 @@ protected:
 
 private:
     friend class ProjectTestJobPrivate;
-    QScopedPointer<ProjectTestJobPrivate> d;
+    const QScopedPointer<class ProjectTestJobPrivate> d;
 };
 
 }

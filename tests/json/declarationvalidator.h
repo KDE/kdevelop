@@ -25,7 +25,6 @@
 
 namespace KDevelop {
 
-class DeclarationValidatorPrivate;
 class KDEVPLATFORMTESTS_EXPORT DeclarationValidator : public DUChainVisitor
 {
 public:
@@ -37,7 +36,7 @@ public:
   void visit(Declaration *declaration) override;
 private:
   Q_DISABLE_COPY(DeclarationValidator)
-  const QScopedPointer<DeclarationValidatorPrivate> d;
+  const QScopedPointer<class DeclarationValidatorPrivate> d;
 };
 
 }

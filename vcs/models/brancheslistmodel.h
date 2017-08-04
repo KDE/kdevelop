@@ -30,7 +30,6 @@
 namespace KDevelop {
 class IBranchingVersionControl;
 class IProject;
-class BranchesListModelPrivate;
 
 class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
 {
@@ -66,7 +65,7 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
         void currentBranchChanged();
 
     private:
-        const QScopedPointer<BranchesListModelPrivate> d;
+        const QScopedPointer<class BranchesListModelPrivate> d;
 };
 
 }

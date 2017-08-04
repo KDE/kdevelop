@@ -30,7 +30,6 @@ class QTextBrowser;
 
 
 namespace KDevelop {
-  class AbstractNavigationWidgetPrivate;
 
   /**
    * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
@@ -93,7 +92,7 @@ namespace KDevelop {
       void update();
 
     private:
-      QScopedPointer<AbstractNavigationWidgetPrivate> d;
+      const QScopedPointer<class AbstractNavigationWidgetPrivate> d;
   };
 }
 

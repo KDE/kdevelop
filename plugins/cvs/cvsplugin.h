@@ -20,7 +20,6 @@
 #include <qobject.h>
 
 class CvsProxy;
-class CvsPluginPrivate;
 
 /**
  * This is the main class of KDevelop's CVS plugin.
@@ -130,8 +129,10 @@ Q_SIGNALS:
 
 private:
     void setupActions();
-    QScopedPointer<CvsPluginPrivate> d;
     QString findWorkingDir(const QUrl& location);
+
+private:
+    const QScopedPointer<class CvsPluginPrivate> d;
 };
 
 #endif
