@@ -26,8 +26,6 @@
 #include <serialization/indexedstring.h>
 #include <interfaces/iproblem.h>
 
-struct ProblemStorePrivate;
-
 namespace KDevelop
 {
 
@@ -153,7 +151,7 @@ protected:
     ProblemStoreNode* rootNode();
 
 private:
-    QScopedPointer<ProblemStorePrivate> d;
+    const QScopedPointer<class ProblemStorePrivate> d;
 };
 
 }

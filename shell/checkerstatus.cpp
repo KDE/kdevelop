@@ -20,8 +20,12 @@
 #include "checkerstatus.h"
 #include <KLocalizedString>
 
-struct CheckerStatusPrivate
+namespace KDevelop
 {
+
+class CheckerStatusPrivate
+{
+public:
     int m_maxItems;
     int m_checkedItems;
     QString m_name;
@@ -33,8 +37,6 @@ struct CheckerStatusPrivate
     }
 };
 
-namespace KDevelop
-{
 
 CheckerStatus::CheckerStatus() :
     d(new CheckerStatusPrivate())

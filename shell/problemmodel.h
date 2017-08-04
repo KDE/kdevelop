@@ -27,8 +27,6 @@
 #include <QAbstractItemModel>
 #include <shell/problem.h>
 
-struct ProblemModelPrivate;
-
 namespace KDevelop {
     class IDocument;
 class IndexedString;
@@ -200,7 +198,7 @@ protected:
     ProblemStore *store() const;
 
 private:
-    QScopedPointer<ProblemModelPrivate> d;
+    const QScopedPointer<class ProblemModelPrivate> d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ProblemModel::Features)

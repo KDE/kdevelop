@@ -25,8 +25,9 @@
 namespace KDevelop
 {
 
-struct ProblemModelSetPrivate
+class ProblemModelSetPrivate
 {
+public:
     QVector<ModelData> data;
 };
 

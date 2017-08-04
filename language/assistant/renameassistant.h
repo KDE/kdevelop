@@ -46,8 +46,7 @@ public:
     QString title() const override;
 
 private:
-    struct Private;
-    QScopedPointer<Private> const d;
+    const QScopedPointer<class RenameAssistantPrivate> d;
 };
 
 }

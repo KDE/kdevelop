@@ -26,9 +26,6 @@
 
 #include <QScopedPointer>
 
-struct DetectedProblemPrivate;
-
-
 namespace KDevelop
 {
 
@@ -103,7 +100,7 @@ public:
     QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const override;
 
 private:
-    QScopedPointer<DetectedProblemPrivate> d;
+    const QScopedPointer<class DetectedProblemPrivate> d;
 };
 
 }

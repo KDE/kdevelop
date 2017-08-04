@@ -24,8 +24,6 @@
 
 #include <interfaces/istatus.h>
 
-struct CheckerStatusPrivate;
-
 namespace KDevelop
 {
 
@@ -89,7 +87,7 @@ Q_SIGNALS:
     void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value) override;
 
 private:
-    QScopedPointer<CheckerStatusPrivate> d;
+    const QScopedPointer<class CheckerStatusPrivate> d;
 };
 
 }

@@ -40,8 +40,7 @@ public:
     void execute() override;
 
 private:
-    struct Private;
-    QScopedPointer<Private> const d;
+    const QScopedPointer<class RenameFileActionPrivate> d;
 };
 
 

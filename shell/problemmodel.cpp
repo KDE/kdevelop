@@ -58,8 +58,12 @@ QIcon iconForSeverity(KDevelop::IProblem::Severity severity)
 }
 
 
-struct ProblemModelPrivate
+namespace KDevelop
 {
+
+class ProblemModelPrivate
+{
+public:
     explicit ProblemModelPrivate(KDevelop::ProblemStore *store)
         : m_problems(store)
         , m_features(KDevelop::ProblemModel::NoFeatures)
@@ -72,8 +76,6 @@ struct ProblemModelPrivate
     QString m_fullUpdateTooltip;
 };
 
-namespace KDevelop
-{
 
 ProblemModel::ProblemModel(QObject * parent, ProblemStore *store)
   : QAbstractItemModel(parent)

@@ -25,9 +25,10 @@
 
 using namespace KDevelop;
 
-struct PlaceholderItemProxyModel::Private
+class KDevelop::PlaceholderItemProxyModelPrivate
 {
-    explicit Private(PlaceholderItemProxyModel* qq)
+public:
+    explicit PlaceholderItemProxyModelPrivate(PlaceholderItemProxyModel* qq)
         : q(qq)
     {}
 
@@ -52,7 +53,7 @@ struct PlaceholderItemProxyModel::Private
 
 PlaceholderItemProxyModel::PlaceholderItemProxyModel(QObject* parent)
     : QIdentityProxyModel(parent)
-    , d(new Private(this))
+    , d(new PlaceholderItemProxyModelPrivate(this))
 {}
 
 PlaceholderItemProxyModel::~PlaceholderItemProxyModel()

@@ -78,8 +78,9 @@ private:
 };
 #endif
 
-struct KDevelop::StandardDocumentationViewPrivate
+class KDevelop::StandardDocumentationViewPrivate
 {
+public:
     ZoomController* m_zoomController = nullptr;
     IDocumentation::Ptr m_doc;
 

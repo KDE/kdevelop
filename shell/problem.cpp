@@ -24,8 +24,12 @@
 
 #include <KLocalizedString>
 
-struct DetectedProblemPrivate
+namespace KDevelop
 {
+
+class DetectedProblemPrivate
+{
+public:
     DetectedProblemPrivate(const QString& pluginName)
         : m_pluginName(pluginName)
         , m_severity(KDevelop::IProblem::Error)
@@ -44,8 +48,6 @@ struct DetectedProblemPrivate
     KDevelop::IProblem::FinalLocationMode m_finalLocationMode;
 };
 
-namespace KDevelop
-{
 
 DetectedProblem::DetectedProblem()
     : d(new DetectedProblemPrivate(i18n("Plugin")))

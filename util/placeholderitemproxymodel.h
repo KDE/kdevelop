@@ -110,8 +110,7 @@ Q_SIGNALS:
     void dataInserted(int column, const QVariant& values);
 
 private:
-    struct Private;
-    QScopedPointer<Private> const d;
+    const QScopedPointer<class PlaceholderItemProxyModelPrivate> d;
 };
 
 }

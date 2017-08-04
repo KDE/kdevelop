@@ -23,13 +23,14 @@
 
 using namespace KDevelop;
 
-struct StaticAssistant::Private
+class KDevelop::StaticAssistantPrivate
 {
+public:
     ILanguageSupport* m_supportedLanguage;
 };
 
 StaticAssistant::StaticAssistant(ILanguageSupport* supportedLanguage)
-    : d(new Private)
+    : d(new StaticAssistantPrivate)
 {
     d->m_supportedLanguage = supportedLanguage;
 }

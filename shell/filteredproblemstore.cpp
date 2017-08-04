@@ -203,8 +203,9 @@ public:
 namespace KDevelop
 {
 
-struct FilteredProblemStorePrivate
+class FilteredProblemStorePrivate
 {
+public:
     explicit FilteredProblemStorePrivate(FilteredProblemStore* q)
         : q(q)
         , m_strategy(new NoGroupingStrategy(q->rootNode()))

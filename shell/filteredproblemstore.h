@@ -27,8 +27,6 @@
 namespace KDevelop
 {
 
-struct FilteredProblemStorePrivate;
-
 /**
  * @brief ProblemStore subclass that can group by severity, and path, and filter by scope, and severity.
  *
@@ -103,8 +101,8 @@ public:
     int grouping() const;
 
 private:
-    friend struct FilteredProblemStorePrivate;
-    QScopedPointer<FilteredProblemStorePrivate> d;
+    friend class FilteredProblemStorePrivate;
+    const QScopedPointer<class FilteredProblemStorePrivate> d;
 };
 
 }

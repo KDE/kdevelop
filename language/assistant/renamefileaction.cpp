@@ -32,15 +32,16 @@
 
 using namespace KDevelop;
 
-struct RenameFileAction::Private
+class RenameFileActionPrivate
 {
+public:
     KDevelop::BasicRefactoring* m_refactoring;
     QUrl m_file;
     QString m_newName;
 };
 
 RenameFileAction::RenameFileAction(BasicRefactoring* refactoring, const QUrl& file, const QString& newName)
-    : d(new Private)
+    : d(new RenameFileActionPrivate)
 {
     d->m_refactoring = refactoring;
     d->m_file = file;

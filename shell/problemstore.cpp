@@ -25,8 +25,12 @@
 #include <shell/watcheddocumentset.h>
 #include "problemstorenode.h"
 
-struct ProblemStorePrivate
+namespace KDevelop
 {
+
+class ProblemStorePrivate
+{
+public:
     ProblemStorePrivate()
         : m_documents(nullptr)
         , m_severities(KDevelop::IProblem::Error | KDevelop::IProblem::Warning | KDevelop::IProblem::Hint)
@@ -50,8 +54,6 @@ struct ProblemStorePrivate
     QVector<KDevelop::IProblem::Ptr> m_allProblems;
 };
 
-namespace KDevelop
-{
 
 ProblemStore::ProblemStore(QObject *parent)
     : QObject(parent),

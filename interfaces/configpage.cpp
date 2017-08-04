@@ -25,7 +25,9 @@
 
 namespace KDevelop {
 
-struct ConfigPagePrivate {
+class ConfigPagePrivate
+{
+public:
     explicit ConfigPagePrivate(IPlugin* plugin)
         : plugin(plugin)
     {}

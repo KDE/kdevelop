@@ -49,10 +49,9 @@ QVector<RevisionedFileRanges> RevisionedFileRanges::convert(const QMap<IndexedSt
     return ret;
 }
 
-struct RenameAction::Private
+class KDevelop::RenameActionPrivate
 {
-    Private() {}
-
+public:
     Identifier m_oldDeclarationName;
     QString m_newDeclarationName;
     QVector<RevisionedFileRanges> m_oldDeclarationUses;
@@ -60,7 +59,7 @@ struct RenameAction::Private
 
 RenameAction::RenameAction(const Identifier& oldDeclarationName, const QString& newDeclarationName,
                            const QVector<RevisionedFileRanges>& oldDeclarationUses)
-    : d(new Private)
+    : d(new RenameActionPrivate)
 {
     d->m_oldDeclarationName = oldDeclarationName;
     d->m_newDeclarationName = newDeclarationName.trimmed();

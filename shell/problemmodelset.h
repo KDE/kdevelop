@@ -36,8 +36,6 @@ struct ModelData
     ProblemModel *model;
 };
 
-struct ProblemModelSetPrivate;
-
 /**
  * @brief Stores name/model pairs and emits signals when they are added/removed.
  *
@@ -91,8 +89,7 @@ Q_SIGNALS:
     void problemsChanged();
 
 private:
-    QScopedPointer<ProblemModelSetPrivate> d;
-
+    const QScopedPointer<class ProblemModelSetPrivate> d;
 };
 
 }

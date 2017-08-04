@@ -64,8 +64,7 @@ public:
     QString oldDeclarationName() const;
 
 private:
-    struct Private;
-    QScopedPointer<Private> const d;
+    const QScopedPointer<class RenameActionPrivate> d;
 };
 
 }

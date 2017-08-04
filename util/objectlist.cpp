@@ -23,16 +23,17 @@
 
 using namespace KDevelop;
 
-struct ObjectListTracker::Private
+class KDevelop::ObjectListTrackerPrivate
 {
+public:
     /// List of tracked objects (contains unique items only)
     QList<QObject*> m_list;
-    CleanupBehavior m_cleanupBehavior;
+    ObjectListTracker::CleanupBehavior m_cleanupBehavior;
 };
 
 ObjectListTracker::ObjectListTracker(CleanupBehavior behavior, QObject* parent)
     : QObject(parent)
-    , d(new Private{{}, behavior})
+    , d(new ObjectListTrackerPrivate{{}, behavior})
 {
 }
 

@@ -70,9 +70,10 @@ Declaration* getDeclarationForChangedRange(KTextEditor::Document* doc, const KTe
 
 }
 
-struct RenameAssistant::Private
+class KDevelop::RenameAssistantPrivate
 {
-    explicit Private(RenameAssistant* qq)
+public:
+    explicit RenameAssistantPrivate(RenameAssistant* qq)
         : q(qq)
         , m_isUseful(false)
         , m_renameFile(false)
@@ -105,7 +106,7 @@ struct RenameAssistant::Private
 
 RenameAssistant::RenameAssistant(ILanguageSupport* supportedLanguage)
     : StaticAssistant(supportedLanguage)
-    , d(new Private(this))
+    , d(new RenameAssistantPrivate(this))
 {
 }
 

@@ -96,8 +96,7 @@ public:
     virtual void updateReady(const IndexedString&, const KDevelop::ReferencedTopDUContext&) { }
 
 private:
-    struct Private;
-    QScopedPointer<Private> const d;
+    const QScopedPointer<class StaticAssistantPrivate> d;
 };
 
 }
