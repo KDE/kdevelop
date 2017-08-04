@@ -30,6 +30,19 @@
 namespace KDevelop
 {
 
+class LaunchConfigurationPrivate
+{
+public:
+    LaunchConfigurationPrivate(const KConfigGroup& grp, IProject* project)
+        : baseGroup(grp)
+        , project(project)
+    {}
+
+    KConfigGroup baseGroup;
+    IProject* project;
+    LaunchConfigurationType* type;
+};
+
 QString LaunchConfiguration::LaunchConfigurationNameEntry()
 {
     return QStringLiteral("Name");
@@ -41,9 +54,11 @@ QString LaunchConfiguration::LaunchConfigurationTypeEntry()
 }
 
 LaunchConfiguration::LaunchConfiguration(KConfigGroup grp, IProject* project, QObject* parent ) 
-    : QObject( parent ), ILaunchConfiguration(), baseGroup( grp ), m_project( project )
+    : QObject(parent)
+    , ILaunchConfiguration()
+    , d(new LaunchConfigurationPrivate(grp, project))
 {
-    m_type = Core::self()->runControllerInternal()->launchConfigurationTypeForId( grp.readEntry(LaunchConfigurationTypeEntry(), "") );
+    d->type = Core::self()->runControllerInternal()->launchConfigurationTypeForId(grp.readEntry(LaunchConfigurationTypeEntry(), QString()));
 }
 
 LaunchConfiguration::~LaunchConfiguration()
@@ -52,33 +67,33 @@ LaunchConfiguration::~LaunchConfiguration()
 
 KConfigGroup LaunchConfiguration::config()
 {
-    return baseGroup.group( "Data" );
+    return d->baseGroup.group("Data");
 }
 
 const KConfigGroup LaunchConfiguration::config() const
 {
-    return baseGroup.group( "Data" );
+    return d->baseGroup.group("Data");
 }
 
 QString LaunchConfiguration::name() const
 {
-    return baseGroup.readEntry( LaunchConfigurationNameEntry(), "" );
+    return d->baseGroup.readEntry(LaunchConfigurationNameEntry(), QString());
 }
 
 IProject* LaunchConfiguration::project() const
 {
-    return m_project;
+    return d->project;
 }
 
 LaunchConfigurationType* LaunchConfiguration::type() const
 {
-    return m_type;
+    return d->type;
 }
 
 void LaunchConfiguration::setName(const QString& name)
 {
-    baseGroup.writeEntry( LaunchConfigurationNameEntry(), name );
-    baseGroup.sync();
+    d->baseGroup.writeEntry(LaunchConfigurationNameEntry(), name);
+    d->baseGroup.sync();
     emit nameChanged( this );
 }
 
@@ -90,31 +105,31 @@ void LaunchConfiguration::setType(const QString& typeId)
     Q_ASSERT(t);
     if( t )
     {
-        baseGroup.deleteGroup("Data");
-        m_type = t;
-        baseGroup.writeEntry( LaunchConfigurationTypeEntry(), m_type->id() );
-        baseGroup.sync();
+        d->baseGroup.deleteGroup("Data");
+        d->type = t;
+        d->baseGroup.writeEntry(LaunchConfigurationTypeEntry(), d->type->id());
+        d->baseGroup.sync();
         emit typeChanged( t );
     }
 }
 
 void LaunchConfiguration::save()
 {
-    baseGroup.sync();
+    d->baseGroup.sync();
 }
 
 QString LaunchConfiguration::configGroupName() const
 {
-    return baseGroup.name();
+    return d->baseGroup.name();
 }
 
 QString LaunchConfiguration::launcherForMode(const QString& mode) const
 {
-    QStringList modes = baseGroup.readEntry( "Configured Launch Modes", QStringList() );
+    QStringList modes = d->baseGroup.readEntry("Configured Launch Modes", QStringList());
     int idx = modes.indexOf( mode );
     if( idx != -1 )
     {
-        QStringList launchers = baseGroup.readEntry( "Configured Launchers", QStringList() );
+        QStringList launchers = d->baseGroup.readEntry("Configured Launchers", QStringList());
         if( launchers.count() > idx )
         {
             foreach( ILauncher* l, type()->launchers() )
@@ -152,15 +167,15 @@ QString LaunchConfiguration::launcherForMode(const QString& mode) const
 
 void LaunchConfiguration::setLauncherForMode(const QString& mode, const QString& id)
 {
-    QStringList modes = baseGroup.readEntry( "Configured Launch Modes", QStringList() );
+    QStringList modes = d->baseGroup.readEntry("Configured Launch Modes", QStringList());
     int idx = modes.indexOf( mode );
     if( idx == -1 )
     {
         idx = modes.count();
         modes << mode;
-        baseGroup.writeEntry( "Configured Launch Modes", modes );
+        d->baseGroup.writeEntry("Configured Launch Modes", modes);
     }
-    QStringList launchers = baseGroup.readEntry( "Configured Launchers", QStringList() );
+    QStringList launchers = d->baseGroup.readEntry("Configured Launchers", QStringList());
     if( launchers.count() > idx )
     {
         launchers.replace(idx, id);
@@ -168,7 +183,7 @@ void LaunchConfiguration::setLauncherForMode(const QString& mode, const QString&
     {
         launchers.append( id );
     }
-    baseGroup.writeEntry( "Configured Launchers", launchers );
+    d->baseGroup.writeEntry("Configured Launchers", launchers);
 }
 
 

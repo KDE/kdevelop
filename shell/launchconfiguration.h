@@ -90,10 +90,9 @@ public:
 Q_SIGNALS:
     void nameChanged( LaunchConfiguration* );
     void typeChanged( LaunchConfigurationType* );
+
 private:
-    KConfigGroup baseGroup;
-    IProject* m_project;
-    LaunchConfigurationType* m_type;
+    const QScopedPointer<class LaunchConfigurationPrivate> d;
 };
 
 }
