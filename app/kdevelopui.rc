@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui version="143" name="kdevelop" translationDomain="kdevelop">
+<kpartgui version="144" name="kdevelop" translationDomain="kdevelop">
 <MenuBar>
 
   <Menu name="session" append="first_menu">
@@ -145,6 +145,8 @@
     <Action name="show_right_dock"/>
     <Action name="show_bottom_dock"/>
     <Action name="hide_all_docks"/>
+    <Separator/>
+    <Action name="toggle_concentration_mode"/>
     <Separator/>
     <Merge/>
   </Menu>
