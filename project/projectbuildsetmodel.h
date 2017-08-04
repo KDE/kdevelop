@@ -57,6 +57,7 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBuildSetModel : public QAbstractTableMod
     Q_OBJECT
 public:
     explicit ProjectBuildSetModel( QObject* parent );
+    ~ProjectBuildSetModel() override;
     QVariant data( const QModelIndex&, int role = Qt::DisplayRole ) const override;
     QVariant headerData( int, Qt::Orientation, int role = Qt::DisplayRole ) const override;
     int rowCount( const QModelIndex& = QModelIndex() ) const override;
@@ -77,13 +78,13 @@ public Q_SLOTS:
     void loadFromProject( KDevelop::IProject* );
     void projectClosed( KDevelop::IProject* );
 private:
-    QList<BuildItem> m_items;
-    QList< QStringList > m_orderingCache;
-
     int findInsertionPlace( const QStringList& itemPath );
     void removeItemsWithCache( const QList<int>& itemIndices );
     void insertItemWithCache( const KDevelop::BuildItem& item );
     void insertItemsOverrideCache( int index, const QList<KDevelop::BuildItem>& items );
+
+private:
+    const QScopedPointer<class ProjectBuildSetModelPrivate> d;
 };
 
 }
