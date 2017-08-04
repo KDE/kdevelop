@@ -24,20 +24,17 @@
 #include "projectexport.h"
 
 namespace KDevelop { 
-class ProjectModel; 
 class ProjectBaseItem;
 class IProject;
 }
-
-class ProjectItemValidator;
-class ProjectItemCompleter;
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectItemLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
     explicit ProjectItemLineEdit(QWidget* parent=nullptr);
-    
+    ~ProjectItemLineEdit() override;
+
     /**
      * Sets this lineedit to show the given @p path, eventually removing
      * parts from the beginning if a base item is set
@@ -75,10 +72,7 @@ private Q_SLOTS:
     void showCtxMenu(const QPoint& p);
     
 private:
-    KDevelop::ProjectBaseItem* m_base;
-    ProjectItemCompleter* m_completer;
-    ProjectItemValidator* m_validator;
-    KDevelop::IProject* m_suggestion;
+    const QScopedPointer<class ProjectItemLineEditPrivate> d;
 };
 
 #endif

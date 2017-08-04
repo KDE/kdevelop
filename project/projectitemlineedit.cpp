@@ -145,15 +145,26 @@ QValidator::State ProjectItemValidator::validate(QString& input, int& pos) const
     return state;
 }
 
+class ProjectItemLineEditPrivate
+{
+public:
+    explicit ProjectItemLineEditPrivate(ProjectItemLineEdit* q)
+        : completer(new ProjectItemCompleter(q))
+        , validator(new ProjectItemValidator(q))
+    {
+    }
+    KDevelop::ProjectBaseItem* base = nullptr;
+    ProjectItemCompleter* completer;
+    ProjectItemValidator* validator;
+    KDevelop::IProject* suggestion = nullptr;
+};
+
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     : QLineEdit(parent),
-      m_base(nullptr),
-      m_completer( new ProjectItemCompleter( this ) ),
-      m_validator( new ProjectItemValidator( this ) ),
-      m_suggestion( nullptr )
+      d(new ProjectItemLineEditPrivate(this))
 {
-    setCompleter( m_completer );
-    setValidator( m_validator );
+    setCompleter(d->completer);
+    setValidator(d->validator);
     setPlaceholderText( i18n("Enter the path to an item from the projects tree" ) );
 
     QAction* selectItemAction = new QAction(QIcon::fromTheme(QStringLiteral("folder-document")), i18n("Select..."), this);
@@ -163,6 +174,8 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, &ProjectItemLineEdit::customContextMenuRequested, this, &ProjectItemLineEdit::showCtxMenu);
 }
+
+ProjectItemLineEdit::~ProjectItemLineEdit() = default;
 
 void ProjectItemLineEdit::showCtxMenu(const QPoint& p)
 {
@@ -197,8 +210,8 @@ bool ProjectItemLineEdit::selectItemDialog()
     connect(buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
     mainLayout->addWidget(buttonBox);
 
-    if (m_suggestion) {
-        const QModelIndex idx = proxymodel->proxyIndexFromItem(m_suggestion->projectItem());
+    if (d->suggestion) {
+        const QModelIndex idx = proxymodel->proxyIndexFromItem(d->suggestion->projectItem());
         view->selectionModel()->select(idx, QItemSelectionModel::ClearAndSelect);
     }
 
@@ -216,24 +229,24 @@ bool ProjectItemLineEdit::selectItemDialog()
 
 void ProjectItemLineEdit::setItemPath(const QStringList& list)
 {
-    setText( KDevelop::joinWithEscaping( removeProjectBasePath( list, m_base ), sep, escape ) );
+    setText(KDevelop::joinWithEscaping(removeProjectBasePath(list, d->base), sep, escape));
 }
 
 QStringList ProjectItemLineEdit::itemPath() const
 {
-    return joinProjectBasePath( KDevelop::splitWithEscaping( text(), sep, escape ), m_base );
+    return joinProjectBasePath(KDevelop::splitWithEscaping(text(), sep, escape), d->base);
 }
 
 void ProjectItemLineEdit::setBaseItem(KDevelop::ProjectBaseItem* item)
 {
-    m_base = item;
-    m_validator->setBaseItem( m_base );
-    m_completer->setBaseItem( m_base );
+    d->base = item;
+    d->validator->setBaseItem(d->base);
+    d->completer->setBaseItem(d->base);
 }
 
 KDevelop::ProjectBaseItem* ProjectItemLineEdit::baseItem() const
 {
-    return m_base;
+    return d->base;
 }
 
 KDevelop::ProjectBaseItem* ProjectItemLineEdit::currentItem() const
@@ -244,7 +257,7 @@ KDevelop::ProjectBaseItem* ProjectItemLineEdit::currentItem() const
 
 void ProjectItemLineEdit::setSuggestion(KDevelop::IProject* project)
 {
-    m_suggestion = project;
+    d->suggestion = project;
 }
 
 #include "projectitemlineedit.moc"
