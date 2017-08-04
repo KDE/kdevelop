@@ -27,8 +27,8 @@
 #include "ifilterstrategy.h"
 
 #include <QAbstractListModel>
-#include <QUrl>
 
+class QUrl;
 
 namespace KDevelop
 {

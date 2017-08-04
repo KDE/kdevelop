@@ -14,7 +14,6 @@
 
 #include <QString>
 #include <QRegularExpression>
-#include <KLocalizedString>
 
 namespace KDevelop
 {
