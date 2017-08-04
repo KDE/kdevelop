@@ -82,7 +82,12 @@ QHash<QString, QString> setDefaultMKSpec(QMakeProjectFile& file)
 {
     static const QHash<QString, QString> qmvars = QMakeConfig::queryQMake(QMakeConfig::qmakeBinary(nullptr));
     static const QString specFile = QMakeConfig::findBasicMkSpec(qmvars);
-    Q_ASSERT(QFile::exists(specFile));
+
+    if (!QFile::exists(specFile)) {
+        qDebug() << "mkspec file does not exist:" << specFile;
+        return {};
+    }
+
     QMakeMkSpecs* mkspecs = new QMakeMkSpecs(specFile, qmvars);
     mkspecs->read();
     file.setMkSpecs(mkspecs);
@@ -184,7 +189,11 @@ void TestQMakeFile::libTarget()
 
     QMakeProjectFile file(tmpfile.fileName());
 
-    setDefaultMKSpec(file);
+    const auto qmvars = setDefaultMKSpec(file);
+    if (qmvars.isEmpty()) {
+        QSKIP("Problem querying QMake, skipping test function");
+    }
+
     QVERIFY(file.read());
 
     QCOMPARE(file.targets(), QStringList() << resolved);
@@ -388,7 +397,10 @@ void TestQMakeFile::qtIncludeDirs()
 
     QMakeProjectFile file(tmpFile.fileName());
 
-    QHash<QString, QString> qmvars = setDefaultMKSpec(file);
+    const auto qmvars = setDefaultMKSpec(file);
+    if (qmvars.isEmpty()) {
+        QSKIP("Problem querying QMake, skipping test function");
+    }
 
     QVERIFY(file.read());
 
@@ -484,7 +496,10 @@ void TestQMakeFile::testInclude()
 
     QMakeProjectFile file(baseFile.fileName());
 
-    setDefaultMKSpec(file);
+    const auto qmvars = setDefaultMKSpec(file);
+    if (qmvars.isEmpty()) {
+        QSKIP("Problem querying QMake, skipping test function");
+    }
 
     QVERIFY(file.read());
 
@@ -569,7 +584,10 @@ void TestQMakeFile::globbing()
 
     QMakeProjectFile pro(testFile.fileName());
 
-    setDefaultMKSpec(pro);
+    const auto qmvars = setDefaultMKSpec(pro);
+    if (qmvars.isEmpty()) {
+        QSKIP("Problem querying QMake, skipping test function");
+    }
 
     QVERIFY(pro.read());
 
@@ -606,7 +624,10 @@ void TestQMakeFile::benchGlobbing()
 
     QMakeProjectFile pro(testFile.fileName());
 
-    setDefaultMKSpec(pro);
+    const auto qmvars = setDefaultMKSpec(pro);
+    if (qmvars.isEmpty()) {
+        QSKIP("Problem querying QMake, skipping test function");
+    }
 
     QVERIFY(pro.read());
 
@@ -640,7 +661,10 @@ void TestQMakeFile::benchGlobbingNoPattern()
 
     QMakeProjectFile pro(testFile.fileName());
 
-    setDefaultMKSpec(pro);
+    const auto qmvars = setDefaultMKSpec(pro);
+    if (qmvars.isEmpty()) {
+        QSKIP("Problem querying QMake, skipping test function");
+    }
 
     QVERIFY(pro.read());
 
