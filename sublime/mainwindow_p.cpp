@@ -207,6 +207,7 @@ void MainWindowPrivate::restoreConcentrationMode()
         m_concentrateToolBar = new QToolBar(m_mainWindow);
         m_concentrateToolBar->setObjectName(QStringLiteral("concentrateToolBar"));
         m_concentrateToolBar->addAction(m_concentrationModeAction);
+        m_concentrateToolBar->toggleViewAction()->setVisible(false);
         QWidgetAction *action = new QWidgetAction(this);
 
         action->setDefaultWidget(m_mainWindow->menuBar()->cornerWidget(Qt::TopRightCorner));
