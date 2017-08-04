@@ -156,8 +156,7 @@ public:
     bool keepDUChainData();
 
 private:
-    struct TestFilePrivate;
-    TestFilePrivate* d;
+    const QScopedPointer<class TestFilePrivate> d;
 
     Q_PRIVATE_SLOT(d, void updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext))
 };

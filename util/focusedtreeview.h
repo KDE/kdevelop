@@ -21,7 +21,6 @@
 #ifndef KDEVPLATFORM_FOCUSEDTREEVIEW_H
 #define KDEVPLATFORM_FOCUSEDTREEVIEW_H
 
-#include <memory>
 #include <QTreeView>
 #include "utilexport.h"
 
@@ -58,8 +57,7 @@ class KDEVPLATFORMUTIL_EXPORT FocusedTreeView : public QTreeView {
         void delayedAutoScrollAndResize();
 
     private:
-        struct Private;
-        std::unique_ptr<Private> d;
+        const QScopedPointer<class FocusedTreeViewPrivate> d;
 };
 
 }

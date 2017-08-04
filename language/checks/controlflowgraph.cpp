@@ -21,22 +21,22 @@
 
 using namespace KDevelop;
 
-struct ControlFlowGraph::Private
+class KDevelop::ControlFlowGraphPrivate
 {
+public:
     QList<ControlFlowNode*> m_nodes;
     QMap<KDevelop::Declaration*, ControlFlowNode*> m_funcNodes;
     QVector<ControlFlowNode*> m_deadNodes;
 };
 
 ControlFlowGraph::ControlFlowGraph()
-    : d(new Private)
+    : d(new ControlFlowGraphPrivate)
 {}
 
 
 ControlFlowGraph::~ControlFlowGraph()
 {
   clear();
-  delete d;
 }
 
 void ControlFlowGraph::addEntry(ControlFlowNode* n)

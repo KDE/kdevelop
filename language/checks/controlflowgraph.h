@@ -20,6 +20,7 @@
 #define KDEVPLATFORM_CONTROLFLOWGRAPH_H
 
 #include <QVector>
+#include <QScopedPointer>
 #include <language/languageexport.h>
 
 namespace KDevelop {
@@ -68,8 +69,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowGraph
     QVector<ControlFlowNode*> deadNodes() const;
   private:
     ControlFlowGraph(const ControlFlowGraph&);
-    struct Private;
-    Private* d;
+
+  private:
+    const QScopedPointer<class ControlFlowGraphPrivate> d;
 };
 
 }

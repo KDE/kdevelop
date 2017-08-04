@@ -21,7 +21,9 @@
 
 namespace KDevelop {
 
-struct FocusedTreeView::Private {
+class FocusedTreeViewPrivate
+{
+public:
     bool autoScrollAtEnd = false;
     QTimer timer;
     bool wasAtEnd = false;
@@ -31,7 +33,7 @@ struct FocusedTreeView::Private {
 
 FocusedTreeView::FocusedTreeView(QWidget* parent)
     : QTreeView(parent)
-    , d(new Private)
+    , d(new FocusedTreeViewPrivate)
 {
     setVerticalScrollMode(ScrollPerItem);
 

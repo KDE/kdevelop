@@ -42,23 +42,22 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
-class DUContextContext::Private
+class DUContextContextPrivate
 {
 public:
-    explicit Private( const IndexedDUContext& item ) : m_item( item )
+    explicit DUContextContextPrivate(const IndexedDUContext& item)
+        : m_item(item)
     {}
 
     IndexedDUContext m_item;
 };
 
 DUContextContext::DUContextContext( const IndexedDUContext& item )
-        : Context(), d( new Private( item ) )
+    : Context()
+    , d(new DUContextContextPrivate(item))
 {}
 
-DUContextContext::~DUContextContext()
-{
-    delete d;
-}
+DUContextContext::~DUContextContext() = default;
 
 int DUContextContext::type() const
 {
@@ -83,10 +82,12 @@ void DUContextContext::setContext(IndexedDUContext context)
     d->m_item = context;
 }
 
-class DeclarationContext::Private
+class DeclarationContextPrivate
 {
 public:
-    Private( const IndexedDeclaration& declaration, const DocumentRange& use ) : m_declaration( declaration ), m_use(use)
+    DeclarationContextPrivate(const IndexedDeclaration& declaration, const DocumentRange& use)
+        : m_declaration(declaration)
+        , m_use(use)
     {}
 
     IndexedDeclaration m_declaration;
@@ -94,7 +95,8 @@ public:
 };
 
 DeclarationContext::DeclarationContext( const IndexedDeclaration& declaration, const DocumentRange& use, const IndexedDUContext& context )
-        : DUContextContext(context), d( new Private( declaration, use ) )
+    : DUContextContext(context)
+    , d(new DeclarationContextPrivate(declaration, use))
 {}
 
 DeclarationContext::DeclarationContext(KTextEditor::View* view, const KTextEditor::Cursor& position) : DUContextContext(IndexedDUContext())
@@ -108,14 +110,11 @@ DeclarationContext::DeclarationContext(KTextEditor::View* view, const KTextEdito
     if ( declaration ) {
         indexed = IndexedDeclaration(declaration);
     }
-    d = new Private(declaration, useRange);
+    d.reset(new DeclarationContextPrivate(declaration, useRange));
     setContext(IndexedDUContext(item.context));
 }
 
-DeclarationContext::~DeclarationContext()
-{
-    delete d;
-}
+DeclarationContext::~DeclarationContext() = default;
 
 int DeclarationContext::type() const
 {

@@ -35,8 +35,9 @@
 
 using namespace KDevelop;
 
-struct TestFile::TestFilePrivate
+class KDevelop::TestFilePrivate
 {
+public:
     TestFilePrivate()
     : ready(false)
     , keepDUChainData(false)
@@ -118,7 +119,6 @@ TestFile::~TestFile()
         DUChain::self()->removeDocumentChain(d->topContext.data());
     }
     QFile::remove(d->file);
-    delete d;
 }
 
 IndexedString TestFile::url() const

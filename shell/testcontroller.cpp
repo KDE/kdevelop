@@ -26,7 +26,7 @@
 
 using namespace KDevelop;
 
-class TestController::TestControllerPrivate
+class KDevelop::TestControllerPrivate
 {
 public:
     QList<ITestSuite*> suites;
@@ -38,10 +38,7 @@ TestController::TestController(QObject *parent)
 {
 }
 
-TestController::~TestController()
-{
-    delete d;
-}
+TestController::~TestController() = default;
 
 void TestController::initialize()
 {

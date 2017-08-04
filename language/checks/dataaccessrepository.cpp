@@ -20,20 +20,19 @@
 
 namespace KDevelop {
 
-class DataAccessRepository::Private
+class DataAccessRepositoryPrivate
 {
 public:
     QList<DataAccess*> m_modifications;
 };
 
 DataAccessRepository::DataAccessRepository()
-: d(new Private)
+: d(new DataAccessRepositoryPrivate)
 {}
 
 DataAccessRepository::~DataAccessRepository()
 {
     clear();
-    delete d;
 }
 
 void DataAccessRepository::addModification(const CursorInRevision& cursor, DataAccess::DataAccessFlags flags, const KDevelop::RangeInRevision& range)

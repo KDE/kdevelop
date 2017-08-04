@@ -48,8 +48,7 @@ public:
     void notifyTestRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases) override;
 
 private:
-    class TestControllerPrivate;
-    TestControllerPrivate* const d;
+    const QScopedPointer<class TestControllerPrivate> d;
 };
 
 }

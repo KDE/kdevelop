@@ -52,9 +52,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
 
         /** @returns all the data accesses inside the @p range range */
         QList<DataAccess*> accessesInRange(const KDevelop::RangeInRevision& range) const;
+
     private:
-        class Private;
-        Private* d;
+        const QScopedPointer<class DataAccessRepositoryPrivate> d;
 };
 
 }

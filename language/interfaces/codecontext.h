@@ -65,9 +65,9 @@ public:
     
 protected:
     void setContext(IndexedDUContext context);
+
 private:
-    class Private;
-    Private *d;
+    const QScopedPointer<class DUContextContextPrivate> d;
 
     Q_DISABLE_COPY(DUContextContext)
 };
@@ -102,8 +102,8 @@ public:
     DocumentRange use() const;
 
 private:
-    class Private;
-    Private *d;
+    // TODO: fix constructor and make const
+    QScopedPointer<class DeclarationContextPrivate> d;
 
     Q_DISABLE_COPY(DeclarationContext)
 };
