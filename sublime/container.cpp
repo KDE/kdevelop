@@ -331,7 +331,7 @@ Container::Container(QWidget *parent)
     d->fileStatus->setFixedSize( QSize( 16, 16 ) );
     d->layout->addWidget(d->fileStatus);
     d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
-    d->fileNameCorner->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+    d->fileNameCorner->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     d->layout->addWidget(d->fileNameCorner);
     d->shortcutHelpLabel = new QLabel(i18n("(Press Ctrl+Tab to switch)"), this);
     auto font = d->shortcutHelpLabel->font();
