@@ -25,20 +25,9 @@
 #include "outputviewexport.h"
 
 #include <QItemDelegate>
-#include <kcolorscheme.h>
 
 namespace KDevelop
 {
-
-struct OutputDelegatePrivate
-{
-    OutputDelegatePrivate();
-
-    KStatefulBrush errorBrush;
-    KStatefulBrush warningBrush;
-    KStatefulBrush informationBrush;
-    KStatefulBrush builtBrush;
-};
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputDelegate : public QItemDelegate
 {
@@ -49,7 +38,7 @@ public:
     void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const override;
 
 private:
-    OutputDelegatePrivate* const d;
+    const QScopedPointer<class OutputDelegatePrivate> d;
 };
 
 }

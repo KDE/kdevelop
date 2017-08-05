@@ -24,11 +24,25 @@
 #include "outputmodel.h"
 #include "filtereditem.h"
 
+#include <kcolorscheme.h>
+
 #include <QPainter>
 
 
 namespace KDevelop
 {
+
+class OutputDelegatePrivate
+{
+public:
+    OutputDelegatePrivate();
+
+    KStatefulBrush errorBrush;
+    KStatefulBrush warningBrush;
+    KStatefulBrush informationBrush;
+    KStatefulBrush builtBrush;
+};
+
 
 OutputDelegatePrivate::OutputDelegatePrivate()
 : errorBrush( KColorScheme::View, KColorScheme::NegativeText )
@@ -46,10 +60,7 @@ OutputDelegate::OutputDelegate( QObject* parent )
 {
 }
 
-OutputDelegate::~OutputDelegate()
-{
-    delete d;
-}
+OutputDelegate::~OutputDelegate() = default;
 
 void OutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
