@@ -24,29 +24,26 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/isourceformattercontroller.h>
 #include <interfaces/isourceformatter.h>
 
-#include <QList>
 #include <QSet>
 #include <QMimeType>
-#include <QUrl>
 
 #include <kxmlguiclient.h>
 #include <KConfigGroup>
 
 #include "shellexport.h"
 
+class QUrl;
+
 namespace KTextEditor {
 class Document;
 }
 
-class QAction;
 namespace KDevelop
 {
 
 class Context;
 
 class ContextMenuExtension;
-
-class ProjectBaseItem;
 
 class IDocument;
 class ISourceFormatter;
@@ -152,13 +149,9 @@ private:
     void formatDocument(KDevelop::IDocument* doc, ISourceFormatter* formatter, const QMimeType& mime);
     // Adapts the mode of the editor regarding indentation-style
     void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter, bool ignoreModeline = false);
-    // GUI actions
-    QAction* m_formatTextAction;
-    QAction* m_formatFilesAction;
-    QAction* m_formatLine;
-    QList<KDevelop::ProjectBaseItem*> m_prjItems;
-    QList<QUrl> m_urls;
-    bool m_enabled;
+
+private:
+    const QScopedPointer<class SourceFormatterControllerPrivate> d;
 };
 
 }

@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 #include <QMimeDatabase>
 #include <QRegExp>
 #include <QStringList>
+#include <QUrl>
 
 #include <KActionCollection>
 #include <KIO/StoredTransferJob>
@@ -68,6 +69,18 @@ QString SourceFormatter() { return QStringLiteral("SourceFormatter"); }
 namespace KDevelop
 {
 
+class SourceFormatterControllerPrivate
+{
+public:
+    // GUI actions
+    QAction* formatTextAction;
+    QAction* formatFilesAction;
+    QAction* formatLine;
+    QList<KDevelop::ProjectBaseItem*> prjItems;
+    QList<QUrl> urls;
+    bool enabled = true;
+};
+
 QString SourceFormatterController::kateModeLineConfigKey()
 {
     return QStringLiteral("ModelinesEnabled");
@@ -99,7 +112,8 @@ QString SourceFormatterController::styleSampleKey()
 }
 
 SourceFormatterController::SourceFormatterController(QObject *parent)
-        : ISourceFormatterController(parent), m_enabled(true)
+    : ISourceFormatterController(parent)
+    , d(new SourceFormatterControllerPrivate)
 {
     setObjectName(QStringLiteral("SourceFormatterController"));
     setComponentName(QStringLiteral("kdevsourceformatter"), i18n("Source Formatter"));
@@ -107,23 +121,23 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
 
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
-    m_formatTextAction = actionCollection()->addAction(QStringLiteral("edit_reformat_source"));
-    m_formatTextAction->setText(i18n("&Reformat Source"));
-    m_formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
-    m_formatTextAction->setWhatsThis(i18n("Source reformatting functionality using <b>astyle</b> library."));
-    connect(m_formatTextAction, &QAction::triggered, this, &SourceFormatterController::beautifySource);
+    d->formatTextAction = actionCollection()->addAction(QStringLiteral("edit_reformat_source"));
+    d->formatTextAction->setText(i18n("&Reformat Source"));
+    d->formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
+    d->formatTextAction->setWhatsThis(i18n("Source reformatting functionality using <b>astyle</b> library."));
+    connect(d->formatTextAction, &QAction::triggered, this, &SourceFormatterController::beautifySource);
 
-    m_formatLine = actionCollection()->addAction(QStringLiteral("edit_reformat_line"));
-    m_formatLine->setText(i18n("Reformat Line"));
-    m_formatLine->setToolTip(i18n("Reformat current line using AStyle"));
-    m_formatLine->setWhatsThis(i18n("Source reformatting of line under cursor using <b>astyle</b> library."));
-    connect(m_formatLine, &QAction::triggered, this, &SourceFormatterController::beautifyLine);
+    d->formatLine = actionCollection()->addAction(QStringLiteral("edit_reformat_line"));
+    d->formatLine->setText(i18n("Reformat Line"));
+    d->formatLine->setToolTip(i18n("Reformat current line using AStyle"));
+    d->formatLine->setWhatsThis(i18n("Source reformatting of line under cursor using <b>astyle</b> library."));
+    connect(d->formatLine, &QAction::triggered, this, &SourceFormatterController::beautifyLine);
 
-    m_formatFilesAction = actionCollection()->addAction(QStringLiteral("tools_astyle"));
-    m_formatFilesAction->setText(i18n("Reformat Files..."));
-    m_formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
-    m_formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
-    connect(m_formatFilesAction, &QAction::triggered, this, static_cast<void(SourceFormatterController::*)()>(&SourceFormatterController::formatFiles));
+    d->formatFilesAction = actionCollection()->addAction(QStringLiteral("tools_astyle"));
+    d->formatFilesAction->setText(i18n("Reformat Files..."));
+    d->formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
+    d->formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
+    connect(d->formatFilesAction, &QAction::triggered, this, static_cast<void(SourceFormatterController::*)()>(&SourceFormatterController::formatFiles));
 
     // connect to both documentActivated & documentClosed,
     // otherwise we miss when the last document was closed
@@ -226,7 +240,7 @@ SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceForm
 
 ISourceFormatter* SourceFormatterController::formatterForMimeType(const QMimeType& mime)
 {
-    if( !m_enabled || !isMimeTypeSupported( mime ) ) {
+    if (!d->enabled || !isMimeTypeSupported(mime)) {
         return nullptr;
     }
     QString formatter = sessionConfig().readEntry( mime.name(), QString() );
@@ -352,8 +366,8 @@ void SourceFormatterController::updateFormatTextAction()
             enabled = true;
     }
 
-    m_formatLine->setEnabled(enabled);
-    m_formatTextAction->setEnabled(enabled);
+    d->formatLine->setEnabled(enabled);
+    d->formatTextAction->setEnabled(enabled);
 }
 
 void SourceFormatterController::beautifySource()
@@ -502,7 +516,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
                 QString msg;
                 qCDebug(SHELL) << "calling" << cmd;
                 foreach(KTextEditor::View* view, doc->views())
-                    if( !command->exec( view, cmd, msg ) )
+                    if (!command->exec(view, cmd, msg))
                         qCWarning(SHELL) << "setting indentation width failed: " << msg;
             }
 
@@ -526,21 +540,21 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 
 void SourceFormatterController::formatFiles()
 {
-    if (m_prjItems.isEmpty() && m_urls.isEmpty())
+    if (d->prjItems.isEmpty() && d->urls.isEmpty())
         return;
 
     //get a list of all files in this folder recursively
     QList<KDevelop::ProjectFolderItem*> folders;
-    foreach(KDevelop::ProjectBaseItem *item, m_prjItems) {
+    foreach (KDevelop::ProjectBaseItem *item, d->prjItems) {
         if (!item)
             continue;
         if (item->folder())
             folders.append(item->folder());
         else if (item->file())
-            m_urls.append(item->file()->path().toUrl());
+            d->urls.append(item->file()->path().toUrl());
         else if (item->target()) {
             foreach(KDevelop::ProjectFileItem *f, item->fileList())
-            m_urls.append(f->path().toUrl());
+            d->urls.append(f->path().toUrl());
         }
     }
 
@@ -550,10 +564,10 @@ void SourceFormatterController::formatFiles()
         folders.append(f);
         foreach(KDevelop::ProjectTargetItem *f, item->targetList()) {
             foreach(KDevelop::ProjectFileItem *child, f->fileList())
-            m_urls.append(child->path().toUrl());
+            d->urls.append(child->path().toUrl());
         }
         foreach(KDevelop::ProjectFileItem *f, item->fileList())
-        m_urls.append(f->path().toUrl());
+        d->urls.append(f->path().toUrl());
     }
 
     auto win = ICore::self()->uiController()->activeMainWindow()->window();
@@ -568,7 +582,7 @@ void SourceFormatterController::formatFiles()
 
     if (msgBox.clickedButton() == okButton) {
         auto formatterJob = new SourceFormatterJob(this);
-        formatterJob->setFiles(m_urls);
+        formatterJob->setFiles(d->urls);
         ICore::self()->runController()->registerJob(formatterJob);
     }
 }
@@ -578,23 +592,23 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
     Q_UNUSED(parent);
 
     KDevelop::ContextMenuExtension ext;
-    m_urls.clear();
-    m_prjItems.clear();
+    d->urls.clear();
+    d->prjItems.clear();
 
     if (context->hasType(KDevelop::Context::EditorContext))
     {
-        if(m_formatTextAction->isEnabled())
-            ext.addAction(KDevelop::ContextMenuExtension::EditGroup, m_formatTextAction);
+        if (d->formatTextAction->isEnabled())
+            ext.addAction(KDevelop::ContextMenuExtension::EditGroup, d->formatTextAction);
     } else if (context->hasType(KDevelop::Context::FileContext)) {
         KDevelop::FileContext* filectx = static_cast<KDevelop::FileContext*>(context);
-        m_urls = filectx->urls();
-        ext.addAction(KDevelop::ContextMenuExtension::EditGroup, m_formatFilesAction);
+        d->urls = filectx->urls();
+        ext.addAction(KDevelop::ContextMenuExtension::EditGroup, d->formatFilesAction);
     } else if (context->hasType(KDevelop::Context::CodeContext)) {
     } else if (context->hasType(KDevelop::Context::ProjectItemContext)) {
         KDevelop::ProjectItemContext* prjctx = static_cast<KDevelop::ProjectItemContext*>(context);
-        m_prjItems = prjctx->items();
-        if ( !m_prjItems.isEmpty() ) {
-            ext.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, m_formatFilesAction);
+        d->prjItems = prjctx->items();
+        if (!d->prjItems.isEmpty()) {
+            ext.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, d->formatFilesAction);
         }
     }
     return ext;
@@ -618,12 +632,12 @@ SourceFormatterStyle SourceFormatterController::styleForMimeType(const QMimeType
 
 void SourceFormatterController::disableSourceFormatting(bool disable)
 {
-    m_enabled = !disable;
+    d->enabled = !disable;
 }
 
 bool SourceFormatterController::sourceFormattingEnabled()
 {
-    return m_enabled;
+    return d->enabled;
 }
 
 }
