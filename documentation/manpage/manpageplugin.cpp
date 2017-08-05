@@ -66,8 +66,7 @@ QString ManPagePlugin::name() const
 
 QIcon ManPagePlugin::icon() const
 {
-    static QIcon icon = QIcon::fromTheme("x-office-address-book");
-    return icon;
+    return QIcon::fromTheme(QStringLiteral("application-x-troff-man"));
 }
 
 ManPageModel* ManPagePlugin::model() const{
