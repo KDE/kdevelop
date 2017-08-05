@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QDialog>
 #include <QListWidget>
+#include <QPushButton>
 #include <QMap>
 #include <QPointer>
 #include <QTimer>
