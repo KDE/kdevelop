@@ -268,7 +268,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setNamespaceIndent(false);
         return true;
     } else if (style == QLatin1String("KDELibs")) {
-        // http://techbase.kde.org/Policies/Kdelibs_Coding_Style
+        // https://community.kde.org/Policies/Kdelibs_Coding_Style
         resetStyle();
         setSpaceIndentation(4);
         setBracketFormatMode(astyle::LINUX_MODE);
