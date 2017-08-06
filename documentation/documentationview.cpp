@@ -27,6 +27,7 @@
 #include <QCompleter>
 #include <QAbstractItemView>
 #include <QLineEdit>
+#include <QShortcut>
 
 #include <KLocalizedString>
 
@@ -116,6 +117,10 @@ void DocumentationView::setupActions()
     auto identifiersAction = new QWidgetAction(this);
     identifiersAction->setDefaultWidget(mIdentifiers);
     addAction(identifiersAction);
+
+    auto closeFindBarShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), this);
+    closeFindBarShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    connect(closeFindBarShortcut, &QShortcut::activated, mFindDoc, &QWidget::hide);
 }
 
 void DocumentationView::initialize()
