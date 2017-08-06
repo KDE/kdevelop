@@ -34,7 +34,7 @@
      <property name="placeholderText">
       <string>Enter a dependency to add to the list</string>
      </property>
-     <property name="showClearButton" stdset="0">
+     <property name="clearButtonEnabled">
       <bool>true</bool>
      </property>
     </widget>
