@@ -17,6 +17,15 @@
    </sizepolicy>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QToolButton" name="hideButton">
      <property name="text">

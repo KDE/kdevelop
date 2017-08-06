@@ -111,7 +111,10 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
     : QWidget(parent)
     , d(new StandardDocumentationViewPrivate)
 {
-    setLayout(new QVBoxLayout(this));
+    auto mainLayout = new QVBoxLayout(this);
+    mainLayout->setMargin(0);
+    setLayout(mainLayout);
+
     d->init(this);
     layout()->addWidget(d->m_view);
 
