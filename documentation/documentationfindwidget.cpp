@@ -67,7 +67,8 @@ void KDevelop::DocumentationFindWidget::startSearch()
     m_ui->findText->setFocus();
 }
 
-void KDevelop::DocumentationFindWidget::showEvent(QShowEvent* e)
+void KDevelop::DocumentationFindWidget::hideEvent(QHideEvent* event)
 {
-    QWidget::showEvent(e);
+    emit searchFinished();
+    QWidget::hideEvent(event);
 }

@@ -41,9 +41,9 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationFindWidget : public QWidget
         
         explicit DocumentationFindWidget(QWidget* parent = nullptr);
         virtual ~DocumentationFindWidget();
-        
-        void showEvent ( QShowEvent* ) override;
-        
+
+        void hideEvent(QHideEvent* event) override;
+
     public Q_SLOTS:
         void startSearch();
 
@@ -53,6 +53,10 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationFindWidget : public QWidget
         
     Q_SIGNALS:
         void newSearch(const QString& text, KDevelop::DocumentationFindWidget::FindOptions);
+        /**
+         * Emitted when the search tool view is closed, so no more search hits should be displayed.
+         */
+        void searchFinished();
 
     private:
         Ui::FindWidget* m_ui;

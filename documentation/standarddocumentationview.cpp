@@ -120,6 +120,7 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
 
     findWidget->setEnabled(true);
     connect(findWidget, &DocumentationFindWidget::newSearch, this, &StandardDocumentationView::search);
+    connect(findWidget, &DocumentationFindWidget::searchFinished, this, &StandardDocumentationView::finishSearch);
 
 #ifdef USE_QTWEBKIT
     QFont sansSerifFont = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
@@ -180,6 +181,12 @@ void StandardDocumentationView::search ( const QString& text, DocumentationFindW
         ff |= WebkitThing::FindCaseSensitively;
 
     d->m_view->page()->findText(text, ff);
+}
+
+void StandardDocumentationView::finishSearch()
+{
+    // passing emptry string to reset search, as told in API docs
+    d->m_view->page()->findText(QString());
 }
 
 void StandardDocumentationView::initZoom(const QString& configSubGroup)
