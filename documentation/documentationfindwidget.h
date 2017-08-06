@@ -50,9 +50,22 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationFindWidget : public QWidget
     private Q_SLOTS:
         void searchNext();
         void searchPrevious();
-        
+        void emitDataChanged();
+
     Q_SIGNALS:
-        void newSearch(const QString& text, KDevelop::DocumentationFindWidget::FindOptions);
+        /**
+         * Emitted when the user requests a search.
+         * @param text text to search in documentation
+         * @param options MatchCase being set or empty flags (Next/Previous unused here)
+         */
+        void searchRequested(const QString& text, KDevelop::DocumentationFindWidget::FindOptions options);
+        /**
+         * Emitted when the user edits the search field or changes the case-sensitivity checkbox.
+         * Allows documentation views capable of live searches to show live results while the user types.
+         * @param text current text in search text field
+         * @param options MatchCase being set or empty flags (Next/Previous unused here)
+         */
+        void searchDataChanged(const QString& text, KDevelop::DocumentationFindWidget::FindOptions options);
         /**
          * Emitted when the search tool view is closed, so no more search hits should be displayed.
          */

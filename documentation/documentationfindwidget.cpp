@@ -29,12 +29,17 @@ DocumentationFindWidget::DocumentationFindWidget(QWidget* parent)
     m_ui = new Ui::FindWidget;
     m_ui->setupUi(this);
 
+    connect(m_ui->findText, &QLineEdit::textEdited,
+            this, &DocumentationFindWidget::emitDataChanged);
+    connect(m_ui->matchCase, &QAbstractButton::toggled,
+            this, &DocumentationFindWidget::emitDataChanged);
     connect(m_ui->findText, &QLineEdit::returnPressed,
             this, &DocumentationFindWidget::searchNext);
     connect(m_ui->nextButton, &QToolButton::clicked,
             this, &DocumentationFindWidget::searchNext);
     connect(m_ui->previousButton, &QToolButton::clicked,
             this, &DocumentationFindWidget::searchPrevious);
+    // TODO: disable next/previous buttons if no (more) search hits, color coding in text field
 }
 
 DocumentationFindWidget::~DocumentationFindWidget()
@@ -48,7 +53,7 @@ void KDevelop::DocumentationFindWidget::searchNext()
     if (m_ui->matchCase->isChecked())
         opts |= MatchCase;
 
-    emit newSearch(m_ui->findText->text(), opts);
+    emit searchRequested(m_ui->findText->text(), opts);
 }
 
 void KDevelop::DocumentationFindWidget::searchPrevious()
@@ -57,7 +62,7 @@ void KDevelop::DocumentationFindWidget::searchPrevious()
     if (m_ui->matchCase->isChecked())
         opts |= MatchCase;
 
-    emit newSearch(m_ui->findText->text(), opts);
+    emit searchRequested(m_ui->findText->text(), opts);
 }
 
 void KDevelop::DocumentationFindWidget::startSearch()
@@ -65,6 +70,15 @@ void KDevelop::DocumentationFindWidget::startSearch()
     show();
     m_ui->findText->selectAll();
     m_ui->findText->setFocus();
+}
+
+void DocumentationFindWidget::emitDataChanged()
+{
+    FindOptions opts;
+    if (m_ui->matchCase->isChecked())
+        opts |= MatchCase;
+
+    emit searchDataChanged(m_ui->findText->text(), opts);
 }
 
 void KDevelop::DocumentationFindWidget::hideEvent(QHideEvent* event)

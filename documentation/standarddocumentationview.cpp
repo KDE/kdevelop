@@ -119,7 +119,8 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
     layout()->addWidget(d->m_view);
 
     findWidget->setEnabled(true);
-    connect(findWidget, &DocumentationFindWidget::newSearch, this, &StandardDocumentationView::search);
+    connect(findWidget, &DocumentationFindWidget::searchRequested, this, &StandardDocumentationView::search);
+    connect(findWidget, &DocumentationFindWidget::searchDataChanged, this, &StandardDocumentationView::searchIncremental);
     connect(findWidget, &DocumentationFindWidget::searchFinished, this, &StandardDocumentationView::finishSearch);
 
 #ifdef USE_QTWEBKIT
@@ -181,6 +182,30 @@ void StandardDocumentationView::search ( const QString& text, DocumentationFindW
         ff |= WebkitThing::FindCaseSensitively;
 
     d->m_view->page()->findText(text, ff);
+}
+
+void StandardDocumentationView::searchIncremental(const QString& text, DocumentationFindWidget::FindOptions options)
+{
+#ifdef USE_QTWEBKIT
+    typedef QWebPage WebkitThing;
+#else
+    typedef QWebEnginePage WebkitThing;
+#endif
+    WebkitThing::FindFlags findFlags;
+
+    if (options & DocumentationFindWidget::MatchCase)
+        findFlags |= WebkitThing::FindCaseSensitively;
+
+    // calling with changed text with added or removed chars at end will result in current
+    // selection kept, if also matching new text
+    // behaviour on changed case sensitivity though is advancing to next match even if current
+    // would be still matching. as there is no control about currently shown match, nothing
+    // we can do about it. thankfully case sensitivity does not happen too often, so should
+    // not be too grave UX
+    // at least with webengine 5.9.1 there is a bug when switching from no-casesensitivy to
+    // casesensitivity, that global matches are not updated and the ones with non-matching casing
+    // still active. no workaround so far.
+    d->m_view->page()->findText(text, findFlags);
 }
 
 void StandardDocumentationView::finishSearch()

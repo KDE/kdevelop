@@ -76,6 +76,7 @@ public Q_SLOTS:
      * Search for @p text in the documentation view.
      */
     void search(const QString& text, KDevelop::DocumentationFindWidget::FindOptions options);
+    void searchIncremental(const QString& text, KDevelop::DocumentationFindWidget::FindOptions options);
     void finishSearch();
 
     /**
