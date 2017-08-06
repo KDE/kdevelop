@@ -28,8 +28,9 @@
    </property>
    <item>
     <widget class="QToolButton" name="hideButton">
-     <property name="text">
-      <string>...</string>
+     <property name="icon">
+      <iconset theme="dialog-close">
+       <normaloff>.</normaloff>.</iconset>
      </property>
      <property name="autoRaise">
       <bool>true</bool>
@@ -45,29 +46,53 @@
    </item>
    <item>
     <widget class="QLineEdit" name="findText">
-     <property name="showClearButton" stdset="0">
+     <property name="clearButtonEnabled">
       <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="nextButton">
-     <property name="text">
-      <string>Next</string>
+    <widget class="QToolButton" name="nextButton">
+     <property name="toolTip">
+      <string>Jump to next match</string>
+     </property>
+     <property name="icon">
+      <iconset theme="go-down-search">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="previousButton">
-     <property name="text">
-      <string>Previous</string>
+    <widget class="QToolButton" name="previousButton">
+     <property name="toolTip">
+      <string>Jump to previous match</string>
+     </property>
+     <property name="icon">
+      <iconset theme="go-up-search">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="matchCase">
-     <property name="text">
-      <string>Match case</string>
+    <widget class="QToolButton" name="matchCase">
+     <property name="toolTip">
+      <string>Match case sensitive</string>
+     </property>
+     <property name="icon">
+      <iconset theme="format-text-superscript">
+       <normaloff>.</normaloff>.</iconset>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="autoRaise">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

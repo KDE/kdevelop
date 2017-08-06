@@ -29,15 +29,11 @@ DocumentationFindWidget::DocumentationFindWidget(QWidget* parent)
     m_ui = new Ui::FindWidget;
     m_ui->setupUi(this);
 
-    m_ui->hideButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-close")));
-    m_ui->nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-down-search")));
-    m_ui->previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-up-search")));
-
     connect(m_ui->findText, &QLineEdit::returnPressed,
             this, &DocumentationFindWidget::searchNext);
-    connect(m_ui->nextButton, &QPushButton::clicked,
+    connect(m_ui->nextButton, &QToolButton::clicked,
             this, &DocumentationFindWidget::searchNext);
-    connect(m_ui->previousButton, &QPushButton::clicked,
+    connect(m_ui->previousButton, &QToolButton::clicked,
             this, &DocumentationFindWidget::searchPrevious);
 }
 
@@ -49,7 +45,7 @@ DocumentationFindWidget::~DocumentationFindWidget()
 void KDevelop::DocumentationFindWidget::searchNext()
 {
     FindOptions opts=Next;
-    if(m_ui->matchCase->checkState()==Qt::Checked)
+    if (m_ui->matchCase->isChecked())
         opts |= MatchCase;
 
     emit newSearch(m_ui->findText->text(), opts);
@@ -58,7 +54,7 @@ void KDevelop::DocumentationFindWidget::searchNext()
 void KDevelop::DocumentationFindWidget::searchPrevious()
 {
     FindOptions opts=Previous;
-    if(m_ui->matchCase->checkState()==Qt::Checked)
+    if (m_ui->matchCase->isChecked())
         opts |= MatchCase;
 
     emit newSearch(m_ui->findText->text(), opts);
