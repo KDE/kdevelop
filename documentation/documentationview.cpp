@@ -69,7 +69,8 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
 
 QList<QAction*> DocumentationView::contextMenuActions() const
 {
-    return {mBack, mForward, mFind, mHomeAction}; // TODO: also show providers
+    // TODO: also show providers
+    return {mBack, mForward, mHomeAction, mSeparatorBeforeFind, mFind};
 }
 
 void DocumentationView::setupActions()
@@ -84,14 +85,6 @@ void DocumentationView::setupActions()
     mForward->setEnabled(false);
     connect(mForward, &QAction::triggered, this, &DocumentationView::browseForward);
     addAction(mForward);
-
-    mFind = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("Find"), this);
-    connect(mFind, &QAction::triggered, mFindDoc, &DocumentationFindWidget::startSearch);
-    addAction(mFind);
-
-    QAction* separator = new QAction(this);
-    separator->setSeparator(true);
-    addAction(separator);
 
     mHomeAction = new QAction(QIcon::fromTheme(QStringLiteral("go-home")), i18n("Home"), this);
     connect(mHomeAction, &QAction::triggered, this, &DocumentationView::showHome);
@@ -117,6 +110,15 @@ void DocumentationView::setupActions()
     auto identifiersAction = new QWidgetAction(this);
     identifiersAction->setDefaultWidget(mIdentifiers);
     addAction(identifiersAction);
+
+    mSeparatorBeforeFind = new QAction(this);
+    mSeparatorBeforeFind->setSeparator(true);
+    addAction(mSeparatorBeforeFind);
+
+    mFind = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("Find in Text..."), this);
+    mFind->setToolTip(i18n("Find in text of current documentation page."));
+    connect(mFind, &QAction::triggered, mFindDoc, &DocumentationFindWidget::startSearch);
+    addAction(mFind);
 
     auto closeFindBarShortcut = new QShortcut(QKeySequence(Qt::Key_Escape), this);
     closeFindBarShortcut->setContext(Qt::WidgetWithChildrenShortcut);

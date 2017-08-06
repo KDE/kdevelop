@@ -65,8 +65,9 @@ private:
 
     QAction* mForward;
     QAction* mBack;
-    QAction* mFind;
     QAction* mHomeAction;
+    QAction* mSeparatorBeforeFind;
+    QAction* mFind;
     QLineEdit* mIdentifiers;
     QList< KDevelop::IDocumentation::Ptr > mHistory;
     QList< KDevelop::IDocumentation::Ptr >::iterator mCurrent;
