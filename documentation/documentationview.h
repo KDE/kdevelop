@@ -34,7 +34,6 @@ class QModelIndex;
 class QLineEdit;
 class ProvidersModel;
 class QComboBox;
-class KToolBar;
 
 class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
 {
@@ -43,6 +42,9 @@ public:
     DocumentationView(QWidget* parent, ProvidersModel* m);
 
     void showDocumentation(const KDevelop::IDocumentation::Ptr& doc);
+
+public:
+    QList<QAction*> contextMenuActions() const;
 
 public Q_SLOTS:
     void initialize();
@@ -57,13 +59,14 @@ public Q_SLOTS:
     void showHome();
 
 private:
+    void setupActions();
     void updateView();
     void returnPressed();
 
-    KToolBar* mActions;
     QAction* mForward;
     QAction* mBack;
     QAction* mFind;
+    QAction* mHomeAction;
     QLineEdit* mIdentifiers;
     QList< KDevelop::IDocumentation::Ptr > mHistory;
     QList< KDevelop::IDocumentation::Ptr >::iterator mCurrent;

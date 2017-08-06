@@ -19,16 +19,15 @@
 
 #include "documentationview.h"
 
+#include <QWidgetAction>
 #include <QAction>
 #include <QIcon>
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QCompleter>
-#include <QLayout>
 #include <QAbstractItemView>
 #include <QLineEdit>
 
-#include <KToolBar>
 #include <KLocalizedString>
 
 #include <interfaces/icore.h>
@@ -51,26 +50,58 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
     layout()->setMargin(0);
     layout()->setSpacing(0);
 
-    //TODO: clean this up, simply use addAction as that will create a toolbar automatically
-    //      use custom QAction's with createWidget for mProviders and mIdentifiers
-    mActions = new KToolBar(this);
-    // set window title so the QAction from QToolBar::toggleViewAction gets a proper name set
-    mActions->setWindowTitle(i18n("Documentation Tool Bar"));
-    mActions->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    int iconSize = style()->pixelMetric(QStyle::PM_SmallIconSize);
-    mActions->setIconSize(QSize(iconSize, iconSize));
-
     mFindDoc = new DocumentationFindWidget;
     mFindDoc->hide();
 
-    mBack = mActions->addAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("Back"));
-    mForward = mActions->addAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("Forward"));
-    mFind = mActions->addAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("Find"), mFindDoc, SLOT(startSearch()));
-    mActions->addSeparator();
-    mActions->addAction(QIcon::fromTheme(QStringLiteral("go-home")), i18n("Home"), this, SLOT(showHome()));
-    mProviders = new QComboBox(mActions);
+    // insert placeholder widget at location of doc view
+    layout()->addWidget(new QWidget(this));
+    layout()->addWidget(mFindDoc);
 
-    mIdentifiers = new QLineEdit(mActions);
+    setupActions();
+
+    mCurrent = mHistory.end();
+
+    setFocusProxy(mIdentifiers);
+
+    QMetaObject::invokeMethod(this, "initialize", Qt::QueuedConnection);
+}
+
+QList<QAction*> DocumentationView::contextMenuActions() const
+{
+    return {mBack, mForward, mFind, mHomeAction}; // TODO: also show providers
+}
+
+void DocumentationView::setupActions()
+{
+    // use custom QAction's with createWidget for mProviders and mIdentifiers
+    mBack = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("Back"), this);
+    mBack->setEnabled(false);
+    connect(mBack, &QAction::triggered, this, &DocumentationView::browseBack);
+    addAction(mBack);
+
+    mForward = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("Forward"), this);
+    mForward->setEnabled(false);
+    connect(mForward, &QAction::triggered, this, &DocumentationView::browseForward);
+    addAction(mForward);
+
+    mFind = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("Find"), this);
+    connect(mFind, &QAction::triggered, mFindDoc, &DocumentationFindWidget::startSearch);
+    addAction(mFind);
+
+    QAction* separator = new QAction(this);
+    separator->setSeparator(true);
+    addAction(separator);
+
+    mHomeAction = new QAction(QIcon::fromTheme(QStringLiteral("go-home")), i18n("Home"), this);
+    connect(mHomeAction, &QAction::triggered, this, &DocumentationView::showHome);
+    addAction(mHomeAction);
+
+    mProviders = new QComboBox(this);
+    auto provicersAction = new QWidgetAction(this);
+    provicersAction->setDefaultWidget(mProviders);
+    addAction(provicersAction);
+
+    mIdentifiers = new QLineEdit(this);
     mIdentifiers->setClearButtonEnabled(true);
     mIdentifiers->setPlaceholderText(i18n("Search..."));
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
@@ -82,24 +113,9 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
     connect(mIdentifiers->completer(), static_cast<void(QCompleter::*)(const QModelIndex&)>(&QCompleter::activated),
             this, &DocumentationView::changedSelection);
     connect(mIdentifiers, &QLineEdit::returnPressed, this, &DocumentationView::returnPressed);
-
-    QWidget::setTabOrder(mProviders, mIdentifiers);
-    mActions->addWidget(mProviders);
-    mActions->addWidget(mIdentifiers);
-
-    mBack->setEnabled(false);
-    mForward->setEnabled(false);
-    connect(mBack, &QAction::triggered, this, &DocumentationView::browseBack);
-    connect(mForward, &QAction::triggered, this, &DocumentationView::browseForward);
-    mCurrent = mHistory.end();
-
-    layout()->addWidget(mActions);
-    layout()->addWidget(new QWidget(this));
-    layout()->addWidget(mFindDoc);
-
-    setFocusProxy(mIdentifiers);
-
-    QMetaObject::invokeMethod(this, "initialize", Qt::QueuedConnection);
+    auto identifiersAction = new QWidgetAction(this);
+    identifiersAction->setDefaultWidget(mIdentifiers);
+    addAction(identifiersAction);
 }
 
 void DocumentationView::initialize()
@@ -228,7 +244,7 @@ void DocumentationView::updateView()
     mIdentifiers->setText((*mCurrent)->name());
     mIdentifiers->completer()->setCompletionPrefix((*mCurrent)->name());
 
-    QLayoutItem* lastview = layout()->takeAt(1);
+    QLayoutItem* lastview = layout()->takeAt(0);
     Q_ASSERT(lastview);
 
     if (lastview->widget()->parent() == this) {
@@ -247,7 +263,7 @@ void DocumentationView::updateView()
         mFindDoc->hide();
     }
 
-    QLayoutItem* findWidget = layout()->takeAt(1);
+    QLayoutItem* findWidget = layout()->takeAt(0);
     layout()->addWidget(w);
     layout()->addItem(findWidget);
 }

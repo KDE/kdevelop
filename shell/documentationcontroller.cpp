@@ -102,6 +102,12 @@ public:
 
     Qt::DockWidgetArea defaultPosition() override { return Qt::RightDockWidgetArea; }
     QString id() const override { return QStringLiteral("org.kdevelop.DocumentationView"); }
+    QList<QAction*> contextMenuActions(QWidget* viewWidget) const override
+    {
+        auto documentationViewWidget = qobject_cast<DocumentationView*>(viewWidget);
+        Q_ASSERT(documentationViewWidget);
+        return documentationViewWidget->contextMenuActions();
+    }
 
 private:
     QScopedPointer<ProvidersModel> m_providersModel;
