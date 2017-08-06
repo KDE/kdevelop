@@ -37,7 +37,7 @@
        <property name="placeholderText">
         <string>Filter...</string>
        </property>
-       <property name="showClearButton" stdset="0">
+       <property name="clearButtonEnabled">
         <bool>true</bool>
        </property>
       </widget>
