@@ -1,10 +1,10 @@
 {
     "KPlugin": {
-        "Id": "kdevsourceformatter",
-        "Name": "Source Formatter",
+        "Category": "Utilities",
         "Description": "Configure which style should be used for formatting of the sourcecode in a project.",
         "Icon": "text-field",
-        "Category": "Utilities",
+        "Id": "kdevsourceformatter",
+        "Name": "Source Formatter",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
