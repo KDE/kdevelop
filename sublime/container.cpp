@@ -505,14 +505,12 @@ QWidget* Container::currentWidget() const
 
 void Container::setCurrentWidget(QWidget* w)
 {
-    d->stack->setCurrentWidget(w);
-    //prevent from emitting activateView() signal on tabbar active tab change
-    //this function is called from MainWindow::activateView()
-    //which does the activation without any additional signals
-    {
-        QSignalBlocker blocker(d->tabBar);
-        d->tabBar->setCurrentIndex(d->stack->indexOf(w));
+
+    if (d->stack->currentWidget() == w) {
+        return;
     }
+    d->stack->setCurrentWidget(w);
+    d->tabBar->setCurrentIndex(d->stack->indexOf(w));
     if (View* view = viewForWidget(w))
     {
         statusChanged(view);
