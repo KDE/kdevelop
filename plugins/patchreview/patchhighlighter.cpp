@@ -441,7 +441,7 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, const KTextEdito
     }
 }
 
-PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin, bool updatePatchFromEdits ) throw( QString )
+PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, PatchReviewPlugin* plugin, bool updatePatchFromEdits )
     : m_doc( kdoc ), m_plugin( plugin ), m_model( model ), m_applying( false ) {
     KTextEditor::Document* doc = kdoc->textDocument();
 //     connect( kdoc, SIGNAL(destroyed(QObject*)), this, SLOT(documentDestroyed()) );

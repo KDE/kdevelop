@@ -198,7 +198,7 @@ namespace svn
                  const bool get_all,
                  const bool update,
                  const bool no_ignore,
-                 const bool ignore_externals) throw(ClientException)
+                 const bool ignore_externals)
   {
     if (Url::isValid(path))
     {
@@ -314,7 +314,7 @@ public:
                  const StatusFilter & filter,
                  const bool descend,
                  const bool update,
-                 StatusEntries & entries) throw(ClientException)
+                 StatusEntries & entries)
   {
     entries.clear();
 
@@ -336,7 +336,7 @@ public:
   const LogEntries *
   Client::log(const char * path, const Revision & revisionStart,
               const Revision & revisionEnd, bool discoverChangedPaths,
-              bool strictNodeHistory) throw(ClientException)
+              bool strictNodeHistory)
   {
     Pool pool;
     Targets target(path);
@@ -388,7 +388,7 @@ public:
   Client::info(const Path & pathOrUrl,
                bool recurse,
                const Revision & revision,
-               const Revision & pegRevision) throw(ClientException)
+               const Revision & pegRevision)
   {
     Pool pool;
     InfoVector infoVector;

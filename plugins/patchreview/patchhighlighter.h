@@ -47,7 +47,7 @@ class PatchHighlighter : public QObject
 {
     Q_OBJECT
 public:
-    PatchHighlighter( Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin, bool updatePatchFromEdits ) throw( QString );
+    PatchHighlighter( Diff2::DiffModel* model, KDevelop::IDocument* doc, PatchReviewPlugin* plugin, bool updatePatchFromEdits );
     ~PatchHighlighter() override;
     KDevelop::IDocument* doc();
     QList< KTextEditor::MovingRange* > ranges() const;

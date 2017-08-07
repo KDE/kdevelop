@@ -42,22 +42,19 @@ public:
     QString diff( const svn::Path& src, const svn::Revision& srcRev,
                   const svn::Path& dst, const svn::Revision& dstRev,
                   const bool recurse, const bool ignoreAncestry,
-                  const bool noDiffDeleted, const bool ignoreContentType )
-            throw (svn::ClientException);
+                  const bool noDiffDeleted, const bool ignoreContentType );
 
     QString diff( const svn::Path& src, const svn::Revision& pegRev,
                   const svn::Revision& srcRev, const svn::Revision& dstRev,
                   const bool recurse, const bool ignoreAncestry,
-                  const bool noDiffDeleted, const bool ignoreContentType )
-            throw (svn::ClientException);
+                  const bool noDiffDeleted, const bool ignoreContentType );
 
     void log( const char* path,
               const svn::Revision& start,
               const svn::Revision& end,
               int limit,
               bool discoverChangedPaths = false,
-              bool strictNodeHistory = true )
-            throw (svn::ClientException);
+              bool strictNodeHistory = true );
 
     void emitLogEventReceived( const KDevelop::VcsEvent& );
 

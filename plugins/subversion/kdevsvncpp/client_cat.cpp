@@ -43,7 +43,7 @@ namespace svn
   std::string
   Client::cat(const Path & path,
               const Revision & revision,
-              const Revision & peg_revision) throw(ClientException)
+              const Revision & peg_revision)
   {
     Pool pool;
 
@@ -82,7 +82,6 @@ namespace svn
   static apr_file_t *
   openTempFile(Path & dstPath, const Path & path,
                const Revision & revision, Pool & pool)
-  throw(ClientException)
   {
     apr_file_t * file = nullptr;
 
@@ -138,7 +137,7 @@ namespace svn
   Client::get(Path & dstPath,
               const Path & path,
               const Revision & revision,
-              const Revision & peg_revision) throw(ClientException)
+              const Revision & peg_revision)
   {
     Pool pool;
 

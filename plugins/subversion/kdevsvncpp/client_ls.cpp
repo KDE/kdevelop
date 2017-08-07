@@ -130,7 +130,7 @@ namespace svn
   DirEntries
   Client::list(const char * pathOrUrl,
                svn_opt_revision_t * revision,
-               bool recurse) throw(ClientException)
+               bool recurse)
   {
     Pool pool;
     DirEntries entries;
