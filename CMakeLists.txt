@@ -22,7 +22,6 @@ include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 include(ECMPackageConfigHelpers)
 
-include(CTest)
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)
