@@ -266,24 +266,24 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
     if (!view)
         return;
 
-    QMenu menu(view);
-    QAction* copyAction = view->copyAction();
-    copyAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
-    menu.addAction(copyAction);
+    auto menu = view->createStandardContextMenu();
 
     if (m_info.count() > 1) {
-        menu.addSeparator();
+        if (!menu->isEmpty()) {
+            menu->addSeparator();
+        }
 
-        QActionGroup* actionGroup = new QActionGroup(&menu);
+        QActionGroup* actionGroup = new QActionGroup(menu);
         foreach(const QString& name, m_info.keys()) {
             QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, actionGroup);
             act->setCheckable(true);
             act->setChecked(name==m_current.key());
-            menu.addAction(act);
+            menu->addAction(act);
         }
     }
 
-    menu.exec(view->mapToGlobal(pos));
+    menu->setAttribute(Qt::WA_DeleteOnClose);
+    menu->exec(view->mapToGlobal(pos));
 }
 
 
