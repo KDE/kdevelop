@@ -1,5 +1,4 @@
 add_subdirectory(p4clientstub)
-
 ecm_qt_declare_logging_category(kdevperforce_LOG_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_PERFORCE
@@ -18,4 +17,6 @@ target_link_libraries(kdevperforce
    KDev::Vcs
 )
 
-add_subdirectory(test)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

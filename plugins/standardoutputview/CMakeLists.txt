@@ -26,4 +26,6 @@ target_link_libraries(kdevstandardoutputview
     KDev::OutputView
 )
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

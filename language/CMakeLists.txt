@@ -6,11 +6,13 @@ include(CheckSymbolExists)
 check_include_file("malloc.h" HAVE_MALLOC_H)
 check_symbol_exists(malloc_trim "malloc.h" HAVE_MALLOC_TRIM)
 
-add_subdirectory(highlighting/tests)
-add_subdirectory(duchain/tests)
-add_subdirectory(backgroundparser/tests)
-add_subdirectory(codegen/tests)
-add_subdirectory(util/tests)
+if(BUILD_TESTING)
+    add_subdirectory(highlighting/tests)
+    add_subdirectory(duchain/tests)
+    add_subdirectory(backgroundparser/tests)
+    add_subdirectory(codegen/tests)
+    add_subdirectory(util/tests)
+endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/language-features.h.cmake
                ${CMAKE_CURRENT_BINARY_DIR}/language-features.h )

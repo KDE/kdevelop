@@ -67,4 +67,6 @@ install(FILES
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/debugger/framestack COMPONENT Devel
 )
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

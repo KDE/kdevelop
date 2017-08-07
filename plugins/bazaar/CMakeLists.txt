@@ -16,4 +16,6 @@ target_link_libraries(kdevbazaar
 )
 
 add_subdirectory(icons)
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

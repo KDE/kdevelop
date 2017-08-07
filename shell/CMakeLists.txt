@@ -1,6 +1,8 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(KDevPlatformShell_LIB_SRCS
     workingsetcontroller.cpp

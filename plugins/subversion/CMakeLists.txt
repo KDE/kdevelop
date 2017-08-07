@@ -7,7 +7,9 @@ add_definitions(-DSVN_DEPRECATED=)
 
 string(REPLACE "-Wdocumentation" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 add_subdirectory(icons)
 
 include_directories(

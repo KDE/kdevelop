@@ -40,7 +40,9 @@ if(BUILD_TESTING)
     add_subdirectory(duchainify) # needs KDev::Tests
 endif()
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 ecm_qt_declare_logging_category(KDevPlatformUtil_LIB_SRCS
     HEADER debug.h
