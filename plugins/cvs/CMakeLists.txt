@@ -1,7 +1,4 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcvs\")
-if(BUILD_TESTING)
-    add_subdirectory(tests)
-endif()
 
 ########### next target ###############
 
@@ -53,4 +50,6 @@ target_link_libraries(kdevcvs
     KDev::Language
 )
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
