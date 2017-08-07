@@ -41,7 +41,6 @@ CMakeCommandsContents::CMakeCommandsContents(QObject* parent)
      : QAbstractItemModel(parent)
      , m_namesForType(CMakeDocumentation::EOType)
 {
-    new ModelTest(this, this);
     QVector<QProcess*> processes;
     for(int i=0; i<=CMakeDocumentation::Property; i++) {
         const QStringList params = { args[i]+QStringLiteral("-list") };

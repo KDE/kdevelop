@@ -109,7 +109,6 @@ target_link_libraries( kdevcmakedocumentation
                         KDev::Interfaces kdevcmakecommon
                         KDev::Project KDev::Language
                         KDev::Documentation
-                        KDev::Tests
                         KF5::ItemModels
                         KF5::TextEditor)
 
