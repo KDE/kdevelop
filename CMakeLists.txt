@@ -46,6 +46,7 @@ endif()
 find_package(Qt5QuickWidgets ${QT_MIN_VERSION})
 set_package_properties(Qt5QuickWidgets PROPERTIES
     PURPOSE "Qt5 QuickWidgets library (part of Qt >=5.3). Required for the Welcome Page plugin."
+    TYPE RECOMMENDED
 )
 
 set(KF5_DEP_VERSION "5.18.0") # need KAboutData::fromPluginMetaData in kcoreaddons
