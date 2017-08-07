@@ -40,6 +40,9 @@ include(KDevPlatformMacros)
 set(QT_MIN_VERSION "5.4.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets WebKitWidgets Concurrent Test)
 
+if(BUILD_TESTING)
+  find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
+endif()
 find_package(Qt5QuickWidgets ${QT_MIN_VERSION})
 set_package_properties(Qt5QuickWidgets PROPERTIES
     PURPOSE "Qt5 QuickWidgets library (part of Qt >=5.3). Required for the Welcome Page plugin."
@@ -137,7 +140,9 @@ add_subdirectory(debugger)
 add_subdirectory(documentation)
 add_subdirectory(serialization)
 add_subdirectory(template)
-add_subdirectory(tests)
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
 add_subdirectory(plugins)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")

@@ -77,16 +77,17 @@ main.cpp
     debug.cpp
 )
 
-add_executable(testfiletemplates ${test_srcs})
-add_dependencies(testfiletemplates kdevfiletemplates)
+if(BUILD_TESTING)
+    add_executable(testfiletemplates ${test_srcs})
+    add_dependencies(testfiletemplates kdevfiletemplates)
+    target_link_libraries(testfiletemplates
+        KDev::Interfaces
+        KDev::Language
+        KDev::Project
+        KDev::Util
+        KDev::Tests
+        KF5::NewStuff
+    )
 
-target_link_libraries(testfiletemplates
-    KDev::Interfaces
-    KDev::Language
-    KDev::Project
-    KDev::Util
-    KDev::Tests
-    KF5::NewStuff
-)
-
-add_subdirectory(tests)
+    add_subdirectory(tests)
+endif()

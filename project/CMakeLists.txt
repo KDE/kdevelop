@@ -38,7 +38,9 @@ LINK_PRIVATE
     Qt5::Concurrent
 )
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 install(FILES
     interfaces/iprojectbuilder.h
