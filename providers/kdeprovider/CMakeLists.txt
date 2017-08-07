@@ -1,5 +1,7 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevkdeprovider\")
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(kdevkdeprovider_PART_SRCS kdeprojectsmodel.cpp
     kdeproviderwidget.cpp

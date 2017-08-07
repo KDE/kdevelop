@@ -60,4 +60,6 @@ target_link_libraries(kdevlldb
 add_subdirectory(formatters)
 
 # Unit tests
-add_subdirectory(unittests)
+if(BUILD_TESTING)
+    add_subdirectory(unittests)
+endif()

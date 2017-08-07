@@ -7,7 +7,9 @@ ecm_qt_declare_logging_category(qmakecommon_LOG_SRCS
 )
 
 add_subdirectory(parser)
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(qmakecommon_SRCS
     qmakebuilddirchooser.cpp

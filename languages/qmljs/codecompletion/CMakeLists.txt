@@ -22,4 +22,6 @@ target_link_libraries(kdevqmljscompletion LINK_PRIVATE
     kdevqtc-qmlsupport
 )
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

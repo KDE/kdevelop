@@ -9,7 +9,9 @@ add_definitions(-DQML_BUILD_STATIC_LIB=1)
 add_subdirectory(libs)
 add_subdirectory(duchain)
 add_subdirectory(nodejsmodules)
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 add_subdirectory(codecompletion)
 
 ecm_qt_declare_logging_category(kdevqmljslanguagesupport_LOG_SRCS

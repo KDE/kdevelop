@@ -6,7 +6,9 @@ ecm_qt_declare_logging_category(kdevdefinesandincludesmanager_LOG_SRCS
     CATEGORY_NAME "kdevelop.definesandincludes"
 )
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 add_subdirectory(compilerprovider)
 add_subdirectory(noprojectincludesanddefines)
 

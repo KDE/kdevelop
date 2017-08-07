@@ -15,4 +15,6 @@ install(FILES
     DESTINATION ${KDE_INSTALL_DATADIR}/kdevmanpage
 )
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

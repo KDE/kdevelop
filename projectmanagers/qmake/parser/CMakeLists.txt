@@ -16,7 +16,9 @@ kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO
     "${CMAKE_CURRENT_SOURCE_DIR}/qmake.g"
     "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.h")
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 option(BUILD_qmake_parser "Build the qmake-parser debugging tool" OFF)
 if(BUILD_qmake_parser)

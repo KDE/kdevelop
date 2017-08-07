@@ -5,7 +5,6 @@ set_package_properties(OktetaGui PROPERTIES
     PURPOSE "Required for building MemoryViewer Widget."
     URL "http://kde.org/"
     TYPE OPTIONAL)
-
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgdb\")
 
 set(kdevgdb_SRCS
@@ -63,5 +62,7 @@ set_property(TARGET kdevgdb_static PROPERTY POSITION_INDEPENDENT_CODE ON)
 kdevplatform_add_plugin(kdevgdb JSON kdevgdb.json SOURCES debuggerplugin.cpp )
 target_link_libraries(kdevgdb kdevgdb_static)
 
-add_subdirectory(unittests)
+if(BUILD_TESTING)
+    add_subdirectory(unittests)
+endif()
 add_subdirectory(printers)
