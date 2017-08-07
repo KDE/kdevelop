@@ -21,7 +21,6 @@ include(ECMMarkNonGuiExecutable)
 include(ECMGenerateHeaders)
 include(ECMQtDeclareLoggingCategory)
 
-include(CTest)
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
 include(FeatureSummary)

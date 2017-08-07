@@ -225,7 +225,10 @@ void TestQMakeFile::defines()
 
     QMakeProjectFile file(tmpfile.fileName());
 
-    setDefaultMKSpec(file);
+    const auto qmvars = setDefaultMKSpec(file);
+    if (qmvars.isEmpty()) {
+        QSKIP("Problem querying QMake, skipping test function");
+    }
 
     QVERIFY(file.read());
 
