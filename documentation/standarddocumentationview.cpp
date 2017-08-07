@@ -29,6 +29,8 @@
 #include <KSharedConfig>
 
 #include <QVBoxLayout>
+#include <QContextMenuEvent>
+#include <QMenu>
 
 #ifdef USE_QTWEBKIT
 #include <QFontDatabase>
@@ -89,6 +91,7 @@ public:
     void init(StandardDocumentationView* parent)
     {
         m_view = new QWebView(parent);
+        m_view->setContextMenuPolicy(Qt::NoContextMenu);
     }
 #else
     QWebEngineView* m_view = nullptr;
@@ -103,6 +106,10 @@ public:
         m_page = new StandardDocumentationPage(profile, parent);
         m_view = new QWebEngineView(parent);
         m_view->setPage(m_page);
+        // workaround for Qt::NoContextMenu broken with QWebEngineView, contextmenu event is always eaten
+        // see https://bugreports.qt.io/browse/QTBUG-62345
+        // we have to enforce deferring of event ourselves
+        m_view->installEventFilter(parent);
     }
 #endif
 };
@@ -315,16 +322,48 @@ void KDevelop::StandardDocumentationView::setDelegateLinks(bool delegate)
 #endif
 }
 
-QAction * KDevelop::StandardDocumentationView::copyAction() const
+QMenu* StandardDocumentationView::createStandardContextMenu()
 {
+    auto menu = new QMenu(this);
 #ifdef USE_QTWEBKIT
     typedef QWebPage WebkitThing;
 #else
     typedef QWebEnginePage WebkitThing;
 #endif
-    return d->m_view->pageAction(WebkitThing::Copy);
+    auto copyAction = d->m_view->pageAction(WebkitThing::Copy);
+    if (copyAction) {
+        copyAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
+        menu->addAction(copyAction);
+    }
+    return menu;
 }
 
+bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
+{
+#ifndef USE_QTWEBKIT
+    if (object == d->m_view) {
+        // help QWebEngineView properly behave like expected as if Qt::NoContextMenu was set
+        if (event->type() == QEvent::ContextMenu) {
+            event->ignore();
+            return true;
+        }
+    }
+#endif
+
+    return QWidget::eventFilter(object, event);
+}
+
+void StandardDocumentationView::contextMenuEvent(QContextMenuEvent* event)
+{
+    auto menu = createStandardContextMenu();
+    if (menu->isEmpty()) {
+        delete menu;
+        return;
+    }
+
+    menu->setAttribute(Qt::WA_DeleteOnClose);
+    menu->exec(event->globalPos());
+}
 
 void StandardDocumentationView::updateZoomFactor(double zoomFactor)
 {

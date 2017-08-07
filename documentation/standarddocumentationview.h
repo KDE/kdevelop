@@ -28,6 +28,7 @@
 #include <interfaces/idocumentation.h>
 
 class QNetworkAccessManager;
+class QMenu;
 
 namespace KDevelop
 {
@@ -66,7 +67,7 @@ public:
      */
     void setDelegateLinks(bool delegate);
 
-    QAction* copyAction() const;
+    QMenu* createStandardContextMenu();
 
 Q_SIGNALS:
     void linkClicked(const QUrl &link);
@@ -86,6 +87,10 @@ public Q_SLOTS:
      * @sa setDocumentation(IDocumentation::Ptr)
      */
     void update();
+
+protected:
+    void contextMenuEvent(QContextMenuEvent* event) override;
+    bool eventFilter(QObject* object, QEvent* event) override;
 
 private Q_SLOTS:
     void updateZoomFactor(double zoomFactor);
