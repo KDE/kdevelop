@@ -8,10 +8,6 @@ add_subdirectory(printers)
 
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
-if(BUILD_TESTING)
-    add_subdirectory(tests)
-endif()
-
 ########### next target ###############
 
 set(kdevgdb_SRCS
