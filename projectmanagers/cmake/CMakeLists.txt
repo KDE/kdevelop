@@ -30,6 +30,7 @@ set( cmakecommon_SRCS
   debug.cpp
 
  )
+set_source_files_properties(parser/cmListFileLexer.c PROPERTIES COMPILE_FLAGS "-DYY_NO_INPUT -DYY_NO_UNPUT")
 
 set( cmakecommon_UI
   cmakebuilddirchooser.ui
