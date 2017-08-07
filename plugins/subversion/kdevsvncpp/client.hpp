@@ -157,7 +157,7 @@ public:
            const bool get_all = true,
            const bool update = false,
            const bool no_ignore = false,
-           const bool ignore_externals = false) throw(ClientException);
+           const bool ignore_externals = false);
 
     /**
      * Enumerates all files/dirs matchin the parameter @a filter
@@ -181,7 +181,7 @@ public:
            const StatusFilter & filter,
            const bool descend,
            const bool update,
-           StatusEntries & entries) throw(ClientException);
+           StatusEntries & entries);
 
 
     /**
@@ -201,7 +201,7 @@ public:
              const Revision & revision,
              bool recurse,
              bool ignore_externals = false,
-             const Revision & peg_revision = Revision::UNSPECIFIED) throw(ClientException);
+             const Revision & peg_revision = Revision::UNSPECIFIED);
 
     /**
      * relocate wc @a from to @a to
@@ -209,14 +209,14 @@ public:
      */
     void
     relocate(const Path & path, const char *from_url,
-             const char *to_url, bool recurse) throw(ClientException);
+             const char *to_url, bool recurse);
 
     /**
      * Sets a single file for deletion.
      * @exception ClientException
      */
     void
-    remove(const Path & path, bool force) throw(ClientException);
+    remove(const Path & path, bool force);
 
     /**
      * Sets files for deletion.
@@ -227,7 +227,7 @@ public:
      */
     void
     remove(const Targets & targets,
-           bool force) throw(ClientException);
+           bool force);
 
     /**
      * Sets files to lock.
@@ -239,7 +239,7 @@ public:
      */
     void
     lock(const Targets & targets, bool force,
-         const char * comment) throw(ClientException);
+         const char * comment);
 
     /**
      * Sets files to unlock.
@@ -249,21 +249,21 @@ public:
      * @exception ClientException
      */
     void
-    unlock(const Targets & targets, bool force) throw(ClientException);
+    unlock(const Targets & targets, bool force);
 
     /**
      * Reverts a couple of files to a pristiner state.
      * @exception ClientException
      */
     void
-    revert(const Targets & targets, bool recurse) throw(ClientException);
+    revert(const Targets & targets, bool recurse);
 
     /**
      * Adds a file to the repository.
      * @exception ClientException
      */
     void
-    add(const Path & path, bool recurse) throw(ClientException);
+    add(const Path & path, bool recurse);
 
     /**
      * Updates the file or directory.
@@ -281,13 +281,13 @@ public:
     update(const Targets & targets,
            const Revision & revision,
            bool recurse,
-           bool ignore_externals) throw(ClientException);
+           bool ignore_externals);
 
     svn_revnum_t
     update(const Path & path,
            const Revision & revision,
            bool recurse,
-           bool ignore_externals) throw(ClientException);
+           bool ignore_externals);
 
     /**
      * Retrieves the contents for a specific @a revision of
@@ -302,7 +302,7 @@ public:
     std::string
     cat(const Path & path,
         const Revision & revision,
-        const Revision & peg_revision = Revision::UNSPECIFIED) throw(ClientException);
+        const Revision & peg_revision = Revision::UNSPECIFIED);
 
 
     /**
@@ -324,7 +324,7 @@ public:
     get(Path & dstPath,
         const Path & path,
         const Revision & revision,
-        const Revision & peg_revision = Revision::UNSPECIFIED) throw(ClientException);
+        const Revision & peg_revision = Revision::UNSPECIFIED);
 
 
     /**
@@ -339,7 +339,7 @@ public:
     AnnotatedFile *
     annotate(const Path & path,
              const Revision & revisionStart,
-             const Revision & revisionEnd) throw(ClientException);
+             const Revision & revisionEnd);
 
     /**
      * Commits changes to the repository. This usually requires
@@ -356,7 +356,7 @@ public:
     commit(const Targets & targets,
            const char * message,
            bool recurse,
-           bool keep_locks = false) throw(ClientException);
+           bool keep_locks = false);
 
     /**
      * Copies a versioned file with the history preserved.
@@ -365,7 +365,7 @@ public:
     void
     copy(const Path & srcPath,
          const Revision & srcRevision,
-         const Path & destPath) throw(ClientException);
+         const Path & destPath);
 
     /**
      * Moves or renames a file.
@@ -375,7 +375,7 @@ public:
     move(const Path & srcPath,
          const Revision & srcRevision,
          const Path & destPath,
-         bool force) throw(ClientException);
+         bool force);
 
     /**
      * Creates a directory directly in a repository or creates a
@@ -385,10 +385,10 @@ public:
      * @exception ClientException
      */
     void
-    mkdir(const Path & path) throw(ClientException);
+    mkdir(const Path & path);
 
     void
-    mkdir(const Targets & targets) throw(ClientException);
+    mkdir(const Targets & targets);
 
     /**
      * Recursively cleans up a local directory, finishing any
@@ -397,14 +397,14 @@ public:
      * @exception ClientException
      */
     void
-    cleanup(const Path & path) throw(ClientException);
+    cleanup(const Path & path);
 
     /**
      * Removes the 'conflicted' state on a file.
      * @exception ClientException
      */
     void
-    resolved(const Path & path, bool recurse) throw(ClientException);
+    resolved(const Path & path, bool recurse);
 
     /**
      * Export into file or directory TO_PATH from local or remote FROM_PATH
@@ -425,7 +425,7 @@ public:
              const Revision & peg_revision = Revision::UNSPECIFIED,
              bool ignore_externals = false,
              bool recurse = true,
-             const char * native_eol = NULL) throw(ClientException);
+             const char * native_eol = NULL);
 
     /**
      * Update local copy to mirror a new url. This excapsulates the
@@ -435,7 +435,7 @@ public:
     svn_revnum_t
     doSwitch(const Path & path, const char * url,
              const Revision & revision,
-             bool recurse) throw(ClientException);
+             bool recurse);
 
     /**
      * Import file or directory PATH into repository directory URL at
@@ -448,12 +448,12 @@ public:
     import(const Path & path,
            const char * url,
            const char * message,
-           bool recurse) throw(ClientException);
+           bool recurse);
     void
     import(const Path & path,
            const Path & url,
            const char * message,
-           bool recurse) throw(ClientException);
+           bool recurse);
 
 
     /**
@@ -466,7 +466,7 @@ public:
           const Path & localPath, bool force,
           bool recurse,
           bool notice_ancestry = false,
-          bool dry_run = false) throw(ClientException);
+          bool dry_run = false);
 
 
     /**
@@ -480,7 +480,7 @@ public:
     info(const Path & pathOrUrl,
          bool recurse=false,
          const Revision & revision = Revision::UNSPECIFIED,
-         const Revision & pegRevision = Revision::UNSPECIFIED) throw(ClientException);
+         const Revision & pegRevision = Revision::UNSPECIFIED);
 
 
     /**
@@ -498,7 +498,7 @@ public:
         const Revision & revisionStart,
         const Revision & revisionEnd,
         bool discoverChangedPaths = false,
-        bool strictNodeHistory = true) throw(ClientException);
+        bool strictNodeHistory = true);
 
     /**
      * Produce diff output which describes the delta between
@@ -526,7 +526,7 @@ public:
     diff(const Path & tmpPath, const Path & path,
          const Revision & revision1, const Revision & revision2,
          const bool recurse, const bool ignoreAncestry,
-         const bool noDiffDeleted) throw(ClientException);
+         const bool noDiffDeleted);
 
     /**
      * Produce diff output which describes the delta between
@@ -555,7 +555,7 @@ public:
     diff(const Path & tmpPath, const Path & path1, const Path & path2,
          const Revision & revision1, const Revision & revision2,
          const bool recurse, const bool ignoreAncestry,
-         const bool noDiffDeleted) throw(ClientException);
+         const bool noDiffDeleted);
 
     /**
      * Produce diff output which describes the delta of
@@ -585,7 +585,7 @@ public:
          const Revision & pegRevision, const Revision & revision1,
          const Revision & revision2, const bool recurse,
          const bool ignoreAncestry, const bool noDiffDeleted)
-    throw(ClientException);
+   ;
 
     /**
      * lists entries in @a pathOrUrl no matter whether local or
@@ -597,7 +597,7 @@ public:
     DirEntries
     list(const char * pathOrUrl,
          svn_opt_revision_t * revision,
-         bool recurse) throw(ClientException);
+         bool recurse);
 
     /**
      * lists properties in @a path no matter whether local or
@@ -705,7 +705,7 @@ public:
     * @see svn:ignore property description
      */
     void
-    ignore(const Path & path) throw(ClientException);
+    ignore(const Path & path);
 
     /**
      * Add files into ignore list.
@@ -715,7 +715,7 @@ public:
     * @see svn:ignore property description
      */
     void
-    ignore(const Targets & targets) throw(ClientException);
+    ignore(const Targets & targets);
   private:
     Context * m_context;
 

@@ -36,7 +36,9 @@ if(NOT WIN32)
     add_subdirectory(dbus_socket_transformer)
 endif()
 
-add_subdirectory(duchainify)
+if(BUILD_TESTING)
+    add_subdirectory(duchainify) # needs KDev::Tests
+endif()
 
 add_subdirectory(tests)
 

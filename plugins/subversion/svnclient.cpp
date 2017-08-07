@@ -84,7 +84,6 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
                 const svn::Path& dst, const svn::Revision& dstRev,
                 const bool recurse, const bool ignoreAncestry,
                 const bool noDiffDeleted, const bool ignoreContentType )
-        throw (svn::ClientException)
 {
     svn::Pool pool;
     // null options
@@ -161,7 +160,6 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& pegRev,
                 const svn::Revision& srcRev, const svn::Revision& dstRev,
                 const bool recurse, const bool ignoreAncestry,
                 const bool noDiffDeleted, const bool ignoreContentType )
-        throw (svn::ClientException)
 {
     svn::Pool pool;
     // null options
@@ -304,7 +302,6 @@ void SvnClient::log( const char* path,
                      int limit,
                      bool discoverChangedPaths,
                      bool strictNodeHistory )
-        throw (svn::ClientException)
 {
     svn::Pool pool;
     svn::Targets target(path);

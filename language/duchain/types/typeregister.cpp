@@ -18,10 +18,13 @@
 
 #include "typeregister.h"
 
+#include <debug.h>
+
 namespace KDevelop {
 AbstractType* TypeSystem::create(AbstractTypeData* data) const
 {
-  if (!isFactoryLoaded(*data)) {
+  Q_ASSERT(data);
+  if (!ensureFactoryLoaded(*data)) {
     return nullptr;
   }
   return m_factories.value(data->typeClassId)->create(data);
@@ -29,7 +32,8 @@ AbstractType* TypeSystem::create(AbstractTypeData* data) const
 
 void TypeSystem::callDestructor(AbstractTypeData* data) const
 {
-  if (!isFactoryLoaded(*data)) {
+  Q_ASSERT(data);
+  if (!ensureFactoryLoaded(*data)) {
     return;
   }
   return m_factories.value(data->typeClassId)->callDestructor(data);
@@ -37,7 +41,7 @@ void TypeSystem::callDestructor(AbstractTypeData* data) const
 
 uint TypeSystem::dynamicSize(const AbstractTypeData& data) const
 {
-  if (!isFactoryLoaded(data)) {
+  if (!ensureFactoryLoaded(data)) {
     return 0;
   }
   return m_factories.value(data.typeClassId)->dynamicSize(data);
@@ -54,10 +58,20 @@ bool TypeSystem::isFactoryLoaded(const AbstractTypeData& data) const
   return m_factories.contains(data.typeClassId);
 }
 
+bool TypeSystem::ensureFactoryLoaded(const AbstractTypeData& data) const
+{
+  if (!m_factories.contains(data.typeClassId)) {
+    qCWarning(LANGUAGE) << "Factory for this type not loaded:" << data.typeClassId;
+    Q_ASSERT(false);
+    return false;
+  }
+  return true;
+}
+
 void TypeSystem::copy(const AbstractTypeData& from, AbstractTypeData& to, bool constant) const
 {
   //Shouldn't try to copy an unknown type
-  Q_ASSERT(isFactoryLoaded(from));
+  ensureFactoryLoaded(from);
   return m_factories.value(from.typeClassId)->copy(from, to, constant);
 }
 
@@ -68,6 +82,8 @@ TypeSystem& TypeSystem::self() {
 
 void TypeSystem::registerTypeClassInternal(AbstractTypeFactory* repo, uint dataClassSize, uint identity)
 {
+  qCDebug(LANGUAGE) << "Registering type class" << identity;
+  Q_ASSERT(repo);
   Q_ASSERT(!m_factories.contains(identity));
   m_factories.insert(identity, repo);
   Q_ASSERT(!m_dataClassSizes.contains(identity));
@@ -76,6 +92,7 @@ void TypeSystem::registerTypeClassInternal(AbstractTypeFactory* repo, uint dataC
 
 void TypeSystem::unregisterTypeClassInternal(uint identity)
 {
+  qCDebug(LANGUAGE) << "Unregistering type class" << identity;
   AbstractTypeFactory* repo = m_factories.take(identity);
   Q_ASSERT(repo);
   delete repo;

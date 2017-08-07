@@ -24,7 +24,7 @@
 #include "backgroundparser.h"
 
 #include "qtcompat_p.h"
-
+#include <QCoreApplication>
 #include <QList>
 #include <QMutex>
 #include <QMutexLocker>
@@ -810,6 +810,30 @@ QList< IndexedString > BackgroundParser::managedDocuments()
 {
     QMutexLocker l(&d->m_managedMutex);
     return d->m_managed.keys();
+}
+
+
+bool BackgroundParser::waitForIdle() const
+{
+    QList<IndexedString> runningParseJobsUrls;
+    forever {
+        {
+            QMutexLocker lock(&d->m_mutex);
+            if (d->m_parseJobs.isEmpty()) {
+                qCDebug(LANGUAGE) << "All parse jobs done" << d->m_parseJobs.keys();
+                return true;
+            }
+
+            if (d->m_parseJobs.size() != runningParseJobsUrls.size()) {
+                runningParseJobsUrls = d->m_parseJobs.keys();
+                qCDebug(LANGUAGE) << "Waiting for background parser to get in idle state... -- the following parse jobs are still running:" << runningParseJobsUrls;
+            }
+        }
+
+        QCoreApplication::processEvents();
+        QThread::msleep(100);
+    }
+    return false;
 }
 
 DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedString& url) const

@@ -110,6 +110,8 @@ public:
      * */
     DocumentChangeTracker* trackerForUrl(const IndexedString& url) const;
 
+    bool waitForIdle() const;
+
 Q_SIGNALS:
     /**
      * Emitted whenever a document parse-job has finished.

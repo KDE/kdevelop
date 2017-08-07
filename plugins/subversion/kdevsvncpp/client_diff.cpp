@@ -80,7 +80,7 @@ namespace svn
   Client::diff(const Path & tmpPath, const Path & path,
                const Revision & revision1, const Revision & revision2,
                const bool recurse, const bool ignoreAncestry,
-               const bool noDiffDeleted) throw(ClientException)
+               const bool noDiffDeleted)
   {
     Pool pool;
     svn_error_t * error;
@@ -165,7 +165,6 @@ namespace svn
                const Path & path2, const Revision & revision1,
                const Revision & revision2, const bool recurse,
                const bool ignoreAncestry, const bool noDiffDeleted)
-  throw(ClientException)
   {
     Pool pool;
     svn_error_t * error;
@@ -250,7 +249,7 @@ namespace svn
                const Revision & pegRevision,
                const Revision & revision1, const Revision & revision2,
                const bool recurse, const bool ignoreAncestry,
-               const bool noDiffDeleted) throw(ClientException)
+               const bool noDiffDeleted)
   {
     Pool pool;
     svn_error_t * error;

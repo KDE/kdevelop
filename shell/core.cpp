@@ -404,7 +404,7 @@ void Core::cleanup()
     emit aboutToShutdown();
 
     if (!d->m_cleanedUp) {
-        // first of all: stop background jobs
+        // first of all: request stop of all background parser jobs
         d->languageController->backgroundParser()->abortAllJobs();
         d->languageController->backgroundParser()->suspend();
 
@@ -425,7 +425,11 @@ void Core::cleanup()
         }
         d->projectController.data()->cleanup();
         d->sourceFormatterController.data()->cleanup();
+
+        // before unloading language plugins, we need to make sure all parse jobs are done
+        d->languageController->backgroundParser()->waitForIdle();
         d->pluginController.data()->cleanup();
+
         d->sessionController.data()->cleanup();
 
         d->testController.data()->cleanup();
