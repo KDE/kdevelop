@@ -1,7 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
 add_subdirectory(examples)
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(sublime_LIB_SRCS
     area.cpp

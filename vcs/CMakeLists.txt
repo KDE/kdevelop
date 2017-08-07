@@ -1,7 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
-add_subdirectory(dvcs/tests)
-add_subdirectory(models/tests)
+if(BUILD_TESTING)
+    add_subdirectory(dvcs/tests)
+    add_subdirectory(models/tests)
+endif()
 
 set(KDevPlatformVcs_UIS
     widgets/vcscommitdialog.ui

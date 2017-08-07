@@ -1,6 +1,7 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgenericprojectmanager\")
-
-add_subdirectory(test)
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 ########### next target ###############
 

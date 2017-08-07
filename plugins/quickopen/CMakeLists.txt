@@ -1,5 +1,7 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevquickopen\")
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 set(kdevquickopen_PART_SRCS
     quickopenplugin.cpp

@@ -1,6 +1,8 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgit\")
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 add_subdirectory(icons)
 
 set(kdevgit_PART_SRCS

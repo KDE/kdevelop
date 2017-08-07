@@ -1,5 +1,7 @@
 add_subdirectory(p4clientstub)
-add_subdirectory(test)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(kdevperforce_PART_SRCS
     perforceplugin.cpp
