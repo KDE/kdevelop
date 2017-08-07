@@ -6,7 +6,9 @@ include_directories(
 )
 
 add_subdirectory(parser)
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(qmakecommon_SRCS
     debug.cpp

@@ -52,4 +52,6 @@ install(FILES kdevcppcheck.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kdevcppcheck)
 ecm_install_icons(ICONS icons/128-apps-cppcheck.png
                   DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

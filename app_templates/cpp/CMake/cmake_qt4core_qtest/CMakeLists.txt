@@ -12,6 +12,8 @@ qt4_automoc(${%{APPNAME}_SRCS})
 add_executable(%{APPNAMELC} ${%{APPNAME}_SRCS})
 target_link_libraries(%{APPNAMELC} ${QT_QTCORE_LIBRARY})
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 install(TARGETS %{APPNAMELC} RUNTIME DESTINATION bin)

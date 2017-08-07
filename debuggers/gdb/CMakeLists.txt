@@ -1,12 +1,16 @@
 project(gdb)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgdb\")
 
-add_subdirectory(unittests)
+if(BUILD_TESTING)
+    add_subdirectory(unittests)
+endif()
 add_subdirectory(printers)
 
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
-#add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 ########### next target ###############
 
@@ -51,6 +55,7 @@ target_link_libraries(kdevgdb
 )
 
 set(test_gdb_SRCS unittests/test_gdb.cpp ${kdevgdb_SRCS})
+if(BUILD_TESTING)
 ecm_add_test(${test_gdb_SRCS}
     TEST_NAME test_gdb
     LINK_LIBRARIES
@@ -66,7 +71,7 @@ ecm_add_test(${test_gdb_SRCS}
         KF5::Parts
         kdevdebuggercommon
 )
-
 if (HAVE_PATH_WITH_SPACES_TEST)
     set_target_properties(test_gdb PROPERTIES COMPILE_FLAGS "-DHAVE_PATH_WITH_SPACES_TEST")
+endif()
 endif()

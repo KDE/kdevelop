@@ -22,4 +22,6 @@ target_link_libraries(kdevqthelp
     KF5::KCMUtils KF5::I18n KF5::KIOWidgets KF5::TextEditor KF5::IconThemes Qt5::Help KF5::NewStuff
     KDev::Language KDev::Documentation KDev::Interfaces)
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

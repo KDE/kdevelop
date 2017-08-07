@@ -9,7 +9,6 @@ add_library(kdevmakefileresolver STATIC
 target_link_libraries(kdevmakefileresolver
   KDev::Interfaces KDev::Project
   Qt5::Core Qt5::Gui KDev::Language
-  KDev::Tests
 )
 set_target_properties(kdevmakefileresolver PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
@@ -22,4 +21,6 @@ if(BUILD_kdev_makefileresolver)
     install(TARGETS kdev_makefileresolver ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif()
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

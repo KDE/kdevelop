@@ -1,7 +1,9 @@
 project(kdevelop4-custom-buildsystem)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustombuildsystem\")
 ## Unittests
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    add_subdirectory( tests )
+endif()
 
 ## KDevelop Plugin
 set(custom_SRCS

@@ -29,4 +29,6 @@ install( PROGRAMS kde4app.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
 install( FILES kde4app.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
 install( FILES kde4appui.rc  DESTINATION  ${KXMLGUI_INSTALL_DIR}/kde4app )
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

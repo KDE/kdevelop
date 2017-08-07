@@ -2,7 +2,9 @@ project(cmakemanager)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcmake\")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/parser)
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 add_subdirectory(icons)
 
 # enable this if you want to have the cmake debug visitor run on each CMakeLists.txt
@@ -101,7 +103,7 @@ target_link_libraries( kdevcmakemanagernosettings KF5::KIOWidgets KDev::Util
 kdevplatform_add_plugin(kdevcmakemanager JSON kdevcmakemanager.json SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
 target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
                         KDev::Interfaces kdevcmakecommon kdevmakefileresolver
-                        KDev::Project KDev::Language
+                        KDev::Project KDev::Language KDev::Shell
                         KDev::OutputView KF5::TextEditor Qt5::Concurrent)
 
 kdevplatform_add_plugin(kdevcmakedocumentation JSON kdevcmakedocumentation.json SOURCES ${cmakedoc_SRCS})

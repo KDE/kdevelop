@@ -15,7 +15,9 @@ kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO
 include_directories(
     ${KDEVPGQT_INCLUDE_DIR} )
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 option(BUILD_qmake_parser "Build the qmake-parser debugging tool" OFF)
 if(BUILD_qmake_parser)

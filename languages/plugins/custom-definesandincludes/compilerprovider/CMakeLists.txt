@@ -31,4 +31,6 @@ if(BUILD_kdev_msvcdefinehelper)
                                          LIBRARY DESTINATION lib)
 endif()
 
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

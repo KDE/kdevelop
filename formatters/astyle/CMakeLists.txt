@@ -25,4 +25,6 @@ target_link_libraries(kdevastyle
     KDev::Util)
 
 add_subdirectory(lib)
-add_subdirectory(tests)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
