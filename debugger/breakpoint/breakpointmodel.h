@@ -190,9 +190,8 @@ private:
     uint breakpointType(Breakpoint *breakpoint);
     Breakpoint *breakpoint(const QUrl& url, int line);
 
-    bool m_dirty = false;
-    bool m_dontUpdateMarks;
-    QList<Breakpoint*> m_breakpoints;
+private:
+    const QScopedPointer<class BreakpointModelPrivate> d;
 };
 
 }
