@@ -28,7 +28,6 @@
 #include <QHeaderView>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
-#include <tests/modeltest.h>
 
 QString CMakeHomeDocumentation::name() const
 {

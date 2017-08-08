@@ -19,7 +19,6 @@
  */
 
 #include "cmakecommandscontents.h"
-#include <tests/modeltest.h>
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iruntime.h>
 #include <interfaces/icore.h>
