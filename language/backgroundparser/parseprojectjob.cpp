@@ -34,8 +34,24 @@
 
 #include <QApplication>
 #include <QPointer>
+#include <QSet>
 
 using namespace KDevelop;
+
+class KDevelop::ParseProjectJobPrivate
+{
+public:
+    ParseProjectJobPrivate(IProject* project, bool forceUpdate)
+        : forceUpdate(forceUpdate)
+        , project(project)
+    {
+    }
+
+    int updated = 0;
+    bool forceUpdate;
+    KDevelop::IProject* project;
+    QSet<IndexedString> filesToParse;
+};
 
 bool ParseProjectJob::doKill() {
     qCDebug(LANGUAGE) << "stopping project parse job";
@@ -51,9 +67,7 @@ ParseProjectJob::~ParseProjectJob() {
 }
 
 ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate)
-    : m_updated(0)
-    , m_forceUpdate(forceUpdate)
-    , m_project(project)
+    : d(new ParseProjectJobPrivate(project, forceUpdate))
 {
     connect(project, &IProject::destroyed, this, &ParseProjectJob::deleteNow);
 
@@ -62,16 +76,16 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate)
         foreach (auto document, ICore::self()->documentController()->openDocuments()) {
             const auto path = IndexedString(document->url());
             if (project->fileSet().contains(path)) {
-                m_filesToParse.insert(path);
+                d->filesToParse.insert(path);
             }
         }
     } else {
-        m_filesToParse = project->fileSet();
+        d->filesToParse = project->fileSet();
     }
 
     setCapabilities(Killable);
 
-    setObjectName(i18np("Process 1 file in %2","Process %1 files in %2", m_filesToParse.size(), m_project->name()));
+    setObjectName(i18np("Process 1 file in %2","Process %1 files in %2", d->filesToParse.size(), d->project->name()));
 }
 
 void ParseProjectJob::deleteNow() {
@@ -85,11 +99,11 @@ void ParseProjectJob::updateProgress() {
 void ParseProjectJob::updateReady(const IndexedString& url, ReferencedTopDUContext topContext) {
     Q_UNUSED(url);
     Q_UNUSED(topContext);
-    ++m_updated;
-    if(m_updated % ((m_filesToParse.size() / 100)+1) == 0)
+    ++d->updated;
+    if (d->updated % ((d->filesToParse.size() / 100)+1) == 0)
         updateProgress();
 
-    if(m_updated >= m_filesToParse.size())
+    if (d->updated >= d->filesToParse.size())
         deleteLater();
 }
 
@@ -98,17 +112,17 @@ void ParseProjectJob::start() {
         return;
     }
 
-    if (m_filesToParse.isEmpty()) {
+    if (d->filesToParse.isEmpty()) {
         deleteLater();
         return;
     }
 
     qCDebug(LANGUAGE) << "starting project parse job";
 
-    TopDUContext::Features processingLevel = m_filesToParse.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
+    TopDUContext::Features processingLevel = d->filesToParse.size() < ICore::self()->languageController()->completionSettings()->minFilesForSimplifiedParsing() ?
                                     TopDUContext::VisibleDeclarationsAndContexts : TopDUContext::SimplifiedVisibleDeclarationsAndContexts;
 
-    if (m_forceUpdate) {
+    if (d->forceUpdate) {
         if (processingLevel & TopDUContext::VisibleDeclarationsAndContexts) {
             processingLevel = TopDUContext::AllDeclarationsContextsAndUses;
         }
@@ -117,18 +131,18 @@ void ParseProjectJob::start() {
 
     if (auto currentDocument = ICore::self()->documentController()->activeDocument()) {
         const auto path = IndexedString(currentDocument->url());
-        if (m_filesToParse.contains(path)) {
+        if (d->filesToParse.contains(path)) {
             ICore::self()->languageController()->backgroundParser()->addDocument(path, TopDUContext::AllDeclarationsContextsAndUses, BackgroundParser::BestPriority, this);
-            m_filesToParse.remove(path);
+            d->filesToParse.remove(path);
         }
     }
 
     // Add all currently open files that belong to the project to the background-parser, so that they'll be parsed first of all
     foreach (auto document, ICore::self()->documentController()->openDocuments()) {
         const auto path = IndexedString(document->url());
-        if (m_filesToParse.contains(path)) {
+        if (d->filesToParse.contains(path)) {
             ICore::self()->languageController()->backgroundParser()->addDocument(path, TopDUContext::AllDeclarationsContextsAndUses, 10, this );
-            m_filesToParse.remove(path);
+            d->filesToParse.remove(path);
         }
     }
 
@@ -142,7 +156,7 @@ void ParseProjectJob::start() {
     int processed = 0;
     // guard against reentrancy issues, see also bug 345480
     auto crashGuard = QPointer<ParseProjectJob>{this};
-    foreach(const IndexedString& url, m_filesToParse) {
+    foreach (const IndexedString& url, d->filesToParse) {
         ICore::self()->languageController()->backgroundParser()->addDocument( url, processingLevel, BackgroundParser::InitialParsePriority, this );
         ++processed;
         if (processed == processAfter) {

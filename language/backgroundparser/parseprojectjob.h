@@ -23,8 +23,6 @@
 #include <serialization/indexedstring.h>
 #include <language/languageexport.h>
 
-#include <QSet>
-
 namespace KDevelop {
 class ReferencedTopDUContext;
 class IProject;
@@ -45,11 +43,10 @@ private Q_SLOTS:
     void updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext);
 
 private:
-    int m_updated;
-    bool m_forceUpdate;
-    KDevelop::IProject* m_project;
-    QSet<IndexedString> m_filesToParse;
     void updateProgress();
+
+private:
+    const QScopedPointer<class ParseProjectJobPrivate> d;
 };
 
 }
