@@ -33,32 +33,42 @@
 
 using namespace KDevelop;
 
+class KDevelop::BreakpointDetailsPrivate
+{
+public:
+    QLabel* status;
+    QLabel* hits;
+    QSpinBox* ignore;
+    Breakpoint* currentBreakpoint = nullptr;
+};
+
 BreakpointDetails::BreakpointDetails(QWidget *parent)
-    : QWidget(parent), m_currentBreakpoint(nullptr)
+    : QWidget(parent)
+    , d(new BreakpointDetailsPrivate)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
 
-    m_status = new QLabel(this);
-    connect(m_status, &QLabel::linkActivated,
+    d->status = new QLabel(this);
+    connect(d->status, &QLabel::linkActivated,
             this, &BreakpointDetails::showExplanation);
-    layout->addWidget(m_status);
+    layout->addWidget(d->status);
 
     QGridLayout* hitsLayout = new QGridLayout();
     layout->addLayout(hitsLayout);
 
     hitsLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_hits = new QLabel(i18n("Not hit yet"), this);
-    m_hits->setWordWrap(true);
-    hitsLayout->addWidget(m_hits, 0, 0, 1, 3);
+    d->hits = new QLabel(i18n("Not hit yet"), this);
+    d->hits->setWordWrap(true);
+    hitsLayout->addWidget(d->hits, 0, 0, 1, 3);
 
     QLabel *l2 = new QLabel(i18n("Ignore"), this);
     hitsLayout->addWidget(l2, 2, 0);
 
-    m_ignore = new QSpinBox(this);
-    hitsLayout->addWidget(m_ignore, 2, 1);
-    m_ignore->setRange(0, 99999);
-    connect(m_ignore, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &BreakpointDetails::setIgnoreHits);
+    d->ignore = new QSpinBox(this);
+    hitsLayout->addWidget(d->ignore, 2, 1);
+    d->ignore->setRange(0, 99999);
+    connect(d->ignore, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &BreakpointDetails::setIgnoreHits);
 
     QLabel *l3 = new QLabel(i18n("next hits"), this);
     hitsLayout->addWidget(l3, 2, 2);
@@ -68,37 +78,39 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     setItem(nullptr); //initialize with no breakpoint active
 }
 
+BreakpointDetails::~BreakpointDetails() = default;
+
 void KDevelop::BreakpointDetails::setIgnoreHits(int ignoreHits)
 {
-    if (!m_currentBreakpoint)
+    if (!d->currentBreakpoint)
         return;
-    m_currentBreakpoint->setIgnoreHits(ignoreHits);
+    d->currentBreakpoint->setIgnoreHits(ignoreHits);
 }
 
 
 void BreakpointDetails::setItem(Breakpoint *breakpoint)
 {
-    m_currentBreakpoint = breakpoint;
+    d->currentBreakpoint = breakpoint;
 
     if (!breakpoint) {
-        m_status->hide();
-        m_hits->hide();
-        m_ignore->setEnabled(false);
+        d->status->hide();
+        d->hits->hide();
+        d->ignore->setEnabled(false);
         return;
     }
 
-    m_ignore->setValue(breakpoint->ignoreHits());
+    d->ignore->setValue(breakpoint->ignoreHits());
 
     if (breakpoint->state() == Breakpoint::NotStartedState) {
-        m_status->hide();
-        m_hits->hide();
-        m_ignore->setEnabled(true);
+        d->status->hide();
+        d->hits->hide();
+        d->ignore->setEnabled(true);
         return;
     }
 
-    m_status->show();
-    m_hits->show();
-    m_ignore->setEnabled(true);
+    d->status->show();
+    d->hits->show();
+    d->ignore->setEnabled(true);
 
     if (breakpoint->errorText().isEmpty()) {
         switch (breakpoint->state()) {
@@ -106,31 +118,31 @@ void BreakpointDetails::setItem(Breakpoint *breakpoint)
                 Q_ASSERT(0);
                 break;
             case Breakpoint::PendingState:
-                m_status->setText(i18n("Breakpoint is <a href=\"pending\">pending</a>"));
+                d->status->setText(i18n("Breakpoint is <a href=\"pending\">pending</a>"));
                 break;
             case Breakpoint::DirtyState:
-                m_status->setText(i18n("Breakpoint is <a href=\"dirty\">dirty</a>"));
+                d->status->setText(i18n("Breakpoint is <a href=\"dirty\">dirty</a>"));
                 break;
             case Breakpoint::CleanState:
-                m_status->setText(i18n("Breakpoint is active"));
+                d->status->setText(i18n("Breakpoint is active"));
                 break;
         }
 
         if (breakpoint->hitCount() == -1)
-            m_hits->clear();
+            d->hits->clear();
         else if (breakpoint->hitCount())
-            m_hits->setText(i18np("Hit %1 time", "Hit %1 times", breakpoint->hitCount()));
+            d->hits->setText(i18np("Hit %1 time", "Hit %1 times", breakpoint->hitCount()));
         else
-            m_hits->setText(i18n("Not hit yet"));
+            d->hits->setText(i18n("Not hit yet"));
     } else {
-        m_status->setText(i18n("Breakpoint has errors"));
-        m_hits->setText(breakpoint->errorText());
+        d->status->setText(i18n("Breakpoint has errors"));
+        d->hits->setText(breakpoint->errorText());
     }
 }
 
 void BreakpointDetails::showExplanation(const QString& link)
 {
-    QPoint pos = m_status->mapToGlobal(m_status->geometry().topLeft());
+    QPoint pos = d->status->mapToGlobal(d->status->geometry().topLeft());
     if (link == QLatin1String("pending"))
     {
         QWhatsThis::showText(pos,
@@ -142,7 +154,7 @@ void BreakpointDetails::showExplanation(const QString& link)
                                 "refers. The most common case is a breakpoint "
                                 "in a shared library: GDB will insert this "
                                 "breakpoint only when the library is loaded.</p>"),
-                                m_status);
+                                d->status);
     }
     else if (link == QLatin1String("dirty"))
     {
@@ -150,7 +162,7 @@ void BreakpointDetails::showExplanation(const QString& link)
                                 i18n("<b>Breakpoint is dirty</b>"
                                 "<p>The breakpoint has not yet been passed "
                                 "to the debugger.</p>"),
-                                m_status);
+                                d->status);
     }
 }
 

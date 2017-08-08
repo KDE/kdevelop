@@ -25,9 +25,6 @@
 #include <QWidget>
 #include <debugger/debuggerexport.h>
 
-class QSpinBox;
-class QLabel;
-
 namespace KDevelop {
 class Breakpoint;
 
@@ -36,6 +33,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT BreakpointDetails : public QWidget
     Q_OBJECT
 public:
     explicit BreakpointDetails(QWidget *parent = nullptr);
+    ~BreakpointDetails() override;
 
     void setItem(Breakpoint *breakpoint);
 
@@ -45,10 +43,7 @@ private Q_SLOTS:
     void setIgnoreHits(int ignoreHits);
 
 private:
-    QLabel* m_status;
-    QLabel* m_hits;
-    QSpinBox* m_ignore;
-    Breakpoint* m_currentBreakpoint;
+    const QScopedPointer<class BreakpointDetailsPrivate> d;
 };
 
 
