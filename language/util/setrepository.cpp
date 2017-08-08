@@ -894,7 +894,7 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
   return createSetFromIndices(indicesVector);
 }
 
-BasicSetRepository::BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry, bool delayedDeletion)
+BasicSetRepository::BasicSetRepository(const QString& name, KDevelop::ItemRepositoryRegistry* registry, bool delayedDeletion)
     : dataRepository(this, name, registry)
     , m_mutex(nullptr)
     , m_delayedDeletion(delayedDeletion)

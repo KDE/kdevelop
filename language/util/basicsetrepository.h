@@ -259,7 +259,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT BasicSetRepository {
 public:
   ///@param name The name must be unique, and is used for loading and storing the data
   ///@param registry Where the repository should be registered. If you give zero, it won't be registered, and thus won't be saved to disk.
-  explicit BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry  = &KDevelop::globalItemRepositoryRegistry(), bool delayedDeletion = delayedDeletionByDefault);
+  explicit BasicSetRepository(const QString& name, KDevelop::ItemRepositoryRegistry* registry = &KDevelop::globalItemRepositoryRegistry(), bool delayedDeletion = delayedDeletionByDefault);
   virtual ~BasicSetRepository();
   typedef unsigned int Index;
 
