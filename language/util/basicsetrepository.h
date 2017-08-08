@@ -318,8 +318,6 @@ public:
 private:
   friend class Set;
   friend class Set::Iterator;
-  class Private;
-  Private* d;
   SetDataRepository dataRepository;
   QMutex* m_mutex;
   bool m_delayedDeletion;

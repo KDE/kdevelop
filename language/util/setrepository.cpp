@@ -214,18 +214,6 @@ bool SetNodeDataRequest::equals(const SetNodeData* item) const {
     return item->leftNode() == data.leftNode() && item->rightNode() == data.rightNode() && item->start() == data.start() && item->end() == data.end();
 }
 
-class BasicSetRepository::Private {
-public:
-
-  explicit Private(QString _name) : name(_name) {
-  }
-  ~Private() {
-  }
-
-  QString name;
-  private:
-};
-
 Set::Set() : m_tree(0), m_repository(nullptr) {
 }
 
@@ -906,7 +894,11 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
   return createSetFromIndices(indicesVector);
 }
 
-BasicSetRepository::BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry, bool delayedDeletion) : d(new Private(name)), dataRepository(this, name, registry), m_mutex(nullptr), m_delayedDeletion(delayedDeletion) {
+BasicSetRepository::BasicSetRepository(QString name, KDevelop::ItemRepositoryRegistry* registry, bool delayedDeletion)
+    : dataRepository(this, name, registry)
+    , m_mutex(nullptr)
+    , m_delayedDeletion(delayedDeletion)
+{
     m_mutex = dataRepository.mutex();
 }
 
@@ -936,10 +928,7 @@ void BasicSetRepository::printStatistics() const {
   qCDebug(LANGUAGE) << "count of nodes:" << stats.nodeCount << "count of nodes with bad split:" << stats.badSplitNodeCount << "count of nodes with zero reference-count:" << stats.zeroRefCountNodes;
 }
 
-BasicSetRepository::~BasicSetRepository() {
-
-  delete d;
-}
+BasicSetRepository::~BasicSetRepository() = default;
 
 void BasicSetRepository::itemRemovedFromSets(uint /*index*/) {
 }
