@@ -66,8 +66,6 @@ set_package_properties(KDevelop-PG-Qt PROPERTIES
     PURPOSE "KDevelop parser generator library. Required for the QMake Builder/Manager plugin."
 )
 
-find_package(KDevPlatform ${KDEVELOP_VERSION} REQUIRED)
-
 find_package(SharedMimeInfo REQUIRED)
 
 add_definitions(
@@ -111,6 +109,7 @@ endif()
 # create config.h
 configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
 
+add_subdirectory(kdevplatform)
 add_subdirectory(pics)
 add_subdirectory(app)
 add_subdirectory(analyzers)

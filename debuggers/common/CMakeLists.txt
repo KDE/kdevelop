@@ -64,6 +64,8 @@ add_library(kdevdebuggercommon STATIC ${debuggercommon_SRCS})
 target_link_libraries(kdevdebuggercommon
     PUBLIC
     KDev::Debugger
+    KDev::OutputView
+    KDev::Sublime
     PRIVATE
     Qt5::Core
     Qt5::Gui

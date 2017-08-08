@@ -15,26 +15,8 @@ set(KDEV_ITEMREPOSITORY_VERSION 87)
 # library version / SO version
 set(KDEVPLATFORM_LIB_SOVERSION 10)
 
-# we need some parts of the ECM CMake helpers
-find_package (ECM "5.14.0" REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
-include(KDECompilerSettings NO_POLICY_SCOPE)
-include(ECMAddTests)
-include(ECMOptionalAddSubdirectory)
-include(ECMInstallIcons)
-include(ECMSetupVersion)
-include(ECMMarkAsTest)
-include(ECMMarkNonGuiExecutable)
-include(ECMGenerateHeaders)
-include(ECMQtDeclareLoggingCategory)
-include(GenerateExportHeader)
-include(FeatureSummary)
-include(WriteBasicConfigVersionFile)
-include(CheckFunctionExists)
-include(CMakePackageConfigHelpers)
-include(KDEInstallDirs)
-include(KDECMakeSettings)
 include(KDevPlatformMacros)
 
 set(QT_MIN_VERSION "5.5.0")
@@ -49,7 +31,6 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
     TYPE RECOMMENDED
 )
 
-set(KF5_DEP_VERSION "5.18.0") # need KAboutData::fromPluginMetaData in kcoreaddons
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Archive
   Config
@@ -188,4 +169,3 @@ install( FILES kdevplatform.categories DESTINATION ${KDE_INSTALL_CONFDIR} )
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.
 configure_file(${CMAKE_SOURCE_DIR}/CTestCustom.cmake ${CMAKE_BINARY_DIR}/CTestCustom.cmake)
 
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
