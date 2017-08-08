@@ -27,21 +27,18 @@
 
 #include <debugger/debuggerexport.h>
 
-class QAbstractProxyModel;
 class QModelIndex;
-class QTreeView;
-class QMenu;
 
 namespace KDevelop {
 class IDebugController;
 class Breakpoint;
-class BreakpointDetails;
 
 class KDEVPLATFORMDEBUGGER_EXPORT BreakpointWidget : public AutoOrientedSplitter
 {
     Q_OBJECT
 public:
     BreakpointWidget(IDebugController *controller, QWidget *parent);
+    ~BreakpointWidget() override;
  
 protected:
     void contextMenuEvent(QContextMenuEvent* event) override;
@@ -69,15 +66,7 @@ private Q_SLOTS:
     void slotPopupMenuAboutToShow();
     
 private:
-    QTreeView* m_breakpointsView;
-    BreakpointDetails* m_details;
-    QMenu* m_popup;
-    bool m_firstShow;
-    IDebugController *m_debugController;
-    QAction* m_breakpointDisableAllAction;
-    QAction* m_breakpointEnableAllAction;
-    QAction* m_breakpointRemoveAll;
-    QAbstractProxyModel* m_proxyModel;
+    const QScopedPointer<class BreakpointWidgetPrivate> d;
 };
 
 }
