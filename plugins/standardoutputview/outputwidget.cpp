@@ -87,6 +87,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         addAction(m_closeOthersAction);
 
         m_tabwidget->setCornerWidget(m_closeButton, Qt::TopRightCorner);
+        m_tabwidget->setDocumentMode(true);
     } else if ( data->type == KDevelop::IOutputView::HistoryView )
     {
         m_stackwidget = new QStackedWidget( this );
