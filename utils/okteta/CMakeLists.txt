@@ -1,4 +1,3 @@
-project( okteta )
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevokteta\")
 
 SET( kdevokteta_PART_SRCS

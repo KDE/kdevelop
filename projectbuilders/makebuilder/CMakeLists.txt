@@ -1,4 +1,3 @@
-project(makebuilder)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevmakebuilder\")
 
 ########### next target ###############

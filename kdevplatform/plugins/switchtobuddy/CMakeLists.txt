@@ -1,5 +1,4 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevswitchtobuddy\")
-project(codeutils)
 
 ########### install target ###############
 

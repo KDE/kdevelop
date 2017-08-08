@@ -1,4 +1,3 @@
-project(lldb)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevlldb\")
 
 set(kdevlldb_SRCS

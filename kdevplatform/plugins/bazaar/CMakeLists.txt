@@ -1,5 +1,3 @@
-project(bazaar)
-
 set(kdevbazaar_SRCS
     diffjob.cpp
     bzrannotatejob.cpp

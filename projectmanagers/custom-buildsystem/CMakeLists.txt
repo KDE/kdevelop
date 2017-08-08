@@ -1,4 +1,3 @@
-project(kdevelop4-custom-buildsystem)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustombuildsystem\")
 
 ecm_qt_declare_logging_category(custom_LOG_SRCS

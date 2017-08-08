@@ -1,6 +1,3 @@
-cmake_minimum_required(VERSION 3.0)
-project(KDevPlatform)
-
 # kdevplatform version
 set(KDEVPLATFORM_VERSION_MAJOR 5)
 set(KDEVPLATFORM_VERSION_MINOR 1)
