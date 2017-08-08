@@ -137,7 +137,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     void clearCache();
     
     private:
-      class PersistentSymbolTablePrivate* d;
+      // cannot use QScopedPointer yet, see comment in ~PersistentSymbolTable()
+      class PersistentSymbolTablePrivate* const d;
   };
 }
 

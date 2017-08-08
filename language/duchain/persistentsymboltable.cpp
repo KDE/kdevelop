@@ -162,6 +162,7 @@ PersistentSymbolTable::~PersistentSymbolTable()
 {
   //Workaround for a strange destruction-order related crash duing shutdown
   //We just let the data leak. This doesn't hurt, as there is no meaningful destructors.
+  // TODO: analyze and fix it
 //   delete d;
 }
 
