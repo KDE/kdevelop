@@ -43,6 +43,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT IVariableController : public QObject
     Q_OBJECT
 public:
     explicit IVariableController(IDebugSession* parent);
+    ~IVariableController() override;
 
     /* Create a variable for the specified expression in the currentl
        thread and frame.  */     
@@ -86,10 +87,8 @@ private Q_SLOTS:
 private:
     void updateIfFrameOrThreadChanged();
 
-    QFlags<UpdateType> m_autoUpdate;
-    int m_activeThread;
-    int m_activeFrame;
-
+private:
+    const QScopedPointer<class IVariableControllerPrivate> d;
 };
  
 } // namespace KDevelop

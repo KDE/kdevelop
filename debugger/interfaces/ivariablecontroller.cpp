@@ -30,13 +30,23 @@
 
 namespace KDevelop {
 
+class IVariableControllerPrivate
+{
+public:
+    QFlags<IVariableController::UpdateType> autoUpdate;
+    int activeThread = -1;
+    int activeFrame = -1;
+};
 
 IVariableController::IVariableController(IDebugSession* parent)
-    : QObject(parent), m_activeThread(-1), m_activeFrame(-1)
+    : QObject(parent)
+    , d(new IVariableControllerPrivate)
 {
     connect(parent, &IDebugSession::stateChanged,
             this, &IVariableController::stateChanged);
 }
+
+IVariableController::~IVariableController() = default;
 
 VariableCollection* IVariableController::variableCollection()
 {
@@ -57,8 +67,8 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
 
     if (state == IDebugSession::ActiveState) {
         //variables are now outdated, update them
-        m_activeThread = -1;
-        m_activeFrame = -1;
+        d->activeThread = -1;
+        d->activeFrame = -1;
     } else if (state == IDebugSession::EndedState || state == IDebugSession::NotStartedState) {
         // Remove all locals.
         foreach (Locals *l, variableCollection()->allLocals()) {
@@ -78,7 +88,7 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
 void IVariableController::updateIfFrameOrThreadChanged()
 {
     IFrameStackModel *sm = session()->frameStackModel();
-    if (sm->currentThread() != m_activeThread || sm->currentFrame() != m_activeFrame) {
+    if (sm->currentThread() != d->activeThread || sm->currentFrame() != d->activeFrame) {
         variableCollection()->root()->resetChanged();
         update();
     }
@@ -90,22 +100,22 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
 
     switch (event) {
     case IDebugSession::thread_or_frame_changed:
-        qCDebug(DEBUGGER) << m_autoUpdate;
-        if (!(m_autoUpdate & UpdateLocals)) {
+        qCDebug(DEBUGGER) << d->autoUpdate;
+        if (!(d->autoUpdate & UpdateLocals)) {
             foreach (Locals *l, variableCollection()->allLocals()) {
                 if (!l->isExpanded() && !l->childCount()) {
                     l->setHasMore(true);
                 }
             }
         }
-        if (m_autoUpdate != UpdateNone) {
+        if (d->autoUpdate != UpdateNone) {
             updateIfFrameOrThreadChanged();
         }
 
-        // update our cache of active thread/frame regardless of m_autoUpdate
+        // update our cache of active thread/frame regardless of d->autoUpdate
         // to keep them synced when user currently hides the variable list
-        m_activeThread = session()->frameStackModel()->currentThread();
-        m_activeFrame = session()->frameStackModel()->currentFrame();
+        d->activeThread = session()->frameStackModel()->currentThread();
+        d->activeFrame = session()->frameStackModel()->currentFrame();
         break;
 
     default:
@@ -116,16 +126,16 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
 void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)
 {
     IDebugSession::DebuggerState state = session()->state();
-    m_autoUpdate = autoUpdate;
-    qCDebug(DEBUGGER) << m_autoUpdate;
-    if (m_autoUpdate != UpdateNone && state == IDebugSession::PausedState) {
+    d->autoUpdate = autoUpdate;
+    qCDebug(DEBUGGER) << d->autoUpdate;
+    if (d->autoUpdate != UpdateNone && state == IDebugSession::PausedState) {
         update();
     }
 }
 
 QFlags<IVariableController::UpdateType> IVariableController::autoUpdate()
 {
-    return m_autoUpdate;
+    return d->autoUpdate;
 }
 
 }
