@@ -27,27 +27,40 @@
 
 using namespace KDevelop;
 
+class KDevelop::TreeModelPrivate
+{
+public:
+    explicit TreeModelPrivate(const QVector<QString>& headers)
+        : headers(headers)
+    {
+    }
+
+    QVector<QString> headers;
+    TreeItem* root = nullptr;
+};
+
 TreeModel::TreeModel(const QVector<QString>& headers,
                      QObject *parent)
-  : QAbstractItemModel(parent), headers_(headers), root_(nullptr)
+  : QAbstractItemModel(parent)
+  , d(new TreeModelPrivate(headers))
 {
 }
 
 void TreeModel::setRootItem(TreeItem *item)
 {
-    root_ = item;
-    root_->fetchMoreChildren();
+    d->root = item;
+    d->root->fetchMoreChildren();
 }
 
 TreeModel::~TreeModel()
 {
-    delete root_;
+    delete d->root;
 }
 
 int TreeModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return headers_.size();
+    return d->headers.size();
 }
 
 QVariant TreeModel::data(const QModelIndex &index, int role) const
@@ -74,7 +87,7 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
                                int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        return headers_[section];
+        return d->headers.value(section);
 
     return QVariant();
 }
@@ -88,7 +101,7 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
     TreeItem *parentItem;
 
     if (!parent.isValid())
-        parentItem = root_;
+        parentItem = d->root;
     else
         parentItem = static_cast<TreeItem*>(parent.internalPointer());
 
@@ -107,7 +120,7 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const
     TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
     TreeItem *parentItem = childItem->parent();
 
-    if (parentItem == root_)
+    if (parentItem == d->root)
         return QModelIndex();
 
     return createIndex(parentItem->row(), 0, parentItem);
@@ -120,7 +133,7 @@ int TreeModel::rowCount(const QModelIndex &parent) const
         return 0;
 
     if (!parent.isValid())
-        parentItem = root_;
+        parentItem = d->root;
     else
         parentItem = static_cast<TreeItem*>(parent.internalPointer());
 
@@ -133,7 +146,7 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 TreeItem* TreeModel::itemForIndex(const QModelIndex& index) const
 {
     if (!index.isValid())
-        return root_;
+        return d->root;
     else
         return static_cast<TreeItem*>(index.internalPointer());
 }
@@ -198,7 +211,7 @@ bool TreeModel::setData(const QModelIndex& index, const QVariant& value,
 
 KDevelop::TreeItem* KDevelop::TreeModel::root() const
 {
-    return root_;
+    return d->root;
 }
 
 

@@ -81,8 +81,7 @@ public:
     using QAbstractItemModel::dataChanged;
 
 private:
-    QVector<QString> headers_;
-    TreeItem *root_;
+    const QScopedPointer<class TreeModelPrivate> d;
 };
 
 }
