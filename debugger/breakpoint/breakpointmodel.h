@@ -127,7 +127,7 @@ public:
     KDevelop::Breakpoint* addAccessWatchpoint();
     KDevelop::Breakpoint* addAccessWatchpoint(const QString& expression);
 
-    Breakpoint *breakpoint(int row);
+    Breakpoint* breakpoint(int row) const;
     QList<Breakpoint*> breakpoints() const;
 
 Q_SIGNALS:
@@ -187,8 +187,8 @@ private:
     void scheduleSave();
 
     void reportChange(Breakpoint *breakpoint, Breakpoint::Column column);
-    uint breakpointType(Breakpoint *breakpoint);
-    Breakpoint *breakpoint(const QUrl& url, int line);
+    uint breakpointType(Breakpoint *breakpoint) const;
+    Breakpoint *breakpoint(const QUrl& url, int line) const;
 
 private:
     const QScopedPointer<class BreakpointModelPrivate> d;

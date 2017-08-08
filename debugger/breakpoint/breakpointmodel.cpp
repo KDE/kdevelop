@@ -438,7 +438,7 @@ void BreakpointModel::reportChange(Breakpoint* breakpoint, Breakpoint::Column co
     scheduleSave();
 }
 
-uint BreakpointModel::breakpointType(Breakpoint *breakpoint)
+uint BreakpointModel::breakpointType(Breakpoint *breakpoint) const
 {
     uint type = BreakpointMark;
     if (!breakpoint->enabled()) {
@@ -570,7 +570,7 @@ QList<Breakpoint*> KDevelop::BreakpointModel::breakpoints() const
     return d->breakpoints;
 }
 
-Breakpoint* BreakpointModel::breakpoint(int row)
+Breakpoint* BreakpointModel::breakpoint(int row) const
 {
     if (row >= d->breakpoints.count()) return nullptr;
     return d->breakpoints.at(row);
@@ -655,7 +655,8 @@ void BreakpointModel::registerBreakpoint(Breakpoint* breakpoint)
     scheduleSave();
 }
 
-Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) {
+Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) const
+{
     foreach (Breakpoint* b, d->breakpoints) {
         if (b->url() == url && b->line() == line) {
             return b;
