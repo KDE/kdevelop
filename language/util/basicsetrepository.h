@@ -342,10 +342,9 @@ public:
   BasicSetRepository::Index operator*() const;
 private:
   friend class Set;
-  friend class IteratorPrivate;
+  friend class SetIteratorPrivate;
   static inline SetDataRepository &getDataRepository(BasicSetRepository *repo) { return repo->dataRepository; }
-  class IteratorPrivate;
-  IteratorPrivate* d;
+  const QScopedPointer<class SetIteratorPrivate> d;
 };
 
 }

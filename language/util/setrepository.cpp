@@ -339,16 +339,33 @@ QString SetRepositoryAlgorithms::dumpDotGraph(uint nodeIndex) const {
 
 const int nodeStackAlloc = 500;
 
-class Set::Iterator::IteratorPrivate {
+class SetIteratorPrivate
+{
 public:
-
-  IteratorPrivate() : nodeStackSize(0), currentIndex(0), repository(nullptr) {
+  SetIteratorPrivate()
+  {
     nodeStackData.resize(nodeStackAlloc);
     nodeStack = nodeStackData.data();
   }
 
-  IteratorPrivate(const IteratorPrivate& rhs) : nodeStackData(rhs.nodeStackData), nodeStackSize(rhs.nodeStackSize), currentIndex(rhs.currentIndex), repository(rhs.repository) {
+  SetIteratorPrivate(const SetIteratorPrivate& rhs)
+    : nodeStackData(rhs.nodeStackData)
+    , nodeStackSize(rhs.nodeStackSize)
+    , currentIndex(rhs.currentIndex)
+    , repository(rhs.repository)
+  {
     nodeStack = nodeStackData.data();
+  }
+
+  SetIteratorPrivate& operator=(const SetIteratorPrivate& rhs)
+  {
+    nodeStackData = rhs.nodeStackData;
+    nodeStackSize = rhs.nodeStackSize;
+    currentIndex = rhs.currentIndex;
+    repository = rhs.repository;
+    nodeStack = nodeStackData.data();
+
+    return *this;
   }
 
   void resizeNodeStack() {
@@ -358,9 +375,9 @@ public:
 
   KDevVarLengthArray<const SetNodeData*, nodeStackAlloc> nodeStackData;
   const SetNodeData** nodeStack;
-  int nodeStackSize;
-  Index currentIndex;
-  BasicSetRepository* repository;
+  int nodeStackSize = 0;
+  Index currentIndex = 0;
+  BasicSetRepository* repository = nullptr;
 
   /**
    * Pushes the noed on top of the stack, changes currentIndex, and goes as deep as necessary for iteration.
@@ -398,21 +415,22 @@ std::set<Index> Set::stdSet() const
   return ret;
 }
 
-Set::Iterator::Iterator(const Iterator& rhs) : d(new IteratorPrivate(*rhs.d)) {
+Set::Iterator::Iterator(const Iterator& rhs)
+    : d(new SetIteratorPrivate(*rhs.d))
+{
 }
 
 Set::Iterator& Set::Iterator::operator=(const Iterator& rhs) {
-  delete d;
-  d = new IteratorPrivate(*rhs.d);
+  *d = *rhs.d;
   return *this;
 }
 
-Set::Iterator::Iterator() : d(new IteratorPrivate) {
+Set::Iterator::Iterator()
+    : d(new SetIteratorPrivate)
+{
 }
 
-Set::Iterator::~Iterator() {
-  delete d;
-}
+Set::Iterator::~Iterator() = default;
 
 Set::Iterator::operator bool() const {
   return d->nodeStackSize;
