@@ -1,0 +1,3 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="KDevPatchReview" version="2" translationDomain="kdevpatchreview">
+</gui>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <include>QtCore/QDir</include>
+  <kcfgfile name="kdeveloprc"/>
+  <group name="Project Manager">
+    <entry name="parseAllProjectSources" key="Parse All Project Sources" type="Bool">
+        <default>true</default>
+        <label>Schedule all project source code to be parsed by the language support in the background</label>
+        <whatsthis>If this option is set, KDevelop will schedule all source code
+        found by the current build system for parsing by the appropriate language
+        support part.  This will enable more complete language support, but may
+        be slower.</whatsthis>
+    </entry>
+    <entry name="projectsBaseDirectory" key="Projects Base Directory" type="Url">
+        <default code="true">QUrl::fromLocalFile(QDir::homePath()+"/projects")</default>
+        <whatsthis>Chooses the base directory where new projects are created.</whatsthis>
+    </entry>
+    <entry name="saveDocuments" key="Save All Documents Before Building" type="Bool">
+        <default>true</default>
+        <label>Save all open documents before building anything</label>
+        <whatsthis>If this option is set all open documents will be automatically saved before any build is started.</whatsthis>
+    </entry>
+  </group>
+</kcfg>

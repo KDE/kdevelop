@@ -1,0 +1,18 @@
+/*!
+ * @mainpage outputview - Interface and library for the outputview.
+ *
+ * outputview provides an interface and a library to display program output.
+ *
+ * @section desc Description
+ *
+ * @todo: add description and examples
+ *
+ * @licenses
+ * @lgpl
+ *
+ * For questions and discussons about editor either contact the author
+ * or the <a href="mailto:kdevelop-devel@kde.org">kdevelop-devel@kde.org</a>
+ * mailing list.
+ */
+
+// DOXYGEN_PROJECT_NAME=Outputview library

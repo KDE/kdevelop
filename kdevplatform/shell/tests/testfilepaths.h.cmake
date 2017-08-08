@@ -1,0 +1,1 @@
+#define TEST_PLUGIN_DIR "${TEST_PLUGIN_DIR}"

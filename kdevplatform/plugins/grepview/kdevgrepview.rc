@@ -1,0 +1,9 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="kdevgrepview" version="8" translationDomain="kdevgrepview">
+<MenuBar>
+  <Menu name="edit">
+   <Action name="edit_grep" group="edit_find_merge"/>
+  </Menu>
+</MenuBar>
+</gui>
+

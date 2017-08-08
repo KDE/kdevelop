@@ -1,0 +1,63 @@
+<ui version="4.0" >
+ <class>DvcsImportMetadataWidget</class>
+ <widget class="QWidget" name="DvcsImportMetadataWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>581</width>
+    <height>37</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Import</string>
+  </property>
+  <layout class="QFormLayout" >
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="labelUrl" >
+     <property name="text" >
+      <string>Source directory:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="KUrlRequester" name="sourceLoc" />
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel">
+     <property name="text">
+      <string>Commit message:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="KTextEdit" name="message">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KUrlRequester</class>
+   <extends>QWidget</extends>
+   <header>kurlrequester.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

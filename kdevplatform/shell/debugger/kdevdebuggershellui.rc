@@ -1,0 +1,90 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="kdevdebuggershellui" version="8" translationDomain="kdevplatform">
+    <MenuBar>
+        <Menu name="run">
+            <Separator group="debug"/>
+            <Action name="debug_continue" group="debug"/>
+            <Action name="debug_pause" group="debug"/>
+            
+            <Separator group="debug"/>
+            <Action name="debug_stepover" group="debug"/>
+            <Action name="debug_stepoverinst" group="debug"/>
+            <Action name="debug_stepinto" group="debug"/>
+            <Action name="debug_stepintoinst" group="debug"/>
+            <Action name="debug_stepout" group="debug"/>
+            <Action name="debug_runtocursor" group="debug"/>
+            
+            <Separator group="debug"/>
+            <Action name="debug_jumptocursor" group="debug"/>
+            <Action name="debug_toggle_breakpoint" group="debug"/>
+            
+        </Menu>
+    </MenuBar>
+    
+    <ToolBar name="debugToolBar">
+        <text>Debugger Toolbar</text>
+        <Action name="debug_continue"/>
+        <Action name="debug_stepover"/>
+        <Action name="debug_stepinto"/>
+        <Action name="debug_stepout"/>
+        <WeakSeparator/>
+    </ToolBar>
+    
+    <State name="ended">
+         <enable>
+             <Action name="debug_continue"/>
++        </enable>
+        <disable>
+            <Action name="debug_pause"/>
+            <Action name="debug_runtocursor"/>
+            <Action name="debug_stepover"/>
+            <Action name="debug_stepoverinst"/>
+            <Action name="debug_stepinto"/>
+            <Action name="debug_stepintoinst"/>
+            <Action name="debug_stepout"/>
+            <Action name="debug_jumptocursor"/>
+        </disable>
+    </State>
+    <State name="paused">
+        <enable>
+            <Action name="debug_continue"/>
+            <Action name="debug_runtocursor"/>
+            <Action name="debug_stepover"/>
+            <Action name="debug_stepoverinst"/>
+            <Action name="debug_stepinto"/>
+            <Action name="debug_stepintoinst"/>
+            <Action name="debug_stepout"/>
+            <Action name="debug_jumptocursor"/>
+        </enable>
+    </State>
+    <State name="active">
+        <enable>
+            <Action name="debug_pause"/>
+        </enable>
+        <disable>
+            <Action name="debug_continue"/>
+            <Action name="debug_runtocursor"/>
+            <Action name="debug_stepover"/>
+            <Action name="debug_stepoverinst"/>
+            <Action name="debug_stepinto"/>
+            <Action name="debug_stepintoinst"/>
+            <Action name="debug_stepout"/>
+            <Action name="debug_jumptocursor"/>
+        </disable>
+    </State>
+    <State name="stopped">
+        <enable>
+            <Action name="debug_continue"/>
+        </enable>
+        <disable>
+            <Action name="debug_pause"/>
+            <Action name="debug_runtocursor"/>
+            <Action name="debug_stepover"/>
+            <Action name="debug_stepoverinst"/>
+            <Action name="debug_stepinto"/>
+            <Action name="debug_stepintoinst"/>
+            <Action name="debug_stepout"/>
+            <Action name="debug_jumptocursor"/>
+        </disable>
+    </State>
+</gui>

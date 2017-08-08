@@ -1,0 +1,7 @@
+Template
+
+Name: {{ name }}
+
+Bool option:   "{% if bool_option %}true{% else %}false{% endif %}"
+String option: "{{ string_option }}"
+Enum option:   "{{ enum_option }}"

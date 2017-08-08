@@ -1,0 +1,3 @@
+{% if namespaces %}
+using namespace {% for ns in namespaces %}{{ ns }}{% if not forloop.last %}::{% endif %}{% endfor %};
+{% endif %}

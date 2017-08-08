@@ -1,0 +1,401 @@
+/** \file  Architecture.dox
+  * \brief KDevelop architecture
+  */
+
+/** \page architecture KDevelop Architecture
+
+\section source_overview Platform Source Overview
+
+\subsection what_is_platform Platform Vs. Others
+
+The idea is that kdevplatform contains:
+- Everything to create platform plugins
+- Everything to create platform applications
+- Commonly used/important plugins
+.
+
+\subsection platform_code Platform Code Layout
+
+Platform consists of
+- interfaces
+  -  interfaces that expose everything necessary for plugins
+  .
+- shell
+  -  implements interfaces and basically provides a ready-to-use and extend application.
+  .
+- sublime
+  -  the user interface library
+  .
+- project and language
+  -  additional libraries for project managers and language supports (usable for other plugins as well)
+  .
+- plugins
+  -  common plugins, ie those that could be useful for other applications than just KDevelop
+  .
+- outputview
+  -  allows plugins to easily implement toolviews that show line-by-line output. for example make build output.
+  .
+- vcs
+  -  central & distributed version control library
+  .
+.
+
+\subsection platform_for_plugins What to Use in Plugins
+
+- Plugins need to link to the interfaces
+- Plugins should never link to the shell
+- Plugins should not need to link to the sublime library
+- Plugins can optionally link to other helper libraries in platform when necessary
+.
+
+\subsection platform_coding_conventions Current Platform Coding Conventions
+
+- All platform classes shall be in the KDevelop namespace
+- All files should be named without a kdev prefix
+- All files have to be installed in subdirectories under ${INCLUDE_INSTALL_DIR}/kdevplatform/
+- All interface names should start with an I (e.g. KDevelop::IFoo) and the files should be named ifoo.h and ifoo.cpp
+- All interface implementations are named KDevelop::Foo and their files foo.h/cpp
+.
+
+
+\section code_overview Platform Code Overview
+
+\subsection core ICore/Core
+
+Core is the central class. It provides access to all shell functionality.
+There's a KDevelop::ICore interface and a KDevelop::Core implementation. 
+The KDevelop::ICore interface gives access to all controllers exposed via
+interfaces. Each plugin is initialized with an KDevelop::ICore pointer so
+it always has access to the core via the KDevelop::IPlugin::core method. 
+
+Core is a singleton that needs to be manually initialized by platform 
+applications using \ref KDevelop::Core::initialize right after the KApplication
+object is created and ShellExtension is initialized. KDevelop::ShellExtension
+the mechanism platform applications define which UI configuration files are
+used and what the default profile is. Use KDevelop::ShellExtension::defaultArea
+to define the name of default UI area (see below for more information about areas).
+
+\subsection plugin IPlugin
+
+All concrete plugins must inherit from KDevelop::IPlugin. Extension interfaces
+can be used to handle groups of similar plugins in a generic fashion, see below.
+Each plugin must have an associated .desktop file, as described in the 
+KPluginInfo class documentation.
+
+\subsection extensions Extension Interfaces and Plugins
+
+The idea behind extension interfaces is to provide following features:
+- To allow plugins to expose their functionality via abstract interfaces
+  and at the same time allow them to not care about binary compatibility
+  and to not force a plugin to link against another plugin.\n \n The documentation
+  plugin would be a good example of a piece of non-core functionality
+  that could be exported via an IDocumentation extension interface with methods like
+  lookupInDocumentation(const QString &) and others. The outputview plugin with
+  has an IOutputView interface which is another example of such a use-case. The
+  IOutputView interface provided by the outputview plugin can be used by other
+  plugins to display information to the user with the other plugin not caring
+  about the specific implementation details of the outputview plugin
+  
+- To provide implementations of important functionality in plugins.\n \n
+  Good examples are buildsystem managers, builders, and language supports in
+  KDevelop4. When a project is opened, a buildsystem manager plugin (that 
+  implements either IBuildSystemManager interface or IProjectFileManager) is
+  looked for by the shell and loaded.
+
+- To forget about binary compatibility issues of dependent plugins.\n \n
+  In case the plugin has something new to expose, a new version of the 
+  extension interface has to be defined. All other plugins will either continue
+  using the old interface or ask for the new one.
+.
+
+The extension interfaces framework is implemented with QExtensionManager and
+company. See the Qt documentation for more information.
+
+KDevelop::IBuildSystemManager is an example of an extension interface.
+Plugins that implement this provide build and/or compile functionality.
+An other example is KDevelop::ILanguageSupport which abstracts away language
+specific details from shell.
+
+
+\subsubsection declare_extension To declare an extension interface:
+- Create an abstract class
+- Add macros declaring the interface to your abstract class' header file
+  - If your abstract class is in a namespace use the following:
+    \code
+    Q_DECLARE_INTERFACE( KDevelop::IMyInterface, "org.kdevelop.IMyInterface" )
+    \endcode
+  - Otherwise use:
+    \code
+    Q_DECLARE_INTERFACE( IMyInterface, "org.kdevelop.IMyInterface" )
+    \endcode
+  .
+  \note The use of nested namespaces is not supported.
+.
+
+\subsubsection implement_extension To implement an extension interface:
+- Create a class that inherits from KDevelop::IPlugin 
+- Add the interface you wish to implement to the inheritance chain for your
+  new plugin class (use multiple inheritance here)
+- Add a Q_INTERFACES macro to your class declaration. \n \n It should be in the
+  same section as the Q_OBJECT macro. The argument to the Q_INTERFACES macro
+  should be the name of the interface you're inheriting from. \n \n For 
+  example, if one is using the IMyInterface interface, one would add
+  \code
+  Q_INTERFACES( IMyInterface )
+  \endcode
+  to one's class declaration.
+- Add the following to the plugin's .desktop file:
+    \code
+    X-KDevelop-Interfaces=IMyInterface
+    \endcode
+  Replacing IMyInterface which the class name of one's interface.
+.
+
+Here's an example putting all of the above together:
+\code
+class MyPlugin: public KDevelop::IPlugin, public KDevelop::IMyInterface
+{
+    Q_OBJECT
+    Q_INTERFACES(KDevelop::IMyInterface)
+public:
+    MyPlugin(QObject* parent) : IPlugin( parent )
+    {
+    }
+};
+\endcode
+
+
+\subsubsection load_extension To load a plugin that supports a certain extension interface:
+- Use KDevelop::IPluginController::pluginForExtension if you have only one 
+  possible plugin implementing the extension interface
+- Or use KDevelop::IPluginController::allPluginsForExtension to return a list
+  of plugins. \n \note The above methods will load plugins to verify they implement the
+  extension being asked for if needed.
+- Once an KDevelop::IPlugin pointer is returned by one of two methods above,
+  it can be asked for an extension using KDevelop::IPlugin::extension
+
+.
+\subsubsection interplugin_dependency To set a dependency between interfaces:
+- Set the list of required interfaces in plugin's .desktop file
+  \code
+  X-KDevelop-IRequired=IMyInterface,IMyOtherInterface
+  \endcode
+.
+It is not possible to set direct inter-plugin dependencies. One plugin shall
+never depend on another plugin, it shall only depend on something that 
+implements an interface.
+
+\subsection project Project Management Infrastructure
+
+KDevelop4 can have multiple projects open at any given time.
+
+Project management structure:
+\code
+                                        |--------------------|       |-------------------------------|
+                                  |---->| KDevelop::IProject |------>| KDevelop::IProjectFileManager |
+                                  |     |--------------------|       |-------------------------------|
+                                  |                 |
+|------------------------------|  |     |------------------------|
+| KDevelop::IProjectController |------->| KDevelop::ProjectModel |
+|------------------------------|  |     |------------------------|
+                                  |                 |
+                                  |     |--------------------|       |-------------------------------|
+                                  |---->| KDevelop::IProject |------>| KDevelop::IBuildSystemManager |
+                                        |--------------------|       |-------------------------------|
+\endcode
+ProjectController is a container for projects (KDevelop::IProject interface). Each project contributes
+its contents (files, folders, targets, etc.) to the KDevelop::ProjectModel. Each project also has
+a file manager plugin associated with it.
+
+A project file manager is the plugin which implements either one of two
+interfaces: KDevelop::IProjectFileManager or KDevelop::IBuildSystemManager. The
+project file manager provides the actual project management facilities.
+
+Plugins access project contents through classes defined in 
+KDevelop::ProjectModel. Examples include ProjectFolderItem, ProjectFileItem,
+ProjectTargetItem, etc.
+
+%KDevelop currently supports the notion of "current project" (the one which is
+currently selected in the project management view). But plugins are encouraged
+to not depend on the notion of a current project. The selection might be empty 
+or the project management view might be closed at any time.
+
+%KDevelop Platform provides by default a generic project manager. This project
+manager treats all files and subdirectories under the project directory as 
+project items and currently provides no building facilities.
+
+The project file (&lt;projectname&gt;.kdev4) controls which project file 
+manager will be loaded. For example, this .kdev4 file will load the generic
+manager:
+\code
+    [General Options]
+    Manager=KDevGenericManager
+\endcode
+
+
+\subsection language Language Support Infrastructure
+
+The language support infrastructure is designed to be similar to project management.
+Its goals are:
+- use as many language supports as necessary at the same time
+- be able to load several language supports for one source file
+  good examples are mixed-source files like .php (php+html), .rhtml (ruby + html)
+- be not dependent on projects
+.
+
+language support structure:
+\code
+                                                                          |----------------------------|
+                                                                    |---->| KDevelop::ILanguageSupport |
+                                         |---------------------|    |     |----------------------------|
+                                   |---->| KDevelop::ILanguage |----|
+                                   |     |---------------------|    |     |----------------------------|
+                                   |                                |---->| KDevelop::BackgroundParser |
+|-------------------------------|  |                                      |----------------------------|
+| KDevelop::ILanguageController |--|
+|-------------------------------|  |                                      |----------------------------|
+                                   |                                |---->| KDevelop::ILanguageSupport |
+                                   |     |---------------------|    |     |----------------------------|
+                                   |---->| KDevelop::ILanguage |----|
+                                         |---------------------|    |     |----------------------------|
+                                                                    |---->| KDevelop::BackgroundParser |
+                                                                          |----------------------------|
+\endcode
+Language controller holds the set of already loaded languages and provides means to load more.
+For each language (defined by its "name") Language object exists. Each such language has
+a background parser and a actual support plugin that implements KDevelop::ILanguageSupport.
+This way the basic shell functionality (like language loading algorithm and background parser)
+is separated from language-specific stuff (like parsing).
+
+Unlike KDevelop3, language support plugin is loaded not among with a project. Instead, when the
+source file is opened, the language controller asks plugin controller whether there are
+any language plugins (those that implement KDevelop::ILanguageSupport) that support a mime type
+of the file (those who set X-KDevelop-SupportedMimeTypes=...).
+
+For each language support plugin found, the KDevelop::Language object (that implements KDevelop::ILanguage interface)
+is created and language support plugin is associated with it. Then each language is asked to return
+a KDevelop::ParseJob to process the file. This way several language supports are able to parse one file.
+
+If KDevelop::Language object for given mimetype already exists, it is used and no plugin loading is performed.
+
+
+\subsection uicontroller IUiController
+
+KDevelop::UiController is closely connected to the Sublime UI and basically is an subclass of
+\ref Sublime::Controller which will be explained later.
+
+The main job of UiController is to allow plugins to manager their views and toolviews. Currently only
+toolviews can be added and removed.
+
+Sublime UI wants plugins to add and remove not actual toolviews, but factories to create them.
+This is because user can request from Sublime UI to show a new toolview at any time. For example,
+it is possible to have more than one Konsole toolviews. The user just have to ask for them.
+Automatically factory will be used only once, when UI controller is asked to add a toolview.
+This means for example that only one Konsole toolview will be opened automatically.
+
+To create a factory, a plugin needs to subclass KDevelop::IToolViewFactory and implement two methods:
+- virtual QWidget* KDevelop::IToolViewFactory::create(QWidget *parent = 0)
+  where the actual toolview widget will be created
+- virtual Qt::DockWidgetArea KDevelop::IToolViewFactory::defaultPosition(const QString &areaName)
+  which will give the UI a hint on where to place the toolview
+.
+
+Once the factory is ready, it has to be added to the UiController using IUiController::addToolView() method.
+It is not absolutely necessary for a plugin to remove or delete toolview factory. UiController will
+delete them all upon unload.
+
+NOTE: temporarily IUiController has KDevelop::IUiController::openUrl() method which is the only
+way to open files in KDevelop until DocumentController is ported.
+
+
+\subsection launch Launch Framework
+
+- Launch Configuration (\ref KDevelop::ILaunchConfiguration)<br />
+  one entry created by the user in Configure Launches
+  (ie an executable)
+  - has one Launch Configuration Type
+  - has a Launcher for every possible Launch Mode
+
+- Launch Configuration Type (\ref KDevelop::LaunchConfigurationType)<br />
+  native application / script
+  - has possible Launchers
+
+- Launcher (\ref KDevelop::ILauncher)<br />
+  creates the KJob for launching
+  - has LaunchConfigurationPageFactories
+  - supports a number of Launch Modes
+
+- Launch Mode: execute / debug / profile
+
+- Launch Configuration Page Factory (\ref KDevelop::LaunchConfigurationPageFactory)<br />
+  creates Widget used in Configure Launches
+
+- Launch Configuration Page (\ref KDevelop::LaunchConfigurationPage)<br />
+  Widget that configures a LaunchConfiguration
+
+- RunController (\ref KDevelop::IRunController)
+  - has possible Launch Configuration Types
+
+
+\section sublime Sublime UI
+
+\subsection sublime_operation Modus Operandi
+
+- UI provides support for "areas" (alike Eclipse's perspectives)
+- The basic set of areas is:
+  - code editing area with split editor windows \n
+    (with kate/konqueror-like splitting)
+  - debugging area \n
+    (Xcode-like debugger window with only one editor view by default but with possiblility to show more)
+  - profiling area \n
+    (like KCacheGrind)
+  - user interface design area \n
+    (like Qt designer)
+- Area configuration includes code editor windows (unlike eclipse)
+- Each area can be displayed in usual Qt mainwindow with toolviews in dockwidgets
+- Areas are shown in separate mainwindows so that multiple-monitor setups become the best supported
+- One area can be shown in two and more mainwindows by "cloning" the area \n
+  (unlike Eclipse that pretends that two mainwindows show the same area)
+- Optionally areas can be switched inside the same mainwindow without opening new ones
+  (like in Eclipse), but this mode of operation is currently not implemented. \n
+  Also Sublime was not optimized for this use-case. See wiki pages for a detailed discussion and
+  explanation of possible problems.
+- It is possible to open as many similar toolviews as necessary (for example, several konsole's)
+- It is possible to open several views for the same file in code editor view (unlike KDevelop 3.x)
+- Instead of tabs for editor windows a "switcher" is provided. \n
+  Currently the switcher is a combobox but that will change for sure.
+.
+
+\subsection sublime_architecture Brief Architecture Overview
+
+Sublime::Controller is the central point of the whole Sublime infrastructure. It contains areas,
+documents, and controlls mainwindows. \n
+Sublime::Controller::showArea() is the only way to show an area in the mainwindow.
+
+Sublime::MainWindow is just a KParts::MainWindow which knows how to "reconstruct" the area
+and react on area changes. Additionally it knows which view and toolview is "active" (i.e. last focused).
+
+Sublime::Area is the object that controls views, toolviews, and defines their placement
+inside the mainwindow. Provides various view management (e.g. add/remove/etc.) methods and signals.
+Also Area is responsible for storing and restoring the view layout (on-disk storage is not
+ implemented currently).
+
+An area is identified by its name. Each KDevelop platform application, for example, has to define
+a concept of a "default area" in ShellExtension so that the UiController can load it by default.
+
+While areas operate on views, the Sublime Controller deals with Sublime::Document objects only.
+Sublime::View is only a thin wrapper around QWidget.
+
+Document is what provides views. Sublime::Document::createView() is the only way to get a view.
+When createView() is called, the protected Sublime::Document::createViewWidget() is called to
+return the actual widget for a view.
+
+There is an abstract Sublime::Document class with no createViewWidget() implementation and
+there's a convenience class Sublime::ToolDocument that can create widgets of user-specified type.
+
+KDevelop currently uses Sublime::PartDocument which is subclassed by KDevelop::PartDocument.
+This PartDocument creates a view by loading a part and then asking a part about its widget.
+
+
+
+*/

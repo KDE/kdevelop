@@ -1,0 +1,11 @@
+/*!
+ * @mainpage Tests library
+ *
+ * @licenses
+ * @lgpl
+ *
+ * For questions and discussions contact the
+ * <a href="mailto:kdevelop-devel@kde.org">kdevelop-devel@kde.org</a> mailing list.
+ */
+
+// DOXYGEN_PROJECT_NAME=Tests library

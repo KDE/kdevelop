@@ -1,0 +1,19 @@
+/*!
+ * @mainpage interfaces - Library with the basic interface for the Shell.
+ *
+ * interfaces is a library that provides Interfaces to various parts of 
+ * the shell, for example the plugin and project controller or the uicontroller
+ *
+ * @section desc Description
+ *
+ * @todo: add description and examples
+ *
+ * @licenses
+ * @lgpl
+ *
+ * For questions and discussons about editor either contact the author
+ * or the <a href="mailto:kdevelop-devel@kde.org">kdevelop-devel@kde.org</a>
+ * mailing list.
+ */
+
+// DOXYGEN_PROJECT_NAME=Interfaces library

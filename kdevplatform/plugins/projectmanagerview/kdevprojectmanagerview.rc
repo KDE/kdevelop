@@ -1,0 +1,28 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="kdevprojectmanagerview" version="8" translationDomain="kdevprojectmanagerview">
+<MenuBar>
+ <Menu name="project">
+  <Action name="project_configure"
+	  group="build_operations"/>
+
+  <Action name="project_buildall"
+	  group="build_operations"/>
+
+  <Action name="project_build"
+	  group="build_operations"/>
+
+  <Action name="project_install"
+	  group="build_operations"/>
+
+  <Action name="project_clean"
+	  group="build_operations"/>
+
+  <Action name="project_prune"
+	  group="build_operations"/>
+ </Menu>
+</MenuBar>
+
+<ToolBar name="mainToolBar" position="Top">
+  <Action name="project_build" group="build_operations" />
+</ToolBar>
+</gui>

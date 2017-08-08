@@ -1,0 +1,3 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="KDevDocumentView" version="9" translationDomain="kdevdocumentview">
+</gui>

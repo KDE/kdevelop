@@ -1,0 +1,4 @@
+Most of the code in here is taken from the rapidsvn project, extending the
+public API of the svncpp library at the places where we need it.
+
+The current version of this code corresponds to rapidsvn 0.12.0

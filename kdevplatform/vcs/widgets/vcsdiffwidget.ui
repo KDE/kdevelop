@@ -1,0 +1,46 @@
+<ui version="4.0" >
+ <class>VcsDiffWidget</class>
+ <widget class="QWidget" name="VcsDiffWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>625</width>
+    <height>376</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="revLabel" >
+     <property name="text" >
+      <string>Difference between revisions</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KTextEdit" name="diffDisplay" />
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

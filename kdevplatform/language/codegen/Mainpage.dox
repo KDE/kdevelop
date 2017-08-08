@@ -1,0 +1,143 @@
+/*!
+ * @mainpage Code Generation and Refactoring library
+ *
+ * Overview | \ref Refactoring
+ *
+ * The code generation api provides a system to simplify the creation of refactoring and
+ * code generating tools.  The definition-use chain (duchain) and the language's specific
+ * abstract syntax tree (AST) provide the basis of a two-tiered, high-level and low-level
+ * api respectively.  This gives you the simplicity and reusability of working with a
+ * language-independent api (the duchain) while still having the full power to manipulate
+ * language specifics (the AST).
+ *
+ * To perform code generation, you should create a new duchain (eg. starting with a
+ * KDevelop::DUContext or KDevelop::Declaration) and then if desired attach AST branches
+ * where required.
+ *
+ * To perform refactoring, a change set needs to be created against pre-existing duchains
+ * and/or ASTs; the chains/ASTs are not modified directly.  Create a KDevelop::DUChangeSet
+ * and/or an KDevelop::AstChangeSet.  Once created, this api will use the
+ * KDevelop::EditorIntegrator to modify the editor text, or directly edit on-disk files.
+ *
+ * Refactoring which includes some code generation can combine the two different
+ * approaches (direct creation of objects and change sets).
+ *
+ * @licenses
+ * @lgpl
+ *
+ * For questions and discussons about editor either contact the author
+ * or the <a href="mailto:kdevelop-devel@kde.org">kdevelop-devel@kde.org</a>
+ * mailing list.
+ */
+
+/*!
+ * \page Refactoring Refactoring and Code Generation
+ *
+ * \ref index "Overview" | Refactoring and Code Generation
+ *
+ * The process of refactoring involves several logical steps - initial condition checking,
+ * user input gathering, final condition checking, generation of change sets, user review
+ * of changes, and change committing.  Tools may need to repeat steps as required, eg.
+ * if further information is needed, or if there would be a semantic problem created by the
+ * refactoring, the user may get a chance to resolve the problem.
+ *
+ * \section precondition Precondition checking
+ *
+ * Preconditions are basic conditions which must be met for the refactoring to be possible.
+ * They usually include that the project does not have any parsing errors, and that the
+ * location where it is to be initiated is a location which can accomodate the refactoring
+ * (eg. extract method should have a portion of a method selected in the editor).
+ *
+ * These conditions may be run often to present the state to the user, so they should be
+ * efficient; save any complex analysis for later.
+ *
+ * \section ui User input gathering
+ *
+ * Here the user is presented with a user interface to enable the efficient gathering of information
+ * required to undertake the refactoring.  This may take the form of a wizard for complex
+ * refactorings, or a popup notification for simpler refactorings such as an object
+ * renaming.
+ *
+ * \section final Final condition checking and change set generation
+ *
+ * Once the user input has been collected, the tool should be in a better position to evaluate
+ * whether the refactoring is possible and will generate semantically correct changes.
+ * If there are no issues, the tool should proceed to generate change set(s).
+ *
+ * Ideally, no more than one AST should be stored in memory at once in order that refactoring
+ * of complex projects proceeds without requiring excessive system resources.  Once the
+ * change set is finalised, request for it to be translated into a KDevelop::EditorChangeSet.
+ *
+ * \section review User review of changes
+ *
+ * The editor change sets will be optionally presented to the user for review before applying
+ * to the code base.
+ */
+
+/*!
+ * \page ChangeSets Change Sets
+ *
+ * \ref index "Overview" | \ref Refactoring | Change Sets
+ *
+ * Change sets are generated via two main methods - altering duchains, and/or (when
+ * the duchain is not expressive enough) altering ASTs.  Code which is able to express everything
+ * using only the duchain may be instantly applicable to many languages, such as class generation.
+ * However code which accesses the AST is automatically language-specific, and will require
+ * additional effort to port to other languages.  In general, use the duchain when you can,
+ * and the AST when you must.
+ *
+ * Create a new duchain change set as follows:
+ * \code
+ *   KDevelop::ReferencedTopDUContext top = KDevelop::DUChainUtils::standardContextForUrl( myFile );
+ *
+ *   KDevelop::DUChainChangeSet* change = new KDevelop::DUChainChangeSet( top );
+ * \endcode
+ *
+ * From here, you can alter declarations, contexts, and types.  Some examples:
+ * \code
+ *   // Create a new class definition
+ *   KDevelop::Declaration* dec = new KDevelop::Declaration();
+ *   dec->setIdentifier("MyNewClass");
+ *   dec->setDeclarationIsDefinition();
+ *
+ *   KDevelop::StructureType::Ptr classType(new KDevelop::StructureType);
+ *   classType->setClassType(KDevelop::StructureType::Class);
+ *
+ *   dec->setType(classType);
+ * \endcode
+ *
+ * Make a member variable private and add accessor methods:
+ * \code
+ *   QList<KDevelop::Declaration*> declarations = topContext->findDeclarations("m_myVariable");
+ *
+ *   foreach ( KDevelop::Declaration* d, declarations ) {
+ *     if ( KDevelop::ClassMemberDeclaration* cd = dynamic_cast<KDevelop::ClassMemberDeclaration*>( d ) ) {
+ *       if ( cd->accessPolicy() == KDevelop::Declaration::Public ) {
+ *         KDevelop::DUChainRef* ref = change->modifyObject( cd );
+ *
+ *         // Make the variable private
+ *         ref->setAccessPolicy( KDevelop::Declaration::Private );
+ *
+ *         // Create an accessor function
+ *         KDevelop::Declaration* accessor = new KDevelop::Declaration();
+ *         FunctionType::Ptr accessorType( new KDevelop::FunctionType() );
+ *         accessorType->setReturnType( cd->type() );
+ *         accessorType->setModifiers( KDevelop::AbstractType::ConstModifier );
+ *         declaration->setType( accessorType );
+ *         declaration->setIdentifier("myVariable");
+ *
+ *         // Provide an implementation for the accessor function
+ *         // Would usually be done in a language-specific component of the code generator
+ *         // Details to be worked out
+ *         CompoundStatementAST* ast = ref->createAst<CompoundStatementAST>();
+ *
+ *         // blah
+ *       }
+ *     }
+ *   }
+ * \endcode
+ */
+
+// DOXYGEN_REFERENCES = language/editor language/duchain
+// DOXYGEN_SET_WARN_LOGFILE=language/codegen/doxygen.log
+// DOXYGEN_SET_RECURSIVE=yes

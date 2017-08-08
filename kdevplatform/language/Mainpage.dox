@@ -1,0 +1,24 @@
+/*!
+ * @mainpage Language library
+ *
+ * The language library provides an interface to the structure of code which
+ * is being edited by KDevelop, and allows such things as class browsing, code
+ * completion, and many more features to be provided for all supported languages.
+ *
+ * @section desc Description
+ *
+ * @section editor Editor Integration
+ * The editor integration tracks editor documents and smart ranges. <a href="../editor/html/index.html"><b>Read more</b></a>.
+ *
+ * @section duchain Definition-Use Chain and Type System
+ * The definition-use chain and type system offer a language-neutral representation of source code structure. <a href="../duchain/html/index.html"><b>Read more</b></a>.
+ *
+ * @licenses
+ * @lgpl
+ *
+ * For questions and discussons about editor either contact the author
+ * or the <a href="mailto:kdevelop-devel@kde.org">kdevelop-devel@kde.org</a>
+ * mailing list.
+ */
+
+// DOXYGEN_PROJECT_NAME=Language library

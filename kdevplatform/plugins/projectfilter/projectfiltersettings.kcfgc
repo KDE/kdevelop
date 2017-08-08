@@ -1,0 +1,8 @@
+File=projectfiltersettings.kcfg
+ClassName=ProjectFilterSettings
+Singleton=true
+UseEnumTypes=true
+SetUserTexts=true
+ItemAccessors=true
+Inherits=KDevelop::ProjectConfigSkeleton
+IncludeFiles=project/projectconfigskeleton.h

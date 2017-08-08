@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile name="kdeveloprc"/>
+  <group name="Language Support">
+    <entry name="automaticInvocation" key="Automatic Invocation" type="Bool">
+    <default>true</default>
+</entry>
+    <entry name="highlightSemanticProblems" key="highlightSemanticProblems" type="Bool">
+    <default>true</default>
+    </entry>
+    <entry name="highlightProblematicLines" key="highlightProblematicLines" type="Bool">
+    <default>false</default>
+    </entry>
+    <entry name="boldDeclarations" key="boldDeclarations" type="Bool">
+    <default>true</default>
+    </entry>
+    <entry name="showMultiLineSelectionInformation" key="showMultiLineSelectionInformation" type="Bool">
+    <default>false</default>
+    </entry>
+    <entry name="localColorization" key="localColorization" type="Int">
+    <default>170</default>
+    </entry>
+    <entry name="globalColorization" key="globalColorization" type="Int">
+    <default>255</default>
+    </entry>
+    <entry name="minFilesForSimplifiedParsing" key="minFilesForSimplifiedParsing" type="Int">
+    <default>100000</default>
+    </entry>
+    <entry name="todoMarkerWords" key="todoMarkerWords" type="String">
+    <default>TODO FIXME</default>
+    </entry>
+    <entry name="completionDetail" key="completionDetail" type="Enum">
+    <choices>
+    <choice name="Minimal" />
+    <choice name="MinimalWhenAutomatic" />
+    <choice name="AlwaysFull" />
+    </choices>
+    <default>MinimalWhenAutomatic</default>
+    </entry>
+  </group>
+</kcfg>

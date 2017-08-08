@@ -1,0 +1,84 @@
+/***************************************************************************
+ *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>            *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU Library General Public License as       *
+ *   published by the Free Software Foundation; either version 2 of the    *
+ *   License, or (at your option) any later version.                       *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this program; if not, write to the                 *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
+ ***************************************************************************/
+#ifndef KDEVPLATFORM_ILANGUAGECONTROLLER_H
+#define KDEVPLATFORM_ILANGUAGECONTROLLER_H
+
+#include <QList>
+#include <QObject>
+#include <QUrl>
+
+#include "interfacesexport.h"
+
+namespace KDevelop {
+
+class ILanguageSupport;
+
+class BackgroundParser;
+class ICompletionSettings;
+class StaticAssistantsManager;
+class ProblemModelSet;
+
+/**
+ * @class ILanguageController
+ */
+class KDEVPLATFORMINTERFACES_EXPORT ILanguageController: public QObject {
+    Q_OBJECT
+public:
+    explicit ILanguageController(QObject *parent = nullptr);
+
+    /**
+     * @return the currently active languages loaded for the currently active file.
+     *
+     * The list is empty if the file's language is unsupported.
+     */
+    virtual QList<ILanguageSupport*> activeLanguages() = 0;
+
+    /**
+     *@return the language for given @p name.
+     */
+    virtual ILanguageSupport* language(const QString &name) const = 0;
+
+    /**
+     * @return the languages that support the MIME type of @p url.
+     * @warning If this is called from within the foreground thread,
+     *          the language support is loaded if required.
+     *          If it is called from a background thread, it can not
+     *          be loaded, and thus zero will be returned.
+     */
+    virtual QList<ILanguageSupport*> languagesForUrl(const QUrl &url) = 0;
+
+    /** @return All languages currently loaded */
+    virtual QList<ILanguageSupport*> loadedLanguages() const = 0;
+
+    /** @return the background parser used to parse source files */
+    virtual BackgroundParser *backgroundParser() const = 0;
+
+    /** @return The global code assistant manager (manages assistants such as the RenameAssistant) */
+    virtual StaticAssistantsManager *staticAssistantsManager() const = 0;
+
+    /** Access to the completion settings */
+    virtual ICompletionSettings *completionSettings() const = 0;
+
+    virtual ProblemModelSet* problemModelSet() const = 0;
+};
+
+}
+
+#endif
+

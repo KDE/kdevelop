@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UiConfig</class>
+ <widget class="QWidget" name="UiConfig">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>521</width>
+    <height>399</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>User Interface</string>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Dock Window Behavior</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="toolTip">
+         <string>&lt;p&gt;Controls whether the bottom left corner is occupied by the dock at the left, or by the dock at the bottom.&lt;/p&gt;</string>
+        </property>
+        <property name="text">
+         <string>Bottom left corner occupied by:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="toolTip">
+         <string>&lt;p&gt;Controls whether the bottom right corner is occupied by the dock at the right, or by the dock at the bottom.&lt;/p&gt;</string>
+        </property>
+        <property name="text">
+         <string>Bottom right corner occupied by:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="kcfg_BottomLeftCornerOwner">
+        <property name="toolTip">
+         <string>&lt;p&gt;Controls whether the bottom left corner is occupied by the dock at the left, or by the dock at the bottom.&lt;/p&gt;</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Left Dock</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Bottom Dock</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="kcfg_BottomRightCornerOwner">
+        <property name="toolTip">
+         <string>&lt;p&gt;Controls whether the bottom right corner is occupied by the dock at the right, or by the dock at the bottom.&lt;/p&gt;</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>Right Dock</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Bottom Dock</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Tabbed Browsing</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_1">
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="kcfg_TabBarOpenAfterCurrent">
+        <property name="toolTip">
+         <string>Controls whether to open new tabs next to the active one.</string>
+        </property>
+        <property name="text">
+         <string>Open new tab after current</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="kcfg_TabBarArrangeBuddies">
+        <property name="toolTip">
+         <string>When enabled, plugins can group related files side by side.
+For example, a header file will be opened next to the implementation file.</string>
+        </property>
+        <property name="text">
+         <string>Arrange related documents side by side</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="kcfg_TabBarVisibility">
+        <property name="toolTip">
+         <string>Enables or disables the display of the tab bar at the top of the editor window.</string>
+        </property>
+        <property name="text">
+         <string>Show tabs</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Coloring</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="kcfg_ColorizeByProject">
+        <property name="toolTip">
+         <string>When enabled, tabs and other widgets are colored based on the project affiliation</string>
+        </property>
+        <property name="text">
+         <string>Color widgets based on the project affiliation</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>kcfg_TabBarVisibility</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_TabBarOpenAfterCurrent</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_TabBarVisibility</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_TabBarArrangeBuddies</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

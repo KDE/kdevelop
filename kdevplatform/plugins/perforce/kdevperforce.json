@@ -1,0 +1,57 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Morten Danielsen Volden",
+                "Name[x-test]": "xxMorten Danielsen Voldenxx"
+            }
+        ],
+        "Category": "Version Control",
+        "Description": "Provides Integration with Perforce Version Control System",
+        "Description[ca@valencia]": "Proporciona integració amb el sistema de control de versions Perforce",
+        "Description[ca]": "Proporciona integració amb el sistema de control de versions Perforce",
+        "Description[cs]": "Poskytuje integraci Perforce Version Control System",
+        "Description[de]": "Bietet Integration mit der Perforce-Versionsverwaltung",
+        "Description[es]": "Proporciona integración con el sistema de control de versiones Perforce",
+        "Description[fr]": "Fournit une intégration avec le système de contrôle de version Perforce",
+        "Description[it]": "Fornisce l'integrazione con il sistema di controllo versione Perforce",
+        "Description[nl]": "Biedt ondersteuning voor Perforce versiecontrolesysteem",
+        "Description[pl]": "Dostarcza integrację z systemem kontroli wersji Perforce",
+        "Description[pt]": "Oferece a integração com o Sistema de Controlo de Versões Perforce",
+        "Description[sk]": "Poskytuje integráciu s verzionovacím systémom Perforce",
+        "Description[sl]": "Ponuja vgradnjo sistema za nadzor različic Perforce",
+        "Description[sv]": "Tillhandahåller integrering med Perforce versionskontrollsystem",
+        "Description[tr]": "Perforce Sürüm Denetim Sistemi ile Bütünleşme Sağlar",
+        "Description[uk]": "Забезпечує інтеграцію з системою керування версіями Perforce",
+        "Description[x-test]": "xxProvides Integration with Perforce Version Control Systemxx",
+        "Icon": "kdevelop",
+        "Id": "kdevperforce",
+        "License": "GPL",
+        "Name": "Perforce Support",
+        "Name[ca@valencia]": "Implementació del Perforce",
+        "Name[ca]": "Implementació del Perforce",
+        "Name[cs]": "Podpora Perforce",
+        "Name[de]": "Perforce-Unterstützung",
+        "Name[es]": "Implementación de Perforce",
+        "Name[fr]": "Prise en charge de Perforce",
+        "Name[it]": "Supporto per Perforce",
+        "Name[nl]": "Ondersteuning van Perforce",
+        "Name[pl]": "Obsługa Perforce",
+        "Name[pt]": "Suporte para o Perforce",
+        "Name[sk]": "Podpora Perforce",
+        "Name[sl]": "Podpora za Perforce",
+        "Name[sv]": "Perforce-stöd",
+        "Name[tr]": "Perforce Desteği",
+        "Name[uk]": "Підтримка Perforce",
+        "Name[x-test]": "xxPerforce Supportxx",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ],
+        "Version": "5.0"
+    },
+    "X-KDevelop-Category": "Global",
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IExecutePlugin"
+    ],
+    "X-KDevelop-Mode": "GUI"
+}

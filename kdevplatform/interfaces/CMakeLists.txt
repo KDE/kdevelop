@@ -1,0 +1,112 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
+
+set(KDevPlatformInterfaces_LIB_SRCS
+    iassistant.cpp
+    context.cpp
+    configpage.cpp
+    iplugin.cpp
+    idocument.cpp
+    icore.cpp
+    iuicontroller.cpp
+    iplugincontroller.cpp
+    iprojectcontroller.cpp
+    iproject.cpp
+    ilanguagecontroller.cpp
+    idocumentcontroller.cpp
+    istatus.cpp
+    iruncontroller.cpp
+    isession.cpp
+    isessionlock.cpp
+    isourceformatter.cpp
+    isourceformattercontroller.cpp
+    contextmenuextension.cpp
+    icompletionsettings.cpp
+    iselectioncontroller.cpp
+    idocumentationprovider.cpp
+    idocumentationproviderprovider.cpp
+    idocumentation.cpp
+    idocumentationcontroller.cpp
+    idebugcontroller.cpp
+    ipartcontroller.cpp
+    launchconfigurationpage.cpp
+    launchconfigurationtype.cpp
+    ilauncher.cpp
+    ilaunchconfiguration.cpp
+    ilaunchmode.cpp
+    iprojectprovider.cpp
+    ibuddydocumentfinder.cpp
+    itemplateprovider.cpp
+    itestsuite.cpp
+    itestcontroller.cpp
+    itoolviewactionlistener.cpp
+    ilanguagecheck.cpp
+    ilanguagecheckprovider.cpp
+    iproblem.cpp
+    iruntime.cpp
+    iruntimecontroller.cpp
+)
+configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
+
+kdevplatform_add_library(KDevPlatformInterfaces SOURCES ${KDevPlatformInterfaces_LIB_SRCS})
+target_link_libraries(KDevPlatformInterfaces
+LINK_PUBLIC
+    KF5::Parts
+    KF5::TextEditor
+LINK_PRIVATE
+    KF5::ConfigCore
+    KF5::I18n
+    KF5::Service
+)
+
+install(FILES
+    iassistant.h
+    context.h
+    configpage.h
+    contextmenuextension.h
+    iplugin.h
+    icore.h
+    iuicontroller.h
+    iplugincontroller.h
+    iprojectcontroller.h
+    iproject.h
+    ilanguagecontroller.h
+    idocument.h
+    idocumentcontroller.h
+    isourceformatter.h
+    isourceformattercontroller.h
+    istatus.h
+    isession.h
+    isessionlock.h
+    iruncontroller.h
+    ilaunchconfiguration.h
+    ilauncher.h
+    launchconfigurationpage.h
+    launchconfigurationtype.h
+    icompletionsettings.h
+    iselectioncontroller.h
+    idocumentation.h
+    idocumentationprovider.h
+    idocumentationproviderprovider.h
+    idocumentationcontroller.h
+    idebugcontroller.h
+    ipartcontroller.h
+    ilaunchmode.h
+    iprojectprovider.h
+    ilanguagecheck.h
+    ilanguagecheckprovider.h
+    ibuddydocumentfinder.h
+    itemplateprovider.h
+    itestsuite.h
+    itestcontroller.h
+    itoolviewactionlistener.h
+    iproblem.h
+    iruntime.h
+    iruntimecontroller.h
+    ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/interfaces COMPONENT Devel
+)
+
+install(FILES
+    kdevelopplugin.desktop
+    DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR}
+)

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile arg="true"/>
+  <group name="Flatpak">
+    <entry name="name" type="String"><label>AppStream name for the application</label><default>org.kde.something</default></entry>
+    <entry name="runtime" type="String"><label>Base platform</label><default>org.kde.Platform</default></entry>
+    <entry name="runtimeversion" type="String"><label>Base platform version</label><default>master</default></entry>
+    <entry name="sdk" type="String"><label>Base SDK</label><default>org.kde.Sdk</default></entry>
+    <entry name="appname" type="String"><label>Application name</label><default>something</default></entry>
+  </group>
+</kcfg>

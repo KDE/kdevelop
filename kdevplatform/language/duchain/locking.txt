@@ -1,0 +1,26 @@
+Definition-use chain locking design
+===================================
+
+Objective: To enable concurrent definition-use chain building, while maintaining thread safety, accuracy, and performance.
+
+Example tasks
+1) Building of a chain from scratch
+2) Re-building a chain from modified source code
+3) Interrogating a chain for code completion, refactoring etc.
+
+Write Access
+- change relationships between items
+- create new items
+- delete items no longer needed
+
+Old scheme:
+One RW lock for each top-level context.  Pros: allowed concurrent writing in different chains.  Cons: prone to deadlocks.
+
+New scheme:
+One RW lock for the entire chain.  Idea is for write locks to be held for brief periods of time.  Thus, need read locks to be held for brief periods too.
+
+When a read lock is held, no changes may be made to the chain.  Evaluations done prior to the lock being taken are invalid and have to be repeated, so prefer to do your evaluations with the lock held.
+
+When a write lock is held, changes may be made to the chain.  Objects may be deleted, as code will not be running inside them.  Need to provide speedy lookup as to whether an object has been deleted or not.
+
+Objects owned by a document may only be deleted by a builder operating on that document.  Additionally, need to guarantee that no more than one builder will be active on each document at any time.  This way, the builder doesn't have to ensure that its objects are not being deleted from underneath it.

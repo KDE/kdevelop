@@ -1,0 +1,20 @@
+/*!
+ * @mainpage project - Project library and manager interfaces.
+ *
+ * project provides the project model, base classes to create
+ * project configuration dialogs and the interfaces for the
+ * project managers
+ *
+ * @section desc Description
+ *
+ * @todo: add description and examples
+ *
+ * @licenses
+ * @lgpl
+ *
+ * For questions and discussons about editor either contact the author
+ * or the <a href="mailto:kdevelop-devel@kde.org">kdevelop-devel@kde.org</a>
+ * mailing list.
+ */
+
+// DOXYGEN_PROJECT_NAME=Project library

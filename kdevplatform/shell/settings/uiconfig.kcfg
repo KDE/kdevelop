@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile/>
+  <group name="UiSettings">
+        <entry name="BottomLeftCornerOwner" key="BottomLeftCornerOwner" type="Int">
+        </entry>
+        <entry name="BottomRightCornerOwner" key="BottomRightCornerOwner" type="Int">
+        </entry>
+        <entry name="TabBarVisibility" key="TabBarVisibility" type="Int">
+            <default>1</default>
+        </entry>
+        <entry name="TabBarOpenAfterCurrent" key="TabBarOpenAfterCurrent" type="Int">
+            <default>1</default>
+        </entry>
+        <entry name="TabBarArrangeBuddies" key="TabBarArrangeBuddies" type="Int">
+            <default>1</default>
+        </entry>
+        <entry name="ColorizeByProject" key="ColorizeByProject" type="Bool">
+            <default>true</default>
+        </entry>
+  </group>
+</kcfg>

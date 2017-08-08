@@ -1,0 +1,43 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="KDevContextBrowser" version="12" translationDomain="kdevcontextbrowser">
+<MenuBar>
+  <Menu name="navigation">
+    <Action name="source_browse_mode"/>
+
+    <Action name="previous_context"
+	    group="navigation_cxt"/>
+
+    <Action name="next_context"
+	    group="navigation_cxt"/>
+
+    <Action name="previous_use"
+            group="navigation_use"/>
+
+    <Action name="next_use"
+            group="navigation_use"/>
+
+    <Action name="context_outline"
+            group="navigation_cxt"/>
+  </Menu>
+</MenuBar>
+
+<ToolBar name="KDevCodebrowserToolBar">
+  <text>Code Browser Toolbar</text>
+  <Separator/>
+  <Action name="outline_line"/>
+  <Separator/>
+  <WeakSeparator/>
+</ToolBar>
+
+<State name="has_project">
+  <enable>
+    <Action name="quick_open_class" />
+    <Action name="quick_open_function" />
+    <Action name="quick_open_navigate" />
+    <Action name="quick_open_navigate_function_definitions" />
+    <Action name="quick_open_jump_declaration" />
+    <Action name="quick_open_jump_definition" />
+  </enable>
+</State>
+
+</gui>

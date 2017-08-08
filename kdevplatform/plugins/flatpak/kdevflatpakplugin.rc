@@ -1,0 +1,10 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="kdevflatpak" version="1" translationDomain="kdevflatpak">
+<MenuBar>
+ <Menu name="run">
+  <Action name="runtime_flatpak_rebuild" group="runtime"/>
+  <Action name="runtime_flatpak_export" group="runtime"/>
+  <Action name="runtime_flatpak_remote" group="runtime"/>
+ </Menu>
+</MenuBar>
+</gui>

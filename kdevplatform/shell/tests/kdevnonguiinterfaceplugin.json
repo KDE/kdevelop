@@ -1,0 +1,36 @@
+{
+    "KPlugin": {
+        "Description": "This plugin is purely for unit-test", 
+        "Description[ca@valencia]": "Este connector és exclusivament per a unitats de proves", 
+        "Description[ca]": "Aquest connector és exclusivament per a unitats de proves", 
+        "Description[de]": "Die ist eine Modul nur für Unit-Tests", 
+        "Description[es]": "Este complemento es exclusivamente para pruebas unitarias", 
+        "Description[fi]": "Tämä liitännäinen on puhtaasti yksikkötestausta varten", 
+        "Description[gl]": "Este complemento é soamente para probas unitarias.", 
+        "Description[nl]": "Deze plugin is alleen voor eenheid-testen", 
+        "Description[pl]": "Ta wtyczka służy tylko do testów jednostek", 
+        "Description[pt]": "Este 'plugin' serve apenas para testes unitários", 
+        "Description[pt_BR]": "Este plugin é apenas para testes unitários", 
+        "Description[sk]": "Tento plugin je čisto na unit testy", 
+        "Description[sl]": "Ta vstavek je samo za preizkušanje enot", 
+        "Description[sv]": "Insticksprogrammet är enbart avsett för enhetstest", 
+        "Description[tr]": "Bu eklenti tamamen birim-testleri içindir", 
+        "Description[uk]": "Цей додаток призначено лише для тестування модулів", 
+        "Description[x-test]": "xxThis plugin is purely for unit-testxx", 
+        "Description[zh_CN]": "此插件只用于 unit 测试", 
+        "Id": "kdevnonguiinterface", 
+        "License": "LGPL", 
+        "Name": "KDevNonGuiInterface", 
+        "Name[bs]": "KDevNonGUI sučelje", 
+        "Name[nds]": "KDevKeenBöversiet", 
+        "Name[sv]": "KDevelop icke grafiskt användargränssnitt", 
+        "Name[x-test]": "xxKDevNonGuiInterfacexx", 
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    }, 
+    "X-KDevelop-Interfaces": [
+        "org.kdevelop.ITestNonGuiInterface"
+    ], 
+    "X-KDevelop-Mode": "NoGUI"
+}

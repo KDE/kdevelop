@@ -1,0 +1,21 @@
+/*!
+ * @mainpage Editor Integration
+ *
+ * The Editor Integration api provides easier access to the KTextEditor
+ * API.
+ *
+ * @section desc Description
+ *
+ * @todo: add description and examples
+ *
+ * @authors Hamish Rodda \<rodda@kde.org\>
+ *
+ * @licenses
+ * @lgpl
+ *
+ * For questions and discussons about editor either contact the author
+ * or the <a href="mailto:kdevelop-devel@kde.org">kdevelop-devel@kde.org</a>
+ * mailing list.
+ */
+
+// DOXYGEN_PROJECT_NAME=Editor library

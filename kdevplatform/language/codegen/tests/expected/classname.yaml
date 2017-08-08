@@ -1,0 +1,20 @@
+class:
+  name: ClassName
+  members:
+  - name: name
+    type: QString
+  - name: number
+    type: int
+  - name: data
+    type: SomeCustomType
+  functions:
+  - name: doSomething
+    arguments:
+    - name: howMuch
+      type: double
+    - name: doSomethingElse
+      type: bool
+  - name: getSomeOtherNumber
+    return values:
+    - name: someOtherNumber
+      type: int

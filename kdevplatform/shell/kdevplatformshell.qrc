@@ -1,0 +1,12 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/kxmlgui5/kdevsession">
+        <file>kdevsessionui.rc</file>
+    </qresource>
+    <qresource prefix="/kxmlgui5/kdevsourceformatter">
+        <file>kdevsourceformatter.rc</file>
+    </qresource>
+    <qresource prefix="/kxmlgui5/kdevdebugger">
+        <file alias="kdevdebuggershellui.rc">debugger/kdevdebuggershellui.rc</file>
+    </qresource>
+</RCC>

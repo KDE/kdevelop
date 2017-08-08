@@ -1,0 +1,10 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="kdevstandardoutputview" version="7" translationDomain="kdevstandardoutputview">
+<MenuBar>
+  <Menu name="navigation">
+    <Action name="prev_error" />
+    <Action name="next_error" />
+  </Menu>
+</MenuBar>
+</gui>
+

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SourceFormatterSettingsUI</class>
+ <widget class="QWidget" name="SourceFormatterSettingsUI">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>636</width>
+    <height>632</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>General</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QCheckBox" name="chkKateOverrideIndentation">
+        <property name="toolTip">
+         <string>Override the editor indentation mode according to the formatting style for documents without Kate modeline.</string>
+        </property>
+        <property name="text">
+         <string>Override Kate Indentation Mode</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chkKateModelines">
+        <property name="toolTip">
+         <string>Add a Kate modeline according to the formatting style to formatted documents.</string>
+        </property>
+        <property name="text">
+         <string>Add Kate Modeline</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>200</horstretch>
+       <verstretch>129</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>Formatting Styles</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="KDevelop::SourceFormatterSelectionEdit" name="formatterSelectionEdit" native="true"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KDevelop::SourceFormatterSelectionEdit</class>
+   <extends>QWidget</extends>
+   <header>sourceformatterselectionedit.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
