@@ -49,6 +49,7 @@ QTextStream qout(stdout);
 QTextStream qerr(stderr);
 QTextStream qin(stdin);
 
+typedef QString (*TokenTextFunc)(int);
 /**
  * This class is a pure helper to use for binaries that you can
  * run on short snippets of test code or whole files and let
@@ -57,15 +58,14 @@ QTextStream qin(stdin);
  * It should work fine for any KDevelop-PG-Qt based parser.
  *
  *
- * @param SessionT the parse session for your language.
- * @param TokenStreamT the token stream for your language, based on KDevPG::TokenStreamBase.
- * @param TokenT the token class for your language, based on KDevPG::Token.
- * @param LexerT the Lexer for your language.
- * @param StartAstT the AST node that is returned from @c SessionT::parse().
- * @param DebugVisitorT the debug visitor for your language.
- * @param TokenToTextT function pointer to the function that returns a string representation for an integral token.
+ * @tparam SessionT the parse session for your language.
+ * @tparam TokenStreamT the token stream for your language, based on KDevPG::TokenStreamBase.
+ * @tparam TokenT the token class for your language, based on KDevPG::Token.
+ * @tparam LexerT the Lexer for your language.
+ * @tparam StartAstT the AST node that is returned from @c SessionT::parse().
+ * @tparam DebugVisitorT the debug visitor for your language.
+ * @tparam TokenTextT function pointer to the function that returns a string representation for an integral token.
  */
-typedef QString (*TokenTextFunc)(int);
 template<class SessionT, class TokenStreamT, class TokenT, class LexerT,
          class StartAstT, class DebugVisitorT, TokenTextFunc TokenTextT>
 class DebugLanguageParserHelper {
