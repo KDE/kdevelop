@@ -33,6 +33,4 @@ target_link_libraries(kdevappwizard
     KF5::Archive
     KDev::Interfaces KDev::Vcs KDev::Language KDev::Util)
 
-install(TARGETS kdevappwizard DESTINATION ${KDE_INSTALL_PLUGINDIR}/kdevplatform/${KDEV_PLUGIN_VERSION} )
-
 
