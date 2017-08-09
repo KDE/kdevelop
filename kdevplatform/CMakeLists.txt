@@ -59,7 +59,7 @@ add_subdirectory(plugins)
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")
 
 if(BUILD_TESTING)
-  set(KDEV_FIND_DEP_QT5TEST "find_dependency(Qt5Test \"${QT_MIN_VERSION})\"")
+  set(KDEV_FIND_DEP_QT5TEST "find_dependency(Qt5Test \"${QT_MIN_VERSION}\")")
 endif()
 configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
                               "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
