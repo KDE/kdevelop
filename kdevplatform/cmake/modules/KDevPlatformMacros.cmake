@@ -6,17 +6,22 @@
 #  KDEVPLATFORM_ADD_APP_TEMPLATES( template1 ... templateN )
 #    Use this to get packaged template archives for the given app templates.
 #    Parameters should be the directories containing the templates.
-
+#
 #  KDEVPLATFORM_ADD_FILE_TEMPLATES( template1 ... templateN )
 #    Use this to get packaged template archives for the given file templates.
 #    Parameters should be the directories containing the templates.
+#
+#  KDEVPLATFORM_ADD_PLUGIN( <plugin> JSON <jsonfile> SOURCES <src1> [<src2> [...]] [SKIP_INSTALL] )
+#    Use this to get create plugins for the KDevPlatform.
+#    Parameters should be the json file with plugin metadata and the sources of the plugin.
+#    In case the plugin should not be installed, pass SKIP_INSTALL.
 #
 # Copyright 2007 Andreas Pakulat <apaku@gmx.de>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
 include(CMakeParseArguments)
 
-# creates a template archive from the given directory
+# creates a template archive from the given directory, internal
 macro(kdevplatform_create_template_archive _templateName)
     get_filename_component(_tmp_file ${_templateName} ABSOLUTE)
     get_filename_component(_baseName ${_tmp_file} NAME_WE)
@@ -96,37 +101,6 @@ macro(kdevplatform_add_file_templates _templateNames)
         kdevplatform_add_template(${KDE_INSTALL_DATADIR}/kdevfiletemplates/templates ${_templateName})
     endforeach(_templateName ${ARGV})
 endmacro(kdevplatform_add_file_templates _templateNames)
-
-function(kdevplatform_add_library target)
-    set(options)
-    set(oneValueArgs)
-    set(multiValueArgs SOURCES)
-    cmake_parse_arguments(KDEV_ADD_LIBRARY "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-
-    string(REPLACE "KDevPlatform" "" shortTargetName ${target})
-    if (${shortTargetName} STREQUAL ${target})
-        message(FATAL_ERROR "Target passed to kdevplatform_add_library needs to start with \"KDevPlatform\", was \"${target}\"")
-    endif()
-
-    string(TOLOWER ${shortTargetName} shortTargetNameToLower)
-
-    add_library(${target} ${KDEV_ADD_LIBRARY_SOURCES})
-    add_library(KDev::${shortTargetName} ALIAS ${target})
-
-    generate_export_header(${target} EXPORT_FILE_NAME ${shortTargetNameToLower}export.h)
-
-    target_include_directories(${target} INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevplatform>")
-    set_target_properties(${target} PROPERTIES
-        VERSION ${KDEVPLATFORM_VERSION}
-        SOVERSION ${KDEVPLATFORM_LIB_SOVERSION}
-        EXPORT_NAME ${shortTargetName}
-    )
-
-    install(TARGETS ${target} EXPORT KDevPlatformTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
-    install(FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/${shortTargetNameToLower}export.h
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/${shortTargetNameToLower} COMPONENT Devel)
-endfunction()
 
 function(kdevplatform_add_plugin plugin)
     set(options SKIP_INSTALL)

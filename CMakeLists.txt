@@ -7,9 +7,6 @@ set(KDEVELOP_VERSION_MINOR 1)
 set(KDEVELOP_VERSION_PATCH 40)
 set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
 
-set(KDevPlatform_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/kdevplatform)
-set(KDevPlatform_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/kdevplatform)
-
 # plugin versions listed in the .desktop files
 set(KDEV_PLUGIN_VERSION 29)
 
@@ -112,14 +109,7 @@ if (CMAKE_COMPILER_CXX_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang
     add_compile_flag_if_supported(-pedantic)
 endif()
 
-include_directories(
-    ${KDevPlatform_SOURCE_DIR}
-    ${KDevPlatform_SOURCE_DIR}/plugins
-    ${KDevPlatform_BINARY_DIR}
-
-    ${KDevelop_SOURCE_DIR}
-    ${KDevelop_BINARY_DIR}
-)
+include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR})
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
 if(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug"
