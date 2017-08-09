@@ -7,6 +7,9 @@ set(KDEVELOP_VERSION_MINOR 1)
 set(KDEVELOP_VERSION_PATCH 40)
 set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
 
+# plugin versions listed in the .desktop files
+set(KDEV_PLUGIN_VERSION 29)
+
 # we need some parts of the ECM CMake helpers
 find_package (ECM 5.14.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
@@ -56,6 +59,9 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   XmlGui
   WindowSystem
   Crash
+  GuiAddons
+  Archive
+  Notifications
 )
 find_package(KF5SysGuard CONFIG)
 set_package_properties(KF5SysGuard PROPERTIES
@@ -78,25 +84,32 @@ add_definitions(
     -DQT_USE_FAST_OPERATOR_PLUS
 )
 
-# Turn off missing-field-initializers warning to avoid noise from false positives with empty {}
+function(add_compile_flag_if_supported _flag)
+    unset(_have_flag CACHE)
+    string(REGEX REPLACE "[-=]" "_" _varname ${_flag})
+    string(TOUPPER ${_varname} _varname)
+    set(_varname "HAVE${_varname}")
+    check_cxx_compiler_flag("${_flag}" "${_varname}")
+    if (${${_varname}})
+        add_compile_options(${_flag})
+    endif()
+endfunction()
+
+# Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
 # See discussion: http://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html
-check_cxx_compiler_flag(-Wno-missing-field-initializers HAVE_MFI_FLAG)
-check_cxx_compiler_flag(-Werror=undefined-bool-conversion HAVE_UBC_FLAG)
-check_cxx_compiler_flag(-Werror=tautological-undefined-compare HAVE_TUC_FLAG)
-if (HAVE_MFI_FLAG)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-missing-field-initializers")
-endif()
-if (HAVE_UBC_FLAG)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=undefined-bool-conversion")
-endif()
-if (HAVE_TUC_FLAG)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=tautological-undefined-compare")
-endif()
+add_compile_flag_if_supported(-Wno-missing-field-initializers)
+add_compile_flag_if_supported(-Werror=undefined-bool-conversion)
+add_compile_flag_if_supported(-Werror=tautological-undefined-compare)
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wdocumentation")
+    add_compile_flag_if_supported(-Wdocumentation)
+    # This warning is triggered by every call to qCDebug()
+    add_compile_flag_if_supported(-Wno-gnu-zero-variadic-macro-arguments)
+endif()
+if (CMAKE_COMPILER_CXX_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_compile_flag_if_supported(-pedantic)
 endif()
 
-include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR}  )
+include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR})
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
 if(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug"

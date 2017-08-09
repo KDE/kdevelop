@@ -4,8 +4,6 @@ set(KDEVPLATFORM_VERSION_MINOR 1)
 set(KDEVPLATFORM_VERSION_PATCH 40)
 set(KDEVPLATFORM_VERSION "${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}")
 
-# plugin versions listed in the .desktop files
-set(KDEV_PLUGIN_VERSION 29)
 # Increase this to reset incompatible item-repositories
 set(KDEV_ITEMREPOSITORY_VERSION 87)
 
@@ -17,43 +15,6 @@ set(KDevPlatform_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDevPlatformMacros)
-
-set(QT_MIN_VERSION "5.5.0")
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core DBus Widgets Concurrent Test)
-
-if(BUILD_TESTING)
-  find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
-endif()
-find_package(Qt5QuickWidgets ${QT_MIN_VERSION} CONFIG)
-set_package_properties(Qt5QuickWidgets PROPERTIES
-    PURPOSE "Qt5 QuickWidgets library (part of Qt >=5.3). Required for the Welcome Page plugin."
-    TYPE RECOMMENDED
-)
-
-find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
-  Archive
-  Config
-  GuiAddons
-  WidgetsAddons
-  IconThemes
-  I18n
-  ItemModels
-  ItemViews
-  JobWidgets
-  KCMUtils
-  KIO
-  NewStuff
-  Notifications
-  NotifyConfig
-  Parts
-  Service
-  Sonnet
-  TextEditor
-  ThreadWeaver
-  WindowSystem
-  Declarative
-  XmlGui
-)
 
 find_package(Grantlee5 CONFIG)
 set_package_properties(Grantlee5 PROPERTIES
@@ -67,41 +28,6 @@ set_package_properties(Boost PROPERTIES
     PURPOSE "Boost libraries for enabling the classbrowser"
     URL "http://www.boost.org"
     TYPE REQUIRED)
-
-add_definitions(
-    -DQT_DEPRECATED_WARNINGS
-    -DQT_DISABLE_DEPRECATED_BEFORE=0x050400
-    -DQT_NO_SIGNALS_SLOTS_KEYWORDS
-    -DQT_NO_URL_CAST_FROM_STRING
-    -DQT_STRICT_ITERATORS
-    -DQT_USE_FAST_CONCATENATION
-    -DQT_USE_FAST_OPERATOR_PLUS
-)
-
-function(add_compile_flag_if_supported _flag)
-    unset(_have_flag CACHE)
-    string(REGEX REPLACE "[-=]" "_" _varname ${_flag})
-    string(TOUPPER ${_varname} _varname)
-    set(_varname "HAVE${_varname}")
-    check_cxx_compiler_flag("${_flag}" "${_varname}")
-    if (${${_varname}})
-        add_compile_options(${_flag})
-    endif()
-endfunction()
-
-# Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
-# See discussion: http://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html
-add_compile_flag_if_supported(-Wno-missing-field-initializers)
-add_compile_flag_if_supported(-Werror=undefined-bool-conversion)
-add_compile_flag_if_supported(-Werror=tautological-undefined-compare)
-if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    add_compile_flag_if_supported(-Wdocumentation)
-    # This warning is triggered by every call to qCDebug()
-    add_compile_flag_if_supported(-Wno-gnu-zero-variadic-macro-arguments)
-endif()
-if (CMAKE_COMPILER_CXX_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    add_compile_flag_if_supported(-pedantic)
-endif()
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
