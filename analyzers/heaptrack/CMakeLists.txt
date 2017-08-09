@@ -50,6 +50,7 @@ kdevplatform_add_plugin(kdevheaptrack
 target_link_libraries(kdevheaptrack
     kdevheaptrack_config
     KDev::Project
+    KDev::IExecute
 )
 if(KF5SysGuard_FOUND)
     target_link_libraries(kdevheaptrack

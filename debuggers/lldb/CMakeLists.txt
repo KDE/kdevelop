@@ -32,6 +32,7 @@ target_link_libraries(kdevlldb_static
     kdevdebuggercommon
     KDev::Debugger
     KDev::Interfaces
+    KDev::IExecute
     PRIVATE
     Qt5::Core
     Qt5::Gui

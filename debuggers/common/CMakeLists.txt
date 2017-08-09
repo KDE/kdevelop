@@ -72,6 +72,7 @@ target_link_libraries(kdevdebuggercommon
     Qt5::Widgets
     KDev::Util
     KDev::Language
+    KDev::IExecute
 )
 if(KF5SysGuard_FOUND)
     target_link_libraries(kdevdebuggercommon

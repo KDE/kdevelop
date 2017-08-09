@@ -19,4 +19,6 @@ target_link_libraries(kdevexecuteplasmoid
     KDev::Interfaces
     KDev::Util
     KDev::Project
-    KDev::OutputView)
+    KDev::OutputView
+    KDev::IExecute
+)

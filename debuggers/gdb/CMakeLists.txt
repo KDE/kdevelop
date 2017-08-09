@@ -47,6 +47,7 @@ target_link_libraries(kdevgdb_static
     KDev::Debugger
     KDev::Shell
     KDev::Interfaces
+    KDev::IExecute
     KF5::KIOWidgets
     Qt5::Core
     Qt5::Gui
