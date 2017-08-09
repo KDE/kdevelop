@@ -8,7 +8,7 @@ find_dependency(Qt5Concurrent "@QT_MIN_VERSION@")
 find_dependency(Qt5Core "@QT_MIN_VERSION@")
 find_dependency(Qt5Quick "@QT_MIN_VERSION@")
 find_dependency(Qt5QuickWidgets "@QT_MIN_VERSION@")
-find_dependency(Qt5Test "@QT_MIN_VERSION@")
+@KDEV_FIND_DEP_QT5TEST@
 
 find_dependency(KF5Archive "@KF5_DEP_VERSION@")
 find_dependency(KF5Config "@KF5_DEP_VERSION@")
