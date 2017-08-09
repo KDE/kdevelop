@@ -10,8 +10,6 @@ set(KDEV_ITEMREPOSITORY_VERSION 87)
 # library version / SO version
 set(KDEVPLATFORM_LIB_SOVERSION 10)
 
-set(KDevPlatform_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(KDevPlatform_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDevPlatformMacros)
@@ -31,8 +29,6 @@ set_package_properties(Boost PROPERTIES
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
-
-include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR})
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
 if(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug"

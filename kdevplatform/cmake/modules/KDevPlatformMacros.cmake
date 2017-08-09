@@ -115,14 +115,7 @@ function(kdevplatform_add_library target)
 
     generate_export_header(${target} EXPORT_FILE_NAME ${shortTargetNameToLower}export.h)
 
-    target_include_directories(${target}
-            INTERFACE   "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevplatform>"
-                        "$<BUILD_INTERFACE:${KDevPlatform_SOURCE_DIR}>" "$<BUILD_INTERFACE:${KDevPlatform_BINARY_DIR}>"
-                        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>" # useful for the "something.export.h" includes
-    )
-    #some plugins install interfaces such as execute/iexecuteplugin.h
-    target_include_directories(${target} INTERFACE
-                        "$<BUILD_INTERFACE:${KDevPlatform_SOURCE_DIR}/plugins>" "$<BUILD_INTERFACE:${KDevPlatform_BINARY_DIR}/plugins>" )
+    target_include_directories(${target} INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR}/kdevplatform>")
     set_target_properties(${target} PROPERTIES
         VERSION ${KDEVPLATFORM_VERSION}
         SOVERSION ${KDEVPLATFORM_LIB_SOVERSION}
