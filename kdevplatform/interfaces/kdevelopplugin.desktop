@@ -3,6 +3,16 @@ Type=ServiceType
 X-KDE-ServiceType=KDevelop/Plugin
 X-KDE-Derived=KPluginInfo
 Name=KDevelop Plugin
+Name[bg]=KDevelop приставка
+Name[ca]=Connector del KDevelop
+Name[ca@valencia]=Connector del KDevelop
+Name[fr]=Module externe pour KDevelop
+Name[hr]=KDevelop priključak
+Name[nb]=KDevelop programtillegg
+Name[nl]=Plugin van KDevelop
+Name[sv]=KDevelop-insticksprogram
+Name[uk]=Додаток KDevelop
+Name[x-test]=xxKDevelop Pluginxx
 
 # mandatory, versioning - prevent DLL hell
 [PropertyDef::X-KDevelop-Version]
