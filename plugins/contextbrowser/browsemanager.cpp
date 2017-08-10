@@ -279,14 +279,19 @@ void BrowseManager::setHandCursor(QWidget* widget) {
     widget->setCursor(QCursor(Qt::PointingHandCursor));
 }
 
-void BrowseManager::avoidMenuAltFocus() {
+void BrowseManager::avoidMenuAltFocus()
+{
+    auto mainWindow = ICore::self()->uiController()->activeMainWindow();
+    if (!mainWindow)
+        return;
+
     // send an invalid key event to the main menu bar. The menu bar will
     // stop listening when observing another key than ALT between the press
     // and the release.
     QKeyEvent event1(QEvent::KeyPress, 0, Qt::NoModifier);
-    QApplication::sendEvent(ICore::self()->uiController()->activeMainWindow()->menuBar(), &event1);
+    QApplication::sendEvent(mainWindow->menuBar(), &event1);
     QKeyEvent event2(QEvent::KeyRelease, 0, Qt::NoModifier);
-    QApplication::sendEvent(ICore::self()->uiController()->activeMainWindow()->menuBar(), &event2);
+    QApplication::sendEvent(mainWindow->menuBar(), &event2);
 }
 
 void BrowseManager::applyEventFilter(QWidget* object, bool install) {
