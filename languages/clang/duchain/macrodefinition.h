@@ -88,7 +88,7 @@ public:
     };
 
 private:
-    DUCHAIN_DECLARE_DATA(MacroDefinition);
+    DUCHAIN_DECLARE_DATA(MacroDefinition)
 };
 
 DUCHAIN_DECLARE_TYPE(MacroDefinition)

@@ -58,7 +58,7 @@ protected:
     void setSegmentRegister(const Register& reg);
     void setEFfagRegister(const Register& reg);
 private:
-    void initRegisterNames();;
+    void initRegisterNames();
 
 protected:
     static QVector<QStringList> m_registerNames;
