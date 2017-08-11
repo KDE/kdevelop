@@ -385,6 +385,12 @@ void QuickOpenWidget::avoidMenuAltFocus()
 
 bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
 {
+    auto getInterface = [this]() {
+        const QModelIndex index = m_proxy->mapToSource(ui.list->currentIndex());
+        QWidget* widget = m_model->expandingWidget(index);
+        return dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>(widget);
+    };
+
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     if (event->type() == QEvent::KeyRelease) {
@@ -441,10 +447,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
         case Qt::Key_Up:
         {
             if (keyEvent->modifiers() == Qt::AltModifier) {
-                const QModelIndex index = m_proxy->mapToSource(ui.list->currentIndex());
-                QWidget* w = m_model->expandingWidget(index);
-                if (KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
-                        dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>(w)) {
+                if (auto interface = getInterface()) {
                     if (keyEvent->key() == Qt::Key_Down) {
                         interface->down();
                     } else {
@@ -469,10 +472,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
             //Expand/unexpand
             if (keyEvent->modifiers() == Qt::AltModifier) {
                 //Eventually Send action to the widget
-                const QModelIndex index = m_proxy->mapToSource(ui.list->currentIndex());
-                QWidget* w = m_model->expandingWidget(index);
-                if (KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
-                        dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>(w)) {
+                if (auto interface = getInterface()) {
                     interface->previous();
                     return true;
                 }
@@ -493,10 +493,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
             //Expand/unexpand
             if (keyEvent->modifiers() == Qt::AltModifier) {
                 //Eventually Send action to the widget
-                const QModelIndex index = m_proxy->mapToSource(ui.list->currentIndex());
-                QWidget* w = m_model->expandingWidget(index);
-                if (KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
-                        dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>(w)) {
+                if (auto interface = getInterface()) {
                     interface->next();
                     return true;
                 }
@@ -521,10 +518,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
             }
             if (keyEvent->modifiers() == Qt::AltModifier) {
                 //Eventually Send action to the widget
-                const QModelIndex index = m_proxy->mapToSource(ui.list->currentIndex());
-                QWidget* w = m_model->expandingWidget(index);
-                if (KDevelop::QuickOpenEmbeddedWidgetInterface* interface =
-                        dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>(w)) {
+                if (auto interface = getInterface()) {
                     interface->accept();
                     return true;
                 }
