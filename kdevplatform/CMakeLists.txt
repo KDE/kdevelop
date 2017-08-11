@@ -21,7 +21,7 @@ find_package(Grantlee5 CONFIG)
 set_package_properties(Grantlee5 PROPERTIES
     PURPOSE "Grantlee templating library, needed for file templates"
     URL "http://www.grantlee.org/"
-    TYPE RECOMMENDED)
+    TYPE REQUIRED)
 
 set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)
