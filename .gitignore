@@ -4,6 +4,8 @@ apidocs
 .kdev4
 build
 *~
+*.patch
+*.diff
 *.bak
 *.orig
 *.pyc
