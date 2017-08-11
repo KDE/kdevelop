@@ -155,9 +155,7 @@ set(KDevPlatformLanguage_LIB_SRCS
     classmodel/allclassesfolder.cpp
     classmodel/documentclassesfolder.cpp
     classmodel/projectfolder.cpp
-)
 
-set(grantlee_LIB_SRCS
     codegen/templatesmodel.cpp
     codegen/templatepreviewicon.cpp
     codegen/templateclassgenerator.cpp
@@ -166,10 +164,6 @@ set(grantlee_LIB_SRCS
     codegen/templateengine.cpp
     codegen/archivetemplateloader.cpp
 )
-
-if (Grantlee5_FOUND)
-    list(APPEND KDevPlatformLanguage_LIB_SRCS ${grantlee_LIB_SRCS})
-endif()
 
 ecm_qt_declare_logging_category(KDevPlatformLanguage_LIB_SRCS
     HEADER debug.h
@@ -188,6 +182,7 @@ target_link_libraries(KDevPlatformLanguage LINK_PUBLIC
         KDev::Interfaces
         KDev::Serialization
 LINK_PRIVATE
+        Grantlee5::Templates
         KF5::GuiAddons
         KF5::TextEditor
         KF5::Parts
@@ -196,10 +191,6 @@ LINK_PRIVATE
         KDev::Util
         KDev::Project
 )
-
-if (Grantlee5_FOUND)
-    target_link_libraries(KDevPlatformLanguage LINK_PRIVATE Grantlee5::Templates)
-endif()
 
 install(FILES
     assistant/renameaction.h
