@@ -204,7 +204,7 @@ QString LldbCommand::cmdToSend()
             if (p < 0) p = 0; // this means the command is malformated, we proceed anyway.
 
             // move other switches like '-d' '-c' into miCommand part
-            overrideCmd = miCommand() + " " + command_.left(p);
+            overrideCmd = miCommand() + QLatin1Char(' ') + command_.left(p);
             command_ = "-f " + command_.mid(p, command_.length());
             break;
         }

@@ -120,7 +120,7 @@ void CustomBuildJob::start()
     } else {
         // prepend the command name to the argument string
         // so that splitArgs works correctly
-        const QString allargv = KShell::quoteArg(cmd) + " " + arguments;
+        const QString allargv = KShell::quoteArg(cmd) + QLatin1Char(' ') + arguments;
 
         KShell::Errors err;
         QStringList strargs = KShell::splitArgs( allargv, KShell::AbortOnMeta, &err );

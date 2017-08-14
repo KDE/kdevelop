@@ -42,7 +42,7 @@ bool KDevFormatFile::find()
             QDir::setCurrent(srcDir.canonicalPath());
 
             qStdOut() << "found \""
-                      << QFileInfo(srcDir.canonicalPath() + "/" + formatFileName).canonicalFilePath()
+                      << QFileInfo(srcDir.canonicalPath() + '/' + formatFileName).canonicalFilePath()
                       << "\"\n";
             return true;
         }
@@ -113,7 +113,7 @@ bool KDevFormatFile::apply()
 
         foreach(const QString& wildcard, formatLine.wildcards) {
             if (QDir::match(QDir::current().canonicalPath() + "/" + wildcard.trimmed(), m_origFilePath)) {
-                qStdOut() << "matched \"" << m_origFilePath << "\" with wildcard \"" << wildcard << "\"";
+                qStdOut() << "matched \"" << m_origFilePath << "\" with wildcard \"" << wildcard << '\"';
                 return executeCommand(formatLine.command);
             }
         }
