@@ -51,8 +51,8 @@ static QStringList resolvePaths(const Path& base, const QStringList& pathsToReso
     foreach(const QString& pathToResolve, pathsToResolve)
     {
         QString dir(pathToResolve);
-        if(!pathToResolve.startsWith("#[") && !pathToResolve.startsWith("$<"))
-        {
+        if (!pathToResolve.startsWith(QLatin1String("#[")) &&
+            !pathToResolve.startsWith(QLatin1String("$<"))) {
             dir = Path(base, pathToResolve).toLocalFile();
         }
         resolvedPaths.append(dir);

@@ -150,7 +150,7 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
 QString dotlessRelativeUrl(const QUrl &baseUrl, const QUrl& url)
 {
     QString dotlessRelative = QUrl::relativeUrl(baseUrl, url);
-    if (dotlessRelative.startsWith("./"))
+    if (dotlessRelative.startsWith(QLatin1String("./")))
         dotlessRelative.remove(0, 2);
     return dotlessRelative;
 }

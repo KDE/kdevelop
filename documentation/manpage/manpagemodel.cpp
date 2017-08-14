@@ -222,8 +222,9 @@ int ManPageModel::nbSectionLoaded() const
 
 bool ManPageModel::identifierInSection(const QString& identifier, const QString& section) const
 {
+    const QString sectionLink = QLatin1String("man:/(") + section + QLatin1Char(')');
     for (auto it = m_manMap.begin(); it != m_manMap.end(); ++it) {
-        if (it.key().startsWith("man:/(" + section + ")")) {
+        if (it.key().startsWith(sectionLink)) {
             return it.value().indexOf(identifier) != -1;
         }
     }
