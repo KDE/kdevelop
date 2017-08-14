@@ -25,7 +25,7 @@
 #include "utils.h"
 #include "visualizer.h"
 
-#include "config.h"
+#include <config-kdevelop.h>
 #if KF5SysGuard_FOUND
 #include "debuggers/common/dialogs/processselection.h"
 #include <QPointer>

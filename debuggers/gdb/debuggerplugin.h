@@ -23,7 +23,7 @@
 #ifndef _DEBUGGERPART_H_
 #define _DEBUGGERPART_H_
 
-#include "config.h"
+#include <config-kdevelop.h>
 
 #include <QVariantList>
 

@@ -121,8 +121,8 @@ else()
   set(COMPILER_OPTIMIZATIONS_DISABLED FALSE)
 endif()
 
-# create config.h
-configure_file (config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
+# create config-kdevelop.h
+configure_file(config-kdevelop.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kdevelop.h)
 
 add_subdirectory(kdevplatform)
 add_subdirectory(pics)

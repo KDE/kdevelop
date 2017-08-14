@@ -27,7 +27,7 @@
 #ifndef MIDEBUGGERPLUGIN_H
 #define MIDEBUGGERPLUGIN_H
 
-#include "config.h"
+#include <config-kdevelop.h>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>
