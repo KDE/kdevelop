@@ -26,7 +26,6 @@
 #include <interfaces/iproject.h>
 #include "configconstants.h"
 #include "kcm_custombuildsystem.h"
-#include "config.h"
 
 #include "custombuildjob.h"
 

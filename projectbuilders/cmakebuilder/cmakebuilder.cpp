@@ -21,7 +21,6 @@
 #include "cmakebuilder.h"
 #include "debug.h"
 
-#include <config.h>
 #include <cmakebuilderconfig.h>
 
 #include <project/projectmodel.h>
