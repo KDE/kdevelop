@@ -47,6 +47,7 @@
         "Name[ug]": "CVS قوللىشى",
         "Name[uk]": "Підтримка CVS",
         "Name[x-test]": "xxCVS Supportxx",
+        "Name[zh_CN]": "CVS 支持",
         "Name[zh_TW]": "CVS 支援",
         "ServiceTypes": [
             "KDevelop/Plugin"

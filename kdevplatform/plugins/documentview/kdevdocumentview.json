@@ -52,6 +52,7 @@
         "Name[ug]": "پۈتۈك كۆرۈنۈشى",
         "Name[uk]": "Перегляд документів",
         "Name[x-test]": "xxDocument Viewxx",
+        "Name[zh_CN]": "文档视图",
         "Name[zh_TW]": "文件檢視",
         "ServiceTypes": [
             "KDevelop/Plugin"

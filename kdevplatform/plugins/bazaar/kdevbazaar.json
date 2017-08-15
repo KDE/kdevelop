@@ -49,6 +49,7 @@
         "Name[ug]": "Bazaar قوللىشى",
         "Name[uk]": "Підтримка Bazaar",
         "Name[x-test]": "xxBazaar Supportxx",
+        "Name[zh_CN]": "Bazaar 支持",
         "Name[zh_TW]": "Bazaar 支援",
         "ServiceTypes": [
             "KDevelop/Plugin"

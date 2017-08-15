@@ -50,7 +50,7 @@
         "Name[tr]": "Çerçeve",
         "Name[uk]": "Схема",
         "Name[x-test]": "xxOutlinexx",
-        "Name[zh_CN]": "概要",
+        "Name[zh_CN]": "轮廓",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

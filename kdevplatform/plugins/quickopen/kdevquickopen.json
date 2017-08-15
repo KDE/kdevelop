@@ -64,7 +64,6 @@
         "Name[ug]": "تېز ئېچىش",
         "Name[uk]": "Швидке відкриття",
         "Name[x-test]": "xxQuick Openxx",
-        "Name[zh_CN]": "快速打开",
         "Name[zh_TW]": "快速開啟",
         "ServiceTypes": [
             "KDevelop/Plugin"

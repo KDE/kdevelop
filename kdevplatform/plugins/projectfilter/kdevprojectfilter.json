@@ -48,6 +48,7 @@
         "Name[sv]": "Projektfilter",
         "Name[uk]": "Фільтр проекту",
         "Name[x-test]": "xxProject Filterxx",
+        "Name[zh_CN]": "项目过滤器",
         "Name[zh_TW]": "專案過濾器",
         "ServiceTypes": [
             "KDevelop/Plugin"
