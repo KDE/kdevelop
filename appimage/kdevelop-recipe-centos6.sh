@@ -460,12 +460,12 @@ InitialPreference=9
 Categories=Qt;KDE;Utility;TextEditor;
 EOF
 
-cp /kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
+cp $SRC/kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
 cp -R /usr/lib/python3.6 /kdevelop.appdir/usr/lib/
 rm -Rf /kdevelop.appdir/usr/lib/python3.6/{test,config-3.5m,__pycache__,site-packages,lib-dynload,distutils,idlelib,unittest,tkinter,ensurepip}
 
 mkdir -p /kdevelop.appdir/usr/share/kdevelop/
-cp /kf5/build/breeze-icons/icons/breeze-icons.rcc /kdevelop.appdir/usr/share/kdevelop/icontheme.rcc
+cp $BUILD/breeze-icons/icons/breeze-icons.rcc /kdevelop.appdir/usr/share/kdevelop/icontheme.rcc
 rm -Rf /kdevelop.appdir/usr/share/icons/breeze* # not needed because of the rcc
 rm -f /kdevelop.appdir/usr/bin/llvm*
 rm -f /kdevelop.appdir/usr/bin/clang*
