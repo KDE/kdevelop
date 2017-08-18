@@ -394,8 +394,12 @@ void AbstractDeclarationNavigationContext::htmlFunction()
         modifyHtml() += ' ' + identifierHighlight(decls[currentArgNum]->identifier().toString().toHtmlEscaped(), d->m_declaration);
       }
 
-      if( currentArgNum >= firstDefaultParam )
-        modifyHtml() += " = " + function->defaultParameters()[ currentArgNum - firstDefaultParam ].str().toHtmlEscaped();
+      if (currentArgNum >= firstDefaultParam) {
+        IndexedString defaultStr = function->defaultParameters()[currentArgNum - firstDefaultParam];
+        if (!defaultStr.isEmpty()) {
+          modifyHtml() += " = " + defaultStr.str().toHtmlEscaped();
+        }
+      }
 
       ++currentArgNum;
     }
