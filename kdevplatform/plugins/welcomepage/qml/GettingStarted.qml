@@ -67,17 +67,17 @@ StandardPage {
         states: [
             State {
                 name: "userbase"
-                PropertyChanges { target: webview; url: "http://userbase.kde.org/KDevelop" }
+                PropertyChanges { target: webview; url: "https://userbase.kde.org/KDevelop" }
                 PropertyChanges { target: description; text: i18n("Documentation for KDevelop users") }
             },
             State {
                 name: "kdevelop.org"
-                PropertyChanges { target: webview; url: "http://kdevelop.org" }
+                PropertyChanges { target: webview; url: "https://kdevelop.org" }
                 PropertyChanges { target: description; text: i18n("Keep up with KDevelop's development") }
             },
             State {
                 name: "techbase"
-                PropertyChanges { target: webview; url: "http://techbase.kde.org/KDevelop" }
+                PropertyChanges { target: webview; url: "https://techbase.kde.org/KDevelop" }
                 PropertyChanges { target: description; text: i18n("Help us improve KDevelop") }
             }
         ]
