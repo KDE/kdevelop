@@ -10,7 +10,7 @@
         "Description[fi]": "Tarjoaa tekstitulostetyökalunäkymän muille liitännäisille käytettäväksi, näyttää asiat kuin kääntäjäviestit.",
         "Description[fr]": "Fournit un outil d'affichage de la sortie texte pour utilisation par d'autres modules, pour afficher des choses comme des messages de compilateur.",
         "Description[gl]": "Fornece unha ferramenta de saída de texto a outros complementos, para mostrar cousas como mensaxes do compilador.",
-        "Description[it]": "Fornisce una vista strumenti testuale per le estensioni da usare, per mostrare le cose come i messaggi del compilatore.",
+        "Description[it]": "Fornisce una vista strumenti testuale che può essere usata dalla estensioni per mostrare cose come i messaggi del compilatore.",
         "Description[nl]": "Levert tekstuitvoer van hulpmiddelen voor andere te gebruiken plugins, om zaken te tonen zoals berichten van compilers.",
         "Description[pl]": "Zapewnia widok narzędzia wyjścia tekstu dla wykorzystania w innych wtyczkach, aby pokazać rzeczy takie jak komunikaty kompilatora.",
         "Description[pt]": "Oferece uma área de texto para os outros 'plugins' usarem, para apresentar algumas coisas, como as mensagens do compilador.",
