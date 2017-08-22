@@ -163,7 +163,7 @@ public:
   }
 
   //Should return whether the here requested item equals the given item
-  inline bool equals(const SetNodeData* item) const;
+  bool equals(const SetNodeData* item) const;
   
   SetNodeData data;
   
