@@ -257,7 +257,7 @@ public:
     if( m_hash == 0 ) {
       KDevHash hash;
 
-      quint32 bitfields = m_explicitlyGlobal
+      quint32 bitfields = static_cast<quint32>(m_explicitlyGlobal)
         | (m_isExpression << 1);
       hash << bitfields << identifiersSize();
       FOREACH_FUNCTION_STATIC( const IndexedIdentifier& identifier, identifiers ) {
@@ -1154,7 +1154,7 @@ void QualifiedIdentifier::prepareWrite()
 
 uint IndexedTypeIdentifier::hash() const
 {
-    quint32 bitfields = m_isConstant
+    quint32 bitfields = static_cast<quint32>(m_isConstant)
       | (m_isReference << 1)
       | (m_isRValue << 2)
       | (m_isVolatile << 3)
