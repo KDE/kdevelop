@@ -10,7 +10,7 @@ The idea that this subdirectory contains
 ## API Documentation
 
 API documentation is available from:
-https://api.kde.org/extragear-api/kdevelop-apidocs/kdevplatform/html/index.html
+https://api.kde.org/extragear-api/kdevelop-apidocs/kdevelop/kdevplatform/html/index.html
 
 ## Infrastructure
 - [Bug tracker](https://bugs.kde.org/buglist.cgi?bug_status=UNCONFIRMED&bug_status=CONFIRMED&bug_status=ASSIGNED&bug_status=REOPENED&list_id=1408918&product=kdevplatform&query_format=advanced)
