@@ -399,6 +399,8 @@ void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction_data()
         << QString("Waf: Entering directory `" + basepath + "/path/to/two/'") << QString( basepath + "/path/to/two") << pathType;
         QTest::newRowForPathType("cmake-line7", pathType)
         << QStringLiteral("[ 50%] Building CXX object CMakeFiles/testdeque.dir/RingBuffer.cpp.o") << QString( basepath) << pathType;
+        QTest::newRowForPathType("cmake-cd-line8", pathType)
+        << QString("> /usr/bin/cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Debug " + basepath) << QString( basepath ) << pathType;
     }
 }
 
