@@ -588,7 +588,7 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Features features, int priority,
                                    QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags, int delay)
 {
-    qCDebug(LANGUAGE) << "BackgroundParser::addDocument" << url.toUrl();
+    qCDebug(LANGUAGE) << "BackgroundParser::addDocument" << url << url.toUrl();
     Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
     {
