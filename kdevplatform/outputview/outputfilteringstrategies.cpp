@@ -269,8 +269,8 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         ErrorFormat( QStringLiteral("^(libtool):( link):( warning): "), 0, 0, 0 ),
         // make
         ErrorFormat( QStringLiteral("No rule to make target"), 0, 0, 0 ),
-        // cmake
-        ErrorFormat( QStringLiteral("^([^:\\t]+):([0-9]+):"), 1, 2, 0, QStringLiteral("cmake") ),
+        // cmake - multiline expression
+        ErrorFormat( QStringLiteral("(^\\/[\\w|\\/| |\\.]+):([0-9]+):"), 1, 2, 0, QStringLiteral("cmake") ),
         // cmake
         ErrorFormat( QStringLiteral("CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)"), 4, 5, 1, QStringLiteral("cmake") ),
         // cmake/automoc

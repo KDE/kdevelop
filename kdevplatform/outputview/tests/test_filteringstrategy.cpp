@@ -515,6 +515,9 @@ warning: \"SOME_MACRO\" redefined" << "/path/to/file.h" << 59 << 0 << FilteredIt
     QTest::newRow("ant-javac-Error")
         << "    [javac] /path/class.java:447: error: cannot find symbol"
         << "/path/class.java" << 446 << 0 << FilteredItem::ErrorItem;
+    QTest::newRow("cmake-error")
+        << "CMake Error at somesubdir/CMakeLists.txt:214:"
+        << "/some/path/to/a/somesubdir/CMakeLists.txt" << 213 << 0 << FilteredItem::ErrorItem;
 #endif
 }
 
