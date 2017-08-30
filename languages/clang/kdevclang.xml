@@ -32,6 +32,14 @@
     <!-- Not yet registered, mimetype based on proposal in https://bugs.freedesktop.org/show_bug.cgi?id=23700 -->
     <mime-type type="text/vnd.nvidia.cuda.csrc">
         <comment>NVIDIA CUDA C source code</comment>
+        <comment xml:lang="ca">Codi font en C per a CUDA de NVIDIA</comment>
+        <comment xml:lang="ca@valencia">Codi font en C per a CUDA de NVIDIA</comment>
+        <comment xml:lang="es">Código fuente NVIDIA CUDA C</comment>
+        <comment xml:lang="nl">NVIDIA CUDA C broncode</comment>
+        <comment xml:lang="pt">Código-fonte em CUDA C da NVIDIA</comment>
+        <comment xml:lang="sk">Zdrojový kód NVIDIA CUDA C</comment>
+        <comment xml:lang="sv">NVIDIA CUDA C-källkod</comment>
+        <comment xml:lang="uk">початковий код C NVIDIA CUDA</comment>
         <sub-class-of type="text/x-csrc"/>
         <glob pattern="*.cu"/>
     </mime-type>
