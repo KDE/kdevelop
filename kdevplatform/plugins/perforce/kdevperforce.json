@@ -2,15 +2,34 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Morten Danielsen Volden"
+                "Name": "Morten Danielsen Volden",
+                "Name[x-test]": "xxMorten Danielsen Voldenxx"
             }
         ],
         "Category": "Version Control",
         "Description": "Provides Integration with Perforce Version Control System",
+        "Description[ca@valencia]": "Proporciona integració amb el sistema de control de versions Perforce",
+        "Description[ca]": "Proporciona integració amb el sistema de control de versions Perforce",
+        "Description[es]": "Proporciona integración con el sistema de control de versiones Perforce",
+        "Description[nl]": "Biedt ondersteuning voor Perforce versiecontrolesysteem",
+        "Description[pt]": "Oferece a Integração com o Sistema de Controlo de Versões Perforce",
+        "Description[sk]": "Poskytuje integráciu s verzionovacím systémom Perforce",
+        "Description[sv]": "Tillhandahåller integrering med Perforce versionskontrollsystem",
+        "Description[uk]": "Забезпечує інтеграцію з системою керування версіями Perforce",
+        "Description[x-test]": "xxProvides Integration with Perforce Version Control Systemxx",
         "Icon": "kdevelop",
         "Id": "kdevperforce",
         "License": "GPL",
         "Name": "Perforce Support",
+        "Name[ca@valencia]": "Implementació del Perforce",
+        "Name[ca]": "Implementació del Perforce",
+        "Name[es]": "Implementación de Perforce",
+        "Name[nl]": "Ondersteuning van Perforce",
+        "Name[pt]": "Suporte para o Perforce",
+        "Name[sk]": "Podpora Perforce",
+        "Name[sv]": "Perforce-stöd",
+        "Name[uk]": "Підтримка Perforce",
+        "Name[x-test]": "xxPerforce Supportxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

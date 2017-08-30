@@ -1,10 +1,26 @@
 [General]
 Name=QObject pimpl subclass
 Name[ca]=Subclasse QObject «pimpl»
+Name[ca@valencia]=Subclasse QObject «pimpl»
+Name[es]=Subclase «pimpl» de QObject
+Name[nl]=pimpl subklasse van QObject
+Name[pt]=Sub-classe 'pimpl' de QObject
+Name[sk]=Podtrieda QObject pimpl
 Name[sl]=Pod-razred pimpl za QObject
+Name[sv]=QObject pimpl-delklass
+Name[uk]=Підклас pimpl QObject
+Name[x-test]=xxQObject pimpl subclassxx
 Comment=QObject subclass with private implementation
 Comment[ca]=Una subclasse QObject amb implementació privada
+Comment[ca@valencia]=Una subclasse QObject amb implementació privada
+Comment[es]=Una subclase de QObject con una implementación privada
+Comment[nl]=Een subklasse van QObject met een private implementatie
+Comment[pt]=Uma sub-classe de QObject com uma implementação privada
+Comment[sk]=Podtrieda GObject so súkromnou implementáciou
 Comment[sl]=Pod-razred QObject z zasebno izvedbo
+Comment[sv]=QObject-delklass med privat implementering
+Comment[uk]=Підклас QObject із закритою (private) реалізацією
+Comment[x-test]=xxQObject subclass with private implementationxx
 Category=C++/Qt
 Language=C++
 Language[bs]=C++

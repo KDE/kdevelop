@@ -2,15 +2,34 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Hamish Rodda"
+                "Name": "Hamish Rodda",
+                "Name[x-test]": "xxHamish Roddaxx"
             }
         ],
         "Category": "Core",
         "Description": "This plugin provides a browsable model of the currently parsed classes and other items.",
+        "Description[ca@valencia]": "Este connector proporciona un model navegable de les classes analitzades actualment i altres elements.",
+        "Description[ca]": "Aquest connector proporciona un model navegable de les classes analitzades actualment i altres elements.",
+        "Description[es]": "Este complemento proporciona un modelo navegable de las clases actualmente analizadas y de otros elementos.",
+        "Description[nl]": "Deze plugin levert een model om door te bladeren van de nu ontlede klasse's en andere items.",
+        "Description[pt]": "Este 'plugin' oferece uma visão navegável sobre as classes e outros itens que estejam a ser processados de momento.",
+        "Description[sk]": "Tento plugin poskytuje prehliadateľný model aktuálne analyzovanej triedy a iných položiek.",
+        "Description[sv]": "Insticksprogrammet tillhandahåller en bläddringsbar modell av klasser och andra objekt som för närvarande har tolkats.",
+        "Description[uk]": "За допомогою цього додатка можна створити придатну для перегляду модель класів та інших елементів, над якими ви працюєте.",
+        "Description[x-test]": "xxThis plugin provides a browsable model of the currently parsed classes and other items.xx",
         "Icon": "code-class",
         "Id": "kdevclassbrowser",
         "License": "GPL",
         "Name": "Class Browser",
+        "Name[ca@valencia]": "Navegador de classes",
+        "Name[ca]": "Navegador de classes",
+        "Name[es]": "Navegador de clases",
+        "Name[nl]": "Klassen-browser",
+        "Name[pt]": "Navegador de Classes",
+        "Name[sk]": "Prehliadač tried",
+        "Name[sv]": "Klassbläddrare",
+        "Name[uk]": "Переглядач класів",
+        "Name[x-test]": "xxClass Browserxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

@@ -2,15 +2,34 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Milian Wolff"
+                "Name": "Milian Wolff",
+                "Name[x-test]": "xxMilian Wolffxx"
             }
         ],
         "Category": "Utilities",
         "Description": "Run external scripts or applications to manipulate the editor contents or do other arbitrary actions.",
+        "Description[ca@valencia]": "Executa scripts externs o aplicacions per a manipular el contingut de l'editor o altres accions arbitràries.",
+        "Description[ca]": "Executa scripts externs o aplicacions per a manipular el contingut de l'editor o altres accions arbitràries.",
+        "Description[es]": "Ejecutar scripts externos o aplicaciones para manipular el contenido del editor o realizar otras acciones.",
+        "Description[nl]": "Externe scripts of programma's uitvoeren om de inhoud van de bewerker te manipuleren of andere acties uit te voeren.",
+        "Description[pt]": "Executa programas ou aplicações externas para manipular o conteúdo do editor ou para efectuar outras acções arbitrárias.",
+        "Description[sk]": "Spustí externé skripty alebo aplikácie na manipuláciu s obsahom editora alebo robí iné ľubovoľné akcie.",
+        "Description[sv]": "Kör externa skript eller program för att behandla editorns innehåll eller utför andra godtyckliga åtgärder.",
+        "Description[uk]": "Запускає зовнішні скрипти або програми для обробки текстових даних редактора або виконання інших потрібних дій.",
+        "Description[x-test]": "xxRun external scripts or applications to manipulate the editor contents or do other arbitrary actions.xx",
         "Icon": "system-run",
         "Id": "kdevexternalscript",
         "License": "GPL",
         "Name": "External Scripts",
+        "Name[ca@valencia]": "Scripts externs",
+        "Name[ca]": "Scripts externs",
+        "Name[es]": "Scripts externos",
+        "Name[nl]": "Externe scripts",
+        "Name[pt]": "Programas Externos",
+        "Name[sk]": "Externé skripty",
+        "Name[sv]": "Externa skript",
+        "Name[uk]": "Зовнішні скрипти",
+        "Name[x-test]": "xxExternal Scriptsxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

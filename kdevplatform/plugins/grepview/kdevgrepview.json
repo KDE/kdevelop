@@ -2,9 +2,27 @@
     "KPlugin": {
         "Category": "Utilities",
         "Description": "Allows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.",
+        "Description[ca@valencia]": "Permet la busca ràpida de múltiples fitxers usant patrons o expressions regulars. I també permet substitucions.",
+        "Description[ca]": "Permet la cerca ràpida de múltiples fitxers usant patrons o expressions regulars. I també permet substitucions.",
+        "Description[es]": "Permite la búsqueda rápida en múltiples archivos usando patrones o expresiones regulares. También permite realizar sustituciones.",
+        "Description[nl]": "Staat toe snel te zoeken naar meerdere bestanden met gebruik van patronen of reguliere expressies. Staat ook vervanging toe.",
+        "Description[pt]": "Permite a pesquisa rápida em vários ficheiros, usando padrões ou expressões regulares. Permite também a sua substituição.",
+        "Description[sk]": "Umožní rýchle hľadanie viacerých súborov pomocou vzorov alebo regulárnych výrazov a umožní ich nahradiť.",
+        "Description[sv]": "Tillåter snabb sökning i flera filer med mönster eller reguljära uttryck, och tillåter dessutom ersättning.",
+        "Description[uk]": "Надає можливості швидкого пошуку та заміни у декількох файлів на основі шаблонів або формальних виразів.",
+        "Description[x-test]": "xxAllows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.xx",
         "Icon": "kfind",
         "Id": "kdevgrepview",
         "Name": "Find/Replace In Files",
+        "Name[ca@valencia]": "Busca i substitució en fitxers",
+        "Name[ca]": "Cerca i substitució en fitxers",
+        "Name[es]": "Buscar/sustituir en archivos",
+        "Name[nl]": "Zoeken/vervangen in bestanden",
+        "Name[pt]": "Procurar/Substituir nos Ficheiros",
+        "Name[sk]": "Hľadať/nahradiť v súboroch",
+        "Name[sv]": "Sök eller ersätt i filer",
+        "Name[uk]": "Пошук або заміна у файлах",
+        "Name[x-test]": "xxFind/Replace In Filesxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

@@ -2,15 +2,34 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Roberto Raggi"
+                "Name": "Roberto Raggi",
+                "Name[x-test]": "xxRoberto Raggixx"
             }
         ],
         "Category": "Core",
         "Description": "Lets you manage the project contents.",
+        "Description[ca@valencia]": "Vos permet gestionar els continguts del projecte.",
+        "Description[ca]": "Us permet gestionar els continguts del projecte.",
+        "Description[es]": "Le permite gestionar el contenido del proyecto.",
+        "Description[nl]": "Laat u de projectinhoud beheren.",
+        "Description[pt]": "Permite-lhe gerir o conteúdo do projecto.",
+        "Description[sk]": "Umožní vám spravovať obsah projektu.",
+        "Description[sv]": "Låter dig hantera projektets innehåll.",
+        "Description[uk]": "Надає вам змогу керувати вмістом проектів.",
+        "Description[x-test]": "xxLets you manage the project contents.xx",
         "Icon": "kdevelop",
         "Id": "KDevProjectManagerView",
         "License": "LGPL",
         "Name": "Project Manager View",
+        "Name[ca@valencia]": "Vista del gestor de projectes",
+        "Name[ca]": "Vista del gestor de projectes",
+        "Name[es]": "Vista del gestor de proyectos",
+        "Name[nl]": "Projectbeheerder-overzicht",
+        "Name[pt]": "Área do Gestor de Projectos",
+        "Name[sk]": "Pohľad na správcu projektu",
+        "Name[sv]": "Projekthanteringsvisning",
+        "Name[uk]": "Перегляд керування проектами",
+        "Name[x-test]": "xxProject Manager Viewxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

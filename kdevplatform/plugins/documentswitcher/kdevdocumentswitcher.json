@@ -2,15 +2,34 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Andreas Pakulat"
+                "Name": "Andreas Pakulat",
+                "Name[x-test]": "xxAndreas Pakulatxx"
             }
         ],
         "Category": "Utilities",
         "Description": "A most-recently-used document switcher for KDevPlatform.",
+        "Description[ca@valencia]": "Un commutador del document usat més recentment per KDevPlatform.",
+        "Description[ca]": "Un commutador del document usat més recentment per KDevPlatform.",
+        "Description[es]": "Un cambiador de documentos recientemente usados para KDevPlatform.",
+        "Description[nl]": "De meest-recent-gebruikte documentwisselaar voor KDevPlatform.",
+        "Description[pt]": "Um selector dos documentos usados mais recentemente para o KDevPlatform.",
+        "Description[sk]": "Prepínač posledných použitých dokumentov pre KDevPlatform.",
+        "Description[sv]": "Byte till senast använda dokument för KDevelop-plattformen.",
+        "Description[uk]": "Перемикач останніх використаних документів для KDevPlatform.",
+        "Description[x-test]": "xxA most-recently-used document switcher for KDevPlatform.xx",
         "Icon": "document-open-recent",
         "Id": "kdevdocumentswitcher",
         "License": "GPL",
         "Name": "Most-Recently-Used Document Switcher",
+        "Name[ca@valencia]": "Commutador del document usat més recentment",
+        "Name[ca]": "Commutador del document usat més recentment",
+        "Name[es]": "Selector de documentos usados recientemente",
+        "Name[nl]": "Meest-recent-gebruikte documentwisselaar",
+        "Name[pt]": "Selector dos Documentos Usados Mais Recentemente",
+        "Name[sk]": "Prepínač posledných použitých dokumentov",
+        "Name[sv]": "Byte till senast använda dokument",
+        "Name[uk]": "Перемикач нещодавно використаних документів",
+        "Name[x-test]": "xxMost-Recently-Used Document Switcherxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

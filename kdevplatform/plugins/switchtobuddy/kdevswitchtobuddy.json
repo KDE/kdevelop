@@ -2,9 +2,27 @@
     "KPlugin": {
         "Category": "Utilities",
         "Description": "Allows switching between buddy documents like implementation and header file.",
+        "Description[ca@valencia]": "Permet commutar entre documents associats com fitxers d'implementacions i de capçaleres.",
+        "Description[ca]": "Permet commutar entre documents associats com fitxers d'implementacions i de capçaleres.",
+        "Description[es]": "Permite cambiar entre documentos asociados, como la implementación y el archivo de cabecera.",
+        "Description[nl]": "Biedt omschakelen tussen buddy-documenten zoals implementatie en header-bestand.",
+        "Description[pt]": "Permite a alternância entre os documentos associados, como o ficheiro de implementação ou o de inclusão.",
+        "Description[sk]": "Umožňuje prepínanie medzi dokumentmi priateľov ako súbor implementácie a hlavičky.",
+        "Description[sv]": "Tillåter byte mellan samhörande dokument som implementerings- och deklarationsfiler.",
+        "Description[uk]": "Надає змогу перемикатися на споріднені документи, зокрема файли з реалізацією та файли заголовків.",
+        "Description[x-test]": "xxAllows switching between buddy documents like implementation and header file.xx",
         "Icon": "document-multiple",
         "Id": "kdevswitchtobuddy",
         "Name": "Switch to Buddy",
+        "Name[ca@valencia]": "Commuta a associat",
+        "Name[ca]": "Commuta a associat",
+        "Name[es]": "Cambiar al asociado",
+        "Name[nl]": "Naar Buddy omschakelen",
+        "Name[pt]": "Mudar para o Ficheiro Associado",
+        "Name[sk]": "Prepnúť na Buddy",
+        "Name[sv]": "Byt till samhörande",
+        "Name[uk]": "Перемикання на споріднений",
+        "Name[x-test]": "xxSwitch to Buddyxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

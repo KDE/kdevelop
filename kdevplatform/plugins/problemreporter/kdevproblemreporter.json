@@ -2,15 +2,34 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Hamish Rodda"
+                "Name": "Hamish Rodda",
+                "Name[x-test]": "xxHamish Roddaxx"
             }
         ],
         "Category": "Utilities",
         "Description": "This plugin shows errors in source code.",
+        "Description[ca@valencia]": "Este connector permet mostrar errors en el codi font.",
+        "Description[ca]": "Aquest connector permet mostrar errors en el codi font.",
+        "Description[es]": "Este complemento muestra errores en el código fuente.",
+        "Description[nl]": "Deze plugin toont fouten in broncode",
+        "Description[pt]": "Este 'plugin' mostra os erros no código-fonte.",
+        "Description[sk]": "Tento plugin ukáže chyby v zdrojovom kóde.",
+        "Description[sv]": "Insticksprogrammet visar fel i källkod.",
+        "Description[uk]": "За допомогою цього додатка можна переглянути повідомлення про помилки у коді.",
+        "Description[x-test]": "xxThis plugin shows errors in source code.xx",
         "Icon": "emblem-important",
         "Id": "kdevproblemreporter",
         "License": "LGPL",
         "Name": "Problem Reporter View",
+        "Name[ca@valencia]": "Vista del notificador de problemes",
+        "Name[ca]": "Vista del notificador de problemes",
+        "Name[es]": "Vista del notificador de problemas",
+        "Name[nl]": "Probleemrapporteuroverzicht",
+        "Name[pt]": "Área de Relatórios de Erros",
+        "Name[sk]": "Pohľad na zadávač problémov",
+        "Name[sv]": "Problemrapporteringsvisning",
+        "Name[uk]": "Перегляд інструмента звітування про проблеми",
+        "Name[x-test]": "xxProblem Reporter Viewxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

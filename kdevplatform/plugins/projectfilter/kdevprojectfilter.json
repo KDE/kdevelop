@@ -2,14 +2,33 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Milian Wolff"
+                "Name": "Milian Wolff",
+                "Name[x-test]": "xxMilian Wolffxx"
             }
         ],
         "Category": "Project Management",
         "Description": "Configure which files and folders inside the project folder should be included or excluded.",
+        "Description[ca@valencia]": "Configura quins fitxers i carpetes dins de la carpeta del projecte s'han d'incloure o excloure.",
+        "Description[ca]": "Configura quins fitxers i carpetes dins de la carpeta del projecte s'han d'incloure o excloure.",
+        "Description[es]": "Configurar los archivos y carpetas que pertenecen a la carpeta del proyecto y que deben ser incluidos o excluidos.",
+        "Description[nl]": "Stel in welke bestanden en mappen in de projectmap meegenomen of uitgesloten moeten worden.",
+        "Description[pt]": "Configurar os ficheiros ou pastas, dentro da pasta do projecto, que deverão ser incluídos ou excluídos.",
+        "Description[sk]": "Nastaviť, ktoré súbory a priečinky v priečinku projektu majú byť zahrnuté alebo vylúčené.",
+        "Description[sv]": "Anpassa vilka filer och kataloger inne i projektkatalogen som ska inkluderas eller exkluderas.",
+        "Description[uk]": "За допомогою цього модуля можна визначити, які файли і теки у теці проекту має бути включено або виключено з його складу.",
+        "Description[x-test]": "xxConfigure which files and folders inside the project folder should be included or excluded.xx",
         "Icon": "view-filter",
         "Id": "KDevProjectFilter",
         "Name": "Project Filter",
+        "Name[ca@valencia]": "Filtre de projecte",
+        "Name[ca]": "Filtre de projecte",
+        "Name[es]": "Filtro de proyectos",
+        "Name[nl]": "Projectfilter",
+        "Name[pt]": "Filtro de Projectos",
+        "Name[sk]": "Filter projektu",
+        "Name[sv]": "Projektfilter",
+        "Name[uk]": "Фільтр проекту",
+        "Name[x-test]": "xxProject Filterxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

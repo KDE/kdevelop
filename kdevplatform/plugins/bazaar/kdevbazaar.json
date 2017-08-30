@@ -4,15 +4,34 @@
         "Authors": [
             {
                 "Email": "d82ks8djf82msd83hf8sc02lqb5gh5@gmail.com",
-                "Name": "Maciej Poleski"
+                "Name": "Maciej Poleski",
+                "Name[x-test]": "xxMaciej Poleskixx"
             }
         ],
         "Category": "Version Control",
         "Description": "This plugin integrates Bazaar to KDevelop",
+        "Description[ca@valencia]": "Este connector integra el Bazaar al KDevelop",
+        "Description[ca]": "Aquest connector integra el Bazaar al KDevelop",
+        "Description[es]": "Este complemento integra Bazaar en KDevelop",
+        "Description[nl]": "Deze plugin integreert Bazaar in KDevelop",
+        "Description[pt]": "Este 'plugin' integra o Bazaar no KDevelop",
+        "Description[sk]": "Tento plugin integruje Bazaar do KDevelop.",
+        "Description[sv]": "Insticksprogrammet integrerar Bazaar i KDevelop",
+        "Description[uk]": "За допомогою цього додатка можна інтегрувати Bazaar до KDevelop",
+        "Description[x-test]": "xxThis plugin integrates Bazaar to KDevelopxx",
         "Icon": "bazaar",
         "Id": "kdevbazaar",
         "License": "GPL",
         "Name": "Bazaar Support",
+        "Name[ca@valencia]": "Implementació de Bazaar",
+        "Name[ca]": "Implementació de Bazaar",
+        "Name[es]": "Implementación de Bazaar",
+        "Name[nl]": "Ondersteuning van Bazaar",
+        "Name[pt]": "Suporte para o Bazaar",
+        "Name[sk]": "Podpora Bazaar",
+        "Name[sv]": "Bazaar-stöd",
+        "Name[uk]": "Підтримка Bazaar",
+        "Name[x-test]": "xxBazaar Supportxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

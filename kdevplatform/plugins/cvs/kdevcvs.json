@@ -2,15 +2,34 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Robert Gruber"
+                "Name": "Robert Gruber",
+                "Name[x-test]": "xxRobert Gruberxx"
             }
         ],
         "Category": "Version Control",
         "Description": "This plugin integrates CVS to KDevelop",
+        "Description[ca@valencia]": "Este connector integra el CVS al KDevelop",
+        "Description[ca]": "Aquest connector integra el CVS al KDevelop",
+        "Description[es]": "Este complemento integra CVS en KDevelop",
+        "Description[nl]": "Deze plugin integreert CVS in KDevelop",
+        "Description[pt]": "Este 'plugin' integra o CVS no KDevelop",
+        "Description[sk]": "Tento plugin integruje CVS do KDevelop.",
+        "Description[sv]": "Insticksprogrammet integrerar CVS i KDevelop",
+        "Description[uk]": "За допомогою цього додатка можна інтегрувати CVS до KDevelop",
+        "Description[x-test]": "xxThis plugin integrates CVS to KDevelopxx",
         "Icon": "cervisia",
         "Id": "kdevcvs",
         "License": "GPL",
         "Name": "CVS Support",
+        "Name[ca@valencia]": "Implementació de CVS",
+        "Name[ca]": "Implementació de CVS",
+        "Name[es]": "Implementación de CVS",
+        "Name[nl]": "CVS-ondersteuning",
+        "Name[pt]": "Suporte para o CVS",
+        "Name[sk]": "Podpora CVS",
+        "Name[sv]": "CVS-stöd",
+        "Name[uk]": "Підтримка CVS",
+        "Name[x-test]": "xxCVS Supportxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

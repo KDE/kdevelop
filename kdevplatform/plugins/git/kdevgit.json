@@ -3,15 +3,34 @@
         "Authors": [
             {
                 "Email": "powerfox@kde.ru",
-                "Name": "Evgeniy Ivanov"
+                "Name": "Evgeniy Ivanov",
+                "Name[x-test]": "xxEvgeniy Ivanovxx"
             }
         ],
         "Category": "Version Control",
         "Description": "This plugin integrates Git to KDevelop",
+        "Description[ca@valencia]": "Este connector integra el Git al KDevelop",
+        "Description[ca]": "Aquest connector integra el Git al KDevelop",
+        "Description[es]": "Este complemento integra Git en KDevelop",
+        "Description[nl]": "Deze plug-in integreert Git in KDevelop",
+        "Description[pt]": "Este 'plugin' integra o Git no KDevelop",
+        "Description[sk]": "Tento plugin integruje GIT do KDevelop.",
+        "Description[sv]": "Insticksprogrammet integrerar Git i KDevelop",
+        "Description[uk]": "Цей додаток інтегрує Git із KDevelop",
+        "Description[x-test]": "xxThis plugin integrates Git to KDevelopxx",
         "Icon": "git",
         "Id": "kdevgit",
         "License": "GPL",
         "Name": "Git Support",
+        "Name[ca@valencia]": "Implementació de Git",
+        "Name[ca]": "Implementació de Git",
+        "Name[es]": "Implementación de Git",
+        "Name[nl]": "Git-ondersteuning",
+        "Name[pt]": "Suporte para o Git",
+        "Name[sk]": "Podpora GIT",
+        "Name[sv]": "Git-stöd",
+        "Name[uk]": "Підтримка Git",
+        "Name[x-test]": "xxGit Supportxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

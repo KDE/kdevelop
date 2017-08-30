@@ -1,9 +1,27 @@
 {
     "KPlugin": {
         "Description": "Provides the welcome page visible in an empty session",
+        "Description[ca@valencia]": "Proporciona la visibilitat de la pàgina de benvinguda en una sessió buida",
+        "Description[ca]": "Proporciona la visibilitat de la pàgina de benvinguda en una sessió buida",
+        "Description[es]": "Proporciona la página de bienvenida visible en una sesión vacía",
+        "Description[nl]": "Biedt de welkomst pagina zichtbaar in een lege sessie",
+        "Description[pt]": "Oferece a página de boas-vindas que fica visível numa sessão vazia",
+        "Description[sk]": "Poskytuje uvítaciu stránku viditeľnú v prázdnom sedení",
+        "Description[sv]": "Tillhandahåller välkomstsidan synlig i en tom session",
+        "Description[uk]": "Забезпечує роботу сторінки вітання, яку програма показує, якщо сеанс порожній",
+        "Description[x-test]": "xxProvides the welcome page visible in an empty sessionxx",
         "Icon": "kdevelop",
         "Id": "KDevWelcomePage",
         "Name": "KDevelop Welcome Page",
+        "Name[ca@valencia]": "Pàgina de benvinguda del KDevelop",
+        "Name[ca]": "Pàgina de benvinguda del KDevelop",
+        "Name[es]": "Página de bienvenida de KDevelop",
+        "Name[nl]": "Welkomstpagina van KDevelop",
+        "Name[pt]": "Página de Boas-Vindas do KDevelop",
+        "Name[sk]": "Uvítacia stránka KDevelop",
+        "Name[sv]": "KDevelop välkomstsida",
+        "Name[uk]": "Сторінка вітання KDevelop",
+        "Name[x-test]": "xxKDevelop Welcome Pagexx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

@@ -4,15 +4,34 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Anton Anikin"
+                "Name": "Anton Anikin",
+                "Name[x-test]": "xxAnton Anikinxx"
             }
         ],
         "Category": "Analyzers",
         "Description": "This plugin integrates Heaptrack to KDevelop",
+        "Description[ca@valencia]": "Este connector integra el Heaptrack al KDevelop",
+        "Description[ca]": "Aquest connector integra el Heaptrack al KDevelop",
+        "Description[es]": "Este complemento integra Heaptrack en KDevelop",
+        "Description[nl]": "Deze plugin integreert Heaptrack in KDevelop",
+        "Description[pt]": "Este 'plugin' integra o Heaptrack no KDevelop",
+        "Description[sl]": "Ta vstavek vgradi Heaptrack v KDevelop",
+        "Description[sv]": "Insticksprogrammet integrerar Heaptrack i KDevelop",
+        "Description[uk]": "За допомогою цього додатка можна інтегрувати Heaptrack до KDevelop",
+        "Description[x-test]": "xxThis plugin integrates Heaptrack to KDevelopxx",
         "Icon": "office-chart-area",
         "Id": "kdevheaptrack",
         "License": "GPL",
         "Name": "Heaptrack Support",
+        "Name[ca@valencia]": "Implementació del Heaptrack",
+        "Name[ca]": "Implementació del Heaptrack",
+        "Name[es]": "Implementación de Heaptrack",
+        "Name[nl]": "Ondersteuning van Heaptrack",
+        "Name[pt]": "Suporte para o Heaptrack",
+        "Name[sl]": "Podpora za Heaptrack",
+        "Name[sv]": "Heaptrack-stöd",
+        "Name[uk]": "Підтримка Heaptrack",
+        "Name[x-test]": "xxHeaptrack Supportxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
