@@ -2,17 +2,49 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Dukju Ahn"
+                "Name": "Dukju Ahn",
+                "Name[x-test]": "xxDukju Ahnxx"
             }
         ],
         "Category": "Version Control",
         "Description": "This plugin integrates Subversion to KDevelop.",
+        "Description[ca@valencia]": "Este connector integra el Subversion en el KDevelop.",
+        "Description[ca]": "Aquest connector integra el Subversion en el KDevelop.",
+        "Description[cs]": "Tento modul integruje podporu pro subversion v KDevelop",
+        "Description[es]": "Este complemento integra Subversion en KDevelop.",
+        "Description[fr]": "Ce module intègre Subversion dans KDevelop.",
         "Description[it]": "Questa estensione integra Subversion in KDevelop.",
+        "Description[nl]": "Deze plugin integreert Subversion in KDevelop.",
+        "Description[pt]": "Este 'plugin' integra o Subversion no KDevelop.",
+        "Description[sv]": "Insticksprogrammet integrerar Subversion i KDevelop.",
+        "Description[uk]": "Цей додаток інтегрує Subversion із KDevelop.",
+        "Description[x-test]": "xxThis plugin integrates Subversion to KDevelop.xx",
         "Icon": "subversion",
         "Id": "kdevsubversion",
         "License": "GPL",
         "Name": "Subversion Support",
+        "Name[bg]": "Поддръжка на Subversion",
+        "Name[ca@valencia]": "Implementació del Subversion",
+        "Name[ca]": "Implementació del Subversion",
+        "Name[cs]": "Podpora subversion",
+        "Name[da]": "Subversion-understøttelse",
+        "Name[el]": "Υποστήριξη Subversion",
+        "Name[es]": "Implementación de Subversion",
+        "Name[et]": "Subversioni toetus",
+        "Name[fr]": "Prise en charge de Subversion",
         "Name[it]": "Supporto per Subversion",
+        "Name[kk]": "Subversion қолдауы",
+        "Name[nb]": "Støtte for subversion",
+        "Name[nds]": "Subversion-Ünnerstütten",
+        "Name[nl]": "Ondersteuning van subversion",
+        "Name[pa]": "ਸਬਵਰਜਨ ਸਹਿਯੋਗ",
+        "Name[pt]": "Suporte para o Subversion",
+        "Name[sv]": "Subversion-stöd",
+        "Name[ug]": "Subversion قوللىشى",
+        "Name[uk]": "Підтримка Subversion",
+        "Name[x-test]": "xxSubversion Supportxx",
+        "Name[zh_CN]": "Subversion 支持",
+        "Name[zh_TW]": "Subversion 支援",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
