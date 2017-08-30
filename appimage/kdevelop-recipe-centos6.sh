@@ -24,7 +24,7 @@ QVERSION_SHORT=5.7
 QTDIR=/usr/local/Qt-${QTVERSION}/
 
 if [ -z "$KDEVELOP_VERSION" ]; then
-    KDEVELOP_VERSION=5.1
+    KDEVELOP_VERSION=5.2
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=2.0
@@ -241,7 +241,6 @@ build_project konsole $KDE_APPLICATION_VERSION
 
 # KDevelop
 build_project kdevelop-pg-qt $KDEV_PG_QT_VERSION
-build_project kdevplatform $KDEVELOP_VERSION
 build_project kdevelop $KDEVELOP_VERSION
 build_project kdev-php $KDEVELOP_VERSION
 
