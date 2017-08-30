@@ -65,4 +65,5 @@ GenericName[uk]=Комплексне середовище розробки (ви
 GenericName[x-test]=xxIntegrated Development Environment (Pick Session to start with)xx
 GenericName[zh_CN]=集成开发环境(选择要启动的会话)
 GenericName[zh_TW]=整合開發環境（選擇要開始的工作階段）
+Comment=Plugin-extensible IDE for C/C++ and other programming languages (Pick Session to start with)
 Categories=Qt;KDE;Development;IDE;

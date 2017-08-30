@@ -70,4 +70,5 @@ GenericName[uk]=Комплексне середовище розробки
 GenericName[x-test]=xxIntegrated Development Environmentxx
 GenericName[zh_CN]=集成开发环境
 GenericName[zh_TW]=整合開發環境
+Comment=Plugin-extensible IDE for C/C++ and other programming languages
 Categories=Qt;KDE;Development;IDE;
