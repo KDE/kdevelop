@@ -1,4 +1,9 @@
-find_package(LibKompareDiff2 5.0 CONFIG REQUIRED)
+find_package(LibKompareDiff2 5.0 CONFIG)
+set_package_properties(LibKompareDiff2 PROPERTIES
+    PURPOSE "Required for building the patch review plugin."
+    TYPE REQUIRED
+)
+
 find_package(KDEExperimentalPurpose QUIET)
 set_package_properties(KDEExperimentalPurpose PROPERTIES DESCRIPTION "EXPERIMENTAL. Support for patch sharing"
                        URL "https://projects.kde.org/projects/playground/libs/purpose"
