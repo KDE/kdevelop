@@ -17,12 +17,14 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller en bläddringsbar modell av klasser och andra objekt som för närvarande har tolkats.",
         "Description[uk]": "За допомогою цього додатка можна створити придатну для перегляду модель класів та інших елементів, над якими ви працюєте.",
         "Description[x-test]": "xxThis plugin provides a browsable model of the currently parsed classes and other items.xx",
+        "Description[zh_CN]": "此插件提供了一个当前已分析类和其它项目的可浏览化视窗模型。",
         "Icon": "code-class",
         "Id": "kdevclassbrowser",
         "License": "GPL",
         "Name": "Class Browser",
         "Name[ca@valencia]": "Navegador de classes",
         "Name[ca]": "Navegador de classes",
+        "Name[cs]": "Prohlížeč tříd",
         "Name[es]": "Navegador de clases",
         "Name[nl]": "Klassen-browser",
         "Name[pt]": "Navegador de Classes",
@@ -30,6 +32,7 @@
         "Name[sv]": "Klassbläddrare",
         "Name[uk]": "Переглядач класів",
         "Name[x-test]": "xxClass Browserxx",
+        "Name[zh_CN]": "类浏览器",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

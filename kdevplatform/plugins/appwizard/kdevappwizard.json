@@ -18,12 +18,14 @@
         "Description[sv]": "Programguide",
         "Description[uk]": "Майстер створення програм",
         "Description[x-test]": "xxApplication Wizardxx",
+        "Description[zh_CN]": "应用程序向导",
         "Icon": "project-development-new-template",
         "Id": "kdevappwizard",
         "License": "GPL",
         "Name": "New Project Wizard",
         "Name[ca@valencia]": "Assistent de projecte nou",
         "Name[ca]": "Assistent de projecte nou",
+        "Name[cs]": "Průvodce novým projektem",
         "Name[es]": "Asistente de nuevo proyecto",
         "Name[nl]": "Nieuwe projectenassistent",
         "Name[pt]": "Assistente de Novos Projectos",
@@ -31,6 +33,7 @@
         "Name[sv]": "Ny projektguide",
         "Name[uk]": "Майстер створення проекту",
         "Name[x-test]": "xxNew Project Wizardxx",
+        "Name[zh_CN]": "新工程向导",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

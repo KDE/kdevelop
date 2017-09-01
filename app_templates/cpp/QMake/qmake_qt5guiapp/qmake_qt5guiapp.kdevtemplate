@@ -2,6 +2,7 @@
 Name=QMake Qt5 QWidgets GUI Application
 Name[ca]=Una aplicació IGU per a QMake Qt5 QWidgets
 Name[ca@valencia]=Una aplicació IGU per a QMake Qt5 QWidgets
+Name[cs]=Aplikace prostředí QMake Qt5 QWidgets
 Name[es]=Aplicación con interfaz gráfica con QWidgets de Qt5 y QMake
 Name[nl]=QMake Qt5 QWidgets GUI-toepassing
 Name[pt]=Aplicação Gráfica de QWidgets do Qt5 com QMake
@@ -13,6 +14,7 @@ Name[x-test]=xxQMake Qt5 QWidgets GUI Applicationxx
 Comment=Generate a QMake/Qt5 based GUI application (crossplatform compatible)
 Comment[ca]=Genera una aplicació IGU basada en QMake/Qt5 (compatible amb multiplataforma)
 Comment[ca@valencia]=Genera una aplicació IGU basada en QMake/Qt5 (compatible amb multiplataforma)
+Comment[cs]=Vytvořit aplikaci založenou na QMake/Qt5 (multiplatformní)
 Comment[es]=Genera una aplicación con interfaz gráfica basada en QMake/Qt5 (compatible multiplataforma)
 Comment[nl]=Op QMake/Qt5 gebaseerde GUI-toepassing genereren (crossplatform compatibel)
 Comment[pt]=Gera uma aplicação baseada no QMake/Qt5 com uma interface gráfica (compatível com várias plataformas)
@@ -21,6 +23,7 @@ Comment[sl]=Ustvari program z grafičnim uporabniškim vmesnikom temelječ na QM
 Comment[sv]=Skapa ett QMake/Qt5-baserat program med grafiskt användargränssnitt (kompatibelt mellan plattformar)
 Comment[uk]=Створити програму з графічним інтерфейсом, засновану на QMake/Qt5 (сумісну з декількома платформами)
 Comment[x-test]=xxGenerate a QMake/Qt5 based GUI application (crossplatform compatible)xx
+Comment[zh_CN]=生成基于 CMake/Qt4 的图形应用程序(跨平台兼容)
 
 Category=Qt/Graphical (QMake-based)
 ShowFilesAfterGeneration=main.cpp

@@ -11,6 +11,7 @@
         "Description": "This plugin brings a filemanager to KDevelop.",
         "Description[ca@valencia]": "Este connector proporciona un gestor de fitxers al KDevelop.",
         "Description[ca]": "Aquest connector proporciona un gestor de fitxers al KDevelop.",
+        "Description[cs]": "Tento modul do KDevelop přináší správce souborů.",
         "Description[es]": "Este complemento proporciona un gestor de archivos a KDevelop.",
         "Description[nl]": "Deze plugin brengt een bestandsbeheerder in KDevelop.",
         "Description[pt]": "Este 'plugin' traz um gestor de ficheiros para o KDevelop.",
@@ -18,6 +19,7 @@
         "Description[sv]": "Insticksprogrammet integrerar en filhanterare i KDevelop.",
         "Description[uk]": "За допомогою цього додатка можна отримати доступ до менеджера файлів у KDevelop.",
         "Description[x-test]": "xxThis plugin brings a filemanager to KDevelop.xx",
+        "Description[zh_CN]": "此插件为 KDevelop 提供了一个文件管理器。",
         "Icon": "system-file-manager",
         "Id": "kdevfilemanager",
         "License": "GPL",
@@ -31,6 +33,7 @@
         "Name[sv]": "Integrering av KDE:s filhanterare",
         "Name[uk]": "Інтеграція засобу керування файлами KDE",
         "Name[x-test]": "xxKDE File Manager Integrationxx",
+        "Name[zh_CN]": "KDE 文件管理器整合",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

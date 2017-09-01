@@ -11,11 +11,13 @@
         "Description[sv]": "Tillåter snabb sökning i flera filer med mönster eller reguljära uttryck, och tillåter dessutom ersättning.",
         "Description[uk]": "Надає можливості швидкого пошуку та заміни у декількох файлів на основі шаблонів або формальних виразів.",
         "Description[x-test]": "xxAllows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.xx",
+        "Description[zh_CN]": "可以用模式或正则表达式快速搜索多个文件，还可以替换。",
         "Icon": "kfind",
         "Id": "kdevgrepview",
         "Name": "Find/Replace In Files",
         "Name[ca@valencia]": "Busca i substitució en fitxers",
         "Name[ca]": "Cerca i substitució en fitxers",
+        "Name[cs]": "Hledat-nahradit v souborech",
         "Name[es]": "Buscar/sustituir en archivos",
         "Name[nl]": "Zoeken/vervangen in bestanden",
         "Name[pt]": "Procurar/Substituir nos Ficheiros",
@@ -23,6 +25,7 @@
         "Name[sv]": "Sök eller ersätt i filer",
         "Name[uk]": "Пошук або заміна у файлах",
         "Name[x-test]": "xxFind/Replace In Filesxx",
+        "Name[zh_CN]": "在文件中查找/替换",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

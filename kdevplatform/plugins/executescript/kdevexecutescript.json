@@ -16,12 +16,14 @@
         "Description[sv]": "Insticksprogrammet gör det möjligt att köra skript.",
         "Description[uk]": "За допомогою цього додатка можна запускати скрипти.",
         "Description[x-test]": "xxThis plugin allows running of scripts.xx",
+        "Description[zh_CN]": "此插件可以执行脚本.",
         "Icon": "system-run",
         "Id": "kdevexecutescript",
         "License": "GPL",
         "Name": "Execute Scripts",
         "Name[ca@valencia]": "Executa scripts",
         "Name[ca]": "Executa scripts",
+        "Name[cs]": "Spustit skripty",
         "Name[es]": "Ejecutar scripts",
         "Name[nl]": "Scripts uitvoeren",
         "Name[pt]": "Executar Programas",
@@ -29,6 +31,7 @@
         "Name[sv]": "Kör skript",
         "Name[uk]": "Виконання скриптів",
         "Name[x-test]": "xxExecute Scriptsxx",
+        "Name[zh_CN]": "执行脚本",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

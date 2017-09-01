@@ -15,6 +15,7 @@
         "Name": "KDevelop Welcome Page",
         "Name[ca@valencia]": "Pàgina de benvinguda del KDevelop",
         "Name[ca]": "Pàgina de benvinguda del KDevelop",
+        "Name[cs]": "Uvítací stránka KDevelop",
         "Name[es]": "Página de bienvenida de KDevelop",
         "Name[nl]": "Welkomstpagina van KDevelop",
         "Name[pt]": "Página de Boas-Vindas do KDevelop",
@@ -22,6 +23,7 @@
         "Name[sv]": "KDevelop välkomstsida",
         "Name[uk]": "Сторінка вітання KDevelop",
         "Name[x-test]": "xxKDevelop Welcome Pagexx",
+        "Name[zh_CN]": "KDevelop 欢迎页面",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
