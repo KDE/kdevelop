@@ -1,7 +1,7 @@
 /* This file is part of KDevelop
    Copyright 2004 Roberto Raggi <roberto@kdevelop.org>
    Copyright 2007 Andreas Pakulat <apaku@gmx.de>
-   Copyright 2017 Alexander Potashev <aspotashev@gmail.com>
+   Copyright 2016, 2017 Alexander Potashev <aspotashev@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +34,8 @@
 #include <KParts/MainWindow>
 #include <KPluginFactory>
 #include <KIO/Paste>
+#include <KFileItem>
+#include <KUrlMimeData>
 
 #include <project/projectmodel.h>
 #include <project/projectbuildsetmodel.h>
@@ -59,6 +61,43 @@
 using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(ProjectManagerFactory, "kdevprojectmanagerview.json", registerPlugin<ProjectManagerViewPlugin>();)
+
+namespace {
+
+QAction* createSeparatorAction()
+{
+    QAction* separator = new QAction(nullptr);
+    separator->setSeparator(true);
+    return separator;
+}
+
+// Returns nullptr iff the list of URLs to copy/cut was empty
+QMimeData* createClipboardMimeData(const bool cut)
+{
+    auto* ctx = dynamic_cast<KDevelop::ProjectItemContext*>(
+        ICore::self()->selectionController()->currentSelection());
+    QList<QUrl> urls;
+    QList<QUrl> mostLocalUrls;
+    for (const ProjectBaseItem* item : ctx->items()) {
+        if (item->folder() || item->file()) {
+            const QUrl& url = item->path().toUrl();
+            urls << url;
+            mostLocalUrls << KFileItem(url).mostLocalUrl();
+        }
+    }
+    qCDebug(PLUGIN_PROJECTMANAGERVIEW) << urls;
+
+    if (urls.isEmpty()) {
+        return nullptr;
+    }
+
+    QMimeData* mimeData = new QMimeData;
+    KIO::setClipboardDataCut(mimeData, cut);
+    KUrlMimeData::setUrls(urls, mostLocalUrls, mimeData);
+    return mimeData;
+}
+
+} // anonymous namespace
 
 class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
 {
@@ -214,7 +253,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
     bool needsCloseProjects = true;
     bool needsBuildItems = true;
     bool needsFolderItems = true;
-    bool needsRemoveAndRename = true;
+    bool needsCutRenameRemove = true;
     bool needsRemoveTargetFiles = true;
     bool needsPaste = true;
 
@@ -236,7 +275,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
         needsFolderItems &= (bool)item->folder();
 
         //needsRemove if items are limited to non-top-level folders or files that don't belong to targets
-        needsRemoveAndRename &= (item->folder() && item->parent()) || (item->file() && !item->parent()->target());
+        needsCutRenameRemove &= (item->folder() && item->parent()) || (item->file() && !item->parent()->target());
 
         //needsRemoveTargets if items are limited to file items with target parents
         needsRemoveTargetFiles &= (item->file() && item->parent()->target());
@@ -286,7 +325,32 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::reloadFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
-    if ( needsRemoveAndRename ) {
+
+    // Populating cut/copy/paste group
+    if ( !menuExt.actions(ContextMenuExtension::FileGroup).isEmpty() ) {
+        menuExt.addAction( ContextMenuExtension::FileGroup, createSeparatorAction() );
+    }
+    if ( needsCutRenameRemove ) {
+        QAction* cut = KStandardAction::cut(this, SLOT(cutFromContextMenu()), this);
+        cut->setShortcutContext(Qt::WidgetShortcut);
+        menuExt.addAction(ContextMenuExtension::FileGroup, cut);
+    }
+    {
+        QAction* copy = KStandardAction::copy(this, SLOT(copyFromContextMenu()), this);
+        copy->setShortcutContext(Qt::WidgetShortcut);
+        menuExt.addAction( ContextMenuExtension::FileGroup, copy );
+    }
+    if (needsPaste) {
+        QAction* paste = KStandardAction::paste(this, SLOT(pasteFromContextMenu()), this);
+        paste->setShortcutContext(Qt::WidgetShortcut);
+        menuExt.addAction( ContextMenuExtension::FileGroup, paste );
+    }
+
+    // Populating rename/remove group
+    {
+        menuExt.addAction( ContextMenuExtension::FileGroup, createSeparatorAction() );
+    }
+    if ( needsCutRenameRemove ) {
         QAction* remove = new QAction(i18n("Remo&ve"), parent);
         remove->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
         connect( remove, &QAction::triggered, this, &ProjectManagerViewPlugin::removeFromContextMenu );
@@ -303,15 +367,8 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
     }
 
-    {
-        QAction* copy = KStandardAction::copy(this, SLOT(copyFromContextMenu()), parent);
-        copy->setShortcutContext(Qt::WidgetShortcut);
-        menuExt.addAction( ContextMenuExtension::FileGroup, copy );
-    }
-    if (needsPaste) {
-        QAction* paste = KStandardAction::paste(this, SLOT(pasteFromContextMenu()), parent);
-        paste->setShortcutContext(Qt::WidgetShortcut);
-        menuExt.addAction( ContextMenuExtension::FileGroup, paste );
+    if ( needsCutRenameRemove || needsRemoveTargetFiles ) {
+        menuExt.addAction(ContextMenuExtension::FileGroup, createSeparatorAction());
     }
 
     return menuExt;
@@ -660,19 +717,12 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
 
 void ProjectManagerViewPlugin::copyFromContextMenu()
 {
-    KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
-    QList<QUrl> urls;
-    foreach (ProjectBaseItem* item, ctx->items()) {
-        if (item->folder() || item->file()) {
-            urls << item->path().toUrl();
-        }
-    }
-    qCDebug(PLUGIN_PROJECTMANAGERVIEW) << urls;
-    if (!urls.isEmpty()) {
-        QMimeData* data = new QMimeData;
-        data->setUrls(urls);
-        qApp->clipboard()->setMimeData(data);
-    }
+    qApp->clipboard()->setMimeData(createClipboardMimeData(false));
+}
+
+void ProjectManagerViewPlugin::cutFromContextMenu()
+{
+    qApp->clipboard()->setMimeData(createClipboardMimeData(true));
 }
 
 static void selectItemsByPaths(ProjectManagerView* view, const Path::List& paths)
@@ -738,7 +788,6 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
         showWarningDialogForFailedPaste(window, tasks);
     }
 }
-
 
 #include "projectmanagerviewplugin.moc"
 
