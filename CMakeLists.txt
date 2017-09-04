@@ -82,8 +82,7 @@ add_definitions(
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_STRICT_ITERATORS
-    -DQT_USE_FAST_CONCATENATION
-    -DQT_USE_FAST_OPERATOR_PLUS
+    -DQT_USE_QSTRINGBUILDER
 )
 
 function(add_compile_flag_if_supported _flag)

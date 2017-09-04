@@ -77,7 +77,7 @@ void Resource::getOrgs(const QString &token)
 
 void Resource::authenticate(const QString &name, const QString &password)
 {
-    auto job = createHttpAuthJob(QLatin1String("Authorization: Basic ") + QString::fromUtf8((name.toUtf8() + ':' + password.toUtf8()).toBase64()));
+    auto job = createHttpAuthJob(QLatin1String("Authorization: Basic ") + QString::fromUtf8(QByteArray(name.toUtf8() + ':' + password.toUtf8()).toBase64()));
     job->addMetaData("PropagateHttpHeader","true");
     connect(job, &KIO::StoredTransferJob::result,
             this, &Resource::slotAuthenticate);
@@ -97,7 +97,7 @@ void Resource::revokeAccess(const QString &id, const QString &name, const QStrin
     QUrl url = baseUrl;
     url.setPath(url.path() + "/authorizations/" + id);
     KIO::TransferJob *job = KIO::http_delete(url, KIO::HideProgressInfo);
-    job->addMetaData(QStringLiteral("customHTTPHeader"), "Authorization: Basic " + QString (name + ':' + password).toUtf8().toBase64());
+    job->addMetaData(QStringLiteral("customHTTPHeader"), QLatin1String("Authorization: Basic ") + QString (name + ':' + password).toUtf8().toBase64());
     /* And we don't care if it's successful ;) */
     job->start();
 }
