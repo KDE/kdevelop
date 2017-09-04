@@ -246,7 +246,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         if (!wrappedQtHeaders.isEmpty()) {
             smartArgs << wrappedQtHeaders;
             clangArguments << "-isystem" << wrappedQtHeaders.constData();
-            const auto qtCore = wrappedQtHeaders + "/QtCore";
+            const QByteArray qtCore = wrappedQtHeaders + "/QtCore";
             smartArgs << qtCore;
             clangArguments << "-isystem" << qtCore.constData();
         }
@@ -303,7 +303,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         m_environment = environment;
 
         if (options.testFlag(PrecompiledHeader)) {
-            clang_saveTranslationUnit(m_unit, (tuUrl.byteArray() + ".pch").constData(), CXSaveTranslationUnit_None);
+            clang_saveTranslationUnit(m_unit, QByteArray(tuUrl.byteArray() + ".pch").constData(), CXSaveTranslationUnit_None);
         }
     } else {
         qCWarning(KDEV_CLANG) << "Failed to parse translation unit:" << tuUrl;

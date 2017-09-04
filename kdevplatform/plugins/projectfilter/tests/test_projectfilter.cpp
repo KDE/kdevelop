@@ -384,14 +384,14 @@ void TestProjectFilter::bench_data()
     {
         TestFilter filter(new ProjectFilter(&project, Filters()));
         foreach(const QVector<BenchData>& data, dataSets) {
-            QTest::newRow(qstrdup(QByteArray("baseline-") + QByteArray::number(data.size()))) << filter << data;
+            QTest::newRow(QByteArray("baseline-" + QByteArray::number(data.size()))) << filter << data;
         }
     }
 
     {
         TestFilter filter(new ProjectFilter(&project, deserialize(defaultFilters())));
         foreach(const QVector<BenchData>& data, dataSets) {
-            QTest::newRow(qstrdup(QByteArray("defaults-") + QByteArray::number(data.size()))) << filter << data;
+            QTest::newRow(QByteArray("defaults-" + QByteArray::number(data.size()))) << filter << data;
         }
     }
 }

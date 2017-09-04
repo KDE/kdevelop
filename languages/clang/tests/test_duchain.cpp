@@ -234,7 +234,7 @@ void TestDUChain::testInclude()
     TestFile header(QStringLiteral("int foo() { return 42; }\n"), QStringLiteral("h"));
     // NOTE: header is _not_ explicitly being parsed, instead the impl job does that
 
-    TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
+    TestFile impl("#include \"" + header.url().str() + "\"\n"
                   "int main() { return foo(); }", QStringLiteral("cpp"), &header);
     impl.parse(TopDUContext::AllDeclarationsContextsAndUses);
 
@@ -283,7 +283,7 @@ class B : public A<int>
     //       header, or similar.
 
     TestFile header(code, QStringLiteral("h"));
-    TestFile impl("#include \"" + header.url().byteArray() + "\"\n", QStringLiteral("cpp"), &header);
+    TestFile impl("#include \"" + header.url().str() + "\"\n", QStringLiteral("cpp"), &header);
     QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses));
 
     DUChainReadLocker lock;
@@ -346,19 +346,19 @@ void TestDUChain::testIncludeLocking()
 
     ICore::self()->languageController()->backgroundParser()->setThreadCount(3);
 
-    TestFile impl1("#include \"" + header1.url().byteArray() + "\"\n"
-                   "#include \"" + header2.url().byteArray() + "\"\n"
-                   "#include \"" + header3.url().byteArray() + "\"\n"
+    TestFile impl1("#include \"" + header1.url().str() + "\"\n"
+                   "#include \"" + header2.url().str() + "\"\n"
+                   "#include \"" + header3.url().str() + "\"\n"
                    "int main() { return 0; }", QStringLiteral("cpp"));
 
-    TestFile impl2("#include \"" + header2.url().byteArray() + "\"\n"
-                   "#include \"" + header1.url().byteArray() + "\"\n"
-                   "#include \"" + header3.url().byteArray() + "\"\n"
+    TestFile impl2("#include \"" + header2.url().str() + "\"\n"
+                   "#include \"" + header1.url().str() + "\"\n"
+                   "#include \"" + header3.url().str() + "\"\n"
                    "int main() { return 0; }", QStringLiteral("cpp"));
 
-    TestFile impl3("#include \"" + header3.url().byteArray() + "\"\n"
-                   "#include \"" + header1.url().byteArray() + "\"\n"
-                   "#include \"" + header2.url().byteArray() + "\"\n"
+    TestFile impl3("#include \"" + header3.url().str() + "\"\n"
+                   "#include \"" + header1.url().str() + "\"\n"
+                   "#include \"" + header2.url().str() + "\"\n"
                    "int main() { return 0; }", QStringLiteral("cpp"));
 
     impl1.parse(TopDUContext::AllDeclarationsContextsAndUses);
@@ -1122,7 +1122,7 @@ void TestDUChain::testReparseOnDocumentActivated()
 void TestDUChain::testReparseInclude()
 {
     TestFile header(QStringLiteral("int foo() { return 42; }\n"), QStringLiteral("h"));
-    TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
+    TestFile impl("#include \"" + header.url().str() + "\"\n"
                   "int main() { return foo(); }", QStringLiteral("cpp"), &header);
 
     // Use TopDUContext::AST to imitate that document is opened in the editor, so that ClangParseJob can store translation unit, that'll be used for reparsing.
@@ -1167,7 +1167,7 @@ void TestDUChain::testReparseInclude()
 void TestDUChain::testReparseChangeEnvironment()
 {
     TestFile header(QStringLiteral("int foo() { return 42; }\n"), QStringLiteral("h"));
-    TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
+    TestFile impl("#include \"" + header.url().str() + "\"\n"
                   "int main() { return foo(); }", QStringLiteral("cpp"), &header);
 
     uint hashes[3] = {0, 0, 0};
@@ -1211,10 +1211,10 @@ void TestDUChain::testMacroDependentHeader()
 {
     TestFile header(QStringLiteral("struct MY_CLASS { class Q{Q(); int m;}; int m; };\n"), QStringLiteral("h"));
     TestFile impl("#define MY_CLASS A\n"
-                  "#include \"" + header.url().byteArray() + "\"\n"
+                  "#include \"" + header.url().str() + "\"\n"
                   "#undef MY_CLASS\n"
                   "#define MY_CLASS B\n"
-                  "#include \"" + header.url().byteArray() + "\"\n"
+                  "#include \"" + header.url().str() + "\"\n"
                   "#undef MY_CLASS\n"
                   "A a;\n"
                   "const A::Q aq;\n"
@@ -1277,7 +1277,7 @@ void TestDUChain::testHeaderParsingOrder1()
 {
     TestFile header(QStringLiteral("typedef const A<int> B;\n"), QStringLiteral("h"));
     TestFile impl("template<class T> class A{};\n"
-                  "#include \"" + header.url().byteArray() + "\"\n"
+                  "#include \"" + header.url().str() + "\"\n"
                   "B c;", QStringLiteral("cpp"), &header);
 
     impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
@@ -1316,8 +1316,8 @@ void TestDUChain::testHeaderParsingOrder2()
 {
     TestFile header(QStringLiteral("template<class T> class A{};\n"), QStringLiteral("h"));
     TestFile header2(QStringLiteral("typedef const A<int> B;\n"), QStringLiteral("h"));
-    TestFile impl("#include \"" + header.url().byteArray() + "\"\n"
-                  "#include \"" + header2.url().byteArray() + "\"\n"
+    TestFile impl("#include \"" + header.url().str() + "\"\n"
+                  "#include \"" + header2.url().str() + "\"\n"
                   "B c;", QStringLiteral("cpp"), &header);
 
     impl.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST|TopDUContext::ForceUpdate));
@@ -1436,8 +1436,8 @@ void TestDUChain::testNestedMacroRanges()
 void TestDUChain::testNestedImports()
 {
     TestFile B(QStringLiteral("#pragma once\nint B();\n"), QStringLiteral("h"));
-    TestFile C("#pragma once\n#include \"" + B.url().byteArray() + "\"\nint C();\n", QStringLiteral("h"));
-    TestFile A("#include \"" + B.url().byteArray() + "\"\n" + "#include \"" + C.url().byteArray() + "\"\nint A();\n", QStringLiteral("cpp"));
+    TestFile C("#pragma once\n#include \"" + B.url().str() + "\"\nint C();\n", QStringLiteral("h"));
+    TestFile A("#include \"" + B.url().str() + "\"\n" + "#include \"" + C.url().str() + "\"\nint A();\n", QStringLiteral("cpp"));
 
     A.parse();
     QVERIFY(A.waitForParsed(5000));
@@ -1634,7 +1634,7 @@ void TestDUChain::testUsesCreatedForDeclarations()
 void TestDUChain::testReparseIncludeGuard()
 {
     TestFile header(QStringLiteral("#ifndef GUARD\n#define GUARD\nint something;\n#endif\n"), QStringLiteral("h"));
-    TestFile impl("#include \"" + header.url().byteArray() + "\"\n", QStringLiteral("cpp"), &header);
+    TestFile impl("#include \"" + header.url().str() + "\"\n", QStringLiteral("cpp"), &header);
 
     QVERIFY(impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST  )));
     {
@@ -1747,7 +1747,7 @@ void TestDUChain::testTypeAliasTemplate()
 void TestDUChain::testDeclarationsInsideMacroExpansion()
 {
     TestFile header(QStringLiteral("#define DECLARE(a) typedef struct a##__ {int var;} *a\nDECLARE(D);\n"), QStringLiteral("h"));
-    TestFile file("#include \"" + header.url().byteArray() + "\"\nint main(){\nD d; d->var;}\n", QStringLiteral("cpp"));
+    TestFile file("#include \"" + header.url().str() + "\"\nint main(){\nD d; d->var;}\n", QStringLiteral("cpp"));
 
     file.parse(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses|TopDUContext::AST));
     QVERIFY(file.waitForParsed(5000));

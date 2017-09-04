@@ -256,13 +256,13 @@ void KDevelop::StandardDocumentationView::setOverrideCss(const QUrl& url)
 #ifdef USE_QTWEBKIT
     d->m_view->settings()->setUserStyleSheetUrl(url);
 #else
-    d->m_view->page()->runJavaScript(
+    d->m_view->page()->runJavaScript(QLatin1String(
         "var link = document.createElement( 'link' );"
-        "link.href = '" + url.toString().toUtf8() + "';"
+        "link.href = '") + url.toString() + QLatin1String("';"
         "link.type = 'text/css';"
         "link.rel = 'stylesheet';"
         "link.media = 'screen,print';"
-        "document.getElementsByTagName( 'head' )[0].appendChild( link );"
+        "document.getElementsByTagName( 'head' )[0].appendChild( link );")
     );
 #endif
 }
