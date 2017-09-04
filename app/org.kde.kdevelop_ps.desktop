@@ -70,6 +70,7 @@ Comment[ca]=Un IDE ampliable amb connectors per al C/C++ i altres llenguatges de
 Comment[es]=Entorno de desarrollo integrado para C/C++ y otros lenguajes de programación que se puede extender con complementos (escoger sesión con la que empezar)
 Comment[it]=IDE estensibile per C/C++ ed altri linguaggi di programmazione (Scegliere la sessione con cui iniziare)
 Comment[nl]=IDE voor C/C++ en andere programmeertalen, uit te breiden met plug-ins. (Kies sessie om mee te beginnen)
+Comment[pl]=Zintegrowane środowisko programistyczne dla C/C++ i innych języków programowania z możliwością rozszerzenia o wtyczki (Wybór sesji do rozpoczęcia)
 Comment[sv]=Integrerad utvecklingsmiljö för C/C++ och andra programspråk, utökningsbar med insticksprogram (välj session att starta med)
 Comment[uk]=Розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування (Виберіть сеанс, який слід запустити)
 Comment[x-test]=xxPlugin-extensible IDE for C/C++ and other programming languages (Pick Session to start with)xx
