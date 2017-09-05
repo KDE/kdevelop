@@ -6,7 +6,7 @@ set(completion_SRCS
     context.cpp
     model.cpp
     worker.cpp
-    ../libs/qmljs/parser/qmljsgrammar.cpp
+    #../libs/qmljs/parser/qmljsgrammar.cpp
 )
 
 add_library(kdevqmljscompletion STATIC ${completion_SRCS})

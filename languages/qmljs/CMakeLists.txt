@@ -1,12 +1,8 @@
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/libs
     ${KDevelop_SOURCE_DIR}/languages/plugins
 )
 
-add_definitions(-DQT_CREATOR) # :D
-add_definitions(-DQML_BUILD_STATIC_LIB=1)
-
-add_subdirectory(libs)
+add_subdirectory(3rdparty/qtcreator-libs)
 add_subdirectory(duchain)
 add_subdirectory(nodejsmodules)
 if(BUILD_TESTING)

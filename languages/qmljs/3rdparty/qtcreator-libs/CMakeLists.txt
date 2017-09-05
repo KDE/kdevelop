@@ -1,5 +1,3 @@
-string(REPLACE "-Wdocumentation" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-
 qt5_wrap_ui(uifiles_SRCS
 	utils/projectintropage.ui
 	utils/filewizardpage.ui
@@ -53,7 +51,11 @@ if (APPLE)
     target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE "-framework Foundation" )
 endif()
 
-set_target_properties(kdevqtc-qmlsupport PROPERTIES COMPILE_FLAGS "-DLANGUAGEUTILS_BUILD_DIR\ -DQTCREATOR_UTILS_LIB")
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(kdevqtc-qmlsupport PRIVATE "-Wno-documentation")
+endif()
+target_compile_definitions(kdevqtc-qmlsupport PUBLIC "-DLANGUAGEUTILS_BUILD_DIR\ -DQTCREATOR_UTILS_LIB -DQT_CREATOR -DQML_BUILD_STATIC_LIB")
+target_include_directories(kdevqtc-qmlsupport PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     Qt5::Core
     Qt5::Gui
