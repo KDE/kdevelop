@@ -63,10 +63,15 @@ macro(kdevplatform_create_template_archive _templateName)
                 DEPENDS ${_deps}
             )
         else()
+            set(extraArgs "")
+            if(DEFINED ENV{SOURCE_DATE_EPOCH})
+                # We assume there is tar > 1.28 if a reproducible build is wanted.
+                set(extraArgs "--mtime=$ENV{SOURCE_DATE_EPOCH}")
+            endif()
             add_custom_command(OUTPUT ${_template}
                 COMMAND tar ARGS -c -C ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
                     --exclude .kdev_ignore --exclude .svn --mode=go=rX,u+rw,a-s --owner=root 
-                    --group=root --numeric-owner -j -f ${_template} .
+                    --group=root --numeric-owner -j -f ${_template} ${extraArgs} .
                 DEPENDS ${_deps}
             )
         endif()
