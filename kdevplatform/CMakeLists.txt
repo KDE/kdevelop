@@ -59,7 +59,6 @@ add_subdirectory(template)
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
-add_subdirectory(plugins)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")
 
