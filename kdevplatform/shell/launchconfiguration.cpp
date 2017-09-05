@@ -53,7 +53,7 @@ QString LaunchConfiguration::LaunchConfigurationTypeEntry()
     return QStringLiteral("Type");
 }
 
-LaunchConfiguration::LaunchConfiguration(KConfigGroup grp, IProject* project, QObject* parent ) 
+LaunchConfiguration::LaunchConfiguration(const KConfigGroup& grp, IProject* project, QObject* parent )
     : QObject(parent)
     , ILaunchConfiguration()
     , d(new LaunchConfigurationPrivate(grp, project))

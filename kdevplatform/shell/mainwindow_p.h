@@ -119,7 +119,7 @@ public Q_SLOTS:
     void showLoadedPlugins();
 
     void toggleArea(bool b);
-    void showErrorMessage(QString message, int timeout);
+    void showErrorMessage(const QString& message, int timeout);
     void pluginDestroyed(QObject*);
 
     /// the following slots always activate the m_tabView before calling the normal slot above

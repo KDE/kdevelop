@@ -74,7 +74,7 @@ public:
      //We connect directly, so we can do the pre-grouping within the background thread
      connect(m_worker, &CodeCompletionWorker::foundDeclarationsReal, m_model, &CodeCompletionModel::foundDeclarations, Qt::QueuedConnection);
 
-     connect(m_model, &CodeCompletionModel::completionsNeeded, m_worker, static_cast<void(CodeCompletionWorker::*)(DUChainPointer<KDevelop::DUContext>,const Cursor&,View*)>(&CodeCompletionWorker::computeCompletions), Qt::QueuedConnection);
+     connect(m_model, &CodeCompletionModel::completionsNeeded, m_worker, static_cast<void(CodeCompletionWorker::*)(const DUChainPointer<KDevelop::DUContext>&, const Cursor&, View*)>(&CodeCompletionWorker::computeCompletions), Qt::QueuedConnection);
      connect(m_model, &CodeCompletionModel::doSpecialProcessingInBackground, m_worker, &CodeCompletionWorker::doSpecialProcessing);
      exec();
    }
@@ -368,7 +368,7 @@ KDevelop::TopDUContextPointer CodeCompletionModel::currentTopContext() const
   return m_currentTopContext;
 }
 
-void CodeCompletionModel::setCurrentTopContext(KDevelop::TopDUContextPointer topContext)
+void CodeCompletionModel::setCurrentTopContext(const KDevelop::TopDUContextPointer& topContext)
 {
   m_currentTopContext = topContext;
 }

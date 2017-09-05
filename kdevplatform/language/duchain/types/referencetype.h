@@ -59,7 +59,7 @@ public:
    *
    * \param baseType the base type.
    */
-  void setBaseType(AbstractType::Ptr baseType);
+  void setBaseType(const AbstractType::Ptr& baseType);
 
   /**
    * Checks whether this type is an rvalue- or lvalue-reference type.

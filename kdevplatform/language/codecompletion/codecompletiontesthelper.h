@@ -162,7 +162,7 @@ struct CodeCompletionItemTester
 struct InsertIntoDUChain
 {
   ///Artificially inserts a file called @p name with the text @p text
-  InsertIntoDUChain(QString name, QString text) : m_insertedCode(IndexedString(name), text), m_topContext(0) {
+  InsertIntoDUChain(const QString& name, const QString& text) : m_insertedCode(IndexedString(name), text), m_topContext(0) {
   }
 
   ~InsertIntoDUChain() {
@@ -199,7 +199,7 @@ struct InsertIntoDUChain
   }
 
   ///Helper function: get a declaration based on its qualified identifier
-  Declaration* getDeclaration(QString id) {
+  Declaration* getDeclaration(const QString& id) {
     get();
     if(!topContext())
       return 0;

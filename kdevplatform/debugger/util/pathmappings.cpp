@@ -247,7 +247,7 @@ void PathMappingsWidget::loadFromConfiguration(const KConfigGroup& cfg)
     static_cast<PathMappingModel*>(m_pathMappingTable->model())->loadFromConfiguration(cfg);
 }
 
-void PathMappingsWidget::saveToConfiguration(KConfigGroup cfg) const
+void PathMappingsWidget::saveToConfiguration(const KConfigGroup& cfg) const
 {
     static_cast<PathMappingModel*>(m_pathMappingTable->model())->saveToConfiguration(cfg);
 }

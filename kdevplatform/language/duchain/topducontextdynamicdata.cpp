@@ -775,7 +775,7 @@ uint TopDUContextDynamicData::allocateContextIndex(DUContext* context, bool temp
   return m_contexts.allocateItemIndex(context, temporary);
 }
 
-uint TopDUContextDynamicData::allocateProblemIndex(ProblemPointer problem)
+uint TopDUContextDynamicData::allocateProblemIndex(const ProblemPointer& problem)
 {
   return m_problems.allocateItemIndex(problem, false);
 }

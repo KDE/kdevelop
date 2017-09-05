@@ -109,7 +109,7 @@ public:
         return nullptr;
     }
 
-    Session* findSessionForId(QString idString)
+    Session* findSessionForId(const QString& idString)
     {
         QUuid id(idString);
 
@@ -534,7 +534,7 @@ SessionRunInfo SessionController::sessionRunInfo(const QString& id)
     return SessionLock::tryLockSession(id, false).runInfo;
 }
 
-QString SessionController::showSessionChooserDialog(QString headerText, bool onlyRunning)
+QString SessionController::showSessionChooserDialog(const QString& headerText, bool onlyRunning)
 {
     ///FIXME: move this code into sessiondialog.cpp
     QListView* view = new QListView;

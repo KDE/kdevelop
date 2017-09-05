@@ -81,7 +81,7 @@ AbstractType::Ptr PointerType::baseType () const
   return d_func()->m_baseType.abstractType();
 }
 
-void PointerType::setBaseType(AbstractType::Ptr type)
+void PointerType::setBaseType(const AbstractType::Ptr& type)
 {
   d_func_dynamic()->m_baseType = IndexedType(type);
 }

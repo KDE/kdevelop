@@ -577,7 +577,7 @@ void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
     }
 }
 
-void UiController::saveAllAreas(KSharedConfigPtr config)
+void UiController::saveAllAreas(const KSharedConfigPtr& config)
 {
     KConfigGroup uiConfig(config, "User Interface");
     int wc = mainWindows().size();
@@ -603,7 +603,7 @@ void UiController::saveAllAreas(KSharedConfigPtr config)
     uiConfig.sync();
 }
 
-void UiController::loadAllAreas(KSharedConfigPtr config)
+void UiController::loadAllAreas(const KSharedConfigPtr& config)
 {
     KConfigGroup uiConfig(config, "User Interface");
     int wc = uiConfig.readEntry("Main Windows Count", 1);

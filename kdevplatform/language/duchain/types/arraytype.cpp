@@ -80,7 +80,7 @@ AbstractType::Ptr ArrayType::elementType () const
   return d_func()->m_elementType.abstractType();
 }
 
-void ArrayType::setElementType(AbstractType::Ptr type)
+void ArrayType::setElementType(const AbstractType::Ptr& type)
 {
   d_func_dynamic()->m_elementType = IndexedType(type);
 }

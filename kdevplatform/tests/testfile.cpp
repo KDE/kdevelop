@@ -44,7 +44,7 @@ public:
     {
     }
 
-    void updateReady(const IndexedString& _url, ReferencedTopDUContext _topContext)
+    void updateReady(const IndexedString& _url, const ReferencedTopDUContext& _topContext)
     {
         Q_ASSERT(_url == url);
         Q_UNUSED(_url);

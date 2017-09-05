@@ -131,7 +131,7 @@ public:
     virtual NavigationContextPointer executeKeyAction(QString key);
 
     ///Adds given the text to currentHtml()
-    void addHtml(QString html);
+    void addHtml(const QString& html);
     ///Returns the html text being built in its current state
     QString currentHtml() const;
     ///Returns a convenience object that allows writing "modifyHtml() += "Hallo";"
@@ -151,9 +151,9 @@ public:
     void makeLink( const QString& name, QString targetId, const NavigationAction& action);
     
     ///Creates a link that executes the given action and returns it
-    QString createLink(const QString& name, QString targetId, const NavigationAction& action);
+    QString createLink(const QString& name, const QString& targetId, const NavigationAction& action);
 
-    NavigationContextPointer registerChild(DeclarationPointer /*declaration*/);
+    NavigationContextPointer registerChild(const DeclarationPointer& /*declaration*/);
     NavigationContextPointer registerChild(AbstractNavigationContext* context);
 
     virtual QString declarationKind(DeclarationPointer decl);

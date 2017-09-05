@@ -56,7 +56,7 @@ AbstractType::Ptr TypeAliasType::type() const
   return d_func()->m_type.abstractType();
 }
 
-void TypeAliasType::setType(AbstractType::Ptr type)
+void TypeAliasType::setType(const AbstractType::Ptr& type)
 {
   d_func_dynamic()->m_type = IndexedType(type);
 }

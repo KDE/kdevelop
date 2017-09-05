@@ -36,7 +36,7 @@
 using namespace KDevelop;
 
 AdaptSignatureAction::AdaptSignatureAction(const DeclarationId& definitionId,
-                                           ReferencedTopDUContext definitionContext,
+                                           const ReferencedTopDUContext& definitionContext,
                                            const Signature& oldSignature,
                                            const Signature& newSignature,
                                            bool editingDefinition,

@@ -150,7 +150,7 @@ public Q_SLOTS:
     // If 'target' is "[selection]", returns the path of the currently active selection.
     // If 'target' is the name of a project, returns the root-path of that project.
     // Whenever the returned path corresponds to a directory, a '/.' suffix is appended.
-    Q_SCRIPTABLE QString activeDocumentPath(QString target = {}) const;
+    Q_SCRIPTABLE QString activeDocumentPath(const QString& target = {}) const;
 
     // Returns all open documents in the current area
     Q_SCRIPTABLE QStringList activeDocumentPaths() const;

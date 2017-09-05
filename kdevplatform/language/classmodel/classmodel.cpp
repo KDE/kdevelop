@@ -72,7 +72,7 @@ ClassModel::~ClassModel()
   delete m_topNode;
 }
 
-void ClassModel::updateFilterString(QString a_newFilterString)
+void ClassModel::updateFilterString(const QString& a_newFilterString)
 {
   m_allClassesNode->updateFilterString(a_newFilterString);
   foreach ( ClassModelNodes::FilteredProjectFolder* folder, m_projectNodes ) {

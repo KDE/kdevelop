@@ -27,7 +27,7 @@
 namespace KDevelop {
 
 AbstractIncludeNavigationContext::AbstractIncludeNavigationContext(const IncludeItem& item,
-                                                                   TopDUContextPointer topContext,
+                                                                   const TopDUContextPointer& topContext,
                                                                    const ParsingEnvironmentType& type)
     : AbstractNavigationContext(topContext), m_type(type), m_item(item)
 {}

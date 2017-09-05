@@ -342,7 +342,7 @@ void MainWindowPrivate::registerStatus(QObject* status)
 }
 
 
-void MainWindowPrivate::showErrorMessage(QString message, int timeout)
+void MainWindowPrivate::showErrorMessage(const QString& message, int timeout)
 {
     m_statusBar->showErrorMessage(message, timeout);
 }

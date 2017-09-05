@@ -28,7 +28,7 @@
 
 namespace KDevelop {
 
-void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor& pos, DeclarationPointer declaration, bool jumpForbidden)
+void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor& pos, const DeclarationPointer& declaration, bool jumpForbidden)
 {
   bool spaceBeforeParen = false; ///@todo Take this from some astyle config or something
   bool spaceBetweenParens = false;

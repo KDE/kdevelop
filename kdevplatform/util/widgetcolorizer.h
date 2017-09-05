@@ -61,7 +61,7 @@ namespace WidgetColorizer
      *          When set to 0 you get the background color as-is, when set to 1
      *          you get the input color as-is.
      */
-    KDEVPLATFORMUTIL_EXPORT QColor blendBackground(QColor color, float ratio,
+    KDEVPLATFORMUTIL_EXPORT QColor blendBackground(const QColor& color, float ratio,
                                                    const QColor& foreground, const QColor& background);
 
     KDEVPLATFORMUTIL_EXPORT void drawBranches(const QTreeView* treeView, QPainter* painter,

@@ -52,9 +52,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     ///Should returns a stripped version of the declarations qualified identifier, with all implicit/redundant parts removed
     virtual QualifiedIdentifier prettyQualifiedIdentifier(DeclarationPointer decl) const;
     ///Returns a stripped version of the declarations identifier, using prettyQualifiedIdentifier
-    Identifier prettyIdentifier(DeclarationPointer decl) const;
+    Identifier prettyIdentifier(const DeclarationPointer& decl) const;
     /// @return String version of the qualified identifier of @p decl, "<anonymous>" on an invalid QID
-    QString prettyQualifiedName(DeclarationPointer decl) const;
+    QString prettyQualifiedName(const DeclarationPointer& decl) const;
 
     /**
      * Return a rich-text version of the identifier @p identifier representing the declaration @p decl
@@ -64,9 +64,9 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     QString identifierHighlight(const QString& identifier, const DeclarationPointer& decl) const;
     
     static QString stringFromAccess(Declaration::AccessPolicy access);
-    static QString stringFromAccess(DeclarationPointer decl);
-    QString declarationName( DeclarationPointer decl ) const;
-    static QStringList declarationDetails(DeclarationPointer decl);
+    static QString stringFromAccess(const DeclarationPointer& decl);
+    QString declarationName( const DeclarationPointer& decl ) const;
+    static QStringList declarationDetails(const DeclarationPointer& decl);
 
     ///This can be used for example to resolve typedefs within the type.
     ///All types that are visualized in the navigation-context are/should be mangled through this.
@@ -85,7 +85,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     virtual void eventuallyMakeTypeLinks( KDevelop::AbstractType::Ptr type );
 
     ///Creates a link that triggers a recomputation of this context with m_fullBackwardSearch set to true
-    void createFullBackwardSearchLink(QString string);
+    void createFullBackwardSearchLink(const QString& string);
     
 private:
     const QScopedPointer<class AbstractDeclarationNavigationContextPrivate> d;

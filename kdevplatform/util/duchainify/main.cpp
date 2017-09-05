@@ -166,7 +166,7 @@ void Manager::init()
     }
 }
 
-void Manager::updateReady(IndexedString url, ReferencedTopDUContext topContext)
+void Manager::updateReady(const IndexedString& url, const ReferencedTopDUContext& topContext)
 {
     qDebug() << "finished" << url.toUrl().toLocalFile() << "success: " << (bool)topContext;
 
@@ -234,7 +234,7 @@ void Manager::dump(const ReferencedTopDUContext& topContext)
     }
 }
 
-void Manager::addToBackgroundParser(QString path, TopDUContext::Features features)
+void Manager::addToBackgroundParser(const QString& path, TopDUContext::Features features)
 {
     QFileInfo info(path);
 

@@ -163,7 +163,7 @@ public:
      *
      * @param lvalueDeclaration The declaration to set as last declaration and derive the last type from
      */
-    void encounterLvalue(DeclarationPointer lvalueDeclaration);
+    void encounterLvalue(const DeclarationPointer& lvalueDeclaration);
 
     /**
      * @brief Encounter the given type and declaration.
@@ -172,7 +172,7 @@ public:
      * @param type Type to set as the last type
      * @param declaration Declaration to set as the last declaration; null by default
      */
-    void encounter(AbstractType::Ptr type, DeclarationPointer declaration=DeclarationPointer());
+    void encounter(AbstractType::Ptr type, const DeclarationPointer& declaration=DeclarationPointer());
 
     /**
      * @brief Set the last type to unknownType() and clear the last declaration.

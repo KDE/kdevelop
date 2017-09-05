@@ -71,7 +71,7 @@ public:
   /**
    * Set the element type of the array, e.g. "int" for int[3].
    */
-  void setElementType(AbstractType::Ptr type);
+  void setElementType(const AbstractType::Ptr& type);
 
   QString toString() const override;
 

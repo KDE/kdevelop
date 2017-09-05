@@ -40,7 +40,7 @@
 using namespace KDevelop;
 
 ///@todo make this language-neutral
-static Identifier destructorForName(Identifier name) {
+static Identifier destructorForName(const Identifier& name) {
   QString str = name.identifier().str();
   if(str.startsWith('~'))
     return Identifier(str);
@@ -322,7 +322,7 @@ void UsesCollector::progress(uint processed, uint total) {
   Q_UNUSED(total);
 }
 
-void UsesCollector::updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext) {
+void UsesCollector::updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext) {
 
   DUChainReadLocker lock(DUChain::lock());
 

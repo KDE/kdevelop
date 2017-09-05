@@ -40,7 +40,7 @@ class KDEVPLATFORMSHELL_EXPORT LaunchConfiguration : public QObject, public ILau
 {
 Q_OBJECT
 public:
-    explicit LaunchConfiguration( KConfigGroup, IProject* = nullptr, QObject* = nullptr );
+    explicit LaunchConfiguration( const KConfigGroup&, IProject* = nullptr, QObject* = nullptr );
     ~LaunchConfiguration() override;
 
     static QString LaunchConfigurationNameEntry();

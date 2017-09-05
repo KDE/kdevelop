@@ -72,7 +72,7 @@ void CodeCompletionWorker::foundDeclarations(const QList<CompletionTreeElementPo
     emit foundDeclarationsReal(items, completionContext);
 }
 
-void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view)
+void CodeCompletionWorker::computeCompletions(const KDevelop::DUContextPointer& context, const KTextEditor::Cursor& position, KTextEditor::View* view)
 {
   {
     QMutexLocker lock(m_mutex);
@@ -196,7 +196,7 @@ QList<QExplicitlySharedDataPointer<CompletionTreeElement> > CodeCompletionWorker
    * 2. Group by inheritance depth
    * 3. Group by simplified attributes
    * */
-  CodeCompletionItemGrouper<ArgumentHintDepthExtractor, CodeCompletionItemGrouper<InheritanceDepthExtractor, CodeCompletionItemGrouper<SimplifiedAttributesExtractor> > > argumentHintDepthGrouper(tree, nullptr, items);
+  CodeCompletionItemGrouper<ArgumentHintDepthExtractor, CodeCompletionItemGrouper<InheritanceDepthExtractor, CodeCompletionItemGrouper<SimplifiedAttributesExtractor> > > argumentHintDepthGrouper(tree, nullptr, std::move(items));
   return tree;
 }
 

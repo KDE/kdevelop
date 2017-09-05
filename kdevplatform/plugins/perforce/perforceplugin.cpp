@@ -47,7 +47,7 @@ using namespace KDevelop;
 
 namespace
 {
-QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision=QString())
+QString toRevisionName(const KDevelop::VcsRevision& rev, const QString& currentRevision=QString())
 {
     bool ok;
     int previous = currentRevision.toInt(&ok);

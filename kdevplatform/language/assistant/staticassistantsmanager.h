@@ -57,8 +57,8 @@ public:
     explicit StaticAssistantsManager(QObject* parent = nullptr);
     ~StaticAssistantsManager() override;
 
-    void registerAssistant(const StaticAssistant::Ptr assistant);
-    void unregisterAssistant(const StaticAssistant::Ptr assistant);
+    void registerAssistant(const StaticAssistant::Ptr& assistant);
+    void unregisterAssistant(const StaticAssistant::Ptr& assistant);
     QVector<StaticAssistant::Ptr> registeredAssistants() const;
     void notifyAssistants(const IndexedString& url, const KDevelop::ReferencedTopDUContext& context);
 

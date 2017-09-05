@@ -89,7 +89,7 @@ namespace KDevelop {
             ///@see processUses()
             void processUsesSignal(KDevelop::ReferencedTopDUContext);
         private Q_SLOTS:
-            void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
+            void updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext);
         private:
             ///Called with every top-context that can contain uses of the declaration, or if setProcessDeclarations(false)
             ///has not been called also with all contexts that contain declarations used as base for the search.

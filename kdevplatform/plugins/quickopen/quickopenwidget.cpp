@@ -257,7 +257,7 @@ QuickOpenWidget::~QuickOpenWidget()
     m_model->setTreeView(nullptr);
 }
 
-QuickOpenWidgetDialog::QuickOpenWidgetDialog(QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField)
+QuickOpenWidgetDialog::QuickOpenWidgetDialog(const QString& title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField)
 {
     m_widget = new QuickOpenWidget(title, model, initialItems, initialScopes, listOnly, noSearchField);
     // the QMenu might close on esc and we want to close the whole dialog then

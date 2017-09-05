@@ -95,7 +95,7 @@ void TestProblemsView::testAddModel()
     QCOMPARE(tab->tabText(1), QStringLiteral("MODEL2 (0)"));
 }
 
-QVector<bool> visibilites(const QList<QAction*> actions)
+QVector<bool> visibilites(const QList<QAction*>& actions)
 {
     QVector<bool> visibilites;
     foreach (auto action, actions) {

@@ -44,7 +44,7 @@ private Q_SLOTS:
 
 private:
     QToolBar* fetchToolBarFor(Sublime::View*);
-    void assertGoodBar(QToolBar*, QString actionText);
+    void assertGoodBar(QToolBar*, const QString& actionText);
 
 private:
     Sublime::Controller *controller;

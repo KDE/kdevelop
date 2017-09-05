@@ -102,7 +102,7 @@ public:
 
 public Q_SLOTS:
   /// Call this to update the filter string for the search results folder.
-  void updateFilterString(QString a_newFilterString);
+  void updateFilterString(const QString& a_newFilterString);
 
   /// removes the project-specific node
   void removeProjectNode(KDevelop::IProject* project);

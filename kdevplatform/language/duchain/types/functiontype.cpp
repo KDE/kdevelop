@@ -81,7 +81,7 @@ FunctionType::~FunctionType()
 }
 
 
-void FunctionType::addArgument(AbstractType::Ptr argument, int index)
+void FunctionType::addArgument(const AbstractType::Ptr& argument, int index)
 {
   if ( index == -1 )
     d_func_dynamic()->m_argumentsList().append(IndexedType(argument));
@@ -94,7 +94,7 @@ void FunctionType::removeArgument(int i)
   d_func_dynamic()->m_argumentsList().remove(i);
 }
 
-void FunctionType::setReturnType(AbstractType::Ptr returnType)
+void FunctionType::setReturnType(const AbstractType::Ptr& returnType)
 {
   d_func_dynamic()->m_returnType = IndexedType(returnType);
 }

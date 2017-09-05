@@ -135,7 +135,7 @@ public:
      * @param onlyRunning whether only currently running sessions should be shown
      * @return UUID on success, empty string in any other case
      */
-    static QString showSessionChooserDialog(QString headerText = QString(), bool onlyRunning = false);
+    static QString showSessionChooserDialog(const QString& headerText = QString(), bool onlyRunning = false);
 
     /// Should be called if session to be opened is locked.
     /// It attempts to bring existing instance's window up via a DBus call; if that succeeds, empty string is returned.

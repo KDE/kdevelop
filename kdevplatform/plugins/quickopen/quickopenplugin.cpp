@@ -250,7 +250,7 @@ QuickOpenLineEdit* QuickOpenPlugin::createQuickOpenLineWidget()
     return new QuickOpenLineEdit(new StandardQuickOpenWidgetCreator(QStringList(), QStringList()));
 }
 
-QuickOpenLineEdit* QuickOpenPlugin::quickOpenLine(QString name)
+QuickOpenLineEdit* QuickOpenPlugin::quickOpenLine(const QString& name)
 {
     QList<QuickOpenLineEdit*> lines = ICore::self()->uiController()->activeMainWindow()->findChildren<QuickOpenLineEdit*>(name);
     foreach (QuickOpenLineEdit* line, lines) {
@@ -860,7 +860,7 @@ class OutlineQuickopenWidgetCreator
     : public QuickOpenWidgetCreator
 {
 public:
-    OutlineQuickopenWidgetCreator(QStringList /*scopes*/, QStringList /*items*/) : m_creator(nullptr)
+    OutlineQuickopenWidgetCreator(const QStringList& /*scopes*/, const QStringList& /*items*/) : m_creator(nullptr)
     {
     }
 

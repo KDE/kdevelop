@@ -613,7 +613,7 @@ DUContext* DUChainUtils::getFunctionContext(Declaration* decl) {
   return nullptr;
 }
 
-QVector<KDevelop::Problem::Ptr> KDevelop::DUChainUtils::allProblemsForContext(KDevelop::ReferencedTopDUContext top)
+QVector<KDevelop::Problem::Ptr> KDevelop::DUChainUtils::allProblemsForContext(const KDevelop::ReferencedTopDUContext& top)
 {
   QVector<KDevelop::Problem::Ptr> ret;
   Q_FOREACH ( const auto& p, top->problems() ) {

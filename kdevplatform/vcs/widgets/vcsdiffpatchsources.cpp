@@ -100,7 +100,7 @@ void VCSCommitDiffPatchSource::addMessageToHistory(const QString& message)
     vcsGroup.writeEntry("OldCommitMessages", oldMessages);
 }
 
-void VCSCommitDiffPatchSource::oldMessageChanged(QString text)
+void VCSCommitDiffPatchSource::oldMessageChanged(const QString& text)
 {
     if(m_oldMessages->currentIndex() != 0)
     {
@@ -178,7 +178,7 @@ uint VCSDiffPatchSource::depth() const {
     return m_depth;
 }
 
-void VCSDiffPatchSource::updateFromDiff(VcsDiff vcsdiff)
+void VCSDiffPatchSource::updateFromDiff(const VcsDiff& vcsdiff)
 {
     if(!m_file.isValid())
     {

@@ -272,7 +272,7 @@ void ExternalScriptPlugin::execute(ExternalScriptItem* item) const
   execute( item, document ? document->url() : QUrl() );
 }
 
-bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDirectory ) const
+bool ExternalScriptPlugin::executeCommand ( const QString& command, const QString& workingDirectory ) const
 {
 
   ExternalScriptItem* item = new ExternalScriptItem;
@@ -288,7 +288,7 @@ bool ExternalScriptPlugin::executeCommand ( QString command, QString workingDire
   return true;
 }
 
-QString ExternalScriptPlugin::executeCommandSync ( QString command, QString workingDirectory ) const
+QString ExternalScriptPlugin::executeCommandSync ( const QString& command, const QString& workingDirectory ) const
 {
   qCDebug(PLUGIN_EXTERNALSCRIPT) << "executing command " << command << " in working-dir " << workingDirectory;
   KProcess process;

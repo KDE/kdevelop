@@ -42,7 +42,7 @@
 ///@todo The subversion library returns borked diffs, where the headers are at the end. This function
 ///           takes those headers, and moves them into the correct place to create a valid working diff.
 ///           Find the source of this problem.
-QString repairDiff(QString diff) {
+QString repairDiff(const QString& diff) {
     qCDebug(PLUGIN_SVN) << "diff before repair:" << diff;
     QStringList lines = diff.split('\n');
     QMap<QString, QString> headers;

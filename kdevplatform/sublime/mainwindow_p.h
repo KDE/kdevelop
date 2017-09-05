@@ -61,7 +61,7 @@ public:
     /**Use this to create views for an area.*/
     class ViewCreator {
     public:
-        explicit ViewCreator(MainWindowPrivate *_d, QList<View*> _topViews = QList<View*>()): d(_d), topViews(_topViews.toSet()) {}
+        explicit ViewCreator(MainWindowPrivate *_d, const QList<View*>& _topViews = QList<View*>()): d(_d), topViews(_topViews.toSet()) {}
         Area::WalkerMode operator() (AreaIndex *index);
     private:
         MainWindowPrivate *d;

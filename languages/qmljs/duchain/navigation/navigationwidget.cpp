@@ -45,7 +45,7 @@ NavigationWidget::NavigationWidget(KDevelop::Declaration* decl,
 }
 
 NavigationWidget::NavigationWidget(const KDevelop::IncludeItem& includeItem,
-                                   KDevelop::TopDUContextPointer topContext,
+                                   const KDevelop::TopDUContextPointer& topContext,
                                    const QString& htmlPrefix,
                                    const QString& htmlSuffix,
                                    KDevelop::AbstractNavigationWidget::DisplayHints hints)

@@ -76,12 +76,12 @@ public Q_SLOTS:
   /**
    * Executes the command (Used by the shell-integration)
    * */
-  Q_SCRIPTABLE bool executeCommand(QString command, QString workingDirectory) const;
+  Q_SCRIPTABLE bool executeCommand(const QString& command, const QString& workingDirectory) const;
 
   /**
    * Executes the command synchronously and returns the output text (Used by the shell-integration)
    * */
-  Q_SCRIPTABLE QString executeCommandSync(QString command, QString workingDirectory) const;
+  Q_SCRIPTABLE QString executeCommandSync(const QString& command, const QString& workingDirectory) const;
   
 private Q_SLOTS:
   void rowsRemoved( const QModelIndex& parent, int start, int end );

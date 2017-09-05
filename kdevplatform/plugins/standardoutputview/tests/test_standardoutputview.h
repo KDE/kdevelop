@@ -42,7 +42,7 @@ class StandardOutputViewTest: public QObject
 {
     Q_OBJECT
 private:
-    OutputWidget* toolviewPointer(QString toolviewTitle);
+    OutputWidget* toolviewPointer(const QString& toolviewTitle);
     KDevelop::TestCore* m_testCore;
     KDevelop::IOutputView* m_stdOutputView;
     KDevelop::UiController* m_controller;

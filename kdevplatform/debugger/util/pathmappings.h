@@ -52,7 +52,7 @@ public:
     explicit PathMappingsWidget(QWidget* parent = nullptr);
 
     void loadFromConfiguration(const KConfigGroup& cfg);
-    void saveToConfiguration(KConfigGroup cfg) const;
+    void saveToConfiguration(const KConfigGroup& cfg) const;
 Q_SIGNALS:
     void changed();
 

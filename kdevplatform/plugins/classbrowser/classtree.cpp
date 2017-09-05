@@ -147,7 +147,7 @@ void ClassTree::itemActivated( const QModelIndex& index )
     expand( index );
 }
 
-void ClassTree::highlightIdentifier( KDevelop::IndexedQualifiedIdentifier a_id )
+void ClassTree::highlightIdentifier( const KDevelop::IndexedQualifiedIdentifier& a_id )
 {
   QModelIndex index = model()->getIndexForIdentifier( a_id );
   if ( !index.isValid() )

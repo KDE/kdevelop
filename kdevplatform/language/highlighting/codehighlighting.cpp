@@ -489,7 +489,7 @@ void CodeHighlightingInstance::highlightUses(DUContext* context)
 }
 
 
-void CodeHighlighting::clearHighlightingForDocument(IndexedString document)
+void CodeHighlighting::clearHighlightingForDocument(const IndexedString& document)
 {
   VERIFY_FOREGROUND_LOCKED
   QMutexLocker lock(&m_dataMutex);

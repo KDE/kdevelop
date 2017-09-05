@@ -62,13 +62,13 @@ public:
 class IncludeNavigationContext : public KDevelop::AbstractIncludeNavigationContext
 {
 public:
-    IncludeNavigationContext(const KDevelop::IncludeItem& item, KDevelop::TopDUContextPointer topContext);
+    IncludeNavigationContext(const KDevelop::IncludeItem& item, const KDevelop::TopDUContextPointer& topContext);
 
 protected:
     bool filterDeclaration(KDevelop::Declaration* decl) override;
 };
 
-IncludeNavigationContext::IncludeNavigationContext(const IncludeItem& item, KDevelop::TopDUContextPointer topContext)
+IncludeNavigationContext::IncludeNavigationContext(const IncludeItem& item, const KDevelop::TopDUContextPointer& topContext)
     : AbstractIncludeNavigationContext(item, topContext, StandardParsingEnvironment)
 {}
 
@@ -106,7 +106,7 @@ ClangNavigationWidget::ClangNavigationWidget(const MacroDefinition::Ptr& macro, 
     setContext(NavigationContextPointer(new MacroNavigationContext(macro, expansionLocation)));
 }
 
-ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, KDevelop::TopDUContextPointer topContext,
+ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, const KDevelop::TopDUContextPointer& topContext,
                                              const QString& htmlPrefix, const QString& htmlSuffix,
                                              KDevelop::AbstractNavigationWidget::DisplayHints hints)
     : AbstractNavigationWidget()

@@ -45,7 +45,7 @@ class AdaptSignatureAction
 
 public:
     AdaptSignatureAction(const KDevelop::DeclarationId& definitionId,
-                         KDevelop::ReferencedTopDUContext definitionContext,
+                         const KDevelop::ReferencedTopDUContext& definitionContext,
                          const Signature& oldSignature,
                          const Signature& newSignature,
                          bool editingDefinition,

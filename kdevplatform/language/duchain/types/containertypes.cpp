@@ -49,12 +49,12 @@ MapType::MapType(ListTypeData& data)
 MapType::MapType(const MapType& rhs)
 : ListType(copyData<MapType>(*rhs.d_func())) { }
 
-void ListType::replaceContentType(AbstractType::Ptr newType)
+void ListType::replaceContentType(const AbstractType::Ptr& newType)
 {
     d_func_dynamic()->m_contentType = IndexedType(newType);
 }
 
-void MapType::replaceKeyType(AbstractType::Ptr newType)
+void MapType::replaceKeyType(const AbstractType::Ptr& newType)
 {
     d_func_dynamic()->m_keyType = IndexedType(newType);
 }

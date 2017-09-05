@@ -532,7 +532,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
             explicit CommandCaller(KTextEditor::Document* _doc) : doc(_doc), editor(KTextEditor::Editor::instance()) {
                 Q_ASSERT(editor);
             }
-            void operator()(QString cmd) {
+            void operator()(const QString& cmd) {
                 KTextEditor::Command* command = editor->queryCommand( cmd );
                 Q_ASSERT(command);
                 QString msg;

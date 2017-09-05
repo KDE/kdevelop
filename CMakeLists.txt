@@ -8,7 +8,7 @@ set(KDEVELOP_VERSION_PATCH 40)
 set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
 
 # plugin versions listed in the .desktop files
-set(KDEV_PLUGIN_VERSION 29)
+set(KDEV_PLUGIN_VERSION 30)
 
 # we need some parts of the ECM CMake helpers
 find_package (ECM 5.14.0 REQUIRED NO_MODULE)

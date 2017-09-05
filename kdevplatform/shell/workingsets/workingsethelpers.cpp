@@ -36,7 +36,7 @@ MainWindow* mainWindow() {
     return window;
 }
 
-void filterViews(QSet< QString > keepFiles)
+void filterViews(const QSet< QString >& keepFiles)
 {
     MainWindow* window = mainWindow();
 

@@ -83,7 +83,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
     ///Convenience-storage for use by the inherited completion model
     KDevelop::TopDUContextPointer currentTopContext() const;
-    void setCurrentTopContext(KDevelop::TopDUContextPointer topContext);
+    void setCurrentTopContext(const KDevelop::TopDUContextPointer& topContext);
 
     ///Tracks navigation widget so they can be interactive with through the keyboard later on
     void addNavigationWidget(const CompletionTreeElement* element, QWidget* widget) const;

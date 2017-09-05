@@ -30,8 +30,8 @@ namespace KDevelop { class IDocumentation; }
 class CMakeNavigationWidget : public KDevelop::AbstractNavigationWidget
 {
     public:
-        CMakeNavigationWidget(KDevelop::TopDUContextPointer top, const KDevelop::IDocumentation::Ptr& doc);
-        CMakeNavigationWidget(KDevelop::TopDUContextPointer top, KDevelop::Declaration* decl);
+        CMakeNavigationWidget(const KDevelop::TopDUContextPointer& top, const KDevelop::IDocumentation::Ptr& doc);
+        CMakeNavigationWidget(const KDevelop::TopDUContextPointer& top, KDevelop::Declaration* decl);
 };
 
 #endif // CMAKENAVIGATIONWIDGET_H

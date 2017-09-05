@@ -75,7 +75,7 @@ void StandardOutputViewTest::cleanupTestCase()
      delete m_testCore;
 }
 
-OutputWidget* StandardOutputViewTest::toolviewPointer(QString toolviewTitle)
+OutputWidget* StandardOutputViewTest::toolviewPointer(const QString& toolviewTitle)
 {
     QList< Sublime::View* > views = m_controller->activeArea()->toolViews();
     foreach(Sublime::View* view, views) {

@@ -76,9 +76,9 @@ public:
 
     void mainWindowAdded(Sublime::MainWindow* mainWindow);
 
-    void saveAllAreas(KSharedConfigPtr config);
+    void saveAllAreas(const KSharedConfigPtr& config);
     void saveArea(Sublime::Area* area, KConfigGroup & group);
-    void loadAllAreas(KSharedConfigPtr config);
+    void loadAllAreas(const KSharedConfigPtr& config);
     void loadArea(Sublime::Area* area, const KConfigGroup & group);
 
     /*! @p status must implement KDevelop::IStatus */

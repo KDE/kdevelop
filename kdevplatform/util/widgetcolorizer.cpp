@@ -43,7 +43,7 @@ QColor WidgetColorizer::blendForeground(QColor color, float ratio,
   return KColorUtils::mix(foreground, color, ratio);
 }
 
-QColor WidgetColorizer::blendBackground(QColor color, float ratio,
+QColor WidgetColorizer::blendBackground(const QColor& color, float ratio,
                                         const QColor& /*foreground*/, const QColor& background)
 {
   // adapt contrast
