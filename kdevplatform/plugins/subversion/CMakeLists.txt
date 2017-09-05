@@ -5,48 +5,13 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevsubversion\")
 # but for now, we won't spend time on it...
 add_definitions(-DSVN_DEPRECATED=)
 
-string(REPLACE "-Wdocumentation" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+kde_enable_exceptions()
 
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
+add_subdirectory(3rdparty)
 add_subdirectory(icons)
-
-include_directories(
-    SYSTEM ${SUBVERSION_INCLUDE_DIRS}
-)
-
-kde_enable_exceptions()
-
-########### next target ###############
-
-set(kdevsubversion_WRAPPER_SRCS
-    kdevsvncpp/apr.cpp
-    kdevsvncpp/client_annotate.cpp
-    kdevsvncpp/client_cat.cpp
-    kdevsvncpp/client.cpp
-    kdevsvncpp/client_diff.cpp
-    kdevsvncpp/client_ls.cpp
-    kdevsvncpp/client_modify.cpp
-    kdevsvncpp/client_property.cpp
-    kdevsvncpp/client_status.cpp
-    kdevsvncpp/context.cpp
-    kdevsvncpp/datetime.cpp
-    kdevsvncpp/dirent.cpp
-    kdevsvncpp/entry.cpp
-    kdevsvncpp/exception.cpp
-    kdevsvncpp/info.cpp
-    kdevsvncpp/log_entry.cpp
-    kdevsvncpp/path.cpp
-    kdevsvncpp/pool.cpp
-    kdevsvncpp/property.cpp
-    kdevsvncpp/revision.cpp
-    kdevsvncpp/status.cpp
-    kdevsvncpp/status_selection.cpp
-    kdevsvncpp/targets.cpp
-    kdevsvncpp/url.cpp
-    kdevsvncpp/wc.cpp
-)
 
 set(kdevsubversion_JOB_SRCS
     svninternaljobbase.cpp
@@ -91,10 +56,8 @@ set(kdevsubversion_PART_UI
 
 ki18n_wrap_ui(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})
 
-kdevplatform_add_plugin(kdevsubversion JSON kdevsubversion.json SOURCES ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS} ${kdevsubversion_WRAPPER_SRCS})
-
+kdevplatform_add_plugin(kdevsubversion JSON kdevsubversion.json SOURCES ${kdevsubversion_PART_SRCS} ${kdevsubversion_JOB_SRCS})
 target_link_libraries(kdevsubversion
-    ${SUBVERSION_LIBRARIES}
     KF5::KIOCore
     KF5::TextEditor
     KF5::ThreadWeaver
@@ -103,4 +66,5 @@ target_link_libraries(kdevsubversion
     KDev::Vcs
     KDev::OutputView
     KDev::Project
+    kdevsvncpp
 )
