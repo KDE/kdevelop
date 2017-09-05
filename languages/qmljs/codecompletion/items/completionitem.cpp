@@ -40,7 +40,7 @@
 using namespace QmlJS;
 using namespace KDevelop;
 
-CompletionItem::CompletionItem(DeclarationPointer decl, int inheritanceDepth, Decoration decoration)
+CompletionItem::CompletionItem(const DeclarationPointer& decl, int inheritanceDepth, Decoration decoration)
 : NormalDeclarationCompletionItem(decl, QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext>(), inheritanceDepth),
   m_decoration(decoration)
 {

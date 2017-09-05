@@ -35,8 +35,8 @@ static bool isInDirectory(const QUrl& url, const QUrl& dir, int maxDepth)
 // the abort parameter must be volatile so that it
 // is evaluated every time - optimization might prevent that
 
-static QList<QUrl> thread_getProjectFiles(const QUrl dir, int depth, const QStringList include,
-                                         const QStringList exlude, volatile bool &abort)
+static QList<QUrl> thread_getProjectFiles(const QUrl& dir, int depth, const QStringList& include,
+                                         const QStringList& exlude, volatile bool &abort)
 {
     ///@todo This is not thread-safe!
     KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->findProjectForUrl( dir );

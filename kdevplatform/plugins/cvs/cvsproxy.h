@@ -54,8 +54,8 @@ public:
     explicit CvsProxy(KDevelop::IPlugin* parent = nullptr);
     ~CvsProxy() override;
 
-    bool isValidDirectory(QUrl dirPath) const;
-    bool isVersionControlled(QUrl filePath) const;
+    bool isValidDirectory(const QUrl& dirPath) const;
+    bool isVersionControlled(const QUrl& filePath) const;
 
     CvsJob* import(const QUrl &directory,
                 const QString & server, const QString& repositoryName,

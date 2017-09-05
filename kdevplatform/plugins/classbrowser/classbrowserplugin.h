@@ -50,7 +50,7 @@ public: // KDevelop::Plugin overrides
   KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
   // The duchain must not be locked when this is called!
-  void showDefinition(KDevelop::DeclarationPointer declaration);
+  void showDefinition(const KDevelop::DeclarationPointer& declaration);
 private Q_SLOTS:
   void findInClassBrowser();
 

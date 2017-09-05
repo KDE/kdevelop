@@ -78,7 +78,7 @@ public:
      * Creates an a list of environment profiles from a KConfig object
      * @param config the KConfig object to read the environment profiles from
      */
-    explicit EnvironmentProfileList(KSharedConfigPtr config);
+    explicit EnvironmentProfileList(const KSharedConfigPtr& config);
     explicit EnvironmentProfileList(KConfig* config );
     ~EnvironmentProfileList();
 

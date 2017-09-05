@@ -107,7 +107,7 @@ public:
     /**
      * @brief Replaces this list's content type by @p newType.
      */
-    void replaceContentType(AbstractType::Ptr newType);
+    void replaceContentType(const AbstractType::Ptr& newType);
 
     /**
      * @brief Get this lists's content type.
@@ -182,7 +182,7 @@ public:
     /**
      * @brief Set this map's key type to @p newType.
      */
-    void replaceKeyType(AbstractType::Ptr newType);
+    void replaceKeyType(const AbstractType::Ptr& newType);
 
     /**
      * @brief Get this map's key type.

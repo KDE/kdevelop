@@ -49,7 +49,7 @@ namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractIncludeNavigationContext : public AbstractNavigationContext {
   Q_OBJECT
 public:
-  AbstractIncludeNavigationContext(const IncludeItem& item, TopDUContextPointer topContext, 
+  AbstractIncludeNavigationContext(const IncludeItem& item, const TopDUContextPointer& topContext,
                                    const ParsingEnvironmentType& type);
   QString html(bool shorten) override;
   QString name() const override;

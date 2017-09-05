@@ -43,7 +43,7 @@ namespace KDevelop {
     class KDEVPLATFORMLANGUAGE_EXPORT OneUseWidget : public QWidget {
       Q_OBJECT
       public:
-        OneUseWidget(IndexedDeclaration declaration, IndexedString document, KTextEditor::Range range, const CodeRepresentation& code);
+        OneUseWidget(IndexedDeclaration declaration, const IndexedString& document, KTextEditor::Range range, const CodeRepresentation& code);
         ~OneUseWidget() override;
 
         void setHighlighted(bool highlight);
@@ -94,7 +94,7 @@ namespace KDevelop {
       Q_SIGNALS:
         void navigateDeclaration(KDevelop::IndexedDeclaration);
       private Q_SLOTS:
-        void linkWasActivated(QString);
+        void linkWasActivated(const QString&);
       private:
         IndexedDUContext m_context;
     };
@@ -143,7 +143,7 @@ namespace KDevelop {
             };
             QSize sizeHint () const override;
             ///@param customCollector allows specifying an own subclass of UsesWidgetCollector.
-            explicit UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<UsesWidgetCollector> customCollector = {});
+            explicit UsesWidget(const IndexedDeclaration& declaration, const QSharedPointer<UsesWidgetCollector>& customCollector = {});
             ~UsesWidget() override;
             void setAllExpanded(bool expanded);
             unsigned int countAllUses() const;
@@ -155,7 +155,7 @@ namespace KDevelop {
             QSharedPointer<UsesWidgetCollector> m_collector;
             QProgressBar* m_progressBar;
         public Q_SLOTS:
-            void headerLinkActivated(QString linkName);
+            void headerLinkActivated(const QString& linkName);
             void redrawHeaderLine();
     };
 }

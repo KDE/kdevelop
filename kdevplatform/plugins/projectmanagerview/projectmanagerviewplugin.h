@@ -80,7 +80,7 @@ private:
     QList<KDevelop::ProjectBaseItem*> recurseAndFetchCheckedItems( KDevelop::ProjectBaseItem* item );
     QList<KDevelop::ProjectBaseItem*> collectItems();
     QList<KDevelop::ProjectBaseItem*> collectAllProjects();
-    void runBuilderJob( KDevelop::BuilderJob::BuildType type, QList<KDevelop::ProjectBaseItem*> items );
+    void runBuilderJob( KDevelop::BuilderJob::BuildType type, const QList<KDevelop::ProjectBaseItem*>& items );
     class ProjectManagerViewPluginPrivate* const d;
 };
 

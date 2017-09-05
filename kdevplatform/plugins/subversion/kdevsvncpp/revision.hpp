@@ -80,7 +80,7 @@ namespace svn
      *
      * @param dateTime DateTime wrapper for apr_time_t
      */
-    Revision(const DateTime dateTime);
+    Revision(const DateTime& dateTime);
 
     /**
      * Copy constructor

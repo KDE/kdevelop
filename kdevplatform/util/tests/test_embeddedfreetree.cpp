@@ -65,14 +65,14 @@ struct Extractor{
 
 clock_t std_insertion = 0, std_removal = 0, std_contains = 0, std_iteration = 0, emb_insertion = 0, emb_removal = 0, emb_contains = 0, emb_iteration = 0;
 
-QString toString(std::set<uint> set) {
+QString toString(const std::set<uint>& set) {
     QString ret;
     for(std::set<uint>::const_iterator it = set.begin(); it != set.end(); ++it)
         ret += QStringLiteral("%1 ").arg(*it);
     return ret;
 }
 
-bool operator==(const std::set<uint> a, const std::set<uint> b) {
+bool operator==(const std::set<uint>& a, const std::set<uint>& b) {
     if(a.size() != b.size()) {
         qDebug() << "size mismatch" << toString(a) << ": " << toString(b);
         return false;

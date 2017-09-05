@@ -33,7 +33,7 @@ class Manager : public QObject {
     Q_OBJECT
     public:
         explicit Manager(QCommandLineParser* args);
-        void addToBackgroundParser(QString path, KDevelop::TopDUContext::Features features);
+        void addToBackgroundParser(const QString& path, KDevelop::TopDUContext::Features features);
         QSet<QUrl> waiting();
     private:
         QSet<QUrl> m_waiting;
@@ -44,7 +44,7 @@ class Manager : public QObject {
     public Q_SLOTS:
         // delay init into event loop so the DUChain can always shutdown gracefully
         void init();
-        void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext);
+        void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
         void finish();
         void dump(const KDevelop::ReferencedTopDUContext& topContext);
 };

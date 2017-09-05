@@ -75,7 +75,7 @@ StaticAssistantsManager::~StaticAssistantsManager()
 {
 }
 
-void StaticAssistantsManager::registerAssistant(const StaticAssistant::Ptr assistant)
+void StaticAssistantsManager::registerAssistant(const StaticAssistant::Ptr& assistant)
 {
     if (d->m_registeredAssistants.contains(assistant))
         return;
@@ -83,7 +83,7 @@ void StaticAssistantsManager::registerAssistant(const StaticAssistant::Ptr assis
     d->m_registeredAssistants << assistant;
 }
 
-void StaticAssistantsManager::unregisterAssistant(const StaticAssistant::Ptr assistant)
+void StaticAssistantsManager::unregisterAssistant(const StaticAssistant::Ptr& assistant)
 {
     d->m_registeredAssistants.removeOne(assistant);
 }

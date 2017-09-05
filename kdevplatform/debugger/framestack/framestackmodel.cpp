@@ -105,7 +105,7 @@ QModelIndex FrameStackModelPrivate::indexForThreadNumber(int threadNumber)
     return QModelIndex();
 }
 
-void FrameStackModel::setFrames(int threadNumber, QList<FrameItem> frames)
+void FrameStackModel::setFrames(int threadNumber, const QList<FrameItem>& frames)
 {
     QModelIndex threadIndex = d->indexForThreadNumber(threadNumber);
     Q_ASSERT(threadIndex.isValid());

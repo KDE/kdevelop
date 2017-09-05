@@ -125,7 +125,7 @@ namespace DUChainUtils {
   ///and returns it.
   KDEVPLATFORMLANGUAGE_EXPORT DUContext* getFunctionContext(Declaration* decl);
 
-  KDEVPLATFORMLANGUAGE_EXPORT QVector<KDevelop::Problem::Ptr> allProblemsForContext(ReferencedTopDUContext top);
+  KDEVPLATFORMLANGUAGE_EXPORT QVector<KDevelop::Problem::Ptr> allProblemsForContext(const ReferencedTopDUContext& top);
 }
 }
 

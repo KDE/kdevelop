@@ -45,7 +45,7 @@ public:
   }
 
   KDevelop::AbstractType::Ptr type() const;
-  void setType(KDevelop::AbstractType::Ptr type);
+  void setType(const KDevelop::AbstractType::Ptr& type);
 
   uint hash() const override;
 

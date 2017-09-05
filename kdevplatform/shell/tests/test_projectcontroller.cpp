@@ -98,7 +98,7 @@ public:
     }
 
     /*! Setup this manager such that @p folder has @p subFolder */
-    void addSubFolderTo(const Path& folder, Path subFolder)
+    void addSubFolderTo(const Path& folder, const Path& subFolder)
     {
         if (!m_subFoldersInFolder.contains(folder)) {
             m_subFoldersInFolder[folder] = Path::List();

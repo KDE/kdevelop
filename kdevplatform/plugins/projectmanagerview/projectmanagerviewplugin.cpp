@@ -450,7 +450,7 @@ QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectItems()
     return items;
 }
 
-void ProjectManagerViewPlugin::runBuilderJob( BuilderJob::BuildType type, QList<ProjectBaseItem*> items )
+void ProjectManagerViewPlugin::runBuilderJob( BuilderJob::BuildType type, const QList<ProjectBaseItem*>& items )
 {
     BuilderJob* builder = new BuilderJob;
     builder->addItems( type, items );

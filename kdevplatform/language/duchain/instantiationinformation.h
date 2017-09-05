@@ -109,7 +109,7 @@ namespace KDevelop {
      *
      * @warning Never use @c templateParametersList() directly.
      */
-    void addTemplateParameter(AbstractType::Ptr type);
+    void addTemplateParameter(const AbstractType::Ptr& type);
 
     /**
      * Instantiation-information for the surrounding context(see IndexedInstantiationInformation).

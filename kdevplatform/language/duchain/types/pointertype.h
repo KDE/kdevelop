@@ -52,7 +52,7 @@ public:
    *
    * \param type the base type.
    */
-  void setBaseType(AbstractType::Ptr type);
+  void setBaseType(const AbstractType::Ptr& type);
 
   /**
    * Retrieve the base type of the pointer, ie. what type of data the pointer points to.

@@ -28,7 +28,7 @@ using namespace KDevelop;
 class CMakeNavigationContext: public AbstractNavigationContext
 {
     public:
-        CMakeNavigationContext(TopDUContextPointer top, const QString& name, const QString& html)
+        CMakeNavigationContext(const TopDUContextPointer& top, const QString& name, const QString& html)
             : AbstractNavigationContext(top, nullptr), mName(name), mDescription(html) {}
         QString name() const override { return mName; }
         QString html(bool shorten = false) override
@@ -46,16 +46,16 @@ class CMakeNavigationContext: public AbstractNavigationContext
 class CMakeDeclarationNavigationContext: public AbstractDeclarationNavigationContext
 {
     public:
-        CMakeDeclarationNavigationContext(DeclarationPointer decl, TopDUContextPointer top)
+        CMakeDeclarationNavigationContext(const DeclarationPointer& decl, const TopDUContextPointer& top)
             : AbstractDeclarationNavigationContext(decl, top) {}
 };
 
-CMakeNavigationWidget::CMakeNavigationWidget(TopDUContextPointer top, const IDocumentation::Ptr& doc)
+CMakeNavigationWidget::CMakeNavigationWidget(const TopDUContextPointer& top, const IDocumentation::Ptr& doc)
 {
     setContext(NavigationContextPointer(new CMakeNavigationContext(top, doc->name(), doc->description())));
 }
 
-CMakeNavigationWidget::CMakeNavigationWidget(KDevelop::DUChainPointer< KDevelop::TopDUContext > top, KDevelop::Declaration* decl)
+CMakeNavigationWidget::CMakeNavigationWidget(const KDevelop::DUChainPointer< KDevelop::TopDUContext >& top, KDevelop::Declaration* decl)
 {
     setContext(NavigationContextPointer(new CMakeDeclarationNavigationContext(DeclarationPointer(decl), top)));
 }

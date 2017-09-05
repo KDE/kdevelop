@@ -116,7 +116,7 @@ QString highlightAndEscapeUseText(QString line, int cutOff, KTextEditor::Range r
  * Note: the links in the HTML here are only used for styling
  * the navigation is implemented in the mouse press event handler
  */
-OneUseWidget::OneUseWidget(IndexedDeclaration declaration, IndexedString document, KTextEditor::Range range, const CodeRepresentation& code) : m_range(new PersistentMovingRange(range, document)), m_declaration(declaration), m_document(document) {
+OneUseWidget::OneUseWidget(IndexedDeclaration declaration, const IndexedString& document, KTextEditor::Range range, const CodeRepresentation& code) : m_range(new PersistentMovingRange(range, document)), m_declaration(declaration), m_document(document) {
 
   //Make the sizing of this widget independent of the content, because we will adapt the content to the size
   setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
@@ -414,7 +414,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
     connect(headerLabel, &QLabel::linkActivated, this, &ContextUsesWidget::linkWasActivated);
 }
 
-void ContextUsesWidget::linkWasActivated(QString link) {
+void ContextUsesWidget::linkWasActivated(const QString& link) {
   if ( link == QLatin1String("navigateToFunction") ) {
     DUChainReadLocker lock(DUChain::lock());
     DUContext* context = m_context.context();
@@ -488,7 +488,7 @@ int TopContextUsesWidget::usesCount() const
   return m_usesCount;
 }
 
-QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, QList<IndexedDeclaration> declarations, DUContext* context) {
+QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, const QList<IndexedDeclaration>& declarations, DUContext* context) {
   QList<ContextUsesWidget*> ret;
 
   if(!context->parentContext() || isNewGroup(context->parentContext(), context)) {
@@ -551,7 +551,7 @@ UsesWidget::~UsesWidget()
     }
 }
 
-UsesWidget::UsesWidget(const IndexedDeclaration& declaration, QSharedPointer<UsesWidgetCollector> customCollector)
+UsesWidget::UsesWidget(const IndexedDeclaration& declaration, const QSharedPointer<UsesWidgetCollector>& customCollector)
     : NavigatableWidgetList(true)
 {
     DUChainReadLocker lock(DUChain::lock());
@@ -613,7 +613,7 @@ void UsesWidget::setAllExpanded(bool expanded)
   }
 }
 
-void UsesWidget::headerLinkActivated(QString linkName)
+void UsesWidget::headerLinkActivated(const QString& linkName)
 {
   if(linkName == QLatin1String("expandAll")) {
     setAllExpanded(true);

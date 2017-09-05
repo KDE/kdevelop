@@ -1101,7 +1101,7 @@ void Set::staticUnref() {
   unrefNode(m_tree);
 }
 
-StringSetRepository::StringSetRepository(QString name) : Utils::BasicSetRepository(name) {
+StringSetRepository::StringSetRepository(const QString& name) : Utils::BasicSetRepository(name) {
 }
 
 void StringSetRepository::itemRemovedFromSets(uint index) {

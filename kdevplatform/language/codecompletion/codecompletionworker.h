@@ -92,7 +92,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
 
   public Q_SLOTS:
     ///Connection from the foreground thread within CodeCompletionModel
-    void computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
+    void computeCompletions(const KDevelop::DUContextPointer& context, const KTextEditor::Cursor& position, KTextEditor::View* view);
     ///This can be used to do special processing within the background, completely bypassing the normal computeCompletions(..) etc. system.
     ///It will be executed within the background when the model emits doSpecialProcessingInBackground
     virtual void doSpecialProcessing(uint data);

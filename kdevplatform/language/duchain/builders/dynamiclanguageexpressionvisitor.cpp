@@ -44,13 +44,13 @@ AbstractType::Ptr DynamicLanguageExpressionVisitor::unknownType() const
     return AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed));
 }
 
-void DynamicLanguageExpressionVisitor::encounter(AbstractType::Ptr type, DeclarationPointer declaration)
+void DynamicLanguageExpressionVisitor::encounter(AbstractType::Ptr type, const DeclarationPointer& declaration)
 {
     m_lastType = encounterPreprocess(type);
     m_lastDeclaration = declaration;
 }
 
-void DynamicLanguageExpressionVisitor::encounterLvalue(DeclarationPointer lvalueDeclaration)
+void DynamicLanguageExpressionVisitor::encounterLvalue(const DeclarationPointer& lvalueDeclaration)
 {
     m_lastDeclaration = lvalueDeclaration;
     if ( lvalueDeclaration ) {

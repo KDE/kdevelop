@@ -28,7 +28,7 @@ namespace KDevelop
 //{
 //}
 
-DUChainChangeSet::DUChainChangeSet(ReferencedTopDUContext topContext) :
+DUChainChangeSet::DUChainChangeSet(const ReferencedTopDUContext& topContext) :
     m_topContext(topContext)
 {
 }

@@ -42,7 +42,7 @@ public:
         Brackets,           /*!< @brief Append brackets after the item and put the cursor in-between them: item becomes item(|) */
     };
 
-    CompletionItem(KDevelop::DeclarationPointer decl, int inheritanceDepth, Decoration decoration);
+    CompletionItem(const KDevelop::DeclarationPointer& decl, int inheritanceDepth, Decoration decoration);
 
     QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override;
     QString declarationName() const override;

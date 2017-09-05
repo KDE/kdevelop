@@ -672,7 +672,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
 }
 
 void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
-    const QString &printedAreas, int containerCount, int splitterCount, QString location)
+    const QString &printedAreas, int containerCount, int splitterCount, const QString& location)
 {
     //check area
     AreaViewsPrinter viewsPrinter;

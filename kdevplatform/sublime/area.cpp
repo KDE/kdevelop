@@ -397,7 +397,7 @@ QString Area::workingSet() const
 }
 
 
-void Area::setWorkingSet(QString name)
+void Area::setWorkingSet(const QString& name)
 {
     if(name != d->workingSet) {
         qCDebug(SUBLIME) << this << "setting new working-set" << name;

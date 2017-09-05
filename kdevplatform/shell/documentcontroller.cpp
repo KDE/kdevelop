@@ -953,7 +953,7 @@ KTextEditor::View* DocumentController::activeTextDocumentView() const
     return view->textView();
 }
 
-QString DocumentController::activeDocumentPath( QString target ) const
+QString DocumentController::activeDocumentPath( const QString& target ) const
 {
     if(!target.isEmpty()) {
         foreach(IProject* project, Core::self()->projectController()->projects()) {

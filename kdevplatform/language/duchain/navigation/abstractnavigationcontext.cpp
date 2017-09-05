@@ -121,7 +121,7 @@ void AbstractNavigationContext::makeLink( const QString& name, DeclarationPointe
   makeLink(name, QString(), action);
 }
 
-QString AbstractNavigationContext::createLink(const QString& name, QString, const NavigationAction& action)
+QString AbstractNavigationContext::createLink(const QString& name, const QString&, const NavigationAction& action)
 {
   if(d->m_shorten) {
     //Do not create links in shortened mode, it's only for viewing
@@ -272,7 +272,7 @@ NavigationContextPointer AbstractNavigationContext::registerChild(AbstractNaviga
   return d->m_children.last();
 }
 
-NavigationContextPointer AbstractNavigationContext::registerChild(DeclarationPointer declaration) {
+NavigationContextPointer AbstractNavigationContext::registerChild(const DeclarationPointer& declaration) {
   //We create a navigation-widget here, and steal its context.. evil ;)
   QScopedPointer<QWidget> navigationWidget(declaration->context()->createNavigationWidget(declaration.data()));
   if (AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget.data()) ) {
@@ -495,7 +495,7 @@ QWidget* AbstractNavigationContext::widget() const {
 }
 
 ///Splits the string by the given regular expression, but keeps the split-matches at the end of each line
-static QStringList splitAndKeep(QString str, QRegExp regExp) {
+static QStringList splitAndKeep(QString str, const QRegExp& regExp) {
   QStringList ret;
   int place = regExp.indexIn(str);
   while(place != -1) {
@@ -507,7 +507,7 @@ static QStringList splitAndKeep(QString str, QRegExp regExp) {
   return ret;
 }
 
-void AbstractNavigationContext::addHtml(QString html) {
+void AbstractNavigationContext::addHtml(const QString& html) {
   QRegExp newLineRegExp("<br>|<br */>");
   foreach(const QString& line, splitAndKeep(html, newLineRegExp)) {
     d->m_currentText +=  line;

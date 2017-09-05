@@ -149,7 +149,7 @@ void ClassBrowserPlugin::findInClassBrowser()
     m_activeClassTree->highlightIdentifier(decl->qualifiedIdentifier());
 }
 
-void ClassBrowserPlugin::showDefinition(DeclarationPointer declaration)
+void ClassBrowserPlugin::showDefinition(const DeclarationPointer& declaration)
 {
   DUChainReadLocker readLock(DUChain::lock());
 

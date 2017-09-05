@@ -410,7 +410,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 }
 
 
-Identifier AbstractDeclarationNavigationContext::prettyIdentifier(DeclarationPointer decl) const
+Identifier AbstractDeclarationNavigationContext::prettyIdentifier(const DeclarationPointer& decl) const
 {
   Identifier ret;
   QualifiedIdentifier q = prettyQualifiedIdentifier(decl);
@@ -429,7 +429,7 @@ QualifiedIdentifier AbstractDeclarationNavigationContext::prettyQualifiedIdentif
 }
 
 
-QString AbstractDeclarationNavigationContext::prettyQualifiedName(DeclarationPointer decl) const
+QString AbstractDeclarationNavigationContext::prettyQualifiedName(const DeclarationPointer& decl) const
 {
   const auto qid = prettyQualifiedIdentifier(decl);
   if (qid.isEmpty()) {
@@ -530,7 +530,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
     createFullBackwardSearchLink(inheriters.isEmpty() ? i18n("Inheriters possible, show all") : i18n("More inheriters possible, show all"));
 }
 
-void AbstractDeclarationNavigationContext::createFullBackwardSearchLink(QString string)
+void AbstractDeclarationNavigationContext::createFullBackwardSearchLink(const QString& string)
 {
   makeLink(string, QStringLiteral("m_fullBackwardSearch=true"), NavigationAction(QStringLiteral("m_fullBackwardSearch=true")));
   modifyHtml() += QStringLiteral("<br />");
@@ -698,7 +698,7 @@ QString AbstractDeclarationNavigationContext::stringFromAccess(Declaration::Acce
   return QString();
 }
 
-QString AbstractDeclarationNavigationContext::stringFromAccess(DeclarationPointer decl)
+QString AbstractDeclarationNavigationContext::stringFromAccess(const DeclarationPointer& decl)
 {
   const ClassMemberDeclaration* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
   if( memberDecl ) {
@@ -707,7 +707,7 @@ QString AbstractDeclarationNavigationContext::stringFromAccess(DeclarationPointe
   return QString();
 }
 
-QString AbstractDeclarationNavigationContext::declarationName( DeclarationPointer decl ) const
+QString AbstractDeclarationNavigationContext::declarationName( const DeclarationPointer& decl ) const
 {
   if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl.data()) ) {
     if( alias->identifier().isEmpty() )
@@ -722,7 +722,7 @@ QString AbstractDeclarationNavigationContext::declarationName( DeclarationPointe
     return prettyIdentifier(decl).toString();
 }
 
-QStringList AbstractDeclarationNavigationContext::declarationDetails(DeclarationPointer decl)
+QStringList AbstractDeclarationNavigationContext::declarationDetails(const DeclarationPointer& decl)
 {
   QStringList details;
   const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(decl.data());

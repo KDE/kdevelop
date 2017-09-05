@@ -51,7 +51,7 @@ QPointer<QWidget> currentTooltip;
 KTextEditor::MovingRange* currentTooltipMark;
 
 
-QSize sizeHintForHtml( QString html, QSize maxSize ) {
+QSize sizeHintForHtml( const QString& html, QSize maxSize ) {
     QTextDocument doc;
     doc.setHtml( html );
 

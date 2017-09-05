@@ -128,7 +128,7 @@ CorePrivate::CorePrivate(Core *core):
 {
 }
 
-bool CorePrivate::initialize(Core::Setup mode, QString session )
+bool CorePrivate::initialize(Core::Setup mode, const QString& session )
 {
     m_mode=mode;
 

@@ -70,7 +70,7 @@ AbstractType::Ptr ReferenceType::baseType () const
   return d_func()->m_baseType.abstractType();
 }
 
-void ReferenceType::setBaseType(AbstractType::Ptr type)
+void ReferenceType::setBaseType(const AbstractType::Ptr& type)
 {
   d_func_dynamic()->m_baseType = IndexedType(type);
 }

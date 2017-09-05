@@ -50,7 +50,7 @@ namespace KDevelop {
        *
        * @warning The du-chain must be unlocked when this is called
        * */
-      CodeCompletionContext(KDevelop::DUContextPointer context, const QString& text, const KDevelop::CursorInRevision& position, int depth = 0);
+      CodeCompletionContext(const KDevelop::DUContextPointer& context, const QString& text, const KDevelop::CursorInRevision& position, int depth = 0);
       virtual ~CodeCompletionContext();
 
       /**

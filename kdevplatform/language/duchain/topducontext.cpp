@@ -712,12 +712,12 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
 
 //This is used to prevent endless recursion due to "using namespace .." declarations, by storing all imports that are already being used.
 struct TopDUContext::ApplyAliasesBuddyInfo {
-  ApplyAliasesBuddyInfo(uint importChainType, ApplyAliasesBuddyInfo* predecessor, IndexedQualifiedIdentifier importId) : m_importChainType(importChainType), m_predecessor(predecessor), m_importId(importId) {
+  ApplyAliasesBuddyInfo(uint importChainType, ApplyAliasesBuddyInfo* predecessor, const IndexedQualifiedIdentifier& importId) : m_importChainType(importChainType), m_predecessor(predecessor), m_importId(importId) {
     if(m_predecessor && m_predecessor->m_importChainType != importChainType)
       m_predecessor = nullptr;
   }
 
-  bool alreadyImporting(IndexedQualifiedIdentifier id) {
+  bool alreadyImporting(const IndexedQualifiedIdentifier& id) {
     ApplyAliasesBuddyInfo* current = this;
     while(current) {
       if(current->m_importId == id)

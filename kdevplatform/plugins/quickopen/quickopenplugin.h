@@ -106,7 +106,7 @@ private Q_SLOTS:
 private:
     friend class QuickOpenLineEdit;
     friend class StandardQuickOpenWidgetCreator;
-    QuickOpenLineEdit* quickOpenLine(QString name = QStringLiteral( "Quickopen" ));
+    QuickOpenLineEdit* quickOpenLine(const QString& name = QStringLiteral( "Quickopen" ));
 
     enum FunctionJumpDirection { NextFunction, PreviousFunction };
     void jumpToNearestFunction(FunctionJumpDirection direction);

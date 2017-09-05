@@ -43,7 +43,7 @@ QUrl IncludeItem::url() const
   return u;
 }
 
-QDebug operator<<(QDebug dbg, const IncludeItem& item)
+QDebug operator<<(const QDebug& dbg, const IncludeItem& item)
 {
     return dbg << item.url();
 }

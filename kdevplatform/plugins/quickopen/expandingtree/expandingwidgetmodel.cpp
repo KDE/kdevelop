@@ -53,7 +53,7 @@ ExpandingWidgetModel::~ExpandingWidgetModel()
     clearExpanding();
 }
 
-static QColor doAlternate(QColor color)
+static QColor doAlternate(const QColor& color)
 {
     QColor background = QApplication::palette().background().color();
     return KColorUtils::mix(color, background, 0.15);

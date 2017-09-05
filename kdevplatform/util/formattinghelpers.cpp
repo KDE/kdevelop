@@ -28,7 +28,7 @@ namespace KDevelop
 
 ///Matches the given prefix to the given text, ignoring all whitespace
 ///Returns -1 if mismatched, else the position in @p text where the @p prefix match ends
-int matchPrefixIgnoringWhitespace(QString text, QString prefix, QString fuzzyCharacters)
+int matchPrefixIgnoringWhitespace(QString text, QString prefix, const QString& fuzzyCharacters)
 {
     int prefixPos = 0;
     int textPos = 0;

@@ -75,7 +75,7 @@ class TopDUContextDynamicData {
    * Allocates an index for the given problem in this top-context.
    * The returned index is never zero.
    */
-  uint allocateProblemIndex(ProblemPointer problem);
+  uint allocateProblemIndex(const ProblemPointer& problem);
   ProblemPointer getProblemForIndex(uint index) const;
   void clearProblems();
 

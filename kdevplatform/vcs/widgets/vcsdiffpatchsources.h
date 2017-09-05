@@ -91,7 +91,7 @@ class KDEVPLATFORMVCS_EXPORT VCSDiffPatchSource : public KDevelop::IPatchSource 
     QList<KDevelop::VcsStatusInfo> m_infos;
     QMap<QUrl, KDevelop::VcsStatusInfo::State> m_selectable;
     private:
-    void updateFromDiff(KDevelop::VcsDiff diff);
+    void updateFromDiff(const KDevelop::VcsDiff& diff);
     uint m_depth = 0;
 };
 
@@ -126,7 +126,7 @@ public:
     KComboBox* m_oldMessages;
 public Q_SLOTS:
     void addMessageToHistory(const QString& message);
-    void oldMessageChanged(QString);
+    void oldMessageChanged(const QString&);
     void jobFinished(KJob*);
 };
 

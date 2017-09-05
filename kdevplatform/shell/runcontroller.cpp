@@ -275,7 +275,7 @@ public:
         QAction* action = currentTargetAction->addAction(launchActionText( l ));
         action->setData(qVariantFromValue<void*>(l));
     }
-    void readLaunchConfigs( KSharedConfigPtr cfg, IProject* prj )
+    void readLaunchConfigs( const KSharedConfigPtr& cfg, IProject* prj )
     {
         KConfigGroup group(cfg, Strings::LaunchConfigurationsGroup());
         QStringList configs = group.readEntry( Strings::LaunchConfigurationsListEntry(), QStringList() );

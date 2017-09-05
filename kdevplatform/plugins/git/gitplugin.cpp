@@ -111,7 +111,7 @@ static QList<QUrl> preventRecursion(const QList<QUrl>& urls)
     return ret;
 }
 
-QString toRevisionName(const KDevelop::VcsRevision& rev, QString currentRevision=QString())
+QString toRevisionName(const KDevelop::VcsRevision& rev, const QString& currentRevision=QString())
 {
     switch(rev.revisionType()) {
         case VcsRevision::Special:

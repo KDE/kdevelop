@@ -102,7 +102,7 @@ class QuickOpenWidgetDialog
 {
     Q_OBJECT
 public:
-    QuickOpenWidgetDialog(QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false);
+    QuickOpenWidgetDialog(const QString& title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false);
     ~QuickOpenWidgetDialog() override;
 
     /// Shows the dialog

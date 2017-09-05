@@ -59,7 +59,7 @@ QualifiedIdentifier InstantiationInformation::applyToIdentifier(const QualifiedI
   return ret;
 }
 
-void InstantiationInformation::addTemplateParameter(KDevelop::AbstractType::Ptr type) {
+void InstantiationInformation::addTemplateParameter(const KDevelop::AbstractType::Ptr& type) {
   templateParametersList().append(IndexedType(type));
 }
 

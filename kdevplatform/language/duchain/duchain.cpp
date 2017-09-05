@@ -486,7 +486,7 @@ public:
   }
 
   ///m_chainsMutex should _not_ be locked, because this may trigger I/O
-  QList<ParsingEnvironmentFilePointer> getEnvironmentInformation(IndexedString url) {
+  QList<ParsingEnvironmentFilePointer> getEnvironmentInformation(const IndexedString& url) {
     QList<ParsingEnvironmentFilePointer> ret;
     uint listIndex = m_environmentListInfo.findIndex(url);
 
@@ -1042,7 +1042,7 @@ private:
   }
 
   ///Stores the environment-information for the given url
-  void storeInformationList(IndexedString url) {
+  void storeInformationList(const IndexedString& url) {
 
     QMutexLocker lock(m_environmentListInfo.mutex());
 

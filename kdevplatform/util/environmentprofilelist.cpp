@@ -103,7 +103,7 @@ EnvironmentProfileList& EnvironmentProfileList::operator=(const EnvironmentProfi
     return *this;
 }
 
-EnvironmentProfileList::EnvironmentProfileList(KSharedConfigPtr config)
+EnvironmentProfileList::EnvironmentProfileList(const KSharedConfigPtr& config)
     : d( new EnvironmentProfileListPrivate )
 {
     decode(config.data(), d.data());

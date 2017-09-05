@@ -29,7 +29,7 @@ class MainWindow;
 MainWindow* mainWindow();
 
 //Filters the views in the main-window so they only contain the given files to keep
-void filterViews(QSet< QString > keepFiles);
+void filterViews(const QSet< QString >& keepFiles);
 
 }
 

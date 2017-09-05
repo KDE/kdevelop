@@ -151,7 +151,7 @@ QList<IndexedType> CompletionTreeItem::typeForArgumentMatching() const {
   return QList<IndexedType>();
 }
 
-CompletionCustomGroupNode::CompletionCustomGroupNode(QString groupName, int _inheritanceDepth) {
+CompletionCustomGroupNode::CompletionCustomGroupNode(const QString& groupName, int _inheritanceDepth) {
   role = (KTextEditor::CodeCompletionModel::ExtraItemDataRoles)Qt::DisplayRole;
   roleValue = groupName;
   inheritanceDepth = _inheritanceDepth;

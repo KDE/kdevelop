@@ -93,7 +93,7 @@ QToolBar* TestToolViewToolBar::fetchToolBarFor(Sublime::View* view)
     return toolBars.at(0);
 }
 
-void TestToolViewToolBar::assertGoodBar(QToolBar* toolbar, QString actionText)
+void TestToolViewToolBar::assertGoodBar(QToolBar* toolbar, const QString& actionText)
 {
     QVERIFY( toolbar );
     QVERIFY( !toolbar->isFloatable() );

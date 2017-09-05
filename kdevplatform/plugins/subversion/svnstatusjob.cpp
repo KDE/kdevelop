@@ -36,7 +36,7 @@ extern "C"
 #include "kdevsvncpp/client.hpp"
 #include "kdevsvncpp/status.hpp"
 
-KDevelop::VcsStatusInfo::State getState( svn::Status st )
+KDevelop::VcsStatusInfo::State getState( const svn::Status& st )
 {
     KDevelop::VcsStatusInfo::State state;
     if( st.isVersioned() )
