@@ -85,7 +85,7 @@ public:
     typedef KDevelop::DUChainPointer<FunctionDeclaration> Ptr;
 
 private:
-    DUCHAIN_DECLARE_DATA(FunctionDeclaration);
+    DUCHAIN_DECLARE_DATA(FunctionDeclaration)
 };
 
 }
