@@ -30,7 +30,7 @@ target_link_libraries(kdevastyle
     KDev::Interfaces
     KDev::Util)
 
-add_subdirectory(lib)
+add_subdirectory(3rdparty/libastyle)
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()

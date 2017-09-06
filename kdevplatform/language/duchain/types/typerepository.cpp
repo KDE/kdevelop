@@ -77,9 +77,11 @@ class AbstractTypeDataRequest {
   }
 
   bool equals(const AbstractTypeData* item) const {
+    if (!TypeSystem::self().isFactoryLoaded(*item))
+        return false;
+
     AbstractType::Ptr otherType( TypeSystem::self().create(const_cast<AbstractTypeData*>(item)) );
-    if(!otherType)
-      return false;
+    Q_ASSERT(otherType);
     return m_item.equals(otherType.data());
   }
 
