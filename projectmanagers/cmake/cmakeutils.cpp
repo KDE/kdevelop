@@ -328,7 +328,13 @@ QString findExecutable()
 
 KDevelop::Path currentInstallDir( KDevelop::IProject* project, int builddir )
 {
-    return KDevelop::Path(readBuildDirParameter( project, Config::Specific::cmakeInstallDirKey, QStringLiteral("/usr/local"), builddir ));
+    const QString defaultInstallDir =
+#ifdef Q_OS_WIN
+        QStringLiteral("C:\\Program Files");
+#else
+        QStringLiteral("/usr/local");
+#endif
+    return KDevelop::Path(readBuildDirParameter( project, Config::Specific::cmakeInstallDirKey, defaultInstallDir, builddir ));
 }
 
 QString projectRootRelative( KDevelop::IProject* project )
