@@ -25,7 +25,9 @@ namespace KDevelop
 
 enum TestPathType {
     UnixFilePathNoSpaces,
-    UnixFilePathWithSpaces
+    UnixFilePathWithSpaces,
+    WindowsFilePathNoSpaces,
+    WindowsFilePathWithSpaces
 };
 
 }
@@ -35,12 +37,23 @@ Q_DECLARE_METATYPE( KDevelop::TestPathType)
 namespace KDevelop
 {
 
-// TODO: extend with windows path and other potential path patterns (network shares?)
+// TODO: extend with other potential path patterns (network shares?)
 static QString projectPath(TestPathType pathType = UnixFilePathNoSpaces)
 {
-    return
-        (pathType == UnixFilePathNoSpaces) ? QStringLiteral("/some/path/to/a/project") :
-        /* else, UnixFilePathWithSpaces) */  QStringLiteral("/some/path with spaces/to/a/project");
+    switch (pathType)
+    {
+        case WindowsFilePathNoSpaces:
+            return QStringLiteral("C:/some/path/to/a/project");
+        case WindowsFilePathWithSpaces:
+            return QStringLiteral("C:/some/path with spaces/to/a/project");
+        case UnixFilePathNoSpaces:
+            return QStringLiteral("/some/path/to/a/project");
+        case UnixFilePathWithSpaces:
+            return QStringLiteral("/some/path with spaces/to/a/project");
+        default:
+            Q_ASSERT(0);
+            return QStringLiteral("/we/should/never/end/up/here");
+    }
 }
 
 QString buildCppCheckErrorLine(TestPathType pathType = UnixFilePathNoSpaces)

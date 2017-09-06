@@ -53,10 +53,19 @@ inline char* toString(const FilteredItem::FilteredOutputItemType& type)
 
 inline QTestData& newRowForPathType(const char *dataTag, TestPathType pathType)
 {
-    if (pathType == UnixFilePathWithSpaces) {
-        return QTest::newRow(QString(QLatin1String(dataTag)+QLatin1String("-ws")).toUtf8().constData());
+    switch (pathType)
+    {
+        case UnixFilePathNoSpaces:
+            return QTest::newRow(QString(QLatin1String(dataTag)+QLatin1String("-unix-ns")).toUtf8().constData());
+        case UnixFilePathWithSpaces:
+            return QTest::newRow(QString(QLatin1String(dataTag)+QLatin1String("-unix-ws")).toUtf8().constData());
+        case WindowsFilePathNoSpaces:
+            return QTest::newRow(QString(QLatin1String(dataTag)+QLatin1String("-windows-ns")).toUtf8().constData());
+        case WindowsFilePathWithSpaces:
+            return QTest::newRow(QString(QLatin1String(dataTag)+QLatin1String("-windows-ws")).toUtf8().constData());
+        default:
+            return QTest::newRow(dataTag);
     }
-    return QTest::newRow(dataTag);
 }
 
 }
@@ -380,9 +389,15 @@ void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction_data()
     QTest::addColumn<QString>("expectedLastDir");
     QTest::addColumn<TestPathType>("pathType");
 
-    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
-        const QString basepath = projectPath(pathType);
+    for (TestPathType pathType :
+#ifdef Q_OS_WIN
+        {WindowsFilePathNoSpaces, WindowsFilePathWithSpaces}
 
+#else
+        {UnixFilePathNoSpaces, UnixFilePathWithSpaces}
+#endif
+    ) {
+        const QString basepath = projectPath(pathType);
         QTest::newRowForPathType("cmake-line1", pathType)
         << "[ 25%] Building CXX object path/to/one/CMakeFiles/file.o" << QString( basepath + "/path/to/one" ) << pathType;
         QTest::newRowForPathType("cmake-line2", pathType)
