@@ -36,8 +36,7 @@
 
 using namespace KDevelop;
 
-#pragma message("TODO: we are lacking introspection into targets, to see what files belong to each target.")
-
+// TODO: we are lacking introspection into targets, to see what files belong to each target.
 static CMakeTarget targetByName(const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, const QString& name)
 {
     for (const auto &subdir: targets.values()) {
