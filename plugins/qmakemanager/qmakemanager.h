@@ -60,6 +60,7 @@ public:
     KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const override;
     KDevelop::Path::List frameworkDirectories(KDevelop::ProjectBaseItem* item) const override;
     QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const override;
+    QString extraArguments(KDevelop::ProjectBaseItem *item) const override;
     bool hasBuildInfo(KDevelop::ProjectBaseItem*) const override;
 
     KDevelop::ProjectTargetItem* createTarget( const QString&, KDevelop::ProjectFolderItem* ) override

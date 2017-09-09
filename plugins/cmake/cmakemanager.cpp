@@ -286,6 +286,11 @@ QHash<QString, QString> CMakeManager::defines(KDevelop::ProjectBaseItem *item ) 
     return fileInformation(item).defines;
 }
 
+QString CMakeManager::extraArguments(KDevelop::ProjectBaseItem *item) const
+{
+    return fileInformation(item).compileFlags;
+}
+
 KDevelop::IProjectBuilder * CMakeManager::builder() const
 {
     IPlugin* i = core()->pluginController()->pluginForExtension( QStringLiteral("org.kdevelop.IProjectBuilder"), QStringLiteral("KDevCMakeBuilder"));

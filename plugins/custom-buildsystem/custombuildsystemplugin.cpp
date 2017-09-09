@@ -141,6 +141,11 @@ Path::List CustomBuildSystem::frameworkDirectories( ProjectBaseItem* ) const
     return {};
 }
 
+QString CustomBuildSystem::extraArguments(KDevelop::ProjectBaseItem*) const
+{
+    return {};
+}
+
 KJob* CustomBuildSystem::install( KDevelop::ProjectBaseItem* item, const QUrl &installPrefix )
 {
     auto job = new CustomBuildJob( this, item, CustomBuildSystemTool::Install );

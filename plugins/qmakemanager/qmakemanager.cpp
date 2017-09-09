@@ -448,6 +448,21 @@ QHash<QString, QString> QMakeProjectManager::defines(ProjectBaseItem* item) cons
     return d;
 }
 
+QString QMakeProjectManager::extraArguments(KDevelop::ProjectBaseItem *item) const
+{
+    QMakeFolderItem* folder = findQMakeFolderParent(item);
+    if (!folder) {
+        // happens for bad qmake configurations
+        return {};
+    }
+
+    QStringList d;
+    foreach (QMakeProjectFile* pro, folder->projectFiles()) {
+        d << pro->extraArguments();
+    }
+    return d.join(QLatin1Char(' '));
+}
+
 bool QMakeProjectManager::hasBuildInfo(KDevelop::ProjectBaseItem* item) const
 {
     return findQMakeFolderParent(item);

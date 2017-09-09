@@ -39,6 +39,7 @@ struct CMakeFile
 {
     KDevelop::Path::List includes;
     KDevelop::Path::List frameworkDirectories;
+    QString compileFlags;
     QHash<QString, QString> defines;
 };
 inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
