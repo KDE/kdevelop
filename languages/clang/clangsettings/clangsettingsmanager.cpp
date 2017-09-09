@@ -113,13 +113,13 @@ bool ParserSettings::isCpp() const
 QVector<QByteArray> ParserSettings::toClangAPI() const
 {
     // TODO: This is not efficient.
-    auto list = parserOptions.split(QLatin1Char(' '), QString::SkipEmptyParts);
+    auto list = parserOptions.splitRef(QLatin1Char(' '), QString::SkipEmptyParts);
     QVector<QByteArray> result;
     result.reserve(list.size());
 
     std::transform(list.constBegin(), list.constEnd(),
                    std::back_inserter(result),
-                   [] (const QString &argument) { return argument.toUtf8(); });
+                   [] (const QStringRef &argument) { return argument.toUtf8(); });
 
     return result;
 }

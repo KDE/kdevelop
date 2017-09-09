@@ -176,7 +176,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     Status mode = Initial;
 
     const auto output = QString::fromLocal8Bit( proc.readAllStandardOutput() );
-    foreach( const QString &line, output.split( '\n' ) ) {
+    foreach( const auto &line, output.splitRef( '\n' ) ) {
         switch ( mode ) {
             case Initial:
                 if ( line.indexOf( QLatin1String("#include \"...\"") ) != -1 ) {
@@ -195,7 +195,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
                     mode = Finished;
                 } else {
                     // This is an include path, add it to the list.
-                    auto hostPath = rt->pathInHost(Path(line.trimmed()));
+                    auto hostPath = rt->pathInHost(Path(line.trimmed().toString()));
                     data.includePaths << Path(QFileInfo(hostPath.toLocalFile()).canonicalFilePath());
                 }
                 break;
