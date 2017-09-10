@@ -54,7 +54,7 @@ endif()
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     target_compile_options(kdevqtc-qmlsupport PRIVATE "-Wno-documentation")
 endif()
-target_compile_definitions(kdevqtc-qmlsupport PUBLIC "-DLANGUAGEUTILS_BUILD_DIR\ -DQTCREATOR_UTILS_LIB -DQT_CREATOR -DQML_BUILD_STATIC_LIB")
+target_compile_definitions(kdevqtc-qmlsupport PUBLIC -DLANGUAGEUTILS_BUILD_DIR -DQTCREATOR_UTILS_LIB -DQT_CREATOR -DQML_BUILD_STATIC_LIB)
 target_include_directories(kdevqtc-qmlsupport PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     Qt5::Core
