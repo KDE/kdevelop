@@ -21,6 +21,7 @@ Comment[it]=Un file Dockerfile è un documento di testo che contiene tutti i com
 Comment[nl]=Een Dockerbestand is een tekstdocument dat alle opdrachten bevat die een gebruiker zou kunnen aanroepen op de opdrachtregel om een image samen te stellen
 Comment[pl]=Plik dokowany jest plikiem tekstowym, który zawiera wszystkie polecenia, które użytkownik może wydać w wierszu poleceń, aby złożyć obraz
 Comment[pt]=Um Dockerfile é um documento de texto que contém todos os comandos que um utilizador poderá invocar na linha de comandos para montar uma imagem
+Comment[sk]=Dockerfile je textový dokument, ktorý obsahuje všetky príkazy, ktoré používať môže volať na príkazovom riadku na zostavenie obrazu
 Comment[sv]=En Dockerfile är ett textdokument som innehåller alla kommandon en användare skulle kunna anropa på kommandoraden för att sammanställa en avbild
 Comment[uk]=Dockerfile — текстовий документ, який містить усі команди, які користувач може віддавати у командному рядку для збирання образу
 Comment[x-test]=xxA Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an imagexx
