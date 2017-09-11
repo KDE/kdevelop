@@ -54,6 +54,7 @@ namespace Config
 namespace Old
 {
 static const QString currentBuildDirKey = QStringLiteral("CurrentBuildDir");
+static const QString oldcmakeExecutableKey = QStringLiteral("CMake Binary"); // Todo: Remove at some point
 static const QString currentBuildTypeKey = QStringLiteral("CurrentBuildType");
 static const QString currentInstallDirKey = QStringLiteral("CurrentInstallDir");
 static const QString currentEnvironmentKey = QStringLiteral("CurrentEnvironment");
@@ -75,7 +76,7 @@ static QString buildDirIndexKey() {
 namespace Specific
 {
 static const QString buildDirPathKey = QStringLiteral("Build Directory Path");
-// TODO: migrate to more generic & consistent key term "CMake Executable"
+static const QString cmakeExecutableKey = QStringLiteral("CMake Executable");
 static const QString cmakeBuildTypeKey = QStringLiteral("Build Type");
 static const QString cmakeInstallDirKey = QStringLiteral("Install Directory");
 static const QString cmakeEnvironmentKey = QStringLiteral("Environment Profile");
@@ -352,6 +353,11 @@ QString currentExtraArguments( KDevelop::IProject* project, int builddir )
     return readBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, QString(), builddir );
 }
 
+QString currentCmakeExecutable( KDevelop::IProject* project, int builddir )
+{
+    return readBuildDirParameter( project, Config::Specific::cmakeExecutableKey, QString(), builddir );
+}
+
 void setCurrentInstallDir( KDevelop::IProject* project, const KDevelop::Path& path )
 {
     writeBuildDirParameter( project, Config::Specific::cmakeInstallDirKey, path.toLocalFile() );
@@ -375,6 +381,11 @@ void setProjectRootRelative( KDevelop::IProject* project, const QString& relativ
 void setCurrentExtraArguments( KDevelop::IProject* project, const QString& string)
 {
     writeBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, string );
+}
+
+void setCurrentCmakeExecutable( KDevelop::IProject* project, const QString& string )
+{
+    writeBuildDirParameter( project, Config::Specific::cmakeExecutableKey, string );
 }
 
 QString currentEnvironment(KDevelop::IProject* project, int builddir)

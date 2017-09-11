@@ -126,6 +126,7 @@ void CMakePreferences::initAdvanced()
     }
     m_prefsUi->buildType->setCurrentIndex(m_prefsUi->buildType->findText(buildType));
     m_prefsUi->extraArguments->setEditText(CMake::currentExtraArguments(m_project));
+    m_prefsUi->cMakeExecutable->setText(CMake::currentCmakeExecutable(m_project));
 }
 
 void CMakePreferences::reset()
@@ -168,12 +169,16 @@ void CMakePreferences::apply()
     }
     CMake::setCurrentBuildType( m_project, buildType );
     CMake::setCurrentExtraArguments( m_project, m_prefsUi->extraArguments->currentText() );
+    CMake::setCurrentCmakeExecutable( m_project, m_prefsUi->cMakeExecutable->text() );
+
 
     qCDebug(CMAKE) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
     qCDebug(CMAKE) << "writing to cmake config: builddir path " << CMake::currentBuildDir(m_project);
     qCDebug(CMAKE) << "writing to cmake config: installdir " << CMake::currentInstallDir(m_project);
     qCDebug(CMAKE) << "writing to cmake config: build type " << CMake::currentBuildType(m_project);
     qCDebug(CMAKE) << "writing to cmake config: environment " << CMake::currentEnvironment(m_project);
+    qCDebug(CMAKE) << "writing to cmake config: cmake executable " << CMake::currentCmakeExecutable(m_project);
+
 
     //We run cmake on the builddir to generate it
     configure();
@@ -351,6 +356,7 @@ void CMakePreferences::removeBuildDir()
     qCDebug(CMAKE) << "removing from cmake config: extra args" << CMake::currentExtraArguments( m_project );
     qCDebug(CMAKE) << "removing from cmake config: buildtype " << CMake::currentBuildType( m_project );
     qCDebug(CMAKE) << "removing from cmake config: environment " << CMake::currentEnvironment( m_project );
+
 
     CMake::removeBuildDirConfig(m_project);
     m_prefsUi->buildDirs->removeItem( curr ); // this triggers buildDirChanged()
