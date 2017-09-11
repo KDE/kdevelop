@@ -158,7 +158,7 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
                                   i18n("Could not find any plugins"),
                                   i18n("<p>Could not find any plugins during startup.<br/>"
                                   "Please make sure QT_PLUGIN_PATH is set correctly.</p>"
-                                  "Refer to <a href=\"https://community.kde.org/Frameworks/Building#Runtime_setup\">this article</a> for more information."),
+                                  "Refer to <a href=\"https://community.kde.org/Guidelines_and_HOWTOs/Build_from_source#Set_up_the_runtime_environment\">this article</a> for more information."),
                                   QMessageBox::Abort, QMessageBox::Abort);
             qCWarning(SHELL) << "Could not find any plugins, aborting";
             return false;

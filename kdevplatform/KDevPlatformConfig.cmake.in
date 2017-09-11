@@ -4,6 +4,8 @@ set(KDEV_PLUGIN_VERSION @KDEV_PLUGIN_VERSION@)
 
 include("${CMAKE_CURRENT_LIST_DIR}/KDevPlatformMacros.cmake")
 
+include(CMakeFindDependencyMacro)
+
 find_dependency(Qt5Concurrent "@QT_MIN_VERSION@")
 find_dependency(Qt5Core "@QT_MIN_VERSION@")
 find_dependency(Qt5Quick "@QT_MIN_VERSION@")

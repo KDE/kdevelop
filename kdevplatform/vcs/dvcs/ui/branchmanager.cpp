@@ -192,6 +192,47 @@ void BranchManager::mergeBranch()
     }
 }
 
+// adapted from VCSStandardDiffUpdater
+class VCSBranchDiffUpdater : public VCSDiffUpdater {
+public:
+    VCSBranchDiffUpdater(const QString& repo, const QString& src, KDevelop::DistributedVersionControlPlugin* vcs);
+    ~VCSBranchDiffUpdater() override;
+    KDevelop::VcsDiff update() const override;
+    KDevelop::IBasicVersionControl* vcs() const override { return m_vcs; }
+    QUrl url() const override { return QUrl::fromLocalFile(m_repository); }
+private:
+    const QString m_repository;
+    const QString m_src;
+    KDevelop::DistributedVersionControlPlugin* m_vcs;
+};
+
+VCSBranchDiffUpdater::VCSBranchDiffUpdater(const QString& repo, const QString& src,
+        KDevelop::DistributedVersionControlPlugin* vcs)
+    : m_repository(repo)
+    , m_src(src)
+    , m_vcs(vcs)
+{
+}
+
+VCSBranchDiffUpdater::~VCSBranchDiffUpdater() {
+}
+
+VcsDiff VCSBranchDiffUpdater::update() const
+{
+    VcsRevision srcRev;
+    srcRev.setRevisionValue(m_src, KDevelop::VcsRevision::GlobalNumber);
+    // see comment in BranchManager::diffFromBranch()
+    const auto destRev = VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Working);
+    QScopedPointer<VcsJob> diffJob(m_vcs->diff(QUrl::fromLocalFile(m_repository), srcRev, destRev));
+    const bool success = diffJob ? diffJob->exec() : false;
+    if (!success) {
+        KMessageBox::error(nullptr, i18n("Could not create a patch for the current version."));
+        return {};
+    }
+
+    return diffJob->fetchResults().value<VcsDiff>();
+}
+
 void BranchManager::diffFromBranch()
 {
     const auto dest = m_model->currentBranch();
@@ -232,7 +273,8 @@ void BranchManager::diffJobFinished(KJob* job)
         return;
     }
 
-    auto patch = new VCSDiffPatchSource(diff);
+    auto patch = new VCSDiffPatchSource(new VCSBranchDiffUpdater(m_repository,
+        m_ui->branchView->currentIndex().data().toString(), m_dvcPlugin));
     showVcsDiff(patch);
     close();
 }

@@ -57,6 +57,7 @@
 #include <sublime/area.h>
 #include <sublime/document.h>
 #include <sublime/view.h>
+#include <vcs/widgets/vcsdiffpatchsources.h>
 #include "patchhighlighter.h"
 #include "patchreviewtoolview.h"
 #include "localpatchsource.h"
@@ -214,9 +215,12 @@ void PatchReviewPlugin::notifyPatchChanged() {
 
 void PatchReviewPlugin::forceUpdate() {
     if( m_patch ) {
-        m_patch->update();
-
-        notifyPatchChanged();
+        // don't trigger an update if we know the plugin cannot update itself
+        VCSDiffPatchSource *vcsPatch = dynamic_cast<VCSDiffPatchSource*>(m_patch.data());
+        if (!vcsPatch || vcsPatch->m_updater) {
+            m_patch->update();
+            notifyPatchChanged();
+        }
     }
 }
 
