@@ -1,6 +1,6 @@
 add_subdirectory(makebuilder)
 add_subdirectory(ninjabuilder)
 ecm_optional_add_subdirectory(cmakebuilder)
-if (KDevelop-PG-Qt_FOUND)
+if (KDEVPGQT_FOUND)
     ecm_optional_add_subdirectory(qmakebuilder)
 endif()
