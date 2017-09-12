@@ -67,6 +67,7 @@ GenericName[zh_CN]=集成开发环境(选择要启动的会话)
 GenericName[zh_TW]=整合開發環境（選擇要開始的工作階段）
 Comment=Plugin-extensible IDE for C/C++ and other programming languages (Pick Session to start with)
 Comment[ca]=Un IDE ampliable amb connectors per al C/C++ i altres llenguatges de programació (trieu Sessió per a començar-hi)
+Comment[ca@valencia]=Un IDE ampliable amb connectors per al C/C++ i altres llenguatges de programació (trieu Sessió per a començar-hi)
 Comment[es]=Entorno de desarrollo integrado para C/C++ y otros lenguajes de programación que se puede extender con complementos (escoger sesión con la que empezar)
 Comment[it]=IDE estensibile per C/C++ ed altri linguaggi di programmazione (Scegliere la sessione con cui iniziare)
 Comment[nl]=IDE voor C/C++ en andere programmeertalen, uit te breiden met plug-ins. (Kies sessie om mee te beginnen)
