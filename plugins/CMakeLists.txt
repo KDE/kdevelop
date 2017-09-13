@@ -30,7 +30,7 @@ add_subdirectory(customscript)
 # END: Formatters
 
 # BEGIN: Languages
-ecm_optional_add_subdirectory(plugins)
+ecm_optional_add_subdirectory(custom-definesandincludes)
 ecm_optional_add_subdirectory(qmljs)
 
 find_package(Clang 3.8)
