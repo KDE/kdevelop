@@ -22,7 +22,6 @@
 
 #include <qglobal.h>
 
-// COMPAT: qAsConst (from qglobal.h)
 #if QT_VERSION < QT_VERSION_CHECK(5,7,0)
 namespace QtPrivate
 {
@@ -41,24 +40,25 @@ void qAsConst(const T &&) Q_DECL_EQ_DELETE;
 
 #endif
 
-// COMPAT: Q_FALLTHROUGH (from qcompilerdetection.h)
+// compat for Q_FALLTHROUGH
 #if QT_VERSION < QT_VERSION_CHECK(5,8,0)
 
-#if defined(__cplusplus)
-#if QT_HAS_CPP_ATTRIBUTE(fallthrough)
-#  define Q_FALLTHROUGH() [[fallthrough]]
-#elif QT_HAS_CPP_ATTRIBUTE(clang::fallthrough)
-#    define Q_FALLTHROUGH() [[clang::fallthrough]]
-#elif QT_HAS_CPP_ATTRIBUTE(gnu::fallthrough)
-#    define Q_FALLTHROUGH() [[gnu::fallthrough]]
+#if defined(__has_cpp_attribute)
+#    if __has_cpp_attribute(fallthrough)
+#        define Q_FALLTHROUGH() [[fallthrough]]
+#    elif __has_cpp_attribute(clang::fallthrough)
+#        define Q_FALLTHROUGH() [[clang::fallthrough]]
+#    elif __has_cpp_attribute(gnu::fallthrough)
+#        define Q_FALLTHROUGH() [[gnu::fallthrough]]
+#    endif
 #endif
-#endif
+
 #ifndef Q_FALLTHROUGH
-#  if (defined(Q_CC_GNU) && Q_CC_GNU >= 700) && !defined(Q_CC_INTEL)
-#    define Q_FALLTHROUGH() __attribute__((fallthrough))
-#  else
-#    define Q_FALLTHROUGH() (void)0
-#endif
+#    if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 700)
+#        define Q_FALLTHROUGH() __attribute__((fallthrough))
+#    else
+#        define Q_FALLTHROUGH() (void)0
+#    endif
 #endif
 
 #endif
