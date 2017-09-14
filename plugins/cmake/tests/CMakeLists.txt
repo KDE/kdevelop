@@ -1,9 +1,3 @@
-include_directories(
-    ${KDevelop_SOURCE_DIR}/projectmanagers/cmake
-    ${KDevelop_BINARY_DIR}/projectmanagers/cmake
-    ${KDevelop_SOURCE_DIR}/projectmanagers/cmake/parser
-)
-
 configure_file("paths.h.cmake" "cmake-test-paths.h" ESCAPE_QUOTES)
 
 set(commonlibs Qt5::Test Qt5::Core KDev::Interfaces kdevcmakecommon)

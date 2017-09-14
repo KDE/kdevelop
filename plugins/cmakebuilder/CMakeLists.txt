@@ -1,8 +1,4 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcmakebuilder\")
-include_directories(
-    ${KDevelop_SOURCE_DIR}/projectmanagers/cmake
-    )
-
 
 ########### next target ###############
 
