@@ -69,6 +69,24 @@ bool jsonTestRun()
 }
 
 //BEGIN helpers
+// HACK: current alias type template machinery is badly broken wrt spelling
+// location, work around this by adjusting all references to point to child
+// type alias node with proper location
+// TODO: investigate upstream implementation of CXCursor_TypeAliasTemplateDecl
+CXCursor findEmbeddedTypeAlias(CXCursor aliasTemplate)
+{
+    auto result = clang_getNullCursor();
+    clang_visitChildren(aliasTemplate, [] (CXCursor cursor, CXCursor, CXClientData data) {
+        if (clang_getCursorKind(cursor) == CXCursor_TypeAliasDecl) {
+            auto res = reinterpret_cast<CXCursor*>(data);
+            *res = cursor;
+            return CXChildVisit_Break;
+        }
+        return CXChildVisit_Continue;
+    }, &result);
+    return result;
+}
+
 /**
  * Find the cursor that cursor @p cursor references
  *
@@ -81,6 +99,11 @@ bool jsonTestRun()
 CXCursor referencedCursor(CXCursor cursor)
 {
     auto referenced = clang_getCursorReferenced(cursor);
+    // HACK: see notes at getEmbeddedTypeAlias()
+    if (clang_getCursorKind(referenced) == CXCursor_TypeAliasTemplateDecl) {
+        return findEmbeddedTypeAlias(referenced);
+    }
+
     if (!clang_equalCursors(cursor, referenced)) {
         return referenced;
     }
@@ -321,6 +344,12 @@ struct Visitor
         EnableIf<IsInClass != Decision::Maybe && IsDefinition != Decision::Maybe> = dummy>
     CXChildVisitResult dispatchCursor(CXCursor cursor, CXCursor parent);
 
+    CXChildVisitResult dispatchTypeAliasTemplate(CXCursor cursor, CXCursor parent)
+    {
+        return CursorKindTraits::isClass(clang_getCursorKind(parent)) ? buildTypeAliasTemplateDecl<true>(cursor)
+            : buildTypeAliasTemplateDecl<false>(cursor);
+    }
+
     template<CXTypeKind TK>
     AbstractType *dispatchType(CXType type, CXCursor cursor)
     {
@@ -337,6 +366,9 @@ struct Visitor
 //BEGIN build*
     template<CXCursorKind CK, class DeclType, bool hasContext>
     CXChildVisitResult buildDeclaration(CXCursor cursor);
+
+    template<bool IsInClass>
+    CXChildVisitResult buildTypeAliasTemplateDecl(CXCursor cursor);
 
     CXChildVisitResult buildUse(CXCursor cursor);
     CXChildVisitResult buildMacroExpansion(CXCursor cursor);
@@ -1213,6 +1245,26 @@ CXChildVisitResult Visitor::buildCXXBaseSpecifier(CXCursor cursor)
     classDecl->addBaseClass({decl->indexedType(), access, virtualInherited});
     return CXChildVisit_Recurse;
 }
+
+template<bool IsInClass>
+CXChildVisitResult Visitor::buildTypeAliasTemplateDecl(CXCursor cursor)
+{
+    auto aliasDecl = findEmbeddedTypeAlias(cursor);
+    // NOTE: using aliasDecl here averts having to add a workaround to makeId()
+    auto id = makeId(aliasDecl);
+    // create template context to prevent leaking child template params
+    auto context = createContext<CXCursor_TypeAliasTemplateDecl, DUContext::Template>(cursor, QualifiedIdentifier(id));
+    using DeclType = typename DeclType<CXCursor_TypeAliasDecl, false, IsInClass>::Type;
+    createDeclaration<CXCursor_TypeAliasDecl, DeclType>(aliasDecl, id, context);
+    CurrentContext newParent(context, m_parentContext->keepAliveContexts);
+    PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
+    clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor parent, CXClientData data) {
+        // NOTE: immediately recurse into embedded alias decl
+        return clang_getCursorKind(cursor) == CXCursor_TypeAliasDecl ?
+            CXChildVisit_Recurse : visitCursor(cursor, parent, data);
+    }, this);
+    return CXChildVisit_Continue;
+}
 //END build*
 
 DeclarationPointer Visitor::findDeclaration(CXCursor cursor) const
@@ -1503,6 +1555,9 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
         return visitor->buildCXXBaseSpecifier(cursor);
     case CXCursor_ParmDecl:
         return visitor->buildParmDecl(cursor);
+    // TODO: fix upstream and then just adapt this to UseCursorKind()
+    case CXCursor_TypeAliasTemplateDecl:
+        return visitor->dispatchTypeAliasTemplate(cursor, parent);
     default:
         return CXChildVisit_Recurse;
     }

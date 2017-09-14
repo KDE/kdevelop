@@ -1729,19 +1729,24 @@ void TestDUChain::testReparseUnchanged()
 
 void TestDUChain::testTypeAliasTemplate()
 {
-    TestFile file(QStringLiteral("template <typename T> using TypeAliasTemplate = T;"), QStringLiteral("cpp"));
+    TestFile file(QStringLiteral("template <typename T> using Alias = T; using Foo = Alias<int>;"), QStringLiteral("cpp"));
     QVERIFY(file.parseAndWait());
 
     DUChainReadLocker lock;
     QVERIFY(file.topContext());
 
-    auto templateAlias = file.topContext()->localDeclarations().last();
+    QCOMPARE(file.topContext()->localDeclarations().size(), 2);
+    auto templateAlias = file.topContext()->localDeclarations().first();
     QVERIFY(templateAlias);
 #if CINDEX_VERSION_MINOR < 31
     QEXPECT_FAIL("", "TypeAliasTemplate is not exposed via LibClang", Abort);
 #endif
+    QVERIFY(templateAlias->isTypeAlias());
     QVERIFY(templateAlias->abstractType());
-    QCOMPARE(templateAlias->abstractType()->toString(), QStringLiteral("TypeAliasTemplate"));
+    QCOMPARE(templateAlias->abstractType()->toString(), QStringLiteral("Alias"));
+    QCOMPARE(templateAlias->uses().size(), 1);
+    QCOMPARE(templateAlias->uses().first().size(), 1);
+    QCOMPARE(templateAlias->uses().first().first(), RangeInRevision(0, 51, 0, 56));
 }
 
 void TestDUChain::testDeclarationsInsideMacroExpansion()
