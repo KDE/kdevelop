@@ -287,6 +287,23 @@ QStringList QMakeProjectFile::frameworkDirectories() const
     return fwDirs;
 }
 
+QStringList QMakeProjectFile::extraArguments() const
+{
+    const auto variablesToCheck = {QStringLiteral("QMAKE_CXXFLAGS")};
+    const auto prefixes = { QLatin1String("-F"), QLatin1String("-iframework"), QLatin1String("-I"), QLatin1String("-D") };
+    QStringList args;
+    foreach (const auto& var, variablesToCheck) {
+        foreach (const auto& arg, variableValues(var)) {
+            for (const auto& prefix: prefixes) {
+                if (!arg.startsWith(prefix)) {
+                    args << arg;
+                }
+            }
+        }
+    }
+    return args;
+}
+
 QStringList QMakeProjectFile::files() const
 {
     ifDebug(qCDebug(KDEV_QMAKE) << "Fetching files";)

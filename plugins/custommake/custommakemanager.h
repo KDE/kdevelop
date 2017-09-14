@@ -56,6 +56,8 @@ public:
      */
     QHash<QString,QString> defines(KDevelop::ProjectBaseItem*) const override;
 
+    QString extraArguments(KDevelop::ProjectBaseItem *item) const override;
+
     /**
      * Create a new target
      *

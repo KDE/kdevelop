@@ -356,6 +356,13 @@ QString DefinesAndIncludesManager::parserArguments(KDevelop::ProjectBaseItem* it
 
     Q_ASSERT(QThread::currentThread() == qApp->thread());
 
+    auto buildManager = item->project()->buildSystemManager();
+    if ( buildManager ) {
+        const auto args = buildManager->extraArguments(item);
+        if (!args.isEmpty())
+            return args;
+    }
+
     auto cfg = item->project()->projectConfiguration().data();
     const auto arguments = findConfigForItem(m_settings->readPaths(cfg), item).parserArguments;
     return argumentsForPath(item->path(), arguments);

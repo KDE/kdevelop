@@ -125,6 +125,11 @@ public:
      * Get the toplevel build directory for the project
      */
     virtual Path buildDirectory(ProjectBaseItem*) const = 0;
+
+    /**
+     * @returns the extra arguments that will be passed to the compiler when building @p item
+     */
+    virtual QString extraArguments(ProjectBaseItem* item) const = 0;
 };
 
 }

@@ -52,6 +52,7 @@ public:
     QStringList filesForTarget( const QString& ) const;
     QStringList includeDirectories() const;
     QStringList frameworkDirectories() const;
+    QStringList extraArguments() const;
 
     QStringList targets() const;
 

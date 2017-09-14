@@ -150,6 +150,11 @@ QHash<QString,QString> CustomMakeManager::defines(KDevelop::ProjectBaseItem*) co
     return QHash<QString,QString>();
 }
 
+QString CustomMakeManager::extraArguments(KDevelop::ProjectBaseItem*) const
+{
+    return {};
+}
+
 ProjectTargetItem* CustomMakeManager::createTarget(const QString& target, KDevelop::ProjectFolderItem *parent)
 {
     Q_UNUSED(target)
