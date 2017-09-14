@@ -41,7 +41,7 @@ LldbVariable::LldbVariable(DebugSession *session, TreeModel *model, TreeItem *pa
 
 void LldbVariable::refetch()
 {
-    if (!topLevel() || varobj_.isEmpty()) {
+    if (!topLevel() || varobj().isEmpty()) {
         return;
     }
 
@@ -51,7 +51,7 @@ void LldbVariable::refetch()
 
     // update the value itself
     QPointer<LldbVariable> guarded_this(this);
-    debugSession->addCommand(VarEvaluateExpression, varobj_, [guarded_this](const ResultRecord &r){
+    m_debugSession->addCommand(VarEvaluateExpression, varobj(), [guarded_this](const ResultRecord &r){
         if (guarded_this && r.reason == QLatin1String("done") && r.hasField(QStringLiteral("value"))) {
             guarded_this->setValue(guarded_this->formatValue(r[QStringLiteral("value")].literal()));
         }
@@ -90,9 +90,9 @@ void LldbVariable::formatChanged()
     {
         if (sessionIsAlive()) {
             QPointer<LldbVariable> guarded_this(this);
-            debugSession->addCommand(
+            m_debugSession->addCommand(
                 VarSetFormat,
-                QStringLiteral(" %1 %2 ").arg(varobj_).arg(format2str(format())),
+                QStringLiteral(" %1 %2 ").arg(varobj()).arg(format2str(format())),
                 [guarded_this](const ResultRecord &r){
                     if(guarded_this && r.hasField(QStringLiteral("changelist"))) {
                         if (r[QStringLiteral("changelist")].size() > 0) {

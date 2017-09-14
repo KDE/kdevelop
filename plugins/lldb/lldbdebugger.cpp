@@ -73,12 +73,12 @@ bool LldbDebugger::start(KConfigGroup& config, const QStringList& extraArguments
     }
 
     // Start!
-    process_->setProcessEnvironment(processEnv);
-    process_->setProgram(debuggerExecutable_, arguments);
-    process_->start();
+    m_process->setProcessEnvironment(processEnv);
+    m_process->setProgram(debuggerExecutable_, arguments);
+    m_process->start();
 
     qCDebug(DEBUGGERLLDB) << "Starting LLDB with command" << debuggerExecutable_ + QLatin1Char(' ') + arguments.join(QLatin1Char(' '));
-    qCDebug(DEBUGGERLLDB) << "LLDB process pid:" << process_->pid();
+    qCDebug(DEBUGGERLLDB) << "LLDB process pid:" << m_process->pid();
     emit userCommandOutput(debuggerExecutable_ + QLatin1Char(' ') + arguments.join(QLatin1Char(' ')) + QLatin1Char('\n'));
 
     return true;

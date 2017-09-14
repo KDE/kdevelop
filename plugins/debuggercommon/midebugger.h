@@ -136,15 +136,14 @@ protected:
 
 protected:
     QString debuggerExecutable_;
-    KProcess* process_;
+    KProcess* m_process;
 
-    MI::MICommand* currentCmd_;
-
-    MI::MIParser mi_parser_;
+    MI::MICommand* m_currentCmd;
+    MI::MIParser m_parser;
 
     /** The unprocessed output from debugger. Output is
         processed as soon as we see newline. */
-    QByteArray buffer_;
+    QByteArray m_buffer;
 };
 
 }

@@ -35,26 +35,26 @@ using namespace KDevMI::MI;
 
 bool MIVariable::sessionIsAlive() const
 {
-    if (!debugSession)
+    if (!m_debugSession)
         return false;
 
-    IDebugSession::DebuggerState s = debugSession->state();
+    IDebugSession::DebuggerState s = m_debugSession->state();
     return s != IDebugSession::NotStartedState 
         && s != IDebugSession::EndedState
-        && !debugSession->debuggerStateIsOn(s_shuttingDown);
+        && !m_debugSession->debuggerStateIsOn(s_shuttingDown);
 }
 
 MIVariable::MIVariable(MIDebugSession *session, TreeModel* model, TreeItem* parent,
                        const QString& expression, const QString& display)
     : Variable(model, parent, expression, display)
-    , debugSession(session)
+    , m_debugSession(session)
 {
 }
 
 MIVariable *MIVariable::createChild(const Value& child)
 {
-    if (!debugSession) return nullptr;
-    auto var = static_cast<MIVariable*>(debugSession->variableController()->createVariable(model(), this, child[QStringLiteral("exp")].literal()));
+    if (!m_debugSession) return nullptr;
+    auto var = static_cast<MIVariable*>(m_debugSession->variableController()->createVariable(model(), this, child[QStringLiteral("exp")].literal()));
     var->setTopLevel(false);
     var->setVarobj(child[QStringLiteral("name")].literal());
     bool hasMore = child[QStringLiteral("numchild")].toInt() != 0 || ( child.hasField(QStringLiteral("dynamic")) && child[QStringLiteral("dynamic")].toInt()!=0 );
@@ -71,33 +71,33 @@ MIVariable *MIVariable::createChild(const Value& child)
 
 MIVariable::~MIVariable()
 {
-    if (!varobj_.isEmpty())
+    if (!m_varobj.isEmpty())
     {
         // Delete only top-level variable objects.
         if (topLevel()) {
             if (sessionIsAlive()) {
-                debugSession->addCommand(VarDelete, QStringLiteral("\"%1\"").arg(varobj_));
+                m_debugSession->addCommand(VarDelete, QStringLiteral("\"%1\"").arg(m_varobj));
             }
         }
-        if (debugSession)
-            debugSession->variableMapping().remove(varobj_);
+        if (m_debugSession)
+            m_debugSession->variableMapping().remove(m_varobj);
     }
 }
 
 void MIVariable::setVarobj(const QString& v)
 {
-    if (!debugSession) {
+    if (!m_debugSession) {
         qCWarning(DEBUGGERCOMMON) << "MIVariable::setVarobj called when its session died";
         return;
     }
-    if (!varobj_.isEmpty()) {
+    if (!m_varobj.isEmpty()) {
         // this should not happen
         // but apperently it does when attachMaybe is called a second time before
         // the first -var-create call returned
-        debugSession->variableMapping().remove(varobj_);
+        m_debugSession->variableMapping().remove(m_varobj);
     }
-    varobj_ = v;
-    debugSession->variableMapping()[varobj_] = this;
+    m_varobj = v;
+    m_debugSession->variableMapping()[m_varobj] = this;
 }
 
 
@@ -163,15 +163,15 @@ private:
 
 void MIVariable::attachMaybe(QObject *callback, const char *callbackMethod)
 {
-    if (!varobj_.isEmpty())
+    if (!m_varobj.isEmpty())
         return;
 
     // Try find a current session and attach to it
     if (!ICore::self()->debugController()) return; //happens on shutdown
-    debugSession = static_cast<MIDebugSession*>(ICore::self()->debugController()->currentSession());
+    m_debugSession = static_cast<MIDebugSession*>(ICore::self()->debugController()->currentSession());
 
     if (sessionIsAlive()) {
-        debugSession->addCommand(VarCreate,
+        m_debugSession->addCommand(VarCreate,
                                  QStringLiteral("var%1 @ %2").arg(nextId++).arg(enquotedExpression()),
                                  new CreateVarobjHandler(this, callback, callbackMethod));
     }
@@ -179,7 +179,7 @@ void MIVariable::attachMaybe(QObject *callback, const char *callbackMethod)
 
 void MIVariable::markAsDead()
 {
-    varobj_.clear();
+    m_varobj.clear();
 }
 
 class FetchMoreChildrenHandler : public MICommandHandler
@@ -249,11 +249,11 @@ void MIVariable::fetchMoreChildren()
     // FIXME: should not even try this if app is not started.
     // Probably need to disable open, or something
     if (sessionIsAlive()) {
-        debugSession->addCommand(VarListChildren,
+        m_debugSession->addCommand(VarListChildren,
                                  QStringLiteral("--all-values \"%1\" %2 %3")
                                  //   fetch    from ..    to ..
-                                 .arg(varobj_).arg(c).arg(c + fetchStep),
-                                 new FetchMoreChildrenHandler(this, debugSession));
+                                 .arg(m_varobj).arg(c).arg(c + s_fetchStep),
+                                 new FetchMoreChildrenHandler(this, m_debugSession));
     }
 }
 
@@ -290,7 +290,7 @@ void MIVariable::handleUpdate(const Value& var)
         if (var.hasField(QStringLiteral("new_children")))
         {
             const Value& children = var[QStringLiteral("new_children")];
-            if (debugSession) {
+            if (m_debugSession) {
                 for (int i = 0; i < children.size(); ++i) {
                     createChild(children[i]);
                     // it's automatically appended to this's children list
@@ -309,7 +309,7 @@ void MIVariable::handleUpdate(const Value& var)
 
 const QString& MIVariable::varobj() const
 {
-    return varobj_;
+    return m_varobj;
 }
 
 QString MIVariable::enquotedExpression() const
@@ -347,8 +347,8 @@ void MIVariable::formatChanged()
     else
     {
         if (sessionIsAlive()) {
-            debugSession->addCommand(VarSetFormat,
-                                     QStringLiteral(" %1 %2 ").arg(varobj_).arg(format2str(format())),
+            m_debugSession->addCommand(VarSetFormat,
+                                     QStringLiteral(" %1 %2 ").arg(m_varobj).arg(format2str(format())),
                                      new SetFormatHandler(this));
         }
     }

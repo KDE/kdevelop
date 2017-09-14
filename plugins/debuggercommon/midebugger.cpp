@@ -46,50 +46,50 @@ using namespace KDevMI::MI;
 
 MIDebugger::MIDebugger(QObject* parent)
     : QObject(parent)
-    , process_(nullptr)
-    , currentCmd_(nullptr)
+    , m_process(nullptr)
+    , m_currentCmd(nullptr)
 {
-    process_ = new KProcess(this);
-    process_->setOutputChannelMode(KProcess::SeparateChannels);
-    connect(process_, &KProcess::readyReadStandardOutput,
+    m_process = new KProcess(this);
+    m_process->setOutputChannelMode(KProcess::SeparateChannels);
+    connect(m_process, &KProcess::readyReadStandardOutput,
             this, &MIDebugger::readyReadStandardOutput);
-    connect(process_, &KProcess::readyReadStandardError,
+    connect(m_process, &KProcess::readyReadStandardError,
             this, &MIDebugger::readyReadStandardError);
-    connect(process_,
+    connect(m_process,
             static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
             this, &MIDebugger::processFinished);
-    connect(process_, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+    connect(m_process, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
             this, &MIDebugger::processErrored);
 }
 
 MIDebugger::~MIDebugger()
 {
     // prevent Qt warning: QProcess: Destroyed while process is still running.
-    if (process_ && process_->state() == QProcess::Running) {
-        disconnect(process_, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+    if (m_process && m_process->state() == QProcess::Running) {
+        disconnect(m_process, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
                     this, &MIDebugger::processErrored);
-        process_->kill();
-        process_->waitForFinished(10);
+        m_process->kill();
+        m_process->waitForFinished(10);
     }
 }
 
 void MIDebugger::execute(MICommand* command)
 {
-    currentCmd_ = command;
-    QString commandText = currentCmd_->cmdToSend();
+    m_currentCmd = command;
+    QString commandText = m_currentCmd->cmdToSend();
 
     qCDebug(DEBUGGERCOMMON) << "SEND:" << commandText.trimmed();
 
     QByteArray commandUtf8 = commandText.toUtf8();
 
-    process_->write(commandUtf8, commandUtf8.length());
+    m_process->write(commandUtf8, commandUtf8.length());
     command->markAsSubmitted();
 
-    QString prettyCmd = currentCmd_->cmdToSend();
+    QString prettyCmd = m_currentCmd->cmdToSend();
     prettyCmd.remove( QRegExp("set prompt \032.\n") );
     prettyCmd = "(gdb) " + prettyCmd;
 
-    if (currentCmd_->isUserCommand())
+    if (m_currentCmd->isUserCommand())
         emit userCommandOutput(prettyCmd);
     else
         emit internalCommandOutput(prettyCmd);
@@ -97,13 +97,13 @@ void MIDebugger::execute(MICommand* command)
 
 bool MIDebugger::isReady() const
 {
-    return currentCmd_ == nullptr;
+    return m_currentCmd == nullptr;
 }
 
 void MIDebugger::interrupt()
 {
     //TODO:win32 Porting needed
-    int pid = process_->pid();
+    int pid = m_process->pid();
     if (pid != 0) {
         ::kill(pid, SIGINT);
     }
@@ -111,28 +111,28 @@ void MIDebugger::interrupt()
 
 MICommand* MIDebugger::currentCommand() const
 {
-    return currentCmd_;
+    return m_currentCmd;
 }
 
 void MIDebugger::kill()
 {
-    process_->kill();
+    m_process->kill();
 }
 
 void MIDebugger::readyReadStandardOutput()
 {
-    process_->setReadChannel(QProcess::StandardOutput);
+    m_process->setReadChannel(QProcess::StandardOutput);
 
-    buffer_ += process_->readAll();
+    m_buffer += m_process->readAll();
     for (;;)
     {
         /* In MI mode, all messages are exactly one line.
            See if we have any complete lines in the buffer. */
-        int i = buffer_.indexOf('\n');
+        int i = m_buffer.indexOf('\n');
         if (i == -1)
             break;
-        QByteArray reply(buffer_.left(i));
-        buffer_ = buffer_.mid(i+1);
+        QByteArray reply(m_buffer.left(i));
+        m_buffer = m_buffer.mid(i+1);
 
         processLine(reply);
     }
@@ -140,18 +140,18 @@ void MIDebugger::readyReadStandardOutput()
 
 void MIDebugger::readyReadStandardError()
 {
-    process_->setReadChannel(QProcess::StandardError);
-    emit debuggerInternalOutput(QString::fromUtf8(process_->readAll()));
+    m_process->setReadChannel(QProcess::StandardError);
+    emit debuggerInternalOutput(QString::fromUtf8(m_process->readAll()));
 }
 
 void MIDebugger::processLine(const QByteArray& line)
 {
-    qCDebug(DEBUGGERCOMMON) << "Debugger (" << process_->pid() <<") output: " << line;
+    qCDebug(DEBUGGERCOMMON) << "Debugger (" << m_process->pid() <<") output: " << line;
 
     FileSymbol file;
     file.contents = line;
 
-    std::unique_ptr<MI::Record> r(mi_parser_.parse(&file));
+    std::unique_ptr<MI::Record> r(m_parser.parse(&file));
 
     if (!r)
     {
@@ -179,23 +179,23 @@ void MIDebugger::processLine(const QByteArray& line)
 
             // it's still possible for the user to issue a MI command,
             // emit correct signal
-            if (currentCmd_ && currentCmd_->isUserCommand()) {
+            if (m_currentCmd && m_currentCmd->isUserCommand()) {
                 emit userCommandOutput(QString::fromUtf8(line) + '\n');
             } else {
                 emit internalCommandOutput(QString::fromUtf8(line) + '\n');
             }
 
             // protect against wild replies that sometimes returned from gdb without a pending command
-            if (!currentCmd_)
+            if (!m_currentCmd)
             {
                 qCWarning(DEBUGGERCOMMON) << "Received a result without a pending command";
                 throw std::runtime_error("Received a result without a pending command");
             }
-            else if (currentCmd_->token() != result.token)
+            else if (m_currentCmd->token() != result.token)
             {
                 std::stringstream ss;
                 ss << "Received a result with token not matching pending command. "
-                   << "Pending: " << currentCmd_->token() << "Received: " << result.token;
+                   << "Pending: " << m_currentCmd->token() << "Received: " << result.token;
                 qCWarning(DEBUGGERCOMMON) << ss.str().c_str();
                 throw std::runtime_error(ss.str());
             }
@@ -204,24 +204,24 @@ void MIDebugger::processLine(const QByteArray& line)
             if (result.reason == QLatin1String("done") || result.reason == QLatin1String("running") || result.reason == QLatin1String("exit"))
             {
                 qCDebug(DEBUGGERCOMMON) << "Result token is" << result.token;
-                currentCmd_->markAsCompleted();
+                m_currentCmd->markAsCompleted();
                 qCDebug(DEBUGGERCOMMON) << "Command successful, times "
-                                        << currentCmd_->totalProcessingTime()
-                                        << currentCmd_->queueTime()
-                                        << currentCmd_->gdbProcessingTime();
-                currentCmd_->invokeHandler(result);
+                                        << m_currentCmd->totalProcessingTime()
+                                        << m_currentCmd->queueTime()
+                                        << m_currentCmd->gdbProcessingTime();
+                m_currentCmd->invokeHandler(result);
             }
             else if (result.reason == QLatin1String("error"))
             {
                 qCDebug(DEBUGGERCOMMON) << "Handling error";
-                currentCmd_->markAsCompleted();
+                m_currentCmd->markAsCompleted();
                 qCDebug(DEBUGGERCOMMON) << "Command error, times"
-                                        << currentCmd_->totalProcessingTime()
-                                        << currentCmd_->queueTime()
-                                        << currentCmd_->gdbProcessingTime();
+                                        << m_currentCmd->totalProcessingTime()
+                                        << m_currentCmd->queueTime()
+                                        << m_currentCmd->gdbProcessingTime();
                 // Some commands want to handle errors themself.
-                if (currentCmd_->handlesError() &&
-                    currentCmd_->invokeHandler(result))
+                if (m_currentCmd->handlesError() &&
+                    m_currentCmd->invokeHandler(result))
                 {
                     qCDebug(DEBUGGERCOMMON) << "Invoked custom handler\n";
                     // Done, nothing more needed
@@ -234,8 +234,8 @@ void MIDebugger::processLine(const QByteArray& line)
                 qCDebug(DEBUGGERCOMMON) << "Unhandled result code: " << result.reason;
             }
 
-            delete currentCmd_;
-            currentCmd_ = nullptr;
+            delete m_currentCmd;
+            m_currentCmd = nullptr;
             emit ready();
             break;
         }
@@ -286,13 +286,13 @@ void MIDebugger::processLine(const QByteArray& line)
             if (s.subkind == MI::StreamRecord::Target) {
                 emit applicationOutput(s.message);
             } else if (s.subkind == MI::StreamRecord::Console) {
-                if (currentCmd_ && currentCmd_->isUserCommand())
+                if (m_currentCmd && m_currentCmd->isUserCommand())
                     emit userCommandOutput(s.message);
                 else
                     emit internalCommandOutput(s.message);
 
-                if (currentCmd_)
-                    currentCmd_->newOutput(s.message);
+                if (m_currentCmd)
+                    m_currentCmd->newOutput(s.message);
             } else {
                 emit debuggerInternalOutput(s.message);
             }

@@ -82,16 +82,16 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
 
         arguments.insert(0, debuggerExecutable_);
         arguments.insert(0, shell.toLocalFile());
-        process_->setShellCommand(KShell::joinArgs(arguments));
+        m_process->setShellCommand(KShell::joinArgs(arguments));
     } else {
-        process_->setProgram(debuggerExecutable_, arguments);
+        m_process->setProgram(debuggerExecutable_, arguments);
     }
 
-    process_->start();
+    m_process->start();
 
     qCDebug(DEBUGGERGDB) << "Starting GDB with command" << shell.toLocalFile() + QLatin1Char(' ') + debuggerExecutable_
                            + QLatin1Char(' ') + arguments.join(QLatin1Char(' '));
-    qCDebug(DEBUGGERGDB) << "GDB process pid:" << process_->pid();
+    qCDebug(DEBUGGERGDB) << "GDB process pid:" << m_process->pid();
     emit userCommandOutput(shell.toLocalFile() + QLatin1Char(' ') + debuggerExecutable_
                            + QLatin1Char(' ') + arguments.join(QLatin1Char(' ')) + QLatin1Char('\n'));
     return true;
