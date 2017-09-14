@@ -77,13 +77,16 @@ protected: // Internal
     bool sessionIsAlive() const;
 
     void setVarobj(const QString& v);
-    QString varobj_;
 
-    QPointer<MIDebugSession> debugSession;
+protected:
+    QPointer<MIDebugSession> m_debugSession;
+
+private:
+    QString m_varobj;
 
     // How many children should be fetched in one
     // increment.
-    static const int fetchStep = 5;
+    static const int s_fetchStep = 5;
 };
 } // end of KDevMI
 
