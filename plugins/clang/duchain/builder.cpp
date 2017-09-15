@@ -1338,6 +1338,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
     UseKind(CXType_ObjCClass);
     UseKind(CXType_ObjCSel);
     UseKind(CXType_NullPtr);
+    UseKind(CXType_Float128);
 #if CINDEX_VERSION_MINOR >= 32
     UseKind(CXType_Auto);
 #endif
