@@ -191,6 +191,14 @@ void CMakeServerImportJob::processResponse(const QJsonObject& response)
         setErrorText(response.value(QStringLiteral("errorMessage")).toString());
         qCWarning(CMAKE) << "error!!" << response;
         emitResult();
+    } else if (responseType == QLatin1String("progress")) {
+        int progress = response.value(QStringLiteral("progressCurrent")).toInt();
+        int total = response.value(QStringLiteral("progressMaximum")).toInt();
+        if (progress >= 0 && total > 0) {
+            setPercent(100.0 * progress / total);
+        }
+    } else if (responseType == QLatin1String("message") || responseType == QLatin1String("hello")) {
+        // Known, but not used for anything currently.
     } else {
         qCWarning(CMAKE) << "unhandled message" << response;
     }
