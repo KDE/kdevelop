@@ -1,6 +1,7 @@
 function(add_debuggable_executable target)
     cmake_parse_arguments(add_debuggable_executable "" "" "SRCS" ${ARGN})
     add_executable(${target} ${add_debuggable_executable_SRCS})
+	ecm_mark_nongui_executable(${target})
     # force debug symbols for our debuggees, disable optimizations
     if (WIN32)
         set(_flags "/0d")

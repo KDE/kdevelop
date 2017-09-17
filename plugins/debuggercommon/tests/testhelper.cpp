@@ -36,7 +36,11 @@ namespace KDevMI {
 
 QUrl findExecutable(const QString& name)
 {
-    QFileInfo info(QString::fromLocal8Bit(DEBUGGEE_BIN_DIR), name);
+    QString exeExtension;
+#ifdef Q_OS_WIN
+    exeExtension = QStringLiteral(".exe");
+#endif
+    QFileInfo info(QString::fromLocal8Bit(DEBUGGEE_BIN_DIR), name + exeExtension);
     Q_ASSERT_X(info.exists(), "findExecutable", info.filePath().toLocal8Bit());
     Q_ASSERT(info.isExecutable());
     return QUrl::fromLocalFile(info.canonicalFilePath());
