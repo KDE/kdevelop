@@ -36,6 +36,7 @@
 #include "ui_cmakebuildsettings.h"
 #include "cmakecachedelegate.h"
 #include "cmakebuilddirchooser.h"
+#include "cmakebuilderconfig.h"
 #include <debug.h>
 #include <cmakeutils.h>
 #include <interfaces/iproject.h>
@@ -126,6 +127,7 @@ void CMakePreferences::initAdvanced()
     }
     m_prefsUi->buildType->setCurrentIndex(m_prefsUi->buildType->findText(buildType));
     m_prefsUi->extraArguments->setEditText(CMake::currentExtraArguments(m_project));
+    m_prefsUi->cMakeExecutable->setText(CMake::currentCMakeExecutable(m_project).toLocalFile());
 }
 
 void CMakePreferences::reset()
@@ -168,11 +170,13 @@ void CMakePreferences::apply()
     }
     CMake::setCurrentBuildType( m_project, buildType );
     CMake::setCurrentExtraArguments( m_project, m_prefsUi->extraArguments->currentText() );
+    CMake::setCurrentCMakeExecutable(m_project, Path(m_prefsUi->cMakeExecutable->text()));
 
     qCDebug(CMAKE) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
     qCDebug(CMAKE) << "writing to cmake config: builddir path " << CMake::currentBuildDir(m_project);
     qCDebug(CMAKE) << "writing to cmake config: installdir " << CMake::currentInstallDir(m_project);
     qCDebug(CMAKE) << "writing to cmake config: build type " << CMake::currentBuildType(m_project);
+    qCDebug(CMAKE) << "writing to cmake config: cmake executable " << CMake::currentCMakeExecutable(m_project);
     qCDebug(CMAKE) << "writing to cmake config: environment " << CMake::currentEnvironment(m_project);
 
     //We run cmake on the builddir to generate it
@@ -291,6 +295,7 @@ void CMakePreferences::createBuildDir()
     // It may be '/' or '\', so maybe should we rely on CMake::allBuildDirs() for returning well-formed paths?
     QStringList used = CMake::allBuildDirs( m_project );
     bdCreator.setAlreadyUsed(used);
+    bdCreator.setCMakeExecutable(Path(CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile()));
 
     if(bdCreator.exec())
     {
@@ -303,6 +308,7 @@ void CMakePreferences::createBuildDir()
         qCDebug(CMAKE) << "adding to cmake config: installdir " << bdCreator.installPrefix();
         qCDebug(CMAKE) << "adding to cmake config: extra args" << bdCreator.extraArguments();
         qCDebug(CMAKE) << "adding to cmake config: build type " << bdCreator.buildType();
+        qCDebug(CMAKE) << "adding to cmake config: cmake executable " << bdCreator.cmakeExecutable();
         qCDebug(CMAKE) << "adding to cmake config: environment empty";
         CMake::setOverrideBuildDirIndex( m_project, addedBuildDirIndex );
         CMake::setBuildDirCount( m_project, addedBuildDirIndex + 1 );
@@ -310,6 +316,7 @@ void CMakePreferences::createBuildDir()
         CMake::setCurrentInstallDir( m_project, bdCreator.installPrefix() );
         CMake::setCurrentExtraArguments( m_project, bdCreator.extraArguments() );
         CMake::setCurrentBuildType( m_project, bdCreator.buildType() );
+        CMake::setCurrentCMakeExecutable(m_project, bdCreator.cmakeExecutable());
         CMake::setCurrentEnvironment( m_project, QString() );
 
         QString newbuilddir = bdCreator.buildFolder().toLocalFile();
@@ -350,6 +357,7 @@ void CMakePreferences::removeBuildDir()
     qCDebug(CMAKE) << "removing from cmake config: installdir " << CMake::currentInstallDir( m_project );
     qCDebug(CMAKE) << "removing from cmake config: extra args" << CMake::currentExtraArguments( m_project );
     qCDebug(CMAKE) << "removing from cmake config: buildtype " << CMake::currentBuildType( m_project );
+    qCDebug(CMAKE) << "removing from cmake config: cmake executable " << CMake::currentCMakeExecutable(m_project);
     qCDebug(CMAKE) << "removing from cmake config: environment " << CMake::currentEnvironment( m_project );
 
     CMake::removeBuildDirConfig(m_project);

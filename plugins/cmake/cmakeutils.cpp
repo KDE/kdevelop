@@ -58,6 +58,7 @@ static const QString currentBuildTypeKey = QStringLiteral("CurrentBuildType");
 static const QString currentInstallDirKey = QStringLiteral("CurrentInstallDir");
 static const QString currentEnvironmentKey = QStringLiteral("CurrentEnvironment");
 static const QString currentExtraArgumentsKey = QStringLiteral("Extra Arguments");
+static const QString currentCMakeExecutableKey = QStringLiteral("Current CMake Binary");
 static const QString projectRootRelativeKey = QStringLiteral("ProjectRootRelative");
 static const QString projectBuildDirs = QStringLiteral("BuildDirs");
 }
@@ -76,6 +77,12 @@ namespace Specific
 {
 static const QString buildDirPathKey = QStringLiteral("Build Directory Path");
 // TODO: migrate to more generic & consistent key term "CMake Executable"
+// Support the old "CMake Binary" key too for backwards compatibility during
+// a reasonable transition period. Both keys are saved at least until 5.2.0
+// is released. Import support for the old key will need to remain for a
+// considably longer period, ideally.
+static const QString cmakeBinaryKey = QStringLiteral("CMake Binary");
+static const QString cmakeExecutableKey = QStringLiteral("CMake Executable");
 static const QString cmakeBuildTypeKey = QStringLiteral("Build Type");
 static const QString cmakeInstallDirKey = QStringLiteral("Install Directory");
 static const QString cmakeEnvironmentKey = QStringLiteral("Environment Profile");
@@ -203,6 +210,7 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
         const auto builddirs = CMake::allBuildDirs(project);
         bd.setAlreadyUsed( builddirs );
         bd.setShowAvailableBuildDirs(!builddirs.isEmpty());
+        bd.setCMakeExecutable(currentCMakeExecutable(project));
 
         if( !bd.exec() )
         {
@@ -226,6 +234,7 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
             qCDebug(CMAKE) << "adding to cmake config: installdir " << bd.installPrefix();
             qCDebug(CMAKE) << "adding to cmake config: extra args" << bd.extraArguments();
             qCDebug(CMAKE) << "adding to cmake config: build type " << bd.buildType();
+            qCDebug(CMAKE) << "adding to cmake config: cmake executable " << bd.cmakeExecutable();
             qCDebug(CMAKE) << "adding to cmake config: environment <null>";
             CMake::setBuildDirCount( project, addedBuildDirIndex + 1 );
             CMake::setCurrentBuildDirIndex( project, addedBuildDirIndex );
@@ -233,6 +242,7 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
             CMake::setCurrentInstallDir( project, bd.installPrefix() );
             CMake::setCurrentExtraArguments( project, bd.extraArguments() );
             CMake::setCurrentBuildType( project, bd.buildType() );
+            CMake::setCurrentCMakeExecutable(project, bd.cmakeExecutable());
             CMake::setCurrentEnvironment( project, QString() );
         }
         setBuildDirRuntime( project, currentRuntime );
@@ -326,6 +336,25 @@ QString findExecutable()
     return cmake;
 }
 
+KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project, int builddir)
+{
+    const auto defaultCMakeExecutable = CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile();
+    if (project) {
+        // check for "CMake Executable" but for now also "CMake Binary", falling back to the default.
+        auto projectCMakeExecutable = readBuildDirParameter( project, Config::Specific::cmakeExecutableKey,
+            readBuildDirParameter( project, Config::Specific::cmakeBinaryKey, defaultCMakeExecutable, builddir),
+            builddir );
+        if (projectCMakeExecutable != defaultCMakeExecutable) {
+            QFileInfo info(projectCMakeExecutable);
+            if (!info.isExecutable()) {
+                projectCMakeExecutable = defaultCMakeExecutable;
+            }
+        }
+        return KDevelop::Path(projectCMakeExecutable);
+    }
+    return KDevelop::Path(defaultCMakeExecutable);
+}
+
 KDevelop::Path currentInstallDir( KDevelop::IProject* project, int builddir )
 {
     const QString defaultInstallDir =
@@ -360,6 +389,13 @@ void setCurrentInstallDir( KDevelop::IProject* project, const KDevelop::Path& pa
 void setCurrentBuildType( KDevelop::IProject* project, const QString& type )
 {
     writeBuildDirParameter( project, Config::Specific::cmakeBuildTypeKey, type );
+}
+
+void setCurrentCMakeExecutable(KDevelop::IProject* project, const KDevelop::Path& path)
+{
+    // maintain compatibility with older versions for now
+    writeBuildDirParameter(project, Config::Specific::cmakeBinaryKey, path.toLocalFile());
+    writeBuildDirParameter(project, Config::Specific::cmakeExecutableKey, path.toLocalFile());
 }
 
 void setCurrentBuildDir( KDevelop::IProject* project, const KDevelop::Path& path )
@@ -490,6 +526,7 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex)
     const KDevelop::Path cacheFilePath( builddir, QStringLiteral("CMakeCache.txt"));
 
     const QMap<QString, QString> keys = {
+        { QStringLiteral("CMAKE_COMMAND"), Config::Specific::cmakeExecutableKey },
         { QStringLiteral("CMAKE_INSTALL_PREFIX"), Config::Specific::cmakeInstallDirKey },
         { QStringLiteral("CMAKE_BUILD_TYPE"), Config::Specific::cmakeBuildTypeKey }
     };
@@ -552,6 +589,7 @@ void attemptMigrate( KDevelop::IProject* project )
     }
 
     baseGrp.deleteEntry( Config::Old::currentBuildDirKey );
+    baseGrp.deleteEntry( Config::Old::currentCMakeExecutableKey );
     baseGrp.deleteEntry( Config::Old::currentBuildTypeKey );
     baseGrp.deleteEntry( Config::Old::currentInstallDirKey );
     baseGrp.deleteEntry( Config::Old::currentEnvironmentKey );
