@@ -38,6 +38,7 @@
         "Name[sv]": "Disposition",
         "Name[uk]": "Схема",
         "Name[x-test]": "xxOutlinexx",
+        "Name[zh_CN]": "轮廓",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
