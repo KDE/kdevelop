@@ -170,7 +170,7 @@ void CMakePreferences::apply()
     }
     CMake::setCurrentBuildType( m_project, buildType );
     CMake::setCurrentExtraArguments( m_project, m_prefsUi->extraArguments->currentText() );
-    CMake::setCurrentCmakeExecutable( m_project, m_prefsUi->cMakeExecutable->text() );
+    CMake::setCurrentCMakeExecutable( m_project, Path(m_prefsUi->cMakeExecutable->text()) );
 
     qCDebug(CMAKE) << "writing to cmake config: using builddir " << CMake::currentBuildDirIndex(m_project);
     qCDebug(CMAKE) << "writing to cmake config: builddir path " << CMake::currentBuildDir(m_project);
@@ -178,8 +178,6 @@ void CMakePreferences::apply()
     qCDebug(CMAKE) << "writing to cmake config: build type " << CMake::currentBuildType(m_project);
     qCDebug(CMAKE) << "writing to cmake config: cmake executable " << CMake::currentCMakeExecutable(m_project);
     qCDebug(CMAKE) << "writing to cmake config: environment " << CMake::currentEnvironment(m_project);
-    qCDebug(CMAKE) << "writing to cmake config: cmake executable " << CMake::currentCmakeExecutable(m_project);
-
 
     //We run cmake on the builddir to generate it
     configure();
