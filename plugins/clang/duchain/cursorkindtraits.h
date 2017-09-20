@@ -211,7 +211,8 @@ constexpr IntegralType::CommonIntegralTypes integralType(CXTypeKind TK)
     : TK == CXType_Char32       ? IntegralType::TypeChar32_t
     : TK == CXType_WChar        ? IntegralType::TypeWchar_t
     : ( TK == CXType_LongDouble
-      ||TK == CXType_Double)    ? IntegralType::TypeDouble
+      ||TK == CXType_Double
+      ||TK == CXType_Float128)    ? IntegralType::TypeDouble
     : ( TK == CXType_Short
       ||TK == CXType_UShort
       ||TK == CXType_Int

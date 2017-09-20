@@ -1,7 +1,3 @@
-include_directories(
-    ${KDevelop_SOURCE_DIR}/languages/plugins
-)
-
 add_subdirectory(3rdparty/qtcreator-libs)
 add_subdirectory(duchain)
 add_subdirectory(nodejsmodules)

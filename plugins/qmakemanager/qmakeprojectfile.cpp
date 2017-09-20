@@ -290,14 +290,15 @@ QStringList QMakeProjectFile::frameworkDirectories() const
 QStringList QMakeProjectFile::extraArguments() const
 {
     const auto variablesToCheck = {QStringLiteral("QMAKE_CXXFLAGS")};
-    const auto prefixes = { QLatin1String("-F"), QLatin1String("-iframework"), QLatin1String("-I"), QLatin1String("-D") };
+    const auto prefixes = { "-F", "-iframework", "-I", "-D" };
     QStringList args;
     foreach (const auto& var, variablesToCheck) {
         foreach (const auto& arg, variableValues(var)) {
-            for (const auto& prefix: prefixes) {
-                if (!arg.startsWith(prefix)) {
-                    args << arg;
-                }
+            auto argHasPrefix = [arg](const char* prefix) {
+                return arg.startsWith(prefix);
+            };
+            if ( !std::any_of(prefixes.begin(), prefixes.end(), argHasPrefix)) {
+                args << arg;
             }
         }
     }

@@ -25,6 +25,7 @@
 #include <interfaces/iruntime.h>
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/icore.h>
+#include <interfaces/iproject.h>
 
 #include <QDir>
 #include <QJsonDocument>
@@ -78,7 +79,9 @@ CMakeServer::CMakeServer(QObject* parent)
             m_localSocket->connectToServer(path, QIODevice::ReadWrite);
         });
     });
-    m_process.setProgram(CMake::findExecutable());
+    // we're called with the importing project as our parent, so we can fetch configured
+    // cmake executable (project-specific or kdevelop-wide) rather than the system version.
+    m_process.setProgram(CMake::currentCMakeExecutable(dynamic_cast<KDevelop::IProject*>(parent)).toLocalFile());
     m_process.setArguments({"-E", "server", "--experimental", "--pipe=" + path});
     KDevelop::ICore::self()->runtimeController()->currentRuntime()->startProcess(&m_process);
 }
