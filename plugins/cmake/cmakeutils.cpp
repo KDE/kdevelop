@@ -414,11 +414,6 @@ void setCurrentExtraArguments( KDevelop::IProject* project, const QString& strin
     writeBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, string );
 }
 
-void setCurrentCmakeExecutable( KDevelop::IProject* project, const QString& string )
-{
-    writeBuildDirParameter( project, Config::Specific::cmakeExecutableKey, string );
-}
-
 QString currentEnvironment(KDevelop::IProject* project, int builddir)
 {
     return readBuildDirParameter( project, Config::Specific::cmakeEnvironmentKey, QString(), builddir );
