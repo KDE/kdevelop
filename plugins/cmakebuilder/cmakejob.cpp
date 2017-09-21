@@ -82,10 +82,7 @@ QUrl CMakeJob::workingDirectory() const
 QStringList CMakeJob::commandLine() const
 {
     QStringList args;
-    QString cmakeProjectExecutable = CMake::currentCmakeExecutable( m_project );
-    args <<
-        (cmakeProjectExecutable.isEmpty() ?
-            CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile() : cmakeProjectExecutable);
+    args << CMake::currentCMakeExecutable( m_project ).toLocalFile();
 
     args << QStringLiteral("-DCMAKE_EXPORT_COMPILE_COMMANDS=ON");
 

@@ -105,11 +105,6 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT QString currentBuildType( KDevelop::IProject* project, int builddir = -1 );
 
     /**
-     * @returns the current build type for the given project or "Release" as default value.
-     */
-    KDEVCMAKECOMMON_EXPORT QString currentCmakeExecutable( KDevelop::IProject* project, int builddir = -1 );
-
-    /**
     * @returns the CMake executable, taking into account standard
     * installation dirs on Windows, or empty string in case of failure.
     */
@@ -184,11 +179,6 @@ namespace CMake
      * Sets the current extra arguments for the given project.
      */
     KDEVCMAKECOMMON_EXPORT void setCurrentExtraArguments( KDevelop::IProject* project, const QString& args );
-
-    /**
-     * Sets the current CMake binary the given project.
-     */
-    KDEVCMAKECOMMON_EXPORT void setCurrentCmakeExecutable(KDevelop::IProject* project, const QString& string);
 
     /**
      * Obtains a cmake documentation instance if it exists

@@ -382,11 +382,6 @@ QString currentExtraArguments( KDevelop::IProject* project, int builddir )
     return readBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, QString(), builddir );
 }
 
-QString currentCmakeExecutable( KDevelop::IProject* project, int builddir )
-{
-    return readBuildDirParameter( project, Config::Specific::cmakeExecutableKey, QString(), builddir );
-}
-
 void setCurrentInstallDir( KDevelop::IProject* project, const KDevelop::Path& path )
 {
     writeBuildDirParameter( project, Config::Specific::cmakeInstallDirKey, path.toLocalFile() );
@@ -417,11 +412,6 @@ void setProjectRootRelative( KDevelop::IProject* project, const QString& relativ
 void setCurrentExtraArguments( KDevelop::IProject* project, const QString& string)
 {
     writeBuildDirParameter( project, Config::Specific::cmakeArgumentsKey, string );
-}
-
-void setCurrentCmakeExecutable( KDevelop::IProject* project, const QString& string )
-{
-    writeBuildDirParameter( project, Config::Specific::cmakeExecutableKey, string );
 }
 
 QString currentEnvironment(KDevelop::IProject* project, int builddir)
