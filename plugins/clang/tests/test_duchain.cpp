@@ -2052,7 +2052,7 @@ void TestDUChain::testHasInclude()
 
     QVERIFY(file.waitForParsed(1000));
     {
-        DUChainDumper dumper(DUChainDumper::Features(DUChainDumper::DumpProblems));
+        DUChainDumper dumper({DUChainDumper::DumpProblems});
 
         DUChainReadLocker lock;
 
