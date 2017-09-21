@@ -179,6 +179,7 @@ CompilerPointer CompilerProvider::defaultCompiler() const
         }
 
         m_defaultProvider = compiler;
+        break;
     }
     if (!m_defaultProvider)
         m_defaultProvider = createDummyCompiler();
