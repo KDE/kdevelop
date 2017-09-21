@@ -100,6 +100,7 @@ private Q_SLOTS:
     void benchDUChainBuilder();
     void testGccCompatibility();
     void testQtIntegration();
+    void testHasInclude();
 
 private:
     QScopedPointer<TestEnvironmentProvider> m_provider;

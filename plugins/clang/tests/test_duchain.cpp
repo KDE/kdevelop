@@ -2027,3 +2027,46 @@ void TestDUChain::testQtIntegration()
 
     m_projectController->closeAllProjects();
 }
+
+void TestDUChain::testHasInclude()
+{
+    TestFile header(QStringLiteral(R"(
+        #pragma once
+        #if __has_include_next(<atomic>)
+        // good
+        #else
+        #error broken c++11 setup (__has_include_next)
+        #endif
+    )"), QStringLiteral("h"));
+    // NOTE: header is _not_ explicitly being parsed, instead the impl job does that
+
+    TestFile file(QStringLiteral(R"(
+        #if __has_include(<atomic>)
+        // good
+        #else
+        #error broken c++11 setup (__has_include)
+        #endif
+        #include "%1"
+    )").arg(header.url().str()), QStringLiteral("cpp"));
+    file.parse(TopDUContext::AllDeclarationsContextsAndUses);
+
+    QVERIFY(file.waitForParsed(1000));
+    {
+        DUChainDumper dumper({DUChainDumper::DumpProblems});
+
+        DUChainReadLocker lock;
+
+        QVERIFY(file.topContext());
+        dumper.dump(file.topContext());
+        QVERIFY(file.topContext()->problems().isEmpty());
+
+        auto headerCtx = DUChain::self()->chainForDocument(header.url());
+        QVERIFY(headerCtx);
+        dumper.dump(headerCtx);
+        QVERIFY(headerCtx->problems().count() <= 1);
+        for (const auto& problem : headerCtx->problems()) {
+            // ignore the following error:  "#include_next with absolute path [-Winclude-next-absolute-path]" "" [ (2, 12)  ->  (2, 30) ]
+            QVERIFY(problem->description().contains(QLatin1String("-Winclude-next-absolute-path")));
+        }
+    }
+}
