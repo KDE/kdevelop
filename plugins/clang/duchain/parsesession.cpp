@@ -325,6 +325,11 @@ QByteArray ParseSessionData::writeDefinesFile(const QMap<QString, QString>& defi
         // don't show warnings about redefined macros
         definesStream << "#pragma clang system_header\n";
         for (auto it = defines.begin(); it != defines.end(); ++it) {
+            if (it.key().startsWith(QLatin1String("__has_include("))
+                || it.key().startsWith(QLatin1String("__has_include_next(")))
+            {
+                continue;
+            }
             definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
         }
     }
