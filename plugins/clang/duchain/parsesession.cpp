@@ -320,11 +320,24 @@ QByteArray ParseSessionData::writeDefinesFile(const QMap<QString, QString>& defi
     m_definesFile.open();
     Q_ASSERT(m_definesFile.isWritable());
 
-    QTextStream definesStream(&m_definesFile);
-    // don't show warnings about redefined macros
-    definesStream << "#pragma clang system_header\n";
-    for (auto it = defines.begin(); it != defines.end(); ++it) {
-        definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
+    {
+        QTextStream definesStream(&m_definesFile);
+        // don't show warnings about redefined macros
+        definesStream << "#pragma clang system_header\n";
+        for (auto it = defines.begin(); it != defines.end(); ++it) {
+            definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
+        }
+    }
+    m_definesFile.close();
+
+    if (qEnvironmentVariableIsSet("KDEV_CLANG_DISPLAY_DEFINES")) {
+        QFile f(m_definesFile.fileName());
+        f.open(QIODevice::ReadOnly);
+        Q_ASSERT(f.isReadable());
+        QTextStream out(stdout);
+        out << "Defines file: " << f.fileName() << "\n"
+            << f.readAll() << f.size()
+            << "\n VS defines:" << defines.size() << "\n";
     }
 
     return m_definesFile.fileName().toUtf8();
