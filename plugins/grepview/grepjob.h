@@ -37,6 +37,8 @@ class FindReplaceTest; //FIXME: this is useful only for tests
 
 struct GrepJobSettings
 {
+    bool fromHistory = false;
+
     bool projectFilesOnly = false;
     bool caseSensitive = true;
     bool regexp = true;
