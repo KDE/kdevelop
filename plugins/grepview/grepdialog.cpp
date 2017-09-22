@@ -480,7 +480,6 @@ void GrepDialog::startSearch()
     QList<QUrl> choice = getDirectoryChoice(descriptionOrUrl);
     QString description = descriptionOrUrl;
 
-    GrepJob* job = m_plugin->newGrepJob();
     // Shorten the description
     if(descriptionOrUrl != allOpenFilesString() && descriptionOrUrl != allOpenProjectsString()) {
         auto prettyFileName = [](const QUrl& url) {
@@ -494,27 +493,40 @@ void GrepDialog::startSearch()
         }
     }
 
-    GrepOutputView *toolView = (GrepOutputView*)ICore::self()->uiController()->
-                               findToolView(i18n("Find/Replace in Files"), m_plugin->toolViewFactory(), IUiController::CreateAndRaise);
-    GrepOutputModel* outputModel = toolView->renewModel(m_settings, description);
+    GrepOutputView *toolView =
+        (GrepOutputView*)ICore::self()->uiController()->findToolView(
+            i18n("Find/Replace in Files"), m_plugin->toolViewFactory(),
+            m_settings.fromHistory ? IUiController::Create : IUiController::CreateAndRaise);
 
-    connect(job, &GrepJob::showErrorMessage,
-            toolView, &GrepOutputView::showErrorMessage);
-    //the GrepOutputModel gets the 'showMessage' signal to store it and forward
-    //it to toolView
-    connect(job, &GrepJob::showMessage,
-            outputModel, &GrepOutputModel::showMessageSlot);
-    connect(outputModel, &GrepOutputModel::showMessage,
-            toolView, &GrepOutputView::showMessage);
+    if (m_settings.fromHistory) {
+        // when restored from history, only display the parameters
+        toolView->renewModel(m_settings, i18n("Search \"%1\" in %2", m_settings.pattern, description));
+        emit m_plugin->grepJobFinished(true);
+    } else {
+        GrepOutputModel* outputModel =
+            toolView->renewModel(m_settings,
+                                i18n("Search \"%1\" in %2 (at time %3)", m_settings.pattern, description,
+                                    QTime::currentTime().toString(QStringLiteral("hh:mm"))));
 
-    connect(toolView, &GrepOutputView::outputViewIsClosed, job, [=]() {job->kill();});
+        GrepJob* job = m_plugin->newGrepJob();
+        connect(job, &GrepJob::showErrorMessage,
+                toolView, &GrepOutputView::showErrorMessage);
+        //the GrepOutputModel gets the 'showMessage' signal to store it and forward
+        //it to toolView
+        connect(job, &GrepJob::showMessage,
+                outputModel, &GrepOutputModel::showMessageSlot);
+        connect(outputModel, &GrepOutputModel::showMessage,
+                toolView, &GrepOutputView::showMessage);
 
-    job->setOutputModel(outputModel);
-    job->setDirectoryChoice(choice);
+        connect(toolView, &GrepOutputView::outputViewIsClosed, job, [=]() {job->kill();});
 
-    job->setSettings(m_settings);
+        job->setOutputModel(outputModel);
+        job->setDirectoryChoice(choice);
 
-    ICore::self()->runController()->registerJob(job);
+        job->setSettings(m_settings);
+
+        ICore::self()->runController()->registerJob(job);
+    }
 
     m_plugin->rememberSearchDirectory(descriptionOrUrl);
 

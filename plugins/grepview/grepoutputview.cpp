@@ -149,6 +149,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
         settings.exclude = s.takeFirst();
         settings.searchPaths = s.takeFirst();
 
+        settings.fromHistory = true;
         m_settingsHistory << settings;
     }
 
@@ -220,12 +221,8 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
     connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepOutputView::updateScrollArea);
 
     // appends new model to history
-    const QString displayName = i18n("Search \"%1\" in %2 (at time %3)",
-                                     settings.pattern, description,
-                                     QTime::currentTime().toString(QStringLiteral("hh:mm")));
-    modelSelector->insertItem(0, displayName, qVariantFromValue<QObject*>(newModel));
-
-    modelSelector->setCurrentIndex(0);//setCurrentItem(displayName);
+    modelSelector->insertItem(0, description, qVariantFromValue<QObject*>(newModel));
+    modelSelector->setCurrentIndex(0);
 
     m_settingsHistory.append(settings);
 
@@ -338,6 +335,7 @@ void GrepOutputView::refresh()
         QList<GrepJobSettings> refresh_history({
             m_settingsHistory.takeAt(m_settingsHistory.count() - 1 - index)
         });
+        refresh_history.first().fromHistory = false;
 
         GrepDialog* dlg = new GrepDialog(m_plugin, this, false);
         dlg->historySearch(refresh_history);
