@@ -95,7 +95,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     QWidget* senderWidget = qobject_cast<QWidget*>(sender());
     Q_ASSERT(senderWidget);
 
-    QMenu menu(senderWidget);
+    QMenu menu;
     menu.addSection(windowIcon(), m_view->document()->title());
 
     QList< QAction* > viewActions = m_view->contextMenuActions();
