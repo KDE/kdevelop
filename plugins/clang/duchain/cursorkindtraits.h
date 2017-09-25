@@ -212,7 +212,10 @@ constexpr IntegralType::CommonIntegralTypes integralType(CXTypeKind TK)
     : TK == CXType_WChar        ? IntegralType::TypeWchar_t
     : ( TK == CXType_LongDouble
       ||TK == CXType_Double
-      ||TK == CXType_Float128)    ? IntegralType::TypeDouble
+#if CINDEX_VERSION_MINOR >= 38
+      ||TK == CXType_Float128
+#endif
+                             )    ? IntegralType::TypeDouble
     : ( TK == CXType_Short
       ||TK == CXType_UShort
       ||TK == CXType_Int
