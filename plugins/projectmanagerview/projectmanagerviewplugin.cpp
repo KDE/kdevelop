@@ -549,7 +549,7 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
         if ( item->folder() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
             QString name = QInputDialog::getText ( window,
-                                i18n ( "Create Folder in %1", item->folder()->path().pathOrUrl() ), i18n ( "Folder Name" ) );
+                                i18n ( "Create Folder in %1", item->folder()->path().pathOrUrl() ), i18n ( "Folder name:" ) );
             if (!name.isEmpty()) {
                 item->project()->projectFileManager()->addFolder( Path(item->path(), name), item->folder() );
             }
