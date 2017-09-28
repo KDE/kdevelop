@@ -1,5 +1,3 @@
-include_directories(lib)
-
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevastyle\")
 
 ecm_qt_declare_logging_category(kdevastyle_LOG_SRCS

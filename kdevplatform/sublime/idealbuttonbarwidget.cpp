@@ -113,8 +113,6 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     {
         QBoxLayout *statusLayout = new QBoxLayout(QBoxLayout::RightToLeft, this);
         statusLayout->setMargin(0);
-        statusLayout->setSpacing(IDEAL_LAYOUT_SPACING);
-        statusLayout->setContentsMargins(0, IDEAL_LAYOUT_MARGIN, 0, IDEAL_LAYOUT_MARGIN);
 
         IdealButtonBarLayout *l = new IdealButtonBarLayout(orientation());
         statusLayout->addLayout(l);
