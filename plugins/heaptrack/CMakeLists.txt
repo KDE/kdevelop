@@ -26,7 +26,7 @@ set(kdevheaptrack_SRCS
 ecm_qt_declare_logging_category(kdevheaptrack_SRCS
     HEADER debug.h
     IDENTIFIER KDEV_HEAPTRACK
-    CATEGORY_NAME "kdevelop.analyzers.heaptrack"
+    CATEGORY_NAME "kdevelop.plugins.heaptrack"
 )
 ki18n_wrap_ui(kdevheaptrack_SRCS
     config/globalconfigpage.ui

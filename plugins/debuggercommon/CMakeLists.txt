@@ -39,7 +39,7 @@ endif()
 ecm_qt_declare_logging_category(debuggercommon_SRCS
     HEADER debuglog.h
     IDENTIFIER DEBUGGERCOMMON
-    CATEGORY_NAME "kdevelop.debuggers.common"
+    CATEGORY_NAME "kdevelop.plugins.common"
 )
 
 ki18n_wrap_ui(debuggercommon_SRCS

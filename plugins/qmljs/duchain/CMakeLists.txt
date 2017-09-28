@@ -1,7 +1,7 @@
 ecm_qt_declare_logging_category(kdevqmljsduchain_LOG_SRCS
     HEADER debug.h
     IDENTIFIER KDEV_QMLJS_DUCHAIN
-    CATEGORY_NAME "kdevelop.languages.qmljs.duchain"
+    CATEGORY_NAME "kdevelop.plugins.qmljs.duchain"
 )
 add_library(kdevqmljsduchain STATIC
     ${kdevqmljsduchain_LOG_SRCS}

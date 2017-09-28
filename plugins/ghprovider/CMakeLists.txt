@@ -15,7 +15,7 @@ set(kdevghprovider_PART_SRCS
 ecm_qt_declare_logging_category(kdevghprovider_PART_SRCS
     HEADER debug.h
     IDENTIFIER GHPROVIDER
-    CATEGORY_NAME "kdevelop.providers.ghprovider"
+    CATEGORY_NAME "kdevelop.plugins.ghprovider"
 )
 
 kdevplatform_add_plugin(kdevghprovider JSON kdevghprovider.json	SOURCES ${kdevghprovider_PART_SRCS})

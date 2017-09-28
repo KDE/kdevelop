@@ -9,7 +9,7 @@ add_subdirectory(codecompletion)
 ecm_qt_declare_logging_category(kdevqmljslanguagesupport_LOG_SRCS
     HEADER debug.h
     IDENTIFIER KDEV_QMLJS
-    CATEGORY_NAME "kdevelop.languages.qmljs"
+    CATEGORY_NAME "kdevelop.plugins.qmljs"
 )
 kdevplatform_add_plugin(kdevqmljslanguagesupport JSON kdevqmljs.json SOURCES
     qmljsparsejob.cpp

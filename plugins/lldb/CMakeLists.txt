@@ -15,7 +15,7 @@ set(kdevlldb_SRCS
 ecm_qt_declare_logging_category(kdevlldb_SRCS
     HEADER debuglog.h
     IDENTIFIER DEBUGGERLLDB
-    CATEGORY_NAME "kdevelop.debuggers.lldb"
+    CATEGORY_NAME "kdevelop.plugins.lldb"
 )
 
 set(kdevlldb_UI

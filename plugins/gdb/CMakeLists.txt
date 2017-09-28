@@ -29,7 +29,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-gdb-plugin.h.cmake
 ecm_qt_declare_logging_category(kdevgdb_SRCS
     HEADER debuglog.h
     IDENTIFIER DEBUGGERGDB
-    CATEGORY_NAME "kdevelop.debuggers.gdb"
+    CATEGORY_NAME "kdevelop.plugins.gdb"
 )
 set(kdevgdb_UI
     debuggertracingdialog.ui
