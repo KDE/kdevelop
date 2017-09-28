@@ -22,6 +22,9 @@
 
 #include "ideallayout.h"
 
+#include <QStyle>
+#include <QWidget>
+
 using namespace Sublime;
 
 IdealButtonBarLayout::IdealButtonBarLayout(Qt::Orientation orientation, QWidget *parent)
@@ -30,11 +33,7 @@ IdealButtonBarLayout::IdealButtonBarLayout(Qt::Orientation orientation, QWidget 
     , _height(0)
 
 {
-    if (orientation == Qt::Vertical)
-        setContentsMargins(IDEAL_LAYOUT_MARGIN, 0, IDEAL_LAYOUT_MARGIN, 0);
-    else
-        setContentsMargins(0, IDEAL_LAYOUT_MARGIN, 0, IDEAL_LAYOUT_MARGIN);
-    setSpacing(IDEAL_LAYOUT_SPACING);
+    setContentsMargins(0, 0, 0, 0);
     invalidate();
 }
 
@@ -93,6 +92,8 @@ QSize IdealButtonBarLayout::minimumSize() const
 QSize IdealButtonBarLayout::sizeHint() const
 {
     if (m_sizeHintDirty) {
+        const int buttonSpacing = this->buttonSpacing();
+
         int orientationSize = 0;
         int crossSize = 0;
 
@@ -119,7 +120,7 @@ QSize IdealButtonBarLayout::sizeHint() const
             }
             else
             {
-                orientationSize += spacing();
+                orientationSize += buttonSpacing;
             }
             orientationSize += orientationSizeHere;
             first = false;
@@ -178,8 +179,17 @@ int IdealButtonBarLayout::count() const
     return _items.count();
 }
 
+int IdealButtonBarLayout::buttonSpacing() const
+{
+    auto pw = parentWidget();
+    return pw ? pw->style()->pixelMetric(QStyle::PM_ToolBarItemSpacing) : 0;
+}
+
+
 int IdealButtonBarLayout::doVerticalLayout(const QRect &rect, bool updateGeometry) const
 {
+    const int buttonSpacing = this->buttonSpacing();
+
     int l, t, r, b;
     getContentsMargins(&l, &t, &r, &b);
     int x = rect.x() + l;
@@ -189,10 +199,10 @@ int IdealButtonBarLayout::doVerticalLayout(const QRect &rect, bool updateGeometr
     foreach (QLayoutItem *item, _items) {
         const QSize itemSizeHint = item->sizeHint();
         if (y + itemSizeHint.height() + b > rect.height()) {
-            int newX = x + currentLineWidth + spacing();
+            int newX = x + currentLineWidth + buttonSpacing;
             if (newX + itemSizeHint.width() + r <= rect.width())
             {
-                x += currentLineWidth + spacing();
+                x += currentLineWidth + buttonSpacing;
                 y = rect.y() + t;
             }
         }
@@ -202,7 +212,7 @@ int IdealButtonBarLayout::doVerticalLayout(const QRect &rect, bool updateGeometr
 
         currentLineWidth = qMax(currentLineWidth, itemSizeHint.width());
 
-        y += itemSizeHint.height() + spacing();
+        y += itemSizeHint.height() + buttonSpacing;
     }
 
     m_layoutDirty = updateGeometry;
@@ -212,6 +222,8 @@ int IdealButtonBarLayout::doVerticalLayout(const QRect &rect, bool updateGeometr
 
 int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeometry) const
 {
+    const int buttonSpacing = this->buttonSpacing();
+
     int l, t, r, b;
     getContentsMargins(&l, &t, &r, &b);
     int x = rect.x() + l;
@@ -223,7 +235,7 @@ int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeome
         if (x + itemSizeHint.width() + r > rect.width()) {
             // Run out of horizontal space. Try to move button to another
             // row.
-            int newY = y + currentLineHeight + spacing();
+            int newY = y + currentLineHeight + buttonSpacing;
             if (newY + itemSizeHint.height() + b <= rect.height())
             {
                 y = newY;
@@ -237,7 +249,7 @@ int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeome
 
         currentLineHeight = qMax(currentLineHeight, itemSizeHint.height());
 
-        x += itemSizeHint.width() + spacing();
+        x += itemSizeHint.width() + buttonSpacing;
     }
 
     m_layoutDirty = updateGeometry;

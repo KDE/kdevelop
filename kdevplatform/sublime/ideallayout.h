@@ -26,9 +26,6 @@
 
 #include "sublimedefs.h"
 
-#define IDEAL_LAYOUT_MARGIN  0
-#define IDEAL_LAYOUT_SPACING 2
-
 namespace Sublime {
 
 class IdealButtonBarLayout: public QLayout
@@ -66,6 +63,8 @@ protected:
     int doVerticalLayout(const QRect &rect, bool updateGeometry = true) const;
 
     int doHorizontalLayout(const QRect &rect, bool updateGeometry = true) const;
+
+    int buttonSpacing() const;
 
 private:
     QList<QLayoutItem *> _items;
