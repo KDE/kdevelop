@@ -226,6 +226,8 @@ public:
                 }
             }
 
+            auto restEmpty = doc->characterAt(word.end() + KTextEditor::Cursor{0, 1}) == QChar();
+
             bool didAddParentheses = false;
             if ( !funcptr && doc->characterAt(word.end()) != QLatin1Char('(') ) {
                 repl += QLatin1String("()");
@@ -237,8 +239,8 @@ public:
                 view->setCursorPosition(word.start() + KTextEditor::Cursor(0, repl.size() - 1));
             }
             auto returnTypeIntegral = f->returnType().cast<IntegralType>();
-            if ( !funcptr && returnTypeIntegral && returnTypeIntegral->dataType() == IntegralType::TypeVoid ) {
-                // function returns void -- nothing can be done with the result
+            if ( restEmpty && !funcptr && returnTypeIntegral && returnTypeIntegral->dataType() == IntegralType::TypeVoid ) {
+                // function returns void and rest of line is empty -- nothing can be done with the result
                 if ( f && f->indexedArgumentsSize() ) {
                     // we placed the cursor inside the ()
                     view->document()->insertText(view->cursorPosition() + KTextEditor::Cursor(0, 1), QStringLiteral(";"));
