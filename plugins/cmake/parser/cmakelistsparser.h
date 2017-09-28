@@ -22,9 +22,9 @@
 #ifndef CMAKELISTSPARSER_H
 #define CMAKELISTSPARSER_H
 
-#include <QList>
 #include <QMetaType>
 #include <QString>
+#include <QVector>
 
 // #include "cmakemodelitems.h"
 #include "cmListFileLexer.h"
@@ -80,7 +80,7 @@ public:
     CMakeFunctionDesc(const QString& name, const QStringList& args);
 
     QString name;
-    QList<CMakeFunctionArgument> arguments;
+    QVector<CMakeFunctionArgument> arguments;
     QString filePath;
     quint32 line;
     quint32 column;
@@ -120,7 +120,7 @@ Q_DECLARE_METATYPE( CMakeFunctionDesc )
  * @author Aleix Pol <aleixpol@gmail.com>
  */
 
-typedef QList<CMakeFunctionDesc> CMakeFileContent;
+typedef QVector<CMakeFunctionDesc> CMakeFileContent;
 
 namespace CMakeListsParser
 {

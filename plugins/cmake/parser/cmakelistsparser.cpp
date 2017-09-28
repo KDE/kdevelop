@@ -128,7 +128,7 @@ CMakeFileContent readCMakeFile(const QString & _fileName)
             {
                 haveNewline = false;
                 CMakeFunctionDesc function;
-                function.name = QString::fromLocal8Bit(token->text).toLower();
+                function.name = QString::fromLocal8Bit(token->text, token->length).toLower();
                 function.filePath = fileName;
                 function.line = token->line;
                 function.column = token->column;
@@ -178,18 +178,18 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
                 } else if(parenthesis<0)
                     return false;
                 else
-                    func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, token->line, token->column );
+                    func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text, token->length), false, token->line, token->column );
                 break;
             case cmListFileLexer_Token_ParenLeft:
                 parenthesis++;
-                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, token->line, token->column );
+                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text, token->length), false, token->line, token->column );
                 break;
             case cmListFileLexer_Token_Identifier:
             case cmListFileLexer_Token_ArgumentUnquoted:
-                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), false, token->line, token->column );
+                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text, token->length), false, token->line, token->column );
                 break;
             case cmListFileLexer_Token_ArgumentQuoted:
-                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text), true, token->line, token->column+1 );
+                func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text, token->length), true, token->line, token->column+1 );
                 break;
             case cmListFileLexer_Token_Space:
             case cmListFileLexer_Token_Newline:
@@ -224,8 +224,8 @@ bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
     if(other.arguments.count()!=arguments.count() || name!=other.name)
         return false;
 
-    QList<CMakeFunctionArgument>::const_iterator it=arguments.constBegin();
-    QList<CMakeFunctionArgument>::const_iterator itOther=other.arguments.constBegin();
+    auto it=arguments.constBegin();
+    auto itOther=other.arguments.constBegin();
     for(;it!=arguments.constEnd(); ++it, ++itOther)
     {
         if(*it!=*itOther)
