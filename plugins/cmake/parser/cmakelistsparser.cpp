@@ -204,19 +204,11 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
 
 CMakeFunctionDesc::CMakeFunctionDesc(const QString& name, const QStringList& args)
     : name(name)
-    , line(0)
-    , column(0)
-    , endLine(0)
-    , endColumn(0)
 {
     addArguments(args);
 }
 
 CMakeFunctionDesc::CMakeFunctionDesc()
-    : line(0)
-    , column(0)
-    , endLine(0)
-    , endColumn(0)
 {}
 
 bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
@@ -234,20 +226,12 @@ bool CMakeFunctionDesc::operator==(const CMakeFunctionDesc & other) const
     return true;
 }
 
-
-/*CMakeFunctionArgument::CMakeFunctionArgument(const CMakeFunctionArgument & r)
-    : value(r.value), quoted(r.quoted), filePath(r.filePath), line(r.line), column(r.column)
-{
-    value=unescapeValue(value);
-}*/
-
 CMakeFunctionArgument::CMakeFunctionArgument(const QString& v, bool q, quint32 l, quint32 c)
     : value(unescapeValue(v)), quoted(q), line(l), column(c)
 {
 }
 
 CMakeFunctionArgument::CMakeFunctionArgument(const QString& v)
-    : value(v), quoted(false), line(0), column(0)
+    : value(v)
 {
 }
-

@@ -26,7 +26,6 @@
 #include <QString>
 #include <QVector>
 
-// #include "cmakemodelitems.h"
 #include "cmListFileLexer.h"
 #include <cmakecommonexport.h>
 #include <language/editor/rangeinrevision.h>
@@ -35,7 +34,7 @@ class QStringList;
 
 struct CMakeFunctionArgument
 {
-    CMakeFunctionArgument(): value(), quoted(false), line(0), column(0) {}
+    CMakeFunctionArgument() {}
     explicit CMakeFunctionArgument(const QString& v);
     CMakeFunctionArgument(const QString& v, bool q, quint32 l = 0, quint32 c=0);
     inline bool operator == (const CMakeFunctionArgument& r) const
@@ -63,9 +62,9 @@ struct CMakeFunctionArgument
     bool isValid() const { return quoted || !value.isEmpty(); }
     
     QString value;
-    bool quoted;
-    quint32 line;
-    quint32 column;
+    bool quoted = false;
+    quint32 line = 0;
+    quint32 column = 0;
     static const QMap<QChar, QChar> scapings;
 };
 Q_DECLARE_METATYPE( CMakeFunctionArgument )
@@ -82,13 +81,10 @@ public:
     QString name;
     QVector<CMakeFunctionArgument> arguments;
     QString filePath;
-    quint32 line;
-    quint32 column;
-    quint32 endLine;
-    quint32 endColumn;
-/*  int numSpacesBeforeLeftParen;
-    int numSpacesAfterLeftParen;
-    int numSpacesBeforeRightParen; */
+    quint32 line = 0;
+    quint32 column = 0;
+    quint32 endLine = 0;
+    quint32 endColumn = 0;
 
     KDevelop::RangeInRevision nameRange() const
     { return KDevelop::RangeInRevision(line-1, column-1, line-1, column-1+name.length()); }
