@@ -399,9 +399,14 @@ void AbstractFileManagerPluginPrivate::continueWatcher(ProjectFolderItem* folder
     if ( !folder->path().isLocalFile() ) {
         return;
     }
-    Q_ASSERT(m_watchers.contains(folder->project()));
+    auto watcher = m_watchers.value(folder->project(), nullptr);
+    Q_ASSERT(watcher);
     const QString path = folder->path().toLocalFile();
-    m_watchers[folder->project()]->restartDirScan(path);
+    if (!watcher->restartDirScan(path)) {
+        // path wasn't being watched yet - can we be 100% certain of that will never happen?
+        qCWarning(FILEMANAGER) << "Folder" << path << "in project" << folder->project()->name() << "wasn't yet being watched";
+        watcher->addDir(path);
+    }
     const int idx = m_stoppedFolders.indexOf(path);
     if (idx != -1) {
         m_stoppedFolders.remove(idx);
