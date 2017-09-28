@@ -28,13 +28,13 @@ import "storage.js" as Storage
 ListView {
     id: root
 
-    /// Update interval (in minutes) in which the news feed is polled
-    property int updateInterval: 24 * 60 // 24 hours
-    /// Max age (in minutes) of a news entry so it is shown in the list view
+    /// Update interval (in seconds) in which the news feed is polled
+    property int updateInterval: 24 * 3600 // 24 hours
+    /// Max age (in seconds) of a news entry so it is shown in the list view
     /// TODO: Implement me
-    property int maxNewsAge: 3 * 30 * 24 * 60 // 3 months
-    /// Max age (in minutes) of a news entry so it is considered 'new' (thus highlighted with a bold font)
-    property int maxHighlightedNewsAge: 30 * 24 * 60 // a month
+    property int maxNewsAge: 3 * 30 * 24 * 3600 // 3 months
+    /// Max age (in seconds) of a news entry so it is considered 'new' (thus highlighted with a bold font)
+    property int maxHighlightedNewsAge: 30 * 24 * 3600 // a month
 
     readonly property string feedUrl: "https://www.kdevelop.org/news/feed"
     readonly property bool loading: newsFeedSyncModel.status === XmlListModel.Loading
@@ -59,8 +59,8 @@ ListView {
         return map;
     }
 
-    function minutesSince(date) {
-        return !isNaN(date) ? Math.floor(Number((new Date() - date)) / 60000) : -1;
+    function secondsSince(date) {
+        return !isNaN(date) ? Math.floor(Number((new Date() - date)) / 1000) : -1;
     }
 
     function loadEntriesFromCache() {
@@ -122,8 +122,9 @@ ListView {
         id: feedDelegate
 
         readonly property date publicationDate: parsePubDate(model.pubDate)
-        readonly property int ageInMinutes: minutesSince(publicationDate)
-        readonly property bool isNew: ageInMinutes != -1 && ageInMinutes < maxHighlightedNewsAge
+        /// in seconds
+        readonly property int age: secondsSince(publicationDate)
+        readonly property bool isNew: age != -1 && age < maxHighlightedNewsAge
         readonly property string dateString: isNaN(publicationDate.getDate()) ? model.pubDate : publicationDate.toLocaleDateString()
 
         x: 10
@@ -185,8 +186,8 @@ ListView {
         onTriggered: {
             // only fetch feed if items are out of date
             var lastFetchDate = new Date(JSON.parse(Storage.get("newsFeedLastFetchDate", null)));
-            if (minutesSince(lastFetchDate) > root.updateInterval) {
-                console.log("Last fetch of news feed was on " + lastFetchDate + ", updating now");
+            console.log("Last fetch of news feed was on " + lastFetchDate);
+            if (secondsSince(lastFetchDate) > root.updateInterval) {
                 root.fetchFeed();
             }
         }
