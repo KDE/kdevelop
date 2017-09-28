@@ -148,23 +148,17 @@ ListView {
         }
     }
 
-    BusyIndicator {
-        id: busyIndicator
-
-        height: newsHeading.height
-
-        running: root.loading
-    }
-
     Label {
         id: placeHolderLabel
 
         x: 10
         width: parent.width - 2*x
 
-        text: i18n("No recent news")
+        text: root.loading ?
+            i18n("Fetching feeds...") :
+            i18n("No recent news")
         color: disabledPalette.windowText
-        visible: root.count === 0 && !root.loading
+        visible: root.count === 0
 
         Behavior on opacity { NumberAnimation {} }
     }
