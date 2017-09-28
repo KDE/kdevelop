@@ -2,7 +2,7 @@ add_subdirectory(p4clientstub)
 ecm_qt_declare_logging_category(kdevperforce_LOG_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_PERFORCE
-    CATEGORY_NAME "kdevplatform.plugins.perforce"
+    CATEGORY_NAME "kdevelop.plugins.perforce"
 )
 set(kdevperforce_PART_SRCS
     perforceplugin.cpp

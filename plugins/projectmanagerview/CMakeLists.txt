@@ -15,7 +15,7 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
 ecm_qt_declare_logging_category(kdevprojectmanagerview_PLUGIN_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_PROJECTMANAGERVIEW
-    CATEGORY_NAME "kdevplatform.plugins.projectmanagerview"
+    CATEGORY_NAME "kdevelop.plugins.projectmanagerview"
 )
 ki18n_wrap_ui( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
 

@@ -3,7 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustomdefinesandincludes\")
 ecm_qt_declare_logging_category(kdevdefinesandincludesmanager_LOG_SRCS
     HEADER debug.h
     IDENTIFIER DEFINESANDINCLUDES
-    CATEGORY_NAME "kdevelop.definesandincludes"
+    CATEGORY_NAME "kdevelop.plugins.definesandincludes"
 )
 
 if(BUILD_TESTING)

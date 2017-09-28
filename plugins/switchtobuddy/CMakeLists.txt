@@ -9,7 +9,7 @@ set(kdevswitchtobuddy_PART_SRCS
 ecm_qt_declare_logging_category(kdevswitchtobuddy_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_SWITCHTOBUDDY
-    CATEGORY_NAME "kdevplatform.plugins.switchtobuddy"
+    CATEGORY_NAME "kdevelop.plugins.switchtobuddy"
 )
 qt5_add_resources(kdevswitchtobuddy_PART_SRCS kdevswitchtobuddy.qrc)
 kdevplatform_add_plugin(kdevswitchtobuddy JSON kdevswitchtobuddy.json SOURCES ${kdevswitchtobuddy_PART_SRCS})

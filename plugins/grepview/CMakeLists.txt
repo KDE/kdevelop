@@ -5,7 +5,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevgrepview\")
 ecm_qt_declare_logging_category(kdevgrepview_LOG_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_GREPVIEW
-    CATEGORY_NAME "kdevplatform.plugins.grepview"
+    CATEGORY_NAME "kdevelop.plugins.grepview"
 )
 
 set(kdevgrepview_PART_SRCS

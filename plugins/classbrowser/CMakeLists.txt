@@ -17,7 +17,7 @@ set(kdevclassbrowser_PART_SRCS
 ecm_qt_declare_logging_category(kdevclassbrowser_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_CLASSBROWSER
-    CATEGORY_NAME "kdevplatform.plugins.classbrowser"
+    CATEGORY_NAME "kdevelop.plugins.classbrowser"
 )
 qt5_add_resources(kdevclassbrowser_PART_SRCS kdevclassbrowser.qrc)
 kdevplatform_add_plugin(kdevclassbrowser JSON kdevclassbrowser.json SOURCES ${kdevclassbrowser_PART_SRCS})
