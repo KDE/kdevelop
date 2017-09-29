@@ -1,12 +1,6 @@
-# kdevplatform version
-set(KDEVPLATFORM_VERSION_MAJOR 5)
-set(KDEVPLATFORM_VERSION_MINOR 1)
-set(KDEVPLATFORM_VERSION_PATCH 42)
-set(KDEVPLATFORM_VERSION "${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}")
-
 # kdevplatform soversion
 # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
-set(KDEVPLATFORM_SOVERSION 52)
+set(KDEVPLATFORM_SOVERSION ${KDEVELOP_SOVERSION})
 
 # Increase this to reset incompatible item-repositories
 set(KDEV_ITEMREPOSITORY_VERSION 87)
@@ -46,7 +40,7 @@ configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cm
                               INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
 
-ecm_setup_version(${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}
+ecm_setup_version(PROJECT
                   VARIABLE_PREFIX KDEVPLATFORM
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdevplatform_version.h"
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
