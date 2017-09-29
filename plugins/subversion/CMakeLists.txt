@@ -45,7 +45,7 @@ set(kdevsubversion_PART_SRCS
 ecm_qt_declare_logging_category(kdevsubversion_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_SVN
-    CATEGORY_NAME "kdevplatform.plugins.svn"
+    CATEGORY_NAME "kdevelop.plugins.svn"
 )
 
 set(kdevsubversion_PART_UI

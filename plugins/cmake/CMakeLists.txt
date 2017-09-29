@@ -13,7 +13,7 @@ add_subdirectory(icons)
 ecm_qt_declare_logging_category(cmake_LOG_SRCS
     HEADER debug.h
     IDENTIFIER CMAKE
-    CATEGORY_NAME "kdevelop.projectmanagers.cmake"
+    CATEGORY_NAME "kdevelop.plugins.cmake"
 )
 
 set( cmakecommon_SRCS

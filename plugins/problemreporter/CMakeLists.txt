@@ -14,7 +14,7 @@ set(kdevproblemreporter_PART_SRCS
 ecm_qt_declare_logging_category(kdevproblemreporter_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_PROBLEMREPORTER
-    CATEGORY_NAME "kdevplatform.plugins.problemreporter"
+    CATEGORY_NAME "kdevelop.plugins.problemreporter"
 )
 qt5_add_resources(kdevproblemreporter_PART_SRCS kdevproblemreporter.qrc)
 kdevplatform_add_plugin(kdevproblemreporter JSON kdevproblemreporter.json SOURCES ${kdevproblemreporter_PART_SRCS})

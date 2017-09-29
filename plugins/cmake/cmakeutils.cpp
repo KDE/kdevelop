@@ -716,6 +716,10 @@ QVector<Test> importTestSuites(const Path &buildDir)
                 continue;
             }
             Test &test = tests.last();
+            qWarning() << "ARGS";
+            for (auto arg : entry.arguments) {
+                qWarning() << arg.value;
+            }
             for (int i = 2; i < entry.arguments.count(); i += 2)
                 test.properties[entry.arguments[i].value] = entry.arguments[i + 1].value;
         }

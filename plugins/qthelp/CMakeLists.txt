@@ -3,7 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevqthelp\")
 ecm_qt_declare_logging_category(kdevqthelp_LOG_SRCS
     HEADER debug.h
     IDENTIFIER QTHELP
-    CATEGORY_NAME "kdevelop.documentation.qthelp"
+    CATEGORY_NAME "kdevelop.plugins.qthelp"
 )
 set(kdevqthelp_SRCS
     qthelpplugin.cpp

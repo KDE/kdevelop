@@ -11,7 +11,7 @@ set(kdevcontextbrowser_PART_SRCS
 ecm_qt_declare_logging_category(kdevcontextbrowser_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_CONTEXTBROWSER
-    CATEGORY_NAME "kdevplatform.plugins.contextbrowser"
+    CATEGORY_NAME "kdevelop.plugins.contextbrowser"
 )
 qt5_add_resources(kdevcontextbrowser_PART_SRCS kdevcontextbrowser.qrc)
 kdevplatform_add_plugin(kdevcontextbrowser JSON kdevcontextbrowser.json SOURCES ${kdevcontextbrowser_PART_SRCS})

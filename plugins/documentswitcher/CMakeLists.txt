@@ -10,7 +10,7 @@ set(kdevdocumentswitcher_PART_SRCS
 ecm_qt_declare_logging_category(kdevdocumentswitcher_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_DOCUMENTSWITCHER
-    CATEGORY_NAME "kdevplatform.plugins.documentswitcher"
+    CATEGORY_NAME "kdevelop.plugins.documentswitcher"
 )
 
 qt5_add_resources(kdevdocumentswitcher_PART_SRCS kdevdocumentswitcher.qrc)

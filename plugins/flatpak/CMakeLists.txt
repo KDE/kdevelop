@@ -5,7 +5,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevflatpak\")
 ecm_qt_declare_logging_category(flatpakplugin_SRCS
     HEADER debug_flatpak.h
     IDENTIFIER FLATPAK
-    CATEGORY_NAME kdevplatform.plugins.flatpak
+    CATEGORY_NAME "kdevelop.plugins.flatpak"
 )
 
 qt5_add_resources(flatpakplugin_SRCS kdevflatpakplugin.qrc)

@@ -16,7 +16,7 @@ set( projectfilter_SRCS
 ecm_qt_declare_logging_category(projectfilter_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_PROJECTFILTER
-    CATEGORY_NAME "kdevplatform.plugins.projectfilter"
+    CATEGORY_NAME "kdevelop.plugins.projectfilter"
 )
 ki18n_wrap_ui(projectfilter_SRCS projectfiltersettings.ui)
 kconfig_add_kcfg_files(projectfilter_SRCS projectfiltersettings.kcfgc)

@@ -20,7 +20,7 @@ set(kdevquickopen_PART_SRCS
 ecm_qt_declare_logging_category(kdevquickopen_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_QUICKOPEN
-    CATEGORY_NAME "kdevplatform.plugins.quickopen"
+    CATEGORY_NAME "kdevelop.plugins.quickopen"
 )
 ki18n_wrap_ui(kdevquickopen_PART_SRCS
   quickopenwidget.ui

@@ -5,7 +5,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevcvs\")
 ecm_qt_declare_logging_category(kdevcvs_LOG_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_CVS
-    CATEGORY_NAME "kdevplatform.plugins.cvs"
+    CATEGORY_NAME "kdevelop.plugins.cvs"
 )
 
 set(kdevcvs_PART_SRCS

@@ -47,7 +47,7 @@ void DeclarationBuilder::startVisiting(CMakeContentIterator* node)
             CMakeFunctionArgument arg = func.arguments.first();
             FunctionType::Ptr funcType(new FunctionType);
 
-            QList<CMakeFunctionArgument>::const_iterator it=func.arguments.constBegin()+1, itEnd = func.arguments.constEnd();
+            auto it=func.arguments.constBegin()+1, itEnd = func.arguments.constEnd();
             for (; it!=itEnd; ++it)
             {
                 DelayedType::Ptr delayed(new DelayedType);

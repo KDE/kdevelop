@@ -9,7 +9,7 @@ set(kdevtestview_PLUGIN_SRCS
 ecm_qt_declare_logging_category(kdevtestview_PLUGIN_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_TESTVIEW
-    CATEGORY_NAME "kdevplatform.plugins.testview"
+    CATEGORY_NAME "kdevelop.plugins.testview"
 )
 qt5_add_resources(kdevtestview_PLUGIN_SRCS kdevtestview.qrc)
 kdevplatform_add_plugin(kdevtestview JSON kdevtestview.json SOURCES ${kdevtestview_PLUGIN_SRCS})

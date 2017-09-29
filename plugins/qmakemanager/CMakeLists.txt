@@ -3,7 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevqmakemanager\")
 ecm_qt_declare_logging_category(qmakecommon_LOG_SRCS
     HEADER debug.h
     IDENTIFIER KDEV_QMAKE
-    CATEGORY_NAME "kdevelop.projectmanagers.qmake"
+    CATEGORY_NAME "kdevelop.plugins.qmake"
 )
 
 add_subdirectory(parser)

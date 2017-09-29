@@ -10,7 +10,7 @@ set(kdevmakebuilder_SRCS
 ecm_qt_declare_logging_category(kdevmakebuilder_SRCS
     HEADER debug.h
     IDENTIFIER KDEV_MAKEBUILDER
-    CATEGORY_NAME "kdevelop.projectbuilders.makebuilder"
+    CATEGORY_NAME "kdevelop.plugins.makebuilder"
 )
 ki18n_wrap_ui(kdevmakebuilder_SRCS makeconfig.ui)
 kconfig_add_kcfg_files( kdevmakebuilder_SRCS makebuilderconfig.kcfgc )

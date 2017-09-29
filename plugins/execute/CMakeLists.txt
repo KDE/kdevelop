@@ -12,7 +12,7 @@ set(kdevexecute_PART_SRCS
 ecm_qt_declare_logging_category(kdevexecute_PART_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_EXECUTE
-    CATEGORY_NAME "kdevplatform.plugins.execute"
+    CATEGORY_NAME "kdevelop.plugins.execute"
 )
 
 ki18n_wrap_ui( kdevexecute_PART_SRCS nativeappconfig.ui)

@@ -24,7 +24,7 @@
 #include <language/duchain/builders/abstractcontextbuilder.h>
 #include <cmakelistsparser.h>
 
-typedef QListIterator<CMakeFunctionDesc> CMakeContentIterator;
+typedef QVectorIterator<CMakeFunctionDesc> CMakeContentIterator;
 
 class ContextBuilder : public KDevelop::AbstractContextBuilder<CMakeContentIterator, CMakeFunctionDesc>
 {

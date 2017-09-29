@@ -17,6 +17,9 @@
 */
 
 #include "uihelper.h"
+
+#include "debug.h"
+
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <KParts/MainWindow>
@@ -42,7 +45,7 @@ QAction* findActionRec(const QStringList& path, const QList<QAction*>& actions)
             else if(a->menu())
                 return findActionRec(newPath, a->menu()->actions());
             else
-                qDebug() << "shouldn't get here:" << path;
+                qCDebug(PLUGIN_WELCOMEPAGE) << "shouldn't get here:" << path;
         }
     }
     

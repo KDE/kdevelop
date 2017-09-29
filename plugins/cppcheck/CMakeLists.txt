@@ -17,7 +17,7 @@ set(kdevcppcheck_core_SRCS
 ecm_qt_declare_logging_category(kdevcppcheck_core_SRCS
     HEADER debug.h
     IDENTIFIER KDEV_CPPCHECK
-    CATEGORY_NAME "kdevelop.analyzers.cppcheck"
+    CATEGORY_NAME "kdevelop.plugins.cppcheck"
 )
 kconfig_add_kcfg_files(kdevcppcheck_core_SRCS
     config/globalsettings.kcfgc

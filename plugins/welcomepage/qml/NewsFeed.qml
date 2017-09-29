@@ -23,6 +23,8 @@ import QtQuick.Controls 1.3
 import QtQuick.Layouts 1.2
 import QtQuick.XmlListModel 2.0
 
+import org.kde.kdevplatform 1.0
+
 import "storage.js" as Storage
 
 ListView {
@@ -106,7 +108,7 @@ ListView {
 
                 Storage.set("newsFeedLastFetchDate", JSON.stringify(new Date()));
             } else if (status == XmlListModel.Error) {
-                console.log("Failed to fetch news feed: " + errorString());
+                Logger.log("Failed to fetch news feed: " + errorString());
             }
         }
     }
@@ -170,7 +172,7 @@ ListView {
     }
 
     function fetchFeed() {
-        console.log("Fetching news feed")
+        Logger.log("Fetching news feed")
 
         newsFeedSyncModel.active = true
         newsFeedSyncModel.reload()
@@ -186,7 +188,7 @@ ListView {
         onTriggered: {
             // only fetch feed if items are out of date
             var lastFetchDate = new Date(JSON.parse(Storage.get("newsFeedLastFetchDate", null)));
-            console.log("Last fetch of news feed was on " + lastFetchDate);
+            Logger.log("Last fetch of news feed was on " + lastFetchDate);
             if (secondsSince(lastFetchDate) > root.updateInterval) {
                 root.fetchFeed();
             }
