@@ -7,12 +7,11 @@ set(KDEVPLATFORM_VERSION "${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_M
 # Increase this to reset incompatible item-repositories
 set(KDEV_ITEMREPOSITORY_VERSION 87)
 
-# library version / SO version
-set(KDEVPLATFORM_LIB_SOVERSION 52)
-
 set(KDevPlatform_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(KDevPlatform_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
+
 set(CMAKE_MODULE_PATH ${KDevPlatform_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")
 
 include(KDevPlatformMacros)
 include(KDevPlatformMacrosInternal)
@@ -34,6 +33,22 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-kdevplatform.h )
 
 include_directories(${KDevPlatform_SOURCE_DIR} ${KDevPlatform_BINARY_DIR})
+
+if(BUILD_TESTING)
+  set(KDEV_FIND_DEP_QT5TEST "find_dependency(Qt5Test \"${QT_MIN_VERSION}\")")
+endif()
+configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
+                              "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
+                              INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
+)
+
+ecm_setup_version(${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}
+                  VARIABLE_PREFIX KDEVPLATFORM
+                  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdevplatform_version.h"
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
+                  # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
+                  SOVERSION ${KDEVPLATFORM_VERSION_MAJOR}${KDEVPLATFORM_VERSION_MINOR} # This sets KDEVPLATFORM_SOVERSION
+)
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
 if(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug"
@@ -60,21 +75,6 @@ if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevPlatform")
-
-if(BUILD_TESTING)
-  set(KDEV_FIND_DEP_QT5TEST "find_dependency(Qt5Test \"${QT_MIN_VERSION}\")")
-endif()
-configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevPlatformConfig.cmake.in"
-                              "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfig.cmake"
-                              INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
-)
-
-ecm_setup_version(${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}
-                  VARIABLE_PREFIX KDEVPLATFORM
-                  VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdevplatform_version.h"
-                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
-                  SOVERSION ${KDEVPLATFORM_LIB_SOVERSION})
 
 install( FILES
         "${KDevPlatform_BINARY_DIR}/kdevplatform_version.h"
