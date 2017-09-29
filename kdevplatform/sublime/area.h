@@ -39,7 +39,7 @@ class View;
 /**
 @short Area - the universal view container
 
-Area contains views and toolviews, knows about their positions
+Area contains views and tool views, knows about their positions
 and provides functionality to add new (tool)views and remove existing.
 
 Area takes care of all placement/configuration details so that
@@ -138,20 +138,20 @@ public:
     method will never return 0.*/
     RootAreaIndex *rootIndex() const;
 
-    /**Adds the toolview to the area. Area will use its configuration and restore
-    the proper position for the toolview when necessary. If it has no configuration
+    /**Adds the tool view to the area. Area will use its configuration and restore
+    the proper position for the tool view when necessary. If it has no configuration
     for this view, it will use @p defaultPosition.*/
     void addToolView(View *toolView, Position defaultPosition);
 
-    /**Removes the toolview from the area.*/
+    /**Removes the tool view from the area.*/
     View* removeToolView(View *toolView);
 
-    /**Moves the toolview to a different position.  */
+    /**Moves the tool view to a different position.  */
     void moveToolView(View *toolView, Position newPosition);
 
     /**Raise tool view.*/
     void raiseToolView(View *toolView);
-    /**@return the list of toolviews in the area. No particular sort order is guaranteed.*/
+    /**@return the list of tool views in the area. No particular sort order is guaranteed.*/
     QList<View*> &toolViews() const;
     /**@return the current position of @p toolView in the area.*/
     Position toolViewPosition(View *toolView) const;
@@ -183,7 +183,7 @@ public:
     
     /**Walker mode to determine the behavior of area walkers.*/
     enum WalkerMode {
-        StopWalker,       /**< Stop after processing this area index or toolview */
+        StopWalker,       /**< Stop after processing this area index or tool view */
         ContinueWalker    /**< Continue walking */
     };
 
@@ -209,7 +209,7 @@ public:
     template <typename Operator>
     void walkViews(Operator &op, AreaIndex *index);
 
-    /**Walks the list of toolviews. The order in which toolviews are walked is not specified.
+    /**Walks the list of tool views. The order in which tool views are walked is not specified.
 
     Operator should be the class with <i>bool operator()(View *view, Sublime::Position position)</i>
     method. That method should return Area::StopWalker if the walker has to stop at current index
@@ -250,13 +250,13 @@ Q_SIGNALS:
     void aboutToRemoveView(Sublime::AreaIndex*, Sublime::View*);
     /**Emitted when a view was removed from the area.*/
     void viewRemoved(Sublime::AreaIndex*, Sublime::View*);
-    /**Emitted when a new toolview is added to the area.*/
+    /**Emitted when a new tool view is added to the area.*/
     void toolViewAdded(Sublime::View*, Sublime::Position);
-    /**Emitted when a toolview is requesting to be raised.*/
+    /**Emitted when a tool view is requesting to be raised.*/
     void requestToolViewRaise(Sublime::View*);
-    /**Emitted when a toolview is going to be removed from the area.*/
+    /**Emitted when a tool view is going to be removed from the area.*/
     void aboutToRemoveToolView(Sublime::View*, Sublime::Position);
-    /**Emitted when a toolview is moved to a different position.*/
+    /**Emitted when a tool view is moved to a different position.*/
     void toolViewMoved(Sublime::View*, Sublime::Position);
     /**Emitted before the working-set is changed.*/
     void changingWorkingSet(Sublime::Area* area, QString from, QString to);

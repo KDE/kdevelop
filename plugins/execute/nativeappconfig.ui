@@ -191,7 +191,7 @@
         <item>
          <widget class="QCheckBox" name="runInTerminal">
           <property name="toolTip">
-           <string>&lt;p&gt;By default applications will be run in the background and only their output will be displayed in a toolview. This makes it impossible to interact with applications requiring user input from a terminal emulator. To run such applications, you should use an external terminal.&lt;/p&gt;</string>
+           <string>&lt;p&gt;By default applications will be run in the background and only their output will be displayed in a tool view. This makes it impossible to interact with applications requiring user input from a terminal emulator. To run such applications, you should use an external terminal.&lt;/p&gt;</string>
           </property>
           <property name="text">
            <string>Use external terminal:</string>

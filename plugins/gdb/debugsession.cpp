@@ -67,12 +67,12 @@ DebugSession::DebugSession(CppDebuggerPlugin *plugin)
     m_variableController = new VariableController(this);
     m_frameStackModel = new GdbFrameStackModel(this);
 
-    if (m_plugin) m_plugin->setupToolviews();
+    if (m_plugin) m_plugin->setupToolViews();
 }
 
 DebugSession::~DebugSession()
 {
-    if (m_plugin) m_plugin->unloadToolviews();
+    if (m_plugin) m_plugin->unloadToolViews();
 }
 
 void DebugSession::setAutoDisableASLR(bool enable)

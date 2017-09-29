@@ -79,8 +79,8 @@ protected:
 
     void ensureDebuggerListening() override;
 
-    void setupToolviews();
-    void unloadToolviews();
+    void setupToolViews();
+    void unloadToolViews();
 
 private Q_SLOTS:
     void handleFileExecAndSymbols(const MI::ResultRecord &r);

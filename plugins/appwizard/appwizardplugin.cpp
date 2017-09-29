@@ -131,7 +131,7 @@ void vcsError(const QString &errorMsg, QTemporaryDir &tmpdir, const QUrl &dest, 
     QString displayDetails = details;
     if (displayDetails.isEmpty())
     {
-        displayDetails = i18n("Please see the Version Control toolview");
+        displayDetails = i18n("Please see the Version Control tool view.");
     }
     KMessageBox::detailedError(nullptr, errorMsg, displayDetails, i18n("Version Control System Error"));
     KIO::del(dest, KIO::HideProgressInfo)->exec();

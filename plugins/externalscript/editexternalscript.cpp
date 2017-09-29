@@ -105,7 +105,7 @@ EditExternalScript::EditExternalScript(ExternalScriptItem* item, QWidget* parent
   saveCombo->setToolTip( tooltip );
 
   tooltip = i18n(
-    "<p>Defines whether the output of the script should be shown in a toolview.</p>"
+    "<p>Defines whether the output of the script should be shown in a tool view.</p>"
   );
   showOutputBox->setToolTip( tooltip );
   tooltip = i18n(

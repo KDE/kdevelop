@@ -109,14 +109,14 @@ DebugSession::DebugSession(LldbDebuggerPlugin *plugin)
     m_variableController = new VariableController(this);
     m_frameStackModel = new LldbFrameStackModel(this);
 
-    if (m_plugin) m_plugin->setupToolviews();
+    if (m_plugin) m_plugin->setupToolViews();
 
     connect(this, &DebugSession::stateChanged, this, &DebugSession::handleSessionStateChange);
 }
 
 DebugSession::~DebugSession()
 {
-    if (m_plugin) m_plugin->unloadToolviews();
+    if (m_plugin) m_plugin->unloadToolViews();
 }
 
 BreakpointController *DebugSession::breakpointController() const

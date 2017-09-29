@@ -42,13 +42,13 @@ class StandardOutputViewTest: public QObject
 {
     Q_OBJECT
 private:
-    OutputWidget* toolviewPointer(const QString& toolviewTitle);
+    OutputWidget* toolViewPointer(const QString& toolViewTitle);
     KDevelop::TestCore* m_testCore;
     KDevelop::IOutputView* m_stdOutputView;
     KDevelop::UiController* m_controller;
-    int toolviewId;
+    int toolViewId;
     int outputId[5];
-    static const QString toolviewTitle;
+    static const QString toolViewTitle;
 
 private Q_SLOTS:
     void initTestCase();

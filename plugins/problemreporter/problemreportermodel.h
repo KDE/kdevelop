@@ -35,7 +35,7 @@ class QTimer;
 /**
  * @brief ProblemModel subclass that retrieves the problems from DUChain.
  *
- * Provides a ProblemModel interface so these problems can be shown in the Problems toolview.
+ * Provides a ProblemModel interface so these problems can be shown in the Problems tool view.
  */
 class ProblemReporterModel : public KDevelop::ProblemModel
 {

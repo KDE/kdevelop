@@ -81,7 +81,7 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
 void IdealController::addView(Qt::DockWidgetArea area, View* view)
 {
     IdealDockWidget *dock = new IdealDockWidget(this, m_mainWindow);
-    // dock object name is used to store toolview settings
+    // dock object name is used to store tool view settings
     QString dockObjectName = view->document()->title();
     // support different configuration for same docks opened in different areas
     if (m_mainWindow->area())
@@ -155,7 +155,7 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         // this event can happen even when dock changes its location within the same area
         // usecases:
         // 1) user drags to the same area
-        // 2) user rearranges toolviews inside the same area
+        // 2) user rearranges tool views inside the same area
         // 3) state restoration shows the dock widget
 
         // in 3rd case we need to show dock if we don't want it to be shown
@@ -187,7 +187,7 @@ void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
         }
         lastDockWidget[area] = dock;
 
-        // after drag, the toolview loses focus, so focus it again
+        // after drag, the tool view loses focus, so focus it again
         dock->setFocus(Qt::ShortcutFocusReason);
 
         m_docks->addAction(action);
@@ -233,10 +233,10 @@ void IdealController::raiseView(View* view, RaiseMode mode)
     /// @todo GroupWithOtherViews is disabled for now by forcing "mode = HideOtherViews".
     ///       for the release of KDevelop 4.3.
     ///       Reason: Inherent bugs which need significant changes to be fixed.
-    ///       Example: Open two equal toolviews (for example 2x konsole),
+    ///       Example: Open two equal tool views (for example 2x konsole),
     ///                activate one, switch area, switch back, -> Both are active instead of one.
     ///       The problem is that views are identified purely by their factory-id, which is equal
-    ///       for toolviews of the same type.
+    ///       for tool views of the same type.
     mode = HideOtherViews;
 
     QAction* action = m_view_to_action.value(view);
@@ -247,7 +247,7 @@ void IdealController::raiseView(View* view, RaiseMode mode)
     action->setProperty("raise", mode);
     action->setChecked(true);
     // TODO: adymo: hack: focus needs to stay inside the previously
-    // focused widget (setChecked will focus the toolview)
+    // focused widget (setChecked will focus the tool view)
     if (focusWidget)
         focusWidget->setFocus(Qt::ShortcutFocusReason);
 }
@@ -330,7 +330,7 @@ void IdealController::removeView(View* view, bool nondestructive)
 
     QWidget *viewParent = view->widget()->parentWidget();
     IdealDockWidget *dock = qobject_cast<IdealDockWidget *>(viewParent);
-    if (!dock) { // toolviews with a toolbar live in a QMainWindow which lives in a Dock
+    if (!dock) { // tool views with a toolbar live in a QMainWindow which lives in a Dock
         Q_ASSERT(qobject_cast<QMainWindow*>(viewParent));
         viewParent = viewParent->parentWidget();
         dock = qobject_cast<IdealDockWidget*>(viewParent);
@@ -405,7 +405,7 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
     if (!show) {
         hideDocks(bar);
     } else {
-        // open the last opened toolview (or the first one) and focus it
+        // open the last opened tool view (or the first one) and focus it
         if (lastDock) {
             if (QAction *action = m_dockwidget_to_action.value(lastDock))
                 action->setChecked(show);

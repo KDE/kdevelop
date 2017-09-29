@@ -100,7 +100,7 @@ void LldbDebuggerPlugin::setupExecutePlugin(KDevelop::IPlugin* plugin, bool load
     }
 }
 
-void LldbDebuggerPlugin::setupToolviews()
+void LldbDebuggerPlugin::setupToolViews()
 {
     m_consoleFactory = new DebuggerToolFactory<NonInterruptDebuggerConsoleView>(this,
                             QStringLiteral("org.kdevelop.debugger.LldbConsole"), Qt::BottomDockWidgetArea);
@@ -112,10 +112,10 @@ void LldbDebuggerPlugin::setupToolviews()
     */
 }
 
-void LldbDebuggerPlugin::unloadToolviews()
+void LldbDebuggerPlugin::unloadToolViews()
 {
     if (m_consoleFactory) {
-        qCDebug(DEBUGGERLLDB) << "Removing toolview";
+        qCDebug(DEBUGGERLLDB) << "Removing tool view";
         core()->uiController()->removeToolView(m_consoleFactory);
         m_consoleFactory = nullptr;
     }

@@ -100,7 +100,7 @@ class KDEVPLATFORMVCS_EXPORT IPatchReview
         virtual ~IPatchReview();
 
         enum ReviewMode {
-            OpenAndRaise //Opens the related files in the review area, switches to that area, and raises the patch-review toolview
+            OpenAndRaise ///< Opens the related files in the review area, switches to that area, and raises the patch-review tool view
         };
         ///Starts a review on the patch: Opens the patch and the files within the review area
         virtual void startReview(IPatchSource* patch, ReviewMode mode = OpenAndRaise) = 0;

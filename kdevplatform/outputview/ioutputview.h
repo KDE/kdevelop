@@ -62,8 +62,8 @@ public:
     enum ViewType
     {
         OneView      = 0 /**< there's only one outputview, newly registered outputs will replace existing ones */,
-        HistoryView  = 1 /**< The toolview will have a history with forward/backward buttons */,
-        MultipleView = 2 /**< show multiples outputs in a toolview at the same time */
+        HistoryView  = 1 /**< The tool view will have a history with forward/backward buttons */,
+        MultipleView = 2 /**< show multiples outputs in a tool view at the same time */
     };
 
     enum StandardToolView
@@ -78,22 +78,22 @@ public:
     virtual ~IOutputView();
 
     /**
-     * fetch the identifier for one of the standard toolviews
-     * This will automatically create the toolview if it doesn't exist yet
-     * @param view the standard toolview to get the identifier for
-     * @returns the identifier for the standard toolview
+     * Fetch the identifier for one of the standard tool views.
+     * This will automatically create the tool view if it doesn't exist yet
+     * @param view the standard tool view to get the identifier for
+     * @returns the identifier for the standard tool view
      */
     virtual int standardToolView( StandardToolView view ) = 0;
 
     /**
-     * Register a new toolview for output with the given title, behaviour and type
-     * If there already exists a toolview with this title and type return the existing id
-     * @param title the Title to be displayed on the toolview
+     * Register a new tool view for output with the given title, behaviour and type.
+     * If there already exists a tool view with this title and type return the existing id
+     * @param title the Title to be displayed on the tool view
      * @param type the type of view that should be created
-     * @param icon the icon of the toolview
-     * @param option the options of the toolview
+     * @param icon the icon of the tool view
+     * @param option the options of the tool view
      * @param actionList list of actions adding to the toolbar
-     * @returns an toolview id that identifies the new view and is used in the other
+     * @returns an tool view id that identifies the new view and is used in the other
      *          methods
      */
     virtual int registerToolView( const QString& title, ViewType type = OneView,
@@ -101,14 +101,14 @@ public:
                                   const QList<QAction*>& actionList = QList<QAction*>()) = 0;
 
     /**
-     * Register a new output view in a given toolview. How this new view is created depends
-     * on the type of the toolview.
-     * @param toolviewId the id of the toolview, created by registerToolView
-     * @param title the title to use for the new output in the toolview
+     * Register a new output view in a given tool view. How this new view is created depends
+     * on the type of the tool view.
+     * @param toolViewId the id of the tool view, created by registerToolView
+     * @param title the title to use for the new output in the tool view
      * @param behaviour the Behaviour of the output
      * @returns the id of the output to supply to the other methods
      */
-    virtual int registerOutputInToolView( int toolviewId, const QString& title,
+    virtual int registerOutputInToolView( int toolViewId, const QString& title,
                                           Behaviours behaviour = AllowUserClose ) = 0;
 
     /**
@@ -141,14 +141,14 @@ public:
     virtual void setTitle( int outputId, const QString& title ) = 0;
 
     /**
-     * remove a toolview, don't forget to emit toolViewRemoved when you implement this
+     * Remove a tool view, don't forget to emit toolViewRemoved when you implement this.
      *
-     * @param toolviewId identifies the view to remove
+     * @param toolViewId identifies the view to remove
      */
-    virtual void removeToolView( int toolviewId ) = 0;
+    virtual void removeToolView(int toolViewId) = 0;
 
     /**
-     * remove an output view from a toolview. Don't forget to emit outputRemoved
+     * Remove an output view from a tool view. Don't forget to emit outputRemoved
      * when you implement this.
      * @param outputId the id of the outputview to remove
      */
@@ -156,19 +156,19 @@ public:
 
 Q_SIGNALS:
     /**
-     * emitted after a toolview was removed
+     * Emitted after a tool view was removed.
      *
-     * @param toolviewId identifies the removed toolview
+     * @param toolViewId identifies the removed tool view
      */
-    void toolViewRemoved( int toolviewId );
+    void toolViewRemoved(int toolViewId);
 
     /**
-     * emitted after a toolview was removed
+     * Emitted after a tool view was removed.
      *
-     * @param toolviewId identifies the removed toolview
+     * @param toolViewId identifies the removed tool view
      * @param outputId identifies the removed output
      */
-    void outputRemoved( int toolviewId, int outputId );
+    void outputRemoved(int toolViewId, int outputId);
 };
 
 } // namespace KDevelop

@@ -59,8 +59,8 @@ public:
     void unload() override;
 
     DebugSession *createSession() override;
-    void unloadToolviews() override;
-    void setupToolviews() override;
+    void unloadToolViews() override;
+    void setupToolViews() override;
 
 private:
     void setupExecutePlugin(KDevelop::IPlugin* plugin, bool load);

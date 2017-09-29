@@ -75,13 +75,12 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
 
 void StandardOutputView::removeSublimeView( Sublime::View* v )
 {
-    foreach( ToolViewData* d, m_toolviews )
-    {
+    foreach (ToolViewData* d, m_toolViews) {
         if( d->views.contains(v) )
         {
             if( d->views.count() == 1 )
             {
-                m_toolviews.remove( d->toolViewId );
+                m_toolViews.remove(d->toolViewId);
                 m_ids.removeAll( d->toolViewId );
                 delete d;
             } else
@@ -142,9 +141,8 @@ int StandardOutputView::registerToolView( const QString& title,
                                           const QIcon& icon, Options option,
                                           const QList<QAction*>& actionList )
 {
-    // try to reuse existing toolview
-    foreach( ToolViewData* d, m_toolviews )
-    {
+    // try to reuse existing tool view
+    foreach (ToolViewData* d, m_toolViews) {
         if ( d->type == type && d->title == title ) {
             return d->toolViewId;
         }
@@ -163,7 +161,7 @@ int StandardOutputView::registerToolView( const QString& title,
     tvdata->actionList = actionList;
     core()->uiController()->addToolView( title, new OutputViewFactory( tvdata ) );
     m_ids << newid;
-    m_toolviews[newid] = tvdata;
+    m_toolViews[newid] = tvdata;
     return newid;
 }
 
@@ -171,7 +169,7 @@ int StandardOutputView::registerOutputInToolView( int toolViewId,
                                                   const QString& title,
                                                   KDevelop::IOutputView::Behaviours behaviour )
 {
-    if( !m_toolviews.contains( toolViewId ) )
+    if (!m_toolViews.contains(toolViewId))
         return -1;
     int newid;
     if( m_ids.isEmpty() )
@@ -182,17 +180,15 @@ int StandardOutputView::registerOutputInToolView( int toolViewId,
         newid = m_ids.last()+1;
     }
     m_ids << newid;
-    m_toolviews.value( toolViewId )->addOutput( newid, title, behaviour );
+    m_toolViews.value(toolViewId)->addOutput(newid, title, behaviour);
     return newid;
 }
 
 void StandardOutputView::raiseOutput(int outputId)
 {
-    foreach( int _id, m_toolviews.keys() )
-    {
-        if( m_toolviews.value( _id )->outputdata.contains( outputId ) )
-        {
-            foreach( Sublime::View* v, m_toolviews.value( _id )->views ) {
+    foreach (int _id, m_toolViews.keys()) {
+        if (m_toolViews.value(_id)->outputdata.contains(outputId)) {
+            foreach (Sublime::View* v, m_toolViews.value(_id)->views) {
                 if( v->hasWidget() )
                 {
                     OutputWidget* w = qobject_cast<OutputWidget*>( v->widget() );
@@ -207,10 +203,8 @@ void StandardOutputView::raiseOutput(int outputId)
 void StandardOutputView::setModel( int outputId, QAbstractItemModel* model )
 {
     int tvid = -1;
-    foreach( int _id, m_toolviews.keys() )
-    {
-        if( m_toolviews.value( _id )->outputdata.contains( outputId ) )
-        {
+    foreach (int _id, m_toolViews.keys()) {
+        if (m_toolViews.value( _id)->outputdata.contains(outputId)) {
             tvid = _id;
             break;
         }
@@ -219,17 +213,15 @@ void StandardOutputView::setModel( int outputId, QAbstractItemModel* model )
         qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Trying to set model on unknown view-id:" << outputId;
     else
     {
-        m_toolviews.value( tvid )->outputdata.value( outputId )->setModel( model );
+        m_toolViews.value(tvid)->outputdata.value(outputId)->setModel(model);
     }
 }
 
 void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* delegate )
 {
     int tvid = -1;
-    foreach( int _id, m_toolviews.keys() )
-    {
-        if( m_toolviews.value( _id )->outputdata.contains( outputId ) )
-        {
+    foreach (int _id, m_toolViews.keys()) {
+        if (m_toolViews.value(_id)->outputdata.contains(outputId)) {
             tvid = _id;
             break;
         }
@@ -238,15 +230,14 @@ void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* deleg
         qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Trying to set model on unknown view-id:" << outputId;
     else
     {
-        m_toolviews.value( tvid )->outputdata.value( outputId )->setDelegate( delegate );
+        m_toolViews.value(tvid)->outputdata.value(outputId)->setDelegate(delegate);
     }
 }
 
-void StandardOutputView::removeToolView( int toolviewId )
+void StandardOutputView::removeToolView(int toolViewId)
 {
-    if( m_toolviews.contains(toolviewId) )
-    {
-        ToolViewData* td = m_toolviews.value(toolviewId);
+    if (m_toolViews.contains(toolViewId)) {
+        ToolViewData* td = m_toolViews.value(toolViewId);
         foreach( Sublime::View* view, td->views )
         {
             if( view->hasWidget() )
@@ -263,15 +254,14 @@ void StandardOutputView::removeToolView( int toolviewId )
             }
         }
         delete td;
-        m_toolviews.remove(toolviewId);
-        emit toolViewRemoved(toolviewId);
+        m_toolViews.remove(toolViewId);
+        emit toolViewRemoved(toolViewId);
     }
 }
 
 OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
 {
-    foreach( ToolViewData* td, m_toolviews )
-    {
+    foreach (ToolViewData* td, m_toolViews) {
         if( td->outputdata.contains( outputId ) )
         {
             foreach( Sublime::View* view, td->views )
@@ -293,8 +283,7 @@ void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )
 
 void StandardOutputView::removeOutput( int outputId )
 {
-    foreach( ToolViewData* td, m_toolviews )
-    {
+    foreach (ToolViewData* td, m_toolViews) {
         if( td->outputdata.contains( outputId ) )
         {
             foreach( Sublime::View* view, td->views )

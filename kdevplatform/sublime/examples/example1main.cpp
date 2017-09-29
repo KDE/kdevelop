@@ -44,7 +44,7 @@ Example1Main::Example1Main()
     Sublime::Document *doc2 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/boo.cpp")));
     Sublime::Document *doc3 = new Sublime::UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/moo.cpp")));
 
-    //documents for toolviews
+    //documents for tool views
     Sublime::Document *tool1 = new Sublime::ToolDocument(QStringLiteral("ListView"), m_controller,
         new Sublime::SimpleToolWidgetFactory<QListView>(QStringLiteral("ListView")));
     Sublime::Document *tool2 = new Sublime::ToolDocument(QStringLiteral("TextEdit"), m_controller,

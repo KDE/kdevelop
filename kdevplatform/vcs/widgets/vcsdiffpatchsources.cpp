@@ -115,7 +115,7 @@ void VCSCommitDiffPatchSource::jobFinished(KJob *job)
     {
         QString details = job ? job->errorText() : QString();
         if (details.isEmpty()) {    //errorText may be empty
-            details = i18n("For more detailed information please see the Version Control toolview");
+            details = i18n("For more detailed information please see the Version Control tool view.");
         }
         KMessageBox::detailedError(nullptr, i18n("Unable to commit"), details, i18n("Commit unsuccessful"));
     }

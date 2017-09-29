@@ -205,7 +205,7 @@ private Q_SLOTS:
     void addNewToolViewByDoubleClick(const QModelIndex& index)
     {
         QListWidgetItem *item = itemFromIndex(index);
-        // Disable item so that the toolview can not be added again.
+        // Disable item so that the tool view can not be added again.
         item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         emit addNewToolView(m_mw, item);
     }
@@ -448,7 +448,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
         ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), list);
         item->factory = it.key();
         if (!item->factory->allowMultiple() && toolViewPresent(it.value(), mw->area())) {
-            // Disable item if the toolview is already present.
+            // Disable item if the tool view is already present.
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
         }
         list->addItem(item);
@@ -615,7 +615,7 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
 
     QList<Sublime::Area*> changedAreas;
 
-    /* Offer all toolviews to the default areas.  */
+    /* Offer all tool views to the default areas.  */
     foreach (Sublime::Area *area, defaultAreas())
     {
         QHash<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
@@ -658,7 +658,7 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
                 loadArea(area, areaConfig);
             }
 
-            // At this point we know which toolviews the area wants.
+            // At this point we know which tool views the area wants.
             // Tender all tool views we have.
             QHash<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
             for (i = d->factoryDocuments.constBegin(),

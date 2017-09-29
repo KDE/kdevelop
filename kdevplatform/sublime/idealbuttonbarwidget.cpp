@@ -51,7 +51,7 @@ public:
         setToolTip(i18n("Toggle '%1' tool view.", title));
         setText(title);
 
-        //restore toolview shortcut config
+        //restore tool view shortcut config
         KConfigGroup config = KSharedConfig::openConfig()->group("UI");
         QStringList shortcutStrings = config.readEntry(QStringLiteral("Shortcut for %1").arg(title), QStringList());
         setShortcuts({ QKeySequence::fromString(shortcutStrings.value(0)), QKeySequence::fromString(shortcutStrings.value(1)) });

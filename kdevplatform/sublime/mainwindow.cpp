@@ -146,7 +146,7 @@ void MainWindow::setArea(Area *area)
 void MainWindow::initializeStatusBar()
 {
     //nothing here, reimplement in the subclasses if you want to have status bar
-    //inside the bottom toolview buttons row
+    //inside the bottom tool view buttons row
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)

@@ -45,8 +45,8 @@ on the following assumptions:
 and be able to switch each main window between those "area types". For
 example, to switch main window between "Code" and "Debug"
 
-2. It's also desirable to save the state of area -- like the set of toolviews,
-position of toolviews, etc. This need to be done per-main window, so that
+2. It's also desirable to save the state of area -- like the set of tool views,
+position of tool views, etc. This need to be done per-main window, so that
 "code" area of one window is allowed to be different from "code" area
 of another window.
 

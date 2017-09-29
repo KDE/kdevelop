@@ -350,7 +350,7 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
             break;
     }
 
-    // Show the toolview if it's hidden for the user to be able to diagnose errors.
+    // Show the tool view if it's hidden for the user to be able to diagnose errors.
     if( !d->m_outputStarted ) {
         d->m_outputStarted = true;
         startOutput();

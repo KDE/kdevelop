@@ -222,13 +222,13 @@ void KDevelop::DocumentationController::showDocumentation(const IDocumentation::
 {
     QWidget* w = ICore::self()->uiController()->findToolView(i18n("Documentation"), m_factory, KDevelop::IUiController::CreateAndRaise);
     if(!w) {
-        qCWarning(SHELL) << "Could not add documentation toolview";
+        qCWarning(SHELL) << "Could not add documentation tool view";
         return;
     }
 
     DocumentationView* view = dynamic_cast<DocumentationView*>(w);
     if( !view ) {
-        qCWarning(SHELL) << "Could not cast toolview" << w << "to DocumentationView class!";
+        qCWarning(SHELL) << "Could not cast tool view" << w << "to DocumentationView class!";
         return;
     }
     view->showDocumentation(doc);

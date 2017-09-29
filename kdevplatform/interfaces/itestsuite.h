@@ -44,8 +44,8 @@ public:
      **/
     enum TestJobVerbosity
     {
-        Silent, ///< No toolview is raised by the job
-        Verbose ///< The job raises an output toolview
+        Silent, ///< No tool view is raised by the job
+        Verbose ///< The job raises an output tool view
     };
 
     /**

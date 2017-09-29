@@ -58,7 +58,7 @@ void TestAreaOperation::init()
     Document *doc3 = new UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/moo.cpp")));
     Document *doc4 = new UrlDocument(m_controller, QUrl::fromLocalFile(QStringLiteral("~/zoo.cpp")));
 
-    //documents for toolviews
+    //documents for tool views
     Document *tool1 = new ToolDocument(QStringLiteral("tool1"), m_controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("tool1")));
     Document *tool2 = new ToolDocument(QStringLiteral("tool2"), m_controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool2")));
     Document *tool3 = new ToolDocument(QStringLiteral("tool3"), m_controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool3")));
@@ -521,12 +521,12 @@ toolview1.2.2 [ bottom ]\n\
 toolview1.4.1 [ right ]\n\
 "));
 
-    //check that mainwindow has newly added toolview
+    //check that mainwindow has newly added tool view
     foreach (View *dock, mw.toolDocks())
         QVERIFY(dock->widget() != nullptr);
     QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
 
-    //now remove toolview
+    //now remove tool view
     m_area1->removeToolView(view);
 
     AreaToolViewsPrinter toolViewsPrinter2;
@@ -538,7 +538,7 @@ toolview1.2.1 [ bottom ]\n\
 toolview1.2.2 [ bottom ]\n\
 "));
 
-    //check that mainwindow has newly added toolview
+    //check that mainwindow has newly added tool view
     foreach (View *dock, mw.toolDocks())
         QVERIFY(dock->widget() != nullptr);
     QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());

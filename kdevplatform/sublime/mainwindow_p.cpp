@@ -466,7 +466,7 @@ void MainWindowPrivate::clearArea()
     if(m_leftTabbarCornerWidget)
         m_leftTabbarCornerWidget->setParent(nullptr);
 
-    //reparent toolview widgets to 0 to prevent their deletion together with dockwidgets
+    //reparent tool view widgets to nullptr to prevent their deletion together with dockwidgets
     foreach (View *view, area->toolViews())
     {
         // FIXME should we really delete here??

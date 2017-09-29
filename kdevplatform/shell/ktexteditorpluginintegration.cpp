@@ -68,7 +68,7 @@ class ToolViewFactory;
 /**
  * This HACK is required to massage the KTextEditor plugin API into the
  * GUI concepts we apply in KDevelop. Kate does not allow the user to
- * delete toolviews and then readd them. We do. To support our use case
+ * delete tool views and then readd them. We do. To support our use case
  * we prevent the widget we return to KTextEditor plugins from
  * MainWindow::createToolView from getting destroyed. This widget class
  * unsets the parent of the so called container in its dtor. The
@@ -159,7 +159,7 @@ private:
 KeepAliveWidget::~KeepAliveWidget()
 {
     // if the container is still valid, unparent it to prevent it from getting deleted
-    // this happens when the user removes a toolview
+    // this happens when the user removes a tool view
     // on shutdown, the container does get deleted, thus we must guard against that.
     if (m_factory->container()) {
         Q_ASSERT(m_factory->container()->parentWidget() == this);

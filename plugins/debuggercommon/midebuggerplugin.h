@@ -60,12 +60,12 @@ public:
 
     virtual MIDebugSession *createSession() = 0;
 
-    virtual void setupToolviews() = 0;
+    virtual void setupToolViews() = 0;
     /**
      * The implementation should be sure it's safe to call
      * even when tool views are already unloaded.
      */
-    virtual void unloadToolviews() = 0;
+    virtual void unloadToolViews() = 0;
 
 //BEGIN IStatus
 public:

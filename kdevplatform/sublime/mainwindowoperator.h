@@ -42,7 +42,7 @@ protected:
 
     /**Sets the active view for the mainwindow and focuses it.*/
     void setActiveView(MainWindow *w, View *view);
-    /**Sets the active toolview for the mainwindow and focuses it.*/
+    /**Sets the active tool view for the mainwindow and focuses it.*/
     void setActiveToolView(MainWindow *w, View *view);
 };
 

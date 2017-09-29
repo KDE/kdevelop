@@ -37,7 +37,7 @@ class MainWindowOperator;
 /**
 @short Sublime Main Window
 
-The area-enabled mainwindow to show Sublime views and toolviews.
+The area-enabled mainwindow to show Sublime views and tool views.
 
 To use, a controller and constructed areas are necessary:
 @code
@@ -52,7 +52,7 @@ public:
     explicit MainWindow(Controller *controller, Qt::WindowFlags flags = {});
     ~MainWindow() override;
 
-    /**@return the list of dockwidgets that contain area's toolviews.*/
+    /**@return the list of dockwidgets that contain area's tool views.*/
     QList<View*> toolDocks() const;
     /**@return area which mainwindow currently shows or 0 if no area has been set.*/
     Area *area() const;
@@ -61,7 +61,7 @@ public:
 
     /**@return active view inside this mainwindow.*/
     View *activeView() const;
-    /**@return active toolview inside this mainwindow.*/
+    /**@return active tool view inside this mainwindow.*/
     View *activeToolView() const;
 
     /**Enable saving of per-area UI settings (like toolbar properties
@@ -121,7 +121,7 @@ Q_SIGNALS:
     void areaChanged(Sublime::Area*);
     /**Emitted when the active view is changed.*/
     void activeViewChanged(Sublime::View*);
-    /**Emitted when the active toolview is changed.*/
+    /**Emitted when the active tool view is changed.*/
     void activeToolViewChanged(Sublime::View*);
     /**Emitted when the user interface settings have changed.*/
     void settingsLoaded();
@@ -162,7 +162,7 @@ private:
     void clearArea();
     /**Sets the active view.*/
     void setActiveView(Sublime::View* view, bool focus = true);
-    /**Sets the active toolview and focuses it.*/
+    /**Sets the active tool view and focuses it.*/
     void setActiveToolView(View *view);
 
     void resizeEvent(QResizeEvent* event) override;

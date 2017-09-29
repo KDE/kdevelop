@@ -31,15 +31,15 @@
 
 namespace Sublime {
 
-    /**Positions for toolviews in Sublime UI. To combine them, use
+    /**Positions for tool views in Sublime UI. To combine them, use
     Positions class (QFlags based).*/
     enum Position
     {
-        Left = 1   /**< left toolview position */,
-        Right = 2  /**< right toolview position */,
-        Top = 4    /**< top toolview position */,
-        Bottom = 8 /**< bottom toolview position */,
-        AllPositions = Left|Right|Top|Bottom /**< all toolview positions */
+        Left = 1   /**< left tool view position */,
+        Right = 2  /**< right tool view position */,
+        Top = 4    /**< top tool view position */,
+        Bottom = 8 /**< bottom tool view position */,
+        AllPositions = Left|Right|Top|Bottom /**< all tool view positions */
     };
     Q_DECLARE_FLAGS(Positions, Position)
 

@@ -131,19 +131,19 @@ void TestKTextEditorPluginIntegration::testMainWindow()
 
     // we reuse the same view
     QWidget parent;
-    auto kdevToolview = makeQPointer(factory->create(&parent));
-    QCOMPARE(kdevToolview->parentWidget(), &parent);
-    QCOMPARE(toolView->parentWidget(), kdevToolview.data());
+    auto kdevToolView = makeQPointer(factory->create(&parent));
+    QCOMPARE(kdevToolView->parentWidget(), &parent);
+    QCOMPARE(toolView->parentWidget(), kdevToolView.data());
 
-    // the children are kept alive when the toolview gets destroyed
-    delete kdevToolview;
+    // the children are kept alive when the tool view gets destroyed
+    delete kdevToolView;
     QVERIFY(toolView);
-    kdevToolview = factory->create(&parent);
-    // and we reuse the ktexteditor toolview for the new kdevelop toolview
-    QCOMPARE(toolView->parentWidget(), kdevToolview.data());
+    kdevToolView = factory->create(&parent);
+    // and we reuse the ktexteditor tool view for the new kdevelop tool view
+    QCOMPARE(toolView->parentWidget(), kdevToolView.data());
 
     delete toolView;
-    delete kdevToolview;
+    delete kdevToolView;
 
     delete plugin;
     QVERIFY(!findToolView(id));

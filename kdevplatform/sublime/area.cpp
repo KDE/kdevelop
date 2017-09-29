@@ -121,7 +121,7 @@ Area::Area(const Area &area)
 {
     setObjectName(area.objectName());
 
-    //clone toolviews
+    //clone tool views
     d->toolViews.clear();
     foreach (View *view, area.toolViews())
         addToolView(view->document()->createView(), area.toolViewPosition(view));

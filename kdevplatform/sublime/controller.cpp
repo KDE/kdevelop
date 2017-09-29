@@ -296,10 +296,10 @@ Area* Controller::areaForView(View* view) const
     return nullptr;
 }
 
-/*We need this to catch activation of views and toolviews
-so that we can always tell what view and toolview is active.
+/*We need this to catch activation of views and tool views
+so that we can always tell what view and tool view is active.
 "Active" doesn't mean focused. It means that it is focused now
-or was focused before and no other view/toolview wasn't focused
+or was focused before and no other view/tool view wasn't focused
 after that."*/
 //implementation is based upon KParts::PartManager::eventFilter
 bool Controller::eventFilter(QObject *obj, QEvent *ev)
@@ -349,7 +349,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
             return false;
         }
 
-        //find this widget in toolviews
+        //find this widget in tool views
         ToolWidgetFinder toolFinder(w);
         area->walkToolViews(toolFinder, Sublime::AllPositions);
         if (toolFinder.view && toolFinder.view != mw->activeToolView())

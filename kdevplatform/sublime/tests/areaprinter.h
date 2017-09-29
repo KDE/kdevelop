@@ -28,7 +28,7 @@ namespace Sublime {
     class View;
 }
 
-//those two classes will pretty-print area views and toolviews
+//those two classes will pretty-print area views and tool views
 //make sure you provided object names for your views (with setObjectName())
 
 class AreaViewsPrinter {

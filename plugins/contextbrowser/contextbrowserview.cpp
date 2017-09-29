@@ -334,7 +334,7 @@ void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::T
 
     m_navigationWidgetDeclaration = decl->id();
 
-    if (!isLocked() && (isVisible() || force)) {  // NO-OP if toolview is hidden, for performance reasons
+    if (!isLocked() && (isVisible() || force)) {  // NO-OP if tool view is hidden, for performance reasons
 
         QWidget* w = createWidget(decl, topContext);
         updateMainWidget(w);
@@ -370,7 +370,7 @@ void ContextBrowserView::setContext(KDevelop::DUContext* context) {
         m_navigationWidgetDeclaration = DeclarationId();
     }
 
-    if (!isLocked() && isVisible()) { // NO-OP if toolview is hidden, for performance reasons
+    if (!isLocked() && isVisible()) { // NO-OP if tool view is hidden, for performance reasons
 
         QWidget* w = createWidget(context);
         updateMainWidget(w);

@@ -59,7 +59,7 @@ public:
                           KDevelop::IOutputView::Options option = ShowItemsButton,
                           const QList<QAction*>& actionList = QList<QAction*>()) override;
 
-    int registerOutputInToolView( int toolviewId, const QString& title,
+    int registerOutputInToolView( int toolViewId, const QString& title,
                                   KDevelop::IOutputView::Behaviours behaviour
                                     = KDevelop::IOutputView::AllowUserClose ) override;
 
@@ -70,7 +70,7 @@ public:
 
     OutputWidget* outputWidgetForId( int outputId ) const;
 
-    void removeToolView( int toolviewId ) override;
+    void removeToolView(int toolViewId) override;
     void removeOutput( int outputId ) override;
 
     void scrollOutputTo( int outputId, const QModelIndex& idx ) override;
@@ -81,11 +81,11 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void activated( const QModelIndex& );
-    void outputRemoved( int toolviewId, int outputId );
-    void toolViewRemoved( int toolviewId );
+    void outputRemoved(int toolViewId, int outputId);
+    void toolViewRemoved(int toolViewId);
 
 private:
-    QMap<int, ToolViewData*> m_toolviews;
+    QMap<int, ToolViewData*> m_toolViews;
     QList<int> m_ids;
     QMap<KDevelop::IOutputView::StandardToolView, int> m_standardViews;
 };

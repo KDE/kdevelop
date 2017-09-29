@@ -150,7 +150,7 @@ void TestViewActivation::viewActivation()
                       arg(view212->objectName(), mw->activeView()->objectName());
     QVERIFY2(mw->activeView() == view212, failMsg.toLatin1().data());
 
-    //activate toolview and check that both view and toolview are active
+    //activate tool view and check that both view and tool view are active
     qApp->sendEvent(viewT31->widget(), new QFocusEvent(QEvent::FocusIn));
     QCOMPARE(mw->activeView(), view212);
     QCOMPARE(mw->activeToolView(), viewT31);

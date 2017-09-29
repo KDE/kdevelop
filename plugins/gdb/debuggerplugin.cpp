@@ -114,7 +114,7 @@ void CppDebuggerPlugin::setupExecutePlugin(KDevelop::IPlugin* plugin, bool load)
     }
 }
 
-void CppDebuggerPlugin::setupToolviews()
+void CppDebuggerPlugin::setupToolViews()
 {
     disassemblefactory = new DebuggerToolFactory<DisassembleWidget>(
     this, QStringLiteral("org.kdevelop.debugger.DisassemblerView"), Qt::BottomDockWidgetArea);
@@ -141,7 +141,7 @@ void CppDebuggerPlugin::setupToolviews()
 #endif
 }
 
-void CppDebuggerPlugin::unloadToolviews()
+void CppDebuggerPlugin::unloadToolViews()
 {
     if (disassemblefactory) {
         core()->uiController()->removeToolView(disassemblefactory);

@@ -56,7 +56,7 @@ public:
     void initialize();
     void cleanup();
 
-    /// Must be called by debugger plugin that needs debugger actions and toolviews.
+    /// Must be called by debugger plugin that needs debugger actions and tool views.
     void initializeUi() override;
 
     void addSession(IDebugSession* session) override;

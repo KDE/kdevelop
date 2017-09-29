@@ -43,29 +43,29 @@ class KDEVPLATFORMINTERFACES_EXPORT IToolViewFactory {
 public:
     virtual ~IToolViewFactory() {}
     /**
-     * called to create a new widget for this toolview
+     * called to create a new widget for this tool view
      * @param parent the parent to use as parent for the widget
-     * @returns the new widget for the toolview
+     * @returns the new widget for the tool view
      */
     virtual QWidget* create(QWidget *parent = nullptr) = 0;
     /** 
-     * @returns the identifier of this toolview.  The identifier
+     * @returns the identifier of this tool view.  The identifier
      * is used to remember which areas the tool view should appear
      * in, and must never change.
      */
     virtual QString id() const = 0;
     /**
-     * @returns the default position where this toolview should appear
+     * @returns the default position where this tool view should appear
      */
     virtual Qt::DockWidgetArea defaultPosition() = 0;
     /**
-     * Fetch a list of actions to add to the toolbar of the toolview @p view
+     * Fetch a list of actions to add to the toolbar of the tool view @p view
      * @param viewWidget the view to which the actions should be added
      * @returns a list of actions to be added to the toolbar
      */
     virtual QList<QAction*> toolBarActions( QWidget* viewWidget ) const { return viewWidget->actions(); }
     /**
-     * Fetch a list of actions to be shown in the context menu of the toolview @p view.
+     * Fetch a list of actions to be shown in the context menu of the tool view @p view.
      * The default implementation will return all actions of @p viewWidget.
      *
      * @param viewWidget the view for which the context menu should be shown
@@ -87,7 +87,7 @@ public:
 
 /**
  *
- * Allows to access various parts of the user-interface, like the toolviews or the mainwindow
+ * Allows to access various parts of the user-interface, like the tool views or the mainwindow
  */
 class KDEVPLATFORMINTERFACES_EXPORT IUiController {
 public:
@@ -115,7 +115,7 @@ public:
     virtual QWidget* findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags = CreateAndRaise) = 0;
 
     /**
-     * Makes sure that the toolview that contains the widget @p toolViewWidget is visible to the user.
+     * Makes sure that the tool view that contains the widget @p toolViewWidget is visible to the user.
      */
     virtual void raiseToolView(QWidget* toolViewWidget) = 0;
 

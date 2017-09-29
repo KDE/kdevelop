@@ -111,14 +111,14 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     }
 
     /// start position menu
-    QMenu* positionMenu = menu.addMenu(i18n("Toolview Position"));
+    QMenu* positionMenu = menu.addMenu(i18n("Tool View Position"));
 
     QActionGroup* g = new QActionGroup(positionMenu);
 
-    QAction *left = new QAction(i18nc("toolview position", "Left"), g);
-    QAction *bottom = new QAction(i18nc("toolview position", "Bottom"), g);
-    QAction *right = new QAction(i18nc("toolview position", "Right"), g);
-    QAction *detach = new QAction(i18nc("toolview position", "Detached"), g);
+    QAction *left = new QAction(i18nc("tool view position", "Left"), g);
+    QAction *bottom = new QAction(i18nc("tool view position", "Bottom"), g);
+    QAction *right = new QAction(i18nc("tool view position", "Right"), g);
+    QAction *detach = new QAction(i18nc("tool view position", "Detached"), g);
 
     for (auto action : {left, bottom, right, detach}) {
         positionMenu->addAction(action);
@@ -137,10 +137,10 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     menu.addSeparator();
 
     QAction *setShortcut = menu.addAction(QIcon::fromTheme(QStringLiteral("configure-shortcuts")), i18n("Assign Shortcut..."));
-    setShortcut->setToolTip(i18n("Use this shortcut to trigger visibility of the toolview."));
+    setShortcut->setToolTip(i18n("Use this shortcut to trigger visibility of the tool view."));
 
     menu.addSeparator();
-    QAction* remove = menu.addAction(QIcon::fromTheme(QStringLiteral("dialog-close")), i18n("Remove Toolview"));
+    QAction* remove = menu.addAction(QIcon::fromTheme(QStringLiteral("dialog-close")), i18n("Remove Tool View"));
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));
 

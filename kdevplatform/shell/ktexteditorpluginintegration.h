@@ -117,7 +117,7 @@ public:
 
 private:
     QPointer<KTextEditor::Plugin> m_plugin;
-    // view objects and toolviews that should get deleted when the plugin gets unloaded
+    // view objects and tool views that should get deleted when the plugin gets unloaded
     KDevelop::ObjectListTracker *m_tracker;
 };
 

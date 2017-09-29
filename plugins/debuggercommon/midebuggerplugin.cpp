@@ -113,7 +113,7 @@ void MIDebuggerPlugin::setupDBus()
 
 void MIDebuggerPlugin::unload()
 {
-    unloadToolviews();
+    unloadToolViews();
 }
 
 MIDebuggerPlugin::~MIDebuggerPlugin()

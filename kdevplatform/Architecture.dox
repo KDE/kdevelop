@@ -33,7 +33,7 @@ Platform consists of
   -  common plugins, ie those that could be useful for other applications than just KDevelop
   .
 - outputview
-  -  allows plugins to easily implement toolviews that show line-by-line output. for example make build output.
+  -  allows plugins to easily implement tool views that show line-by-line output. for example make build output.
   .
 - vcs
   -  central & distributed version control library
@@ -284,24 +284,24 @@ If KDevelop::Language object for given mimetype already exists, it is used and n
 KDevelop::UiController is closely connected to the Sublime UI and basically is an subclass of
 \ref Sublime::Controller which will be explained later.
 
-The main job of UiController is to allow plugins to manager their views and toolviews. Currently only
-toolviews can be added and removed.
+The main job of UiController is to allow plugins to manager their views and tool views. Currently only
+tool views can be added and removed.
 
-Sublime UI wants plugins to add and remove not actual toolviews, but factories to create them.
-This is because user can request from Sublime UI to show a new toolview at any time. For example,
-it is possible to have more than one Konsole toolviews. The user just have to ask for them.
-Automatically factory will be used only once, when UI controller is asked to add a toolview.
-This means for example that only one Konsole toolview will be opened automatically.
+Sublime UI wants plugins to add and remove not actual tool views, but factories to create them.
+This is because user can request from Sublime UI to show a new tool view at any time. For example,
+it is possible to have more than one Konsole tool views. The user just have to ask for them.
+Automatically factory will be used only once, when UI controller is asked to add a tool view.
+This means for example that only one Konsole tool view will be opened automatically.
 
 To create a factory, a plugin needs to subclass KDevelop::IToolViewFactory and implement two methods:
 - virtual QWidget* KDevelop::IToolViewFactory::create(QWidget *parent = 0)
-  where the actual toolview widget will be created
+  where the actual tool view widget will be created
 - virtual Qt::DockWidgetArea KDevelop::IToolViewFactory::defaultPosition(const QString &areaName)
-  which will give the UI a hint on where to place the toolview
+  which will give the UI a hint on where to place the tool view
 .
 
 Once the factory is ready, it has to be added to the UiController using IUiController::addToolView() method.
-It is not absolutely necessary for a plugin to remove or delete toolview factory. UiController will
+It is not absolutely necessary for a plugin to remove or delete the tool view factory. UiController will
 delete them all upon unload.
 
 NOTE: temporarily IUiController has KDevelop::IUiController::openUrl() method which is the only
@@ -352,7 +352,7 @@ way to open files in KDevelop until DocumentController is ported.
   - user interface design area \n
     (like Qt designer)
 - Area configuration includes code editor windows (unlike eclipse)
-- Each area can be displayed in usual Qt mainwindow with toolviews in dockwidgets
+- Each area can be displayed in usual Qt mainwindow with tool views in dockwidgets
 - Areas are shown in separate mainwindows so that multiple-monitor setups become the best supported
 - One area can be shown in two and more mainwindows by "cloning" the area \n
   (unlike Eclipse that pretends that two mainwindows show the same area)
@@ -360,7 +360,7 @@ way to open files in KDevelop until DocumentController is ported.
   (like in Eclipse), but this mode of operation is currently not implemented. \n
   Also Sublime was not optimized for this use-case. See wiki pages for a detailed discussion and
   explanation of possible problems.
-- It is possible to open as many similar toolviews as necessary (for example, several konsole's)
+- It is possible to open as many similar tool views as necessary (for example, several konsole's)
 - It is possible to open several views for the same file in code editor view (unlike KDevelop 3.x)
 - Instead of tabs for editor windows a "switcher" is provided. \n
   Currently the switcher is a combobox but that will change for sure.
@@ -373,9 +373,9 @@ documents, and controlls mainwindows. \n
 Sublime::Controller::showArea() is the only way to show an area in the mainwindow.
 
 Sublime::MainWindow is just a KParts::MainWindow which knows how to "reconstruct" the area
-and react on area changes. Additionally it knows which view and toolview is "active" (i.e. last focused).
+and react on area changes. Additionally it knows which view and tool view is "active" (i.e. last focused).
 
-Sublime::Area is the object that controls views, toolviews, and defines their placement
+Sublime::Area is the object that controls views, tool views, and defines their placement
 inside the mainwindow. Provides various view management (e.g. add/remove/etc.) methods and signals.
 Also Area is responsible for storing and restoring the view layout (on-disk storage is not
  implemented currently).

@@ -30,7 +30,7 @@ namespace Sublime {
 class ToolDocument;
 
 /**
-@short Factory to create widgets for toolviews
+@short Factory to create widgets for tool views
 */
 class KDEVPLATFORMSUBLIME_EXPORT ToolFactory {
 public:
@@ -61,7 +61,7 @@ private:
 };
 
 /**
-@short Document to represent and manage widgets as toolviews
+@short Document to represent and manage widgets as tool views
 */
 class KDEVPLATFORMSUBLIME_EXPORT ToolDocument: public Document {
 Q_OBJECT
