@@ -4,6 +4,10 @@ set(KDEVPLATFORM_VERSION_MINOR 1)
 set(KDEVPLATFORM_VERSION_PATCH 42)
 set(KDEVPLATFORM_VERSION "${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${KDEVPLATFORM_VERSION_PATCH}")
 
+# kdevplatform soversion
+# E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
+set(KDEVPLATFORM_SOVERSION 52)
+
 # Increase this to reset incompatible item-repositories
 set(KDEV_ITEMREPOSITORY_VERSION 87)
 
@@ -46,8 +50,7 @@ ecm_setup_version(${KDEVPLATFORM_VERSION_MAJOR}.${KDEVPLATFORM_VERSION_MINOR}.${
                   VARIABLE_PREFIX KDEVPLATFORM
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdevplatform_version.h"
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDevPlatformConfigVersion.cmake"
-                  # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
-                  SOVERSION ${KDEVPLATFORM_VERSION_MAJOR}${KDEVPLATFORM_VERSION_MINOR} # This sets KDEVPLATFORM_SOVERSION
+                  SOVERSION ${KDEVPLATFORM_SOVERSION}
 )
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
