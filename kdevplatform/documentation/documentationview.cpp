@@ -91,9 +91,9 @@ void DocumentationView::setupActions()
     addAction(mHomeAction);
 
     mProviders = new QComboBox(this);
-    auto provicersAction = new QWidgetAction(this);
-    provicersAction->setDefaultWidget(mProviders);
-    addAction(provicersAction);
+    auto providersAction = new QWidgetAction(this);
+    providersAction->setDefaultWidget(mProviders);
+    addAction(providersAction);
 
     mIdentifiers = new QLineEdit(this);
     mIdentifiers->setClearButtonEnabled(true);
