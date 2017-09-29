@@ -142,7 +142,6 @@ ecm_setup_version(${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP
                   VARIABLE_PREFIX KDEVELOP
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdevelop_version.h"
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfigVersion.cmake"
-                  SOVERSION ${KDEVELOP_LIB_SOVERSION}
 )
 install(FILES
         "${CMAKE_CURRENT_BINARY_DIR}/kdevelop_version.h"

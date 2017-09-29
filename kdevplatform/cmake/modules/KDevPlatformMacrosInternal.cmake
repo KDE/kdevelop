@@ -36,7 +36,7 @@ function(kdevplatform_add_library target)
     )
     set_target_properties(${target} PROPERTIES
         VERSION ${KDEVPLATFORM_VERSION}
-        SOVERSION ${KDEVPLATFORM_LIB_SOVERSION}
+        SOVERSION ${KDEVPLATFORM_SOVERSION}
         EXPORT_NAME ${shortTargetName}
     )
 
