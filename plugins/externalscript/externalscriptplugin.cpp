@@ -137,12 +137,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
     item->setCommand( QStringLiteral("g++ -o %b %f && ./%b") );
     m_model->appendRow( item );
 
-    item = new ExternalScriptItem;
-    item->setText( i18n("Google Selection") );
-    item->setCommand( QStringLiteral("xdg-open \"https://www.google.com/search?q=%s\"") );
-    item->setShowOutput( false );
-    m_model->appendRow( item );
-
+    #ifndef Q_OS_WIN
     item = new ExternalScriptItem;
     item->setText( i18n("Sort Selection") );
     item->setCommand( QStringLiteral("sort") );
@@ -150,6 +145,20 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
     item->setOutputMode( ExternalScriptItem::OutputReplaceSelectionOrDocument );
     item->setShowOutput( false );
     m_model->appendRow( item );
+
+    item = new ExternalScriptItem;
+    item->setText( i18n("Google Selection") );
+    item->setCommand( QStringLiteral("xdg-open \"https://www.google.com/search?q=%s\"") );
+    item->setShowOutput( false );
+    m_model->appendRow( item );
+
+    item = new ExternalScriptItem;
+    item->setText( i18n("Paste to Hastebin") );
+    item->setCommand( QStringLiteral("a=$(cat); curl -X POST -s -d \"$a\" https://hastebin.com/documents | awk -F '\"' '{print \"https://hastebin.com/\"$4}' | xargs xdg-open ;") );
+    item->setInputMode( ExternalScriptItem::InputSelectionOrDocument );
+    item->setShowOutput( false );
+    m_model->appendRow( item );
+    #endif
 
     config.writeEntry( "firstUse", false );
     config.sync();
