@@ -314,7 +314,6 @@ int main( int argc, char *argv[] )
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
     }
 
-    KLocalizedString::setApplicationDomain("kdevelop");
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
 #ifdef Q_OS_MAC
@@ -356,6 +355,7 @@ int main( int argc, char *argv[] )
     }
 
     KDevelopApplication app(argc, argv);
+    KLocalizedString::setApplicationDomain("kdevelop");
 
     static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
     KAboutData aboutData( QStringLiteral("kdevelop"), i18n( "KDevelop" ), QByteArray(VERSION), i18n(description), KAboutLicense::GPL,
