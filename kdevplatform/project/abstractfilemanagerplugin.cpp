@@ -27,6 +27,9 @@
 #include <QHashIterator>
 #include <QFileInfo>
 #include <QApplication>
+#ifdef TIME_IMPORT_JOB
+#include <QElapsedTimer>
+#endif
 
 #include <KMessageBox>
 #include <KLocalizedString>
@@ -117,7 +120,18 @@ void AbstractFileManagerPluginPrivate::projectClosing(IProject* project)
         }
         m_projectJobs.remove(project);
     }
+#ifdef TIME_IMPORT_JOB
+    QElapsedTimer timer;
+    if (m_watchers.contains(project)) {
+        timer.start();
+    }
+#endif
     delete m_watchers.take(project);
+#ifdef TIME_IMPORT_JOB
+    if (timer.isValid()) {
+        qCDebug(FILEMANAGER) << "Deleting dir watcher took" << timer.elapsed() / 1000.0 << "seconds for project" << project->name();
+    }
+#endif
     m_filters.remove(project);
 }
 
