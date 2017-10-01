@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION 3.0)
-project(KDevelop)
+project(KDevelop VERSION 5.1.80)
 
-# KDevelop version
-set(KDEVELOP_VERSION_MAJOR 5)
-set(KDEVELOP_VERSION_MINOR 1)
-set(KDEVELOP_VERSION_PATCH 40)
-set( KDEVELOP_VERSION "${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}" )
+# KDevelop SOVERSION
+# E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
+set(KDEVELOP_SOVERSION 52)
 
 # plugin versions listed in the .desktop files
 set(KDEV_PLUGIN_VERSION 30)
@@ -138,7 +136,7 @@ configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevelopConfig.cmake.
                                   "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfig.cmake"
                                   INSTALL_DESTINATION ${CMAKECONFIG_INSTALL_DIR}
 )
-ecm_setup_version(${KDEVELOP_VERSION_MAJOR}.${KDEVELOP_VERSION_MINOR}.${KDEVELOP_VERSION_PATCH}
+ecm_setup_version(${KDevelop_VERSION_MAJOR}.${KDevelop_VERSION_MINOR}.${KDevelop_VERSION_PATCH}
                   VARIABLE_PREFIX KDEVELOP
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kdevelop_version.h"
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KDevelopConfigVersion.cmake"

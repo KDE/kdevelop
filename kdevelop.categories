@@ -3,29 +3,56 @@
 # logname<space>description
 
 # Plugins
-kdevplatform.plugins.android KDevelop plugin: android
-kdevelop.languages.clang KDevelop plugin: clang-based language support
-kdevelop.projectmanagers.qmake KDevelop plugin: qmake
-kdevelop.projectmanagers.cmake KDevelop plugin: cmake
-kdevelop.projectmanagers.custommake KDevelop plugin: custommake
-kdevelop.projectmanagers.custombuildsystem KDevelop plugin: custombuildsystem
-kdevelop.languages.qmljs.duchain KDevelop plugin: qmljs duchain
-kdevelop.languages.qmljs KDevelop plugin: qmljs
-kdevelop.definesandincludes KDevelop plugin: definesandincludes
-kdevelop.launchers.executeplasmoid KDevelop plugin: executeplasmoid
-kdevelop.analyzers.cppcheck KDevelop plugin: cppcheck
-kdevelop.analyzers.heaptrack KDevelop plugin: heaptrack
-kdevelop.formatters.astyle KDevelop plugin: astyle
-kdevelop.formatters.customscript KDevelop plugin: customscript
-kdevelop.debuggers.lldb KDevelop plugin: lldb
-kdevelop.debuggers.gdb KDevelop plugin: gdb
-kdevelop.debuggers.common KDevelop plugin: debuggers common
-kdevelop.providers.ghprovider KDevelop plugin: githubprovider
-kdevelop.documentation.qthelp KDevelop plugin: qthelp
-kdevelop.projectbuilders.cmakebuilder KDevelop plugin: cmakebuilder
-kdevelop.projectbuilders.qmakebuilder KDevelop plugin: qmakebuilder
-kdevelop.projectbuilders.ninjabuilder KDevelop plugin: ninjabuilder
-kdevelop.projectbuilders.makebuilder KDevelop plugin: makebuilder
+kdevelop.plugins.android KDevelop plugin: android
+kdevelop.plugins.appwizard KDevelop plugin: appwizard
+kdevelop.plugins.astyle KDevelop plugin: astyle
+kdevelop.plugins.clang KDevelop plugin: clang-based language support
+kdevelop.plugins.classbrowser KDevelop plugin: classbrowser
+kdevelop.plugins.cmake KDevelop plugin: cmake
+kdevelop.plugins.cmakebuilder KDevelop plugin: cmakebuilder
+kdevelop.plugins.codeutils KDevelop plugin: codeutils
+kdevelop.plugins.common KDevelop plugin: debuggers common
+kdevelop.plugins.contextbrowser KDevelop plugin: contextbrowser
+kdevelop.plugins.cppcheck KDevelop plugin: cppcheck
+kdevelop.plugins.custombuildsystem KDevelop plugin: custombuildsystem
+kdevelop.plugins.custommake KDevelop plugin: custommake
+kdevelop.plugins.customscript KDevelop plugin: customscript
+kdevelop.plugins.cvs KDevelop plugin: cvs
+kdevelop.plugins.definesandincludes KDevelop plugin: definesandincludes
+kdevelop.plugins.docker KDevelop plugin: docker
+kdevelop.plugins.documentswitcher KDevelop plugin: documentswitcher
+kdevelop.plugins.execute KDevelop plugin: execute
+kdevelop.plugins.executeplasmoid KDevelop plugin: executeplasmoid
+kdevelop.plugins.executescript KDevelop plugin: executescript
+kdevelop.plugins.externalscript KDevelop plugin: externalscript
+kdevelop.plugins.filemanager KDevelop plugin: filemanager
+kdevelop.plugins.filetemplates KDevelop plugin: filetemplates
+kdevelop.plugins.flatpak KDevelop plugin: flatpak
+kdevelop.plugins.gdb KDevelop plugin: gdb
+kdevelop.plugins.ghprovider KDevelop plugin: githubprovider
+kdevelop.plugins.git KDevelop plugin: git
+kdevelop.plugins.grepview KDevelop plugin: grepview
+kdevelop.plugins.heaptrack KDevelop plugin: heaptrack
+kdevelop.plugins.konsole KDevelop plugin: konsole
+kdevelop.plugins.lldb KDevelop plugin: lldb
+kdevelop.plugins.makebuilder KDevelop plugin: makebuilder
+kdevelop.plugins.ninjabuilder KDevelop plugin: ninjabuilder
+kdevelop.plugins.outline KDevelop plugin: outline
+kdevelop.plugins.patchreview KDevelop plugin: patchreview
+kdevelop.plugins.perforce KDevelop plugin: perforce
+kdevelop.plugins.problemreporter KDevelop plugin: problemreporter
+kdevelop.plugins.projectfilter KDevelop plugin: projectfilter
+kdevelop.plugins.projectmanagerview KDevelop plugin: projectmanagerview
+kdevelop.plugins.qmake KDevelop plugin: qmake
+kdevelop.plugins.qmakebuilder KDevelop plugin: qmakebuilder
+kdevelop.plugins.qmljs KDevelop plugin: qmljs
+kdevelop.plugins.qmljs.duchain KDevelop plugin: qmljs duchain
+kdevelop.plugins.qthelp KDevelop plugin: qthelp
+kdevelop.plugins.quickopen KDevelop plugin: quickopen
+kdevelop.plugins.standardoutputview KDevelop plugin: standardoutputview
+kdevelop.plugins.svn KDevelop plugin: svn
+kdevelop.plugins.switchtobuddy KDevelop plugin: switchtobuddy
+kdevelop.plugins.testview KDevelop plugin: testview
 
 # Programs
 kdevelop.app KDevelop app 
