@@ -32,12 +32,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QStackedWidget" name="vcsImportOptions" >
-     <property name="currentIndex" >
-      <number>0</number>
-     </property>
-     <widget class="QWidget" name="page_2" />
-    </widget>
+    <widget class="QStackedWidget" name="vcsImportOptions"/>
    </item>
   </layout>
  </widget>
