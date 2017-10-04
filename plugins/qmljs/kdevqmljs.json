@@ -38,6 +38,7 @@
         "QML/JS",
         "JavaScript"
     ],
+    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "NoGUI",
     "X-KDevelop-SupportedMimeTypes": [
         "text/x-qml",

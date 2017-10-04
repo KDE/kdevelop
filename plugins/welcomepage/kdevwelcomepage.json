@@ -33,5 +33,6 @@
             "KDevelop/Plugin"
         ]
     },
+    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"
 }
