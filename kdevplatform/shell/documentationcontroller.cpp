@@ -128,7 +128,7 @@ DocumentationController::~DocumentationController()
 
 void DocumentationController::initialize()
 {
-    if(!documentationProviders().isEmpty() && !(Core::self()->setupFlags() & Core::NoUi)) {
+    if (!(Core::self()->setupFlags() & Core::NoUi)) {
         Core::self()->uiController()->addToolView(i18n("Documentation"), m_factory);
     }
 }
