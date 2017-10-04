@@ -57,6 +57,7 @@
         "org.kdevelop.IBuildSystemManager",
         "org.kdevelop.IProjectFileManager"
     ],
+    "X-KDevelop-Category": "Project",
     "X-KDevelop-Mode": "NoGUI",
     "X-KDevelop-ProjectFilesFilter": [
         "*.pro"

@@ -1,6 +1,8 @@
 # BEGIN: Analyzers
 add_subdirectory(cppcheck)
-add_subdirectory(heaptrack)
+if(UNIX AND NOT (APPLE OR CYGWIN))
+    add_subdirectory(heaptrack)
+endif()
 # END: Analyzers
 
 # BEGIN: Debuggers

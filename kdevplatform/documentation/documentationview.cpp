@@ -87,6 +87,7 @@ void DocumentationView::setupActions()
     addAction(mForward);
 
     mHomeAction = new QAction(QIcon::fromTheme(QStringLiteral("go-home")), i18n("Home"), this);
+    mHomeAction->setEnabled(false);
     connect(mHomeAction, &QAction::triggered, this, &DocumentationView::showHome);
     addAction(mHomeAction);
 
@@ -96,6 +97,7 @@ void DocumentationView::setupActions()
     addAction(providersAction);
 
     mIdentifiers = new QLineEdit(this);
+    mIdentifiers->setEnabled(false);
     mIdentifiers->setClearButtonEnabled(true);
     mIdentifiers->setPlaceholderText(i18n("Search..."));
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
@@ -117,6 +119,7 @@ void DocumentationView::setupActions()
 
     mFind = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("Find in Text..."), this);
     mFind->setToolTip(i18n("Find in text of current documentation page."));
+    mFind->setEnabled(false);
     connect(mFind, &QAction::triggered, mFindDoc, &DocumentationFindWidget::startSearch);
     addAction(mFind);
 
@@ -136,7 +139,10 @@ void DocumentationView::initialize()
     }
     connect(mProvidersModel, &ProvidersModel::providersChanged, this, &DocumentationView::emptyHistory);
 
-    if (mProvidersModel->rowCount() > 0) {
+    const bool hasProviders = (mProviders->count() > 0);
+    mHomeAction->setEnabled(hasProviders);
+    mIdentifiers->setEnabled(hasProviders);
+    if (hasProviders) {
         changedProvider(0);
     }
 }
@@ -238,18 +244,27 @@ void DocumentationView::emptyHistory()
     mCurrent = mHistory.end();
     mBack->setEnabled(false);
     mForward->setEnabled(false);
-    if (mProviders->count() > 0) {
+    const bool hasProviders = (mProviders->count() > 0);
+    mHomeAction->setEnabled(hasProviders);
+    mIdentifiers->setEnabled(hasProviders);
+    if (hasProviders) {
         mProviders->setCurrentIndex(0);
         changedProvider(0);
+    } else {
+        updateView();
     }
 }
 
 void DocumentationView::updateView()
 {
-    mProviders->setCurrentIndex(mProvidersModel->rowForProvider((*mCurrent)->provider()));
-    mIdentifiers->completer()->setModel((*mCurrent)->provider()->indexModel());
-    mIdentifiers->setText((*mCurrent)->name());
-    mIdentifiers->completer()->setCompletionPrefix((*mCurrent)->name());
+    if (mCurrent != mHistory.end()) {
+        mProviders->setCurrentIndex(mProvidersModel->rowForProvider((*mCurrent)->provider()));
+        mIdentifiers->completer()->setModel((*mCurrent)->provider()->indexModel());
+        mIdentifiers->setText((*mCurrent)->name());
+        mIdentifiers->completer()->setCompletionPrefix((*mCurrent)->name());
+    } else {
+        mIdentifiers->clear();
+    }
 
     QLayoutItem* lastview = layout()->takeAt(0);
     Q_ASSERT(lastview);
@@ -261,9 +276,15 @@ void DocumentationView::updateView()
     delete lastview;
 
     mFindDoc->setEnabled(false);
-    QWidget* w = (*mCurrent)->documentationWidget(mFindDoc, this);
-    Q_ASSERT(w);
-    QWidget::setTabOrder(mIdentifiers, w);
+    QWidget* w;
+    if (mCurrent != mHistory.end()) {
+        w = (*mCurrent)->documentationWidget(mFindDoc, this);
+        Q_ASSERT(w);
+        QWidget::setTabOrder(mIdentifiers, w);
+    } else {
+        // placeholder widget at location of doc view
+        w = new QWidget(this);
+    }
 
     mFind->setEnabled(mFindDoc->isEnabled());
     if (!mFindDoc->isEnabled()) {
