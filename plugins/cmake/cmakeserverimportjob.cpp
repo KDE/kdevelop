@@ -200,6 +200,6 @@ void CMakeServerImportJob::processResponse(const QJsonObject& response)
     } else if (responseType == QLatin1String("message") || responseType == QLatin1String("hello")) {
         // Known, but not used for anything currently.
     } else {
-        qCDebug(CMAKE) << "unhandled message" << response;
+        qCWarning(CMAKE) << "unhandled message" << response;
     }
 }
