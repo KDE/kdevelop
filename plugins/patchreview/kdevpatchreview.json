@@ -50,7 +50,6 @@
     "X-KDevelop-Languages": [
         "Diff"
     ],
-    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI",
     "X-KDevelop-SupportedMimeTypes": [
         "text/x-diff",

@@ -32,6 +32,5 @@
     "X-KDevelop-Interfaces": [
         "org.kdevelop.ITestNonGuiInterface"
     ], 
-    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "NoGUI"
 }

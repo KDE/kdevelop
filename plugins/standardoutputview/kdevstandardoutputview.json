@@ -40,6 +40,5 @@
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IOutputView"
     ],
-    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"
 }
