@@ -120,6 +120,11 @@ DocumentationController::DocumentationController(Core* core)
     m_showDocumentation->setText(i18n("Show Documentation"));
     m_showDocumentation->setIcon(QIcon::fromTheme(QStringLiteral("documentation")));
     connect(m_showDocumentation, &QAction::triggered, this, &DocumentationController::doShowDocumentation);
+
+    // registering the tool view here so it registered before the areas are restored
+    // and thus also gets treated like the ones registered from plugins
+    // cmp. comment about tool views in CorePrivate::initialize
+    core->uiController()->addToolView(i18n("Documentation"), m_factory);
 }
 
 DocumentationController::~DocumentationController()
@@ -128,9 +133,6 @@ DocumentationController::~DocumentationController()
 
 void DocumentationController::initialize()
 {
-    if (!(Core::self()->setupFlags() & Core::NoUi)) {
-        Core::self()->uiController()->addToolView(i18n("Documentation"), m_factory);
-    }
 }
 
 
