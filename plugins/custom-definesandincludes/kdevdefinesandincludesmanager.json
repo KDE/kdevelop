@@ -52,6 +52,5 @@
         "org.kdevelop.IDefinesAndIncludesManager"
     ],
     "X-KDevelop-LoadMode": "AlwaysOn",
-    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "NoGUI"
 }

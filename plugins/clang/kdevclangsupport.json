@@ -62,7 +62,6 @@
         "Objective-C"
     ],
     "X-KDevelop-LoadMode": "AlwaysOn",
-    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "NoGUI",
     "X-KDevelop-SupportedMimeTypes": [
         "text/x-chdr",

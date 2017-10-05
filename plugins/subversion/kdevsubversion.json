@@ -61,6 +61,5 @@
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IBasicVersionControl"
     ],
-    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"
 }
