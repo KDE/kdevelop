@@ -46,7 +46,7 @@ QTEST_MAIN(TestFiles)
 
 void TestFiles::initTestCase()
 {
-  AutoTestShell::init({"kdevqmljslanguagesupport"});
+  AutoTestShell::init({"kdevqmljs"});
   TestCore::initialize(KDevelop::Core::NoUi);
   DUChain::self()->disablePersistentStorage();
   Core::self()->languageController()->backgroundParser()->setDelay(0);

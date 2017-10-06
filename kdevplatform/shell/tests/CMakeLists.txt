@@ -19,11 +19,23 @@ ecm_add_test(test_sessioncontroller.cpp
 
 set(TEST_PLUGIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/testplugindir")
 configure_file("testfilepaths.h.cmake" "testfilepaths.h" ESCAPE_QUOTES)
-kdevplatform_add_plugin(kdevnonguiinterfaceplugin JSON kdevnonguiinterfaceplugin.json SKIP_INSTALL SOURCES nonguiinterfaceplugin.cpp)
-target_link_libraries(kdevnonguiinterfaceplugin Qt5::Core KDev::Interfaces)
-set_target_properties(kdevnonguiinterfaceplugin PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${TEST_PLUGIN_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}")
+
+macro(KDEVSHELL_ADD_TEST_PLUGIN _PLUGIN_NAME)
+    kdevplatform_add_plugin(${_PLUGIN_NAME} JSON plugins/${_PLUGIN_NAME}.testpluginjson SKIP_INSTALL SOURCES plugins/${_PLUGIN_NAME}.cpp)
+    target_link_libraries(${_PLUGIN_NAME} Qt5::Core KDev::Interfaces)
+    set_target_properties(${_PLUGIN_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${TEST_PLUGIN_DIR}/kdevplatform/${KDEV_PLUGIN_VERSION}")
+endmacro()
+
+kdevshell_add_test_plugin(nonguiinterfaceplugin)
+kdevshell_add_test_plugin(projectdefaultplugin)
+kdevshell_add_test_plugin(projectnondefaultplugin)
+kdevshell_add_test_plugin(globaldefaultplugin)
+kdevshell_add_test_plugin(globalnondefaultplugin)
 
 ecm_add_test(test_plugincontroller.cpp
+    LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)
+
+ecm_add_test(test_pluginenabling.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Shell KDev::Interfaces KDev::Sublime)
 
 ecm_add_test(test_testcontroller.cpp

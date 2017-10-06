@@ -44,7 +44,7 @@ void TestCMakeManager::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
 
-    AutoTestShell::init({"kdevcmakemanager"});
+    AutoTestShell::init({"KDevCMakeManager", "KDevCMakeBuilder", "KDevMakeBuilder", "KDevStandardOutputView"});
     TestCore::initialize();
 
     cleanup();

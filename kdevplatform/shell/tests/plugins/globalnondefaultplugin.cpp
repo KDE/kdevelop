@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2007 Hamish Rodda <rodda@kde.org>
+ * Copyright 2017 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -19,16 +19,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "nonguiinterfaceplugin.h"
+#include <interfaces/iplugin.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
-K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevnonguiinterfaceplugin.json", registerPlugin<NonGuiInterfacePlugin>();)
+class GlobalNonDefaultPlugin : public KDevelop::IPlugin
+{
+    Q_OBJECT
+public:
+    explicit GlobalNonDefaultPlugin(QObject* parent, const QVariantList&);
+};
 
-NonGuiInterfacePlugin::NonGuiInterfacePlugin( QObject* parent, const QVariantList& )
-    : IPlugin( QStringLiteral("kdevnonguiinterfaceplugin"), parent )
+GlobalNonDefaultPlugin::GlobalNonDefaultPlugin(QObject* parent, const QVariantList&)
+    : IPlugin(QStringLiteral("globalnondefaultplugin"), parent)
 {
 }
 
-#include "nonguiinterfaceplugin.moc"
+K_PLUGIN_FACTORY_WITH_JSON(GlobalNonDefaultPluginFactory, "globalnondefaultplugin.testpluginjson",
+                           registerPlugin<GlobalNonDefaultPlugin>();)
 
+#include "globalnondefaultplugin.moc"

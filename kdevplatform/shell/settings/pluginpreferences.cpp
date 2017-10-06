@@ -68,7 +68,6 @@ PluginPreferences::PluginPreferences(QWidget* parent)
                 category = QStringLiteral("Other");
             }
             KPluginInfo kpi(info);
-            kpi.setPluginEnabled(Core::self()->pluginControllerInternal()->isEnabled(info));
             plugins[category] << kpi;
         } else
             qCDebug(SHELL) << "skipping..." << info.pluginId() << info.value(QStringLiteral("X-KDevelop-Category")) << loadMode;
@@ -82,7 +81,6 @@ PluginPreferences::PluginPreferences(QWidget* parent)
                              Core::self()->activeSession()->config());
     }
     connect(selector, &KPluginSelector::changed, this, &PluginPreferences::changed);
-    selector->load();
 }
 
 void PluginPreferences::defaults()
