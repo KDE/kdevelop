@@ -49,9 +49,9 @@
             "KDevelop/Plugin"
         ]
     },
+    "X-KDevelop-Category": "Global",
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IProjectProvider"
     ],
-    "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"
 }
