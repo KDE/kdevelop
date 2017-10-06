@@ -50,6 +50,7 @@
             "KDevelop/Plugin"
         ]
     },
+    "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "CustomMake",
     "X-KDevelop-IRequired": [
         "org.kdevelop.IMakeBuilder",
@@ -59,7 +60,6 @@
         "org.kdevelop.IBuildSystemManager",
         "org.kdevelop.IProjectFileManager"
     ],
-    "X-KDevelop-Category": "Project",
     "X-KDevelop-Mode": "NoGUI",
     "X-KDevelop-ProjectFilesFilter": [
         "GNUmakefile",

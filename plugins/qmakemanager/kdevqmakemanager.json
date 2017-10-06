@@ -51,6 +51,7 @@
             "KDevelop/Plugin"
         ]
     },
+    "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "QMake",
     "X-KDevelop-IRequired": [
         "org.kdevelop.IQMakeBuilder"
@@ -59,7 +60,6 @@
         "org.kdevelop.IBuildSystemManager",
         "org.kdevelop.IProjectFileManager"
     ],
-    "X-KDevelop-Category": "Project",
     "X-KDevelop-Mode": "NoGUI",
     "X-KDevelop-ProjectFilesFilter": [
         "*.pro"
