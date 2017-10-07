@@ -69,7 +69,6 @@ Sublime::MainWindow* toSublimeWindow(KParts::MainWindow* window)
 void TestBuddies::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.clang.debug=true\n"));
-    QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     AutoTestShell::init({QStringLiteral("kdevclangsupport")});
     TestCore::initialize();
     m_documentController = ICore::self()->documentController();
