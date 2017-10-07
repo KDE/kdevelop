@@ -313,7 +313,8 @@ void PatchReviewPlugin::updateKompareModel() {
     emit patchChanged();
 }
 
-K_PLUGIN_FACTORY_WITH_JSON(KDevProblemReporterFactory, "kdevpatchreview.json", registerPlugin<PatchReviewPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KDevPatchReviewFactory, "kdevpatchreview.json",
+                           registerPlugin<PatchReviewPlugin>();)
 
 class PatchReviewToolViewFactory : public KDevelop::IToolViewFactory
 {
