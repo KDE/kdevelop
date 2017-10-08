@@ -50,6 +50,7 @@
             "KDevelop/Plugin"
         ]
     },
+    "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "CustomMake",
     "X-KDevelop-IRequired": [
         "org.kdevelop.IMakeBuilder",

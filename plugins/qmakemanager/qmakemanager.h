@@ -40,8 +40,6 @@ public:
 
     ~QMakeProjectManager() override;
 
-    static QMakeProjectManager* self();
-
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
     //BEGIN AbstractFileManager
@@ -101,8 +99,6 @@ private:
     mutable QString m_qtIncludeDir;
     QAction* m_runQMake;
     QMakeFolderItem* m_actionItem;
-
-    static QMakeProjectManager* m_self;
 };
 
 #endif

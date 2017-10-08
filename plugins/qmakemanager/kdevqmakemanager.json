@@ -49,6 +49,7 @@
             "KDevelop/Plugin"
         ]
     },
+    "X-KDevelop-Category": "Project",
     "X-KDevelop-FileManager": "QMake",
     "X-KDevelop-IRequired": [
         "org.kdevelop.IQMakeBuilder"

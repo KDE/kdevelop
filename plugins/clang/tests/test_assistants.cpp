@@ -69,7 +69,6 @@ void TestAssistants::initTestCase()
         "default.debug=true\n"
         "kdevelop.plugins.clang.debug=true\n"
     ));
-    QVERIFY(qputenv("KDEV_DISABLE_PLUGINS", "kdevcppsupport"));
     QVERIFY(qputenv("KDEV_CLANG_DISPLAY_DIAGS", "1"));
     AutoTestShell::init({QStringLiteral("kdevclangsupport"), QStringLiteral("kdevproblemreporter")});
     TestCore::initialize();
