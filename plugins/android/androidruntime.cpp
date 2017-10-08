@@ -76,7 +76,7 @@ void AndroidRuntime::startProcess(QProcess* process) const
 
 void AndroidRuntime::startProcess(KProcess* process) const
 {
-    if (process->program().constFirst().endsWith(QLatin1String("cmake"))) {
+    if (process->program().first().endsWith(QLatin1String("cmake"))) {
         process->setProgram(process->program() << args());
         setEnvironmentVariables(process);
     }

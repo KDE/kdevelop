@@ -59,7 +59,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, const QHash< 
             if (target.artifacts.isEmpty()) {
                 continue;
             }
-            executablePath = target.artifacts.constFirst();
+            executablePath = target.artifacts.first();
         }
 
         CTestSuite* suite = new CTestSuite(test.name, executablePath, {}, project, test.arguments, test.properties);
