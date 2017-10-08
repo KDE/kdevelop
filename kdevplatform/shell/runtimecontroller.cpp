@@ -61,7 +61,7 @@ KDevelop::RuntimeController::RuntimeController(KDevelop::Core* core)
     }
 
     addRuntimes(new IdentityRuntime);
-    setCurrentRuntime(m_runtimes.constFirst());
+    setCurrentRuntime(m_runtimes.first());
 
     if (haveUI) {
         setupActions();

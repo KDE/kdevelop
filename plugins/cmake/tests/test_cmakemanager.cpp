@@ -379,7 +379,7 @@ void TestCMakeManager::testExecutableOutputPath()
     const auto targets = project->projectItem()->targetList();
     QCOMPARE(targets.count(), 1);
 
-    const auto target = targets.constFirst()->executable();
+    const auto target = targets.first()->executable();
     QVERIFY(target);
     const KDevelop::Path exePath(target->executable()->builtUrl());
     QCOMPARE(exePath, KDevelop::Path(project->buildSystemManager()->buildDirectory(project->projectItem()), QLatin1String("randomplace/mytest")));

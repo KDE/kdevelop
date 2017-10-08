@@ -65,6 +65,21 @@ QVector<QByteArray> extraArgs()
     return result;
 }
 
+void sanitizeArguments(QVector<QByteArray>& arguments)
+{
+    // We remove the -Werror flag, and replace -Werror=foo by -Wfoo.
+    // Warning as error may cause problem to the clang parser.
+    const auto asError = QByteArrayLiteral("-Werror=");
+    for (auto& argument : arguments) {
+        if (argument == "-Werror") {
+            argument.clear();
+        } else if (argument.startsWith(asError)) {
+            // replace -Werror=foo by -Wfoo
+            argument.remove(2, asError.length() - 2);
+        }
+    }
+}
+
 QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Options options, const ParserSettings& parserSettings)
 {
     QMimeDatabase db;
@@ -87,9 +102,12 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
     if (parserSettings.parserOptions.isEmpty()) {
         // The parserOptions can be empty for some unit tests that use ParseSession directly
         auto defaultArguments = ClangSettingsManager::self()->parserSettings(path).toClangAPI();
+
         defaultArguments.append(QByteArrayLiteral("-nostdinc"));
         defaultArguments.append(QByteArrayLiteral("-nostdinc++"));
         defaultArguments.append(QByteArrayLiteral("-xc++"));
+
+        sanitizeArguments(defaultArguments);
         return defaultArguments;
     }
 
@@ -101,10 +119,14 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
 
     if (options & ParseSessionData::PrecompiledHeader) {
         result.append(parserSettings.isCpp() ? QByteArrayLiteral("-xc++-header") : QByteArrayLiteral("-xc-header"));
+
+        sanitizeArguments(result);
         return result;
     }
 
     result.append(parserSettings.isCpp() ? QByteArrayLiteral("-xc++") : QByteArrayLiteral("-xc"));
+
+    sanitizeArguments(result);
     return result;
 }
 
