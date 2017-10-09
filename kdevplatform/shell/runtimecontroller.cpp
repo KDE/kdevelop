@@ -35,13 +35,23 @@ class IdentityRuntime : public IRuntime
     QString name() const override { return i18n("Host System"); }
 
     void startProcess(KProcess *process) const override {
-        connect(process, &QProcess::errorOccurred, this, [process](QProcess::ProcessError error) {
+#if QT_VERSION < 0x050600
+        connect(process, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),
+#else
+        connect(process, &QProcess::errorOccurred,
+#endif
+            this, [process](QProcess::ProcessError error) {
             qCWarning(SHELL) << "error:" << error << process->program() << process->errorString();
         });
         process->start();
     }
     void startProcess(QProcess *process) const override {
-        connect(process, &QProcess::errorOccurred, this, [process](QProcess::ProcessError error) {
+#if QT_VERSION < 0x050600
+        connect(process, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),
+#else
+        connect(process, &QProcess::errorOccurred,
+#endif
+            this, [process](QProcess::ProcessError error) {
             qCWarning(SHELL) << "error:" << error << process->program() << process->errorString();
         });
         process->start();
