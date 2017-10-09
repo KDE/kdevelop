@@ -19,8 +19,10 @@
 
 #include "nativeappjob.h"
 
+#include <QAbstractButton>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QPointer>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -133,19 +135,35 @@ NativeAppJob* findNativeJob(KJob* j)
 
 void NativeAppJob::start()
 {
-    // we kill any execution of the configuration
-    auto currentJobs = ICore::self()->runController()->currentJobs();
-    for (auto it = currentJobs.begin(); it != currentJobs.end();) {
-        NativeAppJob* job = findNativeJob(*it);
-        if (job && job != this && job->m_name == m_name) {
-            QMessageBox::StandardButton button = QMessageBox::question(nullptr, i18n("Job already running"), i18n("'%1' is already being executed. Should we kill the previous instance?", m_name));
-            if (button != QMessageBox::No && ICore::self()->runController()->currentJobs().contains(*it)) {
-                (*it)->kill();
-            }
-            currentJobs = ICore::self()->runController()->currentJobs();
-            it = currentJobs.begin();
-        } else {
-            ++it;
+    QVector<QPointer<NativeAppJob> > currentJobs;
+    // collect running instances of the same type
+    for (auto j : ICore::self()->runController()->currentJobs()) {
+        NativeAppJob* njob = findNativeJob(j);
+        if (njob && njob != this && njob->m_name == m_name)
+            currentJobs << njob;
+    }
+
+    if (!currentJobs.isEmpty()) {
+        QMessageBox msgBox(QMessageBox::Question,
+                    i18n("Job already running"),
+                    i18n("'%1' is already being executed.", m_name),
+                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        msgBox.button(QMessageBox::No)->setText(i18n("Kill All Instances"));
+        msgBox.button(QMessageBox::Yes)->setText(i18n("Start Another"));
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+
+        switch (msgBox.exec()) {
+            case QMessageBox::Yes: // simply start another job
+                break;
+            case QMessageBox::No: // kill the running instance
+                for (auto & job : currentJobs) {
+                    if (job)
+                        job->kill();
+                }
+                break;
+            default: // cancel starting a new job
+                kill();
+                return;
         }
     }
 
