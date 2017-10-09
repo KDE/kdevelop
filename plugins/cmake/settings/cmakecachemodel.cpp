@@ -52,6 +52,7 @@ void CMakeCacheModel::read()
     labels.append(i18n("Value"));
     labels.append(i18n("Comment"));
     labels.append(i18n("Advanced"));
+    labels.append(i18n("Strings"));
     setHorizontalHeaderLabels(labels);
 
     QFile file(m_filePath.toLocalFile());
@@ -91,16 +92,20 @@ void CMakeCacheModel::read()
                 if(flag==QLatin1String("INTERNAL"))
                 {
                     m_internal.insert(name);
-                } else if(flag==QLatin1String("ADVANCED"))
+                } else if(flag==QLatin1String("ADVANCED") || flag==QLatin1String("STRINGS"))
                 {
                     if(variablePos.contains(name))
                     {
                         int pos=variablePos[name];
-                        QStandardItem *p = item(pos, 4);
+                        
+                        // if the flag is not ADVANCED, it's STRINGS.
+                        // The latter is stored in column 5
+                        int column = flag==QLatin1String("ADVANCED") ? 4 : 5;
+                        QStandardItem *p = item(pos, column);
                         if(!p)
                         {
                             p=new QStandardItem(value);
-                            setItem(pos, 4, p);
+                            setItem(pos, column, p);
                         }
                         else
                         {
@@ -118,7 +123,9 @@ void CMakeCacheModel::read()
                     lineItems[0]->setText(lineItems[0]->text()+'-'+flag);
                 }
                 insertRow(currentIdx, lineItems);
-                variablePos[name]=currentIdx;
+                if (!variablePos.contains(name)) {
+                    variablePos[name]=currentIdx;
+                }
                 currentIdx++;
                 currentComment.clear();
             }

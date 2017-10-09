@@ -23,6 +23,7 @@
 
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QComboBox>
 #include <KUrlRequester>
 #include <QUrl>
 
@@ -49,6 +50,19 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
             QCheckBox* box=new QCheckBox(parent);
             connect(box, &QCheckBox::toggled, this, &CMakeCacheDelegate::checkboxToggled);
             ret = box;
+        }
+        else if(type==QLatin1String("STRING"))
+        {
+            QModelIndex stringsIdx=index.sibling(index.row(), 5);
+            QString strings=typeIdx.model()->data(stringsIdx, Qt::DisplayRole).toString();
+            if (!strings.isEmpty()) {
+                QComboBox* comboBox = new QComboBox(parent);
+                comboBox->setEditable(true);
+                comboBox->addItems(strings.split(';'));
+                ret = comboBox;
+            } else {
+                ret=QItemDelegate::createEditor(parent, option, index);
+            }
         }
         else if(type==QLatin1String("PATH") || type==QLatin1String("FILEPATH"))
         {
