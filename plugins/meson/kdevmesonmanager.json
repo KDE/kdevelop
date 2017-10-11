@@ -1,0 +1,68 @@
+{
+    "KPlugin": {
+        "Category": "Project Management",
+        "Description": "Imports and edits Meson projects",
+        "Description[ca@valencia]": "Importa i edita projectes del Meson",
+        "Description[ca]": "Importa i edita projectes del Meson",
+        "Description[cs]": "Importuje a upravuje vlastní projekty Meson",
+        "Description[de]": "Import und Bearbeitung von benutzerdefinierten Meson-Projekten",
+        "Description[es]": "Importa y edita proyectos Meson",
+        "Description[et]": "Meson'i projektide import ja muutmine",
+        "Description[fi]": "Tuo ja muokkaa Meson-projekteja",
+        "Description[fr]": "Importe et édite des projet Meson",
+        "Description[gl]": "Importa e edita proxectos Meson.",
+        "Description[it]": "Importa e modifica i progetti Meson",
+        "Description[nl]": "Importeert en bewerkt Meson-projecten",
+        "Description[pl]": "Importuje i edytuje projekty Meson",
+        "Description[pt]": "Importa e edita os projectos do Meson",
+        "Description[pt_BR]": "Importa e edita os projetos do Meson",
+        "Description[sk]": "Importuje a upravuje projekty Meson",
+        "Description[sl]": "Uvozi in ureja projekte po meri temelječe na Meson",
+        "Description[sv]": "Importerar och redigerar Meson-projekt",
+        "Description[tr]": "Meson projelerini içeriye aktarır ve düzenler",
+        "Description[uk]": "Імпортує і дає змогу редагувати проекти Meson",
+        "Description[x-test]": "xxImports and edits Meson projectsxx",
+        "Description[zh_CN]": "导入并编辑 Meson 工程",
+        "Icon": "qtlogo",
+        "Id": "KDevMesonManager",
+        "Name": "Meson Project Manager",
+        "Name[ca@valencia]": "Gestor de projectes Meson",
+        "Name[ca]": "Gestor de projectes Meson",
+        "Name[cs]": "Správce projektů Meson",
+        "Name[de]": "Meson-Projektverwaltung",
+        "Name[es]": "Gestor de proyectos Meson",
+        "Name[et]": "Meson'i projektihaldur",
+        "Name[fi]": "Meson-projektinhallinta",
+        "Name[fr]": "Gestionnaire de projet Meson",
+        "Name[gl]": "Xestor de proxectos Meson",
+        "Name[it]": "Gestore progetto Meson",
+        "Name[nl]": "Meson-projectbeheerder",
+        "Name[pl]": "Zarządzanie projektem Meson",
+        "Name[pt]": "Gestor de Projectos Meson",
+        "Name[pt_BR]": "Gerenciador de projetos do Meson",
+        "Name[sk]": "Správca projektov Meson",
+        "Name[sl]": "Upravljalnik projektov Meson",
+        "Name[sv]": "Meson-projekthantering",
+        "Name[tr]": "Meson Proje Yöneticisi",
+        "Name[uk]": "Керування проектами Meson",
+        "Name[x-test]": "xxMeson Project Managerxx",
+        "Name[zh_CN]": "Meson 工程管理器",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-Category": "Project",
+    "X-KDevelop-FileManager": "Meson",
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IMesonBuilder"
+    ],
+    "X-KDevelop-Interfaces": [
+        "org.kdevelop.IBuildSystemManager",
+        "org.kdevelop.IProjectFileManager"
+    ],
+    "X-KDevelop-Mode": "NoGUI",
+    "X-KDevelop-ProjectFilesFilter": [
+        "*.pro"
+    ],
+    "X-KDevelop-ProjectFilesFilterDescription": "Meson Project Files"
+}
