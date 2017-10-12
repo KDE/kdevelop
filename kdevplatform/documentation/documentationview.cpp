@@ -44,6 +44,11 @@ using namespace KDevelop;
 DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
     : QWidget(parent), mProvidersModel(model)
 {
+    if (ICore::self()->shuttingDown()) {
+        qCWarning(DOCUMENTATION) << "DocumentationView created during shutdown; ignoring";
+        return;
+    }
+
     setWindowIcon(QIcon::fromTheme(QStringLiteral("documentation"), windowIcon()));
     setWindowTitle(i18n("Documentation"));
 
@@ -280,7 +285,9 @@ void DocumentationView::updateView()
     if (mCurrent != mHistory.end()) {
         w = (*mCurrent)->documentationWidget(mFindDoc, this);
         Q_ASSERT(w);
-        QWidget::setTabOrder(mIdentifiers, w);
+        if (mIdentifiers->window() == w->window()) {
+            QWidget::setTabOrder(mIdentifiers, w);
+        }
     } else {
         // placeholder widget at location of doc view
         w = new QWidget(this);
