@@ -7,6 +7,7 @@
         "Description[es]": "Proporciona un visor de salida de texto para que otros complementos muestren cosas como mensajes del compilador, por ejemplo.",
         "Description[it]": "Fornisce una vista degli strumenti testuale che può essere usata dalla estensioni per mostrare cose come i messaggi del compilatore.",
         "Description[nl]": "Levert tekstuitvoer van hulpmiddelen voor andere te gebruiken plugins, om zaken te tonen zoals berichten van compilers.",
+        "Description[pl]": "Zapewnia widok narzędzia wyjścia tekstu dla wykorzystania w innych wtyczkach, aby pokazać rzeczy takie jak komunikaty kompilatora.",
         "Description[pt]": "Oferece uma área de texto para os outros 'plugins' usarem, para apresentar algumas coisas, como as mensagens do compilador.",
         "Description[sv]": "Tillhandahåller en verktygsvy för textutmatning som andra insticksprogram kan använda för att visa saker som kompilatormeddelanden.",
         "Description[uk]": "Забезпечує роботу панелі показу текстових даних інших додатків, зокрема попереджень компілятора.",
