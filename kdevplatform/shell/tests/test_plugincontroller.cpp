@@ -47,14 +47,6 @@ void TestPluginController::cleanupTestCase()
     TestCore::shutdown();
 }
 
-void TestPluginController::init()
-{
-}
-
-void TestPluginController::cleanup()
-{
-}
-
 void TestPluginController::pluginInfo()
 {
     IPlugin* plugin = m_pluginCtrl->loadPlugin( QStringLiteral("kdevnonguiinterface") );

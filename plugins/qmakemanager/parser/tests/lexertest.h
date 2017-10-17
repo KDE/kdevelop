@@ -31,8 +31,6 @@ class LexerTest : public QObject
         explicit LexerTest( QObject* parent = nullptr );
         ~LexerTest() override;
     private Q_SLOTS:
-        void init();
-        void cleanup();
         void varAssignment();
         void varAssignment_data();
         void operators();

@@ -61,14 +61,6 @@ void TestRefactoring::cleanupTestCase()
     TestCore::shutdown();
 }
 
-void TestRefactoring::cleanup()
-{
-}
-
-void TestRefactoring::init()
-{
-}
-
 void TestRefactoring::testClassRename()
 {
     const QString codeBefore(QStringLiteral(R"(

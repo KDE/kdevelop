@@ -33,14 +33,6 @@ LexerTest::~LexerTest()
 {
 }
 
-void LexerTest::init()
-{
-}
-
-void LexerTest::cleanup()
-{
-}
-
 void LexerTest::varAssignment()
 {
     QFETCH(QString, project);
