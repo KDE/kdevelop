@@ -63,17 +63,6 @@ struct ConfigEntry
 
 namespace Utils
 {
-enum LanguageType
-{
-    C,
-    Cpp,
-    OpenCl,
-    Cuda,
-    ObjC,
-
-    Other = 100
-};
-
 LanguageType languageType(const KDevelop::Path& path, bool treatAmbiguousAsCPP = true);
 }
 

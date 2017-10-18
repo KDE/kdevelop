@@ -32,9 +32,9 @@ class GccLikeCompiler : public QObject, public ICompiler
 public:
     GccLikeCompiler( const QString& name, const QString& path, bool editable, const QString& factoryName );
 
-    KDevelop::Defines defines(const QString& arguments) const override;
+    KDevelop::Defines defines(Utils::LanguageType type, const QString& arguments) const override;
 
-    KDevelop::Path::List includes(const QString& arguments) const override;
+    KDevelop::Path::List includes(Utils::LanguageType type, const QString& arguments) const override;
 
 private:
     void invalidateCache();

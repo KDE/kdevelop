@@ -36,48 +36,40 @@ using namespace KDevelop;
 
 namespace
 {
-// compilers don't deduplicate QStringLiteral
-QString minusXC() { return QStringLiteral("-xc"); }
-QString minusXCPlusPlus() { return QStringLiteral("-xc++"); }
 
-QStringList languageOptions(const QString& arguments)
+QString languageOption(Utils::LanguageType type)
 {
-
-    // TODO: handle -ansi flag: In C mode, this is equivalent to -std=c90. In C++ mode, it is equivalent to -std=c++98.
-    // TODO: check for -x flag on command line
-    const QRegularExpression regexp(QStringLiteral("-std=(\\S+)"));
-    // see gcc manpage or llvm/tools/clang/include/clang/Frontend/LangStandards.def for list of valid language options
-    auto result = regexp.match(arguments);
-    if(result.hasMatch()){
-        const auto standard = result.captured(0);
-        const auto mode = result.capturedRef(1);
-        QString language;
-        if (mode.startsWith(QLatin1String("c++")) || mode.startsWith(QLatin1String("gnu++"))) {
-            language = minusXCPlusPlus();
-        } else if (mode.startsWith(QLatin1String("iso9899:"))) {
-            // all iso9899:xxxxx modes are C standards
-            language = minusXC();
-        } else {
-            // check for c11, gnu99, etc: all of them have a digit after the c/gnu
-            const QRegularExpression cRegexp(QStringLiteral("(c|gnu)\\d.*"));
-            if (cRegexp.match(mode).hasMatch()) {
-                language = minusXC();
-            }
-        }
-        if (language.isEmpty()) {
-            qCWarning(DEFINESANDINCLUDES) << "Failed to determine language from -std= flag:" << arguments;
-            language = minusXCPlusPlus();
-        }
-        return {standard, language};
-
+    switch (type) {
+        case Utils::C:
+            return QStringLiteral("-xc");
+        case Utils::Cpp:
+            return QStringLiteral("-xc++");
+        case Utils::OpenCl:
+            return QStringLiteral("-xcl");
+        case Utils::Cuda:
+            return QStringLiteral("-xcuda");
+        case Utils::ObjC:
+            return QStringLiteral("-xobjective-c");
+        default:
+            Q_UNREACHABLE();
     }
+}
+
+QString languageStandard(const QString& arguments)
+{
+    // TODO: handle -ansi flag: In C mode, this is equivalent to -std=c90. In C++ mode, it is equivalent to -std=c++98.
+    const QRegularExpression regexp(QStringLiteral("-std=(\\S+)"));
+    auto result = regexp.match(arguments);
+    if (result.hasMatch())
+        return result.captured(0);
+
     // no -std= flag passed -> assume c++11
-    return {QStringLiteral("-std=c++11"), minusXCPlusPlus()};
+    return QStringLiteral("-std=c++11");
 }
 
 }
 
-Defines GccLikeCompiler::defines(const QString& arguments) const
+Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& arguments) const
 {
     auto& data = m_definesIncludes[arguments];
     if (!data.definedMacros.isEmpty() ) {
@@ -93,7 +85,7 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
     // TODO: what about -mXXX or -target= flags, some of these change search paths/defines
-    auto compilerArguments = languageOptions(arguments);
+    QStringList compilerArguments{languageOption(type), languageStandard(arguments)};
     compilerArguments.append(QStringLiteral("-dM"));
     compilerArguments.append(QStringLiteral("-E"));
     compilerArguments.append(QProcess::nullDevice());
@@ -123,7 +115,7 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     return data.definedMacros;
 }
 
-Path::List GccLikeCompiler::includes(const QString& arguments) const
+Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& arguments) const
 {
     auto& data = m_definesIncludes[arguments];
     if ( !data.includePaths.isEmpty() ) {
@@ -147,7 +139,7 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     //  /usr/include
     // End of search list.
 
-    auto compilerArguments = languageOptions(arguments);
+    QStringList compilerArguments{languageOption(type), languageStandard(arguments)};
     compilerArguments.append(QStringLiteral("-E"));
     compilerArguments.append(QStringLiteral("-v"));
     compilerArguments.append(QProcess::nullDevice());

@@ -29,6 +29,20 @@
 
 #include "../idefinesandincludesmanager.h"
 
+namespace Utils
+{
+enum LanguageType
+{
+    C,
+    Cpp,
+    OpenCl,
+    Cuda,
+    ObjC,
+
+    Other = 100
+};
+}
+
 /// An interface that represents a compiler. Compiler provides standard include directories and standard defined macros.
 class ICompiler
 {
@@ -45,13 +59,13 @@ public:
      * @param arguments compiler command-line arguments
      * @return list of defined macros for the compiler
      */
-    virtual KDevelop::Defines defines(const QString& arguments) const = 0;
+    virtual KDevelop::Defines defines(Utils::LanguageType type, const QString& arguments) const = 0;
 
     /**
      * @param arguments compiler command-line arguments
      * @return list of include directories for the compiler
      */
-    virtual KDevelop::Path::List includes(const QString& arguments) const = 0;
+    virtual KDevelop::Path::List includes(Utils::LanguageType type, const QString& arguments) const = 0;
 
     void setPath( const QString &path );
 

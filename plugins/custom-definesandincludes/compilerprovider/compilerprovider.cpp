@@ -48,12 +48,12 @@ public:
         ICompiler(i18n("None"), QString(), QString(), false)
     {}
 
-    QHash< QString, QString > defines(const QString&) const override
+    QHash< QString, QString > defines(Utils::LanguageType, const QString&) const override
     {
         return {};
     }
 
-    Path::List includes(const QString&) const override
+    Path::List includes(Utils::LanguageType, const QString&) const override
     {
         return {};
     }
@@ -139,7 +139,8 @@ QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
         languageType = Utils::languageType(item->path(), config.parserArguments.parseAmbiguousAsCPP);
     }
 
-    return config.compiler->defines(languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
+    return config.compiler->defines(languageType,
+        languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
 }
 
 Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
@@ -150,7 +151,8 @@ Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
         languageType = Utils::languageType(item->path(), config.parserArguments.parseAmbiguousAsCPP);
     }
 
-    return config.compiler->includes(languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
+    return config.compiler->includes(languageType,
+        languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
 }
 
 Path::List CompilerProvider::frameworkDirectories( ProjectBaseItem* /* item */ ) const

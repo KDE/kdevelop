@@ -113,8 +113,8 @@ void TestCompilerProvider::testCompilerIncludesAndDefines()
     auto provider = settings->provider();
     for (auto c : provider->compilers()) {
         if (!c->editable() && !c->path().isEmpty()) {
-            QVERIFY(!c->defines({}).isEmpty());
-            QVERIFY(!c->includes({}).isEmpty());
+            QVERIFY(!c->defines(Utils::Cpp, {}).isEmpty());
+            QVERIFY(!c->includes(Utils::Cpp, {}).isEmpty());
         }
     }
 
@@ -123,8 +123,8 @@ void TestCompilerProvider::testCompilerIncludesAndDefines()
 
     auto compiler = provider->compilerForItem(nullptr);
     QVERIFY(compiler);
-    QVERIFY(!compiler->defines(QStringLiteral("--std=c++11")).isEmpty());
-    QVERIFY(!compiler->includes(QStringLiteral("--std=c++11")).isEmpty());
+    QVERIFY(!compiler->defines(Utils::Cpp, QStringLiteral("-std=c++11")).isEmpty());
+    QVERIFY(!compiler->includes(Utils::Cpp, QStringLiteral("-std=c++11")).isEmpty());
 }
 
 void TestCompilerProvider::testStorageBackwardsCompatible()
