@@ -132,7 +132,6 @@ public:
     void unloadProjectPlugins();
 
     void resetToDefaults();
-    bool isEnabled(const KPluginMetaData& info) const;
 
 private:
     /**

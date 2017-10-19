@@ -55,7 +55,7 @@ TestQMakeProject::~TestQMakeProject()
 
 void TestQMakeProject::initTestCase()
 {
-    AutoTestShell::init({ "kdevqmakemanager" });
+    AutoTestShell::init({ "KDevQMakeManager", "KDevQMakeBuilder", "KDevMakeBuilder", "KDevStandardOutputView" });
     TestCore::initialize();
 }
 

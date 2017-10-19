@@ -60,6 +60,8 @@ inline QString KEY_Version() { return QStringLiteral("X-KDevelop-Version"); }
 inline QString KEY_Interfaces() { return QStringLiteral("X-KDevelop-Interfaces"); }
 inline QString KEY_Required() { return QStringLiteral("X-KDevelop-IRequired"); }
 inline QString KEY_Optional() { return QStringLiteral("X-KDevelop-IOptional"); }
+inline QString KEY_KPlugin() { return QStringLiteral("KPlugin"); }
+inline QString KEY_EnabledByDefault() { return QStringLiteral("EnabledByDefault"); }
 
 inline QString KEY_Global() { return QStringLiteral("Global"); }
 inline QString KEY_Project() { return QStringLiteral("Project"); }
@@ -228,6 +230,7 @@ public:
      */
     bool isEnabled(const KPluginMetaData& info) const
     {
+        // first check black listing from environment
         static const QStringList disabledPlugins = QString::fromLatin1(qgetenv("KDEV_DISABLE_PLUGINS")).split(';');
         if (disabledPlugins.contains(info.pluginId())) {
             return false;
@@ -236,23 +239,11 @@ public:
         if (!isUserSelectable( info ))
             return true;
 
-        // in case there's a user preference, prefer that
+        // read stored user preference
         const KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins() );
         const QString pluginEnabledKey = info.pluginId() + KEY_Suffix_Enabled();
         if (grp.hasKey(pluginEnabledKey)) {
             return grp.readEntry(pluginEnabledKey, true);
-        }
-
-        // in all other cases: figure out if we want to load that plugin by default
-        const auto defaultPlugins = ShellExtension::getInstance()->defaultPlugins();
-        const bool isDefaultPlugin = defaultPlugins.isEmpty() || defaultPlugins.contains(info.pluginId());
-        if (isDefaultPlugin) {
-            return true;
-        }
-
-        if (!isGlobalPlugin( info )) {
-            QJsonValue enabledByDefault = info.rawData()[QStringLiteral("KPlugin")].toObject()[QStringLiteral("EnabledByDefault")];
-            return enabledByDefault.isNull() || enabledByDefault.toBool(); //We consider plugins enabled until specified otherwise
         }
 
         return false;
@@ -346,11 +337,6 @@ IPlugin* PluginController::loadPlugin( const QString& pluginName )
     return loadPluginInternal( pluginName );
 }
 
-bool PluginController::isEnabled( const KPluginMetaData& info ) const
-{
-    return d->isEnabled(info);
-}
-
 void PluginController::initialize()
 {
     QElapsedTimer timer;
@@ -361,7 +347,10 @@ void PluginController::initialize()
     {
         foreach( const KPluginMetaData& pi, d->plugins )
         {
-            pluginMap.insert( pi.pluginId(), true );
+            QJsonValue enabledByDefaultValue = pi.rawData()[KEY_KPlugin()].toObject()[KEY_EnabledByDefault()];
+            // plugins enabled until explicitly specified otherwise
+            const bool enabledByDefault = (enabledByDefaultValue.isNull() || enabledByDefaultValue.toBool());
+            pluginMap.insert(pi.pluginId(), enabledByDefault);
         }
     } else
     {
@@ -387,31 +376,27 @@ void PluginController::initialize()
         }
     }
 
-    foreach( const KPluginMetaData& pi, d->plugins )
-    {
-        if( isGlobalPlugin( pi ) )
-        {
-            QMap<QString, bool>::const_iterator it = pluginMap.constFind( pi.pluginId() );
-            if( it != pluginMap.constEnd() && ( it.value() || !isUserSelectable( pi ) ) )
-            {
-                // Plugin is mentioned in pluginmap and the value is true, so try to load it
-                loadPluginInternal( pi.pluginId() );
-                if(!grp.hasKey(pi.pluginId() + KEY_Suffix_Enabled())) {
-                    if( isUserSelectable( pi ) )
-                    {
-                        // If plugin isn't listed yet, add it with true now
-                        grp.writeEntry(pi.pluginId() + KEY_Suffix_Enabled(), true);
-                    }
-                } else if( grp.hasKey( pi.pluginId() + "Disabled" ) && !isUserSelectable( pi ) )
-                {
-                    // Remove now-obsolete entries
-                    grp.deleteEntry( pi.pluginId() + "Disabled" );
-                }
+    // store current known set of enabled plugins
+    foreach (const KPluginMetaData& pi, d->plugins) {
+        if (isUserSelectable(pi)) {
+            auto it = pluginMap.constFind(pi.pluginId());
+            if (it != pluginMap.constEnd() && (it.value())) {
+                grp.writeEntry(pi.pluginId() + KEY_Suffix_Enabled(), true);
             }
+        } else {
+            // Backward compat: Remove any now-obsolete entries
+            grp.deleteEntry(pi.pluginId() + QLatin1String("Disabled"));
         }
     }
     // Synchronize so we're writing out to the file.
     grp.sync();
+
+    // load global plugins
+    foreach (const KPluginMetaData& pi, d->plugins) {
+        if (isGlobalPlugin(pi)) {
+            loadPluginInternal(pi.pluginId());
+        }
+    }
 
     qCDebug(SHELL) << "Done loading plugins - took:" << timer.elapsed() << "ms";
 }
@@ -490,7 +475,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return plugin;
     }
 
-    if ( !isEnabled( info ) ) {
+    if (!d->isEnabled(info)) {
         // Do not load disabled plugins
         qCWarning(SHELL) << "Not loading plugin named" << pluginId << "because it has been disabled!";
         return nullptr;
@@ -760,6 +745,7 @@ void PluginController::updateLoadedPlugins()
                 loadPluginInternal( info.pluginId() );
             }
         }
+        // TODO: what about project plugins? what about dependency plugins?
     }
 }
 
@@ -774,7 +760,15 @@ void PluginController::resetToDefaults()
     {
         foreach( const KPluginMetaData& info, d->plugins )
         {
-            plugins << info.pluginId();
+            if (!isUserSelectable(info)) {
+                continue;
+            }
+
+            QJsonValue enabledByDefault = info.rawData()[KEY_KPlugin()].toObject()[KEY_EnabledByDefault()];
+            // plugins enabled until explicitly specified otherwise
+            if (enabledByDefault.isNull() || enabledByDefault.toBool()) {
+                plugins << info.pluginId();
+            }
         }
     }
     foreach( const QString& s, plugins )

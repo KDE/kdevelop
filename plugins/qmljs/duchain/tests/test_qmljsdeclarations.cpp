@@ -44,7 +44,7 @@ using namespace KDevelop;
 
 void TestDeclarations::initTestCase()
 {
-    AutoTestShell::init({"kdevqmljslanguagesupport"});
+    AutoTestShell::init({"kdevqmljs"});
     TestCore::initialize(Core::NoUi);
 
     QmlJS::registerDUChainItems();

@@ -73,7 +73,7 @@ void setupSampleProject( const QString& name, const QString& content )
 void TestSvnImport::initTestCase()
 {
     QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevplatform.plugins.svn.debug=true\n"));
-    AutoTestShell::init({QStringLiteral("kdevsubversion")});
+    AutoTestShell::init({QStringLiteral("kdevsubversion"), QStringLiteral("KDevStandardOutputView")});
     TestCore::initialize();
 
     QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));

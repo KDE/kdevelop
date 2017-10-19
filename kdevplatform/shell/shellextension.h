@@ -69,7 +69,9 @@ public:
 
     /**
      * Reimplement to return the list of plugins that should
-     * automatically be loaded
+     * loaded by default.
+     * If an empty list is returned, instead the plugin metadata is fallen back to,
+     * by reading the bool value KPlugin/EnabledByDefault (default: true).
      */
     virtual QStringList defaultPlugins() = 0;
 

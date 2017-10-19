@@ -1,0 +1,13 @@
+{
+    "KPlugin": {
+        "Description": "This plugin is purely for unit-test",
+        "Id": "test_projectdefault",
+        "License": "LGPL",
+        "Name": "ProjectDefaultPlugin",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-Category": "Project",
+    "X-KDevelop-Mode": "NoGUI"
+}

@@ -53,7 +53,7 @@ void waitForSuites(IProject* project, int count, int max)
 
 void TestCTestFindSuites::initTestCase()
 {
-    AutoTestShell::init({"kdevcmakemanager"});
+    AutoTestShell::init({"KDevCMakeManager", "KDevCMakeBuilder", "KDevMakeBuilder", "KDevStandardOutputView"});
     TestCore::initialize();
 
     cleanup();

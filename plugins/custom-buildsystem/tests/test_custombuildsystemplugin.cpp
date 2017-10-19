@@ -52,7 +52,7 @@ void TestCustomBuildSystemPlugin::cleanupTestCase()
 }
 void TestCustomBuildSystemPlugin::initTestCase()
 {
-    AutoTestShell::init({"kdevcustombuildsystem"});
+    AutoTestShell::init({"KDevCustomBuildSystem", "KDevStandardOutputView"});
     TestCore::initialize();
 }
 
