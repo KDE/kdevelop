@@ -29,11 +29,13 @@ namespace KDevelop {
     widgets that the user can interact with.
 
     Usage example:
+    @code
     KDevelop::ActiveToolTip* tooltip = new KDevelop::ActiveToolTip(mainWindow, QCursor::pos());
     QVBoxLayout* layout = new QVBoxLayout(tooltip);
     layout->addWidget(widget);
     tooltip->resize( tooltip->sizeHint() );
     ActiveToolTip::showToolTip(tooltip);
+    @endcode
  */
 class KDEVPLATFORMUTIL_EXPORT ActiveToolTip : public QWidget
 {

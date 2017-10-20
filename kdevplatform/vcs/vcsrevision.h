@@ -49,13 +49,13 @@ namespace KDevelop
  * qRegisterMetaType.
  *
  * Also Users of this class should set RevisionSpecialType QVariant values via
- * <code>
+ * @code
  * setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>( val ), KDevelop::VcsRevision::Special);
- * </code>
+ * @endcode
  * instead of
- * <code>
+ * @code
  * setRevisionValue( qVariantFromValue( val ), KDevelop::VcsRevision::Special);
- * </code>
+ * @endcode
  *
  * If the latter method is used the QVariant will be an Integer, which might not
  * be handled by the vcs plugin and is possibly ambiguous with the qlonglong

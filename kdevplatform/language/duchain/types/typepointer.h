@@ -57,10 +57,10 @@ public:
      * This will compile whenever T* and U* are compatible, i.e.
      * T is a subclass of U or vice-versa.
      * Example syntax:
-     * <code>
+     * @code
      *   TypePtr<T> tPtr;
      *   TypePtr<U> uPtr = TypePtr<U>::staticCast( tPtr );
-     * </code>
+     * @endcode
      */
     template <class U>
     static TypePtr<T> staticCast( const TypePtr<U>& o ) {
@@ -71,10 +71,10 @@ public:
      * This will compile whenever T* and U* are compatible, i.e.
      * T is a subclass of U or vice-versa.
      * Example syntax:
-     * <code>
+     * @code
      *   TypePtr<T> tPtr;
      *   TypePtr<U> uPtr = TypePtr<U>::dynamicCast( tPtr );
-     * </code>
+     * @endcode
      * Since a dynamic_cast is used, if U derives from T, and tPtr isn't an instance of U, uPtr will be 0.
      */
     template <class U>

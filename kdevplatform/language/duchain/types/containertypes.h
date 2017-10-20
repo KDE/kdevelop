@@ -49,6 +49,7 @@ public:
  * @brief Represents a list-like object which can have a content type.
  *
  * Example for Python:
+ * @code
  *     # in the file describing the built-in list type
  *     class List:         # (1)
  *         pass
@@ -56,6 +57,7 @@ public:
  *     # in the user's code:
  *     a = []              # (2)
  *     a.append(3)         # (3)
+ * @endcode
  *
  * This type class can be used to determine the type of a as "list of int" as follows:
  *     (1) When creating the type for the List class,
