@@ -467,7 +467,8 @@ int main( int argc, char *argv[] )
     // which only shows the running sessions, and the user can pick one.
     parser.addOption(QCommandLineOption{QStringList{"pid"}});
 
-    parser.addPositionalArgument(QStringLiteral("files"), i18n( "Files to load" ), QStringLiteral("[FILE...]"));
+    parser.addPositionalArgument(QStringLiteral("files"),
+                     i18n( "Files to load, or directories to load as projects" ), QStringLiteral("[FILE[:line[:column]] | DIRECTORY]..."));
 
     // The session-controller needs to arguments to eventually pass them to newly opened sessions
     KDevelop::SessionController::setArguments(argc, argv);
