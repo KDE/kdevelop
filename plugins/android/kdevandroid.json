@@ -25,6 +25,7 @@
         "Description[tr]": "Android çalışma zamanlarını gösterir",
         "Description[uk]": "Надає доступ до середовищ виконання Android",
         "Description[x-test]": "xxExposes Android runtimesxx",
+        "Description[zh_CN]": "暴露 Android 运行时",
         "Icon": "android",
         "Id": "kdevandroid",
         "License": "GPL",
@@ -46,6 +47,7 @@
         "Name[tr]": "Android Desteği",
         "Name[uk]": "Підтримка Android",
         "Name[x-test]": "xxAndroid Supportxx",
+        "Name[zh_CN]": "Android 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],
