@@ -21,6 +21,7 @@
         "Description[sv]": "Exponerar Docker-körtidsprogram",
         "Description[uk]": "Надає доступ до середовищ виконання Docker",
         "Description[x-test]": "xxExposes Docker runtimesxx",
+        "Description[zh_CN]": "暴露 Docker 运行时",
         "Icon": "docker",
         "Id": "kdevdocker",
         "License": "GPL",
@@ -37,6 +38,7 @@
         "Name[sv]": "Docker-stöd",
         "Name[uk]": "Підтримка Docker",
         "Name[x-test]": "xxDocker Supportxx",
+        "Name[zh_CN]": "Docker 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],
