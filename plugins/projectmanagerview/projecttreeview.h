@@ -30,7 +30,6 @@ namespace KDevelop
 {
 class IProject;
 class ProjectBaseItem;
-class NavigationToolTip;
 class Path;
 }
 
@@ -42,8 +41,6 @@ class ProjectTreeView: public QTreeView
         ~ProjectTreeView() override;
 
         static QModelIndex mapFromSource(const QAbstractProxyModel* proxy, const QModelIndex& sourceIdx);
-
-        bool event(QEvent* event) override;
 
     Q_SIGNALS:
         void activate( const KDevelop::Path &url );
@@ -71,8 +68,6 @@ class ProjectTreeView: public QTreeView
         KDevelop::IProject* getCurrentProject();
 
         QPointer<KDevelop::IProject> m_previousSelection;
-        QPointer<KDevelop::NavigationToolTip> m_tooltip;
-        QPersistentModelIndex m_idx;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_PROJECTTREEVIEW_H

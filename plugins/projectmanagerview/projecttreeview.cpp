@@ -34,7 +34,6 @@
 #include <KLocalizedString>
 
 #include <project/projectmodel.h>
-#include <language/duchain/duchainutils.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
@@ -50,9 +49,6 @@
 #include "projectmodelsaver.h"
 #include "projectmodelitemdelegate.h"
 #include "debug.h"
-#include <language/duchain/duchainlock.h>
-#include <language/duchain/duchain.h>
-#include <language/util/navigationtooltip.h>
 #include <project/projectutils.h>
 #include <widgetcolorizer.h>
 
@@ -457,46 +453,6 @@ void ProjectTreeView::aboutToShutdown()
     for ( const auto& project: projects ) {
         saveState( project );
     }
-}
-
-bool ProjectTreeView::event(QEvent* event)
-{
-    if(event->type()==QEvent::ToolTip)
-    {
-        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
-        QModelIndex idxView = indexAt(helpEvent->pos());
-
-        ProjectBaseItem* it = idxView.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
-        QModelIndex idx;
-        if(it)
-            idx = it->index();
-
-        if((m_idx!=idx || !m_tooltip) && it && it->file())
-        {
-            m_idx=idx;
-            ProjectFileItem* file=it->file();
-            KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
-            TopDUContext* top= DUChainUtils::standardContextForUrl(file->path().toUrl());
-
-            if(m_tooltip)
-                m_tooltip->close();
-
-            if(top)
-            {
-                QWidget* navigationWidget = top->createNavigationWidget();
-                if( navigationWidget )
-                {
-                    m_tooltip = new KDevelop::NavigationToolTip(this, helpEvent->globalPos() + QPoint(40, 0), navigationWidget);
-                    m_tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
-                    qCDebug(PLUGIN_PROJECTMANAGERVIEW) << "tooltip size" << m_tooltip->size();
-                    ActiveToolTip::showToolTip(m_tooltip);
-                    return true;
-                }
-            }
-        }
-    }
-
-    return QAbstractItemView::event(event);
 }
 
 void ProjectTreeView::keyPressEvent(QKeyEvent* event)

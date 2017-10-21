@@ -20,8 +20,21 @@
 #include "projectmodelitemdelegate.h"
 
 #include "vcsoverlayproxymodel.h"
+#include <debug.h>
 
+#include <project/projectmodel.h>
+#include <language/duchain/duchainutils.h>
+#include <language/duchain/duchainlock.h>
+#include <language/duchain/duchain.h>
+#include <language/util/navigationtooltip.h>
+#include <util/path.h>
+
+#include <QHelpEvent>
+#include <QToolTip>
+#include <QAbstractItemView>
 #include <QPainter>
+
+using namespace KDevelop;
 
 ProjectModelItemDelegate::ProjectModelItemDelegate(QObject* parent)
     : QItemDelegate(parent)
@@ -157,4 +170,58 @@ void ProjectModelItemDelegate::drawDisplay(QPainter* painter, const QStyleOption
 
     QFontMetrics fm(painter->fontMetrics());
     painter->drawText(rect, fm.elidedText(text, Qt::ElideRight, rect.width()));
+}
+
+bool ProjectModelItemDelegate::helpEvent(QHelpEvent* event,
+                                         QAbstractItemView* view, const QStyleOptionViewItem& option,
+                                         const QModelIndex& index)
+{
+    if (!event || !view) {
+        return false;
+    }
+
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
+
+        // explicitely close current tooltip, as its autoclose margins overlap items
+        if ((m_tooltippedIndex != index) && m_tooltip) {
+            m_tooltip->close();
+            m_tooltip.clear();
+        }
+
+        const ProjectBaseItem* it = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
+
+        // show navigation tooltip for files
+        if (it && it->file()) {
+            if (!m_tooltip) {
+                m_tooltippedIndex = index;
+                KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
+                const TopDUContext* top = DUChainUtils::standardContextForUrl(it->file()->path().toUrl());
+
+                if (top) {
+                    QWidget* navigationWidget = top->createNavigationWidget();
+                    if (navigationWidget) {
+                        // force possible existing normal tooltip for other list item to hide
+                        // Seems that is still only done with a small delay though,
+                        // but the API seems not to allow more control.
+                        QToolTip::hideText();
+
+                        m_tooltip = new KDevelop::NavigationToolTip(view, helpEvent->globalPos() + QPoint(40, 0), navigationWidget);
+                        m_tooltip->resize(navigationWidget->sizeHint() + QSize(10, 10));
+                        auto rect = view->visualRect(m_tooltippedIndex);
+                        rect.moveTopLeft(view->mapToGlobal(rect.topLeft()));
+                        m_tooltip->setHandleRect(rect);
+                        ActiveToolTip::showToolTip(m_tooltip);
+                    }
+                }
+            }
+
+            // tooltip successfully handled by us?
+            if (m_tooltip) {
+                return true;
+            }
+        }
+    }
+
+    return QItemDelegate::helpEvent(event, view, option, index);
 }
