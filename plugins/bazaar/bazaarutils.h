@@ -38,7 +38,7 @@ namespace BazaarUtils
 {
 
 /**
- * Converts @p url to \code QDir \endcode instance assuming file is local
+ * Converts @p url to QDir instance assuming file is local
  */
 QDir toQDir(const QUrl& url);
 
@@ -76,7 +76,7 @@ QString getRevisionSpecRange(const KDevelop::VcsRevision& begin,
 bool isValidDirectory(const QUrl& dirPath);
 
 /**
- * Parses single status info line to \code KDevelop::VcsStatusInfo \endcode.
+ * Parses single status info line to KDevelop::VcsStatusInfo.
  */
 KDevelop::VcsStatusInfo parseVcsStatusInfoLine(const QString& line);
 
@@ -90,15 +90,15 @@ QString concatenatePath(const QDir& workingCopy, const QUrl& pathInWorkingCopy);
 
 /**
  * Parses information about single commit from @p output (which is single part
- * of \code bzr log \endcode output).
+ * of @c bzr @c log output).
  * @return Information about single commit in instance of
- * \code KDevelop::VcsEvent \endcode class.
+ * KDevelop::VcsEvent class.
  */
 KDevelop::VcsEvent parseBzrLogPart(const QString& output);
 
 /**
  * Parses information about single action on single file in some
- * \code bzr log \endcode output.
+ * @c bzr @c log output.
  */
 KDevelop::VcsItemEvent::Action parseActionDescription(const QString& action);
 
