@@ -922,7 +922,9 @@ LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfig
     {
         LaunchConfigurationPage* page = fac->createWidget( parentwidget );
         if ( page->layout() ) {
-            page->layout()->setContentsMargins( 0, 0, 0, 0 );
+            // remove margins for single page, reset margins for tabbed display
+            const int pageMargin = tab ? -1 : 0;
+            page->layout()->setContentsMargins(pageMargin, pageMargin, pageMargin, pageMargin);
         }
         pages.append( page );
         connect( page, &LaunchConfigurationPage::changed, this, &LaunchConfigPagesContainer::changed );
