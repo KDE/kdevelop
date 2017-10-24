@@ -19,6 +19,7 @@
         "Description[pt]": "Oferece a Integração com o Sistema de Controlo de Versões Perforce",
         "Description[sk]": "Poskytuje integráciu s verzionovacím systémom Perforce",
         "Description[sv]": "Tillhandahåller integrering med Perforce versionskontrollsystem",
+        "Description[tr]": "Perforce Sürüm Denetim Sistemi ile Bütünleşme Sağlar",
         "Description[uk]": "Забезпечує інтеграцію з системою керування версіями Perforce",
         "Description[x-test]": "xxProvides Integration with Perforce Version Control Systemxx",
         "Icon": "kdevelop",
@@ -36,6 +37,7 @@
         "Name[pt]": "Suporte para o Perforce",
         "Name[sk]": "Podpora Perforce",
         "Name[sv]": "Perforce-stöd",
+        "Name[tr]": "Perforce Desteği",
         "Name[uk]": "Підтримка Perforce",
         "Name[x-test]": "xxPerforce Supportxx",
         "ServiceTypes": [

@@ -36,6 +36,7 @@
         "Name[pt]": "Sistema de Compilação Personalizado",
         "Name[sk]": "Vlastný zostavovací systém",
         "Name[sv]": "Eget byggsystem",
+        "Name[tr]": "Özel İnşa Sistemi",
         "Name[uk]": "Нетипова система збирання",
         "Name[x-test]": "xxCustom Build Systemxx",
         "ServiceTypes": [
