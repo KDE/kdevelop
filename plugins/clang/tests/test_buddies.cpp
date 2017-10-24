@@ -383,7 +383,7 @@ void TestBuddies::testSplitViewBuddies()
     QVERIFY(pClassAHeader);
     pMainWindow->activeView()->setObjectName(QStringLiteral("classA.h"));
 
-    // now, create a splitted view of the active view (pClassAHeader)
+    // now, create a split view of the active view (pClassAHeader)
     Sublime::View *pNewView = pMainWindow->activeView()->document()->createView();
     pNewView->setObjectName("splitOf" + pMainWindow->activeView()->objectName());
     pCodeArea->addView(pNewView, pMainWindow->activeView(), Qt::Vertical);

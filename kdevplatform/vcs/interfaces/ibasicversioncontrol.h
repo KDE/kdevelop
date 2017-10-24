@@ -89,7 +89,7 @@ public:
      * no communication to any server is done.
      *
      * @param remoteLocation the URL used to access a remote repository
-     * @returns true if the the given @p remoteLocation seems valid for this version control system
+     * @returns true if the given @p remoteLocation seems valid for this version control system
      */
     virtual bool isValidRemoteRepositoryUrl(const QUrl& remoteLocation) = 0;
 

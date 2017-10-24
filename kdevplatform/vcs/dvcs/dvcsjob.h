@@ -65,7 +65,7 @@ class QStringList;
  * ICore::self()->runController()->registerJob(job);
  * @endcode
  * 
- * Usage example 2, asyunchronous:
+ * Usage example 2, asynchronous:
  * @code
  * DVcsJob* branchJob = d->branch(repo, baseBranch, newBranch);
  * 

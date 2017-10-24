@@ -183,7 +183,7 @@ bool ProjectModelItemDelegate::helpEvent(QHelpEvent* event,
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
 
-        // explicitely close current tooltip, as its autoclose margins overlap items
+        // explicitly close current tooltip, as its autoclose margins overlap items
         if ((m_tooltippedIndex != index) && m_tooltip) {
             m_tooltip->close();
             m_tooltip.clear();

@@ -49,7 +49,7 @@ QDir workingCopy(const QUrl& path);
 
 /**
  * Translate VcsRevision into Revision Identifier accepted by Bazaar. This
- * function is designed for translating signle revision ids.
+ * function is designed for translating single revision ids.
  */
 QString getRevisionSpec(const KDevelop::VcsRevision& revision);
 
@@ -76,7 +76,7 @@ QString getRevisionSpecRange(const KDevelop::VcsRevision& begin,
 bool isValidDirectory(const QUrl& dirPath);
 
 /**
- * Parses signle status info line to \code KDevelop::VcsStatusInfo \endcode.
+ * Parses single status info line to \code KDevelop::VcsStatusInfo \endcode.
  */
 KDevelop::VcsStatusInfo parseVcsStatusInfoLine(const QString& line);
 
@@ -89,9 +89,9 @@ KDevelop::VcsStatusInfo parseVcsStatusInfoLine(const QString& line);
 QString concatenatePath(const QDir& workingCopy, const QUrl& pathInWorkingCopy);
 
 /**
- * Parses informations about single commit from @p action (which is signle part
+ * Parses information about single commit from @p output (which is single part
  * of \code bzr log \endcode output).
- * @return Informations about single commit in instance of
+ * @return Information about single commit in instance of
  * \code KDevelop::VcsEvent \endcode class.
  */
 KDevelop::VcsEvent parseBzrLogPart(const QString& output);
