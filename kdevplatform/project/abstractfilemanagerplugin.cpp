@@ -491,14 +491,15 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
 
     ///TODO: check if this works for remote files when something gets changed through another KDE app
     if ( project->path().isLocalFile() ) {
-        d->m_watchers[project] = new KDirWatch( project );
+        auto watcher = new KDirWatch( project );
 
-        connect(d->m_watchers[project], &KDirWatch::created,
+        // set up the signal handling
+        connect(watcher, &KDirWatch::created,
                 this, [&] (const QString& path_) { d->created(path_); });
-        connect(d->m_watchers[project], &KDirWatch::deleted,
+        connect(watcher, &KDirWatch::deleted,
                 this, [&] (const QString& path_) { d->deleted(path_); });
-
-        d->m_watchers[project]->addDir(project->path().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
+        watcher->addDir(project->path().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
+        d->m_watchers[project] = watcher;
     }
 
     d->m_filters.add(project);
