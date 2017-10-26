@@ -225,28 +225,47 @@ public:
         }
     }
 
+    enum EnableState {
+        DisabledByEnv,
+        DisabledBySetting,
+        DisabledByUnknown,
+
+        FirstEnabledState,
+        EnabledBySetting = FirstEnabledState,
+        AlwaysEnabled
+    };
+
     /**
-     * Decide whether a plugin is enabled
+     * Estimate enabled state of a plugin
      */
-    bool isEnabled(const KPluginMetaData& info) const
+    EnableState enabledState(const KPluginMetaData& info) const
     {
         // first check black listing from environment
         static const QStringList disabledPlugins = QString::fromLatin1(qgetenv("KDEV_DISABLE_PLUGINS")).split(';');
         if (disabledPlugins.contains(info.pluginId())) {
-            return false;
+            return DisabledByEnv;
         }
 
         if (!isUserSelectable( info ))
-            return true;
+            return AlwaysEnabled;
 
         // read stored user preference
         const KConfigGroup grp = Core::self()->activeSession()->config()->group( KEY_Plugins() );
         const QString pluginEnabledKey = info.pluginId() + KEY_Suffix_Enabled();
         if (grp.hasKey(pluginEnabledKey)) {
-            return grp.readEntry(pluginEnabledKey, true);
+            return grp.readEntry(pluginEnabledKey, true) ? EnabledBySetting : DisabledBySetting;
         }
 
-        return false;
+        // should not happen
+        return DisabledByUnknown;
+    }
+
+    /**
+     * Decide whether a plugin is enabled
+     */
+    bool isEnabled(const KPluginMetaData& info) const
+    {
+        return (enabledState(info) >= FirstEnabledState);
     }
 
     Core *core;
@@ -475,9 +494,16 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
         return plugin;
     }
 
-    if (!d->isEnabled(info)) {
+    const auto enabledState = d->enabledState(info);
+    if (enabledState < PluginControllerPrivate::FirstEnabledState) {
         // Do not load disabled plugins
-        qCWarning(SHELL) << "Not loading plugin named" << pluginId << "because it has been disabled!";
+        qCDebug(SHELL) << "Not loading plugin named" << pluginId << (
+            (enabledState == PluginControllerPrivate::DisabledByEnv) ?
+                "because disabled by KDEV_DISABLE_PLUGINS." :
+            (enabledState == PluginControllerPrivate::DisabledBySetting) ?
+                "because disabled by setting." :
+            /* else, should not happen */
+                "because disabled for unknown reason.");
         return nullptr;
     }
 
