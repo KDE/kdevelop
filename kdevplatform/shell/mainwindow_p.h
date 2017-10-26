@@ -77,6 +77,7 @@ public:
 public Q_SLOTS:
     void addPlugin( KDevelop::IPlugin *plugin );
     void removePlugin( KDevelop::IPlugin *plugin );
+    void updateSourceFormatterGuiClient(bool hasFormatters);
 
     void activePartChanged(KParts::Part *part);
     void mergeView(Sublime::View *view);

@@ -74,6 +74,8 @@ namespace KDevelop
 class SourceFormatterControllerPrivate
 {
 public:
+    // cache of formatter plugins, to avoid querying plugincontroller
+    QVector<ISourceFormatter*> sourceFormatters;
     // GUI actions
     QAction* formatTextAction;
     QAction* formatFilesAction;
@@ -127,19 +129,28 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
     d->formatTextAction->setText(i18n("&Reformat Source"));
     d->formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
     d->formatTextAction->setWhatsThis(i18n("Source reformatting functionality using <b>astyle</b> library."));
+    d->formatTextAction->setEnabled(false);
     connect(d->formatTextAction, &QAction::triggered, this, &SourceFormatterController::beautifySource);
 
     d->formatLine = actionCollection()->addAction(QStringLiteral("edit_reformat_line"));
     d->formatLine->setText(i18n("Reformat Line"));
     d->formatLine->setToolTip(i18n("Reformat current line using AStyle"));
     d->formatLine->setWhatsThis(i18n("Source reformatting of line under cursor using <b>astyle</b> library."));
+    d->formatLine->setEnabled(false);
     connect(d->formatLine, &QAction::triggered, this, &SourceFormatterController::beautifyLine);
 
     d->formatFilesAction = actionCollection()->addAction(QStringLiteral("tools_astyle"));
     d->formatFilesAction->setText(i18n("Reformat Files..."));
     d->formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
     d->formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
+    d->formatFilesAction->setEnabled(false);
     connect(d->formatFilesAction, &QAction::triggered, this, static_cast<void(SourceFormatterController::*)()>(&SourceFormatterController::formatFiles));
+
+
+    connect(Core::self()->pluginController(), &IPluginController::pluginLoaded,
+            this, &SourceFormatterController::pluginLoaded);
+    connect(Core::self()->pluginController(), &IPluginController::unloadingPlugin,
+            this, &SourceFormatterController::unloadingPlugin);
 
     // connect to both documentActivated & documentClosed,
     // otherwise we miss when the last document was closed
@@ -167,6 +178,46 @@ void SourceFormatterController::documentLoaded( IDocument* doc )
     const auto mime = QMimeDatabase().mimeTypeForUrl(url);
     adaptEditorIndentationMode(doc->textDocument(), formatterForUrl(url, mime), url);
 }
+
+void SourceFormatterController::pluginLoaded(IPlugin* plugin)
+{
+    ISourceFormatter* sourceFormatter = plugin->extension<ISourceFormatter>();
+
+    if (!sourceFormatter) {
+        return;
+    }
+
+    d->sourceFormatters << sourceFormatter;
+
+    resetUi();
+
+    emit formatterLoaded(sourceFormatter);
+    // with one plugin now added, hasFormatters turned to true, so report to listeners
+    if (d->sourceFormatters.size() == 1) {
+        emit hasFormattersChanged(true);
+    }
+}
+
+void SourceFormatterController::unloadingPlugin(IPlugin* plugin)
+{
+    ISourceFormatter* sourceFormatter = plugin->extension<ISourceFormatter>();
+
+    if (!sourceFormatter) {
+        return;
+    }
+
+    const int idx = d->sourceFormatters.indexOf(sourceFormatter);
+    Q_ASSERT(idx != -1);
+    d->sourceFormatters.remove(idx);
+
+    resetUi();
+
+    emit formatterUnloading(sourceFormatter);
+    if (d->sourceFormatters.isEmpty()) {
+        emit hasFormattersChanged(false);
+    }
+}
+
 
 void SourceFormatterController::initialize()
 {
@@ -212,9 +263,7 @@ ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const
     if (knownFormatters.contains(mime.name()))
         return knownFormatters[mime.name()];
 
-    QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension( QStringLiteral("org.kdevelop.ISourceFormatter") );
-    foreach( IPlugin* p, plugins) {
-        ISourceFormatter *iformatter = p->extension<ISourceFormatter>();
+    foreach (ISourceFormatter* iformatter, d->sourceFormatters) {
         QSharedPointer<SourceFormatter> formatter(createFormatterForPlugin(iformatter));
         if( formatter->supportedMimeTypes().contains(mime.name()) ) {
             knownFormatters[mime.name()] = iformatter;
@@ -275,7 +324,13 @@ ISourceFormatter* SourceFormatterController::formatterForUrl(const QUrl& url, co
         return nullptr;
     }
 
-    return Core::self()->pluginControllerInternal()->extensionForPlugin<ISourceFormatter>( QStringLiteral("org.kdevelop.ISourceFormatter"), formatterinfo.at(0) );
+    foreach (ISourceFormatter* iformatter, d->sourceFormatters) {
+        if (iformatter->name() == formatterinfo.first()) {
+            return iformatter;
+        }
+    }
+
+    return nullptr;
 }
 
 bool SourceFormatterController::isMimeTypeSupported(const QMimeType& mime)
@@ -377,11 +432,13 @@ void SourceFormatterController::updateFormatTextAction()
 {
     bool enabled = false;
 
-    IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument();
-    if (doc) {
-        QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
-        if (isMimeTypeSupported(mime))
-            enabled = true;
+    if (!d->sourceFormatters.isEmpty()) {
+        IDocument* doc = KDevelop::ICore::self()->documentController()->activeDocument();
+        if (doc) {
+            QMimeType mime = QMimeDatabase().mimeTypeForUrl(doc->url());
+            if (isMimeTypeSupported(mime))
+                enabled = true;
+        }
     }
 
     d->formatLine->setEnabled(enabled);
@@ -616,6 +673,10 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
     d->urls.clear();
     d->prjItems.clear();
 
+    if (d->sourceFormatters.isEmpty()) {
+        return ext;
+    }
+
     if (context->hasType(KDevelop::Context::EditorContext))
     {
         if (d->formatTextAction->isEnabled())
@@ -659,6 +720,23 @@ void SourceFormatterController::disableSourceFormatting(bool disable)
 bool SourceFormatterController::sourceFormattingEnabled()
 {
     return d->enabled;
+}
+
+bool SourceFormatterController::hasFormatters() const
+{
+    return !d->sourceFormatters.isEmpty();
+}
+
+QVector<ISourceFormatter*> SourceFormatterController::formatters() const
+{
+    return d->sourceFormatters;
+}
+
+void SourceFormatterController::resetUi()
+{
+    d->formatFilesAction->setEnabled(!d->sourceFormatters.isEmpty());
+
+    updateFormatTextAction();
 }
 
 }

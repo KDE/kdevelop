@@ -21,6 +21,8 @@
 
 #include "config/projectconfigpage.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/isourceformattercontroller.h>
 #include <project/projectconfigpage.h>
 
 #include <KPluginFactory>
@@ -38,7 +40,8 @@ SourceFormatterPlugin::~SourceFormatterPlugin() = default;
 
 int SourceFormatterPlugin::perProjectConfigPages() const
 {
-    return 1;
+    const auto hasFormatters = KDevelop::ICore::self()->sourceFormatterController()->hasFormatters();
+    return hasFormatters ? 1 : 0;
 }
 
 KDevelop::ConfigPage* SourceFormatterPlugin::perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent)

@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/isourceformatter.h>
 
 #include <QSet>
+#include <QVector>
 #include <QMimeType>
 
 #include <kxmlguiclient.h>
@@ -102,6 +103,7 @@ public:
     * The source formatter is then ready to use on a file.
     */
     ISourceFormatter* formatterForUrl(const QUrl& url, const QMimeType& mime) override;
+    bool hasFormatters() const override;
     /** \return Whether this mime type is supported by any plugin.
     */
     bool isMimeTypeSupported(const QMimeType& mime) override;
@@ -132,12 +134,21 @@ public:
     void disableSourceFormatting(bool disable) override;
     bool sourceFormattingEnabled() override;
 
+    QVector<KDevelop::ISourceFormatter*> formatters() const;
+
+Q_SIGNALS:
+    void formatterLoaded(KDevelop::ISourceFormatter* ifmt);
+    void formatterUnloading(KDevelop::ISourceFormatter* ifmt);
+
 private Q_SLOTS:
     void updateFormatTextAction();
     void beautifySource();
     void beautifyLine();
     void formatFiles();
     void documentLoaded( KDevelop::IDocument* );
+    void pluginLoaded(KDevelop::IPlugin* plugin);
+    void unloadingPlugin(KDevelop::IPlugin* plugin);
+
 private:
     /** \return A modeline string (to add at the end or the beginning of a file)
     * corresponding to the settings of the active language.
@@ -151,6 +162,8 @@ private:
     // Adapts the mode of the editor regarding indentation-style
     void adaptEditorIndentationMode(KTextEditor::Document* doc, KDevelop::ISourceFormatter* formatter,
                                     const QUrl& url, bool ignoreModeline = false);
+
+    void resetUi();
 
 private:
     const QScopedPointer<class SourceFormatterControllerPrivate> d;

@@ -47,6 +47,7 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "textdocument.h"
 #include "sessioncontroller.h"
+#include "sourceformattercontroller.h"
 #include "debug.h"
 #include "ktexteditorpluginintegration.h"
 #include "colorschemechooser.h"
@@ -123,6 +124,17 @@ void MainWindowPrivate::removePlugin( IPlugin *plugin )
     disconnect(plugin, &IPlugin::destroyed, this, &MainWindowPrivate::pluginDestroyed);
 
     m_mainWindow->guiFactory()->removeClient( plugin );
+}
+
+void MainWindowPrivate::updateSourceFormatterGuiClient(bool hasFormatters)
+{
+    auto sourceFormatterController = Core::self()->sourceFormatterControllerInternal();
+    auto guiFactory = m_mainWindow->guiFactory();
+    if (hasFormatters) {
+        guiFactory->addClient(sourceFormatterController);
+    } else {
+        guiFactory->removeClient(sourceFormatterController);
+    }
 }
 
 void MainWindowPrivate::activePartChanged(KParts::Part *part)

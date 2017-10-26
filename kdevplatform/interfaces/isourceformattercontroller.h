@@ -58,6 +58,8 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		* @param mime known mimetype of the url
 		*/
 		virtual ISourceFormatter* formatterForUrl(const QUrl& url, const QMimeType& mime) = 0;
+		///\return @c true if there are formatters at all, @c false otherwise
+		virtual bool hasFormatters() const = 0;
 		/** \return Whether this mime type is supported by any plugin.
 		*/
 		virtual bool isMimeTypeSupported(const QMimeType &mime) = 0;
@@ -68,6 +70,9 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatterController : public QObject
 		virtual void disableSourceFormatting(bool disable) = 0;
 		///\return Whether or not source formatting is enabled
 		virtual bool sourceFormattingEnabled() = 0;
+
+	Q_SIGNALS:
+		void hasFormattersChanged(bool hasFormatters);
 };
 
 }

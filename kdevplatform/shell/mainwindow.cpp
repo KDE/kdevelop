@@ -345,12 +345,16 @@ void MainWindow::initialize()
         d, &MainWindowPrivate::activePartChanged);
     connect( this, &MainWindow::activeViewChanged,
         d, &MainWindowPrivate::changeActiveView);
+    connect(Core::self()->sourceFormatterControllerInternal(), &SourceFormatterController::hasFormattersChanged,
+             d, &MainWindowPrivate::updateSourceFormatterGuiClient);
 
     foreach(IPlugin* plugin, Core::self()->pluginController()->loadedPlugins())
         d->addPlugin(plugin);
 
     guiFactory()->addClient(Core::self()->sessionController());
-    guiFactory()->addClient(Core::self()->sourceFormatterControllerInternal());
+    if (Core::self()->sourceFormatterControllerInternal()->hasFormatters()) {
+        guiFactory()->addClient(Core::self()->sourceFormatterControllerInternal());
+    }
 
     // Needed to re-plug the actions from the sessioncontroller as xmlguiclients don't
     // seem to remember which actions where plugged in.

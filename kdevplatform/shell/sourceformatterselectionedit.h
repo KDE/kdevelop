@@ -32,6 +32,7 @@ class QListWidgetItem;
 namespace KDevelop
 {
 class SourceFormatterStyle;
+class ISourceFormatter;
 
 class KDEVPLATFORMSHELL_EXPORT SourceFormatterSelectionEdit : public QWidget
 {
@@ -49,6 +50,9 @@ Q_SIGNALS:
     void changed();
 
 private Q_SLOTS:
+    void addSourceFormatter(KDevelop::ISourceFormatter* ifmt);
+    void removeSourceFormatter(KDevelop::ISourceFormatter* ifmt);
+
     void deleteStyle();
     void editStyle();
     void newStyle();
@@ -58,6 +62,7 @@ private Q_SLOTS:
     void styleNameChanged(QListWidgetItem* );
 
 private:
+    void resetUi();
     void updatePreview();
     QListWidgetItem* addStyle(const KDevelop::SourceFormatterStyle& s);
     void enableStyleButtons();
