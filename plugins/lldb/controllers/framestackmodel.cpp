@@ -42,6 +42,7 @@ QString getFunctionOrAddress(const KDevMI::MI::Value &frame)
 
 using namespace KDevMI::LLDB;
 using namespace KDevMI::MI;
+using namespace KDevMI;
 
 LldbFrameStackModel::LldbFrameStackModel(DebugSession *session)
     : MIFrameStackModel(session)

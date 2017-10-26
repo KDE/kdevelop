@@ -20,7 +20,12 @@
  */
 
 #include <iostream>
+#ifndef _MSC_VER
 #include <unistd.h>
+#else
+#include <direct.h>
+#define getcwd _getcwd
+#endif // !_MSC_VER
 
 int main()
 {

@@ -18,7 +18,12 @@
 
 #include <iostream>
 
+#ifndef _MSC_VER
 #include <unistd.h>
+#else
+#include <Windows.h>
+#define sleep Sleep
+#endif
 
 void foo() {
     static int i=0;

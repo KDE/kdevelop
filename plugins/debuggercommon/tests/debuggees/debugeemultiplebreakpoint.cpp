@@ -18,6 +18,7 @@
 
 
 #include <iostream>
+#include <string>
 
 class Str2 {
     public: void print(void) {

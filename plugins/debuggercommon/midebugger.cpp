@@ -39,6 +39,10 @@
 #include <stdexcept>
 #include <sstream>
 
+#ifdef Q_OS_WIN
+#include <Windows.h>
+#endif
+
 // #define DEBUG_NO_TRY //to get a backtrace to where the exception was thrown
 
 using namespace KDevMI;
@@ -102,11 +106,16 @@ bool MIDebugger::isReady() const
 
 void MIDebugger::interrupt()
 {
-    //TODO:win32 Porting needed
+#ifndef Q_OS_WIN
     int pid = m_process->pid();
     if (pid != 0) {
         ::kill(pid, SIGINT);
     }
+#else
+    SetConsoleCtrlHandler(nullptr, true);
+    GenerateConsoleCtrlEvent(0, 0);
+    SetConsoleCtrlHandler(nullptr, false);
+#endif
 }
 
 MICommand* MIDebugger::currentCommand() const

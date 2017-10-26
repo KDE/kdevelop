@@ -52,6 +52,7 @@
 
 using namespace KDevMI::LLDB;
 using namespace KDevMI::MI;
+using namespace KDevMI;
 using namespace KDevelop;
 
 struct ExecRunHandler : public MICommandHandler

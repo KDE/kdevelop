@@ -32,11 +32,13 @@
 #endif
 
 #include <sys/types.h>
+#ifndef _MSC_VER
 #include <sys/ioctl.h>
-#include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#endif
+#include <sys/stat.h>
 
 #ifdef HAVE_SYS_STROPTS_H
 #include <sys/stropts.h>
@@ -45,13 +47,15 @@
 
 #include <assert.h>
 #include <fcntl.h>
+#ifndef _MSC_VER
 #include <grp.h>
+#include <termios.h>
+#include <unistd.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <termios.h>
 #include <time.h>
-#include <unistd.h>
 #include <errno.h>
 
 #if defined (_HPUX_SOURCE)
@@ -83,6 +87,7 @@ static int chownpty(int fd, int grant)
 // param grant: 1 to grant, 0 to revoke
 // returns 1 on success 0 on fail
 {
+#ifndef Q_OS_WIN
     void(*tmp)(int) = signal(SIGCHLD,SIG_DFL);
     pid_t pid = fork();
     if (pid < 0) {
@@ -115,6 +120,7 @@ static int chownpty(int fd, int grant)
         return (rc != -1 && WIFEXITED(w) && WEXITSTATUS(w) == 0);
     }
     signal(SIGCHLD,tmp);
+#endif
     return 0; //dummy.
 }
 
@@ -143,10 +149,12 @@ STTY::STTY(bool ext, const QString &termAppName)
 
 STTY::~STTY()
 {
+#ifndef Q_OS_WIN
     if (out) {
         ::close(fout);
         delete out;
     }
+#endif
 }
 
 // **************************************************************************
@@ -155,7 +163,7 @@ int STTY::findTTY()
 {
     int ptyfd = -1;
     bool needGrantPty = true;
-
+#ifndef Q_OS_WIN
     // Find a master pty that we can open ////////////////////////////////
 
 #ifdef __sgi__
@@ -250,6 +258,7 @@ int STTY::findTTY()
                                     "and/or add the user to the tty group using "
                                     "\"usermod -aG tty username\".");
     }
+#endif
     return ptyfd;
 }
 
@@ -257,6 +266,7 @@ int STTY::findTTY()
 
 void STTY::OutReceived(int f)
 {
+#ifndef Q_OS_WIN
     char buf[1024];
     int n;
 
@@ -279,7 +289,7 @@ void STTY::OutReceived(int f)
         // cycles.
         out->setEnabled(false);
     }
-
+#endif
 }
 
 void STTY::readRemaining()
@@ -290,6 +300,7 @@ void STTY::readRemaining()
 
 bool STTY::findExternalTTY(const QString& termApp)
 {
+#ifndef Q_OS_WIN
     QString appName(termApp.isEmpty() ? QStringLiteral("xterm") : termApp);
 
     if (QStandardPaths::findExecutable(appName).isEmpty()) {
@@ -340,6 +351,7 @@ bool STTY::findExternalTTY(const QString& termApp)
     if (ttySlave.isEmpty()) {
         m_lastError = i18n("Can't receive %1 tty/pty. Check that %1 is actually a terminal and that it accepts these arguments: -e sh -c \"tty> %2 ;exec<&-;exec>&-;while :;do sleep 3600;done\"", appName, file.fileName());
     }
+#endif
     return true;
 }
 // **************************************************************************

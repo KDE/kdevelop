@@ -6,12 +6,9 @@ endif()
 # END: Analyzers
 
 # BEGIN: Debuggers
-if(NOT WIN32)
-    # TODO: Make compile under Windows
-    add_subdirectory(debuggercommon)
-    add_subdirectory(lldb)
-    add_subdirectory(gdb)
-endif()
+add_subdirectory(debuggercommon)
+add_subdirectory(lldb)
+add_subdirectory(gdb)
 # END: Debuggers
 
 # BEGIN: Documentation

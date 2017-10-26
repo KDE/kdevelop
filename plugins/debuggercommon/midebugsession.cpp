@@ -254,12 +254,14 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
         connect(m_tty.get(), &STTY::ErrOutput, this, &MIDebugSession::inferiorTtyStderr);
     }
     QString tty(m_tty->getSlave());
+#ifndef Q_OS_WIN
     if (tty.isEmpty()) {
         KMessageBox::information(qApp->activeWindow(), m_tty->lastError(), i18n("warning"));
 
         m_tty.reset(nullptr);
         return false;
     }
+#endif
     addCommand(InferiorTtySet, tty);
 
     // Change the working directory to the correct one

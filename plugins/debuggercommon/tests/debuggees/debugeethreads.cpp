@@ -17,7 +17,9 @@
 */
 #include <iostream>
 #include <QThread>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif
 
 class TestThread : public QThread
 {
@@ -36,7 +38,7 @@ int main(int /*argc*/, char **/*argv*/) {
     t1.start();
     t2.start();
     t3.start();
-    usleep(500000);
-    usleep(600000);
+    QThread::usleep(500000);
+    QThread::usleep(600000);
     return 0;
 }
