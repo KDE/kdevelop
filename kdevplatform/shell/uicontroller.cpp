@@ -494,6 +494,7 @@ void UiController::showSettingsDialog()
     auto analyzersPreferences = new AnalyzersPreferences(&cfgDlg);
     auto documentationPreferences = new DocumentationPreferences(&cfgDlg);
     auto runtimesPreferences = new RuntimesPreferences(&cfgDlg);
+    auto templateConfig = new TemplateConfig(&cfgDlg);
 
     const auto configPages = QVector<KDevelop::ConfigPage*> {
         new UiPreferences(&cfgDlg),
@@ -501,7 +502,7 @@ void UiController::showSettingsDialog()
         new SourceFormatterSettings(&cfgDlg),
         new ProjectPreferences(&cfgDlg),
         new EnvironmentPreferences(QString(), &cfgDlg),
-        new TemplateConfig(&cfgDlg),
+        templateConfig,
         editorConfigPage
     };
 
@@ -529,7 +530,7 @@ void UiController::showSettingsDialog()
         }
     };
 
-    cfgDlg.insertConfigPage(configPages[5], documentationPreferences);
+    cfgDlg.insertConfigPage(templateConfig, documentationPreferences);
     cfgDlg.insertConfigPage(documentationPreferences, analyzersPreferences);
     cfgDlg.insertConfigPage(analyzersPreferences, runtimesPreferences);
 
