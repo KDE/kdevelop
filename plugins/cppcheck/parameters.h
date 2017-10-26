@@ -35,7 +35,6 @@ namespace defaults
 {
 
 // global settings
-static const QString executablePath = QStringLiteral("/usr/bin/cppcheck");
 static const bool hideOutputView = true;
 static const bool showXmlOutput = false;
 

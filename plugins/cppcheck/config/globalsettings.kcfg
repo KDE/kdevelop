@@ -10,7 +10,7 @@
   <group name="Cppcheck">
 
     <entry name="executablePath" key="executablePath" type="Path">
-        <default code="true">defaults::executablePath</default>
+        <default code="true">QStandardPaths::findExecutable("cppcheck")</default>
     </entry>
 
     <entry name="hideOutputView" key="hideOutputView" type="Bool">
