@@ -110,6 +110,7 @@ QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString
 
 QtHelpDocumentation::~QtHelpDocumentation()
 {
+    delete m_lastStyleSheet.data();
 }
 
 QString QtHelpDocumentation::description() const

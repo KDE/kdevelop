@@ -7,7 +7,7 @@
     "command": "{{ appname }}",
     "tags": ["nightly"],
     "desktop-file-name-prefix": "(Nightly) ",
-    "finish-args": ["--share=ipc", "--socket=x11", "--socket=wayland" "--env=QT_QPA_PLATFORM=flatpak" ],
+    "finish-args": ["--share=ipc", "--socket=x11", "--socket=wayland", "--env=QT_QPA_PLATFORM=flatpak" ],
 
     "modules": [
         {
