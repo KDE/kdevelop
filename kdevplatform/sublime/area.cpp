@@ -303,7 +303,7 @@ void Area::save(KConfigGroup& group) const
     QMap<QString, Sublime::Position>::iterator i, e;
     for (i = d->desiredToolViews.begin(), e = d->desiredToolViews.end(); i != e; ++i)
     {
-        desired << i.key() + ':' + QString::number(static_cast<int>(i.value()));
+        desired << i.key() + QLatin1Char(':') + QString::number(static_cast<int>(i.value()));
     }
     group.writeEntry("desired views", desired);
     qCDebug(SUBLIME) << "save " << this << "wrote" << group.readEntry("desired views", "");
@@ -321,7 +321,7 @@ void Area::load(const KConfigGroup& group)
     QStringList desired = group.readEntry("desired views", QStringList());
     foreach (const QString &s, desired)
     {
-        int i = s.indexOf(':');
+        int i = s.indexOf(QLatin1Char(':'));
         if (i != -1)
         {
             QString id = s.left(i);

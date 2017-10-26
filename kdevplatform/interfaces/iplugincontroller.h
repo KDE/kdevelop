@@ -154,7 +154,7 @@ public:
     {
         QString ext;
         if( extension.isEmpty() ) {
-            ext = qobject_interface_iid<Extension*>();
+            ext = QString::fromUtf8(qobject_interface_iid<Extension*>());
         } else {
             ext = extension;
         }

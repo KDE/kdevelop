@@ -266,7 +266,7 @@ void ProjectSourcePage::locationChanged()
     Q_ASSERT(m_locationWidget);
     if(m_locationWidget->isCorrect()) {
         QString currentUrl = m_ui->workingDir->text();
-        currentUrl = currentUrl.left(currentUrl.lastIndexOf('/')+1);
+        currentUrl = currentUrl.left(currentUrl.lastIndexOf(QLatin1Char('/'))+1);
 
         QUrl current = QUrl::fromUserInput(currentUrl + m_locationWidget->projectName());
         m_ui->workingDir->setUrl(current);
@@ -279,7 +279,7 @@ void ProjectSourcePage::projectChanged(const QString& name)
 {
     Q_ASSERT(m_providerWidget);
     QString currentUrl = m_ui->workingDir->text();
-    currentUrl = currentUrl.left(currentUrl.lastIndexOf('/')+1);
+    currentUrl = currentUrl.left(currentUrl.lastIndexOf(QLatin1Char('/'))+1);
 
     QUrl current = QUrl::fromUserInput(currentUrl + name);
     m_ui->workingDir->setUrl(current);

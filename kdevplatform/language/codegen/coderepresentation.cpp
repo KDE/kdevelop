@@ -44,7 +44,7 @@ QString CodeRepresentation::rangeText(const KTextEditor::Range& range) const
     QString rangedText = line(range.start().line()).mid(range.start().column());
 
     for(int i = range.start().line() + 1; i <= range.end().line(); ++i)
-        rangedText += '\n' + ((i == range.end().line()) ? line(i).left(range.end().column()) : line(i));
+        rangedText += QLatin1Char('\n') + ((i == range.end().line()) ? line(i).left(range.end().column()) : line(i));
 
     return rangedText;
 }
@@ -64,8 +64,8 @@ static void grepLine(const QString& identifier, const QString& lineText, int lin
         pos += identifier.length();
         int end = pos;
 
-        if(!surroundedByBoundary || ( (end == lineText.length() || !lineText[end].isLetterOrNumber() || lineText[end] != '_')
-                                        && (start-1 < 0 || !lineText[start-1].isLetterOrNumber() || lineText[start-1] != '_')) )
+        if (!surroundedByBoundary || ( (end == lineText.length() || !lineText[end].isLetterOrNumber() || lineText[end] != QLatin1Char('_'))
+                                        && (start-1 < 0 || !lineText[start-1].isLetterOrNumber() || lineText[start-1] != QLatin1Char('_'))) )
         {
             ret << KTextEditor::Range(lineNumber, start, lineNumber, end);
         }
@@ -158,7 +158,7 @@ class FileCodeRepresentation : public CodeRepresentation {
         QFile file( localFile );
         if ( file.open(QIODevice::ReadOnly) ) {
             data = QString::fromLocal8Bit(file.readAll());
-            lineData = data.split('\n');
+            lineData = data.split(QLatin1Char('\n'));
         }
         m_exists = file.exists();
     }
@@ -228,7 +228,7 @@ class ArtificialStringData : public QSharedData {
     }
     void setData(const QString& data) {
         m_data = data;
-        m_lineData = m_data.split('\n');
+        m_lineData = m_data.split(QLatin1Char('\n'));
     }
     QString data() const {
         return m_data;

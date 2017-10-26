@@ -958,7 +958,7 @@ QString DocumentController::activeDocumentPath( const QString& target ) const
     if(!target.isEmpty()) {
         foreach(IProject* project, Core::self()->projectController()->projects()) {
             if(project->name().startsWith(target, Qt::CaseInsensitive)) {
-                return project->path().pathOrUrl() + "/.";
+                return project->path().pathOrUrl() + QLatin1String("/.");
             }
         }
     }
@@ -1033,7 +1033,7 @@ QUrl DocumentController::nextEmptyDocumentUrl()
     if (nextEmptyDocNumber > 0)
         url = QUrl::fromLocalFile(QStringLiteral("/%1 (%2)").arg(EMPTY_DOCUMENT_URL).arg(nextEmptyDocNumber));
     else
-        url = QUrl::fromLocalFile('/' + EMPTY_DOCUMENT_URL);
+        url = QUrl::fromLocalFile(QLatin1Char('/') + EMPTY_DOCUMENT_URL);
     return url;
 }
 

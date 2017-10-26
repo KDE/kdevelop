@@ -310,7 +310,7 @@ public:
     ///Loading of some static data:
     {
       ///@todo Solve this more duchain-like
-      QFile f(globalItemRepositoryRegistry().path() + "/parsing_environment_data");
+      QFile f(globalItemRepositoryRegistry().path() + QLatin1String("/parsing_environment_data"));
       bool opened = f.open(QIODevice::ReadOnly);
       ///FIXME: ugh, so ugly
       ParsingEnvironmentFile::m_staticData = reinterpret_cast<StaticParsingEnvironmentData*>( new char[sizeof(StaticParsingEnvironmentData)]);
@@ -327,7 +327,7 @@ public:
 
     ///Read in the list of available top-context indices
     {
-      QFile f(globalItemRepositoryRegistry().path() + "/available_top_context_indices");
+      QFile f(globalItemRepositoryRegistry().path() + QLatin1String("/available_top_context_indices"));
       bool opened = f.open(QIODevice::ReadOnly);
       if(opened)
       {
@@ -861,7 +861,7 @@ public:
         //Store the static parsing-environment file data
         ///@todo Solve this more elegantly, using a general mechanism to store static duchain-like data
         Q_ASSERT(ParsingEnvironmentFile::m_staticData);
-        QFile f(globalItemRepositoryRegistry().path() + "/parsing_environment_data");
+        QFile f(globalItemRepositoryRegistry().path() + QLatin1String("/parsing_environment_data"));
         bool opened = f.open(QIODevice::WriteOnly);
         Q_ASSERT(opened);
         Q_UNUSED(opened);
@@ -872,7 +872,7 @@ public:
       {
         QMutexLocker lock(&m_chainsMutex);
 
-        QFile f(globalItemRepositoryRegistry().path() + "/available_top_context_indices");
+        QFile f(globalItemRepositoryRegistry().path() + QLatin1String("/available_top_context_indices"));
         bool opened = f.open(QIODevice::WriteOnly);
         Q_ASSERT(opened);
         Q_UNUSED(opened);

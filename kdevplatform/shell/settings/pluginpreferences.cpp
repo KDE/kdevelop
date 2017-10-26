@@ -44,17 +44,17 @@ PluginPreferences::PluginPreferences(QWidget* parent)
     lay->addWidget( selector );
     QMap<QString, QList<KPluginInfo>> plugins;
     const QMap<QString, QString> categories = {
-        { "Core", i18nc("@title:group", "Core") },
-        { "Project Management", i18nc("@title:group", "Project Management") },
-        { "Version Control", i18nc("@title:group", "Version Control") },
-        { "Utilities", i18nc("@title:group", "Utilities") },
-        { "Documentation", i18nc("@title:group", "Documentation") },
-        { "Language Support", i18nc("@title:group", "Language Support") },
-        { "Debugging", i18nc("@title:group", "Debugging") },
-        { "Testing", i18nc("@title:group", "Testing") },
-        { "Analyzers", i18nc("@title:group", "Analyzers") },
-        { "Runtimes", i18nc("@title:group", "Runtimes") },
-        { "Other", i18nc("@title:group", "Other") }
+        { QStringLiteral("Core"),               i18nc("@title:group", "Core") },
+        { QStringLiteral("Project Management"), i18nc("@title:group", "Project Management") },
+        { QStringLiteral("Version Control"),    i18nc("@title:group", "Version Control") },
+        { QStringLiteral("Utilities"),          i18nc("@title:group", "Utilities") },
+        { QStringLiteral("Documentation"),      i18nc("@title:group", "Documentation") },
+        { QStringLiteral("Language Support"),   i18nc("@title:group", "Language Support") },
+        { QStringLiteral("Debugging"),          i18nc("@title:group", "Debugging") },
+        { QStringLiteral("Testing"),            i18nc("@title:group", "Testing") },
+        { QStringLiteral("Analyzers"),          i18nc("@title:group", "Analyzers") },
+        { QStringLiteral("Runtimes"),           i18nc("@title:group", "Runtimes") },
+        { QStringLiteral("Other"),              i18nc("@title:group", "Other") }
     };
     foreach (const KPluginMetaData& info, Core::self()->pluginControllerInternal()->allPluginInfos()) {
         const QString loadMode = info.value(QStringLiteral("X-KDevelop-LoadMode"));

@@ -51,26 +51,26 @@ void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor&
   
   //Need to have a paren behind
   QString suffix = view->document()->text( KTextEditor::Range( pos, pos + KTextEditor::Cursor(1, 0) ) );
-  if( suffix.trimmed().startsWith('(') ) {
+  if (suffix.trimmed().startsWith(QLatin1Char('('))) {
     //Move the cursor behind the opening paren
     if( view )
-      view->setCursorPosition( pos + KTextEditor::Cursor( 0, suffix.indexOf('(')+1 ) );
+      view->setCursorPosition(pos + KTextEditor::Cursor(0, suffix.indexOf(QLatin1Char('(')) + 1));
   }else{
     //We need to insert an opening paren
     QString openingParen;
     if( spaceBeforeParen )
       openingParen = QStringLiteral(" (");
     else
-      openingParen = '(';
+      openingParen = QLatin1Char('(');
 
     if( spaceBetweenParens && (haveArguments || spaceBetweenEmptyParens) )
-      openingParen += ' ';
+      openingParen += QLatin1Char(' ');
 
     QString closingParen;
     if( spaceBetweenParens && (haveArguments) ) {
       closingParen = QStringLiteral(" )");
     } else
-      closingParen = ')';
+      closingParen = QLatin1Char(')');
 
     KTextEditor::Cursor jumpPos = pos + KTextEditor::Cursor( 0, openingParen.length() );
 
@@ -79,8 +79,8 @@ void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor&
       if (IntegralType::Ptr type = funcType->returnType().cast<IntegralType>()) {
         if (type->dataType() == IntegralType::TypeVoid) {
           const QChar nextChar = view->document()->characterAt(pos);
-          if (nextChar != ';' && nextChar != ')' && nextChar != ',') {
-            closingParen += ';';
+          if (nextChar != QLatin1Char(';') && nextChar != QLatin1Char(')') && nextChar != QLatin1Char(',')) {
+            closingParen += QLatin1Char(';');
           }
         }
       }

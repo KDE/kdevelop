@@ -42,9 +42,9 @@ using namespace KDevelop;
 ///@todo make this language-neutral
 static Identifier destructorForName(const Identifier& name) {
   QString str = name.identifier().str();
-  if(str.startsWith('~'))
+  if(str.startsWith(QLatin1Char('~')))
     return Identifier(str);
-  return Identifier('~'+str);
+  return Identifier(QLatin1Char('~') + str);
 }
 
 ///@todo Only collect uses within currently loaded projects
@@ -371,7 +371,7 @@ void UsesCollector::updateReady(const KDevelop::IndexedString& url, KDevelop::Re
       ///or whether we work on with it.
       ///@todo We will lose files that were edited right after their update here.
       qCWarning(LANGUAGE) << "WARNING: context" << topContext->url().str() << "does not have the required features!!";
-      ICore::self()->uiController()->showErrorMessage("Updating " + ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain) + " failed!", 5);
+      ICore::self()->uiController()->showErrorMessage(QLatin1String("Updating ") + ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain) + QLatin1String(" failed!"), 5);
       return;
   }
 

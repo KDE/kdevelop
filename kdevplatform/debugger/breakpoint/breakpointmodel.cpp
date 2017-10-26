@@ -213,7 +213,7 @@ BreakpointModel::headerData(int section, Qt::Orientation orientation,
     }
 
     if (role == Qt::DisplayRole) {
-        if (section == 0 || section == 1) return "";
+        if (section == 0 || section == 1) return QString();
         if (section == 2) return i18n("Type");
         if (section == 3) return i18n("Location");
         if (section == 4) return i18n("Condition");

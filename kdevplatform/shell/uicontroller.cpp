@@ -593,7 +593,7 @@ void UiController::saveAllAreas(const KSharedConfigPtr& config)
             // FIXME: using object name seems ugly.
             QString type = defaultArea->objectName();
             Sublime::Area* area = this->area(w, type);
-            KConfigGroup areaConfig(&mainWindowConfig, "Area " + type);
+            KConfigGroup areaConfig(&mainWindowConfig, QLatin1String("Area ") + type);
 
             areaConfig.deleteGroup();
             areaConfig.writeEntry("id", type);
@@ -646,7 +646,7 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
             QString type = defaultArea->objectName();
             Sublime::Area* area = this->area(w, type);
 
-            KConfigGroup areaConfig(&mainWindowConfig, "Area " + type);
+            KConfigGroup areaConfig(&mainWindowConfig, QLatin1String("Area ") + type);
 
             qCDebug(SHELL) << "Trying to restore area " << type;
 

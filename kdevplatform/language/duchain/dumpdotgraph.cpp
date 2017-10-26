@@ -139,10 +139,10 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       label = QStringLiteral("unknown file");
     }
     if(topCtx->parsingEnvironmentFile() && topCtx->parsingEnvironmentFile()->isProxyContext())
-      label = "Proxy-context " + label;
+      label = QLatin1String("Proxy-context ") + label;
   }else{
     label = /*"context " + */context->localScopeIdentifier().toString();
-    label += ' ' + rangeToString(context->range().castToSimpleRange());
+    label += QLatin1Char(' ') + rangeToString(context->range().castToSimpleRange());
   }
 
   //label = QStringLiteral("%1 ").arg((size_t)context) + label;
@@ -158,11 +158,11 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
       stream << dotGraphInternal(parent.context(m_topContext), false, true);
       QString label = QStringLiteral("imports");
       if( (!dynamic_cast<TopDUContext*>(parent.context(m_topContext)) || !dynamic_cast<TopDUContext*>(context)) && !(parent.context(m_topContext)->url() == context->url()) ) {
-        label += " from " + parent.context(m_topContext)->url().toUrl().fileName()
-               + " to " + context->url().toUrl().fileName();
+        label += QLatin1String(" from ") + parent.context(m_topContext)->url().toUrl().fileName()
+               + QLatin1String(" to ") + context->url().toUrl().fileName();
       }
 
-      stream << shortLabel(context) << " -> " << shortLabel(parent.context(m_topContext)) << "[style=dotted,label=\"" << label  << "\"];\n";
+      stream << shortLabel(context) << QLatin1String(" -> ") << shortLabel(parent.context(m_topContext)) << QLatin1String("[style=dotted,label=\"") << label  << QLatin1String("\"];\n");
     }
   }
 
@@ -172,7 +172,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
   if( !shortened ) {
     foreach (DUContext* child, context->childContexts()) {
       stream << dotGraphInternal(child, false, false);
-      stream << shortLabel(context) << " -> " << shortLabel(child) << "[style=dotted,color=green];\n";
+      stream << shortLabel(context) << QLatin1String(" -> ") << shortLabel(child) << QLatin1String("[style=dotted,color=green];\n");
     }
   }
 

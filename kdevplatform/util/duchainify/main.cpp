@@ -253,7 +253,7 @@ void Manager::addToBackgroundParser(const QString& path, TopDUContext::Features 
         QDirIterator contents(path);
         while(contents.hasNext()) {
             QString newPath = contents.next();
-            if(!newPath.endsWith('.'))
+            if(!newPath.endsWith(QLatin1Char('.')))
                 addToBackgroundParser(newPath, features);
         }
     }

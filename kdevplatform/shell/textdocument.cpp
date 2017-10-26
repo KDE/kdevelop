@@ -515,13 +515,13 @@ QString TextDocument::textWord() const
         int startPos = qMax( qMin( start.column(), linestr.length() - 1 ), 0 );
         int endPos = startPos;
         startPos --;
-        while( startPos >= 0 && ( linestr[startPos].isLetterOrNumber() || linestr[startPos] == '_' || linestr[startPos] == '~' ) )
-        {
+        while (startPos >= 0 &&
+               (linestr[startPos].isLetterOrNumber() || linestr[startPos] == QLatin1Char('_') || linestr[startPos] == QLatin1Char('~'))) {
             --startPos;
         }
 
-        while( endPos < linestr.length() && ( linestr[endPos].isLetterOrNumber() || linestr[endPos] == '_' || linestr[endPos] == '~' ) )
-        {
+        while (endPos < linestr.length() &&
+               (linestr[endPos].isLetterOrNumber() || linestr[endPos] == QLatin1Char('_') || linestr[endPos] == QLatin1Char('~'))) {
             ++endPos;
         }
         if( startPos != endPos )
@@ -624,8 +624,8 @@ KTextEditor::Range KDevelop::TextView::initialRange() const
 
 void KDevelop::TextView::setState(const QString & state)
 {
-    static QRegExp reCursor("Cursor=([\\d]+),([\\d]+)");
-    static QRegExp reSelection("Selection=([\\d]+),([\\d]+),([\\d]+),([\\d]+)");
+    static QRegExp reCursor(QStringLiteral("Cursor=([\\d]+),([\\d]+)"));
+    static QRegExp reSelection(QStringLiteral("Selection=([\\d]+),([\\d]+),([\\d]+),([\\d]+)"));
     if (reCursor.exactMatch(state)) {
         setInitialRange(KTextEditor::Range(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()), 0));
     } else if (reSelection.exactMatch(state)) {

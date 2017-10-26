@@ -50,7 +50,7 @@ public:
     QUrl pluginArea( const IPlugin* plugin )
     {
         QString name = Core::self()->pluginController()->pluginInfo(plugin).pluginId();
-        QUrl url = QUrl::fromLocalFile( info.path + '/' + name );
+        QUrl url = QUrl::fromLocalFile(info.path + QLatin1Char('/') + name );
         if( !QFile::exists( url.toLocalFile() ) ) {
             QDir( info.path ).mkdir( name );
         }
@@ -160,7 +160,7 @@ QString SessionPrivate::generatePrettyContents( const SessionInfo& info )
             projectNames << project->name();
         } else {
             QString projectName = url.fileName();
-            projectName.remove( QRegExp( "\\.kdev4$", Qt::CaseInsensitive ) );
+            projectName.remove(QRegExp(QStringLiteral("\\.kdev4$"), Qt::CaseInsensitive));
             projectNames << projectName;
         }
     }
@@ -180,7 +180,7 @@ QString SessionPrivate::generateDescription( const SessionInfo& info )
     if( info.name.isEmpty() ) {
         description = prettyContentsFormatted;
     } else {
-        description = info.name + ":  " + prettyContentsFormatted;
+        description = info.name + QLatin1String(":  ") + prettyContentsFormatted;
     }
 
     return description;
@@ -212,7 +212,7 @@ SessionInfo Session::parse( const QString& id, bool mkdir )
 
     ret.uuid = id;
     ret.path = sessionPath;
-    ret.config = KSharedConfig::openConfig( sessionPath + "/sessionrc" );
+    ret.config = KSharedConfig::openConfig(sessionPath + QLatin1String("/sessionrc"));
 
     KConfigGroup cfgRootGroup = ret.config->group( QString() );
     KConfigGroup cfgOptionsGroup = ret.config->group( cfgSessionOptionsGroup );

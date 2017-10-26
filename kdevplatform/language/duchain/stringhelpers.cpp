@@ -92,7 +92,7 @@ T formatComment_impl(const T& comment)
 {
   T ret;
 
-  QList<T> lines = comment.split( '\n' );
+  QList<T> lines = comment.split('\n');
 
   if ( !lines.isEmpty() ) {
 
@@ -146,10 +146,10 @@ public:
 
 bool parenFits( QChar c1, QChar c2 )
 {
-  if( c1 == '<' && c2 == '>' ) return true;
-  else if( c1 == '(' && c2 == ')' ) return true;
-  else if( c1 == '[' && c2 == ']' ) return true;
-  else if( c1 == '{' && c2 == '}' ) return true;
+  if (c1 == QLatin1Char('<') && c2 == QLatin1Char('>')) return true;
+  else if (c1 == QLatin1Char('(') && c2 == QLatin1Char(')')) return true;
+  else if (c1 == QLatin1Char('[') && c2 == QLatin1Char(']')) return true;
+  else if (c1 == QLatin1Char('{') && c2 == QLatin1Char('}')) return true;
   else
     return false;
 }
@@ -158,7 +158,7 @@ int findClose( const QString& str , int pos )
 {
   int depth = 0;
   QList<QChar> st;
-  QChar last = ' ';
+  QChar last = QLatin1Char(' ');
 
   for( int a = pos; a < (int)str.length(); a++)
   {
@@ -171,7 +171,7 @@ int findClose( const QString& str , int pos )
       depth++;
       break;
     case '>':
-      if( last == '-' ) break;
+      if (last == QLatin1Char('-')) break;
       Q_FALLTHROUGH();
     case ')':
       case ']':
@@ -185,8 +185,7 @@ int findClose( const QString& str , int pos )
     case '"':
       last = str[a];
       a++;
-      while( a < (int)str.length() && (str[a] != '"' || last == '\\'))
-      {
+      while (a < (int)str.length() && (str[a] != QLatin1Char('"') || last == QLatin1Char('\\'))) {
         last = str[a];
         a++;
       }
@@ -195,7 +194,7 @@ int findClose( const QString& str , int pos )
     case '\'':
       last = str[a];
       a++;
-      while( a < (int)str.length() && (str[a] != '\'' || last == '\\'))
+      while( a < (int)str.length() && (str[a] != QLatin1Char('\'') || last == QLatin1Char('\\')))
       {
         last = str[a];
         a++;
@@ -234,7 +233,7 @@ int findCommaOrEnd( const QString& str , int pos, QChar validEnd)
       case ']':
         case '}':
         case '>':
-        if( validEnd != ' ' && validEnd != str[a] )
+        if( validEnd != QLatin1Char(' ') && validEnd != str[a] )
           continue;
         Q_FALLTHROUGH();
     case ',':
@@ -252,28 +251,28 @@ QString reverse( const QString& str ) {
   for( int a = len-1; a >= 0; --a ) {
     switch(str[a].unicode()) {
     case '(':
-      ret += ')';
+      ret += QLatin1Char(')');
       continue;
     case '[':
-      ret += ']';
+      ret += QLatin1Char(']');
       continue;
     case '{':
-      ret += '}';
+      ret += QLatin1Char('}');
       continue;
     case '<':
-      ret += '>';
+      ret += QLatin1Char('>');
       continue;
     case ')':
-      ret += '(';
+      ret += QLatin1Char('(');
       continue;
     case ']':
-      ret += '[';
+      ret += QLatin1Char('[');
       continue;
     case '}':
-      ret += '{';
+      ret += QLatin1Char('{');
       continue;
     case '>':
-      ret += '<';
+      ret += QLatin1Char('<');
       continue;
     default:
       ret += str[a];
@@ -321,7 +320,7 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
       if( !arg.isEmpty() )
         skippedArguments.push_front( escapeFromBracketMatching(arg) ); //We are processing the reversed reverseding, so push to front
     }
-    if( reversed[pos] == ')' || reversed[pos] == '>' )
+    if( reversed[pos] == QLatin1Char(')') || reversed[pos] == QLatin1Char('>') )
       break;
     else
       ++pos;
@@ -338,7 +337,7 @@ QString reduceWhiteSpace(QString str) {
   str = str.trimmed();
   QString ret;
 
-  QChar spaceChar = ' ';
+  QChar spaceChar = QLatin1Char(' ');
 
   bool hadSpace = false;
   for( int a = 0; a < str.length(); a++ ) {
@@ -375,18 +374,18 @@ QString clearComments( QString str, QChar replacement ) {
   QString withoutStrings = clearStrings(str, '$');
 
   int pos = -1, newlinePos = -1, endCommentPos = -1, nextPos = -1, dest = -1;
-  while ( (pos = str.indexOf('/', pos + 1)) != -1 )
+  while ( (pos = str.indexOf(QLatin1Char('/'), pos + 1)) != -1 )
   {
     newlinePos = withoutStrings.indexOf('\n', pos);
 
-    if (withoutStrings[pos + 1] == '/')
+    if (withoutStrings[pos + 1] == QLatin1Char('/'))
     {
       //C style comment
       dest = newlinePos == -1 ? str.length() : newlinePos;
       fillString(str, pos, dest, replacement);
       pos = dest;
     }
-    else if (withoutStrings[pos + 1] == '*')
+    else if (withoutStrings[pos + 1] == QLatin1Char('*'))
     {
       //CPP style comment
       endCommentPos = withoutStrings.indexOf(QStringLiteral("*/"), pos + 2);
@@ -402,7 +401,7 @@ QString clearComments( QString str, QChar replacement ) {
         if (pos == newlinePos)
         {
           ++pos; //Keep newlines intact, skip them
-          newlinePos = withoutStrings.indexOf('\n', pos + 1);
+          newlinePos = withoutStrings.indexOf(QLatin1Char('\n'), pos + 1);
         }
       }
     }
@@ -414,11 +413,10 @@ QString clearStrings( QString str, QChar replacement ) {
   bool inString = false;
   for(int pos = 0; pos < str.length(); ++pos) {
     //Skip cpp comments
-    if(!inString && pos + 1 < str.length() && str[pos] == '/' && str[pos+1] == '*')
-    {
+    if(!inString && pos + 1 < str.length() && str[pos] == QLatin1Char('/') && str[pos+1] == QLatin1Char('*')) {
       pos += 2;
       while(pos + 1 < str.length()) {
-        if (str[pos] == '*' && str[pos + 1] == '/') {
+        if (str[pos] == '*' && str[pos + 1] == QLatin1Char('/')) {
           ++pos;
           break;
         }
@@ -426,22 +424,19 @@ QString clearStrings( QString str, QChar replacement ) {
       }
     }
     //Skip cstyle comments
-    if(!inString && pos + 1 < str.length() && str[pos] == '/' && str[pos+1] == '/')
-    {
+    if(!inString && pos + 1 < str.length() && str[pos] == QLatin1Char('/') && str[pos+1] == QLatin1Char('/')) {
       pos += 2;
-      while(pos < str.length() && str[pos] != '\n') {
+      while(pos < str.length() && str[pos] != QLatin1Char('\n')) {
         ++pos;
       }
     }
     //Skip a character a la 'b'
-    if(!inString && str[pos] == '\'' && pos + 3 <= str.length())
-    {
+    if (!inString && str[pos] == QLatin1Char('\'') && pos + 3 <= str.length()) {
       //skip the opening '
       str[pos] = replacement;
       ++pos;
 
-      if(str[pos] == '\\')
-      {
+      if (str[pos] == QLatin1Char('\\')) {
         //Skip an escape character
         str[pos] = replacement;
         ++pos;
@@ -452,8 +447,7 @@ QString clearStrings( QString str, QChar replacement ) {
       ++pos;
 
       //Skip the closing '
-      if(pos < str.length() && str[pos] == '\'')
-      {
+      if (pos < str.length() && str[pos] == QLatin1Char('\'')) {
         str[pos] = replacement;
       }
 
@@ -461,19 +455,19 @@ QString clearStrings( QString str, QChar replacement ) {
     }
 
     bool intoString = false;
-    if(str[pos] == '"' && !inString)
+    if (str[pos] == QLatin1Char('"') && !inString)
       intoString = true;
 
     if(inString || intoString) {
       if(inString) {
-        if(str[pos] == '"')
+        if(str[pos] == QLatin1Char('"'))
           inString = false;
       }else{
         inString = true;
       }
 
       bool skip = false;
-      if(str[pos] == '\\')
+      if (str[pos] == QLatin1Char('\\'))
         skip = true;
 
       str[pos] = replacement;

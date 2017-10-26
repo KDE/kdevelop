@@ -132,9 +132,8 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
         d->errorString.clear();
     }
 
-    if (d->emptyLinesPolicy == TrimEmptyLines && output.contains('\n'))
-    {
-        QStringList lines = output.split('\n', QString::KeepEmptyParts);
+    if (d->emptyLinesPolicy == TrimEmptyLines && output.contains(QLatin1Char('\n'))) {
+        QStringList lines = output.split(QLatin1Char('\n'), QString::KeepEmptyParts);
         QMutableStringListIterator it(lines);
 
         // Remove empty lines from the start of the document
@@ -201,7 +200,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
     }
     else if (d->emptyLinesPolicy == RemoveEmptyLines)
     {
-        QStringList lines = output.split('\n', QString::SkipEmptyParts);
+        QStringList lines = output.split(QLatin1Char('\n'), QString::SkipEmptyParts);
         QMutableStringListIterator it(lines);
         while (it.hasNext())
         {
@@ -226,7 +225,7 @@ QString TemplateRenderer::renderFile(const QUrl& url, const QString& name) const
     QFile file(url.toLocalFile());
     file.open(QIODevice::ReadOnly);
 
-    QString content(file.readAll());
+    const QString content = QString::fromUtf8(file.readAll());
     qCDebug(LANGUAGE) << content;
 
     return render(content, name);
@@ -260,14 +259,14 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
     DocumentChangeSet changes;
     const QDir baseDir(baseUrl.path());
 
-    QRegExp nonAlphaNumeric("\\W");
+    QRegExp nonAlphaNumeric(QStringLiteral("\\W"));
     for (QHash<QString,QUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it)
     {
         QString cleanName = it.key().toLower();
         cleanName.replace(nonAlphaNumeric, QStringLiteral("_"));
         const QString path = it.value().toLocalFile();
-        addVariable("output_file_" + cleanName, baseDir.relativeFilePath(path));
-        addVariable("output_file_" + cleanName + "_absolute", path);
+        addVariable(QLatin1String("output_file_") + cleanName, baseDir.relativeFilePath(path));
+        addVariable(QLatin1String("output_file_") + cleanName + QLatin1String("_absolute"), path);
     }
 
     const KArchiveDirectory* directory = fileTemplate.directory();
@@ -292,7 +291,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
         IndexedString document(url);
         KTextEditor::Range range(KTextEditor::Cursor(0, 0), 0);
 
-        DocumentChange change(document, range, QString(), render(file->data(), outputFile.identifier));
+        DocumentChange change(document, range, QString(), render(QString::fromUtf8(file->data()), outputFile.identifier));
         changes.addChange(change);
         qCDebug(LANGUAGE) << "Added change for file" << document.str();
     }

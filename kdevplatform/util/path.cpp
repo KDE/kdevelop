@@ -34,7 +34,7 @@ namespace {
 inline bool isWindowsDriveLetter(const QString& segment)
 {
 #ifdef Q_OS_WIN
-    return segment.size() == 2 && segment.at(0).isLetter() && segment.at(1) == ':';
+    return segment.size() == 2 && segment.at(0).isLetter() && segment.at(1) == QLatin1Char(':');
 #else
     Q_UNUSED(segment);
     return false;
@@ -43,12 +43,12 @@ inline bool isWindowsDriveLetter(const QString& segment)
 
 inline bool isAbsolutePath(const QString& path)
 {
-    if (path.startsWith('/')) {
+    if (path.startsWith(QLatin1Char('/'))) {
         return true; // Even on Windows: Potentially a path of a remote URL
     }
 
 #ifdef Q_OS_WIN
-    return path.size() >= 2 && path.at(0).isLetter() && path.at(1) == ':';
+    return path.size() >= 2 && path.at(0).isLetter() && path.at(1) == QLatin1Char(':');
 #else
     return false;
 #endif
@@ -61,7 +61,7 @@ QString KDevelop::toUrlOrLocalFile(const QUrl& url, QUrl::FormattingOptions opti
     const auto str = url.toString(options | QUrl::PreferLocalFile);
 #ifdef Q_OS_WIN
     // potentially strip leading slash
-    if (url.isLocalFile() && !str.isEmpty() && str[0] == '/') {
+    if (url.isLocalFile() && !str.isEmpty() && str[0] == QLatin1Char('/')) {
         return str.mid(1); // expensive copying, but we'd like toString(...) to properly format everything first
     }
 #endif
@@ -104,11 +104,11 @@ Path::Path(const QUrl& url)
         const QString user = url.userName();
         if (!user.isEmpty()) {
             urlPrefix += user;
-            urlPrefix += '@';
+            urlPrefix += QLatin1Char('@');
         }
         urlPrefix += url.host();
         if (url.port() != -1) {
-            urlPrefix += ':' + QString::number(url.port());
+            urlPrefix += QLatin1Char(':') + QString::number(url.port());
         }
         m_data << urlPrefix;
     }
@@ -162,7 +162,7 @@ static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<
 
 #ifdef Q_OS_WIN
     if (start == 0 && isLocalFile) {
-        Q_ASSERT(data.at(0).endsWith(':')); // assume something along "C:"
+        Q_ASSERT(data.at(0).endsWith(QLatin1Char(':'))); // assume something along "C:"
         res += data.at(0);
         start++;
     }
@@ -170,7 +170,7 @@ static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<
 
     for (int i = start; i < size; ++i) {
         if (i || isLocalFile) {
-            res += '/';
+            res += QLatin1Char('/');
         }
 
         res += data.at(i);

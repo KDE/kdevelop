@@ -59,7 +59,7 @@ void WorkingSetController::initialize()
     foreach(const QString& set, setConfig.groupList()) {
         // do not load working set if the id contains an '|', because it then belongs to an area.
         // this is functionally equivalent to the if ( ! config->icon ) stuff which was there before.
-        if ( set.contains('|') ) {
+        if (set.contains(QLatin1Char('|'))) {
             continue;
         }
         getWorkingSet(set);

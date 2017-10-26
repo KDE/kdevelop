@@ -66,15 +66,15 @@ void InstantiationInformation::addTemplateParameter(const KDevelop::AbstractType
 QString InstantiationInformation::toString(bool local) const {
     QString ret;
     if(previousInstantiationInformation.index() && !local)
-        ret = previousInstantiationInformation.information().toString() + "::";
-    ret += '<';
+        ret = previousInstantiationInformation.information().toString() + QLatin1String("::");
+    ret += QLatin1Char('<');
     for(uint a = 0; a < templateParametersSize(); ++a) {
         if(a)
             ret += QLatin1String(", ");
         if(templateParameters()[a].abstractType())
           ret += templateParameters()[a].abstractType()->toString();
     }
-    ret += '>';
+    ret += QLatin1Char('>');
     return ret;
 }
 

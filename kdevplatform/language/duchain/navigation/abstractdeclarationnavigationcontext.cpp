@@ -88,7 +88,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   clear();
   AbstractNavigationContext::html(shorten);
 
-  modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
+  modifyHtml()  += QLatin1String("<html><body><p>") + fontSizePrefix(shorten);
 
   addExternalHtml(prefix());
 
@@ -127,7 +127,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
       eventuallyMakeTypeLinks( useType );
 
-      modifyHtml() += ' ' + identifierHighlight(declarationName(d->m_declaration).toHtmlEscaped(), d->m_declaration);
+      modifyHtml() += QLatin1Char(' ') + identifierHighlight(declarationName(d->m_declaration).toHtmlEscaped(), d->m_declaration);
 
       if(auto integralType = d->m_declaration->type<ConstantIntegralType>()) {
         const QString plainValue = integralType->valueAsString();
@@ -180,7 +180,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
             }
             modifyHtml() += QStringLiteral("<br />");
             makeLink(i18n("possible resolution from"), DeclarationPointer(dec), NavigationAction::NavigateDeclaration);
-            modifyHtml() += ' ' + dec->url().str();
+            modifyHtml() += QLatin1Char(' ') + dec->url().str();
           }
         }
       }
@@ -232,10 +232,10 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       comment.truncate(60);
       comment += QLatin1String("...");
     }
-    comment.replace('\n', QLatin1String(" "));
+    comment.replace(QLatin1Char('\n'), QLatin1Char(' '));
     comment.replace(QLatin1String("<br />"), QLatin1String(" "));
     comment.replace(QLatin1String("<br/>"), QLatin1String(" "));
-    modifyHtml() += commentHighlight(comment.toHtmlEscaped()) + "   ";
+    modifyHtml() += commentHighlight(comment.toHtmlEscaped()) + QLatin1String("   ");
   }
 
 
@@ -311,7 +311,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       connect(doc.data(), &IDocumentation::descriptionChanged, this, &AbstractDeclarationNavigationContext::contentsChanged);
 
       if(!comment.isEmpty()) {
-        modifyHtml() += "<p>" + commentHighlight(comment) + "</p>";
+        modifyHtml() += QLatin1String("<p>") + commentHighlight(comment) + QLatin1String("</p>");
       }
     }
 
@@ -321,9 +321,9 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
       if (!Qt::mightBeRichText(comment)) {
         // still might contain extra html tags for line breaks (this is the case for doxygen-style comments sometimes)
         // let's protect them from being removed completely
-        comment.replace(QRegExp("<br */>"), QStringLiteral("\n"));
+        comment.replace(QRegExp(QStringLiteral("<br */>")), QStringLiteral("\n"));
         comment = comment.toHtmlEscaped();
-        comment.replace('\n', QLatin1String("<br />")); //Replicate newlines in html
+        comment.replace(QLatin1Char('\n'), QLatin1String("<br />")); //Replicate newlines in html
       }
       modifyHtml() += commentHighlight(comment);
       modifyHtml() += QStringLiteral("</p>");
@@ -331,7 +331,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   }
 
     if(!shorten && doc) {
-      modifyHtml() += "<p>" + i18n("Show documentation for ");
+      modifyHtml() += QLatin1String("<p>") + i18n("Show documentation for ");
       makeLink(prettyQualifiedName(d->m_declaration),
                d->m_declaration, NavigationAction::ShowDocumentation);
       modifyHtml() += QStringLiteral("</p>");
@@ -342,7 +342,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
   addExternalHtml(suffix());
 
-  modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
+  modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
 
   return currentHtml();
 }
@@ -368,7 +368,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     eventuallyMakeTypeLinks( type->returnType() );
   }
 
-  modifyHtml() += ' ' + identifierHighlight(prettyIdentifier(d->m_declaration).toString().toHtmlEscaped(), d->m_declaration);
+  modifyHtml() += QLatin1Char(' ') + identifierHighlight(prettyIdentifier(d->m_declaration).toString().toHtmlEscaped(), d->m_declaration);
 
   if( type->indexedArgumentsSize() == 0 )
   {
@@ -391,13 +391,13 @@ void AbstractDeclarationNavigationContext::htmlFunction()
 
       eventuallyMakeTypeLinks( argType );
       if (currentArgNum < decls.size()) {
-        modifyHtml() += ' ' + identifierHighlight(decls[currentArgNum]->identifier().toString().toHtmlEscaped(), d->m_declaration);
+        modifyHtml() += QLatin1Char(' ') + identifierHighlight(decls[currentArgNum]->identifier().toString().toHtmlEscaped(), d->m_declaration);
       }
 
       if (currentArgNum >= firstDefaultParam) {
         IndexedString defaultStr = function->defaultParameters()[currentArgNum - firstDefaultParam];
         if (!defaultStr.isEmpty()) {
-          modifyHtml() += " = " + defaultStr.str().toHtmlEscaped();
+          modifyHtml() += QLatin1String(" = ") + defaultStr.str().toHtmlEscaped();
         }
       }
 
@@ -575,7 +575,7 @@ void AbstractDeclarationNavigationContext::htmlClass()
     eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
 
     FOREACH_FUNCTION( const BaseClassInstance& base, classDecl->baseClasses ) {
-      modifyHtml() += ", " + stringFromAccess(base.access) + " " + (base.virtualInheritance ? QStringLiteral("virtual") : QString()) + " ";
+      modifyHtml() += QLatin1String(", ") + stringFromAccess(base.access) + QLatin1Char(' ') + (base.virtualInheritance ? QStringLiteral("virtual") : QString()) + QLatin1Char(' ');
       eventuallyMakeTypeLinks(base.baseClass.abstractType());
     }
   } else {
@@ -651,7 +651,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType
 
     if(exchanged) {
       QString typeSuffixString = exchanged->toString();
-      QRegExp suffixExp("\\&|\\*");
+      QRegExp suffixExp(QStringLiteral("\\&|\\*"));
       int suffixPos = typeSuffixString.indexOf(suffixExp);
       if(suffixPos != -1)
         modifyHtml() += typeHighlight(typeSuffixString.mid(suffixPos));
@@ -711,9 +711,9 @@ QString AbstractDeclarationNavigationContext::declarationName( const Declaration
 {
   if( NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl.data()) ) {
     if( alias->identifier().isEmpty() )
-      return "using namespace " + alias->importIdentifier().toString();
+      return QLatin1String("using namespace ") + alias->importIdentifier().toString();
     else
-      return "namespace " + alias->identifier().toString() + " = " + alias->importIdentifier().toString();
+      return QLatin1String("namespace ") + alias->identifier().toString() + QLatin1String(" = ") + alias->importIdentifier().toString();
   }
 
   if( !decl )

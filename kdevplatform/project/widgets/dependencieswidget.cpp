@@ -163,7 +163,7 @@ void DependenciesWidget::setDependencies(const QVariantList &deps)
         if(pitem)
             icon=QIcon::fromTheme(pitem->iconName());
 
-        QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping( deplist, '/', '\\' ), m_ui->dependencies );
+        QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping(deplist, QLatin1Char('/'), QLatin1Char('\\')), m_ui->dependencies);
         item->setData( Qt::UserRole, dep );
     }
 }

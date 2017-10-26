@@ -93,9 +93,9 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension,
                    TestProject* project, const QString& dir)
 : d(new TestFilePrivate())
 {
-    d->suffix = '.' + fileExtension;
+    d->suffix = QLatin1Char('.') + fileExtension;
 
-    QTemporaryFile file((!dir.isEmpty() ? dir : QDir::tempPath()) + "/testfile_XXXXXX" + d->suffix);
+    QTemporaryFile file((!dir.isEmpty() ? dir : QDir::tempPath()) + QLatin1String("/testfile_XXXXXX") + d->suffix);
     file.setAutoRemove(false);
     file.open();
     Q_ASSERT(file.isOpen());
@@ -107,7 +107,7 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension, const 
 : d(new TestFilePrivate)
 {
     QString fileName = base->d->file.mid(0, base->d->file.length() - base->d->suffix.length());
-    d->suffix = '.' + fileExtension;
+    d->suffix = QLatin1Char('.') + fileExtension;
     fileName += d->suffix;
     d->init(fileName, contents, base->d->project);
 }

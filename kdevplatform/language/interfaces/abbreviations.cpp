@@ -130,8 +130,8 @@ bool matchesAbbreviationMulti(const QString &word, const QStringList &typedFragm
     const QChar& c = word.at(i);
     bool isDoubleColon = false;
     // if it's not a separation char, walk over it.
-    if ( c != ' ' && c != '/' && i != word.size() - 1 ) {
-      if ( c != ':' && i < word.size()-1 && word.at(i+1) != ':' ) {
+    if (c != QLatin1Char(' ') && c != QLatin1Char('/') && i != word.size() - 1) {
+      if (c != QLatin1Char(':') && i < word.size()-1 && word.at(i+1) != QLatin1Char(':')) {
         continue;
       }
       isDoubleColon = true;

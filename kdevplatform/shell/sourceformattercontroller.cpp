@@ -303,7 +303,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
     if( !isMimeTypeSupported(mime) )
         return input;
 
-    QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
+    QRegExp kateModelineWithNewline(QStringLiteral("\\s*\\n//\\s*kate:(.*)$"));
 
     // If there already is a modeline in the document, adapt it while formatting, even
     // if "add modeline" is disabled.
@@ -339,10 +339,10 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 
     qCDebug(SHELL) << "created modeline: " << modeline << endl;
 
-    QRegExp kateModeline("^\\s*//\\s*kate:(.*)$");
+    QRegExp kateModeline(QStringLiteral("^\\s*//\\s*kate:(.*)$"));
 
     bool modelinefound = false;
-    QRegExp knownOptions("\\s*(indent-width|space-indent|tab-width|indent-mode|replace-tabs)");
+    QRegExp knownOptions(QStringLiteral("\\s*(indent-width|space-indent|tab-width|indent-mode|replace-tabs)"));
     while (!is.atEnd()) {
         QString line = is.readLine();
         // replace only the options we care about
@@ -350,12 +350,12 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
             qCDebug(SHELL) << "Found a kate modeline: " << line << endl;
             modelinefound = true;
             QString options = kateModeline.cap(1);
-            QStringList optionList = options.split(';', QString::SkipEmptyParts);
+            QStringList optionList = options.split(QLatin1Char(';'), QString::SkipEmptyParts);
 
             os <<  modeline;
             foreach(QString s, optionList) {
                 if (knownOptions.indexIn(s) < 0) { // unknown option, add it
-                    if(s.startsWith(' '))
+                    if(s.startsWith(QLatin1Char(' ')))
                         s=s.mid(1);
                     os << s << ";";
                     qCDebug(SHELL) << "Found unknown option: " << s << endl;
@@ -421,7 +421,7 @@ void SourceFormatterController::beautifySource()
                                                 doc->text(KTextEditor::Range(view->selectionRange().end(), doc->documentRange().end())));
 
         //remove the final newline character, unless it should be there
-        if (!original.endsWith('\n')  && output.endsWith('\n'))
+        if (!original.endsWith(QLatin1Char('\n'))  && output.endsWith(QLatin1Char('\n')))
             output.resize(output.length() - 1);
         //there was a selection, so only change the part of the text related to it
 
@@ -457,7 +457,7 @@ void SourceFormatterController::beautifyLine()
     const KTextEditor::Cursor cursor = view->cursorPosition();
     const QString line = tDoc->line(cursor.line());
     const QString prev = tDoc->text(KTextEditor::Range(0, 0, cursor.line(), 0));
-    const QString post = '\n' + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
+    const QString post = QLatin1Char('\n') + tDoc->text(KTextEditor::Range(KTextEditor::Cursor(cursor.line() + 1, 0), tDoc->documentEnd()));
 
     const QString formatted = formatter->formatSource(line, doc->url(), mime, prev, post);
 
@@ -517,7 +517,7 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 
     qCDebug(SHELL) << "adapting mode for" << url;
 
-    QRegExp kateModelineWithNewline("\\s*\\n//\\s*kate:(.*)$");
+    QRegExp kateModelineWithNewline(QStringLiteral("\\s*\\n//\\s*kate:(.*)$"));
 
     // modelines should always take precedence
     if( !ignoreModeline && kateModelineWithNewline.indexIn( doc->text() ) != -1 )

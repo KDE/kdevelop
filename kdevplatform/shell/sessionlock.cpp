@@ -194,7 +194,7 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
     QString problemResolution = i18nc("@info", "<p>Please, close the offending application instance "
                                   "or choose another session to launch.</p>");
 
-    QString errmsg = "<p>" + problemHeader + "<br>" + problemDescription + "</p>" + problemResolution;
+    QString errmsg = QLatin1String("<p>") + problemHeader + QLatin1String("<br>") + problemDescription + QLatin1String("</p>") + problemResolution;
 
     KGuiItem retry = KStandardGuiItem::cont();
     retry.setText(i18nc("@action:button", "Retry startup"));

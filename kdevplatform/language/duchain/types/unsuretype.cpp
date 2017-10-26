@@ -56,7 +56,7 @@ QString UnsureType::toString() const {
     else
       ret += QLatin1String("none");
   }
-  ret += ')';
+  ret += QLatin1Char(')');
   
   return ret;
 }

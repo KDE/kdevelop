@@ -126,8 +126,8 @@ struct Dependency
     explicit Dependency(const QString &dependency)
         : interface(dependency)
     {
-        if (dependency.contains('@')) {
-            const auto list = dependency.split('@', QString::SkipEmptyParts);
+        if (dependency.contains(QLatin1Char('@'))) {
+            const auto list = dependency.split(QLatin1Char('@'), QString::SkipEmptyParts);
             if (list.size() == 2) {
                 interface = list.at(0);
                 pluginName = list.at(1);
@@ -241,7 +241,7 @@ public:
     EnableState enabledState(const KPluginMetaData& info) const
     {
         // first check black listing from environment
-        static const QStringList disabledPlugins = QString::fromLatin1(qgetenv("KDEV_DISABLE_PLUGINS")).split(';');
+        static const QStringList disabledPlugins = QString::fromLatin1(qgetenv("KDEV_DISABLE_PLUGINS")).split(QLatin1Char(';'));
         if (disabledPlugins.contains(info.pluginId())) {
             return DisabledByEnv;
         }
@@ -604,7 +604,7 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
         d->foreachEnabledPlugin([&required] (const KPluginMetaData& plugin) -> bool {
             foreach (const QString& iface, KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces())) {
                 required.remove(iface);
-                required.remove(iface + '@' + plugin.pluginId());
+                required.remove(iface + QLatin1Char('@') + plugin.pluginId());
             }
             return !required.isEmpty();
         });

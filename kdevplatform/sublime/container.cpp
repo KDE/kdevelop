@@ -192,9 +192,9 @@ public:
                 }
                 else {
                     auto url = urlDoc->url().toString();
-                    int secondOffset = url.lastIndexOf('/');
-                    secondOffset = url.lastIndexOf('/', secondOffset - 1);
-                    visibleEntryTitle = url.right(url.length() - url.lastIndexOf('/', secondOffset) - 1);
+                    int secondOffset = url.lastIndexOf(QLatin1Char('/'));
+                    secondOffset = url.lastIndexOf(QLatin1Char('/'), secondOffset - 1);
+                    visibleEntryTitle = url.right(url.length() - url.lastIndexOf(QLatin1Char('/'), secondOffset) - 1);
                 }
             } else {
                 visibleEntryTitle = view->document()->title();

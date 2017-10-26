@@ -258,7 +258,7 @@ bool VCSCommitDiffPatchSource::finishReview(QList< QUrl > selection) {
     qCDebug(VCS) << "Finishing with selection" << selection;
     QString files;
     foreach(const QUrl& url, selection)
-        files += "<li>"+ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + "</li>";
+        files += QLatin1String("<li>") + ICore::self()->projectController()->prettyFileName(url, KDevelop::IProjectController::FormatPlain) + QLatin1String("</li>");
 
     QString text = i18n("<qt>Files will be committed:\n<ul>%1</ul>\nWith message:\n <pre>%2</pre></qt>", files, message);
 

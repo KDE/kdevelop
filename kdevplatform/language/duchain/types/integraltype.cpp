@@ -127,16 +127,16 @@ QString IntegralType::toString() const
   }
 
   if (modifiers() & UnsignedModifier)
-    name.prepend("unsigned ");
+    name.prepend(QLatin1String("unsigned "));
   else if (modifiers() & SignedModifier)
-    name.prepend("signed ");
+    name.prepend(QLatin1String("signed "));
 
   if (modifiers() & ShortModifier)
-    name.prepend("short ");
+    name.prepend(QLatin1String("short "));
   else if (modifiers() & LongLongModifier)
-    name.prepend("long long ");
+    name.prepend(QLatin1String("long long "));
   else if (modifiers() & LongModifier)
-    name.prepend("long ");
+    name.prepend(QLatin1String("long "));
 
   return AbstractType::toString() + name;
 }

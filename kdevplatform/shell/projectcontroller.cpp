@@ -1059,7 +1059,7 @@ bool ProjectController::isProjectNameUsed( const QString& name ) const
 QUrl ProjectController::projectsBaseDirectory() const
 {
     KConfigGroup group = ICore::self()->activeSession()->config()->group( "Project Manager" );
-    return group.readEntry( "Projects Base Directory", QUrl::fromLocalFile( QDir::homePath() + "/projects" ) );
+    return group.readEntry("Projects Base Directory", QUrl::fromLocalFile(QDir::homePath() + QLatin1String("/projects")));
 }
 
 QString ProjectController::prettyFilePath(const QUrl& url, FormattingOptions format) const
@@ -1083,19 +1083,19 @@ QString ProjectController::prettyFilePath(const QUrl& url, FormattingOptions for
     QString prefixText;
     if (project) {
         if (format == FormatHtml) {
-            prefixText = "<i>" +  project->name() + "</i>/";
+            prefixText = QLatin1String("<i>") +  project->name() + QLatin1String("</i>/");
         } else {
-            prefixText = project->name() + ':';
+            prefixText = project->name() + QLatin1Char(':');
         }
         QString relativePath = project->path().relativePath(parent);
         if(relativePath.startsWith(QLatin1String("./"))) {
             relativePath = relativePath.mid(2);
         }
         if (!relativePath.isEmpty()) {
-            prefixText += relativePath + '/';
+            prefixText += relativePath + QLatin1Char('/');
         }
     } else {
-        prefixText = parent.pathOrUrl() + '/';
+        prefixText = parent.pathOrUrl() + QLatin1Char('/');
     }
     return prefixText;
 }
@@ -1106,7 +1106,7 @@ QString ProjectController::prettyFileName(const QUrl& url, FormattingOptions for
     if(project && project->path() == Path(url))
     {
         if (format == FormatHtml) {
-            return "<i>" +  project->name() + "</i>";
+            return QLatin1String("<i>") +  project->name() + QLatin1String("</i>");
         } else {
             return project->name();
         }
@@ -1114,7 +1114,7 @@ QString ProjectController::prettyFileName(const QUrl& url, FormattingOptions for
 
     QString prefixText = prettyFilePath( url, format );
     if (format == FormatHtml) {
-        return prefixText + "<b>" + url.fileName() + "</b>";
+        return prefixText + QLatin1String("<b>") + url.fileName() + QLatin1String("</b>");
     } else {
         return prefixText + url.fileName();
     }

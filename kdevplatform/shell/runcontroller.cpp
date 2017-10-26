@@ -589,7 +589,7 @@ void KDevelop::RunController::registerJob(KJob * job)
     if (!d->jobs.contains(job)) {
         QAction* stopJobAction = nullptr;
         if (Core::self()->setupFlags() != Core::NoUi) {
-            stopJobAction = new QAction(job->objectName().isEmpty() ? i18n("<%1> Unnamed job", job->staticMetaObject.className()) : job->objectName(), this);
+            stopJobAction = new QAction(job->objectName().isEmpty() ? i18n("<%1> Unnamed job", QString::fromUtf8(job->staticMetaObject.className())) : job->objectName(), this);
             stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
             d->stopJobsMenu->addAction(stopJobAction);
             connect (stopJobAction, &QAction::triggered, this, &RunController::slotKillJob);

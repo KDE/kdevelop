@@ -29,7 +29,7 @@ typedef PushValue<int> IntPusher;
 
 ///Extracts the last line from the given string
 QString CodeCompletionContext::extractLastLine(const QString& str) {
-  int prevLineEnd = str.lastIndexOf('\n');
+  int prevLineEnd = str.lastIndexOf(QLatin1Char('\n'));
   if(prevLineEnd != -1)
     return str.mid(prevLineEnd+1);
   else

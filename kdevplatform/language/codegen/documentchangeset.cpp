@@ -379,7 +379,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     }
 
     //Create the actual new modified file
-    QStringList textLines = repr->text().split('\n');
+    QStringList textLines = repr->text().split(QLatin1Char('\n'));
 
     QUrl url = file.toUrl();
 
@@ -406,8 +406,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
                 if(formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation) {
                     // Reproduce the previous indentation
-                    QStringList oldLines = oldNewText.split('\n');
-                    QStringList newLines = change.m_newText.split('\n');
+                    QStringList oldLines = oldNewText.split(QLatin1Char('\n'));
+                    QStringList newLines = change.m_newText.split(QLatin1Char('\n'));
 
                     if(oldLines.size() == newLines.size()) {
                         for(int line = 0; line < newLines.size(); ++line) {

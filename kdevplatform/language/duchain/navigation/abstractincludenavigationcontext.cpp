@@ -75,7 +75,7 @@ TopDUContext* pickContextWithData(QList<TopDUContext*> duchains, uint maxDepth,
 QString AbstractIncludeNavigationContext::html(bool shorten)
 {
   clear();
-  modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
+  modifyHtml()  += QLatin1String("<html><body><p>") + fontSizePrefix(shorten);
   addExternalHtml(prefix());
 
   QUrl u = m_item.url();
@@ -91,7 +91,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
   if(duchain) {
     getFileInfo(duchain);
     if(!shorten) {
-      modifyHtml() += labelHighlight(i18n("Declarations:")) + "<br />";
+      modifyHtml() += labelHighlight(i18n("Declarations:")) + QLatin1String("<br />");
       bool first = true;
       QList<IdentifierPair> decs;
       addDeclarationsFromContext(duchain, first, decs);
@@ -102,7 +102,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
 
   addExternalHtml(suffix());
 
-  modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
+  modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
   return currentHtml();
 }
 
@@ -155,7 +155,7 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
         else
           first = false;
 
-        modifyHtml() += QString(indent + declarationKind(DeclarationPointer(*declarationIterator)) + " ").toHtmlEscaped();
+        modifyHtml() += QString(indent + declarationKind(DeclarationPointer(*declarationIterator)) + QLatin1Char(' ')).toHtmlEscaped();
         makeLink((*declarationIterator)->qualifiedIdentifier().toString(), DeclarationPointer(*declarationIterator), NavigationAction::NavigateDeclaration);
 
         addedDeclarations << id;
@@ -164,7 +164,7 @@ void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUCo
     } else {
       //Eventually Recurse into the context
       if((*childIterator)->type() == DUContext::Global || (*childIterator)->type() == DUContext::Namespace /*|| (*childIterator)->type() == DUContext::Class*/)
-        addDeclarationsFromContext(*childIterator, first, addedDeclarations, indent + ' ');
+        addDeclarationsFromContext(*childIterator, first, addedDeclarations, indent + QLatin1Char(' '));
       ++childIterator;
     }
   }

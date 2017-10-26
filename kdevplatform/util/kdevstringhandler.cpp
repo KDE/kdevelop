@@ -154,7 +154,7 @@ namespace KDevelop
         switch (mode) {
         case FastMode: {
             QString result(s);
-            result.remove(QRegExp("<[^>]+>"));
+            result.remove(QRegExp(QStringLiteral("<[^>]+>")));
             return result;
         }
         case CompleteMode: {

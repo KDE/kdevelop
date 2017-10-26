@@ -32,7 +32,7 @@ TestProject::TestProject(const Path& path, QObject* parent)
 , m_root(nullptr)
 , m_projectConfiguration(KSharedConfig::openConfig())
 {
-    m_path = path.isValid() ? path : Path(QDir::tempPath() + "/kdev-testproject/");
+    m_path = path.isValid() ? path : Path(QDir::tempPath() + QLatin1String("/kdev-testproject/"));
     m_root = new ProjectFolderItem(this, m_path);
     ICore::self()->projectController()->projectModel()->appendRow( m_root );
 }
@@ -73,7 +73,7 @@ void TestProject::setProjectItem(ProjectFolderItem* item)
 
 Path TestProject::projectFile() const
 {
-    return Path(m_path, m_path.lastPathSegment() + ".kdev4");
+    return Path(m_path, m_path.lastPathSegment() + QLatin1String(".kdev4"));
 }
 
 Path TestProject::path() const

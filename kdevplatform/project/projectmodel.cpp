@@ -130,7 +130,7 @@ public:
     {
         Q_ASSERT(item->file() || item->folder());
 
-        if (newName.contains('/')) {
+        if (newName.contains(QLatin1Char('/'))) {
             return ProjectBaseItem::InvalidNewName;
         }
 

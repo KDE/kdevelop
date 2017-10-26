@@ -56,7 +56,7 @@ namespace KDevelop {
   }
 
   bool extractLineNumber(const QString& from, QString& path, uint& lineNumber) {
-    int colonIndex = from.indexOf(':');
+    int colonIndex = from.indexOf(QLatin1Char(':'));
     if (colonIndex != -1) {
       if (colonIndex == from.count() - 1) {
         path = from.mid(0, colonIndex);

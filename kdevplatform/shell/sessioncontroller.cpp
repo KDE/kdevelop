@@ -77,7 +77,7 @@ static QStringList standardArguments()
         QString arg = QString::fromLocal8Bit(argv[a]);
         if(arg.startsWith(QLatin1String("-graphicssystem")) || arg.startsWith(QLatin1String("-style")))
         {
-            ret << '-' + arg;
+            ret << QLatin1Char('-') + arg;
             if(a+1 < argc)
                 ret << QString::fromLocal8Bit(argv[a+1]);
         }
@@ -217,7 +217,7 @@ public:
         a->setData(QVariant::fromValue<Session*>(s));
 
         sessionActions[s] = a;
-        q->actionCollection()->addAction( "session_"+s->id().toString(), a );
+        q->actionCollection()->addAction(QLatin1String("session_") + s->id().toString(), a);
         connect( s, &Session::sessionUpdated, this, &SessionControllerPrivate::sessionUpdated );
         sessionUpdated( s );
     }
@@ -233,7 +233,7 @@ public:
     static QString sessionBaseDirectory()
     {
         return QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
-            +'/'+ qApp->applicationName() + "/sessions/";
+            + QLatin1Char('/') + qApp->applicationName() + QLatin1String("/sessions/");
     }
 
     QString ownSessionDirectory() const
@@ -382,8 +382,7 @@ QList< const KDevelop::Session* > SessionController::sessions() const
 Session* SessionController::createSession( const QString& name )
 {
     Session* s;
-    if(name.startsWith('{'))
-    {
+    if(name.startsWith(QLatin1Char('{'))) {
         s = new Session( QUuid(name).toString(), this );
     }else{
         qsrand(QDateTime::currentDateTimeUtc().toTime_t());

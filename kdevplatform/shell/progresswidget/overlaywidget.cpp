@@ -43,7 +43,7 @@ OverlayWidget::OverlayWidget( QWidget* alignWidget, QWidget* parent, const char*
     auto hboxHBoxLayout = new QHBoxLayout(this);
     hboxHBoxLayout->setMargin(0);
 
-    setObjectName(name);
+    setObjectName(QString::fromUtf8(name));
     setAlignWidget( alignWidget );
 
     setWindowFlags(Qt::WindowDoesNotAcceptFocus | windowFlags());

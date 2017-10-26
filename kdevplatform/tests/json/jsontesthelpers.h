@@ -27,7 +27,7 @@ if (!ptr) \
 
 #define VERIFY_TYPE(qvariantType)\
 if (!value.canConvert<qvariantType>())\
-    return JsonTestHelpers::INVALID_JSON_TYPE().arg(QStringLiteral(#qvariantType), QVariant::typeToName(value.type()))
+    return JsonTestHelpers::INVALID_JSON_TYPE().arg(QStringLiteral(#qvariantType), QString::fromUtf8(QVariant::typeToName(value.type())))
 
 #define __AddTest(testName, objType)\
 bool testName##Added = KDevelop::TestSuite<objType>::get().addTest(QStringLiteral(#testName), &testName)

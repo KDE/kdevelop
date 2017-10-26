@@ -168,7 +168,7 @@ KParts::Part* PartController::createPart( const QString & mimeType,
         return editorFactory->create<KParts::Part>(
                    nullptr,
                    this,
-                   className.toLatin1() );
+                   className);
     }
 
     return nullptr;

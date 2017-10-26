@@ -265,7 +265,7 @@ QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
                 return d->items.at(idx.row()).itemName();
                 break;
             case 1:
-                return KDevelop::joinWithEscaping(d->items.at(idx.row()).itemPath(), '/', '\\');
+                return KDevelop::joinWithEscaping(d->items.at(idx.row()).itemPath(), QLatin1Char('/'), QLatin1Char('\\'));
                 break;
         }
     } else if(role == Qt::DecorationRole && idx.column()==0) {

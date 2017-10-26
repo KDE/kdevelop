@@ -100,7 +100,7 @@ void AbstractNavigationContext::addExternalHtml( const QString& text )
     pos += fileMark.length();
 
     if( pos != text.length() ) {
-      int fileEnd = text.indexOf('}', pos);
+      int fileEnd = text.indexOf(QLatin1Char('}'), pos);
       if( fileEnd != -1 ) {
         QString file = text.mid( pos, fileEnd - pos );
         pos = fileEnd + 1;
@@ -144,9 +144,9 @@ QString AbstractNavigationContext::createLink(const QString& name, const QString
 
   QString str = name.toHtmlEscaped();
   if( d->m_linkCount == d->m_selectedLink )
-    str = "<font style=\"background-color:#f1f1f1;\" color=\"#880088\">" + str + "</font>";
+    str = QLatin1String("<font style=\"background-color:#f1f1f1;\" color=\"#880088\">") + str + QLatin1String("</font>");
 
-  QString ret =  "<a href=\"" + hrefId + "\"" + ((d->m_linkCount == d->m_selectedLink && d->m_currentPositionLine == -1) ? QStringLiteral(" name = \"currentPosition\"") : QString()) + ">" + str + "</a>";
+  QString ret = QLatin1String("<a href=\"") + hrefId + QLatin1Char('\"') + ((d->m_linkCount == d->m_selectedLink && d->m_currentPositionLine == -1) ? QStringLiteral(" name = \"currentPosition\"") : QString()) + QLatin1Char('>') + str + QLatin1String("</a>");
 
   if( d->m_selectedLink == d->m_linkCount )
     d->m_selectedLinkAction = action;
@@ -508,7 +508,7 @@ static QStringList splitAndKeep(QString str, const QRegExp& regExp) {
 }
 
 void AbstractNavigationContext::addHtml(const QString& html) {
-  QRegExp newLineRegExp("<br>|<br */>");
+  QRegExp newLineRegExp(QStringLiteral("<br>|<br */>"));
   foreach(const QString& line, splitAndKeep(html, newLineRegExp)) {
     d->m_currentText +=  line;
     if(line.indexOf(newLineRegExp) != -1) {
@@ -536,14 +536,14 @@ QString AbstractNavigationContext::fontSizeSuffix(bool /*shorten*/) const
 
 QString Colorizer::operator() ( const QString& str ) const
 {
-  QString ret = "<font color=\"#" + m_color + "\">" + str + "</font>";
+  QString ret = QLatin1String("<font color=\"#") + m_color + QLatin1String("\">") + str + QLatin1String("</font>");
 
   if( m_formatting & Fixed )
-    ret = "<tt>"+ret+"</tt>";
+    ret = QLatin1String("<tt>") + ret + QLatin1String("</tt>");
   if ( m_formatting & Bold )
-    ret = "<b>"+ret+"</b>";
+    ret = QLatin1String("<b>") + ret + QLatin1String("</b>");
   if ( m_formatting & Italic )
-    ret = "<i>"+ret+"</i>";
+    ret = QLatin1String("<i>") + ret + QLatin1String("</i>");
 
   return ret;
 }

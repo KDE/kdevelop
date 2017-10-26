@@ -240,7 +240,7 @@ RootAreaIndex::RootAreaIndex()
 QString AreaIndex::print() const
 {
     if(isSplit())
-        return " [ " + first()->print() + (orientation() == Qt::Horizontal ? " / " : " - ") + second()->print() + " ] ";
+        return QLatin1String(" [ ") + first()->print() + QLatin1String(orientation() == Qt::Horizontal ? " / " : " - ") + second()->print() + QLatin1String(" ] ");
     QStringList ret;
     foreach(Sublime::View* view, views())
         ret << view->document()->title();

@@ -40,7 +40,7 @@ static const char* const BREAKPOINT_KINDS[Breakpoint::LastBreakpointKind] = {
 static Breakpoint::BreakpointKind stringToKind(const QString& kindString)
 {
     for (int i = 0; i < Breakpoint::LastBreakpointKind; ++i) {
-        if (BREAKPOINT_KINDS[i] == kindString) {
+        if (kindString == QLatin1String(BREAKPOINT_KINDS[i])) {
             return (Breakpoint::BreakpointKind)i;
         }
     }
@@ -100,7 +100,7 @@ bool Breakpoint::setData(int index, const QVariant& value)
     {
         QString s = value.toString();
         if (index == LocationColumn) {
-            QRegExp rx("^(.+):([0-9]+)$");
+            QRegExp rx(QStringLiteral("^(.+):([0-9]+)$"));
             int idx = rx.indexIn(s);
             if (m_kind == CodeBreakpoint && idx != -1) {
                 m_url = QUrl::fromLocalFile(rx.cap(1));
@@ -171,7 +171,7 @@ QVariant Breakpoint::data(int column, int role) const
 
     if (column == TypeColumn && role == Qt::DisplayRole)
     {
-        return BREAKPOINT_KINDS[m_kind];
+        return QLatin1String(BREAKPOINT_KINDS[m_kind]);
     }
 
     if (column == ConditionColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
@@ -187,7 +187,7 @@ QVariant Breakpoint::data(int column, int role) const
                 } else {
                     ret = m_url.toDisplayString(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
                 }
-                ret += ':' + QString::number(m_line+1);
+                ret += QLatin1Char(':') + QString::number(m_line+1);
             } else {
                 ret = m_expression;
             }

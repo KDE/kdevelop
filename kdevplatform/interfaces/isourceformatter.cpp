@@ -103,7 +103,7 @@ void SourceFormatterStyle::setMimeTypes(const SourceFormatterStyle::MimeList& ty
 void SourceFormatterStyle::setMimeTypes(const QStringList& types)
 {
 	foreach ( auto& t, types ) {
-		auto items = t.split('|');
+		auto items = t.split(QLatin1Char('|'));
 		if ( items.size() != 2 ) {
 			continue;
 		}
@@ -167,10 +167,7 @@ QString ISourceFormatter::optionMapToString(const QMap<QString, QVariant> &map)
 	QString options;
 	QMap<QString, QVariant>::const_iterator it = map.constBegin();
 	for (; it != map.constEnd(); ++it) {
-		options += it.key();
-		options += '=';
-		options += it.value().toString();
-		options += ',';
+		options += it.key() + QLatin1Char('=') + it.value().toString() + QLatin1Char(',');
 	}
 	return options;
 }
@@ -178,10 +175,10 @@ QString ISourceFormatter::optionMapToString(const QMap<QString, QVariant> &map)
 QMap<QString, QVariant> ISourceFormatter::stringToOptionMap(const QString &options)
 {
 	QMap<QString, QVariant> map;
-	QStringList pairs = options.split(',', QString::SkipEmptyParts);
+	QStringList pairs = options.split(QLatin1Char(','), QString::SkipEmptyParts);
 	QStringList::const_iterator it;
 	for (it = pairs.constBegin(); it != pairs.constEnd(); ++it) {
-		QStringList bits = (*it).split('=');
+		const QStringList bits = (*it).split(QLatin1Char('='));
 		map[bits[0]] = bits[1];
 	}
 	return map;
@@ -191,7 +188,7 @@ QString ISourceFormatter::missingExecutableMessage(const QString &name)
 {
 	return i18n("The executable %1 cannot be found. Please make sure"
 	" it is installed and can be executed. <br />"
-	"The plugin will not work until you fix this problem.", "<b>" + name + "</b>");
+	"The plugin will not work until you fix this problem.", QLatin1String("<b>") + name + QLatin1String("</b>"));
 }
 
 }

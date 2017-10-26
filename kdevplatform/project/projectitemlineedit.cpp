@@ -40,8 +40,8 @@
 #include <interfaces/iproject.h>
 #include "projectproxymodel.h"
 
-static const QChar sep = '/';
-static const QChar escape = '\\';
+static const QChar sep = QLatin1Char('/');
+static const QChar escape = QLatin1Char('\\');
 
 
 class ProjectItemCompleter : public QCompleter
@@ -252,7 +252,7 @@ KDevelop::ProjectBaseItem* ProjectItemLineEdit::baseItem() const
 KDevelop::ProjectBaseItem* ProjectItemLineEdit::currentItem() const
 {
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-    return model->itemFromIndex(model->pathToIndex(KDevelop::splitWithEscaping(text(),'/', '\\')));
+    return model->itemFromIndex(model->pathToIndex(KDevelop::splitWithEscaping(text(), QLatin1Char('/'), QLatin1Char('\\'))));
 }
 
 void ProjectItemLineEdit::setSuggestion(KDevelop::IProject* project)

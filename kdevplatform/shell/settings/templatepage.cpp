@@ -135,6 +135,6 @@ void TemplatePage::extractTemplate()
 
     archive->open(QIODevice::ReadOnly);
 
-    const QString destination = QFileDialog::getExistingDirectory() + '/' + info.baseName();
+    const QString destination = QFileDialog::getExistingDirectory() + QLatin1Char('/') + info.baseName();
     archive->directory()->copyTo(destination);
 }

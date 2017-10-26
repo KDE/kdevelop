@@ -299,9 +299,9 @@ FunctionNode::FunctionNode(Declaration* a_decl, NodesModelInterface* a_model)
   ClassFunctionDeclaration* classmember = dynamic_cast<ClassFunctionDeclaration*>(a_decl);
   if ( classmember ) {
     if ( classmember->isConstructor() || classmember->isDestructor() )
-      m_sortableString = '0' + m_displayName;
+      m_sortableString = QLatin1Char('0') + m_displayName;
     else
-      m_sortableString = '1' + m_displayName;
+      m_sortableString = QLatin1Char('1') + m_displayName;
   }
   else {
     m_sortableString = m_displayName;

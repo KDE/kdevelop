@@ -103,6 +103,7 @@ public:
 
     /**
      * Overloaded convenience function.
+     * @param arg command or argument as utf8-encoded string
      * @see operator<<(const QString& arg).
      */
     DVcsJob& operator<<(const char* arg);

@@ -132,7 +132,7 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
 QVariant ClassModel::headerData(int, Qt::Orientation, int role) const
 {
   if ( role == Qt::DisplayRole )
-    return "Class";
+    return QStringLiteral("Class");
 
   return QVariant();
 }

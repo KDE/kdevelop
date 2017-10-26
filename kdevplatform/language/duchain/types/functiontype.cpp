@@ -150,16 +150,16 @@ QString FunctionType::partToString( SignaturePart sigPart ) const {
   TYPE_D(FunctionType);
   if( sigPart == SignatureArguments || sigPart == SignatureWhole )
   {
-    args += '(';
+    args += QLatin1Char('(');
     bool first = true;
     FOREACH_FUNCTION(const IndexedType& type, d->m_arguments) {
       if (first)
         first = false;
       else
-        args.append(", ");
+        args.append(QLatin1String(", "));
       args.append(type ? type.abstractType()->toString() : QStringLiteral("<notype>"));
     }
-    args += ')';
+    args += QLatin1Char(')');
   }
 
   if( sigPart == SignatureArguments )

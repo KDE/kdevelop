@@ -141,7 +141,7 @@ void SourceFormatterJob::formatFile(const QUrl& url)
         // TODO: really fromLocal8Bit/toLocal8Bit? no encoding detection? added in b8062f736a2bf2eec098af531a7fda6ebcdc7cde
         QString text = QString::fromLocal8Bit(getJob->data());
         text = formatter->formatSource(text, url, mime);
-        text = m_sourceFormatterController->addModelineForCurrentLang(text, url, mime).toUtf8();
+        text = m_sourceFormatterController->addModelineForCurrentLang(text, url, mime);
 
         auto putJob = KIO::storedPut(text.toLocal8Bit(), url, -1, KIO::Overwrite);
         // see getJob

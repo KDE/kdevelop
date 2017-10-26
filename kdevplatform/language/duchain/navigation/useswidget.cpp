@@ -106,10 +106,10 @@ QString highlightAndEscapeUseText(QString line, int cutOff, KTextEditor::Range r
   // mixing (255, 255, 0, 100) with white yields this:
   const QColor foreground(0, 0, 0);
 
-  return "<code>" + line.left(range.start().column()).toHtmlEscaped()
-                    + "<span style=\"background-color:" + backgroundColor(false) + ";color:" + foreground.name() + ";\">"
+  return QLatin1String("<code>") + line.left(range.start().column()).toHtmlEscaped()
+                    + QLatin1String("<span style=\"background-color:") + backgroundColor(false) + QLatin1String(";color:") + foreground.name() + QLatin1String(";\">")
                     + line.mid(range.start().column(), range.end().column() - range.start().column()).toHtmlEscaped()
-                    + "</span>" + line.mid(range.end().column(), line.length() - range.end().column()).toHtmlEscaped() + "</code>";
+                    + QLatin1String("</span>") + line.mid(range.end().column(), line.length() - range.end().column()).toHtmlEscaped() + QLatin1String("</code>");
 }
 
 /**
@@ -134,10 +134,10 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, const IndexedString& 
   m_icon->setPixmap(QIcon::fromTheme(QStringLiteral("code-function")).pixmap(16));
 
   DUChainReadLocker lock(DUChain::lock());
-  QString text = "<a>" + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start().line()) + QStringLiteral("</a>");
+  QString text = QLatin1String("<a>") + i18nc("refers to a line in source code", "Line <b>%1</b>:", range.start().line()) + QStringLiteral("</a>");
   if(!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range->range().end().column()) {
 
-    text += "&nbsp;&nbsp;" + highlightAndEscapeUseText(m_sourceLine, 0, m_range->range());
+    text += QLatin1String("&nbsp;&nbsp;") + highlightAndEscapeUseText(m_sourceLine, 0, m_range->range());
 
     //Useful tooltip:
     int start = m_range->range().start().line() - tooltipContextSize;
@@ -150,7 +150,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, const IndexedString& 
         lineText = QStringLiteral("<b>") + lineText + QStringLiteral("</b>");
       }
       if(!lineText.trimmed().isEmpty()) {
-        toolTipText += lineText + "<br>";
+        toolTipText += lineText + QLatin1String("<br>");
       }
     }
     if ( toolTipText.endsWith(QLatin1String("<br>")) ) {
@@ -172,10 +172,12 @@ void OneUseWidget::setHighlighted(bool highlight)
     }
 
     if (highlight) {
-        m_label->setText(m_label->text().replace("background-color:" + backgroundColor(false), "background-color:" + backgroundColor(true)));
+        m_label->setText(m_label->text().replace(QLatin1String("background-color:") + backgroundColor(false),
+                                                 QLatin1String("background-color:") + backgroundColor(true)));
         m_isHighlighted = true;
     } else {
-        m_label->setText(m_label->text().replace("background-color:" + backgroundColor(true), "background-color:" + backgroundColor(false)));
+        m_label->setText(m_label->text().replace(QLatin1String("background-color:") + backgroundColor(true),
+                                                 QLatin1String("background-color:") + backgroundColor(false)));
         m_isHighlighted = false;
     }
 }
@@ -407,8 +409,8 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
       }
     }
 
-    QLabel* headerLabel = new QLabel(i18nc("%1: source file", "In %1", "<a href='navigateToFunction'>"
-                                          + headerText.toHtmlEscaped() + "</a>: "));
+    QLabel* headerLabel = new QLabel(i18nc("%1: source file", "In %1", QLatin1String("<a href='navigateToFunction'>")
+                                          + headerText.toHtmlEscaped() + QLatin1String("</a>: ")));
     addHeaderItem(headerLabel);
     setUpdatesEnabled(true);
     connect(headerLabel, &QLabel::linkActivated, this, &ContextUsesWidget::linkWasActivated);
@@ -476,7 +478,7 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList
                               m_usesCount, ICore::self()->projectController()->prettyFileName(topContext.url().toUrl()));
     label->setText(labelText);
 
-    m_toggleButton->setText("&nbsp;&nbsp; <a href='toggleCollapsed'>[" + i18nc("Refers to closing a UI element", "Collapse") + "]</a>");
+    m_toggleButton->setText(QLatin1String("&nbsp;&nbsp; <a href='toggleCollapsed'>[") + i18nc("Refers to closing a UI element", "Collapse") + QLatin1String("]</a>"));
 
     connect(m_toggleButton, &QLabel::linkActivated, this, &TopContextUsesWidget::labelClicked);
     addHeaderItem(headerWidget);
@@ -507,10 +509,10 @@ QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code, const
 
 void TopContextUsesWidget::setExpanded(bool expanded) {
   if(!expanded) {
-    m_toggleButton->setText("&nbsp;&nbsp; <a href='toggleCollapsed'>[" + i18nc("Refers to opening a UI element", "Expand") + "]</a>");
+    m_toggleButton->setText(QLatin1String("&nbsp;&nbsp; <a href='toggleCollapsed'>[") + i18nc("Refers to opening a UI element", "Expand") + QLatin1String("]</a>"));
     deleteItems();
   }else{
-    m_toggleButton->setText("&nbsp;&nbsp; <a href='toggleCollapsed'>[" + i18nc("Refers to closing a UI element", "Collapse") + "]</a>");
+    m_toggleButton->setText(QLatin1String("&nbsp;&nbsp; <a href='toggleCollapsed'>[") + i18nc("Refers to closing a UI element", "Collapse") + QLatin1String("]</a>"));
     if(hasItems())
       return;
     DUChainReadLocker lock(DUChain::lock());
@@ -588,9 +590,9 @@ void UsesWidget::redrawHeaderLine()
 
 const QString UsesWidget::headerLineText() const
 {
-  return i18np("1 use found", "%1 uses found", countAllUses()) + " &bull; "
-              "<a href='expandAll'>[" + i18n("Expand all") + "]</a> &bull; "
-              "<a href='collapseAll'>[" + i18n("Collapse all") + "]</a>";
+  return i18np("1 use found", "%1 uses found", countAllUses()) + QLatin1String(" &bull; "
+              "<a href='expandAll'>[") + i18n("Expand all") + QLatin1String("]</a> &bull; "
+              "<a href='collapseAll'>[") + i18n("Collapse all") + QLatin1String("]</a>");
 }
 
 unsigned int UsesWidget::countAllUses() const

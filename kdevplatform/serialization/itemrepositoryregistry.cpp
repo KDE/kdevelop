@@ -232,7 +232,7 @@ void ItemRepositoryRegistryPrivate::lockForWriting()
 {
   QMutexLocker lock(&m_mutex);
   //Create is_writing
-  QFile f(m_path + "/is_writing");
+  QFile f(m_path + QLatin1String("/is_writing"));
   f.open(QIODevice::WriteOnly);
   f.close();
 }
@@ -246,7 +246,7 @@ void ItemRepositoryRegistryPrivate::unlockForWriting()
 {
   QMutexLocker lock(&m_mutex);
   //Delete is_writing
-  QFile::remove(m_path + "/is_writing");
+  QFile::remove(m_path + QLatin1String("/is_writing"));
 }
 
 void ItemRepositoryRegistry::unlockForWriting()
@@ -303,7 +303,7 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
     }
   }
 
-  QFile f(path + "/Counters");
+  QFile f(path + QLatin1String("/Counters"));
   if(f.open(QIODevice::ReadOnly)) {
     QDataStream stream(&f);
 
@@ -337,7 +337,7 @@ void ItemRepositoryRegistry::store()
   }
 
   //Store all custom counter values
-  QFile f(d->m_path + "/Counters");
+  QFile f(d->m_path + QLatin1String("/Counters"));
   if(f.open(QIODevice::WriteOnly)) {
     f.resize(0);
     QDataStream stream(&f);

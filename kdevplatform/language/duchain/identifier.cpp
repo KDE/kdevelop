@@ -241,7 +241,7 @@ public:
 
     while( currentStart < (uint)str.length() ) {
       identifiersList.append(IndexedIdentifier(Identifier( str, currentStart, &currentStart )));
-      while( currentStart < (uint)str.length() && (str[currentStart] == ' ' ) )
+      while (currentStart < (uint)str.length() && (str[currentStart] == QLatin1Char(' ')))
         ++currentStart;
       currentStart += 2; //Skip "::"
     }
@@ -593,13 +593,13 @@ QString Identifier::toString(IdentifierStringFormattingOptions options) const
   QString ret = identifier().str();
 
   if (!options.testFlag(RemoveTemplateInformation) && templateIdentifiersCount()) {
-    ret.append("< ");
+    ret.append(QStringLiteral("< "));
     for (uint i = 0; i < templateIdentifiersCount(); ++i) {
       ret.append(templateIdentifier(i).toString(options));
       if (i != templateIdentifiersCount() - 1)
-        ret.append(", ");
+        ret.append(QStringLiteral(", "));
     }
-    ret.append(" >");
+    ret.append(QStringLiteral(" >"));
   }
 
   return ret;
@@ -1257,7 +1257,7 @@ QString IndexedTypeIdentifier::toString(IdentifierStringFormattingOptions option
 
   ret += m_identifier.identifier().toString(options);
   for(int a = 0; a < pointerDepth(); ++a) {
-    ret += '*';
+    ret += QLatin1Char('*');
     if( isConstPointer(a) )
       ret += QLatin1String("const");
   }
@@ -1265,7 +1265,7 @@ QString IndexedTypeIdentifier::toString(IdentifierStringFormattingOptions option
   if(isRValue())
     ret += QLatin1String("&&");
   else if(isReference())
-    ret += '&';
+    ret += QLatin1Char('&');
   return ret;
 }
 

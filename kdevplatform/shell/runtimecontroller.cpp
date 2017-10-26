@@ -59,7 +59,7 @@ class IdentityRuntime : public IRuntime
     KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) const override { return runtimePath; }
     KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) const override { return localPath; }
     void setEnabled(bool /*enabled*/) override {}
-    QByteArray getenv(const QByteArray & varname) const override { return qgetenv(varname); }
+    QByteArray getenv(const QByteArray & varname) const override { return qgetenv(varname.constData()); }
 };
 
 KDevelop::RuntimeController::RuntimeController(KDevelop::Core* core)

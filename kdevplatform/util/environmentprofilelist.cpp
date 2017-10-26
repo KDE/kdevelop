@@ -175,8 +175,8 @@ QStringList EnvironmentProfileList::createEnvironment(const QString& profileName
     QMap<QString, QString> retMap;
     foreach( const QString &line, defaultEnvironment )
     {
-        QString varName = line.section( '=', 0, 0 );
-        QString varValue = line.section( '=', 1 );
+        QString varName = line.section(QLatin1Char('='), 0, 0);
+        QString varValue = line.section(QLatin1Char('='), 1);
         retMap.insert( varName, varValue );
     }
 
@@ -194,7 +194,7 @@ QStringList EnvironmentProfileList::createEnvironment(const QString& profileName
     for( QMap<QString, QString>::const_iterator it = retMap.constBegin();
         it != retMap.constEnd(); ++it )
     {
-        env << it.key() + '=' + it.value();
+        env << it.key() + QLatin1Char('=') + it.value();
     }
 
     return env;

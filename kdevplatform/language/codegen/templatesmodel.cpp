@@ -93,8 +93,8 @@ public:
 TemplatesModelPrivate::TemplatesModelPrivate(const QString& _typePrefix)
 : typePrefix(_typePrefix)
 {
-    if (!typePrefix.endsWith('/')) {
-        typePrefix.append('/');
+    if (!typePrefix.endsWith(QLatin1Char('/'))) {
+        typePrefix.append(QLatin1Char('/'));
     }
 }
 
@@ -126,7 +126,7 @@ void TemplatesModel::refresh()
     }
 
     QStringList templateDescriptions;
-    const QStringList templatePaths = {QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ d->resourceFilter(TemplatesModelPrivate::Description)};
+    const QStringList templatePaths = {QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + d->resourceFilter(TemplatesModelPrivate::Description)};
     foreach(const QString& templateDescription, templatePaths) {
         const QStringList files = QDir(templateDescription).entryList(QDir::Files);
         foreach(const QString& file, files) {
@@ -167,7 +167,7 @@ void TemplatesModel::refresh()
 
 QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QString& category, QStandardItem* parent)
 {
-    QStringList path = category.split('/');
+    QStringList path = category.split(QLatin1Char('/'));
 
     QStringList currentPath;
     foreach (const QString& entry, path)
@@ -205,7 +205,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
         }
     }
 
-    QString localDescriptionsDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ resourceFilter(Description);
+    QString localDescriptionsDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + resourceFilter(Description);
 
     QDir dir(localDescriptionsDir);
     if(!dir.exists())
@@ -308,10 +308,10 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
 QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
 {
     QFileInfo info(fileName);
-    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".kdevtemplate"));
+    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + QLatin1String(".kdevtemplate")));
     if (description.isEmpty())
     {
-        description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + ".desktop"));
+        description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + QLatin1String(".desktop")));
     }
 
     QModelIndexList indexes;
@@ -320,19 +320,19 @@ QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
     {
         KConfig templateConfig(description);
         KConfigGroup general(&templateConfig, "General");
-        QStringList categories = general.readEntry("Category").split('/');
+        QStringList categories = general.readEntry("Category").split(QLatin1Char('/'));
 
         QStringList levels;
         foreach (const QString& category, categories)
         {
             levels << category;
-            indexes << d->templateItems[levels.join(QString('/'))]->index();
+            indexes << d->templateItems[levels.join(QStringLiteral("/"))]->index();
         }
 
         if (!indexes.isEmpty())
         {
             QString name = general.readEntry("Name");
-            QStandardItem* categoryItem = d->templateItems[levels.join(QString('/'))];
+            QStandardItem* categoryItem = d->templateItems[levels.join(QStringLiteral("/"))];
             for (int i = 0; i < categoryItem->rowCount(); ++i)
             {
                 QStandardItem* templateItem = categoryItem->child(i);
@@ -361,7 +361,7 @@ void TemplatesModel::addDataPath(const QString& path)
 
 QString TemplatesModel::loadTemplateFile(const QString& fileName)
 {
-    QString saveLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) +'/'+ d->resourceFilter(TemplatesModelPrivate::Template);
+    QString saveLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + d->resourceFilter(TemplatesModelPrivate::Template);
 
     QDir dir(saveLocation);
     if(!dir.exists())

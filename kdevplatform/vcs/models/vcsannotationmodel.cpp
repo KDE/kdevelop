@@ -96,7 +96,7 @@ VcsAnnotationModel::VcsAnnotationModel(VcsJob *job, const QUrl& url, QObject* pa
 VcsAnnotationModel::~VcsAnnotationModel() = default;
 
 static QString abbreviateLastName(const QString& author) {
-    auto parts = author.split(' ');
+    auto parts = author.split(QLatin1Char(' '));
     bool onlyOneFragment = parts.size() == 1 || ( parts.size() == 2 && parts.at(1).isEmpty() );
     return onlyOneFragment ? parts.first() : parts.first() + QStringLiteral(" %1.").arg(parts.last()[0]);
 }

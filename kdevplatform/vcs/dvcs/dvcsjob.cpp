@@ -100,7 +100,7 @@ DVcsJob& DVcsJob::operator<<(const QString& arg)
 
 DVcsJob& DVcsJob::operator<<(const char* arg)
 {
-    *d->childproc << arg;
+    *d->childproc << QString::fromUtf8(arg);
     return *this;
 }
 
@@ -123,7 +123,7 @@ QString DVcsJob::output() const
         endpos = stdoutbuf.lastIndexOf('\n')+1; // Include the final newline or become 0, when there is no newline
     }
 
-    return QString::fromLocal8Bit(stdoutbuf, endpos);
+    return QString::fromLocal8Bit(stdoutbuf.constData(), endpos);
 }
 
 QByteArray DVcsJob::rawOutput() const
@@ -181,14 +181,14 @@ void DVcsJob::start()
     QString service;
     if(d->vcsplugin)
         service = d->vcsplugin->objectName();
-    setObjectName(service+": "+commandDisplay);
+    setObjectName(service + QLatin1String(": ") + commandDisplay);
 
     d->status = JobRunning;
     d->childproc->setOutputChannelMode(KProcess::SeparateChannels);
     //the started() and error() signals may be delayed! It causes crash with deferred deletion!!!
     d->childproc->start();
 
-    d->model->appendLine(directory().path() + "> " + commandDisplay);
+    d->model->appendLine(directory().path() + QLatin1String("> ") + commandDisplay);
 }
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
@@ -267,7 +267,7 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 
 void DVcsJob::displayOutput(const QString& data)
 {
-    d->model->appendLines(data.split('\n'));
+    d->model->appendLines(data.split(QLatin1Char('\n')));
 }
 
 void DVcsJob::slotReceivedStdout()

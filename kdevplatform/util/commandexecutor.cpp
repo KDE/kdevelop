@@ -92,7 +92,7 @@ void CommandExecutor::setEnvironment( const QStringList& env )
     QMap<QString,QString> envmap;
     foreach( const QString& var, env )
     {
-        int sep = var.indexOf( '=' );
+        int sep = var.indexOf(QLatin1Char('='));
         envmap.insert( var.left( sep ), var.mid( sep + 1 ) );
     }
     d->m_env = envmap;
@@ -130,7 +130,7 @@ void CommandExecutor::start()
     } else {
         QStringList arguments;
         Q_FOREACH( const QString &a, d->m_args ) arguments << KShell::quoteArg( a );
-        d->m_process->setShellCommand(d->m_command + ' ' + arguments.join(QLatin1Char(' ')));
+        d->m_process->setShellCommand(d->m_command + QLatin1Char(' ') + arguments.join(QLatin1Char(' ')));
     }
 
     d->m_process->start();

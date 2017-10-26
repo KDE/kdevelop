@@ -42,7 +42,7 @@ QString UsesNavigationContext::name() const {
 
 QString UsesNavigationContext::html(bool shorten) {
   clear();
-  modifyHtml()  += "<html><body><p>" + fontSizePrefix(shorten);
+  modifyHtml()  += QLatin1String("<html><body><p>") + fontSizePrefix(shorten);
   
   if(auto context = previousContext()) {
     modifyHtml() += navigationHighlight(i18n("Uses of "));
@@ -54,7 +54,7 @@ QString UsesNavigationContext::html(bool shorten) {
     }
   }
   
-  modifyHtml() += fontSizeSuffix(shorten) + "</p></body></html>";
+  modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
 
   return currentHtml();
 }

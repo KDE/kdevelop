@@ -30,7 +30,7 @@ using namespace KDevelop;
 
 void TestModels::initTestCase()
 {
-    AutoTestShell::init({"dummy"});
+    AutoTestShell::init({QStringLiteral("dummy")});
     TestCore::initialize();
 }
 

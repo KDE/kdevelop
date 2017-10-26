@@ -76,7 +76,7 @@ QVariant VcsBasicEventModel::data(const QModelIndex& idx, int role) const
             return QVariant( ev.revision().revisionValue() );
         case SummaryColumn:
             // show the first line only
-            return QVariant( ev.message().section('\n', 0, 0) );
+            return QVariant( ev.message().section(QLatin1Char('\n'), 0, 0) );
         case AuthorColumn:
             return QVariant( ev.author() );
         case DateColumn:

@@ -101,5 +101,5 @@ QString ArchiveTemplateLocation::templateContents(const QString& name) const
 {
     const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(m_directory->entry(name));
     Q_ASSERT(file);
-    return file->data();
+    return QString::fromUtf8(file->data());
 }

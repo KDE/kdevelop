@@ -181,7 +181,7 @@ void Declaration::setComment(const QByteArray& str) {
   if(str.isEmpty())
     d->m_comment = 0;
   else
-    d->m_comment = commentRepository().index(Repositories::StringRepositoryItemRequest(str, IndexedString::hashString(str, str.length()), str.length()));
+    d->m_comment = commentRepository().index(Repositories::StringRepositoryItemRequest(str.constData(), IndexedString::hashString(str.constData(), str.length()), str.length()));
 }
 
 void Declaration::setComment(const QString& str) {

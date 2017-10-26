@@ -220,7 +220,7 @@ void MainWindow::saveSettings()
     d->disableConcentrationMode();
     QString group = QStringLiteral("MainWindow");
     if (area())
-        group += '_' + area()->objectName();
+        group += QLatin1Char('_') + area()->objectName();
     KConfigGroup cg = KSharedConfig::openConfig()->group(group);
     /* This will try to save window size, too.  But it's OK, since we
        won't use this information when loading.  */
@@ -247,7 +247,7 @@ void MainWindow::loadSettings()
     qCDebug(SUBLIME) << "loading settings for " << (area() ? area()->objectName() : QLatin1String(""));
     QString group = QStringLiteral("MainWindow");
     if (area())
-        group += '_' + area()->objectName();
+        group += QLatin1Char('_') + area()->objectName();
     KConfigGroup cg = KSharedConfig::openConfig()->group(group);
 
     // What follows is copy-paste from applyMainWindowSettings.  Unfortunately,

@@ -225,9 +225,8 @@ void AbstractNavigationWidget::update() {
   d->m_browser->setMaximumHeight(10000);
 
   if(d->m_currentWidget) {
-    if (d->m_currentWidget->metaObject()
-          ->indexOfSignal(QMetaObject::normalizedSignature("navigateDeclaration(KDevelop::IndexedDeclaration)")) != -1)
-    {
+    const auto signalSignature = QMetaObject::normalizedSignature("navigateDeclaration(KDevelop::IndexedDeclaration)");
+    if (d->m_currentWidget->metaObject()->indexOfSignal(signalSignature.constData()) != -1) {
       connect(d->m_currentWidget, SIGNAL(navigateDeclaration(KDevelop::IndexedDeclaration)),
               this, SLOT(navigateDeclaration(KDevelop::IndexedDeclaration)));
     }

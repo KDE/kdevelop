@@ -263,15 +263,15 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
     const QString fileName = url.fileName();
 
     ///TODO: cache regexp or simple string pattern for endsWith matching
-    QRegExp exp("", Qt::CaseInsensitive, QRegExp::Wildcard);
+    QRegExp exp(QString(), Qt::CaseInsensitive, QRegExp::Wildcard);
     ///non-crashy part: Use the mime-types of known languages
     for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.constBegin();
         it != d->mimeTypeCache.constEnd(); ++it)
     {
         foreach(const QString& pattern, it.key().globPatterns()) {
-            if(pattern.startsWith('*')) {
+            if(pattern.startsWith(QLatin1Char('*'))) {
                 const QStringRef subPattern = pattern.midRef(1);
-                if (!subPattern.contains('*')) {
+                if (!subPattern.contains(QLatin1Char('*'))) {
                     //optimize: we can skip the expensive QRegExp in this case
                     //and do a simple string compare (much faster)
                     if (fileName.endsWith(subPattern)) {

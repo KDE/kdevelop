@@ -257,11 +257,11 @@ QString ModificationRevisionSet::toString() const
     first = false;
 
     const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
-    ret += data->file.str() + ':' + data->revision.toString();
+    ret += data->file.str() + QLatin1Char(':') + data->revision.toString();
     ++it;
   }
 
-  ret += ']';
+  ret += QLatin1Char(']');
   return ret;
 }
 

@@ -151,7 +151,7 @@ void verifyDataInfo(const TopDUContextDynamicData::ItemDataInfo& info, const QVe
 
 QString basePath()
 {
-  return globalItemRepositoryRegistry().path() + "/topcontexts/";
+  return globalItemRepositoryRegistry().path() + QLatin1String("/topcontexts/");
 }
 
 QString pathForTopContext(const uint topContextIndex)

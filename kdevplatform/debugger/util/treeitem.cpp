@@ -188,9 +188,9 @@ public:
     : TreeItem(model, parent)
     {
         QVector<QVariant> data;
-        data.push_back("...");
+        data.push_back(QVariant(QStringLiteral("...")));
         for (int i = 1; i < model->columnCount(QModelIndex()); ++i)
-            data.push_back("");
+            data.push_back(QString());
         setData(data);
     }
 

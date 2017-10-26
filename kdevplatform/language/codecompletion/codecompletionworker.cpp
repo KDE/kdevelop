@@ -111,7 +111,7 @@ void CodeCompletionWorker::computeCompletions(const KDevelop::DUContextPointer& 
   }
 
   if( position.column() == 0 ) //Seems like when the cursor is a the beginning of a line, kate does not give the \n
-    text += '\n';
+    text += QLatin1Char('\n');
 
   if (aborting()) {
     failed();

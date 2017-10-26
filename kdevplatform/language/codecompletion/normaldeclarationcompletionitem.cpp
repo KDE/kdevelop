@@ -156,7 +156,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
                 if(!m_declaration->context()->owner()->identifier().isEmpty())
                   return shortenedTypeString(DeclarationPointer(m_declaration->context()->owner()), desiredTypeLength);
                 else
-                  return "enum";
+                  return QStringLiteral("enum");
               }
             }
             if (FunctionType::Ptr functionType = m_declaration->type<FunctionType>()) {
@@ -171,17 +171,17 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
               }else if(argumentHintDepth()) {
                 return QString();//Don't show useless prefixes in the argument-hints
               }else if(funDecl && funDecl->isConstructor() )
-                return "<constructor>";
+                return QStringLiteral("<constructor>");
               else if(funDecl && funDecl->isDestructor() )
-                return "<destructor>";
+                return QStringLiteral("<destructor>");
               else
-                return "<incomplete type>";
+                return QStringLiteral("<incomplete type>");
 
             } else {
               return shortenedTypeString(m_declaration, desiredTypeLength);
             }
           } else {
-            return "<incomplete type>";
+            return QStringLiteral("<incomplete type>");
           }
         } else if (index.column() == CodeCompletionModel::Arguments) {
             if (m_declaration->isFunctionDeclaration()) {

@@ -42,14 +42,12 @@ QString getSafeString(const QVariant& variant)
 QStringList words(const QVariant& input)
 {
     QString string = getSafeString(input);
-    if (string == string.toLower() && !string.contains('_'))
-    {
+    if (string == string.toLower() && !string.contains(QLatin1Char('_'))) {
         return QStringList(string);
     }
 
-    if (string.contains('_'))
-    {
-        return string.toLower().split('_');
+    if (string.contains(QLatin1Char('_'))) {
+        return string.toLower().split(QLatin1Char('_'));
     }
 
     int n = string.size();
@@ -121,11 +119,11 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
 {
     QStringList retLines;
     QString start = getSafeString(argument);
-    foreach (const QString& line, getSafeString(input).split('\n', QString::KeepEmptyParts))
+    foreach (const QString& line, getSafeString(input).split(QLatin1Char('\n'), QString::KeepEmptyParts))
     {
         retLines << start + line;
     }
-    return Grantlee::SafeString(retLines.join(QString('\n')));
+    return Grantlee::SafeString(retLines.join(QStringLiteral("\n")));
 }
 
 QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*argument*/,

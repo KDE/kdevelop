@@ -33,7 +33,7 @@ public:
     while (!output.isEmpty())
     {
         DepthedOutput curOutput = output.pop();
-        qDebug().nospace() << qPrintable(QString(curOutput.second -1, ' ')) << curOutput.first.toUtf8().data();
+        qDebug().nospace() << qPrintable(QString(curOutput.second -1, QLatin1Char(' '))) << curOutput.first.toUtf8().data();
     }
   }
   QStack<DepthedOutput> output;

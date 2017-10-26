@@ -55,7 +55,7 @@ class TransactionItem;
 TransactionItemView::TransactionItemView( QWidget *parent, const char *name )
     : QScrollArea( parent )
 {
-    setObjectName( name );
+    setObjectName(QString::fromUtf8(name));
     setFrameStyle( NoFrame );
     mBigBox = new QWidget( this );
     auto layout = new QVBoxLayout(mBigBox);

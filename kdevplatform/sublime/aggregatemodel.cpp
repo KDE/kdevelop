@@ -90,7 +90,7 @@ QVariant AggregateModel::headerData(int section, Qt::Orientation orientation, in
     Q_UNUSED(role);
     //there's nothing to return here because aggregated models will have different headers
     //so we just use empty headers for aggregate model.
-    return "";
+    return QString();
 }
 
 int AggregateModel::columnCount(const QModelIndex &parent) const

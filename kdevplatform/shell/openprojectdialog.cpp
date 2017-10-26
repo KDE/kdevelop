@@ -92,8 +92,8 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
     QString filterFormat = useKdeFileDialog
                          ? QStringLiteral("%1|%2 (%1)")
                          : QStringLiteral("%2 (%1)");
-    allEntry << "*." + ShellExtension::getInstance()->projectFileExtension();
-    filters << filterFormat.arg("*." + ShellExtension::getInstance()->projectFileExtension(), ShellExtension::getInstance()->projectFileDescription());
+    allEntry << QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension();
+    filters << filterFormat.arg(QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension(), ShellExtension::getInstance()->projectFileDescription());
     QVector<KPluginMetaData> plugins = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
     foreach(const KPluginMetaData& info, plugins)
     {
@@ -249,11 +249,11 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                 auto plugins = projectManagerForFile(file);
                 if ( plugins.contains(QStringLiteral("<built-in>")) ) {
                     plugins.removeAll(QStringLiteral("<built-in>"));
-                    choices.append({i18n("Open existing file \"%1\"", file), "<built-in>", QString()});
+                    choices.append({i18n("Open existing file \"%1\"", file), QStringLiteral("<built-in>"), QString()});
                 }
                 Q_FOREACH ( const auto& plugin, plugins ) {
                     auto meta = m_projectPlugins.value(plugin);
-                    choices.append({file + QString(" (%1)").arg(plugin), meta.pluginId(), meta.iconName(), file});
+                    choices.append({file + QLatin1String(" (") + plugin + QLatin1Char(')'), meta.pluginId(), meta.iconName(), file});
                 }
             }
             Q_FOREACH ( const auto& plugin, m_projectFilters.keys() ) {
@@ -266,7 +266,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
             }
             page->populateProjectFileCombo(choices);
         }
-        m_url.setPath( m_url.path() + '/' + m_url.fileName() + '.' + ShellExtension::getInstance()->projectFileExtension() );
+        m_url.setPath( m_url.path() + QLatin1Char('/') + m_url.fileName() + QLatin1Char('.') + ShellExtension::getInstance()->projectFileExtension() );
     } else {
         setAppropriate( projectInfoPage, false );
         m_url = url;
@@ -319,7 +319,7 @@ void OpenProjectDialog::validateProjectManager( const QString& manager, const QS
     
     if ( m_urlIsDirectory )
     {
-        m_selected = m_url.resolved( QUrl("./" + fileName) );
+        m_selected = m_url.resolved( QUrl(QLatin1String("./") + fileName) );
     }
     
     validateProjectInfo();

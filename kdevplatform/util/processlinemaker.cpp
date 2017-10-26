@@ -52,9 +52,9 @@ public:
         int pos;
         while ( (pos = data.indexOf('\n')) != -1) {
             if (pos > 0 && data.at(pos - 1) == '\r')
-                lineList << QString::fromLocal8Bit(data, pos - 1);
+                lineList << QString::fromLocal8Bit(data.constData(), pos - 1);
             else
-                lineList << QString::fromLocal8Bit(data, pos);
+                lineList << QString::fromLocal8Bit(data.constData(), pos);
             data.remove(0, pos+1);
         }
         return lineList;

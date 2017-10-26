@@ -99,10 +99,10 @@ int skipRedundantWhiteSpace( QString context, QString text, int tabWidth )
     QString textWhiteSpace = text.left(textWhitespaceEnd);
 
     // Step 1: Remove redundant newlines
-    while(contextWhiteSpace.contains('\n') && textWhiteSpace.contains('\n'))
+    while(contextWhiteSpace.contains(QLatin1Char('\n')) && textWhiteSpace.contains(QLatin1Char('\n')))
     {
-        int contextOffset = contextWhiteSpace.indexOf('\n')+1;
-        int textOffset = textWhiteSpace.indexOf('\n')+1;
+        int contextOffset = contextWhiteSpace.indexOf(QLatin1Char('\n'))+1;
+        int textOffset = textWhiteSpace.indexOf(QLatin1Char('\n'))+1;
 
         contextPosition += contextOffset;
         contextWhiteSpace.remove(0, contextOffset);
@@ -114,10 +114,10 @@ int skipRedundantWhiteSpace( QString context, QString text, int tabWidth )
     int contextOffset = 0;
     int textOffset = 0;
     // Skip redundant ordinary whitespace
-    while( contextOffset < contextWhiteSpace.size() && textOffset < textWhiteSpace.size() && contextWhiteSpace[contextOffset].isSpace() && contextWhiteSpace[contextOffset] != '\n' && textWhiteSpace[textOffset].isSpace() && textWhiteSpace[textOffset] != '\n' )
+    while(contextOffset < contextWhiteSpace.size() && textOffset < textWhiteSpace.size() && contextWhiteSpace[contextOffset].isSpace() && contextWhiteSpace[contextOffset] != QLatin1Char('\n') && textWhiteSpace[textOffset].isSpace() && textWhiteSpace[textOffset] != QLatin1Char('\n'))
     {
-		bool contextWasTab = contextWhiteSpace[contextOffset] == '	';
-		bool textWasTab = textWhiteSpace[contextOffset] == '	';
+		bool contextWasTab = contextWhiteSpace[contextOffset] == QLatin1Char('\t');
+		bool textWasTab = textWhiteSpace[contextOffset] == QLatin1Char('\t');
         ++contextOffset;
         ++textOffset;
         if( contextWasTab != textWasTab )
@@ -126,12 +126,12 @@ int skipRedundantWhiteSpace( QString context, QString text, int tabWidth )
             if( contextWasTab )
 			{
 				for( int s = 1; s < tabWidth; ++s )
-					if( textOffset < textWhiteSpace.size() && textWhiteSpace[textOffset] == ' ' )
+					if (textOffset < textWhiteSpace.size() && textWhiteSpace[textOffset] == QLatin1Char(' '))
 						++textOffset;
 			}else if( textWasTab )
 			{
 				for( int s = 1; s < tabWidth; ++s )
-					if( contextOffset < contextWhiteSpace.size() && contextWhiteSpace[contextOffset] == ' ' )
+					if (contextOffset < contextWhiteSpace.size() && contextWhiteSpace[contextOffset] == QLatin1Char(' '))
 						++contextOffset;
 			}
         }
@@ -169,10 +169,10 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
 
     if(!rightContext.isEmpty()) {
         //Add a whitespace behind the text for matching, so that we definitely capture all trailing whitespace
-        int endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+' ', QString() );
+        int endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text + QLatin1Char(' '), QString());
         if(endOfText == -1) {
             // Try 2: Ignore the fuzzy characters while matching
-            endOfText = matchPrefixIgnoringWhitespace( formattedMergedText, text+' ', fuzzyCharacters );
+            endOfText = matchPrefixIgnoringWhitespace(formattedMergedText, text + QLatin1Char(' '), fuzzyCharacters);
             if(endOfText == -1) {
                 qCWarning(UTIL) << "problem matching the text while formatting";
                 return text;

@@ -90,7 +90,7 @@ QIcon UrlDocument::defaultIcon() const
 QString UrlDocument::title(TitleType type) const
 {
     if (type == Extended)
-        return Document::title() + " (" + url().toDisplayString(QUrl::PreferLocalFile) + ')';
+        return Document::title() + QLatin1String(" (") + url().toDisplayString(QUrl::PreferLocalFile) + QLatin1Char(')');
     else
         return Document::title();
 }

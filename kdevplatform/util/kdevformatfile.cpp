@@ -42,7 +42,7 @@ bool KDevFormatFile::find()
             QDir::setCurrent(srcDir.canonicalPath());
 
             qStdOut() << "found \""
-                      << QFileInfo(srcDir.canonicalPath() + '/' + formatFileName).canonicalFilePath()
+                      << QFileInfo(srcDir.canonicalPath() + QDir::separator() + formatFileName).canonicalFilePath()
                       << "\"\n";
             return true;
         }
@@ -55,7 +55,7 @@ bool KDevFormatFile::find()
 
 bool KDevFormatFile::read()
 {
-    static const QChar delimeter(':');
+    static const QChar delimeter = QLatin1Char(':');
 
     QFile formatFile(formatFileName);
     if (!formatFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -71,8 +71,8 @@ bool KDevFormatFile::read()
     while (!formatFile.atEnd()) {
         ++lineNumber;
 
-        line = formatFile.readLine().trimmed();
-        if (line.isEmpty() || line.startsWith('#'))
+        line =  QString::fromUtf8(formatFile.readLine().trimmed());
+        if (line.isEmpty() || line.startsWith(QLatin1Char('#')))
             continue;
 
         if (line.indexOf(delimeter) < 0) {
@@ -83,7 +83,7 @@ bool KDevFormatFile::read()
         } else {
             // We found the correct syntax with "wildcards : command"
 
-            wildcards = line.section(delimeter, 0, 0).split(' ', QString::SkipEmptyParts);
+            wildcards = line.section(delimeter, 0, 0).split(QLatin1Char(' '), QString::SkipEmptyParts);
             command = line.section(delimeter, 1).trimmed();
 
             if (wildcards.isEmpty()) {
@@ -112,7 +112,7 @@ bool KDevFormatFile::apply()
         }
 
         foreach(const QString& wildcard, formatLine.wildcards) {
-            if (QDir::match(QDir::current().canonicalPath() + "/" + wildcard.trimmed(), m_origFilePath)) {
+            if (QDir::match(QDir::current().canonicalPath() + QDir::separator() + wildcard.trimmed(), m_origFilePath)) {
                 qStdOut() << "matched \"" << m_origFilePath << "\" with wildcard \"" << wildcard << '\"';
                 return executeCommand(formatLine.command);
             }
@@ -131,18 +131,18 @@ bool KDevFormatFile::executeCommand(QString command)
     command.replace(QStringLiteral("$TMPFILE"), m_tempFilePath);
 
 #ifdef Q_OS_WIN
-    int execResult = QProcess::execute("cmd", {"/c", command});
+    int execResult = QProcess::execute(QStringLiteral("cmd"), {QStringLiteral("/c"), command});
 #else
-    int execResult = QProcess::execute(QStringLiteral("sh"), {"-c", command});
+    int execResult = QProcess::execute(QStringLiteral("sh"), {QStringLiteral("-c"), command});
 #endif
 
     if (execResult == -2) {
-        qStdOut() << "command \"" + command + "\" failed to start\n";
+        qStdOut() << "command \"" << command << "\" failed to start\n";
         return false;
     }
 
     if (execResult == -1) {
-        qStdOut() << "command \"" + command + "\" crashed\n";
+        qStdOut() << "command \"" << command << "\" crashed\n";
         return false;
     }
 

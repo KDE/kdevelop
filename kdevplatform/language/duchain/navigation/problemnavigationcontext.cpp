@@ -157,7 +157,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
   // Add only non-empty explanation which differs from the problem description.
   // Skip this if we have more than one problem.
   if (m_problems.size() == 1 && !explanation.isEmpty() && explanation != description)
-    modifyHtml() += "<p><i style=\"white-space:pre-wrap\">" + explanation + "</i></p>";
+    modifyHtml() += QLatin1String("<p><i style=\"white-space:pre-wrap\">") + explanation + QLatin1String("</i></p>");
 
   modifyHtml() += QStringLiteral("</td>");
   // END: right column
@@ -212,7 +212,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
 
       makeLink(i18n("Solution (%1)", currentIndex + 1), KEY_INVOKE_ACTION( currentIndex ),
                NavigationAction(KEY_INVOKE_ACTION( currentIndex )));
-      modifyHtml() += ": " + assistantAction->description().toHtmlEscaped();
+      modifyHtml() += QLatin1String(": ") + assistantAction->description().toHtmlEscaped();
 
       ++currentIndex;
     }

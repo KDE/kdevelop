@@ -32,7 +32,7 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    QFileInfo origFileInfo(argv[1]);
+    QFileInfo origFileInfo(QString::fromLocal8Bit(argv[1]));
     if (!origFileInfo.exists()) {
         qStdOut() << "orig file \"" << origFileInfo.absoluteFilePath() << "\" does not exits\n";
         return EXIT_FAILURE;
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     QString tempFilePath;
 
     if (argc > 2)
-        tempFilePath = QFileInfo(argv[2]).canonicalFilePath();
+        tempFilePath = QFileInfo(QString::fromLocal8Bit(argv[2])).canonicalFilePath();
     else {
         tempFilePath = origFilePath;
         qStdOut() << "no temp file given, formatting the original file\n";

@@ -52,7 +52,7 @@ namespace {
 
 QPair<QString, QString> splitFileAtExtension(const QString& fileName)
 {
-  int idx = fileName.indexOf('.');
+  int idx = fileName.indexOf(QLatin1Char('.'));
   if (idx == -1) {
     return qMakePair(fileName, QString());
   }

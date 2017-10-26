@@ -536,7 +536,7 @@ QString OutputExecuteJobPrivate::getJobName()
     const QString joinedCommandLine = joinCommandLine();
     if( m_properties.testFlag( OutputExecuteJob::AppendProcessString ) ) {
         if( !m_jobName.isEmpty() ) {
-            return m_jobName + ": " + joinedCommandLine;
+            return m_jobName + QLatin1String(": ") + joinedCommandLine;
         } else {
             return joinedCommandLine;
         }

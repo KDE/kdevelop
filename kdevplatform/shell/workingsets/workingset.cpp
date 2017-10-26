@@ -247,7 +247,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
 
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
     KConfigGroup setGroup = setConfig.group(m_id);
-    KConfigGroup areaGroup = setConfig.group(m_id + '|' + area->title());
+    KConfigGroup areaGroup = setConfig.group(m_id + QLatin1Char('|') + area->title());
 
     loadToArea(area, areaIndex, setGroup, areaGroup, recycle);
 
@@ -390,7 +390,7 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
     KConfigGroup setGroup = setConfig.group(m_id);
     deleteGroupRecursive(setGroup);
 
-    KConfigGroup areaGroup = setConfig.group(m_id + '|' + area->title());
+    KConfigGroup areaGroup = setConfig.group(m_id + QLatin1Char('|') + area->title());
     QString lastActiveView = areaGroup.readEntry("Active View", "");
     deleteGroupRecursive(areaGroup);
     if (area->activeView() && area->activeView()->document())

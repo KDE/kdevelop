@@ -39,7 +39,7 @@ using namespace KDevelop;
 /// @param base String such as 'public QObject' or 'QObject'
 InheritanceDescription descriptionFromString(const QString& base)
 {
-    QStringList splitBase = base.split(' ');
+    QStringList splitBase = base.split(QLatin1Char(' '));
     QString identifier = splitBase.takeLast();
     QString inheritanceMode = splitBase.join(QStringLiteral(" "));
 
@@ -159,8 +159,8 @@ QUrl TemplateClassGenerator::fileUrl(const QString& outputFile) const
 void TemplateClassGenerator::setFileUrl(const QString& outputFile, const QUrl& url)
 {
     d->fileUrls.insert(outputFile, url);
-    d->renderer.addVariable("output_file_" + outputFile.toLower(), QDir(d->baseUrl.path()).relativeFilePath(url.path()));
-    d->renderer.addVariable("output_file_" + outputFile.toLower() + "_absolute", url.toLocalFile());
+    d->renderer.addVariable(QLatin1String("output_file_") + outputFile.toLower(), QDir(d->baseUrl.path()).relativeFilePath(url.path()));
+    d->renderer.addVariable(QLatin1String("output_file_") + outputFile.toLower() + QLatin1String("_absolute"), url.toLocalFile());
 }
 
 KTextEditor::Cursor TemplateClassGenerator::filePosition(const QString& outputFile) const

@@ -163,8 +163,8 @@ void DocumentChangeTracker::updateChangedRange(int delay)
 
 static Cursor cursorAdd(Cursor c, const QString& text)
 {
-    c.setLine(c.line() + text.count('\n'));
-    c.setColumn(c.column() + (text.length() - qMin(0, text.lastIndexOf('\n'))));
+    c.setLine(c.line() + text.count(QLatin1Char('\n')));
+    c.setColumn(c.column() + (text.length() - qMin(0, text.lastIndexOf(QLatin1Char('\n')))));
     return c;
 }
 
