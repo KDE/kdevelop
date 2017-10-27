@@ -21,3 +21,12 @@ target_link_libraries(abstractfilemanagerpluginimporttest
     KDev::Tests
     Qt5::QuickWidgets
 )
+
+add_executable(abstractfilemanagerpluginimportbenchmark
+    abstractfilemanagerpluginimportbenchmark.cpp
+)
+ecm_mark_nongui_executable(abstractfilemanagerpluginimportbenchmark)
+target_link_libraries(abstractfilemanagerpluginimportbenchmark
+    KDev::Project
+    KDev::Tests
+)

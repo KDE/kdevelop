@@ -34,6 +34,7 @@ class KDirWatch;
 namespace KDevelop {
 
 class AbstractFileManagerPluginPrivate;
+class AbstractFileManagerPluginImportBenchmark;
 
 /**
  * This class can be used as a common base for file managers.
@@ -118,6 +119,8 @@ Q_SIGNALS:
 private:
     const QScopedPointer<class AbstractFileManagerPluginPrivate> d;
     friend class AbstractFileManagerPluginPrivate;
+public:
+    friend class AbstractFileManagerPluginImportBenchmark;
 };
 
 }
