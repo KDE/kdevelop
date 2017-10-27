@@ -27,13 +27,15 @@ Boston, MA 02110-1301, USA.
 
 #include "debug.h"
 
-using KDevelop::Core;
-using KDevelop::SourceFormatterController;
+using namespace KDevelop;
 
 SourceFormatterSettings::SourceFormatterSettings(QWidget* parent)
     : KDevelop::ConfigPage(nullptr, nullptr, parent)
 {
     setupUi(this);
+
+    connect(formatterSelectionEdit, &SourceFormatterSelectionEdit::changed,
+            this, &SourceFormatterSettings::changed);
 }
 
 SourceFormatterSettings::~SourceFormatterSettings()
