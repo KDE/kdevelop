@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QClipboard>
+#include <QDir>
 #include <QEvent>
 #include <QSpacerItem>
 #include <QLabel>
@@ -699,7 +700,11 @@ void Container::contextMenu( const QPoint& pos )
             auto view = viewForWidget( widget( currentTab ) );
             auto urlDocument = qobject_cast<UrlDocument*>( view->document() );
             if( urlDocument ) {
-                QApplication::clipboard()->setText(urlDocument->url().toDisplayString(QUrl::PreferLocalFile));
+                QString toCopy = urlDocument->url().toDisplayString(QUrl::PreferLocalFile);
+                if (urlDocument->url().isLocalFile()) {
+                    toCopy = QDir::toNativeSeparators(toCopy);
+                }
+                QApplication::clipboard()->setText(toCopy);
             }
         } // else the action was handled by someone else
     }
