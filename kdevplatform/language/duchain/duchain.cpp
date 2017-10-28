@@ -889,12 +889,8 @@ public:
       if(lockFlag != NoLock) {
         globalItemRepositoryRegistry().unlockForWriting();
 
-        int elapsedSeconds = startTime.secsTo(QTime::currentTime());
-        qCDebug(LANGUAGE) << "seconds spent doing cleanup: " << elapsedSeconds << "top-contexts still open:" << m_chainsByUrl.size();
-      }
-      if(!retries) {
-        int elapesedMilliSeconds = startTime.msecsTo(QTime::currentTime());
-        qCDebug(LANGUAGE) << "milliseconds spent doing cleanup with locked duchain: " << elapesedMilliSeconds;
+        const auto elapsedMS = startTime.msecsTo(QTime::currentTime());
+        qCDebug(LANGUAGE) << "time spent doing cleanup:" << elapsedMS << "ms - top-contexts still open:" << m_chainsByUrl.size() << "- retries" << retries;
       }
 
       foreach(QReadWriteLock* lock, locked)
