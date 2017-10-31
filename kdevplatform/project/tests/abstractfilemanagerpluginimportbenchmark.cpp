@@ -46,7 +46,7 @@ class AbstractFileManagerPluginImportBenchmark : public QObject
     Q_OBJECT
 public:
     AbstractFileManagerPluginImportBenchmark(AbstractFileManagerPlugin* manager, const QString& path,
-        QObject* parent)
+                                             QObject* parent)
         : QObject(parent)
         , m_out(stdout)
     {
