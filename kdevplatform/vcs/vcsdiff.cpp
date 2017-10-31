@@ -170,12 +170,12 @@ uint VcsDiff::depth() const
     return d->depth;
 }
 
-void VcsDiff::setBaseDiff(const QUrl& url) const
+void VcsDiff::setBaseDiff(const QUrl& url)
 {
     d->baseDiff=url;
 }
 
-void VcsDiff::setDepth(const uint depth) const
+void VcsDiff::setDepth(const uint depth)
 {
     d->depth = depth;
 }

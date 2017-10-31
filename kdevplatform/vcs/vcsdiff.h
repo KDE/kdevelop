@@ -111,9 +111,9 @@ public:
     uint depth() const;
 
     /** Sets the base directory of the diff to the @p url */
-    void setBaseDiff(const QUrl& url) const;
+    void setBaseDiff(const QUrl& url);
     /** Sets the depth of the diff to @p depth */
-    void setDepth(const uint depth) const;
+    void setDepth(const uint depth);
 
     void setDiff( const QString& );
     void addLeftBinary( const KDevelop::VcsLocation&, const QByteArray& );
