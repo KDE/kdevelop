@@ -23,12 +23,13 @@
 #include <QList>
 #include <QDateTime>
 #include <QVariant>
+#include <QSharedData>
 
 #include "vcsrevision.h"
 namespace KDevelop
 {
 
-class VcsItemEventPrivate
+class VcsItemEventPrivate : public QSharedData
 {
 public:
     QString location;
@@ -45,12 +46,8 @@ VcsItemEvent::VcsItemEvent()
 VcsItemEvent::~VcsItemEvent() = default;
 
 VcsItemEvent::VcsItemEvent(const VcsItemEvent& rhs )
-    : d(new VcsItemEventPrivate)
+    : d(rhs.d)
 {
-    d->actions = rhs.d->actions;
-    d->sourceRevision = rhs.d->sourceRevision;
-    d->sourceLocation = rhs.d->sourceLocation;
-    d->location = rhs.d->location;
 }
 
 QString VcsItemEvent::repositoryLocation() const
@@ -95,16 +92,11 @@ void VcsItemEvent::setActions( VcsItemEvent::Actions a )
 
 VcsItemEvent& VcsItemEvent::operator=( const VcsItemEvent& rhs)
 {
-    if(this == &rhs)
-        return *this;
-    d->actions = rhs.d->actions;
-    d->sourceRevision = rhs.d->sourceRevision;
-    d->sourceLocation = rhs.d->sourceLocation;
-    d->location = rhs.d->location;
+    d = rhs.d;
     return *this;
 }
 
-class VcsEventPrivate
+class VcsEventPrivate : public QSharedData
 {
 public:
     VcsRevision revision;
@@ -122,13 +114,8 @@ VcsEvent::VcsEvent()
 VcsEvent::~VcsEvent() = default;
 
 VcsEvent::VcsEvent( const VcsEvent& rhs )
-    : d(new VcsEventPrivate)
+    : d(rhs.d)
 {
-    d->revision = rhs.d->revision;
-    d->author = rhs.d->author;
-    d->message = rhs.d->message;
-    d->date = rhs.d->date;
-    d->items = rhs.d->items;
 }
 
 VcsRevision VcsEvent::revision() const
@@ -188,13 +175,7 @@ void VcsEvent::addItem(const VcsItemEvent& item)
 
 VcsEvent& VcsEvent::operator=( const VcsEvent& rhs)
 {
-    if(this == &rhs)
-        return *this;
-    d->revision = rhs.d->revision;
-    d->message = rhs.d->message;
-    d->items = rhs.d->items;
-    d->date = rhs.d->date;
-    d->author = rhs.d->author;
+    d = rhs.d;
     return *this;
 }
 

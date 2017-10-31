@@ -20,6 +20,7 @@
 
 #include "vcsannotation.h"
 
+#include <QSharedData>
 #include <QDateTime>
 #include <QHash>
 #include <QUrl>
@@ -29,14 +30,14 @@
 namespace KDevelop
 {
 
-class VcsAnnotationPrivate
+class VcsAnnotationPrivate : public QSharedData
 {
 public:
     QHash<int, VcsAnnotationLine> lines;
     QUrl location;
 };
 
-class VcsAnnotationLinePrivate
+class VcsAnnotationLinePrivate : public QSharedData
 {
 public:
     QString author;
@@ -55,15 +56,8 @@ VcsAnnotationLine::VcsAnnotationLine()
 }
 
 VcsAnnotationLine::VcsAnnotationLine( const VcsAnnotationLine& rhs )
-    : d( new VcsAnnotationLinePrivate )
+    : d(rhs.d)
 {
-    d->author = rhs.d->author;
-    d->line = rhs.d->line;
-    d->revision = rhs.d->revision;
-    d->lineno = rhs.d->lineno;
-    d->date = rhs.d->date;
-    d->text = rhs.d->text;
-    d->message = rhs.d->message;
 }
 
 VcsAnnotationLine::~VcsAnnotationLine() = default;
@@ -120,15 +114,7 @@ void VcsAnnotationLine::setDate( const QDateTime& date )
 
 VcsAnnotationLine& VcsAnnotationLine::operator=( const VcsAnnotationLine& rhs)
 {
-    if(this == &rhs)
-        return *this;
-    d->author = rhs.d->author;
-    d->line = rhs.d->line;
-    d->revision = rhs.d->revision;
-    d->lineno = rhs.d->lineno;
-    d->date = rhs.d->date;
-    d->text = rhs.d->text;
-    d->message = rhs.d->message;
+    d = rhs.d;
     return *this;
 }
 
@@ -149,10 +135,8 @@ VcsAnnotation::VcsAnnotation()
 }
 
 VcsAnnotation::VcsAnnotation( const VcsAnnotation& rhs )
-    : d(new VcsAnnotationPrivate)
+    : d(rhs.d)
 {
-    d->lines = rhs.d->lines;
-    d->location = rhs.d->location;
 }
 
 VcsAnnotation::~VcsAnnotation() = default;
@@ -188,10 +172,7 @@ VcsAnnotationLine VcsAnnotation::line( int lineno ) const
 
 VcsAnnotation& VcsAnnotation::operator=( const VcsAnnotation& rhs)
 {
-    if(this == &rhs)
-        return *this;
-    d->location = rhs.d->location;
-    d->lines = rhs.d->lines;
+    d = rhs.d;
     return *this;
 }
 

@@ -36,7 +36,7 @@ VcsRevision VcsRevision::createSpecialRevision( KDevelop::VcsRevision::RevisionS
     return rev;
 }
 
-class VcsRevisionPrivate
+class VcsRevisionPrivate : public QSharedData
 {
     public:
         QVariant value;
@@ -51,22 +51,15 @@ VcsRevision::VcsRevision()
 }
 
 VcsRevision::VcsRevision( const VcsRevision& rhs )
-    : d(new VcsRevisionPrivate)
+    : d(rhs.d)
 {
-    d->value = rhs.d->value;
-    d->internalValues = rhs.d->internalValues;
-    d->type = rhs.d->type;
 }
 
 VcsRevision::~VcsRevision() = default;
 
 VcsRevision& VcsRevision::operator=( const VcsRevision& rhs)
 {
-    if(this == &rhs)
-        return *this;
-    d->value = rhs.d->value;
-    d->type = rhs.d->type;
-    d->internalValues = rhs.d->internalValues;
+    d = rhs.d;
     return *this;
 }
 

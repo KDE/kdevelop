@@ -24,6 +24,7 @@
 
 #include "vcsexport.h"
 #include <QVariant>
+#include <QSharedDataPointer>
 class QStringList;
 class QString;
 
@@ -91,6 +92,9 @@ public:
         UserSpecialType = 1000     /**< This should be used by subclasses as base for their own special types. */
     };
 
+    /**
+     * Creates an invalid revision.
+     */
     VcsRevision();
     virtual ~VcsRevision();
 
@@ -155,7 +159,7 @@ protected:
 
 
 private:
-    const QScopedPointer<class VcsRevisionPrivate> d;
+    QSharedDataPointer<class VcsRevisionPrivate> d;
 };
 
 KDEVPLATFORMVCS_EXPORT uint qHash( const KDevelop::VcsRevision& rev);
@@ -163,6 +167,7 @@ KDEVPLATFORMVCS_EXPORT uint qHash( const KDevelop::VcsRevision& rev);
 }
 
 Q_DECLARE_METATYPE(KDevelop::VcsRevision)
+Q_DECLARE_TYPEINFO(KDevelop::VcsRevision, Q_MOVABLE_TYPE);
 Q_DECLARE_METATYPE(KDevelop::VcsRevision::RevisionSpecialType)
 
 

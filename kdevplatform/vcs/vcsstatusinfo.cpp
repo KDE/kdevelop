@@ -22,11 +22,12 @@
 
 #include <QDebug>
 #include <QUrl>
+#include <QSharedData>
 
 namespace KDevelop
 {
 
-class VcsStatusInfoPrivate
+class VcsStatusInfoPrivate : public QSharedData
 {
 public:
     int state;
@@ -42,18 +43,13 @@ VcsStatusInfo::VcsStatusInfo()
 VcsStatusInfo::~VcsStatusInfo() = default;
 
 VcsStatusInfo::VcsStatusInfo( const VcsStatusInfo& rhs )
-    : d(new VcsStatusInfoPrivate)
+    : d(rhs.d)
 {
-    d->state = rhs.d->state;
-    d->url = rhs.d->url;
 }
 
 VcsStatusInfo& VcsStatusInfo::operator=( const VcsStatusInfo& rhs)
 {
-    if(this == &rhs)
-        return *this;
-    d->state = rhs.d->state;
-    d->url = rhs.d->url;
+    d = rhs.d;
     return *this;
 }
 

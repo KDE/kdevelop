@@ -22,7 +22,8 @@
 #ifndef KDEVPLATFORM_VCSEVENT_H
 #define KDEVPLATFORM_VCSEVENT_H
 
-#include <QVariant>
+#include <QMetaType>
+#include <QSharedDataPointer>
 
 #include "vcsexport.h"
 
@@ -77,7 +78,7 @@ public:
     VcsItemEvent& operator=( const VcsItemEvent& rhs);
 
 private:
-    const QScopedPointer<class VcsItemEventPrivate> d;
+    QSharedDataPointer<class VcsItemEventPrivate> d;
 };
 
 /**
@@ -110,13 +111,15 @@ public:
     VcsEvent& operator=( const VcsEvent& rhs);
 
 private:
-    const QScopedPointer<class VcsEventPrivate> d;
+    QSharedDataPointer<class VcsEventPrivate> d;
 };
 
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( KDevelop::VcsItemEvent::Actions )
 Q_DECLARE_METATYPE( KDevelop::VcsEvent )
+Q_DECLARE_TYPEINFO( KDevelop::VcsEvent, Q_MOVABLE_TYPE );
 Q_DECLARE_METATYPE( KDevelop::VcsItemEvent )
+Q_DECLARE_TYPEINFO( KDevelop::VcsItemEvent, Q_MOVABLE_TYPE );
 #endif
 

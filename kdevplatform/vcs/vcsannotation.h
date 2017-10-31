@@ -24,7 +24,7 @@
 
 #include "vcsexport.h"
 #include <QMetaType>
-#include <QScopedPointer>
+#include <QSharedDataPointer>
 
 class QString;
 class QDateTime;
@@ -102,7 +102,7 @@ public:
     VcsAnnotationLine& operator=( const VcsAnnotationLine& rhs);
 
 private:
-    const QScopedPointer<class VcsAnnotationLinePrivate> d;
+    QSharedDataPointer<class VcsAnnotationLinePrivate> d;
 };
 
 /**
@@ -152,13 +152,15 @@ public:
     VcsAnnotation& operator=( const VcsAnnotation& rhs);
 
 private:
-    const QScopedPointer<class VcsAnnotationPrivate> d;
+    QSharedDataPointer<class VcsAnnotationPrivate> d;
 };
 
 }
 
 Q_DECLARE_METATYPE( KDevelop::VcsAnnotation )
+Q_DECLARE_TYPEINFO( KDevelop::VcsAnnotation, Q_MOVABLE_TYPE );
 Q_DECLARE_METATYPE( KDevelop::VcsAnnotationLine )
+Q_DECLARE_TYPEINFO( KDevelop::VcsAnnotationLine, Q_MOVABLE_TYPE);
 
 #endif
 

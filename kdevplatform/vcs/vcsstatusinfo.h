@@ -24,7 +24,7 @@
 
 #include "vcsexport.h"
 #include <QMetaType>
-#include <QScopedPointer>
+#include <QSharedDataPointer>
 
 class QUrl;
 
@@ -87,12 +87,13 @@ public:
     bool operator!=( const KDevelop::VcsStatusInfo& rhs) const;
 
 private:
-    const QScopedPointer<class VcsStatusInfoPrivate> d;
+    QSharedDataPointer<class VcsStatusInfoPrivate> d;
 };
 
 }
 
 Q_DECLARE_METATYPE( KDevelop::VcsStatusInfo )
+Q_DECLARE_TYPEINFO( KDevelop::VcsStatusInfo, Q_MOVABLE_TYPE );
 
 KDEVPLATFORMVCS_EXPORT QDebug operator<<(QDebug s, const KDevelop::VcsStatusInfo& statusInfo);
 

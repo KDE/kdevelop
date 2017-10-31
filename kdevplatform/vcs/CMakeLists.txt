@@ -1,6 +1,7 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
 if(BUILD_TESTING)
+    add_subdirectory(tests)
     add_subdirectory(dvcs/tests)
     add_subdirectory(models/tests)
 endif()

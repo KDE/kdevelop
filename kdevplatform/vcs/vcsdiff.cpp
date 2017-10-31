@@ -22,12 +22,12 @@
 
 #include <QString>
 #include <QByteArray>
-#include <QHash>
+#include <QSharedData>
 
 namespace KDevelop
 {
 
-class VcsDiffPrivate
+class VcsDiffPrivate : public QSharedData
 {
 public:
     QHash<VcsLocation,QByteArray> leftBinaries;
@@ -49,9 +49,8 @@ VcsDiff::VcsDiff()
 VcsDiff::~VcsDiff() = default;
 
 VcsDiff::VcsDiff( const VcsDiff& rhs )
-    : d(new VcsDiffPrivate)
+    : d(rhs.d)
 {
-    *d = *rhs.d;
 }
 
 bool VcsDiff::isEmpty() const
@@ -154,9 +153,7 @@ void VcsDiff::setContentType( VcsDiff::Content c )
 
 VcsDiff& VcsDiff::operator=( const VcsDiff& rhs)
 {
-    if (this != &rhs) {
-        *d = *rhs.d;
-    }
+    d = rhs.d;
     return *this;
 }
 

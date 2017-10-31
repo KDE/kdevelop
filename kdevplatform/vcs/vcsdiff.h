@@ -26,6 +26,7 @@
 #include "vcslocation.h"
 
 #include <QHash>
+#include <QSharedDataPointer>
 
 #include "vcsexport.h"
 
@@ -134,12 +135,13 @@ public:
     bool isEmpty() const;
     
 private:
-    const QScopedPointer<class VcsDiffPrivate> d;
+    QSharedDataPointer<class VcsDiffPrivate> d;
 };
 
 }
 
 Q_DECLARE_METATYPE( KDevelop::VcsDiff )
+Q_DECLARE_TYPEINFO( KDevelop::VcsDiff, Q_MOVABLE_TYPE );
 
 #endif
 
