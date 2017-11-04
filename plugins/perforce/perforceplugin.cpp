@@ -643,7 +643,6 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
         globalCommits.insert(item.revision().revisionValue().toLongLong(), item);
     }
 
-    VcsAnnotationLine* annotation;
     QStringList lines = job->output().split('\n');
 
     size_t lineNumber(0);
@@ -660,22 +659,22 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
 
         globalRevision = it->left(it->indexOf(':'));
 
-        annotation = new VcsAnnotationLine;
-        annotation->setLineNumber(lineNumber);
+        VcsAnnotationLine annotation;
+        annotation.setLineNumber(lineNumber);
         VcsRevision rev;
         rev.setRevisionValue(globalRevision, KDevelop::VcsRevision::GlobalNumber);
-        annotation->setRevision(rev);
+        annotation.setRevision(rev);
         // Find the other info in the commits list
         globalRevisionInt = globalRevision.toLongLong(&convertToIntOk);
         if(convertToIntOk)
         {
             currentEvent = globalCommits.find(globalRevisionInt);
-            annotation->setAuthor(currentEvent->author());
-            annotation->setCommitMessage(currentEvent->message());
-            annotation->setDate(currentEvent->date());
+            annotation.setAuthor(currentEvent->author());
+            annotation.setCommitMessage(currentEvent->message());
+            annotation.setDate(currentEvent->date());
         }
 
-        results += qVariantFromValue(*annotation);
+        results += qVariantFromValue(annotation);
         ++lineNumber;
     }
     
