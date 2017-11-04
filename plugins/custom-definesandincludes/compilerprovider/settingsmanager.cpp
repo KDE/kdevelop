@@ -422,6 +422,10 @@ LanguageType languageType(const KDevelop::Path& path, bool treatAmbiguousAsCPP)
         return ObjC;
     }
 
+    if (mimeType == QStringLiteral("text/x-opencl-src")) {
+        return OpenCl;
+    }
+
     return Other;
 }
 }
