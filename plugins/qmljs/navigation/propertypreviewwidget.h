@@ -66,8 +66,8 @@ public:
     // Returns 0 when the property is not supported, which tells kdevplatform not to
     // display any widget when returned from e.g. specialLanguageObjectNavigationWidget.
     static QWidget* constructIfPossible(KTextEditor::Document* doc,
-                                        KTextEditor::Range keyRange,
-                                        KTextEditor::Range valueRange,
+                                        const KTextEditor::Range& keyRange,
+                                        const KTextEditor::Range& valueRange,
                                         Declaration* decl,
                                         const QString& key,
                                         const QString& value);
@@ -76,7 +76,8 @@ public:
 private:
     // private because you should use the static constructIfPossible function to create instances,
     // to make sure you don't have widgets which operate on unsupported properties.
-    explicit PropertyPreviewWidget(KTextEditor::Document* doc, KTextEditor::Range keyRange, KTextEditor::Range valueRange,
+    explicit PropertyPreviewWidget(KTextEditor::Document* doc,
+                                   const KTextEditor::Range& keyRange, const KTextEditor::Range& valueRange,
                                    const SupportedProperty& property, const QString& value);
     static QHash<QString, SupportedProperty> supportedProperties;
 

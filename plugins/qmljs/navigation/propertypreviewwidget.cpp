@@ -37,8 +37,8 @@
 QHash<QString, SupportedProperty> PropertyPreviewWidget::supportedProperties;
 
 QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
-                                                    KTextEditor::Range keyRange,
-                                                    KTextEditor::Range valueRange,
+                                                    const KTextEditor::Range& keyRange,
+                                                    const KTextEditor::Range& valueRange,
                                                     Declaration* decl,
                                                     const QString& key,
                                                     const QString& value)
@@ -141,7 +141,8 @@ PropertyPreviewWidget::~PropertyPreviewWidget()
 {
 }
 
-PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc, KTextEditor::Range keyRange, KTextEditor::Range valueRange,
+PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc,
+                                             const KTextEditor::Range& keyRange, const KTextEditor::Range& valueRange,
                                              const SupportedProperty& property, const QString& value)
     : QWidget()
     , view(new QQuickWidget)

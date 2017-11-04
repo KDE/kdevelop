@@ -266,7 +266,7 @@ void QtHelpConfig::remove(QTreeWidgetItem* item)
     emit changed();
 }
 
-void QtHelpConfig::knsUpdate(KNS3::Entry::List list)
+void QtHelpConfig::knsUpdate(const KNS3::Entry::List& list)
 {
     if (list.isEmpty())
         return;

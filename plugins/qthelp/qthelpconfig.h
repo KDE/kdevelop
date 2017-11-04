@@ -55,7 +55,7 @@ public:
       void add();
       void remove(QTreeWidgetItem* item);
       void modify(QTreeWidgetItem* item);
-      void knsUpdate(KNS3::Entry::List list);
+      void knsUpdate(const KNS3::Entry::List& list);
 
     public Q_SLOTS:
       void apply() override;
