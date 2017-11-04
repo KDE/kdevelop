@@ -52,7 +52,6 @@ Boston, MA 02110-1301, USA.
 #include "debug.h"
 #include <sublime/mainwindow.h>
 #include <serialization/itemrepositoryregistry.h>
-#include <ktexteditor/document.h>
 
 
 namespace KDevelop

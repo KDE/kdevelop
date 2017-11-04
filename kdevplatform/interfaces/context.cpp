@@ -32,8 +32,6 @@ Boston, MA 02110-1301, USA.
 #include <QList>
 #include <QMimeType>
 
-#include <ktexteditor/document.h>
-
 namespace KDevelop
 {
 

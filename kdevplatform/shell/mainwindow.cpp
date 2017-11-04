@@ -38,7 +38,6 @@ Boston, MA 02110-1301, USA.
 #include <KShortcutsDialog>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-#include <KTextEditor/MainWindow>
 #include <KWindowSystem>
 #include <KXMLGUIFactory>
 #include <kparts_version.h>

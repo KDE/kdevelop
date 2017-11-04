@@ -31,7 +31,6 @@
 #include <QScrollBar>
 #include <QSignalMapper>
 #include <QDesktopWidget>
-#include <KTextEditor/View>
 #include <KLocalizedString>
 #include <QPainter>
 #include <QSortFilterProxyModel>

@@ -28,7 +28,6 @@
 #include <QVariantList>
 
 #include <KConfigGroup>
-#include <KTextEditor/Cursor>
 
 #include <interfaces/iplugin.h>
 #include <interfaces/istatus.h>

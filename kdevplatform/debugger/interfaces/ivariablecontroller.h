@@ -22,13 +22,13 @@
 #define KDEVPLATFORM_IVARIABLECONTROLLER_H
 
 #include <QObject>
-#include <KTextEditor/Range>
 
 #include "idebugsession.h"
 
 namespace KTextEditor {
 class Document;
 class Cursor;
+class Range;
 }
 
 namespace KDevelop {

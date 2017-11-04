@@ -21,6 +21,8 @@
 
 #include "staticassistant.h"
 
+#include <KTextEditor/Range>
+
 using namespace KDevelop;
 
 class KDevelop::StaticAssistantPrivate

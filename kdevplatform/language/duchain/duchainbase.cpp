@@ -32,7 +32,6 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <backgroundparser/backgroundparser.h>
 #include <backgroundparser/documentchangetracker.h>
-#include <ktexteditor/movinginterface.h>
 
 namespace KDevelop
 {

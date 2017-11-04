@@ -28,8 +28,6 @@
 
 #include <interfaces/iassistant.h>
 
-#include <ktexteditor/range.h>
-
 namespace KTextEditor {
 class Document;
 class View;

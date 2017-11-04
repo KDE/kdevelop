@@ -23,6 +23,7 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <backgroundparser/backgroundparser.h>
 
+#include <KTextEditor/MovingInterface>
 #include <KTextEditor/Document>
 
 void KDevelop::PersistentMovingRangePrivate::connectTracker()

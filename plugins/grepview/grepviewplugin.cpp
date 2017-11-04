@@ -28,7 +28,6 @@
 #include <KLocalizedString>
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
-#include <KTextEditor/Cursor>
 #include <KTextEditor/View>
 
 #include <interfaces/icore.h>

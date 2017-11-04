@@ -25,8 +25,6 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <editor/modificationrevision.h>
-#include <ktexteditor/movinginterface.h>
-#include <ktexteditor/configinterface.h>
 
 namespace KDevelop {
 

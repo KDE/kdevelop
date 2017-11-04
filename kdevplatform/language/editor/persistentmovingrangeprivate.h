@@ -23,7 +23,6 @@
 
 #include <QObject>
 #include <ktexteditor/movingrange.h>
-#include <ktexteditor/movinginterface.h>
 #include <backgroundparser/documentchangetracker.h>
 #include <QApplication>
 

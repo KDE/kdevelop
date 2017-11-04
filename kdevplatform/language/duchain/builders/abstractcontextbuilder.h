@@ -25,8 +25,6 @@
 
 #include <climits>
 
-#include <ktexteditor/range.h>
-
 #include "../topducontext.h"
 #include "../duchainpointer.h"
 #include "../duchainlock.h"

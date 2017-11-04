@@ -23,6 +23,8 @@
 
 #include "testvariablecontroller.h"
 
+#include <KTextEditor/Range>
+
 using namespace KDevelop;
 using KTextEditor::Range;
 using KTextEditor::Document;

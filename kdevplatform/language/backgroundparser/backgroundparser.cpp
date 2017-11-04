@@ -36,8 +36,6 @@
 #include <KSharedConfig>
 #include <KLocalizedString>
 
-#include <ktexteditor/document.h>
-
 #include <ThreadWeaver/State>
 #include <ThreadWeaver/ThreadWeaver>
 #include <ThreadWeaver/DebuggingAids>

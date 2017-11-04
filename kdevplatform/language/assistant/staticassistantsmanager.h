@@ -31,9 +31,6 @@
 #include <language/duchain/topducontext.h>
 #include <serialization/indexedstring.h>
 
-#include <ktexteditor/range.h>
-#include <ktexteditor/cursor.h>
-
 typedef QPointer<KTextEditor::Document> SafeDocumentPointer;
 
 namespace KDevelop {

@@ -22,11 +22,6 @@
 #include "util/clangdebug.h"
 #include "util/clangutils.h"
 
-#include <KTextEditor/Editor>
-#include <KTextEditor/Document>
-#include <KTextEditor/View>
-#include <KTextEditor/ConfigInterface>
-
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 

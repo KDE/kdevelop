@@ -22,8 +22,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KPluginFactory>
-#include <KTextEditor/Document>
-#include <KTextEditor/MarkInterface>
 #include <KUrlRequester>
 #include <KUrlRequesterDialog>
 

@@ -28,8 +28,6 @@
 
 #include <KXMLGUIClient>
 
-#include <KTextEditor/MarkInterface>
-
 #include "../interfaces/idebugcontroller.h"
 #include "../debugger/interfaces/idebugsession.h"
 

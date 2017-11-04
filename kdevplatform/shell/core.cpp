@@ -49,9 +49,6 @@
 #include "runtimecontroller.h"
 #include "debug.h"
 
-#include <KTextEditor/Document>
-#include <ktexteditor/movinginterface.h>
-
 #include <csignal>
 
 namespace {

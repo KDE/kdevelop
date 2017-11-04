@@ -30,7 +30,6 @@
 #include <KToggleAction>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <KTextEditor/View>
 
 #include <language/duchain/declaration.h>
 #include <language/duchain/topducontext.h>

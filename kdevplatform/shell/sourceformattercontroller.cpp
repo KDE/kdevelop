@@ -32,11 +32,9 @@ Boston, MA 02110-1301, USA.
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KTextEditor/Command>
-#include <KTextEditor/ConfigInterface>
 #include <KTextEditor/Document>
 #include <KTextEditor/Editor>
 #include <KTextEditor/View>
-#include <KTextEditor/MainWindow>
 #include <KParts/MainWindow>
 
 #include <interfaces/context.h>

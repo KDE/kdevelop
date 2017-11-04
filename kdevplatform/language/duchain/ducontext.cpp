@@ -24,8 +24,6 @@
 
 #include <QSet>
 
-#include <ktexteditor/document.h>
-
 #include "ducontextdata.h"
 #include "declaration.h"
 #include "duchain.h"

@@ -24,8 +24,6 @@
 
 #include <util/path.h>
 
-#include <KTextEditor/View>
-
 #include <clang-c/Index.h>
 
 #include "clangprivateexport.h"

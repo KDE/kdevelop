@@ -34,8 +34,6 @@
 #include <KTextEditor/ModificationInterface>
 #include <KTextEditor/CodeCompletionInterface>
 #include <KTextEditor/MarkInterface>
-#include <KTextEditor/ConfigInterface>
-#include <KTextEditor/SessionConfigInterface>
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>

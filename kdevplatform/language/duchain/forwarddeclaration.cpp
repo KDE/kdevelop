@@ -19,7 +19,6 @@
 
 #include "forwarddeclaration.h"
 
-#include <ktexteditor/document.h>
 #include <KLocalizedString>
 
 #include "duchain.h"
