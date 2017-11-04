@@ -144,7 +144,6 @@ LINK_PRIVATE
     KF5::Notifications
     KF5::NotifyConfig
     KF5::TextEditor
-    KF5::ThreadWeaver
     KF5::JobWidgets
     KF5::ItemViews
     KF5::WindowSystem
