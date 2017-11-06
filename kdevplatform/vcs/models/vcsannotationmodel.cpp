@@ -45,11 +45,27 @@ class VcsAnnotationModelPrivate
 public:
     explicit VcsAnnotationModelPrivate( VcsAnnotationModel* q_ ) : q(q_) {}
     KDevelop::VcsAnnotation m_annotation;
-    QHash<KDevelop::VcsRevision,QBrush> m_brushes;
+    mutable QHash<KDevelop::VcsRevision, QBrush> m_brushes;
     VcsAnnotationModel* q;
     VcsJob* job;
     QColor foreground;
     QColor background;
+
+    const QBrush& brush(const VcsRevision& revision) const
+    {
+        auto brushIt = m_brushes.find(revision);
+        if (brushIt == m_brushes.end()) {
+            const int background_y = background.red()*0.299 + 0.587*background.green()
+                                                            + 0.114*background.blue();
+            int u = ( float(qrand()) / RAND_MAX ) * 255;
+            int v = ( float(qrand()) / RAND_MAX ) * 255;
+            float r = qMin(255.0, qMax(0.0, background_y + 1.402*(v-128)));
+            float g = qMin(255.0, qMax(0.0, background_y - 0.344*(u-128) - 0.714*(v-128)));
+            float b = qMin(255.0, qMax(0.0, background_y + 1.772*(u-128)));
+            brushIt = m_brushes.insert(revision, QBrush(QColor(r, g, b)));
+        }
+        return brushIt.value();
+    }
 
     void addLines( KDevelop::VcsJob* job )
     {
@@ -60,17 +76,6 @@ public:
                 if( v.canConvert<KDevelop::VcsAnnotationLine>() )
                 {
                     VcsAnnotationLine l = v.value<KDevelop::VcsAnnotationLine>();
-                    if( !m_brushes.contains( l.revision() ) )
-                    {
-                        const int background_y = background.red()*0.299 + 0.587*background.green()
-                                                                        + 0.114*background.blue();
-                        int u = ( float(qrand()) / RAND_MAX ) * 255;
-                        int v = ( float(qrand()) / RAND_MAX ) * 255;
-                        float r = qMin(255.0, qMax(0.0, background_y + 1.402*(v-128)));
-                        float g = qMin(255.0, qMax(0.0, background_y - 0.344*(u-128) - 0.714*(v-128)));
-                        float b = qMin(255.0, qMax(0.0, background_y + 1.772*(u-128)));
-                        m_brushes.insert( l.revision(), QBrush( QColor( r, g, b ) ) );
-                    }
                     m_annotation.insertLine( l.lineNumber(), l );
                     emit q->lineChanged( l.lineNumber() );
                 }
@@ -149,7 +154,7 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
     }
     if( role == Qt::BackgroundRole )
     {
-        return QVariant( d->m_brushes[aline.revision()] );
+        return QVariant(d->brush(aline.revision()));
     } else if( role == Qt::DisplayRole )
     {
         return QVariant( QStringLiteral("%1 ").arg(aline.date().date().year()) + abbreviateLastName(aline.author()) );
