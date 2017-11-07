@@ -57,11 +57,13 @@ public:
         if (brushIt == m_brushes.end()) {
             const int background_y = background.red()*0.299 + 0.587*background.green()
                                                             + 0.114*background.blue();
-            int u = ( float(qrand()) / RAND_MAX ) * 255;
-            int v = ( float(qrand()) / RAND_MAX ) * 255;
-            float r = qMin(255.0, qMax(0.0, background_y + 1.402*(v-128)));
-            float g = qMin(255.0, qMax(0.0, background_y - 0.344*(u-128) - 0.714*(v-128)));
-            float b = qMin(255.0, qMax(0.0, background_y + 1.772*(u-128)));
+            // get random, but reproducable 8-bit values from last two bytes of the revision hash
+            const uint revisionHash = qHash(revision);
+            const int u = static_cast<int>((0xFF & revisionHash));
+            const int v = static_cast<int>((0xFF00 & revisionHash) >> 8);
+            const int r = qRound(qMin(255.0, qMax(0.0, background_y + 1.402*(v-128))));
+            const int g = qRound(qMin(255.0, qMax(0.0, background_y - 0.344*(u-128) - 0.714*(v-128))));
+            const int b = qRound(qMin(255.0, qMax(0.0, background_y + 1.772*(u-128))));
             brushIt = m_brushes.insert(revision, QBrush(QColor(r, g, b)));
         }
         return brushIt.value();
