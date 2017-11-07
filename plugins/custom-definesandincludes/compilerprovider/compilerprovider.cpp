@@ -138,6 +138,10 @@ QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
     if (item) {
         languageType = Utils::languageType(item->path(), config.parserArguments.parseAmbiguousAsCPP);
     }
+    // If called on files that we can't compile, return an empty set of defines.
+    if (languageType == Utils::Other) {
+        return {};
+    }
 
     return config.compiler->defines(languageType,
         languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
@@ -149,6 +153,10 @@ Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
     auto languageType = Utils::Cpp;
     if (item) {
         languageType = Utils::languageType(item->path(), config.parserArguments.parseAmbiguousAsCPP);
+    }
+    // If called on files that we can't compile, return an empty set of includes.
+    if (languageType == Utils::Other) {
+        return {};
     }
 
     return config.compiler->includes(languageType,
