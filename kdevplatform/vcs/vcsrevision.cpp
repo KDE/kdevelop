@@ -168,6 +168,22 @@ QString VcsRevision::prettyValue() const
 
 uint KDevelop::qHash( const KDevelop::VcsRevision& rev)
 {
-    return rev.revisionValue().toULongLong();
+    const auto revisionValue = rev.revisionValue();
+    switch (rev.revisionType()) {
+        case VcsRevision::GlobalNumber:
+        case VcsRevision::FileNumber:
+            return (revisionValue.type() == QVariant::String ? ::qHash(revisionValue.toString()) :
+                    ::qHash(revisionValue.toULongLong()));
+            break;
+        case VcsRevision::Special:
+            return ::qHash(static_cast<int>(revisionValue.value<KDevelop::VcsRevision::RevisionSpecialType>()));
+            break;
+        case VcsRevision::Date:
+            return ::qHash(revisionValue.toDateTime());
+            break;
+        default:
+            break;
+    }
+    return ::qHash(revisionValue.toString());
 }
 
