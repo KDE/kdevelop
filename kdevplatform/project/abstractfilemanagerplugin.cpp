@@ -172,10 +172,6 @@ void AbstractFileManagerPluginPrivate::addJobItems(FileManagerListJob* job,
                                                      ProjectFolderItem* baseItem,
                                                      const KIO::UDSEntryList& entries)
 {
-    if ( entries.empty() ) {
-        return;
-    }
-
     qCDebug(FILEMANAGER) << "reading entries of" << baseItem->path();
 
     // build lists of valid files and folders with paths relative to the project folder
