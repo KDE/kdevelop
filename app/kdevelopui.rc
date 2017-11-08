@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
 <gui version="147" name="kdevelop" translationDomain="kdevelop">
 <MenuBar>
 
