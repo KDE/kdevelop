@@ -54,6 +54,10 @@ public Q_SLOTS:
 
     KTextEditor::Plugin *plugin(const QString &id) const;
 
+    QList<KTextEditor::Document *> documents();
+
+    KTextEditor::Document *openUrl(const QUrl &url, const QString &encoding = QString());
+
     bool closeDocument(KTextEditor::Document *document) const;
 };
 
@@ -76,6 +80,7 @@ public Q_SLOTS:
     QList<KTextEditor::View *> views() const;
 
     KTextEditor::View *activeView() const;
+    KTextEditor::View *activateView(KTextEditor::Document *doc);
 
     QObject *pluginView(const QString &id) const;
     void splitView(Qt::Orientation orientation);

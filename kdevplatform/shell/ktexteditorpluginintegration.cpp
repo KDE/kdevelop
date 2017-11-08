@@ -215,7 +215,12 @@ QList<KTextEditor::MainWindow *> Application::mainWindows() const
 bool Application::closeDocument(KTextEditor::Document *document) const
 {
     auto documentController = Core::self()->documentControllerInternal();
-    return documentController->closeDocument(document->url());
+    for (auto doc : documentController->openDocuments()) {
+        if (doc->textDocument() == document) {
+            return doc->close();
+        }
+    }
+    return false;
 }
 
 KTextEditor::Plugin *Application::plugin(const QString &id) const
@@ -223,6 +228,23 @@ KTextEditor::Plugin *Application::plugin(const QString &id) const
     auto kdevPlugin = Core::self()->pluginController()->loadPlugin(id);
     const auto plugin = dynamic_cast<Plugin*>(kdevPlugin);
     return plugin ? plugin->interface() : nullptr;
+}
+
+QList<KTextEditor::Document *> Application::documents()
+{
+    QList<KTextEditor::Document *> l;
+    auto documentController = Core::self()->documentControllerInternal();
+    for (auto d : documentController->openDocuments()) {
+        l << d->textDocument();
+    }
+    return l;
+}
+
+KTextEditor::Document * Application::openUrl(const QUrl& url, const QString& encoding)
+{
+    auto documentController = Core::self()->documentControllerInternal();
+    auto doc = url.isEmpty() ? documentController->openDocumentFromText(QString()) : documentController->openDocument(url);
+    return doc->textDocument();
 }
 
 MainWindow::MainWindow(KDevelop::MainWindow *mainWindow)
@@ -289,6 +311,22 @@ QList<KTextEditor::View *> MainWindow::views() const
 KTextEditor::View *MainWindow::activeView() const
 {
     return toKteView(m_mainWindow->activeView());
+}
+
+KTextEditor::View *MainWindow::activateView(KTextEditor::Document *doc)
+{
+    foreach (auto area, m_mainWindow->areas()) {
+        foreach (auto view, area->views()) {
+            if (auto kteView = toKteView(view)) {
+                if (kteView->document() == doc) {
+                    m_mainWindow->activateView(view);
+                    return kteView;
+                }
+            }
+        }
+    }
+
+    return activeView();
 }
 
 QObject *MainWindow::pluginView(const QString &id) const
