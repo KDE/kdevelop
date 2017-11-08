@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright 2008 Andreas Pakulat <apaku@gmx.de>                         *
  *   Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>                  *
+ *   Copyright 2017-2018 Friedrich W. H. Kossebau <kossebau@kde.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,6 +29,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/ModificationInterface>
 #include <KTextEditor/View>
+#include <ktexteditor_version.h>
 
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
@@ -45,6 +47,9 @@
 #include <util/scopeddialog.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/models/vcsannotationmodel.h>
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,53,0)
+#include <vcs/widgets/vcsannotationitemdelegate.h>
+#endif
 #include <vcs/widgets/vcseventwidget.h>
 #include <vcs/widgets/vcscommitdialog.h>
 #include <vcs/vcsjob.h>
@@ -362,8 +367,9 @@ void VcsPluginHelper::annotation()
     if (!doc)
         doc = ICore::self()->documentController()->openDocument(url);
 
+    KTextEditor::View* view = doc ? doc->activeTextView() : nullptr;
     KTextEditor::AnnotationInterface* annotateiface = qobject_cast<KTextEditor::AnnotationInterface*>(doc->textDocument());
-    KTextEditor::AnnotationViewInterface* viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(doc->activeTextView());
+    auto viewiface = qobject_cast<KTextEditor::AnnotationViewInterface*>(view);
     if (viewiface && viewiface->isAnnotationBorderVisible()) {
         viewiface->setAnnotationBorderVisible(false);
         return;
@@ -379,7 +385,7 @@ void VcsPluginHelper::annotation()
 
         QColor foreground(Qt::black);
         QColor background(Qt::white);
-        if (KTextEditor::View* view = doc->activeTextView()) {
+        if (view) {
             KTextEditor::Attribute::Ptr style = view->defaultStyleAttribute(KTextEditor::dsNormal);
             foreground = style->foreground().color();
             if (style->hasProperty(QTextFormat::BackgroundBrush)) {
@@ -392,12 +398,21 @@ void VcsPluginHelper::annotation()
             auto* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
                                                                                    foreground, background);
             annotateiface->setAnnotationModel(model);
+
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,53,0)
+            auto viewifaceV2 = qobject_cast<KTextEditor::AnnotationViewInterfaceV2*>(view);
+            if (viewifaceV2) {
+                // TODO: only create delegate if there is none yet
+                auto delegate = new VcsAnnotationItemDelegate(view, model, view);
+                viewifaceV2->setAnnotationItemDelegate(delegate);
+                viewifaceV2->setAnnotationUniformItemSizes(true);
+            }
+#endif
             viewiface->setAnnotationBorderVisible(true);
             // can't use new signal slot syntax here, AnnotationInterface is not a QObject
-            connect(doc->activeTextView(),
-                    SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
+            connect(view, SIGNAL(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)),
                     this, SLOT(annotationContextMenuAboutToShow(KTextEditor::View*,QMenu*,int)));
-            connect(doc->activeTextView(), SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
+            connect(view, SIGNAL(annotationBorderVisibilityChanged(View*,bool)),
                     this, SLOT(handleAnnotationBorderVisibilityChanged(View*,bool)));
         } else {
             KMessageBox::error(nullptr, i18n("Cannot display annotations, missing interface KTextEditor::AnnotationInterface for the editor."));
@@ -411,6 +426,13 @@ void VcsPluginHelper::annotation()
 
 void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line )
 {
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,53,0)
+    auto viewifaceV2 = qobject_cast<KTextEditor::AnnotationViewInterfaceV2*>(view);
+    if (viewifaceV2) {
+        viewifaceV2->annotationItemDelegate()->hideTooltip(view);
+    }
+#endif
+
     KTextEditor::AnnotationInterface* annotateiface =
         qobject_cast<KTextEditor::AnnotationInterface*>(view->document());
 

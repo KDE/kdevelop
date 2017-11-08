@@ -46,6 +46,12 @@ set(KDevPlatformVcs_LIB_SRCS
     interfaces/ipatchsource.cpp
 )
 
+if(NOT KF5TextEditor_VERSION VERSION_LESS 5.53.0)
+    list(APPEND KDevPlatformVcs_LIB_SRCS
+        widgets/vcsannotationitemdelegate.cpp
+    )
+endif()
+
 declare_qt_logging_category(KDevPlatformVcs_LIB_SRCS
     TYPE LIBRARY
     CATEGORY_BASENAME "vcs"

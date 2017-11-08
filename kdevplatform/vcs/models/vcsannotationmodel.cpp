@@ -182,6 +182,15 @@ VcsRevision VcsAnnotationModel::revisionForLine( int line ) const
     return d->m_annotation.line( line ).revision();
 }
 
+VcsAnnotationLine VcsAnnotationModel::annotationLine(int line) const
+{
+    if (line < 0 || !d->m_annotation.containsLine(line)) {
+        return VcsAnnotationLine();
+    }
+
+    return d->m_annotation.line(line);
+}
+
 }
 
 #include "moc_vcsannotationmodel.cpp"

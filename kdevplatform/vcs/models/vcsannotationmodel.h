@@ -35,6 +35,7 @@ namespace KDevelop
 {
 
 class VcsJob;
+class VcsAnnotationLine;
     
 class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public KTextEditor::AnnotationModel
 {
@@ -47,6 +48,10 @@ public:
     VcsRevision revisionForLine(int line) const;
 
     QVariant data( int line, Qt::ItemDataRole role = Qt::DisplayRole ) const override;
+
+    // given "role" argument is of type Qt::ItemDataRole and not int, we cannot use custom roles
+    // to access custom data, so providing a custom API instead
+    VcsAnnotationLine annotationLine(int line) const;
 
 private:
     const QScopedPointer<class VcsAnnotationModelPrivate> d;
