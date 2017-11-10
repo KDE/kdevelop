@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <!-- TODO: find who else uses mimetypes for those files and which. See to push upstream -->
+  <mime-type type="application/x-gitignore">
+    <comment>Git Ignore Rules</comment>
+    <glob pattern=".gitignore"/>
+    <generic-icon name="git"/>
+    <sub-class-of type="text/plain"/>
+  </mime-type>
+  <mime-type type="application/x-gitattributes">
+    <comment>Git Attribute Rules</comment>
+    <glob pattern=".gitattributes"/>
+    <generic-icon name="git"/>
+    <sub-class-of type="text/plain"/>
+  </mime-type>
+</mime-info>

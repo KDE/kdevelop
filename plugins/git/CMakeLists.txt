@@ -32,3 +32,6 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 add_subdirectory(icons)
+
+install(FILES kdevgit.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
+update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})
