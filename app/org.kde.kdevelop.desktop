@@ -82,4 +82,5 @@ Comment[sk]=Pluginmi rozšíriteľné IDE pred C/C++ a iné programovacie jazyky
 Comment[sv]=Integrerad utvecklingsmiljö för C/C++ och andra programspråk, utökningsbar med insticksprogram
 Comment[uk]=Розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.
 Comment[x-test]=xxPlugin-extensible IDE for C/C++ and other programming languagesxx
+Comment[zh_CN]=可扩展的支持 C/C++ 和其他语言的集成开发环境
 Categories=Qt;KDE;Development;IDE;

@@ -17,6 +17,7 @@ Name[sv]=API-dokumentation (QtHelp)
 Name[tr]=API Belgelendirmesi (QtYardım)
 Name[uk]=Документація з програмного інтерфейсу (QtHelp)
 Name[x-test]=xxAPI Documentation (QtHelp)xx
+Name[zh_CN]=API 文档 (QtHelp)
 
 ProvidersUrl=https://collect.kde.org/kdevelop-qthelp/providers.xml
 TargetDir=kdevelop-qthelp
