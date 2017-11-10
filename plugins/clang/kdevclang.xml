@@ -24,6 +24,7 @@
         <comment xml:lang="sv">OpenCL C-källkod</comment>
         <comment xml:lang="tr">OpenCL C kaynak kodu</comment>
         <comment xml:lang="uk">початковий код C OpenCL</comment>
+        <comment xml:lang="zh_CN">OpenCL C 源代码</comment>
         <acronym>OpenCL</acronym>
         <expanded-acronym>Open Computing Language</expanded-acronym>
         <sub-class-of type="text/x-csrc"/>
