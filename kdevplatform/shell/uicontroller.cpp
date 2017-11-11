@@ -108,7 +108,7 @@ public:
 
         a = new Sublime::Area(m_controller, QStringLiteral("review"), i18n("Review"));
         a->setDesiredToolViews(desired);
-        a->setIconName(QStringLiteral("applications-engineering"));
+        a->setIconName(QStringLiteral("text-x-patch"));
         m_controller->addDefaultArea(a);
 
         if(!(Core::self()->setupFlags() & Core::NoUi))

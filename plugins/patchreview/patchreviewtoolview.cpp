@@ -95,6 +95,8 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     m_resetCheckedUrls( true ),
     m_plugin( plugin )
 {
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("text-x-patch"), windowIcon()));
+
     connect( m_plugin->finishReviewAction(), &QAction::triggered, this, &PatchReviewToolView::finishReview );
 
     connect( plugin, &PatchReviewPlugin::patchChanged, this, &PatchReviewToolView::patchChanged );
