@@ -22,7 +22,6 @@
 
 namespace Sublime { class Area; }
 namespace KDevelop { class IDocument; }
-namespace KParts { class Part; }
 namespace Purpose { class Menu; }
 
 class QStandardItem;
@@ -86,8 +85,6 @@ private:
 
     QTime m_lastDataTime;
     QString m_lastTerminalData;
-
-    QPointer< KParts::Part > m_konsolePart;
 
     /// Whether the set of checked URLs should be reset on the next update
     bool m_resetCheckedUrls;
