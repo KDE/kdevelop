@@ -214,13 +214,6 @@ void PatchReviewToolView::showEditDialog() {
     m_editPatch.filesList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_editPatch.filesList, &QTreeView::customContextMenuRequested, this, &PatchReviewToolView::customContextMenuRequested);
     connect(m_fileModel, &PatchFilesModel::itemChanged, this, &PatchReviewToolView::fileItemChanged);
-    m_editPatch.previousFile->setIcon( QIcon::fromTheme( QStringLiteral("arrow-left") ) );
-    m_editPatch.previousHunk->setIcon( QIcon::fromTheme( QStringLiteral("arrow-up") ) );
-    m_editPatch.nextHunk->setIcon( QIcon::fromTheme( QStringLiteral("arrow-down") ) );
-    m_editPatch.nextFile->setIcon( QIcon::fromTheme( QStringLiteral("arrow-right") ) );
-    m_editPatch.cancelReview->setIcon( QIcon::fromTheme( QStringLiteral("dialog-cancel") ) );
-    m_editPatch.updateButton->setIcon( QIcon::fromTheme( QStringLiteral("view-refresh") ) );
-    m_editPatch.testsButton->setIcon( QIcon::fromTheme( QStringLiteral("preflight-verifier") ) );
     m_editPatch.finishReview->setDefaultAction(m_plugin->finishReviewAction());
 
 #ifdef WITH_PURPOSE

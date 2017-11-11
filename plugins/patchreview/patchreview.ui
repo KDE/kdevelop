@@ -10,9 +10,6 @@
     <height>357</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Edit Patch</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <layout class="QHBoxLayout" name="buttonsLayout">
@@ -23,8 +20,9 @@
          <property name="toolTip">
           <string>Previous file</string>
          </property>
-         <property name="text">
-          <string>...</string>
+         <property name="icon">
+          <iconset theme="arrow-left">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -33,8 +31,9 @@
          <property name="toolTip">
           <string>Previous difference</string>
          </property>
-         <property name="text">
-          <string>...</string>
+         <property name="icon">
+          <iconset theme="arrow-up">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -43,8 +42,9 @@
          <property name="toolTip">
           <string>Next difference</string>
          </property>
-         <property name="text">
-          <string>...</string>
+         <property name="icon">
+          <iconset theme="arrow-down">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -53,8 +53,9 @@
          <property name="toolTip">
           <string>Next file</string>
          </property>
-         <property name="text">
-          <string>...</string>
+         <property name="icon">
+          <iconset theme="arrow-right">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -73,14 +74,12 @@
        </item>
        <item>
         <widget class="QPushButton" name="updateButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="text">
           <string>Update</string>
+         </property>
+         <property name="icon">
+          <iconset theme="view-refresh">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -88,6 +87,10 @@
         <widget class="QPushButton" name="testsButton">
          <property name="text">
           <string>Run Tests</string>
+         </property>
+         <property name="icon">
+          <iconset theme="preflight-verifier">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
@@ -125,6 +128,10 @@
         <widget class="QPushButton" name="cancelReview">
          <property name="text">
           <string>Cancel Review</string>
+         </property>
+         <property name="icon">
+          <iconset theme="dialog-cancel">
+           <normaloff>.</normaloff>.</iconset>
          </property>
         </widget>
        </item>
