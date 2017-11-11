@@ -49,7 +49,7 @@ macro(kdevplatform_create_template_archive _templateName)
     if(WIN32)
         add_custom_command(OUTPUT ${_template}
             COMMAND ${CMAKE_COMMAND} -E tar
-            ARGS cfvz ${_template} -- ${_deps}
+            ARGS cfvj ${_template} -- ${_deps}
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${_templateName}
             DEPENDS ${_deps}
         )
