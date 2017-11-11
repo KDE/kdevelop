@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.0)
-project(KDevelop VERSION 5.1.80)
+project(KDevelop VERSION 5.2.40)
 
 # KDevelop SOVERSION
 # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
-set(KDEVELOP_SOVERSION 52)
+set(KDEVELOP_SOVERSION 53)
 
-# plugin versions listed in the .desktop files
-set(KDEV_PLUGIN_VERSION 30)
+# plugin version as used e.g. in plugin installation path
+set(KDEV_PLUGIN_VERSION 31)
 
 # we need some parts of the ECM CMake helpers
 find_package (ECM 5.14.0 REQUIRED NO_MODULE)
