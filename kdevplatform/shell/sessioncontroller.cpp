@@ -496,11 +496,6 @@ void SessionController::updateXmlGuiActionList()
 QString SessionController::cfgSessionGroup() { return QStringLiteral("Sessions"); }
 QString SessionController::cfgActiveSessionEntry() { return QStringLiteral("Active Session ID"); }
 
-QList<SessionInfo> SessionController::availableSessionInfo()
-{
-    return availableSessionInfos().toList();
-}
-
 SessionInfos SessionController::availableSessionInfos()
 {
     SessionInfos sessionInfos;

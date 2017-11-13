@@ -126,7 +126,6 @@ public:
     static QString cfgSessionGroup();
     static QString cfgActiveSessionEntry();
 
-    static QT_DEPRECATED QList<SessionInfo> availableSessionInfo(); // use availableSessionInfos()
     static SessionInfos availableSessionInfos();
 
     /**

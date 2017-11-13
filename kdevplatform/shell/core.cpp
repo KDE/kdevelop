@@ -21,7 +21,6 @@
 #include "core_p.h"
 
 #include <QApplication>
-#include <QTimer>
 
 #include <KLocalizedString>
 
@@ -319,14 +318,6 @@ CorePrivate::~CorePrivate()
     workingSetController.clear();
     testController.clear();
     runtimeController.clear();
-}
-
-bool Core::initialize(QObject* splash, Setup mode, const QString& session )
-{
-    if (splash) {
-        QTimer::singleShot( 200, splash, &QObject::deleteLater );
-    }
-    return initialize(mode, session);
 }
 
 bool Core::initialize(Setup mode, const QString& session)

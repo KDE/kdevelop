@@ -64,8 +64,6 @@ public:
       *
       */
     static bool initialize(Setup mode=Default, const QString& session = {});
-    // TODO: remove before 5.2 release
-    static QT_DEPRECATED bool initialize(QObject* splash = nullptr, Setup mode=Default, const QString& session = {});
 
     /**
      * \brief Provide access an instance of Core
