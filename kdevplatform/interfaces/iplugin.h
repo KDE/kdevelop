@@ -176,7 +176,7 @@ public:
      * Ask the plugin for a ContextActionContainer, which contains actions
      * that will be merged into the context menu.
      * @param context the context describing where the context menu was requested
-     * @param parent a widget to use for memory manageent of QActions, QMenus etc. created only for this request
+     * @param parent a widget to use for memory management of QActions, QMenus etc. created only for this request
      * @returns a container describing which actions to merge into which context menu part
      */
     virtual ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent);
