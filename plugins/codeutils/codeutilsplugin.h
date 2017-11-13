@@ -21,7 +21,6 @@
 #define KDEVPLATFORM_PLUGIN_CODEUTILSPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <interfaces/contextmenuextension.h>
 
 #include <QVariant>
 

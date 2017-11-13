@@ -35,6 +35,7 @@
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/contextmenuextension.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
 #include <language/interfaces/editorcontext.h>

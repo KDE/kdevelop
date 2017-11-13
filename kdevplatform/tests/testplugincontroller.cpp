@@ -21,6 +21,8 @@
 
 #include "testplugincontroller.h"
 
+#include <interfaces/contextmenuextension.h>
+
 #include <QVariant>
 
 using namespace KDevelop;

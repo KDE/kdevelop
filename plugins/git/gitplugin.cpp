@@ -43,7 +43,6 @@
 #include <vcs/vcsannotation.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include "gitclonejob.h"
-#include <interfaces/contextmenuextension.h>
 #include <interfaces/iruncontroller.h>
 #include "stashmanagerdialog.h"
 

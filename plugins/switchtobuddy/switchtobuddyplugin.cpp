@@ -33,6 +33,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ibuddydocumentfinder.h>
+#include <interfaces/contextmenuextension.h>
 #include <language/interfaces/editorcontext.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/functiondefinition.h>

@@ -25,7 +25,6 @@
 #include "testsexport.h"
 
 #include <shell/plugincontroller.h>
-#include <interfaces/contextmenuextension.h>
 
 namespace KDevelop {
 

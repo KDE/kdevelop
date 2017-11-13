@@ -14,7 +14,6 @@
 #define KDEVPLATFORM_PLUGIN_GREPVIEWPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <interfaces/contextmenuextension.h>
 
 #include <QList>
 #include <QPointer>

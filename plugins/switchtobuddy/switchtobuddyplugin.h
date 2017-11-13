@@ -22,7 +22,6 @@
 #define KDEVPLATFORM_PLUGIN_SWITCHTOBUDDYPLUGIN_H
 
 #include <interfaces/iplugin.h>
-#include <interfaces/contextmenuextension.h>
 
 #include <QVariantList>
 
