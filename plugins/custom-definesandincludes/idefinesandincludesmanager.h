@@ -98,34 +98,40 @@ public:
     };
 
     ///@param item project item
+    ///@param type Data sources to be used.
     ///@return list of defines for @p item
     ///NOTE: call it from the foreground thread only.
     virtual Defines defines( ProjectBaseItem* item, Type type = All ) const = 0;
 
     ///@param item project item
+    ///@param type Data sources to be used.
     ///@return list of include directories/files for @p item
     ///NOTE: call it from the foreground thread only.
     virtual Path::List includes( ProjectBaseItem* item, Type type = All ) const = 0;
 
     ///@param item project item
+    ///@param type Data sources to be used.
     ///@return list of framework directories for @p item
     ///NOTE: call it from the foreground thread only.
     virtual Path::List frameworkDirectories( ProjectBaseItem* item, Type type = All ) const = 0;
 
     ///@param path path to an out-of-project file.
+    ///@param type Data sources to be used.
     ///@return list of defines for @p path
     ///NOTE: call it from the foreground thread only.
-    virtual Defines defines( const QString& path ) const = 0;
+    virtual Defines defines( const QString& path, Type type = All ) const = 0;
 
     ///@param path path to an out-of-project file.
+    ///@param type Data sources to be used.
     ///@return list of include directories/files for @p path
     ///NOTE: call it from the foreground thread only.
-    virtual Path::List includes( const QString& path ) const = 0;
+    virtual Path::List includes( const QString& path, Type type = All ) const = 0;
 
     ///@param path path to an out-of-project file.
+    ///@param type Data sources to be used.
     ///@return list of framework directories for @p path
     ///NOTE: call it from the foreground thread only.
-    virtual Path::List frameworkDirectories( const QString& path ) const = 0;
+    virtual Path::List frameworkDirectories( const QString& path, Type type = All ) const = 0;
 
     /**
      * Computes include directories in background thread.

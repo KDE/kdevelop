@@ -264,22 +264,33 @@ void DefinesAndIncludesManager::registerProvider(IDefinesAndIncludesManager::Pro
     m_providers.push_back(provider);
 }
 
-Defines DefinesAndIncludesManager::defines(const QString& path) const
+Defines DefinesAndIncludesManager::defines(const QString& path, Type type) const
 {
-    Defines ret = m_settings->provider()->defines(nullptr);
-    merge(&ret, m_noProjectIPM->includesAndDefines(path).second);
+    Defines ret;
+    if ( type & CompilerSpecific ) {
+        merge(&ret, m_settings->provider()->defines(nullptr));
+    }
+    if ( type & ProjectSpecific ) {
+        merge(&ret, m_noProjectIPM->includesAndDefines(path).second);
+    }
     return ret;
 }
 
-Path::List DefinesAndIncludesManager::includes(const QString& path) const
+Path::List DefinesAndIncludesManager::includes(const QString& path, Type type) const
 {
-    return m_settings->provider()->includes(nullptr) 
-           + m_noProjectIPM->includesAndDefines(path).first;
+    Path::List ret;
+    if ( type & CompilerSpecific ) {
+        ret += m_settings->provider()->includes(nullptr);
+    }
+    if ( type & ProjectSpecific ) {
+        ret += m_noProjectIPM->includesAndDefines(path).first;
+    }
+    return ret;
 }
 
-Path::List DefinesAndIncludesManager::frameworkDirectories(const QString& /* path */) const
+Path::List DefinesAndIncludesManager::frameworkDirectories(const QString& /* path */, Type type) const
 {
-    return m_settings->provider()->frameworkDirectories(nullptr);
+    return (type & CompilerSpecific) ? m_settings->provider()->frameworkDirectories(nullptr) : Path::List();
 }
 
 void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFile)

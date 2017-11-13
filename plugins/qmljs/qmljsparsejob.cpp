@@ -83,12 +83,15 @@ QmlJsParseJob::QmlJsParseJob(const IndexedString& url, ILanguageSupport* languag
     if (auto file = findProjectFileItem(url)) {
         QmlJS::Cache::instance().setFileCustomIncludes(
             url,
-            IDefinesAndIncludesManager::manager()->includes(file)
+            IDefinesAndIncludesManager::manager()->includes(file,
+                IDefinesAndIncludesManager::Type(
+                    IDefinesAndIncludesManager::ProjectSpecific | IDefinesAndIncludesManager::UserDefined))
         );
     } else {
         QmlJS::Cache::instance().setFileCustomIncludes(
             url,
-            IDefinesAndIncludesManager::manager()->includes(url.str())
+            IDefinesAndIncludesManager::manager()->includes(url.str(),
+                IDefinesAndIncludesManager::ProjectSpecific)
         );
     }
 }
