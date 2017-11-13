@@ -4,11 +4,13 @@ function(add_debuggable_executable target)
 	ecm_mark_nongui_executable(${target})
     # force debug symbols for our debuggees, disable optimizations
     if (WIN32)
-        set(_flags "/0d")
+        # Avoid "cl : Command line warning D9025 : overriding '/O2' with '/Od'" warnings
+        # Thus set COMPILE_FLAGS_RELEASE instead of COMPILE_FLAGS
+        # COMPILE_FLAGS_DEBUG should already have the desired flags
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS_RELEASE "/DEBUG /Od")
     else()
-        set(_flags "-O0")
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -O0")
     endif()
-    set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} ${_flags}")
 endfunction()
 
 add_debuggable_executable(debuggee_debugee SRCS debugee.cpp)
