@@ -1851,10 +1851,6 @@ void LldbTest::testDebugInExternalTerminal()
 
 void LldbTest::testSpecialPath()
 {
-#ifndef HAVE_PATH_WITH_SPACES_TEST
-    QSKIP("Skipping... special path test,"
-          " this CMake version would create a faulty build.ninja file. Upgrade to at least CMake v3.0");
-#endif
     QSKIP("Skipping... lldb-mi itself can't handle path with space in application dir");
 
     TestDebugSession* session = new TestDebugSession;

@@ -2044,7 +2044,6 @@ void GdbTest::testDebugInExternalTerminal()
 // see: https://bugs.kde.org/show_bug.cgi?id=339231
 void GdbTest::testPathWithSpace()
 {
-#ifdef HAVE_PATH_WITH_SPACES_TEST
     TestDebugSession* session = new TestDebugSession;
 
     auto debugee = findExecutable(QStringLiteral("path with space/debuggee_spacedebugee"));
@@ -2057,7 +2056,6 @@ void GdbTest::testPathWithSpace()
     QCOMPARE(b->state(), KDevelop::Breakpoint::CleanState);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
-#endif
 }
 
 bool GdbTest::waitForState(DebugSession *session, DebugSession::DebuggerState state,

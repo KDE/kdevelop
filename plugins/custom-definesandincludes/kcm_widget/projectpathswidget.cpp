@@ -241,7 +241,6 @@ void ProjectPathsWidget::batchEdit()
         delete dialog;
         return;
     }
-    delete dialog;
 
     if (includesTab) {
         auto includes = be.textEdit->toPlainText().split('\n', QString::SkipEmptyParts);
@@ -268,6 +267,7 @@ void ProjectPathsWidget::batchEdit()
     }
 
     projectPathSelected(index);
+    delete dialog;
 }
 
 void ProjectPathsWidget::setCurrentCompiler(const QString& name)
