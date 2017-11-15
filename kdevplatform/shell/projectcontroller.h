@@ -96,7 +96,11 @@ public:
 
     ContextMenuExtension contextMenuExtension(KDevelop::Context* ctx, QWidget* parent);
 
-    void fetchProjectFromUrl(const QUrl& repoUrl, IPlugin* vcsOrProviderPlugin);
+    /**
+     * @param repoUrl url identifying the repo
+     * @returns @c true if a plugin was found to handle the repo (also if user cancelled), @c false otherwise
+     */
+    bool fetchProjectFromUrl(const QUrl& repoUrl);
 
 public Q_SLOTS:
     Q_SCRIPTABLE void openProjectForUrl( const QString &sourceUrl ) { openProjectForUrl(QUrl(sourceUrl)); }

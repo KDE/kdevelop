@@ -17,3 +17,5 @@ add_subdirectory(icons)
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
+
+install(PROGRAMS org.kde.kdevelop_bzr.desktop DESTINATION ${KDE_INSTALL_APPDIR})

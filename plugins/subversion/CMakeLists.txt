@@ -68,3 +68,5 @@ target_link_libraries(kdevsubversion
     KDev::Project
     kdevsvncpp
 )
+
+install(PROGRAMS org.kde.kdevelop_svn.desktop DESTINATION ${KDE_INSTALL_APPDIR})

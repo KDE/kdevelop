@@ -59,7 +59,6 @@ Boston, MA 02110-1301, USA.
 
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
-#include <vcs/interfaces/ibasicversioncontrol.h>
 #include <sublime/view.h>
 #include <sublime/document.h>
 #include <sublime/urldocument.h>
@@ -247,21 +246,7 @@ void MainWindow::dropEvent( QDropEvent* ev )
 
     bool eventUsed = false;
     if (urls.size() == 1) {
-        const QUrl& url = urls.at(0);
-        // TODO: query also projectprovider plugins, and that before plain vcs plugins
-        // e.g. KDE provider plugin could catch URLs from mirror or pickup kde:repo things
-
-        auto* pluginController = Core::self()->pluginController();
-        const auto& plugins = pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
-
-        for (auto* plugin : plugins) {
-            auto* iface = plugin->extension<IBasicVersionControl>();
-            if (iface->isValidRemoteRepositoryUrl(url)) {
-                Core::self()->projectControllerInternal()->fetchProjectFromUrl(url, plugin);
-                eventUsed = true;
-                break;
-            }
-        }
+        eventUsed = Core::self()->projectControllerInternal()->fetchProjectFromUrl(urls.at(0));
     }
 
     if (!eventUsed) {

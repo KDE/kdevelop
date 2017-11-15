@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=kdevelop --ps --fetch %U
+MimeType=x-scheme-handler/svn;x-scheme-handler/svn+ssh;
+Icon=kdevelop
+Terminal=false
+Name=KDevelop (Fetch Subversion Project)
+GenericName=Integrated Development Environment
+Categories=Qt;KDE;Development;IDE;
+NoDisplay=true

@@ -33,5 +33,7 @@ if(BUILD_TESTING)
 endif()
 add_subdirectory(icons)
 
+install(PROGRAMS org.kde.kdevelop_git.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+
 install(FILES kdevgit.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
 update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})

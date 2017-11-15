@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=kdevelop --ps --fetch %U
+MimeType=x-scheme-handler/git;x-scheme-handler/git+ssh;
+Icon=kdevelop
+Terminal=false
+Name=KDevelop (Fetch git Project)
+GenericName=Integrated Development Environment
+Categories=Qt;KDE;Development;IDE;
+NoDisplay=true

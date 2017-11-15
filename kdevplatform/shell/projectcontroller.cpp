@@ -847,13 +847,35 @@ void ProjectController::openProject( const QUrl &projectFile )
     }
 }
 
-void ProjectController::fetchProjectFromUrl(const QUrl& repoUrl, IPlugin* vcsOrProviderPlugin)
+bool ProjectController::fetchProjectFromUrl(const QUrl& repoUrl)
 {
+    IPlugin* vcsOrProviderPlugin = nullptr;
+
+    // TODO: query also projectprovider plugins, and that before plain vcs plugins
+    // e.g. KDE provider plugin could catch URLs from mirror or pickup kde:repo things
+    auto* pluginController = d->m_core->pluginController();
+    const auto& vcsPlugins = pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
+
+    for (auto* plugin : vcsPlugins) {
+        auto* iface = plugin->extension<IBasicVersionControl>();
+        if (iface->isValidRemoteRepositoryUrl(repoUrl)) {
+            vcsOrProviderPlugin = plugin;
+            break;
+        }
+    }
+    if (!vcsOrProviderPlugin) {
+        KMessageBox::error(Core::self()->uiController()->activeMainWindow(),
+                            i18n("No enabled plugin supports this repository URL: %1", repoUrl.toDisplayString()));
+        return false;
+    }
+
     const QUrl url = d->dialog->askProjectConfigLocation(true, QUrl(), repoUrl, vcsOrProviderPlugin);
 
     if (!url.isEmpty()) {
         d->importProject(url);
     }
+
+    return true;
 }
 
 void ProjectController::fetchProject()
