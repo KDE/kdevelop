@@ -96,8 +96,9 @@ Defines GccLikeCompiler::defines(const QString& arguments) const
     auto compilerArguments = languageOptions(arguments);
     compilerArguments.append(QStringLiteral("-dM"));
     compilerArguments.append(QStringLiteral("-E"));
-    compilerArguments.append(QProcess::nullDevice());
+    compilerArguments.append(QStringLiteral("-"));
 
+    proc.setStandardInputFile(QProcess::nullDevice());
     proc.setProgram(path());
     proc.setArguments(compilerArguments);
     rt->startProcess(&proc);
@@ -150,8 +151,9 @@ Path::List GccLikeCompiler::includes(const QString& arguments) const
     auto compilerArguments = languageOptions(arguments);
     compilerArguments.append(QStringLiteral("-E"));
     compilerArguments.append(QStringLiteral("-v"));
-    compilerArguments.append(QProcess::nullDevice());
+    compilerArguments.append(QStringLiteral("-"));
 
+    proc.setStandardInputFile(QProcess::nullDevice());
     proc.setProgram(path());
     proc.setArguments(compilerArguments);
     rt->startProcess(&proc);
