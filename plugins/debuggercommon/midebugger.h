@@ -135,7 +135,7 @@ protected:
     void processLine(const QByteArray& line);
 
 protected:
-    QString debuggerExecutable_;
+    QString m_debuggerExecutable;
     KProcess* m_process;
 
     MI::MICommand* m_currentCmd;
