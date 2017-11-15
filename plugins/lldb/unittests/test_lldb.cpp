@@ -207,6 +207,11 @@ void LldbTest::initTestCase()
     Q_ASSERT(m_iface);
 
     m_debugeeFileName = findSourceFile("debugee.cpp");
+
+    const QString lldbMiExecutable = QStandardPaths::findExecutable(QStringLiteral("lldb-mi"));
+    if (lldbMiExecutable.isEmpty()) {
+        QSKIP("Skipping, lldb-mi not available");
+    }
 }
 
 // Called after the last testfunction was executed
