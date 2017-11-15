@@ -17,19 +17,26 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include <interfaces/iplugin.h>
+#include <interfaces/icore.h>
+#include <interfaces/iplugincontroller.h>
+
 #include <project/abstractfilemanagerplugin.h>
 #include <project/projectmodel.h>
+
+#include <shell/projectcontroller.h>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <tests/testproject.h>
+#include <tests/testplugincontroller.h>
 
 #include <util/path.h>
 
 #include <KJob>
 #include <KDirWatch>
 
-#include <QCoreApplication>
+#include <QApplication>
 #include <QList>
 #include <QFileInfo>
 #include <QElapsedTimer>
@@ -41,14 +48,27 @@ using namespace KDevelop;
 
 namespace KDevelop {
 
+// wrap the ProjectController to make its addProject() method public
+class ProjectControllerWrapper : public ProjectController
+{
+    Q_OBJECT
+public:
+    ProjectControllerWrapper(Core* core)
+        : ProjectController(core)
+    {}
+
+    using ProjectController::addProject;
+};
+
 class AbstractFileManagerPluginImportBenchmark : public QObject
 {
     Q_OBJECT
 public:
     AbstractFileManagerPluginImportBenchmark(AbstractFileManagerPlugin* manager, const QString& path,
-                                             QObject* parent)
-        : QObject(parent)
+                                             TestCore* core)
+        : QObject(core)
         , m_out(stdout)
+        , m_core(core)
     {
         m_manager = manager;
         m_project = new TestProject(Path(path));
@@ -58,6 +78,8 @@ public:
     {
         m_projectNumber = s_numBenchmarksRunning++;
         m_out << "Starting import of project " << m_project->path().toLocalFile() << endl;
+        ProjectControllerWrapper *projectController = qobject_cast<ProjectControllerWrapper*>(m_core->projectController());
+        projectController->addProject(m_project);
         m_timer.start();
         auto root = m_manager->import(m_project);
         int elapsed = m_timer.elapsed();
@@ -75,6 +97,7 @@ public:
     QElapsedTimer m_timer;
     int m_projectNumber;
     QTextStream m_out;
+    TestCore* m_core;
 
     static int s_numBenchmarksRunning;
 
@@ -86,8 +109,9 @@ private Q_SLOTS:
     {
         Q_UNUSED(job);
         int elapsed = m_timer.elapsed();
-        m_out << "importing project " << m_projectNumber << " took "
-            << elapsed / 1000.0 << " seconds" << endl;
+        m_out << "importing " << m_project->fileSet().size()
+            << " items into project #" << m_projectNumber
+            << " took " << elapsed / 1000.0 << " seconds" << endl;
 
         s_numBenchmarksRunning -= 1;
         if (s_numBenchmarksRunning <= 0) {
@@ -106,7 +130,7 @@ int main(int argc, char** argv)
         qWarning() << "Usage:" << argv[0] << "projectDir1 [...projectDirN]";
         return 1;
     }
-    QCoreApplication app(argc, argv);
+    QApplication app(argc, argv);
     QTextStream qout(stdout);
     // measure the total test time, this provides an indication
     // of overhead and how well multiple projects are imported in parallel
@@ -117,7 +141,12 @@ int main(int argc, char** argv)
     QElapsedTimer runTimer;
 
     AutoTestShell::init({"no plugins"});
-    auto core = TestCore::initialize(Core::NoUi);
+    auto core = TestCore::initialize();
+    // load/activate the "Project Filter" plugin (it won't be available to us without this step):
+    core->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IProjectFilter"));
+    auto projectController = new ProjectControllerWrapper(core);
+    delete core->projectController();
+    core->setProjectController(projectController);
     auto manager = new AbstractFileManagerPlugin({}, core);
 
     const char *kdwMethod[] = {"FAM", "Inotify", "Stat", "QFSWatch"};
