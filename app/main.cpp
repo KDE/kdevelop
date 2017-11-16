@@ -192,6 +192,21 @@ static const KDevelop::SessionInfo* findSessionInList( const SessionInfos& sessi
     return nullptr;
 }
 
+/// Tries to find sessions containing project @p projectUrl in @p sessions.
+static const KDevelop::SessionInfos findSessionsWithProject(const SessionInfos& sessions, const QUrl& projectUrl)
+{
+    if (!projectUrl.isValid())
+        return {};
+
+    KDevelop::SessionInfos infos;
+    for (auto it = sessions.constBegin(); it != sessions.constEnd(); ++it) {
+        if (it->projects.contains(projectUrl)) {
+            infos << *it;
+        }
+    }
+    return infos;
+}
+
 /// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid
 /// Returns the exit status
 static int openFilesInRunningInstance(const QVector<UrlInfo>& files, qint64 pid)
@@ -452,7 +467,7 @@ int main( int argc, char *argv[] )
     parser.addOption(QCommandLineOption{QStringList{"pss", "pick-session-shell"}, i18n("List all available sessions on shell and lets you select one to open.")});
     parser.addOption(QCommandLineOption{QStringList{"l", "list-sessions"}, i18n("List available sessions and quit.")});
     parser.addOption(QCommandLineOption{QStringList{"f", "fetch"}, i18n("Open KDevelop and fetch the given project."), QStringLiteral("fetch")});
-    parser.addOption(QCommandLineOption{QStringList{"p", "project"}, i18n("Open KDevelop and load the given project."), QStringLiteral("project")});
+    parser.addOption(QCommandLineOption{QStringList{"p", "project"}, i18n("Open KDevelop and load the given project. Project can be either a .kdev4 file or a directory path."), QStringLiteral("project")});
     parser.addOption(QCommandLineOption{QStringList{"d", "debug"},
                      i18n("Start debugging an application in KDevelop with the given debugger.\n"
                      "The executable that should be debugged must follow - including arguments.\n"
@@ -674,8 +689,38 @@ int main( int argc, char *argv[] )
         }
     }
 
+    if (parser.isSet("project")) {
+        const auto project = parser.value(QStringLiteral("project"));
+        QFileInfo info(project);
+        QUrl projectUrl;
+        if (info.suffix() == QLatin1String("kdev4")) {
+            projectUrl = QUrl::fromLocalFile(info.absoluteFilePath());
+        } else if (info.isDir()) {
+            QDir dir(info.absoluteFilePath());
+            const auto potentialProjectFiles = dir.entryList({QStringLiteral("*.kdev4")}, QDir::Files, QDir::Name);
+            qDebug(APP) << "Found these potential project files:" << potentialProjectFiles;
+            if (!potentialProjectFiles.isEmpty()) {
+                projectUrl = QUrl::fromLocalFile(dir.absoluteFilePath(potentialProjectFiles.value(0)));
+            }
+        } else {
+            QTextStream qerr(stderr);
+            qerr << "Invalid project: " << project << " - should be either a path to a .kdev4 file or a directory containing a .kdev4 file";
+            return 1;
+        }
+
+        qDebug(APP) << "Attempting to find a suitable session for project" << projectUrl;
+        const auto sessionInfos = findSessionsWithProject(availableSessionInfos, projectUrl);
+        qDebug(APP) << "Found matching sessions:" << sessionInfos.size();
+        if (!sessionInfos.isEmpty()) {
+            // TODO: If there's more than one match: Allow the user to select which session to open?
+            qDebug(APP) << "Attempting to open session:" << sessionInfos.at(0).name;
+            session = sessionInfos.at(0).uuid.toString();
+        }
+    }
+
     KDevIDEExtension::init();
 
+    qDebug(APP) << "Attempting to initialize session:" << session;
     if(!Core::initialize(Core::Default, session))
         return 5;
 
@@ -685,26 +730,6 @@ int main( int argc, char *argv[] )
     Core* core = Core::self();
     if (!QProcessEnvironment::systemEnvironment().contains(QStringLiteral("KDEV_DISABLE_WELCOMEPAGE"))) {
         core->pluginController()->loadPlugin(QStringLiteral("KDevWelcomePage"));
-    }
-
-    QStringList projectNames = parser.values(QStringLiteral("project"));
-    foreach(const QString& projectName, projectNames)
-    {
-        QFileInfo info( projectName );
-        if( info.suffix() == QLatin1String("kdev4") ) {
-            // make sure the project is not already opened by the session controller
-            bool shouldOpen = true;
-            Path path(info.absoluteFilePath());
-            foreach(KDevelop::IProject* project, core->projectController()->projects()) {
-                if (project->projectFile() == path) {
-                    shouldOpen = false;
-                    break;
-                }
-            }
-            if (shouldOpen) {
-                core->projectController()->openProject( path.toUrl() );
-            }
-        }
     }
 
     const auto fetchUrlStrings = parser.values(QStringLiteral("fetch"));
