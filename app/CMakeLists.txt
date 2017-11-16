@@ -9,17 +9,7 @@ endif()
 
 option(KDEVELOP_SINGLE_APP "Use QtSingleApplication as KDevelop's base" OFF)
 
-set(singleapp_SRCS qtlocalpeer.cpp qtsingleapplication.cpp qtlockedfile.cpp)
-if(WIN32)
-    set(singleapp_SRCS ${singleapp_SRCS} qtlockedfile_win.cpp)
-else()
-    set(singleapp_SRCS ${singleapp_SRCS} qtlockedfile_unix.cpp)
-endif()
-
 set(kdevelop_SRCS  main.cpp kdevideextension.cpp)
-if(KDEVELOP_SINGLE_APP)
-    set(kdevelop_SRCS ${kdevelop_SRCS} ${singleapp_SRCS})
-endif()
 
 ecm_qt_declare_logging_category(kdevelop_SRCS
     HEADER debug.h
@@ -46,7 +36,6 @@ ecm_add_app_icon(kdevelop_SRCS ICONS
 
 qt5_add_resources(kdevelop_SRCS kdevelop.qrc)
 add_executable(kdevelop ${kdevelop_SRCS} )
-
 target_link_libraries(kdevelop
     KDev::Interfaces
     KDev::Shell
@@ -59,6 +48,10 @@ target_link_libraries(kdevelop
 IF(APPLE)
     target_link_libraries(kdevelop "-framework CoreFoundation")
 ENDIF()
+if(KDEVELOP_SINGLE_APP)
+    add_subdirectory(3rdparty/qtsingleapplication)
+    target_link_libraries(kdevelop qtsingleapplication)
+endif()
 
 install(TARGETS kdevelop ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
