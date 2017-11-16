@@ -23,6 +23,8 @@
 #include "problemtreeview.h"
 
 #include <QAction>
+#include <QApplication>
+#include <QClipboard>
 #include <QContextMenuEvent>
 #include <QHeaderView>
 #include <QItemDelegate>
@@ -47,6 +49,31 @@
 //#include "modeltest.h"
 
 using namespace KDevelop;
+
+namespace {
+QString descriptionFromProblem(IProblem::Ptr problem)
+{
+    QString text;
+    const auto location = problem->finalLocation();
+    if (location.isValid()) {
+        text += location.document.toUrl()
+            .adjusted(QUrl::NormalizePathSegments)
+            .toDisplayString(QUrl::PreferLocalFile);
+        if (location.start().line() >= 0) {
+            text += QStringLiteral(":") + QString::number(location.start().line() + 1);
+            if (location.start().column() >= 0) {
+                text += QStringLiteral(":") + QString::number(location.start().column() + 1);
+            }
+        }
+        text += QStringLiteral(": ");
+    }
+    text += problem->description();
+    if (!problem->explanation().isEmpty()) {
+        text += QStringLiteral("\n") + problem->explanation();
+    }
+    return text;
+}
+}
 
 namespace KDevelop
 {
@@ -189,30 +216,35 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
         return;
     }
 
-    QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
-    if (!solution) {
-        return;
-    }
-
-    QList<QAction*> actions;
-    foreach (KDevelop::IAssistantAction::Ptr action, solution->actions()) {
-        actions << action->toQAction();
-    }
-
-    if (actions.isEmpty()) {
-        return;
-    }
-
-    QString title = solution->title();
-    title = KDevelop::htmlToPlainText(title);
-    title.replace(QLatin1String("&apos;"), QLatin1String("\'"));
-
     QPointer<QMenu> m = new QMenu(this);
-    m->addSection(title);
-    m->addActions(actions);
+
+    m->addSection(i18n("Problem"));
+    auto copyDescriptionAction = new QAction(i18n("&Copy Description"));
+    copyDescriptionAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
+    connect(copyDescriptionAction, &QAction::triggered, this, [problem]() {
+        QApplication::clipboard()->setText(descriptionFromProblem(problem), QClipboard::Clipboard);
+    });
+    m->addAction(copyDescriptionAction);
+
+    QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
+    if (solution && !solution->actions().isEmpty()) {
+        QList<QAction*> actions;
+        foreach (KDevelop::IAssistantAction::Ptr assistantAction, solution->actions()) {
+            auto action = assistantAction->toQAction(m.data());
+            action->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
+            actions << action;
+        }
+
+        QString title = solution->title();
+        title = KDevelop::htmlToPlainText(title);
+        title.replace(QLatin1String("&apos;"), QLatin1String("\'"));
+        m->addSection(i18n("Solve: %1", title));
+        m->addActions(actions);
+    }
+
     m->exec(event->globalPos());
     delete m;
-    qDeleteAll(actions);
+
 }
 
 void ProblemTreeView::showEvent(QShowEvent* event)
