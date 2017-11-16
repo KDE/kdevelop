@@ -105,7 +105,7 @@ public:
     ProjectBuildSetModel* buildset;
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
     bool m_cleaningUp; //Temporary flag enabled while destroying the project-controller
-    QPointer<ProjectChangesModel> m_changesModel;
+    ProjectChangesModel* m_changesModel = nullptr;
     QHash< IProject*, QPointer<KJob> > m_parseJobs; // parse jobs that add files from the project to the background parser.
 
     explicit ProjectControllerPrivate( ProjectController* p )
@@ -640,6 +640,8 @@ void ProjectController::initialize()
     connect( this, &ProjectController::projectClosed,
              d->buildset, &ProjectBuildSetModel::projectClosed );
 
+    d->m_changesModel = new ProjectChangesModel(this);
+
     loadSettings(false);
     d->dialog = new ProjectDialogProvider(d.data());
 
@@ -1140,9 +1142,6 @@ ProjectBuildSetModel* ProjectController::buildSetModel()
 
 ProjectChangesModel* ProjectController::changesModel()
 {
-    if(!d->m_changesModel)
-        d->m_changesModel=new ProjectChangesModel(this);
-
     return d->m_changesModel;
 }
 
