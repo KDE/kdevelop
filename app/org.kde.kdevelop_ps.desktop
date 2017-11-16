@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Exec=kdevelop --ps
-MimeType=application/x-kdevelop;
+MimeType=
 Icon=kdevelop
 Terminal=false
 Name=KDevelop (Pick Session)
