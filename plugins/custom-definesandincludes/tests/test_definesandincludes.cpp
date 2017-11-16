@@ -42,7 +42,7 @@ void TestDefinesAndIncludes::cleanupTestCase()
 
 void TestDefinesAndIncludes::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({QStringLiteral("kdevdefinesandincludesmanager"), QStringLiteral("KDevCustomBuildSystem"), QStringLiteral("KDevStandardOutputView")});
     TestCore::initialize();
 }
 
