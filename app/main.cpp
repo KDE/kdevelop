@@ -466,7 +466,7 @@ int main( int argc, char *argv[] )
     parser.addOption(QCommandLineOption{QStringList{"ps", "pick-session"}, i18n("Shows all available sessions and lets you select one to open.")});
     parser.addOption(QCommandLineOption{QStringList{"pss", "pick-session-shell"}, i18n("List all available sessions on shell and lets you select one to open.")});
     parser.addOption(QCommandLineOption{QStringList{"l", "list-sessions"}, i18n("List available sessions and quit.")});
-    parser.addOption(QCommandLineOption{QStringList{"f", "fetch"}, i18n("Open KDevelop and fetch the given project."), QStringLiteral("fetch")});
+    parser.addOption(QCommandLineOption{QStringList{"f", "fetch"}, i18n("Open KDevelop and fetch the project from the given <repo url>."), QStringLiteral("repo url")});
     parser.addOption(QCommandLineOption{QStringList{"p", "project"}, i18n("Open KDevelop and load the given project. Project can be either a .kdev4 file or a directory path."), QStringLiteral("project")});
     parser.addOption(QCommandLineOption{QStringList{"d", "debug"},
                      i18n("Start debugging an application in KDevelop with the given debugger.\n"
