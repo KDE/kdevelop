@@ -5,17 +5,30 @@ RUN cd /tmp && wget http://opensource.wandisco.com/rhel/6/svn-1.9/RPMS/x86_64/su
 
 RUN echo ". /opt/rh/devtoolset-4/enable && chmod +x /opt/rh/python27/enable && . /opt/rh/python27/enable" >> /root/.bashrc
 
-ENV LC_ALL=en_US.UTF-8 LANG=en_us.UTF-8 QTVERSION=5.7.1 QVERSION_SHORT=5.7 LLVM_ROOT=/opt/llvm/ QTV=5.7.1 LD_LIBRARY_PATH=$QTDIR/lib/
+ENV LC_ALL=en_US.UTF-8 LANG=en_us.UTF-8 QTVERSION=5.9.1 QVERSION_SHORT=5.9 LLVM_VERSION=5.0.0 LLVM_ROOT=/opt/llvm/ LD_LIBRARY_PATH=$QTDIR/lib/
 ENV QTDIR=/usr/local/Qt-${QTVERSION}/
 
-RUN bash -c "mkdir -p /qt && cd /qt && wget http://download.qt.io/archive/qt/${QVERSION_SHORT}/${QTVERSION}/single/qt-everywhere-opensource-src-${QTVERSION}.tar.xz && tar xvf qt-everywhere-opensource-src-${QTVERSION}.tar.xz && ln -sf /opt/rh/devtoolset-4/root/usr/bin/g++ /usr/bin/g++ && ln -sf /opt/rh/devtoolset-4/root/usr/bin/c++ /usr/bin/c++ && cd /qt/qt-everywhere-opensource-src-$QTV && ./configure -v -skip qt3d -skip qtgamepad -platform linux-g++ -qt-pcre -qt-xcb -qt-xkbcommon -xkb-config-root /usr/share/X11/xkb -no-pch -qt-sql-sqlite -qt-sql-sqlite2 -nomake tests -nomake examples -confirm-license -opensource && make -j$(nproc) || make -j 1 install; make -j$(nproc) install && rm -Rf /qt"
+RUN bash -c "ln -sf /opt/rh/devtoolset-4/root/usr/bin/g++ /usr/bin/g++ && ln -sf /opt/rh/devtoolset-4/root/usr/bin/c++ /usr/bin/c++"
 
-RUN bash -c "ln -sf /usr/local/Qt-$QTV/bin/qmake /usr/bin/qmake-qt5 && mkdir -p /qtwk && cd /qtwk && wget http://download.qt.io/community_releases/${QVERSION_SHORT}/${QTV}/qtwebkit-opensource-src-${QTV}.tar.xz && tar xvf qtwebkit-opensource-src-${QTV}.tar.xz && cd /qtwk/qtwebkit-opensource-src-${QTV} &&  $QTDIR/bin/qmake && make -j$(nproc) || make -j$(nproc) && make -j$(nproc) install && rm -Rf /qtwk"
+# Build Qt5
+RUN bash -c "mkdir -p /qt && cd /qt && wget http://download.qt.io/archive/qt/${QVERSION_SHORT}/${QTVERSION}/single/qt-everywhere-opensource-src-${QTVERSION}.tar.xz && tar xvf qt-everywhere-opensource-src-${QTVERSION}.tar.xz"
+RUN bash -c "export MAKEFLAGS=-j$(nproc) && cd /qt/qt-everywhere-opensource-src-${QTVERSION} && ./configure -v -skip qt3d -skip qtgamepad -platform linux-g++ -qt-pcre -qt-xcb -qt-xkbcommon -xkb-config-root /usr/share/X11/xkb -no-pch -nomake tests -nomake examples -confirm-license -opensource && make -j$(nproc) || make -j 1 install; make -j$(nproc) install && rm -Rf /qt"
 
-RUN bash -c "mkdir -p /llvm && cd /llvm && wget http://llvm.org/releases/3.9.1/llvm-3.9.1.src.tar.xz && tar xvf llvm-3.9.1.src.tar.xz && cd llvm-3.9.1.src && cd tools && wget http://llvm.org/releases/3.9.1/cfe-3.9.1.src.tar.xz && tar xvf cfe-3.9.1.src.tar.xz && . /opt/rh/python27/enable && . /opt/rh/devtoolset-4/enable && python --version && cd /llvm/llvm-3.9.1.src && mkdir -p build && cd build && cmake3 .. -DCMAKE_INSTALL_PREFIX=/opt/llvm/ -DCMAKE_BUILD_TYPE=Release && make -j$(nproc) install && rm -Rf /llvm"
+RUN ln -sf /usr/local/Qt-${QTVERSION}/bin/qmake /usr/bin/qmake-qt5
 
+# Build qtwebkit
+RUN bash -c "mkdir -p /qtwk && cd /qtwk && wget http://download.qt.io/archive/qt/${QVERSION_SHORT}/${QTVERSION}/submodules/qtwebkit-opensource-src-${QTVERSION}.tar.xz && tar xvf qtwebkit-opensource-src-${QTVERSION}.tar.xz"
+RUN bash -c "cd /qtwk/qtwebkit-opensource-src-${QTVERSION} &&  $QTDIR/bin/qmake && make -j$(nproc) || make -j$(nproc) && make -j$(nproc) install && rm -Rf /qtwk"
+
+# Install ninja
+RUN bash -c "yum install unzip && mkdir -p /tmp/deploy && cd /tmp/deploy && wget https://github.com/ninja-build/ninja/releases/download/v1.7.2/ninja-linux.zip && unzip ninja-linux.zip && mv -f ninja /usr/local/bin && cd .. && rm -Rf deploy"
+
+# Build Clang/LLVM
+RUN bash -c "mkdir -p /llvm && cd /llvm && wget http://llvm.org/releases/${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz && tar xvf llvm-${LLVM_VERSION}.src.tar.xz && cd llvm-${LLVM_VERSION}.src && cd tools && wget http://llvm.org/releases/${LLVM_VERSION}/cfe-${LLVM_VERSION}.src.tar.xz && tar xvf cfe-${LLVM_VERSION}.src.tar.xz"
+RUN bash -c ". /opt/rh/python27/enable && . /opt/rh/devtoolset-4/enable && python --version && cd /llvm/llvm-${LLVM_VERSION}.src && mkdir -p build && cd build && cmake3 -G Ninja .. -DCMAKE_INSTALL_PREFIX=/opt/llvm/ -DCMAKE_BUILD_TYPE=Release && ninja install && rm -Rf /llvm"
+
+# Build Python
 RUN bash -c "mkdir -p /python && cd /python && wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz && tar xvf Python-3.6.0.tar.xz && cd /python/Python-3.6.0 && mkdir -p /usr/lib/pkgconfig && ./configure --prefix=/usr --enable-shared && make -j$(nproc) install && rm -Rf /python"
 
-RUN bash -c "yum install unzip && mkdir -p /tmp/deploy && cd /tmp/deploy && wget https://github.com/ninja-build/ninja/releases/download/v1.7.2/ninja-linux.zip && unzip ninja-linux.zip && mv -f ninja /usr/local/bin && cd .. && rm -Rf deploy"
 
 CMD /bin/bash
