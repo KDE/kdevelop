@@ -70,6 +70,7 @@ void sanitizeArguments(QVector<QByteArray>& arguments)
     // We remove the -Werror flag, and replace -Werror=foo by -Wfoo.
     // Warning as error may cause problem to the clang parser.
     const auto asError = QByteArrayLiteral("-Werror=");
+    const auto documentation = QByteArrayLiteral("-Wdocumentation");
     for (auto& argument : arguments) {
         if (argument == "-Werror") {
             argument.clear();
@@ -77,7 +78,13 @@ void sanitizeArguments(QVector<QByteArray>& arguments)
             // replace -Werror=foo by -Wfoo
             argument.remove(2, asError.length() - 2);
         }
+#if CINDEX_VERSION_MINOR < 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
+        if (argument == documentation) {
+            argument.clear();
+        }
+#endif
     }
+
 }
 
 QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Options options, const ParserSettings& parserSettings)
