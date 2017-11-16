@@ -1,0 +1,8 @@
+set(qtsingleapplication_SRCS qtlocalpeer.cpp qtsingleapplication.cpp qtlockedfile.cpp)
+if(WIN32)
+    list(APPEND qtsingleapplication_SRCS qtlockedfile_win.cpp)
+else()
+    list(APPEND qtsingleapplication_SRCS qtlockedfile_unix.cpp)
+endif()
+add_library(qtsingleapplication STATIC ${qtsingleapplication_SRCS})
+target_link_libraries(qtsingleapplication Qt5::Core Qt5::Network Qt5::Widgets)

@@ -52,10 +52,10 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
     // FIXME: verify that default value leads to something sensible
     QUrl gdbUrl = config.readEntry(Config::GdbPathEntry, QUrl());
     if (gdbUrl.isEmpty()) {
-        debuggerExecutable_ = QStringLiteral("gdb");
+        m_debuggerExecutable = QStringLiteral("gdb");
     } else {
         // FIXME: verify its' a local path.
-        debuggerExecutable_ = gdbUrl.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
+        m_debuggerExecutable = gdbUrl.url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash);
     }
 
     QStringList arguments = extraArguments;
@@ -80,19 +80,19 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
             return false;
         }
 
-        arguments.insert(0, debuggerExecutable_);
+        arguments.insert(0, m_debuggerExecutable);
         arguments.insert(0, shell.toLocalFile());
         m_process->setShellCommand(KShell::joinArgs(arguments));
     } else {
-        m_process->setProgram(debuggerExecutable_, arguments);
+        m_process->setProgram(m_debuggerExecutable, arguments);
     }
 
     m_process->start();
 
-    qCDebug(DEBUGGERGDB) << "Starting GDB with command" << shell.toLocalFile() + QLatin1Char(' ') + debuggerExecutable_
+    qCDebug(DEBUGGERGDB) << "Starting GDB with command" << shell.toLocalFile() + QLatin1Char(' ') + m_debuggerExecutable
                            + QLatin1Char(' ') + arguments.join(QLatin1Char(' '));
     qCDebug(DEBUGGERGDB) << "GDB process pid:" << m_process->pid();
-    emit userCommandOutput(shell.toLocalFile() + QLatin1Char(' ') + debuggerExecutable_
+    emit userCommandOutput(shell.toLocalFile() + QLatin1Char(' ') + m_debuggerExecutable
                            + QLatin1Char(' ') + arguments.join(QLatin1Char(' ')) + QLatin1Char('\n'));
     return true;
 }

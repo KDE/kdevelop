@@ -159,13 +159,18 @@ KDevelop::Breakpoint* LldbFormattersTest::addCodeBreakpoint(const QUrl& location
 // Called before the first testfunction is executed
 void LldbFormattersTest::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({QStringLiteral("kdevlldb"), QStringLiteral("kdevexecute")});
     m_core = TestCore::initialize(Core::NoUi);
 
     m_iface = m_core->pluginController()
                 ->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))
                 ->extension<IExecutePlugin>();
     Q_ASSERT(m_iface);
+
+    const QString lldbMiExecutable = QStandardPaths::findExecutable(QStringLiteral("lldb-mi"));
+    if (lldbMiExecutable.isEmpty()) {
+        QSKIP("Skipping, lldb-mi not available");
+    }
 }
 
 // Called after the last testfunction was executed

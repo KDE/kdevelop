@@ -51,9 +51,9 @@ bool LldbDebugger::start(KConfigGroup& config, const QStringList& extraArguments
     // Get path to executable
     QUrl lldbUrl = config.readEntry(Config::LldbExecutableEntry, QUrl());
     if (!lldbUrl.isValid() || !lldbUrl.isLocalFile()) {
-        debuggerExecutable_ = QStringLiteral("lldb-mi");
+        m_debuggerExecutable = QStringLiteral("lldb-mi");
     } else {
-        debuggerExecutable_ = lldbUrl.toLocalFile();
+        m_debuggerExecutable = lldbUrl.toLocalFile();
     }
 
     // Get arguments
@@ -74,12 +74,12 @@ bool LldbDebugger::start(KConfigGroup& config, const QStringList& extraArguments
 
     // Start!
     m_process->setProcessEnvironment(processEnv);
-    m_process->setProgram(debuggerExecutable_, arguments);
+    m_process->setProgram(m_debuggerExecutable, arguments);
     m_process->start();
 
-    qCDebug(DEBUGGERLLDB) << "Starting LLDB with command" << debuggerExecutable_ + QLatin1Char(' ') + arguments.join(QLatin1Char(' '));
+    qCDebug(DEBUGGERLLDB) << "Starting LLDB with command" << m_debuggerExecutable + QLatin1Char(' ') + arguments.join(QLatin1Char(' '));
     qCDebug(DEBUGGERLLDB) << "LLDB process pid:" << m_process->pid();
-    emit userCommandOutput(debuggerExecutable_ + QLatin1Char(' ') + arguments.join(QLatin1Char(' ')) + QLatin1Char('\n'));
+    emit userCommandOutput(m_debuggerExecutable + QLatin1Char(' ') + arguments.join(QLatin1Char(' ')) + QLatin1Char('\n'));
 
     return true;
 }
