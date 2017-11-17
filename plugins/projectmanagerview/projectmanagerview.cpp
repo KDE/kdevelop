@@ -91,6 +91,9 @@ ProjectManagerView::ProjectManagerView( ProjectManagerViewPlugin* plugin, QWidge
         m_ui->splitter->setStretchFactor(1, projectBuildSetStrechFactor);
     }
 
+    // keep the project tree view from collapsing (would confuse users)
+    m_ui->splitter->setCollapsible(0, false);
+
     m_syncAction = plugin->actionCollection()->action(QStringLiteral("locate_document"));
     Q_ASSERT(m_syncAction);
     m_syncAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
