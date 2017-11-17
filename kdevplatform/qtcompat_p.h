@@ -22,6 +22,8 @@
 
 #include <qglobal.h>
 
+#include <QDir>
+
 #if QT_VERSION < QT_VERSION_CHECK(5,7,0)
 namespace QtPrivate
 {
@@ -36,8 +38,6 @@ Q_DECL_CONSTEXPR typename QtPrivate::QAddConst<T>::Type &qAsConst(T &t) Q_DECL_N
 // prevent rvalue arguments:
 template <typename T>
 void qAsConst(const T &&) Q_DECL_EQ_DELETE;
-#endif
-
 #endif
 
 // compat for Q_FALLTHROUGH
@@ -60,5 +60,23 @@ void qAsConst(const T &&) Q_DECL_EQ_DELETE;
 #        define Q_FALLTHROUGH() (void)0
 #    endif
 #endif
+
+#endif
+
+namespace QtCompat {
+// TODO: Just use QDir::listSeparator once we depend on Qt 5.6
+Q_DECL_CONSTEXPR inline QChar listSeparator() Q_DECL_NOTHROW
+{
+#if QT_VERSION < QT_VERSION_CHECK(5,6,0)
+#ifdef Q_OS_WIN
+    return QLatin1Char(';');
+#else
+    return QLatin1Char(':');
+#endif
+#else
+    return QDir::listSeparator();
+#endif
+}
+}
 
 #endif

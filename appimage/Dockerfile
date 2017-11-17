@@ -5,19 +5,19 @@ RUN cd /tmp && wget http://opensource.wandisco.com/rhel/6/svn-1.9/RPMS/x86_64/su
 
 RUN echo ". /opt/rh/devtoolset-4/enable && chmod +x /opt/rh/python27/enable && . /opt/rh/python27/enable" >> /root/.bashrc
 
-ENV LC_ALL=en_US.UTF-8 LANG=en_us.UTF-8 QTVERSION=5.9.1 QVERSION_SHORT=5.9 LLVM_VERSION=5.0.0 LLVM_ROOT=/opt/llvm/ LD_LIBRARY_PATH=$QTDIR/lib/
+ENV LC_ALL=en_US.UTF-8 LANG=en_us.UTF-8 QTVERSION=5.9.1 QTVERSION_SHORT=5.9 LLVM_VERSION=5.0.0 LLVM_ROOT=/opt/llvm/ LD_LIBRARY_PATH=$QTDIR/lib/
 ENV QTDIR=/usr/local/Qt-${QTVERSION}/
 
 RUN bash -c "ln -sf /opt/rh/devtoolset-4/root/usr/bin/g++ /usr/bin/g++ && ln -sf /opt/rh/devtoolset-4/root/usr/bin/c++ /usr/bin/c++"
 
 # Build Qt5
-RUN bash -c "mkdir -p /qt && cd /qt && wget http://download.qt.io/archive/qt/${QVERSION_SHORT}/${QTVERSION}/single/qt-everywhere-opensource-src-${QTVERSION}.tar.xz && tar xvf qt-everywhere-opensource-src-${QTVERSION}.tar.xz"
+RUN bash -c "mkdir -p /qt && cd /qt && wget http://download.qt.io/archive/qt/${QTVERSION_SHORT}/${QTVERSION}/single/qt-everywhere-opensource-src-${QTVERSION}.tar.xz && tar xvf qt-everywhere-opensource-src-${QTVERSION}.tar.xz"
 RUN bash -c "export MAKEFLAGS=-j$(nproc) && cd /qt/qt-everywhere-opensource-src-${QTVERSION} && ./configure -v -skip qt3d -skip qtgamepad -platform linux-g++ -qt-pcre -qt-xcb -qt-xkbcommon -xkb-config-root /usr/share/X11/xkb -no-pch -nomake tests -nomake examples -confirm-license -opensource && make -j$(nproc) || make -j 1 install; make -j$(nproc) install && rm -Rf /qt"
 
 RUN ln -sf /usr/local/Qt-${QTVERSION}/bin/qmake /usr/bin/qmake-qt5
 
 # Build qtwebkit
-RUN bash -c "mkdir -p /qtwk && cd /qtwk && wget http://download.qt.io/archive/qt/${QVERSION_SHORT}/${QTVERSION}/submodules/qtwebkit-opensource-src-${QTVERSION}.tar.xz && tar xvf qtwebkit-opensource-src-${QTVERSION}.tar.xz"
+RUN bash -c "mkdir -p /qtwk && cd /qtwk && wget http://download.qt.io/archive/qt/${QTVERSION_SHORT}/${QTVERSION}/submodules/qtwebkit-opensource-src-${QTVERSION}.tar.xz && tar xvf qtwebkit-opensource-src-${QTVERSION}.tar.xz"
 RUN bash -c "cd /qtwk/qtwebkit-opensource-src-${QTVERSION} &&  $QTDIR/bin/qmake && make -j$(nproc) || make -j$(nproc) && make -j$(nproc) install && rm -Rf /qtwk"
 
 # Install ninja

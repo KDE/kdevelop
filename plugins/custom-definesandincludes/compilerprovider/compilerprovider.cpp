@@ -23,8 +23,8 @@
 
 #include "compilerprovider.h"
 
-#include <debug.h>
-
+#include "debug.h"
+#include "qtcompat_p.h"
 #include "compilerfactories.h"
 #include "settingsmanager.h"
 
@@ -179,7 +179,7 @@ CompilerPointer CompilerProvider::defaultCompiler() const
         return m_defaultProvider;
 
     auto rt = ICore::self()->runtimeController()->currentRuntime();
-    const auto path = QFile::decodeName(rt->getenv("PATH")).split(QDir::listSeparator());
+    const auto path = QFile::decodeName(rt->getenv("PATH")).split(QtCompat::listSeparator());
 
     for ( const CompilerPointer& compiler : m_compilers ) {
         const bool absolutePath = QDir::isAbsolutePath(compiler->path());
