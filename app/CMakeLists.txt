@@ -44,6 +44,8 @@ target_link_libraries(kdevelop
     KF5::Declarative
     KF5::IconThemes
     KF5::Crash
+
+    Qt5::Quick
 )
 IF(APPLE)
     target_link_libraries(kdevelop "-framework CoreFoundation")
