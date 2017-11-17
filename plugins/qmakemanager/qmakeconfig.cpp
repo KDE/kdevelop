@@ -18,6 +18,8 @@
 
 #include "qmakeconfig.h"
 
+#include "qtcompat_p.h"
+
 #include <QMutex>
 #include <QFileInfo>
 #include <QStandardPaths>
@@ -38,19 +40,6 @@ const char QMakeConfig::INSTALL_PREFIX[] = "Install_Prefix";
 const char QMakeConfig::EXTRA_ARGUMENTS[] = "Extra_Arguments";
 const char QMakeConfig::BUILD_TYPE[] = "Build_Type";
 const char QMakeConfig::ALL_BUILDS[] = "All_Builds";
-
-namespace {
-
-// TODO: Just use QDir::listSeparator once we depend on Qt 5.6
-Q_DECL_CONSTEXPR inline QChar listSeparator() Q_DECL_NOTHROW
-{
-#ifdef Q_OS_WIN
-    return QLatin1Char(';');
-#else
-    return QLatin1Char(':');
-#endif
-}
-}
 
 using namespace KDevelop;
 
@@ -141,7 +130,7 @@ QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
     QStringList paths;
     if (qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS"))) {
         // qt4
-        foreach (const QString& dir, qmakeVars["QMAKE_MKSPECS"].split(listSeparator())) {
+        foreach (const QString& dir, qmakeVars["QMAKE_MKSPECS"].split(QtCompat::listSeparator())) {
             paths << dir + "/default/qmake.conf";
         }
     } else if (!qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS")) && qmakeVars.contains(QStringLiteral("QMAKE_SPEC"))) {
