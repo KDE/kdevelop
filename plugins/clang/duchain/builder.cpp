@@ -946,7 +946,11 @@ template<CXCursorKind CK>
 void Visitor::setDeclData(CXCursor cursor, Declaration *decl, bool setComment) const
 {
     if (setComment)
+#if CINDEX_VERSION_MINOR < 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
+        decl->setComment(QByteArray(clang_getCString(clang_Cursor_getRawCommentText(cursor))));
+#else
         decl->setComment(makeComment(clang_Cursor_getParsedComment(cursor)));
+#endif
     if (CursorKindTraits::isAliasType(CK)) {
         decl->setIsTypeAlias(true);
     }
