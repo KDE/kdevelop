@@ -127,6 +127,7 @@ Identifier makeId(CXCursor cursor)
     return Identifier(ClangString(clang_getCursorSpelling(cursor)).toIndexed());
 }
 
+#if CINDEX_VERSION_MINOR >= 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
 QByteArray makeComment(CXComment comment)
 {
     if (Q_UNLIKELY(jsonTestRun())) {
@@ -143,6 +144,7 @@ QByteArray makeComment(CXComment comment)
 
     return ClangString(clang_FullComment_getAsHTML(comment)).toByteArray();
 }
+#endif
 
 AbstractType* createDelayedType(CXType type)
 {
