@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=kdevelop -p %u
+MimeType=application/x-kdevelop;
+Icon=kdevelop
+Terminal=false
+Name=KDevelop
+GenericName=Integrated Development Environment
+Categories=Qt;KDE;Development;IDE;
+NoDisplay=true

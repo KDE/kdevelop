@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Exec=kdevelop -p %u
-MimeType=application/x-kdevelop;
+Exec=kdevelop
+MimeType=
 Icon=kdevelop
 X-DocPath=kdevelop/index.html
 Terminal=false
