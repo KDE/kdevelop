@@ -34,4 +34,3 @@ set_target_properties(kdevqmakebuilder_interface PROPERTIES
 install(TARGETS kdevqmakebuilder_interface EXPORT KDevelopTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES iqmakebuilder.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevelop/qmake COMPONENT Devel)
-install( FILES data.kdev4 DESTINATION ${KDE_INSTALL_DATADIR}/kdevqmakebuilder )
