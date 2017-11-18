@@ -978,7 +978,7 @@ void TestCodeCompletion::testIncludePathCompletionLocal()
 
     IncludeTester tester(executeIncludePathCompletion(&impl, {0, 10}));
     QVERIFY(tester.names.contains(header.url().toUrl().fileName()));
-    QVERIFY(!tester.names.contains("iostream"));
+    QVERIFY(tester.names.contains("iostream"));
 }
 
 void TestCodeCompletion::testOverloadedFunctions()
