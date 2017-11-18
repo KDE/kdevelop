@@ -92,6 +92,7 @@ public:
     {
         m_view = new QWebView(parent);
         m_view->setContextMenuPolicy(Qt::NoContextMenu);
+        QObject::connect(m_view, &QWebView::linkClicked, parent, &StandardDocumentationView::linkClicked);
     }
 #else
     QWebEngineView* m_view = nullptr;

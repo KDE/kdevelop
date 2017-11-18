@@ -143,26 +143,35 @@ IncludePathProperties IncludePathProperties::parseText(const QString& text, int 
 namespace
 {
 
-QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePathProperties& properties, const Path::List& includePaths )
+QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const IncludePathProperties& properties,
+                                                  const ClangParsingEnvironment::IncludePaths& includePaths)
 {
     QVector<IncludeItem> includeItems;
-    Path::List paths = includePaths;
+    Path::List paths;
 
     if (properties.local) {
-        paths.push_front(Path(url).parent());
+        paths.push_back(Path(url).parent());
+        paths += includePaths.project;
+        paths += includePaths.system;
+    } else {
+        paths = includePaths.system + includePaths.project;
     }
 
-    std::sort(paths.begin(), paths.end());
-    auto last = std::unique(paths.begin(), paths.end());
+    // ensure we don't add duplicate paths
+    QSet<Path> handledPaths; // search paths
+    QSet<QString> foundIncludePaths; // found items
 
     int pathNumber = 0;
-    for (auto it = paths.begin(); it != last; it++ ) {
-        auto searchPath = *it;
+    for (auto searchPath : paths) {
+        if (handledPaths.contains(searchPath)) {
+            continue;
+        }
+        handledPaths.insert(searchPath);
+
         if (!properties.prefixPath.isEmpty()) {
             searchPath.addPath(properties.prefixPath);
         }
 
-        QSet<QString> foundIncludePaths;
         QDirIterator dirIterator(searchPath.toLocalFile());
         while (dirIterator.hasNext()) {
             dirIterator.next();
@@ -266,7 +275,7 @@ IncludePathCompletionContext::IncludePathCompletionContext(const DUContextPointe
         return;
     }
 
-    m_includeItems = includeItemsForUrl(url, properties, properties.local ?  sessionData->environment().includes().project : sessionData->environment().includes().system);
+    m_includeItems = includeItemsForUrl(url, properties, sessionData->environment().includes());
 }
 
 QList< CompletionTreeItemPointer > IncludePathCompletionContext::completionItems(bool& abort, bool)
