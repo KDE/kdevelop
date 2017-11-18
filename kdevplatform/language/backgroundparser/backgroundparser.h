@@ -143,11 +143,15 @@ public Q_SLOTS:
 
     /**
      * Suspends execution of the background parser
+     *
+     * NOTE: Only the Core should call this
      */
     void suspend();
 
     /**
      * Resumes execution of the background parser
+     *
+     * NOTE: Only the Core should call this
      */
     void resume();
 
