@@ -435,14 +435,17 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
         }
     }
 
+    bool isSuspended() const
+    {
+        return m_weaver.state()->stateId() == ThreadWeaver::Suspended ||
+               m_weaver.state()->stateId() == ThreadWeaver::Suspending;
+    }
+
     void suspend()
     {
         qCDebug(LANGUAGE) << "Suspending background parser";
 
-        bool s = m_weaver.state()->stateId() == ThreadWeaver::Suspended ||
-                 m_weaver.state()->stateId() == ThreadWeaver::Suspending;
-
-        if (s) { // Already suspending
+        if (isSuspended()) { // Already suspending
             qCWarning(LANGUAGE) << "Already suspended or suspending";
             return;
         }
@@ -453,10 +456,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     void resume()
     {
-        bool s = m_weaver.state()->stateId() == ThreadWeaver::Suspended ||
-                 m_weaver.state()->stateId() == ThreadWeaver::Suspending;
-
-        if (m_timer.isActive() && !s) { // Not suspending
+        if (m_timer.isActive() && !isSuspended()) { // Not suspended
             return;
         }
 
