@@ -516,19 +516,15 @@ BackgroundParser::BackgroundParser(ILanguageController *languageController)
     connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &BackgroundParser::documentClosed);
     connect(ICore::self(), &ICore::aboutToShutdown, this, &BackgroundParser::aboutToQuit);
 
-    bool connected = QObject::connect(ICore::self()->projectController(),
+    QObject::connect(ICore::self()->projectController(),
                                       &IProjectController::projectAboutToBeOpened,
                                       this, &BackgroundParser::projectAboutToBeOpened);
-    Q_ASSERT(connected);
-    connected = QObject::connect(ICore::self()->projectController(),
+    QObject::connect(ICore::self()->projectController(),
                                  &IProjectController::projectOpened,
                                  this, &BackgroundParser::projectOpened);
-    Q_ASSERT(connected);
-    connected = QObject::connect(ICore::self()->projectController(),
+    QObject::connect(ICore::self()->projectController(),
                                  &IProjectController::projectOpeningAborted,
                                  this, &BackgroundParser::projectOpeningAborted);
-    Q_ASSERT(connected);
-    Q_UNUSED(connected);
 }
 
 void BackgroundParser::aboutToQuit()
