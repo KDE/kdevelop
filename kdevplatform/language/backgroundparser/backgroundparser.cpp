@@ -456,7 +456,10 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
 
     void resume()
     {
+        qCDebug(LANGUAGE) << "Resuming background parser";
+
         if (m_timer.isActive() && !isSuspended()) { // Not suspended
+            qCWarning(LANGUAGE) << "Not suspended";
             return;
         }
 
