@@ -75,6 +75,10 @@ public:
 
     JobPrototype jobForUrl(const IndexedString& url);
 
+    int numJobs() const;
+    int numFinishedJobs() const;
+    int numCreatedJobs() const;
+
 private Q_SLOTS:
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& context);
     void parseJobCreated(KDevelop::ParseJob*);
@@ -104,6 +108,7 @@ private Q_SLOTS:
     void testParseOrdering_noSequentialProcessing();
 
     void testNoDeadlockInJobCreation();
+    void testSuspendResume();
 
     void benchmark();
 

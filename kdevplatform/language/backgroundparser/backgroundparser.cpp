@@ -645,7 +645,7 @@ void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyW
 
 void BackgroundParser::parseDocuments()
 {
-    if (!d->m_loadingProjects.empty()) {
+    if (d->isSuspended() || !d->m_loadingProjects.empty()) {
         startTimer(d->m_delay);
         return;
     }
@@ -914,7 +914,9 @@ void BackgroundParser::documentUrlChanged(IDocument* document)
 }
 
 void BackgroundParser::startTimer(int delay) {
-    d->m_timer.start(delay);
+    if (!d->isSuspended()) {
+        d->m_timer.start(delay);
+    }
 }
 
 void BackgroundParser::projectAboutToBeOpened(IProject* project)

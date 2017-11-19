@@ -163,6 +163,21 @@ void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext
     m_finishedJobs << job.m_url;
 }
 
+int JobPlan::numJobs() const
+{
+    return m_jobs.size();
+}
+
+int JobPlan::numCreatedJobs() const
+{
+    return m_createdJobs.size();
+}
+
+int JobPlan::numFinishedJobs() const
+{
+    return m_finishedJobs.size();
+}
+
 void TestBackgroundparser::initTestCase()
 {
   AutoTestShell::init();
@@ -389,4 +404,37 @@ void TestBackgroundparser::testNoDeadlockInJobCreation()
 
     // should be able to run quickly, if no deadlock occurs
     QVERIFY(m_jobPlan.runJobs(500));
+}
+
+void TestBackgroundparser::testSuspendResume()
+{
+    auto parser = ICore::self()->languageController()->backgroundParser();
+
+    m_jobPlan.clear();
+
+    const auto runUrl = QUrl::fromLocalFile(QStringLiteral("/file.txt"));
+    const auto job = JobPrototype(runUrl, BackgroundParser::BestPriority,
+                                  ParseJob::IgnoresSequentialProcessing, 0);
+    m_jobPlan.addJob(job);
+
+    parser->suspend();
+
+    m_jobPlan.addJobsToParser();
+
+    parser->parseDocuments();
+    QTest::qWait(250);
+
+    QCOMPARE(m_jobPlan.numCreatedJobs(), 0);
+    QCOMPARE(m_jobPlan.numFinishedJobs(), 0);
+
+    parser->resume();
+    QVERIFY(m_jobPlan.runJobs(100));
+
+    // run once again, this time suspend and resume quickly after another
+    m_jobPlan.clear();
+    m_jobPlan.addJob(job);
+
+    parser->suspend();
+    parser->resume();
+    QVERIFY(m_jobPlan.runJobs(100));
 }
