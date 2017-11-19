@@ -219,12 +219,11 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
     QPointer<QMenu> m = new QMenu(this);
 
     m->addSection(i18n("Problem"));
-    auto copyDescriptionAction = new QAction(i18n("&Copy Description"));
-    copyDescriptionAction->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
+    auto copyDescriptionAction = m->addAction(QIcon::fromTheme(QStringLiteral("edit-copy")),
+                                              i18n("&Copy Description"));
     connect(copyDescriptionAction, &QAction::triggered, this, [problem]() {
         QApplication::clipboard()->setText(descriptionFromProblem(problem), QClipboard::Clipboard);
     });
-    m->addAction(copyDescriptionAction);
 
     QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
     if (solution && !solution->actions().isEmpty()) {
