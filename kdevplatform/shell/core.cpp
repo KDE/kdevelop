@@ -162,7 +162,7 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     }
     if( !partController && !(mode & Core::NoUi))
     {
-        partController = new PartController(m_core, uiController.data()->defaultMainWindow());
+        partController = new PartController(m_core, uiController->defaultMainWindow());
     }
 
     if( !projectController )
@@ -226,8 +226,8 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
 
     qCDebug(SHELL) << "Initializing controllers";
 
-    sessionController.data()->initialize( session );
-    if( !sessionController.data()->activeSessionLock() ) {
+    sessionController->initialize( session );
+    if( !sessionController->activeSessionLock() ) {
         return false;
     }
 
@@ -236,23 +236,23 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
     DUChain::initialize();
 
     if (!(mode & Core::NoUi)) {
-        uiController.data()->initialize();
+        uiController->initialize();
     }
-    languageController.data()->initialize();
+    languageController->initialize();
     languageController->backgroundParser()->suspend();
     // eventually resume the background parser once the project controller
     // has been initialized. At that point we know whether there are projects loading
     // which the background parser is handling internally to defer parse jobs
     QObject::connect(projectController.data(), &ProjectController::initialized,
                      m_core, [this]() {
-                         languageController.data()->backgroundParser()->resume();
+                         languageController->backgroundParser()->resume();
                      });
 
     if (partController) {
-        partController.data()->initialize();
+        partController->initialize();
     }
-    projectController.data()->initialize();
-    documentController.data()->initialize();
+    projectController->initialize();
+    documentController->initialize();
 
     /* This is somewhat messy.  We want to load the areas before
         loading the plugins, so that when each plugin is loaded we
@@ -264,29 +264,29 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
         those tool views when loading an area.  */
 
     qCDebug(SHELL) << "Initializing plugin controller (loading session plugins)";
-    pluginController.data()->initialize();
+    pluginController->initialize();
 
     qCDebug(SHELL) << "Initializing working set controller";
     if(!(mode & Core::NoUi))
     {
-        workingSetController.data()->initialize();
+        workingSetController->initialize();
         /* Need to do this after everything else is loaded.  It's too
             hard to restore position of views, and toolbars, and whatever
             that are not created yet.  */
-        uiController.data()->loadAllAreas(KSharedConfig::openConfig());
-        uiController.data()->defaultMainWindow()->show();
+        uiController->loadAllAreas(KSharedConfig::openConfig());
+        uiController->defaultMainWindow()->show();
     }
 
     qCDebug(SHELL) << "Initializing remaining controllers";
-    runController.data()->initialize();
-    sourceFormatterController.data()->initialize();
-    selectionController.data()->initialize();
+    runController->initialize();
+    sourceFormatterController->initialize();
+    selectionController->initialize();
     if (documentationController) {
-        documentationController.data()->initialize();
+        documentationController->initialize();
     }
-    debugController.data()->initialize();
-    testController.data()->initialize();
-    runtimeController.data()->initialize();
+    debugController->initialize();
+    testController->initialize();
+    runtimeController->initialize();
 
     installSignalHandler();
 
@@ -405,34 +405,34 @@ void Core::cleanup()
         d->languageController->backgroundParser()->abortAllJobs();
         d->languageController->backgroundParser()->suspend();
 
-        d->debugController.data()->cleanup();
-        d->selectionController.data()->cleanup();
+        d->debugController->cleanup();
+        d->selectionController->cleanup();
         // Save the layout of the ui here, so run it first
-        d->uiController.data()->cleanup();
+        d->uiController->cleanup();
 
         if (d->workingSetController)
-            d->workingSetController.data()->cleanup();
+            d->workingSetController->cleanup();
 
-        /* Must be called before projectController.data()->cleanup(). */
+        /* Must be called before projectController->cleanup(). */
         // Closes all documents (discards, as already saved if the user wished earlier)
-        d->documentController.data()->cleanup();
-        d->runController.data()->cleanup();
+        d->documentController->cleanup();
+        d->runController->cleanup();
         if (d->partController) {
             d->partController->cleanup();
         }
-        d->projectController.data()->cleanup();
-        d->sourceFormatterController.data()->cleanup();
+        d->projectController->cleanup();
+        d->sourceFormatterController->cleanup();
 
         // before unloading language plugins, we need to make sure all parse jobs are done
         d->languageController->backgroundParser()->waitForIdle();
-        d->pluginController.data()->cleanup();
+        d->pluginController->cleanup();
 
-        d->sessionController.data()->cleanup();
+        d->sessionController->cleanup();
 
-        d->testController.data()->cleanup();
+        d->testController->cleanup();
 
         //Disable the functionality of the language controller
-        d->languageController.data()->cleanup();
+        d->languageController->cleanup();
 
         DUChain::self()->shutdown();
     }
