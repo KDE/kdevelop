@@ -70,6 +70,12 @@ inline QDebug &operator<<(QDebug debug, const CMakeTarget& target) {
     debug << target.type << ':' << target.name; return debug.maybeSpace();
 }
 
+inline bool operator==(const CMakeTarget& lhs, const CMakeTarget& rhs)
+{
+    return lhs.type == rhs.type
+        && lhs.name == rhs.name
+        && lhs.artifacts == rhs.artifacts;
+}
 
 struct Test
 {
