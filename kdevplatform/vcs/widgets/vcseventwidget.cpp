@@ -29,8 +29,10 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QDesktopServices>
 
 #include <KLocalizedString>
+#include <KTextToHTML>
 
 #include <interfaces/iplugin.h>
 
@@ -113,7 +115,10 @@ void VcsEventWidgetPrivate::eventViewClicked( const QModelIndex &index )
     {
         m_ui->itemEventView->setEnabled(true);
         m_ui->message->setEnabled(true);
-        m_ui->message->setPlainText( ev.message() );
+        const KTextToHTML::Options markupOptions = KTextToHTML::PreserveSpaces;
+        const QString markupMessage =
+            QLatin1String("<tt>") + KTextToHTML::convertToHtml(ev.message(), markupOptions) + QLatin1String("</tt>");
+        m_ui->message->setHtml(markupMessage);
         m_detailModel->addItemEvents( ev.items() );
     }else
     {
@@ -221,6 +226,9 @@ VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelo
              this, [&] (const QModelIndex& start, const QModelIndex& end) { d->currentRowChanged(start, end); });
     connect( d->m_ui->eventView, &QTreeView::customContextMenuRequested,
              this, [&] (const QPoint& point) { d->eventViewCustomContextMenuRequested(point); } );
+
+    connect(d->m_ui->message, &QTextBrowser::anchorClicked,
+            this, [&] (const QUrl& url) { QDesktopServices::openUrl(url); });
 }
 
 VcsEventWidget::~VcsEventWidget()

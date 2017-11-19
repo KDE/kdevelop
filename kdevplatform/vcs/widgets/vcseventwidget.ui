@@ -103,7 +103,7 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="acceptRichText">
+       <property name="openLinks">
         <bool>false</bool>
        </property>
       </widget>
