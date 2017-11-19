@@ -134,6 +134,11 @@ JobPrototype JobPlan::jobForUrl(const IndexedString& url)
 
 void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext& /*context*/)
 {
+    if (!ICore::self() || ICore::self()->shuttingDown()) {
+        // core was shutdown before we get to handle the delayed signal, cf. testShutdownWithRunningJobs
+        return;
+    }
+
     qDebug() << "update ready on " << url.toUrl();
 
     const JobPrototype job = jobForUrl(url);
