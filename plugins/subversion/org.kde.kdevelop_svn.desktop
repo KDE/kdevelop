@@ -6,6 +6,7 @@ Icon=kdevelop
 Terminal=false
 Name=KDevelop (Fetch Subversion Project)
 Name[ca]=KDevelop (obtenir un projecte de Subversion)
+Name[nl]=KDevelop (Subversion-project ophalen)
 Name[pt]=KDevelop (Obter um Projecto do Subversion)
 Name[uk]=KDevelop (отримати проект Subversion)
 Name[x-test]=xxKDevelop (Fetch Subversion Project)xx

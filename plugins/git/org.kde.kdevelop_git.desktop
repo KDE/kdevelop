@@ -6,6 +6,7 @@ Icon=kdevelop
 Terminal=false
 Name=KDevelop (Fetch git Project)
 Name[ca]=KDevelop (obtenir un projecte de Git)
+Name[nl]=KDevelop (git-project ophalen)
 Name[pt]=KDevelop (Obter um Projecto do Git)
 Name[uk]=KDevelop (отримати проект git)
 Name[x-test]=xxKDevelop (Fetch git Project)xx

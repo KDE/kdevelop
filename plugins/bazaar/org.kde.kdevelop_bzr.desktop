@@ -6,6 +6,7 @@ Icon=kdevelop
 Terminal=false
 Name=KDevelop (Fetch Bazaar Project)
 Name[ca]=KDevelop (obtenir un projecte de Bazaar)
+Name[nl]=KDevelop (Bazaar-project ophalen)
 Name[pt]=KDevelop (Obter um Projecto do Bazaar)
 Name[uk]=KDevelop (отримати проект Bazaar)
 Name[x-test]=xxKDevelop (Fetch Bazaar Project)xx
