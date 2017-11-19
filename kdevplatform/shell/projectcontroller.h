@@ -150,6 +150,9 @@ protected:
 
     virtual void initialize();
 
+Q_SIGNALS:
+    void initialized();
+
 private:
     //FIXME Do not load all of this just for the project being opened...
     //void legacyLoading();

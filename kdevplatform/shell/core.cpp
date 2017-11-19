@@ -239,6 +239,15 @@ bool CorePrivate::initialize(Core::Setup mode, const QString& session )
         uiController.data()->initialize();
     }
     languageController.data()->initialize();
+    languageController->backgroundParser()->suspend();
+    // eventually resume the background parser once the project controller
+    // has been initialized. At that point we know whether there are projects loading
+    // which the background parser is handling internally to defer parse jobs
+    QObject::connect(projectController.data(), &ProjectController::initialized,
+                     m_core, [this]() {
+                         languageController.data()->backgroundParser()->resume();
+                     });
+
     if (partController) {
         partController.data()->initialize();
     }

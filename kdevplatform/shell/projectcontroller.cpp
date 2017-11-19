@@ -35,6 +35,7 @@ Boston, MA 02110-1301, USA.
 #include <QSet>
 #include <QTemporaryFile>
 #include <QVBoxLayout>
+#include <QTimer>
 
 #include <KActionCollection>
 #include <KConfigGroup>
@@ -648,9 +649,7 @@ void ProjectController::initialize()
 
     KSharedConfigPtr config = Core::self()->activeSession()->config();
     KConfigGroup group = config->group( "General Options" );
-    QList<QUrl> openProjects = group.readEntry( "Open Projects", QList<QUrl>() );
-
-    QMetaObject::invokeMethod(this, "openProjects", Qt::QueuedConnection, Q_ARG(QList<QUrl>, openProjects));
+    const auto projects = group.readEntry( "Open Projects", QList<QUrl>() );
 
     connect( Core::self()->selectionController(), &ISelectionController::selectionChanged,
              this, [&] () { d->updateActionStates(); } );
@@ -658,6 +657,11 @@ void ProjectController::initialize()
             this, [&] () { d->updateActionStates(); });
     connect(this, &ProjectController::projectClosing,
             this, [&] () { d->updateActionStates(); });
+
+    QTimer::singleShot(0, this, [this, projects](){
+        openProjects(projects);
+        emit initialized();
+    });
 }
 
 void ProjectController::openProjects(const QList<QUrl>& projects)

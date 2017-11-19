@@ -172,6 +172,10 @@ void TestProjectController::initTestCase()
     m_scratchDir = QDir(QDir::tempPath());
     m_scratchDir.mkdir(QStringLiteral("prjctrltest"));
     m_scratchDir.cd(QStringLiteral("prjctrltest"));
+
+    QSignalSpy projectControllerInitializedSpy(m_core->projectControllerInternal(),
+                                               &ProjectController::initialized);
+    QVERIFY(projectControllerInitializedSpy.wait(100));
 }
 
 void TestProjectController::cleanupTestCase()
