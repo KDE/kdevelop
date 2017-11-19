@@ -84,7 +84,7 @@ void JobPlan::parseJobCreated(ParseJob* job)
     m_createdJobs.append(testJob->document());
 }
 
-bool JobPlan::runJobs(int timeoutMS)
+void JobPlan::addJobsToParser()
 {
     // add parse jobs
     foreach(const JobPrototype& job, m_jobs) {
@@ -92,6 +92,11 @@ bool JobPlan::runJobs(int timeoutMS)
             job.m_url, TopDUContext::Empty, job.m_priority, this, job.m_flags
         );
     }
+}
+
+bool JobPlan::runJobs(int timeoutMS)
+{
+    addJobsToParser();
 
     ICore::self()->languageController()->backgroundParser()->parseDocuments();
 
@@ -196,12 +201,7 @@ void TestBackgroundparser::testShutdownWithRunningJobs()
     m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_fgt_hp.txt")),
                                   -500, ParseJob::IgnoresSequentialProcessing, 1000));
 
-    // add parse jobs
-    foreach(const JobPrototype& job, m_jobPlan.m_jobs) {
-        ICore::self()->languageController()->backgroundParser()->addDocument(
-            job.m_url, TopDUContext::Empty, job.m_priority, this, job.m_flags
-        );
-    }
+    m_jobPlan.addJobsToParser();
 
     ICore::self()->languageController()->backgroundParser()->parseDocuments();
     QTest::qWait(50);
