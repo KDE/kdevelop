@@ -178,7 +178,7 @@ VcsRevision VcsAnnotationModel::revisionForLine( int line ) const
         return VcsRevision();
     }
 
-    Q_ASSERT(line > 0 && d->m_annotation.containsLine( line ));
+    Q_ASSERT(line >= 0 && d->m_annotation.containsLine(line));
     return d->m_annotation.line( line ).revision();
 }
 

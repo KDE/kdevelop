@@ -108,11 +108,18 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
                 const auto target = targetObject.toObject();
                 const KDevelop::Path targetDir = rt->pathInHost(KDevelop::Path(target.value(QStringLiteral("sourceDirectory")).toString()));
 
-                data.targets[targetDir] += CMakeTarget {
+                CMakeTarget cmakeTarget{
                     typeToEnum(target),
                     target.value(QStringLiteral("name")).toString(),
                     kTransform<KDevelop::Path::List>(target[QLatin1String("artifacts")].toArray(), [](const QJsonValue& val) { return KDevelop::Path(val.toString()); })
                 };
+
+                // ensure we don't add the same target multiple times, for different projects
+                // cf.: https://bugs.kde.org/show_bug.cgi?id=387095
+                auto& dirTargets = data.targets[targetDir];
+                if (dirTargets.contains(cmakeTarget))
+                    continue;
+                dirTargets += cmakeTarget;
 
                 const auto fileGroups = target.value(QStringLiteral("fileGroups")).toArray();
                 for (const auto &fileGroupValue: fileGroups) {
