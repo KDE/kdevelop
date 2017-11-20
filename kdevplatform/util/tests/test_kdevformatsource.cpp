@@ -23,12 +23,21 @@
 
 #include <QTest>
 #include <QDebug>
-#include <QStandardPaths>
 #include <QDir>
+#include <QStandardPaths>
+#include <QTemporaryDir>
 
 QTEST_MAIN(KDevelop::TestKdevFormatSource)
 
 using namespace KDevelop;
+
+TestKdevFormatSource::TestKdevFormatSource()
+{
+}
+
+TestKdevFormatSource::~TestKdevFormatSource()
+{
+}
 
 void TestKdevFormatSource::testNotFound_data()
 {
@@ -128,21 +137,14 @@ bool TestKdevFormatSource::initTest(const QStringList& formatFileData)
     QTest::addColumn<bool>("isApplied");
     QTest::addColumn<QStringList>("lines");
 
-    QString workPath = QStandardPaths::standardLocations(QStandardPaths::TempLocation).first();
-    workPath += QLatin1String("/test_kdevformatsource/");
+    m_temporaryDir.reset(new QTemporaryDir);
+    const QString workPath = m_temporaryDir->path();
+    qDebug() << "Using temporary dir:" << workPath;
 
-    if (QDir(workPath).exists() && !QDir(workPath).removeRecursively()) {
-        qDebug() << "unable to remove existing directory" << workPath;
-        return false;
-    }
-
-    if (!mkPath(workPath))
+    if (!mkPath(workPath + "/src1"))
         return false;
 
-    if (!mkPath(workPath + "src1"))
-        return false;
-
-    if (!mkPath(workPath + "src2"))
+    if (!mkPath(workPath + "/src2"))
         return false;
 
     if (!QDir::setCurrent(workPath)) {
@@ -152,14 +154,14 @@ bool TestKdevFormatSource::initTest(const QStringList& formatFileData)
 
     m_sources.resize(3);
 
-    m_sources[0].path = workPath + "src1/source_1.cpp";
+    m_sources[0].path = workPath + "/src1/source_1.cpp";
     m_sources[0].lines = QStringList({
         QStringLiteral("void foo(int x) {"),
         QStringLiteral("  printf(\"squared x = %d\\n\", x * x);"),
         QStringLiteral("}")
     });
 
-    m_sources[1].path = workPath + "src2/source_2.cpp";
+    m_sources[1].path = workPath + "/src2/source_2.cpp";
     m_sources[1].lines = QStringList({
         QStringLiteral("void bar(double x) {"),
         QStringLiteral("  x = sqrt(x);"),
@@ -167,7 +169,7 @@ bool TestKdevFormatSource::initTest(const QStringList& formatFileData)
         QStringLiteral("}")
     });
 
-    m_sources[2].path = workPath + "source_3.cpp";
+    m_sources[2].path = workPath + "/source_3.cpp";
     m_sources[2].lines = QStringList({
         QStringLiteral("void baz(double x, double y) {"),
         QStringLiteral("  double z = pow(x, y);"),
@@ -232,6 +234,7 @@ bool TestKdevFormatSource::writeLines(const QString& path, const QStringList& li
     for (const QString& line : lines) {
         outStream << line << "\n";
     }
+    outStream.flush();
     outFile.close();
 
     return true;

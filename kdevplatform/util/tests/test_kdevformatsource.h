@@ -19,7 +19,10 @@
 #pragma once
 
 #include <QObject>
+#include <QScopedPointer>
 #include <QVector>
+
+class QTemporaryDir;
 
 namespace KDevelop
 {
@@ -30,8 +33,13 @@ struct Source
     QStringList lines;
 };
 
-class TestKdevFormatSource: public QObject {
+class TestKdevFormatSource : public QObject
+{
     Q_OBJECT
+
+public:
+    TestKdevFormatSource();
+    ~TestKdevFormatSource() override;
 
 private Q_SLOTS:
     void testNotFound();
@@ -57,6 +65,7 @@ private:
     bool writeLines(const QString& path, const QStringList& lines) const;
     bool readLines(const QString& path, QStringList& lines) const;
 
+    QScopedPointer<QTemporaryDir> m_temporaryDir;
     QVector<Source> m_sources;
 };
 
