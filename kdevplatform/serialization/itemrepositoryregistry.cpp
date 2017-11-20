@@ -74,7 +74,7 @@ bool shouldClear(const QString& path)
   }
 
   if (!dir.exists(QStringLiteral("version_%1").arg(staticItemRepositoryVersion()))) {
-    qCWarning(SERIALIZATION) << "version-hint not found, seems to be an old version";
+    qCWarning(SERIALIZATION) << "version mismatch or no version hint; expected version:" << staticItemRepositoryVersion();
     return true;
   }
 
