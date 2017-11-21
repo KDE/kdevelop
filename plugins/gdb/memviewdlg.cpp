@@ -101,7 +101,6 @@ MemoryView::MemoryView(QWidget* parent)
     m_debuggerState(0)
 {
     setWindowTitle(i18n("Memory view"));
-    emit captionChanged(windowTitle());
 
     initWidget();
 

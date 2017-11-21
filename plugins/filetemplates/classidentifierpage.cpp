@@ -59,8 +59,6 @@ ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
             d->classid->keditlistwidget->lineEdit(),
             static_cast<void(QWidget::*)()>(&QWidget::setFocus));
 #endif
-
-    emit isValid(false);
 }
 
 ClassIdentifierPage::~ClassIdentifierPage()
