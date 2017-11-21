@@ -274,7 +274,7 @@ void TestPath::testPath()
     QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.isLocalFile());
     QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.remotePrefix().isEmpty());
 
-    if (url.path() == QLatin1Char('/')) {
+    if (url.path() == QLatin1String("/")) {
         url.setPath("/test/foo/bar");
     } else {
         url.setPath(url.path() + "/test/foo/bar");
