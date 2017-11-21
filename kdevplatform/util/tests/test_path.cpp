@@ -24,9 +24,6 @@
 
 #include <util/path.h>
 
-#include <tests/autotestshell.h>
-#include <tests/testcore.h>
-
 #include <KIO/Global>
 
 #include <QTest>
@@ -109,14 +106,10 @@ void runBenchmark()
 
 void TestPath::initTestCase()
 {
-    // TODO: is this really needed? It doesn't seem like any kdevelop shell is needed
-    AutoTestShell::init();
-    TestCore::initialize(Core::NoUi);
 }
 
 void TestPath::cleanupTestCase()
 {
-    TestCore::shutdown();
 }
 
 void TestPath::bench_qurl()
@@ -281,7 +274,11 @@ void TestPath::testPath()
     QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.isLocalFile());
     QCOMPARE(optUrl.isRemote(), optUrl.isValid() && !optUrl.remotePrefix().isEmpty());
 
-    url.setPath(url.path() + "/test/foo/bar");
+    if (url.path() == QLatin1Char('/')) {
+        url.setPath("/test/foo/bar");
+    } else {
+        url.setPath(url.path() + "/test/foo/bar");
+    }
     if (url.scheme().isEmpty()) {
         url.setScheme(QStringLiteral("file"));
     }
@@ -588,10 +585,14 @@ void TestPath::testHasParent_data()
     QTest::addColumn<bool>("hasParent");
 
     QTest::newRow("empty") << QString() << false;
+#ifdef Q_OS_WIN
+    QTest::newRow("\\") << QStringLiteral("\\") << true; // true b/c parent could be e.g. 'C:'
+#else
     QTest::newRow("/") << QStringLiteral("/") << false;
     QTest::newRow("/foo") << QStringLiteral("/foo") << true;
     QTest::newRow("/foo/bar") << QStringLiteral("/foo/bar") << true;
     QTest::newRow("//foo/bar") << QStringLiteral("//foo/bar") << true;
+#endif
     QTest::newRow("http://foo.bar") << QStringLiteral("http://foo.bar") << false;
     QTest::newRow("http://foo.bar/") << QStringLiteral("http://foo.bar/") << false;
     QTest::newRow("http://foo.bar/asdf") << QStringLiteral("http://foo.bar/asdf") << true;
