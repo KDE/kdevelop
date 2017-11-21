@@ -24,9 +24,6 @@
 
 #include <util/path.h>
 
-#include <tests/autotestshell.h>
-#include <tests/testcore.h>
-
 #include <KIO/Global>
 
 #include <QTest>
@@ -109,14 +106,10 @@ void runBenchmark()
 
 void TestPath::initTestCase()
 {
-    // TODO: is this really needed? It doesn't seem like any kdevelop shell is needed
-    AutoTestShell::init();
-    TestCore::initialize(Core::NoUi);
 }
 
 void TestPath::cleanupTestCase()
 {
-    TestCore::shutdown();
 }
 
 void TestPath::bench_qurl()
