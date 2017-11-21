@@ -351,7 +351,7 @@ void KDevDocumentView::documentUrlChanged( KDevelop::IDocument* document )
 void KDevDocumentView::drawBranches(QPainter* painter, const QRect& rect, const QModelIndex& index) const
 {
     if (WidgetColorizer::colorizeByProject()) {
-        const auto url = index.data(KDevDocumentItem::UrlRole).value<QUrl>();
+        const auto url = index.data(KDevDocumentItem::UrlRole).toUrl();
         const auto project = ICore::self()->projectController()->findProjectForUrl(url);
         if (project) {
             const QColor color = WidgetColorizer::colorForId(qHash(project->path()), palette(), true);

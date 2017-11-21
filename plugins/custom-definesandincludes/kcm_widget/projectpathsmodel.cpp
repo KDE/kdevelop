@@ -116,7 +116,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         pathConfig.path = sanitizePath( value.toString(), true );
         break;
     case FullUrlDataRole:
-        pathConfig.path = sanitizeUrl( value.value<QUrl>() );
+        pathConfig.path = sanitizeUrl(value.toUrl());
         break;
     case CompilerDataRole:
         pathConfig.compiler = value.value<CompilerPointer>();

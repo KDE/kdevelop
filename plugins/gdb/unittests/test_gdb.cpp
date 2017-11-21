@@ -786,15 +786,15 @@ void GdbTest::testShowStepInSource()
     {
         QCOMPARE(showStepInSourceSpy.count(), 3);
         QList<QVariant> arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<QUrl>(), QUrl::fromLocalFile(debugeeFileName));
+        QCOMPARE(arguments.first().toUrl(), QUrl::fromLocalFile(debugeeFileName));
         QCOMPARE(arguments.at(1).toInt(), 29);
 
         arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<QUrl>(), QUrl::fromLocalFile(debugeeFileName));
+        QCOMPARE(arguments.first().toUrl(), QUrl::fromLocalFile(debugeeFileName));
         QCOMPARE(arguments.at(1).toInt(), 22);
 
         arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<QUrl>(), QUrl::fromLocalFile(debugeeFileName));
+        QCOMPARE(arguments.first().toUrl(), QUrl::fromLocalFile(debugeeFileName));
         QCOMPARE(arguments.at(1).toInt(), 23);
     }
 }
