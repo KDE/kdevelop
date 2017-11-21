@@ -582,8 +582,6 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex) {
       qCWarning(LANGUAGE) << "Top-context file is empty" << file.fileName();
       return nullptr;
     }
-    QVector<ItemDataInfo> contextDataOffsets;
-    QVector<ItemDataInfo> declarationDataOffsets;
 
     uint readValue;
     file.read((char*)&readValue, sizeof(uint));

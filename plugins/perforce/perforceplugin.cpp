@@ -555,7 +555,6 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
 {
     QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
     QVariantList statuses;
-    QList<QUrl> processedFiles;
     static const QString ACTION_STR(QStringLiteral("... action "));
     static const QString CLIENT_FILE_STR(QStringLiteral("... clientFile "));
 
@@ -646,7 +645,6 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
     QStringList lines = job->output().split('\n');
 
     size_t lineNumber(0);
-    QMap<QString, VcsAnnotationLine> definedRevisions;
     QMap<qlonglong, VcsEvent>::iterator currentEvent;
     bool convertToIntOk(false);
     int globalRevisionInt(0);

@@ -85,7 +85,6 @@ Manager::Manager(QCommandLineParser* args) : m_total(0), m_args(args), m_allFile
 
 void Manager::init()
 {
-    QList<QUrl> includes;
     if(m_args->positionalArguments().isEmpty()) {
         std::cerr << "Need file or directory to duchainify" << std::endl;
         QCoreApplication::exit(1);

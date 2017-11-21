@@ -154,7 +154,6 @@ KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path)
     const QString destPath = QStringLiteral("/tmp/kdevelop-test-app.flatpak");
     const QString replicatePath = QStringLiteral("/tmp/replicate.sh");
     const QString localReplicatePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("kdevflatpak/replicate.sh"));
-    const QString process;
 
     const QList<KJob*> jobs = exportBundle(path) << QList<KJob*> {
         createExecuteJob({ "scp", path, host+QLatin1Char(':')+destPath}, i18n("Transferring flatpak to %1", host)),

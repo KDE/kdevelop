@@ -75,7 +75,6 @@ ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic)
         CXSourceRange range;
         const QString replacementText = ClangString(clang_getDiagnosticFixIt(diagnostic, i, &range)).toString();
 
-        auto location = ClangString(clang_formatDiagnostic(diagnostic, CXDiagnostic_DisplaySourceLocation)).toString();
         const auto docRange = ClangRange(range).toDocumentRange();
         auto doc = KDevelop::ICore::self()->documentController()->documentForUrl(docRange.document.toUrl());
         const QString original = doc ? doc->text(docRange) : QString{};

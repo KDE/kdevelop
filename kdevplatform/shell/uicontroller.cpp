@@ -614,8 +614,6 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
     if (wc > mainWindows().size())
         wc = mainWindows().size();
 
-    QList<Sublime::Area*> changedAreas;
-
     /* Offer all tool views to the default areas.  */
     foreach (Sublime::Area *area, defaultAreas())
     {

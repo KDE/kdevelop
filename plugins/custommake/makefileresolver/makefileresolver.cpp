@@ -427,8 +427,6 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   if (maxDepth < 0)
     return PathResolutionResult(false);
 
-  QString processStdout;
-
   QString fullOutput;
   executeCommand(source.getCommand(file, workingDirectory, makeParameters), workingDirectory, fullOutput);
 

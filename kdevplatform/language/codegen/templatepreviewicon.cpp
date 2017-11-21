@@ -84,7 +84,6 @@ QPixmap TemplatePreviewIcon::pixmap() const
         if (templateArchive->open(QIODevice::ReadOnly)) {
             const KArchiveFile* iconFile = templateArchive->directory()->file(d->iconName);
             if (iconFile) {
-                const auto data = iconFile->data();
                 QPixmap pixmap;
                 const bool loadSuccess = pixmap.loadFromData(iconFile->data());
                 if (loadSuccess) {
