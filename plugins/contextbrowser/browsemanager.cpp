@@ -198,7 +198,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
             // user wants to trigger an action in the code browser
             const int index = keyEvent->key() - Qt::Key_1;
             emit invokeAction(index);
-            stopDelayedBrowsing();
+            emit stopDelayedBrowsing();
             return true;
         }
     }

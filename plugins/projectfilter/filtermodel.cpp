@@ -191,7 +191,7 @@ bool FilterModel::setData(const QModelIndex& index, const QVariant& value, int r
     } else if (column == Inclusive) {
         filter.type = static_cast<Filter::Type>(value.toInt());
     }
-    dataChanged(index, index);
+    emit dataChanged(index, index);
     return true;
 }
 

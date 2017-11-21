@@ -686,7 +686,7 @@ void Container::contextMenu( const QPoint& pos )
             }
             // finally close other tabs
             foreach( QWidget* tab, otherTabs ) {
-                requestClose(tab);
+                emit requestClose(tab);
             }
         } else if ( triggered == closeAllTabsAction ) {
             // activate last tab
@@ -694,7 +694,7 @@ void Container::contextMenu( const QPoint& pos )
 
             // close all
             for ( int i = 0; i < count(); ++i ) {
-                requestClose(widget(i));
+                emit requestClose(widget(i));
             }
         } else if( triggered == copyPathAction ) {
             auto view = viewForWidget( widget( currentTab ) );
