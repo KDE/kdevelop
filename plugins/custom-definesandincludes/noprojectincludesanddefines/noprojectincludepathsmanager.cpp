@@ -48,6 +48,7 @@ bool removeSettings(const QString& storageDirectory)
 QStringList pathListToStringList(const Path::List& paths)
 {
     QStringList sl;
+    sl.reserve(paths.size());
     for (const auto& p : paths) {
         sl << p.path();
     }

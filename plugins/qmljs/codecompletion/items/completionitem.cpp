@@ -103,8 +103,9 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
             case CodeCompletionModel::Arguments:
             {
                 QStringList args;
-
-                for (auto arg : funcDecl->internalContext()->localDeclarations()) {
+                const auto localDeclarations = funcDecl->internalContext()->localDeclarations();
+                args.reserve(localDeclarations.size());
+                for (auto* arg : localDeclarations) {
                     args.append(arg->toString());
                 }
 

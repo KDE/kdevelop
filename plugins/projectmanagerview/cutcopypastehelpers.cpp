@@ -231,6 +231,7 @@ QVector<TaskInfo> copyMoveItems(const Path::List& paths, ProjectBaseItem* destIt
         const auto& itemsList = cl.itemsPerProject[srcProject];
 
         Path::List pathsList;
+        pathsList.reserve(itemsList.size());
         for (KDevelop::ProjectBaseItem* item : itemsList) {
             pathsList.append(item->path());
         }
@@ -272,6 +273,7 @@ QVector<TaskInfo> copyMoveItems(const Path::List& paths, ProjectBaseItem* destIt
         if (operation == Operation::CUT) {
             if (alien_copy_ok) {
                 QList<QUrl> urlsToDelete;
+                urlsToDelete.reserve(cl.alienSrcPaths.size());
                 for (const Path& path : cl.alienSrcPaths) {
                     urlsToDelete.append(path.toUrl());
                 }

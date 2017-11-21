@@ -254,6 +254,7 @@ void TestView::runSelectedTests()
         //if there's no selection we'll run all of them (or only the filtered)
         //in case there's a filter.
         const int rc = m_filter->rowCount();
+        indexes.reserve(rc);
         for(int i=0; i<rc; ++i) {
             indexes << m_filter->index(i, 0);
         }

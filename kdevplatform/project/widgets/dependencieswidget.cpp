@@ -170,9 +170,10 @@ void DependenciesWidget::setDependencies(const QVariantList &deps)
 
 QVariantList DependenciesWidget::dependencies() const
 {
+    const int dependenciesCount = m_ui->dependencies->count();
     QVariantList deps;
-    for( int i = 0; i < m_ui->dependencies->count(); i++ )
-    {
+    deps.reserve(dependenciesCount);
+    for (int i = 0; i < dependenciesCount; ++i) {
         deps << m_ui->dependencies->item( i )->data( Qt::UserRole );
     }
     return deps;

@@ -124,7 +124,9 @@ RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(MIDebugSession* deb
     : IRegisterController(debugSession, parent), m_registerNamesInitialized(false)
 {
     if (m_registerNames.isEmpty()) {
-        for (int i = 0; i < static_cast<int>(LAST_REGISTER); i++) {
+        const int registerCount = static_cast<int>(LAST_REGISTER);
+        m_registerNames.reserve(registerCount);
+        for (int i = 0; i < registerCount; ++i) {
             m_registerNames.append(QStringList());
         }
         initRegisterNames();

@@ -67,9 +67,11 @@ ClassMembersPage::~ClassMembersPage()
 void ClassMembersPage::setMembers(const VariableDescriptionList& members)
 {
     QStringList memberItems;
+    memberItems.reserve(members.size());
     foreach (const VariableDescription& variable, members)
     {
         QStringList items;
+        items.reserve(3);
         if (!variable.access.isEmpty())
         {
             items << variable.access;

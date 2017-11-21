@@ -324,6 +324,7 @@ bool ProjectBuildSetModel::removeRows( int row, int count, const QModelIndex& pa
         return false;
 
     QList<int> itemsToRemove;
+    itemsToRemove.reserve(count);
     for( int i = row; i < row+count; i++ )
     {
         itemsToRemove.append( i );

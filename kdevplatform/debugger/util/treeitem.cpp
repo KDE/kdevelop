@@ -187,9 +187,11 @@ public:
     EllipsisItem(TreeModel *model, TreeItem *parent)
     : TreeItem(model, parent)
     {
+        const int dataCount = model->columnCount(QModelIndex());
         QVector<QVariant> data;
+        data.reserve(dataCount);
         data.push_back(QVariant(QStringLiteral("...")));
-        for (int i = 1; i < model->columnCount(QModelIndex()); ++i)
+        for (int i = 1; i < dataCount; ++i)
             data.push_back(QString());
         setData(data);
     }

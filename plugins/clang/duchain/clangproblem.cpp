@@ -71,6 +71,7 @@ ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic)
 {
     ClangFixits fixits;
     auto numFixits = clang_getDiagnosticNumFixIts(diagnostic);
+    fixits.reserve(numFixits);
     for (uint i = 0; i < numFixits; ++i) {
         CXSourceRange range;
         const QString replacementText = ClangString(clang_getDiagnosticFixIt(diagnostic, i, &range)).toString();
@@ -151,6 +152,7 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
     QVector<IProblem::Ptr> diagnostics;
     auto childDiagnostics = clang_getChildDiagnostics(diagnostic);
     auto numChildDiagnostics = clang_getNumDiagnosticsInSet(childDiagnostics);
+    diagnostics.reserve(numChildDiagnostics);
     for (uint j = 0; j < numChildDiagnostics; ++j) {
         auto childDiagnostic = clang_getDiagnosticInSet(childDiagnostics, j);
         ClangProblem::Ptr problem(new ClangProblem(childDiagnostic, unit));

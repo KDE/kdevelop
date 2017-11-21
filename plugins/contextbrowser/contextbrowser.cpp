@@ -1275,6 +1275,7 @@ inline QDebug operator<<(QDebug debug, const ContextBrowserPlugin::HistoryEntry 
 
 void ContextBrowserPlugin::nextMenuAboutToShow() {
     QList<int> indices;
+    indices.reserve(m_history.size()-m_nextHistoryIndex);
     for(int a = m_nextHistoryIndex; a < m_history.size(); ++a) {
         indices << a;
     }
@@ -1283,6 +1284,7 @@ void ContextBrowserPlugin::nextMenuAboutToShow() {
 
 void ContextBrowserPlugin::previousMenuAboutToShow() {
     QList<int> indices;
+    indices.reserve(m_nextHistoryIndex-1);
     for(int a = m_nextHistoryIndex-2; a >= 0; --a) {
         indices << a;
     }

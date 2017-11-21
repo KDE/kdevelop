@@ -129,6 +129,7 @@ SourceFormatterStyle::MimeList SourceFormatterStyle::mimeTypes() const
 QVariant SourceFormatterStyle::mimeTypesVariant() const
 {
 	QStringList result;
+	result.reserve(m_mimeTypes.size());
 	for ( const auto& item: m_mimeTypes ) {
 		result << item.mimeType + QLatin1Char('|') + item.highlightMode;
 	}

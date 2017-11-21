@@ -823,6 +823,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         unsaved.Contents = content.constData();
         unsaved.Length = content.size();
 
+        allUnsaved.reserve(otherUnsavedFiles.size());
         for ( const auto& f : otherUnsavedFiles ) {
             allUnsaved.append(f.toClangApi());
         }
@@ -1234,6 +1235,7 @@ void ClangCodeCompletionContext::addOverwritableItems()
     QList<CompletionTreeItemPointer> overridesAbstract;
     for (const auto& info : overrideList) {
         QStringList params;
+        params.reserve(info.params.size());
         for (const auto& param : info.params) {
             params << param.type + QLatin1Char(' ') + param.id;
         }

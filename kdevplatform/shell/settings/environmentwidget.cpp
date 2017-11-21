@@ -225,6 +225,7 @@ void EnvironmentWidget::removeSelectedVariables()
     }
 
     QStringList variables;
+    variables.reserve(selectedRows.size());
     for (const auto& idx : selectedRows) {
         const QString variable = idx.data(EnvironmentProfileModel::VariableRole).toString();
         variables << variable;

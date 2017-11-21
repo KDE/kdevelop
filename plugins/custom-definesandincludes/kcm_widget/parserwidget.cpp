@@ -153,7 +153,9 @@ void ParserWidget::setParserArguments(const ParserArguments& arguments)
 {
     auto setArguments = [](QComboBox* languageStandards, QLineEdit* parserOptions, const QString& arguments) {
         QStringList standards;
-        for (int i = 1; i < languageStandards->count(); i++) {
+        const int languageStandardsCount = languageStandards->count();
+        standards.reserve(languageStandardsCount-1);
+        for (int i = 1; i < languageStandardsCount; ++i) {
             standards << languageStandards->itemText(i);
         }
 

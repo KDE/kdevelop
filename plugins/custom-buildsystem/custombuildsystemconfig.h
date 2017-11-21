@@ -47,6 +47,7 @@ struct CustomBuildSystemConfig
 
     CustomBuildSystemConfig()
     {
+        tools.reserve(CustomBuildSystemTool::Undefined - CustomBuildSystemTool::Build);
         for (int i = CustomBuildSystemTool::Build; i < CustomBuildSystemTool::Undefined; ++i) {
             CustomBuildSystemTool tool;
             tool.type = CustomBuildSystemTool::ActionType(i);

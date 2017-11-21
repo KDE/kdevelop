@@ -898,6 +898,7 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
 
             //mask is used in CommitViewDelegate to understand what we should draw for each branch
             QList<int> mask;
+            mask.reserve(branchesShas.count());
 
             //set mask (properties for each graph column in row)
             for(int i = 0; i < branchesShas.count(); ++i)

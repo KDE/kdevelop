@@ -59,6 +59,7 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
     if (argsContext) {
         auto args = argsContext->allDeclarations(CursorInRevision::invalid(), decl->topContext(), false);
 
+        arguments.reserve(args.size());
         for (auto pair : args) {
             arguments.append(pair.first->toString());
         }
@@ -67,7 +68,9 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
             m_currentArgumentType = args.at(argumentIndex).first->abstractType();
         }
     } else {
-        for (auto type : func->arguments()) {
+        const auto args = func->arguments();
+        arguments.reserve(args.size());
+        for (auto type : args) {
             arguments.append(type->toString());
         }
 

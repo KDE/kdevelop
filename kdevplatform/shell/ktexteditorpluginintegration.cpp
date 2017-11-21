@@ -233,8 +233,9 @@ KTextEditor::Plugin *Application::plugin(const QString &id) const
 QList<KTextEditor::Document *> Application::documents()
 {
     QList<KTextEditor::Document *> l;
-    auto documentController = Core::self()->documentControllerInternal();
-    for (auto d : documentController->openDocuments()) {
+    const auto openDocuments = Core::self()->documentControllerInternal()->openDocuments();
+    l.reserve(openDocuments.size());
+    for (auto* d : openDocuments) {
         l << d->textDocument();
     }
     return l;

@@ -83,7 +83,9 @@ QList<DeclarationPointer> ClangClassHelper::defaultMethods(const QString& name) 
         DUChainReadLocker lock;
 
         if (context && context->childContexts().size() == 1) {
-            for (auto* declaration : context->childContexts().first()->localDeclarations()) {
+            const auto localDeclarations = context->childContexts().first()->localDeclarations();
+            methods.reserve(localDeclarations.size());
+            for (auto* declaration : localDeclarations) {
                 methods << DeclarationPointer(declaration);
             }
         }
@@ -199,6 +201,7 @@ QString includeDirectiveArgumentFromPath(const Path& file,
 
     // create include arguments for all candidates
     QStringList includeArguments;
+    includeArguments.reserve(includeFiles.size());
     for (const auto& includeFile : includeFiles) {
         const auto includeArgument = includeArgumentForFile(includeFile, includePaths, file);
         if (includeArgument.isEmpty()) {

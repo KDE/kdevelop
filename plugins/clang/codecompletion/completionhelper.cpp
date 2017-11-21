@@ -77,6 +77,7 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
     FuncParameterList params;
 
     int numArgs = clang_Cursor_getNumArguments(cursor);
+    params.reserve(numArgs);
     for (int i = 0; i < numArgs; i++) {
         CXCursor arg = clang_Cursor_getArgument(cursor, i);
         QString id = ClangString(clang_getCursorDisplayName(arg)).toString();

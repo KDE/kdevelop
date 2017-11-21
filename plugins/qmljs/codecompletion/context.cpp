@@ -208,7 +208,9 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::importCompletion()
     if (!dataDir.isEmpty()) {
         dir.setPath(dataDir);
 
-        for (const QString& entry : dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+        const auto dirEntries = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+        items.reserve(dirEntries.size());
+        for (const QString& entry : dirEntries) {
             items.append(CompletionTreeItemPointer(new ModuleCompletionItem(
                 fragment + entry.section(QLatin1Char('.'), 0, 0),
                 ModuleCompletionItem::Import
