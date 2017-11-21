@@ -222,8 +222,8 @@ void MainWindow::saveSettings()
     if (area())
         group += '_' + area()->objectName();
     KConfigGroup cg = KSharedConfig::openConfig()->group(group);
-    /* This will try to save window size, too.  But it's OK, since we
-       won't use this information when loading.  */
+    // This will try to save also the window size and the enabled state of the statusbar.
+    // But it's OK, since we won't use this information when loading.
     saveMainWindowSettings(cg);
 
     //debugToolBar visibility is stored separately to allow a area dependent default value
@@ -253,15 +253,10 @@ void MainWindow::loadSettings()
     // What follows is copy-paste from applyMainWindowSettings.  Unfortunately,
     // we don't really want that one to try restoring window size, and we also
     // cannot stop it from doing that in any clean way.
-    QStatusBar* sb = findChild<QStatusBar *>();
-    if (sb) {
-        QString entry = cg.readEntry("StatusBar", "Enabled");
-        if ( entry == QLatin1String("Disabled") )
-           sb->hide();
-        else
-           sb->show();
-    }
-
+    // We also do not want that one do it for the enabled state of the statusbar:
+    // KMainWindow scans the widget tree for a QStatusBar-inheriting instance and
+    // set enabled state by the config value stored by the key "StatusBar",
+    // while the QStatusBar subclass used in sublime should always be enabled.
     QMenuBar* mb = findChild<QMenuBar *>();
     if (mb) {
         QString entry = cg.readEntry ("MenuBar", "Enabled");
