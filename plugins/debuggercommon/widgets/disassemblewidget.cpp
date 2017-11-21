@@ -364,7 +364,7 @@ void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QStri
 
         QString cmd = (to.isEmpty())?
         QStringLiteral("-s %1 -e \"%1 + 256\" -- 0").arg(from ):
-        QStringLiteral("-s %1 -e %2+1 -- 0").arg(from).arg(to); // if both addr set
+        QStringLiteral("-s %1 -e %2+1 -- 0").arg(from, to); // if both addr set
 
         s->addCommand(DataDisassemble, cmd,
                       this, &DisassembleWidget::disassembleMemoryHandler);

@@ -162,13 +162,13 @@ public Q_SLOTS:
 private Q_SLOTS:
     void saveState( QSessionManager& sm ) {
         if (KDevelop::Core::self() && KDevelop::Core::self()->sessionController()) {
-            QString x11SessionId = QStringLiteral("%1_%2").arg(sm.sessionId()).arg(sm.sessionKey());
             const auto activeSession = KDevelop::Core::self()->sessionController()->activeSession();
             if (!activeSession) {
                 qWarning(APP) << "No active session, can't save state";
                 return;
             }
 
+            const QString x11SessionId = sm.sessionId() + QLatin1Char('_') + sm.sessionKey();
             QString kdevelopSessionId = activeSession->id().toString();
             sm.setRestartCommand({QCoreApplication::applicationFilePath(), "-session", x11SessionId, "-s", kdevelopSessionId});
         }

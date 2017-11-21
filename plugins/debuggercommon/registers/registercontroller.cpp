@@ -237,7 +237,7 @@ void IRegisterController::setGeneralRegister(const Register& reg, const GroupsNa
         return;
     }
 
-    const QString command = QStringLiteral("set var $%1=%2").arg(reg.name).arg(reg.value);
+    const QString command = QStringLiteral("set var $%1=%2").arg(reg.name, reg.value);
     qCDebug(DEBUGGERCOMMON) << "Setting register: " << command;
 
     m_debugSession->addCommand(NonMI, command);

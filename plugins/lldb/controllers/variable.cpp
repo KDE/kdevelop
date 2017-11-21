@@ -92,7 +92,7 @@ void LldbVariable::formatChanged()
             QPointer<LldbVariable> guarded_this(this);
             m_debugSession->addCommand(
                 VarSetFormat,
-                QStringLiteral(" %1 %2 ").arg(varobj()).arg(format2str(format())),
+                QStringLiteral(" %1 %2 ").arg(varobj(), format2str(format())),
                 [guarded_this](const ResultRecord &r){
                     if(guarded_this && r.hasField(QStringLiteral("changelist"))) {
                         if (r[QStringLiteral("changelist")].size() > 0) {

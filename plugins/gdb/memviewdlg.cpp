@@ -213,8 +213,7 @@ void MemoryView::sizeComputed(const QString& size)
 
     session->addCommand(MI::DataReadMemory,
             QStringLiteral("%1 x 1 1 %2")
-                .arg(m_rangeSelector->startAddressLineEdit->text())
-                .arg(size),
+                .arg(m_rangeSelector->startAddressLineEdit->text(), size),
             this,
             &MemoryView::memoryRead);
 }

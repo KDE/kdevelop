@@ -159,7 +159,7 @@ void CustomBuildJob::start()
         connect( exec, &CommandExecutor::receivedStandardError, model, &OutputModel::appendLines );
         connect( exec, &CommandExecutor::receivedStandardOutput, model, &OutputModel::appendLines );
 
-        model->appendLine( QStringLiteral("%1> %2 %3").arg( builddir ).arg( cmd ).arg( arguments ) );
+        model->appendLine(QStringLiteral("%1> %2 %3").arg(builddir, cmd, arguments));
         exec->start();
     }
 }
