@@ -307,9 +307,15 @@ void TestBackgroundparser::benchmarkDocumentChanges()
     QVERIFY(editor);
     KTextEditor::Document* doc = editor->createDocument(this);
     QVERIFY(doc);
-    QTemporaryFile file;
-    QVERIFY(file.open());
-    doc->saveAs(QUrl::fromLocalFile(file.fileName()));
+
+    QString tmpFileName;
+    {
+        QTemporaryFile file;
+        QVERIFY(file.open());
+        tmpFileName = file.fileName();
+    }
+
+    doc->saveAs(QUrl::fromLocalFile(tmpFileName));
 
     DocumentChangeTracker tracker(doc);
 
