@@ -174,6 +174,7 @@ OutputFile={{ name }}.cpp
 
 [UI]
 Name=User Interface
+Name[bg]=Потребителски интерфейс
 Name[bs]=Korisnički interfejs
 Name[ca]=Interfície d'usuari
 Name[ca@valencia]=Interfície d'usuari
@@ -190,13 +191,16 @@ Name[gl]=Interface de usuario
 Name[hu]=Felhasználói felület
 Name[it]=Interfaccia utente
 Name[kk]=Пайдаланушы интерфейсі
+Name[lv]=Lietotāja saskarne
 Name[mr]=वापरकर्ता संवाद
 Name[nb]=Brukerflate
 Name[nds]=Böversiet
 Name[nl]=Gebruikersinterface
+Name[pa]=ਯੂਜ਼ਰ ਇੰਟਰਫੇਸ
 Name[pl]=Interfejs użytkownika
 Name[pt]=Interface do Utilizador
 Name[pt_BR]=Interface do usuário
+Name[ro]=Interfață utilizator
 Name[ru]=Пользовательский интерфейс
 Name[sk]=Užívateľské rozhranie
 Name[sl]=Uporabniški vmesnik
