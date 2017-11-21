@@ -1,10 +1,8 @@
 {
     "KPlugin": {
         "Description": "%{APPNAME}",
-        "Description[x-test]": "xx%{APPNAME}xx",
         "Id": "%{APPNAMELC}",
         "Name": "%{APPNAME}",
-        "Name[x-test]": "xx%{APPNAME}xx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
