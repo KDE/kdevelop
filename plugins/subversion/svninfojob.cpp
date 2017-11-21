@@ -99,8 +99,7 @@ QVariant SvnInfoJob::fetchResults()
 {
     if( m_provideInfo == RepoUrlOnly )
     {
-        QUrl url = m_info.url;
-        return qVariantFromValue<QUrl>( url );
+        return QVariant(m_info.url);
     }else if( m_provideInfo == RevisionOnly )
     {
         KDevelop::VcsRevision rev;
