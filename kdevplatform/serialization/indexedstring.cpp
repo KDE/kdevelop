@@ -261,7 +261,7 @@ IndexedString::IndexedString(const QString& string)
 {}
 
 IndexedString::IndexedString(const char* str)
-    : IndexedString(str, str ? strlen(str) : 0)
+    : IndexedString(str, str ? qstrlen(str) : 0)
 {}
 
 IndexedString::IndexedString(const QByteArray& str)
