@@ -698,7 +698,8 @@ QList<IProject*> ProjectController::projects() const
     return d->m_projects;
 }
 
-void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, KIO::UDSEntryList entries ) {
+void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, const KIO::UDSEntryList& entries)
+{
     KIO::SimpleJob* job(dynamic_cast<KIO::SimpleJob*>(_job));
     Q_ASSERT(job);
     foreach(const KIO::UDSEntry& entry, entries) {

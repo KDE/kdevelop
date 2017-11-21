@@ -115,7 +115,7 @@ public Q_SLOTS:
 
     void reparseProject( IProject* project, bool forceUpdate = false  ) override;
 
-    void eventuallyOpenProjectFile(KIO::Job*,KIO::UDSEntryList);
+    void eventuallyOpenProjectFile(KIO::Job* job, const KIO::UDSEntryList& entries);
     void openProjectForUrlSlot(bool);
 //     void changeCurrentProject( ProjectBaseItem* );
     void openProjects(const QList<QUrl>& projects);
