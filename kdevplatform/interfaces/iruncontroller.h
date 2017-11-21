@@ -39,7 +39,7 @@ class LaunchConfigurationType;
 class KDEVPLATFORMINTERFACES_EXPORT IRunController : public KJobTrackerInterface
 {
     Q_OBJECT
-    Q_ENUMS(State)
+
 public:
     ///Constructor.
     explicit IRunController(QObject *parent);
@@ -56,6 +56,7 @@ public:
         Idle     /**< No processes are currently running */,
         Running  /**< processes are currently running */
     };
+    Q_ENUM(State)
 
     /**
      * Get a list of all launch modes that the app knows

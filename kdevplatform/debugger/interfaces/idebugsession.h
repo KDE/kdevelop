@@ -37,7 +37,6 @@ class StackModel;
 class KDEVPLATFORMDEBUGGER_EXPORT IDebugSession : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(DebuggerState)
 public:
     IDebugSession();
     ~IDebugSession() override;
@@ -51,6 +50,7 @@ public:
         StoppedState,
         EndedState
     };
+    Q_ENUM(DebuggerState)
 
     enum event_t {
         program_state_changed = 1,
