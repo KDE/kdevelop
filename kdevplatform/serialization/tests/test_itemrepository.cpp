@@ -99,13 +99,12 @@ class TestItemRepository : public QObject {
   Q_OBJECT
   private Q_SLOTS:
     void initTestCase() {
-      KDevelop::AutoTestShell::init({{}}); // don't load any plugins
-      KDevelop::TestCore* core = new KDevelop::TestCore();
-      core->initialize(KDevelop::Core::NoUi);
+      KDevelop::ItemRepositoryRegistry::initialize(m_repositoryPath);
     }
     void cleanupTestCase() {
-        KDevelop::TestCore::shutdown();
+      KDevelop::ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
     }
+
     void testItemRepository() {
       KDevelop::ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
       uint itemId = 0;
@@ -360,6 +359,9 @@ class TestItemRepository : public QObject {
        * be done correctly using only Bucket::hasClashingItem as of now.
        */
     }
+
+private:
+    QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/test_itemrepository");
 };
 
 #include "test_itemrepository.moc"

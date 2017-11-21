@@ -50,9 +50,10 @@ Boston, MA 02110-1301, USA.
 #include "sessionlock.h"
 #include "sessionchooserdialog.h"
 #include "debug.h"
+
 #include <sublime/mainwindow.h>
 #include <serialization/itemrepositoryregistry.h>
-
+#include <duchain/duchain.h>
 
 namespace KDevelop
 {
@@ -422,7 +423,7 @@ void SessionController::deleteSessionFromDisk( const ISessionLock::Ptr& lock )
     qCDebug(SHELL) << "Deleting session:" << lock->id();
 
     static_cast<SessionLock*>(lock.data())->removeFromDisk();
-    ItemRepositoryRegistry::deleteRepositoryFromDisk( lock );
+    ItemRepositoryRegistry::deleteRepositoryFromDisk(DUChain::repositoryPathForSession(lock));
 }
 
 void SessionController::loadDefaultSession( const QString& session )

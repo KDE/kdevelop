@@ -23,9 +23,11 @@
 #include <QApplication>
 #include <QHash>
 #include <QMultiMap>
+#include <QProcessEnvironment>
 #include <QReadWriteLock>
 #include <QAtomicInt>
 #include <QThread>
+#include <QStandardPaths>
 #include <QMutex>
 #include <QTimer>
 
@@ -1131,12 +1133,22 @@ extern void initIdentifierRepository();
 extern void initTypeRepository();
 extern void initInstantiationInformationRepository();
 
+QString DUChain::repositoryPathForSession(const KDevelop::ISessionLock::Ptr& session)
+{
+  QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation);
+  cacheDir += QStringLiteral("/kdevduchain");
+  QString baseDir = QProcessEnvironment::systemEnvironment().value(QStringLiteral("KDEV_DUCHAIN_DIR"), cacheDir);
+  baseDir += QStringLiteral("/%1-%2").arg(qApp->applicationName(), session->id());
+  return baseDir;
+}
+
 void DUChain::initialize()
 {
   // Initialize the global item repository as first thing after loading the session
   Q_ASSERT(ICore::self());
   Q_ASSERT(ICore::self()->activeSession());
-  ItemRepositoryRegistry::initialize(ICore::self()->activeSessionLock());
+
+  ItemRepositoryRegistry::initialize(repositoryPathForSession(ICore::self()->activeSessionLock()));
 
   initReferenceCounting();
 

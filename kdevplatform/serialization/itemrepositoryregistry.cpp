@@ -46,15 +46,6 @@ void setCrashCounter(QFile& crashesFile, int count)
   writeStream << count;
 }
 
-QString repositoryPathForSession(const KDevelop::ISessionLock::Ptr& session)
-{
-  QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation);
-  cacheDir += QStringLiteral("/kdevduchain");
-  QString baseDir = QProcessEnvironment::systemEnvironment().value(QStringLiteral("KDEV_DUCHAIN_DIR"), cacheDir);
-  baseDir += QStringLiteral("/%1-%2").arg(qApp->applicationName(), session->id());
-  return baseDir;
-}
-
 bool shouldClear(const QString& path)
 {
   QDir dir(path);
@@ -122,7 +113,6 @@ public:
   ItemRepositoryRegistry* m_owner;
   bool m_shallDelete;
   QString m_path;
-  ISessionLock::Ptr m_sessionLock;
   QMap<AbstractItemRepository*, AbstractRepositoryManager*> m_repositories;
   QMap<QString, QAtomicInt*> m_customCounters;
   mutable QMutex m_mutex;
@@ -153,19 +143,19 @@ public:
 //The global item-reposity registry
 ItemRepositoryRegistry* ItemRepositoryRegistry::m_self = nullptr;
 
-ItemRepositoryRegistry::ItemRepositoryRegistry(const ISessionLock::Ptr& session)
+ItemRepositoryRegistry::ItemRepositoryRegistry(const QString& repositoryPath)
 : d(new ItemRepositoryRegistryPrivate(this))
 {
-  Q_ASSERT(session);
-  d->open(repositoryPathForSession(session));
+  Q_ASSERT(!repositoryPath.isEmpty());
+  d->open(repositoryPath);
 }
 
-void ItemRepositoryRegistry::initialize(const ISessionLock::Ptr& session)
+void ItemRepositoryRegistry::initialize(const QString& repositoryPath)
 {
   if (!m_self) {
     ///We intentionally leak the registry, to prevent problems in the destruction order, where
     ///the actual repositories might get deleted later than the repository registry.
-    m_self = new ItemRepositoryRegistry(session);
+    m_self = new ItemRepositoryRegistry(repositoryPath);
   }
 }
 
@@ -175,11 +165,10 @@ ItemRepositoryRegistry* ItemRepositoryRegistry::self()
   return m_self;
 }
 
-void ItemRepositoryRegistry::deleteRepositoryFromDisk(const ISessionLock::Ptr& session)
+void ItemRepositoryRegistry::deleteRepositoryFromDisk(const QString& repositoryPath)
 {
   // Now, as we have only the global item-repository registry, assume that if and only if
   // the given session is ours, its cache path is used by the said global item-repository registry.
-  const QString repositoryPath = repositoryPathForSession(session);
   if(m_self && m_self->d->m_path == repositoryPath) {
     // remove later
     m_self->d->m_shallDelete = true;

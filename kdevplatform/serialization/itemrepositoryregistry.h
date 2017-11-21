@@ -21,7 +21,7 @@
 
 #include "serializationexport.h"
 
-#include <interfaces/isessionlock.h>
+#include <QScopedPointer>
 
 class QString;
 class QMutex;
@@ -45,13 +45,13 @@ class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
     /**
      * Initialize the global item-repository registry for the given @p session.
      */
-    static void initialize(const ISessionLock::Ptr& session);
+    static void initialize(const QString& repositoryPath);
 
     /// @returns The global item-repository registry.
     static ItemRepositoryRegistry* self();
 
     /// Deletes the item-repository of a specified session; or, if it is currently used, marks it for deletion at exit.
-    static void deleteRepositoryFromDisk(const ISessionLock::Ptr& sessionLock);
+    static void deleteRepositoryFromDisk(const QString& repositoryPath);
 
     /// Add a new repository.
     /// It will automatically be opened with the current path, if one is set.
@@ -97,7 +97,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
     QMutex& mutex();
 
   private:
-    explicit ItemRepositoryRegistry(const ISessionLock::Ptr& session);
+    explicit ItemRepositoryRegistry(const QString& repositoryPath);
 
     const QScopedPointer<class ItemRepositoryRegistryPrivate> d;
 

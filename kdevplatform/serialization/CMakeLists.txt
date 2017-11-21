@@ -15,8 +15,6 @@ ecm_qt_declare_logging_category(KDevPlatformSerialization_LIB_SRCS
 
 kdevplatform_add_library(KDevPlatformSerialization SOURCES ${KDevPlatformSerialization_LIB_SRCS})
 target_link_libraries(KDevPlatformSerialization
-LINK_PUBLIC
-    KDev::Interfaces
 LINK_PRIVATE
     KDev::Util
 )

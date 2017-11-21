@@ -25,6 +25,8 @@
 #include "topducontext.h"
 #include "parsingenvironment.h"
 
+#include <interfaces/isessionlock.h>
+
 class QUrl;
 
 namespace KDevelop
@@ -212,6 +214,8 @@ public:
 
   /// Returns the structure that manages mapping between declarations, and which top level contexts contain uses of them.
   static Uses* uses();
+
+  static QString repositoryPathForSession(const KDevelop::ISessionLock::Ptr& session);
 
   /**
    * Retrieve the read write lock for the entire definition-use chain.
