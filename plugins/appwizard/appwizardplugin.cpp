@@ -214,6 +214,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     }
 
     QString templateName = templateInfo.baseName();
+    qCDebug(PLUGIN_APPWIZARD) << "Searching archive for template name:" << templateName;
+
     QString templateArchive;
     const QStringList filters = {templateName + QStringLiteral(".*")};
     const QStringList matchesPaths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevappwizard/templates/"), QStandardPaths::LocateDirectory);
@@ -228,6 +230,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         qCWarning(PLUGIN_APPWIZARD) << "Template name does not exist in the template list";
         return QString();
     }
+
+    qCDebug(PLUGIN_APPWIZARD) << "Using template archive:" << templateArchive;
 
     QUrl dest = info.location;
 

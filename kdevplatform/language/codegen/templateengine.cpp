@@ -21,6 +21,7 @@
 
 #include "templateengine.h"
 
+#include "debug.h"
 #include "templateengine_p.h"
 
 #include "codedescription.h"
@@ -44,7 +45,17 @@ TemplateEngine::TemplateEngine()
 {
     d->engine.setSmartTrimEnabled(true);
 
-    addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevcodegen/templates"), QStandardPaths::LocateDirectory));
+    qCDebug(LANGUAGE) << "Generic data locations:" << QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+
+    const auto templateDirectories = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+        QStringLiteral("kdevcodegen/templates"), QStandardPaths::LocateDirectory);
+
+    if (!templateDirectories.isEmpty()) {
+        qCDebug(LANGUAGE) << "Found template directories:" << templateDirectories;
+        addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevcodegen/templates"), QStandardPaths::LocateDirectory));
+    } else {
+        qCWarning(LANGUAGE) << "No template directories found -- templating engine will not work!";
+    }
 
     Grantlee::registerMetaType<KDevelop::VariableDescription>();
     Grantlee::registerMetaType<KDevelop::FunctionDescription>();
