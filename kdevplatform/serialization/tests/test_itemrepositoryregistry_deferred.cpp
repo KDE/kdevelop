@@ -5,20 +5,22 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
+using namespace KDevelop;
+
 class TestItemRepositoryRegistryDeferredDeletion : public QObject {
   Q_OBJECT
     void initCore(const QString& sessionName = QString()) {
-      KDevelop::TestCore* core = new KDevelop::TestCore();
-      core->initialize(KDevelop::Core::NoUi, sessionName);
+      TestCore* core = new TestCore();
+      core->initialize(Core::NoUi, sessionName);
     }
 
     void destroyCore() {
-      KDevelop::TestCore::shutdown();
+      TestCore::shutdown();
     }
 
   private Q_SLOTS:
     void initTestCase() {
-      KDevelop::AutoTestShell::init();
+      AutoTestShell::init();
     }
 
     void testDeferredDeletion() {
@@ -33,14 +35,14 @@ class TestItemRepositoryRegistryDeferredDeletion : public QObject {
         initCore(sessionName);
 
         // The session with a custom name shall not be temporary
-        QVERIFY(!KDevelop::Core::self()->activeSession()->isTemporary());
+        QVERIFY(!Core::self()->activeSession()->isTemporary());
 
         // The repository shall exist
-        repositoryPath = KDevelop::globalItemRepositoryRegistry().path();
+        repositoryPath = globalItemRepositoryRegistry().path();
         QVERIFY(QFile::exists(repositoryPath));
 
         // The repository shall survive session deletion request
-        KDevelop::Core::self()->sessionController()->deleteSession(KDevelop::Core::self()->sessionController()->activeSessionLock());
+        Core::self()->sessionController()->deleteSession(Core::self()->sessionController()->activeSessionLock());
         QVERIFY(QFile::exists(repositoryPath));
 
         // The repository shall die together with the core shutdown

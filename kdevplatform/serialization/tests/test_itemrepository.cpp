@@ -5,8 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include <tests/testcore.h>
-#include <tests/autotestshell.h>
+using namespace KDevelop;
 
 struct TestItem {
   TestItem(uint hash, uint dataSize) : m_hash(hash), m_dataSize(dataSize) {
@@ -60,7 +59,7 @@ struct TestItemRequest {
     memcpy(item, &m_item, m_item.itemSize());
   }
 
-  static void destroy(TestItem* /*item*/, KDevelop::AbstractItemRepository&) {
+  static void destroy(TestItem* /*item*/, AbstractItemRepository&) {
     //Nothing to do
   }
 
@@ -99,14 +98,14 @@ class TestItemRepository : public QObject {
   Q_OBJECT
   private Q_SLOTS:
     void initTestCase() {
-      KDevelop::ItemRepositoryRegistry::initialize(m_repositoryPath);
+      ItemRepositoryRegistry::initialize(m_repositoryPath);
     }
     void cleanupTestCase() {
-      KDevelop::ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
+      ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
     }
 
     void testItemRepository() {
-      KDevelop::ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
+      ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
       uint itemId = 0;
       QHash<uint, TestItem*> realItemsByIndex;
       QHash<uint, TestItem*> realItemsById;
@@ -191,14 +190,14 @@ class TestItemRepository : public QObject {
 
       qDebug() << "total insertions:" << totalInsertions << "total deletions:" << totalDeletions << "average item size:" << (totalSize / totalInsertions) << "biggest item size:" << maxSize;
 
-      KDevelop::ItemRepository<TestItem, TestItemRequest>::Statistics stats = repository.statistics();
+      ItemRepository<TestItem, TestItemRequest>::Statistics stats = repository.statistics();
       qDebug() << stats;
       QVERIFY(stats.freeUnreachableSpace < stats.freeSpaceInBuckets/100); // < 1% of the free space is unreachable
       QVERIFY(stats.freeSpaceInBuckets < stats.usedSpaceForBuckets); // < 20% free space
     }
     void testLeaks()
     {
-      KDevelop::ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
+      ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
       QList<TestItem*> items;
       for(int i = 0; i < 10000; ++i) {
         TestItem* item = createItem(i, (rand() % 1000) + sizeof(TestItem));
@@ -213,7 +212,7 @@ class TestItemRepository : public QObject {
     {
       QString qString;
         qString.fill('.', 1000);
-      KDevelop::IndexedString indexedString(qString);
+      IndexedString indexedString(qString);
       const int repeat = 10000;
       QVector<QString> strings;
       strings.resize(repeat);
@@ -224,10 +223,10 @@ class TestItemRepository : public QObject {
     }
     void deleteClashingMonsterBucket()
     {
-      KDevelop::ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
+      ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("TestItemRepository"));
       const uint hash = 1235;
 
-      QScopedArrayPointer<TestItem> monsterItem(createItem(hash, KDevelop::ItemRepositoryBucketSize + 10));
+      QScopedArrayPointer<TestItem> monsterItem(createItem(hash, ItemRepositoryBucketSize + 10));
       QScopedArrayPointer<TestItem> smallItem(createItem(hash, 20));
       QVERIFY(!monsterItem->equals(smallItem.data()));
 
@@ -242,7 +241,7 @@ class TestItemRepository : public QObject {
 
       // now in reverse order, with different data see: https://bugs.kde.org/show_bug.cgi?id=272408
 
-      monsterItem.reset(createItem(hash + 1, KDevelop::ItemRepositoryBucketSize + 10));
+      monsterItem.reset(createItem(hash + 1, ItemRepositoryBucketSize + 10));
       smallItem.reset(createItem(hash + 1, 20));
       QVERIFY(!monsterItem->equals(smallItem.data()));
       monsterIndex = repository.index(TestItemRequest(*monsterItem, true));
@@ -255,7 +254,7 @@ class TestItemRepository : public QObject {
     }
     void usePermissiveModuloWhenRemovingClashLinks()
     {
-      KDevelop::ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("PermissiveModulo"));
+      ItemRepository<TestItem, TestItemRequest> repository(QStringLiteral("PermissiveModulo"));
 
       const uint bucketHashSize = decltype(repository)::bucketHashSize;
       const uint nextBucketHashSize = decltype(repository)::MyBucket::NextBucketHashSize;
@@ -266,8 +265,8 @@ class TestItemRepository : public QObject {
       const uint clashValue = 2;
 
       // Choose sizes that ensure that the items fit in the desired buckets
-      const uint bigItemSize = KDevelop::ItemRepositoryBucketSize * 0.55 - 1;
-      const uint smallItemSize = KDevelop::ItemRepositoryBucketSize * 0.25 - 1;
+      const uint bigItemSize = ItemRepositoryBucketSize * 0.55 - 1;
+      const uint smallItemSize = ItemRepositoryBucketSize * 0.25 - 1;
 
       // Will get placed in bucket 1 (bucket zero is invalid), so the root bucket table at position 'clashValue' will be '1'
       const QScopedArrayPointer<TestItem> firstChainFirstLink(createItem(clashValue, bigItemSize));

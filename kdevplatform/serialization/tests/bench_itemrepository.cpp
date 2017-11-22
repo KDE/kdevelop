@@ -81,7 +81,7 @@ struct TestDataRepositoryItemRequest
     memcpy(item, m_text, m_length);
   }
 
-  static void destroy(TestData* item, KDevelop::AbstractItemRepository&)
+  static void destroy(TestData* item, AbstractItemRepository&)
   {
     Q_UNUSED(item);
     //Nothing to do here (The object is not intelligent)
@@ -107,12 +107,12 @@ typedef ItemRepository<TestData, TestDataRepositoryItemRequest, false, true> Tes
 
 void BenchItemRepository::initTestCase()
 {
-    KDevelop::ItemRepositoryRegistry::initialize(m_repositoryPath);
+    ItemRepositoryRegistry::initialize(m_repositoryPath);
 }
 
 void BenchItemRepository::cleanupTestCase()
 {
-    KDevelop::ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
+    ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
 }
 
 static QVector<QString> generateData()

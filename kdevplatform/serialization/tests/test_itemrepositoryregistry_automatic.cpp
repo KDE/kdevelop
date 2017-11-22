@@ -5,20 +5,22 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
+using namespace KDevelop;
+
 class TestItemRepositoryRegistryAutomaticDeletion : public QObject {
   Q_OBJECT
     void initCore(const QString& sessionName = QString()) {
-      KDevelop::TestCore* core = new KDevelop::TestCore();
-      core->initialize(KDevelop::Core::NoUi, sessionName);
+      TestCore* core = new TestCore();
+      core->initialize(Core::NoUi, sessionName);
     }
 
     void destroyCore() {
-      KDevelop::TestCore::shutdown();
+      TestCore::shutdown();
     }
 
   private Q_SLOTS:
     void initTestCase() {
-      KDevelop::AutoTestShell::init();
+      AutoTestShell::init();
     }
 
     void testTemporarySessionDeletion() {
@@ -30,10 +32,10 @@ class TestItemRepositoryRegistryAutomaticDeletion : public QObject {
         initCore();
 
         // The session created by TestCore shall be temporary
-        QVERIFY(KDevelop::Core::self()->activeSession()->isTemporary());
+        QVERIFY(Core::self()->activeSession()->isTemporary());
 
         // The repository shall exist
-        QString repositoryPath = KDevelop::globalItemRepositoryRegistry().path();
+        QString repositoryPath = globalItemRepositoryRegistry().path();
         QVERIFY(QFile::exists(repositoryPath));
 
         // The repository shall die with the core shutdown

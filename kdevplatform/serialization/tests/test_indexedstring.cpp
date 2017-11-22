@@ -34,12 +34,12 @@ using namespace KDevelop;
 
 void TestIndexedString::initTestCase()
 {
-    KDevelop::ItemRepositoryRegistry::initialize(m_repositoryPath);
+    ItemRepositoryRegistry::initialize(m_repositoryPath);
 }
 
 void TestIndexedString::cleanupTestCase()
 {
-    KDevelop::ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
+    ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
 }
 
 void TestIndexedString::testUrl_data()
