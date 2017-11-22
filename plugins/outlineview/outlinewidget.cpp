@@ -56,9 +56,9 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
 
     // sort action
     m_sortAlphabeticallyAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")), QString(), this);
-    m_sortAlphabeticallyAction->setToolTip(i18n("Sort alphabetically"));
+    m_sortAlphabeticallyAction->setToolTip(i18n("Sort items alphabetically"));
     // reuse the tooltip so the action will show up in the context menu:
-    m_sortAlphabeticallyAction->setText(m_sortAlphabeticallyAction->toolTip());
+    m_sortAlphabeticallyAction->setText(i18n("Sort Alphabetically"));
     m_sortAlphabeticallyAction->setCheckable(true);
     connect(m_sortAlphabeticallyAction, &QAction::triggered, this, [this](bool sort) {
         // calling sort with -1 will restore the original order
