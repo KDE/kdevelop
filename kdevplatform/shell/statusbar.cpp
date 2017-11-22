@@ -121,13 +121,9 @@ void StatusBar::registerStatus(QObject* status)
     connect(status, SIGNAL(showProgress(KDevelop::IStatus*,int,int,int)),
             SLOT(showProgress(KDevelop::IStatus*,int,int,int)),
             Qt::QueuedConnection);
-
-    // Don't try to connect when the status object doesn't provide an error message signal (ie. avoid warning)
-    const auto signalSignature = QMetaObject::normalizedSignature("showErrorMessage(QString,int)");
-    if (status->metaObject()->indexOfSignal(signalSignature.constData()) != -1) {
-        connect(status, SIGNAL(showErrorMessage(QString,int)),
-                SLOT(showErrorMessage(QString,int)), Qt::QueuedConnection);
-    }
+    connect(status, SIGNAL(showErrorMessage(QString,int)),
+            SLOT(showErrorMessage(QString,int)),
+            Qt::QueuedConnection);
 }
 
 QWidget* errorMessage(QWidget* parent, const QString& text)
