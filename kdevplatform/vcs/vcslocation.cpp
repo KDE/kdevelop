@@ -25,7 +25,7 @@
 namespace KDevelop
 {
 
-class VcsLocationPrivate
+class VcsLocationPrivate : public QSharedData
 {
 public:
     QUrl m_localUrl;
@@ -60,30 +60,13 @@ VcsLocation::VcsLocation( const QString& s )
 VcsLocation::~VcsLocation() = default;
 
 VcsLocation::VcsLocation( const VcsLocation& rhs )
-    : d(new VcsLocationPrivate)
+    : d(rhs.d)
 {
-    d->m_type = rhs.d->m_type;
-    d->m_localUrl = rhs.d->m_localUrl;
-    d->m_repoServer = rhs.d->m_repoServer;
-    d->m_repoPath = rhs.d->m_repoPath;
-    d->m_repoModule = rhs.d->m_repoModule;
-    d->m_repoBranch = rhs.d->m_repoBranch;
-    d->m_repoTag = rhs.d->m_repoTag;
-    d->m_userData = rhs.d->m_userData;
 }
 
 VcsLocation& VcsLocation::operator=( const VcsLocation& rhs )
 {
-    if( &rhs == this )
-        return *this;
-    d->m_type = rhs.d->m_type;
-    d->m_localUrl = rhs.d->m_localUrl;
-    d->m_repoServer = rhs.d->m_repoServer;
-    d->m_repoPath = rhs.d->m_repoPath;
-    d->m_repoModule = rhs.d->m_repoModule;
-    d->m_repoBranch = rhs.d->m_repoBranch;
-    d->m_repoTag = rhs.d->m_repoTag;
-    d->m_userData = rhs.d->m_userData;
+    d = rhs.d;
     return *this;
 }
 

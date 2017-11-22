@@ -25,7 +25,7 @@
 #include <QHash>
 #include <QUrl>
 #include <QMetaType>
-#include <QScopedPointer>
+#include <QSharedDataPointer>
 
 class QVariant;
 
@@ -135,7 +135,7 @@ public:
     bool isValid() const;
 
 private:
-    const QScopedPointer<class VcsLocationPrivate> d;
+    QSharedDataPointer<class VcsLocationPrivate> d;
 };
 
 inline uint qHash( const KDevelop::VcsLocation& loc )
@@ -159,6 +159,7 @@ inline bool operator==( const KDevelop::VcsLocation& lhs, const KDevelop::VcsLoc
 }
 
 Q_DECLARE_METATYPE( KDevelop::VcsLocation )
+Q_DECLARE_TYPEINFO(KDevelop::VcsLocation, Q_MOVABLE_TYPE);
 
 #endif
 

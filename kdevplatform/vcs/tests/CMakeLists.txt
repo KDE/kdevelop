@@ -25,3 +25,7 @@ ecm_add_test(test_vcsstatusinfo
 ecm_add_test(test_vcsdiff
     LINK_LIBRARIES Qt5::Test KDev::Vcs
 )
+
+ecm_add_test(test_vcslocation
+    LINK_LIBRARIES Qt5::Test KDev::Vcs
+)
