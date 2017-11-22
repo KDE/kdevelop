@@ -49,7 +49,7 @@
 #include <vcs/vcspluginhelper.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 
-K_PLUGIN_FACTORY(KDevCvsFactory, registerPlugin<CvsPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(KDevCvsFactory, "kdevcvs.json", registerPlugin<CvsPlugin>();)
 // K_EXPORT_PLUGIN(KDevCvsFactory(KAboutData("kdevcvs", "kdevcvs", ki18n("CVS"), "0.1", ki18n("Support for CVS version control system"), KAboutData::License_GPL)))
 
 class KDevCvsViewFactory: public KDevelop::IToolViewFactory
