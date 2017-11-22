@@ -19,7 +19,7 @@
         "Description[uk]": "Цей додаток є обгорткою до LLDB, високошвидкісного засобу діагностики коду мовами C/Obj-C/C++.",
         "Description[x-test]": "xxThis plugin provides a frontend for LLDB, a next generation, high-performance C/Obj-C/C++ debugger.xx",
         "Description[zh_CN]": "此插件提供了 GDB 前端，GDB 是一个源码级的 C、C++ 等多语言的调试器。",
-        "Icon": "debugger",
+        "Icon": "kdevelop",
         "Id": "kdevlldb",
         "License": "GPL",
         "Name": "LLDB Support",

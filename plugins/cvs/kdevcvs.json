@@ -27,7 +27,7 @@
         "Description[uk]": "За допомогою цього додатка можна інтегрувати CVS до KDevelop",
         "Description[x-test]": "xxThis plugin integrates CVS to KDevelopxx",
         "Description[zh_CN]": "此插件将 CVS 整合到 KDevelop",
-        "Icon": "cervisia",
+        "Icon": "kdevelop",
         "Id": "kdevcvs",
         "License": "GPL",
         "Name": "CVS Support",

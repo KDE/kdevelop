@@ -24,7 +24,7 @@
         "Description[uk]": "Надає доступ до середовищ виконання Android",
         "Description[x-test]": "xxExposes Android runtimesxx",
         "Description[zh_CN]": "暴露 Android 运行时",
-        "Icon": "android",
+        "Icon": "kdevelop",
         "Id": "kdevandroid",
         "License": "GPL",
         "Name": "Android Support",
