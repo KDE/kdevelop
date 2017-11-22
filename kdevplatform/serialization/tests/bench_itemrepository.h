@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QObject>
 
-class TestItemRepository : public QObject
+class BenchItemRepository : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:

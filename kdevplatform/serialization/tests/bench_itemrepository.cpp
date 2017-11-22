@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <QTest>
 
-QTEST_GUILESS_MAIN(TestItemRepository);
+QTEST_GUILESS_MAIN(BenchItemRepository);
 
 using namespace KDevelop;
 
@@ -105,12 +105,12 @@ struct TestDataRepositoryItemRequest
 
 typedef ItemRepository<TestData, TestDataRepositoryItemRequest, false, true> TestDataRepository;
 
-void TestItemRepository::initTestCase()
+void BenchItemRepository::initTestCase()
 {
     KDevelop::ItemRepositoryRegistry::initialize(m_repositoryPath);
 }
 
-void TestItemRepository::cleanupTestCase()
+void BenchItemRepository::cleanupTestCase()
 {
     KDevelop::ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
 }
@@ -137,7 +137,7 @@ static QVector<uint> insertData(const QVector<QString>& data, TestDataRepository
   return indices;
 }
 
-void TestItemRepository::insert()
+void BenchItemRepository::insert()
 {
   TestDataRepository repo("TestDataRepositoryInsert");
   QVector<QString> data = generateData();
@@ -150,7 +150,7 @@ void TestItemRepository::insert()
   QCOMPARE(repo.statistics().totalItems, uint(data.size()));
 }
 
-void TestItemRepository::remove()
+void BenchItemRepository::remove()
 {
   TestDataRepository repo("TestDataRepositoryRemove");
   QVector<QString> data = generateData();
@@ -167,7 +167,7 @@ void TestItemRepository::remove()
   QCOMPARE(repo.statistics().totalItems, 0u);
 }
 
-void TestItemRepository::removeDisk()
+void BenchItemRepository::removeDisk()
 {
   QVector<QString> data = generateData();
   QVector<uint> indices;
@@ -187,7 +187,7 @@ void TestItemRepository::removeDisk()
   QCOMPARE(repo.statistics().totalItems, 0u);
 }
 
-void TestItemRepository::lookupKey()
+void BenchItemRepository::lookupKey()
 {
   TestDataRepository repo("TestDataRepositoryLookupKey");
   QVector<QString> data = generateData();
@@ -201,7 +201,7 @@ void TestItemRepository::lookupKey()
   }
 }
 
-void TestItemRepository::lookupValue()
+void BenchItemRepository::lookupValue()
 {
   TestDataRepository repo("TestDataRepositoryLookupValue");
   QVector<QString> data = generateData();
