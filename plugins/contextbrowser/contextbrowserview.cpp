@@ -182,6 +182,9 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
 
     m_declarationMenuAction = new QAction(QIcon::fromTheme(QStringLiteral("code-class")), QString(), this);
     m_declarationMenuAction->setToolTip(i18n("Declaration menu"));
+    // expose the declaration menu via the context menu; allows hiding the toolbar to save some space
+    // (this will not make it behave like a submenu though)
+    m_declarationMenuAction->setText(m_declarationMenuAction->toolTip());
     connect(m_declarationMenuAction, &QAction::triggered, this, &ContextBrowserView::declarationMenu);
     addAction(m_declarationMenuAction);
     m_lockAction = new KToggleAction(QIcon::fromTheme(QStringLiteral("object-unlocked")), i18n("Lock Current View"), this);
