@@ -40,7 +40,7 @@ CvsProxy::~CvsProxy()
 bool CvsProxy::isValidDirectory(const QUrl& dirPath) const
 {
     const QFileInfo fsObject( dirPath.toLocalFile() );
-    QDir dir = fsObject.isDir() ? fsObject.absoluteDir() : fsObject.dir();
+    QDir dir = fsObject.isDir() ? QDir(fsObject.filePath()) : fsObject.dir();
 
     return dir.exists(QStringLiteral("CVS"));
 }
@@ -48,7 +48,7 @@ bool CvsProxy::isValidDirectory(const QUrl& dirPath) const
 bool CvsProxy::isVersionControlled(const QUrl& filePath) const
 {
     const QFileInfo fsObject( filePath.toLocalFile() );
-    QDir dir = fsObject.isDir() ? fsObject.absoluteDir() : fsObject.dir();
+    QDir dir = fsObject.isDir() ? QDir(fsObject.filePath()) : fsObject.dir();
 
     if( !dir.cd(QStringLiteral("CVS")) )
         return false;
