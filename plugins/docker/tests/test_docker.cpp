@@ -56,17 +56,15 @@ public:
         m_initialRuntime = ICore::self()->runtimeController()->currentRuntime();
 
         auto plugin = ICore::self()->pluginController()->loadPlugin("kdevdocker");
-        Q_ASSERT(plugin);
+        QVERIFY(plugin);
 
         QSignalSpy spy(plugin, SIGNAL(imagesListed()));
-        Q_ASSERT(spy.wait());
-
+        QVERIFY(spy.wait());
 
         auto projectPath = QUrl::fromLocalFile(QFINDTESTDATA("testproject/test.kdev4"));
-        qDebug() << "wuuu" << projectPath;
         TestCore::self()->projectController()->openProject(projectPath);
         QSignalSpy spy2(TestCore::self()->projectController(), &IProjectController::projectOpened);
-        Q_ASSERT(spy2.wait());
+        QVERIFY(spy2.wait());
 
     }
     IRuntime* m_initialRuntime;
