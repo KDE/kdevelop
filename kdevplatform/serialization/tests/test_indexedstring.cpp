@@ -21,8 +21,10 @@
 
 #include "test_indexedstring.h"
 
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
+
 #include <language/util/kdevhash.h>
-#include <serialization/itemrepositoryregistry.h>
 #include <serialization/indexedstring.h>
 #include <QTest>
 
@@ -34,12 +36,13 @@ using namespace KDevelop;
 
 void TestIndexedString::initTestCase()
 {
-    KDevelop::ItemRepositoryRegistry::initialize(m_repositoryPath);
+  AutoTestShell::init();
+  TestCore::initialize(Core::NoUi);
 }
 
 void TestIndexedString::cleanupTestCase()
 {
-    KDevelop::ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
+  TestCore::shutdown();
 }
 
 void TestIndexedString::testUrl_data()

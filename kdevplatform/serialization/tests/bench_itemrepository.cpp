@@ -21,6 +21,10 @@
 
 #include "bench_itemrepository.h"
 
+
+#include <tests/testcore.h>
+#include <tests/autotestshell.h>
+
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
 
@@ -107,12 +111,13 @@ typedef ItemRepository<TestData, TestDataRepositoryItemRequest, false, true> Tes
 
 void TestItemRepository::initTestCase()
 {
-    KDevelop::ItemRepositoryRegistry::initialize(m_repositoryPath);
+  AutoTestShell::init();
+  TestCore::initialize(Core::NoUi);
 }
 
 void TestItemRepository::cleanupTestCase()
 {
-    KDevelop::ItemRepositoryRegistry::deleteRepositoryFromDisk(m_repositoryPath);
+  TestCore::shutdown();
 }
 
 static QVector<QString> generateData()

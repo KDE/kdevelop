@@ -22,7 +22,6 @@
 #ifndef TESTINDEXEDSTRING_H
 #define TESTINDEXEDSTRING_H
 
-#include <QDir>
 #include <QObject>
 
 class TestIndexedString : public QObject
@@ -49,9 +48,6 @@ private Q_SLOTS:
     void test_data();
 
     void testCString();
-
-private:
-    QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/test_indexedstring");
 };
 
 #endif // TESTINDEXEDSTRING_H

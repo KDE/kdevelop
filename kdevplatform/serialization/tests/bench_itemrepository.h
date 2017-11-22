@@ -22,7 +22,6 @@
 #ifndef TESTITEMREPOSITORY_H
 #define TESTITEMREPOSITORY_H
 
-#include <QDir>
 #include <QObject>
 
 class TestItemRepository : public QObject
@@ -37,9 +36,6 @@ private Q_SLOTS:
     void removeDisk();
     void lookupKey();
     void lookupValue();
-
-private:
-    QString m_repositoryPath = QDir::tempPath() + QStringLiteral("/bench_itemrepository");
 };
 
 #endif // TESTITEMREPOSITORY_H
