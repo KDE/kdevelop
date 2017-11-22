@@ -372,8 +372,16 @@ public:
             foreach( IPlugin* p, plugins )
             {
                 IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
-                if( iface && iface->isVersionControlled( topItem->path().toUrl() ) )
+                if (!iface) {
+                    continue;
+                }
+
+                const auto url = topItem->path().toUrl();
+                qCDebug(SHELL) << "Checking whether" << url << "is version controlled by" << iface->name();
+                if(iface->isVersionControlled(url))
                 {
+                    qDebug(SHELL) << "Detected that" << url << "is a" << iface->name() << "project";
+
                     vcsPlugin = p;
                     projectGroup.writeEntry("VersionControlSupport", pluginManager->pluginInfo(p).pluginId());
                     projectGroup.sync();
