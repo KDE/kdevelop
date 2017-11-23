@@ -11,6 +11,7 @@
 #include "cvsdiffjob.h"
 
 #include <QRegExp>
+#include <QUrl>
 
 CvsDiffJob::CvsDiffJob(KDevelop::IPlugin* parent, KDevelop::OutputJob::OutputJobVerbosity verbosity)
     : CvsJob(parent, verbosity)
@@ -29,11 +30,6 @@ QVariant CvsDiffJob::fetchResults()
     diff.setDiff( output() );
 
     /// @todo check output of "cvs diff" if it reported binary files
-    diff.setContentType( KDevelop::VcsDiff::Text );
-
-    /// @todo hmmm, we always call "cvs diff" with it's -u option
-    ///       but if this option would be omitted cvs would return an other format
-    diff.setType( KDevelop::VcsDiff::DiffUnified );
 
     return qVariantFromValue( diff );
 }

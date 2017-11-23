@@ -304,7 +304,7 @@ KDevelop::VcsJob* PerforcePlugin::commit(const QString& message, const QList<QUr
     return job;
 }
 
-KDevelop::VcsJob* PerforcePlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision, KDevelop::VcsDiff::Type , KDevelop::IBasicVersionControl::RecursionMode /*recursion*/)
+KDevelop::VcsJob* PerforcePlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision, KDevelop::IBasicVersionControl::RecursionMode /*recursion*/)
 {
     QFileInfo curFile(fileOrDirectory.toLocalFile());
     QString depotSrcFileName = getRepositoryName(curFile);

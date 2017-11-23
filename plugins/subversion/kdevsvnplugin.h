@@ -81,7 +81,6 @@ public:
     KDevelop::VcsJob* diff(const QUrl &fileOrDirectory,
                            const KDevelop::VcsRevision& srcRevision,
                            const KDevelop::VcsRevision& dstRevision,
-                           KDevelop::VcsDiff::Type = KDevelop::VcsDiff::DiffUnified,
                            KDevelop::IBasicVersionControl::RecursionMode recursion
                            = KDevelop::IBasicVersionControl::Recursive) override;
 
@@ -94,7 +93,6 @@ public:
                             const KDevelop::VcsLocation& localOrRepoLocationDst,
                             const KDevelop::VcsRevision& srcRevision,
                             const KDevelop::VcsRevision& dstRevision,
-                            KDevelop::VcsDiff::Type = KDevelop::VcsDiff::DiffDontCare,
                             KDevelop::IBasicVersionControl::RecursionMode = KDevelop::IBasicVersionControl::Recursive);
 
     KDevelop::VcsJob* log(const QUrl &localLocation,

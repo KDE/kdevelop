@@ -189,12 +189,11 @@ public:
     /**
      * Retrieves a diff between two revisions of a file
      *
-     * The diff is in unified diff format for text files by default
+     * The diff is in unified diff format for text files.
      */
     virtual VcsJob* diff( const QUrl& fileOrDirectory,
                           const VcsRevision& srcRevision,
                           const VcsRevision& dstRevision,
-                          VcsDiff::Type = VcsDiff::DiffUnified,
                           IBasicVersionControl::RecursionMode recursion
                                        = IBasicVersionControl::Recursive ) = 0;
 

@@ -63,10 +63,7 @@ public:
             delete patch;
         }
 
-        qCDebug(VCS) << "diff:" << diff.leftTexts().count();
         qCDebug(VCS) << "diff:" << diff.diff();
-        qCDebug(VCS) << "diff:" << diff.type();
-        qCDebug(VCS) << "diff:" << diff.contentType();
         m_ui->diffDisplay->setPlainText( diff.diff() );
         m_ui->diffDisplay->setReadOnly( true );
 

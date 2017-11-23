@@ -26,6 +26,8 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/vcslocation.h>
+
 #include "ui_kdeconfig.h"
 #include "kdeconfig.h"
 #include "kdeprojectsmodel.h"

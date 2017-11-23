@@ -29,6 +29,7 @@
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsstatusinfo.h>
+#include <vcs/vcslocation.h>
 #include <vcs/dvcs/ui/dvcsimportmetadatawidget.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
@@ -120,7 +121,7 @@ VcsJob* BazaarPlugin::createWorkingCopy(const VcsLocation& sourceRepository, con
     return job;
 }
 
-VcsJob* BazaarPlugin::diff(const QUrl& fileOrDirectory, const VcsRevision& srcRevision, const VcsRevision& dstRevision, VcsDiff::Type, IBasicVersionControl::RecursionMode recursion)
+VcsJob* BazaarPlugin::diff(const QUrl& fileOrDirectory, const VcsRevision& srcRevision, const VcsRevision& dstRevision, IBasicVersionControl::RecursionMode recursion)
 {
     Q_UNUSED(recursion);
     VcsJob* job = new DiffJob(BazaarUtils::workingCopy(fileOrDirectory), BazaarUtils::getRevisionSpecRange(srcRevision, dstRevision), fileOrDirectory, this);

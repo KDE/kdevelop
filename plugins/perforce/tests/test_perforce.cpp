@@ -180,7 +180,7 @@ void PerforcePluginTest::testDiff()
     VcsRevision dstRevision;
     dstRevision.setRevisionValue(QVariant(2), VcsRevision::GlobalNumber);
      
-    VcsJob* j = m_plugin->diff( QUrl::fromLocalFile(perforceTestBaseDir + perforceTest_FileName), srcRevision, dstRevision, VcsDiff::Type::DiffUnified );
+    VcsJob* j = m_plugin->diff( QUrl::fromLocalFile(perforceTestBaseDir + perforceTest_FileName), srcRevision, dstRevision);
     VERIFYJOB(j);
 }
 

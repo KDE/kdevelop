@@ -574,7 +574,7 @@ void GitInitTest::testDiff()
 
     VcsRevision srcrev = VcsRevision::createSpecialRevision(VcsRevision::Base);
     VcsRevision dstrev = VcsRevision::createSpecialRevision(VcsRevision::Working);
-    VcsJob* j = m_plugin->diff(QUrl::fromLocalFile(gitTest_BaseDir()), srcrev, dstrev, VcsDiff::DiffUnified, IBasicVersionControl::Recursive);
+    VcsJob* j = m_plugin->diff(QUrl::fromLocalFile(gitTest_BaseDir()), srcrev, dstrev, IBasicVersionControl::Recursive);
     VERIFYJOB(j);
 
     KDevelop::VcsDiff d = j->fetchResults().value<KDevelop::VcsDiff>();

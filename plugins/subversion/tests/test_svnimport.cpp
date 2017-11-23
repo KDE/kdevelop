@@ -31,6 +31,7 @@
 #include <tests/testcore.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/vcsjob.h>
+#include <vcs/vcslocation.h>
 
 #define VERBOSE
 #if defined(VERBOSE)

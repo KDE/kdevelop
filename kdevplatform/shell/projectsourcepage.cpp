@@ -17,6 +17,7 @@
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/widgets/vcslocationwidget.h>
 #include <vcs/vcsjob.h>
+#include <vcs/vcslocation.h>
 
 #include <QVBoxLayout>
 

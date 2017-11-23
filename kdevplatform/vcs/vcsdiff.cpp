@@ -21,7 +21,7 @@
 #include "vcsdiff.h"
 
 #include <QString>
-#include <QByteArray>
+#include <QUrl>
 #include <QSharedData>
 
 namespace KDevelop
@@ -30,14 +30,8 @@ namespace KDevelop
 class VcsDiffPrivate : public QSharedData
 {
 public:
-    QHash<VcsLocation,QByteArray> leftBinaries;
-    QHash<VcsLocation,QByteArray> rightBinaries;
-    QHash<VcsLocation,QString> leftTexts;
-    QHash<VcsLocation,QString> rightTexts;
     QUrl baseDiff;
     QString diff;
-    VcsDiff::Type type = VcsDiff::DiffDontCare;
-    VcsDiff::Content content = VcsDiff::Text;
     uint depth = 0;
 };
 
@@ -55,39 +49,7 @@ VcsDiff::VcsDiff( const VcsDiff& rhs )
 
 bool VcsDiff::isEmpty() const
 {
-    return d->diff.isEmpty() && d->leftBinaries.isEmpty() && d->rightBinaries.isEmpty()
-                             && d->leftTexts.isEmpty() && d->rightTexts.isEmpty();
-}
-
-VcsDiff::Type VcsDiff::type() const
-{
-    return d->type;
-}
-
-VcsDiff::Content VcsDiff::contentType() const
-{
-    return d->content;
-}
-
-QHash<VcsLocation, QByteArray> VcsDiff::leftBinaries() const
-{
-    return d->leftBinaries;
-}
-
-QHash<VcsLocation, QByteArray> VcsDiff::rightBinaries() const
-{
-    return d->rightBinaries;
-}
-
-
-QHash<VcsLocation, QString> VcsDiff::leftTexts() const
-{
-    return d->leftTexts;
-}
-
-QHash<VcsLocation, QString> VcsDiff::rightTexts() const
-{
-    return d->rightTexts;
+    return d->diff.isEmpty();
 }
 
 QString VcsDiff::diff() const
@@ -99,56 +61,6 @@ QString VcsDiff::diff() const
 void VcsDiff::setDiff( const QString& s )
 {
     d->diff = s;
-}
-
-void VcsDiff::addLeftBinary( const VcsLocation& loc, const QByteArray& b )
-{
-    d->leftBinaries[loc] = b;
-}
-
-void VcsDiff::addRightBinary( const VcsLocation& loc, const QByteArray& b )
-{
-    d->rightBinaries[loc] = b;
-}
-
-void VcsDiff::removeLeftBinary( const VcsLocation& loc )
-{
-    d->leftBinaries.remove( loc );
-}
-
-void VcsDiff::removeRightBinary( const VcsLocation& loc )
-{
-    d->rightBinaries.remove( loc );
-}
-
-void VcsDiff::addLeftText( const VcsLocation& loc, const QString& b )
-{
-    d->leftTexts[loc] = b;
-}
-
-void VcsDiff::addRightText( const VcsLocation& loc, const QString& b )
-{
-    d->rightTexts[loc] = b;
-}
-
-void VcsDiff::removeLeftText( const VcsLocation& loc )
-{
-    d->leftTexts.remove( loc );
-}
-
-void VcsDiff::removeRightText( const VcsLocation& loc )
-{
-    d->rightTexts.remove( loc );
-}
-
-void VcsDiff::setType( VcsDiff::Type t )
-{
-    d->type = t;
-}
-
-void VcsDiff::setContentType( VcsDiff::Content c )
-{
-    d->content = c;
 }
 
 VcsDiff& VcsDiff::operator=( const VcsDiff& rhs)

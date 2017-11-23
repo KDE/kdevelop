@@ -50,7 +50,7 @@ public:
     KDevelop::VcsJob* copy(const QUrl& localLocationSrc, const QUrl& localLocationDstn) override;
     KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;
     KDevelop::VcsJob* createWorkingCopy(const KDevelop::VcsLocation& sourceRepository, const QUrl& destinationDirectory, RecursionMode recursion=Recursive) override;
-    KDevelop::VcsJob* diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision, KDevelop::VcsDiff::Type, RecursionMode recursion=Recursive) override;
+    KDevelop::VcsJob* diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision, RecursionMode recursion=Recursive) override;
     KDevelop::VcsJob* init(const QUrl& localRepositoryRoot) override;
     bool isVersionControlled(const QUrl& localLocation) override;
     KDevelop::VcsJob* log(const QUrl& localLocation, const KDevelop::VcsRevision& rev, long unsigned int limit) override;

@@ -27,142 +27,102 @@
 using namespace KDevelop;
 
 void TestVcsDiff::setDiff(VcsDiff& diff,
-                          VcsDiff::Type type,
-                          VcsDiff::Content contentType,
                           const QString& diffString,
                           const QUrl& baseDiff,
-                          uint depth,
-                          const QHash<VcsLocation,QByteArray>& leftBinaries,
-                          const QHash<VcsLocation,QByteArray>& rightBinaries,
-                          const QHash<VcsLocation,QString>& leftTexts,
-                          const QHash<VcsLocation,QString>& rightTexts)
+                          uint depth)
 {
-    diff.setType(type);
-    diff.setContentType(contentType);
     diff.setDiff(diffString);
     diff.setBaseDiff(baseDiff);
     diff.setDepth(depth);
-    for (auto it = leftBinaries.begin(); it != leftBinaries.end(); ++it)
-        diff.addLeftBinary(it.key(), it.value());
-    for (auto it = rightBinaries.begin(); it != rightBinaries.end(); ++it)
-        diff.addRightBinary(it.key(), it.value());
-    for (auto it = leftTexts.begin(); it != leftTexts.end(); ++it)
-        diff.addLeftText(it.key(), it.value());
-    for (auto it = rightTexts.begin(); it != rightTexts.end(); ++it)
-        diff.addRightText(it.key(), it.value());
 }
 
 void TestVcsDiff::compareDiff(const VcsDiff& diff,
-                              VcsDiff::Type type,
-                              VcsDiff::Content contentType,
                               const QString& diffString,
                               const QUrl& baseDiff,
-                              uint depth,
-                              const QHash<VcsLocation,QByteArray>& leftBinaries,
-                              const QHash<VcsLocation,QByteArray>& rightBinaries,
-                              const QHash<VcsLocation,QString>& leftTexts,
-                              const QHash<VcsLocation,QString>& rightTexts)
+                              uint depth)
 {
-    QCOMPARE(diff.type(), type);
-    QCOMPARE(diff.contentType(), contentType);
     QCOMPARE(diff.diff(), diffString);
     QCOMPARE(diff.baseDiff(), baseDiff);
     QCOMPARE(diff.depth(), depth);
-    QCOMPARE(diff.leftBinaries(), leftBinaries);
-    QCOMPARE(diff.rightBinaries(), rightBinaries);
-    QCOMPARE(diff.leftTexts(), leftTexts);
-    QCOMPARE(diff.rightTexts(), rightTexts);
 }
 
 void TestVcsDiff::testCopyConstructor()
 {
     // test plain copy
-    const VcsDiff::Type type = VcsDiff::DiffRaw;
-    const VcsDiff::Content contentType = VcsDiff::Binary;
     const QString diffString("diff");
     const QUrl baseDiff("git://1");
     const uint depth = 1;
     const VcsLocation location("server");
-    const QHash<VcsLocation,QByteArray> leftBinaries({{location, "leftbinary"}});
-    const QHash<VcsLocation,QByteArray> rightBinaries({{location, "rightbinary"}});
-    const QHash<VcsLocation,QString> leftTexts({{location, "lefttext"}});
-    const QHash<VcsLocation,QString> rightTexts({{location, "righttext"}});
 
     {
         VcsDiff diffA;
         setDiff(diffA, 
-                type, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                diffString, baseDiff, depth);
 
         VcsDiff diffB(diffA);
         compareDiff(diffA,
-                    type, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                    diffString, baseDiff, depth);
         compareDiff(diffB,
-                    type, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                    diffString, baseDiff, depth);
     }
 
-    const VcsDiff::Type typeNew = VcsDiff::DiffUnified;
+    const QString diffStringNew("diffNew");
 
     // test detach after changing A
     {
         VcsDiff diffA;
         setDiff(diffA, 
-                type, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                diffString, baseDiff, depth);
 
         VcsDiff diffB(diffA);
         // change a property of A
-        diffA.setType(typeNew);
+        diffA.setDiff(diffStringNew);
 
         compareDiff(diffA,
-                    typeNew, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                    diffStringNew, baseDiff, depth);
         compareDiff(diffB,
-                    type,    contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                    diffString, baseDiff, depth);
     }
 }
 
 void TestVcsDiff::testAssignOperator()
 {
     // test plain copy
-    const VcsDiff::Type type = VcsDiff::DiffRaw;
-    const VcsDiff::Content contentType = VcsDiff::Binary;
     const QString diffString("diff");
     const QUrl baseDiff("git://1");
     const uint depth = 1;
     const VcsLocation location("server");
-    const QHash<VcsLocation,QByteArray> leftBinaries({{location, "leftbinary"}});
-    const QHash<VcsLocation,QByteArray> rightBinaries({{location, "rightbinary"}});
-    const QHash<VcsLocation,QString> leftTexts({{location, "lefttext"}});
-    const QHash<VcsLocation,QString> rightTexts({{location, "righttext"}});
 
     {
         VcsDiff diffA;
         setDiff(diffA, 
-                type, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                diffString, baseDiff, depth);
 
         VcsDiff diffB;
         diffB = diffA;
         compareDiff(diffA,
-                    type, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                    diffString, baseDiff, depth);
         compareDiff(diffB,
-                    type, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                    diffString, baseDiff, depth);
     }
 
-    const VcsDiff::Type typeNew = VcsDiff::DiffUnified;
+    const QString diffStringNew("diffNew");
 
     // test detach after changing A
     {
         VcsDiff diffA;
         setDiff(diffA, 
-                type, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                diffString, baseDiff, depth);
 
         VcsDiff diffB;
         diffB = diffA;
         // change a property of A
-        diffA.setType(typeNew);
+        diffA.setDiff(diffStringNew);
 
         compareDiff(diffA,
-                    typeNew, contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                    diffStringNew, baseDiff, depth);
         compareDiff(diffB,
-                    type,    contentType, diffString, baseDiff, depth, leftBinaries, rightBinaries, leftTexts, rightTexts);
+                    diffString,    baseDiff, depth);
     }
 }
 

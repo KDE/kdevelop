@@ -29,6 +29,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
+#include <vcs/vcslocation.h>
 #include <KLocalizedString>
 
 #include <ghaccount.h>

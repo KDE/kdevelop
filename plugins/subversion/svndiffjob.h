@@ -24,15 +24,12 @@
 
 #include "svnjobbase.h"
 
-#include <vcs/vcslocation.h>
-
 #include <vcs/vcsdiff.h>
-
-class SvnCatJob;
 
 namespace KDevelop
 {
     class VcsRevision;
+    class VcsLocation;
 }
 
 class SvnInternalDiffJob;
@@ -54,16 +51,11 @@ public:
     void setIgnoreContentType( bool );
     void setNoDiffOnDelete( bool );
 
-    void setDiffType( KDevelop::VcsDiff::Type type );
-
 public Q_SLOTS:
     void setDiff( const QString& );
-    void addLeftText( KDevelop::VcsJob* job );
-    void removeJob( KJob* job );
+
 private:
     KDevelop::VcsDiff m_diff;
-    KDevelop::VcsDiff::Type m_diffType;
-    QMap<KDevelop::VcsJob*, KDevelop::VcsLocation> m_catJobMap;
 };
 
 

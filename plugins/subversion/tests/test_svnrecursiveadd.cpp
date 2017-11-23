@@ -31,6 +31,7 @@
 #include <tests/testcore.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/vcsjob.h>
+#include <vcs/vcslocation.h>
 
 #define PATHETIC    // A little motivator to make things work right :)
 #if defined(PATHETIC)

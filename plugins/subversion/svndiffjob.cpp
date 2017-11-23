@@ -37,7 +37,6 @@
 #include "iruncontroller.h"
 
 #include "svnclient.h"
-#include "svncatjob.h"
 
 ///@todo The subversion library returns borked diffs, where the headers are at the end. This function
 ///           takes those headers, and moves them into the correct place to create a valid working diff.
@@ -338,103 +337,8 @@ void SvnDiffJob::setDiff( const QString& diff )
 {
     m_diff = KDevelop::VcsDiff();
     m_diff.setBaseDiff(QUrl::fromLocalFile(QStringLiteral("/")));
-    m_diff.setType( KDevelop::VcsDiff::DiffUnified );
-
-    m_diff.setContentType( KDevelop::VcsDiff::Text );
     m_diff.setDiff( diff );
 
-    QRegExp fileRe("(?:^|\n)Index: ([^\n]+)\n");
-
-    QStringList paths;
-    int pos = 0;
-
-    while( ( pos = fileRe.indexIn( diff, pos ) ) != -1 )
-    {
-        paths << fileRe.cap(1);
-        pos += fileRe.matchedLength();
-    }
-
-    if (paths.isEmpty()) {
-        internalJobDone();
-        emit resultsReady( this );
-        return;
-    }
-
-    foreach( const QString &s, paths )
-    {
-        if( !s.isEmpty() )
-        {
-            SvnCatJob* job = new SvnCatJob( m_part );
-            KDevelop::VcsLocation l = m_job->source();
-            if( l.type() == KDevelop::VcsLocation::LocalLocation )
-            {
-                l.setLocalUrl( QUrl::fromLocalFile( s ) );
-            }else
-            {
-                QString repoLocation = QUrl( l.repositoryServer() ).toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash );
-                QFileInfo fi( repoLocation );
-                if( s == fi.fileName() )
-                {
-                    l.setRepositoryServer( l.repositoryServer() );
-                }else
-                {
-                    l.setRepositoryServer( l.repositoryServer() + '/' + s );
-                }
-            }
-
-            job->setSource( l );
-            job->setPegRevision( m_job->pegRevision() );
-            job->setSrcRevision( m_job->srcRevision() );
-
-            m_catJobMap[job] = l;
-
-            connect( job, &KDevelop::VcsJob::resultsReady, this, &SvnDiffJob::addLeftText );
-            connect( job, &KJob::result, this, &SvnDiffJob::removeJob );
-
-            KDevelop::ICore::self()->runController()->registerJob(job);
-        }
-    }
-}
-
-void SvnDiffJob::addLeftText( KDevelop::VcsJob* job )
-{
-    if( m_catJobMap.contains( job ) )
-    {
-        QVariant v = job->fetchResults();
-        m_diff.addLeftText( m_catJobMap[job], v.toString() );
-        m_catJobMap.remove(job);
-        // KJobs delete themselves when finished
-    }
-    if( m_catJobMap.isEmpty() )
-    {
-        internalJobDone();
-        emit resultsReady( this );
-    }
-}
-
-void SvnDiffJob::removeJob( KJob* job )
-{
-    if( job->error() != 0 )
-    {
-        KDevelop::VcsJob* j = dynamic_cast<KDevelop::VcsJob*>( job );
-        if( j )
-        {
-            if( m_catJobMap.contains( j ) )
-            {
-                m_catJobMap.remove(j);
-                // KJobs delete themselves when finished
-            }
-        }
-    }
-
-    if( m_catJobMap.isEmpty() )
-    {
-        internalJobDone();
-        emit resultsReady( this );
-    }
-}
-
-void SvnDiffJob::setDiffType( KDevelop::VcsDiff::Type type )
-{
-    m_diffType = type;
+    internalJobDone();
+    emit resultsReady( this );
 }

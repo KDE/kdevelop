@@ -29,6 +29,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iplugin.h>
 
+#include <vcs/vcslocation.h>
 #include <vcs/widgets/vcsimportmetadatawidget.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 

@@ -35,25 +35,13 @@ private Q_SLOTS:
 
 private:
     void setDiff(KDevelop::VcsDiff& diff,
-                 KDevelop::VcsDiff::Type type,
-                 KDevelop::VcsDiff::Content contentType,
                  const QString& diffString,
                  const QUrl& baseDiff,
-                 uint depth,
-                 const QHash<KDevelop::VcsLocation,QByteArray>& leftBinaries,
-                 const QHash<KDevelop::VcsLocation,QByteArray>& rightBinaries,
-                 const QHash<KDevelop::VcsLocation,QString>& leftTexts,
-                 const QHash<KDevelop::VcsLocation,QString>& rightTexts);
+                 uint depth);
     void compareDiff(const KDevelop::VcsDiff& diff,
-                     KDevelop::VcsDiff::Type type,
-                     KDevelop::VcsDiff::Content contentType,
                      const QString& diffString,
                      const QUrl& baseDiff,
-                     uint depth,
-                     const QHash<KDevelop::VcsLocation,QByteArray>& leftBinaries,
-                     const QHash<KDevelop::VcsLocation,QByteArray>& rightBinaries,
-                     const QHash<KDevelop::VcsLocation,QString>& leftTexts,
-                     const QHash<KDevelop::VcsLocation,QString>& rightTexts);
+                     uint depth);
 };
 
 #endif // KDEVPLATFORM_TESTVCSDIFF_H

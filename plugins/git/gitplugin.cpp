@@ -39,6 +39,7 @@
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsevent.h>
+#include <vcs/vcslocation.h>
 #include <vcs/dvcs/dvcsjob.h>
 #include <vcs/vcsannotation.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
@@ -385,10 +386,8 @@ KDevelop::VcsJob* GitPlugin::status(const QList<QUrl>& localLocations, KDevelop:
 }
 
 VcsJob* GitPlugin::diff(const QUrl& fileOrDirectory, const KDevelop::VcsRevision& srcRevision, const KDevelop::VcsRevision& dstRevision,
-                        VcsDiff::Type /*type*/, IBasicVersionControl::RecursionMode recursion)
+                        IBasicVersionControl::RecursionMode recursion)
 {
-    //TODO: control different types
-
     DVcsJob* job = new GitJob(dotGitDirectory(fileOrDirectory), this, KDevelop::OutputJob::Silent);
     job->setType(VcsJob::Diff);
     *job << "git" << "diff" << "--no-color" << "--no-ext-diff";

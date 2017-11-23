@@ -49,6 +49,7 @@
 #include <vcs/widgets/vcscommitdialog.h>
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
+#include <vcs/vcslocation.h>
 #include <vcs/vcsdiff.h>
 
 #include "interfaces/idistributedversioncontrol.h"

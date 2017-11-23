@@ -224,18 +224,16 @@ KDevelop::VcsJob* KDevSvnPlugin::commit(const QString& message, const QList<QUrl
 KDevelop::VcsJob* KDevSvnPlugin::diff(const QUrl &fileOrDirectory,
                                       const KDevelop::VcsRevision& srcRevision,
                                       const KDevelop::VcsRevision& dstRevision,
-                                      KDevelop::VcsDiff::Type diffType,
                                       KDevelop::IBasicVersionControl::RecursionMode recurse)
 {
     KDevelop::VcsLocation loc(fileOrDirectory);
-    return diff2(loc, loc, srcRevision, dstRevision, diffType, recurse);
+    return diff2(loc, loc, srcRevision, dstRevision, recurse);
 }
 
 KDevelop::VcsJob* KDevSvnPlugin::diff2(const KDevelop::VcsLocation& src,
                                        const KDevelop::VcsLocation& dst,
                                        const KDevelop::VcsRevision& srcRevision,
                                        const KDevelop::VcsRevision& dstRevision,
-                                       KDevelop::VcsDiff::Type diffType,
                                        KDevelop::IBasicVersionControl::RecursionMode recurse)
 {
     SvnDiffJob* job = new SvnDiffJob(this);
@@ -243,7 +241,6 @@ KDevelop::VcsJob* KDevSvnPlugin::diff2(const KDevelop::VcsLocation& src,
     job->setDestination(dst);
     job->setSrcRevision(srcRevision);
     job->setDstRevision(dstRevision);
-    job->setDiffType(diffType);
     job->setRecursive((recurse == KDevelop::IBasicVersionControl::Recursive));
     return job;
 }

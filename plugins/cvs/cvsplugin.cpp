@@ -392,7 +392,7 @@ KDevelop::VcsJob * CvsPlugin::commit(const QString & message, const QList<QUrl> 
     return job;
 }
 
-KDevelop::VcsJob * CvsPlugin::diff(const QUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::VcsDiff::Type, KDevelop::IBasicVersionControl::RecursionMode)
+KDevelop::VcsJob * CvsPlugin::diff(const QUrl & fileOrDirectory, const KDevelop::VcsRevision & srcRevision, const KDevelop::VcsRevision & dstRevision, KDevelop::IBasicVersionControl::RecursionMode)
 {
     CvsJob* job = d->m_proxy->diff(fileOrDirectory, srcRevision, dstRevision, QStringLiteral("-uN")/*always unified*/);
     return job;
