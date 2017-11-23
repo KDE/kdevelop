@@ -35,7 +35,7 @@ public:
 
     /**
      * If @p project is non-null, only files from that project will
-     * be handled by @code index{From,To}ConfigString @endcode.
+     * be handled by @c indexFromConfigString() and @c indexToConfigString().
      *
      * For other files, an invalid index or empty string is be returned.
      */

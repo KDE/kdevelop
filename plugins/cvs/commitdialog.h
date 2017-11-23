@@ -18,7 +18,7 @@
 
 /**
  * Allows to enter text which can them be used as
- * parameter for @code cvs commit @endcode
+ * parameter for <tt>cvs commit</tt>
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  */
 class CommitDialog : public QDialog, private Ui::CommitDialogBase

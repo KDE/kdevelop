@@ -97,7 +97,7 @@ public:
      * Calls @c cleanup() on the current TestCore instance,
      * then deletes the core.
      *
-     * @NOTE: It is important to call this in e.g. @code cleanupTestSuite @endcode
+     * @NOTE: It is important to call this in e.g. @c cleanupTestSuite()
      *        otherwise the core will be leaked, no proper cleanup will take place
      *        and e.g. temporary sessions not properly deleted.
      */
