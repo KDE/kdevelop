@@ -32,6 +32,9 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 
 if(POLICY CMP0071)
+  # CMake 3.10 generates warnings when projects combine AUTOMOC with qt5_wrap_ui() or qt5_add_resources()
+  # Avoid that by setting this policy (cf. https://bugreports.qt.io/browse/QTBUG-63442)
+  # Note: Once we depend on a Qt which has this fix (likely Qt 5.9.4+), remove this
   cmake_policy(SET CMP0071 OLD)
 endif()
 
