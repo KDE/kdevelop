@@ -786,7 +786,7 @@ function setenv! {
         executeInAppSync "if ! [ -e $(getCurrentShellEnvPath) ]; then touch $(getCurrentShellEnvPath); fi" ""
     fi
     source $TEMP
-    rm $TEMP
+    rm -f $TEMP
 }
 
 function showenv! {
