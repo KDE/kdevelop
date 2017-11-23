@@ -31,6 +31,10 @@ include(CheckFunctionExists)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 
+if(POLICY CMP0071)
+  cmake_policy(SET CMP0071 OLD)
+endif()
+
 set(QT_MIN_VERSION "5.5.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets)
 if(BUILD_TESTING)
