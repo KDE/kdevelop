@@ -1061,15 +1061,15 @@ void LldbTest::testShowStepInSource()
     {
         QCOMPARE(showStepInSourceSpy.count(), 3);
         QList<QVariant> arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<QUrl>(), QUrl::fromLocalFile(m_debugeeFileName));
+        QCOMPARE(arguments.first().toUrl(), QUrl::fromLocalFile(m_debugeeFileName));
         QCOMPARE(arguments.at(1).toInt(), 29);
 
         arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<QUrl>(), QUrl::fromLocalFile(m_debugeeFileName));
+        QCOMPARE(arguments.first().toUrl(), QUrl::fromLocalFile(m_debugeeFileName));
         QCOMPARE(arguments.at(1).toInt(), 22);
 
         arguments = showStepInSourceSpy.takeFirst();
-        QCOMPARE(arguments.first().value<QUrl>(), QUrl::fromLocalFile(m_debugeeFileName));
+        QCOMPARE(arguments.first().toUrl(), QUrl::fromLocalFile(m_debugeeFileName));
         QCOMPARE(arguments.at(1).toInt(), 23);
     }
 }
