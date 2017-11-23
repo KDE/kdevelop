@@ -153,7 +153,7 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
     } else if( role == Qt::DisplayRole )
     {
         return QVariant( QStringLiteral("%1 ").arg(aline.date().date().year()) + abbreviateLastName(aline.author()) );
-    } else if( role == KTextEditor::AnnotationModel::GroupIdentifierRole )
+    } else if( role == (int) KTextEditor::AnnotationModel::GroupIdentifierRole )
     {
         return aline.revision().revisionValue();
     } else if( role == Qt::ToolTipRole )
