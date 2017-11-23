@@ -289,7 +289,11 @@ PluginController::PluginController(Core *core)
         }
     });
 
-    qCDebug(SHELL) << "Found" << newPlugins.size() << " plugins:" << foundPlugins;
+    qCDebug(SHELL) << "Found" << newPlugins.size() << "plugins:" << foundPlugins;
+    if (newPlugins.isEmpty()) {
+        qCWarning(SHELL) << "Did not find any plugins, check your environment.";
+        qCWarning(SHELL) << "  Note: QT_PLUGIN_PATH is set to:" << qgetenv("QT_PLUGIN_PATH");
+    }
 
     d->plugins = newPlugins;
 

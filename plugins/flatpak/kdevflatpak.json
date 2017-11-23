@@ -24,7 +24,7 @@
         "Description[uk]": "Надає доступ до середовищ виконання Flatpak",
         "Description[x-test]": "xxExposes Flatpak runtimesxx",
         "Description[zh_CN]": "暴露 Flatpak 运行时",
-        "Icon": "flatpak",
+        "Icon": "kdevelop",
         "Id": "kdevflatpak",
         "License": "GPL",
         "Name": "Flatpak Support",

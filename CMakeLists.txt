@@ -12,6 +12,14 @@ set(KDEV_PLUGIN_VERSION 31)
 find_package (ECM 5.14.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
+if(NOT CMAKE_VERSION VERSION_LESS "3.10.0")
+  # CMake 3.9+ warns about automoc on files without Q_OBJECT, and doesn't know about other macros.
+  # 3.10+ lets us provide more macro names that require automoc.
+  # Remove this when depending on a Frameworks or ECM version that solves this upstream.
+  list(APPEND CMAKE_AUTOMOC_MACRO_NAMES
+       "K_PLUGIN_FACTORY_WITH_JSON" "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON" "K_EXPORT_PLASMA_RUNNER")
+endif()
+
 include(KDECompilerSettings NO_POLICY_SCOPE) # needs to be first, as set policies influence following macros
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
@@ -30,6 +38,13 @@ include(CheckFunctionExists)
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
+
+if(POLICY CMP0071)
+  # CMake 3.10 generates warnings when projects combine AUTOMOC with qt5_wrap_ui() or qt5_add_resources()
+  # Avoid that by setting this policy (cf. https://bugreports.qt.io/browse/QTBUG-63442)
+  # Note: Once we depend on a Qt which has this fix (likely Qt 5.9.4+), remove this
+  cmake_policy(SET CMP0071 OLD)
+endif()
 
 set(QT_MIN_VERSION "5.5.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets)
