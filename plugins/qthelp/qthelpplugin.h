@@ -49,7 +49,7 @@ class QtHelpPlugin : public KDevelop::IPlugin, public KDevelop::IDocumentationPr
     public Q_SLOTS:
         void readConfig();
     Q_SIGNALS:
-        void changedProvidersList() const override;
+        void changedProvidersList() override;
     private:
         void loadQtDocumentation(bool loadQtDoc);
         void searchHelpDirectory(QStringList& pathList, QStringList& nameList, QStringList& iconList, const QString& searchDir);

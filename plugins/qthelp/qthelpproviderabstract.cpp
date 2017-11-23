@@ -91,9 +91,9 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForIndex(const QModelIn
     return IDocumentation::Ptr(new QtHelpDocumentation(name, m_engine.indexModel()->linksForKeyword(name)));
 }
 
-void QtHelpProviderAbstract::jumpedTo(const QUrl& newUrl) const
+void QtHelpProviderAbstract::jumpedTo(const QUrl& newUrl)
 {
-    QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
+    QtHelpDocumentation::s_provider = this;
     QMap<QString, QUrl> info;
     info.insert(newUrl.toString(), newUrl);
     IDocumentation::Ptr doc(new QtHelpDocumentation(newUrl.toString(), info));

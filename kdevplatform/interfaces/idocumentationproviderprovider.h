@@ -36,7 +36,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IDocumentationProviderProvider
         virtual QList<IDocumentationProvider*> providers() = 0;
 
 Q_SIGNALS:
-    virtual void changedProvidersList() const=0;
+    virtual void changedProvidersList() = 0;
 };
 
 }

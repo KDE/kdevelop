@@ -119,19 +119,19 @@ Q_SIGNALS:
     /**
      * Emitted whenever a new test suite gets added.
      */
-    void testSuiteAdded(KDevelop::ITestSuite* suite) const;
+    void testSuiteAdded(KDevelop::ITestSuite* suite);
     /**
      * Emitted whenever a test suite gets removed.
      */
-    void testSuiteRemoved(KDevelop::ITestSuite* suite) const;
+    void testSuiteRemoved(KDevelop::ITestSuite* suite);
     /**
      * Emitted after a test suite was run.
      */
-    void testRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result) const;
+    void testRunFinished(KDevelop::ITestSuite* suite, const KDevelop::TestResult& result);
      /**
      * Emitted when a test suite starts.
      */
-    void testRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases) const;
+    void testRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases);
 };
 
 }

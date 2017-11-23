@@ -66,61 +66,61 @@ Q_SIGNALS:
     /**
      * Emits when received standard output lines from inferior
      */
-    void inferiorStdoutLines(const QStringList &lines) const;
+    void inferiorStdoutLines(const QStringList& lines);
 
     /**
      * Emits when received standard error lines from inferior
      */
-    void inferiorStderrLines(const QStringList &lines) const;
+    void inferiorStderrLines(const QStringList& lines);
 
-    void inferiorStopped(const MI::AsyncRecord &r) const;
+    void inferiorStopped(const MI::AsyncRecord& r);
 
-    void inferiorRunning() const;
+    void inferiorRunning();
 
     /**
      * Emits when received standard output from debugger for user commands
      */
-    void debuggerUserCommandOutput(const QString &output) const;
+    void debuggerUserCommandOutput(const QString &output);
 
     /**
      * Emits when received standard output from debugger for internal commands
      */
-    void debuggerInternalCommandOutput(const QString &output) const;
+    void debuggerInternalCommandOutput(const QString& output);
 
     /**
      * Emits when received internal output from debugger
      */
-    void debuggerInternalOutput(const QString &output) const;
+    void debuggerInternalOutput(const QString& output) const;
 
     /**
      * Emits when received standard output from inferior's tty
      */
-    void inferiorTtyStdout(const QByteArray &output) const;
+    void inferiorTtyStdout(const QByteArray& output);
 
     /**
      * Emits when received standard output from inferior's tty
      */
-    void inferiorTtyStderr(const QByteArray &output) const;
+    void inferiorTtyStderr(const QByteArray& output);
 
     /**
      * Emits when the debugger instance state changes
      */
-    void debuggerStateChanged(DBGStateFlags oldState, DBGStateFlags newState) const;
+    void debuggerStateChanged(DBGStateFlags oldState, DBGStateFlags newState);
 
     /**
      * Emits when there's message needed to be show to user.
      */
-    void showMessage(const QString& message, int timeout) const;
+    void showMessage(const QString& message, int timeout);
 
     /**
      * Emits when the debugger console view need to be raised.
      */
-    void raiseDebuggerConsoleViews() const;
+    void raiseDebuggerConsoleViews();
 
     /**
      * Emits when need to reset
      */
-    void reset() const;
+    void reset();
 
 public:
     bool debuggerStateIsOn(DBGStateFlags state) const;

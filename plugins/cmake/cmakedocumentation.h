@@ -57,7 +57,7 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
         QString descriptionForIdentifier(const QString& identifier, Type t) const;
         
     Q_SIGNALS:
-        void addHistory(const KDevelop::IDocumentation::Ptr& doc) const override;
+        void addHistory(const KDevelop::IDocumentation::Ptr& doc) override;
     
     private:
         CMakeCommandsContents* m_index;
