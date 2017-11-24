@@ -1051,7 +1051,7 @@ void QuickOpenLineEdit::hideEvent(QHideEvent* ev)
 bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
 {
     if (!m_widget) {
-        return false;
+        return IQuickOpenLine::eventFilter(obj, e);
     }
 
     switch (e->type()) {
@@ -1060,7 +1060,7 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
         if (static_cast<QKeyEvent*>(e)->key() == Qt::Key_Escape) {
             deactivate();
             e->accept();
-            return true;
+            return true; // eat event
         }
         break;
     case QEvent::WindowActivate:
@@ -1085,13 +1085,13 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
             //Eat the focus event, keep the focus
             qCDebug(PLUGIN_QUICKOPEN) << "focus change" << "inside this: " << insideThis(obj) << "this" << this << "obj" << obj;
             if (obj == this) {
-                return false;
+                break;
             }
 
             qCDebug(PLUGIN_QUICKOPEN) << "reason" << focusEvent->reason();
             if (focusEvent->reason() != Qt::MouseFocusReason && focusEvent->reason() != Qt::ActiveWindowFocusReason) {
                 QMetaObject::invokeMethod(this, "checkFocus", Qt::QueuedConnection);
-                return false;
+                break;
             }
             if (!insideThis(obj)) {
                 deactivate();
@@ -1103,7 +1103,8 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
     default:
         break;
     }
-    return false;
+
+    return IQuickOpenLine::eventFilter(obj, e);
 }
 void QuickOpenLineEdit::activate()
 {

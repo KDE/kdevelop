@@ -110,23 +110,21 @@ void ProjectFilterConfigPage::defaults()
 
 bool ProjectFilterConfigPage::eventFilter(QObject* object, QEvent* event)
 {
-    Q_ASSERT(object == m_ui->filters);
-    Q_UNUSED(object);
-    if (event->type() == QEvent::KeyRelease) {
+    if (object == m_ui->filters && event->type() == QEvent::KeyRelease) {
         QKeyEvent* key = static_cast<QKeyEvent*>(event);
         if (key->key() == Qt::Key_Delete && key->modifiers() == Qt::NoModifier && m_ui->filters->currentIndex().isValid()) {
             // workaround https://bugs.kde.org/show_bug.cgi?id=324451
             // there is no other way I see to figure out whether an editor is showing...
             QWidget* editor = m_ui->filters->viewport()->findChild<QWidget*>();
-            if (editor && editor->isVisible()) {
-                // editor is showing
-                return false;
+            if (!editor || !editor->isVisible()) {
+                // editor is not showing
+                remove();
+                return true; // eat event
             }
-            remove();
-            return true;
         }
     }
-    return false;
+
+    return ProjectConfigPage::eventFilter(object, event);
 }
 
 void ProjectFilterConfigPage::selectionChanged()

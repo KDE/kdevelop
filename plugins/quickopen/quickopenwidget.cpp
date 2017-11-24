@@ -432,7 +432,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
                 // Tab should work just like Down
                 QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Down, Qt::NoModifier));
                 QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Down, Qt::NoModifier));
-                return true;
+                return true; // eat event
             }
             break;
         case Qt::Key_Backtab:
@@ -440,7 +440,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
                 // Shift + Tab should work just like Up
                 QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyPress, Qt::Key_Up, Qt::NoModifier));
                 QCoreApplication::sendEvent(ui.list, new QKeyEvent(QEvent::KeyRelease, Qt::Key_Up, Qt::NoModifier));
-                return true;
+                return true; // eat event
             }
             break;
         case Qt::Key_Down:
@@ -453,20 +453,20 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
                     } else {
                         interface->up();
                     }
-                    return true;
+                    return true; // eat event
                 }
-                return false;
+                break;
             }
             Q_FALLTHROUGH();
         }
         case Qt::Key_PageUp:
         case Qt::Key_PageDown:
             if (watched == ui.list) {
-                return false;
+                break;
             }
             QApplication::sendEvent(ui.list, event);
             //callRowSelected();
-            return true;
+            return true; // eat event
 
         case Qt::Key_Left: {
             //Expand/unexpand
@@ -474,7 +474,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
                 //Eventually Send action to the widget
                 if (auto interface = getInterface()) {
                     interface->previous();
-                    return true;
+                    return true; // eat event
                 }
             } else {
                 QModelIndex row = m_proxy->mapToSource(ui.list->currentIndex());
@@ -483,11 +483,11 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
 
                     if (m_model->isExpanded(row)) {
                         m_model->setExpanded(row, false);
-                        return true;
+                        return true; // eat event
                     }
                 }
             }
-            return false;
+            break;
         }
         case Qt::Key_Right: {
             //Expand/unexpand
@@ -495,7 +495,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
                 //Eventually Send action to the widget
                 if (auto interface = getInterface()) {
                     interface->next();
-                    return true;
+                    return true; // eat event
                 }
             } else {
                 QModelIndex row = m_proxy->mapToSource(ui.list->selectionModel()->currentIndex());
@@ -504,11 +504,11 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
 
                     if (!m_model->isExpanded(row)) {
                         m_model->setExpanded(row, true);
-                        return true;
+                        return true; // eat event
                     }
                 }
             }
-            return false;
+            break;
         }
         case Qt::Key_Return:
         case Qt::Key_Enter: {
@@ -520,7 +520,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
                 //Eventually Send action to the widget
                 if (auto interface = getInterface()) {
                     interface->accept();
-                    return true;
+                    return true; // eat event
                 }
             } else {
                 QString filterText = ui.searchLine->text();
@@ -531,7 +531,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
 
                 if (m_model->execute(m_proxy->mapToSource(ui.list->currentIndex()), filterText)) {
                     if (!stillExists) {
-                        return true;
+                        return true; // eat event
                     }
 
                     if (!(keyEvent->modifiers() & Qt::ShiftModifier)) {
@@ -544,12 +544,12 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
                     }
                 }
             }
-            return true;
+            return true; // eat event
         }
         }
     }
 
-    return false;
+    return QMenu::eventFilter(watched, event);
 }
 
 #include "quickopenwidget.moc"

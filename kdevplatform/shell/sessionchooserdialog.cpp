@@ -153,42 +153,37 @@ bool SessionChooserDialog::eventFilter(QObject* object, QEvent* event)
     if(object == m_view && event->type() == QEvent::Leave ) {
         m_deleteButtonTimer.stop();
         m_deleteButton->hide();
-    }
-    if(object == m_filter && event->type() == QEvent::KeyPress) {
+        // don't eat the event, pass on
+   } else if (object == m_filter && event->type() == QEvent::KeyPress) {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        if(keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down || keyEvent->key() == Qt::Key_Return) {
+        if (keyEvent->key() == Qt::Key_Return) {
+            accept();
+            // don't eat the event, pass on
+        } else if (keyEvent->key() == Qt::Key_Up || keyEvent->key() == Qt::Key_Down) {
             QModelIndex currentIndex = m_view->selectionModel()->currentIndex();
             int selectRow = -1;
-            switch (keyEvent->key()) {
-            case Qt::Key_Up:
+            if (keyEvent->key() == Qt::Key_Up) {
                 if(!currentIndex.isValid()) {
                     selectRow = m_model->rowCount()-1;
                 } else if(currentIndex.row()-1 >= 0) {
                     selectRow = currentIndex.row()-1;
                 }
-                break;
-            case Qt::Key_Down:
+            } else {
                 if(!currentIndex.isValid()) {
                     selectRow = 0;
                 } else if(currentIndex.row()+1 < m_model->rowCount()) {
                     selectRow = currentIndex.row()+1;
                 }
-                break;
-            case Qt::Key_Return:
-                accept();
-                return false;
-            default:
-                return false;
             }
 
             if (selectRow != -1) {
                     m_view->selectionModel()->setCurrentIndex(m_model->index(selectRow, 0), QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
             }
-            return true;
+            return true; // eat event
         }
     }
 
-    return false;
+    return QDialog::eventFilter(object, event);
 }
 
 QWidget* SessionChooserDialog::mainWidget() const
