@@ -49,8 +49,10 @@
     <Action shortcut="Ctrl+Del" name="delete_word_right"/>
     <Action shortcut="Del" name="delete_next_character"/>
     <Action shortcut="Backspace" name="backspace"/>
-    <Action shortcut="Alt+Left; Ctrl+Tab" name="last_used_views_forward"/>
-    <Action shortcut="Alt+Right; Ctrl+Shift+Tab" name="last_used_views_backward"/>
+    <Action shortcut="Ctrl+Tab" name="last_used_views_forward"/>
+    <Action shortcut="Ctrl+Shift+Tab" name="last_used_views_backward"/>
+    <Action shortcut="Alt+Left" name="previous_context"/>
+    <Action shortcut="Alt+Right" name="next_context"/>
     <Action shortcut="Shift+F7" name="previous_use"/>
     <Action shortcut="F7" name="next_use"/>
     <Action shortcut="Ctrl+Shift+U" name="find_uses"/>
