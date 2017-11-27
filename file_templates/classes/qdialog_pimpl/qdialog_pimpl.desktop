@@ -2,6 +2,7 @@
 Name=Dialog (pimpl) with a UI File
 Name[ca]=Diàleg (pimpl) amb un fitxer IU
 Name[ca@valencia]=Diàleg (pimpl) amb un fitxer IU
+Name[en_GB]=Dialogue (pimpl) with a UI File
 Name[es]=Diálogo (pimpl) con un archivo de interfaz gráfica
 Name[fr]=Dialogue (pimpl) avec un fichier d'interface utilisateur
 Name[it]=Finestra di dialogo (pimpl) con un file UI
@@ -17,6 +18,7 @@ Name[zh_CN]=使用 UI 文件的对话框 (pimpl)
 Comment=QDialog subclass with a separate Qt Designer file and private implementation
 Comment[ca]=Subclasse QDialog amb un fitxer separat del Qt Designer i una implementació privada
 Comment[ca@valencia]=Subclasse QDialog amb un fitxer separat del Qt Designer i una implementació privada
+Comment[en_GB]=QDialog subclass with a separate Qt Designer file and private implementation
 Comment[es]=Subclase de QDialog con un archivo separado del Diseñador de Qt y una implementación privada
 Comment[fr]=Sous-classe QDialog avec un fichier Qt  Designer séparé et une implémentation privée
 Comment[it]=Sottoclasse di QDialog con un file separato di Qt Designer e implementazione privata
