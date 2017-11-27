@@ -164,7 +164,7 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
         }
     }
 
-    const QRegularExpression nameRx(".*\\..*\\.*.json$");
+    const QRegularExpression nameRx(".*\\..*\\..*\\.json$");
     for(auto it = urls.begin(); it != urls.end(); ) {
         if (it->isLocalFile() && it->path().contains(nameRx)) {
             ++it;
