@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0)
 
 project(%{APPNAME})
 
@@ -11,7 +11,7 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMQtDeclareLoggingCategory)
 include(FeatureSummary)
 
-find_package(KDevPlatform 5.1.40 REQUIRED)
+find_package(KDevPlatform 5.2.40 REQUIRED)
 
 add_subdirectory(src)
 
