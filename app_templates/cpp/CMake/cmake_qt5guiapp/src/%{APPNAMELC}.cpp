@@ -3,12 +3,9 @@
 
 %{APPNAME}::%{APPNAME}(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::%{APPNAME})
+    m_ui(new Ui::%{APPNAME})
 {
-    ui->setupUi(this);
+    m_ui->setupUi(this);
 }
 
-%{APPNAME}::~%{APPNAME}()
-{
-    delete ui;
-}
+%{APPNAME}::~%{APPNAME}() = default;

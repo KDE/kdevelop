@@ -2,6 +2,7 @@
 #define %{APPNAMEUC}_H
 
 #include <QMainWindow>
+#include <QScopedPointer>
 
 namespace Ui {
 class %{APPNAME};
@@ -12,11 +13,11 @@ class %{APPNAME} : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit %{APPNAME}(QWidget *parent = 0);
-    ~%{APPNAME}();
+    explicit %{APPNAME}(QWidget *parent = nullptr);
+    ~%{APPNAME}() override;
 
 private:
-    Ui::%{APPNAME} *ui;
+    QScopedPointer<Ui::%{APPNAME}> m_ui;
 };
 
 #endif // %{APPNAMEUC}_H
