@@ -13,6 +13,7 @@
         "Description[pl]": "Zapewnia widok narzędzia wyjścia tekstu dla wykorzystania w innych wtyczkach, aby pokazać rzeczy takie jak komunikaty kompilatora.",
         "Description[pt]": "Oferece uma área de texto para os outros 'plugins' usarem, para apresentar algumas coisas, como as mensagens do compilador.",
         "Description[sv]": "Tillhandahåller en verktygsvy för textutmatning som andra insticksprogram kan använda för att visa saker som kompilatormeddelanden.",
+        "Description[tr]": "Derleyici iletileri gibi şeyleri göstermek amacıyla,diğer eklentilerin kullanması için araç görünümünde bir metin çıkışı sağlar.",
         "Description[uk]": "Забезпечує роботу панелі показу текстових даних інших додатків, зокрема попереджень компілятора.",
         "Description[x-test]": "xxProvides a text output tool view for other plugins to use, to show things like compiler messages.xx",
         "Description[zh_CN]": "提供让其它插件使用的文本输出工具视图，以便显示诸如编译器消息的信息。",
