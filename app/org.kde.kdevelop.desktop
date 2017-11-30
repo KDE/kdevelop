@@ -4,6 +4,7 @@ Exec=kdevelop
 MimeType=
 Icon=kdevelop
 X-DocPath=kdevelop/index.html
+Actions=OpenSession;
 Terminal=false
 Name=KDevelop
 Name[ca]=KDevelop
@@ -73,3 +74,7 @@ GenericName[x-test]=xxIntegrated Development Environmentxx
 GenericName[zh_CN]=集成开发环境
 GenericName[zh_TW]=整合開發環境
 Categories=Qt;KDE;Development;IDE;
+
+[Desktop Action OpenSession]
+Name=Open a Session
+Exec=kdevelop --ps
