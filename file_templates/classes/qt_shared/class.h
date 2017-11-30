@@ -30,3 +30,7 @@ public:
 private:
     QSharedDataPointer<{{ name }}Data> d;
 {% endblock class_body %}
+
+{% block outside_namespace %}
+Q_DECLARE_TYPEINFO({% if namespaces %}{{ namespaces|join:"::" }}::{% endif %}{{ name }}, Q_MOVABLE_TYPE);
+{% endblock outside_namespace %}
