@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile arg="true"/>
+  <group name="General">
+    <entry name="window_title" type="String">
+      <label>Window title</label>
+      <default>{{ name }}</default>
+    </entry>
+    <entry name="buttonset" type="Enum">
+      <label>Button set</label>
+      <choices>
+          <choice name="Ok/Cancel" />
+          <choice name="Close" />
+      </choices>
+      <default>Ok/Cancel</default>
+    </entry>
+  </group>
+</kcfg>

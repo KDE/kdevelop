@@ -1,0 +1,59 @@
+{% with namespaces|join:"::"|default:"::"|add:"::"|cut:"::::"|add:name as ns_prefixed_name %}
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>{{ ns_prefixed_name }}</class>
+ <widget class="QDialog" name="{{ ns_prefixed_name }}">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>520</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>{{ window_title }}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+{% if "Close" == buttonset %}
+      <set>QDialogButtonBox::Close</set>
+{% else %}{# default Ok/Cancel #}
+      <set>QDialogButtonBox::Ok|QDialogButtonBox::Cancel</set>
+{% endif %}
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+{% if "Ok/Cancel" == buttonset %}
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>{{ ns_prefixed_name }}</receiver>
+   <slot>accept()</slot>
+  </connection>
+{% endif %}
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>{{ ns_prefixed_name }}</receiver>
+   <slot>reject()</slot>
+  </connection>
+ </connections>
+</ui>
+{% endwith %}

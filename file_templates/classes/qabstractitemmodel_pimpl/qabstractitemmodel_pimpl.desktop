@@ -1,0 +1,24 @@
+[General]
+Name=QAbstractItemModel pimpl subclass
+Comment=QAbstractItemModel subclass with private implementation
+Category=C++/Qt
+Language=C++
+Type=Class
+BaseClasses=public QAbstractItemModel
+Files=Header,PrivateHeader,Implementation
+OptionsFile=options.kcfg
+
+[Header]
+Name=Header
+File=class.h
+OutputFile={{ name }}.h
+
+[PrivateHeader]
+Name=Private Header
+File=class_p.h
+OutputFile={{ name }}_p.h
+
+[Implementation]
+Name=Implementation
+File=class.cpp
+OutputFile={{ name }}.cpp

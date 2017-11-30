@@ -1,15 +1,19 @@
 set(filetemplate_DIRS
     classes/cpp_basic
     classes/private_pointer
-    classes/qt_widget
-    classes/qobject
-    classes/qobject_pimpl
     classes/python_basic
     classes/c_gobject
     classes/c_gobject_private
     classes/c_gobject_properties
     classes/qt_shared
     classes/qt_interface
+    classes/qobject
+    classes/qobject_pimpl
+    classes/qabstractitemmodel
+    classes/qabstractitemmodel_pimpl
+    classes/qt_widget
+    classes/qwidget_pimpl
+    classes/qdialog
     classes/qdialog_pimpl
 
     testing/cpp_cpputest
@@ -43,5 +47,10 @@ install ( FILES
     common/cpp_header.h
     common/cpp_header_onlyfunctions.h
     common/cpp_implementation.cpp
+    common/cpp_qobject_header.h
+    common/cpp_qobject_implementation.cpp
+    common/cpp_qobject_pimpl_header.h
+    common/cpp_qobject_pimpl_p_header.h
+    common/cpp_qobject_pimpl_implementation.cpp
     DESTINATION ${KDE_INSTALL_DATADIR}/kdevcodegen/templates
 )

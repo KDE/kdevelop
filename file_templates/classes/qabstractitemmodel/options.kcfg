@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile arg="true"/>
+  <group name="General">
+    <entry name="add_roles_enum" type="Bool">
+      <label>Custom roles enum</label>
+      <default>true</default>
+    </entry>
+    <entry name="roles_enum_name" type="String">
+      <label>Custom roles enum name</label>
+      <default>Roles</default>
+    </entry>
+    <entry name="first_role_name" type="String">
+      <label>First custom role title</label>
+      <default>CustomRole</default>
+    </entry>
+  </group>
+</kcfg>

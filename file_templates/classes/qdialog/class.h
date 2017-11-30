@@ -2,7 +2,7 @@
 
 
 {% block qobject_default_include %}
-#include <QWidget>
+#include <QDialog>
 {% endblock qobject_default_include %}
 
 
@@ -12,7 +12,7 @@
 {% endblock includes %}
 
 
-{% block qobject_baseclass %}QWidget{% endblock qobject_baseclass %}
+{% block qobject_baseclass %}QDialog{% endblock qobject_baseclass %}
 
 
 {% block forward_declarations %}
