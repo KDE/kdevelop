@@ -151,6 +151,8 @@ private:
 
 }
 
+Q_DECLARE_TYPEINFO(CommentTodoParser::Result, Q_MOVABLE_TYPE);
+
 TodoExtractor::TodoExtractor(CXTranslationUnit unit, CXFile file)
     : m_unit(unit)
     , m_file(file)

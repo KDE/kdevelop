@@ -29,9 +29,9 @@
 /// @todo Listen to filesystem changes (together with the project manager)
 /// and call fileModificationCache().clear(...) when a file has changed
 
-namespace KDevelop {
+using namespace KDevelop;
 
-const int cacheModificationTimesForSeconds = 30;
+const int KDevelop::cacheModificationTimesForSeconds = 30;
 
 QMutex fileModificationTimeCacheMutex(QMutex::Recursive);
 
@@ -40,6 +40,7 @@ struct FileModificationCache
   QDateTime m_readTime;
   QDateTime m_modificationTime;
 };
+Q_DECLARE_TYPEINFO(FileModificationCache, Q_MOVABLE_TYPE);
 
 typedef QHash<KDevelop::IndexedString, FileModificationCache> FileModificationMap;
 
@@ -141,6 +142,3 @@ QString ModificationRevision::toString() const
 {
   return QStringLiteral("%1 (rev %2)").arg(QDateTime::fromTime_t(modificationTime).time().toString()).arg(revision);
 }
-
-}
-

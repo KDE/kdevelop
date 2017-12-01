@@ -73,3 +73,4 @@ inline AutoFlushingQTextStream& qStdOut()
 
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::KDevFormatLine, Q_MOVABLE_TYPE);

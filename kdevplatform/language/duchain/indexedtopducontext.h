@@ -142,5 +142,6 @@ inline uint qHash(const IndexedTopDUContext& ctx)
 }
 
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)
+Q_DECLARE_TYPEINFO(KDevelop::IndexedTopDUContext, Q_MOVABLE_TYPE);
 
 #endif // KDEVPLATFORM_INDEXEDTOPDUCONTEXT_H

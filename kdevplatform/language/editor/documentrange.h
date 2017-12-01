@@ -54,6 +54,7 @@ public:
 };
 
 }
+Q_DECLARE_TYPEINFO(KDevelop::DocumentRange, Q_MOVABLE_TYPE);
 
 namespace QTest {
 template<>

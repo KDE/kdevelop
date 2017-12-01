@@ -38,6 +38,7 @@ struct CustomBuildSystemTool
 };
 
 Q_DECLARE_METATYPE( CustomBuildSystemTool )
+Q_DECLARE_TYPEINFO(CustomBuildSystemTool, Q_MOVABLE_TYPE);
 
 struct CustomBuildSystemConfig
 {
@@ -56,5 +57,7 @@ struct CustomBuildSystemConfig
         }
     }
 };
+
+Q_DECLARE_TYPEINFO(CustomBuildSystemConfig, Q_MOVABLE_TYPE);
 
 #endif

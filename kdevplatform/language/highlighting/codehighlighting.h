@@ -215,6 +215,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
 
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::HighlightedRange, Q_MOVABLE_TYPE);
+
 #endif
 
 // kate: space-indent on; indent-width 2; remove-trailing-spaces all; show-tabs on; tab-indents on; tab-width 2;

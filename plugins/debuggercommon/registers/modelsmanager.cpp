@@ -63,6 +63,8 @@ private:
 
 } // end of namespace KDevMI
 
+ Q_DECLARE_TYPEINFO(KDevMI::Model, Q_MOVABLE_TYPE);
+
 using namespace KDevMI;
 
 ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(nullptr), m_config(KSharedConfig::openConfig()->group("Register models")) {}

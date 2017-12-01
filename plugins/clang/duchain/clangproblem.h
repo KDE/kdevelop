@@ -46,6 +46,7 @@ struct KDEVCLANGPRIVATE_EXPORT ClangFixit
             && currentText == other.currentText;
     }
 };
+Q_DECLARE_TYPEINFO(ClangFixit, Q_MOVABLE_TYPE);
 
 namespace QTest {
 template<>

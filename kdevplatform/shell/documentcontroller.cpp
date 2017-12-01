@@ -70,11 +70,10 @@ Boston, MA 02110-1301, USA.
 
 #define EMPTY_DOCUMENT_URL i18n("Untitled")
 
-namespace KDevelop
-{
+using namespace KDevelop;
 
 
-class DocumentControllerPrivate
+class KDevelop::DocumentControllerPrivate
 {
 public:
     struct OpenFileResult
@@ -556,6 +555,7 @@ public:
     KRecentFilesAction* fileOpenRecent;
     KTextEditor::Document* globalTextEditorInstance;
 };
+Q_DECLARE_TYPEINFO(KDevelop::DocumentControllerPrivate::HistoryEntry, Q_MOVABLE_TYPE);
 
 DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )
@@ -1227,8 +1227,6 @@ void DocumentController::vcsAnnotateCurrentDocument()
         KMessageBox::error(nullptr, i18n("Could not annotate the document because it is not "
                                    "part of a version-controlled project."));
     }
-}
-
 }
 
 #include "moc_documentcontroller.cpp"

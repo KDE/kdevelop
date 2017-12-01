@@ -62,6 +62,7 @@ public:
 };
 
 Q_DECLARE_METATYPE(ParserArguments);
+Q_DECLARE_TYPEINFO(ParserArguments, Q_MOVABLE_TYPE);
 
 struct ConfigEntry
 {
@@ -76,6 +77,7 @@ struct ConfigEntry
     // FIXME: get rid of this but stay backwards compatible
     void setDefines(const QHash<QString, QVariant>& defines);
 };
+Q_DECLARE_TYPEINFO(ConfigEntry, Q_MOVABLE_TYPE);
 
 namespace Utils
 {

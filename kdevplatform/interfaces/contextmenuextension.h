@@ -107,4 +107,6 @@ private:
 
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::ContextMenuExtension, Q_MOVABLE_TYPE);
+
 #endif

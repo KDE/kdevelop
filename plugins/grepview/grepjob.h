@@ -53,6 +53,9 @@ struct GrepJobSettings
     QString searchPaths;
 };
 
+Q_DECLARE_TYPEINFO(GrepJobSettings, Q_MOVABLE_TYPE);
+
+
 class GrepJob : public KJob, public KDevelop::IStatus
 {
     Q_OBJECT

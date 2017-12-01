@@ -69,4 +69,6 @@ struct NavigationAction {
 
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::NavigationAction, Q_MOVABLE_TYPE);
+
 #endif

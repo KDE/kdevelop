@@ -102,6 +102,8 @@ public:
     KTextEditor::Cursor cursor;
 };
 
+Q_DECLARE_TYPEINFO(UrlInfo, Q_MOVABLE_TYPE);
+
 QDataStream& operator<<(QDataStream& stream, const UrlInfo& info)
 {
     stream << info.url;

@@ -50,6 +50,9 @@ struct SupportedProperty {
     QString classContains;
 };
 
+Q_DECLARE_TYPEINFO(SupportedProperty, Q_MOVABLE_TYPE);
+
+
 // This class is responsible for creating the property widgets for editing QML properties
 // with e.g. sliders. It knows which properties are supported, and creates a widget from
 // a QML file for each supported property when requested. For the actual implementations

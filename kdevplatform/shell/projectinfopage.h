@@ -47,4 +47,6 @@ private:
 
 }
 
+Q_DECLARE_TYPEINFO(ProjectFileChoice, Q_MOVABLE_TYPE);
+
 #endif

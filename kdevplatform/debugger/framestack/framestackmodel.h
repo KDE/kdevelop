@@ -99,4 +99,6 @@ private:
 
 }
 
+Q_DECLARE_TYPEINFO(KDevelop::FrameStackModel::ThreadItem, Q_MOVABLE_TYPE);
+
 #endif

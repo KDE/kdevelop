@@ -146,4 +146,6 @@ inline FileSymbol::~FileSymbol()
 } // end of MI
 } // end of KDevMI
 
+ Q_DECLARE_TYPEINFO(KDevMI::MI::Token, Q_PRIMITIVE_TYPE);
+
 #endif

@@ -40,6 +40,8 @@ struct Import
     KDevelop::CursorInRevision location;
 };
 
+Q_DECLARE_TYPEINFO(Import, Q_MOVABLE_TYPE);
+
 using Imports = QMultiHash<CXFile, Import>;
 using IncludeFileContexts = QHash<CXFile, KDevelop::ReferencedTopDUContext>;
 

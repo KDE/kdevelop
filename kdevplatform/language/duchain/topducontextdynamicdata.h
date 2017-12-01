@@ -182,5 +182,6 @@ class TopDUContextDynamicData {
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::TopDUContextDynamicData::ItemDataInfo, Q_PRIMITIVE_TYPE);
+Q_DECLARE_TYPEINFO(KDevelop::TopDUContextDynamicData::ArrayWithPosition, Q_MOVABLE_TYPE);
 
 #endif
