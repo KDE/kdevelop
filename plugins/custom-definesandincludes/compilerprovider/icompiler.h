@@ -39,7 +39,7 @@ enum LanguageType
     Cuda,
     ObjC,
 
-    Other = 100
+    Other
 };
 }
 

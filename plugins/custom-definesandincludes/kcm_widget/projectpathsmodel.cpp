@@ -196,8 +196,7 @@ void ProjectPathsModel::addPath( const QUrl &url )
 
 void ProjectPathsModel::addPathInternal( const ConfigEntry& config, bool prepend )
 {
-    Q_ASSERT(!config.parserArguments.cppArguments.isEmpty());
-    Q_ASSERT(!config.parserArguments.cArguments.isEmpty());
+    Q_ASSERT(!config.parserArguments.isAnyEmpty());
 
     // Do not allow duplicates
     foreach( const ConfigEntry& existingConfig, projectPaths ) {

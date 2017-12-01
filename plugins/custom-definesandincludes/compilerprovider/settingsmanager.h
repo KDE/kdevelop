@@ -38,10 +38,26 @@ class ProjectBaseItem;
 
 struct ParserArguments
 {
-    QString cArguments;
-    QString cppArguments;
-    QString openClArguments;
-    QString cudaArguments;
+public:
+    const QString& operator[](Utils::LanguageType languageType) const
+    {
+        Q_ASSERT(languageType >= Utils::C && languageType < Utils::Other);
+        return arguments[languageType];
+    }
+
+    QString& operator[](Utils::LanguageType languageType)
+    {
+        Q_ASSERT(languageType >= Utils::C && languageType < Utils::Other);
+        return arguments[languageType];
+    }
+
+    /// Is any of the arguments empty?
+    bool isAnyEmpty() const;
+
+private:
+    QString arguments[Utils::Other];
+
+public:
     bool parseAmbiguousAsCPP;
 };
 

@@ -44,16 +44,35 @@ QString languageStandard(const QString& arguments)
     return arguments.mid(idx, end - idx);
 }
 
-bool isCustomParserArguments(const QString& arguments, const QStringList& standards)
+QString languageDefaultStandard(Utils::LanguageType languageType)
+{
+    switch (languageType) {
+    case Utils::C:
+        return QLatin1String("c99");
+    case Utils::Cpp:
+        return QLatin1String("c++11");
+    case Utils::OpenCl:
+        return QLatin1String("CL1.1");
+    case Utils::Cuda:
+        return QLatin1String("c++11");
+    case Utils::ObjC:
+        return QLatin1String("c99");
+    case Utils::Other:
+        break;
+    }
+    Q_UNREACHABLE();
+}
+
+bool isCustomParserArguments(Utils::LanguageType languageType, const QString& arguments, const QStringList& standards)
 {
     const auto defaultArguments = SettingsManager::globalInstance()->defaultParserArguments();
 
     auto standard = languageStandard(arguments);
 
     auto tmpArgs(arguments);
-    tmpArgs.replace(standard, QLatin1String("c++11"));
+    tmpArgs.replace(standard, languageDefaultStandard(languageType));
 
-    if (tmpArgs == defaultArguments.cppArguments && standards.contains(standard)) {
+    if (tmpArgs == defaultArguments[languageType] && standards.contains(standard)) {
         return false;
     }
 
@@ -96,9 +115,9 @@ void ParserWidget::textEdited()
 void ParserWidget::languageStandardChangedC(const QString& standard)
 {
     if (m_ui->languageStandardsC->currentIndex() == customProfileIdx) {
-        m_ui->parserOptionsC->setText(SettingsManager::globalInstance()->defaultParserArguments().cArguments);
+        m_ui->parserOptionsC->setText(SettingsManager::globalInstance()->defaultParserArguments()[Utils::C]);
     } else {
-        auto text = SettingsManager::globalInstance()->defaultParserArguments().cArguments;
+        auto text = SettingsManager::globalInstance()->defaultParserArguments()[Utils::C];
         auto currentStandard = languageStandard(text);
         m_ui->parserOptionsC->setText(text.replace(currentStandard, standard));
     }
@@ -110,9 +129,9 @@ void ParserWidget::languageStandardChangedC(const QString& standard)
 void ParserWidget::languageStandardChangedCpp(const QString& standard)
 {
     if (m_ui->languageStandardsCpp->currentIndex() == customProfileIdx) {
-        m_ui->parserOptionsCpp->setText(SettingsManager::globalInstance()->defaultParserArguments().cppArguments);
+        m_ui->parserOptionsCpp->setText(SettingsManager::globalInstance()->defaultParserArguments()[Utils::Cpp]);
     } else {
-        auto text = SettingsManager::globalInstance()->defaultParserArguments().cppArguments;
+        auto text = SettingsManager::globalInstance()->defaultParserArguments()[Utils::Cpp];
         auto currentStandard = languageStandard(text);
         m_ui->parserOptionsCpp->setText(text.replace(currentStandard, standard));
     }
@@ -124,9 +143,9 @@ void ParserWidget::languageStandardChangedCpp(const QString& standard)
 void ParserWidget::languageStandardChangedOpenCl(const QString& standard)
 {
     if (m_ui->languageStandardsOpenCl->currentIndex() == customProfileIdx) {
-        m_ui->parserOptionsOpenCl->setText(SettingsManager::globalInstance()->defaultParserArguments().openClArguments);
+        m_ui->parserOptionsOpenCl->setText(SettingsManager::globalInstance()->defaultParserArguments()[Utils::OpenCl]);
     } else {
-        auto text = SettingsManager::globalInstance()->defaultParserArguments().openClArguments;
+        auto text = SettingsManager::globalInstance()->defaultParserArguments()[Utils::OpenCl];
         auto currentStandard = languageStandard(text);
         m_ui->parserOptionsOpenCl->setText(text.replace(currentStandard, standard));
     }
@@ -138,9 +157,9 @@ void ParserWidget::languageStandardChangedOpenCl(const QString& standard)
 void ParserWidget::languageStandardChangedCuda(const QString& standard)
 {
     if (m_ui->languageStandardsCuda->currentIndex() == customProfileIdx) {
-        m_ui->parserOptionsCuda->setText(SettingsManager::globalInstance()->defaultParserArguments().cudaArguments);
+        m_ui->parserOptionsCuda->setText(SettingsManager::globalInstance()->defaultParserArguments()[Utils::Cuda]);
     } else {
-        auto text = SettingsManager::globalInstance()->defaultParserArguments().cudaArguments;
+        auto text = SettingsManager::globalInstance()->defaultParserArguments()[Utils::Cuda];
         auto currentStandard = languageStandard(text);
         m_ui->parserOptionsCuda->setText(text.replace(currentStandard, standard));
     }
@@ -151,7 +170,7 @@ void ParserWidget::languageStandardChangedCuda(const QString& standard)
 
 void ParserWidget::setParserArguments(const ParserArguments& arguments)
 {
-    auto setArguments = [](QComboBox* languageStandards, QLineEdit* parserOptions, const QString& arguments) {
+    auto setArguments = [arguments](QComboBox* languageStandards, QLineEdit* parserOptions, Utils::LanguageType languageType) {
         QStringList standards;
         const int languageStandardsCount = languageStandards->count();
         standards.reserve(languageStandardsCount-1);
@@ -159,19 +178,20 @@ void ParserWidget::setParserArguments(const ParserArguments& arguments)
             standards << languageStandards->itemText(i);
         }
 
-        if (isCustomParserArguments(arguments, standards)) {
+        const QString& arg = arguments[languageType];
+        if (isCustomParserArguments(languageType, arg, standards)) {
             languageStandards->setCurrentIndex(customProfileIdx);
         } else {
-            languageStandards->setCurrentText(languageStandard(arguments));
+            languageStandards->setCurrentText(languageStandard(arg));
         }
 
-        parserOptions->setText(arguments);
+        parserOptions->setText(arg);
     };
 
-    setArguments(m_ui->languageStandardsCpp, m_ui->parserOptionsCpp, arguments.cppArguments);
-    setArguments(m_ui->languageStandardsC, m_ui->parserOptionsC, arguments.cArguments);
-    setArguments(m_ui->languageStandardsOpenCl, m_ui->parserOptionsOpenCl, arguments.openClArguments);
-    setArguments(m_ui->languageStandardsCuda, m_ui->parserOptionsCuda, arguments.cudaArguments);
+    setArguments(m_ui->languageStandardsCpp, m_ui->parserOptionsCpp, Utils::Cpp);
+    setArguments(m_ui->languageStandardsC, m_ui->parserOptionsC, Utils::C);
+    setArguments(m_ui->languageStandardsOpenCl, m_ui->parserOptionsOpenCl, Utils::OpenCl);
+    setArguments(m_ui->languageStandardsCuda, m_ui->parserOptionsCuda, Utils::Cuda);
 
     m_ui->parseHeadersInPlainC->setChecked(!arguments.parseAmbiguousAsCPP);
 
@@ -180,13 +200,13 @@ void ParserWidget::setParserArguments(const ParserArguments& arguments)
 
 ParserArguments ParserWidget::parserArguments() const
 {
-    return {
-        m_ui->parserOptionsC->text(),
-        m_ui->parserOptionsCpp->text(),
-        m_ui->parserOptionsOpenCl->text(),
-        m_ui->parserOptionsCuda->text(),
-        !m_ui->parseHeadersInPlainC->isChecked()
-    };
+    ParserArguments arguments;
+    arguments[Utils::C] = m_ui->parserOptionsC->text();
+    arguments[Utils::Cpp] = m_ui->parserOptionsCpp->text();
+    arguments[Utils::OpenCl] = m_ui->parserOptionsOpenCl->text();
+    arguments[Utils::Cuda] = m_ui->parserOptionsCuda->text();
+    arguments.parseAmbiguousAsCPP = !m_ui->parseHeadersInPlainC->isChecked();
+    return arguments;
 }
 
 void ParserWidget::updateEnablements()

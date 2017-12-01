@@ -81,8 +81,7 @@ static ConfigEntry findConfigForItem(QVector<ConfigEntry> paths, const KDevelop:
     }
     ret.includes.removeDuplicates();
 
-    Q_ASSERT(!ret.parserArguments.cppArguments.isEmpty());
-    Q_ASSERT(!ret.parserArguments.cArguments.isEmpty());
+    Q_ASSERT(!ret.parserArguments.isAnyEmpty());
 
     return ret;
 }
@@ -102,22 +101,10 @@ void merge(Defines* target, const Defines& source)
 QString argumentsForPath(const Path& path, const ParserArguments& arguments)
 {
     auto languageType = Utils::languageType(path, arguments.parseAmbiguousAsCPP);
-    switch (languageType) {
-    case Utils::C:
-        return arguments.cArguments;
-    case Utils::Cpp:
-        return arguments.cppArguments;
-    case Utils::OpenCl:
-        return arguments.openClArguments;
-    case Utils::Cuda:
-        return arguments.cudaArguments;
-    case Utils::ObjC:
-        return QString();
-    case Utils::Other:
-        return QString();
-    }
-    Q_UNREACHABLE();
-    return QString();
+    if (languageType != Utils::Other)
+        return arguments[languageType];
+    else
+        return {};
 }
 
 }

@@ -143,8 +143,7 @@ QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
         return {};
     }
 
-    return config.compiler->defines(languageType,
-        languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
+    return config.compiler->defines(languageType, config.parserArguments[languageType]);
 }
 
 Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
@@ -159,8 +158,7 @@ Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
         return {};
     }
 
-    return config.compiler->includes(languageType,
-        languageType == Utils::C ? config.parserArguments.cArguments : config.parserArguments.cppArguments);
+    return config.compiler->includes(languageType, config.parserArguments[languageType]);
 }
 
 Path::List CompilerProvider::frameworkDirectories( ProjectBaseItem* /* item */ ) const

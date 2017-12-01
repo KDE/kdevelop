@@ -34,11 +34,16 @@
 #include <interfaces/icore.h>
 #include <project/projectmodel.h>
 
+#include <algorithm>
+
 #include "compilerprovider.h"
 
 using namespace KDevelop;
 
 namespace {
+constexpr Utils::LanguageType configurableLanguageTypes[] =
+    { Utils::C, Utils::Cpp, Utils::OpenCl, Utils::Cuda };
+
 namespace ConfigConstants {
 const QString configKey = QStringLiteral( "CustomDefinesAndIncludes" );
 const QString definesKey = QStringLiteral( "Defines" );
@@ -54,14 +59,22 @@ const QString compilerNameKey = QStringLiteral( "Name" );
 const QString compilerPathKey = QStringLiteral( "Path" );
 const QString compilerTypeKey = QStringLiteral( "Type" );
 
-QString parserArgumentsCPP()
+QString parserArgumentsKey(Utils::LanguageType languageType)
 {
-    return QStringLiteral("parserArguments");
-}
-
-QString parserArgumentsC()
-{
-    return QStringLiteral("parserArgumentsC");
+    switch (languageType) {
+    case Utils::C:
+        return QStringLiteral("parserArgumentsC");
+    case Utils::Cpp:
+        return QStringLiteral("parserArguments");
+    case Utils::OpenCl:
+        return QStringLiteral("parserArgumentsOpenCL");
+    case Utils::Cuda:
+        return QStringLiteral("parserArgumentsCuda");
+    case Utils::ObjC:
+    case Utils::Other:
+        break;
+    }
+    Q_UNREACHABLE();
 }
 
 QString parseAmbiguousAsCPP()
@@ -78,16 +91,22 @@ QStringList sorted(QStringList list)
     return list;
 }
 
-ParserArguments defaultArguments()
+ParserArguments createDefaultArguments()
 {
-    const static ParserArguments arguments{
-        QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c99"),
-        QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11"),
-        QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=CL1.1"),
-        QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11"),
-        true
-    };
+    ParserArguments arguments;
+    arguments[Utils::C] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c99");
+    arguments[Utils::Cpp] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11");
+    arguments[Utils::OpenCl] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -cl-std=CL1.1");
+    arguments[Utils::Cuda] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11");
+    arguments[Utils::ObjC] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c99");
+    arguments.parseAmbiguousAsCPP = true;
 
+    return arguments;
+}
+
+const ParserArguments& defaultArguments()
+{
+    static ParserArguments arguments = createDefaultArguments();
     return arguments;
 }
 
@@ -124,8 +143,9 @@ void doWriteSettings( KConfigGroup grp, const QVector<ConfigEntry>& paths )
     for ( const auto& path : paths ) {
         KConfigGroup pathgrp = grp.group( ConfigConstants::projectPathPrefix + QString::number( pathIndex++ ) );
         pathgrp.writeEntry(ConfigConstants::projectPathKey, path.path);
-        pathgrp.writeEntry(ConfigConstants::parserArgumentsCPP(), path.parserArguments.cppArguments);
-        pathgrp.writeEntry(ConfigConstants::parserArgumentsC(), path.parserArguments.cArguments);
+        for (auto type : configurableLanguageTypes) {
+            pathgrp.writeEntry(ConfigConstants::parserArgumentsKey(type), path.parserArguments[type]);
+        }
         pathgrp.writeEntry(ConfigConstants::parseAmbiguousAsCPP(), path.parserArguments.parseAmbiguousAsCPP);
 
         {
@@ -158,16 +178,15 @@ QVector<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
 
         ConfigEntry path;
         path.path = pathgrp.readEntry( ConfigConstants::projectPathKey, "" );
-        path.parserArguments.cppArguments = pathgrp.readEntry(ConfigConstants::parserArgumentsCPP(), defaultArguments().cppArguments);
-        path.parserArguments.cArguments = pathgrp.readEntry(ConfigConstants::parserArgumentsC(), defaultArguments().cArguments);
+        for (auto type : configurableLanguageTypes) {
+            path.parserArguments[type] = pathgrp.readEntry(ConfigConstants::parserArgumentsKey(type), defaultArguments()[type]);
+        }
         path.parserArguments.parseAmbiguousAsCPP = pathgrp.readEntry(ConfigConstants::parseAmbiguousAsCPP(), defaultArguments().parseAmbiguousAsCPP);
 
-        if (path.parserArguments.cppArguments.isEmpty()) {
-            path.parserArguments.cppArguments = defaultArguments().cppArguments;
-        }
-
-        if (path.parserArguments.cArguments.isEmpty()) {
-            path.parserArguments.cArguments = defaultArguments().cArguments;
+        for (auto type : configurableLanguageTypes) {
+            if (path.parserArguments[type].isEmpty()) {
+                path.parserArguments[type] = defaultArguments()[type];
+            }
         }
 
         { // defines
@@ -223,8 +242,7 @@ QVector<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
             pathgrp.deleteGroup();
         }
 
-        Q_ASSERT(!path.parserArguments.cppArguments.isEmpty());
-        Q_ASSERT(!path.parserArguments.cArguments.isEmpty());
+        Q_ASSERT(!path.parserArguments.isAnyEmpty());
         paths << path;
     }
 
@@ -428,4 +446,11 @@ LanguageType languageType(const KDevelop::Path& path, bool treatAmbiguousAsCPP)
 
     return Other;
 }
+}
+
+bool ParserArguments::isAnyEmpty() const
+{
+    return std::any_of(std::begin(arguments), std::end(arguments),
+        [](const QString& args) { return args.isEmpty(); }
+    );
 }
