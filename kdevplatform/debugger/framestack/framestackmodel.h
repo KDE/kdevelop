@@ -59,11 +59,11 @@ public:
      * @note The currentFrame property will be set to the first frame
      *   containing debug information
      */
-    void setFrames(int threadNumber, const QList<FrameItem>& frames);
-    void insertFrames(int threadNumber, const QList<FrameItem> &frames);
+    void setFrames(int threadNumber, const QVector<FrameItem>& frames);
+    void insertFrames(int threadNumber, const QVector<FrameItem>& frames);
     void setHasMoreFrames(int threadNumber, bool hasMoreFrames);
     FrameItem frame(const QModelIndex &index) override;
-    QList<FrameItem> frames(int threadNumber) const;
+    QVector<FrameItem> frames(int threadNumber) const;
 
     //ItemModel implementation
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;

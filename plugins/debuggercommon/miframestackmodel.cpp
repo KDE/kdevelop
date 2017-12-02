@@ -113,7 +113,7 @@ struct FrameListHandler : public MICommandHandler
     {
         const Value& stack = r[QStringLiteral("stack")];
         int first = stack[0][QStringLiteral("level")].toInt();
-        QList<KDevelop::FrameStackModel::FrameItem> frames;
+        QVector<KDevelop::FrameStackModel::FrameItem> frames;
         for (int i = 0; i< stack.size(); ++i) {
             const Value& frame = stack[i];
             KDevelop::FrameStackModel::FrameItem f;

@@ -1817,7 +1817,7 @@ void GdbTest::testCatchpoint()
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(1000);
 
-    const QList<KDevelop::FrameStackModel::FrameItem> frames = fsModel->frames(fsModel->currentThread());
+    const QVector<KDevelop::FrameStackModel::FrameItem> frames = fsModel->frames(fsModel->currentThread());
     QVERIFY(frames.size() >= 2);
     // frame 0 is somewhere inside libstdc++
     QCOMPARE(frames[1].file, QUrl::fromLocalFile(findSourceFile("debugeeexception.cpp")));

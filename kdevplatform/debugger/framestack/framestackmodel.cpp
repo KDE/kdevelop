@@ -58,7 +58,7 @@ public:
     bool m_updateCurrentFrameOnNextFetch = false;
 
     QVector<FrameStackModel::ThreadItem> m_threads;
-    QHash<int, QList<FrameStackModel::FrameItem> > m_frames;
+    QHash<int, QVector<FrameStackModel::FrameItem>> m_frames;
     QHash<int, bool> m_hasMoreFrames;
 
     // Caches
@@ -105,7 +105,7 @@ QModelIndex FrameStackModelPrivate::indexForThreadNumber(int threadNumber)
     return QModelIndex();
 }
 
-void FrameStackModel::setFrames(int threadNumber, const QList<FrameItem>& frames)
+void FrameStackModel::setFrames(int threadNumber, const QVector<FrameItem>& frames)
 {
     QModelIndex threadIndex = d->indexForThreadNumber(threadNumber);
     Q_ASSERT(threadIndex.isValid());
@@ -137,7 +137,7 @@ void FrameStackModel::setFrames(int threadNumber, const QList<FrameItem>& frames
     emit currentFrameChanged(d->m_currentFrame);
 }
 
-void FrameStackModel::insertFrames(int threadNumber, const QList<FrameItem> &frames)
+void FrameStackModel::insertFrames(int threadNumber, const QVector<FrameItem>& frames)
 {
     QModelIndex threadIndex = d->indexForThreadNumber(threadNumber);
     Q_ASSERT(threadIndex.isValid());
@@ -161,7 +161,7 @@ FrameStackModel::FrameItem FrameStackModel::frame(const QModelIndex& index)
     return d->m_frames[thread.nr].at(index.row());
 }
 
-QList<FrameStackModel::FrameItem> FrameStackModel::frames(int threadNumber) const
+QVector<FrameStackModel::FrameItem> FrameStackModel::frames(int threadNumber) const
 {
     return d->m_frames.value(threadNumber);
 }
