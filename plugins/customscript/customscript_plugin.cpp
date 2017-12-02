@@ -207,9 +207,9 @@ QString CustomScriptPlugin::formatSource(const QString& text, const QUrl& url, c
     return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
 }
 
-static QList<SourceFormatterStyle> stylesFromLanguagePlugins()
+static QVector<SourceFormatterStyle> stylesFromLanguagePlugins()
 {
-    QList<KDevelop::SourceFormatterStyle> styles;
+    QVector<KDevelop::SourceFormatterStyle> styles;
     foreach (auto lang, ICore::self()->languageController()->loadedLanguages()) {
         const SourceFormatterItemList& languageStyles = lang->sourceFormatterItems();
         for (const SourceFormatterStyleItem& item: languageStyles) {
@@ -273,9 +273,9 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
     return result;
 }
 
-QList<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles()
+QVector<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles()
 {
-    QList<KDevelop::SourceFormatterStyle> styles = stylesFromLanguagePlugins();
+    QVector<KDevelop::SourceFormatterStyle> styles = stylesFromLanguagePlugins();
     styles << predefinedStyle(QStringLiteral("kdev_format_source"));
     styles << predefinedStyle(QStringLiteral("GNU_indent_GNU"));
     styles << predefinedStyle(QStringLiteral("GNU_indent_KR"));

@@ -46,7 +46,7 @@ public:
 
     /** \return A map of predefined styles (a key and a caption for each type)
     */
-    QList<KDevelop::SourceFormatterStyle> predefinedStyles() override;
+    QVector<KDevelop::SourceFormatterStyle> predefinedStyles() override;
 
     /** \return The widget to edit a style.
     */

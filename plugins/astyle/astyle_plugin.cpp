@@ -116,7 +116,7 @@ SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption
     return st;
 }
 
-QList<SourceFormatterStyle> AStylePlugin::predefinedStyles()
+QVector<SourceFormatterStyle> AStylePlugin::predefinedStyles()
 {
     return {
         predefinedStyle(QStringLiteral("ANSI")),

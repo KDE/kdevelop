@@ -175,7 +175,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 		/** \return A map of predefined styles (a key and a caption for each type)
 		*/
-		virtual QList<SourceFormatterStyle> predefinedStyles() = 0;
+		virtual QVector<SourceFormatterStyle> predefinedStyles() = 0;
 
 		/** \return The widget to edit a style.
 		*/
