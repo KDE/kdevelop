@@ -71,7 +71,7 @@ public:
     /**Reconstructs the mainwindow according to the current area.*/
     void reconstruct();
     /**Reconstructs the views according to the current area index.*/
-    void reconstructViews(QList<View*> topViews = QList<View*>());    
+    void reconstructViews(const QList<View*>& topViews = QList<View*>());
     /**Clears the area leaving mainwindow empty.*/
     void clearArea();
     

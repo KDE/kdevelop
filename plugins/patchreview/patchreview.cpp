@@ -394,7 +394,8 @@ void PatchReviewPlugin::cancelReview() {
     }
 }
 
-void PatchReviewPlugin::finishReview( QList<QUrl> selection ) {
+void PatchReviewPlugin::finishReview(const QList<QUrl>& selection)
+{
     if( m_patch && m_patch->finishReview( selection ) ) {
         closeReview();
     }

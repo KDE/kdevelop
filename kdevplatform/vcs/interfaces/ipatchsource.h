@@ -68,7 +68,7 @@ class KDEVPLATFORMVCS_EXPORT IPatchSource : public QObject
         ///Called when the user has reviewed and accepted this patch
         ///If canSelectFiles() returned true, @p selection will contain the list of selected files
         ///If this returns false, the review is not finished.
-        virtual bool finishReview(QList<QUrl> selection);
+        virtual bool finishReview(const QList<QUrl>& selection);
 
         ///Called when the user has rejected this patch
         virtual void cancelReview();

@@ -73,7 +73,7 @@ MainWindow::~MainWindow()
     qCDebug(SUBLIME) << "destroying mainwindow";
 }
 
-void MainWindow::reconstructViews(QList<View*> topViews)
+void MainWindow::reconstructViews(const QList<View*>& topViews)
 {
     d->reconstructViews(topViews);
 }

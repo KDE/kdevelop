@@ -424,7 +424,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
     return Area::ContinueWalker;
 }
 
-void MainWindowPrivate::reconstructViews(QList<View*> topViews)
+void MainWindowPrivate::reconstructViews(const QList<View*>& topViews)
 {
     ViewCreator viewCreator(this, topViews);
     area->walkViews(viewCreator, area->rootIndex());

@@ -38,7 +38,7 @@ void IPatchSource::cancelReview()
 
 }
 
-bool IPatchSource::finishReview(QList< QUrl > selection)
+bool IPatchSource::finishReview(const QList<QUrl>& selection)
 {
     Q_UNUSED(selection);
     return true;

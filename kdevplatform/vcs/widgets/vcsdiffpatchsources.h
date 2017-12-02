@@ -114,7 +114,7 @@ class KDEVPLATFORMVCS_EXPORT VCSCommitDiffPatchSource : public VCSDiffPatchSourc
 
     void cancelReview() override;
 
-    bool finishReview(QList< QUrl > selection) override ;
+    bool finishReview(const QList<QUrl>& selection) override;
     QList<KDevelop::VcsStatusInfo> infos() const { return m_infos; }
 Q_SIGNALS:
     void reviewFinished(const QString& message, const QList<QUrl>& selection);

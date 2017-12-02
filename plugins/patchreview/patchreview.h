@@ -78,7 +78,7 @@ public :
 
     void startReview( KDevelop::IPatchSource* patch, ReviewMode mode ) override;
 
-    void finishReview( QList< QUrl > selection );
+    void finishReview(const QList<QUrl>& selection);
 
     QUrl urlForFileModel( const Diff2::DiffModel* model );
     QAction* finishReviewAction() const { return m_finishReview; }

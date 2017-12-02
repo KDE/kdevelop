@@ -248,8 +248,8 @@ void VCSCommitDiffPatchSource::cancelReview() {
     deleteLater();
 }
 
-bool VCSCommitDiffPatchSource::finishReview(QList< QUrl > selection) {
-
+bool VCSCommitDiffPatchSource::finishReview(const QList<QUrl>& selection)
+{
     QString message;
 
     if (m_commitMessageEdit)
