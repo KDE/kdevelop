@@ -1036,7 +1036,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
             if(!usingFiles.isEmpty()) {
             TopDUContext* top = (forward ? usingFiles[0] : usingFiles.back()).data();
             if(top) {
-              QList<RangeInRevision> useRanges = allUses(top, decl, true);
+              QVector<RangeInRevision> useRanges = allUses(top, decl, true);
               std::sort(useRanges.begin(), useRanges.end());
               if(!useRanges.isEmpty()) {
                 QUrl url = top->url().toUrl();
@@ -1049,7 +1049,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
           return;
         }
         //Check whether we are within a use
-        QList<RangeInRevision> localUses = allUses(chosen, decl, true);
+        QVector<RangeInRevision> localUses = allUses(chosen, decl, true);
         std::sort(localUses.begin(), localUses.end());
         for(int a = 0; a < localUses.size(); ++a) {
           int nextUse = (forward ? a+1 : a-1);
@@ -1122,7 +1122,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
 
                 QUrl u = nextTop->url().toUrl();
 
-                QList<RangeInRevision> nextTopUses = allUses(nextTop, decl, true);
+                QVector<RangeInRevision> nextTopUses = allUses(nextTop, decl, true);
                 std::sort(nextTopUses.begin(), nextTopUses.end());
 
                 if(!nextTopUses.isEmpty()) {

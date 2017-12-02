@@ -148,8 +148,8 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
       if (FunctionDefinition::definition(dec)) {
         qout << Indent((m_indent+2) * 2 + 1) << "Definition:" << FunctionDefinition::definition(dec)->range().castToSimpleRange() << endl;
       }
-      QMap<IndexedString, QList<RangeInRevision> > uses = dec->uses();
-      for(QMap<IndexedString, QList<RangeInRevision> >::const_iterator it = uses.constBegin(); it != uses.constEnd(); ++it) {
+      const auto uses = dec->uses();
+      for (auto it = uses.constBegin(); it != uses.constEnd(); ++it) {
         qout << Indent((m_indent+3) * 2) << "File:" << it.key().str() << endl;
         foreach (const RangeInRevision range, *it)
           qout << Indent((m_indent+4) * 2) << "Use:" << range.castToSimpleRange() << endl;

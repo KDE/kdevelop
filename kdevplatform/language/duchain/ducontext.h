@@ -942,7 +942,7 @@ KDEVPLATFORMLANGUAGE_EXPORT const IndexedIdentifier& globalIndexedAliasIdentifie
 /**
  * Collects all uses of the given @p declarationIndex
  */
-KDEVPLATFORMLANGUAGE_EXPORT QList<RangeInRevision> allUses(DUContext* context,
+KDEVPLATFORMLANGUAGE_EXPORT QVector<RangeInRevision> allUses(DUContext* context,
                                                            int declarationIndex,
                                                            bool noEmptyRanges = false);
 }

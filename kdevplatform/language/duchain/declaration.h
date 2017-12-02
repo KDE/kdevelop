@@ -426,7 +426,7 @@ public:
    *
    * \note This is a non-trivial operation and hence expensive.
    */
-  QMap<IndexedString, QList<RangeInRevision> > uses() const;
+  QMap<IndexedString, QVector<RangeInRevision>> uses() const;
 
   /**
    * Determines whether the declaration has any uses or not.

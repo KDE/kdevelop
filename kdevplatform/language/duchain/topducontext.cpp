@@ -1133,8 +1133,9 @@ int TopDUContext::indexForUsedDeclaration(Declaration* declaration, bool create)
   return d_func()->m_usedDeclarationIdsSize()-1;
 }
 
-QList<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges) {
-  QList<RangeInRevision> ret;
+QVector<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges)
+{
+  QVector<RangeInRevision> ret;
   int declarationIndex = context->indexForUsedDeclaration(declaration, false);
   if(declarationIndex == std::numeric_limits<int>::max())
     return ret;

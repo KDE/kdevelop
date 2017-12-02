@@ -161,13 +161,13 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
         }
 
         if (supportedLanguage()->refactoring()->shouldRenameUses(declAtCursor)) {
-            QMap< IndexedString, QList<RangeInRevision> > declUses = declAtCursor->uses();
+            const auto declUses = declAtCursor->uses();
             if (declUses.isEmpty()) {
                 // new declaration has no uses
                 return;
             }
 
-            for(QMap< IndexedString, QList< RangeInRevision > >::const_iterator it = declUses.constBegin();
+            for (auto it = declUses.constBegin();
                 it != declUses.constEnd(); ++it)
             {
                 foreach(const RangeInRevision range, it.value()) {

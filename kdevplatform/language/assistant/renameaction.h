@@ -43,9 +43,9 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RevisionedFileRanges
 {
     KDevelop::IndexedString file;
     KDevelop::RevisionReference revision;
-    QList<KDevelop::RangeInRevision> ranges;
+    QVector<KDevelop::RangeInRevision> ranges;
 
-    static QVector<RevisionedFileRanges> convert(const QMap<KDevelop::IndexedString, QList<KDevelop::RangeInRevision> >& uses);
+    static QVector<RevisionedFileRanges> convert(const QMap<KDevelop::IndexedString, QVector<KDevelop::RangeInRevision> >& uses);
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT RenameAction : public KDevelop::IAssistantAction

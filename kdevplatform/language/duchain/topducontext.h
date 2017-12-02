@@ -364,7 +364,7 @@ protected:
 /**
   * Returns all uses of the given declaration within this top-context and all sub-contexts
   * */
-KDEVPLATFORMLANGUAGE_EXPORT QList<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges = false);
+KDEVPLATFORMLANGUAGE_EXPORT QVector<RangeInRevision> allUses(TopDUContext* context, Declaration* declaration, bool noEmptyRanges = false);
 
 inline uint qHash(const ReferencedTopDUContext& ctx) {
   return ctx.hash();

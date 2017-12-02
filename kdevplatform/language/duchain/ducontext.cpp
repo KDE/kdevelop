@@ -1475,9 +1475,9 @@ QWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topC
   }
 }
 
-QList<RangeInRevision> allUses(DUContext* context, int declarationIndex, bool noEmptyUses)
+QVector<RangeInRevision> allUses(DUContext* context, int declarationIndex, bool noEmptyUses)
 {
-  QList<RangeInRevision> ret;
+  QVector<RangeInRevision> ret;
   for(int a = 0; a < context->usesCount(); ++a)
     if(context->uses()[a].m_declarationIndex == declarationIndex)
       if(!noEmptyUses || !context->uses()[a].m_range.isEmpty())

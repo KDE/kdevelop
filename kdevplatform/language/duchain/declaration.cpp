@@ -644,7 +644,7 @@ bool Declaration::equalQualifiedIdentifier(const Declaration* rhs) const {
   return m_context->equalScopeIdentifier(m_context);
 }
 
-QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
+QMap<IndexedString, QVector<RangeInRevision> > Declaration::uses() const
 {
   ENSURE_CAN_READ
   QMap<IndexedString, QMap<RangeInRevision, bool> > tempUses;
@@ -673,11 +673,11 @@ QMap<IndexedString, QList<RangeInRevision> > Declaration::uses() const
     }
   }
 
-  QMap<IndexedString, QList<RangeInRevision> > ret;
+  QMap<IndexedString, QVector<RangeInRevision>> ret;
 
   for(QMap<IndexedString, QMap<RangeInRevision, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
     if(!(*it).isEmpty()) {
-      QList<RangeInRevision>& list(ret[it.key()]);
+      auto& list = ret[it.key()];
       for(QMap<RangeInRevision, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
         list << it2.key();
     }

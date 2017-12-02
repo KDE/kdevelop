@@ -32,7 +32,7 @@
 
 using namespace KDevelop;
 
-QVector<RevisionedFileRanges> RevisionedFileRanges::convert(const QMap<IndexedString, QList<RangeInRevision> >& uses)
+QVector<RevisionedFileRanges> RevisionedFileRanges::convert(const QMap<IndexedString, QVector<RangeInRevision> >& uses)
 {
     QVector<RevisionedFileRanges> ret(uses.size());
     auto insertIt = ret.begin();
