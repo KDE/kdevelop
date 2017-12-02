@@ -71,19 +71,19 @@ public:
     }
 
     ///Clears the filter and sets new data. The filter-text will be lost.
-    void setItems( const QList<Item>& data )
+    void setItems(const QVector<Item>& data)
     {
         m_items = data;
         clearFilter();
     }
 
-    const QList<Item>& items() const
+    const QVector<Item>& items() const
     {
         return m_items;
     }
 
     ///Returns the data that is left after the filtering
-    const QList<Item>& filteredItems() const
+    const QVector<Item>& filteredItems() const
     {
         return m_filtered;
     }
@@ -99,7 +99,7 @@ public:
             return;
         }
 
-        QList<Item> filterBase = m_filtered;
+        QVector<Item> filterBase = m_filtered;
         if( !text.startsWith( m_oldFilterText ) ) {
             filterBase = m_items; //Start filtering based on the whole data
         }
@@ -136,8 +136,8 @@ protected:
 
 private:
     QString m_oldFilterText;
-    QList<Item> m_filtered;
-    QList<Item> m_items;
+    QVector<Item> m_filtered;
+    QVector<Item> m_items;
 };
 }
 
@@ -155,19 +155,19 @@ public:
     }
 
     ///Clears the filter and sets new data. The filter-text will be lost.
-    void setItems( const QList<Item>& data )
+    void setItems(const QVector<Item>& data)
     {
         m_items = data;
         clearFilter();
     }
 
-    const QList<Item>& items() const
+    const QVector<Item>& items() const
     {
         return m_items;
     }
 
     ///Returns the data that is left after the filtering
-    const QList<Item>& filteredItems() const
+    const QVector<Item>& filteredItems() const
     {
         return m_filtered;
     }
@@ -185,7 +185,7 @@ public:
 
         const QString joinedText = text.join(QString());
 
-        QList<Item> filterBase = m_filtered;
+        QVector<Item> filterBase = m_filtered;
 
         if ( m_oldFilterText.isEmpty()) {
             filterBase = m_items;
@@ -201,11 +201,11 @@ public:
 
         // filterBase is correctly sorted, to keep it that way we add
         // exact matches to this list in sorted way and then prepend the whole list in one go.
-        QList<Item> exactMatches;
+        QVector<Item> exactMatches;
         // similar for starting matches
-        QList<Item> startMatches;
+        QVector<Item> startMatches;
         // all other matches
-        QList<Item> otherMatches;
+        QVector<Item> otherMatches;
         foreach( const Item& data, filterBase ) {
             const Path toFilter = static_cast<Parent*>(this)->itemPath(data);
             const QVector<QString>& segments = toFilter.segments();
@@ -271,8 +271,8 @@ public:
 
 private:
     QStringList m_oldFilterText;
-    QList<Item> m_filtered;
-    QList<Item> m_items;
+    QVector<Item> m_filtered;
+    QVector<Item> m_items;
 };
 
 }

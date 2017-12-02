@@ -128,7 +128,7 @@ private:
     // project files sorted by their url
     // this is done so we can limit ourselves to a relatively fast
     // filtering without any expensive sorting in reset().
-    QList<ProjectFile> m_projectFiles;
+    QVector<ProjectFile> m_projectFiles;
 };
 
 /**

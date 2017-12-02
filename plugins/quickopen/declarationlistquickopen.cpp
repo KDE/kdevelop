@@ -22,7 +22,7 @@
 using namespace KDevelop;
 
 DeclarationListDataProvider::DeclarationListDataProvider(IQuickOpen* quickopen,
-                                                         const QList<DUChainItem>& items,
+                                                         const QVector<DUChainItem>& items,
                                                          bool openDefinitions)
     : DUChainItemDataProvider(quickopen, openDefinitions)
     , m_items(items)

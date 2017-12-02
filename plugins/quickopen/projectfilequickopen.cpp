@@ -310,10 +310,10 @@ void ProjectFileDataProvider::reset()
 {
     clearFilter();
 
-    QList<ProjectFile> projectFiles = m_projectFiles;
+    QVector<ProjectFile> projectFiles = m_projectFiles;
 
     const auto& open = openFiles();
-    for (QList<ProjectFile>::iterator it = projectFiles.begin();
+    for (QVector<ProjectFile>::iterator it = projectFiles.begin();
          it != projectFiles.end(); ) {
         if (open.contains(it->indexedPath)) {
             it = projectFiles.erase(it);
@@ -343,7 +343,7 @@ void OpenFilesDataProvider::reset()
     IDocumentController* docCtrl = ICore::self()->documentController();
     const QList<IDocument*>& docs = docCtrl->openDocuments();
 
-    QList<ProjectFile> currentFiles;
+    QVector<ProjectFile> currentFiles;
     currentFiles.reserve(docs.size());
     foreach (IDocument* doc, docs) {
         ProjectFile f;

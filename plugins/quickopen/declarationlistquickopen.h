@@ -31,12 +31,12 @@ class DeclarationListDataProvider
     Q_OBJECT
 public:
     DeclarationListDataProvider(KDevelop::IQuickOpen* quickopen,
-                                const QList<DUChainItem>& items,
+                                const QVector<DUChainItem>& items,
                                 bool openDefinitions = false);
 
     void reset() override;
 private:
-    QList<DUChainItem> m_items;
+    QVector<DUChainItem> m_items;
 };
 
 #endif

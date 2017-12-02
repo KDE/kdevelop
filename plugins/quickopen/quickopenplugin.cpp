@@ -127,7 +127,7 @@ class OutlineFilter
 {
 public:
     enum OutlineMode { Functions, FunctionsAndClasses };
-    explicit OutlineFilter(QList<DUChainItem>& _items, OutlineMode _mode = FunctionsAndClasses) : items(_items)
+    explicit OutlineFilter(QVector<DUChainItem>& _items, OutlineMode _mode = FunctionsAndClasses) : items(_items)
         , mode(_mode)
     {
     }
@@ -156,7 +156,7 @@ public:
             return false;
         }
     }
-    QList<DUChainItem>& items;
+    QVector<DUChainItem>& items;
     OutlineMode mode;
 };
 
@@ -734,7 +734,7 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
         return;
     }
 
-    QList<DUChainItem> items;
+    QVector<DUChainItem> items;
     OutlineFilter filter(items, OutlineFilter::Functions);
     DUChainUtils::collectItems(context, filter);
 
@@ -852,7 +852,7 @@ struct CreateOutlineDialog
     }
     QPointer<QuickOpenWidgetDialog> dialog;
     Declaration* cursorDecl;
-    QList<DUChainItem> items;
+    QVector<DUChainItem> items;
     QuickOpenModel* model;
 };
 
