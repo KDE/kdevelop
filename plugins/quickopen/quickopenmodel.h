@@ -119,8 +119,8 @@ private:
     };
 
     //typedef QMultiMap< QString, ProviderEntry > ProviderMap;
-    typedef QList<ProviderEntry> ProviderList;
-    QList<ProviderEntry> m_providers;
+    using ProviderList = QVector<ProviderEntry>;
+    ProviderList m_providers;
     QString m_filterText;
     int m_expandingWidgetHeightIncrease;
     mutable int m_resetBehindRow;
