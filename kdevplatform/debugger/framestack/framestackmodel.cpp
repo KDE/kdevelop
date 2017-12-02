@@ -57,7 +57,7 @@ public:
     int m_subsequentFrameFetchOperations = 0;
     bool m_updateCurrentFrameOnNextFetch = false;
 
-    QList<FrameStackModel::ThreadItem> m_threads;
+    QVector<FrameStackModel::ThreadItem> m_threads;
     QHash<int, QList<FrameStackModel::FrameItem> > m_frames;
     QHash<int, bool> m_hasMoreFrames;
 
@@ -76,7 +76,7 @@ FrameStackModel::~FrameStackModel()
 {
 }
 
-void FrameStackModel::setThreads(const QList<ThreadItem> &threads)
+void FrameStackModel::setThreads(const QVector<ThreadItem>& threads)
 {
     qCDebug(DEBUGGER) << threads.count();
 
@@ -388,7 +388,7 @@ void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
         setCurrentFrame(-1);
         d->m_updateCurrentFrameOnNextFetch = true;
     } else if (state == IDebugSession::EndedState || state == IDebugSession::NotStartedState) {
-        setThreads(QList<FrameStackModel::ThreadItem>());
+        setThreads(QVector<FrameStackModel::ThreadItem>());
     }
 }
 

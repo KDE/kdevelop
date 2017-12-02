@@ -52,7 +52,7 @@ public:
         QString name;
     };
 
-    void setThreads(const QList<ThreadItem> &threads);
+    void setThreads(const QVector<ThreadItem>& threads);
     /**
      * Update frames for thread @p threadNumber
      *

@@ -72,7 +72,7 @@ void MIFrameStackModel::handleThreadInfo(const ResultRecord& r)
 {
     const Value& threads = r[QStringLiteral("threads")];
 
-    QList<FrameStackModel::ThreadItem> threadsList;
+    QVector<FrameStackModel::ThreadItem> threadsList;
     for (int i = 0; i!= threads.size(); ++i) {
         const auto &threadMI = threads[i];
         FrameStackModel::ThreadItem threadItem;
