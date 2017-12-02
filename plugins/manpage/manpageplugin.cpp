@@ -34,6 +34,7 @@
 #include <language/duchain/classfunctiondeclaration.h>
 
 #include <QFile>
+#include <QStringListModel>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

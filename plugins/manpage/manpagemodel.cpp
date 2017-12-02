@@ -27,6 +27,7 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
 
+#include <QStringListModel>
 #include <limits>
 
 namespace {

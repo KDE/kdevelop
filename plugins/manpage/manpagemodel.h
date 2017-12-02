@@ -23,11 +23,13 @@
 #ifndef MANPAGEMODEL_H
 #define MANPAGEMODEL_H
 
-#include <QStringListModel>
+#include <QAbstractItemModel>
 
 #include <KIO/Job>
 
 #include <QListIterator>
+
+class QStringListModel;
 
 // id and name for man section
 typedef QPair<QString, QString> ManSection;

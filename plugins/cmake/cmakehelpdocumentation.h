@@ -22,7 +22,6 @@
 #define CMAKEHELPDOCUMENTATION_H
 
 #include <interfaces/idocumentation.h>
-#include <QAbstractItemModel>
 
 class CMakeHomeDocumentation : public KDevelop::IDocumentation
 {
