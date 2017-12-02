@@ -33,7 +33,7 @@ public:
     void setSettings(const GrepJobSettings &settings);
     GrepJobSettings settings() const;
     ///Rerun all grep jobs from a list of settings, called by GrepOutputView
-    void historySearch(QList<GrepJobSettings> &settingsHistory);
+    void historySearch(QVector<GrepJobSettings> &settingsHistory);
 
 public Q_SLOTS:
     ///Start a new search
@@ -78,7 +78,7 @@ private:
     ///Current setting
     GrepJobSettings m_settings;
     ///List of remaining grep job settings to be done
-    QList<GrepJobSettings> m_historyJobSettings;
+    QVector<GrepJobSettings> m_historyJobSettings;
 };
 
 

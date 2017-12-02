@@ -85,7 +85,7 @@ private:
     QAction* m_clearSearchHistory;
     QLabel*  m_statusLabel;
     GrepViewPlugin *m_plugin;
-    QList<GrepJobSettings> m_settingsHistory;
+    QVector<GrepJobSettings> m_settingsHistory;
 
 private Q_SLOTS:
     void selectPreviousItem() override;

@@ -332,7 +332,7 @@ void GrepOutputView::refresh()
         qvariant_cast<QObject*>(var)->deleteLater();
         modelSelector->removeItem(index);
 
-        QList<GrepJobSettings> refresh_history({
+        QVector<GrepJobSettings> refresh_history({
             m_settingsHistory.takeAt(m_settingsHistory.count() - 1 - index)
         });
         refresh_history.first().fromHistory = false;

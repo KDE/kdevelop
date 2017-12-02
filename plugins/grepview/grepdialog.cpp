@@ -365,7 +365,7 @@ GrepJobSettings GrepDialog::settings() const
     return m_settings;
 }
 
-void GrepDialog::historySearch(QList<GrepJobSettings> &settingsHistory)
+void GrepDialog::historySearch(QVector<GrepJobSettings> &settingsHistory)
 {
     // clear the current settings history and pass it to a job list
     m_historyJobSettings.clear();
