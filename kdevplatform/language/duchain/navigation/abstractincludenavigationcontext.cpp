@@ -93,7 +93,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
     if(!shorten) {
       modifyHtml() += labelHighlight(i18n("Declarations:")) + QLatin1String("<br />");
       bool first = true;
-      QList<IdentifierPair> decs;
+      QVector<IdentifierPair> decs;
       addDeclarationsFromContext(duchain, first, decs);
     }
   }else if(duchains.isEmpty()) {
@@ -123,7 +123,7 @@ bool AbstractIncludeNavigationContext::filterDeclaration(Declaration* /*decl*/)
 }
 
 void AbstractIncludeNavigationContext::addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first,
-                                                                  QList< IdentifierPair > &addedDeclarations,
+                                                                  QVector<IdentifierPair>& addedDeclarations,
                                                                   const QString& indent )
 {
   //modifyHtml() += indent + ctx->localScopeIdentifier().toString() + "{<br />";
