@@ -166,9 +166,9 @@ struct DocumentParsePlan
         return ret;
     }
 
-    QList<QPointer<QObject> > notifyWhenReady() const
+    QVector<QPointer<QObject>> notifyWhenReady() const
     {
-        QList<QPointer<QObject> > ret;
+        QVector<QPointer<QObject>> ret;
 
         foreach(const DocumentParseTarget &target, targets) {
             if(target.notifyWhenReady)

@@ -136,7 +136,7 @@ public:
     * The notification is guaranteed to be called once the parse-job finishes, from within its destructor.
     * The given top-context may be invalid if the update failed.
     */
-    void setNotifyWhenReady(const QList<QPointer<QObject> >& notify);
+    void setNotifyWhenReady(const QVector<QPointer<QObject>>& notify);
 
     /// Sets the du-context that was created by this parse-job
     virtual void setDuChain(ReferencedTopDUContext duChain);

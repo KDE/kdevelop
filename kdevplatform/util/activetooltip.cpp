@@ -167,7 +167,7 @@ class ActiveToolTipPrivate
 public:
     QRect rect_;
     QRect handleRect_;
-    QList<QPointer<QObject> > friendWidgets_;
+    QVector<QPointer<QObject>> friendWidgets_;
 };
 }
 

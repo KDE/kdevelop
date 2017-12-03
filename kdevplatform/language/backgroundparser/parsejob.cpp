@@ -90,7 +90,7 @@ public:
     bool hasReadContents : 1;
     bool aborted : 1;
     TopDUContext::Features features;
-    QList<QPointer<QObject> > notify;
+    QVector<QPointer<QObject>> notify;
     QPointer<DocumentChangeTracker> tracker;
     RevisionReference revision;
     RevisionReference previousRevision;
@@ -209,8 +209,8 @@ void ParseJob::abortJob()
     setStatus(Status_Aborted);
 }
 
-void ParseJob::setNotifyWhenReady(const QList<QPointer< QObject > >& notify
-) {
+void ParseJob::setNotifyWhenReady(const QVector<QPointer<QObject>>& notify)
+{
     d->notify = notify;
 }
 
