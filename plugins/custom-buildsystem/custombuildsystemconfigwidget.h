@@ -57,7 +57,7 @@ private Q_SLOTS:
 private:
     void saveConfig( KConfigGroup& grp, CustomBuildSystemConfig& c, int index );
     Ui::CustomBuildSystemConfigWidget* ui;
-    QList<CustomBuildSystemConfig> configs;
+    QVector<CustomBuildSystemConfig> configs;
 };
 
 #endif
