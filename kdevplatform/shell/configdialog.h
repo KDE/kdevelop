@@ -84,7 +84,7 @@ private:
 
 private:
     // we have to use QPointer since KPageDialog::removePage() also removes all child pages
-    QList<QPointer<KPageWidgetItem>> m_pages; // TODO: use a QVector once we depend on Qt 5.4
+    QVector<QPointer<KPageWidgetItem>> m_pages;
     bool m_currentPageHasChanges = false;
     bool m_currentlyApplyingChanges = false;
 };
