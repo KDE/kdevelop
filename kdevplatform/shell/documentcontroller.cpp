@@ -544,8 +544,8 @@ public:
 
     DocumentController* controller;
 
-    QList<HistoryEntry> backHistory;
-    QList<HistoryEntry> forwardHistory;
+    QVector<HistoryEntry> backHistory;
+    QVector<HistoryEntry> forwardHistory;
     bool isJumping;
 
     QPointer<QAction> saveAll;
