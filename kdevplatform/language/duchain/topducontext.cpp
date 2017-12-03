@@ -1030,7 +1030,7 @@ void TopDUContext::removeImportedParentContext(DUContext* context) {
   m_local->removeImportedContextRecursively(static_cast<TopDUContext*>(context), true);
 }
 
-void TopDUContext::addImportedParentContexts(const QList<QPair<TopDUContext*, CursorInRevision> >& contexts, bool temporary) {
+void TopDUContext::addImportedParentContexts(const QVector<QPair<TopDUContext*, CursorInRevision>>& contexts, bool temporary) {
   typedef QPair<TopDUContext*, CursorInRevision> Pair;
 
   foreach(const Pair pair, contexts)

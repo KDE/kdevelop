@@ -262,7 +262,7 @@ public:
   ///@param temporary If this is true, importers of this context will not be notified of the new imports. This greatly increases performance while removing the context,
   ///but creates in inconsistent import-structure. Therefore it is only suitable for temporary imports. These imports will not be visible from contexts that import this one.
   ///When this top-context does not own its private data, the import is added locally only to this context, not into the shared data.
-  virtual void addImportedParentContexts(const QList<QPair<TopDUContext*, CursorInRevision> >& contexts, bool temporary=false);
+  virtual void addImportedParentContexts(const QVector<QPair<TopDUContext*, CursorInRevision>>& contexts, bool temporary = false);
 
   ///When this top-context does not own its private data, the import is removed locally only from this context, not from the shared data.
   void removeImportedParentContext(DUContext* context) override;
