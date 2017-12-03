@@ -724,7 +724,7 @@ bool Declaration::hasUses() const
   return ret;
 }
 
-QMap<IndexedString, QList<KTextEditor::Range> > Declaration::usesCurrentRevision() const
+QMap<IndexedString, QVector<KTextEditor::Range>> Declaration::usesCurrentRevision() const
 {
   ENSURE_CAN_READ
   QMap<IndexedString, QMap<KTextEditor::Range, bool> > tempUses;
@@ -755,11 +755,11 @@ QMap<IndexedString, QList<KTextEditor::Range> > Declaration::usesCurrentRevision
     }
   }
 
-QMap<IndexedString, QList<KTextEditor::Range> > ret;
+  QMap<IndexedString, QVector<KTextEditor::Range>> ret;
 
   for(QMap<IndexedString, QMap<KTextEditor::Range, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
     if(!(*it).isEmpty()) {
-      QList<KTextEditor::Range>& list(ret[it.key()]);
+      auto& list = ret[it.key()];
       for(QMap<KTextEditor::Range, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
         list << it2.key();
     }

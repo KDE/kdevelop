@@ -687,11 +687,9 @@ void ContextBrowserPlugin::addHighlight( View* view, KDevelop::Declaration* decl
 
   // Highlight uses
   {
-    QMap< IndexedString, QList< KTextEditor::Range > > currentRevisionUses = decl->usesCurrentRevision();
-    for(QMap< IndexedString, QList< KTextEditor::Range > >::iterator fileIt = currentRevisionUses.begin(); fileIt != currentRevisionUses.end(); ++fileIt)
-    {
-      for(QList< KTextEditor::Range >::const_iterator useIt = (*fileIt).constBegin(); useIt != (*fileIt).constEnd(); ++useIt)
-      {
+    const auto currentRevisionUses = decl->usesCurrentRevision();
+    for (auto fileIt = currentRevisionUses.constBegin(); fileIt != currentRevisionUses.constEnd(); ++fileIt) {
+      for (auto useIt = (*fileIt).constBegin(); useIt != (*fileIt).constEnd(); ++useIt) {
         highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(*useIt, fileIt.key()));
         highlights.highlights.back()->setAttribute(highlightedUseAttribute(view));
         highlights.highlights.back()->setZDepth(highlightingZDepth);

@@ -447,7 +447,7 @@ public:
    *
    * \note This is a non-trivial operation and hence expensive.
    */
-  QMap<IndexedString, QList<KTextEditor::Range> > usesCurrentRevision() const;
+  QMap<IndexedString, QVector<KTextEditor::Range>> usesCurrentRevision() const;
 
   /**
     * This hash-value should differentiate between multiple different
