@@ -32,7 +32,7 @@ typedef QPair<KDevelop::IndexedType, QString> ParameterItem;
 struct Signature
 {
     Signature(){};
-    QList<ParameterItem> parameters;
+    QVector<ParameterItem> parameters;
     QList<QString> defaultParams;
     KDevelop::IndexedType returnType;
     bool isConst;
