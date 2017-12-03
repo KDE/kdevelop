@@ -23,7 +23,7 @@
 #define KDEVPLATFORM_COLORCACHE_H
 
 #include <QObject>
-#include <QList>
+#include <QVector>
 #include <QColor>
 #include <QPointer>
 
@@ -145,7 +145,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     CodeHighlightingColors* m_defaultColors;
 
     /// the generated colors
-    QList<QColor> m_colors;
+    QVector<QColor> m_colors;
 
     uint m_validColorCount;
 
