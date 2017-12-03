@@ -552,7 +552,7 @@ void WorkingSet::changed( Sublime::Area* area )
     qCDebug(SHELL) << "recording change done to" << m_id;
     saveFromArea( area, area->rootIndex() );
 
-    for ( QList< QPointer< Sublime::Area > >::iterator it = m_areas.begin(); it != m_areas.end(); ++it ) {
+    for (auto it = m_areas.begin(); it != m_areas.end(); ++it ) {
       if (( *it ) != area ) {
         loadToArea(( *it ), ( *it )->rootIndex() );
       }

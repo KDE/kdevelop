@@ -119,7 +119,7 @@ private:
 
     QString m_id;
     QIcon m_icon;
-    QList<QPointer<Sublime::Area> > m_areas;
+    QVector<QPointer<Sublime::Area>> m_areas;
     static bool m_loading;
 };
 
