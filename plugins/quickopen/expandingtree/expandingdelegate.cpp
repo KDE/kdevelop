@@ -120,11 +120,11 @@ void ExpandingDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     }
 }
 
-QList<QTextLayout::FormatRange> ExpandingDelegate::createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const
+QVector<QTextLayout::FormatRange> ExpandingDelegate::createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const
 {
     Q_UNUSED(index);
     Q_UNUSED(option);
-    return QList<QTextLayout::FormatRange>();
+    return QVector<QTextLayout::FormatRange>();
 }
 
 QSize ExpandingDelegate::basicSizeHint(const QModelIndex& index) const
@@ -342,9 +342,9 @@ bool ExpandingDelegate::editorEvent(QEvent* event, QAbstractItemModel* /*model*/
     return false;
 }
 
-QList<QTextLayout::FormatRange> ExpandingDelegate::highlightingFromVariantList(const QList<QVariant>& customHighlights) const
+QVector<QTextLayout::FormatRange> ExpandingDelegate::highlightingFromVariantList(const QList<QVariant>& customHighlights) const
 {
-    QList<QTextLayout::FormatRange> ret;
+    QVector<QTextLayout::FormatRange> ret;
 
     for (int i = 0; i + 2 < customHighlights.count(); i += 3) {
         if (!customHighlights[i].canConvert(QVariant::Int) || !customHighlights[i + 1].canConvert(QVariant::Int) || !customHighlights[i + 2].canConvert<QTextFormat>()) {

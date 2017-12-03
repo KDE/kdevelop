@@ -51,7 +51,7 @@ public:
     explicit QuickOpenDelegate(ExpandingWidgetModel* model, QObject* parent = nullptr) : ExpandingDelegate(model, parent)
     {
     }
-    QList<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const override
+    QVector<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const override
     {
         QList<QVariant> highlighting = index.data(KTextEditor::CodeCompletionModel::CustomHighlight).toList();
         if (!highlighting.isEmpty()) {

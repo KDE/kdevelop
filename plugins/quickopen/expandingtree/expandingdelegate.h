@@ -61,14 +61,14 @@ protected:
     virtual void drawBackground (QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void drawDecoration(QPainter* painter, const QStyleOptionViewItem& option, const QRect& rect, const QPixmap& pixmap) const override;
     //option can be changed
-    virtual QList<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const;
+    virtual QVector<QTextLayout::FormatRange> createHighlighting(const QModelIndex& index, QStyleOptionViewItem& option) const;
 
     void adjustRect(QRect& rect) const;
 
     /**
      * Creates a list of FormatRanges as should be returned by createHighlighting from a list of QVariants as described in the kde header ktexteditor/codecompletionmodel.h
      * */
-    QList<QTextLayout::FormatRange> highlightingFromVariantList(const QList<QVariant>& customHighlights) const;
+    QVector<QTextLayout::FormatRange> highlightingFromVariantList(const QList<QVariant>& customHighlights) const;
 
     //Called when an item was expanded/unexpanded and the height changed
     virtual void heightChanged() const;
@@ -78,7 +78,7 @@ protected:
 
     mutable int m_currentColumnStart; //Text-offset for custom highlighting, will be applied to m_cachedHighlights(Only highlights starting after this will be used). Shoult be zero of the highlighting is not taken from kate.
     mutable QList<int> m_currentColumnStarts;
-    mutable QList<QTextLayout::FormatRange> m_cachedHighlights;
+    mutable QVector<QTextLayout::FormatRange> m_cachedHighlights;
 
     mutable Qt::Alignment m_cachedAlignment;
     mutable QColor m_backgroundColor;
