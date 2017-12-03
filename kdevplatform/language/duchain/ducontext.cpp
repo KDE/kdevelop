@@ -915,13 +915,13 @@ bool DUContext::parentContextOf(DUContext* context) const
   return false;
 }
 
-QList< QPair<Declaration*, int> > DUContext::allDeclarations(const CursorInRevision& position,
+QVector<QPair<Declaration*, int>> DUContext::allDeclarations(const CursorInRevision& position,
                                                              const TopDUContext* topContext,
                                                              bool searchInParents) const
 {
   ENSURE_CAN_READ
 
-  QList< QPair<Declaration*, int> > ret;
+  QVector<QPair<Declaration*, int>> ret;
 
   QHash<const DUContext*, bool> hadContexts;
   // Iterate back up the chain
@@ -938,7 +938,7 @@ QVector<Declaration*> DUContext::localDeclarations(const TopDUContext* source) c
   return m_dynamicData->m_localDeclarations;
 }
 
-void DUContext::mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions,
+void DUContext::mergeDeclarationsInternal(QVector<QPair<Declaration*, int>>& definitions,
                                           const CursorInRevision& position,
                                           QHash<const DUContext*, bool>& hadContexts,
                                           const TopDUContext* source,

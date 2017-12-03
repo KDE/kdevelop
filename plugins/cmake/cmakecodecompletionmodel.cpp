@@ -141,11 +141,9 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     
     if(ctx)
     {
-        typedef QPair<Declaration*, int> DeclPair;
-        QList<DeclPair> list=ctx->allDeclarations( ctx->transformToLocalRevision(KTextEditor::Cursor(range.start())), ctx );
-        
-        foreach(const DeclPair& pair, list)
-        {
+        const auto list = ctx->allDeclarations( ctx->transformToLocalRevision(KTextEditor::Cursor(range.start())), ctx );
+
+        for (const auto& pair : list) {
             bool func=isFunction(pair.first);
             if((func && !m_inside) || (!func && m_inside))
                 m_declarations.append(pair.first);

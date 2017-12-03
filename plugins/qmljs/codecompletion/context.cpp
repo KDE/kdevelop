@@ -347,7 +347,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
     DUChainReadLocker lock;
 
     if (context) {
-        const QList<DeclarationDepthPair>& declarations = context->allDeclarations(
+        const auto declarations = context->allDeclarations(
             CursorInRevision::invalid(),
             context->topContext(),
             !flags.testFlag(CompletionOnlyLocal)

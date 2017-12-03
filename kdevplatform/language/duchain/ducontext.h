@@ -565,7 +565,7 @@ public:
    * @returns the requested declarations, if any were active at that location.
    *          Declarations propagated into this context(@c setPropagateDeclarations) are included.
    */
-  QList< QPair<Declaration*, int> > allDeclarations(const CursorInRevision& position,
+  QVector<QPair<Declaration*, int>> allDeclarations(const CursorInRevision& position,
                                                     const TopDUContext* topContext,
                                                     bool searchInParents = true) const;
 
@@ -815,7 +815,7 @@ protected:
    * @param hadContexts is used to count together all contexts that already were
    *                visited, so they are not visited again.
    */
-  virtual void mergeDeclarationsInternal(QList< QPair<Declaration*, int> >& definitions,
+  virtual void mergeDeclarationsInternal(QVector<QPair<Declaration*, int>>& definitions,
                                          const CursorInRevision& position,
                                          QHash<const DUContext*, bool>& hadContexts,
                                          const TopDUContext* source,
