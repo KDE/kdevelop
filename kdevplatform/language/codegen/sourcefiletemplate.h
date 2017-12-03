@@ -283,7 +283,7 @@ public:
     /**
      * The list of all output files in this template
      */
-    QList<OutputFile> outputFiles() const;
+    QVector<OutputFile> outputFiles() const;
 
     /**
      * @return true if the template uses any custom options, false otherwise

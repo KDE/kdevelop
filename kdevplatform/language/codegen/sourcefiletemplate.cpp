@@ -248,9 +248,9 @@ const KArchiveDirectory* SourceFileTemplate::directory() const
     return d->archive->directory();
 }
 
-QList< SourceFileTemplate::OutputFile > SourceFileTemplate::outputFiles() const
+QVector<SourceFileTemplate::OutputFile> SourceFileTemplate::outputFiles() const
 {
-    QList<SourceFileTemplate::OutputFile> outputFiles;
+    QVector<SourceFileTemplate::OutputFile> outputFiles;
 
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup group(&templateConfig, "General");
