@@ -20,12 +20,12 @@ public:
 
     virtual QList<QUrl> includeDirectories() const;
     virtual QHash<QString, QString> environment() const;
-    virtual QList<QPair<QString, QString> > defines() const;
+    virtual QVector<QPair<QString, QString>> defines() const;
 
 private:
     QList<QUrl> m_includeDirs;
     QHash<QString, QString> m_envs;
-    QList<QPair <QString, QString> > m_defines;
+    QVector<QPair<QString, QString>> m_defines;
 
 };
 

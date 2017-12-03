@@ -27,7 +27,7 @@ QHash<QString, QString> CustomMakeTargetItem::environment() const
     return m_envs;
 }
 
-QList<QPair<QString, QString> > CustomMakeTargetItem::defines() const
+QVector<QPair<QString, QString>> CustomMakeTargetItem::defines() const
 {
     return m_defines;
 }

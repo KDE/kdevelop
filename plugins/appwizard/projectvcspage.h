@@ -59,7 +59,7 @@ public:
 private:
     QList<KDevelop::VcsImportMetadataWidget*> importWidgets;
     KDevelop::VcsImportMetadataWidget* m_currentImportWidget;
-    QList<QPair<QString,QString> > vcsPlugins;
+    QVector<QPair<QString, QString>> vcsPlugins;
     Ui::ProjectVcsPage* m_ui;
 };
 

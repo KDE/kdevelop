@@ -23,7 +23,7 @@
 
 #include <project/interfaces/iprojectbuilder.h>
 
-#include <QList>
+#include <QVector>
 #include <QStringList>
 #include <QPair>
 
@@ -36,7 +36,7 @@ class KJob;
 /**
  * Used to create make variables of the form KEY=VALUE.
  */
-typedef QList< QPair<QString, QString> > MakeVariables;
+typedef QVector<QPair<QString, QString>> MakeVariables;
 
 class IMakeBuilder : public KDevelop::IProjectBuilder
 {
