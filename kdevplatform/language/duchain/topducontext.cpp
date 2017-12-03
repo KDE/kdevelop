@@ -737,7 +737,7 @@ template<class Acceptor>
 bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const SearchItem::Ptr& identifier, Acceptor& accept, const CursorInRevision& position, bool canBeNamespace, ApplyAliasesBuddyInfo* buddy, uint recursionDepth ) const
 {
   if(recursionDepth > maxApplyAliasesRecursion) {
-    QList<QualifiedIdentifier> searches = identifier->toList();
+    const auto searches = identifier->toList();
     QualifiedIdentifier id;
     if(!searches.isEmpty())
       id = searches.first();

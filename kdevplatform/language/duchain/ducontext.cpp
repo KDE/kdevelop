@@ -732,7 +732,7 @@ bool DUContext::findDeclarationsInternal( const SearchItem::PtrList & baseIdenti
   return true;
 }
 
-QList< QualifiedIdentifier > DUContext::fullyApplyAliases(const QualifiedIdentifier& id,
+QVector<QualifiedIdentifier> DUContext::fullyApplyAliases(const QualifiedIdentifier& id,
                                                           const TopDUContext* source) const
 {
   ENSURE_CAN_READ
@@ -752,7 +752,7 @@ QList< QualifiedIdentifier > DUContext::fullyApplyAliases(const QualifiedIdentif
     current = current->parentContext();
   }
 
-  QList<QualifiedIdentifier> ret;
+  QVector<QualifiedIdentifier> ret;
   foreach (const SearchItem::Ptr& item, identifiers)
     ret += item->toList();
 
@@ -1567,8 +1567,9 @@ bool DUContext::SearchItem::hasNext() const {
   return !next.isEmpty();
 }
 
-QList<QualifiedIdentifier> DUContext::SearchItem::toList(const QualifiedIdentifier& prefix) const {
-  QList<QualifiedIdentifier> ret;
+QVector<QualifiedIdentifier> DUContext::SearchItem::toList(const QualifiedIdentifier& prefix) const
+{
+  QVector<QualifiedIdentifier> ret;
 
   QualifiedIdentifier id = prefix;
   if(id.isEmpty())

@@ -744,7 +744,7 @@ public:
     /**
      * @note expensive
      */
-    QList<QualifiedIdentifier> toList(const QualifiedIdentifier& prefix = QualifiedIdentifier()) const;
+    QVector<QualifiedIdentifier> toList(const QualifiedIdentifier& prefix = QualifiedIdentifier()) const;
 
     void addNext(const Ptr& other);
 
@@ -793,8 +793,8 @@ public:
    * @example: If the namespace 'Foo' is imported, and id is 'Bar',
    *           then the returned list is 'Bar' and 'Foo::Bar'
    */
-  QList<QualifiedIdentifier> fullyApplyAliases(const QualifiedIdentifier& id,
-                                               const TopDUContext* source) const;
+  QVector<QualifiedIdentifier> fullyApplyAliases(const QualifiedIdentifier& id,
+                                                 const TopDUContext* source) const;
 
 protected:
 
