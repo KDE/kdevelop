@@ -259,9 +259,9 @@ Q_SIGNALS:
     /**Emitted when a tool view is moved to a different position.*/
     void toolViewMoved(Sublime::View*, Sublime::Position);
     /**Emitted before the working-set is changed.*/
-    void changingWorkingSet(Sublime::Area* area, QString from, QString to);
+    void changingWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
     /**Emitted after the working-set was changed.*/
-    void changedWorkingSet(Sublime::Area* area, QString from, QString to);
+    void changedWorkingSet(Sublime::Area* area, const QString& from, const QString& to);
     /** notifies the working set that it should clear */
     void clearWorkingSet(Sublime::Area* area);
 

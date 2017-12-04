@@ -124,7 +124,7 @@ Q_SIGNALS:
      * of a job. So the new view will show the output of that job as
      * soon as it has finished.
      */
-    void addNewTabToMainView(QWidget* tab, QString label);
+    void addNewTabToMainView(QWidget* tab, const QString& label);
 
 private:
     void setupActions();
