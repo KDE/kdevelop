@@ -22,8 +22,16 @@
 #ifndef KDEVPLATFORM_DVCSEVENT_H
 #define KDEVPLATFORM_DVCSEVENT_H
 
-#include <QStringList>
+#include <QMetaType>
+#include <QSharedDataPointer>
 
+#include <vcs/vcsexport.h>
+
+class QStringList;
+class QString;
+
+namespace KDevelop
+{
 /**
  * This class is used to store all required Commit(Revision) data: commit (sha string),
  * log (log[0] is used as shortlog), author, date (in QString), CommitType, and a special properties mask.
@@ -41,7 +49,8 @@
  *
  */
 //TODO: properties should be used instead of type
-class DVcsEvent {
+class KDEVPLATFORMVCS_EXPORT DVcsEvent
+{
 public:
 
     /**
@@ -63,88 +72,66 @@ public:
         EMPTY        /**< draw nothing */
     };
 
+    DVcsEvent();
+    DVcsEvent(const DVcsEvent& rhs);
+    ~DVcsEvent();
+
+    DVcsEvent& operator=(const DVcsEvent& rhs);
+
     /** Returns sha string of the commit. */
-    QString getCommit() const {return commit;}
+    QString getCommit() const;
 
     /** Sets sha string. */
-    void setCommit(const QString &_commit_)
-    {
-        commit = _commit_;
-    }
+    void setCommit(const QString& commit);
 
     /** Returns QStringList with parents (sha strings). */
-    QStringList getParents() const {return parents;}
+    QStringList getParents() const;
 
     /** Sets parents (sha strings). */
-    void setParents(const QStringList &_parents_)
-    {
-        parents = _parents_;
-        switch (parents.count())
-        {
-        case 0:
-        {
-            setType(INITIAL);
-            break;
-        }
-        case 1:
-        {
-            setType(BRANCH);
-            break;
-        }
-        default: // > 1
-        {
-            setType(MERGE);
-            break;
-        }
-        }
-    }
+    void setParents(const QStringList& parents);
 
     /** Returns commit date (stored in QString). */
-    QString getDate() const {return date;}
+    QString getDate() const;
 
     /** Sets date. */
-    void setDate(const QString &_date_) {date = _date_;}
+    void setDate(const QString& date);
 
     /** Returns author (committer) name. */
-    QString getAuthor() const {return author;}
+    QString getAuthor() const;
 
     /** Sets author (committer) name. */
-    void setAuthor(const QString &_author_) {author = _author_;}
+    void setAuthor(const QString& author);
 
     /** Returns full log in one QString. */
-    QString getLog() const {return log;}
+    QString getLog() const;
 
     /** Sets full log in one QString. */
-    void setLog(const QString &_log_) {log = _log_;}
+    void setLog(const QString& log);
 
     /** Returns CommitType */
-    int getType() const {return type;}
+    int getType() const;
 
     /** Sets CommitType */
-    void setType(CommitType t) {type = t;}
+    void setType(CommitType t);
 
     /** Returns list of properties */
-    QList<int>getProperties() const {return properties;}
+    QList<int> getProperties() const;
 
     /** Sets properties */
-    void setProperties(const QList<int> &prop) {properties = prop;}
+    void setProperties(const QList<int>& properties);
 
     /** Sets property
      * @param index index in the properties array.
      * @param prop value to be set
      */
-    void setPropetry(const int index, const int prop) {if (index >= 0 && index < properties.count())properties[index] = prop;}
+    void setPropetry(const int index, const int prop);
+
 private:
-    int type;
-private:
-    QString commit;
-    QStringList parents;
-    QString date;
-    QString author;
-    QString log;
-    QList<int>properties; //used to describe graph columns in every row (MERGE, HEAD, CROSS, etc)
+    QSharedDataPointer<class DVcsEventPrivate> d;
 };
 
-Q_DECLARE_TYPEINFO(DVcsEvent, Q_MOVABLE_TYPE);
+}
+
+Q_DECLARE_TYPEINFO(KDevelop::DVcsEvent, Q_MOVABLE_TYPE);
 
 #endif

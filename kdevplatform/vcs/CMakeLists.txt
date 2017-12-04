@@ -37,6 +37,7 @@ set(KDevPlatformVcs_LIB_SRCS
     models/brancheslistmodel.cpp
     dvcs/dvcsjob.cpp
     dvcs/dvcsplugin.cpp
+    dvcs/dvcsevent.cpp
     dvcs/ui/dvcsimportmetadatawidget.cpp
     dvcs/ui/branchmanager.cpp
     interfaces/ibasicversioncontrol.cpp
