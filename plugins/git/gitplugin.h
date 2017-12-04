@@ -125,11 +125,11 @@ public:
     KDevelop::VcsJob* mergeBranch(const QUrl& repository, const QString& branchName) override;
 
     //graph helpers
-    QList<DVcsEvent> getAllCommits(const QString &repo) override;
+    QVector<DVcsEvent> getAllCommits(const QString &repo) override;
 
     //used in log
-    void parseLogOutput(const KDevelop::DVcsJob * job,
-                        QList<DVcsEvent>& commits) const override;
+    void parseLogOutput(const KDevelop::DVcsJob* job,
+                        QVector<DVcsEvent>& commits) const override;
 
     void additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls) override;
     

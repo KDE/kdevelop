@@ -834,7 +834,7 @@ extra merge rectangle in master. If there are no extra commits in branch2, but t
 3. Commits that have additional commit-data (not only history merging, but changes to fix conflicts) are shown incorrectly
 */
 
-QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
+QVector<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
 {
     initBranchHash(repo);
 
@@ -848,7 +848,7 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
 
     static QRegExp rx_com("commit \\w{40,40}");
 
-    QList<DVcsEvent>commitList;
+    QVector<DVcsEvent> commitList;
     DVcsEvent item;
 
     //used to keep where we have empty/cross/branch entry
@@ -934,7 +934,7 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
     }
 
     //find and set merges, HEADS, require refactoring!
-    for(QList<DVcsEvent>::iterator iter = commitList.begin();
+    for (auto iter = commitList.begin();
         iter != commitList.end(); ++iter)
     {
         QStringList parents = iter->getParents();
@@ -957,7 +957,7 @@ QList<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
                     //parent and child are not in same branch
                     //since it is list, than parent has i+1 index
                     //set CROSS and HCROSS
-                    for(QList<DVcsEvent>::iterator f_iter = iter;
+                    for (auto f_iter = iter;
                         f_iter != commitList.end(); ++f_iter)
                     {
                         if (parent == f_iter->getCommit())
@@ -1036,7 +1036,7 @@ void GitPlugin::initBranchHash(const QString &repo)
 }
 
 //Actually we can just copy the output without parsing. So it's a kind of draft for future
-void GitPlugin::parseLogOutput(const DVcsJob * job, QList<DVcsEvent>& commits) const
+void GitPlugin::parseLogOutput(const DVcsJob* job, QVector<DVcsEvent>& commits) const
 {
 //     static QRegExp rx_sep( "[-=]+" );
 //     static QRegExp rx_date( "date:\\s+([^;]*);\\s+author:\\s+([^;]*).*" );
