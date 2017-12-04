@@ -902,16 +902,16 @@ QVector<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
             //set mask (properties for each graph column in row)
             for(int i = 0; i < branchesShas.count(); ++i)
             {
-                qCDebug(PLUGIN_GIT)<<"commit: " << item.getCommit();
-                if (branchesShas[i].contains(item.getCommit()))
+                qCDebug(PLUGIN_GIT)<<"commit: " << item.commit();
+                if (branchesShas[i].contains(item.commit()))
                 {
-                    mask.append(item.getType()); //we set type in setParents
+                    mask.append(item.type()); //we set type in setParents
 
                     //check if parent from the same branch, if not then we have found a root of the branch
                     //and will use empty column for all futher (from top to bottom) revisions
                     //FIXME: we should set CROSS between parent and child (and do it when find merge point)
                     additionalFlags[i] = false;
-                    foreach(const QString &sha, item.getParents())
+                    foreach(const QString &sha, item.parents())
                     {
                         if (branchesShas[i].contains(sha))
                             additionalFlags[i] = true;
@@ -937,13 +937,13 @@ QVector<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
     for (auto iter = commitList.begin();
         iter != commitList.end(); ++iter)
     {
-        QStringList parents = iter->getParents();
+        QStringList parents = iter->parents();
         //we need only only child branches
         if (parents.count() != 1)
             break;
 
         QString parent = parents[0];
-        QString commit = iter->getCommit();
+        const QString commit = iter->commit();
         bool parent_checked = false;
         int heads_checked = 0;
 
@@ -960,7 +960,7 @@ QVector<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
                     for (auto f_iter = iter;
                         f_iter != commitList.end(); ++f_iter)
                     {
-                        if (parent == f_iter->getCommit())
+                        if (parent == f_iter->commit())
                         {
                             for(int j = 0; j < i; ++j)
                             {
@@ -972,7 +972,7 @@ QVector<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
                             f_iter->setType(DVcsEvent::MERGE);
                             f_iter->setPropetry(i, DVcsEvent::MERGE_RIGHT);
                             qCDebug(PLUGIN_GIT) << parent << " is parent of " << commit;
-                            qCDebug(PLUGIN_GIT) << f_iter->getCommit() << " is merge";
+                            qCDebug(PLUGIN_GIT) << f_iter->commit() << " is merge";
                             parent_checked = true;
                             break;
                         }

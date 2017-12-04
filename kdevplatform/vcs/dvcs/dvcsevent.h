@@ -79,43 +79,43 @@ public:
     DVcsEvent& operator=(const DVcsEvent& rhs);
 
     /** Returns sha string of the commit. */
-    QString getCommit() const;
+    QString commit() const;
 
     /** Sets sha string. */
     void setCommit(const QString& commit);
 
     /** Returns QStringList with parents (sha strings). */
-    QStringList getParents() const;
+    QStringList parents() const;
 
     /** Sets parents (sha strings). */
     void setParents(const QStringList& parents);
 
     /** Returns commit date (stored in QString). */
-    QString getDate() const;
+    QString date() const;
 
     /** Sets date. */
     void setDate(const QString& date);
 
     /** Returns author (committer) name. */
-    QString getAuthor() const;
+    QString author() const;
 
     /** Sets author (committer) name. */
     void setAuthor(const QString& author);
 
     /** Returns full log in one QString. */
-    QString getLog() const;
+    QString log() const;
 
     /** Sets full log in one QString. */
     void setLog(const QString& log);
 
     /** Returns CommitType */
-    int getType() const;
+    int type() const;
 
     /** Sets CommitType */
     void setType(CommitType t);
 
     /** Returns list of properties */
-    QList<int> getProperties() const;
+    QList<int> properties() const;
 
     /** Sets properties */
     void setProperties(const QList<int>& properties);
@@ -124,7 +124,7 @@ public:
      * @param index index in the properties array.
      * @param prop value to be set
      */
-    void setPropetry(const int index, const int prop);
+    void setPropetry(int index, int prop);
 
 private:
     QSharedDataPointer<class DVcsEventPrivate> d;

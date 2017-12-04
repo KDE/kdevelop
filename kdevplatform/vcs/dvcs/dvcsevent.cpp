@@ -57,7 +57,7 @@ DVcsEvent& DVcsEvent::operator=(const DVcsEvent& rhs)
     return *this;
 }
 
-QString DVcsEvent::getCommit() const
+QString DVcsEvent::commit() const
 {
     return d->commit;
 }
@@ -67,7 +67,7 @@ void DVcsEvent::setCommit(const QString& commit)
     d->commit = commit;
 }
 
-QStringList DVcsEvent::getParents() const
+QStringList DVcsEvent::parents() const
 {
     return d->parents;
 }
@@ -94,7 +94,7 @@ void DVcsEvent::setParents(const QStringList& parents)
     }
 }
 
-QString DVcsEvent::getDate() const
+QString DVcsEvent::date() const
 {
     return d->date;
 }
@@ -104,7 +104,7 @@ void DVcsEvent::setDate(const QString& date)
     d->date = date;
 }
 
-QString DVcsEvent::getAuthor() const
+QString DVcsEvent::author() const
 {
     return d->author;
 }
@@ -114,7 +114,7 @@ void DVcsEvent::setAuthor(const QString& author)
     d->author = author;
 }
 
-QString DVcsEvent::getLog() const
+QString DVcsEvent::log() const
 {
     return d->log;
 }
@@ -124,7 +124,7 @@ void DVcsEvent::setLog(const QString& log)
     d->log = log;
 }
 
-int DVcsEvent::getType() const
+int DVcsEvent::type() const
 {
     return d->type;
 }
@@ -134,7 +134,7 @@ void DVcsEvent::setType(CommitType type)
     d->type = type;
 }
 
-QList<int> DVcsEvent::getProperties() const
+QList<int> DVcsEvent::properties() const
 {
     return d->properties;
 }
@@ -144,7 +144,7 @@ void DVcsEvent::setProperties(const QList<int>& properties)
     d->properties = properties;
 }
 
-void DVcsEvent::setPropetry(const int index, const int prop)
+void DVcsEvent::setPropetry(int index, int prop)
 {
     if (index >= 0 && index < d->properties.count())
         d->properties[index] = prop;
