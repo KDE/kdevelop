@@ -53,7 +53,7 @@ public:
 
 Q_SIGNALS:
     ///Emits current CPU architecture. @sa determineArchitecture
-    void architectureParsed(const Architecture);
+    void architectureParsed(Architecture arch);
 
 private:
 
