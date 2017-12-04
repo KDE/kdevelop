@@ -965,19 +965,19 @@ QVector<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
                             for(int j = 0; j < i; ++j)
                             {
                                 if(branchesShas[j].contains(parent))
-                                    f_iter->setPropetry(j, DVcsEvent::MERGE);
+                                    f_iter->setProperty(j, DVcsEvent::MERGE);
                                 else
-                                    f_iter->setPropetry(j, DVcsEvent::HCROSS);
+                                    f_iter->setProperty(j, DVcsEvent::HCROSS);
                             }
                             f_iter->setType(DVcsEvent::MERGE);
-                            f_iter->setPropetry(i, DVcsEvent::MERGE_RIGHT);
+                            f_iter->setProperty(i, DVcsEvent::MERGE_RIGHT);
                             qCDebug(PLUGIN_GIT) << parent << " is parent of " << commit;
                             qCDebug(PLUGIN_GIT) << f_iter->commit() << " is merge";
                             parent_checked = true;
                             break;
                         }
                         else
-                            f_iter->setPropetry(i, DVcsEvent::CROSS);
+                            f_iter->setProperty(i, DVcsEvent::CROSS);
                     }
                 }
             }
@@ -986,7 +986,7 @@ QVector<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
             if (!branchesShas[i].empty() && commit == branchesShas[i][0])
             {
                 iter->setType(DVcsEvent::HEAD);
-                iter->setPropetry(i, DVcsEvent::HEAD);
+                iter->setProperty(i, DVcsEvent::HEAD);
                 heads_checked++;
                 qCDebug(PLUGIN_GIT) << "HEAD found";
             }

@@ -144,7 +144,7 @@ void DVcsEvent::setProperties(const QList<int>& properties)
     d->properties = properties;
 }
 
-void DVcsEvent::setPropetry(int index, int prop)
+void DVcsEvent::setProperty(int index, int prop)
 {
     if (index >= 0 && index < d->properties.count())
         d->properties[index] = prop;

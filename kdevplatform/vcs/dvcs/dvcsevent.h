@@ -124,7 +124,7 @@ public:
      * @param index index in the properties array.
      * @param prop value to be set
      */
-    void setPropetry(int index, int prop);
+    void setProperty(int index, int prop);
 
 private:
     QSharedDataPointer<class DVcsEventPrivate> d;
