@@ -81,18 +81,18 @@ CustomScriptPlugin::~CustomScriptPlugin()
 {
 }
 
-QString CustomScriptPlugin::name()
+QString CustomScriptPlugin::name() const
 {
     // This needs to match the X-KDE-PluginInfo-Name entry from the .desktop file!
     return QStringLiteral("kdevcustomscript");
 }
 
-QString CustomScriptPlugin::caption()
+QString CustomScriptPlugin::caption() const
 {
     return QStringLiteral("Custom Script Formatter");
 }
 
-QString CustomScriptPlugin::description()
+QString CustomScriptPlugin::description() const
 {
     return i18n("<b>Indent and Format Source Code.</b><br />"
                 "This plugin allows using powerful external formatting tools "
@@ -103,7 +103,7 @@ QString CustomScriptPlugin::description()
                 "can be easily shared by all team members, independent of their preferred IDE.");
 }
 
-QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const QUrl& url, const QMimeType& /*mime*/, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, const QString& text, const QUrl& url, const QMimeType& /*mime*/, const QString& leftContext, const QString& rightContext) const
 {
     KProcess proc;
     QTextStream ios(&proc);
@@ -201,7 +201,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
     return KDevelop::extractFormattedTextFromContext(output, text, leftContext, rightContext, tabWidth);
 }
 
-QString CustomScriptPlugin::formatSource(const QString& text, const QUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
+QString CustomScriptPlugin::formatSource(const QString& text, const QUrl& url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) const
 {
 	auto style = KDevelop::ICore::self()->sourceFormatterController()->styleForUrl(url, mime);
     return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
@@ -222,7 +222,7 @@ static QVector<SourceFormatterStyle> stylesFromLanguagePlugins()
     return styles;
 };
 
-KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name)
+KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name) const
 {
     for (auto langStyle: stylesFromLanguagePlugins()) {
         qCDebug(CUSTOMSCRIPT) << "looking at style from language with custom sample" << langStyle.description() << langStyle.overrideSample();
@@ -273,7 +273,7 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
     return result;
 }
 
-QVector<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles()
+QVector<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles() const
 {
     QVector<KDevelop::SourceFormatterStyle> styles = stylesFromLanguagePlugins();
     styles << predefinedStyle(QStringLiteral("kdev_format_source"));
@@ -283,7 +283,7 @@ QVector<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles()
     return styles;
 }
 
-KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& mime)
+KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& mime) const
 {
     Q_UNUSED(mime);
     return new CustomScriptPreferences();
@@ -379,7 +379,7 @@ static QString indentingSample()
         "\tbarArg3);\n";
 }
 
-QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const QMimeType& /*mime*/)
+QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const QMimeType& /*mime*/) const
 {
     if (!style.overrideSample().isEmpty()) {
         return style.overrideSample();
@@ -387,7 +387,7 @@ QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const
     return formattingSample() + "\n\n" + indentingSample();
 }
 
-QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url)
+QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url) const
 {
     QStringList ret;
 
@@ -420,7 +420,7 @@ QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url)
     return ret;
 }
 
-CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url)
+CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url) const
 {
     Indentation ret;
     QStringList indent = computeIndentationFromSample(url);

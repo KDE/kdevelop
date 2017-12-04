@@ -48,25 +48,25 @@ AStylePlugin::~AStylePlugin()
 {
 }
 
-QString AStylePlugin::name()
+QString AStylePlugin::name() const
 {
     // This needs to match the X-KDE-PluginInfo-Name entry from the .desktop file!
     return QStringLiteral("kdevastyle");
 }
 
-QString AStylePlugin::caption()
+QString AStylePlugin::caption() const
 {
     return QStringLiteral("Artistic Style");
 }
 
-QString AStylePlugin::description()
+QString AStylePlugin::description() const
 {
     return i18n("<b>Artistic Style</b> is a source code indenter, formatter,"
         " and beautifier for the C, C++, C# and Java programming languages.<br />"
         "Home Page: <a href=\"http://astyle.sourceforge.net/\">http://astyle.sourceforge.net</a>");
 }
 
-QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const QUrl& /*url*/, const QMimeType& mime, const QString& leftContext, const QString& rightContext )
+QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QString& text, const QUrl& /*url*/, const QMimeType& mime, const QString& leftContext, const QString& rightContext ) const
 {
     if(mime.inherits(QStringLiteral("text/x-java")))
         m_formatter->setJavaStyle();
@@ -86,7 +86,7 @@ QString AStylePlugin::formatSourceWithStyle( SourceFormatterStyle s, const QStri
     return m_formatter->formatSource(text, leftContext, rightContext);
 }
 
-QString AStylePlugin::formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext)
+QString AStylePlugin::formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) const
 {
     auto style = ICore::self()->sourceFormatterController()->styleForUrl(url, mime);
     return formatSourceWithStyle(style, text, url, mime, leftContext, rightContext);
@@ -116,7 +116,7 @@ SourceFormatterStyle predefinedStyle(const QString& name, const QString& caption
     return st;
 }
 
-QVector<SourceFormatterStyle> AStylePlugin::predefinedStyles()
+QVector<SourceFormatterStyle> AStylePlugin::predefinedStyles() const
 {
     return {
         predefinedStyle(QStringLiteral("ANSI")),
@@ -134,7 +134,7 @@ QVector<SourceFormatterStyle> AStylePlugin::predefinedStyles()
     };
 }
 
-SettingsWidget* AStylePlugin::editStyleWidget(const QMimeType& mime)
+SettingsWidget* AStylePlugin::editStyleWidget(const QMimeType& mime) const
 {
     AStylePreferences::Language lang = AStylePreferences::CPP;
     if(mime.inherits(QStringLiteral("text/x-java")))
@@ -144,13 +144,13 @@ SettingsWidget* AStylePlugin::editStyleWidget(const QMimeType& mime)
     return new AStylePreferences(lang);
 }
 
-QString AStylePlugin::previewText(const SourceFormatterStyle& /*style*/, const QMimeType& /*mime*/)
+QString AStylePlugin::previewText(const SourceFormatterStyle& /*style*/, const QMimeType& /*mime*/) const
 {
     return "// Indentation\n" + indentingSample() + "\t// Formatting\n"
         + formattingSample();
 }
 
-AStylePlugin::Indentation AStylePlugin::indentation( const QUrl &url )
+AStylePlugin::Indentation AStylePlugin::indentation(const QUrl& url) const
 {
     // Call formatSource first, to initialize the m_formatter data structures according to the URL
     formatSource( QLatin1String(""), url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString() );

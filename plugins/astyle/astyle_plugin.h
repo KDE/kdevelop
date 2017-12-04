@@ -36,35 +36,35 @@ public:
     explicit AStylePlugin(QObject *parent, const QVariantList & = QVariantList());
     ~AStylePlugin() override;
 
-    QString name() override;
-    QString caption() override;
-    QString description() override;
+    QString name() const override;
+    QString caption() const override;
+    QString description() const override;
 
     /** Formats using the current style.
     */
-    QString formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) override;
+    QString formatSource(const QString& text, const QUrl &url, const QMimeType& mime, const QString& leftContext, const QString& rightContext) const override;
 
     /** \return A map of predefined styles (a key and a caption for each type)
     */
-    QVector<KDevelop::SourceFormatterStyle> predefinedStyles() override;
+    QVector<KDevelop::SourceFormatterStyle> predefinedStyles() const override;
 
     /** \return The widget to edit a style.
     */
-    KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) override;
+    KDevelop::SettingsWidget* editStyleWidget(const QMimeType& mime) const override;
 
     QString formatSourceWithStyle(KDevelop::SourceFormatterStyle, const QString& text,
                                             const QUrl &url,
                                             const QMimeType& mime,
                                             const QString& leftContext = QString(),
-                                            const QString& rightContext = QString()) override;
+                                            const QString& rightContext = QString()) const override;
 
     /** \return The text used in the config dialog to preview the current style.
     */
-    QString previewText(const KDevelop::SourceFormatterStyle& style, const QMimeType& mime) override;
+    QString previewText(const KDevelop::SourceFormatterStyle& style, const QMimeType& mime) const override;
 
     /** \return The indentation type of the currently selected style.
     */
-    Indentation indentation(const QUrl &url) override;
+    Indentation indentation(const QUrl &url) const override;
 
     static QString formattingSample();
     static QString indentingSample();

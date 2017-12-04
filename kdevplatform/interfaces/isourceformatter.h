@@ -141,15 +141,15 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		* ASCII chars and no spaces. This will be used internally to identify
 		* the plugin.
 		*/
-		virtual QString name() = 0;
+		virtual QString name() const = 0;
 		/** \return A caption describing the plugin.
 		*/
-		virtual QString caption() = 0;
+		virtual QString caption() const = 0;
 		/** \return A more complete description of the plugin.
 		* The string should be written in Rich text. It can eg contain
 		* a link to the project homepage.
 		*/
-		virtual QString description() = 0;
+		virtual QString description() const = 0;
 
 		/** Formats using the current style.
 		 * @param text The text to format
@@ -159,7 +159,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		 *
 		 * If the source-formatter cannot work correctly with the context, it will just return the input text.
 		*/
-		virtual QString formatSource(const QString &text, const QUrl& url, const QMimeType &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) = 0;
+		virtual QString formatSource(const QString &text, const QUrl& url, const QMimeType &mime, const QString& leftContext = QString(), const QString& rightContext = QString()) const = 0;
 
 		/**
 		 * Format with the given style, this is mostly for the kcm to format the preview text
@@ -171,19 +171,19 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 											   const QUrl& url,
 											   const QMimeType &mime,
 											   const QString& leftContext = QString(),
-											   const QString& rightContext = QString() ) = 0;
+											   const QString& rightContext = QString() ) const = 0;
 
 		/** \return A map of predefined styles (a key and a caption for each type)
 		*/
-		virtual QVector<SourceFormatterStyle> predefinedStyles() = 0;
+		virtual QVector<SourceFormatterStyle> predefinedStyles() const = 0;
 
 		/** \return The widget to edit a style.
 		*/
-		virtual SettingsWidget* editStyleWidget(const QMimeType &mime) = 0;
+		virtual SettingsWidget* editStyleWidget(const QMimeType &mime) const = 0;
 
 		/** \return The text used in the config dialog to preview the current style.
 		*/
-		virtual QString previewText(const SourceFormatterStyle& style, const QMimeType &mime) = 0;
+		virtual QString previewText(const SourceFormatterStyle& style, const QMimeType &mime) const = 0;
 
 		struct Indentation {
 			Indentation() : indentationTabWidth(0), indentWidth(0) {
@@ -204,7 +204,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 		/** \return The indentation of the style applicable for the given url.
 		*/
-		virtual Indentation indentation(const QUrl& url) = 0;
+		virtual Indentation indentation(const QUrl& url) const = 0;
 
 		/** \return A string representing the map. Values are written in the form
 		* key=value and separated with ','.
