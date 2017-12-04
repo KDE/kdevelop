@@ -145,4 +145,6 @@ private:
     QList<int>properties; //used to describe graph columns in every row (MERGE, HEAD, CROSS, etc)
 };
 
+Q_DECLARE_TYPEINFO(DVcsEvent, Q_MOVABLE_TYPE);
+
 #endif
