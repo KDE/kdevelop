@@ -73,6 +73,7 @@ void MIFrameStackModel::handleThreadInfo(const ResultRecord& r)
     const Value& threads = r[QStringLiteral("threads")];
 
     QVector<FrameStackModel::ThreadItem> threadsList;
+    threadsList.reserve(threads.size());
     for (int i = 0; i!= threads.size(); ++i) {
         const auto &threadMI = threads[i];
         FrameStackModel::ThreadItem threadItem;
@@ -114,6 +115,7 @@ struct FrameListHandler : public MICommandHandler
         const Value& stack = r[QStringLiteral("stack")];
         int first = stack[0][QStringLiteral("level")].toInt();
         QVector<KDevelop::FrameStackModel::FrameItem> frames;
+        frames.reserve(stack.size());
         for (int i = 0; i< stack.size(); ++i) {
             const Value& frame = stack[i];
             KDevelop::FrameStackModel::FrameItem f;

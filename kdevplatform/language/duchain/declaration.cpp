@@ -678,6 +678,7 @@ QMap<IndexedString, QVector<RangeInRevision> > Declaration::uses() const
   for(QMap<IndexedString, QMap<RangeInRevision, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
     if(!(*it).isEmpty()) {
       auto& list = ret[it.key()];
+      list.reserve((*it).size());
       for(QMap<RangeInRevision, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
         list << it2.key();
     }
@@ -760,6 +761,7 @@ QMap<IndexedString, QVector<KTextEditor::Range>> Declaration::usesCurrentRevisio
   for(QMap<IndexedString, QMap<KTextEditor::Range, bool> >::const_iterator it = tempUses.constBegin(); it != tempUses.constEnd(); ++it) {
     if(!(*it).isEmpty()) {
       auto& list = ret[it.key()];
+      list.reserve((*it).size());
       for(QMap<KTextEditor::Range, bool>::const_iterator it2 = (*it).constBegin(); it2 != (*it).constEnd(); ++it2)
         list << it2.key();
     }

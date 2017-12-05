@@ -173,7 +173,9 @@ public:
         beginResetModel();
         m_paths.clear();
         KConfigGroup cfg = config.group(PathMappings::pathMappingsEntry);
-        for (int i=0; i<cfg.readEntry("Count", 0); ++i) {
+        const auto pathCount = cfg.readEntry("Count", 0);
+        m_paths.reserve(pathCount);
+        for (int i = 0; i < pathCount; ++i) {
             KConfigGroup pCfg = cfg.group(QString::number(i+1));
             Path p;
             p.remote = pCfg.readEntry(PathMappings::pathMappingRemoteEntry, QUrl());

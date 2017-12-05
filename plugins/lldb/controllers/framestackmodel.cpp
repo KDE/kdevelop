@@ -79,6 +79,7 @@ void LldbFrameStackModel::handleThreadInfo(const ResultRecord& r)
     const Value& threads = r[QStringLiteral("threads")];
 
     QVector<FrameStackModel::ThreadItem> threadsList;
+    threadsList.reserve(threads.size());
     for (int gidx = 0; gidx != threads.size(); ++gidx) {
         FrameStackModel::ThreadItem i;
         const Value & threadMI = threads[gidx];
