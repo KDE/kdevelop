@@ -163,8 +163,9 @@ class TemporaryDataManager {
       if(m_freeIndicesWithData.size() > 200) {
         for(int a = 0; a < 100; ++a) {
           int deleteIndexData = m_freeIndicesWithData.pop();
-          delete m_items.at(deleteIndexData);
-          m_items[deleteIndexData] = nullptr;
+          auto& item = m_items[deleteIndexData];
+          delete item;
+          item = nullptr;
           m_freeIndices.push(deleteIndexData);
         }
       }
