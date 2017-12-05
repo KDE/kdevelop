@@ -104,14 +104,6 @@ void runBenchmark()
     }
 }
 
-void TestPath::initTestCase()
-{
-}
-
-void TestPath::cleanupTestCase()
-{
-}
-
 void TestPath::bench_qurl()
 {
     runBenchmark<QUrl>();
