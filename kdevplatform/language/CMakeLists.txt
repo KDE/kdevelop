@@ -282,7 +282,6 @@ install(FILES
     duchain/persistentsymboltable.h
     duchain/instantiationinformation.h
     duchain/specializationstore.h
-    duchain/persistentsetmap.h
     duchain/indexedducontext.h
     duchain/indexedtopducontext.h
     duchain/localindexedducontext.h
