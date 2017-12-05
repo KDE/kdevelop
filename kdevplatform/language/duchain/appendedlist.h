@@ -119,23 +119,20 @@ class TemporaryDataManager {
 
           const auto now = time(nullptr);
 
+          // We do this in this place so it isn't called too often. The result is that we will always have some additional data around.
+          // However the index itself should anyway not consume too much data.
+          while (!m_deleteLater.isEmpty()) {
+            // We delete only after 5 seconds
+            if (now - m_deleteLater.first().first <= 5) {
+              break;
+            }
+            m_deleteLater.removeFirst();
+          }
+
           //The only function that does not lock the mutex is getItem(..), because that function must be very efficient.
           //Since it's only a few instructions from the moment m_items is read to the moment it's used,
           //deleting the old data after a few seconds should be safe.
           m_deleteLater.append(qMakePair(now, oldItems));
-
-          //We do this in this place so it isn't called too often. The result is that we will always have some additional data around.
-          //However the index itself should anyway not consume too much data.
-          if(!m_deleteLater.isEmpty()) {
-            while(!m_deleteLater.isEmpty()) {
-              //We delete after 5 seconds
-              if (now - m_deleteLater.first().first > 5) {
-                m_deleteLater.removeFirst();
-              }else{
-                break;
-              }
-            }
-          }
         }
 
         ret = m_items.size();
