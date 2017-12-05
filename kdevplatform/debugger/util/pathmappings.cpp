@@ -204,7 +204,7 @@ private:
         QUrl remote;
         QUrl local;
     };
-    QList<Path> m_paths;
+    QVector<Path> m_paths;
 };
 
 
