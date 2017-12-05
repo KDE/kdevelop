@@ -20,6 +20,7 @@ Name[zh_CN]=QObject pimpl 子类
 Comment=QObject subclass with private implementation
 Comment[ca]=Una subclasse QObject amb implementació privada
 Comment[ca@valencia]=Una subclasse QObject amb implementació privada
+Comment[de]=QObject-Unterklasse mit privater Implementierung
 Comment[en_GB]=QObject subclass with private implementation
 Comment[es]=Una subclase de QObject con una implementación privada
 Comment[fr]=Une sous-classe QObject avec une implémentation privée
