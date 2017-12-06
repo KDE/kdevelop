@@ -80,7 +80,7 @@ void MIFrameStackModel::handleThreadInfo(const ResultRecord& r)
         if (threadMI[QStringLiteral("state")].literal() == QLatin1String("stopped")) {
             threadItem.name = getFunctionOrAddress(threadMI[QStringLiteral("frame")]);
         } else {
-            i18n("(running)");
+            threadItem.name = i18n("(running)");
         }
         threadsList << threadItem;
     }
