@@ -125,17 +125,11 @@ RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(MIDebugSession* deb
 {
     if (m_registerNames.isEmpty()) {
         const int registerCount = static_cast<int>(LAST_REGISTER);
-        m_registerNames.reserve(registerCount);
-        for (int i = 0; i < registerCount; ++i) {
-            m_registerNames.append(QStringList());
-        }
+        m_registerNames.resize(registerCount);
         initRegisterNames();
     }
 
-    int n = 0;
-    while (n++ < namesOfRegisterGroups().size()) {
-        m_formatsModes.append(FormatsModes());
-    }
+    m_formatsModes.resize(namesOfRegisterGroups().size());
 
     m_formatsModes[XMM].formats.append(Binary);
     m_formatsModes[XMM].formats.append(Decimal);

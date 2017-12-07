@@ -112,17 +112,11 @@ RegisterController_Arm::RegisterController_Arm(MIDebugSession* debugSession, QOb
 {
     if (m_registerNames.isEmpty()) {
         const int registerCount = static_cast<int>(LAST_REGISTER);
-        m_registerNames.reserve(registerCount);
-        for (int i = 0; i < registerCount; ++i) {
-            m_registerNames.append(QStringList());
-        }
+        m_registerNames.resize(registerCount);
         initRegisterNames();
     }
 
-    int n = 0;
-    while (n++ < namesOfRegisterGroups().size()) {
-        m_formatsModes.append(FormatsModes());
-    }
+    m_formatsModes.resize(namesOfRegisterGroups().size());
 
     m_formatsModes[VFP_double].formats.append(Binary);
     m_formatsModes[VFP_double].formats.append(Decimal);
