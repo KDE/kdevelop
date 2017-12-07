@@ -170,9 +170,9 @@ SourceToDestinationMap mapSourceToDestination(const Path::List& sourcePaths, con
 
     SourceToDestinationMap result;
     for (const Path& path : sortedPaths) {
-        if (!result.filteredPaths.isEmpty() && std::reverse_iterator<Path::List::const_iterator>(result.filteredPaths.constBegin())->isParentOf(path)) {
+        if (!result.filteredPaths.isEmpty() && result.filteredPaths.back().isParentOf(path)) {
             // think: "/tests"
-            const Path& previousPath = *std::reverse_iterator<Path::List::const_iterator>(result.filteredPaths.constBegin());
+            const Path& previousPath = result.filteredPaths.back();
             // think: "/dest" + "/".relativePath("/tests/abc.cpp") = /dest/tests/abc.cpp
             result.finalPaths[previousPath].append(Path(destinationPath, previousPath.parent().relativePath(path)));
         } else {
