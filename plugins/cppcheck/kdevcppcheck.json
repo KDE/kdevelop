@@ -1,26 +1,4 @@
 {
-    "GenericName": "Cppcheck Support",
-    "GenericName[ast]": "Sofitu Cppcheck",
-    "GenericName[bs]": "Cppcheck podrška",
-    "GenericName[ca@valencia]": "Implementació del Cppcheck",
-    "GenericName[ca]": "Implementació del Cppcheck",
-    "GenericName[cs]": "Podpora Cppcheck",
-    "GenericName[de]": "Cppcheck-Unterstützung",
-    "GenericName[es]": "Uso de Cppcheck",
-    "GenericName[fi]": "Cppcheck-tuki",
-    "GenericName[fr]": "Prise en charge de Cppcheck",
-    "GenericName[gl]": "Integración de Cppcheck",
-    "GenericName[hu]": "Cppcheck támogatás",
-    "GenericName[nl]": "Ondersteuning van CPPCheck",
-    "GenericName[pl]": "Obsługa Cppcheck",
-    "GenericName[pt]": "Suporte para o Cppcheck",
-    "GenericName[pt_BR]": "Suporte ao Cppcheck",
-    "GenericName[sk]": "Podpora Cppcheck",
-    "GenericName[sv]": "Stöd för Cppcheck",
-    "GenericName[tr]": "Cppcheck Desteği",
-    "GenericName[uk]": "Підтримка Cppcheck",
-    "GenericName[x-test]": "xxCppcheck Supportxx",
-    "GenericName[zh_CN]": "Cppcheck 支持",
     "KPlugin": {
         "Authors": [
             {
