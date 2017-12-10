@@ -53,7 +53,6 @@
         "Name[tr]": "Hızlı Aç",
         "Name[uk]": "Швидке відкриття",
         "Name[x-test]": "xxQuick Openxx",
-        "Name[zh_CN]": "快速打开",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
