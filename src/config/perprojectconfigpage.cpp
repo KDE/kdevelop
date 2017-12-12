@@ -22,8 +22,11 @@
 #include "config/perprojectconfigpage.h"
 #include "ui_perprojectconfig.h"
 
-#include <KSharedConfig>
 #include <interfaces/iproject.h>
+
+#include <KSharedConfig>
+
+#include <QStringListModel>
 
 namespace ClangTidy
 {

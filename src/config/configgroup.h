@@ -22,8 +22,8 @@
 #ifndef CLANGTIDY_CONFIG_H
 #define CLANGTIDY_CONFIG_H
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <array>
 #include <tuple>

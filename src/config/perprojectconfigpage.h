@@ -23,8 +23,6 @@
 #define CLANGTIDY_PERPROJECTCONFIGPAGE_H_
 
 #include <QItemSelectionModel>
-#include <QObject>
-#include <QStringListModel>
 #include <interfaces/configpage.h>
 
 #include "config/configgroup.h"

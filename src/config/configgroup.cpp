@@ -19,7 +19,7 @@
  * 02110-1301, USA.
  */
 
-#include "config/configgroup.h"
+#include "configgroup.h"
 
 namespace ClangTidy
 {

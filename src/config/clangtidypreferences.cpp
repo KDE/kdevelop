@@ -24,8 +24,6 @@
 #include "config/configgroup.h"
 #include "ui_clangtidypreferences.h"
 
-#include <QVBoxLayout>
-
 using KDevelop::IPlugin;
 using ClangTidy::ConfigGroup;
 using KDevelop::ConfigPage;

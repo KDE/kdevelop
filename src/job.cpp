@@ -25,7 +25,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KShell>
+
 #include <QApplication>
 #include <QFile>
 #include <QRegularExpression>

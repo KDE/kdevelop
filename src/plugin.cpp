@@ -25,15 +25,14 @@
 #include <QMessageBox>
 #include <QMimeType>
 
-#include <kactioncollection.h>
-#include <klocalizedstring.h>
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
-#include <kprocess.h>
+#include <KActionCollection>
+#include <KLocalizedString>
+#include <KPluginFactory>
+#include <KPluginLoader>
+#include <KProcess>
 
 #include <execute/iexecuteplugin.h>
 
-#include <KXMLGUIFactory>
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/idocument.h>

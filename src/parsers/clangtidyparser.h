@@ -22,6 +22,8 @@
 #ifndef _CLANGTIDYPARSER_H_
 #define _CLANGTIDYPARSER_H_
 
+#include <QObject>
+
 #include <interfaces/iproblem.h>
 // #include "qCDebug/debug.h"
 
