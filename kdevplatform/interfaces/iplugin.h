@@ -60,7 +60,6 @@ struct ProjectConfigOptions;
  * Type=Service
  * Exec=blubb
  * Name=
- * GenericName=
  * Comment=
  * Icon=
  * ServiceTypes=KDevelop/Plugin
@@ -83,8 +82,6 @@ struct ProjectConfigOptions;
  * <b>Description of parameters in .desktop file:</b>
  * - <i>Name</i> is a translatable name of a plugin, it is used in the plugin 
  *   selection list (required);
- * - <i>GenericName</i> is a translatable generic name of a plugin, it should 
- *   describe in general what the plugin can do  (required);
  * - <i>Comment</i> is a short description about the plugin (optional);
  * - <i>Icon</i> is a plugin icon (preferred);
  *   <i>X-KDE-library</i>this is the name of the .so file to load for this plugin (required);
