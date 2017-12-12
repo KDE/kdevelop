@@ -5,8 +5,6 @@ project(kdev-clangtidy)
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 1)
-# KDevplatform dependency version
-set(KDEVPLATFORM_VERSION "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
 
 find_package (ECM "5.14.0" REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
@@ -20,7 +18,11 @@ include(FeatureSummary)
 
 find_package(Qt5 REQUIRED Core Widgets Test)
 find_package(KF5 REQUIRED COMPONENTS IconThemes ItemModels ThreadWeaver TextEditor I18n)
-find_package(KDevPlatform ${KDEVPLATFORM_VERSION} REQUIRED)
+set(KDEVPLATFORM_DEP_VERSION "5.1.0")
+find_package(KDevPlatform ${KDEVPLATFORM_DEP_VERSION} CONFIG)
+set_package_properties(KDevPlatform PROPERTIES
+    TYPE REQUIRED
+)
 
 find_package(Boost REQUIRED)
 
