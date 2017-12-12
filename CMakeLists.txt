@@ -27,6 +27,8 @@ set_package_properties(KDevPlatform PROPERTIES
 
 find_package(Boost REQUIRED)
 
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevclangtidy\")
+
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/src

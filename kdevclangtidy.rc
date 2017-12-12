@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="ClangTidy" library="libclangtidyplugin" version="3">
+<gui name="ClangTidy" version="3" translationDomain="kdevclangtidy">
 <MenuBar>
   <Menu name="code">
     <Menu name="analyze_file">

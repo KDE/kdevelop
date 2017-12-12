@@ -4,3 +4,5 @@ Singleton=true
 UseEnumTypes=true
 SetUserTexts=true
 ItemAccessors=true
+TranslationSystem=kde
+TranslationDomain=kdevclangtidy
