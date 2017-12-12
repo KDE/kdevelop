@@ -17,7 +17,12 @@ include(KDECMakeSettings)
 include(FeatureSummary)
 
 find_package(Qt5 REQUIRED Core Widgets Test)
-find_package(KF5 REQUIRED COMPONENTS IconThemes ItemModels ThreadWeaver TextEditor I18n)
+set(KF5_DEP_VERSION "5.15.0")
+find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
+    I18n
+    ItemModels # needed because missing in KDevPlatformConfig.cmake, remove once dep on kdevplatform >=5.2.2
+    Config
+)
 set(KDEVPLATFORM_DEP_VERSION "5.1.0")
 find_package(KDevPlatform ${KDEVPLATFORM_DEP_VERSION} CONFIG)
 set_package_properties(KDevPlatform PROPERTIES
@@ -77,12 +82,8 @@ target_link_libraries(kdevclangtidy
     KDev::Util
     KDev::Shell
     KF5::ConfigCore
-    KF5::IconThemes
-    KF5::KIOCore
-    KF5::WidgetsAddons
-    KF5::TextEditor
-    Qt5::Network
-    )
+    KF5::I18n
+)
 
 add_subdirectory(tests)
 
