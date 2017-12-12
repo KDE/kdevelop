@@ -7,7 +7,7 @@ set(VERSION_MINOR 0)
 set(VERSION_PATCH 1)
 
 find_package (ECM "5.14.0" REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMAddTests)
@@ -30,8 +30,6 @@ set_package_properties(KDevPlatform PROPERTIES
 )
 
 find_package(Boost REQUIRED)
-
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
