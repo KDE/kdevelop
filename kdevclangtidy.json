@@ -1,21 +1,4 @@
 {
-    "GenericName": "Clang-Tidy Support",
-    "GenericName[bs]": "Provjera sintakse",
-    "GenericName[ca@valencia]": "Comprova la sintaxi",
-    "GenericName[ca]": "Comprova la sintaxi",
-    "GenericName[cs]": "Kontrola syntaxe",
-    "GenericName[de]": "Syntaxprüfung",
-    "GenericName[es]": "Comprobación de sintaxis",
-    "GenericName[fr]": "Vérification de la syntaxe",
-    "GenericName[hu]": "Szintaxis-ellenőrzés",
-    "GenericName[nl]": "Controle op syntaxis",
-    "GenericName[pl]": "Sprawdzanie składni",
-    "GenericName[pt]": "Verificação de sintaxe",
-    "GenericName[pt_BR]": "Verificação de sintaxe",
-    "GenericName[sk]": "Kontrola syntaxe",
-    "GenericName[sv]": "Syntaxkontroll",
-    "GenericName[uk]": "Перевірка синтаксису",
-    "GenericName[x-test]": "xxclang-tidy Supportxx",
     "KPlugin": {
         "Authors": [
             {
