@@ -316,7 +316,7 @@ void TestAstyle::testForeach()
     AStyleFormatter formatter;
     QVERIFY(formatter.predefinedStyle("KDELibs"));
 
-    const QString initial(QStringLiteral("int a(){QList<int> v;foreach(int i,v){return i;}}\n"));
+    const QString initial(QStringLiteral("int a(){QList<int> v;\n    foreach(int i,v){\nreturn i;}}\n"));
     const QString expected(QStringLiteral("int a()\n{\n    QList<int> v;\n    foreach (int i, v) {\n        return i;\n    }\n}\n"));
     const QString formatted = formatter.formatSource(initial);
     QCOMPARE(formatted, expected);
