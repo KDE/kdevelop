@@ -569,7 +569,7 @@ void SourceFormatterSelectionEdit::updatePreview()
         }
     } else
     {
-        d->document->setText(i18n("No Language selected"));
+        d->document->setText(i18n("No language selected"));
     }
     d->view->setCursorPosition(KTextEditor::Cursor(0, 0));
     d->document->setReadWrite(false);
