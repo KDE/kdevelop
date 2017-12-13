@@ -136,6 +136,8 @@ static void selectAvailableStyle(LanguageSettings& lang)
 
 void SourceFormatterSelectionEdit::addSourceFormatter(ISourceFormatter* ifmt)
 {
+    qCDebug(SHELL) << "Adding source formatter:" << ifmt->name();
+
     SourceFormatter* formatter;
     FormatterMap::const_iterator iter = d->formatters.constFind(ifmt->name());
     if (iter == d->formatters.constEnd()) {
@@ -170,6 +172,8 @@ void SourceFormatterSelectionEdit::addSourceFormatter(ISourceFormatter* ifmt)
 
 void SourceFormatterSelectionEdit::removeSourceFormatter(ISourceFormatter* ifmt)
 {
+    qCDebug(SHELL) << "Removing source formatter:" << ifmt->name();
+
     auto iter = d->formatters.find(ifmt->name());
     if (iter == d->formatters.end()) {
         qCWarning(SHELL) << "formatter plugin" << ifmt->name() << "unloading which was not seen before by SourceFormatterSelectionEdit";
@@ -238,6 +242,8 @@ void SourceFormatterSelectionEdit::loadSettings(const KConfigGroup& config)
 
 void SourceFormatterSelectionEdit::resetUi()
 {
+    qCDebug(SHELL) << "Resetting UI";
+
     // Sort the languages, preferring firstly active, then loaded languages
     QList<QString> sortedLanguages;
 
