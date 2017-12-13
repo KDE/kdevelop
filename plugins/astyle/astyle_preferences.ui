@@ -337,11 +337,6 @@ from their immediately preceding closing brackets.</string>
               </item>
               <item>
                <property name="text">
-                <string>Stroustrup</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
                 <string>Run-In</string>
                </property>
               </item>

@@ -103,7 +103,8 @@ void AStyleFormatter::updateFormatter()
     else if(s == QLatin1String("Linux"))
         AStyleFormatter::setBracketFormatMode(astyle::LINUX_MODE);
     else if(s == QLatin1String("Stroustrup"))
-        AStyleFormatter::setBracketFormatMode(astyle::STROUSTRUP_MODE);
+        // In astyle 2.06 BracketMode STROUSTRUP_MODE was removed and LINUX_MODE is the replacement
+        AStyleFormatter::setBracketFormatMode(astyle::LINUX_MODE);
     else if(s == QLatin1String("Horstmann") || s == QLatin1String("RunInMode"))
         AStyleFormatter::setBracketFormatMode(astyle::RUN_IN_MODE);
     else
@@ -124,7 +125,7 @@ void AStyleFormatter::updateFormatter()
 
     // oneliner
     AStyleFormatter::setBreakOneLineBlocksMode(!m_options[QStringLiteral("KeepBlocks")].toBool());
-    AStyleFormatter::setSingleStatementsMode(!m_options[QStringLiteral("KeepStatements")].toBool());
+    AStyleFormatter::setBreakOneLineStatementsMode(!m_options[QStringLiteral("KeepStatements")].toBool());
 
     // pointer
     s = m_options[QStringLiteral("PointerAlign")].toString();
@@ -143,7 +144,7 @@ void AStyleFormatter::resetStyle()
     setSpaceIndentation(4);
     setBracketFormatMode(astyle::NONE_MODE);
     setBreakOneLineBlocksMode(true);
-    setSingleStatementsMode(true);
+    setBreakOneLineStatementsMode(true);
     // blocks
     setBreakBlocksMode(false);
     setBreakClosingHeaderBlocksMode(false);
@@ -218,7 +219,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         return true;
     } else if (style == QLatin1String("Stroustrup")) {
         resetStyle();
-        setBracketFormatMode(astyle::STROUSTRUP_MODE);
+        setBracketFormatMode(astyle::LINUX_MODE);
         setBlockIndent(false);
         setBracketIndent(false);
         setSpaceIndentation(5);
@@ -279,7 +280,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setParensOutsidePaddingMode(false);
         setParensHeaderPaddingMode(true);
         setParensUnPaddingMode(true);
-        setSingleStatementsMode(false);
+        setBreakOneLineStatementsMode(false);
         setTabSpaceConversionMode(true);
         setPreprocessorIndent(true);
         setSwitchIndent(false);
@@ -432,9 +433,6 @@ void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
     case astyle::LINUX_MODE:
         m_options[QStringLiteral("Brackets")] = "Linux";
         break;
-    case astyle::STROUSTRUP_MODE:
-        m_options[QStringLiteral("Brackets")] = "Stroustrup";
-        break;
     case astyle::RUN_IN_MODE:
         m_options[QStringLiteral("Brackets")] = "RunInMode";
         break;
@@ -501,10 +499,10 @@ void AStyleFormatter::setBreakOneLineBlocksMode(bool state)
     ASFormatter::setBreakOneLineBlocksMode(state);
 }
 
-void AStyleFormatter::setSingleStatementsMode(bool state)
+void AStyleFormatter::setBreakOneLineStatementsMode(bool state)
 {
     m_options[QStringLiteral("KeepStatements")] = !state;
-    ASFormatter::setSingleStatementsMode(state);
+    ASFormatter::setBreakOneLineStatementsMode(state);
 }
 
 void AStyleFormatter::setPointerAlignment(astyle::PointerAlign alignment)

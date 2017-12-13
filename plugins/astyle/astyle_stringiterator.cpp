@@ -35,6 +35,15 @@ AStyleStringIterator::~AStyleStringIterator()
 {
 }
 
+astyle::streamoff AStyleStringIterator::tellg()
+{
+  return m_is.pos();
+}
+
+int AStyleStringIterator::getStreamLength() const
+{
+  return m_content.size();
+}
 
 bool AStyleStringIterator::hasMoreLines() const
 {
@@ -42,13 +51,13 @@ bool AStyleStringIterator::hasMoreLines() const
 }
 
 
-string AStyleStringIterator::nextLine(bool emptyLineWasDeleted)
+std::string AStyleStringIterator::nextLine(bool emptyLineWasDeleted)
 {
   Q_UNUSED(emptyLineWasDeleted)
   return m_is.readLine().toUtf8().data();
 }
 
-string AStyleStringIterator::peekNextLine()
+std::string AStyleStringIterator::peekNextLine()
 {
     if (m_peekStart == -1) {
         m_peekStart = m_is.pos();

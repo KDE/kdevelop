@@ -74,7 +74,7 @@ public:
     void setParensUnPaddingMode(bool state);
     //oneliners
     void setBreakOneLineBlocksMode(bool state);
-    void setSingleStatementsMode(bool state);
+    void setBreakOneLineStatementsMode(bool state);
     //pointer
     void setPointerAlignment(astyle::PointerAlign alignment);
 

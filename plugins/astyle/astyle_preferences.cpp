@@ -50,8 +50,7 @@ const int BRACKET_NOCHANGE = 0;
 const int BRACKET_ATTACH = 1;
 const int BRACKET_BREAK = 2;
 const int BRACKET_LINUX = 3;
-const int BRACKET_STROUSTRUP = 4;
-const int BRACKET_RUNINMODE = 5;
+const int BRACKET_RUNINMODE = 4;
 
 const int POINTERALIGN_NOCHANGE = 0;
 const int POINTERALIGN_NAME = 1;
@@ -331,7 +330,6 @@ void AStylePreferences::bracketsChanged()
         case BRACKET_ATTACH: m_formatter->setBracketFormatMode(astyle::ATTACH_MODE); break;
         case BRACKET_BREAK: m_formatter->setBracketFormatMode(astyle::BREAK_MODE); break;
         case BRACKET_LINUX: m_formatter->setBracketFormatMode(astyle::LINUX_MODE); break;
-        case BRACKET_STROUSTRUP: m_formatter->setBracketFormatMode(astyle::STROUSTRUP_MODE); break;
         case BRACKET_RUNINMODE: m_formatter->setBracketFormatMode(astyle::RUN_IN_MODE); break;
     }
 
@@ -402,7 +400,7 @@ void AStylePreferences::onelinersChanged()
 {
     if(!m_enableWidgetSignals)
         return;
-    m_formatter->setSingleStatementsMode(!chkKeepStatements->isChecked());
+    m_formatter->setBreakOneLineStatementsMode(!chkKeepStatements->isChecked());
     m_formatter->setBreakOneLineBlocksMode(!chkKeepBlocks->isChecked());
 
     updatePreviewText();

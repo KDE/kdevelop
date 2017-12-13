@@ -35,6 +35,8 @@ public:
     explicit AStyleStringIterator(const QString &string);
     virtual ~AStyleStringIterator();
 
+    astyle::streamoff tellg() override;
+    int getStreamLength() const override;
     bool hasMoreLines() const override;
     std::string nextLine(bool emptyLineWasDeleted = false) override;
     std::string peekNextLine() override;
