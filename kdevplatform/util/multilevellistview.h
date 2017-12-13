@@ -21,7 +21,6 @@
 #define KDEVPLATFORM_MULTILEVELLISTVIEW_H
 
 #include <QWidget>
-#include <KSelectionProxyModel>
 #include "utilexport.h"
 
 class QTreeView;
@@ -44,6 +43,12 @@ class KDEVPLATFORMUTIL_EXPORT MultiLevelListView : public QWidget
 {
     Q_OBJECT
 public:
+    enum LastLevelViewMode {
+        SubTrees,      ///< Shows complete subtree for each child. Only leafs are selectable.
+        DirectChildren ///< Shows only the direct childs.
+    };
+    Q_ENUM(LastLevelViewMode)
+
     /**
      * Creates a new MultiLevelListView with parent @p parent.
      *
@@ -109,10 +114,11 @@ public:
     void setHeaderLabels(const QStringList& labels);
 
     /**
-     * Set the filter behavior of the last model. By default, SubTreesWithoutRoots
-     * is used and only leafs are selectable in the view for that model.
+     * Set the view mode of the view for the last level.
+     * Default is @c SubTrees.
      */
-    void setLastModelsFilterBehavior(KSelectionProxyModel::FilterBehavior filter);
+    void setLastLevelViewMode(LastLevelViewMode mode);
+
 Q_SIGNALS:
     /**
      * Notified that the current index has changed from @p previous to @p current

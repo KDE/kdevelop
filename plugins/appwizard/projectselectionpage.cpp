@@ -58,7 +58,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     ui->listView->setLevels(2);
     ui->listView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Project Type"));
     ui->listView->setModel(templatesModel);
-    ui->listView->setLastModelsFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
+    ui->listView->setLastLevelViewMode(MultiLevelListView::DirectChildren);
     connect (ui->listView, &MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
     typeChanged(ui->listView->currentIndex());
 

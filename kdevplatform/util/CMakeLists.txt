@@ -55,8 +55,8 @@ kdevplatform_add_library(KDevPlatformUtil SOURCES ${KDevPlatformUtil_LIB_SRCS})
 target_link_libraries(KDevPlatformUtil
 LINK_PUBLIC
     KDev::Interfaces
-    KF5::ItemModels
 LINK_PRIVATE
+    KF5::ItemModels
     KF5::ConfigWidgets
     KF5::TextEditor
     KF5::GuiAddons

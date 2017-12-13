@@ -437,12 +437,25 @@ void MultiLevelListView::setHeaderLabels(const QStringList& labels)
     }
 }
 
-void MultiLevelListView::setLastModelsFilterBehavior(KSelectionProxyModel::FilterBehavior filter)
+static
+KSelectionProxyModel::FilterBehavior toSelectionProxyModelFilterBehavior(MultiLevelListView::LastLevelViewMode mode)
+{
+    switch (mode) {
+        case MultiLevelListView::SubTrees:
+            return KSelectionProxyModel::SubTreesWithoutRoots;
+        case MultiLevelListView::DirectChildren:
+            return KSelectionProxyModel::ChildrenOfExactSelection;
+    }
+    Q_UNREACHABLE();
+};
+
+void MultiLevelListView::setLastLevelViewMode(LastLevelViewMode mode)
 {
     if (d->proxies.isEmpty()) {
         return;
     }
-    dynamic_cast<KSelectionProxyModel*>(d->proxies.last())->setFilterBehavior(filter);
+    const auto filterBehavior = toSelectionProxyModelFilterBehavior(mode);
+    dynamic_cast<KSelectionProxyModel*>(d->proxies.last())->setFilterBehavior(filterBehavior);
 }
 
 

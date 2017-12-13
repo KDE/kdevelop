@@ -43,7 +43,6 @@ target_link_libraries(kdevfiletemplates
     KDev::Util
     KF5::NewStuff
     KF5::TextEditor
-    KF5::ItemModels
 )
 
 ########### install files ###############
