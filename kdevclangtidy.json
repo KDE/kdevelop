@@ -2,15 +2,26 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Carlos Nihelton"
+                "Name": "Carlos Nihelton",
+                "Name[x-test]": "xxCarlos Niheltonxx"
             }
         ],
         "Category": "Analyzers",
         "Description": "clang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. http://clang.llvm.org/extra/clang-tidy/",
+        "Description[ca]": "El clang-tidy proporciona un marc de treball extensible per al diagnòstic i esmena d'errors de programació típics, com ara infraccions de l'estil, mal ús de la interfície o errors que es poden deduir mitjançant anàlisi estàtic. http://clang.llvm.org/extra/clang-tidy/",
+        "Description[nl]": "clang-tidy biedt een uitbreidbaar framework voor diagnose en repareren van typische programmeringsfouten, zoals ingaan tegen de stijl, misbruik van interface of bugs die afgeleid worden via statische analyse. http://clang.llvm.org/extra/clang-tidy/",
+        "Description[pt]": "O 'clang-tidy' oferece uma plataforma flexível para diagnosticar e corrigir erros de programação típicos, como as violações de estilo, o mau uso de interfaces ou erros que possam ser deduzidos por análise estática. http://clang.llvm.org/extra/clang-tidy/",
+        "Description[uk]": "clang-tidy — розширена оболонка діагностування та виправлення типових помилок у програмах, зокрема порушень стилю, помилкового використання інтерфейсу та вад, які можна виявити за допомогою статичного аналізу. http://clang.llvm.org/extra/clang-tidy/",
+        "Description[x-test]": "xxclang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. http://clang.llvm.org/extra/clang-tidy/xx",
         "Icon": "kdevelop",
         "Id": "kdevclangtidy",
         "License": "GPL",
         "Name": "Clang-Tidy Support",
+        "Name[ca]": "Implementació del Clang-Tidy",
+        "Name[nl]": "Ondersteuning van Clang-Tidy",
+        "Name[pt]": "Suporte para o Clang-Tidy",
+        "Name[uk]": "Підтримка Clang-Tidy",
+        "Name[x-test]": "xxClang-Tidy Supportxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
