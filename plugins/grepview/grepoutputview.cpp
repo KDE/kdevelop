@@ -182,18 +182,17 @@ GrepOutputView::~GrepOutputView()
     QStringList settingsStrings;
     settingsStrings.reserve(m_settingsHistory.size() * GrepSettingsStorageItemCount);
     foreach (const GrepJobSettings & s, m_settingsHistory) {
-        settingsStrings << QStringList({
-            QString::number(s.projectFilesOnly),
-            QString::number(s.caseSensitive),
-            QString::number(s.regexp),
-            QString::number(s.depth),
-            s.pattern,
-            s.searchTemplate,
-            s.replacementTemplate,
-            s.files,
-            s.exclude,
-            s.searchPaths
-        });
+        settingsStrings
+            << QString::number(s.projectFilesOnly ? 1 : 0)
+            << QString::number(s.caseSensitive ? 1 : 0)
+            << QString::number(s.regexp ? 1 : 0)
+            << QString::number(s.depth)
+            << s.pattern
+            << s.searchTemplate
+            << s.replacementTemplate
+            << s.files
+            << s.exclude
+            << s.searchPaths;
     }
     cg.writeEntry("LastSettings", settingsStrings);
     emit outputViewIsClosed();
