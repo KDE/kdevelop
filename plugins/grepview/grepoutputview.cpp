@@ -54,6 +54,10 @@ QString GrepOutputViewFactory::id() const
 
 const int GrepOutputView::HISTORY_SIZE = 5;
 
+namespace {
+enum { GrepSettingsStorageItemCount = 10 };
+}
+
 GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
   : QWidget(parent)
   , m_next(nullptr)
@@ -136,7 +140,8 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 
     // read Find/Replace settings history
     QStringList s = cg.readEntry("LastSettings", QStringList());
-    while (!s.empty() && s.count() % 10 == 0) {
+    m_settingsHistory.reserve(s.count() / GrepSettingsStorageItemCount);
+    while (!s.empty() && s.count() % GrepSettingsStorageItemCount == 0) {
         GrepJobSettings settings;
         settings.projectFilesOnly = s.takeFirst().toUInt();
         settings.caseSensitive = s.takeFirst().toUInt();
@@ -175,6 +180,7 @@ GrepOutputView::~GrepOutputView()
     KConfigGroup cg = ICore::self()->activeSession()->config()->group( "GrepDialog" );
     cg.writeEntry("LastReplacementItems", qCombo2StringList(replacementCombo, true));
     QStringList settingsStrings;
+    settingsStrings.reserve(m_settingsHistory.size() * GrepSettingsStorageItemCount);
     foreach (const GrepJobSettings & s, m_settingsHistory) {
         settingsStrings << QStringList({
             QString::number(s.projectFilesOnly),
