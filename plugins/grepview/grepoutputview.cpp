@@ -17,6 +17,7 @@
 #include "grepdialog.h"
 #include "greputil.h"
 #include "grepjob.h"
+#include "debug.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
@@ -139,23 +140,28 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     resultsTreeView->header()->setStretchLastSection(true);
 
     // read Find/Replace settings history
-    QStringList s = cg.readEntry("LastSettings", QStringList());
-    m_settingsHistory.reserve(s.count() / GrepSettingsStorageItemCount);
-    while (!s.empty() && s.count() % GrepSettingsStorageItemCount == 0) {
-        GrepJobSettings settings;
-        settings.projectFilesOnly = s.takeFirst().toUInt();
-        settings.caseSensitive = s.takeFirst().toUInt();
-        settings.regexp = s.takeFirst().toUInt();
-        settings.depth = s.takeFirst().toInt();
-        settings.pattern = s.takeFirst();
-        settings.searchTemplate = s.takeFirst();
-        settings.replacementTemplate = s.takeFirst();
-        settings.files = s.takeFirst();
-        settings.exclude = s.takeFirst();
-        settings.searchPaths = s.takeFirst();
+    const QStringList s = cg.readEntry("LastSettings", QStringList());
+    if (s.size() % GrepSettingsStorageItemCount != 0) {
+        qCWarning(PLUGIN_GREPVIEW) << "Stored settings history has unexpected size:" << s;
+    } else {
+        m_settingsHistory.reserve(s.size() / GrepSettingsStorageItemCount);
+        auto it = s.begin();
+        while (it != s.end()) {
+            GrepJobSettings settings;
+            settings.projectFilesOnly = ((it++)->toUInt() != 0);
+            settings.caseSensitive = ((it++)->toUInt() != 0);
+            settings.regexp = ((it++)->toUInt() != 0);
+            settings.depth = (it++)->toInt();
+            settings.pattern = *(it++);
+            settings.searchTemplate = *(it++);
+            settings.replacementTemplate = *(it++);
+            settings.files = *(it++);
+            settings.exclude = *(it++);
+            settings.searchPaths = *(it++);
 
-        settings.fromHistory = true;
-        m_settingsHistory << settings;
+            settings.fromHistory = true;
+            m_settingsHistory << settings;
+        }
     }
 
     // rerun the grep jobs with settings from the history
