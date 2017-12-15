@@ -262,7 +262,6 @@ MultiLevelListView::MultiLevelListView(QWidget* parent, Qt::WindowFlags f)
 : QWidget(parent, f)
 , d(new MultiLevelListViewPrivate(this))
 {
-    delete layout();
     setLayout(new QHBoxLayout());
     layout()->setContentsMargins(0, 0, 0, 0);
 
