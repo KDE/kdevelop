@@ -13,11 +13,6 @@
 #include "appwizardpagewidget.h"
 #include "appwizarddialog.h"
 
-namespace KDevelop
-{
-class MultiLevelListView;
-}
-
 namespace Ui {
 class ProjectSelectionPage;
 }
@@ -60,7 +55,6 @@ private:
     void setCurrentTemplate(const QString& fileName);
 
     Ui::ProjectSelectionPage *ui;
-    KDevelop::MultiLevelListView* m_listView;
     ProjectTemplatesModel *m_templatesModel;
     AppWizardDialog *m_wizardDialog;
 };

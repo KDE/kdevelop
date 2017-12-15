@@ -25,7 +25,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <language/codegen/templatepreviewicon.h>
 
-#include <util/multilevellistview.h>
 #include <util/scopeddialog.h>
 
 #include "ui_projectselectionpage.h"
@@ -56,30 +55,27 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->projectNameEdit, &QLineEdit::textEdited,
              this, &ProjectSelectionPage::nameChanged );
 
-    m_listView = new KDevelop::MultiLevelListView(this);
-    m_listView->setLevels(2);
-    m_listView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Project Type"));
-    m_listView->setModel(templatesModel);
-    m_listView->setLastModelsFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
-    m_listView->setContentsMargins(0, 0, 0, 0);
-    connect (m_listView, &MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
-    ui->gridLayout->addWidget(m_listView, 0, 0, 1, 1);
-    typeChanged(m_listView->currentIndex());
+    ui->listView->setLevels(2);
+    ui->listView->setHeaderLabels(QStringList() << i18n("Category") << i18n("Project Type"));
+    ui->listView->setModel(templatesModel);
+    ui->listView->setLastModelsFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
+    connect (ui->listView, &MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
+    typeChanged(ui->listView->currentIndex());
 
     connect( ui->templateType, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
              this, &ProjectSelectionPage::templateChanged );
 
-    QPushButton* getMoreButton = new QPushButton(i18n("Get More Templates"), m_listView);
+    QPushButton* getMoreButton = new QPushButton(i18n("Get More Templates"), ui->listView);
     getMoreButton->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
     connect (getMoreButton, &QPushButton::clicked,
              this, &ProjectSelectionPage::moreTemplatesClicked);
-    m_listView->addWidget(0, getMoreButton);
+    ui->listView->addWidget(0, getMoreButton);
 
-    QPushButton* loadButton = new QPushButton(m_listView);
+    QPushButton* loadButton = new QPushButton(ui->listView);
     loadButton->setText(i18n("Load Template From File"));
     loadButton->setIcon(QIcon::fromTheme(QStringLiteral("application-x-archive")));
     connect (loadButton, &QPushButton::clicked, this, &ProjectSelectionPage::loadFileClicked);
-    m_listView->addWidget(0, loadButton);
+    ui->listView->addWidget(0, loadButton);
 
     m_wizardDialog = wizardDialog;
 }
@@ -273,7 +269,7 @@ QByteArray ProjectSelectionPage::encodedProjectName()
 
 QStandardItem* ProjectSelectionPage::getCurrentItem() const
 {
-    QStandardItem* item = m_templatesModel->itemFromIndex( m_listView->currentIndex() );
+    QStandardItem* item = m_templatesModel->itemFromIndex( ui->listView->currentIndex() );
     if ( item && item->hasChildren() )
     {
         const int currect = ui->templateType->currentIndex();
@@ -319,7 +315,7 @@ void ProjectSelectionPage::loadFileClicked()
         QModelIndexList indexes = m_templatesModel->templateIndexes(destination);
         if (indexes.size() > 2)
         {
-            m_listView->setCurrentIndex(indexes.at(1));
+            ui->listView->setCurrentIndex(indexes.at(1));
             ui->templateType->setCurrentIndex(indexes.at(2).row());
         }
     }
@@ -352,7 +348,7 @@ void ProjectSelectionPage::moreTemplatesClicked()
 
     if (!updated)
     {
-        m_listView->setCurrentIndex(QModelIndex());
+        ui->listView->setCurrentIndex(QModelIndex());
     }
 }
 
@@ -361,7 +357,7 @@ void ProjectSelectionPage::setCurrentTemplate (const QString& fileName)
     QModelIndexList indexes = m_templatesModel->templateIndexes(fileName);
     if (indexes.size() > 1)
     {
-        m_listView->setCurrentIndex(indexes.at(1));
+        ui->listView->setCurrentIndex(indexes.at(1));
     }
     if (indexes.size() > 2)
     {
