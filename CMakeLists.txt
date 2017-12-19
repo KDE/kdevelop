@@ -112,10 +112,12 @@ endfunction()
 # Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
 # See discussion: http://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html
 add_compile_flag_if_supported(-Wno-missing-field-initializers)
+add_compile_flag_if_supported(-Werror=switch)
 add_compile_flag_if_supported(-Werror=undefined-bool-conversion)
 add_compile_flag_if_supported(-Werror=tautological-undefined-compare)
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_flag_if_supported(-Wdocumentation)
+    add_compile_flag_if_supported(-Wcovered-switch-default)
     # This warning is triggered by every call to qCDebug()
     add_compile_flag_if_supported(-Wno-gnu-zero-variadic-macro-arguments)
 endif()

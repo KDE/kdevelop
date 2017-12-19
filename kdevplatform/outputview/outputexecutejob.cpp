@@ -344,7 +344,6 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
             errorValue = i18n("Waiting for the process has timed out");
             break;
 
-        default:
         case QProcess::UnknownError:
             errorValue = i18n("Exit code %1", d->m_process->exitCode());
             break;

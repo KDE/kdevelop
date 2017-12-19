@@ -96,9 +96,8 @@ QString BuilderJobPrivate::buildTypeToString(BuilderJob::BuildType type) const
             return i18nc( "@info:status", "install" );
         case BuilderJob::Prune:
             return i18nc( "@info:status", "prune" );
-        default:
-            return QString();
     }
+    return QString();
 }
 
 void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
@@ -137,8 +136,6 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
             if (!hasJobForProject(t, item->project())) {
                 j = item->project()->buildSystemManager()->builder()->configure( item->project() );
             }
-            break;
-        default:
             break;
     }
     if( j )

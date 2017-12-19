@@ -189,8 +189,8 @@ QString Variable::format2str(format_t format)
         case Octal:         return QStringLiteral("octal");
         case Decimal:       return QStringLiteral("decimal");
         case Hexadecimal:   return QStringLiteral("hexadecimal");
-        default:            return QString();
     }
+    return QString();
 }
 
 

@@ -217,10 +217,8 @@ QIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
 
         case TestResult::Error:
             return QIcon::fromTheme(QStringLiteral("dialog-cancel"));
-
-        default:
-            return QIcon::fromTheme(QLatin1String(""));
     }
+    Q_UNREACHABLE();
 }
 
 QStandardItem* TestView::itemForSuite(ITestSuite* suite)

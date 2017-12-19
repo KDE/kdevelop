@@ -423,12 +423,10 @@ void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrate
         case StaticAnalysisFilter:
             filter = new StaticAnalysisFilterStrategy;
             break;
-        default:
-            // assert(false);
-            filter = new NoFilterStrategy;
-            break;
     }
-    Q_ASSERT(filter);
+    if (!filter) {
+        filter = new NoFilterStrategy;
+    }
 
     QMetaObject::invokeMethod(d->worker, "changeFilterStrategy",
                               Q_ARG(KDevelop::IFilterStrategy*, filter));

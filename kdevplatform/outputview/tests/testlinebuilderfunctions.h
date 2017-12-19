@@ -50,10 +50,8 @@ static QString projectPath(TestPathType pathType = UnixFilePathNoSpaces)
             return QStringLiteral("/some/path/to/a/project");
         case UnixFilePathWithSpaces:
             return QStringLiteral("/some/path with spaces/to/a/project");
-        default:
-            Q_ASSERT(0);
-            return QStringLiteral("/we/should/never/end/up/here");
     }
+    Q_UNREACHABLE();
 }
 
 QString buildCppCheckErrorLine(TestPathType pathType = UnixFilePathNoSpaces)

@@ -45,9 +45,8 @@ QIcon KDevDocumentItem::icon() const
         return QIcon::fromTheme(QStringLiteral("document-revert"));
     case IDocument::DirtyAndModified:
         return QIcon::fromTheme(QStringLiteral("edit-delete"));
-    default:
-        return QIcon();
     }
+    Q_UNREACHABLE();
 }
 
 IDocument::DocumentState KDevDocumentItem::documentState() const

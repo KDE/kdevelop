@@ -281,9 +281,6 @@ void MIDebugger::processLine(const QByteArray& line)
                 // On-going status information about progress of a slow operation; may be ignored
                 break;
             }
-
-            default:
-                Q_ASSERT(false);
             }
             break;
         }

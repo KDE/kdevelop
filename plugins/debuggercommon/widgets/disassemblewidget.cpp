@@ -134,7 +134,6 @@ void DisassembleWindow::setDisassemblyFlavor(DisassemblyFlavor flavor)
 {
     switch(flavor)
     {
-    default:
     case DisassemblyFlavorUnknown:
         m_disassemblyFlavorAtt->setChecked(false);
         m_disassemblyFlavorIntel->setChecked(false);

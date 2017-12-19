@@ -63,9 +63,8 @@ inline QTestData& newRowForPathType(const char *dataTag, TestPathType pathType)
             return QTest::newRow(QString(QLatin1String(dataTag)+QLatin1String("-windows-ns")).toUtf8().constData());
         case WindowsFilePathWithSpaces:
             return QTest::newRow(QString(QLatin1String(dataTag)+QLatin1String("-windows-ws")).toUtf8().constData());
-        default:
-            return QTest::newRow(dataTag);
     }
+    Q_UNREACHABLE();
 }
 
 }

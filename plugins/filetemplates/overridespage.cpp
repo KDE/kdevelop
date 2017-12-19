@@ -51,11 +51,8 @@ static QString accessPolicyToString(Declaration::AccessPolicy accessPolicy)
         return i18n("Protected");
     case Declaration::Private:
         return i18n("Private");
-    default:
-        qCritical("Unexpected value for Declaration::AccessPolicy: %d", accessPolicy);
-        Q_ASSERT(false);
-        return QString();
     }
+    Q_UNREACHABLE();
 }
 
 static QString functionPropertiesToString(ClassFunctionDeclaration* decl)

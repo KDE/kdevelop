@@ -568,9 +568,6 @@ void AbstractDeclarationNavigationContext::htmlClass()
       case ClassDeclarationData::Trait:
         modifyHtml() += QStringLiteral("trait ");
         break;
-      default:
-        modifyHtml() += QStringLiteral("<unknown type> ");
-        break;
     }
     eventuallyMakeTypeLinks( klass.cast<AbstractType>() );
 
