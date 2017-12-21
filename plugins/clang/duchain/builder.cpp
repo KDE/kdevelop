@@ -597,7 +597,7 @@ struct Visitor
         return t;
     }
 
-    template<CXTypeKind TK, EnableIf<TK == CXType_Vector> = dummy>
+    template<CXTypeKind TK, EnableIf<TK == CXType_Vector || TK == CXType_Complex> = dummy>
     AbstractType *createType(CXType type, CXCursor /*parent*/)
     {
         return createDelayedType(type);
@@ -1353,6 +1353,7 @@ AbstractType *Visitor::makeType(CXType type, CXCursor parent)
 #if CINDEX_VERSION_MINOR >= 38
     UseKind(CXType_Float128);
 #endif
+    UseKind(CXType_Complex);
     case CXType_Invalid:
         return nullptr;
     default:
