@@ -404,27 +404,27 @@ ConfigEntry::ConfigEntry(const QString& path)
 {}
 
 namespace Utils {
-LanguageType languageType(const KDevelop::Path& path, bool treatAmbiguousAsCPP)
+LanguageType languageType(const QString& path, bool treatAmbiguousAsCPP)
 {
     QMimeDatabase db;
-    const auto mimeType = db.mimeTypeForFile(path.path()).name();
+    const auto mimeType = db.mimeTypeForFile(path).name();
     if (mimeType == QStringLiteral("text/x-csrc") ||
         mimeType == QStringLiteral("text/x-chdr") ) {
         if (treatAmbiguousAsCPP) {
-            if (path.lastPathSegment().endsWith(QLatin1String(".h"), Qt::CaseInsensitive)) {
+            if (path.endsWith(QLatin1String(".h"), Qt::CaseInsensitive)) {
                 return Cpp;
             }
         }
 
         // TODO: No proper mime type detection possible yet
         // cf. https://bugs.freedesktop.org/show_bug.cgi?id=26913
-        if (path.lastPathSegment().endsWith(QLatin1String(".cl"), Qt::CaseInsensitive)) {
+        if (path.endsWith(QLatin1String(".cl"), Qt::CaseInsensitive)) {
             return OpenCl;
         }
 
         // TODO: No proper mime type detection possible yet
         // cf. https://bugs.freedesktop.org/show_bug.cgi?id=23700
-        if (path.lastPathSegment().endsWith(QLatin1String(".cu"), Qt::CaseInsensitive)) {
+        if (path.endsWith(QLatin1String(".cu"), Qt::CaseInsensitive)) {
             return Cuda;
         }
 

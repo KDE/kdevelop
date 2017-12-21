@@ -65,10 +65,13 @@ public:
     public:
         virtual ~Provider() = default;
 
+        virtual Defines defines( const QString& path ) const = 0;
         virtual Defines defines( ProjectBaseItem* item ) const = 0;
 
+        virtual Path::List includes( const QString& path ) const = 0;
         virtual Path::List includes( ProjectBaseItem* item ) const = 0;
 
+        virtual Path::List frameworkDirectories( const QString& path ) const = 0;
         virtual Path::List frameworkDirectories( ProjectBaseItem* item ) const = 0;
 
         /// @return the type of i/d this provider provides

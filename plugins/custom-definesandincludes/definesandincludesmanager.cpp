@@ -98,7 +98,7 @@ void merge(Defines* target, const Defines& source)
     }
 }
 
-QString argumentsForPath(const Path& path, const ParserArguments& arguments)
+QString argumentsForPath(const QString& path, const ParserArguments& arguments)
 {
     auto languageType = Utils::languageType(path, arguments.parseAmbiguousAsCPP);
     if (languageType != Utils::Other)
@@ -255,7 +255,7 @@ Defines DefinesAndIncludesManager::defines(const QString& path, Type type) const
 {
     Defines ret;
     if ( type & CompilerSpecific ) {
-        merge(&ret, m_settings->provider()->defines(nullptr));
+        merge(&ret, m_settings->provider()->defines(path));
     }
     if ( type & ProjectSpecific ) {
         merge(&ret, m_noProjectIPM->includesAndDefines(path).second);
@@ -267,7 +267,7 @@ Path::List DefinesAndIncludesManager::includes(const QString& path, Type type) c
 {
     Path::List ret;
     if ( type & CompilerSpecific ) {
-        ret += m_settings->provider()->includes(nullptr);
+        ret += m_settings->provider()->includes(path);
     }
     if ( type & ProjectSpecific ) {
         ret += m_noProjectIPM->includesAndDefines(path).first;
@@ -275,9 +275,9 @@ Path::List DefinesAndIncludesManager::includes(const QString& path, Type type) c
     return ret;
 }
 
-Path::List DefinesAndIncludesManager::frameworkDirectories(const QString& /* path */, Type type) const
+Path::List DefinesAndIncludesManager::frameworkDirectories(const QString& path, Type type) const
 {
-    return (type & CompilerSpecific) ? m_settings->provider()->frameworkDirectories(nullptr) : Path::List();
+    return (type & CompilerSpecific) ? m_settings->provider()->frameworkDirectories(path) : Path::List();
 }
 
 void DefinesAndIncludesManager::openConfigurationDialog(const QString& pathToFile)
@@ -356,7 +356,7 @@ QString DefinesAndIncludesManager::parserArguments(KDevelop::ProjectBaseItem* it
 
     auto cfg = item->project()->projectConfiguration().data();
     const auto parserArguments = findConfigForItem(m_settings->readPaths(cfg), item).parserArguments;
-    auto arguments = argumentsForPath(item->path(), parserArguments);
+    auto arguments = argumentsForPath(item->path().path(), parserArguments);
 
     auto buildManager = item->project()->buildSystemManager();
     if ( buildManager ) {
@@ -371,7 +371,7 @@ QString DefinesAndIncludesManager::parserArguments(KDevelop::ProjectBaseItem* it
 QString DefinesAndIncludesManager::parserArguments(const QString& path) const
 {
     const auto args = m_settings->defaultParserArguments();
-    return argumentsForPath(Path(path), args);
+    return argumentsForPath(path, args);
 }
 
 int DefinesAndIncludesManager::perProjectConfigPages() const

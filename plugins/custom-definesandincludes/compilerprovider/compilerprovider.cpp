@@ -131,12 +131,24 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
 
 CompilerProvider::~CompilerProvider() = default;
 
+QHash<QString, QString> CompilerProvider::defines( const QString& path ) const
+{
+    auto config = configForItem(nullptr);
+    auto languageType = Utils::languageType(path, config.parserArguments.parseAmbiguousAsCPP);
+    // If called on files that we can't compile, return an empty set of defines.
+    if (languageType == Utils::Other) {
+        return {};
+    }
+
+    return config.compiler->defines(languageType, config.parserArguments[languageType]);
+}
+
 QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
 {
     auto config = configForItem(item);
     auto languageType = Utils::Cpp;
     if (item) {
-        languageType = Utils::languageType(item->path(), config.parserArguments.parseAmbiguousAsCPP);
+        languageType = Utils::languageType(item->path().path(), config.parserArguments.parseAmbiguousAsCPP);
     }
     // If called on files that we can't compile, return an empty set of defines.
     if (languageType == Utils::Other) {
@@ -146,12 +158,24 @@ QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
     return config.compiler->defines(languageType, config.parserArguments[languageType]);
 }
 
+Path::List CompilerProvider::includes( const QString& path ) const
+{
+    auto config = configForItem(nullptr);
+    auto languageType = Utils::languageType(path, config.parserArguments.parseAmbiguousAsCPP);
+    // If called on files that we can't compile, return an empty set of includes.
+    if (languageType == Utils::Other) {
+        return {};
+    }
+
+    return config.compiler->includes(languageType, config.parserArguments[languageType]);
+}
+
 Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
 {
     auto config = configForItem(item);
     auto languageType = Utils::Cpp;
     if (item) {
-        languageType = Utils::languageType(item->path(), config.parserArguments.parseAmbiguousAsCPP);
+        languageType = Utils::languageType(item->path().path(), config.parserArguments.parseAmbiguousAsCPP);
     }
     // If called on files that we can't compile, return an empty set of includes.
     if (languageType == Utils::Other) {
@@ -159,6 +183,11 @@ Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
     }
 
     return config.compiler->includes(languageType, config.parserArguments[languageType]);
+}
+
+Path::List CompilerProvider::frameworkDirectories( const QString& /* path */ ) const
+{
+    return {};
 }
 
 Path::List CompilerProvider::frameworkDirectories( ProjectBaseItem* /* item */ ) const

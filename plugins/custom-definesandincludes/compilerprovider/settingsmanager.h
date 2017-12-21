@@ -81,7 +81,7 @@ Q_DECLARE_TYPEINFO(ConfigEntry, Q_MOVABLE_TYPE);
 
 namespace Utils
 {
-LanguageType languageType(const KDevelop::Path& path, bool treatAmbiguousAsCPP = true);
+LanguageType languageType(const QString& path, bool treatAmbiguousAsCPP = true);
 }
 
 class SettingsManager

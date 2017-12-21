@@ -38,8 +38,11 @@ public:
     explicit CompilerProvider( SettingsManager* settings, QObject* parent = nullptr );
     ~CompilerProvider() override;
 
+    KDevelop::Defines defines( const QString& path ) const override;
     KDevelop::Defines defines( KDevelop::ProjectBaseItem* item ) const override;
+    KDevelop::Path::List includes( const QString& path ) const override;
     KDevelop::Path::List includes( KDevelop::ProjectBaseItem* item ) const override;
+    KDevelop::Path::List frameworkDirectories( const QString& path ) const override;
     KDevelop::Path::List frameworkDirectories( KDevelop::ProjectBaseItem* item ) const override;
     KDevelop::IDefinesAndIncludesManager::Type type() const override;
 
