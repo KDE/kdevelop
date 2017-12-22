@@ -930,6 +930,7 @@ QuickOpenLineEdit::QuickOpenLineEdit(QuickOpenWidgetCreator* creator) : m_widget
     , m_forceUpdate(false)
     , m_widgetCreator(creator)
 {
+    setFont(qApp->font("QToolButton"));
     setMinimumWidth(200);
     setMaximumWidth(400);
 
