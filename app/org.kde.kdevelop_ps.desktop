@@ -68,6 +68,7 @@ GenericName[zh_TW]=整合開發環境（選擇要開始的工作階段）
 Comment=Plugin-extensible IDE for C/C++ and other programming languages (Pick Session to start with)
 Comment[ca]=Un IDE ampliable amb connectors per al C/C++ i altres llenguatges de programació (trieu Sessió per a començar-hi)
 Comment[ca@valencia]=Un IDE ampliable amb connectors per al C/C++ i altres llenguatges de programació (trieu Sessió per a començar-hi)
+Comment[de]=Eine integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann. Wählen Sie eine Sitzung zum Starten aus.
 Comment[en_GB]=Plugin-extensible IDE for C/C++ and other programming languages (Pick Session to start with)
 Comment[es]=Entorno de desarrollo integrado para C/C++ y otros lenguajes de programación que se puede extender con complementos (escoger sesión con la que empezar)
 Comment[fr]=Il s'agit d'un environnement de développement complet et extensible pour le C / C++ et d'autres langages de programmation (sélectionnez la session avec laquelle vous voulez commencer).
