@@ -148,7 +148,7 @@ class OverrideItem : public CompletionItem<CompletionTreeItem>
 {
 public:
     OverrideItem(const QString& nameAndParams, const QString& returnType)
-        : CompletionItem<KDevelop::CompletionTreeItem>(
+        : CompletionItem<CompletionTreeItem>(
               nameAndParams,
               i18n("Override %1", returnType)
           )
@@ -263,7 +263,7 @@ public:
 
     QWidget* createExpandingWidget(const CodeCompletionModel* /*model*/) const override
     {
-        return new ClangNavigationWidget(m_declaration, KDevelop::AbstractNavigationWidget::EmbeddableWidget);
+        return new ClangNavigationWidget(m_declaration, AbstractNavigationWidget::EmbeddableWidget);
     }
 
     int matchQuality() const
@@ -401,7 +401,7 @@ public:
         if (role == Qt::DecorationRole && index.column() == KTextEditor::CodeCompletionModel::Icon) {
             return m_icon;
         }
-        if (role == KDevelop::CodeCompletionModel::UnimportantItemRole) {
+        if (role == CodeCompletionModel::UnimportantItemRole) {
             return m_unimportant;
         }
         return CompletionItem<CompletionTreeItem>::data(index, role, model);
@@ -1210,7 +1210,7 @@ void ClangCodeCompletionContext::eventuallyAddGroup(const QString& name, int pri
         return;
     }
 
-    KDevelop::CompletionCustomGroupNode* node = new KDevelop::CompletionCustomGroupNode(name, priority);
+    auto* node = new CompletionCustomGroupNode(name, priority);
     node->appendChildren(items);
     m_ungrouped << CompletionTreeElementPointer(node);
 }
