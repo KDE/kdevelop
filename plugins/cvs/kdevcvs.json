@@ -25,6 +25,7 @@
         "Description[tr]": "Bu eklenti CVS uygulamasını KDevelop ile bütünleştirir",
         "Description[uk]": "За допомогою цього додатка можна інтегрувати CVS до KDevelop",
         "Description[x-test]": "xxThis plugin integrates CVS to KDevelopxx",
+        "Description[zh_CN]": "此插件将 CVS 整合到 KDevelop",
         "Icon": "kdevelop",
         "Id": "kdevcvs",
         "License": "GPL",
@@ -55,6 +56,7 @@
         "Name[ug]": "CVS قوللىشى",
         "Name[uk]": "Підтримка CVS",
         "Name[x-test]": "xxCVS Supportxx",
+        "Name[zh_CN]": "CVS 支持",
         "Name[zh_TW]": "CVS 支援",
         "ServiceTypes": [
             "KDevelop/Plugin"

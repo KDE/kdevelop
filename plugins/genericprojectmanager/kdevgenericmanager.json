@@ -23,6 +23,7 @@
         "Description[tr]": "KDevelop uygulamasının genel projeleri yönetmesine izin ver",
         "Description[uk]": "За допомогою цього додатка можна увімкнути керування загальними проектами у KDevelop",
         "Description[x-test]": "xxAllow KDevelop to manage generic projectsxx",
+        "Description[zh_CN]": "允许 KDevelop 管理常规工程",
         "Icon": "kdevelop",
         "Id": "KDevGenericManager",
         "Name": "Generic Project Manager",
@@ -52,6 +53,7 @@
         "Name[ug]": "ئادەتتىكى قۇرۇلۇش باشقۇرغۇچ",
         "Name[uk]": "Звичайний засіб керування проектом",
         "Name[x-test]": "xxGeneric Project Managerxx",
+        "Name[zh_CN]": "常规工程管理器",
         "Name[zh_TW]": "一般專案管理員",
         "ServiceTypes": [
             "KDevelop/Plugin"

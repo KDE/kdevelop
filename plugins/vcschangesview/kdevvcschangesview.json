@@ -28,6 +28,7 @@
         "Description[tr]": "Bu eklenti projeler ile VCS altyapıları arasında bütünleşme sağlar",
         "Description[uk]": "За допомогою цього додатка забезпечується інтеграція між проектами та інфраструктурою системи керування версіями (VCS)",
         "Description[x-test]": "xxThis plugin provides integration between the projects and their VCS infrastructurexx",
+        "Description[zh_CN]": "此插件提供工程和它们的代码管理系统的集成",
         "Icon": "kdevelop",
         "Id": "kdevvcschangesviewplugin",
         "License": "GPL",
@@ -59,6 +60,7 @@
         "Name[ug]": "VCS يۈرۈشلەشتۈرۈلۈشى",
         "Name[uk]": "Інтеграція з системами керування версіями",
         "Name[x-test]": "xxVCS Integrationxx",
+        "Name[zh_CN]": "VCS 工程集成",
         "Name[zh_TW]": "版本控制系統整合",
         "ServiceTypes": [
             "KDevelop/Plugin"

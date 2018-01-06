@@ -27,6 +27,7 @@
         "Description[tr]": "Bu eklenti Bazaar uygulamasını KDevelop ile bütünleştirir",
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Bazaar до KDevelop",
         "Description[x-test]": "xxThis plugin integrates Bazaar to KDevelopxx",
+        "Description[zh_CN]": "此插件将 Bazaar 整合到 KDevelop",
         "Icon": "bazaar",
         "Id": "kdevbazaar",
         "License": "GPL",
@@ -56,6 +57,7 @@
         "Name[ug]": "Bazaar قوللىشى",
         "Name[uk]": "Підтримка Bazaar",
         "Name[x-test]": "xxBazaar Supportxx",
+        "Name[zh_CN]": "Bazaar 支持",
         "Name[zh_TW]": "Bazaar 支援",
         "ServiceTypes": [
             "KDevelop/Plugin"

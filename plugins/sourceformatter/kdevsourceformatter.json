@@ -45,6 +45,7 @@
         "Name[ug]": "مەنبەنى پىچقۇچ",
         "Name[uk]": "Форматування коду",
         "Name[x-test]": "xxSource Formatterxx",
+        "Name[zh_CN]": "源代码格式化器",
         "Name[zh_TW]": "源碼格式器",
         "ServiceTypes": [
             "KDevelop/Plugin"

@@ -26,6 +26,7 @@
         "Description[tr]": "Birim testlerini görmenizi ve çalıştırmanızı sağlar.",
         "Description[uk]": "Надає вам змогу переглядати і виконувати перевірки модулів.",
         "Description[x-test]": "xxLets you see and run unit tests.xx",
+        "Description[zh_CN]": "让您查看并运行单元测试。",
         "Icon": "preflight-verifier",
         "Id": "kdevtestview",
         "License": "GPL",
@@ -56,6 +57,7 @@
         "Name[tr]": "Birim Test Görünümü",
         "Name[uk]": "Перегляд перевірок модулів",
         "Name[x-test]": "xxUnit Test Viewxx",
+        "Name[zh_CN]": "单元测试视图",
         "Name[zh_TW]": "單元測試檢視",
         "ServiceTypes": [
             "KDevelop/Plugin"
