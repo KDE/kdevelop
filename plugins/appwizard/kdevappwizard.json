@@ -28,6 +28,7 @@
         "Description[tr]": "Uygulama Sihirbazı",
         "Description[uk]": "Майстер створення програм",
         "Description[x-test]": "xxApplication Wizardxx",
+        "Description[zh_CN]": "应用程序向导",
         "Icon": "project-development-new-template",
         "Id": "kdevappwizard",
         "License": "GPL",
@@ -49,6 +50,7 @@
         "Name[tr]": "Yeni Proje Sihirbazı",
         "Name[uk]": "Майстер створення проекту",
         "Name[x-test]": "xxNew Project Wizardxx",
+        "Name[zh_CN]": "新工程向导",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

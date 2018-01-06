@@ -27,6 +27,7 @@
         "Description[tr]": "Bu eklenti KDevelop için bir dosya yöneticisi sağlar.",
         "Description[uk]": "За допомогою цього додатка можна отримати доступ до менеджера файлів у KDevelop.",
         "Description[x-test]": "xxThis plugin brings a filemanager to KDevelop.xx",
+        "Description[zh_CN]": "此插件为 KDevelop 提供了一个文件管理器。",
         "Icon": "system-file-manager",
         "Id": "kdevfilemanager",
         "License": "GPL",
@@ -48,6 +49,7 @@
         "Name[tr]": "KDE Dosya Yöneticisi Bütünleşmesi",
         "Name[uk]": "Інтеграція засобу керування файлами KDE",
         "Name[x-test]": "xxKDE File Manager Integrationxx",
+        "Name[zh_CN]": "KDE 文件管理器整合",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

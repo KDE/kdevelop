@@ -48,6 +48,7 @@
         "Name[tr]": "Suversion Desteği",
         "Name[uk]": "Підтримка Subversion",
         "Name[x-test]": "xxSubversion Supportxx",
+        "Name[zh_CN]": "Subversion 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

@@ -21,6 +21,7 @@
         "Description[tr]": "Programlama sırasında verimliliği artıran çeşitli yardımcı araçlar koleksiyonu.",
         "Description[uk]": "Збірка різноманітних допоміжних програм, яка підвищує продуктивність програмування.",
         "Description[x-test]": "xxCollection of various utilities that increase productivity while programming.xx",
+        "Description[zh_CN]": "多种提升编程生产力的工具集合。",
         "Icon": "help-hint",
         "Id": "kdevcodeutils",
         "Name": "Code Utilities",
@@ -44,6 +45,7 @@
         "Name[tr]": "Kod Araçları",
         "Name[uk]": "Допоміжні засоби",
         "Name[x-test]": "xxCode Utilitiesxx",
+        "Name[zh_CN]": "代码工具",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

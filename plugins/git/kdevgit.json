@@ -27,6 +27,7 @@
         "Description[tr]": "Bu eklenti Git uygulamasını KDevelop ile bütünleştirir",
         "Description[uk]": "Цей додаток інтегрує Git із KDevelop",
         "Description[x-test]": "xxThis plugin integrates Git to KDevelopxx",
+        "Description[zh_CN]": "此插件对 KDevelop 整合 Git",
         "Icon": "git",
         "Id": "kdevgit",
         "License": "GPL",
@@ -46,6 +47,7 @@
         "Name[tr]": "Git Desteği",
         "Name[uk]": "Підтримка Git",
         "Name[x-test]": "xxGit Supportxx",
+        "Name[zh_CN]": "Git 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

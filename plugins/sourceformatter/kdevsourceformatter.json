@@ -36,6 +36,7 @@
         "Name[tr]": "Kaynak Biçimlendirici",
         "Name[uk]": "Форматування коду",
         "Name[x-test]": "xxSource Formatterxx",
+        "Name[zh_CN]": "源代码格式化器",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
