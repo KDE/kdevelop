@@ -951,6 +951,11 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         }
 
         auto result = m_results->Results[i];
+        #if CINDEX_VERSION_MINOR >= 30
+        const bool isOverloadCandidate = result.CursorKind == CXCursor_OverloadCandidate;
+        #else
+        const bool isOverloadCandidate = false;
+        #endif
 
         const auto availability = clang_getCompletionAvailability(result.CompletionString);
         if (availability == CXAvailability_NotAvailable) {
@@ -1015,14 +1020,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
                 // We don't need function signature for declaration items, we can get it directly from the declaration. Also adding the function signature to the "display" would break the "Detailed completion" option.
                 if (isDeclaration && !typed.isEmpty()) {
-#if CINDEX_VERSION_MINOR >= 30
                     // TODO: When parent context for CXCursor_OverloadCandidate is fixed remove this check
-                    if (result.CursorKind != CXCursor_OverloadCandidate) {
+                    if (!isOverloadCandidate) {
                         break;
                     }
-#else
-                    break;
-#endif
                 }
 
                 const QString string = ClangString(clang_getCompletionChunkText(completionString, j)).toString();
@@ -1054,11 +1055,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     }
                     break;
                 case CXCompletionChunk_Text:
-#if CINDEX_VERSION_MINOR >= 30
-                    if (result.CursorKind == CXCursor_OverloadCandidate) {
+                    if (isOverloadCandidate) {
                         typed += string;
                     }
-#endif
                     break;
                 case CXCompletionChunk_CurrentParameter:
                     argumentRange.start = arguments.size();
@@ -1075,12 +1074,10 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
         processChunks(result.CompletionString);
 
-#if CINDEX_VERSION_MINOR >= 30
         // TODO: No closing paren if default parameters present
-        if (result.CursorKind == CXCursor_OverloadCandidate && !arguments.endsWith(QLatin1Char(')'))) {
+        if (isOverloadCandidate && !arguments.endsWith(QLatin1Char(')'))) {
             arguments += QLatin1Char(')');
         }
-#endif
         // ellide text to the right for overly long result types (templates especially)
         elideStringRight(resultType, MAX_RETURN_TYPE_STRING_LENGTH);
 
@@ -1144,30 +1141,24 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 if ( isInternal ) {
                     declarationItem->markAsUnimportant();
                 }
-#if CINDEX_VERSION_MINOR >= 30
-                if (result.CursorKind == CXCursor_OverloadCandidate) {
+                if (isOverloadCandidate) {
                     declarationItem->setArgumentHintDepth(1);
                 }
-#endif
 
                 item = declarationItem;
             } else {
-#if CINDEX_VERSION_MINOR >= 30
-                if (result.CursorKind == CXCursor_OverloadCandidate) {
+                if (isOverloadCandidate) {
                     // TODO: No parent context for CXCursor_OverloadCandidate items, hence qid is broken -> no declaration found
                     auto ahi = new ArgumentHintItem({}, resultType, typed, arguments, argumentRange);
                     ahi->setArgumentHintDepth(1);
                     item = ahi;
                 } else {
-#endif
                     // still, let's trust that Clang found something useful and put it into the completion result list
                     clangDebug() << "Could not find declaration for" << qid;
                     auto instance = new SimpleItem(typed + arguments, resultType, replacement, noIcon);
                     instance->markAsUnimportant();
                     item = CompletionTreeItemPointer(instance);
-#if CINDEX_VERSION_MINOR >= 30
                 }
-#endif
             }
 
             if (isValidSpecialCompletionIdentifier(qid)) {
