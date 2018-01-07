@@ -366,7 +366,7 @@ public:
             return QVariant(CodeCompletionModel::CustomHighlighting);
         }
 
-        if (index.column() == CodeCompletionModel::Arguments && !m_declaration) {
+        if (index.column() == CodeCompletionModel::Arguments) {
             return m_arguments;
         }
 
@@ -936,7 +936,11 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
     /// Builtins reported by Clang
     QList<CompletionTreeItemPointer> builtin;
 
+    // two sets of handled declarations to prevent duplicates and make sure we show
+    // all available overloads
     QSet<Declaration*> handled;
+    // this is only used for the CXCursor_OverloadCandidate completion items
+    QSet<Declaration*> overloadsHandled;
 
     LookAheadItemMatcher lookAheadMatcher(TopDUContextPointer(ctx->topContext()));
 
@@ -1097,7 +1101,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 continue;
             }
 
-            auto found = findDeclaration(qid, ctx, m_position, handled);
+            auto found = findDeclaration(qid, ctx, m_position, isOverloadCandidate ? overloadsHandled : handled);
 
             CompletionTreeItemPointer item;
             if (found) {
@@ -1120,7 +1124,13 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     }
                 }
 
-                auto declarationItem = new DeclarationItem(found, typed, resultType, replacement);
+                DeclarationItem* declarationItem = nullptr;
+                if (isOverloadCandidate) {
+                    declarationItem = new ArgumentHintItem(found, resultType, typed, arguments, argumentRange);
+                    declarationItem->setArgumentHintDepth(1);
+                } else {
+                    declarationItem = new DeclarationItem(found, typed, resultType, replacement);
+                }
 
                 const unsigned int completionPriority = adjustPriorityForDeclaration(found, clang_getCompletionPriority(result.CompletionString));
                 const bool bestMatch = completionPriority <= CCP_SuperCompletion;
@@ -1140,9 +1150,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 }
                 if ( isInternal ) {
                     declarationItem->markAsUnimportant();
-                }
-                if (isOverloadCandidate) {
-                    declarationItem->setArgumentHintDepth(1);
                 }
 
                 item = declarationItem;

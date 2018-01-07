@@ -1201,7 +1201,7 @@ void TestCodeCompletion::testArgumentHintCompletionDefaultParameters()
     QVERIFY(f.data());
 
     const QString itemDisplay = tester.itemData(f).toString() + tester.itemData(f, KTextEditor:: CodeCompletionModel::Arguments).toString();
-    QCOMPARE(itemDisplay, QStringLiteral("f(int i, int j, double k)"));
+    QCOMPARE(itemDisplay, QStringLiteral("f(int i, int j = 0, double k = 1)"));
 }
 
 void TestCodeCompletion::testCompleteFunction()
