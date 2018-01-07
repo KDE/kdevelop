@@ -26,6 +26,7 @@
 #include <shell/plugincontroller.h>
 #include <shell/partcontroller.h>
 #include <shell/projectcontroller.h>
+#include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/isession.h>
 #include "../shell/core_p.h"
 
@@ -60,6 +61,13 @@ TestCore* TestCore::initialize( Core::Setup mode, const QString& session )
         // the unit tests should work anyways
         core->uiController()->activeMainWindow()->hide();
     }
+
+    // resume the background parser when a unit test replaces the project controller
+    QObject::connect(core->d->projectController.data(), &ProjectController::destroyed,
+                     core, [core]() {
+                         core->d->languageController->backgroundParser()->resume();
+                     });
+
     return core;
 }
 
