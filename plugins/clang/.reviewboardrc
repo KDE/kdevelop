@@ -1,3 +1,0 @@
-REPOSITORY = "kdev-clang"
-REVIEWBOARD_URL = "https://git.reviewboard.kde.org"
-TARGET_GROUPS = "kdevelop"
