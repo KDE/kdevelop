@@ -111,6 +111,36 @@ struct NoopTestFunction
     }
 };
 
+QString textForDocument(const QUrl& url, const KTextEditor::Cursor& position)
+{
+    bool close = false;
+
+    auto* doc = ICore::self()->documentController()->documentForUrl(url);
+    if (!doc) {
+        doc = ICore::self()->documentController()->openDocument(url);
+        close = true;
+    }
+
+    auto text = doc->textDocument()->text({{0, 0}, position});
+
+    if (close) {
+        doc->close(IDocument::Discard);
+    }
+
+    return text;
+}
+
+QExplicitlySharedDataPointer<ClangCodeCompletionContext> createContext(const ReferencedTopDUContext& top,
+                                                                       const ParseSessionData::Ptr& sessionData,
+                                                                       const KTextEditor::Cursor position,
+                                                                       const QString& code = {})
+{
+    const auto url = top->url().toUrl();
+    const auto text = code.isEmpty() ? textForDocument(url, position) : code;
+    return QExplicitlySharedDataPointer<ClangCodeCompletionContext>{
+        new ClangCodeCompletionContext(DUContextPointer(top), sessionData, url, position, text)};
+}
+
 template<typename CustomTestFunction = NoopTestFunction>
 void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionItems& expectedCompletionItems,
                            const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin,
@@ -120,16 +150,12 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
     lock.unlock();
-    QString text;
-    if (auto doc = ICore::self()->documentController()->documentForUrl(top->url().toUrl())) {
-        text = doc->textDocument()->text({{0, 0}, expectedCompletionItems.position});
-    }
     // TODO: We should not need to pass 'session' to the context, should just use the base class ctor
-    auto context = new ClangCodeCompletionContext(DUContextPointer(top), sessionData, top->url().toUrl(), expectedCompletionItems.position, text);
+    auto context = createContext(top, sessionData, expectedCompletionItems.position);
     context->setFilters(filters);
     lock.lock();
 
-    auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    auto tester = ClangCodeCompletionItemTester(context);
 
     int previousMatchQuality = 10;
     for(const auto& declarationName : expectedCompletionItems.declarationItems){
@@ -180,16 +206,14 @@ void executeCompletionPriorityTest(const QString& code, const CompletionPriority
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
 
-    DUContextPointer topPtr(top);
-
     // don't hold DUChain lock when constructing ClangCodeCompletionContext
     lock.unlock();
 
-    auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), expectedCompletionItems.position, QString());
+    auto context = createContext(top, sessionData, expectedCompletionItems.position);
     context->setFilters(filters);
 
     lock.lock();
-    auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    auto tester = ClangCodeCompletionItemTester(context);
 
     for(const auto& declaration : expectedCompletionItems.completions){
         const auto declarationItem = tester.findItem(declaration.name);
@@ -225,13 +249,9 @@ void executeMemberAccessReplacerTest(const QString& code, const CompletionItems&
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
 
-    DUContextPointer topPtr(top);
-
     lock.unlock();
 
-    QExplicitlySharedDataPointer<ClangCodeCompletionContext> context(
-        new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(),
-                                       expectedCompletionItems.position, code));
+    auto context = createContext(top, sessionData, expectedCompletionItems.position, code);
 
     QApplication::processEvents();
     document->close(KDevelop::IDocument::Silent);
@@ -241,8 +261,7 @@ void executeMemberAccessReplacerTest(const QString& code, const CompletionItems&
     // so let's stop that request.
     ICore::self()->languageController()->backgroundParser()->removeDocument(file.url());
 
-    context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(),
-                                             expectedCompletionItems.position, QString());
+    context = createContext(top, sessionData, expectedCompletionItems.position);
     context->setFilters(filters);
     lock.lock();
     auto tester = ClangCodeCompletionItemTester(context);
@@ -991,13 +1010,12 @@ void TestCodeCompletion::testOverloadedFunctions()
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
 
-    DUContextPointer topPtr(top);
     lock.unlock();
 
-    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 0}, QString());
+    const auto context = createContext(top, sessionData, {1, 0});
     context->setFilters(NoMacroOrBuiltin);
     lock.lock();
-    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    const auto tester = ClangCodeCompletionItemTester(context);
     QCOMPARE(tester.items.size(), 3);
     for (const auto& item : tester.items) {
         auto function = item->declaration()->type<FunctionType>();
@@ -1080,13 +1098,12 @@ void TestCodeCompletion::testVariableScope()
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
 
-    DUContextPointer topPtr(top);
     lock.unlock();
 
-    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {2, 0}, QString());
+    const auto context = createContext(top, sessionData, {2, 0});
     context->setFilters(NoMacroOrBuiltin);
     lock.lock();
-    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    const auto tester = ClangCodeCompletionItemTester(context);
 
     QCOMPARE(tester.items.size(), 4);
     auto item = tester.findItem(QStringLiteral("var"));
@@ -1166,13 +1183,12 @@ void TestCodeCompletion::testArgumentHintCompletionDefaultParameters()
     const ParseSessionData::Ptr sessionData(dynamic_cast<ParseSessionData*>(top->ast().data()));
     QVERIFY(sessionData);
 
-    DUContextPointer topPtr(top);
     lock.unlock();
 
-    const auto context = new ClangCodeCompletionContext(topPtr, sessionData, file.url().toUrl(), {1, 2}, QString());
+    const auto context = createContext(top, sessionData, {1, 2});
     context->setFilters(NoMacroOrBuiltin);
     lock.lock();
-    const auto tester = ClangCodeCompletionItemTester(QExplicitlySharedDataPointer<ClangCodeCompletionContext>(context));
+    const auto tester = ClangCodeCompletionItemTester(context);
     QExplicitlySharedDataPointer<KDevelop::CompletionTreeItem> f;
 
     for (const auto& item : tester.items) {
