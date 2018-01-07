@@ -1,3 +1,0 @@
-REPOSITORY = "git://anongit.kde.org/kdevelop"
-REVIEWBOARD_URL = "https://git.reviewboard.kde.org"
-TARGET_GROUPS = "kdevelop"
