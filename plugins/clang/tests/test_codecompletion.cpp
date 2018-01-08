@@ -1115,8 +1115,19 @@ void TestCodeCompletion::testArgumentHintCompletion()
 {
     QFETCH(QString, code);
     QFETCH(CompletionItems, expectedItems);
+    QFETCH(QStringList, hints);
 
-    executeCompletionTest(code, expectedItems);
+    executeCompletionTest(code, expectedItems, NoMacroOrBuiltin, [&](const ClangCodeCompletionItemTester& tester) {
+        QStringList actualHints;
+        for (const auto& item : tester.items) {
+            if (item->argumentHintDepth() == 1) {
+                actualHints << tester.itemData(item).toString() + tester.itemData(item, KTextEditor:: CodeCompletionModel::Arguments).toString();
+            }
+        }
+        actualHints.sort();
+        hints.sort();
+        QCOMPARE(actualHints, hints);
+    });
 }
 
 void TestCodeCompletion::testArgumentHintCompletion_data()
@@ -1127,6 +1138,7 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
 
     QTest::addColumn<QString>("code");
     QTest::addColumn<CompletionItems>("expectedItems");
+    QTest::addColumn<QStringList>("hints");
 
     QTest::newRow("global function")
         << "void foo(int);\n"
@@ -1134,7 +1146,8 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
         << CompletionItems{{2,4}, {
             "foo", "foo",
             "main"
-        }};
+        }}
+        << QStringList{"foo(int)"};
 
     QTest::newRow("member function")
         << "struct Struct{ void foo(int);}\n"
@@ -1142,7 +1155,8 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
         << CompletionItems{{2,6}, {
             "Struct", "foo",
             "main", "s"
-        }};
+        }}
+        << QStringList{"foo(int)"};
 
     QTest::newRow("template function")
         << "template <typename T> void foo(T);\n"
@@ -1150,7 +1164,8 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
         << CompletionItems{{2,6}, {
             "foo", "foo",
             "main"
-        }};
+        }}
+        << QStringList{"foo(T)"};
 
     QTest::newRow("overloaded functions")
         << "void foo(int); void foo(int, double)\n"
@@ -1158,7 +1173,8 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
         << CompletionItems{{2,6}, {
             "foo", "foo", "foo", "foo",
             "main"
-        }};
+        }}
+        << QStringList{"foo(int)", "foo(int, double)"};
 
     QTest::newRow("overloaded functions2")
         << "void foo(int); void foo(int, double)\n"
@@ -1166,7 +1182,26 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
         << CompletionItems{{2,1}, {
             "foo", "foo", "foo",
             "main"
-        }};
+        }}
+        << QStringList{"foo(int, double)"};
+
+    QTest::newRow("constructor")
+        << "struct foo { foo(int); foo(int, double); }\n"
+           "int main() { foo f(\n "
+        << CompletionItems{{2,1}, {
+            "f", "foo", "foo", "foo", "foo", "foo",
+            "main"
+        }}
+        << QStringList{"foo(int)", "foo(int, double)", "foo(foo &&)", "foo(const foo &)"};
+
+    QTest::newRow("constructor2")
+        << "struct foo { foo(int); foo(int, double); }\n"
+           "int main() { foo f(1,\n "
+        << CompletionItems{{2,1}, {
+            "f", "foo", "foo",
+            "main"
+        }}
+        << QStringList{"foo(int, double)"};
 }
 
 void TestCodeCompletion::testArgumentHintCompletionDefaultParameters()
