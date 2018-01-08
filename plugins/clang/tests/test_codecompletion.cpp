@@ -1172,7 +1172,6 @@ void TestCodeCompletion::testArgumentHintCompletion()
         std::sort(actualHints.begin(), actualHints.end());
         QEXPECT_FAIL("member function", "clang_getCompletionParent returns nothing, thus decl lookup fails", Continue);
         QEXPECT_FAIL("namespaced function", "clang_getCompletionParent returns nothing, thus decl lookup fails", Continue);
-        QEXPECT_FAIL("constructor", "clang_getCompletionParent returns nothing, thus decl lookup fails", Continue);
         QEXPECT_FAIL("namespaced constructor", "clang_getCompletionParent returns nothing, thus decl lookup fails", Continue);
         QCOMPARE(actualHints, hints);
     });

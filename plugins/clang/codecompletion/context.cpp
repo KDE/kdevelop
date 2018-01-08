@@ -1101,6 +1101,12 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 continue;
             }
 
+            if (isOverloadCandidate && resultType.isEmpty() && parent.isEmpty()) {
+                // workaround: find constructor calls for non-namespaced classes
+                // TODO: return the namespaced class as parent in libclang
+                qid.push(id);
+            }
+
             auto found = findDeclaration(qid, ctx, m_position, isOverloadCandidate ? overloadsHandled : handled);
 
             CompletionTreeItemPointer item;
