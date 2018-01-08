@@ -125,13 +125,6 @@ CodeCompletionModel::~CodeCompletionModel()
   delete m_mutex;
 }
 
-void CodeCompletionModel::addNavigationWidget(const CompletionTreeElement* element, QWidget* widget) const
-{
-  Q_ASSERT(dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(widget));
-  m_navigationWidgets[element] = widget;
-}
-
-
 bool CodeCompletionModel::fullCompletion() const
 {
   return m_fullCompletion;
@@ -145,7 +138,6 @@ void CodeCompletionModel::clear()
 {
   beginResetModel();
   m_completionItems.clear();
-  m_navigationWidgets.clear();
   m_completionContext.reset();
   endResetModel();
 }
@@ -166,7 +158,6 @@ void CodeCompletionModel::completionInvokedInternal(KTextEditor::View* view, con
     qCDebug(LANGUAGE) << "================== NO CONTEXT FOUND =======================";
     beginResetModel();
     m_completionItems.clear();
-    m_navigationWidgets.clear();
     endResetModel();
 
     qCDebug(LANGUAGE) << "Completion invoked for unknown context. Document:" << url << ", Known documents:" << DUChain::self()->documents();
@@ -228,7 +219,6 @@ void CodeCompletionModel::completionInvoked(KTextEditor::View* view, const KText
   }
 
   beginResetModel();
-  m_navigationWidgets.clear();
   m_completionItems.clear();
   endResetModel();
 

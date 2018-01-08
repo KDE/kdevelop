@@ -85,9 +85,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     KDevelop::TopDUContextPointer currentTopContext() const;
     void setCurrentTopContext(const KDevelop::TopDUContextPointer& topContext);
 
-    ///Tracks navigation widget so they can be interactive with through the keyboard later on
-    void addNavigationWidget(const CompletionTreeElement* element, QWidget* widget) const;
-
     ///Whether the completion should be fully detailed. If false, it should be simplifed, so no argument-hints,
     ///no expanding information, no type-information, etc.
     bool fullCompletion() const;
@@ -123,7 +120,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     QExplicitlySharedDataPointer<CodeCompletionContext> m_completionContext;
     typedef QPair<KDevelop::DeclarationPointer, QExplicitlySharedDataPointer<CodeCompletionContext> > DeclarationContextPair;
 
-    mutable QMap<const CompletionTreeElement*, QPointer<QWidget> > m_navigationWidgets;
     QList< QExplicitlySharedDataPointer<CompletionTreeElement> > m_completionItems;
 
     /// Should create a completion-worker. The worker must have no parent object,

@@ -198,7 +198,6 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
     case CodeCompletionModel::ExpandingWidget: {
       QWidget* nav = createExpandingWidget(model);
       Q_ASSERT(nav);
-      model->addNavigationWidget(this, nav);
 
       QVariant v;
       v.setValue<QWidget*>(nav);

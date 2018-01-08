@@ -108,7 +108,6 @@ public:
   /// Should return normal completion data, @see KTextEditor::CodeCompletionModel
   /// The default implementation returns "unimplemented", so re-implement it!
   /// The duchain is not locked when this is called
-  /// Navigation-widgets should be registered to the model, then it will care about the interaction.
   virtual QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const;
   
   /// Should return the inheritance-depth. The completion-items don't need to return it through the data() function.
