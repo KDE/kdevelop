@@ -1111,21 +1111,69 @@ void TestCodeCompletion::testVariableScope()
     QCOMPARE(item->declaration()->range().start, CursorInRevision(1, 14));
 }
 
+struct HintItem
+{
+    QString hint;
+    bool hasDeclaration;
+    bool operator==(const HintItem& rhs) const
+    {
+        return std::tie(hint, hasDeclaration) == std::tie(rhs.hint, rhs.hasDeclaration);
+    }
+    bool operator<(const HintItem& rhs) const
+    {
+        return std::tie(hint, hasDeclaration) < std::tie(rhs.hint, rhs.hasDeclaration);
+    }
+    QByteArray toString() const
+    {
+        return "HintItem(" + hint.toUtf8() + ", " + (hasDeclaration ? "true" : "false") + ')';
+    }
+};
+Q_DECLARE_METATYPE(HintItem);
+using HintItemList = QVector<HintItem>;
+namespace QTest {
+template<>
+char *toString(const HintItem& hint)
+{
+    return qstrdup(hint.toString());
+}
+template<>
+char *toString(const HintItemList& hints)
+{
+    QByteArray ba = "HintItemList(";
+    for (int i = 0, c = hints.size(); i < c; ++i) {
+        ba += hints[i].toString();
+        if (i == c - 1) {
+            ba += ')';
+        } else {
+            ba += ", ";
+        }
+    }
+    return qstrdup(ba.constData());
+}
+}
+
 void TestCodeCompletion::testArgumentHintCompletion()
 {
     QFETCH(QString, code);
     QFETCH(CompletionItems, expectedItems);
-    QFETCH(QStringList, hints);
+    QFETCH(HintItemList, hints);
 
     executeCompletionTest(code, expectedItems, NoMacroOrBuiltin, [&](const ClangCodeCompletionItemTester& tester) {
-        QStringList actualHints;
+        HintItemList actualHints;
         for (const auto& item : tester.items) {
             if (item->argumentHintDepth() == 1) {
-                actualHints << tester.itemData(item).toString() + tester.itemData(item, KTextEditor:: CodeCompletionModel::Arguments).toString();
+                actualHints << HintItem{
+                    tester.itemData(item).toString() + tester.itemData(item, KTextEditor:: CodeCompletionModel::Arguments).toString(),
+                    item->declaration()
+                };
             }
         }
-        actualHints.sort();
-        hints.sort();
+        std::sort(hints.begin(), hints.end());
+        std::sort(actualHints.begin(), actualHints.end());
+        QEXPECT_FAIL("member function", "clang_getCompletionParent returns nothing, thus decl lookup fails", Continue);
+        QEXPECT_FAIL("namespaced function", "clang_getCompletionParent returns nothing, thus decl lookup fails", Continue);
+        QEXPECT_FAIL("constructor", "clang_getCompletionParent returns nothing, thus decl lookup fails", Continue);
+        QEXPECT_FAIL("namespaced constructor", "clang_getCompletionParent returns nothing, thus decl lookup fails", Continue);
         QCOMPARE(actualHints, hints);
     });
 }
@@ -1135,10 +1183,11 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
 #if CINDEX_VERSION_MINOR < 30
     QSKIP("You need at least LibClang 3.7");
 #endif
+    qRegisterMetaType<HintItemList>("HintItemList");
 
     QTest::addColumn<QString>("code");
     QTest::addColumn<CompletionItems>("expectedItems");
-    QTest::addColumn<QStringList>("hints");
+    QTest::addColumn<HintItemList>("hints");
 
     QTest::newRow("global function")
         << "void foo(int);\n"
@@ -1147,7 +1196,15 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
             "foo", "foo",
             "main"
         }}
-        << QStringList{"foo(int)"};
+        << HintItemList{{"foo(int)", true}};
+
+    QTest::newRow("namespaced function")
+        << "namespace ns { void foo(int); }\n"
+           "int main() { \nns::foo( "
+        << CompletionItems{{2,4}, {
+            "foo"
+        }}
+        << HintItemList{{"foo(int)", true}};
 
     QTest::newRow("member function")
         << "struct Struct{ void foo(int);}\n"
@@ -1156,7 +1213,7 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
             "Struct", "foo",
             "main", "s"
         }}
-        << QStringList{"foo(int)"};
+        << HintItemList{{"foo(int)", true}};
 
     QTest::newRow("template function")
         << "template <typename T> void foo(T);\n"
@@ -1165,7 +1222,7 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
             "foo", "foo",
             "main"
         }}
-        << QStringList{"foo(T)"};
+        << HintItemList{{"foo(T)", true}};
 
     QTest::newRow("overloaded functions")
         << "void foo(int); void foo(int, double)\n"
@@ -1174,7 +1231,10 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
             "foo", "foo", "foo", "foo",
             "main"
         }}
-        << QStringList{"foo(int)", "foo(int, double)"};
+        << HintItemList{
+            {"foo(int)", true},
+            {"foo(int, double)", true}
+        };
 
     QTest::newRow("overloaded functions2")
         << "void foo(int); void foo(int, double)\n"
@@ -1183,7 +1243,7 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
             "foo", "foo", "foo",
             "main"
         }}
-        << QStringList{"foo(int, double)"};
+        << HintItemList{{"foo(int, double)", true}};
 
     QTest::newRow("constructor")
         << "struct foo { foo(int); foo(int, double); }\n"
@@ -1192,7 +1252,12 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
             "f", "foo", "foo", "foo", "foo", "foo",
             "main"
         }}
-        << QStringList{"foo(int)", "foo(int, double)", "foo(foo &&)", "foo(const foo &)"};
+        << HintItemList{
+            {"foo(int)", true},
+            {"foo(int, double)", true},
+            {"foo(foo &&)", false},
+            {"foo(const foo &)", false}
+        };
 
     QTest::newRow("constructor2")
         << "struct foo { foo(int); foo(int, double); }\n"
@@ -1201,7 +1266,23 @@ void TestCodeCompletion::testArgumentHintCompletion_data()
             "f", "foo", "foo",
             "main"
         }}
-        << QStringList{"foo(int, double)"};
+        << HintItemList{
+            {"foo(int, double)", true}
+        };
+
+    QTest::newRow("namespaced constructor")
+        << "namespace ns { struct foo { foo(int); foo(int, double); } }\n"
+           "int main() { ns::foo f(\n "
+        << CompletionItems{{2,1}, {
+            "f", "foo", "foo", "foo", "foo",
+            "main", "ns"
+        }}
+        << HintItemList{
+            {"foo(int)", true},
+            {"foo(int, double)", true},
+            {"foo(ns::foo &&)", false},
+            {"foo(const ns::foo &)", false}
+        };
 }
 
 void TestCodeCompletion::testArgumentHintCompletionDefaultParameters()
