@@ -102,10 +102,6 @@ TemplatesModel::TemplatesModel(const QString& typePrefix, QObject* parent)
 : QStandardItemModel(parent)
 , d(new TemplatesModelPrivate(typePrefix))
 {
-    const QStringList dataPaths = {QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)};
-    foreach(const QString& dataPath, dataPaths) {
-        addDataPath(dataPath);
-    }
 }
 
 TemplatesModel::~TemplatesModel() = default;
