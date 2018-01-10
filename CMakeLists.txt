@@ -12,14 +12,6 @@ set(KDEV_PLUGIN_VERSION 30)
 find_package (ECM 5.14.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
-if(NOT CMAKE_VERSION VERSION_LESS "3.10.0")
-  # CMake 3.9+ warns about automoc on files without Q_OBJECT, and doesn't know about other macros.
-  # 3.10+ lets us provide more macro names that require automoc.
-  # Remove this when depending on a Frameworks or ECM version that solves this upstream.
-  list(APPEND CMAKE_AUTOMOC_MACRO_NAMES
-       "K_PLUGIN_FACTORY_WITH_JSON" "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON" "K_EXPORT_PLASMA_RUNNER")
-endif()
-
 include(KDECompilerSettings NO_POLICY_SCOPE) # needs to be first, as set policies influence following macros
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
@@ -88,6 +80,14 @@ set_package_properties(KDevelop-PG-Qt PROPERTIES
 )
 
 find_package(SharedMimeInfo REQUIRED)
+
+if(NOT CMAKE_VERSION VERSION_LESS "3.10.0" AND KF5_VERSION VERSION_LESS "5.42.0")
+  # CMake 3.9+ warns about automoc on files without Q_OBJECT, and doesn't know about other macros.
+  # 3.10+ lets us provide more macro names that require automoc.
+  # KF5 >= 5.42 takes care itself of adding its macros in its cmake config files
+  list(APPEND CMAKE_AUTOMOC_MACRO_NAMES
+       "K_PLUGIN_FACTORY_WITH_JSON" "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON" "K_EXPORT_PLASMA_RUNNER")
+endif()
 
 add_definitions(
     -DQT_DEPRECATED_WARNINGS
