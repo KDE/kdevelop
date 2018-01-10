@@ -55,11 +55,11 @@ QString iconForSeverity(IProblem::Severity severity)
 
 QString htmlImg(const QString& iconName, KIconLoader::Group group)
 {
-  KIconLoader loader;
-  const int size = loader.currentSize(group);
+  auto* loader = KIconLoader::global();
+  const int size = loader->currentSize(group);
   return QStringLiteral("<img width='%1' height='%1' src='%2'/>")
     .arg(size)
-    .arg(loader.iconPath(iconName, group));
+    .arg(loader->iconPath(iconName, group));
 }
 
 }
