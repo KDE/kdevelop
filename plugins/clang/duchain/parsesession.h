@@ -79,6 +79,8 @@ private:
     /// TODO: share this file for all TUs that use the same defines (probably most in a project)
     ///       best would be a PCH, if possible
     QTemporaryFile m_definesFile;
+    // cached ProblemPointer representation for diagnostics
+    QVector<KDevelop::ProblemPointer> m_diagnosticsCache;
 };
 
 /**
