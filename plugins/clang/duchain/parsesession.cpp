@@ -380,6 +380,7 @@ QByteArray ParseSessionData::writeDefinesFile(const QMap<QString, QString>& defi
 void ParseSessionData::setUnit(CXTranslationUnit unit)
 {
     m_unit = unit;
+    m_diagnosticsCache.clear();
     if (m_unit) {
         const ClangString unitFile(clang_getTranslationUnitSpelling(unit));
         m_file = clang_getFile(m_unit, unitFile.c_str());
@@ -449,6 +450,8 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
     // extra clang diagnostics
     const uint numDiagnostics = clang_getNumDiagnostics(d->m_unit);
     problems.reserve(numDiagnostics);
+    d->m_diagnosticsCache.resize(numDiagnostics);
+
     for (uint i = 0; i < numDiagnostics; ++i) {
         auto diagnostic = clang_getDiagnostic(d->m_unit, i);
 
@@ -461,7 +464,11 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
             continue;
         }
 
-        ProblemPointer problem(ClangDiagnosticEvaluator::createProblem(diagnostic, d->m_unit));
+        auto& problem = d->m_diagnosticsCache[i];
+        if (!problem) {
+            problem = ClangDiagnosticEvaluator::createProblem(diagnostic, d->m_unit);
+        }
+
         problems << problem;
 
         clang_disposeDiagnostic(diagnostic);
