@@ -41,7 +41,7 @@ class IdentityRuntime : public IRuntime
         connect(process, &QProcess::errorOccurred,
 #endif
             this, [process](QProcess::ProcessError error) {
-            qCWarning(SHELL) << "error:" << error << process->program() << process->errorString();
+            qCWarning(SHELL) << "process finished with error:" << error;
         });
         process->start();
     }
@@ -52,7 +52,7 @@ class IdentityRuntime : public IRuntime
         connect(process, &QProcess::errorOccurred,
 #endif
             this, [process](QProcess::ProcessError error) {
-            qCWarning(SHELL) << "error:" << error << process->program() << process->errorString();
+            qCWarning(SHELL) << "process finished with error:" << error;
         });
         process->start();
     }
