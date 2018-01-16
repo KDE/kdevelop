@@ -136,23 +136,19 @@ class QListPrinter:
             return ('[%d]' % count, value.cast(self.nodetype.pointer()).dereference())
 
     def __init__(self, val, container, itype):
-        self.val = val
+        self.d = val['d']
         self.container = container
+        self.size = self.d['end'] - self.d['begin']
         if itype == None:
-            self.itype = self.val.type.template_argument(0)
+            self.itype = val.type.template_argument(0)
         else:
             self.itype = gdb.lookup_type(itype)
 
     def children(self):
-        return self._iterator(self.itype, self.val['d'])
+        return self._iterator(self.itype, self.d)
 
     def to_string(self):
-        if self.val['d']['end'] == self.val['d']['begin']:
-            empty = "empty "
-        else:
-            empty = ""
-
-        return "%s%s<%s>" % ( empty, self.container, self.itype )
+        return "%s<%s> (size = %s)" % ( self.container, self.itype, self.size )
 
 class QVectorPrinter:
     "Print a QVector"
@@ -189,12 +185,9 @@ class QVectorPrinter:
             return self._iterator(self.itype, data.cast(self.itype.pointer()), self.val['d']['size'])
 
     def to_string(self):
-        if self.val['d']['size'] == 0:
-            empty = "empty "
-        else:
-            empty = ""
+        size = self.val['d']['size']
 
-        return "%s%s<%s>" % ( empty, self.container, self.itype )
+        return "%s<%s> (size = %s)" % ( self.container, self.itype, size )
 
 class QLinkedListPrinter:
     "Print a QLinkedList"
@@ -227,12 +220,9 @@ class QLinkedListPrinter:
         return self._iterator(self.itype, self.val['e']['n'], self.val['d']['size'])
 
     def to_string(self):
-        if self.val['d']['size'] == 0:
-            empty = "empty "
-        else:
-            empty = ""
+        size = self.val['d']['size']
 
-        return "%sQLinkedList<%s>" % ( empty, self.itype )
+        return "QLinkedList<%s> (size = %s)" % ( self.itype, size )
 
 class QMapPrinter:
     "Print a QMap"
@@ -367,12 +357,9 @@ class QMapPrinter:
             return self._iteratorQt5(self.val)
 
     def to_string(self):
-        if self.val['d']['size'] == 0:
-            empty = "empty "
-        else:
-            empty = ""
+        size = self.val['d']['size']
 
-        return "%s%s<%s, %s>" % ( empty, self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
+        return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
 
     def display_hint (self):
         return 'map'
@@ -477,12 +464,9 @@ class QHashPrinter:
         return self._iterator(self.val)
 
     def to_string(self):
-        if self.val['d']['size'] == 0:
-            empty = "empty "
-        else:
-            empty = ""
+        size = self.val['d']['size']
 
-        return "%s%s<%s, %s>" % ( empty, self.container, self.val.type.template_argument(0), self.val.type.template_argument(1) )
+        return "%s<%s, %s> (size = %s)" % ( self.container, self.val.type.template_argument(0), self.val.type.template_argument(1), size )
 
     def display_hint (self):
         return 'map'
@@ -666,12 +650,9 @@ class QSetPrinter:
         return self._iterator(hashIterator)
 
     def to_string(self):
-        if self.val['q_hash']['d']['size'] == 0:
-            empty = "empty "
-        else:
-            empty = ""
+        size = self.val['q_hash']['d']['size']
 
-        return "%sQSet<%s>" % ( empty , self.val.type.template_argument(0) )
+        return "QSet<%s> (size = %s)" % ( self.val.type.template_argument(0), size )
 
 
 class QCharPrinter:

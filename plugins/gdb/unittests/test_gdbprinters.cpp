@@ -145,10 +145,10 @@ void QtPrintersTest::testQListContainer()
     gdb.execute("cont");
     QByteArray out = gdb.execute("print intList");
     qWarning() << "FOO" << out;
-    QVERIFY(out.contains(QString("empty %1<int>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<int> (size = 0)").arg(container).toLocal8Bit()));
     gdb.execute("next");
     out = gdb.execute("print intList");
-    QVERIFY(out.contains(QString("%1<int>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<int> (size = 2)").arg(container).toLocal8Bit()));
     if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = 10"));
         QVERIFY(out.contains("[1] = 20"));
@@ -160,7 +160,7 @@ void QtPrintersTest::testQListContainer()
     }
     gdb.execute("next");
     out = gdb.execute("print intList");
-    QVERIFY(out.contains(QString("%1<int>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<int> (size = 3)").arg(container).toLocal8Bit()));
     if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = 10"));
         QVERIFY(out.contains("[1] = 20"));
@@ -174,10 +174,10 @@ void QtPrintersTest::testQListContainer()
     { // <QString>
     gdb.execute("next");
     QByteArray out = gdb.execute("print stringList");
-    QVERIFY(out.contains(QString("empty %1<QString>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<QString> (size = 0)").arg(container).toLocal8Bit()));
     gdb.execute("next");
     out = gdb.execute("print stringList");
-    QVERIFY(out.contains(QString("%1<QString>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<QString> (size = 2)").arg(container).toLocal8Bit()));
     if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = \"a\""));
         QVERIFY(out.contains("[1] = \"bc\""));
@@ -189,7 +189,7 @@ void QtPrintersTest::testQListContainer()
     }
     gdb.execute("next");
     out = gdb.execute("print stringList");
-    QVERIFY(out.contains(QString("%1<QString>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<QString> (size = 3)").arg(container).toLocal8Bit()));
     if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = \"a\""));
         QVERIFY(out.contains("[1] = \"bc\""));
@@ -203,10 +203,10 @@ void QtPrintersTest::testQListContainer()
     { // <struct A>
     gdb.execute("next");
     QByteArray out = gdb.execute("print structList");
-    QVERIFY(out.contains(QString("empty %1<A>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<A> (size = 0)").arg(container).toLocal8Bit()));
     gdb.execute("next");
     out = gdb.execute("print structList");
-    QVERIFY(out.contains(QString("%1<A>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<A> (size = 1)").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = {"));
     QVERIFY(out.contains("a = \"a\""));
     QVERIFY(out.contains("b = \"b\""));
@@ -214,21 +214,22 @@ void QtPrintersTest::testQListContainer()
     QVERIFY(out.contains("d = -200"));
     gdb.execute("next");
     out = gdb.execute("print structList");
-    QVERIFY(out.contains(QString("%1<A>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<A> (size = 2)").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[1] = {"));
     }
     { // <int*>
     gdb.execute("next");
     QByteArray out = gdb.execute("print pointerList");
-    QVERIFY(out.contains(QString("empty %1<int *>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<int *> (size = 0)").arg(container).toLocal8Bit()));
     gdb.execute("next");
     out = gdb.execute("print pointerList");
-    QVERIFY(out.contains(QString("%1<int *>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<int *> (size = 2)").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = 0x"));
     QVERIFY(out.contains("[1] = 0x"));
     QVERIFY(!out.contains("[2] = 0x"));
     gdb.execute("next");
     out = gdb.execute("print pointerList");
+    QVERIFY(out.contains(QString("%1<int *> (size = 3)").arg(container).toLocal8Bit()));
     QVERIFY(out.contains("[0] = 0x"));
     QVERIFY(out.contains("[1] = 0x"));
     QVERIFY(out.contains("[2] = 0x"));
@@ -237,10 +238,10 @@ void QtPrintersTest::testQListContainer()
     { // <QPair<int, int> >
     gdb.execute("next");
     QByteArray out = gdb.execute("print pairList");
-    QVERIFY(out.contains(QString("empty %1<QPair<int, int>>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<QPair<int, int>> (size = 0)").arg(container).toLocal8Bit()));
     gdb.execute("next");
     out = gdb.execute("print pairList");
-    QVERIFY(out.contains(QString("%1<QPair<int, int>>").arg(container).toLocal8Bit()));
+    QVERIFY(out.contains(QString("%1<QPair<int, int>> (size = 2)").arg(container).toLocal8Bit()));
     if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
         QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
@@ -251,6 +252,7 @@ void QtPrintersTest::testQListContainer()
     QVERIFY(!out.contains("[2] = "));
     gdb.execute("next");
     out = gdb.execute("print pairList");
+    QVERIFY(out.contains(QString("%1<QPair<int, int>> (size = 3)").arg(container).toLocal8Bit()));
     if (container != QLatin1String("QSet")) {
         QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
         QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
@@ -269,11 +271,12 @@ void QtPrintersTest::testQMapInt()
     gdb.execute("break qmapint.cpp:7");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains("QMap<int, int>"));
+    QVERIFY(out.contains("QMap<int, int> (size = 2)"));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
     gdb.execute("next");
     out = gdb.execute("print m");
+    QVERIFY(out.contains("QMap<int, int> (size = 3)"));
     QVERIFY(out.contains("[30] = 300"));
 }
 
@@ -283,11 +286,12 @@ void QtPrintersTest::testQMapString()
     gdb.execute("break qmapstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains("QMap<QString, QString>"));
+    QVERIFY(out.contains("QMap<QString, QString> (size = 2)"));
     QVERIFY(out.contains("[\"10\"] = \"100\""));
     QVERIFY(out.contains("[\"20\"] = \"200\""));
     gdb.execute("next");
     out = gdb.execute("print m");
+    QVERIFY(out.contains("QMap<QString, QString> (size = 3)"));
     QVERIFY(out.contains("[\"30\"] = \"300\""));
 }
 
@@ -297,11 +301,12 @@ void QtPrintersTest::testQMapStringBool()
     gdb.execute("break qmapstringbool.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print m");
-    QVERIFY(out.contains("QMap<QString, bool>"));
+    QVERIFY(out.contains("QMap<QString, bool> (size = 2)"));
     QVERIFY(out.contains("[\"10\"] = true"));
     QVERIFY(out.contains("[\"20\"] = false"));
     gdb.execute("next");
     out = gdb.execute("print m");
+    QVERIFY(out.contains("QMap<QString, bool> (size = 3)"));
     QVERIFY(out.contains("[\"30\"] = true"));
 }
 
@@ -348,10 +353,12 @@ void QtPrintersTest::testQHashInt()
     gdb.execute("break qhashint.cpp:7");
     gdb.execute("run");
     QByteArray out = gdb.execute("print h");
+    QVERIFY(out.contains("QHash<int, int> (size = 2)"));
     QVERIFY(out.contains("[10] = 100"));
     QVERIFY(out.contains("[20] = 200"));
     gdb.execute("next");
     out = gdb.execute("print h");
+    QVERIFY(out.contains("QHash<int, int> (size = 3)"));
     QVERIFY(out.contains("[30] = 300"));
 }
 
@@ -361,10 +368,12 @@ void QtPrintersTest::testQHashString()
     gdb.execute("break qhashstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print h");
+    QVERIFY(out.contains("QHash<QString, QString> (size = 2)"));
     QVERIFY(out.contains("[\"10\"] = \"100\""));
     QVERIFY(out.contains("[\"20\"] = \"200\""));
     gdb.execute("next");
     out = gdb.execute("print h");
+    QVERIFY(out.contains("QHash<QString, QString> (size = 3)"));
     QVERIFY(out.contains("[\"30\"] = \"300\""));
 }
 
@@ -374,10 +383,12 @@ void QtPrintersTest::testQSetInt()
     gdb.execute("break qsetint.cpp:7");
     gdb.execute("run");
     QByteArray out = gdb.execute("print s");
+    QVERIFY(out.contains("QSet<int> (size = 2)"));
     QVERIFY(out.contains("] = 10"));
     QVERIFY(out.contains("] = 20"));
     gdb.execute("next");
     out = gdb.execute("print s");
+    QVERIFY(out.contains("QSet<int> (size = 3)"));
     QVERIFY(out.contains("] = 30"));
 }
 
@@ -387,10 +398,12 @@ void QtPrintersTest::testQSetString()
     gdb.execute("break qsetstring.cpp:8");
     gdb.execute("run");
     QByteArray out = gdb.execute("print s");
+    QVERIFY(out.contains("QSet<QString> (size = 2)"));
     QVERIFY(out.contains("] = \"10\""));
     QVERIFY(out.contains("] = \"20\""));
     gdb.execute("next");
     out = gdb.execute("print s");
+    QVERIFY(out.contains("QSet<QString> (size = 3)"));
     QVERIFY(out.contains("] = \"30\""));
 }
 
