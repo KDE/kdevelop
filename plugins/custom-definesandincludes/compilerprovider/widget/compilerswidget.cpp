@@ -33,6 +33,7 @@
 #include <QKeySequence>
 #include <QMenu>
 #include <QSignalMapper>
+#include <QSignalBlocker>
 
 #include "ui_compilerswidget.h"
 #include "compilersmodel.h"
@@ -162,7 +163,15 @@ void CompilersWidget::compilerSelected(const QModelIndex& index)
     auto compiler = index.data(CompilersModel::CompilerDataRole);
     if (compiler.value<CompilerPointer>()) {
         m_ui->compilerName->setText(compiler.value<CompilerPointer>()->name());
+        
+        //NOTE: there is a bug in kLineEdit, which causes textEdited signal to be
+        // spuriously emitted on calling setText(). See bug report here:
+        // https://bugs.kde.org/show_bug.cgi?id=388798
+        // The resulting spurious call of compilerEdited then fails with an assert.
+        //Work around this bug until it is fixed upstream by disabling signals here
+        const QSignalBlocker blocker(m_ui->compilerPath);
         m_ui->compilerPath->setText(compiler.value<CompilerPointer>()->path());
+        
         enableItems(true);
     } else {
         enableItems(false);
@@ -194,6 +203,10 @@ void CompilersWidget::enableItems(bool enable)
 
     if(!enable) {
         m_ui->compilerName->clear();
+        
+        //NOTE: this is to work around the 
+        //spurious signal bug in kLineEdit
+        const QSignalBlocker blocker(m_ui->compilerPath);
         m_ui->compilerPath->clear();
     }
 }
