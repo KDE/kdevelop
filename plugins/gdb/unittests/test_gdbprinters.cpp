@@ -102,9 +102,9 @@ void QtPrintersTest::testQString()
     GdbProcess gdb(QStringLiteral("debuggee_qstring"));
     gdb.execute("break qstring.cpp:5");
     gdb.execute("run");
-    QVERIFY(gdb.execute("print s").contains("\"test string\""));
+    QVERIFY(gdb.execute("print s").contains("\"test最后一个不是特殊字符'\\\"\\\\u6211\""));
     gdb.execute("next");
-    QVERIFY(gdb.execute("print s").contains("\"test stringx\""));
+    QVERIFY(gdb.execute("print s").contains("\"test最后一个不是特殊字符'\\\"\\\\u6211x\""));
 }
 
 void QtPrintersTest::testQByteArray()
