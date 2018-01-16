@@ -1041,14 +1041,14 @@ void GdbTest::testCoreFile()
                       + findExecutable(QStringLiteral("debuggee_crash")).toLocalFile();
     debugeeProcess.start();
     debugeeProcess.waitForFinished();
-    qDebug() << debugeeProcess.readAll();
+    qDebug() << "Debuggee output:\n" << debugeeProcess.readAll();
 
     bool coreFileFound = f.exists();
     if (!coreFileFound) {
         // Try to use coredumpctl
         auto coredumpctl = QStandardPaths::findExecutable(QStringLiteral("coredumpctl"));
         if (!coredumpctl.isEmpty()) {
-            KProcess::execute(coredumpctl, {"-1", "-o", f.absoluteFilePath(), "dump", "debuggee_crash"});
+            KProcess::execute(coredumpctl, {"-1", "-o", f.absoluteFilePath(), "dump", "debuggee_crash"}, 5000);
             coreFileFound = f.exists();
         }
     }
