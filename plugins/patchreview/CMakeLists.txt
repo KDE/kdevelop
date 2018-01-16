@@ -4,13 +4,17 @@ set_package_properties(LibKompareDiff2 PROPERTIES
     TYPE REQUIRED
 )
 
-find_package(KDEExperimentalPurpose QUIET)
-set_package_properties(KDEExperimentalPurpose PROPERTIES DESCRIPTION "EXPERIMENTAL. Support for patch sharing"
-                       URL "https://projects.kde.org/projects/playground/libs/purpose"
+find_package(KF5Purpose CONFIG QUIET)
+set_package_properties(KF5Purpose PROPERTIES DESCRIPTION "Support for patch sharing"
                        TYPE OPTIONAL
                       )
-
-
+if (NOT KF5Purpose_FOUND)
+    find_package(KDEExperimentalPurpose QUIET)
+    set_package_properties(KDEExperimentalPurpose PROPERTIES DESCRIPTION "EXPERIMENTAL. Support for patch sharing"
+                        URL "https://projects.kde.org/projects/playground/libs/purpose"
+                        TYPE OPTIONAL
+                        )
+endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevpatchreview\")
 kde_enable_exceptions()
@@ -49,7 +53,10 @@ target_link_libraries(kdevpatchreview
     KF5::TextEditor
     KF5::Parts
 )
-if (KDEExperimentalPurpose_FOUND)
+if (KF5Purpose_FOUND)
+    target_compile_definitions(kdevpatchreview PRIVATE WITH_PURPOSE)
+    target_link_libraries(kdevpatchreview KF5::PurposeWidgets)
+elseif (KDEExperimentalPurpose_FOUND)
     target_compile_definitions(kdevpatchreview PRIVATE WITH_PURPOSE)
     target_link_libraries(kdevpatchreview KDEExperimental::PurposeWidgets)
 endif()
