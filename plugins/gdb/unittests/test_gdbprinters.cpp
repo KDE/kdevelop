@@ -113,11 +113,14 @@ void QtPrintersTest::testQByteArray()
     gdb.execute("break qbytearray.cpp:5");
     gdb.execute("run");
     QByteArray out = gdb.execute("print ba");
-    QVERIFY(out.contains("\"test byte array\""));
-    QVERIFY(out.contains("[0] = 116 't'"));
-    QVERIFY(out.contains("[4] = 32 ' '"));
+    qDebug() << out;
+    QVERIFY(out.contains("\"\xE6\x98\xAF'\\\"\\\\u6211\""));
+    QVERIFY(out.contains("[0] = -26 '\\346'"));
+    QVERIFY(out.contains("[3] = 39 '\\''"));
+    QVERIFY(out.contains("[4] = 34 '\"'"));
     gdb.execute("next");
-    QVERIFY(gdb.execute("print ba").contains("\"test byte arrayx\""));
+    out = gdb.execute("print ba");
+    QVERIFY(out.contains("\"\xE6\x98\xAF'\\\"\\\\u6211x\""));
 }
 
 void QtPrintersTest::testQListContainer_data()
