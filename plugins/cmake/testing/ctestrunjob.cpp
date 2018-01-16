@@ -30,6 +30,7 @@
 #include <interfaces/launchconfigurationtype.h>
 #include <interfaces/ilaunchmode.h>
 #include <util/executecompositejob.h>
+#include <outputview/outputmodel.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -41,7 +42,7 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 , m_suite(suite)
 , m_cases(cases)
 , m_job(nullptr)
-, m_outputJob(nullptr)
+, m_outputModel(nullptr)
 , m_verbosity(verbosity)
 {
     foreach (const QString& testCase, cases)
@@ -119,9 +120,9 @@ void CTestRunJob::start()
     m_job = createTestJob(QStringLiteral("execute"), arguments, workingDirectory);
 
     if (ExecuteCompositeJob* cjob = qobject_cast<ExecuteCompositeJob*>(m_job)) {
-        m_outputJob = cjob->findChild<OutputJob*>();
-        Q_ASSERT(m_outputJob);
-        m_outputJob->setVerbosity(m_verbosity);
+        OutputJob* outputJob = cjob->findChild<OutputJob*>();
+        Q_ASSERT(outputJob);
+        outputJob->setVerbosity(m_verbosity);
 
         QString testName = m_suite->name();
         QString title;
@@ -130,9 +131,10 @@ void CTestRunJob::start()
         else
             title = i18ncp("running test %1, %2 number of test cases", "CTest %2 (%1)", "CTest %2 (%1)", cases_selected.count(), testName);
 
-        m_outputJob->setTitle(title);
+        outputJob->setTitle(title);
 
-        connect(m_outputJob->model(), &QAbstractItemModel::rowsInserted, this, &CTestRunJob::rowsInserted);
+        m_outputModel = qobject_cast<OutputModel*>(outputJob->model());
+        connect(m_outputModel, &QAbstractItemModel::rowsInserted, this, &CTestRunJob::rowsInserted);
     }
     connect(m_job, &KJob::finished, this, &CTestRunJob::processFinished);
 
@@ -150,25 +152,38 @@ bool CTestRunJob::doKill()
 
 void CTestRunJob::processFinished(KJob* job)
 {
-    TestResult result;
-    result.testCaseResults = m_caseResults;
-    if (job->error() == OutputJob::FailedShownError) {
-        result.suiteResult = TestResult::Failed;
-    } else if (job->error() == KJob::NoError) {
-        result.suiteResult = TestResult::Passed;
-    } else {
-        result.suiteResult = TestResult::Error;
-    }
+    int error = job->error();
+    auto finished = [this,error]() {
+        TestResult result;
+        result.testCaseResults = m_caseResults;
+        if (error == OutputJob::FailedShownError) {
+            result.suiteResult = TestResult::Failed;
+        } else if (error == KJob::NoError) {
+            result.suiteResult = TestResult::Passed;
+        } else {
+            result.suiteResult = TestResult::Error;
+        }
 
-    // in case the job was killed, mark this job as killed as well
-    if (job->error() == KJob::KilledJobError) {
-        setError(KJob::KilledJobError);
-        setErrorText(QStringLiteral("Child job was killed."));
-    }
+        // in case the job was killed, mark this job as killed as well
+        if (error == KJob::KilledJobError) {
+            setError(KJob::KilledJobError);
+            setErrorText(QStringLiteral("Child job was killed."));
+        }
 
-    qCDebug(CMAKE) << result.suiteResult << result.testCaseResults;
-    ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
-    emitResult();
+        qCDebug(CMAKE) << result.suiteResult << result.testCaseResults;
+        ICore::self()->testController()->notifyTestRunFinished(m_suite, result);
+        emitResult();
+    };
+
+    if (m_outputModel)
+    {
+        connect(m_outputModel, &OutputModel::allDone, this, finished, Qt::QueuedConnection);
+        m_outputModel->ensureAllDone();
+    }
+    else
+    {
+        finished();
+    }
 }
 
 void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endRow)
@@ -180,7 +195,7 @@ void CTestRunJob::rowsInserted(const QModelIndex &parent, int startRow, int endR
     static QRegExp caseRx("::(.*)\\(", Qt::CaseSensitive, QRegExp::RegExp2);
     for (int row = startRow; row <= endRow; ++row)
     {
-        QString line = m_outputJob->model()->data(m_outputJob->model()->index(row, 0, parent), Qt::DisplayRole).toString();
+        QString line = m_outputModel->data(m_outputModel->index(row, 0, parent), Qt::DisplayRole).toString();
 
         QString testCase;
         if (caseRx.indexIn(line) >= 0) {

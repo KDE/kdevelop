@@ -35,6 +35,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
     void testCTestSuite();
+    void testQtTestCases();
 };
 
 #endif

@@ -36,7 +36,6 @@
 
 using namespace KDevelop;
 
-// TODO: we are lacking introspection into targets, to see what files belong to each target.
 static CMakeTarget targetByName(const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, const QString& name)
 {
     for (const auto &subdir: targets.values()) {
@@ -45,6 +44,19 @@ static CMakeTarget targetByName(const QHash< KDevelop::Path, QVector<CMakeTarget
                 return target;
         }
     }
+
+    return {};
+}
+
+static CMakeTarget targetByExe(const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, const KDevelop::Path& exe)
+{
+    for (const auto &subdir: targets.values()) {
+        for (const auto &target: subdir) {
+            if (target.artifacts.contains(exe))
+                return target;
+        }
+    }
+
     return {};
 }
 
@@ -52,17 +64,22 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, const QHash< 
 {
     foreach (const Test& test, testSuites) {
         KDevelop::Path executablePath;
+        CMakeTarget target;
+
         if (QDir::isAbsolutePath(test.executable)) {
             executablePath = KDevelop::Path(test.executable);
+            target = targetByExe(targets, executablePath);
         } else {
-            const auto target = targetByName(targets, test.executable);
+            target = targetByName(targets, test.executable);
             if (target.artifacts.isEmpty()) {
                 continue;
             }
             executablePath = target.artifacts.first();
         }
 
-        CTestSuite* suite = new CTestSuite(test.name, executablePath, {}, project, test.arguments, test.properties);
+        qCDebug(CMAKE) << "looking for tests in test" << test.name << "target" << target.name << "with sources" << target.sources;
+
+        CTestSuite* suite = new CTestSuite(test.name, executablePath, target.sources.toList(), project, test.arguments, test.properties);
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

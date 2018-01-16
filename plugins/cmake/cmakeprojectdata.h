@@ -64,6 +64,7 @@ public:
     Type type;
     QString name;
     KDevelop::Path::List artifacts;
+    KDevelop::Path::List sources;
 };
 Q_DECLARE_TYPEINFO(CMakeTarget, Q_MOVABLE_TYPE);
 inline QDebug &operator<<(QDebug debug, const CMakeTarget& target) {

@@ -26,6 +26,10 @@
 
 class CTestSuite;
 
+namespace KDevelop {
+    class OutputModel;
+}
+
 class CTestRunJob : public KJob
 {
     Q_OBJECT
@@ -45,7 +49,7 @@ private:
     QStringList m_cases;
     QHash<QString, KDevelop::TestResult::TestCaseResult> m_caseResults;
     KJob* m_job;
-    KDevelop::OutputJob* m_outputJob;
+    KDevelop::OutputModel* m_outputModel;
     KDevelop::OutputJob::OutputJobVerbosity m_verbosity;
 };
 

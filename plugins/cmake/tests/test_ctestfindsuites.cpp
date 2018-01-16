@@ -40,6 +40,8 @@
 #include <QDir>
 #include <QtTest>
 
+Q_DECLARE_METATYPE(KDevelop::ITestSuite*)
+
 using namespace KDevelop;
 
 void waitForSuites(IProject* project, int count, int max)
@@ -55,6 +57,8 @@ void TestCTestFindSuites::initTestCase()
 {
     AutoTestShell::init({"KDevCMakeManager", "KDevCMakeBuilder", "KDevMakeBuilder", "KDevStandardOutputView"});
     TestCore::initialize();
+
+    qRegisterMetaType<ITestSuite*>();
 
     cleanup();
 }
@@ -85,7 +89,6 @@ void TestCTestFindSuites::testCTestSuite()
 
     foreach (auto suite, suites)
     {
-        qDebug() << "checking suite" << suite->name();
         QCOMPARE(suite->cases(), QStringList());
         QVERIFY(!suite->declaration().isValid());
         CTestSuite* ctestSuite = static_cast<CTestSuite*>(suite);
@@ -110,6 +113,42 @@ void TestCTestFindSuites::testCTestSuite()
         else
             QCOMPARE(workingDirectory, QString());
         QCOMPARE(ctestSuite->properties().value(QLatin1String("WILL_FAIL")), willFail);
+    }
+}
+
+void TestCTestFindSuites::testQtTestCases()
+{
+    IProject* project = loadProject( "unit_tests_kde" );
+    QVERIFY2(project, "Project was not opened");
+
+    QSignalSpy spy(ICore::self()->testController(), &ITestController::testSuiteAdded);
+    QVERIFY(spy.isValid());
+
+    // Background parsing can take a long time, so we need a long timeout
+    QVERIFY(spy.wait(30 * 1000));
+
+    QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
+    QCOMPARE(suites.size(), 1);
+
+    QStringList cases = {
+        QStringLiteral("passingTestCase"),
+        QStringLiteral("failingTestCase"),
+        QStringLiteral("expectedFailTestCase"),
+        QStringLiteral("unexpectedPassTestCase"),
+        QStringLiteral("skippedTestCase"),
+    };
+
+    DUChainReadLocker locker(DUChain::lock());
+
+    foreach (auto suite, suites)
+    {
+        QCOMPARE(suite->cases(), cases);
+        QVERIFY(suite->declaration().isValid());
+
+        foreach (const auto& caseName, suite->cases())
+        {
+            QVERIFY(suite->caseDeclaration(caseName).isValid());
+        }
     }
 }
 

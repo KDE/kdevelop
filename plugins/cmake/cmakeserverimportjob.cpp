@@ -108,19 +108,7 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
                 const auto target = targetObject.toObject();
                 const KDevelop::Path targetDir = rt->pathInHost(KDevelop::Path(target.value(QStringLiteral("sourceDirectory")).toString()));
 
-                CMakeTarget cmakeTarget{
-                    typeToEnum(target),
-                    target.value(QStringLiteral("name")).toString(),
-                    kTransform<KDevelop::Path::List>(target[QLatin1String("artifacts")].toArray(), [](const QJsonValue& val) { return KDevelop::Path(val.toString()); })
-                };
-
-                // ensure we don't add the same target multiple times, for different projects
-                // cf.: https://bugs.kde.org/show_bug.cgi?id=387095
-                auto& dirTargets = data.targets[targetDir];
-                if (dirTargets.contains(cmakeTarget))
-                    continue;
-                dirTargets += cmakeTarget;
-
+                KDevelop::Path::List targetSources;
                 const auto fileGroups = target.value(QStringLiteral("fileGroups")).toArray();
                 for (const auto &fileGroupValue: fileGroups) {
                     const auto fileGroup = fileGroupValue.toObject();
@@ -139,9 +127,26 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
                         const auto canonicalFile = QFileInfo(source.toLocalFile()).canonicalFilePath();
                         const auto sourcePath = localFile.toLocalFile() == canonicalFile ? localFile : KDevelop::Path(canonicalFile);
                         data.compilationData.files[sourcePath] = file;
+                        targetSources << sourcePath;
                     }
                     qCDebug(CMAKE) << "registering..." << sources << file;
                 }
+
+                CMakeTarget cmakeTarget{
+                    typeToEnum(target),
+                    target.value(QStringLiteral("name")).toString(),
+                    kTransform<KDevelop::Path::List>(target[QLatin1String("artifacts")].toArray(), [](const QJsonValue& val) { return KDevelop::Path(val.toString()); }),
+                    targetSources,
+                };
+
+                // ensure we don't add the same target multiple times, for different projects
+                // cf.: https://bugs.kde.org/show_bug.cgi?id=387095
+                auto& dirTargets = data.targets[targetDir];
+                if (dirTargets.contains(cmakeTarget))
+                    continue;
+                dirTargets += cmakeTarget;
+
+                qCDebug(CMAKE) << "adding target" << cmakeTarget.name << "with sources" << cmakeTarget.sources;
             }
         }
     }

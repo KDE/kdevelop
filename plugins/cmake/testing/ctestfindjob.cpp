@@ -46,8 +46,6 @@ void CTestFindJob::start()
 
 void CTestFindJob::findTestCases()
 {
-    qCDebug(CMAKE);
-
     if (!m_suite->arguments().isEmpty())
     {
         KDevelop::ICore::self()->testController()->addTestSuite(m_suite);
@@ -55,7 +53,14 @@ void CTestFindJob::findTestCases()
         return;
     }
 
-    m_pendingFiles = m_suite->sourceFiles();
+    m_pendingFiles.clear();
+    for (const auto& file : m_suite->sourceFiles())
+    {
+        if (!file.isEmpty())
+        {
+            m_pendingFiles << file;
+        }
+    }
     qCDebug(CMAKE) << "Source files to update:" << m_pendingFiles;
 
     if (m_pendingFiles.isEmpty())
@@ -73,7 +78,7 @@ void CTestFindJob::findTestCases()
 
 void CTestFindJob::updateReady(const KDevelop::IndexedString& document, const KDevelop::ReferencedTopDUContext& context)
 {
-    qCDebug(CMAKE) << m_pendingFiles << document.str();
+    qCDebug(CMAKE) << "context update ready" << m_pendingFiles << document.str();
     m_suite->loadDeclarations(document, context);
     m_pendingFiles.removeAll(KDevelop::Path(document.toUrl()));
 

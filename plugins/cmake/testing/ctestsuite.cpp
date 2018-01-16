@@ -35,6 +35,39 @@
 #include <language/duchain/types/structuretype.h>
 #include <project/projectmodel.h>
 
+Declaration* findTestClassDeclaration(const CursorInRevision& c, DUContext* ctx, RangeInRevision::ContainsBehavior behavior)
+{
+    /*
+     * This code is mostly copied from DUChainUtils::itemUnderCursorInternal.
+     * However, it is simplified because we are only looking for uses of the test class,
+     * so we can skip the search through local declarations, which speeds up the search.
+     * Additionally, we are only interested in the declaration itself, not in its context
+     * or range.
+     */
+
+    foreach(DUContext* subCtx, ctx->childContexts())
+    {
+        //This is a little hacky, but we need it in case of foreach macros and similar stuff
+        if(subCtx->range().contains(c, behavior) || subCtx->range().isEmpty() || subCtx->range().start.line == c.line || subCtx->range().end.line == c.line)
+        {
+            Declaration *d = findTestClassDeclaration(c, subCtx, behavior);
+            if (d)
+            {
+                return d;
+            }
+        }
+    }
+
+    for(int a = 0; a < ctx->usesCount(); ++a)
+    {
+        if(ctx->uses()[a].m_range.contains(c, behavior))
+        {
+            return ctx->topContext()->usedDeclarationForIndex(ctx->uses()[a].m_declarationIndex);
+        }
+    }
+
+    return nullptr;
+}
 
 using namespace KDevelop;
 
@@ -67,22 +100,57 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
 
     Declaration* testClass = nullptr;
     Identifier testCaseIdentifier(QStringLiteral("tc"));
-    foreach (Declaration* declaration, topContext->findLocalDeclarations(Identifier("main")))
+
+    foreach (Declaration* declaration, topContext->findLocalDeclarations(Identifier(QStringLiteral("main"))))
     {
         if (declaration->isDefinition())
         {
-            qCDebug(CMAKE) << "Found a definition for a function 'main()' ";
-            FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(declaration);
-            DUContext* main = def->internalContext();
-            foreach (Declaration* mainDeclaration, main->localDeclarations(topContext))
+            qCDebug(CMAKE) << "Found a definition for a function 'main()' at" << declaration->range();
+
+            /*
+             * This is a rather hacky soluction to get the test class for a Qt test.
+             *
+             * The class is used as the argument to the QTEST_MAIN or QTEST_GUILESS_MAIN macro.
+             * This macro expands to a main() function with a variable declaration with 'tc' as
+             * the name and with the test class as the type.
+             *
+             * Unfortunately, we cannot get to the function body context in order to find
+             * this variable declaration.
+             * Instead, we find the cursor to the beginning of the main() function, offset
+             * the cursor to the inside of the QTEST_MAIN(x) call, and find the declaration there.
+             * If it is a type declaration, that type is the main test class.
+             */
+
+            CursorInRevision cursor = declaration->range().start;
+            Declaration* testClassDeclaration = nullptr;
+            int mainDeclarationColumn = cursor.column;
+
+            // cursor points to the start of QTEST_MAIN(x) invocation, we offset it to point inside it
+            cursor.column += 12;
+            testClassDeclaration = findTestClassDeclaration(cursor, topContext, RangeInRevision::Default);
+
+            while (!testClassDeclaration || testClassDeclaration->kind() != Declaration::Kind::Type)
             {
-                if (mainDeclaration->identifier() == testCaseIdentifier)
+                // If the first found declaration was not a type, the macro may be QTEST_GUILESS_MAIN rather than QTEST_MAIN.
+                // Alternatively, it may be called as QTEST_MAIN(KDevelop::TestCase), or something similar.
+                // So we just try a couple of different positions.
+                cursor.column += 8;
+                if (cursor.column > mainDeclarationColumn + 60)
                 {
-                    qCDebug(CMAKE) << "Found tc declaration in main:" << mainDeclaration->identifier().toString();
-                    qCDebug(CMAKE) << "Its type is" << mainDeclaration->abstractType()->toString();
-                    if (StructureType::Ptr type = mainDeclaration->abstractType().cast<StructureType>())
+                    break;
+                }
+                testClassDeclaration = findTestClassDeclaration(cursor, topContext, RangeInRevision::Default);
+            }
+
+            if (testClassDeclaration && testClassDeclaration->kind() == Declaration::Kind::Type)
+            {
+                qCDebug(CMAKE) << "Found test class declaration" << testClassDeclaration->identifier().toString() << testClassDeclaration->kind();
+                if (StructureType::Ptr type = testClassDeclaration->type<StructureType>())
+                {
+                    testClass = type->declaration(topContext);
+                    if (testClass && testClass->internalContext())
                     {
-                        testClass = type->declaration(topContext);
+                        break;
                     }
                 }
             }
