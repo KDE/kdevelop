@@ -82,7 +82,7 @@ class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
 
 void TestShellBuddy::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({{}}); // do not load plugins at all
     TestCore::initialize();
     m_documentController = Core::self()->documentController();
     m_uiController = Core::self()->uiControllerInternal();

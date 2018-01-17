@@ -41,7 +41,7 @@ using namespace KDevelop;
 
 void TestShellDocumentOperation::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({{}}); // do not load plugins at all
     TestCore::initialize();
 }
 

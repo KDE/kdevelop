@@ -85,7 +85,7 @@ void testAddingEntry(SettingsManager* settings, KConfig* config){
 
 void TestCompilerProvider::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({QStringLiteral("kdevdefinesandincludesmanager"), QStringLiteral("KDevCustomBuildSystem"), QStringLiteral("KDevStandardOutputView")});
     TestCore::initialize();
 }
 
