@@ -32,6 +32,8 @@
 #include <interfaces/itestsuite.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/ibuildsystemmanager.h>
+#include <interfaces/iprojectbuilder.h>
 #include <testing/ctestsuite.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -39,6 +41,7 @@
 
 #include <QDir>
 #include <QtTest>
+#include <KJob>
 
 using namespace KDevelop;
 
@@ -61,7 +64,12 @@ void TestCTestFindSuites::initTestCase()
 
 void TestCTestFindSuites::cleanup()
 {
-    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+    foreach(IProject* p, ICore::self()->projectController()->projects())
+    {
+        if (p && p->buildSystemManager() && p->buildSystemManager()->builder())
+        {
+            p->buildSystemManager()->builder()->prune(p)->exec();
+        }
         ICore::self()->projectController()->closeProject(p);
     }
     QVERIFY(ICore::self()->projectController()->projects().isEmpty());
