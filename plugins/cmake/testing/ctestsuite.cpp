@@ -101,7 +101,8 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
     Declaration* testClass = nullptr;
     Identifier testCaseIdentifier(QStringLiteral("tc"));
 
-    foreach (Declaration* declaration, topContext->findLocalDeclarations(Identifier(QStringLiteral("main"))))
+    const auto mainId = Identifier(QStringLiteral("main"));
+    foreach (Declaration* declaration, topContext->findLocalDeclarations(mainId))
     {
         if (declaration->isDefinition())
         {
