@@ -8,7 +8,7 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 include(ECMAddTests)
 
-set(ENABLE_TESTING ON)
+enable_testing()
 set(CMAKE_AUTOMOC ON)
 
 ecm_add_test(test.cpp TEST_NAME cmake-test-unittestskde)
