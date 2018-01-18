@@ -5,6 +5,7 @@ set(debuggercommon_SRCS
     mi/miparser.cpp
     mi/micommand.cpp
     mi/micommandqueue.cpp
+    dbgglobal.cpp
     dialogs/selectcoredialog.cpp
     # debug session & debugger
     midebugger.cpp

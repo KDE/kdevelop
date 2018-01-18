@@ -146,7 +146,9 @@ void MIDebugger::readyReadStandardError()
 
 void MIDebugger::processLine(const QByteArray& line)
 {
-    qCDebug(DEBUGGERCOMMON) << "Debugger (" << m_process->pid() <<") output: " << line;
+    if (line != "(gdb) ") {
+        qCDebug(DEBUGGERCOMMON) << "Debugger output (pid =" << m_process->pid() << "): " << line;
+    }
 
     FileSymbol file;
     file.contents = line;
