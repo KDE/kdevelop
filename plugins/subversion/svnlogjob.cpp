@@ -114,7 +114,7 @@ SvnLogJob::SvnLogJob( KDevSvnPlugin* parent )
 {
     setType( KDevelop::VcsJob::Log );
     connect( m_job, &SvnInternalLogJob::logEvent,
-             this, &SvnLogJob::logEventReceived, Qt::QueuedConnection );
+             this, &SvnLogJob::logEventReceived );
 
     setObjectName(i18n("Subversion Log"));
 }

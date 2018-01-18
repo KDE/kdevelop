@@ -137,13 +137,8 @@ public:
 public Q_SLOTS:
 
     // invoked by context-menu
-    void ctxInfo();
-    void ctxStatus();
     void ctxCopy();
     void ctxMove();
-    void ctxCat();
-    void ctxImport();
-    void ctxCheckout();
 private:
     QScopedPointer<KDevelop::VcsPluginHelper> m_common;
     QAction* copy_action;

@@ -24,7 +24,6 @@ set(kdevsubversion_JOB_SRCS
     svnremovejob.cpp
     svninfojob.cpp
     svndiffjob.cpp
-    svncatjob.cpp
     svncopyjob.cpp
     svnmovejob.cpp
     svnlogjob.cpp
@@ -37,7 +36,6 @@ set(kdevsubversion_PART_SRCS
     kdevsvnplugin.cpp
     svnssldialog.cpp
     svnimportmetadatawidget.cpp
-    svncheckoutmetadatawidget.cpp
     svnclient.cpp
     svnlocationwidget.cpp
 )
@@ -51,7 +49,6 @@ ecm_qt_declare_logging_category(kdevsubversion_PART_SRCS
 set(kdevsubversion_PART_UI
     ui/ssltrustdialog.ui
     ui/importmetadatawidget.ui
-    ui/checkoutmetadatawidget.ui
 )
 
 ki18n_wrap_ui(kdevsubversion_PART_SRCS ${kdevsubversion_PART_UI})

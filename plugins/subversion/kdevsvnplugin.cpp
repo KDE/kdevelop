@@ -56,7 +56,6 @@
 #include "svncheckoutjob.h"
 
 #include "svnimportmetadatawidget.h"
-#include "svncheckoutmetadatawidget.h"
 #include <vcs/vcspluginhelper.h>
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include "svnlocationwidget.h"
@@ -354,24 +353,6 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
     return menuExt;
 }
 
-void KDevSvnPlugin::ctxInfo()
-{
-    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
-    if (ctxUrlList.count() != 1) {
-        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
-        return;
-    }
-}
-
-void KDevSvnPlugin::ctxStatus()
-{
-    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
-    if (ctxUrlList.count() > 1) {
-        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
-        return;
-    }
-}
-
 void KDevSvnPlugin::ctxCopy()
 {
     QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
@@ -443,15 +424,6 @@ void KDevSvnPlugin::ctxMove()
     }
 }
 
-void KDevSvnPlugin::ctxCat()
-{
-    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
-    if (ctxUrlList.count() != 1) {
-        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
-        return;
-    }
-}
-
 QString KDevSvnPlugin::name() const
 {
     return i18n("Subversion");
@@ -460,60 +432,6 @@ QString KDevSvnPlugin::name() const
 KDevelop::VcsImportMetadataWidget* KDevSvnPlugin::createImportMetadataWidget(QWidget* parent)
 {
     return new SvnImportMetadataWidget(parent);
-}
-
-void KDevSvnPlugin::ctxImport()
-{
-    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
-    if (ctxUrlList.count() != 1) {
-        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
-        return;
-    }
-
-    QDialog dlg;
-
-    dlg.setWindowTitle(i18n("Import into Subversion repository"));
-    SvnImportMetadataWidget* widget = new SvnImportMetadataWidget(&dlg);
-    widget->setSourceLocation(KDevelop::VcsLocation(ctxUrlList.first()));
-    widget->setSourceLocationEditable(false);
-    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    auto layout = new QVBoxLayout();
-    dlg.setLayout(layout);
-    layout->addWidget(widget);
-    layout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
-
-    if (dlg.exec() == QDialog::Accepted) {
-        KDevelop::ICore::self()->runController()->registerJob(import(widget->message(), widget->source(), widget->destination()));
-    }
-}
-
-void KDevSvnPlugin::ctxCheckout()
-{
-    QList<QUrl> const & ctxUrlList = m_common->contextUrlList();
-    if (ctxUrlList.count() != 1) {
-        KMessageBox::error(nullptr, i18n("Please select only one item for this operation"));
-        return;
-    }
-
-    QDialog dlg;
-
-    dlg.setWindowTitle(i18n("Checkout from Subversion repository"));
-    SvnCheckoutMetadataWidget* widget = new SvnCheckoutMetadataWidget(&dlg);
-    QUrl tmp = KIO::upUrl(ctxUrlList.first());
-    widget->setDestinationLocation(tmp);
-    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    auto layout = new QVBoxLayout();
-    dlg.setLayout(layout);
-    layout->addWidget(widget);
-    layout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
-
-    if (dlg.exec() == QDialog::Accepted) {
-        KDevelop::ICore::self()->runController()->registerJob(createWorkingCopy(widget->source(), widget->destination(), widget->recursionMode()));
-    }
 }
 
 KDevelop::VcsLocationWidget* KDevSvnPlugin::vcsLocation(QWidget* parent) const

@@ -218,18 +218,19 @@ bool SvnInternalJobBase::contextGetLogMessage( std::string& msg )
 
 void SvnInternalJobBase::initBeforeRun()
 {
-    connect( this, SIGNAL(needCommitMessage()),
-             parent(), SLOT(askForCommitMessage()), Qt::QueuedConnection );
-    connect( this, SIGNAL(needLogin(QString)),
-             parent(), SLOT(askForLogin(QString)), Qt::QueuedConnection );
-    connect( this, SIGNAL(needSslServerTrust(QStringList,QString,QString,QString,QString,QString,QString)),
-             parent(), SLOT(askForSslServerTrust(QStringList,QString,QString,QString,QString,QString,QString)), Qt::QueuedConnection );
-    connect( this, SIGNAL(showNotification(QString,QString)),
-             parent(), SLOT(showNotification(QString,QString)), Qt::QueuedConnection );
-    connect( this, SIGNAL(needSslClientCert(QString)),
-             parent(), SLOT(askForSslClientCert(QString)), Qt::QueuedConnection );
-    connect( this, SIGNAL(needSslClientCertPassword(QString)),
-             parent(), SLOT(askForSslClientCertPassword(QString)), Qt::QueuedConnection );
+    auto parentJob = static_cast<SvnJobBase*>(parent());
+    connect( this, &SvnInternalJobBase::needCommitMessage,
+             parentJob, &SvnJobBase::askForCommitMessage, Qt::QueuedConnection );
+    connect( this, &SvnInternalJobBase::needLogin,
+             parentJob,  &SvnJobBase::askForLogin, Qt::QueuedConnection );
+    connect( this, &SvnInternalJobBase::needSslServerTrust,
+             parentJob,  &SvnJobBase::askForSslServerTrust, Qt::QueuedConnection );
+    connect( this, &SvnInternalJobBase::showNotification,
+             parentJob,  &SvnJobBase::showNotification, Qt::QueuedConnection );
+    connect( this, &SvnInternalJobBase::needSslClientCert,
+             parentJob,  &SvnJobBase::askForSslClientCert, Qt::QueuedConnection );
+    connect( this, &SvnInternalJobBase::needSslClientCertPassword,
+             parentJob,  &SvnJobBase::askForSslClientCertPassword, Qt::QueuedConnection );
 }
 
 svn::ContextListener::SslServerTrustAnswer SvnInternalJobBase::contextSslServerTrustPrompt(

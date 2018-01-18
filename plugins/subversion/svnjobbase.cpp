@@ -159,9 +159,6 @@ void SvnJobBase::internalJobDone()
     }
 
     emitResult();
-    if( m_status == VcsJob::JobCanceled ) {
-        deleteLater();
-    }
 }
 
 void SvnJobBase::internalJobFailed()
@@ -178,11 +175,8 @@ void SvnJobBase::internalJobFailed()
     {
         m_status = KDevelop::VcsJob::JobFailed;
     }
-    emitResult();
 
-    if( m_status == VcsJob::JobCanceled ) {
-        deleteLater();
-    }
+    emitResult();
 }
 
 KDevelop::IPlugin* SvnJobBase::vcsPlugin() const

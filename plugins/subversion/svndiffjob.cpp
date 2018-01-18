@@ -339,6 +339,5 @@ void SvnDiffJob::setDiff( const QString& diff )
     m_diff.setBaseDiff(QUrl::fromLocalFile(QStringLiteral("/")));
     m_diff.setDiff( diff );
 
-    internalJobDone();
     emit resultsReady( this );
 }
