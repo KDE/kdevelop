@@ -40,7 +40,7 @@ using namespace KDevelop;
 
 void TestDocumentController::initTestCase()
 {
-    AutoTestShell::init();
+    AutoTestShell::init({{}}); // do not load plugins at all
     TestCore::initialize();
     Core::self()->languageController()->backgroundParser()->disableProcessing();
     m_subject = Core::self()->documentController();

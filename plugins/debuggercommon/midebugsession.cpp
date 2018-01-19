@@ -444,7 +444,6 @@ void MIDebugSession::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags n
                 out += QString::number(i);
             }
         }
-        qCDebug(DEBUGGERCOMMON) << "Debugger state change:" << out;
     }
 }
 
@@ -490,7 +489,7 @@ void MIDebugSession::handleDebuggerStateChange(DBGStateFlags oldState, DBGStateF
     }
 
     // And now? :-)
-    qCDebug(DEBUGGERCOMMON) << "Debugger state changed to: " << newState << message;
+    qCDebug(DEBUGGERCOMMON) << "Debugger state changed to:" << newState << message << "- changes:" << changedState;
 
     if (!message.isEmpty())
         emit showMessage(message, 3000);
