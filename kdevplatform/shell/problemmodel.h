@@ -176,10 +176,10 @@ public Q_SLOTS:
     /// Show imports
     void setShowImports(bool showImports);
 
-    /// Sets the scope filter. Uses int to be able to use QSignalMapper
+    /// Sets the scope filter
     void setScope(int scope);
 
-    /// Sets the severity filter. Uses int to be able to use QSignalMapper
+    /// Sets the severity filter
     void setSeverity(int severity);///old-style severity filtering
 
     void setSeverities(KDevelop::IProblem::Severities severities);///new-style severity filtering

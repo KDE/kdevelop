@@ -74,9 +74,6 @@ private Q_SLOTS:
      * the cursor will be also set to the declaration's position when the buddy document is opened
      */
     void switchDefinitionDeclaration();
-
-private:
-    class QSignalMapper* m_signalMapper;
 };
 
 

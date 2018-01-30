@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QDBusConnection>
 #include <QPalette>
-#include <QSignalMapper>
 
 #include <KAboutData>
 #include <KActionCollection>
@@ -137,8 +136,6 @@ public:
     QMap<QString,LaunchConfigurationType*> launchConfigurationTypes;
     QList<LaunchConfiguration*> launchConfigurations;
     QMap<QString,ILaunchMode*> launchModes;
-    QSignalMapper* launchChangeMapper;
-    QSignalMapper* launchAsMapper;
     QMap<int,QPair<QString,QString> > launchAsInfo;
     KDevelop::ProjectBaseItem* contextItem;
     DebugMode* debugMode;
@@ -321,8 +318,6 @@ RunController::RunController(QObject *parent)
     d->state = Idle;
     d->q = this;
     d->delegate = new RunDelegate(this);
-    d->launchChangeMapper = new QSignalMapper( this );
-    d->launchAsMapper = nullptr;
     d->contextItem = nullptr;
     d->executeMode = nullptr;
     d->debugMode = nullptr;
@@ -964,9 +959,6 @@ QItemDelegate * KDevelop::RunController::delegate() const
 
 ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* parent)
 {
-    delete d->launchAsMapper;
-    d->launchAsMapper = new QSignalMapper( this );
-    connect( d->launchAsMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), this, [&] (int id) { d->launchAs(id); } );
     d->launchAsInfo.clear();
     d->contextItem = nullptr;
     ContextMenuExtension ext;
@@ -992,11 +984,10 @@ ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* 
                     if( hasLauncher && type->canLaunch(itm) )
                     {
                         d->launchAsInfo[i] = qMakePair( type->id(), mode->id() );
-                        QAction* act = new QAction( d->launchAsMapper );
+                        QAction* act = new QAction(menu);
                         act->setText( type->name() );
-                        qCDebug(SHELL) << "Setting up mapping for:" << i << "for action" << act->text() << "in mode" << mode->name();
-                        d->launchAsMapper->setMapping( act, i );
-                        connect( act, &QAction::triggered, d->launchAsMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
+                        qCDebug(SHELL) << "Connect " << i << "for action" << act->text() << "in mode" << mode->name();
+                        connect( act, &QAction::triggered, this, [this, i] () { d->launchAs(i); } );
                         menu->addAction(act);
                         i++;
                     }

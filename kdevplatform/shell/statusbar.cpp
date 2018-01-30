@@ -23,7 +23,6 @@
 #include "progresswidget/progressdialog.h"
 
 #include <QTimer>
-#include <QSignalMapper>
 
 #include <KColorScheme>
 #include <KSqueezedTextLabel>
@@ -44,7 +43,6 @@ StatusBar::StatusBar(QWidget* parent)
     : QStatusBar(parent)
     , m_timer(new QTimer(this))
     , m_currentView(nullptr)
-    , m_errorRemovalMapper(new QSignalMapper(this))
 {
 #ifdef Q_OS_MAC
     /* At time of writing this is only required for OSX and only has effect on OSX. 
@@ -63,8 +61,6 @@ StatusBar::StatusBar(QWidget* parent)
         registerStatus(plugin);
 
     registerStatus(Core::self()->languageController()->backgroundParser());
-
-    connect(m_errorRemovalMapper, static_cast<void(QSignalMapper::*)(QWidget*)>(&QSignalMapper::mapped), this, &StatusBar::removeError);
 
     m_progressController = Core::self()->progressController();
     m_progressDialog = new ProgressDialog(this, parent); // construct this first, then progressWidget
@@ -144,8 +140,7 @@ QTimer* StatusBar::errorTimeout(QWidget* error, int timeout)
     QTimer* timer = new QTimer(error);
     timer->setSingleShot(true);
     timer->setInterval(1000*timeout);
-    m_errorRemovalMapper->setMapping(timer, error);
-    connect(timer, &QTimer::timeout, m_errorRemovalMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(timer, &QTimer::timeout, this, [this, error](){ removeError(error); });
     return timer;
 }
 

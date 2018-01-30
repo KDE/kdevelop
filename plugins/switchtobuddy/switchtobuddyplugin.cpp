@@ -26,7 +26,6 @@
 #include <KActionCollection>
 #include <QAction>
 #include <QFile>
-#include <QSignalMapper>
 #include <QMimeDatabase>
 #include <QMimeType>
 
@@ -93,7 +92,6 @@ K_PLUGIN_FACTORY_WITH_JSON(SwitchToBuddyPluginFactory, "kdevswitchtobuddy.json",
 
 SwitchToBuddyPlugin::SwitchToBuddyPlugin ( QObject* parent, const QVariantList& )
     : IPlugin ( QStringLiteral("kdevswitchtobuddy"), parent )
-    , m_signalMapper(nullptr)
 {
     setXMLFile(QStringLiteral("kdevswitchtobuddy.rc"));
 }
@@ -120,10 +118,6 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context,
     const QVector<QUrl>& potentialBuddies = buddyFinder->getPotentialBuddies(currentUrl);
 
     ContextMenuExtension extension;
-    if (m_signalMapper) {
-        delete m_signalMapper;
-    }
-    m_signalMapper = new QSignalMapper(this);
 
     foreach(const QUrl& url, potentialBuddies) {
         if (!QFile::exists(url.toLocalFile())) {
@@ -131,10 +125,8 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context,
         }
 
         QAction* action = new QAction(i18n("Switch to '%1'", url.fileName()), parent);
-        connect(action, &QAction::triggered, m_signalMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map), Qt::QueuedConnection);
-        m_signalMapper->setMapping(action, url.toLocalFile());
-        connect(m_signalMapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped),
-                this, &SwitchToBuddyPlugin::switchToBuddy, Qt::QueuedConnection);
+        const QString surl = url.toLocalFile();
+        connect(action, &QAction::triggered, this, [this, surl](){ switchToBuddy(surl); }, Qt::QueuedConnection);
         extension.addAction(ContextMenuExtension::NavigationGroup, action);
     }
 

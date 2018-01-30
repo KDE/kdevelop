@@ -28,7 +28,6 @@
 #include <KUrlRequester>
 
 #include <QSpinBox>
-#include <QSignalMapper>
 #include <QLabel>
 
 namespace KDevelop {
@@ -41,7 +40,6 @@ struct OutputPagePrivate
     { }
     OutputPage* page;
     Ui::OutputLocationDialog* output;
-    QSignalMapper urlChangedMapper;
 
     QHash<QString, KUrlRequester*> outputFiles;
     QHash<QString, QSpinBox*> outputLines;
@@ -142,8 +140,6 @@ OutputPage::OutputPage(QWidget* parent)
     d->output->setupUi(this);
     d->output->messageWidget->setVisible(false);
 
-    connect(&d->urlChangedMapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped),
-            this, [&] (const QString& field) { d->updateFileRange(field); });
     connect(d->output->lowerFilenameCheckBox, &QCheckBox::stateChanged,
             this, [&] { d->updateFileNames(); });
 }
@@ -171,11 +167,6 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
         d->output->positionFormLayout->takeAt(0);
     }
 
-    foreach (KUrlRequester* req, d->outputFiles)
-    {
-        d->urlChangedMapper.removeMappings(req);
-    }
-
     qDeleteAll(d->outputFiles);
     qDeleteAll(d->outputLines);
     qDeleteAll(d->outputColumns);
@@ -192,7 +183,8 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
 
     foreach (const SourceFileTemplate::OutputFile& file, fileTemplate.outputFiles())
     {
-        d->fileIdentifiers << file.identifier;
+        const QString id = file.identifier;
+        d->fileIdentifiers << id;
 
         const QString fileLabelText = i18n("%1:", file.label);
         QLabel* label = new QLabel(fileLabelText, this);
@@ -200,8 +192,7 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
         KUrlRequester* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
 
-        d->urlChangedMapper.setMapping(requester, file.identifier);
-        connect(requester, &KUrlRequester::textChanged, &d->urlChangedMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        connect(requester, &KUrlRequester::textChanged, this, [this, id] () { d->updateFileRange(id); });
 
         d->output->urlFormLayout->addRow(label, requester);
         d->outputFiles.insert(file.identifier, requester);

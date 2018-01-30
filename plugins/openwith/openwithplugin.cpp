@@ -25,7 +25,6 @@
 #include <QMenu>
 #include <QMimeDatabase>
 #include <QMimeType>
-#include <QSignalMapper>
 #include <QVariantList>
 
 #include <KSharedConfig>
@@ -88,8 +87,7 @@ bool canOpenDefault(const QString& mimeType)
 }
 
 OpenWithPlugin::OpenWithPlugin ( QObject* parent, const QVariantList& )
-    : IPlugin ( QStringLiteral("kdevopenwith"), parent ),
-    m_actionMap( nullptr )
+    : IPlugin ( QStringLiteral("kdevopenwith"), parent )
 {
 }
 
@@ -105,7 +103,6 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     }
 
     m_urls.clear();
-    m_actionMap.reset();
     m_services.clear();
 
     FileContext* filectx = dynamic_cast<FileContext*>( context );
@@ -127,9 +124,6 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     if (m_urls.isEmpty()) {
         return KDevelop::ContextMenuExtension();
     }
-
-    m_actionMap.reset(new QSignalMapper( this ));
-    connect( m_actionMap.data(), static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &OpenWithPlugin::open );
 
     // Ok, lets fetch the mimetype for the !!first!! url and the relevant services
     // TODO: Think about possible alternatives to using the mimetype of the first url.
@@ -201,8 +195,8 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType(const QString& serviceType
             font.setBold(true);
             act->setFont(font);
         }
-        connect(act, &QAction::triggered, m_actionMap.data(), static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        m_actionMap->setMapping( act, svc->storageId() );
+        const QString sid = svc->storageId();
+        connect(act, &QAction::triggered, this, [this, sid]() { open(sid); } );
         actions << act;
         if ( isTextEditor(svc) ) {
             standardAction = act;

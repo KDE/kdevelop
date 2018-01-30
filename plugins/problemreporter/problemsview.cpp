@@ -25,7 +25,6 @@
 #include <QAction>
 #include <QLineEdit>
 #include <QMenu>
-#include <QSignalMapper>
 #include <QTabWidget>
 #include <QTimer>
 #include <QVBoxLayout>
@@ -96,30 +95,11 @@ void ProblemsView::setupActions()
         }
         addAction(m_scopeMenu);
 
-        QSignalMapper* scopeMapper = new QSignalMapper(this);
-        scopeMapper->setMapping(m_currentDocumentAction, CurrentDocument);
-        scopeMapper->setMapping(openDocumentsAction, OpenDocuments);
-        scopeMapper->setMapping(currentProjectAction, CurrentProject);
-        scopeMapper->setMapping(allProjectAction, AllProjects);
-        connect(m_currentDocumentAction, &QAction::triggered, scopeMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(openDocumentsAction, &QAction::triggered, scopeMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(currentProjectAction, &QAction::triggered, scopeMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(allProjectAction, &QAction::triggered, scopeMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-
-        {
-            scopeMapper->setMapping(actions.last(), BypassScopeFilter);
-            connect(actions.last(), &QAction::triggered, scopeMapper,
-                    static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        }
-
-        connect(scopeMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped),
-                this, [this](int index) {
-            setScope(index);
-        });
+        connect(m_currentDocumentAction, &QAction::triggered, this, [this](){ setScope(CurrentDocument); });
+        connect(openDocumentsAction, &QAction::triggered, this, [this](){ setScope(OpenDocuments); });
+        connect(currentProjectAction, &QAction::triggered, this, [this](){ setScope(CurrentProject); });
+        connect(allProjectAction, &QAction::triggered, this, [this](){ setScope(AllProjects); });
+        connect(actions.last(), &QAction::triggered, this, [this](){ setScope(BypassScopeFilter); });
     }
 
     {
@@ -189,22 +169,10 @@ void ProblemsView::setupActions()
         addAction(m_groupingMenu);
 
         noGroupingAction->setChecked(true);
-        QSignalMapper* groupingMapper = new QSignalMapper(this);
-        groupingMapper->setMapping(noGroupingAction, NoGrouping);
-        groupingMapper->setMapping(pathGroupingAction, PathGrouping);
-        groupingMapper->setMapping(severityGroupingAction, SeverityGrouping);
 
-        connect(noGroupingAction, &QAction::triggered, groupingMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(pathGroupingAction, &QAction::triggered, groupingMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(severityGroupingAction, &QAction::triggered, groupingMapper,
-                static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-
-        connect(groupingMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped),
-                this, [this](int index) {
-            currentView()->model()->setGrouping(index);
-        });
+        connect(noGroupingAction, &QAction::triggered, this, [this](){ currentView()->model()->setGrouping(NoGrouping); });
+        connect(pathGroupingAction, &QAction::triggered, this, [this](){ currentView()->model()->setGrouping(PathGrouping); });
+        connect(severityGroupingAction, &QAction::triggered, this, [this](){ currentView()->model()->setGrouping(SeverityGrouping); });
     }
 
     {

@@ -176,7 +176,6 @@ VariableTree::VariableTree(IDebugController *controller,
         controller->variableCollection()->watches(), 0);
     setExpanded(index, true);
 
-    m_signalMapper = new QSignalMapper(this);
     setupActions();
 }
 
@@ -233,11 +232,10 @@ void VariableTree::setupActions()
     {
         act->setCheckable(true);
         act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-        m_signalMapper->setMapping(act, act->data().toInt());
-        connect(act, &QAction::triggered, m_signalMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+        const int id = act->data().toInt();
+        connect(act, &QAction::triggered, this, [this, id](){ changeVariableFormat(id); });
         addAction(act);
     }
-    connect(m_signalMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped), this, &VariableTree::changeVariableFormat);
 
     m_watchDelete = new QAction(
         QIcon::fromTheme(QStringLiteral("edit-delete")), i18n( "Remove Watch Variable" ), this);

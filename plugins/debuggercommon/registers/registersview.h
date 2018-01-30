@@ -26,7 +26,6 @@
 #include <QVector>
 
 class QMenu;
-class QSignalMapper;
 
 namespace KDevMI {
 
@@ -81,7 +80,6 @@ private Q_SLOTS:
 
 private:
     QMenu* m_menu;
-    QSignalMapper* m_mapper;
 
     ModelsManager* m_modelsManager;
 

@@ -16,8 +16,6 @@
 #ifndef KDEVPLATFORM_VARIABLEWIDGET_H
 #define KDEVPLATFORM_VARIABLEWIDGET_H
 
-#include <QSignalMapper>
-
 #include <debugger/debuggerexport.h>
 #include "../util/treeview.h"
 #include "variablecollection.h"
@@ -109,7 +107,6 @@ private:
     QAction *m_watchDelete;
     QAction *m_copyVariableValue;
     QAction *m_stopOnChange;
-    QSignalMapper *m_signalMapper;
     QSortFilterProxyModel *m_proxy;
     TreeModel *m_model;
 };

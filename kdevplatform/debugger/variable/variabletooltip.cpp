@@ -29,7 +29,6 @@
 #include <QHeaderView>
 #include <QPushButton>
 #include <QScrollBar>
-#include <QSignalMapper>
 #include <QDesktopWidget>
 #include <KLocalizedString>
 #include <QPainter>
@@ -138,12 +137,10 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
     QPushButton* stopOnChangeButton = new QPushButton(i18n("Stop on Change"));
     buttonBox->addWidget(stopOnChangeButton);
 
-    QSignalMapper* mapper = new QSignalMapper(this);
-    connect(watchThisButton, &QPushButton::clicked, mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    mapper->setMapping(watchThisButton, QStringLiteral("add_watch"));
-    connect(stopOnChangeButton, &QPushButton::clicked, mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-    mapper->setMapping(stopOnChangeButton, QStringLiteral("add_watchpoint"));
-    connect(mapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &VariableToolTip::slotLinkActivated);
+    connect(watchThisButton, &QPushButton::clicked,
+            this, [this](){ slotLinkActivated(QStringLiteral("add_watch")); });
+    connect(stopOnChangeButton, &QPushButton::clicked,
+            this, [this](){ slotLinkActivated(QStringLiteral("add_watchpoint")); });
 
     QHBoxLayout* inner = new QHBoxLayout();
     l->addLayout(inner);

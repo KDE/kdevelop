@@ -18,7 +18,6 @@
 #include <vcs/vcslocation.h>
 
 class KPageWidgetItem;
-class QSignalMapper;
 class ProjectSelectionPage;
 class ProjectVcsPage;
 class ProjectTemplatesModel;
@@ -54,8 +53,6 @@ private Q_SLOTS:
     void next() override;
 private:
     QMap<QWidget*, KPageWidgetItem*> m_pageItems;
-    QSignalMapper* m_invalidMapper;
-    QSignalMapper* m_validMapper;
     ProjectSelectionPage* m_selectionPage;
     ProjectVcsPage* m_vcsPage;
 };

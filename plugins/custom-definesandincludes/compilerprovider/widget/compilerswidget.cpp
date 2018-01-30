@@ -32,7 +32,6 @@
 #include <KLocalizedString>
 #include <QKeySequence>
 #include <QMenu>
-#include <QSignalMapper>
 #include <QSignalBlocker>
 
 #include "ui_compilerswidget.h"
@@ -56,8 +55,6 @@ CompilersWidget::CompilersWidget(QWidget* parent)
     m_ui->removeButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
 
     m_addMenu = new QMenu(m_ui->addButton);
-    m_mapper = new QSignalMapper(m_addMenu);
-    connect(m_mapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &CompilersWidget::addCompiler);
 
     m_addMenu->clear();
 
@@ -65,10 +62,9 @@ CompilersWidget::CompilersWidget(QWidget* parent)
     auto provider = settings->provider();
     foreach (const auto& factory, provider->compilerFactories()) {
         QAction* action = new QAction(m_addMenu);
-        action->setText(factory->name());
-        connect(action, &QAction::triggered,
-                m_mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
-        m_mapper->setMapping(action, factory->name());
+        const QString fname = factory->name();
+        action->setText(fname);
+        connect(action, &QAction::triggered, this, [this, fname]() { addCompiler(fname); });
         m_addMenu->addAction(action);
     }
     m_ui->addButton->setMenu(m_addMenu);

@@ -38,7 +38,6 @@ class CompilersWidget;
 
 class CompilersModel;
 class QMenu;
-class QSignalMapper;
 
 class CompilersWidget : public KDevelop::ConfigPage
 {
@@ -77,7 +76,6 @@ private:
     QScopedPointer<Ui::CompilersWidget> m_ui;
     CompilersModel* m_compilersModel;
     QMenu *m_addMenu;
-    QSignalMapper *m_mapper;
 };
 
 #endif

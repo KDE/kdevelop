@@ -28,8 +28,6 @@
 
 #include "iopenwith.h"
 
-class QSignalMapper;
-
 class OpenWithPlugin : public KDevelop::IPlugin, public KDevelop::IOpenWith
 {
     Q_OBJECT
@@ -49,7 +47,6 @@ private Q_SLOTS:
 
 private:
     QList<QAction*> actionsForServiceType(const QString& serviceType, QWidget* parent);
-    QScopedPointer<QSignalMapper> m_actionMap;
     QList<QUrl> m_urls;
     QString m_mimeType;
     KService::List m_services;

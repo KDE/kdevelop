@@ -9,7 +9,6 @@
  ***************************************************************************/
 #include "appwizarddialog.h"
 
-#include <QSignalMapper>
 #include <QPushButton>
 
 #include <KLocalizedString>
@@ -44,21 +43,10 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
 
     setValid( m_pageItems[m_selectionPage], false );
 
-    m_invalidMapper = new QSignalMapper(this);
-    m_invalidMapper->setMapping(m_selectionPage, m_selectionPage);
-    m_invalidMapper->setMapping(m_vcsPage, m_vcsPage);
-    m_validMapper = new QSignalMapper(this);
-    m_validMapper->setMapping(m_selectionPage, m_selectionPage);
-    m_validMapper->setMapping(m_vcsPage, m_vcsPage);
-
-    connect( m_selectionPage, &ProjectSelectionPage::invalid, m_invalidMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
-    connect( m_selectionPage, &ProjectSelectionPage::valid, m_validMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
-
-    connect( m_vcsPage, &ProjectVcsPage::invalid, m_invalidMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
-    connect( m_vcsPage, &ProjectVcsPage::valid, m_validMapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map) );
-
-    connect( m_validMapper, static_cast<void(QSignalMapper::*)(QWidget*)>(&QSignalMapper::mapped), this, &AppWizardDialog::pageValid );    
-    connect( m_invalidMapper, static_cast<void(QSignalMapper::*)(QWidget*)>(&QSignalMapper::mapped), this, &AppWizardDialog::pageInValid );
+    connect(m_selectionPage, &ProjectSelectionPage::invalid, this, [this]() { pageInValid(m_selectionPage); });
+    connect(m_vcsPage, &ProjectVcsPage::invalid, this, [this]() { pageInValid(m_vcsPage); });
+    connect(m_selectionPage, &ProjectSelectionPage::valid, this, [this]() { pageValid(m_selectionPage); });
+    connect(m_vcsPage, &ProjectVcsPage::valid, this, [this]() { pageValid(m_vcsPage); });
 }
 
 ApplicationInfo AppWizardDialog::appInfo() const

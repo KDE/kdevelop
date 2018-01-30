@@ -26,7 +26,6 @@
 
 #include <QMenu>
 #include <QContextMenuEvent>
-#include <QSignalMapper>
 
 #include <KLocalizedString>
 
@@ -38,13 +37,11 @@ const int TABLES_COUNT = 5;
 }
 
 RegistersView::RegistersView(QWidget* p)
-    : QWidget(p), m_menu(new QMenu(this)), m_mapper(new QSignalMapper(this)), m_modelsManager(nullptr)
+    : QWidget(p), m_menu(new QMenu(this)), m_modelsManager(nullptr)
 {
     setupUi(this);
 
     setupActions();
-
-    connect(m_mapper, static_cast<void(QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &RegistersView::menuTriggered);
 
     connect(tabWidget, &QTabWidget::currentChanged, this, &RegistersView::updateRegisters);
 }
@@ -243,6 +240,5 @@ void RegistersView::insertAction(const QString& name, Qt::Key k)
     m_actions.append(a);
     addAction(a);
 
-    m_mapper->setMapping(a, a->text());
-    connect(a, &QAction::triggered, m_mapper, static_cast<void(QSignalMapper::*)()>(&QSignalMapper::map));
+    connect(a, &QAction::triggered, this, [this, a](){ menuTriggered(a->text()); });
 }
