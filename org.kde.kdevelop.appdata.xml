@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>KDevelop</name>
+  <name xml:lang="ar">مطوّرك</name>
   <name xml:lang="ast">KDevelop</name>
   <name xml:lang="bs">KDevelop</name>
   <name xml:lang="ca">KDevelop</name>
@@ -31,6 +32,7 @@
   <name xml:lang="x-test">xxKDevelopxx</name>
   <name xml:lang="zh-CN">KDevelop</name>
   <summary>Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
+  <summary xml:lang="ar">بيئة تطوير متكاملة بمزايا عديدة ودعم للملحقات للغتي سي/سي++ ولغات البرمجة الأخرى</summary>
   <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
   <summary xml:lang="ca-valencia">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
   <summary xml:lang="de">Eine leistungsfähige integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann.</summary>
@@ -51,6 +53,7 @@
   <summary xml:lang="zh-CN">全功能，可扩展的支持 C/C++ 和其他语言的集成开发环境。</summary>
   <description>
     <p>KDevelop is a Free and Open Source integrated development environment (IDE).</p>
+    <p xml:lang="ar">«مطوّرك» هي بيئة تطوير متكاملة (IDE) حرّة ومفتوحة المصدر.</p>
     <p xml:lang="ca">El KDevelop és un entorn de desenvolupament integrat (IDE) lliure i de codi obert.</p>
     <p xml:lang="ca-valencia">El KDevelop és un entorn de desenvolupament integrat (IDE) lliure i de codi obert.</p>
     <p xml:lang="de">KDevelop ist eine integrierte Entwicklungsumgebung (Frei und Open Source).</p>
@@ -70,6 +73,7 @@
     <p xml:lang="x-test">xxKDevelop is a Free and Open Source integrated development environment (IDE).xx</p>
     <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
     <p>It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
+    <p xml:lang="ar">توفّر البرمجيّة مزايا التّحرير والتّنقّل والتّنقيح لمختلف لغات البرمجة، إلى جانب التّكامل مع مختلف أنظمة البناء وأنظمة التّحكّم بالإصدارات، وذلك عبر البنية المعتمدة على الملحقات.</p>
     <p xml:lang="ca">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
     <p xml:lang="ca-valencia">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
     <p xml:lang="en-GB">It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
@@ -87,6 +91,7 @@
     <p xml:lang="uk">У програмі передбачено можливості з редагування, навігації та діагностики коду декількома мовами програмування, а також інтеграцію із декількома системами збирання коду та керування версіями. Використовується архітектура з додатками.</p>
     <p xml:lang="x-test">xxIt provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.xx</p>
     <p>KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
+    <p xml:lang="ar">لدى «مطوّرك» سندات تحليل للغات سي، وسي++، وجاڤاسكربت/QML كما وملحقات خارجيّة أخرى تدعم PHP أو پيثون.</p>
     <p xml:lang="ca">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
     <p xml:lang="ca-valencia">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
     <p xml:lang="en-GB">KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
