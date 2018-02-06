@@ -38,7 +38,12 @@ DocumentSwitcherTreeView::DocumentSwitcherTreeView(DocumentSwitcherPlugin* plugi
 
 void DocumentSwitcherTreeView::keyPressEvent(QKeyEvent* event)
 {
-    QTreeView::keyPressEvent(event);
+    if (event->key() == Qt::Key_Escape) {
+        event->accept();
+        hide();
+    } else {
+        QTreeView::keyPressEvent(event);
+    }
 }
 
 void DocumentSwitcherTreeView::keyReleaseEvent(QKeyEvent* event)
