@@ -23,6 +23,7 @@
 
 #include "externalscriptitem.h"
 
+#include <QAction>
 #include <QDialogButtonBox>
 #include <QPushButton>
 

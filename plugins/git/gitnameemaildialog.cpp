@@ -27,6 +27,8 @@
 
 #include <QDialog>
 #include <QPushButton>
+#include <QRegularExpression>
+#include <QValidator>
 
 using namespace KDevelop;
 
