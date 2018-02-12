@@ -26,6 +26,7 @@
 
 #include "mi/mi.h"
 
+#include <QActionGroup>
 #include <QTreeWidget>
 #include <QUrl>
 
