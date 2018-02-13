@@ -4,6 +4,7 @@
             {
                 "Email": "kossebau@kde.org",
                 "Name": "Friedrich W. H. Kossebau",
+                "Name[nn]": "Friedrich W.H. Kossebau",
                 "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ],
@@ -13,7 +14,7 @@
         "Description[ca]": "Permet la visualització i edició de les dades sense processar dels fitxers (basat en l'Okteta)",
         "Description[de]": "Ermöglicht das Betrachten und Bearbeiten der Rohdaten von Dateien (basiert auf Okteta)",
         "Description[es]": "Activa la visualización y la edición de datos de archivos en bruto (basado en Okteta)",
-        "Description[fr]": "Permet de visualiser et éditer les données brutes de fichiers (basé sur Okteta)",
+        "Description[fr]": "Permet l'aperçu et l'édition des données brutes de fichiers (repose sur Okteta)",
         "Description[it]": "Abilita la visualizzazione e la modifica dei dati grezzi dei file (basato su Okteta)",
         "Description[nl]": "Schakelt het bekijken en bewerken van de ruwe gegevens van bestanden in (gebaseerd op Okteta)",
         "Description[pl]": "Umożliwia oglądanie i edytowanie nieprzetworzonych danych pliku (w oparciu o Oktetę)",
