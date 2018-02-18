@@ -5,5 +5,6 @@ kdevplatform_add_app_templates(
     cpp/CMake/cmake_qt5-qml2
     cpp/QMake/qmake_qt5guiapp
     cpp/QMake/qt5-qml2
+    c/CMake/cmake_plainc
     empty
 )
