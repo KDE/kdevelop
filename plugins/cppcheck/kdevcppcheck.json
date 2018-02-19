@@ -19,7 +19,7 @@
         "Description[pl]": "Wtyczka ta integruje Cppcheck (statyczne narzędzie analizy) z KDevelop",
         "Description[pt]": "Este 'plugin' integra o Cppcheck (ferramenta de análise estática) no KDevelop",
         "Description[sk]": "Tento plugin integruje Cppcheck (nástroj na statickú analýzy) pre KDevelop",
-        "Description[sl]": "Ta vstavek vgradi Cppcheck (orodje za statično preučevanje) v KDevelop",
+        "Description[sl]": "Ta vstavek v KDevelop vgradi Cppcheck (orodje za statično preučevanje)",
         "Description[sv]": "Insticksprogrammet integrerar Cppcheck (statiskt analysverktyg) i KDevelop",
         "Description[tr]": "Bu eklenti Cppcheck uygulamasını (istatistik analiz aracı) KDevelop ile bütünleştirir",
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Cppcheck (засіб статичного аналізу) до KDevelop",
