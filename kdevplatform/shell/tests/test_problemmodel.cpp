@@ -49,6 +49,7 @@ private Q_SLOTS:
     void testNoGrouping();
     void testPathGrouping();
     void testSeverityGrouping();
+    void testPlaceholderText();
 
 private:
     void generateProblems();
@@ -360,6 +361,61 @@ void TestProblemModel::testSeverityGrouping()
     }
 
     m_model->clearProblems();
+}
+
+void TestProblemModel::testPlaceholderText()
+{
+    const QString text1 = QStringLiteral("testPlaceholderText1");
+    const QString text2 = QStringLiteral("testPlaceholderText2");
+    const QString empty;
+
+    m_model->setGrouping(NoGrouping);
+
+    // Test model with empty placeholder text
+
+    QCOMPARE(m_model->rowCount(), 0);
+    m_model->setPlaceholderText(empty);
+    QCOMPARE(m_model->rowCount(), 0);
+    m_model->setProblems(m_problems);
+    QCOMPARE(m_model->rowCount(), 3);
+    m_model->clearProblems();
+    QCOMPARE(m_model->rowCount(), 0);
+
+    // Test empty model with non-empty placeholder text
+
+    m_model->setPlaceholderText(text1);
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkLabel(0, QModelIndex(), text1));
+
+    m_model->setPlaceholderText(text2);
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkLabel(0, QModelIndex(), text2));
+
+    // Test non-empty model with non-empty placeholder text
+
+    m_model->setProblems(m_problems);
+    QCOMPARE(m_model->rowCount(), 3);
+
+    m_model->clearProblems();
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkLabel(0, QModelIndex(), text2));
+
+    m_model->addProblem(m_problems[0]);
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkIsSame(0, QModelIndex(), m_problems[0]));
+
+    m_model->addProblem(m_problems[1]);
+    QCOMPARE(m_model->rowCount(), 2);
+    QVERIFY(checkIsSame(1, QModelIndex(), m_problems[1]));
+
+    m_model->setPlaceholderText(text1);
+    QCOMPARE(m_model->rowCount(), 2);
+    QVERIFY(checkIsSame(0, QModelIndex(), m_problems[0]));
+    QVERIFY(checkIsSame(1, QModelIndex(), m_problems[1]));
+
+    m_model->setProblems({});
+    QCOMPARE(m_model->rowCount(), 1);
+    QVERIFY(checkLabel(0, QModelIndex(), text1));
 }
 
 // Generate 3 problems, all with different paths, different severity

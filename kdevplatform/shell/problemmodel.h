@@ -26,6 +26,7 @@
 #include <shell/shellexport.h>
 #include <QAbstractItemModel>
 #include <shell/problem.h>
+#include <language/editor/documentrange.h>
 
 namespace KDevelop {
     class IDocument;
@@ -129,6 +130,20 @@ public:
 
     /// Retrieve problems for selected document
     QVector<IProblem::Ptr> problems(const KDevelop::IndexedString& document) const;
+
+    /**
+     * Add new "placeholder" item (problem). The item will be displayed whenever the model is empty.
+     *
+     * The method should be used to notify user about some events. For example, analyzer plugin
+     * can set placeholders at analysis state changes - started/finished without errors/etc.
+     *
+     * \param[in] text Sets problem description.
+     * \param[in] location Sets problem final location.
+     * \param[in] source Sets problem source string.
+    */
+    void setPlaceholderText(const QString& text,
+                            const KDevelop::DocumentRange& location = KDevelop::DocumentRange::invalid(),
+                            const QString& source = QString());
 
     /// Retrieve the supported features
     Features features() const;

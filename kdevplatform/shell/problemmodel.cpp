@@ -68,12 +68,29 @@ public:
         : m_problems(store)
         , m_features(KDevelop::ProblemModel::NoFeatures)
         , m_fullUpdateTooltip(i18nc("@info:tooltip", "Re-parse all watched documents"))
+        , m_isPlaceholderShown(false)
     {
+    }
+
+    KDevelop::IProblem::Ptr createPlaceholdreProblem() const
+    {
+        Q_ASSERT(!m_placeholderText.isEmpty());
+
+        KDevelop::IProblem::Ptr problem(new KDevelop::DetectedProblem(m_placeholderSource));
+        problem->setDescription(m_placeholderText);
+        problem->setFinalLocation(m_placeholderLocation);
+        problem->setSeverity(KDevelop::IProblem::Hint);
+
+        return problem;
     }
 
     QScopedPointer<KDevelop::ProblemStore> m_problems;
     KDevelop::ProblemModel::Features m_features;
     QString m_fullUpdateTooltip;
+    QString m_placeholderText;
+    QString m_placeholderSource;
+    KDevelop::DocumentRange m_placeholderLocation;
+    bool m_isPlaceholderShown;
 };
 
 
@@ -253,26 +270,46 @@ void ProblemModel::setFullUpdateTooltip(const QString& tooltip)
     emit fullUpdateTooltipChanged();
 }
 
+void ProblemModel::setPlaceholderText(const QString& text, const KDevelop::DocumentRange& location, const QString& source)
+{
+    d->m_placeholderText = text;
+    d->m_placeholderLocation = location;
+    d->m_placeholderSource = source;
+
+    if (d->m_isPlaceholderShown || d->m_problems->count() == 0) {
+        // clearing will show/update the new placeholder
+        clearProblems();
+    }
+}
+
 void ProblemModel::addProblem(const IProblem::Ptr &problem)
 {
-    int c = d->m_problems->count();
-    beginInsertRows(QModelIndex(), c, c);
-    d->m_problems->addProblem(problem);
-    endInsertRows();
+    if (d->m_isPlaceholderShown) {
+        setProblems({ problem });
+    } else {
+        int c = d->m_problems->count();
+        beginInsertRows(QModelIndex(), c, c);
+        d->m_problems->addProblem(problem);
+        endInsertRows();
+    }
 }
 
 void ProblemModel::setProblems(const QVector<IProblem::Ptr> &problems)
 {
     beginResetModel();
-    d->m_problems->setProblems(problems);
+    if (problems.isEmpty() && !d->m_placeholderText.isEmpty()) {
+        d->m_problems->setProblems({ d->createPlaceholdreProblem() });
+        d->m_isPlaceholderShown = true;
+    } else {
+        d->m_problems->setProblems(problems);
+        d->m_isPlaceholderShown = false;
+    }
     endResetModel();
 }
 
 void ProblemModel::clearProblems()
 {
-    beginResetModel();
-    d->m_problems->clear();
-    endResetModel();
+    setProblems({});
 }
 
 QVector<IProblem::Ptr> ProblemModel::problems(const KDevelop::IndexedString& document) const
