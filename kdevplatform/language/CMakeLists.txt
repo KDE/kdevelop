@@ -177,19 +177,20 @@ ki18n_wrap_ui(KDevPlatformLanguage_LIB_SRCS
 
 kdevplatform_add_library(KDevPlatformLanguage SOURCES ${KDevPlatformLanguage_LIB_SRCS})
 target_include_directories(KDevPlatformLanguage PRIVATE ${Boost_INCLUDE_DIRS})
-target_link_libraries(KDevPlatformLanguage LINK_PUBLIC
-        KF5::ThreadWeaver
-        KDev::Interfaces
-        KDev::Serialization
-LINK_PRIVATE
-        Grantlee5::Templates
-        KF5::GuiAddons
-        KF5::TextEditor
-        KF5::Parts
-        KF5::Archive
-        KF5::IconThemes
-        KDev::Util
-        KDev::Project
+target_link_libraries(KDevPlatformLanguage
+PUBLIC
+    KDev::Serialization
+    KDev::Interfaces
+    KDev::Util
+    KF5::ThreadWeaver
+PRIVATE
+    KDev::Project
+    KF5::GuiAddons
+    KF5::TextEditor
+    KF5::Parts
+    KF5::Archive
+    KF5::IconThemes
+    Grantlee5::Templates
 )
 
 install(FILES

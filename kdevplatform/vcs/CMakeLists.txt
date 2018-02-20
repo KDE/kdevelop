@@ -55,13 +55,13 @@ ecm_qt_declare_logging_category(KDevPlatformVcs_LIB_SRCS
 ki18n_wrap_ui(KDevPlatformVcs_LIB_SRCS ${KDevPlatformVcs_UIS})
 kdevplatform_add_library(KDevPlatformVcs SOURCES ${KDevPlatformVcs_LIB_SRCS})
 target_link_libraries(KDevPlatformVcs
-LINK_PUBLIC
+PUBLIC
     KDev::OutputView
     KDev::Interfaces
-LINK_PRIVATE
+PRIVATE
+    KDev::Util
     KF5::KIOWidgets
     KF5::Parts
-    KDev::Util
 )
 
 install(FILES

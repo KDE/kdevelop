@@ -27,14 +27,13 @@ ecm_qt_declare_logging_category(KDevPlatformDebugger_LIB_SRCS
 )
 kdevplatform_add_library(KDevPlatformDebugger SOURCES ${KDevPlatformDebugger_LIB_SRCS})
 target_link_libraries(KDevPlatformDebugger
-LINK_PUBLIC
+PUBLIC
     KDev::Interfaces
     KDev::Util
-LINK_PRIVATE
-    Qt5::Core
+PRIVATE
+    KDev::Sublime
     KF5::Notifications
     KF5::TextEditor
-    KDev::Sublime
 )
 
 install(FILES

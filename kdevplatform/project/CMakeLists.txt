@@ -27,13 +27,13 @@ ki18n_wrap_ui( KDevPlatformProject_LIB_SRCS widgets/dependencieswidget.ui)
 
 kdevplatform_add_library(KDevPlatformProject SOURCES ${KDevPlatformProject_LIB_SRCS})
 target_link_libraries(KDevPlatformProject
-LINK_PUBLIC
+PUBLIC
     KDev::Interfaces
     KDev::Util # util/path.h
-LINK_PRIVATE
+    KDev::Vcs
+PRIVATE
     KDev::Interfaces
     KDev::Serialization
-    KDev::Vcs
     KF5::KIOWidgets
     Qt5::Concurrent
 )

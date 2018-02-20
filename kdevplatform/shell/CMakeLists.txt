@@ -128,13 +128,18 @@ ki18n_wrap_ui(KDevPlatformShell_LIB_SRCS
 qt5_add_resources(KDevPlatformShell_LIB_SRCS kdevplatformshell.qrc)
 kdevplatform_add_library(KDevPlatformShell SOURCES ${KDevPlatformShell_LIB_SRCS})
 target_link_libraries(KDevPlatformShell
-LINK_PUBLIC
-    KF5::XmlGui
-
+PUBLIC
     KDev::Sublime
     KDev::OutputView
     KDev::Interfaces
-LINK_PRIVATE
+    KDev::Language
+    KF5::XmlGui
+PRIVATE
+    KDev::Debugger
+    KDev::Project
+    KDev::Vcs
+    KDev::Util
+    KDev::Documentation
     KF5::GuiAddons
     KF5::ConfigWidgets
     KF5::IconThemes
@@ -150,13 +155,6 @@ LINK_PRIVATE
     KF5::KCMUtils #for KPluginSelector, not sure why it is in kcmutils
     KF5::NewStuff # template config page
     KF5::Archive # template config page
-
-    KDev::Debugger
-    KDev::Project
-    KDev::Vcs
-    KDev::Language
-    KDev::Util
-    KDev::Documentation
 )
 if(APPLE)
     target_link_libraries(KDevPlatformShell PRIVATE "-framework AppKit")

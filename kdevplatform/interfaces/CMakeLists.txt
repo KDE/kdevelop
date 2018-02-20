@@ -49,13 +49,10 @@ configure_file(ipluginversion.h.in ${CMAKE_CURRENT_BINARY_DIR}/ipluginversion.h)
 
 kdevplatform_add_library(KDevPlatformInterfaces SOURCES ${KDevPlatformInterfaces_LIB_SRCS})
 target_link_libraries(KDevPlatformInterfaces
-LINK_PUBLIC
-    KF5::Parts
+PUBLIC
     KF5::TextEditor
-LINK_PRIVATE
-    KF5::ConfigCore
+PRIVATE
     KF5::I18n
-    KF5::Service
 )
 
 install(FILES

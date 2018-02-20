@@ -34,8 +34,11 @@ ecm_qt_declare_logging_category(sublime_LIB_SRCS
 )
 kdevplatform_add_library(KDevPlatformSublime SOURCES ${sublime_LIB_SRCS})
 target_link_libraries(KDevPlatformSublime
-        LINK_PRIVATE KF5::KIOWidgets
-        LINK_PUBLIC KF5::Parts)
+PUBLIC
+    KF5::Parts
+PRIVATE
+    KF5::KIOWidgets
+)
 
 install(FILES
     area.h

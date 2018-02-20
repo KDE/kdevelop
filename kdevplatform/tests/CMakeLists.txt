@@ -19,14 +19,13 @@ set(kdevtests_LIB_SRCS
 )
 
 kdevplatform_add_library(KDevPlatformTests SOURCES ${kdevtests_LIB_SRCS})
-target_link_libraries(KDevPlatformTests LINK_PUBLIC
+target_link_libraries(KDevPlatformTests
+PUBLIC
     KDev::Shell
     KDev::Language
     KDev::Project
     KDev::Debugger
-)
-target_link_libraries(KDevPlatformTests LINK_PRIVATE
-    Qt5::Core
+PRIVATE
     Qt5::Test
 )
 

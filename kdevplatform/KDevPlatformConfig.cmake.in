@@ -6,31 +6,9 @@ include("${CMAKE_CURRENT_LIST_DIR}/KDevPlatformMacros.cmake")
 
 include(CMakeFindDependencyMacro)
 
-find_dependency(Qt5Concurrent "@QT_MIN_VERSION@")
-find_dependency(Qt5Core "@QT_MIN_VERSION@")
-find_dependency(Qt5Quick "@QT_MIN_VERSION@")
-find_dependency(Qt5QuickWidgets "@QT_MIN_VERSION@")
 @KDEV_FIND_DEP_QT5TEST@
 
-find_dependency(KF5Archive "@KF5_DEP_VERSION@")
-find_dependency(KF5Config "@KF5_DEP_VERSION@")
-find_dependency(KF5ConfigWidgets "@KF5_DEP_VERSION@")
-find_dependency(KF5GuiAddons "@KF5_DEP_VERSION@")
-find_dependency(KF5I18n "@KF5_DEP_VERSION@")
-find_dependency(KF5IconThemes "@KF5_DEP_VERSION@")
-find_dependency(KF5ItemViews "@KF5_DEP_VERSION@")
-find_dependency(KF5JobWidgets "@KF5_DEP_VERSION@")
-find_dependency(KF5KCMUtils "@KF5_DEP_VERSION@")
-find_dependency(KF5KIO "@KF5_DEP_VERSION@")
-find_dependency(KF5NewStuff "@KF5_DEP_VERSION@")
-find_dependency(KF5Notifications "@KF5_DEP_VERSION@")
-find_dependency(KF5NotifyConfig "@KF5_DEP_VERSION@")
-find_dependency(KF5Parts "@KF5_DEP_VERSION@")
-find_dependency(KF5Service "@KF5_DEP_VERSION@")
 find_dependency(KF5TextEditor "@KF5_DEP_VERSION@")
 find_dependency(KF5ThreadWeaver "@KF5_DEP_VERSION@")
-find_dependency(KF5WindowSystem "@KF5_DEP_VERSION@")
-
-find_dependency(Grantlee5)
 
 include("${CMAKE_CURRENT_LIST_DIR}/KDevPlatformTargets.cmake")

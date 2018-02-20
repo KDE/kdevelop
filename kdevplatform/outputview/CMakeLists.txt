@@ -18,8 +18,11 @@ ecm_qt_declare_logging_category(outputviewinterfaces_LIB_SRCS
     CATEGORY_NAME "kdevplatform.outputview"
 )
 kdevplatform_add_library(KDevPlatformOutputView SOURCES ${outputviewinterfaces_LIB_SRCS})
-target_link_libraries(KDevPlatformOutputView PRIVATE
-    Qt5::Core
+target_link_libraries(KDevPlatformOutputView
+PUBLIC
+    KF5::CoreAddons
+    Qt5::Widgets
+PRIVATE
     KDev::Interfaces
     KDev::Util
 )
