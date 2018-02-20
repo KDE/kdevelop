@@ -36,6 +36,8 @@ class VcsJob;
 class IRepositoryVersionControl
 {
 public:
+    virtual ~IRepositoryVersionControl() {}
+
     /**
      * Copies the source location in the repository to the destination
      */

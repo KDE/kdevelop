@@ -35,6 +35,8 @@ class VcsJob;
 class IBrowsableVersionControl
 {
 public:
+    virtual ~IBrowsableVersionControl() {}
+
     /**
      * retrieve the last revision in which the repository location was changed
      */
