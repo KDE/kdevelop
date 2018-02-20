@@ -23,7 +23,6 @@
 
 #include <QObject>
 #include <shell/shellexport.h>
-#include <serialization/indexedstring.h>
 #include <interfaces/iproblem.h>
 
 namespace KDevelop
@@ -31,6 +30,7 @@ namespace KDevelop
 
 class WatchedDocumentSet;
 class ProblemStoreNode;
+class IndexedString;
 
 /**
  * @brief Stores and handles problems. Does no ordering or filtering, those should be done in subclasses.
