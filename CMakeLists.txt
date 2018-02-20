@@ -88,6 +88,19 @@ if(NOT CMAKE_VERSION VERSION_LESS "3.10.0" AND KF5_VERSION VERSION_LESS "5.42.0"
   list(APPEND CMAKE_AUTOMOC_MACRO_NAMES
        "K_PLUGIN_FACTORY_WITH_JSON" "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON" "K_EXPORT_PLASMA_RUNNER")
 endif()
+if(NOT CMAKE_VERSION VERSION_LESS "3.9.0")
+    # CMake's automoc needs help to find names of plugin metadata files in case Q_PLUGIN_METADATA
+    # is indirectly used via other C++ preprocessor macros
+    # 3.9+ lets us provide some filter rule pairs (keyword, regexp) to match the names of such files
+    # in the plain text of the sources. See AUTOMOC_DEPEND_FILTERS docs for details.
+    list(APPEND CMAKE_AUTOMOC_DEPEND_FILTERS
+        "K_PLUGIN_FACTORY_WITH_JSON"
+        "[\n^][ \t]*K_PLUGIN_FACTORY_WITH_JSON[ \t\n]*\\([^,]*,[ \t\n]*\"([^\"]+)\""
+        "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON"
+        "[\n^][ \t]*K_EXPORT_PLASMA_DATAENGINE_WITH_JSON[ \t\n]*\\([^,]*,[^,]*,[ \t\n]*\"([^\"]+)\""
+    )
+endif()
+
 
 add_definitions(
     -DQT_DEPRECATED_WARNINGS
