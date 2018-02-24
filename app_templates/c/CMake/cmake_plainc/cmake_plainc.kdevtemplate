@@ -8,6 +8,7 @@ Name[pt]=C com CMake
 Name[sv]=CMake C
 Name[uk]=CMake C
 Name[x-test]=xxCMake Cxx
+Name[zh_CN]=CMake C
 Comment=Simple CMake-based C application
 Comment[ca]=Aplicació senzilla en C basada en CMake
 Comment[ca@valencia]=Aplicació senzilla en C basada en CMake
