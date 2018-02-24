@@ -169,17 +169,19 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
 
         for (const PluginDumpExecutable& executable : m_pluginDumpExecutables) {
             QProcess qmlplugindump;
-
             qmlplugindump.setProcessChannelMode(QProcess::SeparateChannels);
-            qmlplugindump.setWorkingDirectory(fileInfo.absolutePath());
-            qmlplugindump.start(executable.executable, args);
+            qmlplugindump.start(executable.executable, args, QIODevice::ReadOnly);
 
-            qCDebug(KDEV_QMLJS_DUCHAIN) << "starting qmlplugindump with args:" << args;
+            qCDebug(KDEV_QMLJS_DUCHAIN) << "starting qmlplugindump with args:" << executable.executable << args << qmlplugindump.state() << fileInfo.absolutePath();
 
             if (!qmlplugindump.waitForFinished(3000)) {
-                qCWarning(KDEV_QMLJS_DUCHAIN) << "qmlplugindump didn't finish in time -- killing";
-                qmlplugindump.kill();
-                qmlplugindump.waitForFinished(100);
+                if (qmlplugindump.state() == QProcess::Running) {
+                    qCWarning(KDEV_QMLJS_DUCHAIN) << "qmlplugindump didn't finish in time -- killing";
+                    qmlplugindump.kill();
+                    qmlplugindump.waitForFinished(100);
+                } else {
+                    qCDebug(KDEV_QMLJS_DUCHAIN) << "qmlplugindump attempt failed" << qmlplugindump.program() << qmlplugindump.arguments() << qmlplugindump.readAllStandardError();
+                }
                 continue;
             }
 
