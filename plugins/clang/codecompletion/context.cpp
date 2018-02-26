@@ -1029,7 +1029,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                 switch (kind) {
                 case CXCompletionChunk_TypedText:
                     typed = string;
-                    replacement = string;
+                    replacement += string;
                     break;
                 case CXCompletionChunk_ResultType:
                     resultType = string;
@@ -1056,6 +1056,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 #if CINDEX_VERSION_MINOR >= 30
                     if (result.CursorKind == CXCursor_OverloadCandidate) {
                         typed += string;
+                    }
+                    else if (result.CursorKind == CXCursor_EnumConstantDecl) {
+                        replacement += string;
                     }
 #endif
                     break;

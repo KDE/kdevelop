@@ -1223,6 +1223,12 @@ void TestCodeCompletion::testCompleteFunction_data()
         << CompletionItems({2, 0}, {"foo", "main"})
         << "main"
         << "int foo();\nint main() {\nmain();\n}";
+
+    QTest::newRow("bug375635")
+        << "enum class Color {\nBlue, Green, Red, Yellow\n};\nvoid foo() {\nColor x;\nswitch (x) {\ncase : break;}\n}"
+        << CompletionItems({6, 5}, {"Blue", "Green", "Red", "Yellow"})
+        << "Yellow"
+        << "enum class Color {\nBlue, Green, Red, Yellow\n};\nvoid foo() {\nColor x;\nswitch (x) {\ncase Color::Yellow: break;}\n}";
 }
 
 void TestCodeCompletion::testIgnoreGccBuiltins()
