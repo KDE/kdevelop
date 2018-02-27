@@ -158,7 +158,7 @@ void NativeAppJob::start()
             case QMessageBox::No: // kill the running instance
                 for (auto & job : currentJobs) {
                     if (job)
-                        job->kill();
+                        job->kill(EmitResult);
                 }
                 break;
             default: // cancel starting a new job
