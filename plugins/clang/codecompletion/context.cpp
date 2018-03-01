@@ -1065,6 +1065,9 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                     else if (result.CursorKind == CXCursor_EnumConstantDecl) {
                         replacement += string;
                     }
+                    else if (result.CursorKind == CXCursor_EnumConstantDecl) {
+                        replacement += string;
+                    }
                     break;
                 case CXCompletionChunk_CurrentParameter:
                     argumentRange.start = arguments.size();
