@@ -23,6 +23,7 @@
 #include "globalsettings.h"
 #include "projectsettings.h"
 
+#include <interfaces/iplugin.h>
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
@@ -234,6 +235,12 @@ QStringList Parameters::commandLine(QString& infoMessage) const
                 result << QStringLiteral("-I");
                 result << dir.toLocalFile();
             }
+        }
+    }
+
+    if (m_project && m_project->managerPlugin()) {
+        if (m_project->managerPlugin()->componentName() == QStringLiteral("kdevcmakemanager")) {
+            result << QStringLiteral("-i %1/CMakeFiles").arg(m_projectBuildPath.toLocalFile());
         }
     }
 
