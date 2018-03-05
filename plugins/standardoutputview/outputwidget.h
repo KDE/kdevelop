@@ -29,6 +29,7 @@
 #include <outputview/ioutputviewmodel.h>
 #include <outputview/ioutputview.h>
 
+class KExpandableLineEdit;
 class KToggleAction;
 class StandardOutputViewTest;
 class QAction;
@@ -112,7 +113,7 @@ private:
     QAction* m_previousAction;
     KToggleAction* m_activateOnSelect;
     KToggleAction* m_focusOnSelect;
-    QLineEdit * m_filterInput;
+    KExpandableLineEdit* m_filterInput;
     QWidgetAction* m_filterAction;
 };
 

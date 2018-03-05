@@ -34,6 +34,7 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <shell/problemconstants.h>
 #include <shell/problemmodelset.h>
+#include <util/expandablelineedit.h>
 #include "problemtreeview.h"
 #include "problemmodel.h"
 
@@ -214,13 +215,9 @@ void ProblemsView::setupActions()
             setFilter(m_filterEdit->text());
         });
 
-        m_filterEdit = new QLineEdit(this);
+        m_filterEdit = new KExpandableLineEdit(this);
         m_filterEdit->setClearButtonEnabled(true);
         m_filterEdit->setPlaceholderText(i18n("Search..."));
-
-        QSizePolicy p(m_filterEdit->sizePolicy());
-        p.setHorizontalPolicy(QSizePolicy::Fixed);
-        m_filterEdit->setSizePolicy(p);
 
         connect(m_filterEdit, &QLineEdit::textChanged, this, [filterTimer](const QString&) {
             filterTimer->start(500);

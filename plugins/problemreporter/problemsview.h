@@ -27,6 +27,7 @@
 class ProblemTreeView;
 
 class KActionMenu;
+class KExpandableLineEdit;
 
 class QAction;
 class QActionGroup;
@@ -35,6 +36,7 @@ class QTabWidget;
 
 namespace KDevelop
 {
+
 struct ModelData;
 
 /**
@@ -108,7 +110,7 @@ private:
     void setFilter(const QString& filterText);
     void setFilter(const QString& filterText, int tabIdx);
 
-    QLineEdit* m_filterEdit;
+    KExpandableLineEdit* m_filterEdit;
     int m_prevTabIdx;
     QVector<ModelData> m_models;
 };

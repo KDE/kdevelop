@@ -26,6 +26,7 @@ set(KDevPlatformUtil_LIB_SRCS
     path.cpp
     texteditorhelpers.cpp
     stack.cpp
+    expandablelineedit.cpp
 )
 
 set (KDevPlatformUtil_LIB_UI

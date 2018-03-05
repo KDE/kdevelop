@@ -44,6 +44,7 @@
 
 #include <outputview/ioutputviewmodel.h>
 #include <util/focusedtreeview.h>
+#include <util/expandablelineedit.h>
 
 #include "outputmodel.h"
 #include "toolviewdata.h"
@@ -155,9 +156,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         separator->setSeparator(true);
         addAction(separator);
 
-        m_filterInput = new QLineEdit();
-        m_filterInput->setMaximumWidth(150);
-        m_filterInput->setMinimumWidth(100);
+        m_filterInput = new KExpandableLineEdit(this);
         m_filterInput->setPlaceholderText(i18n("Search..."));
         m_filterInput->setClearButtonEnabled(true);
         m_filterInput->setToolTip(i18n("Enter a wild card string to filter the output view"));
