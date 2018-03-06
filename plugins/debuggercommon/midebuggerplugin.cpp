@@ -37,6 +37,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <language/interfaces/editorcontext.h>
+#include <isession.h>
 
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -49,30 +50,80 @@
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
-#include <QDBusServiceWatcher>
 #include <QPointer>
-#include <QSignalMapper>
 #include <QTimer>
 
 using namespace KDevelop;
 using namespace KDevMI;
 
+class KDevMI::DBusProxy : public QObject
+{
+    Q_OBJECT
+
+public:
+    DBusProxy(const QString& service, const QString& name, QObject* parent)
+        : QObject(parent),
+          m_dbusInterface(service, QStringLiteral("/debugger")),
+          m_name(name), m_valid(true)
+    {}
+
+    ~DBusProxy()
+    {
+        if (m_valid) {
+            m_dbusInterface.call(QStringLiteral("debuggerClosed"), m_name);
+        }
+    }
+
+    QDBusInterface* interface()
+    {
+        return &m_dbusInterface;
+    }
+
+    void Invalidate()
+    {
+        m_valid = false;
+    }
+
+public Q_SLOTS:
+    void debuggerAccepted(const QString& name)
+    {
+        if (name == m_name) {
+            emit debugProcess(this);
+        }
+    }
+
+    void debuggingFinished()
+    {
+        m_dbusInterface.call(QStringLiteral("debuggingFinished"), m_name);
+    }
+
+Q_SIGNALS:
+    void debugProcess(DBusProxy*);
+
+private:
+    QDBusInterface m_dbusInterface;
+    QString m_name;
+    bool m_valid;
+};
+
+const QString drkonqiservice = QLatin1String("org.kde.drkonqi");
+
 MIDebuggerPlugin::MIDebuggerPlugin(const QString &componentName, const QString& displayName, QObject *parent)
-    : KDevelop::IPlugin(componentName, parent)
+    : KDevelop::IPlugin(componentName, parent), m_displayName(displayName)
 {
     core()->debugController()->initializeUi();
 
-    setupActions(displayName);
+    setupActions();
     setupDBus();
 }
 
-void MIDebuggerPlugin::setupActions(const QString& displayName)
+void MIDebuggerPlugin::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
     QAction * action = new QAction(this);
     action->setIcon(QIcon::fromTheme(QStringLiteral("core")));
-    action->setText(i18n("Examine Core File with %1", displayName));
+    action->setText(i18n("Examine Core File with %1", m_displayName));
     action->setWhatsThis(i18n("<b>Examine core file</b>"
                               "<p>This loads a core file, which is typically created "
                               "after the application has crashed, e.g. with a "
@@ -85,7 +136,7 @@ void MIDebuggerPlugin::setupActions(const QString& displayName)
 #if KF5SysGuard_FOUND
     action = new QAction(this);
     action->setIcon(QIcon::fromTheme(QStringLiteral("connect_creating")));
-    action->setText(i18n("Attach to Process with %1", displayName));
+    action->setText(i18n("Attach to Process with %1", m_displayName));
     action->setWhatsThis(i18n("<b>Attach to process</b>"
                               "<p>Attaches the debugger to a running process.</p>"));
     connect(action, &QAction::triggered, this, &MIDebuggerPlugin::slotAttachProcess);
@@ -95,20 +146,13 @@ void MIDebuggerPlugin::setupActions(const QString& displayName)
 
 void MIDebuggerPlugin::setupDBus()
 {
-    m_drkonqiMap = new QSignalMapper(this);
-    connect(m_drkonqiMap, static_cast<void(QSignalMapper::*)(QObject*)>(&QSignalMapper::mapped),
-            this, &MIDebuggerPlugin::slotDebugExternalProcess);
-
     QDBusConnectionInterface* dbusInterface = QDBusConnection::sessionBus().interface();
     for (const auto &service : dbusInterface->registeredServiceNames().value()) {
-        slotDBusServiceRegistered(service);
+        slotDBusOwnerChanged(service, QString(), QString('n'));
     }
 
-    QDBusServiceWatcher* watcher = new QDBusServiceWatcher(this);
-    connect(watcher, &QDBusServiceWatcher::serviceRegistered,
-            this, &MIDebuggerPlugin::slotDBusServiceRegistered);
-    connect(watcher, &QDBusServiceWatcher::serviceUnregistered,
-            this, &MIDebuggerPlugin::slotDBusServiceUnregistered);
+    connect(dbusInterface, &QDBusConnectionInterface::serviceOwnerChanged,
+            this, &MIDebuggerPlugin::slotDBusOwnerChanged);
 }
 
 void MIDebuggerPlugin::unload()
@@ -120,53 +164,41 @@ MIDebuggerPlugin::~MIDebuggerPlugin()
 {
 }
 
-void MIDebuggerPlugin::slotDBusServiceRegistered(const QString& service)
+void MIDebuggerPlugin::slotDBusOwnerChanged(const QString& service, const QString& oldOwner, const QString& newOwner)
 {
-    if (service.startsWith(QLatin1String("org.kde.drkonqi"))) {
+    if (oldOwner.isEmpty() && service.startsWith(drkonqiservice)) {
+        if (m_drkonqis.contains(service)) {
+            return;
+        }
         // New registration
-        QDBusInterface* drkonqiInterface = new QDBusInterface(service, QStringLiteral("/krashinfo"),
-                                                              QString(), QDBusConnection::sessionBus(),
-                                                              this);
-        m_drkonqis.insert(service, drkonqiInterface);
+        const QString name = i18n("KDevelop (%1) - %2", m_displayName, core()->activeSession()->name());
+        auto drkonqiProxy = new DBusProxy(service, name, this);
+        m_drkonqis.insert(service, drkonqiProxy);
+        connect(drkonqiProxy->interface(), SIGNAL(acceptDebuggingApplication(const QString&)),
+                drkonqiProxy, SLOT(debuggerAccepted(const QString&)));
+        connect(drkonqiProxy, &DBusProxy::debugProcess,
+                this, &MIDebuggerPlugin::slotDebugExternalProcess);
 
-        connect(drkonqiInterface, SIGNAL(acceptDebuggingApplication()), m_drkonqiMap, SLOT(map()));
-        m_drkonqiMap->setMapping(drkonqiInterface, drkonqiInterface);
-
-        drkonqiInterface->call(QStringLiteral("registerDebuggingApplication"), i18n("KDevelop"));
-    }
-}
-
-void MIDebuggerPlugin::slotDBusServiceUnregistered(const QString& service)
-{
-    if (service.startsWith(QLatin1String("org.kde.drkonqi"))) {
+        drkonqiProxy->interface()->call(QStringLiteral("registerDebuggingApplication"), name);
+    } else if (newOwner.isEmpty() && service.startsWith(drkonqiservice)) {
         // Deregistration
-        if (m_drkonqis.contains(service))
-            delete m_drkonqis.take(service);
+        if (m_drkonqis.contains(service)) {
+            auto proxy = m_drkonqis.take(service);
+            proxy->Invalidate();
+            delete proxy;
+        }
     }
 }
 
-void MIDebuggerPlugin::slotDebugExternalProcess(QObject* interface)
+void MIDebuggerPlugin::slotDebugExternalProcess(DBusProxy* proxy)
 {
-    auto dbusInterface = static_cast<QDBusInterface*>(interface);
-
-    QDBusReply<int> reply = dbusInterface->call(QStringLiteral("pid"));
+    QDBusReply<int> reply = proxy->interface()->call(QStringLiteral("pid"));
     if (reply.isValid()) {
-        attachProcess(reply.value());
-        QTimer::singleShot(500, this, &MIDebuggerPlugin::slotCloseDrKonqi);
-
-        m_drkonqi = m_drkonqis.key(dbusInterface);
+        connect(attachProcess(reply.value()), &KJob::result,
+                proxy, &DBusProxy::debuggingFinished);
     }
 
     core()->uiController()->activeMainWindow()->raise();
-}
-
-void MIDebuggerPlugin::slotCloseDrKonqi()
-{
-    if (!m_drkonqi.isEmpty()) {
-        QDBusInterface drkonqiInterface(m_drkonqi, QStringLiteral("/MainApplication"), QStringLiteral("org.kde.KApplication"));
-        drkonqiInterface.call(QStringLiteral("quit"));
-        m_drkonqi.clear();
-    }
 }
 
 ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QWidget* parent)
@@ -256,11 +288,13 @@ void MIDebuggerPlugin::slotAttachProcess()
 }
 #endif
 
-void MIDebuggerPlugin::attachProcess(int pid)
+MIAttachProcessJob* MIDebuggerPlugin::attachProcess(int pid)
 {
     MIAttachProcessJob *job = new MIAttachProcessJob(this, pid, core()->runController());
     core()->runController()->registerJob(job);
     // job->start() is called in registerJob
+
+    return job;
 }
 
 QString MIDebuggerPlugin::statusName() const
@@ -272,3 +306,5 @@ void MIDebuggerPlugin::showStatusMessage(const QString& msg, int timeout)
 {
     emit showMessage(this, msg, timeout);
 }
+
+#include "midebuggerplugin.moc"

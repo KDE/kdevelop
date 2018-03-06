@@ -36,8 +36,6 @@
 
 #include <QHash>
 
-class QDBusInterface;
-class QSignalMapper;
 class QUrl;
 
 namespace KDevelop {
@@ -45,7 +43,9 @@ class Context;
 }
 
 namespace KDevMI {
+class MIAttachProcessJob;
 class MIDebugSession;
+class DBusProxy;
 class MIDebuggerPlugin : public KDevelop::IPlugin, public KDevelop::IStatus
 {
     Q_OBJECT
@@ -92,28 +92,25 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
 
-    void slotDebugExternalProcess(QObject* interface);
+    void slotDebugExternalProcess(DBusProxy* proxy);
     void slotExamineCore();
 
 #if KF5SysGuard_FOUND
     void slotAttachProcess();
 #endif
 
-    void slotDBusServiceRegistered(const QString& service);
-    void slotDBusServiceUnregistered(const QString& service);
-    void slotCloseDrKonqi();
+    void slotDBusOwnerChanged(const QString& service, const QString& oldOwner, const QString& newOwner);
 
 protected:
-    void setupActions(const QString& displayName);
+    void setupActions();
     void setupDBus();
 
-    void attachProcess(int pid);
+    MIAttachProcessJob* attachProcess(int pid);
     void showStatusMessage(const QString& msg, int timeout);
 
 private:
-    QHash<QString, QDBusInterface*> m_drkonqis;
-    QSignalMapper* m_drkonqiMap;
-    QString m_drkonqi;
+    QHash<QString, DBusProxy*> m_drkonqis;
+    const QString m_displayName;
 };
 
 template<class T, class Plugin = MIDebuggerPlugin>
