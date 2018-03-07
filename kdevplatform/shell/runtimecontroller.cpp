@@ -17,6 +17,8 @@
 */
 
 #include "runtimecontroller.h"
+#include <QInputDialog>
+#include <QPointer>
 #include <QProcess>
 #include <QComboBox>
 #include <KActionCollection>
@@ -27,6 +29,9 @@
 #include "uicontroller.h"
 #include "mainwindow.h"
 #include "debug.h"
+#include <KShell>
+#include <outputexecutejob.h>
+#include <iruncontroller.h>
 
 using namespace KDevelop;
 
@@ -100,6 +105,20 @@ void RuntimeController::setupActions()
     updateActionText(m_currentRuntime);
 
     ac->addAction(QStringLiteral("switch_runtimes"), action);
+
+    auto runAction = new QAction(QIcon::fromTheme("run-install"), i18n("Run command in runtime"), this);
+    runAction->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_X);
+    connect(runAction, &QAction::triggered, this, [this] () {
+        auto rt = currentRuntime();
+        const auto command = QInputDialog::getText(nullptr, rt->name(), i18n("Command to execute in %1:", rt->name()));
+        if (!command.isEmpty()) {
+            OutputExecuteJob* process = new OutputExecuteJob(rt);
+            process->setProperties(OutputExecuteJob::DisplayStdout | OutputExecuteJob::DisplayStderr);
+            *process << KShell::splitArgs(command);
+            ICore::self()->runController()->registerJob(process);
+        }
+    });
+    ac->addAction("runtime_randon_command", runAction);
 }
 
 void KDevelop::RuntimeController::initialize()
