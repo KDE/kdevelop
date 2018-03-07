@@ -68,6 +68,11 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     connect(m_chooserUi->extraArguments, &KComboBox::editTextChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->availableBuildDirs, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &CMakeBuildDirChooser::adoptPreviousBuildDirectory);
 
+    const auto defaultInstallPrefix = ICore::self()->runtimeController()->currentRuntime()->getenv("KDEV_DEFAULT_INSTALL_PREFIX");
+    if (!defaultInstallPrefix.isEmpty()) {
+        m_chooserUi->installPrefix->setPath(QFile::decodeName(defaultInstallPrefix));
+    }
+
     updated();
 }
 
