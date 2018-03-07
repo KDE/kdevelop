@@ -227,5 +227,7 @@ Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath) const
 
 QByteArray FlatpakRuntime::getenv(const QByteArray& varname) const
 {
+    if (varname == "KDEV_DEFAULT_INSTALL_PREFIX")
+        return "/app";
     return qgetenv(varname.constData());
 }
