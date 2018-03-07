@@ -172,7 +172,8 @@ void CMakeBuildDirChooser::updated()
                 buildDirSettings(chosenBuildFolder, srcDir, installDir, buildType);
                 if(!srcDir.isEmpty())
                 {
-                    if(QDir(srcDir).canonicalPath()==QDir(proposed).canonicalPath())
+                    auto rt = ICore::self()->runtimeController()->currentRuntime();
+                    if(QDir(rt->pathInHost(Path(srcDir)).toLocalFile()).canonicalPath() == QDir(proposed).canonicalPath())
                     {
                             st |= CorrectBuildDir | BuildDirCreated;
                     }
