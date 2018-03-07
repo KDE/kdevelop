@@ -137,12 +137,12 @@ static QStringList projectVolumes()
     for (IProject* project: ICore::self()->projectController()->projects()) {
         const Path path = project->path();
         if (path.isLocalFile()) {
-            ret << "--volume" << QStringLiteral("%1:%2").arg(path.toLocalFile(), dir + project->name());
+            ret << "--volume" << (path.toLocalFile() + QLatin1Char(':') + dir + project->name());
         }
 
         const auto ibsm = project->buildSystemManager();
         if (ibsm) {
-            ret << "--volume" << ibsm->buildDirectory(project->projectItem()).toLocalFile() + QLatin1Char(':') +  buildDir + project->name();
+            ret << "--volume" << ibsm->buildDirectory(project->projectItem()).toLocalFile() + QLatin1Char(':') + buildDir + project->name();
         }
     }
     return ret;
@@ -160,7 +160,7 @@ void DockerRuntime::startProcess(QProcess* process) const
     if (program.contains('/'))
         program = pathInRuntime(Path(program)).toLocalFile();
 
-    const QStringList args = QStringList{"run", "--rm"} << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << program << process->arguments();
+    const QStringList args = QStringList{"run", "--rm"} << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << extraDockerArguments() << m_tag << program << process->arguments() << extraProcessArguments(process);
     process->setProgram("docker");
     process->setArguments(args);
 
@@ -173,7 +173,7 @@ void DockerRuntime::startProcess(KProcess* process) const
     auto program = process->program();
     if (program[0].contains('/'))
         program[0] = pathInRuntime(Path(program[0])).toLocalFile();
-    process->setProgram(QStringList{ "docker", "run", "--rm" } << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << m_tag << program);
+    process->setProgram(QStringList{ "docker", "run", "--rm" } << workingDirArgs(process) << KShell::splitArgs(s_settings->extraArguments()) << projectVolumes() << extraDockerArguments() << m_tag << program << extraProcessArguments(process));
 
     qCDebug(DOCKER) << "starting kprocess" << process->program().join(' ');
     process->start();

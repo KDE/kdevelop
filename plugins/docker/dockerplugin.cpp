@@ -18,6 +18,7 @@
 
 #include "dockerplugin.h"
 #include "dockerruntime.h"
+#include "androiddockerruntime.h"
 #include "dockerpreferences.h"
 #include "dockerpreferencessettings.h"
 #include <interfaces/icore.h>
@@ -80,6 +81,7 @@ void DockerPlugin::imagesListFinished(int code)
         const QString tag = parts[0] == QLatin1String("<none>") ? parts[1] : parts[0];
         ICore::self()->runtimeController()->addRuntimes(new DockerRuntime(tag));
     }
+    ICore::self()->runtimeController()->addRuntimes(new AndroidDockerRuntime());
 
     process->deleteLater();
     Q_EMIT imagesListed();

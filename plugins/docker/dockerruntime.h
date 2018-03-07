@@ -78,6 +78,13 @@ public:
 
     static DockerPreferencesSettings* s_settings;
 
+
+    /** Allow subclasses to add more arguments */
+    virtual QStringList extraProcessArguments(KProcess */*process*/) const { return {}; }
+    virtual QStringList extraProcessArguments(QProcess */*process*/) const { return {}; }
+
+    /** Allow subclasses to pass more arguments when calling docker run, such as volumes. */
+    virtual QStringList extraDockerArguments() const { return {}; }
 private:
     void inspectContainer();
     QStringList workingDirArgs(QProcess* process) const;
