@@ -134,6 +134,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
 
                 auto process = new OutputExecuteJob;
                 process->setExecuteOnHost(true);
+                process->setProperties(OutputExecuteJob::DisplayStdout | OutputExecuteJob::DisplayStderr);
                 *process << QStringList{"docker", "build", "--tag", name, dir.toLocalFile()};
                 connect(process, &KJob::finished, this, [name] (KJob* job) {
                     if (job->error() != 0)
