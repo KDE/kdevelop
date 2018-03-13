@@ -2,7 +2,7 @@
     "KPlugin": {
         "Category": "Documentation",
         "Description": "This plugin provides Manual Pages integration",
-        "Description[ca@valencia]": "Este connector proporciona la integració de les pàgines del manual",
+        "Description[ca@valencia]": "Aquest connector proporciona la integració de les pàgines del manual",
         "Description[ca]": "Aquest connector proporciona la integració de les pàgines del manual",
         "Description[de]": "Dieses Modul integriert Handbuch-Seiten",
         "Description[es]": "Este complemento proporciona la integración de páginas de manual",

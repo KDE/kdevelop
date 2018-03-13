@@ -8,7 +8,7 @@
         ],
         "Category": "Utilities",
         "Description": "This plugin shows errors in source code.",
-        "Description[ca@valencia]": "Este connector permet mostrar errors en el codi font.",
+        "Description[ca@valencia]": "Aquest connector permet mostrar errors en el codi font.",
         "Description[ca]": "Aquest connector permet mostrar errors en el codi font.",
         "Description[cs]": "Tento zásuvný modul ukazuje chyby ve zdrojovém kódu.",
         "Description[de]": "Dieses Modul zeigt Fehler im Quelltext an.",

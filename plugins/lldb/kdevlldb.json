@@ -2,7 +2,7 @@
     "KPlugin": {
         "Category": "Debugging",
         "Description": "This plugin provides a frontend for LLDB, a next generation, high-performance C/Obj-C/C++ debugger.",
-        "Description[ca@valencia]": "Este connector proveeix d'un frontal per al LLDB, un depurador d'alt rendiment per C/Obj-C/C++ d'última generació.",
+        "Description[ca@valencia]": "Aquest connector proveeix d'un frontal per al LLDB, un depurador d'alt rendiment per C/Obj-C/C++ d'última generació.",
         "Description[ca]": "Aquest connector proveeix d'un frontal per al LLDB, un depurador d'alt rendiment per C/Obj-C/C++ d'última generació.",
         "Description[cs]": "Tento modul poskytuje rozhraní pro LLDB, vysoce výkonný ladicí nástroj nové generace pro C/Obj-C/C++.",
         "Description[de]": "Dieses Modul stellt eine Oberfläche für LLDB zur Verfügung. LLDB ist ein leistungsfähiger Debugger für C, Obj-C und C++.",

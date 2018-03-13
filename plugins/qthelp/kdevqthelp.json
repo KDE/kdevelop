@@ -9,7 +9,7 @@
         ],
         "Category": "Documentation",
         "Description": "This plugin provides QtHelp integration",
-        "Description[ca@valencia]": "Este connector proveeix la integració amb QtHelp",
+        "Description[ca@valencia]": "Aquest connector proveeix la integració amb QtHelp",
         "Description[ca]": "Aquest connector proveeix la integració amb QtHelp",
         "Description[de]": "Dieses Modul integriert QtHelp in KDevelop",
         "Description[es]": "Este complemento proporciona la integración de QtHelp",

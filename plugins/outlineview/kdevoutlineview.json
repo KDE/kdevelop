@@ -9,7 +9,7 @@
         ],
         "Category": "Core",
         "Description": "This plugin provides a view to show the outline of the currently open document.",
-        "Description[ca@valencia]": "Este connector proporciona una visualització que mostra una visió general del document obert actualment.",
+        "Description[ca@valencia]": "Aquest connector proporciona una visualització que mostra una visió general del document obert actualment.",
         "Description[ca]": "Aquest connector proporciona una visualització que mostra una visió general del document obert actualment.",
         "Description[de]": "Dieses Modul zeigt eine Ansicht der Funktions-Kurzinfos im aktuell geöffneten Dokument.",
         "Description[es]": "Este complemento proporciona una vista para mostrar el boceto del documento actualmente abierto.",

@@ -2,7 +2,7 @@
     "KPlugin": {
         "Category": "Utilities",
         "Description": "This plugin provides KDevelop with an embedded konsole for quick and easy command line access.",
-        "Description[ca@valencia]": "Este connector proporciona al KDevelop un Konsole incrustat per accedir de manera ràpida i fàcil a la línia d'ordes.",
+        "Description[ca@valencia]": "Aquest connector proporciona al KDevelop un Konsole incrustat per accedir de manera ràpida i fàcil a la línia d'ordres.",
         "Description[ca]": "Aquest connector proporciona al KDevelop un Konsole incrustat per accedir de manera ràpida i fàcil a la línia d'ordres.",
         "Description[cs]": "Tento zásuvný modul poskytuje vestavěnou konzoli KDevelopu pro rychlý a jednoduchý přístup do příkazové řádky.",
         "Description[de]": "Dieses Modul stattet KDevelop mit einer eingebetteten Konsole zum einfachen Zugriff auf die Befehlszeile aus.",

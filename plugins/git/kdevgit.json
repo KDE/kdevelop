@@ -9,7 +9,7 @@
         ],
         "Category": "Version Control",
         "Description": "This plugin integrates Git to KDevelop",
-        "Description[ca@valencia]": "Este connector integra el Git al KDevelop",
+        "Description[ca@valencia]": "Aquest connector integra el Git al KDevelop",
         "Description[ca]": "Aquest connector integra el Git al KDevelop",
         "Description[cs]": "Tento modul integruje podporu pro Git v KDevelop",
         "Description[de]": "Dieses Modul integriert Git in KDevelop.",

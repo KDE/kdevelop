@@ -8,7 +8,7 @@
         ],
         "Category": "Core",
         "Description": "This plugin provides a browsable model of the currently parsed classes and other items.",
-        "Description[ca@valencia]": "Este connector proporciona un model navegable de les classes analitzades actualment i altres elements.",
+        "Description[ca@valencia]": "Aquest connector proporciona un model navegable de les classes analitzades actualment i altres elements.",
         "Description[ca]": "Aquest connector proporciona un model navegable de les classes analitzades actualment i altres elements.",
         "Description[de]": "Dieses Modul bietet eine Liste der aktuell eingelesenen Klassen und anderer Elemente.",
         "Description[es]": "Este complemento proporciona un modelo navegable de las clases actualmente analizadas y de otros elementos.",

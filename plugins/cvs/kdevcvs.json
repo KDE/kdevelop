@@ -8,7 +8,7 @@
         ],
         "Category": "Version Control",
         "Description": "This plugin integrates CVS to KDevelop",
-        "Description[ca@valencia]": "Este connector integra el CVS al KDevelop",
+        "Description[ca@valencia]": "Aquest connector integra el CVS al KDevelop",
         "Description[ca]": "Aquest connector integra el CVS al KDevelop",
         "Description[cs]": "Tento modul integruje podporu pro CVS v KDevelop",
         "Description[de]": "Dieses Modul integriert CVS in KDevelop.",
