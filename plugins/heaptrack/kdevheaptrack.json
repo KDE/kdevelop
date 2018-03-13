@@ -8,7 +8,7 @@
         ],
         "Category": "Analyzers",
         "Description": "This plugin integrates Heaptrack to KDevelop",
-        "Description[ca@valencia]": "Este connector integra el Heaptrack al KDevelop",
+        "Description[ca@valencia]": "Aquest connector integra el Heaptrack al KDevelop",
         "Description[ca]": "Aquest connector integra el Heaptrack al KDevelop",
         "Description[cs]": "Tento modul integruje Heaptrack do KDevelop",
         "Description[de]": "Dieses Modul integriert Heaptrack in KDevelop",
