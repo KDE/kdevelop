@@ -88,6 +88,7 @@ private Q_SLOTS:
     void testUsesCreatedForDeclarations();
     void testReparseIncludeGuard();
     void testExternC();
+    void testLambda();
     void testReparseUnchanged_data();
     void testReparseUnchanged();
     void testTypeAliasTemplate();

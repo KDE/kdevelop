@@ -1965,6 +1965,27 @@ void TestDUChain::testGccCompatibility()
     m_projectController->closeAllProjects();
 }
 
+void TestDUChain::testLambda()
+{
+    TestFile file(QStringLiteral("auto lambda = [](int p1, int p2, int p3) { int var1, var2; };"), QStringLiteral("cpp"));
+    QVERIFY(file.parseAndWait());
+    {
+        DUChainReadLocker lock;
+        QVERIFY(file.topContext());
+        QCOMPARE(file.topContext()->localDeclarations().size(), 1);
+        QCOMPARE(file.topContext()->childContexts().size(), 1);
+
+        auto lambdaContext = file.topContext()->childContexts().first();
+
+        QCOMPARE(lambdaContext->type(), DUContext::Function);
+
+        QCOMPARE(lambdaContext->localDeclarations().size(), 3);
+        QCOMPARE(lambdaContext->childContexts().size(), 1);
+        QCOMPARE(lambdaContext->childContexts().first()->type(), DUContext::Other);
+        QCOMPARE(lambdaContext->childContexts().first()->localDeclarations().size(), 2);
+    }
+}
+
 void TestDUChain::testQtIntegration()
 {
     QTemporaryDir includeDir;

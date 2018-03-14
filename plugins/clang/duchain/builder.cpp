@@ -374,6 +374,8 @@ struct Visitor
 
     CXChildVisitResult buildUse(CXCursor cursor);
     CXChildVisitResult buildMacroExpansion(CXCursor cursor);
+
+    template<CXCursorKind CK>
     CXChildVisitResult buildCompoundStatement(CXCursor cursor);
     CXChildVisitResult buildCXXBaseSpecifier(CXCursor cursor);
     CXChildVisitResult buildParmDecl(CXCursor cursor);
@@ -1215,11 +1217,12 @@ CXChildVisitResult Visitor::buildMacroExpansion(CXCursor cursor)
     return CXChildVisit_Recurse;
 }
 
+template<CXCursorKind CK>
 CXChildVisitResult Visitor::buildCompoundStatement(CXCursor cursor)
 {
-    if (m_parentContext->context->type() == DUContext::Function)
+    if (CK == CXCursor_LambdaExpr || m_parentContext->context->type() == DUContext::Function)
     {
-        auto context = createContext<CXCursor_CompoundStmt, DUContext::Other>(cursor);
+        auto context = createContext<CK, CK == CXCursor_LambdaExpr ? DUContext::Function : DUContext::Other>(cursor);
         CurrentContext newParent(context, m_parentContext->keepAliveContexts);
         PushValue<CurrentContext*> pushCurrent(m_parentContext, &newParent);
         clang_visitChildren(cursor, &visitCursor, this);
@@ -1560,7 +1563,9 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
     case CXCursor_MacroExpansion:
         return visitor->buildMacroExpansion(cursor);
     case CXCursor_CompoundStmt:
-        return visitor->buildCompoundStatement(cursor);
+        return visitor->buildCompoundStatement<CXCursor_CompoundStmt>(cursor);
+    case CXCursor_LambdaExpr:
+        return visitor->buildCompoundStatement<CXCursor_LambdaExpr>(cursor);
     case CXCursor_CXXBaseSpecifier:
         return visitor->buildCXXBaseSpecifier(cursor);
     case CXCursor_ParmDecl:
