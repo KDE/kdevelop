@@ -48,7 +48,7 @@ Declaration *getDeclarationAtCursor(const KTextEditor::Cursor &cursor, const QUr
 
 bool isConstructor(const Declaration *functionDecl)
 {
-    auto classFun = dynamic_cast<const ClassFunctionDeclaration*>(functionDecl);
+    auto classFun = dynamic_cast<const ClassFunctionDeclaration*>(DUChainUtils::declarationForDefinition(const_cast<Declaration*>(functionDecl)));
     return classFun && classFun->isConstructor();
 }
 
