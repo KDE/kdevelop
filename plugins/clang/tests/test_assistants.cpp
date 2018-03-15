@@ -484,6 +484,14 @@ void TestAssistants::testSignatureAssistant_data()
         << "class Foo { Foo(char c); };"
         << "Foo::Foo(char c)\n{}";
 
+    // see https://bugs.kde.org/show_bug.cgi?id=365420
+    QTest::newRow("no_retval_on_ctor_while_editing_definition")
+        << "class Foo {\nFoo(int a); \n};"
+        << "Foo::Foo(int a)\n{}"
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,13,0,14), QStringLiteral("b"), SHOULD_ASSIST))
+        << "class Foo {\nFoo(int b); \n};"
+        << "Foo::Foo(int b)\n{}";
+
     // see https://bugs.kde.org/show_bug.cgi?id=298511
     QTest::newRow("change_return_type_header")
         << "struct Foo { int bar(); };"
