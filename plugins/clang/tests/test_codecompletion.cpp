@@ -831,6 +831,16 @@ void TestCodeCompletion::testImplement_data()
             )"
         << CompletionItems{{5, 0}, {"Hello::bar()"}};
 
+    QTest::newRow("bug368544")
+        << R"(
+                class Klass {
+                public:
+                    template <typename T>
+                    void func(int a, T x, int b) const;
+                };
+            )"
+        << CompletionItems{{6, 0}, {"Klass::func(int a, T x, int b) const"}};
+
 }
 
 void TestCodeCompletion::testImplementOtherFile()
@@ -1360,6 +1370,24 @@ void TestCodeCompletion::testCompleteFunction_data()
         << CompletionItems({6, 5}, {"Blue", "Green", "Red", "Yellow"})
         << "Yellow"
         << "enum class Color {\nBlue, Green, Red, Yellow\n};\nvoid foo() {\nColor x;\nswitch (x) {\ncase Color::Yellow: break;}\n}";
+
+    QTest::newRow("bug368544")
+        << "class Klass {\npublic:\ntemplate <typename T>\nvoid func(int a, T x, int b) const;\n};\n"
+        << CompletionItems({5, 0}, {"Klass", "Klass::func(int a, T x, int b) const"})
+        << "Klass::func(int a, T x, int b) const"
+        << "class Klass {\npublic:\ntemplate <typename T>\nvoid func(int a, T x, int b) const;\n};\ntemplate<typename T> void Klass::func(int a, T x, int b) const\n{\n}\n";
+
+    QTest::newRow("bug377397")
+        << "template<typename T> class Foo {\nvoid bar();\n};\n"
+        << CompletionItems({3, 0}, {"Foo", "Foo<T>::bar()"})
+        << "Foo<T>::bar()"
+        << "template<typename T> class Foo {\nvoid bar();\n};\ntemplate<typename T> void Foo<T>::bar()\n{\n}\n";
+
+    QTest::newRow("template-template-parameter")
+        << "template <template<class, int> class X, typename B>\nclass Test {\npublic:\nvoid bar(B a);\n};\n"
+        << CompletionItems({5, 0}, {"Test", "Test<X, B>::bar(B a)"})
+        << "Test<X, B>::bar(B a)"
+        << "template <template<class, int> class X, typename B>\nclass Test {\npublic:\nvoid bar(B a);\n};\ntemplate<template<typename, int> class X, typename B> void Test<X, B>::bar(B a)\n{\n}\n";
 }
 
 void TestCodeCompletion::testIgnoreGccBuiltins()

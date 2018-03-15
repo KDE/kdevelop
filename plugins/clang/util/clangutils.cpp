@@ -244,9 +244,33 @@ QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, co
 
     //Add the parameters and such
     stream << '(';
-    int numArgs = clang_Cursor_getNumArguments(cursor);
+    int numArgs ;
+    QVector<CXCursor> args;
+
+    // SEE https://bugs.kde.org/show_bug.cgi?id=368544
+    // clang_Cursor_getNumArguments returns -1 for FunctionTemplate
+    // clang checks if cursor's Decl is ObjCMethodDecl or FunctionDecl
+    // CXCursor_FunctionTemplate is neither of them instead it has a FunctionTemplateDecl
+    // HACK Get function template arguments by visiting children
+    if (kind == CXCursor_FunctionTemplate) {
+        clang_visitChildren(cursor, [] (CXCursor cursor, CXCursor /*parent*/, CXClientData data) {
+            if (clang_getCursorKind(cursor) == CXCursor_ParmDecl) {
+                (static_cast<QVector<CXCursor>*>(data))->push_back(cursor);
+            }
+            return CXChildVisit_Continue;
+        }, &args);
+        numArgs = args.size();
+    } else {
+        numArgs = clang_Cursor_getNumArguments(cursor);
+        args.reserve(numArgs);
+        for (int i = 0; i < numArgs; i++) {
+            CXCursor arg = clang_Cursor_getArgument(cursor, i);
+            args.push_back(arg);
+        }
+    }
+
     for (int i = 0; i < numArgs; i++) {
-        CXCursor arg = clang_Cursor_getArgument(cursor, i);
+        CXCursor arg = args[i];
 
         //Clang formats pointer types as "t *x" and reference types as "t &x", while
         //KDevelop formats them as "t* x" and "t& x". Make that adjustment.

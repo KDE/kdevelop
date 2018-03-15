@@ -55,12 +55,31 @@ struct ImplementsInfo
     QString templatePrefix;
 };
 
+QStringList templateParams(CXCursor cursor);
+
 CXChildVisitResult templateParamsHelper(CXCursor cursor, CXCursor /*parent*/, CXClientData data)
 {
     CXCursorKind kind = clang_getCursorKind(cursor);
-    if (kind == CXCursor_TemplateTypeParameter || kind == CXCursor_TemplateTemplateParameter ||
-        kind == CXCursor_NonTypeTemplateParameter) {
-        (*static_cast<QStringList*>(data)).append(ClangString(clang_getCursorSpelling(cursor)).toString());
+    auto& params = *static_cast<QStringList*>(data);
+    if (kind == CXCursor_TemplateTypeParameter) {
+        auto paramName = ClangString(clang_getCursorSpelling(cursor)).toString();
+        auto param = QStringLiteral("typename");
+        if (!paramName.isEmpty()) {
+            param += QLatin1Char(' ') + paramName;
+        }
+        params.append(param);
+    } else if (kind == CXCursor_NonTypeTemplateParameter) {
+        auto param = ClangString(clang_getTypeSpelling(clang_getCursorType(cursor))).toString();
+        auto paramName = ClangString(clang_getCursorSpelling(cursor)).toString();
+        if (!paramName.isEmpty()) {
+            param += QLatin1Char(' ') + paramName;
+        }
+        params.append(param);
+    } else if (kind == CXCursor_TemplateTemplateParameter) {
+        auto paramName = ClangString(clang_getCursorSpelling(cursor)).toString();
+        auto templateTypes = templateParams(cursor);
+        auto param = QLatin1String("template<") + templateTypes.join(QStringLiteral(", ")) + QLatin1String("> class ") + paramName ;
+        params.append(param);
     }
     return CXChildVisit_Continue;
 }
@@ -247,7 +266,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
                 //which goes at the front of the prototype
                 const QStringList templateTypes = templateParams(kind == CXCursor_ClassTemplate ? cursor : clang_getSpecializedCursorTemplate(cursor));
 
-                templatePrefix = QLatin1String("template<") + templateTypes.join(QStringLiteral(", typename ")) + QLatin1String("> ");
+                templatePrefix = QLatin1String("template<") + templateTypes.join(QStringLiteral(", ")) + QLatin1String("> ");
             }
         }
 
@@ -292,6 +311,12 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
         return CXChildVisit_Continue;
     }
 
+    QString templatePrefix;
+    if (kind == CXCursor_FunctionTemplate) {
+        const QStringList templateTypes = templateParams(cursor);
+        templatePrefix = QLatin1String("template<") + templateTypes.join(QStringLiteral(", ")) + QLatin1String("> ");
+    }
+
     const auto scope = ClangUtils::getScope(cursor, data->origin);
     QString signature = ClangUtils::getCursorSignature(cursor, scope);
 
@@ -313,7 +338,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     }
     DeclarationPointer declaration = ClangHelpers::findDeclaration(clang_getCursorLocation(cursor), QualifiedIdentifier(), top);
     data->prototypes->append(FuncImplementInfo{kind == CXCursor_Constructor, kind == CXCursor_Destructor,
-                                               data->templatePrefix, returnType, rest, declaration});
+                                               data->templatePrefix + templatePrefix, returnType, rest, declaration});
 
     return CXChildVisit_Continue;
 }
