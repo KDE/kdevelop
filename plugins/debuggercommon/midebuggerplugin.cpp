@@ -179,7 +179,7 @@ void MIDebuggerPlugin::slotDBusOwnerChanged(const QString& service, const QStrin
         connect(drkonqiProxy, &DBusProxy::debugProcess,
                 this, &MIDebuggerPlugin::slotDebugExternalProcess);
 
-        drkonqiProxy->interface()->call(QStringLiteral("registerDebuggingApplication"), name);
+        drkonqiProxy->interface()->call(QStringLiteral("registerDebuggingApplication"), name, QCoreApplication::applicationPid());
     } else if (newOwner.isEmpty() && service.startsWith(QLatin1String("org.kde.drkonqi"))) {
         // Deregistration
         const auto proxyIt = m_drkonqis.find(service);
