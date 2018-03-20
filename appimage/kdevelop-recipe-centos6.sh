@@ -30,7 +30,7 @@ if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=2.0
 fi
 KF5_VERSION=v5.37.0
-KDE_PLASMA_VERSION=v5.11.5 # need libksysguard master (contains a0e69617442d720c76da5ebe3323e7a977929db4 -- patch which makes plasma dep optional)
+KDE_PLASMA_VERSION=v5.12.3 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
 KDE_APPLICATION_VERSION=v16.12.3
 GRANTLEE_VERSION=v5.1.0
 
