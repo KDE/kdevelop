@@ -226,19 +226,17 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     const EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
     QString envProfileName = iexec->environmentProfileName(cfg);
     if (envProfileName.isEmpty()) {
-        qCWarning(DEBUGGERLLDB) << i18n("No environment profile specified, looks like a broken "
-                                        "configuration, please check run configuration '%1'. "
-                                        "Using default environment profile.", cfg->name());
         envProfileName = environmentProfiles.defaultProfileName();
     }
-    QStringList vars;
-    for (auto it = environmentProfiles.variables(envProfileName).constBegin(),
-              ite = environmentProfiles.variables(envProfileName).constEnd();
-         it != ite; ++it) {
-        vars.append(QStringLiteral("%0=%1").arg(it.key(), Utils::quote(it.value())));
+    const auto &envVariables = environmentProfiles.variables(envProfileName);
+    if (!envVariables.isEmpty()) {
+        QStringList vars;
+        for (auto it = envVariables.constBegin(), ite = envVariables.constEnd(); it != ite; ++it) {
+            vars.append(QStringLiteral("%0=%1").arg(it.key(), Utils::quote(it.value())));
+        }
+        // actually using lldb command 'settings set target.env-vars' which accepts multiple values
+        addCommand(GdbSet, "environment " + vars.join(QStringLiteral(" ")));
     }
-    // actually using lldb command 'settings set target.env-vars' which accepts multiple values
-    addCommand(GdbSet, "environment " + vars.join(QStringLiteral(" ")));
 
     // Break on start: can't use "-exec-run --start" because in lldb-mi
     // the inferior stops without any notification
