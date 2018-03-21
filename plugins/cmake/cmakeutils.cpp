@@ -424,12 +424,12 @@ int currentBuildDirIndex( KDevelop::IProject* project )
     KConfigGroup baseGrp = baseGroup(project);
 
     if ( baseGrp.hasKey( Config::buildDirOverrideIndexKey ) )
-        return baseGrp.readEntry<int>( Config::buildDirOverrideIndexKey, 0 );
+        return baseGrp.readEntry<int>( Config::buildDirOverrideIndexKey, -1 );
 
     else if (baseGrp.hasKey(Config::buildDirIndexKey()))
-        return baseGrp.readEntry<int>( Config::buildDirIndexKey(), 0 );
+        return baseGrp.readEntry<int>( Config::buildDirIndexKey(), -1 );
     else
-        return baseGrp.readEntry<int>( Config::buildDirIndexKey_, 0 ); // backwards compatibility
+        return baseGrp.readEntry<int>( Config::buildDirIndexKey_, -1 ); // backwards compatibility
 }
 
 void setCurrentBuildDirIndex( KDevelop::IProject* project, int buildDirIndex )
