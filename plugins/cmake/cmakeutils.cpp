@@ -339,7 +339,11 @@ QString findExecutable()
 
 KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project, int builddir)
 {
-    const auto defaultCMakeExecutable = CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile();
+    auto defaultCMakeExecutable = CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile();
+
+    if (!QFileInfo::exists(ICore::self()->runtimeController()->currentRuntime()->pathInHost(KDevelop::Path(defaultCMakeExecutable)).toLocalFile()))
+        defaultCMakeExecutable = CMake::findExecutable();
+
     if (project) {
         // check for "CMake Executable" but for now also "CMake Binary", falling back to the default.
         auto projectCMakeExecutable = readBuildDirParameter( project, Config::Specific::cmakeExecutableKey,
