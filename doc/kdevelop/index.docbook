@@ -1217,7 +1217,7 @@ template into &kdevelop; by opening the template manager, activating the appropr
     <entry>Run</entry>
   </row>
   <row>
-    <entry><keycap>F9</keycap></entry>
+    <entry><keycombo>&Alt;<keycap>F9</keycap></keycombo></entry>
     <entry>Run program in the debugger; you may want to set breakpoints beforehand, for example by right-clicking with the mouse on a particular line in the source code</entry>
   </row>
   </tbody>
@@ -1228,7 +1228,7 @@ template into &kdevelop; by opening the template manager, activating the appropr
 </chapter>
 <chapter id="debugging-programs-in-kdevelop"><title>Debugging programs in &kdevelop;</title>
 <sect1 id="running-a-program-in-the-debugger"><title>Running a program in the debugger</title>
-<para>Once you have a launch configured (see <link linkend="running-programs-in-kdevelop">Running programs</link>), you can also run it in a debugger: Select the menu item <menuchoice><guimenu>Run</guimenu><guimenuitem>Debug Launch</guimenuitem></menuchoice>, or hit <keycap>F9</keycap>. If you are familiar with <application>gdb</application>, the effect is the same as starting <application>gdb</application> with the executable specified in the launch configuration and then saying <varname>Run</varname>. This means that if the program calls <varname>abort()</varname> somewhere (&eg; when you run onto a failing assertion) or if there is a segmentation fault, then the debugger will stop. On the other hand, if the program runs to the end (with or without doing the right thing) then the debugger will not stop by itself before the program is finished. In the latter case, you will want to set a breakpoint on all those lines of your code base where you want the debugger to stop before you run the debug launch. You 
+<para>Once you have a launch configured (see <link linkend="running-programs-in-kdevelop">Running programs</link>), you can also run it in a debugger: Select the menu item <menuchoice><guimenu>Run</guimenu><guimenuitem>Debug Launch</guimenuitem></menuchoice>, or hit <keycombo>&Alt;<keycap>F9</keycap></keycombo>. If you are familiar with <application>gdb</application>, the effect is the same as starting <application>gdb</application> with the executable specified in the launch configuration and then saying <varname>Run</varname>. This means that if the program calls <varname>abort()</varname> somewhere (&eg; when you run onto a failing assertion) or if there is a segmentation fault, then the debugger will stop. On the other hand, if the program runs to the end (with or without doing the right thing) then the debugger will not stop by itself before the program is finished. In the latter case, you will want to set a breakpoint on all those lines of your code base where you want the debugger to stop before you run the debug launch. You 
 can do that by moving the cursor on such a line and selecting the menu item <menuchoice><guimenu>Run</guimenu><guimenuitem>Toggle breakpoint</guimenuitem></menuchoice>, or right-clicking on a line and selecting <guilabel>Toggle Breakpoint</guilabel> from the context menu.</para>
 <para>
 <screenshot>

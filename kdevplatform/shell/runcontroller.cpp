@@ -447,7 +447,7 @@ void RunController::setupActions()
     connect(d->runAction, &QAction::triggered, this, &RunController::slotExecute);
 
     d->dbgAction = new QAction( QIcon::fromTheme(QStringLiteral("debug-run")), i18n("Debug Launch"), this);
-    ac->setDefaultShortcut( d->dbgAction, Qt::Key_F9);
+    ac->setDefaultShortcut( d->dbgAction, Qt::ALT + Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("Short text for 'Debug launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
     d->dbgAction->setStatusTip(i18n("Debug current launch"));
