@@ -65,6 +65,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
                     "You can also issue any other gdb command while debugging.</p>"));
 
     m_gdbView = new OutputTextEdit(this);
+    m_gdbView->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     m_gdbView->setReadOnly(true);
 
     m_userGDBCmdEditor = new KHistoryComboBox (this);
@@ -429,7 +430,7 @@ void GDBOutputWidget::toggleShowInternalCommands()
 
 
 OutputTextEdit::OutputTextEdit(GDBOutputWidget * parent)
-    : QTextEdit(parent)
+    : QPlainTextEdit(parent)
 {
 }
 

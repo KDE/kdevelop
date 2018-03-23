@@ -25,7 +25,7 @@
 
 #include "dbgglobal.h"
 
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QTimer>
 #include <QStringList>
 
@@ -101,7 +101,7 @@ private:
     GDBController* m_controller;
     KHistoryComboBox*  m_userGDBCmdEditor;
     QToolButton*    m_Interrupt;
-    QTextEdit*      m_gdbView;
+    QPlainTextEdit*      m_gdbView;
 
     bool m_cmdEditorHadFocus;
 
@@ -137,7 +137,7 @@ private:
     QColor m_errorColor;
 };
 
-class OutputTextEdit : public QTextEdit
+class OutputTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 
