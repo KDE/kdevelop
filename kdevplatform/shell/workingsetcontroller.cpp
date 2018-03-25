@@ -153,28 +153,6 @@ QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, Sublim
 
 void WorkingSetController::setupActions()
 {
-/*
-    KActionCollection * ac =
-        Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
-
-    QAction* action;
-
-    action = ac->addAction ( "view_next_window" );
-    action->setText( i18n( "Next Document" ) );
-    action->setIcon( QIcon::fromTheme("go-next") );
-    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Right );
-    action->setWhatsThis( i18n( "Switch the focus to the next open document." ) );
-    action->setStatusTip( i18n( "Switch the focus to the next open document." ) );
-    connect( action, SIGNAL(triggered()), this, SLOT(nextDocument()) );
-
-    action = ac->addAction ( "view_previous_window" );
-    action->setText( i18n( "Previous Document" ) );
-    action->setIcon( QIcon::fromTheme("go-previous") );
-    action->setShortcut( Qt::ALT + Qt::SHIFT + Qt::Key_Left );
-    action->setWhatsThis( i18n( "Switch the focus to the previous open document." ) );
-    action->setStatusTip( i18n( "Switch the focus to the previous open document." ) );
-    connect( action, SIGNAL(triggered()), this, SLOT(previousDocument()) );
-*/
 }
 
 ActiveToolTip* WorkingSetController::tooltip() const

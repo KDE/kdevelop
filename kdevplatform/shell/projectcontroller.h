@@ -159,6 +159,8 @@ private:
     void setupActions();
     void cleanup();
 
+    void saveRecentProjectsActionEntries();
+
     // helper methods for closeProject()
     void unloadUnusedProjectPlugins(IProject* proj);
     void disableProjectCloseAction();

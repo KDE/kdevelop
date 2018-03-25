@@ -55,8 +55,8 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     m_userGDBCmdEditor(nullptr),
     m_Interrupt(nullptr),
     m_gdbView(nullptr),
-    showInternalCommands_(false),
-    maxLines_(5000)
+    m_showInternalCommands(false),
+    m_maxLines(5000)
 {
     setWindowIcon(QIcon::fromTheme(QStringLiteral("dialog-scripts"), windowIcon()));
     setWindowTitle(i18n("GDB Output"));
@@ -65,6 +65,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
                     "You can also issue any other gdb command while debugging.</p>"));
 
     m_gdbView = new OutputTextEdit(this);
+    m_gdbView->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
     m_gdbView->setReadOnly(true);
 
     m_userGDBCmdEditor = new KHistoryComboBox (this);
@@ -96,8 +97,8 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
             this, &GDBOutputWidget::slotGDBCmd);
     connect(m_Interrupt, &QToolButton::clicked, this, &GDBOutputWidget::breakInto);
 
-    updateTimer_.setSingleShot(true);
-    connect(&updateTimer_, &QTimer::timeout,
+    m_updateTimer.setSingleShot(true);
+    connect(&m_updateTimer, &QTimer::timeout,
              this, &GDBOutputWidget::flushPending);
 
     connect(KDevelop::ICore::self()->debugController(), &KDevelop::IDebugController::currentSessionChanged,
@@ -118,8 +119,8 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
 void GDBOutputWidget::updateColors()
 {
     KColorScheme scheme(QPalette::Active);
-    gdbColor_ = scheme.foreground(KColorScheme::LinkText).color();
-    errorColor_ = scheme.foreground(KColorScheme::NegativeText).color();
+    m_gdbColor = scheme.foreground(KColorScheme::LinkText).color();
+    m_errorColor = scheme.foreground(KColorScheme::NegativeText).color();
 }
 
 void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
@@ -166,8 +167,8 @@ void GDBOutputWidget::clear()
     if (m_gdbView)
         m_gdbView->clear();
 
-    userCommands_.clear();
-    allCommands_.clear();
+    m_userCommands_.clear();
+    m_allCommands.clear();
 }
 
 /***************************************************************************/
@@ -208,37 +209,37 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
     QString s = line.toHtmlEscaped();
     if (s.startsWith(QLatin1String("(gdb)")))
     {
-        s = colorify(s, gdbColor_);
+        s = colorify(s, m_gdbColor);
     }
     else
         s.replace('\n', QLatin1String("<br>"));
 
-    allCommands_.append(s);
-    allCommandsRaw_.append(line);
-    trimList(allCommands_, maxLines_);
-    trimList(allCommandsRaw_, maxLines_);
+    m_allCommands.append(s);
+    m_allCommandsRaw.append(line);
+    trimList(m_allCommands, m_maxLines);
+    trimList(m_allCommandsRaw, m_maxLines);
 
     if (!internal)
     {
-        userCommands_.append(s);
-        userCommandsRaw_.append(line);
-        trimList(userCommands_, maxLines_);
-        trimList(userCommandsRaw_, maxLines_);
+        m_userCommands_.append(s);
+        m_userCommandsRaw.append(line);
+        trimList(m_userCommands_, m_maxLines);
+        trimList(m_userCommandsRaw, m_maxLines);
     }
 
-    if (!internal || showInternalCommands_)
+    if (!internal || m_showInternalCommands)
         showLine(s);
 }
 
 
 void GDBOutputWidget::showLine(const QString& line)
 {
-    pendingOutput_ += line;
+    m_pendingOutput += line;
 
     // To improve performance, we update the view after some delay.
-    if (!updateTimer_.isActive())
+    if (!m_updateTimer.isActive())
     {
-        updateTimer_.start(100);
+        m_updateTimer.start(100);
     }
 }
 
@@ -256,15 +257,15 @@ void GDBOutputWidget::trimList(QStringList& l, int max_size)
 
 void GDBOutputWidget::setShowInternalCommands(bool show)
 {
-    if (show != showInternalCommands_)
+    if (show != m_showInternalCommands)
     {
-        showInternalCommands_ = show;
+        m_showInternalCommands = show;
 
         // Set of strings to show changes, text edit still has old
         // set. Refresh.
         m_gdbView->clear();
         QStringList& newList =
-            showInternalCommands_ ? allCommands_ : userCommands_;
+            m_showInternalCommands ? m_allCommands : m_userCommands_;
 
         QStringList::iterator i = newList.begin(), e = newList.end();
         for(; i != e; ++i)
@@ -279,17 +280,17 @@ void GDBOutputWidget::setShowInternalCommands(bool show)
 
 void GDBOutputWidget::slotReceivedStderr(const char* line)
 {
-    QString colored = colorify(QString::fromLatin1(line).toHtmlEscaped(), errorColor_);
+    QString colored = colorify(QString::fromLatin1(line).toHtmlEscaped(), m_errorColor);
     // Errors are shown inside user commands too.
-    allCommands_.append(colored);
-    trimList(allCommands_, maxLines_);
-    userCommands_.append(colored);
-    trimList(userCommands_, maxLines_);
+    m_allCommands.append(colored);
+    trimList(m_allCommands, m_maxLines);
+    m_userCommands_.append(colored);
+    trimList(m_userCommands_, m_maxLines);
 
-    allCommandsRaw_.append(line);
-    trimList(allCommandsRaw_, maxLines_);
-    userCommandsRaw_.append(line);
-    trimList(userCommandsRaw_, maxLines_);
+    m_allCommandsRaw.append(line);
+    trimList(m_allCommandsRaw, m_maxLines);
+    m_userCommandsRaw.append(line);
+    trimList(m_userCommandsRaw, m_maxLines);
 
     showLine(colored);
 }
@@ -313,15 +314,15 @@ void GDBOutputWidget::flushPending()
 
     // QTextEdit adds newline after paragraph automatically.
     // So, remove trailing newline to avoid double newlines.
-    if (pendingOutput_.endsWith('\n'))
-        pendingOutput_.remove(pendingOutput_.length()-1, 1);
-    Q_ASSERT(!pendingOutput_.endsWith('\n'));
+    if (m_pendingOutput.endsWith('\n'))
+        m_pendingOutput.remove(m_pendingOutput.length()-1, 1);
+    Q_ASSERT(!m_pendingOutput.endsWith('\n'));
 
     QTextDocument *document = m_gdbView->document();
     QTextCursor cursor(document);
     cursor.movePosition(QTextCursor::End);
-    cursor.insertHtml(pendingOutput_);
-    pendingOutput_ = QLatin1String("");
+    cursor.insertHtml(m_pendingOutput);
+    m_pendingOutput = QLatin1String("");
 
     m_gdbView->verticalScrollBar()->setValue(m_gdbView->verticalScrollBar()->maximum());
     m_gdbView->setUpdatesEnabled(true);
@@ -372,14 +373,14 @@ void GDBOutputWidget::savePartialProjectSession()
 {
     KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
 
-    config.writeEntry("showInternalCommands", showInternalCommands_);
+    config.writeEntry("showInternalCommands", m_showInternalCommands);
 }
 
 void GDBOutputWidget::restorePartialProjectSession()
 {
     KConfigGroup config(KSharedConfig::openConfig(), "GDB Debugger");
 
-    showInternalCommands_ = config.readEntry("showInternalCommands", false);
+    m_showInternalCommands = config.readEntry("showInternalCommands", false);
 }
 
 
@@ -392,7 +393,7 @@ void GDBOutputWidget::contextMenuEvent(QContextMenuEvent * e)
                                SLOT(toggleShowInternalCommands()));
 
     action->setCheckable(true);
-    action->setChecked(showInternalCommands_);
+    action->setChecked(m_showInternalCommands);
     action->setWhatsThis(i18n(
             "Controls if commands issued internally by KDevelop "
             "will be shown or not.<br>"
@@ -410,8 +411,8 @@ void GDBOutputWidget::copyAll()
 {
     /* See comments for allCommandRaw_ for explanations of
        this complex logic, as opposed to calling text(). */
-    const QStringList& raw = showInternalCommands_ ?
-        allCommandsRaw_ : userCommandsRaw_;
+    const QStringList& raw = m_showInternalCommands ?
+        m_allCommandsRaw : m_userCommandsRaw;
     QString text;
     for (int i = 0; i < raw.size(); ++i)
         text += raw.at(i);
@@ -424,12 +425,12 @@ void GDBOutputWidget::copyAll()
 
 void GDBOutputWidget::toggleShowInternalCommands()
 {
-    setShowInternalCommands(!showInternalCommands_);
+    setShowInternalCommands(!m_showInternalCommands);
 }
 
 
 OutputTextEdit::OutputTextEdit(GDBOutputWidget * parent)
-    : QTextEdit(parent)
+    : QPlainTextEdit(parent)
 {
 }
 
@@ -454,5 +455,5 @@ void OutputTextEdit::contextMenuEvent(QContextMenuEvent * event)
 
 bool GDBOutputWidget::showInternalCommands() const
 {
-    return showInternalCommands_;
+    return m_showInternalCommands;
 }

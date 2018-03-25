@@ -164,11 +164,16 @@ private:
 
 template<class ParserT>
 void setupCustomArgs(QCommandLineParser* parser)
-{}
+{
+    Q_UNUSED(parser);
+}
 
 template<class ParserT>
 void setCustomArgs(ParserT* parser, QCommandLineParser* commandLineParser)
-{}
+{
+    Q_UNUSED(parser);
+    Q_UNUSED(commandLineParser);
+}
 
 /// call this after setting up @p aboutData in your @c main() function.
 template<class ParserT>

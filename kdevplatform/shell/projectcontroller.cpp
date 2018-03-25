@@ -92,7 +92,7 @@ class ProjectControllerPrivate
 public:
     QList<IProject*> m_projects;
     QMap< IProject*, QList<IPlugin*> > m_projectPlugins;
-    QPointer<KRecentFilesAction> m_recentAction;
+    QPointer<KRecentFilesAction> m_recentProjectsAction;
     Core* m_core;
 //     IProject* m_currentProject;
     ProjectModel* model;
@@ -598,11 +598,11 @@ void ProjectController::setupActions()
     KSharedConfig * config = KSharedConfig::openConfig().data();
 //     KConfigGroup group = config->group( "General Options" );
 
-    d->m_recentAction = KStandardAction::openRecent(this, SLOT(openProject(QUrl)), this);
-    ac->addAction( QStringLiteral("project_open_recent"), d->m_recentAction );
-    d->m_recentAction->setText( i18n( "Open Recent Project" ) );
-    d->m_recentAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
-    d->m_recentAction->loadEntries( KConfigGroup(config, "RecentProjects") );
+    d->m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openProject(QUrl)), this);
+    ac->addAction( QStringLiteral("project_open_recent"), d->m_recentProjectsAction );
+    d->m_recentProjectsAction->setText( i18n( "Open Recent Project" ) );
+    d->m_recentProjectsAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
+    d->m_recentProjectsAction->loadEntries( KConfigGroup(config, "RecentProjects") );
 
     QAction* openProjectForFileAction = new QAction( this );
     ac->addAction(QStringLiteral("project_open_for_file"), openProjectForFileAction);
@@ -622,12 +622,22 @@ void ProjectController::cleanup()
         d->saveListOfOpenedProjects();
     }
 
+    saveRecentProjectsActionEntries();
+
     d->m_cleaningUp = true;
     if( buildSetModel() ) {
         buildSetModel()->storeToSession( Core::self()->activeSession() );
     }
 
     closeAllProjects();
+}
+
+void ProjectController::saveRecentProjectsActionEntries()
+{
+    auto config = KSharedConfig::openConfig();
+    KConfigGroup recentGroup = config->group("RecentProjects");
+    d->m_recentProjectsAction->saveEntries( recentGroup );
+    config->sync();
 }
 
 void ProjectController::initialize()
@@ -914,12 +924,8 @@ void ProjectController::projectImportingFinished( IProject* project )
 
     if (Core::self()->setupFlags() != Core::NoUi)
     {
-        d->m_recentAction->addUrl( project->projectFile().toUrl() );
-        KSharedConfig * config = KSharedConfig::openConfig().data();
-        KConfigGroup recentGroup = config->group("RecentProjects");
-        d->m_recentAction->saveEntries( recentGroup );
-
-        config->sync();
+        d->m_recentProjectsAction->addUrl( project->projectFile().toUrl() );
+        saveRecentProjectsActionEntries();
     }
 
     Q_ASSERT(d->m_currentlyOpening.contains(project->projectFile().toUrl()));
@@ -1158,7 +1164,7 @@ ContextMenuExtension ProjectController::contextMenuExtension(Context* ctx, QWidg
     }
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_openProject);
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_fetchProject);
-    ext.addAction(ContextMenuExtension::ProjectGroup, d->m_recentAction);
+    ext.addAction(ContextMenuExtension::ProjectGroup, d->m_recentProjectsAction);
     return ext;
 }
 

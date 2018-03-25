@@ -80,23 +80,18 @@ class TextDocumentPrivate
 {
 public:
     explicit TextDocumentPrivate(TextDocument *textDocument)
-        : document(nullptr), state(IDocument::Clean), encoding(), q(textDocument)
-        , m_loaded(false), m_addedContextMenu(nullptr)
+        : q(textDocument)
     {
     }
 
     ~TextDocumentPrivate()
     {
-        delete m_addedContextMenu;
-        m_addedContextMenu = nullptr;
+        delete addedContextMenu;
+        addedContextMenu = nullptr;
 
         saveSessionConfig();
         delete document;
     }
-
-    QPointer<KTextEditor::Document> document;
-    IDocument::DocumentState state;
-    QString encoding;
 
     void setStatus(KTextEditor::Document* document, bool dirty)
     {
@@ -231,9 +226,13 @@ public:
     }
 
     TextDocument * const q;
-    bool m_loaded;
+
+    QPointer<KTextEditor::Document> document;
+    IDocument::DocumentState state = IDocument::Clean;
+    QString encoding;
+    bool loaded = false;
     // we want to remove the added stuff when the menu hides
-    QMenu* m_addedContextMenu;
+    QMenu* addedContextMenu = nullptr;
 };
 
 class TextViewPrivate
@@ -371,7 +370,7 @@ void TextDocument::reload()
         return;
 
     KTextEditor::ModificationInterface* modif=nullptr;
-    if(d->state==Dirty) {
+    if(d->state ==Dirty) {
         modif = qobject_cast<KTextEditor::ModificationInterface*>(d->document);
         modif->setModifiedOnDiskWarning(false);
     }
@@ -686,21 +685,21 @@ void KDevelop::TextDocument::textChanged(KTextEditor::Document *document)
 
 void KDevelop::TextDocument::populateContextMenu( KTextEditor::View* v, QMenu* menu )
 {
-    if (d->m_addedContextMenu) {
-        foreach ( QAction* action, d->m_addedContextMenu->actions() ) {
+    if (d->addedContextMenu) {
+        foreach ( QAction* action, d->addedContextMenu->actions() ) {
             menu->removeAction(action);
         }
-        delete d->m_addedContextMenu;
+        delete d->addedContextMenu;
     }
 
-    d->m_addedContextMenu = new QMenu();
+    d->addedContextMenu = new QMenu();
 
     EditorContext c(v, v->cursorPosition());
-    auto extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions(&c, d->m_addedContextMenu);
+    auto extensions = Core::self()->pluginController()->queryPluginsForContextMenuExtensions(&c, d->addedContextMenu);
 
-    ContextMenuExtension::populateMenu(d->m_addedContextMenu, extensions);
+    ContextMenuExtension::populateMenu(d->addedContextMenu, extensions);
 
-    foreach ( QAction* action, d->m_addedContextMenu->actions() ) {
+    foreach ( QAction* action, d->addedContextMenu->actions() ) {
         menu->addAction(action);
     }
 }
@@ -728,10 +727,10 @@ void KDevelop::TextDocument::repositoryCheckFinished(bool canRecreate) {
 
 void KDevelop::TextDocument::slotDocumentLoaded()
 {
-    if (d->m_loaded)
+    if (d->loaded)
         return;
     // Tell the editor integrator first
-    d->m_loaded = true;
+    d->loaded = true;
     notifyLoaded();
 }
 

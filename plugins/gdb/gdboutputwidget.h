@@ -25,7 +25,7 @@
 
 #include "dbgglobal.h"
 
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QTimer>
 #include <QStringList>
 
@@ -101,7 +101,7 @@ private:
     GDBController* m_controller;
     KHistoryComboBox*  m_userGDBCmdEditor;
     QToolButton*    m_Interrupt;
-    QTextEdit*      m_gdbView;
+    QPlainTextEdit*      m_gdbView;
 
     bool m_cmdEditorHadFocus;
 
@@ -113,31 +113,31 @@ private:
         "Show internal commands" on, we can show previous 
         internal commands. 
     */
-    QStringList userCommands_, allCommands_;
+    QStringList m_userCommands_, m_allCommands;
     /** Same output, without any fancy formatting.  Keeping it
         here because I can't find any way to extract raw text,
         without formatting, out of QTextEdit except for
         selecting everything and calling 'copy()'. The latter
         approach is just ugly.  */
-    QStringList userCommandsRaw_, allCommandsRaw_;
+    QStringList m_userCommandsRaw, m_allCommandsRaw;
 
 
     /** For performance reasons, we don't immediately add new text
         to QTExtEdit. Instead we add it to pendingOutput_ and 
         flush it on timer.
     */
-    QString pendingOutput_;
-    QTimer updateTimer_;
+    QString m_pendingOutput;
+    QTimer m_updateTimer;
 
-    bool showInternalCommands_;
+    bool m_showInternalCommands;
 
-    int maxLines_;
+    int m_maxLines;
 
-    QColor gdbColor_;
-    QColor errorColor_;
+    QColor m_gdbColor;
+    QColor m_errorColor;
 };
 
-class OutputTextEdit : public QTextEdit
+class OutputTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 
