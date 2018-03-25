@@ -446,9 +446,10 @@ void Container::addWidget(View *view, int position)
 
 void Container::statusChanged(Sublime::View* view)
 {
-    d->statusCorner->setText(view->viewStatus());
+    const auto statusText = view->viewStatus();
+    d->statusCorner->setText(statusText);
+    d->statusCorner->setVisible(!statusText.isEmpty());
 }
-
 
 void Container::statusIconChanged(Document* doc)
 {
