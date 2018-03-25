@@ -24,6 +24,8 @@
 
 #include "sublimeexport.h"
 
+class KConfigGroup;
+
 class QAction;
 
 namespace Sublime {
@@ -68,10 +70,22 @@ public:
     /// Retrieve information to be placed in the status bar.
     virtual QString viewStatus() const;
 
-    /// Retrieve view state for saving into configuration.
-    virtual QString viewState() const;
-    /// Restore view state from configuration
-    virtual void setState(const QString& state);
+    /**
+     * Read session settings from the given \p config.
+     *
+     * The default implementation is a no-op
+     *
+     * @see KTextEditor::View::readSessionConfig()
+     */
+    virtual void readSessionConfig(KConfigGroup &config);
+    /**
+     * Write session settings to the \p config.
+     *
+     * The default implementation is a no-op
+     *
+     * @see KTextEditor::View::writeSessionConfig()
+     */
+    virtual void writeSessionConfig(KConfigGroup &config);
 
     void notifyPositionChanged(int newPositionInArea);
 

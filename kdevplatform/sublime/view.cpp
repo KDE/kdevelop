@@ -94,14 +94,14 @@ void View::requestRaise()
     emit raise(this);
 }
 
-QString View::viewState() const
+void View::readSessionConfig(KConfigGroup& config)
 {
-    return QString();
+    Q_UNUSED(config);
 }
 
-void View::setState(const QString & state)
+void View::writeSessionConfig(KConfigGroup& config)
 {
-    Q_UNUSED(state);
+    Q_UNUSED(config);
 }
 
 QList<QAction*> View::toolBarActions() const

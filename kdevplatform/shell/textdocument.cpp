@@ -583,29 +583,6 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
     return widget;
 }
 
-QString KDevelop::TextView::viewState() const
-{
-    if (d->view) {
-        if (d->view->selection()) {
-            KTextEditor::Range selection = d->view->selectionRange();
-            return QStringLiteral("Selection=%1,%2,%3,%4").arg(selection.start().line())
-                                                   .arg(selection.start().column())
-                                                   .arg(selection.end().line())
-                                                   .arg(selection.end().column());
-        } else {
-            KTextEditor::Cursor cursor = d->view->cursorPosition();
-            return QStringLiteral("Cursor=%1,%2").arg(cursor.line()).arg(cursor.column());
-        }
-    }
-    else {
-        KTextEditor::Range selection = d->initialRange;
-        return QStringLiteral("Selection=%1,%2,%3,%4").arg(selection.start().line())
-                                                   .arg(selection.start().column())
-                                                   .arg(selection.end().line())
-                                                   .arg(selection.end().column());
-    }
-}
-
 void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range)
 {
     if (d->view) {
@@ -620,16 +597,20 @@ KTextEditor::Range KDevelop::TextView::initialRange() const
     return d->initialRange;
 }
 
-void KDevelop::TextView::setState(const QString & state)
+void KDevelop::TextView::readSessionConfig(KConfigGroup& config)
 {
-    static QRegExp reCursor(QStringLiteral("Cursor=([\\d]+),([\\d]+)"));
-    static QRegExp reSelection(QStringLiteral("Selection=([\\d]+),([\\d]+),([\\d]+),([\\d]+)"));
-    if (reCursor.exactMatch(state)) {
-        setInitialRange(KTextEditor::Range(KTextEditor::Cursor(reCursor.cap(1).toInt(), reCursor.cap(2).toInt()), 0));
-    } else if (reSelection.exactMatch(state)) {
-        KTextEditor::Range range(reSelection.cap(1).toInt(), reSelection.cap(2).toInt(), reSelection.cap(3).toInt(), reSelection.cap(4).toInt());
-        setInitialRange(range);
+    if (!d->view) {
+        return;
     }
+    d->view->readSessionConfig(config);
+}
+
+void KDevelop::TextView::writeSessionConfig(KConfigGroup& config)
+{
+    if (!d->view) {
+        return;
+    }
+    d->view->writeSessionConfig(config);
 }
 
 QString KDevelop::TextDocument::documentType() const

@@ -147,7 +147,8 @@ void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KCon
             setGroup.writeEntry(QStringLiteral("View %1").arg(index), docSpec);
             //The area specific config stores the working set documents in order along with their state
             areaGroup.writeEntry(QStringLiteral("View %1").arg(index), docSpec);
-            areaGroup.writeEntry(QStringLiteral("View %1 State").arg(index), view->viewState());
+            KConfigGroup viewGroup(&areaGroup, QStringLiteral("View %1 Config").arg(index));
+            view->writeSessionConfig(viewGroup);
             ++index;
         }
     }
@@ -339,9 +340,9 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
         //Load state
         for (int i = 0; i < viewCount; ++i)
         {
-            QString state = areaGroup.readEntry(QStringLiteral("View %1 State").arg(i));
-            if (!state.isEmpty() && createdViews.contains(i))
-                createdViews[i]->setState(state);
+            KConfigGroup viewGroup(&areaGroup, QStringLiteral("View %1 Config").arg(i));
+            if (viewGroup.exists() && createdViews.contains(i))
+                createdViews[i]->readSessionConfig(viewGroup);
         }
     }
 }

@@ -110,8 +110,9 @@ public:
     KTextEditor::View *textView() const;
 
     QString viewStatus() const override;
-    QString viewState() const override;
-    void setState(const QString& state) override;
+
+    void readSessionConfig(KConfigGroup & config) override;
+    void writeSessionConfig(KConfigGroup & config) override;
 
     void setInitialRange(const KTextEditor::Range& range);
     KTextEditor::Range initialRange() const;
