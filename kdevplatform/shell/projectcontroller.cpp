@@ -621,12 +621,22 @@ void ProjectController::cleanup()
         d->saveListOfOpenedProjects();
     }
 
+    saveRecentProjectsActionEntries();
+
     d->m_cleaningUp = true;
     if( buildSetModel() ) {
         buildSetModel()->storeToSession( Core::self()->activeSession() );
     }
 
     closeAllProjects();
+}
+
+void ProjectController::saveRecentProjectsActionEntries()
+{
+    auto config = KSharedConfig::openConfig();
+    KConfigGroup recentGroup = config->group("RecentProjects");
+    d->m_recentAction->saveEntries( recentGroup );
+    config->sync();
 }
 
 void ProjectController::initialize()
@@ -888,11 +898,7 @@ void ProjectController::projectImportingFinished( IProject* project )
     if (Core::self()->setupFlags() != Core::NoUi)
     {
         d->m_recentAction->addUrl( project->projectFile().toUrl() );
-        KSharedConfig * config = KSharedConfig::openConfig().data();
-        KConfigGroup recentGroup = config->group("RecentProjects");
-        d->m_recentAction->saveEntries( recentGroup );
-
-        config->sync();
+        saveRecentProjectsActionEntries();
     }
 
     Q_ASSERT(d->m_currentlyOpening.contains(project->projectFile().toUrl()));
