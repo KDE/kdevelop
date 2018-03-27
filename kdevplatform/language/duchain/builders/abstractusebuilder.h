@@ -114,7 +114,7 @@ protected:
    */
   void newUse(T* node, const KDevelop::DeclarationPointer& declaration)
   {
-    newUse(node, this->editorFindRange(node, node), declaration);
+    newUse(this->editorFindRange(node, node), declaration);
   }
 
   /**
@@ -123,7 +123,7 @@ protected:
    * \param newRange Text range which encompasses the use.
    * \param _declaration Declaration which is being used. May be null when a declaration cannot be found for the use.
    */
-  void newUse(T* node, const RangeInRevision& newRange, const DeclarationPointer& _declaration)
+  void newUse(const RangeInRevision& newRange, const DeclarationPointer& _declaration)
   {
     DUChainWriteLocker lock(DUChain::lock());
     Declaration* declaration = _declaration.data();

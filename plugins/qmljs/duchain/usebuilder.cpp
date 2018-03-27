@@ -100,7 +100,6 @@ bool UseBuilder::visit(QmlJS::AST::UiPublicMember* node)
     );
 
     newUse(
-        node,
         m_session->locationToRange(node->typeToken),
         decl
     );
@@ -119,7 +118,6 @@ void UseBuilder::useForExpression(QmlJS::AST::Node* node, const KDevelop::RangeI
 
     if (visitor.lastDeclaration()) {
         newUse(
-            node,
             range.isValid() ? range : m_session->locationsToRange(
                 node->firstSourceLocation(),
                 node->lastSourceLocation()
