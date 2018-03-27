@@ -315,8 +315,7 @@ QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange rang
         const auto location = ClangLocation(clang_getTokenLocation(unit, token));
         unsigned int offset;
         clang_getFileLocation(location, nullptr, nullptr, nullptr, &offset);
-        Q_ASSERT(offset >= start); // TODO: Sometimes hit, see bug 357585
-        if (offset < start)
+        if (offset < start) // TODO: Sometimes hit, see bug 357585
             return {};
 
         const int fillCharacters = offset - start - result.size();
