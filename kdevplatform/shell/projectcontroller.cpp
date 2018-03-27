@@ -634,6 +634,9 @@ void ProjectController::cleanup()
 
 void ProjectController::saveRecentProjectsActionEntries()
 {
+    if (!d->m_recentProjectsAction)
+        return;
+
     auto config = KSharedConfig::openConfig();
     KConfigGroup recentGroup = config->group("RecentProjects");
     d->m_recentProjectsAction->saveEntries( recentGroup );
