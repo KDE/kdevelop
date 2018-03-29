@@ -101,7 +101,7 @@ protected:
     // If we don't break, there's no non-forward declaration
 
     lock.unlock();
-    newUse( name, newRange, !declarations.isEmpty() ? DeclarationPointer(declarations.first()) : DeclarationPointer() );
+    newUse( newRange, !declarations.isEmpty() ? DeclarationPointer(declarations.first()) : DeclarationPointer() );
   }
 
   ///@todo Work this over! We must not pass around "Declaration*" values if the duchain is not locked.
