@@ -197,7 +197,8 @@ public:
         QVector<QPair<int, int>> matches;
         for (int i = 0, c = filterBase.size(); i < c; ++i) {
             const auto& data = filterBase.at(i);
-            const auto matchQuality = matchPathFilter(static_cast<Parent*>(this)->itemPath(data), text);
+            const auto matchQuality = matchPathFilter(static_cast<Parent*>(this)->itemPath(data), text,
+                                                      static_cast<Parent*>(this)->itemPrefixPath(data));
             if (matchQuality == -1) {
                 continue;
             }

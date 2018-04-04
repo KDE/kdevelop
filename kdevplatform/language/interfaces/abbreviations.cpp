@@ -158,7 +158,7 @@ bool matchesAbbreviationMulti(const QString &word, const QStringList &typedFragm
   return matchedFragments == typedFragments.size();
 }
 
-int matchPathFilter(const Path &toFilter, const QStringList &text)
+int matchPathFilter(const Path &toFilter, const QStringList &text, const Path &prefixPath)
 {
     enum PathFilterMatchQuality {
       NoMatch = -1,
@@ -216,14 +216,20 @@ int matchPathFilter(const Path &toFilter, const QStringList &text)
         return NoMatch;
     }
 
-    // prefer matches whose last element starts with the filter
-    if (allMatched) {
-      return ExactMatch;
+    const int segmentMatchDistance = segments.size() - (pathIndex + 1);
+    const bool inPrefixPath = segmentMatchDistance > (segments.size() - prefixPath.segments().size())
+                                && prefixPath.isParentOf(toFilter);
+    // penalize matches that fall into the shared suffix
+    const int penalty = (inPrefixPath ) ? 1024 : 0;
+
+    if (allMatched && !inPrefixPath) {
+      return ExactMatch + penalty;
     } else if (lastMatchIndex == 0) {
-        return StartMatch;
+        // prefer matches whose last element starts with the filter
+        return StartMatch + penalty;
     } else {
         // prefer matches closer to the end of the path
-        return OtherMatch + segments.size() - pathIndex;
+        return OtherMatch + segmentMatchDistance + penalty;
     }
 }
 

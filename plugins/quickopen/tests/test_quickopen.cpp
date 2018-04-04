@@ -247,6 +247,30 @@ void TestQuickOpen::testSorting_data()
         QTest::newRow("prefer_multimatch_a_user") << a << QStringLiteral("user") << a;
         QTest::newRow("prefer_multimatch_b_user") << b << QStringLiteral("user") << a;
     }
+    {
+        const StringList a = {
+            QStringLiteral("/home/user/project/A/file"),
+            QStringLiteral("/home/user/project/B/project/A/file"),
+            QStringLiteral("/home/user/project/user/C/D/E"),
+        };
+        const StringList b = {
+            QStringLiteral("/home/user/project/B/project/A/file"),
+            QStringLiteral("/home/user/project/A/file"),
+        };
+        const StringList c = {
+            QStringLiteral("/home/user/project/user/C/D/E"),
+            QStringLiteral("/home/user/project/A/file"),
+            QStringLiteral("/home/user/project/B/project/A/file"),
+        };
+        QTest::newRow("prefer_multimatch_a_project/file") << a << QStringLiteral("project/file") << b;
+        QTest::newRow("prefer_multimatch_b_project/file") << b << QStringLiteral("project/file") << b;
+        QTest::newRow("prefer_multimatch_a_project/le") << a << QStringLiteral("project/le") << b;
+        QTest::newRow("prefer_multimatch_b_project/le") << b << QStringLiteral("project/le") << b;
+        QTest::newRow("prefer_multimatch_a_project/a/file") << a << QStringLiteral("project/a/file") << b;
+        QTest::newRow("prefer_multimatch_b_project/a/file") << b << QStringLiteral("project/a/file") << b;
+        QTest::newRow("prefer_multimatch_a_project_user") << a << QStringLiteral("user") << c;
+        QTest::newRow("prefer_multimatch_c_project_user") << c << QStringLiteral("user") << c;
+    }
 }
 
 void TestQuickOpen::testProjectFileFilter()

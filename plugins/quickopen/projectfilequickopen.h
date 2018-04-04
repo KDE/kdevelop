@@ -104,6 +104,11 @@ public:
     {
         return data.path;
     }
+
+    inline KDevelop::Path itemPrefixPath(const ProjectFile& data) const
+    {
+        return data.projectPath;
+    }
 };
 
 /**

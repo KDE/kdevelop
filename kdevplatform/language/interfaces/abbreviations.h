@@ -51,7 +51,7 @@ KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviationMulti(const QString& word, c
  * @brief Matches a path against a list of search fragments.
  * @return -1 when no match is found, otherwise a positive integer, higher values mean lower quality
  */
-KDEVPLATFORMLANGUAGE_EXPORT int matchPathFilter(const Path& toFilter, const QStringList& text);
+KDEVPLATFORMLANGUAGE_EXPORT int matchPathFilter(const Path& toFilter, const QStringList& text, const Path& prefixPath);
 }
 
 #endif
