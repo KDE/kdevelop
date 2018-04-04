@@ -3,6 +3,7 @@
 Name=CMake C
 Name[ca]=CMake C
 Name[ca@valencia]=CMake C
+Name[cs]=CMake C
 Name[de]=CMake C
 Name[en_GB]=CMake C
 Name[es]=CMake C
@@ -16,6 +17,7 @@ Name[zh_CN]=CMake C
 Comment=Simple CMake-based C application
 Comment[ca]=Aplicació senzilla en C basada en CMake
 Comment[ca@valencia]=Aplicació senzilla en C basada en CMake
+Comment[cs]=Jednoduchá aplikace C založená na CMake
 Comment[de]=Einfache auf CMake basierende C-Anwendung
 Comment[en_GB]=Simple CMake-based C application
 Comment[es]=Aplicación C sencilla basada en CMake
