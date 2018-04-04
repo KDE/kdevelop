@@ -139,9 +139,6 @@ private:
     QVector<Item> m_filtered;
     QVector<Item> m_items;
 };
-}
-
-namespace KDevelop {
 
 template<class Item, class Parent>
 class PathFilter
@@ -204,64 +201,23 @@ public:
         QVector<Item> exactMatches;
         // similar for starting matches
         QVector<Item> startMatches;
-        // all other matches
+        // all other matches are sorted by where they match, we prefer matches at the end
         QVector<Item> otherMatches;
         foreach( const Item& data, filterBase ) {
-            const Path toFilter = static_cast<Parent*>(this)->itemPath(data);
-            const QVector<QString>& segments = toFilter.segments();
-
-            if (text.count() > segments.count()) {
-                // number of segments mismatches, thus item cannot match
-                continue;
-            }
-            {
-                bool allMatched = true;
-                // try to put exact matches up front
-                for(int i = segments.count() - 1, j = text.count() - 1;
-                    i >= 0 && j >= 0; --i, --j)
-                {
-                    if (segments.at(i) != text.at(j)) {
-                        allMatched = false;
-                        break;
-                    }
-                }
-                if (allMatched) {
-                    exactMatches << data;
-                    continue;
-                }
-            }
-
-            int searchIndex = 0;
-            int pathIndex = 0;
-            int lastMatchIndex = -1;
-            // stop early if more search fragments remain than available after path index
-            while (pathIndex < segments.size() && searchIndex < text.size()
-                    && (pathIndex + text.size() - searchIndex - 1) < segments.size() )
-            {
-                const QString& segment = segments.at(pathIndex);
-                const QString& typedSegment = text.at(searchIndex);
-                lastMatchIndex = segment.indexOf(typedSegment, 0, Qt::CaseInsensitive);
-                if (lastMatchIndex == -1 && !matchesAbbreviation(segment.midRef(0), typedSegment)) {
-                    // no match, try with next path segment
-                    ++pathIndex;
-                    continue;
-                }
-                // else we matched
-                ++searchIndex;
-                ++pathIndex;
-            }
-
-            if (searchIndex != text.size()) {
-                if ( ! matchesPath(segments.last(), joinedText) ) {
-                    continue;
-                }
-            }
-
-            // prefer matches whose last element starts with the filter
-            if (pathIndex == segments.size() && lastMatchIndex == 0) {
+            const auto matchQuality = matchPathFilter(static_cast<Parent*>(this)->itemPath(data),
+                                                      text, joinedText);
+            switch (matchQuality) {
+            case PathFilterMatchQuality::NoMatch:
+                break;
+            case PathFilterMatchQuality::ExactMatch:
+                exactMatches << data;
+                break;
+            case PathFilterMatchQuality::StartMatch:
                 startMatches << data;
-            } else {
+                break;
+            case PathFilterMatchQuality::OtherMatch:
                 otherMatches << data;
+                break;
             }
         }
 

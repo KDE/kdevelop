@@ -20,6 +20,7 @@ Boston, MA 02110-1301, USA.
 #include "abbreviations.h"
 
 #include <QStringList>
+#include <util/path.h>
 
 namespace KDevelop {
 bool matchesAbbreviationHelper(const QStringRef &word, const QString &typed, const QVarLengthArray< int, 32 > &offsets, int &depth, int atWord, int i)
@@ -151,6 +152,65 @@ bool matchesAbbreviationMulti(const QString &word, const QStringList &typedFragm
     lastSpace = isDoubleColon ? i : i+1;
   }
   return matchedFragments == typedFragments.size();
+}
+
+PathFilterMatchQuality matchPathFilter(const Path &toFilter, const QStringList &text,
+                                       const QString &joinedText)
+{
+    const QVector<QString>& segments = toFilter.segments();
+
+    if (text.count() > segments.count()) {
+        // number of segments mismatches, thus item cannot match
+        return PathFilterMatchQuality::NoMatch;
+    }
+    {
+        bool allMatched = true;
+        // try to put exact matches up front
+        for(int i = segments.count() - 1, j = text.count() - 1;
+            i >= 0 && j >= 0; --i, --j)
+        {
+            if (segments.at(i) != text.at(j)) {
+                allMatched = false;
+                break;
+            }
+        }
+        if (allMatched) {
+            return PathFilterMatchQuality::ExactMatch;
+        }
+    }
+
+    int searchIndex = 0;
+    int pathIndex = 0;
+    int lastMatchIndex = -1;
+    // stop early if more search fragments remain than available after path index
+    while (pathIndex < segments.size() && searchIndex < text.size()
+            && (pathIndex + text.size() - searchIndex - 1) < segments.size() )
+    {
+        const QString& segment = segments.at(pathIndex);
+        const QString& typedSegment = text.at(searchIndex);
+        lastMatchIndex = segment.indexOf(typedSegment, 0, Qt::CaseInsensitive);
+        if (lastMatchIndex == -1 && !matchesAbbreviation(segment.midRef(0), typedSegment)) {
+            // no match, try with next path segment
+            ++pathIndex;
+            continue;
+        }
+        // else we matched
+        ++searchIndex;
+        ++pathIndex;
+    }
+
+    if (searchIndex != text.size()) {
+        if ( ! matchesPath(segments.last(), joinedText) ) {
+            return PathFilterMatchQuality::NoMatch;
+        }
+    }
+
+    // prefer matches whose last element starts with the filter
+    if (pathIndex == segments.size() && lastMatchIndex == 0) {
+        return PathFilterMatchQuality::StartMatch;
+    } else {
+        return PathFilterMatchQuality::OtherMatch;
+    }
 }
 
 } // namespace KDevelop

@@ -29,6 +29,8 @@ class QStringRef;
 class QString;
 
 namespace KDevelop {
+class Path;
+
 // Taken and adapted for kdevelop from katecompletionmodel.cpp
 KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviationHelper(const QStringRef& word, const QString& typed, const QVarLengthArray<int, 32>& offsets,
                                       int& depth, int atWord = -1, int i = 0);
@@ -48,6 +50,19 @@ KDEVPLATFORMLANGUAGE_EXPORT bool matchesPath(const QString& path, const QString&
  * @return bool true if match, else false
  */
 KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviationMulti(const QString& word, const QStringList& typedFragments);
+
+enum class PathFilterMatchQuality
+{
+  NoMatch,
+  ExactMatch,
+  StartMatch,
+  OtherMatch
+};
+/**
+ * @brief Matches a path against a list of search fragments.
+ */
+KDEVPLATFORMLANGUAGE_EXPORT PathFilterMatchQuality matchPathFilter(const Path& toFilter, const QStringList& text,
+                                                                   const QString& joinedText);
 }
 
 #endif
