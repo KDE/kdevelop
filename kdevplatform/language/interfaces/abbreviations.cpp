@@ -172,22 +172,8 @@ int matchPathFilter(const Path &toFilter, const QStringList &text)
         // number of segments mismatches, thus item cannot match
         return NoMatch;
     }
-    {
-        bool allMatched = true;
-        // try to put exact matches up front
-        for(int i = segments.count() - 1, j = text.count() - 1;
-            i >= 0 && j >= 0; --i, --j)
-        {
-            if (segments.at(i) != text.at(j)) {
-                allMatched = false;
-                break;
-            }
-        }
-        if (allMatched) {
-            return ExactMatch;
-        }
-    }
 
+    bool allMatched = true;
     int searchIndex = text.size() - 1;
     int pathIndex = segments.size() - 1;
     int lastMatchIndex = -1;
@@ -200,11 +186,16 @@ int matchPathFilter(const Path &toFilter, const QStringList &text)
         const int matchIndex = segment.indexOf(typedSegment, 0, Qt::CaseInsensitive);
         const bool isLastPathSegment = pathIndex == segments.size() - 1;
         const bool isLastSearchSegment = searchIndex == text.size() - 1;
+
+        // check for exact matches
+        allMatched &= matchIndex == 0 && segment.size() == typedSegment.size();
+
+        // check for fuzzy matches
         bool isMatch = matchIndex != -1;
         // do fuzzy path matching on the last segment
         if (!isMatch && isLastPathSegment && isLastSearchSegment) {
           isMatch = matchesPath(segment, typedSegment);
-        } else if (!isMatch) {
+        } else if (!isMatch) { // check other segments for abbreviations
           isMatch = matchesAbbreviation(segment.midRef(0), typedSegment);
         }
 
@@ -226,7 +217,9 @@ int matchPathFilter(const Path &toFilter, const QStringList &text)
     }
 
     // prefer matches whose last element starts with the filter
-    if (lastMatchIndex == 0) {
+    if (allMatched) {
+      return ExactMatch;
+    } else if (lastMatchIndex == 0) {
         return StartMatch;
     } else {
         return OtherMatch;
