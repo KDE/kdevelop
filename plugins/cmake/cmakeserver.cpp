@@ -161,8 +161,9 @@ void CMakeServer::handshake(const KDevelop::Path& source, const KDevelop::Path& 
 
     const QString generatorVariable = QStringLiteral("CMAKE_GENERATOR");
     const QString homeDirectoryVariable = QStringLiteral("CMAKE_HOME_DIRECTORY");
+    const QString cacheFileDirectoryVariable = QStringLiteral("CMAKE_CACHEFILE_DIR");
     const auto cacheValues = CMake::readCacheValues(KDevelop::Path(build, QStringLiteral("CMakeCache.txt")),
-                                                    {generatorVariable, homeDirectoryVariable});
+                                                    {generatorVariable, homeDirectoryVariable, cacheFileDirectoryVariable});
 
     QString generator = cacheValues.value(generatorVariable);
     if (generator.isEmpty()) {
@@ -179,7 +180,21 @@ void CMakeServer::handshake(const KDevelop::Path& source, const KDevelop::Path& 
                    << "wanted to open" << source << "in" << build;
     }
 
-    qCDebug(CMAKE) << "Using generator" << generator << "for project" << source << "in" << build;
+    // prefer to reuse the exact same build dir path to prevent useless recompilation
+    // when we open a symlinked project path
+    QString buildDirectory = cacheValues.value(cacheFileDirectoryVariable);
+    if (buildDirectory.isEmpty()) {
+        buildDirectory = build.toLocalFile();
+    } else if (QFileInfo(buildDirectory).canonicalFilePath() != QFileInfo(build.toLocalFile()).canonicalFilePath()) {
+        qCWarning(CMAKE) << "Build directory mismatch:"
+                   << cacheFileDirectoryVariable << buildDirectory
+                   << "wanted to open" << build;
+        buildDirectory = build.toLocalFile();
+    }
+
+    qCDebug(CMAKE) << "Using generator" << generator << "for project"
+                   << sourceDirectory << "aka" << source
+                   << "in" << buildDirectory << "aka" << build;
 
     sendCommand({
         {"cookie", {}},
@@ -187,8 +202,8 @@ void CMakeServer::handshake(const KDevelop::Path& source, const KDevelop::Path& 
         {"major", 1},
         {"protocolVersion", QJsonObject{{"major", 1}} },
         {"sourceDirectory", sourceDirectory},
-        {"buildDirectory", build.toLocalFile()},
-        {"generator", generator} //TODO: make it possible to keep whatever they have ATM
+        {"buildDirectory", buildDirectory},
+        {"generator", generator}
     });
 }
 
