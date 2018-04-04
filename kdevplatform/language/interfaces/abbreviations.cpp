@@ -154,8 +154,7 @@ bool matchesAbbreviationMulti(const QString &word, const QStringList &typedFragm
   return matchedFragments == typedFragments.size();
 }
 
-PathFilterMatchQuality matchPathFilter(const Path &toFilter, const QStringList &text,
-                                       const QString &joinedText)
+PathFilterMatchQuality matchPathFilter(const Path &toFilter, const QStringList &text)
 {
     const QVector<QString>& segments = toFilter.segments();
 
@@ -189,7 +188,15 @@ PathFilterMatchQuality matchPathFilter(const Path &toFilter, const QStringList &
         const QString& segment = segments.at(pathIndex);
         const QString& typedSegment = text.at(searchIndex);
         lastMatchIndex = segment.indexOf(typedSegment, 0, Qt::CaseInsensitive);
-        if (lastMatchIndex == -1 && !matchesAbbreviation(segment.midRef(0), typedSegment)) {
+        bool isMatch = lastMatchIndex != -1;
+        // do fuzzy path matching on the last segment
+        if (!isMatch && searchIndex == text.size() - 1 && pathIndex == segments.size() - 1) {
+          isMatch = matchesPath(segment, typedSegment);
+        } else if (!isMatch) {
+          isMatch = matchesAbbreviation(segment.midRef(0), typedSegment);
+        }
+
+        if (!isMatch) {
             // no match, try with next path segment
             ++pathIndex;
             continue;
@@ -200,9 +207,7 @@ PathFilterMatchQuality matchPathFilter(const Path &toFilter, const QStringList &
     }
 
     if (searchIndex != text.size()) {
-        if ( ! matchesPath(segments.last(), joinedText) ) {
-            return PathFilterMatchQuality::NoMatch;
-        }
+        return PathFilterMatchQuality::NoMatch;
     }
 
     // prefer matches whose last element starts with the filter

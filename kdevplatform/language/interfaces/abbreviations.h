@@ -61,8 +61,7 @@ enum class PathFilterMatchQuality
 /**
  * @brief Matches a path against a list of search fragments.
  */
-KDEVPLATFORMLANGUAGE_EXPORT PathFilterMatchQuality matchPathFilter(const Path& toFilter, const QStringList& text,
-                                                                   const QString& joinedText);
+KDEVPLATFORMLANGUAGE_EXPORT PathFilterMatchQuality matchPathFilter(const Path& toFilter, const QStringList& text);
 }
 
 #endif

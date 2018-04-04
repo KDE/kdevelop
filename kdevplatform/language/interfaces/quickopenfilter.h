@@ -180,8 +180,6 @@ public:
             return;
         }
 
-        const QString joinedText = text.join(QString());
-
         QVector<Item> filterBase = m_filtered;
 
         if ( m_oldFilterText.isEmpty()) {
@@ -204,8 +202,7 @@ public:
         // all other matches are sorted by where they match, we prefer matches at the end
         QVector<Item> otherMatches;
         foreach( const Item& data, filterBase ) {
-            const auto matchQuality = matchPathFilter(static_cast<Parent*>(this)->itemPath(data),
-                                                      text, joinedText);
+            const auto matchQuality = matchPathFilter(static_cast<Parent*>(this)->itemPath(data), text);
             switch (matchQuality) {
             case PathFilterMatchQuality::NoMatch:
                 break;

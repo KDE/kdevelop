@@ -204,6 +204,35 @@ void TestQuickOpen::testSorting_data()
     {
         QTest::newRow("duplicate") << StringList({ QStringLiteral("/muh/kuh/asdf/foo") }) << QStringLiteral("kuh/kuh") << StringList();
     }
+    {
+        const StringList fuzzyItems = {
+            QStringLiteral("/foo/bar.h"),
+            QStringLiteral("/foo/fooXbar.h"),
+            QStringLiteral("/foo/fXoXoXbXaXr.h"),
+            QStringLiteral("/bar/FOOxBAR.h")
+        };
+
+        QTest::newRow("fuzzy1") << fuzzyItems << QStringLiteral("br") << fuzzyItems;
+        QTest::newRow("fuzzy2") << fuzzyItems << QStringLiteral("foo/br") << StringList({
+            QStringLiteral("/foo/bar.h"),
+            QStringLiteral("/foo/fooXbar.h"),
+            QStringLiteral("/foo/fXoXoXbXaXr.h")
+        });
+        QTest::newRow("fuzzy3") << fuzzyItems << QStringLiteral("b/br") << StringList({
+            QStringLiteral("/bar/FOOxBAR.h")
+        });
+        QTest::newRow("fuzzy4") << fuzzyItems << QStringLiteral("br/br") << StringList();
+        QTest::newRow("fuzzy5") << fuzzyItems << QStringLiteral("foo/bar") << StringList({
+            QStringLiteral("/foo/bar.h"),
+            QStringLiteral("/foo/fooXbar.h"),
+            QStringLiteral("/foo/fXoXoXbXaXr.h")
+        });
+        QTest::newRow("fuzzy6") << fuzzyItems << QStringLiteral("foobar") << StringList({
+            QStringLiteral("/foo/fooXbar.h"),
+            QStringLiteral("/foo/fXoXoXbXaXr.h"),
+            QStringLiteral("/bar/FOOxBAR.h")
+        });
+    }
 }
 
 void TestQuickOpen::testProjectFileFilter()
