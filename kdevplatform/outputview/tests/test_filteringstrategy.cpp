@@ -21,7 +21,7 @@
 
 #include <outputview/outputfilteringstrategies.h>
 #include <outputview/filtereditem.h>
-#include <language/interfaces/quickopenfilter.h>
+#include <util/path.h>
 
 using namespace KDevelop;
 
