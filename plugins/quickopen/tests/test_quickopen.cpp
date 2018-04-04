@@ -129,6 +129,8 @@ void TestQuickOpen::testSorting()
     filterItems.setItems(items);
     filterItems.setFilter(filter.split('/', QString::SkipEmptyParts));
     QEXPECT_FAIL("bar7", "empty parts are skipped", Continue);
+    if (filterItems.filteredItems() != filtered)
+        qWarning() << filterItems.filteredItems() << filtered;
     QCOMPARE(filterItems.filteredItems(), filtered);
 }
 
