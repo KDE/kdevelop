@@ -31,10 +31,6 @@ class QString;
 namespace KDevelop {
 class Path;
 
-// Taken and adapted for kdevelop from katecompletionmodel.cpp
-KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviationHelper(const QStringRef& word, const QString& typed, const QVarLengthArray<int, 32>& offsets,
-                                      int& depth, int atWord = -1, int i = 0);
-
 KDEVPLATFORMLANGUAGE_EXPORT bool matchesAbbreviation(const QStringRef& word, const QString& typed);
 
 KDEVPLATFORMLANGUAGE_EXPORT bool matchesPath(const QString& path, const QString& typed);

@@ -23,7 +23,11 @@ Boston, MA 02110-1301, USA.
 #include <util/path.h>
 
 namespace KDevelop {
-bool matchesAbbreviationHelper(const QStringRef &word, const QString &typed, const QVarLengthArray< int, 32 > &offsets, int &depth, int atWord, int i)
+
+// Taken and adapted for kdevelop from katecompletionmodel.cpp
+static bool matchesAbbreviationHelper(const QStringRef &word, const QString &typed,
+                                      const QVarLengthArray< int, 32 > &offsets,
+                                      int &depth, int atWord = -1, int i = 0)
 {
   int atLetter = 1;
   for ( ; i < typed.size(); i++ ) {
