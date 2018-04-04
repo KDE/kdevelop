@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 
 #include <QStringList>
 
+namespace KDevelop {
 bool matchesAbbreviationHelper(const QStringRef &word, const QString &typed, const QVarLengthArray< int, 32 > &offsets, int &depth, int atWord, int i)
 {
   int atLetter = 1;
@@ -151,5 +152,7 @@ bool matchesAbbreviationMulti(const QString &word, const QStringList &typedFragm
   }
   return matchedFragments == typedFragments.size();
 }
+
+} // namespace KDevelop
 
 // kate: space-indent on; indent-width 2
