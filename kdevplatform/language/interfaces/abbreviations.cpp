@@ -188,19 +188,21 @@ int matchPathFilter(const Path &toFilter, const QStringList &text)
         }
     }
 
-    int searchIndex = 0;
-    int pathIndex = 0;
+    int searchIndex = text.size() - 1;
+    int pathIndex = segments.size() - 1;
     int lastMatchIndex = -1;
     // stop early if more search fragments remain than available after path index
-    while (pathIndex < segments.size() && searchIndex < text.size()
+    while (pathIndex >= 0 && searchIndex >= 0
             && (pathIndex + text.size() - searchIndex - 1) < segments.size() )
     {
         const QString& segment = segments.at(pathIndex);
         const QString& typedSegment = text.at(searchIndex);
-        lastMatchIndex = segment.indexOf(typedSegment, 0, Qt::CaseInsensitive);
-        bool isMatch = lastMatchIndex != -1;
+        const int matchIndex = segment.indexOf(typedSegment, 0, Qt::CaseInsensitive);
+        const bool isLastPathSegment = pathIndex == segments.size() - 1;
+        const bool isLastSearchSegment = searchIndex == text.size() - 1;
+        bool isMatch = matchIndex != -1;
         // do fuzzy path matching on the last segment
-        if (!isMatch && searchIndex == text.size() - 1 && pathIndex == segments.size() - 1) {
+        if (!isMatch && isLastPathSegment && isLastSearchSegment) {
           isMatch = matchesPath(segment, typedSegment);
         } else if (!isMatch) {
           isMatch = matchesAbbreviation(segment.midRef(0), typedSegment);
@@ -208,20 +210,23 @@ int matchPathFilter(const Path &toFilter, const QStringList &text)
 
         if (!isMatch) {
             // no match, try with next path segment
-            ++pathIndex;
+            --pathIndex;
             continue;
         }
         // else we matched
-        ++searchIndex;
-        ++pathIndex;
+        if (isLastPathSegment) {
+          lastMatchIndex = matchIndex;
+        }
+        --searchIndex;
+        --pathIndex;
     }
 
-    if (searchIndex != text.size()) {
+    if (searchIndex != -1) {
         return NoMatch;
     }
 
     // prefer matches whose last element starts with the filter
-    if (pathIndex == segments.size() && lastMatchIndex == 0) {
+    if (lastMatchIndex == 0) {
         return StartMatch;
     } else {
         return OtherMatch;
