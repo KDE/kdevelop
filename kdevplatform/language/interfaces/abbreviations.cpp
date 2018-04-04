@@ -222,7 +222,8 @@ int matchPathFilter(const Path &toFilter, const QStringList &text)
     } else if (lastMatchIndex == 0) {
         return StartMatch;
     } else {
-        return OtherMatch;
+        // prefer matches closer to the end of the path
+        return OtherMatch + segments.size() - pathIndex;
     }
 }
 

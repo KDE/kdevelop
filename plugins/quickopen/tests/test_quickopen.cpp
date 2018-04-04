@@ -233,6 +233,20 @@ void TestQuickOpen::testSorting_data()
             QStringLiteral("/bar/FOOxBAR.h")
         });
     }
+    {
+        const StringList a = {
+            QStringLiteral("/home/user/src/code/user/something"),
+            QStringLiteral("/home/user/src/code/home/else"),
+        };
+        const StringList b = {
+            QStringLiteral("/home/user/src/code/home/else"),
+            QStringLiteral("/home/user/src/code/user/something"),
+        };
+        QTest::newRow("prefer_multimatch_a_home") << a << QStringLiteral("home") << b;
+        QTest::newRow("prefer_multimatch_b_home") << b << QStringLiteral("home") << b;
+        QTest::newRow("prefer_multimatch_a_user") << a << QStringLiteral("user") << a;
+        QTest::newRow("prefer_multimatch_b_user") << b << QStringLiteral("user") << a;
+    }
 }
 
 void TestQuickOpen::testProjectFileFilter()
