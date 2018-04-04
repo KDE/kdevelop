@@ -194,31 +194,25 @@ public:
             filterBase = m_items;
         }
 
-        // filterBase is correctly sorted, to keep it that way we add
-        // exact matches to this list in sorted way and then prepend the whole list in one go.
-        QVector<Item> exactMatches;
-        // similar for starting matches
-        QVector<Item> startMatches;
-        // all other matches are sorted by where they match, we prefer matches at the end
-        QVector<Item> otherMatches;
-        foreach( const Item& data, filterBase ) {
+        QVector<QPair<int, int>> matches;
+        for (int i = 0, c = filterBase.size(); i < c; ++i) {
+            const auto& data = filterBase.at(i);
             const auto matchQuality = matchPathFilter(static_cast<Parent*>(this)->itemPath(data), text);
-            switch (matchQuality) {
-            case PathFilterMatchQuality::NoMatch:
-                break;
-            case PathFilterMatchQuality::ExactMatch:
-                exactMatches << data;
-                break;
-            case PathFilterMatchQuality::StartMatch:
-                startMatches << data;
-                break;
-            case PathFilterMatchQuality::OtherMatch:
-                otherMatches << data;
-                break;
+            if (matchQuality == -1) {
+                continue;
             }
+            matches.push_back({matchQuality, i});
         }
-
-        m_filtered = exactMatches + startMatches + otherMatches;
+        std::sort(matches.begin(), matches.end(),
+                  [](const QPair<int, int>& lhs, const QPair<int, int>& rhs)
+                  {
+                    return lhs.first < rhs.first;
+                  });
+        m_filtered.resize(matches.size());
+        std::transform(matches.begin(), matches.end(), m_filtered.begin(),
+                       [&filterBase](const QPair<int, int>& match) {
+                            return filterBase.at(match.second);
+                       });
         m_oldFilterText = text;
     }
 

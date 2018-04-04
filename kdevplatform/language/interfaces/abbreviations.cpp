@@ -158,13 +158,19 @@ bool matchesAbbreviationMulti(const QString &word, const QStringList &typedFragm
   return matchedFragments == typedFragments.size();
 }
 
-PathFilterMatchQuality matchPathFilter(const Path &toFilter, const QStringList &text)
+int matchPathFilter(const Path &toFilter, const QStringList &text)
 {
+    enum PathFilterMatchQuality {
+      NoMatch = -1,
+      ExactMatch = 0,
+      StartMatch = 1,
+      OtherMatch = 2 // and anything higher than that
+    };
     const QVector<QString>& segments = toFilter.segments();
 
     if (text.count() > segments.count()) {
         // number of segments mismatches, thus item cannot match
-        return PathFilterMatchQuality::NoMatch;
+        return NoMatch;
     }
     {
         bool allMatched = true;
@@ -178,7 +184,7 @@ PathFilterMatchQuality matchPathFilter(const Path &toFilter, const QStringList &
             }
         }
         if (allMatched) {
-            return PathFilterMatchQuality::ExactMatch;
+            return ExactMatch;
         }
     }
 
@@ -211,14 +217,14 @@ PathFilterMatchQuality matchPathFilter(const Path &toFilter, const QStringList &
     }
 
     if (searchIndex != text.size()) {
-        return PathFilterMatchQuality::NoMatch;
+        return NoMatch;
     }
 
     // prefer matches whose last element starts with the filter
     if (pathIndex == segments.size() && lastMatchIndex == 0) {
-        return PathFilterMatchQuality::StartMatch;
+        return StartMatch;
     } else {
-        return PathFilterMatchQuality::OtherMatch;
+        return OtherMatch;
     }
 }
 
