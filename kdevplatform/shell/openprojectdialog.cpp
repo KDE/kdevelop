@@ -15,6 +15,7 @@
 #include <QPushButton>
 #include <QFileInfo>
 #include <QFileDialog>
+#include <QRegularExpression>
 
 #include <KColorScheme>
 #include <KIO/StatJob>
@@ -308,7 +309,20 @@ void OpenProjectDialog::openPageAccepted()
 
 void OpenProjectDialog::validateProjectName( const QString& name )
 {
-    m_projectName = name;
+    if (name != m_projectName) {
+        m_projectName = name;
+        QUrl url(m_url.adjusted(QUrl::StripTrailingSlash | QUrl::RemoveFilename));
+        // construct a version of the project name that's safe for use as a filename:
+        // TODO: do an additional replace of QDir::separator() with "@"?
+        QString safeName = m_projectName;
+        safeName.replace(QRegularExpression(QStringLiteral("[\\\\/]")), QStringLiteral("@"));
+        safeName = safeName.replace(QChar(':'), QChar('='));
+        safeName = safeName.replace(QRegExp("\\s"), QStringLiteral("_"));
+        safeName += '.' + ShellExtension::getInstance()->projectFileExtension();
+        m_url.setPath(url.path() + QLatin1Char('/') + safeName);
+        m_urlIsDirectory = false;
+        qCDebug(SHELL) << "project name:" << m_projectName << "file name:" << safeName;
+    }
     validateProjectInfo();
 }
 
