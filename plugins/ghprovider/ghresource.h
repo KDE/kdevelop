@@ -102,12 +102,12 @@ public:
 
 private:
     /**
-     * Get a TransferJob for the given URI and authorization token.
+     * Get a TransferJob for the given path and authorization token.
      *
-     * @param uri The URI to be requested.
+     * @param path The path to be requested (i.e. "/user/orgs")
      * @param token The authorization token to be set on the headers.
      */
-    KIO::TransferJob * getTransferJob(const QString &uri, const QString &token) const;
+    KIO::TransferJob * getTransferJob(const QString &path, const QString &token) const;
 
     /**
      * Retrieve the info of the name and the URL of each repo and append
