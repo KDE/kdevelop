@@ -102,11 +102,11 @@ void Resource::revokeAccess(const QString &id, const QString &name, const QStrin
     job->start();
 }
 
-KIO::TransferJob * Resource::getTransferJob(const QString &uri, const QString &token) const
+KIO::TransferJob * Resource::getTransferJob(const QString &path, const QString &token) const
 {
     QUrl url = baseUrl;
     url = url.adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + '/' + uri);
+    url.setPath(url.path() + path);
     KIO::TransferJob *job = KIO::get(url, KIO::Reload, KIO::HideProgressInfo);
     if (!token.isEmpty())
         job->addMetaData(QStringLiteral("customHTTPHeader"), "Authorization: token " + token);
