@@ -27,6 +27,7 @@ Comment[pt]=Aplicação simples em C, baseada no CMake
 Comment[sv]=Enkelt CMake-baserat C-program
 Comment[uk]=Проста заснована на CMake програма C
 Comment[x-test]=xxSimple CMake-based C applicationxx
+Comment[zh_CN]=基于 CMake 的简单 C 应用程序
 Category=Standard/Terminal
 Icon=default-kdevelop
 ShowFilesAfterGeneration=main.c
