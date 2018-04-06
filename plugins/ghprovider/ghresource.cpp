@@ -106,7 +106,7 @@ KIO::TransferJob * Resource::getTransferJob(const QString &uri, const QString &t
 {
     QUrl url = baseUrl;
     url = url.adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + '/' + uri);
+    url.setPath(url.path() + uri);
     KIO::TransferJob *job = KIO::get(url, KIO::Reload, KIO::HideProgressInfo);
     if (!token.isEmpty())
         job->addMetaData(QStringLiteral("customHTTPHeader"), "Authorization: token " + token);
