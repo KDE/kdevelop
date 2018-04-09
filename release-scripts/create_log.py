@@ -12,7 +12,7 @@ import sys
 import cgi
 
 
-def createLog(workingDir, fromVersion, toVersion, repositoryName=None):
+def createLog(workingDir, fromVersion, toVersion, repositoryName=None, showInterestingChangesOnly=True):
     if not repositoryName:
         # use cwd name as repository name
         repositoryName = os.path.split(workingDir)[1]
@@ -62,9 +62,8 @@ def createLog(workingDir, fromVersion, toVersion, repositoryName=None):
     if len(commit) > 1 and not ignoreCommit:
         commits.append(commit)
 
-    if len(commits):
-        print("<h3><a name='" + repositoryName + "' href='https://commits.kde.org/" + repositoryName + "'>" + repositoryName + "</a></h3>")
-        print("<ul id='ul" + repositoryName + "' style='display: block'>")
+    commitLogEntries = []
+    if len(commits) > 0:
         for commit in commits:
             extra = ""
             changelog = commit[1]
@@ -115,15 +114,26 @@ def createLog(workingDir, fromVersion, toVersion, repositoryName=None):
                 elif line.startswith("Merge Plasma"):
                     pass
 
+            if showInterestingChangesOnly and not extra:
+                continue
+
             commitHash = commit[0]
             if not changelog.endswith("."):
                 changelog = changelog + "."
 
-            # NOTE: Only showing interesting changes
-            if extra:
-                capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
-                print("<li>" + capitalizedChangelog + " (<a href='https://commits.kde.org/" + repositoryName + "/" + commitHash + "'>commit.</a> " + extra + ")</li>")
+            capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
+            commitLogEntries.append("<li>" + capitalizedChangelog + " (<a href='https://commits.kde.org/" + repositoryName + "/" + commitHash + "'>commit.</a> " + extra + ")</li>")
+
+    # Print result to stdout
+    print("<h3><a name='" + repositoryName + "' href='https://commits.kde.org/" + repositoryName + "'>" + repositoryName + "</a></h3>")
+    if len(commitLogEntries) > 0:
+        print("<ul id='ul" + repositoryName + "' style='display: block'>")
+        for commitLogEntry in commitLogEntries:
+            print(commitLogEntry)
         print("</ul>\n\n")
+    else:
+        print("<em>No changes</em>")
+
 
     if p.wait() != 0:
         raise NameError('git log failed', repositoryName, fromVersion, toVersion)
