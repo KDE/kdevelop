@@ -1,1 +1,1 @@
-kdevplatform kdevelop kdev-python kdev-php
+kdevelop kdev-python kdev-php
