@@ -12,18 +12,22 @@ import sys
 import cgi
 
 
-def createLog(repositoryName, fromVersion, toVersion):
-    p = subprocess.Popen('git fetch', shell=True,
+def createLog(workingDir, fromVersion, toVersion, repositoryName=None):
+    if not repositoryName:
+        # use cwd name as repository name
+        repositoryName = os.path.split(workingDir)[1]
+
+    p = subprocess.Popen('git fetch', shell=True, cwd=workingDir,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if p.wait() != 0:
         raise NameError('git fetch failed')
 
-    p = subprocess.Popen('git rev-parse ' + fromVersion + ' ' + toVersion, shell=True,
+    p = subprocess.Popen('git rev-parse ' + fromVersion + ' ' + toVersion, shell=True, cwd=workingDir,
                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if p.wait() != 0:
         raise NameError("git rev-parse failed -- correct to/from version?")
 
-    p = subprocess.Popen('git log ' + fromVersion + '...' + toVersion, shell=True,
+    p = subprocess.Popen('git log ' + fromVersion + '...' + toVersion, shell=True, cwd=workingDir,
                          stdout=subprocess.PIPE, universal_newlines=True)
     commit = []
     commits = []
@@ -127,9 +131,9 @@ def createLog(repositoryName, fromVersion, toVersion):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create HTML log based on Git history in the current working directory')
-    parser.add_argument('--repositoryName', type=str, help='The path to the Git repositoryNamesitory (default: name of current working dir', default=os.path.split(os.getcwd())[1])
+    parser.add_argument('--repositoryName', type=str, help='The path to the Git repositoryNamesitory (default: name of current working dir', default=None)
     parser.add_argument('from_version', type=str, help='The start of the revision range (e.g. "v5.0.0")')
     parser.add_argument('to_version', type=str, help='The end of the revision range (e.g. "v5.0.1"')
     args = parser.parse_args()
 
-    createLog(args.repositoryName, args.from_version, args.to_version)
+    createLog(os.getcwd(), args.repositoryName, args.from_version, args.to_version)
