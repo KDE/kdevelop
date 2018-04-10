@@ -28,6 +28,7 @@
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KDeclarative/KDeclarative>
+#include <kdeclarative_version.h>
 
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchainlock.h>
@@ -154,7 +155,12 @@ PropertyPreviewWidget::PropertyPreviewWidget(KTextEditor::Document* doc,
     //setup kdeclarative library
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(view->engine());
+#if KDECLARATIVE_VERSION >= QT_VERSION_CHECK(5, 45, 0)
+    kdeclarative.setupEngine(view->engine());
+    kdeclarative.setupContext();
+#else
     kdeclarative.setupBindings();        //binds things like kconfig and icons
+#endif
 
     // Configure layout
     auto l = new QHBoxLayout;

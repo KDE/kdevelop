@@ -21,6 +21,9 @@
 #include "uihelper.h"
 #include "sessionsmodel.h"
 
+#include <KDeclarative/KDeclarative>
+#include <kdeclarative_version.h>
+
 #include <QQmlContext>
 #include <QQmlComponent>
 #include <QQmlError>
@@ -32,7 +35,6 @@
 #include <sublime/area.h>
 #include <sublime/mainwindow.h>
 #include <interfaces/iprojectcontroller.h>
-#include <KDeclarative/KDeclarative>
 
 using namespace KDevelop;
 
@@ -49,7 +51,12 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
     KDeclarative::KDeclarative kdeclarative;
     kdeclarative.setDeclarativeEngine(engine());
     kdeclarative.setTranslationDomain(QStringLiteral("kdevwelcomepage"));
+#if KDECLARATIVE_VERSION >= QT_VERSION_CHECK(5, 45, 0)
+    kdeclarative.setupEngine(engine());
+    kdeclarative.setupContext();
+#else
     kdeclarative.setupBindings();
+#endif
 
     setResizeMode(QQuickWidget::SizeRootObjectToView);
 
