@@ -37,6 +37,8 @@
 #include <KTextEditor/View>
 #include <KTextEditor/Document>
 
+#include <QTimer>
+
 using namespace KDevelop;
 
 namespace {
@@ -79,6 +81,25 @@ public:
 public Q_SLOTS:
     void completionRequested(const QUrl &url, const KTextEditor::Cursor& position, const QString& text, const QString& followingText)
     {
+        // group requests and only handle the latest one
+        m_url = url;
+        m_position = position;
+        m_text = text;
+        m_followingText = followingText;
+
+        if (!m_timer) {
+            // lazy-load the timer to initialize it in the background thread
+            m_timer = new QTimer(this);
+            m_timer->setInterval(0);
+            m_timer->setSingleShot(true);
+            connect(m_timer, &QTimer::timeout, this, &ClangCodeCompletionWorker::run);
+        }
+        m_timer->start();
+    }
+
+private:
+    void run()
+    {
         aborting() = false;
 
         DUChainReadLocker lock;
@@ -87,9 +108,9 @@ public Q_SLOTS:
             return;
         }
 
-        auto top = DUChainUtils::standardContextForUrl(url);
+        auto top = DUChainUtils::standardContextForUrl(m_url);
         if (!top) {
-            qCWarning(KDEV_CLANG) << "No context found for" << url;
+            qCWarning(KDEV_CLANG) << "No context found for" << m_url;
             return;
         }
 
@@ -97,7 +118,7 @@ public Q_SLOTS:
 
         if (!sessionData) {
             // TODO: trigger reparse and re-request code completion
-            qCWarning(KDEV_CLANG) << "No parse session / AST attached to context for url" << url;
+            qCWarning(KDEV_CLANG) << "No parse session / AST attached to context for url" << m_url;
             return;
         }
 
@@ -109,7 +130,8 @@ public Q_SLOTS:
         // We hold DUChain lock, and ask for ParseSession, but TUDUChain indirectly holds ParseSession lock.
         lock.unlock();
 
-        auto completionContext = ::createCompletionContext(DUContextPointer(top), sessionData, url, position, text, followingText);
+        auto completionContext = ::createCompletionContext(DUContextPointer(top), sessionData, m_url,
+                                                           m_position, m_text, m_followingText);
 
         lock.lock();
         if (aborting()) {
@@ -141,6 +163,11 @@ public Q_SLOTS:
     }
 private:
     ClangIndex* m_index;
+    QTimer* m_timer = nullptr;
+    QUrl m_url;
+    KTextEditor::Cursor m_position;
+    QString m_text;
+    QString m_followingText;
 };
 }
 
