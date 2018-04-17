@@ -204,7 +204,7 @@ public:
             }
             matches.push_back({matchQuality, i});
         }
-        std::sort(matches.begin(), matches.end(),
+        std::stable_sort(matches.begin(), matches.end(),
                   [](const QPair<int, int>& lhs, const QPair<int, int>& rhs)
                   {
                     return lhs.first < rhs.first;

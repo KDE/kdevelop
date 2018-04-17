@@ -125,12 +125,17 @@ void TestQuickOpen::testSorting()
     QFETCH(QString, filter);
     QFETCH(StringList, filtered);
 
+    const auto filterList = filter.split('/', QString::SkipEmptyParts);
     PathTestFilter filterItems;
     filterItems.setItems(items);
-    filterItems.setFilter(filter.split('/', QString::SkipEmptyParts));
-    QEXPECT_FAIL("bar7", "empty parts are skipped", Continue);
+    filterItems.setFilter(filterList);
+    QEXPECT_FAIL("bar7", "empty parts are skipped", Abort);
     if (filterItems.filteredItems() != filtered)
         qWarning() << filterItems.filteredItems() << filtered;
+    QCOMPARE(filterItems.filteredItems(), filtered);
+
+    // check whether sorting is stable
+    filterItems.setFilter(filterList);
     QCOMPARE(filterItems.filteredItems(), filtered);
 }
 
@@ -272,6 +277,25 @@ void TestQuickOpen::testSorting_data()
         QTest::newRow("prefer_multimatch_b_project/a/file") << b << QStringLiteral("project/a/file") << b;
         QTest::newRow("prefer_multimatch_a_project_user") << a << QStringLiteral("user") << c;
         QTest::newRow("prefer_multimatch_c_project_user") << c << QStringLiteral("user") << c;
+    }
+}
+
+void TestQuickOpen::testStableSort()
+{
+    const StringList items = {
+        QStringLiteral("a/c/CMakeLists.txt"),
+        QStringLiteral("a/d/CMakeLists.txt"),
+        QStringLiteral("b/e/CMakeLists.txt"),
+        QStringLiteral("b/f/CMakeLists.txt")
+    };
+    PathTestFilter filterItems;
+    filterItems.setItems(items);
+
+    QStringList filter = {QString()};
+    for (auto c : QStringLiteral("CMakeLists.txt")) {
+        filter[0].append(c);
+        filterItems.setFilter(filter);
+        QCOMPARE(filterItems.filteredItems(), items);
     }
 }
 

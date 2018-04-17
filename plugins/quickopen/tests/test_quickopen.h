@@ -32,6 +32,7 @@ public:
 private Q_SLOTS:
     void testSorting();
     void testSorting_data();
+    void testStableSort();
     void testAbbreviations();
     void testAbbreviations_data();
     void testDuchainFilter();
