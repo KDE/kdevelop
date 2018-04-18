@@ -80,6 +80,7 @@ private:
     QStringList m_fileList;
     QMap<QString, QStringList> m_projectFilters;
     QMap<QString, KPluginMetaData> m_projectPlugins;
+    QStringList m_genericProjectPlugins;
 
     KDevelop::OpenProjectPage* openPageWidget = nullptr;
     KDevelop::ProjectSourcePage* sourcePageWidget = nullptr;

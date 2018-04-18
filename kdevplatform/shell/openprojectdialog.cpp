@@ -97,15 +97,18 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
     QVector<KPluginMetaData> plugins = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
     foreach(const KPluginMetaData& info, plugins)
     {
+        m_projectPlugins.insert(info.name(), info);
+
         QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
+
         // some project file manager plugins like KDevGenericManager have no file filter set
         if (filter.isEmpty()) {
+            m_genericProjectPlugins << info.name();
             continue;
         }
         QString desc = info.value(QStringLiteral("X-KDevelop-ProjectFilesFilterDescription"));
 
         m_projectFilters.insert(info.name(), filter);
-        m_projectPlugins.insert(info.name(), info);
         allEntry += filter;
         filters << filterFormat.arg(filter.join(QStringLiteral(" ")), desc);
     }
@@ -260,13 +263,11 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                     choices.append({file + QString(" (%1)").arg(plugin), meta.pluginId(), meta.iconName(), file});
                 }
             }
-            Q_FOREACH ( const auto& plugin, m_projectFilters.keys() ) {
-                qCDebug(SHELL) << plugin << m_projectFilters.value(plugin);
-                if ( m_projectFilters.value(plugin).isEmpty() ) {
-                    // that works in any case
-                    auto meta = m_projectPlugins.value(plugin);
-                    choices.append({plugin, meta.pluginId(), meta.iconName()});
-                }
+            // add managers that work in any case (e.g. KDevGenericManager)
+            Q_FOREACH ( const auto& plugin, m_genericProjectPlugins ) {
+                qCDebug(SHELL) << plugin;
+                auto meta = m_projectPlugins.value(plugin);
+                choices.append({plugin, meta.pluginId(), meta.iconName()});
             }
             page->populateProjectFileCombo(choices);
         }
