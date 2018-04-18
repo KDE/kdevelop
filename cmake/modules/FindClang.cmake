@@ -91,6 +91,7 @@ endif()
 if(CLANG_FOUND)
   set(CLANG_LIBRARY_DIRS ${LLVM_LIBRARY_DIRS})
   set(CLANG_INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
+  set(CLANG_VERSION ${LLVM_VERSION})
 
   # check whether llvm-config comes from an install prefix
   execute_process(
@@ -107,7 +108,7 @@ if(CLANG_FOUND)
     )
   endif()
 
-  message(STATUS "Found Clang (LLVM version: ${LLVM_VERSION})")
+  message(STATUS "Found Clang (LLVM version: ${CLANG_VERSION})")
   message(STATUS "  Include dirs:       ${CLANG_INCLUDE_DIRS}")
   message(STATUS "  Clang libraries:    ${CLANG_LIBS}")
   message(STATUS "  Libclang C library: ${CLANG_LIBCLANG_LIB}")
