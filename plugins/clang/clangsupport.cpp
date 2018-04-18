@@ -24,7 +24,6 @@
 #include "clangsupport.h"
 
 #include "clangparsejob.h"
-#include "version.h"
 
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"

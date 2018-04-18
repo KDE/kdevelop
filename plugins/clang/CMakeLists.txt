@@ -2,12 +2,6 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevclang\")
 add_definitions(${LLVM_CFLAGS})
 include_directories(${CLANG_INCLUDE_DIRS})
 
-configure_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/version.h.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/version.h"
-  @ONLY
-)
-
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
