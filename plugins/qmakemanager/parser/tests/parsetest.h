@@ -47,7 +47,7 @@ class ParseTest : public QObject
         void failFullProject();
         void failFullProject_data();
     private:
-        QMake::ProjectAST* ast;
+        QMake::ProjectAST* ast = nullptr;
 };
 
 #endif

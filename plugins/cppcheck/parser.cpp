@@ -65,7 +65,6 @@ QString verboseMessageToHtml( const QString & input )
 }
 
 CppcheckParser::CppcheckParser()
-    : m_errorInconclusive(false)
 {
 }
 

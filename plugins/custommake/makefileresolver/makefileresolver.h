@@ -78,8 +78,8 @@ class MakeFileResolver
   private:
     PathResolutionResult resolveIncludePath( const QString& file, const QString& workingDirectory, int maxStepsUp = 20 );
 
-    bool m_isResolving;
-    bool m_outOfSource;
+    bool m_isResolving = false;
+    bool m_outOfSource = false;
 
     QString mapToBuild(const QString &path) const;
 

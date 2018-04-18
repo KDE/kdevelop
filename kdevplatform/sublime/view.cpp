@@ -32,14 +32,13 @@ class ViewPrivate
 {
 public:
     ViewPrivate();
-    Document *doc;
-    QWidget *widget;
+    Document *doc = nullptr;
+    QWidget *widget = nullptr;
     void unsetWidget();
     View::WidgetOwnership ws;
 };
 
 ViewPrivate::ViewPrivate()
-    :doc(nullptr), widget(nullptr)
 {
 }
 

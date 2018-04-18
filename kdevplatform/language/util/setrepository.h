@@ -157,7 +157,7 @@ class StorableSet : public Conversion {
             set().staticRef();
     }
 
-    StorableSet() : m_setIndex(0) {
+    StorableSet() {
     }
 
     ~StorableSet() {
@@ -332,7 +332,7 @@ class StorableSet : public Conversion {
 
   private:
 
-    uint m_setIndex;
+    uint m_setIndex = 0;
   };
   
 template<class T, class Conversion, class StaticRepository, bool doReferenceCounting, class StaticAccessLocker>

@@ -46,7 +46,7 @@ private Q_SLOTS:
     void updateRightAfterEnableAutoUpdate_data();
 
 private:
-    TestDebugSession *m_debugSession;
+    TestDebugSession *m_debugSession = nullptr;
 };
 
 }

@@ -71,7 +71,7 @@ public:
     void copyDataFrom(SourceFormatterStyle *other);
 
 private:
-	bool m_usePreview;
+	bool m_usePreview = false;
 	QString m_name;
 	QString m_caption;
 	QString m_content;
@@ -186,7 +186,7 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 		virtual QString previewText(const SourceFormatterStyle& style, const QMimeType &mime) const = 0;
 
 		struct Indentation {
-			Indentation() : indentationTabWidth(0), indentWidth(0) {
+			Indentation() {
 			}
 			// If this indentation is really valid
 			bool isValid() const {
@@ -195,11 +195,11 @@ class KDEVPLATFORMINTERFACES_EXPORT ISourceFormatter
 
 			// The length of one tab used for indentation.
 			// Zero if unknown, -1 if tabs should not be used for indentation
-			int indentationTabWidth;
+			int indentationTabWidth = 0;
 
 			// The number of columns that equal one indentation level.
 			// If this is zero, the default should be used.
-			int indentWidth;
+			int indentWidth = 0;
 		};
 
 		/** \return The indentation of the style applicable for the given url.

@@ -37,7 +37,7 @@ const int TABLES_COUNT = 5;
 }
 
 RegistersView::RegistersView(QWidget* p)
-    : QWidget(p), m_menu(new QMenu(this)), m_modelsManager(nullptr)
+    : QWidget(p), m_menu(new QMenu(this))
 {
     setupUi(this);
 

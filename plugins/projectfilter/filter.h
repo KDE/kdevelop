@@ -63,7 +63,7 @@ public:
 
     QRegExp pattern;
     Targets targets;
-    Type type;
+    Type type = Exclusive;
 };
 
 typedef QVector<Filter> Filters;
@@ -78,7 +78,7 @@ struct SerializedFilter
     SerializedFilter(const QString& pattern, Filter::Targets targets, Filter::Type type = Filter::Exclusive);
     QString pattern;
     Filter::Targets targets;
-    Filter::Type type;
+    Filter::Type type = Filter::Exclusive;
 };
 
 typedef QVector<SerializedFilter> SerializedFilters;

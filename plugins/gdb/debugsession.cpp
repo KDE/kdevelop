@@ -58,10 +58,6 @@ using namespace KDevelop;
 
 DebugSession::DebugSession(CppDebuggerPlugin *plugin)
     : MIDebugSession(plugin)
-    , m_breakpointController(nullptr)
-    , m_variableController(nullptr)
-    , m_frameStackModel(nullptr)
-    , m_autoDisableASLR(false)
 {
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);

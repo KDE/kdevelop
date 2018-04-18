@@ -114,12 +114,12 @@ private:
 
     QSet<QString> m_usedIcons;
     QMap<QString, WorkingSet*> m_workingSets;
-    WorkingSet* m_emptyWorkingSet;
+    WorkingSet* m_emptyWorkingSet = nullptr;
     QTimer* m_hideToolTipTimer;
     QPointer<KDevelop::ActiveToolTip> m_tooltip;
     // This is set to true while the working-set controller is forcing a working-set
     // onto an area. We ignore the low-level feedback then, as we handle the switch on a higher level.
-    bool m_changingWorkingSet;
+    bool m_changingWorkingSet = false;
 };
 
 }

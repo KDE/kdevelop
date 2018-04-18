@@ -186,7 +186,7 @@ class KDEVPLATFORMSUBLIME_EXPORT RootAreaIndex: public AreaIndex {
 public:
     RootAreaIndex();
 private:
-    class RootAreaIndexPrivate* const d;
+    class RootAreaIndexPrivate* const d = nullptr;
 };
 
 }

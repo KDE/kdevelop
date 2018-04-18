@@ -28,7 +28,7 @@
 class KDEVCMAKECOMMON_EXPORT CacheLine
 {
 public:
-    CacheLine() : endName(-1), dash(-1), colon(-1), equal(-1) {}
+    CacheLine() {}
 
     void readLine(const QString& line);
     bool isCorrect() const { return endName>=0 && equal>=0; }
@@ -41,10 +41,10 @@ public:
 private:
     QString m_line;
 
-    int endName;
-    int dash;
-    int colon;
-    int equal;
+    int endName = -1;
+    int dash = -1;
+    int colon = -1;
+    int equal = -1;
 };
 
 #endif

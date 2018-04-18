@@ -29,7 +29,6 @@ using namespace KDevelop;
 
 TestProject::TestProject(const Path& path, QObject* parent)
 : IProject(parent)
-, m_root(nullptr)
 , m_projectConfiguration(KSharedConfig::openConfig())
 {
     m_path = path.isValid() ? path : Path(QDir::tempPath() + QLatin1String("/kdev-testproject/"));

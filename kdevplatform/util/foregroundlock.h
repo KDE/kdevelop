@@ -60,7 +60,7 @@ class KDEVPLATFORMUTIL_EXPORT ForegroundLock
     private:
         ForegroundLock(const ForegroundLock& rhs);
         ForegroundLock& operator=(const ForegroundLock& rhs);
-        bool m_locked;
+        bool m_locked = false;
 };
 
 /**

@@ -24,7 +24,7 @@
 #include "../kdevvarlengtharray.h"
 
 struct TestValue {
-    TestValue() : m_index(0)
+    TestValue()
     {}
     TestValue(const TestValue& other)
     {
@@ -34,7 +34,7 @@ struct TestValue {
         }
         m_index = other.m_index;
     }
-    uint m_index;
+    uint m_index = 0;
 };
 
 class TestKDevVarLengthArray : public QObject {

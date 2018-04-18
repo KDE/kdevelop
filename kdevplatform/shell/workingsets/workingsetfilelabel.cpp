@@ -23,7 +23,6 @@
 using namespace KDevelop;
 
 WorkingSetFileLabel::WorkingSetFileLabel()
-    : m_isActive( false )
 {
 }
 

@@ -72,7 +72,7 @@ private:
   // i.e. m_start, m_end, m_leftNode and m_rightNode
   uint m_hash;
 public:
-  uint m_refCount;
+  uint m_refCount = 0;
 
   inline explicit SetNodeData(uint start = 1, uint end = 1, uint leftNode = 0, uint rightNode = 0)
   : m_start(start)
@@ -80,7 +80,6 @@ public:
   , m_leftNode(leftNode)
   , m_rightNode(rightNode)
   , m_hash(calculateHash())
-  , m_refCount(0)
   {
   }
 
@@ -241,8 +240,8 @@ private:
   void unrefNode(uint);
   friend class BasicSetRepository;
   
-  uint m_tree;
-  mutable BasicSetRepository* m_repository;
+  uint m_tree = 0;
+  mutable BasicSetRepository* m_repository = nullptr;
 };
 
 /**

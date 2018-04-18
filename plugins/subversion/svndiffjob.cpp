@@ -81,9 +81,7 @@ QString repairDiff(const QString& diff) {
 //@TODO: Handle raw diffs by using SvnCatJob to fetch both files/revisions
 
 SvnInternalDiffJob::SvnInternalDiffJob( SvnJobBase* parent )
-    : SvnInternalJobBase( parent ), m_recursive( true ),
-      m_ignoreAncestry( false ), m_ignoreContentType( false ),
-      m_noDiffOnDelete( false )
+    : SvnInternalJobBase( parent )
 {
     m_pegRevision.setRevisionValue( KDevelop::VcsRevision::Head,
                                     KDevelop::VcsRevision::Special );

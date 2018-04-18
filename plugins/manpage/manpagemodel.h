@@ -90,8 +90,8 @@ private:
     QStringList m_index;
     QStringListModel* m_indexModel;
 
-    bool m_loaded;
-    int m_nbSectionLoaded;
+    bool m_loaded = false;
+    int m_nbSectionLoaded = 0;
     QString m_errorString;
 };
 

@@ -44,7 +44,7 @@ public:
     QSize sizeHint() const override;
 
 protected:
-    int m_preferredWidth;
+    int m_preferredWidth = 200;
 };
 
 #endif

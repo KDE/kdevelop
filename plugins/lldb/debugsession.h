@@ -91,12 +91,12 @@ private Q_SLOTS:
     void handleSessionStateChange(IDebugSession::DebuggerState state);
 
 private:
-    BreakpointController *m_breakpointController;
-    VariableController *m_variableController;
-    LldbFrameStackModel *m_frameStackModel;
+    BreakpointController *m_breakpointController = nullptr;
+    VariableController *m_variableController = nullptr;
+    LldbFrameStackModel *m_frameStackModel = nullptr;
 
     QString m_formatterPath;
-    bool m_hasCorrectCLIOutput;
+    bool m_hasCorrectCLIOutput = false;
 };
 
 } // end of namespace GDB

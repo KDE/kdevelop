@@ -36,7 +36,6 @@ class ProjectFileItem;
 struct ProjectFile
 {
     ProjectFile()
-        : outsideOfProject(false)
     {}
     KDevelop::Path path;
     // project root folder url
@@ -46,7 +45,7 @@ struct ProjectFile
     KDevelop::IndexedString indexedPath;
     // true for files which reside outside of the project root
     // this happens e.g. for generated files in out-of-source build folders
-    bool outsideOfProject;
+    bool outsideOfProject = false;
 };
 
 inline bool operator<(const ProjectFile& left, const ProjectFile& right)

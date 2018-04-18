@@ -128,17 +128,6 @@ class Bucket {
       CheckEnd = 0xfafcfb
     };
     Bucket()
-      : m_monsterBucketExtent(0)
-      , m_available(0)
-      , m_data(nullptr)
-      , m_mappedData(nullptr)
-      , m_objectMap(nullptr)
-      , m_largestFreeItem(0)
-      , m_freeItemCount(0)
-      , m_nextBucketHash(nullptr)
-      , m_dirty(false)
-      , m_changed(false)
-      , m_lastUsed(0)
     {
     }
     ~Bucket() {
@@ -959,19 +948,19 @@ class Bucket {
       *reinterpret_cast<unsigned short*>(m_data+index) = size;
     }
 
-    int m_monsterBucketExtent; //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
-    unsigned int m_available;
-    char* m_data; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
-    char* m_mappedData; //Read-only memory-mapped data. If this equals m_data, m_data must not be written
-    short unsigned int* m_objectMap; //Points to the first object in m_data with (hash % ObjectMapSize) == index. Points to the item itself, so subtract 1 to get the pointer to the next item with same local hash.
-    short unsigned int m_largestFreeItem; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
-    unsigned int m_freeItemCount;
+    int m_monsterBucketExtent = 0; //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
+    unsigned int m_available = 0;
+    char* m_data = nullptr; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
+    char* m_mappedData  = nullptr; //Read-only memory-mapped data. If this equals m_data, m_data must not be written
+    short unsigned int* m_objectMap  = nullptr; //Points to the first object in m_data with (hash % ObjectMapSize) == index. Points to the item itself, so subtract 1 to get the pointer to the next item with same local hash.
+    short unsigned int m_largestFreeItem  = 0; //Points to the largest item that is currently marked as free, or zero. That one points to the next largest one through followerIndex
+    unsigned int m_freeItemCount  = 0;
 
-    unsigned short* m_nextBucketHash;
+    unsigned short* m_nextBucketHash  = nullptr;
 
-    bool m_dirty; //Whether the data was changed since the last finalCleanup
-    bool m_changed; //Whether this bucket was changed since it was last stored to disk
-    mutable int m_lastUsed; //How many ticks ago this bucket was last accessed
+    bool m_dirty = false; //Whether the data was changed since the last finalCleanup
+    bool m_changed  = false; //Whether this bucket was changed since it was last stored to disk
+    mutable int m_lastUsed = 0; //How many ticks ago this bucket was last accessed
 };
 
 template<bool lock>
@@ -1498,32 +1487,30 @@ class ItemRepository : public AbstractItemRepository {
   }
 
   struct Statistics {
-    Statistics() : loadedBuckets(-1), currentBucket(-1), usedMemory(-1), loadedMonsterBuckets(-1), usedSpaceForBuckets(-1),
-                   freeSpaceInBuckets(-1), lostSpace(-1), freeUnreachableSpace(-1), hashClashedItems(-1), totalItems(-1), hashSize(-1), hashUse(-1),
-                   averageInBucketHashSize(-1), averageInBucketUsedSlotCount(-1), averageInBucketSlotChainLength(-1), longestInBucketChain(-1), longestNextBucketChain(-1), totalBucketFollowerSlots(-1), averageNextBucketForHashSequenceLength(-1) {
+    Statistics()  {
     }
 
-    uint loadedBuckets;
-    uint currentBucket;
-    uint usedMemory;
-    uint loadedMonsterBuckets;
-    uint usedSpaceForBuckets;
-    uint freeSpaceInBuckets;
-    uint lostSpace;
-    uint freeUnreachableSpace;
-    uint hashClashedItems;
-    uint totalItems;
+    uint loadedBuckets = -1;
+    uint currentBucket = -1;
+    uint usedMemory = -1;
+    uint loadedMonsterBuckets = -1;
+    uint usedSpaceForBuckets = -1;
+    uint freeSpaceInBuckets = -1;
+    uint lostSpace = -1;
+    uint freeUnreachableSpace = -1;
+    uint hashClashedItems = -1;
+    uint totalItems = -1;
     uint emptyBuckets;
-    uint hashSize; //How big the hash is
-    uint hashUse; //How many slots in the hash are used
-    uint averageInBucketHashSize;
-    uint averageInBucketUsedSlotCount;
-    float averageInBucketSlotChainLength;
-    uint longestInBucketChain;
+    uint hashSize = -1; //How big the hash is
+    uint hashUse = -1; //How many slots in the hash are used
+    uint averageInBucketHashSize = -1;
+    uint averageInBucketUsedSlotCount = -1;
+    float averageInBucketSlotChainLength = -1;
+    uint longestInBucketChain = -1;
 
-    uint longestNextBucketChain;
-    uint totalBucketFollowerSlots; //Total count of used slots in the nextBucketForHash structure
-    float averageNextBucketForHashSequenceLength; //Average sequence length of a nextBucketForHash sequence(If not empty)
+    uint longestNextBucketChain = -1;
+    uint totalBucketFollowerSlots = -1; //Total count of used slots in the nextBucketForHash structure
+    float averageNextBucketForHashSequenceLength = -1; //Average sequence length of a nextBucketForHash sequence(If not empty)
 
     QString print() const {
       QString ret;

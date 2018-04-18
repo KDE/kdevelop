@@ -101,9 +101,6 @@ ICompletionSettings::CompletionLevel CompletionSettings::completionLevel() const
 }
 
 CompletionSettings::CompletionSettings()
-    : m_level(MinimalWhenAutomatic), m_automatic(true),
-      m_highlightSemanticProblems(true), m_highlightProblematicLines(false), m_showMultiLineInformation(false),
-      m_boldDeclarations(true), m_localColorizationLevel(170), m_globalColorizationLevel(255),
-      m_minFilesForSimplifiedParsing(100000), m_todoMarkerWords(QStringLiteral("TODO FIXME")),
-      m_languageGroup(KSharedConfig::openConfig(), "Language Support"){}
+    : m_todoMarkerWords(QStringLiteral("TODO FIXME"))
+    , m_languageGroup(KSharedConfig::openConfig(), "Language Support"){}
 }

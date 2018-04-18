@@ -29,7 +29,7 @@
 #include "kdevsvncpp/path.hpp"
 
 SvnInternalMoveJob::SvnInternalMoveJob( SvnJobBase* parent )
-    : SvnInternalJobBase( parent ), m_force( false )
+    : SvnInternalJobBase( parent )
 {
 }
 

@@ -200,14 +200,14 @@ public:
 private:
   QString m_command;
   QString m_workingDirectory;
-  SaveMode m_saveMode;
-  OutputMode m_outputMode;
-  ErrorMode m_errorMode;
-  InputMode m_inputMode;
-  QAction* m_action;
-  bool m_showOutput;
-  int m_filterMode;
-  bool m_performReplacements;
+  SaveMode m_saveMode = SaveNone;
+  OutputMode m_outputMode = OutputNone;
+  ErrorMode m_errorMode = ErrorNone;
+  InputMode m_inputMode = InputNone;
+  QAction* m_action = nullptr;
+  bool m_showOutput = true;
+  int m_filterMode = 0;
+  bool m_performReplacements = true;
 };
 
 Q_DECLARE_METATYPE(ExternalScriptItem*)

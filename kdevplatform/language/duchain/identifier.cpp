@@ -38,9 +38,6 @@ class IdentifierPrivate
 {
 public:
   IdentifierPrivate()
-    : m_unique(0)
-    , m_refCount(0)
-    , m_hash(0)
   {
   }
 
@@ -76,9 +73,9 @@ public:
     return m_hash;
   }
 
-  int m_unique;
+  int m_unique = 0;
   IndexedString m_identifier;
-  uint m_refCount;
+  uint m_refCount = 0;
 
   START_APPENDED_LISTS_STATIC(IdentifierPrivate)
 
@@ -103,7 +100,7 @@ public:
     m_hash = kdevhash;
   }
 
-  mutable uint m_hash;
+  mutable uint m_hash = 0;
 };
 
 typedef IdentifierPrivate<true> DynamicIdentifierPrivate;
@@ -197,8 +194,7 @@ public:
   QualifiedIdentifierPrivate()
     : m_explicitlyGlobal(false)
     , m_isExpression(false)
-    , m_hash(0)
-    , m_refCount(0)
+
   {
   }
 
@@ -219,8 +215,8 @@ public:
 
   bool m_explicitlyGlobal:1;
   bool m_isExpression:1;
-  mutable uint m_hash;
-  uint m_refCount;
+  mutable uint m_hash = 0;
+  uint m_refCount = 0;
 
   START_APPENDED_LISTS_STATIC(QualifiedIdentifierPrivate)
 

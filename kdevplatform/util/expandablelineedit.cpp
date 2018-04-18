@@ -21,7 +21,6 @@
 
 KExpandableLineEdit::KExpandableLineEdit(QWidget* parent)
     : QLineEdit(parent)
-    , m_preferredWidth(200)
 {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 

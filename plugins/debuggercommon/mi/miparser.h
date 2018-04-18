@@ -76,7 +76,7 @@ protected: // rules
 
 private:
     MILexer m_lexer;
-    TokenStream *m_lex;
+    TokenStream *m_lex = nullptr;
 };
 
 } // end of namespace MI

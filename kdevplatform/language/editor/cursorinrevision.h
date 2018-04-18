@@ -36,9 +36,9 @@ namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT CursorInRevision {
 public:
 
- int line, column;
+ int line = 0, column = 0;
 
- CursorInRevision() : line(0), column(0) {
+ CursorInRevision()  {
  }
 
  CursorInRevision(int _line, int _column) : line(_line), column(_column) {

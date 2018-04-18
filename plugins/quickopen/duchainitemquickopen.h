@@ -31,13 +31,12 @@ class IQuickOpen;
 struct DUChainItem
 {
     DUChainItem()
-        : m_noHtmlDestription(false)
     {
     }
     KDevelop::IndexedDeclaration m_item;
     QString m_text;
     KDevelop::Path m_projectPath;
-    bool m_noHtmlDestription;
+    bool m_noHtmlDestription = false;
 };
 
 Q_DECLARE_TYPEINFO(DUChainItem, Q_MOVABLE_TYPE);

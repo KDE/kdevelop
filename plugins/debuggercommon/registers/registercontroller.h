@@ -47,15 +47,15 @@ public:
 
     bool operator==(const GroupsName& g) const {return _name == g.name();}
 
-    GroupsName(): _index(-1), _type(general) {}
+    GroupsName() {}
 
 private:
     GroupsName(const QString& name, int idx, RegisterType type = general, const QString& flag = QString()): _name(name), _index(idx), _type(type), _flagName(flag) {}
 
 private:
     QString _name;
-    int _index; ///Should be unique for each group for current architecture (0, 1...n).
-    RegisterType _type;
+    int _index = -1; ///Should be unique for each group for current architecture (0, 1...n).
+    RegisterType _type = general;
     QString _flagName; ///Used only for flag registers.
 
     friend class IRegisterController;
@@ -104,14 +104,13 @@ struct Register {
 ///List of @p registers for @p groupName in @p format
 struct RegistersGroup {
     RegistersGroup()
-        : format(Binary)
-        , flag(false)
+
     {}
 
     GroupsName groupName;
     QVector<Register> registers;
-    Format format; ///<Current format
-    bool flag; ///<true if this group is flags group.
+    Format format = Binary; ///<Current format
+    bool flag = false; ///<true if this group is flags group.
 };
 
 struct FlagRegister {

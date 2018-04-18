@@ -67,7 +67,11 @@ private:
 
 using namespace KDevMI;
 
-ModelsManager::ModelsManager(QObject* parent) : QObject(parent), m_models(new Models), m_controller(nullptr), m_config(KSharedConfig::openConfig()->group("Register models")) {}
+ModelsManager::ModelsManager(QObject* parent)
+    : QObject(parent)
+    , m_models(new Models)
+    , m_config(KSharedConfig::openConfig()->group("Register models"))
+{}
 
 ModelsManager::~ModelsManager() {}
 

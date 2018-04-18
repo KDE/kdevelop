@@ -100,11 +100,7 @@ struct ExecRunHandler : public MICommandHandler
 
 DebugSession::DebugSession(LldbDebuggerPlugin *plugin)
     : MIDebugSession(plugin)
-    , m_breakpointController(nullptr)
-    , m_variableController(nullptr)
-    , m_frameStackModel(nullptr)
     , m_formatterPath()
-    , m_hasCorrectCLIOutput(false)
 {
     m_breakpointController = new BreakpointController(this);
     m_variableController = new VariableController(this);

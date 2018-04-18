@@ -25,8 +25,6 @@
 using namespace KDevelop;
 
 IncludeItem::IncludeItem()
-    : pathNumber(0)
-    , isDirectory(false)
 {
 }
 

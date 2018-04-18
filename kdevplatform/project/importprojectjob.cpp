@@ -38,12 +38,12 @@ namespace KDevelop
 class ImportProjectJobPrivate
 {
 public:
-    ImportProjectJobPrivate() : cancel(false) {}
+    ImportProjectJobPrivate() {}
     ProjectFolderItem *m_folder;
     IProjectFileManager *m_importer;
     QFutureWatcher<void> *m_watcher;
     QPointer<IProject> m_project;
-    bool cancel;
+    bool cancel = false;
 
     void import(ProjectFolderItem* folder)
     {

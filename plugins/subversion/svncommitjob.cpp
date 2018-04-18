@@ -41,7 +41,7 @@
 #include "kdevsvnplugin.h"
 
 SvnInternalCommitJob::SvnInternalCommitJob( SvnJobBase* parent )
-    : SvnInternalJobBase( parent ), m_recursive( true ), m_keepLock( false )
+    : SvnInternalJobBase( parent )
 {
 }
 

@@ -26,7 +26,7 @@
 using namespace KDevelop;
 
 ProjectPathsModel::ProjectPathsModel( QObject* parent )
-    : QAbstractListModel( parent ), project( nullptr )
+    : QAbstractListModel( parent )
 {
 }
 

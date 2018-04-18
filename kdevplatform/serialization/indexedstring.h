@@ -210,7 +210,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString {
       HashInitialValue = 5381
     };
 
-    RunningHash() : hash(HashInitialValue) { //We initialize the hash with zero, because we want empty strings to create a zero hash(invalid)
+    RunningHash() {
     }
     inline void append(const char c) {
       hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
@@ -218,7 +218,9 @@ class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString {
     inline void clear() {
       hash = HashInitialValue;
     }
-    unsigned int hash;
+
+    /// We initialize the hash with zero, because we want empty strings to create a zero hash(invalid)
+    unsigned int hash = HashInitialValue;
   };
 
   static unsigned int hashString(const char* str, unsigned short length);
@@ -232,7 +234,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString {
 
  private:
    explicit IndexedString(bool);
-   uint m_index;
+   uint m_index = 0;
 };
 
 // the following function would need to be exported in case you'd remove the inline keyword.

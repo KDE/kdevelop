@@ -77,8 +77,6 @@ K_PLUGIN_FACTORY_WITH_JSON(QMakeSupportFactory, "kdevqmakemanager.json", registe
 QMakeProjectManager::QMakeProjectManager(QObject* parent, const QVariantList&)
     : AbstractFileManagerPlugin(QStringLiteral("kdevqmakemanager"), parent)
     , IBuildSystemManager()
-    , m_builder(nullptr)
-    , m_runQMake(nullptr)
 {
     IPlugin* i = core()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IQMakeBuilder"));
     Q_ASSERT(i);

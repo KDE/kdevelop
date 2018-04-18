@@ -37,7 +37,7 @@ protected:
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
 private:
     QList<QUrl> m_locations;
-    bool m_recursive;
+    bool m_recursive = false;
 };
 
 #endif

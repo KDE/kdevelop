@@ -30,10 +30,6 @@
 using namespace KDevelop;
 
 TestDebugSession::TestDebugSession()
-    : m_breakpointController(nullptr)
-    , m_variableController(nullptr)
-    , m_frameStackModel(nullptr)
-    , m_sessionState(NotStartedState)
 {
     setBreakpointController(nullptr);
     setVariableController(nullptr);

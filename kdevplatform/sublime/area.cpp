@@ -40,7 +40,6 @@ public:
     AreaPrivate()
         : rootIndex(new RootAreaIndex)
         , currentIndex(rootIndex.data())
-        , controller(nullptr)
     {
     }
 
@@ -88,7 +87,7 @@ public:
 
     QScopedPointer<RootAreaIndex> rootIndex;
     AreaIndex *currentIndex;
-    Controller *controller;
+    Controller *controller = nullptr;
 
     QList<View*> toolViews;
     QMap<View *, Sublime::Position> toolViewPositions;

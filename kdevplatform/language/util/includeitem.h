@@ -40,9 +40,9 @@ public:
   ///basePath + name = Absolute path of file
   QUrl basePath;
   ///Which path in the include-path was used to find this item?
-  int pathNumber;
+  int pathNumber = 0;
   ///If this is true, this item represents a sub-directory. Else it represents a file.
-  bool isDirectory;
+  bool isDirectory = false;
 };
 
 }

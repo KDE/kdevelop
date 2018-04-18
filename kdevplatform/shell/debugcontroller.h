@@ -96,24 +96,24 @@ private:
 
     static const QPixmap* executionPointPixmap();
 
-    QAction* m_continueDebugger;
+    QAction* m_continueDebugger = nullptr;
     //QAction* m_restartDebugger;
-    QAction* m_stopDebugger;
-    QAction* m_interruptDebugger;
-    QAction* m_runToCursor;
-    QAction* m_jumpToCursor;
-    QAction* m_stepOver;
-    QAction* m_stepIntoInstruction;
-    QAction* m_stepInto;
-    QAction* m_stepOverInstruction;
-    QAction* m_stepOut;
-    QAction* m_toggleBreakpoint;
+    QAction* m_stopDebugger = nullptr;
+    QAction* m_interruptDebugger = nullptr;
+    QAction* m_runToCursor = nullptr;
+    QAction* m_jumpToCursor = nullptr;
+    QAction* m_stepOver = nullptr;
+    QAction* m_stepIntoInstruction = nullptr;
+    QAction* m_stepInto = nullptr;
+    QAction* m_stepOverInstruction = nullptr;
+    QAction* m_stepOut = nullptr;
+    QAction* m_toggleBreakpoint = nullptr;
 
     QPointer<IDebugSession> m_currentSession;
     BreakpointModel *m_breakpointModel;
     VariableCollection *m_variableCollection;    
     
-    bool m_uiInitialized;
+    bool m_uiInitialized = false;
 };
 
 }

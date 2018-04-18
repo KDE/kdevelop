@@ -25,6 +25,7 @@
 #include "indexedtype.h"
 #include "delayedtype.h"
 #include "identifiedtype.h"
+#include "integraltype.h"
 
 namespace KDevelop {
 
@@ -71,10 +72,10 @@ public:
   }
 
   /// Reference-count for this type within the repository. Not used for comparison or hashes.
-  uint refCount;
+  uint refCount = 0;
 
   /// Type modifier flags
-  quint32 m_modifiers;
+  quint32 m_modifiers = AbstractType::NoModifiers;
 
   /// Remember which type this data was created for. \sa setTypeClassId()
   quint16 typeClassId;
@@ -109,7 +110,7 @@ public:
   /// Copy constructor. \param rhs data to copy
   IntegralTypeData( const IntegralTypeData& rhs );
   /// Data type
-  uint m_dataType;
+  uint m_dataType = IntegralType::TypeNone;
 };
 
 /// Private data structure for PointerType
@@ -191,7 +192,7 @@ public:
   /// Copy constructor. \param rhs data to copy
   ArrayTypeData( const ArrayTypeData& rhs );
   /// Dimension of the array
-  int m_dimension;
+  int m_dimension = 0;
   /// Element type of the array
   IndexedType m_elementType;
 };
@@ -207,7 +208,7 @@ public:
   /// Identifier of the delayed type
   IndexedTypeIdentifier m_identifier;
   /// Type of delay in resolving the type
-  DelayedType::Kind m_kind;
+  DelayedType::Kind m_kind = DelayedType::Delayed;
 };
 
 /// Private data structure for ConstantIntegralType
@@ -215,7 +216,7 @@ struct ConstantIntegralTypeData : public IntegralTypeData {
   /// Constructor
   ConstantIntegralTypeData();
   /// Constant integer value
-  qint64 m_value;
+  qint64 m_value = 0;
 };
 
 }

@@ -109,10 +109,10 @@ private:
 
     struct ProviderEntry
     {
-        ProviderEntry() : enabled(false)
+        ProviderEntry()
         {
         }
-        bool enabled;
+        bool enabled = false;
         QSet<QString> scopes;
         QSet<QString> types;
         KDevelop::QuickOpenDataProviderBase* provider;

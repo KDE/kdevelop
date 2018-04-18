@@ -48,10 +48,9 @@ class DialogProviderFake : public IProjectDialogProvider
 Q_OBJECT
 public:
     DialogProviderFake()
-        : m_reopen(true)
     {}
     ~DialogProviderFake() override {}
-    bool m_reopen;
+    bool m_reopen = true;
 
 public Q_SLOTS:
     QUrl askProjectConfigLocation(bool /*fetch*/, const QUrl& /*startUrl*/,

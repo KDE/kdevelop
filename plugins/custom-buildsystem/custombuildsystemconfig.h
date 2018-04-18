@@ -29,12 +29,12 @@ struct CustomBuildSystemTool
     enum ActionType { Build = 0, Configure, Install, Clean, Prune, Undefined };
     static QString toolName(ActionType type);
 
-    CustomBuildSystemTool() : enabled( false ), type( Undefined ) {}
-    bool enabled;
+    CustomBuildSystemTool() {}
+    bool enabled = false;
     QUrl executable;
     QString arguments;
     QString envGrp;
-    ActionType type;
+    ActionType type = Undefined;
 };
 
 Q_DECLARE_METATYPE( CustomBuildSystemTool )

@@ -84,9 +84,9 @@ private:
     class TreeItem
     {
     public:
-        TreeItem() : parent(nullptr) {}
+        TreeItem() {}
         virtual ~TreeItem() {}
-        TreeItem* parent;
+        TreeItem* parent = nullptr;
         int row;
         QList<TreeItem*> children;
     };
@@ -158,7 +158,7 @@ private:
     LaunchConfigurationsModel* model;
     QMap<LaunchConfigurationType*, LaunchConfigPagesContainer*> typeWidgets;
     QMap<ILauncher*, LaunchConfigPagesContainer*> launcherWidgets;
-    bool currentPageChanged;
+    bool currentPageChanged = false;
 };
 
 }

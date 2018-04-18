@@ -27,7 +27,6 @@ bool isVarNameChar(QChar* c)
 }
 
 VariableInfo::VariableInfo()
-    : type(VariableInfo::Invalid)
 {
 }
 

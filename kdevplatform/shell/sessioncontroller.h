@@ -36,8 +36,6 @@ namespace KDevelop
 struct SessionRunInfo
 {
     SessionRunInfo()
-    : isRunning(false)
-    , holderPid(-1)
     {}
     bool operator==(const SessionRunInfo& o) const
     {
@@ -49,9 +47,9 @@ struct SessionRunInfo
         return !(operator==(o));
     }
     // if this is true, this session is currently running in an external process
-    bool isRunning;
+    bool isRunning = false;
     // if the session is running, this contains the PID of its process
-    qint64 holderPid;
+    qint64 holderPid = -1;
     // if the session is running, this contains the name of its process
     QString holderApp;
     // if the session is running, this contains the host name where the process runs

@@ -26,8 +26,6 @@
 #include "debug.h"
 
 LocalPatchSource::LocalPatchSource()
-    : m_applied(false)
-    , m_widget(nullptr)
 {
 }
 

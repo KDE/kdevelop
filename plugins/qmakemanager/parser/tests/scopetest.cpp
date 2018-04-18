@@ -27,7 +27,6 @@ QTEST_MAIN(ScopeTest)
 
 ScopeTest::ScopeTest(QObject* parent)
     : QObject(parent)
-    , ast(nullptr)
 {
 }
 

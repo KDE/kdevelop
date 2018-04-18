@@ -35,7 +35,6 @@
 
 SvnInternalCheckoutJob::SvnInternalCheckoutJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
-    , m_recursion( KDevelop::IBasicVersionControl::Recursive )
 {
 }
 

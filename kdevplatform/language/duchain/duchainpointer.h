@@ -70,7 +70,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
     explicit DUChainPointerData( DUChainBase* base );
 
     friend class DUChainBase;
-    DUChainBase * m_base;
+    DUChainBase * m_base = nullptr;
     Q_DISABLE_COPY(DUChainPointerData)
 };
 

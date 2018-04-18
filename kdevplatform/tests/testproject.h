@@ -77,7 +77,7 @@ public:
 private:
     QSet<IndexedString> m_fileSet;
     Path m_path;
-    ProjectFolderItem* m_root;
+    ProjectFolderItem* m_root = nullptr;
     KSharedConfigPtr m_projectConfiguration;
 };
 

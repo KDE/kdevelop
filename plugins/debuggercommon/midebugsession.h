@@ -342,18 +342,18 @@ protected:
 
     // Though the misleading class name, this is the session level state.
     // see m_debuggerState for debugger instance state
-    DebuggerState m_sessionState;
+    DebuggerState m_sessionState = NotStartedState;
 
-    MIDebugger *m_debugger;
+    MIDebugger *m_debugger = nullptr;
     DBGStateFlags m_debuggerState;
 
-    bool m_stateReloadInProgress;
-    bool m_stateReloadNeeded;
+    bool m_stateReloadInProgress = false;
+    bool m_stateReloadNeeded = false;
 
     std::unique_ptr<STTY> m_tty;
 
-    bool m_hasCrashed;
-    bool m_sourceInitFile;
+    bool m_hasCrashed = false;
+    bool m_sourceInitFile = true;
 
     // Map from GDB varobj name to MIVariable.
     QMap<QString, MIVariable*> m_allVariables;

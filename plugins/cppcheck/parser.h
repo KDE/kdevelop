@@ -65,7 +65,7 @@ private:
     QString m_errorSeverity;
     QString m_errorMessage;
     QString m_errorVerboseMessage;
-    bool    m_errorInconclusive;
+    bool    m_errorInconclusive = false;
     QStringList  m_errorFiles;
     QVector<int> m_errorLines;
 };

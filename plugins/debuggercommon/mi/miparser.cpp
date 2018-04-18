@@ -49,7 +49,6 @@ using namespace KDevMI::MI;
   } while (0)
 
 MIParser::MIParser()
-    : m_lex(nullptr)
 {
 }
 

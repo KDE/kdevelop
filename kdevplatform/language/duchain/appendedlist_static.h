@@ -110,9 +110,9 @@ class AppendedList : public KDevVarLengthArray<T, 10> {
 template<class T> 
 class AppendedList<false, T> {
   public:
-    AppendedList() : listSize(0) {
+    AppendedList() {
     }
-    unsigned int listSize;
+    unsigned int listSize = 0;
     unsigned int size() const {
       return listSize;
     }

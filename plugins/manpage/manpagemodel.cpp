@@ -41,8 +41,6 @@ using namespace KDevelop;
 ManPageModel::ManPageModel(QObject* parent)
     : QAbstractItemModel(parent)
     , m_indexModel(new QStringListModel(this))
-    , m_loaded(false)
-    , m_nbSectionLoaded(0)
 {
     QMetaObject::invokeMethod(const_cast<ManPageModel*>(this), "initModel", Qt::QueuedConnection);
 }

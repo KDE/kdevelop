@@ -62,14 +62,13 @@ namespace {
   struct CacheEntry
   {
     CacheEntry()
-      : failed(false)
     { }
     ModificationRevisionSet modificationTime;
     Path::List paths;
     Path::List frameworkDirectories;
     QHash<QString, QString> defines;
     QString errorMessage, longErrorMessage;
-    bool failed;
+    bool failed = false;
     QMap<QString,bool> failedFiles;
     QDateTime failTime;
   };
@@ -192,8 +191,7 @@ bool MakeFileResolver::executeCommand(const QString& command, const QString& wor
 }
 
 MakeFileResolver::MakeFileResolver()
-  : m_isResolving(false)
-  , m_outOfSource(false)
+
 {
 }
 

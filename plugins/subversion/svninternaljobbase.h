@@ -113,12 +113,12 @@ protected:
 
     mutable QMutex m_mutex;
     mutable QMutex m_killMutex;
-    bool m_success;
+    bool m_success = true;
     void setErrorMessage( const QString& );
 
 private:
-    bool sendFirstDelta;
-    bool killed;
+    bool sendFirstDelta = false;
+    bool killed = false;
     QString m_errorMessage;
 };
 

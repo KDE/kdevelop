@@ -31,7 +31,7 @@ AbstractItemRepository::~AbstractItemRepository()
 {
 }
 
-AbstractRepositoryManager::AbstractRepositoryManager() : m_repository(nullptr)
+AbstractRepositoryManager::AbstractRepositoryManager()
 {
 }
 

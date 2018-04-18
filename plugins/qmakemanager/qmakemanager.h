@@ -95,9 +95,9 @@ private:
                                                   KDevelop::ProjectBaseItem* parent );
     QMakeCache* findQMakeCache( KDevelop::IProject* project, const KDevelop::Path &path = {} ) const;
     
-    IQMakeBuilder* m_builder;
+    IQMakeBuilder* m_builder = nullptr;
     mutable QString m_qtIncludeDir;
-    QAction* m_runQMake;
+    QAction* m_runQMake = nullptr;
     QMakeFolderItem* m_actionItem;
 };
 

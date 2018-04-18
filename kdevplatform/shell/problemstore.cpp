@@ -32,14 +32,13 @@ class ProblemStorePrivate
 {
 public:
     ProblemStorePrivate()
-        : m_documents(nullptr)
-        , m_severities(KDevelop::IProblem::Error | KDevelop::IProblem::Warning | KDevelop::IProblem::Hint)
+        : m_severities(KDevelop::IProblem::Error | KDevelop::IProblem::Warning | KDevelop::IProblem::Hint)
         , m_rootNode(new KDevelop::ProblemStoreNode())
     {
     }
 
     /// Watched document set. Only problems that are in files in this set are stored.
-    KDevelop::WatchedDocumentSet *m_documents;
+    KDevelop::WatchedDocumentSet *m_documents = nullptr;
 
     /// The severity filter setting
     KDevelop::IProblem::Severities m_severities;

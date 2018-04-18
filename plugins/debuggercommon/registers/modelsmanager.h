@@ -91,7 +91,7 @@ private Q_SLOTS:
 private:
     QScopedPointer<Models> m_models;
 
-    IRegisterController* m_controller;
+    IRegisterController* m_controller = nullptr;
 
     KConfigGroup m_config;
 };

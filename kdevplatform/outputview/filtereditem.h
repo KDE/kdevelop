@@ -55,13 +55,13 @@ struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem
     FilteredItem( const QString& line, FilteredOutputItemType type );
 
     QString originalLine;
-    FilteredOutputItemType type;
-    bool isActivatable;
+    FilteredOutputItemType type =  InvalidItem;
+    bool isActivatable = false;
     QUrl url;
     /// lineNo starts with 0
-    int lineNo;
+    int lineNo = -1;
     /// columnNo starts with 0
-    int columnNo;
+    int columnNo = -1;
 };
 
 

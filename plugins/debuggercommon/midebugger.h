@@ -136,9 +136,9 @@ protected:
 
 protected:
     QString m_debuggerExecutable;
-    KProcess* m_process;
+    KProcess* m_process = nullptr;
 
-    MI::MICommand* m_currentCmd;
+    MI::MICommand* m_currentCmd = nullptr;
     MI::MIParser m_parser;
 
     /** The unprocessed output from debugger. Output is

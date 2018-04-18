@@ -39,7 +39,7 @@ Q_SIGNALS:
     void clicked();
 
 private:
-    bool m_isActive;
+    bool m_isActive = false;
 };
 
 }

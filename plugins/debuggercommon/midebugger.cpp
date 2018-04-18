@@ -50,8 +50,6 @@ using namespace KDevMI::MI;
 
 MIDebugger::MIDebugger(QObject* parent)
     : QObject(parent)
-    , m_process(nullptr)
-    , m_currentCmd(nullptr)
 {
     m_process = new KProcess(this);
     m_process->setOutputChannelMode(KProcess::SeparateChannels);

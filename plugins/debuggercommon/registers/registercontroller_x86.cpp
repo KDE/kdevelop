@@ -121,7 +121,7 @@ RegisterController_x86_64::RegisterController_x86_64(MIDebugSession* debugSessio
 }
 
 RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(MIDebugSession* debugSession, QObject* parent)
-    : IRegisterController(debugSession, parent), m_registerNamesInitialized(false)
+    : IRegisterController(debugSession, parent)
 {
     if (m_registerNames.isEmpty()) {
         const int registerCount = static_cast<int>(LAST_REGISTER);

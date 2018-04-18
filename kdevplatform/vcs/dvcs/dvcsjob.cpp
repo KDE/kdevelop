@@ -44,7 +44,7 @@ using namespace KDevelop;
 class KDevelop::DVcsJobPrivate
 {
 public:
-    DVcsJobPrivate() : childproc(new KProcess), vcsplugin(nullptr), ignoreError(false)
+    DVcsJobPrivate() : childproc(new KProcess)
     {}
 
     ~DVcsJobPrivate() {
@@ -55,12 +55,12 @@ public:
     VcsJob::JobStatus status;
     QByteArray  output;
     QByteArray  errorOutput;
-    IPlugin* vcsplugin;
+    IPlugin* vcsplugin = nullptr;
 
     QVariant results;
     OutputModel* model;
 
-    bool ignoreError;
+    bool ignoreError = false;
 };
 
 DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVerbosity verbosity)

@@ -29,9 +29,7 @@ namespace KDevelop
 {
 
 AbstractTypeData::AbstractTypeData()
-  : refCount(0)
-  , m_modifiers(AbstractType::NoModifiers)
-  , inRepository(false)
+  : inRepository(false)
 {
   initializeAppendedLists(true);
 }
@@ -69,7 +67,7 @@ AbstractTypeData& AbstractTypeData::operator=(const AbstractTypeData&) {
 }
 
 IntegralTypeData::IntegralTypeData()
-  : m_dataType(IntegralType::TypeNone)
+
 {
 }
 
@@ -127,12 +125,12 @@ StructureTypeData::StructureTypeData( const StructureTypeData& rhs )
 }
 
 ConstantIntegralTypeData::ConstantIntegralTypeData()
-  : m_value(0)
+
 {
 }
 
 ArrayTypeData::ArrayTypeData()
-  : m_dimension(0)
+
 {
 }
 
@@ -143,7 +141,7 @@ ArrayTypeData::ArrayTypeData( const ArrayTypeData& rhs )
   Q_ASSERT(m_dimension == rhs.m_dimension);
 }
 
-DelayedTypeData::DelayedTypeData() : m_kind(DelayedType::Delayed) {
+DelayedTypeData::DelayedTypeData() {
 }
 
 DelayedTypeData::DelayedTypeData( const DelayedTypeData& rhs )

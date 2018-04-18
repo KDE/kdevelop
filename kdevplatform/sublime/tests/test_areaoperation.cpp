@@ -41,13 +41,13 @@
 using namespace Sublime;
 
 struct ViewCounter {
-    ViewCounter(): count(0) {}
+    ViewCounter() {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
         count += index->views().count();
         return Area::ContinueWalker;
     }
-    int count;
+    int count = 0;
 };
 
 void TestAreaOperation::init()
@@ -314,7 +314,7 @@ void TestAreaOperation::areaCloning()
     Walks all Views and checks if they got a widget.
     hasWidget will be set to false if any View lacks a widget.*/
 struct AreaWidgetChecker {
-    AreaWidgetChecker(): foundViewWithoutWidget(false), failureMessage(QLatin1String("")) {}
+    AreaWidgetChecker(): failureMessage(QLatin1String("")) {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
         foreach (View *view, index->views())
@@ -337,7 +337,7 @@ struct AreaWidgetChecker {
     char* message() {
         return qstrdup(failureMessage.toLatin1().data());
     }
-    bool foundViewWithoutWidget;
+    bool foundViewWithoutWidget = false;
     QString failureMessage;
 };
 

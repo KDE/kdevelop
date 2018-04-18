@@ -39,10 +39,9 @@ struct Token
 struct FileSymbol
 {
     QByteArray contents;
-    TokenStream *tokenStream;
+    TokenStream *tokenStream = nullptr;
 
-    inline FileSymbol()
-        : tokenStream(nullptr) {}
+    inline FileSymbol() {}
 
     inline ~FileSymbol();
 };
@@ -124,17 +123,17 @@ private:
     static scan_fun_ptr s_scan_table[128 + 1];
 
     QByteArray m_contents;
-    int m_ptr;
+    int m_ptr = 0;
     // Cached 'm_contents.length()'
-    int m_length;
+    int m_length = 0;
 
     QVector<int> m_lines;
-    int m_line;
+    int m_line = 0;
 
     QVector<Token> m_tokens;
-    int m_tokensCount;
+    int m_tokensCount = 0;
 
-    int m_cursor;
+    int m_cursor = 0;
 };
 
 inline FileSymbol::~FileSymbol()

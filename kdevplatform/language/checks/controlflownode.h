@@ -76,8 +76,8 @@ private:
     KDevelop::RangeInRevision m_nodeRange;
     KDevelop::RangeInRevision m_conditionRange;
 
-    ControlFlowNode* m_next;
-    ControlFlowNode* m_alternative;
+    ControlFlowNode* m_next = nullptr;
+    ControlFlowNode* m_alternative = nullptr;
 };
 
 }

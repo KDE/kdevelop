@@ -97,13 +97,13 @@ private:
     QString m_replacement;
     QString m_replacementTemplate;
     QString m_finalReplacement;
-    bool m_finalUpToDate;  /// says if m_finalReplacement is up to date or must be regenerated
-    GrepOutputItem *m_rootItem;
-    int m_fileCount;
-    int m_matchCount;
+    bool m_finalUpToDate = false;  /// says if m_finalReplacement is up to date or must be regenerated
+    GrepOutputItem *m_rootItem = nullptr;
+    int m_fileCount = 0;
+    int m_matchCount = 0;
     QString m_savedMessage;
     KDevelop::IStatus *m_savedIStatus;
-    bool m_itemsCheckable;
+    bool m_itemsCheckable = false;
 
 private Q_SLOTS:
     void updateCheckState(QStandardItem*);

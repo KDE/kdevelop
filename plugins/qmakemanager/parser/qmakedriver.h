@@ -41,7 +41,7 @@ class KDEVQMAKEPARSER_EXPORT Driver
         bool parse( ProjectAST** ast );
     private:
         QString m_content;
-        bool m_debug;
+        bool m_debug = false;
 };
 }
 

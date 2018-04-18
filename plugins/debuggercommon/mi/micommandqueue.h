@@ -54,7 +54,7 @@ private:
 
     QList<MICommand*> m_commandList;
     int m_immediatelyCounter = 0;
-    uint32_t m_tokenCounter;
+    uint32_t m_tokenCounter = 0;
 };
 
 } // end of namespace MI

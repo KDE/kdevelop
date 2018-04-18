@@ -33,11 +33,11 @@ unsigned int extractor_div_with = 0;
 #include <tests/autotestshell.h>
 
 struct TestItem {
-    explicit TestItem(uint _value = 0) : value(_value), leftChild(-1), rightChild(-1) {
+    explicit TestItem(uint _value = 0) : value(_value) {
     }
     uint value;
-    int leftChild;
-    int rightChild;
+    int leftChild = -1;
+    int rightChild = -1;
     bool operator==(const TestItem& rhs) const {
         return value == rhs.value;
     }
@@ -123,7 +123,7 @@ bool operator==(const std::set<uint>& a, const std::set<uint>& b) {
 
     class TestItemBasedSet {
         public:
-            TestItemBasedSet() : m_centralFree(-1) {
+            TestItemBasedSet() {
             }
 
             void insert(uint i) {
@@ -202,7 +202,7 @@ bool operator==(const std::set<uint>& a, const std::set<uint>& b) {
             }
 
         private:
-            int m_centralFree;
+            int m_centralFree = -1;
             QVector<TestItem> data;
     };
 

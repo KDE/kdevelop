@@ -214,7 +214,7 @@ bool SetNodeDataRequest::equals(const SetNodeData* item) const {
     return item->leftNode() == data.leftNode() && item->rightNode() == data.rightNode() && item->start() == data.start() && item->end() == data.end();
 }
 
-Set::Set() : m_tree(0), m_repository(nullptr) {
+Set::Set() {
 }
 
 Set::~Set() {

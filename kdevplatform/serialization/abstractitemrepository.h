@@ -60,7 +60,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT AbstractRepositoryManager
     virtual QMutex* repositoryMutex() const = 0;
 
   protected:
-    mutable AbstractItemRepository* m_repository;
+    mutable AbstractItemRepository* m_repository = nullptr;
 };
 
 }

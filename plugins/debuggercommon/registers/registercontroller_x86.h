@@ -66,7 +66,7 @@ protected:
     static FlagRegister m_eflags;
 
     ///Indicates if register names were initialized.
-    bool m_registerNamesInitialized;
+    bool m_registerNamesInitialized = false;
 };
 
 class RegisterController_x86 : public RegisterControllerGeneral_x86

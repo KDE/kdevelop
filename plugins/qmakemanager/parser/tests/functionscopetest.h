@@ -78,7 +78,7 @@ class FunctionScopeTest : public QObject
         void missingParenthesis();
         void missingParenthesis_data();
     private:
-        QMake::ProjectAST* ast;
+        QMake::ProjectAST* ast = nullptr;
 
 };
 

@@ -84,9 +84,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemData : public DUChainBaseData
 {
 public:
     ProblemData()
-        : source(IProblem::Unknown)
-        , severity(IProblem::Error)
-        , finalLocationMode(IProblem::Range)
     {
       initializeAppendedLists();
     }
@@ -98,7 +95,6 @@ public:
       , url(rhs.url)
       , description(rhs.description)
       , explanation(rhs.explanation)
-      , finalLocationMode(IProblem::Range)
     {
       initializeAppendedLists();
       copyListsFrom(rhs);
@@ -109,12 +105,12 @@ public:
       freeAppendedLists();
     }
 
-    IProblem::Source source;
-    IProblem::Severity severity;
+    IProblem::Source source = IProblem::Unknown;
+    IProblem::Severity severity = IProblem::Error;
     IndexedString url;
     IndexedString description;
     IndexedString explanation;
-    IProblem::FinalLocationMode finalLocationMode;
+    IProblem::FinalLocationMode finalLocationMode = IProblem::Range;
 
     START_APPENDED_LISTS_BASE(ProblemData, DUChainBaseData);
     APPENDED_LIST_FIRST(ProblemData, LocalIndexedProblem, diagnostics);

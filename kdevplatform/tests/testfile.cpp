@@ -39,8 +39,6 @@ class KDevelop::TestFilePrivate
 {
 public:
     TestFilePrivate()
-    : ready(false)
-    , keepDUChainData(false)
     {
     }
 
@@ -81,12 +79,12 @@ public:
 
     QString file;
     QString suffix;
-    bool ready;
+    bool ready = false;
     ReferencedTopDUContext topContext;
     IndexedString url;
     TestProject* project;
     QScopedPointer<ProjectFileItem> fileItem;
-    bool keepDUChainData;
+    bool keepDUChainData = false;
 };
 
 TestFile::TestFile(const QString& contents, const QString& fileExtension,

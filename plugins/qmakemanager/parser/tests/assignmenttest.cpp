@@ -29,7 +29,6 @@ QTEST_MAIN(AssignmentTest)
 
 AssignmentTest::AssignmentTest(QObject* parent)
     : QObject(parent)
-    , ast(nullptr)
 {
 }
 

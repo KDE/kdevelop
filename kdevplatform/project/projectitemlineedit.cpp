@@ -58,7 +58,7 @@ public:
 
 private:
     KDevelop::ProjectModel* mModel;
-    KDevelop::ProjectBaseItem* mBase;
+    KDevelop::ProjectBaseItem* mBase = nullptr;
 };
 
 class ProjectItemValidator : public QValidator
@@ -71,13 +71,13 @@ public:
     void setBaseItem( KDevelop::ProjectBaseItem* item ) { mBase = item; }
 
 private:
-    KDevelop::ProjectBaseItem* mBase;
+    KDevelop::ProjectBaseItem* mBase = nullptr;
 };
 
 ProjectItemCompleter::ProjectItemCompleter(QObject* parent)
     : QCompleter(parent)
     , mModel(KDevelop::ICore::self()->projectController()->projectModel())
-    , mBase( nullptr )
+
 {
     setModel(mModel);
     setCaseSensitivity( Qt::CaseInsensitive );
@@ -98,7 +98,7 @@ QString ProjectItemCompleter::pathFromIndex(const QModelIndex& index) const
 }
 
 
-ProjectItemValidator::ProjectItemValidator(QObject* parent): QValidator(parent), mBase(nullptr)
+ProjectItemValidator::ProjectItemValidator(QObject* parent): QValidator(parent)
 {
 }
 

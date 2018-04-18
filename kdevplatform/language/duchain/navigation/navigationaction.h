@@ -42,25 +42,25 @@ struct NavigationAction {
   };
 
   ///When executed, this navigation-action calls the "executeKeyAction(QString) function in its navigation-context
-  explicit NavigationAction(const QString& _key) : targetContext(nullptr), type(ExecuteKey), key(_key) {
+  explicit NavigationAction(const QString& _key) : type(ExecuteKey), key(_key) {
   }
 
-  NavigationAction() : targetContext(nullptr), type(None) {
+  NavigationAction() {
   }
 
-  NavigationAction( const DeclarationPointer& decl_, Type type_ ) : targetContext(nullptr), decl(decl_), type(type_) {
+  NavigationAction( const DeclarationPointer& decl_, Type type_ ) :  decl(decl_), type(type_) {
   }
 
-  NavigationAction( const QUrl& _document, const KTextEditor::Cursor& _cursor) : targetContext(nullptr), type(JumpToSource), document(_document), cursor(_cursor) {
+  NavigationAction( const QUrl& _document, const KTextEditor::Cursor& _cursor) :  type(JumpToSource), document(_document), cursor(_cursor) {
   }
 
   explicit NavigationAction(AbstractNavigationContext* _targetContext) : targetContext(_targetContext) {
   }
 
-  AbstractNavigationContext* targetContext; //If this is set, this action does nothing else than jumping to that context
+  AbstractNavigationContext* targetContext = nullptr; //If this is set, this action does nothing else than jumping to that context
 
   DeclarationPointer decl;
-  Type type;
+  Type type = None;
 
   QUrl document;
   KTextEditor::Cursor cursor;

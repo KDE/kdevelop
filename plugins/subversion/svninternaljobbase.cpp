@@ -45,9 +45,6 @@ SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
     , m_guiSemaphore( 0 )
     , m_mutex()
     , m_killMutex()
-    , m_success( true )
-    , sendFirstDelta( false )
-    , killed( false )
 {
     m_ctxt->setListener(this);
 }

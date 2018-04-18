@@ -54,7 +54,7 @@ private Q_SLOTS:
     void moveToTop();
     void showContextMenu( const QPoint& p );
 private:
-    ProjectManagerView* m_view;
+    ProjectManagerView* m_view = nullptr ;
 
     Ui::ProjectBuildSetWidget* m_ui;
 };

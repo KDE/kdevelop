@@ -108,7 +108,7 @@ GroupsName RegisterController_Arm::enumToGroupName(ArmRegisterGroups group) cons
     return groups[group];
 }
 
-RegisterController_Arm::RegisterController_Arm(MIDebugSession* debugSession, QObject* parent) : IRegisterController(debugSession, parent), m_registerNamesInitialized(false)
+RegisterController_Arm::RegisterController_Arm(MIDebugSession* debugSession, QObject* parent) : IRegisterController(debugSession, parent)
 {
     if (m_registerNames.isEmpty()) {
         const int registerCount = static_cast<int>(LAST_REGISTER);

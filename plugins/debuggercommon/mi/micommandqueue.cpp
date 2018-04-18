@@ -24,7 +24,6 @@
 using namespace KDevMI::MI;
 
 CommandQueue::CommandQueue()
-    : m_tokenCounter(0)
 {
 }
 

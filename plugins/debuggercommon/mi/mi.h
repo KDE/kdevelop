@@ -182,7 +182,6 @@ namespace KDevMI { namespace MI {
     struct Value
     {
         Value()
-            : kind(StringLiteral)
         {}
     private: // Copy disabled to prevent slicing.
         Value(const Value&);
@@ -192,7 +191,7 @@ namespace KDevMI { namespace MI {
 
         virtual ~Value() {}
 
-        enum { StringLiteral, Tuple, List } kind;
+        enum { StringLiteral, Tuple, List } kind = StringLiteral;
 
         /** If this value is a string literals, returns the string value.
             Othewise, throws type_error.
@@ -241,11 +240,11 @@ namespace KDevMI { namespace MI {
     */
     struct Result
     {
-        Result() : value(nullptr) {}
+        Result() {}
         ~Result() { delete value; value = nullptr; }
 
         QString variable;
-        Value *value;
+        Value *value = nullptr;
     };
 
     struct StringLiteralValue : public Value

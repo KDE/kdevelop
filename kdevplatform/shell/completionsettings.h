@@ -57,15 +57,15 @@ public:
 private:
     CompletionSettings();
 
-    const CompletionLevel m_level;
-    const bool m_automatic;
-    const bool m_highlightSemanticProblems;
-    const bool m_highlightProblematicLines;
-    const bool m_showMultiLineInformation;
-    const bool m_boldDeclarations;
-    const int m_localColorizationLevel;
-    const int m_globalColorizationLevel;
-    const int m_minFilesForSimplifiedParsing;
+    const CompletionLevel m_level = MinimalWhenAutomatic;
+    const bool m_automatic = true;
+    const bool m_highlightSemanticProblems = true;
+    const bool m_highlightProblematicLines = false;
+    const bool m_showMultiLineInformation = false;
+    const bool m_boldDeclarations = true;
+    const int m_localColorizationLevel = 170;
+    const int m_globalColorizationLevel = 255;
+    const int m_minFilesForSimplifiedParsing = 100000;
     const QString m_todoMarkerWords;
 
     const KConfigGroup m_languageGroup;

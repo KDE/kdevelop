@@ -32,8 +32,6 @@
 
 SvnInternalUpdateJob::SvnInternalUpdateJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
-    , m_recursive( false )
-    , m_ignoreExternals( false )
 {
 }
 

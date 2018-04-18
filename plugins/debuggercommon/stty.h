@@ -60,7 +60,7 @@ private:
 
 private:
     int fout;
-    QSocketNotifier *out;
+    QSocketNotifier *out = nullptr;
     QString ttySlave;
     QString m_lastError;
     QScopedPointer<QProcess> m_externalTerminal;

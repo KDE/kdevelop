@@ -85,7 +85,7 @@ void unlockForegroundMutexInternal(bool duringDestruction = false) {
 }
 }
 
-ForegroundLock::ForegroundLock(bool lock) : m_locked(false)
+ForegroundLock::ForegroundLock(bool lock)
 {
     if(lock)
         relock();

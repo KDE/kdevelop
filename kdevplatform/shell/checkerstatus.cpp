@@ -26,13 +26,11 @@ namespace KDevelop
 class CheckerStatusPrivate
 {
 public:
-    int m_maxItems;
-    int m_checkedItems;
+    int m_maxItems = 0;
+    int m_checkedItems = 0;
     QString m_name;
 
     CheckerStatusPrivate()
-        : m_maxItems(0)
-        , m_checkedItems(0)
     {
     }
 };

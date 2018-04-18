@@ -29,11 +29,10 @@ using namespace KDevelop;
 struct KDevelop::ClassIdentifierPagePrivate
 {
     ClassIdentifierPagePrivate()
-        : classid(nullptr)
     {
     }
 
-    Ui::NewClassDialog* classid;
+    Ui::NewClassDialog* classid = nullptr;
 };
 
 ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)

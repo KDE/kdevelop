@@ -51,7 +51,7 @@ public:
 
     VariableInfo();
     QList< Position > positions;
-    VariableType type;
+    VariableType type = VariableInfo::Invalid;
 };
 
 class VariableReferenceParser

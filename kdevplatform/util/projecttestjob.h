@@ -39,27 +39,23 @@ class IProject;
 struct KDEVPLATFORMUTIL_EXPORT ProjectTestResult
 {
     ProjectTestResult()
-        : total(0)
-        , passed(0)
-        , failed(0)
-        , error(0)
     {}
     /**
      * The total number of test suites launched in this job
      **/
-    int total;
+    int total = 0;
     /**
      * The number of passed test suites in this job.
      **/
-    int passed;
+    int passed = 0;
     /**
      * The number of failed test suites in this job.
      **/
-    int failed;
+    int failed = 0;
     /**
      * The number of errors in this job.
      **/
-    int error;
+    int error = 0;
 };
 
 /**

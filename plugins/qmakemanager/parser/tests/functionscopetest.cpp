@@ -27,7 +27,6 @@ QTEST_MAIN(FunctionScopeTest)
 
 FunctionScopeTest::FunctionScopeTest(QObject* parent)
     : QObject(parent)
-    , ast(nullptr)
 {
 }
 

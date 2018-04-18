@@ -91,11 +91,11 @@ private Q_SLOTS:
 private:
     friend class GdbTest;
 
-    BreakpointController *m_breakpointController;
-    VariableController *m_variableController;
-    GdbFrameStackModel *m_frameStackModel;
+    BreakpointController *m_breakpointController = nullptr;
+    VariableController *m_variableController = nullptr;
+    GdbFrameStackModel *m_frameStackModel = nullptr;
 
-    bool m_autoDisableASLR;
+    bool m_autoDisableASLR = false;
 };
 
 } // end of namespace GDB

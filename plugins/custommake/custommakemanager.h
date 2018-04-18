@@ -138,7 +138,7 @@ private:
     void createTargetItems(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent);
 
 private:
-    IMakeBuilder *m_builder;
+    IMakeBuilder *m_builder = nullptr;
     QScopedPointer<CustomMakeProvider> m_provider;
     QSet<QString> m_projectPaths;
     friend class CustomMakeProvider;

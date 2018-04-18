@@ -27,9 +27,7 @@ using namespace KDevelop;
 
 Filter::Filter()
     : targets(Files | Folders)
-    , type(Exclusive)
 {
-
 }
 
 Filter::Filter(const SerializedFilter& filter)
@@ -52,7 +50,7 @@ Filter::Filter(const SerializedFilter& filter)
 
 SerializedFilter::SerializedFilter()
     : targets(Filter::Files | Filter::Folders)
-    , type(Filter::Exclusive)
+
 {
 
 }

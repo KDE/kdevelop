@@ -40,7 +40,6 @@ ISourceFormatter::~ISourceFormatter()
 }
 
 SourceFormatterStyle::SourceFormatterStyle()
-	: m_usePreview(false)
 {
 };
 

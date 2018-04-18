@@ -41,7 +41,7 @@ protected:
 private:
     KDevelop::VcsLocation m_sourceRepository;
     QUrl m_destinationDirectory;
-    KDevelop::IBasicVersionControl::RecursionMode m_recursion;
+    KDevelop::IBasicVersionControl::RecursionMode m_recursion = KDevelop::IBasicVersionControl::Recursive;
 };
 
 

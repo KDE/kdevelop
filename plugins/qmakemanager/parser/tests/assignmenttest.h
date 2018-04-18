@@ -97,7 +97,7 @@ class AssignmentTest : public QObject
         void contAfterComment();
         void contAfterComment_data();
     private:
-        QMake::ProjectAST* ast;
+        QMake::ProjectAST* ast = nullptr;
 };
 
 #endif

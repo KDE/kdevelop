@@ -38,7 +38,6 @@
 namespace QMake {
 
 Driver::Driver()
-    : m_debug(false)
 {
 }
 

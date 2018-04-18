@@ -18,10 +18,10 @@
 #include <QDebug>
 
 struct SafetyCounter {
-  int safetyCounter;
+  int safetyCounter = 0;
   const int maxSafetyCounter;
 
-  explicit SafetyCounter( int max = 40000 ) : safetyCounter(0), maxSafetyCounter(max) {
+  explicit SafetyCounter( int max = 40000 ) : maxSafetyCounter(max) {
   }
 
   void init() {

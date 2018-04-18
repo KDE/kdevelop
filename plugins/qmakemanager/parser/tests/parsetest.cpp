@@ -48,7 +48,6 @@ QTEST_MAIN(ParseTest)
 
 ParseTest::ParseTest(QObject* parent)
     : QObject(parent)
-    , ast(nullptr)
 {
 }
 

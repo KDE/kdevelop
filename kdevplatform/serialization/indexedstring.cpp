@@ -215,7 +215,6 @@ inline void deref(IndexedString* string)
 }
 
 IndexedString::IndexedString()
-    : m_index(0)
 {
 }
 

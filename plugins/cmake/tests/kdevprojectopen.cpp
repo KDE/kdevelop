@@ -32,7 +32,6 @@ using namespace KDevelop;
 
 KDevProjectOpen::KDevProjectOpen(QObject* parent)
     : QObject(parent)
-    , m_toOpen(0)
 {
     AutoTestShell::init();
     TestCore::initialize();

@@ -24,6 +24,7 @@
 
 #include "integraltype.h"
 #include "identifiedtype.h"
+#include "typesystemdata.h" // for IntegralTypeData (used in EnumerationTypeBase)
 
 namespace KDevelop
 {

@@ -26,10 +26,6 @@ namespace KDevelop
 
 FilteredItem::FilteredItem( const QString& line )
 : originalLine( line )
-, type( InvalidItem )
-, isActivatable(false)
-, lineNo(-1)
-, columnNo(-1)
 {
 }
 

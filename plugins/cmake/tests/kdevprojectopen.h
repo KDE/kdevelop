@@ -38,7 +38,7 @@ private Q_SLOTS:
     void projectDone(KDevelop::IProject*);
 
 private:
-    int m_toOpen;
+    int m_toOpen = 0;
 };
 
 #endif

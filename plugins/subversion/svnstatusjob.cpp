@@ -68,7 +68,6 @@ KDevelop::VcsStatusInfo::State getState( const svn::Status& st )
 
 SvnInternalStatusJob::SvnInternalStatusJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
-    , m_recursive( false )
 {
 }
 

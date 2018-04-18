@@ -56,7 +56,6 @@ bool launchConfigGreaterThan(KDevelop::LaunchConfigurationType* a, KDevelop::Lau
 //TODO: Maybe use KPageDialog instead, might make the model stuff easier and the default-size stuff as well
 LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     : QDialog(parent)
-    , currentPageChanged(false)
 {
     setWindowTitle( i18n( "Launch Configurations" ) );
 

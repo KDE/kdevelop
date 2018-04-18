@@ -61,7 +61,7 @@ private:
     QStringList cmakeArguments( KDevelop::IProject* project );
     KDevelop::Path buildDir( KDevelop::IProject* project );
 
-    KDevelop::IProject* m_project;
+    KDevelop::IProject* m_project = nullptr;
 };
 
 #endif // CMAKEJOB_H

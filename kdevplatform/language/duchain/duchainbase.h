@@ -58,8 +58,7 @@ class IndexedString;
 ///even if both sides are constant.
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainBaseData {
 public:
-
-    DUChainBaseData() : classId(0) {
+    DUChainBaseData() {
       initializeAppendedLists();
     }
     
@@ -75,7 +74,7 @@ public:
     
     APPENDED_LISTS_STUB(DUChainBaseData)
     
-    quint16 classId;
+    quint16 classId = 0;
 
     bool isDynamic() const {
       return m_dynamic;

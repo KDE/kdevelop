@@ -33,12 +33,11 @@ struct PerUrlData
     PerUrlData()
         // TODO: make this non-recursive
         : mutex(QMutex::Recursive)
-        , ref(0)
     {}
     QMutex mutex;
     // how many people are (trying to) parse this url
     // we use this to delete the entry once no-one needs it anymore
-    uint ref;
+    uint ref = 0;
 };
 
 // this mutex protects the parsingUrls

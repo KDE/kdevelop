@@ -101,10 +101,10 @@ public Q_SLOTS:
     void stepOut() override;
 
 private:
-    IBreakpointController *m_breakpointController;
-    IVariableController *m_variableController;
-    IFrameStackModel *m_frameStackModel;
-    DebuggerState m_sessionState;
+    IBreakpointController *m_breakpointController = nullptr;
+    IVariableController *m_variableController = nullptr;
+    IFrameStackModel *m_frameStackModel = nullptr;
+    DebuggerState m_sessionState = NotStartedState;
 };
 
 } // end of namespace KDevelop

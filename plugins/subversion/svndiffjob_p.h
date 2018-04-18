@@ -59,10 +59,10 @@ private:
     KDevelop::VcsRevision m_srcRevision;
     KDevelop::VcsRevision m_dstRevision;
     KDevelop::VcsRevision m_pegRevision;
-    bool m_recursive;
-    bool m_ignoreAncestry;
-    bool m_ignoreContentType;
-    bool m_noDiffOnDelete;
+    bool m_recursive = true;
+    bool m_ignoreAncestry = false;
+    bool m_ignoreContentType = false;
+    bool m_noDiffOnDelete = false;
 };
 
 

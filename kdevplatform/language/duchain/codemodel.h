@@ -35,8 +35,7 @@ namespace KDevelop {
   struct CodeModelItem
   {
     CodeModelItem()
-      : referenceCount(0)
-      , kind(Unknown)
+      : kind(Unknown)
     {
     }
     enum Kind {
@@ -49,7 +48,7 @@ namespace KDevelop {
       ClassMember = 32
     };
     IndexedQualifiedIdentifier id;
-    uint referenceCount;
+    uint referenceCount = 0;
     union {
       Kind kind;
       uint uKind;

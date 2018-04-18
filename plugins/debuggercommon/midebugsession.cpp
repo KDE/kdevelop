@@ -65,14 +65,8 @@ using namespace KDevMI::MI;
 MIDebugSession::MIDebugSession(MIDebuggerPlugin *plugin)
     : m_procLineMaker(new ProcessLineMaker(this))
     , m_commandQueue(new CommandQueue)
-    , m_sessionState(NotStartedState)
-    , m_debugger(nullptr)
     , m_debuggerState(s_dbgNotStarted | s_appNotStarted)
-    , m_stateReloadInProgress(false)
-    , m_stateReloadNeeded(false)
     , m_tty(nullptr)
-    , m_hasCrashed(false)
-    , m_sourceInitFile(true)
     , m_plugin(plugin)
 {
     // setup signals

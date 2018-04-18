@@ -81,7 +81,7 @@ private Q_SLOTS:
 private:
     QMenu* m_menu;
 
-    ModelsManager* m_modelsManager;
+    ModelsManager* m_modelsManager = nullptr;
 
     QVector<QAction*> m_actions;
 };

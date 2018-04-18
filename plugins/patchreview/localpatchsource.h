@@ -63,9 +63,9 @@ private:
     QUrl m_filename;
     QUrl m_baseDir;
     QString m_command;
-    bool m_applied;
+    bool m_applied = false;
     uint m_depth;
-    class LocalPatchWidget* m_widget;
+    class LocalPatchWidget* m_widget = nullptr;
 };
 
 class LocalPatchWidget : public QWidget

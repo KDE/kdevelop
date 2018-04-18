@@ -65,7 +65,7 @@ private:
 
     static FlagRegister m_cpsr;
 
-    bool m_registerNamesInitialized;
+    bool m_registerNamesInitialized = false;
 };
 
 } // end of namespace KDevMI

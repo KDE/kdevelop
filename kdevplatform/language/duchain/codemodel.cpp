@@ -72,7 +72,7 @@ DEFINE_LIST_MEMBER_HASH(CodeModelRepositoryItem, items, CodeModelItem)
 
 class CodeModelRepositoryItem {
   public:
-  CodeModelRepositoryItem() : centralFreeItem(-1) {
+  CodeModelRepositoryItem() {
     initializeAppendedLists();
   }
   CodeModelRepositoryItem(const CodeModelRepositoryItem& rhs, bool dynamic = true) : file(rhs.file), centralFreeItem(rhs.centralFreeItem) {
@@ -99,7 +99,7 @@ class CodeModelRepositoryItem {
   }
 
   IndexedString file;
-  int centralFreeItem;
+  int centralFreeItem = -1;
 
   START_APPENDED_LISTS(CodeModelRepositoryItem);
   APPENDED_LIST_FIRST(CodeModelRepositoryItem, CodeModelItem, items);

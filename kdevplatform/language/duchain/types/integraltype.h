@@ -22,7 +22,6 @@
 #define KDEVPLATFORM_INTEGRALTYPE_H
 
 #include "abstracttype.h"
-#include "typesystemdata.h"
 
 namespace KDevelop
 {

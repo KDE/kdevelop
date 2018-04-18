@@ -46,7 +46,7 @@ public:
     QString indexToConfigString(const QModelIndex &index) const override;
 
 private:
-    IProject* m_project;
+    IProject* m_project = nullptr;
 };
 
 }

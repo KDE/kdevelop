@@ -40,7 +40,7 @@ protected:
 private:
     QUrl m_sourceLocation;
     QUrl m_destinationLocation;
-    bool m_force;
+    bool m_force = false;
 };
 
 

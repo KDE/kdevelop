@@ -32,7 +32,6 @@ class AreaIndexPrivate
 {
 public:
     AreaIndexPrivate()
-        :parent(nullptr), first(nullptr), second(nullptr), orientation(Qt::Horizontal)
     {
     }
     ~AreaIndexPrivate()
@@ -60,10 +59,10 @@ public:
 
     QList<View*> views;
 
-    AreaIndex *parent;
-    AreaIndex *first;
-    AreaIndex *second;
-    Qt::Orientation orientation;
+    AreaIndex *parent = nullptr;
+    AreaIndex *first = nullptr;
+    AreaIndex *second = nullptr;
+    Qt::Orientation orientation = Qt::Horizontal;
 };
 
 
@@ -233,7 +232,7 @@ void Sublime::AreaIndex::setOrientation(Qt::Orientation orientation) const
 // class RootAreaIndex
 
 RootAreaIndex::RootAreaIndex()
-    :AreaIndex(), d(nullptr)
+    :AreaIndex()
 {
 }
 

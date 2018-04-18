@@ -37,7 +37,6 @@ using namespace KDevelop;
 
 TestIVariableController::TestIVariableController(QObject* parent)
     : QObject(parent)
-    , m_debugSession(nullptr)
 {
 }
 

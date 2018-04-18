@@ -36,15 +36,13 @@ struct Value;
 }
 
 struct BreakpointData {
-    int debuggerId;
+    int debuggerId = -1;
     KDevelop::BreakpointModel::ColumnFlags dirty;
     KDevelop::BreakpointModel::ColumnFlags sent;
     KDevelop::BreakpointModel::ColumnFlags errors;
-    bool pending;
+    bool pending = false;
 
     BreakpointData()
-        : debuggerId(-1)
-        , pending(false)
     {}
 };
 

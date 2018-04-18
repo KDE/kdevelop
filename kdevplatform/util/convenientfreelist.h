@@ -36,7 +36,7 @@ namespace KDevelop {
     template<class Data, class Handler>
     class ConstantConvenientEmbeddedSet {
         public:
-            ConstantConvenientEmbeddedSet() : m_data(nullptr), m_dataSize(0), m_centralFreeItem(-1) {
+            ConstantConvenientEmbeddedSet() : m_data(nullptr) {
             }
             ConstantConvenientEmbeddedSet(const Data* data, uint count, int centralFreeItem) : m_data(data), m_dataSize(count), m_centralFreeItem(centralFreeItem) {
             }
@@ -143,15 +143,15 @@ namespace KDevelop {
 
 //         protected:
             const Data* m_data;
-            uint m_dataSize;
-            int m_centralFreeItem;
+            uint m_dataSize = 0;
+            int m_centralFreeItem = -1;
     };
 
     ///Convenient iterator that automatically skips invalid/free items in the array.
     template<class Data, class Handler>
     class ConvenientEmbeddedSetIterator : public ConstantConvenientEmbeddedSet<Data, Handler> {
         public:
-        explicit ConvenientEmbeddedSetIterator(const Data* data = nullptr, uint count = 0, int centralFreeItem = -1) : ConstantConvenientEmbeddedSet<Data, Handler>(data, count, centralFreeItem), m_pos(0) {
+        explicit ConvenientEmbeddedSetIterator(const Data* data = nullptr, uint count = 0, int centralFreeItem = -1) : ConstantConvenientEmbeddedSet<Data, Handler>(data, count, centralFreeItem) {
             //Move to first valid position
             moveToValid();
         }
@@ -180,7 +180,7 @@ namespace KDevelop {
                 while(this->m_pos < this->m_dataSize && (Handler::isFree(this->m_data[this->m_pos])))
                     ++this->m_pos;
             }
-            uint m_pos;
+            uint m_pos = 0;
     };
 
 
@@ -193,7 +193,7 @@ namespace KDevelop {
     template<class Data, class Handler, class Data2, class Handler2, class KeyExtractor>
     class ConvenientEmbeddedSetFilterIterator : public ConvenientEmbeddedSetIterator<Data, Handler> {
         public:
-        ConvenientEmbeddedSetFilterIterator() : m_match(-1) {
+        ConvenientEmbeddedSetFilterIterator() {
         }
         ConvenientEmbeddedSetFilterIterator(const ConvenientEmbeddedSetIterator<Data, Handler>& base, const ConvenientEmbeddedSetIterator<Data2, Handler2>& rhs) : ConvenientEmbeddedSetIterator<Data, Handler>(base), m_rhs(rhs), m_match(-1) {
             boundStack.append( qMakePair( qMakePair(0u, this->m_dataSize), qMakePair(0u, rhs.m_dataSize) ) );
@@ -309,14 +309,14 @@ namespace KDevelop {
         //Bounds that yet need to be matched.
         KDevVarLengthArray<QPair<QPair<uint, uint>, QPair<uint, uint> > > boundStack;
         ConvenientEmbeddedSetIterator<Data2, Handler2> m_rhs;
-        int m_match;
+        int m_match = -1;
     };
 
     ///Filters a list-embedded set by a binary tree set as managed by the SetRepository data structures
     template<class Data, class Handler, class Data2, class TreeSet, class KeyExtractor>
     class ConvenientEmbeddedSetTreeFilterIterator : public ConvenientEmbeddedSetIterator<Data, Handler> {
         public:
-        ConvenientEmbeddedSetTreeFilterIterator() : m_match(-1) {
+        ConvenientEmbeddedSetTreeFilterIterator() {
         }
         ///@param noFiltering whether the given input is pre-filtered. If this is true, base will be iterated without skipping any items.
         ConvenientEmbeddedSetTreeFilterIterator(const ConvenientEmbeddedSetIterator<Data, Handler>& base, const TreeSet& rhs, bool noFiltering = false) : ConvenientEmbeddedSetIterator<Data, Handler>(base), m_rhs(rhs), m_match(-1), m_noFiltering(noFiltering) {
@@ -492,7 +492,7 @@ namespace KDevelop {
         //Bounds that yet need to be matched. Always a range in the own vector, and a node that all items in the range are contained in
         KDevVarLengthArray<QPair<QPair<uint, uint>, typename TreeSet::Node > > boundStack;
         TreeSet m_rhs;
-        int m_match, m_matchBound;
+        int m_match = -1, m_matchBound;
         Data2 m_matchingTo;
         bool m_noFiltering;
     };
@@ -526,7 +526,7 @@ namespace KDevelop {
                 return;
             }
 
-            if(rhs.node().isValid())  {
+            if(rhs.node().isValid()) {
                 //Correctly initialize the initial bounds
                 int ownStart = lowerBound(rhs.node().firstItem(), 0, this->m_dataSize);
                 if(ownStart == -1)
@@ -685,7 +685,7 @@ namespace KDevelop {
 
             typedef ConvenientEmbeddedSetIterator<Data, Handler> Iterator;
 
-            ConvenientFreeListSet() : m_centralFree(-1) {
+            ConvenientFreeListSet() {
             }
 
             ///Re-construct a set from its components
@@ -735,7 +735,7 @@ namespace KDevelop {
             }
 
         private:
-            int m_centralFree;
+            int m_centralFree = -1;
             QVector<Data> m_data;
     };
 }

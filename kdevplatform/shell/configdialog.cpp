@@ -40,7 +40,6 @@ using namespace KDevelop;
 
 ConfigDialog::ConfigDialog(QWidget* parent)
     : KPageDialog(parent)
-    , m_currentPageHasChanges(false)
 {
     setWindowTitle(i18n("Configure"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
