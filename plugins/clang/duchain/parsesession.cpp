@@ -32,6 +32,7 @@
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"
 #include "util/clangutils.h"
+#include "libclang_include_path.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
@@ -190,14 +191,6 @@ QVector<CXUnsavedFile> toClangApi(const QVector<UnsavedFile>& unsavedFiles)
     return unsaved;
 }
 
-bool needGccCompatibility(const ClangParsingEnvironment& environment)
-{
-    const auto& defines = environment.defines();
-    // TODO: potentially do the same for the intel compiler?
-    return defines.contains(QStringLiteral("__GNUC__"))
-        && !environment.defines().contains(QStringLiteral("__clang__"));
-}
-
 bool hasQtIncludes(const Path::List& includePaths)
 {
     return std::find_if(includePaths.begin(), includePaths.end(), [] (const Path& path) {
@@ -260,14 +253,6 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
         clangArguments << pchFile.constData();
     }
 
-    if (needGccCompatibility(environment)) {
-        const auto compatFile = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("kdevclangsupport/gcc_compat.h")).toUtf8();
-        if (!compatFile.isEmpty()) {
-            smartArgs << compatFile;
-            clangArguments << "-include" << compatFile.constData();
-        }
-    }
-
     if (hasQtIncludes(includes.system)) {
         const auto wrappedQtHeaders = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
                                                              QStringLiteral("kdevclangsupport/wrappedQtHeaders"),
@@ -287,6 +272,9 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     const auto& frameworkDirectories = environment.frameworkDirectories();
     addFrameworkDirectories(&clangArguments, &smartArgs, frameworkDirectories.system, "-iframework");
     addFrameworkDirectories(&clangArguments, &smartArgs, frameworkDirectories.project, "-F");
+
+    // libclang cannot find it's builtin dir automatically, we have to specify it manually
+    clangArguments << "-isystem" << KDEV_CLANG_BUILTIN_DIR;
 
     smartArgs << writeDefinesFile(environment.defines());
     clangArguments << "-imacros" << smartArgs.last().constData();

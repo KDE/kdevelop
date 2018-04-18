@@ -2,6 +2,12 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevclang\")
 add_definitions(${LLVM_CFLAGS})
 include_directories(${CLANG_INCLUDE_DIRS})
 
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/libclang_include_path.h.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/libclang_include_path.h"
+  @ONLY
+)
+
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
@@ -101,7 +107,6 @@ LINK_PUBLIC
     ${CLANG_LIBCLANG_LIB}
 )
 
-install(FILES duchain/gcc_compat.h DESTINATION ${KDE_INSTALL_DATADIR}/kdevclangsupport PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 install(DIRECTORY duchain/wrappedQtHeaders DESTINATION ${KDE_INSTALL_DATADIR}/kdevclangsupport
         DIRECTORY_PERMISSIONS
             OWNER_READ OWNER_WRITE OWNER_EXECUTE
