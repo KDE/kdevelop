@@ -415,9 +415,6 @@ bool equalProjectFile( const QString& configPath, OpenProjectDialog* dlg )
     KSharedConfigPtr cfg = KSharedConfig::openConfig( configPath, KConfig::SimpleConfig );
     KConfigGroup grp = cfg->group( "Project" );
     QString defaultName = dlg->projectFileUrl().adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash).fileName();
-    qCDebug(SHELL) << "configPath=" << configPath << "defaultName=" << defaultName
-        << "projName=" << dlg->projectName() << "projectMan=" << dlg->projectManager()
-        << "grp.Name=" << grp.readEntry( "Name", QString() ) << "grp.Manager=" << grp.readEntry( "Manager", QString() );
     return (grp.readEntry( "Name", QString() ) == dlg->projectName() || dlg->projectName() == defaultName) &&
            grp.readEntry( "Manager", QString() ) == dlg->projectManager();
 }
@@ -433,8 +430,7 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
     }
 
     QUrl projectFileUrl = dlg->projectFileUrl();
-    qCDebug(SHELL) << "selected project:" << projectFileUrl << "selectedUrl=" << dlg->selectedUrl()
-        << "projectName=" << dlg->projectName() << "projectManager=" << dlg->projectManager();
+    qCDebug(SHELL) << "selected project:" << projectFileUrl << dlg->projectName() << dlg->projectManager();
     if ( dlg->projectManager() == QLatin1String("<built-in>") ) {
         return projectFileUrl;
     }
@@ -443,17 +439,10 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
     bool writeProjectConfigToFile = true;
     if( projectFileExists( projectFileUrl ) )
     {
-        // check whether we should question the user about overriding an existing project file or not.
-        // We don't need to do that when the file we're importing (dlg->selectedUrl) is already an
-        // existing .kdev4 project file (we just verified that it exists):
-        bool isKDevProject = QFileInfo(dlg->selectedUrl().url()).suffix() == QStringLiteral("kdev4");
-        bool shouldAsk = !isKDevProject;
-        if( !isKDevProject && projectFileUrl == dlg->selectedUrl() )
+        // check whether config is equal
+        bool shouldAsk = true;
+        if( projectFileUrl == dlg->selectedUrl() )
         {
-            // We're importing a project from another type of project file, post the
-            // override dialog if there's a discrepancy between the project file URL
-            // and the information stored in the dialog and the project settings.
-            qCWarning(SHELL) << "Importing a foreign project type:" << projectFileUrl.url();
             if( projectFileUrl.isLocalFile() )
             {
                 shouldAsk = !equalProjectFile( projectFileUrl.toLocalFile(), dlg );
