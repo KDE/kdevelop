@@ -14,6 +14,7 @@
         <comment xml:lang="de">OpenCL C Quelltext</comment>
         <comment xml:lang="en_GB">OpenCL C source code</comment>
         <comment xml:lang="es">Código fuente OpenCL C</comment>
+        <comment xml:lang="gl">Código fonte en C de OpenCL</comment>
         <comment xml:lang="it">Codice sorgente OpenCL C</comment>
         <comment xml:lang="nl">OpenCL C broncode</comment>
         <comment xml:lang="pl">Kod źródłowy OpenCL C</comment>
@@ -40,6 +41,7 @@
         <comment xml:lang="de">NVIDIA CUDA C Quelltext</comment>
         <comment xml:lang="en_GB">NVIDIA CUDA C source code</comment>
         <comment xml:lang="es">Código fuente NVIDIA CUDA C</comment>
+        <comment xml:lang="gl">Código fonte en C de NVIDIA CUDA</comment>
         <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
         <comment xml:lang="nl">NVIDIA CUDA C broncode</comment>
         <comment xml:lang="pl">Kod źródłowy NVIDIA CUDA C</comment>
