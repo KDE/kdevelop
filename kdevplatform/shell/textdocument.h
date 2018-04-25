@@ -50,7 +50,6 @@ public:
 
     QWidget *createViewWidget(QWidget *parent = nullptr) override;
     KParts::Part *partForView(QWidget *view) const override;
-    bool close(DocumentSaveMode mode = Default) override;
 
     bool save(DocumentSaveMode mode = Default) override;
     DocumentState state() const override;

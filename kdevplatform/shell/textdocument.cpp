@@ -543,19 +543,6 @@ void TextDocument::setTextSelection(const KTextEditor::Range &range)
     }
 }
 
-bool TextDocument::close(DocumentSaveMode mode)
-{
-    if (!PartDocument::close(mode))
-        return false;
-
-    if ( d->document ) {
-        d->saveSessionConfig();
-        delete d->document; //We have to delete the document right now, to prevent random crashes in the event handler
-    }
-
-    return true;
-}
-
 Sublime::View* TextDocument::newView(Sublime::Document* doc)
 {
     Q_UNUSED(doc);
