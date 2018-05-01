@@ -241,8 +241,10 @@ QList<KTextEditor::Document *> Application::documents()
     return l;
 }
 
-KTextEditor::Document * Application::openUrl(const QUrl& url, const QString& encoding)
+KTextEditor::Document *Application::openUrl(const QUrl &url, const QString &encoding)
 {
+    Q_UNUSED(encoding);
+
     auto documentController = Core::self()->documentControllerInternal();
     auto doc = url.isEmpty() ? documentController->openDocumentFromText(QString()) : documentController->openDocument(url);
     return doc->textDocument();
