@@ -106,7 +106,14 @@ ParseSessionData::Ptr DUChainUtils::findParseSessionData(const IndexedString &fi
 
 QString DUChainUtils::clangBuiltinIncludePath()
 {
-    return qEnvironmentVariable("KDEV_CLANG_BUILTIN_DIR", QStringLiteral(KDEV_CLANG_BUILTIN_DIR));
+    static const auto dir = []() -> QString {
+        auto dir = qgetenv("KDEV_CLANG_BUILTIN_DIR");
+        if (dir.isEmpty()) {
+            dir = KDEV_CLANG_BUILTIN_DIR;
+        }
+        return QString::fromUtf8(dir);
+    }();
+    return dir;
 }
 
 }
