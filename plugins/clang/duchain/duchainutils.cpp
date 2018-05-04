@@ -33,6 +33,8 @@
 #include "clangparsingenvironmentfile.h"
 #include "types/classspecializationtype.h"
 
+#include "libclang_include_path.h"
+
 using namespace KDevelop;
 
 namespace ClangIntegration {
@@ -100,6 +102,11 @@ ParseSessionData::Ptr DUChainUtils::findParseSessionData(const IndexedString &fi
         return ParseSessionData::Ptr(dynamic_cast<ParseSessionData*>(context->ast().data()));
     }
     return {};
+}
+
+QString DUChainUtils::clangBuiltinIncludePath()
+{
+    return qEnvironmentVariable("KDEV_CLANG_BUILTIN_DIR", QStringLiteral(KDEV_CLANG_BUILTIN_DIR));
 }
 
 }

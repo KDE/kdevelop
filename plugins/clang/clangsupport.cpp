@@ -176,6 +176,16 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     , m_refactoring(nullptr)
     , m_index(nullptr)
 {
+    {
+        const auto builtinDir = ClangIntegration::DUChainUtils::clangBuiltinIncludePath();
+        if (!QFile::exists(builtinDir + QLatin1String("/varargs.h"))) {
+            setErrorDescription(i18n("The clang builtin include path \"%1\" is invalid (missing varargs.h header).\n"
+                                     "Try setting the KDEV_CLANG_BUILTIN_DIR environment variable manually to fix this.\n"
+                                     "See also: https://bugs.kde.org/show_bug.cgi?id=393779", builtinDir));
+            return;
+        }
+    }
+
     setXMLFile( QStringLiteral("kdevclangsupport.rc") );
 
     ClangIntegration::DUChainUtils::registerDUChainItems();
