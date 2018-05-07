@@ -135,7 +135,7 @@ void TestPluginEnabling::loadPluginNormalDefaults()
     // check plugin metadata
     const auto pluginInfo  = m_pluginCtrl->infoForPluginId(pluginId);
     // logic in kdevelop different from  KPluginMetaData::isEnabledByDefault(), here defaults to true
-    const auto enabledByDefaultValue = pluginInfo.rawData()["KPlugin"].toObject()["EnabledByDefault"];
+    const QJsonValue enabledByDefaultValue = pluginInfo.rawData()["KPlugin"].toObject()["EnabledByDefault"];
     const bool enabledByDefault = (enabledByDefaultValue.isNull() || enabledByDefaultValue.toBool());
     QCOMPARE(enabledByDefault, shouldBeEnabled);
 
