@@ -57,7 +57,7 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   FIND_AND_ADD_CLANG_LIB(clangFrontend)
 
   # note: On Windows there's 'libclang.dll' instead of 'clang.dll' -> search for 'libclang', too
-  FIND_AND_ADD_CLANG_LIB(clang NAMES clang libclang HINTS ${LLVM_LIBRARY_DIRS}) # LibClang: high-level C interface
+  FIND_AND_ADD_CLANG_LIB(clang NAMES clang libclang) # LibClang: high-level C interface
 
   FIND_AND_ADD_CLANG_LIB(clangDriver)
   FIND_AND_ADD_CLANG_LIB(clangCodeGen)
@@ -109,7 +109,7 @@ if(CLANG_FOUND)
   message(STATUS "Found Clang (LLVM version: ${LLVM_VERSION})")
   message(STATUS "  Include dirs:       ${CLANG_INCLUDE_DIRS}")
   message(STATUS "  Clang libraries:    ${CLANG_LIBS}")
-  message(STATUS "  Libclang C library: ${CLANG_LIBCLANG_LIB}")
+  message(STATUS "  Libclang C library: ${CLANG_CLANG_LIB}")
 else()
   if(Clang_FIND_REQUIRED)
     message(FATAL_ERROR "Could NOT find Clang")
