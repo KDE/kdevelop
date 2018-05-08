@@ -72,6 +72,10 @@ void compareFixitWithoutDescription(const ClangFixit& a, const ClangFixit& b)
 
 void compareFixitsWithoutDescription(const ClangFixits& a, const ClangFixits& b)
 {
+    if (a.size() != b.size()) {
+        qDebug() << "a:" << a;
+        qDebug() << "b:" << b;
+    }
     QCOMPARE(a.size(), b.size());
     const int size = a.size();
     for (int i = 0; i < size; ++i) {
