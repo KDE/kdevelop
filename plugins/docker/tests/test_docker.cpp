@@ -50,7 +50,7 @@ public:
             return;
         }
 
-        AutoTestShell::init({QStringLiteral("kdevdocker")});
+        AutoTestShell::init({QStringLiteral("kdevdocker"), QStringLiteral("KDevGenericManager")});
         TestCore::initialize();
 
         m_initialRuntime = ICore::self()->runtimeController()->currentRuntime();
