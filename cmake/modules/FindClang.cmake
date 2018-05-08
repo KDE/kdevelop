@@ -50,18 +50,14 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
     string(TOUPPER ${_libname_} _prettylibname_)
     find_library(CLANG_${_prettylibname_}_LIB NAMES ${_libname_} HINTS ${LLVM_LIBRARY_DIRS} ${ARGN})
     if (CLANG_${_prettylibname_}_LIB)
-      add_library(${_libname_} UNKNOWN IMPORTED GLOBAL)
-      set_property(TARGET ${_libname_} PROPERTY IMPORTED_LOCATION ${CLANG_${_prettylibname_}_LIB})
-
       set(CLANG_LIBS ${CLANG_LIBS} ${CLANG_${_prettylibname_}_LIB})
     endif()
   endmacro(FIND_AND_ADD_CLANG_LIB)
 
-  # note: On Windows there's 'libclang.dll' instead of 'clang.dll' -> search for 'libclang', too
   FIND_AND_ADD_CLANG_LIB(clangFrontend)
 
+  # note: On Windows there's 'libclang.dll' instead of 'clang.dll' -> search for 'libclang', too
   FIND_AND_ADD_CLANG_LIB(clang NAMES clang libclang HINTS ${LLVM_LIBRARY_DIRS}) # LibClang: high-level C interface
-
 
   FIND_AND_ADD_CLANG_LIB(clangDriver)
   FIND_AND_ADD_CLANG_LIB(clangCodeGen)
