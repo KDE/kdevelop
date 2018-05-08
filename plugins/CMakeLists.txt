@@ -47,7 +47,7 @@ set_package_properties(Clang PROPERTIES
 )
 
 if (CLANG_FOUND)
-    if (NOT CLANG_LIBCLANG_LIB)
+    if (NOT CLANG_CLANG_LIB)
         message(FATAL_ERROR "Could not find the Clang C library: libclang")
     endif()
 

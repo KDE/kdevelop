@@ -5,7 +5,7 @@
 #  CLANG_INCLUDE_DIRS          - Where to find Clang includes
 #  CLANG_LIBRARY_DIRS          - Where to find Clang libraries
 #
-#  CLANG_LIBCLANG_LIB          - Libclang C library
+#  CLANG_CLANG_LIB             - Libclang C library
 #
 #  CLANG_CLANGFRONTEND_LIB     - Clang Frontend (C++) Library
 #  CLANG_CLANGDRIVER_LIB       - Clang Driver (C++) Library
@@ -85,7 +85,7 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   FIND_AND_ADD_CLANG_LIB(clangRewriteCore)
 endif()
 
-if(CLANG_LIBS OR CLANG_LIBCLANG_LIB)
+if(CLANG_LIBS OR CLANG_CLANG_LIB)
   set(CLANG_FOUND TRUE)
 else()
   message(STATUS "Could not find any Clang libraries in ${LLVM_LIBRARY_DIRS}")
