@@ -48,16 +48,21 @@ set(CLANG_FOUND FALSE)
 if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   macro(FIND_AND_ADD_CLANG_LIB _libname_)
     string(TOUPPER ${_libname_} _prettylibname_)
-    find_library(CLANG_${_prettylibname_}_LIB NAMES ${_libname_} HINTS ${LLVM_LIBRARY_DIRS})
-    if(CLANG_${_prettylibname_}_LIB)
+    find_library(CLANG_${_prettylibname_}_LIB NAMES ${_libname_} HINTS ${LLVM_LIBRARY_DIRS} ${ARGN})
+    if (CLANG_${_prettylibname_}_LIB)
+      add_library(${_libname_} UNKNOWN IMPORTED GLOBAL)
+      set_property(TARGET ${_libname_} PROPERTY IMPORTED_LOCATION ${CLANG_${_prettylibname_}_LIB})
+
       set(CLANG_LIBS ${CLANG_LIBS} ${CLANG_${_prettylibname_}_LIB})
     endif()
   endmacro(FIND_AND_ADD_CLANG_LIB)
 
   # note: On Windows there's 'libclang.dll' instead of 'clang.dll' -> search for 'libclang', too
-  find_library(CLANG_LIBCLANG_LIB NAMES clang libclang HINTS ${LLVM_LIBRARY_DIRS}) # LibClang: high-level C interface
-
   FIND_AND_ADD_CLANG_LIB(clangFrontend)
+
+  FIND_AND_ADD_CLANG_LIB(clang NAMES clang libclang HINTS ${LLVM_LIBRARY_DIRS}) # LibClang: high-level C interface
+
+
   FIND_AND_ADD_CLANG_LIB(clangDriver)
   FIND_AND_ADD_CLANG_LIB(clangCodeGen)
   FIND_AND_ADD_CLANG_LIB(clangSema)
@@ -72,13 +77,11 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   FIND_AND_ADD_CLANG_LIB(clangARCMigrate)
   FIND_AND_ADD_CLANG_LIB(clangEdit)
   FIND_AND_ADD_CLANG_LIB(clangFrontendTool)
-  FIND_AND_ADD_CLANG_LIB(clangRewrite)
   FIND_AND_ADD_CLANG_LIB(clangSerialization)
   FIND_AND_ADD_CLANG_LIB(clangTooling)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerCheckers)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerCore)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerFrontend)
-  FIND_AND_ADD_CLANG_LIB(clangSema)
   FIND_AND_ADD_CLANG_LIB(clangRewriteCore)
 endif()
 

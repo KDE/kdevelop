@@ -104,7 +104,7 @@ LINK_PUBLIC
     KDev::Language
     KDev::Project
     KDev::Util
-    ${CLANG_LIBCLANG_LIB}
+    clang
 )
 
 install(FILES duchain/gcc_compat.h DESTINATION ${KDE_INSTALL_DATADIR}/kdevclangsupport PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
