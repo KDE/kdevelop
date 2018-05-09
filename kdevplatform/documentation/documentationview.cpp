@@ -132,11 +132,6 @@ void DocumentationView::initialize()
 {
     mProviders->setModel(mProvidersModel);
     connect(mProviders, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &DocumentationView::changedProvider);
-    foreach (IDocumentationProvider* p, mProvidersModel->providers()) {
-        // can't use new signal/slot syntax here, IDocumentation is not a QObject
-        connect(dynamic_cast<QObject*>(p), SIGNAL(addHistory(KDevelop::IDocumentation::Ptr)),
-                this, SLOT(addHistory(KDevelop::IDocumentation::Ptr)));
-    }
     connect(mProvidersModel, &ProvidersModel::providersChanged, this, &DocumentationView::emptyHistory);
 
     const bool hasProviders = (mProviders->count() > 0);
@@ -210,12 +205,6 @@ void DocumentationView::showDocumentation(const IDocumentation::Ptr& doc)
 {
     qCDebug(DOCUMENTATION) << "showing" << doc->name();
 
-    addHistory(doc);
-    updateView();
-}
-
-void DocumentationView::addHistory(const IDocumentation::Ptr& doc)
-{
     mBack->setEnabled(!mHistory.isEmpty());
     mForward->setEnabled(false);
 
@@ -236,6 +225,8 @@ void DocumentationView::addHistory(const IDocumentation::Ptr& doc)
     if (mIdentifiers->completer()->model() == (*mCurrent)->provider()->indexModel()) {
         mIdentifiers->setText((*mCurrent)->name());
     }
+
+    updateView();
 }
 
 void DocumentationView::emptyHistory()

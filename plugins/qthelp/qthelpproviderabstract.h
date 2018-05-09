@@ -51,8 +51,6 @@ public:
     HelpNetworkAccessManager* networkAccess() const;
 public Q_SLOTS:
     void jumpedTo(const QUrl& newUrl);
-Q_SIGNALS:
-    void addHistory(const KDevelop::IDocumentation::Ptr& doc) override;
 protected:
     QHelpEngine m_engine;
     HelpNetworkAccessManager* const m_nam;

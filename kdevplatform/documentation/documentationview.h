@@ -41,15 +41,13 @@ class KDEVPLATFORMDOCUMENTATION_EXPORT DocumentationView : public QWidget
 public:
     DocumentationView(QWidget* parent, ProvidersModel* m);
 
-    void showDocumentation(const KDevelop::IDocumentation::Ptr& doc);
-
 public:
     QList<QAction*> contextMenuActions() const;
 
 public Q_SLOTS:
     void initialize();
 
-    void addHistory(const KDevelop::IDocumentation::Ptr& doc);
+    void showDocumentation(const KDevelop::IDocumentation::Ptr& doc);
     void emptyHistory();
 
     void browseForward();

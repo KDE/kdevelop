@@ -26,6 +26,9 @@
 
 #include <QStandardPaths>
 
+#include <interfaces/icore.h>
+#include <interfaces/idocumentationcontroller.h>
+
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/duchainlock.h>
@@ -97,7 +100,7 @@ void QtHelpProviderAbstract::jumpedTo(const QUrl& newUrl)
     QMap<QString, QUrl> info;
     info.insert(newUrl.toString(), newUrl);
     IDocumentation::Ptr doc(new QtHelpDocumentation(newUrl.toString(), info));
-    emit addHistory(doc);
+    ICore::self()->documentationController()->showDocumentation(doc);
 }
 
 IDocumentation::Ptr QtHelpProviderAbstract::homePage() const

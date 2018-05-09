@@ -292,8 +292,6 @@ void QtHelpDocumentation::jumpedTo(const QUrl& newUrl)
 {
     Q_ASSERT(lastView);
     m_provider->jumpedTo(newUrl);
-    setUserStyleSheet(lastView, newUrl);
-    lastView->load(newUrl);
 }
 
 IDocumentationProvider* QtHelpDocumentation::provider() const

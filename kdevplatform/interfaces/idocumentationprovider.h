@@ -53,9 +53,6 @@ public:
 
     /** @returns a documentation item where we can show some home page information such a context index. */
     virtual IDocumentation::Ptr homePage() const = 0;
-
-Q_SIGNALS:
-    virtual void addHistory(const KDevelop::IDocumentation::Ptr& doc) = 0;
 };
 
 }
