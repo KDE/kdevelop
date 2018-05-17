@@ -104,7 +104,7 @@ LINK_PUBLIC
     KDev::Language
     KDev::Project
     KDev::Util
-    ${CLANG_LIBCLANG_LIB}
+    Clang::clang
 )
 
 install(DIRECTORY duchain/wrappedQtHeaders DESTINATION ${KDE_INSTALL_DATADIR}/kdevclangsupport

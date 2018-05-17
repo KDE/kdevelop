@@ -43,14 +43,19 @@ public:
 
     DockerTest() {
         QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevplatform.plugins.docker=true\n"));
+    }
 
+    IRuntime* m_initialRuntime = nullptr;
+
+private Q_SLOTS:
+    void initTestCase() {
         auto ret = QProcess::execute("docker", {"pull", s_testedImage});
         if (ret != 0) {
             QSKIP("Couldn't successfully call docker");
             return;
         }
 
-        AutoTestShell::init({QStringLiteral("kdevdocker")});
+        AutoTestShell::init({QStringLiteral("kdevdocker"), QStringLiteral("KDevGenericManager")});
         TestCore::initialize();
 
         m_initialRuntime = ICore::self()->runtimeController()->currentRuntime();
@@ -65,12 +70,10 @@ public:
         TestCore::self()->projectController()->openProject(projectPath);
         QSignalSpy spy2(TestCore::self()->projectController(), &IProjectController::projectOpened);
         QVERIFY(spy2.wait());
-
     }
-    IRuntime* m_initialRuntime;
 
-private Q_SLOTS:
-    void initTestCase() {
+    void init()
+    {
         QVERIFY(ICore::self()->runtimeController()->currentRuntime() == m_initialRuntime);
         for(IRuntime* runtime : ICore::self()->runtimeController()->availableRuntimes()) {
             if (s_testedImage == runtime->name()) {
@@ -138,7 +141,7 @@ private Q_SLOTS:
         QCOMPARE(process.readAll(), QByteArray("test.kdev4\ntestfile.sh\n"));
     }
 
-    void cleanupTestCase() {
+    void cleanup() {
         ICore::self()->runtimeController()->setCurrentRuntime(m_initialRuntime);
     }
 

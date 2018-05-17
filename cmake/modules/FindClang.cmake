@@ -5,7 +5,7 @@
 #  CLANG_INCLUDE_DIRS          - Where to find Clang includes
 #  CLANG_LIBRARY_DIRS          - Where to find Clang libraries
 #
-#  CLANG_LIBCLANG_LIB          - Libclang C library
+#  CLANG_CLANG_LIB             - Libclang C library
 #
 #  CLANG_CLANGFRONTEND_LIB     - Clang Frontend (C++) Library
 #  CLANG_CLANGDRIVER_LIB       - Clang Driver (C++) Library
@@ -48,16 +48,17 @@ set(CLANG_FOUND FALSE)
 if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   macro(FIND_AND_ADD_CLANG_LIB _libname_)
     string(TOUPPER ${_libname_} _prettylibname_)
-    find_library(CLANG_${_prettylibname_}_LIB NAMES ${_libname_} HINTS ${LLVM_LIBRARY_DIRS})
-    if(CLANG_${_prettylibname_}_LIB)
+    find_library(CLANG_${_prettylibname_}_LIB NAMES ${_libname_} HINTS ${LLVM_LIBRARY_DIRS} ${ARGN})
+    if (CLANG_${_prettylibname_}_LIB)
       set(CLANG_LIBS ${CLANG_LIBS} ${CLANG_${_prettylibname_}_LIB})
     endif()
   endmacro(FIND_AND_ADD_CLANG_LIB)
 
-  # note: On Windows there's 'libclang.dll' instead of 'clang.dll' -> search for 'libclang', too
-  find_library(CLANG_LIBCLANG_LIB NAMES clang libclang HINTS ${LLVM_LIBRARY_DIRS}) # LibClang: high-level C interface
-
   FIND_AND_ADD_CLANG_LIB(clangFrontend)
+
+  # note: On Windows there's 'libclang.dll' instead of 'clang.dll' -> search for 'libclang', too
+  FIND_AND_ADD_CLANG_LIB(clang NAMES clang libclang) # LibClang: high-level C interface
+
   FIND_AND_ADD_CLANG_LIB(clangDriver)
   FIND_AND_ADD_CLANG_LIB(clangCodeGen)
   FIND_AND_ADD_CLANG_LIB(clangSema)
@@ -72,17 +73,15 @@ if (LLVM_FOUND AND LLVM_LIBRARY_DIRS)
   FIND_AND_ADD_CLANG_LIB(clangARCMigrate)
   FIND_AND_ADD_CLANG_LIB(clangEdit)
   FIND_AND_ADD_CLANG_LIB(clangFrontendTool)
-  FIND_AND_ADD_CLANG_LIB(clangRewrite)
   FIND_AND_ADD_CLANG_LIB(clangSerialization)
   FIND_AND_ADD_CLANG_LIB(clangTooling)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerCheckers)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerCore)
   FIND_AND_ADD_CLANG_LIB(clangStaticAnalyzerFrontend)
-  FIND_AND_ADD_CLANG_LIB(clangSema)
   FIND_AND_ADD_CLANG_LIB(clangRewriteCore)
 endif()
 
-if(CLANG_LIBS OR CLANG_LIBCLANG_LIB)
+if(CLANG_LIBS OR CLANG_CLANG_LIB)
   set(CLANG_FOUND TRUE)
 else()
   message(STATUS "Could not find any Clang libraries in ${LLVM_LIBRARY_DIRS}")
@@ -111,7 +110,7 @@ if(CLANG_FOUND)
   message(STATUS "Found Clang (LLVM version: ${CLANG_VERSION})")
   message(STATUS "  Include dirs:       ${CLANG_INCLUDE_DIRS}")
   message(STATUS "  Clang libraries:    ${CLANG_LIBS}")
-  message(STATUS "  Libclang C library: ${CLANG_LIBCLANG_LIB}")
+  message(STATUS "  Libclang C library: ${CLANG_CLANG_LIB}")
 else()
   if(Clang_FIND_REQUIRED)
     message(FATAL_ERROR "Could NOT find Clang")

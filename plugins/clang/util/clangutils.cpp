@@ -78,7 +78,7 @@ QVector<UnsavedFile> ClangUtils::unsavedFiles()
 
 KTextEditor::Range ClangUtils::rangeForIncludePathSpec(const QString& line, const KTextEditor::Range& originalRange)
 {
-    static const QRegularExpression pattern(QStringLiteral("^\\s*(#include|#import)"));
+    static const QRegularExpression pattern(QStringLiteral("^\\s*(#\\s*include|#\\s*import)"));
     if (!line.contains(pattern)) {
         return KTextEditor::Range::invalid();
     }

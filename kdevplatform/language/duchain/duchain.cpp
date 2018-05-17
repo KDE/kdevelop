@@ -1631,7 +1631,7 @@ uint DUChain::newTopContextIndex() {
       sdDUChainPrivate->m_availableTopContextIndices.pop_back();
       if(TopDUContextDynamicData::fileExists(ret))
       {
-        qCWarning(LANGUAGE) << "Problem in the management of availalbe top-context indices";
+        qCWarning(LANGUAGE) << "Problem in the management of available top-context indices";
         return newTopContextIndex();
       }
       return ret;
