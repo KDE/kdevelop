@@ -147,7 +147,11 @@ void TestDUChain::testComments()
     QVERIFY(!candidates.isEmpty());
     auto decl = candidates.first();
     QString comment = QString::fromLocal8Bit(decl->comment());
-    comment = KDevelop::htmlToPlainText(comment, KDevelop::CompleteMode);
+    const auto plainText = KDevelop::htmlToPlainText(comment, KDevelop::CompleteMode);
+    // if comment is e.g. "<this is bar", htmlToPlainText(comment) would just return an empty string; avoid this
+    if (!plainText.isEmpty()) {
+        comment = plainText;
+    }
     QCOMPARE(comment, expectedComment.comment);
 }
 
@@ -169,15 +173,31 @@ void TestDUChain::testComments_data()
     QTest::newRow("basic2")
         << "/**this is foo*/\nint foo;"
         << ExpectedComment{"foo", "this is foo"};
+
+    // as long as https://bugs.llvm.org/show_bug.cgi?id=35333 is not fixed, we don't fully parse and render
+    // doxygen-style comments properly (cf. `makeComment` in builder.cpp)
+#define PARSE_COMMENTS 0
     QTest::newRow("enumerator")
         << "enum Foo { bar1, ///<this is bar1\nbar2 ///<this is bar2\n };"
+#if PARSE_COMMENTS
         << ExpectedComment{"Foo::bar1", "this is bar1"};
+#else
+        << ExpectedComment{"Foo::bar1", "<this is bar1"};
+#endif
     QTest::newRow("comment-formatting")
         << "/** a\n * multiline\n *\n * comment\n */ int foo;"
+#if PARSE_COMMENTS
         << ExpectedComment{"foo", "a multiline\ncomment"};
+#else
+        << ExpectedComment{"foo", "a multiline comment"};
+#endif
     QTest::newRow("comment-doxygen-tags")
         << "/** @see bar()\n@param a foo\n*/\nvoid foo(int a);\nvoid bar();"
+#if PARSE_COMMENTS
         << ExpectedComment{"foo", "bar()\na\nfoo"};
+#else
+        << ExpectedComment{"foo", "@see bar() @param a foo"};
+#endif
 }
 
 void TestDUChain::testElaboratedType()
