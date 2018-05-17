@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(KDevelop VERSION 5.2.2)
+project(KDevelop VERSION 5.2.3)
 
 # KDevelop SOVERSION
 # E.g. for KDevelop 5.2.0 => SOVERSION 52 (we only promise ABI compatibility between patch version updates)
