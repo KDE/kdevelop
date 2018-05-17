@@ -112,7 +112,7 @@ void FlatpakPlugin::createRuntime(const KDevelop::Path &file, const QString &arc
     const KDevelop::Path path(dir->path());
 
     auto process = FlatpakRuntime::createBuildDirectory(path, file, arch);
-    connect(process, &KJob::finished, this, [this, path, file, arch, dir] (KJob* job) {
+    connect(process, &KJob::finished, this, [path, file, arch, dir] (KJob* job) {
         if (job->error() != 0) {
             delete dir;
             return;
