@@ -951,7 +951,7 @@ void Visitor::setDeclData(CXCursor cursor, Declaration *decl, bool setComment) c
 {
     if (setComment)
 #if CINDEX_VERSION_MINOR < 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
-        decl->setComment(KDevelop::formatComment(QByteArray(clang_getCString(clang_Cursor_getRawCommentText(cursor)))));
+        decl->setComment(KDevelop::formatComment(ClangString(clang_Cursor_getRawCommentText(cursor)).toByteArray()));
 #else
         decl->setComment(makeComment(clang_Cursor_getParsedComment(cursor)));
 #endif
