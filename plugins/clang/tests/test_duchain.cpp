@@ -1039,29 +1039,6 @@ void TestDUChain::testSystemIncludes()
     QCOMPARE(includes.project, projectIncludes);
 }
 
-void TestDUChain::benchDUChainBuilder()
-{
-    QBENCHMARK_ONCE {
-        TestFile file(
-            "#include <vector>\n"
-            "#include <map>\n"
-            "#include <set>\n"
-            "#include <algorithm>\n"
-            "#include <functional>\n"
-            "#include <limits>\n"
-            "#include <bitset>\n"
-            "#include <iostream>\n"
-            "#include <string>\n"
-            "#include <mutex>\n", QStringLiteral("cpp"));
-        file.parse(TopDUContext::AllDeclarationsContextsAndUses);
-        QVERIFY(file.waitForParsed(60000));
-
-        DUChainReadLocker lock;
-        auto top = file.topContext();
-        QVERIFY(top);
-    }
-}
-
 void TestDUChain::testReparseWithAllDeclarationsContextsAndUses()
 {
     TestFile file(QStringLiteral("int foo() { return 0; } int main() { return foo(); }"), QStringLiteral("cpp"));

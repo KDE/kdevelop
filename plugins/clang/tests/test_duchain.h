@@ -98,7 +98,6 @@ private Q_SLOTS:
     void testFriendDeclaration();
     void testVariadicTemplateArguments();
 
-    void benchDUChainBuilder();
     void testGccCompatibility();
     void testQtIntegration();
     void testHasInclude();
