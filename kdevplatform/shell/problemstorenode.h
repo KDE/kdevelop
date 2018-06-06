@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <interfaces/iproblem.h>
+#include <shell/shellexport.h>
 
 namespace KDevelop
 {
@@ -42,7 +43,7 @@ namespace KDevelop
  * @endcode
  *
  */
-class ProblemStoreNode
+class KDEVPLATFORMSHELL_EXPORT ProblemStoreNode
 {
 public:
     explicit ProblemStoreNode(ProblemStoreNode *parent = nullptr)
@@ -150,7 +151,7 @@ private:
  * @endcode
  *
  */
-class LabelNode : public ProblemStoreNode
+class KDEVPLATFORMSHELL_EXPORT LabelNode : public ProblemStoreNode
 {
 public:
     explicit LabelNode(ProblemStoreNode *parent = nullptr, const QString &l = QString())
@@ -187,7 +188,7 @@ private:
  * @endcode
  *
  */
-class ProblemNode : public ProblemStoreNode
+class KDEVPLATFORMSHELL_EXPORT ProblemNode : public ProblemStoreNode
 {
 public:
     explicit ProblemNode(ProblemStoreNode *parent = nullptr, const IProblem::Ptr &problem = IProblem::Ptr(nullptr))
