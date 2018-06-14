@@ -70,8 +70,7 @@ void TestDefinesAndIncludes::loadSimpleProject()
     defines.insert( QStringLiteral("VARIABLE"), QStringLiteral("VALUE") );
     QCOMPARE( actualDefines, defines );
 
-    QVERIFY(!manager->parserArguments(s_currentProject->projectItem()).isEmpty());
-    QVERIFY(!manager->parserArguments(QStringLiteral("/some/path/to/file.cpp")).isEmpty());
+    QVERIFY(!manager->parserArguments(s_currentProject->path().path() + "/src/main.cpp").isEmpty());
 }
 
 void TestDefinesAndIncludes::loadMultiPathProject()
@@ -89,7 +88,6 @@ void TestDefinesAndIncludes::loadMultiPathProject()
 
     QCOMPARE( manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );
-    QVERIFY(!manager->parserArguments(s_currentProject->projectItem()).isEmpty());
 
     ProjectBaseItem* mainfile = nullptr;
     for (const auto& file: s_currentProject->fileSet() ) {
@@ -130,7 +128,6 @@ void TestDefinesAndIncludes::testNoProjectIncludeDirectories()
     auto noProjectIncludes = manager->includes(s_currentProject->path().path() + "/src/main.cpp");
     QVERIFY(noProjectIncludes.contains(includePath1));
     QVERIFY(noProjectIncludes.contains(includePath2));
-    QVERIFY(!manager->parserArguments(s_currentProject->projectItem()).isEmpty());
 }
 
 void TestDefinesAndIncludes::testEmptyProject()
@@ -145,9 +142,9 @@ void TestDefinesAndIncludes::testEmptyProject()
     auto projectDefines = manager->defines(s_currentProject->projectItem());
     auto parserArguments = manager->parserArguments(s_currentProject->projectItem());
 
-    QVERIFY(!projectIncludes.isEmpty());
-    QVERIFY(!projectDefines.isEmpty());
-    QVERIFY(!parserArguments.isEmpty());
+    QVERIFY(projectIncludes.isEmpty());
+    QVERIFY(projectDefines.isEmpty());
+    QVERIFY(parserArguments.isEmpty());
 }
 
 QTEST_MAIN(TestDefinesAndIncludes)
