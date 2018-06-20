@@ -187,8 +187,15 @@ View *MainWindow::activeToolView() const
 
 void MainWindow::activateView(Sublime::View* view, bool focus)
 {
-    if (!d->viewContainers.contains(view) || d->activeView == view)
+    if (!d->viewContainers.contains(view))
         return;
+
+    if (d->activeView == view)
+    {
+        if (focus && view && !view->widget()->hasFocus())
+            view->widget()->setFocus();
+        return;
+    }
 
     d->viewContainers[view]->setCurrentWidget(view->widget());
 
