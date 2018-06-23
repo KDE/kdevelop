@@ -25,6 +25,10 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
+#include <interfaces/idocumentcontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
+#include <util/path.h>
 
 #include "kdevkonsoleviewplugin.h"
 
@@ -66,7 +70,17 @@ public:
             TerminalInterface* interface = qobject_cast<TerminalInterface*>(konsolepart);
             Q_ASSERT(interface);
 
-            interface->showShellInDir( QString() );
+            QString dir;
+            if (KDevelop::IDocument* activeDocument = KDevelop::ICore::self()->documentController()->activeDocument())
+            {
+                KDevelop::IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(activeDocument->url());
+                if (project && project->path().isLocalFile())
+                    dir = project->path().path();
+                else if (activeDocument->url().isLocalFile())
+                    dir = activeDocument->url().adjusted(QUrl::RemoveFilename).path(QUrl::FullyDecoded);
+            }
+            interface->showShellInDir( dir );
+
             interface->sendInput( " kdevelop! -s \"" + KDevelop::ICore::self()->activeSession()->id().toString() + "\"\n" );
 
         }else
