@@ -56,6 +56,7 @@ Boston, MA 02110-1301, USA.
 #include "project.h"
 #include "debug.h"
 #include "uiconfig.h"
+#include "ktexteditorpluginintegration.h"
 
 #include <interfaces/isession.h>
 #include <interfaces/iprojectcontroller.h>
@@ -158,6 +159,9 @@ MainWindow::~ MainWindow()
         Core::self()->shutdown();
     }
 
+    // The window wrapper has to stay alive until the last KTextEditor::Views are gone
+    // but needs to know this mainwindow is next an ex-mainwindow.
+    d->kateWrapper()->startDestroy();
     delete d;
 }
 

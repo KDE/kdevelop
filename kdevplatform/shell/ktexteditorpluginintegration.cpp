@@ -31,6 +31,7 @@
 
 #include <sublime/area.h>
 #include <sublime/view.h>
+#include <sublime/viewbarcontainer.h>
 
 #include "core.h"
 #include "uicontroller.h"
@@ -167,27 +168,6 @@ KeepAliveWidget::~KeepAliveWidget()
     }
 }
 
-class ViewBarStackedLayout : public QStackedLayout
-{
-    Q_OBJECT
-public:
-    QSize sizeHint() const override
-    {
-        if (currentWidget()) {
-            return currentWidget()->sizeHint();
-        }
-        return QStackedLayout::sizeHint();
-    }
-
-    QSize minimumSize() const override
-    {
-        if (currentWidget()) {
-            return currentWidget()->minimumSize();
-        }
-        return QStackedLayout::minimumSize();
-    }
-};
-
 }
 
 namespace KTextEditorIntegration {
@@ -251,14 +231,9 @@ KTextEditor::Document *Application::openUrl(const QUrl &url, const QString &enco
 }
 
 MainWindow::MainWindow(KDevelop::MainWindow *mainWindow)
-    : QObject(mainWindow)
-    , m_mainWindow(mainWindow)
+    : m_mainWindow(mainWindow)
     , m_interface(new KTextEditor::MainWindow(this))
-    , m_viewBarContainerLayout(new ViewBarStackedLayout)
 {
-    auto viewBarContainer = m_mainWindow->viewBarContainer();
-    viewBarContainer->setLayout(m_viewBarContainerLayout);
-
     connect(mainWindow, &Sublime::MainWindow::viewAdded, this, [this] (Sublime::View *view) {
         if (auto kteView = toKteView(view)) {
             emit m_interface->viewCreated(kteView);
@@ -269,7 +244,7 @@ MainWindow::MainWindow(KDevelop::MainWindow *mainWindow)
         emit m_interface->viewChanged(kteView);
 
         if (auto viewBar = m_viewBars.value(kteView)) {
-            m_viewBarContainerLayout->setCurrentWidget(viewBar);
+            m_mainWindow->viewBarContainer()->setCurrentViewBar(viewBar);
         }
     });
 }
@@ -290,6 +265,9 @@ QWidget *MainWindow::createToolView(KTextEditor::Plugin* plugin, const QString &
 
 KXMLGUIFactory *MainWindow::guiFactory() const
 {
+    if (!m_mainWindow) {
+        return nullptr;
+    }
     return m_mainWindow->guiFactory();
 }
 
@@ -301,10 +279,12 @@ QWidget *MainWindow::window() const
 QList<KTextEditor::View *> MainWindow::views() const
 {
     QList<KTextEditor::View *> views;
-    foreach (auto area, m_mainWindow->areas()) {
-        foreach (auto view, area->views()) {
-            if (auto kteView = toKteView(view)) {
-                views << kteView;
+    if (m_mainWindow) {
+        foreach (auto area, m_mainWindow->areas()) {
+            foreach (auto view, area->views()) {
+                if (auto kteView = toKteView(view)) {
+                    views << kteView;
+                }
             }
         }
     }
@@ -313,11 +293,18 @@ QList<KTextEditor::View *> MainWindow::views() const
 
 KTextEditor::View *MainWindow::activeView() const
 {
+    if (!m_mainWindow) {
+        return nullptr;
+    }
     return toKteView(m_mainWindow->activeView());
 }
 
 KTextEditor::View *MainWindow::activateView(KTextEditor::Document *doc)
 {
+    if (!m_mainWindow) {
+        return nullptr;
+    }
+
     foreach (auto area, m_mainWindow->areas()) {
         foreach (auto view, area->views()) {
             if (auto kteView = toKteView(view)) {
@@ -340,6 +327,9 @@ QObject *MainWindow::pluginView(const QString &id) const
 QWidget *MainWindow::createViewBar(KTextEditor::View *view)
 {
     Q_UNUSED(view);
+    if (!m_mainWindow) {
+        return nullptr;
+    }
     // we reuse the central view bar for every view
     return m_mainWindow->viewBarContainer();
 }
@@ -347,8 +337,8 @@ QWidget *MainWindow::createViewBar(KTextEditor::View *view)
 void MainWindow::deleteViewBar(KTextEditor::View *view)
 {
     auto viewBar = m_viewBars.take(view);
-    if (viewBar == m_viewBarContainerLayout->currentWidget()) {
-        m_mainWindow->viewBarContainer()->hide();
+    if (m_mainWindow) {
+        m_mainWindow->viewBarContainer()->removeViewBar(viewBar);
     }
     delete viewBar;
 }
@@ -357,20 +347,18 @@ void MainWindow::showViewBar(KTextEditor::View *view)
 {
     auto viewBar = m_viewBars.value(view);
     Q_ASSERT(viewBar);
-    m_viewBarContainerLayout->setCurrentWidget(viewBar);
-    viewBar->show();
-
-    m_mainWindow->viewBarContainer()->show();
+    if (m_mainWindow) {
+        m_mainWindow->viewBarContainer()->showViewBar(viewBar);
+    }
 }
 
 void MainWindow::hideViewBar(KTextEditor::View *view)
 {
     auto viewBar = m_viewBars.value(view);
     Q_ASSERT(viewBar);
-    m_viewBarContainerLayout->setCurrentWidget(viewBar);
-    viewBar->hide();
-
-    m_mainWindow->viewBarContainer()->hide();
+    if (m_mainWindow) {
+        m_mainWindow->viewBarContainer()->hideViewBar(viewBar);
+    }
 }
 
 void MainWindow::addWidgetToViewBar(KTextEditor::View *view, QWidget *widget)
@@ -378,7 +366,9 @@ void MainWindow::addWidgetToViewBar(KTextEditor::View *view, QWidget *widget)
     Q_ASSERT(widget);
     m_viewBars[view] = widget;
 
-    m_viewBarContainerLayout->addWidget(widget);
+    if (m_mainWindow) {
+        m_mainWindow->viewBarContainer()->addViewBar(widget);
+    }
 }
 
 KTextEditor::MainWindow *MainWindow::interface() const
@@ -397,6 +387,12 @@ void MainWindow::removePluginView(const QString &id)
     auto view = m_pluginViews.take(id).data();
     delete view;
     emit m_interface->pluginViewDeleted(id, view);
+}
+
+void MainWindow::startDestroy()
+{
+    m_mainWindow = nullptr;
+    deleteLater();
 }
 
 Plugin::Plugin(KTextEditor::Plugin *plugin, QObject *parent)
@@ -453,7 +449,9 @@ void initialize()
 
 void MainWindow::splitView(Qt::Orientation orientation)
 {
-    m_mainWindow->split(orientation);
+    if (m_mainWindow) {
+        m_mainWindow->split(orientation);
+    }
 }
 
 }

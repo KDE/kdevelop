@@ -386,7 +386,7 @@ QWidget *MainWindow::statusBarLocation() const
     return d->idealController->statusBarLocation();
 }
 
-QWidget *MainWindow::viewBarContainer() const
+ViewBarContainer *MainWindow::viewBarContainer() const
 {
     return d->viewBarContainer;
 }

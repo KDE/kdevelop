@@ -17,6 +17,7 @@ set(sublime_LIB_SRCS
     urldocument.cpp
     tooldocument.cpp
     view.cpp
+    viewbarcontainer.cpp
     sublimedefs.cpp
     aggregatemodel.cpp
     holdupdates.cpp
@@ -53,4 +54,5 @@ install(FILES
     sublimedefs.h
     tooldocument.h
     view.h
+    viewbarcontainer.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/sublime COMPONENT Devel)

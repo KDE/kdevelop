@@ -36,6 +36,7 @@
 #include "container.h"
 #include "controller.h"
 #include "mainwindow.h"
+#include "viewbarcontainer.h"
 #include "idealcontroller.h"
 #include "holdupdates.h"
 #include "idealbuttonbarwidget.h"
@@ -162,7 +163,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     // this view bar container is used for the ktexteditor integration to show
     // all view bars at a central place, esp. for split view configurations
-    viewBarContainer = new QWidget;
+    viewBarContainer = new ViewBarContainer;
     viewBarContainer->setObjectName(QStringLiteral("viewBarContainer"));
     // hide by default
     viewBarContainer->setVisible(false);
