@@ -87,7 +87,12 @@ void saveDUChainItem(QVector<TopDUContextDynamicData::ArrayWithPosition>& data, 
     disableDUChainReferenceCounting(data.back().array.data());
   }else{
     //Just copy the data into another place, expensive copy constructors are not needed
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
     memcpy(&target, item.d_func(), size);
+#pragma GCC diagnostic pop
+#endif
     if (!isSharedDataItem) {
       item.setData(&target, false);
     }
@@ -759,7 +764,12 @@ TopDUContextDynamicData::ItemDataInfo TopDUContextDynamicData::writeDataInfo(con
   totalDataOffset += size;
 
   auto target = reinterpret_cast<DUChainBaseData*>(m_data.back().array.data() + pos);
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
   memcpy(target, data, size);
+#pragma GCC diagnostic pop
+#endif
 
   verifyDataInfo(ret, m_data);
   return ret;
