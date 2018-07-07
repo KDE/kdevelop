@@ -35,7 +35,7 @@ class ProjectFilter : public IProjectFilter
 {
 public:
     ProjectFilter(const IProject* const project, const Filters& filters);
-    virtual ~ProjectFilter();
+    ~ProjectFilter() override;
 
     bool isValid(const Path& path, bool isFolder) const override;
 

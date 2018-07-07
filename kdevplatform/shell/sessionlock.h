@@ -50,7 +50,7 @@ public:
 
     QString id() override;
 
-    virtual ~SessionLock();
+    ~SessionLock() override;
 
     /**
      * Release the lock file and remove the session directory from disk.

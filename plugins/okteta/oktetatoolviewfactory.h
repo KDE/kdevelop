@@ -40,13 +40,13 @@ class OktetaToolViewFactory : public IToolViewFactory
     OktetaToolViewFactory( Kasten::AbstractToolViewFactory* toolViewFactory,
                            Kasten::AbstractToolFactory* toolFactory );
 
-    virtual ~OktetaToolViewFactory();
+    ~OktetaToolViewFactory() override;
 
   public: // KDevelop::IToolViewFactory API
-    virtual QWidget* create( QWidget* parent );
-    virtual Qt::DockWidgetArea defaultPosition();
+    QWidget* create( QWidget* parent ) override;
+    Qt::DockWidgetArea defaultPosition() override;
 
-    virtual QString id() const;
+    QString id() const override;
 
   protected:
     Kasten::AbstractToolViewFactory* mToolViewFactory;

@@ -36,7 +36,7 @@ public:
   ClassMemberDeclaration(const ClassMemberDeclaration& rhs);
   ClassMemberDeclaration(const RangeInRevision& range, DUContext* context);
   explicit ClassMemberDeclaration(ClassMemberDeclarationData& dd);
-  ~ClassMemberDeclaration();
+  ~ClassMemberDeclaration() override;
 
   AccessPolicy accessPolicy() const;
   void setAccessPolicy(AccessPolicy accessPolicy);

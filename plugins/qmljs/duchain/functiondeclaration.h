@@ -59,7 +59,7 @@ public:
     FunctionDeclaration(const FunctionDeclaration &rhs);
     FunctionDeclaration(const KDevelop::RangeInRevision &range, KDevelop::DUContext *context);
     explicit FunctionDeclaration(FunctionDeclarationData &data);
-    ~FunctionDeclaration();
+    ~FunctionDeclaration() override;
 
     /**
      * @brief Return the context representing the prototype of this function

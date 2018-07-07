@@ -28,7 +28,7 @@ class ICMakeDocumentation : public KDevelop::IDocumentationProvider
 public:
     enum Type { Command, Variable, Module, Property, Policy, EOType };
     
-    virtual ~ICMakeDocumentation() {}
+    ~ICMakeDocumentation() override = default;
     virtual KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const=0;
     virtual QVector<QString> names(Type t) const=0;
 };

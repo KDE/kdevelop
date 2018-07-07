@@ -32,7 +32,7 @@ class IProject;
 class IQMakeBuilder : public KDevelop::IProjectBuilder
 {
 public:
-    virtual ~IQMakeBuilder() {}
+    ~IQMakeBuilder() override = default;
 
 };
 

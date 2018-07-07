@@ -45,7 +45,7 @@ public:
     EditorContext( KTextEditor::View* view, const KTextEditor::Cursor& position );
 
     /**Destructor.*/
-    virtual ~EditorContext();
+    ~EditorContext() override;
 
     int type() const override;
 

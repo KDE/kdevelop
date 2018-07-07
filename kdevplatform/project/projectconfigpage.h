@@ -64,7 +64,7 @@ public:
         conf->setProjectFile(m_project->projectFile());
     }
 
-    virtual ~ProjectConfigPage()
+    ~ProjectConfigPage() override
     {
         // we have to delete T::self otherwise we get the following message on the
         // next call to T::intance(QString):

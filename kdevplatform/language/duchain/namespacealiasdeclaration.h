@@ -55,7 +55,7 @@ public:
   NamespaceAliasDeclaration(const RangeInRevision& range, DUContext* context);
   explicit NamespaceAliasDeclaration(NamespaceAliasDeclarationData& data);
 
-  virtual ~NamespaceAliasDeclaration();
+  ~NamespaceAliasDeclaration() override;
   ///A NamespaceAliasDeclaration cannot have a type, so setAbstractType does nothing here.
   void setAbstractType(AbstractType::Ptr type) override;
 

@@ -27,7 +27,7 @@ class AppWizardPageWidget : public QWidget
     Q_OBJECT
 public:
     explicit AppWizardPageWidget(QWidget* parent = nullptr);
-    virtual ~AppWizardPageWidget();
+    ~AppWizardPageWidget() override;
 
     virtual bool shouldContinue();
 };

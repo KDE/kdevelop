@@ -71,7 +71,7 @@ public:
   /// Constructor using raw data. \param data internal data.
   explicit IntegralType(IntegralTypeData& data);
   /// Destructor
-  virtual ~IntegralType();
+  ~IntegralType() override;
 
   /**
    * Access the integral type

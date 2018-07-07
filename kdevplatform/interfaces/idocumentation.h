@@ -43,7 +43,7 @@ public:
     using Ptr = QExplicitlySharedDataPointer<IDocumentation>;
     IDocumentation();
 
-    virtual ~IDocumentation();
+    ~IDocumentation() override;
 
     /** @returns the name of the documented information*/
     virtual QString name() const = 0;

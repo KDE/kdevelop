@@ -318,7 +318,7 @@ protected:
   void applyAliases( const SearchItem::PtrList& identifiers, Acceptor& accept, const CursorInRevision& position, bool canBeNamespace ) const;
 
 protected:
-  virtual ~TopDUContext();
+  ~TopDUContext() override;
   
   void clearFeaturesSatisfied();
   void rebuildDynamicData(DUContext* parent, uint ownIndex) override;

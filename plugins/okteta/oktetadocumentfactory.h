@@ -40,7 +40,7 @@ class OktetaDocumentFactory : public IDocumentFactory
     explicit OktetaDocumentFactory( OktetaPlugin* plugin );
 
   public: // IDocumentFactory API
-    virtual IDocument* create( const QUrl &url, ICore* core );
+    IDocument* create( const QUrl &url, ICore* core ) override;
 
   protected:
     OktetaPlugin* mPlugin;

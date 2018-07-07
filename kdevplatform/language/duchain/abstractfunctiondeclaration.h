@@ -111,10 +111,10 @@ class MergeAbstractFunctionDeclaration : public Base, public AbstractFunctionDec
   }
   
   private:
-  virtual const AbstractFunctionDeclarationData* data() const {
+  const AbstractFunctionDeclarationData* data() const override {
     return static_cast<const _Data*>(Base::d_func());
   }
-  virtual AbstractFunctionDeclarationData* dynamicData() {
+  AbstractFunctionDeclarationData* dynamicData() override {
     return static_cast<_Data*>(Base::d_func_dynamic());
   }
 };

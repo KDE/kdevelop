@@ -43,8 +43,7 @@ public:
     }
   }
 
-  ~RepositoryManager() {
-  }
+  ~RepositoryManager() override = default;
 
   Q_DISABLE_COPY(RepositoryManager)
 

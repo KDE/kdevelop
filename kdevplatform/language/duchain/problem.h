@@ -132,7 +132,7 @@ public:
 
     Problem();
     explicit Problem(ProblemData& data);
-    ~Problem();
+    ~Problem() override;
 
     Source source() const override;
     void setSource(IProblem::Source source) override;

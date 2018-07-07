@@ -52,7 +52,7 @@ public:
                                const KTextEditor::Cursor& position,
                                const QString& text,
                                const QString& followingText = {});
-    ~ClangCodeCompletionContext();
+    ~ClangCodeCompletionContext() override;
 
     QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
 

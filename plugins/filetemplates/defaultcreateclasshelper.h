@@ -31,7 +31,7 @@ class DefaultCreateClassHelper : public KDevelop::ICreateClassHelper
 {
 public:
     DefaultCreateClassHelper();
-    virtual ~DefaultCreateClassHelper();
+    ~DefaultCreateClassHelper() override;
 
     /**
      * @return a new @c TemplateClassGenerator.

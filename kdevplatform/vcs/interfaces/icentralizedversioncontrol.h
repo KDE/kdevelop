@@ -40,7 +40,7 @@ namespace KDevelop
 class ICentralizedVersionControl : public KDevelop::IBasicVersionControl
 {
 public:
-    virtual ~ICentralizedVersionControl(){}
+    ~ICentralizedVersionControl() override = default;
 
     /**
      * this is for files only, it makes a file editable, this may be a no-op

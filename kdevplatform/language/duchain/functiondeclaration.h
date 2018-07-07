@@ -63,7 +63,7 @@ public:
   FunctionDeclaration(const RangeInRevision& range, DUContext* context);
   explicit FunctionDeclaration(FunctionDeclarationData& data);
   FunctionDeclaration(FunctionDeclarationData& data, const KDevelop::RangeInRevision&);
-  virtual ~FunctionDeclaration();
+  ~FunctionDeclaration() override;
 
   void setAbstractType(AbstractType::Ptr type) override;
 

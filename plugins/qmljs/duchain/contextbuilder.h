@@ -53,8 +53,8 @@ public:
     void setContextOnNode(QmlJS::AST::Node* node, KDevelop::DUContext* context) override;
     KDevelop::DUContext* contextFromNode(QmlJS::AST::Node* node) override;
 
-    virtual KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range,
-                                                  KDevelop::ParsingEnvironmentFile* file = nullptr) override;
+    KDevelop::TopDUContext* newTopContext(const KDevelop::RangeInRevision& range,
+                                          KDevelop::ParsingEnvironmentFile* file = nullptr) override;
     KDevelop::DUContext* newContext(const KDevelop::RangeInRevision& range) override;
 
     ExpressionType findType(QmlJS::AST::Node* node);

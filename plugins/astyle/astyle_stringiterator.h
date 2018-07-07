@@ -33,7 +33,7 @@ class AStyleStringIterator : public astyle::ASSourceIterator
 {
 public:
     explicit AStyleStringIterator(const QString &string);
-    virtual ~AStyleStringIterator();
+    ~AStyleStringIterator() override;
 
     astyle::streamoff tellg() override;
     int getStreamLength() const override;

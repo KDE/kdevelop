@@ -37,7 +37,7 @@ class KDevSvnPlugin: public KDevelop::IPlugin, public KDevelop::ICentralizedVers
     Q_INTERFACES(KDevelop::IBasicVersionControl KDevelop::ICentralizedVersionControl)
 public:
     explicit KDevSvnPlugin(QObject *parent, const QVariantList & = QVariantList());
-    virtual ~KDevSvnPlugin();
+    ~KDevSvnPlugin() override;
 
     QString name() const override;
     KDevelop::VcsImportMetadataWidget* createImportMetadataWidget(QWidget* parent) override;

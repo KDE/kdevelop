@@ -57,7 +57,7 @@ public:
   
   explicit AliasDeclaration(AliasDeclarationData& data);
   /// Destructor
-  virtual ~AliasDeclaration();
+  ~AliasDeclaration() override;
 
   /**
    * An AliasDeclaration cannot have a type, so setAbstractType does nothing here.

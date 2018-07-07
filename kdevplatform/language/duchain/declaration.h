@@ -84,7 +84,7 @@ public:
   ///Copy-constructor for cloning
   Declaration(const Declaration& rhs);
   /// Destructor
-  virtual ~Declaration();
+  ~Declaration() override;
   /// Uses the given data
   explicit Declaration( DeclarationData & dd );
 

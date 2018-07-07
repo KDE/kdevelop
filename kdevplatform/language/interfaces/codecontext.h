@@ -54,7 +54,7 @@ class IndexedDUContext;
 class KDEVPLATFORMLANGUAGE_EXPORT  DUContextContext : public Context {
 public:
     explicit DUContextContext(const IndexedDUContext& context);
-    virtual ~DUContextContext();
+    ~DUContextContext() override;
         
     ///Returns the represented DUContext
     IndexedDUContext context() const;
@@ -89,7 +89,7 @@ public:
     DeclarationContext(KTextEditor::View* view, const KTextEditor::Cursor& position);
 
     /**Destructor.*/
-    virtual ~DeclarationContext();
+    ~DeclarationContext() override;
 
     /// Returns the type of this context.
     int type() const override;

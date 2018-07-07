@@ -54,7 +54,7 @@ public:
   /// Constructor using raw data. \param data internal data.
   explicit DelayedType(DelayedTypeData& data);
   /// Destructor
-  virtual ~DelayedType();
+  ~DelayedType() override;
 
   /**
    * Access the type identifier which this type represents.

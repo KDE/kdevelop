@@ -34,7 +34,7 @@ class KDEVCLANGPRIVATE_EXPORT MacroNavigationContext : public KDevelop::Abstract
 public:
     explicit MacroNavigationContext(const MacroDefinition::Ptr& macro,
                            const KDevelop::DocumentCursor& expansionLocation = KDevelop::DocumentCursor::invalid());
-    ~MacroNavigationContext();
+    ~MacroNavigationContext() override;
 
     QString html(bool shorten) override;
     QString name() const override;

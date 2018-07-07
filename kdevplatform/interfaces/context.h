@@ -136,7 +136,7 @@ public:
     explicit FileContext( const QList<QUrl> &urls );
 
     /**Destructor.*/
-    virtual ~FileContext();
+    ~FileContext() override;
 
     int type() const override;
 
@@ -159,7 +159,7 @@ public:
     explicit ProjectItemContext( const QList<ProjectBaseItem*> &items );
 
     /**Destructor.*/
-    virtual ~ProjectItemContext();
+    ~ProjectItemContext() override;
 
     int type() const override;
 
@@ -185,7 +185,7 @@ public:
      */
     OpenWithContext(const QList<QUrl>& urls, const QMimeType& mimeType);
 
-    virtual ~OpenWithContext();
+    ~OpenWithContext() override;
 
     /**
      * @return Context::OpenWithContext

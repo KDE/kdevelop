@@ -34,7 +34,7 @@ class CMakeParserTest : public QObject
 Q_OBJECT
 public:
     CMakeParserTest();
-    ~CMakeParserTest();
+    ~CMakeParserTest() override;
 
 private Q_SLOTS:
     void testLexerCreation();

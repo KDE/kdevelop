@@ -41,7 +41,7 @@ public:
     static const QStringList FileVariables;
 
     explicit QMakeProjectFile( const QString& projectfile );
-    ~QMakeProjectFile();
+    ~QMakeProjectFile() override;
 
     bool read() override;
 

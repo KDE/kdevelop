@@ -48,7 +48,7 @@ public:
   /// Constructor using raw data. \param data internal data.
   explicit StructureType(StructureTypeData& data);
   /// Destructor
-  virtual ~StructureType();
+  ~StructureType() override;
 
   AbstractType* clone() const override;
 

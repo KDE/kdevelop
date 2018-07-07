@@ -45,7 +45,7 @@ public:
     FunctionType();
     FunctionType(const FunctionType& rhs);
     explicit FunctionType(Data& data);
-    virtual ~FunctionType();
+    ~FunctionType() override;
 
     KDevelop::AbstractType* clone() const override;
     QString toString() const override;

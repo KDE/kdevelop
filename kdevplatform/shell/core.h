@@ -70,7 +70,7 @@ public:
      */
     static Core *self();
 
-    virtual ~Core();
+    ~Core() override;
 
     IUiController *uiController() override;
     IPluginController *pluginController() override;

@@ -67,7 +67,7 @@ public:
           m_name(name), m_valid(true)
     {}
 
-    ~DBusProxy()
+    ~DBusProxy() override
     {
         if (m_valid) {
             m_dbusInterface.call(QStringLiteral("debuggerClosed"), m_name);

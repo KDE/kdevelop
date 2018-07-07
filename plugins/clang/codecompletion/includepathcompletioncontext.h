@@ -57,7 +57,7 @@ public:
 
     QList<KDevelop::CompletionTreeItemPointer> completionItems(bool& abort, bool fullCompletion = true) override;
 
-    virtual ~IncludePathCompletionContext() = default;
+    ~IncludePathCompletionContext() override = default;
 
 private:
     QVector<KDevelop::IncludeItem> m_includeItems;

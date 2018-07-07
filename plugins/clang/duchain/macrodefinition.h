@@ -49,7 +49,7 @@ public:
     MacroDefinition(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
     explicit MacroDefinition(MacroDefinitionData& data);
     MacroDefinition(const MacroDefinition& rhs);
-    virtual ~MacroDefinition();
+    ~MacroDefinition() override;
 
     /**
      * The definition text of this macro

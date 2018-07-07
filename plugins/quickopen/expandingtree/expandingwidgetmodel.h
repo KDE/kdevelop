@@ -41,7 +41,7 @@ class ExpandingWidgetModel
 public:
 
     explicit ExpandingWidgetModel(QWidget* parent);
-    virtual ~ExpandingWidgetModel();
+    ~ExpandingWidgetModel() override;
 
     enum ExpandingType {
         NotExpandable = 0,

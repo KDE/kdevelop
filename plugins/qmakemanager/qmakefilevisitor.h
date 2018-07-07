@@ -37,7 +37,7 @@ class QMakeFile;
 class QMakeFileVisitor : protected QMake::ASTDefaultVisitor, public QMakeVariableResolver {
 public:
     explicit QMakeFileVisitor(const QMakeVariableResolver* resolver, QMakeFile* baseFile);
-    virtual ~QMakeFileVisitor();
+    ~QMakeFileVisitor() override;
 
     QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const override;
 

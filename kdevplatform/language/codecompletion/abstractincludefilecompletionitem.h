@@ -38,7 +38,7 @@ public:
   AbstractIncludeFileCompletionItem(const IncludeItem& include) : includeItem(include) {
   }
 
-  virtual QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const {
+  QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override {
     DUChainReadLocker lock(DUChain::lock(), 500);
     if(!lock.locked()) {
       qDebug() << "Failed to lock the du-chain in time";
@@ -78,12 +78,12 @@ public:
     return QVariant();
   }
 
-  virtual void execute(KTextEditor::View* view, const KTextEditor::Range& word) = 0;
+  void execute(KTextEditor::View* view, const KTextEditor::Range& word) override = 0;
 
-  virtual int inheritanceDepth() const {
+  int inheritanceDepth() const override {
     return includeItem.pathNumber;
   }
-  virtual int argumentHintDepth() const {
+  int argumentHintDepth() const override {
     return 0;
   }
 

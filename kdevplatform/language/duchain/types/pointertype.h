@@ -45,7 +45,7 @@ public:
   /// Constructor using raw data. \param data internal data.
   explicit PointerType(PointerTypeData& data);
   /// Destructor
-  virtual ~PointerType();
+  ~PointerType() override;
 
   /**
    * Sets the base type of the pointer, ie. what type of data the pointer points to.

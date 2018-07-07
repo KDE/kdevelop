@@ -32,7 +32,7 @@
 class KDEVCLANGPRIVATE_EXPORT ClangParsingEnvironment : public KDevelop::ParsingEnvironment
 {
 public:
-    virtual ~ClangParsingEnvironment() = default;
+    ~ClangParsingEnvironment() override = default;
     int type() const override;
 
     /**

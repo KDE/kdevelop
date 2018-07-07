@@ -117,7 +117,7 @@ typedef QExplicitlySharedDataPointer<ParsingEnvironmentFile> ParsingEnvironmentF
 class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, public QSharedData
 {
   public:
-    virtual ~ParsingEnvironmentFile();
+    ~ParsingEnvironmentFile() override;
     explicit ParsingEnvironmentFile(const IndexedString& url);
     ParsingEnvironmentFile(ParsingEnvironmentFileData& data, const IndexedString& url);
     explicit ParsingEnvironmentFile(ParsingEnvironmentFileData& data);

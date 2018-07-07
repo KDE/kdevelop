@@ -170,7 +170,7 @@ protected:
   /**
    * Reimplementation of openContext, to track which uses should be assigned to which context.
    */
-  virtual void openContext(KDevelop::DUContext* newContext)
+  void openContext(KDevelop::DUContext* newContext) override
   {
     LanguageSpecificUseBuilderBase::openContext(newContext);
 
@@ -182,7 +182,7 @@ protected:
   /**
    * Reimplementation of closeContext, to track which uses should be assigned to which context.
    */
-  virtual void closeContext()
+  void closeContext() override
   {
     if(m_finishContext) {
       DUChainWriteLocker lock(DUChain::lock());

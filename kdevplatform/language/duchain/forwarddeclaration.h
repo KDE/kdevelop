@@ -56,7 +56,7 @@ public:
   ForwardDeclaration(const ForwardDeclaration& rhs);
 
   /// Destructor.
-  virtual ~ForwardDeclaration();
+  ~ForwardDeclaration() override;
 
   bool isForwardDeclaration() const override;
 

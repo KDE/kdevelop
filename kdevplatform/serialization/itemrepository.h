@@ -1072,7 +1072,7 @@ class ItemRepository : public AbstractItemRepository {
       m_registry->registerRepository(this, m_manager);
   }
 
-  ~ItemRepository() {
+  ~ItemRepository() override {
     if(m_registry)
       m_registry->unRegisterRepository(this);
     close();

@@ -51,7 +51,7 @@ class DebuggerConsoleView : public QWidget
     Q_OBJECT
 public:
     explicit DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *parent = nullptr);
-    ~DebuggerConsoleView();
+    ~DebuggerConsoleView() override;
 
     /**
      * Whether show a button allowing user to interrupt debugger execution.

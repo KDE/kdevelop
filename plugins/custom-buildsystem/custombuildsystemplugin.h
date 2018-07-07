@@ -42,7 +42,7 @@ class CustomBuildSystem : public KDevelop::AbstractFileManagerPlugin, public KDe
     Q_INTERFACES( KDevelop::IBuildSystemManager )
 public:
     explicit CustomBuildSystem( QObject *parent = nullptr, const QVariantList &args = QVariantList() );
-    virtual ~CustomBuildSystem();
+    ~CustomBuildSystem() override;
 
 // ProjectBuilder API
     KJob* build( KDevelop::ProjectBaseItem* dom ) override;
@@ -63,7 +63,7 @@ Q_SIGNALS:
 // AbstractFileManagerPlugin API
 public:
     Features features() const override;
-    virtual KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project, 
+    KDevelop::ProjectFolderItem* createFolderItem( KDevelop::IProject* project,
                     const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = nullptr ) override;
 
 // BuildSystemManager API

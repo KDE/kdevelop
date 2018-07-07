@@ -42,7 +42,7 @@ class IMakeBuilder : public KDevelop::IProjectBuilder
 {
 public:
 
-    virtual ~IMakeBuilder() {}
+    ~IMakeBuilder() override = default;
 
     /**
      * Return a build job for the given target.

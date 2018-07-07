@@ -32,7 +32,7 @@ class ArchiveTemplateLoader : public Grantlee::AbstractTemplateLoader
 {
 public:
     static ArchiveTemplateLoader* self();
-    virtual ~ArchiveTemplateLoader();
+    ~ArchiveTemplateLoader() override;
     bool canLoadTemplate(const QString& name) const override;
     Grantlee::Template loadByName(const QString& name, const Grantlee::Engine* engine) const override;
 

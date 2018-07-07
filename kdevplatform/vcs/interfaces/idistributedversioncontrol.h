@@ -38,7 +38,7 @@ class IDistributedVersionControl : public KDevelop::IBasicVersionControl
 {
 public:
 
-    virtual ~IDistributedVersionControl(){}
+    ~IDistributedVersionControl() override = default;
 
     /**
      * Create a new repository inside the given local directory.

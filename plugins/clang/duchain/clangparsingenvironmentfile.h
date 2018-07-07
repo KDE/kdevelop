@@ -37,7 +37,7 @@ public:
 
     ClangParsingEnvironmentFile(const KDevelop::IndexedString& url, const ClangParsingEnvironment& environment);
     explicit ClangParsingEnvironmentFile(ClangParsingEnvironmentFileData& data);
-    ~ClangParsingEnvironmentFile();
+    ~ClangParsingEnvironmentFile() override;
 
     bool needsUpdate(const KDevelop::ParsingEnvironment* environment = nullptr) const override;
     int type() const override;

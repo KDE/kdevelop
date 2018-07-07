@@ -43,7 +43,7 @@ public:
     MIVariable(MIDebugSession *session, KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                const QString& expression, const QString& display = QLatin1String(""));
 
-    ~MIVariable();
+    ~MIVariable() override;
 
     /* FIXME: should eventually remove, so that existence of
         varobjs is fully encapsulalated inside GdbVariable.  */

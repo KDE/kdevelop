@@ -53,7 +53,7 @@ public:
   /// Constructor using raw data. \param data internal data.
   explicit FunctionType(FunctionTypeData& data);
   /// Destructor
-  ~FunctionType();
+  ~FunctionType() override;
 
   /**
    * Retrieve the return type of the function.

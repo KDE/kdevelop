@@ -264,7 +264,7 @@ namespace KDevMI { namespace MI {
     struct TupleValue : public Value
     {
         TupleValue() { Value::kind = Tuple; }
-        ~TupleValue();
+        ~TupleValue() override;
 
         bool hasField(const QString&) const override;
 
@@ -278,7 +278,7 @@ namespace KDevMI { namespace MI {
     struct ListValue : public Value
     {
         ListValue() { Value::kind = List; }
-        ~ListValue();
+        ~ListValue() override;
 
         bool empty() const override;
 

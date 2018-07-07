@@ -42,7 +42,7 @@ class KDEVPLATFORMPROJECT_EXPORT IBuildSystemManager : public virtual IProjectFi
 {
 public:
 
-    virtual ~IBuildSystemManager();
+    ~IBuildSystemManager() override;
 
     enum BuildFeature
     {

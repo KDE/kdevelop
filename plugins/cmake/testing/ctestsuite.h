@@ -33,19 +33,19 @@ class CTestSuite : public KDevelop::ITestSuite
 {
 public:
     CTestSuite(const QString& name, const KDevelop::Path &executable, const QList<KDevelop::Path>& files, KDevelop::IProject* project, const QStringList& args, const QHash<QString, QString>& properties);
-    virtual ~CTestSuite();
+    ~CTestSuite() override;
 
-    virtual KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity);
-    virtual KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity);
-    virtual KJob* launchAllCases(TestJobVerbosity verbosity);
+    KJob* launchCase(const QString& testCase, TestJobVerbosity verbosity) override;
+    KJob* launchCases(const QStringList& testCases, TestJobVerbosity verbosity) override;
+    KJob* launchAllCases(TestJobVerbosity verbosity) override;
 
     virtual KDevelop::Path executable() const;
-    virtual QStringList cases() const;
-    virtual QString name() const;
-    virtual KDevelop::IProject* project() const;
+    QStringList cases() const override;
+    QString name() const override;
+    KDevelop::IProject* project() const override;
 
-    virtual KDevelop::IndexedDeclaration declaration() const;
-    virtual KDevelop::IndexedDeclaration caseDeclaration(const QString& testCase) const;
+    KDevelop::IndexedDeclaration declaration() const override;
+    KDevelop::IndexedDeclaration caseDeclaration(const QString& testCase) const override;
 
     virtual QHash<QString, QString> properties() const;
 

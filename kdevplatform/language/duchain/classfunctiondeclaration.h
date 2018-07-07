@@ -73,7 +73,7 @@ public:
   ClassFunctionDeclaration(const RangeInRevision& range, DUContext* context);
   ClassFunctionDeclaration(ClassFunctionDeclarationData& data, const RangeInRevision& range, DUContext* context);
   explicit ClassFunctionDeclaration(ClassFunctionDeclarationData& data);
-  ~ClassFunctionDeclaration();
+  ~ClassFunctionDeclaration() override;
 
   ///Whether this function is a signal, for example a C++ Qt signal
   bool isSignal() const;

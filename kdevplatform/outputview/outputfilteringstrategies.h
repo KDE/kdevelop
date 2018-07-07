@@ -62,7 +62,7 @@ class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrat
 
 public:
     explicit CompilerFilterStrategy(const QUrl& buildDir);
-    virtual ~CompilerFilterStrategy();
+    ~CompilerFilterStrategy() override;
 
     FilteredItem errorInLine(const QString& line) override;
 

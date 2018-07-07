@@ -50,7 +50,7 @@ class HelpNetworkAccessManager : public QNetworkAccessManager
         ~HelpNetworkAccessManager() override;
 
 	protected:
-		virtual QNetworkReply *createRequest(Operation op,
+		QNetworkReply *createRequest(Operation op,
 			const QNetworkRequest &request, QIODevice *outgoingData = nullptr) override;
 
 	private:

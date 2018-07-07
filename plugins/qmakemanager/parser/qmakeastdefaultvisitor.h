@@ -29,7 +29,7 @@ namespace QMake
     class KDEVQMAKEPARSER_EXPORT ASTDefaultVisitor : public ASTVisitor
     {
     public:
-        virtual ~ASTDefaultVisitor();
+        ~ASTDefaultVisitor() override;
         void visitProject( ProjectAST* node ) override;
         void visitAssignment( AssignmentAST* node ) override;
         void visitValue( ValueAST* node ) override;

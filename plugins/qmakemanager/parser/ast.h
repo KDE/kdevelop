@@ -68,14 +68,14 @@ class KDEVQMAKEPARSER_EXPORT StatementAST : public AST
 {
 public:
     StatementAST( AST* parent, AST::Type type );
-    ~StatementAST();
+    ~StatementAST() override;
 };
 
 class KDEVQMAKEPARSER_EXPORT ScopeBodyAST: public AST
 {
 public:
     explicit ScopeBodyAST( AST* parent, AST::Type type = AST::ScopeBody );
-    ~ScopeBodyAST();
+    ~ScopeBodyAST() override;
     QList<StatementAST*> statements;
 };
 
@@ -83,7 +83,7 @@ class KDEVQMAKEPARSER_EXPORT ProjectAST : public ScopeBodyAST
 {
 public:
     explicit ProjectAST();
-    ~ProjectAST();
+    ~ProjectAST() override;
     QString filename;
 
 
@@ -93,7 +93,7 @@ class KDEVQMAKEPARSER_EXPORT AssignmentAST : public StatementAST
 {
 public:
     explicit AssignmentAST( AST* parent );
-    ~AssignmentAST();
+    ~AssignmentAST() override;
 
     ValueAST* identifier;
     ValueAST* op;
@@ -105,7 +105,7 @@ class KDEVQMAKEPARSER_EXPORT ScopeAST : public StatementAST
 {
 public:
     explicit ScopeAST( AST* parent, AST::Type type);
-    ~ScopeAST();
+    ~ScopeAST() override;
     ScopeBodyAST* body;
 };
 
@@ -113,7 +113,7 @@ class KDEVQMAKEPARSER_EXPORT FunctionCallAST : public ScopeAST
 {
 public:
     explicit FunctionCallAST( AST* parent );
-    ~FunctionCallAST();
+    ~FunctionCallAST() override;
     ValueAST* identifier;
     QList<ValueAST*> args;
 };
@@ -123,7 +123,7 @@ class KDEVQMAKEPARSER_EXPORT SimpleScopeAST : public ScopeAST
 {
 public:
     explicit SimpleScopeAST( AST* parent );
-    ~SimpleScopeAST();
+    ~SimpleScopeAST() override;
     ValueAST* identifier;
 };
 
@@ -131,7 +131,7 @@ class KDEVQMAKEPARSER_EXPORT OrAST : public ScopeAST
 {
 public:
     explicit OrAST( AST* parent );
-    ~OrAST();
+    ~OrAST() override;
     QList<ScopeAST*> scopes;
 };
 

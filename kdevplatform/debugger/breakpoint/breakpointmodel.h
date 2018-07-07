@@ -101,7 +101,7 @@ public:
     Q_DECLARE_FLAGS(ColumnFlags, ColumnFlag)
 
     explicit BreakpointModel(QObject* parent);
-    virtual ~BreakpointModel();
+    ~BreakpointModel() override;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;

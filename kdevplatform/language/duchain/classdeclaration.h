@@ -98,7 +98,7 @@ public:
   explicit ClassDeclaration(ClassDeclarationData& data);
   ClassDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
   ClassDeclaration(ClassDeclarationData& data, const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
-  ~ClassDeclaration();
+  ~ClassDeclaration() override;
 
   void clearBaseClasses();
   ///Count of base-classes

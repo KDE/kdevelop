@@ -38,7 +38,7 @@ class BuildASTVisitor : public DefaultVisitor
 {
 public:
     BuildASTVisitor(Parser* parser, ProjectAST* project);
-    virtual ~BuildASTVisitor();
+    ~BuildASTVisitor() override;
     void visitArgumentList( ArgumentListAst *node ) override;
     void visitFunctionArguments( FunctionArgumentsAst *node ) override;
     void visitOrOperator( OrOperatorAst *node ) override;

@@ -146,15 +146,15 @@ class MergeIdentifiedType : public Parent, public IdentifiedType {
     explicit MergeIdentifiedType(Data& data) : Parent(data) {
     }
 
-    virtual IdentifiedTypeData* idData() {
+    IdentifiedTypeData* idData() override {
       return static_cast<Data*>(this->d_func_dynamic());
     }
 
-    virtual const IdentifiedTypeData* idData() const {
+    const IdentifiedTypeData* idData() const override {
       return static_cast<const Data*>(this->d_func());
     }
 
-    virtual bool equals(const KDevelop::AbstractType* rhs) const
+    bool equals(const KDevelop::AbstractType* rhs) const override
     {
       if (!Parent::equals(rhs))
         return false;

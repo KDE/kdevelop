@@ -45,7 +45,7 @@ public:
   /// Constructor using raw data. \param data internal data.
   explicit ReferenceType(ReferenceTypeData& data);
   /// Destructor
-  virtual ~ReferenceType();
+  ~ReferenceType() override;
 
   /**
    * Retrieve the referenced type, ie. what type of data this type references.

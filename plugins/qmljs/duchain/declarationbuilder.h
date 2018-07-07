@@ -47,9 +47,9 @@ class KDEVQMLJSDUCHAIN_EXPORT DeclarationBuilder : public DeclarationBuilderBase
 public:
     explicit DeclarationBuilder(ParseSession* session);
 
-    virtual KDevelop::ReferencedTopDUContext build(const KDevelop::IndexedString& url,
-                                                   QmlJS::AST::Node* node,
-                                                   KDevelop::ReferencedTopDUContext updateContext = KDevelop::ReferencedTopDUContext()) override;
+    KDevelop::ReferencedTopDUContext build(const KDevelop::IndexedString& url,
+                                           QmlJS::AST::Node* node,
+                                           KDevelop::ReferencedTopDUContext updateContext = KDevelop::ReferencedTopDUContext()) override;
     void startVisiting(QmlJS::AST::Node* node) override;
 
 protected:

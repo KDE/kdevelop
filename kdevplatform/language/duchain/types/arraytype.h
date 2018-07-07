@@ -39,7 +39,7 @@ public:
   /// Constructor using raw data. \param data internal data.
   explicit ArrayType(ArrayTypeData& data);
   /// Destructor
-  virtual ~ArrayType();
+  ~ArrayType() override;
 
   AbstractType* clone() const override;
 

@@ -62,7 +62,7 @@ public:
     ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, ClangIndex* index,
                      const ClangParsingEnvironment& environment, Options options = Options());
 
-    ~ParseSessionData();
+    ~ParseSessionData() override;
 
     ClangParsingEnvironment environment() const;
 

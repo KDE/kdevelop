@@ -45,7 +45,7 @@ class QMakeFile : public QMakeVariableResolver
 {
 public:
     explicit QMakeFile( QString  file );
-    virtual ~QMakeFile();
+    ~QMakeFile() override;
     virtual bool read();
     QString absoluteDir() const;
     QString absoluteFile() const;

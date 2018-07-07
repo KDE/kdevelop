@@ -160,11 +160,11 @@ public:
     {
     }
 
-    ~LabelNode()
+    ~LabelNode() override
     {
     }
 
-    QString label() const{ return m_label; }
+    QString label() const override { return m_label; }
 
     /// Sets the label
     void setLabel(const QString &s){ m_label = s; }
@@ -197,11 +197,11 @@ public:
     {
     }
 
-    ~ProblemNode()
+    ~ProblemNode() override
     {
     }
 
-    IProblem::Ptr problem() const{
+    IProblem::Ptr problem() const override {
         return m_problem;
     }
 

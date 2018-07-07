@@ -39,7 +39,7 @@ protected:
                 MI::CommandFlags flags = {});
     friend class KDevMI::LLDB::DebugSession;
 public:
-    ~LldbCommand();
+    ~LldbCommand() override;
 
     QString cmdToSend() override;
     QString miCommand() const override;

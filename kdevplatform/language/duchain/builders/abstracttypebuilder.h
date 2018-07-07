@@ -77,7 +77,7 @@ protected:
    * Perform initialisation at the start of a build, and check that all types
    * that were registered were also used.
    */
-  virtual void supportBuild(T* node, DUContext* context = nullptr)
+  void supportBuild(T* node, DUContext* context = nullptr) override
   {
     m_topTypes.clear();
 

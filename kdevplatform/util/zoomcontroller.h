@@ -46,7 +46,7 @@ public:
     explicit ZoomController(const KConfigGroup& configGroup,
                             QObject* parent = nullptr);
 
-    ~ZoomController();
+    ~ZoomController() override;
 
     /**
      * @return Current zoom factor

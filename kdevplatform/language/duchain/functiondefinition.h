@@ -36,7 +36,7 @@ namespace KDevelop {
     public:
     FunctionDefinition(const RangeInRevision& range, DUContext* context);
     explicit FunctionDefinition(FunctionDefinitionData& data);
-    ~FunctionDefinition();
+    ~FunctionDefinition() override;
 
     /**
     * Find the declaration for this definition, if one exists.

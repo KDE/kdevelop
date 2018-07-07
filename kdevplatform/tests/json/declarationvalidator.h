@@ -29,7 +29,7 @@ class KDEVPLATFORMTESTS_EXPORT DeclarationValidator : public DUChainVisitor
 {
 public:
   DeclarationValidator();
-  virtual ~DeclarationValidator();
+  ~DeclarationValidator() override;
 
   virtual bool testsPassed();
   void visit(DUContext*) override;
