@@ -85,7 +85,7 @@ ContextTest(declarations)
   for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it)
   {
     int index = it.key().toInt();
-    QVector<Declaration*> decls = ctxt->localDeclarations(0);
+    QVector<Declaration*> decls = ctxt->localDeclarations(nullptr);
     if (decls.size() <= index)
         return NOT_FOUND_ERROR;
 
@@ -128,7 +128,7 @@ ContextTest(type)
 ///@returns whether the context's nullity matches the given value
 ContextTest(null)
 {
-  return compareValues(ctxt == 0, value, "Context's nullity");
+  return compareValues(ctxt == nullptr, value, "Context's nullity");
 }
 
 //JSON type: DeclTestObject

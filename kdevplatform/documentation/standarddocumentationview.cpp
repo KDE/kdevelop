@@ -182,7 +182,7 @@ void StandardDocumentationView::search ( const QString& text, DocumentationFindW
 #else
     typedef QWebEnginePage WebkitThing;
 #endif
-    WebkitThing::FindFlags ff = 0;
+    WebkitThing::FindFlags ff = {};
     if(options & DocumentationFindWidget::Previous)
         ff |= WebkitThing::FindBackward;
 

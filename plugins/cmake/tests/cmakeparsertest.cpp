@@ -33,7 +33,7 @@ CMakeParserTest::~CMakeParserTest()
 void CMakeParserTest::testLexerCreation()
 {
     cmListFileLexer* lexer = cmListFileLexer_New();
-    QVERIFY( lexer != 0 );
+    QVERIFY( lexer != nullptr );
     cmListFileLexer_Delete( lexer );
 }
 

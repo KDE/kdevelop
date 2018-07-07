@@ -94,7 +94,7 @@ KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const QUrl &dest)
 
     auto plugin = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"), QStringLiteral("kdevgit"));
     if (!plugin) {
-        KMessageBox::error(0, i18n("The Git plugin could not be loaded which is required to import a GitHub project."), i18n("GitHub Provider Error"));
+        KMessageBox::error(nullptr, i18n("The Git plugin could not be loaded which is required to import a GitHub project."), i18n("GitHub Provider Error"));
         return nullptr;
     }
 

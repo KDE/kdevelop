@@ -232,7 +232,7 @@ void MemoryView::memoryRead(const MI::ResultRecord& r)
 
     for(int i = 0; i < content.size(); ++i)
     {
-        m_memData[i] = content[i].literal().toInt(0, 16);
+        m_memData[i] = content[i].literal().toInt(nullptr, 16);
     }
 
     m_memViewModel->setData(reinterpret_cast<Okteta::Byte*>(m_memData.data()), m_memData.size());

@@ -114,7 +114,7 @@ struct CodeCompletionItemTester
 
   QVariant itemData(Item item, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) const
   {
-    return item->data(fakeModel().index(0, column), role, 0);
+    return item->data(fakeModel().index(0, column), role, nullptr);
   }
 
   Item findItem(const QString& itemName) const
@@ -140,7 +140,7 @@ struct CodeCompletionItemTester
       addElements(completionContext->ungroupedElements());
 
       foreach(Item i, items) {
-        names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, 0).toString();
+        names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, nullptr).toString();
       }
     }
 
@@ -162,7 +162,7 @@ struct CodeCompletionItemTester
 struct InsertIntoDUChain
 {
   ///Artificially inserts a file called @p name with the text @p text
-  InsertIntoDUChain(const QString& name, const QString& text) : m_insertedCode(IndexedString(name), text), m_topContext(0) {
+  InsertIntoDUChain(const QString& name, const QString& text) : m_insertedCode(IndexedString(name), text), m_topContext(nullptr) {
   }
 
   ~InsertIntoDUChain() {
@@ -175,7 +175,7 @@ struct InsertIntoDUChain
     if(m_topContext) {
       DUChainWriteLocker lock;
 
-      m_topContext = 0;
+      m_topContext = nullptr;
 
       QList< TopDUContext* > chains = DUChain::self()->chainsForDocument(m_insertedCode.file());
       foreach(TopDUContext* top, chains)
@@ -202,7 +202,7 @@ struct InsertIntoDUChain
   Declaration* getDeclaration(const QString& id) {
     get();
     if(!topContext())
-      return 0;
+      return nullptr;
     return DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(id))).getDeclaration(topContext());
   }
 

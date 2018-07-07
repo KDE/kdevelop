@@ -361,7 +361,7 @@ class LazySet : public Conversion {
      *
      * @warning Watch for deadlocks, never use this class while the mutex given through lockBeforeAccess is locked
      */
-    explicit LazySet(BasicSetRepository* rep, QMutex* lockBeforeAccess = 0, const Set& basicSet = Set()) : m_rep(rep), m_set(basicSet), m_lockBeforeAccess(lockBeforeAccess) {
+    explicit LazySet(BasicSetRepository* rep, QMutex* lockBeforeAccess = nullptr, const Set& basicSet = Set()) : m_rep(rep), m_set(basicSet), m_lockBeforeAccess(lockBeforeAccess) {
     }
 
     void insert(const T& t) {
