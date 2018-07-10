@@ -328,7 +328,7 @@ static QString formattingSample()
 
 static QString indentingSample()
 {
-    return
+    return QLatin1String(
         "// Indentation\n"
         "#define foobar(A)\\\n"
         "{Foo();Bar();}\n"
@@ -342,6 +342,8 @@ static QString indentingSample()
         "Foo();\n"
         "virtual ~Foo();\n"
         "};\n"
+        "void bar(int foo)\n"
+        "{\n"
         "switch (foo)\n"
         "{\n"
         "case 1:\n"
@@ -361,14 +363,15 @@ static QString indentingSample()
         "{\n"
         "anotherBar();\n"
         "}\n"
+        "}\n"
         "int foo()\n"
         "\twhile(isFoo)\n"
         "\t\t{\n"
-        "\t\t\t...\n"
+        "\t\t\t// ...\n"
         "\t\t\tgoto error;\n"
-        "\t\t....\n"
+        "\t\t/* .... */\n"
         "\t\terror:\n"
-        "\t\t\t...\n"
+        "\t\t\t//...\n"
         "\t\t}\n"
         "\t}\n"
         "fooArray[]={ red,\n"
@@ -376,7 +379,8 @@ static QString indentingSample()
         "\tdarkblue};\n"
         "fooFunction(barArg1,\n"
         "\tbarArg2,\n"
-        "\tbarArg3);\n";
+        "\tbarArg3);\n"
+        );
 }
 
 QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const QMimeType& /*mime*/) const

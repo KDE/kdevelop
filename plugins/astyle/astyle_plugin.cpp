@@ -212,7 +212,7 @@ QString AStylePlugin::formattingSample()
 
 QString AStylePlugin::indentingSample()
 {
-    return
+    return QLatin1String(
     "#define foobar(A)\\\n"
     "{Foo();Bar();}\n"
     "#define anotherFoo(B)\\\n"
@@ -225,6 +225,8 @@ QString AStylePlugin::indentingSample()
     "Foo();\n"
     "virtual ~Foo();\n"
     "};\n"
+    "void bar(int foo)\n"
+    "{\n"
     "switch (foo)\n"
     "{\n"
     "case 1:\n"
@@ -244,14 +246,15 @@ QString AStylePlugin::indentingSample()
     "{\n"
     "anotherBar();\n"
     "}\n"
+    "}\n"
     "int foo()\n"
     "\twhile(isFoo)\n"
     "\t\t{\n"
-    "\t\t\t...\n"
+    "\t\t\t// ...\n"
     "\t\t\tgoto error;\n"
-    "\t\t....\n"
+    "\t\t/* .... */\n"
     "\t\terror:\n"
-    "\t\t\t...\n"
+    "\t\t\t//...\n"
     "\t\t}\n"
     "\t}\n"
     "fooArray[]={ red,\n"
@@ -260,7 +263,8 @@ QString AStylePlugin::indentingSample()
     "fooFunction(barArg1,\n"
     "\tbarArg2,\n"
     "\tbarArg3);\n"
-    "struct foo{ int bar() {} };\n";
+    "struct foo{ int bar() {} };\n"
+    );
 }
 
 #include "astyle_plugin.moc"
