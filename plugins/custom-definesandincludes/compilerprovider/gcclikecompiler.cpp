@@ -191,7 +191,7 @@ Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& ar
                     // This is an include path, add it to the list.
                     auto hostPath = rt->pathInHost(Path(line.trimmed().toString()));
                     // but skip folders with compiler builtins, we cannot parse these with clang
-                    if (!QFile::exists(hostPath.toLocalFile() + QLatin1String("/varargs.h"))) {
+                    if (!QFile::exists(hostPath.toLocalFile() + QLatin1String("/cpuid.h"))) {
                         data.includePaths << Path(QFileInfo(hostPath.toLocalFile()).canonicalFilePath());
                     }
                 }
