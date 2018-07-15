@@ -44,6 +44,7 @@
   <summary xml:lang="nl">IDE voor C/C++ en andere programmeertalen, vol functies en uit te breiden met plug-ins.</summary>
   <summary xml:lang="pl">Jest to w pełni funkcjonalne, z możliwością rozszerzenia przy użyciu wtyczek, zintegrowane środowisko programistyczne dla C/C++ i innych języków programowania.</summary>
   <summary xml:lang="pt">IDE pleno de funcionalidades e modular para o C/C++ e outras linguagens de programação</summary>
+  <summary xml:lang="pt-BR">IDE repleto de funcionalidades e expansível através de plugins, para C/C++ e outras linguagens de programação.</summary>
   <summary xml:lang="sk">Plne funkčné, pluginmi rozšíriteľné IDE pre C/C++ a iné programovacie jazyky</summary>
   <summary xml:lang="sl">Zmogljivo integrirano razvojno okolje za C/C++ in druge programske jezike, ki je razširljivo z vstavki.</summary>
   <summary xml:lang="sv">Funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk</summary>
@@ -65,6 +66,7 @@
     <p xml:lang="nl">KDevelop is een vrije geïntegreerde ontwikkelomgeving (IDE) binnen het open source principe.</p>
     <p xml:lang="pl">KDevelop to darmowe i otwartoźródłowe zintegrowane środkowisko programistyczne (IDE).</p>
     <p xml:lang="pt">O KDevelop é um ambiente de desenvolvimento integrado (IDE) livre e em código aberto.</p>
+    <p xml:lang="pt-BR">Ambiente de Desenvolvimento Integrado (IDE) em Software Livre e Código Aberto.</p>
     <p xml:lang="sk">KDevelop je slobodné a otvorené integrované vývojové prostredie (IDE).</p>
     <p xml:lang="sl">KDevelop je prosto in odprtokodno integrirano razvojno okolje  (IDE).</p>
     <p xml:lang="sv">KDevelop är en fri integrerad utvecklingsmiljö (IDE) med öppen källkod för olika programvaruprojekt.</p>
