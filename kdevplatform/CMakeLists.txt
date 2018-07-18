@@ -56,6 +56,12 @@ else()
   set(COMPILER_OPTIMIZATIONS_DISABLED FALSE)
 endif()
 
+add_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
+)
+
 add_subdirectory(sublime)
 add_subdirectory(interfaces)
 add_subdirectory(project)

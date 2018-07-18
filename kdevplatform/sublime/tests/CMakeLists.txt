@@ -1,3 +1,9 @@
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
+)
+
 set(test_areaoperation_SRCS test_areaoperation.cpp areaprinter.cpp)
 ecm_add_test(${test_areaoperation_SRCS}
     TEST_NAME test_areaoperation

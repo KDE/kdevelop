@@ -1,5 +1,11 @@
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
+)
+
 if(NOT COMPILER_OPTIMIZATIONS_DISABLED)
     ecm_add_test(bench_itemrepository.cpp LINK_LIBRARIES
         LINK_LIBRARIES Qt5::Test KDev::Serialization KDev::Tests)

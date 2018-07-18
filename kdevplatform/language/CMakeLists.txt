@@ -6,6 +6,11 @@ include(CheckSymbolExists)
 check_include_file("malloc.h" HAVE_MALLOC_H)
 check_symbol_exists(malloc_trim "malloc.h" HAVE_MALLOC_TRIM)
 
+# TODO: fix duchain/stringhelpers.cpp and drop this again
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+)
+
 if(BUILD_TESTING)
     add_subdirectory(highlighting/tests)
     add_subdirectory(duchain/tests)

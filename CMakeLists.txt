@@ -109,6 +109,7 @@ add_definitions(
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_STRICT_ITERATORS
     -DQT_USE_QSTRINGBUILDER
+    -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
 )
 
 function(add_compile_flag_if_supported _flag)
