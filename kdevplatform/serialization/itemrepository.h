@@ -558,7 +558,12 @@ class Bucket {
         disableDUChainReferenceCounting(m_data);
 
 #ifndef QT_NO_DEBUG
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
       memset(item, 0, size); //For debugging, so we notice the data is wrong
+#pragma GCC diagnostic pop
+#endif
 #endif
 
       if(m_monsterBucketExtent) {
