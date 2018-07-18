@@ -28,7 +28,7 @@
 #include <tests/testfile.h>
 #include <QTest>
 
-QTEST_GUILESS_MAIN(TestDocumentchangeset);
+QTEST_GUILESS_MAIN(TestDocumentchangeset)
 
 using namespace KDevelop;
 

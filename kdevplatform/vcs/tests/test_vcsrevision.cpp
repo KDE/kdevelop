@@ -135,4 +135,4 @@ void TestVcsRevision::testAssignOperator()
     }
 }
 
-QTEST_GUILESS_MAIN(TestVcsRevision);
+QTEST_GUILESS_MAIN(TestVcsRevision)

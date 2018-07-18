@@ -56,6 +56,6 @@ KDEVCLANGPRIVATE_EXPORT QVector< QUrl > getPotentialBuddies(const QUrl &url, boo
  * If no source file exists or @p headerPath is not a header an empty sting is returned
  */
 KDEVCLANGPRIVATE_EXPORT QString sourceForHeader(const QString& headerPath);
-};
+}
 
 #endif // DOCUMENTFINDERHELPERS_H

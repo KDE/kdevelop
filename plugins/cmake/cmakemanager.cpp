@@ -71,7 +71,7 @@
 #include <language/duchain/duchain.h>
 #include <makefileresolver/makefileresolver.h>
 
-Q_DECLARE_METATYPE(KDevelop::IProject*);
+Q_DECLARE_METATYPE(KDevelop::IProject*)
 
 using namespace KDevelop;
 

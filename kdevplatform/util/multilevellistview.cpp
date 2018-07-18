@@ -447,7 +447,7 @@ KSelectionProxyModel::FilterBehavior toSelectionProxyModelFilterBehavior(MultiLe
             return KSelectionProxyModel::ChildrenOfExactSelection;
     }
     Q_UNREACHABLE();
-};
+}
 
 void MultiLevelListView::setLastLevelViewMode(LastLevelViewMode mode)
 {

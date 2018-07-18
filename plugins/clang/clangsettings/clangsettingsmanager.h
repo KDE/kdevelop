@@ -42,7 +42,7 @@ struct ParserSettings
     QVector<QByteArray> toClangAPI() const;
     bool operator==(const ParserSettings& rhs) const;
 };
-Q_DECLARE_METATYPE(ParserSettings);
+Q_DECLARE_METATYPE(ParserSettings)
 
 struct CodeCompletionSettings
 {

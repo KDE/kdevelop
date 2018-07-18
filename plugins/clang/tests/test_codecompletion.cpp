@@ -49,7 +49,7 @@
 
 #include <KConfigGroup>
 
-QTEST_MAIN(TestCodeCompletion);
+QTEST_MAIN(TestCodeCompletion)
 
 static const auto NoMacroOrBuiltin = ClangCodeCompletionContext::ContextFilters(
     ClangCodeCompletionContext::NoBuiltins | ClangCodeCompletionContext::NoMacros);
@@ -70,7 +70,7 @@ struct CompletionItems {
     QStringList declarationItems; ///< completion items that have associated declarations. Declarations with higher match quality at the top. @sa KTextEditor::CodeCompletionModel::MatchQuality
 };
 Q_DECLARE_TYPEINFO(CompletionItems, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(CompletionItems);
+Q_DECLARE_METATYPE(CompletionItems)
 
 
 struct CompletionPriorityItem
@@ -100,7 +100,7 @@ struct CompletionPriorityItems : public CompletionItems
 };
 
 Q_DECLARE_TYPEINFO(CompletionPriorityItems, Q_MOVABLE_TYPE);
-Q_DECLARE_METATYPE(CompletionPriorityItems);
+Q_DECLARE_METATYPE(CompletionPriorityItems)
 
 namespace {
 
@@ -1138,7 +1138,7 @@ struct HintItem
         return "HintItem(" + hint.toUtf8() + ", " + (hasDeclaration ? "true" : "false") + ')';
     }
 };
-Q_DECLARE_METATYPE(HintItem);
+Q_DECLARE_METATYPE(HintItem)
 using HintItemList = QVector<HintItem>;
 namespace QTest {
 template<>

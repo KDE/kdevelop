@@ -25,7 +25,7 @@
 
 #include <QTest>
 
-QTEST_MAIN(TestKTextEditorHelpers);
+QTEST_MAIN(TestKTextEditorHelpers)
 
 using namespace KDevelop;
 

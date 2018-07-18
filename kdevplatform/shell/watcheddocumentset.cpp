@@ -40,8 +40,8 @@ enum ActionFlag {
     DoUpdate = 1,
     DoEmit = 2
 };
-Q_DECLARE_FLAGS(ActionFlags, ActionFlag);
-Q_DECLARE_OPERATORS_FOR_FLAGS(ActionFlags);
+Q_DECLARE_FLAGS(ActionFlags, ActionFlag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(ActionFlags)
 
 class WatchedDocumentSetPrivate : public QObject
 {

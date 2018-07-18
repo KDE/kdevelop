@@ -43,6 +43,6 @@ KDevelop::IndexedTypeIdentifier shortenedTypeIdentifier(const KDevelop::Abstract
 QString simplifiedTypeString(const KDevelop::AbstractType::Ptr& type, KDevelop::DUContext* visibilityFrom);
 
 QString makeSignatureString(const KDevelop::Declaration* functionDecl, const Signature& signature, const bool editingDefinition);
-};
+}
 
 #endif // CODEGENHELPER_H

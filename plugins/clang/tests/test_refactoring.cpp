@@ -36,7 +36,7 @@
 #include <QLoggingCategory>
 #include <QTest>
 
-QTEST_MAIN(TestRefactoring);
+QTEST_MAIN(TestRefactoring)
 
 using namespace KDevelop;
 

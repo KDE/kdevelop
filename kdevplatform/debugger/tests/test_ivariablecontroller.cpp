@@ -31,7 +31,7 @@
 
 #include <QTest>
 
-QTEST_MAIN(KDevelop::TestIVariableController);
+QTEST_MAIN(KDevelop::TestIVariableController)
 
 using namespace KDevelop;
 

@@ -39,5 +39,5 @@ void TestName::thirdTestCase()
 
 }
 
-QTEST_MAIN(TestName);
+QTEST_MAIN(TestName)
 #include "testname.moc"

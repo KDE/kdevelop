@@ -46,7 +46,7 @@ namespace {
 KPluginMetaData pluginInfo(KDevelop::IPlugin* plugin)
 {
     return KDevelop::Core::self()->pluginControllerInternal()->pluginInfo(plugin);
-};
+}
 
 QString displayName(KDevelop::IPlugin* plugin)
 {

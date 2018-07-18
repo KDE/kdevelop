@@ -131,7 +131,7 @@ public:
     ClangParsingEnvironment environment() const;
 
 private:
-    Q_DISABLE_COPY(ParseSession);
+    Q_DISABLE_COPY(ParseSession)
 
     ParseSessionData::Ptr d;
 

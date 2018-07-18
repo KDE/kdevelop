@@ -109,7 +109,7 @@ TopDUContext* DUChainBase::topContext() const
 
 namespace {
   QMutex weakPointerMutex;
-};
+}
 
 const QExplicitlySharedDataPointer<DUChainPointerData>& DUChainBase::weakPointer() const
 {

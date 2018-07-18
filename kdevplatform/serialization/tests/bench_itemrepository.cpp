@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <QTest>
 
-QTEST_GUILESS_MAIN(BenchItemRepository);
+QTEST_GUILESS_MAIN(BenchItemRepository)
 
 using namespace KDevelop;
 

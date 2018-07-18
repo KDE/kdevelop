@@ -26,7 +26,7 @@
 #include <QTest>
 #include <QProcessEnvironment>
 
-QTEST_MAIN(TestEnvironment);
+QTEST_MAIN(TestEnvironment)
 
 using ProcEnv = QMap<QString,QString>;
 

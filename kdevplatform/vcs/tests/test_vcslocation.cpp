@@ -219,4 +219,4 @@ void TestVcsLocation::testAssignOperator()
     }
 }
 
-QTEST_GUILESS_MAIN(TestVcsLocation);
+QTEST_GUILESS_MAIN(TestVcsLocation)

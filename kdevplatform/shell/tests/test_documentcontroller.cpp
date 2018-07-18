@@ -194,4 +194,4 @@ void TestDocumentController::testEmptyUrl()
     QVERIFY(!DocumentController::isEmptyDocumentUrl(QUrl::fromLocalFile(QStringLiteral("/test"))));
 }
 
-QTEST_MAIN(TestDocumentController);
+QTEST_MAIN(TestDocumentController)

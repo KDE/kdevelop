@@ -25,7 +25,7 @@
 #include <QTest>
 #include <QTemporaryFile>
 
-QTEST_MAIN(TestQuickOpen);
+QTEST_MAIN(TestQuickOpen)
 
 using namespace KDevelop;
 

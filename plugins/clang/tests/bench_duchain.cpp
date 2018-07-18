@@ -76,4 +76,4 @@ void BenchDUChain::benchDUChainBuilder()
     }
 }
 
-QTEST_MAIN(BenchDUChain);
+QTEST_MAIN(BenchDUChain)

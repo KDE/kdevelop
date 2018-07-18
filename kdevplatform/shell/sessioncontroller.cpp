@@ -61,7 +61,7 @@ namespace KDevelop
 namespace {
     int argc = 0;
     char** argv = nullptr;
-};
+}
 
 void SessionController::setArguments(int _argc, char** _argv)
 {

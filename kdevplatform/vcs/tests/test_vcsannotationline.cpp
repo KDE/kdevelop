@@ -170,4 +170,4 @@ void TestVcsAnnotationLine::testAssignOperator()
     }
 }
 
-QTEST_GUILESS_MAIN(TestVcsAnnotationLine);
+QTEST_GUILESS_MAIN(TestVcsAnnotationLine)

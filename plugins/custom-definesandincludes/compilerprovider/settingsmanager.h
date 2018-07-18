@@ -61,7 +61,7 @@ public:
     bool parseAmbiguousAsCPP;
 };
 
-Q_DECLARE_METATYPE(ParserArguments);
+Q_DECLARE_METATYPE(ParserArguments)
 Q_DECLARE_TYPEINFO(ParserArguments, Q_MOVABLE_TYPE);
 
 struct ConfigEntry

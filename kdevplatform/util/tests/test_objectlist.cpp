@@ -25,7 +25,7 @@
 
 #include <QTest>
 
-QTEST_MAIN(TestObjectList);
+QTEST_MAIN(TestObjectList)
 
 using namespace KDevelop;
 

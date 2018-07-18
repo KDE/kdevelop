@@ -30,7 +30,7 @@
 
 #include "../projectfilter.h"
 
-QTEST_GUILESS_MAIN(TestProjectFilter);
+QTEST_GUILESS_MAIN(TestProjectFilter)
 
 using namespace KDevelop;
 

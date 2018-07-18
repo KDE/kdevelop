@@ -28,7 +28,7 @@
 
 #include <utility>
 
-QTEST_GUILESS_MAIN(TestIndexedString);
+QTEST_GUILESS_MAIN(TestIndexedString)
 
 using namespace KDevelop;
 

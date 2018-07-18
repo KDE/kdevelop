@@ -145,6 +145,6 @@ typedef QExplicitlySharedDataPointer<CompletionTreeElement> CompletionTreeElemen
 
 }
 
-Q_DECLARE_METATYPE(KDevelop::CompletionTreeElementPointer);
+Q_DECLARE_METATYPE(KDevelop::CompletionTreeElementPointer)
 
 #endif

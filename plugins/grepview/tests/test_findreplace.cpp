@@ -197,4 +197,4 @@ void FindReplaceTest::testReplace()
 }
 
 
-QTEST_MAIN(FindReplaceTest);
+QTEST_MAIN(FindReplaceTest)

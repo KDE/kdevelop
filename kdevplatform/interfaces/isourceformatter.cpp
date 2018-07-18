@@ -41,7 +41,7 @@ ISourceFormatter::~ISourceFormatter()
 
 SourceFormatterStyle::SourceFormatterStyle()
 {
-};
+}
 
 SourceFormatterStyle::SourceFormatterStyle(const QString &name)
 	: m_usePreview(false)

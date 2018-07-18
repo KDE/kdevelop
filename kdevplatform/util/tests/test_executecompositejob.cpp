@@ -26,7 +26,7 @@
 
 #include <util/executecompositejob.h>
 
-QTEST_MAIN(TestExecuteCompositeJob);
+QTEST_MAIN(TestExecuteCompositeJob)
 
 using namespace KDevelop;
 

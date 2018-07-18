@@ -94,7 +94,7 @@ EditorConfigPage::EditorConfigPage(QWidget* parent)
     setObjectName(QStringLiteral("editorconfig"));
 }
 
-EditorConfigPage::~EditorConfigPage() {};
+EditorConfigPage::~EditorConfigPage() {}
 
 QString EditorConfigPage::name() const
 {

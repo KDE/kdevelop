@@ -177,7 +177,7 @@ private:
     QThread m_thread;
 };
 
-Q_GLOBAL_STATIC(ParsingThread, s_parsingThread);
+Q_GLOBAL_STATIC(ParsingThread, s_parsingThread)
 
 class OutputModelPrivate
 {

@@ -28,7 +28,7 @@
 
 #include <QTest>
 
-QTEST_MAIN(TestPath);
+QTEST_MAIN(TestPath)
 
 using namespace KDevelop;
 

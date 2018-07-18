@@ -26,7 +26,7 @@
 #include <QIcon>
 #include <QTest>
 
-QTEST_MAIN(BenchQuickOpen);
+QTEST_MAIN(BenchQuickOpen)
 
 using namespace KDevelop;
 

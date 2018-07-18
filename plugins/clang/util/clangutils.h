@@ -167,6 +167,6 @@ namespace ClangUtils
      * Returns special attributes (isFinal, isQtSlot, ...) given a @p cursor representing a CXXmethod
      */
     KDevelop::ClassFunctionFlags specialAttributes(CXCursor cursor);
-};
+}
 
 #endif // CLANGUTILS_H

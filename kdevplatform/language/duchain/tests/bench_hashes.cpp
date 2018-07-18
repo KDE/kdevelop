@@ -65,7 +65,7 @@ inline void insertData(QStringHash& hash, const InputData& data)
   }
 }
 
-QTEST_GUILESS_MAIN(BenchHashes);
+QTEST_GUILESS_MAIN(BenchHashes)
 
 using namespace KDevelop;
 

@@ -126,4 +126,4 @@ void TestVcsDiff::testAssignOperator()
     }
 }
 
-QTEST_GUILESS_MAIN(TestVcsDiff);
+QTEST_GUILESS_MAIN(TestVcsDiff)

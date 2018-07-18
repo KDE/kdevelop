@@ -42,7 +42,7 @@
 #include <QLineEdit>
 class la;
 
-Q_DECLARE_METATYPE(KDevelop::IProject*);
+Q_DECLARE_METATYPE(KDevelop::IProject*)
 
 QIcon PlasmoidExecutionConfig::icon() const
 {

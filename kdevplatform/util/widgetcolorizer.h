@@ -84,6 +84,6 @@ namespace WidgetColorizer
      * files belonging to projects.
      */
     KDEVPLATFORMUTIL_EXPORT bool colorizeByProject();
-};
+}
 
 }

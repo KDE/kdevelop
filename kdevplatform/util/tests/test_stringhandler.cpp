@@ -25,7 +25,7 @@
 
 #include <QTest>
 
-QTEST_MAIN(TestStringHandler);
+QTEST_MAIN(TestStringHandler)
 
 using namespace KDevelop;
 

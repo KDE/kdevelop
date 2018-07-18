@@ -84,6 +84,6 @@ public:
 } // namespace KDevelop
 
 Q_DECLARE_METATYPE(KDevelop::IFilterStrategy*)
-Q_DECLARE_METATYPE(KDevelop::IFilterStrategy::Progress);
+Q_DECLARE_METATYPE(KDevelop::IFilterStrategy::Progress)
 
 #endif // KDEVPLATFORM_IFILTERSTRATEGY_H

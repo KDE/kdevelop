@@ -252,6 +252,6 @@ private:
 
 } // namespace KDevelop
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::OutputExecuteJob::JobProperties);
+Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::OutputExecuteJob::JobProperties)
 
 #endif // KDEVPLATFORM_OUTPUTEXECUTEJOB_H

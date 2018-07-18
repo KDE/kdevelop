@@ -50,7 +50,7 @@ KDEVCLANGPRIVATE_EXPORT void unregisterDUChainItems();
 KDEVCLANGPRIVATE_EXPORT ParseSessionData::Ptr findParseSessionData(const KDevelop::IndexedString &file, const KDevelop::IndexedString &tufile);
 
 KDEVCLANGPRIVATE_EXPORT QString clangBuiltinIncludePath();
-};
+}
 
 }
 

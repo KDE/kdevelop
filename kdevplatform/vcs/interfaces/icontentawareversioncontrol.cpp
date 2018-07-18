@@ -37,7 +37,7 @@ CheckInRepositoryJob::CheckInRepositoryJob(KTextEditor::Document* document)
 {
     connect(this, &CheckInRepositoryJob::finished, this, &CheckInRepositoryJob::deleteLater);
     setCapabilities(Killable);
-};
+}
 
 CheckInRepositoryJob::~CheckInRepositoryJob() = default;
 

@@ -40,7 +40,7 @@
 #include <QTest>
 #include <QLoggingCategory>
 
-Q_DECLARE_METATYPE(KDevelop::IProblem::Severity);
+Q_DECLARE_METATYPE(KDevelop::IProblem::Severity)
 
 using namespace KDevelop;
 
@@ -172,7 +172,7 @@ void TestProblems::testChildDiagnostics()
     QCOMPARE(d2->rangeInCurrentRevision(), KTextEditor::Range(1, 5, 1, 8));
 }
 
-Q_DECLARE_METATYPE(QVector<ClangFixit>);
+Q_DECLARE_METATYPE(QVector<ClangFixit>)
 
 /**
  * Provides a list of possible fixits: http://blog.llvm.org/2010/04/amazing-feats-of-clang-error-recovery.html

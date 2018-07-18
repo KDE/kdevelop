@@ -193,6 +193,6 @@ void TestKTextEditorPluginIntegration::testPluginUnload()
     plugin->unload();
 }
 
-QTEST_MAIN(TestKTextEditorPluginIntegration);
+QTEST_MAIN(TestKTextEditorPluginIntegration)
 
 #include <test_ktexteditorpluginintegration.moc>

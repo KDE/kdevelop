@@ -61,7 +61,7 @@
 #include <QLoggingCategory>
 #include <QThread>
 
-QTEST_MAIN(TestDUChain);
+QTEST_MAIN(TestDUChain)
 
 using namespace KDevelop;
 

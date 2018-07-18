@@ -1898,6 +1898,6 @@ void KDevMI::LLDB::LldbTest::testEnvironmentCd()
     QCOMPARE(outputLines, QStringList() << path.toLocalFile());
 }
 
-QTEST_MAIN(KDevMI::LLDB::LldbTest);
+QTEST_MAIN(KDevMI::LLDB::LldbTest)
 
 #include "test_lldb.moc"

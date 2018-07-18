@@ -139,4 +139,4 @@ void TestModels::testVcsFileChangesModel()
     QCOMPARE(model->rowCount(), 2);
 }
 
-QTEST_MAIN(TestModels);
+QTEST_MAIN(TestModels)

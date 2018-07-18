@@ -37,7 +37,7 @@
 
 #include <algorithm>
 
-QTEST_MAIN(TestQMakeFile);
+QTEST_MAIN(TestQMakeFile)
 
 typedef QHash<QString, QString> DefineHash;
 

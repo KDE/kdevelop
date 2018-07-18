@@ -41,10 +41,10 @@ ListType::ListType(const ListType& rhs)
 : KDevelop::StructureType(copyData<ListType>(*rhs.d_func())) { }
 
 MapType::MapType()
-: ListType(createData<MapType>()) { };
+: ListType(createData<MapType>()) { }
 
 MapType::MapType(ListTypeData& data)
-: ListType(data) { };
+: ListType(data) { }
 
 MapType::MapType(const MapType& rhs)
 : ListType(copyData<MapType>(*rhs.d_func())) { }

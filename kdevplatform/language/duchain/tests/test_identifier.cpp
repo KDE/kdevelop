@@ -29,7 +29,7 @@
 #include <utility>
 #include <QTest>
 
-QTEST_GUILESS_MAIN(TestIdentifier);
+QTEST_GUILESS_MAIN(TestIdentifier)
 
 using namespace KDevelop;
 

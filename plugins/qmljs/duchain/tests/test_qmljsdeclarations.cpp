@@ -38,7 +38,7 @@
 
 #include <QTest>
 
-QTEST_GUILESS_MAIN(TestDeclarations);
+QTEST_GUILESS_MAIN(TestDeclarations)
 
 using namespace KDevelop;
 

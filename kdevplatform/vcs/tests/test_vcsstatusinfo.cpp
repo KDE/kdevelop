@@ -110,4 +110,4 @@ void TestVcsStatusInfo::testAssignOperator()
     }
 }
 
-QTEST_GUILESS_MAIN(TestVcsStatusInfo);
+QTEST_GUILESS_MAIN(TestVcsStatusInfo)

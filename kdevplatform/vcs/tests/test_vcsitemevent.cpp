@@ -142,4 +142,4 @@ void TestVcsItemEvent::testAssignOperator()
     }
 }
 
-QTEST_GUILESS_MAIN(TestVcsItemEvent);
+QTEST_GUILESS_MAIN(TestVcsItemEvent)

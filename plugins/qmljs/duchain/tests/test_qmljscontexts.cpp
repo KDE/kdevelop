@@ -31,7 +31,7 @@
 
 #include <QTest>
 
-QTEST_GUILESS_MAIN(TestContexts);
+QTEST_GUILESS_MAIN(TestContexts)
 
 using namespace KDevelop;
 

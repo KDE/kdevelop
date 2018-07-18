@@ -220,7 +220,7 @@ static QVector<SourceFormatterStyle> stylesFromLanguagePlugins()
     }
 
     return styles;
-};
+}
 
 KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name) const
 {

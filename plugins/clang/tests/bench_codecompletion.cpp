@@ -34,7 +34,7 @@
 
 #include "codecompletion/model.h"
 
-QTEST_MAIN(BenchCodeCompletion);
+QTEST_MAIN(BenchCodeCompletion)
 
 using namespace KDevelop;
 

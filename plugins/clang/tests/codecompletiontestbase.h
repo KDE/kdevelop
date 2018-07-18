@@ -34,7 +34,7 @@ class View;
 namespace KDevelop
 {
 class TestProjectController;
-};
+}
 
 struct DeleteDocument
 {

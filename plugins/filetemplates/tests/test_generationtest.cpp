@@ -127,4 +127,4 @@ QHash< QString, QUrl > TestGenerationTest::urls (const SourceFileTemplate& file)
 }
 
 
-QTEST_GUILESS_MAIN(TestGenerationTest);
+QTEST_GUILESS_MAIN(TestGenerationTest)

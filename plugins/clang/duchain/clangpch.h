@@ -41,7 +41,7 @@ public:
     KDevelop::ReferencedTopDUContext context() const;
 
 private:
-    Q_DISABLE_COPY(ClangPCH);
+    Q_DISABLE_COPY(ClangPCH)
 
     IncludeFileContexts m_includes;
     KDevelop::ReferencedTopDUContext m_context;

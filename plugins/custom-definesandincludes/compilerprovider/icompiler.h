@@ -94,6 +94,6 @@ private:
 
 typedef QSharedPointer<ICompiler> CompilerPointer;
 
-Q_DECLARE_METATYPE(CompilerPointer);
+Q_DECLARE_METATYPE(CompilerPointer)
 
 #endif // ICOMPILER_H

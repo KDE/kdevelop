@@ -39,7 +39,7 @@
 #include <KConfigGroup>
 #include <KJob>
 
-QTEST_MAIN(TestQMakeProject);
+QTEST_MAIN(TestQMakeProject)
 
 using namespace KDevelop;
 

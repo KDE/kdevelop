@@ -123,7 +123,7 @@ ContextMenuExtension KDevQmlJsPlugin::contextMenuExtension(Context* context, QWi
 
 const QString textFromDoc(const IDocument* doc, const KTextEditor::Range& range) {
     return doc->textDocument()->line(range.start().line()).mid(range.start().column(), range.end().column()-range.start().column());
-};
+}
 
 // Finds how many spaces the given string has at one end.
 // direction=+1 -> left end of the string, -1 for right end.
@@ -175,7 +175,7 @@ const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString&
         KTextEditor::Cursor(position.line(), col_offset - value.size() + spacesAtCorner(value, +1)),
         KTextEditor::Cursor(position.line(), col_offset + spacesAtCorner(value, -1))
     ));
-};
+}
 
 QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position)
 {

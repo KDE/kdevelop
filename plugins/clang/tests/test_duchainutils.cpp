@@ -33,7 +33,7 @@
 
 using namespace KDevelop;
 
-QTEST_GUILESS_MAIN(TestDUChainUtils);
+QTEST_GUILESS_MAIN(TestDUChainUtils)
 
 void TestDUChainUtils::initTestCase()
 {
