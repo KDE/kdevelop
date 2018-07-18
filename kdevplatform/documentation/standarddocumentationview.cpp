@@ -290,7 +290,7 @@ void KDevelop::StandardDocumentationView::setHtml(const QString& html)
 class CustomSchemeHandler : public QWebEngineUrlSchemeHandler
 {
 public:
-    explicit CustomSchemeHandler(QNetworkAccessManager* nam, QObject *parent = 0)
+    explicit CustomSchemeHandler(QNetworkAccessManager* nam, QObject *parent = nullptr)
         : QWebEngineUrlSchemeHandler(parent), m_nam(nam) {}
 
     void requestStarted(QWebEngineUrlRequestJob *job) override {
