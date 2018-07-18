@@ -138,7 +138,7 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
     QWebSettings* s = d->m_view->settings();
 
     s->setFontFamily(QWebSettings::StandardFont, sansSerifFont.family());
-    s->setFontFamily(QWebSettings::SerifFont, "Serif");
+    s->setFontFamily(QWebSettings::SerifFont, QStringLiteral("Serif"));
     s->setFontFamily(QWebSettings::SansSerifFont, sansSerifFont.family());
     s->setFontFamily(QWebSettings::FixedFont, monospaceFont.family());
 

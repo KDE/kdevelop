@@ -44,8 +44,8 @@ using namespace JsonTestHelpers;
 ///@returns whether the type toString matches the given value
 TypeTest(toString)
 {
-  QString typeStr = type ? type->toString() : "<no type>";
-  return compareValues(typeStr, value, "Type's toString");
+  QString typeStr = type ? type->toString() : QStringLiteral("<no type>");
+  return compareValues(typeStr, value, QStringLiteral("Type's toString"));
 }
 ///JSON type: bool
 ///@returns whether type's constness matches the given value
@@ -59,8 +59,8 @@ TypeTest(isConst)
     typeIsConst = (type->modifiers() & AbstractType::ConstModifier);
 
   if (typeIsConst != value.toBool())
-    return typeIsConst ? "Type is constant, but test data expects non-const." :
-                         "Type is non-const, but test data expects constant.";
+    return typeIsConst ? QStringLiteral("Type is constant, but test data expects non-const.") :
+                         QStringLiteral("Type is non-const, but test data expects constant.");
 
   return SUCCESS();
 }
@@ -72,7 +72,7 @@ TypeTest(plainValue)
     VERIFY_TYPE(qint64);
     auto constantIntegralType = type.cast<ConstantIntegralType>();
     VERIFY_NOT_NULL(constantIntegralType);
-    return compareValues(constantIntegralType->plainValue(), value, "ConstantIntegralType's plainValue");
+    return compareValues(constantIntegralType->plainValue(), value, QStringLiteral("ConstantIntegralType's plainValue"));
 }
 
 }

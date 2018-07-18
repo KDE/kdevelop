@@ -53,9 +53,9 @@ using namespace JsonTestHelpers;
 ContextTest(findDeclarations)
 {
   VERIFY_TYPE(QVariantMap);
-  QString INVALID_ERROR = "Attempted to test invalid context.";
-  QString NOT_FOUND_ERROR = "Could not find declaration \"%1\".";
-  QString DECL_ERROR = "Declaration found with \"%1\" did not pass tests.";
+  const QString INVALID_ERROR = QStringLiteral("Attempted to test invalid context.");
+  const QString NOT_FOUND_ERROR = QStringLiteral("Could not find declaration \"%1\".");
+  const QString DECL_ERROR = QStringLiteral("Declaration found with \"%1\" did not pass tests.");
   if (!ctxt)
     return INVALID_ERROR;
   QVariantMap findDecls = value.toMap();
@@ -76,9 +76,9 @@ ContextTest(findDeclarations)
 ContextTest(declarations)
 {
   VERIFY_TYPE(QVariantMap);
-  QString INVALID_ERROR = "Attempted to test invalid context.";
-  QString NOT_FOUND_ERROR = "No declaration at index \"%1\".";
-  QString DECL_ERROR = "Declaration at index \"%1\" did not pass tests.";
+  const QString INVALID_ERROR = QStringLiteral("Attempted to test invalid context.");
+  const QString NOT_FOUND_ERROR = QStringLiteral("No declaration at index \"%1\".");
+  const QString DECL_ERROR = QStringLiteral("Declaration at index \"%1\" did not pass tests.");
   if (!ctxt)
     return INVALID_ERROR;
   QVariantMap findDecls = value.toMap();
@@ -98,13 +98,13 @@ ContextTest(declarations)
 ///@returns whether the number of child contexts matches the given value
 ContextTest(childCount)
 {
-  return compareValues(ctxt->childContexts().size(), value, "Context's child count");
+  return compareValues(ctxt->childContexts().size(), value, QStringLiteral("Context's child count"));
 }
 ///JSON type: int
 ///@returns whether the number of local declarations matches the given value
 ContextTest(localDeclarationCount)
 {
-  return compareValues(ctxt->localDeclarations().size(), value, "Context's local declaration count");
+  return compareValues(ctxt->localDeclarations().size(), value, QStringLiteral("Context's local declaration count"));
 }
 ///JSON type: string
 ///@returns whether the context's type matches the given value
@@ -113,29 +113,29 @@ ContextTest(type)
   QString contextTypeString;
   switch(ctxt->type())
   {
-  case DUContext::Class: contextTypeString = "Class"; break;
-  case DUContext::Enum: contextTypeString = "Enum"; break;
-  case DUContext::Namespace: contextTypeString = "Namespace"; break;
-  case DUContext::Function: contextTypeString = "Function"; break;
-  case DUContext::Template: contextTypeString = "Template"; break;
-  case DUContext::Global: contextTypeString = "Global"; break;
-  case DUContext::Helper: contextTypeString = "Helper"; break;
-  case DUContext::Other: contextTypeString = "Other"; break;
+  case DUContext::Class: contextTypeString = QStringLiteral("Class"); break;
+  case DUContext::Enum: contextTypeString = QStringLiteral("Enum"); break;
+  case DUContext::Namespace: contextTypeString = QStringLiteral("Namespace"); break;
+  case DUContext::Function: contextTypeString = QStringLiteral("Function"); break;
+  case DUContext::Template: contextTypeString = QStringLiteral("Template"); break;
+  case DUContext::Global: contextTypeString = QStringLiteral("Global"); break;
+  case DUContext::Helper: contextTypeString = QStringLiteral("Helper"); break;
+  case DUContext::Other: contextTypeString = QStringLiteral("Other"); break;
   }
-  return compareValues(contextTypeString, value, "Context's type");
+  return compareValues(contextTypeString, value, QStringLiteral("Context's type"));
 }
 ///JSON type: bool
 ///@returns whether the context's nullity matches the given value
 ContextTest(null)
 {
-  return compareValues(ctxt == nullptr, value, "Context's nullity");
+  return compareValues(ctxt == nullptr, value, QStringLiteral("Context's nullity"));
 }
 
 //JSON type: DeclTestObject
 ///@returns the context's owner
 ContextTest(owner)
 {
-    return testObject(ctxt->owner(), value, "Context's owner");
+    return testObject(ctxt->owner(), value, QStringLiteral("Context's owner"));
 }
 
 ///JSON type: IndexCtxtObject
@@ -143,9 +143,9 @@ ContextTest(owner)
 ContextTest(importedParents)
 {
     VERIFY_TYPE(QVariantMap);
-    QString INVALID_ERROR = "Attempted to test invalid context.";
-    QString NOT_FOUND_ERROR = "No imported context at index \"%1\".";
-    QString CONTEXT_ERROR = "Context at index \"%1\" did not pass tests.";
+    const QString INVALID_ERROR = QStringLiteral("Attempted to test invalid context.");
+    const QString NOT_FOUND_ERROR = QStringLiteral("No imported context at index \"%1\".");
+    const QString CONTEXT_ERROR = QStringLiteral("Context at index \"%1\" did not pass tests.");
     if (!ctxt)
         return INVALID_ERROR;
     QVariantMap findDecls = value.toMap();
@@ -167,9 +167,9 @@ ContextTest(importedParents)
 ContextTest(range)
 {
     if (!ctxt) {
-        return "Invalid Context";
+        return QStringLiteral("Invalid Context");
     }
-    return compareValues(rangeStr(ctxt->range()), value, "Contexts's range");
+    return compareValues(rangeStr(ctxt->range()), value, QStringLiteral("Contexts's range"));
 }
 
 }
