@@ -1051,11 +1051,7 @@ void GitPlugin::parseLogOutput(const DVcsJob* job, QVector<DVcsEvent>& commits) 
 
     for (int i=0; i<lines.count(); ++i) {
 //         qCDebug(PLUGIN_GIT) << "line:" << s;
-#if QT_VERSION >= 0x050500
         if (rx_com.match(lines[i]).hasMatch()) {
-#else
-        if (rx_com.match(lines[i].toString()).hasMatch()) {
-#endif
 //             qCDebug(PLUGIN_GIT) << "MATCH COMMIT";
             item.setCommit(lines[++i].toString());
             item.setAuthor(lines[++i].toString());

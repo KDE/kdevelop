@@ -58,9 +58,7 @@ void messageOutput(QtMsgType type, const QMessageLogContext& context, const QStr
     Q_UNUSED(context);
 
     switch (type) {
-#if QT_VERSION >= 0x050500
         case QtInfoMsg: // fall-through
-#endif
         case QtDebugMsg:
             if(verbose)
                 std::cerr << qPrintable(msg) << std::endl;

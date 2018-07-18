@@ -40,64 +40,6 @@
 
 using namespace KDevelop;
 
-namespace {
-#if QT_VERSION >= 0x050500
-int indexOf(const QString& str, const QRegularExpression& re, int from, QRegularExpressionMatch* rmatch)
-{
-    return str.indexOf(re, from, rmatch);
-}
-
-int lastIndexOf(const QString& str, const QRegularExpression& re, int from, QRegularExpressionMatch* rmatch)
-{
-    return str.lastIndexOf(re, from, rmatch);
-}
-#else
-int indexOf(const QString& str, const QRegularExpression& re, int from, QRegularExpressionMatch* rmatch)
-{
-    if (!re.isValid()) {
-        qCWarning(QTHELP) << "QString::indexOf: invalid QRegularExpression object";
-        return -1;
-    }
-
-    QRegularExpressionMatch match = re.match(str, from);
-    if (match.hasMatch()) {
-        const int ret = match.capturedStart();
-        if (rmatch)
-            *rmatch = qMove(match);
-        return ret;
-    }
-
-    return -1;
-}
-
-int lastIndexOf(const QString &str, const QRegularExpression &re, int from, QRegularExpressionMatch *rmatch)
-{
-    if (!re.isValid()) {
-        qCWarning(QTHELP) << "QString::lastIndexOf: invalid QRegularExpression object";
-        return -1;
-    }
-
-    int endpos = (from < 0) ? (str.size() + from + 1) : (from + 1);
-    QRegularExpressionMatchIterator iterator = re.globalMatch(str);
-    int lastIndex = -1;
-    while (iterator.hasNext()) {
-        QRegularExpressionMatch match = iterator.next();
-        int start = match.capturedStart();
-        if (start < endpos) {
-            lastIndex = start;
-            if (rmatch)
-                *rmatch = qMove(match);
-        } else {
-            break;
-        }
-    }
-
-    return lastIndex;
-}
-#endif
-
-}
-
 QtHelpProviderAbstract* QtHelpDocumentation::s_provider=nullptr;
 
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
@@ -126,7 +68,7 @@ QString QtHelpDocumentation::description() const
 
     const QRegularExpression findFragment(exp);
     QRegularExpressionMatch findFragmentMatch;
-    int pos = indexOf(dataString, findFragment, 0, &findFragmentMatch);
+    int pos = dataString.indexOf(findFragment, 0, &findFragmentMatch);
 
     if(fragment.isEmpty()) {
         pos = 0;
@@ -158,7 +100,7 @@ QString QtHelpDocumentation::description() const
             const QString newLineRegExp = QStringLiteral ("< br / > | < / p >").replace(' ', optionalSpace);
             const QRegularExpression lastNewLine(newLineRegExp);
             QRegularExpressionMatch match;
-            const int newEnd = lastIndexOf(dataString, lastNewLine, endPos, &match);
+            const int newEnd = dataString.lastIndexOf(lastNewLine, endPos, &match);
             if(match.isValid() && newEnd > pos)
                 endPos = newEnd + match.capturedLength();
         }

@@ -21,10 +21,6 @@
 
 // TODO: ecm_qt_declare_logging_category only supports one category
 // so generate two separate files with a wrapper debug.h, or have code include explicit matching header?
-#if QT_VERSION >= 0x050500
 const QtMsgType defaultMsgType = QtInfoMsg;
-#else
-const QtMsgType defaultMsgType = QtWarningMsg;
-#endif
 Q_LOGGING_CATEGORY(PROJECT, "kdevplatform.project", defaultMsgType)
 Q_LOGGING_CATEGORY(FILEMANAGER, "kdevplatform.filemanager", defaultMsgType)
