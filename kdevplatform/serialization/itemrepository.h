@@ -572,7 +572,9 @@ class Bucket {
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
       memset(item, 0, size); //For debugging, so we notice the data is wrong
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
 #pragma GCC diagnostic pop
 #endif
 #endif
