@@ -78,7 +78,7 @@ CXChildVisitResult templateParamsHelper(CXCursor cursor, CXCursor /*parent*/, CX
     } else if (kind == CXCursor_TemplateTemplateParameter) {
         auto paramName = ClangString(clang_getCursorSpelling(cursor)).toString();
         auto templateTypes = templateParams(cursor);
-        auto param = QLatin1String("template<") + templateTypes.join(QStringLiteral(", ")) + QLatin1String("> class ") + paramName ;
+        QString param = QLatin1String("template<") + templateTypes.join(QStringLiteral(", ")) + QLatin1String("> class ") + paramName ;
         params.append(param);
     }
     return CXChildVisit_Continue;
