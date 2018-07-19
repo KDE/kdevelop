@@ -687,6 +687,7 @@ namespace KDevelop {
 #if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
+#endif
                 //Shuffle around the item at the free pos, so reference counting in constructors/destructors is not screwed up
                 char backup[sizeof(Data)];
                 memcpy(backup, m_items+pos, sizeof(Data));
@@ -710,6 +711,7 @@ namespace KDevelop {
                     target = bound-1;
                }
                memcpy(m_items+target, backup, sizeof(Data));
+#if defined(__GNUC__) && !defined(__INTEL_COMPILER) && (((__GNUC__ * 100) + __GNUC_MINOR__) >= 800)
 #pragma GCC diagnostic pop
 #endif
 
