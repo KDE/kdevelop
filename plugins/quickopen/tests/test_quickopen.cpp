@@ -268,8 +268,7 @@ void TestQuickOpen::testProjectFileFilter()
 
     // ensure we don't add stuff multiple times
     QMetaObject::invokeMethod(&provider, "fileAddedToSet",
-                              Q_ARG(KDevelop::IProject*, project),
-                              Q_ARG(KDevelop::IndexedString, blub->indexedPath()));
+                              Q_ARG(KDevelop::ProjectFileItem*, blub));
     QCOMPARE(provider.itemCount(), 6u);
     provider.reset();
     QCOMPARE(provider.itemCount(), 6u);
