@@ -84,7 +84,7 @@ CompletionParameters prepareCompletion(const QString& initCode, const QString& i
     Q_ASSERT(initCode.indexOf("%INVOKE") != -1);
 
     // Create a file containing the given code, with "%INVOKE" removed
-    completion_data.file = QSharedPointer<TestFile>(new TestFile(QString(initCode).replace(QLatin1String("%INVOKE"), QLatin1String("")),
+    completion_data.file = QSharedPointer<TestFile>(new TestFile(QString(initCode).remove(QLatin1String("%INVOKE")),
                                                     qml ? "qml" : "js"));
 
     completion_data.file->parse();

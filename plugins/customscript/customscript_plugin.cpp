@@ -64,7 +64,7 @@ static QString replaceVariables(QString command, QMap<QString, QString> variable
             command.replace(pos, 1 + end - pos, variables[key]);
         } else {
             qCDebug(CUSTOMSCRIPT) << "found no variable while replacing in shell-command" << command << "key" << key << "available:" << variables;
-            command.replace(pos, 1 + end - pos, QLatin1String(""));
+            command.remove(pos, 1 + end - pos);
         }
     }
     return command;
