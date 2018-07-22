@@ -13,3 +13,15 @@ target_link_libraries(kdevdbg_testhelper
     PRIVATE
     Qt5::Test
 )
+
+ecm_add_test(test_miparser
+    LINK_LIBRARIES Qt5::Test kdevdbg_testhelper
+)
+
+ecm_add_test(test_micommand
+    LINK_LIBRARIES Qt5::Test kdevdbg_testhelper
+)
+
+ecm_add_test(test_micommandqueue
+    LINK_LIBRARIES Qt5::Test kdevdbg_testhelper
+)
