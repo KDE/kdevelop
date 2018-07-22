@@ -47,11 +47,6 @@ namespace KDevMI {
 
 class STTY;
 
-namespace MI {
-class MICommand;
-class CommandQueue;
-}
-
 namespace GDB {
 
 class CppDebuggerPlugin;
