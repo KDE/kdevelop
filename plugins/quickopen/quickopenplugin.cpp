@@ -61,7 +61,6 @@
 #include "debug.h"
 #include <language/duchain/functiondefinition.h>
 #include <qdesktopwidget.h>
-#include <util/activetooltip.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>
 
