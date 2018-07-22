@@ -413,7 +413,7 @@ QList<QMakeProjectFile::DefinePair> QMakeProjectFile::defines() const
             d.append(DefinePair(def.left(pos), def.right(def.length() - (pos + 1))));
         } else {
             // a value-less define
-            d.append(DefinePair(def, QLatin1String("")));
+            d.append(DefinePair(def, QString()));
         }
     }
     return d;

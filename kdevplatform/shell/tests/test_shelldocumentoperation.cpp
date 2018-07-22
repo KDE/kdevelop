@@ -111,7 +111,7 @@ void TestShellDocumentOperation::testKateDocumentAndViewCreation()
 {
     //create one document
     IDocumentController *documentController = Core::self()->documentController();
-    documentController->openDocumentFromText(QLatin1String(""));
+    documentController->openDocumentFromText(QString());
     QCOMPARE(documentController->openDocuments().count(), 1);
 
     //assure we have only one kate view for the newly created document

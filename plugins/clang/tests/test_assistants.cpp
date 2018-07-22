@@ -306,7 +306,7 @@ ProblemPointer findStaticAssistantProblem(const QVector<ProblemPointer>& problem
 void TestAssistants::testRenameAssistant()
 {
     QFETCH(QString, fileContents);
-    Testbed testbed(QLatin1String(""), fileContents);
+    Testbed testbed(QString(), fileContents);
 
     const auto document = testbed.document(Testbed::CppDoc);
     QVERIFY(document);
@@ -348,7 +348,7 @@ void TestAssistants::testRenameAssistant()
 
 void TestAssistants::testRenameAssistantUndoRename()
 {
-    Testbed testbed(QLatin1String(""), QStringLiteral("int foo(int i)\n { i = 0; return i; }"));
+    Testbed testbed(QString(), QStringLiteral("int foo(int i)\n { i = 0; return i; }"));
     testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,13), QStringLiteral("d"), true);
 
     const auto document = testbed.document(Testbed::CppDoc);
@@ -369,7 +369,7 @@ void TestAssistants::testRenameAssistantUndoRename()
     QVERIFY(r);
 
     // now rename the variable back to its original identifier
-    testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,14), QLatin1String(""));
+    testbed.changeDocument(Testbed::CppDoc, Range(0,13,0,14), QString());
     // there should be no assistant anymore
     QVERIFY(!assistant || assistant->actions().isEmpty());
 }
@@ -409,7 +409,7 @@ void TestAssistants::testSignatureAssistant_data()
     QTest::newRow("change_default_parameter")
         << "class Foo {\nint bar(int a, char* b, int c = 10); \n};"
         << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }"
-        << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(1,29,1,34), QLatin1String(""), NO_ASSIST))
+        << (QList<StateChange>() << StateChange(Testbed::HeaderDoc, Range(1,29,1,34), QString(), NO_ASSIST))
         << "class Foo {\nint bar(int a, char* b, int c); \n};"
         << "int Foo::bar(int a, char* b, int c)\n{ a = c; b = new char; return a + *b; }";
 
@@ -432,7 +432,7 @@ void TestAssistants::testSignatureAssistant_data()
     QTest::newRow("change_function_constness")
         << "class Foo {\nvoid bar(const Foo&) const;\n};"
         << "void Foo::bar(const Foo&) const\n{}"
-        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,25,0,31), QLatin1String(""), SHOULD_ASSIST))
+        << (QList<StateChange>() << StateChange(Testbed::CppDoc, Range(0,25,0,31), QString(), SHOULD_ASSIST))
         << "class Foo {\nvoid bar(const Foo&);\n};"
         << "void Foo::bar(const Foo&)\n{}";
 

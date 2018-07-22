@@ -66,7 +66,7 @@ void TestDefinesAndIncludes::loadSimpleProject()
     QCOMPARE( actualIncludes, Path::List() << Path( "/usr/include/mydir") );
 
     Defines defines;
-    defines.insert( QStringLiteral("_DEBUG"), QLatin1String("") );
+    defines.insert( QStringLiteral("_DEBUG"), QString() );
     defines.insert( QStringLiteral("VARIABLE"), QStringLiteral("VALUE") );
     QCOMPARE( actualDefines, defines );
 
@@ -84,7 +84,7 @@ void TestDefinesAndIncludes::loadMultiPathProject()
 
     QHash<QString,QString> defines;
     defines.insert(QStringLiteral("SOURCE"), QStringLiteral("CONTENT"));
-    defines.insert(QStringLiteral("_COPY"), QLatin1String(""));
+    defines.insert(QStringLiteral("_COPY"), QString());
 
     QCOMPARE( manager->includes( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), includes );
     QCOMPARE( manager->defines( s_currentProject->projectItem(), IDefinesAndIncludesManager::UserDefined ), defines );

@@ -314,7 +314,7 @@ void TestAreaOperation::areaCloning()
     Walks all Views and checks if they got a widget.
     hasWidget will be set to false if any View lacks a widget.*/
 struct AreaWidgetChecker {
-    AreaWidgetChecker(): failureMessage(QLatin1String("")) {}
+    AreaWidgetChecker() = default;
     Area::WalkerMode operator()(AreaIndex *index)
     {
         foreach (View *view, index->views())

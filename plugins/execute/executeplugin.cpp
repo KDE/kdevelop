@@ -149,7 +149,7 @@ QString ExecutePlugin::environmentProfileName(KDevelop::ILaunchConfiguration* cf
 {
     if( !cfg )
     {
-        return QLatin1String("");
+        return QString();
     }
 
     return cfg->config().readEntry(ExecutePlugin::environmentProfileEntry, QString());

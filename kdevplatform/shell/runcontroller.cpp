@@ -155,7 +155,7 @@ public:
         {
             KConfigGroup grp = Core::self()->activeSession()->config()->group( Strings::LaunchConfigurationsGroup() );
             LaunchConfiguration* l = static_cast<LaunchConfiguration*>( currentTargetAction->currentAction()->data().value<void*>() );
-            grp.writeEntry( Strings::CurrentLaunchConfigProjectEntry(), l->project() ? l->project()->name() : QLatin1String("") );
+            grp.writeEntry( Strings::CurrentLaunchConfigProjectEntry(), l->project() ? l->project()->name() : QString() );
             grp.writeEntry( Strings::CurrentLaunchConfigNameEntry(), l->configGroupName() );
             grp.sync();
         }
@@ -413,7 +413,7 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
         KMessageBox::error(
             qApp->activeWindow(),
             i18n("The current launch configuration does not support the '%1' mode.", runMode),
-            QLatin1String(""));
+            QString());
         return nullptr;
     }
 

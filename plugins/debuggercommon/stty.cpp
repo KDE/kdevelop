@@ -128,7 +128,6 @@ static int chownpty(int fd, int grant)
 
 STTY::STTY(bool ext, const QString &termAppName)
     : QObject(),
-      ttySlave(QLatin1String("")),
       m_externalTerminal(nullptr),
       external_(ext)
 {

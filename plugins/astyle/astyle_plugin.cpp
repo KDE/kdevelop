@@ -153,7 +153,7 @@ QString AStylePlugin::previewText(const SourceFormatterStyle& /*style*/, const Q
 AStylePlugin::Indentation AStylePlugin::indentation(const QUrl& url) const
 {
     // Call formatSource first, to initialize the m_formatter data structures according to the URL
-    formatSource( QLatin1String(""), url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString() );
+    formatSource(QString(), url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString());
 
     Indentation ret;
 

@@ -65,7 +65,7 @@ MIDebugSession * MIFrameStackModel::session()
 
 void MIFrameStackModel::fetchThreads()
 {
-    session()->addCommand(ThreadInfo, QLatin1String(""), this, &MIFrameStackModel::handleThreadInfo);
+    session()->addCommand(ThreadInfo, QString(), this, &MIFrameStackModel::handleThreadInfo);
 }
 
 void MIFrameStackModel::handleThreadInfo(const ResultRecord& r)

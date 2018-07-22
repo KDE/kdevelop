@@ -75,7 +75,7 @@ ProviderWidget::ProviderWidget(QWidget *parent)
     fillCombo();
     topLayout->addWidget(m_combo);
 
-    QPushButton *settings = new QPushButton(QIcon::fromTheme(QStringLiteral("configure")), QLatin1String(""), this);
+    QPushButton *settings = new QPushButton(QIcon::fromTheme(QStringLiteral("configure")), QString(), this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     settings->setToolTip(i18n("Click this button to configure your GitHub account"));
     connect(settings, &QPushButton::clicked, this, &ProviderWidget::showSettings);

@@ -185,7 +185,7 @@ void TestDUChain::testStringSets() {
         {
           {
             qDebug() << "SET a:";
-            QString dbg = QLatin1String("");
+            QString dbg;
             for(std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -194,7 +194,7 @@ void TestDUChain::testStringSets() {
           }
           {
             qDebug() << "SET b:";
-            QString dbg = QLatin1String("");
+            QString dbg;
             for(std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
               dbg += QStringLiteral("%1 ").arg(*it);
             qDebug() << dbg;
@@ -802,8 +802,8 @@ void TestDUChain::testIdentifiers()
   QCOMPARE(aj2.at(1), Identifier(QStringLiteral("jump")));
   QVERIFY(aj != aj2);
 
-  QVERIFY(QualifiedIdentifier(QLatin1String("")) == QualifiedIdentifier());
-  QVERIFY(QualifiedIdentifier(QLatin1String("")).index() == QualifiedIdentifier().index());
+  QVERIFY(QualifiedIdentifier(QString()) == QualifiedIdentifier());
+  QVERIFY(QualifiedIdentifier(QString()).index() == QualifiedIdentifier().index());
 
   QualifiedIdentifier ajt(QStringLiteral("Area::jump::test"));
   QualifiedIdentifier jt(QStringLiteral("jump::test"));

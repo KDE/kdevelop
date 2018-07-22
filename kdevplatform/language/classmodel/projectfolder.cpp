@@ -33,7 +33,7 @@ ProjectFolder::ProjectFolder( NodesModelInterface* a_model, IProject* project )
 }
 
 ProjectFolder::ProjectFolder( NodesModelInterface* a_model )
-  : DocumentClassesFolder( QLatin1String(""), a_model )
+  : DocumentClassesFolder(QString(), a_model)
   , m_project( nullptr )
 {
 }

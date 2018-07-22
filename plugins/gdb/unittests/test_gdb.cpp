@@ -1845,7 +1845,7 @@ void GdbTest::testThreadAndFrameInfo()
 
     QSignalSpy outputSpy(session, &TestDebugSession::debuggerUserCommandOutput);
 
-    session->addCommand(new MI::UserCommand(MI::ThreadInfo,QLatin1String("")));
+    session->addCommand(new MI::UserCommand(MI::ThreadInfo, QString()));
     session->addCommand(new MI::UserCommand(MI::StackListLocals, QStringLiteral("0")));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // wait for command finish
 
@@ -1982,7 +1982,7 @@ void GdbTest::testRegularExpressionBreakpoint()
         WAIT_FOR_STATE(session, DebugSession::PausedState);
         QCOMPARE(breakpoints()->breakpoints().count(), 3);
 
-        session->addCommand(MI::BreakDelete, QLatin1String(""));
+        session->addCommand(MI::BreakDelete, QString());
         session->run();
         WAIT_FOR_STATE(session, DebugSession::EndedState);
 }

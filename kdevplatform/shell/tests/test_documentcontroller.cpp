@@ -87,7 +87,7 @@ void TestDocumentController::testOpeningNewDocumentFromText()
     QSignalSpy openedSpy(m_subject, SIGNAL(documentOpened(KDevelop::IDocument*)));
     QVERIFY(openedSpy.isValid());
 
-    IDocument* document = m_subject->openDocumentFromText(QLatin1String(""));
+    IDocument* document = m_subject->openDocumentFromText(QString());
     QVERIFY(document != nullptr);
 
     QCOMPARE(createdSpy.count(), 1);
@@ -151,8 +151,8 @@ void TestDocumentController::testSaveAllDocuments()
 void TestDocumentController::testCloseAllDocuments()
 {
     // create documents
-    m_subject->openDocumentFromText(QLatin1String(""));
-    m_subject->openDocumentFromText(QLatin1String(""));
+    m_subject->openDocumentFromText(QString());
+    m_subject->openDocumentFromText(QString());
     QVERIFY(!m_subject->openDocuments().empty());
 
     m_subject->closeAllDocuments();

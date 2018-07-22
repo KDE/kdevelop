@@ -283,7 +283,7 @@ void TestAstyle::testContext()
     QCOMPARE(formattedSource, QString(" "));
     
     formattedSource = formatter->formatSource(
-        QLatin1String(""), leftContext + "  if(", "q )" + rightContext );
+        QString(), leftContext + "  if(", "q )" + rightContext );
     
 //     qDebug() << formattedSource;
     // Normalize padding: from 0 to 1
@@ -294,7 +294,7 @@ void TestAstyle::testContext()
     
 //     qDebug() << formattedSource;
     // Reduce padding as much as possible
-    QCOMPARE(formattedSource, QLatin1String(""));
+    QCOMPARE(formattedSource, QString());
     
     delete formatter;
 }

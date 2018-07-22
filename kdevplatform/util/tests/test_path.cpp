@@ -543,7 +543,7 @@ void TestPath::testPathCd_data()
     QTest::addColumn<QString>("change");
 
     const QVector<QString> bases{
-        QLatin1String(""),
+        QString(),
 #ifndef Q_OS_WIN
         QStringLiteral("/foo"), QStringLiteral("/foo/bar/asdf"),
 #else

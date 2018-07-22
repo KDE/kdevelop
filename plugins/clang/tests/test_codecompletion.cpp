@@ -1402,7 +1402,7 @@ void TestCodeCompletion::testIgnoreGccBuiltins()
     m_projectController->addProject(project);
 
     {
-        TestFile file(QLatin1String(""), QStringLiteral("cpp"), project, dir.path());
+        TestFile file(QString(), QStringLiteral("cpp"), project, dir.path());
 
         QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
 

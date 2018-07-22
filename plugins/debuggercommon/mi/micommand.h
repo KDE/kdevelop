@@ -294,7 +294,7 @@ public:
 
     QString cmdToSend() override
     {
-        return QLatin1String("");
+        return QString();
     }
 
 private:

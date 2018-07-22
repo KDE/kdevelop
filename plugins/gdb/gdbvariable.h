@@ -38,7 +38,7 @@ class GdbVariable : public KDevMI::MIVariable
 
 public:
     GdbVariable(DebugSession *session, KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
-                const QString& expression, const QString& display = QLatin1String(QLatin1String("")));
+                const QString& expression, const QString& display = QString());
 };
 
 } // end of namespace GDB

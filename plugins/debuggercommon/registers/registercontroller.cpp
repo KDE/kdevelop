@@ -185,7 +185,7 @@ bool IRegisterController::initializeRegisters()
         return false;
     }
 
-    m_debugSession->addCommand(DataListRegisterNames, QLatin1String(""), this, &IRegisterController::registerNamesHandler);
+    m_debugSession->addCommand(DataListRegisterNames, QString(), this, &IRegisterController::registerNamesHandler);
     return true;
 }
 

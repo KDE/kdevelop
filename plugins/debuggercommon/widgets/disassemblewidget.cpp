@@ -200,7 +200,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
         m_disassembleWindow->setUniformRowHeights(true);
         m_disassembleWindow->setRootIsDecorated(false);
 
-        m_disassembleWindow->setHeaderLabels(QStringList() << QLatin1String("") << i18n("Address") << i18n("Function") << i18n("Instruction"));
+        m_disassembleWindow->setHeaderLabels(QStringList() << QString() << i18n("Address") << i18n("Function") << i18n("Instruction"));
 
         m_splitter->setStretchFactor(0, 1);
         m_splitter->setContentsMargins(0, 0, 0, 0);

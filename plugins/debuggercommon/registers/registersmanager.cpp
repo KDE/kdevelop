@@ -74,7 +74,7 @@ void ArchitectureParser::determineArchitecture(MIDebugSession* debugSession)
         return;
     }
 
-    debugSession->addCommand(DataListRegisterNames, QLatin1String(""), this, &ArchitectureParser::registerNamesHandler);
+    debugSession->addCommand(DataListRegisterNames, QString(), this, &ArchitectureParser::registerNamesHandler);
 }
 
 RegistersManager::RegistersManager(QWidget* parent)

@@ -100,7 +100,7 @@ bool DefinesModel::setData( const QModelIndex& index, const QVariant& value, int
     if( index.row() == m_defines.count() ) {
         if( index.column() == 0 && !value.toString().isEmpty() ) {
             beginInsertRows( QModelIndex(), m_defines.count(), m_defines.count() );
-            m_defines << qMakePair<QString,QString>( value.toString(), QLatin1String("") );
+            m_defines << qMakePair<QString,QString>(value.toString(), QString());
             endInsertRows();
         }
     } else {

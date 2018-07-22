@@ -38,7 +38,7 @@ class LldbVariable : public MIVariable
 
 public:
     LldbVariable(DebugSession *session, KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
-                const QString& expression, const QString& display = QLatin1String(""));
+                const QString& expression, const QString& display = QString());
 
     void handleRawUpdate(const MI::ResultRecord &r);
 

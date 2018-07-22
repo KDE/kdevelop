@@ -437,7 +437,7 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url)
         ret.indentWidth = indent[0].count(' ');
     }
 
-    if (!indent.join(QLatin1String("")).contains('	')) {
+    if (!indent.join(QString()).contains('	')) {
         ret.indentationTabWidth = -1;         // Tabs are not used for indentation
     }
     if (indent[0] == QLatin1String("	")) {

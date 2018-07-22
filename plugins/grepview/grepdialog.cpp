@@ -104,7 +104,7 @@ inline QStringList filepatterns() { return QStringList()
 
 inline QStringList excludepatterns() { return QStringList()
     << QStringLiteral("/CVS/,/SCCS/,/.svn/,/_darcs/,/build/,/.git/")
-    << QLatin1String("");
+    << QString();
 }
 
 ///Separator used to separate search paths.

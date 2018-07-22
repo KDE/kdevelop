@@ -47,17 +47,17 @@ QString LldbCommand::miCommand() const
     // TODO: find alternatives to the following command which are not supported in lldb-mi
     switch(type()) {
         case BreakCommands:
-            command = QLatin1String("");
+            // empty command
             break;
         case BreakInfo:
-            command = QLatin1String("");
+            // empty command
             break;
         case BreakInsert: // in lldb-mi, '-f' must be the last option switch right before location
             command = QStringLiteral("break-insert");
             isMI = true;
             break;
         case BreakList:
-            command = QLatin1String("");
+            // empty command
             break;
         case BreakWatch:
             command = QStringLiteral("break set var");

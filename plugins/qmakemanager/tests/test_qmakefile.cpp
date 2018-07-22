@@ -246,7 +246,7 @@ void TestQMakeFile::defines_data()
     QTest::addColumn<DefineHash>("expectedDefines");
     {
         DefineHash list;
-        list.insert(QStringLiteral("VAR1"), QLatin1String(""));
+        list.insert(QStringLiteral("VAR1"), QString());
         QTest::newRow("Simple define") << "DEFINES += VAR1" << list;
     }
     {
@@ -257,7 +257,7 @@ void TestQMakeFile::defines_data()
     {
         DefineHash list;
         list.insert(QStringLiteral("ANSWER"), QStringLiteral("42"));
-        list.insert(QStringLiteral("ANOTHER_DEFINE"), QLatin1String(""));
+        list.insert(QStringLiteral("ANOTHER_DEFINE"), QString());
         QTest::newRow("Multiple defines") << "DEFINES += ANSWER=42 ANOTHER_DEFINE" << list;
     }
 }

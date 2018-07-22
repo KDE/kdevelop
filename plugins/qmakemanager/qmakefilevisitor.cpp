@@ -84,8 +84,8 @@ void QMakeFileVisitor::visitFunctionCall(QMake::FunctionCallAST* node)
             return;
         QStringList arguments = getValueList(node->args);
 
-        ifDebug(qCDebug(KDEV_QMAKE) << "found include" << node->identifier->value << arguments;) QString argument
-            = arguments.join(QLatin1String("")).trimmed();
+        ifDebug(qCDebug(KDEV_QMAKE) << "found include" << node->identifier->value << arguments;)
+        QString argument = arguments.join(QString()).trimmed();
         if (!argument.isEmpty() && QFileInfo(argument).isRelative()) {
             argument = QFileInfo(m_baseFile->absoluteDir() + '/' + argument).canonicalFilePath();
         }

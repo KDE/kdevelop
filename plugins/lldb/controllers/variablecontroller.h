@@ -39,7 +39,7 @@ public:
     void update() override;
     LldbVariable* createVariable(KDevelop::TreeModel* model, KDevelop::TreeItem* parent,
                                  const QString& expression,
-                                 const QString& display = QLatin1String("")) override;
+                                 const QString& display = QString()) override;
 private:
     DebugSession* debugSession() const;
 };

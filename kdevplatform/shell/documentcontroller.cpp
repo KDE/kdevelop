@@ -689,7 +689,7 @@ IDocument* DocumentController::openDocument( const QUrl & inputUrl,
         DocumentActivationParams activationParams,
         const QString& encoding, IDocument* buddy)
 {
-    return d->openDocumentInternal( inputUrl, QLatin1String(""), range, encoding, activationParams, buddy);
+    return d->openDocumentInternal(inputUrl, QString(), range, encoding, activationParams, buddy);
 }
 
 

@@ -71,7 +71,7 @@ void LldbFrameStackModel::fetchThreads()
     // that's causing std::logic_error when executing -thread-info with
     // more than one threads. Find a workaround for this (and report bug
     // if it truly is).
-    session()->addCommand(ThreadInfo, QLatin1String(""), this, &LldbFrameStackModel::handleThreadInfo);
+    session()->addCommand(ThreadInfo, QString(), this, &LldbFrameStackModel::handleThreadInfo);
 }
 
 void LldbFrameStackModel::handleThreadInfo(const ResultRecord& r)

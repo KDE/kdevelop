@@ -35,7 +35,7 @@ CMakeExtraArgumentsHistory::CMakeExtraArgumentsHistory(KComboBox* widget)
     if (m_arguments) {
         KConfigGroup config = KSharedConfig::openConfig()->group("CMakeBuildDirChooser");
         QStringList lastExtraArguments = config.readEntry("LastExtraArguments", QStringList());;
-        m_arguments->addItem(QLatin1String(""));
+        m_arguments->addItem(QString());
         m_arguments->addItems(lastExtraArguments);
         m_arguments->setInsertPolicy(QComboBox::InsertAtTop);
         KCompletion *comp = m_arguments->completionObject();

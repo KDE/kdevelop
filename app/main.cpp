@@ -410,7 +410,7 @@ int main( int argc, char *argv[] )
     aboutData.addCredit( i18n("The KWrite authors"), i18n( "Kate editor component" ), QStringLiteral("kwrite-devel@kde.org") );
     aboutData.addCredit( i18n("Nokia Corporation/Qt Software"), i18n( "Designer code" ), QStringLiteral("qt-info@nokia.com") );
 
-    aboutData.addCredit( i18n("Contributors to older versions:"), QString(), QLatin1String("") );
+    aboutData.addCredit( i18n("Contributors to older versions:"), QString(), QString() );
     aboutData.addCredit( i18n("Bernd Gehrmann"), i18n( "Initial idea, basic architecture, much initial source code" ), QStringLiteral("bernd@kdevelop.org") );
     aboutData.addCredit( i18n("Caleb Tennis"), i18n( "KTabBar, bugfixes" ), QStringLiteral("caleb@aei-tech.com") );
     aboutData.addCredit( i18n("Richard Dale"), i18n( "Java & Objective C support" ), QStringLiteral("Richard_Dale@tipitina.demon.co.uk") );

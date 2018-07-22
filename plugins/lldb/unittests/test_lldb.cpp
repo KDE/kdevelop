@@ -965,7 +965,7 @@ void LldbTest::testRegularExpressionBreakpoint()
 
     QCOMPARE(breakpoints()->breakpoints().count(), 3);
 
-    session->addCommand(MI::BreakDelete, QLatin1String(""));
+    session->addCommand(MI::BreakDelete, QString());
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }

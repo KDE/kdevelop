@@ -169,7 +169,6 @@ void CustomBuildSystemConfigWidget::changeCurrentConfig( int idx )
 void CustomBuildSystemConfigWidget::addConfig()
 {
     CustomBuildSystemConfig c;
-    c.title = QLatin1String("");
     configs.append( c );
     ui->currentConfig->addItem( c.title );
     ui->currentConfig->setCurrentIndex( ui->currentConfig->count() - 1 );

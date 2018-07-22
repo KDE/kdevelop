@@ -251,7 +251,7 @@ void MainWindow::loadSettings()
 {
     HoldUpdates hu(this);
 
-    qCDebug(SUBLIME) << "loading settings for " << (area() ? area()->objectName() : QLatin1String(""));
+    qCDebug(SUBLIME) << "loading settings for " << (area() ? area()->objectName() : QString());
     QString group = QStringLiteral("MainWindow");
     if (area())
         group += QLatin1Char('_') + area()->objectName();
