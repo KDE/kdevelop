@@ -60,7 +60,7 @@ public:
     bool isActive() const override;
     DocumentState state() const override;
 
-    void setPrettyName(QString name) override;
+    void setPrettyName(const QString& name) override;
     
     void activate(Sublime::View *activeView, KParts::MainWindow *mainWindow) override;
 

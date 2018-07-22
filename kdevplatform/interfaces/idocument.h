@@ -98,7 +98,7 @@ public:
      * instead of the filename and/or path.
      * @param name The pretty name to use. Give an empty name to reset.
      * */
-    virtual void setPrettyName(QString name);
+    virtual void setPrettyName(const QString& name);
     
     /**
      * returns the pretty name of this document that was set through setPrettyName(...).

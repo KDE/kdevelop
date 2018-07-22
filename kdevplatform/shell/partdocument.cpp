@@ -205,7 +205,7 @@ void PartDocument::setUrl(const QUrl& newUrl)
     notifyUrlChanged();
 }
 
-void PartDocument::setPrettyName(QString name)
+void PartDocument::setPrettyName(const QString& name)
 {
     KDevelop::IDocument::setPrettyName(name);
     // Re-set the url, to trigger the whole chain
