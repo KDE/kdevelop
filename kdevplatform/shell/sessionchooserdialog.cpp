@@ -112,7 +112,7 @@ void SessionChooserDialog::updateState() {
         }
 
         m_model->setData(m_model->index(row, 1),
-                         !info.isRunning ? QIcon::fromTheme(QLatin1String("")) : QIcon::fromTheme(QStringLiteral("media-playback-start")),
+                         !info.isRunning ? QIcon() : QIcon::fromTheme(QStringLiteral("media-playback-start")),
                          Qt::DecorationRole);
         m_model->setData(m_model->index(row, 1), tooltip, Qt::ToolTipRole);
         m_model->setData(m_model->index(row, 2), state, Qt::DisplayRole);
