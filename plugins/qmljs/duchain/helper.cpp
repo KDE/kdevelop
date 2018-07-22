@@ -147,7 +147,7 @@ QMLAttributeValue getQMLAttributeValue(QmlJS::AST::UiObjectMemberList* members, 
     // The expression must be an identifier or a string literal
     res.value = getNodeValue(statement->expression);
 
-    if (res.value.isNull()) {
+    if (res.value.isEmpty()) {
         return res;
     }
 

@@ -190,7 +190,7 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
     for (auto path : moduleDirectories(url)) {
         fileName = fileOrDirectoryPath(path.cd(moduleName).toLocalFile());
 
-        if (!fileName.isNull()) {
+        if (!fileName.isEmpty()) {
             break;
         }
     }

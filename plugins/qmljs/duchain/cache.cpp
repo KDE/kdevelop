@@ -61,7 +61,7 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
     QString cacheKey = uri + version;
     QString path = m_modulePaths.value(cacheKey, QString());
 
-    if (!path.isNull()) {
+    if (!path.isEmpty()) {
         return path;
     }
 
@@ -158,7 +158,7 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
             dumpFile
         );
 
-        if (!dumpPath.isNull()) {
+        if (!dumpPath.isEmpty()) {
             QMutexLocker lock(&m_mutex);
 
             result.append(dumpPath);

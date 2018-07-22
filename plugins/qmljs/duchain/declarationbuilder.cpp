@@ -712,7 +712,7 @@ void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectInitializer* node,
         decl->setClassType(ClassDeclarationData::Interface);
         decl->clearBaseClasses();
 
-        if (!baseClass.isNull()) {
+        if (!baseClass.isEmpty()) {
             addBaseClass(decl, baseClass);
         }
 
@@ -731,7 +731,7 @@ void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectInitializer* node,
     QString type_name = QmlJS::getQMLAttributeValue(node->members, QStringLiteral("type")).value;
     QmlJS::FunctionType::Ptr type(new QmlJS::FunctionType);
 
-    if (type_name.isNull()) {
+    if (type_name.isEmpty()) {
         type->setReturnType(typeFromName(QStringLiteral("void")));
     } else {
         type->setReturnType(typeFromName(type_name));
@@ -1082,7 +1082,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiImport* node)
 {
     if (node->importUri) {
         importModule(node);
-    } else if (!node->fileName.isNull() && node->fileName != QLatin1String(".")) {
+    } else if (!node->fileName.isEmpty() && node->fileName != QLatin1String(".")) {
         QUrl currentFileUrl = currentContext()->topContext()->url().toUrl();
         QUrl importUrl = QUrl(node->fileName.toString());
 
