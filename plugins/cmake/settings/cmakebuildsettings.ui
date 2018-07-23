@@ -43,7 +43,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Add</string>
+        <string/>
        </property>
        <property name="icon">
         <iconset theme="list-add"/>
@@ -59,7 +59,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Remove</string>
+        <string/>
        </property>
        <property name="icon">
         <iconset theme="list-remove"/>

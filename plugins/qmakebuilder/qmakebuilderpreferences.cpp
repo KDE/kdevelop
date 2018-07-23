@@ -45,10 +45,6 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     m_prefsUi = new Ui::QMakeConfig;
     m_prefsUi->setupUi(this);
 
-    // display icons instead of text
-    m_prefsUi->addButton->setText(QString());
-    m_prefsUi->removeButton->setText(QString());
-
     m_chooserUi = new QMakeBuildDirChooser(m_project);
     auto groupBoxLayout = new QVBoxLayout(m_prefsUi->groupBox);
     groupBoxLayout->addWidget(m_chooserUi);
