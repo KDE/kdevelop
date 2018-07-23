@@ -76,7 +76,7 @@ struct ExecRunHandler : public MICommandHandler
                     --m_remainRetry;
                     // resend the command again.
                     ++m_activeCommands;
-                    m_session->addCommand(ExecRun, QStringLiteral(""),
+                    m_session->addCommand(ExecRun, QString(),
                                           this, // use *this as handler, so we can track error times
                                           CmdMaybeStartsRunning | CmdHandlesError);
                     return;

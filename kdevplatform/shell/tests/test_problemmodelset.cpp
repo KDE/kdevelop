@@ -118,7 +118,7 @@ void TestProblemModelSet::testFindModel()
         QVERIFY(model == m_testData[i].model);
     }
 
-    model = m_set->findModel(QStringLiteral(""));
+    model = m_set->findModel(QString());
     QVERIFY(model == nullptr);
 
     model = m_set->findModel(QStringLiteral("RandomName"));

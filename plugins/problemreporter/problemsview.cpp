@@ -367,8 +367,8 @@ void ProblemsView::onCurrentChanged(int idx)
     if (idx == -1)
         return;
 
-    setFilter(QStringLiteral(""), m_prevTabIdx);
-    setFilter(QStringLiteral(""));
+    setFilter(QString(), m_prevTabIdx);
+    setFilter(QString());
     m_prevTabIdx = idx;
 
     updateActions();
