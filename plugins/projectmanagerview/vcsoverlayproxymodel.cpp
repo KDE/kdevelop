@@ -64,7 +64,7 @@ QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) con
             return idx.sibling(idx.row(), 1).data(Qt::DisplayRole);
         }
     } else
-        return QAbstractProxyModel::data(proxyIndex, role);
+        return QIdentityProxyModel::data(proxyIndex, role);
 }
 
 void VcsOverlayProxyModel::addProject(IProject* p)
