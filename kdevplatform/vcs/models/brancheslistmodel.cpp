@@ -63,7 +63,7 @@ class BranchItem : public QStandardItem
         void setCurrent(bool current)
         {
             setData(current, BranchesListModel::CurrentRole);
-            setIcon(QIcon::fromTheme( current ? QStringLiteral("arrow-right") : QStringLiteral("")));
+            setIcon(current ? QIcon::fromTheme(QStringLiteral("arrow-right")) : QIcon());
         }
 
         void setData(const QVariant& value, int role = Qt::UserRole + 1) override
