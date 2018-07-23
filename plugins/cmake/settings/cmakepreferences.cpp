@@ -52,9 +52,6 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
     m_prefsUi = new Ui::CMakeBuildSettings;
     m_prefsUi->setupUi(this);
 
-    m_prefsUi->addBuildDir->setIcon(QIcon::fromTheme( QStringLiteral("list-add") ));
-    m_prefsUi->removeBuildDir->setIcon(QIcon::fromTheme( QStringLiteral("list-remove") ));
-
     m_prefsUi->addBuildDir->setText(QString());
     m_prefsUi->removeBuildDir->setText(QString());
     m_prefsUi->cacheList->setItemDelegate(new CMakeCacheDelegate(m_prefsUi->cacheList));

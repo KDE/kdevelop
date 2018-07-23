@@ -33,6 +33,9 @@
        <property name="text">
         <string>New</string>
        </property>
+       <property name="icon">
+        <iconset theme="list-add"/>
+       </property>
       </widget>
      </item>
      <item>
@@ -43,12 +46,18 @@
        <property name="text">
         <string>Delete</string>
        </property>
+       <property name="icon">
+        <iconset theme="list-remove"/>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="renameButton">
        <property name="text">
         <string>Rename</string>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-rename"/>
        </property>
       </widget>
      </item>
@@ -76,6 +85,9 @@
        <property name="text">
         <string>Compare to Branch</string>
        </property>
+       <property name="icon">
+        <iconset theme="text-x-patch"/>
+       </property>
       </widget>
      </item>
      <item>
@@ -102,12 +114,18 @@
        <property name="text">
         <string>Checkout</string>
        </property>
+       <property name="icon">
+        <iconset theme="dialog-ok-apply"/>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="mergeButton">
        <property name="text">
         <string>Merge</string>
+       </property>
+       <property name="icon">
+        <iconset theme="merge"/>
        </property>
       </widget>
      </item>

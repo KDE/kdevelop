@@ -51,27 +51,21 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
 {
     m_ui->setupUi( this );
 
-    m_ui->addItemButton->setIcon( QIcon::fromTheme( QStringLiteral("list-add") ) );
     connect( m_ui->addItemButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::addItems );
 
-    m_ui->removeItemButton->setIcon( QIcon::fromTheme( QStringLiteral("list-remove") ) );
     connect( m_ui->removeItemButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::removeItems );
 
-    m_ui->upButton->setIcon( QIcon::fromTheme( QStringLiteral("go-up") ) );
     connect( m_ui->upButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::moveUp );
 
-    m_ui->downButton->setIcon( QIcon::fromTheme( QStringLiteral("go-down") ) );
     connect( m_ui->downButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::moveDown );
 
-    m_ui->topButton->setIcon( QIcon::fromTheme( QStringLiteral("go-top") ) );
     connect( m_ui->topButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::moveToTop );
 
-    m_ui->bottomButton->setIcon( QIcon::fromTheme( QStringLiteral("go-bottom") ) );
     connect( m_ui->bottomButton, &QToolButton::clicked,
              this, &ProjectBuildSetWidget::moveToBottom );
 

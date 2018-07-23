@@ -46,9 +46,7 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     m_prefsUi->setupUi(this);
 
     // display icons instead of text
-    m_prefsUi->addButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
     m_prefsUi->addButton->setText(QString());
-    m_prefsUi->removeButton->setIcon(QIcon::fromTheme(QStringLiteral("list-remove")));
     m_prefsUi->removeButton->setText(QString());
 
     m_chooserUi = new QMakeBuildDirChooser(m_project);

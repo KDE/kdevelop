@@ -24,12 +24,18 @@
        <property name="text">
         <string>&amp;Add</string>
        </property>
+       <property name="icon">
+        <iconset theme="list-add"/>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="removeButton">
        <property name="text">
         <string>&amp;Remove</string>
+       </property>
+       <property name="icon">
+        <iconset theme="list-remove"/>
        </property>
       </widget>
      </item>

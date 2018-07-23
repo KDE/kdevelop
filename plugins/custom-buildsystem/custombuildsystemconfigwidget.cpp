@@ -54,9 +54,6 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    ui->addConfig->setIcon(QIcon::fromTheme( QStringLiteral("list-add") ));
-    ui->removeConfig->setIcon(QIcon::fromTheme( QStringLiteral("list-remove") ));
-
     // hack taken from kurlrequester, make the buttons a bit less in height so they better match the url-requester
     ui->addConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
     ui->removeConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
