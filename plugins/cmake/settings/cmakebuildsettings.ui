@@ -62,7 +62,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset theme="list-remove"/>
+        <iconset theme="edit-delete"/>
        </property>
       </widget>
      </item>

@@ -59,7 +59,7 @@
         <string>Remove profile</string>
        </property>
        <property name="icon">
-        <iconset theme="list-remove"/>
+        <iconset theme="edit-delete"/>
        </property>
       </widget>
      </item>
@@ -114,7 +114,7 @@
         <string>Remove variable</string>
        </property>
        <property name="icon">
-        <iconset theme="list-remove"/>
+        <iconset theme="edit-delete"/>
        </property>
       </widget>
      </item>

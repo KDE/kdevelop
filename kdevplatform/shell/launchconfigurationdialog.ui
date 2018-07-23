@@ -41,7 +41,7 @@
             <string>Remove</string>
            </property>
            <property name="icon">
-            <iconset theme="list-remove">
+            <iconset theme="edit-delete">
              <normaloff/>
             </iconset>
            </property>
