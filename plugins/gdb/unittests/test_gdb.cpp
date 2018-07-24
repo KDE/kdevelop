@@ -458,25 +458,28 @@ void GdbTest::testUpdateBreakpoint()
     TestDebugSession *session = new TestDebugSession;
     TestLaunchConfiguration cfg;
 
-    // breakpoint 1: line 29
+    // breakpoint 1: real line 29: foo();
     KDevelop::Breakpoint * b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(debugeeFileName), 28);
     QCOMPARE(breakpoints()->rowCount(), 1);
 
     session->startDebugging(&cfg, m_iface);
 
-    // breakpoint 2: line 28
+    // breakpoint 2: real line 32: const char *x = "Hello";
     //insert custom command as user might do it using GDB console
-    session->addCommand(new MI::UserCommand(MI::NonMI, "break "+debugeeFileName+":28"));
+    session->addCommand(new MI::UserCommand(MI::NonMI, "break "+debugeeFileName+":32"));
 
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop at line 28
-    session->stepInto();
-    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop after step
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState); // stop at breakpoint 1, with custom command handled
+    QCOMPARE(session->currentLine(), 28);
+
+    // check breakpoint 2 got picked up
     QCOMPARE(breakpoints()->rowCount(), 2);
     b = breakpoints()->breakpoint(1);
     QCOMPARE(b->url(), QUrl::fromLocalFile(debugeeFileName));
-    QCOMPARE(b->line(), 27);
+    QCOMPARE(b->line(), 31);
+
     session->run();
-    WAIT_FOR_STATE(session, DebugSession::PausedState); // stop at line 29
+    WAIT_FOR_STATE(session, DebugSession::PausedState); // stop at breakpoint 2
+    QCOMPARE(session->currentLine(), 31);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
