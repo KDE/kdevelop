@@ -296,11 +296,6 @@ class B : public A<int>
 };
     )";
 
-    // NOTE: This fails and needs fixing. If the include of "missing2.h"
-    //       above is commented out, then it doesn't fail. Maybe
-    //       clang stops processing when it encounters the second missing
-    //       header, or similar.
-
     TestFile header(code, QStringLiteral("h"));
     TestFile impl("#include \"" + header.url().str() + "\"\n", QStringLiteral("cpp"), &header);
     QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses));
@@ -329,9 +324,12 @@ class B : public A<int>
     auto b = dynamic_cast<ClassDeclaration*>(headerCtx->localDeclarations().last());
     QVERIFY(b);
 
-#if CINDEX_VERSION_MINOR < 34
+    // NOTE: This fails and needs fixing. If the include of "missing2.h"
+    //       above is commented out, then it doesn't fail. Maybe
+    //       clang stops processing when it encounters the second missing
+    //       header, or similar.
+    // XFAIL this check until https://bugs.llvm.org/show_bug.cgi?id=38155 is fixed
     QEXPECT_FAIL("", "Base class isn't assigned correctly", Continue);
-#endif
     QCOMPARE(b->baseClassesSize(), 1u);
 
 #if CINDEX_VERSION_MINOR < 34
@@ -1297,7 +1295,7 @@ void TestDUChain::testHeaderParsingOrder1()
     // NOTE: the decl. doesn't know (yet) about the template insantiation <int>
     QVERIFY(decl);
     QCOMPARE(decl, top->localDeclarations()[0]);
-    
+
     // now ensure that a use was build for 'A' in header1
     TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[0].context(top));
     QVERIFY(top2);
@@ -1334,7 +1332,7 @@ void TestDUChain::testHeaderParsingOrder2()
     Declaration* decl = idType->declaration(top);
     // NOTE: the decl. doesn't know (yet) about the template insantiation <int>
     QVERIFY(decl);
-    
+
     // now ensure that a use was build for 'A' in header2
     TopDUContext* top2 = dynamic_cast<TopDUContext*>(top->importedParentContexts()[1].context(top));
     QVERIFY(top2);
