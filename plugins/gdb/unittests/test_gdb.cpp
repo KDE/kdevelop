@@ -1049,7 +1049,10 @@ void GdbTest::testCoreFile()
         auto coredumpctl = QStandardPaths::findExecutable(QStringLiteral("coredumpctl"));
         if (!coredumpctl.isEmpty()) {
             KProcess::execute(coredumpctl, {"-1", "-o", f.absoluteFilePath(), "dump", "debuggee_crash"}, 5000);
-            coreFileFound = f.exists();
+            // coredumpctl seems to create an empty file "core" even if no cores can be delivered
+            // (like when run inside docker containers as on KDE CI or with kernel.core_pattern=|/dev/null)
+            // so also check for size != 0
+            coreFileFound = f.exists() && (f.size() > 0);
         }
     }
     if (!coreFileFound)
