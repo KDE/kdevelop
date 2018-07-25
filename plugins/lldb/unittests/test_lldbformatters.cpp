@@ -94,15 +94,12 @@ public:
                             const QUrl& workingDirectory = QUrl()) {
         auto execPath = findExecutable(executable);
         qDebug() << "FIND" << execPath;
-        c = new KConfig();
+        c = KSharedConfig::openConfig();
         c->deleteGroup("launch");
         cfg = c->group("launch");
         cfg.writeEntry("isExecutable", true);
         cfg.writeEntry("Executable", execPath);
         cfg.writeEntry("Working Directory", workingDirectory);
-    }
-    ~TestLaunchConfiguration() override {
-        delete c;
     }
     const KConfigGroup config() const override { return cfg; }
     KConfigGroup config() override { return cfg; };
@@ -110,10 +107,9 @@ public:
     KDevelop::IProject* project() const override { return nullptr; }
     KDevelop::LaunchConfigurationType* type() const override { return nullptr; }
 
-    KConfig *rootConfig() { return c; }
 private:
     KConfigGroup cfg;
-    KConfig *c;
+    KSharedConfigPtr c;
 };
 
 class TestDebugSession : public DebugSession
