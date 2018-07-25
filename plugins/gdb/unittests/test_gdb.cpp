@@ -114,15 +114,12 @@ public:
     explicit TestLaunchConfiguration(const QUrl& executable = findExecutable(QStringLiteral("debuggee_debugee")),
                             const QUrl& workingDirectory = QUrl()) {
         qDebug() << "FIND" << executable;
-        c = new KConfig();
+        c = KSharedConfig::openConfig();
         c->deleteGroup("launch");
         cfg = c->group("launch");
         cfg.writeEntry("isExecutable", true);
         cfg.writeEntry("Executable", executable);
         cfg.writeEntry("Working Directory", workingDirectory);
-    }
-    ~TestLaunchConfiguration() override {
-        delete c;
     }
     const KConfigGroup config() const override { return cfg; }
     KConfigGroup config() override { return cfg; };
@@ -130,10 +127,10 @@ public:
     KDevelop::IProject* project() const override { return nullptr; }
     KDevelop::LaunchConfigurationType* type() const override { return nullptr; }
 
-    KConfig *rootConfig() { return c; }
+    KConfig* rootConfig() { return c.data(); }
 private:
     KConfigGroup cfg;
-    KConfig *c;
+    KSharedConfigPtr c;
 };
 
 class TestFrameStackModel : public GdbFrameStackModel
