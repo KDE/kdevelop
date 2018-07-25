@@ -16,6 +16,7 @@
  ***************************************************************************/
 
 #include "perforceplugin.h"
+#include "ui/perforceimportmetadatawidget.h"
 #include "debug.h"
 
 #include "qtcompat_p.h"
@@ -135,9 +136,9 @@ QString PerforcePlugin::name() const
     return i18n("Perforce");
 }
 
-KDevelop::VcsImportMetadataWidget* PerforcePlugin::createImportMetadataWidget(QWidget* /*parent*/)
+KDevelop::VcsImportMetadataWidget* PerforcePlugin::createImportMetadataWidget(QWidget* parent)
 {
-    return nullptr;
+    return new PerforceImportMetadataWidget(parent);
 }
 
 bool PerforcePlugin::isValidRemoteRepositoryUrl(const QUrl& remoteLocation)
