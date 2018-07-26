@@ -113,7 +113,7 @@ SvnLogJob::SvnLogJob( KDevSvnPlugin* parent )
     : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Log );
-    connect( m_job, &SvnInternalLogJob::logEvent,
+    connect( m_job.data(), &SvnInternalLogJob::logEvent,
              this, &SvnLogJob::logEventReceived );
 
     setObjectName(i18n("Subversion Log"));

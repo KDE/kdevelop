@@ -41,13 +41,21 @@ SvnJobBase::~SvnJobBase()
 void SvnJobBase::startInternalJob()
 {
     auto job = internalJob();
-    connect( job, &SvnInternalJobBase::failed,
+    connect( job.data(), &SvnInternalJobBase::failed,
              this, &SvnJobBase::internalJobFailed, Qt::QueuedConnection );
-    connect( job, &SvnInternalJobBase::done,
+    connect( job.data(), &SvnInternalJobBase::done,
              this, &SvnJobBase::internalJobDone, Qt::QueuedConnection );
-    connect( job, &SvnInternalJobBase::started,
+    connect( job.data(), &SvnInternalJobBase::started,
              this, &SvnJobBase::internalJobStarted, Qt::QueuedConnection );
-    m_part->jobQueue()->stream() << ThreadWeaver::make_job_raw(job);
+    // add as shared pointer
+    // the signals "done" & "failed" are emitted when the queue and the executor still
+    // have and use a reference to the job, in the execution thread.
+    // As the this parent job will be deleted in the main/other thread
+    // (due to deleteLater() being called on it in the KJob::exec())
+    // and the ThreadWeaver queue will release the last reference to the passed
+    // JobInterface pointer only after the JobInterface::execute() method has been left,
+    // the internal threaded job thus needs to get shared memory management via the QSharedPointer.
+    m_part->jobQueue()->stream() << job;
 }
 
 bool SvnJobBase::doKill()
@@ -133,7 +141,7 @@ void SvnJobBase::askForSslClientCertPassword( const QString& )
 
 void SvnJobBase::internalJobStarted()
 {
-    qCDebug(PLUGIN_SVN)  << "job started" << static_cast<void*>(internalJob());
+    qCDebug(PLUGIN_SVN)  << "job started" << static_cast<void*>(internalJob().data());
     m_status = KDevelop::VcsJob::JobRunning;
 }
 

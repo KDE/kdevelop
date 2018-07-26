@@ -128,7 +128,7 @@ SvnStatusJob::SvnStatusJob( KDevSvnPlugin* parent )
     : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Status );
-    connect(m_job, &SvnInternalStatusJob::gotNewStatus,
+    connect(m_job.data(), &SvnInternalStatusJob::gotNewStatus,
             this, &SvnStatusJob::addToStats, Qt::QueuedConnection);
     setObjectName(i18n("Subversion Status"));
 }

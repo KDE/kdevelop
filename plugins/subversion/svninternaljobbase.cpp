@@ -39,12 +39,12 @@ extern "C" {
 #include "kdevsvncpp/apr.hpp"
 #include "kdevsvncpp/revision.hpp"
 
-SvnInternalJobBase::SvnInternalJobBase( SvnJobBase* parent )
-    : QObject(parent)
-    , m_ctxt( new svn::Context() )
+SvnInternalJobBase::SvnInternalJobBase(SvnJobBase* parentJob)
+    : m_ctxt( new svn::Context() )
     , m_guiSemaphore( 0 )
     , m_mutex()
     , m_killMutex()
+    , m_parentJob(parentJob)
 {
     m_ctxt->setListener(this);
 }
@@ -69,6 +69,8 @@ void SvnInternalJobBase::defaultEnd(const ThreadWeaver::JobPointer& self, Thread
         emit failed();
     }
     emit done();
+    // at this ppint this object cannot yet be deleted (e.g. as part of the parent job destruction,
+    // ThreadWeaver logic still holds and uses a reference to finish the execution logic
 }
 
 bool SvnInternalJobBase::contextGetLogin( const std::string& realm,
@@ -215,19 +217,18 @@ bool SvnInternalJobBase::contextGetLogMessage( std::string& msg )
 
 void SvnInternalJobBase::initBeforeRun()
 {
-    auto parentJob = static_cast<SvnJobBase*>(parent());
     connect( this, &SvnInternalJobBase::needCommitMessage,
-             parentJob, &SvnJobBase::askForCommitMessage, Qt::QueuedConnection );
+             m_parentJob, &SvnJobBase::askForCommitMessage, Qt::QueuedConnection );
     connect( this, &SvnInternalJobBase::needLogin,
-             parentJob,  &SvnJobBase::askForLogin, Qt::QueuedConnection );
+             m_parentJob,  &SvnJobBase::askForLogin, Qt::QueuedConnection );
     connect( this, &SvnInternalJobBase::needSslServerTrust,
-             parentJob,  &SvnJobBase::askForSslServerTrust, Qt::QueuedConnection );
+             m_parentJob,  &SvnJobBase::askForSslServerTrust, Qt::QueuedConnection );
     connect( this, &SvnInternalJobBase::showNotification,
-             parentJob,  &SvnJobBase::showNotification, Qt::QueuedConnection );
+             m_parentJob,  &SvnJobBase::showNotification, Qt::QueuedConnection );
     connect( this, &SvnInternalJobBase::needSslClientCert,
-             parentJob,  &SvnJobBase::askForSslClientCert, Qt::QueuedConnection );
+             m_parentJob,  &SvnJobBase::askForSslClientCert, Qt::QueuedConnection );
     connect( this, &SvnInternalJobBase::needSslClientCertPassword,
-             parentJob,  &SvnJobBase::askForSslClientCertPassword, Qt::QueuedConnection );
+             m_parentJob,  &SvnJobBase::askForSslClientCertPassword, Qt::QueuedConnection );
 }
 
 svn::ContextListener::SslServerTrustAnswer SvnInternalJobBase::contextSslServerTrustPrompt(

@@ -18,6 +18,7 @@
 #include "debug.h"
 
 #include <ThreadWeaver/Queueing>
+#include <QSharedPointer>
 
 extern "C"
 {
@@ -25,6 +26,7 @@ extern "C"
 }
 
 class SvnInternalJobBase;
+using SvnInternalJobBasePtr = QSharedPointer<SvnInternalJobBase>;
 
 namespace ThreadWeaver
 {
@@ -39,7 +41,7 @@ class SvnJobBase : public KDevelop::VcsJob
 public:
     explicit SvnJobBase( KDevSvnPlugin*, KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose );
     ~SvnJobBase() override;
-    virtual SvnInternalJobBase* internalJob() const = 0;
+    virtual SvnInternalJobBasePtr internalJob() const = 0;
     KDevelop::VcsJob::JobStatus status() const override;
     KDevelop::IPlugin* vcsPlugin() const override;
 
@@ -74,17 +76,17 @@ public:
     explicit SvnJobBaseImpl(KDevSvnPlugin* plugin,
                    KDevelop::OutputJob::OutputJobVerbosity verbosity = KDevelop::OutputJob::Verbose)
         : SvnJobBase(plugin, verbosity)
+        , m_job(new InternalJobClass(this))
     {
-        m_job = new InternalJobClass(this);
     }
 
-    SvnInternalJobBase* internalJob() const override
+    SvnInternalJobBasePtr internalJob() const override
     {
         return m_job;
     }
 
 protected:
-    InternalJobClass* m_job = nullptr;
+    QSharedPointer<InternalJobClass> m_job;
 };
 
 #endif

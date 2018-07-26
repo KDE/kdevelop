@@ -49,7 +49,7 @@ class SvnInternalJobBase : public QObject, public ThreadWeaver::Job, public svn:
 {
     Q_OBJECT
 public:
-    explicit SvnInternalJobBase( SvnJobBase* parent = nullptr );
+    explicit SvnInternalJobBase(SvnJobBase* parentJob);
     ~SvnInternalJobBase() override;
 
     bool success() const override;
@@ -120,6 +120,7 @@ private:
     bool sendFirstDelta = false;
     bool killed = false;
     QString m_errorMessage;
+    SvnJobBase* m_parentJob;
 };
 
 

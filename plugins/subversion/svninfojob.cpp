@@ -90,7 +90,7 @@ SvnInfoJob::SvnInfoJob( KDevSvnPlugin* parent )
     : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent ), m_provideInfo( SvnInfoJob::AllInfo )
 {
     setType( KDevelop::VcsJob::Add );
-    connect( m_job, &SvnInternalInfoJob::gotInfo,
+    connect( m_job.data(), &SvnInternalInfoJob::gotInfo,
              this, &SvnInfoJob::setInfo, Qt::QueuedConnection );
     setObjectName(i18n("Subversion Info"));
 }

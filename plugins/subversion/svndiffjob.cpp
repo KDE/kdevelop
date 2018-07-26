@@ -258,7 +258,7 @@ SvnDiffJob::SvnDiffJob( KDevSvnPlugin* parent )
     : SvnJobBaseImpl( parent, KDevelop::OutputJob::Silent )
 {
     setType( KDevelop::VcsJob::Add );
-    connect( m_job, &SvnInternalDiffJob::gotDiff,
+    connect( m_job.data(), &SvnInternalDiffJob::gotDiff,
                 this, &SvnDiffJob::setDiff, Qt::QueuedConnection );
 
     setObjectName(i18n("Subversion Diff"));
