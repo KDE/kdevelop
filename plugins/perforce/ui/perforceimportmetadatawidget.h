@@ -28,7 +28,7 @@
  * Asks the user for all options needed to import an existing directory into
  * a Perforce repository
  */
-class KDEVPLATFORMVCS_EXPORT PerforceImportMetadataWidget
+class PerforceImportMetadataWidget
     : public KDevelop::VcsImportMetadataWidget
 {
     Q_OBJECT
