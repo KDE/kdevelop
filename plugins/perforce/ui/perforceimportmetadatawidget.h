@@ -34,7 +34,7 @@ class PerforceImportMetadataWidget
     Q_OBJECT
 
 public:
-    PerforceImportMetadataWidget(QWidget* parent = nullptr);
+    explicit PerforceImportMetadataWidget(QWidget* parent = nullptr);
 
     QUrl source() const override;
     KDevelop::VcsLocation destination() const override;
