@@ -5,6 +5,7 @@ include_directories(
 set(perforceplugintest_SRCS
     test_perforce.cpp
     ../perforceplugin.cpp
+    ../ui/perforceimportmetadatawidget.cpp
     ${kdevperforce_LOG_PART_SRCS}
 )
 
