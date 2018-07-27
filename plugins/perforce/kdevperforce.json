@@ -55,5 +55,9 @@
     "X-KDevelop-IRequired": [
         "org.kdevelop.IExecutePlugin"
     ],
+    "X-KDevelop-Interfaces": [
+        "org.kdevelop.IBasicVersionControl",
+        "org.kdevelop.ICentralizedVersionControl"
+    ],
     "X-KDevelop-Mode": "GUI"
 }
