@@ -44,6 +44,7 @@
 #include <KIO/Global>
 #include <KProcess>
 #include <KSharedConfig>
+#include <KShell>
 
 #include <QApplication>
 #include <QDebug>
@@ -1578,7 +1579,7 @@ void GdbTest::testRunGdbScript()
     QTemporaryFile runScript;
     runScript.open();
 
-    runScript.write("file " + findExecutable(QStringLiteral("debuggee_debugee")).toLocalFile().toUtf8() + "\n");
+    runScript.write("file " + KShell::quoteArg(findExecutable(QStringLiteral("debuggee_debugee")).toLocalFile()).toUtf8() + "\n");
     runScript.write("break main\n");
     runScript.write("run\n");
     runScript.close();
