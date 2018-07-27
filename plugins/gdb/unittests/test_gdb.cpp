@@ -1817,8 +1817,9 @@ void GdbTest::testCatchpoint()
     QCOMPARE(session->line(), 29);
 
     session->addCommand(MI::NonMI, QStringLiteral("catch throw"));
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     session->run();
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
     QTest::qWait(1000);
 
     const QVector<KDevelop::FrameStackModel::FrameItem> frames = fsModel->frames(fsModel->currentThread());
