@@ -31,6 +31,8 @@ include(CheckFunctionExists)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 
+include(KDevelopMacrosInternal)
+
 if(POLICY CMP0071)
   # CMake 3.10 generates warnings when projects combine AUTOMOC with qt5_wrap_ui() or qt5_add_resources()
   # Avoid that by setting this policy (cf. https://bugreports.qt.io/browse/QTBUG-63442)
@@ -112,17 +114,6 @@ add_definitions(
     -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
 )
 
-function(add_compile_flag_if_supported _flag)
-    unset(_have_flag CACHE)
-    string(REGEX REPLACE "[-=]" "_" _varname ${_flag})
-    string(TOUPPER ${_varname} _varname)
-    set(_varname "HAVE${_varname}")
-    check_cxx_compiler_flag("${_flag}" "${_varname}")
-    if (${${_varname}})
-        add_compile_options(${_flag})
-    endif()
-endfunction()
-
 # Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
 # See discussion: http://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html
 add_compile_flag_if_supported(-Wno-missing-field-initializers)
@@ -135,8 +126,12 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # This warning is triggered by every call to qCDebug()
     add_compile_flag_if_supported(-Wno-gnu-zero-variadic-macro-arguments)
 endif()
-if (CMAKE_COMPILER_CXX_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_flag_if_supported(-pedantic)
+    add_compile_flag_if_supported(-Wzero-as-null-pointer-constant CXX_ONLY)
+endif()
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_flag_if_supported(-Wsuggest-override CXX_ONLY)
 endif()
 
 include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR})

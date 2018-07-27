@@ -27,7 +27,7 @@ add_library(kdevsvncpp STATIC
 )
 set_property(TARGET kdevsvncpp PROPERTY POSITION_INDEPENDENT_CODE ON)
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    target_compile_options(kdevsvncpp PRIVATE "-Wno-documentation")
+    add_target_compile_flag_if_supported(kdevsvncpp PRIVATE "-Wno-documentation")
 endif()
 target_include_directories(kdevsvncpp
     PRIVATE kdevsvncpp
