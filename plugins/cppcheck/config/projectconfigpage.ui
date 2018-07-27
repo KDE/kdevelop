@@ -314,15 +314,12 @@
        </layout>
       </item>
       <item>
-       <widget class="QTextEdit" name="commandLine">
+       <widget class="QPlainTextEdit" name="commandLine">
         <property name="enabled">
          <bool>true</bool>
         </property>
         <property name="readOnly">
          <bool>true</bool>
-        </property>
-        <property name="acceptRichText">
-         <bool>false</bool>
         </property>
        </widget>
       </item>

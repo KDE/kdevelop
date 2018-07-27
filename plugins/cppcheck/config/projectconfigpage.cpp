@@ -25,6 +25,8 @@
 
 #include <interfaces/iproject.h>
 
+#include <QFontDatabase>
+
 namespace cppcheck
 {
 
@@ -38,7 +40,7 @@ ProjectConfigPage::ProjectConfigPage(KDevelop::IPlugin* plugin, KDevelop::IProje
 
     ui->setupUi(this);
 
-    ui->commandLine->setFontFamily(QStringLiteral("Monospace"));
+    ui->commandLine->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     connect(this, &ProjectConfigPage::changed, this, &ProjectConfigPage::updateCommandLine);
     connect(ui->commandLineFilter->lineEdit(), &QLineEdit::textChanged, this, &ProjectConfigPage::updateCommandLine);
@@ -98,14 +100,14 @@ void ProjectConfigPage::updateCommandLine()
     }
 
     if (!ui->commandLineBreaks->isChecked()) {
-        ui->commandLine->setText(commandLine);
+        ui->commandLine->setPlainText(commandLine);
         return;
     }
 
     commandLine.replace(QLatin1String(" -"), QLatin1String("\n-"));
     QString filterText = ui->commandLineFilter->lineEdit()->text();
     if (filterText.isEmpty()) {
-        ui->commandLine->setText(commandLine);
+        ui->commandLine->setPlainText(commandLine);
         ui->commandLineBreaks->setEnabled(true);
         return;
     }
@@ -119,7 +121,7 @@ void ProjectConfigPage::updateCommandLine()
         }
     }
 
-    ui->commandLine->setText(lines.join('\n'));
+    ui->commandLine->setPlainText(lines.join('\n'));
     ui->commandLineBreaks->setEnabled(false);
 }
 
