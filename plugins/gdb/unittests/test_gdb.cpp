@@ -626,6 +626,10 @@ void GdbTest::testBreakOnReadBreakpoint2()
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState);
+    if(session->line() == 22) { // some GDB versions break 3 times on this line
+        session->run();
+        WAIT_FOR_STATE(session, DebugSession::PausedState);
+    }
     QCOMPARE(session->line(), 24);
 
     session->run();
@@ -951,7 +955,7 @@ void GdbTest::testStackSwitchThread()
     QVERIFY(session->startDebugging(&cfg, m_iface));
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
 
-    QCOMPARE(stackModel->rowCount(), 4);
+    QVERIFY(stackModel->rowCount() > 2);
 
     QModelIndex tIdx = stackModel->index(0,0);
     COMPARE_DATA(tIdx, "#1 at main");
