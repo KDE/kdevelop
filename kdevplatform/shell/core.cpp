@@ -115,6 +115,7 @@ KAboutData createAboutData()
     aboutData.addAuthor( i18n("Milian Wolff"), i18n( "Generic manager, Webdevelopment Plugins, Snippets, Performance" ), QStringLiteral("mail@milianw.de") );
     aboutData.addAuthor( i18n("Kevin Funk"), i18n( "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website" ), QStringLiteral("kfunk@kde.org") );
     aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Co-maintainer, AppImage, Python Support, User Interface improvements" ), QStringLiteral("svenbrauch@gmx.de") );
+    aboutData.addAuthor( i18n("Friedrich W. H. Kossebau"), QString(), QStringLiteral("kossebau@kde.org") );
 
     return aboutData;
 }
