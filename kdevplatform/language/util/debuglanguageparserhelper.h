@@ -185,11 +185,9 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
 
     QApplication app(argc, argv);
 
-    QCommandLineParser parser;
     KAboutData::setApplicationData(aboutData);
-    parser.addVersionOption();
-    parser.addHelpOption();
 
+    QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
 
     parser.addPositionalArgument("files", i18n("files or - to read from STDIN, the latter is the default if nothing is provided"), "[FILE...]");

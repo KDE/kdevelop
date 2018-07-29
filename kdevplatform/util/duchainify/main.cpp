@@ -281,9 +281,6 @@ int main(int argc, char** argv)
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
 
-    parser.addVersionOption();
-    parser.addHelpOption();
-
     parser.addPositionalArgument(QStringLiteral("paths"), i18n("file or directory"), QStringLiteral("[PATH...]"));
 
     parser.addOption(QCommandLineOption{QStringList{QStringLiteral("w"), QStringLiteral("warnings")}, i18n("Show warnings")});

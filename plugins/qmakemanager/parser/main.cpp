@@ -31,14 +31,13 @@ int main(int argc, char* argv[])
     KAboutData aboutData(QLatin1String("QMake Parser"), "qmake-parser", QLatin1String("1.0"));
     aboutData.setShortDescription("Parse QMake project files");
     QCoreApplication app(argc, argv);
-    QCommandLineParser parser;
     KAboutData::setApplicationData(aboutData);
-    parser.addVersionOption();
-    parser.addHelpOption();
+
+    QCommandLineParser parser;
+    aboutData.setupCommandLine(&parser);
     parser.addOption(QCommandLineOption(QLatin1String("debug"), "Enable output of the debug AST"));
     parser.addPositionalArgument("files", "QMake project files");
 
-    aboutData.setupCommandLine(&parser);
     parser.process(app);
     aboutData.processCommandLine(&parser);
 

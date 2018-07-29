@@ -88,11 +88,11 @@ int main(int argc, char **argv)
                      KAboutLicense::GPL, i18n("(C) 2012 Andreas Pakulat"));
     aboutData.addAuthor( i18n("Andreas Pakulat"), QString(), QStringLiteral("apaku@gmx.de") );
     QApplication app(argc, argv);
-    QCommandLineParser parser;
     KAboutData::setApplicationData(aboutData);
-    parser.addVersionOption();
-    parser.addHelpOption();
+
+    QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
+
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
