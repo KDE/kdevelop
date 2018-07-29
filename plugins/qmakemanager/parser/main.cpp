@@ -28,9 +28,10 @@
 
 int main(int argc, char* argv[])
 {
+    QCoreApplication app(argc, argv);
+
     KAboutData aboutData(QLatin1String("QMake Parser"), "qmake-parser", QLatin1String("1.0"));
     aboutData.setShortDescription("Parse QMake project files");
-    QCoreApplication app(argc, argv);
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;

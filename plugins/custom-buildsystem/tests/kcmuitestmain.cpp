@@ -84,10 +84,11 @@ private:
 
 int main(int argc, char **argv)
 {
+    QApplication app(argc, argv);
+
     KAboutData aboutData(QStringLiteral("kcm_uitest"), i18n("kcm_uitest"), version, i18n(description),
                      KAboutLicense::GPL, i18n("(C) 2012 Andreas Pakulat"));
     aboutData.addAuthor( i18n("Andreas Pakulat"), QString(), QStringLiteral("apaku@gmx.de") );
-    QApplication app(argc, argv);
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;

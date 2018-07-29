@@ -271,11 +271,11 @@ using namespace KDevelop;
 
 int main(int argc, char** argv)
 {
+    QApplication app(argc, argv);
+
     KAboutData aboutData( QStringLiteral("duchainify"), i18n( "duchainify" ),
                           QStringLiteral("1"), i18n("DUChain builder application"), KAboutLicense::GPL,
                           i18n( "(c) 2009 David Nolden" ), QString(), QStringLiteral("http://www.kdevelop.org") );
-
-    QApplication app(argc, argv);
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;
