@@ -51,16 +51,20 @@ if (APPLE)
     target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE "-framework Foundation" )
 endif()
 
+# silence warnings which won't be fixed in this 3rd-party code copy, to keep diff small
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_target_compile_flag_if_supported(kdevqtc-qmlsupport PRIVATE "-Wno-documentation")
 endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_target_compile_flag_if_supported(kdevqtc-qmlsupport PRIVATE "-Wno-pedantic")
+    add_target_compile_flag_if_supported(kdevqtc-qmlsupport PRIVATE "-Wno-implicit-fallthrough")
     add_target_compile_flag_if_supported(kdevqtc-qmlsupport PRIVATE "-Wno-zero-as-null-pointer-constant")
 endif()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
    add_target_compile_flag_if_supported(kdevqtc-qmlsupport PRIVATE "-Wno-suggest-override")
    add_target_compile_flag_if_supported(kdevqtc-qmlsupport PRIVATE "-Wno-class-memaccess")
 endif()
+
 target_compile_definitions(kdevqtc-qmlsupport PUBLIC -DLANGUAGEUTILS_BUILD_DIR -DQTCREATOR_UTILS_LIB -DQT_CREATOR -DQML_BUILD_STATIC_LIB)
 # add as SYSTEM include dir so compiler does not emit warnings for the lib headers
 target_include_directories(kdevqtc-qmlsupport SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
