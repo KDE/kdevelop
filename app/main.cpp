@@ -463,8 +463,6 @@ int main( int argc, char *argv[] )
     qCDebug(APP) << "Startup";
 
     QCommandLineParser parser;
-    parser.addVersionOption();
-    parser.addHelpOption();
     aboutData.setupCommandLine(&parser);
 
     parser.addOption(QCommandLineOption{QStringList{"n", "new-session"}, i18n("Open KDevelop with a new session using the given name."), QStringLiteral("name")});
