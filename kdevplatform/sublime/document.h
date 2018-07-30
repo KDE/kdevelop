@@ -94,7 +94,7 @@ public:
       * Returns whether closing was successful (The user did not push 'Cancel') */
     virtual bool closeDocument(bool silent = false);
 
-    void setStatusIcon(QIcon icon);
+    void setStatusIcon(const QIcon& icon);
 
     /**
      * @return The status icon of the document.

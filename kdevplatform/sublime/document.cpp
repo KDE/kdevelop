@@ -115,7 +115,7 @@ View *Document::newView(Document *doc)
 }
 
 
-void Document::setStatusIcon(QIcon icon)
+void Document::setStatusIcon(const QIcon& icon)
 {
     d->statusIcon = icon;
     emit statusIconChanged(this);
