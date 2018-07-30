@@ -58,10 +58,22 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     addMainWindow( qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() ) );
     connect( KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::mainWindowAdded, this, &DocumentSwitcherPlugin::addMainWindow );
 
+#ifdef Q_OS_MACOS
+    // Qt/Mac swaps the Ctrl and Meta (Command) keys by default, so that shortcuts defined as Ctrl+X
+    // become the platform-standard Command+X . Ideally we would map the document switcher shortcut to
+    // Control+Tab (and thus Qt::META+Qt::Key_Tab) everywhere because Command+Tab and Command+Shift+Tab
+    // are reserved system shortcuts that bring up the application switcher. The Control+Tab shortcut is 
+    // inoperable on Mac, so we resort to the Alt (Option) key, unless the AA_MacDontSwapCtrlAndMeta
+    // attribute is set.
+    const Qt::Modifier shortcutAccelerator = QCoreApplication::testAttribute(Qt::AA_MacDontSwapCtrlAndMeta) ? Qt::CTRL : Qt::ALT;
+#else
+    const Qt::Modifier shortcutAccelerator = Qt::CTRL;
+#endif
+
     forwardAction = actionCollection()->addAction ( QStringLiteral( "last_used_views_forward" ) );
     forwardAction->setText( i18n( "Last Used Views" ) );
     forwardAction->setIcon( QIcon::fromTheme( QStringLiteral( "go-next-view-page") ) );
-    actionCollection()->setDefaultShortcut( forwardAction, Qt::CTRL | Qt::Key_Tab );
+    actionCollection()->setDefaultShortcut( forwardAction, shortcutAccelerator | Qt::Key_Tab );
     forwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views." ) );
     forwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( forwardAction, &QAction::triggered, this, &DocumentSwitcherPlugin::walkForward );
@@ -69,7 +81,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     backwardAction = actionCollection()->addAction ( QStringLiteral( "last_used_views_backward" ) );
     backwardAction->setText( i18n( "Last Used Views (Reverse)" ) );
     backwardAction->setIcon( QIcon::fromTheme( QStringLiteral( "go-previous-view-page") ) );
-    actionCollection()->setDefaultShortcut( backwardAction, Qt::CTRL | Qt::SHIFT | Qt::Key_Tab );
+    actionCollection()->setDefaultShortcut( backwardAction, shortcutAccelerator | Qt::SHIFT | Qt::Key_Tab );
     backwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views in reverse." ) );
     backwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
     connect( backwardAction, &QAction::triggered, this, &DocumentSwitcherPlugin::walkBackward );
