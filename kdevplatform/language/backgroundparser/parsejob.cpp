@@ -25,6 +25,7 @@
 #include <QFile>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QStandardPaths>
 
 #include <KLocalizedString>
 #include <KFormat>
@@ -270,18 +271,34 @@ KDevelop::ProblemPointer ParseJob::readContents()
 
         static const int maximumFileSize = 5 * 1024 * 1024; // 5 MB
         if (fileInfo.size() > maximumFileSize) {
-            KFormat f;
+            QStringList paths = QStandardPaths::standardLocations(QStandardPaths::StandardLocation::GenericDataLocation);
 
-            KDevelop::ProblemPointer p(new Problem());
-            p->setSource(IProblem::Disk);
-            p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile ));
-            p->setExplanation(i18nc("%1: file size, %2: limit file size",
-                                    "The file is %1 and exceeds the limit of %2.",
-                                    f.formatByteSize(fileInfo.size()),
-                                    f.formatByteSize(maximumFileSize)));
-            p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
-            qCWarning(LANGUAGE) << p->description() << p->explanation();
-            return p;
+            bool internalFile = false;
+            QString internalFilePath = fileInfo.canonicalPath();
+
+            foreach (const QString path, paths) {
+                QDir dataPath = QDir(path);
+                if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev"))) {
+                    qCInfo(LANGUAGE) << "Found internal file " << fileInfo.absoluteFilePath() << " in " << path << ". Ignoring file size limit!";
+                    internalFile = true;
+                    break;
+                }
+            }
+
+            if (!internalFile) {
+                KFormat f;
+
+                KDevelop::ProblemPointer p(new Problem());
+                p->setSource(IProblem::Disk);
+                p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile ));
+                p->setExplanation(i18nc("%1: file size, %2: limit file size",
+                                        "The file is %1 and exceeds the limit of %2.",
+                                        f.formatByteSize(fileInfo.size()),
+                                        f.formatByteSize(maximumFileSize)));
+                p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
+                qCWarning(LANGUAGE) << p->description() << p->explanation();
+                return p;
+            }
         }
         QFile file( localFile );
 
