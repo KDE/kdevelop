@@ -68,7 +68,7 @@ public:
 
     FilteredItem actionInLine(const QString& line) override;
 
-    QVector<QString> getCurrentDirs();
+    QVector<QString> currentDirs() const;
 
 private:
     const QScopedPointer<class CompilerFilterStrategyPrivate> d;

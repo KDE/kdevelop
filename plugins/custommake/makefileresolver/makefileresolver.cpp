@@ -92,7 +92,7 @@ namespace {
     {
     }
 
-    QString getCommand(const QString& absoluteFile, const QString& workingDirectory, const QString& makeParameters) const
+    QString createCommand(const QString& absoluteFile, const QString& workingDirectory, const QString& makeParameters) const
     {
       QString relativeFile = Path(workingDirectory).relativePath(Path(absoluteFile));
       return "make -k --no-print-directory -W \'" + absoluteFile + "\' -W \'" + relativeFile + "\' -n " + makeParameters;
@@ -426,7 +426,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
     return PathResolutionResult(false);
 
   QString fullOutput;
-  executeCommand(source.getCommand(file, workingDirectory, makeParameters), workingDirectory, fullOutput);
+  executeCommand(source.createCommand(file, workingDirectory, makeParameters), workingDirectory, fullOutput);
 
   {
     QRegExp newLineRx("\\\\\\n");
@@ -517,7 +517,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   if (ret.paths.isEmpty() && ret.frameworkDirectories.isEmpty())
     return PathResolutionResult(false, i18n("Could not extract include paths from make output"),
                                 i18n("Folder: \"%1\"  Command: \"%2\"  Output: \"%3\"", workingDirectory,
-                                     source.getCommand(file, workingDirectory, makeParameters), fullOutput));
+                                     source.createCommand(file, workingDirectory, makeParameters), fullOutput));
   return ret;
 }
 

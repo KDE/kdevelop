@@ -78,7 +78,7 @@ void MainWindow::reconstructViews(const QList<View*>& topViews)
     d->reconstructViews(topViews);
 }
 
-QList<View*> MainWindow::getTopViews() const
+QList<View*> MainWindow::topViews() const
 {
     QList<View*> topViews;
     foreach(View* view, d->area->views())

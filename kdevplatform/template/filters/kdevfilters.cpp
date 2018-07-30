@@ -27,7 +27,8 @@
 
 using namespace KDevelop;
 
-QString getSafeString(const QVariant& variant)
+static
+QString safeString(const QVariant& variant)
 {
     if (variant.canConvert<Grantlee::SafeString>())
     {
@@ -41,7 +42,7 @@ QString getSafeString(const QVariant& variant)
 
 QStringList words(const QVariant& input)
 {
-    QString string = getSafeString(input);
+    QString string = safeString(input);
     if (string == string.toLower() && !string.contains(QLatin1Char('_'))) {
         return QStringList(string);
     }
@@ -105,7 +106,7 @@ QVariant UnderscoreFilter::doFilter(const QVariant& input, const QVariant& /*arg
 QVariant UpperFirstFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
                                     bool /*autoescape*/) const
 {
-    QString in = getSafeString(input);
+    QString in = safeString(input);
     if (!in.isEmpty())
     {
         in[0] = in[0].toUpper();
@@ -118,8 +119,8 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
                                     bool /*autoescape*/) const
 {
     QStringList retLines;
-    QString start = getSafeString(argument);
-    foreach (const QString& line, getSafeString(input).split(QLatin1Char('\n'), QString::KeepEmptyParts))
+    QString start = safeString(argument);
+    foreach (const QString& line, safeString(input).split(QLatin1Char('\n'), QString::KeepEmptyParts))
     {
         retLines << start + line;
     }
@@ -129,7 +130,7 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
 QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*argument*/,
                                        bool /*autoescape*/) const
 {
-    QString type = getSafeString(input);
+    QString type = safeString(input);
 
     DUChainReadLocker locker(DUChain::lock());
     PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(type)));

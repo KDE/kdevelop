@@ -42,7 +42,9 @@ private Q_SLOTS:
     void dirChanged(const QUrl& url);
 
 private:
-    QUrl getAbsoluteUrl(const QString&) const;
+    QUrl absoluteUrl(const QString& file) const;
+
+private:
     KFileWidget* fileWidget;
 };
 

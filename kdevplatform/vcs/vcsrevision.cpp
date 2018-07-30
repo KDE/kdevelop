@@ -90,7 +90,7 @@ QStringList VcsRevision::keys() const
     return d->internalValues.keys();
 }
 
-QVariant VcsRevision::getValue( const QString& key ) const
+QVariant VcsRevision::value(const QString& key) const
 {
     if( d->internalValues.contains(key) )
     {

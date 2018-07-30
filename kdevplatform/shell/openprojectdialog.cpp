@@ -40,7 +40,7 @@ struct URLInfo
     QString extension;
 };
 
-URLInfo getUrlInfo(const QUrl& url)
+URLInfo urlInfo(const QUrl& url)
 {
     URLInfo ret;
     ret.isValid = false;
@@ -167,7 +167,7 @@ bool OpenProjectDialog::execNativeDialog()
     {
         if (nativeDialog->exec()) {
             QUrl selectedUrl = nativeDialog->selectedUrls().at(0);
-            if (getUrlInfo(selectedUrl).isValid) {
+            if (urlInfo(selectedUrl).isValid) {
                 // validate directory first to populate m_projectName and m_projectManager
                 validateOpenUrl(selectedUrl.adjusted(QUrl::RemoveFilename));
                 validateOpenUrl(selectedUrl);
@@ -199,7 +199,7 @@ void OpenProjectDialog::validateSourcePage(bool valid)
 
 void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
 {
-    URLInfo urlInfo = getUrlInfo(url_);
+    URLInfo urlInfo = ::urlInfo(url_);
 
     const QUrl url = url_.adjusted(QUrl::StripTrailingSlash);
 

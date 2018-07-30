@@ -1637,7 +1637,7 @@ uint DUChain::newTopContextIndex() {
       return ret;
     }
   }
-  static QAtomicInt& currentId( globalItemRepositoryRegistry().getCustomCounter(QStringLiteral("Top-Context Counter"), 1) );
+  static QAtomicInt& currentId( globalItemRepositoryRegistry().customCounter(QStringLiteral("Top-Context Counter"), 1) );
   return currentId.fetchAndAddRelaxed(1);
 }
 

@@ -46,7 +46,7 @@ public:
     void emitProgress(const IFilterStrategy::Progress& progress);
 
     QString joinCommandLine() const;
-    QString getJobName();
+    QString jobDisplayName() const;
 
     template< typename T >
     static void mergeEnvironment( QProcessEnvironment& dest, const T& src );
@@ -149,9 +149,10 @@ void OutputExecuteJob::setPrivilegedExecutionCommand( const QStringList& command
 void OutputExecuteJob::setJobName( const QString& name )
 {
     d->m_jobName = name;
-    QString jobName = d->getJobName();
-    setObjectName( jobName );
-    setTitle( jobName );
+
+    const QString jobDisplayName = d->jobDisplayName();
+    setObjectName(jobDisplayName);
+    setTitle(jobDisplayName);
 }
 
 QUrl OutputExecuteJob::workingDirectory() const
@@ -530,7 +531,7 @@ QStringList OutputExecuteJobPrivate::effectiveCommandLine() const
     }
 }
 
-QString OutputExecuteJobPrivate::getJobName()
+QString OutputExecuteJobPrivate::jobDisplayName() const
 {
     const QString joinedCommandLine = joinCommandLine();
     if( m_properties.testFlag( OutputExecuteJob::AppendProcessString ) ) {

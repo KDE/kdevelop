@@ -1054,7 +1054,7 @@ bool DocumentController::openDocumentsSimple( QStringList urls )
     Sublime::Area* area = Core::self()->uiControllerInternal()->activeArea();
     Sublime::AreaIndex* areaIndex = area->rootIndex();
 
-    QList<Sublime::View*> topViews = static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->getTopViews();
+    QList<Sublime::View*> topViews = static_cast<Sublime::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow())->topViews();
 
     if(Sublime::View* activeView = Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView())
         areaIndex = area->indexOf(activeView);

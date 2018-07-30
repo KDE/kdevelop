@@ -138,7 +138,7 @@ void ProjectSelectionPage::itemChanged( const QModelIndex& current)
 
 QString ProjectSelectionPage::selectedTemplate()
 {
-    QStandardItem *item = getCurrentItem();
+    QStandardItem *item = currentItem();
     if (item)
         return item->data().toString();
     else
@@ -222,7 +222,7 @@ void ProjectSelectionPage::validateData()
         }
     }
 
-    QStandardItem* item = getCurrentItem();
+    QStandardItem* item = currentItem();
     if( item && !item->hasChildren() )
     {
         ui->locationValidWidget->animatedHide();
@@ -267,7 +267,7 @@ QByteArray ProjectSelectionPage::encodedProjectName()
     return tEncodedName;
 }
 
-QStandardItem* ProjectSelectionPage::getCurrentItem() const
+QStandardItem* ProjectSelectionPage::currentItem() const
 {
     QStandardItem* item = m_templatesModel->itemFromIndex( ui->listView->currentIndex() );
     if ( item && item->hasChildren() )

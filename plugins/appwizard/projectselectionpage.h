@@ -51,7 +51,7 @@ private Q_SLOTS:
 
 private:
     inline QByteArray encodedProjectName();
-    inline QStandardItem* getCurrentItem() const;
+    inline QStandardItem* currentItem() const;
     void setCurrentTemplate(const QString& fileName);
 
     Ui::ProjectSelectionPage *ui;

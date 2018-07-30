@@ -77,7 +77,7 @@ public:
     /** Returns the list of all commits (in all branches).
      * @see CommitView and CommitViewDelegate to see how this list is used.
      */
-    virtual QVector<KDevelop::DVcsEvent> getAllCommits(const QString& repo) = 0;
+    virtual QVector<KDevelop::DVcsEvent> allCommits(const QString& repo) = 0;
 
     /**
      * When a plugin wants to add elements to the vcs menu, this method can be

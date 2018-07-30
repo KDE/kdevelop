@@ -85,7 +85,7 @@ public:
 
     bool areBuddies(const QUrl &url1, const QUrl& url2) override;
     bool buddyOrder(const QUrl &url1, const QUrl& url2) override;
-    QVector< QUrl > getPotentialBuddies(const QUrl &url) const override;
+    QVector<QUrl> potentialBuddies(const QUrl& url) const override;
 
     //END IBuddyDocumentFinder
 

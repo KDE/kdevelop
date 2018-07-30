@@ -75,7 +75,7 @@ QString findSwitchCandidate(const QUrl& docUrl)
     IBuddyDocumentFinder* finder = IBuddyDocumentFinder::finderForMimeType(db.mimeTypeForUrl(docUrl).name());
     if (finder) {
         // get the first entry that exists, use that as candidate
-        foreach(const QUrl& buddyUrl, finder->getPotentialBuddies(docUrl)) {
+        foreach(const QUrl& buddyUrl, finder->potentialBuddies(docUrl)) {
             if (!QFile::exists(buddyUrl.toLocalFile())) {
                 continue;
             }
@@ -115,7 +115,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context,
     // Get all potential buddies for the current document and add a switch-to action
     // for each buddy who really exists in the file system. Note: if no buddies could be calculated
     // no extension actions are generated.
-    const QVector<QUrl>& potentialBuddies = buddyFinder->getPotentialBuddies(currentUrl);
+    const QVector<QUrl>& potentialBuddies = buddyFinder->potentialBuddies(currentUrl);
 
     ContextMenuExtension extension;
 

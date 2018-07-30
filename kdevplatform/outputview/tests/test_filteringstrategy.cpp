@@ -427,8 +427,8 @@ void TestFilteringStrategy::testCompilerFilterstrategyUrlFromAction()
     QUrl projecturl = QUrl::fromLocalFile( projectPath(pathType) );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.actionInLine(line);
-    int last = testee.getCurrentDirs().size() - 1;
-    QCOMPARE(testee.getCurrentDirs().at(last), expectedLastDir);
+    int last = testee.currentDirs().size() - 1;
+    QCOMPARE(testee.currentDirs().at(last), expectedLastDir);
 }
 
 void TestFilteringStrategy::benchMarkCompilerFilterAction()

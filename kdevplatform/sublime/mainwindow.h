@@ -87,7 +87,7 @@ public:
     void reconstructViews(const QList<View*>& topViews = QList<View*>());
 
     /**Returns a list of all views which are on top of their corresponding view stacks*/
-    QList<View*> getTopViews() const;
+    QList<View*> topViews() const;
 
     QList<Container*> containers() const;
 

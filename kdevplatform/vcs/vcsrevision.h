@@ -144,7 +144,7 @@ protected:
      * get the value for a given key, this retrieves internal data and is
      * meant to be used by subclasses
      */
-    QVariant getValue( const QString& key ) const;
+    QVariant value(const QString& key) const;
     /**
      * change the value of the given internal data
      */

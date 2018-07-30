@@ -90,7 +90,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
     /// same directory, possibly creating it.
     /// @param identity     The string used to identify a counter.
     /// @param initialValue Value to initialize a previously inexistent counter with.
-    QAtomicInt& getCustomCounter(const QString& identity, int initialValue);
+    QAtomicInt& customCounter(const QString& identity, int initialValue);
 
     /// @returns The global item-repository mutex.
     /// @note    Can be used to protect the initialization.

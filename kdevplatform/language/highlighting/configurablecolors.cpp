@@ -43,7 +43,7 @@ void ConfigurableHighlightingColors::setDefaultAttribute(KTextEditor::Attribute:
   m_defaultAttribute = defaultAttrib;
 }
 
-KTextEditor::Attribute::Ptr ConfigurableHighlightingColors::getAttribute(int number) const
+KTextEditor::Attribute::Ptr ConfigurableHighlightingColors::attribute(int number) const
 {
   return m_attributes[number];
 }

@@ -238,7 +238,7 @@ void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int val
     if (!m_progressItems.contains(status)) {
         bool canBeCanceled = false;
         m_progressItems[status] = m_progressController->createProgressItem(
-            ProgressManager::getUniqueID(), status->statusName(), QString(), canBeCanceled);;
+            ProgressManager::createUniqueID(), status->statusName(), QString(), canBeCanceled);
     }
     
     ProgressItem* i = m_progressItems[status];

@@ -106,7 +106,7 @@ public:
      * @returns list of potential buddy documents or an empty list
      *  if non are available.
      */
-    virtual QVector<QUrl> getPotentialBuddies(const QUrl& url) const = 0;
+    virtual QVector<QUrl> potentialBuddies(const QUrl& url) const = 0;
 
     /**
      * @brief Registers a <i>IBuddyDocumentFinder</i> object for a mimetype.

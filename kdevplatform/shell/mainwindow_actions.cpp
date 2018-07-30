@@ -152,7 +152,7 @@ static void gotoPrevNextSplit(bool next)
     if (!area)
         return;
 
-    QList<Sublime::View*> topViews = ui->activeSublimeWindow()->getTopViews();
+    QList<Sublime::View*> topViews = ui->activeSublimeWindow()->topViews();
 
     Sublime::View *activeView = ui->activeSublimeWindow()->activeView();
     if (!activeView)

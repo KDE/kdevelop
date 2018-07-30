@@ -54,7 +54,7 @@ namespace {
 /**
  * Returns the parent folder item for a given item or the project root item if there is no parent.
  */
-ProjectFolderItem* getParentFolder(ProjectBaseItem* item)
+ProjectFolderItem* parentFolder(ProjectBaseItem* item)
 {
     if ( item->parent() ) {
         return static_cast<ProjectFolderItem*>(item->parent());
@@ -568,7 +568,7 @@ bool AbstractFileManagerPlugin::removeFilesAndFolders(const QList<ProjectBaseIte
     {
         Q_ASSERT(item->folder() || item->file());
 
-        ProjectFolderItem* parent = getParentFolder(item);
+        ProjectFolderItem* parent = parentFolder(item);
         d->stopWatcher(parent);
 
         success &= removeUrl(parent->project(), item->path().toUrl(), true);
@@ -596,7 +596,7 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
     {
         Q_ASSERT(item->folder() || item->file());
 
-        ProjectFolderItem* oldParent = getParentFolder(item);
+        ProjectFolderItem* oldParent = parentFolder(item);
         d->stopWatcher(oldParent);
         d->stopWatcher(newParent);
 

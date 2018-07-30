@@ -30,7 +30,7 @@ namespace KDevelop {
 namespace {
 
 // TODO: this is a hack, but Kate does not provide interface for this
-int getLineHeight(const KTextEditor::View* view, int curLine)
+int lineHeight(const KTextEditor::View* view, int curLine)
 {
   KTextEditor::Cursor c(curLine, 0);
   int currentHeight = view->cursorToCoordinate(c).y();
@@ -47,7 +47,7 @@ QRect KTextEditorHelpers::getItemBoundingRect(const KTextEditor::View* view, con
 {
   QPoint startPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.start()));
   QPoint endPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.end()));
-  endPoint.ry() += getLineHeight(view, itemRange.start().line());
+  endPoint.ry() += lineHeight(view, itemRange.start().line());
   return QRect(startPoint, endPoint);
 }
 

@@ -433,10 +433,10 @@ void TestBuddies::testDUChainBuddy()
     other.parseAndWait();
     source.parseAndWait();
 
-    // Test IBuddyDocumentFinder::getPotentialBuddies()
+    // Test IBuddyDocumentFinder::potentialBuddies()
     QMimeDatabase db;
     IBuddyDocumentFinder* sourceBuddyFinder = IBuddyDocumentFinder::finderForMimeType(db.mimeTypeForUrl(source.url().toUrl()).name());
-    QVector< QUrl > sourceBuddies = sourceBuddyFinder->getPotentialBuddies(source.url().toUrl());
+    QVector< QUrl > sourceBuddies = sourceBuddyFinder->potentialBuddies(source.url().toUrl());
     if (!sourceBuddies.contains(header.url().toUrl())) {
         qDebug() << "got source buddies: " << sourceBuddies;
         qDebug() << "expected: " << header.url().toUrl();
@@ -445,7 +445,7 @@ void TestBuddies::testDUChainBuddy()
     QVERIFY2(!sourceBuddies.contains(other.url().toUrl()), "source buddy list contains unrelated file");
 
     IBuddyDocumentFinder* headerBuddyFinder = IBuddyDocumentFinder::finderForMimeType(db.mimeTypeForUrl(header.url().toUrl()).name());
-    QVector< QUrl > headerBuddies = headerBuddyFinder->getPotentialBuddies(header.url().toUrl());
+    QVector< QUrl > headerBuddies = headerBuddyFinder->potentialBuddies(header.url().toUrl());
     if (!headerBuddies.contains(source.url().toUrl())) {
         qDebug() << "got header buddies: " << headerBuddies;
         qDebug() << "expected: " << source.url().toUrl();
@@ -485,10 +485,10 @@ void TestBuddies::testDUChainBuddyVote()
     source1.parseAndWait();
     source2.parseAndWait();
 
-    // Test IBuddyDocumentFinder::getPotentialBuddies()
+    // Test IBuddyDocumentFinder::potentialBuddies()
     QMimeDatabase db;
     IBuddyDocumentFinder* sourceBuddyFinder = IBuddyDocumentFinder::finderForMimeType(db.mimeTypeForUrl(source1.url().toUrl()).name());
-    QVector< QUrl > sourceBuddies = sourceBuddyFinder->getPotentialBuddies(source1.url().toUrl());
+    QVector< QUrl > sourceBuddies = sourceBuddyFinder->potentialBuddies(source1.url().toUrl());
     if (!sourceBuddies.contains(header.url().toUrl())) {
         qDebug() << "got source buddies: " << sourceBuddies;
         qDebug() << "expected: " << header.url().toUrl();
@@ -496,7 +496,7 @@ void TestBuddies::testDUChainBuddyVote()
     }
 
     IBuddyDocumentFinder* source2BuddyFinder = IBuddyDocumentFinder::finderForMimeType(db.mimeTypeForUrl(source2.url().toUrl()).name());
-    QVector< QUrl > source2Buddies = source2BuddyFinder->getPotentialBuddies(source2.url().toUrl());
+    QVector< QUrl > source2Buddies = source2BuddyFinder->potentialBuddies(source2.url().toUrl());
     if (!source2Buddies.contains(header.url().toUrl())) {
         qDebug() << "got source2 buddies: " << source2Buddies;
         qDebug() << "expected: " << header.url().toUrl();
@@ -504,7 +504,7 @@ void TestBuddies::testDUChainBuddyVote()
     }
 
     IBuddyDocumentFinder* headerBuddyFinder = IBuddyDocumentFinder::finderForMimeType(db.mimeTypeForUrl(header.url().toUrl()).name());
-    QVector< QUrl > headerBuddies = headerBuddyFinder->getPotentialBuddies(header.url().toUrl());
+    QVector< QUrl > headerBuddies = headerBuddyFinder->potentialBuddies(header.url().toUrl());
     if (!headerBuddies.contains(source2.url().toUrl())) {
         qDebug() << "got header buddies: " << headerBuddies;
         qDebug() << "expected: " << source2.url().toUrl();

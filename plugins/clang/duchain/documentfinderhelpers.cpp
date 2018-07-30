@@ -228,7 +228,7 @@ bool buddyOrder(const QUrl &url1, const QUrl& url2)
     return(type1.second == Header && type2.second == Source);
 }
 
-QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain)
+QVector<QUrl> potentialBuddies(const QUrl& url, bool checkDUChain)
 {
     auto type = basePathAndTypeForUrl(url);
     // Don't do anything for types we don't know
@@ -266,7 +266,7 @@ QString sourceForHeader(const QString& headerPath)
     }
 
     QString targetUrl;
-    auto buddies = DocumentFinderHelpers::getPotentialBuddies(QUrl::fromLocalFile(headerPath));
+    auto buddies = DocumentFinderHelpers::potentialBuddies(QUrl::fromLocalFile(headerPath));
     for (const auto& buddy : buddies) {
         const auto local = buddy.toLocalFile();
         if (QFileInfo::exists(local)) {

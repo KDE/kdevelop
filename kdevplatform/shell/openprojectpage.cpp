@@ -55,7 +55,7 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, const QStringList& filte
     connect( fileWidget, &KFileWidget::accepted, this, &OpenProjectPage::accepted);
 }
 
-QUrl OpenProjectPage::getAbsoluteUrl( const QString& file ) const
+QUrl OpenProjectPage::absoluteUrl(const QString& file) const
 {
     QUrl u(file);
     if( u.isRelative() )
@@ -104,7 +104,7 @@ void OpenProjectPage::opsEntered(const QUrl& url)
 
 void OpenProjectPage::comboTextChanged( const QString& file )
 {
-    emit urlSelected( getAbsoluteUrl( file ) );
+    emit urlSelected(absoluteUrl(file));
 }
 
 }

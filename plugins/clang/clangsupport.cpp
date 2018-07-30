@@ -276,9 +276,9 @@ bool ClangSupport::buddyOrder(const QUrl &url1, const QUrl& url2)
     return DocumentFinderHelpers::buddyOrder(url1, url2);
 }
 
-QVector< QUrl > ClangSupport::getPotentialBuddies(const QUrl &url) const
+QVector<QUrl> ClangSupport::potentialBuddies(const QUrl& url) const
 {
-    return DocumentFinderHelpers::getPotentialBuddies(url);
+    return DocumentFinderHelpers::potentialBuddies(url);
 }
 
 void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, QString& _xmlFile, KActionCollection& actions)

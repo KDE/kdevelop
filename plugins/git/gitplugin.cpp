@@ -834,7 +834,7 @@ extra merge rectangle in master. If there are no extra commits in branch2, but t
 3. Commits that have additional commit-data (not only history merging, but changes to fix conflicts) are shown incorrectly
 */
 
-QVector<DVcsEvent> GitPlugin::getAllCommits(const QString &repo)
+QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
 {
     initBranchHash(repo);
 

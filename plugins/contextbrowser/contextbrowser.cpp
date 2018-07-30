@@ -111,7 +111,7 @@ DUContext* contextForHighlightingAt(const KTextEditor::Cursor& position, TopDUCo
 }
 
 ///Duchain must be locked
-DUContext* getContextAt(const QUrl& url, KTextEditor::Cursor cursor)
+DUContext* contextAt(const QUrl& url, KTextEditor::Cursor cursor)
 {
   TopDUContext* topContext = DUChainUtils::standardContextForUrl(url);
   if (!topContext) return nullptr;
@@ -1179,7 +1179,7 @@ void ContextBrowserPlugin::documentJumpPerformed( KDevelop::IDocument* newDocume
 
     if(previousDocument && previousCursor.isValid()) {
         qCDebug(PLUGIN_CONTEXTBROWSER) << "updating jump source";
-        DUContext* context = getContextAt(previousDocument->url(), previousCursor);
+        DUContext* context = contextAt(previousDocument->url(), previousCursor);
         if(context) {
             updateHistory(context, KTextEditor::Cursor(previousCursor), true);
         }else{
@@ -1192,7 +1192,7 @@ void ContextBrowserPlugin::documentJumpPerformed( KDevelop::IDocument* newDocume
     qCDebug(PLUGIN_CONTEXTBROWSER) << "new doc: " << newDocument << " new cursor: " << newCursor;
     if(newDocument && newCursor.isValid()) {
         qCDebug(PLUGIN_CONTEXTBROWSER) << "updating jump target";
-        DUContext* context = getContextAt(newDocument->url(), newCursor);
+        DUContext* context = contextAt(newDocument->url(), newCursor);
         if(context) {
             updateHistory(context, KTextEditor::Cursor(newCursor), true);
         }else{

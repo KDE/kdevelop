@@ -148,7 +148,7 @@ CompilerFilterStrategy::CompilerFilterStrategy(const QUrl& buildDir)
 
 CompilerFilterStrategy::~CompilerFilterStrategy() = default;
 
-QVector<QString> CompilerFilterStrategy::getCurrentDirs()
+QVector<QString> CompilerFilterStrategy::currentDirs() const
 {
     QVector<QString> ret;
     ret.reserve(d->m_currentDirs.size());

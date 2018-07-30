@@ -73,7 +73,7 @@ class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder
         return name1.at(1) == QLatin1String("l");
     }
 
-    QVector<QUrl> getPotentialBuddies(const QUrl& url) const override
+    QVector<QUrl> potentialBuddies(const QUrl& url) const override
     {
         Q_UNUSED(url);
         return QVector<QUrl>();

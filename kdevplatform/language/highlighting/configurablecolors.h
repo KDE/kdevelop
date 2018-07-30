@@ -37,7 +37,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors {
 
     void addAttribute(int number, KTextEditor::Attribute::Ptr attribute);
 
-    KTextEditor::Attribute::Ptr getAttribute(int number) const;
+    KTextEditor::Attribute::Ptr attribute(int number) const;
 
     void setDefaultAttribute(KTextEditor::Attribute::Ptr defaultAttrib);
 

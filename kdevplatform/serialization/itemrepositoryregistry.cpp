@@ -184,7 +184,7 @@ QMutex& ItemRepositoryRegistry::mutex()
   return d->m_mutex;
 }
 
-QAtomicInt& ItemRepositoryRegistry::getCustomCounter(const QString& identity, int initialValue)
+QAtomicInt& ItemRepositoryRegistry::customCounter(const QString& identity, int initialValue)
 {
   if(!d->m_customCounters.contains(identity))
     d->m_customCounters.insert(identity, new QAtomicInt(initialValue));
@@ -302,7 +302,7 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
       stream >> counterName;
       int counterValue;
       stream >> counterValue;
-      m_owner->getCustomCounter(counterName, 0) = counterValue;
+      m_owner->customCounter(counterName, 0) = counterValue;
     }
   }
 

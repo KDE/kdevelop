@@ -289,7 +289,7 @@ public:
      * an operation from all others going on at the same time. Use that
      * number as the id string for your <i>progressItem</i> to ensure it is unique.
      */
-    static QString getUniqueID()
+    static QString createUniqueID()
     {
         return QString::number( ++uID );
     }
@@ -301,7 +301,7 @@ public:
       */
     static ProgressItem *createProgressItem( const QString &label )
     {
-        return instance()->createProgressItemImpl( nullptr, getUniqueID(), label,
+        return instance()->createProgressItemImpl( nullptr, createUniqueID(), label,
                                                    QString(), true, false );
     }
 

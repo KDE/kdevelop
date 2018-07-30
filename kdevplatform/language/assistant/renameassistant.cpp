@@ -47,7 +47,7 @@ bool rangesConnect(const KTextEditor::Range& firstRange, const KTextEditor::Rang
     return !firstRange.intersect(secondRange + KTextEditor::Range(0, -1, 0, +1)).isEmpty();
 }
 
-Declaration* getDeclarationForChangedRange(KTextEditor::Document* doc, const KTextEditor::Range& changed)
+Declaration* declarationForChangedRange(KTextEditor::Document* doc, const KTextEditor::Range& changed)
 {
     const KTextEditor::Cursor cursor(changed.start());
     Declaration* declaration = DUChainUtils::itemUnderCursor(doc->url(), cursor).declaration;
@@ -154,7 +154,7 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
             || d->m_newDeclarationRange->document() != indexedUrl) {
         d->reset();
 
-        Declaration* declAtCursor = getDeclarationForChangedRange(doc, invocationRange);
+        Declaration* declAtCursor = declarationForChangedRange(doc, invocationRange);
         if (!declAtCursor) {
             // not editing a declaration
             return;

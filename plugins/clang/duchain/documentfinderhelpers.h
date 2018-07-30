@@ -48,7 +48,7 @@ KDEVCLANGPRIVATE_EXPORT bool areBuddies(const QUrl &url1, const QUrl& url2);
 KDEVCLANGPRIVATE_EXPORT bool buddyOrder(const QUrl &url1, const QUrl& url2);
 
 /// @see KDevelop::IBuddyDocumentFinder
-KDEVCLANGPRIVATE_EXPORT QVector< QUrl > getPotentialBuddies(const QUrl &url, bool checkDUChain = true);
+KDEVCLANGPRIVATE_EXPORT QVector<QUrl> potentialBuddies(const QUrl& url, bool checkDUChain = true);
 
 /**
  * Returns path to the source file for given @p headerPath

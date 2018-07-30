@@ -438,7 +438,7 @@ void GitInitTest::revHistory()
     addFiles();
     commitFiles();
 
-    QVector<KDevelop::DVcsEvent> commits = m_plugin->getAllCommits(gitTest_BaseDir());
+    QVector<KDevelop::DVcsEvent> commits = m_plugin->allCommits(gitTest_BaseDir());
     QVERIFY(!commits.isEmpty());
     QStringList logMessages;
 
