@@ -174,8 +174,8 @@ void MIDebuggerPlugin::slotDBusOwnerChanged(const QString& service, const QStrin
         const QString name = i18n("KDevelop (%1) - %2", m_displayName, core()->activeSession()->name());
         auto drkonqiProxy = new DBusProxy(service, name, this);
         m_drkonqis.insert(service, drkonqiProxy);
-        connect(drkonqiProxy->interface(), SIGNAL(acceptDebuggingApplication(const QString&)),
-                drkonqiProxy, SLOT(debuggerAccepted(const QString&)));
+        connect(drkonqiProxy->interface(), SIGNAL(acceptDebuggingApplication(QString)),
+                drkonqiProxy, SLOT(debuggerAccepted(QString)));
         connect(drkonqiProxy, &DBusProxy::debugProcess,
                 this, &MIDebuggerPlugin::slotDebugExternalProcess);
 
