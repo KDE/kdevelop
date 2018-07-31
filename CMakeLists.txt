@@ -27,6 +27,16 @@ set_package_properties(KDevPlatform PROPERTIES
 
 find_package(Boost REQUIRED)
 
+add_definitions(
+    -DQT_DEPRECATED_WARNINGS
+    -DQT_DISABLE_DEPRECATED_BEFORE=0x050500
+    -DQT_NO_SIGNALS_SLOTS_KEYWORDS
+    -DQT_NO_URL_CAST_FROM_STRING
+    -DQT_STRICT_ITERATORS
+    -DQT_USE_QSTRINGBUILDER
+    -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
+)
+
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevclangtidy\")
 
 include_directories(
