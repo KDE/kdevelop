@@ -94,7 +94,7 @@ public:
 
     void enableEntry(const Option& key, bool enable)
     {
-        enable ? writeEntry(key, QStringLiteral("")) : deleteEntry(key);
+        enable ? writeEntry(key, QString()) : deleteEntry(key);
     }
 };
 }

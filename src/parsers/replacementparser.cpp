@@ -144,7 +144,7 @@ Replacement ReplacementParser::nextNode(const QRegularExpressionMatch& smatch)
     } else {
         repl.offset = 0;
         repl.length = 0;
-        repl.replacementText = QStringLiteral("");
+        repl.replacementText.clear();
     }
 
     return repl;

@@ -127,13 +127,13 @@ void PerProjectConfigPage::defaults()
     // Right now it only works with manual entry.
     m_config.writeEntry(ConfigGroup::ExecutablePath, "/usr/bin/clang-tidy");
 
-    m_config.writeEntry(ConfigGroup::HeaderFilter, "");
-    ui->headerFilterText->setText("");
+    m_config.writeEntry(ConfigGroup::HeaderFilter, QString());
+    ui->headerFilterText->setText(QString());
 
-    m_config.writeEntry(ConfigGroup::AdditionalParameters, "");
-    ui->clangtidyParameters->setText(QString(""));
+    m_config.writeEntry(ConfigGroup::AdditionalParameters, QString());
+    ui->clangtidyParameters->setText(QString());
 
-    m_config.writeEntry(ConfigGroup::CheckSystemHeaders, "");
+    m_config.writeEntry(ConfigGroup::CheckSystemHeaders, QString());
     ui->sysHeadersCheckBox->setChecked(false);
 
     m_config.enableEntry(ConfigGroup::UseConfigFile, false);

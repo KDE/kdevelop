@@ -100,7 +100,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
 
     collectAllAvailableChecks(clangTidyPath);
 
-    m_config.writeEntry(ConfigGroup::AdditionalParameters, "");
+    m_config.writeEntry(ConfigGroup::AdditionalParameters, QString());
     for (auto check : m_allChecks) {
         bool enable = check.contains("cert") || check.contains("-core.") || check.contains("-cplusplus")
             || check.contains("-deadcode") || check.contains("-security") || check.contains("cppcoreguide");
