@@ -64,7 +64,7 @@ public:
         QString checkSystemHeaders;
     };
 
-    Job(const Parameters& params, QObject* parent = nullptr);
+    explicit Job(const Parameters& params, QObject* parent = nullptr);
     ~Job() override;
 
     void start() override;
