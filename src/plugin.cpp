@@ -67,18 +67,16 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
 
     QAction* act_checkfile;
     act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangTidyFile()));
-    act_checkfile->setStatusTip(i18n("Launches clang-tidy for current file"));
-    act_checkfile->setText(i18n("Clang-Tidy (Current File)"));
+    act_checkfile->setText(i18n("Analyze Current File with Clang-Tidy"));
+    act_checkfile->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
 
     /*     TODO: Uncomment this only when discover a safe way to run clang-tidy on
     the whole project.
     //     QAction* act_check_all_files;
     //     act_check_all_files = actionCollection()->addAction ( "clangtidy_all",
     this, SLOT ( runClangTidyAll() ) );
-    //     act_check_all_files->setStatusTip ( i18n ( "Launches clangtidy for all
-    translation "
-    //                                         "units of current project" ) );
-    //     act_check_all_files->setText ( i18n ( "clang-tidy (all)" ) );
+    //     act_check_all_files->setText(i18n("Analyze Current Project with Clang-Tidy)"));
+    //     act_check_all_files->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
     */
 
     IExecutePlugin* iface = KDevelop::ICore::self()
