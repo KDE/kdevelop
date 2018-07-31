@@ -242,10 +242,6 @@ void Plugin::runClangTidyAll()
     runClangTidy(allFiles);
 }
 
-void Plugin::loadOutput()
-{
-}
-
 void Plugin::result(KJob* job)
 {
     Job* aj = dynamic_cast<Job*>(job);

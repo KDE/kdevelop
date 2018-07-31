@@ -84,7 +84,6 @@ protected:
     void collectAllAvailableChecks(const QString& clangtidyPath);
 
 private Q_SLOTS:
-    void loadOutput();
     void runClangTidy(bool allFiles = false);
     void runClangTidy(const QUrl& url, bool allFiles = false);
     void runClangTidyFile();
