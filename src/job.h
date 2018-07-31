@@ -79,7 +79,6 @@ protected slots:
     void childProcessError(QProcess::ProcessError processError) override;
 
 protected:
-    void buildCommandLine();
     void processStdoutLines(const QStringList& lines);
     void processStderrLines(const QStringList& lines);
 
