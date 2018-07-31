@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef JOB_H
-#define JOB_H
+#ifndef CLANGTIDY_JOB_H
+#define CLANGTIDY_JOB_H
 
 #include "debug.h"
 
