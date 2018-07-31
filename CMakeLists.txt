@@ -27,6 +27,13 @@ set_package_properties(KDevPlatform PROPERTIES
 
 find_package(Boost REQUIRED)
 
+find_package(ClangTidy QUIET)
+set_package_properties(ClangTidy PROPERTIES
+    DESCRIPTION "A clang-based C++ “linter” tool"
+    URL "http://clang.llvm.org/extra/clang-tidy/"
+    TYPE RUNTIME
+)
+
 add_definitions(
     -DQT_DEPRECATED_WARNINGS
     -DQT_DISABLE_DEPRECATED_BEFORE=0x050500
@@ -96,5 +103,4 @@ add_subdirectory(tests)
 # kdebugsettings file
 install(FILES kdevclangtidy.categories DESTINATION ${KDE_INSTALL_CONFDIR})
 
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
+feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
