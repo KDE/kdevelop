@@ -82,6 +82,7 @@ protected:
     void processStdoutLines(const QStringList& lines);
     void processStderrLines(const QStringList& lines);
 
+protected:
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
     bool mustDumpConfig;

@@ -99,6 +99,7 @@ private Q_SLOTS:
 private:
     bool isRunning() const;
 
+private:
     QPointer<KJob> m_runningJob;
 
     ConfigGroup m_config;
