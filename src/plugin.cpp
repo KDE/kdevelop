@@ -221,7 +221,7 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
         params.dumpConfig = QString();
     }
     auto job2 = new ClangTidy::Job(params, this);
-    connect(job2, SIGNAL(finished(KJob*)), this, SLOT(result(KJob*)));
+    connect(job2, &KJob::finished, this, &Plugin::result);
     core()->runController()->registerJob(job2);
 
     m_runningJob = job2;
