@@ -32,6 +32,7 @@
 #include "debug.h"
 
 class KJob;
+class QAction;
 
 namespace KDevelop
 {
@@ -89,6 +90,7 @@ private Q_SLOTS:
     void runClangTidyFile();
     void runClangTidyAll();
     void result(KJob* job);
+    void updateActions();
 
 private:
     bool isRunning() const;
@@ -96,6 +98,7 @@ private:
 private:
     QPointer<KJob> m_runningJob;
 
+    QAction* m_checkFileAction;
     ConfigGroup m_config;
     QScopedPointer<KDevelop::ProblemModel> m_model;
     QStringList m_allChecks;

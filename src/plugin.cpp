@@ -60,16 +60,24 @@ K_PLUGIN_FACTORY_WITH_JSON(ClangTidyFactory, "kdevclangtidy.json", registerPlugi
 
 namespace ClangTidy
 {
+
+static
+bool isSupportedMimeType(const QMimeType& mimeType)
+{
+    const QString mime = mimeType.name();
+    return (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc"));
+}
+
 Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     : IPlugin("kdevclangtidy", parent)
     , m_model(new KDevelop::ProblemModel(parent))
 {
     setXMLFile("kdevclangtidy.rc");
 
-    QAction* act_checkfile;
-    act_checkfile = actionCollection()->addAction("clangtidy_file", this, SLOT(runClangTidyFile()));
-    act_checkfile->setText(i18n("Analyze Current File with Clang-Tidy"));
-    act_checkfile->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
+    m_checkFileAction = new QAction(QIcon::fromTheme(QStringLiteral("dialog-ok")),
+                                    i18n("Analyze Current File with Clang-Tidy"), this);
+    connect(m_checkFileAction, &QAction::triggered, this, &Plugin::runClangTidyFile);
+    actionCollection()->addAction(QStringLiteral("clangtidy_file"), m_checkFileAction);
 
     /*     TODO: Uncomment this only when discover a safe way to run clang-tidy on
     the whole project.
@@ -109,6 +117,16 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     }
     m_activeChecks.removeDuplicates();
     m_config.writeEntry(ConfigGroup::EnabledChecks, m_activeChecks.join(','));
+
+    connect(core()->documentController(), &KDevelop::IDocumentController::documentClosed,
+            this, &Plugin::updateActions);
+    connect(core()->documentController(), &KDevelop::IDocumentController::documentActivated,
+            this, &Plugin::updateActions);
+
+    connect(core()->projectController(), &KDevelop::IProjectController::projectOpened,
+            this, &Plugin::updateActions);
+
+    updateActions();
 }
 
 Plugin::~Plugin() = default;
@@ -117,6 +135,26 @@ void Plugin::unload()
 {
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->removeModel(QStringLiteral("ClangTidy"));
+}
+
+void Plugin::updateActions()
+{
+    m_checkFileAction->setEnabled(false);
+
+    if (isRunning()) {
+        return;
+    }
+
+    KDevelop::IDocument* activeDocument = core()->documentController()->activeDocument();
+    if (!activeDocument) {
+        return;
+    }
+
+    if (!isSupportedMimeType(activeDocument->mimeType())) {
+        return;
+    }
+
+    m_checkFileAction->setEnabled(true);
 }
 
 void Plugin::collectAllAvailableChecks(const QString& clangTidyPath)
@@ -224,6 +262,8 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     core()->runController()->registerJob(job2);
 
     m_runningJob = job2;
+
+    updateActions();
 }
 
 bool Plugin::isRunning() const
@@ -256,13 +296,8 @@ void Plugin::result(KJob* job)
         core()->uiController()->findToolView(i18nd("kdevproblemreporter", "Problems"), nullptr,
                                              KDevelop::IUiController::FindFlags::Raise);
     }
-}
 
-static
-bool isSupportedMimeType(const QMimeType& mimeType)
-{
-    const QString mime = mimeType.name();
-    return (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc"));
+    updateActions();
 }
 
 ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* parent)
