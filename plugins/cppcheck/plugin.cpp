@@ -220,6 +220,16 @@ void Plugin::result(KJob*)
     updateActions();
 }
 
+static
+bool isSupportedMimeType(const QMimeType& mimeType)
+{
+    const QString mimeName = mimeType.name();
+    return (mimeName == QLatin1String("text/x-c++src") ||
+            mimeName == QLatin1String("text/x-c++hdr") ||
+            mimeName == QLatin1String("text/x-chdr")   ||
+            mimeName == QLatin1String("text/x-csrc"));
+}
+
 KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context, parent);
@@ -229,8 +239,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
         QMimeDatabase db;
         const auto mime = db.mimeTypeForUrl(eContext->url());
 
-        if (mime.name() == QLatin1String("text/x-c++src") || mime.name() == QLatin1String("text/x-c++hdr") ||
-            mime.name() == QLatin1String("text/x-chdr") || mime.name() == QLatin1String("text/x-csrc")) {
+        if (isSupportedMimeType(mime)) {
             extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, m_contextActionFile);
             extension.addAction(KDevelop::ContextMenuExtension::AnalyzeProjectGroup, m_contextActionProject);
         }
@@ -245,7 +254,13 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
         auto item = pContext->items().first();
 
         switch (item->type()) {
-            case KDevelop::ProjectBaseItem::File:
+            case KDevelop::ProjectBaseItem::File: {
+                const QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(item->path().toUrl());
+                if (!isSupportedMimeType(mimetype)) {
+                    return extension;
+                }
+                break;
+            }
             case KDevelop::ProjectBaseItem::Folder:
             case KDevelop::ProjectBaseItem::BuildFolder:
                 break;
