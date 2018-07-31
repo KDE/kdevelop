@@ -24,6 +24,7 @@
 #include <QAction>
 #include <QMessageBox>
 #include <QMimeType>
+#include <QMimeDatabase>
 // KF
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -257,14 +258,20 @@ void Plugin::result(KJob* job)
     }
 }
 
+static
+bool isSupportedMimeType(const QMimeType& mimeType)
+{
+    const QString mime = mimeType.name();
+    return (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc"));
+}
+
 ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* parent)
 {
     ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context, parent);
 
     if (context->hasType(KDevelop::Context::EditorContext) && !isRunning()) {
         IDocument* doc = core()->documentController()->activeDocument();
-        const auto mime = doc->mimeType().name();
-        if (mime == QLatin1String("text/x-c++src") || mime == QLatin1String("text/x-csrc")) {
+        if (isSupportedMimeType(doc->mimeType())) {
             auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), parent);
             connect(action, &QAction::triggered, this, &Plugin::runClangTidyFile);
             extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, action);
@@ -278,12 +285,12 @@ ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* par
 
         auto item = pContext->items().first();
 
-        switch (item->type()) {
-            case KDevelop::ProjectBaseItem::File:
-                break;
-
-            default:
-                return extension;
+        if (item->type() != KDevelop::ProjectBaseItem::File) {
+            return extension;
+        }
+        const QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(item->path().toUrl());
+        if (!isSupportedMimeType(mimetype)) {
+            return extension;
         }
 
         auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), parent);
