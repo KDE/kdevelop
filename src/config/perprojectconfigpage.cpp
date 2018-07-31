@@ -26,6 +26,7 @@
 
 #include <KSharedConfig>
 
+#include <QItemSelectionModel>
 #include <QStringListModel>
 
 namespace ClangTidy

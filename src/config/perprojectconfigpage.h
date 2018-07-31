@@ -22,13 +22,13 @@
 #ifndef CLANGTIDY_PERPROJECTCONFIGPAGE_H_
 #define CLANGTIDY_PERPROJECTCONFIGPAGE_H_
 
-#include <QItemSelectionModel>
 #include <interfaces/configpage.h>
 
 #include "config/configgroup.h"
 
 class QIcon;
 class QStringListModel;
+class QItemSelectionModel;
 
 namespace KDevelop
 {

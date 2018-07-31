@@ -20,21 +20,20 @@
  */
 
 #include "plugin.h"
-
+// Qt
 #include <QAction>
 #include <QMessageBox>
 #include <QMimeType>
-
+// KF
 #include <KActionCollection>
 #include <KLocalizedString>
+#include <KSharedConfig>
 #include <KPluginFactory>
-#include <KPluginLoader>
 #include <KProcess>
-
-#include <execute/iexecuteplugin.h>
-
+// KDevPlatform
 #include <interfaces/icore.h>
-#include <interfaces/idebugcontroller.h>
+#include <interfaces/context.h>
+#include <interfaces/contextmenuextension.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -43,14 +42,13 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <interfaces/launchconfigurationtype.h>
-#include <language/interfaces/editorcontext.h>
+#include <execute/iexecuteplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
+#include <shell/problemmodel.h>
 #include <shell/problemmodelset.h>
-#include <util/executecompositejob.h>
-
+// plugin
 #include "config/clangtidypreferences.h"
 #include "config/perprojectconfigpage.h"
 #include "job.h"
@@ -113,6 +111,8 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     m_activeChecks.removeDuplicates();
     m_config.writeEntry(ConfigGroup::EnabledChecks, m_activeChecks.join(','));
 }
+
+Plugin::~Plugin() = default;
 
 void Plugin::unload()
 {

@@ -22,17 +22,12 @@
 #ifndef CLANGTIDY_PLUGIN_H
 #define CLANGTIDY_PLUGIN_H
 
+// Qt
 #include <QPointer>
 #include <QVariant>
-
-#include <interfaces/icore.h>
+// KDevPlatform
 #include <interfaces/iplugin.h>
-#include <interfaces/istatus.h>
-
-#include <interfaces/contextmenuextension.h>
-#include <interfaces/iuicontroller.h>
-#include <shell/problemmodel.h>
-
+// plugin
 #include "config/configgroup.h"
 #include "debug.h"
 
@@ -55,7 +50,7 @@ class Plugin : public KDevelop::IPlugin
 
 public:
     explicit Plugin(QObject* parent, const QVariantList& = QVariantList());
-    ~Plugin() = default;
+    ~Plugin();
 
     void unload() override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
