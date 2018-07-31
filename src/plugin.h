@@ -86,7 +86,7 @@ protected:
      * --list-checks".
      * \param clangtidyPath QString - the system path for the clang-tidy program.
      */
-    void collectAllAvailableChecks(QString clangtidyPath);
+    void collectAllAvailableChecks(const QString& clangtidyPath);
 
 private Q_SLOTS:
     void loadOutput();

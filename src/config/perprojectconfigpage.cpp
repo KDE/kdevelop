@@ -73,7 +73,7 @@ void PerProjectConfigPage::setActiveChecksReceptorList(QStringList* list)
     *m_activeChecksReceptor = m_config.readEntry(ConfigGroup::EnabledChecks).split(',');
 }
 
-void PerProjectConfigPage::setList(QStringList list)
+void PerProjectConfigPage::setList(const QStringList& list)
 {
     m_underlineAvailChecks = list;
     m_availableChecksModel->setStringList(m_underlineAvailChecks);

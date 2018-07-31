@@ -120,7 +120,7 @@ void Plugin::unload()
     pms->removeModel(QStringLiteral("ClangTidy"));
 }
 
-void Plugin::collectAllAvailableChecks(QString clangTidyPath)
+void Plugin::collectAllAvailableChecks(const QString& clangTidyPath)
 {
     m_allChecks.clear();
     KProcess tidy;
