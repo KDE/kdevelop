@@ -43,7 +43,7 @@ public:
     QString fullName() const override;
     QIcon icon() const override;
 
-public slots:
+public Q_SLOTS:
     void apply() override;
 
 private:

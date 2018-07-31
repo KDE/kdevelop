@@ -62,9 +62,7 @@ public:
     void setList(QStringList list);
     void setActiveChecksReceptorList(QStringList* list);
 
-signals:
-
-public slots:
+public Q_SLOTS:
     void apply() override;
     void defaults() override;
     void reset() override;

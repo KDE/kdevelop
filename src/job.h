@@ -71,7 +71,7 @@ public:
 
     QVector<KDevelop::IProblem::Ptr> problems() const;
 
-protected slots:
+protected Q_SLOTS:
     void postProcessStdout(const QStringList& lines) override;
     void postProcessStderr(const QStringList& lines) override;
 
