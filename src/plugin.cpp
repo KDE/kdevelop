@@ -62,6 +62,10 @@ K_PLUGIN_FACTORY_WITH_JSON(ClangTidyFactory, "kdevclangtidy.json", registerPlugi
 namespace ClangTidy
 {
 
+namespace Strings {
+QString modelId() { return QStringLiteral("ClangTidy"); }
+}
+
 static
 bool isSupportedMimeType(const QMimeType& mimeType)
 {
@@ -96,7 +100,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     Q_ASSERT(iface);
 
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->addModel(QStringLiteral("ClangTidy"), i18n("Clang-Tidy"), m_model.data());
+    pms->addModel(Strings::modelId(), i18n("Clang-Tidy"), m_model.data());
 
     auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
 
@@ -122,7 +126,7 @@ Plugin::~Plugin() = default;
 void Plugin::unload()
 {
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
-    pms->removeModel(QStringLiteral("ClangTidy"));
+    pms->removeModel(Strings::modelId());
 }
 
 void Plugin::updateActions()
@@ -249,10 +253,14 @@ void Plugin::result(KJob* job)
         return;
     }
 
-    if (aj->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded) {
+    if (aj->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
+        aj->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled) {
         m_model->setProblems(aj->problems());
 
-        core()->uiController()->findToolView(i18nd("kdevproblemreporter", "Problems"), nullptr,
+        ProblemModelSet* pms = core()->languageController()->problemModelSet();
+        pms->showModel(Strings::modelId());
+    } else {
+        core()->uiController()->findToolView(i18ndc("kdevstandardoutputview", "@title:window", "Test"), nullptr,
                                              KDevelop::IUiController::FindFlags::Raise);
     }
 
