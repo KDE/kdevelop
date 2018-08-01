@@ -50,6 +50,7 @@
 #include <shell/problemmodel.h>
 #include <shell/problemmodelset.h>
 // plugin
+#include <clangtidyconfig.h>
 #include "config/clangtidypreferences.h"
 #include "config/perprojectconfigpage.h"
 #include "job.h"
@@ -97,14 +98,14 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->addModel(QStringLiteral("ClangTidy"), i18n("Clang-Tidy"), m_model.data());
 
-    m_config = KSharedConfig::openConfig()->group("ClangTidy");
-    auto clangTidyPath = m_config.readEntry(ConfigGroup::ExecutablePath);
+    auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
     if (clangTidyPath.isEmpty()) {
         clangTidyPath = QStandardPaths::findExecutable("clang-tidy");
     }
 
     collectAllAvailableChecks(clangTidyPath);
 
+    m_config = KSharedConfig::openConfig()->group("ClangTidy");
     m_config.writeEntry(ConfigGroup::AdditionalParameters, QString());
     for (auto check : m_allChecks) {
         bool enable = check.contains("cert") || check.contains("-core.") || check.contains("-cplusplus")
@@ -216,13 +217,11 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
         return;
     }
 
-    ConfigGroup configGroup = KSharedConfig::openConfig()->group("ClangTidy");
-    auto clangTidyPath = configGroup.readEntry(ConfigGroup::ExecutablePath);
-
     Job::Parameters params;
 
     params.projectRootDir = project->path().toLocalFile();
 
+    auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
     if (clangTidyPath.isEmpty()) {
         params.executablePath = QStandardPaths::findExecutable("clang-tidy");
     } else {

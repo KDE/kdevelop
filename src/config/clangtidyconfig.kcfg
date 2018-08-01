@@ -4,7 +4,7 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
   <group name="ClangTidy">
-    <entry name="clangtidyPath" key="ClangTidy Path" type="Url">
+    <entry name="clangtidyPath" key="ExecutablePath" type="Path">
         <default></default>
         <label>clang-tidy Executable</label>
         <tooltip>The full path to the clang-tidy executable</tooltip>

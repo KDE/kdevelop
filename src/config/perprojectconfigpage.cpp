@@ -126,7 +126,6 @@ void PerProjectConfigPage::defaults()
     // TODO: discover a way to set the project folders where user header files
     // might exist into this option.
     // Right now it only works with manual entry.
-    m_config.writeEntry(ConfigGroup::ExecutablePath, "/usr/bin/clang-tidy");
 
     m_config.writeEntry(ConfigGroup::HeaderFilter, QString());
     ui->headerFilterText->setText(QString());

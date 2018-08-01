@@ -41,7 +41,7 @@ class ConfigGroup
     //\typedef Typedef for pair of QStrings.
     using Option = std::pair<QString, QString>;
     ///\typedef definition of an array of options.
-    using OptionArray = std::array<const Option*, 18>;
+    using OptionArray = std::array<const Option*, 17>;
 
 private:
     KConfigGroup m_group;
@@ -59,7 +59,6 @@ public:
     /// This technique allows us to avoid passing strings to KConfigGroup member
     /// functions, thus allowing compile time
     /// detection of wrong parameters.
-    static const Option ExecutablePath;
     static const Option FilePath;
     static const Option BuildPath;
     static const Option AdditionalParameters;

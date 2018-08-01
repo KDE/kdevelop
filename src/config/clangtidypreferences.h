@@ -43,9 +43,6 @@ public:
     QString fullName() const override;
     QIcon icon() const override;
 
-public Q_SLOTS:
-    void apply() override;
-
 private:
     Ui::ClangTidyPreferences* ui;
 };

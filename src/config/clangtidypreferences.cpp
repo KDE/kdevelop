@@ -21,11 +21,9 @@
 
 #include "config/clangtidypreferences.h"
 #include "clangtidyconfig.h"
-#include "config/configgroup.h"
 #include "ui_clangtidypreferences.h"
 
 using KDevelop::IPlugin;
-using ClangTidy::ConfigGroup;
 using KDevelop::ConfigPage;
 
 ClangTidyPreferences::ClangTidyPreferences(IPlugin* plugin, QWidget* parent)
@@ -58,10 +56,4 @@ QString ClangTidyPreferences::fullName() const
 QIcon ClangTidyPreferences::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("dialog-ok"));
-}
-
-void ClangTidyPreferences::apply()
-{
-    ConfigGroup configGroup = KSharedConfig::openConfig()->group("ClangTidy");
-    configGroup.writeEntry(ConfigGroup::ExecutablePath, ui->kcfg_clangtidyPath->text());
 }

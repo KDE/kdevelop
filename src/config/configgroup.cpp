@@ -23,7 +23,6 @@
 
 namespace ClangTidy
 {
-const ConfigGroup::Option ConfigGroup::ExecutablePath{ { "ExecutablePath" }, { "%1" } };
 const ConfigGroup::Option ConfigGroup::FilePath{ { "FilePath" }, { "%1" } };
 const ConfigGroup::Option ConfigGroup::BuildPath{ { "BuildPath" }, { "--p=%1%2" } };
 const ConfigGroup::Option ConfigGroup::AdditionalParameters{ { "AdditionalParameters" }, { "%1" } };
@@ -42,7 +41,7 @@ const ConfigGroup::Option ConfigGroup::LineFilter{ { "LineFilter" }, { "--line-f
 const ConfigGroup::Option ConfigGroup::ListChecks{ { "ListChecks" }, { "--list-checks" } };
 const ConfigGroup::Option ConfigGroup::CheckSystemHeaders{ { "CheckSystemHeaders" }, { "--system-headers" } };
 const ConfigGroup::OptionArray ConfigGroup::m_allOptions{
-    { &ConfigGroup::ExecutablePath, &ConfigGroup::FilePath, &ConfigGroup::BuildPath, &ConfigGroup::AdditionalParameters,
+    { &ConfigGroup::FilePath, &ConfigGroup::BuildPath, &ConfigGroup::AdditionalParameters,
       &ConfigGroup::AnaliseTempDtors, &ConfigGroup::EnabledChecks, &ConfigGroup::UseConfigFile,
       &ConfigGroup::DumpConfig, &ConfigGroup::EnableChecksProfile, &ConfigGroup::ExportFixes, &ConfigGroup::ExtraArgs,
       &ConfigGroup::ExtraArgsBefore, &ConfigGroup::AutoFix, &ConfigGroup::AutoFixError, &ConfigGroup::HeaderFilter,
