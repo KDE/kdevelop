@@ -155,6 +155,11 @@ void Plugin::updateActions()
         return;
     }
 
+    auto currentProject = core()->projectController()->findProjectForUrl(activeDocument->url());
+    if (!currentProject) {
+        return;
+    }
+
     m_checkFileAction->setEnabled(true);
 }
 
