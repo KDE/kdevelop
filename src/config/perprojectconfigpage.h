@@ -37,7 +37,7 @@ class IProject;
 
 namespace ClangTidy
 {
-class Plugin;
+class CheckSet;
 
 namespace Ui
 {
@@ -53,14 +53,13 @@ class PerProjectConfigPage : public KDevelop::ConfigPage
     Q_OBJECT
 
 public:
-    PerProjectConfigPage(KDevelop::IProject* project, QWidget* parent);
+    PerProjectConfigPage(KDevelop::IProject* project, const CheckSet* checkSet, QWidget* parent);
     ~PerProjectConfigPage() override;
 
     ConfigPageType configPageType() const override;
     QString name() const override;
     QIcon icon() const override;
     void setList(const QStringList& list);
-    void setActiveChecksReceptorList(QStringList* list);
 
 public Q_SLOTS:
     void apply() override;
@@ -68,11 +67,13 @@ public Q_SLOTS:
     void reset() override;
 
 private:
+    void updateEnabledChecks(const QStringList& enabledCheckList);
+
+private:
     KDevelop::IProject* m_project;
     Ui::PerProjectConfig* ui;
     ConfigGroup m_config;
-    QStringList* m_activeChecksReceptor;
-    QStringList m_underlineAvailChecks;
+    const CheckSet* m_checkSet;
     QStringListModel* m_availableChecksModel;
     QItemSelectionModel* m_selectedItemModel;
 };

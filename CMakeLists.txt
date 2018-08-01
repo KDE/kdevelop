@@ -62,6 +62,7 @@ ecm_qt_declare_logging_category(kdevclangtidy_LOG_SRCS
 set(kdevclangtidy_PART_SRCS
     src/job.cpp
     src/plugin.cpp
+    src/checkset.cpp
 
     src/config/configgroup.cpp
     src/config/perprojectconfigpage.cpp

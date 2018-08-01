@@ -22,9 +22,9 @@
 #include "config/perprojectconfigpage.h"
 #include "ui_perprojectconfig.h"
 
-#include <interfaces/iproject.h>
+#include <checkset.h>
 
-#include <KSharedConfig>
+#include <interfaces/iproject.h>
 
 #include <QItemSelectionModel>
 #include <QStringListModel>
@@ -32,14 +32,17 @@
 namespace ClangTidy
 {
 
-PerProjectConfigPage::PerProjectConfigPage(KDevelop::IProject* project, QWidget* parent)
+PerProjectConfigPage::PerProjectConfigPage(KDevelop::IProject* project, const CheckSet* checkSet,
+                                           QWidget* parent)
     : KDevelop::ConfigPage(nullptr, nullptr, parent)
     , m_project(project)
+    , m_checkSet(checkSet)
 {
     ui = new Ui::PerProjectConfig();
     ui->setupUi(this);
 
     m_availableChecksModel = new QStringListModel();
+    m_availableChecksModel->setStringList(m_checkSet->all());
     ui->checkListView->setModel(m_availableChecksModel);
 
     m_selectedItemModel = new QItemSelectionModel(m_availableChecksModel);
@@ -68,25 +71,13 @@ QString PerProjectConfigPage::name() const
     return i18n("Clang-Tidy");
 }
 
-void PerProjectConfigPage::setActiveChecksReceptorList(QStringList* list)
+void PerProjectConfigPage::updateEnabledChecks(const QStringList& enabledCheckList)
 {
-    m_activeChecksReceptor = list;
-    *m_activeChecksReceptor = m_config.readEntry(ConfigGroup::EnabledChecks).split(',');
-}
-
-void PerProjectConfigPage::setList(const QStringList& list)
-{
-    m_underlineAvailChecks = list;
-    m_availableChecksModel->setStringList(m_underlineAvailChecks);
-
     for (int i = 0; i < m_availableChecksModel->rowCount(); ++i) {
         QModelIndex index = m_availableChecksModel->index(i, 0);
         if (index.isValid()) {
-            if (m_activeChecksReceptor->contains((index.data().toString()))) {
-                m_selectedItemModel->select(index, QItemSelectionModel::Select);
-            } else {
-                m_selectedItemModel->select(index, QItemSelectionModel::Deselect);
-            }
+            const bool isEnabled = enabledCheckList.contains(index.data().toString());
+            m_selectedItemModel->select(index, isEnabled ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
         }
     }
 }
@@ -102,81 +93,57 @@ void PerProjectConfigPage::apply()
     m_config.enableEntry(ConfigGroup::UseConfigFile, !ui->overrideConfigFileCheckBox->isChecked());
     m_config.enableEntry(ConfigGroup::DumpConfig, ui->dumpCheckBox->isChecked());
 
+    QStringList activeChecks;
     for (int i = 0; i < m_availableChecksModel->rowCount(); ++i) {
         QModelIndex index = m_availableChecksModel->index(i, 0);
         if (index.isValid()) {
-            bool isSelected = m_selectedItemModel->isSelected(index);
-            auto check = index.data().toString();
+            const bool isSelected = m_selectedItemModel->isSelected(index);
             if (isSelected) {
-                *m_activeChecksReceptor << check;
-            } else {
-                m_activeChecksReceptor->removeAll(check);
+                const auto check = index.data().toString();
+                activeChecks.append(check);
             }
         }
     }
-    m_activeChecksReceptor->removeDuplicates();
-    m_config.writeEntry(ConfigGroup::EnabledChecks, m_activeChecksReceptor->join(','));
+    m_config.writeEntry(ConfigGroup::EnabledChecks, activeChecks.join(','));
 }
 
 void PerProjectConfigPage::defaults()
 {
-    bool wasBlocked = signalsBlocked();
-    blockSignals(true);
-
     // TODO: discover a way to set the project folders where user header files
     // might exist into this option.
     // Right now it only works with manual entry.
 
-    m_config.writeEntry(ConfigGroup::HeaderFilter, QString());
     ui->headerFilterText->setText(QString());
 
-    m_config.writeEntry(ConfigGroup::AdditionalParameters, QString());
     ui->clangtidyParameters->setText(QString());
 
-    m_config.writeEntry(ConfigGroup::CheckSystemHeaders, QString());
     ui->sysHeadersCheckBox->setChecked(false);
 
-    m_config.enableEntry(ConfigGroup::UseConfigFile, false);
     ui->overrideConfigFileCheckBox->setChecked(true);
     ui->checkListGroupBox->setEnabled(true);
 
-    m_config.enableEntry(ConfigGroup::DumpConfig, true);
     ui->dumpCheckBox->setChecked(true);
     ui->checkListGroupBox->setEnabled(true);
 
-    m_config.enableEntry(ConfigGroup::ExportFixes, true);
     //     ui->autoFixCheckBox->setChecked(true);
 
-    for (int i = 0; i < m_availableChecksModel->rowCount(); ++i) {
-        QModelIndex index = m_availableChecksModel->index(i, 0);
-        if (index.isValid()) {
-            auto check = index.data().toString();
-            bool enable = check.contains("cert") || check.contains("-core.") || check.contains("-cplusplus")
-                || check.contains("-deadcode") || check.contains("-security") || check.contains("cppcoreguide");
-            m_selectedItemModel->select(index, enable ? QItemSelectionModel::Select : QItemSelectionModel::Deselect);
-            if (enable) {
-                *m_activeChecksReceptor << check;
-            } else {
-                m_activeChecksReceptor->removeAll(check);
-            }
-        }
-    }
-    m_activeChecksReceptor->removeDuplicates();
-    m_config.writeEntry(ConfigGroup::EnabledChecks, m_activeChecksReceptor->join(','));
-    blockSignals(wasBlocked);
+    updateEnabledChecks(m_checkSet->defaults());
 }
 
 void PerProjectConfigPage::reset()
 {
-    if (!m_config.isValid()) {
-        return;
-    }
     ui->headerFilterText->setText(m_config.readEntry(ConfigGroup::HeaderFilter).remove("--header-filter="));
     ui->clangtidyParameters->setText(m_config.readEntry(ConfigGroup::AdditionalParameters));
     ui->sysHeadersCheckBox->setChecked(!m_config.readEntry(ConfigGroup::CheckSystemHeaders).isEmpty());
     ui->overrideConfigFileCheckBox->setChecked(m_config.readEntry(ConfigGroup::UseConfigFile).isEmpty());
     ui->checkListGroupBox->setEnabled(m_config.readEntry(ConfigGroup::UseConfigFile).isEmpty());
     ui->dumpCheckBox->setChecked(!m_config.readEntry(ConfigGroup::DumpConfig).isEmpty());
+
+    auto enabledChecks = m_config.readEntry(ConfigGroup::EnabledChecks).split(QLatin1Char(','));
+    if (enabledChecks.isEmpty()) {
+        enabledChecks = m_checkSet->defaults();
+    }
+    updateEnabledChecks(enabledChecks);
 }
 
 } // namespace ClangTidy

@@ -28,7 +28,7 @@
 // KDevPlatform
 #include <interfaces/iplugin.h>
 // plugin
-#include "config/configgroup.h"
+#include "checkset.h"
 #include "debug.h"
 
 class KJob;
@@ -73,16 +73,7 @@ public:
      *\returns all available checks, obtained from clang-tidy program, ran with with "--checks=* --list-checks"
      * parameters.
      */
-    QStringList allAvailableChecks() { return m_allChecks; }
-
-protected:
-    /**
-     * \function
-     * \brief collects all available checks by running clang-tidy with the following parameters: "--checks=*
-     * --list-checks".
-     * \param clangtidyPath QString - the system path for the clang-tidy program.
-     */
-    void collectAllAvailableChecks(const QString& clangtidyPath);
+    QStringList allAvailableChecks() { return m_checkSet.all(); }
 
 private Q_SLOTS:
     void runClangTidy(bool allFiles = false);
@@ -99,10 +90,8 @@ private:
     QPointer<KJob> m_runningJob;
 
     QAction* m_checkFileAction;
-    ConfigGroup m_config;
     QScopedPointer<KDevelop::ProblemModel> m_model;
-    QStringList m_allChecks;
-    QStringList m_activeChecks;
+    CheckSet m_checkSet;
 };
 
 } // namespace ClangTidy
