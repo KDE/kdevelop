@@ -99,9 +99,6 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     pms->addModel(QStringLiteral("ClangTidy"), i18n("Clang-Tidy"), m_model.data());
 
     auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
-    if (clangTidyPath.isEmpty()) {
-        clangTidyPath = QStandardPaths::findExecutable("clang-tidy");
-    }
 
     // TODO: not only collect on plugin loading, but also on every change in the settings
     // TODO: should also check version on every job start to see if there was an update
@@ -181,9 +178,6 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     params.projectRootDir = project->path().toLocalFile();
 
     auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
-    if (clangTidyPath.isEmpty()) {
-        clangTidyPath = QStandardPaths::findExecutable("clang-tidy");
-    }
     params.executablePath = clangTidyPath;
 
     if (allFiles) {
@@ -311,9 +305,6 @@ KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConf
 
     // ensure checkset is up-to-date TODO: async
     auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
-    if (clangTidyPath.isEmpty()) {
-        clangTidyPath = QStandardPaths::findExecutable("clang-tidy");
-    }
     m_checkSet.setClangTidyPath(clangTidyPath);
 
     return new PerProjectConfigPage(options.project, &m_checkSet, parent);

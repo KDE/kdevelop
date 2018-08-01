@@ -63,6 +63,7 @@ set(kdevclangtidy_PART_SRCS
     src/job.cpp
     src/plugin.cpp
     src/checkset.cpp
+    src/utils.cpp
 
     src/config/configgroup.cpp
     src/config/perprojectconfigpage.cpp

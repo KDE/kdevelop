@@ -3,9 +3,10 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <include>"utils.h"</include>
   <group name="ClangTidy">
     <entry name="clangtidyPath" key="ExecutablePath" type="Path">
-        <default></default>
+        <default code="true">ClangTidy::Utils::findExecutable(QStringLiteral("clang-tidy"))</default>
         <label>clang-tidy Executable</label>
         <tooltip>The full path to the clang-tidy executable</tooltip>
         <whatsthis>The full path to the clang-tidy executable.</whatsthis>
