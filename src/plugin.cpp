@@ -193,7 +193,6 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
         params.buildDir = buildSystem->buildDirectory(project->projectItem()).toLocalFile();
     }
     params.additionalParameters = projectConfig.readEntry(ConfigGroup::AdditionalParameters);
-    params.analiseTempDtors = projectConfig.readEntry(ConfigGroup::AnaliseTempDtors);
 
     const auto enabledChecks = projectConfig.readEntry(ConfigGroup::EnabledChecks);
     if (!enabledChecks.isEmpty()) {
@@ -205,14 +204,8 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     }
     params.useConfigFile = projectConfig.readEntry(ConfigGroup::UseConfigFile);
     params.dumpConfig = projectConfig.readEntry(ConfigGroup::DumpConfig);
-    params.enableChecksProfile = projectConfig.readEntry(ConfigGroup::EnableChecksProfile);
     params.exportFixes = projectConfig.readEntry(ConfigGroup::ExportFixes);
-    params.extraArgs = projectConfig.readEntry(ConfigGroup::ExtraArgs);
-    params.extraArgsBefore = projectConfig.readEntry(ConfigGroup::ExtraArgsBefore);
-    params.autoFix = projectConfig.readEntry(ConfigGroup::AutoFix);
     params.headerFilter = projectConfig.readEntry(ConfigGroup::HeaderFilter);
-    params.lineFilter = projectConfig.readEntry(ConfigGroup::LineFilter);
-    params.listChecks = projectConfig.readEntry(ConfigGroup::ListChecks);
     params.checkSystemHeaders = projectConfig.readEntry(ConfigGroup::CheckSystemHeaders);
 
     if (!params.dumpConfig.isEmpty()) {

@@ -48,19 +48,11 @@ public:
         QString filePath;
         QString buildDir;
         QString additionalParameters;
-        QString analiseTempDtors;
         QString enabledChecks;
         QString useConfigFile;
         QString dumpConfig;
-        QString enableChecksProfile;
         QString exportFixes;
-        QString extraArgs;
-        QString extraArgsBefore;
-        QString autoFix;
-        QString autoFixError;
         QString headerFilter;
-        QString lineFilter;
-        QString listChecks;
         QString checkSystemHeaders;
     };
 

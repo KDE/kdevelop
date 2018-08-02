@@ -41,7 +41,7 @@ class ConfigGroup
     //\typedef Typedef for pair of QStrings.
     using Option = std::pair<QString, QString>;
     ///\typedef definition of an array of options.
-    using OptionArray = std::array<const Option*, 17>;
+    using OptionArray = std::array<const Option*, 9>;
 
 private:
     KConfigGroup m_group;
@@ -62,20 +62,13 @@ public:
     static const Option FilePath;
     static const Option BuildPath;
     static const Option AdditionalParameters;
-    static const Option AnaliseTempDtors;
     static const Option EnabledChecks;
     static const Option UseConfigFile;
     static const Option DumpConfig;
-    static const Option EnableChecksProfile;
     static const Option ExportFixes;
-    static const Option ExtraArgs;
-    static const Option ExtraArgsBefore;
-    static const Option AutoFix;
-    static const Option AutoFixError;
     static const Option HeaderFilter;
-    static const Option LineFilter;
-    static const Option ListChecks;
     static const Option CheckSystemHeaders;
+
     static const OptionArray m_allOptions;
 
     QString readEntry(const Option& key) const { return m_group.readEntry(key.first); }

@@ -129,8 +129,6 @@ void PerProjectConfigPage::defaults()
     ui->dumpCheckBox->setChecked(true);
     ui->checkListGroupBox->setEnabled(true);
 
-    //     ui->autoFixCheckBox->setChecked(true);
-
     updateEnabledChecks(m_checkSet->defaults());
 }
 
