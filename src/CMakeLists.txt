@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevclangtidy\")
+
 include_directories(
     ${Boost_INCLUDE_DIRS}
 )

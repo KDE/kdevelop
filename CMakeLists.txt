@@ -45,8 +45,6 @@ add_definitions(
     -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
 )
 
-add_definitions(-DTRANSLATION_DOMAIN=\"kdevclangtidy\")
-
 include (cmake/ClangFormatAll.cmake)
 
 include_directories(
