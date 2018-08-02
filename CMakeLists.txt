@@ -47,10 +47,10 @@ add_definitions(
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevclangtidy\")
 
+include (cmake/ClangFormatAll.cmake)
+
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    ${Boost_INCLUDE_DIRS}
 )
 
 ecm_qt_declare_logging_category(kdevclangtidy_LOG_SRCS
@@ -59,49 +59,7 @@ ecm_qt_declare_logging_category(kdevclangtidy_LOG_SRCS
     CATEGORY_NAME "kdevelop.analyzers.clangtidy"
 )
 
-
-set(kdevclangtidy_PART_SRCS
-    src/job.cpp
-    src/plugin.cpp
-    src/checkset.cpp
-    src/utils.cpp
-
-    src/config/configgroup.cpp
-    src/config/perprojectconfigpage.cpp
-    src/config/clangtidypreferences.cpp
-
-    src/parsers/clangtidyparser.cpp
-    src/parsers/replacementparser.cpp
-
-    ${kdevclangtidy_LOG_SRCS}
-)
-
-include (cmake/ClangFormatAll.cmake)
-
-ki18n_wrap_ui(kdevclangtidy_PART_SRCS ${kdevclangtidy_PART_UI}
-    src/config/clangtidypreferences.ui
-    src/config/perprojectconfig.ui
-)
-
-qt5_add_resources(kdevclangtidy_PART_SRCS
-    kdevclangtidy.qrc
-)
-
-kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS src/config/clangtidyconfig.kcfgc)
-kdevplatform_add_plugin(kdevclangtidy JSON kdevclangtidy.json SOURCES
-${kdevclangtidy_PART_SRCS} ${kdevclangtidy_CONFIG_SRCS})
-target_link_libraries(kdevclangtidy
-    KDev::Interfaces
-    KDev::Project
-    KDev::Language
-    KDev::OutputView
-    KDev::Util
-    KDev::Shell
-    KF5::ItemViews
-    KF5::ConfigCore
-    KF5::I18n
-)
-
+add_subdirectory(src)
 add_subdirectory(tests)
 
 # kdebugsettings file

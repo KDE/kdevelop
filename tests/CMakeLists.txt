@@ -1,3 +1,8 @@
+include_directories(
+    ${Boost_INCLUDE_DIRS}
+    ../src
+)
+
 file(COPY "${PROJECT_SOURCE_DIR}/tests/data" 
      DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 
