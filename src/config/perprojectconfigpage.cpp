@@ -27,6 +27,7 @@
 #include <interfaces/iproject.h>
 
 #include <QItemSelectionModel>
+#include <QSortFilterProxyModel>
 #include <QStringListModel>
 
 namespace ClangTidy
@@ -43,7 +44,10 @@ PerProjectConfigPage::PerProjectConfigPage(KDevelop::IProject* project, const Ch
 
     m_availableChecksModel = new QStringListModel();
     m_availableChecksModel->setStringList(m_checkSet->all());
-    ui->checkListView->setModel(m_availableChecksModel);
+    QSortFilterProxyModel* checksFilterProxyModel = new QSortFilterProxyModel(this);
+    ui->checkFilterEdit->setProxy(checksFilterProxyModel);
+    checksFilterProxyModel->setSourceModel(m_availableChecksModel);
+    ui->checkListView->setModel(checksFilterProxyModel);
 
     m_selectedItemModel = new QItemSelectionModel(m_availableChecksModel);
     ui->checkListView->setSelectionModel(m_selectedItemModel);

@@ -74,8 +74,11 @@
      <property name="title">
       <string>Available Checks</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
+     <layout class="QVBoxLayout">
+      <item>
+       <widget class="KFilterProxySearchLine" name="checkFilterEdit"/>
+      </item>
+      <item>
        <widget class="QListView" name="checkListView">
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
@@ -88,7 +91,7 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
+      <item>
        <widget class="QCheckBox" name="dumpCheckBox">
         <property name="text">
          <string>Dump active configuration to .clang-tidy file</string>
@@ -100,6 +103,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KFilterProxySearchLine</class>
+   <extends>QWidget</extends>
+   <header>kfilterproxysearchline.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
