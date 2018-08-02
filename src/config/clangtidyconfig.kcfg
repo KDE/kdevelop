@@ -7,9 +7,6 @@
   <group name="ClangTidy">
     <entry name="clangtidyPath" key="ExecutablePath" type="Path">
         <default code="true">ClangTidy::Utils::findExecutable(QStringLiteral("clang-tidy"))</default>
-        <label>clang-tidy Executable</label>
-        <tooltip>The full path to the clang-tidy executable</tooltip>
-        <whatsthis>The full path to the clang-tidy executable.</whatsthis>
     </entry>
   </group>
 </kcfg>

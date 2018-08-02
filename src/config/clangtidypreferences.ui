@@ -49,7 +49,11 @@
       <item>
        <layout class="QVBoxLayout" name="pathsUrlsLayout">
         <item>
-         <widget class="KUrlRequester" name="kcfg_clangtidyPath"/>
+         <widget class="KUrlRequester" name="kcfg_clangtidyPath">
+          <property name="toolTip">
+           <string>The full path to the clang-tidy executable</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
