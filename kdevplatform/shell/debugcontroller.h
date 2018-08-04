@@ -78,11 +78,12 @@ private Q_SLOTS:
     void stepOverInstruction();
     void stepOut();
     void toggleBreakpoint();
+    void showCurrentLine();
 
     void debuggerStateChanged(KDevelop::IDebugSession::DebuggerState state);
     void showStepInSource(const QUrl &file, int line);
     void clearExecutionPoint();
-    
+
     void partAdded(KParts::Part* part);
     void areaChanged(Sublime::Area* newArea);
 
@@ -108,11 +109,12 @@ private:
     QAction* m_stepOverInstruction = nullptr;
     QAction* m_stepOut = nullptr;
     QAction* m_toggleBreakpoint = nullptr;
+    QAction* m_showCurrentLine = nullptr;
 
     QPointer<IDebugSession> m_currentSession;
     BreakpointModel *m_breakpointModel;
-    VariableCollection *m_variableCollection;    
-    
+    VariableCollection *m_variableCollection;
+
     bool m_uiInitialized = false;
 };
 

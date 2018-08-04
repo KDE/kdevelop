@@ -1,11 +1,11 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="kdevdebuggershellui" version="8" translationDomain="kdevplatform">
+<gui name="kdevdebuggershellui" version="9" translationDomain="kdevplatform">
     <MenuBar>
         <Menu name="run">
             <Separator group="debug"/>
             <Action name="debug_continue" group="debug"/>
             <Action name="debug_pause" group="debug"/>
-            
+
             <Separator group="debug"/>
             <Action name="debug_stepover" group="debug"/>
             <Action name="debug_stepoverinst" group="debug"/>
@@ -13,14 +13,14 @@
             <Action name="debug_stepintoinst" group="debug"/>
             <Action name="debug_stepout" group="debug"/>
             <Action name="debug_runtocursor" group="debug"/>
-            
+
             <Separator group="debug"/>
             <Action name="debug_jumptocursor" group="debug"/>
             <Action name="debug_toggle_breakpoint" group="debug"/>
-            
+            <Action name="debug_showcurrentline" group="debug"/>
         </Menu>
     </MenuBar>
-    
+
     <ToolBar name="debugToolBar">
         <text>Debugger Toolbar</text>
         <Action name="debug_continue"/>
@@ -29,7 +29,7 @@
         <Action name="debug_stepout"/>
         <WeakSeparator/>
     </ToolBar>
-    
+
     <State name="ended">
          <enable>
              <Action name="debug_continue"/>
@@ -43,6 +43,7 @@
             <Action name="debug_stepintoinst"/>
             <Action name="debug_stepout"/>
             <Action name="debug_jumptocursor"/>
+            <Action name="debug_showcurrentline"/>
         </disable>
     </State>
     <State name="paused">
@@ -55,6 +56,7 @@
             <Action name="debug_stepintoinst"/>
             <Action name="debug_stepout"/>
             <Action name="debug_jumptocursor"/>
+            <Action name="debug_showcurrentline"/>
         </enable>
     </State>
     <State name="active">
@@ -70,6 +72,7 @@
             <Action name="debug_stepintoinst"/>
             <Action name="debug_stepout"/>
             <Action name="debug_jumptocursor"/>
+            <Action name="debug_showcurrentline"/>
         </disable>
     </State>
     <State name="stopped">
@@ -85,6 +88,7 @@
             <Action name="debug_stepintoinst"/>
             <Action name="debug_stepout"/>
             <Action name="debug_jumptocursor"/>
+            <Action name="debug_showcurrentline"/>
         </disable>
     </State>
 </gui>

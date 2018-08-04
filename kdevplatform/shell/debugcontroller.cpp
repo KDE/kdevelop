@@ -273,6 +273,12 @@ void DebugController::setupActions()
     action->setWhatsThis(i18n("Toggles the breakpoint at the current line in editor."));
     connect(action, &QAction::triggered, this, &DebugController::toggleBreakpoint);
     ac->addAction(QStringLiteral("debug_toggle_breakpoint"), action);
+
+    m_showCurrentLine = action = new QAction(QIcon::fromTheme(QStringLiteral("go-jump")), i18n("Show Current Line"), this);
+    action->setToolTip(i18n("Show the current execution position"));
+    action->setWhatsThis(i18n("Jumps to the execution line in the editor."));
+    connect(action, &QAction::triggered, this, &DebugController::showCurrentLine);
+    ac->addAction(QStringLiteral("debug_showcurrentline"), action);
 }
 
 void DebugController::addSession(IDebugSession* session)
@@ -544,6 +550,19 @@ void DebugController::toggleBreakpoint()
         if (!cursor.isValid()) return;
         breakpointModel()->toggleBreakpoint(document->url(), cursor);
     }
+}
+
+void DebugController::showCurrentLine()
+{
+    const auto location = qMakePair(m_currentSession->currentUrl(), m_currentSession->currentLine());
+
+    if (location.second != -1) {
+        const auto localLocation = m_currentSession->convertToLocalUrl(location);
+        ICore::self()->documentController()->openDocument(localLocation.first,
+                                                          KTextEditor::Cursor(localLocation.second, 0),
+                                                          IDocumentController::DefaultMode);
+    }
+
 }
 
 const QPixmap* DebugController::executionPointPixmap()
