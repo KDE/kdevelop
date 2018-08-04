@@ -53,7 +53,7 @@ TestCommandHandler::~TestCommandHandler()
 
 void TestCommandHandler::handle(const KDevMI::MI::ResultRecord& record)
 {
-    QCOMPARE(record.reason, "reason");
+    QCOMPARE(record.reason, QStringLiteral("reason"));
 
     ++m_recordsHandled;
 }
@@ -72,7 +72,7 @@ private:
 
 void TestCommandResultHandler::handleResult(const KDevMI::MI::ResultRecord& record)
 {
-    QCOMPARE(record.reason, "reason");
+    QCOMPARE(record.reason, QStringLiteral("reason"));
 
     ++m_recordsHandled;
 }
@@ -83,15 +83,15 @@ void TestMICommand::testUserCommand()
     command.setToken(1);
 
     // check
-    QCOMPARE(command.token(), 1);
+    QCOMPARE(command.token(), (uint)1);
     QCOMPARE(command.frame(), -1);
     QCOMPARE(command.thread(), -1);
     QCOMPARE(command.isUserCommand(), true);
     QCOMPARE(command.handlesError(), false);
     QCOMPARE(command.flags(), KDevMI::MI::CommandFlags(KDevMI::MI::CmdMaybeStartsRunning));
-    QCOMPARE(command.command(), "command");
-    QCOMPARE(command.initialString(), "1command");
-    QCOMPARE(command.cmdToSend(), "1command\n");
+    QCOMPARE(command.command(), QStringLiteral("command"));
+    QCOMPARE(command.initialString(), QStringLiteral("1command"));
+    QCOMPARE(command.cmdToSend(), QStringLiteral("1command\n"));
 }
 
 void TestMICommand::testMICommandHandler_data()
