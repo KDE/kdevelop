@@ -88,7 +88,7 @@ ListView {
 
     spacing: 10
 
-    // Note: this model is *not* attached to the the view -- it's merely used for fetching the RSS feed
+    // Note: this model is *not* attached to the view -- it's merely used for fetching the RSS feed
     XmlListModel {
         id: newsFeedSyncModel
 

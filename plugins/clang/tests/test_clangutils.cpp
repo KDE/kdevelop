@@ -199,7 +199,7 @@ void TestClangUtils::testTemplateArgumentTypes_data()
         << 2
         << QStringList({"void"});
 
-    // Partially specialise one
+    // Partially specialize one
     QTest::newRow("template-partial-spec")
         << QByteArray(
             "template<typename T, unsigned N>\n"
@@ -211,7 +211,7 @@ void TestClangUtils::testTemplateArgumentTypes_data()
         << 3
         << QStringList({"type-parameter-0-0", ""});
 
-    // Fully specialise 3 args
+    // Fully specialize 3 args
     QTest::newRow("template-full-spec")
         << QByteArray(
             "template<typename T, typename R, unsigned N>\n"

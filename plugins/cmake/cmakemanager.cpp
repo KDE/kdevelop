@@ -34,7 +34,6 @@
 #include "testing/ctestutils.h"
 #include "cmakeserverimportjob.h"
 #include "cmakeserver.h"
-#include "cmakeutils.h"
 
 #include <QDir>
 #include <QReadWriteLock>
