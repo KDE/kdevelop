@@ -33,12 +33,25 @@
 namespace ClangTidy
 {
 
+QString inlineYaml(const Job::Parameters& params)
+{
+    QString result;
+
+    result.append(QLatin1String("{Checks: '") + params.enabledChecks + QLatin1Char('\''));
+
+    if (!params.headerFilter.isEmpty()) {
+        result.append(QLatin1String(", HeaderFilterRegex: '") + params.headerFilter + QLatin1Char('\''));
+    }
+    result.append(QLatin1Char('}'));
+
+    return result;
+}
+
 Job::Job(const Parameters& params, QObject* parent)
     : KDevelop::OutputExecuteJob(parent)
     , m_parameters(params)
 {
     setJobName(i18n("Clang-tidy output"));
-    mustDumpConfig = !(params.dumpConfig.isEmpty());
 
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
@@ -49,28 +62,21 @@ Job::Job(const Parameters& params, QObject* parent)
 
     *this << params.executablePath;
 
-    if (params.useConfigFile.isEmpty())
-        *this << QString("--checks=%1").arg(params.enabledChecks);
-    else
-        *this << params.useConfigFile;
-    if (!params.exportFixes.isEmpty()) {
-        *this << params.exportFixes + QStringLiteral("%1.yaml").arg(params.filePath);
-    }
+    *this << QLatin1String("-p=") + params.buildDir;
+    *this << params.filePath;
 
-    *this << QString("-p=%1").arg(params.buildDir);
-    *this << QString("%1").arg(params.filePath);
+    // don't add statistics we are not interested in to parse anyway
+    *this << QStringLiteral("-quiet");
 
-    if (!params.headerFilter.isEmpty()) {
-        *this << params.headerFilter;
-    }
     if (!params.additionalParameters.isEmpty()) {
         *this << params.additionalParameters;
     }
-    if (!params.checkSystemHeaders.isEmpty()) {
-        *this << params.checkSystemHeaders;
+    if (params.checkSystemHeaders) {
+        *this << QStringLiteral("--system-headers");
     }
-    if (mustDumpConfig) {
-        *this << params.dumpConfig;
+
+    if (!params.useConfigFile) {
+        *this << QLatin1String("--config=") + inlineYaml(params);
     }
 
     qCDebug(KDEV_CLANGTIDY) << "checking path" << params.filePath;
@@ -83,14 +89,7 @@ Job::~Job()
 
 void Job::processStdoutLines(const QStringList& lines)
 {
-    if (!mustDumpConfig) {
-        m_standardOutput << lines;
-    } else {
-        QFile file(m_parameters.projectRootDir + "/.clang-tidy");
-        file.open(QIODevice::WriteOnly);
-        QTextStream os(&file);
-        os << lines.join('\n');
-    }
+    m_standardOutput << lines;
 }
 
 void Job::processStderrLines(const QStringList& lines)

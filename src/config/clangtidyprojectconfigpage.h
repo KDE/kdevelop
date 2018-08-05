@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
+ * Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,16 +19,14 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLANGTIDY_PERPROJECTCONFIGPAGE_H_
-#define CLANGTIDY_PERPROJECTCONFIGPAGE_H_
+#ifndef CLANGTIDY_PROJECTCONFIGPAGE_H
+#define CLANGTIDY_PROJECTCONFIGPAGE_H
 
+// plugin
+#include "ui_clangtidyprojectconfigpage.h"
+// KDevPlatform
 #include <interfaces/configpage.h>
 
-#include "config/configgroup.h"
-
-class QIcon;
-class QStringListModel;
-class QItemSelectionModel;
 
 namespace KDevelop
 {
@@ -39,44 +37,31 @@ namespace ClangTidy
 {
 class CheckSet;
 
-namespace Ui
-{
-    class PerProjectConfig;
-}
 /**
  * \class
  * \brief Implements the clang-tidy's configuration project for the current
  * project.
  */
-class PerProjectConfigPage : public KDevelop::ConfigPage
+class ProjectConfigPage : public KDevelop::ConfigPage
 {
     Q_OBJECT
 
 public:
-    PerProjectConfigPage(KDevelop::IProject* project, const CheckSet* checkSet, QWidget* parent);
-    ~PerProjectConfigPage() override;
+    ProjectConfigPage(KDevelop::IPlugin* plugin,
+                      KDevelop::IProject* project, const CheckSet* checkSet, QWidget* parent);
+    ~ProjectConfigPage() override;
 
+public: // KDevelop::ConfigPage API
     ConfigPageType configPageType() const override;
     QString name() const override;
     QIcon icon() const override;
-    void setList(const QStringList& list);
-
-public Q_SLOTS:
-    void apply() override;
-    void defaults() override;
-    void reset() override;
 
 private:
-    void updateEnabledChecks(const QStringList& enabledCheckList);
+    Ui::ProjectConfigPage m_ui;
 
-private:
     KDevelop::IProject* m_project;
-    Ui::PerProjectConfig* ui;
-    ConfigGroup m_config;
-    const CheckSet* m_checkSet;
-    QStringListModel* m_availableChecksModel;
-    QItemSelectionModel* m_selectedItemModel;
 };
+
 }
 
-#endif /* CLANGTIDY_PERPROJECTCONFIGPAGE_H_ */
+#endif /* CLANGTIDY_PROJECTCONFIGPAGE_H_ */

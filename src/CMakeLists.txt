@@ -12,9 +12,10 @@ set(kdevclangtidy_PART_SRCS
     checkset.cpp
     utils.cpp
 
-    config/configgroup.cpp
-    config/perprojectconfigpage.cpp
+    config/clangtidyprojectconfigpage.cpp
     config/clangtidypreferences.cpp
+    config/checkselection.cpp
+    config/checklistmodel.cpp
 
     parsers/clangtidyparser.cpp
     parsers/replacementparser.cpp
@@ -22,14 +23,17 @@ set(kdevclangtidy_PART_SRCS
 
 ki18n_wrap_ui(kdevclangtidy_PART_SRCS
     config/clangtidypreferences.ui
-    config/perprojectconfig.ui
+    config/clangtidyprojectconfigpage.ui
 )
 
 qt5_add_resources(kdevclangtidy_PART_SRCS
     kdevclangtidy.qrc
 )
 
-kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS config/clangtidyconfig.kcfgc)
+kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS
+    config/clangtidyconfig.kcfgc
+    config/clangtidyprojectconfig.kcfgc
+)
 
 kdevplatform_add_plugin(kdevclangtidy
     JSON kdevclangtidy.json

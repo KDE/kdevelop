@@ -50,9 +50,9 @@
 #include <shell/problemmodelset.h>
 // plugin
 #include <clangtidyconfig.h>
-#include "config/configgroup.h"
+#include <clangtidyprojectconfig.h>
 #include "config/clangtidypreferences.h"
-#include "config/perprojectconfigpage.h"
+#include "config/clangtidyprojectconfigpage.h"
 #include "job.h"
 
 using namespace KDevelop;
@@ -175,7 +175,9 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
         return;
     }
 
-    ConfigGroup projectConfig = project->projectConfiguration()->group("ClangTidy");
+    ClangTidyProjectSettings projectSettings;
+    projectSettings.setSharedConfig(project->projectConfiguration());
+    projectSettings.load();
 
     Job::Parameters params;
 
@@ -192,9 +194,9 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     if (const auto buildSystem = project->buildSystemManager()) {
         params.buildDir = buildSystem->buildDirectory(project->projectItem()).toLocalFile();
     }
-    params.additionalParameters = projectConfig.readEntry(ConfigGroup::AdditionalParameters);
+    params.additionalParameters = projectSettings.additionalParameters();
 
-    const auto enabledChecks = projectConfig.readEntry(ConfigGroup::EnabledChecks);
+    const auto enabledChecks = projectSettings.enabledChecks();
     if (!enabledChecks.isEmpty()) {
         params.enabledChecks = enabledChecks;
     } else {
@@ -202,22 +204,15 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
         m_checkSet.setClangTidyPath(clangTidyPath);
         params.enabledChecks = m_checkSet.defaults().join(QLatin1Char(','));
     }
-    params.useConfigFile = projectConfig.readEntry(ConfigGroup::UseConfigFile);
-    params.dumpConfig = projectConfig.readEntry(ConfigGroup::DumpConfig);
-    params.exportFixes = projectConfig.readEntry(ConfigGroup::ExportFixes);
-    params.headerFilter = projectConfig.readEntry(ConfigGroup::HeaderFilter);
-    params.checkSystemHeaders = projectConfig.readEntry(ConfigGroup::CheckSystemHeaders);
+    params.useConfigFile = projectSettings.useConfigFile();
+    params.headerFilter = projectSettings.headerFilter();
+    params.checkSystemHeaders = projectSettings.checkSystemHeaders();
 
-    if (!params.dumpConfig.isEmpty()) {
-        auto job = new ClangTidy::Job(params, this);
-        core()->runController()->registerJob(job);
-        params.dumpConfig = QString();
-    }
-    auto job2 = new ClangTidy::Job(params, this);
-    connect(job2, &KJob::finished, this, &Plugin::result);
-    core()->runController()->registerJob(job2);
+    auto job = new ClangTidy::Job(params, this);
+    connect(job, &KJob::finished, this, &Plugin::result);
+    core()->runController()->registerJob(job);
 
-    m_runningJob = job2;
+    m_runningJob = job;
 
     updateActions();
 }
@@ -308,7 +303,7 @@ KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConf
     auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
     m_checkSet.setClangTidyPath(clangTidyPath);
 
-    return new PerProjectConfigPage(options.project, &m_checkSet, parent);
+    return new ProjectConfigPage(this, options.project, &m_checkSet, parent);
 }
 
 KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)

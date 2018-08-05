@@ -49,11 +49,9 @@ public:
         QString buildDir;
         QString additionalParameters;
         QString enabledChecks;
-        QString useConfigFile;
-        QString dumpConfig;
-        QString exportFixes;
+        bool useConfigFile;
         QString headerFilter;
-        QString checkSystemHeaders;
+        bool checkSystemHeaders;
     };
 
     explicit Job(const Parameters& params, QObject* parent = nullptr);
@@ -77,8 +75,7 @@ protected:
 protected:
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
-    bool mustDumpConfig;
-    Job::Parameters m_parameters;
+    const Job::Parameters m_parameters;
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
 };
