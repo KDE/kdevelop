@@ -143,11 +143,11 @@ QVector<KDevelop::IProblem::Ptr> Job::problems() const
     return m_problems;
 }
 
-void Job::childProcessError(QProcess::ProcessError e)
+void Job::childProcessError(QProcess::ProcessError processError)
 {
     QString message;
 
-    switch (e) {
+    switch (processError) {
     case QProcess::FailedToStart: {
         const auto binaryPath = commandLine().value(0);
         if (binaryPath.isEmpty()) {
@@ -184,7 +184,7 @@ void Job::childProcessError(QProcess::ProcessError e)
         KMessageBox::error(qApp->activeWindow(), message, i18n("Clang-tidy Error"));
     }
 
-    KDevelop::OutputExecuteJob::childProcessError(e);
+    KDevelop::OutputExecuteJob::childProcessError(processError);
 }
 
 void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
