@@ -22,7 +22,7 @@
 #ifndef CLANGTIDY_REPLACEMENT_H
 #define CLANGTIDY_REPLACEMENT_H
 
-// plugin
+// KDevPlatform
 #include <language/editor/documentrange.h>
 // Qt
 #include <QFile>
