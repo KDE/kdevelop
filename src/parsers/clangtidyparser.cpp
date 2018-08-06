@@ -70,7 +70,7 @@ ClangTidyParser::ClangTidyParser(QObject* parent)
 
 void ClangTidyParser::parse()
 {
-    QRegularExpression regex(QStringLiteral("(\\/.+\\.cpp):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"));
+    QRegularExpression regex(QStringLiteral("(\\/.+\\.[ch]{1,2}[px]{0,2}):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"));
 
     for (auto line : m_stdout) {
         auto smatch = regex.match(line);
