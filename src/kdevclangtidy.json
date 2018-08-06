@@ -4,6 +4,9 @@
             {
                 "Name": "Carlos Nihelton",
                 "Name[x-test]": "xxCarlos Niheltonxx"
+            },
+            {
+                "Name": "Friedrich W. H. Kossebau"
             }
         ],
         "Category": "Analyzers",
