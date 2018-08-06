@@ -94,7 +94,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     //     act_check_all_files->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
     */
 
-    IExecutePlugin* iface = KDevelop::ICore::self()
+    auto* iface = KDevelop::ICore::self()
                                 ->pluginController()
                                 ->pluginForExtension("org.kdevelop.IExecutePlugin")
                                 ->extension<IExecutePlugin>();
@@ -237,7 +237,7 @@ void Plugin::runClangTidyAll()
 
 void Plugin::result(KJob* job)
 {
-    Job* aj = dynamic_cast<Job*>(job);
+    auto* aj = qobject_cast<Job*>(job);
     if (aj == nullptr) {
         return;
     }
