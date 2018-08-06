@@ -58,7 +58,10 @@ ecm_qt_declare_logging_category(kdevclangtidy_LOG_SRCS
 )
 
 add_subdirectory(src)
-add_subdirectory(tests)
+
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 # kdebugsettings file
 install(FILES kdevclangtidy.categories DESTINATION ${KDE_INSTALL_CONFDIR})
