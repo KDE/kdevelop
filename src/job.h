@@ -22,8 +22,9 @@
 #ifndef CLANGTIDY_JOB_H
 #define CLANGTIDY_JOB_H
 
-#include "debug.h"
-
+// plugin
+#include <debug.h>
+// KDevPlatform
 #include <interfaces/iproblem.h>
 #include <outputview/outputexecutejob.h>
 

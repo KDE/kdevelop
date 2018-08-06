@@ -19,7 +19,9 @@
  * 02110-1301, USA.
  */
 
-#include "config/clangtidypreferences.h"
+#include "clangtidypreferences.h"
+
+// plugin
 #include "clangtidyconfig.h"
 #include "ui_clangtidypreferences.h"
 

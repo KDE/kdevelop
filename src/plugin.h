@@ -22,14 +22,14 @@
 #ifndef CLANGTIDY_PLUGIN_H
 #define CLANGTIDY_PLUGIN_H
 
+// plugin
+#include "checkset.h"
+#include <debug.h>
+// KDevPlatform
+#include <interfaces/iplugin.h>
 // Qt
 #include <QPointer>
 #include <QVariant>
-// KDevPlatform
-#include <interfaces/iplugin.h>
-// plugin
-#include "checkset.h"
-#include "debug.h"
 
 class KJob;
 class QAction;

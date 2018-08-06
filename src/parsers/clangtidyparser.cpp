@@ -21,11 +21,12 @@
 
 #include "clangtidyparser.h"
 
-#include <QRegularExpression>
-
+// KDevPlatform
 #include <language/editor/documentrange.h>
 #include <serialization/indexedstring.h>
 #include <shell/problem.h>
+// Qt
+#include <QRegularExpression>
 
 namespace ClangTidy
 {

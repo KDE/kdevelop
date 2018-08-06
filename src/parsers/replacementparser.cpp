@@ -20,8 +20,10 @@
  */
 
 #include "replacementparser.h"
-#include "debug.h"
 
+// plugin
+#include <debug.h>
+// Std
 // See <https://github.com/CarlosNihelton/kdev-clang-tidy/issues/1>
 #include <algorithm>
 #include <fstream>

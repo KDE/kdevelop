@@ -22,11 +22,14 @@
 #ifndef CLANGTIDY_REPLACEMENT_H
 #define CLANGTIDY_REPLACEMENT_H
 
+// plugin
+#include <language/editor/documentrange.h>
+// Qt
 #include <QFile>
 #include <QRegularExpression>
 #include <QVector>
+// Boost
 #include <boost/utility/string_ref.hpp>
-#include <language/editor/documentrange.h>
 
 using KDevelop::DocumentRange;
 using KDevelop::IndexedString;

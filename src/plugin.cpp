@@ -20,16 +20,13 @@
  */
 
 #include "plugin.h"
-// Qt
-#include <QAction>
-#include <QMessageBox>
-#include <QMimeType>
-#include <QMimeDatabase>
-// KF
-#include <KActionCollection>
-#include <KLocalizedString>
-#include <KSharedConfig>
-#include <KPluginFactory>
+
+// plugin
+#include <clangtidyconfig.h>
+#include <clangtidyprojectconfig.h>
+#include "config/clangtidypreferences.h"
+#include "config/clangtidyprojectconfigpage.h"
+#include "job.h"
 // KDevPlatform
 #include <interfaces/icore.h>
 #include <interfaces/context.h>
@@ -48,12 +45,16 @@
 #include <project/projectmodel.h>
 #include <shell/problemmodel.h>
 #include <shell/problemmodelset.h>
-// plugin
-#include <clangtidyconfig.h>
-#include <clangtidyprojectconfig.h>
-#include "config/clangtidypreferences.h"
-#include "config/clangtidyprojectconfigpage.h"
-#include "job.h"
+// KF
+#include <KActionCollection>
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KPluginFactory>
+// Qt
+#include <QAction>
+#include <QMessageBox>
+#include <QMimeType>
+#include <QMimeDatabase>
 
 using namespace KDevelop;
 

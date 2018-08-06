@@ -22,6 +22,7 @@
 #ifndef CLANGTIDYPREFERENCES_H
 #define CLANGTIDYPREFERENCES_H
 
+// KDevPlatform
 #include <interfaces/configpage.h>
 
 namespace Ui

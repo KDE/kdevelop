@@ -22,10 +22,10 @@
 #ifndef _CLANGTIDYPARSER_H_
 #define _CLANGTIDYPARSER_H_
 
-#include <QObject>
-
+// KDevPlatform
 #include <interfaces/iproblem.h>
-// #include "qCDebug/debug.h"
+// Qt
+#include <QObject>
 
 namespace ClangTidy
 {

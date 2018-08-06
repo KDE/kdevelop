@@ -22,6 +22,7 @@
 #ifndef CLANGTIDY_CHECKSET_H
 #define CLANGTIDY_CHECKSET_H
 
+// Qt
 #include <QStringList>
 
 namespace ClangTidy

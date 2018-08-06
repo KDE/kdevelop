@@ -21,11 +21,12 @@
 
 #include "job.h"
 
+// plugin
 #include "parsers/clangtidyparser.h"
-
+// KF
 #include <KLocalizedString>
 #include <KMessageBox>
-
+// Qt
 #include <QApplication>
 #include <QFile>
 #include <QRegularExpression>
