@@ -154,7 +154,7 @@ Replacement ReplacementParser::nextNode(const QRegularExpressionMatch& smatch)
 
 KDevelop::DocumentRange ReplacementParser::composeNextNodeRange(size_t offset, size_t length)
 {
-    qDebug() << "count: " << cReplacements << "\toffset: " << offset << "\tlength: " << length << '\n';
+    qCDebug(KDEV_CLANGTIDY) << "count: " << cReplacements << "\toffset: " << offset << "\tlength: " << length << '\n';
     KDevelop::DocumentRange range{ KDevelop::IndexedString(), KTextEditor::Range::invalid() };
     /// See https://github.com/CarlosNihelton/kdev-clang-tidy/issues/2.
     if (offset < 1 || offset + length >= m_sourceView.length()) {
