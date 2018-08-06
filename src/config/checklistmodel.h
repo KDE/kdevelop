@@ -49,15 +49,15 @@ public: // QAbstractItemModel API
 
 public:
     void setCheckSet(const CheckSet* checkSet);
-    void setSelectedChecks(const QStringList& checks);
-    QStringList selectedChecks() const;
+    void setEnabledChecks(const QStringList& enabledChecks);
+    QStringList enabledChecks() const;
 
 Q_SIGNALS:
-    void selectedChecksChanged();
+    void enabledChecksChanged();
 
 private:
     const CheckSet* m_checkSet = nullptr;
-    QStringList m_selectedChecks;
+    QStringList m_enabledChecks;
     bool m_isDefault = true;
 };
 

@@ -67,7 +67,7 @@ CheckSelection::CheckSelection(QWidget* parent)
     checksFilterProxyModel->setSourceModel(m_checkListModel);
     checkListView->setModel(checksFilterProxyModel);
 
-    connect(m_checkListModel, &CheckListModel::selectedChecksChanged,
+    connect(m_checkListModel, &CheckListModel::enabledChecksChanged,
             this, &CheckSelection::checksChanged);
 }
 
@@ -81,12 +81,12 @@ void CheckSelection::setCheckSet(const CheckSet* checkSet)
 
 void CheckSelection::setChecks(const QString& checks)
 {
-    m_checkListModel->setSelectedChecks(checks.split(QLatin1Char(','), QString::SkipEmptyParts));
+    m_checkListModel->setEnabledChecks(checks.split(QLatin1Char(','), QString::SkipEmptyParts));
 }
 
 QString CheckSelection::checks() const
 {
-    return m_checkListModel->selectedChecks().join(QLatin1Char(','));
+    return m_checkListModel->enabledChecks().join(QLatin1Char(','));
 }
 
 }

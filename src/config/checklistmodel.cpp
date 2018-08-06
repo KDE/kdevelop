@@ -50,7 +50,7 @@ QVariant CheckListModel::data(const QModelIndex& index, int role) const
     }
     if (role == Qt::CheckStateRole) {
         const QString check = m_checkSet->all().at(c);
-        return m_selectedChecks.contains(check) ? Qt::Checked : Qt::Unchecked;
+        return m_enabledChecks.contains(check) ? Qt::Checked : Qt::Unchecked;
     }
 
     return {};
@@ -72,15 +72,15 @@ bool CheckListModel::setData(const QModelIndex& index, const QVariant& value, in
         const bool selected = value.toBool();
 
         if (selected) {
-            m_selectedChecks.append(check);
+            m_enabledChecks.append(check);
         } else {
-            m_selectedChecks.removeAll(check);
+            m_enabledChecks.removeAll(check);
         }
         m_isDefault = false;
 
         emit dataChanged(index, index);
 
-        emit selectedChecksChanged();
+        emit enabledChecksChanged();
 
         return true;
     }
@@ -136,33 +136,33 @@ void CheckListModel::setCheckSet(const CheckSet* checkSet)
     m_checkSet = checkSet;
 
     if (m_isDefault) {
-        m_selectedChecks = m_checkSet->defaults();
+        m_enabledChecks = m_checkSet->defaults();
     }
 
     endResetModel();
 }
 
 
-QStringList CheckListModel::selectedChecks() const
+QStringList CheckListModel::enabledChecks() const
 {
     if (m_isDefault) {
         return QStringList();
     }
 
     // return normalized by sorting
-    auto sortedChecks = m_selectedChecks;
+    auto sortedChecks = m_enabledChecks;
     sortedChecks.sort();
     return sortedChecks;
 }
 
-void CheckListModel::setSelectedChecks(const QStringList& enabledChecks)
+void CheckListModel::setEnabledChecks(const QStringList& enabledChecks)
 {
     beginResetModel();
     if (enabledChecks.isEmpty() && m_checkSet) {
-        m_selectedChecks = m_checkSet->defaults();
+        m_enabledChecks = m_checkSet->defaults();
         m_isDefault = true;
     } else {
-        m_selectedChecks = enabledChecks;
+        m_enabledChecks = enabledChecks;
     }
 
     endResetModel();
