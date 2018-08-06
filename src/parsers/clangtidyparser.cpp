@@ -105,8 +105,9 @@ void ClangTidyParser::parse()
             auto problem = m_problems.last();
             line.prepend(problem->explanation() + '\n');
             problem->setExplanation(line);
-        } else
+        } else {
             continue;
+        }
     }
 }
 } // namespace ClangTidy
