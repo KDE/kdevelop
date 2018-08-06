@@ -192,9 +192,9 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
     qCDebug(KDEV_CLANGTIDY) << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
 
     if (exitCode != 0) {
-        qCDebug(KDEV_CLANGTIDY) << "clangtidy failed, standard output: ";
+        qCDebug(KDEV_CLANGTIDY) << "clang-tidy failed, standard output: ";
         qCDebug(KDEV_CLANGTIDY) << m_standardOutput.join(QLatin1Char('\n'));
-        qCDebug(KDEV_CLANGTIDY) << "clangtidy failed, XML output: ";
+        qCDebug(KDEV_CLANGTIDY) << "clang-tidy failed, XML output: ";
         qCDebug(KDEV_CLANGTIDY) << m_xmlOutput.join(QLatin1Char('\n'));
     } else {
         ClangTidyParser parser;

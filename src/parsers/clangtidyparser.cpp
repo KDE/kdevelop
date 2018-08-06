@@ -35,7 +35,7 @@ using KDevelop::DetectedProblem;
 using KDevelop::DocumentRange;
 using KDevelop::IndexedString;
 /**
- * Convert the value of <verbose> attribute of <error> element from clangtidy's
+ * Convert the value of <verbose> attribute of <error> element from clang-tidy's
  * XML-output to 'good-looking' HTML-version. This is necessary because the
  * displaying of the original message is performed without line breaks - such
  * tooltips are uncomfortable to read, and large messages will not fit into the
