@@ -71,6 +71,7 @@ ClangTidyParser::ClangTidyParser(QObject* parent)
 
 void ClangTidyParser::parse()
 {
+    //                                       (1filename                 ) (2lin) (3col)  (4s)  (5d) (6explain)
     QRegularExpression regex(QStringLiteral("(\\/.+\\.[ch]{1,2}[px]{0,2}):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"));
 
     for (const auto& line : m_stdout) {
