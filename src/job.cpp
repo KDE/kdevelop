@@ -95,7 +95,7 @@ void Job::processStdoutLines(const QStringList& lines)
 
 void Job::processStderrLines(const QStringList& lines)
 {
-    static const auto xmlStartRegex = QRegularExpression("\\s*<");
+    static const auto xmlStartRegex = QRegularExpression(QStringLiteral("\\s*<"));
 
     for (const QString& line : lines) {
         // unfortunately sometime clangtidy send non-XML messages to stderr.
@@ -133,7 +133,7 @@ void Job::start()
     m_standardOutput.clear();
     m_xmlOutput.clear();
 
-    qCDebug(KDEV_CLANGTIDY) << "executing:" << commandLine().join(' ');
+    qCDebug(KDEV_CLANGTIDY) << "executing:" << commandLine().join(QLatin1Char(' '));
 
     KDevelop::OutputExecuteJob::start();
 }
@@ -193,9 +193,9 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 
     if (exitCode != 0) {
         qCDebug(KDEV_CLANGTIDY) << "clangtidy failed, standard output: ";
-        qCDebug(KDEV_CLANGTIDY) << m_standardOutput.join('\n');
+        qCDebug(KDEV_CLANGTIDY) << m_standardOutput.join(QLatin1Char('\n'));
         qCDebug(KDEV_CLANGTIDY) << "clangtidy failed, XML output: ";
-        qCDebug(KDEV_CLANGTIDY) << m_xmlOutput.join('\n');
+        qCDebug(KDEV_CLANGTIDY) << m_xmlOutput.join(QLatin1Char('\n'));
     } else {
         ClangTidyParser parser;
         parser.addData(m_standardOutput);

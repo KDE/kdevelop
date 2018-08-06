@@ -75,10 +75,10 @@ bool isSupportedMimeType(const QMimeType& mimeType)
 }
 
 Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
-    : IPlugin("kdevclangtidy", parent)
+    : IPlugin(QStringLiteral("kdevclangtidy"), parent)
     , m_model(new KDevelop::ProblemModel(parent))
 {
-    setXMLFile("kdevclangtidy.rc");
+    setXMLFile(QStringLiteral("kdevclangtidy.rc"));
 
     m_checkFileAction = new QAction(QIcon::fromTheme(QStringLiteral("dialog-ok")),
                                     i18n("Analyze Current File with Clang-Tidy"), this);
@@ -96,7 +96,7 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
 
     auto* iface = KDevelop::ICore::self()
                                 ->pluginController()
-                                ->pluginForExtension("org.kdevelop.IExecutePlugin")
+                                ->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))
                                 ->extension<IExecutePlugin>();
     Q_ASSERT(iface);
 
@@ -263,7 +263,7 @@ ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* par
     if (context->hasType(KDevelop::Context::EditorContext) && !isRunning()) {
         IDocument* doc = core()->documentController()->activeDocument();
         if (isSupportedMimeType(doc->mimeType())) {
-            auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), parent);
+            auto action = new QAction(QIcon::fromTheme(QStringLiteral("dialog-ok")), i18n("Clang-Tidy"), parent);
             connect(action, &QAction::triggered, this, &Plugin::runClangTidyFile);
             extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, action);
         }
@@ -285,7 +285,7 @@ ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* par
             return extension;
         }
 
-        auto action = new QAction(QIcon::fromTheme("dialog-ok"), i18n("Clang-Tidy"), parent);
+        auto action = new QAction(QIcon::fromTheme(QStringLiteral("dialog-ok")), i18n("Clang-Tidy"), parent);
         connect(action, &QAction::triggered, this, [this, item]() {
             runClangTidy(item->path().toUrl());
         });

@@ -52,13 +52,13 @@ using KDevelop::IndexedString;
  */
 QString verboseMessageToHtml(const QString& input)
 {
-    QString output(QString("<html>%1</html>").arg(input.toHtmlEscaped()));
+    QString output(QStringLiteral("<html>%1</html>").arg(input.toHtmlEscaped()));
 
-    output.replace("\\012", "\n");
+    output.replace(QStringLiteral("\\012"), QStringLiteral("\n"));
 
-    if (output.count('\n') >= 2) {
-        output.replace(output.indexOf('\n'), 1, "<pre>");
-        output.replace(output.lastIndexOf('\n'), 1, "</pre><br>");
+    if (output.count(QLatin1Char('\n')) >= 2) {
+        output.replace(output.indexOf(QLatin1Char('\n')), 1, QStringLiteral("<pre>"));
+        output.replace(output.lastIndexOf(QLatin1Char('\n')), 1, QStringLiteral("</pre><br>"));
     }
 
     return output;
@@ -79,7 +79,7 @@ void ClangTidyParser::parse()
             IProblem::Ptr problem(new DetectedProblem());
             problem->setSource(IProblem::Plugin);
             problem->setDescription(smatch.captured(5));
-            problem->setExplanation(smatch.captured(6) + '\n');
+            problem->setExplanation(smatch.captured(6) + QLatin1Char('\n'));
 
             DocumentRange range;
             range.document = IndexedString(smatch.captured(1));
@@ -103,7 +103,7 @@ void ClangTidyParser::parse()
 
         } else if (!m_problems.isEmpty()) {
             auto problem = m_problems.last();
-            line.prepend(problem->explanation() + '\n');
+            line.prepend(problem->explanation() + QLatin1Char('\n'));
             problem->setExplanation(line);
         } else {
             continue;

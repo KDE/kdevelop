@@ -88,10 +88,10 @@ ReplacementParser::ReplacementParser(const QString& yaml_file, const QString& so
     , m_yamlname{ yaml_file }
     , m_sourceFile{ source_file }
 {
-    if (m_yamlname.endsWith(".yaml")) {
+    if (m_yamlname.endsWith(QLatin1String(".yaml"))) {
         QFile yaml(m_yamlname);
         yaml.open(QIODevice::ReadOnly);
-        m_yamlContent = yaml.readAll();
+        m_yamlContent = QString::fromLocal8Bit(yaml.readAll());
 
         auto checkMatch = check.match(m_yamlContent);
         if (!checkMatch.hasMatch()) {
@@ -101,11 +101,11 @@ ReplacementParser::ReplacementParser(const QString& yaml_file, const QString& so
     }
 
     // TODO (CarlosNihelton): Discover a way to get that from KDevelop.
-    if (m_sourceFile.endsWith(".cpp")) {
+    if (m_sourceFile.endsWith(QLatin1String(".cpp"))) {
         i_source = IndexedString(m_sourceFile);
         // See <https://github.com/CarlosNihelton/kdev-clang-tidy/issues/1>
         std::ifstream cpp;
-        cpp.open(m_sourceFile.toUtf8());
+        cpp.open(m_sourceFile.toUtf8().constData());
         std::copy(std::istreambuf_iterator<char>(cpp), std::istreambuf_iterator<char>(),
                   std::back_insert_iterator<std::string>(m_sourceCode));
         m_sourceView = boost::string_ref(m_sourceCode);
@@ -139,7 +139,7 @@ Replacement ReplacementParser::nextNode(const QRegularExpressionMatch& smatch)
         repl.offset = off;
         repl.length = len;
         repl.replacementText = smatch.captured(4);
-        if (repl.replacementText.startsWith('\'') && repl.replacementText.endsWith('\'')) {
+        if (repl.replacementText.startsWith(QLatin1Char('\'')) && repl.replacementText.endsWith(QLatin1Char('\''))) {
             repl.replacementText.remove(0, 1);
             repl.replacementText.remove(repl.replacementText.length() - 1, 1);
         }
