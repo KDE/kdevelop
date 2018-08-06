@@ -58,8 +58,10 @@ public:
     explicit Job(const Parameters& params, QObject* parent = nullptr);
     ~Job() override;
 
+public: // KJob API
     void start() override;
 
+public:
     QVector<KDevelop::IProblem::Ptr> problems() const;
 
 protected Q_SLOTS:

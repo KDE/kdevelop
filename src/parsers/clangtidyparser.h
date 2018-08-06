@@ -29,6 +29,7 @@
 
 namespace ClangTidy
 {
+
 /**
  * \class
  * \brief Implements a parser for clang-tidy's standard output.
@@ -38,6 +39,8 @@ class ClangTidyParser : public QObject
 public:
     explicit ClangTidyParser(QObject* parent = nullptr);
     ~ClangTidyParser() = default;
+
+public:
     /**
      * \return all problems collected from clang-tidy stdout.
      */
@@ -54,6 +57,7 @@ private:
     QVector<KDevelop::IProblem::Ptr> m_problems; ///< problems collected from clang-tidy stdout.
     QStringList m_stdout;
 };
+
 } // namespace ClangTidy
 
 #endif

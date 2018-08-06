@@ -37,6 +37,7 @@ class CheckSet
 public:
     CheckSet() = default;
 
+public:
     /**
      * @param path the system path for the clang-tidy program.
      */

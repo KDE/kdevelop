@@ -53,6 +53,7 @@ public:
     explicit Plugin(QObject* parent, const QVariantList& = QVariantList());
     ~Plugin();
 
+public: // KDevelop::IPlugin API
     void unload() override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
     int configPages() const override { return 1; }
@@ -68,6 +69,8 @@ public:
      */
     KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options,
                                                QWidget* parent) override;
+
+public:
     /**
      *\function
      *\returns all available checks, obtained from clang-tidy program, ran with with "--checks=* --list-checks"

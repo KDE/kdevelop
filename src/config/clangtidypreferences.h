@@ -36,9 +36,12 @@ class ClangTidyPreferences;
 class ClangTidyPreferences : public KDevelop::ConfigPage
 {
     Q_OBJECT
+
 public:
     explicit ClangTidyPreferences(KDevelop::IPlugin* plugin = nullptr, QWidget* parent = nullptr);
     ~ClangTidyPreferences() override;
+
+public: // KDevelop::ConfigPage API
     ConfigPage::ConfigPageType configPageType() const override;
     QString name() const override;
     QString fullName() const override;

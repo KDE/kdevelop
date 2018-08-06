@@ -55,20 +55,14 @@ using Replacements = QVector<Replacement>;
  */
 class ReplacementParser
 {
-private:
-    size_t currentLine; ///< current line on source code while parsing.
-    size_t currentColumn; ///< current column on source code while parsing.
-    size_t currentOffset; ///< current offset in bytes since the beginning of the source code while parsing.
-    size_t cReplacements; ///< current count of replacements parsed.
+public:
+    ReplacementParser() = default;
+    explicit ReplacementParser(const QString& yaml_file, const QString& source_file);
 
-    QString m_yamlname;
-    QString m_sourceFile;
-    IndexedString i_source;
-    QString m_yamlContent;
-    std::string m_sourceCode;
-    boost::string_ref m_sourceView;
-    static const QRegularExpression regex, check;
-    Replacements all_replacements;
+public:
+    void parse();
+    size_t count() const { return cReplacements; }
+    Replacements allReplacements() { return all_replacements; }
 
 protected:
     /**
@@ -87,13 +81,22 @@ protected:
     */
     KDevelop::DocumentRange composeNextNodeRange(size_t offset, size_t length);
 
-public:
-    ReplacementParser() = default;
-    explicit ReplacementParser(const QString& yaml_file, const QString& source_file);
-    void parse();
-    size_t count() const { return cReplacements; }
-    Replacements allReplacements() { return all_replacements; }
+private:
+    size_t currentLine; ///< current line on source code while parsing.
+    size_t currentColumn; ///< current column on source code while parsing.
+    size_t currentOffset; ///< current offset in bytes since the beginning of the source code while parsing.
+    size_t cReplacements; ///< current count of replacements parsed.
+
+    QString m_yamlname;
+    QString m_sourceFile;
+    IndexedString i_source;
+    QString m_yamlContent;
+    std::string m_sourceCode;
+    boost::string_ref m_sourceView;
+    static const QRegularExpression regex, check;
+    Replacements all_replacements;
 };
+
 }
 
 #endif // CLANGTIDY_REPLACEMENT_H
