@@ -20,7 +20,7 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
     ItemModels # needed because missing in KDevPlatformConfig.cmake, remove once dep on kdevplatform >=5.2.2
     Config
 )
-set(KDEVPLATFORM_DEP_VERSION "5.1.0")
+set(KDEVPLATFORM_DEP_VERSION "5.2.0")
 find_package(KDevPlatform ${KDEVPLATFORM_DEP_VERSION} CONFIG)
 set_package_properties(KDevPlatform PROPERTIES
     TYPE REQUIRED
