@@ -22,8 +22,7 @@
 #ifndef CLANGTIDY_UTILS_H
 #define CLANGTIDY_UTILS_H
 
-// Qt
-#include <QStringList>
+class QString;
 
 namespace ClangTidy
 {
