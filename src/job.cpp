@@ -52,7 +52,7 @@ Job::Job(const Parameters& params, QObject* parent)
     : KDevelop::OutputExecuteJob(parent)
     , m_parameters(params)
 {
-    setJobName(i18n("Clang-tidy output"));
+    setJobName(i18n("Clang-Tidy Analysis"));
 
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
