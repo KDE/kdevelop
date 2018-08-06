@@ -645,7 +645,7 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
 
     QStringList lines = job->output().split('\n');
 
-    size_t lineNumber(0);
+    int lineNumber = 0;
     QMap<qlonglong, VcsEvent>::iterator currentEvent;
     bool convertToIntOk(false);
     int globalRevisionInt(0);
