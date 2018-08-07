@@ -89,6 +89,7 @@ class ExampleItemRequest {
 
   /// @returns Whether the requested item equals the given one (@p item).
   bool equals(const ExampleItem* item) const {
+    Q_UNUSED(item);
     return false;
   }
 };
