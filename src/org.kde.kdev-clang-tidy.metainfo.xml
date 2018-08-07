@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <id>org.kde.kdev-clang-tidy</id>
+  <extends>org.kde.kdevelop.desktop</extends>
+  <name>KDevelop Clang-Tidy Support</name>
+  <summary>Clang-Tidy integration with KDevelop</summary>
+  <project_license>GPL-2.0+</project_license>
+  <metadata_license>CC0-1.0</metadata_license>
+  <url type="homepage">https://kdevelop.org</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kdev-clang-tidy</url>
+  <url type="help">https://docs.kde.org/index.php?application=kdevelop</url>
+  <url type="donation">https://www.kde.org/community/donations/?app=kdevelop</url>
+  <project_group>KDE</project_group>
+  <update_contact>kossebau@kde.org</update_contact>
+</component>

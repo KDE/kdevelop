@@ -51,3 +51,5 @@ target_link_libraries(kdevclangtidy
     KF5::ConfigCore
     KF5::I18n
 )
+
+install(FILES org.kde.kdev-clang-tidy.metainfo.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
