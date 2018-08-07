@@ -42,7 +42,8 @@
         "Name[x-test]": "xxClang-Tidy Supportxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
-        ]
+        ],
+        "Version": "0.1.0"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [
