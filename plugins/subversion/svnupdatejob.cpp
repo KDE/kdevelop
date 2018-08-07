@@ -56,7 +56,7 @@ void SvnInternalUpdateJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
             return;
         }
         cli.update( svn::Targets( targets ), rev, recursive(), ignoreExternals() );
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCDebug(PLUGIN_SVN) << "Exception while updating files: "
                 << m_locations

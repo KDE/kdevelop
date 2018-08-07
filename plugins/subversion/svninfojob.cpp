@@ -64,7 +64,7 @@ void SvnInternalInfoJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Th
         h.propertyRejectFile = QString::fromUtf8( i.propertyRejectFile() );
 
         emit gotInfo( h );
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCDebug(PLUGIN_SVN) << "Exception while getting info for file: "
                 << m_location

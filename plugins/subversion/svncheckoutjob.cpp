@@ -57,7 +57,7 @@ void SvnInternalCheckoutJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver
         QByteArray destba = destdir.toLocalFile().toUtf8();
         qCDebug(PLUGIN_SVN) << srcba << destba << recurse;
         cli.checkout( srcba.data(), svn::Path( destba.data() ), svn::Revision::HEAD, recurse );
-    } catch( svn::ClientException ce ) {
+    } catch( const svn::ClientException& ce ) {
         qCDebug(PLUGIN_SVN) << "Exception while checking out: " << source().repositoryServer() << ce.message();
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;

@@ -115,7 +115,7 @@ void SvnInternalStatusJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
                 info.setState( getState( *it ) );
                 emit gotNewStatus( info );
             }
-        }catch( svn::ClientException ce )
+        }catch( const svn::ClientException& ce )
         {
             qCDebug(PLUGIN_SVN) << "Couldn't get status: " << url << QString::fromUtf8( ce.message() );
             setErrorMessage( QString::fromUtf8( ce.message() ) );

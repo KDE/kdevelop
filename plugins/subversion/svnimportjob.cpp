@@ -51,7 +51,7 @@ void SvnImportInternalJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
         QByteArray msg = m_message.toUtf8();
         qCDebug(PLUGIN_SVN) << "Importing" << srcba << "into" << destba;
         cli.import( svn::Path( srcba.data() ), destba.data(), msg.data(), true );
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCWarning(PLUGIN_SVN) << "Exception while importing: "
                 << m_sourceDirectory

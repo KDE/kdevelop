@@ -50,7 +50,7 @@ void SvnInternalRemoveJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
     {
         cli.remove( svn::Targets( targets ), force() );
 
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCDebug(PLUGIN_SVN) << "Exception while removing files: "
                 << m_locations

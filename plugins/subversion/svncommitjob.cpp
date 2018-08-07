@@ -109,7 +109,7 @@ void SvnInternalCommitJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
     try
     {
         cli.commit( svn::Targets(targets), ba.data(), recursive(), keepLock() );
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCDebug(PLUGIN_SVN) << "Couldn't commit:" << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );

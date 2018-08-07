@@ -49,7 +49,7 @@ void SvnInternalRevertJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
     try
     {
         cli.revert( svn::Targets( targets ), recursive() );
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCDebug(PLUGIN_SVN) << "Exception while reverting files: "
                 << m_locations

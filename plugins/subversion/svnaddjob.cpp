@@ -47,7 +47,7 @@ void SvnInternalAddJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thr
         {
             QByteArray ba = url.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
             cli.add( svn::Path( ba.data() ), recursive() );
-        }catch( svn::ClientException ce )
+        }catch( const svn::ClientException& ce )
         {
             qCDebug(PLUGIN_SVN) << "Exception while adding file: "
                     << url

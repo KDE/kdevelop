@@ -51,7 +51,7 @@ void SvnInternalLogJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thr
                  createSvnCppRevisionFromVcsRevision( startRevision() ),
                  createSvnCppRevisionFromVcsRevision( endRevision() ),
                  limit() );
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCDebug(PLUGIN_SVN) << "Exception while logging file: "
                 << location()

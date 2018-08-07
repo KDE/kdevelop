@@ -51,7 +51,7 @@ void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::T
         file = cli.annotate( ba.data(),
                              createSvnCppRevisionFromVcsRevision( startRevision() ),
                              createSvnCppRevisionFromVcsRevision( endRevision() ) );
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCDebug(PLUGIN_SVN) << "Exception while blaming file: "
                 << location()
@@ -80,7 +80,7 @@ void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::T
         {
             commitMessages[(*it).revision] = QString::fromUtf8( (*it).message.c_str() );
         }
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCDebug(PLUGIN_SVN) << "Exception while fetching log messages for blame: "
                      << location()

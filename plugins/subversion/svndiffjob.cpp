@@ -150,7 +150,7 @@ void SvnInternalDiffJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Th
         diff = repairDiff(diff);
         emit gotDiff( diff );
 
-    }catch( svn::ClientException ce )
+    }catch( const svn::ClientException& ce )
     {
         qCDebug(PLUGIN_SVN) << "Exception while doing a diff: "
                 << m_source.localUrl() << m_source.repositoryServer() << m_srcRevision.prettyValue()
