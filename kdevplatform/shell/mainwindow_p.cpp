@@ -245,6 +245,7 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog with information about KDevelop Platform." ) );
 
     action = actionCollection()->addAction( QStringLiteral("loaded_plugins"), this, SLOT(showLoadedPlugins()) );
+    action->setIcon(QIcon::fromTheme(QStringLiteral("plugins")));
     action->setText( i18n("Loaded Plugins") );
     action->setStatusTip( i18n("Show a list of all loaded plugins") );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog with information about all loaded plugins." ) );
