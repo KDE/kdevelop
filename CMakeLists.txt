@@ -12,7 +12,12 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(FeatureSummary)
 
-find_package(Qt5 REQUIRED Core Widgets Test)
+if(BUILD_TESTING)
+    set(QT_ADDITIONAL_REQ_COMPONENTS Test)
+endif()
+set(QT_MIN_VERSION "5.5.0")
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets ${QT_ADDITIONAL_REQ_COMPONENTS})
+
 set(KF5_DEP_VERSION "5.15.0")
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
     I18n
