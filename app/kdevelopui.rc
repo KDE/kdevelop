@@ -111,11 +111,11 @@
 
   <Menu name="code">
     <text context="@title:menu">Code</text>
-    <Menu name="analyze_file">
+    <Menu name="analyze_file" icon="dialog-ok">
       <text context="@title:menu">Analyze Current File With</text>
       <Merge />
     </Menu>
-    <Menu name="analyze_project">
+    <Menu name="analyze_project" icon="dialog-ok">
       <text context="@title:menu">Analyze Current Project With</text>
       <Merge />
     </Menu>

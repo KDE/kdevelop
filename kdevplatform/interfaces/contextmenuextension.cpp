@@ -98,6 +98,7 @@ void populateMenuWithGroup(
     const QList<ContextMenuExtension>& extensions,
     const QString& groupName,
     const QString& groupDisplayName = QString(),
+    const QString& groupIconName = QString(),
     bool forceAddMenu = false,
     bool addSeparator = true)
 {
@@ -117,6 +118,9 @@ void populateMenuWithGroup(
     if ((groupActions.count() > 1 && !groupDisplayName.isEmpty()) ||
         (!groupDisplayName.isEmpty() && forceAddMenu)) {
         groupMenu = menu->addMenu(groupDisplayName);
+        if (!groupIconName.isEmpty()) {
+            groupMenu->setIcon(QIcon::fromTheme(groupIconName));
+        }
     }
 
     for (QAction* action : groupActions) {
@@ -136,8 +140,8 @@ void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExte
     populateMenuWithGroup(menu, extensions, DebugGroup, i18n("Debug"));
     populateMenuWithGroup(menu, extensions, RefactorGroup, i18n("Refactor"));
     populateMenuWithGroup(menu, extensions, NavigationGroup);
-    populateMenuWithGroup(menu, extensions, AnalyzeFileGroup, i18n("Analyze Current File With"), true, false);
-    populateMenuWithGroup(menu, extensions, AnalyzeProjectGroup, i18n("Analyze Current Project With"), true);
+    populateMenuWithGroup(menu, extensions, AnalyzeFileGroup, i18n("Analyze Current File With"), QStringLiteral("dialog-ok"), true, false);
+    populateMenuWithGroup(menu, extensions, AnalyzeProjectGroup, i18n("Analyze Current Project With"), QStringLiteral("dialog-ok"), true);
     populateMenuWithGroup(menu, extensions, VcsGroup);
     populateMenuWithGroup(menu, extensions, ExtensionGroup);
 }
