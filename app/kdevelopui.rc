@@ -26,7 +26,7 @@
   </Menu>
 
   <Menu name="run" append="first_menu">
-    <text name="@title:menu">&amp;Run</text>
+    <text context="@title:menu">&amp;Run</text>
 
     <Action name="run_default_target" />
     <Action name="configure_launches" />
@@ -36,11 +36,11 @@
 
     <Action name="switch_runtimes" />
     <Menu name="debug_core_menu">
-      <text name="@title:menu">Examine Core File</text>
+      <text context="@title:menu">Examine Core File</text>
     </Menu>
 
     <Menu name="debug_attach_menu">
-      <text name="@title:menu">Attach to Process</text>
+      <text context="@title:menu">Attach to Process</text>
     </Menu>
 
     <Separator />
@@ -112,11 +112,11 @@
   <Menu name="code">
     <text context="@title:menu">Code</text>
     <Menu name="analyze_file">
-      <text name="@title:menu">Analyze Current File With</text>
+      <text context="@title:menu">Analyze Current File With</text>
       <Merge />
     </Menu>
     <Menu name="analyze_project">
-      <text name="@title:menu">Analyze Current Project With</text>
+      <text context="@title:menu">Analyze Current Project With</text>
       <Merge />
     </Menu>
     <Merge/>
