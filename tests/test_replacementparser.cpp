@@ -21,11 +21,13 @@
 
 #include "test_replacementparser.h"
 
-#include <QtTest>
+// SUT
+#include "parsers/replacementparser.h"
+// KDevPlatform
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
-
-#include "parsers/replacementparser.h"
+// Qt
+#include <QtTest>
 
 using namespace KDevelop;
 using namespace ClangTidy;

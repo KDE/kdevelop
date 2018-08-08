@@ -21,15 +21,17 @@
 
 #include "test_clangtidyparser.h"
 
-#include <QFile>
-#include <QTextStream>
-#include <QtTest/QTest>
+// SUT
+#include "parsers/clangtidyparser.h"
+// KDevPlatform
 #include <language/editor/documentrange.h>
 #include <shell/problem.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
-
-#include "parsers/clangtidyparser.h"
+// Qt
+#include <QFile>
+#include <QTextStream>
+#include <QTest>
 
 using namespace KDevelop;
 using namespace ClangTidy;

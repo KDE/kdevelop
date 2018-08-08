@@ -19,13 +19,17 @@
  * 02110-1301, USA.
  */
 
-#include <QtTest/QTest>
+#include "test_clangtidyjob.h"
+
+// SUT
+#include "job.h"
+// KDevPlatform
 #include <language/editor/documentrange.h>
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
+// Qt
+#include <QTest>
 
-#include "job.h"
-#include "test_clangtidyjob.h"
 
 using namespace KDevelop;
 using namespace ClangTidy;

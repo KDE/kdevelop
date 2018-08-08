@@ -18,14 +18,17 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
 #include "test_plugin.h"
 
-#include <QtTest/QTest>
+// SUT
+#include "plugin.h"
+// KDevPlatform
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
-
-#include "plugin/plugin.h"
 #include <shell/problem.h>
+// Qt
+#include <QTest>
 
 using namespace KDevelop;
 // using namespace ClangTidy;
