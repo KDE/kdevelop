@@ -6,7 +6,8 @@
                 "Name[x-test]": "xxCarlos Niheltonxx"
             },
             {
-                "Name": "Friedrich W. H. Kossebau"
+                "Name": "Friedrich W. H. Kossebau",
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx"
             }
         ],
         "Category": "Analyzers",
