@@ -30,6 +30,11 @@ find_package(KDevPlatform ${KDEVPLATFORM_DEP_VERSION} CONFIG)
 set_package_properties(KDevPlatform PROPERTIES
     TYPE REQUIRED
 )
+if(BUILD_TESTING)
+    if (NOT TARGET KDev::Tests)
+        message(FATAL_ERROR "KDevPlatform was built without the library KDevPlatformTests (due to BUILD_TESTING=OFF), which though is required for our tests.")
+    endif()
+endif()
 
 find_package(Boost REQUIRED)
 
