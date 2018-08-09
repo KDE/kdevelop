@@ -3,7 +3,17 @@
   <id>org.kde.kdev-clang-tidy</id>
   <extends>org.kde.kdevelop.desktop</extends>
   <name>KDevelop Clang-Tidy Support</name>
+  <name xml:lang="ca">Implementació del Clang-Tidy al KDevelop</name>
+  <name xml:lang="nl">Ondersteuning van KDevelop Clang-Tidy</name>
+  <name xml:lang="pt">Suporte do Clang-Tidy para o KDevelop</name>
+  <name xml:lang="uk">Підтримка Clang-Tidy у KDevelop</name>
+  <name xml:lang="x-test">xxKDevelop Clang-Tidy Supportxx</name>
   <summary>Clang-Tidy integration with KDevelop</summary>
+  <summary xml:lang="ca">Integració del Clang-Tidy amb el KDevelop</summary>
+  <summary xml:lang="nl">Integratie van Clang-Tidy met KDevelop</summary>
+  <summary xml:lang="pt">Integração do Clang-Tidy com o KDevelop</summary>
+  <summary xml:lang="uk">Інтеграція Clang-Tidy із KDevelop</summary>
+  <summary xml:lang="x-test">xxClang-Tidy integration with KDevelopxx</summary>
   <project_license>GPL-2.0+</project_license>
   <metadata_license>CC0-1.0</metadata_license>
   <url type="homepage">https://kdevelop.org</url>
