@@ -1,5 +1,0 @@
-add_subdirectory(android)
-if (UNIX)
-    add_subdirectory(docker)
-    add_subdirectory(flatpak)
-endif()

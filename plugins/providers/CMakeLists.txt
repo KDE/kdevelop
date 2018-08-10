@@ -1,2 +1,0 @@
-ecm_optional_add_subdirectory(ghprovider)
-ecm_optional_add_subdirectory(kdeprovider)
