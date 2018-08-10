@@ -1,3 +1,5 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevbazaar\")
+
 set(kdevbazaar_SRCS
     diffjob.cpp
     bzrannotatejob.cpp
