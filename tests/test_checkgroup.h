@@ -19,43 +19,29 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLANGTIDY_CHECKSELECTION_H
-#define CLANGTIDY_CHECKSELECTION_H
+#ifndef TEST_CHECKGROUP_H
+#define TEST_CHECKGROUP_H
 
-// Qt
-#include <QWidget>
+#include <QObject>
 
-class QTreeView;
+namespace ClangTidy {
+class CheckGroup;
+}
 
-namespace ClangTidy
-{
+struct CheckGroupData;
 
-class CheckSet;
-class CheckListModel;
-
-class CheckSelection : public QWidget
+class TestCheckGroup : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString checks READ checks WRITE setChecks NOTIFY checksChanged USER true)
 
-public:
-    explicit CheckSelection(QWidget* parent = nullptr);
-    ~CheckSelection();
-
-public:
-    void setCheckSet(const CheckSet* checkSet);
-
-    void setChecks(const QString& checks);
-    QString checks() const;
-
-Q_SIGNALS:
-    void checksChanged();
+private Q_SLOTS:
+    void testFromPlainList_data();
+    void testFromPlainList();
+    void testSetEnabledChecks_data();
+    void testSetEnabledChecks();
 
 private:
-    const CheckSet* m_checkSet = nullptr;
-    CheckListModel* m_checkListModel;
-    QTreeView* m_checkListView;
+    void doTestResult(const ClangTidy::CheckGroup* actualValue, const CheckGroupData& expectedValue);
 };
 
-}
 #endif

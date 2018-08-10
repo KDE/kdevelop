@@ -24,6 +24,29 @@
 // plugin
 #include <checkset.h>
 #include <debug.h>
+// KF
+#include <KLocalizedString>
+
+
+namespace {
+
+Qt::CheckState checkState(ClangTidy::CheckGroup::EnabledState enabledState)
+{
+    return
+        (enabledState == ClangTidy::CheckGroup::EnabledInherited) ? Qt::PartiallyChecked :
+        (enabledState == ClangTidy::CheckGroup::Disabled) ?         Qt::Unchecked :
+        /* else */                                                  Qt::Checked;
+}
+
+ClangTidy::CheckGroup::EnabledState enabledState(int checkState)
+{
+    return
+        (checkState == Qt::PartiallyChecked) ? ClangTidy::CheckGroup::EnabledInherited :
+        (checkState == Qt::Unchecked) ?        ClangTidy::CheckGroup::Disabled  :
+        /* else */                             ClangTidy::CheckGroup::Enabled;
+}
+
+}
 
 namespace ClangTidy
 {
@@ -40,65 +63,122 @@ QVariant CheckListModel::data(const QModelIndex& index, int role) const
     if (!index.isValid()) {
         return QVariant();
     }
-    const int c = index.row();
-    if (0 > c || c >= m_checkSet->all().size()) {
-        return QVariant();
+
+    auto* checkGroup = static_cast<const CheckGroup*>(index.internalPointer());
+
+    // root?
+    if (!checkGroup) {
+        if (index.row() != 0) {
+            return QVariant();
+        }
+        if (role == Qt::DisplayRole) {
+            return i18n("All checks");
+        }
+        if (role == Qt::CheckStateRole) {
+            return checkState(m_rootCheckGroup->groupEnabledState());
+        }
+    } else {
+        const int childIndex = index.row();
+        if (childIndex < 0 || childCount(checkGroup) <= childIndex) {
+            return QVariant();
+        }
+        const int subGroupsCount = checkGroup->subGroups().count();
+        if (childIndex < subGroupsCount) {
+            const int subGroupIndex = childIndex;
+            if (role == Qt::DisplayRole) {
+                auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                return subGroup->wildCardText();
+            }
+            if (role == Qt::CheckStateRole) {
+                auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                return checkState(subGroup->groupEnabledState());
+            }
+        } else {
+            const int checkIndex = childIndex - subGroupsCount;
+            if (role == Qt::DisplayRole) {
+                return checkGroup->checkNames().at(checkIndex);
+            }
+            if (role == Qt::CheckStateRole) {
+                return checkState(checkGroup->checkEnabledState(checkIndex));
+            }
+        }
     }
 
-    if (role == Qt::DisplayRole) {
-        return m_checkSet->all().at(c);
-    }
-    if (role == Qt::CheckStateRole) {
-        const QString check = m_checkSet->all().at(c);
-        return m_enabledChecks.contains(check) ? Qt::Checked : Qt::Unchecked;
-    }
-
-    return {};
+    return QVariant();
 }
 
 bool CheckListModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (!index.isValid()) {
-        return false;
-    }
-    const int c = index.row();
-    if (0 > c || c >= m_checkSet->all().size()) {
+    if (!index.isValid() ||
+        (role != Qt::CheckStateRole)) {
         return false;
     }
 
-    if (role == Qt::CheckStateRole) {
-        const QString check = m_checkSet->all().at(c);
+    const auto enabledState = ::enabledState(value.toInt());
+    auto* checkGroup = static_cast<CheckGroup*>(index.internalPointer());
 
-        const bool selected = value.toBool();
-
-        if (selected) {
-            m_enabledChecks.append(check);
-        } else {
-            m_enabledChecks.removeAll(check);
+    // root?
+    if (!checkGroup) {
+        if (index.row() != 0) {
+            return false;
         }
+
+        m_rootCheckGroup->setGroupEnabledState(enabledState);
+
         m_isDefault = false;
-
+        // TODO: does this result in the subtree being updated, needed as effective state could have changed?
         emit dataChanged(index, index);
-
         emit enabledChecksChanged();
+        return true;
+    } else {
+        const int childIndex = index.row();
+        if (childIndex < 0 || childCount(checkGroup) <= childIndex) {
+            return false;
+        }
 
+        const int subGroupsCount = checkGroup->subGroups().count();
+        if (childIndex < subGroupsCount) {
+            const int subGroupIndex = childIndex;
+            auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+            subGroup->setGroupEnabledState(enabledState);
+        } else {
+            const int checkIndex = childIndex - subGroupsCount;
+            checkGroup->setCheckEnabledState(checkIndex, enabledState);
+        }
+
+        m_isDefault = false;
+        // TODO: does this result in the subtree being updated, needed as effective state could have changed?
+        emit dataChanged(index, index);
+        emit enabledChecksChanged();
         return true;
     }
-    return true;
+
+    return false;
 }
 
 int CheckListModel::columnCount(const QModelIndex& parent) const
 {
-    if (!parent.isValid()) {
-        return 1;
-    }
-    return 0;
+    Q_UNUSED(parent)
+    return 1;
 }
 
 int CheckListModel::rowCount(const QModelIndex& parent) const
 {
     if (!parent.isValid()) {
-        return m_checkSet ? m_checkSet->all().count() : 0;
+        return m_rootCheckGroup ? 1 : 0;
+    }
+
+    auto* parentCheckGroup = static_cast<const CheckGroup*>(parent.internalPointer());
+
+    if (!parentCheckGroup) {
+        return childCount(m_rootCheckGroup.data());
+    }
+
+    // is subgroup?
+    const int subGroupIndex = parent.row();
+    const auto& subGroups = parentCheckGroup->subGroups();
+    if (0 <= subGroupIndex && subGroupIndex < subGroups.count()) {
+        return childCount(subGroups.at(subGroupIndex));
     }
 
     return 0;
@@ -109,15 +189,41 @@ QModelIndex CheckListModel::parent(const QModelIndex& child) const
     if (!child.isValid()) {
         return QModelIndex();
     }
-    return QModelIndex();
+
+    auto* childCheckGroup = static_cast<CheckGroup*>(child.internalPointer());
+    if (!childCheckGroup) {
+        return QModelIndex();
+    }
+    if (childCheckGroup == m_rootCheckGroup.data()) {
+        return createIndex(0, 0, nullptr);
+    }
+    auto* parentCheckGroup = childCheckGroup->superGroup();
+    const auto& subGroups = parentCheckGroup->subGroups();
+    const int parentRow = subGroups.indexOf(childCheckGroup);
+    return createIndex(parentRow, 0, parentCheckGroup);
 }
 
 QModelIndex CheckListModel::index(int row, int column, const QModelIndex& parent) const
 {
-    if (!hasIndex(row, column, parent)) {
+    if ((column != 0) ||
+        (row < 0) ||
+        !m_rootCheckGroup) {
         return QModelIndex();
     }
-    return createIndex(row, column);
+
+    if (!parent.isValid()) {
+        if (1 <= row) {
+            return QModelIndex();
+        }
+        return createIndex(row, column, nullptr);
+    }
+
+    auto* superCheckGroup = checkGroup(parent);
+    if (row >= childCount(superCheckGroup)) {
+        return QModelIndex();
+    }
+
+    return createIndex(row, column, superCheckGroup);
 }
 
 Qt::ItemFlags CheckListModel::flags(const QModelIndex& index) const
@@ -126,8 +232,34 @@ Qt::ItemFlags CheckListModel::flags(const QModelIndex& index) const
         return Qt::NoItemFlags;
     }
 
-    return  Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+    auto* checkGroup = static_cast<const CheckGroup*>(index.internalPointer());
+
+    // root?
+    if (!checkGroup) {
+        return  Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+    }
+
+    return  Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsUserTristate;
 }
+
+int CheckListModel::childCount(const CheckGroup* checkGroup) const
+{
+    return checkGroup->subGroups().count() + checkGroup->checkNames().count();
+}
+
+CheckGroup* CheckListModel::checkGroup(const QModelIndex& index) const
+{
+    auto* superCheckGroup = static_cast<CheckGroup*>(index.internalPointer());
+    if (!superCheckGroup) {
+        return m_rootCheckGroup.data();
+    }
+
+    const int subGroupIndex = index.row();
+    const auto& subGroups = superCheckGroup->subGroups();
+    Q_ASSERT(0 <= subGroupIndex && subGroupIndex < subGroups.count());
+    return subGroups.at(subGroupIndex);
+}
+
 
 void CheckListModel::setCheckSet(const CheckSet* checkSet)
 {
@@ -135,8 +267,10 @@ void CheckListModel::setCheckSet(const CheckSet* checkSet)
 
     m_checkSet = checkSet;
 
+    m_rootCheckGroup.reset(CheckGroup::fromPlainList(m_checkSet->all()));
+
     if (m_isDefault) {
-        m_enabledChecks = m_checkSet->defaults();
+        m_rootCheckGroup->setEnabledChecks(m_checkSet->defaults());
     }
 
     endResetModel();
@@ -149,20 +283,19 @@ QStringList CheckListModel::enabledChecks() const
         return QStringList();
     }
 
-    // return normalized by sorting
-    auto sortedChecks = m_enabledChecks;
-    sortedChecks.sort();
-    return sortedChecks;
+    return m_rootCheckGroup->enabledChecksRules();
 }
 
 void CheckListModel::setEnabledChecks(const QStringList& enabledChecks)
 {
     beginResetModel();
+
     if (enabledChecks.isEmpty() && m_checkSet) {
-        m_enabledChecks = m_checkSet->defaults();
+        m_rootCheckGroup->setEnabledChecks(m_checkSet->defaults());
         m_isDefault = true;
     } else {
-        m_enabledChecks = enabledChecks;
+        m_rootCheckGroup->setEnabledChecks(enabledChecks);
+        m_isDefault = false;
     }
 
     endResetModel();

@@ -22,6 +22,8 @@
 #ifndef CLANGTIDY_CHECKLISTMODEL_H
 #define CLANGTIDY_CHECKLISTMODEL_H
 
+// plugin
+#include "checkgroup.h"
 // Qt
 #include <QAbstractItemModel>
 
@@ -56,8 +58,13 @@ Q_SIGNALS:
     void enabledChecksChanged();
 
 private:
+    int childCount(const CheckGroup* checkGroup) const;
+    CheckGroup* checkGroup(const QModelIndex& index) const;
+
+private:
     const CheckSet* m_checkSet = nullptr;
-    QStringList m_enabledChecks;
+
+    QScopedPointer<CheckGroup> m_rootCheckGroup;
     bool m_isDefault = true;
 };
 

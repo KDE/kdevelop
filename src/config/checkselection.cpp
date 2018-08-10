@@ -31,10 +31,15 @@
 #if KCONFIGWIDGETS_VERSION < QT_VERSION_CHECK(5,32,0)
 #include <KConfigDialogManager>
 #endif
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
+#include <KRecursiveFilterProxyModel>
+#endif
 // Qt
 #include <QVBoxLayout>
 #include <QTreeView>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QSortFilterProxyModel>
+#endif
 
 namespace ClangTidy
 {
@@ -54,18 +59,23 @@ CheckSelection::CheckSelection(QWidget* parent)
     auto* checkFilterEdit = new KFilterProxySearchLine(this);
     layout->addWidget(checkFilterEdit);
 
-    auto* checkListView = new QTreeView(this);
-    checkListView->setAllColumnsShowFocus(true);
-    checkListView->setRootIsDecorated(false);
-    checkListView->setHeaderHidden(true);
-    layout->addWidget(checkListView);
+    m_checkListView = new QTreeView(this);
+    m_checkListView->setAllColumnsShowFocus(true);
+    m_checkListView->setRootIsDecorated(true);
+    m_checkListView->setHeaderHidden(true);
+    layout->addWidget(m_checkListView);
 
     setLayout(layout);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     auto* checksFilterProxyModel = new QSortFilterProxyModel(this);
+    checksFilterProxyModel->setRecursiveFilteringEnabled(true);
+#else
+    auto* checksFilterProxyModel = new KRecursiveFilterProxyModel(this);
+#endif
     checkFilterEdit->setProxy(checksFilterProxyModel);
     checksFilterProxyModel->setSourceModel(m_checkListModel);
-    checkListView->setModel(checksFilterProxyModel);
+    m_checkListView->setModel(checksFilterProxyModel);
 
     connect(m_checkListModel, &CheckListModel::enabledChecksChanged,
             this, &CheckSelection::checksChanged);
@@ -76,12 +86,14 @@ CheckSelection::~CheckSelection() = default;
 void CheckSelection::setCheckSet(const CheckSet* checkSet)
 {
     m_checkListModel->setCheckSet(checkSet);
+    m_checkListView->expandAll();
 }
 
 
 void CheckSelection::setChecks(const QString& checks)
 {
     m_checkListModel->setEnabledChecks(checks.split(QLatin1Char(','), QString::SkipEmptyParts));
+    m_checkListView->expandAll();
 }
 
 QString CheckSelection::checks() const

@@ -16,14 +16,22 @@ if(BUILD_TESTING)
     set(QT_ADDITIONAL_REQ_COMPONENTS Test)
 endif()
 set(QT_MIN_VERSION "5.5.0")
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Core Widgets ${QT_ADDITIONAL_REQ_COMPONENTS})
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED
+    Core
+    Widgets
+    ${QT_ADDITIONAL_REQ_COMPONENTS}
+)
 
 set(KF5_DEP_VERSION "5.15.0")
+# TRUE needed because missing in KDevPlatformConfig.cmake, remove TRUE once dep on kdevplatform >=5.2.2
+if(Qt5_VERSION VERSION_LESS "5.10.0" OR TRUE)
+    set(KF_ADDITIONAL_REQ_COMPONENTS ItemModels)
+endif()
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
     I18n
     ItemViews
-    ItemModels # needed because missing in KDevPlatformConfig.cmake, remove once dep on kdevplatform >=5.2.2
     Config
+    ${KF_ADDITIONAL_REQ_COMPONENTS}
 )
 set(KDEVPLATFORM_DEP_VERSION "5.2.0")
 find_package(KDevPlatform ${KDEVPLATFORM_DEP_VERSION} CONFIG)

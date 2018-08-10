@@ -35,6 +35,13 @@ ecm_add_test(test_clangtidyjob.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests
 )
 
+ecm_add_test(test_checkgroup.cpp
+    ../src/config/checkgroup.cpp
+    ${kdevclangtidy_LOG_SRCS}
+    TEST_NAME test_checkgroup
+    LINK_LIBRARIES Qt5::Test KDev::Tests
+)
+
 # TODO: Discover how to test the plugin class.
 # ecm_add_test(test_plugin.cpp ${PROJECT_SOURCE_DIR}/src/plugin.cpp ${PROJECT_SOURCE_DIR}/src/job.cpp 
 #     ${kdevclangtidy_LOG_SRCS}
