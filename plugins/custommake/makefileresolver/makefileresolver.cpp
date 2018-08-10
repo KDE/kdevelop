@@ -95,7 +95,13 @@ namespace {
     QString createCommand(const QString& absoluteFile, const QString& workingDirectory, const QString& makeParameters) const
     {
       QString relativeFile = Path(workingDirectory).relativePath(Path(absoluteFile));
-      return "make -k --no-print-directory -W \'" + absoluteFile + "\' -W \'" + relativeFile + "\' -n " + makeParameters;
+#ifndef Q_OS_FREEBSD
+      // GNU make implicitly enables "-w" for sub-makes, we don't want that
+      QLatin1String noPrintDirFlag = QLatin1String(" --no-print-directory");
+#else
+      QLatin1String noPrintDirFlag;
+#endif
+      return "make -k" + noPrintDirFlag + " -W \'" + absoluteFile + "\' -W \'" + relativeFile + "\' -n " + makeParameters;
     }
 
     bool hasMakefile() const
