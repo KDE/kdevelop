@@ -46,7 +46,7 @@ BazaarPlugin::BazaarPlugin(QObject* parent, const QVariantList& args) :
 {
     Q_UNUSED(args); // What is this?
     if (QStandardPaths::findExecutable(QStringLiteral("bzr")).isEmpty()) {
-        setErrorDescription(i18n("Unable to find Bazaar (bzr) executable Is it installed on the system?"));
+        setErrorDescription(i18n("Unable to find Bazaar (bzr) executable. Is it installed on the system?"));
         return;
     }
 
