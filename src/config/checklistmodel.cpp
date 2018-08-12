@@ -164,8 +164,7 @@ bool CheckListModel::setData(const QModelIndex& index, const QVariant& value, in
         m_rootCheckGroup->setGroupEnabledState(enabledState);
 
         m_isDefault = false;
-        emit dataChanged(index, index);
-        emitSubGroupDataChanged(m_rootCheckGroup.data());
+        emitSubGroupDataChanged(index);
         emit enabledChecksChanged();
         return true;
     } else {
@@ -190,10 +189,10 @@ bool CheckListModel::setData(const QModelIndex& index, const QVariant& value, in
         }
 
         m_isDefault = false;
-        // TODO: does this result in the subtree being updated, needed as effective state could have changed?
-        emit dataChanged(index, index);
         if (changedSubGroup) {
-            emitSubGroupDataChanged(changedSubGroup);
+            emitSubGroupDataChanged(index);
+        } else {
+            emit dataChanged(index, index);
         }
         emit enabledChecksChanged();
         return true;
@@ -351,17 +350,28 @@ void CheckListModel::setEnabledChecks(const QStringList& enabledChecks)
     endResetModel();
 }
 
-void CheckListModel::emitSubGroupDataChanged(CheckGroup* checkGroup)
+void CheckListModel::emitSubGroupDataChanged(const QModelIndex& subGroupIndex)
 {
-    const int rowCount = childCount(checkGroup);
-    if (rowCount > 0) {
-        const auto firstIndex = createIndex(0, NameColumnId, checkGroup);
-        const auto lastIndex = createIndex(rowCount-1, CountColumnId, checkGroup);
-        emit dataChanged(firstIndex, lastIndex);
+    // first group itself
+    emit dataChanged(subGroupIndex, subGroupIndex.siblingAtColumn(CountColumnId));
+
+    auto* checkGroup = this->checkGroup(subGroupIndex);
+    const int subGroupsCount = checkGroup->subGroups().count();
+
+    // subgroups
+    for (int i = 0; i < subGroupsCount; ++i) {
+        const auto subSubGroupInxex = index(i, NameColumnId, subGroupIndex);
+        emitSubGroupDataChanged(subSubGroupInxex);
     }
 
-    for (auto* subGroup : checkGroup->subGroups()) {
-        emitSubGroupDataChanged(subGroup);
+    // checks
+    const int checksCount = checkGroup->checkNames().count();
+    if (checksCount > 0) {
+        const int firstChecksRow = subGroupsCount;
+        const int lastChecksRow = firstChecksRow + checksCount - 1;
+        const auto firstCheckIndex = index(firstChecksRow, NameColumnId, subGroupIndex);
+        const auto lastCheckIndex = index(lastChecksRow, NameColumnId, subGroupIndex);
+        emit dataChanged(firstCheckIndex, lastCheckIndex);
     }
 }
 

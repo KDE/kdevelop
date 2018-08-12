@@ -70,7 +70,7 @@ Q_SIGNALS:
 private:
     int childCount(const CheckGroup* checkGroup) const;
     CheckGroup* checkGroup(const QModelIndex& index) const;
-    void emitSubGroupDataChanged(CheckGroup* checkGroup);
+    void emitSubGroupDataChanged(const QModelIndex& subGroupIndex);
 
 private:
     const CheckSet* m_checkSet = nullptr;
