@@ -60,7 +60,8 @@ CheckListModel::~CheckListModel() = default;
 
 QVariant CheckListModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid()) {
+    if (!index.isValid() ||
+        (index.column() < NameColumnId) || (index.column() > CountColumnId)) {
         return QVariant();
     }
 
@@ -71,11 +72,26 @@ QVariant CheckListModel::data(const QModelIndex& index, int role) const
         if (index.row() != 0) {
             return QVariant();
         }
-        if (role == Qt::DisplayRole) {
-            return i18n("All checks");
-        }
-        if (role == Qt::CheckStateRole) {
-            return checkState(m_rootCheckGroup->groupEnabledState());
+        if (index.column() == NameColumnId) {
+            if (role == Qt::DisplayRole) {
+                return i18n("All checks");
+            } else
+            if (role == Qt::CheckStateRole) {
+                return checkState(m_rootCheckGroup->groupEnabledState());
+            } else
+            if (role == EffectiveEnabledStateRole) {
+                return m_rootCheckGroup->effectiveGroupEnabledState();
+            }
+        } else {
+            if (role == Qt::DisplayRole) {
+                const int enabledChecksCount = m_rootCheckGroup->enabledChecksCount();
+                if (enabledChecksCount > 0) {
+                    return enabledChecksCount;
+                }
+            } else
+            if (role == Qt::TextAlignmentRole) {
+                return static_cast<int>(Qt::AlignRight | Qt::AlignVCenter);
+            }
         }
     } else {
         const int childIndex = index.row();
@@ -85,21 +101,43 @@ QVariant CheckListModel::data(const QModelIndex& index, int role) const
         const int subGroupsCount = checkGroup->subGroups().count();
         if (childIndex < subGroupsCount) {
             const int subGroupIndex = childIndex;
-            if (role == Qt::DisplayRole) {
-                auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
-                return subGroup->wildCardText();
-            }
-            if (role == Qt::CheckStateRole) {
-                auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
-                return checkState(subGroup->groupEnabledState());
+            if (index.column() == NameColumnId) {
+                if (role == Qt::DisplayRole) {
+                    auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                    return subGroup->wildCardText();
+                } else
+                if (role == Qt::CheckStateRole) {
+                    auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                    return checkState(subGroup->groupEnabledState());
+                } else
+                if (role == EffectiveEnabledStateRole) {
+                    auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                    return subGroup->effectiveGroupEnabledState();
+                }
+            } else {
+                if (role == Qt::DisplayRole) {
+                    auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                    const int enabledChecksCount = subGroup->enabledChecksCount();
+                    if (enabledChecksCount > 0) {
+                        return enabledChecksCount;
+                    }
+                } else
+                if (role == Qt::TextAlignmentRole) {
+                    return static_cast<int>(Qt::AlignRight | Qt::AlignVCenter);
+                }
             }
         } else {
-            const int checkIndex = childIndex - subGroupsCount;
-            if (role == Qt::DisplayRole) {
-                return checkGroup->checkNames().at(checkIndex);
-            }
-            if (role == Qt::CheckStateRole) {
-                return checkState(checkGroup->checkEnabledState(checkIndex));
+            if (index.column() == NameColumnId) {
+                const int checkIndex = childIndex - subGroupsCount;
+                if (role == Qt::DisplayRole) {
+                    return checkGroup->checkNames().at(checkIndex);
+                } else
+                if (role == Qt::CheckStateRole) {
+                    return checkState(checkGroup->checkEnabledState(checkIndex));
+                } else
+                if (role == EffectiveEnabledStateRole) {
+                    return checkGroup->effectiveCheckEnabledState(checkIndex);
+                }
             }
         }
     }
@@ -126,8 +164,8 @@ bool CheckListModel::setData(const QModelIndex& index, const QVariant& value, in
         m_rootCheckGroup->setGroupEnabledState(enabledState);
 
         m_isDefault = false;
-        // TODO: does this result in the subtree being updated, needed as effective state could have changed?
         emit dataChanged(index, index);
+        emitSubGroupDataChanged(m_rootCheckGroup.data());
         emit enabledChecksChanged();
         return true;
     } else {
@@ -136,11 +174,16 @@ bool CheckListModel::setData(const QModelIndex& index, const QVariant& value, in
             return false;
         }
 
+        CheckGroup* changedSubGroup = nullptr;
         const int subGroupsCount = checkGroup->subGroups().count();
         if (childIndex < subGroupsCount) {
             const int subGroupIndex = childIndex;
             auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+            const auto oldEffectiveGroupEnabledState = subGroup->effectiveGroupEnabledState();
             subGroup->setGroupEnabledState(enabledState);
+            if (oldEffectiveGroupEnabledState != subGroup->effectiveGroupEnabledState()) {
+                changedSubGroup = subGroup;
+            }
         } else {
             const int checkIndex = childIndex - subGroupsCount;
             checkGroup->setCheckEnabledState(checkIndex, enabledState);
@@ -149,6 +192,9 @@ bool CheckListModel::setData(const QModelIndex& index, const QVariant& value, in
         m_isDefault = false;
         // TODO: does this result in the subtree being updated, needed as effective state could have changed?
         emit dataChanged(index, index);
+        if (changedSubGroup) {
+            emitSubGroupDataChanged(changedSubGroup);
+        }
         emit enabledChecksChanged();
         return true;
     }
@@ -159,7 +205,7 @@ bool CheckListModel::setData(const QModelIndex& index, const QVariant& value, in
 int CheckListModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
-    return 1;
+    return 2;
 }
 
 int CheckListModel::rowCount(const QModelIndex& parent) const
@@ -205,7 +251,7 @@ QModelIndex CheckListModel::parent(const QModelIndex& child) const
 
 QModelIndex CheckListModel::index(int row, int column, const QModelIndex& parent) const
 {
-    if ((column != 0) ||
+    if ((column < NameColumnId) ||(column > CountColumnId) ||
         (row < 0) ||
         !m_rootCheckGroup) {
         return QModelIndex();
@@ -230,6 +276,10 @@ Qt::ItemFlags CheckListModel::flags(const QModelIndex& index) const
 {
     if (!index.isValid()) {
         return Qt::NoItemFlags;
+    }
+
+    if (index.column() == CountColumnId) {
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     }
 
     auto* checkGroup = static_cast<const CheckGroup*>(index.internalPointer());
@@ -299,6 +349,20 @@ void CheckListModel::setEnabledChecks(const QStringList& enabledChecks)
     }
 
     endResetModel();
+}
+
+void CheckListModel::emitSubGroupDataChanged(CheckGroup* checkGroup)
+{
+    const int rowCount = childCount(checkGroup);
+    if (rowCount > 0) {
+        const auto firstIndex = createIndex(0, NameColumnId, checkGroup);
+        const auto lastIndex = createIndex(rowCount-1, CountColumnId, checkGroup);
+        emit dataChanged(firstIndex, lastIndex);
+    }
+
+    for (auto* subGroup : checkGroup->subGroups()) {
+        emitSubGroupDataChanged(subGroup);
+    }
 }
 
 }

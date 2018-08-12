@@ -22,6 +22,7 @@
 #include "checkselection.h"
 
 // plugin
+#include "checklistitemproxystyle.h"
 #include "checklistmodel.h"
 #include <checkset.h>
 #include <debug.h>
@@ -35,8 +36,10 @@
 #include <KRecursiveFilterProxyModel>
 #endif
 // Qt
+#include <QEvent>
 #include <QVBoxLayout>
 #include <QTreeView>
+#include <QHeaderView>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 #include <QSortFilterProxyModel>
 #endif
@@ -63,6 +66,11 @@ CheckSelection::CheckSelection(QWidget* parent)
     m_checkListView->setAllColumnsShowFocus(true);
     m_checkListView->setRootIsDecorated(true);
     m_checkListView->setHeaderHidden(true);
+    m_proxyStyle = new CheckListItemProxyStyle;
+    m_proxyStyle->setParent(this);
+    m_checkListView->setStyle(m_proxyStyle);
+    auto* header = m_checkListView->header();
+    header->setSectionResizeMode(QHeaderView::ResizeToContents);
     layout->addWidget(m_checkListView);
 
     setLayout(layout);
@@ -99,6 +107,21 @@ void CheckSelection::setChecks(const QString& checks)
 QString CheckSelection::checks() const
 {
     return m_checkListModel->enabledChecks().join(QLatin1Char(','));
+}
+
+
+bool CheckSelection::event(QEvent* event)
+{
+    if (event->type() == QEvent::StyleChange) {
+        // no recursion protection needed as the style is set on the subchild only
+        m_checkListView->setStyle(nullptr);
+        delete m_proxyStyle;
+        m_proxyStyle = new CheckListItemProxyStyle;
+        m_proxyStyle->setParent(this);
+        m_checkListView->setStyle(m_proxyStyle);
+    }
+
+    return QWidget::event(event);
 }
 
 }

@@ -59,18 +59,22 @@ public:
     EnabledState effectiveCheckEnabledState(int index) const;
 
     QString wildCardText() const;
+    QStringList enabledChecksRules() const;
+    int enabledChecksCount() const;
 
     void setGroupEnabledState(EnabledState groupEnabledState);
     void setCheckEnabledState(int index, EnabledState checkEnabledState);
 
     void setEnabledChecks(const QStringList& rules);
-    QStringList enabledChecksRules() const;
 
 private:
     void addCheck(const QString& checkName);
     void applyEnabledRule(const QStringRef& rule, EnabledState enabledState);
     void resetEnabledState(EnabledState enabledState);
     void collectEnabledChecks(QStringList& enabledChecks) const;
+
+    void setEnabledChecksCountDirtyInSuperGroups();
+    void setEnabledChecksCountDirtyInSubGroups();
 
 private:
     CheckGroup* m_superGroup = nullptr;
@@ -80,6 +84,9 @@ private:
     QString m_prefix;
     QVector<CheckGroup*> m_subGroups;
     QStringList m_checks;
+
+    mutable int m_enabledChecksCount = 0;
+    mutable bool m_enabledChecksCountDirty = false;
 };
 
 }

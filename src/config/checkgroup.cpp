@@ -108,6 +108,9 @@ void CheckGroup::setEnabledChecks(const QStringList& rules)
         }
         applyEnabledRule(rule.midRef(matchStartPos), enabledState);
     }
+
+    m_enabledChecksCountDirty = true;
+    setEnabledChecksCountDirtyInSubGroups();
 }
 
 void CheckGroup::applyEnabledRule(const QStringRef& rule, EnabledState enabledState)
@@ -237,13 +240,63 @@ CheckGroup::EnabledState CheckGroup::effectiveCheckEnabledState(int index) const
 
 void CheckGroup::setGroupEnabledState(CheckGroup::EnabledState groupEnabledState)
 {
+    const int oldEffectiveGroupEnabledState = effectiveGroupEnabledState();
+
     m_groupEnabledState = groupEnabledState;
+
+    if (oldEffectiveGroupEnabledState != effectiveGroupEnabledState()) {
+        setEnabledChecksCountDirtyInSuperGroups();
+        setEnabledChecksCountDirtyInSubGroups();
+    }
 }
 
 
 void CheckGroup::setCheckEnabledState(int index, CheckGroup::EnabledState checkEnabledState)
 {
+    const int oldEffectiveCheckEnabledState = effectiveCheckEnabledState(index);
+
     m_checksEnabledStates[index] = checkEnabledState;
+
+    if (oldEffectiveCheckEnabledState != effectiveCheckEnabledState(index)) {
+        setEnabledChecksCountDirtyInSuperGroups();
+    }
+}
+
+int CheckGroup::enabledChecksCount() const
+{
+    if (m_enabledChecksCountDirty) {
+        m_enabledChecksCount = 0;
+
+        for (auto* subGroup : m_subGroups) {
+            m_enabledChecksCount += subGroup->enabledChecksCount();
+        }
+
+        for (int i = 0; i < m_checks.size(); ++i) {
+            if (effectiveCheckEnabledState(i) == Enabled) {
+                ++m_enabledChecksCount;
+            }
+        }
+        m_enabledChecksCountDirty = false;
+    }
+
+    return m_enabledChecksCount;
+}
+
+void CheckGroup::setEnabledChecksCountDirtyInSuperGroups()
+{
+    auto* checkGroup = this;
+    while (checkGroup) {
+        checkGroup->m_enabledChecksCountDirty = true;
+        checkGroup = checkGroup->superGroup();
+    }
+}
+
+void CheckGroup::setEnabledChecksCountDirtyInSubGroups()
+{
+    for (auto* subGroup : m_subGroups) {
+        subGroup->m_enabledChecksCountDirty = true;
+        subGroup->setEnabledChecksCountDirtyInSubGroups();
+    }
 }
 
 }

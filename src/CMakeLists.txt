@@ -15,6 +15,7 @@ set(kdevclangtidy_PART_SRCS
     config/clangtidyprojectconfigpage.cpp
     config/clangtidypreferences.cpp
     config/checkselection.cpp
+    config/checklistitemproxystyle.cpp
     config/checklistmodel.cpp
     config/checkgroup.cpp
 

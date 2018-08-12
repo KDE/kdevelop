@@ -19,48 +19,29 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLANGTIDY_CHECKSELECTION_H
-#define CLANGTIDY_CHECKSELECTION_H
+#ifndef CLANGTIDY_CHECKLISTITEMPROXYSTYLE_H
+#define CLANGTIDY_CHECKLISTITEMPROXYSTYLE_H
 
 // Qt
-#include <QWidget>
+#include <QProxyStyle>
 
-class QTreeView;
+class QStyleOptionViewItem;
 
 namespace ClangTidy
 {
 
-class CheckSet;
-class CheckListModel;
-class CheckListItemProxyStyle;
-
-class CheckSelection : public QWidget
+class CheckListItemProxyStyle : public QProxyStyle
 {
     Q_OBJECT
-    Q_PROPERTY(QString checks READ checks WRITE setChecks NOTIFY checksChanged USER true)
 
-public:
-    explicit CheckSelection(QWidget* parent = nullptr);
-    ~CheckSelection();
-
-public:
-    void setCheckSet(const CheckSet* checkSet);
-
-    void setChecks(const QString& checks);
-    QString checks() const;
-
-protected: // QObject API
-    bool event(QEvent *event) override;
-
-Q_SIGNALS:
-    void checksChanged();
+public: // QStyle API
+    void drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption* option,
+                       QPainter* painter, const QWidget* widget = nullptr) const override;
 
 private:
-    const CheckSet* m_checkSet = nullptr;
-    CheckListModel* m_checkListModel;
-    QTreeView* m_checkListView;
-    CheckListItemProxyStyle* m_proxyStyle;
+    void drawCheckBox(QPainter* painter, const QStyleOptionViewItem* option) const;
 };
 
 }
+
 #endif

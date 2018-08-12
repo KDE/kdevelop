@@ -37,6 +37,16 @@ class CheckListModel : public QAbstractItemModel
     Q_OBJECT
 
 public:
+    enum Roles {
+        EffectiveEnabledStateRole = Qt::UserRole+1
+    };
+
+    enum ColumIds {
+        NameColumnId = 0,
+        CountColumnId = 1
+    };
+
+public:
     explicit CheckListModel(QObject* parent = nullptr);
     ~CheckListModel() override;
 
@@ -60,6 +70,7 @@ Q_SIGNALS:
 private:
     int childCount(const CheckGroup* checkGroup) const;
     CheckGroup* checkGroup(const QModelIndex& index) const;
+    void emitSubGroupDataChanged(CheckGroup* checkGroup);
 
 private:
     const CheckSet* m_checkSet = nullptr;
