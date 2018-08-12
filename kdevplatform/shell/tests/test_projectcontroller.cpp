@@ -125,8 +125,8 @@ public:
         return it;
     }
 
-    ProjectFolderItem* addFolder(const Path& /*folder*/, ProjectFolderItem */*parent*/) override { return nullptr; }
-    ProjectFileItem* addFile(const Path& /*file*/, ProjectFolderItem */*parent*/) override { return nullptr; }
+    ProjectFolderItem* addFolder(const Path& /*folder*/, ProjectFolderItem* /*parent*/) override { return nullptr; }
+    ProjectFileItem* addFile(const Path& /*file*/, ProjectFolderItem* /*parent*/) override { return nullptr; }
     bool removeFilesAndFolders(const QList<ProjectBaseItem*> &/*items*/) override { return false; }
     bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &/*items*/, KDevelop::ProjectFolderItem* /*newParent*/) override { return false; }
     bool copyFilesAndFolders(const Path::List &/*items*/, KDevelop::ProjectFolderItem* /*newParent*/) override { return false; }

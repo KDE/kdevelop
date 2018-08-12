@@ -363,7 +363,7 @@ void GDBOutputWidget::slotStateChanged(KDevMI::DBGStateFlags oldStatus, KDevMI::
 
 /***************************************************************************/
 
-void GDBOutputWidget::focusInEvent(QFocusEvent */*e*/)
+void GDBOutputWidget::focusInEvent(QFocusEvent* /*e*/)
 {
     m_gdbView->verticalScrollBar()->setValue(m_gdbView->verticalScrollBar()->maximum());
     m_userGDBCmdEditor->setFocus();
