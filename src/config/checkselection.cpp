@@ -22,12 +22,12 @@
 #include "checkselection.h"
 
 // plugin
+#include "checklistfilterproxysearchline.h"
 #include "checklistitemproxystyle.h"
 #include "checklistmodel.h"
 #include <checkset.h>
 #include <debug.h>
 // KF
-#include <KFilterProxySearchLine>
 #include <kconfigwidgets_version.h>
 #if KCONFIGWIDGETS_VERSION < QT_VERSION_CHECK(5,32,0)
 #include <KConfigDialogManager>
@@ -59,7 +59,7 @@ CheckSelection::CheckSelection(QWidget* parent)
     auto* layout = new QVBoxLayout;
     layout->setMargin(0);
 
-    auto* checkFilterEdit = new KFilterProxySearchLine(this);
+    auto* checkFilterEdit = new CheckListFilterProxySearchLine(this);
     layout->addWidget(checkFilterEdit);
 
     m_checkListView = new QTreeView(this);
@@ -81,8 +81,11 @@ CheckSelection::CheckSelection(QWidget* parent)
 #else
     auto* checksFilterProxyModel = new KRecursiveFilterProxyModel(this);
 #endif
-    checkFilterEdit->setProxy(checksFilterProxyModel);
+    checkFilterEdit->setFilterProxyModel(checksFilterProxyModel);
     checksFilterProxyModel->setSourceModel(m_checkListModel);
+    checksFilterProxyModel->setFilterKeyColumn(CheckListModel::NameColumnId);
+    checksFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
     m_checkListView->setModel(checksFilterProxyModel);
 
     connect(m_checkListModel, &CheckListModel::enabledChecksChanged,

@@ -15,6 +15,7 @@ set(kdevclangtidy_PART_SRCS
     config/clangtidyprojectconfigpage.cpp
     config/clangtidypreferences.cpp
     config/checkselection.cpp
+    config/checklistfilterproxysearchline.cpp
     config/checklistitemproxystyle.cpp
     config/checklistmodel.cpp
     config/checkgroup.cpp
@@ -50,7 +51,6 @@ target_link_libraries(kdevclangtidy
     KDev::Util
     KDev::Shell
     KF5::ItemViews
-    KF5::ItemModels
     KF5::ConfigCore
     KF5::I18n
 )
