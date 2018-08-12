@@ -4,6 +4,7 @@
   <extends>org.kde.kdevelop.desktop</extends>
   <name>KDevelop Clang-Tidy Support</name>
   <name xml:lang="ca">Implementació del Clang-Tidy al KDevelop</name>
+  <name xml:lang="ca-valencia">Implementació del Clang-Tidy al KDevelop</name>
   <name xml:lang="nl">Ondersteuning van KDevelop Clang-Tidy</name>
   <name xml:lang="pt">Suporte do Clang-Tidy para o KDevelop</name>
   <name xml:lang="sv">KDevelop stöd för Clang-Tidy</name>
@@ -11,6 +12,7 @@
   <name xml:lang="x-test">xxKDevelop Clang-Tidy Supportxx</name>
   <summary>Clang-Tidy integration with KDevelop</summary>
   <summary xml:lang="ca">Integració del Clang-Tidy amb el KDevelop</summary>
+  <summary xml:lang="ca-valencia">Integració del Clang-Tidy amb el KDevelop</summary>
   <summary xml:lang="nl">Integratie van Clang-Tidy met KDevelop</summary>
   <summary xml:lang="pt">Integração do Clang-Tidy com o KDevelop</summary>
   <summary xml:lang="sv">Integrering av Clang-Tidy med KDevelop</summary>
