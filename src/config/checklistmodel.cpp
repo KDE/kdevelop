@@ -354,7 +354,7 @@ void CheckListModel::emitSubGroupDataChanged(const QModelIndex& subGroupIndex)
 {
     // first group itself
     emit dataChanged(subGroupIndex, subGroupIndex, {Qt::CheckStateRole});
-    const auto countIndex = subGroupIndex.siblingAtColumn(CountColumnId);
+    const auto countIndex = subGroupIndex.sibling(subGroupIndex.row(), CountColumnId);
     emit dataChanged(countIndex, countIndex, {Qt::DisplayRole});
 
     auto* checkGroup = this->checkGroup(subGroupIndex);
