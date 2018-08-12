@@ -192,7 +192,7 @@ bool CheckListModel::setData(const QModelIndex& index, const QVariant& value, in
         if (changedSubGroup) {
             emitSubGroupDataChanged(index);
         } else {
-            emit dataChanged(index, index);
+            emit dataChanged(index, index, {Qt::CheckStateRole});
         }
         emit enabledChecksChanged();
         return true;
@@ -353,7 +353,9 @@ void CheckListModel::setEnabledChecks(const QStringList& enabledChecks)
 void CheckListModel::emitSubGroupDataChanged(const QModelIndex& subGroupIndex)
 {
     // first group itself
-    emit dataChanged(subGroupIndex, subGroupIndex.siblingAtColumn(CountColumnId));
+    emit dataChanged(subGroupIndex, subGroupIndex, {Qt::CheckStateRole});
+    const auto countIndex = subGroupIndex.siblingAtColumn(CountColumnId);
+    emit dataChanged(countIndex, countIndex, {Qt::DisplayRole});
 
     auto* checkGroup = this->checkGroup(subGroupIndex);
     const int subGroupsCount = checkGroup->subGroups().count();
@@ -371,7 +373,7 @@ void CheckListModel::emitSubGroupDataChanged(const QModelIndex& subGroupIndex)
         const int lastChecksRow = firstChecksRow + checksCount - 1;
         const auto firstCheckIndex = index(firstChecksRow, NameColumnId, subGroupIndex);
         const auto lastCheckIndex = index(lastChecksRow, NameColumnId, subGroupIndex);
-        emit dataChanged(firstCheckIndex, lastCheckIndex);
+        emit dataChanged(firstCheckIndex, lastCheckIndex, {Qt::CheckStateRole});
     }
 }
 
