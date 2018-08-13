@@ -75,7 +75,7 @@ QString MacroNavigationContext::html(bool shorten)
 
     auto code = m_macro->definition().str();
     modifyHtml() += QLatin1String("<p>") + i18n("Body: ");
-    modifyHtml() += QLatin1String("<tt>") + code.toHtmlEscaped().replace(QStringLiteral("\n"), QStringLiteral("<br/>")) + QLatin1String("</tt>");
+    modifyHtml() += QLatin1String("<tt>") + code.toHtmlEscaped().replace(QLatin1Char('\n'), QStringLiteral("<br/>")) + QLatin1String("</tt>");
     modifyHtml() += QStringLiteral("</p>");
 
     modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");

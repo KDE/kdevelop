@@ -184,7 +184,7 @@ QString Utils::unquoteExpression(const QString& expr)
 QString Utils::quote(const QString& str, char quoteCh)
 {
     QString res = str;
-    res.replace(QLatin1String("\\"), QLatin1String("\\\\")).replace(quoteCh, QStringLiteral("\\") + quoteCh);
+    res.replace(QLatin1Char('\\'), QLatin1String("\\\\")).replace(quoteCh, QStringLiteral("\\") + quoteCh);
     return res.prepend(quoteCh).append(quoteCh);
 }
 
