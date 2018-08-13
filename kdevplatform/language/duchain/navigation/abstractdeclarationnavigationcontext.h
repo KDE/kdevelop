@@ -67,6 +67,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     static QString stringFromAccess(const DeclarationPointer& decl);
     QString declarationName( const DeclarationPointer& decl ) const;
     static QStringList declarationDetails(const DeclarationPointer& decl);
+    static QString declarationSizeInformation(const DeclarationPointer& decl);
 
     ///This can be used for example to resolve typedefs within the type.
     ///All types that are visualized in the navigation-context are/should be mangled through this.

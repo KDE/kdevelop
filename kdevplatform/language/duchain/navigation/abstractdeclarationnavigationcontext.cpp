@@ -330,6 +330,10 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     }
   }
 
+  if(!shorten) {
+    modifyHtml() += declarationSizeInformation(d->m_declaration);
+  }
+
     if(!shorten && doc) {
       modifyHtml() += QLatin1String("<p>") + i18n("Show documentation for ");
       makeLink(prettyQualifiedName(d->m_declaration),
@@ -782,6 +786,39 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(const Decla
   }
 
   return details;
+}
+
+QString AbstractDeclarationNavigationContext::declarationSizeInformation(const DeclarationPointer& decl)
+{
+  // Note that ClassMemberDeclaration also includes ClassDeclaration, which uses the sizeOf and alignOf fields,
+  // but normally leaves the bitOffsetOf unset (-1).
+  const ClassMemberDeclaration* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
+  if (memberDecl && (memberDecl->bitOffsetOf() > 0 || memberDecl->sizeOf() > 0 || memberDecl->alignOf() > 0)) {
+    QString sizeInfo = "<p>";
+
+    if (memberDecl->bitOffsetOf() >= 0) {
+      const auto byteOffset = memberDecl->bitOffsetOf() / 8;
+      const auto bitOffset = memberDecl->bitOffsetOf() % 8;
+      const QString byteOffsetStr = i18np("1 Byte", "%1 Bytes", byteOffset);
+      const QString bitOffsetStr = bitOffset ? i18np("1 Bit", "%1 Bits", bitOffset) : QString();
+      sizeInfo += i18n("offset in parent: %1", bitOffset ? i18nc("%1: bytes, %2: bits", "%1, %2", byteOffsetStr, bitOffsetStr) : byteOffsetStr);
+      sizeInfo += "; ";
+    }
+
+    if (memberDecl->sizeOf() >= 0) {
+      sizeInfo += i18n("size: %1 Bytes", memberDecl->sizeOf());
+      sizeInfo += "; ";
+    }
+
+    if (memberDecl->alignOf() >= 0) {
+      sizeInfo += i18n("aligned to: %1 Bytes", memberDecl->alignOf());
+    }
+
+    sizeInfo += "</p>";
+
+    return sizeInfo;
+  }
+  return QString();
 }
 
 }

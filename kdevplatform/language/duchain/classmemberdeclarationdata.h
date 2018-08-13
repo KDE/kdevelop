@@ -35,12 +35,26 @@ public:
   ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs ) = default;
 
   Declaration::AccessPolicy m_accessPolicy;
+
+  /**
+   * Since alignOf must be integral power of 2, we only need to store the power.
+   * The max value (63) represents unknown alignment.
+   */
+  unsigned m_alignOfExponent : 6;
+  static constexpr unsigned MaxAlignOfExponent = 63;
+
   bool m_isStatic: 1;
   bool m_isAuto: 1;
   bool m_isFriend: 1;
   bool m_isRegister: 1;
   bool m_isExtern: 1;
   bool m_isMutable: 1;
+
+  /// Stores sizeOf in bytes or -1 if unknown.
+  int64_t m_sizeOf;
+
+  /// Stores bitOffsetOf in bits or -1 if unknown.
+  int64_t m_bitOffsetOf;
 };
 
 }

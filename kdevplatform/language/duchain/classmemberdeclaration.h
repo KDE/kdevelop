@@ -71,6 +71,38 @@ public:
   bool isMutable() const;
   void setMutable(bool isMutable);
 
+  /**
+   * \returns The size in bytes or -1 if unknown.
+   */
+  int64_t sizeOf() const;
+
+  /**
+   * Set the size to given number of bytes. Use -1 to represent unknown size.
+   */
+  void setSizeOf(int64_t sizeOf);
+
+  /**
+   * \returns The offset of the field in bits or -1 if unknown or not applicable.
+   */
+  int64_t bitOffsetOf() const;
+
+  /**
+   * Set the offset to given number of bits. Use -1 to represent unknown offset.
+   */
+  void setBitOffsetOf(int64_t bitOffsetOf);
+
+  /**
+   * \returns The alignment in bytes or -1 if unknown.
+   */
+  int64_t alignOf() const;
+
+  /**
+   * Set the alignment to given number of bytes.
+   *
+   * The value must be non-negative power of 2 or -1 to represent unknown alignment.
+   */
+  void setAlignOf(int64_t alignedTo);
+
   enum {
     Identity = 9
   };

@@ -1032,23 +1032,18 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
 #endif
 
 #if CINDEX_VERSION_MINOR >= 30
-    if (!jsonTestRun()) {
-        auto offset = clang_Cursor_getOffsetOfField(cursor);
-        if (offset >= 0) { // don't add this info to the json tests, it invalidates the comment structure
-            auto type = clang_getCursorType(cursor);
-            auto sizeOf = clang_Type_getSizeOf(type);
-            auto alignedTo = clang_Type_getAlignOf(type);
-            const auto byteOffset = offset / 8;
-            const auto bitOffset = offset % 8;
-            const QString byteOffsetStr = i18np("1 Byte", "%1 Bytes", byteOffset);
-            const QString bitOffsetStr = bitOffset ? i18np("1 Bit", "%1 Bits", bitOffset) : QString();
-            const QString offsetStr = bitOffset ? i18nc("%1: bytes, %2: bits", "%1, %2", byteOffsetStr, bitOffsetStr) : byteOffsetStr;
+    auto offset = clang_Cursor_getOffsetOfField(cursor);
+    if (offset >= 0) { // don't add this info to the json tests, it invalidates the comment structure
+        auto type = clang_getCursorType(cursor);
+        auto sizeOf = clang_Type_getSizeOf(type);
+        auto alignOf = clang_Type_getAlignOf(type);
 
-            decl->setComment(decl->comment()
-                                + i18n("<p>offset in parent: %1; "
-                                    "size: %2 Bytes; "
-                                    "aligned to: %3 Bytes</p>", offsetStr, sizeOf, alignedTo).toUtf8());
-        }
+        if (sizeOf >= 0)
+            decl->setSizeOf(sizeOf);
+        if (offset >= 0)
+            decl->setBitOffsetOf(offset);
+        if (alignOf >= 0)
+            decl->setAlignOf(alignOf);
     }
 #endif
 }
@@ -1079,16 +1074,17 @@ void Visitor::setDeclData(CXCursor cursor, ClassDeclaration* decl) const
     if (clang_isCursorDefinition(cursor)) {
         decl->setDeclarationIsDefinition(true);
     }
-    if (!jsonTestRun()) { // don't add this info to the json tests, it invalidates the comment structure
-        auto type = clang_getCursorType(cursor);
-        auto sizeOf = clang_Type_getSizeOf(type);
-        auto alignOf = clang_Type_getAlignOf(type);
-        if (sizeOf >= 0 && alignOf >= 0) {
-            decl->setComment(decl->comment()
-                                + i18n("<p>size: %1 Bytes; "
-                                    "aligned to: %2 Bytes</p>", sizeOf, alignOf).toUtf8());
-        }
-    }
+
+#if CINDEX_VERSION_MINOR >= 30
+    auto type = clang_getCursorType(cursor);
+    auto sizeOf = clang_Type_getSizeOf(type);
+    auto alignOf = clang_Type_getAlignOf(type);
+
+    if (sizeOf >= 0)
+        decl->setSizeOf(sizeOf);
+    if (alignOf >= 0)
+        decl->setAlignOf(alignOf);
+#endif
 }
 
 template<CXCursorKind CK>
