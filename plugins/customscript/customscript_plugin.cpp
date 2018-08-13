@@ -403,7 +403,7 @@ QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url) co
     QString sample = languages[0]->indentationSample();
     QString formattedSample = formatSource(sample, url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString());
 
-    QStringList lines = formattedSample.split(QStringLiteral("\n"));
+    QStringList lines = formattedSample.split(QLatin1Char('\n'));
     foreach (QString line, lines) {
         if (!line.isEmpty() && line[0].isSpace()) {
             QString indent;

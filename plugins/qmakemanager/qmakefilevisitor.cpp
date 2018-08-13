@@ -226,7 +226,7 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
         }
     }
 
-    QStringList ret = value.split(QStringLiteral(" "), QString::SkipEmptyParts);
+    QStringList ret = value.split(QLatin1Char(' '), QString::SkipEmptyParts);
     ifDebug(qCDebug(KDEV_QMAKE) << "resolved variable" << var << "to" << ret;) return ret;
 }
 

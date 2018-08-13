@@ -117,7 +117,7 @@ Defines MsvcCompiler::defines(Utils::LanguageType, const QString&) const
 
 Path::List MsvcCompiler::includes(Utils::LanguageType, const QString&) const
 {
-    QStringList _includePaths = QProcessEnvironment::systemEnvironment().value( QStringLiteral("INCLUDE") ).split( QStringLiteral(";"), QString::SkipEmptyParts );
+    QStringList _includePaths = QProcessEnvironment::systemEnvironment().value(QStringLiteral("INCLUDE")).split(QLatin1Char(';'), QString::SkipEmptyParts);
     Path::List includePaths;
     foreach( const QString &include, _includePaths ) {
         includePaths.append( Path( QDir::fromNativeSeparators( include ) ) );
