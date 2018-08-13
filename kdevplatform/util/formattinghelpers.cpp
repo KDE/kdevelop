@@ -28,7 +28,7 @@ namespace KDevelop
 
 ///Matches the given prefix to the given text, ignoring all whitespace
 ///Returns -1 if mismatched, else the position in @p text where the @p prefix match ends
-int matchPrefixIgnoringWhitespace(QString text, QString prefix, const QString& fuzzyCharacters)
+int matchPrefixIgnoringWhitespace(const QString& text, const QString& prefix, const QString& fuzzyCharacters)
 {
     int prefixPos = 0;
     int textPos = 0;
@@ -77,7 +77,7 @@ static QString reverse( const QString& str ) {
 }
 
 // Returns the text start position with all whitespace that is redundant in the given context skipped
-int skipRedundantWhiteSpace( QString context, QString text, int tabWidth )
+int skipRedundantWhiteSpace(const QString& context, const QString& text, int tabWidth)
 {
     if( context.isEmpty() || !context[context.size()-1].isSpace() || text.isEmpty() || !text[0].isSpace() )
         return 0;
