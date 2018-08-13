@@ -1203,7 +1203,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             const auto text = QString(typed + arguments);
             auto instance = new SimpleItem(text, resultType, replacement, noIcon);
             auto item = CompletionTreeItemPointer(instance);
-            if ( text.startsWith(QLatin1String("_")) ) {
+            if ( text.startsWith(QLatin1Char('_')) ) {
                 instance->markAsUnimportant();
             }
             macros.append(item);
