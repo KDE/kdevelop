@@ -185,8 +185,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem(IProject* project, const
 {
     // find .pro or .pri files in dir
     QDir dir(path.toLocalFile());
-    QStringList projectFiles = dir.entryList(QStringList() << QStringLiteral("*.pro")
-                                                           << QStringLiteral("*.pri"),
+    QStringList projectFiles = dir.entryList(QStringList{QStringLiteral("*.pro"), QStringLiteral("*.pri")},
                                              QDir::Files);
     if (projectFiles.isEmpty()) {
         return nullptr;

@@ -107,13 +107,14 @@ QList<QVariant> DUChainItemData::highlighting() const
 
     prefixLength += fullId.length() - lastId.length();
 
-    QList<QVariant> ret;
-    ret << 0;
-    ret << prefixLength;
-    ret << QVariant(normalFormat);
-    ret << prefixLength;
-    ret << lastId.length();
-    ret << QVariant(boldFormat);
+    QList<QVariant> ret{
+        0,
+        prefixLength,
+        QVariant(normalFormat),
+        prefixLength,
+        lastId.length(),
+        QVariant(boldFormat),
+    };
     if (!signature.isEmpty()) {
         ret << prefixLength + lastId.length();
         ret << signature.length();

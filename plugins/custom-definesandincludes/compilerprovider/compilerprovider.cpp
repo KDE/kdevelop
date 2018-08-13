@@ -105,11 +105,13 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
     : QObject( parent )
     , m_settings(settings)
 {
-    m_factories.append(CompilerFactoryPointer(new GccFactory()));
-    m_factories.append(CompilerFactoryPointer(new ClangFactory()));
+    m_factories = {
+        CompilerFactoryPointer(new GccFactory()),
+        CompilerFactoryPointer(new ClangFactory()),
 #ifdef _WIN32
-    m_factories.append(CompilerFactoryPointer(new MsvcFactory()));
+        CompilerFactoryPointer(new MsvcFactory()),
 #endif
+    };
 
     if (!QStandardPaths::findExecutable( QStringLiteral("clang") ).isEmpty()) {
         m_factories[1]->registerDefaultCompilers(this);

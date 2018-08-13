@@ -352,9 +352,10 @@ uint ProjectItemDataProvider::unfilteredItemCount() const
 
 QStringList ProjectItemDataProvider::supportedItemTypes()
 {
-    QStringList ret;
-    ret << i18n("Classes");
-    ret << i18n("Functions");
+    const QStringList ret{
+        i18n("Classes"),
+        i18n("Functions"),
+    };
     return ret;
 }
 

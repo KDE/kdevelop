@@ -185,7 +185,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     m_editParts[m_index]->openUrl(url);
 
     v->addWidget(m_editParts[m_index]->widget());
-    v->setSizes(QList<int>() << 400 << 100);
+    v->setSizes(QList<int>{400, 100});
 }
 
 void ApplyChangesWidget::indexChanged(int newIndex)

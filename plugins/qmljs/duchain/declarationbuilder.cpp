@@ -1007,10 +1007,10 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
     if (dir.isDir()) {
         // Import all the files in the given directory
         entries = QDir(directory).entryInfoList(
-            QStringList()
-                << (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1))
-                << QStringLiteral("*.qmltypes")
-                << QStringLiteral("*.so"),
+            QStringList{
+                (QLatin1String("*.") + currentFilePath.section(QLatin1Char('.'), -1, -1)),
+                QStringLiteral("*.qmltypes"),
+                QStringLiteral("*.so")},
             QDir::Files
         );
     } else if (dir.isFile()) {

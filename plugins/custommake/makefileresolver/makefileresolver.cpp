@@ -112,13 +112,14 @@ namespace {
 
     QStringList possibleTargets(const QString& targetBaseName) const
     {
-      QStringList ret;
+      const QStringList ret{
       ///@todo open the make-file, and read the target-names from there.
       //It would be nice if all targets could be processed in one call, the problem is the exit-status of make, so for now make has to be called multiple times.
-      ret << targetBaseName + ".o";
-      ret << targetBaseName + ".lo";
+        targetBaseName + QLatin1String(".o"),
+        targetBaseName + QLatin1String(".lo"),
       //ret << targetBaseName + ".lo " + targetBaseName + ".o";
-      ret << targetBaseName + ".ko";
+        targetBaseName + QLatin1String(".ko"),
+      };
       return ret;
     }
 

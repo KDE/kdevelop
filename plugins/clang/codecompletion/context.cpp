@@ -359,12 +359,13 @@ public:
     QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
     {
         if (role == CodeCompletionModel::CustomHighlight && index.column() == CodeCompletionModel::Arguments && argumentHintDepth()) {
-            QList<QVariant> highlighting;
-            highlighting << QVariant(m_range.start);
-            highlighting << QVariant(m_range.end);
             QTextCharFormat boldFormat;
             boldFormat.setFontWeight(QFont::Bold);
-            highlighting << boldFormat;
+            const QList<QVariant> highlighting {
+                QVariant(m_range.start),
+                QVariant(m_range.end),
+                boldFormat,
+            };
             return highlighting;
         }
 

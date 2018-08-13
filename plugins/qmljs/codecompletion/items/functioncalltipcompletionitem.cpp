@@ -143,10 +143,11 @@ QVariant FunctionCalltipCompletionItem::data(const QModelIndex& index, int role,
             format.setBackground(QBrush(QColor::fromRgb(142, 186, 255)));   // Same color as kdev-python
             format.setProperty(QTextFormat::FontWeight, 99);
 
-            return QVariantList()
-                << m_currentArgumentStart
-                << m_currentArgumentLength
-                << format;
+            return QVariantList{
+                m_currentArgumentStart,
+                m_currentArgumentLength,
+                format,
+            };
         }
         break;
 

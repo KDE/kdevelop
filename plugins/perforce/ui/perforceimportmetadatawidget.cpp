@@ -142,8 +142,8 @@ bool PerforceImportMetadataWidget::validateP4user(const QString&  projectDir) co
     p4execEnvironment.insert(QString("P4PORT"), m_ui->p4portEdit->displayText());
     exec.setWorkingDirectory(projectDir);
     exec.setProcessEnvironment(p4execEnvironment);
-    exec.start(m_ui->executableLoc->url().toLocalFile(), QStringList() << QStringLiteral("workspaces") <<
-        QStringLiteral("-u") << m_ui->p4userEdit->text()
+    exec.start(m_ui->executableLoc->url().toLocalFile(), QStringList{QStringLiteral("workspaces"),
+        QStringLiteral("-u"), m_ui->p4userEdit->text()}
     );
     exec.waitForFinished();
 

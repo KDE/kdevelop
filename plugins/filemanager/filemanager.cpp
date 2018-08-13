@@ -145,15 +145,18 @@ void FileManager::setupActions()
     action->setText(i18n("Current Document Directory"));
     action->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));
     connect(action, &QAction::triggered, this, &FileManager::syncCurrentDocumentDirectory);
-    tbActions << (dirop->actionCollection()->action(QStringLiteral("back")));
-    tbActions << (dirop->actionCollection()->action(QStringLiteral("up")));
-    tbActions << (dirop->actionCollection()->action(QStringLiteral("home")));
-    tbActions << (dirop->actionCollection()->action(QStringLiteral("forward")));
-    tbActions << (dirop->actionCollection()->action(QStringLiteral("reload")));
-    tbActions << acmBookmarks;
-    tbActions << action;
-    tbActions << (dirop->actionCollection()->action(QStringLiteral("sorting menu")));
-    tbActions << (dirop->actionCollection()->action(QStringLiteral("show hidden")));
+    auto* diropActionCollection = dirop->actionCollection();
+    tbActions = {
+        diropActionCollection->action(QStringLiteral("back")),
+        diropActionCollection->action(QStringLiteral("up")),
+        diropActionCollection->action(QStringLiteral("home")),
+        diropActionCollection->action(QStringLiteral("forward")),
+        diropActionCollection->action(QStringLiteral("reload")),
+        acmBookmarks,
+        action,
+        diropActionCollection->action(QStringLiteral("sorting menu")),
+        diropActionCollection->action(QStringLiteral("show hidden")),
+    };
 
     newFileAction = new QAction(this);
     newFileAction->setText(i18n("New File..."));

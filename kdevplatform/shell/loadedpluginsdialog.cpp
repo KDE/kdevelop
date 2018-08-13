@@ -196,8 +196,7 @@ public:
 
         QPushButton *button = new QPushButton();
         button->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
-        setBlockedEventTypes(button, QList<QEvent::Type>() << QEvent::MouseButtonPress
-                             << QEvent::MouseButtonRelease << QEvent::MouseButtonDblClick);
+        setBlockedEventTypes(button, QList<QEvent::Type>{QEvent::MouseButtonPress, QEvent::MouseButtonRelease, QEvent::MouseButtonDblClick});
 
         connect(button, &QPushButton::clicked, this, &LoadedPluginsDelegate::info);
         return QList<QWidget*>()

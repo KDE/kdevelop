@@ -85,11 +85,13 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
     proc.setProcessChannelMode( QProcess::MergedChannels );
 
     // TODO: what about -mXXX or -target= flags, some of these change search paths/defines
-    QStringList compilerArguments{languageOption(type), languageStandard(arguments)};
-    compilerArguments.append(QStringLiteral("-dM"));
-    compilerArguments.append(QStringLiteral("-E"));
-    compilerArguments.append(QStringLiteral("-"));
-
+    const QStringList compilerArguments{
+        languageOption(type),
+        languageStandard(arguments),
+        QStringLiteral("-dM"),
+        QStringLiteral("-E"),
+        QStringLiteral("-"),
+    };
     proc.setStandardInputFile(QProcess::nullDevice());
     proc.setProgram(path());
     proc.setArguments(compilerArguments);
@@ -140,10 +142,13 @@ Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& ar
     //  /usr/include
     // End of search list.
 
-    QStringList compilerArguments{languageOption(type), languageStandard(arguments)};
-    compilerArguments.append(QStringLiteral("-E"));
-    compilerArguments.append(QStringLiteral("-v"));
-    compilerArguments.append(QStringLiteral("-"));
+    const QStringList compilerArguments{
+        languageOption(type),
+        languageStandard(arguments),
+        QStringLiteral("-E"),
+        QStringLiteral("-v"),
+        QStringLiteral("-"),
+    };
 
     proc.setStandardInputFile(QProcess::nullDevice());
     proc.setProgram(path());

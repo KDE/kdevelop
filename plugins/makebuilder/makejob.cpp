@@ -215,7 +215,7 @@ QStringList MakeJob::privilegedExecutionCommand() const
         suCommandWithArg = KShell::splitArgs(suCommand);
         if( suCommandWithArg.isEmpty() )
         {
-            suCommandWithArg << QStringLiteral("kdesu") << QStringLiteral("-t");
+            suCommandWithArg = QStringList{QStringLiteral("kdesu"), QStringLiteral("-t")};
         }
 
         return suCommandWithArg;

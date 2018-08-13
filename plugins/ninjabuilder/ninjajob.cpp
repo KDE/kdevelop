@@ -167,13 +167,13 @@ QStringList NinjaJob::privilegedExecutionCommand() const
         QString suCommandName;
         switch (suCommand) {
         case 1:
-            return QStringList() << QStringLiteral("kdesudo") << QStringLiteral("-t");
+            return QStringList{QStringLiteral("kdesudo"), QStringLiteral("-t")};
 
         case 2:
-            return QStringList() << QStringLiteral("sudo");
+            return QStringList{QStringLiteral("sudo")};
 
         default:
-            return QStringList() << QStringLiteral("kdesu") << QStringLiteral("-t");
+            return QStringList{QStringLiteral("kdesu"), QStringLiteral("-t")};
         }
     }
     return QStringList();

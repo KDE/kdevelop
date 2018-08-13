@@ -86,28 +86,30 @@ OktetaWidget::OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayVie
 
 void OktetaWidget::setupActions(OktetaPlugin* plugin)
 {
-    mControllers.append( new Kasten::VersionController(this) );
-    mControllers.append( new Kasten::ReadOnlyController(this) );
+    Kasten::ByteArrayViewProfileManager* viewProfileManager = plugin->viewProfileManager();
+    mControllers = {
+        new Kasten::VersionController(this),
+        new Kasten::ReadOnlyController(this),
     // TODO: save_as
 //     mControllers.append( new ExportController(mProgram->viewManager(),mProgram->documentManager(),this) );
-    mControllers.append( new Kasten::ZoomController(this) );
-    mControllers.append( new Kasten::SelectController(this) );
-    mControllers.append( new Kasten::ClipboardController(this) );
+        new Kasten::ZoomController(this),
+        new Kasten::SelectController(this),
+        new Kasten::ClipboardController(this),
 //     if( modus != BrowserViewModus )
 //         mControllers.append( new Kasten::InsertController(mProgram->viewManager(),mProgram->documentManager(),this) );
 //     mControllers.append( new Kasten::CopyAsController(mProgram->viewManager(),mProgram->documentManager(),this) );
-    mControllers.append( new Kasten::OverwriteModeController(this) );
-    mControllers.append( new Kasten::SearchController(this,this) );
-    mControllers.append( new Kasten::ReplaceController(this,this) );
+        new Kasten::OverwriteModeController(this),
+        new Kasten::SearchController(this,this),
+        new Kasten::ReplaceController(this,this),
 //     mControllers.append( new Kasten::GotoOffsetController(mGroupedViews,this) );
 //     mControllers.append( new Kasten::SelectRangeController(mGroupedViews,this) );
-    mControllers.append( new Kasten::BookmarksController(this) );
-    mControllers.append( new Kasten::PrintController( this ) );
-    mControllers.append( new Kasten::ViewConfigController(this) );
-    mControllers.append( new Kasten::ViewModeController(this) );
-    Kasten::ByteArrayViewProfileManager* viewProfileManager = plugin->viewProfileManager();
-    mControllers.append( new Kasten::ViewProfileController(viewProfileManager, mByteArrayView->widget(), this) );
-    mControllers.append( new Kasten::ViewProfilesManageController(this, viewProfileManager, mByteArrayView->widget()) );
+        new Kasten::BookmarksController(this),
+        new Kasten::PrintController(this),
+        new Kasten::ViewConfigController(this),
+        new Kasten::ViewModeController(this),
+        new Kasten::ViewProfileController(viewProfileManager, mByteArrayView->widget(), this),
+        new Kasten::ViewProfilesManageController(this, viewProfileManager, mByteArrayView->widget()),
+    };
     // update the text of the viewprofiles_manage action, to make clear this is just for byte arrays
     QAction* viewprofilesManageAction = actionCollection()->action(QStringLiteral("settings_viewprofiles_manage"));
     viewprofilesManageAction->setText( i18nc("@action:inmenu",

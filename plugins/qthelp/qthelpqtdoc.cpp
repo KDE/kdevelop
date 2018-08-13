@@ -117,8 +117,10 @@ QStringList QtHelpQtDoc::qchFiles() const
 {
     QStringList files;
 
-    QVector<QString> paths; // test directories
-    paths << m_path << m_path+"/qch/";
+    const QVector<QString> paths{ // test directories
+        m_path,
+        m_path + QLatin1String("/qch/"),
+    };
 
     foreach (const auto &path, paths) {
         QDir d(path);

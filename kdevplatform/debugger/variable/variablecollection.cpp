@@ -78,9 +78,9 @@ Variable::Variable(TreeModel* model, TreeItem* parent,
     // FIXME: should not duplicate the data, instead overload 'data'
     // and return expression_ directly.
     if (display.isEmpty())
-        setData(QVector<QVariant>() << expression << QString() << QString());
+        setData(QVector<QVariant>{expression, QString(), QString()});
     else
-        setData(QVector<QVariant>() << display << QString() << QString());
+        setData(QVector<QVariant>{display, QString(), QString()});
 }
 
 QString Variable::expression() const
@@ -245,7 +245,7 @@ QVariant Variable::data(int column, int role) const
 Watches::Watches(TreeModel* model, TreeItem* parent)
 : TreeItem(model, parent), finishResult_(nullptr)
 {
-    setData(QVector<QVariant>() << i18n("Auto") << QString());
+    setData(QVector<QVariant>{i18n("Auto"), QString()});
 }
 
 Variable* Watches::add(const QString& expression)
@@ -323,7 +323,7 @@ void Watches::reinstall()
 Locals::Locals(TreeModel* model, TreeItem* parent, const QString &name)
 : TreeItem(model, parent)
 {
-    setData(QVector<QVariant>() << name << QString());
+    setData(QVector<QVariant>{name, QString()});
 }
 
 QList<Variable*> Locals::updateLocals(QStringList locals)

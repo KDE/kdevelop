@@ -50,8 +50,12 @@ QIcon generateIcon(const WorkingSetIconParameters& params)
     pixmap.fill(QColor::fromRgba(qRgba(0, 0, 0, 0)));
     const uint coloredCount = params.coloredCount;
     // coordinates of the rectangles to draw, for 16x16 icons specifically
-    QList<QRect> rects;
-    rects << QRect(1, 1, 5, 5) << QRect(1, 9, 5, 5) << QRect(9, 1, 5, 5) << QRect(9, 9, 5, 5);
+    QList<QRect> rects{
+        {1, 1, 5, 5},
+        {1, 9, 5, 5},
+        {9, 1, 5, 5},
+        {9, 9, 5, 5},
+    };
     if ( params.swapDiagonal ) {
         rects.swap(1, 2);
     }
