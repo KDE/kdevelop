@@ -244,9 +244,13 @@ void ClassModel::nodesLayoutChanged(ClassModelNodes::Node*)
   emit layoutChanged();
 }
 
-void ClassModel::nodesRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last)
+void ClassModel::nodesAboutToBeRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last)
 {
   beginRemoveRows(index(a_parent), a_first, a_last);
+}
+
+void ClassModel::nodesRemoved(ClassModelNodes::Node*)
+{
   endRemoveRows();
 }
 

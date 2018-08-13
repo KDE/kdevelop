@@ -453,9 +453,11 @@ Node::~Node()
 {
   // Notify the model about the removal of this nodes' children.
   if ( !m_children.empty() && m_model )
-    m_model->nodesRemoved(this, 0, m_children.size()-1);
-
-  clear();
+  {
+    m_model->nodesAboutToBeRemoved(this, 0, m_children.size()-1);
+    clear();
+    m_model->nodesRemoved(this);
+  }
 }
 
 
@@ -478,9 +480,10 @@ void Node::addNode(Node* a_child)
 void Node::removeNode(Node* a_child)
 {
   int row = a_child->row();
+  m_model->nodesAboutToBeRemoved(this, row, row);
   m_children.removeAt(row);
-  m_model->nodesRemoved(this, row, row );
   delete a_child;
+  m_model->nodesRemoved(this);
 }
 
 // Sort algorithm for the nodes.
@@ -564,11 +567,13 @@ void DynamicNode::performNodeCleanup()
   if ( !m_children.empty() )
   {
     // Notify model for this node.
-    m_model->nodesRemoved(this, 0, m_children.size()-1);
-  }
+    m_model->nodesAboutToBeRemoved(this, 0, m_children.size()-1);
 
-  // Clear sub-nodes.
-  clear();
+    // Clear sub-nodes.
+    clear();
+
+    m_model->nodesRemoved(this);
+  }
 
   // This shouldn't be called from clear since clear is called also from the d-tor
   // and the function is virtual.

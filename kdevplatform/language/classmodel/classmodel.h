@@ -65,7 +65,8 @@ public:
 
   virtual void nodesLayoutAboutToBeChanged(ClassModelNodes::Node* a_parent) = 0;
   virtual void nodesLayoutChanged(ClassModelNodes::Node* a_parent) = 0;
-  virtual void nodesRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last) = 0;
+  virtual void nodesAboutToBeRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last) = 0;
+  virtual void nodesRemoved(ClassModelNodes::Node* a_parent) = 0;
   virtual void nodesAboutToBeAdded(ClassModelNodes::Node* a_parent, int a_pos, int a_size) = 0;
   virtual void nodesAdded(ClassModelNodes::Node* a_parent) = 0;
   virtual Features features() const = 0;
@@ -112,7 +113,8 @@ public Q_SLOTS:
 private: // NodesModelInterface overrides
   void nodesLayoutAboutToBeChanged(ClassModelNodes::Node* a_parent) override;
   void nodesLayoutChanged(ClassModelNodes::Node* a_parent) override;
-  void nodesRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last) override;
+  void nodesAboutToBeRemoved(ClassModelNodes::Node* a_parent, int a_first, int a_last) override;
+  void nodesRemoved(ClassModelNodes::Node* a_parent) override;
   void nodesAboutToBeAdded(ClassModelNodes::Node* a_parent, int a_pos, int a_size) override;
   void nodesAdded(ClassModelNodes::Node* a_parent) override;
 
