@@ -149,8 +149,8 @@ void QMakeFileVisitor::visitAssignment(QMake::AssignmentAST* node)
         if (values.isEmpty())
             return;
         QString value = values.first().trimmed();
-        QString regex = value.mid(2, value.indexOf(QLatin1String("/"), 2));
-        QString replacement = value.mid(value.indexOf(QLatin1String("/"), 2) + 1, value.lastIndexOf(QLatin1String("/")));
+        QString regex = value.mid(2, value.indexOf(QLatin1Char('/'), 2));
+        QString replacement = value.mid(value.indexOf(QLatin1Char('/'), 2) + 1, value.lastIndexOf(QLatin1Char('/')));
         m_variableValues[node->identifier->value].replaceInStrings(QRegExp(regex), replacement);
     }
 }

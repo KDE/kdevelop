@@ -54,7 +54,7 @@ static QString replaceVariables(QString command, QMap<QString, QString> variable
 {
     while (command.contains(QLatin1String("${"))) {
         int pos = command.indexOf(QLatin1String("${"));
-        int end = command.indexOf(QLatin1String("}"), pos + 2);
+        int end = command.indexOf(QLatin1Char('}'), pos + 2);
         if (end == -1) {
             break;
         }
