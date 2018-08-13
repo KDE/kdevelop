@@ -230,7 +230,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::nodeModuleCompletions()
         dir.setPath(path.toLocalFile());
 
         for (QString entry : dir.entryList(QDir::Files, QDir::Name)) {
-            entry.replace(QLatin1String(".js"), QString());
+            entry.remove(QLatin1String(".js"));
 
             if (entry.startsWith(QLatin1String("__"))) {
                 // Internal module, don't show

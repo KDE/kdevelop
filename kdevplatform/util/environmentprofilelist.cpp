@@ -211,7 +211,7 @@ void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcess
                 it.value().replace(m.capturedStart(0), m.capturedLength(0), environment.value(m.captured(0).midRef(1).toString()));
             } else {
                 //TODO: an warning
-                it.value().replace(m.capturedStart(0), m.capturedLength(0), QString());
+                it.value().remove(m.capturedStart(0), m.capturedLength(0));
             }
         }
         it.value().replace(rNotVar, QStringLiteral("$"));
