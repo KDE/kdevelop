@@ -187,12 +187,6 @@ void GDBOutputWidget::slotUserCommandStdout(const QString& line)
 namespace {
     QString colorify(QString text, const QColor& color)
     {
-        // Make sure the newline is at the end of the newly-added
-        // string. This is so that we can always correctly remove
-        // newline inside 'flushPending'.
-        if (!text.endsWith('\n'))
-          text.append('\n');
-
         if (text.endsWith('\n'))
         {
             text.remove(text.length()-1, 1);
