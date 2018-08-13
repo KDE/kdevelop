@@ -85,19 +85,19 @@ void TestAreaWalker::viewWalkerModes()
 
     AreaStopper stopper(QStringLiteral("1"));
     area->walkViews(stopper, area->rootIndex());
-    QCOMPARE(stopper.list.join(QStringLiteral(" ")), QStringLiteral("1"));
+    QCOMPARE(stopper.list.join(QLatin1Char(' ')), QStringLiteral("1"));
 
     AreaStopper stopper2(QStringLiteral("2"));
     area->walkViews(stopper2, area->rootIndex());
-    QCOMPARE(stopper2.list.join(QStringLiteral(" ")), QStringLiteral("1 4 3 2"));
+    QCOMPARE(stopper2.list.join(QLatin1Char(' ')), QStringLiteral("1 4 3 2"));
 
     AreaStopper stopper3(QStringLiteral("3"));
     area->walkViews(stopper3, area->rootIndex());
-    QCOMPARE(stopper3.list.join(QStringLiteral(" ")), QStringLiteral("1 4 3"));
+    QCOMPARE(stopper3.list.join(QLatin1Char(' ')), QStringLiteral("1 4 3"));
 
     AreaStopper noStopper(QStringLiteral("X"));
     area->walkViews(noStopper, area->rootIndex());
-    QCOMPARE(noStopper.list.join(QStringLiteral(" ")), QStringLiteral("1 4 3 2"));
+    QCOMPARE(noStopper.list.join(QLatin1Char(' ')), QStringLiteral("1 4 3 2"));
 
     delete area;
     delete doc;
@@ -121,19 +121,19 @@ void TestAreaWalker::toolViewWalkerModes()
 
     AreaStopper stopper1(QStringLiteral("1"));
     area->walkToolViews(stopper1, Sublime::AllPositions);
-    QCOMPARE(stopper1.list.join(QStringLiteral(" ")), QStringLiteral("1"));
+    QCOMPARE(stopper1.list.join(QLatin1Char(' ')), QStringLiteral("1"));
 
     AreaStopper stopper2(QStringLiteral("2"));
     area->walkToolViews(stopper2, Sublime::AllPositions);
-    QCOMPARE(stopper2.list.join(QStringLiteral(" ")), QStringLiteral("1 2"));
+    QCOMPARE(stopper2.list.join(QLatin1Char(' ')), QStringLiteral("1 2"));
 
     AreaStopper stopper3(QStringLiteral("3"));
     area->walkToolViews(stopper3, Sublime::AllPositions);
-    QCOMPARE(stopper3.list.join(QStringLiteral(" ")), QStringLiteral("1 2 3"));
+    QCOMPARE(stopper3.list.join(QLatin1Char(' ')), QStringLiteral("1 2 3"));
 
     AreaStopper noStopper(QStringLiteral("X"));
     area->walkToolViews(noStopper, Sublime::AllPositions);
-    QCOMPARE(noStopper.list.join(QStringLiteral(" ")), QStringLiteral("1 2 3"));
+    QCOMPARE(noStopper.list.join(QLatin1Char(' ')), QStringLiteral("1 2 3"));
 
     delete area;
     delete doc;

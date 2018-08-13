@@ -41,7 +41,7 @@ InheritanceDescription descriptionFromString(const QString& base)
 {
     QStringList splitBase = base.split(QLatin1Char(' '));
     QString identifier = splitBase.takeLast();
-    QString inheritanceMode = splitBase.join(QStringLiteral(" "));
+    QString inheritanceMode = splitBase.join(QLatin1Char(' '));
 
     InheritanceDescription desc;
     desc.baseType = identifier;

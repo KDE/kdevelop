@@ -223,7 +223,7 @@ void ExternalScriptJob::start()
     if ( m_showOutput ) {
       startOutput();
     }
-    appendLine( i18n( "Running external script: %1", m_proc->program().join( QStringLiteral( " " ) ) ) );
+    appendLine(i18n("Running external script: %1", m_proc->program().join(QLatin1Char(' '))));
     m_proc->start();
 
     if ( m_inputMode != ExternalScriptItem::InputNone ) {
@@ -280,7 +280,7 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
   if ( exitCode == 0 && status == QProcess::NormalExit ) {
     if ( m_outputMode != ExternalScriptItem::OutputNone ) {
       if ( !m_stdout.isEmpty() ) {
-        QString output = m_stdout.join( QStringLiteral("\n") );
+        QString output = m_stdout.join(QLatin1Char('\n'));
         switch ( m_outputMode ) {
           case ExternalScriptItem::OutputNone:
             // do nothing;
@@ -312,7 +312,7 @@ void ExternalScriptJob::processFinished( int exitCode , QProcess::ExitStatus sta
       }
     }
     if ( m_errorMode != ExternalScriptItem::ErrorNone && m_errorMode != ExternalScriptItem::ErrorMergeOutput ) {
-      QString output = m_stderr.join( QStringLiteral("\n") );
+      QString output = m_stderr.join(QLatin1Char('\n'));
 
       if ( !output.isEmpty() ) {
         switch ( m_errorMode ) {

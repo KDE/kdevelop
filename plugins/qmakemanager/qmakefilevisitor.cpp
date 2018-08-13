@@ -194,7 +194,7 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
                     qCWarning(KDEV_QMAKE) << "undefined macro argument:" << variable;
                 }
             } else {
-                varValue = resolveVariable(variable, vi.type).join(QStringLiteral(" "));
+                varValue = resolveVariable(variable, vi.type).join(QLatin1Char(' '));
             }
             break;
         case VariableInfo::ShellVariableResolveQMake:
@@ -203,17 +203,17 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
             varValue = QProcessEnvironment::systemEnvironment().value(variable);
             break;
         case VariableInfo::QtConfigVariable:
-            varValue = resolveVariable(variable, vi.type).join(QStringLiteral(" "));
+            varValue = resolveVariable(variable, vi.type).join(QLatin1Char(' '));
             break;
         case VariableInfo::FunctionCall: {
             QStringList arguments;
             foreach (const VariableInfo::Position& pos, vi.positions) {
                 int start = pos.start + 3 + variable.length();
                 QString args = value.mid(start, pos.end - start);
-                varValue = resolveVariables(args).join(QStringLiteral(" "));
+                varValue = resolveVariables(args).join(QLatin1Char(' '));
                 arguments << varValue;
             }
-            varValue = evaluateMacro(variable, arguments).join(QStringLiteral(" "));
+            varValue = evaluateMacro(variable, arguments).join(QLatin1Char(' '));
             break;
         }
         case VariableInfo::Invalid:

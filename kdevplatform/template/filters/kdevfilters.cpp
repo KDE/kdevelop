@@ -99,7 +99,7 @@ QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& /
 QVariant UnderscoreFilter::doFilter(const QVariant& input, const QVariant& /*argument*/,
                                     bool /*autoescape*/) const
 {
-    QString ret = words(input).join(QStringLiteral("_"));
+    QString ret = words(input).join(QLatin1Char('_'));
     return Grantlee::SafeString(ret);
 }
 
@@ -124,7 +124,7 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
     {
         retLines << start + line;
     }
-    return Grantlee::SafeString(retLines.join(QStringLiteral("\n")));
+    return Grantlee::SafeString(retLines.join(QLatin1Char('\n')));
 }
 
 QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*argument*/,

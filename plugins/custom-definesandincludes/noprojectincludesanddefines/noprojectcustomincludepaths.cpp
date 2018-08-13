@@ -64,7 +64,7 @@ QStringList NoProjectCustomIncludePaths::customIncludePaths() const
 
 void NoProjectCustomIncludePaths::setCustomIncludePaths(const QStringList& paths)
 {
-    m_ui->customIncludePaths->setPlainText(paths.join(QStringLiteral("\n")));
+    m_ui->customIncludePaths->setPlainText(paths.join(QLatin1Char('\n')));
 }
 
 void NoProjectCustomIncludePaths::openAddIncludeDirectoryDialog()

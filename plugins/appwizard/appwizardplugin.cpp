@@ -414,7 +414,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory* dir, const QString&
 {
     qCDebug(PLUGIN_APPWIZARD) << "unpacking dir:" << dir->name() << "to" << dest;
     const QStringList entries = dir->entries();
-    qCDebug(PLUGIN_APPWIZARD) << "entries:" << entries.join(QStringLiteral(","));
+    qCDebug(PLUGIN_APPWIZARD) << "entries:" << entries.join(QLatin1Char(','));
 
     //This extra tempdir is needed just for the files files have special names,
     //which may contain macros also files contain content with macros. So the

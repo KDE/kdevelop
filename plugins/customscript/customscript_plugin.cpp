@@ -471,7 +471,7 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url)
         }
     }
 
-    qCDebug(CUSTOMSCRIPT) << "indent-sample" << "\"" + indent.join(QStringLiteral("\n")) + "\"" << "extracted tab-width" << ret.indentationTabWidth << "extracted indentation width" << ret.indentWidth;
+    qCDebug(CUSTOMSCRIPT) << "indent-sample" << "\"" + indent.join(QLatin1Char('\n')) + "\"" << "extracted tab-width" << ret.indentationTabWidth << "extracted indentation width" << ret.indentWidth;
 
     return ret;
 }

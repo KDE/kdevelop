@@ -322,13 +322,13 @@ QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
         foreach (const QString& category, categories)
         {
             levels << category;
-            indexes << d->templateItems[levels.join(QStringLiteral("/"))]->index();
+            indexes << d->templateItems[levels.join(QLatin1Char('/'))]->index();
         }
 
         if (!indexes.isEmpty())
         {
             QString name = general.readEntry("Name");
-            QStandardItem* categoryItem = d->templateItems[levels.join(QStringLiteral("/"))];
+            QStandardItem* categoryItem = d->templateItems[levels.join(QLatin1Char('/'))];
             for (int i = 0; i < categoryItem->rowCount(); ++i)
             {
                 QStandardItem* templateItem = categoryItem->child(i);

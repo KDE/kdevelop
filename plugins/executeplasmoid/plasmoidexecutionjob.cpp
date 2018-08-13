@@ -73,7 +73,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
 void PlasmoidExecutionJob::start()
 {
     startOutput();
-    model()->appendLine( m_process->workingDirectory() + "> " + m_process->command() + " " + m_process->arguments().join(QStringLiteral(" ")) );
+    model()->appendLine( m_process->workingDirectory() + "> " + m_process->command() + " " + m_process->arguments().join(QLatin1Char(' ')) );
     m_process->start();
 }
 

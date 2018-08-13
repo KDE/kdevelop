@@ -63,7 +63,7 @@ const QString Account::name() const
 
 void Account::setOrgs(const QStringList &orgs)
 {
-    QString res = orgs.join(QStringLiteral(","));
+    QString res = orgs.join(QLatin1Char(','));
     m_group.writeEntry("orgs", orgs);
 }
 

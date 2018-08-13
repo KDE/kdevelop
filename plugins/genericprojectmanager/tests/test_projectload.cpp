@@ -116,7 +116,7 @@ TestProject makeProject()
     QUrl projecturl = QUrl::fromLocalFile( dir.absoluteFilePath() + "/simpleproject.kdev4" );
     QFile projectFile(projecturl.toLocalFile());
     projectFile.open(QIODevice::WriteOnly);
-    projectFile.write(projectFileContents.join(QStringLiteral("\n")).toLatin1());
+    projectFile.write(projectFileContents.join(QLatin1Char('\n')).toLatin1());
     projectFile.close();
     ret.file = projecturl;
 

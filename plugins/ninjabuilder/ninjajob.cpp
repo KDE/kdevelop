@@ -103,7 +103,7 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType,
 
     QString title;
     if (!targets.isEmpty()) {
-        title = i18n("Ninja (%1): %2", item->text(), targets.join(" "));
+        title = i18n("Ninja (%1): %2", item->text(), targets.join(QLatin1Char(' ')));
     } else {
         title = i18n("Ninja (%1)", item->text());
     }

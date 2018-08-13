@@ -243,7 +243,7 @@ QString AreaIndex::print() const
     QStringList ret;
     foreach(Sublime::View* view, views())
         ret << view->document()->title();
-    return ret.join(QStringLiteral(" "));
+    return ret.join(QLatin1Char(' '));
 }
 
 }

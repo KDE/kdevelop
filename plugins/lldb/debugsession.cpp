@@ -232,7 +232,7 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
             vars.append(QStringLiteral("%0=%1").arg(it.key(), Utils::quote(it.value())));
         }
         // actually using lldb command 'settings set target.env-vars' which accepts multiple values
-        addCommand(GdbSet, "environment " + vars.join(QStringLiteral(" ")));
+        addCommand(GdbSet, "environment " + vars.join(QLatin1Char(' ')));
     }
 
     // Break on start: can't use "-exec-run --start" because in lldb-mi

@@ -90,7 +90,7 @@ MakeJob::MakeJob(QObject* parent, KDevelop::ProjectBaseItem* item,
 
     QString title;
     if( !m_overrideTargets.isEmpty() )
-        title = i18n("Make (%1): %2", item->text(), m_overrideTargets.join(" "));
+        title = i18n("Make (%1): %2", item->text(), m_overrideTargets.join(QLatin1Char(' ')));
     else
         title = i18n("Make (%1)", item->text());
     setJobName( title );
@@ -104,7 +104,7 @@ MakeJob::~MakeJob()
 void MakeJob::start()
 {
     ProjectBaseItem* it = item();
-    qCDebug(KDEV_MAKEBUILDER) << "Building with make" << m_command << m_overrideTargets.join(QStringLiteral(" "));
+    qCDebug(KDEV_MAKEBUILDER) << "Building with make" << m_command << m_overrideTargets.join(QLatin1Char(' '));
     if (!it)
     {
         setError(ItemNoLongerValidError);

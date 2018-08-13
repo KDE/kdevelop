@@ -535,7 +535,7 @@ IPlugin *PluginController::loadPluginInternal( const QString &pluginId )
     if ( !hasUnresolvedDependencies( info, missingInterfaces ) ) {
         qCWarning(SHELL) << "Can't load plugin" << pluginId
                    << "some of its required dependencies could not be fulfilled:"
-                   << missingInterfaces.join(QStringLiteral(","));
+                   << missingInterfaces.join(QLatin1Char(','));
         return nullptr;
     }
 

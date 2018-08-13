@@ -93,7 +93,7 @@ bool ensureWritable( const QList<QUrl> &urls )
     if (!notWritable.isEmpty())
     {
         int answer = KMessageBox::questionYesNoCancel(ICore::self()->uiController()->activeMainWindow(),
-            i18n("You don't have write permissions for the following files; add write permissions for owner before saving?") + QLatin1String("\n\n") + notWritable.join(QStringLiteral("\n")),
+            i18n("You don't have write permissions for the following files; add write permissions for owner before saving?") + QLatin1String("\n\n") + notWritable.join(QLatin1Char('\n')),
             i18n("Some files are write-protected"),
             KStandardGuiItem::yes(), KStandardGuiItem::no(), KStandardGuiItem::cancel());
         if (answer == KMessageBox::Yes) {

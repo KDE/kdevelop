@@ -106,7 +106,7 @@ QString zeroIndentation(const QString& str, int fromLine = 0)
         ret << line.mid(minLineStart);
     }
 
-    return ret.join(QStringLiteral("\n"));
+    return ret.join(QLatin1Char('\n'));
 }
 }
 

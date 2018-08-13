@@ -358,7 +358,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
   ///STEP 3.1: Try resolution using the absolute path
   PathResolutionResult res;
   //Try for each possible target
-  res = resolveIncludePathInternal(absoluteFile, wd, possibleTargets.join(QStringLiteral(" ")), source, maximumInternalResolutionDepth);
+  res = resolveIncludePathInternal(absoluteFile, wd, possibleTargets.join(QLatin1Char(' ')), source, maximumInternalResolutionDepth);
   if (!res) {
     ifTest(cout << "Try for absolute file " << absoluteFile.toLocal8Bit().data() << " and targets " << possibleTargets.join(", ").toLocal8Bit().data()
                  << " failed: " << res.longErrorMessage.toLocal8Bit().data() << endl;)

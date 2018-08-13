@@ -110,11 +110,11 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
 
         m_projectFilters.insert(info.name(), filter);
         allEntry += filter;
-        filters << filterFormat.arg(filter.join(QStringLiteral(" ")), desc);
+        filters << filterFormat.arg(filter.join(QLatin1Char(' ')), desc);
     }
 
     if (useKdeFileDialog)
-        filters.prepend(i18n("%1|All Project Files (%1)", allEntry.join(QStringLiteral(" "))));
+        filters.prepend(i18n("%1|All Project Files (%1)", allEntry.join(QLatin1Char(' '))));
 
     QUrl start = startUrl.isValid() ? startUrl : Core::self()->projectController()->projectsBaseDirectory();
     start = start.adjusted(QUrl::NormalizePathSegments);

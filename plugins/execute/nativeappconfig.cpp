@@ -324,7 +324,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                         act->setData(KDevelop::joinWithEscaping(path, '/','\\'));
                         act->setProperty("name", target->text());
                         path.removeFirst();
-                        act->setText(path.join(QStringLiteral("/")));
+                        act->setText(path.join(QLatin1Char('/')));
                         act->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
                         connect(act, &QAction::triggered, this, &NativeAppConfigType::suggestionTriggered);
                         targetsContainer[target->parent()].append(act);
@@ -344,7 +344,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                     }
                     QStringList path = model->pathFromIndex(folder->index());
                     path.removeFirst();
-                    QMenu* submenu = new QMenu(path.join(QStringLiteral("/")), projectMenu);
+                    QMenu* submenu = new QMenu(path.join(QLatin1Char('/')), projectMenu);
                     std::sort(actions.begin(), actions.end(), actionLess);
                     submenu->addActions(actions);
                     submenus += submenu;

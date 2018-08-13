@@ -101,7 +101,7 @@ void QMakeJob::start()
     }
     args << QStringLiteral("-r") << m_srcDir;
 
-    m_model->appendLine(m_buildDir + ": " + args.join(QStringLiteral(" ")));
+    m_model->appendLine(m_buildDir + ": " + args.join(QLatin1Char(' ')));
 
     QDir build(m_buildDir);
     if (!build.exists()) {

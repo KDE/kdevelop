@@ -104,7 +104,7 @@ QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeExecutable, 
 
     const int rc = p.execute();
     if (rc != 0) {
-        qCWarning(KDEV_QMAKE) << "failed to execute qmake query " << p.program().join(QStringLiteral(" ")) << "return code was:" << rc;
+        qCWarning(KDEV_QMAKE) << "failed to execute qmake query " << p.program().join(QLatin1Char(' ')) << "return code was:" << rc;
         return QHash<QString, QString>();
     }
 
@@ -121,7 +121,7 @@ QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeExecutable, 
         const auto value = line.mid(colon + 1);
         hash.insert(key, value);
     }
-    qCDebug(KDEV_QMAKE) << "Ran qmake (" << p.program().join(QStringLiteral(" ")) << "), found:" << hash;
+    qCDebug(KDEV_QMAKE) << "Ran qmake (" << p.program().join(QLatin1Char(' ')) << "), found:" << hash;
     return hash;
 }
 

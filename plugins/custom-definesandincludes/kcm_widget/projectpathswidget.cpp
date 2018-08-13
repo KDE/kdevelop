@@ -220,7 +220,7 @@ void ProjectPathsWidget::batchEdit()
     bool includesTab = ui->languageParameters->currentIndex() == 0;
     if (includesTab) {
         auto includes = pathsModel->data(midx, ProjectPathsModel::IncludesDataRole).toStringList();
-        be.textEdit->setPlainText(includes.join(QStringLiteral("\n")));
+        be.textEdit->setPlainText(includes.join(QLatin1Char('\n')));
 
         dialog->setWindowTitle(i18n("Edit include directories/files"));
     } else {

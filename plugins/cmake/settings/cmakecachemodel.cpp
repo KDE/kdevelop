@@ -87,7 +87,7 @@ void CMakeCacheModel::read()
                 lineItems.append(new QStandardItem(name));
                 lineItems.append(new QStandardItem(type));
                 lineItems.append(new QStandardItem(value));
-                lineItems.append(new QStandardItem(currentComment.join(QStringLiteral("\n"))));
+                lineItems.append(new QStandardItem(currentComment.join(QLatin1Char('\n'))));
 
                 if(flag==QLatin1String("INTERNAL"))
                 {

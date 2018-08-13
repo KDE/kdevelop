@@ -196,7 +196,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
         it.toBack();
         it.insert(QString());
 
-        output = lines.join(QStringLiteral("\n"));
+        output = lines.join(QLatin1Char('\n'));
     }
     else if (d->emptyLinesPolicy == RemoveEmptyLines)
     {
@@ -214,7 +214,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
         {
             it.insert(QString());
         }
-        output = lines.join(QStringLiteral("\n"));
+        output = lines.join(QLatin1Char('\n'));
     }
 
     return output;
