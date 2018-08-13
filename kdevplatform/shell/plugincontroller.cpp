@@ -309,6 +309,7 @@ PluginController::PluginController(Core *core)
     });
     qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << foundPlugins;
 
+    d->plugins.reserve(d->plugins.size() + ktePlugins.size());
     foreach (const auto& info, ktePlugins) {
         auto data = info.rawData();
         // add some KDevelop specific JSON data
@@ -689,6 +690,7 @@ QVector<KPluginMetaData> PluginController::queryExtensionPlugins(const QString& 
 QStringList PluginController::allPluginNames()
 {
     QStringList names;
+    names.reserve(d->plugins.size());
     Q_FOREACH( const KPluginMetaData& info , d->plugins )
     {
         names << info.pluginId();
@@ -708,6 +710,7 @@ QList<ContextMenuExtension> PluginController::queryPluginsForContextMenuExtensio
     }
 
     QList<ContextMenuExtension> exts;
+    exts.reserve(sortedPlugins.size());
     foreach (IPlugin* plugin, sortedPlugins) {
         exts << plugin->contextMenuExtension(context, parent);
     }

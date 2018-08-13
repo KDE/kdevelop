@@ -173,6 +173,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
     if (targets.isEmpty())
     {
         // If no target was explicitly found yet, try all the targets in the current folder
+        targets.reserve(items.size());
         foreach (ProjectBaseItem* item, items)
         {
             targets << item->targetList();
@@ -437,8 +438,9 @@ void TemplateClassAssistant::next()
     {
         ClassDescription desc = d->generator->description();
         desc.methods.clear();
-        foreach (const DeclarationPointer& declaration, d->overridesPageWidget->selectedOverrides())
-        {
+        const auto overrides = d->overridesPageWidget->selectedOverrides();
+        desc.methods.reserve(overrides.size());
+        for (const DeclarationPointer& declaration : overrides) {
             desc.methods << FunctionDescription(declaration);
         }
         d->generator->setDescription(desc);

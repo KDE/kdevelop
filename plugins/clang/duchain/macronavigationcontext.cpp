@@ -50,6 +50,7 @@ QString MacroNavigationContext::html(bool shorten)
     addExternalHtml(prefix());
 
     QStringList parameterList;
+    parameterList.reserve(m_macro->parametersSize());
     FOREACH_FUNCTION(const auto& parameter, m_macro->parameters) {
         parameterList << parameter.str();
     }

@@ -524,6 +524,7 @@ void MainWindowPrivate::slotDockShown(Sublime::View* /*view*/, Sublime::Position
     m_mainWindow->area()->walkToolViews(finder, pos);
 
     QStringList ids;
+    ids.reserve(finder.views.size());
     foreach (View *v, finder.views) {
         ids << v->document()->documentSpecifier();
     }

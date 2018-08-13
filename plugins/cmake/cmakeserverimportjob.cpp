@@ -120,6 +120,7 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
 
                     const auto sourcesArray = fileGroup.value(QStringLiteral("sources")).toArray();
                     const KDevelop::Path::List sources = kTransform<KDevelop::Path::List>(sourcesArray, [targetDir](const QJsonValue& val) { return KDevelop::Path(targetDir, val.toString()); });
+                    targetSources.reserve(targetSources.size() + sources.size());
                     for (const auto& source: sources) {
                         // NOTE: we use the canonical file path to prevent issues with symlinks in the path
                         //       leading to lookup failures

@@ -628,6 +628,7 @@ QStringList allBuildDirs(KDevelop::IProject* project)
 {
     QStringList result;
     int bdCount = buildDirCount(project);
+    result.reserve(bdCount);
     for (int i = 0; i < bdCount; ++i)
         result += buildDirGroup( project, i ).readEntry( Config::Specific::buildDirPathKey );
     return result;

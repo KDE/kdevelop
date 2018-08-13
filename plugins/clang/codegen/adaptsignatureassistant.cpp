@@ -58,7 +58,11 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
     int pos = 0;
     Signature signature;
     const AbstractFunctionDeclaration* abstractFunDecl = dynamic_cast<const AbstractFunctionDeclaration*>(functionDecl);
-    foreach(Declaration * parameter, functionCtxt->localDeclarations()) {
+    const auto localDeclarations = functionCtxt->localDeclarations();
+    const int localDeclarationsCount = localDeclarations.size();
+    signature.defaultParams.reserve(localDeclarationsCount);
+    signature.parameters.reserve(localDeclarationsCount);
+    for (Declaration * parameter : localDeclarations) {
         signature.defaultParams << (includeDefaults ? abstractFunDecl->defaultParameterForArgument(pos).str() : QString());
         signature.parameters << qMakePair(parameter->indexedType(), parameter->identifier().identifier().str());
         ++pos;
@@ -167,6 +171,7 @@ bool AdaptSignatureAssistant::isUseful() const
 bool AdaptSignatureAssistant::getSignatureChanges(const Signature& newSignature, QList<int>& oldPositions) const
 {
     bool changed = false;
+    oldPositions.reserve(oldPositions.size() + newSignature.parameters.size());
     for (int i = 0; i < newSignature.parameters.size(); ++i) {
         oldPositions.append(-1);
     }

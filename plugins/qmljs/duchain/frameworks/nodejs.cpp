@@ -150,6 +150,7 @@ Path::List NodeJS::moduleDirectories(const QString& url)
         QStandardPaths::LocateDirectory
     );
 
+    paths.reserve(dirs.size());
     for (auto dir : dirs) {
         paths.append(Path(dir));
     }

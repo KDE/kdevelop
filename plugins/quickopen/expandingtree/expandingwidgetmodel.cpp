@@ -576,7 +576,9 @@ QList<QVariant> mergeCustomHighlighting(QStringList strings, QList<QVariantList>
     highlights.pop_front();
 
     while (!strings.isEmpty()) {
-        totalHighlighting = mergeCustomHighlighting(totalString.length(), totalHighlighting, strings[0].length(), highlights[0]);
+        const int stringLength = strings[0].length();
+        totalHighlighting = mergeCustomHighlighting(totalString.length(), totalHighlighting, stringLength, highlights[0]);
+        totalString.reserve(totalString.size() + stringLength + grapBetweenStrings);
         totalString += strings[0];
 
         for (int a = 0; a < grapBetweenStrings; a++) {

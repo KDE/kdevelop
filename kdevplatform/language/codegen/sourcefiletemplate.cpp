@@ -89,6 +89,7 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
         else if (tag == QLatin1String("choices")) {
             QStringList values;
             QDomNodeList choices = element.elementsByTagName(QStringLiteral("choice"));
+            values.reserve(choices.size());
             for (int j = 0; j < choices.size(); ++j) {
                 QDomElement choiceElement = choices.at(j).toElement();
                 values << choiceElement.attribute(QStringLiteral("name"));

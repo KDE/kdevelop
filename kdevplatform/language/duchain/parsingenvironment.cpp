@@ -174,6 +174,7 @@ QList< QExplicitlySharedDataPointer<ParsingEnvironmentFile> > ParsingEnvironment
   IndexedTopDUContext top = indexedTopContext();
   if(top.isLoaded()) {
     TopDUContext* topCtx = top.data();
+    imp.reserve(topCtx->d_func()->m_importedContextsSize());
     FOREACH_FUNCTION(const DUContext::Import& import, topCtx->d_func()->m_importedContexts)
       imp << import.indexedContext();
   }else{

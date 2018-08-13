@@ -752,8 +752,11 @@ QList< KJob * > KDevelop::RunController::currentJobs() const
 QList<ILaunchConfiguration*> RunController::launchConfigurations() const
 {
     QList<ILaunchConfiguration*> configs;
-    foreach (LaunchConfiguration *config, launchConfigurationsInternal())
+    const auto configsInternal = launchConfigurationsInternal();
+    configs.reserve(configsInternal.size());
+    for (LaunchConfiguration* config : configsInternal) {
         configs << config;
+    }
     return configs;
 }
 

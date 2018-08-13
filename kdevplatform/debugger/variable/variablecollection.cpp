@@ -370,6 +370,7 @@ QList<Variable*> Locals::updateLocals(QStringList locals)
     // Variables that changed type -- likewise.
 
     QList<Variable*> ret;
+    ret.reserve(childItems.size());
     foreach (TreeItem *i, childItems) {
         Q_ASSERT(qobject_cast<Variable*>(i));
         ret << static_cast<Variable*>(i);

@@ -866,12 +866,14 @@ QVector<DUContext*> DUContext::importers() const
   ENSURE_CAN_READ
 
   QVector<DUContext*> ret;
+  ret.reserve(d_func()->m_importersSize());
   FOREACH_FUNCTION(const IndexedDUContext& ctx, d_func()->m_importers)
     ret << ctx.context();
 
   if(owner()) {
     //Add indirect importers to the list
     KDevVarLengthArray<IndexedDUContext> indirect = Importers::self().importers(owner()->id());
+    ret.reserve(ret.size() + indirect.size());
     foreach (const IndexedDUContext ctx, indirect) {
       ret << ctx.context();
     }

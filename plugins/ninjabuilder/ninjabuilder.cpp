@@ -46,7 +46,9 @@ NinjaBuilder::NinjaBuilder(QObject* parent, const QVariantList&)
 static QStringList targetsInFolder(KDevelop::ProjectFolderItem* item)
 {
     QStringList ret;
-    foreach (KDevelop::ProjectTargetItem* target, item->targetList()) {
+    const auto targets = item->targetList();
+    ret.reserve(targets.size());
+    for (auto* target : targets) {
         ret += target->text();
     }
 

@@ -236,11 +236,15 @@ void Controller::addMainWindow(MainWindow* mainWindow)
     d->mainWindowAreas.resize(d->controlledWindows.size());
     int index = d->controlledWindows.size()-1;
 
-    foreach (Area* area, defaultAreas())
-    {
+    auto& mainWindowAreas = d->mainWindowAreas[index];
+    const auto& defaultAreas = this->defaultAreas();
+    d->allAreas.reserve(d->allAreas.size() + defaultAreas.size());
+    mainWindowAreas.reserve(defaultAreas.size());
+
+    for (const auto* area : defaultAreas) {
         Area *na = new Area(*area);
         d->allAreas.append(na);
-        d->mainWindowAreas[index].push_back(na);
+        mainWindowAreas.append(na);
         emit areaCreated(na);
     }
     showAreaInternal(d->mainWindowAreas[index][0], mainWindow);

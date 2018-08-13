@@ -95,6 +95,7 @@ void KDevelopSessions::loadSessions()
     // Switch kdevelop session: -u
     // Should we add a match for this option or would that clutter the matches too much?
     const QStringList list = findSessions();
+    m_sessions.reserve(list.size());
     foreach (const QString &sessionfile, list)
     {
         Session session;

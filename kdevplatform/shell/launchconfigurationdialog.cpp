@@ -490,9 +490,10 @@ LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstract
     GenericPageItem* global = new GenericPageItem;
     global->text = i18n("Global");
     global->row = 0;
+    const auto projects = Core::self()->projectController()->projects();
+    topItems.reserve(1 + projects.size());
     topItems << global;
-    foreach( IProject* p, Core::self()->projectController()->projects() )
-    {
+    for (IProject* p :  projects) {
         ProjectItem* t = new ProjectItem;
         t->project = p;
         t->row = topItems.count();

@@ -829,7 +829,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         unsaved.Contents = content.constData();
         unsaved.Length = content.size();
 
-        allUnsaved.reserve(otherUnsavedFiles.size());
+        allUnsaved.reserve(otherUnsavedFiles.size() + 1);
         for ( const auto& f : otherUnsavedFiles ) {
             allUnsaved.append(f.toClangApi());
         }
@@ -1278,6 +1278,7 @@ void ClangCodeCompletionContext::addImplementationHelperItems()
     }
 
     QList<CompletionTreeItemPointer> implements;
+    implements.reserve(implementsList.size());
     foreach(const auto& info, implementsList) {
         implements << CompletionTreeItemPointer(new ImplementsItem(info));
     }

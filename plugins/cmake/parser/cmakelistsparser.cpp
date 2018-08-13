@@ -71,10 +71,12 @@ void CMakeFunctionDesc::addArguments( const QStringList& args, bool addEvenIfEmp
 {
     if(addEvenIfEmpty && args.isEmpty())
         arguments += CMakeFunctionArgument();
-    else foreach( const QString& arg, args )
-    {
-        CMakeFunctionArgument cmakeArg( arg );
-        arguments.append( cmakeArg );
+    else {
+        arguments.reserve(arguments.size() + args.size());
+        for (const auto& arg : args) {
+            CMakeFunctionArgument cmakeArg(arg);
+            arguments.append(cmakeArg);
+        }
     }
 }
 

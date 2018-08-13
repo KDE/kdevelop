@@ -44,7 +44,9 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroup(const GroupsNam
 
     registers.groupName = group;
     registers.format = m_formatsModes[group.index()].formats.first();
-    foreach (const QString & name, registerNamesForGroup(group)) {
+    const auto registerNames = registerNamesForGroup(group);
+    registers.registers.reserve(registerNames.size());
+    for (const auto& name : registerNames) {
         registers.registers.append(Register(name, QString()));
     }
 

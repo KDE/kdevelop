@@ -287,6 +287,7 @@ void TopDUContextDynamicData::DUChainItemStorage<Item>::storeData(uint& currentD
 {
   auto const oldOffsets = offsets;
   offsets.clear();
+  offsets.reserve(items.size());
   for (int a = 0; a < items.size(); ++a) {
     auto item = items[a];
     if (!item) {

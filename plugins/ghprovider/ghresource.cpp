@@ -147,6 +147,7 @@ void Resource::retrieveOrgs(const QByteArray &data)
 
     if (error.error == 0) {
         QVariantList json = doc.toVariant().toList();
+        res.reserve(json.size());
         foreach (QVariant it, json) {
             QVariantMap map = it.toMap();
             res << map.value(QStringLiteral("login")).toString();

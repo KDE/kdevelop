@@ -102,6 +102,7 @@ QString zeroIndentation(const QString& str, int fromLine = 0)
         }
     }
 
+    ret.reserve(ret.size() + lines.size());
     foreach (const auto& line, lines) {
         ret << line.mid(minLineStart);
     }

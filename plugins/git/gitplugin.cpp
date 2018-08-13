@@ -100,7 +100,8 @@ static QList<QUrl> preventRecursion(const QList<QUrl>& urls)
     foreach(const QUrl& url, urls) {
         QDir d(url.toLocalFile());
         if(d.exists()) {
-            QStringList entries = d.entryList(QDir::Files | QDir::NoDotAndDotDot);
+            const QStringList entries = d.entryList(QDir::Files | QDir::NoDotAndDotDot);
+            ret.reserve(ret.size() + entries.size());
             foreach(const QString& entry, entries) {
                 QUrl entryUrl = QUrl::fromLocalFile(d.absoluteFilePath(entry));
                 ret += entryUrl;
@@ -501,6 +502,7 @@ void GitPlugin::addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files)
     QStringList otherStr = getLsFiles(dir, QStringList() << QStringLiteral("--others"), KDevelop::OutputJob::Silent);
     QList<QUrl> toadd, otherFiles;
 
+    otherFiles.reserve(otherStr.size());
     foreach(const QString& file, otherStr) {
         QUrl v = QUrl::fromLocalFile(dir.absoluteFilePath(file));
 
@@ -549,6 +551,7 @@ VcsJob* GitPlugin::remove(const QList<QUrl>& files)
         if(!otherStr.isEmpty()) {
             //remove files not under version control
             QList<QUrl> otherFiles;
+            otherFiles.reserve(otherStr.size());
             foreach(const QString &f, otherStr) {
                 otherFiles << QUrl::fromLocalFile(dotGitDir.path()+'/'+f);
             }
@@ -1187,6 +1190,7 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
     }
 
     QVariantList statuses;
+    statuses.reserve(allStatus.size());
     QMap< QUrl, VcsStatusInfo::State >::const_iterator it = allStatus.constBegin(), itEnd=allStatus.constEnd();
     for(; it!=itEnd; ++it) {
 
@@ -1242,6 +1246,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
     QStringList paths;
     QStringList oldcmd=job->dvcsCommand();
     QStringList::const_iterator it=oldcmd.constBegin()+oldcmd.indexOf(QStringLiteral("--"))+1, itEnd=oldcmd.constEnd();
+    paths.reserve(oldcmd.size());
     for(; it!=itEnd; ++it)
         paths += *it;
 

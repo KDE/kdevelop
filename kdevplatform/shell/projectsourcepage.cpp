@@ -53,6 +53,7 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
     int preselectIndex = -1;
     IPluginController* pluginManager = ICore::self()->pluginController();
     QList<IPlugin*> plugins = pluginManager->allPluginsForExtension( QStringLiteral("org.kdevelop.IBasicVersionControl") );
+    m_plugins.reserve(m_plugins.size() + plugins.size());
     foreach( IPlugin* p, plugins )
     {
         if (p == preSelectPlugin) {
@@ -63,6 +64,7 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
     }
 
     plugins = pluginManager->allPluginsForExtension( QStringLiteral("org.kdevelop.IProjectProvider") );
+    m_plugins.reserve(m_plugins.size() + plugins.size());
     foreach( IPlugin* p, plugins )
     {
         if (p == preSelectPlugin) {

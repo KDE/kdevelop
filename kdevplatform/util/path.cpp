@@ -480,6 +480,7 @@ static Path::List toPathList_impl(const Container& list)
             ret << path;
         }
     }
+    ret.squeeze();
     return ret;
 }
 

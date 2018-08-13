@@ -241,8 +241,11 @@ QString AreaIndex::print() const
     if(isSplit())
         return QLatin1String(" [ ") + first()->print() + QLatin1String(orientation() == Qt::Horizontal ? " / " : " - ") + second()->print() + QLatin1String(" ] ");
     QStringList ret;
-    foreach(Sublime::View* view, views())
+    const auto views = this->views();
+    ret.reserve(views.size());
+    for (const auto* view : views) {
         ret << view->document()->title();
+    }
     return ret.join(QLatin1Char(' '));
 }
 

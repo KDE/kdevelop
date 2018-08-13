@@ -248,6 +248,7 @@ int findCommaOrEnd( const QString& str , int pos, QChar validEnd)
 QString reverse( const QString& str ) {
   QString ret;
   int len = str.length();
+  ret.reserve(len);
   for( int a = len-1; a >= 0; --a ) {
     switch(str[a].unicode()) {
     case '(':
@@ -336,11 +337,13 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
 QString reduceWhiteSpace(QString str) {
   str = str.trimmed();
   QString ret;
+  const int len = str.length();
+  ret.reserve(len);
 
   QChar spaceChar = QLatin1Char(' ');
 
   bool hadSpace = false;
-  for( int a = 0; a < str.length(); a++ ) {
+  for (int a = 0; a < len; ++a) {
     if( str[a].isSpace() ) {
       hadSpace = true;
     } else {
@@ -351,7 +354,7 @@ QString reduceWhiteSpace(QString str) {
       ret += str[a];
     }
   }
-
+  ret.squeeze();
   return ret;
 }
 

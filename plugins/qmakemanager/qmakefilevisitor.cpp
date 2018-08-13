@@ -207,6 +207,7 @@ QStringList QMakeFileVisitor::resolveVariables(const QString& var) const
             break;
         case VariableInfo::FunctionCall: {
             QStringList arguments;
+            arguments.reserve(vi.positions.size());
             foreach (const VariableInfo::Position& pos, vi.positions) {
                 int start = pos.start + 3 + variable.length();
                 QString args = value.mid(start, pos.end - start);

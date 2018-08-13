@@ -120,8 +120,9 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
 {
     QStringList retLines;
     QString start = safeString(argument);
-    foreach (const QString& line, safeString(input).split(QLatin1Char('\n'), QString::KeepEmptyParts))
-    {
+    const auto lines = safeString(input).split(QLatin1Char('\n'), QString::KeepEmptyParts);
+    retLines.reserve(lines.size());
+    for (const auto& line : lines) {
         retLines << start + line;
     }
     return Grantlee::SafeString(retLines.join(QLatin1Char('\n')));

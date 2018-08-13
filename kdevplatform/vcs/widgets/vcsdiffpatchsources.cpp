@@ -137,8 +137,9 @@ VCSDiffPatchSource::VCSDiffPatchSource(VCSDiffUpdater* updater)
     {
         varlist = statusJob->fetchResults();
 
-        foreach( const QVariant &var, varlist.toList() )
-        {
+        const auto vars = varlist.toList();
+        m_infos.reserve(m_infos.size() + vars.size());
+        for (const auto& var : vars) {
             VcsStatusInfo info = var.value<KDevelop::VcsStatusInfo>();
 
             m_infos += info;

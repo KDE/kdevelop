@@ -188,7 +188,9 @@ void TodoExtractor::extractTodos()
         const QString text = ClangString(tokenSpelling).toString();
 
         CommentTodoParser parser(text, m_todoMarkerWords);
-        foreach (const CommentTodoParser::Result& result, parser.results()) {
+        const auto parserResults = parser.results();
+        m_problems.reserve(m_problems.size() + parserResults.size());
+        for (const CommentTodoParser::Result& result : parserResults) {
             ProblemPointer problem(new Problem);
             problem->setDescription(result.description);
             problem->setSeverity(IProblem::Hint);

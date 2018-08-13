@@ -70,6 +70,7 @@ int matchPrefixIgnoringWhitespace(const QString& text, const QString& prefix, co
 
 static QString reverse( const QString& str ) {
   QString ret;
+  ret.reserve(str.length());
   for(int a = str.length()-1; a >= 0; --a)
       ret.append(str[a]);
 

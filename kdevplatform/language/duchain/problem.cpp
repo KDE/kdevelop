@@ -47,6 +47,7 @@ LocalIndexedProblem::LocalIndexedProblem(const ProblemPointer& problem, const To
     // the const cast is ugly but we don't really "change" the state as observed from the outside
     auto& serialized = const_cast<Problem*>(problem.data())->d_func_dynamic()->diagnosticsList();
     serialized.clear();
+    serialized.reserve(problem->m_diagnostics.size());
     foreach(const ProblemPointer& child, problem->m_diagnostics) {
         serialized << LocalIndexedProblem(child, top);
     }

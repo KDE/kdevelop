@@ -776,9 +776,11 @@ QStringList QualifiedIdentifier::toStringList(IdentifierStringFormattingOptions 
     ret.append(QString());
 
   if(m_index) {
+    ret.reserve(ret.size() + cd->identifiersSize());
     FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, cd->identifiers)
       ret << index.identifier().toString(options);
   }else{
+    ret.reserve(ret.size() + dd->identifiersSize());
     FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, dd->identifiers)
       ret << index.identifier().toString(options);
   }

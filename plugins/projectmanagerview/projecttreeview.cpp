@@ -191,6 +191,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             QList<ProjectBaseItem*> usefulItems = topLevelItemsWithin(selectionCtxt->items());
             filterDroppedItems(usefulItems, destItem);
             Path::List paths;
+            paths.reserve(usefulItems.size());
             foreach (ProjectBaseItem* i, usefulItems) {
                 paths << i->path();
             }

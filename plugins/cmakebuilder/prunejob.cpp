@@ -61,8 +61,9 @@ void PruneJob::start()
 
     QDir d( builddir.toLocalFile() );
     QList<QUrl> urls;
-    foreach( const QString& entry, d.entryList( QDir::NoDotAndDotDot | QDir::AllEntries ) )
-    {
+    const auto entries = d.entryList( QDir::NoDotAndDotDot | QDir::AllEntries );
+    urls.reserve(entries.size());
+    for (const auto& entry : entries) {
         urls << Path(builddir, entry).toUrl();
     }
     output->appendLine(i18n("%1> rm -rf %2", m_project->path().pathOrUrl(), builddir.toLocalFile()));

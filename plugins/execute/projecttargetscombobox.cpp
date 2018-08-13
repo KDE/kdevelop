@@ -62,7 +62,9 @@ void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item, bool exec)
     if(item) {
         items += item;
     } else {
-        foreach(IProject* p, ICore::self()->projectController()->projects()) {
+        const auto projects = ICore::self()->projectController()->projects();
+        items.reserve(projects.size());
+        for (auto* p : projects) {
             items += p->projectItem();
         }
     }

@@ -115,16 +115,23 @@ QList<QUrl> getDirectoryChoice(const QString& text)
 {
     QList<QUrl> ret;
     if (text == allOpenFilesString()) {
-        foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
+        const auto openDocuments = ICore::self()->documentController()->openDocuments();
+        ret.reserve(openDocuments.size());
+        for (auto* doc : openDocuments) {
             ret << doc->url();
+        }
     } else if (text == allOpenProjectsString()) {
-        foreach(IProject* project, ICore::self()->projectController()->projects())
+        const auto projects = ICore::self()->projectController()->projects();
+        ret.reserve(projects.size());
+        for (auto* project : projects) {
             ret << project->path().toUrl();
+        }
     } else {
         QStringList semicolonSeparatedFileList = text.split(pathsSeparator());
         if (!semicolonSeparatedFileList.isEmpty() && QFileInfo::exists(semicolonSeparatedFileList[0])) {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
             // a semicolon in the name.
+            ret.reserve(semicolonSeparatedFileList.size());
             foreach(const QString& file, semicolonSeparatedFileList)
                 ret << QUrl::fromLocalFile(file).adjusted(QUrl::StripTrailingSlash);
         } else {

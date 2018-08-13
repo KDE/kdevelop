@@ -208,6 +208,7 @@ void loadFileList(QStringList& ret, KConfigGroup group)
 
     } else {
         int viewCount = group.readEntry("View Count", 0);
+        ret.reserve(ret.size() + viewCount);
         for (int i = 0; i < viewCount; ++i) {
             QString specifier = group.readEntry(QStringLiteral("View %1").arg(i), QString());
 

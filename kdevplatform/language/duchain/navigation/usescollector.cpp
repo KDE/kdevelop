@@ -198,6 +198,8 @@ void UsesCollector::startCollecting() {
 
         ///Step 4: Copy allDeclarations into m_declarations, build top-context list, etc.
         QList<ReferencedTopDUContext> candidateTopContexts;
+        candidateTopContexts.reserve(allDeclarations.size());
+        m_declarations.reserve(allDeclarations.size());
         foreach(const IndexedDeclaration d, allDeclarations) {
           m_declarations << d;
           m_declarationTopContexts.insert(d.indexedTopContext());

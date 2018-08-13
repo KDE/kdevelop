@@ -150,6 +150,7 @@ QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const Include
     Path::List paths;
 
     if (properties.local) {
+        paths.reserve(1 + includePaths.project.size() + includePaths.system.size());
         paths.push_back(Path(url).parent());
         paths += includePaths.project;
         paths += includePaths.system;

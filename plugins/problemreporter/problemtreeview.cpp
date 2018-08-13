@@ -228,7 +228,9 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
     QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
     if (solution && !solution->actions().isEmpty()) {
         QList<QAction*> actions;
-        foreach (KDevelop::IAssistantAction::Ptr assistantAction, solution->actions()) {
+        const auto solutionActions = solution->actions();
+        actions.reserve(solutionActions.size());
+        for (auto assistantAction : solutionActions) {
             auto action = assistantAction->toQAction(m.data());
             action->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
             actions << action;

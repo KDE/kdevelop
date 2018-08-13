@@ -108,6 +108,7 @@ QList<AbstractType::Ptr> FunctionType::arguments () const
 {
   ///@todo Don't do the conversion
   QList<AbstractType::Ptr> ret;
+  ret.reserve(d_func()->m_argumentsSize());
   FOREACH_FUNCTION(const IndexedType& arg, d_func()->m_arguments)
     ret << arg.abstractType();
   return ret;

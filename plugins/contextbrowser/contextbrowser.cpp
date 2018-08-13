@@ -463,7 +463,9 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(TopDUContext* 
   QVector<KDevelop::IProblem::Ptr> allProblems;
   const auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
   for (const auto& modelData : modelsData) {
-    foreach (const auto& problem, modelData.model->problems(topContext->url())) {
+    const auto problems = modelData.model->problems(topContext->url());
+    allProblems.reserve(allProblems.size() + problems.size());
+    for (const auto& problem : problems) {
       allProblems += problem;
     }
   }

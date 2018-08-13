@@ -129,6 +129,7 @@ void CommandExecutor::start()
         d->m_process->setProgram( d->m_command, d->m_args );
     } else {
         QStringList arguments;
+        arguments.reserve(d->m_args.size());
         Q_FOREACH( const QString &a, d->m_args ) arguments << KShell::quoteArg( a );
         d->m_process->setShellCommand(d->m_command + QLatin1Char(' ') + arguments.join(QLatin1Char(' ')));
     }

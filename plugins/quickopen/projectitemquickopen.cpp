@@ -253,6 +253,7 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data(uint pos) const
             }
         }
 
+        ret.reserve(ret.size() + decls.size());
         foreach (Declaration* decl, decls) {
             DUChainItem item;
             item.m_item = decl;

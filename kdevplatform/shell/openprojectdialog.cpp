@@ -258,12 +258,14 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                     plugins.removeAll(QStringLiteral("<built-in>"));
                     choices.append({i18n("Open existing file \"%1\"", file), QStringLiteral("<built-in>"), QString()});
                 }
+                choices.reserve(choices.size() + plugins.size());
                 Q_FOREACH ( const auto& plugin, plugins ) {
                     auto meta = m_projectPlugins.value(plugin);
                     choices.append({file + QLatin1String(" (") + plugin + QLatin1Char(')'), meta.pluginId(), meta.iconName(), file});
                 }
             }
             // add managers that work in any case (e.g. KDevGenericManager)
+                choices.reserve(choices.size() + m_genericProjectPlugins.size());
             Q_FOREACH ( const auto& plugin, m_genericProjectPlugins ) {
                 qCDebug(SHELL) << plugin;
                 auto meta = m_projectPlugins.value(plugin);

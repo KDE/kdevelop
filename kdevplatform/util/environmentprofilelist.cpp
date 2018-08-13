@@ -191,6 +191,7 @@ QStringList EnvironmentProfileList::createEnvironment(const QString& profileName
     }
 
     QStringList env;
+    env.reserve(retMap.size());
     for( QMap<QString, QString>::const_iterator it = retMap.constBegin();
         it != retMap.constEnd(); ++it )
     {

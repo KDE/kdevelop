@@ -128,6 +128,7 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         QFileInfoList paths=dir.entryInfoList(QStringList() << tocomplete.mid(lastdir+1)+'*',
                                               QDir::AllEntries | QDir::NoDotAndDotDot);
         m_paths.clear();
+        m_paths.reserve(paths.size());
         foreach(const QFileInfo& f, paths) {
             QString currentPath = f.fileName();
             if(f.isDir())
@@ -258,8 +259,9 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
                     return QVariant();
 
                 QStringList args;
-                foreach(const AbstractType::Ptr& t, func->arguments())
-                {
+                const auto arguments = func->arguments();
+                args.reserve(arguments.size());
+                for (const AbstractType::Ptr& t : arguments) {
                     DelayedType::Ptr delay = t.cast<DelayedType>();
                     args.append(delay ? delay->identifier().toString() : i18n("wrong"));
                 }
