@@ -98,13 +98,10 @@ Path::Path(const QUrl& url)
 
     if (!url.isLocalFile()) {
         // handle remote urls
-        QString urlPrefix;
-        urlPrefix += url.scheme();
-        urlPrefix += QLatin1String("://");
+        QString urlPrefix = url.scheme() + QLatin1String("://");
         const QString user = url.userName();
         if (!user.isEmpty()) {
-            urlPrefix += user;
-            urlPrefix += QLatin1Char('@');
+            urlPrefix += user + QLatin1Char('@');
         }
         urlPrefix += url.host();
         if (url.port() != -1) {

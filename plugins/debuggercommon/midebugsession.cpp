@@ -434,8 +434,7 @@ void MIDebugSession::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags n
         for (unsigned int i = 0; delta != 0 && i < 32; ++i) {
             if (delta & (1 << i))  {
                 delta &= ~(1 << i);
-                out += ((1 << i) & newState) ? " +" : " -";
-                out += QString::number(i);
+                out += (((1 << i) & newState) ? " +" : " -") + QString::number(i);
             }
         }
     }

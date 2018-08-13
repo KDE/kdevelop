@@ -106,7 +106,7 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
 
     QString description = ClangString(clang_getDiagnosticSpelling(diagnostic)).toString();
     if (!diagnosticOption.isEmpty()) {
-        description.append(QStringLiteral(" [%1]").arg(diagnosticOption));
+        description.append(QLatin1String(" [") + diagnosticOption + QLatin1Char(']'));
     }
     setDescription(prettyDiagnosticSpelling(description));
 

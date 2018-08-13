@@ -877,8 +877,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         if (trimmedText.endsWith(QLatin1Char('.'))) {
             // TODO: This shouldn't be needed if Clang provided diagnostic.
             // But it doesn't always do it, so let's try to manually determine whether '.' is used instead of '->'
-            m_text = trimmedText.left(trimmedText.size() - 1);
-            m_text += QStringLiteral("->");
+            m_text = trimmedText.leftRef(trimmedText.size() - 1) + QStringLiteral("->");
 
             CXUnsavedFile unsaved;
             unsaved.Filename = file.constData();

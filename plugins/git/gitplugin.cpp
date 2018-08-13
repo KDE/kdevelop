@@ -1138,8 +1138,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
 
             item.addItem(itemEvent);
         } else if (line.startsWith(QLatin1String("    "))) {
-            message += line.remove(0, 4);
-            message += '\n';
+            message += line.midRef(4) + QLatin1Char('\n');
         }
     }
 

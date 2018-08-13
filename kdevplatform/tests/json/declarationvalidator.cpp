@@ -46,7 +46,7 @@ QByteArray preprocess(QByteArray json)
     commentIndex = json.indexOf('#', commentIndex);
   }
 
-  return json.prepend('{').append('}');
+  return '{' + json + '}';
 }
 
 DeclarationValidator::DeclarationValidator()

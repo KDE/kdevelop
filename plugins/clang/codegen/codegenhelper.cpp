@@ -418,13 +418,12 @@ QString makeSignatureString(const KDevelop::Declaration* functionDecl, const Sig
     // constructors don't have a return type
     if (signature.returnType.isValid()) {
         ret += CodegenHelper::simplifiedTypeString(signature.returnType.abstractType(),
-                                                        visibilityFrom);
-        ret += QLatin1Char(' ');
+                                                        visibilityFrom)
+               + QLatin1Char(' ');
     }
 
-    ret += editingDefinition ? functionDecl->qualifiedIdentifier().toString() : functionDecl->identifier().toString();
-
-    ret += QLatin1Char('(');
+    ret += (editingDefinition ? functionDecl->qualifiedIdentifier().toString() : functionDecl->identifier().toString())
+           + QLatin1Char('(');
     int pos = 0;
 
     foreach(const ParameterItem &item, signature.parameters)
