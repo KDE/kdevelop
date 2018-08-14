@@ -110,10 +110,8 @@ void IncludesModel::addIncludeInternal( const QString& includePath )
     }
 
     // Do not allow duplicates
-    foreach( const QString &include, m_includes ) {
-        if( include == includePath ) {
-            return;
-        }
+    if (m_includes.contains(includePath)) {
+        return;
     }
 
     m_includes << includePath;
