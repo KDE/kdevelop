@@ -158,7 +158,7 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
                     while (p >= 1 && (line[p-1] == '\r' || line[p-1] == '\n'))
                         p--;
                     if (p != line.length())
-                        line.remove(p, line.length() - p);
+                        line.truncate(p);
                 }
                 emit inferiorStdoutLines(lines);
             });
