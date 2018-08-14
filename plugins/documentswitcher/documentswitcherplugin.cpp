@@ -182,7 +182,7 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
             const bool isPartOfOpenProject = QDir::isRelativePath(path);
             if( path.endsWith('/') )
             {
-                path.remove(path.length() - 1, 1);
+                path.chop(1);
             }
             if( isPartOfOpenProject )
             {

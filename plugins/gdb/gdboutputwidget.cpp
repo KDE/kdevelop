@@ -189,7 +189,7 @@ namespace {
     {
         if (text.endsWith('\n'))
         {
-            text.remove(text.length()-1, 1);
+            text.chop(1);
         }
         text = "<font color=\"" + color.name() +  "\">" + text + "</font><br>";
         return text;
@@ -309,7 +309,7 @@ void GDBOutputWidget::flushPending()
     // QTextEdit adds newline after paragraph automatically.
     // So, remove trailing newline to avoid double newlines.
     if (m_pendingOutput.endsWith('\n'))
-        m_pendingOutput.remove(m_pendingOutput.length()-1, 1);
+        m_pendingOutput.chop(1);
     Q_ASSERT(!m_pendingOutput.endsWith('\n'));
 
     QTextDocument *document = m_gdbView->document();
