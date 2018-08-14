@@ -481,8 +481,8 @@ void Node::removeNode(Node* a_child)
 {
   int row = a_child->row();
   m_model->nodesAboutToBeRemoved(this, row, row);
-  m_children.removeAt(row);
   delete a_child;
+  m_children.removeAt(row);
   m_model->nodesRemoved(this);
 }
 
