@@ -209,11 +209,11 @@ void CompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& 
         break;
 
     case QmlJS::CompletionItem::Quotes:
-        document->replaceText(word, "\"" + base + "\"");
+        document->replaceText(word, '\"' + base + '\"');
         break;
 
     case QmlJS::CompletionItem::QuotesAndBracket:
-        document->replaceText(word, "\"" + base + "\"]");
+        document->replaceText(word, '\"' + base + "\"]");
         break;
 
     case QmlJS::CompletionItem::ColonOrBracket:

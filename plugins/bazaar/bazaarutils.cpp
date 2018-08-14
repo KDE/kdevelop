@@ -185,7 +185,7 @@ KDevelop::VcsEvent BazaarUtils::parseBzrLogPart(const QString& output)
             }
         } else if (atMessage && !afterMessage) {
             if (!line.isEmpty() && line[0].isSpace()) {
-                message += line.trimmed() + "\n";
+                message += line.trimmed() + QLatin1Char('\n');
             } else if (!line.isEmpty()) {
                 afterMessage = true;
                 // leave atMessage = true

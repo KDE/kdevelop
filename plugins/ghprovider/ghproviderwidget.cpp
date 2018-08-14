@@ -100,7 +100,7 @@ KDevelop::VcsJob * ProviderWidget::createWorkingCopy(const QUrl &dest)
 
     QString url = pos.data(ProviderModel::VcsLocationRole).toString();
     if (m_account->validAccount())
-      url = "https://" + m_account->token() + "@" + url.mid(8);
+      url = QLatin1String("https://") + m_account->token() + QLatin1Char('@') + url.midRef(8);
     QUrl real = QUrl(url);
     VcsLocation loc(real);
 

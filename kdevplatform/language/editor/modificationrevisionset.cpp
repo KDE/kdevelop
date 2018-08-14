@@ -247,7 +247,7 @@ static bool nodeNeedsUpdate(uint index) {
 QString ModificationRevisionSet::toString() const
 {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  QString ret = QStringLiteral("["); // krazy:exclude=doublequote_chars
+  QString ret(QLatin1Char('['));
   Utils::Set set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set::Iterator it = set.iterator();
   bool first = true;

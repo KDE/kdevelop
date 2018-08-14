@@ -60,16 +60,16 @@ QString descriptionFromProblem(IProblem::Ptr problem)
             .adjusted(QUrl::NormalizePathSegments)
             .toDisplayString(QUrl::PreferLocalFile);
         if (location.start().line() >= 0) {
-            text += QStringLiteral(":") + QString::number(location.start().line() + 1);
+            text += QLatin1Char(':') + QString::number(location.start().line() + 1);
             if (location.start().column() >= 0) {
-                text += QStringLiteral(":") + QString::number(location.start().column() + 1);
+                text += QLatin1Char(':') + QString::number(location.start().column() + 1);
             }
         }
         text += QStringLiteral(": ");
     }
     text += problem->description();
     if (!problem->explanation().isEmpty()) {
-        text += QStringLiteral("\n") + problem->explanation();
+        text += QLatin1Char('\n') + problem->explanation();
     }
     return text;
 }

@@ -272,7 +272,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
       QString localName = sourceDir.dirName();
 
       if (sourceDir.cdUp() && !fileName.isAbsolute()) {
-        QString checkFor = localName + "/" + file;
+        const QString checkFor = localName + QLatin1Char('/') + file;
         PathResolutionResult oneUp = resolveIncludePath(checkFor, sourceDir.path(), maxStepsUp-1);
         if (oneUp.success) {
           oneUp.mergeWith(resultOnFail);

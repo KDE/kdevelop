@@ -66,7 +66,7 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, const QString& currentR
                 case VcsRevision::Previous:
                     Q_ASSERT(!currentRevision.isEmpty());
                     tmp.setNum(previous);
-                    tmp.prepend("#");
+                    tmp.prepend(QLatin1Char('#'));
                     return tmp;
                 case VcsRevision::Start:
                     return QString();

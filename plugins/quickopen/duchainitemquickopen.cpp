@@ -142,7 +142,7 @@ QString DUChainItemData::htmlDescription() const
 
     if (function && function->returnType()) {
         text = i18nc("%1: function signature", "Return: %1",
-                     function->partToString(FunctionType::SignatureReturn)) + QLatin1String(" ");
+                     function->partToString(FunctionType::SignatureReturn)) + QLatin1Char(' ');
     }
 
     text += i18nc("%1: file path", "File: %1", ICore::self()->projectController()->prettyFileName(decl->url().toUrl()));

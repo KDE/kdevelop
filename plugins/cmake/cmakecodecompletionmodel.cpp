@@ -63,7 +63,7 @@ QString escapePath(QString path)
     static const QString toBeEscaped = QStringLiteral("\"()#$^");
 
     for(const QChar &ch : toBeEscaped) {
-        path.replace(ch, "\\" + ch);
+        path.replace(ch, QLatin1Char('\\') + ch);
     }
     return path;
 }

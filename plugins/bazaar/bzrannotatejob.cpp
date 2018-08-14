@@ -167,7 +167,7 @@ void BzrAnnotateJob::parseBzrLog(KDevelop::DVcsJob* job)
                 atMessage = true;
             }
         } else {
-            message += line.trimmed() + "\n";
+            message += line.trimmed() + QLatin1Char('\n');
         }
     }
     if (atMessage)

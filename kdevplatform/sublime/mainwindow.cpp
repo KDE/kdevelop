@@ -306,7 +306,7 @@ void MainWindow::loadSettings()
         QString group(QStringLiteral("Toolbar"));
         // Give a number to the toolbar, but prefer a name if there is one,
         // because there's no real guarantee on the ordering of toolbars
-        group += (toolbar->objectName().isEmpty() ? QString::number(n) : QStringLiteral(" ")+toolbar->objectName());
+        group += (toolbar->objectName().isEmpty() ? QString::number(n) : QLatin1Char(' ')+toolbar->objectName());
 
         KConfigGroup toolbarGroup(&cg, group);
         toolbar->applySettings(toolbarGroup);

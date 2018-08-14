@@ -393,7 +393,7 @@ void DisassembleWidget::disassembleMemoryHandler(const ResultRecord& r)
         //We use offset at the same column where function is.
         if(currentFunction == fct){
             if(!fct.isEmpty()){
-                fct = QStringLiteral("+") + offs;
+                fct = QLatin1Char('+') + offs;
             }
         }else { currentFunction = fct; }
 

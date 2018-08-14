@@ -227,7 +227,7 @@ void ProjectPathsWidget::batchEdit()
         auto defines = pathsModel->data(midx, ProjectPathsModel::DefinesDataRole).value<Defines>();
 
         for (auto it = defines.constBegin(); it != defines.constEnd(); it++) {
-            be.textEdit->appendPlainText(it.key() + "=" + it.value());
+            be.textEdit->appendPlainText(it.key() + QLatin1Char('=') + it.value());
         }
 
         dialog->setWindowTitle(i18n("Edit defined macros"));

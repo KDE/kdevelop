@@ -81,13 +81,13 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
 
     // [type] functionName
     if (func->returnType()) {
-        m_prefix = func->returnType()->toString() + QLatin1String(" ");
+        m_prefix = func->returnType()->toString() + QLatin1Char(' ');
     }
 
     m_prefix += decl->identifier().toString();
 
     // (arg1, arg2, [currentArgument in m_currentArgument], arg4, arg5)
-    m_arguments = QStringLiteral("(");
+    m_arguments = QLatin1Char('(');
 
     for (int i=0; i<arguments.count(); ++i) {
         if (i > 0) {
@@ -102,7 +102,7 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
         m_arguments += arguments.at(i);
     }
 
-    m_arguments += QLatin1String(")");
+    m_arguments += QLatin1Char(')');
 }
 
 AbstractType::Ptr FunctionCalltipCompletionItem::currentArgumentType() const
