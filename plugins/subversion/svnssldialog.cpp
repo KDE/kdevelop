@@ -51,12 +51,12 @@ void SvnSSLTrustDialog::setCertInfos( const QString& hostname,
                                       const QString& realm,
                                       const QStringList& failures )
 {
-    QString txt = QStringLiteral("<ul>");
-    foreach( const QString &fail, failures )
-    {
-        txt += "<li>"+fail+"</li>";
+    if (!failures.isEmpty()) {
+        const QString txt = QLatin1String("<ul><li>") +
+                            failures.join(QLatin1String("</li><li>")) +
+                            QLatin1String("</li></ul>");
+        d->ui.reasons->setHtml( txt );
     }
-    d->ui.reasons->setHtml( txt );
 
     d->ui.hostname->setText( hostname );
     d->ui.fingerprint->setText( fingerPrint );

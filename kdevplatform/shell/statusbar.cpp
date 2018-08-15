@@ -179,11 +179,10 @@ void StatusBar::updateMessage()
     QString ret;
     int timeout = 0;
 
+    QStringList messages;
+    messages.reserve(m_messages.size());
     foreach (const Message& m, m_messages) {
-        if (!ret.isEmpty())
-            ret += QLatin1String("; ");
-
-        ret += m.text;
+        messages.append(m.text);
 
         if (timeout)
             timeout = qMin(timeout, m.timeout);
@@ -191,8 +190,8 @@ void StatusBar::updateMessage()
             timeout = m.timeout;
     }
 
-    if (!ret.isEmpty())
-        QStatusBar::showMessage(ret);
+    if (!messages.isEmpty())
+        QStatusBar::showMessage(messages.join(QLatin1String("; ")));
     else
         QStatusBar::clearMessage();
 

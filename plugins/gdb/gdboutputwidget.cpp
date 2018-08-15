@@ -407,9 +407,7 @@ void GDBOutputWidget::copyAll()
        this complex logic, as opposed to calling text(). */
     const QStringList& raw = m_showInternalCommands ?
         m_allCommandsRaw : m_userCommandsRaw;
-    QString text;
-    for (int i = 0; i < raw.size(); ++i)
-        text += raw.at(i);
+    const QString text = raw.join(QString());
 
     // Make sure the text is pastable both with Ctrl-C and with
     // middle click.

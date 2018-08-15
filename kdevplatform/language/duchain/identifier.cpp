@@ -589,13 +589,12 @@ QString Identifier::toString(IdentifierStringFormattingOptions options) const
   QString ret = identifier().str();
 
   if (!options.testFlag(RemoveTemplateInformation) && templateIdentifiersCount()) {
-    ret.append(QStringLiteral("< "));
+    QStringList templateIds;
+    templateIds.reserve(templateIdentifiersCount());
     for (uint i = 0; i < templateIdentifiersCount(); ++i) {
-      ret.append(templateIdentifier(i).toString(options));
-      if (i != templateIdentifiersCount() - 1)
-        ret.append(QStringLiteral(", "));
+      templateIds.append(templateIdentifier(i).toString(options));
     }
-    ret.append(QStringLiteral(" >"));
+    ret += QStringLiteral("< ") + templateIds.join(QStringLiteral(", ")) + QStringLiteral(" >");
   }
 
   return ret;
@@ -796,30 +795,22 @@ QString QualifiedIdentifier::toString(IdentifierStringFormattingOptions options)
   if( !options.testFlag(RemoveExplicitlyGlobalPrefix) && explicitlyGlobal() )
     ret = doubleColon;
 
-  bool first = true;
+  QStringList identifiers;
   if(m_index) {
+    identifiers.reserve(cd->identifiersSize());
     FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, cd->identifiers)
     {
-      if( !first )
-        ret += doubleColon;
-      else
-        first = false;
-
-      ret += index.identifier().toString(options);
+      identifiers += index.identifier().toString(options);
     }
   }else{
+    identifiers.reserve(dd->identifiersSize());
     FOREACH_FUNCTION_STATIC(const IndexedIdentifier& index, dd->identifiers)
     {
-      if( !first )
-        ret += doubleColon;
-      else
-        first = false;
-
-      ret += index.identifier().toString(options);
+      identifiers += index.identifier().toString(options);
     }
   }
 
-  return ret;
+  return ret + identifiers.join(doubleColon);
 }
 
 QualifiedIdentifier QualifiedIdentifier::merge(const QualifiedIdentifier& base) const

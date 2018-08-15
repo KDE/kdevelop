@@ -247,21 +247,16 @@ static bool nodeNeedsUpdate(uint index) {
 QString ModificationRevisionSet::toString() const
 {
   QMutexLocker lock(&modificationRevisionSetMutex);
-  QString ret(QLatin1Char('['));
   Utils::Set set(m_index, &FileModificationSetRepositoryRepresenter::repository());
   Utils::Set::Iterator it = set.iterator();
-  bool first = true;
+  QStringList revisions;
   while(it) {
-    if(!first)
-      ret += QLatin1String(", ");
-    first = false;
-
     const FileModificationPair* data = fileModificationPairRepository().itemFromIndex(*it);
-    ret += data->file.str() + QLatin1Char(':') + data->revision.toString();
+    revisions.append(data->file.str() + QLatin1Char(':') + data->revision.toString());
     ++it;
   }
 
-  ret += QLatin1Char(']');
+  QString ret = QLatin1Char('[') + revisions.join(QLatin1String(", ")) + QLatin1Char(']');
   return ret;
 }
 

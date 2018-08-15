@@ -422,16 +422,14 @@ QString makeSignatureString(const KDevelop::Declaration* functionDecl, const Sig
                + QLatin1Char(' ');
     }
 
-    ret += (editingDefinition ? functionDecl->qualifiedIdentifier().toString() : functionDecl->identifier().toString())
-           + QLatin1Char('(');
+    ret += editingDefinition ? functionDecl->qualifiedIdentifier().toString() : functionDecl->identifier().toString();
     int pos = 0;
 
+    QStringList parameters;
+    parameters.reserve(signature.parameters.size());
     foreach(const ParameterItem &item, signature.parameters)
     {
-        if (pos != 0) {
-            ret += QLatin1String(", ");
-        }
-
+        QString parameter;
         AbstractType::Ptr type = item.first.abstractType();
 
         QString arrayAppendix;
@@ -446,19 +444,19 @@ QString makeSignatureString(const KDevelop::Declaration* functionDecl, const Sig
                 arrayAppendix.prepend(QLatin1String("[]"));
             }
         }
-        ret += CodegenHelper::simplifiedTypeString(type,
-                                                   visibilityFrom);
+        parameter += CodegenHelper::simplifiedTypeString(type, visibilityFrom);
 
         if (!item.second.isEmpty()) {
-            ret += QLatin1Char(' ') + item.second;
+            parameter += QLatin1Char(' ') + item.second;
         }
-        ret += arrayAppendix;
+        parameter += arrayAppendix;
         if (signature.defaultParams.size() > pos && !signature.defaultParams[pos].isEmpty()) {
-            ret += QLatin1String(" = ") + signature.defaultParams[pos];
+            parameter += QLatin1String(" = ") + signature.defaultParams[pos];
         }
+        parameters.append(parameter);
         ++pos;
     }
-    ret += QLatin1Char(')');
+    ret += QLatin1Char('(') + parameters.join(QLatin1String(", ")) + QLatin1Char(')');
     if (signature.isConst) {
         ret += QLatin1String(" const");
     }
