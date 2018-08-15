@@ -66,7 +66,7 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, const QString& currentR
                 case VcsRevision::Previous:
                     Q_ASSERT(!currentRevision.isEmpty());
                     tmp.setNum(previous);
-                    tmp.prepend("#");
+                    tmp.prepend(QLatin1Char('#'));
                     return tmp;
                 case VcsRevision::Start:
                     return QString();
@@ -75,8 +75,7 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, const QString& currentR
             }
             break;
         case VcsRevision::GlobalNumber:
-            tmp.append("#");
-            tmp.append(rev.revisionValue().toString());
+            tmp.append(QLatin1Char('#') + rev.revisionValue().toString());
             return tmp;
         case VcsRevision::Date:
         case VcsRevision::FileNumber:
@@ -317,8 +316,7 @@ KDevelop::VcsJob* PerforcePlugin::diff(const QUrl& fileOrDirectory, const KDevel
     switch (dstRevision.revisionType()) {
     case VcsRevision::FileNumber:
     case VcsRevision::GlobalNumber:
-        depotDstFileName.append("#");
-        depotDstFileName.append(dstRevision.prettyValue());
+        depotDstFileName.append(QLatin1Char('#') + dstRevision.prettyValue());
         *job << m_perforceExecutable << "diff2" << "-u" << depotSrcFileName << depotDstFileName;
         break;
     case VcsRevision::Special:

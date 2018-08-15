@@ -139,6 +139,7 @@ struct CodeCompletionItemTester
 
       addElements(completionContext->ungroupedElements());
 
+      names.reserve(items.size());
       foreach(Item i, items) {
         names << i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole, nullptr).toString();
       }

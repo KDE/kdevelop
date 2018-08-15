@@ -140,8 +140,7 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
             currentPos = markers[b]->offset();
         }
 
-        html += string.mid( currentPos, string.length()-currentPos ).toHtmlEscaped();
-        html += QLatin1String("<br/>");
+        html += string.mid(currentPos, string.length()-currentPos).toHtmlEscaped() + QLatin1String("<br/>");
     }
 
     auto browser = new QTextBrowser;

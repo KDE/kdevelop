@@ -1083,7 +1083,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     Sublime::Area* area = Core::self()->uiControllerInternal()->activeArea();
 
     QList<int> topLevelSeparators; // Indices of the top-level separators (with groups skipped)
-    QStringList separators = QStringList() << QStringLiteral("/") << QStringLiteral("-");
+    const QStringList separators {QStringLiteral("/"), QStringLiteral("-")};
     QList<QStringList> groups;
 
     bool ret = true;

@@ -139,6 +139,7 @@ static QList<ProjectBaseItem*> itemsFromIndexes(const QList<QPersistentModelInde
 {
     QList<ProjectBaseItem*> items;
     ProjectModel* model = ICore::self()->projectController()->projectModel();
+    items.reserve(indexes.size());
     foreach(const QModelIndex& index, indexes) {
         items += model->itemFromIndex(index);
     }
@@ -263,6 +264,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
     needsCreateFolder &= (items.count() == 1) && (items.first()->folder());
     needsPaste = needsCreateFolder;
 
+    d->ctxProjectItemList.reserve(items.size());
     foreach( ProjectBaseItem* item, items ) {
         d->ctxProjectItemList << item->index();
         //needsBuildItems if items are limited to targets and buildfolders
@@ -415,8 +417,9 @@ void ProjectManagerViewPlugin::buildItemsFromContextMenu()
 QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectAllProjects()
 {
     QList<KDevelop::ProjectBaseItem*> items;
-    foreach( KDevelop::IProject* project, core()->projectController()->projects() )
-    {
+    const auto projects = core()->projectController()->projects();
+    items.reserve(projects.size());
+    for (auto* project : projects) {
         items << project->projectItem();
     }
     return items;
@@ -769,6 +772,7 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
         Path::List finalPathsList;
         for (const auto& task : tasks) {
             if (task.m_status == CutCopyPasteHelpers::TaskStatus::SUCCESS && task.m_type != CutCopyPasteHelpers::TaskType::DELETION) {
+                finalPathsList.reserve(finalPathsList.size() + task.m_src.size());
                 for (const Path& src : task.m_src) {
                     finalPathsList.append(map.finalPaths[src]);
                 }

@@ -362,8 +362,9 @@ void SessionController::loadSession( const QString& nameOrId )
 QList<QString> SessionController::sessionNames() const
 {
     QStringList l;
-    foreach( const Session* s, d->sessionActions.keys() )
-    {
+    const auto sessions = d->sessionActions.keys();
+    l.reserve(sessions.size());
+    for(const auto* s : sessions) {
         l << s->name();
     }
     return l;
@@ -372,8 +373,10 @@ QList<QString> SessionController::sessionNames() const
 QList< const KDevelop::Session* > SessionController::sessions() const
 {
     QList< const KDevelop::Session* > ret;
-    foreach( const Session* s, d->sessionActions.keys() )
-    {
+    const auto sessions = d->sessionActions.keys();
+    ret.reserve(sessions.size());
+    // turn to const pointers
+    for (const auto* s : sessions) {
         ret << s;
     }
     return ret;
@@ -500,11 +503,14 @@ QString SessionController::cfgActiveSessionEntry() { return QStringLiteral("Acti
 SessionInfos SessionController::availableSessionInfos()
 {
     SessionInfos sessionInfos;
-    foreach( const QString& sessionId, QDir( SessionControllerPrivate::sessionBaseDirectory() ).entryList( QDir::AllDirs ) ) {
+    const auto sessionDirs = QDir(SessionControllerPrivate::sessionBaseDirectory()).entryList(QDir::AllDirs);
+    sessionInfos.reserve(sessionDirs.size());
+    for (const QString& sessionId : sessionDirs) {
         if( !QUuid( sessionId ).isNull() ) {
             sessionInfos << Session::parse( sessionId );
         }
     }
+    sessionInfos.squeeze();
     return sessionInfos;
 }
 

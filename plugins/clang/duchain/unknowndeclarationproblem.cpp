@@ -263,7 +263,9 @@ QVector<KDevelop::QualifiedIdentifier> findPossibleQualifiedIdentifiers( const Q
     }
 
     QVector<KDevelop::QualifiedIdentifier> declarations{ identifier };
-    for( auto scopes = context->scopeIdentifier(); !scopes.isEmpty(); scopes.pop() ) {
+    auto scopes = context->scopeIdentifier();
+    declarations.reserve(declarations.size() + scopes.count());
+    for (; !scopes.isEmpty(); scopes.pop()) {
         declarations.append( scopes + identifier );
     }
 

@@ -142,8 +142,8 @@ bool PerforceImportMetadataWidget::validateP4user(const QString&  projectDir) co
     p4execEnvironment.insert(QString("P4PORT"), m_ui->p4portEdit->displayText());
     exec.setWorkingDirectory(projectDir);
     exec.setProcessEnvironment(p4execEnvironment);
-    exec.start(m_ui->executableLoc->url().toLocalFile(), QStringList() << QStringLiteral("workspaces") <<
-        QStringLiteral("-u") << m_ui->p4userEdit->text()
+    exec.start(m_ui->executableLoc->url().toLocalFile(), QStringList{QStringLiteral("workspaces"),
+        QStringLiteral("-u"), m_ui->p4userEdit->text()}
     );
     exec.waitForFinished();
 
@@ -166,6 +166,7 @@ bool PerforceImportMetadataWidget::validateP4user(const QString&  projectDir) co
     if(!processStdout.isEmpty()) {
         QStringList clientCmdOutput = processStdout.split(QLatin1Char('\n'),QString::SkipEmptyParts);
         QStringList clientItems;
+        clientItems.reserve(clientCmdOutput.size());
         for(QString const& clientLine : clientCmdOutput) {
             QStringList wordsInLine = clientLine.split(QLatin1Char(' '));
             // Client mvo_testkdevinteg 2017/05/22 root C:\P4repo 'Created by mvo. ' -- Line would be expected to look like so

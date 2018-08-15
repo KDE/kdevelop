@@ -320,8 +320,7 @@ void IRegisterController::setStructuredRegister(const Register& reg, const Group
     r.value = r.value.trimmed();
     r.value.replace(' ', ',');
     if (r.value.contains(',')) {
-        r.value.append('}');
-        r.value.prepend('{');
+        r.value = '{' + r.value + '}';
     }
 
     r.name += '.' + Converters::modeToString(m_formatsModes[group.index()].modes.first());

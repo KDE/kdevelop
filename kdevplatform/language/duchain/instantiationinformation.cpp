@@ -68,13 +68,16 @@ QString InstantiationInformation::toString(bool local) const {
     if(previousInstantiationInformation.index() && !local)
         ret = previousInstantiationInformation.information().toString() + QLatin1String("::");
     ret += QLatin1Char('<');
+    QStringList types;
+    types.reserve(templateParametersSize());
     for(uint a = 0; a < templateParametersSize(); ++a) {
-        if(a)
-            ret += QLatin1String(", ");
         if(templateParameters()[a].abstractType())
-          ret += templateParameters()[a].abstractType()->toString();
+          types.append(templateParameters()[a].abstractType()->toString());
+        else
+          // TODO: what should be here instead?
+          types.append(QString());
     }
-    ret += QLatin1Char('>');
+    ret += QLatin1Char('<') + types.join(QLatin1String(", ")) + QLatin1Char('>');
     return ret;
 }
 

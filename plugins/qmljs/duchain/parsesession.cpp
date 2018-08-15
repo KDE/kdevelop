@@ -120,7 +120,9 @@ QList<ProblemPointer> ParseSession::problems() const
 {
     QList<ProblemPointer> problems = m_problems;
 
-    foreach (const QmlJS::DiagnosticMessage& msg, m_doc->diagnosticMessages()) {
+    const auto diagnosticMessages = m_doc->diagnosticMessages();
+    problems.reserve(problems.size() + diagnosticMessages.size());
+    for (const auto& msg : diagnosticMessages) {
         ProblemPointer p(new Problem);
         p->setDescription(msg.message);
         p->setSeverity(IProblem::Error);

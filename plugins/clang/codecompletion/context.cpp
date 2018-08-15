@@ -359,12 +359,13 @@ public:
     QVariant data(const QModelIndex& index, int role, const CodeCompletionModel* model) const override
     {
         if (role == CodeCompletionModel::CustomHighlight && index.column() == CodeCompletionModel::Arguments && argumentHintDepth()) {
-            QList<QVariant> highlighting;
-            highlighting << QVariant(m_range.start);
-            highlighting << QVariant(m_range.end);
             QTextCharFormat boldFormat;
             boldFormat.setFontWeight(QFont::Bold);
-            highlighting << boldFormat;
+            const QList<QVariant> highlighting {
+                QVariant(m_range.start),
+                QVariant(m_range.end),
+                boldFormat,
+            };
             return highlighting;
         }
 
@@ -829,7 +830,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         unsaved.Contents = content.constData();
         unsaved.Length = content.size();
 
-        allUnsaved.reserve(otherUnsavedFiles.size());
+        allUnsaved.reserve(otherUnsavedFiles.size() + 1);
         for ( const auto& f : otherUnsavedFiles ) {
             allUnsaved.append(f.toClangApi());
         }
@@ -877,8 +878,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         if (trimmedText.endsWith(QLatin1Char('.'))) {
             // TODO: This shouldn't be needed if Clang provided diagnostic.
             // But it doesn't always do it, so let's try to manually determine whether '.' is used instead of '->'
-            m_text = trimmedText.left(trimmedText.size() - 1);
-            m_text += QStringLiteral("->");
+            m_text = trimmedText.leftRef(trimmedText.size() - 1) + QStringLiteral("->");
 
             CXUnsavedFile unsaved;
             unsaved.Filename = file.constData();
@@ -1279,6 +1279,7 @@ void ClangCodeCompletionContext::addImplementationHelperItems()
     }
 
     QList<CompletionTreeItemPointer> implements;
+    implements.reserve(implementsList.size());
     foreach(const auto& info, implementsList) {
         implements << CompletionTreeItemPointer(new ImplementsItem(info));
     }

@@ -44,7 +44,9 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroup(const GroupsNam
 
     registers.groupName = group;
     registers.format = m_formatsModes[group.index()].formats.first();
-    foreach (const QString & name, registerNamesForGroup(group)) {
+    const auto registerNames = registerNamesForGroup(group);
+    registers.registers.reserve(registerNames.size());
+    for (const auto& name : registerNames) {
         registers.registers.append(Register(name, QString()));
     }
 
@@ -55,7 +57,13 @@ RegistersGroup RegisterControllerGeneral_x86::registersFromGroup(const GroupsNam
 
 QVector<GroupsName> RegisterControllerGeneral_x86::namesOfRegisterGroups() const
 {
-    static const QVector<GroupsName> registerGroups =  QVector<GroupsName>() << enumToGroupName(General) << enumToGroupName(Flags) << enumToGroupName(FPU) << enumToGroupName(XMM) << enumToGroupName(Segment);
+    static const QVector<GroupsName> registerGroups =  QVector<GroupsName>{
+        enumToGroupName(General),
+        enumToGroupName(Flags),
+        enumToGroupName(FPU),
+        enumToGroupName(XMM),
+        enumToGroupName(Segment),
+    };
 
     return registerGroups;
 }
@@ -131,15 +139,8 @@ RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(MIDebugSession* deb
 
     m_formatsModes.resize(namesOfRegisterGroups().size());
 
-    m_formatsModes[XMM].formats.append(Binary);
-    m_formatsModes[XMM].formats.append(Decimal);
-    m_formatsModes[XMM].formats.append(Hexadecimal);
-    m_formatsModes[XMM].formats.append(Octal);
-    m_formatsModes[XMM].formats.append(Unsigned);
-    m_formatsModes[XMM].modes.append(v4_float);
-    m_formatsModes[XMM].modes.append(v2_double);
-    m_formatsModes[XMM].modes.append(v4_int32);
-    m_formatsModes[XMM].modes.append(v2_int64);
+    m_formatsModes[XMM].formats = {Binary, Decimal, Hexadecimal, Octal, Unsigned};
+    m_formatsModes[XMM].modes = {v4_float, v2_double, v4_int32, v2_int64};
 
     m_formatsModes[Flags].formats.append(Raw);
     m_formatsModes[Flags].modes.append(natural);
@@ -171,10 +172,26 @@ void RegisterControllerGeneral_x86::initRegisterNames()
         QStringLiteral("O")
     };
 
-    m_registerNames[Segment] << QStringLiteral("cs") << QStringLiteral("ss") << QStringLiteral("ds") << QStringLiteral("es") << QStringLiteral("fs") << QStringLiteral("gs");
+    m_registerNames[Segment] = QStringList{
+        QStringLiteral("cs"),
+        QStringLiteral("ss"),
+        QStringLiteral("ds"),
+        QStringLiteral("es"),
+        QStringLiteral("fs"),
+        QStringLiteral("gs"),
+    };
 
     m_eflags.flags = m_registerNames[Flags];
-    m_eflags.bits << QStringLiteral("0") << QStringLiteral("2") << QStringLiteral("4") << QStringLiteral("6") << QStringLiteral("7") << QStringLiteral("8") << QStringLiteral("10") << QStringLiteral("11");
+    m_eflags.bits = QStringList{
+        QStringLiteral("0"),
+        QStringLiteral("2"),
+        QStringLiteral("4"),
+        QStringLiteral("6"),
+        QStringLiteral("7"),
+        QStringLiteral("8"),
+        QStringLiteral("10"),
+        QStringLiteral("11"),
+    };
     m_eflags.registerName = QStringLiteral("eflags");
     m_eflags.groupName = enumToGroupName(Flags);
 }

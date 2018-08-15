@@ -93,8 +93,7 @@ QString strippedQid(const QualifiedIdentifier& qid)
     }
     const auto parts = qid.count();
     for (int i = 0; i < parts - 1; ++i) {
-        result += qid.at(i).toString();
-        result += QLatin1String("::");
+        result += qid.at(i).toString() + QLatin1String("::");
     }
     const auto last = qid.at(parts - 1);
     result += last.identifier().str();

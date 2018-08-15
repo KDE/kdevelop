@@ -140,6 +140,7 @@ void QtHelpPlugin::loadQtHelpProvider(const QStringList& pathList, const QString
 QList<KDevelop::IDocumentationProvider*> QtHelpPlugin::providers()
 {
     QList<KDevelop::IDocumentationProvider*> list;
+    list.reserve(m_qtHelpProviders.size() + (m_loadSystemQtDoc?1:0));
     foreach(QtHelpProvider* provider, m_qtHelpProviders) {
         list.append(provider);
     }

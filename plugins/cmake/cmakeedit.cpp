@@ -206,9 +206,12 @@ QList<ProjectBaseItem*> cmakeListedItemsAffectedByUrlChange(const IProject *proj
     {
         if (itemAffected(sameUrlItem, rootUrl))
             dirtyItems.append(sameUrlItem);
-        
-        foreach(ProjectBaseItem* childItem, sameUrlItem->children())
+
+        const auto childItems = sameUrlItem->children();
+        dirtyItems.reserve(dirtyItems.size() + childItems.size());
+        for (ProjectBaseItem* childItem : childItems) {
             dirtyItems.append(cmakeListedItemsAffectedByUrlChange(childItem->project(), childItem->url(), rootUrl));
+        }
     }
     return dirtyItems;
 }
@@ -216,6 +219,7 @@ QList<ProjectBaseItem*> cmakeListedItemsAffectedByUrlChange(const IProject *proj
 QList<ProjectBaseItem*> cmakeListedItemsAffectedByItemsChanged(const QList<ProjectBaseItem*> &items)
 {
     QList<ProjectBaseItem*> dirtyItems;
+    dirtyItems.reserve(items.size());
     foreach(ProjectBaseItem *item, items)
         dirtyItems.append(cmakeListedItemsAffectedByUrlChange(item->project(), item->url()));
     return dirtyItems;

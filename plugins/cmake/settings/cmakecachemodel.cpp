@@ -46,13 +46,14 @@ void CMakeCacheModel::reset()
 void CMakeCacheModel::read()
 {
     // Set headers
-    QStringList labels;
-    labels.append(i18n("Name"));
-    labels.append(i18n("Type"));
-    labels.append(i18n("Value"));
-    labels.append(i18n("Comment"));
-    labels.append(i18n("Advanced"));
-    labels.append(i18n("Strings"));
+    const QStringList labels{
+        i18n("Name"),
+        i18n("Type"),
+        i18n("Value"),
+        i18n("Comment"),
+        i18n("Advanced"),
+        i18n("Strings"),
+    };
     setHorizontalHeaderLabels(labels);
 
     QFile file(m_filePath.toLocalFile());
@@ -83,11 +84,12 @@ void CMakeCacheModel::read()
                 QString type=c.type();
                 QString value=c.value();
 
-                QList<QStandardItem*> lineItems;
-                lineItems.append(new QStandardItem(name));
-                lineItems.append(new QStandardItem(type));
-                lineItems.append(new QStandardItem(value));
-                lineItems.append(new QStandardItem(currentComment.join(QLatin1Char('\n'))));
+                const QList<QStandardItem*> lineItems{
+                    new QStandardItem(name),
+                    new QStandardItem(type),
+                    new QStandardItem(value),
+                    new QStandardItem(currentComment.join(QLatin1Char('\n'))),
+                };
 
                 if(flag==QLatin1String("INTERNAL"))
                 {

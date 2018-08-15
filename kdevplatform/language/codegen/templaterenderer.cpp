@@ -235,6 +235,7 @@ QStringList TemplateRenderer::render(const QStringList& contents) const
 {
     qCDebug(LANGUAGE) << d->context.stackHash(0);
     QStringList ret;
+    ret.reserve(contents.size());
     foreach (const QString& content, contents)
     {
         ret << render(content);

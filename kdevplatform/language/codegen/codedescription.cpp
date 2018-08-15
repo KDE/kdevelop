@@ -136,8 +136,9 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
         }
 
         int i = 0;
-        foreach (Declaration* arg, context->localDeclarations())
-        {
+        const auto localDeclarations = context->localDeclarations();
+        arguments.reserve(localDeclarations.size());
+        for (Declaration* arg : localDeclarations) {
             VariableDescription var = VariableDescription(DeclarationPointer(arg));
             if (function)
             {

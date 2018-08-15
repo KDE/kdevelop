@@ -166,6 +166,7 @@ QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QStr
     QStringList path = category.split(QLatin1Char('/'));
 
     QStringList currentPath;
+    currentPath.reserve(path.size());
     foreach (const QString& entry, path)
     {
         currentPath << entry;
@@ -319,6 +320,7 @@ QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
         QStringList categories = general.readEntry("Category").split(QLatin1Char('/'));
 
         QStringList levels;
+        levels.reserve(categories.size());
         foreach (const QString& category, categories)
         {
             levels << category;

@@ -31,7 +31,7 @@ QString substitudePattern(const QString& pattern, const QString& searchString)
             else if(ch == 's')
                 result.append(subst);
             else
-                result.append('%').append(ch);
+                result.append(QLatin1Char('%') + ch);
         }
         else if(ch == '%')
             expectEscape = true;

@@ -9,7 +9,7 @@
         {% else %}
             {% with arguments|first as argFirst %}
             {% if arguments|length == 1 and argFirst.type == method.name|arg_type %}
-     * Copy Constructor
+     * Copy constructor
             {% else %}
      * Constructor
             {% endif %}
@@ -17,6 +17,8 @@
         {% endif %}
     {% elif method.isDestructor %}
      * Destructor
+    {% elif "operator=" == method.name %}
+     * Assignment operator
     {% else %}
      * @todo write docs
     {% endif %}

@@ -210,9 +210,10 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
         QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
         QProcess *proc = new QProcess;
-        QStringList arguments;
-        arguments << QStringLiteral("-c") << KShell::quoteArg(runShellScript.toLocalFile()) +
-            ' ' + KShell::quoteArg(executable) + QString::fromLatin1(options);
+        const QStringList arguments{
+            QStringLiteral("-c"),
+            KShell::quoteArg(runShellScript.toLocalFile()) + QLatin1Char(' ') + KShell::quoteArg(executable) + QString::fromLatin1(options),
+        };
 
         qCDebug(DEBUGGERGDB) << "starting sh" << arguments;
         proc->start(QStringLiteral("sh"), arguments);

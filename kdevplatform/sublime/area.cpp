@@ -299,6 +299,7 @@ void Area::setTitle(const QString &title)
 void Area::save(KConfigGroup& group) const
 {
     QStringList desired;
+    desired.reserve(d->desiredToolViews.size());
     QMap<QString, Sublime::Position>::iterator i, e;
     for (i = d->desiredToolViews.begin(), e = d->desiredToolViews.end(); i != e; ++i)
     {
@@ -357,6 +358,7 @@ QStringList Area::shownToolViews(Sublime::Position pos) const
 {
     if (pos == Sublime::AllPositions) {
         QStringList allIds;
+        allIds.reserve(d->shownToolViews.size());
         std::for_each(d->shownToolViews.constBegin(), d->shownToolViews.constEnd(), [&](const QStringList& ids) {
             allIds << ids;
         });

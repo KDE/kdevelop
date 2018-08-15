@@ -81,7 +81,9 @@ QVector<KDevelop::IProblem::Ptr> ProblemReporterModel::problems(const QSet<KDeve
         if (!ctx)
             continue;
 
-        foreach (const ProblemPointer& p, DUChainUtils::allProblemsForContext(ctx)) {
+        const auto allProblems = DUChainUtils::allProblemsForContext(ctx);
+        result.reserve(result.size() + allProblems.size());
+        for (const ProblemPointer& p : allProblems) {
             result.append(p);
         }
     }

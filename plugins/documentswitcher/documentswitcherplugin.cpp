@@ -182,7 +182,7 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
             const bool isPartOfOpenProject = QDir::isRelativePath(path);
             if( path.endsWith('/') )
             {
-                path.remove(path.length() - 1, 1);
+                path.chop(1);
             }
             if( isPartOfOpenProject )
             {
@@ -375,7 +375,7 @@ void DocumentSwitcherPlugin::changeView( Sublime::View* view )
         documentLists[mainwindow][area].removeAt( idx );
     }
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "moving view to front, list should now not contain this view anymore" << view << view->document()->title();
-    qCDebug(PLUGIN_DOCUMENTSWITCHER) << "current area is:" << area << area->title() << "mainwnidow:" << mainwindow << mainwindow->windowTitle();;
+    qCDebug(PLUGIN_DOCUMENTSWITCHER) << "current area is:" << area << area->title() << "mainwindow:" << mainwindow << mainwindow->windowTitle();
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
     documentLists[mainwindow][area].prepend( view );
     enableActions();
@@ -398,7 +398,7 @@ void DocumentSwitcherPlugin::removeView( Sublime::View* view )
     }
 
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "removing view, list should now not contain this view anymore" << view << view->document()->title();
-    qCDebug(PLUGIN_DOCUMENTSWITCHER) << "current area is:" << area << area->title() << "mainwnidow:" << mainwindow << mainwindow->windowTitle();;
+    qCDebug(PLUGIN_DOCUMENTSWITCHER) << "current area is:" << area << area->title() << "mainwindow:" << mainwindow << mainwindow->windowTitle();
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "idx of this view in list:" << documentLists[mainwindow][area].indexOf( view );
     enableActions();
 }

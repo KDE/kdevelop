@@ -190,6 +190,7 @@ void EnvironmentProfileModel::setCurrentProfile(const QString& profileName)
     if (!m_currentProfileName.isEmpty()) {
         const auto& variables = m_profileListModel->variables(m_currentProfileName);
 
+        m_varsByIndex.reserve(variables.size());
         const auto endIt = variables.constEnd();
         for (auto it = variables.constBegin(); it != endIt; ++it) {
             m_varsByIndex << it.key();

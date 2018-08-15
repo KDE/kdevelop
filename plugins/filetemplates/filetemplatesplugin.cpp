@@ -168,10 +168,11 @@ QString FileTemplatesPlugin::knsConfigurationFile() const
 
 QStringList FileTemplatesPlugin::supportedMimeTypes() const
 {
-    QStringList types;
-    types << QStringLiteral("application/x-desktop");
-    types << QStringLiteral("application/x-bzip-compressed-tar");
-    types << QStringLiteral("application/zip");
+    const QStringList types{
+        QStringLiteral("application/x-desktop"),
+        QStringLiteral("application/x-bzip-compressed-tar"),
+        QStringLiteral("application/zip"),
+    };
     return types;
 }
 
@@ -243,8 +244,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
     int level = 0;
     while (dir.cdUp() && level < 5)
     {
-        QStringList filters;
-        filters << QStringLiteral("*.kdevtemplate") << QStringLiteral("*.desktop");
+        const QStringList filters{QStringLiteral("*.kdevtemplate"), QStringLiteral("*.desktop")};
         foreach (const QString& entry, dir.entryList(filters))
         {
             qCDebug(PLUGIN_FILETEMPLATES) << "Trying entry" << entry;

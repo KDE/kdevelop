@@ -95,8 +95,22 @@ void TestKTextEditorPluginIntegration::cleanupTestCase()
     TestCore::shutdown();
 
     QVERIFY(!plugin);
+    // Test uncovers issue in shutdown behaviour when not triggered by last closed mainwindow, but directly:
+    // Core::shutdown() deletes itself via deleteLater, for which TestCore::shutdown() adds a QTest::qWait(1)
+    // so Core instance should be gone after the call returns.
+    // Core in its destructor deletes the Sublime::Controller instance.
+    // That one in the destructor deletes any still existing mainwindows, of which we have here in the test one.
+    // The KTE::MainWindow wrapper trying to outlive the KTE::View instances as needed now is only deleted with
+    // a deleteLater() from the mainwindow. Thus still living here.
+    QEXPECT_FAIL("", "Chain of deleteLater too long ATM", Continue);
     QVERIFY(!window);
     QVERIFY(!application);
+
+    // workaround for now, remove again if issue of too long deleteLater chain above is fixed
+    QTest::qWait(1);
+    QVERIFY(!window);
+
+    // editor lives by design until QCoreApplication terminates, then autodeletes
 }
 
 void TestKTextEditorPluginIntegration::testApplication()

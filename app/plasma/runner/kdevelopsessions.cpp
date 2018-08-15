@@ -95,13 +95,14 @@ void KDevelopSessions::loadSessions()
     // Switch kdevelop session: -u
     // Should we add a match for this option or would that clutter the matches too much?
     const QStringList list = findSessions();
+    m_sessions.reserve(list.size());
     foreach (const QString &sessionfile, list)
     {
         Session session;
         session.id = sessionfile.section('/', -2, -2);
         KConfig cfg(sessionfile, KConfig::SimpleConfig);
         KConfigGroup group = cfg.group(QString());
-        session.name = group.readEntry("SessionPrettyContents");;
+        session.name = group.readEntry("SessionPrettyContents");
         m_sessions << session;
     }
     std::sort(m_sessions.begin(), m_sessions.end(), kdevelopsessions_runner_compare_sessions);

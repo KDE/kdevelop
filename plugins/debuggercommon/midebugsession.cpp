@@ -158,7 +158,7 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
                     while (p >= 1 && (line[p-1] == '\r' || line[p-1] == '\n'))
                         p--;
                     if (p != line.length())
-                        line.remove(p, line.length() - p);
+                        line.truncate(p);
                 }
                 emit inferiorStdoutLines(lines);
             });
@@ -434,8 +434,7 @@ void MIDebugSession::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags n
         for (unsigned int i = 0; delta != 0 && i < 32; ++i) {
             if (delta & (1 << i))  {
                 delta &= ~(1 << i);
-                out += ((1 << i) & newState) ? " +" : " -";
-                out += QString::number(i);
+                out += (((1 << i) & newState) ? " +" : " -") + QString::number(i);
             }
         }
     }
@@ -1090,7 +1089,7 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
             const MI::Value& frame = r[QStringLiteral("frame")];
             QString file, line, addr;
 
-            if (frame.hasField(QStringLiteral("fullname"))) file = frame[QStringLiteral("fullname")].literal();;
+            if (frame.hasField(QStringLiteral("fullname"))) file = frame[QStringLiteral("fullname")].literal();
             if (frame.hasField(QStringLiteral("line")))     line = frame[QStringLiteral("line")].literal();
             if (frame.hasField(QStringLiteral("addr")))     addr = frame[QStringLiteral("addr")].literal();
 

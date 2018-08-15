@@ -187,15 +187,9 @@ void GDBOutputWidget::slotUserCommandStdout(const QString& line)
 namespace {
     QString colorify(QString text, const QColor& color)
     {
-        // Make sure the newline is at the end of the newly-added
-        // string. This is so that we can always correctly remove
-        // newline inside 'flushPending'.
-        if (!text.endsWith('\n'))
-          text.append('\n');
-
         if (text.endsWith('\n'))
         {
-            text.remove(text.length()-1, 1);
+            text.chop(1);
         }
         text = "<font color=\"" + color.name() +  "\">" + text + "</font><br>";
         return text;
@@ -315,7 +309,7 @@ void GDBOutputWidget::flushPending()
     // QTextEdit adds newline after paragraph automatically.
     // So, remove trailing newline to avoid double newlines.
     if (m_pendingOutput.endsWith('\n'))
-        m_pendingOutput.remove(m_pendingOutput.length()-1, 1);
+        m_pendingOutput.chop(1);
     Q_ASSERT(!m_pendingOutput.endsWith('\n'));
 
     QTextDocument *document = m_gdbView->document();
@@ -413,9 +407,7 @@ void GDBOutputWidget::copyAll()
        this complex logic, as opposed to calling text(). */
     const QStringList& raw = m_showInternalCommands ?
         m_allCommandsRaw : m_userCommandsRaw;
-    QString text;
-    for (int i = 0; i < raw.size(); ++i)
-        text += raw.at(i);
+    const QString text = raw.join(QString());
 
     // Make sure the text is pastable both with Ctrl-C and with
     // middle click.

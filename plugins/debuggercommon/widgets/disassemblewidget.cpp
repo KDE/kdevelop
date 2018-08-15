@@ -200,7 +200,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
         m_disassembleWindow->setUniformRowHeights(true);
         m_disassembleWindow->setRootIsDecorated(false);
 
-        m_disassembleWindow->setHeaderLabels(QStringList() << QString() << i18n("Address") << i18n("Function") << i18n("Instruction"));
+        m_disassembleWindow->setHeaderLabels(QStringList{QString(), i18n("Address"), i18n("Function"), i18n("Instruction")});
 
         m_splitter->setStretchFactor(0, 1);
         m_splitter->setContentsMargins(0, 0, 0, 0);
@@ -393,12 +393,12 @@ void DisassembleWidget::disassembleMemoryHandler(const ResultRecord& r)
         //We use offset at the same column where function is.
         if(currentFunction == fct){
             if(!fct.isEmpty()){
-                fct = QStringLiteral("+") + offs;
+                fct = QLatin1Char('+') + offs;
             }
         }else { currentFunction = fct; }
 
         m_disassembleWindow->addTopLevelItem(new QTreeWidgetItem(m_disassembleWindow,
-                                                                 QStringList() << QString() << addr << fct << inst));
+                                                                 QStringList{QString(), addr, fct, inst}));
 
         if (i == 0) {
             lower_ = addr.toULong(&ok,16);

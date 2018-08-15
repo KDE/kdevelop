@@ -71,25 +71,27 @@ void CMakeFunctionDesc::addArguments( const QStringList& args, bool addEvenIfEmp
 {
     if(addEvenIfEmpty && args.isEmpty())
         arguments += CMakeFunctionArgument();
-    else foreach( const QString& arg, args )
-    {
-        CMakeFunctionArgument cmakeArg( arg );
-        arguments.append( cmakeArg );
+    else {
+        arguments.reserve(arguments.size() + args.size());
+        for (const auto& arg : args) {
+            CMakeFunctionArgument cmakeArg(arg);
+            arguments.append(cmakeArg);
+        }
     }
 }
 
 QString CMakeFunctionDesc::writeBack() const
 {
-    QString output=name+"( ";
-    foreach(const CMakeFunctionArgument& arg, arguments)
-    {
-        QString o = arg.value;
-        if(arg.quoted)
-            o='"'+o+'"';
-        output += o+' ';
+    QStringList args;
+    args.reserve(arguments.size());
+    for (const auto& arg : arguments) {
+        if (arg.quoted) {
+            args.append(QLatin1Char('"') + arg.value + QLatin1Char('"'));
+        } else {
+            args.append(arg.value);
+        }
     }
-    output += ')';
-    return output;
+    return name + QLatin1String("( ") + args.join(QLatin1Char(' ')) + QLatin1String(" )");
 }
 
 namespace CMakeListsParser

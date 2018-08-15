@@ -34,6 +34,7 @@ QVariant CvsAnnotateJob::fetchResults()
     parseOutput(output(), getDirectory(), annotateInfo);
 
     QList<QVariant> lines;
+    lines.reserve(annotateInfo.lineCount());
     for(int i=0; i < annotateInfo.lineCount(); i++) {
         KDevelop::VcsAnnotationLine line = annotateInfo.line(i);
         lines.append( qVariantFromValue( line ) );

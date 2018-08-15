@@ -108,6 +108,7 @@ QList<AbstractType::Ptr> FunctionType::arguments () const
 {
   ///@todo Don't do the conversion
   QList<AbstractType::Ptr> ret;
+  ret.reserve(d_func()->m_argumentsSize());
   FOREACH_FUNCTION(const IndexedType& arg, d_func()->m_arguments)
     ret << arg.abstractType();
   return ret;
@@ -150,16 +151,12 @@ QString FunctionType::partToString( SignaturePart sigPart ) const {
   TYPE_D(FunctionType);
   if( sigPart == SignatureArguments || sigPart == SignatureWhole )
   {
-    args += QLatin1Char('(');
-    bool first = true;
+    QStringList types;
+    types.reserve(d->m_argumentsSize());
     FOREACH_FUNCTION(const IndexedType& type, d->m_arguments) {
-      if (first)
-        first = false;
-      else
-        args.append(QLatin1String(", "));
-      args.append(type ? type.abstractType()->toString() : QStringLiteral("<notype>"));
+      types.append(type ? type.abstractType()->toString() : QStringLiteral("<notype>"));
     }
-    args += QLatin1Char(')');
+    args += QLatin1Char('(') + types.join(QLatin1String(", ")) + QLatin1Char(')');
   }
 
   if( sigPart == SignatureArguments )

@@ -240,6 +240,7 @@ QVector<QUrl> potentialBuddies(const QUrl& url, bool checkDUChain)
     // or header extensions (for sources)
     const auto& extensions = ( type.second == Header ? ClangHelpers::sourceExtensions() : ClangHelpers::headerExtensions() );
     QVector< QUrl > buddies;
+    buddies.reserve(extensions.size());
     for(const QString& extension : extensions) {
         if (!extension.contains(QLatin1Char('.'))) {
             buddies.append(QUrl::fromLocalFile(type.first + QLatin1Char('.') + extension));

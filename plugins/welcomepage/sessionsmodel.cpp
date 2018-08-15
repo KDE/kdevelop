@@ -60,7 +60,9 @@ QVariant SessionsModel::data(const QModelIndex& index, int role) const
         }
         case ProjectNames: {
             QVariantList ret;
-            foreach(const QUrl& project, m_sessions[index.row()].projects) {
+            const auto& projects = m_sessions[index.row()].projects;
+            ret.reserve(projects.size());
+            for (const auto& project : projects) {
                 ret += project.fileName();
             }
             return ret;

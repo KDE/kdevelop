@@ -100,7 +100,8 @@ static QList<QUrl> preventRecursion(const QList<QUrl>& urls)
     foreach(const QUrl& url, urls) {
         QDir d(url.toLocalFile());
         if(d.exists()) {
-            QStringList entries = d.entryList(QDir::Files | QDir::NoDotAndDotDot);
+            const QStringList entries = d.entryList(QDir::Files | QDir::NoDotAndDotDot);
+            ret.reserve(ret.size() + entries.size());
             foreach(const QString& entry, entries) {
                 QUrl entryUrl = QUrl::fromLocalFile(d.absoluteFilePath(entry));
                 ret += entryUrl;
@@ -219,7 +220,7 @@ bool GitPlugin::hasModifications(const QDir& d)
 
 bool GitPlugin::hasModifications(const QDir& repo, const QUrl& file)
 {
-    return !emptyOutput(lsFiles(repo, QStringList() << QStringLiteral("-m") << file.path(), OutputJob::Silent));
+    return !emptyOutput(lsFiles(repo, QStringList{QStringLiteral("-m"), file.path()}, OutputJob::Silent));
 }
 
 void GitPlugin::additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls)
@@ -501,6 +502,7 @@ void GitPlugin::addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files)
     QStringList otherStr = getLsFiles(dir, QStringList() << QStringLiteral("--others"), KDevelop::OutputJob::Silent);
     QList<QUrl> toadd, otherFiles;
 
+    otherFiles.reserve(otherStr.size());
     foreach(const QString& file, otherStr) {
         QUrl v = QUrl::fromLocalFile(dir.absoluteFilePath(file));
 
@@ -545,10 +547,11 @@ VcsJob* GitPlugin::remove(const QList<QUrl>& files)
         QUrl file = i.next();
         QFileInfo fileInfo(file.toLocalFile());
 
-        QStringList otherStr = getLsFiles(dotGitDir, QStringList() << QStringLiteral("--others") << QStringLiteral("--") << file.toLocalFile(), KDevelop::OutputJob::Silent);
+        const QStringList otherStr = getLsFiles(dotGitDir, QStringList{QStringLiteral("--others"), QStringLiteral("--"), file.toLocalFile()}, KDevelop::OutputJob::Silent);
         if(!otherStr.isEmpty()) {
             //remove files not under version control
             QList<QUrl> otherFiles;
+            otherFiles.reserve(otherStr.size());
             foreach(const QString &f, otherStr) {
                 otherFiles << QUrl::fromLocalFile(dotGitDir.path()+'/'+f);
             }
@@ -838,8 +841,11 @@ QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
 {
     initBranchHash(repo);
 
-    QStringList args;
-    args << QStringLiteral("--all") << QStringLiteral("--pretty") << QStringLiteral("--parents");
+    const QStringList args{
+        QStringLiteral("--all"),
+        QStringLiteral("--pretty"),
+        QStringLiteral("--parents"),
+    };
     QScopedPointer<DVcsJob> job(gitRevList(repo, args));
     bool ret = job->exec();
     Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
@@ -1138,8 +1144,7 @@ void GitPlugin::parseGitLogOutput(DVcsJob * job)
 
             item.addItem(itemEvent);
         } else if (line.startsWith(QLatin1String("    "))) {
-            message += line.remove(0, 4);
-            message += '\n';
+            message += line.midRef(4) + QLatin1Char('\n');
         }
     }
 
@@ -1188,6 +1193,7 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
     }
 
     QVariantList statuses;
+    statuses.reserve(allStatus.size());
     QMap< QUrl, VcsStatusInfo::State >::const_iterator it = allStatus.constBegin(), itEnd=allStatus.constEnd();
     for(; it!=itEnd; ++it) {
 
@@ -1243,11 +1249,12 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
     QStringList paths;
     QStringList oldcmd=job->dvcsCommand();
     QStringList::const_iterator it=oldcmd.constBegin()+oldcmd.indexOf(QStringLiteral("--"))+1, itEnd=oldcmd.constEnd();
+    paths.reserve(oldcmd.size());
     for(; it!=itEnd; ++it)
         paths += *it;
 
     //here we add the already up to date files
-    QStringList files = getLsFiles(job->directory(), QStringList() << QStringLiteral("-c") << QStringLiteral("--") << paths, OutputJob::Silent);
+    QStringList files = getLsFiles(job->directory(), QStringList{QStringLiteral("-c"), QStringLiteral("--")} << paths, OutputJob::Silent);
     foreach(const QString& file, files) {
         QUrl fileUrl = QUrl::fromLocalFile(workingDir.absoluteFilePath(file));
 
@@ -1266,7 +1273,7 @@ void GitPlugin::parseGitVersionOutput(DVcsJob* job)
 {
     const auto output = job->output().trimmed();
     auto versionString = output.midRef(output.lastIndexOf(' ')).split('.');
-    static const QList<int> minimumVersion = QList<int>() << 1 << 7;
+    static const QList<int> minimumVersion = QList<int>{1, 7};
     qCDebug(PLUGIN_GIT) << "checking git version" << versionString << "against" << minimumVersion;
     m_oldVersion = false;
     if (versionString.size() < minimumVersion.size()) {
@@ -1401,7 +1408,7 @@ VcsJob* GitPlugin::move(const QUrl& source, const QUrl& destination)
         }
     }
 
-    QStringList otherStr = getLsFiles(dir, QStringList() << QStringLiteral("--others") << QStringLiteral("--") << source.toLocalFile(), KDevelop::OutputJob::Silent);
+    const QStringList otherStr = getLsFiles(dir, QStringList{QStringLiteral("--others"), QStringLiteral("--"), source.toLocalFile()}, KDevelop::OutputJob::Silent);
     if(otherStr.isEmpty()) {
         DVcsJob* job = new DVcsJob(dir, this, KDevelop::OutputJob::Verbose);
         *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
@@ -1546,7 +1553,7 @@ QString GitPlugin::readConfigOption(const QUrl& repository, const QString& key)
 {
     QProcess exec;
     exec.setWorkingDirectory(urlDir(repository).absolutePath());
-    exec.start(QStringLiteral("git"), QStringList() << QStringLiteral("config") << QStringLiteral("--get") << key);
+    exec.start(QStringLiteral("git"), QStringList{QStringLiteral("config"), QStringLiteral("--get"), key});
     exec.waitForFinished();
     return exec.readAllStandardOutput().trimmed();
 }

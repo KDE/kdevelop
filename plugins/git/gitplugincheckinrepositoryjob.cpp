@@ -55,8 +55,8 @@ void GitPluginCheckInRepositoryJob::start()
     connect(m_hashjob, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), this, &GitPluginCheckInRepositoryJob::processFailed);
     connect(m_findjob, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), this, &GitPluginCheckInRepositoryJob::processFailed);
 
-    m_hashjob->start(QStringLiteral("git"), QStringList() << QStringLiteral("hash-object") << QStringLiteral("--stdin"));
-    m_findjob->start(QStringLiteral("git"), QStringList() << QStringLiteral("cat-file") << QStringLiteral("--batch-check"));
+    m_hashjob->start(QStringLiteral("git"), QStringList{QStringLiteral("hash-object"), QStringLiteral("--stdin")});
+    m_findjob->start(QStringLiteral("git"), QStringList{QStringLiteral("cat-file"), QStringLiteral("--batch-check")});
 
     for ( int i = 0; i < document()->lines(); i++ ) {
         m_hashjob->write(codec->fromUnicode(document()->line(i)));

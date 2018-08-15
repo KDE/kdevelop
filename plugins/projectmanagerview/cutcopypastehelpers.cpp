@@ -76,6 +76,7 @@ static QWidget* createPasteStatsWidget(QWidget *parent, const QVector<TaskInfo>&
     // TODO: Create a model for the task list, and use it here instead of using QTreeWidget
     QTreeWidget* treeWidget = new QTreeWidget(parent);
     QList<QTreeWidgetItem *> items;
+    items.reserve(tasks.size());
     for (const TaskInfo& task : tasks) {
         int srcCount = task.m_src.size();
         const bool withChildren = srcCount != 1;

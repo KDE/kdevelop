@@ -141,7 +141,9 @@ public:
         options.project = proj;
 
         foreach (IPlugin* plugin, findPluginsForProject(proj)) {
-            for (int i = 0; i < plugin->perProjectConfigPages(); ++i) {
+            const int perProjectConfigPagesCount = plugin->perProjectConfigPages();
+            configPages.reserve(configPages.size() + perProjectConfigPagesCount);
+            for (int i = 0; i < perProjectConfigPagesCount; ++i) {
                 configPages.append(plugin->perProjectConfigPage(i, options, cfgDlg));
             }
         }
@@ -945,6 +947,7 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
     d->m_projectPlugins.remove( proj );
 
     QList<IPlugin*> otherProjectPlugins;
+    otherProjectPlugins.reserve(d->m_projectPlugins.size());
     Q_FOREACH( const QList<IPlugin*>& _list, d->m_projectPlugins )
     {
         otherProjectPlugins << _list;

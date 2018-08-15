@@ -44,7 +44,9 @@ RegistersGroup RegisterController_Arm::registersFromGroup(const GroupsName& grou
 
     registers.groupName = group;
     registers.format = m_formatsModes[group.index()].formats.first();
-    foreach (const QString & name, registerNamesForGroup(group)) {
+    const auto registerNames = registerNamesForGroup(group);
+    registers.registers.reserve(registerNames.size());
+    for (const auto& name : registerNames) {
         registers.registers.append(Register(name, QString()));
     }
 
@@ -55,7 +57,13 @@ RegistersGroup RegisterController_Arm::registersFromGroup(const GroupsName& grou
 
 QVector<GroupsName> RegisterController_Arm::namesOfRegisterGroups() const
 {
-    static const QVector<GroupsName> registerGroups = QVector<GroupsName>() << enumToGroupName(General) << enumToGroupName(Flags) << enumToGroupName(VFP_single) << enumToGroupName(VFP_double) << enumToGroupName(VFP_quad);
+    static const QVector<GroupsName> registerGroups = QVector<GroupsName>{
+        enumToGroupName(General),
+        enumToGroupName(Flags),
+        enumToGroupName(VFP_single),
+        enumToGroupName(VFP_double),
+        enumToGroupName(VFP_quad),
+    };
 
     return registerGroups;
 }
@@ -118,15 +126,8 @@ RegisterController_Arm::RegisterController_Arm(MIDebugSession* debugSession, QOb
 
     m_formatsModes.resize(namesOfRegisterGroups().size());
 
-    m_formatsModes[VFP_double].formats.append(Binary);
-    m_formatsModes[VFP_double].formats.append(Decimal);
-    m_formatsModes[VFP_double].formats.append(Hexadecimal);
-    m_formatsModes[VFP_double].formats.append(Octal);
-    m_formatsModes[VFP_double].formats.append(Unsigned);
-    m_formatsModes[VFP_double].modes.append(u32);
-    m_formatsModes[VFP_double].modes.append(u64);
-    m_formatsModes[VFP_double].modes.append(f32);
-    m_formatsModes[VFP_double].modes.append(f64);
+    m_formatsModes[VFP_double].formats = {Binary, Decimal, Hexadecimal, Octal, Unsigned};
+    m_formatsModes[VFP_double].modes = {u32, u64, f32, f64};
 
     m_formatsModes[Flags].formats.append(Raw);
     m_formatsModes[Flags].modes.append(natural);
@@ -148,8 +149,20 @@ void RegisterController_Arm::initRegisterNames()
     }
 
     m_cpsr.registerName = QStringLiteral("cpsr");
-    m_cpsr.flags << QStringLiteral("Q") << QStringLiteral("V") << QStringLiteral("C") << QStringLiteral("Z") << QStringLiteral("N");
-    m_cpsr.bits << QStringLiteral("27") << QStringLiteral("28") << QStringLiteral("29") << QStringLiteral("30") << QStringLiteral("31");
+    m_cpsr.flags = QStringList{
+        QStringLiteral("Q"),
+        QStringLiteral("V"),
+        QStringLiteral("C"),
+        QStringLiteral("Z"),
+        QStringLiteral("N"),
+    };
+    m_cpsr.bits = QStringList{
+        QStringLiteral("27"),
+        QStringLiteral("28"),
+        QStringLiteral("29"),
+        QStringLiteral("30"),
+        QStringLiteral("31"),
+    };
     m_cpsr.groupName = enumToGroupName(Flags);
 
     m_registerNames[Flags] = m_cpsr.flags;

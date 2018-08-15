@@ -60,16 +60,16 @@ QString descriptionFromProblem(IProblem::Ptr problem)
             .adjusted(QUrl::NormalizePathSegments)
             .toDisplayString(QUrl::PreferLocalFile);
         if (location.start().line() >= 0) {
-            text += QStringLiteral(":") + QString::number(location.start().line() + 1);
+            text += QLatin1Char(':') + QString::number(location.start().line() + 1);
             if (location.start().column() >= 0) {
-                text += QStringLiteral(":") + QString::number(location.start().column() + 1);
+                text += QLatin1Char(':') + QString::number(location.start().column() + 1);
             }
         }
         text += QStringLiteral(": ");
     }
     text += problem->description();
     if (!problem->explanation().isEmpty()) {
-        text += QStringLiteral("\n") + problem->explanation();
+        text += QLatin1Char('\n') + problem->explanation();
     }
     return text;
 }
@@ -228,7 +228,9 @@ void ProblemTreeView::contextMenuEvent(QContextMenuEvent* event)
     QExplicitlySharedDataPointer<KDevelop::IAssistant> solution = problem->solutionAssistant();
     if (solution && !solution->actions().isEmpty()) {
         QList<QAction*> actions;
-        foreach (KDevelop::IAssistantAction::Ptr assistantAction, solution->actions()) {
+        const auto solutionActions = solution->actions();
+        actions.reserve(solutionActions.size());
+        for (auto assistantAction : solutionActions) {
             auto action = assistantAction->toQAction(m.data());
             action->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
             actions << action;

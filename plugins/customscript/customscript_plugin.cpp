@@ -275,11 +275,12 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
 
 QVector<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles() const
 {
-    QVector<KDevelop::SourceFormatterStyle> styles = stylesFromLanguagePlugins();
-    styles << predefinedStyle(QStringLiteral("kdev_format_source"));
-    styles << predefinedStyle(QStringLiteral("GNU_indent_GNU"));
-    styles << predefinedStyle(QStringLiteral("GNU_indent_KR"));
-    styles << predefinedStyle(QStringLiteral("GNU_indent_orig"));
+    const QVector<KDevelop::SourceFormatterStyle> styles = stylesFromLanguagePlugins() + QVector<KDevelop::SourceFormatterStyle>{
+        predefinedStyle(QStringLiteral("kdev_format_source")),
+        predefinedStyle(QStringLiteral("GNU_indent_GNU")),
+        predefinedStyle(QStringLiteral("GNU_indent_KR")),
+        predefinedStyle(QStringLiteral("GNU_indent_orig")),
+    };
     return styles;
 }
 

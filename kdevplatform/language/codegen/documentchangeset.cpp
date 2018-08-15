@@ -206,7 +206,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
     }
 
     QList<QUrl> allFiles;
-    foreach (IndexedString file, d->documentsRename.keys().toSet() + d->changes.keys().toSet()) {
+    const auto changedFiles = d->documentsRename.keys().toSet() + d->changes.keys().toSet();
+    allFiles.reserve(changedFiles.size());
+    for (const IndexedString& file : changedFiles) {
         allFiles << file.toUrl();
     }
 
@@ -451,7 +453,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                 line.replace(change.m_range.start().column(), line.length() - change.m_range.start().column(),
                              change.m_newText);
                 // null other lines and remember for deletion
-                for(int i = change.m_range.start().line() + 1; i <= change.m_range.end().line(); ++i) {
+                const int firstLine = change.m_range.start().line() + 1;
+                const int lastLine = change.m_range.end().line();
+                removedLines.reserve(removedLines.size() + lastLine - firstLine + 1);
+                for (int i = firstLine; i <= lastLine; ++i) {
                     textLines[i].clear();
                     removedLines << i;
                 }

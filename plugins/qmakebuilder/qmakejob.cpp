@@ -79,10 +79,10 @@ QStringList QMakeJob::commandLine() const
         return {};
     }
 
-    QStringList args;
-    args << QMakeConfig::qmakeExecutable(m_project);
-
-    args << m_project->path().toUrl().toLocalFile();
+    const QStringList args{
+        QMakeConfig::qmakeExecutable(m_project),
+        m_project->path().toUrl().toLocalFile(),
+    };
 
     return args;
 }

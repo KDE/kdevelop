@@ -78,7 +78,10 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
     configs.clear();
     QStringList groupNameList;
     KConfigGroup grp = cfg->group(ConfigConstants::customBuildSystemGroup());
-    foreach( const QString& grpName, grp.groupList() ) {
+    const auto groupList = grp.groupList();
+    groupNameList.reserve(groupList.size());
+    configs.reserve(groupList.size());
+    for (const auto& grpName : groupList) {
         KConfigGroup subgrp = grp.group( grpName );
         CustomBuildSystemConfig config;
 

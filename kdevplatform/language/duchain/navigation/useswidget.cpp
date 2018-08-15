@@ -143,20 +143,17 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, const IndexedString& 
     int start = m_range->range().start().line() - tooltipContextSize;
     int end = m_range->range().end().line() + tooltipContextSize + 1;
 
-    QString toolTipText;
+    QStringList toolTipLines;
     for(int a = start; a < end; ++a) {
       QString lineText = code.line(a).toHtmlEscaped();
       if (m_range->range().start().line() <= a && m_range->range().end().line() >= a) {
         lineText = QStringLiteral("<b>") + lineText + QStringLiteral("</b>");
       }
       if(!lineText.trimmed().isEmpty()) {
-        toolTipText += lineText + QLatin1String("<br>");
+        toolTipLines.append(lineText);
       }
     }
-    if ( toolTipText.endsWith(QLatin1String("<br>")) ) {
-      toolTipText.remove(toolTipText.length() - 4, 4);
-    }
-    setToolTip(QStringLiteral("<html><body><pre>") + toolTipText + QStringLiteral("</pre></body></html>"));
+    setToolTip(QStringLiteral("<html><body><pre>") + toolTipLines.join(QLatin1String("<br>")) + QStringLiteral("</pre></body></html>"));
   }
   m_label->setText(text);
 

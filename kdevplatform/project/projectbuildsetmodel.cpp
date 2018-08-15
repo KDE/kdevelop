@@ -121,6 +121,7 @@ void ProjectBuildSetModel::loadFromSession( ISession* session )
     // Load the item ordering cache
     KConfigGroup sessionBuildSetConfig = session->config()->group( "Buildset" );
     QVariantList sessionBuildItems = KDevelop::stringToQVariant( sessionBuildSetConfig.readEntry( "BuildItems", QString() ) ).toList();
+    d->orderingCache.reserve(d->orderingCache.size() + sessionBuildItems.size());
     foreach( const QVariant& item, sessionBuildItems ) {
         d->orderingCache.append(item.toStringList());
     }
@@ -134,6 +135,7 @@ void ProjectBuildSetModel::storeToSession( ISession* session )
 
     // Store the item ordering cache
     QVariantList sessionBuildItems;
+    sessionBuildItems.reserve(d->orderingCache.size());
     foreach (const QStringList& item, d->orderingCache) {
         sessionBuildItems.append( item );
     }
@@ -232,6 +234,7 @@ void ProjectBuildSetModel::insertItemsOverrideCache( int index, const QList< Bui
     if (index == d->items.size()) {
         beginInsertRows( QModelIndex(), index, index + items.size() - 1 );
         d->items.append(items);
+        d->orderingCache.reserve(d->orderingCache.size() + items.size());
         foreach( const BuildItem& item, items ) {
             d->orderingCache.append(item.itemPath());
         }

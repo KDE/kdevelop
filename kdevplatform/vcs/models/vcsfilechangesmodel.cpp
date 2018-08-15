@@ -245,7 +245,9 @@ QList<QUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
     }
 
     QList<QUrl> ret;
-    for(int i = 0, c = parent->rowCount(); i < c; i++) {
+    const int c = parent->rowCount();
+    ret.reserve(c);
+    for (int i = 0; i < c; i++) {
         QStandardItem* item = parent->child(i);
         ret << indexFromItem(item).data(UrlRole).toUrl();
     }

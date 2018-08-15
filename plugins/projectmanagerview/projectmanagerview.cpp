@@ -173,8 +173,9 @@ void ProjectManagerView::selectionChanged()
 {
     m_ui->buildSetView->selectionChanged();
     QList<ProjectBaseItem*> selected;
-    foreach( const QModelIndex& idx, m_ui->projectTreeView->selectionModel()->selectedRows() )
-    {
+    const auto selectedRows = m_ui->projectTreeView->selectionModel()->selectedRows();
+    selected.reserve(selectedRows.size());
+    for (const auto& idx : selectedRows) {
         selected << ICore::self()->projectController()->projectModel()->itemFromIndex(indexFromView( idx ));
     }
     selected.removeAll(nullptr);
@@ -212,6 +213,7 @@ QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
 void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
 {
     QItemSelection selection;
+    selection.reserve(items.size());
     foreach (ProjectBaseItem *item, items) {
         QModelIndex indx = indexToView(item->index());
         selection.append(QItemSelectionRange(indx, indx));

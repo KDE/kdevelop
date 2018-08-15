@@ -80,6 +80,7 @@ public:
         activeLanguages.clear();
 
         QList<ILanguageSupport*> languages = m_controller->languagesForUrl(url);
+        activeLanguages.reserve(languages.size());
         foreach (const auto lang, languages) {
             activeLanguages << lang;
         }
@@ -194,6 +195,7 @@ QList<ILanguageSupport*> LanguageController::loadedLanguages() const
     if(d->m_cleanedUp)
         return ret;
 
+    ret.reserve(d->languages.size());
     foreach(ILanguageSupport* lang, d->languages)
         ret << lang;
     return ret;

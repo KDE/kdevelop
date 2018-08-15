@@ -231,6 +231,7 @@ void BuilderJob::updateJobName()
     QString itemNames;
     if( !hasNullItems ) {
         QStringList itemNamesList;
+        itemNamesList.reserve(registeredItems.size());
         foreach( ProjectBaseItem* item, registeredItems ) {
             itemNamesList << item->text();
         }
@@ -241,6 +242,7 @@ void BuilderJob::updateJobName()
 
     QString methodNames;
     QStringList methodNamesList;
+    methodNamesList.reserve(buildTypes.size());
     foreach( BuildType type, buildTypes ) {
         methodNamesList << d->buildTypeToString( type );
     }

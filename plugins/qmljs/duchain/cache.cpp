@@ -201,8 +201,8 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
             if (dumpFile.open(QIODevice::WriteOnly)) {
                 qmlplugindump.readLine();   // Skip "import QtQuick.tooling 1.1"
 
-                dumpFile.write("// " + filePath.toUtf8() + "\n");
-                dumpFile.write("import QtQuick " + executable.quickVersion.toUtf8() + "\n");
+                dumpFile.write("// " + filePath.toUtf8() + '\n');
+                dumpFile.write("import QtQuick " + executable.quickVersion.toUtf8() + '\n');
                 dumpFile.write(qmlplugindump.readAllStandardOutput());
                 dumpFile.close();
 

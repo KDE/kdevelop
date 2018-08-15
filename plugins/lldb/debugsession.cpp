@@ -228,6 +228,7 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     const auto &envVariables = environmentProfiles.variables(envProfileName);
     if (!envVariables.isEmpty()) {
         QStringList vars;
+        vars.reserve(envVariables.size());
         for (auto it = envVariables.constBegin(), ite = envVariables.constEnd(); it != ite; ++it) {
             vars.append(QStringLiteral("%0=%1").arg(it.key(), Utils::quote(it.value())));
         }

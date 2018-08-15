@@ -615,12 +615,12 @@ void OutputWidget::copySelection()
 
     QClipboard *cb = QApplication::clipboard();
     QModelIndexList indexes = view->selectionModel()->selectedRows();
-    QString content;
+    QStringList content;
+    content.reserve(indexes.size());
     Q_FOREACH( const QModelIndex& index, indexes) {
-      content += index.data().toString() + '\n';
+        content += index.data().toString();
     }
-    content.chop(1);
-    cb->setText(content);
+    cb->setText(content.join(QLatin1Char('\n')));
 }
 
 void OutputWidget::selectAll()

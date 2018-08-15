@@ -44,13 +44,13 @@ Visualizer::Visualizer(const QString& resultsFile, QObject* parent)
             this, [this](QProcess::ProcessError error) {
         QString errorMessage;
         if (error == QProcess::FailedToStart) {
-            errorMessage += i18n("Failed to start visualizer from \"%1\".", program());
-            errorMessage += QStringLiteral("\n\n");
-            errorMessage += i18n("Check your settings and install the visualizer if necessary.");
+            errorMessage = i18n("Failed to start visualizer from \"%1\".", program())
+                           + QStringLiteral("\n\n")
+                           + i18n("Check your settings and install the visualizer if necessary.");
         } else {
-            errorMessage += i18n("Error during visualizer execution:");
-            errorMessage += QStringLiteral("\n\n");
-            errorMessage += errorString();
+            errorMessage = i18n("Error during visualizer execution:")
+                           + QStringLiteral("\n\n")
+                           + errorString();
         }
         KMessageBox::error(activeMainWindow(), errorMessage, i18n("Heaptrack Error"));
     });

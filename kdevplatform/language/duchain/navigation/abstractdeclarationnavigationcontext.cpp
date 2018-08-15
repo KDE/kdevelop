@@ -801,13 +801,11 @@ QString AbstractDeclarationNavigationContext::declarationSizeInformation(const D
       const auto bitOffset = memberDecl->bitOffsetOf() % 8;
       const QString byteOffsetStr = i18np("1 Byte", "%1 Bytes", byteOffset);
       const QString bitOffsetStr = bitOffset ? i18np("1 Bit", "%1 Bits", bitOffset) : QString();
-      sizeInfo += i18n("offset in parent: %1", bitOffset ? i18nc("%1: bytes, %2: bits", "%1, %2", byteOffsetStr, bitOffsetStr) : byteOffsetStr);
-      sizeInfo += "; ";
+      sizeInfo += i18n("offset in parent: %1", bitOffset ? i18nc("%1: bytes, %2: bits", "%1, %2", byteOffsetStr, bitOffsetStr) : byteOffsetStr) + QLatin1String("; ");
     }
 
     if (memberDecl->sizeOf() >= 0) {
-      sizeInfo += i18n("size: %1 Bytes", memberDecl->sizeOf());
-      sizeInfo += "; ";
+      sizeInfo += i18n("size: %1 Bytes", memberDecl->sizeOf()) + QLatin1String("; ");
     }
 
     if (memberDecl->alignOf() >= 0) {

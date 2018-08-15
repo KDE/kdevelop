@@ -56,21 +56,21 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
     auto type = clang_getCursorType(cursor);
     if (type.kind != CXType_Invalid) {
         ClangString typeName(clang_getTypeSpelling(type));
-        (*data->out) << "| type: \"" << typeName << "\"" << " (" << type.kind << ") ";
+        (*data->out) << "| type: \"" << typeName << '\"' << " (" << type.kind << ") ";
     }
 
     auto canonicalType = clang_getCanonicalType(type);
     if (canonicalType.kind != CXType_Invalid
         && !clang_equalTypes(type, canonicalType)) {
         ClangString typeName(clang_getTypeSpelling(canonicalType));
-        (*data->out) << "| canonical type: \"" << typeName << "\"" << " (" << canonicalType.kind << ") ";
+        (*data->out) << "| canonical type: \"" << typeName << '\"' << " (" << canonicalType.kind << ") ";
     }
 
     auto typedefType = clang_getTypedefDeclUnderlyingType(cursor);
     if (typedefType.kind != CXType_Invalid
         && !clang_equalTypes(type, typedefType)) {
         ClangString typeName(clang_getTypeSpelling(typedefType));
-        (*data->out) << "| typedef type: \"" << typeName << "\"" << " (" << typedefType.kind << ") ";
+        (*data->out) << "| typedef type: \"" << typeName << '\"' << " (" << typedefType.kind << ") ";
     }
 
     ClangString displayName(clang_getCursorDisplayName(cursor));

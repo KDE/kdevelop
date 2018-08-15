@@ -534,10 +534,11 @@ QString AppWizardPlugin::knsConfigurationFile() const
 
 QStringList AppWizardPlugin::supportedMimeTypes() const
 {
-    QStringList types;
-    types << QStringLiteral("application/x-desktop");
-    types << QStringLiteral("application/x-bzip-compressed-tar");
-    types << QStringLiteral("application/zip");
+    const QStringList types{
+        QStringLiteral("application/x-desktop"),
+        QStringLiteral("application/x-bzip-compressed-tar"),
+        QStringLiteral("application/zip"),
+    };
     return types;
 }
 

@@ -173,9 +173,10 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
                 //save shortcut config
                 KConfigGroup config = KSharedConfig::openConfig()->group("UI");
-                QStringList shortcuts;
-                shortcuts << w->shortcut().value(0).toString();
-                shortcuts << w->shortcut().value(1).toString();
+                const QStringList shortcuts{
+                    w->shortcut().value(0).toString(),
+                    w->shortcut().value(1).toString(),
+                };
                 config.writeEntry(QStringLiteral("Shortcut for %1").arg(m_view->document()->title()), shortcuts);
                 config.sync();
             }

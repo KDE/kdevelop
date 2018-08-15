@@ -315,11 +315,19 @@ bool STTY::findExternalTTY(const QString& termApp)
     m_externalTerminal.reset(new QProcess(this));
 
     if (appName == QLatin1String("konsole")) {
-        m_externalTerminal->start(appName, QStringList() << QStringLiteral("-e") << QStringLiteral("sh") << QStringLiteral("-c") << "tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done");
+        m_externalTerminal->start(appName, QStringList{
+            QStringLiteral("-e"),
+            QStringLiteral("sh"),
+            QStringLiteral("-c"),
+            QLatin1String("tty>") + file.fileName() + QLatin1String(";exec<&-;exec>&-;while :;do sleep 3600;done")});
     } else if (appName == QLatin1String("xfce4-terminal")) {
-        m_externalTerminal->start(appName, QStringList() << QStringLiteral("-e") << " sh -c \"tty>" + file.fileName() + ";\"\"<&\\-\"\">&\\-;\"\"while :;\"\"do sleep 3600;\"\"done\"");
+        m_externalTerminal->start(appName, QStringList{
+            QStringLiteral("-e"),
+            QLatin1String("sh -c \"tty>") + file.fileName() + QLatin1String(";\"\"<&\\-\"\">&\\-;\"\"while :;\"\"do sleep 3600;\"\"done\"")});
     } else {
-        m_externalTerminal->start(appName, QStringList() << QStringLiteral("-e") << "sh -c \"tty>" + file.fileName() + ";exec<&-;exec>&-;while :;do sleep 3600;done\"");
+        m_externalTerminal->start(appName, QStringList{
+            QStringLiteral("-e"),
+            QLatin1String("sh -c \"tty>") + file.fileName() + QLatin1String(";exec<&-;exec>&-;while :;do sleep 3600;done\"")});
     }
 
     if (!m_externalTerminal->waitForStarted(500)) {

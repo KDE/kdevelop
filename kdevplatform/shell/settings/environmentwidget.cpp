@@ -253,7 +253,7 @@ void EnvironmentWidget::batchModeEditButtonClicked()
     for (int i = 0; i < m_proxyModel->rowCount(); ++i) {
         const auto variable = m_proxyModel->index(i, EnvironmentProfileModel::VariableColumn).data().toString();
         const auto value = m_proxyModel->index(i, EnvironmentProfileModel::ValueColumn).data().toString();
-        text.append(QStringLiteral("%1=%2\n").arg(variable, value));
+        text.append(variable + QLatin1Char('=') + value + QLatin1Char('\n'));
     }
     edit->setPlainText(text);
     layout->addWidget( edit );

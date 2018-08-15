@@ -179,7 +179,7 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     {
         const auto builtinDir = ClangIntegration::DUChainUtils::clangBuiltinIncludePath();
         const auto headerToCheck = QLatin1String("cpuid.h");
-        if (!QFile::exists(builtinDir + QLatin1String("/") + headerToCheck)) {
+        if (!QFile::exists(builtinDir + QLatin1Char('/') + headerToCheck)) {
             setErrorDescription(i18n("The clang builtin include path \"%1\" is invalid (missing %2 header).\n"
                                      "Try setting the KDEV_CLANG_BUILTIN_DIR environment variable manually to fix this.\n"
                                      "See also: https://bugs.kde.org/show_bug.cgi?id=393779", builtinDir, headerToCheck));

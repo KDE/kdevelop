@@ -142,9 +142,7 @@ namespace KDevelop
             s << variant;
         }
         
-        QString result = QStringLiteral("@Variant(");
-        result += QString::fromLatin1(a.constData(), a.size());
-        result += QLatin1Char(')');
+        QString result = QStringLiteral("@Variant(") + QString::fromLatin1(a.constData(), a.size()) + QLatin1Char(')');
         return result;
         
     }

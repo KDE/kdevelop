@@ -81,7 +81,10 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
 
     QVBoxLayout* layout = new QVBoxLayout();
 
-    for (const auto& optionGroup : fileTemplate.customOptions(renderer)) {
+    const auto customOptions = fileTemplate.customOptions(renderer);
+    d->groupBoxes.reserve(customOptions.size());
+    d->entries.reserve(customOptions.size());
+    for (const auto& optionGroup : customOptions) {
         QGroupBox* box = new QGroupBox(this);
         d->groupBoxes.append(box);
 

@@ -39,7 +39,7 @@ StashPatchSource::StashPatchSource(const QString& stashName, GitPlugin* plugin, 
     tempFile.open();
     m_patchFile = QUrl::fromLocalFile(tempFile.fileName());
 
-    KDevelop::DVcsJob * job = m_plugin->gitStash(m_baseDir, QStringList() << QStringLiteral("show") << QStringLiteral("-u") << m_stashName, KDevelop::OutputJob::Silent);
+    KDevelop::DVcsJob * job = m_plugin->gitStash(m_baseDir, QStringList{QStringLiteral("show"), QStringLiteral("-u"), m_stashName}, KDevelop::OutputJob::Silent);
 
     connect(job, &DVcsJob::resultsReady, this, &StashPatchSource::updatePatchFile);
     KDevelop::ICore::self()->runController()->registerJob(job);

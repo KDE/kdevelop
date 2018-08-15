@@ -34,6 +34,7 @@ namespace KDevelop {
 struct CodeCompletionItemLastGrouper {
   CodeCompletionItemLastGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
   {
+    tree.reserve(tree.size() + items.size());
     foreach( CompletionTreeItemPointer item, items ) {
       item->setParent(parent);
       tree << QExplicitlySharedDataPointer<CompletionTreeElement>( item.data() );
@@ -60,6 +61,7 @@ struct CodeCompletionItemGrouper {
       (*it).append(item);
     }
 
+    tree.reserve(tree.size() + groups.size());
     for( typename GroupMap::const_iterator it = groups.constBegin(); it != groups.constEnd(); ++it ) {
       QExplicitlySharedDataPointer<CompletionTreeNode> node(new CompletionTreeNode());
       node->setParent(parent);

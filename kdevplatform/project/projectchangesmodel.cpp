@@ -240,16 +240,16 @@ void ProjectChangesModel::reloadAll()
 
 void ProjectChangesModel::jobUnregistered(KJob* job)
 {
-    static QList<VcsJob::JobType> readOnly = QList<VcsJob::JobType>()
-		<< KDevelop::VcsJob::Add
-		<< KDevelop::VcsJob::Remove
-		<< KDevelop::VcsJob::Pull
-		<< KDevelop::VcsJob::Commit
-		<< KDevelop::VcsJob::Move
-        << KDevelop::VcsJob::Copy
-        << KDevelop::VcsJob::Revert
-		;
-    
+    static const QList<VcsJob::JobType> readOnly = QList<VcsJob::JobType>{
+        KDevelop::VcsJob::Add,
+        KDevelop::VcsJob::Remove,
+        KDevelop::VcsJob::Pull,
+        KDevelop::VcsJob::Commit,
+        KDevelop::VcsJob::Move,
+        KDevelop::VcsJob::Copy,
+        KDevelop::VcsJob::Revert,
+    };
+
     VcsJob* vcsjob=dynamic_cast<VcsJob*>(job);
     if(vcsjob && readOnly.contains(vcsjob->type())) {
         reloadAll();

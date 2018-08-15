@@ -64,7 +64,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     mainLayout->addWidget(mainWidget);
 
     setupUi(mainWidget);
-    splitter->setSizes(QList<int>() << 260 << 620);
+    splitter->setSizes(QList<int>{260, 620});
     splitter->setCollapsible(0, false);
 
     addConfig->setToolTip(i18nc("@info:tooltip", "Add a new launch configuration."));
@@ -490,9 +490,10 @@ LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstract
     GenericPageItem* global = new GenericPageItem;
     global->text = i18n("Global");
     global->row = 0;
+    const auto projects = Core::self()->projectController()->projects();
+    topItems.reserve(1 + projects.size());
     topItems << global;
-    foreach( IProject* p, Core::self()->projectController()->projects() )
-    {
+    for (IProject* p :  projects) {
         ProjectItem* t = new ProjectItem;
         t->project = p;
         t->row = topItems.count();

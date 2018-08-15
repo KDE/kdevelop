@@ -285,6 +285,9 @@ void MultiLevelListView::setLevels(int levels)
     d->layouts.clear();
 
     d->levels = levels;
+    d->views.reserve(levels);
+    d->proxies.reserve(levels);
+    d->layouts.reserve(levels);
 
     QTreeView* previousView = nullptr;
     for (int i = 0; i < d->levels; ++i)

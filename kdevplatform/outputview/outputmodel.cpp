@@ -198,6 +198,7 @@ public:
     {
         model->beginInsertRows( QModelIndex(), model->rowCount(), model->rowCount() + items.size() -  1);
 
+        m_filteredItems.reserve(m_filteredItems.size() + items.size());
         foreach( const FilteredItem& item, items ) {
             if( item.type == FilteredItem::ErrorItem ) {
                 m_errorItems.insert(m_filteredItems.size());

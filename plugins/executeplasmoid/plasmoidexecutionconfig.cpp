@@ -92,9 +92,10 @@ void PlasmoidExecutionConfig::saveToConfiguration( KConfigGroup cfg, KDevelop::I
 {
     Q_UNUSED( project );
     cfg.writeEntry("PlasmoidIdentifier", identifier->lineEdit()->text());
-    QStringList args;
-    args += QStringLiteral("--formfactor");
-    args += formFactor->currentText();
+    QStringList args{
+        QStringLiteral("--formfactor"),
+        formFactor->currentText(),
+    };
     if(!themes->currentText().isEmpty()) {
         args += QStringLiteral("--theme");
         args += themes->currentText();

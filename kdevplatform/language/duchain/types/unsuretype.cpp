@@ -43,20 +43,16 @@ KDevelop::AbstractType* UnsureType::clone() const {
 }
 
 QString UnsureType::toString() const {
-  QString ret = QStringLiteral("unsure (");
-  bool first = true;
+  QStringList typeNames;
+  typeNames.reserve(d_func()->m_typesSize());
   FOREACH_FUNCTION(const IndexedType& type, d_func()->m_types) {
-    if(!first)
-      ret += QLatin1String(", ");
-    first = false;
-    
     AbstractType::Ptr t = type.abstractType();
     if(t)
-      ret += t->toString();
+      typeNames.append(t->toString());
     else
-      ret += QLatin1String("none");
+      typeNames.append(QLatin1String("none"));
   }
-  ret += QLatin1Char(')');
+  QString ret = QLatin1String("unsure (") + typeNames.join(QLatin1String(", ")) + QLatin1Char(')');
   
   return ret;
 }

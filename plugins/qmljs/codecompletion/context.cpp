@@ -316,6 +316,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsFromImports(C
         realImports << m_duContext->findDeclarations(decl->importIdentifier());
     }
 
+    items.reserve(realImports.size());
     foreach (Declaration* import, realImports) {
         items << completionsInContext(
             DUContextPointer(import->internalContext()),

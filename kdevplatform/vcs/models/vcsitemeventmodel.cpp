@@ -70,9 +70,10 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
         QMimeType mime = repoUrl.isLocalFile()
                 ? mimeDataBase.mimeTypeForFile(repoUrl.toLocalFile(), QMimeDatabase::MatchExtension)
                 : mimeDataBase.mimeTypeForUrl(repoUrl);
-        QList<QStandardItem*> rowItems = QList<QStandardItem*>()
-            << new QStandardItem(QIcon::fromTheme(mime.iconName()), ev.repositoryLocation())
-            << new QStandardItem(actionStrings.join(i18nc("separes an action list", ", ")));
+        QList<QStandardItem*> rowItems{
+            new QStandardItem(QIcon::fromTheme(mime.iconName()), ev.repositoryLocation()),
+            new QStandardItem(actionStrings.join(i18nc("separes an action list", ", "))),
+        };
         QString loc = ev.repositoryCopySourceLocation();
         if(!loc.isEmpty()) { //according to the documentation, those are optional. don't force them on the UI
             rowItems << new QStandardItem(ev.repositoryCopySourceLocation());

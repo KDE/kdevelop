@@ -100,6 +100,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
         extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, menu);
     } else {
         QList<ProjectBaseItem*> items;
+        items.reserve(projects.size());
         foreach(IProject* p, projects)
             items += p->projectItem();
         

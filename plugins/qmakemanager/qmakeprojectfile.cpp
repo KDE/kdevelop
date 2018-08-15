@@ -37,17 +37,19 @@
 
 QHash<QString, QHash<QString, QString>> QMakeProjectFile::m_qmakeQueryCache;
 
-const QStringList QMakeProjectFile::FileVariables = QStringList() << QStringLiteral("IDLS")
-                                                                  << QStringLiteral("RESOURCES")
-                                                                  << QStringLiteral("IMAGES")
-                                                                  << QStringLiteral("LEXSOURCES")
-                                                                  << QStringLiteral("DISTFILES")
-                                                                  << QStringLiteral("YACCSOURCES")
-                                                                  << QStringLiteral("TRANSLATIONS")
-                                                                  << QStringLiteral("HEADERS")
-                                                                  << QStringLiteral("SOURCES")
-                                                                  << QStringLiteral("INTERFACES")
-                                                                  << QStringLiteral("FORMS");
+const QStringList QMakeProjectFile::FileVariables = QStringList{
+    QStringLiteral("IDLS"),
+    QStringLiteral("RESOURCES"),
+    QStringLiteral("IMAGES"),
+    QStringLiteral("LEXSOURCES"),
+    QStringLiteral("DISTFILES"),
+    QStringLiteral("YACCSOURCES"),
+    QStringLiteral("TRANSLATIONS"),
+    QStringLiteral("HEADERS"),
+    QStringLiteral("SOURCES"),
+    QStringLiteral("INTERFACES"),
+    QStringLiteral("FORMS"),
+};
 
 QMakeProjectFile::QMakeProjectFile(const QString& projectfile)
     : QMakeFile(projectfile)
@@ -71,8 +73,7 @@ bool QMakeProjectFile::read()
     // default values
     // NOTE: if we already have such a var, e.g. in an include file, we must not overwrite it here!
     if (!m_variableValues.contains(QStringLiteral("QT"))) {
-        m_variableValues[QStringLiteral("QT")] = QStringList() << QStringLiteral("core")
-                                               << QStringLiteral("gui");
+        m_variableValues[QStringLiteral("QT")] = QStringList{QStringLiteral("core"), QStringLiteral("gui")};
     }
     if (!m_variableValues.contains(QStringLiteral("CONFIG"))) {
         m_variableValues[QStringLiteral("CONFIG")] = QStringList() << QStringLiteral("qt");

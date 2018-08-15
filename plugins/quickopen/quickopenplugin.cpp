@@ -355,7 +355,11 @@ QuickOpenPlugin::QuickOpenPlugin(QObject* parent,
     m_model = new QuickOpenModel(nullptr);
 
     KConfigGroup quickopengrp = KSharedConfig::openConfig()->group("QuickOpen");
-    lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList() << i18n("Project") << i18n("Includes") << i18n("Includers") << i18n("Currently Open"));
+    lastUsedScopes = quickopengrp.readEntry("SelectedScopes", QStringList{
+        i18n("Project"),
+        i18n("Includes"),
+        i18n("Includers"),
+        i18n("Currently Open")});
     lastUsedItems = quickopengrp.readEntry("SelectedItems", QStringList());
 
     {

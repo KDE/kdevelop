@@ -55,56 +55,71 @@ namespace {
 inline QString allOpenFilesString() { return i18n("All Open Files"); }
 inline QString allOpenProjectsString() { return i18n("All Open Projects"); }
 
-inline QStringList template_desc() { return QStringList()
-    << QStringLiteral("verbatim")
-    << QStringLiteral("word")
-    << QStringLiteral("assignment")
-    << QStringLiteral("->MEMBER(")
-    << QStringLiteral("class::MEMBER(")
-    << QStringLiteral("OBJECT->member(");
+inline QStringList template_desc()
+{
+    return QStringList{
+        QStringLiteral("verbatim"),
+        QStringLiteral("word"),
+        QStringLiteral("assignment"),
+        QStringLiteral("->MEMBER("),
+        QStringLiteral("class::MEMBER("),
+        QStringLiteral("OBJECT->member("),
+    };
 }
 
-inline QStringList template_str() { return QStringList()
-    << QStringLiteral("%s")
-    << QStringLiteral("\\b%s\\b")
-    << QStringLiteral("\\b%s\\b\\s*=[^=]")
-    << QStringLiteral("\\->\\s*\\b%s\\b\\s*\\(")
-    << QStringLiteral("([a-z0-9_$]+)\\s*::\\s*\\b%s\\b\\s*\\(")
-    << QStringLiteral("\\b%s\\b\\s*\\->\\s*([a-z0-9_$]+)\\s*\\(");
+inline QStringList template_str()
+{
+    return QStringList{
+        QStringLiteral("%s"),
+        QStringLiteral("\\b%s\\b"),
+        QStringLiteral("\\b%s\\b\\s*=[^=]"),
+        QStringLiteral("\\->\\s*\\b%s\\b\\s*\\("),
+        QStringLiteral("([a-z0-9_$]+)\\s*::\\s*\\b%s\\b\\s*\\("),
+        QStringLiteral("\\b%s\\b\\s*\\->\\s*([a-z0-9_$]+)\\s*\\("),
+    };
 }
 
-inline QStringList repl_template() { return QStringList()
-    << QStringLiteral("%s")
-    << QStringLiteral("%s")
-    << QStringLiteral("%s = ")
-    << QStringLiteral("->%s(")
-    << QStringLiteral("\\1::%s(")
-    << QStringLiteral("%s->\\1(");
+inline QStringList repl_template()
+{
+    return QStringList{
+        QStringLiteral("%s"),
+        QStringLiteral("%s"),
+        QStringLiteral("%s = "),
+        QStringLiteral("->%s("),
+        QStringLiteral("\\1::%s("),
+        QStringLiteral("%s->\\1("),
+    };
 }
 
-inline QStringList filepatterns() { return QStringList()
-    << QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M,*.y,*.ypp,*.yxx,*.y++,*.l")
-    << QStringLiteral("*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M")
-    << QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl")
-    << QStringLiteral("*.adb")
-    << QStringLiteral("*.cs")
-    << QStringLiteral("*.f")
-    << QStringLiteral("*.html,*.htm")
-    << QStringLiteral("*.hs")
-    << QStringLiteral("*.java")
-    << QStringLiteral("*.js")
-    << QStringLiteral("*.php,*.php3,*.php4")
-    << QStringLiteral("*.pl")
-    << QStringLiteral("*.pp,*.pas")
-    << QStringLiteral("*.py")
-    << QStringLiteral("*.js,*.css,*.yml,*.rb,*.rhtml,*.html.erb,*.rjs,*.js.rjs,*.rxml,*.xml.builder")
-    << QStringLiteral("CMakeLists.txt,*.cmake")
-    << QStringLiteral("*");
+inline QStringList filepatterns()
+{
+    return QStringList{
+        QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M,*.y,*.ypp,*.yxx,*.y++,*.l"),
+        QStringLiteral("*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M"),
+        QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl"),
+        QStringLiteral("*.adb"),
+        QStringLiteral("*.cs"),
+        QStringLiteral("*.f"),
+        QStringLiteral("*.html,*.htm"),
+        QStringLiteral("*.hs"),
+        QStringLiteral("*.java"),
+        QStringLiteral("*.js"),
+        QStringLiteral("*.php,*.php3,*.php4"),
+        QStringLiteral("*.pl"),
+        QStringLiteral("*.pp,*.pas"),
+        QStringLiteral("*.py"),
+        QStringLiteral("*.js,*.css,*.yml,*.rb,*.rhtml,*.html.erb,*.rjs,*.js.rjs,*.rxml,*.xml.builder"),
+        QStringLiteral("CMakeLists.txt,*.cmake"),
+        QStringLiteral("*"),
+    };
 }
 
-inline QStringList excludepatterns() { return QStringList()
-    << QStringLiteral("/CVS/,/SCCS/,/.svn/,/_darcs/,/build/,/.git/")
-    << QString();
+inline QStringList excludepatterns()
+{
+    return QStringList{
+        QStringLiteral("/CVS/,/SCCS/,/.svn/,/_darcs/,/build/,/.git/"),
+        QString(),
+    };
 }
 
 ///Separator used to separate search paths.
@@ -115,16 +130,23 @@ QList<QUrl> getDirectoryChoice(const QString& text)
 {
     QList<QUrl> ret;
     if (text == allOpenFilesString()) {
-        foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
+        const auto openDocuments = ICore::self()->documentController()->openDocuments();
+        ret.reserve(openDocuments.size());
+        for (auto* doc : openDocuments) {
             ret << doc->url();
+        }
     } else if (text == allOpenProjectsString()) {
-        foreach(IProject* project, ICore::self()->projectController()->projects())
+        const auto projects = ICore::self()->projectController()->projects();
+        ret.reserve(projects.size());
+        for (auto* project : projects) {
             ret << project->path().toUrl();
+        }
     } else {
         QStringList semicolonSeparatedFileList = text.split(pathsSeparator());
         if (!semicolonSeparatedFileList.isEmpty() && QFileInfo::exists(semicolonSeparatedFileList[0])) {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
             // a semicolon in the name.
+            ret.reserve(semicolonSeparatedFileList.size());
             foreach(const QString& file, semicolonSeparatedFileList)
                 ret << QUrl::fromLocalFile(file).adjusted(QUrl::StripTrailingSlash);
         } else {

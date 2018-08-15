@@ -42,8 +42,10 @@ void SessionJob::start()
 {
     if (operationName() == QLatin1String("open"))
     {
-        QStringList args;
-        args << QStringLiteral("--open-session") << destination();
+        const QStringList args{
+            QStringLiteral("--open-session"),
+            destination(),
+        };
         KToolInvocation::kdeinitExec(QStringLiteral("kdevelop"), args);
 
         setResult(true);

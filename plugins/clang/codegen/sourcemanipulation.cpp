@@ -102,6 +102,7 @@ QString zeroIndentation(const QString& str, int fromLine = 0)
         }
     }
 
+    ret.reserve(ret.size() + lines.size());
     foreach (const auto& line, lines) {
         ret << line.mid(minLineStart);
     }
@@ -161,11 +162,11 @@ QString SourceCodeInsertion::applySubScope(const QString& decl) const
 
     QString ret;
     foreach (const QString& scope, m_scope.toStringList()) {
-        ret += scopeType + QStringLiteral(" ") + scope + QStringLiteral(" {\n");
+        ret += scopeType + QLatin1Char(' ') + scope + QStringLiteral(" {\n");
     }
 
     ret += decl;
-    ret += QStringLiteral("}") + scopeClose + QStringLiteral("\n").repeated(m_scope.count());
+    ret += QLatin1Char('}') + scopeClose + QStringLiteral("\n").repeated(m_scope.count());
 
     return ret;
 }
@@ -239,10 +240,10 @@ bool SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Declaration* decla
     decl.replace(declaration->qualifiedIdentifier().toString(), id.toString());
 
     if (body.isEmpty()) {
-        decl += QStringLiteral(";");
+        decl += QLatin1Char(';');
     } else {
         if (!body.startsWith(QLatin1Char(' ')) && !body.startsWith(QLatin1Char('\n'))) {
-            decl += QStringLiteral(" ");
+            decl += QLatin1Char(' ');
         }
         decl += zeroIndentation(body);
     }

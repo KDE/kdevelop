@@ -121,6 +121,7 @@ public:
         if (r.hasField(QStringLiteral("stack-args")) && r[QStringLiteral("stack-args")].size() > 0) {
             const Value& locals = r[QStringLiteral("stack-args")][0][QStringLiteral("args")];
 
+            m_localsName.reserve(m_localsName.size() + locals.size());
             for (int i = 0; i < locals.size(); i++) {
                 m_localsName << locals[i].literal();
             }
@@ -149,6 +150,7 @@ public:
             const Value& locals = r[QStringLiteral("locals")];
 
             QStringList localsName;
+            localsName.reserve(locals.size());
             for (int i = 0; i < locals.size(); i++) {
                 const Value& var = locals[i];
                 localsName << var[QStringLiteral("name")].literal();
