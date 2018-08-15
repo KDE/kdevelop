@@ -136,7 +136,7 @@ QString toRevisionName(const KDevelop::VcsRevision& rev, const QString& currentR
         case VcsRevision::Date:
         case VcsRevision::FileNumber:
         case VcsRevision::Invalid:
-        case VcsRevision::UserSpecialType:
+        case VcsRevision::UserType:
             Q_ASSERT(false);
     }
     return QString();
