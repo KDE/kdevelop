@@ -250,7 +250,7 @@ void TestProblemModel::testPathGrouping()
 
     // Hint filtering
     m_model->setSeverities(IProblem::Hint);
-    QCOMPARE(m_model->rowCount(), 1);;
+    QCOMPARE(m_model->rowCount(), 1);
     QVERIFY(checkPathGroup(0, m_problems[2]));
 
     // Error + Hint filtering

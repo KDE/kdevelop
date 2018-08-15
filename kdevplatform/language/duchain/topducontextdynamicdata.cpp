@@ -378,7 +378,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
     qCWarning(LANGUAGE) << "item index out of bounds:" << index << "count:" << items.size();
     return {};
   }
-  const uint realIndex = index - 1;;
+  const uint realIndex = index - 1;
   const auto& item = items.at(realIndex);
   if (item) {
     //Shortcut, because this is the most common case

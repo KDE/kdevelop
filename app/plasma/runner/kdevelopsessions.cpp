@@ -102,7 +102,7 @@ void KDevelopSessions::loadSessions()
         session.id = sessionfile.section('/', -2, -2);
         KConfig cfg(sessionfile, KConfig::SimpleConfig);
         KConfigGroup group = cfg.group(QString());
-        session.name = group.readEntry("SessionPrettyContents");;
+        session.name = group.readEntry("SessionPrettyContents");
         m_sessions << session;
     }
     std::sort(m_sessions.begin(), m_sessions.end(), kdevelopsessions_runner_compare_sessions);

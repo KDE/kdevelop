@@ -1089,7 +1089,7 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
             const MI::Value& frame = r[QStringLiteral("frame")];
             QString file, line, addr;
 
-            if (frame.hasField(QStringLiteral("fullname"))) file = frame[QStringLiteral("fullname")].literal();;
+            if (frame.hasField(QStringLiteral("fullname"))) file = frame[QStringLiteral("fullname")].literal();
             if (frame.hasField(QStringLiteral("line")))     line = frame[QStringLiteral("line")].literal();
             if (frame.hasField(QStringLiteral("addr")))     addr = frame[QStringLiteral("addr")].literal();
 

@@ -2107,7 +2107,7 @@ class ItemRepository : public AbstractItemRepository {
           offset += BucketStartOffset;
           m_file->seek(offset);
           uint monsterBucketExtent;
-          m_file->read((char*)(&monsterBucketExtent), sizeof(unsigned int));;
+          m_file->read((char*)(&monsterBucketExtent), sizeof(unsigned int));
           m_file->seek(offset);
           ///FIXME: use the data here instead of copying it again in prepareChange
           QByteArray data = m_file->read((1+monsterBucketExtent) * MyBucket::DataSize);

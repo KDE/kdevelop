@@ -341,7 +341,7 @@ void TestFilteringStrategy::testStaticAnalysisFilterStrategy_data()
     << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
     for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
         QTest::newRowForPathType("cppcheck-error-line", pathType)
-        << buildCppCheckErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;;
+        << buildCppCheckErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("krazy2-error-line", pathType)
         << buildKrazyErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("krazy2-error-line-two-colons", pathType)

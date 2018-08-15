@@ -44,7 +44,7 @@ DUChainItemData::DUChainItemData(const DUChainItem& file, bool openDefinition)
 
 QString DUChainItemData::text() const
 {
-    DUChainReadLocker lock;;
+    DUChainReadLocker lock;
     Declaration* decl = m_item.m_item.data();
     if (!decl) {
         return i18n("Not available any more: %1", m_item.m_text);
@@ -72,7 +72,7 @@ QString DUChainItemData::text() const
 
 QList<QVariant> DUChainItemData::highlighting() const
 {
-    DUChainReadLocker lock;;
+    DUChainReadLocker lock;
 
     Declaration* decl = m_item.m_item.data();
     if (!decl) {
@@ -130,7 +130,7 @@ QString DUChainItemData::htmlDescription() const
         return QString();
     }
 
-    DUChainReadLocker lock;;
+    DUChainReadLocker lock;
     Declaration* decl = m_item.m_item.data();
     if (!decl) {
         return i18n("Not available any more");
@@ -154,7 +154,7 @@ QString DUChainItemData::htmlDescription() const
 
 bool DUChainItemData::execute(QString& /*filterText*/)
 {
-    DUChainReadLocker lock;;
+    DUChainReadLocker lock;
     Declaration* decl = m_item.m_item.data();
     if (!decl) {
         return false;
@@ -188,7 +188,7 @@ bool DUChainItemData::isExpandable() const
 
 QWidget* DUChainItemData::expandingWidget() const
 {
-    DUChainReadLocker lock;;
+    DUChainReadLocker lock;
 
     Declaration* decl = dynamic_cast<KDevelop::Declaration*>(m_item.m_item.data());
     if (!decl || !decl->context()) {

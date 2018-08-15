@@ -212,7 +212,7 @@ QString TemplateClassGenerator::identifier() const
 
 void TemplateClassGenerator::setIdentifier(const QString& identifier)
 {
-    d->renderer.addVariable(QStringLiteral("identifier"), identifier);;
+    d->renderer.addVariable(QStringLiteral("identifier"), identifier);
     const QStringList separators{
         QStringLiteral("::"),
         QStringLiteral("."),
