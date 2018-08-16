@@ -72,7 +72,7 @@ KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::R
     }
     
     KTextEditor::Cursor c(r.start());
-    c.setLine(c.line() + txt.left(namepos).count('\n'));
+    c.setLine(c.line() + txt.leftRef(namepos).count('\n'));
     int lastNewLinePos = txt.lastIndexOf('\n', namepos);
     if (lastNewLinePos < 0)
         c.setColumn(r.start().column() + namepos);

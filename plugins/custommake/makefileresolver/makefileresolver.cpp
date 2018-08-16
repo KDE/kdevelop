@@ -568,7 +568,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
       QString path = match.captured(2);
       if (path.startsWith('"') || (path.startsWith('\'') && path.length() > 2)) {
           //probable a quoted path
-          if (path.endsWith(path.left(1))) {
+          if (path.endsWith(path.leftRef(1))) {
             //Quotation is ok, remove it
             path = path.mid(1, path.length() - 2);
           }
