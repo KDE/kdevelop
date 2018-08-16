@@ -169,12 +169,12 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
 
     m_currentFilter = text;
 
-    QVector<CodeModelViewItem> oldFiltered = m_filteredItems;
+    const QVector<CodeModelViewItem> oldFiltered = m_filteredItems;
     QHash<int, int> heights;
 
     m_filteredItems.clear();
 
-    foreach (const CodeModelViewItem& item, oldFiltered) {
+    for (const CodeModelViewItem& item : oldFiltered) {
         const QualifiedIdentifier& currentId = item.m_id;
 
         int last_pos = currentId.count() - 1;

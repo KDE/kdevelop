@@ -65,8 +65,9 @@ KSaveSelectDialog::KSaveSelectDialog( const QList<IDocument*>& files, QWidget * 
 //     m_listWidget->header()->hide();
 //     m_listWidget->setSectionResizeMode( QListView::LastColumn );
 
-    foreach (IDocument* doc, files)
+    for (IDocument* doc : files) {
         new DocumentItem( doc, m_listWidget );
+    }
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Save|QDialogButtonBox::Cancel);
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Save);

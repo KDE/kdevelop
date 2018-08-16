@@ -156,7 +156,7 @@ void GitInitTest::addFiles()
     //Now let's create several files and try "git add file1 file2 file3"
     const QStringList files{QStringLiteral("file1"), QStringLiteral("file2"), QStringLiteral("la la")};
     QList<QUrl> multipleFiles;
-    foreach(const QString& file, files) {
+    for (const QString& file : files) {
         QVERIFY(writeFile(gitTest_BaseDir() + file, file));
         multipleFiles << QUrl::fromLocalFile(gitTest_BaseDir() + file);
     }

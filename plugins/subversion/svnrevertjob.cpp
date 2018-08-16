@@ -40,9 +40,8 @@ void SvnInternalRevertJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
 
     svn::Client cli(m_ctxt);
     std::vector<svn::Path> targets;
-    QList<QUrl> l = locations();
-    foreach( const QUrl &url, l )
-    {
+    const QList<QUrl> l = locations();
+    for (const QUrl& url : l) {
         QByteArray ba = url.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
         targets.push_back( svn::Path( ba.data() ) );
     }

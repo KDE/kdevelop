@@ -82,9 +82,9 @@ Declaration * ForwardDeclaration::resolve(const TopDUContext* topContext) const
   globalIdentifier.setExplicitlyGlobal(true);
 
   //We've got to use DUContext::DirectQualifiedLookup so C++ works correctly.
-  QList<Declaration*> declarations = topContext->findDeclarations(globalIdentifier, CursorInRevision::invalid(), AbstractType::Ptr(), nullptr, DUContext::DirectQualifiedLookup);
+  const QList<Declaration*> declarations = topContext->findDeclarations(globalIdentifier, CursorInRevision::invalid(), AbstractType::Ptr(), nullptr, DUContext::DirectQualifiedLookup);
 
-  foreach(Declaration* decl, declarations) {
+  for (Declaration* decl : declarations) {
     if( !decl->isForwardDeclaration() )
       return decl;
   }

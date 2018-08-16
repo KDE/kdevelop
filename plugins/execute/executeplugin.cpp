@@ -111,14 +111,13 @@ QStringList ExecutePlugin::arguments( KDevelop::ILaunchConfiguration* cfg, QStri
 
 KJob* ExecutePlugin::dependencyJob( KDevelop::ILaunchConfiguration* cfg ) const
 {
-    QVariantList deps = KDevelop::stringToQVariant( cfg->config().readEntry( dependencyEntry, QString() ) ).toList();
+    const QVariantList deps = KDevelop::stringToQVariant( cfg->config().readEntry( dependencyEntry, QString() ) ).toList();
     QString depAction = cfg->config().readEntry( dependencyActionEntry, "Nothing" );
     if( depAction != QLatin1String("Nothing") && !deps.isEmpty() )
     {
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         QList<KDevelop::ProjectBaseItem*> items;
-        foreach( const QVariant& dep, deps )
-        {
+        for (const QVariant& dep : deps) {
             KDevelop::ProjectBaseItem* item = model->itemFromIndex( model->pathToIndex( dep.toStringList() ) );
             if( item )
             {

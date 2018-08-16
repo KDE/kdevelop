@@ -309,14 +309,14 @@ QMenu* NativeAppConfigType::launcherSuggestions()
     QMenu* ret = new QMenu(i18n("Project Executables"));
 
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-    QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
+    const QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
 
-    foreach(KDevelop::IProject* project, projects) {
+    for (KDevelop::IProject* project : projects) {
         if(project->projectFileManager()->features() & KDevelop::IProjectFileManager::Targets) {
-            QList<KDevelop::ProjectTargetItem*> targets=targetsInFolder(project->projectItem());
+            const QList<KDevelop::ProjectTargetItem*> targets = targetsInFolder(project->projectItem());
             QHash<KDevelop::ProjectBaseItem*, QList<QAction*> > targetsContainer;
             QMenu* projectMenu = ret->addMenu(QIcon::fromTheme(QStringLiteral("project-development")), project->name());
-            foreach(KDevelop::ProjectTargetItem* target, targets) {
+            for (KDevelop::ProjectTargetItem* target : targets) {
                 if(target->executable()) {
                     QStringList path = model->pathFromIndex(target->index());
                     if(!path.isEmpty()){

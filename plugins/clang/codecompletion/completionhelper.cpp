@@ -394,7 +394,7 @@ void CompletionHelper::computeCompletions(const ParseSession& session, CXFile fi
         fileFilter << file;
         const auto url = QUrl::fromLocalFile(ClangString(clang_getFileName(file)).toString()).adjusted(QUrl::NormalizePathSegments);
         const auto& buddies = DocumentFinderHelpers::potentialBuddies(url);
-        foreach(const auto& buddy, buddies) {
+        for (const auto& buddy : buddies) {
             auto buddyFile = clang_getFile(unit, qPrintable(buddy.toLocalFile()));
             if (buddyFile) {
                 fileFilter << buddyFile;

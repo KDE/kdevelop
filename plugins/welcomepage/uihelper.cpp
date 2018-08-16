@@ -38,7 +38,7 @@ QAction* findActionRec(const QStringList& path, const QList<QAction*>& actions)
     QStringList newPath = path;
     QString current = newPath.takeFirst();
     
-    foreach(QAction* a, actions) {
+    for (QAction* a : actions) {
         if(a->objectName() == current) {
             if(newPath.isEmpty())
                 return a;
@@ -68,8 +68,8 @@ void UiHelper::setArea(const QString& name)
 
 void UiHelper::raiseToolView(const QString& id)
 {
-    QList< Sublime::View* > views = ICore::self()->uiController()->activeArea()->toolViews();
-    foreach(Sublime::View* v, views) {
+    const QList<Sublime::View*> views = ICore::self()->uiController()->activeArea()->toolViews();
+    for (Sublime::View* v : views) {
         QWidget* w=v->widget();
         if(w && id==w->objectName())
             ICore::self()->uiController()->raiseToolView(w);

@@ -52,7 +52,7 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
 
     bool copySource = false;
     QMimeDatabase mimeDataBase;
-    foreach(const KDevelop::VcsItemEvent& ev, list) {
+    for (const KDevelop::VcsItemEvent& ev : list) {
 
         KDevelop::VcsItemEvent::Actions act = ev.actions();
         QStringList actionStrings;

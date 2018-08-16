@@ -81,8 +81,9 @@ QSize IdealButtonBarLayout::minimumSize() const
         }
 
         m_min = QSize(0, 0);
-        foreach (QLayoutItem *item, _items)
+        for (QLayoutItem* item : _items) {
             m_min = m_min.expandedTo(item->minimumSize());
+        }
 
         m_minSizeDirty = false;
     }
@@ -98,8 +99,7 @@ QSize IdealButtonBarLayout::sizeHint() const
         int crossSize = 0;
 
         bool first = true;
-        foreach (QLayoutItem *item, _items)
-        {
+        for (QLayoutItem *item : _items) {
             QSize hint = item->sizeHint();
             int orientationSizeHere;
             int crossSizeHere;
@@ -196,7 +196,7 @@ int IdealButtonBarLayout::doVerticalLayout(const QRect &rect, bool updateGeometr
     int y = rect.y() + t;
     int currentLineWidth = 0;
 
-    foreach (QLayoutItem *item, _items) {
+    for (QLayoutItem *item : _items) {
         const QSize itemSizeHint = item->sizeHint();
         if (y + itemSizeHint.height() + b > rect.height()) {
             int newX = x + currentLineWidth + buttonSpacing;
@@ -230,7 +230,7 @@ int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeome
     int y = rect.y() + t;
     int currentLineHeight = 0;
 
-    foreach (QLayoutItem *item, _items) {
+    for (QLayoutItem *item : _items) {
         QSize itemSizeHint = item->sizeHint();
         if (x + itemSizeHint.width() + r > rect.width()) {
             // Run out of horizontal space. Try to move button to another

@@ -474,7 +474,7 @@ static Path::List toPathList_impl(const Container& list)
 {
     Path::List ret;
     ret.reserve(list.size());
-    foreach (const auto& entry, list) {
+    for (const auto& entry : list) {
         Path path(entry);
         if (path.isValid()) {
             ret << path;

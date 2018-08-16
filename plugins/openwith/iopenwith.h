@@ -52,7 +52,7 @@ public:
             return;
         }
 
-        foreach(const QUrl& url, files) {
+        for (const QUrl& url : files) {
             ICore::self()->documentController()->openDocument( url );
         }
     }

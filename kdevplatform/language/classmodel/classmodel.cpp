@@ -224,12 +224,11 @@ void ClassModel::nodesLayoutAboutToBeChanged(ClassModelNodes::Node*)
 
 void ClassModel::nodesLayoutChanged(ClassModelNodes::Node*)
 {
-  QModelIndexList oldIndexList = persistentIndexList();
+  const QModelIndexList oldIndexList = persistentIndexList();
   QModelIndexList newIndexList;
 
   newIndexList.reserve(oldIndexList.size());
-  foreach(const QModelIndex& oldIndex, oldIndexList)
-  {
+  for (const QModelIndex& oldIndex : oldIndexList) {
     Node* node = static_cast<Node*>(oldIndex.internalPointer());
     if ( node )
     {

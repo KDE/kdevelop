@@ -99,9 +99,8 @@ void SvnInternalCommitJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
     initBeforeRun();
     svn::Client cli(m_ctxt);
     std::vector<svn::Path> targets;
-    QList<QUrl> l = urls();
-    foreach( const QUrl &u, l )
-    {
+    const QList<QUrl> l = urls();
+    for (const QUrl& u : l) {
         QByteArray path = u.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();
         targets.push_back( svn::Path( path.data() ) );
     }

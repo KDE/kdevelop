@@ -64,13 +64,13 @@ void CompletionTreeElement::setParent(CompletionTreeElement* parent) {
 }
 
 void CompletionTreeNode::appendChildren(const QList<QExplicitlySharedDataPointer<KDevelop::CompletionTreeElement>>& children) {
-  foreach (const auto& child, children) {
+  for (const auto& child : children) {
     appendChild(child);
   }
 }
 
 void CompletionTreeNode::appendChildren(const QList<QExplicitlySharedDataPointer<KDevelop::CompletionTreeItem>>& children) {
-  foreach (const auto& child, children) {
+  for (const auto& child : children) {
     appendChild(CompletionTreeElementPointer(child.data()));
   }
 }

@@ -177,7 +177,7 @@ void AbstractFileManagerPluginPrivate::addJobItems(FileManagerListJob* job,
     // build lists of valid files and folders with paths relative to the project folder
     Path::List files;
     Path::List folders;
-    foreach ( const KIO::UDSEntry& entry, entries ) {
+    for (const KIO::UDSEntry& entry : entries) {
         QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
         if (name == QLatin1String(".") || name == QLatin1String("..")) {
             continue;
@@ -564,8 +564,7 @@ bool AbstractFileManagerPlugin::renameFile(ProjectFileItem* file, const Path& ne
 bool AbstractFileManagerPlugin::removeFilesAndFolders(const QList<ProjectBaseItem*> &items)
 {
     bool success = true;
-    foreach(ProjectBaseItem* item, items)
-    {
+    for (ProjectBaseItem* item : items) {
         Q_ASSERT(item->folder() || item->file());
 
         ProjectFolderItem* parent = parentFolder(item);
@@ -592,8 +591,7 @@ bool AbstractFileManagerPlugin::removeFilesAndFolders(const QList<ProjectBaseIte
 bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem* >& items, ProjectFolderItem* newParent)
 {
     bool success = true;
-    foreach(ProjectBaseItem* item, items)
-    {
+    for (ProjectBaseItem* item : items) {
         Q_ASSERT(item->folder() || item->file());
 
         ProjectFolderItem* oldParent = parentFolder(item);
@@ -629,8 +627,7 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
 bool AbstractFileManagerPlugin::copyFilesAndFolders(const Path::List& items, ProjectFolderItem* newParent)
 {
     bool success = true;
-    foreach(const Path& item, items)
-    {
+    for (const Path& item : items) {
         d->stopWatcher(newParent);
 
         success &= copyUrl(newParent->project(), item.toUrl(), newParent->path().toUrl());

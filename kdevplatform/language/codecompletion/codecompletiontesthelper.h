@@ -74,7 +74,7 @@ struct CodeCompletionItemTester
 
   void addElements(const QList<Element>& elements)
   {
-    foreach(Element element, elements) {
+    for (auto& element : elements) {
       Item item(dynamic_cast<CompletionTreeItem*>(element.data()));
       if(item)
         items << item;
@@ -86,7 +86,7 @@ struct CodeCompletionItemTester
 
   bool containsDeclaration(Declaration* dec) const
   {
-    foreach(Item item, items) {
+    for (auto& item : items) {
         if (item->declaration().data() == dec) {
             return true;
         }
@@ -178,9 +178,10 @@ struct InsertIntoDUChain
 
       m_topContext = nullptr;
 
-      QList< TopDUContext* > chains = DUChain::self()->chainsForDocument(m_insertedCode.file());
-      foreach(TopDUContext* top, chains)
+      const QList<TopDUContext*> chains = DUChain::self()->chainsForDocument(m_insertedCode.file());
+      for (TopDUContext* top : chains) {
         DUChain::self()->removeDocumentChain(top);
+      }
     }
   }
 

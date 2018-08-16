@@ -37,7 +37,7 @@ using namespace KDevelop;
 
 static ProjectFileItem* containsFile(const Path& file, const QList<ProjectFileItem*>& tfiles)
 {
-    foreach(ProjectFileItem* f, tfiles) {
+    for (ProjectFileItem* f : tfiles) {
         if(f->path()==file)
             return f;
     }
@@ -48,8 +48,7 @@ static QStringList resolvePaths(const Path& base, const QStringList& pathsToReso
 {
     QStringList resolvedPaths;
     resolvedPaths.reserve(pathsToResolve.size());
-    foreach(const QString& pathToResolve, pathsToResolve)
-    {
+    for (const QString& pathToResolve : pathsToResolve) {
         QString dir(pathToResolve);
         if (!pathToResolve.startsWith(QLatin1String("#[")) &&
             !pathToResolve.startsWith(QLatin1String("$<"))) {
@@ -64,8 +63,7 @@ static QSet<QString> filterFiles(const QFileInfoList& orig, const Path& base, IP
 {
     QSet<QString> ret;
     ret.reserve(orig.size());
-    foreach(const QFileInfo& info, orig)
-    {
+    for (const QFileInfo& info : orig) {
         const QString str = info.fileName();
         const Path path(base, str);
 
@@ -91,7 +89,7 @@ static bool isCorrectFolder(const Path& path, IProject* p)
 template <class T>
 static bool textInList(const QVector<T>& list, KDevelop::ProjectBaseItem* item)
 {
-    foreach(const T& s, list) {
+    for (const T& s : list) {
         if(item->text()==s.name)
             return true;
     }
@@ -101,8 +99,8 @@ static bool textInList(const QVector<T>& list, KDevelop::ProjectBaseItem* item)
 static QList<KDevelop::ProjectBaseItem*> cleanupBuildFolders(CMakeFolderItem* item, const QVector<Subdirectory>& subs)
 {
     QList<ProjectBaseItem*> ret;
-    QList<KDevelop::ProjectFolderItem*> folders = item->folderList();
-    foreach(KDevelop::ProjectFolderItem* folder, folders) {
+    const QList<KDevelop::ProjectFolderItem*> folders = item->folderList();
+    for (KDevelop::ProjectFolderItem* folder : folders) {
         CMakeFolderItem* cmfolder = dynamic_cast<CMakeFolderItem*>(folder);
         if(cmfolder && cmfolder->formerParent()==item && !textInList<Subdirectory>(subs, folder))
             ret += folder;
@@ -343,7 +341,7 @@ void CMakeCommitChangesJob::setTargetFiles(ProjectTargetItem* target, const Path
     }
 
     tfiles = target->fileList(); //We need to recreate the list without the removed items
-    foreach(const Path& file, files) {
+    for (const Path& file : files) {
         ProjectFileItem* f = containsFile(file, tfiles);
         if(!f)
             new KDevelop::ProjectFileItem( target->project(), file, target );
@@ -361,7 +359,7 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
     const Path folderPath = item->path();
 
     const QFileInfoList entriesL = d.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
-    QSet<QString> entries = filterFiles(entriesL, folderPath, item->project(), m_manager->filterManager());
+    const QSet<QString> entries = filterFiles(entriesL, folderPath, item->project(), m_manager->filterManager());
 
     qCDebug(CMAKE) << "Reloading Directory!" << folderPath;
 
@@ -382,8 +380,7 @@ void CMakeCommitChangesJob::reloadFiles(ProjectFolderItem* item)
 
     //We look for new elements
     QList<ProjectBaseItem*> newItems;
-    foreach( const QString& entry, entries )
-    {
+    for (const QString& entry : entries ) {
         if(item->hasFileOrFolder( entry ))
             continue;
 

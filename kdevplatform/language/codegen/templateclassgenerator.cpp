@@ -221,8 +221,7 @@ void TemplateClassGenerator::setIdentifier(const QString& identifier)
         QStringLiteral("/"),
     };
     QStringList ns;
-    foreach (const QString& separator, separators)
-    {
+    for (const QString& separator : separators) {
         ns = identifier.split(separator);
         if (ns.size() > 1)
         {
@@ -318,7 +317,7 @@ void TemplateClassGenerator::setBaseClasses(const QList<QString>& bases)
     d->allBaseClasses.clear();
 
     // add all bases
-    foreach (const QString& base, bases) {
+    for (const QString& base : bases) {
         addBaseClass(base);
     }
 }

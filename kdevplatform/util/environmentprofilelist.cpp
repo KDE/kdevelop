@@ -173,8 +173,7 @@ EnvironmentProfileList::EnvironmentProfileList()
 QStringList EnvironmentProfileList::createEnvironment(const QString& profileName, const QStringList& defaultEnvironment) const
 {
     QMap<QString, QString> retMap;
-    foreach( const QString &line, defaultEnvironment )
-    {
+    for (const QString& line : defaultEnvironment) {
         QString varName = line.section(QLatin1Char('='), 0, 0);
         QString varValue = line.section(QLatin1Char('='), 1);
         retMap.insert( varName, varValue );

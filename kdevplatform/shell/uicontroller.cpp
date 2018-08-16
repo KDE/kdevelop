@@ -276,8 +276,8 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
     if(!d->areasRestored || !activeArea())
         return nullptr;
 
-    QList< Sublime::View* > views = activeArea()->toolViews();
-    foreach(Sublime::View* view, views) {
+    const QList<Sublime::View*> views = activeArea()->toolViews();
+    for (Sublime::View* view : views) {
         Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
         if(doc && doc->title() == name && view->widget()) {
             if(flags & Raise)
@@ -312,8 +312,8 @@ void UiController::raiseToolView(QWidget* toolViewWidget)
     if(!d->areasRestored)
         return;
 
-    QList< Sublime::View* > views = activeArea()->toolViews();
-    foreach(Sublime::View* view, views) {
+    const QList<Sublime::View*> views = activeArea()->toolViews();
+    for (Sublime::View* view : views) {
         if(view->widget() == toolViewWidget) {
             view->requestRaise();
             return;

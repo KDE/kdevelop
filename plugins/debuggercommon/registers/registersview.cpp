@@ -63,7 +63,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
     const QVector<Format> formats = m_modelsManager->formats(group);
     if (formats.size() > 1) {
         QMenu* m = m_menu->addMenu(i18n("Format"));
-        foreach (Format fmt, formats) {
+        for (Format fmt : formats) {
             m->addAction(findAction(Converters::formatToString(fmt)));
         }
         findAction(Converters::formatToString(formats.first()))->setChecked(true);
@@ -72,7 +72,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
     const QVector<Mode> modes = m_modelsManager->modes(group);
     if (modes.size() > 1) {
         QMenu* m = m_menu->addMenu(i18n("Mode"));
-        foreach (Mode mode, modes) {
+        for (Mode mode : modes) {
             m->addAction(findAction(Converters::modeToString(mode)));
         }
         findAction(Converters::modeToString(modes.first()))->setChecked(true);
@@ -114,7 +114,7 @@ void RegistersView::changeAvaliableActions()
 
     foreach (QAction * a, m_actions) {
         bool enable = false;
-        foreach (Format f, formats) {
+        for (Format f : formats) {
             if (a->text() == Converters::formatToString(f)) {
                 enable = true;
                 break;
@@ -122,7 +122,7 @@ void RegistersView::changeAvaliableActions()
         }
 
         if (!enable) {
-            foreach (Mode m, modes) {
+            for (Mode m : modes) {
                 if (a->text() == Converters::modeToString(m)) {
                     enable = true;
                     break;

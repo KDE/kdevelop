@@ -54,7 +54,7 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     KDirWatch *historyWatch = new KDirWatch(this);
     const QStringList sessiondirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
                                                               QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory);
-    foreach (const QString &dir, sessiondirs) {
+    for (const QString& dir : sessiondirs) {
         historyWatch->addDir(dir);
     }
     connect(historyWatch, &KDirWatch::dirty, this, &KDevelopSessions::loadSessions);
@@ -72,11 +72,11 @@ KDevelopSessions::~KDevelopSessions() = default;
 
 QStringList findSessions()
 {
-    QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                        QStringLiteral("kdevelop/sessions"),
-                                                        QStandardPaths::LocateDirectory);
+    const QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                              QStringLiteral("kdevelop/sessions"),
+                                                              QStandardPaths::LocateDirectory);
     QStringList sessionrcs;
-    Q_FOREACH(const QString& dir, sessionDirs) {
+    for (const QString& dir : sessionDirs) {
         QDir d(dir);
         Q_FOREACH(const QString& sessionDir, d.entryList(QDir::Dirs)) {
             QDir sd(d.absoluteFilePath(sessionDir));
@@ -96,8 +96,7 @@ void KDevelopSessions::loadSessions()
     // Should we add a match for this option or would that clutter the matches too much?
     const QStringList list = findSessions();
     m_sessions.reserve(list.size());
-    foreach (const QString &sessionfile, list)
-    {
+    for (const QString& sessionfile : list) {
         Session session;
         session.id = sessionfile.section('/', -2, -2);
         KConfig cfg(sessionfile, KConfig::SimpleConfig);

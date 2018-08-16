@@ -533,10 +533,10 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(TopDUContext* 
 QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* view, KTextEditor::Cursor position)
 {
   QUrl viewUrl = view->document()->url();
-  auto languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
+  const auto languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
 
   DUChainReadLocker lock(DUChain::lock());
-  foreach (const auto language, languages) {
+  for (const auto language : languages) {
     auto widget = language->specialLanguageObjectNavigationWidget(viewUrl, KTextEditor::Cursor(position));
     auto navigationWidget = qobject_cast<AbstractNavigationWidget*>(widget);
     if(navigationWidget)
@@ -1294,7 +1294,7 @@ void ContextBrowserPlugin::previousMenuAboutToShow() {
 void ContextBrowserPlugin::fillHistoryPopup(QMenu* menu, const QList<int>& historyIndices) {
     menu->clear();
     KDevelop::DUChainReadLocker lock( KDevelop::DUChain::lock() );
-    foreach(int index, historyIndices) {
+    for (int index : historyIndices) {
         QAction* action = new QAction(actionTextFor(index), menu);
         action->setData(index);
         menu->addAction(action);

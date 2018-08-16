@@ -95,7 +95,7 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType,
     *this << arguments;
 
     QStringList targets;
-    foreach (const QString& arg, arguments) {
+    for (const QString& arg : arguments) {
         if (!arg.startsWith('-')) {
             targets << arg;
         }

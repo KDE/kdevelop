@@ -98,7 +98,7 @@ DeclarationTest(useRanges)
 {
   QStringList ranges;
   foreach (const auto& useRanges, decl->uses()) {
-    foreach(const RangeInRevision range, useRanges) {
+    for (const RangeInRevision range : useRanges) {
       ranges << rangeStr(range);
     }
   }

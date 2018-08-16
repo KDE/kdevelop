@@ -190,16 +190,16 @@ public:
     // Recursively collects builder dependencies for a project.
     static void collectBuilders( QList< IProjectBuilder* >& destination, IProjectBuilder* topBuilder, IProject* project )
     {
-        QList< IProjectBuilder* > auxBuilders = topBuilder->additionalBuilderPlugins( project );
+        const QList<IProjectBuilder*> auxBuilders = topBuilder->additionalBuilderPlugins(project);
         destination.append( auxBuilders );
-        foreach( IProjectBuilder* auxBuilder, auxBuilders ) {
+        for (IProjectBuilder* auxBuilder : auxBuilders ) {
             collectBuilders( destination, auxBuilder, project );
         }
     }
 
     QVector<IPlugin*> findPluginsForProject( IProject* project ) const
     {
-        QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
+        const QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
         QVector<IPlugin*> projectPlugins;
         QList<IProjectBuilder*> buildersForKcm;
         // Important to also include the "top" builder for the project, so
@@ -210,7 +210,7 @@ public:
             collectBuilders( buildersForKcm, buildSystemManager->builder(), project );
         }
 
-        foreach(auto plugin, plugins) {
+        for (auto plugin : plugins) {
             auto info = m_core->pluginController()->pluginInfo(plugin);
             IProjectFileManager* manager = plugin->extension<KDevelop::IProjectFileManager>();
             if( manager && manager != project->projectFileManager() )
@@ -683,8 +683,9 @@ void ProjectController::initialize()
 
 void ProjectController::openProjects(const QList<QUrl>& projects)
 {
-    foreach (const QUrl& url, projects)
+    for (const QUrl& url : projects) {
         openProject(url);
+    }
 }
 
 void ProjectController::loadSettings( bool projectIsLoaded )
@@ -719,7 +720,7 @@ void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, const KIO::UDS
 {
     KIO::SimpleJob* job(dynamic_cast<KIO::SimpleJob*>(_job));
     Q_ASSERT(job);
-    foreach(const KIO::UDSEntry& entry, entries) {
+    for (const KIO::UDSEntry& entry : entries) {
         if(d->m_foundProjectFile)
             break;
         if(!entry.isDir()) {
@@ -956,9 +957,8 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
     QSet<IPlugin*> pluginsForProjSet = QSet<IPlugin*>::fromList( pluginsForProj );
     QSet<IPlugin*> otherPrjPluginsSet = QSet<IPlugin*>::fromList( otherProjectPlugins );
     // loaded - target = tobe unloaded.
-    QSet<IPlugin*> tobeRemoved = pluginsForProjSet.subtract( otherPrjPluginsSet );
-    Q_FOREACH( IPlugin* _plugin, tobeRemoved )
-    {
+    const QSet<IPlugin*> tobeRemoved = pluginsForProjSet.subtract( otherPrjPluginsSet );
+    for (IPlugin* _plugin : tobeRemoved) {
         KPluginMetaData _plugInfo = Core::self()->pluginController()->pluginInfo( _plugin );
         if( _plugInfo.isValid() )
         {

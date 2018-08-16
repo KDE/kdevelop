@@ -171,9 +171,9 @@ static Cursor cursorAdd(Cursor c, const QString& text)
 int DocumentChangeTracker::recommendedDelay(KTextEditor::Document* doc, const KTextEditor::Range& range,
                                             const QString& text, bool removal)
 {
-    auto languages = ICore::self()->languageController()->languagesForUrl(doc->url());
+    const auto languages = ICore::self()->languageController()->languagesForUrl(doc->url());
     int delay = ILanguageSupport::NoUpdateRequired;
-    Q_FOREACH (const auto& lang, languages) {
+    for (const auto& lang : languages) {
         // take the largest value, because NoUpdateRequired is -2 and we want to make sure
         // that if one language requires an update it actually happens
         delay = qMax<int>(lang->suggestedReparseDelayForChange(doc, range, text, removal), delay);

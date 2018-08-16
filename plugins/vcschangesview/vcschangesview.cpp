@@ -73,11 +73,11 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
 {
     QList<QUrl> urls;
     QList<IProject*> projects;
-    QModelIndexList selectionIdxs = selectedIndexes();
+    const QModelIndexList selectionIdxs = selectedIndexes();
     if(selectionIdxs.isEmpty())
         return;
     
-    foreach(const QModelIndex& idx, selectionIdxs) {
+    for (const QModelIndex& idx : selectionIdxs) {
         if(idx.column()==0) {
             if(idx.parent().isValid())
                 urls += idx.data(KDevelop::VcsFileChangesModel::VcsStatusInfoRole).value<VcsStatusInfo>().url();

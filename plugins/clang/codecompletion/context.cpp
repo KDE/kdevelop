@@ -1273,14 +1273,14 @@ void ClangCodeCompletionContext::addOverwritableItems()
 
 void ClangCodeCompletionContext::addImplementationHelperItems()
 {
-    auto implementsList = m_completionHelper.implements();
+    const auto implementsList = m_completionHelper.implements();
     if (implementsList.isEmpty()) {
         return;
     }
 
     QList<CompletionTreeItemPointer> implements;
     implements.reserve(implementsList.size());
-    foreach(const auto& info, implementsList) {
+    for (const auto& info : implementsList) {
         implements << CompletionTreeItemPointer(new ImplementsItem(info));
     }
     eventuallyAddGroup(i18n("Implement Function"), 0, implements);

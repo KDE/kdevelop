@@ -505,10 +505,10 @@ bool WorkingSet::hasConnectedAreas() const
 
 bool WorkingSet::hasConnectedAreas(const QList<Sublime::Area*>& areas) const
 {
-  foreach( Sublime::Area* area, areas )
-
-  if ( m_areas.contains( area ) )
-    return true;
+    for (Sublime::Area* area : areas) {
+        if (m_areas.contains(area))
+            return true;
+    }
 
   return false;
 }

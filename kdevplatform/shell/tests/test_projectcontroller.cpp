@@ -107,13 +107,13 @@ public:
 
     QList<ProjectFolderItem*> parse(ProjectFolderItem *dom) override
     {
-        Path::List files = m_filesInFolder[dom->path()];
-        foreach (const Path& file, files) {
+        const Path::List files = m_filesInFolder[dom->path()];
+        for (const Path& file : files) {
             new ProjectFileItem(dom->project(), file, dom);
         }
-        Path::List folderPaths = m_subFoldersInFolder[dom->path()];
+        const Path::List folderPaths = m_subFoldersInFolder[dom->path()];
         QList<ProjectFolderItem*> folders;
-        foreach (const Path& folderPath, folderPaths) {
+        for (const Path& folderPath : folderPaths) {
             folders << new ProjectFolderItem(dom->project(), folderPath, dom);
         }
         return folders;

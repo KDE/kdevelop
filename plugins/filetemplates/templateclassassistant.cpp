@@ -152,7 +152,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
         return;
     }
 
-    QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(url));
+    const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(url));
     if (items.isEmpty())
     {
         qCDebug(PLUGIN_FILETEMPLATES) << "No suitable project items found";
@@ -162,8 +162,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
     QList<ProjectTargetItem*> targets;
     ProjectTargetItem* target = nullptr;
 
-    foreach (ProjectBaseItem* item, items)
-    {
+    for (ProjectBaseItem* item : items) {
         if (ProjectTargetItem* target = item->target())
         {
             targets << target;
@@ -174,8 +173,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
     {
         // If no target was explicitly found yet, try all the targets in the current folder
         targets.reserve(items.size());
-        foreach (ProjectBaseItem* item, items)
-        {
+        for (ProjectBaseItem* item : items) {
             targets << item->targetList();
         }
     }
@@ -206,7 +204,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
 
         QListWidget* targetsWidget = new QListWidget(d);
         targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-        foreach(ProjectTargetItem* target, targets) {
+        for (ProjectTargetItem* target : targets) {
             targetsWidget->addItem(target->text());
         }
         targetsWidget->setCurrentRow(0);
@@ -247,8 +245,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
     Q_ASSERT(target);
 
     QList<ProjectFileItem*> fileItems;
-    foreach (const QUrl &fileUrl, fileUrls)
-    {
+    for (const QUrl& fileUrl : fileUrls) {
         foreach (ProjectBaseItem* item, project->itemsForPath(IndexedString(KIO::upUrl(fileUrl))))
         {
             if (ProjectFolderItem* folder = item->folder())
@@ -553,7 +550,7 @@ void TemplateClassAssistant::back()
 void TemplateClassAssistant::accept()
 {
     // next() is not called for the last page (when the user clicks Finish), so we have to set output locations here
-    QHash<QString, QUrl> fileUrls = d->outputPageWidget->fileUrls();
+    const QHash<QString, QUrl> fileUrls = d->outputPageWidget->fileUrls();
     QHash<QString, KTextEditor::Cursor> filePositions = d->outputPageWidget->filePositions();
 
     DocumentChangeSet changes;
@@ -578,8 +575,7 @@ void TemplateClassAssistant::accept()
     changes.applyAllChanges();
 
     // Open the generated files in the editor
-    foreach (const QUrl& url, fileUrls)
-    {
+    for (const QUrl& url : fileUrls) {
         ICore::self()->documentController()->openDocument(url);
     }
 

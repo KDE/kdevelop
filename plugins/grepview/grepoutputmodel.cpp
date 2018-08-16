@@ -395,8 +395,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
 
     GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
     m_rootItem->appendRow(fileItem);
-    foreach( const GrepOutputItem& item, items )
-    {
+    for (const GrepOutputItem& item : items) {
         GrepOutputItem* copy = new GrepOutputItem(item);
         copy->setCheckable(m_itemsCheckable);
         if(m_itemsCheckable)

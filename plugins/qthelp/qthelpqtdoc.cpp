@@ -87,13 +87,13 @@ void QtHelpQtDoc::loadDocumentation()
         return;
     }
 
-    QStringList files = qchFiles();
+    const QStringList files = qchFiles();
     if(files.isEmpty()) {
         qCWarning(QTHELP) << "could not find QCH file in directory" << m_path;
         return;
     }
 
-    foreach(const QString &fileName, files) {
+    for (const QString& fileName : files) {
         QString fileNamespace = QHelpEngineCore::namespaceName(fileName);
         if (!fileNamespace.isEmpty() && !m_engine.registeredDocumentations().contains(fileNamespace)) {
             qCDebug(QTHELP) << "loading doc" << fileName << fileNamespace;
@@ -122,7 +122,7 @@ QStringList QtHelpQtDoc::qchFiles() const
         m_path + QLatin1String("/qch/"),
     };
 
-    foreach (const auto &path, paths) {
+    for (const auto& path : paths) {
         QDir d(path);
         if(path.isEmpty() || !d.exists()) {
             continue;

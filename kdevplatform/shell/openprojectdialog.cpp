@@ -94,9 +94,8 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
                          : QStringLiteral("%2 (%1)");
     allEntry << QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension();
     filters << filterFormat.arg(QLatin1String("*.") + ShellExtension::getInstance()->projectFileExtension(), ShellExtension::getInstance()->projectFileDescription());
-    QVector<KPluginMetaData> plugins = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
-    foreach(const KPluginMetaData& info, plugins)
-    {
+    const QVector<KPluginMetaData> plugins = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
+    for (const KPluginMetaData& info : plugins) {
         m_projectPlugins.insert(info.name(), info);
 
         QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
@@ -354,8 +353,7 @@ QString OpenProjectDialog::projectManager() const
 
 void OpenProjectDialog::storeFileList(KIO::Job*, const KIO::UDSEntryList& list)
 {
-    foreach( const KIO::UDSEntry& entry, list )
-    {
+    for (const KIO::UDSEntry& entry : list) {
         QString name = entry.stringValue( KIO::UDSEntry::UDS_NAME );
         if( name != QLatin1String(".") && name != QLatin1String("..") && !entry.isDir() )
         {

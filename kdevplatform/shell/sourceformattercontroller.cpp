@@ -403,10 +403,10 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
             qCDebug(SHELL) << "Found a kate modeline: " << line << endl;
             modelinefound = true;
             QString options = kateModeline.cap(1);
-            QStringList optionList = options.split(QLatin1Char(';'), QString::SkipEmptyParts);
+            const QStringList optionList = options.split(QLatin1Char(';'), QString::SkipEmptyParts);
 
             os <<  modeline;
-            foreach(QString s, optionList) {
+            for (QString s : optionList) {
                 if (knownOptions.indexIn(s) < 0) { // unknown option, add it
                     if(s.startsWith(QLatin1Char(' ')))
                         s=s.mid(1);

@@ -107,8 +107,7 @@ ProjectBuildSetWidget::~ProjectBuildSetWidget()
 void showContextMenu_appendActions(QMenu& menu, const QList<QAction*>& actions)
 {
     menu.addSeparator();
-    foreach( QAction* act, actions )
-    {
+    for (QAction* act : actions) {
         menu.addAction(act);
     }
 }
@@ -141,7 +140,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
     if( !itemlist.isEmpty() )
     {
         KDevelop::ProjectItemContextImpl context(itemlist);
-        QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, &m);
+        const QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, &m);
 
         QList<QAction*> buildActions;
         QList<QAction*> vcsActions;
@@ -149,8 +148,7 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
         QList<QAction*> projectActions;
         QList<QAction*> fileActions;
         QList<QAction*> runActions;
-        foreach( const KDevelop::ContextMenuExtension& ext, extensions )
-        {
+        for (const KDevelop::ContextMenuExtension& ext : extensions) {
             buildActions += ext.actions(KDevelop::ContextMenuExtension::BuildGroup);
             fileActions += ext.actions(KDevelop::ContextMenuExtension::FileGroup);
             projectActions += ext.actions(KDevelop::ContextMenuExtension::ProjectGroup);

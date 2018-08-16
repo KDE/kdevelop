@@ -129,7 +129,7 @@ namespace {
 
 static void mergePaths(KDevelop::Path::List& destList, const KDevelop::Path::List& srcList)
 {
-    foreach (const Path& path, srcList) {
+    for (const Path& path : srcList) {
         if (!destList.contains(path))
             destList.append(path);
     }

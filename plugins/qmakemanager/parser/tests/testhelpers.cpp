@@ -33,7 +33,7 @@ void matchScopeBodies(QList<QMake::StatementAST*> realbody, const QList<QMake::S
     QMake::AssignmentAST* testassign;
     QMake::ScopeAST* testscope;
 
-    foreach (QMake::StatementAST* ast, realbody) {
+    for (QMake::StatementAST* ast : realbody) {
         scope = dynamic_cast<QMake::ScopeAST*>(ast);
         testscope = dynamic_cast<QMake::ScopeAST*>(testbody.at(i));
 

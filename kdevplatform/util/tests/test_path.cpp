@@ -415,7 +415,7 @@ void TestPath::testPathAddData()
         QStringLiteral("http://www.asdf.com/foo/bar/asdf/"),
     };
 
-    foreach(const QString& base, bases) {
+    for (const QString& base : bases) {
         QUrl baseUrl = QUrl::fromUserInput(base);
         if (QDir::isRelativePath(pathToAdd)) {
             baseUrl = resolvedUrl(baseUrl, QUrl(pathToAdd));
@@ -459,7 +459,7 @@ void TestPath::testPathAddData_data()
         << QStringLiteral("../foo/../bar")
         << QStringLiteral("../foo/./bar")
         << QStringLiteral("../../../../../../../invalid");
-    foreach(const QString &path, paths) {
+    for (const QString& path : paths) {
         QTest::newRow(qstrdup(path.toUtf8().constData())) << path;
     }
 }
@@ -551,7 +551,7 @@ void TestPath::testPathCd_data()
 #endif
         QStringLiteral("http://foo.com/"), QStringLiteral("http://foo.com/foo"), QStringLiteral("http://foo.com/foo/bar/asdf")
     };
-    foreach (const QString& base, bases) {
+    for (const QString& base : bases) {
         QTest::newRow(qstrdup(qPrintable(base + "-"))) << base << "";
         QTest::newRow(qstrdup(qPrintable(base + "-.."))) << base << "..";
         QTest::newRow(qstrdup(qPrintable(base + "-../"))) << base << "../";

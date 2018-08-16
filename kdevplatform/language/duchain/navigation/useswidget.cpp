@@ -392,7 +392,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, const QList
 
       QSet<int> hadIndices;
 
-      foreach(const IndexedDeclaration usedDeclaration, usedDeclarations) {
+      for (const IndexedDeclaration usedDeclaration : usedDeclarations) {
         int usedDeclarationIndex = ctx->topContext()->indexForUsedDeclaration(usedDeclaration.data(), false);
         if(hadIndices.contains(usedDeclarationIndex))
           continue;

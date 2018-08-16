@@ -69,11 +69,10 @@ struct LicensePagePrivate
 void LicensePagePrivate::initializeLicenses()
 {
     qCDebug(PLUGIN_FILETEMPLATES) << "Searching for available licenses";
-    QStringList licenseDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevcodegen/licenses"), QStandardPaths::LocateDirectory);
+    const QStringList licenseDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevcodegen/licenses"), QStandardPaths::LocateDirectory);
 
     //Iterate through the possible directories that contain licenses, and load their names
-    foreach(const QString& currentDir, licenseDirs)
-    {
+    for (const QString& currentDir : licenseDirs) {
         QDirIterator it(currentDir, QDir::Files | QDir::Readable);
         while(it.hasNext())
         {

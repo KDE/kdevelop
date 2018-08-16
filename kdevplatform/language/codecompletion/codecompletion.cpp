@@ -112,10 +112,10 @@ void CodeCompletion::checkDocument(Document* textDocument)
 {
   unregisterDocument(textDocument);
 
-  auto langs = ICore::self()->languageController()->languagesForUrl( textDocument->url() );
+  const auto langs = ICore::self()->languageController()->languagesForUrl( textDocument->url() );
 
   bool found = false;
-  foreach(const auto lang, langs) {
+  for (const auto lang : langs) {
     if(m_language==lang->name()) {
       found=true;
       break;

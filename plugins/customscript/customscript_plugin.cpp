@@ -404,11 +404,11 @@ QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url) co
     QString sample = languages[0]->indentationSample();
     QString formattedSample = formatSource(sample, url, QMimeDatabase().mimeTypeForUrl(url), QString(), QString());
 
-    QStringList lines = formattedSample.split(QLatin1Char('\n'));
-    foreach (QString line, lines) {
+    const QStringList lines = formattedSample.split(QLatin1Char('\n'));
+    for (const QString& line : lines) {
         if (!line.isEmpty() && line[0].isSpace()) {
             QString indent;
-            foreach (QChar c, line) {
+            for (const QChar c : line) {
                 if (c.isSpace()) {
                     indent.push_back(c);
                 } else {

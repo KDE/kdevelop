@@ -79,8 +79,7 @@ bool askUser( const QString& mainText,
 bool ensureWritable( const QList<QUrl> &urls )
 {
     QStringList notWritable;
-    foreach (const QUrl& url, urls)
-    {
+    for (const QUrl& url : urls) {
         if (url.isLocalFile())
         {
             QFile file(url.toLocalFile());

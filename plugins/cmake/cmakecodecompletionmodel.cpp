@@ -125,11 +125,11 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         }
         QDir dir(path);
         
-        QFileInfoList paths=dir.entryInfoList(QStringList() << tocomplete.mid(lastdir+1)+'*',
+        const QFileInfoList paths = dir.entryInfoList(QStringList() << tocomplete.mid(lastdir+1)+'*',
                                               QDir::AllEntries | QDir::NoDotAndDotDot);
         m_paths.clear();
         m_paths.reserve(paths.size());
-        foreach(const QFileInfo& f, paths) {
+        for (const QFileInfo& f : paths) {
             QString currentPath = f.fileName();
             if(f.isDir())
                 currentPath+='/';

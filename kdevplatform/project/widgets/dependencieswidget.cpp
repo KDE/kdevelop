@@ -155,7 +155,7 @@ void DependenciesWidget::removeDep()
 
 void DependenciesWidget::setDependencies(const QVariantList &deps)
 {
-    foreach( const QVariant& dep, deps ) {
+    for (const QVariant& dep : deps) {
         QStringList deplist = dep.toStringList();
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         KDevelop::ProjectBaseItem* pitem=itemForPath(deplist, model);

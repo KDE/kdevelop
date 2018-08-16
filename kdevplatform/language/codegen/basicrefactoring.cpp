@@ -192,7 +192,7 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(con
                                                                              DocumentChangeSet &changes,
                                                                              const QList<IndexedDeclaration> &declarations)
 {
-    foreach (const IndexedDeclaration decl, declarations) {
+    for (auto& decl : declarations) {
         Declaration *declaration = decl.data();
         if (!declaration)
             continue;

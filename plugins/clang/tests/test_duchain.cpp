@@ -1839,7 +1839,7 @@ static bool containsErrors(const QList<Problem::Ptr>& problems)
 
 static bool expectedXmmintrinErrors(const QList<Problem::Ptr>& problems)
 {
-    foreach (const auto& problem, problems) {
+    for (const auto& problem : problems) {
         if (problem->severity() == Problem::Error && !problem->description().contains(QLatin1String("Cannot initialize a parameter of type"))) {
             return false;
         }
@@ -1860,7 +1860,7 @@ static void verifyNoErrors(TopDUContext* top, QSet<TopDUContext*>& checked)
         }
     }
     const auto imports = top->importedParentContexts();
-    foreach (const auto& import, imports) {
+    for (const auto& import : imports) {
         auto ctx = import.context(top);
         QVERIFY(ctx);
         auto importedTop = ctx->topContext();
@@ -2031,7 +2031,7 @@ void TestDUChain::testQtIntegration()
         QVERIFY(top->problems().isEmpty());
         const auto methods = top->childContexts().last()->localDeclarations();
         QCOMPARE(methods.size(), 6);
-        foreach(auto method, methods) {
+        for (auto method : methods) {
             auto classFunction = dynamic_cast<ClassFunctionDeclaration*>(method);
             QVERIFY(classFunction);
             auto id = classFunction->identifier().toString();

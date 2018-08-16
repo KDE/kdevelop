@@ -84,7 +84,7 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
         if( b )
         {
             m_builders[neededfile] = b;
-            foreach(const QString& gen, generators) {
+            for (const QString& gen : generators) {
                 m_buildersForGenerator[gen] = b;
             }
             // can't use new signal/slot syntax here, IProjectBuilder is not a QObject

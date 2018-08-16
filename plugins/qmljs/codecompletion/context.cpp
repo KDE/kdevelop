@@ -304,10 +304,10 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsFromImports(C
 
     // Iterate over all the imported namespaces and add their definitions
     DUChainReadLocker lock;
-    QList<Declaration*> imports = m_duContext->findDeclarations(globalImportIdentifier());
+    const QList<Declaration*> imports = m_duContext->findDeclarations(globalImportIdentifier());
     QList<Declaration*> realImports;
 
-    foreach (Declaration* import, imports) {
+    for (Declaration* import : imports) {
         if (import->kind() != Declaration::NamespaceAlias) {
             continue;
         }
@@ -354,7 +354,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
             !flags.testFlag(CompletionOnlyLocal)
         );
 
-        foreach (const DeclarationDepthPair& decl, declarations) {
+        for (const DeclarationDepthPair& decl : declarations) {
             DeclarationPointer declaration(decl.first);
             CompletionItem::Decoration decorationOfThisItem = decoration;
 

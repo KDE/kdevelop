@@ -258,8 +258,7 @@ template <class T> QVariant toVariantList(const QVector<T>& list)
 {
     QVariantList ret;
     ret.reserve(list.size());
-    foreach (const T& t, list)
-    {
+    for (const T& t : list) {
         ret << QVariant::fromValue<T>(t);
     }
     return QVariant::fromValue(ret);

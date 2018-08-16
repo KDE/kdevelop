@@ -185,7 +185,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem(IProject* project, const
 {
     // find .pro or .pri files in dir
     QDir dir(path.toLocalFile());
-    QStringList projectFiles = dir.entryList(QStringList{QStringLiteral("*.pro"), QStringLiteral("*.pri")},
+    const QStringList projectFiles = dir.entryList(QStringList{QStringLiteral("*.pro"), QStringLiteral("*.pri")},
                                              QDir::Files);
     if (projectFiles.isEmpty()) {
         return nullptr;
@@ -200,7 +200,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem(IProject* project, const
         return nullptr;
     }
 
-    foreach (const QString& file, projectFiles) {
+    for (const QString& file : projectFiles) {
         const QString absFile = dir.absoluteFilePath(file);
 
         // TODO: multiple includes by different .pro's
@@ -379,7 +379,7 @@ Path::List QMakeProjectManager::collectDirectories(ProjectBaseItem* item, const 
         foreach (QMakeProjectFile* pro, folder->projectFiles()) {
             if (pro->files().contains(item->path().toLocalFile())) {
                 const QStringList directories = collectIncludes ? pro->includeDirectories() : pro->frameworkDirectories();
-                foreach (const QString& dir, directories) {
+                for (const QString& dir : directories) {
                     Path path(dir);
                     if (!list.contains(path)) {
                         list << path;
@@ -391,7 +391,7 @@ Path::List QMakeProjectManager::collectDirectories(ProjectBaseItem* item, const 
             // fallback for new files, use all possible include dirs
             foreach (QMakeProjectFile* pro, folder->projectFiles()) {
                 const QStringList directories = collectIncludes ? pro->includeDirectories() : pro->frameworkDirectories();
-                foreach (const QString& dir, directories) {
+                for (const QString& dir : directories) {
                     Path path(dir);
                     if (!list.contains(path)) {
                         list << path;

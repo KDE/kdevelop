@@ -132,12 +132,12 @@ void BzrAnnotateJob::prepareCommitInfo(std::size_t revision)
  */
 void BzrAnnotateJob::parseBzrLog(KDevelop::DVcsJob* job)
 {
-    QStringList outputLines = job->output().split('\n');
+    const QStringList outputLines = job->output().split('\n');
     KDevelop::VcsEvent commitInfo;
     int revision=-1;
     bool atMessage = false;
     QString message;
-    foreach (const QString &line, outputLines) {
+    for (const QString& line : outputLines) {
         if (!atMessage) {
             if (line.startsWith(QStringLiteral("revno"))) {
                 QString revno = line.mid(QStringLiteral("revno: ").length());

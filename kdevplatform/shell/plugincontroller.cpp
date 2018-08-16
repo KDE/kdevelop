@@ -174,9 +174,10 @@ public:
         qCDebug(SHELL) << "checking dependencies:" << interfaces;
         foreach (const KPluginMetaData& info, loadedPlugins.keys()) {
             if (info.pluginId() != plugin.pluginId()) {
-                QStringList dependencies = KPluginMetaData::readStringList(plugin.rawData(), KEY_Required());
-                dependencies += KPluginMetaData::readStringList(plugin.rawData(), KEY_Optional());
-                foreach (const QString& dep, dependencies) {
+                const QStringList dependencies =
+                    KPluginMetaData::readStringList(plugin.rawData(), KEY_Required()) +
+                    KPluginMetaData::readStringList(plugin.rawData(), KEY_Optional());
+                for (const QString& dep : dependencies) {
                     Dependency dependency(dep);
                     if (!dependency.pluginName.isEmpty() && dependency.pluginName != plugin.pluginId()) {
                         continue;
@@ -192,7 +193,7 @@ public:
 
     KPluginMetaData infoForId( const QString& id ) const
     {
-        foreach (const KPluginMetaData& info, plugins) {
+        for (const KPluginMetaData& info : plugins) {
             if (info.pluginId() == id) {
                 return info;
             }
@@ -310,7 +311,7 @@ PluginController::PluginController(Core *core)
     qCDebug(SHELL) << "Found" << ktePlugins.size() << " KTextEditor plugins:" << foundPlugins;
 
     d->plugins.reserve(d->plugins.size() + ktePlugins.size());
-    foreach (const auto& info, ktePlugins) {
+    for (const auto& info : ktePlugins) {
         auto data = info.rawData();
         // add some KDevelop specific JSON data
         data[KEY_Category()] = KEY_Global();
@@ -625,7 +626,7 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
 void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
 {
    const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Optional());
-   foreach (const QString& dep, dependencies) {
+   for (const QString& dep : dependencies) {
         Dependency dependency(dep);
         if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
             qCDebug(SHELL) << "Couldn't load optional dependency:" << dep << info.pluginId();
@@ -636,7 +637,7 @@ void PluginController::loadOptionalDependencies( const KPluginMetaData& info )
 bool PluginController::loadDependencies( const KPluginMetaData& info, QString& failedDependency )
 {
    const QStringList dependencies = KPluginMetaData::readStringList(info.rawData(), KEY_Required());
-   foreach (const QString& value, dependencies) {
+   for (const QString& value : dependencies) {
         Dependency dependency(value);
         if (!pluginForExtension(dependency.interface, dependency.pluginName)) {
             failedDependency = value;

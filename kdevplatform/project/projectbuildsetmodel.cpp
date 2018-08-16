@@ -120,9 +120,9 @@ void ProjectBuildSetModel::loadFromSession( ISession* session )
 
     // Load the item ordering cache
     KConfigGroup sessionBuildSetConfig = session->config()->group( "Buildset" );
-    QVariantList sessionBuildItems = KDevelop::stringToQVariant( sessionBuildSetConfig.readEntry( "BuildItems", QString() ) ).toList();
+    const QVariantList sessionBuildItems = KDevelop::stringToQVariant(sessionBuildSetConfig.readEntry("BuildItems", QString())).toList();
     d->orderingCache.reserve(d->orderingCache.size() + sessionBuildItems.size());
-    foreach( const QVariant& item, sessionBuildItems ) {
+    for (const QVariant& item : sessionBuildItems) {
         d->orderingCache.append(item.toStringList());
     }
 }
@@ -235,7 +235,7 @@ void ProjectBuildSetModel::insertItemsOverrideCache( int index, const QList< Bui
         beginInsertRows( QModelIndex(), index, index + items.size() - 1 );
         d->items.append(items);
         d->orderingCache.reserve(d->orderingCache.size() + items.size());
-        foreach( const BuildItem& item, items ) {
+        for (const BuildItem& item : items) {
             d->orderingCache.append(item.itemPath());
         }
         endInsertRows();
@@ -368,10 +368,9 @@ void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 {
     KConfigGroup base = project->projectConfiguration()->group("Buildset");
     if (base.hasKey("BuildItems")) {
-        QVariantList items = KDevelop::stringToQVariant(base.readEntry("BuildItems", QString())).toList();
+        const QVariantList items = KDevelop::stringToQVariant(base.readEntry("BuildItems", QString())).toList();
 
-        foreach(const QVariant& path, items)
-        {
+        for (const QVariant& path : items) {
             insertItemWithCache( BuildItem( path.toStringList() ) );
         }
     } else {

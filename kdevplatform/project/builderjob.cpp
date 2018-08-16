@@ -63,7 +63,7 @@ public:
 
     bool hasJobForProject( BuilderJob::BuildType type, IProject* project ) const
     {
-        foreach(const SubJobData& data, m_metadata) {
+        for (const SubJobData& data : m_metadata) {
             if (data.type == type && data.item->project() == project) {
                 return true;
             }
@@ -153,16 +153,14 @@ BuilderJob::~BuilderJob() = default;
 
 void BuilderJob::addItems( BuildType t, const QList<ProjectBaseItem*>& items )
 {
-    foreach( ProjectBaseItem* item, items )
-    {
+    for (ProjectBaseItem* item : items) {
         d->addJob( t, item );
     }
 }
 
 void BuilderJob::addProjects( BuildType t, const QList<IProject*>& projects )
 {
-    foreach( IProject* project, projects )
-    {
+    for (IProject* project : projects) {
         d->addJob( t, project->projectItem() );
     }
 }
@@ -176,9 +174,9 @@ void BuilderJob::addCustomJob( BuilderJob::BuildType type, KJob* job, ProjectBas
 {
     if( BuilderJob* builderJob = dynamic_cast<BuilderJob*>( job ) ) {
         // If a subjob is a builder job itself, re-own its job list to avoid having recursive composite jobs.
-        QVector<SubJobData> subjobs = builderJob->d->takeJobList();
+        const QVector<SubJobData> subjobs = builderJob->d->takeJobList();
         builderJob->deleteLater();
-        foreach( const SubJobData& subjob, subjobs ) {
+        for (const SubJobData& subjob : subjobs) {
             subjob.job->setParent(this);
             addSubjob( subjob.job );
         }

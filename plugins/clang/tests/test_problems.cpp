@@ -477,7 +477,7 @@ void TestProblems::testRanges()
 
     const auto problems = parse(code);
     RangeList actualRanges;
-    foreach (auto problem, problems) {
+    for (auto problem : problems) {
         actualRanges << problem->rangeInCurrentRevision();
     }
     qDebug() << actualRanges << ranges;

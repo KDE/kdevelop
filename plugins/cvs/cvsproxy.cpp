@@ -89,7 +89,7 @@ bool CvsProxy::addFileList(CvsJob* job, const QString& repository, const QList<Q
     QStringList args;
 
     QDir repoDir(repository);
-    foreach(const QUrl &url, urls) {
+    for (const QUrl& url : urls) {
         ///@todo this is ok for now, but what if some of the urls are not
         ///      to the given repository
         const QString file = repoDir.relativeFilePath(url.toLocalFile());

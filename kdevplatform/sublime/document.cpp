@@ -130,8 +130,8 @@ void Document::closeViews()
 {
     foreach (Sublime::Area *area, controller()->allAreas())
     {
-        QList<Sublime::View*> areaViews = area->views();
-        foreach (Sublime::View *view, areaViews) {
+        const QList<Sublime::View*> areaViews = area->views();
+        for (Sublime::View* view : areaViews) {
             if (views().contains(view)) {
                 area->removeView(view);
                 delete view;

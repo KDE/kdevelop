@@ -51,7 +51,7 @@ void QuickOpenModel::setExpandingWidgetHeightIncrease(int pixels)
 QStringList QuickOpenModel::allScopes() const
 {
     QStringList scopes;
-    foreach (const ProviderEntry& provider, m_providers) {
+    for (const ProviderEntry& provider : m_providers) {
         foreach (const QString& scope, provider.scopes) {
             if (!scopes.contains(scope)) {
                 scopes << scope;
@@ -65,7 +65,7 @@ QStringList QuickOpenModel::allScopes() const
 QStringList QuickOpenModel::allTypes() const
 {
     QSet<QString> types;
-    foreach (const ProviderEntry& provider, m_providers) {
+    for (const ProviderEntry& provider : m_providers) {
         types += provider.types;
     }
 
@@ -261,7 +261,7 @@ int QuickOpenModel::rowCount(const QModelIndex& i) const
     }
 
     int count = 0;
-    foreach (const ProviderEntry& provider, m_providers) {
+    for (const ProviderEntry& provider : m_providers) {
         if (provider.enabled) {
             count += provider.provider->itemCount();
         }
@@ -273,7 +273,7 @@ int QuickOpenModel::rowCount(const QModelIndex& i) const
 int QuickOpenModel::unfilteredRowCount() const
 {
     int count = 0;
-    foreach (const ProviderEntry& provider, m_providers) {
+    for (const ProviderEntry& provider : m_providers) {
         if (provider.enabled) {
             count += provider.provider->unfilteredItemCount();
         }
@@ -404,7 +404,7 @@ QuickOpenDataPointer QuickOpenModel::getItem(int row, bool noReset) const
 
     Q_ASSERT(row < rowCount(QModelIndex()));
 
-    foreach (const ProviderEntry& provider, m_providers) {
+    for (const ProviderEntry& provider : m_providers) {
         if (!provider.enabled) {
             continue;
         }
@@ -436,7 +436,7 @@ QuickOpenDataPointer QuickOpenModel::getItem(int row, bool noReset) const
 QSet<IndexedString> QuickOpenModel::fileSet() const
 {
     QSet<IndexedString> merged;
-    foreach (const ProviderEntry& provider, m_providers) {
+    for (const ProviderEntry& provider : m_providers) {
         if (m_enabledScopes.isEmpty() || !(m_enabledScopes & provider.scopes).isEmpty()) {
             if (QuickOpenFileSetInterface* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider)) {
                 QSet<IndexedString> ifiles = iface->files();

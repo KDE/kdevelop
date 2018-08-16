@@ -196,7 +196,7 @@ GroupsName IRegisterController::groupForRegisterName(const QString& name) const
         if (group.flagName() == name) {
             return group;
         }
-        foreach (const QString & n, registersInGroup) {
+        for (const QString& n : registersInGroup) {
             if (n == name) {
                 return group;
             }

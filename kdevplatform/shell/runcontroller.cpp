@@ -275,10 +275,9 @@ public:
     void readLaunchConfigs( const KSharedConfigPtr& cfg, IProject* prj )
     {
         KConfigGroup group(cfg, Strings::LaunchConfigurationsGroup());
-        QStringList configs = group.readEntry( Strings::LaunchConfigurationsListEntry(), QStringList() );
+        const QStringList configs = group.readEntry(Strings::LaunchConfigurationsListEntry(), QStringList());
 
-        foreach( const QString& cfg, configs )
-        {
+        for (const QString& cfg : configs) {
             KConfigGroup grp = group.group( cfg );
             if( launchConfigurationTypeForId( grp.readEntry( LaunchConfiguration::LaunchConfigurationTypeEntry(), "" ) ) )
             {

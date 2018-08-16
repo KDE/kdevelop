@@ -898,8 +898,8 @@ QModelIndex ProjectModel::pathToIndex(const QStringList& tofetch_) const
         const QString& currentName = tofetch[a];
 
         bool matched = false;
-        QModelIndexList l = match(current, Qt::DisplayRole, currentName, -1, Qt::MatchExactly);
-        foreach(const QModelIndex& idx, l) {
+        const QModelIndexList l = match(current, Qt::DisplayRole, currentName, -1, Qt::MatchExactly);
+        for (const QModelIndex& idx : l) {
             //If this is not the last item, only match folders, as there may be targets and folders with the same name
             if(a == tofetch.size()-1 || itemFromIndex(idx)->folder()) {
                 ret = idx;

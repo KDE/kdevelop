@@ -55,10 +55,11 @@ StatusBar::StatusBar(QWidget* parent)
     m_timer->setSingleShot(true);
     connect(m_timer, &QTimer::timeout, this, &StatusBar::slotTimeout);
     connect(Core::self()->pluginController(), &IPluginController::pluginLoaded, this, &StatusBar::pluginLoaded);
-    QList<IPlugin*> plugins = Core::self()->pluginControllerInternal()->allPluginsForExtension(QStringLiteral("IStatus"));
+    const QList<IPlugin*> plugins = Core::self()->pluginControllerInternal()->allPluginsForExtension(QStringLiteral("IStatus"));
 
-    foreach (IPlugin* plugin, plugins)
+    for (IPlugin* plugin : plugins) {
         registerStatus(plugin);
+    }
 
     registerStatus(Core::self()->languageController()->backgroundParser());
 

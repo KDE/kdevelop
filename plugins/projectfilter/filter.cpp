@@ -81,7 +81,7 @@ SerializedFilters defaultFilters()
         QStringLiteral(".git"), QStringLiteral("CVS"), QStringLiteral(".svn"), QStringLiteral("_svn"),
         QStringLiteral("SCCS"), QStringLiteral("_darcs"), QStringLiteral(".hg"), QStringLiteral(".bzr"), QStringLiteral("__pycache__")
     };
-    foreach(const QString& folder, invalidFolders) {
+    for (const QString& folder : invalidFolders) {
         ret << SerializedFilter(folder, Filter::Folders);
     }
 
@@ -98,7 +98,7 @@ SerializedFilters defaultFilters()
         // python cache and object files
         QStringLiteral("*.pyc"), QStringLiteral("*.pyo")
     };
-    foreach(const QString& filePattern, filePatterns) {
+    for (const QString& filePattern : filePatterns) {
         ret << SerializedFilter(filePattern, Filter::Files);
     }
 
@@ -143,7 +143,7 @@ void writeFilters(const SerializedFilters& filters, KSharedConfigPtr config)
     KConfigGroup group = config->group("Filters");
     group.writeEntry("size", filters.size());
     int i = 0;
-    foreach(const SerializedFilter& filter, filters) {
+    for (const SerializedFilter& filter : filters) {
         KConfigGroup subGroup = group.group(QByteArray::number(i++));
         subGroup.writeEntry("pattern", filter.pattern);
         subGroup.writeEntry("targets", static_cast<int>(filter.targets));
@@ -156,7 +156,7 @@ Filters deserialize(const SerializedFilters& filters)
 {
     Filters ret;
     ret.reserve(filters.size());
-    foreach(const SerializedFilter& filter, filters) {
+    for (const SerializedFilter& filter : filters) {
         ret << Filter(filter);
     }
     return ret;

@@ -214,7 +214,7 @@ void ProjectManagerView::selectItems(const QList< ProjectBaseItem* >& items)
 {
     QItemSelection selection;
     selection.reserve(items.size());
-    foreach (ProjectBaseItem *item, items) {
+    for (ProjectBaseItem *item : items) {
         QModelIndex indx = indexToView(item->index());
         selection.append(QItemSelectionRange(indx, indx));
         m_ui->projectTreeView->setCurrentIndex(indx);

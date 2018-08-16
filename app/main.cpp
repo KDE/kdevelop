@@ -93,7 +93,7 @@ QString serializeOpenFilesMessage(const QVector<UrlInfo> &infos)
 
 void openFiles(const QVector<UrlInfo>& infos)
 {
-    foreach (const UrlInfo& info, infos) {
+    for (const UrlInfo& info : infos) {
         if (!ICore::self()->documentController()->openDocument(info.url, info.cursor)) {
             qWarning(APP) << i18n("Could not open %1", info.url.toDisplayString(QUrl::PreferLocalFile));
         }
@@ -218,7 +218,7 @@ static int openFilesInRunningInstance(const QVector<UrlInfo>& files, qint64 pid)
 
     QStringList urls;
     bool errors_occured = false;
-    foreach ( const UrlInfo& file, files ) {
+    for (const UrlInfo& file : files) {
         QDBusReply<bool> result = iface.call(QStringLiteral("openDocumentSimple"), file.url.toString(), file.cursor.line(), file.cursor.column());
         if ( ! result.value() ) {
             QTextStream err(stderr);
@@ -241,7 +241,7 @@ static int openProjectInRunningInstance(const QVector<UrlInfo>& paths, qint64 pi
     QDBusInterface iface(service, QStringLiteral("/org/kdevelop/ProjectController"), QStringLiteral("org.kdevelop.ProjectController"));
     int errors = 0;
 
-    foreach ( const UrlInfo& path, paths ) {
+    for (const UrlInfo& path : paths) {
         QDBusReply<void> result = iface.call(QStringLiteral("openProjectForUrl"), path.url.toString());
         if ( !result.isValid() ) {
             QTextStream err(stderr);
@@ -286,8 +286,7 @@ static QString findSessionId(const SessionInfos& availableSessionInfos, const QS
     //If there is a session and a project with the same name, always open the session
     //regardless of the order encountered
     QString projectAsSession;
-    foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
-    {
+    for (const KDevelop::SessionInfo& si : availableSessionInfos) {
         if ( session == si.name || session == si.uuid.toString() ) {
             return si.uuid.toString();
         } else if (projectAsSession.isEmpty()) {
@@ -565,9 +564,10 @@ int main( int argc, char *argv[] )
     QString session;
 
     uint nRunningSessions = 0;
-    foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
+    for (const KDevelop::SessionInfo& si : availableSessionInfos) {
         if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
             ++nRunningSessions;
+    }
 
     // also show the picker dialog when a pid shall be retrieved and multiple
     // sessions are running.
@@ -575,10 +575,11 @@ int main( int argc, char *argv[] )
     {
         QTextStream qerr(stderr);
         SessionInfos candidates;
-        foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
+        for (const KDevelop::SessionInfo& si : availableSessionInfos) {
             if( (!si.name.isEmpty() || !si.projects.isEmpty() || parser.isSet(QStringLiteral("pid"))) &&
                 (!parser.isSet(QStringLiteral("pid")) || KDevelop::SessionController::isSessionRunning(si.uuid.toString())))
                 candidates << si;
+        }
 
         if(candidates.size() == 0)
         {
@@ -636,8 +637,7 @@ int main( int argc, char *argv[] )
     } else if ( parser.isSet(QStringLiteral("new-session")) )
     {
         session = parser.value(QStringLiteral("new-session"));
-        foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
-        {
+        for (const KDevelop::SessionInfo& si : availableSessionInfos) {
             if ( session == si.name ) {
                 QTextStream qerr(stderr);
                 qerr << endl << i18n("A session with the name %1 exists already. Use the -s switch to open it.", session) << endl;
@@ -675,9 +675,10 @@ int main( int argc, char *argv[] )
     if(parser.isSet(QStringLiteral("pid"))) {
         if (session.isEmpty())
         {   // just pick the first running session
-            foreach(const KDevelop::SessionInfo& si, availableSessionInfos)
+            for (const KDevelop::SessionInfo& si : availableSessionInfos) {
                 if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
                     session = si.uuid.toString();
+            }
         }
         const KDevelop::SessionInfo* sessionData = findSessionInList(availableSessionInfos, session);
 

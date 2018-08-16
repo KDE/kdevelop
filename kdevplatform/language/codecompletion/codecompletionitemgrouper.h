@@ -35,7 +35,7 @@ struct CodeCompletionItemLastGrouper {
   CodeCompletionItemLastGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree, CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
   {
     tree.reserve(tree.size() + items.size());
-    foreach( CompletionTreeItemPointer item, items ) {
+    for (auto& item : items) {
       item->setParent(parent);
       tree << QExplicitlySharedDataPointer<CompletionTreeElement>( item.data() );
     }
@@ -52,7 +52,7 @@ struct CodeCompletionItemGrouper {
     typedef QMap<KeyType, QList<CompletionTreeItemPointer> > GroupMap;
     GroupMap groups;
 
-    foreach(const CompletionTreeItemPointer& item, items) {
+    for (auto& item : items) {
       KeyType key = KeyExtractor::extract(item);
       typename GroupMap::iterator it = groups.find(key);
       if(it == groups.end())

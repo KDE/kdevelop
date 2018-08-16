@@ -69,8 +69,8 @@ void DefinesWidget::clear()
 void DefinesWidget::deleteDefine()
 {
     qCDebug(DEFINESANDINCLUDES) << "Deleting defines";
-    QModelIndexList selection = ui->defines->selectionModel()->selectedRows();
-    foreach( const QModelIndex& row, selection ) {
+    const QModelIndexList selection = ui->defines->selectionModel()->selectedRows();
+    for (const QModelIndex& row : selection) {
         definesModel->removeRow( row.row() );
     }
 }

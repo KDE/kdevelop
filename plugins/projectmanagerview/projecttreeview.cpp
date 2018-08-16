@@ -61,8 +61,7 @@ QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*>& items)
 {
     QList<ProjectFileItem*> fileItems;
     fileItems.reserve(items.size());
-    foreach(ProjectBaseItem* item, items)
-    {
+    for (ProjectBaseItem* item : items) {
         if (ProjectFileItem *file = item->file())
             fileItems.append(file);
         else if (item->folder())
@@ -336,7 +335,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     QMenu menu( this );
 
     KDevelop::ProjectItemContextImpl context(itemlist);
-    QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, &menu);
+    const QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, &menu);
 
     QList<QAction*> buildActions;
     QList<QAction*> vcsActions;
@@ -345,8 +344,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     QList<QAction*> projectActions;
     QList<QAction*> fileActions;
     QList<QAction*> runActions;
-    foreach( const ContextMenuExtension& ext, extensions )
-    {
+    for (const ContextMenuExtension& ext : extensions) {
         buildActions += ext.actions(ContextMenuExtension::BuildGroup);
         fileActions += ext.actions(ContextMenuExtension::FileGroup);
         projectActions += ext.actions(ContextMenuExtension::ProjectGroup);

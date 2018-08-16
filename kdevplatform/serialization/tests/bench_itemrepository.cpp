@@ -130,7 +130,7 @@ static QVector<uint> insertData(const QVector<QString>& data, TestDataRepository
 {
   QVector<uint> indices;
   indices.reserve(data.size());
-  foreach(const QString& item, data) {
+  for (const QString& item : data) {
     const QByteArray byteArray = item.toUtf8();
     indices << repo.index(TestDataRepositoryItemRequest(byteArray.constData(), byteArray.length()));
   }
@@ -154,12 +154,12 @@ void BenchItemRepository::remove()
 {
   TestDataRepository repo("TestDataRepositoryRemove");
   QVector<QString> data = generateData();
-  QVector<uint> indices = insertData(data, repo);
+  const QVector<uint> indices = insertData(data, repo);
   repo.store();
   QVERIFY(indices.size() == indices.toList().toSet().size());
   QVERIFY(indices.size() == data.size());
   QBENCHMARK_ONCE {
-    foreach(uint index, indices) {
+    for (uint index : indices) {
       repo.deleteItem(index);
     }
     repo.store();
@@ -191,11 +191,11 @@ void BenchItemRepository::lookupKey()
 {
   TestDataRepository repo("TestDataRepositoryLookupKey");
   QVector<QString> data = generateData();
-  QVector<uint> indices = insertData(data, repo);
+  const QVector<uint> indices = insertData(data, repo);
   srand(0);
   std::random_shuffle(indices.begin(), indices.end());
   QBENCHMARK {
-    foreach(uint index, indices) {
+    for (uint index : indices) {
       repo.itemFromIndex(index);
     }
   }
@@ -205,11 +205,11 @@ void BenchItemRepository::lookupValue()
 {
   TestDataRepository repo("TestDataRepositoryLookupValue");
   QVector<QString> data = generateData();
-  QVector<uint> indices = insertData(data, repo);
+  const QVector<uint> indices = insertData(data, repo);
   srand(0);
   std::random_shuffle(indices.begin(), indices.end());
   QBENCHMARK {
-    foreach(const QString& item, data) {
+    for (const QString& item : data) {
       const QByteArray byteArray = item.toUtf8();
       repo.findIndex(TestDataRepositoryItemRequest(byteArray.constData(), byteArray.length()));
     }

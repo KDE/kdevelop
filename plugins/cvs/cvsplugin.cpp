@@ -178,7 +178,7 @@ KDevelop::ContextMenuExtension CvsPlugin::contextMenuExtension(KDevelop::Context
     QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
 
     bool hasVersionControlledEntries = false;
-    foreach(const QUrl &url, ctxUrlList) {
+    for (const QUrl& url : ctxUrlList) {
         if (d->m_proxy->isValidDirectory(url)) {
             hasVersionControlledEntries = true;
             break;

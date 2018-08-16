@@ -232,9 +232,9 @@ void TestQMakeFile::defines()
 
     QVERIFY(file.read());
 
-    QList<QMakeProjectFile::DefinePair> list = file.defines();
+    const QList<QMakeProjectFile::DefinePair> list = file.defines();
     QCOMPARE(list.size(), expectedDefines.size());
-    foreach (QMakeProjectFile::DefinePair define, list) {
+    for (QMakeProjectFile::DefinePair define : list) {
         QVERIFY(expectedDefines.find(define.first) != expectedDefines.end());
         QCOMPARE(define.second, expectedDefines[define.first]);
     }

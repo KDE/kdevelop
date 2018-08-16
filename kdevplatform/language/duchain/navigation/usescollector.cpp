@@ -164,8 +164,8 @@ void UsesCollector::startCollecting() {
             allDeclarations.insert(d);
 
             if(m_collectConstructors && d.data() && d.data()->internalContext() && d.data()->internalContext()->type() == DUContext::Class) {
-              QList<Declaration*> constructors = d.data()->internalContext()->findLocalDeclarations(d.data()->identifier(), CursorInRevision::invalid(), nullptr, AbstractType::Ptr(), DUContext::OnlyFunctions);
-              foreach(Declaration* constructor, constructors) {
+              const QList<Declaration*> constructors = d.data()->internalContext()->findLocalDeclarations(d.data()->identifier(), CursorInRevision::invalid(), nullptr, AbstractType::Ptr(), DUContext::OnlyFunctions);
+              for (Declaration* constructor : constructors) {
                 ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(constructor);
                 if(classFun && classFun->isConstructor())
                   allDeclarations.insert(IndexedDeclaration(constructor));
@@ -173,8 +173,8 @@ void UsesCollector::startCollecting() {
 
               Identifier destructorId = destructorForName(d.data()->identifier());
 
-              QList<Declaration*> destructors = d.data()->internalContext()->findLocalDeclarations(destructorId, CursorInRevision::invalid(), nullptr, AbstractType::Ptr(), DUContext::OnlyFunctions);
-              foreach(Declaration* destructor, destructors) {
+              const QList<Declaration*> destructors = d.data()->internalContext()->findLocalDeclarations(destructorId, CursorInRevision::invalid(), nullptr, AbstractType::Ptr(), DUContext::OnlyFunctions);
+              for (Declaration* destructor : destructors) {
                 ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(destructor);
                 if(classFun && classFun->isDestructor())
                   allDeclarations.insert(IndexedDeclaration(destructor));
@@ -226,8 +226,8 @@ void UsesCollector::startCollecting() {
               //We can not perfectly handle that, but we can at least handle it if the header includes
               //the header that contains the declaration. That header may be parsed empty due to header-guards,
               //but we still need to pick it up here.
-              QList<ParsingEnvironmentFilePointer> allVersions = DUChain::self()->allEnvironmentFiles(top->url());
-              foreach(const ParsingEnvironmentFilePointer& version, allVersions)
+              const QList<ParsingEnvironmentFilePointer> allVersions = DUChain::self()->allEnvironmentFiles(top->url());
+              for (const ParsingEnvironmentFilePointer& version : allVersions)
                 collectImporters(checker, version.data(), visited, collected);
             }
           }

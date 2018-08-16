@@ -119,7 +119,7 @@ void ProviderWidget::fillCombo()
         m_combo->setCurrentIndex(2);
     }
     const QStringList &orgs = m_account->orgs();
-    foreach (const QString &org, orgs)
+    for (const QString& org : orgs)
         m_combo->addItem(org, 2);
 }
 

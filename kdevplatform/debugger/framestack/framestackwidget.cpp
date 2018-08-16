@@ -230,9 +230,9 @@ void FramestackWidget::frameContextMenuRequested(const QPoint& pos)
 void FramestackWidget::copySelection()
 {
     QClipboard *cb = QApplication::clipboard();
-    QModelIndexList indexes = m_framesTreeView->selectionModel()->selectedRows();
+    const QModelIndexList indexes = m_framesTreeView->selectionModel()->selectedRows();
     QString content;
-    Q_FOREACH(const QModelIndex& index, indexes) {
+    for (const QModelIndex& index : indexes) {
         IFrameStackModel::FrameItem frame = m_session->frameStackModel()->frame(index);
         if (frame.line == -1) {
             content += i18nc("#frame function() at file", "#%1 %2() at %3\n",

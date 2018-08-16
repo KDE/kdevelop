@@ -108,7 +108,7 @@ public:
     bool allLocalFiles(const QList<QUrl>& urls)
     {
         bool ret=true;
-        foreach(const QUrl &url, urls) {
+        for (const QUrl& url : urls) {
             QFileInfo info(url.toLocalFile());
             ret &= info.isFile();
         }
@@ -252,9 +252,9 @@ void VcsPluginHelper::revertDone(KJob* job)
 void VcsPluginHelper::delayedModificationWarningOn()
 {
     QObject* timer = sender();
-    QList<QUrl> urls = timer->property("urls").value<QList<QUrl>>();
+    const QList<QUrl> urls = timer->property("urls").value<QList<QUrl>>();
 
-    foreach(const QUrl &url, urls) {
+    for (const QUrl& url : urls) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
 
         if(doc) {

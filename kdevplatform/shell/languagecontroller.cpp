@@ -79,9 +79,9 @@ public:
 
         activeLanguages.clear();
 
-        QList<ILanguageSupport*> languages = m_controller->languagesForUrl(url);
+        const QList<ILanguageSupport*> languages = m_controller->languagesForUrl(url);
         activeLanguages.reserve(languages.size());
-        foreach (const auto lang, languages) {
+        for (const auto lang : languages) {
             activeLanguages << lang;
         }
     }
@@ -114,7 +114,7 @@ void LanguageControllerPrivate::addLanguageSupport(ILanguageSupport* languageSup
     Q_ASSERT(!languages.contains(languageSupport->name()));
     languages.insert(languageSupport->name(), languageSupport);
 
-    foreach(const QString& mimeTypeName, mimetypes) {
+    for (const QString& mimeTypeName : mimetypes) {
         qCDebug(SHELL) << "adding supported mimetype:" << mimeTypeName << "language:" << languageSupport->name();
         languageCache[mimeTypeName] << languageSupport;
         QMimeType mime = QMimeDatabase().mimeTypeForName(mimeTypeName);
@@ -331,13 +331,13 @@ QList<ILanguageSupport*> LanguageController::languagesForMimetype(const QString&
     } else {
         QVariantMap constraints;
         constraints.insert(KEY_SupportedMimeTypes(), mimetype);
-        QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport(), constraints);
+        const QList<IPlugin*> supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport(), constraints);
 
         if (supports.isEmpty()) {
             qCDebug(SHELL) << "no languages for mimetype:" << mimetype;
             d->languageCache.insert(mimetype, QList<ILanguageSupport*>());
         } else {
-            foreach (IPlugin *support, supports) {
+            for (IPlugin *support : supports) {
                 ILanguageSupport* languageSupport = support->extension<ILanguageSupport>();
                 qCDebug(SHELL) << "language-support:" << languageSupport;
                 if(languageSupport) {

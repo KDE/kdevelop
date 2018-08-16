@@ -77,8 +77,8 @@ void StandardOutputViewTest::cleanupTestCase()
 
 OutputWidget* StandardOutputViewTest::toolViewPointer(const QString& toolViewTitle)
 {
-    QList< Sublime::View* > views = m_controller->activeArea()->toolViews();
-    foreach(Sublime::View* view, views) {
+    const QList< Sublime::View* > views = m_controller->activeArea()->toolViews();
+    for (Sublime::View* view : views) {
         Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
         if(doc) {
             if(doc->title() == toolViewTitle && view->hasWidget()) {

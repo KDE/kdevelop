@@ -80,9 +80,9 @@ static QVector<QString> generateData()
 
 void TestIndexedString::bench_index()
 {
-  QVector<QString> data = generateData();
+  const QVector<QString> data = generateData();
   QBENCHMARK {
-    foreach(const QString& item, data) {
+    for (const QString& item : data) {
       IndexedString idx(item);
       Q_UNUSED(idx);
     }
@@ -91,10 +91,10 @@ void TestIndexedString::bench_index()
 
 static QVector<uint> setupTest()
 {
-  QVector<QString> data = generateData();
+  const QVector<QString> data = generateData();
   QVector<uint> indices;
   indices.reserve(data.size());
-  foreach(const QString& item, data) {
+  for (const QString& item : data) {
     IndexedString idx(item);
     indices << idx.index();
   }
@@ -103,9 +103,9 @@ static QVector<uint> setupTest()
 
 void TestIndexedString::bench_length()
 {
-  QVector<uint> indices = setupTest();
+  const QVector<uint> indices = setupTest();
   QBENCHMARK {
-    foreach(uint index, indices) {
+    for (uint index : indices) {
       IndexedString str = IndexedString::fromIndex(index);
       str.length();
     }
@@ -114,9 +114,9 @@ void TestIndexedString::bench_length()
 
 void TestIndexedString::bench_qstring()
 {
-  QVector<uint> indices = setupTest();
+  const QVector<uint> indices = setupTest();
   QBENCHMARK {
-    foreach(uint index, indices) {
+    for (uint index : indices) {
       IndexedString str = IndexedString::fromIndex(index);
       str.str();
     }
@@ -125,9 +125,9 @@ void TestIndexedString::bench_qstring()
 
 void TestIndexedString::bench_kurl()
 {
-  QVector<uint> indices = setupTest();
+  const QVector<uint> indices = setupTest();
   QBENCHMARK {
-    foreach(uint index, indices) {
+    for (uint index : indices) {
       IndexedString str = IndexedString::fromIndex(index);
       str.toUrl();
     }
@@ -136,10 +136,10 @@ void TestIndexedString::bench_kurl()
 
 void TestIndexedString::bench_qhashQString()
 {
-  QVector<QString> data = generateData();
+  const QVector<QString> data = generateData();
   quint64 sum = 0;
   QBENCHMARK {
-    foreach (const auto& string, data) {
+    for (const auto& string : data) {
       sum += qHash(string);
     }
   }
@@ -148,10 +148,10 @@ void TestIndexedString::bench_qhashQString()
 
 void TestIndexedString::bench_qhashIndexedString()
 {
-  QVector<uint> indices = setupTest();
+  const QVector<uint> indices = setupTest();
   quint64 sum = 0;
   QBENCHMARK {
-    foreach(uint index, indices) {
+    for (uint index : indices) {
       sum += qHash(IndexedString::fromIndex(index));
     }
   }
@@ -160,10 +160,10 @@ void TestIndexedString::bench_qhashIndexedString()
 
 void TestIndexedString::bench_hashString()
 {
-  QVector<QString> strings = generateData();
+  const QVector<QString> strings = generateData();
   QVector<QByteArray> byteArrays;
   byteArrays.reserve(strings.size());
-  foreach (const auto& string, strings) {
+  for (const auto& string : strings) {
     byteArrays << string.toUtf8();
   }
 
@@ -178,10 +178,10 @@ void TestIndexedString::bench_hashString()
 
 void TestIndexedString::bench_kdevhash()
 {
-  QVector<QString> strings = generateData();
+  const QVector<QString> strings = generateData();
   QVector<QByteArray> byteArrays;
   byteArrays.reserve(strings.size());
-  foreach (const auto& string, strings) {
+  for (const auto& string : strings) {
     byteArrays << string.toUtf8();
   }
 
@@ -196,10 +196,10 @@ void TestIndexedString::bench_kdevhash()
 
 void TestIndexedString::bench_qSet()
 {
-  QVector<uint> indices = setupTest();
+  const QVector<uint> indices = setupTest();
   QSet<IndexedString> set;
   QBENCHMARK {
-    foreach(uint index, indices) {
+    for (uint index : indices) {
       set.insert(IndexedString::fromIndex(index));
     }
   }

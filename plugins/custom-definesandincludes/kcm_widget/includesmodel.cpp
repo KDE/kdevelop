@@ -75,7 +75,7 @@ void IncludesModel::setIncludes(const QStringList& includes )
 {
     beginResetModel();
     m_includes.clear();
-    foreach( const QString includePath, includes ) {
+    for (const QString& includePath : includes) {
         addIncludeInternal( includePath.trimmed() );
     }
     endResetModel();

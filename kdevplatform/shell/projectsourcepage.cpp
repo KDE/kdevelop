@@ -52,10 +52,9 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
 
     int preselectIndex = -1;
     IPluginController* pluginManager = ICore::self()->pluginController();
-    QList<IPlugin*> plugins = pluginManager->allPluginsForExtension( QStringLiteral("org.kdevelop.IBasicVersionControl") );
-    m_plugins.reserve(m_plugins.size() + plugins.size());
-    foreach( IPlugin* p, plugins )
-    {
+    const QList<IPlugin*> vcsPlugins = pluginManager->allPluginsForExtension( QStringLiteral("org.kdevelop.IBasicVersionControl") );
+    m_plugins.reserve(m_plugins.size() + vcsPlugins.size());
+    for (IPlugin* p : vcsPlugins) {
         if (p == preSelectPlugin) {
             preselectIndex = m_plugins.count();
         }
@@ -63,10 +62,9 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
         m_ui->sources->addItem(QIcon::fromTheme(pluginManager->pluginInfo(p).iconName()), p->extension<IBasicVersionControl>()->name());
     }
 
-    plugins = pluginManager->allPluginsForExtension( QStringLiteral("org.kdevelop.IProjectProvider") );
-    m_plugins.reserve(m_plugins.size() + plugins.size());
-    foreach( IPlugin* p, plugins )
-    {
+    const QList<IPlugin*> projectPlugins = pluginManager->allPluginsForExtension( QStringLiteral("org.kdevelop.IProjectProvider") );
+    m_plugins.reserve(m_plugins.size() + projectPlugins.size());
+    for (IPlugin* p : projectPlugins) {
         if (p == preSelectPlugin) {
             preselectIndex = m_plugins.count();
         }

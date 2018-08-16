@@ -99,10 +99,9 @@ public:
             return;
         }
 
-        QVector<Item> filterBase = m_filtered;
-        if( !text.startsWith( m_oldFilterText ) ) {
-            filterBase = m_items; //Start filtering based on the whole data
-        }
+        const QVector<Item> filterBase = text.startsWith(m_oldFilterText) ?
+            m_filtered :
+            m_items; //Start filtering based on the whole data
 
         m_filtered.clear();
 
@@ -120,7 +119,7 @@ public:
             clearFilter();
             return;
         }
-        foreach( const Item& data, filterBase ) {
+        for (const Item& data : filterBase) {
             const QString& itemData = itemText( data );
             if( itemData.contains(text, Qt::CaseInsensitive) || matchesAbbreviationMulti(itemData, typedFragments) ) {
                 m_filtered << data;

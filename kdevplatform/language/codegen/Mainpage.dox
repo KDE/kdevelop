@@ -108,9 +108,9 @@
  *
  * Make a member variable private and add accessor methods:
  * \code
- *   QList<KDevelop::Declaration*> declarations = topContext->findDeclarations("m_myVariable");
+ *   const QList<KDevelop::Declaration*> declarations = topContext->findDeclarations("m_myVariable");
  *
- *   foreach ( KDevelop::Declaration* d, declarations ) {
+ *   for ( KDevelop::Declaration* d : declarations ) {
  *     if ( KDevelop::ClassMemberDeclaration* cd = dynamic_cast<KDevelop::ClassMemberDeclaration*>( d ) ) {
  *       if ( cd->accessPolicy() == KDevelop::Declaration::Public ) {
  *         KDevelop::DUChainRef* ref = change->modifyObject( cd );

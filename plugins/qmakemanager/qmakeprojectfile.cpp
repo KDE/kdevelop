@@ -164,7 +164,7 @@ bool QMakeProjectFile::hasSubProject(const QString& file) const
 void QMakeProjectFile::addPathsForVariable(const QString& variable, QStringList* list, const QString& base) const
 {
     const QStringList values = variableValues(variable);
-    ifDebug(qCDebug(KDEV_QMAKE) << variable << values;) foreach (const QString& val, values)
+    ifDebug(qCDebug(KDEV_QMAKE) << variable << values;) for (const QString& val : values)
     {
         QString path = resolveToSingleFileName(val, base);
         if (!path.isEmpty() && !list->contains(val)) {
@@ -263,7 +263,7 @@ QStringList QMakeProjectFile::frameworkDirectories() const
     const QLatin1String fOption("-F");
     const QLatin1String iframeworkOption("-iframework");
     QStringList fwDirs;
-    foreach (const auto& var, variablesToCheck) {
+    for (const auto& var : variablesToCheck) {
         bool storeArg = false;
         foreach (const auto& arg, variableValues(var)) {
             if (arg == fOption || arg == iframeworkOption) {
@@ -293,7 +293,7 @@ QStringList QMakeProjectFile::extraArguments() const
     const auto variablesToCheck = {QStringLiteral("QMAKE_CXXFLAGS")};
     const auto prefixes = { "-F", "-iframework", "-I", "-D" };
     QStringList args;
-    foreach (const auto& var, variablesToCheck) {
+    for (const auto& var : variablesToCheck) {
         foreach (const auto& arg, variableValues(var)) {
             auto argHasPrefix = [arg](const char* prefix) {
                 return arg.startsWith(prefix);
@@ -326,10 +326,8 @@ QStringList QMakeProjectFile::filesForTarget(const QString& s) const
         QStringList list;
     if (variableValues(QStringLiteral("INSTALLS")).contains(s)) {
         const QStringList files = variableValues(s + ".files");
-        if (!files.isEmpty()) {
-            foreach (const QString& val, files) {
-                list += QStringList(resolveFileName(val));
-            }
+        for (const QString& val : files) {
+            list += QStringList(resolveFileName(val));
         }
     }
     if (!variableValues(QStringLiteral("INSTALLS")).contains(s) || s == QLatin1String("target")) {

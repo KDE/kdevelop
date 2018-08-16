@@ -140,12 +140,12 @@ int spacesAtCorner(const QString& string, int direction = +1) {
 // Take the given QML line and check if it's a line of the form foo.bar: value.
 // Return ranges for the key and the value.
 const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString& line, const KTextEditor::Cursor& position) {
-    QStringList items = line.split(';');
+    const QStringList items = line.split(';');
     QString matchingItem;
     int col_offset = -1;
     // This is to also support FooAnimation { foo: bar; baz: bang; duration: 200 }
     // or similar
-    foreach ( const QString& item, items ) {
+    for (const QString& item : items) {
         col_offset += item.size() + 1;
         if ( position.column() < col_offset ) {
             matchingItem = item;

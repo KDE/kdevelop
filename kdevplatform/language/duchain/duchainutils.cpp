@@ -273,10 +273,9 @@ TopDUContext* DUChainUtils::contentContextFromProxyContext(TopDUContext* top)
 TopDUContext* DUChainUtils::standardContextForUrl(const QUrl& url, bool preferProxyContext) {
   KDevelop::TopDUContext* chosen = nullptr;
 
-  auto languages = ICore::self()->languageController()->languagesForUrl(url);
+  const auto languages = ICore::self()->languageController()->languagesForUrl(url);
 
-  foreach(const auto language, languages)
-  {
+  for (const auto language : languages) {
     if(!chosen)
     {
       chosen = language->standardContext(url, preferProxyContext);

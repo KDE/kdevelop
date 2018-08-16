@@ -86,9 +86,10 @@ void WorkingSetToolButton::mergeSet()
 {
     Q_ASSERT(m_set);
 
-    QSet< QString > loadFiles = m_set->fileList().toSet() - Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet();
-    foreach(const QString& file, loadFiles)
+    const QSet<QString> loadFiles = m_set->fileList().toSet() - Core::self()->workingSetControllerInternal()->getWorkingSet(mainWindow()->area()->workingSet())->fileList().toSet();
+    for (const QString& file : loadFiles) {
         Core::self()->documentController()->openDocument(QUrl::fromUserInput(file));
+    }
 }
 
 void WorkingSetToolButton::duplicateSet()

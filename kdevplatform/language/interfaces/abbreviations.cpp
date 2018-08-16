@@ -80,7 +80,7 @@ bool matchesAbbreviation(const QStringRef &word, const QString &typed)
 
     // First, check if all letters are contained in the word in the right order.
     int atLetter = 0;
-    foreach ( const QChar c, typed ) {
+    for (const QChar c : typed) {
         while ( c.toLower() != word.at(atLetter).toLower() ) {
             atLetter += 1;
             if ( atLetter >= word.size() ) {

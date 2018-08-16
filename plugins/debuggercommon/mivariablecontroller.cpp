@@ -125,9 +125,9 @@ public:
             for (int i = 0; i < locals.size(); i++) {
                 m_localsName << locals[i].literal();
             }
-            QList<Variable*> variables = KDevelop::ICore::self()->debugController()->variableCollection()
+            const QList<Variable*> variables = KDevelop::ICore::self()->debugController()->variableCollection()
                     ->locals()->updateLocals(m_localsName);
-            foreach (Variable *v, variables) {
+            for (Variable* v : variables) {
                 v->attachMaybe();
             }
         }
