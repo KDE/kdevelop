@@ -267,19 +267,19 @@ void OutputWidget::removeOutput( int id )
                 if( idx != -1 )
                 {
                     m_tabwidget->removeTab( idx );
-                    if( m_proxyModels.contains( idx ) )
+                    if( m_proxyModels.contains( id ) )
                     {
-                        delete m_proxyModels.take( idx );
-                        m_filters.remove( idx );
+                        delete m_proxyModels.take( id );
+                        m_filters.remove( id );
                     }
                 }
             } else
             {
                 int idx = m_stackwidget->indexOf( view );
-                if( idx != -1 && m_proxyModels.contains( idx ) )
+                if( idx != -1 && m_proxyModels.contains( id ) )
                 {
-                    delete m_proxyModels.take( idx );
-                    m_filters.remove( idx );
+                    delete m_proxyModels.take( id );
+                    m_filters.remove( id );
                 }
                 m_stackwidget->removeWidget( view );
             }
@@ -389,10 +389,10 @@ void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *vi
 {
     if( ! index.isValid() )
         return;
-    int tabIndex = currentOutputIndex();
     QModelIndex sourceIndex = index;
     QModelIndex viewIndex = index;
-    if( QAbstractProxyModel* proxy = m_proxyModels.value(tabIndex) ) {
+    int id = m_views.key(qobject_cast<QTreeView*>(view));
+    if( QAbstractProxyModel* proxy = m_proxyModels.value(id) ) {
         if ( index.model() == proxy ) {
             // index is from the proxy, map it to the source
             sourceIndex = proxy->mapToSource(index);
@@ -439,8 +439,8 @@ void OutputWidget::selectItem(SelectionMode selectionMode)
     eventuallyDoFocus();
 
     auto index = view->currentIndex();
-
-    if (QAbstractProxyModel* proxy = m_proxyModels.value(currentOutputIndex())) {
+    int id = m_views.key(qobject_cast<QTreeView*>(view));
+    if (QAbstractProxyModel* proxy = m_proxyModels.value(id)) {
         if ( index.model() == proxy ) {
             // index is from the proxy, map it to the source
             index = proxy->mapToSource(index);
@@ -648,26 +648,31 @@ void OutputWidget::outputFilter(const QString& filter)
     QAbstractItemView *view = qobject_cast<QAbstractItemView*>(currentWidget());
     if( !view )
         return;
-    int index = currentOutputIndex();
+
+    int id = m_views.key(qobject_cast<QTreeView*>(view));
     auto proxyModel = qobject_cast<QSortFilterProxyModel*>(view->model());
     if( !proxyModel )
     {
         proxyModel = new QSortFilterProxyModel(view->model());
         proxyModel->setDynamicSortFilter(true);
         proxyModel->setSourceModel(view->model());
-        m_proxyModels.insert(index, proxyModel);
+        m_proxyModels.insert(id, proxyModel);
         view->setModel(proxyModel);
     }
     QRegExp regExp(filter, Qt::CaseInsensitive);
     proxyModel->setFilterRegExp(regExp);
-    m_filters[index] = filter;
+    m_filters[id] = filter;
 }
 
 void OutputWidget::updateFilter(int index)
 {
-    if(m_filters.contains(index))
+    QWidget *view = (data->type & KDevelop::IOutputView::MultipleView)
+        ? m_tabwidget->widget(index) : m_stackwidget->widget(index);
+    int id = m_views.key(qobject_cast<QTreeView*>(view));
+
+    if(m_filters.contains(id))
     {
-        m_filterInput->setText(m_filters[index]);
+        m_filterInput->setText(m_filters[id]);
     } else
     {
         m_filterInput->clear();
@@ -684,4 +689,3 @@ void OutputWidget::setTitle(int outputId, const QString& title)
         }
     }
 }
-
