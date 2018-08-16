@@ -112,6 +112,7 @@ T formatComment_impl(const T& comment)
         rStrip_impl( slashDoubleStar, *it );
     }
 
+    // TODO add method with QStringList specialisation
     foreach(const T& line, lines) {
       if(!ret.isEmpty())
         ret += '\n';
@@ -300,9 +301,10 @@ QString escapeFromBracketMatching(QString str) {
   return str;
 }
 
-void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart ) {
-  QString withStrings = escapeForBracketMatching(str);
-  str = escapeForBracketMatching(clearStrings(str));
+void skipFunctionArguments(const QString& str_, QStringList& skippedArguments, int& argumentsStart)
+{
+  QString withStrings = escapeForBracketMatching(str_);
+  QString str = escapeForBracketMatching(clearStrings(str_));
 
   //Blank out everything that can confuse the bracket-matching algorithm
   QString reversed = reverse( str.left(argumentsStart) );
@@ -334,8 +336,9 @@ void skipFunctionArguments(QString str, QStringList& skippedArguments, int& argu
   argumentsStart -= pos;
 }
 
-QString reduceWhiteSpace(QString str) {
-  str = str.trimmed();
+QString reduceWhiteSpace(const QString& str_)
+{
+  const QString str = str_.trimmed();
   QString ret;
   const int len = str.length();
   ret.reserve(len);
@@ -362,8 +365,8 @@ void fillString( QString& str, int start, int end, QChar replacement ) {
   for( int a = start; a < end; a++) str[a] = replacement;
 }
 
-QString stripFinalWhitespace(QString str) {
-
+QString stripFinalWhitespace(const QString& str)
+{
   for( int a = str.length() - 1; a >= 0; --a ) {
     if( !str[a].isSpace() )
       return str.left( a+1 );
@@ -372,8 +375,9 @@ QString stripFinalWhitespace(QString str) {
   return QString();
 }
 
-QString clearComments( QString str, QChar replacement ) {
-
+QString clearComments(const QString& str_, QChar replacement)
+{
+  QString str(str_);
   QString withoutStrings = clearStrings(str, '$');
 
   int pos = -1, newlinePos = -1, endCommentPos = -1, nextPos = -1, dest = -1;
@@ -412,7 +416,9 @@ QString clearComments( QString str, QChar replacement ) {
   return str;
 }
 
-QString clearStrings( QString str, QChar replacement ) {
+QString clearStrings(const QString& str_, QChar replacement)
+{
+  QString str(str_);
   bool inString = false;
   for(int pos = 0; pos < str.length(); ++pos) {
     //Skip cpp comments
@@ -507,7 +513,8 @@ QString formatComment(const QString& comment)
 
 ParamIterator::~ParamIterator() = default;
 
-ParamIterator::ParamIterator( QString parens, QString source, int offset ) : d(new ParamIteratorPrivate)
+ParamIterator::ParamIterator(const QString& parens, const QString& source, int offset)
+  : d(new ParamIteratorPrivate)
 {
   d->m_source = source;
   d->m_parens = parens;

@@ -32,7 +32,7 @@ AbstractIncludeNavigationContext::AbstractIncludeNavigationContext(const Include
     : AbstractNavigationContext(topContext), m_type(type), m_item(item)
 {}
 
-TopDUContext* pickContextWithData(QList<TopDUContext*> duchains, uint maxDepth,
+TopDUContext* pickContextWithData(const QList<TopDUContext*>& duchains, uint maxDepth,
                                    const ParsingEnvironmentType& type,
                                    bool forcePick = true) {
   TopDUContext* duchain = nullptr;

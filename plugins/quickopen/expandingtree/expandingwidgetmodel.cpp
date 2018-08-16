@@ -551,8 +551,11 @@ QList<QVariant> mergeCustomHighlighting(int leftSize, const QList<QVariant>& lef
 }
 
 //It is assumed that between each two strings, one space is inserted
-QList<QVariant> mergeCustomHighlighting(QStringList strings, QList<QVariantList> highlights, int grapBetweenStrings)
+QList<QVariant> mergeCustomHighlighting(const QStringList& strings_, const QList<QVariantList>& highlights_, int grapBetweenStrings)
 {
+    QStringList strings(strings_);
+    QList<QVariantList> highlights(highlights_);
+
     if (strings.isEmpty()) {
         qCWarning(PLUGIN_QUICKOPEN) << "List of strings is empty";
         return QList<QVariant>();

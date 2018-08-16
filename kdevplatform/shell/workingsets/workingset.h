@@ -95,7 +95,7 @@ public:
 
     bool hasConnectedAreas() const;
 
-    bool hasConnectedAreas(QList<Sublime::Area*> areas) const;
+    bool hasConnectedAreas(const QList<Sublime::Area*>& areas) const;
 
     void connectArea(Sublime::Area* area);
 

@@ -371,7 +371,7 @@ QList<OneUseWidget*> createUseWidgets(const CodeRepresentation& code, int usedDe
   return ret;
 }
 
-ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<IndexedDeclaration> usedDeclarations, IndexedDUContext context) : m_context(context) {
+ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, const QList<IndexedDeclaration>& usedDeclarations, IndexedDUContext context) : m_context(context) {
 
   setFrameShape(NoFrame);
 

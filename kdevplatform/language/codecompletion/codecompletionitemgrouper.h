@@ -32,7 +32,7 @@ namespace KDevelop {
 
 ///Always the last item of a grouping chain: Only inserts the items
 struct CodeCompletionItemLastGrouper {
-  CodeCompletionItemLastGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
+  CodeCompletionItemLastGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree, CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
   {
     tree.reserve(tree.size() + items.size());
     foreach( CompletionTreeItemPointer item, items ) {
@@ -47,7 +47,7 @@ template<class KeyExtractor, class NextGrouper = CodeCompletionItemLastGrouper>
 struct CodeCompletionItemGrouper {
   typedef typename KeyExtractor::KeyType KeyType;
 
-  CodeCompletionItemGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
+  CodeCompletionItemGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree, CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
   {
     typedef QMap<KeyType, QList<CompletionTreeItemPointer> > GroupMap;
     GroupMap groups;

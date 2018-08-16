@@ -110,7 +110,7 @@ void MIVariableController::handleVarUpdate(const ResultRecord& r)
 class StackListArgumentsHandler : public MICommandHandler
 {
 public:
-    explicit StackListArgumentsHandler(QStringList localsName)
+    explicit StackListArgumentsHandler(const QStringList& localsName)
         : m_localsName(localsName)
     {}
 
