@@ -164,7 +164,7 @@ QString CompletionItem::declarationName() const
         QString signal = classFuncDecl->identifier().toString();
 
         if (signal.size() > 0) {
-            return QLatin1String("on") + signal.at(0).toUpper() + signal.mid(1);
+            return QLatin1String("on") + signal.at(0).toUpper() + signal.midRef(1);
         }
     }
 

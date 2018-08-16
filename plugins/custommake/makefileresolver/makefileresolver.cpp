@@ -220,7 +220,7 @@ QString MakeFileResolver::mapToBuild(const QString &path) const
   if (m_outOfSource) {
     if (wd.startsWith(m_source) && !wd.startsWith(m_build)) {
         //Move the current working-directory out of source, into the build-system
-        wd = QDir::cleanPath(m_build + '/' + wd.mid(m_source.length()));
+        wd = QDir::cleanPath(m_build + '/' + wd.midRef(m_source.length()));
       }
   }
   return wd;

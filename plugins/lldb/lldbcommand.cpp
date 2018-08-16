@@ -205,14 +205,14 @@ QString LldbCommand::cmdToSend()
 
             // move other switches like '-d' '-c' into miCommand part
             overrideCmd = miCommand() + QLatin1Char(' ') + command_.left(p);
-            command_ = "-f " + command_.mid(p, command_.length());
+            command_ = "-f " + command_.midRef(p, command_.length());
             break;
         }
         case BreakWatch:
             if (command_.startsWith(QLatin1String("-r "))) {
-                command_ = "-w read " + command_.mid(3);
+                command_ = "-w read " + command_.midRef(3);
             } else if (command_.startsWith(QLatin1String("-a "))) {
-                command_ = "-w read_write " + command_.mid(3);
+                command_ = "-w read_write " + command_.midRef(3);
             }
             break;
         case StackListArguments:
