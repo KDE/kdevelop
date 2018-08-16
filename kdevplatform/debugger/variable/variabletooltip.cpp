@@ -121,16 +121,16 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
     m_view->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
     l->addWidget(m_view);
 
-    m_itemHeight = m_view->indexRowSizeHint(m_model->indexForItem(m_var, 0));
+    QModelIndex varIndex = m_proxy->mapFromSource(m_model->indexForItem(m_var, 0));
+    m_itemHeight = m_view->indexRowSizeHint(varIndex);
     connect(m_view->verticalScrollBar(),
             &QScrollBar::rangeChanged,
             this,
             &VariableToolTip::slotRangeChanged);
 
     m_selection = m_view->selectionModel();
-    m_selection->select(m_model->indexForItem(m_var, 0),
-                       QItemSelectionModel::Rows
-                       | QItemSelectionModel::ClearAndSelect);
+    m_selection->select(varIndex,
+                        QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect);
 
     QHBoxLayout* buttonBox = new QHBoxLayout();
     buttonBox->setContentsMargins(11, 0, 11, 6);
