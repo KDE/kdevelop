@@ -137,7 +137,7 @@ void CMakeServer::processOutput()
         const int idx = m_buffer.indexOf(closeTag, openTag.size());
         if (idx >= 0) {
             emitResponse(m_buffer.mid(openTag.size(), idx - openTag.size()));
-            m_buffer = m_buffer.mid(idx + closeTag.size());
+            m_buffer.remove(0, idx + closeTag.size());
         } else {
             break;
         }

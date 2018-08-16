@@ -96,8 +96,8 @@ QString highlightAndEscapeUseText(QString line, int cutOff, KTextEditor::Range r
   }
   Q_ASSERT(leftCut + rightCut <= cutOff);
 
-  line = line.left(line.length() - rightCut);
-  line = line.mid(leftCut);
+  line.chop(rightCut);
+  line.remove(0, leftCut);
   range += KTextEditor::Range(0, -leftCut, 0, -leftCut);
 
   Q_ASSERT(range.start().column() >= 0 && range.end().column() <= line.length());

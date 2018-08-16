@@ -249,7 +249,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
     if (workingDirectory == QLatin1String("."))
       workingDirectory = QString();
     else if (workingDirectory.startsWith(QLatin1String("./")))
-      workingDirectory = workingDirectory.mid(2);
+      workingDirectory.remove(0, 2);
 
     if (!workingDirectory.isEmpty()) {
       u = u.adjusted(QUrl::StripTrailingSlash);

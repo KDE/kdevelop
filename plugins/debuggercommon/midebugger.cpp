@@ -139,7 +139,7 @@ void MIDebugger::readyReadStandardOutput()
         if (i == -1)
             break;
         QByteArray reply(m_buffer.left(i));
-        m_buffer = m_buffer.mid(i+1);
+        m_buffer.remove(0, i+1);
 
         processLine(reply);
     }

@@ -1338,7 +1338,7 @@ void ContextBrowserPlugin::updateHistory(KDevelop::DUContext* context, const KTe
 
         updateButtonState();
         if(m_history.size() > (maxHistoryLength + 5)) {
-            m_history = m_history.mid(m_history.size() - maxHistoryLength);
+            m_history.remove(0, m_history.size() - maxHistoryLength);
             m_nextHistoryIndex = m_history.size();
         }
     }

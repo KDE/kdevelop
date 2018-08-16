@@ -409,7 +409,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
             for (QString s : optionList) {
                 if (knownOptions.indexIn(s) < 0) { // unknown option, add it
                     if(s.startsWith(QLatin1Char(' ')))
-                        s=s.mid(1);
+                        s.remove(0, 1);
                     os << s << ";";
                     qCDebug(SHELL) << "Found unknown option: " << s << endl;
                 }

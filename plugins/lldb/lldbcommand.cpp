@@ -171,10 +171,10 @@ QString LldbCommand::cmdToSend()
             QString env_name = QStringLiteral("environment ");
             QString disassembly_flavor = QStringLiteral("disassembly-flavor ");
             if (command_.startsWith(env_name)) {
-                command_ = command_.mid(env_name.length());
+                command_.remove(0, env_name.length());
                 overrideCmd = QStringLiteral("settings set target.env-vars");
             } else if (command_.startsWith(disassembly_flavor)) {
-                command_ = command_.mid(disassembly_flavor.length());
+                command_.remove(0, disassembly_flavor.length());
                 overrideCmd = QStringLiteral("settings set target.x86-disassembly-flavor");
             }
             break;
