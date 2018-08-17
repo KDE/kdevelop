@@ -191,7 +191,7 @@ void BenchItemRepository::lookupKey()
 {
   TestDataRepository repo("TestDataRepositoryLookupKey");
   QVector<QString> data = generateData();
-  const QVector<uint> indices = insertData(data, repo);
+  QVector<uint> indices = insertData(data, repo);
   srand(0);
   std::random_shuffle(indices.begin(), indices.end());
   QBENCHMARK {
@@ -205,7 +205,7 @@ void BenchItemRepository::lookupValue()
 {
   TestDataRepository repo("TestDataRepositoryLookupValue");
   QVector<QString> data = generateData();
-  const QVector<uint> indices = insertData(data, repo);
+  QVector<uint> indices = insertData(data, repo);
   srand(0);
   std::random_shuffle(indices.begin(), indices.end());
   QBENCHMARK {
