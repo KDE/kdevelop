@@ -196,7 +196,7 @@ GroupsName IRegisterController::groupForRegisterName(const QString& name) const
         if (group.flagName() == name) {
             return group;
         }
-        foreach (const QString & n, registersInGroup) {
+        for (const QString& n : registersInGroup) {
             if (n == name) {
                 return group;
             }
@@ -358,7 +358,7 @@ void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
         Q_ASSERT(start != -1);
         start += Converters::modeToString(currentMode).size();
 
-        QString value = record.right(record.size() - start);
+        QString value = record.mid(start);
         int idx = rx.indexIn(value);
         value = rx.cap(1);
 

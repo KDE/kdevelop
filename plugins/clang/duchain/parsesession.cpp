@@ -58,7 +58,7 @@ QVector<QByteArray> extraArgs()
     // transform to list of QByteArrays
     QVector<QByteArray> result;
     result.reserve(extraArgs.size());
-    foreach (const QString& arg, extraArgs) {
+    for (const QString& arg : extraArgs) {
         result << arg.toLatin1();
     }
     clangDebug() << "Passing extra arguments to clang:" << result;
@@ -141,7 +141,7 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
 void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
                  const Path::List& includes, const char* cliSwitch)
 {
-    foreach (const Path& url, includes) {
+    for (const Path& url : includes) {
         if (url.isEmpty()) {
             continue;
         }
@@ -162,7 +162,7 @@ void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
 void addFrameworkDirectories(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
                  const Path::List& frameworkDirectories, const char* cliSwitch)
 {
-    foreach (const Path& url, frameworkDirectories) {
+    for (const Path& url : frameworkDirectories) {
         if (url.isEmpty()) {
             continue;
         }
@@ -282,7 +282,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
 
     // append extra args from environment variable
     static const auto extraArgs = ::extraArgs();
-    foreach (const QByteArray& arg, extraArgs) {
+    for (const QByteArray& arg : extraArgs) {
         clangArguments << arg.constData();
     }
 

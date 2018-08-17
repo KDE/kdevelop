@@ -139,15 +139,16 @@ StashModel::StashModel(const QDir& dir, GitPlugin* git, QObject* parent)
 void StashModel::stashListReady(KJob* _job)
 {
     DVcsJob* job = qobject_cast<DVcsJob*>(_job);
-    QList< QByteArray > output = job->rawOutput().split('\n');
+    const QList<QByteArray> output = job->rawOutput().split('\n');
 
-    foreach(const QByteArray& line, output) {
-        QList< QByteArray > fields = line.split(':');
+    for (const QByteArray& line : output) {
+        const QList<QByteArray> fields = line.split(':');
 
         QList<QStandardItem*> elements;
         elements.reserve(fields.size());
-        foreach(const QByteArray& field, fields)
+        for (const QByteArray& field : fields) {
             elements += new QStandardItem(QString(field.trimmed()));
+        }
 
         appendRow(elements);
     }

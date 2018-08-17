@@ -256,12 +256,11 @@ QVector<SourceFileTemplate::OutputFile> SourceFileTemplate::outputFiles() const
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup group(&templateConfig, "General");
 
-    QStringList files = group.readEntry("Files", QStringList());
+    const QStringList files = group.readEntry("Files", QStringList());
     qCDebug(LANGUAGE) << "Files in template" << files;
 
     outputFiles.reserve(files.size());
-    foreach (const QString& fileGroup, files)
-    {
+    for (const QString& fileGroup : files) {
         KConfigGroup cg(&templateConfig, fileGroup);
         OutputFile f;
         f.identifier = cg.name();

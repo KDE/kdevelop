@@ -375,7 +375,7 @@ void TestProjectFilter::bench_data()
 
     const TestProject project;
 
-    QVector<QVector<BenchData> > dataSets = QVector<QVector<BenchData> >()
+    const QVector<QVector<BenchData> > dataSets = QVector<QVector<BenchData> >()
         << createBenchData(project.path(), 3, 5, 10)
         << createBenchData(project.path(), 3, 5, 20)
         << createBenchData(project.path(), 4, 5, 10)
@@ -383,14 +383,14 @@ void TestProjectFilter::bench_data()
 
     {
         TestFilter filter(new ProjectFilter(&project, Filters()));
-        foreach(const QVector<BenchData>& data, dataSets) {
+        for (const QVector<BenchData>& data : dataSets) {
             QTest::newRow(QByteArray("baseline-" + QByteArray::number(data.size()))) << filter << data;
         }
     }
 
     {
         TestFilter filter(new ProjectFilter(&project, deserialize(defaultFilters())));
-        foreach(const QVector<BenchData>& data, dataSets) {
+        for (const QVector<BenchData>& data : dataSets) {
             QTest::newRow(QByteArray("defaults-" + QByteArray::number(data.size()))) << filter << data;
         }
     }

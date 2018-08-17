@@ -183,7 +183,7 @@ QString KDevelop::stripAnsiSequences(const QString& str)
     QString result;
     result.reserve(str.count());
 
-    foreach (const QChar c, str) {
+    for (const QChar c : str) {
         const auto val = c.unicode();
         switch (state) {
         case PLAIN:

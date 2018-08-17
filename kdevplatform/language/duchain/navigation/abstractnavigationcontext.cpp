@@ -500,7 +500,7 @@ static QStringList splitAndKeep(QString str, const QRegExp& regExp) {
   int place = regExp.indexIn(str);
   while(place != -1) {
     ret << str.left(place + regExp.matchedLength());
-    str = str.mid(place + regExp.matchedLength());
+    str.remove(0, place + regExp.matchedLength());
     place = regExp.indexIn(str);
   }
   ret << str;

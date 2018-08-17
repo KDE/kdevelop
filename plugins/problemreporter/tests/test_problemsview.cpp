@@ -98,7 +98,7 @@ void TestProblemsView::testAddModel()
 QVector<bool> visibilites(const QList<QAction*>& actions)
 {
     QVector<bool> visibilites;
-    foreach (auto action, actions) {
+    for (auto action : actions) {
         visibilites << action->isVisible();
     }
     return visibilites;

@@ -71,7 +71,7 @@ QStringList QMakeFileVisitor::resolveVariable(const QString& variable, VariableI
 QStringList QMakeFileVisitor::getValueList(const QList<QMake::ValueAST*>& list) const
 {
     QStringList result;
-    foreach (QMake::ValueAST* v, list) {
+    for (QMake::ValueAST* v : list) {
         result += resolveVariables(v->value);
     }
     return result;
@@ -130,17 +130,17 @@ void QMakeFileVisitor::visitFunctionCall(QMake::FunctionCallAST* node)
 void QMakeFileVisitor::visitAssignment(QMake::AssignmentAST* node)
 {
     QString op = node->op->value;
-    QStringList values = getValueList(node->values);
+    const QStringList values = getValueList(node->values);
     if (op == QLatin1String("=")) {
         m_variableValues[node->identifier->value] = values;
     } else if (op == QLatin1String("+=")) {
         m_variableValues[node->identifier->value] += values;
     } else if (op == QLatin1String("-=")) {
-        foreach (const QString& value, values) {
+        for (const QString& value : values) {
             m_variableValues[node->identifier->value].removeAll(value);
         }
     } else if (op == QLatin1String("*=")) {
-        foreach (const QString& value, values) {
+        for (const QString& value : values) {
             if (!m_variableValues.value(node->identifier->value).contains(value)) {
                 m_variableValues[node->identifier->value].append(value);
             }

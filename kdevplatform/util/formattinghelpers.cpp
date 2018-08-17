@@ -179,11 +179,11 @@ QString extractFormattedTextFromContext( const QString& _formattedMergedText, co
                 return text;
             }
         }
-        formattedMergedText = formattedMergedText.left(endOfText);
+        formattedMergedText.truncate(endOfText);
 
         int skip = skipRedundantWhiteSpace( reverse(rightContext), reverse(formattedMergedText), tabWidth );
 
-        formattedMergedText = formattedMergedText.left(formattedMergedText.size() - skip);
+        formattedMergedText.chop(skip);
     }
 
     return formattedMergedText;

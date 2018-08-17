@@ -122,8 +122,7 @@ QVector<IProblem::Ptr> Problem::diagnostics() const
 {
     QVector<IProblem::Ptr> vector;
 
-    foreach(ProblemPointer ptr, m_diagnostics)
-    {
+    for (ProblemPointer ptr : m_diagnostics) {
         vector.push_back(ptr);
     }
 
@@ -134,8 +133,7 @@ void Problem::setDiagnostics(const QVector<IProblem::Ptr> &diagnostics)
 {
     clearDiagnostics();
 
-    foreach(const IProblem::Ptr& problem, diagnostics)
-    {
+    for (const IProblem::Ptr& problem : diagnostics) {
         addDiagnostic(problem);
     }
 }

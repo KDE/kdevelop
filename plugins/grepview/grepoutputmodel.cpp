@@ -151,7 +151,7 @@ QVariant GrepOutputItem::data ( int role ) const {
         // show replaced version in tooltip if we are in replace mode
         const QString match = isCheckable() ? grepModel->replacementFor(m_change->m_oldText) : m_change->m_oldText;
         const QString repl  = QLatin1String("<b>") + match.toHtmlEscaped() + QLatin1String("</b>");
-        QString end   = text().right(text().length() - m_change->m_range.end().column()).toHtmlEscaped();
+        QString end   = text().mid(m_change->m_range.end().column()).toHtmlEscaped();
         const QString toolTip = QLatin1String("<span style=\"white-space:nowrap\">") + QString(start + repl + end).trimmed() + QLatin1String("</span>");
         return toolTip;
     } else if (role == Qt::FontRole) {
@@ -395,8 +395,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
 
     GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
     m_rootItem->appendRow(fileItem);
-    foreach( const GrepOutputItem& item, items )
-    {
+    for (const GrepOutputItem& item : items) {
         GrepOutputItem* copy = new GrepOutputItem(item);
         copy->setCheckable(m_itemsCheckable);
         if(m_itemsCheckable)

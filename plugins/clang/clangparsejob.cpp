@@ -111,7 +111,7 @@ Path::List readPathListFile(const QString& filepath)
  */
 Path userDefinedPchIncludeForFile(const QString& sourcefile)
 {
-    static const QString pchIncludeFilename = QStringLiteral(".kdev_pch_include");
+    const QString pchIncludeFilename = QStringLiteral(".kdev_pch_include");
     const auto paths = readPathListFile(findConfigFile(sourcefile, pchIncludeFilename));
     return paths.isEmpty() ? Path() : paths.first();
 }
@@ -187,7 +187,7 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
     Path::List projectPaths;
     const auto& projects = ICore::self()->projectController()->projects();
     projectPaths.reserve(projects.size());
-    foreach (auto project, projects) {
+    for (auto project : projects) {
         projectPaths.append(project->path());
     }
     m_environment.setProjectPaths(projectPaths);

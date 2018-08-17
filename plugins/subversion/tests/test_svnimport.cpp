@@ -77,8 +77,8 @@ void TestSvnImport::initTestCase()
     AutoTestShell::init({QStringLiteral("kdevsubversion"), QStringLiteral("KDevStandardOutputView")});
     TestCore::initialize();
 
-    QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
-    foreach(IPlugin* p,  plugins) {
+    const QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
+    for (IPlugin* p : plugins) {
         qDebug() << "checking plugin" << p;
         ICentralizedVersionControl* icentr = p->extension<ICentralizedVersionControl>();
         if (!icentr)

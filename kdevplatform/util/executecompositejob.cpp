@@ -40,7 +40,7 @@ ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jo
     setCapabilities(Killable);
 
     qCDebug(UTIL) << "execute composite" << jobs;
-    foreach(KJob* job, jobs) {
+    for (KJob* job : jobs) {
         if (!job) {
             qCWarning(UTIL) << "Added null job!";
             continue;

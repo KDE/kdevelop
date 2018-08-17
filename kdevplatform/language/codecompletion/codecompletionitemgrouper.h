@@ -32,10 +32,10 @@ namespace KDevelop {
 
 ///Always the last item of a grouping chain: Only inserts the items
 struct CodeCompletionItemLastGrouper {
-  CodeCompletionItemLastGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
+  CodeCompletionItemLastGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree, CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
   {
     tree.reserve(tree.size() + items.size());
-    foreach( CompletionTreeItemPointer item, items ) {
+    for (auto& item : items) {
       item->setParent(parent);
       tree << QExplicitlySharedDataPointer<CompletionTreeElement>( item.data() );
     }
@@ -47,12 +47,12 @@ template<class KeyExtractor, class NextGrouper = CodeCompletionItemLastGrouper>
 struct CodeCompletionItemGrouper {
   typedef typename KeyExtractor::KeyType KeyType;
 
-  CodeCompletionItemGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >& tree, CompletionTreeNode* parent, QList<CompletionTreeItemPointer> items)
+  CodeCompletionItemGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree, CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
   {
     typedef QMap<KeyType, QList<CompletionTreeItemPointer> > GroupMap;
     GroupMap groups;
 
-    foreach(const CompletionTreeItemPointer& item, items) {
+    for (auto& item : items) {
       KeyType key = KeyExtractor::extract(item);
       typename GroupMap::iterator it = groups.find(key);
       if(it == groups.end())

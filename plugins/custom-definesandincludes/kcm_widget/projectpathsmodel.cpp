@@ -154,7 +154,7 @@ void ProjectPathsModel::setPaths(const QVector< ConfigEntry >& paths )
 {
     beginResetModel();
     projectPaths.clear();
-    foreach( const ConfigEntry& existingPathConfig, paths ) {
+    for (const ConfigEntry& existingPathConfig : paths) {
         // Sanitize the path of loaded config
         ConfigEntry config = existingPathConfig;
         bool rootPath = config.path == QLatin1String(".") ? true : false;

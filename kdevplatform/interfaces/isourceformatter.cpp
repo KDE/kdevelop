@@ -101,7 +101,7 @@ void SourceFormatterStyle::setMimeTypes(const SourceFormatterStyle::MimeList& ty
 
 void SourceFormatterStyle::setMimeTypes(const QStringList& types)
 {
-	foreach ( auto& t, types ) {
+	for (auto& t : types) {
 		auto items = t.split(QLatin1Char('|'));
 		if ( items.size() != 2 ) {
 			continue;

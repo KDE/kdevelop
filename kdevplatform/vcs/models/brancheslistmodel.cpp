@@ -141,9 +141,10 @@ void BranchesListModel::removeBranch(const QString& branch)
 
     qCDebug(VCS) << "Removing branch:" << branch;
     if (branchJob->exec()) {
-        QList< QStandardItem* > items = findItems(branch);
-        foreach(QStandardItem* item, items)
+        const QList<QStandardItem*> items = findItems(branch);
+        for (QStandardItem* item : items) {
             removeRow(item->row());
+        }
     }
 }
 
@@ -166,11 +167,12 @@ void BranchesListModel::initialize(KDevelop::IBranchingVersionControl* branching
 
 void BranchesListModel::refresh()
 {
-    QStringList branches = runSynchronously(d->dvcsplugin->branches(d->repo)).toStringList();
+    const QStringList branches = runSynchronously(d->dvcsplugin->branches(d->repo)).toStringList();
     QString curBranch = runSynchronously(d->dvcsplugin->currentBranch(d->repo)).toString();
 
-    foreach(const QString& branch, branches)
+    for (const QString& branch : branches) {
         appendRow(new BranchItem(branch, branch == curBranch));
+    }
 }
 
 void BranchesListModel::resetCurrent()

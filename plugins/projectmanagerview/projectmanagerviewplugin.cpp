@@ -140,7 +140,7 @@ static QList<ProjectBaseItem*> itemsFromIndexes(const QList<QPersistentModelInde
     QList<ProjectBaseItem*> items;
     ProjectModel* model = ICore::self()->projectController()->projectModel();
     items.reserve(indexes.size());
-    foreach(const QModelIndex& index, indexes) {
+    for (const QModelIndex& index : indexes) {
         items += model->itemFromIndex(index);
     }
     return items;
@@ -240,7 +240,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
         return IPlugin::contextMenuExtension(context, parent);
 
     KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(context);
-    QList<KDevelop::ProjectBaseItem*> items = ctx->items();
+    const QList<KDevelop::ProjectBaseItem*> items = ctx->items();
 
     d->ctxProjectItemList.clear();
 
@@ -265,7 +265,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
     needsPaste = needsCreateFolder;
 
     d->ctxProjectItemList.reserve(items.size());
-    foreach( ProjectBaseItem* item, items ) {
+    for (ProjectBaseItem* item : items) {
         d->ctxProjectItemList << item->index();
         //needsBuildItems if items are limited to targets and buildfolders
         needsBuildItems &= item->target() || item->type() == ProjectBaseItem::BuildFolder;
@@ -433,11 +433,10 @@ void ProjectManagerViewPlugin::buildAllProjects()
 QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectItems()
 {
     QList<ProjectBaseItem*> items;
-    QList<BuildItem> buildItems = ICore::self()->projectController()->buildSetModel()->items();
+    const QList<BuildItem> buildItems = ICore::self()->projectController()->buildSetModel()->items();
     if( !buildItems.isEmpty() )
     {
-        foreach( const BuildItem& buildItem, buildItems )
-        {
+        for (const BuildItem& buildItem : buildItems) {
             if( ProjectBaseItem* item = buildItem.findItem() )
             {
                 items << item;
@@ -624,10 +623,11 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
 
 void ProjectManagerViewPlugin::removeTargetFilesFromContextMenu()
 {
-    QList<ProjectBaseItem*> items = itemsFromIndexes( d->ctxProjectItemList );
+    const QList<ProjectBaseItem*> items = itemsFromIndexes( d->ctxProjectItemList );
     QHash< IBuildSystemManager*, QList<KDevelop::ProjectFileItem*> > itemsByBuildSystem;
-    foreach(ProjectBaseItem *item, items)
+    for (ProjectBaseItem* item : items) {
         itemsByBuildSystem[item->project()->buildSystemManager()].append(item->file());
+    }
 
     QHash< IBuildSystemManager*, QList<KDevelop::ProjectFileItem*> >::iterator it;
     for (it = itemsByBuildSystem.begin(); it != itemsByBuildSystem.end(); ++it)
@@ -647,8 +647,7 @@ void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& item
 
     QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
 
-    foreach( KDevelop::ProjectBaseItem* item, items )
-    {
+    for (KDevelop::ProjectBaseItem* item : items) {
         if ((item->type()!=ProjectBaseItem::BuildFolder
                 && item->type()!=ProjectBaseItem::Folder
                 && item->type()!=ProjectBaseItem::File) || !item->parent())

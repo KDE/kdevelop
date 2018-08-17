@@ -187,12 +187,12 @@ Path::List DefinesAndIncludesManager::includes( ProjectBaseItem* item, Type type
         if ( !(provider->type() & type) ) {
             continue;
         }
-        auto newItems = provider->includes(item);
+        const auto newItems = provider->includes(item);
         if ( provider->type() & DefinesAndIncludesManager::CompilerSpecific ) {
             // If an item occurs in the "compiler specific" list, but was previously supplied
             // in the user include path list already, remove it from there.
             // Re-ordering the system include paths causes confusion in some cases.
-            Q_FOREACH (const auto& x, newItems ) {
+            for (const auto& x : newItems) {
                 includes.removeAll(x);
             }
         }

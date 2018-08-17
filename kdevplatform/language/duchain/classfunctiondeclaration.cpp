@@ -186,7 +186,7 @@ bool ClassFunctionDeclaration::isDestructor() const
 {
   DUContext* ctx = context();
   QString id = identifier().toString();
-  return ctx && ctx->type() == DUContext::Class && id.startsWith(QLatin1Char('~')) && id.mid(1) == ctx->localScopeIdentifier().top().toString();
+  return ctx && ctx->type() == DUContext::Class && id.startsWith(QLatin1Char('~')) && id.midRef(1) == ctx->localScopeIdentifier().top().toString();
 }
 
 uint ClassFunctionDeclaration::additionalIdentity() const

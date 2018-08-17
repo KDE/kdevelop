@@ -54,9 +54,9 @@ static PathType appendPaths(const KDevelop::Path::List &paths, const KDevelop::P
     PathType ret;
     ret.project.reserve(paths.size());
     ret.system.reserve(paths.size());
-    foreach (const auto& path, paths) {
+    for (const auto& path : paths) {
         bool inProject = false;
-        foreach (const auto& project, projectPaths) {
+        for (const auto& project : projectPaths) {
             if (project.isParentOf(path) || project == path) {
                 inProject = true;
                 break;

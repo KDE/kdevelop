@@ -45,8 +45,7 @@ CTestRunJob::CTestRunJob(CTestSuite* suite, const QStringList& cases, OutputJob:
 , m_outputModel(nullptr)
 , m_verbosity(verbosity)
 {
-    foreach (const QString& testCase, cases)
-    {
+    for (const QString& testCase : cases) {
         m_caseResults[testCase] = TestResult::NotRun;
     }
 
@@ -74,8 +73,8 @@ static KJob* createTestJob(const QString& launchModeId, const QStringList& argum
     Q_ASSERT(launcher);
 
     ILaunchConfiguration* ilaunch = nullptr;
-    QList<ILaunchConfiguration*> launchConfigurations = ICore::self()->runController()->launchConfigurations();
-    foreach (ILaunchConfiguration *l, launchConfigurations) {
+    const QList<ILaunchConfiguration*> launchConfigurations = ICore::self()->runController()->launchConfigurations();
+    for (ILaunchConfiguration* l : launchConfigurations) {
         if (l->type() == type && l->config().readEntry("ConfiguredByCTest", false)) {
             ilaunch = l;
             break;

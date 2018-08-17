@@ -116,16 +116,16 @@ void TemplatesModel::refresh()
     QStringList templateArchives;
     foreach(const QString& archivePath, d->searchPaths) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
-        foreach(const QString& file, files) {
+        for (const QString& file : files) {
             templateArchives.append(archivePath + file);
         }
     }
 
     QStringList templateDescriptions;
     const QStringList templatePaths = {QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + d->resourceFilter(TemplatesModelPrivate::Description)};
-    foreach(const QString& templateDescription, templatePaths) {
+    for (const QString& templateDescription : templatePaths) {
         const QStringList files = QDir(templateDescription).entryList(QDir::Files);
-        foreach(const QString& file, files) {
+        for (const QString& file : files) {
             templateDescriptions.append(templateDescription + file);
         }
     }
@@ -163,12 +163,11 @@ void TemplatesModel::refresh()
 
 QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QString& category, QStandardItem* parent)
 {
-    QStringList path = category.split(QLatin1Char('/'));
+    const QStringList path = category.split(QLatin1Char('/'));
 
     QStringList currentPath;
     currentPath.reserve(path.size());
-    foreach (const QString& entry, path)
-    {
+    for (const QString& entry : path) {
         currentPath << entry;
         if (!templateItems.contains(currentPath.join(QLatin1Char('/')))) {
             QStandardItem *item = new QStandardItem(entry);
@@ -194,7 +193,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
     searchPaths.removeDuplicates();
     foreach(const QString &archivePath, searchPaths) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
-        foreach(const QString& file, files) {
+        for (const QString& file : files) {
             if(file.endsWith(QLatin1String(".zip")) || file.endsWith(QLatin1String(".tar.bz2"))) {
                 QString archfile = archivePath + file;
                 templateArchives.append(archfile);
@@ -248,8 +247,8 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                  *
                  * This is needed because kde-files.org renames downloaded files
                  */
-                foreach (const QString& entryName, templateArchive->directory()->entries())
-                {
+                const auto dirEntries = templateArchive->directory()->entries();
+                for (const QString& entryName : dirEntries) {
                     if (entryName.endsWith(suffix)) {
                         templateEntry = templateArchive->directory()->entry(entryName);
                         break;
@@ -265,8 +264,8 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
 
             if (!templateEntry || !templateEntry->isFile())
             {
-                foreach (const QString& entryName, templateArchive->directory()->entries())
-                {
+                const auto dirEntries = templateArchive->directory()->entries();
+                for (const QString& entryName : dirEntries) {
                     if (entryName.endsWith(suffix)) {
                         templateEntry = templateArchive->directory()->entry(entryName);
                         break;
@@ -317,12 +316,11 @@ QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
     {
         KConfig templateConfig(description);
         KConfigGroup general(&templateConfig, "General");
-        QStringList categories = general.readEntry("Category").split(QLatin1Char('/'));
+        const QStringList categories = general.readEntry("Category").split(QLatin1Char('/'));
 
         QStringList levels;
         levels.reserve(categories.size());
-        foreach (const QString& category, categories)
-        {
+        for (const QString& category : categories) {
             levels << category;
             indexes << d->templateItems[levels.join(QLatin1Char('/'))]->index();
         }
@@ -385,9 +383,8 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
         archive.open(QIODevice::WriteOnly);
 
         QDir dir(info.absoluteDir());
-        QDir::Filters filter = QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot;
-        foreach (const QFileInfo& entry, dir.entryInfoList(filter))
-        {
+        const auto dirEntryInfos = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+        for (const QFileInfo& entry : dirEntryInfos) {
             if (entry.isFile())
             {
                 archive.addLocalFile(entry.absoluteFilePath(), entry.fileName());

@@ -167,7 +167,7 @@ void DetectedProblem::setDiagnostics(const QVector<Ptr> &diagnostics)
 {
     clearDiagnostics();
 
-    foreach (const Ptr &diagnostic, diagnostics) {
+    for (const Ptr& diagnostic : diagnostics) {
         addDiagnostic(diagnostic);
     }
 }

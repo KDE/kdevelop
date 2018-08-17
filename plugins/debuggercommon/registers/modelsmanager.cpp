@@ -177,7 +177,7 @@ QStandardItemModel* Models::addModel(const Model& m)
 
 bool Models::contains(const QString& name) const
 {
-    foreach (const Model & m, m_models) {
+    for (const Model &m : m_models) {
         if (m.name == name) {
             return true;
         }
@@ -187,7 +187,7 @@ bool Models::contains(const QString& name) const
 
 bool Models::contains(QAbstractItemView* view) const
 {
-    foreach (const Model & m, m_models) {
+    for (const Model& m : m_models) {
         if (m.view == view) {
             return true;
         }
@@ -197,7 +197,7 @@ bool Models::contains(QAbstractItemView* view) const
 
 bool Models::contains(QStandardItemModel* model) const
 {
-    foreach (const Model & m, m_models) {
+    for (const Model& m : m_models) {
         if (m.model.data() == model) {
             return true;
         }
@@ -207,7 +207,7 @@ bool Models::contains(QStandardItemModel* model) const
 
 QStandardItemModel* Models::modelForName(const QString& name) const
 {
-    foreach (const Model & m, m_models) {
+    for (const Model& m : m_models) {
         if (m.name == name) {
             return m.model.data();
         }
@@ -217,7 +217,7 @@ QStandardItemModel* Models::modelForName(const QString& name) const
 
 QStandardItemModel* Models::modelForView(QAbstractItemView* view) const
 {
-    foreach (const Model & m, m_models) {
+    for (const Model& m : m_models) {
         if (m.view == view) {
             return m.model.data();
         }
@@ -242,7 +242,7 @@ void ModelsManager::itemChanged(QStandardItem* i)
 
 QString Models::nameForView(QAbstractItemView* view) const
 {
-    foreach (const Model & m, m_models) {
+    for (const Model& m : m_models) {
         if (m.view == view) {
             return m.name;
         }

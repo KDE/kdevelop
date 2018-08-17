@@ -90,7 +90,7 @@ namespace KDevelop {
     class KDEVPLATFORMLANGUAGE_EXPORT ContextUsesWidget : public NavigatableWidgetList {
       Q_OBJECT
       public:
-        ContextUsesWidget(const CodeRepresentation& code, QList<IndexedDeclaration> usedDeclaration, IndexedDUContext context);
+        ContextUsesWidget(const CodeRepresentation& code, const QList<IndexedDeclaration>& usedDeclaration, IndexedDUContext context);
       Q_SIGNALS:
         void navigateDeclaration(KDevelop::IndexedDeclaration);
       private Q_SLOTS:

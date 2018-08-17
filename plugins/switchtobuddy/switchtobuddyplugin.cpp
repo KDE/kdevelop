@@ -56,8 +56,8 @@ KTextEditor::Cursor normalizeCursor(KTextEditor::Cursor c)
 ///Tries to find a definition for the declaration at given cursor-position and document-url. DUChain must be locked.
 Declaration* definitionForCursorDeclaration(const KTextEditor::Cursor& cursor, const QUrl& url)
 {
-    QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument(url);
-    foreach (TopDUContext* ctx, topContexts) {
+    const QList<TopDUContext*> topContexts = DUChain::self()->chainsForDocument(url);
+    for (TopDUContext* ctx : topContexts) {
         Declaration* decl = DUChainUtils::declarationInLine(cursor, ctx);
         if (!decl) {
             continue;
@@ -119,7 +119,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context,
 
     ContextMenuExtension extension;
 
-    foreach(const QUrl& url, potentialBuddies) {
+    for (const QUrl& url : potentialBuddies) {
         if (!QFile::exists(url.toLocalFile())) {
             continue;
         }

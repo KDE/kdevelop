@@ -51,25 +51,25 @@ int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd( const QString& str , int pos, QC
  * @param skippedArguments Will contain all skipped arguments
  * @param argumentsStart Should be set to the position where the seeking should start, will be changed to the right side of a "(" when found. Should be at the right side of a '(', and may be max. str.length()
  */
-void KDEVPLATFORMLANGUAGE_EXPORT skipFunctionArguments(QString str, QStringList& skippedArguments, int& argumentsStart );
+void KDEVPLATFORMLANGUAGE_EXPORT skipFunctionArguments(const QString& str, QStringList& skippedArguments, int& argumentsStart);
 
 /**
  * Removes white space at the beginning and end, and replaces contiguous inner white-spaces with single white-spaces. Newlines are treated as whitespaces, the returned text will have no more newlines.
  */
-QString KDEVPLATFORMLANGUAGE_EXPORT reduceWhiteSpace(QString str);
+QString KDEVPLATFORMLANGUAGE_EXPORT reduceWhiteSpace(const QString& str);
 
-QString KDEVPLATFORMLANGUAGE_EXPORT stripFinalWhitespace(QString str);
+QString KDEVPLATFORMLANGUAGE_EXPORT stripFinalWhitespace(const QString& str);
 // 
 /**
  * Fills all c++-style comments  within the given code with the given 'replacement' character
  * Newlines are preserved.
  */
-QString KDEVPLATFORMLANGUAGE_EXPORT clearComments( QString str, QChar replacement = QLatin1Char(' ') );
+QString KDEVPLATFORMLANGUAGE_EXPORT clearComments(const QString& str, QChar replacement = QLatin1Char(' '));
 /**
  * Fills all c++-strings within the given code with the given 'replacement' character
  * Comments should have been removed before.
  */
-QString KDEVPLATFORMLANGUAGE_EXPORT clearStrings( QString str, QChar replacement = QLatin1Char(' ') );
+QString KDEVPLATFORMLANGUAGE_EXPORT clearStrings(const QString& str, QChar replacement = QLatin1Char(' '));
 
 /**
  * Extracts the interesting information out of a comment.
@@ -110,7 +110,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator
      *
      * Example: When "<>:" is given, ParamIterator will only parse the first identifier of a C++ scope
      */
-    ParamIterator( QString parens, QString source, int start = 0);
+    ParamIterator(const QString& parens, const QString& source, int start = 0);
     ~ParamIterator();
 
     ParamIterator& operator ++();

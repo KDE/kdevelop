@@ -195,11 +195,11 @@ QString PerforcePlugin::getRepositoryName(const QFileInfo& curFile)
     QScopedPointer<DVcsJob> job(p4fstatJob(curFile, KDevelop::OutputJob::Silent));
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
         if (!job->output().isEmpty()) {
-            QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
-            foreach(const QString & line, outputLines) {
+            const QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
+            for (const QString& line : outputLines) {
                 int idx(line.indexOf(DEPOT_FILE_STR));
                 if (idx != -1) {
-                    ret = line.right(line.size() - DEPOT_FILE_STR.size());
+                    ret = line.mid(DEPOT_FILE_STR.size());
                     return ret;
                 }
             }
@@ -513,7 +513,7 @@ QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outp
     int indexofAt;
     int changeNumber = 0;
     
-    foreach(const QString & line, outputLines) {
+    for (const QString& line : outputLines) {
         if (!line.startsWith(LOGENTRY_START) && !line.startsWith(DEPOTMESSAGE_START)  && !line.startsWith('\t')) {
             currentFileName = line;
         }
@@ -552,7 +552,7 @@ QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outp
 
 void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
 {
-    QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
+    const QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
     QVariantList statuses;
     static const QString ACTION_STR(QStringLiteral("... action "));
     static const QString CLIENT_FILE_STR(QStringLiteral("... clientFile "));
@@ -561,10 +561,10 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
 
     VcsStatusInfo status;
     status.setState(VcsStatusInfo::ItemUserState);
-    foreach(const QString & line, outputLines) {
+    for (const QString& line : outputLines) {
         int idx(line.indexOf(ACTION_STR));
         if (idx != -1) {
-            QString curr = line.right(line.size() - ACTION_STR.size());
+            QString curr = line.mid(ACTION_STR.size());
 
             if (curr == QLatin1String("edit")) {
                 status.setState(VcsStatusInfo::ItemModified);
@@ -577,7 +577,7 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
         }
         idx = line.indexOf(CLIENT_FILE_STR);
         if (idx != -1) {
-            QUrl fileUrl = QUrl::fromLocalFile(line.right(line.size() - CLIENT_FILE_STR.size()));
+            QUrl fileUrl = QUrl::fromLocalFile(line.mid(CLIENT_FILE_STR.size()));
 
             status.setUrl(fileUrl);
         }

@@ -119,9 +119,9 @@ void Resource::retrieveRepos(const QByteArray &data)
     QJsonDocument doc = QJsonDocument::fromJson(data, &error);
 
     if (error.error == 0) {
-        QVariantList map = doc.toVariant().toList();
+        const QVariantList list = doc.toVariant().toList();
         m_model->clear();
-        foreach (const QVariant &it, map) {
+        for (const QVariant& it : list) {
             const QVariantMap &map = it.toMap();
             Response res;
             res.name = map.value(QStringLiteral("name")).toString();
@@ -146,9 +146,9 @@ void Resource::retrieveOrgs(const QByteArray &data)
     QJsonDocument doc = QJsonDocument::fromJson(data, &error);
 
     if (error.error == 0) {
-        QVariantList json = doc.toVariant().toList();
+        const QVariantList json = doc.toVariant().toList();
         res.reserve(json.size());
-        foreach (QVariant it, json) {
+        for (const QVariant& it : json) {
             QVariantMap map = it.toMap();
             res << map.value(QStringLiteral("login")).toString();
         }

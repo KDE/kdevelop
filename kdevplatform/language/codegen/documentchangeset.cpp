@@ -266,9 +266,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
     ChangesHash filteredSortedChanges;
     ChangeResult result = ChangeResult::successfulResult();
 
-    QList<IndexedString> files(d->changes.keys());
+    const QList<IndexedString> files(d->changes.keys());
 
-    foreach(const IndexedString &file, files) {
+    for (const IndexedString& file : files) {
         CodeRepresentation::Ptr repr = createCodeRepresentation(file);
         if(!repr) {
             return ChangeResult(QStringLiteral("Could not create a Representation for %1").arg(file.str()));
@@ -293,7 +293,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
     QMap<IndexedString, QString> oldTexts;
 
     //Apply the changes to the files
-    foreach(const IndexedString &file, files) {
+    for (const IndexedString& file : files) {
         oldTexts[file] = codeRepresentations[file]->text();
 
         result = d->replaceOldText(codeRepresentations[file].data(), newTexts[file], filteredSortedChanges[file]);
@@ -310,7 +310,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
     d->updateFiles();
 
     if(d->activationPolicy == Activate) {
-        foreach(const IndexedString& file, files) {
+        for (const IndexedString& file : files) {
             ICore::self()->documentController()->openDocument(file.toUrl());
         }
     }

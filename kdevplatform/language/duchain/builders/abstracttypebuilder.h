@@ -221,13 +221,13 @@ protected:
       CursorInRevision pos(this->editorFindRange(typeNode, typeNode).start);
       DUChainReadLocker lock(DUChain::lock());
 
-      QList<Declaration*> dec = searchContext()->findDeclarations(id, pos);
+      const QList<Declaration*> dec = searchContext()->findDeclarations(id, pos);
 
       if ( dec.isEmpty() )
         delay = true;
 
       if(!delay) {
-        foreach( Declaration* decl, dec ) {
+        for (Declaration* decl : dec) {
           // gcc 4.0.1 doesn't eath this // if( needClass && !decl->abstractType().cast<StructureType>() )
           if( needClass && !decl->abstractType().cast(static_cast<StructureType *>(nullptr)) )
             continue;

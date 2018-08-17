@@ -75,12 +75,11 @@ IndexedString fetchImplementationFileForClass(const Declaration & targetClass)
         context = realClass->internalContext();
     }
 
-    QVector<Declaration *> declarations = context->localDeclarations();
+    const QVector<Declaration*> declarations = context->localDeclarations();
 
     QMap<IndexedString, unsigned int > implementationsInFile;
 
-    foreach(Declaration * decl, declarations)
-    {
+    for (Declaration* decl : declarations) {
         ///@todo check for static variable instantiation as well
         if(ClassFunctionDeclaration * classFun = dynamic_cast<ClassFunctionDeclaration *>(decl))
             if(FunctionDefinition * def = FunctionDefinition::definition(classFun))
@@ -111,12 +110,13 @@ IndexedString fetchImplementationFileForClass(const Declaration & targetClass)
 
         IndexedString mostUsesFile;
         unsigned int mostUses = 0;
-        foreach(const IndexedString& currentFile, tiedFiles)
+        for (const IndexedString& currentFile : tiedFiles) {
             if(static_cast<unsigned int>(uses[currentFile].size()) > mostUses)
             {
                 mostUses = uses[currentFile].size();
                 mostUsesFile = currentFile;
             }
+        }
 
         return mostUsesFile;
     }

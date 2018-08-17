@@ -61,5 +61,5 @@ QString CacheLine::type() const
 
 QString CacheLine::value() const
 {
-    return m_line.right(m_line.size()-equal-1);
+    return m_line.mid(equal+1);
 }

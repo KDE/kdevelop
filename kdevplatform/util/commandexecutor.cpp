@@ -90,8 +90,7 @@ void CommandExecutor::setEnvironment( const QMap<QString,QString>& env )
 void CommandExecutor::setEnvironment( const QStringList& env )
 {
     QMap<QString,QString> envmap;
-    foreach( const QString& var, env )
-    {
+    for (const QString& var : env) {
         int sep = var.indexOf(QLatin1Char('='));
         envmap.insert( var.left( sep ), var.mid( sep + 1 ) );
     }

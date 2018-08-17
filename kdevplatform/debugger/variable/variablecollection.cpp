@@ -326,7 +326,7 @@ Locals::Locals(TreeModel* model, TreeItem* parent, const QString &name)
     setData(QVector<QVariant>{name, QString()});
 }
 
-QList<Variable*> Locals::updateLocals(QStringList locals)
+QList<Variable*> Locals::updateLocals(const QStringList& locals)
 {
     QSet<QString> existing, current;
     for (int i = 0; i < childItems.size(); i++)

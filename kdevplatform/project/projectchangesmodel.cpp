@@ -146,14 +146,14 @@ void ProjectChangesModel::statusReady(KJob* job)
 {
     VcsJob* status=static_cast<VcsJob*>(job);
 
-    QList<QVariant> states = status->fetchResults().toList();
+    const QList<QVariant> states = status->fetchResults().toList();
     IProject* project = job->property("project").value<KDevelop::IProject*>();
     if(!project)
         return;
 
     QSet<QUrl> foundUrls;
     foundUrls.reserve(states.size());
-    foreach(const QVariant& state, states) {
+    for (const QVariant& state : states) {
         const VcsStatusInfo st = state.value<VcsStatusInfo>();
         foundUrls += st.url();
 
@@ -167,11 +167,11 @@ void ProjectChangesModel::statusReady(KJob* job)
     }
 
     IBasicVersionControl::RecursionMode mode = IBasicVersionControl::RecursionMode(job->property("mode").toInt());
-    QSet<QUrl> uncertainUrls = urls(itProject).toSet().subtract(foundUrls);
-    QList<QUrl> sourceUrls = job->property("urls").value<QList<QUrl>>();
-    foreach(const QUrl& url, sourceUrls) {
+    const QSet<QUrl> uncertainUrls = urls(itProject).toSet().subtract(foundUrls);
+    const QList<QUrl> sourceUrls = job->property("urls").value<QList<QUrl>>();
+    for (const QUrl& url : sourceUrls) {
         if(url.isLocalFile() && QDir(url.toLocalFile()).exists()) {
-            foreach(const QUrl& currentUrl, uncertainUrls) {
+            for (const QUrl& currentUrl : uncertainUrls) {
                 if((mode == IBasicVersionControl::NonRecursive && currentUrl.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash) == url.adjusted(QUrl::StripTrailingSlash))
                     || (mode == IBasicVersionControl::Recursive && url.isParentOf(currentUrl))
                 ) {
@@ -216,13 +216,14 @@ void ProjectChangesModel::itemsAdded(const QModelIndex& parent, int start, int e
 
 void ProjectChangesModel::reload(const QList<IProject*>& projects)
 {
-    foreach(IProject* project, projects)
+    for (IProject* project : projects) {
         changes(project, {project->path().toUrl()}, KDevelop::IBasicVersionControl::Recursive);
+    }
 }
 
 void ProjectChangesModel::reload(const QList<QUrl>& urls)
 {
-    foreach(const QUrl& url, urls) {
+    for (const QUrl& url : urls) {
         IProject* project=ICore::self()->projectController()->findProjectForUrl(url);
         
         if (project) {

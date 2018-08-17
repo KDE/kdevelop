@@ -142,13 +142,14 @@ QList<QUrl> getDirectoryChoice(const QString& text)
             ret << project->path().toUrl();
         }
     } else {
-        QStringList semicolonSeparatedFileList = text.split(pathsSeparator());
+        const QStringList semicolonSeparatedFileList = text.split(pathsSeparator());
         if (!semicolonSeparatedFileList.isEmpty() && QFileInfo::exists(semicolonSeparatedFileList[0])) {
             // We use QFileInfo to make sure this is really a semicolon-separated file list, not a file containing
             // a semicolon in the name.
             ret.reserve(semicolonSeparatedFileList.size());
-            foreach(const QString& file, semicolonSeparatedFileList)
+            for (const QString& file : semicolonSeparatedFileList) {
                 ret << QUrl::fromLocalFile(file).adjusted(QUrl::StripTrailingSlash);
+            }
         } else {
             ret << QUrl::fromUserInput(text).adjusted(QUrl::StripTrailingSlash);
         }

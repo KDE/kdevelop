@@ -306,12 +306,13 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
     m_functionDeclarationsForColors[IndexedDUContext(context)] = declarationsForColors;
   }
 
-  QVector< DUContext* > children = context->childContexts();
+  const QVector<DUContext*> children = context->childContexts();
 
   lock.unlock(); // Periodically release the lock, so that the UI won't be blocked too much
 
-  foreach (DUContext* child, children)
+  for (DUContext* child : children) {
     highlightDUChain(child,  colorsForDeclarations, declarationsForColors );
+  }
 }
 
 KTextEditor::Attribute::Ptr CodeHighlighting::attributeForDepth(int depth) const

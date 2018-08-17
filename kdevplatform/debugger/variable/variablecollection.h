@@ -168,7 +168,7 @@ class KDEVPLATFORMDEBUGGER_EXPORT Locals : public TreeItem
     Q_OBJECT
 public:
     Locals(TreeModel* model, TreeItem* parent, const QString &name);
-    QList<Variable*> updateLocals(QStringList locals);
+    QList<Variable*> updateLocals(const QStringList& locals);
     void resetChanged();
 
     using TreeItem::deleteChildren;

@@ -100,9 +100,9 @@ void ProjectFilterProvider::addFilterFromContextMenu()
 {
     QAction* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
-    QList<ProjectBaseItem*> items = action->data().value<QList<ProjectBaseItem*> >();
+    const QList<ProjectBaseItem*> items = action->data().value<QList<ProjectBaseItem*>>();
     QHash<IProject*, SerializedFilters> changedProjectFilters;
-    foreach(ProjectBaseItem* item, items) {
+    for (ProjectBaseItem* item : items) {
         if (!changedProjectFilters.contains(item->project())) {
             changedProjectFilters[item->project()] = readFilters(item->project()->projectConfiguration());
         }

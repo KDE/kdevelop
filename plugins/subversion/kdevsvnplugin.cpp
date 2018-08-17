@@ -317,7 +317,7 @@ KDevelop::ContextMenuExtension KDevSvnPlugin::contextMenuExtension(KDevelop::Con
     const QList<QUrl> & ctxUrlList  = m_common->contextUrlList();
 
     bool hasVersionControlledEntries = false;
-    foreach(const QUrl &url, ctxUrlList) {
+    for (const QUrl& url : ctxUrlList) {
         if (isVersionControlled(url) || isVersionControlled(KIO::upUrl(url))) {
             hasVersionControlledEntries = true;
             break;

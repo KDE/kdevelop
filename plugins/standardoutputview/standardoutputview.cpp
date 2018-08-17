@@ -261,7 +261,7 @@ void StandardOutputView::removeToolView(int toolViewId)
 
 OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
 {
-    foreach (ToolViewData* td, m_toolViews) {
+    for (ToolViewData* td : m_toolViews) {
         if( td->outputdata.contains( outputId ) )
         {
             foreach( Sublime::View* view, td->views )

@@ -1327,21 +1327,23 @@ TopDUContext* DUChain::chainForDocument(const KDevelop::IndexedString& document,
   if(sdDUChainPrivate->m_destroyed)
     return nullptr;
 
-  QList<ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
+  const QList<ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
 
-  foreach(const ParsingEnvironmentFilePointer &file, list)
+  for (const ParsingEnvironmentFilePointer&file : list) {
     if(isInMemory(file->indexedTopContext().index()) && file->isProxyContext() == proxyContext) {
       return file->topContext();
     }
+  }
 
-  foreach(const ParsingEnvironmentFilePointer &file, list)
+  for (const ParsingEnvironmentFilePointer& file : list) {
     if(proxyContext == file->isProxyContext()) {
       return file->topContext();
     }
+  }
 
   //Allow selecting a top-context even if there is no ParsingEnvironmentFile
-  QList< TopDUContext* > ret = chainsForDocument(document);
-  foreach(TopDUContext* ctx, ret) {
+  const QList<TopDUContext*> ret = chainsForDocument(document);
+  for (TopDUContext* ctx : ret) {
     if(!ctx->parsingEnvironmentFile() || (ctx->parsingEnvironmentFile()->isProxyContext() == proxyContext))
       return ctx;
   }
@@ -1502,7 +1504,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
   TopDUContext* standardContext = DUChainUtils::standardContextForUrl(doc->url());
   QList<TopDUContext*> chains = chainsForDocument(url);
 
-  auto languages = ICore::self()->languageController()->languagesForUrl(doc->url());
+  const auto languages = ICore::self()->languageController()->languagesForUrl(doc->url());
 
   if(standardContext) {
     Q_ASSERT(chains.contains(standardContext)); //We have just loaded it
@@ -1526,7 +1528,7 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
         if(allImportsLoaded) {
           l.unlock();
           lock.unlock();
-          foreach(const auto language, languages) {
+          for (const auto language : languages) {
             if(language->codeHighlighting()) {
               language->codeHighlighting()->highlightDUChain(standardContext);
             }

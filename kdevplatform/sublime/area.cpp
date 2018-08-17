@@ -318,9 +318,8 @@ void Area::load(const KConfigGroup& group)
 {
     qCDebug(SUBLIME) << "loading areas config";
     d->desiredToolViews.clear();
-    QStringList desired = group.readEntry("desired views", QStringList());
-    foreach (const QString &s, desired)
-    {
+    const QStringList desired = group.readEntry("desired views", QStringList());
+    for (const QString& s : desired) {
         int i = s.indexOf(QLatin1Char(':'));
         if (i != -1)
         {

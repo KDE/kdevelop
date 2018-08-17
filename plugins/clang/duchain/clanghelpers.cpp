@@ -205,7 +205,7 @@ DeclarationPointer ClangHelpers::findDeclaration(CXSourceLocation location, cons
 
     if (!id.isEmpty()) {
         const auto& decls = top->findDeclarations(id);
-        foreach (Declaration* decl, decls) {
+        for (Declaration* decl : decls) {
             if (decl->range().contains(cursor) ||
                 (decl->range().isEmpty() && decl->range().start == cursor))
             {
@@ -269,11 +269,11 @@ DeclarationPointer ClangHelpers::findForwardDeclaration(CXType type, DUContext* 
     auto qualifiedIdentifier = QualifiedIdentifier(ClangString(clang_getTypeSpelling(type)).toString());
 
     DUChainReadLocker lock;
-    auto decls = context->findDeclarations(qualifiedIdentifier,
+    const auto decls = context->findDeclarations(qualifiedIdentifier,
         CursorInRevision(ClangLocation(clang_getCursorLocation(cursor)))
     );
 
-    foreach (auto decl, decls) {
+    for (auto decl : decls) {
         if (decl->isForwardDeclaration()) {
             return DeclarationPointer(decl);
         }

@@ -62,7 +62,7 @@ static CMakeTarget targetByExe(const QHash< KDevelop::Path, QVector<CMakeTarget>
 
 void CTestUtils::createTestSuites(const QVector<Test>& testSuites, const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, KDevelop::IProject* project)
 {
-    foreach (const Test& test, testSuites) {
+    for (const Test& test : testSuites) {
         KDevelop::Path executablePath;
         CMakeTarget target;
 

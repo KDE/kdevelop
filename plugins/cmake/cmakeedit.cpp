@@ -72,7 +72,7 @@ KTextEditor::Range rangeForText(KTextEditor::Document* doc, const KTextEditor::R
     }
     
     KTextEditor::Cursor c(r.start());
-    c.setLine(c.line() + txt.left(namepos).count('\n'));
+    c.setLine(c.line() + txt.leftRef(namepos).count('\n'));
     int lastNewLinePos = txt.lastIndexOf('\n', namepos);
     if (lastNewLinePos < 0)
         c.setColumn(r.start().column() + namepos);
@@ -201,9 +201,8 @@ QList<ProjectBaseItem*> cmakeListedItemsAffectedByUrlChange(const IProject *proj
     
     QList<ProjectBaseItem*> dirtyItems;
     
-    QList<ProjectBaseItem*> sameUrlItems = proj->itemsForUrl(url);
-    foreach(ProjectBaseItem *sameUrlItem, sameUrlItems)
-    {
+    const QList<ProjectBaseItem*> sameUrlItems = proj->itemsForUrl(url);
+    for (ProjectBaseItem* sameUrlItem : sameUrlItems) {
         if (itemAffected(sameUrlItem, rootUrl))
             dirtyItems.append(sameUrlItem);
 
@@ -220,8 +219,9 @@ QList<ProjectBaseItem*> cmakeListedItemsAffectedByItemsChanged(const QList<Proje
 {
     QList<ProjectBaseItem*> dirtyItems;
     dirtyItems.reserve(items.size());
-    foreach(ProjectBaseItem *item, items)
+    for (ProjectBaseItem *item : items) {
         dirtyItems.append(cmakeListedItemsAffectedByUrlChange(item->project(), item->url()));
+    }
     return dirtyItems;
 }
 
@@ -294,8 +294,7 @@ bool changesWidgetRemoveFileFromTarget(const ProjectBaseItem *item, ApplyChanges
 
 bool changesWidgetRemoveItems(const QSet<ProjectBaseItem*> &items, ApplyChangesWidget *widget)
 {
-    foreach(ProjectBaseItem *item, items)
-    {
+    for (ProjectBaseItem *item : items) {
         CMakeFolderItem *folder = dynamic_cast<CMakeFolderItem*>(item);
         if (folder && !changesWidgetRemoveCMakeFolder(folder, widget))
             return false;
@@ -307,8 +306,7 @@ bool changesWidgetRemoveItems(const QSet<ProjectBaseItem*> &items, ApplyChangesW
 
 bool changesWidgetRemoveFilesFromTargets(const QList<ProjectFileItem*> &files, ApplyChangesWidget *widget)
 {
-    foreach(ProjectBaseItem *file, files)
-    {
+    for (ProjectBaseItem* file : files) {
         Q_ASSERT(file->parent()->target());
         if (!changesWidgetRemoveFileFromTarget(file, widget))
             return false;
@@ -318,8 +316,7 @@ bool changesWidgetRemoveFilesFromTargets(const QList<ProjectFileItem*> &files, A
 
 bool changesWidgetAddFilesToTarget(const QList<ProjectFileItem*> &files, const ProjectTargetItem* target, ApplyChangesWidget *widget)
 {
-    foreach(ProjectFileItem *file, files)
-    {
+    for (ProjectFileItem* file : files) {
         if (!changesWidgetAddFileToTarget(file, target, widget))
             return false;
     }

@@ -89,14 +89,13 @@ void TestCTestFindSuites::testCTestSuite()
     IProject* project = loadProject( "unit_tests" );
     QVERIFY2(project, "Project was not opened");
     waitForSuites(project, 5, 10);
-    QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
+    const QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
 
     QCOMPARE(suites.size(), 5);
 
     DUChainReadLocker locker(DUChain::lock());
 
-    foreach (auto suite, suites)
-    {
+    for (auto suite : suites) {
         QCOMPARE(suite->cases(), QStringList());
         QVERIFY(!suite->declaration().isValid());
         CTestSuite* ctestSuite = static_cast<CTestSuite*>(suite);
@@ -135,7 +134,7 @@ void TestCTestFindSuites::testQtTestCases()
     // Background parsing can take a long time, so we need a long timeout
     QVERIFY(spy.wait(30 * 1000));
 
-    QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
+    const QList<ITestSuite*> suites = ICore::self()->testController()->testSuitesForProject(project);
     QCOMPARE(suites.size(), 1);
 
     QStringList cases = {
@@ -148,8 +147,7 @@ void TestCTestFindSuites::testQtTestCases()
 
     DUChainReadLocker locker(DUChain::lock());
 
-    foreach (auto suite, suites)
-    {
+    for (auto suite : suites) {
         QCOMPARE(suite->cases(), cases);
         QVERIFY(suite->declaration().isValid());
 

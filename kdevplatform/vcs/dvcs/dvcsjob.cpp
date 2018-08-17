@@ -298,8 +298,9 @@ DVcsJob& DVcsJob::operator<<(const QUrl& url)
 
 DVcsJob& DVcsJob::operator<<(const QList< QUrl >& urls)
 {
-    foreach(const QUrl &url, urls)
+    for (const QUrl& url : urls) {
         operator<<(url);
+    }
     return *this;
 }
 

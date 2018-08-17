@@ -193,12 +193,11 @@ IDocumentation::Ptr DocumentationController::documentationForDeclaration(Declara
 
 QList< IDocumentationProvider* > DocumentationController::documentationProviders() const
 {
-    QList<IPlugin*> plugins=ICore::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IDocumentationProvider"));
-    QList<IPlugin*> pluginsProvider=ICore::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IDocumentationProviderProvider"));
+    const QList<IPlugin*> plugins = ICore::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IDocumentationProvider"));
+    const QList<IPlugin*> pluginsProvider = ICore::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IDocumentationProviderProvider"));
 
     QList<IDocumentationProvider*> ret;
-    foreach(IPlugin* p, pluginsProvider)
-    {
+    for (IPlugin* p : pluginsProvider) {
         IDocumentationProviderProvider *docProvider=p->extension<IDocumentationProviderProvider>();
         if (!docProvider) {
             qCWarning(SHELL) << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca5";
@@ -207,8 +206,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
         ret.append(docProvider->providers());
     }
 
-    foreach(IPlugin* p, plugins)
-    {
+    for (IPlugin* p : plugins) {
         IDocumentationProvider *doc=p->extension<IDocumentationProvider>();
         if (!doc) {
             qCWarning(SHELL) << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca5";

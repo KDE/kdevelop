@@ -340,7 +340,7 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     });
 
     const auto tl = folder->targetList();
-    foreach (ProjectTargetItem* item, tl) {
+    for (ProjectTargetItem* item : tl) {
         const auto idx = kIndexOf(dirTargets, [item](const CMakeTarget& target) { return target.name == item->text(); });
         if (idx < 0) {
             delete item;

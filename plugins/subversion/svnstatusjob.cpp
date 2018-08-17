@@ -100,9 +100,8 @@ void SvnInternalStatusJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::
     initBeforeRun();
 
     svn::Client cli(m_ctxt);
-    QList<QUrl> l = locations();
-    foreach( const QUrl &url, l )
-    {
+    const QList<QUrl> l = locations();
+    for (const QUrl& url : l) {
         //qCDebug(PLUGIN_SVN) << "Fetching status info for:" << url;
         try
         {

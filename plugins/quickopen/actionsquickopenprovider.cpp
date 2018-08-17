@@ -90,8 +90,8 @@ void ActionsQuickOpenProvider::setFilterText(const QString& text)
     const QList<KActionCollection*> collections = KActionCollection::allCollections();
     QRegularExpression mnemonicRx(QStringLiteral("^(.*)&(.+)$"));
     for (KActionCollection* c : collections) {
-        QList<QAction*> actions = c->actions();
-        foreach (QAction* action, actions) {
+        const QList<QAction*> actions = c->actions();
+        for (QAction* action : actions) {
             if (!action->isEnabled()) {
                 continue;
             }
@@ -112,8 +112,8 @@ void ActionsQuickOpenProvider::setFilterText(const QString& text)
 uint ActionsQuickOpenProvider::unfilteredItemCount() const
 {
     uint ret = 0;
-    QList<KActionCollection*> collections = KActionCollection::allCollections();
-    foreach (KActionCollection* c, collections) {
+    const QList<KActionCollection*> collections = KActionCollection::allCollections();
+    for (KActionCollection* c : collections) {
         ret += c->count();
     }
 

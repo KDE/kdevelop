@@ -98,11 +98,11 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     QMenu menu;
     menu.addSection(windowIcon(), m_view->document()->title());
 
-    QList< QAction* > viewActions = m_view->contextMenuActions();
+    const QList<QAction*> viewActions = m_view->contextMenuActions();
     if(!viewActions.isEmpty()) {
         // add the view's actions to the context menu,
         // checking each if it can be represented
-        foreach (const auto action, viewActions) {
+        for (const auto action : viewActions) {
             if (!action->text().isEmpty() && !action->iconText().isEmpty()) {
                 // avoid adding empty menu items
                 menu.addAction(action);

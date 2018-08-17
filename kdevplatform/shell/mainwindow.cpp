@@ -452,10 +452,10 @@ void MainWindow::updateAllTabColors()
     if (UiConfig::colorizeByProject()) {
         QHash<const Sublime::View*, QColor> viewColors;
         foreach (auto container, containers()) {
-            auto views = container->views();
+            const auto views = container->views();
             viewColors.reserve(views.size());
             viewColors.clear();
-            foreach (auto view, views) {
+            for (auto view : views) {
                 const auto urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
                 if (urlDoc) {
                     viewColors[view] = colorForDocument(urlDoc->url(), palette(), defaultColor);

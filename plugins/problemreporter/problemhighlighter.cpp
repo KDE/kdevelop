@@ -137,7 +137,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     KTextEditor::MovingInterface* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
     Q_ASSERT(iface);
 
-    foreach (const IProblem::Ptr& problem, problems) {
+    for (const IProblem::Ptr& problem : problems) {
         if (problem->finalLocation().document != url || !problem->finalLocation().isValid())
             continue;
 

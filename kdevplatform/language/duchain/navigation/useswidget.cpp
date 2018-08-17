@@ -96,8 +96,8 @@ QString highlightAndEscapeUseText(QString line, int cutOff, KTextEditor::Range r
   }
   Q_ASSERT(leftCut + rightCut <= cutOff);
 
-  line = line.left(line.length() - rightCut);
-  line = line.mid(leftCut);
+  line.chop(rightCut);
+  line.remove(0, leftCut);
   range += KTextEditor::Range(0, -leftCut, 0, -leftCut);
 
   Q_ASSERT(range.start().column() >= 0 && range.end().column() <= line.length());
@@ -371,7 +371,7 @@ QList<OneUseWidget*> createUseWidgets(const CodeRepresentation& code, int usedDe
   return ret;
 }
 
-ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<IndexedDeclaration> usedDeclarations, IndexedDUContext context) : m_context(context) {
+ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, const QList<IndexedDeclaration>& usedDeclarations, IndexedDUContext context) : m_context(context) {
 
   setFrameShape(NoFrame);
 
@@ -392,7 +392,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, QList<Index
 
       QSet<int> hadIndices;
 
-      foreach(const IndexedDeclaration usedDeclaration, usedDeclarations) {
+      for (const IndexedDeclaration usedDeclaration : usedDeclarations) {
         int usedDeclarationIndex = ctx->topContext()->indexForUsedDeclaration(usedDeclaration.data(), false);
         if(hadIndices.contains(usedDeclarationIndex))
           continue;

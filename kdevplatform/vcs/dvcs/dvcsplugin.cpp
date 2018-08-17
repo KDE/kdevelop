@@ -91,7 +91,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context, QWidget*
     QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
 
     bool isWorkingDirectory = false;
-    foreach(const QUrl &url, ctxUrlList) {
+    for (const QUrl& url : ctxUrlList) {
         if (isValidDirectory(url)) {
             isWorkingDirectory = true;
             break;

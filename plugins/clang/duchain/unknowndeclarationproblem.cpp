@@ -352,7 +352,7 @@ ClangFixit directiveForFile( const QString& includefile, const KDevelop::Path::L
         for( const auto& includePath : includepaths ) {
             QString relative = includePath.relativePath( canonicalFile );
             if( relative.startsWith( QLatin1String("./") ) )
-                relative = relative.mid( 2 );
+                relative.remove(0, 2);
 
             if( shortestDirective.isEmpty() || relative.length() < shortestDirective.length() ) {
                 shortestDirective = relative;

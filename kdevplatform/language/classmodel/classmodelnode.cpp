@@ -430,10 +430,9 @@ void DerivedClassesFolderNode::populateNode()
   if ( klass )
   {
     uint steps = 10000;
-    QList< Declaration* > inheriters = DUChainUtils::getInheriters(klass, steps, true);
+    const QList<Declaration*> inheriters = DUChainUtils::getInheriters(klass, steps, true);
 
-    foreach( Declaration* decl, inheriters )
-    {
+    for (Declaration* decl : inheriters) {
       addNode( new ClassNode(decl, m_model) );
     }
   }

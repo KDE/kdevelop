@@ -75,7 +75,7 @@ void Job::postProcessStdout(const QStringList& lines)
 
     QRegularExpressionMatch match;
 
-    foreach (const QString & line, lines) {
+    for (const QString& line : lines) {
         match = fileNameRegex.match(line);
         if (match.hasMatch()) {
             emit infoMessage(this, match.captured(1));

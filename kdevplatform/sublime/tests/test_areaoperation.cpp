@@ -254,12 +254,11 @@ void TestAreaOperation::checkArea2(MainWindow *mw)
     QVERIFY(splitter->inherits("QSplitter"));
 
     //check that we have 4 properly initialized containers
-    QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
+    const QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
     QCOMPARE(containers.count(), 4);
 
     int widgetCount = 0;
-    foreach (Container *c, containers)
-    {
+    for (Container* c : containers) {
         for (int i = 0; i < c->count(); ++i)
             QVERIFY(c->widget(i) != nullptr);
         widgetCount += c->count();
@@ -392,9 +391,10 @@ void TestAreaOperation::simpleViewAdditionAndDeletion()
         1, 1, QStringLiteral("Removed the url view (view1.5.1)"));
 
     //now remove all other views one by one and leave an empty container
-    QList<View*> list(m_area1->views());
-    foreach (View *view, list)
+    const QList<View*> list(m_area1->views());
+    for (View* view : list) {
         delete m_area1->removeView(view);
+    }
 
     checkAreaViewsDisplay(&mw, m_area1,
         QStringLiteral("\n[ horizontal splitter ]\n"),
@@ -549,8 +549,8 @@ toolview1.2.2 [ bottom ]\n\
 void TestAreaOperation::testAddingViewAfter()
 {
 
-    QList<View*> list(m_area3->views());
-    foreach (View *view, list){
+    const QList<View*> list(m_area3->views());
+    for (View* view : list) {
         qDebug() << "name of view : " << view->objectName() << " , it's index : " << m_area3->views().indexOf(view);
     }
 
@@ -689,15 +689,14 @@ void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
     QVERIFY(splitter->inherits("QSplitter"));
 
     //check containers
-    QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
+    const QList<Container*> containers = splitter->findChildren<Sublime::Container*>();
     QString failMsg = QStringLiteral("\nFailure while checking area contents @ %1\n"
                               "Expected %2 containers in central splitter but got %3 \n").
                       arg(location).arg(containerCount).arg(containers.count());
     QVERIFY2(containers.count() == containerCount, failMsg.toLatin1().data());
 
     int widgetCount = 0;
-    foreach (Container *c, containers)
-    {
+    for (Container* c : containers) {
         for (int i = 0; i < c->count(); ++i)
         {
             QVERIFY(c->widget(i) != nullptr);

@@ -45,8 +45,7 @@ static QList<QUrl> thread_getProjectFiles(const QUrl& dir, int depth, const QStr
         return res;
 
     const QSet<IndexedString> fileSet = project->fileSet();
-    foreach( const IndexedString &item, fileSet )
-    {
+    for (const IndexedString& item : fileSet) {
         if(abort)
             break;
         QUrl url = item.toUrl();

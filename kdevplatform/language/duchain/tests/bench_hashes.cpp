@@ -52,7 +52,7 @@ typedef std::unordered_map<KDevelop::IndexedString, DataT, IndexedStringHash> St
 
 inline void insertData(StlHash& hash, const InputData& data)
 {
-  foreach(const DataPair& pair, data) {
+  for (const DataPair& pair : data) {
     hash.insert(std::make_pair(pair.first, pair.second));
   }
 }
@@ -60,7 +60,7 @@ inline void insertData(StlHash& hash, const InputData& data)
 typedef QHash<KDevelop::IndexedString, DataT> QStringHash;
 inline void insertData(QStringHash& hash, const InputData& data)
 {
-  foreach(const DataPair& pair, data) {
+  for (const DataPair& pair : data) {
     hash.insert(pair.first, pair.second);
   }
 }
@@ -90,8 +90,8 @@ void BenchHashes::feedData()
   QTest::addColumn<InputData>("data");
 
   InputData data;
-  QVector<int> sizes = QVector<int>() << 100 << 1000 << 10000 << 100000;
-  foreach(int size, sizes) {
+  const QVector<int> sizes{100, 1000, 10000, 100000};
+  for (int size : sizes) {
     for(int i = data.size(); i < size; ++i) {
       data << qMakePair(IndexedString(QString::number(i)), DataT());
     }

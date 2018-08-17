@@ -580,8 +580,9 @@ void Identifier::setTemplateIdentifiers(const QList<IndexedTypeIdentifier>& temp
 {
   prepareWrite();
   dd->templateIdentifiersList.clear();
-  foreach(const IndexedTypeIdentifier& id, templateIdentifiers)
+  for (const IndexedTypeIdentifier& id : templateIdentifiers) {
     dd->templateIdentifiersList.append(id);
+  }
 }
 
 QString Identifier::toString(IdentifierStringFormattingOptions options) const

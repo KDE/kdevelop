@@ -41,12 +41,11 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
     , m_ui(new Ui::ProjectVcsPage)
 {
     m_ui->setupUi( this );
-    QList<KDevelop::IPlugin*> vcsplugins = controller->allPluginsForExtension ( QStringLiteral("org.kdevelop.IBasicVersionControl") );
+    const QList<KDevelop::IPlugin*> vcsplugins = controller->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
     int idx = 1;
     m_ui->vcsImportOptions->insertWidget( 0, new QWidget(this) );
     m_ui->vcsTypes->insertItem( 0, i18nc("No Version Control Support chosen", "None") );
-    foreach( KDevelop::IPlugin* plugin, vcsplugins )
-    {
+    for (KDevelop::IPlugin* plugin : vcsplugins) {
         KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
         if( iface  )
         {

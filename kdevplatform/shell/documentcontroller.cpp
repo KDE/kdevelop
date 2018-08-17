@@ -108,9 +108,8 @@ public:
 
     void removeDocument(Sublime::Document *doc)
     {
-        QList<QUrl> urlsForDoc = documents.keys(dynamic_cast<KDevelop::IDocument*>(doc));
-        foreach (const QUrl &url, urlsForDoc)
-        {
+        const QList<QUrl> urlsForDoc = documents.keys(dynamic_cast<KDevelop::IDocument*>(doc));
+        for (const QUrl& url : urlsForDoc) {
             qCDebug(SHELL) << "destroying document" << doc;
             documents.remove(url);
         }
@@ -190,8 +189,8 @@ public:
 
     KDevelop::IDocument* findBuddyDocument(const QUrl &url, IBuddyDocumentFinder* finder)
     {
-        QList<KDevelop::IDocument*> allDocs = controller->openDocuments();
-        foreach( KDevelop::IDocument* doc, allDocs ) {
+        const QList<KDevelop::IDocument*> allDocs = controller->openDocuments();
+        for (KDevelop::IDocument* doc : allDocs) {
             if(finder->areBuddies(url, doc->url())) {
                 return doc;
             }
@@ -863,9 +862,10 @@ QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(
 QList< IDocument * > KDevelop::DocumentController::modifiedDocuments(const QList< IDocument * > & list) const
 {
     QList< IDocument * > ret;
-    foreach (IDocument* doc, list)
+    for (IDocument* doc : list) {
         if (doc->state() == IDocument::Modified || doc->state() == IDocument::DirtyAndModified)
             ret.append(doc);
+    }
     return ret;
 }
 
@@ -879,29 +879,31 @@ bool DocumentController::saveAllDocumentsForWindow(KParts::MainWindow* mw, KDeve
 void DocumentController::reloadAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        const QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
 
         if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
             return;
 
-        foreach (IDocument* doc, views)
+        for (IDocument* doc : views) {
             if(!isEmptyDocumentUrl(doc->url()))
                 doc->reload();
+        }
     }
 }
 
 bool DocumentController::closeAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        const QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
 
         if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
             return false;
 
-        foreach (IDocument* doc, views)
+        for (IDocument* doc : views) {
             doc->close(IDocument::Discard);
+        }
     }
     return true;
 }

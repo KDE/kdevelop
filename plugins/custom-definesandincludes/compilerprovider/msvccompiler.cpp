@@ -57,11 +57,11 @@ Defines MsvcCompiler::defines(Utils::LanguageType, const QString&) const
             if ( !buff.isEmpty() ) {
                 line = buff;
                 if ( line.startsWith( QLatin1String("#define ") ) ) {
-                    line = line.right( line.length() - 8 ).trimmed();
+                    line = line.mid(8).trimmed();
                     int pos = line.indexOf( ' ' );
 
                     if ( pos != -1 ) {
-                        ret[line.left( pos )] = line.right( line.length() - pos - 1 ).toUtf8();
+                        ret[line.left( pos )] = line.mid(pos + 1).toUtf8();
                     } else {
                         ret[line] = QLatin1String("");
                     }
@@ -117,10 +117,10 @@ Defines MsvcCompiler::defines(Utils::LanguageType, const QString&) const
 
 Path::List MsvcCompiler::includes(Utils::LanguageType, const QString&) const
 {
-    QStringList _includePaths = QProcessEnvironment::systemEnvironment().value(QStringLiteral("INCLUDE")).split(QLatin1Char(';'), QString::SkipEmptyParts);
+    const QStringList _includePaths = QProcessEnvironment::systemEnvironment().value(QStringLiteral("INCLUDE")).split(QLatin1Char(';'), QString::SkipEmptyParts);
     Path::List includePaths;
     includePaths.reserve(_includePaths.size());
-    foreach( const QString &include, _includePaths ) {
+    for (const QString& include : _includePaths) {
         includePaths.append( Path( QDir::fromNativeSeparators( include ) ) );
     }
     return includePaths;

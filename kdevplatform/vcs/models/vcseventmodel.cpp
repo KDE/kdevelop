@@ -166,14 +166,13 @@ void VcsEventLogModel::fetchMore(const QModelIndex& parent)
 
 void VcsEventLogModel::jobReceivedResults(KJob* job)
 {
-    QList<QVariant> l = qobject_cast<KDevelop::VcsJob *>(job)->fetchResults().toList();
+    const QList<QVariant> l = qobject_cast<KDevelop::VcsJob *>(job)->fetchResults().toList();
     if(l.isEmpty() || job->error()!=0) {
         d->done = true;
         return;
     }
     QList<KDevelop::VcsEvent> newevents;
-    foreach( const QVariant &v, l )
-    {
+    for (const QVariant& v : l) {
         if( v.canConvert<KDevelop::VcsEvent>() )
         {
             newevents << v.value<KDevelop::VcsEvent>();

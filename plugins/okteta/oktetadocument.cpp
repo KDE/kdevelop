@@ -163,11 +163,9 @@ bool OktetaDocument::close( IDocument::DocumentSaveMode mode )
     ///@todo test this
     const QList<Sublime::Area*>& allAreas =
         ICore::self()->uiController()->controller()->allAreas();
-    foreach( Sublime::Area *area, allAreas )
-    {
+    for (Sublime::Area* area : allAreas ) {
         const QList<Sublime::View*> areaViews = area->views();
-        foreach( Sublime::View* view, areaViews )
-        {
+        for (Sublime::View* view : areaViews) {
             if (views().contains(view))
             {
                 area->removeView(view);

@@ -826,8 +826,7 @@ QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l ) 
         TreeItem* tparent = topItems.at( 0 );
         if( l->project() )
         {
-            foreach( TreeItem* t, topItems )
-            {
+            for (TreeItem* t : topItems) {
                 ProjectItem* pi = dynamic_cast<ProjectItem*>( t );
                 if( pi && pi->project == l->project() )
                 {
@@ -918,8 +917,7 @@ LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfig
         parentwidget = tab;
         layout()->addWidget( tab );
     }
-    foreach( LaunchConfigurationPageFactory* fac, factories )
-    {
+    for (LaunchConfigurationPageFactory* fac : factories) {
         LaunchConfigurationPage* page = fac->createWidget( parentwidget );
         if ( page->layout() ) {
             // remove margins for single page, reset margins for tabbed display

@@ -872,9 +872,9 @@ QVector<DUContext*> DUContext::importers() const
 
   if(owner()) {
     //Add indirect importers to the list
-    KDevVarLengthArray<IndexedDUContext> indirect = Importers::self().importers(owner()->id());
+    const KDevVarLengthArray<IndexedDUContext> indirect = Importers::self().importers(owner()->id());
     ret.reserve(ret.size() + indirect.size());
-    foreach (const IndexedDUContext ctx, indirect) {
+    for (const IndexedDUContext ctx : indirect) {
       ret << ctx.context();
     }
   }

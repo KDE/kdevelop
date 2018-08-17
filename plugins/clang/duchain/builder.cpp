@@ -1097,7 +1097,7 @@ void Visitor::setDeclData(CXCursor cursor, AbstractFunctionDeclaration* decl) co
     // TODO: Can we get the default arguments directly from Clang?
     // also see http://clang-developers.42468.n3.nabble.com/Finding-default-value-for-function-argument-with-clang-c-API-td4036919.html
     const QVector<QString> defaultArgs = ClangUtils::getDefaultArguments(cursor, ClangUtils::MinimumSize);
-    foreach (const QString& defaultArg, defaultArgs) {
+    for (const QString& defaultArg : defaultArgs) {
         decl->addDefaultParameter(IndexedString(defaultArg));
     }
 }

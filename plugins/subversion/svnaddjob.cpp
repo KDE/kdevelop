@@ -40,9 +40,8 @@ void SvnInternalAddJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thr
     initBeforeRun();
 
     svn::Client cli(m_ctxt);
-    QList<QUrl> l = locations();
-    foreach( const QUrl &url, l )
-    {
+    const QList<QUrl> l = locations();
+    for (const QUrl& url : l) {
         try
         {
             QByteArray ba = url.toString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash ).toUtf8();

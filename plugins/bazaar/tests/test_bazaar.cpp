@@ -149,9 +149,9 @@ void TestBazaar::addFiles()
     VERIFYJOB(j);
 
     //Now let's create several files and try "bzr add file1 file2 file3"
-    QStringList files = QStringList() << QStringLiteral("file1") << QStringLiteral("file2") << QStringLiteral("la la");
+    const QStringList files{QStringLiteral("file1"), QStringLiteral("file2"), QStringLiteral("la la")};
     QList<QUrl> multipleFiles;
-    foreach(const QString& file, files) {
+    for (const QString& file : files) {
         QFile f(bazaarTest_BaseDir + file);
         QVERIFY(f.open(QIODevice::WriteOnly));
         QTextStream input(&f);

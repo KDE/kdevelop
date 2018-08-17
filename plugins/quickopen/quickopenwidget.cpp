@@ -82,12 +82,12 @@ QuickOpenWidget::QuickOpenWidget(QString title, QuickOpenModel* model, const QSt
     ui.list->setItemDelegate(new QuickOpenDelegate(m_model, ui.list));
 
     if (!listOnly) {
-        QStringList allTypes = m_model->allTypes();
-        QStringList allScopes = m_model->allScopes();
+        const QStringList allTypes = m_model->allTypes();
+        const QStringList allScopes = m_model->allScopes();
 
         QMenu* itemsMenu = new QMenu(this);
 
-        foreach (const QString& type, allTypes) {
+        for (const QString& type : allTypes) {
             QAction* action = new QAction(type, itemsMenu);
             action->setCheckable(true);
             action->setChecked(initialItems.isEmpty() || initialItems.contains(type));
@@ -99,7 +99,7 @@ QuickOpenWidget::QuickOpenWidget(QString title, QuickOpenModel* model, const QSt
 
         QMenu* scopesMenu = new QMenu(this);
 
-        foreach (const QString& scope, allScopes) {
+        for (const QString& scope : allScopes) {
             QAction* action = new QAction(scope, scopesMenu);
             action->setCheckable(true);
             action->setChecked(initialScopes.isEmpty() || initialScopes.contains(scope));

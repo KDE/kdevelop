@@ -328,7 +328,7 @@ void ProjectSelectionPage::moreTemplatesClicked()
     if (!dialog->exec())
         return;
 
-    auto entries = dialog->changedEntries();
+    const auto entries = dialog->changedEntries();
     if (entries.isEmpty()) {
         return;
     }
@@ -336,8 +336,7 @@ void ProjectSelectionPage::moreTemplatesClicked()
     m_templatesModel->refresh();
     bool updated = false;
 
-    foreach (const KNS3::Entry& entry, entries)
-    {
+    for (const KNS3::Entry& entry : entries) {
         if (!entry.installedFiles().isEmpty())
         {
             updated = true;

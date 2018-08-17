@@ -115,8 +115,8 @@ protected:
     if (LanguageSpecificDeclarationBuilderBase::recompiling()) {
       // Seek a matching declaration
 
-      QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->findLocalDeclarations(localId, CursorInRevision::invalid(), this->topContext(), AbstractType::Ptr(), DUContext::NoFiltering);
-      foreach( Declaration* dec, declarations ) {
+      const QList<Declaration*> declarations = LanguageSpecificDeclarationBuilderBase::currentContext()->findLocalDeclarations(localId, CursorInRevision::invalid(), this->topContext(), AbstractType::Ptr(), DUContext::NoFiltering);
+      for (Declaration* dec : declarations) {
 
         if( LanguageSpecificDeclarationBuilderBase::wasEncountered(dec) )
           continue;

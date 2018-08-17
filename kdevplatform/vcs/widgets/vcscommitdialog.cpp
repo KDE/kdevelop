@@ -66,8 +66,7 @@ void VcsCommitDialog::setRecursive( bool recursive )
 
 void VcsCommitDialog::setCommitCandidates( const QList<KDevelop::VcsStatusInfo>& statuses )
 {
-    foreach( const VcsStatusInfo& info, statuses )
-    {
+    for (const VcsStatusInfo& info : statuses) {
         d->m_model->updateState( info );
     }
 }

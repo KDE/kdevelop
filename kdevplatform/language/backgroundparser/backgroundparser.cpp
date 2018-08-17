@@ -138,7 +138,7 @@ struct DocumentParsePlan
     {
         //Pick the strictest possible flags
         ParseJob::SequentialProcessingFlags ret = ParseJob::IgnoresSequentialProcessing;
-        foreach(const DocumentParseTarget &target, targets) {
+        for (const DocumentParseTarget& target : targets) {
             ret |= target.sequentialProcessingFlags;
         }
         return ret;
@@ -148,7 +148,7 @@ struct DocumentParsePlan
     {
         //Pick the best priority
         int ret = BackgroundParser::WorstPriority;
-        foreach(const DocumentParseTarget &target, targets) {
+        for (const DocumentParseTarget& target : targets) {
             if(target.priority < ret) {
                 ret = target.priority;
             }
@@ -160,7 +160,7 @@ struct DocumentParsePlan
     {
         //Pick the best features
         TopDUContext::Features ret = (TopDUContext::Features)0;
-        foreach(const DocumentParseTarget &target, targets) {
+        for (const DocumentParseTarget& target : targets) {
             ret = (TopDUContext::Features) (ret | target.features);
         }
         return ret;
@@ -170,7 +170,7 @@ struct DocumentParsePlan
     {
         QVector<QPointer<QObject>> ret;
 
-        foreach(const DocumentParseTarget &target, targets) {
+        for (const DocumentParseTarget& target : targets) {
             if(target.notifyWhenReady)
                 ret << target.notifyWhenReady;
         }

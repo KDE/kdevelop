@@ -247,10 +247,10 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
   ///@todo Enumerations
 
   QString detailsHtml;
-  QStringList details = declarationDetails(d->m_declaration);
+  const QStringList details = declarationDetails(d->m_declaration);
   if( !details.isEmpty() ) {
     bool first = true;
-    foreach( const QString &str, details ) {
+    for (const QString& str : details) {
       if( !first )
         detailsHtml += QLatin1String(", ");
       first = false;
@@ -490,12 +490,12 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
       Declaration* classDecl = d->m_declaration->context()->owner();
       if(classDecl) {
         uint maxAllowedSteps = d->m_fullBackwardSearch ? (uint)-1 : 10;
-        QList<Declaration*> overriders = DUChainUtils::getOverriders(classDecl, classFunDecl, maxAllowedSteps);
+        const QList<Declaration*> overriders = DUChainUtils::getOverriders(classDecl, classFunDecl, maxAllowedSteps);
 
         if(!overriders.isEmpty()) {
           modifyHtml() += i18n("Overridden in ");
           bool first = true;
-          foreach(Declaration* overrider, overriders) {
+          for (Declaration* overrider : overriders) {
             if(!first)
               modifyHtml() += QStringLiteral(", ");
             first = false;
@@ -514,12 +514,12 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 
   ///Show all classes that inherit this one
   uint maxAllowedSteps = d->m_fullBackwardSearch ? (uint)-1 : 10;
-  QList<Declaration*> inheriters = DUChainUtils::getInheriters(d->m_declaration.data(), maxAllowedSteps);
+  const QList<Declaration*> inheriters = DUChainUtils::getInheriters(d->m_declaration.data(), maxAllowedSteps);
 
   if(!inheriters.isEmpty()) {
       modifyHtml() += i18n("Inherited by ");
       bool first = true;
-      foreach(Declaration* importer, inheriters) {
+      for (Declaration* importer : inheriters) {
         if(!first)
           modifyHtml() += QStringLiteral(", ");
         first = false;

@@ -86,8 +86,8 @@ void VcsOverlayProxyModel::addProject(IProject* p)
 
 void VcsOverlayProxyModel::repositoryBranchChanged(const QUrl& url)
 {
-    QList<IProject*> allProjects = ICore::self()->projectController()->projects();
-    foreach(IProject* project, allProjects) {
+    const QList<IProject*> allProjects = ICore::self()->projectController()->projects();
+    for (IProject* project : allProjects) {
         const bool isExactMatch = url.matches(project->path().toUrl(), QUrl::StripTrailingSlash);
         const bool isParentOf = url.isParentOf(project->path().toUrl());
         if (isParentOf || isExactMatch) {

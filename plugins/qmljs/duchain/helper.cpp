@@ -74,7 +74,7 @@ DeclarationPointer getDeclarationOrSignal(const QualifiedIdentifier& id, const D
     if (identifier.startsWith(QLatin1String("on")) && identifier.size() > 2) {
         // The use may have typed the name of a QML slot (onFoo), try to get
         // the declaration of its corresponding signal (foo)
-        identifier = identifier.at(2).toLower() + identifier.mid(3);
+        identifier = identifier.at(2).toLower() + identifier.midRef(3);
         DeclarationPointer decl = getDeclaration(QualifiedIdentifier(identifier), context, searchInParent);
 
         if (decl) {

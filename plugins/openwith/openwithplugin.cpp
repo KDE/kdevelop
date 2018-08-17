@@ -134,8 +134,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     QList<QAction*> appActions = actionsForServiceType(QStringLiteral("Application"), parent);
 
     OpenWithContext subContext(m_urls, mimetype);
-    QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &subContext, parent);
-    foreach( const ContextMenuExtension& ext, extensions ) {
+    const QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions( &subContext, parent);
+    for (const ContextMenuExtension& ext : extensions) {
         appActions += ext.actions(ContextMenuExtension::OpenExternalGroup);
         partActions += ext.actions(ContextMenuExtension::OpenEmbeddedGroup);
     }
@@ -180,14 +180,14 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
 
 QList<QAction*> OpenWithPlugin::actionsForServiceType(const QString& serviceType, QWidget* parent)
 {
-    KService::List list = KMimeTypeTrader::self()->query( m_mimeType, serviceType );
+    const KService::List list = KMimeTypeTrader::self()->query( m_mimeType, serviceType );
     KService::Ptr pref = KMimeTypeTrader::self()->preferredService( m_mimeType, serviceType );
 
     m_services += list;
     QList<QAction*> actions;
     QAction* standardAction = nullptr;
     const QString defaultId = defaultForMimeType(m_mimeType);
-    foreach( KService::Ptr svc, list ) {
+    for (auto& svc : list) {
         QAction* act = new QAction(isTextEditor(svc) ? i18n("Default Editor") : svc->name(), parent);
         act->setIcon( QIcon::fromTheme( svc->icon() ) );
         if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {

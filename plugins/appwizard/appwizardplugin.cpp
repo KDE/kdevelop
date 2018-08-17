@@ -219,7 +219,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
     QString templateArchive;
     const QStringList filters = {templateName + QStringLiteral(".*")};
     const QStringList matchesPaths = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevappwizard/templates/"), QStandardPaths::LocateDirectory);
-    foreach(const QString& matchesPath, matchesPaths) {
+    for (const QString& matchesPath : matchesPaths) {
         const QStringList files = QDir(matchesPath).entryList(filters);
         if(!files.isEmpty()) {
             templateArchive = matchesPath + files.first();
@@ -379,8 +379,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         QString manager = QStringLiteral("KDevGenericManager");
 
         QDir d( dest.toLocalFile() );
-        auto data = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
-        foreach(const KPluginMetaData& info, data) {
+        const auto data = ICore::self()->pluginController()->queryExtensionPlugins(QStringLiteral("org.kdevelop.IProjectFileManager"));
+        for (const KPluginMetaData& info : data) {
             QStringList filter = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-ProjectFilesFilter"));
             if (!filter.isEmpty()) {
                 if (!d.entryList(filter).isEmpty()) {

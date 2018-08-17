@@ -261,7 +261,7 @@ DocumentChangeSet::ChangeResult ClangRefactoring::applyChangesToDeclarations(con
                                                                              DocumentChangeSet& changes,
                                                                              const QList<IndexedDeclaration>& declarations)
 {
-    foreach (const IndexedDeclaration decl, declarations) {
+    for (const IndexedDeclaration decl : declarations) {
         Declaration *declaration = decl.data();
         if (!declaration)
             continue;

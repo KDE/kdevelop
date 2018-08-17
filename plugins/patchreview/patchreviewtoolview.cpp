@@ -258,9 +258,9 @@ void PatchReviewToolView::showEditDialog() {
 void PatchReviewToolView::customContextMenuRequested(const QPoint& pos)
 {
     QList<QUrl> urls;
-    QModelIndexList selectionIdxs = m_editPatch.filesList->selectionModel()->selectedIndexes();
+    const QModelIndexList selectionIdxs = m_editPatch.filesList->selectionModel()->selectedIndexes();
     urls.reserve(selectionIdxs.size());
-    foreach(const QModelIndex& idx, selectionIdxs) {
+    for (const QModelIndex& idx : selectionIdxs) {
         urls += idx.data(KDevelop::VcsFileChangesModel::UrlRole).toUrl();
     }
 

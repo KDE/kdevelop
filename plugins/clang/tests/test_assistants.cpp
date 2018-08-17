@@ -623,7 +623,7 @@ void TestAssistants::testUnknownDeclarationAssistant()
 
     {
         auto fileName = testbed.includeFileName();
-        fileName = fileName.mid(fileName.lastIndexOf('/') + 1);
+        fileName.remove(0, fileName.lastIndexOf('/') + 1);
         const auto directive = QStringLiteral("#include \"%1\"").arg(fileName);
         const auto description = i18n("Insert \'%1\'", directive);
         const bool hasMissingInclude = actionDescriptions.contains(description);

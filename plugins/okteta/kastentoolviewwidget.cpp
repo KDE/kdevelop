@@ -49,8 +49,9 @@ KastenToolViewWidget::KastenToolViewWidget( Kasten::AbstractToolView* toolView, 
     connect( controller, &Sublime::Controller::mainWindowAdded,
              this, &KastenToolViewWidget::onMainWindowAdded );
     const QList<Sublime::MainWindow*>& mainWindows = controller->mainWindows();
-    foreach( Sublime::MainWindow* mainWindow, mainWindows )
+    for (Sublime::MainWindow* mainWindow : mainWindows) {
         onMainWindowAdded( mainWindow );
+    }
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );

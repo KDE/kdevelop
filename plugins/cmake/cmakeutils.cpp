@@ -170,8 +170,7 @@ KDevelop::Path::List resolveSystemDirs(KDevelop::IProject* project, const QStrin
 
     KDevelop::Path::List newList;
     newList.reserve(dirs.size());
-    foreach(const QString& s, dirs)
-    {
+    for (const QString& s : dirs) {
         KDevelop::Path dir;
         if(s.startsWith(QLatin1String("#[bin_dir]")))
         {

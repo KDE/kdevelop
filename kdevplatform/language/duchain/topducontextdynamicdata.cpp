@@ -692,8 +692,9 @@ void TopDUContextDynamicData::store() {
     m_data.clear();
 
     uint newDataSize = 0;
-    foreach(const ArrayWithPosition &array, oldData)
+    for (const ArrayWithPosition& array : oldData) {
         newDataSize += array.position;
+    }
 
     newDataSize = std::max(newDataSize, 10000u);
 

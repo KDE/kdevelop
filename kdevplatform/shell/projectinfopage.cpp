@@ -47,7 +47,7 @@ void ProjectInfoPage::setProjectName( const QString& name )
 void ProjectInfoPage::populateProjectFileCombo(const QVector<ProjectFileChoice>& choices)
 {
     page_ui->managerCombo->clear();
-    Q_FOREACH ( const auto& item, choices ) {
+    for (const auto& item : choices) {
         const int index = page_ui->managerCombo->count();
         page_ui->managerCombo->addItem(QIcon::fromTheme(item.iconName), item.text, item.pluginId);
         page_ui->managerCombo->setItemData( index, item.fileName, FileNameRole );

@@ -107,8 +107,8 @@ void DocumentationQuickOpenProvider::setFilterText(const QString& text)
     }
     m_results.clear();
     int split = 0;
-    QList<IDocumentationProvider*> providers = ICore::self()->documentationController()->documentationProviders();
-    foreach (IDocumentationProvider* p, providers) {
+    const QList<IDocumentationProvider*> providers = ICore::self()->documentationController()->documentationProviders();
+    for (IDocumentationProvider* p : providers) {
         QList<QModelIndex> idxs;
         int internalSplit = 0;
         int i = 0;
@@ -125,8 +125,8 @@ void DocumentationQuickOpenProvider::setFilterText(const QString& text)
 uint DocumentationQuickOpenProvider::unfilteredItemCount() const
 {
     uint ret = 0;
-    QList<IDocumentationProvider*> providers = ICore::self()->documentationController()->documentationProviders();
-    foreach (IDocumentationProvider* p, providers) {
+    const QList<IDocumentationProvider*> providers = ICore::self()->documentationController()->documentationProviders();
+    for (IDocumentationProvider* p : providers) {
         ret += recursiveRowCount(p->indexModel(), QModelIndex());
     }
 

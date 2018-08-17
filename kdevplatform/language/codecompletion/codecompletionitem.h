@@ -91,8 +91,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionTreeNode : public CompletionTreeEle
   
   /// Will append the child, and initialize it correctly to create a working tree-structure
   void appendChild(QExplicitlySharedDataPointer<CompletionTreeElement>);
-  void appendChildren(QList<QExplicitlySharedDataPointer<CompletionTreeElement> >);
-  void appendChildren(QList<QExplicitlySharedDataPointer<CompletionTreeItem> >);
+  void appendChildren(const QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& children);
+  void appendChildren(const QList<QExplicitlySharedDataPointer<CompletionTreeItem>>& children);
   
   /// @warning Do not manipulate this directly, that's bad for consistency. Use appendChild instead.
   QList<QExplicitlySharedDataPointer<CompletionTreeElement> > children;

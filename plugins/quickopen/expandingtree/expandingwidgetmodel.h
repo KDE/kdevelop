@@ -163,5 +163,5 @@ private:
  * @param highlights One variant-list for highlighting, as described in the kde header ktextedtor/codecompletionmodel.h
  * @param gapBetweenStrings How many signs are inserted between 2 strings?
  * */
-QList<QVariant> mergeCustomHighlighting(QStringList strings, QList<QVariantList> highlights, int gapBetweenStrings = 0);
+QList<QVariant> mergeCustomHighlighting(const QStringList& strings, const QList<QVariantList>& highlights, int gapBetweenStrings = 0);
 #endif

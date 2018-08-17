@@ -125,9 +125,9 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
 template<typename F> void KDevDocumentView::visitItems(F f, bool selectedItems)
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-    QList<QUrl> docs = selectedItems ? m_selectedDocs : m_unselectedDocs;
+    const QList<QUrl> docs = selectedItems ? m_selectedDocs : m_unselectedDocs;
 
-    foreach(const QUrl& url, docs) {
+    for (const QUrl& url : docs) {
        KDevelop::IDocument* doc = dc->documentForUrl(url);
        if (doc) f(doc);
     }
@@ -184,15 +184,14 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
         QMenu* ctxMenu = new QMenu(this);
 
         KDevelop::FileContext context(m_selectedDocs);
-        QList<KDevelop::ContextMenuExtension> extensions =
+        const QList<KDevelop::ContextMenuExtension> extensions =
             m_plugin->core()->pluginController()->queryPluginsForContextMenuExtensions(&context, ctxMenu);
 
         QList<QAction*> vcsActions;
         QList<QAction*> fileActions;
         QList<QAction*> editActions;
         QList<QAction*> extensionActions;
-        foreach( const KDevelop::ContextMenuExtension& ext, extensions )
-        {
+        for (const KDevelop::ContextMenuExtension& ext : extensions) {
             fileActions += ext.actions(KDevelop::ContextMenuExtension::FileGroup);
             vcsActions += ext.actions(KDevelop::ContextMenuExtension::VcsGroup);
             editActions += ext.actions(KDevelop::ContextMenuExtension::EditGroup);
@@ -221,8 +220,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 
 void KDevDocumentView::appendActions(QMenu* menu, const QList<QAction*>& actions)
 {
-    foreach( QAction* act, actions )
-    {
+    for (QAction* act : actions) {
         menu->addAction(act);
     }
     menu->addSeparator();
@@ -248,9 +246,8 @@ void KDevDocumentView::updateSelectedDocs()
     m_selectedDocs.clear();
     m_unselectedDocs.clear();
 
-    QList<QStandardItem*> allItems = m_documentModel->findItems(QStringLiteral("*"), Qt::MatchWildcard | Qt::MatchRecursive);
-    foreach (QStandardItem* item, allItems)
-    {
+    const QList<QStandardItem*> allItems = m_documentModel->findItems(QStringLiteral("*"), Qt::MatchWildcard | Qt::MatchRecursive);
+    for (QStandardItem* item : allItems) {
         if (KDevFileItem* fileItem = static_cast<KDevDocumentItem*>(item)->fileItem()) {
             if (m_selectionModel->isSelected(m_proxy->mapFromSource(m_documentModel->indexFromItem(fileItem))))
                 m_selectedDocs << fileItem->url();

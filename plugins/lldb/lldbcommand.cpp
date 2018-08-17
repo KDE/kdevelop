@@ -171,10 +171,10 @@ QString LldbCommand::cmdToSend()
             QString env_name = QStringLiteral("environment ");
             QString disassembly_flavor = QStringLiteral("disassembly-flavor ");
             if (command_.startsWith(env_name)) {
-                command_ = command_.mid(env_name.length());
+                command_.remove(0, env_name.length());
                 overrideCmd = QStringLiteral("settings set target.env-vars");
             } else if (command_.startsWith(disassembly_flavor)) {
-                command_ = command_.mid(disassembly_flavor.length());
+                command_.remove(0, disassembly_flavor.length());
                 overrideCmd = QStringLiteral("settings set target.x86-disassembly-flavor");
             }
             break;
@@ -204,15 +204,15 @@ QString LldbCommand::cmdToSend()
             if (p < 0) p = 0; // this means the command is malformated, we proceed anyway.
 
             // move other switches like '-d' '-c' into miCommand part
-            overrideCmd = miCommand() + QLatin1Char(' ') + command_.left(p);
-            command_ = "-f " + command_.mid(p, command_.length());
+            overrideCmd = miCommand() + QLatin1Char(' ') + command_.leftRef(p);
+            command_ = "-f " + command_.midRef(p, command_.length());
             break;
         }
         case BreakWatch:
             if (command_.startsWith(QLatin1String("-r "))) {
-                command_ = "-w read " + command_.mid(3);
+                command_ = "-w read " + command_.midRef(3);
             } else if (command_.startsWith(QLatin1String("-a "))) {
-                command_ = "-w read_write " + command_.mid(3);
+                command_ = "-w read_write " + command_.midRef(3);
             }
             break;
         case StackListArguments:

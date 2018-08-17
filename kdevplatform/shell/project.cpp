@@ -368,9 +368,8 @@ public:
             }
         } else
         {
-            QList<IPlugin*> plugins = pluginManager->allPluginsForExtension( QStringLiteral( "org.kdevelop.IBasicVersionControl" ) );
-            foreach( IPlugin* p, plugins )
-            {
+            const QList<IPlugin*> plugins = pluginManager->allPluginsForExtension( QStringLiteral( "org.kdevelop.IBasicVersionControl" ) );
+            for (IPlugin* p : plugins) {
                 IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
                 if (!iface) {
                     continue;

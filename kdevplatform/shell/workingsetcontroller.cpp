@@ -104,7 +104,7 @@ const QString WorkingSetController::makeSetId(const QString& prefix) const
     for(uint retry = 2; retry <= maxRetries; retry++) {
         newId = QStringLiteral("%1_%2").arg(prefix).arg(qrand() % 10000000);
         WorkingSetIconParameters params(newId);
-        foreach(WorkingSet* set, m_workingSets) {
+        for (WorkingSet* set : m_workingSets) {
             if(set->isEmpty()) {
                 continue;
             }

@@ -157,9 +157,8 @@ bool CodeGeneratorBase::execute()
         if(!d->context)
         {
             //Attempt to get the context again
-            QList<TopDUContext *> contexts = DUChain::self()->chainsForDocument(document);
-            foreach(TopDUContext * top, contexts)
-            {
+            const QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(document);
+            for (TopDUContext* top : contexts) {
                 qCDebug(LANGUAGE) << "Checking top context with range: " << top->range() << " for a context";
                 if((d->context = top->findContextIncluding(d->range)))
                     break;

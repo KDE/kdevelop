@@ -35,7 +35,7 @@ namespace
 /// Adds diagnostics as sub-nodes
 void addDiagnostics(ProblemStoreNode *node, const QVector<IProblem::Ptr> &diagnostics)
 {
-    foreach (const IProblem::Ptr &ptr, diagnostics) {
+    for (const IProblem::Ptr& ptr : diagnostics) {
         ProblemNode *child = new ProblemNode(node, ptr);
         node->addChild(child);
 

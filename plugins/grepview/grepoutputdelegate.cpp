@@ -99,7 +99,7 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
         fmt.clearBackground();
         
         fmt.setFontWeight(QFont::Normal);
-        cur.insertText(item->text().right(item->text().length() - rng.end().column()), fmt);
+        cur.insertText(item->text().mid(rng.end().column()), fmt);
     }else{
         QString text;
         if(item)
@@ -150,7 +150,7 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
         const KTextEditor::Range rng = item->change()->m_range;
 
         int width = metrics.width(item->text().left(rng.start().column())) +
-                    metrics.width(item->text().right(item->text().length() - rng.end().column())) +
+                    metrics.width(item->text().mid(rng.end().column())) +
                     bMetrics.width(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
                     option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
                     std::max(option.decorationSize.width(), 0);

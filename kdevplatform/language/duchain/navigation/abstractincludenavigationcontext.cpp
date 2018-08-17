@@ -32,12 +32,12 @@ AbstractIncludeNavigationContext::AbstractIncludeNavigationContext(const Include
     : AbstractNavigationContext(topContext), m_type(type), m_item(item)
 {}
 
-TopDUContext* pickContextWithData(QList<TopDUContext*> duchains, uint maxDepth,
+TopDUContext* pickContextWithData(const QList<TopDUContext*>& duchains, uint maxDepth,
                                    const ParsingEnvironmentType& type,
                                    bool forcePick = true) {
   TopDUContext* duchain = nullptr;
 
-  foreach(TopDUContext* ctx, duchains) {
+  for (TopDUContext* ctx : duchains) {
     if(!ctx->parsingEnvironmentFile() || ctx->parsingEnvironmentFile()->type() != type)
       continue;
 
@@ -53,7 +53,7 @@ TopDUContext* pickContextWithData(QList<TopDUContext*> duchains, uint maxDepth,
 
   if(!duchain && maxDepth != 0) {
     if(maxDepth != 0) {
-      foreach(TopDUContext* ctx, duchains) {
+      for (TopDUContext* ctx : duchains) {
         QList<TopDUContext*> children;
         foreach(const DUContext::Import &import, ctx->importedParentContexts())
           if(import.context(nullptr))

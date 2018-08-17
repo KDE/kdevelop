@@ -228,7 +228,7 @@ public:
 
 
     QSet<QPair<TopDUContext*, const TopDUContext*> > rebuild;
-    foreach(TopDUContext* context, contexts) {
+    for (TopDUContext* context : contexts) {
 
       context->m_local->m_directImporters.remove(m_ctxt);
 
@@ -1033,13 +1033,15 @@ void TopDUContext::removeImportedParentContext(DUContext* context) {
 void TopDUContext::addImportedParentContexts(const QVector<QPair<TopDUContext*, CursorInRevision>>& contexts, bool temporary) {
   typedef QPair<TopDUContext*, CursorInRevision> Pair;
 
-  foreach(const Pair pair, contexts)
+  for (const Pair pair : contexts) {
     addImportedParentContext(pair.first, pair.second, false, temporary);
+  }
 }
 
 void TopDUContext::removeImportedParentContexts(const QList<TopDUContext*>& contexts) {
-  foreach(TopDUContext* context, contexts)
+  for (TopDUContext* context : contexts) {
     DUContext::removeImportedParentContext(context);
+  }
 
   m_local->removeImportedContextsRecursively(contexts, true);
 }

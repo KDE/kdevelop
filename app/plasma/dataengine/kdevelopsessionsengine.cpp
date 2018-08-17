@@ -58,9 +58,9 @@ Plasma::Service *KDevelopSessionsEngine::serviceForSource(const QString &source)
 
 QStringList findSessions()
 {
-    QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory);
+    const QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory);
     QStringList sessionrcs;
-    Q_FOREACH(const QString& dir, sessionDirs) {
+    for (const QString& dir : sessionDirs) {
         QDir d(dir);
         Q_FOREACH(const QString& sessionDir, d.entryList(QDir::Dirs)) {
             QDir sd(d.absoluteFilePath(sessionDir));

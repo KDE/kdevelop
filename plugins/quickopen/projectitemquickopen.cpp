@@ -145,7 +145,7 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
     QStringList search(text.split(QStringLiteral("::"), QString::SkipEmptyParts));
     for (int a = 0; a < search.count(); ++a) {
         if (search[a].endsWith(':')) { //Don't get confused while the :: is being typed
-            search[a] = search[a].left(search[a].length() - 1);
+            search[a].chop(1);
         }
     }
 
@@ -169,12 +169,12 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
 
     m_currentFilter = text;
 
-    QVector<CodeModelViewItem> oldFiltered = m_filteredItems;
+    const QVector<CodeModelViewItem> oldFiltered = m_filteredItems;
     QHash<int, int> heights;
 
     m_filteredItems.clear();
 
-    foreach (const CodeModelViewItem& item, oldFiltered) {
+    for (const CodeModelViewItem& item : oldFiltered) {
         const QualifiedIdentifier& currentId = item.m_id;
 
         int last_pos = currentId.count() - 1;

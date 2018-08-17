@@ -137,7 +137,7 @@ void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
 {
     DUChainReadLocker lock;
 
-    foreach(const DeclarationPointer& baseClass, allBases) {
+    for (const DeclarationPointer& baseClass : allBases) {
         QTreeWidgetItem* classItem = new QTreeWidgetItem(overrideTree(), QStringList() << baseClass->qualifiedIdentifier().toString());
         classItem->setIcon(ClassOrFunctionColumn, DUChainUtils::iconForDeclaration(baseClass.data()));
 
@@ -256,7 +256,7 @@ void OverridesPage::addCustomDeclarations (const QString& category, const QList<
     DUChainReadLocker lock(DUChain::lock());
 
     QTreeWidgetItem* item = new QTreeWidgetItem(overrideTree(), QStringList() << category);
-    foreach (const DeclarationPointer& declaration, declarations)
+    for (const DeclarationPointer& declaration : declarations)
     {
         addPotentialOverride(item, declaration);
     }

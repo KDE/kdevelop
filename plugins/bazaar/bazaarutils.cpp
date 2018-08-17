@@ -234,7 +234,7 @@ QList<QUrl> BazaarUtils::handleRecursion(const QList<QUrl>& listOfUrls, KDevelop
         return listOfUrls;      // Nothing to do
     } else {
         QList<QUrl> result;
-        foreach (const auto& url, listOfUrls) {
+        for (const auto& url : listOfUrls) {
             if (url.isLocalFile() && QFileInfo(url.toLocalFile()).isFile()) {
                 result.push_back(url);
             }

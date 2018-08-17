@@ -324,7 +324,7 @@ CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
     if (kind != CXCursor_Constructor && kind != CXCursor_Destructor) {
         int spaceIndex = signature.indexOf(QLatin1Char(' '));
         returnType = signature.left(spaceIndex);
-        rest = signature.right(signature.count() - spaceIndex - 1);
+        rest = signature.mid(spaceIndex + 1);
     } else {
         rest = signature;
     }
@@ -394,7 +394,7 @@ void CompletionHelper::computeCompletions(const ParseSession& session, CXFile fi
         fileFilter << file;
         const auto url = QUrl::fromLocalFile(ClangString(clang_getFileName(file)).toString()).adjusted(QUrl::NormalizePathSegments);
         const auto& buddies = DocumentFinderHelpers::potentialBuddies(url);
-        foreach(const auto& buddy, buddies) {
+        for (const auto& buddy : buddies) {
             auto buddyFile = clang_getFile(unit, qPrintable(buddy.toLocalFile()));
             if (buddyFile) {
                 fileFilter << buddyFile;

@@ -340,7 +340,7 @@ void PatchHighlighter::textRemoved( KTextEditor::Document* doc, const KTextEdito
         remainingLines << above;
     }
     QString changed = doc->line(cursor.line()) + '\n';
-    removedLines << changed.mid(0, cursor.column()) + oldText + changed.mid(cursor.column());
+    removedLines << changed.midRef(0, cursor.column()) + oldText + changed.midRef(cursor.column());
     remainingLines << changed;
     if (doc->documentRange().end().line() > cursor.line()) {
         QString below = doc->line(cursor.line() + 1);
@@ -477,7 +477,7 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, const KTextEdito
         insertedLines << above;
     }
     QString changed = doc->line(cursor.line()) + '\n';
-    removedLines << changed.mid(0, cursor.column()) + changed.mid(endColumn);
+    removedLines << changed.midRef(0, cursor.column()) + changed.midRef(endColumn);
     insertedLines << changed;
     if (doc->documentRange().end().line() > cursor.line()) {
         QString below = doc->line(cursor.line() + 1) + '\n';

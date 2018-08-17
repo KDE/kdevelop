@@ -116,12 +116,12 @@ void TestCMakeManager::testTargetIncludePaths()
 
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
+    const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundInTarget = false;
-    foreach(ProjectBaseItem* mainCppItem, items) {
+    for (ProjectBaseItem* mainCppItem : items) {
         ProjectBaseItem* mainContainer = mainCppItem->parent();
 
         Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
@@ -142,12 +142,12 @@ void TestCMakeManager::testTargetIncludeDirectories()
 
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
+    const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundInTarget = false;
-    foreach(ProjectBaseItem* mainCppItem, items) {
+    for (ProjectBaseItem* mainCppItem : items) {
         ProjectBaseItem* mainContainer = mainCppItem->parent();
 
         Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
@@ -168,14 +168,14 @@ void TestCMakeManager::testQt5App()
 
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
+    const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundCore = false, foundGui = false, foundWidgets = false;
-    foreach(ProjectBaseItem* mainCppItem, items) {
-        Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
-        foreach(const Path& include, includeDirs) {
+    for (ProjectBaseItem* mainCppItem : items) {
+        const Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
+        for (const Path& include : includeDirs) {
             QString filename = include.lastPathSegment();
             foundCore |= filename == QLatin1String("QtCore");
             foundGui |= filename == QLatin1String("QtGui");
@@ -193,14 +193,14 @@ void TestCMakeManager::testQt5AppOld()
 
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
+    const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundCore = false, foundGui = false, foundWidgets = false;
-    foreach(ProjectBaseItem* mainCppItem, items) {
-        Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
-        foreach(const Path& include, includeDirs) {
+    for (ProjectBaseItem* mainCppItem : items) {
+        const Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
+        for (const Path& include : includeDirs) {
             QString filename = include.lastPathSegment();
             foundCore |= filename == QLatin1String("QtCore");
             foundGui |= filename == QLatin1String("QtGui");
@@ -218,15 +218,15 @@ void TestCMakeManager::testKF5App()
 
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
+    const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundCore = false, foundGui = false, foundWidgets = false, foundWidgetsAddons = false;
-    foreach(ProjectBaseItem* mainCppItem, items) {
-        Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
+    for (ProjectBaseItem* mainCppItem : items) {
+        const Path::List includeDirs = project->buildSystemManager()->includeDirectories(mainCppItem);
         qDebug() << "xxxxxxxxx" << includeDirs;
-        foreach(const Path& include, includeDirs) {
+        for (const Path& include : includeDirs) {
             QString filename = include.lastPathSegment();
             foundCore |= filename == QLatin1String("QtCore");
             foundGui |= filename == QLatin1String("QtGui");
@@ -246,12 +246,12 @@ void TestCMakeManager::testDefines()
 
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
-    QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
+    const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
     QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundInTarget = false;
-    foreach(ProjectBaseItem* mainCppItem, items) {
+    for (ProjectBaseItem* mainCppItem : items) {
         QHash<QString, QString> defines = project->buildSystemManager()->defines(mainCppItem);
 
         QCOMPARE(defines.value("B", QStringLiteral("not found")), QString());

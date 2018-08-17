@@ -186,9 +186,9 @@ bool ProjectFilterManager::isValid(const Path& path, bool isFolder, IProject* pr
 QVector< QSharedPointer< IProjectFilter > > ProjectFilterManager::filtersForProject(IProject* project) const
 {
     QVector< QSharedPointer< IProjectFilter > > ret;
-    QVector< Filter > filters = d->m_filters[project];
+    const QVector<Filter>& filters = d->m_filters[project];
     ret.reserve(filters.size());
-    foreach(const Filter& filter, filters) {
+    for (const Filter& filter : filters) {
         ret << filter.filter;
     }
     return ret;

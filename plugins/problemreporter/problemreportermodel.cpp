@@ -73,7 +73,7 @@ QVector<KDevelop::IProblem::Ptr> ProblemReporterModel::problems(const QSet<KDeve
     QVector<IProblem::Ptr> result;
     DUChainReadLocker lock;
 
-    foreach (const IndexedString& doc, docs) {
+    for (const IndexedString& doc : docs) {
         if (doc.isEmpty())
             continue;
 

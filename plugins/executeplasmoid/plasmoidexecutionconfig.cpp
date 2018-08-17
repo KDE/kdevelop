@@ -178,13 +178,12 @@ KJob* PlasmoidLauncher::start(const QString& launchMode, KDevelop::ILaunchConfig
 
 KJob* PlasmoidLauncher::calculateDependencies(KDevelop::ILaunchConfiguration* cfg)
 {
-    QVariantList deps = KDevelop::stringToQVariant( cfg->config().readEntry( "Dependencies", QString() ) ).toList();
+    const QVariantList deps = KDevelop::stringToQVariant(cfg->config().readEntry("Dependencies", QString())).toList();
     if( !deps.isEmpty() )
     {
         KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
         QList<KDevelop::ProjectBaseItem*> items;
-        foreach( const QVariant& dep, deps )
-        {
+        for (const QVariant& dep : deps) {
             KDevelop::ProjectBaseItem* item = model->itemFromIndex( model->pathToIndex( dep.toStringList() ) );
             if( item )
             {
@@ -288,10 +287,10 @@ void PlasmoidExecutionConfigType::configureLaunchFromCmdLineArguments(KConfigGro
 QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
 {
     QList<QAction*> found;
-    QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
-    foreach(KDevelop::IProject* p, projects) {
-        QSet<KDevelop::IndexedString> files = p->fileSet();
-        foreach(const KDevelop::IndexedString& file, files) {
+    const QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
+    for (KDevelop::IProject* p : projects) {
+        const QSet<KDevelop::IndexedString> files = p->fileSet();
+        for (const KDevelop::IndexedString& file : files) {
             KDevelop::Path path(file.str());
             if (path.lastPathSegment() == QLatin1String("metadata.desktop") && canLaunchMetadataFile(path)) {
                 path = path.parent();

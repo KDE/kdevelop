@@ -129,7 +129,7 @@ namespace {
 
 static void mergePaths(KDevelop::Path::List& destList, const KDevelop::Path::List& srcList)
 {
-    foreach (const Path& path, srcList) {
+    for (const Path& path : srcList) {
         if (!destList.contains(path))
             destList.append(path);
     }
@@ -220,7 +220,7 @@ QString MakeFileResolver::mapToBuild(const QString &path) const
   if (m_outOfSource) {
     if (wd.startsWith(m_source) && !wd.startsWith(m_build)) {
         //Move the current working-directory out of source, into the build-system
-        wd = QDir::cleanPath(m_build + '/' + wd.mid(m_source.length()));
+        wd = QDir::cleanPath(m_build + '/' + wd.midRef(m_source.length()));
       }
   }
   return wd;
@@ -249,7 +249,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
     if (workingDirectory == QLatin1String("."))
       workingDirectory = QString();
     else if (workingDirectory.startsWith(QLatin1String("./")))
-      workingDirectory = workingDirectory.mid(2);
+      workingDirectory.remove(0, 2);
 
     if (!workingDirectory.isEmpty()) {
       u = u.adjusted(QUrl::StripTrailingSlash);
@@ -473,7 +473,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
           //We use the second directory. For t hat reason we search for the last index of "cd "
           int cdIndex = prefix.lastIndexOf(QLatin1String("cd "));
           if (cdIndex != -1) {
-            newWorkingDirectory = prefix.right(prefix.length() - 3 - cdIndex).trimmed();
+            newWorkingDirectory = prefix.mid(cdIndex + 3).trimmed();
             if (QFileInfo(newWorkingDirectory).isRelative())
               newWorkingDirectory = workingDirectory + '/' + newWorkingDirectory;
             newWorkingDirectory = QDir::cleanPath(newWorkingDirectory);
@@ -568,7 +568,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
       QString path = match.captured(2);
       if (path.startsWith('"') || (path.startsWith('\'') && path.length() > 2)) {
           //probable a quoted path
-          if (path.endsWith(path.left(1))) {
+          if (path.endsWith(path.leftRef(1))) {
             //Quotation is ok, remove it
             path = path.mid(1, path.length() - 2);
           }

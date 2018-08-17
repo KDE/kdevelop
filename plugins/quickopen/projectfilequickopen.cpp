@@ -50,7 +50,7 @@ QSet<IndexedString> openFiles()
     QSet<IndexedString> openFiles;
     const QList<IDocument*>& docs = ICore::self()->documentController()->openDocuments();
     openFiles.reserve(docs.size());
-    foreach (IDocument* doc, docs) {
+    for (IDocument* doc : docs) {
         openFiles << IndexedString(doc->url());
     }
 
@@ -132,11 +132,11 @@ QWidget* ProjectFileData::expandingWidget() const
     DUChainReadLocker lock;
 
     ///Find a du-chain for the document
-    QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(url);
+    const QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(url);
 
     ///Pick a non-proxy context
     TopDUContext* chosen = nullptr;
-    foreach (TopDUContext* ctx, contexts) {
+    for (TopDUContext* ctx : contexts) {
         if (!(ctx->parsingEnvironmentFile() && ctx->parsingEnvironmentFile()->isProxyContext())) {
             chosen = ctx;
         }
@@ -344,7 +344,7 @@ void OpenFilesDataProvider::reset()
 
     QVector<ProjectFile> currentFiles;
     currentFiles.reserve(docs.size());
-    foreach (IDocument* doc, docs) {
+    for (IDocument* doc : docs) {
         ProjectFile f;
         f.path = Path(doc->url());
         IProject* project = projCtrl->findProjectForUrl(doc->url());
