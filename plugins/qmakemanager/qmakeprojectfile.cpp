@@ -409,7 +409,7 @@ QList<QMakeProjectFile::DefinePair> QMakeProjectFile::defines() const
         int pos = def.indexOf('=');
         if (pos >= 0) {
             // a value is attached to define
-            d.append(DefinePair(def.left(pos), def.right(def.length() - (pos + 1))));
+            d.append(DefinePair(def.left(pos), def.mid(pos + 1)));
         } else {
             // a value-less define
             d.append(DefinePair(def, QString()));

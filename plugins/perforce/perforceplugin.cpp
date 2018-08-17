@@ -199,7 +199,7 @@ QString PerforcePlugin::getRepositoryName(const QFileInfo& curFile)
             for (const QString& line : outputLines) {
                 int idx(line.indexOf(DEPOT_FILE_STR));
                 if (idx != -1) {
-                    ret = line.right(line.size() - DEPOT_FILE_STR.size());
+                    ret = line.mid(DEPOT_FILE_STR.size());
                     return ret;
                 }
             }
@@ -564,7 +564,7 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
     for (const QString& line : outputLines) {
         int idx(line.indexOf(ACTION_STR));
         if (idx != -1) {
-            QString curr = line.right(line.size() - ACTION_STR.size());
+            QString curr = line.mid(ACTION_STR.size());
 
             if (curr == QLatin1String("edit")) {
                 status.setState(VcsStatusInfo::ItemModified);
@@ -577,7 +577,7 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
         }
         idx = line.indexOf(CLIENT_FILE_STR);
         if (idx != -1) {
-            QUrl fileUrl = QUrl::fromLocalFile(line.right(line.size() - CLIENT_FILE_STR.size()));
+            QUrl fileUrl = QUrl::fromLocalFile(line.mid(CLIENT_FILE_STR.size()));
 
             status.setUrl(fileUrl);
         }

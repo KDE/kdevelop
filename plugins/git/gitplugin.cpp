@@ -652,7 +652,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
             continue;
 
         QStringRef name = it->left(it->indexOf(' '));
-        QStringRef value = it->right(it->size()-name.size()-1);
+        QStringRef value = it->mid(name.size()+1);
 
         if(name==QLatin1String("author"))
             annotation->setAuthor(value.toString());
@@ -807,7 +807,7 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
 
         QStringRef name = branch;
         if (name.startsWith('*'))
-            name = branch.right(branch.size()-2);
+            name = branch.mid(2);
 
         branchList << name.trimmed().toString();
     }
@@ -1184,7 +1184,7 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
     for (const QString& line : outputLines) {
         VcsStatusInfo::State status = lsfilesToState(line[0].toLatin1());
 
-        QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(line.right(line.size()-2)));
+        QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(line.mid(2)));
 
         allStatus[url] = status;
     }
@@ -1216,7 +1216,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 
     for (const QStringRef& line : outputLines) {
         //every line is 2 chars for the status, 1 space then the file desc
-        QStringRef curr=line.right(line.size()-3);
+        QStringRef curr=line.mid(3);
         QStringRef state = line.left(2);
 
         int arrow = curr.indexOf(QStringLiteral(" -> "));

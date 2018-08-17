@@ -358,7 +358,7 @@ void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
         Q_ASSERT(start != -1);
         start += Converters::modeToString(currentMode).size();
 
-        QString value = record.right(record.size() - start);
+        QString value = record.mid(start);
         int idx = rx.indexIn(value);
         value = rx.cap(1);
 

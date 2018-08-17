@@ -71,7 +71,7 @@ void CMakeCacheModel::read()
     {
         QString line = in.readLine().trimmed();
         if(line.startsWith(QLatin1String("//")))
-            currentComment += line.right(line.count()-2);
+            currentComment += line.mid(2);
         else if(!line.isEmpty() && !line.startsWith('#')) //it is a variable
         {
             CacheLine c;

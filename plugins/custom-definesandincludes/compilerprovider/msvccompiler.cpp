@@ -57,11 +57,11 @@ Defines MsvcCompiler::defines(Utils::LanguageType, const QString&) const
             if ( !buff.isEmpty() ) {
                 line = buff;
                 if ( line.startsWith( QLatin1String("#define ") ) ) {
-                    line = line.right( line.length() - 8 ).trimmed();
+                    line = line.mid(8).trimmed();
                     int pos = line.indexOf( ' ' );
 
                     if ( pos != -1 ) {
-                        ret[line.left( pos )] = line.right( line.length() - pos - 1 ).toUtf8();
+                        ret[line.left( pos )] = line.mid(pos + 1).toUtf8();
                     } else {
                         ret[line] = QLatin1String("");
                     }
