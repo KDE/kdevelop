@@ -116,7 +116,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT TypeExchanger {
 ///A simple type-exchanger that replaces one type with another
 class KDEVPLATFORMLANGUAGE_EXPORT SimpleTypeExchanger : public TypeExchanger {
   public:
-    SimpleTypeExchanger(AbstractType::Ptr replace, AbstractType::Ptr replaceWith);
+    SimpleTypeExchanger(const AbstractType::Ptr& replace, const AbstractType::Ptr& replaceWith);
     AbstractType::Ptr exchange( const AbstractType::Ptr& ) override ;
   private:
     AbstractType::Ptr m_replace, m_replaceWith;

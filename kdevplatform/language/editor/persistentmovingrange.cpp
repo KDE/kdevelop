@@ -80,7 +80,7 @@ bool KDevelop::PersistentMovingRange::valid() const
   return m_p->m_valid;
 }
 
-void KDevelop::PersistentMovingRange::setAttribute(KTextEditor::Attribute::Ptr attribute)
+void KDevelop::PersistentMovingRange::setAttribute(const KTextEditor::Attribute::Ptr& attribute)
 {
   VERIFY_FOREGROUND_LOCKED;
   if(m_p->m_movingRange)

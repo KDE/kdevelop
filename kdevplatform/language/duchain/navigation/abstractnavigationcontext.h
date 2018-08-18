@@ -128,7 +128,7 @@ public:
     };
     
     ///Override this to execute own key-actions using NavigationAction
-    virtual NavigationContextPointer executeKeyAction(QString key);
+    virtual NavigationContextPointer executeKeyAction(const QString& key);
 
     ///Adds given the text to currentHtml()
     void addHtml(const QString& html);
@@ -145,10 +145,10 @@ public:
     void addExternalHtml( const QString& text );
 
     ///Creates and registers a link to the given declaration, labeled by the given name
-    virtual void makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType );
+    virtual void makeLink(const QString& name, const DeclarationPointer& declaration, NavigationAction::Type actionType);
 
     ///Creates a link that executes the given action and adds it to the current context
-    void makeLink( const QString& name, QString targetId, const NavigationAction& action);
+    void makeLink(const QString& name, const QString& targetId, const NavigationAction& action);
     
     ///Creates a link that executes the given action and returns it
     QString createLink(const QString& name, const QString& targetId, const NavigationAction& action);
@@ -156,7 +156,7 @@ public:
     NavigationContextPointer registerChild(const DeclarationPointer& /*declaration*/);
     NavigationContextPointer registerChild(AbstractNavigationContext* context);
 
-    virtual QString declarationKind(DeclarationPointer decl);
+    virtual QString declarationKind(const DeclarationPointer& decl);
 
     static const Colorizer typeHighlight;
     static const Colorizer errorHighlight;

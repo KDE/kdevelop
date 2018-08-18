@@ -29,7 +29,7 @@
 
 using namespace KDevelop;
 
-GrepOutputItem::GrepOutputItem(DocumentChangePointer change, const QString &text, bool checkable)
+GrepOutputItem::GrepOutputItem(const DocumentChangePointer& change, const QString &text, bool checkable)
     : QStandardItem(), m_change(change)
 {
     setText(text);

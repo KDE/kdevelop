@@ -111,7 +111,7 @@ namespace KDevelop {
     class KDEVPLATFORMLANGUAGE_EXPORT TopContextUsesWidget : public NavigatableWidgetList {
         Q_OBJECT
         public:
-          TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> localDeclarations, IndexedTopDUContext topContext);
+          TopContextUsesWidget(IndexedDeclaration declaration, const QList<IndexedDeclaration>& localDeclarations, IndexedTopDUContext topContext);
           void setExpanded(bool);
           int usesCount() const;
         private Q_SLOTS:

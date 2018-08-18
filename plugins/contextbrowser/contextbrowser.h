@@ -247,7 +247,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     struct HistoryEntry {
         //Duchain must be locked
         explicit HistoryEntry(KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(), const KTextEditor::Cursor& cursorPosition = KTextEditor::Cursor());
-        explicit HistoryEntry(KDevelop::DocumentCursor pos);
+        explicit HistoryEntry(const KDevelop::DocumentCursor& pos);
         //Duchain must be locked
         void setCursorPosition(const KTextEditor::Cursor& cursorPosition);
 

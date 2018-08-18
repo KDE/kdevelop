@@ -115,7 +115,7 @@ void AbstractNavigationContext::addExternalHtml( const QString& text )
   modifyHtml() +=  text.mid(lastPos, text.length()-lastPos);
 }
 
-void AbstractNavigationContext::makeLink( const QString& name, DeclarationPointer declaration, NavigationAction::Type actionType )
+void AbstractNavigationContext::makeLink(const QString& name, const DeclarationPointer& declaration, NavigationAction::Type actionType)
 {
   NavigationAction action( declaration, actionType );
   makeLink(name, QString(), action);
@@ -155,7 +155,7 @@ QString AbstractNavigationContext::createLink(const QString& name, const QString
   return ret;
 }
 
-void AbstractNavigationContext::makeLink( const QString& name, QString targetId, const NavigationAction& action)
+void AbstractNavigationContext::makeLink(const QString& name, const QString& targetId, const NavigationAction& action)
 {
   modifyHtml() += createLink(name, targetId, action);
 }
@@ -178,7 +178,8 @@ void AbstractNavigationContext::executeLink(const QString& link)
   execute(d->m_links[link]);
 }
 
-NavigationContextPointer AbstractNavigationContext::executeKeyAction(QString key){
+NavigationContextPointer AbstractNavigationContext::executeKeyAction(const QString& key)
+{
   Q_UNUSED(key);
   return NavigationContextPointer(this);
 }
@@ -443,7 +444,7 @@ NavigationAction AbstractNavigationContext::currentAction() const {
 }
 
 
-QString AbstractNavigationContext::declarationKind(DeclarationPointer decl)
+QString AbstractNavigationContext::declarationKind(const DeclarationPointer& decl)
 {
   const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(decl.data());
 

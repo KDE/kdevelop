@@ -37,7 +37,10 @@ struct FileModificationPair {
   FileModificationPair() {
   }
 
-  FileModificationPair(KDevelop::IndexedString _file, KDevelop::ModificationRevision _revision) : file(_file), revision(_revision) {
+  FileModificationPair(const KDevelop::IndexedString& _file, KDevelop::ModificationRevision _revision)
+    : file(_file)
+    , revision(_revision)
+  {
   }
 
   unsigned int hash() const {

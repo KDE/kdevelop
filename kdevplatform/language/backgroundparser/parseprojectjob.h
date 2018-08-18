@@ -40,7 +40,7 @@ public:
 
 private Q_SLOTS:
     void deleteNow();
-    void updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext);
+    void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
 
 private:
     void updateProgress();

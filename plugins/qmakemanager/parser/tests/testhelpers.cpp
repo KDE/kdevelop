@@ -24,7 +24,7 @@
 #include <QTest>
 #include "ast.h"
 
-void matchScopeBodies(QList<QMake::StatementAST*> realbody, const QList<QMake::StatementAST*>& testbody)
+void matchScopeBodies(const QList<QMake::StatementAST*>& realbody, const QList<QMake::StatementAST*>& testbody)
 {
     QVERIFY(realbody.count() == testbody.count());
     int i = 0;

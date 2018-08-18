@@ -60,7 +60,7 @@ CustomBuildSystemConfig ConfigWidget::config() const
     return c;
 }
 
-void ConfigWidget::loadConfig( CustomBuildSystemConfig cfg )
+void ConfigWidget::loadConfig(const CustomBuildSystemConfig& cfg)
 {
     bool b = blockSignals( true );
     clear();

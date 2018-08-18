@@ -42,7 +42,9 @@ const bool NormalDeclarationCompletionItem::shortenArgumentHintReturnValues = tr
 const int NormalDeclarationCompletionItem::maximumArgumentHintReturnValueLength = 30;
 const int NormalDeclarationCompletionItem::desiredTypeLength = 20;
 
-NormalDeclarationCompletionItem::NormalDeclarationCompletionItem(const KDevelop::DeclarationPointer& decl, QExplicitlySharedDataPointer<CodeCompletionContext> context, int inheritanceDepth)
+NormalDeclarationCompletionItem::NormalDeclarationCompletionItem(const KDevelop::DeclarationPointer& decl,
+                                                                 const QExplicitlySharedDataPointer<CodeCompletionContext>& context,
+                                                                 int inheritanceDepth)
   : m_completionContext(context), m_declaration(decl), m_inheritanceDepth(inheritanceDepth) {
 }
 
@@ -115,7 +117,7 @@ bool NormalDeclarationCompletionItem::createsExpandingWidget() const
   return false;
 }
 
-QString NormalDeclarationCompletionItem::shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const
+QString NormalDeclarationCompletionItem::shortenedTypeString(const KDevelop::DeclarationPointer& decl, int desiredTypeLength) const
 {
   Q_UNUSED(desiredTypeLength);
   return decl->abstractType()->toString();

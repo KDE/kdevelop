@@ -184,7 +184,7 @@ TopDUContext::Features ParseJob::minimumFeatures() const
     return (TopDUContext::Features)(d->features | staticMinimumFeatures(d->url));
 }
 
-void ParseJob::setDuChain(ReferencedTopDUContext duChain)
+void ParseJob::setDuChain(const ReferencedTopDUContext& duChain)
 {
     d->duContext = duChain;
 }

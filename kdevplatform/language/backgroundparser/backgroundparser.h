@@ -225,7 +225,7 @@ public Q_SLOTS:
 
 protected Q_SLOTS:
     void parseComplete(const ThreadWeaver::JobPointer& job);
-    void parseProgress(KDevelop::ParseJob*, float value, QString text);
+    void parseProgress(KDevelop::ParseJob*, float value, const QString& text);
     void startTimer(int delay);
     void aboutToQuit();
     void updateProgressBar();

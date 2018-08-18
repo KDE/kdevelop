@@ -99,7 +99,7 @@ struct CodeCompletionItemTester
   Context completionContext;
 
   //Convenience-function to retrieve data from completion-items by name
-  QVariant itemData(QString itemName, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) const
+  QVariant itemData(const QString& itemName, int column = KTextEditor::CodeCompletionModel::Name, int role = Qt::DisplayRole) const
   {
     return itemData(names.indexOf(itemName), column, role);
   }

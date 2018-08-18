@@ -61,7 +61,7 @@ public:
     }
 };
 
-QuickOpenWidget::QuickOpenWidget(QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField)
+QuickOpenWidget::QuickOpenWidget(const QString& title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField)
     : m_model(model)
     , m_expandedTemporary(false)
     , m_hadNoCommandSinceAlt(true)

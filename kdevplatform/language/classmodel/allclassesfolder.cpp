@@ -85,7 +85,7 @@ FilteredAllClassesFolder::FilteredAllClassesFolder(NodesModelInterface* a_model)
 {
 }
 
-void FilteredAllClassesFolder::updateFilterString(QString a_newFilterString)
+void FilteredAllClassesFolder::updateFilterString(const QString& a_newFilterString)
 {
   m_filterString = a_newFilterString;
 

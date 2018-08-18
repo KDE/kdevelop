@@ -95,13 +95,15 @@ void UnsureType::exchangeTypes(KDevelop::TypeExchanger* exchanger) {
   KDevelop::AbstractType::exchangeTypes(exchanger);
 }
 
-void UnsureType::addType(KDevelop::IndexedType type) {
+void UnsureType::addType(const KDevelop::IndexedType& type)
+{
   if ( !d_func_dynamic()->m_typesList().contains(type) ) {
     d_func_dynamic()->m_typesList().append(type);
   }
 }
 
-void UnsureType::removeType(KDevelop::IndexedType type) {
+void UnsureType::removeType(const KDevelop::IndexedType& type)
+{
   d_func_dynamic()->m_typesList().removeOne(type);
 }
 

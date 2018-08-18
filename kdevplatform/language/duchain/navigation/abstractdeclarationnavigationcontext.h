@@ -44,13 +44,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
 
     ///Execute an action. For example "show_uses" shows the uses of the declaration.
     ///Returns the context pointer for the new state.
-    NavigationContextPointer executeKeyAction(QString key) override;
+    NavigationContextPointer executeKeyAction(const QString& key) override;
 
     QString html(bool shorten = false) override;
 
   protected:
     ///Should returns a stripped version of the declarations qualified identifier, with all implicit/redundant parts removed
-    virtual QualifiedIdentifier prettyQualifiedIdentifier(DeclarationPointer decl) const;
+    virtual QualifiedIdentifier prettyQualifiedIdentifier(const DeclarationPointer& decl) const;
     ///Returns a stripped version of the declarations identifier, using prettyQualifiedIdentifier
     Identifier prettyIdentifier(const DeclarationPointer& decl) const;
     /// @return String version of the qualified identifier of @p decl, "<anonymous>" on an invalid QID

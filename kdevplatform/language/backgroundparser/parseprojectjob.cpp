@@ -96,7 +96,8 @@ void ParseProjectJob::updateProgress() {
 
 }
 
-void ParseProjectJob::updateReady(const IndexedString& url, ReferencedTopDUContext topContext) {
+void ParseProjectJob::updateReady(const IndexedString& url, const ReferencedTopDUContext& topContext)
+{
     Q_UNUSED(url);
     Q_UNUSED(topContext);
     ++d->updated;

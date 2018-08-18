@@ -424,7 +424,7 @@ Identifier AbstractDeclarationNavigationContext::prettyIdentifier(const Declarat
   return ret;
 }
 
-QualifiedIdentifier AbstractDeclarationNavigationContext::prettyQualifiedIdentifier(DeclarationPointer decl) const
+QualifiedIdentifier AbstractDeclarationNavigationContext::prettyQualifiedIdentifier(const DeclarationPointer& decl) const
 {
   if(decl)
     return decl->qualifiedIdentifier();
@@ -540,7 +540,7 @@ void AbstractDeclarationNavigationContext::createFullBackwardSearchLink(const QS
   modifyHtml() += QStringLiteral("<br />");
 }
 
-NavigationContextPointer AbstractDeclarationNavigationContext::executeKeyAction( QString key )
+NavigationContextPointer AbstractDeclarationNavigationContext::executeKeyAction(const QString& key)
 {
   if(key == QLatin1String("m_fullBackwardSearch=true")) {
     d->m_fullBackwardSearch = true;

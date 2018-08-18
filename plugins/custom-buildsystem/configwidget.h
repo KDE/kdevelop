@@ -39,7 +39,7 @@ class ConfigWidget : public QWidget
 Q_OBJECT
 public:
     explicit ConfigWidget( QWidget* parent = nullptr );
-    void loadConfig( CustomBuildSystemConfig cfg );
+    void loadConfig(const CustomBuildSystemConfig& cfg);
     CustomBuildSystemConfig config() const;
     void clear();
 Q_SIGNALS:

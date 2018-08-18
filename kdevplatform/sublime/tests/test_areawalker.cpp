@@ -31,7 +31,7 @@
 using namespace Sublime;
 
 struct AreaStopper {
-    explicit AreaStopper(QString stopAt): m_stopAt(stopAt) {}
+    explicit AreaStopper(const QString& stopAt): m_stopAt(stopAt) {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
         foreach (View *view, index->views())

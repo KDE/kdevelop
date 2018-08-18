@@ -52,7 +52,7 @@ public:
 
 class KDEVPLATFORMVCS_EXPORT VCSStandardDiffUpdater : public VCSDiffUpdater {
 public:
-    VCSStandardDiffUpdater(KDevelop::IBasicVersionControl* vcs, QUrl url);
+    VCSStandardDiffUpdater(KDevelop::IBasicVersionControl* vcs, const QUrl& url);
     ~VCSStandardDiffUpdater() override;
     KDevelop::VcsDiff update() const override;
     KDevelop::IBasicVersionControl* vcs() const override { return m_vcs; }

@@ -31,7 +31,7 @@ namespace KDevelop {
 class KDEVPLATFORMLANGUAGE_EXPORT NormalDeclarationCompletionItem : public CompletionTreeItem
 {
 public:
-  explicit NormalDeclarationCompletionItem(const KDevelop::DeclarationPointer& decl = KDevelop::DeclarationPointer(), QExplicitlySharedDataPointer<CodeCompletionContext> context=QExplicitlySharedDataPointer<CodeCompletionContext>(), int inheritanceDepth = 0);
+  explicit NormalDeclarationCompletionItem(const KDevelop::DeclarationPointer& decl = KDevelop::DeclarationPointer(), const QExplicitlySharedDataPointer<CodeCompletionContext>& context = QExplicitlySharedDataPointer<CodeCompletionContext>(), int inheritanceDepth = 0);
   KDevelop::DeclarationPointer declaration() const override;
   QExplicitlySharedDataPointer<CodeCompletionContext> completionContext() const;
   int inheritanceDepth() const override;
@@ -44,7 +44,7 @@ protected:
   virtual QString declarationName() const;
   virtual QWidget* createExpandingWidget(const KDevelop::CodeCompletionModel* model) const;
   virtual bool createsExpandingWidget() const;
-  virtual QString shortenedTypeString(KDevelop::DeclarationPointer decl, int desiredTypeLength) const;
+  virtual QString shortenedTypeString(const KDevelop::DeclarationPointer& decl, int desiredTypeLength) const;
 
   /**
    * Called after execute, you may insert additional chars for this declaration (eg. parens)

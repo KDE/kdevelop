@@ -36,7 +36,7 @@ KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(TopDUContextData, m_problem
 class KDEVPLATFORMLANGUAGE_EXPORT TopDUContextData : public DUContextData
 {
 public:
-  explicit TopDUContextData(IndexedString url)
+  explicit TopDUContextData(const IndexedString& url)
     : DUContextData()
     , m_url(url)
     , m_ownIndex(0)
