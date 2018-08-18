@@ -277,7 +277,7 @@ struct DeclType<CK, isDefinition, isInClass,
 //BEGIN CurrentContext
 struct CurrentContext
 {
-    CurrentContext(DUContext* context, QSet<DUContext*> keepAliveContexts)
+    CurrentContext(DUContext* context, const QSet<DUContext*>& keepAliveContexts)
         : context(context)
         , keepAliveContexts(keepAliveContexts)
     {

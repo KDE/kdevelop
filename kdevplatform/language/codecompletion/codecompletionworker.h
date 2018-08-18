@@ -72,16 +72,16 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionWorker : public QObject
     
   protected:
     
-    virtual void computeCompletions(DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& contextRange, const QString& contextText);
+    virtual void computeCompletions(const DUContextPointer& context, const KTextEditor::Cursor& position, const QString& followingText, const KTextEditor::Range& contextRange, const QString& contextText);
     ///This can be overridden to compute an own grouping in the completion-list.
     ///The default implementation groups items in a way that improves the efficiency of the completion-model, thus the default-implementation should be preferred.
-    virtual QList<QExplicitlySharedDataPointer<CompletionTreeElement> > computeGroups(QList<CompletionTreeItemPointer> items, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
+    virtual QList<QExplicitlySharedDataPointer<CompletionTreeElement>> computeGroups(const QList<CompletionTreeItemPointer>& items, const QExplicitlySharedDataPointer<CodeCompletionContext>& completionContext);
     ///If you don't need to reimplement computeCompletions, you can implement only this.
-    virtual KDevelop::CodeCompletionContext* createCompletionContext(KDevelop::DUContextPointer context, const QString &contextText, const QString &followingText, const CursorInRevision &position) const;
+    virtual KDevelop::CodeCompletionContext* createCompletionContext(const KDevelop::DUContextPointer& context, const QString& contextText, const QString& followingText, const CursorInRevision& position) const;
 
     ///Override this to change the text-range which is used as context-information for the completion context
     ///The foreground-lock and a DUChain read lock are held when this is called
-    virtual void updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, DUContextPointer context) const;
+    virtual void updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view, const DUContextPointer& context) const;
     
     ///Can be used to retrieve and set the aborting flag(Enabling it is equivalent to caling abortCompletion())
     ///Is always reset from within computeCompletions

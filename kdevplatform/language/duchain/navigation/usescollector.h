@@ -47,7 +47,7 @@ namespace KDevelop {
             ///in the import-chain between that file, and the file where the declaration occurs.
             ///The default-implementation returns true if the file is part of an open project, or
             ///if no project is opened and the file is open in an editor.
-            virtual bool shouldRespectFile(IndexedString url);
+            virtual bool shouldRespectFile(const IndexedString& url);
             
             bool isReady() const;
             

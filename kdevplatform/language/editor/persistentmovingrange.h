@@ -76,7 +76,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange : public QSharedData
     /**
      * Change the highlighting attribute.
      * */
-    void setAttribute(KTextEditor::Attribute::Ptr attribute);
+    void setAttribute(const KTextEditor::Attribute::Ptr& attribute);
     
     /**
      * Whether this range is still valid. The range is invalidated if the document is changed externally,

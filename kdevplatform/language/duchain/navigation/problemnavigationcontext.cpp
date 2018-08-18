@@ -72,7 +72,7 @@ ProblemNavigationContext::ProblemNavigationContext(const QVector<IProblem::Ptr>&
   // Sort problems vector:
   // 1) By severity
   // 2) By sourceString, if severities are equals
-  std::sort(m_problems.begin(), m_problems.end(), [](const IProblem::Ptr a, const IProblem::Ptr b) {
+  std::sort(m_problems.begin(), m_problems.end(), [](const IProblem::Ptr& a, const IProblem::Ptr& b) {
     if (a->severity() < b->severity())
       return true;
 
@@ -240,10 +240,10 @@ QString ProblemNavigationContext::html(bool shorten)
   return currentHtml();
 }
 
-NavigationContextPointer ProblemNavigationContext::executeKeyAction(QString key)
+NavigationContextPointer ProblemNavigationContext::executeKeyAction(const QString& key)
 {
   if (key.startsWith(QLatin1String("invoke_action_"))) {
-    const int index = key.replace(QLatin1String("invoke_action_"), QString()).toInt();
+    const int index = QString(key).remove(QLatin1String("invoke_action_")).toInt();
     executeAction(index);
   }
 

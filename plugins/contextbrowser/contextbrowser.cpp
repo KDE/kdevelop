@@ -474,7 +474,7 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(TopDUContext* 
     return allProblems;
 
   std::sort(allProblems.begin(), allProblems.end(),
-            [position](const KDevelop::IProblem::Ptr a, const KDevelop::IProblem::Ptr b) {
+            [position](const KDevelop::IProblem::Ptr& a, const KDevelop::IProblem::Ptr& b) {
     const auto aRange = a->finalLocation();
     const auto bRange = b->finalLocation();
 
@@ -1459,7 +1459,9 @@ void ContextBrowserPlugin::navigateUp() {
 
 
 //BEGIN HistoryEntry
-ContextBrowserPlugin::HistoryEntry::HistoryEntry(KDevelop::DocumentCursor pos) : absoluteCursorPosition(pos) {
+ContextBrowserPlugin::HistoryEntry::HistoryEntry(const KDevelop::DocumentCursor& pos)
+  : absoluteCursorPosition(pos)
+{
 }
 
 ContextBrowserPlugin::HistoryEntry::HistoryEntry(IndexedDUContext ctx, const KTextEditor::Cursor& cursorPosition) : context(ctx) {

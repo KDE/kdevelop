@@ -172,7 +172,7 @@ public:
      * @param type Type to set as the last type
      * @param declaration Declaration to set as the last declaration; null by default
      */
-    void encounter(AbstractType::Ptr type, const DeclarationPointer& declaration=DeclarationPointer());
+    void encounter(const AbstractType::Ptr& type, const DeclarationPointer& declaration=DeclarationPointer());
 
     /**
      * @brief Set the last type to unknownType() and clear the last declaration.

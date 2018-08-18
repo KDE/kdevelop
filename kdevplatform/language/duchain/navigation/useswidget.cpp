@@ -443,7 +443,9 @@ DeclarationWidget::DeclarationWidget(const CodeRepresentation& code, const Index
   setUpdatesEnabled(true);
 }
 
-TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration, QList<IndexedDeclaration> allDeclarations, IndexedTopDUContext topContext)
+TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration,
+                                           const QList<IndexedDeclaration>& allDeclarations,
+                                           IndexedTopDUContext topContext)
   : m_topContext(topContext)
   , m_declaration(declaration)
   , m_allDeclarations(allDeclarations)

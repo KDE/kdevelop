@@ -55,7 +55,7 @@ FilteredProjectFolder::FilteredProjectFolder(NodesModelInterface* a_model, IProj
 {
 }
 
-void FilteredProjectFolder::updateFilterString(QString a_newFilterString)
+void FilteredProjectFolder::updateFilterString(const QString& a_newFilterString)
 {
   m_filterString = a_newFilterString;
 

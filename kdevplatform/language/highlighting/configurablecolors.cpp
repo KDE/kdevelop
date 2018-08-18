@@ -38,7 +38,7 @@ KTextEditor::Attribute::Ptr ConfigurableHighlightingColors::defaultAttribute() c
   return m_defaultAttribute;
 }
 
-void ConfigurableHighlightingColors::setDefaultAttribute(KTextEditor::Attribute::Ptr defaultAttrib)
+void ConfigurableHighlightingColors::setDefaultAttribute(const KTextEditor::Attribute::Ptr& defaultAttrib)
 {
   m_defaultAttribute = defaultAttrib;
 }
@@ -48,7 +48,7 @@ KTextEditor::Attribute::Ptr ConfigurableHighlightingColors::attribute(int number
   return m_attributes[number];
 }
 
-void ConfigurableHighlightingColors::addAttribute(int number, KTextEditor::Attribute::Ptr attribute)
+void ConfigurableHighlightingColors::addAttribute(int number, const KTextEditor::Attribute::Ptr& attribute)
 {
   m_attributes[number] = attribute;
 }

@@ -78,8 +78,8 @@ public:
    * \returns the newly created or updated TopDUContext pointer.
    */
   virtual ReferencedTopDUContext build( const IndexedString& url, T* node,
-                              ReferencedTopDUContext updateContext
-                                    = ReferencedTopDUContext() )
+                                        const ReferencedTopDUContext& updateContext
+                                        = ReferencedTopDUContext() )
   {
     m_compilingContexts = true;
     m_url = url;

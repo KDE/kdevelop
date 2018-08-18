@@ -127,7 +127,7 @@ void classname::funcname()\
         TESTSCOPEAST( orop->scopes.at(i), testorop->scopes.at(i) ) \
     }
 
-void matchScopeBodies( QList<QMake::StatementAST*>,
+void matchScopeBodies(const QList<QMake::StatementAST*>&,
                              const QList<QMake::StatementAST*>& );
 
 #endif

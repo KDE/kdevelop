@@ -285,7 +285,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
     }
 }
 
-void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup, QMultiMap<QString, Sublime::View*>& recycle)
+void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, const KConfigGroup& setGroup, const KConfigGroup& areaGroup, QMultiMap<QString, Sublime::View*>& recycle)
 {
     Q_ASSERT( !areaIndex->isSplit() );
     if (setGroup.hasKey("Orientation")) {

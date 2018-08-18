@@ -42,7 +42,7 @@ QString findSourceFile(const QString& name);
 QString findFile(const char* dir, const QString& name);
 bool isAttachForbidden(const char* file, int line);
 
-bool compareData(QModelIndex index, const QString& expected, const char* file, int line, bool useRE = false);
+bool compareData(const QModelIndex& index, const QString& expected, const char* file, int line, bool useRE = false);
 
 bool waitForState(MIDebugSession* session, KDevelop::IDebugSession::DebuggerState state, const char* file, int line,
                   bool waitForIdle = false);

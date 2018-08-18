@@ -78,7 +78,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     bool forceWaitForModel();
 
     ///Convenience-storage for use by the inherited completion model
-    void setCompletionContext(QExplicitlySharedDataPointer<CodeCompletionContext> completionContext);
+    void setCompletionContext(const QExplicitlySharedDataPointer<CodeCompletionContext>& completionContext);
     QExplicitlySharedDataPointer<CodeCompletionContext> completionContext() const;
 
     ///Convenience-storage for use by the inherited completion model
@@ -96,11 +96,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     void clear();
 
     ///Returns the tree-element that belogns to the index, or zero
-    QExplicitlySharedDataPointer<CompletionTreeElement> itemForIndex(QModelIndex index) const;
+    QExplicitlySharedDataPointer<CompletionTreeElement> itemForIndex(const QModelIndex& index) const;
 
   Q_SIGNALS:
     ///Connection from this completion-model into the background worker thread. You should emit this from within completionInvokedInternal.
-    void completionsNeeded(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, KTextEditor::View* view);
+    void completionsNeeded(const KDevelop::DUContextPointer& context, const KTextEditor::Cursor& position, KTextEditor::View* view);
     ///Additional signal that allows directly stepping into the worker-thread, bypassing computeCompletions(..) etc.
     ///doSpecialProcessing(data) will be executed in the background thread.
     void doSpecialProcessingInBackground(uint data);

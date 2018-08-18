@@ -372,7 +372,8 @@ IndexedString ParsingEnvironmentFile::language() const {
   return d_func()->m_language;
 }
 
-void ParsingEnvironmentFile::setLanguage(IndexedString language) {
+void ParsingEnvironmentFile::setLanguage(const IndexedString& language)
+{
   d_func_dynamic()->m_language = language;
 }
 

@@ -46,7 +46,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavi
     QWidget* widget() const override;
     bool isWidgetMaximized() const override;
 
-    NavigationContextPointer executeKeyAction(QString key) override;
+    NavigationContextPointer executeKeyAction(const QString& key) override;
 
 public Q_SLOTS:
     void executeAction(int index); // TODO: Add API in base class?

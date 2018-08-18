@@ -71,7 +71,7 @@ protected:
    * This should be called at the beginning of processing a class-specifier, right after the type for the class was created.
    * The type can be retrieved through currentAbstractType().
    */
-  virtual void classTypeOpened(KDevelop::AbstractType::Ptr) {}
+  virtual void classTypeOpened(const KDevelop::AbstractType::Ptr&) {}
 
   /**
    * Perform initialisation at the start of a build, and check that all types
@@ -211,7 +211,7 @@ protected:
    *
    * \returns whether a type was found (and thus opened).
    */
-  bool openTypeFromName(QualifiedIdentifier id, T* typeNode, bool needClass)
+  bool openTypeFromName(const QualifiedIdentifier& id, T* typeNode, bool needClass)
   {
     bool openedType = false;
 

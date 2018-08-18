@@ -110,7 +110,8 @@ bool UsesCollector::isReady() const {
   return m_waitForUpdate.size() == m_updateReady.size();
 }
 
-bool UsesCollector::shouldRespectFile(IndexedString document) {
+bool UsesCollector::shouldRespectFile(const IndexedString& document)
+{
   return (bool)ICore::self()->projectController()->findProjectForUrl(document.toUrl()) || (bool)ICore::self()->documentController()->documentForUrl(document.toUrl());
 }
 

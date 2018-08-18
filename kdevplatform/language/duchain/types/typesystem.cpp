@@ -217,7 +217,10 @@ TypePtr< KDevelop::AbstractType > SimpleTypeExchanger::exchange(const TypePtr< K
     return TypeExchanger::exchange(type);
 }
 
-SimpleTypeExchanger::SimpleTypeExchanger(TypePtr< KDevelop::AbstractType > replace, TypePtr< KDevelop::AbstractType > replaceWith) : m_replace(replace), m_replaceWith(replaceWith) {
+SimpleTypeExchanger::SimpleTypeExchanger(const TypePtr<KDevelop::AbstractType>& replace,
+                                         const TypePtr<KDevelop::AbstractType>& replaceWith)
+    : m_replace(replace)
+    , m_replaceWith(replaceWith) {
 }
 
 

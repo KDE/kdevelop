@@ -196,7 +196,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ParsingEnvironmentFile : public DUChainBase, p
     
     ///Sets the language for this top-context. Each top-context should get the language assigned that can by used
     ///in order to load the language using ILanguageController.
-    void setLanguage(IndexedString language);
+    void setLanguage(const IndexedString& language);
     
     enum {
       Identity = 11

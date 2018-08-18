@@ -101,7 +101,8 @@ public:
      * @param typeToAdd The new type the list's contents can possibly be of.
      */
     template <typename LanguageUnsureType>
-    void addContentType(AbstractType::Ptr typeToAdd) {
+    void addContentType(const AbstractType::Ptr& typeToAdd)
+    {
         auto newContentType = TypeUtils::mergeTypes<LanguageUnsureType>(contentType().abstractType(), typeToAdd);
         d_func_dynamic()->m_contentType = IndexedType(newContentType);
     }
@@ -174,7 +175,7 @@ public:
     * Behaves like addContentType, except that it modifies the key type instead.
     */
     template <typename LanguageUnsureType>
-    void addKeyType(AbstractType::Ptr typeToAdd)
+    void addKeyType(const AbstractType::Ptr& typeToAdd)
     {
         auto newKeyType = TypeUtils::mergeTypes<LanguageUnsureType>(keyType().abstractType(), typeToAdd);
         DUChainWriteLocker lock;

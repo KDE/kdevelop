@@ -242,7 +242,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistantProblem : public KDevelop::Prob
     KDevelop::IAssistant::Ptr solutionAssistant() const override {
       return m_solution;
     }
-    void setSolutionAssistant(KDevelop::IAssistant::Ptr p) {
+    void setSolutionAssistant(const KDevelop::IAssistant::Ptr& p)
+    {
       m_solution = p;
     }
 

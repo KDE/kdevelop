@@ -139,7 +139,7 @@ public:
     void setNotifyWhenReady(const QVector<QPointer<QObject>>& notify);
 
     /// Sets the du-context that was created by this parse-job
-    virtual void setDuChain(ReferencedTopDUContext duChain);
+    virtual void setDuChain(const ReferencedTopDUContext& duChain);
     /// Returns the set du-context, or zero of none was set.
     virtual ReferencedTopDUContext duChain() const;
 

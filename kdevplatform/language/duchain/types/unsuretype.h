@@ -64,8 +64,8 @@ public:
   KDevelop::AbstractType::WhichType whichType() const override;
   void exchangeTypes(KDevelop::TypeExchanger* exchanger) override;
   
-  virtual void addType(IndexedType type);
-  virtual void removeType(IndexedType type);
+  virtual void addType(const IndexedType& type);
+  virtual void removeType(const IndexedType& type);
   
   ///Array of represented types. You can conveniently iterate it using the FOREACH_FUNCTION macro,
   ///or just access them using indices

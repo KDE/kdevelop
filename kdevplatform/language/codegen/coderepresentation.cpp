@@ -242,7 +242,9 @@ class ArtificialStringData : public QSharedData {
 
 class StringCodeRepresentation : public CodeRepresentation {
   public:
-    explicit StringCodeRepresentation(QExplicitlySharedDataPointer<ArtificialStringData> _data) : data(_data) {
+    explicit StringCodeRepresentation(const QExplicitlySharedDataPointer<ArtificialStringData>& _data)
+        : data(_data)
+    {
       Q_ASSERT(data);
     }
 

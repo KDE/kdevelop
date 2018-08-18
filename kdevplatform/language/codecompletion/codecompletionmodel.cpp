@@ -258,7 +258,7 @@ KTextEditor::CodeCompletionModelControllerInterface::MatchReaction CodeCompletio
     return None;
 }
 
-void CodeCompletionModel::setCompletionContext(QExplicitlySharedDataPointer<CodeCompletionContext> completionContext)
+void CodeCompletionModel::setCompletionContext(const QExplicitlySharedDataPointer<CodeCompletionContext>& completionContext)
 {
   QMutexLocker lock(m_mutex);
   m_completionContext = completionContext;
@@ -284,7 +284,8 @@ void CodeCompletionModel::executeCompletionItem(View* view, const KTextEditor::R
   element->asItem()->execute(view, word);
 }
 
-QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > CodeCompletionModel::itemForIndex(QModelIndex index) const {
+QExplicitlySharedDataPointer<KDevelop::CompletionTreeElement> CodeCompletionModel::itemForIndex(const QModelIndex& index) const
+{
   CompletionTreeElement* element = static_cast<CompletionTreeElement*>(index.internalPointer());
   return QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement >(element);
 }

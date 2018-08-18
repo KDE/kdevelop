@@ -53,10 +53,11 @@ DeclarationBuilder::DeclarationBuilder(ParseSession* session)
 
 ReferencedTopDUContext DeclarationBuilder::build(const IndexedString& url,
                                                  QmlJS::AST::Node* node,
-                                                 ReferencedTopDUContext updateContext)
+                                                 const ReferencedTopDUContext& updateContext_)
 {
     Q_ASSERT(m_session->url() == url);
 
+    ReferencedTopDUContext updateContext(updateContext_);
     // The declaration builder needs to run twice, so it can resolve uses of e.g. functions
     // which are called before they are defined (which is easily possible, due to JS's dynamic nature).
     if (!m_prebuilding) {

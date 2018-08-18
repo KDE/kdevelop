@@ -596,7 +596,7 @@ void TopDUContext::setFeatures(Features features)
     parsingEnvironmentFile()->setFeatures(this->features());
 }
 
-void TopDUContext::setAst(QExplicitlySharedDataPointer<IAstContainer> ast)
+void TopDUContext::setAst(const QExplicitlySharedDataPointer<IAstContainer>& ast)
 {
   ENSURE_CAN_WRITE
   m_local->m_ast = ast;

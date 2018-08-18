@@ -247,7 +247,7 @@ public:
   /**
    * Sets the AST Container.
   */
-  void setAst(QExplicitlySharedDataPointer<IAstContainer> ast);
+  void setAst(const QExplicitlySharedDataPointer<IAstContainer>& ast);
   
   /**
    * Utility function to clear the AST Container

@@ -136,7 +136,8 @@ void KDevelop::CodeCompletionWorker::doSpecialProcessing(uint) {
 
 }
 
-CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::DUContextPointer context, const QString& contextText, const QString& followingText, const KDevelop::CursorInRevision& position) const {
+CodeCompletionContext* CodeCompletionWorker::createCompletionContext(const KDevelop::DUContextPointer& context, const QString& contextText, const QString& followingText, const KDevelop::CursorInRevision& position) const
+{
   Q_UNUSED(context);
   Q_UNUSED(contextText);
   Q_UNUSED(followingText);
@@ -144,7 +145,7 @@ CodeCompletionContext* CodeCompletionWorker::createCompletionContext(KDevelop::D
   return nullptr;
 }
 
-void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context, const KTextEditor::Cursor& position, QString followingText, const KTextEditor::Range& contextRange, const QString& contextText)
+void CodeCompletionWorker::computeCompletions(const KDevelop::DUContextPointer& context, const KTextEditor::Cursor& position, const QString& followingText, const KTextEditor::Range& contextRange, const QString& contextText)
 {
   Q_UNUSED(contextRange);
 
@@ -187,7 +188,8 @@ void CodeCompletionWorker::computeCompletions(KDevelop::DUContextPointer context
   }
 }
 
-QList<QExplicitlySharedDataPointer<CompletionTreeElement> > CodeCompletionWorker::computeGroups(QList<CompletionTreeItemPointer> items, QExplicitlySharedDataPointer<CodeCompletionContext> completionContext)
+QList<QExplicitlySharedDataPointer<CompletionTreeElement>> CodeCompletionWorker::computeGroups(const QList<CompletionTreeItemPointer>& items,
+                                                                                               const QExplicitlySharedDataPointer<CodeCompletionContext>& completionContext)
 {
   Q_UNUSED(completionContext);
   QList<QExplicitlySharedDataPointer<CompletionTreeElement> > tree;
@@ -216,7 +218,7 @@ KDevelop::CodeCompletionModel* CodeCompletionWorker::model() const
   return m_model;
 }
 
-void CodeCompletionWorker::updateContextRange(Range& contextRange, View* view, DUContextPointer context) const
+void CodeCompletionWorker::updateContextRange(Range& contextRange, View* view, const DUContextPointer& context) const
 {
   Q_UNUSED(contextRange);
   Q_UNUSED(view);

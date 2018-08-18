@@ -59,7 +59,7 @@ public:
 
 public: // Operations.
   /// Call this to update the classes filter string.
-  void updateFilterString(QString a_newFilterString);
+  void updateFilterString(const QString& a_newFilterString);
 
 private: // DocumentClassesFolder overrides
   bool isClassFiltered(const KDevelop::QualifiedIdentifier& a_id) override;

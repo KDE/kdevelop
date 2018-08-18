@@ -46,7 +46,7 @@ public:
      * @param listOnly when this is true, the given items will be listed, but all filtering using checkboxes is disabled.
      * @param noSearchField when this is true, no search-line is shown.
      * */
-    QuickOpenWidget(QString title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false);
+    QuickOpenWidget(const QString& title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly = false, bool noSearchField = false);
     ~QuickOpenWidget() override;
     void setPreselectedText(const QString& text);
     void prepareShow();

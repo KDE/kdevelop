@@ -550,7 +550,7 @@ void BackgroundParser::loadSettings()
     d->loadSettings();
 }
 
-void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, QString text)
+void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, const QString& text)
 {
     Q_UNUSED(text)
     d->m_jobProgress[job] = value;

@@ -312,7 +312,10 @@ VcsDiff VCSStandardDiffUpdater::update() const
     return diffJob->fetchResults().value<VcsDiff>();
 }
 
-VCSStandardDiffUpdater::VCSStandardDiffUpdater(IBasicVersionControl* vcs, QUrl url) : m_vcs(vcs), m_url(url) {
+VCSStandardDiffUpdater::VCSStandardDiffUpdater(IBasicVersionControl* vcs, const QUrl& url)
+    : m_vcs(vcs)
+    , m_url(url)
+{
 }
 
 VCSStandardDiffUpdater::~VCSStandardDiffUpdater() {
