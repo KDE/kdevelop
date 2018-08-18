@@ -10,9 +10,6 @@
     <height>381</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Quick Open</string>
-  </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
     <number>2</number>
