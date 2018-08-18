@@ -380,8 +380,9 @@ int main( int argc, char *argv[] )
     KDevelopApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("kdevelop");
 
-    static const char description[] = I18N_NOOP( "The KDevelop Integrated Development Environment" );
-    KAboutData aboutData( QStringLiteral("kdevelop"), i18n( "KDevelop" ), QByteArray(KDEVELOP_VERSION_STRING), i18n(description), KAboutLicense::GPL,
+    KAboutData aboutData( QStringLiteral("kdevelop"), i18n( "KDevelop" ), QByteArray(KDEVELOP_VERSION_STRING),
+                          i18n("The KDevelop Integrated Development Environment"),
+                          KAboutLicense::GPL,
                           i18n("Copyright 1999-2018, The KDevelop developers"), QString(), QStringLiteral("https://www.kdevelop.org/"));
     aboutData.setDesktopFileName(QStringLiteral("org.kde.kdevelop"));
     aboutData.addAuthor( i18n("Kevin Funk"), i18n( "Co-maintainer, C++/Clang, QA, Windows Support" ), QStringLiteral("kfunk@kde.org") );
