@@ -1,3 +1,9 @@
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
+)
+
 configure_file(testconfig.h.in testconfig.h)
 
 ecm_add_test(test_custombuildsystemplugin.cpp ${custom_LOG_SRCS}

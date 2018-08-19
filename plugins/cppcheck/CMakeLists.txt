@@ -1,11 +1,5 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcppcheck\")
 
-add_definitions(
-    -DQT_NO_CAST_FROM_ASCII
-    -DQT_NO_CAST_TO_ASCII
-    -DQT_NO_CAST_FROM_BYTEARRAY
-)
-
 find_package(Cppcheck QUIET)
 set_package_properties(Cppcheck PROPERTIES
     DESCRIPTION "A tool for static C/C++ code analysis"
