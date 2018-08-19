@@ -210,7 +210,7 @@ void Parser::expectedToken(int /*expected*/, qint64 /*where*/, const QString& na
 {
     reportProblem(
         Parser::Error,
-        QString("Expected token \"%1\"").arg(name));
+        QStringLiteral("Expected token \"%1\"").arg(name));
 }
 
 void Parser::expectedSymbol(int /*expected_symbol*/, const QString& name)
@@ -225,9 +225,9 @@ void Parser::expectedSymbol(int /*expected_symbol*/, const QString& name)
     QString tokenValue = tokenText(token.begin, token.end);
     reportProblem(
         Parser::Error,
-        QString("Expected symbol \"%1\" (current token: \"%2\" [%3] at line: %4 col: %5)")
+        QStringLiteral("Expected symbol \"%1\" (current token: \"%2\" [%3] at line: %4 col: %5)")
             .arg(name)
-            .arg(token.kind != 0 ? tokenValue : "EOF")
+            .arg(token.kind != 0 ? tokenValue : QStringLiteral("EOF"))
             .arg(token.kind)
             .arg(line)
             .arg(col));

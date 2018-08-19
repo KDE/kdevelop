@@ -121,7 +121,7 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         if(type==QLatin1String("BOOL"))
         {
             QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
-            value = boolean->isChecked() ? "ON" : "OFF";
+            value = boolean->isChecked() ? QStringLiteral("ON") : QStringLiteral("OFF");
         }
         else if(type==QLatin1String("PATH") || type==QLatin1String("FILEPATH"))
         {
@@ -175,7 +175,7 @@ void CMakeCacheDelegate::checkboxToggled()
     // https://bugs.kde.org/show_bug.cgi?id=304352
     QCheckBox* editor = qobject_cast<QCheckBox*>(sender());
     Q_ASSERT(editor);
-    closeEditor(editor);
+    emit closeEditor(editor);
 }
 
 void CMakeCacheDelegate::closingEditor(QWidget * editor, QAbstractItemDelegate::EndEditHint hint)

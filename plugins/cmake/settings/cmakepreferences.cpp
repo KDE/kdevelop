@@ -245,8 +245,8 @@ void CMakePreferences::listSelectionChanged(const QModelIndex & index, const QMo
     QModelIndex idx = index.sibling(index.row(), 3);
     QModelIndex idxType = index.sibling(index.row(), 1);
     QString comment=QStringLiteral("%1. %2")
-            .arg(m_currentModel->itemFromIndex(idxType)->text())
-            .arg(m_currentModel->itemFromIndex(idx)->text());
+            .arg(m_currentModel->itemFromIndex(idxType)->text(),
+                 m_currentModel->itemFromIndex(idx)->text());
     m_prefsUi->commentText->setText(comment);
 }
 

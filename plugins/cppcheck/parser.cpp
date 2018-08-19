@@ -56,9 +56,9 @@ QString verboseMessageToHtml( const QString & input )
 
     output.replace(QLatin1String("\\012"), QLatin1String("\n"));
 
-    if (output.count('\n') >= 2) {
-        output.replace(output.indexOf('\n'), 1, QStringLiteral("<pre>") );
-        output.replace(output.lastIndexOf('\n'), 1, QStringLiteral("</pre><br>") );
+    if (output.count(QLatin1Char('\n')) >= 2) {
+        output.replace(output.indexOf(QLatin1Char('\n')), 1, QStringLiteral("<pre>") );
+        output.replace(output.lastIndexOf(QLatin1Char('\n')), 1, QStringLiteral("</pre><br>") );
     }
 
     return output;
@@ -83,19 +83,19 @@ bool CppcheckParser::startElement()
 
     qCDebug(KDEV_CPPCHECK) << "CppcheckParser::startElement: elem: " << qPrintable(name().toString());
 
-    if (name() == "results") {
+    if (name() == QLatin1String("results")) {
         newState = Results;
     }
 
-    else if (name() == "cppcheck") {
+    else if (name() == QLatin1String("cppcheck")) {
         newState = CppCheck;
     }
 
-    else if (name() == "errors") {
+    else if (name() == QLatin1String("errors")) {
         newState = Errors;
     }
 
-    else if (name() == "location") {
+    else if (name() == QLatin1String("location")) {
         newState = Location;
         if (attributes().hasAttribute(QStringLiteral("file")) && attributes().hasAttribute(QStringLiteral("line"))) {
             QString errorFile = attributes().value(QStringLiteral("file")).toString();
@@ -114,7 +114,7 @@ bool CppcheckParser::startElement()
         }
     }
 
-    else if (name() == "error") {
+    else if (name() == QLatin1String("error")) {
         newState = Error;
         m_errorSeverity = QStringLiteral("unknown");
         m_errorInconclusive = false;

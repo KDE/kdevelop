@@ -87,7 +87,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
     }
     else if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(decl)) {
         if (member->isFriend()) {
-            m_cachedText = "friend " + m_cachedText;
+            m_cachedText = QLatin1String("friend ") + m_cachedText;
         }
     }
     if (AbstractType::Ptr type = decl->abstractType()) {
@@ -100,7 +100,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
             FunctionType::Ptr func = type.cast<FunctionType>();
             // func->partToString() does not add the argument names -> do it manually
             if (DUContext* fCtx = DUChainUtils::getFunctionContext(decl)) {
-                m_cachedText += '(';
+                m_cachedText += QLatin1Char('(');
                 bool first = true;
                 foreach (Declaration* childDecl, fCtx->localDeclarations(decl->topContext())) {
                     if (first) {
@@ -114,18 +114,18 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
                     }
                     auto ident = childDecl->identifier();
                     if (!ident.isEmpty()) {
-                        m_cachedText += ' ' +  ident.toString();
+                        m_cachedText += QLatin1Char(' ') +  ident.toString();
                     }
 
                 }
-                m_cachedText += ')';
+                m_cachedText += QLatin1Char(')');
             } else {
                 qCWarning(PLUGIN_OUTLINE) << "Missing function context:" << decl->qualifiedIdentifier().toString();
                 m_cachedText += func->partToString(FunctionType::SignatureArguments);
             }
             //constructors/destructors have no return type, a trailing semicolon would look stupid
             if (func->returnType()) {
-                m_cachedText += " : " + func->partToString(FunctionType::SignatureReturn);
+                m_cachedText += QLatin1String(" : ") + func->partToString(FunctionType::SignatureReturn);
             }
             return; // don't append any children here!
         }
@@ -135,7 +135,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         case AbstractType::TypeEnumerator:
             //no need to append the fully qualified type
             Q_ASSERT(decl->type<EnumeratorType>());
-            m_cachedText += " = " + decl->type<EnumeratorType>()->valueAsString();
+            m_cachedText += QLatin1String(" = ") + decl->type<EnumeratorType>()->valueAsString();
             break;
         case AbstractType::TypeStructure: {
             //this seems to be the way it has to be done (after grepping through source code)
@@ -144,7 +144,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
             const bool isFriend = decl->indexedIdentifier() == friendIdentifier;
             if (isFriend) {
                 //FIXME There seems to be no way of finding out whether the friend is class/struct/etc
-                m_cachedText += ' ' + type->toString();
+                m_cachedText += QLatin1Char(' ') + type->toString();
             }
             break;
         }
@@ -152,14 +152,14 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
             //append the type it aliases
             TypeAliasType::Ptr alias = type.cast<TypeAliasType>();
             if (AbstractType::Ptr targetType = alias->type()) {
-                m_cachedText += " : " + targetType->toString();
+                m_cachedText += QLatin1String(" : ") + targetType->toString();
             }
         }
         break;
         default:
             QString typeStr = type->toString();
             if (!typeStr.isEmpty()) {
-                m_cachedText += " : " + typeStr;
+                m_cachedText += QLatin1String(" : ") + typeStr;
             }
         }
     }
@@ -167,10 +167,10 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
 
     //these two don't seem to be hit
     if (decl->isAutoDeclaration()) {
-        m_cachedText = "Implicit: " + m_cachedText;
+        m_cachedText = QLatin1String("Implicit: ") + m_cachedText;
     }
     if (decl->isAnonymous()) {
-        m_cachedText = "<anonymous>" + m_cachedText;
+        m_cachedText = QLatin1String("<anonymous>") + m_cachedText;
     }
 
     if (DUContext* ctx = decl->internalContext()) {

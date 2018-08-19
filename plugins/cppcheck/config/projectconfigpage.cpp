@@ -90,7 +90,7 @@ void ProjectConfigPage::updateCommandLine()
     m_parameters->extraParameters = ui->kcfg_extraParameters->text().trimmed();
 
     QString message;
-    QString commandLine = m_parameters->commandLine(message).join(' ');
+    QString commandLine = m_parameters->commandLine(message).join(QLatin1Char(' '));
 
     if (message.isEmpty()) {
         ui->messageWidget->hide();
@@ -112,7 +112,7 @@ void ProjectConfigPage::updateCommandLine()
         return;
     }
 
-    QStringList lines = commandLine.split('\n');
+    QStringList lines = commandLine.split(QLatin1Char('\n'));
     QMutableStringListIterator i(lines);
 
     while (i.hasNext()) {
@@ -121,7 +121,7 @@ void ProjectConfigPage::updateCommandLine()
         }
     }
 
-    ui->commandLine->setPlainText(lines.join('\n'));
+    ui->commandLine->setPlainText(lines.join(QLatin1Char('\n')));
     ui->commandLineBreaks->setEnabled(false);
 }
 

@@ -78,7 +78,7 @@ void Resource::getOrgs(const QString &token)
 void Resource::authenticate(const QString &name, const QString &password)
 {
     auto job = createHttpAuthJob(QLatin1String("Authorization: Basic ") + QString::fromUtf8(QByteArray(name.toUtf8() + ':' + password.toUtf8()).toBase64()));
-    job->addMetaData("PropagateHttpHeader","true");
+    job->addMetaData(QStringLiteral("PropagateHttpHeader"), QStringLiteral("true"));
     connect(job, &KIO::StoredTransferJob::result,
             this, &Resource::slotAuthenticate);
     job->start();

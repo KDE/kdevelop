@@ -284,7 +284,7 @@ void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
     } else {
         role = KColorScheme::NegativeText;
     }
-    m_chooserUi->status->setText(QStringLiteral("<i><font color='%1'>%2</font></i>").arg(scheme.foreground(role).color().name()).arg(message));
+    m_chooserUi->status->setText(QStringLiteral("<i><font color='%1'>%2</font></i>").arg(scheme.foreground(role).color().name(), message));
 
     auto okButton = m_buttonBox->button(QDialogButtonBox::Ok);
     okButton->setEnabled(canApply);

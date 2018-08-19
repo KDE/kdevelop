@@ -699,7 +699,7 @@ int main( int argc, char *argv[] )
         }
     }
 
-    if (parser.isSet("project")) {
+    if (parser.isSet(QStringLiteral("project"))) {
         const auto project = parser.value(QStringLiteral("project"));
         QFileInfo info(project);
         QUrl projectUrl;
