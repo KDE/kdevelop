@@ -145,7 +145,7 @@ void Job::start()
     m_standardOutput.clear();
     m_xmlOutput.clear();
 
-    qCDebug(KDEV_CPPCHECK) << "executing:" << commandLine().join(' ');
+    qCDebug(KDEV_CPPCHECK) << "executing:" << commandLine().join(QLatin1Char(' '));
 
     m_timer->restart();
     KDevelop::OutputExecuteJob::start();
@@ -195,13 +195,13 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qCDebug(KDEV_CPPCHECK) << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
 
-    postProcessStdout({QString("Elapsed time: %1 s.").arg(m_timer->elapsed()/1000.0)});
+    postProcessStdout({QStringLiteral("Elapsed time: %1 s.").arg(m_timer->elapsed()/1000.0)});
 
     if (exitCode != 0) {
         qCDebug(KDEV_CPPCHECK) << "cppcheck failed, standard output: ";
-        qCDebug(KDEV_CPPCHECK) << m_standardOutput.join('\n');
+        qCDebug(KDEV_CPPCHECK) << m_standardOutput.join(QLatin1Char('\n'));
         qCDebug(KDEV_CPPCHECK) << "cppcheck failed, XML output: ";
-        qCDebug(KDEV_CPPCHECK) << m_xmlOutput.join('\n');
+        qCDebug(KDEV_CPPCHECK) << m_xmlOutput.join(QLatin1Char('\n'));
     }
 
     KDevelop::OutputExecuteJob::childProcessExited(exitCode, exitStatus);

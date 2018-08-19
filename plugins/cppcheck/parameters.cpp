@@ -194,7 +194,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
                 }
 
                 while(!qtHeader.atEnd()) {
-                    auto match = mocHeaderRegex.match(qtHeader.readLine());
+                    auto match = mocHeaderRegex.match(QString::fromUtf8(qtHeader.readLine()));
                     if (match.hasMatch()) {
                         mocDefineFound = true;
                         result << QStringLiteral("-DQ_MOC_OUTPUT_REVISION=") + match.captured(1);
@@ -217,7 +217,8 @@ QStringList Parameters::commandLine(QString& infoMessage) const
     if (m_project && useProjectIncludes) {
         QList<KDevelop::Path> ignored;
 
-        foreach (const QString& element, applyPlaceholders(ignoredIncludes).split(';')) {
+        const auto elements = applyPlaceholders(ignoredIncludes).split(QLatin1Char(';'));
+        for (const QString& element : elements) {
             if (!element.trimmed().isEmpty()) {
                 ignored.append(KDevelop::Path(element));
             }

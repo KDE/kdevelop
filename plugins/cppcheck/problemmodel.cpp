@@ -39,7 +39,9 @@ inline KDevelop::ProblemModelSet* problemModelSet()
     return KDevelop::ICore::self()->languageController()->problemModelSet();
 }
 
-static const QString problemModelId = QStringLiteral("Cppcheck");
+namespace Strings {
+QString problemModelId() { return QStringLiteral("Cppcheck"); }
+}
 
 ProblemModel::ProblemModel(Plugin* plugin)
     : KDevelop::ProblemModel(plugin)
@@ -48,12 +50,12 @@ ProblemModel::ProblemModel(Plugin* plugin)
 {
     setFeatures(CanDoFullUpdate | ScopeFilter | SeverityFilter | Grouping | CanByPassScopeFilter);
     reset();
-    problemModelSet()->addModel(problemModelId, i18n("Cppcheck"), this);
+    problemModelSet()->addModel(Strings::problemModelId(), i18n("Cppcheck"), this);
 }
 
 ProblemModel::~ProblemModel()
 {
-    problemModelSet()->removeModel(problemModelId);
+    problemModelSet()->removeModel(Strings::problemModelId());
 }
 
 KDevelop::IProject* ProblemModel::project() const
@@ -147,7 +149,7 @@ void ProblemModel::reset(KDevelop::IProject* project, const QString& path)
 
 void ProblemModel::show()
 {
-    problemModelSet()->showModel(problemModelId);
+    problemModelSet()->showModel(Strings::problemModelId());
 }
 
 void ProblemModel::forceFullUpdate()
