@@ -174,7 +174,7 @@ void TestMIParser::testParseLine()
     file.contents = line;
 
     std::unique_ptr<KDevMI::MI::Record> record(m_parser.parse(&file));
-    QVERIFY(record);
+    QVERIFY(record != nullptr);
     QCOMPARE((int)record->kind, recordKind);
 
     switch(recordKind) {

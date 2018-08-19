@@ -143,7 +143,7 @@
      </widget>
      <widget class="QWidget" name="tabIncludes">
       <attribute name="title">
-       <string>Include directories</string>
+       <string>Include Directories</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
@@ -226,7 +226,7 @@
      </widget>
      <widget class="QWidget" name="tabExtra">
       <attribute name="title">
-       <string>Extra parameters</string>
+       <string>Extra Parameters</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
@@ -293,7 +293,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Command line</string>
+      <string>Command Line</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>

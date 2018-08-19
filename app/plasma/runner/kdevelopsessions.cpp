@@ -98,7 +98,7 @@ void KDevelopSessions::loadSessions()
     m_sessions.reserve(list.size());
     for (const QString& sessionfile : list) {
         Session session;
-        session.id = sessionfile.section('/', -2, -2);
+        session.id = sessionfile.section(QLatin1Char('/'), -2, -2);
         KConfig cfg(sessionfile, KConfig::SimpleConfig);
         KConfigGroup group = cfg.group(QString());
         session.name = group.readEntry("SessionPrettyContents");
