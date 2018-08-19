@@ -50,7 +50,7 @@ QString UnsureType::toString() const {
     if(t)
       typeNames.append(t->toString());
     else
-      typeNames.append(QLatin1String("none"));
+      typeNames.append(QStringLiteral("none"));
   }
   QString ret = QLatin1String("unsure (") + typeNames.join(QLatin1String(", ")) + QLatin1Char(')');
   

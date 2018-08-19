@@ -48,15 +48,15 @@ QString languageDefaultStandard(Utils::LanguageType languageType)
 {
     switch (languageType) {
     case Utils::C:
-        return QLatin1String("c99");
+        return QStringLiteral("c99");
     case Utils::Cpp:
-        return QLatin1String("c++11");
+        return QStringLiteral("c++11");
     case Utils::OpenCl:
-        return QLatin1String("CL1.1");
+        return QStringLiteral("CL1.1");
     case Utils::Cuda:
-        return QLatin1String("c++11");
+        return QStringLiteral("c++11");
     case Utils::ObjC:
-        return QLatin1String("c99");
+        return QStringLiteral("c99");
     case Utils::Other:
         break;
     }

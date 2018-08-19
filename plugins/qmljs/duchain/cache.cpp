@@ -125,8 +125,8 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
         // and skip everything else
         if (filePath.endsWith(QLatin1String("plugins.qmltypes"))) {
             return QStringList() << filePath;
-        } else if (fileInfo.dir().exists(QLatin1String("plugins.qmltypes"))) {
-            return {fileInfo.dir().filePath(QLatin1String("plugins.qmltypes"))};
+        } else if (fileInfo.dir().exists(QStringLiteral("plugins.qmltypes"))) {
+            return {fileInfo.dir().filePath(QStringLiteral("plugins.qmltypes"))};
         }
 
         // Non-so files don't need any treatment
