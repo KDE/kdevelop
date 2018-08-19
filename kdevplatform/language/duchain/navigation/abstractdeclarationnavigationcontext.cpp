@@ -794,7 +794,7 @@ QString AbstractDeclarationNavigationContext::declarationSizeInformation(const D
   // but normally leaves the bitOffsetOf unset (-1).
   const ClassMemberDeclaration* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
   if (memberDecl && (memberDecl->bitOffsetOf() > 0 || memberDecl->sizeOf() > 0 || memberDecl->alignOf() > 0)) {
-    QString sizeInfo = "<p>";
+    QString sizeInfo = QStringLiteral("<p>");
 
     if (memberDecl->bitOffsetOf() >= 0) {
       const auto byteOffset = memberDecl->bitOffsetOf() / 8;
@@ -812,7 +812,7 @@ QString AbstractDeclarationNavigationContext::declarationSizeInformation(const D
       sizeInfo += i18n("aligned to: %1 Bytes", memberDecl->alignOf());
     }
 
-    sizeInfo += "</p>";
+    sizeInfo += QStringLiteral("</p>");
 
     return sizeInfo;
   }

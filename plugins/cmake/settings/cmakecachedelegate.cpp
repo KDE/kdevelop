@@ -121,7 +121,7 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         if(type==QLatin1String("BOOL"))
         {
             QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
-            value = boolean->isChecked() ? "ON" : "OFF";
+            value = boolean->isChecked() ? QStringLiteral("ON") : QStringLiteral("OFF");
         }
         else if(type==QLatin1String("PATH") || type==QLatin1String("FILEPATH"))
         {
