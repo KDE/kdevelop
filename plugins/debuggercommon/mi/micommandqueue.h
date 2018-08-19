@@ -32,6 +32,7 @@ public:
     CommandQueue();
     ~CommandQueue();
 
+    /// CommandQueue takes ownership of @p command.
     void enqueue(MICommand* command);
 
     bool isEmpty() const;
@@ -43,6 +44,8 @@ public:
 
     /**
      * Retrieve and remove the next command from the list.
+     * Ownership of the command is transferred to the caller.
+     * Returns @c nullptr if the list is empty.
      */
     MICommand* nextCommand();
 
