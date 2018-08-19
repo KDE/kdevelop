@@ -35,12 +35,12 @@ CMakeCacheModel::CMakeCacheModel(QObject *parent, const KDevelop::Path &path)
 
 void CMakeCacheModel::reset()
 {
-    emit beginResetModel();
+    beginResetModel();
     clear();
     m_internal.clear();
     m_modifiedRows.clear();
     read();
-    emit endResetModel();
+    endResetModel();
 }
 
 void CMakeCacheModel::read()
