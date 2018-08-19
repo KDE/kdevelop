@@ -57,7 +57,7 @@ public:
     QString id() const override
     {
         //NOTE: id must be unique, see e.g. https://bugs.kde.org/show_bug.cgi?id=287093
-        return "org.kdevelop.OutputView." + QString::number(m_data->toolViewId);
+        return QStringLiteral("org.kdevelop.OutputView.%1").arg(m_data->toolViewId);
     }
 private:
     const ToolViewData *m_data;

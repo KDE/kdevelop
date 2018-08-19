@@ -39,7 +39,7 @@ BookmarkHandler::BookmarkHandler( FileManager *parent, QMenu* kpopupmenu )
     setObjectName( QStringLiteral( "BookmarkHandler" ) );
 
     QUrl bookmarksPath = KDevelop::ICore::self()->activeSession()->pluginDataArea(parent->plugin());
-    bookmarksPath.setPath(bookmarksPath.path() + "fsbookmarks.xml");
+    bookmarksPath.setPath(bookmarksPath.path() + QLatin1String("fsbookmarks.xml"));
     qCDebug(PLUGIN_FILEMANAGER) << bookmarksPath;
 
     KBookmarkManager *manager = KBookmarkManager::managerForFile( bookmarksPath.toLocalFile(), QStringLiteral( "kdevplatform" ) );
