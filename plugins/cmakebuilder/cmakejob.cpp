@@ -97,7 +97,7 @@ QStringList CMakeJob::commandLine() const
     }
     QVariantMap cacheArgs = property("extraCMakeCacheValues").toMap();
     for( auto it = cacheArgs.constBegin(), itEnd = cacheArgs.constEnd(); it!=itEnd; ++it) {
-        args << QStringLiteral("-D%1=%2").arg(it.key()).arg(it.value().toString());
+        args << QStringLiteral("-D%1=%2").arg(it.key(), it.value().toString());
     }
 
     auto rt = ICore::self()->runtimeController()->currentRuntime();
