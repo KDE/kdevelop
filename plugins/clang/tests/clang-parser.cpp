@@ -102,7 +102,7 @@ private:
         const auto problems = m_session.problemsForFile(file);
         if (!problems.isEmpty()) {
             qerr << endl << "problems encountered during parsing:" << endl;
-            for (const ProblemPointer problem : problems) {
+            for (const ProblemPointer& problem : problems) {
                 qerr << problem->toString() << endl;
             }
         } else {

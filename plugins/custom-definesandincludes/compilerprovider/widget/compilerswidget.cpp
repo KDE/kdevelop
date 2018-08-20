@@ -219,13 +219,13 @@ void CompilersWidget::apply()
 
     const auto& providerCompilers = provider->compilers();
     const auto& widgetCompilers = compilers();
-    for (auto compiler: providerCompilers) {
+    for (auto& compiler: providerCompilers) {
         if (!widgetCompilers.contains(compiler)) {
             provider->unregisterCompiler(compiler);
         }
     }
 
-    for (auto compiler: widgetCompilers) {
+    for (auto& compiler: widgetCompilers) {
         if (!providerCompilers.contains(compiler)) {
             provider->registerCompiler(compiler);
         }
