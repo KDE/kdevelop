@@ -61,7 +61,9 @@ void CheckListItemProxyStyle::drawCheckBox(QPainter* painter, const QStyleOption
 
     const auto icon = QIcon::fromTheme(iconName);
 
-    icon.paint(painter, option->rect, option->decorationAlignment, QIcon::Normal, QIcon::On);
+    const QIcon::Mode iconMode = (option->state & QStyle::State_Enabled) ? QIcon::Normal : QIcon::Disabled;
+
+    icon.paint(painter, option->rect, option->decorationAlignment, iconMode, QIcon::On);
 }
 
 }
