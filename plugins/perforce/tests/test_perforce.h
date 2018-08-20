@@ -26,17 +26,15 @@
 
 class PerforcePlugin;
 
-namespace KDevelop
-{
-class TestCore;
-}
-
 class PerforcePluginTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
+    void cleanupTestCase();
     void init();
     void cleanup();
+
     void testAdd();
     void testEdit();
 	void testEditMultipleFiles();
@@ -50,7 +48,6 @@ private Q_SLOTS:
     void testDiff();
 private:
     PerforcePlugin* m_plugin;
-    KDevelop::TestCore* m_core;
     void removeTempDirsIfAny();
     void createNewTempDirs();
 };

@@ -52,9 +52,6 @@
         "Version": "5.0"
     },
     "X-KDevelop-Category": "Global",
-    "X-KDevelop-IRequired": [
-        "org.kdevelop.IExecutePlugin"
-    ],
     "X-KDevelop-Interfaces": [
         "org.kdevelop.IBasicVersionControl",
         "org.kdevelop.ICentralizedVersionControl"
