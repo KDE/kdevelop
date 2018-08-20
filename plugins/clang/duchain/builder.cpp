@@ -428,6 +428,9 @@ struct Visitor
         }
         auto decl = new DeclType(range, nullptr);
         decl->setIdentifier(id);
+#if CINDEX_VERSION_MINOR >= 32
+        decl->setExplicitlyTyped(clang_getCursorType(cursor).kind != CXType_Auto);
+#endif
         m_cursorToDeclarationCache[cursor] = decl;
         setDeclData<CK>(cursor, decl);
         {

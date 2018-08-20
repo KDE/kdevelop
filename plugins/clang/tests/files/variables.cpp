@@ -10,3 +10,8 @@ class foo
 void f(int);
 /// "internalContext" : { "localDeclarationCount" : 1}
 void f2(int a);
+
+/// "isExplicitlyTyped" : true
+int a = 1;
+/// "isExplicitlyTyped" : false
+auto b = 2;

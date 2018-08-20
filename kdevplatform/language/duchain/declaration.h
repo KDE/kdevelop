@@ -193,6 +193,24 @@ public:
   bool isExplicitlyDeleted() const;
 
   /**
+   * Changes whether this declaration is explicitly typed.
+   *
+   * Explicitly typed declaration has the type writen as part of the
+   * declaration. The opposite, implicitly typed declaration, has the type
+   * deduced by the compiler.
+   *
+   * E.g. in C++ variable declarations are explicitly typed unless the "auto"
+   * keyword is used.
+   *
+   * \param explicitlyTyped true for explicitly typed, false for implicitly typed
+   */
+  void setExplicitlyTyped(bool explicitlyTyped);
+  /**
+   * Determine whether this declaration is explicitly typed.
+   */
+  bool isExplicitlyTyped() const;
+
+  /**
    * Retrieve the declaration which is specialized with the given
    * \a specialization index as seen from \a topContext.
    *
