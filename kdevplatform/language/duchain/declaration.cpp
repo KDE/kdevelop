@@ -61,6 +61,7 @@ DeclarationData::DeclarationData()
   , m_alwaysForceDirect(false)
   , m_isAutoDeclaration(false)
   , m_isExplicitlyDeleted(false)
+  , m_isExplicitlyTyped(false)
 {
 }
 
@@ -509,6 +510,16 @@ bool Declaration::isExplicitlyDeleted() const
 void Declaration::setExplicitlyDeleted(bool deleted)
 {
   d_func_dynamic()->m_isExplicitlyDeleted = deleted;
+}
+
+bool Declaration::isExplicitlyTyped() const
+{
+  return d_func()->m_isExplicitlyTyped;
+}
+
+void Declaration::setExplicitlyTyped(bool explicitlyTyped)
+{
+  d_func_dynamic()->m_isExplicitlyTyped = explicitlyTyped;
 }
 
 ///@todo see whether it would be useful to create an own TypeAliasDeclaration sub-class for this

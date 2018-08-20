@@ -64,6 +64,7 @@
  *   kind : string
  *   isDeprecated : bool
  *   isDefinition : bool
+ *   isExplicitlyTyped : bool
  */
 
 namespace KDevelop
@@ -348,6 +349,14 @@ DeclarationTest(isDefinition)
 {
   VERIFY_NOT_NULL(decl);
   return compareValues(decl->isDefinition(), value, QStringLiteral("Declaration's isDefinition"));
+}
+
+///JSON type: bool
+///@returns whether the declaration's isExplicitlyTyped matches the given value
+DeclarationTest(isExplicitlyTyped)
+{
+  VERIFY_NOT_NULL(decl);
+  return compareValues(decl->isExplicitlyTyped(), value, QStringLiteral("Declaration's isExplicitlyTyped"));
 }
 
 }
