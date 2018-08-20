@@ -47,12 +47,22 @@ const QString perforceTest_FileName3(QStringLiteral("bar"));
 
 using namespace KDevelop;
 
+void PerforcePluginTest::initTestCase()
+{
+    AutoTestShell::init({QStringLiteral("kdevperforce")});
+    TestCore::initialize();
+    m_plugin = new PerforcePlugin(TestCore::self());
+}
+
+void PerforcePluginTest::cleanupTestCase()
+{
+    delete m_plugin;
+    TestCore::shutdown();
+}
+
+
 void PerforcePluginTest::init()
 {
-    AutoTestShell::init({"kdevperforce"});
-    m_core = new TestCore();
-    m_core->initialize();
-    m_plugin = new PerforcePlugin(m_core);
     /// During test we are setting the executable the plugin uses to our own stub
     m_plugin->m_perforceExecutable = P4_CLIENT_STUB_EXE;
     removeTempDirsIfAny();
@@ -102,8 +112,6 @@ void PerforcePluginTest::removeTempDirsIfAny()
 
 void PerforcePluginTest::cleanup()
 {
-    m_core->cleanup();
-    delete m_core;
     removeTempDirsIfAny();
 }
 
