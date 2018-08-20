@@ -137,7 +137,8 @@ void NativeAppJob::start()
 {
     QVector<QPointer<NativeAppJob> > currentJobs;
     // collect running instances of the same type
-    for (auto j : ICore::self()->runController()->currentJobs()) {
+    const auto& allCurrentJobs = ICore::self()->runController()->currentJobs();
+    for (auto j : allCurrentJobs) {
         NativeAppJob* njob = findNativeJob(j);
         if (njob && njob != this && njob->m_name == m_name)
             currentJobs << njob;

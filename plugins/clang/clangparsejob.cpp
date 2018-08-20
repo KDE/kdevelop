@@ -121,7 +121,8 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url, bool* hasBuildSys
     ProjectFileItem* file = nullptr;
 
     *hasBuildSystemInfo = false;
-    for (auto project: ICore::self()->projectController()->projects()) {
+    const auto& projects = ICore::self()->projectController()->projects();
+    for (auto project : projects) {
         auto files = project->filesForPath(url);
         if (files.isEmpty()) {
             continue;

@@ -38,6 +38,7 @@
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <util/environmentprofilelist.h>
+#include <qtcompat_p.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -478,7 +479,7 @@ void DebugSession::updateAllVariables()
         }
     }
 
-    for (auto var : toplevels) {
+    for (auto var : qAsConst(toplevels)) {
         var->refetch();
     }
 }

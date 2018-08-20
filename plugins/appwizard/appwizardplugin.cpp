@@ -286,7 +286,8 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
 
         // but could be different name, if e.g. downloaded, so make a guess
         if (!templateEntry || !templateEntry->isFile()) {
-            for (const auto& entryName : arch->directory()->entries()) {
+            const auto& entries = arch->directory()->entries();
+            for (const auto& entryName : entries) {
                 if (entryName.endsWith(QLatin1String(".kdevtemplate"))) {
                     templateEntry = arch->directory()->entry(entryName);
                     break;

@@ -64,6 +64,7 @@
 #include <interfaces/launchconfigurationtype.h>
 #include <util/path.h>
 #include <debug.h>
+#include <qtcompat_p.h>
 
 #include "kdevideextension.h"
 #if KDEVELOP_SINGLE_APP
@@ -805,7 +806,7 @@ int main( int argc, char *argv[] )
     } else {
         openFiles(initialFiles);
 
-        for(const auto &urlinfo: initialDirectories)
+        for(const auto& urlinfo: qAsConst(initialDirectories))
             core->projectController()->openProjectForUrl(urlinfo.url);
     }
 

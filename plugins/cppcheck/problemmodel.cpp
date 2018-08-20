@@ -28,6 +28,7 @@
 #include <interfaces/iproject.h>
 #include <language/editor/documentrange.h>
 #include <shell/problemmodelset.h>
+#include <qtcompat_p.h>
 
 #include <klocalizedstring.h>
 
@@ -77,14 +78,15 @@ void ProblemModel::fixProblemFinalLocation(KDevelop::IProblem::Ptr problem)
         problem->setFinalLocation(range);
     }
 
-    for (auto diagnostic : problem->diagnostics()) {
+    const auto& diagnostics = problem->diagnostics();
+    for (auto& diagnostic : diagnostics) {
         fixProblemFinalLocation(diagnostic);
     }
 }
 
 bool ProblemModel::problemExists(KDevelop::IProblem::Ptr newProblem)
 {
-    for (auto problem : m_problems) {
+    for (auto problem : qAsConst(m_problems)) {
         if (newProblem->source() == problem->source() &&
             newProblem->severity() == problem->severity() &&
             newProblem->finalLocation() == problem->finalLocation() &&

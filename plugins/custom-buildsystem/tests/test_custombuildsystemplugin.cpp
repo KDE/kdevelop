@@ -96,8 +96,10 @@ void TestCustomBuildSystemPlugin::loadMultiPathProject()
     IProject* project = ICore::self()->projectController()->findProjectByName( QStringLiteral("MultiPathProject") );
     QVERIFY( project );
     KDevelop::ProjectBaseItem* mainfile = nullptr;
-    for (const auto& file: project->fileSet() ) {
-        for (auto i: project->filesForPath(file)) {
+    const auto& files = project->fileSet();
+    for (const auto& file : files) {
+        const auto& filesForPath = project->filesForPath(file);
+        for (auto i: filesForPath) {
             if( i->text() == QLatin1String("main.cpp") ) {
                 mainfile = i;
                 break;

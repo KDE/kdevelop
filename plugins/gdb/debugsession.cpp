@@ -182,7 +182,8 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
                                        "Using default environment profile.", cfg->name());
         envProfileName = environmentProfiles.defaultProfileName();
     }
-    for (const auto &envvar : environmentProfiles.createEnvironment(envProfileName, {})) {
+    const auto& envvars = environmentProfiles.createEnvironment(envProfileName, {});
+    for (const auto& envvar : envvars) {
         addCommand(GdbSet, "environment " + envvar);
     }
 

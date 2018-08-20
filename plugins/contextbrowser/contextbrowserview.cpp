@@ -76,17 +76,20 @@ void selectUse(ContextBrowserView* view, Direction direction)
     }
 
     OneUseWidget* first = nullptr, *previous = nullptr, *current = nullptr;
-    for (auto item : usesWidget->items()) {
+    const auto& usesWidgetItems = usesWidget->items();
+    for (auto item : usesWidgetItems) {
         auto topContext = dynamic_cast<TopContextUsesWidget*>(item);
         if (!topContext) {
             continue;
         }
-        for (auto item : topContext->items()) {
+        const auto& topContextItems = topContext->items();
+        for (auto item : topContextItems) {
             auto navigationList = dynamic_cast<NavigatableWidgetList*>(item);
             if (!navigationList) {
                 continue;
             }
-            for (auto item : navigationList->items()) {
+            const auto& navigationListItems = navigationList->items();
+            for (auto item : navigationListItems) {
                 auto use = dynamic_cast<OneUseWidget*>(item);
                 if (!use) {
                     continue;

@@ -292,7 +292,8 @@ void TestQuickOpen::testStableSort()
     filterItems.setItems(items);
 
     QStringList filter = {QString()};
-    for (auto c : QStringLiteral("CMakeLists.txt")) {
+    const auto cmakeListsString = QStringLiteral("CMakeLists.txt");
+    for (auto c : cmakeListsString) {
         filter[0].append(c);
         filterItems.setFilter(filter);
         QCOMPARE(filterItems.filteredItems(), items);

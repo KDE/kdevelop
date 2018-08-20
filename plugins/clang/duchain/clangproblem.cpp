@@ -28,6 +28,7 @@
 
 #include <language/duchain/duchainlock.h>
 #include <language/codegen/documentchangeset.h>
+#include <qtcompat_p.h>
 
 #include <KLocalizedString>
 
@@ -185,7 +186,8 @@ ClangFixits ClangProblem::allFixits() const
     ClangFixits result;
     result << m_fixits;
 
-    for (const IProblem::Ptr& diagnostic : diagnostics()) {
+    const auto& diagnostics = this->diagnostics();
+    for (const IProblem::Ptr& diagnostic : diagnostics) {
         const Ptr problem(dynamic_cast<ClangProblem*>(diagnostic.data()));
         Q_ASSERT(problem);
         result << problem->allFixits();
@@ -214,7 +216,7 @@ void ClangFixitAssistant::createActions()
 {
     KDevelop::IAssistant::createActions();
 
-    for (const ClangFixit& fixit : m_fixits) {
+    for (const ClangFixit& fixit : qAsConst(m_fixits)) {
         addAction(IAssistantAction::Ptr(new ClangFixitAction(fixit)));
     }
 }

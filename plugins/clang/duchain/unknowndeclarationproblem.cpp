@@ -95,7 +95,8 @@ QStringList scanIncludePaths( const QString& identifier, const QDir& dir, int ma
     }
 
     const QStringList nameFilters = {identifier, identifier + QLatin1String(".*")};
-    for (const auto& file : dir.entryList(nameFilters, QDir::Files)) {
+    const auto& files = dir.entryList(nameFilters, QDir::Files);
+    for (const auto& file : files) {
         if (identifier.compare(file, Qt::CaseInsensitive) == 0 || ClangHelpers::isHeader(file)) {
             const QString filePath = path + QLatin1Char('/') + file;
             clangDebug() << "Found candidate file" << filePath;
@@ -104,8 +105,10 @@ QStringList scanIncludePaths( const QString& identifier, const QDir& dir, int ma
     }
 
     maxDepth--;
-    for( const auto& subdir : dir.entryList( QDir::Dirs | QDir::NoDotAndDotDot ) )
+    const auto& subdirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const auto& subdir : subdirs) {
         candidates += scanIncludePaths( identifier, QDir{ path + QLatin1Char('/') + subdir }, maxDepth );
+    }
 
     return candidates;
 }
@@ -170,7 +173,8 @@ KDevelop::DocumentRange includeDirectivePosition(const KDevelop::Path& source, c
 
     // look at existing #include statements and re-use them
     int currentMatchQuality = -1;
-    for( const auto& import : top->importedParentContexts() ) {
+    const auto& importedParentContexts = top->importedParentContexts();
+    for (const auto& import : importedParentContexts) {
 
         const auto importFilename = import.context(top)->url().str();
         const int matchQuality = sharedPathLevel( importFilename , includeFile );
@@ -211,7 +215,8 @@ KDevelop::DocumentRange forwardDeclarationPosition(const QualifiedIdentifier& id
     }
 
     int line = std::numeric_limits< int >::max();
-    for( const auto decl : top->localDeclarations() ) {
+    const auto& localDeclarations = top->localDeclarations();
+    for (const auto decl : localDeclarations) {
         line = std::min( line, decl->range().start.line );
     }
 
@@ -302,7 +307,8 @@ QStringList UnknownDeclarationProblem::findMatchingIncludeFiles(const QVector<De
             clangDebug() << "Adding" << filepath << "determined from candidate" << decl->toString();
         }
 
-        for( const auto importer : file->importers() ) {
+        const auto& importers = file->importers();
+        for (const auto& importer : importers) {
             if( importer->imports().count() != 1 && !isBlacklisted( filepath ) ) {
                 continue;
             }
@@ -491,7 +497,8 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
     const auto matchingDeclarations = findMatchingDeclarations(possibleIdentifiers);
 
     if (ClangSettingsManager::self()->assistantsSettings().forwardDeclare) {
-        for (const auto& fixit : forwardDeclarations(matchingDeclarations, file)) {
+        const auto& forwardDeclareFixits = forwardDeclarations(matchingDeclarations, file);
+        for (const auto& fixit : forwardDeclareFixits) {
             fixits << fixit;
             if (fixits.size() == maxSuggestions) {
                 return fixits;

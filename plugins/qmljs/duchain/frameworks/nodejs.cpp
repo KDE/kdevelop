@@ -144,14 +144,14 @@ Path::List NodeJS::moduleDirectories(const QString& url)
     Path::List paths;
 
     // QML/JS ships several modules that exist only in binary form in Node.js
-    QStringList dirs = QStandardPaths::locateAll(
+    const QStringList& dirs = QStandardPaths::locateAll(
         QStandardPaths::GenericDataLocation,
         QStringLiteral("kdevqmljssupport/nodejsmodules"),
         QStandardPaths::LocateDirectory
     );
 
     paths.reserve(dirs.size());
-    for (auto dir : dirs) {
+    for (auto& dir : dirs) {
         paths.append(Path(dir));
     }
 
@@ -188,7 +188,8 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
     }
 
     // Try all the paths that might contain modules
-    for (auto path : moduleDirectories(url)) {
+    const auto& paths = moduleDirectories(url);
+    for (auto& path : paths) {
         fileName = fileOrDirectoryPath(path.cd(moduleName).toLocalFile());
 
         if (!fileName.isEmpty()) {

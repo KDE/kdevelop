@@ -46,6 +46,7 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <util/scopeddialog.h>
+#include <qtcompat_p.h>
 
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -204,7 +205,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
 
         QListWidget* targetsWidget = new QListWidget(d);
         targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-        for (ProjectTargetItem* target : targets) {
+        for (ProjectTargetItem* target : qAsConst(targets)) {
             targetsWidget->addItem(target->text());
         }
         targetsWidget->setCurrentRow(0);

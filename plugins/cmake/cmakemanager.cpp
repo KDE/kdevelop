@@ -977,7 +977,8 @@ ConfigPage* CMakeManager::perProjectConfigPage(int number, const ProjectConfigOp
 
 void CMakeManager::reloadProjects()
 {
-    for(IProject* project: m_projects.keys()) {
+    const auto& projects = m_projects.keys();
+    for (IProject* project : projects) {
         CMake::checkForNeedingConfigure(project);
         reload(project->projectItem());
     }

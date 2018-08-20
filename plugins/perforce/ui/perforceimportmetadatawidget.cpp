@@ -183,7 +183,8 @@ bool PerforceImportMetadataWidget::validateP4port(const QString&  projectDir) co
     QProcessEnvironment p4execEnvironment;
     p4execEnvironment.insert(QString("P4PORT"), m_ui->p4portEdit->displayText());
     QTextStream out(stdout);
-    for (QString x : p4execEnvironment.toStringList()) {
+    const auto& env = p4execEnvironment.toStringList();
+    for (const QString& x : env) {
         out << x << endl;
     }
 

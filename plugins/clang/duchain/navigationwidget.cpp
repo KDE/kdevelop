@@ -44,7 +44,8 @@ public:
             modifyHtml() += QStringLiteral("< ").toHtmlEscaped();
 
             bool first = true;
-            for (const auto& type : cst->templateParameters()) {
+            const auto& templateParameters = cst->templateParameters();
+            for (const auto& type : templateParameters) {
                 if (first) {
                     first = false;
                 } else {

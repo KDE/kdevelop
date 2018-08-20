@@ -44,6 +44,7 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <util/foregroundlock.h>
+#include <qtcompat_p.h>
 
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
@@ -670,7 +671,7 @@ public:
     QList<CompletionTreeItemPointer> matchedItems()
     {
         QList<CompletionTreeItemPointer> lookAheadItems;
-        for (const auto& pair: possibleLookAheadDeclarations) {
+        for (const auto& pair: qAsConst(possibleLookAheadDeclarations)) {
             auto decl = pair.first;
             if (matchedTypes.contains(decl->indexedType())) {
                 auto parent = pair.second;
@@ -700,7 +701,8 @@ private:
                     return;
                 }
 
-                for (auto localDecl : typeDecl->internalContext()->localDeclarations()) {
+                const auto& localDeclarations = typeDecl->internalContext()->localDeclarations();
+                for (auto localDecl : localDeclarations) {
                     if(localDecl->identifier().isEmpty()){
                         continue;
                     }
@@ -831,7 +833,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         unsaved.Length = content.size();
 
         allUnsaved.reserve(otherUnsavedFiles.size() + 1);
-        for ( const auto& f : otherUnsavedFiles ) {
+        for (const auto& f : qAsConst(otherUnsavedFiles)) {
             allUnsaved.append(f.toClangApi());
         }
         allUnsaved.append(unsaved);

@@ -78,7 +78,8 @@ void TemplatePage::loadFromFile()
         return;
     }
 
-    for (const auto& file : fileDialog->selectedFiles()) {
+    const auto& selectedFiles = fileDialog->selectedFiles();
+    for (const auto& file : selectedFiles) {
         m_provider->loadTemplate(file);
     }
 

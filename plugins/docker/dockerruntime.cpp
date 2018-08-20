@@ -67,7 +67,8 @@ void DockerRuntime::inspectContainer()
         m_mergedDir = Path(objGraphDriverData.value("MergedDir").toString());
         qCDebug(DOCKER) << "mergeddir:" << m_container << m_mergedDir;
 
-        for (auto entry : obj["Config"].toObject()["Env"].toArray()) {
+        const auto& entries = obj["Config"].toObject()["Env"].toArray();
+        for (auto entry : entries) {
             const auto content = entry.toString().split('=');
             if (content.count() != 2)
                 continue;
@@ -134,7 +135,8 @@ static QStringList projectVolumes()
     const QString dir = ensureEndsSlash(DockerRuntime::s_settings->projectsVolume());
     const QString buildDir = ensureEndsSlash(DockerRuntime::s_settings->buildDirsVolume());
 
-    for (IProject* project: ICore::self()->projectController()->projects()) {
+    const auto& projects = ICore::self()->projectController()->projects();
+    for (IProject* project : projects) {
         const Path path = project->path();
         if (path.isLocalFile()) {
             ret << "--volume" << QStringLiteral("%1:%2").arg(path.toLocalFile(), dir + project->name());

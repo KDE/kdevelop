@@ -228,7 +228,8 @@ QVector<TaskInfo> copyMoveItems(const Path::List& paths, ProjectBaseItem* destIt
     IProjectFileManager* destProjectFileManager = destProject->projectFileManager();
     ProjectFolderItem* destFolder = destItem->folder();
     Path destPath = destFolder->path();
-    for (IProject* srcProject : cl.itemsPerProject.keys()) {
+    const auto& srcProjects = cl.itemsPerProject.keys();
+    for (IProject* srcProject : srcProjects) {
         const auto& itemsList = cl.itemsPerProject[srcProject];
 
         Path::List pathsList;

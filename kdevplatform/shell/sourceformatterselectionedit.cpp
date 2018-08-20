@@ -31,6 +31,7 @@
 #include <util/scopeddialog.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/ilanguagecontroller.h>// TODO: remove later
+#include <qtcompat_p.h>
 
 #include <KMessageBox>
 #include <KTextEditor/Editor>
@@ -118,7 +119,8 @@ SourceFormatterSelectionEdit::SourceFormatterSelectionEdit(QWidget* parent)
             this, &SourceFormatterSelectionEdit::addSourceFormatter);
     connect(controller, &SourceFormatterController::formatterUnloading,
             this, &SourceFormatterSelectionEdit::removeSourceFormatter);
-    for (auto* formatter : controller->formatters()) {
+    const auto& formatters = controller->formatters();
+    for (auto* formatter : formatters) {
         addSourceFormatter(formatter);
     }
 }
@@ -318,7 +320,7 @@ void SourceFormatterSelectionEdit::saveSettings(KConfigGroup& config)
     globalConfig.sync();
 
     // store selected formatters in given language
-    for (const auto& setting : d->languages) {
+    for (const auto& setting : qAsConst(d->languages)) {
         for(const auto& mime : setting.mimetypes) {
             const QString formatterId = setting.selectedFormatter->formatter->name() + QLatin1String("||") + setting.selectedStyle->name();
             config.writeEntry(mime.name(), formatterId);

@@ -30,6 +30,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 
+#include <qtcompat_p.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <project/projectmodel.h>
@@ -118,7 +119,8 @@ CompilerPointer createCompilerFromConfig(KConfigGroup& cfg)
         return SettingsManager::globalInstance()->provider()->defaultCompiler();
     }
 
-    for (auto c : SettingsManager::globalInstance()->provider()->compilers()) {
+    const auto& compilers = SettingsManager::globalInstance()->provider()->compilers();
+    for (auto& c : compilers) {
         if (c->name() == name) {
             return c;
         }
@@ -170,7 +172,8 @@ void doWriteSettings( KConfigGroup grp, const QVector<ConfigEntry>& paths )
 QVector<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
 {
     QVector<ConfigEntry> paths;
-    for( const QString &grpName : sorted(grp.groupList()) ) {
+    const auto& sortedGroupNames = sorted(grp.groupList());
+    for (const QString& grpName : sortedGroupNames) {
         if ( !grpName.startsWith( ConfigConstants::projectPathPrefix ) ) {
             continue;
         }
@@ -381,8 +384,8 @@ QVector< CompilerPointer > SettingsManager::userDefinedCompilers() const
         auto path = grp.readEntry(ConfigConstants::compilerPathKey, QString());
         auto type = grp.readEntry(ConfigConstants::compilerTypeKey, QString());
 
-        auto cf = m_provider.compilerFactories();
-        for (auto f : cf) {
+        const auto cf = m_provider.compilerFactories();
+        for (auto& f : cf) {
             if (f->name() == type) {
                 auto compiler = f->createCompiler(name, path);
                 compilers.append(compiler);

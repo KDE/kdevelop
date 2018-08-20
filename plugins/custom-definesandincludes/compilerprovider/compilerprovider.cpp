@@ -245,7 +245,7 @@ bool CompilerProvider::registerCompiler(const CompilerPointer& compiler)
         return false;
     }
 
-    for(auto c: m_compilers){
+    for (auto& c : qAsConst(m_compilers)) {
         if (c->name() == compiler->name()) {
             return false;
         }
@@ -275,8 +275,8 @@ QVector< CompilerFactoryPointer > CompilerProvider::compilerFactories() const
 
 void CompilerProvider::retrieveUserDefinedCompilers()
 {
-    auto compilers = m_settings->userDefinedCompilers();
-    for (auto c : compilers) {
+    const auto compilers = m_settings->userDefinedCompilers();
+    for (auto& c : compilers) {
         registerCompiler(c);
     }
 }

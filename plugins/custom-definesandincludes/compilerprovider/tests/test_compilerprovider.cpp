@@ -112,7 +112,8 @@ void TestCompilerProvider::testCompilerIncludesAndDefines()
 {
     auto settings = SettingsManager::globalInstance();
     auto provider = settings->provider();
-    for (auto c : provider->compilers()) {
+    const auto& compilers = provider->compilers();
+    for (auto& c : compilers) {
         if (!c->editable() && !c->path().isEmpty()) {
             QVERIFY(!c->defines(Utils::Cpp, {}).isEmpty());
             QVERIFY(!c->includes(Utils::Cpp, {}).isEmpty());
@@ -221,8 +222,10 @@ void TestCompilerProvider::testCompilerIncludesAndDefinesForProject()
     QVERIFY(projectCompiler != compiler);
 
     ProjectBaseItem* mainfile = nullptr;
-    for (const auto& file: project->fileSet() ) {
-        for (auto i: project->filesForPath(file)) {
+    const auto& fileSet = project->fileSet();
+    for (const auto& file: fileSet) {
+        const auto& files = project->filesForPath(file);
+        for (auto i: files) {
             if( i->text() == QLatin1String("main.cpp") ) {
                 mainfile = i;
                 break;

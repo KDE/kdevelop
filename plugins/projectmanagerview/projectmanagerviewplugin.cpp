@@ -53,6 +53,7 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
 #include <serialization/indexedstring.h>
+#include <qtcompat_p.h>
 
 #include "projectmanagerview.h"
 #include "debug.h"
@@ -78,7 +79,8 @@ QMimeData* createClipboardMimeData(const bool cut)
         ICore::self()->selectionController()->currentSelection());
     QList<QUrl> urls;
     QList<QUrl> mostLocalUrls;
-    for (const ProjectBaseItem* item : ctx->items()) {
+    const auto& items = ctx->items();
+    for (const ProjectBaseItem* item : items) {
         if (item->folder() || item->file()) {
             const QUrl& url = item->path().toUrl();
             urls << url;
@@ -735,7 +737,7 @@ static void selectItemsByPaths(ProjectManagerView* view, const Path::List& paths
     for (const Path& path : paths) {
         QList<ProjectBaseItem*> items = projectModel->itemsForPath(IndexedString(path.path()));
         newItems.append(items);
-        for (ProjectBaseItem* item : items) {
+        for (ProjectBaseItem* item : qAsConst(items)) {
             view->expandItem(item->parent());
         }
     }
