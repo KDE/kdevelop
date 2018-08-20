@@ -53,7 +53,8 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url)
 {
     ProjectFileItem* file = nullptr;
 
-    for (auto project: ICore::self()->projectController()->projects()) {
+    const auto& projects = ICore::self()->projectController()->projects();
+    for (auto project: projects) {
         auto files = project->filesForPath(url);
         if (files.isEmpty()) {
             continue;
@@ -107,7 +108,8 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
     }
 
     // Don't parse this file if one of its dependencies is not up to date
-    for (auto dependency : QmlJS::Cache::instance().dependencies(document())) {
+    const auto& dependencies = QmlJS::Cache::instance().dependencies(document());
+    for (auto& dependency : dependencies) {
         if (!QmlJS::Cache::instance().isUpToDate(dependency)) {
             QmlJS::Cache::instance().setUpToDate(document(), false);
             return;

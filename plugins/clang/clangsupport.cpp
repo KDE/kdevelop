@@ -201,7 +201,8 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
             this, &ClangSupport::disableKeywordCompletion);
     connect(model, &CodeCompletion::unregisteredFromView,
             this, &ClangSupport::enableKeywordCompletion);
-    for(const auto& type : DocumentFinderHelpers::mimeTypesList()){
+    const auto& mimeTypes = DocumentFinderHelpers::mimeTypesList();
+    for (const auto& type : mimeTypes) {
         KDevelop::IBuddyDocumentFinder::addFinder(type, this);
     }
 
@@ -219,7 +220,8 @@ ClangSupport::~ClangSupport()
     // By locking the parse-mutexes, we make sure that parse jobs get a chance to finish in a good state
     parseLock()->unlock();
 
-    for(const auto& type : DocumentFinderHelpers::mimeTypesList()) {
+    const auto& mimeTypes = DocumentFinderHelpers::mimeTypesList();
+    for (const auto& type : mimeTypes) {
         KDevelop::IBuddyDocumentFinder::removeFinder(type);
     }
 

@@ -224,7 +224,8 @@ static QVector<SourceFormatterStyle> stylesFromLanguagePlugins()
 
 KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString& name) const
 {
-    for (auto langStyle: stylesFromLanguagePlugins()) {
+	const auto& langStyles = stylesFromLanguagePlugins();
+    for (auto& langStyle: langStyles) {
         qCDebug(CUSTOMSCRIPT) << "looking at style from language with custom sample" << langStyle.description() << langStyle.overrideSample();
         if (langStyle.name() == name) {
             return langStyle;

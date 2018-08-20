@@ -100,7 +100,8 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     // set default option values
     if (fileTemplate.hasCustomOptions()) {
         QVariantHash extraVars;
-        for (const auto& optionGroup : fileTemplate.customOptions(&renderer)) {
+        const auto& optionGroups = fileTemplate.customOptions(&renderer);
+        for (const auto& optionGroup : optionGroups) {
             for (const auto& entry : optionGroup.options) {
                 extraVars[entry.name] = entry.value;
             }

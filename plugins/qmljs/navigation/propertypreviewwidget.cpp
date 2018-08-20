@@ -32,6 +32,7 @@
 
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchainlock.h>
+#include <qtcompat_p.h>
 
 // List of supported properties. The string must be the name of the property,
 // which can contain dots if necessary
@@ -96,7 +97,7 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
     // Explore each possible supported property and return the first supported widget
     DUChainReadLocker lock;
 
-    for (const SupportedProperty& property : properties) {
+    for (const SupportedProperty& property : qAsConst(properties)) {
         if (!decl || !decl->abstractType() || !decl->context() || !decl->context()->owner()) {
             continue;
         }

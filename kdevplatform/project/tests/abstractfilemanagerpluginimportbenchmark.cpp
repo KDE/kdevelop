@@ -32,6 +32,7 @@
 #include <tests/testplugincontroller.h>
 
 #include <util/path.h>
+#include <qtcompat_p.h>
 
 #include <KJob>
 #include <KDirWatch>
@@ -174,7 +175,7 @@ int main(int argc, char** argv)
     }
 
     runTimer.start();
-    for (auto benchmark : benchmarks) {
+    for (auto benchmark : qAsConst(benchmarks)) {
         benchmark->start();
     }
 

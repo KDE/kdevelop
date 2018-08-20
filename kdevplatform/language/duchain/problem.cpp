@@ -29,6 +29,8 @@ Boston, MA 02110-1301, USA.
 #include <editor/documentrange.h>
 
 #include <interfaces/iassistant.h>
+#include <qtcompat_p.h>
+
 #include <KLocalizedString>
 
 namespace KDevelop {
@@ -122,7 +124,7 @@ QVector<IProblem::Ptr> Problem::diagnostics() const
 {
     QVector<IProblem::Ptr> vector;
 
-    for (ProblemPointer ptr : m_diagnostics) {
+    for (const auto& ptr : qAsConst(m_diagnostics)) {
         vector.push_back(ptr);
     }
 

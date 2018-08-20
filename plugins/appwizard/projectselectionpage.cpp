@@ -310,7 +310,8 @@ void ProjectSelectionPage::loadFileClicked()
         return;
     }
 
-    for (const auto& fileName : fileDialog->selectedFiles()) {
+    const auto& fileNames = fileDialog->selectedFiles();
+    for (const auto& fileName : fileNames) {
         QString destination = m_templatesModel->loadTemplateFile(fileName);
         QModelIndexList indexes = m_templatesModel->templateIndexes(destination);
         if (indexes.size() > 2)

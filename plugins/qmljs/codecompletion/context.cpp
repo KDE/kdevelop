@@ -226,10 +226,12 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::nodeModuleCompletions()
     QList<CompletionTreeItemPointer> items;
     QDir dir;
 
-    for (auto path : NodeJS::instance().moduleDirectories(m_duContext->url().str())) {
+    const auto& paths = NodeJS::instance().moduleDirectories(m_duContext->url().str());
+    for (auto& path : paths) {
         dir.setPath(path.toLocalFile());
 
-        for (QString entry : dir.entryList(QDir::Files, QDir::Name)) {
+        const auto& entries = dir.entryList(QDir::Files, QDir::Name);
+        for (QString entry : entries) {
             entry.remove(QLatin1String(".js"));
 
             if (entry.startsWith(QLatin1String("__"))) {

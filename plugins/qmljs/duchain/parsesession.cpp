@@ -261,7 +261,8 @@ ReferencedTopDUContext ParseSession::contextOfFile(const QString& fileName,
 
 void ParseSession::reparseImporters()
 {
-    for (const KDevelop::IndexedString& file : QmlJS::Cache::instance().filesThatDependOn(m_url)) {
+    const auto& files = QmlJS::Cache::instance().filesThatDependOn(m_url);
+    for (const KDevelop::IndexedString& file : files) {
         scheduleForParsing(file, m_ownPriority);
     }
 }

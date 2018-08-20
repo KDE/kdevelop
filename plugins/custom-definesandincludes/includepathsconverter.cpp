@@ -238,7 +238,8 @@ int main(int argc, char** argv)
     }
 
     if (show) {
-        for (const auto& include: converter.readIncludePaths(configFile, subdirectory)) {
+        const auto& includes = converter.readIncludePaths(configFile, subdirectory);
+        for (const auto& include : includes) {
             out << include << "\n";
         }
     }

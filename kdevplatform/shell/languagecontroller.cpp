@@ -24,6 +24,7 @@
 #include <QMutexLocker>
 #include <QThread>
 
+#include <qtcompat_p.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugin.h>
@@ -223,7 +224,7 @@ ILanguageSupport* LanguageController::language(const QString &name) const
         constraints.insert(key, name);
         supports = Core::self()->pluginController()->allPluginsForExtension(KEY_ILanguageSupport(), constraints);
         if (key == keys[1]) {
-            for (auto support : supports) {
+            for (auto support : qAsConst(supports)) {
                 qCWarning(SHELL) << "Plugin" << Core::self()->pluginController()->pluginInfo(support).name() << " has deprecated (since 5.1) metadata key \"X-KDevelop-Language\", needs porting to: \"X-KDevelop-Languages\": ["<<name<<"]'";
             }
         }

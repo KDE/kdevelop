@@ -89,7 +89,8 @@ void DockerPlugin::runtimeChanged(KDevelop::IRuntime* newRuntime)
 {
     const bool isDocker = qobject_cast<DockerRuntime*>(newRuntime);
 
-    for(auto action: actionCollection()->actions()) {
+    const auto& actions = actionCollection()->actions();
+    for (auto action: actions) {
         action->setEnabled(isDocker);
     }
 }

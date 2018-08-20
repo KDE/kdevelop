@@ -217,7 +217,7 @@ bool LldbFormattersTest::verifyVariable(int index, const QString &name,
         qDebug() << "useRE set to true when unordered = true";
         useRE = true;
         expectedChildren.sort();
-        for (auto c : expectedChildren) {
+        for (auto& c : expectedChildren) {
             childrenPairs << qMakePair(QStringLiteral(R"(^\[\d+\]$)"), c);
         }
     } else {

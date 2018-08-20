@@ -264,7 +264,7 @@ void CompilersModel::setCompilers(const QVector< CompilerPointer >& compilers)
     autoDetectedRootItem(m_rootItem)->removeChilds();
     manualRootItem(m_rootItem)->removeChilds();
 
-    for (auto compiler: compilers) {
+    for (auto& compiler: compilers) {
         if (compiler->factoryName().isEmpty()) {
             continue;
         }
@@ -306,7 +306,8 @@ bool CompilersModel::removeRows(int row, int count, const QModelIndex& parent)
 
 void CompilersModel::updateCompiler(const QItemSelection& compiler)
 {
-    for (const auto& idx: compiler.indexes()) {
+    const auto& indexes = compiler.indexes();
+    for (const auto& idx : indexes) {
         emit dataChanged(idx, idx);
     }
     emit compilerChanged();

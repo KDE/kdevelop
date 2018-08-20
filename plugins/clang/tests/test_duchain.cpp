@@ -2079,7 +2079,8 @@ void TestDUChain::testHasInclude()
         QVERIFY(headerCtx);
         dumper.dump(headerCtx);
         QVERIFY(headerCtx->problems().count() <= 1);
-        for (const auto& problem : headerCtx->problems()) {
+        const auto& headerProblems = headerCtx->problems();
+        for (const auto& problem : headerProblems) {
             // ignore the following error:  "#include_next with absolute path [-Winclude-next-absolute-path]" "" [ (2, 12)  ->  (2, 30) ]
             QVERIFY(problem->description().contains(QLatin1String("-Winclude-next-absolute-path")));
         }

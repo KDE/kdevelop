@@ -38,6 +38,7 @@
 #include <interfaces/iuicontroller.h>
 #include <language/interfaces/editorcontext.h>
 #include <isession.h>
+#include <qtcompat_p.h>
 
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -147,7 +148,8 @@ void MIDebuggerPlugin::setupActions()
 void MIDebuggerPlugin::setupDBus()
 {
     QDBusConnectionInterface* dbusInterface = QDBusConnection::sessionBus().interface();
-    for (const auto &service : dbusInterface->registeredServiceNames().value()) {
+    const auto& registeredServiceNames = dbusInterface->registeredServiceNames().value();
+    for (const auto& service : registeredServiceNames) {
         slotDBusOwnerChanged(service, QString(), QString('n'));
     }
 

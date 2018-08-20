@@ -54,8 +54,8 @@ void CTestFindJob::findTestCases()
     }
 
     m_pendingFiles.clear();
-    for (const auto& file : m_suite->sourceFiles())
-    {
+    const auto& sourceFiles = m_suite->sourceFiles();
+    for (const auto& file : sourceFiles) {
         if (!file.isEmpty())
         {
             m_pendingFiles << file;

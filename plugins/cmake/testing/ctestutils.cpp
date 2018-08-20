@@ -38,7 +38,7 @@ using namespace KDevelop;
 
 static CMakeTarget targetByName(const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, const QString& name)
 {
-    for (const auto &subdir: targets.values()) {
+    for (const auto& subdir: targets) {
         for (const auto &target: subdir) {
             if (target.name == name)
                 return target;
@@ -50,7 +50,7 @@ static CMakeTarget targetByName(const QHash< KDevelop::Path, QVector<CMakeTarget
 
 static CMakeTarget targetByExe(const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, const KDevelop::Path& exe)
 {
-    for (const auto &subdir: targets.values()) {
+    for (const auto& subdir: targets) {
         for (const auto &target: subdir) {
             if (target.artifacts.contains(exe))
                 return target;

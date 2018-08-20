@@ -75,7 +75,8 @@ private Q_SLOTS:
     void init()
     {
         QVERIFY(ICore::self()->runtimeController()->currentRuntime() == m_initialRuntime);
-        for(IRuntime* runtime : ICore::self()->runtimeController()->availableRuntimes()) {
+        const auto& availableRuntimes = ICore::self()->runtimeController()->availableRuntimes();
+        for (IRuntime* runtime : availableRuntimes) {
             if (s_testedImage == runtime->name()) {
                 ICore::self()->runtimeController()->setCurrentRuntime(runtime);
             }

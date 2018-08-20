@@ -107,7 +107,8 @@ QString ClassSpecializationType::toString() const
     if (!id.isEmpty()) {
         QString result = AbstractType::toString() + strippedQid(id) + QLatin1String("< ");
         bool first = true;
-        for (const auto& param : templateParameters()) {
+        const auto& templateParameters = this->templateParameters();
+        for (const auto& param : templateParameters) {
             if (first) {
                 first = false;
             } else {

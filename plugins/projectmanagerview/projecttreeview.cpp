@@ -428,7 +428,8 @@ void ProjectTreeView::rowsInserted( const QModelIndex& parent, int start, int en
     QTreeView::rowsInserted( parent, start, end );
 
     if ( !parent.model() ) {
-        for ( const auto& project: selectedProjects() ) {
+        const auto& projects = selectedProjects();
+        for (const auto& project: projects) {
             restoreState( project->project() );
         }
     }
@@ -437,7 +438,8 @@ void ProjectTreeView::rowsInserted( const QModelIndex& parent, int start, int en
 void ProjectTreeView::rowsAboutToBeRemoved( const QModelIndex& parent, int start, int end )
 {
     if ( !parent.model() ) {
-        for ( const auto& project: selectedProjects() ) {
+        const auto& projects = selectedProjects();
+        for (const auto& project : projects) {
             saveState( project->project() );
         }
     }

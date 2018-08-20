@@ -64,7 +64,8 @@ CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
 
 
     auto pluginController = core()->pluginController();
-    for(auto plugin : pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
+    const auto plugins = pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"));
+    for (auto plugin : plugins) {
         setupExecutePlugin(plugin, true);
     }
 
@@ -81,7 +82,8 @@ CppDebuggerPlugin::CppDebuggerPlugin(QObject *parent, const QVariantList &)
 
 void CppDebuggerPlugin::unload()
 {
-    for(auto plugin : core()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
+    const auto plugins = core()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"));
+    for (auto plugin : plugins) {
         setupExecutePlugin(plugin, false);
     }
     Q_ASSERT(m_launchers.isEmpty());

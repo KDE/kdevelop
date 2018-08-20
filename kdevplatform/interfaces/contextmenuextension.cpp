@@ -123,7 +123,7 @@ void populateMenuWithGroup(
         }
     }
 
-    for (QAction* action : groupActions) {
+    for (QAction* action : qAsConst(groupActions)) {
         groupMenu->addAction(action);
     }
 

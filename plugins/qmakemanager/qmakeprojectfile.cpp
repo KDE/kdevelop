@@ -123,7 +123,8 @@ bool QMakeProjectFile::read()
 QStringList QMakeProjectFile::subProjects() const
 {
     ifDebug(qCDebug(KDEV_QMAKE) << "Fetching subprojects";) QStringList list;
-    for (QString subdir : variableValues(QStringLiteral("SUBDIRS"))) {
+    const auto& subdirs = variableValues(QStringLiteral("SUBDIRS"));
+    for (QString subdir : subdirs) {
         QString fileOrPath;
         ifDebug(qCDebug(KDEV_QMAKE) << "Found value:" << subdir;) if (containsVariable(subdir + ".file")
                                                                       && !variableValues(subdir + ".file").isEmpty())
@@ -360,7 +361,8 @@ QStringList QMakeProjectFile::targets() const
         list += QFileInfo(absoluteFile()).baseName();
     }
 
-    for (const QString& target : variableValues(QStringLiteral("INSTALLS"))) {
+    const auto& targets = variableValues(QStringLiteral("INSTALLS"));
+    for (const QString& target : targets) {
         if (!target.isEmpty() && target != QLatin1String("target"))
             list << target;
     }
@@ -405,7 +407,8 @@ QMakeCache* QMakeProjectFile::qmakeCache() const
 QList<QMakeProjectFile::DefinePair> QMakeProjectFile::defines() const
 {
     QList<DefinePair> d;
-    for (const QString& def : variableMap()[QStringLiteral("DEFINES")]) {
+    const auto& defs = variableMap()[QStringLiteral("DEFINES")];
+    for (const QString& def : defs) {
         int pos = def.indexOf('=');
         if (pos >= 0) {
             // a value is attached to define

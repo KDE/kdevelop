@@ -50,7 +50,8 @@ LldbDebuggerPlugin::LldbDebuggerPlugin(QObject *parent, const QVariantList &)
     setXMLFile(QStringLiteral("kdevlldbui.rc"));
 
     auto pluginController = core()->pluginController();
-    for(auto plugin : pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
+    const auto plugins = pluginController->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"));
+    for (auto plugin : plugins) {
         setupExecutePlugin(plugin, true);
     }
 
@@ -67,7 +68,8 @@ LldbDebuggerPlugin::LldbDebuggerPlugin(QObject *parent, const QVariantList &)
 
 void LldbDebuggerPlugin::unload()
 {
-    for(auto plugin : core()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))) {
+    const auto plugins = core()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"));
+    for (auto plugin : plugins) {
         setupExecutePlugin(plugin, false);
     }
     Q_ASSERT(m_launchers.isEmpty());

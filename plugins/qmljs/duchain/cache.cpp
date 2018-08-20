@@ -24,6 +24,7 @@
 #include "cache.h"
 #include "debug.h"
 
+#include <qtcompat_p.h>
 #include <QString>
 #include <QProcess>
 #include <QDir>
@@ -68,7 +69,8 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
     // List of the paths in which the modules will be looked for
     KDevelop::Path::List paths;
 
-    for (auto path : QCoreApplication::instance()->libraryPaths()) {
+    const auto& libraryPaths = QCoreApplication::instance()->libraryPaths();
+    for (auto& path : libraryPaths) {
         KDevelop::Path p(path);
 
         // Change /path/to/qt5/plugins to /path/to/qt5/{qml,imports}
@@ -94,7 +96,7 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
         fragment += QLatin1Char('.') + version.section(QLatin1Char('.'), 0, 0);
     }
 
-    for (auto p : paths) {
+    for (auto& p : qAsConst(paths)) {
         QString pathString = p.cd(fragment).path();
 
         // HACK: QtQuick 1.0 is put in $LIB/qt5/imports/builtins.qmltypes. The "QtQuick"
@@ -169,7 +171,7 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
         // Create a dump of the file
         const QStringList args = {QStringLiteral("-noinstantiate"), QStringLiteral("-path"), filePath};
 
-        for (const PluginDumpExecutable& executable : m_pluginDumpExecutables) {
+        for (const PluginDumpExecutable& executable : qAsConst(m_pluginDumpExecutables)) {
             QProcess qmlplugindump;
             qmlplugindump.setProcessChannelMode(QProcess::SeparateChannels);
             qmlplugindump.start(executable.executable, args, QIODevice::ReadOnly);

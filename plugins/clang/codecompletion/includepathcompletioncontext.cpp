@@ -26,6 +26,7 @@
 #include "duchain/clanghelpers.h"
 
 #include <language/codecompletion/abstractincludefilecompletionitem.h>
+#include <qtcompat_p.h>
 
 #include <QDirIterator>
 
@@ -163,7 +164,7 @@ QVector<KDevelop::IncludeItem> includeItemsForUrl(const QUrl& url, const Include
     QSet<QString> foundIncludePaths; // found items
 
     int pathNumber = 0;
-    for (auto searchPath : paths) {
+    for (auto searchPath : qAsConst(paths)) {
         if (handledPaths.contains(searchPath)) {
             continue;
         }
@@ -283,7 +284,7 @@ QList< CompletionTreeItemPointer > IncludePathCompletionContext::completionItems
 {
     QList<CompletionTreeItemPointer> items;
 
-    for (const auto& includeItem: m_includeItems) {
+    for (const auto& includeItem: qAsConst(m_includeItems)) {
         if (abort) {
             return items;
         }

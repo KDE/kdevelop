@@ -49,7 +49,7 @@ struct CodeCompletionItemTester
   using Context = QExplicitlySharedDataPointer<T>;
 
   //Standard constructor
-  CodeCompletionItemTester(DUContext* context, const QString& text = "; ", const QString& followingText = QString(),
+  CodeCompletionItemTester(DUContext* context, const QString& text = QStringLiteral("; "), const QString& followingText = QString(),
                            const CursorInRevision& position = CursorInRevision::invalid())
     : completionContext(new T(DUContextPointer(context), text, followingText,
                               position.isValid() ? position : context->range().end))

@@ -961,7 +961,7 @@ void DeclarationBuilder::declareExports(const ExportLiteralsAndNames& exports,
     DUChainWriteLocker lock;
 
     // Create the exported versions of the component
-    for (auto exp : exports) {
+    for (auto& exp : exports) {
         QmlJS::AST::StringLiteral* literal = exp.first;
         QString name = exp.second;
         StructureType::Ptr type(new StructureType);

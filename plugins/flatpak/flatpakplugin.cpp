@@ -83,7 +83,8 @@ void FlatpakPlugin::runtimeChanged(KDevelop::IRuntime* newRuntime)
 {
     const bool isFlatpak = qobject_cast<FlatpakRuntime*>(newRuntime);
 
-    for(auto action: actionCollection()->actions()) {
+    const auto& actions = actionCollection()->actions();
+    for (auto action: actions) {
         action->setEnabled(isFlatpak);
     }
 }

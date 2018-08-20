@@ -194,8 +194,8 @@ QList<KTextEditor::MainWindow *> Application::mainWindows() const
 
 bool Application::closeDocument(KTextEditor::Document *document) const
 {
-    auto documentController = Core::self()->documentControllerInternal();
-    for (auto doc : documentController->openDocuments()) {
+    const auto& openDocuments = Core::self()->documentControllerInternal()->openDocuments();
+    for (auto doc : openDocuments) {
         if (doc->textDocument() == document) {
             return doc->close();
         }

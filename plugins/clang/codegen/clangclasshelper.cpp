@@ -283,7 +283,8 @@ QVariantHash ClangTemplateNewClass::extraVariables() const
     }
     const Path sourcePath(sourceUrl);
 
-    for (const auto& baseClass : directBaseClasses()) {
+    const auto& directBaseClasses = this->directBaseClasses();
+    for (const auto& baseClass : directBaseClasses) {
         if (!baseClass) {
             continue;
         }
