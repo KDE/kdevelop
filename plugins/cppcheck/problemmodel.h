@@ -54,13 +54,16 @@ public:
 private:
     void fixProblemFinalLocation(KDevelop::IProblem::Ptr problem);
     bool problemExists(KDevelop::IProblem::Ptr newProblem);
+    void setMessage(const QString& message);
 
     using KDevelop::ProblemModel::setProblems;
 
     Plugin* m_plugin;
 
     KDevelop::IProject* m_project;
+
     QString m_path;
+    KDevelop::DocumentRange m_pathLocation;
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
 };
