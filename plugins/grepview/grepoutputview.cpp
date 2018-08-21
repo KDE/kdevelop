@@ -25,7 +25,7 @@
 #include <KConfigGroup>
 #include <KMessageBox>
 #include <KColorScheme>
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 #include <QAction>
 #include <QMenu>

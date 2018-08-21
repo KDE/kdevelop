@@ -21,9 +21,6 @@
 
 #include "documentchangetracker.h"
 
-#include <ktexteditor/document.h>
-#include <ktexteditor/movinginterface.h>
-
 #include <util/foregroundlock.h>
 #include <editor/modificationrevision.h>
 #include <serialization/indexedstring.h>
@@ -31,6 +28,10 @@
 #include <interfaces/ilanguagecontroller.h>
 #include "backgroundparser.h"
 #include <debug.h>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/MovingInterface>
+
 #include <QApplication>
 
 // Can be used to disable the 'clever' updating logic that ignores whitespace-only changes and such.

@@ -18,16 +18,18 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <KLocalizedString>
-#include <QStandardPaths>
-
 #include "manpagedocumentation.h"
+
 #include "manpageplugin.h"
 #include "manpagedocumentationwidget.h"
 
-#include <KIO/TransferJob>
-#include <kio/jobclasses.h>
 #include <documentation/standarddocumentationview.h>
+
+#include <KIO/TransferJob>
+#include <KLocalizedString>
+
+#include <QStandardPaths>
+
 
 ManPagePlugin* ManPageDocumentation::s_provider=nullptr;
 

@@ -14,13 +14,13 @@
 #ifndef KDEVPLATFORM_PLUGIN_PATCHHIGHLIGHTER_H
 #define KDEVPLATFORM_PLUGIN_PATCHHIGHLIGHTER_H
 
+#include <KTextEditor/MovingRangeFeedback>
+
 #include <QMap>
 #include <QObject>
 #include <QPair>
 #include <QPoint>
 #include <QSet>
-
-#include <ktexteditor/movingrangefeedback.h>
 
 namespace Diff2 {
 class Difference;

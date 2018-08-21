@@ -19,9 +19,9 @@
 #ifndef KDEVPLATFORM_IPARTCONTROLLER_H
 #define KDEVPLATFORM_IPARTCONTROLLER_H
 
-#include <kparts/partmanager.h>
-
 #include "interfacesexport.h"
+
+#include <KParts/PartManager>
 
 class KPluginFactory;
 

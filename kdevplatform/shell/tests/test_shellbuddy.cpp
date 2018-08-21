@@ -23,10 +23,6 @@
 #include <QTest>
 #include <QDebug>
 
-#include <kparts/mainwindow.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
-
 #include <sublime/area.h>
 #include <sublime/view.h>
 #include <sublime/mainwindow.h>
@@ -41,6 +37,10 @@
 
 #include "../documentcontroller.h"
 #include "../uicontroller.h"
+
+#include <KParts/MainWindow>
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
 
 // groups files like foo.l.txt and foo.r.txt such that l is left of r
 class TestBuddyFinder : public KDevelop::IBuddyDocumentFinder

@@ -21,9 +21,9 @@
 
 #include <QUrl>
 
-#include <ktexteditor/cursor.h>
-
 #include "../duchainpointer.h"
+
+#include <KTextEditor/Cursor>
 
 namespace KDevelop {
 

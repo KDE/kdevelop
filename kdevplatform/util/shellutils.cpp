@@ -25,11 +25,12 @@
 #include <QUrl>
 #include <QFile>
 #include <QList>
-#include <KLocalizedString>
-#include <KMessageBox>
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
-#include <kparts/mainwindow.h>
+
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KParts/MainWindow>
 
 namespace KDevelop {
 

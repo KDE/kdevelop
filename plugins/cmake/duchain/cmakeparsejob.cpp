@@ -30,7 +30,9 @@
 #include <language/duchain/duchainutils.h>
 #include <interfaces/icore.h>
 #include <language/duchain/problem.h>
-#include <kio/global.h>
+
+#include <KIO/Global>
+
 #include <QReadWriteLock>
 
 using namespace KDevelop;

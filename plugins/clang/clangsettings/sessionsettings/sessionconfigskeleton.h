@@ -24,10 +24,10 @@
 #ifndef SESSIONCONFIGSKELETON_H
 #define SESSIONCONFIGSKELETON_H
 
-#include <kconfigskeleton.h>
-
 #include <interfaces/icore.h>
 #include <interfaces/isession.h>
+
+#include <KConfigSkeleton>
 
 using namespace KDevelop;
 

@@ -29,7 +29,7 @@
 
 #include <KShell>
 #include <KLocalizedString>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <project/projectmodel.h>
 #include <interfaces/iproject.h>

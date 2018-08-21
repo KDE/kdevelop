@@ -31,7 +31,7 @@
 #include <interfaces/iplugincontroller.h>
 #include <makebuilder/imakebuilder.h>
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include "qmakejob.h"
 #include <debug.h>

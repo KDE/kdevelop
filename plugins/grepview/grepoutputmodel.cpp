@@ -16,14 +16,15 @@
 #include "grepviewplugin.h"
 #include "greputil.h"
 
-#include <ktexteditor/cursor.h>
-#include <ktexteditor/document.h>
-#include <KLocalizedString>
-
-#include <QModelIndex>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
+
+#include <KTextEditor/Cursor>
+#include <KTextEditor/Document>
+#include <KLocalizedString>
+
+#include <QModelIndex>
 #include <QFontDatabase>
 
 

@@ -20,9 +20,9 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_IRUNCONTROLLER_H
 #define KDEVPLATFORM_IRUNCONTROLLER_H
 
-#include <kjobtrackerinterface.h>
-
 #include "interfacesexport.h"
+
+#include <KJobTrackerInterface>
 
 class KJob;
 

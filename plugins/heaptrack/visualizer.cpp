@@ -23,9 +23,10 @@
 #include "globalsettings.h"
 #include "utils.h"
 
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <util/path.h>
+
+#include <KLocalizedString>
+#include <KMessageBox>
 
 #include <QFile>
 

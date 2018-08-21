@@ -20,7 +20,7 @@
 
 #include <language/languageexport.h>
 
-#include <ktexteditor/cursor.h>
+#include <KTextEditor/Cursor>
 
 namespace KDevelop {
 

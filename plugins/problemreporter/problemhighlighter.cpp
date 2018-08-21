@@ -22,11 +22,6 @@
 
 #include "problemhighlighter.h"
 
-#include <KTextEditor/Document>
-#include <KTextEditor/MarkInterface>
-#include <ktexteditor/view.h>
-#include <ktexteditor/movinginterface.h>
-
 #include <serialization/indexedstring.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <interfaces/icore.h>
@@ -38,9 +33,13 @@
 #include <language/duchain/navigation/problemnavigationcontext.h>
 #include <language/editor/documentrange.h>
 
-#include <kcolorscheme.h>
-
 #include <shell/problem.h>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/MarkInterface>
+#include <KTextEditor/View>
+#include <KTextEditor/MovingInterface>
+#include <KColorScheme>
 
 using namespace KTextEditor;
 using namespace KDevelop;

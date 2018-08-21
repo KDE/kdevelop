@@ -24,7 +24,7 @@
 #include <QVariant>
 
 #include <KLocalizedString>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>

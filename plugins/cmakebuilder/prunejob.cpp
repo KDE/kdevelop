@@ -22,8 +22,10 @@
 #include <cmakeutils.h>
 #include <outputview/outputmodel.h>
 #include <interfaces/iproject.h>
+
 #include <KLocalizedString>
-#include <kio/deletejob.h>
+#include <KIO/DeleteJob>
+
 #include <QDir>
 
 using namespace KDevelop;

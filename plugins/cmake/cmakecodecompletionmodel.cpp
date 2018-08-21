@@ -29,13 +29,15 @@
 #include <language/duchain/declaration.h>
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/types/delayedtype.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
-#include <kio/global.h>
-#include <KLocalizedString>
+
 #include <cmakeduchaintypes.h>
 #include "cmakeutils.h"
 #include "icmakedocumentation.h"
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+#include <KIO/Global>
+#include <KLocalizedString>
 
 using namespace KTextEditor;
 using namespace KDevelop;

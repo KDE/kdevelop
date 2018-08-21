@@ -30,7 +30,7 @@
 #include <shell/problemmodelset.h>
 #include <qtcompat_p.h>
 
-#include <klocalizedstring.h>
+#include <KLocalizedString>
 
 namespace cppcheck
 {

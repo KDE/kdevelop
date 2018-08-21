@@ -28,7 +28,7 @@
 
 #include <KLocalizedString>
 #include <KTextEditor/Document>
-#include <ktexteditor/movinginterface.h>
+#include <KTextEditor/MovingInterface>
 
 #include "../interfaces/icore.h"
 #include "../interfaces/idebugcontroller.h"

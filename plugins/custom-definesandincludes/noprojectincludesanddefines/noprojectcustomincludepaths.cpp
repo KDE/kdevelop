@@ -23,10 +23,11 @@
 
 #include "ui_noprojectcustomincludepaths.h"
 
+#include <KLocalizedString>
+
 #include <QFileDialog>
 #include <QUrl>
 
-#include <klocalizedstring.h>
 
 NoProjectCustomIncludePaths::NoProjectCustomIncludePaths(QWidget* parent)
     : QDialog(parent),

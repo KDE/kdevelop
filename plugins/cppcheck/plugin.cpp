@@ -34,12 +34,13 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <kactioncollection.h>
-#include <kpluginfactory.h>
 #include <language/interfaces/editorcontext.h>
 #include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
 #include <util/jobstatus.h>
+
+#include <KActionCollection>
+#include <KPluginFactory>
 
 #include <QAction>
 #include <QMimeDatabase>

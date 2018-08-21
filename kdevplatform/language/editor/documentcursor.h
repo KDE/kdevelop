@@ -22,7 +22,7 @@
 #include <language/languageexport.h>
 #include <serialization/indexedstring.h>
 
-#include <ktexteditor/cursor.h>
+#include <KTextEditor/Cursor>
 
 namespace KDevelop
 {

@@ -29,16 +29,16 @@
 #include <QApplication>
 #include <QMetaObject>
 #include <QWidgetAction>
+#include <QAction>
 
 #include <KLocalizedString>
-#include <kpluginfactory.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
-#include <kparts/mainwindow.h>
+#include <KPluginFactory>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+#include <KParts/MainWindow>
 #include <KSharedConfig>
 #include <KConfigGroup>
-#include <kactioncollection.h>
-#include <QAction>
+#include <KActionCollection>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>

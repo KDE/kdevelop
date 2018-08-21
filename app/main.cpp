@@ -34,8 +34,8 @@
 
 #include <KLocalizedString>
 #include <Kdelibs4ConfigMigrator>
-#include <kaboutdata.h>
-#include <kcrash.h>
+#include <KAboutData>
+#include <KCrash>
 
 #include <QApplication>
 #include <QElapsedTimer>

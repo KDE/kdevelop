@@ -38,10 +38,10 @@
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/classfunctiondeclaration.h>
-
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
 #include <debug.h>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 using namespace KDevelop;
 

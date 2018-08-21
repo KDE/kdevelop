@@ -20,10 +20,10 @@ Boston, MA 02110-1301, USA.
 #ifndef KDEVPLATFORM_OUTPUTJOB_H
 #define KDEVPLATFORM_OUTPUTJOB_H
 
-#include <kjob.h>
-
 #include <outputview/ioutputview.h>
 #include <outputview/outputviewexport.h>
+
+#include <KJob>
 
 class QIcon;
 

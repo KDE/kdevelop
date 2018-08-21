@@ -17,19 +17,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include <ghresource.h>
+
+#include <debug.h>
+#include <ghprovidermodel.h>
+
+#include <KIO/Scheduler>
+#include <KIO/TransferJob>
+#include <KIO/StoredTransferJob>
 
 #include <QUrl>
-#include <kio/scheduler.h>
-#include <kio/transferjob.h>
-#include <kio/storedtransferjob.h>
 #include <QJsonDocument>
 #include <QHostInfo>
 #include <QDateTime>
-
-#include <debug.h>
-#include <ghresource.h>
-#include <ghprovidermodel.h>
-
 
 namespace gh
 {

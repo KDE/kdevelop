@@ -26,7 +26,7 @@
 #include <QMenu>
 
 #include <KLocalizedString>
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 #include <KTextEditor/Document>
 

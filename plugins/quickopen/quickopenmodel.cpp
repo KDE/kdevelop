@@ -22,7 +22,7 @@
 #include <QTreeView>
 #include <QTimer>
 
-#include <ktexteditor/codecompletionmodel.h>
+#include <KTextEditor/CodeCompletionModel>
 #include <typeinfo>
 
 #include "expandingtree/expandingtree.h"

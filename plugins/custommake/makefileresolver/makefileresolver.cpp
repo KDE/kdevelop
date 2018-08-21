@@ -33,7 +33,7 @@
 #include <QRegularExpression>
 #include <QRegExp>
 
-#include <kprocess.h>
+#include <KProcess>
 #include <KLocalizedString>
 
 #include <serialization/indexedstring.h>

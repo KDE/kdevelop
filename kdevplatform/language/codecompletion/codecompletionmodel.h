@@ -33,8 +33,9 @@
 #include <language/languageexport.h>
 #include "codecompletioncontext.h"
 #include "codecompletionitem.h"
-#include <ktexteditor/codecompletionmodel.h>
-#include <ktexteditor/codecompletionmodelcontrollerinterface.h>
+
+#include <KTextEditor/CodeCompletionModel>
+#include <KTextEditor/CodeCompletionModelControllerInterface>
 
 class QMutex;
 

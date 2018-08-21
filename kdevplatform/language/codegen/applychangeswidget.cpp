@@ -19,7 +19,7 @@
 
 #include "applychangeswidget.h"
 
-#include <ktexteditor/document.h>
+#include <KTextEditor/Document>
 
 #include <KMimeTypeTrader>
 

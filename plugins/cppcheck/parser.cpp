@@ -23,10 +23,11 @@
 
 #include "debug.h"
 
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <shell/problem.h>
 #include <language/editor/documentrange.h>
+
+#include <KLocalizedString>
+#include <KMessageBox>
 
 #include <QApplication>
 #include <QFile>

@@ -34,11 +34,11 @@
 #include <interfaces/iruntime.h>
 #include <interfaces/iruntimecontroller.h>
 
-#include <kshell.h>
-#include <klocalizedstring.h>
-
 #include "cmakeutils.h"
 #include "debug.h"
+
+#include <KShell>
+#include <KLocalizedString>
 
 using namespace KDevelop;
 

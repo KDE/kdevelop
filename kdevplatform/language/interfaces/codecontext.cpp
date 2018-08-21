@@ -36,8 +36,8 @@ Boston, MA 02110-1301, USA.
 #include <duchain/duchainutils.h>
 #include <duchain/use.h>
 
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 namespace KDevelop
 {

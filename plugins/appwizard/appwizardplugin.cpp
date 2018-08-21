@@ -37,7 +37,7 @@
 #include <KSharedConfig>
 #include <KTar>
 #include <KZip>
-#include <kmacroexpander.h>
+#include <KMacroExpander>
 
 #include <interfaces/icore.h>
 #include <interfaces/iprojectcontroller.h>

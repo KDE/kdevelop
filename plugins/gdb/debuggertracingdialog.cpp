@@ -22,8 +22,8 @@
 #include "debuggertracingdialog.h"
 #include "breakpoint.h"
 
-#include <keditlistbox.h>
-#include <kmessagebox.h>
+#include <KEditListBox>
+#include <KMessageBox>
 
 /* WARNING: this code was not yet ported to KDevelop4 and is unused, but is 
    intended to be ported.  */

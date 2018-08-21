@@ -20,11 +20,13 @@
 #include "commandexecutor.h"
 
 #include "processlinemaker.h"
+
+#include <KProcess>
+#include <KShell>
+
 #include <QMap>
 #include <QStringList>
 #include <QString>
-#include <kprocess.h>
-#include <kshell.h>
 
 namespace KDevelop
 {

@@ -19,7 +19,7 @@
 #ifndef KDEVPLATFORM_EXAMPLE1MAIN_H
 #define KDEVPLATFORM_EXAMPLE1MAIN_H
 
-#include <kxmlguiwindow.h>
+#include <KXmlGuiWindow>
 
 namespace Sublime {
     class Area;

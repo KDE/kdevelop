@@ -28,7 +28,7 @@
 #include <QList>
 #include <QUrl>
 
-#include <kio/global.h>
+#include <KIO/Global>
 #include <KConfigGroup>
 #include <KDirWatch>
 #include <KLocalizedString>

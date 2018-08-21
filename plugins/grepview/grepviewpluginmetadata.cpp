@@ -20,7 +20,7 @@
 
 #include "grepviewplugin.h"
 
-#include <kpluginfactory.h>
+#include <KPluginFactory>
 
 
 // This file only exists so that the tests can be built:

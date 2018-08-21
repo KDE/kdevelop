@@ -29,7 +29,7 @@
 
 #include <KLocalizedString>
 #include <KFormat>
-#include <ktexteditor/movinginterface.h>
+#include <KTextEditor/MovingInterface>
 
 #include "backgroundparser.h"
 #include <debug.h>

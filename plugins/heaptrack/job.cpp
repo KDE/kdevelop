@@ -27,9 +27,10 @@
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <klocalizedstring.h>
 #include <util/environmentprofilelist.h>
 #include <util/path.h>
+
+#include <KLocalizedString>
 
 #include <QFileInfo>
 #include <QRegularExpression>

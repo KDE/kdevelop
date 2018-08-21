@@ -23,8 +23,9 @@
 
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/duchain/duchainutils.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 #include <QIcon>
 

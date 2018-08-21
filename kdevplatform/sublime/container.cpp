@@ -43,7 +43,8 @@
 
 #include "view.h"
 #include "urldocument.h"
-#include <ksqueezedtextlabel.h>
+
+#include <KSqueezedTextLabel>
 
 namespace Sublime {
 

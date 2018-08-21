@@ -21,10 +21,10 @@
 #ifndef KDEVPLATFORM_SESSIONCONFIGSKELETON_H
 #define KDEVPLATFORM_SESSIONCONFIGSKELETON_H
 
-#include <kconfigskeleton.h>
-
 #include "../core.h"
 #include "../session.h"
+
+#include <KConfigSkeleton>
 
 namespace KDevelop
 {

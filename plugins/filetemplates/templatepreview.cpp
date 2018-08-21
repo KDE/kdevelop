@@ -33,7 +33,7 @@
 #include <KTextEditor/Document>
 
 #include <KLocalizedString>
-#include <kmacroexpander.h>
+#include <KMacroExpander>
 
 using namespace KDevelop;
 

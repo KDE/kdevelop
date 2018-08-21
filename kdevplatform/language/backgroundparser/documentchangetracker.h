@@ -26,9 +26,10 @@
 #include <QExplicitlySharedDataPointer>
 #include <QPointer>
 #include <QPair>
-#include <ktexteditor/movingrange.h>
 #include <language/editor/rangeinrevision.h>
 #include <serialization/indexedstring.h>
+
+#include <KTextEditor/MovingRange>
 
 namespace KTextEditor
 {

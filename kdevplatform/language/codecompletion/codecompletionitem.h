@@ -22,9 +22,9 @@
 #ifndef KDEVPLATFORM_KDEV_CODECOMPLETIONITEM_H
 #define KDEVPLATFORM_KDEV_CODECOMPLETIONITEM_H
 
-#include <ktexteditor/codecompletionmodel.h>
-
 #include "../duchain/duchainpointer.h"
+
+#include <KTextEditor/CodeCompletionModel>
 
 namespace KTextEditor {
   class CodeCompletionModel;

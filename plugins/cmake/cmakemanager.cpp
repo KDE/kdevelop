@@ -45,7 +45,7 @@
 #include <QUrl>
 #include <QAction>
 #include <KMessageBox>
-#include <ktexteditor/document.h>
+#include <KTextEditor/Document>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
