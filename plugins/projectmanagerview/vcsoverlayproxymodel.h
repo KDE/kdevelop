@@ -20,8 +20,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_VCSOVERLAYPROXYMODEL_H
 #define KDEVPLATFORM_PLUGIN_VCSOVERLAYPROXYMODEL_H
 
-#include <qidentityproxymodel.h>
 #include <project/projectmodel.h>
+#include <QIdentityProxyModel>
 
 class QUrl;
 namespace KDevelop {

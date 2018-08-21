@@ -30,6 +30,7 @@
 #include <QMetaObject>
 #include <QWidgetAction>
 #include <QAction>
+#include <QDesktopWidget>
 
 #include <KLocalizedString>
 #include <KPluginFactory>
@@ -60,9 +61,9 @@
 #include "actionsquickopenprovider.h"
 #include "debug.h"
 #include <language/duchain/functiondefinition.h>
-#include <qdesktopwidget.h>
 #include <interfaces/contextmenuextension.h>
 #include <language/interfaces/codecontext.h>
+
 
 using namespace KDevelop;
 

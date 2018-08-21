@@ -19,12 +19,12 @@
 #ifndef KDEVPLATFORM_IPATCHSOURCE_H
 #define KDEVPLATFORM_IPATCHSOURCE_H
 
-#include <QUrl>
-#include <QMap>
-
-#include <qpointer.h>
 #include <vcs/vcsexport.h>
 #include <vcs/vcsstatusinfo.h>
+
+#include <QUrl>
+#include <QMap>
+#include <QPointer>
 
 namespace KDevelop {
 

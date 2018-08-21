@@ -24,10 +24,12 @@
 #define KDEVPLATFORM_CLASSMODELNODE_H
 
 #include "classmodel.h"
-#include <qicon.h>
+
 #include "../duchain/identifier.h"
 #include "../duchain/duchainpointer.h"
 #include "classmodelnodescontroller.h"
+
+#include <QIcon>
 
 class NodesModelInterface;
 

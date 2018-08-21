@@ -22,7 +22,7 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QTemporaryDir>
-#include <qdir.h>
+#include <QDir>
 #include <QPushButton>
 #include <QStandardPaths>
 

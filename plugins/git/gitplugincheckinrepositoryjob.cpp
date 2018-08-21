@@ -22,8 +22,8 @@
 #include "debug.h"
 
 #include <KTextEditor/Document>
-#include <qtextcodec.h>
 
+#include <QTextCodec>
 #include <QDir>
 
 GitPluginCheckInRepositoryJob::GitPluginCheckInRepositoryJob(KTextEditor::Document* document,

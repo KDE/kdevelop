@@ -19,8 +19,9 @@
  */
 
 #include "kdevsignalspy.h"
-#include <qeventloop.h>
-#include <qtimer.h>
+
+#include <QEventLoop>
+#include <QTimer>
 
 namespace KDevelop
 {
