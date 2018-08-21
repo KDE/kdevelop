@@ -27,7 +27,7 @@
 #include "oktetadocument.h"
 #include "oktetawidget.h"
 // Okteta Kasten
-#include <kasten/okteta/bytearrayview.h>
+#include <Kasten/Okteta/ByteArrayView>
 
 
 namespace KDevelop

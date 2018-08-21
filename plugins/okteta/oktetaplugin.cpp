@@ -27,28 +27,28 @@
 #include "oktetatoolviewfactory.h"
 #include "oktetadocument.h"
 // Okteta Kasten tools
-#include <kasten/okteta/stringsextracttoolviewfactory.h>
-#include <kasten/okteta/stringsextracttoolfactory.h>
-#include <kasten/okteta/infotoolviewfactory.h>
-#include <kasten/okteta/infotoolfactory.h>
-#include <kasten/okteta/filtertoolviewfactory.h>
-#include <kasten/okteta/filtertoolfactory.h>
-#include <kasten/okteta/checksumtoolviewfactory.h>
-#include <kasten/okteta/checksumtoolfactory.h>
+#include <Kasten/Okteta/StringsExtractToolViewFactory>
+#include <Kasten/Okteta/StringsExtractToolFactory>
+#include <Kasten/Okteta/InfoToolViewFactory>
+#include <Kasten/Okteta/InfoToolFactory>
+#include <Kasten/Okteta/FilterToolViewFactory>
+#include <Kasten/Okteta/FilterToolFactory>
+#include <Kasten/Okteta/ChecksumToolViewFactory>
+#include <Kasten/Okteta/ChecksumToolFactory>
 // #include <documentinfotoolview.h>
 // #include <documentinfotool.h>
-#include <kasten/okteta/poddecodertoolviewfactory.h>
-#include <kasten/okteta/poddecodertoolfactory.h>
-#include <kasten/okteta/bytetabletoolviewfactory.h>
-#include <kasten/okteta/bytetabletoolfactory.h>
-#include <kasten/okteta/bookmarkstoolviewfactory.h>
-#include <kasten/okteta/bookmarkstoolfactory.h>
+#include <Kasten/Okteta/PODDecoderToolViewFactory>
+#include <Kasten/Okteta/PODDecoderToolFactory>
+#include <Kasten/Okteta/ByteTableToolViewFactory>
+#include <Kasten/Okteta/ByteTableToolFactory>
+#include <Kasten/Okteta/BookmarksToolViewFactory>
+#include <Kasten/Okteta/BookmarksToolFactory>
 #ifndef BIG_ENDIAN
-#include <kasten/okteta/structurestoolviewfactory.h>
-#include <kasten/okteta/structurestoolfactory.h>
+#include <Kasten/Okteta/StructuresToolViewFactory>
+#include <Kasten/Okteta/StructuresToolFactory>
 #endif
 // Okteta Kasten
-#include <kasten/okteta/bytearrayviewprofilemanager.h>
+#include <Kasten/Okteta/ByteArrayViewProfileManager>
 // KDev
 #include <project/projectmodel.h>
 #include <interfaces/icore.h>
