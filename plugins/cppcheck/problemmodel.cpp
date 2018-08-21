@@ -48,6 +48,7 @@ ProblemModel::ProblemModel(Plugin* plugin)
     : KDevelop::ProblemModel(plugin)
     , m_plugin(plugin)
     , m_project(nullptr)
+    , m_pathLocation(KDevelop::DocumentRange::invalid())
 {
     setFeatures(CanDoFullUpdate | ScopeFilter | SeverityFilter | Grouping | CanByPassScopeFilter);
     reset();
@@ -68,14 +69,10 @@ void ProblemModel::fixProblemFinalLocation(KDevelop::IProblem::Ptr problem)
 {
     // Fix problems with incorrect range, which produced by cppcheck's errors
     // without <location> element. In this case location automatically gets "/".
-    // To avoid this we set project's root path as problem location.
+    // To avoid this we set current analysis path as problem location.
 
-    Q_ASSERT(m_project);
-
-    auto range = problem->finalLocation();
-    if (range.document.isEmpty()) {
-        range.document = KDevelop::IndexedString(m_project->path().toLocalFile());
-        problem->setFinalLocation(range);
+    if (problem->finalLocation().document.isEmpty()) {
+        problem->setFinalLocation(m_pathLocation);
     }
 
     const auto& diagnostics = problem->diagnostics();
@@ -96,6 +93,11 @@ bool ProblemModel::problemExists(KDevelop::IProblem::Ptr newProblem)
     }
 
     return false;
+}
+
+void ProblemModel::setMessage(const QString& message)
+{
+    setPlaceholderText(message, m_pathLocation, i18n("Cppcheck"));
 }
 
 void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
@@ -126,6 +128,7 @@ void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
 
 void ProblemModel::setProblems()
 {
+    setMessage(i18n("Analysis completed, no problems detected."));
     setProblems(m_problems);
 }
 
@@ -137,15 +140,21 @@ void ProblemModel::reset()
 void ProblemModel::reset(KDevelop::IProject* project, const QString& path)
 {
     m_project = project;
+
     m_path = path;
+    m_pathLocation.document = KDevelop::IndexedString(m_path);
 
     clearProblems();
     m_problems.clear();
 
-    QString tooltip = i18nc("@info:tooltip", "Re-Run Last Cppcheck Analysis");
+    QString tooltip;
     if (m_project) {
-        tooltip += QStringLiteral(" (%1)").arg(prettyPathName(m_path));
+        setMessage(i18n("Analysis started..."));
+        tooltip = i18nc("@info:tooltip %1 is the path of the file", "Re-run last Cppcheck analysis (%1)", prettyPathName(m_path));
+    } else {
+        tooltip = i18nc("@info:tooltip", "Re-run last Cppcheck analysis");
     }
+
     setFullUpdateTooltip(tooltip);
 }
 
