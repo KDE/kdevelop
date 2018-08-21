@@ -33,12 +33,13 @@
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/iplugincontroller.h>
-#include <kactioncollection.h>
-#include <kpluginfactory.h>
 #include <shell/core.h>
 #include <shell/launchconfiguration.h>
 #include <shell/runcontroller.h>
 #include <util/executecompositejob.h>
+
+#include <KActionCollection>
+#include <KPluginFactory>
 
 #include <QAction>
 #include <QFile>

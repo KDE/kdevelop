@@ -19,9 +19,10 @@
 #ifndef KDEVPLATFORM_PLUGIN_OUTPUTPAGE_H
 #define KDEVPLATFORM_PLUGIN_OUTPUTPAGE_H
 
+#include <KTextEditor/Cursor>
+
 #include <QWidget>
 #include <QUrl>
-#include <ktexteditor/cursor.h>
 
 #include "ipagefocus.h"
 

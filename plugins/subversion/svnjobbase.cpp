@@ -12,9 +12,9 @@
 
 #include <QStandardItemModel>
 
-#include <kpassworddialog.h>
+#include <KPasswordDialog>
 #include <KLocalizedString>
-#include <kmessagebox.h>
+#include <KMessageBox>
 
 #include <ThreadWeaver/QObjectDecorator>
 

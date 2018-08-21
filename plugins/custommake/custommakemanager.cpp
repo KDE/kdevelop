@@ -17,18 +17,19 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include <makebuilder/imakebuilder.h>
-#include <kpluginfactory.h>
 #include <project/projectmodel.h>
 #include <project/helper.h>
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 #include <makefileresolver/makefileresolver.h>
+
+#include <KPluginFactory>
+#include <KLocalizedString>
 
 #include <QFile>
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
 
-#include <KLocalizedString>
 
 #include <algorithm>
 

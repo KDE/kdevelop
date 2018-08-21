@@ -21,9 +21,9 @@
 #ifndef KDEVPLATFORM_PERSISTENTMOVINGRANGEPRIVATE_H
 #define KDEVPLATFORM_PERSISTENTMOVINGRANGEPRIVATE_H
 
-#include <QObject>
-#include <ktexteditor/movingrange.h>
 #include <backgroundparser/documentchangetracker.h>
+#include <KTextEditor/MovingRange>
+#include <QObject>
 #include <QApplication>
 
 namespace KDevelop {

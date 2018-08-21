@@ -21,11 +21,6 @@
 
 #include "codecompletion.h"
 
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/codecompletionmodel.h>
-#include <ktexteditor/codecompletioninterface.h>
-
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguagesupport.h>
@@ -35,6 +30,11 @@
 #include <debug.h>
 #include "codecompletionmodel.h"
 #include <interfaces/idocumentcontroller.h>
+
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
+#include <KTextEditor/CodeCompletionModel>
+#include <KTextEditor/CodeCompletionInterface>
 
 using namespace KTextEditor;
 using namespace KDevelop;

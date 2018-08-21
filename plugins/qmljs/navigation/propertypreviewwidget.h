@@ -21,9 +21,10 @@
 
 #include <QWidget>
 
-#include <ktexteditor/range.h>
 #include <language/duchain/declaration.h>
 #include <interfaces/idocument.h>
+
+#include <KTextEditor/Range>
 
 using namespace KDevelop;
 class QQuickWidget;

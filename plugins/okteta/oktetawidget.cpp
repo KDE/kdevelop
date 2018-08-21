@@ -26,42 +26,42 @@
 #include "oktetadocument.h"
 #include "oktetaplugin.h"
 // Okteta Kasten
-#include <kasten/okteta/bytearrayview.h>
-//#include <kasten/okteta/bytearrayrafilesynchronizerfactory.h>
-//#include <kasten/okteta/overwriteonlycontroller.h>
-#include <kasten/okteta/overwritemodecontroller.h>
-#include <kasten/okteta/gotooffsetcontroller.h>
-#include <kasten/okteta/selectrangecontroller.h>
-#include <kasten/okteta/searchcontroller.h>
-#include <kasten/okteta/replacecontroller.h>
-#include <kasten/okteta/bookmarkscontroller.h>
-#include <kasten/okteta/printcontroller.h>
-#include <kasten/okteta/viewconfigcontroller.h>
-#include <kasten/okteta/viewmodecontroller.h>
-#include <kasten/okteta/viewstatuscontroller.h>
-#include <kasten/okteta/viewprofilecontroller.h>
-#include <kasten/okteta/viewprofilesmanagecontroller.h>
+#include <Kasten/Okteta/ByteArrayView>
+//#include <Kasten/Okteta/bytearrayrafilesynchronizerfactory.h>
+//#include <Kasten/Okteta/overwriteonlycontroller.h>
+#include <Kasten/Okteta/OverwriteModeController>
+#include <Kasten/Okteta/GotoOffsetController>
+#include <Kasten/Okteta/SelectRangeController>
+#include <Kasten/Okteta/SearchController>
+#include <Kasten/Okteta/ReplaceController>
+#include <Kasten/Okteta/BookmarksController>
+#include <Kasten/Okteta/PrintController>
+#include <Kasten/Okteta/ViewConfigController>
+#include <Kasten/Okteta/ViewModeController>
+#include <Kasten/Okteta/ViewStatusController>
+#include <Kasten/Okteta/ViewProfileController>
+#include <Kasten/Okteta/ViewProfilesManageController>
 // Kasten
-#include <kasten/readonlycontroller.h>
+#include <Kasten/ReadOnlyController>
 // #include <document/readonly/readonlybarcontroller.h>
 // #include <io/synchronize/synchronizecontroller.h>
-#include <kasten/clipboardcontroller.h>
-#include <kasten/insertcontroller.h>
-#include <kasten/copyascontroller.h>
-#include <kasten/exportcontroller.h>
-#include <kasten/versioncontroller.h>
-#include <kasten/zoomcontroller.h>
-#include <kasten/zoombarcontroller.h>
-#include <kasten/selectcontroller.h>
+#include <Kasten/ClipboardController>
+#include <Kasten/InsertController>
+#include <Kasten/CopyAsController>
+#include <Kasten/ExportController>
+#include <Kasten/VersionController>
+#include <Kasten/ZoomController>
+#include <Kasten/ZoomBarController>
+#include <Kasten/SelectController>
 // KDevelop
 #include <sublime/view.h>
 // KDE
 #include <KLocalizedString>
-#include <QAction>
 #include <KStandardAction>
 #include <KActionCollection>
 // Qt
 #include <QVBoxLayout>
+#include <QAction>
 
 
 namespace KDevelop

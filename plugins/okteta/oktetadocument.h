@@ -24,7 +24,7 @@
 #define OKTETADOCUMENT_H
 
 // Kasten core
-#include <kasten/kastencore.h>
+#include <Kasten/KastenCore>
 // KDevPlatform
 #include <sublime/urldocument.h>
 #include <interfaces/idocument.h>

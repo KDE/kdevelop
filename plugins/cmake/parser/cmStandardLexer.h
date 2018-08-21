@@ -3,7 +3,7 @@
 #ifndef cmStandardLexer_h
 #define cmStandardLexer_h
 
-#include <qglobal.h>
+#include <QtGlobal>
 
 /* Disable some warnings.  */
 #if defined(_MSC_VER)

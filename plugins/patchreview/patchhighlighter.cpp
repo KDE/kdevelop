@@ -27,8 +27,8 @@
 #include <KTextEditor/View>
 #include <KTextEditor/Cursor>
 
-#include <ktexteditor/movinginterface.h>
-#include <ktexteditor/markinterface.h>
+#include <KTextEditor/MovingInterface>
+#include <KTextEditor/MarkInterface>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>

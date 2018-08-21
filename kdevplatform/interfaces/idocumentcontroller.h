@@ -23,7 +23,7 @@
 #include <QList>
 #include <QUrl>
 
-#include <ktexteditor/range.h>
+#include <KTextEditor/Range>
 
 #include "interfacesexport.h"
 

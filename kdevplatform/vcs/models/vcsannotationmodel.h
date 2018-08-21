@@ -21,9 +21,10 @@
 #ifndef KDEVPLATFORM_VCSANNOTATIONMODEL_H
 #define KDEVPLATFORM_VCSANNOTATIONMODEL_H
 
-#include <ktexteditor/annotationinterface.h>
 #include <vcs/vcsexport.h>
 #include "../vcsrevision.h"
+
+#include <KTextEditor/AnnotationInterface>
 
 #include <QColor>
 

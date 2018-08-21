@@ -11,13 +11,14 @@
 #ifndef KDEVPLATFORM_PLUGIN_CVSPLUGIN_H
 #define KDEVPLATFORM_PLUGIN_CVSPLUGIN_H
 
-#include <QUrl>
-#include <KJob>
-
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/vcslocation.h>
 #include <interfaces/iplugin.h>
-#include <qobject.h>
+
+#include <KJob>
+
+#include <QUrl>
+#include <QObject>
 
 class CvsProxy;
 

@@ -28,7 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <QVector>
 #include <QMimeType>
 
-#include <kxmlguiclient.h>
+#include <KXMLGUIClient>
 #include <KConfigGroup>
 
 #include "shellexport.h"

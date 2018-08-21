@@ -26,9 +26,6 @@
 #include <QTimer>
 #include <QMenuBar>
 
-#include <kparts/mainwindow.h>
-#include <KTextEditor/Document>
-#include <KTextEditor/View>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 #include "contextbrowserview.h"
@@ -40,12 +37,16 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
-#include <ktexteditor/codecompletioninterface.h>
 #include <language/duchain/functiondefinition.h>
 #include <language/duchain/forwarddeclaration.h>
 
 #include "contextbrowser.h"
 #include "debug.h"
+
+#include <KParts/MainWindow>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+#include <KTextEditor/CodeCompletionInterface>
 
 using namespace KDevelop;
 using namespace KTextEditor;

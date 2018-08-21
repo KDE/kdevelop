@@ -23,8 +23,6 @@
 
 #include "codehighlighting.h"
 
-#include <KTextEditor/Document>
-
 #include "../../interfaces/icore.h"
 #include "../../interfaces/ilanguagecontroller.h"
 #include "../../interfaces/icompletionsettings.h"
@@ -44,8 +42,10 @@
 #include "configurablecolors.h"
 #include <duchain/parsingenvironment.h>
 #include <backgroundparser/backgroundparser.h>
-#include <ktexteditor/movinginterface.h>
 #include <backgroundparser/urlparselock.h>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/MovingInterface>
 
 using namespace KTextEditor;
 

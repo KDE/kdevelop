@@ -27,8 +27,8 @@
 
 #include <KLocalizedString>
 
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>

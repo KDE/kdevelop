@@ -24,11 +24,13 @@
 #include "plasmoidexecutionconfig.h"
 #include "plasmoidexecutionjob.h"
 #include "debug.h"
-#include <kpluginfactory.h>
-#include <QUrl>
 
 #include <interfaces/icore.h>
 #include <interfaces/iruncontroller.h>
+
+#include <KPluginFactory>
+
+#include <QUrl>
 
 using namespace KDevelop;
 

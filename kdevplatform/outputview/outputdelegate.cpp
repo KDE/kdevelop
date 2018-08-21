@@ -24,7 +24,7 @@
 #include "outputmodel.h"
 #include "filtereditem.h"
 
-#include <kcolorscheme.h>
+#include <KColorScheme>
 
 #include <QPainter>
 

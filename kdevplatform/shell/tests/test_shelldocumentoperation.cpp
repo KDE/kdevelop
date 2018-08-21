@@ -21,13 +21,6 @@
 #include <QTest>
 #include <QAction>
 
-#include <kactioncollection.h>
-#include <kxmlguifactory.h>
-#include <kparts/mainwindow.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/movinginterface.h>
-
 #include <sublime/area.h>
 #include <sublime/view.h>
 
@@ -36,6 +29,13 @@
 
 #include "../documentcontroller.h"
 #include "../uicontroller.h"
+
+#include <KActionCollection>
+#include <KXMLGUIFactory>
+#include <KParts/MainWindow>
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
+#include <KTextEditor/MovingInterface>
 
 using namespace KDevelop;
 

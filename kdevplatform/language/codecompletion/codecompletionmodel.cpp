@@ -23,8 +23,8 @@
 #include "codecompletionmodel.h"
 
 #include <QThread>
-#include <ktexteditor/view.h>
-#include <ktexteditor/document.h>
+#include <KTextEditor/View>
+#include <KTextEditor/Document>
 
 #include "../duchain/declaration.h"
 #include "../duchain/classfunctiondeclaration.h"

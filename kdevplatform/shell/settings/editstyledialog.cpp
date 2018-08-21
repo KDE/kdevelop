@@ -20,17 +20,19 @@
 
 #include "editstyledialog.h"
 
+#include <interfaces/isourceformatter.h>
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+#include <KTextEditor/Editor>
+#include <KTextEditor/ConfigInterface>
+#include <KLocalizedString>
+
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QUrl>
 #include <QDialogButtonBox>
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
-#include <ktexteditor/editor.h>
-#include <ktexteditor/configinterface.h>
-#include <KLocalizedString>
 
-#include <interfaces/isourceformatter.h>
 
 using namespace KDevelop;
 

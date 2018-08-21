@@ -24,9 +24,11 @@
 #define KDEVPLATFORM_PLUGIN_PROBLEMHIGHLIGHTER_H
 
 #include <language/duchain/problem.h>
-#include <qpointer.h>
-#include <ktexteditor/movingrange.h>
 #include <interfaces/iproblem.h>
+
+#include <KTextEditor/MovingRange>
+
+#include <QPointer>
 
 class ProblemHighlighter : public QObject
 {

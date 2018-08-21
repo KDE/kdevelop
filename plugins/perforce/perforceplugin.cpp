@@ -28,7 +28,7 @@
 #include <QProcessEnvironment>
 #include <QMenu>
 
-#include <kmessagebox.h>
+#include <KMessageBox>
 #include <vcs/vcsjob.h>
 #include <vcs/vcsrevision.h>
 #include <vcs/vcsstatusinfo.h>

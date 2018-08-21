@@ -21,10 +21,12 @@
 #ifndef CMAKECODECOMPLETION_H
 #define CMAKECODECOMPLETION_H
 
-#include <ktexteditor/codecompletionmodel.h>
 #include <language/duchain/duchainpointer.h>
-#include <QStringList>
 #include <language/duchain/declaration.h>
+
+#include <KTextEditor/CodeCompletionModel>
+
+#include <QStringList>
 
 class CMakeDocumentation;
 namespace KTextEditor { class Document; class Range; }

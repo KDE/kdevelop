@@ -24,7 +24,8 @@
 
 #include <language/duchain/navigation/abstractnavigationcontext.h>
 #include <language/languageexport.h>
-#include <qpointer.h>
+
+#include <QPointer>
 
 namespace KDevelop {
 

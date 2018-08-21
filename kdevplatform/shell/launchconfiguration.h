@@ -21,9 +21,10 @@
 #define KDEVPLATFORM_LAUNCHCONFIGURATION_H
 
 #include <interfaces/ilaunchconfiguration.h>
-#include <kconfiggroup.h>
 
 #include "shellexport.h"
+
+#include <KConfigGroup>
 
 class QString;
 

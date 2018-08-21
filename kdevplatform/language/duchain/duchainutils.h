@@ -25,11 +25,11 @@
 
 #include <QUrl>
 
-#include <ktexteditor/codecompletionmodel.h>
-
 #include <language/languageexport.h>
 #include <language/duchain/problem.h>
 #include <language/duchain/topducontext.h>
+
+#include <KTextEditor/CodeCompletionModel>
 
 class QIcon;
 

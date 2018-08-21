@@ -31,16 +31,17 @@
 #include <project/builderjob.h>
 #include <makebuilder/imakebuilder.h>
 
-#include <kpluginfactory.h>
-#include <KLocalizedString>
-#include <kjob.h>
-#include <QUrl>
-
 #include "cmakejob.h"
 #include "prunejob.h"
 #include "cmakebuilderpreferences.h"
 #include "cmakeutils.h"
 #include <cmakemodelitems.h>
+
+#include <KPluginFactory>
+#include <KLocalizedString>
+#include <KJob>
+
+#include <QUrl>
 
 K_PLUGIN_FACTORY_WITH_JSON(CMakeBuilderFactory, "kdevcmakebuilder.json", registerPlugin<CMakeBuilder>(); )
 

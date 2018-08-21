@@ -31,9 +31,10 @@
 #include "parser.h"
 #include "utils.h"
 
-#include <klocalizedstring.h>
-#include <kmessagebox.h>
 #include <shell/problem.h>
+
+#include <KLocalizedString>
+#include <KMessageBox>
 
 #include <QApplication>
 #include <QElapsedTimer>

@@ -24,10 +24,6 @@
 
 #include "gdbconfigpage.h"
 
-#include <kconfiggroup.h>
-#include <KLocalizedString>
-#include <kmessagebox.h>
-
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iproject.h>
@@ -42,6 +38,10 @@
 #include "ui_gdbconfigpage.h"
 #include <interfaces/iruncontroller.h>
 #include <interfaces/icore.h>
+
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <KMessageBox>
 
 using namespace KDevelop;
 namespace Config = KDevMI::GDB::Config;

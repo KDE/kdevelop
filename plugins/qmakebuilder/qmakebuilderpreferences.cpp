@@ -23,8 +23,8 @@
 
 #include <QIcon>
 
-#include <kio/deletejob.h>
-#include <klocalizedstring.h>
+#include <KIO/DeleteJob>
+#include <KLocalizedString>
 #include <KMessageBox>
 #include <KJobWidgets>
 

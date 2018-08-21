@@ -19,9 +19,10 @@
 #ifndef KDEVPLATFORM_PARSEPROJECTJOB_H
 #define KDEVPLATFORM_PARSEPROJECTJOB_H
 
-#include <kjob.h>
 #include <serialization/indexedstring.h>
 #include <language/languageexport.h>
+
+#include <KJob>
 
 namespace KDevelop {
 class ReferencedTopDUContext;

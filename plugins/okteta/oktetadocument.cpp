@@ -26,10 +26,10 @@
 #include "oktetaplugin.h"
 #include "oktetaview.h"
 // Okteta
-#include <kasten/okteta/bytearrayviewprofilemanager.h>
-#include <kasten/okteta/bytearrayviewprofilesynchronizer.h>
-#include <kasten/okteta/bytearrayrawfilesynchronizerfactory.h>
-#include <kasten/okteta/bytearraydocument.h>
+#include <Kasten/Okteta/ByteArrayViewProfileManager>
+#include <Kasten/Okteta/ByteArrayViewProfileSynchronizer>
+#include <Kasten/Okteta/ByteArrayRawFileSynchronizerFactory>
+#include <Kasten/Okteta/ByteArrayDocument>
 // Kasten
 #include <Kasten/JobManager>
 #include <Kasten/AbstractLoadJob>

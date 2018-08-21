@@ -20,9 +20,10 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "editorcontext.h"
-#include <ktexteditor/cursor.h>
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
+
+#include <KTextEditor/Cursor>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 namespace KDevelop {
 

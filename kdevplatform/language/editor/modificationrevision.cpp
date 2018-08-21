@@ -21,10 +21,10 @@
 #include <QString>
 #include <QFileInfo>
 
-#include <ktexteditor/document.h>
-
 #include <serialization/indexedstring.h>
 #include "modificationrevisionset.h"
+
+#include <KTextEditor/Document>
 
 /// @todo Listen to filesystem changes (together with the project manager)
 /// and call fileModificationCache().clear(...) when a file has changed

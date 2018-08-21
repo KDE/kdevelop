@@ -41,10 +41,10 @@
 #include <libkomparediff2/kompare.h>
 #include <libkomparediff2/diffsettings.h>
 
-#include <ktexteditor/document.h>
-#include <ktexteditor/modificationinterface.h>
-#include <ktexteditor/movingrange.h>
-#include <ktexteditor/view.h>
+#include <KTextEditor/Document>
+#include <KTextEditor/ModificationInterface>
+#include <KTextEditor/MovingRange>
+#include <KTextEditor/View>
 
 ///Whether arbitrary exceptions that occurred while diff-parsing within the library should be caught
 #define CATCHLIBDIFF

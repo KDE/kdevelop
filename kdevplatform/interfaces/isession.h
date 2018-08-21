@@ -21,10 +21,11 @@ Boston, MA 02110-1301, USA.
 #define KDEVPLATFORM_ISESSION_H
 
 #include "interfacesexport.h"
+
+#include <KSharedConfig>
+
 #include <QObject>
 #include <QUrl>
-
-#include <ksharedconfig.h>
 
 class QUuid;
 class QString;

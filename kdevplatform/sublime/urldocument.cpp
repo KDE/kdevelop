@@ -23,7 +23,7 @@
 
 #include <KTextEdit>
 #include <KLocalizedString>
-#include <kio/global.h>
+#include <KIO/Global>
 
 namespace Sublime {
 

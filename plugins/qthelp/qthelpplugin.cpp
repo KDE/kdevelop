@@ -20,15 +20,17 @@
 
 #include "qthelpplugin.h"
 
-#include <kpluginfactory.h>
 #include <interfaces/icore.h>
 #include <interfaces/idocumentationcontroller.h>
-#include <QDirIterator>
 #include "qthelpprovider.h"
 #include "qthelpqtdoc.h"
 #include "qthelp_config_shared.h"
 #include "debug.h"
 #include "qthelpconfig.h"
+
+#include <KPluginFactory>
+
+#include <QDirIterator>
 
 QtHelpPlugin *QtHelpPlugin::s_plugin = nullptr;
 

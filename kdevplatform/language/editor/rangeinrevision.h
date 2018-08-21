@@ -22,7 +22,7 @@
 #include <language/languageexport.h>
 #include "cursorinrevision.h"
 
-#include <ktexteditor/range.h>
+#include <KTextEditor/Range>
 
 namespace KDevelop {
   /**

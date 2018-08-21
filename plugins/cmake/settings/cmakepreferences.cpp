@@ -26,7 +26,7 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KJobWidgets>
-#include <kio/deletejob.h>
+#include <KIO/DeleteJob>
 
 #include <QFile>
 #include <QDir>

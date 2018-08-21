@@ -17,7 +17,7 @@
 
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kshell.h>
+#include <KShell>
 
 #include "cvsjob.h"
 #include "cvsannotatejob.h"

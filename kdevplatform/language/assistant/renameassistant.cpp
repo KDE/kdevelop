@@ -34,7 +34,7 @@
 #include <interfaces/ilanguagecontroller.h>
 #include <interfaces/ilanguagesupport.h>
 
-#include <ktexteditor/document.h>
+#include <KTextEditor/Document>
 
 #include <KLocalizedString>
 

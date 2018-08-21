@@ -25,7 +25,7 @@
 #include <QDir>
 
 #include <KLocalizedString>
-#include <kconfiggroup.h>
+#include <KConfigGroup>
 
 #include <interfaces/ilaunchconfiguration.h>
 #include <outputview/outputmodel.h>

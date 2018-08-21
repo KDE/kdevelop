@@ -32,10 +32,10 @@
 #include <language/duchain/types/abstracttype.h>
 #include <language/duchain/types/structuretype.h>
 
-#include <ktexteditor/document.h>
-#include <ktexteditor/view.h>
-
 #include "../../duchain/functiontype.h"
+
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
 
 using namespace QmlJS;
 using namespace KDevelop;

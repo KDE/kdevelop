@@ -19,14 +19,11 @@
 
 #include "projectpathswidget.h"
 
-#include <kmessagebox.h>
-
 #include <QFileDialog>
 #include <QPointer>
 #include <QRegExp>
 
 #include <interfaces/iproject.h>
-#include <KLocalizedString>
 
 #include "../compilerprovider/compilerprovider.h"
 #include "../compilerprovider/settingsmanager.h"
@@ -35,6 +32,10 @@
 #include "ui_batchedit.h"
 #include "projectpathsmodel.h"
 #include <debug.h>
+
+#include <KMessageBox>
+#include <KLocalizedString>
+
 
 using namespace KDevelop;
 

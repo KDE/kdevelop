@@ -23,8 +23,8 @@
 
 #include <language/languageexport.h>
 
-#include <ktexteditor/attribute.h>
-#include <ktexteditor/range.h>
+#include <KTextEditor/Attribute>
+#include <KTextEditor/Range>
 
 #include <QExplicitlySharedDataPointer>
 
