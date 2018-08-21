@@ -241,7 +241,6 @@ build_project konsole $KDE_APPLICATION_VERSION
 
 # KDevelop
 build_project kdevelop-pg-qt $KDEV_PG_QT_VERSION
-build_project kdevplatform $KDEVELOP_VERSION
 build_project kdevelop $KDEVELOP_VERSION
 build_project kdev-php $KDEVELOP_VERSION
 
