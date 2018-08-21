@@ -9,11 +9,7 @@ set(perforceplugintest_SRCS
     ${kdevperforce_LOG_PART_SRCS}
 )
 
-if(WIN32)
-    add_definitions( "-DP4_CLIENT_STUB_EXE=\"${CMAKE_CURRENT_BINARY_DIR}/../../../bin/p4clientstub.exe\"" )
-else()
-    add_definitions( "-DP4_CLIENT_STUB_EXE=\"${CMAKE_CURRENT_BINARY_DIR}/../p4clientstub/p4clientstub\"" )
-endif()
+add_definitions( "-DP4_BINARY_DIR=\"${PROJECT_BINARY_DIR}\"")
 
 ecm_add_test(${perforceplugintest_SRCS}
         TEST_NAME test_kdevperforce
