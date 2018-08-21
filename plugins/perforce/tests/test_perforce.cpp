@@ -22,6 +22,8 @@
 #include "test_perforce.h"
 
 #include <QTest>
+#include <QDirIterator>
+#include <QStandardPaths>
 
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
@@ -52,6 +54,19 @@ void PerforcePluginTest::initTestCase()
     AutoTestShell::init({QStringLiteral("kdevperforce")});
     TestCore::initialize();
     m_plugin = new PerforcePlugin(TestCore::self());
+
+    /// During test we are setting the executable the plugin uses to our own stub
+    QDirIterator it(P4_BINARY_DIR , QStringList() << QStringLiteral("*"), QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+    QStringList pathsToSearch;
+    while (it.hasNext()) {
+        it.next();
+        pathsToSearch << it.filePath();
+    }
+    QString p4stubPath = QStandardPaths::findExecutable("p4clientstub", pathsToSearch);
+    qDebug() << "found p4stub executable :" << p4stubPath;
+    QVERIFY(!p4stubPath.isEmpty());
+
+    m_plugin->m_perforceExecutable = p4stubPath;
 }
 
 void PerforcePluginTest::cleanupTestCase()
@@ -63,8 +78,6 @@ void PerforcePluginTest::cleanupTestCase()
 
 void PerforcePluginTest::init()
 {
-    /// During test we are setting the executable the plugin uses to our own stub
-    m_plugin->m_perforceExecutable = P4_CLIENT_STUB_EXE;
     removeTempDirsIfAny();
     createNewTempDirs();
 }
@@ -187,7 +200,7 @@ void PerforcePluginTest::testDiff()
     srcRevision.setRevisionValue(QVariant(1), VcsRevision::GlobalNumber);
     VcsRevision dstRevision;
     dstRevision.setRevisionValue(QVariant(2), VcsRevision::GlobalNumber);
-     
+
     VcsJob* j = m_plugin->diff( QUrl::fromLocalFile(perforceTestBaseDir + perforceTest_FileName), srcRevision, dstRevision);
     VERIFYJOB(j);
 }
