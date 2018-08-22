@@ -42,6 +42,7 @@
 #include <KMessageBox>
 #include <KPluginFactory>
 
+#include <QAction>
 #include <QApplication>
 
 K_PLUGIN_FACTORY_WITH_JSON(ClazyFactory, "kdevclazy.json", registerPlugin<Clazy::Plugin>();)
