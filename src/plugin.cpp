@@ -264,11 +264,12 @@ ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* par
 
     if (context->hasType(KDevelop::Context::ProjectItemContext) && !isRunning()) {
         auto pContext = dynamic_cast<KDevelop::ProjectItemContext*>(context);
-        if (pContext->items().size() != 1) {
+        const auto items = pContext->items();
+        if (items.size() != 1) {
             return extension;
         }
 
-        auto item = pContext->items().first();
+        auto item = items.first();
 
         if (item->type() != KDevelop::ProjectBaseItem::File) {
             return extension;
