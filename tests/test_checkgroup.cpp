@@ -94,40 +94,128 @@ void TestCheckGroup::testFromPlainList()
     delete checkGroup;
 }
 
+
+struct CheckStateGroupData
+{
+    int enabledChecksCount;
+    bool hasSubGroupWithExplicitEnabledState;
+
+    QVector<CheckStateGroupData> subGroups;
+};
+Q_DECLARE_METATYPE(CheckStateGroupData)
+
 void TestCheckGroup::testSetEnabledChecks_data()
 {
     QTest::addColumn<QStringList>("input");
     QTest::addColumn<QStringList>("result");
+    QTest::addColumn<CheckStateGroupData>("group");
 
     QTest::newRow("empty")
         << QStringList()
-        << QStringList{"-*"};
+        << QStringList{"-*"}
+        << CheckStateGroupData{0, false, {
+            {0, false, { // foo-
+                {0, false, {}}, // foo-one-
+                {0, false, {}}, // foo-a.
+            }},
+            {0, false, { // bar-
+                {0, false, {}}, // bar-mo-
+            }},
+        }};
 
     QTest::newRow("all")
         << QStringList{"*"}
-        << QStringList{"*"};
+        << QStringList{"*"}
+        << CheckStateGroupData{7, false, {
+            {5, false, { // foo-
+                {2, false, {}}, // foo-one-
+                {2, false, {}}, // foo-a.
+            }},
+            {2, false, { // bar-
+                {2, false, {}}, // bar-mo-
+            }},
+        }};
 
     QTest::newRow("all-not-foo")
         << QStringList{"*", "-foo-*"}
-        << QStringList{"*", "-foo-*"};
+        << QStringList{"*", "-foo-*"}
+        << CheckStateGroupData{2, true, {
+            {0, false, { // foo-
+                {0, false, {}}, // foo-one-
+                {0, false, {}}, // foo-a.
+            }},
+            {2, false, { // bar-
+                {2, false, {}}, // bar-mo-
+            }},
+        }};
 
     QTest::newRow("all-not-foo-but-foo-a")
         << QStringList{"*", "-foo-*", "foo-a.*"}
-        << QStringList{"*", "-foo-*", "foo-a.*"};
+        << QStringList{"*", "-foo-*", "foo-a.*"}
+        << CheckStateGroupData{4, true, {
+            {2, true, { // foo-
+                {0, false, {}}, // foo-one-
+                {2, false, {}}, // foo-a.
+            }},
+            {2, false, { // bar-
+                {2, false, {}}, // bar-mo-
+            }},
+        }};
 
     QTest::newRow("all-not-foo-but-foo-a.two")
         << QStringList{"*", "-foo-*", "foo-a.two"}
-        << QStringList{"*", "-foo-*", "foo-a.two"};
+        << QStringList{"*", "-foo-*", "foo-a.two"}
+        << CheckStateGroupData{3, true, {
+            {1, true, { // foo-
+                {0, false, {}}, // foo-one-
+                {1, true, {}}, // foo-a.
+            }},
+            {2, false, { // bar-
+                {2, false, {}}, // bar-mo-
+            }},
+        }};
 
     QTest::newRow("nothing-but-foo-one-three")
         << QStringList{"-*", "foo-one-three"}
-        << QStringList{"-*", "foo-one-three"};
+        << QStringList{"-*", "foo-one-three"}
+        << CheckStateGroupData{1, true, {
+            {1, true, { // foo-
+                {1, true, {}}, // foo-one-
+                {0, false, {}}, // foo-a.
+            }},
+            {0, false, { // bar-
+                {0, false, {}}, // bar-mo-
+            }},
+        }};
+}
+
+void TestCheckGroup::doTestResult(const ClangTidy::CheckGroup* actualValue, const CheckStateGroupData& expectedValue)
+{
+    if ((actualValue->enabledChecksCount() != expectedValue.enabledChecksCount) ||
+        (actualValue->hasSubGroupWithExplicitEnabledState() != expectedValue.hasSubGroupWithExplicitEnabledState)) {
+        qDebug() << "For checkgroup" << actualValue->prefix();
+        qDebug() << "Actual enabledChecksCount:" << actualValue->enabledChecksCount()
+                 << "hasSubGroupWithExplicitEnabledState: " << actualValue->hasSubGroupWithExplicitEnabledState();
+        qDebug() << "Expected enabledChecksCount:" << expectedValue.enabledChecksCount
+                 << "hasSubGroupWithExplicitEnabledState: " << expectedValue.hasSubGroupWithExplicitEnabledState;
+    }
+
+    QCOMPARE(actualValue->enabledChecksCount(), expectedValue.enabledChecksCount);
+    QCOMPARE(actualValue->hasSubGroupWithExplicitEnabledState(), expectedValue.hasSubGroupWithExplicitEnabledState);
+
+    QCOMPARE(actualValue->subGroups().size(), expectedValue.subGroups.size());
+
+    for (int i = 0; i < expectedValue.subGroups.size(); ++i) {
+        const auto* actualSubGroup = actualValue->subGroups()[i];
+        doTestResult(actualSubGroup, expectedValue.subGroups[i]);
+    }
 }
 
 void TestCheckGroup::testSetEnabledChecks()
 {
     QFETCH(QStringList, input);
     QFETCH(QStringList, result);
+    QFETCH(CheckStateGroupData, group);
 
     ClangTidy::CheckGroup* checkGroup = ClangTidy::CheckGroup::fromPlainList({
         "foo-one-two",
@@ -141,6 +229,8 @@ void TestCheckGroup::testSetEnabledChecks()
     checkGroup->setEnabledChecks(input);
 
     QCOMPARE(checkGroup->enabledChecksRules(), result);
+
+    doTestResult(checkGroup, group);
 
     delete checkGroup;
 }

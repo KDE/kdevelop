@@ -72,25 +72,29 @@ QVariant CheckListModel::data(const QModelIndex& index, int role) const
         if (index.row() != 0) {
             return QVariant();
         }
-        if (index.column() == NameColumnId) {
-            if (role == Qt::DisplayRole) {
-                return i18n("All checks");
-            } else
-            if (role == Qt::CheckStateRole) {
-                return checkState(m_rootCheckGroup->groupEnabledState());
-            } else
-            if (role == EffectiveEnabledStateRole) {
-                return m_rootCheckGroup->effectiveGroupEnabledState();
-            }
+        if (role == HasExplicitEnabledStateRole) {
+            return m_rootCheckGroup->hasSubGroupWithExplicitEnabledState();
         } else {
-            if (role == Qt::DisplayRole) {
-                const int enabledChecksCount = m_rootCheckGroup->enabledChecksCount();
-                if (enabledChecksCount > 0) {
-                    return enabledChecksCount;
+            if (index.column() == NameColumnId) {
+                if (role == Qt::DisplayRole) {
+                    return i18n("All checks");
+                } else
+                if (role == Qt::CheckStateRole) {
+                    return checkState(m_rootCheckGroup->groupEnabledState());
+                } else
+                if (role == EffectiveEnabledStateRole) {
+                    return m_rootCheckGroup->effectiveGroupEnabledState();
                 }
-            } else
-            if (role == Qt::TextAlignmentRole) {
-                return static_cast<int>(Qt::AlignRight | Qt::AlignVCenter);
+            } else {
+                if (role == Qt::DisplayRole) {
+                    const int enabledChecksCount = m_rootCheckGroup->enabledChecksCount();
+                    if (enabledChecksCount > 0) {
+                        return enabledChecksCount;
+                    }
+                } else
+                if (role == Qt::TextAlignmentRole) {
+                    return static_cast<int>(Qt::AlignRight | Qt::AlignVCenter);
+                }
             }
         }
     } else {
@@ -101,29 +105,34 @@ QVariant CheckListModel::data(const QModelIndex& index, int role) const
         const int subGroupsCount = checkGroup->subGroups().count();
         if (childIndex < subGroupsCount) {
             const int subGroupIndex = childIndex;
-            if (index.column() == NameColumnId) {
-                if (role == Qt::DisplayRole) {
-                    auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
-                    return subGroup->wildCardText();
-                } else
-                if (role == Qt::CheckStateRole) {
-                    auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
-                    return checkState(subGroup->groupEnabledState());
-                } else
-                if (role == EffectiveEnabledStateRole) {
-                    auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
-                    return subGroup->effectiveGroupEnabledState();
-                }
+            if (role == HasExplicitEnabledStateRole) {
+                auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                return subGroup->hasSubGroupWithExplicitEnabledState();
             } else {
-                if (role == Qt::DisplayRole) {
-                    auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
-                    const int enabledChecksCount = subGroup->enabledChecksCount();
-                    if (enabledChecksCount > 0) {
-                        return enabledChecksCount;
+                if (index.column() == NameColumnId) {
+                    if (role == Qt::DisplayRole) {
+                        auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                        return subGroup->wildCardText();
+                    } else
+                    if (role == Qt::CheckStateRole) {
+                        auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                        return checkState(subGroup->groupEnabledState());
+                    } else
+                    if (role == EffectiveEnabledStateRole) {
+                        auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                        return subGroup->effectiveGroupEnabledState();
                     }
-                } else
-                if (role == Qt::TextAlignmentRole) {
-                    return static_cast<int>(Qt::AlignRight | Qt::AlignVCenter);
+                } else {
+                    if (role == Qt::DisplayRole) {
+                        auto* subGroup = checkGroup->subGroups().at(subGroupIndex);
+                        const int enabledChecksCount = subGroup->enabledChecksCount();
+                        if (enabledChecksCount > 0) {
+                            return enabledChecksCount;
+                        }
+                    } else
+                    if (role == Qt::TextAlignmentRole) {
+                        return static_cast<int>(Qt::AlignRight | Qt::AlignVCenter);
+                    }
                 }
             }
         } else {

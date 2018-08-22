@@ -29,6 +29,7 @@ class CheckGroup;
 }
 
 struct CheckGroupData;
+struct CheckStateGroupData;
 
 class TestCheckGroup : public QObject
 {
@@ -42,6 +43,7 @@ private Q_SLOTS:
 
 private:
     void doTestResult(const ClangTidy::CheckGroup* actualValue, const CheckGroupData& expectedValue);
+    void doTestResult(const ClangTidy::CheckGroup* actualValue, const CheckStateGroupData& expectedValue);
 };
 
 #endif

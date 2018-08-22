@@ -26,6 +26,7 @@
 #include <QWidget>
 
 class QTreeView;
+class QSortFilterProxyModel;
 
 namespace ClangTidy
 {
@@ -56,8 +57,13 @@ Q_SIGNALS:
     void checksChanged();
 
 private:
+    void expandSubGroupsWithExplicitlyEnabledStates();
+    void expandSubGroupsWithExplicitlyEnabledStates(const QModelIndex& groupIndex);
+
+private:
     const CheckSet* m_checkSet = nullptr;
     CheckListModel* m_checkListModel;
+    QSortFilterProxyModel* m_checksFilterProxyModel;
     QTreeView* m_checkListView;
     CheckListItemProxyStyle* m_proxyStyle;
 };

@@ -61,6 +61,7 @@ public:
     QString wildCardText() const;
     QStringList enabledChecksRules() const;
     int enabledChecksCount() const;
+    bool hasSubGroupWithExplicitEnabledState() const;
 
     void setGroupEnabledState(EnabledState groupEnabledState);
     void setCheckEnabledState(int index, EnabledState checkEnabledState);
@@ -75,6 +76,7 @@ private:
 
     void setEnabledChecksCountDirtyInSuperGroups();
     void setEnabledChecksCountDirtyInSubGroups();
+    void updateData() const;
 
 private:
     CheckGroup* m_superGroup = nullptr;
@@ -87,6 +89,7 @@ private:
 
     mutable int m_enabledChecksCount = 0;
     mutable bool m_enabledChecksCountDirty = false;
+    mutable bool m_hasSubGroupWithExplicitEnabledState = false;
 };
 
 }

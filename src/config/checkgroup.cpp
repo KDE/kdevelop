@@ -263,24 +263,38 @@ void CheckGroup::setCheckEnabledState(int index, CheckGroup::EnabledState checkE
     }
 }
 
-int CheckGroup::enabledChecksCount() const
+void CheckGroup::updateData() const
 {
     if (m_enabledChecksCountDirty) {
         m_enabledChecksCount = 0;
+        m_hasSubGroupWithExplicitEnabledState = false;
 
         for (auto* subGroup : m_subGroups) {
             m_enabledChecksCount += subGroup->enabledChecksCount();
+            m_hasSubGroupWithExplicitEnabledState |= subGroup->hasSubGroupWithExplicitEnabledState();
+            m_hasSubGroupWithExplicitEnabledState |= (subGroup->groupEnabledState() != EnabledInherited);
         }
 
         for (int i = 0; i < m_checks.size(); ++i) {
             if (effectiveCheckEnabledState(i) == Enabled) {
                 ++m_enabledChecksCount;
             }
+            m_hasSubGroupWithExplicitEnabledState |= (m_checksEnabledStates[i] != EnabledInherited);
         }
         m_enabledChecksCountDirty = false;
     }
+}
 
+int CheckGroup::enabledChecksCount() const
+{
+    updateData();
     return m_enabledChecksCount;
+}
+
+bool CheckGroup::hasSubGroupWithExplicitEnabledState() const
+{
+    updateData();
+    return m_hasSubGroupWithExplicitEnabledState;
 }
 
 void CheckGroup::setEnabledChecksCountDirtyInSuperGroups()

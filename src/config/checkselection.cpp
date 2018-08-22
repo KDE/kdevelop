@@ -75,17 +75,17 @@ CheckSelection::CheckSelection(QWidget* parent)
     setLayout(layout);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-    auto* checksFilterProxyModel = new QSortFilterProxyModel(this);
-    checksFilterProxyModel->setRecursiveFilteringEnabled(true);
+    m_checksFilterProxyModel = new QSortFilterProxyModel(this);
+    m_checksFilterProxyModel->setRecursiveFilteringEnabled(true);
 #else
-    auto* checksFilterProxyModel = new KRecursiveFilterProxyModel(this);
+    m_checksFilterProxyModel = new KRecursiveFilterProxyModel(this);
 #endif
-    checkFilterEdit->setFilterProxyModel(checksFilterProxyModel);
-    checksFilterProxyModel->setSourceModel(m_checkListModel);
-    checksFilterProxyModel->setFilterKeyColumn(CheckListModel::NameColumnId);
-    checksFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    checkFilterEdit->setFilterProxyModel(m_checksFilterProxyModel);
+    m_checksFilterProxyModel->setSourceModel(m_checkListModel);
+    m_checksFilterProxyModel->setFilterKeyColumn(CheckListModel::NameColumnId);
+    m_checksFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-    m_checkListView->setModel(checksFilterProxyModel);
+    m_checkListView->setModel(m_checksFilterProxyModel);
     auto* header = m_checkListView->header();
     header->setStretchLastSection(false);
     header->setSectionResizeMode(CheckListModel::NameColumnId, QHeaderView::Stretch);
@@ -93,6 +93,9 @@ CheckSelection::CheckSelection(QWidget* parent)
 
     connect(m_checkListModel, &CheckListModel::enabledChecksChanged,
             this, &CheckSelection::checksChanged);
+
+    connect(m_checkListView, &QTreeView::expanded,
+            this, [this](const QModelIndex& index) {qDebug() << "----+" << index;});
 }
 
 CheckSelection::~CheckSelection() = default;
@@ -100,14 +103,33 @@ CheckSelection::~CheckSelection() = default;
 void CheckSelection::setCheckSet(const CheckSet* checkSet)
 {
     m_checkListModel->setCheckSet(checkSet);
-    m_checkListView->expandAll();
+    expandSubGroupsWithExplicitlyEnabledStates();
 }
 
+void CheckSelection::expandSubGroupsWithExplicitlyEnabledStates()
+{
+    const QModelIndex allChecksIndex = m_checksFilterProxyModel->index(0, 0, QModelIndex());
+    expandSubGroupsWithExplicitlyEnabledStates(allChecksIndex);
+}
+
+void CheckSelection::expandSubGroupsWithExplicitlyEnabledStates(const QModelIndex& groupIndex)
+{
+    if (groupIndex.data(CheckListModel::HasExplicitEnabledStateRole).toBool()) {
+        m_checkListView->setExpanded(groupIndex, true);
+        const int rowCount = m_checksFilterProxyModel->rowCount(groupIndex);
+        for (int c = 0; c < rowCount; ++c) {
+            const auto childIndex = m_checksFilterProxyModel->index(c, 0, groupIndex);
+            if (m_checksFilterProxyModel->hasChildren(childIndex)) {
+                expandSubGroupsWithExplicitlyEnabledStates(childIndex);
+            }
+        }
+    }
+}
 
 void CheckSelection::setChecks(const QString& checks)
 {
     m_checkListModel->setEnabledChecks(checks.split(QLatin1Char(','), QString::SkipEmptyParts));
-    m_checkListView->expandAll();
+    expandSubGroupsWithExplicitlyEnabledStates();
 }
 
 QString CheckSelection::checks() const

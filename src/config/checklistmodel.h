@@ -38,7 +38,8 @@ class CheckListModel : public QAbstractItemModel
 
 public:
     enum Roles {
-        EffectiveEnabledStateRole = Qt::UserRole+1
+        EffectiveEnabledStateRole = Qt::UserRole+1,
+        HasExplicitEnabledStateRole
     };
 
     enum ColumIds {
