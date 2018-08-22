@@ -21,6 +21,8 @@
 
 #include "clangtidyparser.h"
 
+// plugin
+#include <qtcompat_p.h>
 // KDevPlatform
 #include <language/editor/documentrange.h>
 #include <serialization/indexedstring.h>
@@ -74,7 +76,7 @@ void ClangTidyParser::parse()
     //                                       (1filename                 ) (2lin) (3col)  (4s)  (5d) (6explain)
     QRegularExpression regex(QStringLiteral("(\\/.+\\.[ch]{1,2}[px]{0,2}):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"));
 
-    for (const auto& line : m_stdout) {
+    for (const auto& line : qAsConst(m_stdout)) {
         auto smatch = regex.match(line);
         if (smatch.hasMatch()) {
             IProblem::Ptr problem(new DetectedProblem());

@@ -23,6 +23,7 @@
 
 // plugin
 #include <debug.h>
+#include <qtcompat_p.h>
 // Qt
 #include <QRegularExpression>
 
@@ -68,7 +69,7 @@ void CheckGroup::addCheck(const QString& checkName)
     // 2. check if existing subgroup for prefix, if so add to that
     // include separator into subgroup name
     const QStringRef subGroupName = checkName.leftRef(nextSplitOffset + 1); 
-    for (auto* subGroup : m_subGroups) {
+    for (auto* subGroup : qAsConst(m_subGroups)) {
         if (subGroup->prefix() == subGroupName) {
             subGroup->addCheck(checkName);
             return;
@@ -121,7 +122,7 @@ void CheckGroup::applyEnabledRule(const QStringRef& rule, EnabledState enabledSt
         return;
     }
 
-    for (auto* subGroup : m_subGroups) {
+    for (auto* subGroup : qAsConst(m_subGroups)) {
         if (rule.startsWith(subGroup->prefix())) {
             subGroup->applyEnabledRule(rule, enabledState);
             return;
@@ -140,7 +141,7 @@ void CheckGroup::resetEnabledState(EnabledState enabledState)
 {
     m_groupEnabledState = enabledState;
 
-    for (auto* subGroup : m_subGroups) {
+    for (auto* subGroup : qAsConst(m_subGroups)) {
         subGroup->resetEnabledState(EnabledInherited);
     }
     m_checksEnabledStates.fill(EnabledInherited);
@@ -293,7 +294,7 @@ void CheckGroup::setEnabledChecksCountDirtyInSuperGroups()
 
 void CheckGroup::setEnabledChecksCountDirtyInSubGroups()
 {
-    for (auto* subGroup : m_subGroups) {
+    for (auto* subGroup : qAsConst(m_subGroups)) {
         subGroup->m_enabledChecksCountDirty = true;
         subGroup->setEnabledChecksCountDirtyInSubGroups();
     }
