@@ -24,6 +24,8 @@
 #include "checksdb.h"
 #include "debug.h"
 
+#include <qtcompat_p.h>
+
 #include <KLocalizedString>
 
 #include <QMenu>

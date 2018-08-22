@@ -43,6 +43,8 @@ namespace Clazy
 
 Job::Job()
     : KDevelop::OutputExecuteJob(nullptr)
+    , m_db(nullptr)
+    , m_timer(nullptr)
 {
 }
 
@@ -177,7 +179,14 @@ void Job::postProcessStderr(const QStringList& lines)
                 problem->setExplanation(check->description);
             }
 
-            const auto document = QFileInfo(match.captured(1)).canonicalFilePath();
+            // Sometimes warning/error file path contains "." or ".." elements so we should fix
+            // it and take "real" (canonical) path value. But QFileInfo::canonicalFilePath()
+            // returns empty string when file does not exists. Unfortunately we can't pass some
+            // real file path from unit tests, therefore we should skip canonicalFilePath() step.
+            // To detect such testing cases we are check m_timer value, which is not-null only for
+            // "real" jobs, created with public constructor.
+            const auto document = m_timer.isNull() ? match.captured(1) : QFileInfo(match.captured(1)).canonicalFilePath();
+
             const int line = match.captured(2).toInt() - 1;
             const int column = match.captured(3).toInt() - 1;
 
