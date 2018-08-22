@@ -71,8 +71,6 @@ Set the CMake flag -DBUILD_TESTING=OFF if kdevelop has been built with that flag
 ## Learn What is on the Development Road
 
 Planned features (in rough order of execution):
-* tree-like display of checks in the config UI, to allow selection of groups
-  (matching the wildcard/masking logic of the clang-tidy -checks= parameter)
 * warning about missing compilation database
 * support for fix-its
 * running on more than one file, e.g. the whole project
