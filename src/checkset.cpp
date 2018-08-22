@@ -77,21 +77,10 @@ void CheckSet::setClangTidyPath(const QString& path)
 
 QStringList CheckSet::defaults() const
 {
-    QStringList defaultChecks;
-
-    // TODO: find some rules/polilcy why these should be the default
-    for (const auto& check : m_allChecks) {
-        const bool enable =
-            check.contains(QLatin1String("cert")) ||
-            check.contains(QLatin1String("-core.")) ||
-            check.contains(QLatin1String("-cplusplus")) ||
-            check.contains(QLatin1String("-deadcode")) ||
-            check.contains(QLatin1String("-security")) ||
-            check.contains(QLatin1String("cppcoreguide"));
-        if (enable) {
-            defaultChecks.append(check);
-        }
-    }
+    // TODO: read this from clang-tidy, to pick up global settings
+    const QStringList defaultChecks{
+        QStringLiteral("clang-analyzer-*"),
+    };
 
     return defaultChecks;
 }
