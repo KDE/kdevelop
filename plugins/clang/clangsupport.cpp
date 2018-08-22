@@ -100,7 +100,7 @@ QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const 
         return {{}, KTextEditor::Range::invalid()};
 
     KTextEditor::Range wordRange = ClangUtils::rangeForIncludePathSpec(line, pair.second);
-    if (!wordRange.isValid()) {
+    if (!wordRange.isValid() || !wordRange.contains(position)) {
         return {{}, KTextEditor::Range::invalid()};
     }
 
