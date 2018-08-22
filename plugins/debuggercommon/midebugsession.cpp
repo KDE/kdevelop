@@ -53,7 +53,6 @@
 #include <QApplication>
 #include <QFileInfo>
 #include <QMetaEnum>
-#include <QPointer>
 #include <QRegularExpression>
 #include <QUrl>
 #include <QTimer>
@@ -555,16 +554,12 @@ void MIDebugSession::stopDebugger()
     emit debuggerUserCommandOutput(QStringLiteral("(gdb) quit"));
 
     // We cannot wait forever, kill gdb after 5 seconds if it's not yet quit
-    QPointer<MIDebugSession> guarded_this(this);
-    QTimer::singleShot(5000, [guarded_this](){
-        if (guarded_this) {
-            if (!guarded_this->debuggerStateIsOn(s_programExited)
-                && guarded_this->debuggerStateIsOn(s_shuttingDown)) {
-                qCDebug(DEBUGGERCOMMON) << "debugger not shutdown - killing";
-                guarded_this->m_debugger->kill();
-                guarded_this->setDebuggerState(s_dbgNotStarted | s_appNotStarted);
-                guarded_this->raiseEvent(debugger_exited);
-            }
+    QTimer::singleShot(5000, this, [this]() {
+        if (!debuggerStateIsOn(s_programExited) && debuggerStateIsOn(s_shuttingDown)) {
+            qCDebug(DEBUGGERCOMMON) << "debugger not shutdown - killing";
+            m_debugger->kill();
+            setDebuggerState(s_dbgNotStarted | s_appNotStarted);
+            raiseEvent(debugger_exited);
         }
     });
 

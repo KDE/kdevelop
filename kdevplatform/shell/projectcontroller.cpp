@@ -164,7 +164,7 @@ public:
             emit q->projectConfigurationChanged(proj);
         });
         cfgDlg->setWindowTitle(i18n("Configure Project %1", proj->name()));
-        QObject::connect(cfgDlg, &KDevelop::ConfigDialog::finished, [proj]() {
+        QObject::connect(cfgDlg, &KDevelop::ConfigDialog::finished, proj, [proj]() {
             proj->projectConfiguration()->sync();
         });
         cfgDlg->show();

@@ -275,7 +275,7 @@ class DUChainPrivate
     private:
       void run() override {
         QTimer timer;
-        connect(&timer, &QTimer::timeout, [this]() {
+        connect(&timer, &QTimer::timeout, this, [this]() {
           //Just to make sure the cache is cleared periodically
           ModificationRevisionSet::clearCache();
 

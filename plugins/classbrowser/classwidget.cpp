@@ -66,7 +66,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 
   // Init filter timer
   m_filterTimer->setSingleShot(true);
-  connect(m_filterTimer, &QTimer::timeout, [this]() {
+  connect(m_filterTimer, &QTimer::timeout, this, [this]() {
     m_model->updateFilterString(m_filterText);
 
     if (m_filterText.isEmpty())
@@ -77,7 +77,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 
   // Init search box
   m_searchLine->setClearButtonEnabled( true );
-  connect(m_searchLine, &QLineEdit::textChanged, [this](const QString& newFilter) {
+  connect(m_searchLine, &QLineEdit::textChanged, this, [this](const QString& newFilter) {
     m_filterText = newFilter;
     m_filterTimer->start(500);
   });
