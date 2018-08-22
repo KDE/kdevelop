@@ -1,0 +1,23 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Anton Anikin"
+            }
+        ],
+        "Category": "Analyzers",
+        "Description": "This plugin integrates Clazy to KDevelop",
+        "Icon": "clazy",
+        "Id": "kdevclazy",
+        "License": "GPL",
+        "Name": "Clazy Support",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-Category": "Global",
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IExecutePlugin"
+    ],
+    "X-KDevelop-Mode": "GUI"
+}

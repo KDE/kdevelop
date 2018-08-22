@@ -1,4 +1,5 @@
 # BEGIN: Analyzers
+add_subdirectory(clazy)
 add_subdirectory(cppcheck)
 if(UNIX AND NOT (APPLE OR CYGWIN))
     add_subdirectory(heaptrack)

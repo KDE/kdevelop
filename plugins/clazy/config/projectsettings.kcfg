@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+
+  <include>"jobparameters.h"</include>
+
+  <group name="Clazy">
+
+    <entry name="checks" key="checks" type="String">
+      <default code="true">JobParameters::defaultChecks()</default>
+    </entry>
+
+    <entry name="onlyQt" key="onlyQt" type="Bool">
+      <default>false</default>
+    </entry>
+
+    <entry name="qtDeveloper" key="qtDeveloper" type="Bool">
+      <default>false</default>
+    </entry>
+
+    <entry name="qt4Compat" key="qt4Compat" type="Bool">
+      <default>false</default>
+    </entry>
+
+    <entry name="visitImplicitCode" key="visitImplicitCode" type="Bool">
+      <default>false</default>
+    </entry>
+
+    <entry name="ignoreIncludedFiles" key="ignoreIncludedFiles" type="Bool">
+      <default>false</default>
+    </entry>
+
+    <entry name="headerFilter" key="headerFilter" type="String"/>
+
+    <entry name="enableAllFixits" key="enableAllFixits" type="Bool">
+      <default>false</default>
+    </entry>
+
+    <entry name="noInplaceFixits" key="noInplaceFixits" type="Bool">
+      <default>false</default>
+    </entry>
+
+    <entry name="extraAppend" key="extraAppend" type="String"/>
+
+    <entry name="extraPrepend" key="extraPrepend" type="String"/>
+
+    <entry name="extraClazy" key="extraClazy" type="String"/>
+
+  </group>
+</kcfg>

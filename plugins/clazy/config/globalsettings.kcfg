@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+
+  <signal name="docsPathChanged"/>
+
+  <include>"jobparameters.h"</include>
+
+  <group name="Clazy">
+
+    <entry name="executablePath" key="executablePath" type="Url">
+        <default code="true">JobGlobalParameters::defaultExecutablePath()</default>
+    </entry>
+
+    <entry name="docsPath" key="docsPath" type="Url">
+        <default code="true">JobGlobalParameters::defaultDocsPath()</default>
+        <emit signal="docsPathChanged"/>
+    </entry>
+
+    <entry name="parallelJobsEnabled" key="parallelJobsEnabled" type="Bool">
+        <default>true</default>
+    </entry>
+
+    <entry name="parallelJobsAutoCount" key="parallelJobsAutoCount" type="Bool">
+        <default>true</default>
+    </entry>
+
+    <entry name="parallelJobsFixedCount" key="parallelJobsFixedCount" type="Int">
+        <default>2</default>
+    </entry>
+
+    <entry name="hideOutputView" key="hideOutputView" type="Bool">
+        <default code="true">true</default>
+    </entry>
+
+    <entry name="verboseOutput" key="verboseOutput" type="Bool">
+        <default code="true">false</default>
+    </entry>
+
+  </group>
+</kcfg>
