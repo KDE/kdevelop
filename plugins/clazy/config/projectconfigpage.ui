@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Clazy::ProjectConfigPage</class>
+ <widget class="QWidget" name="Clazy::ProjectConfigPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>723</width>
+    <height>396</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="checksTab">
+      <attribute name="title">
+       <string>Checks</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="optionsTab">
+      <attribute name="title">
+       <string>Options</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QGroupBox" name="commonBox">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="kcfg_onlyQt">
+            <property name="toolTip">
+             <string>Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB is missing.</string>
+            </property>
+            <property name="text">
+             <string>Only Qt</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="kcfg_qt4Compat">
+            <property name="toolTip">
+             <string>Disable checks not compatible with Qt 4.</string>
+            </property>
+            <property name="text">
+             <string>Qt4 compatible</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="kcfg_qtDeveloper">
+            <property name="toolTip">
+             <string>For running clazy on Qt itself, optional, but honours specific guidelines.</string>
+            </property>
+            <property name="text">
+             <string>Qt developer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="kcfg_visitImplicitCode">
+            <property name="toolTip">
+             <string>For visiting implicit code like compiler generated constructors.
+None of the built-in checks benefit from this, but can be useful for custom checks.</string>
+            </property>
+            <property name="text">
+             <string>Visit implicit code</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="headersBox">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="kcfg_ignoreIncludedFiles">
+            <property name="toolTip">
+             <string>Only emit warnings for the current file being compiled and ignore any includes.
+Useful for performance reasons.</string>
+            </property>
+            <property name="text">
+             <string>Ignore included files</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QLabel" name="headerFilterLabel">
+              <property name="text">
+               <string>Header filter:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="kcfg_headerFilter">
+              <property name="toolTip">
+               <string>Regular expression matching the names of the headers to output diagnostics from.
+Diagnostics from the main file of each translation unit are always displayed.</string>
+              </property>
+              <property name="clearButtonEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="fixitsBox">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <layout class="QHBoxLayout" name="fixitsHLayout">
+            <item>
+             <widget class="QCheckBox" name="kcfg_enableAllFixits">
+              <property name="text">
+               <string>Enable all fixits</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="kcfg_noInplaceFixits">
+              <property name="toolTip">
+               <string>Fixits will be applied to a separate file (for unit-test use only).</string>
+              </property>
+              <property name="text">
+               <string>No-inplace fixits</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="KMessageWidget" name="kmessagewidget">
+            <property name="text">
+             <string>Please backup your code before fixits applying. For better results also disable 
+parallel checking, which can lead to multiple fixit applying for header files.</string>
+            </property>
+            <property name="closeButtonVisible">
+             <bool>false</bool>
+            </property>
+            <property name="messageType">
+             <enum>KMessageWidget::Warning</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="extraTab">
+      <attribute name="title">
+       <string>Extra Parameters</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="extraAppendLabel">
+         <property name="text">
+          <string>Compiler append:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="kcfg_extraAppend">
+         <property name="toolTip">
+          <string>Additional parameters to append to the compiler command line.</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="extraPrependLabel">
+         <property name="text">
+          <string>Compiler prepend:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="kcfg_extraPrepend">
+         <property name="toolTip">
+          <string>Additional parameters to prepend to the compiler command line.</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="kcfg_extraClazy">
+         <property name="toolTip">
+          <string>Additional parameters to clazy-standalone.</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="extraClazyLabel">
+         <property name="text">
+          <string>Extra parameters:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="CommandLineWidget" name="commandLineWidget" native="true"/>
+   </item>
+   <item>
+    <widget class="KMessageWidget" name="dbError">
+     <property name="text">
+      <string notr="true">dbError</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="closeButtonVisible">
+      <bool>false</bool>
+     </property>
+     <property name="messageType">
+      <enum>KMessageWidget::Error</enum>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QFrame</extends>
+   <header>kmessagewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CommandLineWidget</class>
+   <extends>QWidget</extends>
+   <header>config/commandlinewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

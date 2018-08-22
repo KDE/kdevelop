@@ -1,0 +1,68 @@
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevclazy\")
+
+find_package(ClazyStandalone QUIET)
+set_package_properties(ClazyStandalone PROPERTIES
+    DESCRIPTION "Qt oriented code checker based on clang framework. Krazy's little brother"
+    URL "https://commits.kde.org/clazy"
+    PURPOSE "Recommended: required by the non-essential Clazy plugin"
+    TYPE RUNTIME
+)
+
+set(kdevclazy_core_SRCS
+    checksdb.cpp
+    job.cpp
+    jobparameters.cpp
+    utils.cpp
+)
+ecm_qt_declare_logging_category(kdevclazy_core_SRCS
+    HEADER debug.h
+    IDENTIFIER KDEV_CLAZY
+    CATEGORY_NAME "kdevelop.analyzers.clazy"
+)
+kconfig_add_kcfg_files(kdevclazy_core_SRCS GENERATE_MOC
+    config/globalsettings.kcfgc
+)
+kconfig_add_kcfg_files(kdevclazy_core_SRCS
+    config/projectsettings.kcfgc
+)
+add_library(kdevclazy_core STATIC
+    ${kdevclazy_core_SRCS}
+)
+target_link_libraries(kdevclazy_core
+    KDev::Project
+    KDev::Shell
+)
+
+set(kdevclazy_SRCS
+    plugin.cpp
+    problemmodel.cpp
+
+    config/checkswidget.cpp
+    config/commandlinewidget.cpp
+    config/globalconfigpage.cpp
+    config/projectconfigpage.cpp
+)
+ki18n_wrap_ui(kdevclazy_SRCS
+    config/checkswidget.ui
+    config/commandlinewidget.ui
+    config/globalconfigpage.ui
+    config/projectconfigpage.ui
+)
+qt5_add_resources(kdevclazy_SRCS
+    kdevclazy.qrc
+)
+kdevplatform_add_plugin(kdevclazy
+    JSON kdevclazy.json
+    SOURCES ${kdevclazy_SRCS}
+)
+target_link_libraries(kdevclazy
+    kdevclazy_core
+    KF5::ItemViews
+)
+
+ecm_install_icons(ICONS icons/128-apps-clazy.png
+                  DESTINATION ${KDE_INSTALL_ICONDIR} THEME hicolor)
+
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

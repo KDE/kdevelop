@@ -1,0 +1,4 @@
+File=globalsettings.kcfg
+NameSpace=Clazy
+ClassName=GlobalSettings
+Singleton=true

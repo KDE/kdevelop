@@ -24,14 +24,14 @@ QTVERSION_SHORT=5.9
 QTDIR=/usr/local/Qt-${QTVERSION}/
 
 if [ -z "$KDEVELOP_VERSION" ]; then
-    KDEVELOP_VERSION=5.1
+    KDEVELOP_VERSION=5.3
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=2.0
 fi
-KF5_VERSION=v5.37.0
-KDE_PLASMA_VERSION=v5.12.3 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
-KDE_APPLICATION_VERSION=v16.12.3
+KF5_VERSION=v5.48.0 # note: v5.49.0 is broken due to https://phabricator.kde.org/R246:0a96acf251baa5c9dd042d093ab2bf8fcee10502
+KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
+KDE_APPLICATION_VERSION=v18.08.0
 GRANTLEE_VERSION=v5.1.0
 
 export LLVM_ROOT=/opt/llvm/
@@ -241,7 +241,6 @@ build_project konsole $KDE_APPLICATION_VERSION
 
 # KDevelop
 build_project kdevelop-pg-qt $KDEV_PG_QT_VERSION
-build_project kdevplatform $KDEVELOP_VERSION
 build_project kdevelop $KDEVELOP_VERSION
 build_project kdev-php $KDEVELOP_VERSION
 

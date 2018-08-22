@@ -1,0 +1,13 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="kdevclazy" version="1">
+<MenuBar>
+  <Menu name="code">
+    <Menu name="analyze_file">
+      <Action name="clazy_file"/>
+    </Menu>
+    <Menu name="analyze_project">
+      <Action name="clazy_project"/>
+    </Menu>
+  </Menu>
+</MenuBar>
+</gui>
