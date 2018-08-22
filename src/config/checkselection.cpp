@@ -66,11 +66,10 @@ CheckSelection::CheckSelection(QWidget* parent)
     m_checkListView->setAllColumnsShowFocus(true);
     m_checkListView->setRootIsDecorated(true);
     m_checkListView->setHeaderHidden(true);
+    m_checkListView->setUniformRowHeights(true);
     m_proxyStyle = new CheckListItemProxyStyle;
     m_proxyStyle->setParent(this);
     m_checkListView->setStyle(m_proxyStyle);
-    auto* header = m_checkListView->header();
-    header->setSectionResizeMode(QHeaderView::ResizeToContents);
     layout->addWidget(m_checkListView);
 
     setLayout(layout);
@@ -87,6 +86,10 @@ CheckSelection::CheckSelection(QWidget* parent)
     checksFilterProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
     m_checkListView->setModel(checksFilterProxyModel);
+    auto* header = m_checkListView->header();
+    header->setStretchLastSection(false);
+    header->setSectionResizeMode(CheckListModel::NameColumnId, QHeaderView::Stretch);
+    header->setSectionResizeMode(CheckListModel::CountColumnId, QHeaderView::ResizeToContents);
 
     connect(m_checkListModel, &CheckListModel::enabledChecksChanged,
             this, &CheckSelection::checksChanged);
