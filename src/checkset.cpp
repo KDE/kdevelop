@@ -46,7 +46,7 @@ void CheckSet::setClangTidyPath(const QString& path)
 
     // TODO: make this async
     KProcess tidy;
-    tidy << m_clangTidyPath << QLatin1String("-checks=*") << QLatin1String("--list-checks");
+    tidy << m_clangTidyPath << QStringLiteral("-checks=*") << QStringLiteral("--list-checks");
     tidy.setOutputChannelMode(KProcess::OnlyStdoutChannel);
     tidy.start();
 
