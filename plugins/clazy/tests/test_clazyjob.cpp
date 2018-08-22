@@ -123,24 +123,24 @@ void TestClazyJob::testJob()
     QCOMPARE(jobTester.started().at(0), QStringLiteral("source2.cpp"));
     QCOMPARE(jobTester.started().at(1), QStringLiteral("source1.cpp"));
     QCOMPARE(jobTester.finishedCount(), 0);
-    QCOMPARE(jobTester.percent(), 0);
+    QCOMPARE(jobTester.percent(), (unsigned long)0);
 
     jobTester.postProcessStdout(stdoutOutput2);
     QCOMPARE(jobTester.started().size(), 4);
     QCOMPARE(jobTester.started().at(2), QStringLiteral("source3.cpp"));
     QCOMPARE(jobTester.started().at(3), QStringLiteral("source4.cpp"));
     QCOMPARE(jobTester.finishedCount(), 1);
-    QCOMPARE(jobTester.percent(), 25);
+    QCOMPARE(jobTester.percent(), (unsigned long)25);
 
     jobTester.postProcessStdout(stdoutOutput3);
     QCOMPARE(jobTester.started().size(), 4);
     QCOMPARE(jobTester.finishedCount(), 3);
-    QCOMPARE(jobTester.percent(), 75);
+    QCOMPARE(jobTester.percent(), (unsigned long)75);
 
     jobTester.postProcessStdout(stdoutOutput4);
     QCOMPARE(jobTester.started().size(), 4);
     QCOMPARE(jobTester.finishedCount(), 4);
-    QCOMPARE(jobTester.percent(), 100);
+    QCOMPARE(jobTester.percent(), (unsigned long)100);
 
     QCOMPARE(jobTester.started().at(0), QStringLiteral("source2.cpp"));
     QCOMPARE(jobTester.started().at(1), QStringLiteral("source1.cpp"));
