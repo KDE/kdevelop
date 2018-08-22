@@ -240,7 +240,8 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
             return extension;
         }
 
-        auto item = pContext->items().constFirst();
+        const auto items = pContext->items();
+        const auto item = items.first();
         switch (item->type()) {
             case KDevelop::ProjectBaseItem::File:
             case KDevelop::ProjectBaseItem::Folder:
