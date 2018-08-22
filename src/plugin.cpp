@@ -39,7 +39,6 @@
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
-#include <execute/iexecuteplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
@@ -93,12 +92,6 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     //     act_check_all_files->setText(i18n("Analyze Current Project with Clang-Tidy)"));
     //     act_check_all_files->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
     */
-
-    auto* iface = KDevelop::ICore::self()
-                                ->pluginController()
-                                ->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))
-                                ->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
 
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->addModel(Strings::modelId(), i18n("Clang-Tidy"), m_model.data());

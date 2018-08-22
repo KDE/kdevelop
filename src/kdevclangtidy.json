@@ -47,8 +47,5 @@
         "Version": "0.1.0"
     },
     "X-KDevelop-Category": "Global",
-    "X-KDevelop-IRequired": [
-        "org.kdevelop.IExecutePlugin"
-    ],
     "X-KDevelop-Mode": "GUI"
 }
