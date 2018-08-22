@@ -93,9 +93,6 @@ CheckSelection::CheckSelection(QWidget* parent)
 
     connect(m_checkListModel, &CheckListModel::enabledChecksChanged,
             this, &CheckSelection::checksChanged);
-
-    connect(m_checkListView, &QTreeView::expanded,
-            this, [this](const QModelIndex& index) {qDebug() << "----+" << index;});
 }
 
 CheckSelection::~CheckSelection() = default;
