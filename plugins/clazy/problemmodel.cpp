@@ -25,6 +25,7 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <qtcompat_p.h>
 #include <shell/problemmodelset.h>
 
 #include <KLocalizedString>
