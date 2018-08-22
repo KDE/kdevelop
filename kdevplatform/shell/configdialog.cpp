@@ -54,7 +54,7 @@ ConfigDialog::ConfigDialog(QWidget* parent)
 
     connect(button(QDialogButtonBox::Apply), &QPushButton::clicked, onApplyClicked);
     connect(button(QDialogButtonBox::Ok), &QPushButton::clicked, onApplyClicked);
-    connect(button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, [this]() {
+    connect(button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, this, [this]() {
         auto page = qobject_cast<ConfigPage*>(currentPage()->widget());
         Q_ASSERT(page);
         page->defaults();
