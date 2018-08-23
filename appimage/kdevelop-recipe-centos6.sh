@@ -71,7 +71,7 @@ git reset --hard
 cd /
 
 # Use the new compiler
-. /opt/rh/devtoolset-4/enable
+. /opt/rh/devtoolset-6/enable
 
 # TODO: Use these vars more
 export FAKEROOT=/kdevelop.appdir
