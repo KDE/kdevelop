@@ -224,8 +224,8 @@ void OutputPage::loadFileTemplate(const SourceFileTemplate& fileTemplate,
                                    TemplateRenderer* renderer)
 {
     QUrl baseUrl = _baseUrl;
-    if (!baseUrl.path().endsWith('/')) {
-        baseUrl.setPath(baseUrl.path()+'/');
+    if (!baseUrl.path().endsWith(QLatin1Char('/'))) {
+        baseUrl.setPath(baseUrl.path() + QLatin1Char('/'));
     }
 
     KConfigGroup codegenGroup( KSharedConfig::openConfig(), "CodeGeneration" );

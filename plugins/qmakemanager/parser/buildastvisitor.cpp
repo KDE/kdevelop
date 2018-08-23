@@ -169,7 +169,7 @@ void BuildASTVisitor::visitStatement(StatementAst* node)
         setPositionForToken(node->id, val);
         if (node->isExclam) {
             // qCDebug(KDEV_QMAKE) << "found exclam";
-            val->value = '!' + val->value;
+            val->value = QLatin1Char('!') + val->value;
         }
         setIdentifierForStatement(stmt, val);
 
@@ -257,7 +257,7 @@ T* BuildASTVisitor::stackPop()
 QString BuildASTVisitor::getTokenString(qint64 idx)
 {
     QMake::Parser::Token token = m_parser->tokenStream->at(idx);
-    return m_parser->tokenText(token.begin, token.end).replace('\n', QLatin1String("\\n"));
+    return m_parser->tokenText(token.begin, token.end).replace(QLatin1Char('\n'), QLatin1String("\\n"));
 }
 
 void BuildASTVisitor::setPositionForAst(AstNode* node, AST* ast)

@@ -302,7 +302,7 @@ void PatchReviewPlugin::updateKompareModel() {
     } catch ( const QString & str ) {
         KMessageBox::error( nullptr, str, i18n( "Kompare Model Update" ) );
     } catch ( const char * str ) {
-        KMessageBox::error( nullptr, str, i18n( "Kompare Model Update" ) );
+        KMessageBox::error( nullptr, QLatin1String(str), i18n( "Kompare Model Update" ) );
     }
     removeHighlighting();
     m_modelList.reset( nullptr );
@@ -423,7 +423,7 @@ void PatchReviewPlugin::switchToEmptyReviewArea()
 QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
 {
     KDevelop::Path path(QDir::cleanPath(m_patch->baseDir().toLocalFile()));
-    QVector<QString> destPath = KDevelop::Path("/"+model->destinationPath()).segments();
+    QVector<QString> destPath = KDevelop::Path(QLatin1Char('/') + model->destinationPath()).segments();
     if (destPath.size() >= (int)m_depth) {
         destPath = destPath.mid(m_depth);
     }

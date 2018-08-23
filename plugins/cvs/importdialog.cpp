@@ -65,9 +65,9 @@ void ImportDialog::jobFinished(KJob * job)
     // The job finished, now let's check the output is everything was OK
     CvsJob* cvsjob = static_cast<CvsJob*>(job);
 
-    static QRegExp re_file("^[IN]\\s(.*)");
+    static QRegExp re_file(QStringLiteral("^[IN]\\s(.*)"));
     bool error = false;
-    const QStringList lines = cvsjob->output().split('\n');
+    const QStringList lines = cvsjob->output().split(QLatin1Char('\n'));
     for (const QString& line : lines) {
         if (line.isEmpty()) {
             // ignore empty lines

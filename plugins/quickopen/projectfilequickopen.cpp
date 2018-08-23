@@ -82,7 +82,10 @@ QString ProjectFileData::text() const
 
 QString ProjectFileData::htmlDescription() const
 {
-    return "<small><small>" + i18nc("%1: project name", "Project %1", project())  + "</small></small>";
+    return
+        QLatin1String("<small><small>") +
+        i18nc("%1: project name", "Project %1", project()) +
+        QLatin1String("</small></small>");
 }
 
 bool ProjectFileData::execute(QString& filterText)
@@ -144,16 +147,17 @@ QWidget* ProjectFileData::expandingWidget() const
 
     if (chosen) {
         return chosen->createNavigationWidget(nullptr, nullptr,
-                                              "<small><small>"
+                                              QLatin1String("<small><small>")
                                               + i18nc("%1: project name", "Project %1", project())
-                                              + "</small></small><br/>");
+                                              + QLatin1String("</small></small><br/>"));
     } else {
         QTextBrowser* ret = new QTextBrowser();
         ret->resize(400, 100);
         ret->setText(
-            "<small><small>"
+            QLatin1String("<small><small>")
             + i18nc("%1: project name", "Project %1", project())
-            + "<br>" + i18n("Not parsed yet") + "</small></small>");
+            + QLatin1String("<br>") + i18n("Not parsed yet")
+            + QLatin1String("</small></small>"));
         return ret;
     }
 
@@ -213,7 +217,7 @@ void BaseFileDataProvider::setFilterText(const QString& text)
             path = Path(Path(doc->url()).parent(), path).pathOrUrl();
         }
     }
-    setFilter(path.split('/', QString::SkipEmptyParts));
+    setFilter(path.split(QLatin1Char('/'), QString::SkipEmptyParts));
 }
 
 uint BaseFileDataProvider::itemCount() const

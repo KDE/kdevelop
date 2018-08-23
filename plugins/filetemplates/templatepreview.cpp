@@ -40,8 +40,8 @@ using namespace KDevelop;
 TemplatePreviewRenderer::TemplatePreviewRenderer()
 {
     QVariantHash vars;
-    vars[QStringLiteral("name")] = "Example";
-    vars[QStringLiteral("license")] = "This file is licensed under the ExampleLicense 3.0";
+    vars[QStringLiteral("name")] = QStringLiteral("Example");
+    vars[QStringLiteral("license")] = QStringLiteral("This file is licensed under the ExampleLicense 3.0");
     // TODO: More variables, preferably the ones from TemplateClassGenerator
 
     VariableDescriptionList publicMembers;
@@ -95,7 +95,7 @@ TemplatePreview::TemplatePreview(QWidget* parent)
     m_variables[QStringLiteral("APPNAMEUC")] = QStringLiteral("EXAMPLE");
     m_variables[QStringLiteral("APPNAMEID")] = QStringLiteral("Example");
 
-    m_variables[QStringLiteral("PROJECTDIR")] = QDir::homePath() + "/projects/ExampleProjectDir";
+    m_variables[QStringLiteral("PROJECTDIR")] = QDir::homePath() + QLatin1String("/projects/ExampleProjectDir");
     m_variables[QStringLiteral("PROJECTDIRNAME")] = QStringLiteral("ExampleProjectDir");
     m_variables[QStringLiteral("VERSIONCONTROLPLUGIN")] = QStringLiteral("kdevgit");
 

@@ -172,7 +172,7 @@ void DebugSession::initializeDebugger()
                                                QStringLiteral("kdevlldb/formatters/all.py"));
     }
     if (!formatterPath.isEmpty()) {
-        addCommand(MI::NonMI, "command script import " + KShell::quoteArg(formatterPath));
+        addCommand(MI::NonMI, QLatin1String("command script import ") + KShell::quoteArg(formatterPath));
     }
 
 
@@ -199,13 +199,13 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
         auto remoteDir = grp.readEntry(Config::LldbRemotePathEntry, QString());
         auto remoteExe = QDir(remoteDir).filePath(QFileInfo(executable).fileName());
 
-        filesymbols += " -r " + Utils::quote(remoteExe);
+        filesymbols += QLatin1String(" -r ") + Utils::quote(remoteExe);
 
         addCommand(MI::FileExecAndSymbols, filesymbols,
                    this, &DebugSession::handleFileExecAndSymbols,
                    CmdHandlesError);
 
-        addCommand(MI::TargetSelect, "remote " + connStr,
+        addCommand(MI::TargetSelect, QLatin1String("remote ") + connStr,
                    this, &DebugSession::handleTargetSelect, CmdHandlesError);
 
         // ensure executable is on remote end
@@ -234,7 +234,7 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
             vars.append(QStringLiteral("%0=%1").arg(it.key(), Utils::quote(it.value())));
         }
         // actually using lldb command 'settings set target.env-vars' which accepts multiple values
-        addCommand(GdbSet, "environment " + vars.join(QLatin1Char(' ')));
+        addCommand(GdbSet, QLatin1String("environment ") + vars.join(QLatin1Char(' ')));
     }
 
     // Break on start: can't use "-exec-run --start" because in lldb-mi
@@ -299,7 +299,7 @@ bool DebugSession::execInferior(ILaunchConfiguration *cfg, IExecutePlugin *, con
         // run custom config script right before we starting the inferior,
         // so the user has the freedom to change everything.
         if (configLldbScript.isValid()) {
-            addCommand(MI::NonMI, "command source -s 0 " + KShell::quoteArg(configLldbScript.toLocalFile()));
+            addCommand(MI::NonMI, QLatin1String("command source -s 0 ") + KShell::quoteArg(configLldbScript.toLocalFile()));
         }
 
         addCommand(MI::ExecRun, QString(), new ExecRunHandler(this),
@@ -316,7 +316,7 @@ bool DebugSession::loadCoreFile(ILaunchConfiguration *,
                CmdHandlesError);
     raiseEvent(connected_to_program);
 
-    addCommand(new CliCommand(NonMI, "target create -c " + Utils::quote(corefile),
+    addCommand(new CliCommand(NonMI, QLatin1String("target create -c ") + Utils::quote(corefile),
                               this, &DebugSession::handleCoreFile,
                               CmdHandlesError));
     return true;
@@ -374,7 +374,7 @@ void DebugSession::handleCoreFile(const QStringList &s)
                 i18n("<b>Failed to load core file</b>"
                 "<p>Debugger reported the following error:"
                 "<p><tt>%1",
-                s.join('\n')),
+                s.join(QLatin1Char('\n'))),
                 i18n("Startup error"));
             stopDebugger();
             return;
@@ -420,7 +420,7 @@ void DebugSession::handleVersion(const QStringList& s)
 
 // minimal version is 3.8.1
 #ifdef Q_OS_OSX
-    QRegularExpression rx("^lldb-(\\d+).(\\d+).(\\d+)\\b", QRegularExpression::MultilineOption);
+    QRegularExpression rx(QStringLiteral("^lldb-(\\d+).(\\d+).(\\d+)\\b"), QRegularExpression::MultilineOption);
     // lldb 3.8.1 reports version 350.99.0 on OS X
     const int min_ver[] = {350, 99, 0};
 #else

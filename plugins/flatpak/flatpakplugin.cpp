@@ -144,7 +144,7 @@ static QStringList availableArches(const KDevelop::Path& url)
     const auto doc = FlatpakRuntime::config(url);
     const QString sdkName = doc[QLatin1String("sdk")].toString();
     const QString runtimeVersion = doc[QLatin1String("runtime-version")].toString();
-    supportedArchesProcess.start("flatpak", {"info", "-r", sdkName + "//" + runtimeVersion });
+    supportedArchesProcess.start(QStringLiteral("flatpak"), {QStringLiteral("info"), QStringLiteral("-r"), sdkName + QLatin1String("//") + runtimeVersion });
     supportedArchesProcess.waitForFinished();
     return ret;
 }
@@ -165,7 +165,7 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
         }
     }
 
-    const QRegularExpression nameRx(".*\\..*\\..*\\.json$");
+    const QRegularExpression nameRx(QStringLiteral(".*\\..*\\..*\\.json$"));
     for(auto it = urls.begin(); it != urls.end(); ) {
         if (it->isLocalFile() && it->path().contains(nameRx)) {
             ++it;
@@ -210,7 +210,7 @@ void FlatpakPlugin::executeOnRemoteDevice()
         return;
     group.writeEntry("DeviceAddress", host);
 
-    QTemporaryFile* file = new QTemporaryFile(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1Char('/') + runtime->name() + "XXXXXX.flatpak");
+    QTemporaryFile* file = new QTemporaryFile(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1Char('/') + runtime->name() + QLatin1String("XXXXXX.flatpak"));
     file->open();
     file->close();
     auto job = runtime->executeOnDevice(host, file->fileName());

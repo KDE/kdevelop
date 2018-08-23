@@ -148,7 +148,7 @@ QString ProjectSelectionPage::selectedTemplate()
 QUrl ProjectSelectionPage::location()
 {
     QUrl url = ui->locationUrl->url().adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + '/' + encodedProjectName());
+    url.setPath(url.path() + QLatin1Char('/') + QString::fromUtf8(encodedProjectName()));
     return url;
 }
 
@@ -236,7 +236,7 @@ void ProjectSelectionPage::validateData()
     }
 
     // Check for non-empty target directory. Not an error, but need to display a warning.
-    url.setPath( url.path() + '/' + encodedProjectName() );
+    url.setPath(url.path() + QLatin1Char('/') + QString::fromUtf8(encodedProjectName()));
     QFileInfo fi( url.toLocalFile() );
     if( fi.exists() && fi.isDir() )
     {
@@ -256,9 +256,10 @@ QByteArray ProjectSelectionPage::encodedProjectName()
     QByteArray tEncodedName = projectName().toUtf8();
     for (int i = 0; i < tEncodedName.size(); ++i)
     {
-        QChar tChar(tEncodedName.at( i ));
-        if (tChar.isDigit() || tChar.isSpace() || tChar.isLetter() || tChar == '%')
+        QChar tChar(QLatin1Char(tEncodedName.at(i)));
+        if (tChar.isDigit() || tChar.isSpace() || tChar.isLetter() || tChar == QLatin1Char('%')) {
             continue;
+        }
 
         QByteArray tReplace = QUrl::toPercentEncoding( tChar );
         tEncodedName.replace( tEncodedName.at( i ) ,tReplace );

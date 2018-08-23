@@ -51,7 +51,7 @@ bool ProjectFilter::isValid( const Path &path, const bool isFolder ) const
         return true;
     }
 
-    if (isFolder && path.isLocalFile() && QFile::exists(path.toLocalFile() + "/.kdev_ignore")) {
+    if (isFolder && path.isLocalFile() && QFile::exists(path.toLocalFile() + QLatin1String("/.kdev_ignore"))) {
         return false;
     }
 
@@ -91,5 +91,5 @@ QString ProjectFilter::makeRelative(const Path& path) const
         return path.path();
     }
 
-    return '/' + m_project.relativePath(path);
+    return QLatin1Char('/') + m_project.relativePath(path);
 }

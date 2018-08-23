@@ -74,15 +74,15 @@ void CvsStatusJob::parseOutput(const QString& jobOutput, QList<QVariant>& infos)
     QString reporev;
     QString workrev;
 
-    static QRegExp re_start("^=+$");
-    static QRegExp re_file("File:\\s+(.*)\\s+Status:\\s+(.*)");
-    static QRegExp re_workrev("\\s+Working revision:\\s+([\\d\\.]*).*");
-    static QRegExp re_reporev("\\s+Repository revision:\\s+([\\d\\.]*).*");
-    static QRegExp re_dirchange("cvs status: Examining\\s+(.*)");
+    static QRegExp re_start(QStringLiteral("^=+$"));
+    static QRegExp re_file(QStringLiteral("File:\\s+(.*)\\s+Status:\\s+(.*)"));
+    static QRegExp re_workrev(QStringLiteral("\\s+Working revision:\\s+([\\d\\.]*).*"));
+    static QRegExp re_reporev(QStringLiteral("\\s+Repository revision:\\s+([\\d\\.]*).*"));
+    static QRegExp re_dirchange(QStringLiteral("cvs status: Examining\\s+(.*)"));
 
     QString currentDir;
 
-    QStringList lines = jobOutput.split('\n');
+    QStringList lines = jobOutput.split(QLatin1Char('\n'));
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
 

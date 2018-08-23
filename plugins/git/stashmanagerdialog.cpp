@@ -147,7 +147,7 @@ void StashModel::stashListReady(KJob* _job)
         QList<QStandardItem*> elements;
         elements.reserve(fields.size());
         for (const QByteArray& field : fields) {
-            elements += new QStandardItem(QString(field.trimmed()));
+            elements += new QStandardItem(QString::fromUtf8(field.trimmed()));
         }
 
         appendRow(elements);

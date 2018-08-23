@@ -60,14 +60,14 @@ void EditorsView::slotJobFinished(KJob* job)
         QString html;
 
         foreach (const QString &key, lockedFiles.uniqueKeys()) {
-            html += "<h3>"+key+"</h3><br>";
+            html += QLatin1String("<h3>")+key+QLatin1String("</h3><br>");
 
             foreach(const CvsLocker &item, lockedFiles.values( key )) {
-                html += "<b>"+i18n("User")+":</b> "+item.user+"<br>";
-                html += "<b>"+i18n("Date")+":</b> "+item.date+"<br>";
-                html += "<b>"+i18n("Machine")+":</b> "+item.machine+"<br>";
-                html += "<b>"+i18n("Repository")+":</b> "+item.localrepo+"<br>";
-                html += QLatin1String("<br>");
+                html += QLatin1String("<b>")+i18n("User")+QLatin1String(":</b> ")+item.user+QLatin1String("<br>") +
+                        QLatin1String("<b>")+i18n("Date")+QLatin1String(":</b> ")+item.date+QLatin1String("<br>") +
+                        QLatin1String("<b>")+i18n("Machine")+QLatin1String(":</b> ")+item.machine+QLatin1String("<br>") +
+                        QLatin1String("<b>")+i18n("Repository")+QLatin1String(":</b> ")+item.localrepo+QLatin1String("<br>") +
+                        QLatin1String("<br>");
             }
             html += QLatin1String("<br>");
         }
@@ -79,16 +79,16 @@ void EditorsView::slotJobFinished(KJob* job)
 void EditorsView::parseOutput(const QString& jobOutput, QMultiMap<QString,CvsLocker>& editorsInfo)
 {
     // the first line contains the filename and than the locker information
-    static QRegExp re("([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+"
-                        "([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.*)");
+    static QRegExp re(QLatin1String("([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+"
+                                    "([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.*)"));
     // if there are more than one locker of a single file, the second line for a file
     // only contains the locker information (no filename)
-    static QRegExp subre("\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+"
-                        "([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.*)");
+    static QRegExp subre(QLatin1String("\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+"
+                                       "([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+([^\\s]+)\\s+(.*)"));
 
     QString lastfilename;
 
-    QStringList lines = jobOutput.split('\n');
+    QStringList lines = jobOutput.split(QLatin1Char('\n'));
 
     for (int i=0; i<lines.count(); ++i) {
         QString s = lines[i];
@@ -97,7 +97,7 @@ void EditorsView::parseOutput(const QString& jobOutput, QMultiMap<QString,CvsLoc
             CvsLocker item;
             QString file = re.cap(1);
             item.user = re.cap(2);
-            item.date = re.cap(5)+' '+re.cap(4)+' '+re.cap(7)+' '+re.cap(6);
+            item.date = re.cap(5)+QLatin1Char(' ')+re.cap(4)+QLatin1Char(' ')+re.cap(7)+QLatin1Char(' ')+re.cap(6);
             item.machine = re.cap(9);
             item.localrepo = re.cap(10);
 
@@ -108,7 +108,7 @@ void EditorsView::parseOutput(const QString& jobOutput, QMultiMap<QString,CvsLoc
             if (subre.exactMatch(s)) {
                 CvsLocker item;
                 item.user = subre.cap( 1 );
-                item.date = subre.cap(4)+' '+subre.cap(3)+' '+subre.cap(6)+' '+subre.cap(5);
+                item.date = subre.cap(4)+QLatin1Char(' ')+subre.cap(3)+QLatin1Char(' ')+subre.cap(6)+QLatin1Char(' ')+subre.cap(5);
                 item.machine = subre.cap(8);
                 item.localrepo = subre.cap(9);
 

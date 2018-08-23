@@ -72,7 +72,7 @@ void CMakeCacheModel::read()
         QString line = in.readLine().trimmed();
         if(line.startsWith(QLatin1String("//")))
             currentComment += line.mid(2);
-        else if(!line.isEmpty() && !line.startsWith('#')) //it is a variable
+        else if(!line.isEmpty() && !line.startsWith(QLatin1Char('#'))) //it is a variable
         {
             CacheLine c;
             c.readLine(line);
@@ -122,7 +122,7 @@ void CMakeCacheModel::read()
 
                 if(!flag.isEmpty())
                 {
-                    lineItems[0]->setText(lineItems[0]->text()+'-'+flag);
+                    lineItems[0]->setText(lineItems[0]->text() + QLatin1Char('-') + flag);
                 }
                 insertRow(currentIdx, lineItems);
                 if (!variablePos.contains(name)) {
@@ -132,12 +132,12 @@ void CMakeCacheModel::read()
                 currentComment.clear();
             }
         }
-        else if(line.startsWith('#') && line.contains(QLatin1String("INTERNAL")))
+        else if(line.startsWith(QLatin1Char('#')) && line.contains(QLatin1String("INTERNAL")))
         {
             m_internalBegin=currentIdx;
 //                 qCDebug(CMAKE) << "Comment: " << line << " -.- " << currentIdx;
         }
-        else if(!line.startsWith('#') && !line.isEmpty())
+        else if(!line.startsWith(QLatin1Char('#')) && !line.isEmpty())
         {
             qCDebug(CMAKE) << "unrecognized cache line: " << line;
         }
@@ -165,7 +165,7 @@ QVariantMap CMakeCacheModel::changedValues() const
         QStandardItem* type = item(i, 1);
         QStandardItem* valu = item(i, 2);
 //         QStandardItem* comment = item(i, 3);
-        ret.insert(name->text()+':'+type->text(), valu->text());
+        ret.insert(name->text()+QLatin1Char(':')+type->text(), valu->text());
 
     }
     return ret;

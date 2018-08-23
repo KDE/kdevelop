@@ -82,9 +82,9 @@ void QMakeJob::start()
 
     QStringList args;
     if (m_buildType < 2)
-        args << QStringLiteral("CONFIG+=") + BUILD_TYPES[m_buildType];
+        args << QLatin1String("CONFIG+=") + QLatin1String(BUILD_TYPES[m_buildType]);
     if (!m_installPrefix.isEmpty())
-        args << "target.path=" + m_installPrefix;
+        args << QLatin1String("target.path=") + m_installPrefix;
     if (!m_extraArguments.isEmpty()) {
         KShell::Errors err;
         QStringList tmp = KShell::splitArgs(m_extraArguments, KShell::TildeExpand | KShell::AbortOnMeta, &err);
@@ -101,7 +101,7 @@ void QMakeJob::start()
     }
     args << QStringLiteral("-r") << m_srcDir;
 
-    m_model->appendLine(m_buildDir + ": " + args.join(QLatin1Char(' ')));
+    m_model->appendLine(m_buildDir + QLatin1String(": ") + args.join(QLatin1Char(' ')));
 
     QDir build(m_buildDir);
     if (!build.exists()) {

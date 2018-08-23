@@ -175,7 +175,7 @@ void ProjectFilterConfigPage::checkFilters()
         if (pattern.isEmpty()) {
             errorText = i18n("A filter with an empty pattern will match all items. Use <code>\"*\"</code> to make this explicit.");
             break;
-        } else if (pattern.endsWith('/') && filter.targets == Filter::Files) {
+        } else if (pattern.endsWith(QLatin1Char('/')) && filter.targets == Filter::Files) {
             errorText = i18n("A filter ending on <code>\"/\"</code> can never match a file.");
             break;
         }

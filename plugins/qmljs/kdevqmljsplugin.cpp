@@ -140,7 +140,7 @@ int spacesAtCorner(const QString& string, int direction = +1) {
 // Take the given QML line and check if it's a line of the form foo.bar: value.
 // Return ranges for the key and the value.
 const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString& line, const KTextEditor::Cursor& position) {
-    const QStringList items = line.split(';');
+    const QStringList items = line.split(QLatin1Char(';'));
     QString matchingItem;
     int col_offset = -1;
     // This is to also support FooAnimation { foo: bar; baz: bang; duration: 200 }
@@ -152,7 +152,7 @@ const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString&
             break;
         }
     }
-    QStringList split = matchingItem.split(':');
+    QStringList split = matchingItem.split(QLatin1Char(':'));
     if ( split.size() != 2 ) {
         // The expression is not of the form foo:bar, thus invalid.
         return qMakePair(KTextEditor::Range::invalid(), KTextEditor::Range::invalid());
@@ -161,9 +161,9 @@ const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString&
     QString value = split.at(1);
 
     // For animations or similar, remove the trailing '}' if there's no semicolon after the last entry
-    if ( value.trimmed().endsWith('}') ) {
-        col_offset -= value.size() - value.lastIndexOf('}') + 1;
-        value = value.left(value.lastIndexOf('}')-1);
+    if (value.trimmed().endsWith(QLatin1Char('}'))) {
+        col_offset -= value.size() - value.lastIndexOf(QLatin1Char('}')) + 1;
+        value = value.left(value.lastIndexOf(QLatin1Char('}'))-1);
     }
 
     return qMakePair(

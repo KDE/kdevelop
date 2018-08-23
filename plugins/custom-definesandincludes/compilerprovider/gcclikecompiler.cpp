@@ -78,7 +78,7 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
 
     // #define a 1
     // #define a
-    QRegExp defineExpression( "#define\\s+(\\S+)(?:\\s+(.*)\\s*)?");
+    QRegExp defineExpression(QStringLiteral("#define\\s+(\\S+)(?:\\s+(.*)\\s*)?"));
 
     const auto rt = ICore::self()->runtimeController()->currentRuntime();
     QProcess proc;
@@ -110,7 +110,7 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
     while ( proc.canReadLine() ) {
         auto line = proc.readLine();
 
-        if ( defineExpression.indexIn( line ) != -1 ) {
+        if ( defineExpression.indexIn(QString::fromUtf8(line)) != -1 ) {
             data.definedMacros[defineExpression.cap( 1 )] = defineExpression.cap( 2 ).trimmed();
         }
     }
@@ -175,7 +175,7 @@ Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& ar
     Status mode = Initial;
 
     const auto output = QString::fromLocal8Bit( proc.readAllStandardOutput() );
-    foreach( const auto &line, output.splitRef( '\n' ) ) {
+    foreach (const auto& line, output.splitRef(QLatin1Char('\n'))) {
         switch ( mode ) {
             case Initial:
                 if ( line.indexOf( QLatin1String("#include \"...\"") ) != -1 ) {
@@ -189,7 +189,7 @@ Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& ar
                 break;
             case Includes:
                 //Detect the include-paths by the first space that is prepended. Reason: The list may contain relative paths like "."
-                if ( !line.startsWith( ' ' ) ) {
+                if (!line.startsWith(QLatin1Char(' '))) {
                     // We've reached the end of the list.
                     mode = Finished;
                 } else {

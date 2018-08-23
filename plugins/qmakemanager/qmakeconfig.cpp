@@ -112,7 +112,7 @@ QHash<QString, QString> QMakeConfig::queryQMake(const QString& qmakeExecutable, 
     QTextStream stream(&p);
     while (!stream.atEnd()) {
         const QString line = stream.readLine();
-        const int colon = line.indexOf(':');
+        const int colon = line.indexOf(QLatin1Char(':'));
         if (colon == -1) {
             continue;
         }
@@ -130,8 +130,8 @@ QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
     QStringList paths;
     if (qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS"))) {
         // qt4
-        foreach (const QString& dir, qmakeVars["QMAKE_MKSPECS"].split(QtCompat::listSeparator())) {
-            paths << dir + "/default/qmake.conf";
+        foreach (const QString& dir, qmakeVars[QStringLiteral("QMAKE_MKSPECS")].split(QtCompat::listSeparator())) {
+            paths << dir + QLatin1String("/default/qmake.conf");
         }
     } else if (!qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS")) && qmakeVars.contains(QStringLiteral("QMAKE_SPEC"))) {
         QString path;
@@ -148,10 +148,10 @@ QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
             // cross compilation
             path = qmakeVars[QStringLiteral("QT_HOST_DATA")];
         } else {
-            Q_ASSERT(qmakeVars.contains("QT_INSTALL_PREFIX"));
+            Q_ASSERT(qmakeVars.contains(QStringLiteral("QT_INSTALL_PREFIX")));
             path = qmakeVars[QStringLiteral("QT_INSTALL_PREFIX")];
         }
-        path += "/mkspecs/" + qmakeVars[QStringLiteral("QMAKE_SPEC")] + "/qmake.conf";
+        path += QLatin1String("/mkspecs/") + qmakeVars[QStringLiteral("QMAKE_SPEC")] + QLatin1String("/qmake.conf");
         paths << path;
     }
 

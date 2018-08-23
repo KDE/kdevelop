@@ -86,15 +86,15 @@ std::pair<Path::List, QHash<QString, QString>>
 
     QFile f(pathToFile);
     if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        auto lines = QString::fromLocal8Bit(f.readAll()).split('\n', QString::SkipEmptyParts);
+        auto lines = QString::fromLocal8Bit(f.readAll()).split(QLatin1Char('\n'), QString::SkipEmptyParts);
         QFileInfo dir(pathToFile);
         for (const auto& line : lines) {
             auto textLine = line.trimmed();
             if (textLine.startsWith(QLatin1String("#define "))) {
-                QStringList items = textLine.split(' ');
+                QStringList items = textLine.split(QLatin1Char(' '));
                 if (items.length() > 1)
                 {
-                    defines[items[1]] = QStringList(items.mid(2)).join(' ');
+                    defines[items[1]] = QStringList(items.mid(2)).join(QLatin1Char(' '));
                 }else{
                     qWarning() << i18n("Bad #define directive in %1: %2", pathToFile, textLine);
                 }

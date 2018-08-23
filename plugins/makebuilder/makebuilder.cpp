@@ -60,7 +60,7 @@ KJob* MakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPa
 
     QStringList args(QStringLiteral("install"));
     if (!installPath.isEmpty())
-        args << "DESTDIR="+installPath.toLocalFile();
+        args << QLatin1String("DESTDIR=") + installPath.toLocalFile();
 
     if(installAsRoot) {
         KDevelop::BuilderJob* job = new KDevelop::BuilderJob;

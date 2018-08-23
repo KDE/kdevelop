@@ -49,7 +49,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
     setCapabilities(Killable);
     setStandardToolView( IOutputView::RunView );
     setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll );
-    setObjectName("plasmoidviewer "+identifier);
+    setObjectName(QLatin1String("plasmoidviewer ")+identifier);
     setDelegate(new OutputDelegate);
 
     m_process = new CommandExecutor(executable(cfg), this);
@@ -73,7 +73,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
 void PlasmoidExecutionJob::start()
 {
     startOutput();
-    model()->appendLine( m_process->workingDirectory() + "> " + m_process->command() + ' ' + m_process->arguments().join(QLatin1Char(' ')) );
+    model()->appendLine(m_process->workingDirectory() + QLatin1String("> ") + m_process->command() + QLatin1Char(' ') + m_process->arguments().join(QLatin1Char(' ')));
     m_process->start();
 }
 
@@ -122,7 +122,7 @@ QStringList PlasmoidExecutionJob::arguments(ILaunchConfiguration* cfg)
         arguments += QStringLiteral("-a");
         arguments += identifier;
     } else {
-        arguments += { "-a", "." };
+        arguments += { QStringLiteral("-a"), QStringLiteral(".") };
     }
     return arguments;
 }

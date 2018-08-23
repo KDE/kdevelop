@@ -400,6 +400,6 @@ QString CMakePreferences::fullName() const
 
 QIcon CMakePreferences::icon() const
 {
-    return QIcon::fromTheme("cmake");
+    return QIcon::fromTheme(QStringLiteral("cmake"));
 }
 

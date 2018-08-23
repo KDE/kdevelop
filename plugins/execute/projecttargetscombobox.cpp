@@ -43,7 +43,7 @@ class ExecutablePathsVisitor
         using ProjectVisitor::visit;
         void visit(ProjectExecutableTargetItem* eit) override {
             if(!m_onlyExecutables || eit->type()==ProjectTargetItem::ExecutableTarget)
-                m_paths += KDevelop::joinWithEscaping(eit->model()->pathFromIndex(eit->index()), '/', '\\');
+                m_paths += KDevelop::joinWithEscaping(eit->model()->pathFromIndex(eit->index()), QLatin1Char('/'), QLatin1Char('\\'));
         }
 
         QStringList paths() const { return m_paths; }
@@ -81,10 +81,10 @@ void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item, bool exec)
 
 QStringList ProjectTargetsComboBox::currentItemPath() const
 {
-    return KDevelop::splitWithEscaping(currentText(), '/', '\\');
+    return KDevelop::splitWithEscaping(currentText(), QLatin1Char('/'), QLatin1Char('\\'));
 }
 
 void ProjectTargetsComboBox::setCurrentItemPath(const QStringList& str)
 {
-    setCurrentIndex(str.isEmpty() && count() ? 0 : findText(KDevelop::joinWithEscaping(str, '/', '\\')));
+    setCurrentIndex(str.isEmpty() && count() ? 0 : findText(KDevelop::joinWithEscaping(str, QLatin1Char('/'), QLatin1Char('\\'))));
 }

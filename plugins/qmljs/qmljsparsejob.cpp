@@ -124,7 +124,7 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
         return;
     }
 
-    ParseSession session(document(), contents().contents, priority());
+    ParseSession session(document(), QString::fromUtf8(contents().contents), priority());
 
     if (abortRequested()) {
         return;

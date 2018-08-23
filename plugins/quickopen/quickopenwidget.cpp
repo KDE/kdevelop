@@ -301,7 +301,7 @@ void QuickOpenWidget::updateProviders()
             QAction* box = qobject_cast<QAction*>(obj);
             if (box) {
                 if (box->isChecked()) {
-                    checkedItems << box->text().remove('&');
+                    checkedItems << box->text().remove(QLatin1Char('&'));
                 }
             }
         }
@@ -316,7 +316,7 @@ void QuickOpenWidget::updateProviders()
             QAction* box = qobject_cast<QAction*>(obj);
             if (box) {
                 if (box->isChecked()) {
-                    checkedScopes << box->text().remove('&');
+                    checkedScopes << box->text().remove(QLatin1Char('&'));
                 }
             }
         }

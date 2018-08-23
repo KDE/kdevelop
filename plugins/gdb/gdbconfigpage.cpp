@@ -62,9 +62,9 @@ GdbConfigPage::GdbConfigPage( QWidget* parent )
     connect(ui->kcfg_startWith, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &GdbConfigPage::changed);
 
     //Setup data info for combobox
-    ui->kcfg_startWith->setItemData(0, "ApplicationOutput" );
-    ui->kcfg_startWith->setItemData(1, "GdbConsole" );
-    ui->kcfg_startWith->setItemData(2, "FrameStack" );
+    ui->kcfg_startWith->setItemData(0, QStringLiteral("ApplicationOutput"));
+    ui->kcfg_startWith->setItemData(1, QStringLiteral("GdbConsole"));
+    ui->kcfg_startWith->setItemData(2, QStringLiteral("FrameStack"));
 }
 
 GdbConfigPage::~GdbConfigPage()

@@ -37,13 +37,13 @@ QVariant CvsLogJob::fetchResults()
 
 void CvsLogJob::parseOutput(const QString& jobOutput, QList<QVariant>& events)
 {
-    static QRegExp rx_sep( "[-=]+" );
-    static QRegExp rx_rev( "revision ((\\d+\\.?)+)" );
-    static QRegExp rx_branch( "branches:\\s+(.*)" );
-    static QRegExp rx_date( "date:\\s+([^;]*);\\s+author:\\s+([^;]*).*" );
+    static QRegExp rx_sep(QStringLiteral("[-=]+"));
+    static QRegExp rx_rev(QStringLiteral("revision ((\\d+\\.?)+)"));
+    static QRegExp rx_branch(QStringLiteral("branches:\\s+(.*)"));
+    static QRegExp rx_date(QStringLiteral("date:\\s+([^;]*);\\s+author:\\s+([^;]*).*"));
 
 
-    QStringList lines = jobOutput.split('\n');
+    QStringList lines = jobOutput.split(QLatin1Char('\n'));
 
     KDevelop::VcsEvent item;
     bool firstSeperatorReached = false;
@@ -84,7 +84,7 @@ void CvsLogJob::parseOutput(const QString& jobOutput, QList<QVariant>& events)
         } else {
             if (firstSeperatorReached) {
 //                 qCDebug(PLUGIN_CVS) << "ADDING LOG" ;
-                log += s+'\n';
+                log += s+QLatin1Char('\n');
             }
         }
     }

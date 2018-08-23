@@ -239,7 +239,7 @@ QStringList MakeJob::commandLine() const
 
     if( ! builderGroup.readEntry("Abort on First Error", true))
     {
-        cmdline << (isNMake(makeBin) ? "/K" : "-k");
+        cmdline << (isNMake(makeBin) ? QStringLiteral("/K") : QStringLiteral("-k"));
     }
 
     // note: nmake does not support the -j flag
@@ -257,7 +257,7 @@ QStringList MakeJob::commandLine() const
 
     if( builderGroup.readEntry("Display Only", false) )
     {
-        cmdline << (isNMake(makeBin) ? "/N" : "-n");
+        cmdline << (isNMake(makeBin) ? QStringLiteral("/N") : QStringLiteral("-n"));
     }
 
     QString extraOptions = builderGroup.readEntry("Additional Options", QString());

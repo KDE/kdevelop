@@ -45,7 +45,7 @@ KDevelop::VcsLocation SvnImportMetadataWidget::destination() const
     KDevelop::VcsLocation destloc;
     QString url = m_ui->dest->text();
     if( useSourceDirForDestination ) {
-        url += '/' + m_ui->srcEdit->url().fileName();
+        url += QLatin1Char('/') + m_ui->srcEdit->url().fileName();
     }
     destloc.setRepositoryServer(url);
     return destloc;

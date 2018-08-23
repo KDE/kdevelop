@@ -84,12 +84,12 @@ void MIDebugger::execute(MICommand* command)
 
     QByteArray commandUtf8 = commandText.toUtf8();
 
-    m_process->write(commandUtf8, commandUtf8.length());
+    m_process->write(commandUtf8);
     command->markAsSubmitted();
 
     QString prettyCmd = m_currentCmd->cmdToSend();
-    prettyCmd.remove( QRegExp("set prompt \032.\n") );
-    prettyCmd = "(gdb) " + prettyCmd;
+    prettyCmd.remove(QRegExp(QStringLiteral("set prompt \032.\n")));
+    prettyCmd = QLatin1String("(gdb) ") + prettyCmd;
 
     if (m_currentCmd->isUserCommand())
         emit userCommandOutput(prettyCmd);
@@ -189,9 +189,9 @@ void MIDebugger::processLine(const QByteArray& line)
             // it's still possible for the user to issue a MI command,
             // emit correct signal
             if (m_currentCmd && m_currentCmd->isUserCommand()) {
-                emit userCommandOutput(QString::fromUtf8(line) + '\n');
+                emit userCommandOutput(QString::fromUtf8(line) + QLatin1Char('\n'));
             } else {
-                emit internalCommandOutput(QString::fromUtf8(line) + '\n');
+                emit internalCommandOutput(QString::fromUtf8(line) + QLatin1Char('\n'));
             }
 
             // protect against wild replies that sometimes returned from gdb without a pending command
@@ -322,10 +322,10 @@ void MIDebugger::processLine(const QByteArray& line)
                     "processing reply from gdb. Please submit a bug report. "
                     "The debug session will now end to prevent potential crash"),
             i18n("The exception is: %1\n"
-                "The MI response is: %2", e.what(),
+                "The MI response is: %2", QString::fromUtf8(e.what()),
                 QString::fromLatin1(line)),
             i18n("Internal debugger error"));
-        emit exited(true, e.what());
+        emit exited(true, QString::fromUtf8(e.what()));
     }
     #endif
 }

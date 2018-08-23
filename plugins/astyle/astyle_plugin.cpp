@@ -146,7 +146,7 @@ SettingsWidget* AStylePlugin::editStyleWidget(const QMimeType& mime) const
 
 QString AStylePlugin::previewText(const SourceFormatterStyle& /*style*/, const QMimeType& /*mime*/) const
 {
-    return "// Indentation\n" + indentingSample() + "\t// Formatting\n"
+    return QLatin1String("// Indentation\n") + indentingSample() + QLatin1String("\t// Formatting\n")
         + formattingSample();
 }
 
@@ -174,7 +174,7 @@ AStylePlugin::Indentation AStylePlugin::indentation(const QUrl& url) const
 
 QString AStylePlugin::formattingSample()
 {
-    return 
+    return QLatin1String(
     "void func(){\n"
     "\tif(isFoo(a,b))\n"
     "\tbar(a,b);\n"
@@ -207,7 +207,8 @@ QString AStylePlugin::formattingSample()
     "}\n"
     "};\n"
     "}\n"
-    "}\n";
+    "}\n"
+    );
 }
 
 QString AStylePlugin::indentingSample()

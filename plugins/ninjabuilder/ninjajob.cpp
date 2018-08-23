@@ -96,7 +96,7 @@ NinjaJob::NinjaJob(KDevelop::ProjectBaseItem* item, CommandType commandType,
 
     QStringList targets;
     for (const QString& arg : arguments) {
-        if (!arg.startsWith('-')) {
+        if (!arg.startsWith(QLatin1Char('-'))) {
             targets << arg;
         }
     }
@@ -141,7 +141,7 @@ QUrl NinjaJob::workingDirectory() const
     }
     KDevelop::IBuildSystemManager* bsm = it->project()->buildSystemManager();
     KDevelop::Path workingDir = bsm->buildDirectory(it);
-    while (!QFile::exists(workingDir.toLocalFile() + "build.ninja")) {
+    while (!QFile::exists(workingDir.toLocalFile() + QLatin1String("build.ninja"))) {
         KDevelop::Path upWorkingDir = workingDir.parent();
         if (!upWorkingDir.isValid() || upWorkingDir == workingDir) {
             return bsm->buildDirectory(it->project()->projectItem()).toUrl();
@@ -191,7 +191,7 @@ void NinjaJob::emitProjectBuilderSignal(KJob* job)
 
     if (job->error() == 0) {
         Q_ASSERT(!m_signal.isEmpty());
-        QMetaObject::invokeMethod(m_plugin, m_signal, Q_ARG(KDevelop::ProjectBaseItem*, it));
+        QMetaObject::invokeMethod(m_plugin, m_signal.constData(), Q_ARG(KDevelop::ProjectBaseItem*, it));
     } else {
         QMetaObject::invokeMethod(m_plugin, "failed", Q_ARG(KDevelop::ProjectBaseItem*, it));
     }
@@ -217,7 +217,7 @@ void NinjaJob::appendLines(const QStringList& lines)
     bool prev = false;
     for (QStringList::iterator it = ret.end(); it != ret.begin(); ) {
         --it;
-        bool curr = it->startsWith('[');
+        bool curr = it->startsWith(QLatin1Char('['));
         if ((prev && curr) || it->endsWith(QLatin1String("] "))) {
             it = ret.erase(it);
         }

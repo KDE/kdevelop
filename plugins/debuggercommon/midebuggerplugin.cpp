@@ -150,7 +150,7 @@ void MIDebuggerPlugin::setupDBus()
     QDBusConnectionInterface* dbusInterface = QDBusConnection::sessionBus().interface();
     const auto& registeredServiceNames = dbusInterface->registeredServiceNames().value();
     for (const auto& service : registeredServiceNames) {
-        slotDBusOwnerChanged(service, QString(), QString('n'));
+        slotDBusOwnerChanged(service, QString(), QStringLiteral("n"));
     }
 
     connect(dbusInterface, &QDBusConnectionInterface::serviceOwnerChanged,

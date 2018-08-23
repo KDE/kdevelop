@@ -145,7 +145,7 @@ RegisterController_Arm::RegisterController_Arm(MIDebugSession* debugSession, QOb
 void RegisterController_Arm::initRegisterNames()
 {
     for (int i = 0; i < 32; i++) {
-        m_registerNames[VFP_single] << ("s" + QString::number(i));
+        m_registerNames[VFP_single] << (QLatin1Char('s') + QString::number(i));
     }
 
     m_cpsr.registerName = QStringLiteral("cpsr");
@@ -168,16 +168,16 @@ void RegisterController_Arm::initRegisterNames()
     m_registerNames[Flags] = m_cpsr.flags;
 
     for (int i = 0; i < 13; i++) {
-        m_registerNames[General] << ("r" + QString::number(i));
+        m_registerNames[General] << (QLatin1Char('r') + QString::number(i));
     }
     m_registerNames[General] << QStringLiteral("sp") << QStringLiteral("lr") << QStringLiteral("pc");
 
     for (int i = 0; i < 32; i++) {
-        m_registerNames[VFP_double] << ("d" + QString::number(i));
+        m_registerNames[VFP_double] << (QLatin1Char('d') + QString::number(i));
     }
 
     for (int i = 0; i < 16; i++) {
-        m_registerNames[VFP_quad] << ("q" + QString::number(i));
+        m_registerNames[VFP_quad] << (QLatin1Char('q') + QString::number(i));
     }
 }
 

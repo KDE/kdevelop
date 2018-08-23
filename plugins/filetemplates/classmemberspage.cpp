@@ -91,7 +91,7 @@ VariableDescriptionList ClassMembersPage::members() const
     foreach (const QString& item, d->editListWidget->items())
     {
         VariableDescription var;
-        QStringList parts = item.split(' ');
+        QStringList parts = item.split(QLatin1Char(' '));
         switch (parts.size())
         {
             case 1:

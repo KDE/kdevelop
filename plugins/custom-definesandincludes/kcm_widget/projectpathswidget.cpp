@@ -240,19 +240,19 @@ void ProjectPathsWidget::batchEdit()
     }
 
     if (includesTab) {
-        auto includes = be.textEdit->toPlainText().split('\n', QString::SkipEmptyParts);
+        auto includes = be.textEdit->toPlainText().split(QLatin1Char('\n'), QString::SkipEmptyParts);
         for (auto& s : includes) {
             s = s.trimmed();
         }
 
         pathsModel->setData(midx, includes, ProjectPathsModel::IncludesDataRole);
     } else {
-        auto list = be.textEdit->toPlainText().split('\n', QString::SkipEmptyParts);
+        auto list = be.textEdit->toPlainText().split(QLatin1Char('\n'), QString::SkipEmptyParts);
         Defines defines;
 
         for (auto& d : list) {
             //This matches: a=b, a=, a
-            QRegExp r("^([^=]+)(=(.*))?$");
+            QRegExp r(QStringLiteral("^([^=]+)(=(.*))?$"));
 
             if (!r.exactMatch(d)) {
                 continue;

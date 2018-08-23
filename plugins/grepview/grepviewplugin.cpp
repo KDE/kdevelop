@@ -59,12 +59,11 @@ static QString patternFromSelection(const KDevelop::IDocument* doc)
     // Before anything, this removes line feeds from the
     // beginning and the end.
     int len = pattern.length();
-    if (len > 0 && pattern[0] == '\n')
-    {
+    if (len > 0 && pattern[0] == QLatin1Char('\n')) {
         pattern.remove(0, 1);
         len--;
     }
-    if (len > 0 && pattern[len-1] == '\n')
+    if (len > 0 && pattern[len-1] == QLatin1Char('\n'))
         pattern.truncate(len-1);
     return pattern;
 }

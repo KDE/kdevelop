@@ -134,8 +134,8 @@ QString Job::buildMakefile(const JobParameters& params)
 
 void Job::postProcessStdout(const QStringList& lines)
 {
-    static const auto startedRegex  = QRegularExpression("Clazy check started  for (.+)$");
-    static const auto finishedRegex = QRegularExpression("Clazy check finished for (.+)$");
+    static const auto startedRegex  = QRegularExpression(QStringLiteral("Clazy check started  for (.+)$"));
+    static const auto finishedRegex = QRegularExpression(QStringLiteral("Clazy check finished for (.+)$"));
 
     for (const QString & line : lines) {
         auto match = startedRegex.match(line);

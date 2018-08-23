@@ -143,7 +143,7 @@ std::unique_ptr<Record> MIParser::parseResultOrAsyncRecord()
     char c = m_lex->lookAhead();
     m_lex->nextToken();
     MATCH_PTR(Token_identifier);
-    QString reason = m_lex->currentTokenText();
+    QString reason = QString::fromUtf8(m_lex->currentTokenText());
     m_lex->nextToken();
 
     if (c == '^') {
@@ -180,7 +180,7 @@ bool MIParser::parseResult(Result *&result)
     std::unique_ptr<Result> res(new Result);
 
     if (m_lex->lookAhead() == Token_identifier) {
-        res->variable = m_lex->currentTokenText();
+        res->variable = QString::fromUtf8(m_lex->currentTokenText());
         m_lex->nextToken();
 
         if (m_lex->lookAhead() != '=') {
@@ -334,29 +334,23 @@ QString MIParser::parseStringLiteral()
     for(int i = 1, e = length-1; i != e; ++i)
     {
         int translated = -1;
-        if (message[i] == '\\')
-        {
+        if (message[i] == QLatin1Char('\\')) {
             if (i+1 < length)
             {
                 // TODO: implement all the other escapes, maybe
-                if (message[i+1] == 'n')
-                {
+                if (message[i+1] == QLatin1Char('n')) {
                     translated = '\n';
                 }
-                else if (message[i+1] == '\\')
-                {
+                else if (message[i+1] == QLatin1Char('\\')) {
                     translated = '\\';
                 }
-                else if (message[i+1] == '"')
-                {
+                else if (message[i+1] == QLatin1Char('"')) {
                     translated = '"';
                 }
-                else if (message[i+1] == 't')
-                {
+                else if (message[i+1] == QLatin1Char('t')) {
                     translated = '\t';
                 }
-                else if (message[i+1] == 'r')
-                {
+                else if (message[i+1] == QLatin1Char('r')) {
                     translated = '\r';
                 }
             }

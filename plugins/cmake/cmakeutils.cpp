@@ -71,7 +71,7 @@ static const QString buildDirCountKey = QStringLiteral("Build Directory Count");
 //the used builddir will change for every runtime
 static QString buildDirIndexKey() {
     const QString currentRuntime = ICore::self()->runtimeController()->currentRuntime()->name();
-    return buildDirIndexKey_ + '-' + currentRuntime;
+    return buildDirIndexKey_ + QLatin1Char('-') + currentRuntime;
 }
 
 namespace Specific
@@ -647,8 +647,7 @@ QString executeProcess(const QString& execName, const QStringList& args)
     }
 
     QByteArray b = p.readAllStandardOutput();
-    QString t;
-    t.prepend(b.trimmed());
+    QString t = QString::fromUtf8(b.trimmed());
     return t;
 }
 
@@ -687,7 +686,7 @@ QString defaultGenerator()
 
 QVector<Test> importTestSuites(const Path &buildDir)
 {
-    const auto contents = CMakeListsParser::readCMakeFile(buildDir.toLocalFile() + "/CTestTestfile.cmake");
+    const auto contents = CMakeListsParser::readCMakeFile(buildDir.toLocalFile() + QLatin1String("/CTestTestfile.cmake"));
 
     QVector<Test> tests;
     for (const auto& entry: contents) {

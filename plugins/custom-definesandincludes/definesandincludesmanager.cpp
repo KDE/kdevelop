@@ -362,7 +362,7 @@ QString DefinesAndIncludesManager::parserArguments(KDevelop::ProjectBaseItem* it
     if ( buildManager ) {
         const auto extraArguments = buildManager->extraArguments(item);
         if (!extraArguments.isEmpty())
-            arguments += ' ' + extraArguments;
+            arguments += QLatin1Char(' ') + extraArguments;
     }
 
     return arguments;

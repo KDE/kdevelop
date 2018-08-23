@@ -178,16 +178,18 @@ Range MIVariableController::expressionRangeUnderCursor(Document* doc, const Curs
     QString line = doc->line(cursor.line());
     int index = cursor.column();
     QChar c = line[index];
-    if (!c.isLetterOrNumber() && c != '_')
+    if (!c.isLetterOrNumber() && c != QLatin1Char('_')) {
         return {};
+    }
 
     int start = Utils::expressionAt(line, index+1);
     int end = index;
     for (; end < line.size(); ++end)
     {
         QChar c = line[end];
-        if (!(c.isLetterOrNumber() || c == '_'))
+        if (!(c.isLetterOrNumber() || c == QLatin1Char('_'))) {
             break;
+        }
     }
     if (!(start < end))
         return {};

@@ -171,7 +171,13 @@ private Q_SLOTS:
 
             const QString x11SessionId = sm.sessionId() + QLatin1Char('_') + sm.sessionKey();
             QString kdevelopSessionId = activeSession->id().toString();
-            sm.setRestartCommand({QCoreApplication::applicationFilePath(), "-session", x11SessionId, "-s", kdevelopSessionId});
+            sm.setRestartCommand({
+                QCoreApplication::applicationFilePath(),
+                QStringLiteral("-session"),
+                x11SessionId,
+                QStringLiteral("-s"),
+                kdevelopSessionId
+            });
         }
     }
 };
@@ -293,7 +299,7 @@ static QString findSessionId(const SessionInfos& availableSessionInfos, const QS
         } else if (projectAsSession.isEmpty()) {
             foreach(const QUrl& k, si.projects) {
                 QString fn(k.fileName());
-                fn = fn.left(fn.indexOf('.'));
+                fn = fn.left(fn.indexOf(QLatin1Char('.')));
                 if ( session == fn ) {
                     projectAsSession = si.uuid.toString();
                 }
@@ -364,14 +370,14 @@ int main( int argc, char *argv[] )
         int c = argc;
         for (int i=0; i < c; ++i) {
             if (debugFound) {
-                debugArgs << argv[i];
+                debugArgs << QString::fromUtf8(argv[i]);
             } else if ((qstrcmp(argv[i], "--debug") == 0) || (qstrcmp(argv[i], "-d") == 0)) {
                 if (argc > (i + 1)) {
                     i++;
                 }
                 argc = i + 1;
                 debugFound = true;
-            } else if (QString(argv[i]).startsWith(QLatin1String("--debug="))) {
+            } else if (QByteArray(argv[i]).startsWith("--debug=")) {
                 argc = i + 1;
                 debugFound = true;
             }
@@ -381,7 +387,7 @@ int main( int argc, char *argv[] )
     KDevelopApplication app(argc, argv);
     KLocalizedString::setApplicationDomain("kdevelop");
 
-    KAboutData aboutData( QStringLiteral("kdevelop"), i18n( "KDevelop" ), QByteArray(KDEVELOP_VERSION_STRING),
+    KAboutData aboutData( QStringLiteral("kdevelop"), i18n("KDevelop"), QStringLiteral(KDEVELOP_VERSION_STRING),
                           i18n("The KDevelop Integrated Development Environment"),
                           KAboutLicense::GPL,
                           i18n("Copyright 1999-2018, The KDevelop developers"), QString(), QStringLiteral("https://www.kdevelop.org/"));
@@ -467,17 +473,30 @@ int main( int argc, char *argv[] )
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
 
-    parser.addOption(QCommandLineOption{QStringList{"n", "new-session"}, i18n("Open KDevelop with a new session using the given name."), QStringLiteral("name")});
-    parser.addOption(QCommandLineOption{QStringList{"s", "open-session"}, i18n("Open KDevelop with the given session.\n"
-                     "You can pass either hash or the name of the session." ), QStringLiteral("session")});
-    parser.addOption(QCommandLineOption{QStringList{"rm", "remove-session"}, i18n("Delete the given session.\n"
-                     "You can pass either hash or the name of the session." ), QStringLiteral("session")});
-    parser.addOption(QCommandLineOption{QStringList{"ps", "pick-session"}, i18n("Shows all available sessions and lets you select one to open.")});
-    parser.addOption(QCommandLineOption{QStringList{"pss", "pick-session-shell"}, i18n("List all available sessions on shell and lets you select one to open.")});
-    parser.addOption(QCommandLineOption{QStringList{"l", "list-sessions"}, i18n("List available sessions and quit.")});
-    parser.addOption(QCommandLineOption{QStringList{"f", "fetch"}, i18n("Open KDevelop and fetch the project from the given <repo url>."), QStringLiteral("repo url")});
-    parser.addOption(QCommandLineOption{QStringList{"p", "project"}, i18n("Open KDevelop and load the given project. <project> can be either a .kdev4 file or a directory path."), QStringLiteral("project")});
-    parser.addOption(QCommandLineOption{QStringList{"d", "debug"},
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("n"), QStringLiteral("new-session")},
+                     i18n("Open KDevelop with a new session using the given name."),
+                     QStringLiteral("name")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("s"), QStringLiteral("open-session")},
+                     i18n("Open KDevelop with the given session.\n"
+                          "You can pass either hash or the name of the session."),
+                     QStringLiteral("session")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("rm"), QStringLiteral("remove-session")},
+                     i18n("Delete the given session.\n"
+                          "You can pass either hash or the name of the session." ),
+                     QStringLiteral("session")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("ps"), QStringLiteral("pick-session")},
+                     i18n("Shows all available sessions and lets you select one to open.")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("pss"), QStringLiteral("pick-session-shell")},
+                     i18n("List all available sessions on shell and lets you select one to open.")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("l"), QStringLiteral("list-sessions")},
+                     i18n("List available sessions and quit.")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("f"), QStringLiteral("fetch")},
+                     i18n("Open KDevelop and fetch the project from the given <repo url>."),
+                     QStringLiteral("repo url")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("p"), QStringLiteral("project")},
+                     i18n("Open KDevelop and load the given project. <project> can be either a .kdev4 file or a directory path."),
+                     QStringLiteral("project")});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("d"), QStringLiteral("debug")},
                      i18n("Start debugging an application in KDevelop with the given debugger.\n"
                      "The executable that should be debugged must follow - including arguments.\n"
                      "Example: kdevelop --debug gdb myapp --foo bar"), QStringLiteral("debugger")});
@@ -489,7 +508,7 @@ int main( int argc, char *argv[] )
     // session is running, then we should just return the PID of that session.
     // Otherwise, we should print a command-line session-chooser dialog ("--pss"),
     // which only shows the running sessions, and the user can pick one.
-    parser.addOption(QCommandLineOption{QStringList{"pid"}});
+    parser.addOption(QCommandLineOption{QStringList{QStringLiteral("pid")}});
 
     parser.addPositionalArgument(QStringLiteral("files"),
                      i18n( "Files to load, or directories to load as projects" ), QStringLiteral("[FILE[:line[:column]] | DIRECTORY]..."));

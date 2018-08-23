@@ -158,7 +158,7 @@ QString LldbCommand::miCommand() const
     }
 
     if (isMI) {
-        command.prepend('-');
+        command.prepend(QLatin1Char('-'));
     }
     return command;
 }
@@ -187,17 +187,17 @@ QString LldbCommand::cmdToSend()
             }
             int p = command_.length() - 1;
             bool quoted = false;
-            if (command_[p] == '"') {
+            if (command_[p] == QLatin1Char('"')) {
                 quoted = true; // should always be the case
             }
             --p;
             for (; p >= 0; --p) {
                 // find next '"' or ' '
                 if (quoted) {
-                    if (command_[p] == '"' && (p == 0 || command_[p-1] != '\\'))
+                    if (command_[p] == QLatin1Char('"') && (p == 0 || command_[p-1] != QLatin1Char('\\')))
                         break;
                 } else {
-                    if (command_[p] == ' ')
+                    if (command_[p] == QLatin1Char(' '))
                         break;
                 }
             }
@@ -205,14 +205,14 @@ QString LldbCommand::cmdToSend()
 
             // move other switches like '-d' '-c' into miCommand part
             overrideCmd = miCommand() + QLatin1Char(' ') + command_.leftRef(p);
-            command_ = "-f " + command_.midRef(p, command_.length());
+            command_ = QLatin1String("-f ") + command_.midRef(p, command_.length());
             break;
         }
         case BreakWatch:
             if (command_.startsWith(QLatin1String("-r "))) {
-                command_ = "-w read " + command_.midRef(3);
+                command_ = QLatin1String("-w read ") + command_.midRef(3);
             } else if (command_.startsWith(QLatin1String("-a "))) {
-                command_ = "-w read_write " + command_.midRef(3);
+                command_ = QLatin1String("-w read_write ") + command_.midRef(3);
             }
             break;
         case StackListArguments:

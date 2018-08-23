@@ -304,14 +304,14 @@ QString DebuggerConsoleView::toHtmlEscaped(QString text)
 {
     text = text.toHtmlEscaped();
 
-    text.replace('\n', QLatin1String("<br>"));
+    text.replace(QLatin1Char('\n'), QLatin1String("<br>"));
     return text;
 }
 
 
 QString DebuggerConsoleView::colorify(QString text, const QColor& color)
 {
-    text = "<font color=\"" + color.name() +  "\">" + text + "</font>";
+    text = QLatin1String("<font color=\"") + color.name() +  QLatin1String("\">") + text + QLatin1String("</font>");
     return text;
 }
 

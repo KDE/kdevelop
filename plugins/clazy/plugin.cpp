@@ -51,13 +51,13 @@ namespace Clazy
 {
 
 Plugin::Plugin(QObject* parent, const QVariantList&)
-    : IPlugin("kdevclazy", parent)
+    : IPlugin(QStringLiteral("kdevclazy"), parent)
     , m_job(nullptr)
     , m_project(nullptr)
     , m_model(new ProblemModel(this))
     , m_db(nullptr)
 {
-    setXMLFile("kdevclazy.rc");
+    setXMLFile(QStringLiteral("kdevclazy.rc"));
 
     const QIcon clazyIcon = QIcon::fromTheme(QStringLiteral("clazy"));
 
@@ -66,14 +66,14 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
 
     m_menuActionFile = new QAction(clazyIcon, i18n("Analyze Current File with Clazy"), this);
     connect(m_menuActionFile, &QAction::triggered, this, runFileAnalysis);
-    actionCollection()->addAction("clazy_file", m_menuActionFile);
+    actionCollection()->addAction(QStringLiteral("clazy_file"), m_menuActionFile);
 
     m_contextActionFile = new QAction(clazyIcon, i18n("Clazy"), this);
     connect(m_contextActionFile, &QAction::triggered, this, runFileAnalysis);
 
     m_menuActionProject = new QAction(clazyIcon, i18n("Analyze Current Project with Clazy"), this);
     connect(m_menuActionProject, &QAction::triggered, this, runProjectAnalysis);
-    actionCollection()->addAction("clazy_project", m_menuActionProject);
+    actionCollection()->addAction(QStringLiteral("clazy_project"), m_menuActionProject);
 
     m_contextActionProject = new QAction(clazyIcon, i18n("Clazy"), this);
     connect(m_contextActionProject, &QAction::triggered, this, runProjectAnalysis);
@@ -191,7 +191,7 @@ void Plugin::runClazy(KDevelop::IProject* project, const QString& path)
     connect(m_job, &Job::problemsDetected, m_model, &ProblemModel::addProblems);
     connect(m_job, &Job::finished, this, &Plugin::result);
 
-    core()->uiController()->registerStatus(new KDevelop::JobStatus(m_job, "clazy"));
+    core()->uiController()->registerStatus(new KDevelop::JobStatus(m_job, QStringLiteral("clazy")));
     core()->runController()->registerJob(m_job);
 
     if (GlobalSettings::hideOutputView()) {

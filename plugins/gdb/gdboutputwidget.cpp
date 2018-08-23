@@ -188,11 +188,10 @@ void GDBOutputWidget::slotUserCommandStdout(const QString& line)
 namespace {
     QString colorify(QString text, const QColor& color)
     {
-        if (text.endsWith('\n'))
-        {
+        if (text.endsWith(QLatin1Char('\n'))) {
             text.chop(1);
         }
-        text = "<font color=\"" + color.name() +  "\">" + text + "</font><br>";
+        text = QLatin1String("<font color=\"") + color.name() + QLatin1String("\">") + text + QLatin1String("</font><br>");
         return text;
     }
 }
@@ -207,7 +206,7 @@ void GDBOutputWidget::newStdoutLine(const QString& line,
         s = colorify(s, m_gdbColor);
     }
     else
-        s.replace('\n', QLatin1String("<br>"));
+        s.replace(QLatin1Char('\n'), QLatin1String("<br>"));
 
     m_allCommands.append(s);
     m_allCommandsRaw.append(line);
@@ -275,16 +274,17 @@ void GDBOutputWidget::setShowInternalCommands(bool show)
 
 void GDBOutputWidget::slotReceivedStderr(const char* line)
 {
-    QString colored = colorify(QString::fromLatin1(line).toHtmlEscaped(), m_errorColor);
+    const auto lineEncoded = QString::fromUtf8(line);
+    const auto colored = colorify(lineEncoded.toHtmlEscaped(), m_errorColor);
     // Errors are shown inside user commands too.
     m_allCommands.append(colored);
     trimList(m_allCommands, m_maxLines);
     m_userCommands_.append(colored);
     trimList(m_userCommands_, m_maxLines);
 
-    m_allCommandsRaw.append(line);
+    m_allCommandsRaw.append(lineEncoded);
     trimList(m_allCommandsRaw, m_maxLines);
-    m_userCommandsRaw.append(line);
+    m_userCommandsRaw.append(lineEncoded);
     trimList(m_userCommandsRaw, m_maxLines);
 
     showLine(colored);
@@ -309,9 +309,9 @@ void GDBOutputWidget::flushPending()
 
     // QTextEdit adds newline after paragraph automatically.
     // So, remove trailing newline to avoid double newlines.
-    if (m_pendingOutput.endsWith('\n'))
+    if (m_pendingOutput.endsWith(QLatin1Char('\n')))
         m_pendingOutput.chop(1);
-    Q_ASSERT(!m_pendingOutput.endsWith('\n'));
+    Q_ASSERT(!m_pendingOutput.endsWith(QLatin1Char('\n')));
 
     QTextDocument *document = m_gdbView->document();
     QTextCursor cursor(document);

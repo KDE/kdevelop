@@ -59,5 +59,5 @@ QString CMakeBuilderPreferences::fullName() const
 
 QIcon CMakeBuilderPreferences::icon() const
 {
-    return QIcon::fromTheme("cmake");
+    return QIcon::fromTheme(QStringLiteral("cmake"));
 }

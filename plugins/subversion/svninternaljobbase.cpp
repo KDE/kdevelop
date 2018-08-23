@@ -83,8 +83,8 @@ bool SvnInternalJobBase::contextGetLogin( const std::string& realm,
     QMutexLocker l(&m_mutex);
     if( m_login_username.isEmpty() || m_login_password.isEmpty() )
         return false;
-    username = std::string( m_login_username.toUtf8() );
-    password = std::string( m_login_password.toUtf8() );
+    username = std::string(m_login_username.toUtf8().constData());
+    password = std::string(m_login_password.toUtf8().constData());
     maySave = this->m_maySave;
     return true;
 }
@@ -134,7 +134,7 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
                 else if (propState == svn_wc_notify_state_changed)
                     notifyString += QLatin1String(" Properties Updated");
                 else
-                    notifyString += ' ';
+                    notifyString += QLatin1Char(' ');
 
                 if (! ((contentState == svn_wc_notify_state_unchanged
                         || contentState == svn_wc_notify_state_unknown)
@@ -162,7 +162,7 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
             break;
         case svn_wc_notify_commit_added:
             if( mimetype ){
-                notifyString = i18n( "Adding %1 using mimetype %2.", QString::fromUtf8( path ), mimetype );
+                notifyString = i18n("Adding %1 using mimetype %2.", QString::fromUtf8(path), QString::fromUtf8(mimetype));
             } else {
                 notifyString = i18n( "Adding %1.", QString::fromUtf8( path ) );
             }
@@ -178,7 +178,7 @@ void SvnInternalJobBase::contextNotify( const char* path, svn_wc_notify_action_t
                 sendFirstDelta = false;
                 notifyString=i18n("Transmitting file data ");
             } else {
-                notifyString='.';
+                notifyString = QStringLiteral(".");
             }
             break;
         case svn_wc_notify_blame_revision:

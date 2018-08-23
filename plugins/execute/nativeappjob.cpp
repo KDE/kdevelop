@@ -50,7 +50,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     {
         auto cfgGroup = cfg->config();
         if (cfgGroup.readEntry(ExecutePlugin::isExecutableEntry, false)) {
-            m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, cfg->name()).section('/', -1);
+            m_name = cfgGroup.readEntry(ExecutePlugin::executableEntry, cfg->name()).section(QLatin1Char('/'), -1);
         }
     }
     setCapabilities(Killable);

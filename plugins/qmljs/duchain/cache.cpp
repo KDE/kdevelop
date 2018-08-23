@@ -85,10 +85,12 @@ QString QmlJS::Cache::modulePath(const KDevelop::IndexedString& baseFile,
     bool isVersion1 = version.startsWith(QLatin1String("1."));
     bool isQtQuick = (uri == QLatin1String("QtQuick"));
 
-    const QStringList modulesWithoutVersionSuffix{"QtQml",
-                                                  "QtMultimedia",
-                                                  "QtQuick.LocalStorage",
-                                                  "QtQuick.XmlListModel"};
+    const QStringList modulesWithoutVersionSuffix{
+        QStringLiteral("QtQml"),
+        QStringLiteral("QtMultimedia"),
+        QStringLiteral("QtQuick.LocalStorage"),
+        QStringLiteral("QtQuick.XmlListModel"),
+    };
 
     if (!version.isEmpty() && !isVersion1 && !modulesWithoutVersionSuffix.contains(uri)) {
         // Modules having a version greater or equal to 2 are stored in a directory

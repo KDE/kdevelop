@@ -101,7 +101,7 @@ namespace {
 #else
       QLatin1String noPrintDirFlag;
 #endif
-      return "make -k" + noPrintDirFlag + " -W \'" + absoluteFile + "\' -W \'" + relativeFile + "\' -n " + makeParameters;
+      return QLatin1String("make -k") + noPrintDirFlag + QLatin1String(" -W \'") + absoluteFile + QLatin1String("\' -W \'") + relativeFile + QLatin1String("\' -n ") + makeParameters;
     }
 
     bool hasMakefile() const
@@ -187,12 +187,12 @@ bool MakeFileResolver::executeCommand(const QString& command, const QString& wor
   proc.setWorkingDirectory(workingDirectory);
   proc.setOutputChannelMode(KProcess::MergedChannels);
 
-  QStringList args(command.split(' '));
+  QStringList args(command.split(QLatin1Char(' ')));
   QString prog = args.takeFirst();
   proc.setProgram(prog, args);
 
   int status = proc.execute(processTimeoutSeconds * 1000);
-  result = proc.readAll();
+  result = QString::fromUtf8(proc.readAll());
 
   return status == 0;
 }
@@ -220,7 +220,7 @@ QString MakeFileResolver::mapToBuild(const QString &path) const
   if (m_outOfSource) {
     if (wd.startsWith(m_source) && !wd.startsWith(m_build)) {
         //Move the current working-directory out of source, into the build-system
-        wd = QDir::cleanPath(m_build + '/' + wd.midRef(m_source.length()));
+        wd = QDir::cleanPath(m_build + QLatin1Char('/') + wd.midRef(m_source.length()));
       }
   }
   return wd;
@@ -253,7 +253,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
     if (!workingDirectory.isEmpty()) {
       u = u.adjusted(QUrl::StripTrailingSlash);
-      u.setPath(u.path() + '/' + workingDirectory);
+      u.setPath(u.path() + QLatin1Char('/') + workingDirectory);
     }
     workingDirectory = u.toLocalFile();
   } else
@@ -337,11 +337,11 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
   QString absoluteFile = file;
   if (fi.isRelative())
-    absoluteFile = workingDirectory + '/' + file;
+    absoluteFile = workingDirectory + QLatin1Char('/') + file;
   absoluteFile = QDir::cleanPath(absoluteFile);
 
   int dot;
-  if ((dot = file.lastIndexOf('.')) == -1) {
+  if ((dot = file.lastIndexOf(QLatin1Char('.'))) == -1) {
     if (!resultOnFail.errorMessage.isEmpty() || !resultOnFail.paths.isEmpty() || !resultOnFail.frameworkDirectories.isEmpty())
       return resultOnFail;
     else
@@ -352,7 +352,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
   QString wd = dir.path();
   if (QFileInfo(wd).isRelative()) {
-    wd = QDir::cleanPath(QDir::currentPath() + '/' + wd);
+    wd = QDir::cleanPath(QDir::currentPath() + QLatin1Char('/') + wd);
   }
 
   wd = mapToBuild(wd);
@@ -413,13 +413,13 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
 static QRegularExpression includeRegularExpression()
 {
-  static const QRegularExpression expression(
+  static const QRegularExpression expression(QLatin1String(
     "\\s(--include-dir=|-I\\s*|-isystem\\s+|-iframework\\s+|-F\\s*)("
     "\\'.*\\'|\\\".*\\\"" //Matches "hello", 'hello', 'hello"hallo"', etc.
     "|"
     "((?:\\\\.)?([\\S^\\\\]?))+" //Matches /usr/I\ am\ a\ strange\ path/include
     ")(?=\\s)"
-  );
+  ));
   Q_ASSERT(expression.isValid());
   return expression;
 }
@@ -436,13 +436,13 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   executeCommand(source.createCommand(file, workingDirectory, makeParameters), workingDirectory, fullOutput);
 
   {
-    QRegExp newLineRx("\\\\\\n");
+    QRegExp newLineRx(QStringLiteral("\\\\\\n"));
     fullOutput.remove(newLineRx);
   }
   ///@todo collect multiple outputs at the same time for performance-reasons
   QString firstLine = fullOutput;
   int lineEnd;
-  if ((lineEnd = fullOutput.indexOf('\n')) != -1)
+  if ((lineEnd = fullOutput.indexOf(QLatin1Char('\n'))) != -1)
     firstLine.truncate(lineEnd); //Only look at the first line of output
 
   /**
@@ -454,17 +454,17 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
   ///STEP 1: Test if it is a recursive make-call
   // Do not search for recursive make-calls if we already have include-paths available. Happens in kernel modules.
   if (!includeRegularExpression().match(fullOutput).hasMatch()) {
-    QRegExp makeRx("\\bmake\\s");
+    QRegExp makeRx(QStringLiteral("\\bmake\\s"));
     int offset = 0;
     while ((offset = makeRx.indexIn(firstLine, offset)) != -1) {
       QString prefix = firstLine.left(offset).trimmed();
-      if (prefix.endsWith(QLatin1String("&&")) || prefix.endsWith(';') || prefix.isEmpty()) {
+      if (prefix.endsWith(QLatin1String("&&")) || prefix.endsWith(QLatin1Char(';')) || prefix.isEmpty()) {
         QString newWorkingDirectory = workingDirectory;
         ///Extract the new working-directory
         if (!prefix.isEmpty()) {
           if (prefix.endsWith(QLatin1String("&&")))
             prefix.truncate(prefix.length() - 2);
-          else if (prefix.endsWith(';'))
+          else if (prefix.endsWith(QLatin1Char(';')))
             prefix.truncate(prefix.length() - 1);
 
           ///Now test if what we have as prefix is a simple "cd /foo/bar" call.
@@ -475,7 +475,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
           if (cdIndex != -1) {
             newWorkingDirectory = prefix.mid(cdIndex + 3).trimmed();
             if (QFileInfo(newWorkingDirectory).isRelative())
-              newWorkingDirectory = workingDirectory + '/' + newWorkingDirectory;
+              newWorkingDirectory = workingDirectory + QLatin1Char('/') + newWorkingDirectory;
             newWorkingDirectory = QDir::cleanPath(newWorkingDirectory);
           }
         }
@@ -488,12 +488,12 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
         if (d.exists()) {
           ///The recursive working-directory exists.
           QString makeParams = firstLine.mid(offset+5);
-          if (!makeParams.contains(';') && !makeParams.contains(QLatin1String("&&"))) {
+          if (!makeParams.contains(QLatin1Char(';')) && !makeParams.contains(QLatin1String("&&"))) {
             ///Looks like valid parameters
             ///Make the file-name absolute, so it can be referenced from any directory
             QString absoluteFile = file;
             if (QFileInfo(absoluteFile).isRelative())
-              absoluteFile = workingDirectory +  '/' + file;
+              absoluteFile = workingDirectory +  QLatin1Char('/') + file;
             Path absolutePath(absoluteFile);
             ///Try once with absolute, and if that fails with relative path of the file
             SourcePathInformation newSource(newWorkingDirectory);
@@ -544,7 +544,7 @@ static QString unescape(const QStringRef& input)
   bool isEscaped = false;
   for (auto it = input.data(), end = it + input.length(); it != end; ++it) {
     QChar c = *it;
-    if (!isEscaped && c == '\\') {
+    if (!isEscaped && c == QLatin1Char('\\')) {
       isEscaped = true;
     } else {
       output.append(c);
@@ -566,7 +566,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
     while (it.hasNext()) {
       const auto match = it.next();
       QString path = match.captured(2);
-      if (path.startsWith('"') || (path.startsWith('\'') && path.length() > 2)) {
+      if (path.startsWith(QLatin1Char('"')) || (path.startsWith(QLatin1Char('\'')) && path.length() > 2)) {
           //probable a quoted path
           if (path.endsWith(path.leftRef(1))) {
             //Quotation is ok, remove it
@@ -574,7 +574,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
           }
       }
       if (QDir::isRelativePath(path))
-        path = workingDirectory + '/' + path;
+        path = workingDirectory + QLatin1Char('/') + path;
       const auto& internedPath = internPath(path);
       const auto& type = match.captured(1);
       const auto isFramework = type.startsWith(QLatin1String("-iframework"))

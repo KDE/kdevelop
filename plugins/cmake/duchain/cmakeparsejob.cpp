@@ -44,7 +44,7 @@ CMakeParseJob::CMakeParseJob(const KDevelop::IndexedString& url, KDevelop::ILang
 
 IndexedString parentCMakeFile(const IndexedString& doc)
 {
-    return IndexedString(QUrl(KIO::upUrl(doc.toUrl().adjusted(QUrl::RemoveFilename)).toString()+"CMakeLists.txt"));
+    return IndexedString(QUrl(KIO::upUrl(doc.toUrl().adjusted(QUrl::RemoveFilename)).toString()+QLatin1String("CMakeLists.txt")));
 }
 
 void CMakeParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread* /*thread*/)

@@ -146,7 +146,7 @@ bool BazaarPlugin::isVersionControlled(const QUrl& localLocation)
     job->exec();
     if (job->status() == VcsJob::JobSucceeded) {
         QList<QFileInfo> filesAndDirectoriesList;
-        const auto output = job->output().split('\n');
+        const auto output = job->output().split(QLatin1Char('\n'));
         filesAndDirectoriesList.reserve(output.size());
         for (const auto& fod : output) {
             filesAndDirectoriesList.append(QFileInfo(workCopy.absolutePath() + QDir::separator() + fod));
@@ -281,7 +281,7 @@ void BazaarPlugin::parseBzrStatus(DVcsJob* job)
     QVariantList result;
     QSet<QString> filesWithStatus;
     QDir workingCopy = job->directory();
-    const auto output = job->output().split('\n');
+    const auto output = job->output().split(QLatin1Char('\n'));
     result.reserve(output.size());
     for (const auto& line : output) {
         auto status = BazaarUtils::parseVcsStatusInfoLine(line);

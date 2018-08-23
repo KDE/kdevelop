@@ -161,7 +161,7 @@ bool LicensePagePrivate::saveLicense()
 {
     qCDebug(PLUGIN_FILETEMPLATES) << "Attempting to save custom license: " << license->licenseName->text();
 
-    QString localDataDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+"/kdevcodegen/licenses/";
+    QString localDataDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)+QLatin1String("/kdevcodegen/licenses/");
     QString fullPath = localDataDir + license->licenseName->text();
     QFile newFile(fullPath);
 

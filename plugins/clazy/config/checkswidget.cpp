@@ -120,7 +120,7 @@ void ChecksWidget::setChecks(const QString& checks)
         setState(m_ui->checksTree->topLevelItem(i), Qt::Unchecked);
     }
 
-    const QStringList checksList = checks.split(',', QString::SkipEmptyParts);
+    const QStringList checksList = checks.split(QLatin1Char(','), QString::SkipEmptyParts);
     for (auto checkName : checksList) {
         checkName = checkName.trimmed();
         if (checkName == QStringLiteral("manual")) {

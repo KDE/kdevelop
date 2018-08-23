@@ -121,7 +121,7 @@ QAbstractItemModel* CMakeDocumentation::indexModel() const
 
 QIcon CMakeDocumentation::icon() const
 {
-    return QIcon::fromTheme("cmake");
+    return QIcon::fromTheme(QStringLiteral("cmake"));
 }
 
 QString CMakeDocumentation::name() const

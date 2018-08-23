@@ -55,7 +55,8 @@
 using namespace KDevelop;
 
 namespace {
-const char settingsConfigGroup[] = "ProjectTreeView";
+
+QString settingsConfigGroup() { return QStringLiteral("ProjectTreeView"); }
 
 QList<ProjectFileItem*> fileItemsWithin(const QList<ProjectBaseItem*>& items)
 {
@@ -160,19 +161,19 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
             QString seq = QKeySequence( Qt::ShiftModifier ).toString();
             seq.chop(1); // chop superfluous '+'
-            QAction* move = new QAction(i18n( "&Move Here" ) + '\t' + seq, &dropMenu);
+            QAction* move = new QAction(i18n("&Move Here") + QLatin1Char('\t') + seq, &dropMenu);
             move->setIcon(QIcon::fromTheme(QStringLiteral("go-jump")));
             dropMenu.addAction(move);
 
             seq = QKeySequence( Qt::ControlModifier ).toString();
             seq.chop(1);
-            QAction* copy = new QAction(i18n( "&Copy Here" ) + '\t' + seq, &dropMenu);
+            QAction* copy = new QAction(i18n("&Copy Here") + QLatin1Char('\t') + seq, &dropMenu);
             copy->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
             dropMenu.addAction(copy);
 
             dropMenu.addSeparator();
 
-            QAction* cancel = new QAction(i18n( "C&ancel" ) + '\t' + QKeySequence( Qt::Key_Escape ).toString(), &dropMenu);
+            QAction* cancel = new QAction(i18n("C&ancel") + QLatin1Char('\t') + QKeySequence(Qt::Key_Escape).toString(), &dropMenu);
             cancel->setIcon(QIcon::fromTheme(QStringLiteral("process-stop")));
             dropMenu.addAction(cancel);
 
@@ -226,13 +227,13 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
             QString seq = QKeySequence( Qt::ControlModifier ).toString();
             seq.chop(1);
-            QAction* addToTarget = new QAction(i18n( "&Add to Target" ) + '\t' + seq, &dropMenu);
+            QAction* addToTarget = new QAction(i18n("&Add to Target") + QLatin1Char('\t') + seq, &dropMenu);
             addToTarget->setIcon(QIcon::fromTheme(QStringLiteral("edit-link")));
             dropMenu.addAction(addToTarget);
 
             dropMenu.addSeparator();
 
-            QAction* cancel = new QAction(i18n( "C&ancel" ) + '\t' + QKeySequence( Qt::Key_Escape ).toString(), &dropMenu);
+            QAction* cancel = new QAction(i18n("C&ancel") + QLatin1Char('\t') + QKeySequence(Qt::Key_Escape).toString(), &dropMenu);
             cancel->setIcon(QIcon::fromTheme(QStringLiteral("process-stop")));
             dropMenu.addAction(cancel);
 
@@ -401,7 +402,7 @@ void ProjectTreeView::saveState( IProject* project )
     }
 
     KConfigGroup configGroup( ICore::self()->activeSession()->config(),
-                              QString( settingsConfigGroup ).append( project->name() ) );
+                              settingsConfigGroup() + project->name() );
 
     ProjectModelSaver saver;
     saver.setProject( project );
@@ -416,7 +417,7 @@ void ProjectTreeView::restoreState( IProject* project )
     }
 
     KConfigGroup configGroup( ICore::self()->activeSession()->config(),
-                              QString( settingsConfigGroup ).append( project->name() ) );
+                              settingsConfigGroup() + project->name() );
     ProjectModelSaver saver;
     saver.setProject( project );
     saver.setView( this );

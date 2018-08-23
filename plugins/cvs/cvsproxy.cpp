@@ -58,7 +58,7 @@ bool CvsProxy::isVersionControlled(const QUrl& filePath) const
 
     QFile cvsEntries( dir.absoluteFilePath(QStringLiteral("Entries")) );
     cvsEntries.open( QIODevice::ReadOnly );
-    QString cvsEntriesData = cvsEntries.readAll();
+    QString cvsEntriesData = QString::fromUtf8(cvsEntries.readAll());
     cvsEntries.close();
     return ( cvsEntriesData.indexOf( fsObject.fileName() ) != -1 );
 }
@@ -112,12 +112,12 @@ QString CvsProxy::convertVcsRevisionToString(const KDevelop::VcsRevision & rev)
 
         case KDevelop::VcsRevision::FileNumber:
             if (rev.revisionValue().isValid())
-                str = "-r"+rev.revisionValue().toString();
+                str = QLatin1String("-r")+rev.revisionValue().toString();
             break;
 
         case KDevelop::VcsRevision::Date:
             if (rev.revisionValue().isValid())
-                str = "-D"+rev.revisionValue().toString();
+                str = QLatin1String("-D")+rev.revisionValue().toString();
             break;
 
         case KDevelop::VcsRevision::GlobalNumber: // !! NOT SUPPORTED BY CVS !!
@@ -150,7 +150,7 @@ QString CvsProxy::convertRevisionToPrevious(const KDevelop::VcsRevision& rev)
                 if (number > 1) // of course this is only possible if our revision is not the first on the branch
                     number--;
 
-                str = QStringLiteral("-r") + base + '.' + QString::number(number);
+                str = QLatin1String("-r") + base + QLatin1Char('.') + QString::number(number);
                 qCDebug(PLUGIN_CVS) << "Converted revision "<<orig<<" to previous revision "<<str;
             }
             break;

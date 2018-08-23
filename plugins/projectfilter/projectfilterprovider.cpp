@@ -113,7 +113,7 @@ void ProjectFilterProvider::addFilterFromContextMenu()
         } else {
             path = item->path();
         }
-        filters << SerializedFilter('/' + item->project()->path().relativePath(path),
+        filters << SerializedFilter(QLatin1Char('/') + item->project()->path().relativePath(path),
                                     item->folder() ? Filter::Folders : Filter::Files);
     }
     QHash< IProject*, SerializedFilters >::const_iterator it = changedProjectFilters.constBegin();

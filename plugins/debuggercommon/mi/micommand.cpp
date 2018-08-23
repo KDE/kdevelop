@@ -56,7 +56,7 @@ MICommand::~MICommand()
 
 QString MICommand::cmdToSend()
 {
-    return initialString() + '\n';
+    return initialString() + QLatin1Char('\n');
 }
 
 QString MICommand::initialString() const
@@ -75,7 +75,7 @@ QString MICommand::initialString() const
             result = result + QStringLiteral(" --frame %1").arg(m_frame);
 
         if (!command_.isEmpty())
-            result += ' ' + command_;
+            result += QLatin1Char(' ') + command_;
     }
 
     return result;

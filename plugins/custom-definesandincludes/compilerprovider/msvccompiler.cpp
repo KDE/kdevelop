@@ -55,13 +55,13 @@ Defines MsvcCompiler::defines(Utils::LanguageType, const QString&) const
             QByteArray buff = proc.readLine();
             qCDebug(DEFINESANDINCLUDES) << "msvcstandardmacros:" << buff;
             if ( !buff.isEmpty() ) {
-                line = buff;
+                line = QString::fromUtf8(buff);
                 if ( line.startsWith( QLatin1String("#define ") ) ) {
                     line = line.mid(8).trimmed();
-                    int pos = line.indexOf( ' ' );
+                    int pos = line.indexOf(QLatin1Char(' '));
 
                     if ( pos != -1 ) {
-                        ret[line.left( pos )] = line.mid(pos + 1).toUtf8();
+                        ret[line.left(pos)] = line.mid(pos + 1);
                     } else {
                         ret[line] = QLatin1String("");
                     }
@@ -69,7 +69,7 @@ Defines MsvcCompiler::defines(Utils::LanguageType, const QString&) const
             }
         }
     } else {
-        qCDebug(DEFINESANDINCLUDES) << "Unable to read standard c++ macro definitions from " + path();
+        qCDebug(DEFINESANDINCLUDES) << QLatin1String("Unable to read standard c++ macro definitions from ") + path();
         while ( proc.canReadLine() ){
             qCDebug(DEFINESANDINCLUDES)  << proc.readLine();
         }

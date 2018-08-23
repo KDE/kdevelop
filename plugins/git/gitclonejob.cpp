@@ -38,7 +38,7 @@ void GitCloneJob::processResult()
         int end = qMax(out.lastIndexOf('\n'), out.lastIndexOf('\r'));
         int start = qMax(qMax(out.lastIndexOf('\n', end-1), out.lastIndexOf('\r', end-1)), 0);
 
-        QByteArray info=out.mid(start+1, end-start-1);
+        const QString info = QString::fromUtf8(out.mid(start+1, end-start-1));
         emit infoMessage(this, info);
     }
 }

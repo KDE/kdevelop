@@ -47,13 +47,13 @@ void CvsAnnotateJob::parseOutput(const QString& jobOutput, const QString& workin
 {
     // each annotation line looks like this:
     // 1.1 (kdedev 10-Nov-07): #include <QApplication>
-    static QRegExp re("([^\\s]+)\\s+\\(([^\\s]+)\\s+([^\\s]+)\\):\\s(.*)");
+    static QRegExp re(QStringLiteral("([^\\s]+)\\s+\\(([^\\s]+)\\s+([^\\s]+)\\):\\s(.*)"));
 
     // the file is pomoted like this:
     // Annotations for main.cpp
-    static QRegExp reFile("Annotations for\\s(.*)");
+    static QRegExp reFile(QStringLiteral("Annotations for\\s(.*)"));
 
-    QStringList lines = jobOutput.split('\n');
+    QStringList lines = jobOutput.split(QLatin1Char('\n'));
 
     for (int i=0, linenumber=0; i<lines.count(); ++i) {
         QString s = lines[i];

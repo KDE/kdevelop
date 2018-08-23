@@ -110,7 +110,7 @@ public:
             clearFilter();
             return;
         }
-        if ( typedFragments.last().endsWith(':') ) {
+        if ( typedFragments.last().endsWith(QLatin1Char(':')) ) {
             // remove the trailing colon if there's only one; otherwise,
             // this breaks incremental filtering
             typedFragments.last().chop(1);

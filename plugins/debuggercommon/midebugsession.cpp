@@ -154,8 +154,9 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
                 auto lines = output.split(QRegularExpression(QStringLiteral("[\r\n]")), QString::SkipEmptyParts);
                 for (auto &line : lines) {
                     int p = line.length();
-                    while (p >= 1 && (line[p-1] == '\r' || line[p-1] == '\n'))
+                    while (p >= 1 && (line[p-1] == QLatin1Char('\r') || line[p-1] == QLatin1Char('\n'))) {
                         p--;
+                    }
                     if (p != line.length())
                         line.truncate(p);
                 }
@@ -262,7 +263,7 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
     if (dir.isEmpty()) {
         dir = QFileInfo(executable).absolutePath();
     }
-    addCommand(EnvironmentCd, '"' + dir + '"');
+    addCommand(EnvironmentCd, QLatin1Char('"') + dir + QLatin1Char('"'));
 
     // Set the run arguments
     QStringList arguments = iexec->arguments(cfg, err);
@@ -413,8 +414,8 @@ void MIDebugSession::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags n
 #define STATE_CHECK(name) \
     do { \
         if (delta & name) { \
-            out += ((newState & name) ? " +" : " -"); \
-            out += #name; \
+            out += ((newState & name) ? QLatin1String(" +") : QLatin1String(" -")) \
+                   + QLatin1String(#name); \
             delta &= ~name; \
         } \
     } while (0)
@@ -433,7 +434,7 @@ void MIDebugSession::debuggerStateChange(DBGStateFlags oldState, DBGStateFlags n
         for (unsigned int i = 0; delta != 0 && i < 32; ++i) {
             if (delta & (1 << i))  {
                 delta &= ~(1 << i);
-                out += (((1 << i) & newState) ? " +" : " -") + QString::number(i);
+                out += (((1 << i) & newState) ? QLatin1String(" +") : QLatin1String(" -")) + QString::number(i);
             }
         }
     }
@@ -874,7 +875,7 @@ void MIDebugSession::executeCmd()
         executeCmd();
         return;
     } else {
-        if (commandText[length-1] != '\n') {
+        if (commandText[length-1] != QLatin1Char('\n')) {
             bad_command = true;
             message = QStringLiteral("Debugger command does not end with newline");
         }
@@ -1017,7 +1018,7 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
 
     if (reason == QLatin1String("exited-normally") || reason == QLatin1String("exited")) {
         if (r.hasField(QStringLiteral("exit-code"))) {
-            programNoApp(i18n("Exited with return code: %1", r["exit-code"].literal()));
+            programNoApp(i18n("Exited with return code: %1", r[QStringLiteral("exit-code")].literal()));
         } else {
             programNoApp(i18n("Exited normally"));
         }
@@ -1026,7 +1027,7 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
     }
 
     if (reason == QLatin1String("exited-signalled")) {
-        programNoApp(i18n("Exited on signal %1", r["signal-name"].literal()));
+        programNoApp(i18n("Exited on signal %1", r[QStringLiteral("signal-name")].literal()));
         m_stateReloadNeeded = false;
         return;
     }
@@ -1201,7 +1202,7 @@ void MIDebugSession::explainDebuggerStatus()
         QString extra = i18n("Current command class: '%1'\n"
                              "Current command text: '%2'\n"
                              "Current command original text: '%3'\n",
-                             typeid(*currentCmd_).name(),
+                             QString::fromUtf8(typeid(*currentCmd_).name()),
                              currentCmd_->cmdToSend(),
                              currentCmd_->initialString());
 
@@ -1277,7 +1278,7 @@ void MIDebugSession::defaultErrorHandler(const MI::ResultRecord& result)
         qApp->activeWindow(),
         i18n("<b>Debugger error</b>"
              "<p>Debugger reported the following error:"
-             "<p><tt>%1", result["msg"].literal()),
+             "<p><tt>%1", result[QStringLiteral("msg")].literal()),
         i18n("Debugger error"));
 
     // Error most likely means that some change made in GUI

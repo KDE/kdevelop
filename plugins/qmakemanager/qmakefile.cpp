@@ -43,7 +43,9 @@ QStringList resolveShellGlobbingInternal(const QStringList& segments, QDir& dir,
     const QString& pathPattern = segments.at(offset);
 
     QStringList entries;
-    if (pathPattern.contains('*') || pathPattern.contains('?') || pathPattern.contains('[')) {
+    if (pathPattern.contains(QLatin1Char('*')) ||
+        pathPattern.contains(QLatin1Char('?')) ||
+        pathPattern.contains(QLatin1Char('['))) {
         // pattern contains globbing chars
         foreach (const QFileInfo& match, dir.entryInfoList(QStringList() << pathPattern,
                                                            QDir::AllEntries | QDir::NoDotAndDotDot, QDir::Unsorted)) {
@@ -78,7 +80,7 @@ QStringList resolveShellGlobbingInternal(const QString& pattern, const QString& 
         return QStringList();
     }
 
-    QDir dir_(pattern.startsWith('/') ? QStringLiteral("/") : dir);
+    QDir dir_(pattern.startsWith(QLatin1Char('/')) ? QStringLiteral("/") : dir);
 
     // break up pattern into path segments
     return resolveShellGlobbingInternal(pattern.split(QLatin1Char('/'), QString::SkipEmptyParts), dir_);
@@ -103,12 +105,12 @@ bool QMakeFile::read()
 
         QString projectfile;
 
-        if (!l.count() || (l.count() && l.indexOf(fi.baseName() + ".pro") != -1)) {
-            projectfile = fi.baseName() + ".pro";
+        if (!l.count() || (l.count() && l.indexOf(fi.baseName() + QLatin1String(".pro")) != -1)) {
+            projectfile = fi.baseName() + QLatin1String(".pro");
         } else {
             projectfile = l.first();
         }
-        m_projectFile += '/' + projectfile;
+        m_projectFile += QLatin1Char('/') + projectfile;
     }
     QMake::Driver d;
     d.readFile(m_projectFile);

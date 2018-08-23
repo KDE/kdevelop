@@ -68,34 +68,33 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
         if(token==QXmlStreamReader::StartElement) {
             QStringRef name = xml.name();
 
-            if(name == "project" || name == "module")
-            {
+            if (name == QLatin1String("project") || name == QLatin1String("module")) {
                 m_current.push(Source());
 
-                if (name == "project")
+                if (name == QLatin1String("project"))
                     m_current.top().type = Source::Project;
-                else if (name == "module")
+                else if (name == QLatin1String("module"))
                     m_current.top().type = Source::Module;
                 m_current.top().identifier = xml.attributes().value(QStringLiteral("identifier")).toString();
             }
             else if(!m_current.isEmpty())
             {
-                if(name == "name")
+                if(name == QLatin1String("name"))
                     m_current.top().name = readText(&xml);
-                else if(name == "url") {
+                else if(name == QLatin1String("url")) {
                     QString protocol = xml.attributes().value(QStringLiteral("protocol")).toString();
                     m_current.top().m_urls[protocol] = readText(&xml);
-                } else if(name == "icon")
+                } else if(name == QLatin1String("icon"))
                     m_current.top().icon = readText(&xml);
             }
         } else if(token==QXmlStreamReader::EndElement) {
             QStringRef name = xml.name();
-            if(name == "project" || name == "module") {
+            if (name == QLatin1String("project") || name == QLatin1String("module")) {
                 Source p = m_current.pop();
 
-                if (name == "project")
+                if (name == QLatin1String("project"))
                     Q_ASSERT(p.type == Source::Project);
-                else if (name == "module")
+                else if (name == QLatin1String("module"))
                     Q_ASSERT(p.type == Source::Module);
 
                 if(!p.m_urls.isEmpty()) {

@@ -129,12 +129,12 @@ KDevelop::IDocumentation::Ptr ManPagePlugin::documentationForIdentifier(const QS
         return KDevelop::IDocumentation::Ptr(nullptr);
 
     if (m_model->identifierInSection(identifier, QStringLiteral("3")))
-        return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(3)/" + identifier)));
+        return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl(QLatin1String("man:(3)/") + identifier)));
 
     if (m_model->identifierInSection(identifier, QStringLiteral("2")))
-        return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:(2)/" + identifier)));
+        return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl(QLatin1String("man:(2)/") + identifier)));
 
-    return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl("man:/" + identifier)));
+    return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl(QLatin1String("man:/") + identifier)));
 }
 
 QAbstractItemModel* ManPagePlugin::indexModel() const
@@ -145,7 +145,7 @@ QAbstractItemModel* ManPagePlugin::indexModel() const
 IDocumentation::Ptr ManPagePlugin::documentationForIndex(const QModelIndex& index) const
 {
     QString name = index.data().toString();
-    return IDocumentation::Ptr(new ManPageDocumentation(name, QUrl("man:"+name)));
+    return IDocumentation::Ptr(new ManPageDocumentation(name, QUrl(QLatin1String("man:")+name)));
 }
 
 IDocumentation::Ptr ManPagePlugin::homePage() const
