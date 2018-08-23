@@ -19,7 +19,7 @@ git_pull_rebase_helper()
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-QTVERSION=5.9.2
+QTVERSION=5.9.6
 QTVERSION_SHORT=5.9
 QTDIR=/usr/local/Qt-${QTVERSION}/
 
