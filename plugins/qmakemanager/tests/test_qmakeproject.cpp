@@ -97,7 +97,7 @@ void TestQMakeProject::testBuildDirectory()
     {
         // note: all checks from QMakeProjectManager::projectNeedsConfiguration must be satisfied
         const QString fileName
-            = QStringLiteral("%1/%2/.kdev4/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName);
+            = QStringLiteral("%1/%2/.kdev4/%2.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR, projectName);
 
         KConfig cfg(fileName);
         KConfigGroup group(&cfg, QMakeConfig::CONFIG_GROUP);
@@ -116,7 +116,7 @@ void TestQMakeProject::testBuildDirectory()
 
     // opens project with kdevelop
     const QUrl projectUrl = QUrl::fromLocalFile(
-        QStringLiteral("%1/%2/%3.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(projectName));
+        QStringLiteral("%1/%2/%2.kdev4").arg(QMAKE_TESTS_PROJECTS_DIR, projectName));
     ICore::self()->projectController()->openProject(projectUrl);
 
     // wait for loading finished
@@ -130,7 +130,7 @@ void TestQMakeProject::testBuildDirectory()
     Path expectedPath(Path(buildDir), expected);
 
     // path for files to build
-    Path buildUrl(QStringLiteral("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR).arg(projectName).arg(target));
+    Path buildUrl(QStringLiteral("%1/%2/%3").arg(QMAKE_TESTS_PROJECTS_DIR, projectName, target));
     QList<ProjectFolderItem*> buildItems = project->foldersForPath(IndexedString(buildUrl.pathOrUrl()));
     QCOMPARE(buildItems.size(), 1);
     IBuildSystemManager* buildManager = project->buildSystemManager();

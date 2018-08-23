@@ -244,7 +244,7 @@ bool compareData(const QModelIndex& index, const QString& expected, const char *
     QString s = index.model()->data(index, Qt::DisplayRole).toString();
     if (s != expected) {
         QTest::qFail(qPrintable(QString("'%0' didn't match expected '%1' in %2:%3")
-                                .arg(s).arg(expected).arg(file).arg(line)),
+                                .arg(s, expected, file).arg(line)),
                      file, line);
         return false;
     }
