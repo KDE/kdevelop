@@ -2,7 +2,8 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Anton Anikin"
+                "Name": "Anton Anikin",
+                "Name[x-test]": "xxAnton Anikinxx"
             }
         ],
         "Category": "Analyzers",
