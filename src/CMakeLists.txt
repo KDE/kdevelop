@@ -21,7 +21,9 @@ set(kdevclangtidy_PART_SRCS
     config/checkgroup.cpp
 
     parsers/clangtidyparser.cpp
-    parsers/replacementparser.cpp
+# disable for now:
+# CentOS used for appimage does not have string_ref.hpp (Boost >= 1.53) as used by current code
+#     parsers/replacementparser.cpp
 )
 
 ki18n_wrap_ui(kdevclangtidy_PART_SRCS

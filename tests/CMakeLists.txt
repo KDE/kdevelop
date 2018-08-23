@@ -12,13 +12,16 @@ include_directories(
 file(COPY "${PROJECT_SOURCE_DIR}/tests/data" 
      DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
 
-
+# disable for now:
+# CentOS used for appimage does not have string_ref.hpp (Boost >= 1.53) as used by current code
+if(FALSE)
 ecm_add_test(test_replacementparser.cpp
     ../src/parsers/replacementparser.cpp
     ${kdevclangtidy_LOG_SRCS}
     TEST_NAME test_replacementparser
     LINK_LIBRARIES Qt5::Test KDev::Tests
 )
+endif()
 
 ecm_add_test(test_clangtidyparser.cpp
     ../src/parsers/clangtidyparser.cpp
