@@ -30,7 +30,7 @@ RUN bash -c "mkdir -p /llvm && cd /llvm && wget http://llvm.org/releases/${LLVM_
 RUN bash -c "cd /llvm && tar xvf llvm-${LLVM_VERSION}.src.tar.xz && cd llvm-${LLVM_VERSION}.src"
 RUN bash -c "cd /llvm/tools && wget http://llvm.org/releases/${LLVM_VERSION}/cfe-${LLVM_VERSION}.src.tar.xz"
 RUN bash -c "cd /llvm/tools && tar xvf cfe-${LLVM_VERSION}.src.tar.xz"
-RUN bash -c ". /opt/rh/python27/enable && . /opt/rh/devtoolset-6/enable && python --version && cd /llvm/llvm-${LLVM_VERSION}.src && mkdir -p build && cd build && cmake3 -G Ninja .. -DCMAKE_INSTALL_PREFIX=/opt/llvm/ -DCMAKE_BUILD_TYPE=Release && ninja install && rm -Rf /llvm"
+RUN bash -c ". /opt/rh/python27/enable && . /opt/rh/devtoolset-6/enable && python --version && cd /llvm/llvm-${LLVM_VERSION}.src && mkdir -p build && cd build && cmake3 -G Ninja .. -DCMAKE_INSTALL_PREFIX=/opt/llvm/ -DCMAKE_BUILD_TYPE=Release -DLLVM_INCLUDE_TESTS=OFF -DLLVM_TARGETS_TO_BUILD=X86 && ninja install && rm -Rf /llvm"
 
 # Build Python
 RUN bash -c "mkdir -p /python && cd /python && wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz && tar xvf Python-3.6.0.tar.xz && cd /python/Python-3.6.0 && mkdir -p /usr/lib/pkgconfig && ./configure --prefix=/usr --enable-shared && make -j$(nproc) install && rm -Rf /python"
