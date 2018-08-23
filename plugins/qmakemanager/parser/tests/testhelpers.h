@@ -44,7 +44,6 @@ void classname::funcname()\
 {\
     qDebug() << "Beginning Test Function"; \
     QFETCH( QString, project );\
-    QFETCH( QString, output );\
     QMake::Driver d; \
     d.setContent( project ); \
     bool ret = d.parse( &ast );\
@@ -56,7 +55,6 @@ void classname::funcname()\
 {\
     qDebug() << "Beginning Test FAIL Function"; \
     QFETCH( QString, project );\
-    QFETCH( QString, output );\
     QMake::Driver d; \
     d.setContent( project ); \
     bool ret = d.parse( &ast );\

@@ -96,7 +96,6 @@ BEGINTESTFUNCIMPL(ScopeTest, nestedScope, 1)
     val->value = QStringLiteral("barfoo");
     simple->identifier = val;
     auto body = new QMake::ScopeBodyAST(simple);
-    QList<QMake::StatementAST*> sublist;
     auto tst = new QMake::AssignmentAST(body);
     val = new QMake::ValueAST(tst);
     val->value = QStringLiteral("VARIABLE");

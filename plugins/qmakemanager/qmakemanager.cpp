@@ -147,7 +147,6 @@ ProjectFolderItem* QMakeProjectManager::createFolderItem(IProject* project, cons
 
 ProjectFolderItem* QMakeProjectManager::projectRootItem(IProject* project, const Path& path)
 {
-    QFileInfo fi(path.toLocalFile());
     QDir dir(path.toLocalFile());
 
     auto item = new QMakeFolderItem(project, path);

@@ -943,7 +943,6 @@ DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(Qml
         // String literal like "Namespace/Class version".
         QStringList nameAndVersion = stringliteral->value.toString().section('/', -1, -1).split(' ');
         QString name = nameAndVersion.at(0);
-        QString version = (nameAndVersion.count() > 1 ? nameAndVersion.at(1) : QStringLiteral("1.0"));
 
         if (!knownNames.contains(name)) {
             knownNames.insert(name);

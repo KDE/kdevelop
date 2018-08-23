@@ -1018,8 +1018,6 @@ void GdbTest::testManualAttach()
     QSKIP("GDB on FreeBSD produces an unexpected error message, on which KDevelop chokes");
 #endif
 
-    QString fileName = findSourceFile(QStringLiteral("debugeeslow.cpp"));
-
     KProcess debugeeProcess;
     debugeeProcess << QStringLiteral("nice") << findExecutable(QStringLiteral("debuggee_debugeeslow")).toLocalFile();
     debugeeProcess.start();

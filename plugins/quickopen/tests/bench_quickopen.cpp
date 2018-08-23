@@ -53,7 +53,6 @@ void BenchQuickOpen::getData()
 void BenchQuickOpen::benchProjectFileFilter_addRemoveProject()
 {
     QFETCH(int, files);
-    QFETCH(QString, filter);
 
     ProjectFileDataProvider provider;
     QScopedPointer<TestProject> project(getProjectWithFiles(files));

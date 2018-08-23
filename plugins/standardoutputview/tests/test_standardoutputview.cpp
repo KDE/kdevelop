@@ -60,8 +60,6 @@ void StandardOutputViewTest::initTestCase()
     m_stdOutputView = nullptr;
     KDevelop::IPluginController* plugin_controller = m_testCore->pluginController();
 
-
-    QList<KDevelop::IPlugin*> plugins = plugin_controller->loadedPlugins();
     // make sure KDevStandardOutputView is loaded
     KDevelop::IPlugin* plugin = plugin_controller->loadPlugin(QStringLiteral("KDevStandardOutputView"));
     QVERIFY(plugin);
