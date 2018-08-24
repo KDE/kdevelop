@@ -56,7 +56,7 @@
 #include <interfaces/iuicontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
-// KDE
+// KF
 #include <KPluginFactory>
 #include <KLocalizedString>
 
