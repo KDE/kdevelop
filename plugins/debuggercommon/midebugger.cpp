@@ -318,8 +318,8 @@ void MIDebugger::processLine(const QByteArray& line)
         KMessageBox::detailedSorry(
             qApp->activeWindow(),
             i18nc("<b>Internal debugger error</b>",
-                    "<p>The debugger component encountered internal error while "
-                    "processing reply from gdb. Please submit a bug report. "
+                    "<p>The debugger component encountered an internal error while "
+                    "processing the reply from the debugger. Please submit a bug report. "
                     "The debug session will now end to prevent potential crash"),
             i18n("The exception is: %1\n"
                 "The MI response is: %2", QString::fromUtf8(e.what()),
