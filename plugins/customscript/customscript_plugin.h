@@ -27,8 +27,9 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include <QTimer>
 #include <QPushButton>
+
+class QTimer;
 
 class CustomScriptPlugin
     : public KDevelop::IPlugin
@@ -99,11 +100,6 @@ private:
     QTimer* m_updateTimer;
     QPushButton* m_moreVariablesButton;
     KDevelop::SourceFormatterStyle m_style;
-private Q_SLOTS:
-    void textEdited(const QString&)
-    {
-        m_updateTimer->start(1000);
-    }
 
     void updateTimeout();
     void moreVariablesClicked (bool);
