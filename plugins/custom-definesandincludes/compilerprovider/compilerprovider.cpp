@@ -120,7 +120,7 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
         m_factories[0]->registerDefaultCompilers(this);
     }
 #ifdef _WIN32
-    if (!QStandardPaths::findExecutable("cl.exe").isEmpty()) {
+    if (!QStandardPaths::findExecutable(QStringLiteral("cl.exe")).isEmpty()) {
         m_factories[2]->registerDefaultCompilers(this);
     }
 #endif
