@@ -96,7 +96,7 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
             } else if (end.revisionType() == KDevelop::VcsRevision::GlobalNumber)
                 return QStringLiteral("-r") +
                        QString::number(end.revisionValue().toLongLong() - 1)
-                       + ".." + QString::number(end.revisionValue().toLongLong());
+                       + QLatin1String("..") + QString::number(end.revisionValue().toLongLong());
             else
                 return QString(); // Don't know how to handle this situation
         } else if (begin.specialType() == KDevelop::VcsRevision::Base ||
@@ -110,7 +110,7 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
             return QStringLiteral("-r") + QString::number(begin.revisionValue().toLongLong());
         } else {
             return QStringLiteral("-r") + QString::number(begin.revisionValue().toLongLong())
-                   + ".." + QString::number(end.revisionValue().toLongLong());
+                   + QLatin1String("..") + QString::number(end.revisionValue().toLongLong());
         }
     }
     return QString(); // Don't know how to handle this situation
@@ -125,7 +125,7 @@ bool BazaarUtils::isValidDirectory(const QUrl& dirPath)
 
 KDevelop::VcsStatusInfo BazaarUtils::parseVcsStatusInfoLine(const QString& line)
 {
-    QStringList tokens = line.split(' ', QString::SkipEmptyParts);
+    QStringList tokens = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
     KDevelop::VcsStatusInfo result;
     if (tokens.size() < 2) // Don't know how to handle this situation (it is an error)
         return result;
@@ -155,7 +155,7 @@ QString BazaarUtils::concatenatePath(const QDir& workingCopy, const QUrl& pathIn
 
 KDevelop::VcsEvent BazaarUtils::parseBzrLogPart(const QString& output)
 {
-    const QStringList outputLines = output.split('\n');
+    const QStringList outputLines = output.split(QLatin1Char('\n'));
     KDevelop::VcsEvent commitInfo;
     bool atMessage = false;
     QString message;
@@ -166,7 +166,7 @@ KDevelop::VcsEvent BazaarUtils::parseBzrLogPart(const QString& output)
         if (!atMessage) {
             if (line.startsWith(QStringLiteral("revno"))) {
                 QString revno = line.mid(QStringLiteral("revno: ").length());
-                revno = revno.left(revno.indexOf(' '));
+                revno = revno.left(revno.indexOf(QLatin1Char(' ')));
                 KDevelop::VcsRevision revision;
                 revision.setRevisionValue(revno.toLongLong(), KDevelop::VcsRevision::GlobalNumber);
                 commitInfo.setRevision(revision);

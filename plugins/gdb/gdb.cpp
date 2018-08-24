@@ -64,7 +64,7 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
     QUrl shell = config.readEntry(Config::DebuggerShellEntry, QUrl());
     if(!shell.isEmpty()) {
         qCDebug(DEBUGGERGDB) << "have shell" << shell;
-        QString shell_without_args = shell.toLocalFile().split(QChar(' ')).first();
+        QString shell_without_args = shell.toLocalFile().split(QLatin1Char(' ')).first();
 
         QFileInfo info(shell_without_args);
         /*if( info.isRelative() )

@@ -25,14 +25,14 @@ QString substitudePattern(const QString& pattern, const QString& searchString)
         if(expectEscape)
         {
             expectEscape = false;
-            if(ch == '%')
-                result.append('%');
-            else if(ch == 's')
+            if (ch == QLatin1Char('%'))
+                result.append(QLatin1Char('%'));
+            else if (ch == QLatin1Char('s'))
                 result.append(subst);
             else
                 result.append(QLatin1Char('%') + ch);
         }
-        else if(ch == '%')
+        else if (ch == QLatin1Char('%'))
             expectEscape = true;
         else
             result.append(ch);

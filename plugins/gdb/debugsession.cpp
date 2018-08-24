@@ -121,16 +121,16 @@ void DebugSession::initializeDebugger()
     if (!fileName.isEmpty()) {
         QFileInfo fileInfo(fileName);
         QString quotedPrintersPath = fileInfo.dir().path()
-                                             .replace('\\', QLatin1String("\\\\"))
-                                             .replace('"', QLatin1String("\\\""));
+                                             .replace(QLatin1Char('\\'), QLatin1String("\\\\"))
+                                             .replace(QLatin1Char('"'), QLatin1String("\\\""));
         addCommand(MI::NonMI,
                    QStringLiteral("python sys.path.insert(0, \"%0\")").arg(quotedPrintersPath));
-        addCommand(MI::NonMI, "source " + fileName);
+        addCommand(MI::NonMI, QLatin1String("source ") + fileName);
     }
 
     // GDB can't disable ASLR on CI server.
     addCommand(MI::GdbSet,
-               QStringLiteral("disable-randomization %1").arg(m_autoDisableASLR ? "on" : "off"));
+               QStringLiteral("disable-randomization %1").arg(m_autoDisableASLR ? QLatin1String("on") : QLatin1String("off")));
 
     qCDebug(DEBUGGERGDB) << "Initialized GDB";
 }
@@ -184,7 +184,7 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     }
     const auto& envvars = environmentProfiles.createEnvironment(envProfileName, {});
     for (const auto& envvar : envvars) {
-        addCommand(GdbSet, "environment " + envvar);
+        addCommand(GdbSet, QLatin1String("environment ") + envvar);
     }
 
     qCDebug(DEBUGGERGDB) << "Per inferior configuration done";
@@ -201,7 +201,7 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
 
     // handle remote debug
     if (configGdbScript.isValid()) {
-        addCommand(MI::NonMI, "source " + KShell::quoteArg(configGdbScript.toLocalFile()));
+        addCommand(MI::NonMI, QLatin1String("source ") + KShell::quoteArg(configGdbScript.toLocalFile()));
     }
 
     // FIXME: have a check box option that controls remote debugging
@@ -238,7 +238,7 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
             breakpointController()->setDeleteDuplicateBreakpoints(true);
             qCDebug(DEBUGGERGDB) << "Running gdb script " << KShell::quoteArg(runGdbScript.toLocalFile());
 
-            addCommand(MI::NonMI, "source " + KShell::quoteArg(runGdbScript.toLocalFile()),
+            addCommand(MI::NonMI, QLatin1String("source ") + KShell::quoteArg(runGdbScript.toLocalFile()),
                        [this](const MI::ResultRecord&) {
                            breakpointController()->setDeleteDuplicateBreakpoints(false);
                        },
@@ -268,7 +268,7 @@ bool DebugSession::loadCoreFile(KDevelop::ILaunchConfiguration*,
                CmdHandlesError);
     raiseEvent(connected_to_program);
 
-    addCommand(NonMI, "core " + corefile,
+    addCommand(NonMI, QLatin1String("core ") + corefile,
                this, &DebugSession::handleCoreFile,
                CmdHandlesError);
     return true;
@@ -278,7 +278,7 @@ void DebugSession::handleVersion(const QStringList& s)
 {
     qCDebug(DEBUGGERGDB) << s.first();
     // minimal version is 7.0,0
-    QRegExp rx("([7-9]+)\\.([0-9]+)(\\.([0-9]+))?");
+    QRegExp rx(QStringLiteral("([7-9]+)\\.([0-9]+)(\\.([0-9]+))?"));
     int idx = rx.indexIn(s.first());
     if (idx == -1)
     {
@@ -318,7 +318,7 @@ void DebugSession::handleCoreFile(const ResultRecord& r)
             i18n("<b>Failed to load core file</b>"
                  "<p>Debugger reported the following error:"
                  "<p><tt>%1",
-            r["msg"].literal()),
+            r[QStringLiteral("msg")].literal()),
             i18n("Startup error"));
         stopDebugger();
     }

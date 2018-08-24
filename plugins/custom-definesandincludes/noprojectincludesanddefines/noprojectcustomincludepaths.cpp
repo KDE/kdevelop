@@ -59,7 +59,7 @@ void NoProjectCustomIncludePaths::appendCustomIncludePath(const QString& path)
 QStringList NoProjectCustomIncludePaths::customIncludePaths() const
 {
     const QString pathsText = m_ui->customIncludePaths->document()->toPlainText();
-    const QStringList paths = pathsText.split('\n', QString::SkipEmptyParts);
+    const QStringList paths = pathsText.split(QLatin1Char('\n'), QString::SkipEmptyParts);
     return paths;
 }
 

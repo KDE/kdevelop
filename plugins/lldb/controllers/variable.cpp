@@ -109,11 +109,11 @@ QString LldbVariable::formatValue(const QString& value) const
     // Data formatter emits value with unicode escape sequence for string and char,
     // translate them back.
     // Only check with first char is enough, as unquote will do the rest check
-    if (value.startsWith('"')) {
+    if (value.startsWith(QLatin1Char('"'))) {
         return Utils::quote(Utils::unquote(value, true));
-    } else if (value.startsWith('\'')) {
-        return Utils::quote(Utils::unquote(value, true, '\''), '\'');
-    } else if (value.startsWith('b')) {
+    } else if (value.startsWith(QLatin1Char('\''))) {
+        return Utils::quote(Utils::unquote(value, true, QLatin1Char('\'')), QLatin1Char('\''));
+    } else if (value.startsWith(QLatin1Char('b'))) {
         // this is a byte array, don't translate unicode, simply return without 'b' prefix
         return value.mid(1);
     }

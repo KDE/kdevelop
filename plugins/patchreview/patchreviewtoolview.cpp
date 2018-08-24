@@ -222,7 +222,7 @@ void PatchReviewToolView::showEditDialog() {
     m_exportMenu = new Purpose::Menu(this);
     connect(m_exportMenu, &Purpose::Menu::finished, this, [](const QJsonObject &output, int error, const QString &message) {
         if (error==0) {
-            KMessageBox::information(nullptr, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", output["url"].toString()),
+            KMessageBox::information(nullptr, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", output[QLatin1String("url")].toString()),
                                     QString(), QString(), KMessageBox::AllowLink);
         } else {
             QMessageBox::warning(nullptr, i18n("Error exporting"), i18n("Couldn't export the patch.\n%1", message));

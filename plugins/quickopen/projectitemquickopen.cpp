@@ -144,12 +144,12 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
 
     QStringList search(text.split(QStringLiteral("::"), QString::SkipEmptyParts));
     for (int a = 0; a < search.count(); ++a) {
-        if (search[a].endsWith(':')) { //Don't get confused while the :: is being typed
+        if (search[a].endsWith(QLatin1Char(':'))) { //Don't get confused while the :: is being typed
             search[a].chop(1);
         }
     }
 
-    if (!search.isEmpty() && search.back().endsWith('(')) {
+    if (!search.isEmpty() && search.back().endsWith(QLatin1Char('('))) {
         search.back().chop(1);
     }
 

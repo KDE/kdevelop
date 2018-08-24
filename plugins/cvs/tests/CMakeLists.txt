@@ -1,3 +1,9 @@
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
+)
+
 # Due to the use of system() and some unix-style paths this test will only run
 # under Linux. (Maybe this can be fixed later)
 #

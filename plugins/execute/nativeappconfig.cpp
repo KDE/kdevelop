@@ -101,10 +101,10 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
 {
     setupUi(this);
     //Setup data info for combobox
-    dependencyAction->setItemData(0, "Nothing" );
-    dependencyAction->setItemData(1, "Build" );
-    dependencyAction->setItemData(2, "Install" );
-    dependencyAction->setItemData(3, "SudoInstall" );
+    dependencyAction->setItemData(0, QStringLiteral("Nothing"));
+    dependencyAction->setItemData(1, QStringLiteral("Build"));
+    dependencyAction->setItemData(2, QStringLiteral("Install"));
+    dependencyAction->setItemData(3, QStringLiteral("SudoInstall"));
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -321,7 +321,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                     QStringList path = model->pathFromIndex(target->index());
                     if(!path.isEmpty()){
                         QAction* act = new QAction(projectMenu);
-                        act->setData(KDevelop::joinWithEscaping(path, '/','\\'));
+                        act->setData(KDevelop::joinWithEscaping(path, QLatin1Char('/'), QLatin1Char('\\')));
                         act->setProperty("name", target->text());
                         path.removeFirst();
                         act->setText(path.join(QLatin1Char('/')));
@@ -367,7 +367,7 @@ void NativeAppConfigType::suggestionTriggered()
 {
     QAction* action = qobject_cast<QAction*>(sender());
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
-    KDevelop::ProjectTargetItem* pitem = dynamic_cast<KDevelop::ProjectTargetItem*>(itemForPath(KDevelop::splitWithEscaping(action->data().toString(),'/', '\\'), model));
+    KDevelop::ProjectTargetItem* pitem = dynamic_cast<KDevelop::ProjectTargetItem*>(itemForPath(KDevelop::splitWithEscaping(action->data().toString(), QLatin1Char('/'), QLatin1Char('\\')), model));
     if(pitem) {
         QPair<QString,QString> launcher = qMakePair( launchers().at( 0 )->supportedModes().at(0), launchers().at( 0 )->id() );
         KDevelop::IProject* p = pitem->project();

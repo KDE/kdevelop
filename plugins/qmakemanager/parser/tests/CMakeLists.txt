@@ -1,3 +1,9 @@
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
+)
+
 ecm_add_test(parsetest.cpp ${qmakecommon_LOG_SRCS}
     TEST_NAME test_qmakeparse
     LINK_LIBRARIES

@@ -585,7 +585,7 @@ QList<QVariant> mergeCustomHighlighting(const QStringList& strings_, const QList
         totalString += strings[0];
 
         for (int a = 0; a < grapBetweenStrings; a++) {
-            totalString += ' ';
+            totalString += QLatin1Char(' ');
         }
 
         strings.pop_front();

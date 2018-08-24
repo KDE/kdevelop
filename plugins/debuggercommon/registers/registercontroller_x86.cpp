@@ -158,7 +158,7 @@ RegisterControllerGeneral_x86::RegisterControllerGeneral_x86(MIDebugSession* deb
 void RegisterControllerGeneral_x86::initRegisterNames()
 {
     for (int i = 0; i < 8; i++) {
-        m_registerNames[FPU] << ("st" + QString::number(i));
+        m_registerNames[FPU] << (QLatin1String("st") + QString::number(i));
     }
 
     m_registerNames[Flags] = QStringList{
@@ -212,7 +212,7 @@ void RegisterController_x86::initRegisterNames()
 
     m_registerNames[XMM].clear();
     for (int i = 0; i < 8; i++) {
-        m_registerNames[XMM] << ("xmm" + QString::number(i));
+        m_registerNames[XMM] << (QLatin1String("xmm") + QString::number(i));
     }
 }
 
@@ -240,7 +240,7 @@ void RegisterController_x86_64::initRegisterNames()
 
     m_registerNames[XMM].clear();
     for (int i = 0; i < 16; i++) {
-        m_registerNames[XMM] << ("xmm" + QString::number(i));
+        m_registerNames[XMM] << (QLatin1String("xmm") + QString::number(i));
     }
 }
 

@@ -199,7 +199,7 @@ bool initializeCVCS(ICentralizedVersionControl* cvcs, const ApplicationInfo& inf
 QString generateIdentifier( const QString& appname )
 {
     QString tmp = appname;
-    QRegExp re("[^a-zA-Z0-9_]");
+    QRegExp re(QStringLiteral("[^a-zA-Z0-9_]"));
     return tmp.replace(re, QStringLiteral("_"));
 }
 
@@ -358,7 +358,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
         return QString();
     }
 
-    QString projectFileName = QDir::cleanPath( dest.toLocalFile() + '/' + info.name + ".kdev4" );
+    QString projectFileName = QDir::cleanPath(dest.toLocalFile() + QLatin1Char('/') + info.name + QLatin1String(".kdev4"));
 
     // Loop through the new project directory and try to detect the first .kdev4 file.
     // If one is found this file will be used. So .kdev4 file can be stored in any subdirectory and the
@@ -435,7 +435,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory* dir, const QString&
         const auto entry = dir->entry(entryName);
         if (entry->isDirectory()) {
             const KArchiveDirectory* subdir = static_cast<const KArchiveDirectory*>(entry);
-            QString newdest = dest + '/' + KMacroExpander::expandMacros(subdir->name(), m_variables);
+            const QString newdest = dest + QLatin1Char('/') + KMacroExpander::expandMacros(subdir->name(), m_variables);
             if( !QFileInfo::exists( newdest ) )
             {
                 QDir::root().mkdir( newdest  );
@@ -445,8 +445,8 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory* dir, const QString&
         else if (entry->isFile()) {
             const KArchiveFile* file = static_cast<const KArchiveFile*>(entry);
             file->copyTo(tdir.path());
-            QString destName = dest + '/' + file->name();
-            if (!copyFileAndExpandMacros(QDir::cleanPath(tdir.path()+'/'+file->name()),
+            const QString destName = dest + QLatin1Char('/') + file->name();
+            if (!copyFileAndExpandMacros(QDir::cleanPath(tdir.path() + QLatin1Char('/') + file->name()),
                     KMacroExpander::expandMacros(destName, m_variables)))
             {
                 KMessageBox::sorry(nullptr, i18n("The file %1 cannot be created.", dest));

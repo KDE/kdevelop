@@ -56,7 +56,7 @@ GrepOutputDelegate::~GrepOutputDelegate()
 void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 { 
     // there is no function in QString to left-trim. A call to remove this this regexp does the job
-    static const QRegExp leftspaces("^\\s*", Qt::CaseSensitive, QRegExp::RegExp);
+    static const QRegExp leftspaces(QStringLiteral("^\\s*"), Qt::CaseSensitive, QRegExp::RegExp);
     
     // rich text component
     const GrepOutputModel *model = dynamic_cast<const GrepOutputModel *>(index.model());

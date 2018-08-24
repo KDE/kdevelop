@@ -63,7 +63,7 @@ void BzrAnnotateJob::start()
 
 void BzrAnnotateJob::parseBzrAnnotateOutput(KDevelop::DVcsJob* job)
 {
-    m_outputLines = job->output().split('\n');
+    m_outputLines = job->output().split(QLatin1Char('\n'));
     m_currentLine = 0;
     if (m_status == KDevelop::VcsJob::JobRunning)
         QTimer::singleShot(0, this, &BzrAnnotateJob::parseNextLine);
@@ -86,7 +86,7 @@ void BzrAnnotateJob::parseNextLine()
             continue;
         }
         bool revOk;
-        auto revision = currentLine.leftRef(currentLine.indexOf(' ')).toULong(&revOk);
+        auto revision = currentLine.leftRef(currentLine.indexOf(QLatin1Char(' '))).toULong(&revOk);
         if (!revOk) {
             // Future compatibility - not a revision yet
             ++m_currentLine;
@@ -132,7 +132,7 @@ void BzrAnnotateJob::prepareCommitInfo(std::size_t revision)
  */
 void BzrAnnotateJob::parseBzrLog(KDevelop::DVcsJob* job)
 {
-    const QStringList outputLines = job->output().split('\n');
+    const QStringList outputLines = job->output().split(QLatin1Char('\n'));
     KDevelop::VcsEvent commitInfo;
     int revision=-1;
     bool atMessage = false;
@@ -148,7 +148,7 @@ void BzrAnnotateJob::parseBzrLog(KDevelop::DVcsJob* job)
                 // The same below with exception of "commiter" which possibly
                 // can have also some suffix which changes meaning like
                 // "commiter-some_property: "...
-                revno = revno.left(revno.indexOf(' '));
+                revno = revno.left(revno.indexOf(QLatin1Char(' ')));
                 revision = revno.toInt();
                 KDevelop::VcsRevision revision;
                 revision.setRevisionValue(revno.toLongLong(), KDevelop::VcsRevision::GlobalNumber);

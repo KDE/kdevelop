@@ -77,7 +77,7 @@ VcsLocation extractLocation(const QModelIndex& pos)
 {
     QString gitUrl=KDEProviderSettings::self()->gitProtocol();
     if(gitUrl==QLatin1String("kde:")) {
-        return VcsLocation(QUrl("kde:"+pos.data(KDEProjectsModel::IdentifierRole).toString()));
+        return VcsLocation(QUrl(QLatin1String("kde:")+pos.data(KDEProjectsModel::IdentifierRole).toString()));
     } else {
         QMap<QString, QVariant> urls = pos.data(KDEProjectsModel::VcsLocationRole).toMap();
         return VcsLocation(urls[gitUrl].toUrl());

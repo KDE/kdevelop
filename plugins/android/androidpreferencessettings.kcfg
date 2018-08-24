@@ -6,9 +6,9 @@
 
   <kcfgfile />
   <group name="Android">
-    <entry name="cmakeToolchain" type="Path"><default code="true">QStandardPaths::locate(QStandardPaths::GenericDataLocation, "ECM/toolchain/Android.cmake")</default></entry>
-    <entry name="ndk" type="Path"><default code="true">qgetenv("ANDROID_NDK")</default></entry>
-    <entry name="sdk" type="Path"><default code="true">qgetenv("ANDROID_HOME")</default></entry>
+    <entry name="cmakeToolchain" type="Path"><default code="true">QStandardPaths::locate(QStandardPaths::GenericDataLocation, QStringLiteral("ECM/toolchain/Android.cmake"))</default></entry>
+    <entry name="ndk" type="Path"><default code="true">QString::fromUtf8(qgetenv("ANDROID_NDK"))</default></entry>
+    <entry name="sdk" type="Path"><default code="true">QString::fromUtf8(qgetenv("ANDROID_HOME"))</default></entry>
     <entry name="arch" type="String"><default>arm</default></entry>
     <entry name="toolchain" type="String"><default>arm-linux-androideabi</default></entry>
     <entry name="abi" type="String"><default>armeabi-v7a</default></entry>

@@ -163,7 +163,7 @@ QStringList GrepFindFilesThread::parseExclude(const QString& excl)
 {
     QStringList exclude;
     // Split around commas or spaces
-    const auto excludesList = excl.split(QRegExp(",|\\s"), QString::SkipEmptyParts);
+    const auto excludesList = excl.split(QRegExp(QStringLiteral(",|\\s")), QString::SkipEmptyParts);
     exclude.reserve(excludesList.size());
     for (const auto& sub : excludesList) {
         exclude << QStringLiteral("*%1*").arg(sub);
@@ -174,5 +174,5 @@ QStringList GrepFindFilesThread::parseExclude(const QString& excl)
 QStringList GrepFindFilesThread::parseInclude(const QString& inc)
 {
     // Split around commas or spaces
-    return inc.split(QRegExp(",|\\s"), QString::SkipEmptyParts);
+    return inc.split(QRegExp(QStringLiteral(",|\\s")), QString::SkipEmptyParts);
 }

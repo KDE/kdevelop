@@ -1,3 +1,10 @@
+# temporary while patch series in work 08/2018
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_CAST_TO_ASCII
+    -DQT_NO_CAST_FROM_BYTEARRAY
+)
+
 add_subdirectory(p4clientstub)
 ecm_qt_declare_logging_category(kdevperforce_LOG_PART_SRCS
     HEADER debug.h

@@ -293,7 +293,7 @@ QStringList CustomMakeManager::parseCustomMakeFile( const Path &makefile )
         return ret;
     }
 
-    QRegExp targetRe( "^ *([^\\t$.#]\\S+) *:?:(?!=).*$" );
+    QRegExp targetRe(QStringLiteral("^ *([^\\t$.#]\\S+) *:?:(?!=).*$"));
     targetRe.setMinimal( true );
 
     QString str;

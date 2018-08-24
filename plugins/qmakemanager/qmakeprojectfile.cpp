@@ -126,14 +126,14 @@ QStringList QMakeProjectFile::subProjects() const
     const auto& subdirs = variableValues(QStringLiteral("SUBDIRS"));
     for (QString subdir : subdirs) {
         QString fileOrPath;
-        ifDebug(qCDebug(KDEV_QMAKE) << "Found value:" << subdir;) if (containsVariable(subdir + ".file")
-                                                                      && !variableValues(subdir + ".file").isEmpty())
+        ifDebug(qCDebug(KDEV_QMAKE) << "Found value:" << subdir;) if (containsVariable(subdir + QLatin1String(".file"))
+                                                                      && !variableValues(subdir + QLatin1String(".file")).isEmpty())
         {
-            subdir = variableValues(subdir + ".file").first();
+            subdir = variableValues(subdir + QLatin1String(".file")).first();
         }
-        else if (containsVariable(subdir + ".subdir") && !variableValues(subdir + ".subdir").isEmpty())
+        else if (containsVariable(subdir + QLatin1String(".subdir")) && !variableValues(subdir + QLatin1String(".subdir")).isEmpty())
         {
-            subdir = variableValues(subdir + ".subdir").first();
+            subdir = variableValues(subdir + QLatin1String(".subdir")).first();
         }
         if (subdir.endsWith(QLatin1String(".pro"))) {
             fileOrPath = resolveToSingleFileName(subdir.trimmed());
@@ -219,7 +219,7 @@ QStringList QMakeProjectFile::includeDirectories() const
                 pattern = QStringLiteral("ActiveQt");
             }
 
-            QFileInfoList match = incDir.entryInfoList({QString("Qt%1").arg(pattern)}, QDir::Dirs);
+            QFileInfoList match = incDir.entryInfoList({QStringLiteral("Qt%1").arg(pattern)}, QDir::Dirs);
             if (match.isEmpty()) {
                 // try non-prefixed pattern
                 match = incDir.entryInfoList({pattern}, QDir::Dirs);
@@ -231,7 +231,7 @@ QStringList QMakeProjectFile::includeDirectories() const
 
             QString path = match.first().canonicalFilePath();
             if (isPrivate) {
-                path += '/' + m_qtVersion + '/' + match.first().fileName() + "/private/";
+                path += QLatin1Char('/') + m_qtVersion + QLatin1Char('/') + match.first().fileName() + QLatin1String("/private/");
             }
             if (!list.contains(path)) {
                 list << path;
@@ -297,7 +297,7 @@ QStringList QMakeProjectFile::extraArguments() const
     for (const auto& var : variablesToCheck) {
         foreach (const auto& arg, variableValues(var)) {
             auto argHasPrefix = [arg](const char* prefix) {
-                return arg.startsWith(prefix);
+                return arg.startsWith(QLatin1String(prefix));
             };
             if ( !std::any_of(prefixes.begin(), prefixes.end(), argHasPrefix)) {
                 args << arg;
@@ -326,7 +326,7 @@ QStringList QMakeProjectFile::filesForTarget(const QString& s) const
 
         QStringList list;
     if (variableValues(QStringLiteral("INSTALLS")).contains(s)) {
-        const QStringList files = variableValues(s + ".files");
+        const QStringList files = variableValues(s + QLatin1String(".files"));
         for (const QString& val : files) {
             list += QStringList(resolveFileName(val));
         }
@@ -409,7 +409,7 @@ QList<QMakeProjectFile::DefinePair> QMakeProjectFile::defines() const
     QList<DefinePair> d;
     const auto& defs = variableMap()[QStringLiteral("DEFINES")];
     for (const QString& def : defs) {
-        int pos = def.indexOf('=');
+        int pos = def.indexOf(QLatin1Char('='));
         if (pos >= 0) {
             // a value is attached to define
             d.append(DefinePair(def.left(pos), def.mid(pos + 1)));

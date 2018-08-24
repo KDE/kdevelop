@@ -43,7 +43,7 @@ KSharedConfigPtr openConfigFile(const QString& configFile)
 
 QString findconfigFile(const QString& projectDir)
 {
-    QDirIterator dirIterator(projectDir + '/' + ".kdev4");
+    QDirIterator dirIterator(projectDir + QLatin1String("/.kdev4"));
     while (dirIterator.hasNext()) {
         dirIterator.next();
         if (dirIterator.fileName().endsWith(QLatin1String(".kdev4"))) {
@@ -149,10 +149,10 @@ int main(int argc, char** argv)
     QCoreApplication::setApplicationName(QStringLiteral("kdev_includepathsconverter"));
 
     QCommandLineParser parser;
-    parser.setApplicationDescription("\nAdds, removes or shows include directories of a project. Also it can be used as a tool to convert include directories from .kdev_include_paths file to the new format.\n\n"
+    parser.setApplicationDescription(QLatin1String("\nAdds, removes or shows include directories of a project. Also it can be used as a tool to convert include directories from .kdev_include_paths file to the new format.\n\n"
     "Examples:\ncat /project/path/.kdev_include_paths | xargs -d '\\n' kdev_includepathsconverter -a /project/path/\n\n"
     "kdev_includepathsconverter -r /project/path/subdirectory/ \"/some/include/dir\" \"/another/include/dir\" \n\n"
-    "kdev_includepathsconverter -l /project/path/another/subdirectory/");
+    "kdev_includepathsconverter -l /project/path/another/subdirectory/"));
     parser.addHelpOption();
 
     QCommandLineOption listOption(QStringLiteral("l"), QCoreApplication::translate("main", "Shows include directories used by the project"),
@@ -215,7 +215,7 @@ int main(int argc, char** argv)
         auto projectCanonical = QFileInfo(projectDir).canonicalFilePath();
         if (subdirCanonical != projectCanonical) {
             subdirectory = subdirCanonical.mid(projectCanonical.size());
-            if (subdirectory.startsWith('/')) {
+            if (subdirectory.startsWith(QLatin1Char('/'))) {
                 subdirectory.remove(0,1);
             }
         } else {

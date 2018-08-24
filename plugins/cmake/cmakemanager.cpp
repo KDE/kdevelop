@@ -830,11 +830,11 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const QUrl &url, co
         const IDocument* d=ICore::self()->documentController()->documentForUrl(url);
         const KTextEditor::Document* e=d->textDocument();
         KTextEditor::Cursor start=position, end=position, step(0,1);
-        for(QChar i=e->characterAt(start); i.isLetter() || i=='_'; i=e->characterAt(start-=step))
+        for(QChar i=e->characterAt(start); i.isLetter() || i==QLatin1Char('_'); i=e->characterAt(start-=step))
         {}
         start+=step;
 
-        for(QChar i=e->characterAt(end); i.isLetter() || i=='_'; i=e->characterAt(end+=step))
+        for(QChar i=e->characterAt(end); i.isLetter() || i==QLatin1Char('_'); i=e->characterAt(end+=step))
         {}
 
         QString id=e->text(KTextEditor::Range(start, end));
@@ -956,7 +956,7 @@ void CMakeManager::folderAdded(KDevelop::ProjectFolderItem* folder)
 ProjectFolderItem* CMakeManager::createFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)
 {
 //     TODO: when we have data about targets, use folders with targets or similar
-    if (QFile::exists(path.toLocalFile()+"/CMakeLists.txt"))
+    if (QFile::exists(path.toLocalFile()+QLatin1String("/CMakeLists.txt")))
         return new KDevelop::ProjectBuildFolderItem( project, path, parent );
     else
         return KDevelop::AbstractFileManagerPlugin::createFolderItem(project, path, parent);

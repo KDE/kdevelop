@@ -78,7 +78,7 @@ bool shouldClear(const QString& path)
     qCDebug(SERIALIZATION) << "current count of crashes: " << count;
 
     if (count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR")) {
-      bool userAnswer = askUser(i18np("The previous session crashed", "Session crashed %1 times in a row", count),
+      bool userAnswer = askUser(i18np("The previous session crashed.", "Session crashed %1 times in a row.", count),
                                 i18nc("@action", "Clear cache"),
                                 i18nc("@title", "Session crashed"),
                                 i18n("The crash may be caused by a corruption of cached data.\n\n"

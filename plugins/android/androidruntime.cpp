@@ -43,8 +43,8 @@ void AndroidRuntime::setEnabled(bool /*enable*/)
 static void setEnvironmentVariables(QProcess* process)
 {
     auto env = process->processEnvironment();
-    env.insert("ANDROID_NDK", AndroidRuntime::s_settings->ndk());
-    env.insert("ANDROID_SDK_ROOT", AndroidRuntime::s_settings->sdk());
+    env.insert(QStringLiteral("ANDROID_NDK"),      AndroidRuntime::s_settings->ndk());
+    env.insert(QStringLiteral("ANDROID_SDK_ROOT"), AndroidRuntime::s_settings->sdk());
     process->setProcessEnvironment(env);
 }
 
@@ -52,14 +52,14 @@ static void setEnvironmentVariables(QProcess* process)
 static QStringList args()
 {
     return {
-        "-DCMAKE_TOOLCHAIN_FILE=" + AndroidRuntime::s_settings->cmakeToolchain(),
+        QLatin1String("-DCMAKE_TOOLCHAIN_FILE=") + AndroidRuntime::s_settings->cmakeToolchain(),
 
-        "-DANDROID_ABI=" + AndroidRuntime::s_settings->abi(),
-        "-DANDROID_NDK=" + AndroidRuntime::s_settings->ndk(),
-        "-DANDROID_TOOLCHAIN=" + AndroidRuntime::s_settings->toolchain(),
-        "-DANDROID_API_LEVEL=" + AndroidRuntime::s_settings->api(),
-        "-DANDROID_ARCHITECTURE=" + AndroidRuntime::s_settings->arch(),
-        "-DANDROID_SDK_BUILD_TOOLS_REVISION=" + AndroidRuntime::s_settings->buildtools()
+        QLatin1String("-DANDROID_ABI=") + AndroidRuntime::s_settings->abi(),
+        QLatin1String("-DANDROID_NDK=") + AndroidRuntime::s_settings->ndk(),
+        QLatin1String("-DANDROID_TOOLCHAIN=") + AndroidRuntime::s_settings->toolchain(),
+        QLatin1String("-DANDROID_API_LEVEL=") + AndroidRuntime::s_settings->api(),
+        QLatin1String("-DANDROID_ARCHITECTURE=") + AndroidRuntime::s_settings->arch(),
+        QLatin1String("-DANDROID_SDK_BUILD_TOOLS_REVISION=") + AndroidRuntime::s_settings->buildtools()
     };
 }
 
@@ -81,11 +81,11 @@ void AndroidRuntime::startProcess(KProcess* process) const
         setEnvironmentVariables(process);
     }
 
-    qCDebug(ANDROID) << "starting kprocess" << process->program().join(' ');
+    qCDebug(ANDROID) << "starting kprocess" << process->program().join(QLatin1Char(' '));
     process->start();
 }
 
 QByteArray AndroidRuntime::getenv(const QByteArray &varname) const
 {
-    return qgetenv(varname);
+    return qgetenv(varname.constData());
 }

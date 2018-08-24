@@ -36,7 +36,7 @@ QString unquoteExpression(const QString& expr);
 /**
  * Qoute the string, using quoteCh
  */
-QString quote(const QString& str, char quoteCh = '"');
+QString quote(const QString& str, QChar quoteCh = QLatin1Char('"'));
 
 /**
  * Unquote and optionally unescape unicode escape sequence.
@@ -46,7 +46,7 @@ QString quote(const QString& str, char quoteCh = '"');
  *     '\\' 'u' 'N' 'N' 'N' 'N'       -> '\uNNNN'
  *     '\\' 'x''N''N'                 -> '\xNN'
  */
-QString unquote(const QString &str, bool unescapeUnicode = false, char quoteCh = '"');
+QString unquote(const QString& str, bool unescapeUnicode = false, QChar quoteCh = QLatin1Char('"'));
 
 } // end of namespace Utils
 

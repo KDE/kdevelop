@@ -136,7 +136,7 @@ QString IncludesWidget::makeIncludeDirAbsolute(const QUrl &url) const
     QString localFile = url.toLocalFile();
     if( url.isRelative() ) {
         // Relative, make absolute based on startDir of the requester
-        localFile = ui->includePathRequester->startDir().toLocalFile() + '/' + url.path();
+        localFile = ui->includePathRequester->startDir().toLocalFile() + QLatin1Char('/') + url.path();
     }
     return localFile;
 }

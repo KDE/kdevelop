@@ -43,7 +43,7 @@ QModelIndex ProjectModelSaver::indexFromConfigString(const QAbstractItemModel *v
 {
     const KDevelop::ProjectModel *projectModel = KDevelop::ICore::self()->projectController()->projectModel();
 
-    const QModelIndex sourceIndex = projectModel->pathToIndex(key.split('/'));
+    const QModelIndex sourceIndex = projectModel->pathToIndex(key.split(QLatin1Char('/')));
 
     if ( m_project && sourceIndex.isValid() ) {
         ProjectBaseItem* item = projectModel->itemFromIndex(sourceIndex);

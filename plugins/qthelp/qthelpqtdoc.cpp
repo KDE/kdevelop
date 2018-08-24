@@ -37,7 +37,11 @@ namespace {
 QString qmakeCandidate()
 {
     // return the first qmake executable we can find
-    const QStringList candidates = {"qmake", "qmake-qt4", "qmake-qt5"};
+    const QStringList candidates {
+        QStringLiteral("qmake"),
+        QStringLiteral("qmake-qt4"),
+        QStringLiteral("qmake-qt5")
+    };
     auto it = std::find_if(candidates.constBegin(), candidates.constEnd(), [](const QString& candidate) {
         return !QStandardPaths::findExecutable(candidate).isEmpty();
     });
@@ -139,7 +143,7 @@ QStringList QtHelpQtDoc::qchFiles() const
 
 QIcon QtHelpQtDoc::icon() const
 {
-    return QIcon::fromTheme("qtlogo");
+    return QIcon::fromTheme(QStringLiteral("qtlogo"));
 }
 
 QString QtHelpQtDoc::name() const

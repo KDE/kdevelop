@@ -46,7 +46,7 @@ Q_DECLARE_METATYPE(KDevelop::IProject*)
 
 QIcon PlasmoidExecutionConfig::icon() const
 {
-    return QIcon::fromTheme("system-run");
+    return QIcon::fromTheme(QStringLiteral("system-run"));
 }
 
 QStringList readProcess(QProcess* p)
@@ -56,7 +56,7 @@ QStringList readProcess(QProcess* p)
         QByteArray line = p->readLine();
         int nameEnd=line.indexOf(' ');
         if(nameEnd>0) {
-            ret += line.left(nameEnd);
+            ret += QString::fromUtf8(line.left(nameEnd));
         }
     }
     return ret;
@@ -250,7 +250,7 @@ QString PlasmoidExecutionConfigType::typeId()
 
 QIcon PlasmoidExecutionConfigType::icon() const
 {
-    return QIcon::fromTheme("plasma");
+    return QIcon::fromTheme(QStringLiteral("plasma"));
 }
 
 static bool canLaunchMetadataFile(const KDevelop::Path &path)
@@ -321,7 +321,7 @@ void PlasmoidExecutionConfigType::suggestionTriggered()
     KDevelop::ILauncher* launcherInstance = launchers().at( 0 );
     QPair<QString,QString> launcher = qMakePair( launcherInstance->supportedModes().at(0), launcherInstance->id() );
 
-    QString name = relUrl.mid(relUrl.lastIndexOf('/')+1);
+    QString name = relUrl.mid(relUrl.lastIndexOf(QLatin1Char('/'))+1);
     KDevelop::ILaunchConfiguration* config = KDevelop::ICore::self()->runController()->createLaunchConfiguration(this, launcher, p, name);
     KConfigGroup cfg = config->config();
     cfg.writeEntry("PlasmoidIdentifier", relUrl);

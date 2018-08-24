@@ -29,47 +29,41 @@
 namespace {
 
 bool parenFits( QChar c1, QChar c2 ) {
-  if( c1 == '<' && c2 == '>' ) return true;
-  else if( c1 == '(' && c2 == ')' ) return true;
-  else if( c1 == '[' && c2 == ']' ) return true;
-  else if( c1 == '{' && c2 == '}' ) return true;
-  else
+    if (c1 == QLatin1Char('<') && c2 == QLatin1Char('>')) return true;
+    if (c1 == QLatin1Char('(') && c2 == QLatin1Char(')')) return true;
+    if (c1 == QLatin1Char('[') && c2 == QLatin1Char(']')) return true;
+    if (c1 == QLatin1Char('{') && c2 == QLatin1Char('}')) return true;
     return false;
 }
 
 bool isParen( QChar c1 ) {
-  if( c1 == '<' || c1 == '>' ) return true;
-  else if( c1 == '(' || c1 == ')' ) return true;
-  else if( c1 == '[' || c1 == ']' ) return true;
-  else if( c1 == '{' || c1 == '}' ) return true;
-  else
+    if (c1 == QLatin1Char('<') || c1 == QLatin1Char('>')) return true;
+    if (c1 == QLatin1Char('(') || c1 == QLatin1Char(')')) return true;
+    if (c1 == QLatin1Char('[') || c1 == QLatin1Char(']')) return true;
+    if (c1 == QLatin1Char('{') || c1 == QLatin1Char('}')) return true;
     return false;
 }
 
 bool isTypeParen( QChar c1 ) {
-  if( c1 == '<' || c1 == '>' ) return true;
-  else
+    if (c1 == QLatin1Char('<') || c1 == QLatin1Char('>')) return true;
     return false;
 }
 
 bool isTypeOpenParen( QChar c1 ) {
-  if( c1 == '<' ) return true;
-  else
+    if (c1 == QLatin1Char('<')) return true;
     return false;
 }
 
 bool isTypeCloseParen( QChar c1 ) {
-  if( c1 == '>' ) return true;
-  else
+    if (c1 == QLatin1Char('>')) return true;
     return false;
 }
 
 bool isLeftParen( QChar c1 ) {
-  if( c1 == '<' ) return true;
-  else if( c1 == '(' ) return true;
-  else if( c1 == '[' ) return true;
-  else if( c1 == '{' ) return true;
-  else
+    if (c1 == QLatin1Char('<')) return true;
+    if (c1 == QLatin1Char('(')) return true;
+    if (c1 == QLatin1Char('[')) return true;
+    if (c1 == QLatin1Char('{')) return true;
     return false;
 }
 
@@ -93,18 +87,18 @@ int Utils::expressionAt( const QString& text, int index ) {
 
     QChar ch = text[ index ];
     QString ch2 = text.mid( index - 1, 2 );
-    if ( ( last != T_IDE ) && ( ch.isLetterOrNumber() || ch == '_' ) ) {
-      while ( index > 0 && ( text[ index ].isLetterOrNumber() || text[ index ] == '_' ) ) {
+    if ((last != T_IDE) && (ch.isLetterOrNumber() || ch == QLatin1Char('_'))) {
+      while (index > 0 && (text[index].isLetterOrNumber() || text[index] == QLatin1Char('_'))) {
         --index;
       }
       last = T_IDE;
-    } else if ( last != T_IDE && ch == ')' ) {
+    } else if (last != T_IDE && ch == QLatin1Char(')')) {
       int count = 0;
       while ( index > 0 ) {
         QChar ch = text[ index ];
-        if ( ch == '(' ) {
+        if (ch == QLatin1Char('(')) {
           ++count;
-        } else if ( ch == ')' ) {
+        } else if (ch == QLatin1Char(')')) {
           --count;
         }
         --index;
@@ -114,13 +108,13 @@ int Utils::expressionAt( const QString& text, int index ) {
           break;
         }
       }
-    } else if ( last != T_IDE && ch == '>' && ch2 != QLatin1String("->") ) {
+    } else if (last != T_IDE && ch == QLatin1Char('>') && ch2 != QLatin1String("->")) {
       int count = 0;
       while ( index > 0 ) {
         QChar ch = text[ index ];
-        if ( ch == '<' ) {
+        if (ch == QLatin1Char('<')) {
           ++count;
-        } else if ( ch == '>' ) {
+        } else if (ch == QLatin1Char('>')) {
           --count;
         } else if ( count == 0 ) {
           //--index;
@@ -129,13 +123,13 @@ int Utils::expressionAt( const QString& text, int index ) {
         }
         --index;
       }
-    } else if ( ch == ']' ) {
+    } else if (ch == QLatin1Char(']')) {
       int count = 0;
       while ( index > 0 ) {
         QChar ch = text[ index ];
-        if ( ch == '[' ) {
+        if (ch == QLatin1Char('[')) {
           ++count;
-        } else if ( ch == ']' ) {
+        } else if (ch == QLatin1Char(']')) {
           --count;
         } else if ( count == 0 ) {
           //--index;
@@ -144,7 +138,7 @@ int Utils::expressionAt( const QString& text, int index ) {
         }
         --index;
       }
-    } else if ( ch == '.' ) {
+    } else if (ch == QLatin1Char('.')) {
       --index;
       last = T_ACCESS;
     } else if ( ch2 == QLatin1String("::") ) {
@@ -164,7 +158,8 @@ int Utils::expressionAt( const QString& text, int index ) {
 
   ///If we're at the first item, the above algorithm cannot be used safely,
   ///so just determine whether the sign is valid for the beginning of an expression, if it isn't reject it.
-  if ( index == 0 && start > index && !( text[ index ].isLetterOrNumber() || text[ index ] == '_' || text[ index ] == ':' ) ) {
+  if (index == 0 && start > index &&
+      !(text[index].isLetterOrNumber() || text[index] == QLatin1Char('_') || text[index] == QLatin1Char(':'))) {
     ++index;
   }
 
@@ -173,7 +168,7 @@ int Utils::expressionAt( const QString& text, int index ) {
 
 QString Utils::quoteExpression(const QString& expr)
 {
-    return quote(expr, '"');
+    return quote(expr, QLatin1Char('"'));
 }
 
 QString Utils::unquoteExpression(const QString& expr)
@@ -181,14 +176,14 @@ QString Utils::unquoteExpression(const QString& expr)
     return unquote(expr, false);
 }
 
-QString Utils::quote(const QString& str, char quoteCh)
+QString Utils::quote(const QString& str, QChar quoteCh)
 {
     QString res = str;
     res.replace(QLatin1Char('\\'), QLatin1String("\\\\")).replace(quoteCh, QLatin1Char('\\') + quoteCh);
     return quoteCh + res + quoteCh;
 }
 
-QString Utils::unquote(const QString &str, bool unescapeUnicode, char quoteCh)
+QString Utils::unquote(const QString& str, bool unescapeUnicode, QChar quoteCh)
 {
     if (str.startsWith(quoteCh) && str.endsWith(quoteCh)) {
         QString res;
@@ -206,13 +201,13 @@ QString Utils::unquote(const QString &str, bool unescapeUnicode, char quoteCh)
                     if (type != 0) {
                         escSeq += ch;
                         qCDebug(DEBUGGERCOMMON) << "Unrecognized escape sequence:" << escSeq;
-                        res += '\\';
+                        res += QLatin1Char('\\');
                         res += escSeq;
                         escSeq.clear();
                         esc = false;
                         type = 0;
                     } else {
-                        res.append('\\');
+                        res.append(QLatin1Char('\\'));
                         // escSeq.clear();    // escSeq must be empty.
                         esc = false;
                     }
@@ -222,13 +217,13 @@ QString Utils::unquote(const QString &str, bool unescapeUnicode, char quoteCh)
                     if (type != 0 || !unescapeUnicode) {
                         escSeq += ch;
                         qCDebug(DEBUGGERCOMMON) << "Unrecognized escape sequence:" << escSeq;
-                        res += '\\';
+                        res += QLatin1Char('\\');
                         res += escSeq;
                         escSeq.clear();
                         esc = false;
                         type = 0;
                     } else {
-                        type = ch == 'u' ? 1 : 2;
+                        type = ch == QLatin1Char('u') ? 1 : 2;
                     }
                     break;
                 case '0': case '1': case '2': case '3': case '4':
@@ -238,7 +233,7 @@ QString Utils::unquote(const QString &str, bool unescapeUnicode, char quoteCh)
                     escSeq += ch;
                     if (type == 0) {
                         qCDebug(DEBUGGERCOMMON) << "Unrecognized escape sequence:" << escSeq;
-                        res += '\\';
+                        res += QLatin1Char('\\');
                         res += escSeq;
                         escSeq.clear();
                         esc = false;
@@ -262,7 +257,7 @@ QString Utils::unquote(const QString &str, bool unescapeUnicode, char quoteCh)
                     } else {
                         escSeq += ch;
                         qCDebug(DEBUGGERCOMMON) << "Unrecognized escape sequence:" << escSeq;
-                        res += '\\';
+                        res += QLatin1Char('\\');
                         res += escSeq;
                         escSeq.clear();
                     }
@@ -271,7 +266,7 @@ QString Utils::unquote(const QString &str, bool unescapeUnicode, char quoteCh)
                     break;
                 }
             } else {
-                if (ch == '\\') {
+                if (ch == QLatin1Char('\\')) {
                     esc = true;
                     continue;
                 }

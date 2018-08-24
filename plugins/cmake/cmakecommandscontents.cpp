@@ -100,12 +100,12 @@ QString CMakeCommandsContents::descriptionForIdentifier(const QString& id, CMake
 
         const QString rst2html = QStandardPaths::findExecutable(QStringLiteral("rst2html"));
         if (rst2html.isEmpty()) {
-            desc = ("<html><body style='background:#fff'><pre><code>" + desc.toHtmlEscaped() + "</code></pre>"
+            desc = (QLatin1String("<html><body style='background:#fff'><pre><code>") + desc.toHtmlEscaped() + QLatin1String("</code></pre>")
                 + i18n("<p>For better cmake documentation rendering, install rst2html</p>")
-                + "</body></html>");
+                + QLatin1String("</body></html>"));
         } else {
             QProcess p;
-            p.start(rst2html, { "--no-toc-backlinks" });
+            p.start(rst2html, { QStringLiteral("--no-toc-backlinks") });
             p.write(desc.toUtf8());
             p.closeWriteChannel();
             p.waitForFinished();

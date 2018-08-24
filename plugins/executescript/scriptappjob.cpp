@@ -157,7 +157,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         QStringList parts = remoteHost.split(QLatin1Char(':'));
         program << parts.first();
         if (parts.length() > 1) {
-            program << "-p "+parts.at(1);
+            program << QLatin1String("-p ") + parts.at(1);
         }
     }
     program << interpreter;

@@ -81,7 +81,7 @@ public:
             }
             interface->showShellInDir( dir );
 
-            interface->sendInput( " kdevelop! -s \"" + KDevelop::ICore::self()->activeSession()->id().toString() + "\"\n" );
+            interface->sendInput(QLatin1String(" kdevelop! -s \"") + KDevelop::ICore::self()->activeSession()->id().toString() + QLatin1String("\"\n"));
 
         }else
         {

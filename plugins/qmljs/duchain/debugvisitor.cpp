@@ -155,7 +155,7 @@ void DebugVisitor::postVisit(QmlJS::AST::Node* node)
 
 QString DebugVisitor::indent() const
 {
-    return QString().fill(' ', m_depth * 2);
+    return QString().fill(QLatin1Char(' '), m_depth * 2);
 }
 
 void DebugVisitor::printNode(QmlJS::AST::Node* node, Position position)

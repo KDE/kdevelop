@@ -53,14 +53,13 @@ GrepOutputItem::List grepFile(const QString &filename, const QRegExp &re)
     file.seek(0);
     QTextStream stream(&file);
     if(prober.confidence()>0.7)
-        stream.setCodec(prober.encoding());
+        stream.setCodec(prober.encoding().constData());
     while( !stream.atEnd() )
     {
         QString data = stream.readLine();
 
         // remove line terminators (in order to not match them)
-        for(int pos = data.length()-1; pos >= 0 && (data[pos] == '\r' || data[pos] == '\n'); pos--)
-        {
+        for (int pos = data.length()-1; pos >= 0 && (data[pos] == QLatin1Char('\r') || data[pos] == QLatin1Char('\n')); pos--) {
             data.chop(1);
         }
 

@@ -122,7 +122,7 @@ struct MIBreakpointController::InsertedHandler : public MIBreakpointController::
 
         if (r.reason != QLatin1String("error")) {
             QString bkptKind;
-            for (auto kind : {"bkpt", "wpt", "hw-rwpt", "hw-awpt"}) {
+            for (auto kind : {QStringLiteral("bkpt"), QStringLiteral("wpt"), QStringLiteral("hw-rwpt"), QStringLiteral("hw-awpt")}) {
                 if (r.hasField(kind)) {
                     bkptKind = kind;
                     break;
@@ -458,7 +458,7 @@ void MIBreakpointController::notifyBreakpointCreated(const AsyncRecord& r)
     // results in the UI when breakpoints are marked in document views (e.g. when a breakpoint
     // applies to multiple overloads of a C++ function simultaneously) and in disassembly
     // (e.g. when a breakpoint is set in an inlined functions).
-    if (miBkpt[QStringLiteral("number")].literal().contains('.'))
+    if (miBkpt[QStringLiteral("number")].literal().contains(QLatin1Char('.')))
         return;
 
     createFromDebugger(miBkpt);
@@ -550,7 +550,7 @@ void MIBreakpointController::createFromDebugger(const Value& miBkpt)
                 if (location == modelBreakpoint->location()) {
                     sameLocation = true;
                 } else {
-                    QRegExp rx("^(.+):(\\d+)$");
+                    QRegExp rx(QStringLiteral("^(.+):(\\d+)$"));
                     if (rx.indexIn(location) != -1 &&
                         Utils::unquoteExpression(rx.cap(1)) == modelBreakpoint->url().url(QUrl::PreferLocalFile | QUrl::StripTrailingSlash) &&
                         rx.cap(2).toInt() - 1 == modelBreakpoint->line()) {
@@ -665,7 +665,7 @@ void MIBreakpointController::updateFromDebugger(int row, const Value& miBkpt, Br
             QUrl::fromLocalFile(Utils::unquoteExpression(miBkpt[QStringLiteral("fullname")].literal())),
             miBkpt[QStringLiteral("line")].toInt() - 1);
     } else if (miBkpt.hasField(QStringLiteral("original-location"))) {
-        QRegExp rx("^(.+):(\\d+)$");
+        QRegExp rx(QStringLiteral("^(.+):(\\d+)$"));
         QString location = miBkpt[QStringLiteral("original-location")].literal();
         if (rx.indexIn(location) != -1) {
             modelBreakpoint->setLocation(QUrl::fromLocalFile(Utils::unquoteExpression(rx.cap(1))),
@@ -749,10 +749,10 @@ void MIBreakpointController::programStopped(const AsyncRecord& r)
     QString msg;
     if (r.hasField(QStringLiteral("value"))) {
         if (r[QStringLiteral("value")].hasField(QStringLiteral("old"))) {
-            msg += i18n("<br>Old value: %1", r["value"]["old"].literal());
+            msg += i18n("<br>Old value: %1", r[QStringLiteral("value")][QStringLiteral("old")].literal());
         }
         if (r[QStringLiteral("value")].hasField(QStringLiteral("new"))) {
-            msg += i18n("<br>New value: %1", r["value"]["new"].literal());
+            msg += i18n("<br>New value: %1", r[QStringLiteral("value")][QStringLiteral("new")].literal());
         }
     }
 

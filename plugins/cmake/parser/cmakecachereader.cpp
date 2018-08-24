@@ -26,16 +26,12 @@ void CacheLine::readLine(const QString& line)
 {
     m_line=line;
     int i;
-    for(i=0; i<line.count() && line[i]!='='; i++)
-    {
-        if(line[i]==':')
-        {
+    for (i=0; i<line.count() && line[i] != QLatin1Char('='); ++i) {
+        if(line[i] == QLatin1Char(':')) {
             colon=i;
             if(endName<0)
                 endName=i;
-        }
-        else if(line[i]=='-')
-        {
+        } else if(line[i] == QLatin1Char('-')) {
             dash=i;
                 endName=i;
         }

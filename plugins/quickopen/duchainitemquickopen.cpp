@@ -147,7 +147,7 @@ QString DUChainItemData::htmlDescription() const
 
     text += i18nc("%1: file path", "File: %1", ICore::self()->projectController()->prettyFileName(decl->url().toUrl()));
 
-    QString ret = "<small><small>" + text + "</small></small>";
+    QString ret = QLatin1String("<small><small>") + text + QLatin1String("</small></small>");
 
     return ret;
 }

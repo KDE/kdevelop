@@ -53,39 +53,39 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
             QStandardPaths::GenericDataLocation,
             QStringLiteral("kdevqmljssupport/propertywidgets"),
             QStandardPaths::LocateDirectory
-        ) + '/';
+        ) + QLatin1Char('/');
 
         // Positioning
-        PROP("width", "Width.qml", QString(), QString())
-        PROP("height", "Height.qml", QString(), QString())
-        PROP("spacing", "Spacing.qml", QString(), QString())
+        PROP(QStringLiteral("width"), QLatin1String("Width.qml"), QString(), QString())
+        PROP(QStringLiteral("height"), QLatin1String("Height.qml"), QString(), QString())
+        PROP(QStringLiteral("spacing"), QLatin1String("Spacing.qml"), QString(), QString())
 
         // Margins
-        PROP("margins", "Spacing.qml", QString(), "QQuickAnchors");         // matches anchors.margins and anchors { margins: }
-        PROP("margins", "Spacing.qml", QString(), "QDeclarativeAnchors");
-        PROP("leftMargin", "Spacing.qml", QString(), "QQuickAnchors");
-        PROP("leftMargin", "Spacing.qml", QString(), "QDeclarativeAnchors");
-        PROP("rightMargin", "Spacing.qml", QString(), "QQuickAnchors");
-        PROP("rightMargin", "Spacing.qml", QString(), "QDeclarativeAnchors");
-        PROP("topMargin", "Spacing.qml", QString(), "QQuickAnchors");
-        PROP("topMargin", "Spacing.qml", QString(), "QDeclarativeAnchors");
-        PROP("bottomMargin", "Spacing.qml", QString(), "QQuickAnchors");
-        PROP("bottomMargin", "Spacing.qml", QString(), "QDeclarativeAnchors");
+        PROP(QStringLiteral("margins"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QQuickAnchors"));         // matches anchors.margins and anchors { margins: }
+        PROP(QStringLiteral("margins"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QDeclarativeAnchors"));
+        PROP(QStringLiteral("leftMargin"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QQuickAnchors"));
+        PROP(QStringLiteral("leftMargin"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QDeclarativeAnchors"));
+        PROP(QStringLiteral("rightMargin"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QQuickAnchors"));
+        PROP(QStringLiteral("rightMargin"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QDeclarativeAnchors"));
+        PROP(QStringLiteral("topMargin"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QQuickAnchors"));
+        PROP(QStringLiteral("topMargin"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QDeclarativeAnchors"));
+        PROP(QStringLiteral("bottomMargin"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QQuickAnchors"));
+        PROP(QStringLiteral("bottomMargin"), QLatin1String("Spacing.qml"), QString(), QStringLiteral("QDeclarativeAnchors"));
 
         // Animations
-        PROP("duration", "Duration.qml", QString(), QString())
+        PROP(QStringLiteral("duration"), QLatin1String("Duration.qml"), QString(), QString())
 
         // Font QDeclarativeFontValueType, QQuickFontValueType
-        PROP("family", "FontFamily.qml", QString(), "QDeclarativeFontValueType")
-        PROP("family", "FontFamily.qml", QString(), "QQuickFontValueType")
-        PROP("pointSize", "FontSize.qml", QString(), "QDeclarativeFontValueType")
-        PROP("pointSize", "FontSize.qml", QString(), "QQuickFontValueType")
+        PROP(QStringLiteral("family"), QLatin1String("FontFamily.qml"), QString(), QStringLiteral("QDeclarativeFontValueType"))
+        PROP(QStringLiteral("family"), QLatin1String("FontFamily.qml"), QString(), QStringLiteral("QQuickFontValueType"))
+        PROP(QStringLiteral("pointSize"), QLatin1String("FontSize.qml"), QString(), QStringLiteral("QDeclarativeFontValueType"))
+        PROP(QStringLiteral("pointSize"), QLatin1String("FontSize.qml"), QString(), QStringLiteral("QQuickFontValueType"))
 
         // Appearance
-        PROP("opacity", "Opacity.qml", QString(), QString())
+        PROP(QStringLiteral("opacity"), QLatin1String("Opacity.qml"), QString(), QString())
 
         // Type-dependent widgets
-        PROP(QString(), "ColorPicker.qml", "color", QString())
+        PROP(QString(), QLatin1String("ColorPicker.qml"), QStringLiteral("color"), QString())
     }
 #undef PROP
 

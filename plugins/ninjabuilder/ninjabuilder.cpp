@@ -81,7 +81,7 @@ static QStringList argumentsForItem(KDevelop::ProjectBaseItem* item)
 
     switch (item->type()) {
     case KDevelop::ProjectBaseItem::File:
-        return QStringList(item->path().toLocalFile() + '^');
+        return QStringList(item->path().toLocalFile() + QLatin1Char('^'));
     case KDevelop::ProjectBaseItem::Target:
     case KDevelop::ProjectBaseItem::ExecutableTarget:
     case KDevelop::ProjectBaseItem::LibraryTarget:

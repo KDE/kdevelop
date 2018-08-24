@@ -56,7 +56,7 @@ bool isFunction(const Declaration* decl)
 
 bool isPathChar(const QChar& c)
 {
-    return c.isLetterOrNumber() || c=='/' || c=='.';
+    return c.isLetterOrNumber() || c == QLatin1Char('/') || c == QLatin1Char('.');
 }
 
 QString escapePath(QString path)
@@ -88,14 +88,14 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     
     QString line=d->line(range.end().line());
 //     m_inside=line.lastIndexOf('(', range.end().column())>=0;
-    m_inside=line.lastIndexOf('(', range.end().column()-line.size()-1)>=0;
+    m_inside=line.lastIndexOf(QLatin1Char('('), range.end().column()-line.size()-1)>=0;
     
     for(int l=range.end().line(); l>=0 && !m_inside; --l)
     {
         QString cline=d->line(l);
-        QString line=cline.left(cline.indexOf('#'));
+        QString line=cline.left(cline.indexOf(QLatin1Char('#')));
         
-        int close=line.lastIndexOf(')'), open=line.indexOf('(');
+        int close=line.lastIndexOf(QLatin1Char(')')), open=line.indexOf(QLatin1Char('('));
         
         if(close>=0 && open>=0) {
             m_inside=open>close;
@@ -118,8 +118,8 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         
         QString tocomplete=d->text(Range(start, range.end()-Cursor(0,1)));
         
-        int lastdir=tocomplete.lastIndexOf('/');
-        QString path = KIO::upUrl(QUrl(d->url())).adjusted(QUrl::StripTrailingSlash).toLocalFile()+'/';
+        int lastdir=tocomplete.lastIndexOf(QLatin1Char('/'));
+        QString path = KIO::upUrl(QUrl(d->url())).adjusted(QUrl::StripTrailingSlash).toLocalFile()+QLatin1Char('/');
         QString basePath;
         if(lastdir>=0) {
             basePath=tocomplete.mid(0, lastdir);
@@ -127,14 +127,14 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
         }
         QDir dir(path);
         
-        const QFileInfoList paths = dir.entryInfoList(QStringList() << tocomplete.mid(lastdir+1)+'*',
+        const QFileInfoList paths = dir.entryInfoList(QStringList(tocomplete.midRef(lastdir+1)+QLatin1Char('*')),
                                               QDir::AllEntries | QDir::NoDotAndDotDot);
         m_paths.clear();
         m_paths.reserve(paths.size());
         for (const QFileInfo& f : paths) {
             QString currentPath = f.fileName();
             if(f.isDir())
-                currentPath+='/';
+                currentPath += QLatin1Char('/');
             m_paths += currentPath;
         }
         
@@ -267,7 +267,7 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
                     DelayedType::Ptr delay = t.cast<DelayedType>();
                     args.append(delay ? delay->identifier().toString() : i18n("wrong"));
                 }
-                return QString('('+args.join(QStringLiteral(", "))+')');
+                return QString(QLatin1Char('(')+args.join(QStringLiteral(", "))+QLatin1Char(')'));
             }
         }
         
@@ -283,7 +283,7 @@ void CMakeCodeCompletionModel::executeCompletionItem(View* view, const Range& wo
     {
         case Path: {
             Range r=word;
-            for(QChar c=document->characterAt(r.end()); c.isLetterOrNumber() || c=='.'; c=document->characterAt(r.end())) {
+            for (QChar c=document->characterAt(r.end()); c.isLetterOrNumber() || c==QLatin1Char('.'); c=document->characterAt(r.end())) {
                 r.setEnd(KTextEditor::Cursor(r.end().line(), r.end().column()+1));
             }
             QString path = data(index(row, Name, QModelIndex())).toString();
@@ -293,8 +293,8 @@ void CMakeCodeCompletionModel::executeCompletionItem(View* view, const Range& wo
         case Macro:
         case Command: {
             QString code=data(index(row, Name, QModelIndex())).toString();
-            if(!document->line(word.start().line()).contains('('))
-                code.append('(');
+            if (!document->line(word.start().line()).contains(QLatin1Char('(')))
+                code.append(QLatin1Char('('));
             
             document->replaceText(word, code);
         }   break;
@@ -303,9 +303,9 @@ void CMakeCodeCompletionModel::executeCompletionItem(View* view, const Range& wo
             QString bef=document->text(prefix);
             if(r.start().column()>=2 && bef==QLatin1String("${"))
                 r.setStart(KTextEditor::Cursor(r.start().line(), r.start().column()-2));
-            QString code="${"+data(index(row, Name, QModelIndex())).toString();
-            if(document->characterAt(word.end())!='}')
-                code+='}';
+            QString code = QLatin1String("${")+data(index(row, Name, QModelIndex())).toString();
+            if(document->characterAt(word.end())!=QLatin1Char('}'))
+                code += QLatin1Char('}');
             
             document->replaceText(r, code);
         }   break;

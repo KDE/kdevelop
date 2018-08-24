@@ -58,7 +58,7 @@ QMakeTargetItem::~QMakeTargetItem()
 
 QUrl QMakeTargetItem::builtUrl() const
 {
-    return QUrl::fromLocalFile(m_pro->outPwd().append('/' + text()));
+    return QUrl::fromLocalFile(m_pro->outPwd().append(QLatin1Char('/') + text()));
 }
 
 QUrl QMakeTargetItem::installedUrl() const

@@ -58,7 +58,7 @@ void CommandLineWidget::updateCommandLine()
 
     auto filterText = m_ui->cmdFilter->lineEdit()->text();
     if (!filterText.isEmpty()) {
-        QStringList lines = commandLine.split('\n');
+        QStringList lines = commandLine.split(QLatin1Char('\n'));
         QMutableStringListIterator i(lines);
 
         while (i.hasNext()) {

@@ -125,14 +125,14 @@ public:
         html.clear();
         html += QStringLiteral("<html>");
 
-        auto lines = markdown.split('\n');
+        auto lines = markdown.split(QLatin1Char('\n'));
         for (auto line : lines) {
             if (line.isEmpty()) {
                 setState(EMPTY);
                 continue;
             }
 
-            if (line.startsWith("#")) {
+            if (line.startsWith(QLatin1Char('#'))) {
                 auto match = hRE.match(line);
                 if (match.hasMatch()) {
                     setState(HEADING);
@@ -244,7 +244,7 @@ private:
 QString markdown2html(const QByteArray& markdown)
 {
     MarkdownConverter converter;
-    return converter.toHtml(markdown);
+    return converter.toHtml(QString::fromUtf8(markdown));
 }
 
 }

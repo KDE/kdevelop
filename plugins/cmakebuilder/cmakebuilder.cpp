@@ -118,8 +118,8 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
                 return new ErrorJob(this, i18n("Could not find the make builder. Check your installation"));
             }
             KDevelop::ProjectFileItem* file = dom->file();
-            int lastDot = file->text().lastIndexOf('.');
-            QString target = file->text().mid(0, lastDot)+".o";
+            int lastDot = file->text().lastIndexOf(QLatin1Char('.'));
+            QString target = file->text().mid(0, lastDot) + QLatin1String(".o");
             build = makeBuilder->executeMakeTarget(dom->parent(), target);
             qCDebug(KDEV_CMAKEBUILDER) << "create build job for target" << build << dom << target;
         }
@@ -235,7 +235,7 @@ KDevelop::IProjectBuilder* CMakeBuilder::builderForProject(KDevelop::IProject* p
     QString builddir = CMake::currentBuildDir( p ).toLocalFile();
     QMap<QString, IProjectBuilder*>::const_iterator it = m_builders.constBegin(), itEnd = m_builders.constEnd();
     for(; it!=itEnd; ++it) {
-        if(QFile::exists(builddir+'/'+it.key()))
+        if (QFile::exists(builddir+QLatin1Char('/')+it.key()))
             return it.value();
     }
     //It means that it still has to be generated, so use the builder for

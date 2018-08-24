@@ -7,6 +7,13 @@ if (GIT_FOUND)
         ..
         ${CMAKE_CURRENT_BINARY_DIR}/..
     )
+
+    remove_definitions(
+        -DQT_NO_CAST_FROM_ASCII
+        -DQT_NO_CAST_TO_ASCII
+        -DQT_NO_CAST_FROM_BYTEARRAY
+    )
+
     set(gittest_SRCS
         test_git.cpp
         ../gitplugin.cpp

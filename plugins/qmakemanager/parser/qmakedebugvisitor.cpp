@@ -38,12 +38,12 @@ QString DebugVisitor::getTokenInfo(qint64 idx)
     qint64 line, col;
     QMake::Parser::Token token = m_parser->tokenStream->at(idx);
     m_parser->tokenStream->startPosition(idx, &line, &col);
-    return QStringLiteral("%1,%2,%3").arg(line).arg(col).arg(m_parser->tokenText(token.begin, token.end).replace('\n', QLatin1String("\\n")));
+    return QStringLiteral("%1,%2,%3").arg(line).arg(col).arg(m_parser->tokenText(token.begin, token.end).replace(QLatin1Char('\n'), QLatin1String("\\n")));
 }
 
 QString DebugVisitor::getIndent()
 {
-    return QString().fill(' ', indent * 4);
+    return QString().fill(QLatin1Char(' '), indent * 4);
 }
 
 void DebugVisitor::visitArgumentList(ArgumentListAst* node)

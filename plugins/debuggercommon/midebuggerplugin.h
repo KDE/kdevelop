@@ -138,7 +138,7 @@ public:
 
     void viewCreated(Sublime::View* view) override
     {
-        if (view->widget()->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("requestRaise()")) != -1)
+        if (view->widget()->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("requestRaise()").constData()) != -1)
             QObject::connect(view->widget(), SIGNAL(requestRaise()), view, SLOT(requestRaise()));
     }
 

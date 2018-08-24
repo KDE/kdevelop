@@ -44,7 +44,7 @@ QString generateToolGroupName( CustomBuildSystemTool::ActionType type )
     Q_ASSERT( type >= 0 && type < toolTypeCount );
     Q_UNUSED( toolTypeCount );
 
-    return ConfigConstants::toolGroupPrefix() + toolTypes[type];
+    return ConfigConstants::toolGroupPrefix() + QLatin1String(toolTypes[type]);
 }
 
 }

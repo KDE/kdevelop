@@ -43,7 +43,7 @@
 ///           Find the source of this problem.
 QString repairDiff(const QString& diff) {
     qCDebug(PLUGIN_SVN) << "diff before repair:" << diff;
-    QStringList lines = diff.split('\n');
+    QStringList lines = diff.split(QLatin1Char('\n'));
     QMap<QString, QString> headers;
     for(int a = 0; a < lines.size()-1; ++a) {
         if(lines[a].startsWith(QLatin1String("Index: ")) && lines[a+1].startsWith(QLatin1String("====="))) {
@@ -52,13 +52,13 @@ QString repairDiff(const QString& diff) {
             qCDebug(PLUGIN_SVN) << "found header for" << fileName;
             lines[a] = QString();
             if(lines[a+1].startsWith(QLatin1String("======"))) {
-                headers[fileName] += '\n' + lines[a+1];
+                headers[fileName] += QLatin1Char('\n') + lines[a+1];
             lines[a+1] = QString();
             }
         }
     }
 
-    QRegExp spaceRegExp("\\s");
+    QRegExp spaceRegExp(QStringLiteral("\\s"));
 
     for(int a = 0; a < lines.size()-1; ++a) {
         if(lines[a].startsWith(QLatin1String("--- "))) {
@@ -68,7 +68,7 @@ QString repairDiff(const QString& diff) {
                 qCDebug(PLUGIN_SVN) << "checking for" << file;
                 if(headers.contains(file)) {
                     qCDebug(PLUGIN_SVN) << "adding header for" << file << ":" << headers[file];
-                    lines[a] = headers[file] + '\n' + lines[a];
+                    lines[a] = headers[file] + QLatin1Char('\n') + lines[a];
                 }
             }
         }

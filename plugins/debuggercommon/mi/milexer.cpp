@@ -274,7 +274,7 @@ void TokenStream::positionAt(int position, int *line, int *column) const
 QByteArray TokenStream::tokenText(int index) const
 {
     Token *t = index < 0 ? m_currentToken : m_firstToken + index;
-    const char* data = m_contents;
+    const char* data = m_contents.constData();
     return QByteArray(data + t->position, t->length);
 }
 

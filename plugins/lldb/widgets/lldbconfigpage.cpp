@@ -50,9 +50,9 @@ LldbConfigPage::LldbConfigPage(QWidget* parent)
     QRegularExpression rx(QStringLiteral(R"([^:]+:\d+)"));
     ui->lineRemoteServer->setValidator(new QRegularExpressionValidator(rx, this));
 
-    ui->comboStartWith->setItemData(0, "ApplicationOutput");
-    ui->comboStartWith->setItemData(1, "GdbConsole");
-    ui->comboStartWith->setItemData(2, "FrameStack");
+    ui->comboStartWith->setItemData(0, QStringLiteral("ApplicationOutput"));
+    ui->comboStartWith->setItemData(1, QStringLiteral("GdbConsole"));
+    ui->comboStartWith->setItemData(2, QStringLiteral("FrameStack"));
 
     connect(ui->lineDebuggerExec, &KUrlRequester::textChanged, this, &LldbConfigPage::changed);
     connect(ui->lineDebuggerArgs, &QLineEdit::textChanged, this, &LldbConfigPage::changed);

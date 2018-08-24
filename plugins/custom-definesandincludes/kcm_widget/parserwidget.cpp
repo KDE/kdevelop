@@ -40,7 +40,7 @@ QString languageStandard(const QString& arguments)
     }
 
     idx += 5;
-    int end = arguments.indexOf(' ', idx) != -1 ? arguments.indexOf(' ', idx) : arguments.size();
+    int end = arguments.indexOf(QLatin1Char(' '), idx) != -1 ? arguments.indexOf(QLatin1Char(' '), idx) : arguments.size();
     return arguments.mid(idx, end - idx);
 }
 

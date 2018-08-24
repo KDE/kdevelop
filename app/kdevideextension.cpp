@@ -40,12 +40,12 @@ QString KDevIDEExtension::xmlFile()
 
 QString KDevIDEExtension::executableFilePath()
 {
-    return QApplication::applicationDirPath() + "/kdevelop";
+    return QApplication::applicationDirPath() + QLatin1String("/kdevelop");
 }
 
 KDevelop::AreaParams KDevIDEExtension::defaultArea()
 {
-    KDevelop::AreaParams params = {"code", i18n("Code")};
+    KDevelop::AreaParams params = {QStringLiteral("code"), i18n("Code")};
     return params;
 }
 

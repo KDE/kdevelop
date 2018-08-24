@@ -30,6 +30,7 @@
 #include <interfaces/isourceformatter.h>
 #include <memory>
 #include <QDir>
+#include <QTimer>
 
 #include <util/formattinghelpers.h>
 #include <interfaces/iprojectcontroller.h>
@@ -133,7 +134,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
     command.replace(QLatin1String("$FILE"), url.toLocalFile());
 
     if (command.contains(QLatin1String("$TMPFILE"))) {
-        tmpFile.reset(new QTemporaryFile(QDir::tempPath() + "/code"));
+        tmpFile.reset(new QTemporaryFile(QDir::tempPath() + QLatin1String("/code")));
         tmpFile->setAutoRemove(false);
         if (tmpFile->open()) {
             qCDebug(CUSTOMSCRIPT) << "using temporary file" << tmpFile->fileName();
@@ -189,7 +190,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
     }
 
     int tabWidth = 4;
-    if ((!leftContext.isEmpty() || !rightContext.isEmpty()) && (text.contains('	') || output.contains('	'))) {
+    if ((!leftContext.isEmpty() || !rightContext.isEmpty()) && (text.contains(QLatin1Char('	')) || output.contains(QLatin1Char('\t')))) {
         // If we have to do contex-matching with tabs, determine the correct tab-width so that the context
         // can be matched correctly
         Indentation indent = indentation(url);
@@ -267,9 +268,12 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
                                    "tool with the config-file <b>uncrustify.config</b>."));
     }
     result.setMimeTypes({
-        {"text/x-c++src", "C++"}, {"text/x-chdr", "C"},
-        {"text/x-c++hdr", "C++"}, {"text/x-csrc", "C"},
-        {"text/x-java", "Java"}, {"text/x-csharp", "C#"}
+        {QStringLiteral("text/x-c++src"), QStringLiteral("C++")},
+        {QStringLiteral("text/x-chdr"),   QStringLiteral("C")},
+        {QStringLiteral("text/x-c++hdr"), QStringLiteral("C++")},
+        {QStringLiteral("text/x-csrc"),   QStringLiteral("C")},
+        {QStringLiteral("text/x-java"),   QStringLiteral("Java")},
+        {QStringLiteral("text/x-csharp"), QStringLiteral("C#")}
     });
     return result;
 }
@@ -293,7 +297,7 @@ KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& m
 
 static QString formattingSample()
 {
-    return
+    return QLatin1String(
         "// Formatting\n"
         "void func(){\n"
         "\tif(isFoo(a,b))\n"
@@ -325,7 +329,7 @@ static QString formattingSample()
         "  }\n"
         "}\n"
         "}\n"
-        "}\n";
+        "}\n");
 }
 
 static QString indentingSample()
@@ -390,7 +394,7 @@ QString CustomScriptPlugin::previewText(const SourceFormatterStyle& style, const
     if (!style.overrideSample().isEmpty()) {
         return style.overrideSample();
     }
-    return formattingSample() + "\n\n" + indentingSample();
+    return formattingSample() + QLatin1String("\n\n") + indentingSample();
 }
 
 QStringList CustomScriptPlugin::computeIndentationFromSample(const QUrl& url) const
@@ -435,11 +439,11 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url)
         return ret; // No valid indentation could be extracted
     }
 
-    if (indent[0].contains(' ')) {
-        ret.indentWidth = indent[0].count(' ');
+    if (indent[0].contains(QLatin1Char(' '))) {
+        ret.indentWidth = indent[0].count(QLatin1Char(' '));
     }
 
-    if (!indent.join(QString()).contains('	')) {
+    if (!indent.join(QString()).contains(QLatin1Char('	'))) {
         ret.indentationTabWidth = -1;         // Tabs are not used for indentation
     }
     if (indent[0] == QLatin1String("	")) {
@@ -473,7 +477,7 @@ CustomScriptPlugin::Indentation CustomScriptPlugin::indentation(const QUrl& url)
         }
     }
 
-    qCDebug(CUSTOMSCRIPT) << "indent-sample" << "\"" + indent.join(QLatin1Char('\n')) + "\"" << "extracted tab-width" << ret.indentationTabWidth << "extracted indentation width" << ret.indentWidth;
+    qCDebug(CUSTOMSCRIPT) << "indent-sample" << QLatin1Char('\"') + indent.join(QLatin1Char('\n')) + QLatin1Char('\"') << "extracted tab-width" << ret.indentationTabWidth << "extracted indentation width" << ret.indentWidth;
 
     return ret;
 }
@@ -489,6 +493,7 @@ CustomScriptPreferences::CustomScriptPreferences()
 {
     m_updateTimer = new QTimer(this);
     m_updateTimer->setSingleShot(true);
+    m_updateTimer->setInterval(1000);
     connect(m_updateTimer, &QTimer::timeout, this, &CustomScriptPreferences::updateTimeout);
     m_vLayout = new QVBoxLayout(this);
     m_vLayout->setMargin(0);
@@ -514,7 +519,8 @@ CustomScriptPreferences::CustomScriptPreferences()
              "<br />"
              "If you add <b>$TMPFILE</b> into the command, then <br />"
              "a temporary file is used for transferring the code."));
-    connect(m_commandEdit, &QLineEdit::textEdited, this, &CustomScriptPreferences::textEdited);
+    connect(m_commandEdit, &QLineEdit::textEdited,
+            m_updateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
     m_vLayout->addSpacing(10);
 

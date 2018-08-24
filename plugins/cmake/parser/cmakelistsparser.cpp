@@ -28,16 +28,17 @@
 QMap<QChar, QChar> whatToScape()
 {
     //Only add those where we're not scaping the next character
-    QMap<QChar, QChar> ret;
-    ret['n']='\n';
-    ret['r']='\r';
-    ret['t']='\t';
+    QMap<QChar, QChar> ret{
+        {QLatin1Char('n'), QLatin1Char('\n')},
+        {QLatin1Char('r'), QLatin1Char('\r')},
+        {QLatin1Char('t'), QLatin1Char('\t')},
+    };
     return ret;
 }
 
 const QMap<QChar, QChar> CMakeFunctionArgument::scapings=whatToScape();
 
-static const QChar scapingChar='\\';
+static const QChar scapingChar = QLatin1Char('\\');
 QString CMakeFunctionArgument::unescapeValue(const QString& value)
 {
     int firstScape=value.indexOf(scapingChar);

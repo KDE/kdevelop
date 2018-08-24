@@ -72,6 +72,6 @@ QString CustomBuildSystemKCModule::fullName() const
 
 QIcon CustomBuildSystemKCModule::icon() const
 {
-    return QIcon::fromTheme("kdevelop");
+    return QIcon::fromTheme(QStringLiteral("kdevelop"));
 }
 

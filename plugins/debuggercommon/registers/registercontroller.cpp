@@ -94,7 +94,7 @@ void IRegisterController::updateRegisters(const GroupsName& group)
         registers += numberForName(group.flagName());
     } else {
         foreach (const QString & name, registerNamesForGroup(group)) {
-            registers += numberForName(name) + ' ';
+            registers += numberForName(name) + QLatin1Char(' ');
         }
     }
 
@@ -254,7 +254,7 @@ void IRegisterController::updateFlagValues(RegistersGroup* flagsGroup, const Fla
     const quint32 flagsValue = registerValue(flagRegister.registerName).toUInt(nullptr, 16);
 
     for (int idx = 0; idx < flagRegister.flags.count(); idx++) {
-        flagsGroup->registers[idx].value = ((flagsValue >> flagRegister.bits[idx].toInt()) & 1) ? "1" : "0";
+        flagsGroup->registers[idx].value = ((flagsValue >> flagRegister.bits[idx].toInt()) & 1) ? QStringLiteral("1") : QStringLiteral("0");
     }
 }
 
@@ -318,12 +318,12 @@ void IRegisterController::setStructuredRegister(const Register& reg, const Group
 {
     Register r = reg;
     r.value = r.value.trimmed();
-    r.value.replace(' ', ',');
-    if (r.value.contains(',')) {
-        r.value = '{' + r.value + '}';
+    r.value.replace(QLatin1Char(' '), QLatin1Char(','));
+    if (r.value.contains(QLatin1Char(','))) {
+        r.value = QLatin1Char('{') + r.value + QLatin1Char('}');
     }
 
-    r.name += '.' + Converters::modeToString(m_formatsModes[group.index()].modes.first());
+    r.name += QLatin1Char('.') + Converters::modeToString(m_formatsModes[group.index()].modes.first());
 
     setGeneralRegister(r, group);
 }
@@ -334,7 +334,7 @@ void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
     //{u8 = {0, 0, 128, 146, 0, 48, 197, 65}, u16 = {0, 37504, 12288, 16837}, u32 = {2457862144, 1103441920}, u64 = 4739246961893310464, f32 = {-8.07793567e-28, 24.6484375}, f64 = 710934821}
     //{u8 = {0 <repeats 16 times>}, u16 = {0, 0, 0, 0, 0, 0, 0, 0}, u32 = {0, 0, 0, 0}, u64 = {0, 0}, f32 = {0, 0, 0, 0}, f64 = {0, 0}}
 
-    QRegExp rx("^\\s*=\\s*\\{(.*)\\}");
+    QRegExp rx(QStringLiteral("^\\s*=\\s*\\{(.*)\\}"));
     rx.setMinimal(true);
 
     QString registerName;
@@ -364,12 +364,12 @@ void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
 
         if (idx == -1) {
             //if here then value without braces: u64 = 4739246961893310464, f32 = {-8.07793567e-28, 24.6484375}, f64 = 710934821}
-            QRegExp rx2("=\\s+(.*)(\\}|,)");
+            QRegExp rx2(QStringLiteral("=\\s+(.*)(\\}|,)"));
             rx2.setMinimal(true);
             rx2.indexIn(record, start);
             value = rx2.cap(1);
         }
-        value = value.trimmed().remove(',');
+        value = value.trimmed().remove(QLatin1Char(','));
         m_registers.insert(registerName, value);
     }
 

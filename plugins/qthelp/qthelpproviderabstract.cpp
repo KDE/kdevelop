@@ -42,7 +42,7 @@ using namespace KDevelop;
 
 QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList &args)
     : QObject(parent)
-    , m_engine(QStandardPaths::writableLocation(QStandardPaths::DataLocation)+'/'+collectionFileName)
+    , m_engine(QStandardPaths::writableLocation(QStandardPaths::DataLocation)+QLatin1Char('/')+collectionFileName)
     , m_nam(new HelpNetworkAccessManager(&m_engine, this))
 {
     Q_UNUSED(args);

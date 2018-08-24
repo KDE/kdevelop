@@ -699,7 +699,7 @@ void DeclarationBuilder::declareComponent(QmlJS::AST::UiObjectInitializer* node,
                                           const RangeInRevision &range,
                                           const Identifier &name)
 {
-    QString baseClass = QmlJS::getQMLAttributeValue(node->members, QStringLiteral("prototype")).value.section('/', -1, -1);
+    QString baseClass = QmlJS::getQMLAttributeValue(node->members, QStringLiteral("prototype")).value.section(QLatin1Char('/'), -1, -1);
 
     // Declare the component itself
     StructureType::Ptr type(new StructureType);
@@ -805,7 +805,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
                                                   QmlJS::AST::UiQualifiedId* qualifiedId)
 {
     Identifier name(
-        QmlJS::getQMLAttributeValue(node->members, QStringLiteral("name")).value.section('/', -1, -1)
+        QmlJS::getQMLAttributeValue(node->members, QStringLiteral("name")).value.section(QLatin1Char('/'), -1, -1)
     );
     DUContext::ContextType contextType = DUContext::Class;
 
@@ -941,7 +941,7 @@ DeclarationBuilder::ExportLiteralsAndNames DeclarationBuilder::exportedNames(Qml
         }
 
         // String literal like "Namespace/Class version".
-        QStringList nameAndVersion = stringliteral->value.toString().section('/', -1, -1).split(' ');
+        QStringList nameAndVersion = stringliteral->value.toString().section(QLatin1Char('/'), -1, -1).split(QLatin1Char(' '));
         QString name = nameAndVersion.at(0);
 
         if (!knownNames.contains(name)) {
@@ -1063,7 +1063,7 @@ void DeclarationBuilder::importModule(QmlJS::AST::UiImport* node)
 
     while (part) {
         if (!uri.isEmpty()) {
-            uri.append('.');
+            uri.append(QLatin1Char('.'));
         }
 
         uri.append(part->name.toString());

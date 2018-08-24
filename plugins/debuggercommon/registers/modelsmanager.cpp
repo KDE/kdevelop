@@ -113,7 +113,7 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
     disconnect(model, &QStandardItemModel::itemChanged, this, &ModelsManager::itemChanged);
 
     model->setRowCount(group.registers.count());
-    model->setColumnCount(group.registers.first().value.split(' ').size() + 1);
+    model->setColumnCount(group.registers.first().value.split(QLatin1Char(' ')).size() + 1);
 
     //set names and values separately as names don't change so often.
     if (!model->item(0, 0)) {
@@ -128,7 +128,7 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
     for (int row = 0; row < group.registers.count(); row++) {
         const Register& r = group.registers[row];
 
-        const QStringList& values = r.value.split(' ');
+        const QStringList& values = r.value.split(QLatin1Char(' '));
 
         //binary format workaround.
         Format currentFormat = formats(group.groupName.name()).first();
@@ -234,7 +234,7 @@ void ModelsManager::itemChanged(QStandardItem* i)
     Register r;
     r.name = model->item(row, 0)->text();
     for (int i = 1; i < model->columnCount(); i++) {
-        r.value += model->item(row, i)->text() + ' ';
+        r.value += model->item(row, i)->text() + QLatin1Char(' ');
     }
     r.value = r.value.trimmed();
     emit registerChanged(r);

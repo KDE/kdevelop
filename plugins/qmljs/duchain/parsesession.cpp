@@ -78,8 +78,8 @@ ParseSession::ParseSession(const IndexedString& url, const QString& contents, in
     // Parse the module name and the version of url (this is used only when the file
     // is a QML module, but doesn't break for JavaScript files)
     m_baseName = QString::fromUtf8(m_url.byteArray())
-        .section('/', -1, -1)                   // Base name
-        .section('.', 0, -2);                   // Without extension
+        .section(QLatin1Char('/'), -1, -1)                   // Base name
+        .section(QLatin1Char('.'), 0, -2);                   // Without extension
 }
 
 bool ParseSession::isParsedCorrectly() const
@@ -179,7 +179,7 @@ QString ParseSession::commentForLocation(const QmlJS::AST::SourceLocation& locat
 
 RangeInRevision ParseSession::locationToRange(const QmlJS::AST::SourceLocation& location) const
 {
-    const int linesInLocation = m_doc->source().midRef(location.offset, location.length).count('\n');
+    const int linesInLocation = m_doc->source().midRef(location.offset, location.length).count(QLatin1Char('\n'));
     return RangeInRevision(location.startLine - 1, location.startColumn - 1,
                            location.startLine - 1 + linesInLocation, location.startColumn - 1 + location.length);
 }

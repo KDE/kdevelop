@@ -12,10 +12,6 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-add_definitions(
-    -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII -DQT_NO_CAST_FROM_BYTEARRAY
-)
-
 # TODO: Move to kdevplatform
 function(add_private_library target)
     set(options)

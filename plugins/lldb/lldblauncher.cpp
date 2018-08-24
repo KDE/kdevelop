@@ -67,7 +67,7 @@ QString LldbLauncher::description() const
 
 QStringList LldbLauncher::supportedModes() const
 {
-    return {"debug"};
+    return {QStringLiteral("debug")};
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory * > LldbLauncher::configPages() const

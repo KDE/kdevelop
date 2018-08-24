@@ -199,7 +199,7 @@ void SvnJobBase::outputMessage(const QString& message)
 
     QStandardItemModel *m = qobject_cast<QStandardItemModel*>(model());
     QStandardItem *previous = m->item(m->rowCount()-1);
-    if (message == QLatin1String(".") && previous && previous->text().contains(QRegExp("\\.+")))
+    if (message == QLatin1String(".") && previous && previous->text().contains(QRegExp(QStringLiteral("\\.+"))))
         previous->setText(previous->text() + message);
     else
         m->appendRow(new QStandardItem(message));

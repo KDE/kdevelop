@@ -209,23 +209,23 @@ void CompletionItem::execute(KTextEditor::View* view, const KTextEditor::Range& 
         break;
 
     case QmlJS::CompletionItem::Quotes:
-        document->replaceText(word, '\"' + base + '\"');
+        document->replaceText(word, QLatin1Char('\"') + base + QLatin1Char('\"'));
         break;
 
     case QmlJS::CompletionItem::QuotesAndBracket:
-        document->replaceText(word, '\"' + base + "\"]");
+        document->replaceText(word, QLatin1Char('\"') + base + QLatin1String("\"]"));
         break;
 
     case QmlJS::CompletionItem::ColonOrBracket:
         if (declaration() && declaration()->abstractType() &&
             declaration()->abstractType()->whichType() == AbstractType::TypeStructure) {
-            document->replaceText(word, base + " {}");
+            document->replaceText(word, base + QLatin1String(" {}"));
         } else {
-            document->replaceText(word, base + ": ");
+            document->replaceText(word, base + QLatin1String(": "));
         }
         break;
 
     case QmlJS::CompletionItem::Brackets:
-        document->replaceText(word, base + "()");
+        document->replaceText(word, base + QLatin1String("()"));
     }
 }

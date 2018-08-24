@@ -61,7 +61,7 @@ static KJob* createExecuteJob(const QStringList &program, const QString &title, 
 
 KJob* FlatpakRuntime::createBuildDirectory(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
 {
-    return createExecuteJob(QStringList{ "flatpak-builder", "--arch="+arch, "--build-only", buildDirectory.toLocalFile(), file.toLocalFile() }, i18n("Creating Flatpak %1", file.lastPathSegment()), file.parent().toUrl());
+    return createExecuteJob(QStringList{QStringLiteral("flatpak-builder"), QLatin1String("--arch=")+arch, QStringLiteral("--build-only"), buildDirectory.toLocalFile(), file.toLocalFile() }, i18n("Creating Flatpak %1", file.lastPathSegment()), file.parent().toUrl());
 }
 
 FlatpakRuntime::FlatpakRuntime(const KDevelop::Path &buildDirectory, const KDevelop::Path &file, const QString &arch)
@@ -84,11 +84,11 @@ void FlatpakRuntime::refreshJson()
     const QString runtimeVersion = doc.value(QLatin1String("runtime-version")).toString();
     const QString usedRuntime = sdkName + QLatin1Char('/') + m_arch + QLatin1Char('/') + runtimeVersion;
 
-    m_sdkPath = KDevelop::Path("/var/lib/flatpak/runtime/" + usedRuntime + "/active/files");
+    m_sdkPath = KDevelop::Path(QLatin1String("/var/lib/flatpak/runtime/") + usedRuntime + QLatin1String("/active/files"));
     qCDebug(FLATPAK) << "flatpak runtime path..." << name() << m_sdkPath;
     Q_ASSERT(QFile::exists(m_sdkPath.toLocalFile()));
 
-    m_finishArgs = kTransform<QStringList>(doc["finish-args"].toArray(), [](const QJsonValue& val){ return val.toString(); });
+    m_finishArgs = kTransform<QStringList>(doc[QLatin1String("finish-args")].toArray(), [](const QJsonValue& val){ return val.toString(); });
 }
 
 void FlatpakRuntime::setEnabled(bool /*enable*/)
@@ -97,8 +97,8 @@ void FlatpakRuntime::setEnabled(bool /*enable*/)
 
 void FlatpakRuntime::startProcess(QProcess* process) const
 {
-    const QStringList args = m_finishArgs + QStringList{"build", "--talk-name=org.freedesktop.DBus", m_buildDirectory.toLocalFile(), process->program()} << process->arguments();
-    process->setProgram("flatpak");
+    const QStringList args = m_finishArgs + QStringList{QStringLiteral("build"), QStringLiteral("--talk-name=org.freedesktop.DBus"), m_buildDirectory.toLocalFile(), process->program()} << process->arguments();
+    process->setProgram(QStringLiteral("flatpak"));
     process->setArguments(args);
 
     qCDebug(FLATPAK) << "starting qprocess" << process->program() << process->arguments();
@@ -107,9 +107,9 @@ void FlatpakRuntime::startProcess(QProcess* process) const
 
 void FlatpakRuntime::startProcess(KProcess* process) const
 {
-    process->setProgram(QStringList{ "flatpak" } << m_finishArgs << QStringList{ "build", "--talk-name=org.freedesktop.DBus", m_buildDirectory.toLocalFile() } << process->program());
+    process->setProgram(QStringList{QStringLiteral("flatpak")} << m_finishArgs << QStringList{QStringLiteral("build"), QStringLiteral("--talk-name=org.freedesktop.DBus"), m_buildDirectory.toLocalFile() } << process->program());
 
-    qCDebug(FLATPAK) << "starting kprocess" << process->program().join(' ');
+    qCDebug(FLATPAK) << "starting kprocess" << process->program().join(QLatin1Char(' '));
     process->start();
 }
 
@@ -125,7 +125,7 @@ QList<KJob*> FlatpakRuntime::exportBundle(const QString &path) const
 {
     const auto doc = config();
 
-    QTemporaryDir* dir = new QTemporaryDir(QDir::tempPath()+"/flatpak-tmp-repo");
+    QTemporaryDir* dir = new QTemporaryDir(QDir::tempPath()+QLatin1String("/flatpak-tmp-repo"));
     if (!dir->isValid() || doc.isEmpty()) {
         qCWarning(FLATPAK) << "Couldn't export:" << path << dir->isValid() << dir->path() << doc.isEmpty();
         return {};
@@ -133,12 +133,12 @@ QList<KJob*> FlatpakRuntime::exportBundle(const QString &path) const
 
     const QString name = doc[QLatin1String("id")].toString();
     QStringList args = m_finishArgs;
-    if (doc.contains("command"))
-        args << "--command="+doc["command"].toString();
+    if (doc.contains(QLatin1String("command")))
+        args << QLatin1String("--command=")+doc[QLatin1String("command")].toString();
     const QList<KJob*> jobs = {
-        createExecuteJob(QStringList{ "flatpak", "build-finish", m_buildDirectory.toLocalFile()} << args, {}),
-        createExecuteJob(QStringList{ "flatpak", "build-export", "--arch="+m_arch, dir->path(), m_buildDirectory.toLocalFile()}, {}),
-        createExecuteJob(QStringList{ "flatpak", "build-bundle", "--arch="+m_arch, dir->path(), path, name }, i18n("Exporting %1", path))
+        createExecuteJob(QStringList{QStringLiteral("flatpak"), QStringLiteral("build-finish"), m_buildDirectory.toLocalFile()} << args, {}),
+        createExecuteJob(QStringList{QStringLiteral("flatpak"), QStringLiteral("build-export"), QLatin1String("--arch=")+m_arch, dir->path(), m_buildDirectory.toLocalFile()}, {}),
+        createExecuteJob(QStringList{QStringLiteral("flatpak"), QStringLiteral("build-bundle"), QLatin1String("--arch=")+m_arch, dir->path(), path, name }, i18n("Exporting %1", path))
     };
     connect(jobs.last(), &QObject::destroyed, jobs.last(), [dir]() { delete dir; });
     return jobs;
@@ -157,10 +157,10 @@ KJob * FlatpakRuntime::executeOnDevice(const QString& host, const QString &path)
     const QString localReplicatePath = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("kdevflatpak/replicate.sh"));
 
     const QList<KJob*> jobs = exportBundle(path) << QList<KJob*> {
-        createExecuteJob({ "scp", path, host+QLatin1Char(':')+destPath}, i18n("Transferring flatpak to %1", host)),
-        createExecuteJob({ "scp", localReplicatePath, host+QLatin1Char(':')+replicatePath}, i18n("Transferring replicate.sh to %1", host)),
-        createExecuteJob({ "ssh", host, "flatpak", "install", "--user", "--bundle", destPath}, i18n("Installing %1 to %2", name, host)),
-        createExecuteJob({ "ssh", host, "bash", replicatePath, "plasmashell", "flatpak", "run", name }, i18n("Running %1 on %2", name, host)),
+        createExecuteJob({QStringLiteral("scp"), path, host+QLatin1Char(':')+destPath}, i18n("Transferring flatpak to %1", host)),
+        createExecuteJob({QStringLiteral("scp"), localReplicatePath, host+QLatin1Char(':')+replicatePath}, i18n("Transferring replicate.sh to %1", host)),
+        createExecuteJob({QStringLiteral("ssh"), host, QStringLiteral("flatpak"), QStringLiteral("install"), QStringLiteral("--user"), QStringLiteral("--bundle"), destPath}, i18n("Installing %1 to %2", name, host)),
+        createExecuteJob({QStringLiteral("ssh"), host, QStringLiteral("bash"), replicatePath, QStringLiteral("plasmashell"), QStringLiteral("flatpak"), QStringLiteral("run"), name }, i18n("Running %1 on %2", name, host)),
     };
     return new KDevelop::ExecuteCompositeJob( parent(), jobs );
 }
@@ -192,11 +192,11 @@ Path FlatpakRuntime::pathInHost(const KDevelop::Path& runtimePath) const
 {
     KDevelop::Path ret = runtimePath;
     if (runtimePath.isLocalFile() && runtimePath.segments().at(0) == QLatin1String("usr")) {
-        const auto relpath = KDevelop::Path("/usr").relativePath(runtimePath);
+        const auto relpath = KDevelop::Path(QStringLiteral("/usr")).relativePath(runtimePath);
         ret = Path(m_sdkPath, relpath);
     } else if (runtimePath.isLocalFile() && runtimePath.segments().at(0) == QLatin1String("app")) {
-        const auto relpath = KDevelop::Path("/app").relativePath(runtimePath);
-        ret = Path(m_buildDirectory, "/active/files/" + relpath);
+        const auto relpath = KDevelop::Path(QStringLiteral("/app")).relativePath(runtimePath);
+        ret = Path(m_buildDirectory, QLatin1String("/active/files/") + relpath);
     }
 
     qCDebug(FLATPAK) << "path in host" << runtimePath << ret;
@@ -208,12 +208,12 @@ Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath) const
     KDevelop::Path ret = localPath;
     if (m_sdkPath.isParentOf(localPath)) {
         const auto relpath = m_sdkPath.relativePath(localPath);
-        ret = Path(Path("/usr"), relpath);
+        ret = Path(Path(QStringLiteral("/usr")), relpath);
     } else {
-        const Path bdfiles(m_buildDirectory, "/active/flies");
+        const Path bdfiles(m_buildDirectory, QStringLiteral("/active/flies"));
         if (bdfiles.isParentOf(localPath)) {
             const auto relpath = bdfiles.relativePath(localPath);
-            ret = Path(Path("/app"), relpath);
+            ret = Path(Path(QStringLiteral("/app")), relpath);
         }
     }
 
@@ -223,5 +223,5 @@ Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath) const
 
 QByteArray FlatpakRuntime::getenv(const QByteArray& varname) const
 {
-    return qgetenv(varname);
+    return qgetenv(varname.constData());
 }

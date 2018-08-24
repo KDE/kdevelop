@@ -99,8 +99,9 @@ static int chownpty(int fd, int grant)
         if (fd != PTY_FILENO && dup2(fd, PTY_FILENO) < 0)
             ::exit(1);
 
-        QString path = QStandardPaths::findExecutable(BASE_CHOWN);
-        execle(QFile::encodeName(path), BASE_CHOWN, grant?"--grant":"--revoke", (void *)nullptr, NULL);
+        QString path = QStandardPaths::findExecutable(QStringLiteral(BASE_CHOWN));
+        const QByteArray encodedPath = QFile::encodeName(path);
+        execle(encodedPath.constData(), BASE_CHOWN, grant?"--grant":"--revoke", (void *)nullptr, NULL);
         ::exit(1); // should not be reached
     }
     if (pid > 0) {
@@ -136,7 +137,7 @@ STTY::STTY(bool ext, const QString &termAppName)
     } else {
         fout = findTTY();
         if (fout >= 0) {
-            ttySlave = QString(tty_slave);
+            ttySlave = QString::fromLatin1(tty_slave);
             out = new QSocketNotifier(fout, QSocketNotifier::Read, this);
             connect( out, &QSocketNotifier::activated, this, &STTY::OutReceived );
         }
@@ -331,7 +332,7 @@ bool STTY::findExternalTTY(const QString& termApp)
     }
 
     if (!m_externalTerminal->waitForStarted(500)) {
-        m_lastError = "Can't run terminal: " + appName;
+        m_lastError = QLatin1String("Can't run terminal: ") + appName;
         m_externalTerminal->terminate();
         return false;
     }
@@ -350,7 +351,7 @@ bool STTY::findExternalTTY(const QString& termApp)
     }
 
     usleep(1000);
-    ttySlave = file.readAll().trimmed();
+    ttySlave = QString::fromUtf8(file.readAll().trimmed());
 
     file.close();
 

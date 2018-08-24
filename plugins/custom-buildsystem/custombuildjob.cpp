@@ -146,7 +146,7 @@ void CustomBuildJob::start()
 
         auto env = KDevelop::EnvironmentProfileList(KSharedConfig::openConfig()).createEnvironment(environment, QProcess::systemEnvironment());
         if (!installPrefix.isEmpty())
-            env.append("DESTDIR="+installPrefix.toDisplayString(QUrl::PreferLocalFile));
+            env.append(QLatin1String("DESTDIR=")+installPrefix.toDisplayString(QUrl::PreferLocalFile));
 
         exec->setArguments( strargs );
         exec->setEnvironment( env );

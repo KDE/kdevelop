@@ -162,7 +162,7 @@ QVariantHash TemplateOptionsPage::templateOptions() const
         Q_ASSERT(d->controls.contains(entry.name));
         Q_ASSERT(d->typeProperties.contains(entry.type));
 
-        values.insert(entry.name, d->controls[entry.name]->property(d->typeProperties[entry.type]));
+        values.insert(entry.name, d->controls[entry.name]->property(d->typeProperties[entry.type].constData()));
     }
 
     qCDebug(PLUGIN_FILETEMPLATES) << values.size() << d->entries.size();

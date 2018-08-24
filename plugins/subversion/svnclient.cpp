@@ -96,7 +96,7 @@ QString SvnClient::diff( const svn::Path& src, const svn::Revision& srcRev,
     const char* errfileName = nullptr;
     apr_file_t* errfile = nullptr;
 
-    QByteArray ba = QString(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+"/kdevelop_svn_diff" ).toUtf8();
+    QByteArray ba = QString(QStandardPaths::writableLocation(QStandardPaths::TempLocation)+QLatin1String("/kdevelop_svn_diff")).toUtf8();
     
     error = svn_io_open_unique_file( &outfile, &outfileName, ba.data(), ".tmp", false, pool );
 

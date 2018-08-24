@@ -84,6 +84,8 @@ DocumentClassesFolder::DocumentClassesFolder(const QString& a_displayName, Nodes
   : DynamicFolderNode(a_displayName, a_model)
   , m_updateTimer( new QTimer(this) )
 {
+  // this is the required delay.
+  m_updateTimer->setInterval(2000);
   connect( m_updateTimer, &QTimer::timeout, this, &DocumentClassesFolder::updateChangedFiles);
 }
 
@@ -122,8 +124,8 @@ void DocumentClassesFolder::nodeCleared()
 
 void DocumentClassesFolder::populateNode()
 {
-  // Start updates timer - this is the required delay.
-  m_updateTimer->start(2000);
+    // Start updates timer
+    m_updateTimer->start();
 }
 
 QSet< KDevelop::IndexedString > DocumentClassesFolder::getAllOpenDocuments()

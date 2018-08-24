@@ -181,7 +181,7 @@ void RegistersView::setNameForTable(int idx, const QString& name)
     qCDebug(DEBUGGERCOMMON) << name << " " << idx;
     const QString text = tabWidget->tabText(idx);
     if (!text.contains(name)) {
-        tabWidget->setTabText(idx, text.isEmpty() ? name : text + '/' + name);
+        tabWidget->setTabText(idx, text.isEmpty() ? name : text + QLatin1Char('/') + name);
     }
 }
 
@@ -192,7 +192,7 @@ void RegistersView::setModel(ModelsManager* m)
 
 QStringList RegistersView::activeViews()
 {
-    return tabWidget->tabText(tabWidget->currentIndex()).split('/');
+    return tabWidget->tabText(tabWidget->currentIndex()).split(QLatin1Char('/'));
 }
 
 void RegistersView::clear()

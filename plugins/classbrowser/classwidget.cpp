@@ -66,6 +66,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 
   // Init filter timer
   m_filterTimer->setSingleShot(true);
+  m_filterTimer->setInterval(500);
   connect(m_filterTimer, &QTimer::timeout, this, [this]() {
     m_model->updateFilterString(m_filterText);
 
@@ -79,7 +80,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
   m_searchLine->setClearButtonEnabled( true );
   connect(m_searchLine, &QLineEdit::textChanged, this, [this](const QString& newFilter) {
     m_filterText = newFilter;
-    m_filterTimer->start(500);
+    m_filterTimer->start();
   });
 
   QLabel *searchLabel = new QLabel( i18n("S&earch:"), this );

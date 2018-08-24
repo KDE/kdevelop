@@ -180,8 +180,7 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
             QString path = projectController->prettyFilePath(doc->url(),
                                                                               IProjectController::FormatPlain);
             const bool isPartOfOpenProject = QDir::isRelativePath(path);
-            if( path.endsWith('/') )
-            {
+            if (path.endsWith(QLatin1Char('/'))) {
                 path.chop(1);
             }
             if( isPartOfOpenProject )
@@ -198,7 +197,7 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
                                                             fileInProjectInfo.second);
             } else
             {
-                itemText = itemText + " (" + path + ')';
+                itemText += QLatin1String(" (") + path + QLatin1Char(')');
             }
             project = projectController->findProjectForUrl(doc->url());
         }

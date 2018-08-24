@@ -119,7 +119,7 @@ Path QMakeProjectManager::buildDirectory(ProjectBaseItem* item) const
         } else {
             // build sub-item
             foreach (QMakeProjectFile* pro, qmakeItem->projectFiles()) {
-                if (QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->path().toUrl().toLocalFile() + '/').absoluteDir()
+                if (QDir(pro->absoluteDir()) == QFileInfo(qmakeItem->path().toUrl().toLocalFile() + QLatin1Char('/')).absoluteDir()
                     || pro->hasSubProject(qmakeItem->path().toUrl().toLocalFile())) {
                     // get path from project root and it to buildDir
                     dir = QMakeConfig::buildDirFromSrc(qmakeItem->project(), Path(pro->absoluteDir()));
@@ -463,7 +463,7 @@ QMakeCache* QMakeProjectManager::findQMakeCache(IProject* project, const Path& p
 
     if (curdir.exists(QStringLiteral(".qmake.cache"))) {
         qCDebug(KDEV_QMAKE) << "Found QMake cache in " << curdir.absolutePath();
-        return new QMakeCache(curdir.canonicalPath() + "/.qmake.cache");
+        return new QMakeCache(curdir.canonicalPath() + QLatin1String("/.qmake.cache"));
     }
     return nullptr;
 }

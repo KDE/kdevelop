@@ -108,6 +108,7 @@ BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
 {
     m_delayedBrowsingTimer = new QTimer(this);
     m_delayedBrowsingTimer->setSingleShot(true);
+    m_delayedBrowsingTimer->setInterval(300);
 
     connect(m_delayedBrowsingTimer, &QTimer::timeout, this, &BrowseManager::eventuallyStartDelayedBrowsing);
 
@@ -175,7 +176,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
 
     //Eventually start key-browsing
     if(keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
-        m_delayedBrowsingTimer->start(300); // always start the timer, to get consistent behavior regarding the ALT key and the menu activation
+        m_delayedBrowsingTimer->start(); // always start the timer, to get consistent behavior regarding the ALT key and the menu activation
         m_browsingByKey = keyEvent->key();
 
         if(!view) {

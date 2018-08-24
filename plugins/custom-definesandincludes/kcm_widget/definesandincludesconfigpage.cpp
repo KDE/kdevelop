@@ -88,5 +88,5 @@ QString DefinesAndIncludesConfigPage::fullName() const
 
 QIcon DefinesAndIncludesConfigPage::icon() const
 {
-    return QIcon::fromTheme("kdevelop");
+    return QIcon::fromTheme(QStringLiteral("kdevelop"));
 }

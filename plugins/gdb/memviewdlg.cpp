@@ -152,7 +152,7 @@ void MemoryView::initWidget()
 
 
     m_memViewView->setShowsNonprinting(false);
-    m_memViewView->setSubstituteChar('*');
+    m_memViewView->setSubstituteChar(QLatin1Char('*'));
 
     m_rangeSelector = new MemoryRangeSelector(this);
     l->addWidget(m_rangeSelector);
@@ -462,7 +462,7 @@ void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
     QWidget* ncs = const_cast<QWidget*>(s);
     QString cap = caption;
     // Prevent intepreting '&' as accelerator specifier.
-    cap.replace('&', QLatin1String("&&"));
+    cap.replace(QLatin1Char('&'), QLatin1String("&&"));
     m_toolBox->setItemText(m_toolBox->indexOf(ncs), cap);
 }
 

@@ -87,11 +87,11 @@ void QMakeFileVisitor::visitFunctionCall(QMake::FunctionCallAST* node)
         ifDebug(qCDebug(KDEV_QMAKE) << "found include" << node->identifier->value << arguments;)
         QString argument = arguments.join(QString()).trimmed();
         if (!argument.isEmpty() && QFileInfo(argument).isRelative()) {
-            argument = QFileInfo(m_baseFile->absoluteDir() + '/' + argument).canonicalFilePath();
+            argument = QFileInfo(m_baseFile->absoluteDir() + QLatin1Char('/') + argument).canonicalFilePath();
         }
         if (argument.isEmpty()) {
             qCWarning(KDEV_QMAKE) << "empty include file detected in line" << node->startLine;
-            if (node->identifier->value.startsWith('!')) {
+            if (node->identifier->value.startsWith(QLatin1Char('!'))) {
                 visitNode(node->body);
             }
             return;
@@ -107,11 +107,11 @@ void QMakeFileVisitor::visitFunctionCall(QMake::FunctionCallAST* node)
                     m_variableValues[var] = includefile.variableValues(var);
                 }
             }
-            if (!node->identifier->value.startsWith('!')) {
+            if (!node->identifier->value.startsWith(QLatin1Char('!'))) {
                 visitNode(node->body);
             }
         }
-        else if (node->identifier->value.startsWith('!')) { visitNode(node->body); }
+        else if (node->identifier->value.startsWith(QLatin1Char('!'))) { visitNode(node->body); }
     } else if (node->body && (node->identifier->value == QLatin1String("defineReplace")
                               || node->identifier->value
                                   == QLatin1String("defineTest"))) { // TODO: differentiate between replace and test functions?

@@ -71,7 +71,7 @@ void AStyleFormatter::updateFormatter()
         m_indentString = QStringLiteral("\t");
     } else {
         AStyleFormatter::setSpaceIndentation(wsCount);
-        m_indentString.fill(' ', wsCount);
+        m_indentString.fill(QLatin1Char(' '), wsCount);
 
         AStyleFormatter::setTabSpaceConversionMode(m_options[QStringLiteral("FillForce")].toBool());
     }
@@ -315,7 +315,7 @@ QVariant AStyleFormatter::option(const QString &key)
 
 QString AStyleFormatter::indentString()
 {
-    return QString(getIndentString().c_str());
+    return QString::fromUtf8(getIndentString().c_str());
 }
 
 void AStyleFormatter::loadStyle(const QString &content)
@@ -332,7 +332,7 @@ QString AStyleFormatter::saveStyle()
 void AStyleFormatter::setTabIndentation(int length, bool forceTabs)
 {
     ASFormatter::setTabIndentation(length, forceTabs);
-    m_options[QStringLiteral("Fill")] = "Tabs";
+    m_options[QStringLiteral("Fill")] = QStringLiteral("Tabs");
     m_options[QStringLiteral("FillForce")] = forceTabs;
     m_options[QStringLiteral("FillCount")] = length;
 }
@@ -340,7 +340,7 @@ void AStyleFormatter::setTabIndentation(int length, bool forceTabs)
 void AStyleFormatter::setSpaceIndentation(int length)
 {
     ASFormatter::setSpaceIndentation(length);
-    m_options[QStringLiteral("Fill")] = "Spaces";
+    m_options[QStringLiteral("Fill")] = QStringLiteral("Spaces");
     m_options[QStringLiteral("FillCount")] = length;
 }
 
@@ -421,19 +421,19 @@ void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
 {
     switch (mode) {
     case astyle::NONE_MODE:
-        m_options[QStringLiteral("Brackets")] = "";
+        m_options[QStringLiteral("Brackets")] = QString();
         break;
     case astyle::ATTACH_MODE:
-        m_options[QStringLiteral("Brackets")] = "Attach";
+        m_options[QStringLiteral("Brackets")] = QStringLiteral("Attach");
         break;
     case astyle::BREAK_MODE:
-        m_options[QStringLiteral("Brackets")] = "Break";
+        m_options[QStringLiteral("Brackets")] = QStringLiteral("Break");
         break;
     case astyle::LINUX_MODE:
-        m_options[QStringLiteral("Brackets")] = "Linux";
+        m_options[QStringLiteral("Brackets")] = QStringLiteral("Linux");
         break;
     case astyle::RUN_IN_MODE:
-        m_options[QStringLiteral("Brackets")] = "RunInMode";
+        m_options[QStringLiteral("Brackets")] = QStringLiteral("RunInMode");
         break;
     }
     ASFormatter::setBracketFormatMode(mode);
@@ -508,16 +508,16 @@ void AStyleFormatter::setPointerAlignment(astyle::PointerAlign alignment)
 {
     switch (alignment) {
         case astyle::PTR_ALIGN_NONE:
-            m_options[QStringLiteral("PointerAlign")] = "None";
+            m_options[QStringLiteral("PointerAlign")] = QStringLiteral("None");
             break;
         case astyle::PTR_ALIGN_NAME:
-            m_options[QStringLiteral("PointerAlign")] = "Name";
+            m_options[QStringLiteral("PointerAlign")] = QStringLiteral("Name");
             break;
         case astyle::PTR_ALIGN_MIDDLE:
-            m_options[QStringLiteral("PointerAlign")] = "Middle";
+            m_options[QStringLiteral("PointerAlign")] = QStringLiteral("Middle");
             break;
         case astyle::PTR_ALIGN_TYPE:
-            m_options[QStringLiteral("PointerAlign")] = "Type";
+            m_options[QStringLiteral("PointerAlign")] = QStringLiteral("Type");
             break;
     }
     ASFormatter::setPointerAlignment(alignment);

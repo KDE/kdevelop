@@ -181,7 +181,7 @@ void ManPageModel::showItem(const QModelIndex& idx)
     if (idx.isValid() && idx.internalId() != INVALID_ID) {
         QString sectionUrl = m_sectionList.at(idx.internalId()).first;
         QString page = manPage(sectionUrl, idx.row());
-        IDocumentation::Ptr newDoc(new ManPageDocumentation(page, QUrl(sectionUrl + '/' + page)));
+        IDocumentation::Ptr newDoc(new ManPageDocumentation(page, QUrl(sectionUrl + QLatin1Char('/') + page)));
         ICore::self()->documentationController()->showDocumentation(newDoc);
     }
 }

@@ -63,7 +63,7 @@ void GitMessageHighlighter::highlightBlock(const QString& text)
         // Switch block state for multiline blocks
         if (startPos != 0 && blockState < DetailedMessage)
             ++blockState;
-        endPos = text.indexOf('\n', startPos);
+        endPos = text.indexOf(QLatin1Char('\n'), startPos);
         if (endPos < 0)
             endPos = textLength;
         const int lineLength = endPos - startPos;

@@ -58,7 +58,7 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
             if (!strings.isEmpty()) {
                 QComboBox* comboBox = new QComboBox(parent);
                 comboBox->setEditable(true);
-                comboBox->addItems(strings.split(';'));
+                comboBox->addItems(strings.split(QLatin1Char(';')));
                 ret = comboBox;
             } else {
                 ret=QItemDelegate::createEditor(parent, option, index);

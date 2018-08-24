@@ -292,7 +292,7 @@ void ContextBrowserView::updateMainWidget(QWidget* widget)
         m_layout->insertWidget(1, widget, 1);
         m_allowLockedUpdate = false;
         setUpdatesEnabled(true);
-        if (widget->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("contextChanged(bool,bool)")) != -1) {
+        if (widget->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("contextChanged(bool,bool)").constData()) != -1) {
             connect(widget, SIGNAL(contextChanged(bool,bool)), this, SLOT(navigationContextChanged(bool,bool)));
         }
     }

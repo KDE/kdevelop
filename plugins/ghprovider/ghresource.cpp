@@ -43,8 +43,8 @@ KIO::StoredTransferJob* createHttpAuthJob(const QString &httpHeader)
     url.setPath(url.path() + QLatin1String("/authorizations"));
 
     // generate a unique token, see bug 372144
-    const QString tokenName = "KDevelop Github Provider : "
-        + QHostInfo::localHostName() + " - "
+    const QString tokenName = QLatin1String("KDevelop Github Provider : ")
+        + QHostInfo::localHostName() + QLatin1String(" - ")
         + QDateTime::currentDateTimeUtc().toString();
     const QByteArray data = QByteArrayLiteral("{ \"scopes\": [\"repo\"], \"note\": \"") + tokenName.toUtf8() + QByteArrayLiteral("\" }");
 
@@ -95,9 +95,10 @@ void Resource::twoFactorAuthenticate(const QString &transferHeader, const QStrin
 void Resource::revokeAccess(const QString &id, const QString &name, const QString &password)
 {
     QUrl url = baseUrl;
-    url.setPath(url.path() + "/authorizations/" + id);
+    url.setPath(url.path() + QLatin1String("/authorizations/") + id);
     KIO::TransferJob *job = KIO::http_delete(url, KIO::HideProgressInfo);
-    job->addMetaData(QStringLiteral("customHTTPHeader"), QLatin1String("Authorization: Basic ") + QString (name + ':' + password).toUtf8().toBase64());
+    const auto passwordBase64 = QString::fromLatin1(QString(name + QLatin1Char(':') + password).toUtf8().toBase64());
+    job->addMetaData(QStringLiteral("customHTTPHeader"), QLatin1String("Authorization: Basic ") + passwordBase64);
     /* And we don't care if it's successful ;) */
     job->start();
 }
@@ -109,7 +110,7 @@ KIO::TransferJob * Resource::getTransferJob(const QString &path, const QString &
     url.setPath(url.path() + path);
     KIO::TransferJob *job = KIO::get(url, KIO::Reload, KIO::HideProgressInfo);
     if (!token.isEmpty())
-        job->addMetaData(QStringLiteral("customHTTPHeader"), "Authorization: token " + token);
+        job->addMetaData(QStringLiteral("customHTTPHeader"), QLatin1String("Authorization: token ") + token);
     return job;
 }
 

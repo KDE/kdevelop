@@ -44,7 +44,7 @@ CMakeServer::CMakeServer(QObject* parent)
         const auto cacheLocation = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
         QDir::temp().mkpath(cacheLocation);
 
-        QTemporaryFile file(cacheLocation + "/kdevelopcmake");
+        QTemporaryFile file(cacheLocation + QLatin1String("/kdevelopcmake"));
         file.open();
         file.close();
         path = file.fileName();
@@ -82,7 +82,7 @@ CMakeServer::CMakeServer(QObject* parent)
     // we're called with the importing project as our parent, so we can fetch configured
     // cmake executable (project-specific or kdevelop-wide) rather than the system version.
     m_process.setProgram(CMake::currentCMakeExecutable(dynamic_cast<KDevelop::IProject*>(parent)).toLocalFile());
-    m_process.setArguments({"-E", "server", "--experimental", "--pipe=" + path});
+    m_process.setArguments({QStringLiteral("-E"), QStringLiteral("server"), QStringLiteral("--experimental"), QLatin1String("--pipe=") + path});
     KDevelop::ICore::self()->runtimeController()->currentRuntime()->startProcess(&m_process);
 }
 
@@ -197,30 +197,30 @@ void CMakeServer::handshake(const KDevelop::Path& source, const KDevelop::Path& 
                    << "in" << buildDirectory << "aka" << build;
 
     sendCommand({
-        {"cookie", {}},
-        {"type", "handshake"},
-        {"major", 1},
-        {"protocolVersion", QJsonObject{{"major", 1}} },
-        {"sourceDirectory", sourceDirectory},
-        {"buildDirectory", buildDirectory},
-        {"generator", generator}
+        {QStringLiteral("cookie"), {}},
+        {QStringLiteral("type"), QStringLiteral("handshake")},
+        {QStringLiteral("major"), 1},
+        {QStringLiteral("protocolVersion"), QJsonObject{{QStringLiteral("major"), 1}} },
+        {QStringLiteral("sourceDirectory"), sourceDirectory},
+        {QStringLiteral("buildDirectory"), buildDirectory},
+        {QStringLiteral("generator"), generator}
     });
 }
 
 void CMakeServer::configure(const QStringList& args)
 {
     sendCommand({
-        {"type", "configure"},
-        {"cacheArguments", QJsonArray::fromStringList(args)}
+        {QStringLiteral("type"), QStringLiteral("configure")},
+        {QStringLiteral("cacheArguments"), QJsonArray::fromStringList(args)}
     });
 }
 
 void CMakeServer::compute()
 {
-    sendCommand({ {"type", "compute"} });
+    sendCommand({ {QStringLiteral("type"), QStringLiteral("compute")} });
 }
 
 void CMakeServer::codemodel()
 {
-    sendCommand({ {"type", "codemodel"} });
+    sendCommand({ {QStringLiteral("type"), QStringLiteral("codemodel")} });
 }

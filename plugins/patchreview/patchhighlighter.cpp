@@ -133,7 +133,7 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
             QString spanText = string.mid( currentPos, markers[b]->offset() - currentPos ).toHtmlEscaped();
             if( markers[b]->type() == Diff2::Marker::End && ( currentPos != 0 || markers[b]->offset() != static_cast<uint>( string.size() ) ) )
             {
-                html += "<b><span style=\"background:#FFBBBB\">" + spanText + "</span></b>";
+                html += QLatin1String("<b><span style=\"background:#FFBBBB\">") + spanText + QLatin1String("</span></b>");
             }else{
                 html += spanText;
             }
@@ -192,14 +192,14 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, const KTextEdito
 
         for( int a = 0; a < diff->sourceLineCount(); ++a ) {
             sourceText += diff->sourceLineAt( a )->string();
-            if( !sourceText.endsWith( '\n' ) )
-                sourceText += '\n';
+            if (!sourceText.endsWith(QLatin1Char('\n')))
+                sourceText += QLatin1Char('\n');
         }
 
         for( int a = 0; a < diff->destinationLineCount(); ++a ) {
             targetText += diff->destinationLineAt( a )->string();
-            if( !targetText.endsWith( '\n' ) )
-                targetText += '\n';
+            if (!targetText.endsWith(QLatin1Char('\n')))
+                targetText += QLatin1Char('\n');
         }
 
         bool applied = diff->applied();
@@ -217,7 +217,7 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, const KTextEdito
 
         KTextEditor::Cursor start = range->start().toCursor();
         range->document()->replaceText( range->toRange(), replaceWith );
-        uint replaceWithLines = replaceWith.count( '\n' );
+        const uint replaceWithLines = replaceWith.count(QLatin1Char('\n'));
         KTextEditor::Range newRange( start, KTextEditor::Cursor(start.line() +  replaceWithLines, start.column()) );
 
         range->setRange( newRange );
@@ -339,7 +339,7 @@ void PatchHighlighter::textRemoved( KTextEditor::Document* doc, const KTextEdito
         removedLines << above;
         remainingLines << above;
     }
-    QString changed = doc->line(cursor.line()) + '\n';
+    const QString changed = doc->line(cursor.line()) + QLatin1Char('\n');
     removedLines << changed.midRef(0, cursor.column()) + oldText + changed.midRef(cursor.column());
     remainingLines << changed;
     if (doc->documentRange().end().line() > cursor.line()) {
@@ -472,15 +472,15 @@ void PatchHighlighter::textInserted(KTextEditor::Document* doc, const KTextEdito
     QStringList removedLines;
     QStringList insertedLines;
     if (startLine > 0) {
-        QString above = doc->line(--startLine) + '\n';
+        const QString above = doc->line(--startLine) + QLatin1Char('\n');
         removedLines << above;
         insertedLines << above;
     }
-    QString changed = doc->line(cursor.line()) + '\n';
+    const QString changed = doc->line(cursor.line()) + QLatin1Char('\n');
     removedLines << changed.midRef(0, cursor.column()) + changed.midRef(endColumn);
     insertedLines << changed;
     if (doc->documentRange().end().line() > cursor.line()) {
-        QString below = doc->line(cursor.line() + 1) + '\n';
+        const QString below = doc->line(cursor.line() + 1) + QLatin1Char('\n');
         removedLines << below;
         insertedLines << below;
     }
@@ -500,13 +500,13 @@ void PatchHighlighter::newlineInserted(KTextEditor::Document* doc, const KTextEd
     QStringList removedLines;
     QStringList insertedLines;
     if (startLine > 0) {
-        QString above = doc->line(--startLine) + '\n';
+        const QString above = doc->line(--startLine) + QLatin1Char('\n');
         removedLines << above;
         insertedLines << above;
     }
-    insertedLines << QString('\n');
+    insertedLines << QStringLiteral("\n");
     if (doc->documentRange().end().line() > cursor.line()) {
-        QString below = doc->line(cursor.line() + 1) + '\n';
+        const QString below = doc->line(cursor.line() + 1) + QLatin1Char('\n');
         removedLines << below;
         insertedLines << below;
     }

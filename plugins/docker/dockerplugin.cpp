@@ -124,7 +124,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
         foreach(const QUrl &url, urls) {
             const KDevelop::Path file(url);
 
-            auto action = new QAction(QIcon::fromTheme("text-dockerfile"), i18n("docker build '%1'", file.path()), parent);
+            auto action = new QAction(QIcon::fromTheme(QStringLiteral("text-dockerfile")), i18n("docker build '%1'", file.path()), parent);
             connect(action, &QAction::triggered, this, [this, file]() {
                 const auto dir = file.parent();
                 const QString name = QInputDialog::getText(
@@ -136,7 +136,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
                 auto process = new OutputExecuteJob;
                 process->setExecuteOnHost(true);
                 process->setProperties(OutputExecuteJob::DisplayStdout | OutputExecuteJob::DisplayStderr);
-                *process << QStringList{"docker", "build", "--tag", name, dir.toLocalFile()};
+                *process << QStringList{QStringLiteral("docker"), QStringLiteral("build"), QStringLiteral("--tag"), name, dir.toLocalFile()};
                 connect(process, &KJob::finished, this, [name] (KJob* job) {
                     if (job->error() != 0)
                         return;

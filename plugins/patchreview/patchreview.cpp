@@ -207,7 +207,7 @@ void PatchReviewPlugin::removeHighlighting( const QUrl& file ) {
 void PatchReviewPlugin::notifyPatchChanged() {
     if (m_patch) {
         qCDebug(PLUGIN_PATCHREVIEW) << "notifying patch change: " << m_patch->file();
-        m_updateKompareTimer->start( 500 );
+        m_updateKompareTimer->start();
     } else {
         m_updateKompareTimer->stop();
     }
@@ -302,7 +302,7 @@ void PatchReviewPlugin::updateKompareModel() {
     } catch ( const QString & str ) {
         KMessageBox::error( nullptr, str, i18n( "Kompare Model Update" ) );
     } catch ( const char * str ) {
-        KMessageBox::error( nullptr, str, i18n( "Kompare Model Update" ) );
+        KMessageBox::error( nullptr, QLatin1String(str), i18n( "Kompare Model Update" ) );
     }
     removeHighlighting();
     m_modelList.reset( nullptr );
@@ -423,7 +423,7 @@ void PatchReviewPlugin::switchToEmptyReviewArea()
 QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
 {
     KDevelop::Path path(QDir::cleanPath(m_patch->baseDir().toLocalFile()));
-    QVector<QString> destPath = KDevelop::Path("/"+model->destinationPath()).segments();
+    QVector<QString> destPath = KDevelop::Path(QLatin1Char('/') + model->destinationPath()).segments();
     if (destPath.size() >= (int)m_depth) {
         destPath = destPath.mid(m_depth);
     }
@@ -528,6 +528,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
 
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );
+    m_updateKompareTimer->setInterval(500);
     connect( m_updateKompareTimer, &QTimer::timeout, this, &PatchReviewPlugin::updateKompareModel );
 
     m_finishReview = new QAction(i18n("Finish Review"), this);

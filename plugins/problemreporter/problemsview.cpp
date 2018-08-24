@@ -178,6 +178,7 @@ void ProblemsView::setupActions()
     {
         QTimer* filterTimer = new QTimer(this);
         filterTimer->setSingleShot(true);
+        filterTimer->setInterval(500);
 
         connect(filterTimer, &QTimer::timeout, this, [this]() {
             setFilter(m_filterEdit->text());
@@ -187,9 +188,8 @@ void ProblemsView::setupActions()
         m_filterEdit->setClearButtonEnabled(true);
         m_filterEdit->setPlaceholderText(i18n("Search..."));
 
-        connect(m_filterEdit, &QLineEdit::textChanged, this, [filterTimer](const QString&) {
-            filterTimer->start(500);
-        });
+        connect(m_filterEdit, &QLineEdit::textChanged,
+                filterTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
         QWidgetAction* filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(m_filterEdit);

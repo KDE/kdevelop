@@ -57,6 +57,16 @@ QString Converters::modeToString(Mode mode)
 {
     Q_ASSERT(mode >= 0 && mode < LAST_MODE);
 
-    static const QString modes[LAST_MODE] = {"natural", "v4_float", "v2_double", "v4_int32", "v2_int64", "u32", "u64", "f32", "f64"};
+    static const QString modes[LAST_MODE] = {
+        QStringLiteral("natural"),
+        QStringLiteral("v4_float"),
+        QStringLiteral("v2_double"),
+        QStringLiteral("v4_int32"),
+        QStringLiteral("v2_int64"),
+        QStringLiteral("u32"),
+        QStringLiteral("u64"),
+        QStringLiteral("f32"),
+        QStringLiteral("f64")
+    };
     return modes[mode];
 }
