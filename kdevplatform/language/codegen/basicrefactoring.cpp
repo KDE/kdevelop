@@ -21,13 +21,12 @@
 
 // Qt
 #include <QAction>
-
-// KDE / KDevelop
+// KF
 #include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
-
+// KDevelop
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <interfaces/iuicontroller.h>

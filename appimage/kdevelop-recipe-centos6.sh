@@ -19,7 +19,7 @@ git_pull_rebase_helper()
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-QTVERSION=5.9.2
+QTVERSION=5.9.6
 QTVERSION_SHORT=5.9
 QTDIR=/usr/local/Qt-${QTVERSION}/
 
@@ -28,6 +28,9 @@ if [ -z "$KDEVELOP_VERSION" ]; then
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=2.0
+fi
+if [ -z "$KDEV_CLANG_TIDY_VERSION" ]; then
+    KDEV_CLANG_TIDY_VERSION=v0.2.1
 fi
 KF5_VERSION=v5.48.0 # note: v5.49.0 is broken due to https://phabricator.kde.org/R246:0a96acf251baa5c9dd042d093ab2bf8fcee10502
 KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
@@ -68,7 +71,7 @@ git reset --hard
 cd /
 
 # Use the new compiler
-. /opt/rh/devtoolset-4/enable
+. /opt/rh/devtoolset-6/enable
 
 # TODO: Use these vars more
 export FAKEROOT=/kdevelop.appdir
@@ -247,6 +250,9 @@ build_project kdev-php $KDEVELOP_VERSION
 # Build kdev-python
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
 build_project kdev-python $KDEVELOP_VERSION
+
+# Build kdev-clang-tidy
+build_project kdev-clang-tidy $KDEV_CLANG_TIDY_VERSION
 
 # Install some colorschemes
 cd $SRC
@@ -434,8 +440,6 @@ export APPIMAGE_STARTUP_QT_PLUGIN_PATH=\$QT_PLUGIN_PATH
 export APPIMAGE_STARTUP_XDG_DATA_DIRS=\$XDG_DATA_DIRS
 export APPIMAGE_STARTUP_PATH=\$PATH
 export APPIMAGE_STARTUP_PYTHONHOME=\$PYTHONHOME
-
-export KDEV_DISABLE_PLUGINS=KDevWelcomePage
 
 cd \$HOME
 

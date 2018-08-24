@@ -164,7 +164,6 @@ QStringList NinjaJob::privilegedExecutionCommand() const
     if (runAsRoot && m_isInstalling) {
         int suCommand = builderGroup.readEntry("Su Command", 0);
         QStringList arguments;
-        QString suCommandName;
         switch (suCommand) {
         case 1:
             return QStringList{QStringLiteral("kdesudo"), QStringLiteral("-t")};

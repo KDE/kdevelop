@@ -226,8 +226,7 @@ void Parser::expectedSymbol(int /*expected_symbol*/, const QString& name)
     reportProblem(
         Parser::Error,
         QStringLiteral("Expected symbol \"%1\" (current token: \"%2\" [%3] at line: %4 col: %5)")
-            .arg(name)
-            .arg(token.kind != 0 ? tokenValue : QStringLiteral("EOF"))
+            .arg(name, token.kind != 0 ? tokenValue : QStringLiteral("EOF"))
             .arg(token.kind)
             .arg(line)
             .arg(col));

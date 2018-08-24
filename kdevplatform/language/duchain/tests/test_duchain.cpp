@@ -298,7 +298,7 @@ void TestDUChain::testStringSets() {
         }
         {
           Timer t;
-          QSet<Index> i = first.intersect(second);
+          QSet<Index> i = first.intersect(second); // clazy:exclude=unused-non-trivial-variable
           qsetIntersectionTime += t.elapsed();
         }
 

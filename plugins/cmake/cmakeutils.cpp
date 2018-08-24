@@ -223,8 +223,6 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
         }
         else
         {
-
-            QString newbuilddir = bd.buildFolder().toLocalFile();
             int addedBuildDirIndex = buildDirCount( project ); // old count is the new index
 
             // Initialize the kconfig items with the values from the dialog, this ensures the settings

@@ -93,9 +93,9 @@ void CMakeParserTest::testParserWithBadData()
         QFAIL( "Unable to open temporary file" );
 
     tempFile.write( text.toUtf8() );
-    QString tempName = tempFile.fileName();
     tempFile.close(); //hacks to the get name of the file
 //    CMakeAst* ast = new CMakeAst;
+//    QString tempName = tempFile.fileName();
 //    bool parseError = CMakeListsParser::parseCMakeFile( ast, qPrintable( tempName ) );
 //    delete ast;
 //    QVERIFY( parseError == true );

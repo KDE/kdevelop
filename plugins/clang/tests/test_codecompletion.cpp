@@ -852,8 +852,7 @@ void TestCodeCompletion::testImplementOtherFile()
     TestFile impl(QString("#include \"%1\"\n"
                           "#include \"%2\"\n"
                           "void asdf();\n\n")
-                    .arg(header1.url().str())
-                    .arg(header2.url().str()),
+                    .arg(header1.url().str(), header2.url().str()),
                   QStringLiteral("cpp"), &header1);
 
     CompletionItems expectedItems{{3,1}, {"asdf()", "foo()"}};

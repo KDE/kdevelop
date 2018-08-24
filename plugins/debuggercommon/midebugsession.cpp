@@ -1032,8 +1032,6 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
     }
 
     if (reason == QLatin1String("watchpoint-scope")) {
-        QString number = r[QStringLiteral("wpnum")].literal();
-
         // FIXME: shuld remove this watchpoint
         // But first, we should consider if removing all
         // watchpoinst on program exit is the right thing to

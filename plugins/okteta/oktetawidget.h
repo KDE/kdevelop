@@ -23,7 +23,7 @@
 #ifndef OKTETAWIDGET_H
 #define OKTETAWIDGET_H
 
-// KDE
+// KF
 #include <KXMLGUIClient>
 // Qt
 #include <QWidget>

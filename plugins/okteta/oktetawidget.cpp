@@ -55,7 +55,7 @@
 #include <Kasten/SelectController>
 // KDevelop
 #include <sublime/view.h>
-// KDE
+// KF
 #include <KLocalizedString>
 #include <KStandardAction>
 #include <KActionCollection>

@@ -177,7 +177,6 @@ void StatusBar::updateMessage()
         slotTimeout();
     }
 
-    QString ret;
     int timeout = 0;
 
     QStringList messages;

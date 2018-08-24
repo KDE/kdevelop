@@ -97,7 +97,7 @@ void QmlBundle::intersect(const QmlBundle &o)
 
 QmlBundle QmlBundle::mergeF(const QmlBundle &o) const
 {
-    return QmlBundle(QString::fromLatin1("(%1)||(%2)").arg(name()).arg(o.name()),
+    return QmlBundle(QString::fromLatin1("(%1)||(%2)").arg(name(), o.name()),
                      searchPaths().mergeF(o.searchPaths()),
                      installPaths().mergeF(o.installPaths()),
                      supportedImports().mergeF(o.supportedImports()),
@@ -106,7 +106,7 @@ QmlBundle QmlBundle::mergeF(const QmlBundle &o) const
 
 QmlBundle QmlBundle::intersectF(const QmlBundle &o) const
 {
-    return QmlBundle(QString::fromLatin1("(%1)&&(%2)").arg(name()).arg(o.name()),
+    return QmlBundle(QString::fromLatin1("(%1)&&(%2)").arg(name(), o.name()),
                      searchPaths().mergeF(o.searchPaths()),
                      installPaths().mergeF(o.installPaths()),
                      supportedImports().intersectF(o.supportedImports()),
