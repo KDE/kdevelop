@@ -207,7 +207,7 @@ void PatchReviewPlugin::removeHighlighting( const QUrl& file ) {
 void PatchReviewPlugin::notifyPatchChanged() {
     if (m_patch) {
         qCDebug(PLUGIN_PATCHREVIEW) << "notifying patch change: " << m_patch->file();
-        m_updateKompareTimer->start( 500 );
+        m_updateKompareTimer->start();
     } else {
         m_updateKompareTimer->stop();
     }
@@ -528,6 +528,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
 
     m_updateKompareTimer = new QTimer( this );
     m_updateKompareTimer->setSingleShot( true );
+    m_updateKompareTimer->setInterval(500);
     connect( m_updateKompareTimer, &QTimer::timeout, this, &PatchReviewPlugin::updateKompareModel );
 
     m_finishReview = new QAction(i18n("Finish Review"), this);

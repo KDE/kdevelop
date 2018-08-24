@@ -195,8 +195,7 @@ WorkingSetToolTipWidget* WorkingSetController::workingSetToolTip()
     if(!m_tooltip)
         showGlobalToolTip();
 
-    m_hideToolTipTimer->stop();
-    m_hideToolTipTimer->start(toolTipTimeout);
+    m_hideToolTipTimer->start();
 
     if(m_tooltip)
     {

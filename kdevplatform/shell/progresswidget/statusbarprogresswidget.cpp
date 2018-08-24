@@ -174,11 +174,13 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
 
     mDelayTimer = new QTimer( this );
     mDelayTimer->setSingleShot( true );
+    mDelayTimer->setInterval(1000);
     connect ( mDelayTimer, &QTimer::timeout,
               this, &StatusbarProgressWidget::slotShowItemDelayed );
 
     mCleanTimer = new QTimer( this );
     mCleanTimer->setSingleShot( true );
+    mCleanTimer->setInterval(5000);
     connect ( mCleanTimer, &QTimer::timeout,
               this, &StatusbarProgressWidget::slotClean );
 }
@@ -192,7 +194,7 @@ void StatusbarProgressWidget::updateBusyMode()
 {
     connectSingleItem(); // if going to 1 item
     if (!mDelayTimer->isActive())
-        mDelayTimer->start( 1000 );
+        mDelayTimer->start();
 }
 
 void StatusbarProgressWidget::slotProgressItemAdded( ProgressItem *item )
@@ -226,7 +228,7 @@ void StatusbarProgressWidget::slotProgressItemCompleted( ProgressItem *item )
         }
 
         // Done. In 5s the progress-widget will close, then we can clean up the statusbar
-        mCleanTimer->start( 5000 );
+        mCleanTimer->start();
     } else if ( mCurrentItem ) { // Exactly one item
         activateSingleItemMode();
     }

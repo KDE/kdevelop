@@ -29,6 +29,7 @@ namespace gh
 LineEdit::LineEdit(QWidget *parent) : QLineEdit(parent)
 {
     m_timer = new QTimer(this);
+    m_timer->setInterval(500);
     connect(m_timer, &QTimer::timeout, this, &LineEdit::timeOut);
 }
 
@@ -45,7 +46,7 @@ void LineEdit::keyPressEvent(QKeyEvent *e)
         emit returnPressed();
         return;
     }
-    m_timer->start(500);
+    m_timer->start();
     QLineEdit::keyPressEvent(e);
 }
 

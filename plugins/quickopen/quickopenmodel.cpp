@@ -40,6 +40,7 @@ QuickOpenModel::QuickOpenModel(QWidget* parent) : ExpandingWidgetModel(parent)
 {
     m_resetTimer = new QTimer(this);
     m_resetTimer->setSingleShot(true);
+    m_resetTimer->setInterval(0);
     connect(m_resetTimer, &QTimer::timeout, this, &QuickOpenModel::resetTimer);
 }
 
@@ -414,7 +415,7 @@ QuickOpenDataPointer QuickOpenModel::getItem(int row, bool noReset) const
 
             if (!noReset && provider.provider->itemCount() != itemCount) {
                 qCDebug(PLUGIN_QUICKOPEN) << "item-count in provider has changed, resetting model";
-                m_resetTimer->start(0);
+                m_resetTimer->start();
                 m_resetBehindRow = rowOffset + row; //Don't reset everything, only everything behind this position
             }
 

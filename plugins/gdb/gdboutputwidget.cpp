@@ -98,6 +98,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     connect(m_Interrupt, &QToolButton::clicked, this, &GDBOutputWidget::breakInto);
 
     m_updateTimer.setSingleShot(true);
+    m_updateTimer.setInterval(100);
     connect(&m_updateTimer, &QTimer::timeout,
              this, &GDBOutputWidget::flushPending);
 
@@ -233,7 +234,7 @@ void GDBOutputWidget::showLine(const QString& line)
     // To improve performance, we update the view after some delay.
     if (!m_updateTimer.isActive())
     {
-        m_updateTimer.start(100);
+        m_updateTimer.start();
     }
 }
 

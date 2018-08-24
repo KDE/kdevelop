@@ -97,6 +97,7 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
     handleDebuggerStateChange(s_none, s_dbgNotStarted);
 
     m_updateTimer.setSingleShot(true);
+    m_updateTimer.setInterval(100);
     connect(&m_updateTimer, &QTimer::timeout, this, &DebuggerConsoleView::flushPending);
 
     connect(plugin->core()->debugController(), &KDevelop::IDebugController::currentSessionChanged,
@@ -245,7 +246,7 @@ void DebuggerConsoleView::appendLine(const QString& line)
     // To improve performance, we update the view after some delay.
     if (!m_updateTimer.isActive())
     {
-        m_updateTimer.start(100);
+        m_updateTimer.start();
     }
 }
 
