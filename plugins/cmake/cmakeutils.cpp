@@ -325,11 +325,11 @@ QString findExecutable()
     auto cmake = QStandardPaths::findExecutable(QStringLiteral("cmake"));
 #ifdef Q_OS_WIN
     if (cmake.isEmpty())
-        cmake = QStandardPaths::findExecutable("cmake",{
-            "C:\\Program Files (x86)\\CMake\\bin",
-            "C:\\Program Files\\CMake\\bin",
-            "C:\\Program Files (x86)\\CMake 2.8\\bin",
-            "C:\\Program Files\\CMake 2.8\\bin"});
+        cmake = QStandardPaths::findExecutable(QStringLiteral("cmake"), {
+            QStringLiteral("C:\\Program Files (x86)\\CMake\\bin"),
+            QStringLiteral("C:\\Program Files\\CMake\\bin"),
+            QStringLiteral("C:\\Program Files (x86)\\CMake 2.8\\bin"),
+            QStringLiteral("C:\\Program Files\\CMake 2.8\\bin")});
 #endif
     return cmake;
 }
