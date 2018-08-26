@@ -57,9 +57,9 @@ Job::Job(const Parameters& params, QObject* parent)
     setCapabilities(KJob::Killable);
     setStandardToolView(KDevelop::IOutputView::TestView);
     setBehaviours(KDevelop::IOutputView::AutoScroll);
-    setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStdout);
-    setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStderr);
-    setProperties(KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
+    setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStdout |
+                  KDevelop::OutputExecuteJob::JobProperty::DisplayStderr |
+                  KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
 
     *this << params.executablePath;
 
