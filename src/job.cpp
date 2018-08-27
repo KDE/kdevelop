@@ -24,6 +24,7 @@
 
 // plugin
 #include "parsers/clangtidyparser.h"
+#include <qtcompat_p.h>
 // KF
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -119,7 +120,7 @@ void Job::generateMakefile()
     QTextStream scriptStream(&makefile);
 
     scriptStream << QStringLiteral("SOURCES =");
-    for (const auto& source : m_parameters.filePaths) {
+    for (const auto& source : qAsConst(m_parameters.filePaths)) {
         // TODO: how to escape " in a filename, for those people who like to go extreme?
         scriptStream << QLatin1String(" \\\n\t\"") + source + QLatin1Char('\"');
     }
