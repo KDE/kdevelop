@@ -2,6 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
+ * Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +28,7 @@
 #include "config/clangtidypreferences.h"
 #include "config/clangtidyprojectconfigpage.h"
 #include "job.h"
+#include "utils.h"
 // KDevPlatform
 #include <interfaces/icore.h>
 #include <interfaces/context.h>
@@ -84,14 +86,10 @@ Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     connect(m_checkFileAction, &QAction::triggered, this, &Plugin::runClangTidyFile);
     actionCollection()->addAction(QStringLiteral("clangtidy_file"), m_checkFileAction);
 
-    /*     TODO: Uncomment this only when discover a safe way to run clang-tidy on
-    the whole project.
-    //     QAction* act_check_all_files;
-    //     act_check_all_files = actionCollection()->addAction ( "clangtidy_all",
-    this, SLOT ( runClangTidyAll() ) );
-    //     act_check_all_files->setText(i18n("Analyze Current Project with Clang-Tidy)"));
-    //     act_check_all_files->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
-    */
+    m_checkProjectAction = new QAction(QIcon::fromTheme(QStringLiteral("dialog-ok")),
+                                       i18n("Analyze Current Project with Clang-Tidy"), this);
+    connect(m_checkProjectAction, &QAction::triggered, this, &Plugin::runClangTidyAll);
+    actionCollection()->addAction(QStringLiteral("clangtidy_project"), m_checkProjectAction);
 
     ProblemModelSet* pms = core()->languageController()->problemModelSet();
     pms->addModel(Strings::modelId(), i18n("Clang-Tidy"), m_model.data());
@@ -123,9 +121,11 @@ void Plugin::unload()
     pms->removeModel(Strings::modelId());
 }
 
+
 void Plugin::updateActions()
 {
     m_checkFileAction->setEnabled(false);
+    m_checkProjectAction->setEnabled(false);
 
     if (isRunning()) {
         return;
@@ -136,16 +136,16 @@ void Plugin::updateActions()
         return;
     }
 
-    if (!isSupportedMimeType(activeDocument->mimeType())) {
-        return;
-    }
-
     auto currentProject = core()->projectController()->findProjectForUrl(activeDocument->url());
     if (!currentProject) {
         return;
     }
 
-    m_checkFileAction->setEnabled(true);
+    if (isSupportedMimeType(activeDocument->mimeType())) {
+        m_checkFileAction->setEnabled(true);
+    }
+
+    m_checkProjectAction->setEnabled(true);
 }
 
 
@@ -169,6 +169,11 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
         return;
     }
 
+    const auto buildDir = project->buildSystemManager()->buildDirectory(project->projectItem());
+
+    QString error;
+    const auto filePaths = Utils::filesFromCompilationDatabase(buildDir, url, allFiles, error);
+
     ClangTidyProjectSettings projectSettings;
     projectSettings.setSharedConfig(project->projectConfiguration());
     projectSettings.load();
@@ -180,14 +185,9 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
     params.executablePath = clangTidyPath;
 
-    if (allFiles) {
-        params.filePath = project->path().toUrl().toLocalFile();
-    } else {
-        params.filePath = url.toLocalFile();
-    }
-    if (const auto buildSystem = project->buildSystemManager()) {
-        params.buildDir = buildSystem->buildDirectory(project->projectItem()).toLocalFile();
-    }
+    params.filePaths = filePaths;
+    params.buildDir = buildDir.toLocalFile();
+
     params.additionalParameters = projectSettings.additionalParameters();
 
     const auto enabledChecks = projectSettings.enabledChecks();
@@ -260,6 +260,9 @@ ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* par
             connect(action, &QAction::triggered, this, &Plugin::runClangTidyFile);
             extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, action);
         }
+        auto action = new QAction(QIcon::fromTheme(QStringLiteral("dialog-ok")), i18n("Clang-Tidy"), parent);
+        connect(action, &QAction::triggered, this, &Plugin::runClangTidyAll);
+        extension.addAction(KDevelop::ContextMenuExtension::AnalyzeProjectGroup, action);
     }
 
     if (context->hasType(KDevelop::Context::ProjectItemContext) && !isRunning()) {
@@ -269,14 +272,18 @@ ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* par
             return extension;
         }
 
-        auto item = items.first();
-
-        if (item->type() != KDevelop::ProjectBaseItem::File) {
+        const auto item = items.first();
+        const auto itemType = item->type();
+        if ((itemType != KDevelop::ProjectBaseItem::File) &&
+            (itemType != KDevelop::ProjectBaseItem::Folder) &&
+            (itemType != KDevelop::ProjectBaseItem::BuildFolder)) {
             return extension;
         }
-        const QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(item->path().toUrl());
-        if (!isSupportedMimeType(mimetype)) {
-            return extension;
+        if (itemType == KDevelop::ProjectBaseItem::File) {
+            const QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(item->path().toUrl());
+            if (!isSupportedMimeType(mimetype)) {
+                return extension;
+            }
         }
 
         auto action = new QAction(QIcon::fromTheme(QStringLiteral("dialog-ok")), i18n("Clang-Tidy"), parent);

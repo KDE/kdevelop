@@ -6,7 +6,7 @@
       <Action name="clangtidy_file"/>
     </Menu>
     <Menu name="analyze_project">
-      <Action name="clangtidy_all"/>
+      <Action name="clangtidy_project"/>
     </Menu>
   </Menu>
 </MenuBar>

@@ -46,7 +46,7 @@ public:
     struct Parameters {
         QString projectRootDir;
         QString executablePath;
-        QString filePath;
+        QStringList filePaths;
         QString buildDir;
         QString additionalParameters;
         QString enabledChecks;
@@ -75,10 +75,14 @@ protected:
     void processStdoutLines(const QStringList& lines);
     void processStderrLines(const QStringList& lines);
 
+private:
+    void generateMakefile();
+
 protected:
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
     const Job::Parameters m_parameters;
+    QString m_makeFilePath;
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
 };

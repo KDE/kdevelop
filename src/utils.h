@@ -22,7 +22,10 @@
 #ifndef CLANGTIDY_UTILS_H
 #define CLANGTIDY_UTILS_H
 
+namespace KDevelop { class Path; }
+class QUrl;
 class QString;
+class QStringList;
 
 namespace ClangTidy
 {
@@ -31,6 +34,9 @@ namespace Utils
 {
 
 QString findExecutable(const QString& fallbackExecutablePath);
+QStringList filesFromCompilationDatabase(const KDevelop::Path& buildPath,
+                                         const QUrl& urlToCheck, bool allFiles,
+                                         QString& error);
 
 }
 

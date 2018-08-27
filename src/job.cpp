@@ -2,6 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright 2016 Carlos Nihelton <carlosnsoliveira@gmail.com>
+ * Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,19 +35,45 @@
 namespace ClangTidy
 {
 
-QString inlineYaml(const Job::Parameters& params)
+// uses ' for quoting
+QString inlineYaml(const Job::Parameters& parameters)
 {
     QString result;
 
-    result.append(QLatin1String("{Checks: '") + params.enabledChecks + QLatin1Char('\''));
+    result.append(QLatin1String("{Checks: '") + parameters.enabledChecks + QLatin1Char('\''));
 
-    if (!params.headerFilter.isEmpty()) {
-        result.append(QLatin1String(", HeaderFilterRegex: '") + params.headerFilter + QLatin1Char('\''));
+    if (!parameters.headerFilter.isEmpty()) {
+        // TODO: the regex might need escpaing for potential quotes of all kinds
+        result.append(QLatin1String(", HeaderFilterRegex: '") + parameters.headerFilter + QLatin1Char('\''));
     }
     result.append(QLatin1Char('}'));
 
     return result;
 }
+
+// uses " for quoting
+QStringList commandLineArgs(const Job::Parameters& parameters)
+{
+    QStringList args{
+        parameters.executablePath,
+        QLatin1String("-p=\"") + parameters.buildDir + QLatin1Char('\"'),
+        // don't add statistics we are not interested in to parse anyway
+        QStringLiteral("-quiet"),
+    };
+    if (!parameters.additionalParameters.isEmpty()) {
+        args << parameters.additionalParameters;
+    }
+    if (parameters.checkSystemHeaders) {
+        args << QStringLiteral("--system-headers");
+    }
+
+    if (!parameters.useConfigFile) {
+        args << QLatin1String("--config=\"") + inlineYaml(parameters) + QLatin1Char('\"');
+    }
+
+    return args;
+}
+
 
 Job::Job(const Parameters& params, QObject* parent)
     : KDevelop::OutputExecuteJob(parent)
@@ -61,31 +88,59 @@ Job::Job(const Parameters& params, QObject* parent)
                   KDevelop::OutputExecuteJob::JobProperty::DisplayStderr |
                   KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
 
-    *this << params.executablePath;
+    // TODO: check success of creation
+    generateMakefile();
 
-    *this << QLatin1String("-p=") + params.buildDir;
-    *this << params.filePath;
+    *this << QStringList{
+        QStringLiteral("make"),
+        QStringLiteral("-f"),
+        m_makeFilePath,
+    };
 
-    // don't add statistics we are not interested in to parse anyway
-    *this << QStringLiteral("-quiet");
-
-    if (!params.additionalParameters.isEmpty()) {
-        *this << params.additionalParameters;
-    }
-    if (params.checkSystemHeaders) {
-        *this << QStringLiteral("--system-headers");
-    }
-
-    if (!params.useConfigFile) {
-        *this << QLatin1String("--config=") + inlineYaml(params);
-    }
-
-    qCDebug(KDEV_CLANGTIDY) << "checking path" << params.filePath;
+    qCDebug(KDEV_CLANGTIDY) << "checking files" << params.filePaths;
 }
 
 Job::~Job()
 {
     doKill();
+
+    if (!m_makeFilePath.isEmpty()) {
+        QFile::remove(m_makeFilePath);
+    }
+}
+
+void Job::generateMakefile()
+{
+    m_makeFilePath = m_parameters.buildDir + QLatin1String("/kdevclangtidy.makefile");
+
+    QFile makefile(m_makeFilePath);
+    makefile.open(QIODevice::WriteOnly);
+
+    QTextStream scriptStream(&makefile);
+
+    scriptStream << QStringLiteral("SOURCES =");
+    for (const auto& source : m_parameters.filePaths) {
+        // TODO: how to escape " in a filename, for those people who like to go extreme?
+        scriptStream << QLatin1String(" \\\n\t\"") + source + QLatin1Char('\"');
+    }
+    scriptStream << QLatin1Char('\n');
+
+    scriptStream << QStringLiteral("COMMAND =");
+    const auto commandLine = commandLineArgs(m_parameters);
+    for (const auto& commandPart : commandLine) {
+        scriptStream << QLatin1Char(' ') << commandPart;
+    }
+    scriptStream << QLatin1Char('\n');
+
+    scriptStream << QStringLiteral(".PHONY: all $(SOURCES)\n");
+    scriptStream << QStringLiteral("all: $(SOURCES)\n");
+    scriptStream << QStringLiteral("$(SOURCES):\n");
+
+    scriptStream << QStringLiteral("\t@echo 'Clang-Tidy check started  for $@'\n");
+    scriptStream << QStringLiteral("\t$(COMMAND) $@\n");
+    scriptStream << QStringLiteral("\t@echo 'Clang-Tidy check finished for $@'\n");
+
+    makefile.close();
 }
 
 void Job::processStdoutLines(const QStringList& lines)
@@ -149,12 +204,7 @@ void Job::childProcessError(QProcess::ProcessError processError)
 
     switch (processError) {
     case QProcess::FailedToStart: {
-        const auto binaryPath = commandLine().value(0);
-        if (binaryPath.isEmpty()) {
-            message = i18n("Failed to find clang-tidy binary.");
-        } else {
-            message = i18n("Failed to start clang-tidy from %1.", binaryPath);
-        }
+        message = i18n("Failed to start Clang-Tidy process.");
         break;
     }
 

@@ -93,6 +93,7 @@ private:
     QPointer<KJob> m_runningJob;
 
     QAction* m_checkFileAction;
+    QAction* m_checkProjectAction;
     QScopedPointer<KDevelop::ProblemModel> m_model;
     CheckSet m_checkSet;
 };
