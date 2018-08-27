@@ -12,104 +12,106 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QFormLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>E&amp;xtra parameters:</string>
-       </property>
-       <property name="buddy">
-        <cstring>kcfg_additionalParameters</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="kcfg_additionalParameters">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Additional command line options to pass to clang-tidy.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel">
-       <property name="text">
-        <string>&amp;Check system headers:</string>
-       </property>
-       <property name="buddy">
-        <cstring>kcfg_checkSystemHeaders</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QCheckBox" name="kcfg_checkSystemHeaders"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel">
-       <property name="text">
-        <string>&amp;Use .clang-tidy file(s):</string>
-       </property>
-       <property name="buddy">
-        <cstring>kcfg_useConfigFile</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QCheckBox" name="kcfg_useConfigFile">
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="generalGroupBox">
-     <property name="enabled">
-      <bool>false</bool>
+    <widget class="QCheckBox" name="kcfg_useConfigFile">
+     <property name="text">
+      <string>&amp;Use .clang-tidy file(s)</string>
      </property>
-     <property name="title">
-      <string>General</string>
+     <property name="checked">
+      <bool>true</bool>
      </property>
-     <layout class="QFormLayout">
-      <item row="0" column="0">
-       <widget class="QLabel">
-        <property name="text">
-         <string>Header fi&amp;lter regex:</string>
-        </property>
-        <property name="buddy">
-         <cstring>kcfg_headerFilter</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="kcfg_headerFilter">
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Regular expression matching the names of the headers to output diagnostics from. Diagnostics from the main file of each translation unit are always displayed. Can be used together with -line-filter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="checkListGroupBox">
-     <property name="enabled">
-      <bool>false</bool>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
      </property>
-     <property name="title">
-      <string>Checks</string>
-     </property>
-     <layout class="QVBoxLayout">
-      <item>
-       <widget class="ClangTidy::CheckSelection" name="kcfg_enabledChecks" native="true"/>
-      </item>
-     </layout>
+     <widget class="QWidget" name="checksTab">
+      <attribute name="title">
+       <string>Checks</string>
+      </attribute>
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="ClangTidy::CheckSelection" name="kcfg_enabledChecks" native="true"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Includes</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>&amp;Check system headers:</string>
+         </property>
+         <property name="buddy">
+          <cstring>kcfg_checkSystemHeaders</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QCheckBox" name="kcfg_checkSystemHeaders"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="headerFilterLabel">
+         <property name="text">
+          <string>Header fi&amp;lter:</string>
+         </property>
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="buddy">
+          <cstring>kcfg_headerFilter</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="kcfg_headerFilter">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Regular expression matching the names of the headers to output diagnostics from. Diagnostics from the main file of each translation unit are always displayed. Can be used together with -line-filter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Extra Parameters</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>E&amp;xtra parameters:</string>
+         </property>
+         <property name="buddy">
+          <cstring>kcfg_additionalParameters</cstring>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="kcfg_additionalParameters">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Additional command line options to pass to clang-tidy.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -126,34 +128,20 @@
   <connection>
    <sender>kcfg_useConfigFile</sender>
    <signal>toggled(bool)</signal>
-   <receiver>checkListGroupBox</receiver>
+   <receiver>checksTab</receiver>
    <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>194</x>
-     <y>85</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>102</x>
-     <y>109</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>kcfg_useConfigFile</sender>
    <signal>toggled(bool)</signal>
-   <receiver>generalGroupBox</receiver>
+   <receiver>kcfg_headerFilter</receiver>
    <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_useConfigFile</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>headerFilterLabel</receiver>
+   <slot>setDisabled(bool)</slot>
   </connection>
  </connections>
 </ui>
