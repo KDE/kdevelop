@@ -1,6 +1,20 @@
 [General]
 Name=QAbstractItemModel subclass
+Name[ca]=Subclasse QAbstractItemModel
+Name[it]=Sottoclasse di QAbstractItemModel
+Name[nl]=QAbstractItemModel subclass
+Name[pt]=Sub-classe de QAbstractItemModel
+Name[sv]=QAbstractItemModel-delklass
+Name[uk]=Підклас QAbstractItemModel
+Name[x-test]=xxQAbstractItemModel subclassxx
 Comment=QAbstractItemModel subclass with properties
+Comment[ca]=Subclasse QAbstractItemModel amb propietats
+Comment[it]=Sottoclasse di QAbstractItemModel con delle proprietà
+Comment[nl]=QAbstractItemModel subclass met eigenschappen
+Comment[pt]=Sub-classe de QAbstractItemModel com propriedades
+Comment[sv]=QAbstractItemModel-delklass med egenskaper
+Comment[uk]=Підклас QAbstractItemModel із властивостями
+Comment[x-test]=xxQAbstractItemModel subclass with propertiesxx
 Category=C++/Qt
 Language=C++
 Language[bs]=C++

@@ -1,6 +1,20 @@
 [General]
 Name=Widget (pimpl) with a UI File
+Name[ca]=Estri (pimpl) amb un fitxer IU
+Name[it]=Oggetto (pimpl) con un file UI
+Name[nl]=Widget (pimpl) met een UI-bestand
+Name[pt]=Janela (pimpl) com um Ficheiro UI
+Name[sv]=Grafisk komponent (pimpl) med en UI-fil
+Name[uk]=Віджет (pimpl) із файлом UI
+Name[x-test]=xxWidget (pimpl) with a UI Filexx
 Comment=QWidget subclass with a separate Qt Designer file and private implementation
+Comment[ca]=Subclasse QWidget amb un fitxer separat del Qt Designer i una implementació privada
+Comment[it]=Sottoclasse di QWidget con un file separato di Qt Designer e implementazione privata
+Comment[nl]=QWidget subclass met een apart Qt Designer bestand en privé implementatie
+Comment[pt]=Sub-classe de QWidget com um ficheiro separado do Qt Designer e uma implementação privada
+Comment[sv]=QWidget-delklass med en separat Qt Designer-fil och privat implementering
+Comment[uk]=Підклас QWidget із окремим файлом Qt Designer і закритою (private) реалізацією
+Comment[x-test]=xxQWidget subclass with a separate Qt Designer file and private implementationxx
 Category=C++/Qt
 Language=C++
 Language[bs]=C++

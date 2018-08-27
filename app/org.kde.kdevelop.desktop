@@ -75,4 +75,11 @@ Categories=Qt;KDE;Development;IDE;
 
 [Desktop Action OpenSession]
 Name=Open a Session
+Name[ca]=Obre una sessió
+Name[it]=Apri una sessione
+Name[nl]=Een sessie openen
+Name[pt]=Abrir uma Sessão
+Name[sv]=Öppna en session
+Name[uk]=Відкрити сеанс
+Name[x-test]=xxOpen a Sessionxx
 Exec=kdevelop --ps

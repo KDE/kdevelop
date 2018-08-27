@@ -1,6 +1,20 @@
 [General]
 Name=QAbstractItemModel pimpl subclass
+Name[ca]=Subclasse QAbstractItemModel «pimpl»
+Name[it]=Sottoclasse pimpl di QAbstractItemModel
+Name[nl]=QAbstractItemModel pimpl subclass
+Name[pt]=Sub-classe 'pimpl' de QAbstractItemModel
+Name[sv]=QAbstractItemModel pimpl-delklass
+Name[uk]=Підклас pimpl QAbstractItemModel
+Name[x-test]=xxQAbstractItemModel pimpl subclassxx
 Comment=QAbstractItemModel subclass with private implementation
+Comment[ca]=Una subclasse QAbstractItemModel amb implementació privada
+Comment[it]=Una sottoclasse di QAbstractItemModel con un'implementazione privata
+Comment[nl]=QAbstractItemModel subclass met privé implementatie
+Comment[pt]=Uma sub-classe de QAbstractItemModel com uma implementação privada
+Comment[sv]=QAbstractItemModel-delklass med privat implementering
+Comment[uk]=Підклас QAbstractItemModel із закритою (private) реалізацією
+Comment[x-test]=xxQAbstractItemModel subclass with private implementationxx
 Category=C++/Qt
 Language=C++
 Language[bs]=C++
