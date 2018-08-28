@@ -27,8 +27,6 @@
 #include <language/editor/documentrange.h>
 #include <serialization/indexedstring.h>
 #include <shell/problem.h>
-// Qt
-#include <QRegularExpression>
 
 namespace ClangTidy
 {
@@ -68,49 +66,41 @@ QString verboseMessageToHtml(const QString& input)
 
 ClangTidyParser::ClangTidyParser(QObject* parent)
     : QObject(parent)
+      //                          (1filename                 ) (2lin) (3col)  (4s)  (5d) (6explain)
+    , m_hitRegExp(QStringLiteral("(\\/.+\\.[ch]{1,2}[px]{0,2}):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"))
 {
 }
 
 void ClangTidyParser::parse()
 {
-    //                                       (1filename                 ) (2lin) (3col)  (4s)  (5d) (6explain)
-    QRegularExpression regex(QStringLiteral("(\\/.+\\.[ch]{1,2}[px]{0,2}):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"));
-
     for (const auto& line : qAsConst(m_stdout)) {
-        auto smatch = regex.match(line);
-        if (smatch.hasMatch()) {
-            IProblem::Ptr problem(new DetectedProblem());
-            problem->setSource(IProblem::Plugin);
-            problem->setDescription(smatch.captured(5));
-            problem->setExplanation(smatch.capturedRef(6) + QLatin1Char('\n'));
+        auto smatch = m_hitRegExp.match(line);
 
-            DocumentRange range;
-            range.document = IndexedString(smatch.captured(1));
-            range.setBothColumns(smatch.capturedRef(3).toInt() - 1);
-            range.setBothLines(smatch.capturedRef(2).toInt() - 1);
-            problem->setFinalLocation(range);
-
-            const auto sev = smatch.capturedRef(4);
-            IProblem::Severity erity;
-            if (sev == QStringLiteral("error")) {
-                erity = IProblem::Error;
-            } else if (sev == QStringLiteral("warning")) {
-                erity = IProblem::Warning;
-            } else if (sev == QStringLiteral("note")) {
-                erity = IProblem::Hint;
-            } else {
-                erity = IProblem::NoSeverity;
-            }
-            problem->setSeverity(erity);
-            m_problems.push_back(problem);
-
-        } else if (!m_problems.isEmpty()) {
-            auto problem = m_problems.last();
-            const QString extendedExplanation = problem->explanation() + QLatin1Char('\n') + line;
-            problem->setExplanation(extendedExplanation);
-        } else {
+        if (!smatch.hasMatch()) {
             continue;
         }
+
+        IProblem::Ptr problem(new DetectedProblem());
+        problem->setSource(IProblem::Plugin);
+        problem->setDescription(smatch.captured(5));
+        problem->setExplanation(smatch.captured(6));
+
+        DocumentRange range;
+        range.document = IndexedString(smatch.captured(1));
+        range.setBothColumns(smatch.capturedRef(3).toInt() - 1);
+        range.setBothLines(smatch.capturedRef(2).toInt() - 1);
+        problem->setFinalLocation(range);
+
+        const auto sev = smatch.capturedRef(4);
+        const IProblem::Severity erity =
+            (sev == QLatin1String("error")) ?   IProblem::Error :
+            (sev == QLatin1String("warning")) ? IProblem::Warning :
+            (sev == QLatin1String("note")) ?    IProblem::Hint :
+            /* else */                          IProblem::NoSeverity;
+        problem->setSeverity(erity);
+
+        m_problems.append(problem);
     }
 }
+
 } // namespace ClangTidy

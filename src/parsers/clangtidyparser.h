@@ -25,6 +25,7 @@
 // KDevPlatform
 #include <interfaces/iproblem.h>
 // Qt
+#include <QRegularExpression>
 #include <QObject>
 
 namespace ClangTidy
@@ -54,6 +55,7 @@ public:
     void addData(const QStringList& stdoutList) { m_stdout = stdoutList; }
 
 private:
+    const QRegularExpression m_hitRegExp;
     QVector<KDevelop::IProblem::Ptr> m_problems; ///< problems collected from clang-tidy stdout.
     QStringList m_stdout;
 };
