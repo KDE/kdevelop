@@ -28,6 +28,7 @@
 #include "config/clangtidypreferences.h"
 #include "config/clangtidyprojectconfigpage.h"
 #include "job.h"
+#include "problemmodel.h"
 #include "utils.h"
 // KDevPlatform
 #include <interfaces/icore.h>
@@ -44,7 +45,6 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
-#include <shell/problemmodel.h>
 #include <shell/problemmodelset.h>
 #include <util/jobstatus.h>
 // KF
@@ -78,7 +78,7 @@ bool isSupportedMimeType(const QMimeType& mimeType)
 
 Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     : IPlugin(QStringLiteral("kdevclangtidy"), parent)
-    , m_model(new KDevelop::ProblemModel(parent))
+    , m_model(new ProblemModel(this, this))
 {
     setXMLFile(QStringLiteral("kdevclangtidy.rc"));
 
@@ -170,6 +170,8 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
         return;
     }
 
+    m_model->reset(project, url, allFiles);
+
     const auto buildDir = project->buildSystemManager()->buildDirectory(project->projectItem());
 
     QString error;
@@ -204,6 +206,7 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     params.checkSystemHeaders = projectSettings.checkSystemHeaders();
 
     auto job = new ClangTidy::Job(params, this);
+    connect(job, &Job::problemsDetected, m_model.data(), &ProblemModel::addProblems);
     connect(job, &KJob::finished, this, &Plugin::result);
     core()->uiController()->registerStatus(new KDevelop::JobStatus(job, QStringLiteral("clang-tidy")));
     core()->runController()->registerJob(job);
@@ -211,6 +214,13 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     m_runningJob = job;
 
     updateActions();
+    showModel();
+}
+
+void Plugin::showModel()
+{
+    ProblemModelSet* pms = core()->languageController()->problemModelSet();
+    pms->showModel(Strings::modelId());
 }
 
 bool Plugin::isRunning() const
@@ -237,12 +247,11 @@ void Plugin::result(KJob* job)
         return;
     }
 
+    m_model->finishAddProblems();
+
     if (aj->status() == KDevelop::OutputExecuteJob::JobStatus::JobSucceeded ||
         aj->status() == KDevelop::OutputExecuteJob::JobStatus::JobCanceled) {
-        m_model->setProblems(aj->problems());
-
-        ProblemModelSet* pms = core()->languageController()->problemModelSet();
-        pms->showModel(Strings::modelId());
+        showModel();
     } else {
         core()->uiController()->findToolView(i18ndc("kdevstandardoutputview", "@title:window", "Test"), nullptr,
                                              KDevelop::IUiController::FindFlags::Raise);

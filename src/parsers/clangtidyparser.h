@@ -37,27 +37,23 @@ namespace ClangTidy
  */
 class ClangTidyParser : public QObject
 {
+    Q_OBJECT
+
 public:
     explicit ClangTidyParser(QObject* parent = nullptr);
     ~ClangTidyParser() = default;
 
 public:
     /**
-     * \return all problems collected from clang-tidy stdout.
-     */
-    QVector<KDevelop::IProblem::Ptr> problems() const { return m_problems; }
-
-    void parse();
-
-    /**
      * \brief meant to be used by Job class to pass the standard output to be parsed.
      */
-    void addData(const QStringList& stdoutList) { m_stdout = stdoutList; }
+    void addData(const QStringList& stdoutList);
+
+Q_SIGNALS:
+    void problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems);
 
 private:
     const QRegularExpression m_hitRegExp;
-    QVector<KDevelop::IProblem::Ptr> m_problems; ///< problems collected from clang-tidy stdout.
-    QStringList m_stdout;
 };
 
 } // namespace ClangTidy

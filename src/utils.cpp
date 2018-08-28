@@ -24,11 +24,14 @@
 // plugin
 #include <debug.h>
 // KDevPlatform
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 #include <util/path.h>
 // KF
 #include <KLocalizedString>
 // Qt
 #include <QStandardPaths>
+#include <QUrl>
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -39,6 +42,14 @@ namespace ClangTidy
 
 namespace Utils
 {
+
+QString prettyPathName(const QString& path)
+{
+    auto* projectController = KDevelop::ICore::self()->projectController();
+    return projectController->prettyFileName(QUrl::fromLocalFile(path),
+                                             KDevelop::IProjectController::FormatPlain);
+}
+
 
 QString findExecutable(const QString& fallbackExecutablePath)
 {

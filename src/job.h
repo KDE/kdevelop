@@ -23,6 +23,7 @@
 #define CLANGTIDY_JOB_H
 
 // plugin
+#include "parsers/clangtidyparser.h"
 #include <debug.h>
 // KDevPlatform
 #include <interfaces/iproblem.h>
@@ -61,8 +62,8 @@ public:
 public: // KJob API
     void start() override;
 
-public:
-    QVector<KDevelop::IProblem::Ptr> problems() const;
+Q_SIGNALS:
+    void problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems);
 
 protected Q_SLOTS:
     void postProcessStdout(const QStringList& lines) override;
@@ -79,6 +80,7 @@ private:
     void generateMakefile();
 
 protected:
+    ClangTidyParser m_parser;
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
     const Job::Parameters m_parameters;
@@ -88,5 +90,7 @@ protected:
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
 };
+
 }
+
 #endif

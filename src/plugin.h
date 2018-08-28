@@ -34,13 +34,11 @@
 class KJob;
 class QAction;
 
-namespace KDevelop
-{
-class ProblemModel;
-}
-
 namespace ClangTidy
 {
+
+class ProblemModel;
+
 /**
  * \class
  * \brief implements the support for clang-tidy inside KDevelop by using the IPlugin interface.
@@ -77,24 +75,25 @@ public:
      * parameters.
      */
     QStringList allAvailableChecks() { return m_checkSet.all(); }
+    bool isRunning() const;
+    void runClangTidy(const QUrl& url, bool allFiles = false);
 
 private Q_SLOTS:
     void runClangTidy(bool allFiles = false);
-    void runClangTidy(const QUrl& url, bool allFiles = false);
     void runClangTidyFile();
     void runClangTidyAll();
     void result(KJob* job);
     void updateActions();
 
 private:
-    bool isRunning() const;
+    void showModel();
 
 private:
     QPointer<KJob> m_runningJob;
 
     QAction* m_checkFileAction;
     QAction* m_checkProjectAction;
-    QScopedPointer<KDevelop::ProblemModel> m_model;
+    QScopedPointer<ProblemModel> m_model;
     CheckSet m_checkSet;
 };
 

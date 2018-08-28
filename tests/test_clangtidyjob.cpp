@@ -29,6 +29,7 @@
 #include <tests/testcore.h>
 // Qt
 #include <QTest>
+#include <QSignalSpy>
 
 
 using namespace KDevelop;
@@ -75,11 +76,16 @@ void TestClangTidyJob::testJob()
     Job::Parameters jobParams;
     JobTester jobTester(jobParams);
 
+    qRegisterMetaType<QVector<KDevelop::IProblem::Ptr>>();
+    QSignalSpy problemsSpy(&jobTester, &JobTester::problemsDetected);
+
     jobTester.processStdoutLines(stdoutOutput);
     QCOMPARE(jobTester.standardOutput(), stdoutOutput.join('\n'));
 
     jobTester.childProcessExited(0, QProcess::NormalExit);
-    auto problems = jobTester.problems();
+
+    QCOMPARE(problemsSpy.count(), 1);
+    const auto problems = qvariant_cast<QVector<KDevelop::IProblem::Ptr>>(problemsSpy.at(0).at(0));
 
     QVERIFY(problems[0]->finalLocation().document.str().contains(QStringLiteral("/kdev-clang-tidy/src/plugin.cpp")));
     QVERIFY(

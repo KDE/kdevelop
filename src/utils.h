@@ -33,6 +33,7 @@ namespace ClangTidy
 namespace Utils
 {
 
+QString prettyPathName(const QString& path);
 QString findExecutable(const QString& fallbackExecutablePath);
 QStringList filesFromCompilationDatabase(const KDevelop::Path& buildPath,
                                          const QUrl& urlToCheck, bool allFiles,

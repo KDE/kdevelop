@@ -71,9 +71,11 @@ ClangTidyParser::ClangTidyParser(QObject* parent)
 {
 }
 
-void ClangTidyParser::parse()
+void ClangTidyParser::addData(const QStringList& stdoutList)
 {
-    for (const auto& line : qAsConst(m_stdout)) {
+    QVector<KDevelop::IProblem::Ptr> problems;
+
+    for (const auto& line : qAsConst(stdoutList)) {
         auto smatch = m_hitRegExp.match(line);
 
         if (!smatch.hasMatch()) {
@@ -99,7 +101,11 @@ void ClangTidyParser::parse()
             /* else */                          IProblem::NoSeverity;
         problem->setSeverity(erity);
 
-        m_problems.append(problem);
+        problems.append(problem);
+    }
+
+    if (!problems.isEmpty()) {
+        emit problemsDetected(problems);
     }
 }
 

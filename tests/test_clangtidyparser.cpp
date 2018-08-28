@@ -32,6 +32,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QTest>
+#include <QSignalSpy>
 
 using namespace KDevelop;
 using namespace ClangTidy;
@@ -61,10 +62,14 @@ void TestClangTidyParser::testParser()
 
     QVERIFY(!clangtidy_example_output.isEmpty());
     ClangTidy::ClangTidyParser parser;
-    parser.addData(clangtidy_example_output);
-    parser.parse();
 
-    const auto problems = parser.problems();
+    qRegisterMetaType<QVector<KDevelop::IProblem::Ptr>>();
+    QSignalSpy problemsSpy(&parser, &ClangTidyParser::problemsDetected);
+
+    parser.addData(clangtidy_example_output);
+
+    QCOMPARE(problemsSpy.count(), 1);
+    const auto problems = qvariant_cast<QVector<KDevelop::IProblem::Ptr>>(problemsSpy.at(0).at(0));
     QVERIFY(!problems.empty());
 
     IProblem::Ptr p = problems[0];

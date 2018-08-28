@@ -10,6 +10,7 @@ set(kdevclangtidy_PART_SRCS
     job.cpp
     plugin.cpp
     checkset.cpp
+    problemmodel.cpp
     utils.cpp
 
     config/clangtidyprojectconfigpage.cpp

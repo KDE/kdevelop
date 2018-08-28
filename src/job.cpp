@@ -23,7 +23,6 @@
 #include "job.h"
 
 // plugin
-#include "parsers/clangtidyparser.h"
 #include <qtcompat_p.h>
 // KF
 #include <KLocalizedString>
@@ -90,6 +89,9 @@ Job::Job(const Parameters& params, QObject* parent)
                   KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
 
     m_totalCount = params.filePaths.size();
+
+    connect(&m_parser, &ClangTidyParser::problemsDetected,
+            this, &Job::problemsDetected);
 
     // TODO: check success of creation
     generateMakefile();
@@ -166,6 +168,7 @@ void Job::processStdoutLines(const QStringList& lines)
         }
     }
 
+    m_parser.addData(lines);
     m_standardOutput << lines;
 }
 
@@ -215,11 +218,6 @@ void Job::start()
     m_finishedCount = 0;
 
     KDevelop::OutputExecuteJob::start();
-}
-
-QVector<KDevelop::IProblem::Ptr> Job::problems() const
-{
-    return m_problems;
 }
 
 void Job::childProcessError(QProcess::ProcessError processError)
@@ -272,13 +270,9 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
         qCDebug(KDEV_CLANGTIDY) << m_standardOutput.join(QLatin1Char('\n'));
         qCDebug(KDEV_CLANGTIDY) << "clang-tidy failed, XML output: ";
         qCDebug(KDEV_CLANGTIDY) << m_xmlOutput.join(QLatin1Char('\n'));
-    } else {
-        ClangTidyParser parser;
-        parser.addData(m_standardOutput);
-        parser.parse();
-        m_problems = parser.problems();
     }
 
     KDevelop::OutputExecuteJob::childProcessExited(exitCode, exitStatus);
 }
+
 } // namespace ClangTidy
