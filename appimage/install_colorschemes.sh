@@ -4,7 +4,7 @@ if [ -z "$PREFIX" ]; then
      PREFIX=/tmp/fakeroot/usr
 fi
 
-VER=5.9.5 # Plasma version
+VER=5.13.4 # Plasma version
 COLORSCHEMESDIR=$PREFIX/share/color-schemes
 mkdir -p $COLORSCHEMESDIR
 
