@@ -89,6 +89,8 @@ Job::Job(const Parameters& params, QObject* parent)
                   KDevelop::OutputExecuteJob::JobProperty::DisplayStderr |
                   KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
 
+    m_totalCount = params.filePaths.size();
+
     // TODO: check success of creation
     generateMakefile();
 
@@ -146,6 +148,24 @@ void Job::generateMakefile()
 
 void Job::processStdoutLines(const QStringList& lines)
 {
+    static const auto startedRegex  = QRegularExpression(QStringLiteral("Clang-Tidy check started  for (.+)$"));
+    static const auto finishedRegex = QRegularExpression(QStringLiteral("Clang-Tidy check finished for (.+)$"));
+
+    for (const auto& line : lines) {
+        auto match = startedRegex.match(line);
+        if (match.hasMatch()) {
+            emit infoMessage(this, match.captured(1));
+            continue;
+        }
+
+        match = finishedRegex.match(line);
+        if (match.hasMatch()) {
+            ++m_finishedCount;
+            setPercent(static_cast<double>(m_finishedCount)/m_totalCount * 100);
+            continue;
+        }
+    }
+
     m_standardOutput << lines;
 }
 
@@ -190,6 +210,9 @@ void Job::start()
     m_xmlOutput.clear();
 
     qCDebug(KDEV_CLANGTIDY) << "executing:" << commandLine().join(QLatin1Char(' '));
+
+    setPercent(0);
+    m_finishedCount = 0;
 
     KDevelop::OutputExecuteJob::start();
 }
@@ -241,6 +264,8 @@ void Job::childProcessError(QProcess::ProcessError processError)
 void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
     qCDebug(KDEV_CLANGTIDY) << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
+
+    setPercent(100);
 
     if (exitCode != 0) {
         qCDebug(KDEV_CLANGTIDY) << "clang-tidy failed, standard output: ";

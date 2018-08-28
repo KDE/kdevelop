@@ -83,6 +83,8 @@ protected:
     QStringList m_xmlOutput;
     const Job::Parameters m_parameters;
     QString m_makeFilePath;
+    int m_finishedCount = 0;
+    int m_totalCount = 0;
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
 };

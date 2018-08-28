@@ -46,6 +46,7 @@
 #include <project/projectmodel.h>
 #include <shell/problemmodel.h>
 #include <shell/problemmodelset.h>
+#include <util/jobstatus.h>
 // KF
 #include <KActionCollection>
 #include <KLocalizedString>
@@ -204,6 +205,7 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
 
     auto job = new ClangTidy::Job(params, this);
     connect(job, &KJob::finished, this, &Plugin::result);
+    core()->uiController()->registerStatus(new KDevelop::JobStatus(job, QStringLiteral("clang-tidy")));
     core()->runController()->registerJob(job);
 
     m_runningJob = job;
