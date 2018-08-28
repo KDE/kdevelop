@@ -1,6 +1,8 @@
 [General]
 Name=Dialog with a UI File
 Name[ca]=Diàleg amb un fitxer IU
+Name[ca@valencia]=Diàleg amb un fitxer IU
+Name[fr]=Dialogue avec un fichier d'interface utilisateur
 Name[it]=Finestra di dialogo con un file UI
 Name[nl]=Dialoog met een UI-bestand
 Name[pt]=Janela com um Ficheiro UI
@@ -9,6 +11,8 @@ Name[uk]=Діалогове вікно із файлом UI
 Name[x-test]=xxDialog with a UI Filexx
 Comment=QDialog subclass with a separate Qt Designer file
 Comment[ca]=Subclasse QDialog amb un fitxer separat del Qt Designer
+Comment[ca@valencia]=Subclasse QDialog amb un fitxer separat del Qt Designer
+Comment[fr]=Sous-classe QDialog avec un fichier Qt Designer séparé
 Comment[it]=Sottoclasse di QDialog con un file separato di Qt Designer
 Comment[nl]=QDialog subclass met een apart Qt Designer bestand
 Comment[pt]=Sub-classe de QDialog com um ficheiro separado do Qt Designer
