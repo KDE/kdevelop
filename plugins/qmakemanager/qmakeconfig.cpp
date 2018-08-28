@@ -130,7 +130,8 @@ QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
     QStringList paths;
     if (qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS"))) {
         // qt4
-        foreach (const QString& dir, qmakeVars[QStringLiteral("QMAKE_MKSPECS")].split(QtCompat::listSeparator())) {
+        const auto mkspecDirs = qmakeVars[QStringLiteral("QMAKE_MKSPECS")].split(QtCompat::listSeparator());
+        foreach (const QString& dir, mkspecDirs) {
             paths << dir + QLatin1String("/default/qmake.conf");
         }
     } else if (!qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS")) && qmakeVars.contains(QStringLiteral("QMAKE_SPEC"))) {
