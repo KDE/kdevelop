@@ -66,8 +66,8 @@ QString verboseMessageToHtml(const QString& input)
 
 ClangTidyParser::ClangTidyParser(QObject* parent)
     : QObject(parent)
-      //                          (1filename                 ) (2lin) (3col)  (4s)  (5d) (6explain)
-    , m_hitRegExp(QStringLiteral("(\\/.+\\.[ch]{1,2}[px]{0,2}):(\\d+):(\\d+): (.+): (.+) (\\[.+\\])"))
+      //                          (1filename                 ) (2lin) (3col)  (4se)  (5d) (6explain)
+    , m_hitRegExp(QStringLiteral("(\\/.+\\.[ch]{1,2}[px]{0,2}):(\\d+):(\\d+): (.+?): (.+) (\\[.+\\])"))
 {
 }
 
