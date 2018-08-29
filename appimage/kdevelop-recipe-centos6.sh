@@ -30,7 +30,7 @@ if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=2.0
 fi
 if [ -z "$KDEV_CLANG_TIDY_VERSION" ]; then
-    KDEV_CLANG_TIDY_VERSION=v0.2.1
+    KDEV_CLANG_TIDY_VERSION=v0.3.0
 fi
 KF5_VERSION=v5.48.0 # note: v5.49.0 is broken due to https://phabricator.kde.org/R246:0a96acf251baa5c9dd042d093ab2bf8fcee10502
 KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
