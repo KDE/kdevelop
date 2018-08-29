@@ -49,7 +49,7 @@ class Plugin : public KDevelop::IPlugin
 
 public:
     explicit Plugin(QObject* parent, const QVariantList& = QVariantList());
-    ~Plugin();
+    ~Plugin() override;
 
 public: // KDevelop::IPlugin API
     void unload() override;

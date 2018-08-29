@@ -41,7 +41,7 @@ class ClangTidyParser : public QObject
 
 public:
     explicit ClangTidyParser(QObject* parent = nullptr);
-    ~ClangTidyParser() = default;
+    ~ClangTidyParser() override = default;
 
 public:
     /**

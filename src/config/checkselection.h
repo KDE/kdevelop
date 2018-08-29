@@ -42,7 +42,7 @@ class CheckSelection : public QWidget
 
 public:
     explicit CheckSelection(QWidget* parent = nullptr);
-    ~CheckSelection();
+    ~CheckSelection() override;
 
 public:
     void setCheckSet(const CheckSet* checkSet);
