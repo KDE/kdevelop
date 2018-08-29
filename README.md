@@ -6,6 +6,7 @@ It uses the [KDevelop5 Problem Checker Framework](https://techbase.kde.org/KDeve
 clang-tidy's output and showing the issues on the Problems Viewer, allowing easy review of the code.
 
 The plugin provides some very basic features for the start:
+
 * running clang-tidy on a single file, with result shown in Problems tool view,
   invokable from file context menus and main menu (Analyzer section)
 * per-project config UI:
@@ -61,6 +62,7 @@ Building the sources is done with CMake as build confguration tool, the usual th
 Requirement for building are the development files/package of KDevPlatform, at least version 5.2.
 
 To have the KDevelop application see the new plugin, there are multiple options:
+
 * the plugin either needs to be installed to the installation prefix where kdevelop is installed (e.g. using CMake flag `-DCMAKE_INSTALL_PREFIX="/usr"` with a kdevelop as installed from packages typically).
 * the kdevelop instances need to be informed about the custom plugin install directory by seeing the environment variable `QT_PLUGIN_PATH` which is set to also includes the base path to the plugin, i.e. from where `kdevplatform/<number>/kdevclangtidy.so` is found (e.g. having in the `.bashrc` file a line `export QT_PLUGIN_PATH=$HOME/opt/kdevelop/lib64/plugins:$QT_PLUGIN_PATH` if the CMake flag `-DCMAKE_INSTALL_PREFIX=$HOME/opt/kdevelop` was used and if `lib64` is the system's library subdir name).
 
@@ -71,6 +73,7 @@ Set the CMake flag -DBUILD_TESTING=OFF if kdevelop has been built with that flag
 ## Learn What is on the Development Road
 
 Planned features (in rough order of execution):
+
 * warning about missing compilation database
 * support for fix-its
 * running on more than one file, e.g. the whole project
