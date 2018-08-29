@@ -216,7 +216,7 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     auto job = new ClangTidy::Job(params, this);
     connect(job, &Job::problemsDetected, m_model.data(), &ProblemModel::addProblems);
     connect(job, &KJob::finished, this, &Plugin::result);
-    core()->uiController()->registerStatus(new KDevelop::JobStatus(job, QStringLiteral("clang-tidy")));
+    core()->uiController()->registerStatus(new KDevelop::JobStatus(job, i18n("Clang-Tidy")));
     core()->runController()->registerJob(job);
 
     m_runningJob = job;
