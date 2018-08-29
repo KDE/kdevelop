@@ -12,7 +12,7 @@
         "Description[it]": "Questa estensione fornisce un'interfaccia per LLDB, un debugger di nuova generazione ad alte prestazioni per C/Obj-C/C++.",
         "Description[nl]": "Deze plugin levert een frontend voor LLDB, een volgende generatie met hoge prestaties voor debuggen van C/Obj-C/C++.",
         "Description[pl]": "Ta wtyczka udostępnia interfejs do LLDB, wysokiej wydajności debuggera następnej generacji dla C/Obj-C/C++.",
-        "Description[pt]": "Este 'plugin' oferece uma interface para o LLDB, um depurador de código para C/Obj-C/C++.",
+        "Description[pt]": "Este 'plugin' oferece uma interface para o LLDB, um depurador de código para C/Obj-C/C++ de nova geração, com alta performance.",
         "Description[sk]": "Tento modul poskytuje rozhranie pre LLDB, novú generáciu vysokovýkonného debuggera C/Obj-C/C++.",
         "Description[sl]": "Ta vstavek prinaša začelje za LLDB, novo generacijo visoko zmogljivega razhroščevalnika za C/Obj-C/C++.",
         "Description[sv]": "Insticksprogrammet tillhandahåller ett gränssnitt till LLDB, nästa generations avlusare för C, Obj-C, C++ med hög prestanda.",
