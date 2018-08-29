@@ -48,6 +48,9 @@ public: // KDevelop::ConfigPage API
     QIcon icon() const override;
 
 private:
+    void updateJobCountEnabledState();
+
+private:
     Ui::ClangTidyPreferences* ui;
 };
 

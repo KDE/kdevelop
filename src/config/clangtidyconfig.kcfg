@@ -8,5 +8,14 @@
     <entry name="clangtidyPath" key="ExecutablePath" type="Path">
         <default code="true">ClangTidy::Utils::findExecutable(QStringLiteral("clang-tidy"))</default>
     </entry>
+    <entry name="parallelJobsEnabled" key="parallelJobsEnabled" type="Bool">
+        <default>true</default>
+    </entry>
+    <entry name="parallelJobsAutoCount" key="parallelJobsAutoCount" type="Bool">
+        <default>true</default>
+    </entry>
+    <entry name="parallelJobsFixedCount" key="parallelJobsFixedCount" type="Int">
+        <default>2</default>
+    </entry>
   </group>
 </kcfg>

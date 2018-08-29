@@ -57,6 +57,7 @@
 #include <QMessageBox>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QThread>
 
 using namespace KDevelop;
 
@@ -204,6 +205,13 @@ void Plugin::runClangTidy(const QUrl& url, bool allFiles)
     params.useConfigFile = projectSettings.useConfigFile();
     params.headerFilter = projectSettings.headerFilter();
     params.checkSystemHeaders = projectSettings.checkSystemHeaders();
+
+    params.parallelJobCount =
+        ClangTidySettings::parallelJobsEnabled() ?
+            (ClangTidySettings::parallelJobsAutoCount() ?
+                QThread::idealThreadCount() :
+                ClangTidySettings::parallelJobsFixedCount()) :
+        1;
 
     auto job = new ClangTidy::Job(params, this);
     connect(job, &Job::problemsDetected, m_model.data(), &ProblemModel::addProblems);

@@ -54,6 +54,7 @@ public:
         bool useConfigFile;
         QString headerFilter;
         bool checkSystemHeaders;
+        int parallelJobCount;
     };
 
     explicit Job(const Parameters& params, QObject* parent = nullptr);

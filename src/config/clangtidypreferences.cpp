@@ -33,11 +33,30 @@ ClangTidyPreferences::ClangTidyPreferences(IPlugin* plugin, QWidget* parent)
 {
     ui = new Ui::ClangTidyPreferences();
     ui->setupUi(this);
+
+    connect(ui->kcfg_parallelJobsEnabled, &QCheckBox::toggled,
+            this, &ClangTidyPreferences::updateJobCountEnabledState);
+    connect(ui->kcfg_parallelJobsAutoCount, &QCheckBox::toggled,
+            this, &ClangTidyPreferences::updateJobCountEnabledState);
+
+    updateJobCountEnabledState();
 }
 
 ClangTidyPreferences::~ClangTidyPreferences()
 {
     delete ui;
+}
+
+void ClangTidyPreferences::updateJobCountEnabledState()
+{
+    const bool jobsEnabled = ui->kcfg_parallelJobsEnabled->isChecked();
+    const bool autoEnabled = ui->kcfg_parallelJobsAutoCount->isChecked();
+    const bool manualJobsEnabled = (jobsEnabled && !autoEnabled);
+
+    ui->kcfg_parallelJobsAutoCount->setEnabled(jobsEnabled);
+
+    ui->kcfg_parallelJobsFixedCount->setEnabled(manualJobsEnabled);
+    ui->parallelJobsFixedCountLabel->setEnabled(manualJobsEnabled);
 }
 
 ConfigPage::ConfigPageType ClangTidyPreferences::configPageType() const

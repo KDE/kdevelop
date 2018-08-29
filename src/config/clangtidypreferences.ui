@@ -61,6 +61,60 @@
     </widget>
    </item>
    <item>
+    <widget class="QGroupBox" name="jobsBox">
+     <property name="title">
+      <string/>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QCheckBox" name="kcfg_parallelJobsEnabled">
+        <property name="text">
+         <string>Run analysis jobs in parallel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QCheckBox" name="kcfg_parallelJobsAutoCount">
+          <property name="text">
+           <string>Use all CPU cores</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="parallelJobsFixedCountLabel">
+          <property name="text">
+           <string>Maximum number of threads:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="kcfg_parallelJobsFixedCount">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
     <spacer name="settingsSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

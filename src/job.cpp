@@ -98,6 +98,8 @@ Job::Job(const Parameters& params, QObject* parent)
 
     *this << QStringList{
         QStringLiteral("make"),
+        QStringLiteral("-j"),
+        QString::number(m_parameters.parallelJobCount),
         QStringLiteral("-f"),
         m_makeFilePath,
     };
