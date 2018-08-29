@@ -51,10 +51,10 @@ public:
         QString buildDir;
         QString additionalParameters;
         QString enabledChecks;
-        bool useConfigFile;
+        bool useConfigFile = false;
         QString headerFilter;
-        bool checkSystemHeaders;
-        int parallelJobCount;
+        bool checkSystemHeaders = false;
+        int parallelJobCount = 1;
     };
 
     explicit Job(const Parameters& params, QObject* parent = nullptr);
