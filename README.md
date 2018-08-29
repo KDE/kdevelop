@@ -1,9 +1,7 @@
 # kdev-clang-tidy
 
-A plugin for [KDevelop](https://www.kdevelop.org) to support [Clang-Tidy](http://clang.llvm.org/extra/clang-tidy/) 
-static analysis.
-It uses the [KDevelop5 Problem Checker Framework](https://techbase.kde.org/KDevelop5/Problem_Checker_Framework), parsing 
-clang-tidy's output and showing the issues on the Problems Viewer, allowing easy review of the code.
+A plugin for [KDevelop](https://www.kdevelop.org) to support [Clang-Tidy](http://clang.llvm.org/extra/clang-tidy/) static analysis.
+It uses the [KDevelop5 Problem Checker Framework](https://techbase.kde.org/KDevelop5/Problem_Checker_Framework), parsing clang-tidy's output and showing the issues on the Problems Viewer, allowing easy review of the code.
 
 The plugin provides some very basic features for the start:
 
