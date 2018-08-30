@@ -407,7 +407,7 @@ QMakeCache* QMakeProjectFile::qmakeCache() const
 QList<QMakeProjectFile::DefinePair> QMakeProjectFile::defines() const
 {
     QList<DefinePair> d;
-    const auto& defs = variableMap()[QStringLiteral("DEFINES")];
+    const auto& defs = variableMap().value(QStringLiteral("DEFINES"));
     for (const QString& def : defs) {
         int pos = def.indexOf(QLatin1Char('='));
         if (pos >= 0) {
