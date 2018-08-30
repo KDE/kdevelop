@@ -49,7 +49,7 @@ StatusBar::StatusBar(QWidget* parent)
        ifdef for robustness to future platform dependent theme/widget changes
        https://phabricator.kde.org/D656 
     */
-    setStyleSheet("QStatusBar{background:transparent;}");
+    setStyleSheet(QStringLiteral("QStatusBar{background:transparent;}"));
 #endif
 
     m_timer->setSingleShot(true);

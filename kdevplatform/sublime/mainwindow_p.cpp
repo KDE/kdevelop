@@ -618,8 +618,10 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
             container->removeWidget(view->widget());
             view->widget()->setParent(nullptr);
             //activate what is visible currently in the container if the removed view was active
-            if (wasActive)
-                return m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
+            if (wasActive) {
+                m_mainWindow->setActiveView(container->viewForWidget(container->currentWidget()));
+                return;
+            }
         }
     }
     else

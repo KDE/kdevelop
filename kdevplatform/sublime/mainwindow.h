@@ -166,8 +166,6 @@ private:
     /**Sets the active tool view and focuses it.*/
     void setActiveToolView(View *view);
 
-    void resizeEvent(QResizeEvent* event) override;
-
     void saveGeometry(KConfigGroup &config);
     void loadGeometry(const KConfigGroup &config);
 

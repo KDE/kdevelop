@@ -86,7 +86,7 @@ public:
      * Set the checked urls
      * */
     void setCheckedUrls(const QList<QUrl>& urls) const {
-        return checkUrls(invisibleRootItem(), urls);
+        checkUrls(invisibleRootItem(), urls);
     }
 
     /** 

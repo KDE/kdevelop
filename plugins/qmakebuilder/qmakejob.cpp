@@ -55,7 +55,8 @@ void QMakeJob::start()
     if (!m_project) {
         setError(NoProjectError);
         setErrorText(i18n("No project specified."));
-        return emitResult();
+        emitResult();
+        return;
     }
 
     // create build directory if it does not exist yet

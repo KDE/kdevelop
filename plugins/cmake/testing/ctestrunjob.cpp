@@ -114,7 +114,7 @@ void CTestRunJob::start()
 
     QStringList cases_selected = arguments;
     arguments.prepend(m_suite->executable().toLocalFile());
-    const QString workingDirectory = m_suite->properties().value(QLatin1String("WORKING_DIRECTORY"), QString());
+    const QString workingDirectory = m_suite->properties().value(QStringLiteral("WORKING_DIRECTORY"), QString());
 
     m_job = createTestJob(QStringLiteral("execute"), arguments, workingDirectory);
 

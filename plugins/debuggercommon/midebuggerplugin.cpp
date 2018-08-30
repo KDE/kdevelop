@@ -107,8 +107,6 @@ private:
     bool m_valid;
 };
 
-const QString drkonqiservice = QLatin1String("org.kde.drkonqi");
-
 MIDebuggerPlugin::MIDebuggerPlugin(const QString &componentName, const QString& displayName, QObject *parent)
     : KDevelop::IPlugin(componentName, parent), m_displayName(displayName)
 {
@@ -168,7 +166,7 @@ MIDebuggerPlugin::~MIDebuggerPlugin()
 
 void MIDebuggerPlugin::slotDBusOwnerChanged(const QString& service, const QString& oldOwner, const QString& newOwner)
 {
-    if (oldOwner.isEmpty() && service.startsWith(drkonqiservice)) {
+    if (oldOwner.isEmpty() && service.startsWith(QLatin1String("org.kde.drkonqi"))) {
         if (m_drkonqis.contains(service)) {
             return;
         }
@@ -182,7 +180,7 @@ void MIDebuggerPlugin::slotDBusOwnerChanged(const QString& service, const QStrin
                 this, &MIDebuggerPlugin::slotDebugExternalProcess);
 
         drkonqiProxy->interface()->call(QStringLiteral("registerDebuggingApplication"), name);
-    } else if (newOwner.isEmpty() && service.startsWith(drkonqiservice)) {
+    } else if (newOwner.isEmpty() && service.startsWith(QLatin1String("org.kde.drkonqi"))) {
         // Deregistration
         if (m_drkonqis.contains(service)) {
             auto proxy = m_drkonqis.take(service);

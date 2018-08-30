@@ -122,7 +122,7 @@ struct MIBreakpointController::InsertedHandler : public MIBreakpointController::
 
         if (r.reason != QLatin1String("error")) {
             QString bkptKind;
-            for (auto kind : {QStringLiteral("bkpt"), QStringLiteral("wpt"), QStringLiteral("hw-rwpt"), QStringLiteral("hw-awpt")}) {
+            for (auto& kind : {QStringLiteral("bkpt"), QStringLiteral("wpt"), QStringLiteral("hw-rwpt"), QStringLiteral("hw-awpt")}) {
                 if (r.hasField(kind)) {
                     bkptKind = kind;
                     break;

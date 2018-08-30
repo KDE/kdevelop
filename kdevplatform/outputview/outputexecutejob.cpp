@@ -182,7 +182,8 @@ void OutputExecuteJob::start()
             } else {
                 setErrorText( i18n( "No working directory specified for a process." ) );
             }
-            return emitResult();
+            emitResult();
+            return;
         }
 
         setModel( new OutputModel );
@@ -195,7 +196,8 @@ void OutputExecuteJob::start()
             } else {
                 setErrorText( i18n( "Invalid working directory '%1'", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
             }
-            return emitResult();
+            emitResult();
+            return;
         } else if( !effectiveWorkingDirectory.isLocalFile() ) {
             setError( InvalidWorkingDirectoryError );
             if( isBuilder ) {
@@ -203,7 +205,8 @@ void OutputExecuteJob::start()
             } else {
                 setErrorText( i18n( "Working directory '%1' is not a local path", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
             }
-            return emitResult();
+            emitResult();
+            return;
         }
 
         QFileInfo workingDirInfo( effectiveWorkingDirectory.toLocalFile() );
@@ -223,7 +226,8 @@ void OutputExecuteJob::start()
                 } else {
                     setErrorText( i18n( "Working directory '%1' does not exist or is not a directory", effectiveWorkingDirectory.toDisplayString(QUrl::PreferLocalFile) ) );
                 }
-                return emitResult();
+                emitResult();
+                return;
             }
         }
 

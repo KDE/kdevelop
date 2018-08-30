@@ -36,7 +36,7 @@ void TypeSystem::callDestructor(AbstractTypeData* data) const
   if (!ensureFactoryLoaded(*data)) {
     return;
   }
-  return m_factories.value(data->typeClassId)->callDestructor(data);
+  m_factories.value(data->typeClassId)->callDestructor(data);
 }
 
 uint TypeSystem::dynamicSize(const AbstractTypeData& data) const
@@ -72,7 +72,7 @@ void TypeSystem::copy(const AbstractTypeData& from, AbstractTypeData& to, bool c
 {
   //Shouldn't try to copy an unknown type
   ensureFactoryLoaded(from);
-  return m_factories.value(from.typeClassId)->copy(from, to, constant);
+  m_factories.value(from.typeClassId)->copy(from, to, constant);
 }
 
 TypeSystem& TypeSystem::self() {

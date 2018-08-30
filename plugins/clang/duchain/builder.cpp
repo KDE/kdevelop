@@ -59,6 +59,8 @@
 /// Turn on for debugging the declaration building
 #define IF_DEBUG(x)
 
+using namespace KDevelop;
+
 namespace {
 
 // TODO: this is ugly, can we find a better alternative?

@@ -35,6 +35,8 @@
 #include <language/duchain/types/structuretype.h>
 #include <project/projectmodel.h>
 
+using namespace KDevelop;
+
 Declaration* findTestClassDeclaration(const CursorInRevision& c, DUContext* ctx, RangeInRevision::ContainsBehavior behavior)
 {
     /*

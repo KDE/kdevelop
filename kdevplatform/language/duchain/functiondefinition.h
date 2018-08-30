@@ -21,8 +21,6 @@
 #include "functiondeclaration.h"
 #include <language/languageexport.h>
 
-using namespace KDevelop;
-
 namespace KDevelop {
   class KDEVPLATFORMLANGUAGE_EXPORT FunctionDefinitionData : public FunctionDeclarationData {
   public:

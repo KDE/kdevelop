@@ -35,6 +35,8 @@
 
 #include <algorithm>
 
+using namespace KDevelop;
+
 namespace {
 
 struct OverrideInfo
