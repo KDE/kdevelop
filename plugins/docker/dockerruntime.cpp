@@ -68,7 +68,7 @@ void DockerRuntime::inspectContainer()
         qCDebug(DOCKER) << "mergeddir:" << m_container << m_mergedDir;
 
         const auto& entries = obj[QLatin1String("Config")].toObject()[QLatin1String("Env")].toArray();
-        for (auto entry : entries) {
+        for (const auto& entry : entries) {
             const auto content = entry.toString().split(QLatin1Char('='));
             if (content.count() != 2)
                 continue;
