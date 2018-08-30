@@ -83,6 +83,7 @@
 
 using KTextEditor::Attribute;
 using KTextEditor::View;
+using namespace KDevelop;
 
 // Helper that follows the QObject::parent() chain, and returns the highest widget that has no parent.
 QWidget* masterWidget(QWidget* w)
