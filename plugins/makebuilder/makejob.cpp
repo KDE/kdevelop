@@ -109,13 +109,15 @@ void MakeJob::start()
     {
         setError(ItemNoLongerValidError);
         setErrorText(i18n("Build item no longer available"));
-        return emitResult();
+        emitResult();
+        return;
     }
 
     if( it->type() == KDevelop::ProjectBaseItem::File ) {
         setError(IncorrectItemError);
         setErrorText(i18n("Internal error: cannot build a file item"));
-        return emitResult();
+        emitResult();
+        return;
     }
 
     setStandardToolView(IOutputView::BuildView);

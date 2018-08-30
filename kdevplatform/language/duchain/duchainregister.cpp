@@ -48,13 +48,13 @@ DUChainBaseData* DUChainItemSystem::cloneData(const DUChainBaseData& data) const
 void DUChainItemSystem::callDestructor(DUChainBaseData* data) const {
   if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == nullptr)
     return;
-  return m_factories[data->classId]->callDestructor(data);
+  m_factories[data->classId]->callDestructor(data);
 }
 
 void DUChainItemSystem::freeDynamicData(KDevelop::DUChainBaseData* data) const {
   if(uint(m_factories.size()) <= data->classId || m_factories[data->classId] == nullptr)
     return;
-  return m_factories[data->classId]->freeDynamicData(data);
+  m_factories[data->classId]->freeDynamicData(data);
 
 }
 
@@ -76,7 +76,7 @@ void DUChainItemSystem::copy(const DUChainBaseData& from, DUChainBaseData& to, b
     ENSURE_VALID_CLASSID(from.classId)
     return;
   }
-  return m_factories[from.classId]->copy(from, to, constant);
+  m_factories[from.classId]->copy(from, to, constant);
 }
 
 DUChainItemSystem& DUChainItemSystem::self() {

@@ -41,8 +41,10 @@ void KDevDocumentSelection::select( const QItemSelection & selection,
     QList<QModelIndex> selections = selection.indexes();
     QList<QModelIndex>::ConstIterator it = selections.constBegin();
     for ( ; it != selections.constEnd(); ++it )
-        if ( !( *it ).parent().isValid() )
-            return QItemSelectionModel::select( selection, NoUpdate );
+        if (!(*it).parent().isValid()) {
+            QItemSelectionModel::select(selection, NoUpdate);
+            return;
+        }
 
     QItemSelectionModel::select( selection, command );
 }

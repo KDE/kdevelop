@@ -215,7 +215,7 @@ void ContextBrowserView::focusInEvent(QFocusEvent* event) {
 //     parentWidget()->setBackgroundRole(QPalette::ToolTipBase);
 /*    m_layout->removeItem(m_buttons);*/
 
-    return QWidget::focusInEvent(event);
+    QWidget::focusInEvent(event);
 }
 
 void ContextBrowserView::focusOutEvent(QFocusEvent* event) {

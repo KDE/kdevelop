@@ -144,7 +144,8 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
         QReadLocker parseLock(languageSupport()->parseLock());
 
         if (abortRequested()) {
-            return abortJob();
+            abortJob();
+            return;
         }
 
         DeclarationBuilder builder(&session);
@@ -162,7 +163,8 @@ void QmlJsParseJob::run(ThreadWeaver::JobPointer pointer, ThreadWeaver::Thread* 
     }
 
     if (abortRequested()) {
-        return abortJob();
+        abortJob();
+        return;
     }
 
     if (!context) {

@@ -598,7 +598,7 @@ void DUContext::findLocalDeclarationsInternal(const Identifier& identifier, cons
                                               const AbstractType::Ptr& dataType, DeclarationList& ret,
                                               const TopDUContext* source, SearchFlags flags) const
 {
-  return findLocalDeclarationsInternal(IndexedIdentifier(identifier), position, dataType, ret, source, flags);
+    findLocalDeclarationsInternal(IndexedIdentifier(identifier), position, dataType, ret, source, flags);
 }
 
 void DUContext::findLocalDeclarationsInternal( const IndexedIdentifier& identifier,
