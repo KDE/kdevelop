@@ -87,7 +87,7 @@ namespace KDevelop {
             ///@see progress()
             void progressSignal(uint, uint);
             ///@see processUses()
-            void processUsesSignal(KDevelop::ReferencedTopDUContext);
+            void processUsesSignal(const KDevelop::ReferencedTopDUContext&);
         private Q_SLOTS:
             void updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext);
         private:
