@@ -5,7 +5,8 @@ It uses the [KDevelop5 Problem Checker Framework](https://techbase.kde.org/KDeve
 
 The plugin provides some very basic features for the start:
 
-* running clang-tidy on a single file, with result shown in Problems tool view,
+* running clang-tidy on a single file, subdirectories or the whole project,
+  with the result shown in the Problems tool view,
   invokable from file context menus and main menu (Analyzer section)
 * per-project config UI:
   * free field for additional command line parameters to clang-tidy
@@ -74,7 +75,6 @@ Planned features (in rough order of execution):
 
 * warning about missing compilation database
 * support for fix-its
-* running on more than one file, e.g. the whole project
 * globally defined sets of checks, for reuse between projects and use for
   specific code analyze work
 * folder-specific clang-tidy settings
@@ -85,3 +85,7 @@ Planned features (in rough order of execution):
 Long term the kdev-clang-tidy plugin should be added to the kdevelop code repository, as planned before (cmp. [KDevelop 5.1 release notes](https://www.kdevelop.org/news/kdevelop-510-released) ).
 
 Even better though would be somebody implementing integration of this and other clang-based analyzers directly with the clang-parser of the KDevelop clang-based language plugin, so any warnings and fix-its are delivered as part of the normal editing. Though this might be more challenging, so the current explicit analyzer plugins serve as intermediate utilities.
+
+## Get in Contact
+
+This plugin is currently developed by KDevelop contributors, who can be reached via the usual [KDevelop support channels](https://www.kdevelop.org/support).
