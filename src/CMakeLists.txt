@@ -1,5 +1,11 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevclangtidy\")
 
+if (NOT KDevPlatform_VERSION VERSION_LESS 5.2.80)
+    set(HAVE_PROBLEMMODEL_SETPLACEHOLDERTEXT TRUE)
+endif()
+
+configure_file(config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
 include_directories(
     ${Boost_INCLUDE_DIRS}
 )
