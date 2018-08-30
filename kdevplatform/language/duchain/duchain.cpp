@@ -31,6 +31,7 @@
 #include <QMutex>
 #include <QTimer>
 
+#include <qtcompat_p.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
@@ -1032,9 +1033,9 @@ private:
         }
       }
 
-      for(QSet< QExplicitlySharedDataPointer<ParsingEnvironmentFile> >::const_iterator it = checkNext.begin(); it != checkNext.end(); ++it) {
-        topContexts.remove((*it)->indexedTopContext().index()); //Enable full check again
-        addContextsForRemoval(topContexts, (*it)->indexedTopContext());
+      for (auto& parsingEnvFile : qAsConst(checkNext)) {
+        topContexts.remove(parsingEnvFile->indexedTopContext().index()); // Enable full check again
+        addContextsForRemoval(topContexts, parsingEnvFile->indexedTopContext());
       }
     }
   }
