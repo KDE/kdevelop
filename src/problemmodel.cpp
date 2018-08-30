@@ -27,6 +27,7 @@
 #include "plugin.h"
 // KDevPlatform
 #include <interfaces/iproject.h>
+#include <language/editor/documentrange.h>
 // KF
 #include <KLocalizedString>
 
