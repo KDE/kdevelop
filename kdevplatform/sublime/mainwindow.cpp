@@ -149,11 +149,6 @@ void MainWindow::initializeStatusBar()
     //inside the bottom tool view buttons row
 }
 
-void MainWindow::resizeEvent(QResizeEvent* event)
-{
-    return KParts::MainWindow::resizeEvent(event);
-}
-
 void MainWindow::clearArea()
 {
     emit areaCleared(d->area);
