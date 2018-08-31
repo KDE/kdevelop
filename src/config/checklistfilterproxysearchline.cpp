@@ -42,7 +42,7 @@ CheckListFilterProxySearchLine::CheckListFilterProxySearchLine(QWidget *parent)
     connect(m_delayTimer, &QTimer::timeout,
             this, &CheckListFilterProxySearchLine::updateFilter);
     connect(this, &CheckListFilterProxySearchLine::textChanged,
-            m_delayTimer, QOverload<>::of(&QTimer::start));
+            m_delayTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
 }
 
 
