@@ -86,4 +86,5 @@ Name[pt_BR]=Abrir uma sessão
 Name[sv]=Öppna en session
 Name[uk]=Відкрити сеанс
 Name[x-test]=xxOpen a Sessionxx
+Name[zh_CN]=打开会话
 Exec=kdevelop --ps
