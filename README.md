@@ -21,7 +21,12 @@ See below what might be coming next.
 
 Either build it yourself from the sources (see below).
 
-Or search the package manager of your Linux distribution or *BSD system for it (e.g. kdevelop-clang-tidy or kdev-clang-tidy, please report the name in your package system/distribution, so it can be listed here).
+Or search the package manager of your Linux distribution or *BSD system for it (e.g. kdevelop-clang-tidy or kdev-clang-tidy):
+
+* Arch Linux: kdevelop-clang-tidy
+* Gentoo: kdevelop-clang-tidy
+* openSUSE: kdevelop5-plugin-clang-tidy
+* (please report the name in your package system/distribution, so it can be listed here).
 
 Or try to install it via its [AppStream Id Link](appstream://org.kde.kdev-clang-tidy)
 
