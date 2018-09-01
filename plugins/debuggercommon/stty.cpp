@@ -28,7 +28,6 @@
 
 #ifdef __osf__
 #define _XOPEN_SOURCE_EXTENDED
-#define O_NDELAY O_NONBLOCK
 #endif
 
 #include <sys/types.h>
@@ -244,7 +243,7 @@ int STTY::findTTY()
             fprintf(stderr,"        : Make sure konsole_grantpty is installed and setuid root.\n");
         }
 
-        ::fcntl(ptyfd, F_SETFL, O_NDELAY);
+        ::fcntl(ptyfd, F_SETFL, O_NONBLOCK);
 #ifdef TIOCSPTLCK
         int flag = 0;
         ioctl(ptyfd, TIOCSPTLCK, &flag); // unlock pty
