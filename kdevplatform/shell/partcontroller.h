@@ -64,7 +64,7 @@ public:
 
     bool showTextEditorStatusBar() const;
 
-    KTextEditor::Document* createTextPart( const QString &encoding = QString() );
+    KTextEditor::Document* createTextPart();
     KTextEditor::Editor* editorPart() const override;
 
     bool canCreatePart( const QUrl &url );
