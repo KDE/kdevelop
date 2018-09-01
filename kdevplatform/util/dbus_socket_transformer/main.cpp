@@ -79,8 +79,7 @@ std::string getAuthToken() {
     };
 
     std::ostringstream hexStream;
-    for(uint i = 0; i < uidStr.size(); ++i)
-    {
+    for (unsigned int i = 0; i < uidStr.size(); ++i) {
         unsigned char byte = (unsigned char)uidStr[i];
         hexStream << hexdigits[byte >> 4] << hexdigits[byte & 0x0f];
     }
