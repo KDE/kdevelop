@@ -149,7 +149,7 @@ int main(int argc, char** argv)
     QCoreApplication::setApplicationName(QStringLiteral("kdev_includepathsconverter"));
 
     QCommandLineParser parser;
-    parser.setApplicationDescription(QLatin1String("\nAdds, removes or shows include directories of a project. Also it can be used as a tool to convert include directories from .kdev_include_paths file to the new format.\n\n"
+    parser.setApplicationDescription(QStringLiteral("\nAdds, removes or shows include directories of a project. Also it can be used as a tool to convert include directories from .kdev_include_paths file to the new format.\n\n"
     "Examples:\ncat /project/path/.kdev_include_paths | xargs -d '\\n' kdev_includepathsconverter -a /project/path/\n\n"
     "kdev_includepathsconverter -r /project/path/subdirectory/ \"/some/include/dir\" \"/another/include/dir\" \n\n"
     "kdev_includepathsconverter -l /project/path/another/subdirectory/"));

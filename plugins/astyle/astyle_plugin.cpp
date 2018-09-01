@@ -174,7 +174,7 @@ AStylePlugin::Indentation AStylePlugin::indentation(const QUrl& url) const
 
 QString AStylePlugin::formattingSample()
 {
-    return QLatin1String(
+    return QStringLiteral(
     "void func(){\n"
     "\tif(isFoo(a,b))\n"
     "\tbar(a,b);\n"
@@ -213,7 +213,7 @@ QString AStylePlugin::formattingSample()
 
 QString AStylePlugin::indentingSample()
 {
-    return QLatin1String(
+    return QStringLiteral(
     "#define foobar(A)\\\n"
     "{Foo();Bar();}\n"
     "#define anotherFoo(B)\\\n"

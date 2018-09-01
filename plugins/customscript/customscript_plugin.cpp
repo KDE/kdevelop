@@ -297,7 +297,7 @@ KDevelop::SettingsWidget* CustomScriptPlugin::editStyleWidget(const QMimeType& m
 
 static QString formattingSample()
 {
-    return QLatin1String(
+    return QStringLiteral(
         "// Formatting\n"
         "void func(){\n"
         "\tif(isFoo(a,b))\n"
@@ -334,7 +334,7 @@ static QString formattingSample()
 
 static QString indentingSample()
 {
-    return QLatin1String(
+    return QStringLiteral(
         "// Indentation\n"
         "#define foobar(A)\\\n"
         "{Foo();Bar();}\n"
