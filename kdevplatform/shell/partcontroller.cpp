@@ -31,7 +31,6 @@
 #include <KMimeTypeTrader>
 
 #include <KParts/Part>
-#include <KParts/OpenUrlArguments>
 
 #include <KTextEditor/View>
 #include <KTextEditor/Editor>
@@ -139,18 +138,9 @@ KTextEditor::Editor* PartController::editorPart() const
     return KTextEditor::Editor::instance();
 }
 
-KTextEditor::Document* PartController::createTextPart(const QString &encoding)
+KTextEditor::Document* PartController::createTextPart()
 {
-    KTextEditor::Document* doc = editorPart()->createDocument(this);
-
-    if ( !encoding.isNull() )
-    {
-        KParts::OpenUrlArguments args = doc->arguments();
-        args.setMimeType( QLatin1String( "text/plain;" ) + encoding );
-        doc->setArguments( args );
-    }
-
-    return doc;
+    return editorPart()->createDocument(this);
 }
 
 KParts::Part* PartController::createPart( const QString & mimeType,

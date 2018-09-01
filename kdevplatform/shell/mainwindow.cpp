@@ -159,9 +159,6 @@ MainWindow::~ MainWindow()
         Core::self()->shutdown();
     }
 
-    // The window wrapper has to stay alive until the last KTextEditor::Views are gone
-    // but needs to know this mainwindow is next an ex-mainwindow.
-    d->kateWrapper()->startDestroy();
     delete d;
 }
 

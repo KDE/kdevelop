@@ -59,7 +59,7 @@ View::~View()
     if (d->widget && d->ws == View::TakeOwnership ) {
         d->widget->hide();
         d->widget->setParent(nullptr);
-        d->widget->deleteLater();
+        delete d->widget;
     }
 }
 
@@ -73,6 +73,11 @@ QWidget *View::widget(QWidget *parent)
     if (!d->widget)
     {
         d->widget = createWidget(parent);
+        // if we own this widget, we will also delete it and ideally would disconnect
+        // the following connect before doing that. For that though we would need to store
+        // a reference to the connection.
+        // As the d object still exists in the destructor when we delete the widget
+        // this lambda method though can be still safely executed, so we spare ourselves such disconnect.
         connect(d->widget, &QWidget::destroyed, this, [&] { d->unsetWidget(); });
     }
     return d->widget;

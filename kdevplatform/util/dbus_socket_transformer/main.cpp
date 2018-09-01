@@ -79,8 +79,7 @@ std::string getAuthToken() {
     };
 
     std::ostringstream hexStream;
-    for(uint i = 0; i < uidStr.size(); ++i)
-    {
+    for (unsigned int i = 0; i < uidStr.size(); ++i) {
         unsigned char byte = (unsigned char)uidStr[i];
         hexStream << hexdigits[byte >> 4] << hexdigits[byte & 0x0f];
     }
@@ -277,7 +276,7 @@ int main(int argc, char** argv)
         
         sockaddr_in server_addr;
         
-        bzero((char *) &server_addr, sizeof(server_addr));
+        memset(&server_addr, 0, sizeof(server_addr));
         server_addr.sin_family = AF_INET;
         server_addr.sin_addr.s_addr = INADDR_ANY;
         server_addr.sin_port = htons(portno);
@@ -306,7 +305,7 @@ int main(int argc, char** argv)
         path = std::string(argv[2]);
 
         sockaddr_un serv_addr;
-        bzero((char *) &serv_addr, sizeof(serv_addr));
+        memset(&serv_addr, 0, sizeof(serv_addr));
         serv_addr.sun_family = AF_UNIX;
         serv_addr.sun_path[0] = '\0'; // Mark as an abstract socket
         strcpy(serv_addr.sun_path+1, path.data());
@@ -361,7 +360,7 @@ int main(int argc, char** argv)
                 std::cerr << "ERROR opening socket" << std::endl;
                 return 3;
             }
-            bzero((char *) &serv_addru, sizeof(serv_addru));
+            memset(&serv_addru, 0, sizeof(serv_addru));
             serv_addru.sun_family = AF_UNIX;
             serv_addru.sun_path[0] = '\0'; // Mark as an abstract socket
             strcpy(serv_addru.sun_path+1, path.data());
@@ -384,11 +383,11 @@ int main(int argc, char** argv)
                 std::cerr << "failed to get server" << std::endl;
                 return 5;
             }
-            bzero((char *) &serv_addrin, sizeof(serv_addrin));
+            memset(&serv_addrin, 0, sizeof(serv_addrin));
             serv_addrin.sin_family = AF_INET;
             serv_addrin.sin_addr.s_addr = INADDR_ANY;
             serv_addrin.sin_port = htons(port);
-            bcopy((char *)server->h_addr,  (char *)&serv_addrin.sin_addr.s_addr, server->h_length);
+            memcpy(&serv_addrin.sin_addr.s_addr, server->h_addr, server->h_length);
             addrSize = sizeof (serv_addrin);
             useAddr = (sockaddr*)&serv_addrin;
             

@@ -95,16 +95,6 @@ public:
     void addPluginView(const QString &id, QObject *pluginView);
     void removePluginView(const QString &id);
 
-    /**
-     * To be called when the actual mainwindow is destroyed.
-     * Some KTextEditor::View objects relying on this wrapper object at that point in time
-     * only have got called deleteLater() on them, so will still get their destruction
-     * done only in the next handling of QEvent::DeferredDelete.
-     * To outlive them, this method triggers deleteLater for this wrapper object as well,
-     * but already prepares for the actual mainwindow no longer being available.
-     */
-    void startDestroy();
-
 private:
     KDevelop::MainWindow *m_mainWindow;
     KTextEditor::MainWindow *m_interface;

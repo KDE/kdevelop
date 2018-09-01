@@ -231,7 +231,8 @@ KTextEditor::Document *Application::openUrl(const QUrl &url, const QString &enco
 }
 
 MainWindow::MainWindow(KDevelop::MainWindow *mainWindow)
-    : m_mainWindow(mainWindow)
+    : QObject(mainWindow)
+    , m_mainWindow(mainWindow)
     , m_interface(new KTextEditor::MainWindow(this))
 {
     connect(mainWindow, &Sublime::MainWindow::viewAdded, this, [this] (Sublime::View *view) {
@@ -265,9 +266,6 @@ QWidget *MainWindow::createToolView(KTextEditor::Plugin* plugin, const QString &
 
 KXMLGUIFactory *MainWindow::guiFactory() const
 {
-    if (!m_mainWindow) {
-        return nullptr;
-    }
     return m_mainWindow->guiFactory();
 }
 
@@ -279,12 +277,10 @@ QWidget *MainWindow::window() const
 QList<KTextEditor::View *> MainWindow::views() const
 {
     QList<KTextEditor::View *> views;
-    if (m_mainWindow) {
-        foreach (auto area, m_mainWindow->areas()) {
-            foreach (auto view, area->views()) {
-                if (auto kteView = toKteView(view)) {
-                    views << kteView;
-                }
+    foreach (auto area, m_mainWindow->areas()) {
+        foreach (auto view, area->views()) {
+            if (auto kteView = toKteView(view)) {
+                views << kteView;
             }
         }
     }
@@ -293,18 +289,11 @@ QList<KTextEditor::View *> MainWindow::views() const
 
 KTextEditor::View *MainWindow::activeView() const
 {
-    if (!m_mainWindow) {
-        return nullptr;
-    }
     return toKteView(m_mainWindow->activeView());
 }
 
 KTextEditor::View *MainWindow::activateView(KTextEditor::Document *doc)
 {
-    if (!m_mainWindow) {
-        return nullptr;
-    }
-
     foreach (auto area, m_mainWindow->areas()) {
         foreach (auto view, area->views()) {
             if (auto kteView = toKteView(view)) {
@@ -327,9 +316,7 @@ QObject *MainWindow::pluginView(const QString &id) const
 QWidget *MainWindow::createViewBar(KTextEditor::View *view)
 {
     Q_UNUSED(view);
-    if (!m_mainWindow) {
-        return nullptr;
-    }
+
     // we reuse the central view bar for every view
     return m_mainWindow->viewBarContainer();
 }
@@ -337,9 +324,7 @@ QWidget *MainWindow::createViewBar(KTextEditor::View *view)
 void MainWindow::deleteViewBar(KTextEditor::View *view)
 {
     auto viewBar = m_viewBars.take(view);
-    if (m_mainWindow) {
-        m_mainWindow->viewBarContainer()->removeViewBar(viewBar);
-    }
+    m_mainWindow->viewBarContainer()->removeViewBar(viewBar);
     delete viewBar;
 }
 
@@ -347,18 +332,15 @@ void MainWindow::showViewBar(KTextEditor::View *view)
 {
     auto viewBar = m_viewBars.value(view);
     Q_ASSERT(viewBar);
-    if (m_mainWindow) {
-        m_mainWindow->viewBarContainer()->showViewBar(viewBar);
-    }
+
+    m_mainWindow->viewBarContainer()->showViewBar(viewBar);
 }
 
 void MainWindow::hideViewBar(KTextEditor::View *view)
 {
     auto viewBar = m_viewBars.value(view);
     Q_ASSERT(viewBar);
-    if (m_mainWindow) {
-        m_mainWindow->viewBarContainer()->hideViewBar(viewBar);
-    }
+    m_mainWindow->viewBarContainer()->hideViewBar(viewBar);
 }
 
 void MainWindow::addWidgetToViewBar(KTextEditor::View *view, QWidget *widget)
@@ -366,9 +348,7 @@ void MainWindow::addWidgetToViewBar(KTextEditor::View *view, QWidget *widget)
     Q_ASSERT(widget);
     m_viewBars[view] = widget;
 
-    if (m_mainWindow) {
-        m_mainWindow->viewBarContainer()->addViewBar(widget);
-    }
+    m_mainWindow->viewBarContainer()->addViewBar(widget);
 }
 
 KTextEditor::MainWindow *MainWindow::interface() const
@@ -387,12 +367,6 @@ void MainWindow::removePluginView(const QString &id)
     auto view = m_pluginViews.take(id).data();
     delete view;
     emit m_interface->pluginViewDeleted(id, view);
-}
-
-void MainWindow::startDestroy()
-{
-    m_mainWindow = nullptr;
-    deleteLater();
 }
 
 Plugin::Plugin(KTextEditor::Plugin *plugin, QObject *parent)
@@ -449,9 +423,7 @@ void initialize()
 
 void MainWindow::splitView(Qt::Orientation orientation)
 {
-    if (m_mainWindow) {
-        m_mainWindow->split(orientation);
-    }
+    m_mainWindow->split(orientation);
 }
 
 }
