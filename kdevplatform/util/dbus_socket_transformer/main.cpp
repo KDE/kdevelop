@@ -388,7 +388,7 @@ int main(int argc, char** argv)
             serv_addrin.sin_family = AF_INET;
             serv_addrin.sin_addr.s_addr = INADDR_ANY;
             serv_addrin.sin_port = htons(port);
-            bcopy((char *)server->h_addr,  (char *)&serv_addrin.sin_addr.s_addr, server->h_length);
+            memcpy(&serv_addrin.sin_addr.s_addr, server->h_addr, server->h_length);
             addrSize = sizeof (serv_addrin);
             useAddr = (sockaddr*)&serv_addrin;
             
