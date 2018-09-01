@@ -413,7 +413,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePath(const QString& file, c
 
 static QRegularExpression includeRegularExpression()
 {
-  static const QRegularExpression expression(QLatin1String(
+  static const QRegularExpression expression(QStringLiteral(
     "\\s(--include-dir=|-I\\s*|-isystem\\s+|-iframework\\s+|-F\\s*)("
     "\\'.*\\'|\\\".*\\\"" //Matches "hello", 'hello', 'hello"hallo"', etc.
     "|"
