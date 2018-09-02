@@ -44,7 +44,7 @@
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],
-        "Version": "0.3.0"
+        "Version": "0.3.2"
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-Mode": "GUI"
