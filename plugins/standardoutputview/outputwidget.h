@@ -24,6 +24,7 @@
 
 #include <QMap>
 #include <QWidget>
+#include <QSharedPointer>
 
 #include <interfaces/itoolviewactionlistener.h>
 #include <outputview/ioutputviewmodel.h>
@@ -101,9 +102,14 @@ private:
     void eventuallyDoFocus();
     int currentOutputIndex();
 
-    QMap<int, QTreeView*> m_views;
-    QMap<int, QSortFilterProxyModel*> m_proxyModels;
-    QMap<int, QString> m_filters;
+    struct FilteredView {
+        QSharedPointer<QTreeView> view;
+        QSharedPointer<QSortFilterProxyModel> proxyModel;
+        QString filter;
+    };
+    QHash<int, FilteredView>::iterator findFilteredView(QAbstractItemView *view);
+
+    QHash<int, FilteredView> m_views;
     QTabWidget* m_tabwidget;
     QStackedWidget* m_stackwidget;
     const ToolViewData* data;

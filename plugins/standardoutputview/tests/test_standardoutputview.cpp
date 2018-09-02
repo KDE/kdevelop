@@ -194,8 +194,8 @@ void StandardOutputViewTest::testSetModelAndDelegate()
     m_stdOutputView->setModel(outputId[0], model);
     m_stdOutputView->setDelegate(outputId[0], delegate);
 
-    QCOMPARE(outputWidget->m_views.value(outputId[0])->model(), model);
-    QCOMPARE(outputWidget->m_views.value(outputId[0])->itemDelegate(), delegate);
+    QCOMPARE(outputWidget->m_views.value(outputId[0]).view->model(), model);
+    QCOMPARE(outputWidget->m_views.value(outputId[0]).view->itemDelegate(), delegate);
 
     QVERIFY(model->parent()); // they have a parent (the outputdata), so parent() != 0x0
     QVERIFY(delegate->parent());

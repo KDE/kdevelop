@@ -234,7 +234,7 @@ void OutputWidget::setCurrentWidget( QTreeView* view )
 void OutputWidget::changeDelegate( int id )
 {
     if( data->outputdata.contains( id ) && m_views.contains( id ) ) {
-        m_views.value(id)->setItemDelegate(data->outputdata.value(id)->delegate);
+        m_views.value(id).view->setItemDelegate(data->outputdata.value(id)->delegate);
     } else {
         addOutput(id);
     }
@@ -245,7 +245,7 @@ void OutputWidget::changeModel( int id )
     if( data->outputdata.contains( id ) && m_views.contains( id ) )
     {
         OutputData* od = data->outputdata.value(id);
-        m_views.value( id )->setModel(od->model);
+        m_views.value(id).view->setModel(od->model);
     }
     else
     {
@@ -257,42 +257,37 @@ void OutputWidget::removeOutput( int id )
 {
     if( data->outputdata.contains( id ) && m_views.contains( id ) )
     {
-        QTreeView* view = m_views.value(id);
+        QTreeView *view = m_views.value(id).view.data();
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
                 int idx = m_tabwidget->indexOf( view );
-                if( idx != -1 )
+                if (idx != -1)
                 {
                     m_tabwidget->removeTab( idx );
-                    if( m_proxyModels.contains( id ) )
-                    {
-                        delete m_proxyModels.take( id );
-                        m_filters.remove( id );
-                    }
                 }
             } else
             {
                 int idx = m_stackwidget->indexOf( view );
-                if( idx != -1 && m_proxyModels.contains( id ) )
+                if (idx != -1)
                 {
-                    delete m_proxyModels.take( id );
-                    m_filters.remove( id );
+                    m_stackwidget->removeWidget(view);
                 }
-                m_stackwidget->removeWidget( view );
             }
-            delete view;
-        } else
-        {
-            m_views.value( id )->setModel( nullptr );
-            m_views.value( id )->setItemDelegate( nullptr );
-            if( m_proxyModels.contains( 0 ) ) {
-                delete m_proxyModels.take( 0 );
-                m_filters.remove( 0 );
+        } else {  // KDevelop::IOutputView::OneView
+            /* TODO: this branch of execution has no result because of the "m_views.remove( id );"
+             * after the if-else block. Need to find out which behavior has sense.
+             */
+            FilteredView& fview = m_views[id];
+            fview.view->setModel(nullptr);
+            fview.view->setItemDelegate(nullptr);
+            if (fview.proxyModel) {
+                fview.proxyModel = QSharedPointer<QSortFilterProxyModel>();
+                fview.filter = QString();
             }
         }
-        m_views.remove( id );
+        m_views.remove(id);
         emit outputRemoved( data->toolViewId, id );
     }
     enableActions();
@@ -305,7 +300,7 @@ void OutputWidget::closeActiveView()
         return;
     foreach( int id, m_views.keys() )
     {
-        if( m_views.value(id) == widget )
+        if (m_views.value(id).view == widget)
         {
             OutputData* od = data->outputdata.value(id);
             if( od->behaviour & KDevelop::IOutputView::AllowUserClose )
@@ -324,7 +319,7 @@ void OutputWidget::closeOtherViews()
         return;
 
     foreach (int id, m_views.keys()) {
-        if (m_views.value(id) == widget) {
+        if (m_views.value(id).view == widget) {
             continue; // leave the active view open
         }
 
@@ -347,7 +342,7 @@ QWidget* OutputWidget::currentWidget() const
         widget = m_stackwidget->currentWidget();
     } else
     {
-        widget = m_views.begin().value();
+        widget = m_views.begin().value().view.data();
     }
     return widget;
 }
@@ -390,8 +385,9 @@ void OutputWidget::activateIndex(const QModelIndex &index, QAbstractItemView *vi
         return;
     QModelIndex sourceIndex = index;
     QModelIndex viewIndex = index;
-    int id = m_views.key(qobject_cast<QTreeView*>(view));
-    if( QAbstractProxyModel* proxy = m_proxyModels.value(id) ) {
+    auto fvIt = findFilteredView(view);
+    if (fvIt != m_views.end() && fvIt->proxyModel) {
+        auto proxy = fvIt->proxyModel;
         if ( index.model() == proxy ) {
             // index is from the proxy, map it to the source
             sourceIndex = proxy->mapToSource(index);
@@ -438,8 +434,9 @@ void OutputWidget::selectItem(SelectionMode selectionMode)
     eventuallyDoFocus();
 
     auto index = view->currentIndex();
-    int id = m_views.key(qobject_cast<QTreeView*>(view));
-    if (QAbstractProxyModel* proxy = m_proxyModels.value(id)) {
+    auto fvIt = findFilteredView(view);
+    if (fvIt != m_views.end() && fvIt->proxyModel) {
+        auto proxy = fvIt->proxyModel;
         if ( index.model() == proxy ) {
             // index is from the proxy, map it to the source
             index = proxy->mapToSource(index);
@@ -523,11 +520,11 @@ QTreeView* OutputWidget::createListView(int id)
                 layout()->addWidget( listview );
             } else
             {
-                listview = m_views.begin().value();
+                listview = m_views.begin().value().view.data();
                 newView = false;
             }
         }
-        m_views[id] = listview;
+        m_views[id].view = QSharedPointer<QTreeView>(listview);
 
         changeModel( id );
         changeDelegate( id );
@@ -536,7 +533,7 @@ QTreeView* OutputWidget::createListView(int id)
             listview->scrollToBottom();
     } else
     {
-        listview = m_views.value(id);
+        listview = m_views.value(id).view.data();
     }
     enableActions();
     return listview;
@@ -546,16 +543,17 @@ void OutputWidget::raiseOutput(int id)
 {
     if( m_views.contains(id) )
     {
+        auto view = m_views.value(id).view.data();
         if( data->type & KDevelop::IOutputView::MultipleView )
         {
-            int idx = m_tabwidget->indexOf( m_views.value(id) );
+            int idx = m_tabwidget->indexOf(view);
             if( idx >= 0 )
             {
                 m_tabwidget->setCurrentIndex( idx );
             }
         } else if( data->type & KDevelop::IOutputView::HistoryView )
         {
-            int idx = m_stackwidget->indexOf( m_views.value(id) );
+            int idx = m_stackwidget->indexOf(view);
             if( idx >= 0 )
             {
                 m_stackwidget->setCurrentIndex( idx );
@@ -648,30 +646,30 @@ void OutputWidget::outputFilter(const QString& filter)
     if( !view )
         return;
 
-    int id = m_views.key(qobject_cast<QTreeView*>(view));
+    auto fvIt = findFilteredView(view);
     auto proxyModel = qobject_cast<QSortFilterProxyModel*>(view->model());
     if( !proxyModel )
     {
         proxyModel = new QSortFilterProxyModel(view->model());
         proxyModel->setDynamicSortFilter(true);
         proxyModel->setSourceModel(view->model());
-        m_proxyModels.insert(id, proxyModel);
+        fvIt->proxyModel = QSharedPointer<QSortFilterProxyModel>(proxyModel);
         view->setModel(proxyModel);
     }
     QRegExp regExp(filter, Qt::CaseInsensitive);
     proxyModel->setFilterRegExp(regExp);
-    m_filters[id] = filter;
+    fvIt->filter = filter;
 }
 
 void OutputWidget::updateFilter(int index)
 {
     QWidget *view = (data->type & KDevelop::IOutputView::MultipleView)
         ? m_tabwidget->widget(index) : m_stackwidget->widget(index);
-    int id = m_views.key(qobject_cast<QTreeView*>(view));
+    auto fvIt = findFilteredView(qobject_cast<QAbstractItemView*>(view));
 
-    if(m_filters.contains(id))
+    if (fvIt != m_views.end() && !fvIt->filter.isEmpty())
     {
-        m_filterInput->setText(m_filters[id]);
+        m_filterInput->setText(fvIt->filter);
     } else
     {
         m_filterInput->clear();
@@ -680,11 +678,21 @@ void OutputWidget::updateFilter(int index)
 
 void OutputWidget::setTitle(int outputId, const QString& title)
 {
-    QTreeView* view = m_views.value(outputId, nullptr);
-    if(view && (data->type & KDevelop::IOutputView::MultipleView)) {
-        int idx = m_tabwidget->indexOf(view);
+    auto fview = m_views.value(outputId, FilteredView{});
+    if (fview.view && (data->type & KDevelop::IOutputView::MultipleView)) {
+        int idx = m_tabwidget->indexOf(fview.view.data());
         if (idx >= 0) {
             m_tabwidget->setTabText(idx, title);
         }
     }
+}
+
+QHash<int, OutputWidget::FilteredView>::iterator OutputWidget::findFilteredView(QAbstractItemView *view)
+{
+    for (auto it = m_views.begin(); it != m_views.end(); ++it) {
+        if (it->view == view) {
+            return it;
+        }
+    }
+    return m_views.end();
 }
