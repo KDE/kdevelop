@@ -53,7 +53,7 @@ CheckSelection::CheckSelection(QWidget* parent)
 {
     // since 5.32 the signal is by default taken as set for the used property
 #if KCONFIGWIDGETS_VERSION < QT_VERSION_CHECK(5,32,0)
-    KConfigDialogManager::changedMap()->insert(QStringLiteral("ClangTidy::CheckSelection"), SIGNAL(checksChanged(QStringList));
+    KConfigDialogManager::changedMap()->insert(QStringLiteral("ClangTidy::CheckSelection"), SIGNAL(checksChanged(QStringList)));
 #endif
 
     auto* layout = new QVBoxLayout;
