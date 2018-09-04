@@ -474,7 +474,7 @@ void OutputWidget::activate(const QModelIndex& index)
 
 QTreeView* OutputWidget::createListView(int id)
 {
-    auto createHelper = [&]() -> QTreeView* {
+    auto createHelper = [&]() -> QSharedPointer<QTreeView> {
         KDevelop::FocusedTreeView* listview = new KDevelop::FocusedTreeView(this);
         listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
         listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
@@ -490,10 +490,10 @@ QTreeView* OutputWidget::createListView(int id)
         connect(listview, &QTreeView::activated, this, &OutputWidget::activate);
         connect(listview, &QTreeView::clicked, this, &OutputWidget::activate);
 
-        return listview;
+        return QSharedPointer<QTreeView>(listview);
     };
 
-    QTreeView* listview = nullptr;
+    QSharedPointer<QTreeView> listview;
     if( !m_views.contains(id) )
     {
         bool newView = true;
@@ -505,26 +505,25 @@ QTreeView* OutputWidget::createListView(int id)
 
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
-                m_tabwidget->addTab( listview, data->outputdata.value(id)->title );
+                m_tabwidget->addTab(listview.data(), data->outputdata.value(id)->title);
             } else
             {
-                m_stackwidget->addWidget( listview );
-                m_stackwidget->setCurrentWidget( listview );
+                m_stackwidget->addWidget(listview.data());
+                m_stackwidget->setCurrentWidget(listview.data());
             }
         } else
         {
             if( m_views.isEmpty() )
             {
                 listview = createHelper();
-
-                layout()->addWidget( listview );
+                layout()->addWidget(listview.data());
             } else
             {
-                listview = m_views.begin().value().view.data();
+                listview = m_views.begin().value().view;
                 newView = false;
             }
         }
-        m_views[id].view = QSharedPointer<QTreeView>(listview);
+        m_views[id].view = listview;
 
         changeModel( id );
         changeDelegate( id );
@@ -533,10 +532,10 @@ QTreeView* OutputWidget::createListView(int id)
             listview->scrollToBottom();
     } else
     {
-        listview = m_views.value(id).view.data();
+        listview = m_views.value(id).view;
     }
     enableActions();
-    return listview;
+    return listview.data();
 }
 
 void OutputWidget::raiseOutput(int id)
