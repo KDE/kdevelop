@@ -31,6 +31,7 @@ namespace KDevMI {
 
 class SelectCoreDialog : public QDialog
 {
+    Q_OBJECT
 public:
     explicit SelectCoreDialog(QWidget *parent = nullptr);
     QUrl executableFile() const;

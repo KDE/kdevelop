@@ -110,6 +110,7 @@ class KDevelopApplication:
     public QApplication
 #endif
 {
+    Q_OBJECT
 public:
     explicit KDevelopApplication(int &argc, char **argv, bool GUIenabled = true)
 #if KDEVELOP_SINGLE_APP
@@ -847,3 +848,5 @@ int main( int argc, char *argv[] )
 
     return app.exec();
 }
+
+#include "main.moc"

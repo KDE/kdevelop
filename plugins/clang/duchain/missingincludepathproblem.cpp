@@ -62,6 +62,7 @@ private:
 
 class OpenProjectForFileAssistant : public KDevelop::IAssistantAction
 {
+    Q_OBJECT
 public:
     explicit OpenProjectForFileAssistant(const KDevelop::IndexedString& path)
         : m_path(path)
@@ -84,6 +85,7 @@ private:
 
 class MissingIncludePathAssistant : public ClangFixitAssistant
 {
+    Q_OBJECT
 public:
     MissingIncludePathAssistant(const QString& title, const KDevelop::IndexedString& path)
         : ClangFixitAssistant(title, {})

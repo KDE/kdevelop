@@ -34,6 +34,7 @@ class Plugin;
 
 class ProblemModel : public KDevelop::ProblemModel
 {
+    Q_OBJECT
 public:
     explicit ProblemModel(Plugin* plugin);
     ~ProblemModel() override;

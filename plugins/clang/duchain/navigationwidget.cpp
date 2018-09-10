@@ -33,6 +33,7 @@ using namespace KDevelop;
 
 class DeclarationNavigationContext : public AbstractDeclarationNavigationContext
 {
+    Q_OBJECT
 public:
     using AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext;
 
@@ -62,6 +63,7 @@ public:
 
 class IncludeNavigationContext : public KDevelop::AbstractIncludeNavigationContext
 {
+    Q_OBJECT
 public:
     IncludeNavigationContext(const KDevelop::IncludeItem& item, const KDevelop::TopDUContextPointer& topContext);
 
@@ -126,3 +128,5 @@ QString ClangNavigationWidget::shortDescription(const IncludeItem& includeItem)
   IncludeNavigationContext ctx(includeItem, {});
   return ctx.html(true);
 }
+
+#include "navigationwidget.moc"

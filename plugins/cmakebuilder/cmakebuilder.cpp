@@ -47,6 +47,7 @@ K_PLUGIN_FACTORY_WITH_JSON(CMakeBuilderFactory, "kdevcmakebuilder.json", registe
 
 class ErrorJob : public KJob
 {
+    Q_OBJECT
 public:
     ErrorJob(QObject* parent, const QString& error)
         : KJob(parent)

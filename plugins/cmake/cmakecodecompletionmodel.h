@@ -33,6 +33,7 @@ namespace KTextEditor { class Document; class Range; }
 
 class CMakeCodeCompletionModel : public KTextEditor::CodeCompletionModel
 {
+        Q_OBJECT
     public:
         explicit CMakeCodeCompletionModel(QObject *parent);
 

@@ -184,6 +184,7 @@ KDevelop::ConfigPage* NinjaBuilder::perProjectConfigPage(int number, const KDeve
 class ErrorJob
     : public KJob
 {
+    Q_OBJECT
 public:
     ErrorJob(QObject* parent, const QString& error)
         : KJob(parent)

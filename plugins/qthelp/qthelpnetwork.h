@@ -29,6 +29,7 @@
 
 class HelpNetworkReply : public QNetworkReply
 {
+		Q_OBJECT
 	public:
 		HelpNetworkReply(const QNetworkRequest &request, const QByteArray &fileData, const QString &mimeType);
 		
@@ -45,6 +46,7 @@ class HelpNetworkReply : public QNetworkReply
 
 class HelpNetworkAccessManager : public QNetworkAccessManager
 {
+		Q_OBJECT
 	public:
 		explicit HelpNetworkAccessManager(QHelpEngineCore *engine, QObject *parent = nullptr);
         ~HelpNetworkAccessManager() override;

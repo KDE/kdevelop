@@ -31,6 +31,7 @@ namespace QmlJS {
 
 class KDEVQMLJSCOMPLETION_EXPORT CodeCompletionModel : public KDevelop::CodeCompletionModel
 {
+    Q_OBJECT
 public:
     explicit CodeCompletionModel(QObject* parent);
 protected:
