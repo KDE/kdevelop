@@ -32,7 +32,14 @@
       <item>
        <layout class="QHBoxLayout" name="filterLayout">
         <item>
-         <widget class="KFilterProxySearchLine" name="cmdFilter"/>
+         <widget class="QLineEdit" name="cmdFilter">
+          <property name="placeholderText">
+           <string>Search</string>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="cmdBreak">
@@ -55,13 +62,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KFilterProxySearchLine</class>
-   <extends>QWidget</extends>
-   <header>kfilterproxysearchline.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

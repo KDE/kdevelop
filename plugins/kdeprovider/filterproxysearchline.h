@@ -1,6 +1,7 @@
 /*
  * This file is part of KDevelop
- * Copyright 2010 Aleix Pol Gonzalez <aleixpol@kde.org>
+ *
+ * Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Library General Public License as
@@ -18,29 +19,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KDEPROVIDERWIDGET_H
-#define KDEPROVIDERWIDGET_H
+#ifndef KDEPROVIDER_FILTERPROXYSEARCHLINE_H
+#define KDEPROVIDER_FILTERPROXYSEARCHLINE_H
 
-#include <interfaces/iprojectprovider.h>
+// Qt
+#include <QLineEdit>
 
-class QModelIndex;
-class QListView;
+class QTimer;
+class QSortFilterProxyModel;
 
-class KDEProviderWidget : public KDevelop::IProjectProviderWidget
+class FilterProxySearchLine : public QLineEdit
 {
     Q_OBJECT
-    public:
-        explicit KDEProviderWidget(QWidget* parent = nullptr);
-        
-        KDevelop::VcsJob* createWorkingCopy(const QUrl &destinationDirectory) override;
-        bool isCorrect() const override;
-        
-    private Q_SLOTS:
-        void showSettings();
-        void projectIndexChanged(const QModelIndex& currentIndex);
-        
-    private:
-        QListView* m_projects;
+
+public:
+    explicit FilterProxySearchLine(QWidget* parent = nullptr);
+
+public:
+    void setFilterProxyModel(QSortFilterProxyModel* filterProxyModel);
+
+private:
+    void updateFilter();
+
+private:
+    QTimer* m_delayTimer;
+    QSortFilterProxyModel* m_filterProxyModel = nullptr;
 };
 
-#endif // KDEPROVIDERWIDGET_H
+#endif

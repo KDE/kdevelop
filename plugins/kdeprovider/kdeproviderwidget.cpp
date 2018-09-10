@@ -29,11 +29,12 @@
 #include <vcs/vcslocation.h>
 
 #include "ui_kdeconfig.h"
+#include "filterproxysearchline.h"
 #include "kdeconfig.h"
 #include "kdeprojectsmodel.h"
 #include "kdeprojectsreader.h"
 #include <QSortFilterProxyModel>
-#include <KFilterProxySearchLine>
+
 #include <KMessageBox>
 #include <KLocalizedString>
 
@@ -45,7 +46,7 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     setLayout(new QVBoxLayout);
     m_projects = new QListView(this);
     QHBoxLayout* topLayout = new QHBoxLayout;
-    KFilterProxySearchLine* filterLine = new KFilterProxySearchLine(this);
+    auto filterLine = new FilterProxySearchLine(this);
     KDEProjectsModel* model = new KDEProjectsModel(this);
     KDEProjectsReader* reader = new KDEProjectsReader(model, model);
     connect(reader, &KDEProjectsReader::downloadDone, reader, &KDEProjectsReader::deleteLater);
@@ -68,9 +69,11 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     proxyModel->setDynamicSortFilter(true);
     proxyModel->sort(0);
     proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    proxyModel->setFilterKeyColumn(-1);
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     m_projects->setModel(proxyModel);
     m_projects->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    filterLine->setProxy(proxyModel);
+    filterLine->setFilterProxyModel(proxyModel);
 }
 
 VcsLocation extractLocation(const QModelIndex& pos)

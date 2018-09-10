@@ -52,7 +52,6 @@ kdevplatform_add_plugin(kdevcppcheck
 )
 target_link_libraries(kdevcppcheck
     kdevcppcheck_core
-    KF5::ItemViews
 )
 
 ecm_install_icons(ICONS icons/128-apps-cppcheck.png

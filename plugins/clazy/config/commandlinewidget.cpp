@@ -34,7 +34,7 @@ CommandLineWidget::CommandLineWidget(QWidget* parent)
     m_ui->setupUi(this);
     m_ui->cmdEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
-    connect(m_ui->cmdFilter->lineEdit(), &QLineEdit::textChanged, this, &CommandLineWidget::updateCommandLine);
+    connect(m_ui->cmdFilter, &QLineEdit::textChanged, this, &CommandLineWidget::updateCommandLine);
     connect(m_ui->cmdBreak, &QCheckBox::stateChanged, this, &CommandLineWidget::updateCommandLine);
 }
 
@@ -56,7 +56,7 @@ void CommandLineWidget::updateCommandLine()
         commandLine.replace(QLatin1String(","), QLatin1String("\n,"));
     }
 
-    auto filterText = m_ui->cmdFilter->lineEdit()->text();
+    auto filterText = m_ui->cmdFilter->text();
     if (!filterText.isEmpty()) {
         QStringList lines = commandLine.split(QLatin1Char('\n'));
         QMutableStringListIterator i(lines);

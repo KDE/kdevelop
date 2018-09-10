@@ -43,7 +43,7 @@ ProjectConfigPage::ProjectConfigPage(KDevelop::IPlugin* plugin, KDevelop::IProje
     ui->commandLine->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
 
     connect(this, &ProjectConfigPage::changed, this, &ProjectConfigPage::updateCommandLine);
-    connect(ui->commandLineFilter->lineEdit(), &QLineEdit::textChanged, this, &ProjectConfigPage::updateCommandLine);
+    connect(ui->commandLineFilter, &QLineEdit::textChanged, this, &ProjectConfigPage::updateCommandLine);
     connect(ui->commandLineBreaks, &QCheckBox::stateChanged, this, &ProjectConfigPage::updateCommandLine);
 }
 
@@ -105,7 +105,7 @@ void ProjectConfigPage::updateCommandLine()
     }
 
     commandLine.replace(QLatin1String(" -"), QLatin1String("\n-"));
-    QString filterText = ui->commandLineFilter->lineEdit()->text();
+    QString filterText = ui->commandLineFilter->text();
     if (filterText.isEmpty()) {
         ui->commandLine->setPlainText(commandLine);
         ui->commandLineBreaks->setEnabled(true);
