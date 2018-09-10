@@ -17,7 +17,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include <KMessageBox>
+#include <ghproviderwidget.h>
 
 #include <QLabel>
 #include <QListView>
@@ -30,15 +30,15 @@
 #include <interfaces/iplugincontroller.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
 #include <vcs/vcslocation.h>
-#include <KLocalizedString>
 
 #include <ghaccount.h>
 #include <ghdialog.h>
 #include <ghresource.h>
 #include <ghlineedit.h>
 #include <ghprovidermodel.h>
-#include <ghproviderwidget.h>
 
+#include <KLocalizedString>
+#include <KMessageBox>
 
 using namespace KDevelop;
 namespace gh

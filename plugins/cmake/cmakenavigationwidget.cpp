@@ -27,6 +27,7 @@ using namespace KDevelop;
 
 class CMakeNavigationContext: public AbstractNavigationContext
 {
+        Q_OBJECT
     public:
         CMakeNavigationContext(const TopDUContextPointer& top, const QString& name, const QString& html)
             : AbstractNavigationContext(top, nullptr), mName(name), mDescription(html) {}
@@ -45,6 +46,7 @@ class CMakeNavigationContext: public AbstractNavigationContext
 
 class CMakeDeclarationNavigationContext: public AbstractDeclarationNavigationContext
 {
+        Q_OBJECT
     public:
         CMakeDeclarationNavigationContext(const DeclarationPointer& decl, const TopDUContextPointer& top)
             : AbstractDeclarationNavigationContext(decl, top) {}
@@ -59,3 +61,5 @@ CMakeNavigationWidget::CMakeNavigationWidget(const KDevelop::DUChainPointer< KDe
 {
     setContext(NavigationContextPointer(new CMakeDeclarationNavigationContext(DeclarationPointer(decl), top)));
 }
+
+#include "cmakenavigationwidget.moc"

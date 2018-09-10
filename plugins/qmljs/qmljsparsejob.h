@@ -24,6 +24,7 @@
 
 class QmlJsParseJob : public KDevelop::ParseJob
 {
+    Q_OBJECT
 public:
     QmlJsParseJob(const KDevelop::IndexedString& url,
                   KDevelop::ILanguageSupport* languageSupport);

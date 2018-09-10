@@ -29,6 +29,7 @@ namespace QmlJS {
 
 class DeclarationNavigationContext : public KDevelop::AbstractDeclarationNavigationContext
 {
+    Q_OBJECT
 public:
     using KDevelop::AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext;
 

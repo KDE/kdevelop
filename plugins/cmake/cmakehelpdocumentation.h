@@ -25,6 +25,7 @@
 
 class CMakeHomeDocumentation : public KDevelop::IDocumentation
 {
+        Q_OBJECT
     public:
         KDevelop::IDocumentationProvider* provider() const override;
         QString name() const override;

@@ -20,8 +20,9 @@
  *
  */
 
-#include "worker.h"
 #include "model.h"
+
+#include "worker.h"
 
 namespace QmlJS {
 

@@ -34,6 +34,7 @@ namespace QmlJS {
 
 class KDEVQMLJSDUCHAIN_EXPORT NavigationWidget : public KDevelop::AbstractNavigationWidget
 {
+    Q_OBJECT
 public:
     NavigationWidget(KDevelop::Declaration* decl,
                      KDevelop::TopDUContext* topContext,

@@ -32,6 +32,8 @@ using namespace KDevelop;
 
 class IdentityRuntime : public IRuntime
 {
+    Q_OBJECT
+public:
     QString name() const override { return i18n("Host System"); }
 
     void startProcess(KProcess *process) const override {
@@ -163,3 +165,5 @@ void KDevelop::RuntimeController::addRuntimes(KDevelop::IRuntime * runtime)
 
     m_runtimes << runtime;
 }
+
+#include "runtimecontroller.moc"

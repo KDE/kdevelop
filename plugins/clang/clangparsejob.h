@@ -34,6 +34,7 @@ class ParseSessionData;
 
 class ClangParseJob : public KDevelop::ParseJob
 {
+    Q_OBJECT
 public:
     ClangParseJob(const KDevelop::IndexedString& url,
                   KDevelop::ILanguageSupport* languageSupport);

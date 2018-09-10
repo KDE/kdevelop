@@ -20,9 +20,9 @@
  */
 
 #include "templateengine.h"
+#include "templateengine_p.h"
 
 #include "debug.h"
-#include "templateengine_p.h"
 
 #include "codedescription.h"
 #include "codedescriptionmetatypes.h"

@@ -53,6 +53,7 @@ using namespace KDevelop;
 #ifndef USE_QTWEBKIT
 class StandardDocumentationPage : public QWebEnginePage
 {
+    Q_OBJECT
 public:
     StandardDocumentationPage(QWebEngineProfile* profile, KDevelop::StandardDocumentationView* parent)
         : QWebEnginePage(profile, parent),
@@ -289,6 +290,7 @@ void KDevelop::StandardDocumentationView::setHtml(const QString& html)
 #ifndef USE_QTWEBKIT
 class CustomSchemeHandler : public QWebEngineUrlSchemeHandler
 {
+    Q_OBJECT
 public:
     explicit CustomSchemeHandler(QNetworkAccessManager* nam, QObject *parent = nullptr)
         : QWebEngineUrlSchemeHandler(parent), m_nam(nam) {}
@@ -386,3 +388,7 @@ void StandardDocumentationView::wheelEvent(QWheelEvent* event)
     }
     QWidget::wheelEvent(event);
 }
+
+#ifndef USE_QTWEBKIT
+#include "standarddocumentationview.moc"
+#endif

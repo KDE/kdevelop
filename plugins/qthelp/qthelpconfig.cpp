@@ -48,6 +48,7 @@ enum Column
 
 class QtHelpConfigEditDialog : public QDialog, public Ui_QtHelpConfigEditDialog
 {
+    Q_OBJECT
 public:
     explicit QtHelpConfigEditDialog(QTreeWidgetItem* modifiedItem, QtHelpConfig* parent = nullptr)
         : QDialog(parent)
@@ -353,3 +354,5 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
 
     return item;
 }
+
+#include "qthelpconfig.moc"

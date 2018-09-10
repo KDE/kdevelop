@@ -54,6 +54,7 @@ namespace GDB
 */
 class MemoryRangeSelector : public QWidget
 {
+        Q_OBJECT
     public:
         QLineEdit* startAddressLineEdit;
         QLineEdit* amountLineEdit;
@@ -468,3 +469,5 @@ void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
 
 } // end of namespace GDB
 } // end of namespace KDevMI
+
+#include "memviewdlg.moc"

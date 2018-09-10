@@ -17,13 +17,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include <ghproviderplugin.h>
+
+#include <debug.h>
+#include <ghproviderwidget.h>
 
 #include <KLocalizedString>
 #include <KPluginFactory>
-
-#include <debug.h>
-#include <ghproviderplugin.h>
-#include <ghproviderwidget.h>
 
 using namespace KDevelop;
 
