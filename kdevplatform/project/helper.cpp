@@ -17,8 +17,9 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "debug.h"
 #include "helper.h"
+
+#include "debug.h"
 #include "path.h"
 
 #include <QApplication>

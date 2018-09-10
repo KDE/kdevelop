@@ -17,20 +17,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include "ghdialog.h"
+
+#include <ghaccount.h>
+#include <ghresource.h>
+
+#include <KLocalizedString>
+#include <KMessageBox>
+#include <KPasswordDialog>
+
 #include <QLabel>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QPointer>
 #include <QInputDialog>
-
-#include <KLocalizedString>
-#include <KMessageBox>
-#include <KPasswordDialog>
-
-#include <ghdialog.h>
-#include <ghaccount.h>
-#include <ghresource.h>
 
 static QString invalidAccountText()
 {

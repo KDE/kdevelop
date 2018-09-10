@@ -10,6 +10,8 @@
 *                                                                         *
 ***************************************************************************/
 
+#include "test_findreplace.h"
+
 #include <QTest>
 #include <QRegExp>
 
@@ -19,7 +21,6 @@
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
 
-#include "test_findreplace.h"
 #include "../grepjob.h"
 #include "../grepviewplugin.h"
 #include "../grepoutputmodel.h"

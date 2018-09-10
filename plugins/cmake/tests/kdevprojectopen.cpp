@@ -17,14 +17,17 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <QApplication>
-#include <KLocalizedString>
-#include <KAboutData>
+#include "kdevprojectopen.h"
+
 #include <tests/autotestshell.h>
 #include <tests/testcore.h>
 #include <interfaces/iprojectcontroller.h>
-#include "kdevprojectopen.h"
 #include "testhelpers.h"
+
+#include <KLocalizedString>
+#include <KAboutData>
+
+#include <QApplication>
 #include <QDebug>
 #include <QCommandLineParser>
 

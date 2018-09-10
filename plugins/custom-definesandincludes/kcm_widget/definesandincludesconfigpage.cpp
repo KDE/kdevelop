@@ -16,6 +16,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
+#include "definesandincludesconfigpage.h"
+
 #include <QVBoxLayout>
 #include <QIcon>
 
@@ -28,8 +30,6 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
 #include <project/projectmodel.h>
-
-#include "definesandincludesconfigpage.h"
 
 DefinesAndIncludesConfigPage::DefinesAndIncludesConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<CustomDefinesAndIncludes>(plugin, options, parent)

@@ -16,11 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
+#include "test_cppcheckjob.h"
+
 #include <QTest>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
-
-#include "test_cppcheckjob.h"
 
 #include "job.h"
 #include "parameters.h"

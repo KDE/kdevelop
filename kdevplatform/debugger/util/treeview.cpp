@@ -19,12 +19,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "treeview.h"
+
+#include "treemodel.h"
+
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QSortFilterProxyModel>
-
-#include "treeview.h"
-#include "treemodel.h"
 
 using namespace KDevelop;
 

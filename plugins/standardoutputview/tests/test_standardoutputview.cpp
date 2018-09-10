@@ -16,6 +16,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "test_standardoutputview.h"
+
 #include <QAction>
 #include <QStackedWidget>
 #include <QStandardItemModel>
@@ -34,7 +36,6 @@
 #include <interfaces/iplugincontroller.h>
 #include <outputview/ioutputview.h>
 
-#include "test_standardoutputview.h"
 #include "../outputwidget.h"
 #include "../toolviewdata.h"
 

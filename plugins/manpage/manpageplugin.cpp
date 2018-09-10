@@ -18,9 +18,14 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <KPluginFactory>
+#include "manpageplugin.h"
+
+#include "manpagedocumentation.h"
+#include "manpagemodel.h"
 
 #include <interfaces/idocumentation.h>
+#include <interfaces/icore.h>
+#include <interfaces/iprojectcontroller.h>
 
 #include <language/duchain/duchain.h>
 #include <language/duchain/declaration.h>
@@ -33,15 +38,11 @@
 #include <language/duchain/classmemberdeclaration.h>
 #include <language/duchain/classfunctiondeclaration.h>
 
+#include <KPluginFactory>
+
 #include <QFile>
 #include <QStringListModel>
 
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
-
-#include "manpageplugin.h"
-#include "manpagedocumentation.h"
-#include "manpagemodel.h"
 
 using namespace KDevelop;
 

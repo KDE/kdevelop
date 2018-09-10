@@ -17,13 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <cstdlib>
-
 #include "texteditorhelpers.h"
 
 #include <KTextEditor/View>
 
 #include <QRegularExpression>
+
+#include <cstdlib>
 
 namespace KDevelop {
 

@@ -18,10 +18,10 @@
  * 02110-1301, USA.
  */
 
+#include "cmakeextraargumentshistory.h"
+
 #include <KSharedConfig>
 #include <KConfigGroup>
-
-#include "cmakeextraargumentshistory.h"
 
 namespace {
 

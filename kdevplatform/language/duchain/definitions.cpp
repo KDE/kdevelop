@@ -17,8 +17,9 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "appendedlist.h"
 #include "definitions.h"
+
+#include "appendedlist.h"
 #include "declaration.h"
 #include "declarationid.h"
 #include "duchainpointer.h"
