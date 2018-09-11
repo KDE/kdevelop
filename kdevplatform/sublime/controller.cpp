@@ -49,7 +49,7 @@ struct WidgetFinder {
         return Area::ContinueWalker;
     }
 
-    QWidget *w;
+    QWidget* const w;
     View *view;
 };
 
@@ -65,7 +65,7 @@ struct ToolWidgetFinder {
         return Area::ContinueWalker;
     }
 
-    QWidget *w;
+    QWidget* const w;
     View *view;
 };
 

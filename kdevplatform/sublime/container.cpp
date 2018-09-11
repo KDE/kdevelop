@@ -128,7 +128,7 @@ Q_SIGNALS:
     void newTabRequested();
 
 private:
-    Container* m_container;
+    Container* const m_container;
 };
 
 bool sortViews(const View* const lhs, const View* const rhs)

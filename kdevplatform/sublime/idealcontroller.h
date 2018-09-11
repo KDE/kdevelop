@@ -80,19 +80,16 @@ public:
     IdealButtonBarWidget *topBarWidget;
     QWidget *bottomStatusBarLocation;
 
-    IdealDockWidget* currentDockWidget();
+    IdealDockWidget* currentDockWidget() const;
     QMap<Qt::DockWidgetArea, QPointer<IdealDockWidget> > lastDockWidget;
 
-    void emitWidgetResized(Qt::DockWidgetArea dockArea, int thickness);
-
-    QList<IdealDockWidget*> allDockWidgets();
+    QList<IdealDockWidget*> allDockWidgets() const;
 
 Q_SIGNALS:
         /// Emitted, when a context menu is requested on one of the dock bars.
     /// When no actions gets associated to the QMenu, it won't be shown.
     void dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position);
     void dockShown(Sublime::View*, Sublime::Position pos, bool shown);
-    void widgetResized(Qt::DockWidgetArea dockArea, int thickness);
 
 private Q_SLOTS:
     void slotDockBarContextMenuRequested(const QPoint& position);
@@ -104,7 +101,7 @@ private:
     void showDock(Qt::DockWidgetArea area, bool show);
     void toggleDocksShown(IdealButtonBarWidget *bar, bool show);
 
-    Sublime::MainWindow *m_mainWindow;
+    Sublime::MainWindow* const m_mainWindow;
 
     QSet<IdealDockWidget*> docks;
 

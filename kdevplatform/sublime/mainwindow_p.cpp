@@ -71,7 +71,7 @@ class IdealToolBar : public QToolBar
         }
 
     private:
-        Sublime::IdealButtonBarWidget* m_buttons;
+        Sublime::IdealButtonBarWidget* const m_buttons;
         const bool m_hideWhenEmpty;
 };
 
@@ -177,11 +177,6 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
             &IdealController::dockShown,
             this,
             &MainWindowPrivate::slotDockShown);
-
-    connect(idealController,
-            &IdealController::widgetResized,
-            this,
-            &MainWindowPrivate::widgetResized);
 
     connect(idealController, &IdealController::dockBarContextMenuRequested,
             m_mainWindow, &MainWindow::dockBarContextMenuRequested);
@@ -748,12 +743,6 @@ Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
     }
 }
 
-void MainWindowPrivate::switchToArea(QAction *action)
-{
-    qCDebug(SUBLIME) << "for" << action;
-    controller->showArea(m_actionAreas.value(action), m_mainWindow);
-}
-
 void MainWindowPrivate::updateAreaSwitcher(Sublime::Area *area)
 {
     QAction* action = m_areaActions.value(area);
@@ -766,11 +755,6 @@ void MainWindowPrivate::activateFirstVisibleView()
     QList<Sublime::View*> views = area->views();
     if (views.count() > 0)
         m_mainWindow->activateView(views.first());
-}
-
-void MainWindowPrivate::widgetResized(Qt::DockWidgetArea /*dockArea*/, int /*thickness*/)
-{
-    //TODO: adymo: remove all thickness business
 }
 
 void MainWindowPrivate::widgetCloseRequest(QWidget* widget)

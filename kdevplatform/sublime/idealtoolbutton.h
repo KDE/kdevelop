@@ -40,7 +40,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    Qt::DockWidgetArea _area;
+    const Qt::DockWidgetArea _area;
 };
 
 #endif // IDEALTOOLBUTTON_H

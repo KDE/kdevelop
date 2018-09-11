@@ -252,7 +252,7 @@ void IdealController::raiseView(View* view, RaiseMode mode)
         focusWidget->setFocus(Qt::ShortcutFocusReason);
 }
 
-QList< IdealDockWidget* > IdealController::allDockWidgets()
+QList< IdealDockWidget* > IdealController::allDockWidgets() const
 {
     return docks.toList();
 }
@@ -420,7 +420,7 @@ void IdealController::showDock(Qt::DockWidgetArea area, bool show)
 }
 
 // returns currently focused dock widget (if any)
-IdealDockWidget* IdealController::currentDockWidget()
+IdealDockWidget* IdealController::currentDockWidget() const
 {
     QWidget *w = m_mainWindow->focusWidget();
     while (true) {
@@ -507,9 +507,4 @@ void IdealController::loadSettings()
         m_mainWindow->setCorner(Qt::BottomRightCorner, Qt::BottomDockWidgetArea);
     else
         m_mainWindow->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
-}
-
-void IdealController::emitWidgetResized(Qt::DockWidgetArea dockArea, int thickness)
-{
-    emit widgetResized(dockArea, thickness);
 }

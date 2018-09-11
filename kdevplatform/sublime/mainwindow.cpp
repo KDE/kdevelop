@@ -354,7 +354,7 @@ QString MainWindow::screenKey() const
         .arg(desk.width()).arg(desk.height());
 }
 
-void MainWindow::saveGeometry(KConfigGroup &config)
+void MainWindow::saveGeometry(KConfigGroup &config) const
 {
     config.writeEntry(screenKey(), geometry());
 
