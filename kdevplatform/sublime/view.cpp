@@ -31,14 +31,18 @@ class Document;
 class ViewPrivate
 {
 public:
-    ViewPrivate();
-    Document *doc = nullptr;
-    QWidget *widget = nullptr;
+    ViewPrivate(Document* doc, View::WidgetOwnership ws);
+
     void unsetWidget();
-    View::WidgetOwnership ws;
+
+    QWidget* widget = nullptr;
+    Document* const doc;
+    const View::WidgetOwnership ws;
 };
 
-ViewPrivate::ViewPrivate()
+ViewPrivate::ViewPrivate(Document* doc, View::WidgetOwnership ws)
+    : doc(doc)
+    , ws(ws)
 {
 }
 
@@ -48,10 +52,9 @@ void ViewPrivate::unsetWidget()
 }
 
 View::View(Document *doc, WidgetOwnership ws )
-    :QObject(doc), d(new ViewPrivate)
+    : QObject(doc)
+    , d(new ViewPrivate(doc, ws))
 {
-    d->doc = doc;
-    d->ws = ws;
 }
 
 View::~View()

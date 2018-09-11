@@ -68,7 +68,7 @@ protected:
 
 private:
     QList<QLayoutItem *> _items;
-    Qt::Orientation _orientation;
+    const Qt::Orientation _orientation;
     int _height;
     mutable bool m_minSizeDirty : 1;
     mutable bool m_sizeHintDirty : 1;

@@ -71,7 +71,7 @@ class IdealToolBar : public QToolBar
         }
 
     private:
-        Sublime::IdealButtonBarWidget* m_buttons;
+        Sublime::IdealButtonBarWidget* const m_buttons;
         const bool m_hideWhenEmpty;
 };
 

@@ -64,7 +64,7 @@ class KDEVPLATFORMSUBLIME_EXPORT HoldUpdates {
     private:
         bool m_wasupdating;
         bool m_done;
-        QWidget* m_w;
+        QWidget* const m_w;
 };
 
 }

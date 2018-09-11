@@ -59,7 +59,7 @@ private:
     Area *m_area;
     View *m_view;
     Qt::DockWidgetArea m_docking_area;
-    IdealController *m_controller;
+    IdealController* const m_controller;
 };
 
 }

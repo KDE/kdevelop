@@ -29,7 +29,10 @@ namespace Sublime {
 class DocumentPrivate
 {
 public:
-    explicit DocumentPrivate(Document *doc): m_document(doc) {}
+    DocumentPrivate(Controller* controller, Document* doc)
+        : controller(controller)
+        , document(doc)
+    {}
 
     void removeView(Sublime::View* view)
     {
@@ -37,17 +40,17 @@ public:
         //no need to keep empty document - we need to remove it
         if (views.count() == 0)
         {
-            emit m_document->aboutToDelete(m_document);
-            m_document->deleteLater();
+            emit document->aboutToDelete(document);
+            document->deleteLater();
         }
     }
 
-    Controller *controller;
     QList<View*> views;
     QIcon statusIcon;
     QString documentToolTip;
 
-    Document *m_document;
+    Controller* const controller;
+    Document* const document;
 };
 
 
@@ -55,10 +58,9 @@ public:
 //class Document
 
 Document::Document(const QString &title, Controller *controller)
-    :QObject(controller), d( new DocumentPrivate(this) )
+    :QObject(controller), d( new DocumentPrivate(controller, this) )
 {
     setObjectName(title);
-    d->controller = controller;
     d->controller->addDocument(this);
     // Functor will be called after destructor has run -> capture controller pointer by value
     // otherwise we crash because we access the already freed pointer this->d

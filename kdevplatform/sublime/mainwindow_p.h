@@ -55,7 +55,7 @@ public:
         explicit IdealToolViewCreator(MainWindowPrivate *_d): d(_d) {}
         Area::WalkerMode operator() (View *view, Sublime::Position position);
     private:
-        MainWindowPrivate *d;
+        MainWindowPrivate* const d;
     };
 
     /**Use this to create views for an area.*/
@@ -64,8 +64,8 @@ public:
         explicit ViewCreator(MainWindowPrivate *_d, const QList<View*>& _topViews = QList<View*>()): d(_d), topViews(_topViews.toSet()) {}
         Area::WalkerMode operator() (AreaIndex *index);
     private:
-        MainWindowPrivate *d;
-        QSet<View*> topViews;
+        MainWindowPrivate* const d;
+        const QSet<View*> topViews;
     };
 
     /**Reconstructs the mainwindow according to the current area.*/
@@ -80,7 +80,7 @@ public:
 
     void activateFirstVisibleView();
 
-    Controller *controller;
+    Controller* const controller;
     Area *area;
     QList<View*> docks;
     QMap<View*, Container*> viewContainers;
@@ -133,7 +133,7 @@ private:
     Qt::DockWidgetArea positionToDockArea(Position position);
     void cleanCentralWidget();
 
-    MainWindow *m_mainWindow;
+    MainWindow* const m_mainWindow;
     // uses QPointer to make already-deleted splitters detectable
     QMap<AreaIndex*, QPointer<QSplitter> > m_indexSplitters;
 

@@ -101,7 +101,7 @@ private:
     void showDock(Qt::DockWidgetArea area, bool show);
     void toggleDocksShown(IdealButtonBarWidget *bar, bool show);
 
-    Sublime::MainWindow *m_mainWindow;
+    Sublime::MainWindow* const m_mainWindow;
 
     QSet<IdealDockWidget*> docks;
 
