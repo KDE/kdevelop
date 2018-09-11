@@ -542,10 +542,6 @@ public:
 
     DocumentController* const controller;
 
-    QVector<HistoryEntry> backHistory;
-    QVector<HistoryEntry> forwardHistory;
-    bool isJumping;
-
     QPointer<QAction> saveAll;
     QPointer<QAction> revertAll;
     QPointer<QAction> close;
