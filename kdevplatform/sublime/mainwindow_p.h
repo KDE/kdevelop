@@ -115,7 +115,6 @@ public Q_SLOTS:
     void setTabBarLeftCornerWidget(QWidget* widget);
 
 private Q_SLOTS:
-    void switchToArea(QAction *action);
     void updateAreaSwitcher(Sublime::Area *area);
     void slotDockShown(Sublime::View*, Sublime::Position, bool);
     void widgetResized(Qt::DockWidgetArea dockArea, int thickness);
@@ -140,7 +139,6 @@ private:
     QMap<AreaIndex*, QPointer<QSplitter> > m_indexSplitters;
 
     QMap<Area*, QAction*> m_areaActions;
-    QMap<QAction*, Area*> m_actionAreas;
     QPointer<QWidget> m_leftTabbarCornerWidget;
     QPointer<QToolBar> m_concentrateToolBar;
     IdealToolBar* m_bottomToolBar;

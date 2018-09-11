@@ -748,12 +748,6 @@ Qt::DockWidgetArea MainWindowPrivate::positionToDockArea(Position position)
     }
 }
 
-void MainWindowPrivate::switchToArea(QAction *action)
-{
-    qCDebug(SUBLIME) << "for" << action;
-    controller->showArea(m_actionAreas.value(action), m_mainWindow);
-}
-
 void MainWindowPrivate::updateAreaSwitcher(Sublime::Area *area)
 {
     QAction* action = m_areaActions.value(area);
