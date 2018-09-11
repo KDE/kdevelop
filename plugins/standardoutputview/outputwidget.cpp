@@ -102,9 +102,6 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         addAction(m_nextAction);
     }
 
-    addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action(QStringLiteral("prev_error"))));
-    addAction(dynamic_cast<QAction*>(data->plugin->actionCollection()->action(QStringLiteral("next_error"))));
-
     m_activateOnSelect = new KToggleAction( QIcon(), i18n("Select activated Item"), this );
     m_activateOnSelect->setChecked( true );
     m_focusOnSelect = new KToggleAction( QIcon(), i18n("Focus when selecting Item"), this );
