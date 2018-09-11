@@ -178,11 +178,6 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
             this,
             &MainWindowPrivate::slotDockShown);
 
-    connect(idealController,
-            &IdealController::widgetResized,
-            this,
-            &MainWindowPrivate::widgetResized);
-
     connect(idealController, &IdealController::dockBarContextMenuRequested,
             m_mainWindow, &MainWindow::dockBarContextMenuRequested);
 }
@@ -760,11 +755,6 @@ void MainWindowPrivate::activateFirstVisibleView()
     QList<Sublime::View*> views = area->views();
     if (views.count() > 0)
         m_mainWindow->activateView(views.first());
-}
-
-void MainWindowPrivate::widgetResized(Qt::DockWidgetArea /*dockArea*/, int /*thickness*/)
-{
-    //TODO: adymo: remove all thickness business
 }
 
 void MainWindowPrivate::widgetCloseRequest(QWidget* widget)

@@ -508,8 +508,3 @@ void IdealController::loadSettings()
     else
         m_mainWindow->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 }
-
-void IdealController::emitWidgetResized(Qt::DockWidgetArea dockArea, int thickness)
-{
-    emit widgetResized(dockArea, thickness);
-}

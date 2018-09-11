@@ -117,7 +117,6 @@ public Q_SLOTS:
 private Q_SLOTS:
     void updateAreaSwitcher(Sublime::Area *area);
     void slotDockShown(Sublime::View*, Sublime::Position, bool);
-    void widgetResized(Qt::DockWidgetArea dockArea, int thickness);
     void widgetCloseRequest(QWidget* widget);
 
     void showLeftDock(bool b);
