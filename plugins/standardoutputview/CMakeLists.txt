@@ -16,7 +16,6 @@ set(standardoutputview_LIB_SRCS
     ${standardoutputview_LOG_PART_SRCS}
 )
 
-qt5_add_resources(standardoutputview_LIB_SRCS kdevstandardoutputview.qrc)
 kdevplatform_add_plugin(kdevstandardoutputview JSON kdevstandardoutputview.json SOURCES  ${standardoutputview_LIB_SRCS})
 
 target_link_libraries(kdevstandardoutputview

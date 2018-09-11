@@ -66,8 +66,6 @@ private:
 StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(QStringLiteral("kdevstandardoutputview"), parent)
 {
-    setXMLFile(QStringLiteral("kdevstandardoutputview.rc"));
-
     connect(KDevelop::ICore::self()->uiController()->controller(), &Sublime::Controller::aboutToRemoveView,
             this, &StandardOutputView::removeSublimeView);
 
