@@ -21,6 +21,8 @@
 #include "view.h"
 #include "area.h"
 #include "controller.h"
+// Qt
+#include <QIcon>
 
 namespace Sublime {
 

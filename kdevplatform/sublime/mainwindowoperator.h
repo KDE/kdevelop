@@ -23,8 +23,6 @@
 
 #include "sublimeexport.h"
 
-#include <QIcon>
-
 namespace Sublime {
 
 class Area;
