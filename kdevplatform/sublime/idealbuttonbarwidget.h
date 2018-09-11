@@ -60,12 +60,12 @@ public:
 
     IdealDockWidget* widgetForAction(QAction* action) const;
 
-    QWidget* corner();
+    QWidget* corner() const;
 
     void showWidget(QAction *widgetAction, bool checked);
-    bool isEmpty();
+    bool isEmpty() const;
 
-    bool isShown();
+    bool isShown() const;
     void saveShowState();
     bool lastShowState();
 

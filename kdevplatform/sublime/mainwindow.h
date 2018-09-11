@@ -166,7 +166,7 @@ private:
     /**Sets the active tool view and focuses it.*/
     void setActiveToolView(View *view);
 
-    void saveGeometry(KConfigGroup &config);
+    void saveGeometry(KConfigGroup &config) const;
     void loadGeometry(const KConfigGroup &config);
 
 private:

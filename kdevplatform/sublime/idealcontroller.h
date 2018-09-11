@@ -80,10 +80,10 @@ public:
     IdealButtonBarWidget *topBarWidget;
     QWidget *bottomStatusBarLocation;
 
-    IdealDockWidget* currentDockWidget();
+    IdealDockWidget* currentDockWidget() const;
     QMap<Qt::DockWidgetArea, QPointer<IdealDockWidget> > lastDockWidget;
 
-    QList<IdealDockWidget*> allDockWidgets();
+    QList<IdealDockWidget*> allDockWidgets() const;
 
 Q_SIGNALS:
         /// Emitted, when a context menu is requested on one of the dock bars.

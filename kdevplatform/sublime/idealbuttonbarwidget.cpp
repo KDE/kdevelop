@@ -144,7 +144,7 @@ QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
     return action;
 }
 
-QWidget* IdealButtonBarWidget::corner()
+QWidget* IdealButtonBarWidget::corner() const
 {
     return m_corner;
 }
@@ -199,12 +199,12 @@ void IdealButtonBarWidget::removeAction(QAction* widgetAction)
     }
 }
 
-bool IdealButtonBarWidget::isEmpty()
+bool IdealButtonBarWidget::isEmpty() const
 {
     return actions().isEmpty();
 }
 
-bool IdealButtonBarWidget::isShown()
+bool IdealButtonBarWidget::isShown() const
 {
     const auto actions = this->actions();
     return std::any_of(actions.cbegin(), actions.cend(),
