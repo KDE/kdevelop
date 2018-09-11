@@ -540,7 +540,7 @@ public:
         return true;
     }
 
-    DocumentController* controller;
+    DocumentController* const controller;
 
     QVector<HistoryEntry> backHistory;
     QVector<HistoryEntry> forwardHistory;

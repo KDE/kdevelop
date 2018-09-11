@@ -146,6 +146,10 @@ namespace KDevelop {
 class PluginControllerPrivate
 {
 public:
+    explicit PluginControllerPrivate(Core *core)
+        : core(core)
+    {}
+
     QVector<KPluginMetaData> plugins;
 
     //map plugin infos to currently loaded plugins
@@ -269,14 +273,14 @@ public:
         return (enabledState(info) >= FirstEnabledState);
     }
 
-    Core *core;
+    Core* const core;
 };
 
 PluginController::PluginController(Core *core)
-    : IPluginController(), d(new PluginControllerPrivate)
+    : IPluginController()
+    , d(new PluginControllerPrivate(core))
 {
     setObjectName(QStringLiteral("PluginController"));
-    d->core = core;
 
     QSet<QString> foundPlugins;
     auto newPlugins = KPluginLoader::findPlugins(QStringLiteral("kdevplatform/" QT_STRINGIFY(KDEVELOP_PLUGIN_VERSION)), [&](const KPluginMetaData& meta) {

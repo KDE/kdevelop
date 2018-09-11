@@ -88,7 +88,7 @@ public:
     }
 
 protected:
-    ProblemStoreNode *m_rootNode;
+    ProblemStoreNode* const m_rootNode;
     QScopedPointer<ProblemStoreNode> m_groupedRootNode;
 };
 
@@ -216,7 +216,7 @@ public:
     /// Tells if the problem matches the filters
     bool match(const IProblem::Ptr &problem) const;
 
-    FilteredProblemStore* q;
+    FilteredProblemStore* const q;
     QScopedPointer<GroupingStrategy> m_strategy;
     GroupingMethod m_grouping;
 };

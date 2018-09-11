@@ -57,7 +57,7 @@ private:
 
     QVector<FileWidget*> m_orderedFileWidgets;
     QMap<QString, FileWidget*> m_fileWidgets;
-    WorkingSet* m_set;
+    WorkingSet* const m_set;
 
     QPushButton* m_mergeButton;
     QPushButton* m_subtractButton;

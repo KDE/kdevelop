@@ -68,7 +68,7 @@ private:
     void formatFile(const QUrl& url);
 
 private:
-    SourceFormatterController* m_sourceFormatterController;
+    SourceFormatterController* const m_sourceFormatterController;
 
     enum {
         WorkIdle,

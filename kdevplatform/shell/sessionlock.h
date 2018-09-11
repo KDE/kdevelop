@@ -59,7 +59,7 @@ public:
 
 private:
     SessionLock(const QString& sessionId, const QSharedPointer<QLockFile>& lockFile);
-    QString m_sessionId;
+    const QString m_sessionId;
     QSharedPointer<QLockFile> m_lockFile;
 };
 

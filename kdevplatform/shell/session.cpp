@@ -44,7 +44,7 @@ class SessionPrivate
 {
 public:
     SessionInfo info;
-    Session* q;
+    Session* const q;
     bool isTemporary;
 
     QUrl pluginArea( const IPlugin* plugin )

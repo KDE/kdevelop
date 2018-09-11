@@ -176,7 +176,7 @@ class ProjectDialogProvider : public IProjectDialogProvider
 {
 Q_OBJECT
 public:
-    explicit ProjectDialogProvider(ProjectControllerPrivate* const p);
+    explicit ProjectDialogProvider(ProjectControllerPrivate* p);
     ~ProjectDialogProvider() override;
     ProjectControllerPrivate* const d;
 

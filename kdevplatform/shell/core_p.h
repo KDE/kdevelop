@@ -69,8 +69,8 @@ public:
     QPointer<TestController> testController;
     QPointer<RuntimeController> runtimeController;
 
-    KAboutData m_aboutData;
-    Core *m_core;
+    const KAboutData m_aboutData;
+    Core* const m_core;
     bool m_cleanedUp;
     bool m_shuttingDown;
     Core::Setup m_mode;

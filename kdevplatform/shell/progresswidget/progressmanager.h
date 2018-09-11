@@ -231,11 +231,11 @@ protected:
     ~ProgressItem() override;
 
 private:
-    QString mId;
+    const QString mId;
     QString mLabel;
     QString mStatus;
     QPointer<ProgressItem> mParent;
-    bool mCanBeCanceled;
+    const bool mCanBeCanceled;
     unsigned int mProgress;
     ProgressItemMap mChildren;
     unsigned int mTotal;

@@ -37,15 +37,19 @@ namespace KDevelop {
 
 class PartDocumentPrivate {
 public:
+    explicit PartDocumentPrivate(const QString& preferredPart)
+        : preferredPart(preferredPart)
+    {}
 
     QMap<QWidget*, KParts::Part*> partForView;
-    QString preferredPart;
+    const QString preferredPart;
 };
 
 PartDocument::PartDocument(const QUrl& url, KDevelop::ICore* core, const QString& preferredPart)
-    : Sublime::UrlDocument(core->uiController()->controller(), url), KDevelop::IDocument(core), d(new PartDocumentPrivate)
+    : Sublime::UrlDocument(core->uiController()->controller(), url)
+    , KDevelop::IDocument(core)
+    , d(new PartDocumentPrivate(preferredPart))
 {
-    d->preferredPart = preferredPart;
 }
 
 PartDocument::~PartDocument() = default;

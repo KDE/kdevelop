@@ -89,7 +89,7 @@ public:
     ~KeepAliveWidget() override;
 
 private:
-    ToolViewFactory *m_factory;
+    ToolViewFactory* const m_factory;
 };
 
 class ToolViewFactory : public QObject, public KDevelop::IToolViewFactory
@@ -149,11 +149,11 @@ public:
     }
 
 private:
-    QString m_text;
-    QIcon m_icon;
-    QString m_identifier;
+    const QString m_text;
+    const QIcon m_icon;
+    const QString m_identifier;
     QPointer<QWidget> m_container;
-    KTextEditor::MainWindow::ToolViewPosition m_pos;
+    const KTextEditor::MainWindow::ToolViewPosition m_pos;
     friend class KeepAliveWidget;
 };
 
