@@ -25,6 +25,8 @@
 #include <QStyle>
 #include <QWidget>
 
+#include <numeric>
+
 using namespace Sublime;
 
 IdealButtonBarLayout::IdealButtonBarLayout(Qt::Orientation orientation, QWidget *parent)
@@ -196,23 +198,47 @@ int IdealButtonBarLayout::doVerticalLayout(const QRect &rect, bool updateGeometr
     int y = rect.y() + t;
     int currentLineWidth = 0;
 
-    for (QLayoutItem *item : _items) {
-        const QSize itemSizeHint = item->sizeHint();
-        if (y + itemSizeHint.height() + b > rect.height()) {
-            int newX = x + currentLineWidth + buttonSpacing;
-            if (newX + itemSizeHint.width() + r <= rect.width())
-            {
-                x += currentLineWidth + buttonSpacing;
-                y = rect.y() + t;
+    if (_items.empty()) {
+        return x + currentLineWidth + r;
+    }
+
+    const bool shrink = rect.height() < sizeHint().height();
+
+    const int maximumHeight = rect.height() / _items.size();
+    int shrinkedHeight = -1;
+
+    if (shrink) {
+        int smallItemCount = 0;
+        const int surplus = std::accumulate(_items.begin(), _items.end(), 0, [maximumHeight, &smallItemCount](int acc, QLayoutItem* item) {
+            const int itemHeight = item->sizeHint().height();
+            if (itemHeight <= maximumHeight) {
+                acc += maximumHeight - itemHeight;
+                ++smallItemCount;
             }
+            return acc;
+        });
+
+        Q_ASSERT(_items.size() != smallItemCount); // should be true since rect.width != sizeHint.width
+        // evenly distribute surplus height over large items
+        shrinkedHeight = maximumHeight + surplus / (_items.size() - smallItemCount);
+    }
+
+    for (QLayoutItem* item : _items) {
+        const QSize itemSizeHint = item->sizeHint();
+        const int itemWidth  = itemSizeHint.width();
+        int itemHeight = itemSizeHint.height();
+
+        if (shrink && itemSizeHint.height() > maximumHeight) {
+            itemHeight = shrinkedHeight;
         }
 
-        if (updateGeometry)
-            item->setGeometry(QRect(x, y, itemSizeHint.width(), itemSizeHint.height()));
+        if (updateGeometry) {
+            item->setGeometry(QRect(x, y, itemWidth, itemHeight));
+        }
 
-        currentLineWidth = qMax(currentLineWidth, itemSizeHint.width());
+        currentLineWidth = qMax(currentLineWidth, itemWidth);
 
-        y += itemSizeHint.height() + buttonSpacing;
+        y += itemHeight + buttonSpacing;
     }
 
     m_layoutDirty = updateGeometry;
@@ -230,26 +256,47 @@ int IdealButtonBarLayout::doHorizontalLayout(const QRect &rect, bool updateGeome
     int y = rect.y() + t;
     int currentLineHeight = 0;
 
-    for (QLayoutItem *item : _items) {
-        QSize itemSizeHint = item->sizeHint();
-        if (x + itemSizeHint.width() + r > rect.width()) {
-            // Run out of horizontal space. Try to move button to another
-            // row.
-            int newY = y + currentLineHeight + buttonSpacing;
-            if (newY + itemSizeHint.height() + b <= rect.height())
-            {
-                y = newY;
-                x = rect.x() + l;
-                currentLineHeight = 0;
+    if (_items.empty()) {
+        return y + currentLineHeight + b;
+    }
+
+    const bool shrink = rect.width() < sizeHint().width();
+
+    const int maximumWidth = rect.width() / _items.size();
+    int shrinkedWidth = -1;
+
+    if (shrink) {
+        int smallItemCount = 0;
+        const int surplus = std::accumulate(_items.begin(), _items.end(), 0, [maximumWidth, &smallItemCount](int acc, QLayoutItem* item) {
+            const int itemWidth = item->sizeHint().width();
+            if (itemWidth <= maximumWidth) {
+                acc += maximumWidth - itemWidth;
+                ++smallItemCount;
             }
+            return acc;
+        });
+
+        Q_ASSERT(_items.size() != smallItemCount); // should be true since rect.width != sizeHint.width
+        // evenly distribute surplus width on the large items
+        shrinkedWidth = maximumWidth + surplus / (_items.size() - smallItemCount);
+    }
+
+    for (QLayoutItem* item : _items) {
+        const QSize itemSizeHint = item->sizeHint();
+        int itemWidth  = itemSizeHint.width();
+        const int itemHeight = itemSizeHint.height();
+
+        if (shrink && itemSizeHint.width() > maximumWidth) {
+            itemWidth = shrinkedWidth;
         }
 
-        if (updateGeometry)
-            item->setGeometry(QRect(x, y, itemSizeHint.width(), itemSizeHint.height()));
+        if (updateGeometry) {
+            item->setGeometry(QRect(x, y, itemWidth, itemHeight));
+        }
 
-        currentLineHeight = qMax(currentLineHeight, itemSizeHint.height());
+        currentLineHeight = qMax(currentLineHeight, itemHeight);
 
-        x += itemSizeHint.width() + buttonSpacing;
+        x += itemWidth + buttonSpacing;
     }
 
     m_layoutDirty = updateGeometry;

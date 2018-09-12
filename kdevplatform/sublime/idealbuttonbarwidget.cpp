@@ -105,27 +105,29 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     , m_controller(controller)
     , m_corner(nullptr)
     , m_showState(false)
+    , m_buttonsLayout(nullptr)
 {
     setContextMenuPolicy(Qt::CustomContextMenu);
     setToolTip(i18nc("@info:tooltip", "Right click to add new tool views."));
 
     if (area == Qt::BottomDockWidgetArea)
     {
-        QBoxLayout *statusLayout = new QBoxLayout(QBoxLayout::RightToLeft, this);
+        QBoxLayout *statusLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
         statusLayout->setMargin(0);
 
-        IdealButtonBarLayout *l = new IdealButtonBarLayout(orientation());
-        statusLayout->addLayout(l);
+        m_buttonsLayout = new IdealButtonBarLayout(orientation());
+        statusLayout->addLayout(m_buttonsLayout);
+
+        statusLayout->addStretch(1);
 
         m_corner = new QWidget(this);
         QBoxLayout *cornerLayout = new QBoxLayout(QBoxLayout::LeftToRight, m_corner);
         cornerLayout->setMargin(0);
         cornerLayout->setSpacing(0);
         statusLayout->addWidget(m_corner);
-        statusLayout->addStretch(1);
     }
     else
-        (void) new IdealButtonBarLayout(orientation(), this);
+        m_buttonsLayout = new IdealButtonBarLayout(orientation(), this);
 }
 
 QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
@@ -194,7 +196,7 @@ void IdealButtonBarWidget::removeAction(QAction* widgetAction)
     action->button()->deleteLater();
     delete action;
 
-    if (layout()->isEmpty()) {
+    if (m_buttonsLayout->isEmpty()) {
         emit emptyChanged();
     }
 }
@@ -249,12 +251,7 @@ void IdealButtonBarWidget::addButtonToOrder(const IdealToolButton* button)
 {
     QString buttonId = id(button);
     if (!m_buttonsOrder.contains(buttonId)) {
-        if (m_area == Qt::BottomDockWidgetArea) {
-            m_buttonsOrder.push_front(buttonId);
-        }
-        else {
-            m_buttonsOrder.push_back(buttonId);
-        }
+        m_buttonsOrder.push_back(buttonId);
     }
 }
 
@@ -281,16 +278,16 @@ void IdealButtonBarWidget::applyOrderToLayout()
     // If widget already have some buttons in the layout then calling loadOrderSettings() may leads
     // to situations when loaded order does not contains all existing buttons. Therefore we should
     // fix this with using addToOrder() method.
-    for (int i = 0; i < layout()->count(); ++i) {
-        if (auto button = dynamic_cast<IdealToolButton*>(layout()->itemAt(i)->widget())) {
+    for (int i = 0; i < m_buttonsLayout->count(); ++i) {
+        if (auto button = dynamic_cast<IdealToolButton*>(m_buttonsLayout->itemAt(i)->widget())) {
             addButtonToOrder(button);
-            layout()->removeWidget(button);
+            m_buttonsLayout->removeWidget(button);
         }
     }
 
     foreach(const QString& id, m_buttonsOrder) {
         if (auto b = button(id)) {
-            layout()->addWidget(b);
+            m_buttonsLayout->addWidget(b);
         }
     }
 }
@@ -298,8 +295,8 @@ void IdealButtonBarWidget::applyOrderToLayout()
 void IdealButtonBarWidget::takeOrderFromLayout()
 {
     m_buttonsOrder.clear();
-    for (int i = 0; i < layout()->count(); ++i) {
-        if (auto button = dynamic_cast<IdealToolButton*>(layout()->itemAt(i)->widget())) {
+    for (int i = 0; i < m_buttonsLayout->count(); ++i) {
+        if (auto button = dynamic_cast<IdealToolButton*>(m_buttonsLayout->itemAt(i)->widget())) {
             m_buttonsOrder += id(button);
         }
     }
