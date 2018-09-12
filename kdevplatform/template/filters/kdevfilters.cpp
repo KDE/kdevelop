@@ -134,7 +134,7 @@ QVariant ArgumentTypeFilter::doFilter (const QVariant& input, const QVariant& /*
     QString type = safeString(input);
 
     DUChainReadLocker locker(DUChain::lock());
-    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(type)));
+    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(QualifiedIdentifier(type)));
 
     for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
     {

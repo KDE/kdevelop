@@ -642,10 +642,10 @@ struct TopDUContext::FindDeclarationsAcceptor {
     //This is used if filtering is disabled
     PersistentSymbolTable::Declarations::Iterator unchecked;
     if(check.flags & DUContext::NoImportsCheck) {
-      allDecls = PersistentSymbolTable::self().getDeclarations(id);
+      allDecls = PersistentSymbolTable::self().declarations(id);
       unchecked = allDecls.iterator();
     } else
-      filter = PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
+      filter = PersistentSymbolTable::self().filteredDeclarations(id, top->recursiveImportIndices());
 
     while(filter || unchecked) {
 
@@ -764,7 +764,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
 
     if(aliasId.inRepository()) {
     //This iterator efficiently filters the visible declarations out of all declarations
-      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(aliasId, recursiveImportIndices());
+      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().filteredDeclarations(aliasId, recursiveImportIndices());
 
       if(filter) {
         DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, nullptr);
@@ -845,7 +845,7 @@ bool TopDUContext::applyAliases( const QualifiedIdentifier& previous, const Sear
 
     if(importId.inRepository()) {
       //This iterator efficiently filters the visible declarations out of all declarations
-      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().getFilteredDeclarations(importId, recursiveImportIndices());
+      PersistentSymbolTable::FilteredDeclarationIterator filter = PersistentSymbolTable::self().filteredDeclarations(importId, recursiveImportIndices());
 
       if(filter) {
         DeclarationChecker check(this, position, AbstractType::Ptr(), NoSearchFlags, nullptr);
@@ -1080,9 +1080,9 @@ Declaration* TopDUContext::usedDeclarationForIndex(unsigned int declarationIndex
   if(declarationIndex & (1<<31)) {
     //We use the highest bit to mark direct indices into the local declarations
     declarationIndex &= ~(1<<31); //unset the highest bit
-    return m_dynamicData->getDeclarationForIndex(declarationIndex);
+    return m_dynamicData->declarationForIndex(declarationIndex);
   }else if(declarationIndex < d_func()->m_usedDeclarationIdsSize())
-    return d_func()->m_usedDeclarationIds()[declarationIndex].getDeclaration(this);
+    return d_func()->m_usedDeclarationIds()[declarationIndex].declaration(this);
   else
     return nullptr;
 }

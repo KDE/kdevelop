@@ -117,7 +117,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     ///them in a structure that is more convenient than declarations().
     ///@param id The IndexedQualifiedIdentifier for which the declarations should be retrieved
     ///@warning DUChain must be read locked as long as the returned data is used
-    Declarations getDeclarations(const IndexedQualifiedIdentifier& id) const;
+    Declarations declarations(const IndexedQualifiedIdentifier& id) const;
 
     typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository, true> CachedIndexedRecursiveImports;
     
@@ -125,7 +125,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @a visibility
     ///This is very efficient since it uses a cache
     ///The returned iterator is valid as long as the duchain read lock is held
-    FilteredDeclarationIterator getFilteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const;
+    FilteredDeclarationIterator filteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const;
 
     static PersistentSymbolTable& self();
 

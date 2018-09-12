@@ -49,7 +49,7 @@ public:
 
 public: // Node overrides
   bool getIcon(QIcon& a_resultIcon) override;
-  int getScore() const override { return 101; }
+  int score() const override { return 101; }
 
 private:
   /// The namespace identifier.
@@ -128,7 +128,7 @@ void DocumentClassesFolder::populateNode()
     m_updateTimer->start();
 }
 
-QSet< KDevelop::IndexedString > DocumentClassesFolder::getAllOpenDocuments()
+QSet<KDevelop::IndexedString> DocumentClassesFolder::allOpenDocuments() const
 {
   return m_openFiles;
 }
@@ -245,7 +245,7 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
     if ( item.kind & CodeModelItem::Namespace )
     {
       // This should create the namespace folder and add it to the cache.
-      getNamespaceFolder(id);
+      namespaceFolder(id);
 
       // Add to the locally created namespaces.
       declaredNamespaces.insert(id);
@@ -306,7 +306,7 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
               if ( decls->declaration()->kind() == Declaration::Namespace )
               {
                 // This should create the namespace folder and add it to the cache.
-                parentNode = getNamespaceFolder(parentIdentifier);
+                parentNode = namespaceFolder(parentIdentifier);
                 
                 // Add to the locally created namespaces.
                 declaredNamespaces.insert(parentIdentifier);
@@ -385,7 +385,7 @@ void DocumentClassesFolder::removeClassNode(ClassModelNodes::ClassNode* a_node)
 {
   // Get the parent namespace identifier.
   QualifiedIdentifier parentNamespaceIdentifier;
-  if ( auto namespaceParent = dynamic_cast<StaticNamespaceFolderNode*>(a_node->getParent()) )
+  if ( auto namespaceParent = dynamic_cast<StaticNamespaceFolderNode*>(a_node->parent()) )
   {
     parentNamespaceIdentifier = namespaceParent->qualifiedIdentifier();
   }
@@ -418,7 +418,7 @@ void DocumentClassesFolder::removeEmptyNamespace(const QualifiedIdentifier& a_id
   }
 }
 
-StaticNamespaceFolderNode* DocumentClassesFolder::getNamespaceFolder(const KDevelop::QualifiedIdentifier& a_identifier)
+StaticNamespaceFolderNode* DocumentClassesFolder::namespaceFolder(const KDevelop::QualifiedIdentifier& a_identifier)
 {
   // Stop condition.
   if ( a_identifier.count() == 0 )
@@ -429,7 +429,7 @@ StaticNamespaceFolderNode* DocumentClassesFolder::getNamespaceFolder(const KDeve
   if ( iter == m_namespaces.end() )
   {
     // It's not in the cache - create folders up to it.
-    Node* parentNode = getNamespaceFolder(a_identifier.left(-1));
+    Node* parentNode = namespaceFolder(a_identifier.left(-1));
     if ( parentNode == nullptr )
       parentNode = this;
 

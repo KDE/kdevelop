@@ -364,7 +364,7 @@ bool TopDUContextDynamicData::DUChainItemStorage<Item>::isItemForIndexLoaded(uin
 }
 
 template<class Item>
-Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint index) const
+Item TopDUContextDynamicData::DUChainItemStorage<Item>::itemForIndex(uint index) const
 {
   if (index >= (0x0fffffff/2)) {
     index = 0x0fffffff - index; //We always keep the highest bit at zero
@@ -410,7 +410,7 @@ Item TopDUContextDynamicData::DUChainItemStorage<Item>::getItemForIndex(uint ind
       item->makeDynamic();
     }
 
-    auto parent = data->getContextForIndex(offsets[realIndex].parentContext);
+    auto parent = data->contextForIndex(offsets[realIndex].parentContext);
     Q_ASSERT_X(parent, Q_FUNC_INFO, "Could not find parent context for loaded item.\n"
                                     "Potentially, the context has been deleted without deleting its children.");
     item->rebuildDynamicData(parent, index);
@@ -811,7 +811,7 @@ bool TopDUContextDynamicData::isTemporaryDeclarationIndex(uint index) const {
   return !(index < (0x0fffffff/2));
 }
 
-DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const
+DUContext* TopDUContextDynamicData::contextForIndex(uint index) const
 {
   if(!m_dataLoaded)
     loadData();
@@ -820,23 +820,23 @@ DUContext* TopDUContextDynamicData::getContextForIndex(uint index) const
     return m_topContext;
   }
 
-  return m_contexts.getItemForIndex(index);
+  return m_contexts.itemForIndex(index);
 }
 
-Declaration* TopDUContextDynamicData::getDeclarationForIndex(uint index) const
+Declaration* TopDUContextDynamicData::declarationForIndex(uint index) const
 {
   if(!m_dataLoaded)
     loadData();
 
-  return m_declarations.getItemForIndex(index);
+  return m_declarations.itemForIndex(index);
 }
 
-ProblemPointer TopDUContextDynamicData::getProblemForIndex(uint index) const
+ProblemPointer TopDUContextDynamicData::problemForIndex(uint index) const
 {
   if(!m_dataLoaded)
     loadData();
 
-  return m_problems.getItemForIndex(index);
+  return m_problems.itemForIndex(index);
 }
 
 void TopDUContextDynamicData::clearDeclarationIndex(Declaration* decl)

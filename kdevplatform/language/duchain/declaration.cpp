@@ -350,7 +350,7 @@ void Declaration::allocateOwnIndex() {
   m_indexInTopContext = m_topContext->m_dynamicData->allocateDeclarationIndex(this, d_func()->m_anonymousInContext || !context() || context()->isAnonymous());
   Q_ASSERT(m_indexInTopContext);
 
-  if(!m_topContext->m_dynamicData->getDeclarationForIndex(m_indexInTopContext))
+  if(!m_topContext->m_dynamicData->declarationForIndex(m_indexInTopContext))
     qFatal("Could not re-retrieve declaration\nindex: %d", m_indexInTopContext);
 
 }

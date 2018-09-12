@@ -623,7 +623,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
       auto viewUrl = view->document()->url();
       itemRange = DUChainUtils::itemUnderCursor(viewUrl, position).range;
     }
-    tooltip->setHandleRect(KTextEditorHelpers::getItemBoundingRect(view, itemRange));
+    tooltip->setHandleRect(KTextEditorHelpers::itemBoundingRect(view, itemRange));
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
     QObject::connect( view, &KTextEditor::View::verticalScrollPositionChanged,
                       this, &ContextBrowserPlugin::hideToolTip );

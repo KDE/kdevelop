@@ -125,7 +125,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
       if(m_isDirect)
         return KDevHash() << m_directData.hash() << m_specialization.index();
       else
-        return KDevHash() << m_indirectData.identifier.getIndex() << m_indirectData.additionalIdentity << m_specialization.index();
+        return KDevHash() << m_indirectData.identifier.index() << m_indirectData.additionalIdentity << m_specialization.index();
     }
 
     /**
@@ -136,13 +136,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \param instantiateIfRequired Whether the declaration should be instantiated if required
      * \returns the referenced Declaration, or null if none was found.
      * */
-    Declaration* getDeclaration(const TopDUContext* context, bool instantiateIfRequired = true) const;
+    Declaration* declaration(const TopDUContext* context, bool instantiateIfRequired = true) const;
 
     /**
-     * Same as getDeclaration(..), but returns all matching declarations if there are multiple.
+     * Same as declaration(..), but returns all matching declarations if there are multiple.
      * This also returns found forward-declarations.
      */
-    KDevVarLengthArray<Declaration*> getDeclarations(const TopDUContext* context) const;
+    KDevVarLengthArray<Declaration*> declarations(const TopDUContext* context) const;
 
     /**
      * Set the specialization index (see class documentation).

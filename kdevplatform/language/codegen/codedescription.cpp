@@ -117,7 +117,7 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
         DUChainPointer<FunctionDeclaration> function = declaration.dynamicCast<FunctionDeclaration>();
         if (function)
         {
-            context = DUChainUtils::getArgumentContext(declaration.data());
+            context = DUChainUtils::argumentContext(declaration.data());
         }
 
         DUChainPointer<ClassFunctionDeclaration> method = declaration.dynamicCast<ClassFunctionDeclaration>();
@@ -129,7 +129,7 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
             isVirtual = method->isVirtual();
             isAbstract = method->isAbstract();
             isFinal = method->isFinal();
-            isOverriding = (DUChainUtils::getOverridden(method.data()) != nullptr);
+            isOverriding = (DUChainUtils::overridden(method.data()) != nullptr);
             isStatic = method->isStatic();
             isSlot = method->isSlot();
             isSignal = method->isSignal();

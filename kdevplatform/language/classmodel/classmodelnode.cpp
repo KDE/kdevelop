@@ -49,7 +49,7 @@ IdentifierNode::IdentifierNode(KDevelop::Declaration* a_decl,
 {
 }
 
-Declaration* IdentifierNode::getDeclaration()
+Declaration* IdentifierNode::declaration()
 {
   if ( !m_cachedDeclaration )
     m_cachedDeclaration = m_indexedDeclaration.declaration();
@@ -61,7 +61,7 @@ bool IdentifierNode::getIcon(QIcon& a_resultIcon)
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  Declaration* decl = getDeclaration();
+  Declaration* decl = declaration();
   if ( decl )
     a_resultIcon = DUChainUtils::iconForDeclaration(decl);
 
@@ -83,7 +83,7 @@ bool EnumNode::getIcon(QIcon& a_resultIcon)
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(getDeclaration());
+  ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(declaration());
   if ( decl == nullptr )
   {
     static QIcon Icon = QIcon::fromTheme(QStringLiteral("enum"));
@@ -115,7 +115,7 @@ void EnumNode::populateNode()
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  Declaration* decl = getDeclaration();
+  Declaration* decl = declaration();
 
   if ( decl->internalContext() )
     foreach( Declaration* enumDecl, decl->internalContext()->localDeclarations() )
@@ -147,7 +147,7 @@ void ClassNode::populateNode()
   {
     if ( updateClassDeclarations() )
     {
-      m_cachedUrl = getDeclaration()->url();
+      m_cachedUrl = declaration()->url();
       ClassModelNodesController::self().registerForChanges(m_cachedUrl, this);
     }
   }
@@ -159,7 +159,7 @@ void ClassNode::populateNode()
 
 template <> inline bool qMapLessThanKey(const IndexedIdentifier &key1, const IndexedIdentifier &key2)
 {
-  return key1.getIndex() < key2.getIndex();
+  return key1.index() < key2.index();
 }
 
 bool ClassNode::updateClassDeclarations()
@@ -167,7 +167,7 @@ bool ClassNode::updateClassDeclarations()
   bool hadChanges = false;
   SubIdentifiersMap existingIdentifiers = m_subIdentifiers;
 
-  ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>(getDeclaration());
+  ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>(declaration());
 
   if ( klass )
   {
@@ -278,7 +278,7 @@ ClassNode* ClassNode::findSubClass(const KDevelop::IndexedQualifiedIdentifier& a
     if ( classNode == nullptr )
       continue;
 
-    if ( classNode->getIdentifier() == a_id )
+    if ( classNode->identifier() == a_id )
       return classNode;
   }
 
@@ -320,7 +320,7 @@ bool ClassMemberNode::getIcon(QIcon& a_resultIcon)
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(getDeclaration());
+  ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(declaration());
   if ( decl == nullptr )
     return false;
 
@@ -391,7 +391,7 @@ void BaseClassesFolderNode::populateNode()
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>( static_cast<ClassNode*>(getParent())->getDeclaration() );
+  ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>( static_cast<ClassNode*>(parent())->declaration() );
   if ( klass )
   {
     // I use the imports instead of the baseClasses in the ClassDeclaration because I need
@@ -426,11 +426,11 @@ void DerivedClassesFolderNode::populateNode()
 {
   DUChainReadLocker readLock(DUChain::lock());
 
-  ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>( static_cast<ClassNode*>(getParent())->getDeclaration() );
+  ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>( static_cast<ClassNode*>(parent())->declaration() );
   if ( klass )
   {
     uint steps = 10000;
-    const QList<Declaration*> inheriters = DUChainUtils::getInheriters(klass, steps, true);
+    const QList<Declaration*> inheriters = DUChainUtils::inheriters(klass, steps, true);
 
     for (Declaration* decl : inheriters) {
       addNode( new ClassNode(decl, m_model) );
@@ -490,12 +490,12 @@ struct SortNodesFunctor
 {
   bool operator() (Node* a_lhs, Node* a_rhs)
   {
-    if ( a_lhs->getScore() == a_rhs->getScore() )
+    if ( a_lhs->score() == a_rhs->score() )
     {
-      return a_lhs->getSortableString() < a_rhs->getSortableString();
+      return a_lhs->sortableString() < a_rhs->sortableString();
     }
     else
-      return a_lhs->getScore() < a_rhs->getScore();
+      return a_lhs->score() < a_rhs->score();
   }
 };
 
@@ -526,7 +526,7 @@ int Node::row()
   return m_parentNode->m_children.indexOf(this);
 }
 
-QIcon ClassModelNodes::Node::getCachedIcon()
+QIcon ClassModelNodes::Node::cachedIcon()
 {
   // Load the cached icon if it's null.
   if ( m_cachedIcon.isNull() )

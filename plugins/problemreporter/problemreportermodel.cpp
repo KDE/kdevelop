@@ -97,7 +97,7 @@ void ProblemReporterModel::forceFullUpdate()
 
     QSet<IndexedString> documents = store()->documents()->get();
     if (showImports())
-        documents += store()->documents()->getImports();
+        documents += store()->documents()->imports();
 
     DUChainReadLocker lock(DUChain::lock());
     foreach (const IndexedString& document, documents) {
@@ -142,7 +142,7 @@ void ProblemReporterModel::problemsUpdated(const KDevelop::IndexedString& url)
 
     // skip update for urls outside current scope
     if (!store()->documents()->get().contains(url) &&
-        !(showImports() && store()->documents()->getImports().contains(url)))
+        !(showImports() && store()->documents()->imports().contains(url)))
         return;
 
     /// m_minTimer will expire in MinTimeout unless some other parsing job finishes in this period.
@@ -161,7 +161,7 @@ void ProblemReporterModel::rebuildProblemList()
     QVector<IProblem::Ptr> allProblems = problems(store()->documents()->get());
 
     if (showImports())
-        allProblems += problems(store()->documents()->getImports());
+        allProblems += problems(store()->documents()->imports());
 
     store()->setProblems(allProblems);
 

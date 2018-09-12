@@ -149,7 +149,7 @@ void AdaptSignatureAssistant::textChanged(KTextEditor::Document* doc, const KTex
         clangDebug() << "no other side for signature found";
         return;
     }
-    m_otherSideContext = DUContextPointer(DUChainUtils::getFunctionContext(otherSide));
+    m_otherSideContext = DUContextPointer(DUChainUtils::functionContext(otherSide));
     if (!m_otherSideContext) {
         clangDebug() << "no context for other side found";
         return;
@@ -270,7 +270,7 @@ void AdaptSignatureAssistant::updateReady(const KDevelop::IndexedString& documen
         clangDebug() << "No function found at" << m_document->url() << m_lastEditPosition;
         return;
     }
-    DUContext *functionCtxt = DUChainUtils::getFunctionContext(functionDecl);
+    DUContext *functionCtxt = DUChainUtils::functionContext(functionDecl);
     if (!functionCtxt) {
         clangDebug() << "No function context found for" << functionDecl->toString();
         return;

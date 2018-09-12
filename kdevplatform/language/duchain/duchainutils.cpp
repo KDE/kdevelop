@@ -369,7 +369,7 @@ Declaration* DUChainUtils::declarationInLine(const KTextEditor::Cursor& _cursor,
   foreach(Declaration* decl, ctx->localDeclarations()) {
     if(decl->range().start.line == cursor.line)
       return decl;
-    DUContext* funCtx = getFunctionContext(decl);
+    DUContext* funCtx = functionContext(decl);
     if(funCtx && funCtx->range().contains(cursor))
       return decl;
   }
@@ -432,7 +432,7 @@ void DUChainUtils::collectItems( DUContext* context, DUChainItemFilter& filter )
   }
 }
 
-KDevelop::DUContext* DUChainUtils::getArgumentContext(KDevelop::Declaration* decl) {
+KDevelop::DUContext* DUChainUtils::argumentContext(KDevelop::Declaration* decl) {
   DUContext* internal = decl->internalContext();
   if( !internal )
     return nullptr;
@@ -463,7 +463,7 @@ QList<IndexedDeclaration> DUChainUtils::collectAllVersions(Declaration* decl) {
   return ret;
 }
 
-static QList<Declaration*> getInheritersInternal(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
+static QList<Declaration*> inheritersInternal(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
 {
   QList<Declaration*> ret;
 
@@ -499,7 +499,7 @@ static QList<Declaration*> getInheritersInternal(const Declaration* decl, uint& 
       ++maxAllowedSteps;
 
       if(allDeclarations[a].data() && allDeclarations[a].data() != decl) {
-        ret += getInheritersInternal(allDeclarations[a].data(), maxAllowedSteps, false);
+        ret += inheritersInternal(allDeclarations[a].data(), maxAllowedSteps, false);
       }
 
       if(maxAllowedSteps == 0)
@@ -510,9 +510,9 @@ static QList<Declaration*> getInheritersInternal(const Declaration* decl, uint& 
   return ret;
 }
 
-QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
+QList<Declaration*> DUChainUtils::inheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions)
 {
-  auto inheriters = getInheritersInternal(decl, maxAllowedSteps, collectVersions);
+  auto inheriters = inheritersInternal(decl, maxAllowedSteps, collectVersions);
 
   // remove duplicates
   std::sort(inheriters.begin(), inheriters.end());
@@ -521,7 +521,7 @@ QList<Declaration*> DUChainUtils::getInheriters(const Declaration* decl, uint& m
   return inheriters;
 }
 
-QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps) {
+QList<Declaration*> DUChainUtils::overriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps) {
   QList<Declaration*> ret;
 
   if(maxAllowedSteps == 0)
@@ -530,8 +530,8 @@ QList<Declaration*> DUChainUtils::getOverriders(const Declaration* currentClass,
   if(currentClass != overriddenDeclaration->context()->owner() && currentClass->internalContext())
     ret += currentClass->internalContext()->findLocalDeclarations(overriddenDeclaration->identifier(), CursorInRevision::invalid(), currentClass->topContext(), overriddenDeclaration->abstractType());
 
-  foreach(Declaration* inheriter, getInheriters(currentClass, maxAllowedSteps))
-    ret += getOverriders(inheriter, overriddenDeclaration, maxAllowedSteps);
+  foreach(Declaration* inheriter, inheriters(currentClass, maxAllowedSteps))
+    ret += overriders(inheriter, overriddenDeclaration, maxAllowedSteps);
 
   return ret;
 }
@@ -574,7 +574,7 @@ uint DUChainUtils::contextCountUses(DUContext* context, Declaration* declaration
   return countUses(context, context->topContext()->indexForUsedDeclaration(declaration, false));
 }
 
-Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
+Declaration* DUChainUtils::overridden(const Declaration* decl) {
   const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl);
   if(!classFunDecl || !classFunDecl->isVirtual())
     return nullptr;
@@ -597,7 +597,7 @@ Declaration* DUChainUtils::getOverridden(const Declaration* decl) {
   return nullptr;
 }
 
-DUContext* DUChainUtils::getFunctionContext(Declaration* decl) {
+DUContext* DUChainUtils::functionContext(Declaration* decl) {
   DUContext* functionContext = decl->internalContext();
   if(functionContext && functionContext->type() != DUContext::Function) {
     foreach(const DUContext::Import& import, functionContext->importedParentContexts()) {

@@ -95,7 +95,7 @@ namespace DUChainUtils {
   ///Re-implement DUChainItemFilter to do something with the items.
   KDEVPLATFORMLANGUAGE_EXPORT void collectItems( DUContext* context, DUChainItemFilter& filter );
 
-  KDEVPLATFORMLANGUAGE_EXPORT DUContext* getArgumentContext(Declaration* decl);
+  KDEVPLATFORMLANGUAGE_EXPORT DUContext* argumentContext(Declaration* decl);
 
   ///Uses the persistent symbol table to find all occurrences of this declaration, based on its identifier.
   ///The result should be filtered to make sure that the declaration is actually useful to you.
@@ -106,11 +106,11 @@ namespace DUChainUtils {
   ///                       versions of this class, and then get the inheriters from them all together. This is needed for C++.
   ///@param maxAllowedSteps The maximum of steps allowed. If this is zero in the end, this means the search has been stopped with the max. reached
   ///                                           If you really want _all_ inheriters, you should initialize it with a very large value.
-  KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getInheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions = true);
+  KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> inheriters(const Declaration* decl, uint& maxAllowedSteps, bool collectVersions = true);
 
   ///Gets all functions that override the function @p overriddenDeclaration, starting the search at @p currentClass
   ///@param maxAllowedSteps The maximum of steps allowed. If this is zero in the end, this means the search has been stopped with the max. reached
-  KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> getOverriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps);
+  KDEVPLATFORMLANGUAGE_EXPORT QList<Declaration*> overriders(const Declaration* currentClass, const Declaration* overriddenDeclaration, uint& maxAllowedSteps);
 
   ///Returns whether the given context or any of its child-contexts contain a use of the given declaration. This is relatively expensive.
   KDEVPLATFORMLANGUAGE_EXPORT bool contextHasUse(DUContext* context, Declaration* declaration);
@@ -119,11 +119,11 @@ namespace DUChainUtils {
   KDEVPLATFORMLANGUAGE_EXPORT uint contextCountUses(DUContext* context, Declaration* declaration);
 
   ///Returns the declaration that is overridden by the given one, or zero.
-  KDEVPLATFORMLANGUAGE_EXPORT Declaration* getOverridden(const Declaration* decl);
+  KDEVPLATFORMLANGUAGE_EXPORT Declaration* overridden(const Declaration* decl);
 
   ///If the given declaration is a function-declaration, this follows the context-structure up to the function-context that contains the arguments,
   ///and returns it.
-  KDEVPLATFORMLANGUAGE_EXPORT DUContext* getFunctionContext(Declaration* decl);
+  KDEVPLATFORMLANGUAGE_EXPORT DUContext* functionContext(Declaration* decl);
 
   KDEVPLATFORMLANGUAGE_EXPORT QVector<KDevelop::Problem::Ptr> allProblemsForContext(const ReferencedTopDUContext& top);
 }

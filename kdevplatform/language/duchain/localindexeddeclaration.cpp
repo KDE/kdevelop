@@ -39,7 +39,7 @@ Declaration* LocalIndexedDeclaration::data(TopDUContext* top) const
   if(!m_declarationIndex)
     return nullptr;
   Q_ASSERT(top);
-  return top->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
+  return top->m_dynamicData->declarationForIndex(m_declarationIndex);
 }
 
 bool LocalIndexedDeclaration::isLoaded(TopDUContext* top) const

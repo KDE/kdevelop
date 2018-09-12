@@ -604,7 +604,7 @@ void TestDUChain::testVirtualMemberFunction()
     QCOMPARE(top->childContexts()[2]->localDeclarations().count(), 1);
     Declaration* decl = top->childContexts()[2]->localDeclarations()[0];
     QCOMPARE(decl->identifier(), Identifier("ret"));
-    QVERIFY(DUChainUtils::getOverridden(decl));
+    QVERIFY(DUChainUtils::overridden(decl));
 }
 
 void TestDUChain::testBaseClasses()
@@ -728,15 +728,15 @@ void TestDUChain::testGetInheriters()
     QCOMPARE(inheritedDecl->identifier(), Identifier("Inherited"));
 
     uint maxAllowedSteps = uint(-1);
-    auto baseInheriters = DUChainUtils::getInheriters(baseDecl, maxAllowedSteps);
+    auto baseInheriters = DUChainUtils::inheriters(baseDecl, maxAllowedSteps);
     QCOMPARE(baseInheriters, QList<Declaration*>() << inheritedDecl);
 
     maxAllowedSteps = uint(-1);
-    auto innerInheriters = DUChainUtils::getInheriters(innerDecl, maxAllowedSteps);
+    auto innerInheriters = DUChainUtils::inheriters(innerDecl, maxAllowedSteps);
     QCOMPARE(innerInheriters, QList<Declaration*>() << inheritedDecl);
 
     maxAllowedSteps = uint(-1);
-    auto inheritedInheriters = DUChainUtils::getInheriters(inheritedDecl, maxAllowedSteps);
+    auto inheritedInheriters = DUChainUtils::inheriters(inheritedDecl, maxAllowedSteps);
     QCOMPARE(inheritedInheriters.count(), 0);
 }
 
@@ -1817,7 +1817,7 @@ void TestDUChain::testTemplateFunctionParameterName()
     QCOMPARE(declarations.size(), 2);
 
     for (auto decl : declarations) {
-        auto ctx = DUChainUtils::getArgumentContext(decl);
+        auto ctx = DUChainUtils::argumentContext(decl);
         QVERIFY(ctx);
         auto args = ctx->localDeclarations();
         if (decl == declarations.first())

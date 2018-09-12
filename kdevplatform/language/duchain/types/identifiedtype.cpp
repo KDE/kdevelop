@@ -69,7 +69,7 @@ void IdentifiedType::setDeclarationId(const DeclarationId& id) {
 
 Declaration* IdentifiedType::declaration(const TopDUContext* top) const
 {
-  return idData()->m_id.getDeclaration(top);
+  return idData()->m_id.declaration(top);
 }
 
 KDevelop::DUContext* IdentifiedType::internalContext(const KDevelop::TopDUContext* top) const {

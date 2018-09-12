@@ -193,7 +193,7 @@ void ProblemStore::setScope(int scope)
     bool showImports = false;
 
     if (d->m_documents) {
-        if(cast_scope == d->m_documents->getScope())
+        if(cast_scope == d->m_documents->scope())
             return;
 
         showImports = d->m_documents->showImports();
@@ -231,7 +231,7 @@ int ProblemStore::scope() const
 {
     Q_ASSERT(d->m_documents);
 
-    return d->m_documents->getScope();
+    return d->m_documents->scope();
 }
 
 void ProblemStore::setGrouping(int grouping)

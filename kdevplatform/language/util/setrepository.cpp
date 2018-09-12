@@ -225,8 +225,8 @@ unsigned int Set::count() const {
     return 0;
   QMutexLocker lock(m_repository->m_mutex);
 
-  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
-  return alg.count(m_repository->dataRepository.itemFromIndex(m_tree));
+  SetRepositoryAlgorithms alg(m_repository->m_dataRepository, m_repository);
+  return alg.count(m_repository->m_dataRepository.itemFromIndex(m_tree));
 }
 
 Set::Set(uint treeNode, BasicSetRepository* repository) : m_tree(treeNode), m_repository(repository) {
@@ -250,7 +250,7 @@ QString Set::dumpDotGraph() const {
 
   QMutexLocker lock(m_repository->m_mutex);
 
-  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
+  SetRepositoryAlgorithms alg(m_repository->m_dataRepository, m_repository);
   return alg.dumpDotGraph(m_tree);
 }
 
@@ -445,9 +445,9 @@ Set::Iterator& Set::Iterator::operator++() {
     }else{
       //++d->nodeStackSize;
       //We were iterating the left slave of the node, now continue with the right.
-      ifDebug( const SetNodeData& left = *d->repository->dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->leftNode()); Q_ASSERT(left.end == d->currentIndex); )
+      ifDebug( const SetNodeData& left = *d->repository->m_dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->leftNode()); Q_ASSERT(left.end == d->currentIndex); )
 
-      const SetNodeData& right = *d->repository->dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->rightNode());
+      const SetNodeData& right = *d->repository->m_dataRepository.itemFromIndex(d->nodeStack[d->nodeStackSize - 1]->rightNode());
 
       d->startAtNode(&right);
     }
@@ -475,7 +475,7 @@ Set::Iterator Set::iterator() const {
   ret.d->repository = m_repository;
 
   if(m_tree)
-    ret.d->startAtNode(m_repository->dataRepository.itemFromIndex(m_tree));
+    ret.d->startAtNode(m_repository->m_dataRepository.itemFromIndex(m_tree));
   return ret;
 }
 
@@ -866,7 +866,7 @@ Set BasicSetRepository::createSetFromIndices(const std::vector<Index>& indices) 
   if(indices.empty())
     return Set();
 
-  SetRepositoryAlgorithms alg(dataRepository, this);
+  SetRepositoryAlgorithms alg(m_dataRepository, this);
 
   return Set(alg.setForIndices(indices.begin(), indices.end()), this);
 }
@@ -875,7 +875,7 @@ Set BasicSetRepository::createSet(Index i) {
     QMutexLocker lock(m_mutex);
     SetNodeData data(i, i+1);
 
-    return Set(dataRepository.index( SetNodeDataRequest(&data, dataRepository, this) ), this);
+    return Set(m_dataRepository.index( SetNodeDataRequest(&data, m_dataRepository, this) ), this);
 }
 
 Set BasicSetRepository::createSet(const std::set<Index>& indices) {
@@ -895,11 +895,11 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices) {
 }
 
 BasicSetRepository::BasicSetRepository(const QString& name, KDevelop::ItemRepositoryRegistry* registry, bool delayedDeletion)
-    : dataRepository(this, name, registry)
+    : m_dataRepository(this, name, registry)
     , m_mutex(nullptr)
     , m_delayedDeletion(delayedDeletion)
 {
-    m_mutex = dataRepository.mutex();
+    m_mutex = m_dataRepository.mutex();
 }
 
 struct StatisticsVisitor {
@@ -923,8 +923,8 @@ struct StatisticsVisitor {
 
 void BasicSetRepository::printStatistics() const {
 
-  StatisticsVisitor stats(dataRepository);
-  dataRepository.visitAllItems<StatisticsVisitor>(stats);
+  StatisticsVisitor stats(m_dataRepository);
+  m_dataRepository.visitAllItems<StatisticsVisitor>(stats);
   qCDebug(LANGUAGE) << "count of nodes:" << stats.nodeCount << "count of nodes with bad split:" << stats.badSplitNodeCount << "count of nodes with zero reference-count:" << stats.zeroRefCountNodes;
 }
 
@@ -945,8 +945,8 @@ bool Set::contains(Index index) const
 
   QMutexLocker lock(m_repository->m_mutex);
 
-  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
-  return alg.set_contains(m_repository->dataRepository.itemFromIndex(m_tree), index);
+  SetRepositoryAlgorithms alg(m_repository->m_dataRepository, m_repository);
+  return alg.set_contains(m_repository->m_dataRepository.itemFromIndex(m_tree), index);
 }
 
 Set Set::operator +(const Set& first) const
@@ -960,9 +960,9 @@ Set Set::operator +(const Set& first) const
 
   QMutexLocker lock(m_repository->m_mutex);
 
-  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
+  SetRepositoryAlgorithms alg(m_repository->m_dataRepository, m_repository);
 
-  uint retNode = alg.set_union(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
+  uint retNode = alg.set_union(m_tree, first.m_tree, m_repository->m_dataRepository.itemFromIndex(m_tree), m_repository->m_dataRepository.itemFromIndex(first.m_tree));
 
   ifDebug(alg.check(retNode));
 
@@ -980,9 +980,9 @@ Set& Set::operator +=(const Set& first) {
 
   QMutexLocker lock(m_repository->m_mutex);
 
-  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
+  SetRepositoryAlgorithms alg(m_repository->m_dataRepository, m_repository);
 
-  m_tree = alg.set_union(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
+  m_tree = alg.set_union(m_tree, first.m_tree, m_repository->m_dataRepository.itemFromIndex(m_tree), m_repository->m_dataRepository.itemFromIndex(first.m_tree));
 
   ifDebug(alg.check(m_tree));
   return *this;
@@ -996,9 +996,9 @@ Set Set::operator &(const Set& first) const {
 
   QMutexLocker lock(m_repository->m_mutex);
 
-  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
+  SetRepositoryAlgorithms alg(m_repository->m_dataRepository, m_repository);
 
-  Set ret( alg.set_intersect(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree)), m_repository );
+  Set ret( alg.set_intersect(m_tree, first.m_tree, m_repository->m_dataRepository.itemFromIndex(m_tree), m_repository->m_dataRepository.itemFromIndex(first.m_tree)), m_repository );
 
   ifDebug(alg.check(ret.m_tree));
 
@@ -1015,9 +1015,9 @@ Set& Set::operator &=(const Set& first) {
 
   QMutexLocker lock(m_repository->m_mutex);
 
-  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
+  SetRepositoryAlgorithms alg(m_repository->m_dataRepository, m_repository);
 
-  m_tree = alg.set_intersect(m_tree, first.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(first.m_tree));
+  m_tree = alg.set_intersect(m_tree, first.m_tree, m_repository->m_dataRepository.itemFromIndex(m_tree), m_repository->m_dataRepository.itemFromIndex(first.m_tree));
   ifDebug(alg.check(m_tree));
   return *this;
 }
@@ -1030,9 +1030,9 @@ Set Set::operator -(const Set& rhs) const {
 
   QMutexLocker lock(m_repository->m_mutex);
 
-  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
+  SetRepositoryAlgorithms alg(m_repository->m_dataRepository, m_repository);
 
-  Set ret( alg.set_subtract(m_tree, rhs.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(rhs.m_tree)), m_repository );
+  Set ret( alg.set_subtract(m_tree, rhs.m_tree, m_repository->m_dataRepository.itemFromIndex(m_tree), m_repository->m_dataRepository.itemFromIndex(rhs.m_tree)), m_repository );
   ifDebug( alg.check(ret.m_tree) );
   return ret;
 }
@@ -1045,9 +1045,9 @@ Set& Set::operator -=(const Set& rhs) {
 
   QMutexLocker lock(m_repository->m_mutex);
 
-  SetRepositoryAlgorithms alg(m_repository->dataRepository, m_repository);
+  SetRepositoryAlgorithms alg(m_repository->m_dataRepository, m_repository);
 
-  m_tree = alg.set_subtract(m_tree, rhs.m_tree, m_repository->dataRepository.itemFromIndex(m_tree), m_repository->dataRepository.itemFromIndex(rhs.m_tree));
+  m_tree = alg.set_subtract(m_tree, rhs.m_tree, m_repository->m_dataRepository.itemFromIndex(m_tree), m_repository->m_dataRepository.itemFromIndex(rhs.m_tree));
 
   ifDebug(alg.check(m_tree));
   return *this;
@@ -1062,13 +1062,13 @@ void Set::staticRef() {
     return;
 
   QMutexLocker lock(m_repository->m_mutex);
-  SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndexSimple(m_tree);
+  SetNodeData* data = m_repository->m_dataRepository.dynamicItemFromIndexSimple(m_tree);
   ++data->m_refCount;
 }
 
 ///Mutex must be locked
 void Set::unrefNode(uint current) {
-    SetNodeData* data = m_repository->dataRepository.dynamicItemFromIndexSimple(current);
+    SetNodeData* data = m_repository->m_dataRepository.dynamicItemFromIndexSimple(current);
     Q_ASSERT(data->m_refCount);
     --data->m_refCount;
     if(!m_repository->delayedDeletion()) {
@@ -1084,7 +1084,7 @@ void Set::unrefNode(uint current) {
                 m_repository->itemRemovedFromSets(data->start());
             }
 
-        m_repository->dataRepository.deleteItem(current);
+        m_repository->m_dataRepository.deleteItem(current);
         }
     }
 }

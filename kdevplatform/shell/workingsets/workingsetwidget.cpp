@@ -36,7 +36,7 @@ WorkingSet* getSet(const QString& id)
         return nullptr;
     }
 
-    return Core::self()->workingSetControllerInternal()->getWorkingSet(id);
+    return Core::self()->workingSetControllerInternal()->workingSet(id);
 }
 
 WorkingSetWidget::WorkingSetWidget(Sublime::Area* area, QWidget* parent)
