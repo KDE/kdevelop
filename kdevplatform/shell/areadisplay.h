@@ -56,7 +56,7 @@ private Q_SLOTS:
 private:
     QLabel* m_separator;
     QToolButton* m_button;
-    KDevelop::MainWindow* m_mainWindow;
+    KDevelop::MainWindow* const m_mainWindow;
 };
 
 #endif // AREADISPLAY_H

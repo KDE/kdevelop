@@ -75,7 +75,7 @@ public: // Operations
 
 public: // Info retrieval
   /// Return the parent associated with this node.
-  Node* getParent() const { return m_parentNode; }
+  Node* parent() const { return m_parentNode; }
 
   /// Get my index in the parent node
   int row();
@@ -84,21 +84,21 @@ public: // Info retrieval
   QString displayName() const { return m_displayName; }
 
   /// Returns a list of child nodes
-  const QList<Node*>& getChildren() const { return m_children; }
+  const QList<Node*>& children() const { return m_children; }
 
   /// Return an icon representation for the node.
   /// @note It calls the internal getIcon and caches the result.
-  QIcon getCachedIcon();
+  QIcon cachedIcon();
 
 public: // overridables
   /// Return a score when sorting the nodes.
-  virtual int getScore() const = 0;
+  virtual int score() const = 0;
 
   /// Return true if the node contains sub-nodes.
   virtual bool hasChildren() const { return !m_children.empty(); }
 
   /// We use this string when sorting items.
-  virtual QString getSortableString() const { return m_displayName; }
+  virtual QString sortableString() const { return m_displayName; }
 
 protected:
   /// fill a_resultIcon with a display icon for the node.
@@ -167,7 +167,7 @@ public:
 
 public:
   /// Returns the qualified identifier for this node by going through the tree
-  const KDevelop::IndexedQualifiedIdentifier& getIdentifier() const { return m_identifier; }
+  const KDevelop::IndexedQualifiedIdentifier& identifier() const { return m_identifier; }
 
 public: // Node overrides
   bool getIcon(QIcon& a_resultIcon) override;
@@ -175,7 +175,7 @@ public: // Node overrides
 public: // Overridables
   /// Return the associated declaration
   /// @note DU CHAIN MUST BE LOCKED FOR READ
-  virtual KDevelop::Declaration* getDeclaration();
+  virtual KDevelop::Declaration* declaration();
 
 private:
   KDevelop::IndexedQualifiedIdentifier m_identifier;
@@ -193,7 +193,7 @@ public:
   EnumNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model);
 
 public: // Node overrides
-  int getScore() const override { return 102; }
+  int score() const override { return 102; }
   bool getIcon(QIcon& a_resultIcon) override;
   void populateNode() override;
 };
@@ -213,7 +213,7 @@ public:
   ClassNode* findSubClass(const KDevelop::IndexedQualifiedIdentifier& a_id);
 
 public: // Node overrides
-  int getScore() const override { return 300; }
+  int score() const override { return 300; }
   void populateNode() override;
   void nodeCleared() override;
   bool hasChildren() const override { return true; }
@@ -249,8 +249,8 @@ public:
   FunctionNode(KDevelop::Declaration* a_decl, NodesModelInterface* a_model);
 
 public: // Node overrides
-  int getScore() const override { return 400; }
-  QString getSortableString() const override { return m_sortableString; }
+  int score() const override { return 400; }
+  QString sortableString() const override { return m_sortableString; }
 
 private:
   QString m_sortableString;
@@ -266,7 +266,7 @@ public:
   ClassMemberNode(KDevelop::ClassMemberDeclaration* a_decl, NodesModelInterface* a_model);
 
 public: // Node overrides
-  int getScore() const override { return 500; }
+  int score() const override { return 500; }
   bool getIcon(QIcon& a_resultIcon) override;
 };
 
@@ -281,7 +281,7 @@ public:
 
 public: // Node overrides
   bool getIcon(QIcon& a_resultIcon) override;
-  int getScore() const override { return 100; }
+  int score() const override { return 100; }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -295,7 +295,7 @@ public:
 
 public: // Node overrides
   bool getIcon(QIcon& a_resultIcon) override;
-  int getScore() const override { return 100; }
+  int score() const override { return 100; }
 };
 
 //////////////////////////////////////////////////////////////////////////////

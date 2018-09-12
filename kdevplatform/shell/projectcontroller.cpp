@@ -93,24 +93,30 @@ public:
     QList<IProject*> m_projects;
     QMap< IProject*, QList<IPlugin*> > m_projectPlugins;
     QPointer<KRecentFilesAction> m_recentProjectsAction;
-    Core* m_core;
+    Core* const m_core;
 //     IProject* m_currentProject;
-    ProjectModel* model;
+    ProjectModel* const model;
     QPointer<QAction> m_openProject;
     QPointer<QAction> m_fetchProject;
     QPointer<QAction> m_closeProject;
     QPointer<QAction> m_openConfig;
     IProjectDialogProvider* dialog;
     QList<QUrl> m_currentlyOpening; // project-file urls that are being opened
-    ProjectController* q;
+    ProjectController* const q;
     ProjectBuildSetModel* buildset;
     bool m_foundProjectFile; //Temporary flag used while searching the hierarchy for a project file
     bool m_cleaningUp; //Temporary flag enabled while destroying the project-controller
     ProjectChangesModel* m_changesModel = nullptr;
     QHash< IProject*, QPointer<KJob> > m_parseJobs; // parse jobs that add files from the project to the background parser.
 
-    explicit ProjectControllerPrivate( ProjectController* p )
-        : m_core(nullptr), model(nullptr), dialog(nullptr), q(p), buildset(nullptr), m_foundProjectFile(false), m_cleaningUp(false)
+    ProjectControllerPrivate(Core* core, ProjectController* p)
+        : m_core(core)
+        , model(new ProjectModel())
+        , dialog(nullptr)
+        , q(p)
+        , buildset(nullptr)
+        , m_foundProjectFile(false)
+        , m_cleaningUp(false)
     {
     }
 
@@ -355,7 +361,7 @@ IProjectDialogProvider::IProjectDialogProvider()
 IProjectDialogProvider::~IProjectDialogProvider()
 {}
 
-ProjectDialogProvider::ProjectDialogProvider(ProjectControllerPrivate* const p) : d(p)
+ProjectDialogProvider::ProjectDialogProvider(ProjectControllerPrivate* p) : d(p)
 {}
 
 ProjectDialogProvider::~ProjectDialogProvider()
@@ -522,14 +528,12 @@ void ProjectController::setDialogProvider(IProjectDialogProvider* dialog)
 }
 
 ProjectController::ProjectController( Core* core )
-        : IProjectController( core ), d( new ProjectControllerPrivate( this ) )
+    : IProjectController(core)
+    , d(new ProjectControllerPrivate(core, this))
 {
     qRegisterMetaType<QList<QUrl>>();
 
     setObjectName(QStringLiteral("ProjectController"));
-
-    d->m_core = core;
-    d->model = new ProjectModel();
 
     //NOTE: this is required to be called here, such that the
     //      actions are available when the UI controller gets

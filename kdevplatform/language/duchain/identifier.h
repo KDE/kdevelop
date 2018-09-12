@@ -74,13 +74,13 @@ public:
   Identifier identifier() const;
   operator Identifier() const;
 
-  uint getIndex() const
+  unsigned int index() const
   {
-    return index;
+    return m_index;
   }
 
 private:
-  unsigned int index;
+  unsigned int m_index;
 };
 
 /**
@@ -109,7 +109,7 @@ public:
 
   bool operator<(const IndexedQualifiedIdentifier& rhs) const
   {
-    return index < rhs.index;
+    return m_index < rhs.m_index;
   }
 
   bool isValid() const;
@@ -118,13 +118,13 @@ public:
   QualifiedIdentifier identifier() const;
   operator QualifiedIdentifier() const;
 
-  uint getIndex() const
+  unsigned int index() const
   {
-    return index;
+    return m_index;
   }
 
 private:
-  uint index;
+  unsigned int m_index;
 };
 
 /**
@@ -450,12 +450,12 @@ KDEVPLATFORMLANGUAGE_EXPORT uint qHash(const Identifier& id);
 
 inline uint qHash(const IndexedIdentifier& id)
 {
-  return id.getIndex();
+  return id.index();
 }
 
 inline uint qHash(const IndexedQualifiedIdentifier& id)
 {
-  return id.getIndex();
+  return id.index();
 }
 
 }

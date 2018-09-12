@@ -53,5 +53,5 @@ Declaration* IndexedDeclaration::declaration() const
   if(!ctx)
     return nullptr;
 
-  return ctx->m_dynamicData->getDeclarationForIndex(m_declarationIndex);
+  return ctx->m_dynamicData->declarationForIndex(m_declarationIndex);
 }

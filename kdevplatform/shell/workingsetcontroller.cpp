@@ -61,7 +61,7 @@ void WorkingSetController::initialize()
         if (set.contains(QLatin1Char('|'))) {
             continue;
         }
-        getWorkingSet(set);
+        workingSet(set);
     }
 
     m_emptyWorkingSet = new WorkingSet(QStringLiteral("empty"));
@@ -123,10 +123,10 @@ const QString WorkingSetController::makeSetId(const QString& prefix) const
 
 WorkingSet* WorkingSetController::newWorkingSet(const QString& prefix)
 {
-    return getWorkingSet(makeSetId(prefix));
+    return workingSet(makeSetId(prefix));
 }
 
-WorkingSet* WorkingSetController::getWorkingSet(const QString& id)
+WorkingSet* WorkingSetController::workingSet(const QString& id)
 {
     if(id.isEmpty())
         return m_emptyWorkingSet;
@@ -181,7 +181,7 @@ void WorkingSetController::showGlobalToolTip()
 {
     KDevelop::MainWindow* window = static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow());
 
-    showToolTip(getWorkingSet(window->area()->workingSet()),
+    showToolTip(workingSet(window->area()->workingSet()),
                               window->mapToGlobal(window->geometry().topRight()));
 
     connect(m_hideToolTipTimer, &QTimer::timeout,  m_tooltip.data(), &ActiveToolTip::deleteLater);
@@ -235,7 +235,7 @@ QList< WorkingSet* > WorkingSetController::allWorkingSets() const
 void WorkingSetController::areaCreated( Sublime::Area* area )
 {
     if (!area->workingSet().isEmpty()) {
-        WorkingSet* set = getWorkingSet( area->workingSet() );
+        WorkingSet* set = workingSet( area->workingSet() );
         set->connectArea( area );
     }
 
@@ -256,7 +256,7 @@ void WorkingSetController::changingWorkingSet(Sublime::Area* area, const QString
         return;
 
     if (!from.isEmpty()) {
-        WorkingSet* oldSet = getWorkingSet(from);
+        WorkingSet* oldSet = workingSet(from);
         oldSet->disconnectArea(area);
         if (!oldSet->id().isEmpty()) {
             oldSet->saveFromArea(area, area->rootIndex());
@@ -271,7 +271,7 @@ void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString&
         return;
 
     if (!to.isEmpty()) {
-        WorkingSet* newSet = getWorkingSet(to);
+        WorkingSet* newSet = workingSet(to);
         newSet->connectArea(area);
         newSet->loadToArea(area, area->rootIndex());
     }else{
@@ -301,16 +301,16 @@ void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
 
 void WorkingSetController::clearWorkingSet(Sublime::Area * area)
 {
-    const QString workingSet = area->workingSet();
-    if (workingSet.isEmpty()) {
+    const QString workingSetId = area->workingSet();
+    if (workingSetId.isEmpty()) {
         // Nothing to do - area has no working set
         return;
     }
 
-    WorkingSet* set = getWorkingSet(workingSet);
+    WorkingSet* set = workingSet(workingSetId);
     set->deleteSet(true);
 
-    WorkingSet* newSet = getWorkingSet(workingSet);
+    WorkingSet* newSet = workingSet(workingSetId);
     newSet->connectArea(area);
     newSet->loadToArea(area, area->rootIndex());
     Q_ASSERT(newSet->fileList().isEmpty());

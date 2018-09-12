@@ -96,7 +96,7 @@ public:
     void removePluginView(const QString &id);
 
 private:
-    KDevelop::MainWindow *m_mainWindow;
+    KDevelop::MainWindow* const m_mainWindow;
     KTextEditor::MainWindow *m_interface;
     QHash<QString, QPointer<QObject>> m_pluginViews;
     QHash<KTextEditor::View*, QWidget*> m_viewBars;

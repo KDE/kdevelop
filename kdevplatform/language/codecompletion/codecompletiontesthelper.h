@@ -201,11 +201,12 @@ struct InsertIntoDUChain
   }
 
   ///Helper function: get a declaration based on its qualified identifier
-  Declaration* getDeclaration(const QString& id) {
+  Declaration* declaration(const QString& id)
+  {
     get();
     if(!topContext())
       return nullptr;
-    return DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(id))).getDeclaration(topContext());
+    return DeclarationId(IndexedQualifiedIdentifier(QualifiedIdentifier(id))).declaration(topContext());
   }
 
   TopDUContext* topContext() {

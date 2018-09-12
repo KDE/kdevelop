@@ -40,7 +40,7 @@ public:
 
     QString m_description;
     QString m_explanation;
-    QString m_pluginName;
+    const QString m_pluginName;
     KDevelop::IProblem::Severity m_severity;
     KDevelop::IProblem::Source m_source;
     KDevelop::DocumentRange m_range;

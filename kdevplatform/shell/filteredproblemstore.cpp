@@ -88,7 +88,7 @@ public:
     }
 
 protected:
-    ProblemStoreNode *m_rootNode;
+    ProblemStoreNode* const m_rootNode;
     QScopedPointer<ProblemStoreNode> m_groupedRootNode;
 };
 
@@ -216,7 +216,7 @@ public:
     /// Tells if the problem matches the filters
     bool match(const IProblem::Ptr &problem) const;
 
-    FilteredProblemStore* q;
+    FilteredProblemStore* const q;
     QScopedPointer<GroupingStrategy> m_strategy;
     GroupingMethod m_grouping;
 };
@@ -298,7 +298,7 @@ bool FilteredProblemStorePrivate::match(const IProblem::Ptr &problem) const
 {
     if (q->scope() != ProblemScope::BypassScopeFilter &&
         !q->documents()->get().contains(problem.data()->finalLocation().document) &&
-        !(q->showImports() && q->documents()->getImports().contains(problem.data()->finalLocation().document)))
+        !(q->showImports() && q->documents()->imports().contains(problem.data()->finalLocation().document)))
         return false;
 
     if(problem->severity()!=IProblem::NoSeverity)

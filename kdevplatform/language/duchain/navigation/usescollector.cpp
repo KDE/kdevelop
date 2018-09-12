@@ -143,10 +143,10 @@ void UsesCollector::startCollecting() {
 
         if(m_collectOverloads && decl->context()->owner() && decl->context()->type() == DUContext::Class) {
           //First find the overridden base, and then all overriders of that base.
-          while(Declaration* overridden = DUChainUtils::getOverridden(decl))
+          while(Declaration* overridden = DUChainUtils::overridden(decl))
             decl = overridden;
           uint maxAllowedSteps = 10000;
-          decls += DUChainUtils::getOverriders( decl->context()->owner(), decl, maxAllowedSteps );
+          decls += DUChainUtils::overriders( decl->context()->owner(), decl, maxAllowedSteps );
           if(maxAllowedSteps == 10000) {
             ///@todo Fail!
           }

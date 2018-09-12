@@ -91,9 +91,9 @@ public:
   }
 
 private:
-  DebugController* m_controller;
-  QString m_id;
-  Qt::DockWidgetArea m_defaultArea;
+    DebugController* const m_controller;
+    const QString m_id;
+    const Qt::DockWidgetArea m_defaultArea;
 };
 
 DebugController::DebugController(QObject *parent)

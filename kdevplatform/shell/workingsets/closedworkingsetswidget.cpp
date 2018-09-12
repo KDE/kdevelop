@@ -34,9 +34,9 @@
 
 using namespace KDevelop;
 
-WorkingSet* getWorkingSet(const QString& id)
+WorkingSet* workingSet(const QString& id)
 {
-    return Core::self()->workingSetControllerInternal()->getWorkingSet(id);
+    return Core::self()->workingSetControllerInternal()->workingSet(id);
 }
 
 ClosedWorkingSetsWidget::ClosedWorkingSetsWidget( MainWindow* window )
@@ -86,12 +86,12 @@ void ClosedWorkingSetsWidget::changedWorkingSet( Sublime::Area* area, const QStr
     Q_UNUSED(area);
 
     if (!from.isEmpty()) {
-        WorkingSet* oldSet = getWorkingSet(from);
+        WorkingSet* oldSet = workingSet(from);
         addWorkingSet(oldSet);
     }
 
     if (!to.isEmpty()) {
-        WorkingSet* newSet = getWorkingSet(to);
+        WorkingSet* newSet = workingSet(to);
         removeWorkingSet(newSet);
     }
 }

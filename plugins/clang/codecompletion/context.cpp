@@ -556,7 +556,7 @@ bool isValidSpecialCompletionIdentifier(const QualifiedIdentifier& identifier)
 
 Declaration* findDeclaration(const QualifiedIdentifier& qid, const DUContextPointer& ctx, const CursorInRevision& position, QSet<Declaration*>& handled)
 {
-    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(qid);
+    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().declarations(qid);
 
     const auto top = ctx->topContext();
     const auto& importedContexts = top->importedParentContexts();
@@ -1135,7 +1135,7 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
                         auto declarationClassContext = classDeclarationForContext(DUContextPointer(found->context()), m_position);
 
                         uint steps = 10;
-                        auto inheriters = DUChainUtils::getInheriters(declarationClassContext, steps);
+                        auto inheriters = DUChainUtils::inheriters(declarationClassContext, steps);
                         if(!inheriters.contains(currentClassContext)){
                             continue;
                         }

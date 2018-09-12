@@ -54,5 +54,5 @@ DUContext* LocalIndexedDUContext::data(TopDUContext* top) const
   if(!m_contextIndex)
     return nullptr;
   else
-    return top->m_dynamicData->getContextForIndex(m_contextIndex);
+    return top->m_dynamicData->contextForIndex(m_contextIndex);
 }

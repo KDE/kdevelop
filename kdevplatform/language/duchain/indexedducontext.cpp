@@ -68,5 +68,5 @@ DUContext* IndexedDUContext::context() const
   if(!m_contextIndex)
     return ctx;
 
-  return ctx->m_dynamicData->getContextForIndex(m_contextIndex);
+  return ctx->m_dynamicData->contextForIndex(m_contextIndex);
 }

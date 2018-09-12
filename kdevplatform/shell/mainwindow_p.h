@@ -138,7 +138,7 @@ public Q_SLOTS:
 private:
     KActionCollection *actionCollection();
 
-    MainWindow *m_mainWindow;
+    MainWindow* const m_mainWindow;
     StatusBar* m_statusBar;
     QWidget* lastXMLGUIClientView;
     QPointer<QWidget> m_workingSetCornerWidget;

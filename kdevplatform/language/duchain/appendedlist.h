@@ -88,7 +88,7 @@ class TemporaryDataManager {
         delete m_items.at(a);
     }
 
-    inline T& getItem(int index) {
+    inline T& item(int index) {
       //For performance reasons this function does not lock the mutex, it's called too often and must be
       //extremely fast. There is special measures in alloc() to make this safe.
       Q_ASSERT(index & DynamicAppendedListMask);
@@ -96,7 +96,7 @@ class TemporaryDataManager {
       return *m_items.at(index & KDevelop::DynamicAppendedListRevertMask);
     }
 
-    ///Allocates an item index, which from now on you can get using getItem, until you call free(..) on the index.
+    ///Allocates an item index, which from now on you can get using item(), until you call free(..) on the index.
     ///The returned item is not initialized and may contain random older content, so you should clear it after getting it for the first time
     int alloc() {
 
@@ -129,7 +129,7 @@ class TemporaryDataManager {
             m_deleteLater.removeFirst();
           }
 
-          //The only function that does not lock the mutex is getItem(..), because that function must be very efficient.
+          //The only function that does not lock the mutex is item(..), because that function must be very efficient.
           //Since it's only a few instructions from the moment m_items is read to the moment it's used,
           //deleting the old data after a few seconds should be safe.
           m_deleteLater.append(qMakePair(now, oldItems));
@@ -249,14 +249,14 @@ class TemporaryDataManager {
 
 #define APPENDED_LIST_COMMON(container, type, name) \
       uint name ## Data; \
-      unsigned int name ## Size() const { if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; if(!appendedListsDynamic()) return name ## Data; else return temporaryHash ## container ## name().getItem(name ## Data).size(); } \
-      KDevVarLengthArray<type, 10>& name ## List() { name ## NeedDynamicList(); return temporaryHash ## container ## name().getItem(name ## Data); }\
+      unsigned int name ## Size() const { if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return 0; if(!appendedListsDynamic()) return name ## Data; else return temporaryHash ## container ## name().item(name ## Data).size(); } \
+      KDevVarLengthArray<type, 10>& name ## List() { name ## NeedDynamicList(); return temporaryHash ## container ## name().item(name ## Data); }\
       template<class T> bool name ## Equals(const T& rhs) const { unsigned int size = name ## Size(); if(size != rhs.name ## Size()) return false; for(uint a = 0; a < size; ++a) {if(!(name()[a] == rhs.name()[a])) return false;} return true;  } \
       template<class T> void name ## CopyFrom( const T& rhs ) { \
         if(rhs.name ## Size() == 0 && (name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return; \
         if(appendedListsDynamic()) {  \
           name ## NeedDynamicList(); \
-          KDevVarLengthArray<type, 10>& item( temporaryHash ## container ## name().getItem(name ## Data) ); \
+          KDevVarLengthArray<type, 10>& item( temporaryHash ## container ## name().item(name ## Data) ); \
           item.clear();                    \
           const type* otherCurr = rhs.name(); \
           const type* otherEnd = otherCurr + rhs.name ## Size(); \
@@ -275,7 +275,7 @@ class TemporaryDataManager {
         Q_ASSERT(appendedListsDynamic()); \
         if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) {\
           name ## Data = temporaryHash ## container ## name().alloc();\
-          Q_ASSERT(temporaryHash ## container ## name().getItem(name ## Data).isEmpty()); \
+          Q_ASSERT(temporaryHash ## container ## name().item(name ## Data).isEmpty()); \
         } \
       } \
       void name ## Initialize(bool dynamic) { name ## Data = (dynamic ? KDevelop::DynamicAppendedListMask : 0); }  \
@@ -297,7 +297,7 @@ class TemporaryDataManager {
     const type* name() const { \
       if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return nullptr; \
       if(!appendedListsDynamic()) return reinterpret_cast<const type*>(reinterpret_cast<const char*>(this) + classSize() + offsetBehindBase()); \
-      else return temporaryHash ## container ## name().getItem(name ## Data).data(); \
+      else return temporaryHash ## container ## name().item(name ## Data).data(); \
     } \
     unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + offsetBehindBase(); } \
     template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs); } \
@@ -310,7 +310,7 @@ class TemporaryDataManager {
     const type* name() const {\
       if((name ## Data & KDevelop::DynamicAppendedListRevertMask) == 0) return nullptr; \
       if(!appendedListsDynamic()) return reinterpret_cast<const type*>(reinterpret_cast<const char*>(this) + classSize() + predecessor ## OffsetBehind()); \
-      else return temporaryHash ## container ## name().getItem(name ## Data).data(); \
+      else return temporaryHash ## container ## name().item(name ## Data).data(); \
     } \
     unsigned int name ## OffsetBehind() const { return name ## Size() * sizeof(type) + predecessor ## OffsetBehind(); } \
     template<class T> bool name ## ListChainEquals( const T& rhs ) const { return name ## Equals(rhs) && predecessor ## ListChainEquals(rhs); } \

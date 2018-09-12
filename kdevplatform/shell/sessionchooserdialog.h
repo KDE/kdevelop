@@ -55,9 +55,9 @@ private Q_SLOTS:
     void itemEntered(const QModelIndex& index);
 
 private:
-    QListView* m_view;
-    QAbstractItemModel* m_model;
-    QLineEdit* m_filter;
+    QListView* const m_view;
+    QAbstractItemModel* const m_model;
+    QLineEdit* const m_filter;
     QTimer m_updateStateTimer;
 
     QDialogButtonBox* m_buttonBox;

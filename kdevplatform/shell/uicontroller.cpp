@@ -65,8 +65,10 @@ namespace KDevelop {
 
 class UiControllerPrivate {
 public:
-    explicit UiControllerPrivate(UiController *controller)
-    : areasRestored(false), m_controller(controller)
+    UiControllerPrivate(Core* core, UiController* controller)
+        : core(core)
+        , areasRestored(false)
+        , m_controller(controller)
     {
         if (Core::self()->workingSetControllerInternal())
             Core::self()->workingSetControllerInternal()->initializeController(m_controller);
@@ -137,7 +139,7 @@ public:
         }
     }
 
-    Core *core;
+    Core* const core;
     QPointer<MainWindow> defaultMainWindow;
 
     QHash<IToolViewFactory*, Sublime::ToolDocument*> factoryDocuments;
@@ -176,15 +178,17 @@ public:
 
     QString id() const override { return m_factory->id(); }
 private:
-    IToolViewFactory *m_factory;
+    IToolViewFactory* const m_factory;
 };
 
 
 class ViewSelectorItem: public QListWidgetItem {
 public:
-    explicit ViewSelectorItem(const QString &text, QListWidget *parent = nullptr, int type = Type)
-        :QListWidgetItem(text, parent, type) {}
-    IToolViewFactory *factory;
+    explicit ViewSelectorItem(const QString& text, IToolViewFactory* factory, QListWidget* parent = nullptr, int type = Type)
+        : QListWidgetItem(text, parent, type)
+        , factory(factory)
+    {}
+    IToolViewFactory* const factory;
 };
 
 
@@ -211,14 +215,13 @@ private Q_SLOTS:
     }
 
 private:
-    MainWindow *m_mw;
+    MainWindow* const m_mw;
 };
 
 UiController::UiController(Core *core)
-    :Sublime::Controller(nullptr), IUiController(), d(new UiControllerPrivate(this))
+    :Sublime::Controller(nullptr), IUiController(), d(new UiControllerPrivate(core, this))
 {
     setObjectName(QStringLiteral("UiController"));
-    d->core = core;
 
     if (!defaultMainWindow() || (Core::self()->setupFlags() & Core::NoUi))
         return;
@@ -445,8 +448,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
     for (QHash<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.constBegin();
         it != d->factoryDocuments.constEnd(); ++it)
     {
-        ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), list);
-        item->factory = it.key();
+        ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), it.key(), list);
         if (!item->factory->allowMultiple() && toolViewPresent(it.value(), mw->area())) {
             // Disable item if the tool view is already present.
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
@@ -563,7 +565,7 @@ void UiController::saveArea(Sublime::Area * area, KConfigGroup & group)
 {
     area->save(group);
     if (!area->workingSet().isEmpty()) {
-        WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
+        WorkingSet* set = Core::self()->workingSetControllerInternal()->workingSet(area->workingSet());
         set->saveFromArea(area, area->rootIndex());
     }
 }
@@ -572,7 +574,7 @@ void UiController::loadArea(Sublime::Area * area, const KConfigGroup & group)
 {
     area->load(group);
     if (!area->workingSet().isEmpty()) {
-        WorkingSet* set = Core::self()->workingSetControllerInternal()->getWorkingSet(area->workingSet());
+        WorkingSet* set = Core::self()->workingSetControllerInternal()->workingSet(area->workingSet());
         Q_ASSERT(set->isConnected(area));
         Q_UNUSED(set);
     }

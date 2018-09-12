@@ -52,10 +52,10 @@ public:
     void setShowImports(bool showImports);
 
     virtual DocumentSet get() const;
-    virtual DocumentSet getImports() const;
+    virtual DocumentSet imports() const;
 
     virtual void setCurrentDocument(const IndexedString& url);
-    virtual ProblemScope getScope() const = 0;
+    virtual ProblemScope scope() const = 0;
 
 Q_SIGNALS:
     void changed();
@@ -74,7 +74,7 @@ class CurrentDocumentSet : public WatchedDocumentSet
 public:
     explicit CurrentDocumentSet(const IndexedString& document, QObject* parent);
     void setCurrentDocument(const IndexedString& url) override;
-    ProblemScope getScope() const override;
+    ProblemScope scope() const override;
 };
 
 /**
@@ -85,7 +85,7 @@ class OpenDocumentSet : public WatchedDocumentSet
     Q_OBJECT
 public:
     explicit OpenDocumentSet(QObject* parent);
-    ProblemScope getScope() const override;
+    ProblemScope scope() const override;
 
 private Q_SLOTS:
     void documentClosed(IDocument* doc);
@@ -120,7 +120,7 @@ class CurrentProjectSet : public ProjectSet
 public:
     explicit CurrentProjectSet(const IndexedString& document, QObject* parent);
     void setCurrentDocument(const IndexedString& url) override;
-    ProblemScope getScope() const override;
+    ProblemScope scope() const override;
 
 private:
     void setCurrentDocumentInternal(const IndexedString& url); // to avoid virtual in constructor
@@ -132,7 +132,7 @@ class AllProjectSet : public ProjectSet
     Q_OBJECT
 public:
     explicit AllProjectSet(QObject* parent);
-    ProblemScope getScope() const override;
+    ProblemScope scope() const override;
 };
 
 class BypassSet : public WatchedDocumentSet
@@ -141,7 +141,7 @@ class BypassSet : public WatchedDocumentSet
 public:
     explicit BypassSet(QObject* parent);
 
-    ProblemScope getScope() const override;
+    ProblemScope scope() const override;
 };
 
 }

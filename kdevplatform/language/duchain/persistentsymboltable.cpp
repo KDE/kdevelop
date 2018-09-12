@@ -64,7 +64,7 @@ class PersistentSymbolTableItem {
   inline unsigned int hash() const {
     //We only compare the declaration. This allows us implementing a map, although the item-repository
     //originally represents a set.
-    return id.getIndex();
+    return id.index();
   }
   
   unsigned int itemSize() const {
@@ -270,12 +270,12 @@ struct DeclarationCacheVisitor {
   KDevVarLengthArray<IndexedDeclaration>& cache;
 };
 
-PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::getFilteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const {
+PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::filteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const {
   
   QMutexLocker lock(d->m_declarations.mutex());
   ENSURE_CHAIN_READ_LOCKED
   
-  Declarations decls = getDeclarations(id).iterator();
+  Declarations decls = declarations(id).iterator();
   
   CachedIndexedRecursiveImports cachedImports;
   
@@ -313,7 +313,7 @@ PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::getFil
   }
 }
 
-PersistentSymbolTable::Declarations PersistentSymbolTable::getDeclarations(const IndexedQualifiedIdentifier& id) const {
+PersistentSymbolTable::Declarations PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id) const {
   QMutexLocker lock(d->m_declarations.mutex());
   ENSURE_CHAIN_READ_LOCKED
   

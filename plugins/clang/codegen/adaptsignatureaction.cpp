@@ -63,7 +63,7 @@ QString AdaptSignatureAction::description() const
 QString AdaptSignatureAction::toolTip() const
 {
     DUChainReadLocker lock;
-    auto declaration = m_otherSideId.getDeclaration(m_otherSideTopContext.data());
+    auto declaration = m_otherSideId.declaration(m_otherSideTopContext.data());
     if (!declaration) {
         return {};
     }
@@ -89,12 +89,12 @@ void AdaptSignatureAction::execute()
 
     lock.lock();
 
-    Declaration* otherSide = m_otherSideId.getDeclaration(m_otherSideTopContext.data());
+    Declaration* otherSide = m_otherSideId.declaration(m_otherSideTopContext.data());
     if (!otherSide) {
         clangDebug() << "could not find definition";
         return;
     }
-    DUContext* functionContext = DUChainUtils::getFunctionContext(otherSide);
+    DUContext* functionContext = DUChainUtils::functionContext(otherSide);
     if (!functionContext) {
         clangDebug() << "no function context";
         return;

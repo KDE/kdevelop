@@ -285,7 +285,7 @@ void TemplateClassGenerator::addBaseClass(const QString& base)
 
     DUChainReadLocker lock;
 
-    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().getDeclarations(IndexedQualifiedIdentifier(QualifiedIdentifier(desc.baseType)));
+    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(QualifiedIdentifier(desc.baseType)));
 
     //Search for all super classes
     for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)

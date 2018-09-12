@@ -83,7 +83,7 @@ private:
     };
 
     QMap<IStatus*, Message> m_messages;
-    QTimer* m_timer;
+    QTimer* const m_timer;
     QTime m_time;
     Sublime::View* m_currentView;
     QMap<IStatus*,ProgressItem*> m_progressItems;

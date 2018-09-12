@@ -213,7 +213,7 @@ WatchedDocumentSet::DocumentSet WatchedDocumentSet::get() const
     return d->documents();
 }
 
-WatchedDocumentSet::DocumentSet WatchedDocumentSet::getImports() const
+WatchedDocumentSet::DocumentSet WatchedDocumentSet::imports() const
 {
     return d->imports();
 }
@@ -229,7 +229,7 @@ void CurrentDocumentSet::setCurrentDocument(const IndexedString& url)
     d->setDocuments({url}, DoUpdate | DoEmit);
 }
 
-ProblemScope CurrentDocumentSet::getScope() const
+ProblemScope CurrentDocumentSet::scope() const
 {
     return CurrentDocument;
 }
@@ -256,7 +256,7 @@ void OpenDocumentSet::documentCreated(IDocument* doc)
     d->addDocument(IndexedString(doc->url()), DoUpdate | DoEmit);
 }
 
-ProblemScope OpenDocumentSet::getScope() const
+ProblemScope OpenDocumentSet::scope() const
 {
     return OpenDocuments;
 }
@@ -322,7 +322,7 @@ void CurrentProjectSet::setCurrentDocumentInternal(const IndexedString& url)
     }
 }
 
-ProblemScope CurrentProjectSet::getScope() const
+ProblemScope CurrentProjectSet::scope() const
 {
     return CurrentProject;
 }
@@ -341,7 +341,7 @@ AllProjectSet::AllProjectSet(QObject* parent)
     emit changed();
 }
 
-ProblemScope AllProjectSet::getScope() const
+ProblemScope AllProjectSet::scope() const
 {
     return AllProjects;
 }
@@ -351,7 +351,7 @@ BypassSet::BypassSet(QObject* parent)
 {
 }
 
-ProblemScope BypassSet::getScope() const
+ProblemScope BypassSet::scope() const
 {
     return BypassScopeFilter;
 }

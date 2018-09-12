@@ -222,7 +222,7 @@ public:
         sessionUpdated( s );
     }
 
-    SessionController* q;
+    SessionController* const q;
 
     QHash<Session*, QAction*> sessionActions;
     ISession* activeSession;

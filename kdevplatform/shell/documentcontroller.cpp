@@ -540,11 +540,7 @@ public:
         return true;
     }
 
-    DocumentController* controller;
-
-    QVector<HistoryEntry> backHistory;
-    QVector<HistoryEntry> forwardHistory;
-    bool isJumping;
+    DocumentController* const controller;
 
     QPointer<QAction> saveAll;
     QPointer<QAction> revertAll;

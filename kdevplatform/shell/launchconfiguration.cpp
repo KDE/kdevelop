@@ -39,7 +39,7 @@ public:
     {}
 
     KConfigGroup baseGroup;
-    IProject* project;
+    IProject* const project;
     LaunchConfigurationType* type;
 };
 

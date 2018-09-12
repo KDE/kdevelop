@@ -58,7 +58,7 @@ private Q_SLOTS:
     void removeWorkingSet( WorkingSet* );
 
 private:
-    MainWindow* m_mainWindow;
+    MainWindow* const m_mainWindow;
     QHBoxLayout* m_layout;
     QPointer<Sublime::Area> m_connectedArea;
     QMap<WorkingSet*, WorkingSetToolButton*> m_buttons;

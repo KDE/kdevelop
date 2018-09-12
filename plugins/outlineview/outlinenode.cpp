@@ -99,7 +99,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
         case AbstractType::TypeFunction: {
             FunctionType::Ptr func = type.cast<FunctionType>();
             // func->partToString() does not add the argument names -> do it manually
-            if (DUContext* fCtx = DUChainUtils::getFunctionContext(decl)) {
+            if (DUContext* fCtx = DUChainUtils::functionContext(decl)) {
                 m_cachedText += QLatin1Char('(');
                 bool first = true;
                 foreach (Declaration* childDecl, fCtx->localDeclarations(decl->topContext())) {

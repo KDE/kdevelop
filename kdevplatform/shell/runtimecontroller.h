@@ -52,7 +52,7 @@ private:
     QScopedPointer<QMenu> m_runtimesMenu;
     QVector<IRuntime*> m_runtimes;
     IRuntime* m_currentRuntime = nullptr;
-    Core* m_core = nullptr;
+    Core* const m_core;
 };
 
 }

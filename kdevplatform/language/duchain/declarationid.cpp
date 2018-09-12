@@ -95,7 +95,7 @@ IndexedInstantiationInformation DeclarationId::specialization() const
   return m_specialization;
 }
 
-KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUContext* top) const
+KDevVarLengthArray<Declaration*> DeclarationId::declarations(const TopDUContext* top) const
 {
   KDevVarLengthArray<Declaration*> ret;
 
@@ -106,7 +106,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
     if(top) {
       //Do filtering
       PersistentSymbolTable::FilteredDeclarationIterator filter =
-          PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
+          PersistentSymbolTable::self().filteredDeclarations(id, top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
           if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
@@ -116,7 +116,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
       }
     }else{
       //Just accept anything
-      PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().getDeclarations(id);
+      PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().declarations(id);
       PersistentSymbolTable::Declarations::Iterator decl = decls.iterator();
       for(; decl; ++decl) {
         const IndexedDeclaration& iDecl(*decl);
@@ -151,7 +151,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::getDeclarations(const TopDUConte
   return ret;
 }
 
-Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instantiateIfRequired) const
+Declaration* DeclarationId::declaration(const TopDUContext* top, bool instantiateIfRequired) const
 {
   Declaration* ret = nullptr;
 
@@ -162,7 +162,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
     if(top) {
       //Do filtering
       PersistentSymbolTable::FilteredDeclarationIterator filter =
-          PersistentSymbolTable::self().getFilteredDeclarations(id, top->recursiveImportIndices());
+          PersistentSymbolTable::self().filteredDeclarations(id, top->recursiveImportIndices());
       for(; filter; ++filter) {
           Declaration* decl = filter->data();
           if(decl && m_indirectData.additionalIdentity == decl->additionalIdentity()) {
@@ -174,7 +174,7 @@ Declaration* DeclarationId::getDeclaration(const TopDUContext* top, bool instant
       }
     }else{
       //Just accept anything
-      PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().getDeclarations(id);
+      PersistentSymbolTable::Declarations decls = PersistentSymbolTable::self().declarations(id);
       PersistentSymbolTable::Declarations::Iterator decl = decls.iterator();
       for(; decl; ++decl) {
         const IndexedDeclaration& iDecl(*decl);
@@ -226,7 +226,7 @@ QualifiedIdentifier DeclarationId::qualifiedIdentifier() const
       return baseIdentifier;
     return m_specialization.information().applyToIdentifier(baseIdentifier);
   } else {
-    Declaration* decl = getDeclaration(nullptr);
+    Declaration* decl = declaration(nullptr);
     if(decl)
       return decl->qualifiedIdentifier();
 

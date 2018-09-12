@@ -48,7 +48,7 @@ Declaration* FunctionDefinition::declaration(const TopDUContext* topContext) con
 {
   ENSURE_CAN_READ
   
-  const KDevVarLengthArray<Declaration*> declarations = d_func()->m_declaration.getDeclarations(topContext ? topContext : this->topContext());
+  const KDevVarLengthArray<Declaration*> declarations = d_func()->m_declaration.declarations(topContext ? topContext : this->topContext());
   
   for (Declaration* decl : declarations) {
     if(!dynamic_cast<FunctionDefinition*>(decl))

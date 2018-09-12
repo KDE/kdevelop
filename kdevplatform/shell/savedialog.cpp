@@ -48,7 +48,7 @@ public:
     IDocument* doc() const { return m_doc; }
 
 private:
-    IDocument* m_doc;
+    IDocument* const m_doc;
 };
 
 KSaveSelectDialog::KSaveSelectDialog( const QList<IDocument*>& files, QWidget * parent )

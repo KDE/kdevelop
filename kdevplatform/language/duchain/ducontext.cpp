@@ -1633,7 +1633,7 @@ DUContext::Import::Import(const DeclarationId& id, const CursorInRevision& _posi
 
 DUContext* DUContext::Import::context(const TopDUContext* topContext, bool instantiateIfRequired) const {
   if(m_declaration.isValid()) {
-    Declaration* decl = m_declaration.getDeclaration(topContext, instantiateIfRequired);
+    Declaration* decl = m_declaration.declaration(topContext, instantiateIfRequired);
     //This first case rests on the assumption that no context will ever import a function's expression context
     //More accurately, that no specialized or cross-topContext imports will, but if the former assumption fails the latter will too
     if (AbstractFunctionDeclaration *functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl))

@@ -117,8 +117,8 @@ private:
     void saveFromArea(Sublime::Area* area, Sublime::AreaIndex *areaIndex, KConfigGroup setGroup, KConfigGroup areaGroup);
     void loadToArea(Sublime::Area* area, Sublime::AreaIndex *areaIndex, const KConfigGroup& setGroup, const KConfigGroup& areaGroup, QMultiMap<QString, Sublime::View*>& recycle);
 
-    QString m_id;
-    QIcon m_icon;
+    const QString m_id;
+    const QIcon m_icon;
     QVector<QPointer<Sublime::Area>> m_areas;
     static bool m_loading;
 };

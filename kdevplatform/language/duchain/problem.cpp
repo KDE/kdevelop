@@ -64,7 +64,7 @@ ProblemPointer LocalIndexedProblem::data(const TopDUContext* top) const
   if (!m_index) {
     return {};
   }
-  return top->m_dynamicData->getProblemForIndex(m_index);
+  return top->m_dynamicData->problemForIndex(m_index);
 }
 
 Problem::Problem()

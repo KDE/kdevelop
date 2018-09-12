@@ -93,7 +93,7 @@ public:
   KDevelop::DUChainBase* duObjectForIndex(const QModelIndex& a_index);
 
   /// Call this to retrieve the index for the node associated with the specified id.
-  QModelIndex getIndexForIdentifier(const KDevelop::IndexedQualifiedIdentifier& a_id);
+  QModelIndex indexForIdentifier(const KDevelop::IndexedQualifiedIdentifier& a_id);
 
   /// Return the model index associated with the given node.
   QModelIndex index(ClassModelNodes::Node* a_node) const;

@@ -64,7 +64,7 @@ public:
      * NOTE: Never pass an empty @p id, this means there is no working set
      *       for the given area you got that @p id from.
      */
-    WorkingSet* getWorkingSet(const QString& id);
+    WorkingSet* workingSet(const QString& id);
 
     QList<WorkingSet*> allWorkingSets() const;
 

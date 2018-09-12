@@ -96,17 +96,17 @@ public:
     typedef QMultiHash<QMimeType, ILanguageSupport*> MimeTypeCache;
     MimeTypeCache mimeTypeCache; //Maps mimetypes to languages
 
-    BackgroundParser *backgroundParser;
+    BackgroundParser* const backgroundParser;
     StaticAssistantsManager* staticAssistantsManager;
     bool m_cleanedUp;
 
     void addLanguageSupport(ILanguageSupport* support, const QStringList& mimetypes);
     void addLanguageSupport(ILanguageSupport* support);
 
-    ProblemModelSet *problemModelSet;
+    ProblemModelSet* const problemModelSet;
 
 private:
-    LanguageController *m_controller;
+    LanguageController* const m_controller;
 };
 
 void LanguageControllerPrivate::addLanguageSupport(ILanguageSupport* languageSupport,

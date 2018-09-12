@@ -43,7 +43,7 @@ int lineHeight(const KTextEditor::View* view, int curLine)
 
 }
 
-QRect KTextEditorHelpers::getItemBoundingRect(const KTextEditor::View* view, const KTextEditor::Range& itemRange)
+QRect KTextEditorHelpers::itemBoundingRect(const KTextEditor::View* view, const KTextEditor::Range& itemRange)
 {
   QPoint startPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.start()));
   QPoint endPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.end()));

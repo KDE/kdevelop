@@ -385,7 +385,7 @@ void AbstractDeclarationNavigationContext::htmlFunction()
     int currentArgNum = 0;
 
     QVector<Declaration*> decls;
-    if (DUContext* argumentContext = DUChainUtils::getArgumentContext(d->m_declaration.data())) {
+    if (DUContext* argumentContext = DUChainUtils::argumentContext(d->m_declaration.data())) {
       decls = argumentContext->localDeclarations(topContext().data());
     }
     foreach(const AbstractType::Ptr& argType, type->arguments()) {
@@ -449,7 +449,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
   const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(d->m_declaration.data());
   if(classFunDecl) {
 
-    Declaration* overridden = DUChainUtils::getOverridden(d->m_declaration.data());
+    Declaration* overridden = DUChainUtils::overridden(d->m_declaration.data());
 
     if(overridden) {
         modifyHtml() += i18n("Overrides a ");
@@ -490,7 +490,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
       Declaration* classDecl = d->m_declaration->context()->owner();
       if(classDecl) {
         uint maxAllowedSteps = d->m_fullBackwardSearch ? (uint)-1 : 10;
-        const QList<Declaration*> overriders = DUChainUtils::getOverriders(classDecl, classFunDecl, maxAllowedSteps);
+        const QList<Declaration*> overriders = DUChainUtils::overriders(classDecl, classFunDecl, maxAllowedSteps);
 
         if(!overriders.isEmpty()) {
           modifyHtml() += i18n("Overridden in ");
@@ -514,7 +514,7 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 
   ///Show all classes that inherit this one
   uint maxAllowedSteps = d->m_fullBackwardSearch ? (uint)-1 : 10;
-  const QList<Declaration*> inheriters = DUChainUtils::getInheriters(d->m_declaration.data(), maxAllowedSteps);
+  const QList<Declaration*> inheriters = DUChainUtils::inheriters(d->m_declaration.data(), maxAllowedSteps);
 
   if(!inheriters.isEmpty()) {
       modifyHtml() += i18n("Inherited by ");

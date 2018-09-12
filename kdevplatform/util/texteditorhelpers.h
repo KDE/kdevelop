@@ -34,7 +34,7 @@ namespace KDevelop {
 namespace KTextEditorHelpers {
 
 /// @return Item's bounding rect in global screen coordinates
-QRect KDEVPLATFORMUTIL_EXPORT getItemBoundingRect(const KTextEditor::View* view, const KTextEditor::Range& itemRange);
+QRect KDEVPLATFORMUTIL_EXPORT itemBoundingRect(const KTextEditor::View* view, const KTextEditor::Range& itemRange);
 
 /**
  * @brief Try parsing a string such as "path_to_file:line_num:column_num".

@@ -107,7 +107,7 @@ int ClassModel::rowCount(const QModelIndex& parent) const
   if ( parent.isValid() )
     node = static_cast<Node*>(parent.internalPointer());
 
-  return node->getChildren().size();
+  return node->children().size();
 }
 
 QVariant ClassModel::data(const QModelIndex& index, int role) const
@@ -122,7 +122,7 @@ QVariant ClassModel::data(const QModelIndex& index, int role) const
 
   if ( role == Qt::DecorationRole )
   {
-    QIcon icon = node->getCachedIcon();
+    QIcon icon = node->cachedIcon();
     return icon.isNull() ? QVariant() : icon;
   }
 
@@ -161,10 +161,10 @@ QModelIndex ClassModel::index(int row, int column, const QModelIndex& parent) co
   if ( parent.isValid() )
     node = static_cast<Node*>(parent.internalPointer());
 
-  if ( row >= node->getChildren().size() )
+  if ( row >= node->children().size() )
     return QModelIndex();
 
-  return index(node->getChildren()[row]);
+  return index(node->children()[row]);
 }
 
 QModelIndex ClassModel::parent(const QModelIndex& childIndex) const
@@ -174,10 +174,10 @@ QModelIndex ClassModel::parent(const QModelIndex& childIndex) const
 
   Node* childNode = static_cast<Node*>(childIndex.internalPointer());
 
-  if ( childNode->getParent() == m_topNode )
+  if ( childNode->parent() == m_topNode )
     return QModelIndex();
 
-  return index( childNode->getParent() );
+  return index( childNode->parent() );
 }
 
 QModelIndex ClassModel::index(ClassModelNodes::Node* a_node) const
@@ -187,7 +187,7 @@ QModelIndex ClassModel::index(ClassModelNodes::Node* a_node) const
   }
 
   // If no parent exists, we have an invalid index (root node or not part of a model).
-  if ( a_node->getParent() == nullptr )
+  if ( a_node->parent() == nullptr )
     return QModelIndex();
 
   return createIndex(a_node->row(), 0, a_node);
@@ -201,13 +201,13 @@ KDevelop::DUChainBase* ClassModel::duObjectForIndex(const QModelIndex& a_index)
   Node* node = static_cast<Node*>(a_index.internalPointer());
 
   if ( IdentifierNode* identifierNode = dynamic_cast<IdentifierNode*>(node) )
-    return identifierNode->getDeclaration();
+    return identifierNode->declaration();
 
   // Non was found.
   return nullptr;
 }
 
-QModelIndex ClassModel::getIndexForIdentifier(const KDevelop::IndexedQualifiedIdentifier& a_id)
+QModelIndex ClassModel::indexForIdentifier(const KDevelop::IndexedQualifiedIdentifier& a_id)
 {
   ClassNode* node = m_allClassesNode->findClassNode(a_id);
   if ( node == nullptr )

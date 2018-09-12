@@ -74,7 +74,7 @@ public:
         }
     }
 
-    EnvironmentConfigureButton *q;
+    EnvironmentConfigureButton* const q;
     EnvironmentSelectionWidget *selectionWidget;
 };
 

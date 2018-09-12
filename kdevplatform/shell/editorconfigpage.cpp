@@ -83,7 +83,7 @@ public Q_SLOTS:
     }
 
 private:
-    KTextEditor::ConfigPage* m_page;
+    KTextEditor::ConfigPage* const m_page;
 };
 
 }

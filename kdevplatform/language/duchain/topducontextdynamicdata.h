@@ -50,7 +50,7 @@ class TopDUContextDynamicData {
   */
   uint allocateDeclarationIndex(Declaration* decl, bool temporary);
   
-  Declaration* getDeclarationForIndex(uint index) const;
+  Declaration* declarationForIndex(uint index) const;
   
   bool isDeclarationForIndexLoaded(uint index) const;
   
@@ -64,7 +64,7 @@ class TopDUContextDynamicData {
   */
   uint allocateContextIndex(DUContext* ctx, bool temporary);
 
-  DUContext* getContextForIndex(uint index) const;
+  DUContext* contextForIndex(uint index) const;
 
   bool isContextForIndexLoaded(uint index) const;
 
@@ -76,7 +76,7 @@ class TopDUContextDynamicData {
    * The returned index is never zero.
    */
   uint allocateProblemIndex(const ProblemPointer& problem);
-  ProblemPointer getProblemForIndex(uint index) const;
+  ProblemPointer problemForIndex(uint index) const;
   void clearProblems();
 
   ///Stores this top-context to disk
@@ -144,7 +144,7 @@ class TopDUContextDynamicData {
       bool itemsHaveChanged() const;
 
       void storeData(uint& currentDataOffset, const QVector<ArrayWithPosition>& oldData);
-      Item getItemForIndex(uint index) const;
+      Item itemForIndex(uint index) const;
 
       void clearItemIndex(const Item& item, const uint index);
 

@@ -54,7 +54,7 @@ protected: // Documents list handling.
   void closeDocument(const KDevelop::IndexedString& a_file);
 
   /// Returns a list of documents we have monitored.
-  QSet< KDevelop::IndexedString > getAllOpenDocuments();
+  QSet<KDevelop::IndexedString> allOpenDocuments() const;
 
 protected: // Overridables
   /// Override this to filter the found classes.
@@ -141,7 +141,7 @@ private:
 
   /// Recursively create a namespace folder for the specified identifier if it doesn't
   /// exist, cache it and return it (or just return it from the cache).
-  StaticNamespaceFolderNode* getNamespaceFolder(const KDevelop::QualifiedIdentifier& a_identifier);
+  StaticNamespaceFolderNode* namespaceFolder(const KDevelop::QualifiedIdentifier& a_identifier);
 
   /// Removes the given namespace identifier recursively if it's empty.
   void removeEmptyNamespace(const KDevelop::QualifiedIdentifier& a_identifier);

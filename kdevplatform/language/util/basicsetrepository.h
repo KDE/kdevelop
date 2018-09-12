@@ -288,7 +288,7 @@ public:
   
   inline const SetNodeData* nodeFromIndex(uint index) const {
       if(index)
-          return dataRepository.itemFromIndex(index);
+          return m_dataRepository.itemFromIndex(index);
       else
           return nullptr;
   }
@@ -298,8 +298,8 @@ public:
   }
   
   ///Only public to get statistics and such
-  const SetDataRepository& getDataRepository() const {
-      return dataRepository;
+  const SetDataRepository& dataRepository() const {
+      return m_dataRepository;
   }
   
   ///Set whether set-nodes with reference-count zero should be deleted only after a delay
@@ -317,7 +317,7 @@ public:
 private:
   friend class Set;
   friend class Set::Iterator;
-  SetDataRepository dataRepository;
+  SetDataRepository m_dataRepository;
   QMutex* m_mutex;
   bool m_delayedDeletion;
   
@@ -340,7 +340,7 @@ public:
 private:
   friend class Set;
   friend class SetIteratorPrivate;
-  static inline SetDataRepository &getDataRepository(BasicSetRepository *repo) { return repo->dataRepository; }
+  static inline SetDataRepository &getDataRepository(BasicSetRepository *repo) { return repo->m_dataRepository; }
   const QScopedPointer<class SetIteratorPrivate> d;
 };
 

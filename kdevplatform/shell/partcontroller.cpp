@@ -52,21 +52,24 @@ namespace KDevelop
 class PartControllerPrivate
 {
 public:
-    PartControllerPrivate() {}
+    explicit PartControllerPrivate(Core* core)
+        : m_core(core)
+    {}
 
     bool m_showTextEditorStatusBar = false;
     QString m_editor;
     QStringList m_textTypes;
 
-    Core *m_core;
+    Core* const m_core;
 };
 
 PartController::PartController(Core *core, QWidget *toplevel)
-        : IPartController( toplevel ), d(new PartControllerPrivate)
+    : IPartController(toplevel)
+    , d(new PartControllerPrivate(core))
 
 {
     setObjectName(QStringLiteral("PartController"));
-    d->m_core = core;
+
     //Cache this as it is too expensive when creating parts
     //     KConfig * config = Config::standard();
     //     config->setGroup( "General" );
