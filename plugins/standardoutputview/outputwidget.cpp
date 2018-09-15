@@ -192,6 +192,17 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     enableActions();
 }
 
+OutputWidget::~OutputWidget()
+{
+    // Disconnect our widget to prevent updateFilter() slot calling from parent's destructor,
+    // which leads to segfault since m_views hash will be destroyed before.
+    if (m_tabwidget) {
+        m_tabwidget->disconnect(this);
+    } else if (m_stackwidget) {
+        m_stackwidget->disconnect(this);
+    }
+}
+
 void OutputWidget::clearModel()
 {
     auto view = qobject_cast<QAbstractItemView*>(currentWidget());
@@ -254,7 +265,7 @@ void OutputWidget::removeOutput( int id )
 {
     if( data->outputdata.contains( id ) && m_views.contains( id ) )
     {
-        QTreeView *view = m_views.value(id).view.data();
+        auto view = m_views.value(id).view;
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
             if( data->type & KDevelop::IOutputView::MultipleView )
@@ -272,19 +283,16 @@ void OutputWidget::removeOutput( int id )
                     m_stackwidget->removeWidget(view);
                 }
             }
-        } else {  // KDevelop::IOutputView::OneView
-            /* TODO: this branch of execution has no result because of the "m_views.remove( id );"
-             * after the if-else block. Need to find out which behavior has sense.
-             */
-            FilteredView& fview = m_views[id];
-            fview.view->setModel(nullptr);
-            fview.view->setItemDelegate(nullptr);
-            if (fview.proxyModel) {
-                fview.proxyModel = QSharedPointer<QSortFilterProxyModel>();
-                fview.filter = QString();
-            }
+        } else {
+            // KDevelop::IOutputView::OneView case
+            // Do nothig here since our single view will be automatically removed from layout
+            // during it's destroy
         }
-        m_views.remove(id);
+
+        auto fv = m_views.take(id);
+        // remove our view with proxy model which is view's child (see outputFilter() method).
+        delete fv.view;
+
         emit outputRemoved( data->toolViewId, id );
     }
     enableActions();
@@ -339,7 +347,7 @@ QWidget* OutputWidget::currentWidget() const
         widget = m_stackwidget->currentWidget();
     } else
     {
-        widget = m_views.begin().value().view.data();
+        widget = m_views.begin()->view;
     }
     return widget;
 }
@@ -471,7 +479,7 @@ void OutputWidget::activate(const QModelIndex& index)
 
 QTreeView* OutputWidget::createListView(int id)
 {
-    auto createHelper = [&]() -> QSharedPointer<QTreeView> {
+    auto createHelper = [&]() -> QTreeView* {
         KDevelop::FocusedTreeView* listview = new KDevelop::FocusedTreeView(this);
         listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
         listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
@@ -487,10 +495,10 @@ QTreeView* OutputWidget::createListView(int id)
         connect(listview, &QTreeView::activated, this, &OutputWidget::activate);
         connect(listview, &QTreeView::clicked, this, &OutputWidget::activate);
 
-        return QSharedPointer<QTreeView>(listview);
+        return listview;
     };
 
-    QSharedPointer<QTreeView> listview;
+    QTreeView* listview = nullptr;
     if( !m_views.contains(id) )
     {
         bool newView = true;
@@ -502,18 +510,18 @@ QTreeView* OutputWidget::createListView(int id)
 
             if( data->type & KDevelop::IOutputView::MultipleView )
             {
-                m_tabwidget->addTab(listview.data(), data->outputdata.value(id)->title);
+                m_tabwidget->addTab(listview, data->outputdata.value(id)->title);
             } else
             {
-                m_stackwidget->addWidget(listview.data());
-                m_stackwidget->setCurrentWidget(listview.data());
+                const int index = m_stackwidget->addWidget(listview);
+                m_stackwidget->setCurrentIndex(index);
             }
         } else
         {
             if( m_views.isEmpty() )
             {
                 listview = createHelper();
-                layout()->addWidget(listview.data());
+                layout()->addWidget(listview);
             } else
             {
                 listview = m_views.begin().value().view;
@@ -532,14 +540,14 @@ QTreeView* OutputWidget::createListView(int id)
         listview = m_views.value(id).view;
     }
     enableActions();
-    return listview.data();
+    return listview;
 }
 
 void OutputWidget::raiseOutput(int id)
 {
     if( m_views.contains(id) )
     {
-        auto view = m_views.value(id).view.data();
+        auto view = m_views.value(id).view;
         if( data->type & KDevelop::IOutputView::MultipleView )
         {
             int idx = m_tabwidget->indexOf(view);
@@ -646,10 +654,11 @@ void OutputWidget::outputFilter(const QString& filter)
     auto proxyModel = qobject_cast<QSortFilterProxyModel*>(view->model());
     if( !proxyModel )
     {
-        proxyModel = new QSortFilterProxyModel(view->model());
+        // create new proxy model and make view it's parent. This allows us destroy view and
+        // it's model with "one shot" (see removeOutput() method).
+        fvIt->proxyModel = proxyModel = new QSortFilterProxyModel(view);
         proxyModel->setDynamicSortFilter(true);
         proxyModel->setSourceModel(view->model());
-        fvIt->proxyModel = QSharedPointer<QSortFilterProxyModel>(proxyModel);
         view->setModel(proxyModel);
     }
     QRegExp regExp(filter, Qt::CaseInsensitive);
@@ -676,7 +685,7 @@ void OutputWidget::setTitle(int outputId, const QString& title)
 {
     auto fview = m_views.value(outputId, FilteredView{});
     if (fview.view && (data->type & KDevelop::IOutputView::MultipleView)) {
-        int idx = m_tabwidget->indexOf(fview.view.data());
+        const int idx = m_tabwidget->indexOf(fview.view);
         if (idx >= 0) {
             m_tabwidget->setTabText(idx, title);
         }

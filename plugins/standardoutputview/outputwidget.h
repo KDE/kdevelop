@@ -22,9 +22,8 @@
 #ifndef KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 #define KDEVPLATFORM_PLUGIN_OUTPUTWIDGET_H
 
-#include <QMap>
+#include <QHash>
 #include <QWidget>
-#include <QSharedPointer>
 
 #include <interfaces/itoolviewactionlistener.h>
 #include <outputview/ioutputviewmodel.h>
@@ -55,6 +54,8 @@ class OutputWidget : public QWidget, public KDevelop::IToolViewActionListener
 
 public:
     OutputWidget(QWidget* parent, const ToolViewData* data);
+    ~OutputWidget() override;
+
     void removeOutput( int id );
     void raiseOutput( int id );
 public Q_SLOTS:
@@ -103,8 +104,8 @@ private:
     int currentOutputIndex();
 
     struct FilteredView {
-        QSharedPointer<QTreeView> view;
-        QSharedPointer<QSortFilterProxyModel> proxyModel;
+        QTreeView* view = nullptr;
+        QSortFilterProxyModel* proxyModel = nullptr;
         QString filter;
     };
     QHash<int, FilteredView>::iterator findFilteredView(QAbstractItemView *view);
