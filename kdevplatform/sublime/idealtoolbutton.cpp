@@ -88,14 +88,31 @@ QSize IdealToolButton::sizeHint() const
 
 void IdealToolButton::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
+    QStylePainter painter(this);
+    QStyleOptionToolButton option;
+    initStyleOption(&option);
+
     if (_area == Qt::TopDockWidgetArea || _area == Qt::BottomDockWidgetArea) {
-        QToolButton::paintEvent(event);
+        // elide text
+        int iconWidth = 0;
+        if (toolButtonStyle() != Qt::ToolButtonTextOnly && !option.icon.isNull()) {
+            iconWidth = option.iconSize.width();
+        }
+
+        // subtract 4 to be consistent with the size calculated by sizeHint, which adds 4,
+        // again to be consistent with QToolButton
+        option.text = fontMetrics().elidedText(text(), Qt::ElideRight, contentsRect().width() - iconWidth - 4);
+        painter.drawComplexControl(QStyle::CC_ToolButton, option);
     } else {
         // rotated paint
-        QStylePainter painter(this);
-        QStyleOptionToolButton option;
-        initStyleOption(&option);
-
+        // elide text
+        int iconHeight = 0;
+        if (toolButtonStyle() != Qt::ToolButtonTextOnly && !option.icon.isNull()) {
+            iconHeight = option.iconSize.height();
+        }
+        QString textToDraw = fontMetrics().elidedText(text(), Qt::ElideRight, contentsRect().height() - iconHeight - 4);
         // first draw normal frame and not text/icon
         option.text = QString();
         option.icon = QIcon();
@@ -116,7 +133,8 @@ void IdealToolButton::paintEvent(QPaintEvent *event)
         }
 
         // paint text and icon
-        option.text = text();
+        option.text = textToDraw;
+
         QIcon::Mode iconMode = (option.state & QStyle::State_MouseOver) ? QIcon::Active : QIcon::Normal;
         QPixmap ic = icon().pixmap(option.iconSize, iconMode, QIcon::On);
         QTransform tf;

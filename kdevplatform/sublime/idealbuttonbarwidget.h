@@ -37,6 +37,7 @@ namespace Sublime
 class MainWindow;
 class IdealController;
 class IdealDockWidget;
+class IdealButtonBarLayout;
 class View;
 class Area;
 
@@ -93,6 +94,7 @@ private:
     QWidget* m_corner;
     bool m_showState;
     QStringList m_buttonsOrder;
+    IdealButtonBarLayout* m_buttonsLayout;
 };
 
 }
