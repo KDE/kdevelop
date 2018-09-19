@@ -68,7 +68,16 @@ function checkToolsInPath {
 }
 
 # Check if all required tools are there (on the host machine)
-checkToolsInPath sed qdbus ls cut dirname mktemp basename readlink hostname
+checkToolsInPath sed ls cut dirname mktemp basename readlink hostname
+
+# special handling for qdbus variants
+_qdbus=qdbus-qt5
+if ! [ "$(which $_qdbus 2> /dev/null)" ]; then
+    _qdbus=qdbus
+    if ! [ "$(which $_qdbus 2> /dev/null)" ]; then
+        echo "The utility qdbus (or qdbus-qt5) is not in your path, the shell integration will not work properly."
+    fi
+fi
 
 if ! [ "$KDEV_SSH_FORWARD_CHAIN" ]; then
     # Check for additional utilities that are required on the client machine
@@ -77,11 +86,11 @@ fi
 
 # Queries the session name from the running application instance
 function getSessionName {
-    echo "$(qdbus $KDEV_DBUS_ID /org/kdevelop/SessionController org.kdevelop.SessionController.sessionName)"
+    echo "$($_qdbus $KDEV_DBUS_ID /org/kdevelop/SessionController org.kdevelop.SessionController.sessionName)"
 }
 
 function getSessionDir {
-    echo "$(qdbus $KDEV_DBUS_ID /org/kdevelop/SessionController org.kdevelop.SessionController.sessionDir)"
+    echo "$($_qdbus $KDEV_DBUS_ID /org/kdevelop/SessionController org.kdevelop.SessionController.sessionDir)"
 }
 
 function getCurrentShellEnvPath {
@@ -268,7 +277,7 @@ function shev! {
 
 # Opens a document in internally in the application
 function openDocument {
-    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentSimple $1)
+    RESULT=$($_qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentSimple $1)
     if [[ "$RESULT" != "true" ]]; then
         echo "Failed to open $1"
     fi
@@ -281,7 +290,7 @@ function openDocuments {
     else
         arr=("$1")
     fi
-    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentsSimple "(" $arr ")")
+    RESULT=$($_qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.openDocumentsSimple "(" $arr ")")
     if [[ "$RESULT" != "true" ]]; then
         echo "Failed to open $1"
     fi
@@ -295,7 +304,7 @@ function executeInApp {
     if ! [ "$WD" ]; then
         WD=$(pwd)
     fi
-    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommand "$CMD" "$WD")
+    RESULT=$($_qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommand "$CMD" "$WD")
     if [[ "$RESULT" != "true" ]]; then
         echo "Execution failed"
     fi
@@ -309,26 +318,26 @@ function executeInAppSync {
     if ! [ "$WD" ]; then
         WD=$(pwd)
     fi
-    RESULT=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommandSync "$CMD" "$WD")
+    RESULT=$($_qdbus $KDEV_DBUS_ID /org/kdevelop/ExternalScriptPlugin org.kdevelop.ExternalScriptPlugin.executeCommandSync "$CMD" "$WD")
     echo "$RESULT"
 }
 
 # Getter functions:
 
 function getActiveDocument {
-    qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPath $@
+    $_qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPath $@
 }
 
 function getOpenDocuments {
-    qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPaths
+    $_qdbus $KDEV_DBUS_ID /org/kdevelop/DocumentController org.kdevelop.DocumentController.activeDocumentPaths
 }
 
 function raise! {
-    qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
+    $_qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
 }
 
 function bdir! {
-    TARG=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" false)
+    TARG=$($_qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" false)
     if [ "$TARG" ]; then
         cd $TARG
     else
@@ -337,7 +346,7 @@ function bdir! {
 }
 
 function project! {
-    TARG=$(qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" true)
+    TARG=$($_qdbus $KDEV_DBUS_ID /org/kdevelop/ProjectController org.kdevelop.ProjectController.mapSourceBuild "$(pwd)" true)
     if [ "$TARG" ]; then
         cd $TARG
     else
@@ -349,7 +358,7 @@ function project! {
 # Main functions:
 
 function raise! {
-    qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
+    $_qdbus $KDEV_DBUS_ID /kdevelop/MainWindow org.kdevelop.MainWindow.ensureVisible
 }
 
 function sync! {
@@ -565,7 +574,7 @@ function search! {
         LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
 
-    qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
+    $_qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" true
 }
 
 function dsearch! {
@@ -594,7 +603,7 @@ function dsearch! {
         LOCATION="$LOCATION;$(mapFileToClient $LOC)"
     done
 
-    qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" false
+    $_qdbus $KDEV_DBUS_ID /org/kdevelop/GrepViewPlugin org.kdevelop.GrepViewPlugin.startSearch "$PATTERN" "$LOCATION" false
 }
 
 ##### SSH DBUS FORWARDING --------------------------------------------------------------------------------------------------------------------

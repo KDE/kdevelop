@@ -43,8 +43,9 @@ if [ "$(echo $KDEV_ATTACHED_PID | wc -w | sed 's/ //g')" != 1 ]; then
     exit 6
 fi
 
-if ! [ "$(which qdbus)" ]; then
-    echo "Error: The qdbus utility is missing."
+# find qdbus, try also alternative name qdbus-qt5
+if ! [ "$(which qdbus-qt5 2> /dev/null)$(which qdbus 2> /dev/null)" ]; then
+    echo "Error: The qdbus (or qdbus-qt5) utility is missing."
     exit 7
 fi
 
