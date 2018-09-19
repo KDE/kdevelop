@@ -281,6 +281,9 @@ cp -r $PLUGINS/xcbglintegrations ./usr/lib/qt5/plugins/
 cp -R /kdevelop.appdir/usr/lib/grantlee/ /kdevelop.appdir/usr/lib/qt5/plugins/
 rm -Rf /kdevelop.appdir/usr/lib/grantlee
 
+mkdir -p /kdevelop.appdir/$LLVM_ROOT/lib/
+cp -r $LLVM_ROOT/lib/clang /kdevelop.appdir/$LLVM_ROOT/lib
+
 cp -ru /usr/share/mime/* /kdevelop.appdir/usr/share/mime
 update-mime-database /kdevelop.appdir/usr/share/mime/
 
@@ -440,6 +443,8 @@ export APPIMAGE_STARTUP_QT_PLUGIN_PATH=\$QT_PLUGIN_PATH
 export APPIMAGE_STARTUP_XDG_DATA_DIRS=\$XDG_DATA_DIRS
 export APPIMAGE_STARTUP_PATH=\$PATH
 export APPIMAGE_STARTUP_PYTHONHOME=\$PYTHONHOME
+
+export KDEV_CLANG_BUILTIN_DIR=\$DIR/opt/llvm/lib/clang/6.0.1/include
 
 cd \$HOME
 
