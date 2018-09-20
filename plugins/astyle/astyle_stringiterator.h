@@ -41,7 +41,7 @@ public:
     std::string nextLine(bool emptyLineWasDeleted = false) override;
     std::string peekNextLine() override;
     void peekReset() override;
-
+    astyle::streamoff getPeekStart() const override;
 private:
     QString m_content;
     QTextStream m_is;

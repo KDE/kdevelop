@@ -72,3 +72,9 @@ void AStyleStringIterator::peekReset()
     m_peekStart = -1; // invalid
 }
 
+astyle::streamoff AStyleStringIterator::getPeekStart() const
+{
+   return m_peekStart;
+}
+
+

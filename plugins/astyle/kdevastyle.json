@@ -7,7 +7,7 @@
             }
         ],
         "Category": "Utilities",
-        "Description": "A plugin for formatting of sourcecode according to a specified set of rules",
+        "Description": "A plugin for formatting of sourcecode according to a specified set of rules.\nBased on the Artistic Style formatter v3.1 (https://sourceforge.net/projects/astyle)",
         "Description[ca@valencia]": "Un connector per a formatar el codi font d'acord a un conjunt especificat de regles",
         "Description[ca]": "Un connector per a formatar el codi font d'acord a un conjunt especificat de regles",
         "Description[de]": "Modul zum Formatieren von Quelltext nach bestimmten Vorschriften",

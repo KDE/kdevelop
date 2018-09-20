@@ -60,7 +60,7 @@ public:
     void setMaxInStatementIndentLength(int max);
     void setMinConditionalIndentLength(int min);
     //brackets
-    void setBracketFormatMode(astyle::BracketMode mode);
+    void setBracketFormatMode(astyle::BraceMode mode);
     void setBreakClosingHeaderBracketsMode(bool state);
     //blocks
     void setBreakBlocksMode(bool state);
