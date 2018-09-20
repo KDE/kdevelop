@@ -63,12 +63,14 @@ using namespace KDevelop;
 
 namespace {
 
+#if CINDEX_VERSION_MINOR >= 100
 // TODO: this is ugly, can we find a better alternative?
 bool jsonTestRun()
 {
     static bool runningTest = qEnvironmentVariableIsSet("KDEV_CLANG_JSON_TEST_RUN");
     return runningTest;
 }
+#endif
 
 //BEGIN helpers
 // HACK: current alias type template machinery is badly broken wrt spelling
