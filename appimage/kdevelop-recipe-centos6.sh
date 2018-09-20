@@ -451,6 +451,7 @@ export APPIMAGE_STARTUP_PATH=\$PATH
 export APPIMAGE_STARTUP_PYTHONHOME=\$PYTHONHOME
 
 export KDEV_CLANG_BUILTIN_DIR=\$DIR/opt/llvm/lib/clang/6.0.1/include
+export KDEV_DISABLE_PLUGINS=KDevWelcomePage
 
 cd \$HOME
 
