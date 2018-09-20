@@ -62,10 +62,12 @@ const int POINTERALIGN_TYPE = 3;
 AStylePreferences::AStylePreferences(Language lang, QWidget *parent)
     : SettingsWidget(parent)
     , m_formatter(new AStyleFormatter)
+    , m_currentLanguage(lang)
 {
     setupUi(this);
     switch(lang) {
         case AStylePreferences::CPP:
+        case AStylePreferences::ObjC:
             m_formatter->setCStyle();
             break;
         case AStylePreferences::Java:
@@ -250,9 +252,9 @@ void AStylePreferences::updatePreviewText(bool emitChangedSignal)
 {
     Q_UNUSED(emitChangedSignal);
     if(tabWidget->currentIndex() == 0)
-        emit previewTextChanged(AStylePlugin::indentingSample());
+        emit previewTextChanged(AStylePlugin::indentingSample(m_currentLanguage));
     else
-        emit previewTextChanged(AStylePlugin::formattingSample());
+        emit previewTextChanged(AStylePlugin::formattingSample(m_currentLanguage));
 }
 
 void AStylePreferences::currentTabChanged()
