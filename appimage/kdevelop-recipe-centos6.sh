@@ -276,6 +276,7 @@ cp -r $PLUGINS/platforms ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/iconengines ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/platforminputcontexts ./usr/lib/qt5/plugins/
 # cp -r $PLUGINS/platformthemes ./usr/lib/qt5/plugins/
+cp -r $PLUGINS/sqldrivers ./usr/lib/qt5/plugins/ # qsqlite is required for the Welcome Page plugin and for QtHelp
 cp -r $PLUGINS/xcbglintegrations ./usr/lib/qt5/plugins/
 
 mkdir -p ./usr/lib/qt5/qml
