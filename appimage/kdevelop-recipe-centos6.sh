@@ -268,7 +268,7 @@ if [ -e $(dirname $QTDIR/plugins/bearer) ] ; then
 else
   PLUGINS=../../$QTVERSION_SHORT/gc*/plugins/
 fi
-echo $PLUGINS # /usr/lib64/qt5/plugins if build system Qt is found
+echo "Using plugin dir: $PLUGINS" # /usr/lib64/qt5/plugins if build system Qt is found
 cp -r $PLUGINS/bearer ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/generic ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/imageformats ./usr/lib/qt5/plugins/
@@ -276,7 +276,14 @@ cp -r $PLUGINS/platforms ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/iconengines ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/platforminputcontexts ./usr/lib/qt5/plugins/
 # cp -r $PLUGINS/platformthemes ./usr/lib/qt5/plugins/
+cp -r $PLUGINS/sqldrivers ./usr/lib/qt5/plugins/ # qsqlite is required for the Welcome Page plugin and for QtHelp
 cp -r $PLUGINS/xcbglintegrations ./usr/lib/qt5/plugins/
+
+mkdir -p ./usr/lib/qt5/qml
+QML_DIR=$QTDIR/qml
+# for the Welcome Page plugin
+cp -r $QML_DIR/QtQuick ./usr/lib/qml
+cp -r $QML_DIR/QtQuick.2 ./usr/lib/qml
 
 cp -R /kdevelop.appdir/usr/lib/grantlee/ /kdevelop.appdir/usr/lib/qt5/plugins/
 rm -Rf /kdevelop.appdir/usr/lib/grantlee
@@ -375,7 +382,7 @@ rm -rf usr/share/ECM/ || true
 rm -rf usr/share/gettext || true
 rm -rf usr/share/pkgconfig || true
 
-strip -g $(find usr) || true
+strip -g $(find usr/bin usr/lib -type f) || true
 
 # We do not bundle this, so let's not search that inside the AppImage. 
 # Fixes "Qt: Failed to create XKB context!" and lets us enter text
@@ -445,6 +452,7 @@ export APPIMAGE_STARTUP_PATH=\$PATH
 export APPIMAGE_STARTUP_PYTHONHOME=\$PYTHONHOME
 
 export KDEV_CLANG_BUILTIN_DIR=\$DIR/opt/llvm/lib/clang/6.0.1/include
+export KDEV_DISABLE_PLUGINS=KDevWelcomePage
 
 cd \$HOME
 
@@ -498,6 +506,9 @@ rm -f /kdevelop.appdir/usr/bin/llc
 rm -f /kdevelop.appdir/usr/bin/bugpoint
 
 find /kdevelop.appdir -name '*.a' -exec rm {} \;
+
+echo "Final listing of files which will end up in the AppImage:"
+find /kdevelop.appdir
 
 cd /
 

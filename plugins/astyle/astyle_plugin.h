@@ -22,6 +22,8 @@ Copyright (C) 2001 Matthias Hölzer-Klüpfel <mhk@caldera.de>
 #ifndef ASTYLEPLUGIN_H
 #define ASTYLEPLUGIN_H
 
+#include "astyle_preferences.h"
+
 #include <interfaces/iplugin.h>
 #include <interfaces/isourceformatter.h>
 
@@ -66,8 +68,8 @@ public:
     */
     Indentation indentation(const QUrl &url) const override;
 
-    static QString formattingSample();
-    static QString indentingSample();
+    static QString formattingSample(AStylePreferences::Language lang);
+    static QString indentingSample(AStylePreferences::Language lang);
 
 private:
     QScopedPointer<AStyleFormatter> m_formatter;

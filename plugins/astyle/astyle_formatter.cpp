@@ -365,7 +365,7 @@ void AStyleFormatter::setBlockIndent(bool on)
 void AStyleFormatter::setBracketIndent(bool on)
 {
     m_options[QStringLiteral("IndentBrackets")] = on;
-    ASFormatter::setBracketIndent(on);
+    ASFormatter::setBraceIndent(on);
 }
 
 void AStyleFormatter::setCaseIndent(bool on)
@@ -417,7 +417,7 @@ void AStyleFormatter::setMinConditionalIndentLength(int min)
     ASFormatter::setMinConditionalIndentLength();
 }
 
-void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
+void AStyleFormatter::setBracketFormatMode(astyle::BraceMode mode)
 {
     switch (mode) {
     case astyle::NONE_MODE:
@@ -436,7 +436,7 @@ void AStyleFormatter::setBracketFormatMode(astyle::BracketMode mode)
         m_options[QStringLiteral("Brackets")] = QStringLiteral("RunInMode");
         break;
     }
-    ASFormatter::setBracketFormatMode(mode);
+    ASFormatter::setBraceFormatMode(mode);
 }
 
 void AStyleFormatter::setBreakClosingHeaderBracketsMode(bool state)

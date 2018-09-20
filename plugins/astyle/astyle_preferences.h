@@ -31,7 +31,7 @@ class AStylePreferences : public KDevelop::SettingsWidget, public Ui::AStylePref
         Q_OBJECT
 
 public:
-    enum Language { CPP, Java, CSharp};
+    enum Language { CPP, Java, CSharp, ObjC};
 
     explicit AStylePreferences(Language lang=CPP, QWidget *parent=nullptr);
     ~AStylePreferences() override;
@@ -59,6 +59,7 @@ private Q_SLOTS:
 private:
     QScopedPointer<AStyleFormatter> m_formatter;
     bool m_enableWidgetSignals;
+    const Language m_currentLanguage;
 };
 
 #endif // ASTYLEPREFERENCES_H
