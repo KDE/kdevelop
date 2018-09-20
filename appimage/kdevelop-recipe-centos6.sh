@@ -268,7 +268,7 @@ if [ -e $(dirname $QTDIR/plugins/bearer) ] ; then
 else
   PLUGINS=../../$QTVERSION_SHORT/gc*/plugins/
 fi
-echo $PLUGINS # /usr/lib64/qt5/plugins if build system Qt is found
+echo "Using plugin dir: $PLUGINS" # /usr/lib64/qt5/plugins if build system Qt is found
 cp -r $PLUGINS/bearer ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/generic ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/imageformats ./usr/lib/qt5/plugins/
@@ -498,6 +498,9 @@ rm -f /kdevelop.appdir/usr/bin/llc
 rm -f /kdevelop.appdir/usr/bin/bugpoint
 
 find /kdevelop.appdir -name '*.a' -exec rm {} \;
+
+echo "Final listing of files which will end up in the AppImage:"
+find /kdevelop.appdir
 
 cd /
 
