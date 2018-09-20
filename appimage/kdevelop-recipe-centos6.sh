@@ -280,7 +280,9 @@ cp -r $PLUGINS/xcbglintegrations ./usr/lib/qt5/plugins/
 
 mkdir -p ./usr/lib/qt5/qml
 QML_DIR=$QTDIR/qml
-cp -r $QML_DIR/QtQuick.2 ./usr/lib/qml # for the Welcome Page plugin
+# for the Welcome Page plugin
+cp -r $QML_DIR/QtQuick ./usr/lib/qml
+cp -r $QML_DIR/QtQuick.2 ./usr/lib/qml
 
 cp -R /kdevelop.appdir/usr/lib/grantlee/ /kdevelop.appdir/usr/lib/qt5/plugins/
 rm -Rf /kdevelop.appdir/usr/lib/grantlee
