@@ -5,7 +5,7 @@ RUN cd /tmp && wget http://opensource.wandisco.com/rhel/6/svn-1.9/RPMS/x86_64/su
 
 RUN echo ". /opt/rh/devtoolset-6/enable && chmod +x /opt/rh/python27/enable && . /opt/rh/python27/enable" >> /root/.bashrc
 
-ENV LC_ALL=en_US.UTF-8 LANG=en_us.UTF-8 QTVERSION=5.9.2 QTVERSION_SHORT=5.9 LLVM_VERSION=5.0.0 LLVM_ROOT=/opt/llvm/ LD_LIBRARY_PATH=$QTDIR/lib/
+ENV LC_ALL=en_US.UTF-8 LANG=en_us.UTF-8 QTVERSION=5.9.6 QTVERSION_SHORT=5.9 LLVM_VERSION=6.0.1 LLVM_ROOT=/opt/llvm/ LD_LIBRARY_PATH=$QTDIR/lib/
 ENV QTDIR=/usr/local/Qt-${QTVERSION}/
 
 RUN bash -c "ln -sf /opt/rh/devtoolset-6/root/usr/bin/g++ /usr/bin/g++ && ln -sf /opt/rh/devtoolset-6/root/usr/bin/c++ /usr/bin/c++"
@@ -28,8 +28,8 @@ RUN bash -c "yum install unzip && mkdir -p /tmp/deploy && cd /tmp/deploy && wget
 # Build Clang/LLVM
 RUN bash -c "mkdir -p /llvm && cd /llvm && wget http://llvm.org/releases/${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz"
 RUN bash -c "cd /llvm && tar xvf llvm-${LLVM_VERSION}.src.tar.xz && cd llvm-${LLVM_VERSION}.src"
-RUN bash -c "cd /llvm/tools && wget http://llvm.org/releases/${LLVM_VERSION}/cfe-${LLVM_VERSION}.src.tar.xz"
-RUN bash -c "cd /llvm/tools && tar xvf cfe-${LLVM_VERSION}.src.tar.xz"
+RUN bash -c "cd /llvm/llvm-${LLVM_VERSION}.src/tools && wget http://llvm.org/releases/${LLVM_VERSION}/cfe-${LLVM_VERSION}.src.tar.xz"
+RUN bash -c "cd /llvm/llvm-${LLVM_VERSION}.src/tools && tar xvf cfe-${LLVM_VERSION}.src.tar.xz"
 RUN bash -c ". /opt/rh/python27/enable && . /opt/rh/devtoolset-6/enable && python --version && cd /llvm/llvm-${LLVM_VERSION}.src && mkdir -p build && cd build && cmake3 -G Ninja .. -DCMAKE_INSTALL_PREFIX=/opt/llvm/ -DCMAKE_BUILD_TYPE=Release -DLLVM_INCLUDE_TESTS=OFF -DLLVM_TARGETS_TO_BUILD=X86 && ninja install && rm -Rf /llvm"
 
 # Build Python
