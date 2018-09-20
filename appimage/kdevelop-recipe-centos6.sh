@@ -375,7 +375,7 @@ rm -rf usr/share/ECM/ || true
 rm -rf usr/share/gettext || true
 rm -rf usr/share/pkgconfig || true
 
-strip -g $(find usr) || true
+strip -g $(find usr/bin usr/lib -type f) || true
 
 # We do not bundle this, so let's not search that inside the AppImage. 
 # Fixes "Qt: Failed to create XKB context!" and lets us enter text
