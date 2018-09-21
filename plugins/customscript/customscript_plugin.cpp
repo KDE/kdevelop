@@ -273,7 +273,10 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
         {QStringLiteral("text/x-c++hdr"), QStringLiteral("C++")},
         {QStringLiteral("text/x-csrc"),   QStringLiteral("C")},
         {QStringLiteral("text/x-java"),   QStringLiteral("Java")},
-        {QStringLiteral("text/x-csharp"), QStringLiteral("C#")}
+        {QStringLiteral("text/x-csharp"), QStringLiteral("C#")},
+        {QStringLiteral("text/x-objcsrc"), QStringLiteral("Objective-C")},
+        {QStringLiteral("text/x-objc++src"), QStringLiteral("Objective-C++")},
+        {QStringLiteral("text/x-objchdr"), QStringLiteral("Objective-C")},
     });
     return result;
 }
