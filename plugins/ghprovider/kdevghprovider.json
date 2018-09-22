@@ -25,6 +25,7 @@
         "Description[tr]": "Bu eklenti Github'tan projeleri almanıza yardımcı olur",
         "Description[uk]": "За допомогою цього додатка можна отримувати проекти з GitHub",
         "Description[x-test]": "xxThis plugin helps to obtain projects from GitHubxx",
+        "Description[zh_CN]": "此插件帮助您从 GitHub 获取项目",
         "Icon": "kdevgh",
         "Id": "kdevghprovider",
         "License": "GPL",
@@ -48,6 +49,7 @@
         "Name[tr]": "GitHub Sağlayıcı",
         "Name[uk]": "Надавач даних GitHub",
         "Name[x-test]": "xxGitHub Providerxx",
+        "Name[zh_CN]": "GitHub 提供者",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

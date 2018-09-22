@@ -43,6 +43,7 @@
         "Name[tr]": "LLDB Desteği",
         "Name[uk]": "Підтримка LLDB",
         "Name[x-test]": "xxLLDB Supportxx",
+        "Name[zh_CN]": "LLDB 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

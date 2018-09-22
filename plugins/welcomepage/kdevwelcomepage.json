@@ -18,6 +18,7 @@
         "Description[tr]": "Boş oturumda görünen hoşgeldin sayfasını sağlar",
         "Description[uk]": "Забезпечує роботу сторінки вітання, яку програма показує, якщо сеанс порожній",
         "Description[x-test]": "xxProvides the welcome page visible in an empty sessionxx",
+        "Description[zh_CN]": "提供空白会话的欢迎页",
         "Icon": "kdevelop",
         "Id": "KDevWelcomePage",
         "Name": "KDevelop Welcome Page",

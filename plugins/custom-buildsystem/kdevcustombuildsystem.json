@@ -42,6 +42,7 @@
         "Name[tr]": "Özel İnşa Sistemi",
         "Name[uk]": "Нетипова система збирання",
         "Name[x-test]": "xxCustom Build Systemxx",
+        "Name[zh_CN]": "自定义构建系统",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
