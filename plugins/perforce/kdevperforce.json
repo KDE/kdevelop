@@ -26,6 +26,7 @@
         "Description[tr]": "Perforce Sürüm Denetim Sistemi ile Bütünleşme Sağlar",
         "Description[uk]": "Забезпечує інтеграцію з системою керування версіями Perforce",
         "Description[x-test]": "xxProvides Integration with Perforce Version Control Systemxx",
+        "Description[zh_CN]": "提供与 Perforce 版本控制系统的整合",
         "Icon": "kdevelop",
         "Id": "kdevperforce",
         "License": "GPL",
@@ -48,6 +49,7 @@
         "Name[tr]": "Perforce Desteği",
         "Name[uk]": "Підтримка Perforce",
         "Name[x-test]": "xxPerforce Supportxx",
+        "Name[zh_CN]": "Perforce 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],

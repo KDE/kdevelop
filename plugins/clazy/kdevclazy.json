@@ -22,6 +22,7 @@
         "Description[sv]": "Insticksprogrammet integrerar Clazy i KDevelop",
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Clazy до KDevelop",
         "Description[x-test]": "xxThis plugin integrates Clazy to KDevelopxx",
+        "Description[zh_CN]": "此插件整合 Clazy 到 KDevelop",
         "Icon": "clazy",
         "Id": "kdevclazy",
         "License": "GPL",
@@ -40,6 +41,7 @@
         "Name[sv]": "Clazy-stöd",
         "Name[uk]": "Підтримка Clazy",
         "Name[x-test]": "xxClazy Supportxx",
+        "Name[zh_CN]": "Clazy 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]

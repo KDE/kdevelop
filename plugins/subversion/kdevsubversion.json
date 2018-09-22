@@ -26,6 +26,7 @@
         "Description[tr]": "Bu eklenti Subversion ile KDevelop uygulamasını bütünleştirir.",
         "Description[uk]": "Цей додаток інтегрує Subversion із KDevelop.",
         "Description[x-test]": "xxThis plugin integrates Subversion to KDevelop.xx",
+        "Description[zh_CN]": "此插件将 Subversion 整合到 KDevelop。",
         "Icon": "subversion",
         "Id": "kdevsubversion",
         "License": "GPL",
