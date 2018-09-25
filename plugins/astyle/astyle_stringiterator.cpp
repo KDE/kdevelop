@@ -74,7 +74,9 @@ void AStyleStringIterator::peekReset()
 
 astyle::streamoff AStyleStringIterator::getPeekStart() const
 {
-   return m_peekStart == -1 ? 0 : m_peekStart;
+    // NOTE: we're not entirely sure if this is the correct implementation.
+    // we're trying to work-around https://bugs.kde.org/show_bug.cgi?id=399048
+    return m_peekStart == -1 ? 0 : m_peekStart;
 }
 
 
