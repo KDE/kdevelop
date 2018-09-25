@@ -74,7 +74,7 @@ void AStyleStringIterator::peekReset()
 
 astyle::streamoff AStyleStringIterator::getPeekStart() const
 {
-   return m_peekStart;
+   return m_peekStart == -1 ? 0 : m_peekStart;
 }
 
 
