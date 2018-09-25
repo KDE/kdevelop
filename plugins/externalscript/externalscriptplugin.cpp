@@ -108,6 +108,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
     KConfigGroup script = config.group( group );
     if ( script.hasKey( "name" ) && script.hasKey( "command" ) ) {
       ExternalScriptItem* item = new ExternalScriptItem;
+      item->setKey( script.name() );
       item->setText( script.readEntry( "name" ) );
       item->setCommand( script.readEntry( "command" ));
       item->setInputMode( static_cast<ExternalScriptItem::InputMode>( script.readEntry( "inputMode", 0u ) ) );
@@ -124,8 +125,8 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
 
   core()->uiController()->addToolView( i18n( "External Scripts" ), m_factory );
 
-  connect( m_model, &QStandardItemModel::rowsRemoved,
-           this, &ExternalScriptPlugin::rowsRemoved );
+  connect( m_model, &QStandardItemModel::rowsAboutToBeRemoved,
+           this, &ExternalScriptPlugin::rowsAboutToBeRemoved );
   connect( m_model, &QStandardItemModel::rowsInserted,
            this, &ExternalScriptPlugin::rowsInserted );
 
@@ -335,16 +336,18 @@ void ExternalScriptPlugin::executeScriptFromContextMenu() const
 
 void ExternalScriptPlugin::rowsInserted( const QModelIndex& /*parent*/, int start, int end )
 {
-  for ( int i = start; i <= end; ++i ) {
-    saveItemForRow( i );
+  setupKeys( start, end );
+  for ( int row = start; row <= end; ++row ) {
+    saveItemForRow( row );
   }
 }
 
-void ExternalScriptPlugin::rowsRemoved( const QModelIndex& /*parent*/, int start, int end )
+void ExternalScriptPlugin::rowsAboutToBeRemoved( const QModelIndex& /*parent*/, int start, int end )
 {
   KConfigGroup config = getConfig();
-  for ( int i = start; i <= end; ++i ) {
-    KConfigGroup child = config.group( QStringLiteral("script %1").arg(i) );
+  for ( int row = start; row <= end; ++row ) {
+    const ExternalScriptItem* const item = static_cast<ExternalScriptItem*>( m_model->item( row ) );
+    KConfigGroup child = config.group( item->key() );
     qCDebug(PLUGIN_EXTERNALSCRIPT) << "removing config group:" << child.name();
     child.deleteGroup();
   }
@@ -355,7 +358,10 @@ void ExternalScriptPlugin::saveItem( const ExternalScriptItem* item )
 {
   const QModelIndex index = m_model->indexFromItem( item );
   Q_ASSERT( index.isValid() );
-  saveItemForRow( index.row() );
+
+  getConfig().group( item->key() ).deleteGroup(); // delete the previous group
+  setupKeys( index.row(), index.row() );
+  saveItemForRow( index.row() ); // save the new group
 }
 
 void ExternalScriptPlugin::saveItemForRow( int row )
@@ -367,7 +373,7 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   Q_ASSERT( item );
 
   qCDebug(PLUGIN_EXTERNALSCRIPT) << "save extern script:" << item << idx;
-  KConfigGroup config = getConfig().group( QStringLiteral("script %1").arg( row ) );
+  KConfigGroup config = getConfig().group( item->key() );
   config.writeEntry( "name", item->text() );
   config.writeEntry( "command", item->command() );
   config.writeEntry( "inputMode", (uint) item->inputMode() );
@@ -378,6 +384,25 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   config.writeEntry( "showOutput", item->showOutput() );
   config.writeEntry( "filterMode", item->filterMode());
   config.sync();
+}
+
+void ExternalScriptPlugin::setupKeys(int start, int end)
+{
+  QStringList keys = getConfig().groupList();
+
+  for ( int row = start; row <= end; ++row ) {
+    ExternalScriptItem* const item = static_cast<ExternalScriptItem*>( m_model->item( row ) );
+
+    int nextSuffix = 2;
+    QString keyCandidate = item->text();
+    for (; keys.contains( keyCandidate ); ++nextSuffix) {
+      keyCandidate = item->text() + QString::number( nextSuffix );
+    }
+
+    qCDebug(PLUGIN_EXTERNALSCRIPT) << "set key" << keyCandidate << "for" << item << item->command();
+    item->setKey(keyCandidate);
+    keys.push_back(keyCandidate);
+  }
 }
 
 #include "externalscriptplugin.moc"

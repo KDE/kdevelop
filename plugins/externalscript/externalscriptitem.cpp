@@ -34,6 +34,17 @@ ExternalScriptItem::ExternalScriptItem()
 {
 }
 
+QString ExternalScriptItem::key() const
+{
+  return m_key;
+}
+
+void ExternalScriptItem::setKey(const QString& key)
+{
+  m_key = key;
+}
+
+
 QString ExternalScriptItem::command() const
 {
   return m_command;
