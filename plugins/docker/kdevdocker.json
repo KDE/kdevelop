@@ -12,6 +12,7 @@
         "Description": "Exposes Docker runtimes",
         "Description[ca@valencia]": "Exposa el temps d'execució del Docker",
         "Description[ca]": "Exposa el temps d'execució del Docker",
+        "Description[de]": "Stellt Docker-Laufzeitumgebungen bereit",
         "Description[es]": "Expone bibliotecas en tiempo de ejecución de Docker",
         "Description[fr]": "Expose les exécutifs Docker",
         "Description[gl]": "Expón os executábeis de Docker.",

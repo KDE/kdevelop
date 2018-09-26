@@ -12,6 +12,7 @@
         "Description": "Exposes Android runtimes",
         "Description[ca@valencia]": "Exposa el temps d'execució de l'Android",
         "Description[ca]": "Exposa el temps d'execució de l'Android",
+        "Description[de]": "Stellt Android-Laufzeitumgebungen bereit",
         "Description[es]": "Expone bibliotecas en tiempo de ejecución de Android",
         "Description[fr]": "Expose les exécutifs Android",
         "Description[gl]": "Expón execucións de Android.",
