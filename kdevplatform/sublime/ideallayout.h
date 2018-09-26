@@ -22,59 +22,34 @@
 #ifndef KDEVPLATFORM_SUBLIME_IDEALLAYOUT_H
 #define KDEVPLATFORM_SUBLIME_IDEALLAYOUT_H
 
-#include <QLayout>
+#include <QBoxLayout>
 
 #include "sublimedefs.h"
 
 namespace Sublime {
 
-class IdealButtonBarLayout: public QLayout
+class IdealButtonBarLayout: public QBoxLayout
 {
     Q_OBJECT
 
 public:
-    explicit IdealButtonBarLayout(Qt::Orientation orientation, QWidget *parent = nullptr);
+    IdealButtonBarLayout(Qt::Orientation orientation, QWidget* styleParent);
 
     ~IdealButtonBarLayout() override;
-
-    void setHeight(int height);
 
     inline Qt::Orientation orientation() const;
 
     Qt::Orientations expandingDirections() const override;
 
-    QSize minimumSize() const override;
-
-    QSize sizeHint() const override;
-
-    void setGeometry(const QRect &rect) override;
-
-    void addItem(QLayoutItem *item) override;
-
-    QLayoutItem* itemAt(int index) const override;
-
-    QLayoutItem* takeAt(int index) override;
-
-    int count() const override;
-
-    void invalidate() override;
-
 protected:
-    int doVerticalLayout(const QRect &rect, bool updateGeometry = true) const;
 
-    int doHorizontalLayout(const QRect &rect, bool updateGeometry = true) const;
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
     int buttonSpacing() const;
 
 private:
-    QList<QLayoutItem *> _items;
+    QWidget* const m_styleParentWidget;
     const Qt::Orientation _orientation;
-    int _height;
-    mutable bool m_minSizeDirty : 1;
-    mutable bool m_sizeHintDirty : 1;
-    mutable bool m_layoutDirty : 1;
-    mutable QSize m_min;
-    mutable QSize m_hint;
 };
 
 }
