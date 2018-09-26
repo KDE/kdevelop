@@ -2,6 +2,7 @@
 Name=Flatpak Builder Manifest
 Name[ca]=Manifest del constructor Flatpak
 Name[ca@valencia]=Manifest del constructor Flatpak
+Name[de]=Flatpak Builder Manifest
 Name[en_GB]=Flatpak Builder Manifest
 Name[es]=Manifiesto de construcción de Flatpak
 Name[fr]=Manifest de construction Flatpak
@@ -20,6 +21,7 @@ Name[zh_CN]=Flatpak 构建器清单文件
 Comment=A file to configure how a project is built by flatpak
 Comment[ca]=Un fitxer per a configurar com serà construït un projecte per Flatpak
 Comment[ca@valencia]=Un fitxer per a configurar com serà construït un projecte per Flatpak
+Comment[de]=Eine Datei mit Einstellungen, um ein Projekt durch Flatpak zu erstellen
 Comment[en_GB]=A file to configure how a project is built by flatpak
 Comment[es]=Un archivo para configurar cómo construye flatpak un proyecto
 Comment[fr]=Un fichier pour configurer comment un projet est construit par Flatpak

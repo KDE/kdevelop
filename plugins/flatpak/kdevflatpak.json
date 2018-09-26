@@ -12,6 +12,7 @@
         "Description": "Exposes Flatpak runtimes",
         "Description[ca@valencia]": "Exposa el temps d'execució del Flatpak",
         "Description[ca]": "Exposa el temps d'execució del Flatpak",
+        "Description[de]": "Stellt Flatpak-Laufzeitumgebungen bereit",
         "Description[es]": "Expone bibliotecas en tiempo de ejecución de Flatpak",
         "Description[fr]": "Expose les exécutifs Flatpak",
         "Description[gl]": "Expón os executábeis de Flatpak.",
