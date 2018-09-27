@@ -50,12 +50,14 @@ QString languageOption(Utils::LanguageType type)
             return QStringLiteral("-xcuda");
         case Utils::ObjC:
             return QStringLiteral("-xobjective-c");
+        case Utils::ObjCpp:
+            return QStringLiteral("-xobjective-c++");
         default:
             Q_UNREACHABLE();
     }
 }
 
-QString languageStandard(const QString& arguments)
+QString languageStandard(const QString& arguments, Utils::LanguageType type)
 {
     // TODO: handle -ansi flag: In C mode, this is equivalent to -std=c90. In C++ mode, it is equivalent to -std=c++98.
     const QRegularExpression regexp(QStringLiteral("-std=(\\S+)"));
@@ -63,8 +65,19 @@ QString languageStandard(const QString& arguments)
     if (result.hasMatch())
         return result.captured(0);
 
-    // no -std= flag passed -> assume c++11
-    return QStringLiteral("-std=c++11");
+    switch (type) {
+        case Utils::C:
+        case Utils::ObjC:
+            return QStringLiteral("-std=c99");
+        case Utils::Cpp:
+        case Utils::ObjCpp:
+        case Utils::Cuda:
+            return QStringLiteral("-std=c++11");
+        case Utils::OpenCl:
+            return QStringLiteral("-cl-std=CL1.1");
+        default:
+            Q_UNREACHABLE();
+    }
 }
 
 }
@@ -87,7 +100,7 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
     // TODO: what about -mXXX or -target= flags, some of these change search paths/defines
     const QStringList compilerArguments{
         languageOption(type),
-        languageStandard(arguments),
+        languageStandard(arguments, type),
         QStringLiteral("-dM"),
         QStringLiteral("-E"),
         QStringLiteral("-"),
@@ -144,7 +157,7 @@ Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& ar
 
     const QStringList compilerArguments{
         languageOption(type),
-        languageStandard(arguments),
+        languageStandard(arguments, type),
         QStringLiteral("-E"),
         QStringLiteral("-v"),
         QStringLiteral("-"),

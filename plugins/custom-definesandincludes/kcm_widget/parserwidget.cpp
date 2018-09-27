@@ -57,6 +57,8 @@ QString languageDefaultStandard(Utils::LanguageType languageType)
         return QStringLiteral("c++11");
     case Utils::ObjC:
         return QStringLiteral("c99");
+    case Utils::ObjCpp:
+        return QStringLiteral("c++11");
     case Utils::Other:
         break;
     }
