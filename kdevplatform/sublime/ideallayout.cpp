@@ -43,7 +43,7 @@ namespace
 IdealButtonBarLayout::IdealButtonBarLayout(Qt::Orientation orientation, QWidget* styleParent)
     : QBoxLayout(toDirection(orientation)) // creating a child layout, styleParent is only saved for style
     , m_styleParentWidget(styleParent)
-    , _orientation(orientation)
+    , m_orientation(orientation)
 {
     if (m_styleParentWidget) {
         m_styleParentWidget->installEventFilter(this);
@@ -57,7 +57,7 @@ IdealButtonBarLayout::~IdealButtonBarLayout() = default;
 
 Qt::Orientation IdealButtonBarLayout::orientation() const
 {
-    return _orientation;
+    return m_orientation;
 }
 
 Qt::Orientations IdealButtonBarLayout::expandingDirections() const

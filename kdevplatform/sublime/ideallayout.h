@@ -49,7 +49,7 @@ protected:
 
 private:
     QWidget* const m_styleParentWidget;
-    const Qt::Orientation _orientation;
+    const Qt::Orientation m_orientation;
 };
 
 }
