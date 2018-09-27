@@ -56,12 +56,14 @@ public:
     ICompiler( const QString& name, const QString& path, const QString& factoryName, bool editable );
 
     /**
+     * @param type Language type, must not be @ref Utils::Other.
      * @param arguments compiler command-line arguments
      * @return list of defined macros for the compiler
      */
     virtual KDevelop::Defines defines(Utils::LanguageType type, const QString& arguments) const = 0;
 
     /**
+     * @param type Language type, must not be @ref Utils::Other.
      * @param arguments compiler command-line arguments
      * @return list of include directories for the compiler
      */
