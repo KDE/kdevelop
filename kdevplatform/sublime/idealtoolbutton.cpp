@@ -2,6 +2,7 @@
   Copyright 2007 Roberto Raggi <roberto@kdevelop.org>
   Copyright 2007 Hamish Rodda <rodda@kde.org>
   Copyright 2011 Alexander Dymo <adymo@kdevelop.org>
+  Copyright 2018 Amish Naidu <amhndu@gmail.com>
 
   Permission to use, copy, modify, distribute, and sell this software and its
   documentation for any purpose is hereby granted without fee, provided that
@@ -24,6 +25,7 @@
 #include <KAcceleratorManager>
 #include <QStyleOption>
 #include <QStylePainter>
+#include <QApplication>
 
 IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
     : QToolButton(parent), _area(area)
@@ -35,6 +37,14 @@ IdealToolButton::IdealToolButton(Qt::DockWidgetArea area, QWidget *parent)
     setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     setContextMenuPolicy(Qt::CustomContextMenu);
+
+    QSizePolicy sizePolicy = this->sizePolicy();
+    if (orientation() == Qt::Horizontal) {
+        sizePolicy.setHorizontalPolicy(QSizePolicy::Maximum);
+    } else {
+        sizePolicy.setVerticalPolicy(QSizePolicy::Maximum);
+    }
+    setSizePolicy(sizePolicy);
 }
 
 Qt::Orientation IdealToolButton::orientation() const
@@ -85,6 +95,36 @@ QSize IdealToolButton::sizeHint() const
         return size;
     }
 }
+
+QSize IdealToolButton::minimumSizeHint() const
+{
+    ensurePolished();
+
+    QStyleOptionToolButton opt;
+    initStyleOption(&opt);
+
+    QSize minimumSize;
+    // if style has icons, minimumSize is the size of the icon
+    if (toolButtonStyle() != Qt::ToolButtonTextOnly && !opt.icon.isNull()) {
+        minimumSize = opt.iconSize;
+        if (_area == Qt::LeftDockWidgetArea || _area == Qt::RightDockWidgetArea) {
+            minimumSize.transpose();
+        }
+    } else {
+        // if no icon, set an arbitrary minimum size
+        QFontMetrics fm = fontMetrics();
+        minimumSize = fm.size(Qt::TextShowMnemonic, opt.text.left(4));
+    }
+
+    minimumSize = style()->sizeFromContents(QStyle::CT_ToolButton, &opt, minimumSize, this).
+                  expandedTo(QApplication::globalStrut());
+
+    if (_area == Qt::TopDockWidgetArea || _area == Qt::BottomDockWidgetArea) {
+        return minimumSize;
+    }
+    return minimumSize.transposed();
+}
+
 
 void IdealToolButton::paintEvent(QPaintEvent *event)
 {

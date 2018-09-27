@@ -71,7 +71,12 @@ QString parserArgumentsKey(Utils::LanguageType languageType)
         return QStringLiteral("parserArgumentsOpenCL");
     case Utils::Cuda:
         return QStringLiteral("parserArgumentsCuda");
+    // TODO: is there a need for "parserArgumentsObjC[++]" and if so how/where
+    // if not, merge the ObjC cases with the C/C++ cases.
     case Utils::ObjC:
+        return QStringLiteral("parserArgumentsC");
+    case Utils::ObjCpp:
+        return QStringLiteral("parserArguments");
     case Utils::Other:
         break;
     }
@@ -99,7 +104,11 @@ ParserArguments createDefaultArguments()
     arguments[Utils::Cpp] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11");
     arguments[Utils::OpenCl] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -cl-std=CL1.1");
     arguments[Utils::Cuda] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c++11");
-    arguments[Utils::ObjC] = QStringLiteral("-ferror-limit=100 -fspell-checking -Wdocumentation -Wunused-parameter -Wunreachable-code -Wall -std=c99");
+    // For now, use the same arguments for ObjC(++) as for C(++). -Wall enables a number
+    // of language-specific warnings, removing the need to add them explicitly.
+    // (https://embeddedartistry.com/blog/2017/3/7/clang-weverything)
+    arguments[Utils::ObjC] = arguments[Utils::C];
+    arguments[Utils::ObjCpp] = arguments[Utils::Cpp];
     arguments.parseAmbiguousAsCPP = true;
 
     return arguments;
@@ -437,6 +446,10 @@ LanguageType languageType(const QString& path, bool treatAmbiguousAsCPP)
     if (mimeType == QStringLiteral("text/x-c++src") ||
         mimeType == QStringLiteral("text/x-c++hdr") ) {
         return Cpp;
+    }
+
+    if (mimeType == QStringLiteral("text/x-objc++src")) {
+        return ObjCpp;
     }
 
     if (mimeType == QStringLiteral("text/x-objcsrc")) {

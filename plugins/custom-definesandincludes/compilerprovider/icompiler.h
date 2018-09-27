@@ -38,6 +38,7 @@ enum LanguageType
     OpenCl,
     Cuda,
     ObjC,
+    ObjCpp,
 
     Other
 };

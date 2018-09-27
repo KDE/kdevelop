@@ -110,12 +110,12 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     setContextMenuPolicy(Qt::CustomContextMenu);
     setToolTip(i18nc("@info:tooltip", "Right click to add new tool views."));
 
+    m_buttonsLayout = new IdealButtonBarLayout(orientation(), this);
     if (area == Qt::BottomDockWidgetArea)
     {
         QBoxLayout *statusLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
         statusLayout->setMargin(0);
 
-        m_buttonsLayout = new IdealButtonBarLayout(orientation());
         statusLayout->addLayout(m_buttonsLayout);
 
         statusLayout->addStretch(1);
@@ -125,9 +125,13 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
         cornerLayout->setMargin(0);
         cornerLayout->setSpacing(0);
         statusLayout->addWidget(m_corner);
+    } else {
+        QBoxLayout *superLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
+        superLayout->setMargin(0);
+
+        superLayout->addLayout(m_buttonsLayout);
+        superLayout->addStretch(1);
     }
-    else
-        m_buttonsLayout = new IdealButtonBarLayout(orientation(), this);
 }
 
 QAction* IdealButtonBarWidget::addWidget(IdealDockWidget *dock,
