@@ -7,6 +7,7 @@
   <name xml:lang="ca-valencia">Implementació del Clang-Tidy al KDevelop</name>
   <name xml:lang="cs">Podpora Clang-Tidy v KDevelop</name>
   <name xml:lang="es">Implementación de Clang-Tidy de KDevelop</name>
+  <name xml:lang="fi">KDevelopin Clang-Tidy-tuki</name>
   <name xml:lang="nl">Ondersteuning van KDevelop Clang-Tidy</name>
   <name xml:lang="pt">Suporte do Clang-Tidy para o KDevelop</name>
   <name xml:lang="sk">KDevelop Clang-Tidy podpora</name>
@@ -18,6 +19,7 @@
   <summary xml:lang="ca-valencia">Integració del Clang-Tidy amb el KDevelop</summary>
   <summary xml:lang="cs">Integrace Clang-Tidy v KDevelop</summary>
   <summary xml:lang="es">Integración de Clang-Tidy en KDevelop</summary>
+  <summary xml:lang="fi">KDevelopin Clang-Tidy-integrointi</summary>
   <summary xml:lang="nl">Integratie van Clang-Tidy met KDevelop</summary>
   <summary xml:lang="pt">Integração do Clang-Tidy com o KDevelop</summary>
   <summary xml:lang="sk">Clang-Tidy integrácia s KDevelop</summary>
