@@ -34,6 +34,16 @@ public:
   ExternalScriptItem();
 
   /**
+   * The key is supposed to be unique inside the model
+   * @return The key of this script item
+   */
+  QString key() const;
+  /**
+   * Sets the label
+   */
+  void setKey( const QString& key );
+
+  /**
    * @return The command to execute.
    */
   QString command() const;
@@ -198,6 +208,7 @@ public:
    */
   void save() const;
 private:
+  QString m_key;
   QString m_command;
   QString m_workingDirectory;
   SaveMode m_saveMode = SaveNone;

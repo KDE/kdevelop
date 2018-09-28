@@ -68,6 +68,9 @@ public:
    */
   KConfigGroup getConfig() const;
 
+  /**
+   * Saves the @p script to the config and updates the key
+   */
   void saveItem(const ExternalScriptItem* item);
 
 public Q_SLOTS:
@@ -82,15 +85,22 @@ public Q_SLOTS:
    * Executes the command synchronously and returns the output text (Used by the shell-integration)
    * */
   Q_SCRIPTABLE QString executeCommandSync(const QString& command, const QString& workingDirectory) const;
-  
+
 private Q_SLOTS:
-  void rowsRemoved( const QModelIndex& parent, int start, int end );
+  void rowsAboutToBeRemoved( const QModelIndex& parent, int start, int end );
   void rowsInserted( const QModelIndex& parent, int start, int end );
   void executeScriptFromContextMenu() const;
 
 private:
   /// @param row row in the model for the item to save
   void saveItemForRow( int row );
+
+  /**
+   * Sets up unique keys for items in the range [start, end]
+   * @param start start of the range
+   * @param end end of the range
+   */
+  void setupKeys( int start, int end );
 
   QStandardItemModel* m_model;
   QList<QUrl> m_urls;
