@@ -146,4 +146,4 @@ if __name__ == "__main__":
     parser.add_argument('to_version', type=str, help='The end of the revision range (e.g. "v5.0.1"')
     args = parser.parse_args()
 
-    createLog(os.getcwd(), args.repositoryName, args.from_version, args.to_version)
+    createLog(os.getcwd(), args.from_version, args.to_version, args.repositoryName)
