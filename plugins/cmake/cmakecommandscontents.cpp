@@ -30,7 +30,7 @@
 #include <KLocalizedString>
 
 static const QVector<QString> args = {
-    QLatin1String("--help-command"), QLatin1String("--help-variable"), QLatin1String("--help-module"), QLatin1String("--help-property"), QString(), QString()
+    QLatin1String("--help-command"), QLatin1String("--help-variable"), QLatin1String("--help-module"), QLatin1String("--help-property"), QLatin1String("--help-policy"), QString()
 };
 static QString modules [] = {
     i18n("Commands"), i18n("Variables"), i18n("Modules"), i18n("Properties"), i18n("Policies")
@@ -40,7 +40,7 @@ CMakeCommandsContents::CMakeCommandsContents(QObject* parent)
      : QAbstractItemModel(parent)
      , m_namesForType(CMakeDocumentation::EOType)
 {
-    for(int i=0; i<=CMakeDocumentation::Property; i++) {
+    for (int i = 0; i <= CMakeDocumentation::Policy; ++i) {
         const QStringList params = { args[i]+QStringLiteral("-list") };
 
         QProcess* process = new QProcess(this);
