@@ -456,12 +456,14 @@ Stack<CodeCompletionContext::ExpressionStackEntry> CodeCompletionContext::expres
             break;
         case QmlJSGrammar::T_COMMA:
             stack.top().commas++;
+            break;
         default:
             // The last operator of every sub-expression is stored on the stack
             // so that "A = foo." can know that attributes of foo having the same
             // type as A should be highlighted.
             stack.top().operatorStart = lexer.tokenStartColumn() - 1;
             stack.top().operatorEnd = lexer.tokenEndColumn() - 1;
+            break;
         }
     }
 
