@@ -806,6 +806,51 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &/*_files*/,
 //     return renameFileOrFolder(item, newPath);
 // }
 
+QString CMakeManager::termAtPosition(const KTextEditor::Document* textDocument,
+                                     const KTextEditor::Cursor& position) const
+{
+    const KTextEditor::Cursor step(0, 1);
+
+    enum ParseState {
+        NoChar,
+        NonLeadingChar,
+        AnyChar,
+    };
+
+    ParseState parseState = NoChar;
+    KTextEditor::Cursor start = position;
+    while (true) {
+        const QChar c = textDocument->characterAt(start);
+        if (c.isDigit()) {
+            parseState = NonLeadingChar;
+        } else if (c.isLetter() || c == QLatin1Char('_')) {
+            parseState = AnyChar;
+        } else {
+            // also catches going out of document range, where c is invalid
+            break;
+        }
+        start -= step;
+    }
+
+    if (parseState != AnyChar) {
+        return QString();
+    }
+    // undo step before last valid char
+    start += step;
+
+    KTextEditor::Cursor end = position + step;
+    while (true) {
+        const QChar c = textDocument->characterAt(end);
+        if (!(c.isDigit() || c.isLetter() || c == QLatin1Char('_'))) {
+            // also catches going out of document range, where c is invalid
+            break;
+        }
+        end += step;
+    }
+
+    return textDocument->text(KTextEditor::Range(start, end));
+}
+
 QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position)
 {
     KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));
@@ -827,24 +872,18 @@ QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const QUrl &url, co
     }
     else
     {
-        const IDocument* d=ICore::self()->documentController()->documentForUrl(url);
-        const KTextEditor::Document* e=d->textDocument();
-        KTextEditor::Cursor start=position, end=position, step(0,1);
-        for(QChar i=e->characterAt(start); i.isLetter() || i==QLatin1Char('_'); i=e->characterAt(start-=step))
-        {}
-        start+=step;
-
-        for(QChar i=e->characterAt(end); i.isLetter() || i==QLatin1Char('_'); i=e->characterAt(end+=step))
-        {}
-
-        QString id=e->text(KTextEditor::Range(start, end));
         ICMakeDocumentation* docu=CMake::cmakeDocumentation();
         if( docu )
         {
-            IDocumentation::Ptr desc=docu->description(id, url);
-            if(desc)
-            {
-                doc=new CMakeNavigationWidget(top, desc);
+            const auto* document = ICore::self()->documentController()->documentForUrl(url);
+            const auto* textDocument = document->textDocument();
+            const auto id = termAtPosition(textDocument, position);
+            if (!id.isEmpty()) {
+                IDocumentation::Ptr desc=docu->description(id, url);
+                if(desc)
+                {
+                    doc=new CMakeNavigationWidget(top, desc);
+                }
             }
         }
     }
