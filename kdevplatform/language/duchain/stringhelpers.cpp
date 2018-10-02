@@ -191,7 +191,6 @@ int findClose( const QString& str , int pos )
         a++;
       }
       continue;
-      break;
     case '\'':
       last = str[a];
       a++;
@@ -201,7 +200,6 @@ int findClose( const QString& str , int pos )
         a++;
       }
       continue;
-      break;
     }
 
     last = str[a];

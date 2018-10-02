@@ -158,7 +158,6 @@ QUrl MakeJob::workingDirectory() const
             case KDevelop::ProjectBaseItem::Folder:
             case KDevelop::ProjectBaseItem::BuildFolder:
                 return static_cast<KDevelop::ProjectFolderItem*>(item)->path().toUrl();
-                break;
             case KDevelop::ProjectBaseItem::Target:
             case KDevelop::ProjectBaseItem::File:
                 break;

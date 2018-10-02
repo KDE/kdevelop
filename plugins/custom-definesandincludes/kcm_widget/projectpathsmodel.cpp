@@ -45,27 +45,20 @@ QVariant ProjectPathsModel::data( const QModelIndex& index, int role ) const
     switch( role ) {
     case IncludesDataRole:
         return pathConfig.includes;
-        break;
     case DefinesDataRole:
         return QVariant::fromValue(pathConfig.defines);
-        break;
     case Qt::EditRole:
         return sanitizePath( pathConfig.path, true, false );
-        break;
     case Qt::DisplayRole: {
         const QString& path = pathConfig.path;
         return (path == QLatin1String(".")) ? QStringLiteral("(project root)") : path;
-        break;
     }
     case FullUrlDataRole:
         return QVariant::fromValue(QUrl::fromUserInput( sanitizePath( pathConfig.path, true, false ) ));
-        break;
     case CompilerDataRole:
         return QVariant::fromValue(pathConfig.compiler);
-        break;
     case ParserArgumentsRole:
         return QVariant::fromValue(pathConfig.parserArguments);
-        break;
     default:
         break;
     }
@@ -126,7 +119,6 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         break;
     default:
         return false;
-        break;
     }
     emit dataChanged( index, index );
     return true;

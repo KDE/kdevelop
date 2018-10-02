@@ -260,15 +260,10 @@ QVariant OutputModel::data(const QModelIndex& idx , int role ) const
         {
             case Qt::DisplayRole:
                 return d->m_filteredItems.at( idx.row() ).originalLine;
-                break;
             case OutputModel::OutputItemTypeRole:
                 return static_cast<int>(d->m_filteredItems.at( idx.row() ).type);
-                break;
             case Qt::FontRole:
                 return QFontDatabase::systemFont(QFontDatabase::FixedFont);
-                break;
-            default:
-                break;
         }
     }
     return QVariant();

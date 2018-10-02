@@ -47,7 +47,6 @@ IProblem::Severity diagnosticSeverityToSeverity(CXDiagnosticSeverity severity, c
             return IProblem::Hint;
         }
         return IProblem::Warning;
-        break;
     default:
         return IProblem::Hint;
     }

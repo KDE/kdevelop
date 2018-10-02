@@ -208,13 +208,11 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
     switch( ret ) {
     case KMessageBox::Yes:
         return sessionId;
-        break;
 
     case KMessageBox::No: {
         QString errmsg = i18nc("@info", "The session %1 is already active in another running instance.",
                                sessionName);
         return SessionController::showSessionChooserDialog(errmsg);
-        break;
     }
 
     case KMessageBox::Cancel:

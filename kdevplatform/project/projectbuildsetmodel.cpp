@@ -266,10 +266,8 @@ QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
         {
             case 0:
                 return d->items.at(idx.row()).itemName();
-                break;
             case 1:
                 return KDevelop::joinWithEscaping(d->items.at(idx.row()).itemPath(), QLatin1Char('/'), QLatin1Char('\\'));
-                break;
         }
     } else if(role == Qt::DecorationRole && idx.column()==0) {
         KDevelop::ProjectBaseItem* item = d->items.at(idx.row()).findItem();
@@ -290,10 +288,8 @@ QVariant ProjectBuildSetModel::headerData( int section, Qt::Orientation orientat
     {
         case 0:
             return i18nc("@title:column buildset item name", "Name");
-            break;
         case 1:
             return i18nc("@title:column buildset item path", "Path");
-            break;
     }
     return QVariant();
 }

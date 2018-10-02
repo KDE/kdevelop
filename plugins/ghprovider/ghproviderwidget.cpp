@@ -40,6 +40,8 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
+#include <qtcompat_p.h>
+
 using namespace KDevelop;
 namespace gh
 {
@@ -163,6 +165,7 @@ void ProviderWidget::searchRepo()
     case 2: /* Known organization */
         text = m_combo->currentText();
         enabled = false;
+        Q_FALLTHROUGH();
     default:/* Looking for some organization's repo. */
         uri = QStringLiteral("/orgs/%1/repos").arg(text);
         break;

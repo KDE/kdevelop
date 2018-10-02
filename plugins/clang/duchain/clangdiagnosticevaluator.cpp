@@ -119,13 +119,10 @@ ClangProblem* ClangDiagnosticEvaluator::createProblem(CXDiagnostic diagnostic, C
     switch (diagnosticType(diagnostic)) {
     case IncludeFileNotFoundProblem:
         return new MissingIncludePathProblem(diagnostic, unit);
-        break;
     case UnknownDeclarationProblem:
         return new class UnknownDeclarationProblem(diagnostic, unit);
-        break;
     default:
         return new ClangProblem(diagnostic, unit);
-        break;
     }
 }
 

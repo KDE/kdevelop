@@ -210,7 +210,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
       if( ctx && ctx->declaration() == action.decl )
         return NavigationContextPointer(d->m_previousContext);
       return registerChild(action.decl);
-    } break;
+    }
     case NavigationAction::NavigateUses:
     {
       IContextBrowser* browser = ICore::self()->pluginController()->extensionForPlugin<IContextBrowser>();

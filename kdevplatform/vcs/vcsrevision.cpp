@@ -131,36 +131,26 @@ QString VcsRevision::prettyValue() const
         case GlobalNumber:
         case FileNumber:
             return (revisionValue().type() == QVariant::String ? revisionValue().toString() : QString::number(revisionValue().toLongLong()));
-            break;
         case Special:
             switch( revisionValue().value<KDevelop::VcsRevision::RevisionSpecialType>(  ) )
             {
                 case VcsRevision::Head:
                     return QStringLiteral("Head");
-                    break;
                 case VcsRevision::Base:
                     return QStringLiteral("Base");
-                    break;
                 case VcsRevision::Working:
                     return QStringLiteral("Working");
-                    break;
                 case VcsRevision::Previous:
                     return QStringLiteral("Previous");
-                    break;
                 case VcsRevision::Start:
                     return QStringLiteral("Start");
-                    break;
                 default:
                     return QStringLiteral("User");
-                    break;
             }
-            break;
         case Date:
             return revisionValue().toDateTime().toString( Qt::LocalDate );
-            break;
         default:
             return revisionValue().toString();
-            break;
     }
 }
 
@@ -174,16 +164,12 @@ uint KDevelop::qHash( const KDevelop::VcsRevision& rev)
         case VcsRevision::FileNumber:
             return (revisionValue.type() == QVariant::String ? ::qHash(revisionValue.toString()) :
                     ::qHash(revisionValue.toULongLong()));
-            break;
         case VcsRevision::Special:
             return ::qHash(static_cast<int>(revisionValue.value<KDevelop::VcsRevision::RevisionSpecialType>()));
-            break;
         case VcsRevision::Date:
             return ::qHash(revisionValue.toDateTime());
-            break;
         default:
-            break;
+            return ::qHash(revisionValue.toString());
     }
-    return ::qHash(revisionValue.toString());
 }
 

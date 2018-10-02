@@ -194,7 +194,6 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
       break;
     case CodeCompletionModel::BestMatchesCount:
       return QVariant(normalBestMatchesCount);
-    break;
     case CodeCompletionModel::IsExpandable:
       return QVariant(createsExpandingWidget());
     case CodeCompletionModel::ExpandingWidget: {

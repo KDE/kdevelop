@@ -329,6 +329,7 @@ KDevelop::VcsJob* PerforcePlugin::diff(const QUrl& fileOrDirectory, const KDevel
         default:
             break;
         }
+        break;
     default:
         break;
     }
