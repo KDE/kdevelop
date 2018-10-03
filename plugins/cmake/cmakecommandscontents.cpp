@@ -105,7 +105,7 @@ QString CMakeCommandsContents::descriptionForIdentifier(const QString& id, CMake
                 + QLatin1String("</body></html>"));
         } else {
             QProcess p;
-            p.start(rst2html, { QStringLiteral("--no-toc-backlinks") });
+            p.start(rst2html, { QStringLiteral("--no-toc-backlinks"), QStringLiteral("--quiet") });
             p.write(desc.toUtf8());
             p.closeWriteChannel();
             p.waitForFinished();
