@@ -196,7 +196,6 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     m_index.reset(new ClangIndex);
 
     auto model = new KDevelop::CodeCompletion( this, new ClangCodeCompletionModel(m_index.data(), this), name() );
-    // TODO: use direct signal/slot connect syntax for 5.1
     connect(model, &CodeCompletion::registeredToView,
             this, &ClangSupport::disableKeywordCompletion);
     connect(model, &CodeCompletion::unregisteredFromView,
