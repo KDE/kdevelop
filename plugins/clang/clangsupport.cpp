@@ -177,6 +177,8 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     , m_refactoring(nullptr)
     , m_index(nullptr)
 {
+    clangDebug() << "Detected Clang version:" << ClangHelpers::clangVersion();
+
     {
         const auto builtinDir = ClangHelpers::clangBuiltinIncludePath();
         const auto headerToCheck = QLatin1String("cpuid.h");
