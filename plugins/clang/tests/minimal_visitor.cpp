@@ -48,8 +48,14 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor /*parent*/, CXClientDat
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
+    auto clangVersion = clang_getClangVersion();
+    printf("%s\n\n", clang_getCString(clangVersion));
+    clang_disposeString(clangVersion);
+
+    if (argc != 2) {
+        printf("Usage: clang-minimal-visitor file.cpp\n");
         return 1;
+    }
 
     auto index = clang_createIndex(0, 0);
 
@@ -58,5 +64,7 @@ int main(int argc, char** argv)
 
     auto tuCursor = clang_getTranslationUnitCursor(unit);
     clang_visitChildren(tuCursor, &visitCursor, nullptr);
+
+    clang_disposeTranslationUnit(unit);
     return 0;
 }
