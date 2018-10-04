@@ -4,6 +4,7 @@
 #  CLANG_FOUND                 - True if Clang was found
 #  CLANG_INCLUDE_DIRS          - Where to find Clang includes
 #  CLANG_LIBRARY_DIRS          - Where to find Clang libraries
+#  CLANG_BUILTIN_DIR           - Where to find Clang builtin includes
 #
 #  CLANG_CLANG_LIB             - Libclang C library
 #
@@ -92,6 +93,21 @@ if(CLANG_FOUND)
   set(CLANG_INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
   set(CLANG_VERSION ${LLVM_VERSION})
 
+  find_path(CLANG_BUILTIN_DIR
+            # cpuid.h because it is defined in ClangSupport constructor as valid clang builtin dir indicator
+            NAMES "cpuid.h"
+            PATHS "${CLANG_LIBRARY_DIRS}"
+                  "${CLANG_INCLUDE_DIRS}"
+            PATH_SUFFIXES "clang/${CLANG_VERSION}/include"
+                          "../../../clang/${CLANG_VERSION}/include"
+            NO_DEFAULT_PATH
+  )
+
+  if (NOT CLANG_BUILTIN_DIR)
+      message(FATAL_ERROR "Could not find Clang builtin directory")
+  endif()
+  get_filename_component(CLANG_BUILTIN_DIR ${CLANG_BUILTIN_DIR} ABSOLUTE)
+
   # check whether llvm-config comes from an install prefix
   execute_process(
     COMMAND ${LLVM_CONFIG_EXECUTABLE} --src-root
@@ -108,9 +124,10 @@ if(CLANG_FOUND)
   endif()
 
   message(STATUS "Found Clang (LLVM version: ${CLANG_VERSION})")
-  message(STATUS "  Include dirs:       ${CLANG_INCLUDE_DIRS}")
-  message(STATUS "  Clang libraries:    ${CLANG_LIBS}")
-  message(STATUS "  Libclang C library: ${CLANG_CLANG_LIB}")
+  message(STATUS "  Include dirs:        ${CLANG_INCLUDE_DIRS}")
+  message(STATUS "  Clang libraries:     ${CLANG_LIBS}")
+  message(STATUS "  Libclang C library:  ${CLANG_CLANG_LIB}")
+  message(STATUS "  Builtin include dir: ${CLANG_BUILTIN_DIR}")
 else()
   if(Clang_FIND_REQUIRED)
     message(FATAL_ERROR "Could NOT find Clang")
