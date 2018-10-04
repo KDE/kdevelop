@@ -48,8 +48,6 @@ KDEVCLANGPRIVATE_EXPORT void unregisterDUChainItems();
  * If no session data found, then @p tuFile asked for the attached session data
  */
 KDEVCLANGPRIVATE_EXPORT ParseSessionData::Ptr findParseSessionData(const KDevelop::IndexedString &file, const KDevelop::IndexedString &tufile);
-
-KDEVCLANGPRIVATE_EXPORT QString clangBuiltinIncludePath();
 }
 
 }

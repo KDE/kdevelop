@@ -42,8 +42,9 @@
 #include "codegen/clangclasshelper.h"
 #include "codegen/adaptsignatureassistant.h"
 #include "duchain/documentfinderhelpers.h"
-#include "duchain/clangindex.h"
 #include "duchain/navigationwidget.h"
+#include "duchain/clangindex.h"
+#include "duchain/clanghelpers.h"
 #include "duchain/macrodefinition.h"
 #include "duchain/clangparsingenvironmentfile.h"
 #include "duchain/duchainutils.h"
@@ -177,7 +178,7 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
     , m_index(nullptr)
 {
     {
-        const auto builtinDir = ClangIntegration::DUChainUtils::clangBuiltinIncludePath();
+        const auto builtinDir = ClangHelpers::clangBuiltinIncludePath();
         const auto headerToCheck = QLatin1String("cpuid.h");
         if (!QFile::exists(builtinDir + QLatin1Char('/') + headerToCheck)) {
             setErrorDescription(i18n("The clang builtin include path \"%1\" is invalid (missing %2 header).\n"

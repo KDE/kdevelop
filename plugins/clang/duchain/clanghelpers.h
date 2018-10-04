@@ -100,6 +100,13 @@ KDEVCLANGPRIVATE_EXPORT bool isSource(const QString& path);
  */
 KDEVCLANGPRIVATE_EXPORT bool isHeader(const QString& path);
 
+/**
+ * @return The path containing Clang built includes (e.g. stddef.h, stdarg.h, cpuid.h)
+ *
+ * Also see: https://clang.llvm.org/docs/FAQ.html
+ */
+KDEVCLANGPRIVATE_EXPORT QString clangBuiltinIncludePath();
+
 }
 
 #endif //CLANGHELPERS_H

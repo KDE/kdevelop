@@ -35,6 +35,8 @@
 
 #include "util/clangtypes.h"
 
+#include "libclang_include_path.h"
+
 #include <algorithm>
 
 using namespace KDevelop;
@@ -339,4 +341,16 @@ bool ClangHelpers::isHeader(const QString& path)
     const auto& extensions = headerExtensions();
     return std::any_of(extensions.constBegin(), extensions.constEnd(),
                        [&](const QString& ext) { return path.endsWith(ext); });
+}
+
+QString ClangHelpers::clangBuiltinIncludePath()
+{
+    static const auto dir = []() -> QString {
+        auto dir = qgetenv("KDEV_CLANG_BUILTIN_DIR");
+        if (dir.isEmpty()) {
+            dir = KDEV_CLANG_BUILTIN_DIR;
+        }
+        return QString::fromUtf8(dir);
+    }();
+    return dir;
 }

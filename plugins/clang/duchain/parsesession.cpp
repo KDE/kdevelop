@@ -29,7 +29,6 @@
 #include "clanghelpers.h"
 #include "clangindex.h"
 #include "clangparsingenvironment.h"
-#include "duchainutils.h"
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"
 #include "util/clangutils.h"
@@ -274,7 +273,7 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     addFrameworkDirectories(&clangArguments, &smartArgs, frameworkDirectories.project, "-F");
 
     // libclang cannot find it's builtin dir automatically, we have to specify it manually
-    smartArgs << ClangIntegration::DUChainUtils::clangBuiltinIncludePath().toUtf8();
+    smartArgs << ClangHelpers::clangBuiltinIncludePath().toUtf8();
     clangArguments << "-isystem" << smartArgs.last().constData();
 
     smartArgs << writeDefinesFile(environment.defines());
