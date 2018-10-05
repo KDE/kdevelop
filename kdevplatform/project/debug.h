@@ -20,8 +20,7 @@
 #ifndef KDEVPLATFORM_PROJECT_DEBUG_H
 #define KDEVPLATFORM_PROJECT_DEBUG_H
 
-#include <QLoggingCategory>
-Q_DECLARE_LOGGING_CATEGORY(PROJECT)
-Q_DECLARE_LOGGING_CATEGORY(FILEMANAGER)
+#include <debug_project.h>
+#include <debug_filemanager.h>
 
 #endif

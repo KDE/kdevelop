@@ -89,4 +89,7 @@ install( EXPORT KDevPlatformTargets
          FILE KDevPlatformTargets.cmake )
 
 # kdebugsettings file
-install( FILES kdevplatform.categories DESTINATION ${KDE_INSTALL_CONFDIR} )
+install_qt_logging_categories(
+    EXPORT KDevPlatformCategories
+    FILE kdevplatform.categories
+)

@@ -10,7 +10,6 @@ set(KDevPlatformProject_LIB_SRCS
     projectbuildsetmodel.cpp
     projectitemlineedit.cpp
     helper.cpp
-    debug.cpp
     projectproxymodel.cpp
     abstractfilemanagerplugin.cpp
     filemanagerlistjob.cpp
@@ -21,6 +20,22 @@ set(KDevPlatformProject_LIB_SRCS
     interfaces/iprojectfilter.cpp
     interfaces/iprojectfilterprovider.cpp
     widgets/dependencieswidget.cpp
+)
+
+declare_qt_logging_category(KDevPlatformProject_LIB_SRCS
+    HEADER debug_project.h
+    IDENTIFIER PROJECT
+    CATEGORY_NAME "kdevplatform.project"
+    DESCRIPTION "KDevPlatform lib: project"
+    EXPORT KDevPlatformCategories
+)
+
+declare_qt_logging_category(KDevPlatformProject_LIB_SRCS
+    HEADER debug_filemanager.h
+    IDENTIFIER FILEMANAGER
+    CATEGORY_NAME "kdevplatform.filemanager"
+    DESCRIPTION "KDevPlatform lib: filemanager"
+    EXPORT KDevPlatformCategories
 )
 
 ki18n_wrap_ui( KDevPlatformProject_LIB_SRCS widgets/dependencieswidget.ui)

@@ -45,10 +45,12 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-ecm_qt_declare_logging_category(KDevPlatformUtil_LIB_SRCS
+declare_qt_logging_category(KDevPlatformUtil_LIB_SRCS
     HEADER debug.h
     IDENTIFIER UTIL
     CATEGORY_NAME "kdevplatform.util"
+    DESCRIPTION "KDevPlatform lib: util"
+    EXPORT KDevPlatformCategories
 )
 
 ki18n_wrap_ui(KDevPlatformUtil_LIB_SRCS ${KDevPlatformUtil_LIB_US})

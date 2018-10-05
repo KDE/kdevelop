@@ -170,10 +170,12 @@ set(KDevPlatformLanguage_LIB_SRCS
     codegen/archivetemplateloader.cpp
 )
 
-ecm_qt_declare_logging_category(KDevPlatformLanguage_LIB_SRCS
+declare_qt_logging_category(KDevPlatformLanguage_LIB_SRCS
     HEADER debug.h
     IDENTIFIER LANGUAGE
     CATEGORY_NAME "kdevplatform.language"
+    DESCRIPTION "KDevPlatform lib: language"
+    EXPORT KDevPlatformCategories
 )
 
 ki18n_wrap_ui(KDevPlatformLanguage_LIB_SRCS

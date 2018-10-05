@@ -20,10 +20,12 @@ set(KDevPlatformDebugger_LIB_SRCS
     framestack/framestackmodel.cpp
     framestack/framestackwidget.cpp
 )
-ecm_qt_declare_logging_category(KDevPlatformDebugger_LIB_SRCS
+declare_qt_logging_category(KDevPlatformDebugger_LIB_SRCS
     HEADER debug.h
     IDENTIFIER DEBUGGER
     CATEGORY_NAME "kdevplatform.debugger"
+    DESCRIPTION "KDevPlatform lib: debugger"
+    EXPORT KDevPlatformCategories
 )
 kdevplatform_add_library(KDevPlatformDebugger SOURCES ${KDevPlatformDebugger_LIB_SRCS})
 target_link_libraries(KDevPlatformDebugger
