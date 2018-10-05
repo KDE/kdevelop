@@ -42,7 +42,7 @@ class DockerTest: public QObject
 public:
 
     DockerTest() {
-        QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevplatform.plugins.docker=true\n"));
+        QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.docker=true\n"));
     }
 
     IRuntime* m_initialRuntime = nullptr;
