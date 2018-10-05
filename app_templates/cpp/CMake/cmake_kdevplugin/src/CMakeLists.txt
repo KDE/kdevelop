@@ -5,7 +5,7 @@ set(%{APPNAMELC}_SRCS
 ecm_qt_declare_logging_category(%{APPNAMELC}_SRCS
     HEADER debug.h
     IDENTIFIER PLUGIN_%{APPNAMEUC}
-    CATEGORY_NAME "kdevelop.plugin.%{APPNAMELC}"
+    CATEGORY_NAME "kdevelop.plugins.%{APPNAMELC}"
 )
 
 kdevplatform_add_plugin(%{APPNAMELC}
