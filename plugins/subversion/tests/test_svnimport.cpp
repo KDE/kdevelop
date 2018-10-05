@@ -73,7 +73,7 @@ void setupSampleProject( const QString& name, const QString& content )
 
 void TestSvnImport::initTestCase()
 {
-    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevplatform.plugins.svn.debug=true\n"));
+    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\nkdevelop.plugins.svn.debug=true\n"));
     AutoTestShell::init({QStringLiteral("kdevsubversion"), QStringLiteral("KDevStandardOutputView")});
     TestCore::initialize();
 

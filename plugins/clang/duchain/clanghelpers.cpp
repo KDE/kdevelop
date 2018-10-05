@@ -32,10 +32,15 @@
 #include "clangparsingenvironmentfile.h"
 #include "clangindex.h"
 #include "clangducontext.h"
-
+#include "util/clangdebug.h"
 #include "util/clangtypes.h"
 
 #include "libclang_include_path.h"
+
+#include <QCoreApplication>
+#include <QDir>
+#include <QFileInfo>
+#include <QRegularExpression>
 
 #include <algorithm>
 
@@ -343,14 +348,48 @@ bool ClangHelpers::isHeader(const QString& path)
                        [&](const QString& ext) { return path.endsWith(ext); });
 }
 
+QString ClangHelpers::clangVersion()
+{
+    static const auto clangVersion = []() -> QString {
+        // NOTE: The apidocs for clang_getClangVersion() clearly state it shouldn't be used for parsing
+        // but there's no other way to retrieve the Clang version at runtime at this point...
+        const ClangString version(clang_getClangVersion());
+        clangDebug() << "Full Clang version:" << version;
+
+        // samples:
+        //   clang version 6.0.1 (trunk 321709) (git@github.com:llvm-mirror/llvm.git 5136df4d089a086b70d452160ad5451861269498)
+        //   clang version 7.0.0-svn341916-1~exp1~20180911115939.26 (branches/release_70)
+        QRegularExpression re(QStringLiteral("^clang version (\\d+\\.\\d+\\.\\d+)"));
+        const auto match = re.match(version.toString());
+        if (!match.hasMatch())
+            return {};
+
+        return match.captured(1); // return e.g. 7.0.0
+    }();
+    return clangVersion;
+}
+
 QString ClangHelpers::clangBuiltinIncludePath()
 {
     static const auto dir = []() -> QString {
-        auto dir = qgetenv("KDEV_CLANG_BUILTIN_DIR");
-        if (dir.isEmpty()) {
-            dir = KDEV_CLANG_BUILTIN_DIR;
+        auto dir = QString::fromUtf8(qgetenv("KDEV_CLANG_BUILTIN_DIR"));
+        if (!dir.isEmpty()) {
+            clangDebug() << "Using dir from $KDEV_CLANG_BUILTIN_DIR:" << dir;
+            return dir;
         }
-        return QString::fromUtf8(dir);
+
+#ifdef Q_OS_WIN32
+        // attempt to use the bundled copy on Windows
+        dir = QDir::cleanPath(QStringLiteral("%1/../lib/clang/%2/include")
+            .arg(QCoreApplication::applicationDirPath(), clangVersion()));
+        clangDebug() << "Trying" << dir;
+        if (QFileInfo(dir).isDir()) {
+            return dir;
+        }
+#endif
+
+        clangDebug() << "Using builtin dir:" << KDEV_CLANG_BUILTIN_DIR;
+        return QString::fromUtf8(KDEV_CLANG_BUILTIN_DIR);
     }();
     return dir;
 }

@@ -2,4 +2,4 @@
 # Format:
 # logname<space>description
 
-kdevelop.plugin.%{APPNAMELC} KDevelop plugin: %{APPNAME}
+kdevelop.plugins.%{APPNAMELC} KDevelop plugin: %{APPNAME}

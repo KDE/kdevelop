@@ -28,7 +28,7 @@
 #include <language/editor/documentrange.h>
 
 const QtMsgType defaultMsgType = QtInfoMsg;
-Q_LOGGING_CATEGORY(KDEV_CLANG, "kdevelop.languages.clang", defaultMsgType)
+Q_LOGGING_CATEGORY(KDEV_CLANG, "kdevelop.plugins.clang", defaultMsgType)
 
 using namespace KDevelop;
 
