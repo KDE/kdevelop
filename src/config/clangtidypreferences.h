@@ -28,7 +28,8 @@
 namespace Ui
 {
 class ClangTidyPreferences;
-};
+}
+
 /**
  * \class
  * \brief Implements the session configuration page for clang-tidy.

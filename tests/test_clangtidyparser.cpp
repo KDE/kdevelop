@@ -105,4 +105,4 @@ void TestClangTidyParser::testParser()
     QCOMPARE(p->source(), IProblem::Plugin);
 }
 
-QTEST_GUILESS_MAIN(TestClangTidyParser);
+QTEST_GUILESS_MAIN(TestClangTidyParser)

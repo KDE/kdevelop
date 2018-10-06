@@ -100,4 +100,4 @@ void TestClangTidyJob::testJob()
         problems[2]->explanation().startsWith(QStringLiteral("[cppcoreguidelines-pro-bounds-array-to-pointer-decay]")));
 }
 
-QTEST_GUILESS_MAIN(TestClangTidyJob);
+QTEST_GUILESS_MAIN(TestClangTidyJob)

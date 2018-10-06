@@ -236,4 +236,4 @@ void TestCheckGroup::testSetEnabledChecks()
 }
 
 
-QTEST_GUILESS_MAIN(TestCheckGroup);
+QTEST_GUILESS_MAIN(TestCheckGroup)
