@@ -48,6 +48,8 @@ class ExecutablePathsVisitor
 
         QStringList paths() const { return m_paths; }
 
+        void sort() { m_paths.sort(); }
+
     private:
         bool m_onlyExecutables;
         QStringList m_paths;
@@ -68,15 +70,16 @@ void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item, bool exec)
             items += p->projectItem();
         }
     }
-    
+
     ExecutablePathsVisitor walker(exec);
     foreach(ProjectFolderItem* item, items) {
         walker.visit(item);
     }
-    
+    walker.sort();
+
     foreach(const QString& item, walker.paths())
         addItem(QIcon::fromTheme(QStringLiteral("system-run")), item);
-    
+
 }
 
 QStringList ProjectTargetsComboBox::currentItemPath() const
