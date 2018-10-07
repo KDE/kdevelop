@@ -93,6 +93,9 @@ if(CLANG_FOUND)
   set(CLANG_INCLUDE_DIRS ${LLVM_INCLUDE_DIRS})
   set(CLANG_VERSION ${LLVM_VERSION})
 
+  # svn version of clang has a svn suffix "8.0.0svn" but installs the header in "8.0.0", without the suffix
+  string(REPLACE "svn" "" CLANG_VERSION_CLEAN "${CLANG_VERSION}")
+
   find_path(CLANG_BUILTIN_DIR
             # cpuid.h because it is defined in ClangSupport constructor as valid clang builtin dir indicator
             NAMES "cpuid.h"
@@ -100,6 +103,8 @@ if(CLANG_FOUND)
                   "${CLANG_INCLUDE_DIRS}"
             PATH_SUFFIXES "clang/${CLANG_VERSION}/include"
                           "../../../clang/${CLANG_VERSION}/include"
+                          "clang/${CLANG_VERSION_CLEAN}/include"
+                          "../../../clang/${CLANG_VERSION_CLEAN}/include"
             NO_DEFAULT_PATH
   )
 
