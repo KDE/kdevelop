@@ -17,7 +17,7 @@ set(kdevclazy_core_SRCS
 ecm_qt_declare_logging_category(kdevclazy_core_SRCS
     HEADER debug.h
     IDENTIFIER KDEV_CLAZY
-    CATEGORY_NAME "kdevelop.analyzers.clazy"
+    CATEGORY_NAME "kdevelop.plugins.clazy"
 )
 kconfig_add_kcfg_files(kdevclazy_core_SRCS GENERATE_MOC
     config/globalsettings.kcfgc
