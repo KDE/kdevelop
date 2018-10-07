@@ -14,10 +14,10 @@ set(kdevclazy_core_SRCS
     jobparameters.cpp
     utils.cpp
 )
-ecm_qt_declare_logging_category(kdevclazy_core_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevclazy_core_SRCS
+    TYPE PLUGIN
     IDENTIFIER KDEV_CLAZY
-    CATEGORY_NAME "kdevelop.plugins.clazy"
+    CATEGORY_BASENAME "clazy"
 )
 kconfig_add_kcfg_files(kdevclazy_core_SRCS GENERATE_MOC
     config/globalsettings.kcfgc

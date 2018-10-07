@@ -37,10 +37,12 @@ if(KF5SysGuard_FOUND)
     )
 endif()
 
-ecm_qt_declare_logging_category(debuggercommon_SRCS
+declare_qt_logging_category(debuggercommon_SRCS
+    TYPE PLUGIN
     HEADER debuglog.h
     IDENTIFIER DEBUGGERCOMMON
-    CATEGORY_NAME "kdevelop.plugins.common"
+    CATEGORY_BASENAME "common"
+    DESCRIPTION "debuggers common"
 )
 
 ki18n_wrap_ui(debuggercommon_SRCS

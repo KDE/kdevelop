@@ -11,10 +11,10 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
 )
 
-ecm_qt_declare_logging_category(kdevclangtidy_LOG_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevclangtidy_LOG_SRCS
+    TYPE PLUGIN
     IDENTIFIER KDEV_CLANGTIDY
-    CATEGORY_NAME "kdevelop.plugins.clangtidy"
+    CATEGORY_BASENAME "clangtidy"
 )
 
 set(kdevclangtidy_PART_SRCS

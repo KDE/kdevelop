@@ -29,11 +29,8 @@ set(sublime_LIB_SRCS
     idealbuttonbarwidget.cpp
 )
 declare_qt_logging_category(sublime_LIB_SRCS
-    HEADER debug.h
-    IDENTIFIER SUBLIME
-    CATEGORY_NAME "kdevplatform.sublime"
-    DESCRIPTION "KDevPlatform lib: sublime"
-    EXPORT KDevPlatformCategories
+    TYPE LIBRARY
+    CATEGORY_BASENAME "sublime"
 )
 kdevplatform_add_library(KDevPlatformSublime SOURCES ${sublime_LIB_SRCS})
 target_link_libraries(KDevPlatformSublime

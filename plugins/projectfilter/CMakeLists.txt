@@ -13,10 +13,10 @@ set( projectfilter_SRCS
     comboboxdelegate.cpp
 )
 
-ecm_qt_declare_logging_category(projectfilter_SRCS
-    HEADER debug.h
+declare_qt_logging_category(projectfilter_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_PROJECTFILTER
-    CATEGORY_NAME "kdevelop.plugins.projectfilter"
+    CATEGORY_BASENAME "projectfilter"
 )
 ki18n_wrap_ui(projectfilter_SRCS projectfiltersettings.ui)
 kconfig_add_kcfg_files(projectfilter_SRCS projectfiltersettings.kcfgc)

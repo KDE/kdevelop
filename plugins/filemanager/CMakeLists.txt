@@ -5,10 +5,10 @@ set(kdevfilemanager_PART_SRCS
     filemanager.cpp
     bookmarkhandler.cpp
 )
-ecm_qt_declare_logging_category(kdevfilemanager_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevfilemanager_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_FILEMANAGER
-    CATEGORY_NAME "kdevelop.plugins.filemanager"
+    CATEGORY_BASENAME "filemanager"
 )
 qt5_add_resources(kdevfilemanager_PART_SRCS kdevfilemanager.qrc)
 kdevplatform_add_plugin(kdevfilemanager JSON kdevfilemanager.json SOURCES ${kdevfilemanager_PART_SRCS})

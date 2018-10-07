@@ -32,10 +32,10 @@ set(patchreview_PART_SRCS
     localpatchsource.cpp
 )
 
-ecm_qt_declare_logging_category(patchreview_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(patchreview_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_PATCHREVIEW
-    CATEGORY_NAME "kdevelop.plugins.patchreview"
+    CATEGORY_BASENAME "patchreview"
 )
 ki18n_wrap_ui(patchreview_PART_SRCS patchreview.ui localpatchwidget.ui)
 

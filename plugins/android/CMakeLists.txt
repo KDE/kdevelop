@@ -1,9 +1,10 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevandroid\")
 
-ecm_qt_declare_logging_category(androidplugin_SRCS
+declare_qt_logging_category(androidplugin_SRCS
+    TYPE PLUGIN
     HEADER debug_android.h
     IDENTIFIER ANDROID
-    CATEGORY_NAME "kdevelop.plugins.android"
+    CATEGORY_BASENAME "android"
 )
 qt5_add_resources(androidplugin_SRCS kdevandroidplugin.qrc)
 ki18n_wrap_ui(androidplugin_SRCS androidpreferences.ui)

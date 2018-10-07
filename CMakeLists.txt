@@ -181,7 +181,7 @@ install(FILES
 install(EXPORT KDevelopTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" NAMESPACE KDev:: FILE KDevelopTargets.cmake)
 
 # kdebugsettings file
-install(FILES kdevelop.categories DESTINATION ${KDE_INSTALL_CONFDIR})
+install_qt_logging_categories(TYPE APP_PLUGIN)
 
 # CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.

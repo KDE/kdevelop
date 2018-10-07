@@ -9,10 +9,10 @@ set(cmakebuilder_SRCS
     cmakebuilderpreferences.cpp
 )
 
-ecm_qt_declare_logging_category(cmakebuilder_SRCS
-    HEADER debug.h
+declare_qt_logging_category(cmakebuilder_SRCS
+    TYPE PLUGIN
     IDENTIFIER KDEV_CMAKEBUILDER
-    CATEGORY_NAME "kdevelop.plugins.cmakebuilder"
+    CATEGORY_BASENAME "cmakebuilder"
 )
 ki18n_wrap_ui(cmakebuilder_SRCS cmakebuilderpreferences.ui)
 kdevplatform_add_plugin(kdevcmakebuilder JSON kdevcmakebuilder.json SOURCES ${cmakebuilder_SRCS})

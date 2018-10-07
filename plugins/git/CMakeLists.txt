@@ -1,9 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgit\")
 
-ecm_qt_declare_logging_category(kdevgit_LOG_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevgit_LOG_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_GIT
-    CATEGORY_NAME "kdevelop.plugins.git"
+    CATEGORY_BASENAME "git"
 )
 set(kdevgit_PART_SRCS
     stashmanagerdialog.cpp

@@ -8,11 +8,8 @@ set(KDevPlatformSerialization_LIB_SRCS
 )
 
 declare_qt_logging_category(KDevPlatformSerialization_LIB_SRCS
-    HEADER debug.h
-    IDENTIFIER SERIALIZATION
-    CATEGORY_NAME "kdevplatform.serialization"
-    DESCRIPTION "KDevPlatform lib: serialization"
-    EXPORT KDevPlatformCategories
+    TYPE LIBRARY
+    CATEGORY_BASENAME "serialization"
 )
 
 kdevplatform_add_library(KDevPlatformSerialization SOURCES ${KDevPlatformSerialization_LIB_SRCS})

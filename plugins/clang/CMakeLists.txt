@@ -77,6 +77,18 @@ set(kdevclangprivate_SRCS
     util/clangtypes.cpp
     util/clangutils.cpp
 )
+# dummy call to add the data to KDevelopCategories
+# util/clangdebug.* cannot easily be generated with ecm_qt_declare_logging_category
+# as the current code does not use Q_DECLARE_LOGGING_CATEGORY but instead
+# has explicit code to tag KDEV_CLANG() as KDEVCLANGPRIVATE_EXPORT
+# Keep in sync with util/clangdebug.*
+declare_qt_logging_category(dummy_kdevclangprivate_SRCS
+    TYPE PLUGIN
+    HEADER dummy_debug.h
+    IDENTIFIER KDEV_CLANG
+    CATEGORY_BASENAME "clang"
+    DESCRIPTION "clang-based language support"
+)
 
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}

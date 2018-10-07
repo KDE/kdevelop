@@ -47,11 +47,8 @@ set(KDevPlatformVcs_LIB_SRCS
 )
 
 declare_qt_logging_category(KDevPlatformVcs_LIB_SRCS
-    HEADER debug.h
-    IDENTIFIER VCS
-    CATEGORY_NAME "kdevplatform.vcs"
-    DESCRIPTION "KDevPlatform lib: vcs"
-    EXPORT KDevPlatformCategories
+    TYPE LIBRARY
+    CATEGORY_BASENAME "vcs"
 )
 
 ki18n_wrap_ui(KDevPlatformVcs_LIB_SRCS ${KDevPlatformVcs_UIS})

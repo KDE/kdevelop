@@ -1,9 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustombuildsystem\")
 
-ecm_qt_declare_logging_category(custom_LOG_SRCS
-    HEADER debug.h
+declare_qt_logging_category(custom_LOG_SRCS
+    TYPE PLUGIN
     IDENTIFIER CUSTOMBUILDSYSTEM
-    CATEGORY_NAME "kdevelop.plugins.custombuildsystem"
+    CATEGORY_BASENAME "custombuildsystem"
 )
 ## KDevelop Plugin
 set(custom_SRCS

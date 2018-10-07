@@ -22,11 +22,8 @@ set(KDevPlatformDocumentation_LIB_SRCS
 )
 
 declare_qt_logging_category(KDevPlatformDocumentation_LIB_SRCS
-    HEADER debug.h
-    IDENTIFIER DOCUMENTATION
-    CATEGORY_NAME "kdevplatform.documentation"
-    DESCRIPTION "KDevPlatform lib: documentation"
-    EXPORT KDevPlatformCategories
+    TYPE LIBRARY
+    CATEGORY_BASENAME "documentation"
 )
 
 ki18n_wrap_ui(KDevPlatformDocumentation_LIB_SRCS documentationfindwidget.ui)

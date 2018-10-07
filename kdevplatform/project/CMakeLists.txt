@@ -23,19 +23,15 @@ set(KDevPlatformProject_LIB_SRCS
 )
 
 declare_qt_logging_category(KDevPlatformProject_LIB_SRCS
+    TYPE LIBRARY
     HEADER debug_project.h
-    IDENTIFIER PROJECT
-    CATEGORY_NAME "kdevplatform.project"
-    DESCRIPTION "KDevPlatform lib: project"
-    EXPORT KDevPlatformCategories
+    CATEGORY_BASENAME "project"
 )
 
 declare_qt_logging_category(KDevPlatformProject_LIB_SRCS
+    TYPE LIBRARY
     HEADER debug_filemanager.h
-    IDENTIFIER FILEMANAGER
-    CATEGORY_NAME "kdevplatform.filemanager"
-    DESCRIPTION "KDevPlatform lib: filemanager"
-    EXPORT KDevPlatformCategories
+    CATEGORY_BASENAME "filemanager"
 )
 
 ki18n_wrap_ui( KDevPlatformProject_LIB_SRCS widgets/dependencieswidget.ui)

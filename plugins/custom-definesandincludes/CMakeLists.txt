@@ -1,9 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevcustomdefinesandincludes\")
 
-ecm_qt_declare_logging_category(kdevdefinesandincludesmanager_LOG_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevdefinesandincludesmanager_LOG_SRCS
+    TYPE PLUGIN
     IDENTIFIER DEFINESANDINCLUDES
-    CATEGORY_NAME "kdevelop.plugins.definesandincludes"
+    CATEGORY_BASENAME "definesandincludes"
 )
 
 if(BUILD_TESTING)

@@ -17,10 +17,10 @@ set(kdevquickopen_PART_SRCS
     expandingtree/expandingtree.cpp
     expandingtree/expandingwidgetmodel.cpp
 )
-ecm_qt_declare_logging_category(kdevquickopen_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevquickopen_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_QUICKOPEN
-    CATEGORY_NAME "kdevelop.plugins.quickopen"
+    CATEGORY_BASENAME "quickopen"
 )
 ki18n_wrap_ui(kdevquickopen_PART_SRCS
   quickopenwidget.ui

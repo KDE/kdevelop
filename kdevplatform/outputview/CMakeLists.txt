@@ -13,11 +13,8 @@ set(outputviewinterfaces_LIB_SRCS
     outputexecutejob.cpp
 )
 declare_qt_logging_category(outputviewinterfaces_LIB_SRCS
-    HEADER debug.h
-    IDENTIFIER OUTPUTVIEW
-    CATEGORY_NAME "kdevplatform.outputview"
-    DESCRIPTION "KDevPlatform lib: outputview"
-    EXPORT KDevPlatformCategories
+    TYPE LIBRARY
+    CATEGORY_BASENAME "outputview"
 )
 kdevplatform_add_library(KDevPlatformOutputView SOURCES ${outputviewinterfaces_LIB_SRCS})
 target_link_libraries(KDevPlatformOutputView

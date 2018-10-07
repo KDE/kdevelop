@@ -5,10 +5,10 @@ set(qmakebuilder_SRCS
     qmakebuilderpreferences.cpp
     qmakejob.cpp
 )
-ecm_qt_declare_logging_category(qmakebuilder_SRCS
-    HEADER debug.h
+declare_qt_logging_category(qmakebuilder_SRCS
+    TYPE PLUGIN
     IDENTIFIER KDEV_QMAKEBUILDER
-    CATEGORY_NAME "kdevelop.plugins.qmakebuilder"
+    CATEGORY_BASENAME "qmakebuilder"
 )
 ki18n_wrap_ui(qmakebuilder_SRCS qmakeconfig.ui)
 kconfig_add_kcfg_files(qmakebuilder_SRCS qmakebuilderconfig.kcfgc)

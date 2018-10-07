@@ -7,10 +7,10 @@ set(kdevmakebuilder_SRCS
     makejob.cpp
     makebuilderpreferences.cpp
 )
-ecm_qt_declare_logging_category(kdevmakebuilder_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevmakebuilder_SRCS
+    TYPE PLUGIN
     IDENTIFIER KDEV_MAKEBUILDER
-    CATEGORY_NAME "kdevelop.plugins.makebuilder"
+    CATEGORY_BASENAME "makebuilder"
 )
 ki18n_wrap_ui(kdevmakebuilder_SRCS makeconfig.ui)
 kconfig_add_kcfg_files( kdevmakebuilder_SRCS makebuilderconfig.kcfgc )

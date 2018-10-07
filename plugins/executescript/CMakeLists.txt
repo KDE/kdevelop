@@ -5,10 +5,10 @@ set(kdevexecutescript_PART_SRCS
     scriptappconfig.cpp
     scriptappjob.cpp
 )
-ecm_qt_declare_logging_category(kdevexecutescript_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevexecutescript_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_EXECUTESCRIPT
-    CATEGORY_NAME "kdevelop.plugins.executescript"
+    CATEGORY_BASENAME "executescript"
 )
 ki18n_wrap_ui(kdevexecutescript_PART_SRCS
     scriptappconfig.ui

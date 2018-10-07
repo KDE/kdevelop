@@ -27,6 +27,7 @@
 #include <language/editor/documentcursor.h>
 #include <language/editor/documentrange.h>
 
+// Keep in sync with declare_qt_logging_category call
 const QtMsgType defaultMsgType = QtInfoMsg;
 Q_LOGGING_CATEGORY(KDEV_CLANG, "kdevelop.plugins.clang", defaultMsgType)
 

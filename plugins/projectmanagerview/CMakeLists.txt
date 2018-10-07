@@ -12,10 +12,10 @@ set(kdevprojectmanagerview_PLUGIN_SRCS
     cutcopypastehelpers.cpp
 )
 
-ecm_qt_declare_logging_category(kdevprojectmanagerview_PLUGIN_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevprojectmanagerview_PLUGIN_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_PROJECTMANAGERVIEW
-    CATEGORY_NAME "kdevelop.plugins.projectmanagerview"
+    CATEGORY_BASENAME "projectmanagerview"
 )
 ki18n_wrap_ui( kdevprojectmanagerview_PLUGIN_SRCS projectbuildsetwidget.ui projectmanagerview.ui )
 

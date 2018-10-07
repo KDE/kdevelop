@@ -1,9 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevninja\")
 set(kdevninja_SRCS ninjajob.cpp ninjabuilder.cpp ninjabuilderpreferences.cpp)
-ecm_qt_declare_logging_category(kdevninja_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevninja_SRCS
+    TYPE PLUGIN
     IDENTIFIER NINJABUILDER
-    CATEGORY_NAME "kdevelop.plugins.ninjabuilder"
+    CATEGORY_BASENAME "ninjabuilder"
 )
 ki18n_wrap_ui(kdevninja_SRCS ninjaconfig.ui)
 kconfig_add_kcfg_files(kdevninja_SRCS ninjabuilderconfig.kcfgc)

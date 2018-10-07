@@ -8,10 +8,10 @@ set(welcomepage_SRCS
     uihelper.cpp
 )
 qt5_add_resources(welcomepage_SRCS welcomepage.qrc)
-ecm_qt_declare_logging_category(welcomepage_SRCS
-    HEADER debug.h
+declare_qt_logging_category(welcomepage_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_WELCOMEPAGE
-    CATEGORY_NAME "kdevelop.plugins.welcomepage"
+    CATEGORY_BASENAME "welcomepage"
 )
 
 kdevplatform_add_plugin(kdevwelcomepage JSON kdevwelcomepage.json SOURCES ${welcomepage_SRCS})

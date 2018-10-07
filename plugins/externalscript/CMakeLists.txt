@@ -9,10 +9,10 @@ set(kdevexternalscript_PART_SRCS
     editexternalscript.cpp
 )
 
-ecm_qt_declare_logging_category(kdevexternalscript_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevexternalscript_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_EXTERNALSCRIPT
-    CATEGORY_NAME "kdevelop.plugins.externalscript"
+    CATEGORY_BASENAME "externalscript"
 )
 
 set(kdevexternalscript_PART_UI

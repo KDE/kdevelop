@@ -1,9 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevastyle\")
 
-ecm_qt_declare_logging_category(kdevastyle_LOG_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevastyle_LOG_SRCS
+    TYPE PLUGIN
     IDENTIFIER KDEV_ASTYLE
-    CATEGORY_NAME "kdevelop.plugins.astyle"
+    CATEGORY_BASENAME "astyle"
 )
 
 set(kdevastyle_PART_SRCS

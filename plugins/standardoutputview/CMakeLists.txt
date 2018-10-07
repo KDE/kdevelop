@@ -2,10 +2,10 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevstandardoutputview\")
 
 ########### next target ###############
 
-ecm_qt_declare_logging_category(standardoutputview_LOG_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(standardoutputview_LOG_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_STANDARDOUTPUTVIEW
-    CATEGORY_NAME "kdevelop.plugins.standardoutputview"
+    CATEGORY_BASENAME "standardoutputview"
 )
 
 set(standardoutputview_LIB_SRCS

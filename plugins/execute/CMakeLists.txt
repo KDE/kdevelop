@@ -9,10 +9,10 @@ set(kdevexecute_PART_SRCS
     nativeappjob.cpp
 )
 
-ecm_qt_declare_logging_category(kdevexecute_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevexecute_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_EXECUTE
-    CATEGORY_NAME "kdevelop.plugins.execute"
+    CATEGORY_BASENAME "execute"
 )
 
 ki18n_wrap_ui( kdevexecute_PART_SRCS nativeappconfig.ui)

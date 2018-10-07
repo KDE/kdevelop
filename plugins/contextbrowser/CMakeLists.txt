@@ -8,10 +8,10 @@ set(kdevcontextbrowser_PART_SRCS
     browsemanager.cpp
 )
 
-ecm_qt_declare_logging_category(kdevcontextbrowser_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevcontextbrowser_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_CONTEXTBROWSER
-    CATEGORY_NAME "kdevelop.plugins.contextbrowser"
+    CATEGORY_BASENAME "contextbrowser"
 )
 qt5_add_resources(kdevcontextbrowser_PART_SRCS kdevcontextbrowser.qrc)
 kdevplatform_add_plugin(kdevcontextbrowser JSON kdevcontextbrowser.json SOURCES ${kdevcontextbrowser_PART_SRCS})

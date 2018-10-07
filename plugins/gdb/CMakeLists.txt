@@ -26,10 +26,11 @@ endif()
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-gdb-plugin.h.cmake
                 ${CMAKE_CURRENT_BINARY_DIR}/config-gdb-plugin.h )
 
-ecm_qt_declare_logging_category(kdevgdb_SRCS
+declare_qt_logging_category(kdevgdb_SRCS
+    TYPE PLUGIN
     HEADER debuglog.h
     IDENTIFIER DEBUGGERGDB
-    CATEGORY_NAME "kdevelop.plugins.gdb"
+    CATEGORY_BASENAME "gdb"
 )
 set(kdevgdb_UI
     debuggertracingdialog.ui

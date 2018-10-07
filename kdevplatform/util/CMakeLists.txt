@@ -46,11 +46,8 @@ if(BUILD_TESTING)
 endif()
 
 declare_qt_logging_category(KDevPlatformUtil_LIB_SRCS
-    HEADER debug.h
-    IDENTIFIER UTIL
-    CATEGORY_NAME "kdevplatform.util"
-    DESCRIPTION "KDevPlatform lib: util"
-    EXPORT KDevPlatformCategories
+    TYPE LIBRARY
+    CATEGORY_BASENAME "util"
 )
 
 ki18n_wrap_ui(KDevPlatformUtil_LIB_SRCS ${KDevPlatformUtil_LIB_US})

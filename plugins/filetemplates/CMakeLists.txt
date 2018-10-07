@@ -17,10 +17,10 @@ set(kdevfiletemplates_PART_SRCS
     testcasespage.cpp
 )
 
-ecm_qt_declare_logging_category(kdevfiletemplates_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevfiletemplates_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_FILETEMPLATES
-    CATEGORY_NAME "kdevelop.plugins.filetemplates"
+    CATEGORY_BASENAME "filetemplates"
 )
 
 ki18n_wrap_ui(kdevfiletemplates_PART_SRCS

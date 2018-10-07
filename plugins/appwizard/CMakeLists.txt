@@ -16,10 +16,10 @@ set(kdevappwizard_PART_UI
     projectvcspage.ui
 )
 
-ecm_qt_declare_logging_category(kdevappwizard_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevappwizard_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_APPWIZARD
-    CATEGORY_NAME "kdevelop.plugins.appwizard"
+    CATEGORY_BASENAME "appwizard"
 )
 
 ki18n_wrap_ui(kdevappwizard_PART_SRCS ${kdevappwizard_PART_UI})

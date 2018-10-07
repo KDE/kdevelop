@@ -5,8 +5,10 @@
 #
 #   add_compile_flag_if_supported(<flag> [CXX_ONLY])
 #   add_target_compile_flag_if_supported(<target> <INTERFACE|PUBLIC|PRIVATE> <flag>)
-#   declare_qt_logging_category(<sourcevarname> HEADER <filename> IDENTIFIER <id> CATEGORY_NAME <name> EXPORT <target> DESCRIPTION <desc>)
-#   install_qt_logging_categories(EXPORT <target> FILE <name>)
+#   declare_qt_logging_category(<sourcevarname>
+#                               TYPE LIBRARY|PLUGIN|APP [IDENTIFIER <id>] [CATEGORY_BASENAME <name>]
+#                               [HEADER <filename>] [DESCRIPTION <desc>])
+#   install_qt_logging_categories(TYPE LIBRARY|APP_PLUGIN)
 #
 #=============================================================================
 # Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
@@ -61,17 +63,20 @@ function(add_target_compile_flag_if_supported _target _scope _flag)
 endfunction()
 
 
-# declare_qt_logging_category(<sourcevarname> HEADER <filename> IDENTIFIER <id> CATEGORY_NAME <name> EXPORT <target> DESCRIPTION <desc>)
+# helper method
+# _declare_qt_logging_category(<sourcevarname>
+#                              HEADER <filename> IDENTIFIER <id> CATEGORY_NAME <name>
+#                              EXPORT <target> DESCRIPTION <desc>)
 #
 # Example:
-#   declare_qt_logging_category(Foo_LIB_SRCS
+#   _declare_qt_logging_category(Foo_LIB_SRCS
 #       HEADER debug.h
-#       IDENTIFIER DOCUMENTATION
+#       IDENTIFIER FOO
 #       CATEGORY_NAME "bar.foo"
 #       DESCRIPTION "The foo of bar"
 #       EXPORT BarCategories
 #   )
-macro(declare_qt_logging_category _sources)
+macro(_declare_qt_logging_category sources)
     set(options )
     set(oneValueArgs HEADER IDENTIFIER CATEGORY_NAME EXPORT DESCRIPTION)
     set(multiValueArgs)
@@ -79,26 +84,26 @@ macro(declare_qt_logging_category _sources)
     cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     if(NOT DEFINED ARGS_HEADER)
-        message(FATAL_ERROR "HEADER needs to be defined when calling declare_qt_logging_category().")
+        message(FATAL_ERROR "HEADER needs to be defined when calling _declare_qt_logging_category().")
     endif()
     if(NOT DEFINED ARGS_IDENTIFIER)
-        message(FATAL_ERROR "IDENTIFIER needs to be defined when calling declare_qt_logging_category().")
+        message(FATAL_ERROR "IDENTIFIER needs to be defined when calling _declare_qt_logging_category().")
     endif()
     if(NOT DEFINED ARGS_CATEGORY_NAME)
-        message(FATAL_ERROR "CATEGORY_NAME needs to be defined when calling declare_qt_logging_category().")
+        message(FATAL_ERROR "CATEGORY_NAME needs to be defined when calling _declare_qt_logging_category().")
     endif()
     if(NOT DEFINED ARGS_DESCRIPTION)
-        message(FATAL_ERROR "DESCRIPTION needs to be defined when calling declare_qt_logging_category().")
+        message(FATAL_ERROR "DESCRIPTION needs to be defined when calling _declare_qt_logging_category().")
     endif()
 
-    ecm_qt_declare_logging_category(${_sources}
+    ecm_qt_declare_logging_category(${sources}
         HEADER ${ARGS_HEADER}
         IDENTIFIER ${ARGS_IDENTIFIER}
         CATEGORY_NAME ${ARGS_CATEGORY_NAME}
     )
 
     # Nasty hack: we create a target just to store all the category data in some build-system global object
-    # which then can be accessed from other places like install_qt_logging_categories().
+    # which then can be accessed from other places like _install_qt_logging_categories().
     # we also create it here on first usage, to spare some additional call.
     # Better idea how to solve that welcome
     set(_targetname "qt_logging_category_${ARGS_EXPORT}")
@@ -115,28 +120,112 @@ macro(declare_qt_logging_category _sources)
 endmacro()
 
 
-# install_qt_logging_categories(EXPORT <target> FILE <name>)
+set(_platformlib_qt_logging_categories_export_name "KDevPlatformCategories")
+set(_app_plugin_qt_logging_categories_export_name "KDevelopCategories")
+
+
+# declare_qt_logging_category(<sourcevarname>
+#                             TYPE LIBRARY|PLUGIN|APP [IDENTIFIER <id>] [CATEGORY_BASENAME <name>]
+#                             [HEADER <filename>] [DESCRIPTION <desc>])
 #
-# Needs to be called after the last declare_qt_logging_category call which uses the same EXPORT name.
+# CATEGORY_BASENAME <name> is unused of TYPE APP.
+# IDENTIFIER <id> defaults to upper-case CATEGORY_BASENAME <name>.
+# HEADER <filename> defaults to "debug.h"
+# DESCRIPTION <desc> defaults to CATEGORY_BASENAME <name>.
 #
 # Example:
-#   install_qt_logging_categories(
-#       EXPORT KDevPlatformCategories
-#       FILE kdevplatform.test.categories
+#   declare_qt_logging_category(Foo_LIB_SRCS
+#       TYPE PLUGIN
+#       HEADER foodebug.h
+#       IDENTIFIER FOO
+#       CATEGORY_BASENAME "foo"
 #   )
-function(install_qt_logging_categories)
+macro(declare_qt_logging_category sources)
     set(options )
-    set(oneValueArgs FILE EXPORT)
+    set(oneValueArgs HEADER IDENTIFIER CATEGORY_BASENAME DESCRIPTION TYPE)
+    set(multiValueArgs)
+
+    cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    if(NOT DEFINED ARGS_TYPE)
+        message(FATAL_ERROR "TYPE needs to be defined when calling declare_qt_logging_category().")
+    endif()
+    if(NOT DEFINED ARGS_IDENTIFIER)
+        if(ARGS_TYPE STREQUAL "LIBRARY" OR ARGS_TYPE STREQUAL "PLUGIN")
+            string(TOUPPER ${ARGS_CATEGORY_BASENAME} ARGS_IDENTIFIER)
+        else()
+            message(FATAL_ERROR "IDENTIFIER needs to be defined when calling declare_qt_logging_category().")
+        endif()
+    endif()
+    if(NOT DEFINED ARGS_CATEGORY_BASENAME)
+        if(ARGS_TYPE STREQUAL "LIBRARY" OR ARGS_TYPE STREQUAL "PLUGIN")
+            message(FATAL_ERROR "CATEGORY_BASENAME needs to be defined when calling declare_qt_logging_category() with TYPE of LIBRARY or PLUGIN.")
+        endif()
+    endif()
+    if(NOT DEFINED ARGS_HEADER)
+        set(ARGS_HEADER debug.h)
+    endif()
+    if(NOT DEFINED ARGS_DESCRIPTION)
+        set(ARGS_DESCRIPTION ${ARGS_CATEGORY_BASENAME})
+    endif()
+
+    if(ARGS_TYPE STREQUAL "LIBRARY")
+        _declare_qt_logging_category(${sources}
+            HEADER ${ARGS_HEADER}
+            IDENTIFIER ${ARGS_IDENTIFIER}
+            CATEGORY_NAME "kdevplatform.${ARGS_CATEGORY_BASENAME}"
+            DESCRIPTION "KDevPlatform lib: ${ARGS_DESCRIPTION}"
+            EXPORT ${_platformlib_qt_logging_categories_export_name}
+        )
+    elseif(ARGS_TYPE STREQUAL "PLUGIN")
+        _declare_qt_logging_category(${sources}
+            HEADER ${ARGS_HEADER}
+            IDENTIFIER ${ARGS_IDENTIFIER}
+            CATEGORY_NAME "kdevelop.plugins.${ARGS_CATEGORY_BASENAME}"
+            DESCRIPTION "KDevelop plugin: ${ARGS_DESCRIPTION}"
+            EXPORT ${_app_plugin_qt_logging_categories_export_name}
+        )
+    elseif(ARGS_TYPE STREQUAL "APP")
+        _declare_qt_logging_category(${sources}
+            HEADER ${ARGS_HEADER}
+            IDENTIFIER ${ARGS_IDENTIFIER}
+            CATEGORY_NAME "kdevelop.app"
+            DESCRIPTION "KDevelop app"
+            EXPORT ${_app_plugin_qt_logging_categories_export_name}
+        )
+    else()
+        message(FATAL_ERROR "Unknown \"${ARGS_TYPE}\" with TYPE when calling declare_qt_logging_category().")
+    endif()
+endmacro()
+
+
+# helper method
+# _install_qt_logging_categories(EXPORT <target> FILE <name> MACRONAME <macro>)
+#
+# Needs to be called after the last _declare_qt_logging_category call which uses the same EXPORT name.
+#
+# Example:
+#   _install_qt_logging_categories(
+#       EXPORT KDevPlatformCategories
+#       FILE kdevplatform.categories
+#   )
+function(_install_qt_logging_categories)
+    set(options )
+    set(oneValueArgs FILE EXPORT MACRONAME)
     set(multiValueArgs)
 
     cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     if(NOT DEFINED ARGS_FILE)
-        message(FATAL_ERROR "FILE needs to be defined when calling install_qt_logging_categories().")
+        message(FATAL_ERROR "FILE needs to be defined when calling _install_qt_logging_categories().")
     endif()
 
     if(NOT DEFINED ARGS_EXPORT)
-        message(FATAL_ERROR "EXPORT needs to be defined when calling install_qt_logging_categories().")
+        message(FATAL_ERROR "EXPORT needs to be defined when calling _install_qt_logging_categories().")
+    endif()
+
+    if(NOT DEFINED ARGS_MACRONAME)
+        message(FATAL_ERROR "MACRONAME needs to be defined when calling _install_qt_logging_categories().")
     endif()
 
     set(_targetname "qt_logging_category_${ARGS_EXPORT}")
@@ -149,7 +238,7 @@ function(install_qt_logging_categories)
 
     set(_content
 "# KDebugSettings data file
-# This file was generated by install_qt_logging_categories(). DO NOT EDIT!
+# This file was generated by ${ARGS_MACRONAME}(). DO NOT EDIT!
 
 ")
 
@@ -179,4 +268,35 @@ function(install_qt_logging_categories)
         FILES "${ARGS_FILE}"
         DESTINATION ${KDE_INSTALL_CONFDIR}
     )
+endfunction()
+
+# install_qt_logging_categories(TYPE LIBRARY|APP_PLUGIN)
+#
+# Needs to be called after the last declare_qt_logging_category call for the same TYPE(s).
+function(install_qt_logging_categories)
+    set(options )
+    set(oneValueArgs TYPE)
+    set(multiValueArgs)
+
+    cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    if(NOT DEFINED ARGS_TYPE)
+        message(FATAL_ERROR "TYPE needs to be defined when calling install_qt_logging_categories().")
+    endif()
+
+    if(ARGS_TYPE STREQUAL "LIBRARY")
+        _install_qt_logging_categories(
+            EXPORT ${_platformlib_qt_logging_categories_export_name}
+            FILE kdevplatform.categories
+            MACRONAME install_qt_logging_categories
+        )
+    elseif(ARGS_TYPE STREQUAL "APP_PLUGIN")
+        _install_qt_logging_categories(
+            EXPORT ${_app_plugin_qt_logging_categories_export_name}
+            FILE kdevelop.categories
+            MACRONAME install_qt_logging_categories
+        )
+    else()
+        message(FATAL_ERROR "Unknown \"${ARGS_TYPE}\" with TYPE when calling declare_qt_logging_category().")
+    endif()
 endfunction()

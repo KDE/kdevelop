@@ -12,10 +12,11 @@ set(kdevlldb_SRCS
     lldblauncher.cpp
 )
 
-ecm_qt_declare_logging_category(kdevlldb_SRCS
+declare_qt_logging_category(kdevlldb_SRCS
+    TYPE PLUGIN
     HEADER debuglog.h
     IDENTIFIER DEBUGGERLLDB
-    CATEGORY_NAME "kdevelop.plugins.lldb"
+    CATEGORY_BASENAME "lldb"
 )
 
 set(kdevlldb_UI

@@ -7,10 +7,10 @@ set(kdevoutlineview_SRCS
     outlinewidget.cpp
 )
 
-ecm_qt_declare_logging_category(kdevoutlineview_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevoutlineview_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_OUTLINE
-    CATEGORY_NAME "kdevelop.plugins.outline"
+    CATEGORY_BASENAME "outline"
 )
 kdevplatform_add_plugin(kdevoutlineview JSON kdevoutlineview.json SOURCES ${kdevoutlineview_SRCS})
 target_link_libraries(kdevoutlineview

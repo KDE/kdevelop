@@ -10,10 +10,10 @@ add_subdirectory(icons)
 # the debug visitor prints out the Ast for the CMakeLists.txt file.
 #add_definitions( -DCMAKEDEBUGVISITOR )
 
-ecm_qt_declare_logging_category(cmake_LOG_SRCS
-    HEADER debug.h
+declare_qt_logging_category(cmake_LOG_SRCS
+    TYPE PLUGIN
     IDENTIFIER CMAKE
-    CATEGORY_NAME "kdevelop.plugins.cmake"
+    CATEGORY_BASENAME "cmake"
 )
 
 set( cmakecommon_SRCS

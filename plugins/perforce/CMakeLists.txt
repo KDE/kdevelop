@@ -6,10 +6,10 @@ remove_definitions(
 )
 
 add_subdirectory(p4clientstub)
-ecm_qt_declare_logging_category(kdevperforce_LOG_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevperforce_LOG_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_PERFORCE
-    CATEGORY_NAME "kdevelop.plugins.perforce"
+    CATEGORY_BASENAME "perforce"
 )
 set(kdevperforce_UIS
     ui/perforceimportmetadatawidget.ui

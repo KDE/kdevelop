@@ -11,11 +11,11 @@ option(KDEVELOP_SINGLE_APP "Use QtSingleApplication as KDevelop's base" OFF)
 
 set(kdevelop_SRCS  main.cpp kdevideextension.cpp)
 
-ecm_qt_declare_logging_category(kdevelop_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevelop_SRCS
     IDENTIFIER APP
-    CATEGORY_NAME "kdevelop.app"
+    TYPE APP
 )
+
 qt5_add_resources(kdevelop_SRCS kdevelop.qrc)
 
 #TODO: remove CMAKE_CURRENT_SOURCE_DIR prefix when ECM is fixed

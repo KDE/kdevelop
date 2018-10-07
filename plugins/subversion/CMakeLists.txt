@@ -40,10 +40,10 @@ set(kdevsubversion_PART_SRCS
     svnlocationwidget.cpp
 )
 
-ecm_qt_declare_logging_category(kdevsubversion_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevsubversion_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_SVN
-    CATEGORY_NAME "kdevelop.plugins.svn"
+    CATEGORY_BASENAME "svn"
 )
 
 set(kdevsubversion_PART_UI

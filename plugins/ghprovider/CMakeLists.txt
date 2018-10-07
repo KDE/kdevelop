@@ -11,10 +11,11 @@ set(kdevghprovider_PART_SRCS
     ghaccount.cpp
     ghdialog.cpp
 )
-ecm_qt_declare_logging_category(kdevghprovider_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevghprovider_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER GHPROVIDER
-    CATEGORY_NAME "kdevelop.plugins.ghprovider"
+    CATEGORY_BASENAME "ghprovider"
+    DESCRIPTION "githubprovider"
 )
 
 kdevplatform_add_plugin(kdevghprovider JSON kdevghprovider.json	SOURCES ${kdevghprovider_PART_SRCS})

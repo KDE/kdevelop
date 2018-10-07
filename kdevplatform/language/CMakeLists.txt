@@ -171,11 +171,8 @@ set(KDevPlatformLanguage_LIB_SRCS
 )
 
 declare_qt_logging_category(KDevPlatformLanguage_LIB_SRCS
-    HEADER debug.h
-    IDENTIFIER LANGUAGE
-    CATEGORY_NAME "kdevplatform.language"
-    DESCRIPTION "KDevPlatform lib: language"
-    EXPORT KDevPlatformCategories
+    TYPE LIBRARY
+    CATEGORY_BASENAME "language"
 )
 
 ki18n_wrap_ui(KDevPlatformLanguage_LIB_SRCS

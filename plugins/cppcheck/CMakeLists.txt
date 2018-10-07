@@ -14,10 +14,10 @@ set(kdevcppcheck_core_SRCS
     parameters.cpp
     utils.cpp
 )
-ecm_qt_declare_logging_category(kdevcppcheck_core_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevcppcheck_core_SRCS
+    TYPE PLUGIN
     IDENTIFIER KDEV_CPPCHECK
-    CATEGORY_NAME "kdevelop.plugins.cppcheck"
+    CATEGORY_BASENAME "cppcheck"
 )
 kconfig_add_kcfg_files(kdevcppcheck_core_SRCS
     config/globalsettings.kcfgc

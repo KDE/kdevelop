@@ -6,10 +6,10 @@ if(BUILD_TESTING)
 endif()
 add_subdirectory(codecompletion)
 
-ecm_qt_declare_logging_category(kdevqmljslanguagesupport_LOG_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevqmljslanguagesupport_LOG_SRCS
+    TYPE PLUGIN
     IDENTIFIER KDEV_QMLJS
-    CATEGORY_NAME "kdevelop.plugins.qmljs"
+    CATEGORY_BASENAME "qmljs"
 )
 kdevplatform_add_plugin(kdevqmljslanguagesupport JSON kdevqmljs.json SOURCES
     qmljsparsejob.cpp

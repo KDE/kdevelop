@@ -11,10 +11,10 @@ set(kdevproblemreporter_PART_SRCS
     problemreportermodel.cpp
 )
 
-ecm_qt_declare_logging_category(kdevproblemreporter_PART_SRCS
-    HEADER debug.h
+declare_qt_logging_category(kdevproblemreporter_PART_SRCS
+    TYPE PLUGIN
     IDENTIFIER PLUGIN_PROBLEMREPORTER
-    CATEGORY_NAME "kdevelop.plugins.problemreporter"
+    CATEGORY_BASENAME "problemreporter"
 )
 qt5_add_resources(kdevproblemreporter_PART_SRCS kdevproblemreporter.qrc)
 kdevplatform_add_plugin(kdevproblemreporter JSON kdevproblemreporter.json SOURCES ${kdevproblemreporter_PART_SRCS})

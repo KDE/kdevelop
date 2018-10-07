@@ -97,11 +97,8 @@ if(APPLE)
 endif()
 
 declare_qt_logging_category(KDevPlatformShell_LIB_SRCS
-    HEADER debug.h
-    IDENTIFIER SHELL
-    CATEGORY_NAME "kdevplatform.shell"
-    DESCRIPTION "KDevPlatform lib: shell"
-    EXPORT KDevPlatformCategories
+    TYPE LIBRARY
+    CATEGORY_BASENAME "shell"
 )
 
 kconfig_add_kcfg_files(KDevPlatformShell_LIB_SRCS

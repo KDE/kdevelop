@@ -2,10 +2,11 @@ kdevplatform_add_file_templates(flatpak-template)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevflatpak\")
 
-ecm_qt_declare_logging_category(flatpakplugin_SRCS
+declare_qt_logging_category(flatpakplugin_SRCS
+    TYPE PLUGIN
     HEADER debug_flatpak.h
     IDENTIFIER FLATPAK
-    CATEGORY_NAME "kdevelop.plugins.flatpak"
+    CATEGORY_BASENAME "flatpak"
 )
 
 qt5_add_resources(flatpakplugin_SRCS kdevflatpakplugin.qrc)
