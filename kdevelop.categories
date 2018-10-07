@@ -54,6 +54,7 @@ kdevelop.plugins.standardoutputview KDevelop plugin: standardoutputview
 kdevelop.plugins.svn KDevelop plugin: svn
 kdevelop.plugins.switchtobuddy KDevelop plugin: switchtobuddy
 kdevelop.plugins.testview KDevelop plugin: testview
+kdevelop.plugins.welcomepage KDevelop plugin: welcomepage
 
 # Programs
 kdevelop.app KDevelop app 
