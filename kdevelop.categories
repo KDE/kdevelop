@@ -8,6 +8,7 @@ kdevelop.plugins.appwizard KDevelop plugin: appwizard
 kdevelop.plugins.astyle KDevelop plugin: astyle
 kdevelop.plugins.clang KDevelop plugin: clang-based language support
 kdevelop.plugins.classbrowser KDevelop plugin: classbrowser
+kdevelop.plugins.clazy KDevelop plugin: clazy
 kdevelop.plugins.cmake KDevelop plugin: cmake
 kdevelop.plugins.cmakebuilder KDevelop plugin: cmakebuilder
 kdevelop.plugins.codeutils KDevelop plugin: codeutils
