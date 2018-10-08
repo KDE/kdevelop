@@ -29,9 +29,6 @@ fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=2.0
 fi
-if [ -z "$KDEV_CLANG_TIDY_VERSION" ]; then
-    KDEV_CLANG_TIDY_VERSION=v0.3.0
-fi
 KF5_VERSION=v5.48.0 # note: v5.49.0 is broken due to https://phabricator.kde.org/R246:0a96acf251baa5c9dd042d093ab2bf8fcee10502
 KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
 KDE_APPLICATION_VERSION=v18.08.0
@@ -250,9 +247,6 @@ build_project kdev-php $KDEVELOP_VERSION
 # Build kdev-python
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
 build_project kdev-python $KDEVELOP_VERSION
-
-# Build kdev-clang-tidy
-build_project kdev-clang-tidy $KDEV_CLANG_TIDY_VERSION
 
 # Install some colorschemes
 cd $SRC

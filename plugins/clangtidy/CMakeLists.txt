@@ -1,50 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
-
-project(kdev-clangtidy)
-
-find_package (ECM "5.14.0" REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
-
-include(KDECompilerSettings NO_POLICY_SCOPE)
-include(ECMAddTests)
-include(ECMQtDeclareLoggingCategory)
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(FeatureSummary)
-
-if(BUILD_TESTING)
-    set(QT_ADDITIONAL_REQ_COMPONENTS Test)
-endif()
-set(QT_MIN_VERSION "5.5.0")
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED
-    Core
-    Widgets
-    ${QT_ADDITIONAL_REQ_COMPONENTS}
-)
-
-set(KF5_DEP_VERSION "5.15.0")
-# TRUE needed because missing in KDevPlatformConfig.cmake, remove TRUE once dep on kdevplatform >=5.2.2
-if(Qt5_VERSION VERSION_LESS "5.10.0" OR TRUE)
-    set(KF_ADDITIONAL_REQ_COMPONENTS ItemModels)
-endif()
-find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
-    I18n
-    ItemViews
-    Config
-    ${KF_ADDITIONAL_REQ_COMPONENTS}
-)
-set(KDEVPLATFORM_DEP_VERSION "5.2.0")
-find_package(KDevPlatform ${KDEVPLATFORM_DEP_VERSION} CONFIG)
-set_package_properties(KDevPlatform PROPERTIES
-    TYPE REQUIRED
-)
-if(BUILD_TESTING)
-    if (NOT TARGET KDev::Tests)
-        message(FATAL_ERROR "KDevPlatform was built without the library KDevPlatformTests (due to BUILD_TESTING=OFF), which though is required for our tests.")
-    endif()
-endif()
-
-find_package(Boost REQUIRED)
+add_definitions(-DTRANSLATION_DOMAIN=\"kdevclangtidy\")
 
 find_package(ClangTidy QUIET)
 set_package_properties(ClangTidy PROPERTIES
@@ -53,38 +7,75 @@ set_package_properties(ClangTidy PROPERTIES
     TYPE RUNTIME
 )
 
-add_definitions(
-    -DQT_DEPRECATED_WARNINGS
-    -DQT_DISABLE_DEPRECATED_BEFORE=0x050500
-    -DQT_NO_SIGNALS_SLOTS_KEYWORDS
-    -DQT_NO_URL_CAST_FROM_STRING
-    -DQT_STRICT_ITERATORS
-    -DQT_USE_QSTRINGBUILDER
-    -DQT_NO_CAST_FROM_ASCII
-    -DQT_NO_CAST_TO_ASCII
-    -DQT_NO_CAST_FROM_BYTEARRAY
-    -DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT
-)
-
-include (cmake/ClangFormatAll.cmake)
-
 include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
+    ${Boost_INCLUDE_DIRS}
 )
 
 ecm_qt_declare_logging_category(kdevclangtidy_LOG_SRCS
     HEADER debug.h
     IDENTIFIER KDEV_CLANGTIDY
-    CATEGORY_NAME "kdevelop.analyzers.clangtidy"
+    CATEGORY_NAME "kdevelop.plugins.clangtidy"
 )
 
-add_subdirectory(src)
+set(kdevclangtidy_PART_SRCS
+    ${kdevclangtidy_LOG_SRCS}
+
+    job.cpp
+    plugin.cpp
+    checkset.cpp
+    problemmodel.cpp
+    utils.cpp
+
+    config/clangtidyprojectconfigpage.cpp
+    config/clangtidypreferences.cpp
+    config/checkselection.cpp
+    config/checklistfilterproxysearchline.cpp
+    config/checklistitemproxystyle.cpp
+    config/checklistmodel.cpp
+    config/checkgroup.cpp
+
+    parsers/clangtidyparser.cpp
+# disable for now:
+# CentOS used for appimage does not have string_ref.hpp (Boost >= 1.53) as used by current code
+#     parsers/replacementparser.cpp
+)
+
+ki18n_wrap_ui(kdevclangtidy_PART_SRCS
+    config/clangtidypreferences.ui
+    config/clangtidyprojectconfigpage.ui
+)
+
+qt5_add_resources(kdevclangtidy_PART_SRCS
+    kdevclangtidy.qrc
+)
+
+kconfig_add_kcfg_files(kdevclangtidy_PART_SRCS
+    config/clangtidyconfig.kcfgc
+    config/clangtidyprojectconfig.kcfgc
+)
+
+kdevplatform_add_plugin(kdevclangtidy
+    JSON kdevclangtidy.json
+    SOURCES ${kdevclangtidy_PART_SRCS}
+)
+
+target_link_libraries(kdevclangtidy
+    KDev::Interfaces
+    KDev::Project
+    KDev::Language
+    KDev::OutputView
+    KDev::Util
+    KDev::Shell
+    KF5::ItemViews
+    KF5::ConfigCore
+    KF5::I18n
+)
+if(Qt5_VERSION VERSION_LESS "5.10.0")
+target_link_libraries(kdevclangtidy
+    KF5::ItemModels
+)
+endif()
 
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
-
-# kdebugsettings file
-install(FILES kdevclangtidy.categories DESTINATION ${KDE_INSTALL_CONFDIR})
-
-feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)

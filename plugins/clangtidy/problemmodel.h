@@ -22,8 +22,6 @@
 #ifndef CLANGTIDY_PROBLEMMODEL_H
 #define CLANGTIDY_PROBLEMMODEL_H
 
-// plugin
-#include <config.h>
 // KDevPlatfrom
 #include <shell/problemmodel.h>
 // Qt
@@ -55,9 +53,7 @@ public:
     void reset(KDevelop::IProject* project, const QUrl& url, bool allFiles);
 
 private:
-#if HAVE_PROBLEMMODEL_SETPLACEHOLDERTEXT
     void setMessage(const QString& message);
-#endif
     bool problemExists(KDevelop::IProblem::Ptr newProblem);
 
 private:

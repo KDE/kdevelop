@@ -66,9 +66,7 @@ void ProblemModel::reset(KDevelop::IProject* project, const QUrl& url, bool allF
 
     QString tooltip;
     if (project) {
-#if HAVE_PROBLEMMODEL_SETPLACEHOLDERTEXT
         setMessage(i18n("Analysis started..."));
-#endif
         tooltip = i18nc("@info:tooltip %1 is the path of the file", "Re-run last Clang-Tidy analysis (%1)", Utils::prettyPathName(path));
     } else {
         tooltip = i18nc("@info:tooltip", "Re-run last Clang-Tidy analysis");
@@ -77,14 +75,12 @@ void ProblemModel::reset(KDevelop::IProject* project, const QUrl& url, bool allF
     setFullUpdateTooltip(tooltip);
 }
 
-#if HAVE_PROBLEMMODEL_SETPLACEHOLDERTEXT
 void ProblemModel::setMessage(const QString& message)
 {
     KDevelop::DocumentRange pathLocation(KDevelop::DocumentRange::invalid());
     pathLocation.document = KDevelop::IndexedString(m_url.toLocalFile());
     setPlaceholderText(message, pathLocation, i18n("Clang-Tidy"));
 }
-#endif
 
 // The code is adapted version of cppcheck::ProblemModel::problemExists()
 // TODO Add into KDevelop::ProblemModel class ?
@@ -130,9 +126,7 @@ void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
 void ProblemModel::finishAddProblems()
 {
     if (m_problems.isEmpty()) {
-#if HAVE_PROBLEMMODEL_SETPLACEHOLDERTEXT
         setMessage(i18n("Analysis completed, no problems detected."));
-#endif
     } else {
         setProblems(m_problems);
     }

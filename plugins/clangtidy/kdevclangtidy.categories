@@ -1,5 +1,0 @@
-# KDebugSettings data file
-# Format:
-# logname<space>description
-
-kdevelop.analyzers.clangtidy KDevelop plugin: clangtidy
