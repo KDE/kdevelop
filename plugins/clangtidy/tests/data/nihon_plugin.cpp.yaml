@@ -1,0 +1,72 @@
+---
+MainSourceFile:  ''
+Replacements:    
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          10165
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          10169
+    Length:          0
+    ReplacementText: ' == nullptr'
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          10463
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          10471
+    Length:          0
+    ReplacementText: ' == nullptr'
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          11135
+    Length:          69
+    ReplacementText: '// TODO(cnihelton): auto detect clang-tidy executable instead of hard-coding it.'
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          12702
+    Length:          4
+    ReplacementText: 'auto '
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          12847
+    Length:          4
+    ReplacementText: 'auto '
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          13308
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          13311
+    Length:          0
+    ReplacementText: ' == nullptr'
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          13551
+    Length:          1
+    ReplacementText: nullptr
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          14652
+    Length:          5
+    ReplacementText: ''
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          14657
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          14859
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          14989
+    Length:          5
+    ReplacementText: ''
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          14994
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          15055
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/nihon_plugin.cpp
+    Offset:          15060
+    Length:          0
+    ReplacementText: '  // namespace ClangTidy'
+...

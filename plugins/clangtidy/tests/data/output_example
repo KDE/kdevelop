@@ -1,0 +1,36 @@
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:80:5: warning: do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead [cppcoreguidelines-pro-bounds-array-to-pointer-decay]
+    qCDebug(KDEV_CLANGTIDY) << "setting clangtidy rc file";
+    ^
+/usr/include/qt5/QtCore/qloggingcategory.h:125:64: note: expanded from macro 'qCDebug'
+        QMessageLogger(QT_MESSAGELOG_FILE, QT_MESSAGELOG_LINE, QT_MESSAGELOG_FUNC, category().categoryName()).debug(__VA_ARGS__)
+                                                               ^
+/usr/include/qt5/QtCore/qlogging.h:151:30: note: expanded from macro 'QT_MESSAGELOG_FUNC'
+  #define QT_MESSAGELOG_FUNC Q_FUNC_INFO
+                             ^
+/usr/include/qt5/QtCore/qcompilerdetection.h:230:29: note: expanded from macro 'Q_FUNC_INFO'
+#  define Q_FUNC_INFO       __PRETTY_FUNCTION__
+                            ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:145:9: warning: do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead [cppcoreguidelines-pro-bounds-array-to-pointer-decay]
+        qCDebug(KDEV_CLANGTIDY) << "Unable to execute clang-tidy.";
+        ^
+/usr/include/qt5/QtCore/qloggingcategory.h:125:64: note: expanded from macro 'qCDebug'
+        QMessageLogger(QT_MESSAGELOG_FILE, QT_MESSAGELOG_LINE, QT_MESSAGELOG_FUNC, category().categoryName()).debug(__VA_ARGS__)
+                                                               ^
+/usr/include/qt5/QtCore/qlogging.h:151:30: note: expanded from macro 'QT_MESSAGELOG_FUNC'
+  #define QT_MESSAGELOG_FUNC Q_FUNC_INFO
+                             ^
+/usr/include/qt5/QtCore/qcompilerdetection.h:230:29: note: expanded from macro 'Q_FUNC_INFO'
+#  define Q_FUNC_INFO       __PRETTY_FUNCTION__
+                            ^
+/home/cnihelton/Develop/Software/KDevelop/kdev-clang-tidy/src/plugin.cpp:151:9: warning: do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead [cppcoreguidelines-pro-bounds-array-to-pointer-decay]
+        qCDebug(KDEV_CLANGTIDY) << "Failed during clang-tidy execution.";
+        ^
+/usr/include/qt5/QtCore/qloggingcategory.h:125:64: note: expanded from macro 'qCDebug'
+        QMessageLogger(QT_MESSAGELOG_FILE, QT_MESSAGELOG_LINE, QT_MESSAGELOG_FUNC, category().categoryName()).debug(__VA_ARGS__)
+                                                               ^
+/usr/include/qt5/QtCore/qlogging.h:151:30: note: expanded from macro 'QT_MESSAGELOG_FUNC'
+  #define QT_MESSAGELOG_FUNC Q_FUNC_INFO
+                             ^
+/usr/include/qt5/QtCore/qcompilerdetection.h:230:29: note: expanded from macro 'Q_FUNC_INFO'
+#  define Q_FUNC_INFO       __PRETTY_FUNCTION__
+                            ^

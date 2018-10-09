@@ -1,0 +1,68 @@
+---
+MainSourceFile:  ''
+Replacements:    
+  - FilePath:        data/plugin.cpp
+    Offset:          6263
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          6267
+    Length:          0
+    ReplacementText: ' == nullptr'
+  - FilePath:        data/plugin.cpp
+    Offset:          6561
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          6569
+    Length:          0
+    ReplacementText: ' == nullptr'
+  - FilePath:        data/plugin.cpp
+    Offset:          7233
+    Length:          69
+    ReplacementText: '// TODO(cnihelton): auto detect clang-tidy executable instead of hard-coding it.'
+  - FilePath:        data/plugin.cpp
+    Offset:          8800
+    Length:          4
+    ReplacementText: 'auto '
+  - FilePath:        data/plugin.cpp
+    Offset:          8945
+    Length:          4
+    ReplacementText: 'auto '
+  - FilePath:        data/plugin.cpp
+    Offset:          9406
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          9409
+    Length:          0
+    ReplacementText: ' == nullptr'
+  - FilePath:        data/plugin.cpp
+    Offset:          9649
+    Length:          1
+    ReplacementText: nullptr
+  - FilePath:        data/plugin.cpp
+    Offset:          10750
+    Length:          5
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          10755
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          10957
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          14994000
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          15055000
+    Length:          1
+    ReplacementText: ''
+  - FilePath:        data/plugin.cpp
+    Offset:          150600000
+    Length:          15
+    ReplacementText: '  // namespace ClangTidy'
+...

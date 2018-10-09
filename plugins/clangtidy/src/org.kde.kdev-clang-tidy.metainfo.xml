@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <id>org.kde.kdev-clang-tidy</id>
+  <extends>org.kde.kdevelop.desktop</extends>
+  <name>KDevelop Clang-Tidy Support</name>
+  <name xml:lang="ca">Implementació del Clang-Tidy al KDevelop</name>
+  <name xml:lang="ca-valencia">Implementació del Clang-Tidy al KDevelop</name>
+  <name xml:lang="cs">Podpora Clang-Tidy v KDevelop</name>
+  <name xml:lang="es">Implementación de Clang-Tidy de KDevelop</name>
+  <name xml:lang="fi">KDevelopin Clang-Tidy-tuki</name>
+  <name xml:lang="nl">Ondersteuning van KDevelop Clang-Tidy</name>
+  <name xml:lang="pt">Suporte do Clang-Tidy para o KDevelop</name>
+  <name xml:lang="sk">KDevelop Clang-Tidy podpora</name>
+  <name xml:lang="sv">KDevelop stöd för Clang-Tidy</name>
+  <name xml:lang="uk">Підтримка Clang-Tidy у KDevelop</name>
+  <name xml:lang="x-test">xxKDevelop Clang-Tidy Supportxx</name>
+  <summary>Clang-Tidy integration with KDevelop</summary>
+  <summary xml:lang="ca">Integració del Clang-Tidy amb el KDevelop</summary>
+  <summary xml:lang="ca-valencia">Integració del Clang-Tidy amb el KDevelop</summary>
+  <summary xml:lang="cs">Integrace Clang-Tidy v KDevelop</summary>
+  <summary xml:lang="es">Integración de Clang-Tidy en KDevelop</summary>
+  <summary xml:lang="fi">KDevelopin Clang-Tidy-integrointi</summary>
+  <summary xml:lang="nl">Integratie van Clang-Tidy met KDevelop</summary>
+  <summary xml:lang="pt">Integração do Clang-Tidy com o KDevelop</summary>
+  <summary xml:lang="sk">Clang-Tidy integrácia s KDevelop</summary>
+  <summary xml:lang="sv">Integrering av Clang-Tidy med KDevelop</summary>
+  <summary xml:lang="uk">Інтеграція Clang-Tidy із KDevelop</summary>
+  <summary xml:lang="x-test">xxClang-Tidy integration with KDevelopxx</summary>
+  <project_license>GPL-2.0+</project_license>
+  <metadata_license>CC0-1.0</metadata_license>
+  <url type="homepage">https://kdevelop.org</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kdevelop&amp;component=Analyzer:%20Clang-Tidy</url>
+  <url type="help">https://docs.kde.org/index.php?application=kdevelop</url>
+  <url type="donation">https://www.kde.org/community/donations/?app=kdevelop</url>
+  <project_group>KDE</project_group>
+  <update_contact>kossebau@kde.org</update_contact>
+</component>

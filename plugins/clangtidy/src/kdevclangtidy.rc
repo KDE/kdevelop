@@ -1,0 +1,13 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="ClangTidy" version="3" translationDomain="kdevclangtidy">
+<MenuBar>
+  <Menu name="code">
+    <Menu name="analyze_file">
+      <Action name="clangtidy_file"/>
+    </Menu>
+    <Menu name="analyze_project">
+      <Action name="clangtidy_project"/>
+    </Menu>
+  </Menu>
+</MenuBar>
+</gui>
