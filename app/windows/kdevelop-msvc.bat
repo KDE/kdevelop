@@ -16,12 +16,12 @@ if DEFINED VS140COMNTOOLS (
 set script="!base!\..\..\VC\vcvarsall.bat"
 call %script%
 
-for /F "usebackq tokens=3*" %%A in (`REG QUERY "HKEY_LOCAL_MACHINE\Software\KDE\KDevelop" /v Install_Dir`) do (
+for /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\KDE\KDevelop" /v Install_Dir 2^>nul`) DO (
     set appdir=%%A %%B
 )
 
 if NOT DEFINED appdir (
-    for /F "usebackq tokens=3*" %%A in (`REG QUERY "HKEY_LOCAL_MACHINE\Software\Wow6432Node\KDE\KDevelop" /v Install_Dir`) do (
+    for /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\Wow6432Node\KDE\KDevelop" /v Install_Dir 2^>nul`) DO (
         set appdir=%%A %%B
     )
 )
