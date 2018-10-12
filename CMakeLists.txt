@@ -139,8 +139,6 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_compile_flag_if_supported(-Wsuggest-override CXX_ONLY)
 endif()
 
-include_directories(${KDevelop_SOURCE_DIR} ${KDevelop_BINARY_DIR})
-
 string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
 if(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug"
   OR CMAKE_BUILD_TYPE_TOLOWER STREQUAL "")
@@ -151,6 +149,7 @@ endif()
 
 # create config-kdevelop.h
 configure_file(config-kdevelop.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kdevelop.h)
+include_directories(${KDevelop_BINARY_DIR}) # for config-kdevelop.h
 
 add_subdirectory(kdevplatform)
 add_subdirectory(plugins)
