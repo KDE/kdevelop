@@ -1,29 +1,69 @@
-setlocal EnableDelayedExpansion
+@echo off
+
+setlocal enabledelayedexpansion
 setlocal enableextensions
 
-if DEFINED VS140COMNTOOLS (
-    SET "base=%VS140COMNTOOLS%"
+REM Check for newest VS (2017) too. These variables are defined if the script is run from Developer Command Prompt
+IF NOT DEFINED VS150COMNTOOLS (
+    REM load Visual Studio 2017 developer command prompt if VS150COMNTOOLS is not set. It's ugly and hardcoded too.
+    for %%n in (Enterprise Professional Community BuildTools) do (
+        set "p=%ProgramFiles(x86)%\Microsoft Visual Studio\2017\%%n\Common7\Tools\"
+        if exist "!p!\VsDevCmd.bat" (
+            set "VS150COMNTOOLS=!p!"
+            goto :end
+        )
+    )
+)
+:end
+
+set base=
+if DEFINED VS150COMNTOOLS (
+    set "base=%VS150COMNTOOLS%"
+) else ( IF DEFINED VS140COMNTOOLS (
+    set "base=%VS140COMNTOOLS%"
 ) else ( IF DEFINED VS120COMNTOOLS (
-    SET "base=%VS120COMNTOOLS%"
+    set "base=%VS120COMNTOOLS%"
 ) else ( IF DEFINED VS110COMNTOOLS (
-    SET "base=%VS110COMNTOOLS%"
+    set "base=%VS110COMNTOOLS%"
 ) else ( IF DEFINED VS100COMNTOOLS (
-    SET "base=%VS100COMNTOOLS%"
-) else (
-    START CMD /C "The Microsoft Visual C++ compiler was not found on your system, you might not be able to compile programs. && PAUSE"
-) )))
+    set "base=%VS100COMNTOOLS%"
+) ))))
 
-SET script="!base!\..\..\VC\vcvarsall.bat"
-CALL %script%
+if NOT DEFINED base (
+    START CMD /C "echo The Microsoft Visual C++ compiler was not found on your system, you might not be able to compile programs. && PAUSE"
+)
 
-FOR /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\KDE\KDevelop" /v Install_Dir`) DO (
+echo Found VS Install: %base%
+
+if DEFINED VS150COMNTOOLS (
+    REM Note: VS2017 has a different directory layout compared to previous versions
+    set "vcvarsall=%base%..\..\VC\Auxiliary\Build\vcvarsall.bat"
+    REM Choosing architecture
+    echo Note: Refer to !vcvarsall! for more information
+    echo(
+    echo Define which compiler for VS2017 to use. Possible architectures are:
+    echo  x86_amd64
+    echo  x64
+    echo  ...
+    set /p "arch= Type an arch and press enter...: "
+
+    set script="!vcvarsall!" !arch!
+) else ( IF DEFINED base (
+    set script="!base!\..\..\VC\vcvarsall.bat"
+) )
+
+if DEFINED script (
+    call %script%
+)
+
+for /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\KDE\KDevelop" /v Install_Dir 2^>nul`) DO (
     set appdir=%%A %%B
 )
 
 if NOT DEFINED appdir (
-    FOR /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\Wow6432Node\KDE\KDevelop" /v Install_Dir`) DO (
+    for /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\Wow6432Node\KDE\KDevelop" /v Install_Dir 2^>nul`) DO (
         set appdir=%%A %%B
     )
 )
 
-START "" "%appdir%\bin\kdevelop.exe"
+start "" "%appdir%\bin\kdevelop.exe"
