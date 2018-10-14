@@ -624,7 +624,7 @@ QWidget* QuickOpenPlugin::specialObjectNavigationWidget() const
 
     const auto languages = ICore::self()->languageController()->languagesForUrl(url);
     for (const auto language : languages) {
-        QWidget* w = language->specialLanguageObjectNavigationWidget(url, KTextEditor::Cursor(view->cursorPosition()));
+        QWidget* w = language->specialLanguageObjectNavigationWidget(url, view->cursorPosition()).first;
         if (w) {
             return w;
         }

@@ -444,23 +444,36 @@ void ContextBrowserPlugin::hideToolTip() {
   }
 }
 
-static QVector<KDevelop::IProblem::Ptr> findProblemsUnderCursor(TopDUContext* topContext, KTextEditor::Cursor position)
+static QVector<KDevelop::IProblem::Ptr> findProblemsUnderCursor(TopDUContext* topContext, KTextEditor::Cursor position,
+                                                                KTextEditor::Range& handleRange)
 {
   QVector<KDevelop::IProblem::Ptr> problems;
+  handleRange = KTextEditor::Range::invalid();
+
   const auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
   for (const auto& modelData : modelsData) {
     foreach (const auto& problem, modelData.model->problems(topContext->url())) {
       DocumentRange problemRange = problem->finalLocation();
-      if (problemRange.contains(position) || (problemRange.isEmpty() && problemRange.boundaryAtCursor(position)))
+      if (problemRange.contains(position) || (problemRange.isEmpty() && problemRange.boundaryAtCursor(position))) {
         problems += problem;
+        // first?
+        if (!handleRange.isValid()) {
+          handleRange = problemRange;
+        } else {
+          handleRange.confineToRange(problemRange);
+        }
+      }
     }
   }
 
   return problems;
 }
 
-static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(TopDUContext* topContext, KTextEditor::Cursor position, KTextEditor::View* view)
+static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(const TopDUContext* topContext, KTextEditor::Cursor position, const KTextEditor::View* view,
+                                                                KTextEditor::Range& handleRange)
 {
+  handleRange = KTextEditor::Range::invalid();
+
   QVector<KDevelop::IProblem::Ptr> allProblems;
   const auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
   for (const auto& modelData : modelsData) {
@@ -528,32 +541,46 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(TopDUContext* 
     }
   }
 
+  if (!closestProblems.isEmpty()) {
+    auto it = closestProblems.constBegin();
+    handleRange = (*it)->finalLocation();
+    ++it;
+    for (auto end = closestProblems.constEnd(); it != end; ++it) {
+        handleRange.confineToRange((*it)->finalLocation());
+    }
+  }
+
   return closestProblems;
 }
 
-QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* view, KTextEditor::Cursor position)
+QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* view, KTextEditor::Cursor position,
+                                                           KTextEditor::Range& itemRange)
 {
   QUrl viewUrl = view->document()->url();
   const auto languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
 
   DUChainReadLocker lock(DUChain::lock());
+
   for (const auto language : languages) {
-    auto widget = language->specialLanguageObjectNavigationWidget(viewUrl, KTextEditor::Cursor(position));
-    auto navigationWidget = qobject_cast<AbstractNavigationWidget*>(widget);
-    if(navigationWidget)
+    auto widget = language->specialLanguageObjectNavigationWidget(viewUrl, position);
+    auto navigationWidget = qobject_cast<AbstractNavigationWidget*>(widget.first);
+    if (navigationWidget) {
+      itemRange = widget.second;
       return navigationWidget;
+    }
   }
 
   TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
   if (topContext) {
     // first pass: find problems under the cursor
-    const auto problems = findProblemsUnderCursor(topContext, position);
+    const auto problems = findProblemsUnderCursor(topContext, position, itemRange);
     if (!problems.isEmpty()) {
       if (problems == m_currentToolTipProblems && m_currentToolTip) {
         return nullptr;
       }
 
       m_currentToolTipProblems = problems;
+
       auto widget = new AbstractNavigationWidget;
       auto context = new ProblemNavigationContext(problems);
       context->setTopContext(TopDUContextPointer(topContext));
@@ -562,12 +589,12 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
     }
   }
 
-  auto declUnderCursor = DUChainUtils::itemUnderCursor(viewUrl, position).declaration;
+  const auto itemUnderCursor = DUChainUtils::itemUnderCursor(viewUrl, position);
+  auto declUnderCursor = itemUnderCursor.declaration;
   Declaration* decl = DUChainUtils::declarationForDefinition(declUnderCursor);
   if (decl && decl->kind() == Declaration::Alias) {
     AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(decl);
     Q_ASSERT(alias);
-    DUChainReadLocker lock;
     decl = alias->aliasedDeclaration().declaration();
   }
   if(decl) {
@@ -575,18 +602,20 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
       return nullptr;
 
     m_currentToolTipDeclaration = IndexedDeclaration(decl);
+    itemRange = itemUnderCursor.range;
     return decl->context()->createNavigationWidget(decl, DUChainUtils::standardContextForUrl(viewUrl));
   }
 
   if (topContext) {
     // second pass: find closest problem to the cursor
-    const auto problems = findProblemsCloseToCursor(topContext, position, view);
+    const auto problems = findProblemsCloseToCursor(topContext, position, view, itemRange);
     if (!problems.isEmpty()) {
       if (problems == m_currentToolTipProblems && m_currentToolTip) {
         return nullptr;
       }
 
       m_currentToolTipProblems = problems;
+
       auto widget = new AbstractNavigationWidget;
       // since the problem is not under cursor: show location
       widget->setContext(NavigationContextPointer(new ProblemNavigationContext(problems, ProblemNavigationContext::ShowLocation)));
@@ -602,7 +631,8 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
   if(contextView && contextView->isVisible() && !contextView->isLocked())
     return; // If the context-browser view is visible, it will care about updating by itself
 
-  auto navigationWidget = navigationWidgetForPosition(view, position);
+  KTextEditor::Range itemRange = KTextEditor::Range::invalid();
+  auto navigationWidget = navigationWidgetForPosition(view, position, itemRange);
   if(navigationWidget) {
 
     // If we have an invisible context-view, assign the tooltip navigation-widget to it.
@@ -617,12 +647,11 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
     }
 
     KDevelop::NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(view, view->mapToGlobal(view->cursorToCoordinate(position)) + QPoint(20, 40), navigationWidget);
-    KTextEditor::Range itemRange;
-    {
-      DUChainReadLocker lock;
-      auto viewUrl = view->document()->url();
-      itemRange = DUChainUtils::itemUnderCursor(viewUrl, position).range;
+    if (!itemRange.isValid()) {
+      qCWarning(PLUGIN_CONTEXTBROWSER) << "Got navigationwidget with invalid itemrange";
+      itemRange = KTextEditor::Range(position, 0);
     }
+
     tooltip->setHandleRect(KTextEditorHelpers::itemBoundingRect(view, itemRange));
     tooltip->resize( navigationWidget->sizeHint() + QSize(10, 10) );
     QObject::connect( view, &KTextEditor::View::verticalScrollPositionChanged,
@@ -798,7 +827,7 @@ void ContextBrowserPlugin::updateForView(View* view)
         highlights.highlights.back()->setZDepth(highlightingZDepth);
       }
       if(updateBrowserView)
-        updateBrowserView->setSpecialNavigationWidget(language->specialLanguageObjectNavigationWidget(url, highlightPosition));
+        updateBrowserView->setSpecialNavigationWidget(language->specialLanguageObjectNavigationWidget(url, highlightPosition).first);
     }else{
       KDevelop::DUChainReadLocker lock( DUChain::lock(), 100 );
       if(!lock.locked()) {

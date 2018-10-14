@@ -113,11 +113,12 @@ public:
     virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl& url, const KTextEditor::Cursor& position);
 
     /**Should return a navigation-widget for the
-      *special language-object that contains @p position refers, or 0.
+      *special language-object that contains @p position refers to as well as the range the object takes there,
+      *or nullptr and an invalid range.
       *If you setProperty("DoNotCloseOnCursorMove", true) on the widget returned,
       *then the widget will not close when the cursor moves in the document, which
       *enables you to change the document contents from the widget without immediately closing the widget.*/
-    virtual QWidget* specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position);
+    virtual QPair<QWidget*, KTextEditor::Range> specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position);
 
     /**Should return a tiny piece of code which makes it possible for KDevelop to derive the indentation
       *settings from an automatic source formatter. Example for C++: "class C{\n class D {\n void c() {\n int m;\n }\n }\n};\n"

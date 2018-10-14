@@ -57,10 +57,11 @@ QPair<QUrl, KTextEditor::Cursor> ILanguageSupport::specialLanguageObjectJumpCurs
     return QPair<QUrl, KTextEditor::Cursor>(QUrl(), KTextEditor::Cursor::invalid());
 }
 
-QWidget* ILanguageSupport::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) {
+QPair<QWidget*, KTextEditor::Range> ILanguageSupport::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position)
+{
     Q_UNUSED(url)
     Q_UNUSED(position)
-    return nullptr;
+    return {nullptr, KTextEditor::Range::invalid()};
 }
 
 ICodeHighlighting* ILanguageSupport::codeHighlighting() const {

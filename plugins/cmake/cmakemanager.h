@@ -120,8 +120,8 @@ public:
     QString name() const override;
     KDevelop::ParseJob *createParseJob(const KDevelop::IndexedString &url) override;
     KDevelop::ICodeHighlighting* codeHighlighting() const override;
-    QWidget* specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position) override;
-    
+    QPair<QWidget*, KTextEditor::Range> specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
+
 //     void addPending(const KDevelop::Path& path, CMakeFolderItem* folder);
 //     CMakeFolderItem* takePending(const KDevelop::Path& path);
 //     void addWatcher(KDevelop::IProject* p, const QString& path);
@@ -156,8 +156,8 @@ private:
     CMakeFile fileInformation(KDevelop::ProjectBaseItem* item) const;
 
     void folderAdded(KDevelop::ProjectFolderItem* folder);
-    QString termAtPosition(const KTextEditor::Document* textDocument,
-                           const KTextEditor::Cursor& position) const;
+    KTextEditor::Range termRangeAtPosition(const KTextEditor::Document* textDocument,
+                                           const KTextEditor::Cursor& position) const;
 
 private:
     QHash<KDevelop::IProject*, CMakeProjectData> m_projects;
