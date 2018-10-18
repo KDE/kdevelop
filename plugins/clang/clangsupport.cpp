@@ -342,7 +342,7 @@ QPair<QUrl, KTextEditor::Cursor> ClangSupport::specialLanguageObjectJumpCursor(c
     return {{}, KTextEditor::Cursor::invalid()};
 }
 
-QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position)
+QPair<QWidget*, KTextEditor::Range> ClangSupport::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position)
 {
     DUChainReadLocker lock;
     const QPair<TopDUContextPointer, Use> macroExpansion = macroExpansionForPosition(url, position);
@@ -351,15 +351,18 @@ QWidget* ClangSupport::specialLanguageObjectNavigationWidget(const QUrl &url, co
         const MacroDefinition::Ptr macroDefinition(dynamic_cast<MacroDefinition*>(declaration));
         Q_ASSERT(macroDefinition);
         auto rangeInRevision = macroExpansion.first->transformFromLocalRevision(macroExpansion.second.m_range.start);
-        return new ClangNavigationWidget(macroDefinition, DocumentCursor(IndexedString(url), rangeInRevision));
+        return {
+            new ClangNavigationWidget(macroDefinition, DocumentCursor(IndexedString(url), rangeInRevision)),
+            macroExpansion.second.m_range.castToSimpleRange()
+        };
     }
 
     const QPair<TopDUContextPointer, KTextEditor::Range> import = importedContextForPosition(url, position);
 
     if (import.first) {
-        return import.first->createNavigationWidget();
+        return {import.first->createNavigationWidget(), import.second};
     }
-    return nullptr;
+    return {nullptr, KTextEditor::Range::invalid()};
 }
 
 TopDUContext* ClangSupport::standardContext(const QUrl &url, bool /*proxyContext*/)

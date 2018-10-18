@@ -177,7 +177,8 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     QWidget* toolbarWidgetForMainWindow(Sublime::MainWindow* window);
     void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile,
                                             KActionCollection& actions) override;
-    QWidget* navigationWidgetForPosition(KTextEditor::View* view, KTextEditor::Cursor position);
+    QWidget* navigationWidgetForPosition(KTextEditor::View* view, KTextEditor::Cursor position,
+                                         KTextEditor::Range& itemRange);
     void switchUse(bool forward);
     void clearMouseHover();
 

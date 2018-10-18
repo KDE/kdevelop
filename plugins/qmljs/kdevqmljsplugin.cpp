@@ -177,7 +177,7 @@ const QPair<KTextEditor::Range, KTextEditor::Range> parseProperty(const QString&
     ));
 }
 
-QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position)
+QPair<QWidget*, KTextEditor::Range> KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position)
 {
     IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
     if ( doc && doc->textDocument() ) {
@@ -185,16 +185,16 @@ QWidget* KDevQmlJsPlugin::specialLanguageObjectNavigationWidget(const QUrl& url,
         // if the property key is listed in the supported properties.
         QPair<KTextEditor::Range, KTextEditor::Range> property = parseProperty(doc->textDocument()->line(position.line()), position);
         if ( property.first.isValid() && property.second.isValid() ) {
-            Declaration* decl = DUChainUtils::itemUnderCursor(url, property.first.start()).declaration;
+            const auto itemUnderCursor = DUChainUtils::itemUnderCursor(url, property.first.start());
 
-            return PropertyPreviewWidget::constructIfPossible(
+            return {PropertyPreviewWidget::constructIfPossible(
                 doc->textDocument(),
                 property.first,
                 property.second,
-                decl,
+                itemUnderCursor.declaration,
                 textFromDoc(doc, property.first),
                 textFromDoc(doc, property.second)
-            );
+            ), itemUnderCursor.range};
         }
     }
     // Otherwise, display no special "navigation" widget.

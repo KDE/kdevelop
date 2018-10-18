@@ -806,8 +806,8 @@ bool CMakeManager::addFilesToTarget(const QList< ProjectFileItem* > &/*_files*/,
 //     return renameFileOrFolder(item, newPath);
 // }
 
-QString CMakeManager::termAtPosition(const KTextEditor::Document* textDocument,
-                                     const KTextEditor::Cursor& position) const
+KTextEditor::Range CMakeManager::termRangeAtPosition(const KTextEditor::Document* textDocument,
+                                                     const KTextEditor::Cursor& position) const
 {
     const KTextEditor::Cursor step(0, 1);
 
@@ -833,7 +833,7 @@ QString CMakeManager::termAtPosition(const KTextEditor::Document* textDocument,
     }
 
     if (parseState != AnyChar) {
-        return QString();
+        return KTextEditor::Range::invalid();
     }
     // undo step before last valid char
     start += step;
@@ -848,47 +848,47 @@ QString CMakeManager::termAtPosition(const KTextEditor::Document* textDocument,
         end += step;
     }
 
-    return textDocument->text(KTextEditor::Range(start, end));
+    return KTextEditor::Range(start, end);
 }
 
-QWidget* CMakeManager::specialLanguageObjectNavigationWidget(const QUrl &url, const KTextEditor::Cursor& position)
+QPair<QWidget*, KTextEditor::Range> CMakeManager::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position)
 {
+    KTextEditor::Range itemRange;
+    CMakeNavigationWidget* doc = nullptr;
+
     KDevelop::TopDUContextPointer top= TopDUContextPointer(KDevelop::DUChain::self()->chainForDocument(url));
-    Declaration *decl=nullptr;
     if(top)
     {
         int useAt=top->findUseAt(top->transformToLocalRevision(position));
         if(useAt>=0)
         {
             Use u=top->uses()[useAt];
-            decl=u.usedDeclaration(top->topContext());
+            doc = new CMakeNavigationWidget(top, u.usedDeclaration(top->topContext()));
+            itemRange = u.m_range.castToSimpleRange();
         }
     }
 
-    CMakeNavigationWidget* doc=nullptr;
-    if(decl)
-    {
-        doc=new CMakeNavigationWidget(top, decl);
-    }
-    else
-    {
+    if (!doc) {
         ICMakeDocumentation* docu=CMake::cmakeDocumentation();
         if( docu )
         {
             const auto* document = ICore::self()->documentController()->documentForUrl(url);
             const auto* textDocument = document->textDocument();
-            const auto id = termAtPosition(textDocument, position);
-            if (!id.isEmpty()) {
-                IDocumentation::Ptr desc=docu->description(id, url);
-                if(desc)
-                {
-                    doc=new CMakeNavigationWidget(top, desc);
+            itemRange = termRangeAtPosition(textDocument, position);
+            if (itemRange.isValid()) {
+                const auto id = textDocument->text(itemRange);
+
+                if (!id.isEmpty()) {
+                    IDocumentation::Ptr desc=docu->description(id, url);
+                    if (desc) {
+                        doc=new CMakeNavigationWidget(top, desc);
+                    }
                 }
             }
         }
     }
 
-    return doc;
+    return {doc, itemRange};
 }
 
 QPair<QString, QString> CMakeManager::cacheValue(KDevelop::IProject* /*project*/, const QString& /*id*/) const

@@ -40,7 +40,7 @@ public:
     KDevelop::BasicRefactoring* refactoring() const override;
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
-    QWidget* specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
+    QPair<QWidget*, KTextEditor::Range> specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
 
 private:
     KDevelop::ICodeHighlighting* m_highlighting;
