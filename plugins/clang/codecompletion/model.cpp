@@ -199,6 +199,10 @@ bool ClangCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, co
     if (userInsertion && lastChar == QLatin1Char('-') && includePathCompletionRequired(view->document()->line(position.line()))) {
         return true;
     }
+    if (userInsertion && inserted.endsWith(QStringLiteral("::"))) {
+        return true;
+    }
+
     return KDevelop::CodeCompletionModel::shouldStartCompletion(view, inserted, userInsertion, position);
 }
 
