@@ -98,6 +98,11 @@ int KDEVPLATFORMLANGUAGE_EXPORT rStrip( const QByteArray& str, QByteArray& from 
 int KDEVPLATFORMLANGUAGE_EXPORT strip( const QByteArray& str, QByteArray& from );
 
 /**
+ * Removes all whitespace from the string
+ */
+QString KDEVPLATFORMLANGUAGE_EXPORT removeWhitespace( const QString& str );
+
+/**
  * Can be used to iterate through different kinds of parameters, for example template-parameters
  */
 class KDEVPLATFORMLANGUAGE_EXPORT ParamIterator

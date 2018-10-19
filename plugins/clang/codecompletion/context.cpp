@@ -41,6 +41,7 @@
 #include <language/duchain/types/pointertype.h>
 #include <language/duchain/types/typealiastype.h>
 #include <language/duchain/types/typeutils.h>
+#include <language/duchain/stringhelpers.h>
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <util/foregroundlock.h>
@@ -55,6 +56,7 @@
 #include "../duchain/navigationwidget.h"
 #include "../clangsettings/clangsettingsmanager.h"
 
+#include <algorithm>
 #include <functional>
 #include <memory>
 
@@ -338,7 +340,20 @@ public:
 
     void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
     {
-        view->document()->replaceText(word, m_replacement);
+        auto* const document = view->document();
+
+        // try and replace leading typed text that match the proposed implementation
+        const QString leading = document->line(word.end().line()).left(word.end().column());
+        const QString leadingNoSpace = removeWhitespace(leading);
+        if (!leadingNoSpace.isEmpty() && (removeWhitespace(m_display).startsWith(leadingNoSpace)
+            || removeWhitespace(m_replacement).startsWith(leadingNoSpace))) {
+            const int removeSize = leading.end() - std::find_if_not(leading.begin(), leading.end(),
+                                        [](QChar c){ return c.isSpace(); });
+            const KTextEditor::Cursor newStart = {word.end().line(), word.end().column() - removeSize};
+            document->replaceText({newStart, word.end()}, m_replacement);
+        } else {
+            document->replaceText(word, m_replacement);
+        }
     }
 };
 

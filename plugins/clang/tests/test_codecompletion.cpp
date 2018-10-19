@@ -1387,6 +1387,30 @@ void TestCodeCompletion::testCompleteFunction_data()
         << CompletionItems({5, 0}, {"Test", "Test<X, B>::bar(B a)"})
         << "Test<X, B>::bar(B a)"
         << "template <template<class, int> class X, typename B>\nclass Test {\npublic:\nvoid bar(B a);\n};\ntemplate<template<typename, int> class X, typename B> void Test<X, B>::bar(B a)\n{\n}\n";
+
+    QTest::newRow("replace-leading-return-type")
+        << "void foo(int x);\nvoid "
+        << CompletionItems({1, 5}, {"foo(int x)"})
+        << "foo(int x)"
+        << "void foo(int x);\nvoid foo(int x)\n{\n}\n";
+
+    QTest::newRow("replace-leading-function-name")
+        << "void foo(int x);\nfoo"
+        << CompletionItems({1, 3}, {"foo(int x)"})
+        << "foo(int x)"
+        << "void foo(int x);\nvoid foo(int x)\n{\n}\n";
+
+    QTest::newRow("replace-leading-with-class-method")
+        << "class Foo { int bar(int x); };\nint "
+        << CompletionItems({1, 4}, {"Foo", "Foo::bar(int x)"})
+        << "Foo::bar(int x)"
+        << "class Foo { int bar(int x); };\nint Foo::bar(int x)\n{\n}\n";
+
+    QTest::newRow("replace-leading-whitespace-mismatch")
+        << "class Foo { int** bar(int x); };\nint * *"
+        << CompletionItems({1, 7}, {"** Foo::bar(int x)"})
+        << "** Foo::bar(int x)"
+        << "class Foo { int** bar(int x); };\nint ** Foo::bar(int x)\n{\n}\n";
 }
 
 void TestCodeCompletion::testIgnoreGccBuiltins()

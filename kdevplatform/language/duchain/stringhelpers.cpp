@@ -508,6 +508,12 @@ QString formatComment(const QString& comment)
   return formatComment_impl<QString>(comment);
 }
 
+QString removeWhitespace(const QString& str)
+{
+  return str.simplified().remove(QLatin1Char(' '));
+}
+
+
 
 ParamIterator::~ParamIterator() = default;
 
