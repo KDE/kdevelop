@@ -29,6 +29,7 @@ Boston, MA 02110-1301, USA.
 
 namespace KTextEditor {
 class View;
+class Document;
 }
 
 namespace KTextEditorIntegration {
@@ -97,6 +98,7 @@ protected Q_SLOTS:
     void newTabRequested() override;
 
 private Q_SLOTS:
+    void documentActivated(const QPointer<KTextEditor::Document>& textDocument);
     void updateCaption();
 
     void updateTabColor(IDocument* doc);

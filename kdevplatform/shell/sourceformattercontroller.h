@@ -47,6 +47,7 @@ class Context;
 class ContextMenuExtension;
 
 class IDocument;
+class TextDocument;
 class ISourceFormatter;
 class IPlugin;
 
@@ -145,7 +146,7 @@ private Q_SLOTS:
     void beautifySource();
     void beautifyLine();
     void formatFiles();
-    void documentLoaded( KDevelop::IDocument* );
+    void documentLoaded(const QPointer<KDevelop::TextDocument>& doc);
     void pluginLoaded(KDevelop::IPlugin* plugin);
     void unloadingPlugin(KDevelop::IPlugin* plugin);
 
