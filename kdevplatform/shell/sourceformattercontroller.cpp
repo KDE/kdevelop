@@ -159,21 +159,21 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
             this, &SourceFormatterController::updateFormatTextAction);
     connect(Core::self()->documentController(), &IDocumentController::documentClosed,
             this, &SourceFormatterController::updateFormatTextAction);
+
+    qRegisterMetaType<QPointer<KDevelop::TextDocument>>();
     connect(Core::self()->documentController(), &IDocumentController::documentLoaded,
             // Use a queued connection, because otherwise the view is not yet fully set up
             // but wrap the document in a smart pointer to guard against crashes when it
             // gets deleted in the meantime
             this, [this](IDocument *doc) {
                 const auto textDoc = QPointer<TextDocument>(dynamic_cast<TextDocument*>(doc));
-                QMetaObject::invokeMethod(this, [this, textDoc](){
-                    documentLoaded(textDoc);
-                }, Qt::QueuedConnection);
+                QMetaObject::invokeMethod(this, "documentLoaded", Qt::QueuedConnection, Q_ARG(QPointer<KDevelop::TextDocument>, textDoc));
             });
 
     updateFormatTextAction();
 }
 
-void SourceFormatterController::documentLoaded(IDocument* doc)
+void SourceFormatterController::documentLoaded(const QPointer<TextDocument>& doc)
 {
     // NOTE: explicitly check this here to prevent crashes on shutdown
     //       when this slot gets called (note: delayed connection)

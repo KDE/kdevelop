@@ -363,6 +363,8 @@ void MainWindow::initialize()
 
     d->setupGui();
 
+    qRegisterMetaType<QPointer<KTextEditor::Document>>();
+
     //Queued so we process it with some delay, to make sure the rest of the UI has already adapted
     connect(Core::self()->documentController(), &IDocumentController::documentActivated,
             // Use a queued connection, because otherwise the view is not yet fully set up
@@ -370,16 +372,8 @@ void MainWindow::initialize()
             // gets deleted in the meantime
             this, [this](IDocument *doc) {
                 const auto textDocument = QPointer<KTextEditor::Document>(doc->textDocument());
-                QMetaObject::invokeMethod(this, [this, textDocument](){
-                    updateCaption();
-
-                    // update active document connection
-                    disconnect(d->activeDocumentReadWriteConnection);
-                    if (textDocument) {
-                        d->activeDocumentReadWriteConnection = connect(textDocument, &KTextEditor::Document::readWriteChanged,
-                                                                    this, &MainWindow::updateCaption);
-                    }
-                }, Qt::QueuedConnection);
+                QMetaObject::invokeMethod(this, "documentActivated", Qt::QueuedConnection,
+                                          Q_ARG(QPointer<KTextEditor::Document>, textDocument));
             });
 
     connect(Core::self()->documentController(), &IDocumentController::documentClosed, this, &MainWindow::updateCaption, Qt::QueuedConnection);
@@ -410,6 +404,18 @@ bool MainWindow::queryClose()
         return false;
 
     return Sublime::MainWindow::queryClose();
+}
+
+void MainWindow::documentActivated(const QPointer<KTextEditor::Document>& textDocument)
+{
+    updateCaption();
+
+    // update active document connection
+    disconnect(d->activeDocumentReadWriteConnection);
+    if (textDocument) {
+        d->activeDocumentReadWriteConnection = connect(textDocument, &KTextEditor::Document::readWriteChanged,
+                                                    this, &MainWindow::updateCaption);
+    }
 }
 
 void MainWindow::updateCaption()
