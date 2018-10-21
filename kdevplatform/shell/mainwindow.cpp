@@ -364,8 +364,24 @@ void MainWindow::initialize()
     d->setupGui();
 
     //Queued so we process it with some delay, to make sure the rest of the UI has already adapted
-    connect(Core::self()->documentController(), &IDocumentController::documentActivated, this, &MainWindow::updateCaption, Qt::QueuedConnection);
-    connect(Core::self()->documentController(), &IDocumentController::documentActivated, this, &MainWindow::updateActiveDocumentConnection, Qt::QueuedConnection);
+    connect(Core::self()->documentController(), &IDocumentController::documentActivated,
+            // Use a queued connection, because otherwise the view is not yet fully set up
+            // but wrap the document in a smart pointer to guard against crashes when it
+            // gets deleted in the meantime
+            this, [this](IDocument *doc) {
+                const auto textDocument = QPointer<KTextEditor::Document>(doc->textDocument());
+                QMetaObject::invokeMethod(this, [this, textDocument](){
+                    updateCaption();
+
+                    // update active document connection
+                    disconnect(d->activeDocumentReadWriteConnection);
+                    if (textDocument) {
+                        d->activeDocumentReadWriteConnection = connect(textDocument, &KTextEditor::Document::readWriteChanged,
+                                                                    this, &MainWindow::updateCaption);
+                    }
+                }, Qt::QueuedConnection);
+            });
+
     connect(Core::self()->documentController(), &IDocumentController::documentClosed, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->sessionController()->activeSession(), &ISession::sessionUpdated, this, &MainWindow::updateCaption);
@@ -394,15 +410,6 @@ bool MainWindow::queryClose()
         return false;
 
     return Sublime::MainWindow::queryClose();
-}
-
-void MainWindow::updateActiveDocumentConnection(IDocument* document)
-{
-    disconnect(d->activeDocumentReadWriteConnection);
-    if (auto textDocument = document->textDocument()) {
-        d->activeDocumentReadWriteConnection = connect(textDocument, &KTextEditor::Document::readWriteChanged,
-                                                       this, &MainWindow::updateCaption);
-    }
 }
 
 void MainWindow::updateCaption()

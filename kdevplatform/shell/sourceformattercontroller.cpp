@@ -58,6 +58,7 @@ Boston, MA 02110-1301, USA.
 #include "debug.h"
 #include "plugincontroller.h"
 #include "sourceformatterjob.h"
+#include "textdocument.h"
 
 namespace {
 
@@ -158,20 +159,27 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
             this, &SourceFormatterController::updateFormatTextAction);
     connect(Core::self()->documentController(), &IDocumentController::documentClosed,
             this, &SourceFormatterController::updateFormatTextAction);
-    // Use a queued connection, because otherwise the view is not yet fully set up
     connect(Core::self()->documentController(), &IDocumentController::documentLoaded,
-            this, &SourceFormatterController::documentLoaded, Qt::QueuedConnection);
+            // Use a queued connection, because otherwise the view is not yet fully set up
+            // but wrap the document in a smart pointer to guard against crashes when it
+            // gets deleted in the meantime
+            this, [this](IDocument *doc) {
+                const auto textDoc = QPointer<TextDocument>(dynamic_cast<TextDocument*>(doc));
+                QMetaObject::invokeMethod(this, [this, textDoc](){
+                    documentLoaded(textDoc);
+                }, Qt::QueuedConnection);
+            });
 
     updateFormatTextAction();
 }
 
-void SourceFormatterController::documentLoaded( IDocument* doc )
+void SourceFormatterController::documentLoaded(IDocument* doc)
 {
     // NOTE: explicitly check this here to prevent crashes on shutdown
     //       when this slot gets called (note: delayed connection)
     //       but the text document was already destroyed
     //       there have been unit tests that failed due to that...
-    if (!doc->textDocument()) {
+    if (!doc || !doc->textDocument()) {
         return;
     }
     const auto url = doc->url();
