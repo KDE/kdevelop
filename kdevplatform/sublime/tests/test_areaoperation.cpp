@@ -333,9 +333,7 @@ struct AreaWidgetChecker {
         }
         return Area::ContinueWalker;
     }
-    char* message() {
-        return qstrdup(failureMessage.toLatin1().data());
-    }
+
     bool foundViewWithoutWidget = false;
     QString failureMessage;
 };
@@ -353,7 +351,7 @@ void TestAreaOperation::areaSwitchingInSameMainwindow()
     AreaWidgetChecker checker;
     m_area1->walkViews(checker, m_area1->rootIndex());
     m_area1->walkToolViews(checker, Sublime::AllPositions);
-    QVERIFY2(!checker.foundViewWithoutWidget, checker.message());
+    QVERIFY2(!checker.foundViewWithoutWidget, checker.failureMessage.toLatin1().data());
 }
 
 void TestAreaOperation::simpleViewAdditionAndDeletion()

@@ -39,10 +39,22 @@ public:
     explicit ToolViewToolBarFactory(const QString &id): SimpleToolWidgetFactory<QTextEdit>(id) {}
     QList<QAction*> toolBarActions( QWidget* ) const override
     {
-        QAction* action = new QAction(actionText, nullptr);
-        return QList<QAction*>() << action;
+        return actionList;
     }
-    QString actionText;
+
+    ~ToolViewToolBarFactory() override
+    {
+        qDeleteAll(actionList);
+    }
+
+    void addAction(const QString &text)
+    {
+        QAction* action = new QAction(text, nullptr);
+        actionList.append(action);
+    }
+
+private:
+    QList<QAction*> actionList;
 };
 
 void TestToolViewToolBar::init()
@@ -55,7 +67,7 @@ void TestToolViewToolBar::init()
     // a horizontal tool with toolbar
     ToolViewToolBarFactory* factoryT1 = new ToolViewToolBarFactory(QStringLiteral("tool1factory"));
     actionTextT1 = QStringLiteral("Tool1Action");
-    factoryT1->actionText = actionTextT1;
+    factoryT1->addAction(actionTextT1);
     tool1 = new ToolDocument( QStringLiteral("tool1"), controller, factoryT1 );
     viewT11 = tool1->createView();
     area->addToolView( viewT11, Sublime::Bottom );
@@ -63,7 +75,7 @@ void TestToolViewToolBar::init()
     // a vertical tool with toolbar
     ToolViewToolBarFactory* factoryT2 = new ToolViewToolBarFactory(QStringLiteral("tool2factory"));
     actionTextT2 = QStringLiteral("Tool2Action");
-    factoryT2->actionText = actionTextT2;
+    factoryT2->addAction(actionTextT2);
     tool2 = new ToolDocument( QStringLiteral("tool2"), controller, factoryT2 );
     viewT21 = tool2->createView();
     area->addToolView( viewT21, Sublime::Left );
@@ -90,6 +102,7 @@ QToolBar* TestToolViewToolBar::fetchToolBarFor(Sublime::View* view)
     char* failMsg = qstrdup(QStringLiteral("Expected to find a toolbar but found %1").arg(barCount).toLatin1().data());
     Q_UNUSED(failMsg);
     Q_ASSERT_X(barCount == 1, loc, failMsg);
+    delete [] failMsg;
     return toolBars.at(0);
 }
 

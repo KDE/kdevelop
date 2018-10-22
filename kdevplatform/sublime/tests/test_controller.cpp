@@ -40,15 +40,15 @@ void TestController::documentDeletion()
 
 void TestController::areaDeletion()
 {
-    Controller* controller = new Controller;
-    Document *doc = new ToolDocument(QStringLiteral("tool"), controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool")));
+    Controller controller;
+    Document *doc = new ToolDocument(QStringLiteral("tool"), &controller, new SimpleToolWidgetFactory<QTextEdit>(QStringLiteral("tool")));
     //create a view which does not belong to an area
     View* view1 = doc->createView();
     Q_UNUSED(view1);
     //create an area and two views in it
-    Area *area = new Area(controller, QStringLiteral("MyArea"));
-    controller->addDefaultArea(area);
-    QCOMPARE(controller->defaultAreas().count(), 1);
+    Area *area = new Area(&controller, QStringLiteral("MyArea"));
+    controller.addDefaultArea(area);
+    QCOMPARE(controller.defaultAreas().count(), 1);
     View* view2 = doc->createView();
     view2->setObjectName(QStringLiteral("VIEW2"));
     area->addView(view2);
@@ -63,7 +63,7 @@ void TestController::areaDeletion()
 
     QEXPECT_FAIL("", "Fails because of delayed view deletion", Continue);
     QCOMPARE(doc->views().count(), 1);
-    QCOMPARE(controller->defaultAreas().count(), 0);
+    QCOMPARE(controller.defaultAreas().count(), 0);
 
     QTest::qWait(100); // wait for deleteLaters
     qDebug() << "Deleting doc";
