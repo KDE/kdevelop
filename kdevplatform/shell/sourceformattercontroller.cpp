@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 #include <QRegExp>
 #include <QStringList>
 #include <QUrl>
+#include <QPointer>
 
 #include <KActionCollection>
 #include <KIO/StoredTransferJob>
