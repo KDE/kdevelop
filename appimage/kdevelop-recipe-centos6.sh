@@ -19,9 +19,7 @@ git_pull_rebase_helper()
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-QTVERSION=5.9.6
-QTVERSION_SHORT=5.9
-QTDIR=/usr/local/Qt-${QTVERSION}/
+QTDIR=/opt/qt5
 
 if [ -z "$KDEVELOP_VERSION" ]; then
     KDEVELOP_VERSION=5.3
@@ -263,12 +261,9 @@ cd /kdevelop.appdir
 # FIXME: How to find out which subset of plugins is really needed? I used strace when running the binary
 mkdir -p ./usr/lib/qt5/plugins/
 
-if [ -e $(dirname $QTDIR/plugins/bearer) ] ; then
-  PLUGINS=$(dirname $QTDIR/plugins/bearer)
-else
-  PLUGINS=../../$QTVERSION_SHORT/gc*/plugins/
-fi
-echo "Using plugin dir: $PLUGINS" # /usr/lib64/qt5/plugins if build system Qt is found
+PLUGINS=$($QTDIR/bin/qmake -query QT_INSTALL_PLUGINS)
+
+echo "Using plugin dir: $PLUGINS"
 cp -r $PLUGINS/bearer ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/generic ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/imageformats ./usr/lib/qt5/plugins/
