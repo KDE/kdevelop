@@ -139,22 +139,18 @@ function build_project
     git reset --hard
     cat > no_phonon.patch << EOF
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b97425f..8f15f08 100644
+index aa2926f..60f4277 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -59,10 +59,10 @@ find_package(KF5Config ${KF5_DEP_VERSION} REQUIRED)
- find_package(KF5Codecs ${KF5_DEP_VERSION} REQUIRED)
- find_package(KF5CoreAddons ${KF5_DEP_VERSION} REQUIRED)
- 
--find_package(Phonon4Qt5 4.6.60 REQUIRED NO_MODULE)
-+find_package(Phonon4Qt5 4.6.60 NO_MODULE)
- set_package_properties(Phonon4Qt5 PROPERTIES
-    DESCRIPTION "Qt-based audio library"
--   TYPE REQUIRED
-+   TYPE OPTIONAL
-    PURPOSE "Required to build audio notification support")
- if (Phonon4Qt5_FOUND)
-   add_definitions(-DHAVE_PHONON4QT5)
+@@ -77,7 +77,7 @@ else()
+     set_package_properties(Phonon4Qt5 PROPERTIES
+         DESCRIPTION "Qt-based audio library"
+         # This is REQUIRED since you cannot tell CMake "either one of those two optional ones are required"
+-        TYPE REQUIRED
++        TYPE OPTIONAL
+         PURPOSE "Needed to build audio notification support when Canberra isn't available")
+     if (Phonon4Qt5_FOUND)
+         add_definitions(-DHAVE_PHONON4QT5)
 EOF
     cat no_phonon.patch |patch -p1
     cd ..
