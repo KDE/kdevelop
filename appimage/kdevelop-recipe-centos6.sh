@@ -19,17 +19,15 @@ git_pull_rebase_helper()
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-QTVERSION=5.9.6
-QTVERSION_SHORT=5.9
-QTDIR=/usr/local/Qt-${QTVERSION}/
+QTDIR=/opt/qt5
 
 if [ -z "$KDEVELOP_VERSION" ]; then
     KDEVELOP_VERSION=5.3
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
-    KDEV_PG_QT_VERSION=2.0
+    KDEV_PG_QT_VERSION=v2.1.0
 fi
-KF5_VERSION=v5.48.0 # note: v5.49.0 is broken due to https://phabricator.kde.org/R246:0a96acf251baa5c9dd042d093ab2bf8fcee10502
+KF5_VERSION=v5.51.0
 KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
 KDE_APPLICATION_VERSION=v18.08.0
 GRANTLEE_VERSION=v5.1.0
@@ -138,22 +136,18 @@ function build_project
     git reset --hard
     cat > no_phonon.patch << EOF
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b97425f..8f15f08 100644
+index aa2926f..60f4277 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -59,10 +59,10 @@ find_package(KF5Config ${KF5_DEP_VERSION} REQUIRED)
- find_package(KF5Codecs ${KF5_DEP_VERSION} REQUIRED)
- find_package(KF5CoreAddons ${KF5_DEP_VERSION} REQUIRED)
- 
--find_package(Phonon4Qt5 4.6.60 REQUIRED NO_MODULE)
-+find_package(Phonon4Qt5 4.6.60 NO_MODULE)
- set_package_properties(Phonon4Qt5 PROPERTIES
-    DESCRIPTION "Qt-based audio library"
--   TYPE REQUIRED
-+   TYPE OPTIONAL
-    PURPOSE "Required to build audio notification support")
- if (Phonon4Qt5_FOUND)
-   add_definitions(-DHAVE_PHONON4QT5)
+@@ -77,7 +77,7 @@ else()
+     set_package_properties(Phonon4Qt5 PROPERTIES
+         DESCRIPTION "Qt-based audio library"
+         # This is REQUIRED since you cannot tell CMake "either one of those two optional ones are required"
+-        TYPE REQUIRED
++        TYPE OPTIONAL
+         PURPOSE "Needed to build audio notification support when Canberra isn't available")
+     if (Phonon4Qt5_FOUND)
+         add_definitions(-DHAVE_PHONON4QT5)
 EOF
     cat no_phonon.patch |patch -p1
     cd ..
@@ -257,12 +251,9 @@ cd /kdevelop.appdir
 # FIXME: How to find out which subset of plugins is really needed? I used strace when running the binary
 mkdir -p ./usr/lib/qt5/plugins/
 
-if [ -e $(dirname $QTDIR/plugins/bearer) ] ; then
-  PLUGINS=$(dirname $QTDIR/plugins/bearer)
-else
-  PLUGINS=../../$QTVERSION_SHORT/gc*/plugins/
-fi
-echo "Using plugin dir: $PLUGINS" # /usr/lib64/qt5/plugins if build system Qt is found
+PLUGINS=$($QTDIR/bin/qmake -query QT_INSTALL_PLUGINS)
+
+echo "Using plugin dir: $PLUGINS"
 cp -r $PLUGINS/bearer ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/generic ./usr/lib/qt5/plugins/
 cp -r $PLUGINS/imageformats ./usr/lib/qt5/plugins/
