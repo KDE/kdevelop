@@ -459,8 +459,12 @@ cp -R /usr/lib/python3.6 /kdevelop.appdir/usr/lib/
 rm -Rf /kdevelop.appdir/usr/lib/python3.6/{test,config-3.5m,__pycache__,site-packages,lib-dynload,distutils,idlelib,unittest,tkinter,ensurepip}
 
 mkdir -p /kdevelop.appdir/usr/share/kdevelop/
+
+# Breeze cruft
 cp $BUILD/breeze-icons/icons/breeze-icons.rcc /kdevelop.appdir/usr/share/kdevelop/icontheme.rcc
 rm -Rf /kdevelop.appdir/usr/share/icons/breeze* # not needed because of the rcc
+rm -Rf /kdevelop.appdir/usr/share/wallpapers
+
 rm -f /kdevelop.appdir/usr/bin/llvm*
 rm -f /kdevelop.appdir/usr/bin/clang*
 rm -f /kdevelop.appdir/usr/bin/opt
