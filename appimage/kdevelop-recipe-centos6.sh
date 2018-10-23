@@ -120,27 +120,12 @@ function build_project
     git stash pop || true
     cd ..
 
-    if [ "$PROJECT" = "knotifications" ]; then
-    cd $PROJECT
-        echo "patching knotifications"
-    git reset --hard
-    cat > no_phonon.patch << EOF
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index aa2926f..60f4277 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -77,7 +77,7 @@ else()
-     set_package_properties(Phonon4Qt5 PROPERTIES
-         DESCRIPTION "Qt-based audio library"
-         # This is REQUIRED since you cannot tell CMake "either one of those two optional ones are required"
--        TYPE REQUIRED
-+        TYPE OPTIONAL
-         PURPOSE "Needed to build audio notification support when Canberra isn't available")
-     if (Phonon4Qt5_FOUND)
-         add_definitions(-DHAVE_PHONON4QT5)
-EOF
-    cat no_phonon.patch |patch -p1
-    cd ..
+    if [ -z "$PATCH_FILE" ]; then
+        pushd $PROJECT
+        echo "patching $PROJECT"
+        git reset --hard
+        patch -p1 < $PATCH_FILE
+        popd
     fi
 
     # create build dir
@@ -202,7 +187,7 @@ build_framework ktexteditor
 build_framework kpackage
 build_framework kdeclarative
 build_framework kcmutils
-build_framework knotifications
+(PATCH_FILE=knotifications_no_phonon.patch build_framework knotifications)
 build_framework knotifyconfig
 build_framework kdoctools
 build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
