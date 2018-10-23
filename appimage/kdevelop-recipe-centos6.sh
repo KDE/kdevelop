@@ -122,7 +122,7 @@ function build_project
 
     if [ ! -z "$PATCH_FILE" ]; then
         pushd $PROJECT
-        echo "patching $PROJECT"
+        echo "Patching $PROJECT with $PATCH_FILE"
         git reset --hard
         patch -p1 < $PATCH_FILE
         popd
@@ -187,7 +187,7 @@ build_framework ktexteditor
 build_framework kpackage
 build_framework kdeclarative
 build_framework kcmutils
-(PATCH_FILE=knotifications_no_phonon.patch build_framework knotifications)
+(PATCH_FILE=$SCRIPT_DIR/knotifications_no_phonon.patch build_framework knotifications)
 build_framework knotifyconfig
 build_framework kdoctools
 build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
@@ -206,7 +206,7 @@ build_project kate $KDE_APPLICATION_VERSION # for snippet plugin, see T3826
 build_project konsole $KDE_APPLICATION_VERSION
 
 # Extra
-(CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git PATCH_FILE=grantlee_avoid_recompilation.patch build_project grantlee $GRANTLEE_VERSION)
+(CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git PATCH_FILE=$SCRIPT_DIR/grantlee_avoid_recompilation.patch build_project grantlee $GRANTLEE_VERSION)
 
 # KDevelop
 build_project kdevelop-pg-qt $KDEV_PG_QT_VERSION
