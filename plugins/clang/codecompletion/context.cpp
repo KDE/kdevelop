@@ -354,6 +354,9 @@ public:
         } else {
             document->replaceText(word, m_replacement);
         }
+
+        // place cursor after the opening brace
+        view->setCursorPosition(view->cursorPosition() + KTextEditor::Cursor{-2, 1});
     }
 };
 
