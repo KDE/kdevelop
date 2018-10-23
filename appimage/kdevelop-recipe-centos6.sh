@@ -25,7 +25,7 @@ if [ -z "$KDEVELOP_VERSION" ]; then
     KDEVELOP_VERSION=5.3
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
-    KDEV_PG_QT_VERSION=2.0
+    KDEV_PG_QT_VERSION=v2.1.0
 fi
 if [ -z "$KDEV_CLANG_TIDY_VERSION" ]; then
     KDEV_CLANG_TIDY_VERSION=v0.3.0
