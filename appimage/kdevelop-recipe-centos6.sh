@@ -30,7 +30,7 @@ fi
 if [ -z "$KDEV_CLANG_TIDY_VERSION" ]; then
     KDEV_CLANG_TIDY_VERSION=v0.3.0
 fi
-KF5_VERSION=v5.48.0 # note: v5.49.0 is broken due to https://phabricator.kde.org/R246:0a96acf251baa5c9dd042d093ab2bf8fcee10502
+KF5_VERSION=v5.51.0
 KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
 KDE_APPLICATION_VERSION=v18.08.0
 GRANTLEE_VERSION=v5.1.0
