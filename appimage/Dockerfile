@@ -13,7 +13,7 @@ RUN bash -c "ln -sf /opt/rh/devtoolset-6/root/usr/bin/g++ /usr/bin/g++ && ln -sf
 # Build Qt5
 RUN bash -c "mkdir -p /qt && cd /qt && wget http://download.qt.io/archive/qt/${QTVERSION_SHORT}/${QTVERSION}/single/qt-everywhere-opensource-src-${QTVERSION}.tar.xz"
 RUN bash -c "cd /qt && tar xvf qt-everywhere-opensource-src-${QTVERSION}.tar.xz"
-RUN bash -c "export MAKEFLAGS=-j$(nproc) && cd /qt/qt-everywhere-opensource-src-${QTVERSION} && ./configure -v -skip qt3d -skip qtgamepad -skip qtlocation -skip qtcharts -platform linux-g++ -qt-pcre -qt-xcb -qt-xkbcommon-x11 -xkb-config-root /usr/share/X11/xkb -no-pch -nomake tests -nomake examples -confirm-license -opensource && make -j$(nproc) || make -j 1 install; make -j$(nproc) install && rm -Rf /qt"
+RUN bash -c "export MAKEFLAGS=-j$(nproc) && cd /qt/qt-everywhere-opensource-src-${QTVERSION} && ./configure -v -skip qt3d -skip qtconnectivity -skip qtgamepad -skip qtlocation -skip qtcharts -skip qtremoteobjects -skip qtscxml -skip qtsensors -platform linux-g++ -qt-pcre -qt-xcb -qt-xkbcommon-x11 -xkb-config-root /usr/share/X11/xkb -no-pch -nomake tests -nomake examples -confirm-license -opensource && make -j$(nproc) || make -j 1 install; make -j$(nproc) install && rm -Rf /qt"
 
 RUN ln -sf /usr/local/Qt-${QTVERSION}/bin/qmake /usr/bin/qmake-qt5
 
