@@ -5,7 +5,7 @@ RUN cd /tmp && wget http://opensource.wandisco.com/rhel/6/svn-1.9/RPMS/x86_64/su
 
 RUN echo ". /opt/rh/devtoolset-6/enable && chmod +x /opt/rh/python27/enable && . /opt/rh/python27/enable" >> /root/.bashrc
 
-ENV LC_ALL=en_US.UTF-8 LANG=en_us.UTF-8 QTVERSION=5.9.6 QTVERSION_SHORT=5.9 LLVM_VERSION=6.0.1 LLVM_ROOT=/opt/llvm/ LD_LIBRARY_PATH=$QTDIR/lib/
+ENV LC_ALL=en_US.UTF-8 LANG=en_us.UTF-8 QTVERSION=5.9.7 QTVERSION_SHORT=5.9 LLVM_VERSION=6.0.1 LLVM_ROOT=/opt/llvm/ LD_LIBRARY_PATH=$QTDIR/lib/
 ENV QTDIR=/usr/local/Qt-${QTVERSION}/
 
 RUN bash -c "ln -sf /opt/rh/devtoolset-6/root/usr/bin/g++ /usr/bin/g++ && ln -sf /opt/rh/devtoolset-6/root/usr/bin/c++ /usr/bin/c++"
