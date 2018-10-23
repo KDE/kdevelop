@@ -120,7 +120,7 @@ function build_project
     git stash pop || true
     cd ..
 
-    if [ -z "$PATCH_FILE" ]; then
+    if [ ! -z "$PATCH_FILE" ]; then
         pushd $PROJECT
         echo "patching $PROJECT"
         git reset --hard
