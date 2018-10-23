@@ -55,19 +55,6 @@ fi
 # Make sure we build from the /, parts of this script depends on that. We also need to run as root...
 cd  /
 
-# Build AppImageKit
-#rm -Rf /AppImageKit
-if [ ! -d AppImageKit ] ; then
-  git clone  --depth 1 https://github.com/probonopd/AppImageKit.git /AppImageKit
-fi
-
-cd /AppImageKit/
-git checkout stable/v1.0
-git_pull_rebase_helper
-git reset --hard
-./build.sh
-cd /
-
 # Use the new compiler
 . /opt/rh/devtoolset-6/enable
 
@@ -515,9 +502,18 @@ if [[ "$ARCH" = "i686" ]] ; then
 fi
 echo $APPIMAGE
 
+# Get appimagetool
+mkdir -p $SRC/appimagetool
+pushd $SRC/appimagetool
+wget -c -O appimagetool https://github.com/AppImage/AppImageKit/releases/download/11/appimagetool-x86_64.AppImage
+chmod +x ./appimagetool
+./appimagetool --appimage-extract # no fuse on this docker instance...
+export PATH=$PWD/squashfs-root/usr/bin:$PATH
+popd
+
 mkdir -p /out
 
 rm -f /out/*.AppImage || true
-AppImageKit/AppImageAssistant.AppDir/package /kdevelop.appdir/ /out/$APPIMAGE
+appimagetool /kdevelop.appdir/ /out/$APPIMAGE
 
 chmod a+rwx /out/$APPIMAGE # So that we can edit the AppImage outside of the Docker container
