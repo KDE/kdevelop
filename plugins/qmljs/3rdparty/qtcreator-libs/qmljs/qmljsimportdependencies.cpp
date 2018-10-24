@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -63,7 +58,7 @@ ImportKind::Enum toImportKind(ImportType::Enum type)
     return ImportKind::Invalid;
 }
 
-ImportMatchStrength::ImportMatchStrength(QList<int> match)
+ImportMatchStrength::ImportMatchStrength(const QList<int> &match)
     : m_match(match)
 { }
 
@@ -77,7 +72,7 @@ int ImportMatchStrength::compareMatch(const ImportMatchStrength &o) const
         int v2 = o.m_match.at(i);
         if (v1 < v2)
             return -1;
-        if (v2 > v1)
+        if (v1 > v2)
             return 1;
     }
     if (len1 < len2)
@@ -254,6 +249,7 @@ ImportMatchStrength ImportKey::matchImport(const ImportKey &o, const ViewerConte
     case ImportType::QrcFile:
         if (type != ImportType::QrcFile)
             return ImportMatchStrength();
+        break;
     case ImportType::UnknownFile:
     case ImportType::File:
         switch (type) {
@@ -481,13 +477,13 @@ bool operator <(const ImportKey &i1, const ImportKey &i2)
     return i1.compare(i2) < 0;
 }
 
-QString Export::LibraryTypeName() { return QStringLiteral("%Library%"); }
+QString Export::libraryTypeName() { return QStringLiteral("%Library%"); }
 
 Export::Export()
     : intrinsic(false)
 { }
 
-Export::Export(ImportKey exportName, QString pathRequired, bool intrinsic, const QString &typeName)
+Export::Export(ImportKey exportName, const QString &pathRequired, bool intrinsic, const QString &typeName)
     : exportName(exportName), pathRequired(pathRequired), typeName(typeName), intrinsic(intrinsic)
 { }
 
@@ -823,18 +819,6 @@ void ImportDependencies::removeExport(const QString &importId, const ImportKey &
     }
     qCDebug(importsLog) << "removed export "<< importKey.toString() << " for id " << importId
                         << " (" << requiredPath << ")";
-}
-
-void ImportDependencies::iterateOnCoreImports(
-        const ViewerContext &vContext,
-        std::function<bool (const CoreImport &)> const &iterF) const
-{
-    QMapIterator<QString, CoreImport> i(m_coreImports);
-    while (i.hasNext()) {
-        i.next();
-        if (vContext.languageIsCompatible(i.value().language))
-            iterF(i.value()); // check also that at least one export is visible?
-    }
 }
 
 void ImportDependencies::iterateOnLibraryImports(

@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,27 +9,21 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
-#ifndef JSON_H
-#define JSON_H
+#pragma once
 
 #include "utils_global.h"
 
@@ -88,13 +82,13 @@ public:
     Kind kind() const { return m_kind; }
     static QString kindToString(Kind kind);
 
-    virtual JsonStringValue *toString() { return 0; }
-    virtual JsonDoubleValue *toDouble() { return 0; }
-    virtual JsonIntValue *toInt() { return 0; }
-    virtual JsonObjectValue *toObject() { return 0; }
-    virtual JsonArrayValue *toArray() { return 0; }
-    virtual JsonBooleanValue *toBoolean() { return 0; }
-    virtual JsonNullValue *toNull() { return 0; }
+    virtual JsonStringValue *toString() { return nullptr; }
+    virtual JsonDoubleValue *toDouble() { return nullptr; }
+    virtual JsonIntValue *toInt() { return nullptr; }
+    virtual JsonObjectValue *toObject() { return nullptr; }
+    virtual JsonArrayValue *toArray() { return nullptr; }
+    virtual JsonBooleanValue *toBoolean() { return nullptr; }
+    virtual JsonNullValue *toNull() { return nullptr; }
 
     static JsonValue *create(const QString &s, JsonMemoryPool *pool);
     void *operator new(size_t size, JsonMemoryPool *pool);
@@ -122,7 +116,7 @@ public:
         , m_value(value)
     {}
 
-    virtual JsonStringValue *toString() { return this; }
+    JsonStringValue *toString() override { return this; }
 
     const QString &value() const { return m_value; }
 
@@ -142,7 +136,7 @@ public:
         , m_value(value)
     {}
 
-    virtual JsonDoubleValue *toDouble() { return this; }
+    JsonDoubleValue *toDouble() override { return this; }
 
     double value() const { return m_value; }
 
@@ -161,7 +155,7 @@ public:
         , m_value(value)
     {}
 
-    virtual JsonIntValue *toInt() { return this; }
+    JsonIntValue *toInt() override { return this; }
 
     int value() const { return m_value; }
 
@@ -180,7 +174,7 @@ public:
         : JsonValue(Object)
     {}
 
-    virtual JsonObjectValue *toObject() { return this; }
+    JsonObjectValue *toObject() override { return this; }
 
     void addMember(const QString &name, JsonValue *value) { m_members.insert(name, value); }
     bool hasMember(const QString &name) const { return m_members.contains(name); }
@@ -208,7 +202,7 @@ public:
         : JsonValue(Array)
     {}
 
-    virtual JsonArrayValue *toArray() { return this; }
+    JsonArrayValue *toArray() override { return this; }
 
     void addElement(JsonValue *value) { m_elements.append(value); }
     QList<JsonValue *> elements() const { return m_elements; }
@@ -230,7 +224,7 @@ public:
         , m_value(value)
     {}
 
-    virtual JsonBooleanValue *toBoolean() { return this; }
+    JsonBooleanValue *toBoolean() override { return this; }
 
     bool value() const { return m_value; }
 
@@ -245,7 +239,7 @@ public:
         : JsonValue(Null)
     {}
 
-    virtual JsonNullValue *toNull() { return this; }
+    JsonNullValue *toNull() override { return this; }
 };
 
 class JsonSchemaManager;
@@ -405,7 +399,7 @@ public:
 private:
     struct JsonSchemaData
     {
-        JsonSchemaData(const QString &absoluteFileName, JsonSchema *schema = 0)
+        JsonSchemaData(const QString &absoluteFileName, JsonSchema *schema = nullptr)
             : m_absoluteFileName(absoluteFileName)
             , m_schema(schema)
         {}
@@ -422,5 +416,3 @@ private:
 };
 
 } // namespace Utils
-
-#endif // JSON_H

@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -190,37 +185,41 @@ PropertyInfo::PropertyInfo(uint flags)
 
 QString PropertyInfo::toString() const
 {
-    bool join = false;
-    QString res;
-    if (isReadable()) {
-        res += QLatin1String("Readable");
-        join = true;
-    }
-    if (isWriteable()) {
-        if (join)
-            res += QLatin1Char('|');
-        res += QLatin1String("Writeable");
-        join = true;
-    }
-    if (isList()) {
-        if (join)
-            res += QLatin1Char('|');
-        res += QLatin1String("ListType");
-        join = true;
-    }
-    if (canBePointer()) {
-        if (join)
-            res += QLatin1Char('|');
-        res += QLatin1String("Pointer");
-        join = true;
-    }
-    if (canBeValue()) {
-        if (join)
-            res += QLatin1Char('|');
-        res += QLatin1String("Value");
-        join = true;
-    }
-    return res;
+    QStringList list;
+    if (isReadable())
+        list.append("Readable");
+
+    if (isWriteable())
+        list.append("Writeable");
+
+    if (isList())
+        list.append("ListType");
+
+    if (canBePointer())
+        list.append("Pointer");
+
+    if (canBeValue())
+        list.append("Value");
+
+    return list.join('|');
+}
+
+static QList<CustomImportsProvider *> g_customImportProviders;
+
+CustomImportsProvider::CustomImportsProvider(QObject *parent)
+    : QObject(parent)
+{
+    g_customImportProviders.append(this);
+}
+
+CustomImportsProvider::~CustomImportsProvider()
+{
+    g_customImportProviders.removeOne(this);
+}
+
+const QList<CustomImportsProvider *> CustomImportsProvider::allProviders()
+{
+    return g_customImportProviders;
 }
 
 } // namespace QmlJS
@@ -1122,11 +1121,13 @@ const Value *ObjectValue::lookupMember(const QString &name, const Context *conte
         }
     }
 
+    const ObjectValue *prototypeObject = 0;
+
     if (examinePrototypes && context) {
         PrototypeIterator iter(this, context);
         iter.next(); // skip this
         while (iter.hasNext()) {
-            const ObjectValue *prototypeObject = iter.next();
+            prototypeObject = iter.next();
             if (const Value *m = prototypeObject->lookupMember(name, context, foundInObject, false))
                 return m;
         }
@@ -1134,6 +1135,7 @@ const Value *ObjectValue::lookupMember(const QString &name, const Context *conte
 
     if (foundInObject)
         *foundInObject = 0;
+
     return 0;
 }
 
@@ -1351,6 +1353,7 @@ CppQmlTypesLoader::BuiltinObjects CppQmlTypesLoader::defaultQtObjects;
 CppQmlTypesLoader::BuiltinObjects CppQmlTypesLoader::loadQmlTypes(const QFileInfoList &qmlTypeFiles, QStringList *errors, QStringList *warnings)
 {
     QHash<QString, FakeMetaObject::ConstPtr> newObjects;
+    QStringList newDependencies;
 
     foreach (const QFileInfo &qmlTypeFile, qmlTypeFiles) {
         QString error, warning;
@@ -1360,7 +1363,8 @@ CppQmlTypesLoader::BuiltinObjects CppQmlTypesLoader::loadQmlTypes(const QFileInf
             file.close();
 
 
-            parseQmlTypeDescriptions(contents, &newObjects, 0, &error, &warning, qmlTypeFile.absoluteFilePath());
+            parseQmlTypeDescriptions(contents, &newObjects, 0, &newDependencies, &error, &warning,
+                                     qmlTypeFile.absoluteFilePath());
         } else {
             error = file.errorString();
         }
@@ -1382,6 +1386,7 @@ CppQmlTypesLoader::BuiltinObjects CppQmlTypesLoader::loadQmlTypes(const QFileInf
 void CppQmlTypesLoader::parseQmlTypeDescriptions(const QByteArray &contents,
                                                  BuiltinObjects *newObjects,
                                                  QList<ModuleApiInfo> *newModuleApis,
+                                                 QStringList *newDependencies,
                                                  QString *errorMessage,
                                                  QString *warningMessage, const QString &fileName)
 {
@@ -1401,7 +1406,7 @@ void CppQmlTypesLoader::parseQmlTypeDescriptions(const QByteArray &contents,
     errorMessage->clear();
     warningMessage->clear();
     TypeDescriptionReader reader(fileName, QString::fromUtf8(contents));
-    if (!reader(newObjects, newModuleApis)) {
+    if (!reader(newObjects, newModuleApis, newDependencies)) {
         if (reader.errorMessage().isEmpty())
             *errorMessage = QLatin1String("unknown error");
         else
@@ -1453,9 +1458,10 @@ void CppQmlTypes::load(const QString &originId, const T &fakeMetaObjects, const 
             object->setPrototype(proto);
     }
 }
+
 // explicitly instantiate load for list and hash
-template void CppQmlTypes::load< QList<FakeMetaObject::ConstPtr> >(const QString &, const QList<FakeMetaObject::ConstPtr> &, const QString &);
-template void CppQmlTypes::load< QHash<QString, FakeMetaObject::ConstPtr> >(const QString &, const QHash<QString, FakeMetaObject::ConstPtr> &, const QString &);
+template QMLJS_EXPORT void CppQmlTypes::load< QList<FakeMetaObject::ConstPtr> >(const QString &, const QList<FakeMetaObject::ConstPtr> &, const QString &);
+template QMLJS_EXPORT void CppQmlTypes::load< QHash<QString, FakeMetaObject::ConstPtr> >(const QString &, const QHash<QString, FakeMetaObject::ConstPtr> &, const QString &);
 
 QList<const CppComponentValue *> CppQmlTypes::createObjectsForImport(const QString &package, ComponentVersion version)
 {
@@ -1850,7 +1856,7 @@ ASTObjectValue::ASTObjectValue(UiQualifiedId *typeName,
         for (UiObjectMemberList *it = m_initializer->members; it; it = it->next) {
             UiObjectMember *member = it->member;
             if (UiPublicMember *def = cast<UiPublicMember *>(member)) {
-                if (def->type == UiPublicMember::Property && !def->name.isEmpty() && !def->memberType.isEmpty()) {
+                if (def->type == UiPublicMember::Property && !def->name.isEmpty() && def->isValid()) {
                     ASTPropertyReference *ref = new ASTPropertyReference(def, m_doc, valueOwner);
                     m_properties.append(ref);
                     if (def->defaultToken.isValid())
@@ -1985,7 +1991,7 @@ public:
     }
 
 protected:
-    bool visit(ArrayMemberExpression *ast) override
+    bool visit(ArrayMemberExpression *ast)
     {
         if (IdentifierExpression *idExp = cast<IdentifierExpression *>(ast->base)) {
             if (idExp->name == QLatin1String("arguments"))
@@ -1995,9 +2001,7 @@ protected:
     }
 
     // don't go into nested functions
-    bool visit(FunctionBody *) override { return false; }
-    using Visitor::visit;
-
+    bool visit(FunctionBody *) { return false; }
 };
 } // anonymous namespace
 
@@ -2117,10 +2121,10 @@ bool ASTPropertyReference::getSourceLocation(QString *fileName, int *line, int *
 const Value *ASTPropertyReference::value(ReferenceContext *referenceContext) const
 {
     if (m_ast->statement
-            && (m_ast->memberType.isEmpty()
-                || m_ast->memberType == QLatin1String("variant")
-                || m_ast->memberType == QLatin1String("var")
-                || m_ast->memberType == QLatin1String("alias"))) {
+            && (!m_ast->isValid()
+                || m_ast->memberTypeName() == QLatin1String("variant")
+                || m_ast->memberTypeName() == QLatin1String("var")
+                || m_ast->memberTypeName() == QLatin1String("alias"))) {
 
         // Adjust the context for the current location - expensive!
         // ### Improve efficiency by caching the 'use chain' constructed in ScopeBuilder.
@@ -2136,7 +2140,7 @@ const Value *ASTPropertyReference::value(ReferenceContext *referenceContext) con
         return evaluator(m_ast->statement);
     }
 
-    const QString memberType = m_ast->memberType.toString();
+    const QString memberType = m_ast->memberTypeName().toString();
 
     const Value *builtin = valueOwner()->defaultValueForBuiltinType(memberType);
     if (!builtin->asUndefinedValue())
@@ -2160,7 +2164,7 @@ ASTSignal::ASTSignal(UiPublicMember *ast, const Document *doc, ValueOwner *value
     ObjectValue *v = valueOwner->newObject(/*prototype=*/0);
     for (UiParameterList *it = ast->parameters; it; it = it->next) {
         if (!it->name.isEmpty())
-            v->setMember(it->name.toString(), valueOwner->defaultValueForBuiltinType(it->type.toString()));
+            v->setMember(it->name.toString(), valueOwner->defaultValueForBuiltinType(it->type->name.toString()));
     }
     m_bodyScope = v;
 }
@@ -2187,9 +2191,9 @@ const Value *ASTSignal::argument(int index) const
     UiParameterList *param = m_ast->parameters;
     for (int i = 0; param && i < index; ++i)
         param = param->next;
-    if (!param || param->type.isEmpty())
+    if (!param || param->type->name.isEmpty())
         return valueOwner()->unknownValue();
-    return valueOwner()->defaultValueForBuiltinType(param->type.toString());
+    return valueOwner()->defaultValueForBuiltinType(param->type->name.toString());
 }
 
 QString ASTSignal::argumentName(int index) const
@@ -2253,11 +2257,13 @@ ImportInfo ImportInfo::pathImport(const QString &docPath, const QString &path,
     } else if (importFileInfo.isDir()) {
         info.m_type = ImportType::Directory;
     } else if (path.startsWith(QLatin1String("qrc:"))) {
+        ModelManagerInterface *model = ModelManagerInterface::instance();
         info.m_path = path;
-        if (ModelManagerInterface::instance()->filesAtQrcPath(info.path()).isEmpty())
-            info.m_type = ImportType::QrcDirectory;
-        else
-            info.m_type = ImportType::QrcFile;
+        info.m_type = !model
+                ? ImportType::UnknownFile
+                : model->filesAtQrcPath(info.path()).isEmpty()
+                  ? ImportType::QrcDirectory
+                  : ImportType::QrcFile;
     } else {
         info.m_type = ImportType::UnknownFile;
     }
@@ -2279,6 +2285,14 @@ ImportInfo ImportInfo::implicitDirectoryImport(const QString &directory)
 {
     ImportInfo info;
     info.m_type = ImportType::ImplicitDirectory;
+    info.m_path = directory;
+    return info;
+}
+
+ImportInfo ImportInfo::qrcDirectoryImport(const QString &directory)
+{
+    ImportInfo info;
+    info.m_type = ImportType::QrcDirectory;
     info.m_path = directory;
     return info;
 }

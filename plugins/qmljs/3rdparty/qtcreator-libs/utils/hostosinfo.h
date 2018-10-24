@@ -1,7 +1,7 @@
-/**************************************************************************
+/****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,27 +9,21 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
-#ifndef HOSTOSINFO_H
-#define HOSTOSINFO_H
+#pragma once
 
 #include "utils_global.h"
 
@@ -48,20 +42,40 @@ namespace Utils {
 class QTCREATOR_UTILS_EXPORT HostOsInfo
 {
 public:
-    static inline OsType hostOs();
+    static constexpr OsType hostOs()
+    {
+#if defined(Q_OS_WIN)
+        return OsTypeWindows;
+#elif defined(Q_OS_LINUX)
+        return OsTypeLinux;
+#elif defined(Q_OS_MAC)
+        return OsTypeMac;
+#elif defined(Q_OS_UNIX)
+        return OsTypeOtherUnix;
+#else
+        return OsTypeOther;
+#endif
+    }
 
     enum HostArchitecture { HostArchitectureX86, HostArchitectureAMD64, HostArchitectureItanium,
                             HostArchitectureArm, HostArchitectureUnknown };
     static HostArchitecture hostArchitecture();
 
-    static bool isWindowsHost() { return hostOs() == OsTypeWindows; }
-    static bool isLinuxHost() { return hostOs() == OsTypeLinux; }
-    static bool isMacHost() { return hostOs() == OsTypeMac; }
-    static inline bool isAnyUnixHost();
+    static constexpr bool isWindowsHost() { return hostOs() == OsTypeWindows; }
+    static constexpr bool isLinuxHost() { return hostOs() == OsTypeLinux; }
+    static constexpr bool isMacHost() { return hostOs() == OsTypeMac; }
+    static constexpr bool isAnyUnixHost()
+    {
+#ifdef Q_OS_UNIX
+        return true;
+#else
+        return false;
+#endif
+    }
 
     static QString withExecutableSuffix(const QString &executable)
     {
-        return hostOsAspects().withExecutableSuffix(executable);
+        return OsSpecificAspects::withExecutableSuffix(hostOs(), executable);
     }
 
     static void setOverrideFileNameCaseSensitivity(Qt::CaseSensitivity sensitivity);
@@ -71,53 +85,24 @@ public:
     {
         return m_useOverrideFileNameCaseSensitivity
                 ? m_overrideFileNameCaseSensitivity
-                : hostOsAspects().fileNameCaseSensitivity();
+                : OsSpecificAspects::fileNameCaseSensitivity(hostOs());
     }
 
     static QChar pathListSeparator()
     {
-        return hostOsAspects().pathListSeparator();
+        return OsSpecificAspects::pathListSeparator(hostOs());
     }
 
     static Qt::KeyboardModifier controlModifier()
     {
-        return hostOsAspects().controlModifier();
+        return OsSpecificAspects::controlModifier(hostOs());
     }
 
     static bool canCreateOpenGLContext(QString *errorMessage);
 
 private:
-    static OsSpecificAspects hostOsAspects() { return OsSpecificAspects(hostOs()); }
-
     static Qt::CaseSensitivity m_overrideFileNameCaseSensitivity;
     static bool m_useOverrideFileNameCaseSensitivity;
 };
 
-
-OsType HostOsInfo::hostOs()
-{
-#if defined(Q_OS_WIN)
-    return OsTypeWindows;
-#elif defined(Q_OS_LINUX)
-    return OsTypeLinux;
-#elif defined(Q_OS_MAC)
-    return OsTypeMac;
-#elif defined(Q_OS_UNIX)
-    return OsTypeOtherUnix;
-#else
-    return OsTypeOther;
-#endif
-}
-
-bool HostOsInfo::isAnyUnixHost()
-{
-#ifdef Q_OS_UNIX
-    return true;
-#else
-    return false;
-#endif
-}
-
 } // namespace Utils
-
-#endif // HOSTOSINFO_H

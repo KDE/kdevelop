@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -34,7 +29,6 @@
 #include <utils/fileutils.h>
 
 #include <QDir>
-#include <QStringBuilder>
 #include <QDebug>
 #include <QJsonDocument>
 
@@ -76,21 +70,21 @@ void JsonValue::operator delete(void *, JsonMemoryPool *)
 QString JsonValue::kindToString(JsonValue::Kind kind)
 {
     if (kind == String)
-        return QStringLiteral("string");
+        return QLatin1String("string");
     if (kind == Double)
-        return QStringLiteral("number");
+        return QLatin1String("number");
     if (kind == Int)
-        return QStringLiteral("integer");
+        return QLatin1String("integer");
     if (kind == Object)
-        return QStringLiteral("object");
+        return QLatin1String("object");
     if (kind == Array)
-        return QStringLiteral("array");
+        return QLatin1String("array");
     if (kind == Boolean)
-        return QStringLiteral("boolean");
+        return QLatin1String("boolean");
     if (kind == Null)
-        return QStringLiteral("null");
+        return QLatin1String("null");
 
-    return QStringLiteral("unknown");
+    return QLatin1String("unknown");
 }
 
 JsonValue *JsonValue::build(const QVariant &variant, JsonMemoryPool *pool)
@@ -264,13 +258,14 @@ void JsonSchema::enterNestedTypeSchema()
 
 QStringList JsonSchema::properties(JsonObjectValue *v) const
 {
-    typedef QHash<QString, JsonValue *>::ConstIterator MemberConstIterator;
+    using Members = QHash<QString, JsonValue *>;
 
     QStringList all;
 
     if (JsonObjectValue *ov = getObjectValue(kProperties(), v)) {
-        const MemberConstIterator cend = ov->members().constEnd();
-        for (MemberConstIterator it = ov->members().constBegin(); it != cend; ++it)
+        const Members members = ov->members();
+        const Members::ConstIterator cend = members.constEnd();
+        for (Members::ConstIterator it = members.constBegin(); it != cend; ++it)
             if (hasPropertySchema(it.key()))
                 all.append(it.key());
     }
@@ -677,9 +672,9 @@ JsonSchemaManager::JsonSchemaManager(const QStringList &searchPaths)
 {
     foreach (const QString &path, m_searchPaths) {
         QDir dir(path);
-        if (!dir.exists() && !dir.mkpath(path))
+        if (!dir.exists())
             continue;
-        dir.setNameFilters(QStringList(QStringLiteral("*.json")));
+        dir.setNameFilters(QStringList(QLatin1String("*.json")));
         foreach (const QFileInfo &fi, dir.entryInfoList())
             m_schemas.insert(fi.baseName(), JsonSchemaData(fi.absoluteFilePath()));
     }
@@ -712,7 +707,7 @@ JsonSchema *JsonSchemaManager::schemaByName(const QString &baseName) const
     QHash<QString, JsonSchemaData>::iterator it = m_schemas.find(baseName);
     if (it == m_schemas.end()) {
         foreach (const QString &path, m_searchPaths) {
-            QFileInfo candidate(path % baseName % QLatin1String(".json"));
+            QFileInfo candidate(path + baseName + ".json");
             if (candidate.exists()) {
                 m_schemas.insert(baseName, candidate.absoluteFilePath());
                 break;

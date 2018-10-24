@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,27 +9,21 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
-#ifndef QMLJSMEMORYPOOL_P_H
-#define QMLJSMEMORYPOOL_P_H
+#pragma once
 
 //
 //  W A R N I N G
@@ -53,6 +47,8 @@
 QT_QML_BEGIN_NAMESPACE
 
 namespace QmlJS {
+
+class Managed;
 
 class QML_PARSER_EXPORT MemoryPool : public QSharedData
 {
@@ -83,7 +79,7 @@ public:
     inline void *allocate(size_t size)
     {
         size = (size + 7) & ~7;
-        if (_ptr && (_ptr + size < _end)) {
+        if (Q_LIKELY(_ptr && (_ptr + size < _end))) {
             void *addr = _ptr;
             _ptr += size;
             return addr;
@@ -97,8 +93,10 @@ public:
         _ptr = _end = 0;
     }
 
+    template <typename Tp> Tp *New() { return new (this->allocate(sizeof(Tp))) Tp(); }
+
 private:
-    void *allocate_helper(size_t size)
+    Q_NEVER_INLINE void *allocate_helper(size_t size)
     {
         Q_ASSERT(size < BLOCK_SIZE);
 
@@ -109,6 +107,7 @@ private:
                 _allocatedBlocks *= 2;
 
             _blocks = (char **) realloc(_blocks, sizeof(char *) * _allocatedBlocks);
+            Q_CHECK_PTR(_blocks);
 
             for (int index = _blockCount; index < _allocatedBlocks; ++index)
                 _blocks[index] = 0;
@@ -116,8 +115,10 @@ private:
 
         char *&block = _blocks[_blockCount];
 
-        if (! block)
+        if (! block) {
             block = (char *) malloc(BLOCK_SIZE);
+            Q_CHECK_PTR(block);
+        }
 
         _ptr = block;
         _end = _ptr + BLOCK_SIZE;
@@ -159,4 +160,3 @@ public:
 
 QT_QML_END_NAMESPACE
 
-#endif

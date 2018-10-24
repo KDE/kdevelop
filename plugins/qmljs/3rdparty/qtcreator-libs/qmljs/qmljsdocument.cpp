@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -40,6 +35,7 @@
 #include <QCryptographicHash>
 #include <QDir>
 #include <QFileInfo>
+#include <QRegExp>
 
 #include <algorithm>
 
@@ -234,7 +230,17 @@ QString Document::componentName() const
 namespace {
 class CollectDirectives : public Directives
 {
-    QString documentPath;
+    void addLocation(int line, int column) {
+        const SourceLocation loc = SourceLocation(
+                    0,  // placeholder
+                    0,  // placeholder
+                    static_cast<quint32>(line),
+                    static_cast<quint32>(column));
+        _locations += loc;
+    }
+
+    QList<SourceLocation> _locations;
+
 public:
     CollectDirectives(const QString &documentPath)
         : documentPath(documentPath)
@@ -242,23 +248,41 @@ public:
 
     {}
 
-    void pragmaLibrary() override { isLibrary = true; }
-    void importFile(const QString &jsfile, const QString &module) override
+    void pragmaLibrary(int line, int column) override
+    {
+        isLibrary = true;
+        addLocation(line, column);
+    }
+
+    void importFile(const QString &jsfile, const QString &module,
+                    int line, int column) override
     {
         imports += ImportInfo::pathImport(
                     documentPath, jsfile, LanguageUtils::ComponentVersion(), module);
+        addLocation(line, column);
     }
 
-    void importModule(const QString &uri, const QString &version, const QString &module) override
+    void importModule(const QString &uri, const QString &version, const QString &module,
+                      int line, int column) override
     {
         imports += ImportInfo::moduleImport(uri, LanguageUtils::ComponentVersion(version), module);
+        addLocation(line, column);
     }
 
+    virtual QList<SourceLocation> locations() { return _locations; }
+
+    const QString documentPath;
     bool isLibrary;
     QList<ImportInfo> imports;
 };
 
 } // anonymous namespace
+
+
+QList<SourceLocation> Document::jsDirectives() const
+{
+    return _jsdirectives;
+}
 
 bool Document::parse_helper(int startToken)
 {
@@ -274,8 +298,8 @@ bool Document::parse_helper(int startToken)
     QString source = _source;
     lexer.setCode(source, /*line = */ 1, /*qmlMode = */_language.isQmlLikeLanguage());
 
-    CollectDirectives collectDirectives(path());
-    _engine->setDirectives(&collectDirectives);
+    CollectDirectives directives = CollectDirectives(path());
+    _engine->setDirectives(&directives);
 
     switch (startToken) {
     case QmlJSGrammar::T_FEED_UI_PROGRAM:
@@ -283,6 +307,9 @@ bool Document::parse_helper(int startToken)
         break;
     case QmlJSGrammar::T_FEED_JS_PROGRAM:
         _parsedCorrectly = parser.parseProgram();
+        for (const auto &d: directives.locations()) {
+            _jsdirectives << d;
+        }
         break;
     case QmlJSGrammar::T_FEED_JS_EXPRESSION:
         _parsedCorrectly = parser.parseExpression();
@@ -294,7 +321,7 @@ bool Document::parse_helper(int startToken)
     _ast = parser.rootNode();
     _diagnosticMessages = parser.diagnosticMessages();
 
-    _bind = new Bind(this, &_diagnosticMessages, collectDirectives.isLibrary, collectDirectives.imports);
+    _bind = new Bind(this, &_diagnosticMessages, directives.isLibrary, directives.imports);
 
     return _parsedCorrectly;
 }
@@ -499,6 +526,14 @@ void Snapshot::insertLibraryInfo(const QString &path, const LibraryInfo &info)
         QRegExp safeName(QLatin1String("^[a-zA-Z_][[a-zA-Z0-9_]*$"));
         int majorVersion = LanguageUtils::ComponentVersion::NoVersion;
         int minorVersion = LanguageUtils::ComponentVersion::NoVersion;
+
+        foreach (const QmlDirParser::Component &component, info.components()) {
+            if (component.majorVersion > majorVersion)
+                majorVersion = component.majorVersion;
+            if (component.minorVersion > minorVersion)
+                minorVersion = component.minorVersion;
+        }
+
         if (vNr.indexIn(splitPath.last()) == 0) {
             splitPath.last() = vNr.cap(1);
             bool ok;
@@ -524,6 +559,7 @@ void Snapshot::insertLibraryInfo(const QString &path, const LibraryInfo &info)
         foreach (const Export &e, cImport.possibleExports)
             _dependencies.addExport(component.fileName, e.exportName, e.pathRequired, e.typeName);
     }
+
     cImport.fingerprint = info.fingerprint();
     _dependencies.addCoreImport(cImport);
 }

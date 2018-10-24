@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -33,6 +28,8 @@
 #include "parser/qmljsast_p.h"
 
 #include <QColor>
+#include <QDir>
+#include <QRegularExpression>
 
 using namespace QmlJS;
 using namespace QmlJS::AST;
@@ -84,10 +81,9 @@ QColor QmlJS::toQColor(const QString &qmlColorString)
     QColor color;
     if (qmlColorString.size() == 9 && qmlColorString.at(0) == QLatin1Char('#')) {
         bool ok;
-        const int alpha = qmlColorString.mid(1, 2).toInt(&ok, 16);
+        const int alpha = qmlColorString.midRef(1, 2).toInt(&ok, 16);
         if (ok) {
-            QString name(qmlColorString.at(0));
-            name.append(qmlColorString.right(6));
+            const QString name = qmlColorString.at(0) + qmlColorString.right(6);
             if (QColor::isValidColor(name)) {
                 color.setNamedColor(name);
                 color.setAlpha(alpha);
@@ -198,6 +194,83 @@ UiQualifiedId *QmlJS::qualifiedTypeNameId(Node *node)
 DiagnosticMessage QmlJS::errorMessage(const AST::SourceLocation &loc, const QString &message)
 {
     return DiagnosticMessage(Severity::Error, loc, message);
+}
+
+namespace {
+const QString undefinedVersion = QLatin1String("-1.-1");
+}
+
+/*!
+ * \brief Permissive validation of a string representing a module version.
+ * \param version
+ * \return True if \p version is a valid version format (<digit(s)>.<digit(s)>), if it is the
+ *         undefined version (-1.-1) or if it is empty.  False otherwise.
+ */
+bool QmlJS::maybeModuleVersion(const QString &version) {
+    QRegularExpression re(QLatin1String("^\\d+\\.\\d+$"));
+    return version.isEmpty() || version == undefinedVersion || re.match(version).hasMatch();
+}
+
+/*!
+ * \brief Get the path of a module
+ * \param name
+ * \param version
+ * \param importPaths
+ *
+ * Given the qualified \p name and \p version of a module, look for a valid path in \p importPaths.
+ * Most specific version are searched first, the version is searched also in parent modules.
+ * For example, given the \p name QtQml.Models and \p version 2.0, the following directories are
+ * searched in every element of \p importPath:
+ *
+ * - QtQml/Models.2.0
+ * - QtQml.2.0/Models
+ * - QtQml/Models.2
+ * - QtQml.2/Models
+ * - QtQml/Models
+ *
+ * \return The module paths if found, an empty string otherwise
+ * \see qmlimportscanner in qtdeclarative/tools
+ */
+QString QmlJS::modulePath(const QString &name, const QString &version,
+                          const QStringList &importPaths)
+{
+    Q_ASSERT(maybeModuleVersion(version));
+    if (importPaths.isEmpty())
+        return QString();
+
+    const QString sanitizedVersion = version == undefinedVersion ? QString() : version;
+    const QStringList parts = name.split(QLatin1Char('.'), QString::SkipEmptyParts);
+    auto mkpath = [] (const QStringList &xs) -> QString { return xs.join(QLatin1Char('/')); };
+
+    // Regular expression for building candidates by successively removing minor and major
+    // version numbers.  It does not match the undefined version, so it has to be applied to the
+    // sanitized version.
+    const QRegularExpression re("\\.?\\d+$");
+
+    QString candidate;
+
+    for (QString ver = sanitizedVersion; !ver.isEmpty(); ver.remove(re)) {
+        for (const QString &path: importPaths) {
+            for (int i = parts.count() - 1; i >= 0; --i) {
+                candidate = QDir::cleanPath(
+                            QString::fromLatin1("%1/%2.%3/%4").arg(path,
+                                                                   mkpath(parts.mid(0, i + 1)),
+                                                                   ver,
+                                                                   mkpath(parts.mid(i + 1))));
+                if (QDir(candidate).exists())
+                    return candidate;
+            }
+        }
+    }
+
+    // Version is empty
+    for (const QString &path: importPaths) {
+        candidate = QDir::cleanPath(QString::fromLatin1("%1/%2").arg(path, mkpath(parts)));
+        if (QDir(candidate).exists())
+            return candidate;
+    }
+
+    return QString();
 }
 
 bool QmlJS::isValidBuiltinPropertyType(const QString &name)
