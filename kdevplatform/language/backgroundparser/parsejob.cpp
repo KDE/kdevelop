@@ -279,7 +279,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
             foreach (const QString path, paths) {
                 QDir dataPath = QDir(path);
                 if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev"))) {
-                    qCInfo(LANGUAGE) << "Found internal file " << fileInfo.absoluteFilePath() << " in " << path << ". Ignoring file size limit!";
+                    qCDebug(LANGUAGE) << "Found internal file " << fileInfo.absoluteFilePath() << " in " << path << ". Ignoring file size limit!";
                     internalFile = true;
                     break;
                 }

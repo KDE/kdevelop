@@ -134,6 +134,8 @@ public:
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
+        Q_UNUSED(index);
+
         int i = 5;
         int j = 1;
 
