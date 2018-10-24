@@ -1,0 +1,42 @@
+diff --git a/templates/lib/CMakeLists.txt b/templates/lib/CMakeLists.txt
+index dad2ef8..685d4d6 100644
+--- a/templates/lib/CMakeLists.txt
++++ b/templates/lib/CMakeLists.txt
+@@ -118,10 +118,6 @@ endif()
+ 
+ configure_file(grantlee_test_export.h.in "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h")
+ 
+-file(READ "${CMAKE_CURRENT_BINARY_DIR}/grantlee_test_export.h" _content)
+-
+-file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/grantlee_templates_export.h" "${_content}")
+-
+ target_link_libraries(Grantlee_Templates
+   LINK_PUBLIC Qt5::Core
+ )
+diff --git a/templates/lib/grantlee_test_export.h.in b/templates/lib/grantlee_test_export.h.in
+index 681574c..bc07d2b 100644
+--- a/templates/lib/grantlee_test_export.h.in
++++ b/templates/lib/grantlee_test_export.h.in
+@@ -1,2 +1,8 @@
++#ifndef GRANTLEE_TEST_EXPORT_H
++#define GRANTLEE_TEST_EXPORT_H
++
++#include "grantlee_templates_export.h"
+ 
+ #define GRANTLEE_TESTS_EXPORT @GRANTLEE_TESTS_EXPORT@
++
++#endif
+diff --git a/templates/lib/nulllocalizer_p.h b/templates/lib/nulllocalizer_p.h
+index a584f79..ab57b79 100644
+--- a/templates/lib/nulllocalizer_p.h
++++ b/templates/lib/nulllocalizer_p.h
+@@ -21,6 +21,8 @@
+ #ifndef GRANTLEE_NULLLOCALIZER_P_H
+ #define GRANTLEE_NULLLOCALIZER_P_H
+ 
++#include "grantlee_test_export.h"
++
+ #include "abstractlocalizer.h"
+ 
+ namespace Grantlee
+

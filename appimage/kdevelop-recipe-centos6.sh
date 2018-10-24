@@ -52,19 +52,6 @@ fi
 # Make sure we build from the /, parts of this script depends on that. We also need to run as root...
 cd  /
 
-# Build AppImageKit
-#rm -Rf /AppImageKit
-if [ ! -d AppImageKit ] ; then
-  git clone  --depth 1 https://github.com/probonopd/AppImageKit.git /AppImageKit
-fi
-
-cd /AppImageKit/
-git checkout stable/v1.0
-git_pull_rebase_helper
-git reset --hard
-./build.sh
-cd /
-
 # Use the new compiler
 . /opt/rh/devtoolset-6/enable
 
@@ -130,27 +117,12 @@ function build_project
     git stash pop || true
     cd ..
 
-    if [ "$PROJECT" = "knotifications" ]; then
-    cd $PROJECT
-        echo "patching knotifications"
-    git reset --hard
-    cat > no_phonon.patch << EOF
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index aa2926f..60f4277 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -77,7 +77,7 @@ else()
-     set_package_properties(Phonon4Qt5 PROPERTIES
-         DESCRIPTION "Qt-based audio library"
-         # This is REQUIRED since you cannot tell CMake "either one of those two optional ones are required"
--        TYPE REQUIRED
-+        TYPE OPTIONAL
-         PURPOSE "Needed to build audio notification support when Canberra isn't available")
-     if (Phonon4Qt5_FOUND)
-         add_definitions(-DHAVE_PHONON4QT5)
-EOF
-    cat no_phonon.patch |patch -p1
-    cd ..
+    if [ ! -z "$PATCH_FILE" ]; then
+        pushd $PROJECT
+        echo "Patching $PROJECT with $PATCH_FILE"
+        git reset --hard
+        patch -p1 < $PATCH_FILE
+        popd
     fi
 
     # create build dir
@@ -212,7 +184,7 @@ build_framework ktexteditor
 build_framework kpackage
 build_framework kdeclarative
 build_framework kcmutils
-build_framework knotifications
+(PATCH_FILE=$SCRIPT_DIR/knotifications_no_phonon.patch build_framework knotifications)
 build_framework knotifyconfig
 build_framework kdoctools
 build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
@@ -231,7 +203,7 @@ build_project kate $KDE_APPLICATION_VERSION # for snippet plugin, see T3826
 build_project konsole $KDE_APPLICATION_VERSION
 
 # Extra
-(CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git build_project grantlee $GRANTLEE_VERSION)
+(CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git PATCH_FILE=$SCRIPT_DIR/grantlee_avoid_recompilation.patch build_project grantlee $GRANTLEE_VERSION)
 
 # KDevelop
 build_project kdevelop-pg-qt $KDEV_PG_QT_VERSION
@@ -466,8 +438,12 @@ cp -R /usr/lib/python3.6 /kdevelop.appdir/usr/lib/
 rm -Rf /kdevelop.appdir/usr/lib/python3.6/{test,config-3.5m,__pycache__,site-packages,lib-dynload,distutils,idlelib,unittest,tkinter,ensurepip}
 
 mkdir -p /kdevelop.appdir/usr/share/kdevelop/
+
+# Breeze cruft
 cp $BUILD/breeze-icons/icons/breeze-icons.rcc /kdevelop.appdir/usr/share/kdevelop/icontheme.rcc
 rm -Rf /kdevelop.appdir/usr/share/icons/breeze* # not needed because of the rcc
+rm -Rf /kdevelop.appdir/usr/share/wallpapers
+
 rm -f /kdevelop.appdir/usr/bin/llvm*
 rm -f /kdevelop.appdir/usr/bin/clang*
 rm -f /kdevelop.appdir/usr/bin/opt
@@ -509,9 +485,18 @@ if [[ "$ARCH" = "i686" ]] ; then
 fi
 echo $APPIMAGE
 
+# Get appimagetool
+mkdir -p $SRC/appimagetool
+pushd $SRC/appimagetool
+wget -c -O appimagetool https://github.com/AppImage/AppImageKit/releases/download/11/appimagetool-x86_64.AppImage
+chmod +x ./appimagetool
+./appimagetool --appimage-extract # no fuse on this docker instance...
+export PATH=$PWD/squashfs-root/usr/bin:$PATH
+popd
+
 mkdir -p /out
 
 rm -f /out/*.AppImage || true
-AppImageKit/AppImageAssistant.AppDir/package /kdevelop.appdir/ /out/$APPIMAGE
+appimagetool /kdevelop.appdir/ /out/$APPIMAGE
 
 chmod a+rwx /out/$APPIMAGE # So that we can edit the AppImage outside of the Docker container
