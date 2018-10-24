@@ -69,7 +69,7 @@ protected:
                          QmlJS::AST::Node* body,
                          const KDevelop::RangeInRevision& bodyRange);
     template<typename Node>
-    void declareParameters(Node* node, QStringRef Node::*typeAttribute);
+    void declareParameters(Node* node, QmlJS::AST::UiQualifiedId* Node::*typeFunc);
     void endVisitFunction();    // Set the return type of the function to void if no return statement has been encountered
 
     bool visit(QmlJS::AST::FunctionDeclaration* node) override;
