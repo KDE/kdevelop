@@ -134,16 +134,18 @@ public:
 
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override
     {
+        Q_UNUSED(index);
+
         int i = 5;
         int j = 1;
 
         QFont font = titleFont(option.font);
         QFontMetrics fmTitle(font);
 
-        return QSize(qMax(fmTitle.width(index.model()->data(index, Qt::DisplayRole).toString()),
-                        option.fontMetrics.width(index.model()->data(index, PluginsModel::DescriptionRole).toString())) +
-                        KIconLoader::SizeMedium + MARGIN * i + pushButton->sizeHint().width() * j,
-                    qMax(KIconLoader::SizeMedium + MARGIN * 2, fmTitle.height() + option.fontMetrics.height() + MARGIN * 2));
+        return QSize(
+            KIconLoader::SizeMedium + MARGIN * i + pushButton->sizeHint().width() * j,
+            qMax(KIconLoader::SizeMedium + MARGIN * 2, fmTitle.height() + option.fontMetrics.height() + MARGIN * 2)
+        );
 
     }
 
@@ -300,6 +302,8 @@ LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     connect(buttonBox, &QDialogButtonBox::rejected, this, &LoadedPluginsDialog::reject);
     buttonBox->button(QDialogButtonBox::Close)->setDefault(true);
     vbox->addWidget(buttonBox);
+
+    resize(800, 600);
 }
 
 #include "moc_loadedpluginsdialog.cpp"
