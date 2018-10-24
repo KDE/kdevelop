@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Category": "Language Support",
+        "Description": "QML/JS language support (based on qmljs from QtCreator)",
         "Icon": "text-x-qml",
         "Id": "kdevqmljs",
         "License": "GPL",
