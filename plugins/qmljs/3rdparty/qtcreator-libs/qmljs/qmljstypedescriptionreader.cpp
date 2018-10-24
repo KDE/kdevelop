@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -47,10 +42,7 @@ using namespace QmlJS::AST;
 using namespace LanguageUtils;
 
 TypeDescriptionReader::TypeDescriptionReader(const QString &fileName, const QString &data)
-    : _fileName (fileName)
-    , _source(data)
-    , _objects(0)
-    , _moduleApis(nullptr)
+    : _fileName (fileName), _source(data), _objects(0)
 {
 }
 
@@ -60,7 +52,8 @@ TypeDescriptionReader::~TypeDescriptionReader()
 
 bool TypeDescriptionReader::operator()(
         QHash<QString, FakeMetaObject::ConstPtr> *objects,
-        QList<ModuleApiInfo> *moduleApis)
+        QList<ModuleApiInfo> *moduleApis,
+        QStringList *dependencies)
 {
     Engine engine;
 
@@ -79,6 +72,7 @@ bool TypeDescriptionReader::operator()(
 
     _objects = objects;
     _moduleApis = moduleApis;
+    _dependencies = dependencies;
     readDocument(parser.ast());
 
     return _errorMessage.isEmpty();
@@ -116,22 +110,20 @@ void TypeDescriptionReader::readDocument(UiProgram *ast)
     const QString versionString = _source.mid(import->versionToken.offset, import->versionToken.length);
     const int dotIdx = versionString.indexOf(QLatin1Char('.'));
     if (dotIdx != -1) {
-        version = ComponentVersion(versionString.left(dotIdx).toInt(),
-                                   versionString.mid(dotIdx + 1).toInt());
+        version = ComponentVersion(versionString.leftRef(dotIdx).toInt(),
+                                   versionString.midRef(dotIdx + 1).toInt());
     }
     if (version.majorVersion() != 1) {
         addError(import->versionToken, tr("Major version different from 1 not supported."));
         return;
     }
-    if (version.minorVersion() > 1)
-        addWarning(import->versionToken, tr("Reading only version 1.1 parts."));
 
     if (!ast->members || !ast->members->member || ast->members->next) {
         addError(SourceLocation(), tr("Expected document to contain a single object definition."));
         return;
     }
 
-    UiObjectDefinition *module = dynamic_cast<UiObjectDefinition *>(ast->members->member);
+    UiObjectDefinition *module = AST::cast<UiObjectDefinition *>(ast->members->member);
     if (!module) {
         addError(SourceLocation(), tr("Expected document to contain a single object definition."));
         return;
@@ -149,15 +141,19 @@ void TypeDescriptionReader::readModule(UiObjectDefinition *ast)
 {
     for (UiObjectMemberList *it = ast->initializer->members; it; it = it->next) {
         UiObjectMember *member = it->member;
-        UiObjectDefinition *component = dynamic_cast<UiObjectDefinition *>(member);
+        UiObjectDefinition *component = AST::cast<UiObjectDefinition *>(member);
+
+        UiScriptBinding *script = AST::cast<UiScriptBinding *>(member);
+        if (script && (toString(script->qualifiedId) == QStringLiteral("dependencies"))) {
+            readDependencies(script);
+            continue;
+        }
 
         QString typeName;
         if (component)
             typeName = toString(component->qualifiedTypeNameId);
 
         if (!component || (typeName != QLatin1String("Component") && typeName != QLatin1String("ModuleApi"))) {
-            addWarning(member->firstSourceLocation(),
-                       tr("Expected only Component and ModuleApi object definitions."));
             continue;
         }
 
@@ -186,14 +182,32 @@ void TypeDescriptionReader::addWarning(const SourceLocation &loc, const QString 
                 message);
 }
 
+void TypeDescriptionReader::readDependencies(UiScriptBinding *ast)
+{
+    ExpressionStatement *stmt = AST::cast<ExpressionStatement*>(ast->statement);
+    if (!stmt) {
+        addError(ast->statement->firstSourceLocation(), tr("Expected dependency definitions"));
+        return;
+    }
+    ArrayLiteral *exp = AST::cast<ArrayLiteral *>(stmt->expression);
+    if (!exp) {
+        addError(stmt->expression->firstSourceLocation(), tr("Expected dependency definitions"));
+        return;
+    }
+    for (ElementList *l = exp->elements; l; l = l->next) {
+        StringLiteral *str = AST::cast<StringLiteral *>(l->expression);
+        *_dependencies << str->value.toString();
+    }
+}
+
 void TypeDescriptionReader::readComponent(UiObjectDefinition *ast)
 {
     FakeMetaObject::Ptr fmo(new FakeMetaObject);
 
     for (UiObjectMemberList *it = ast->initializer->members; it; it = it->next) {
         UiObjectMember *member = it->member;
-        UiObjectDefinition *component = dynamic_cast<UiObjectDefinition *>(member);
-        UiScriptBinding *script = dynamic_cast<UiScriptBinding *>(member);
+        UiObjectDefinition *component = AST::cast<UiObjectDefinition *>(member);
+        UiScriptBinding *script = AST::cast<UiScriptBinding *>(member);
         if (component) {
             QString name = toString(component->qualifiedTypeNameId);
             if (name == QLatin1String("Property"))
@@ -254,7 +268,7 @@ void TypeDescriptionReader::readModuleApi(UiObjectDefinition *ast)
 
     for (UiObjectMemberList *it = ast->initializer->members; it; it = it->next) {
         UiObjectMember *member = it->member;
-        UiScriptBinding *script = dynamic_cast<UiScriptBinding *>(member);
+        UiScriptBinding *script = AST::cast<UiScriptBinding *>(member);
 
         if (script) {
             const QString name = toString(script->qualifiedId);
@@ -293,8 +307,8 @@ void TypeDescriptionReader::readSignalOrMethod(UiObjectDefinition *ast, bool isM
 
     for (UiObjectMemberList *it = ast->initializer->members; it; it = it->next) {
         UiObjectMember *member = it->member;
-        UiObjectDefinition *component = dynamic_cast<UiObjectDefinition *>(member);
-        UiScriptBinding *script = dynamic_cast<UiScriptBinding *>(member);
+        UiObjectDefinition *component = AST::cast<UiObjectDefinition *>(member);
+        UiScriptBinding *script = AST::cast<UiScriptBinding *>(member);
         if (component) {
             QString name = toString(component->qualifiedTypeNameId);
             if (name == QLatin1String("Parameter"))
@@ -336,7 +350,7 @@ void TypeDescriptionReader::readProperty(UiObjectDefinition *ast, FakeMetaObject
 
     for (UiObjectMemberList *it = ast->initializer->members; it; it = it->next) {
         UiObjectMember *member = it->member;
-        UiScriptBinding *script = dynamic_cast<UiScriptBinding *>(member);
+        UiScriptBinding *script = AST::cast<UiScriptBinding *>(member);
         if (!script) {
             addWarning(member->firstSourceLocation(), tr("Expected script binding."));
             continue;
@@ -373,7 +387,7 @@ void TypeDescriptionReader::readEnum(UiObjectDefinition *ast, FakeMetaObject::Pt
 
     for (UiObjectMemberList *it = ast->initializer->members; it; it = it->next) {
         UiObjectMember *member = it->member;
-        UiScriptBinding *script = dynamic_cast<UiScriptBinding *>(member);
+        UiScriptBinding *script = AST::cast<UiScriptBinding *>(member);
         if (!script) {
             addWarning(member->firstSourceLocation(), tr("Expected script binding."));
             continue;
@@ -398,7 +412,7 @@ void TypeDescriptionReader::readParameter(UiObjectDefinition *ast, FakeMetaMetho
 
     for (UiObjectMemberList *it = ast->initializer->members; it; it = it->next) {
         UiObjectMember *member = it->member;
-        UiScriptBinding *script = dynamic_cast<UiScriptBinding *>(member);
+        UiScriptBinding *script = AST::cast<UiScriptBinding *>(member);
         if (!script) {
             addWarning(member->firstSourceLocation(), tr("Expected script binding."));
             continue;
@@ -432,13 +446,13 @@ QString TypeDescriptionReader::readStringBinding(UiScriptBinding *ast)
         return QString();
     }
 
-    ExpressionStatement *expStmt = dynamic_cast<ExpressionStatement *>(ast->statement);
+    ExpressionStatement *expStmt = AST::cast<ExpressionStatement *>(ast->statement);
     if (!expStmt) {
         addError(ast->statement->firstSourceLocation(), tr("Expected string after colon."));
         return QString();
     }
 
-    StringLiteral *stringLit = dynamic_cast<StringLiteral *>(expStmt->expression);
+    StringLiteral *stringLit = AST::cast<StringLiteral *>(expStmt->expression);
     if (!stringLit) {
         addError(expStmt->firstSourceLocation(), tr("Expected string after colon."));
         return QString();
@@ -456,14 +470,14 @@ bool TypeDescriptionReader::readBoolBinding(AST::UiScriptBinding *ast)
         return false;
     }
 
-    ExpressionStatement *expStmt = dynamic_cast<ExpressionStatement *>(ast->statement);
+    ExpressionStatement *expStmt = AST::cast<ExpressionStatement *>(ast->statement);
     if (!expStmt) {
         addError(ast->statement->firstSourceLocation(), tr("Expected boolean after colon."));
         return false;
     }
 
-    TrueLiteral *trueLit = dynamic_cast<TrueLiteral *>(expStmt->expression);
-    FalseLiteral *falseLit = dynamic_cast<FalseLiteral *>(expStmt->expression);
+    TrueLiteral *trueLit = AST::cast<TrueLiteral *>(expStmt->expression);
+    FalseLiteral *falseLit = AST::cast<FalseLiteral *>(expStmt->expression);
     if (!trueLit && !falseLit) {
         addError(expStmt->firstSourceLocation(), tr("Expected true or false after colon."));
         return false;
@@ -542,20 +556,20 @@ void TypeDescriptionReader::readExports(UiScriptBinding *ast, FakeMetaObject::Pt
         return;
     }
 
-    ExpressionStatement *expStmt = dynamic_cast<ExpressionStatement *>(ast->statement);
+    ExpressionStatement *expStmt = AST::cast<ExpressionStatement *>(ast->statement);
     if (!expStmt) {
         addError(ast->statement->firstSourceLocation(), tr("Expected array of strings after colon."));
         return;
     }
 
-    ArrayLiteral *arrayLit = dynamic_cast<ArrayLiteral *>(expStmt->expression);
+    ArrayLiteral *arrayLit = AST::cast<ArrayLiteral *>(expStmt->expression);
     if (!arrayLit) {
         addError(expStmt->firstSourceLocation(), tr("Expected array of strings after colon."));
         return;
     }
 
     for (ElementList *it = arrayLit->elements; it; it = it->next) {
-        StringLiteral *stringLit = dynamic_cast<StringLiteral *>(it->expression);
+        StringLiteral *stringLit = AST::cast<StringLiteral *>(it->expression);
         if (!stringLit) {
             addError(arrayLit->firstSourceLocation(), tr("Expected array literal with only string literal members."));
             return;
@@ -588,13 +602,13 @@ void TypeDescriptionReader::readMetaObjectRevisions(UiScriptBinding *ast, FakeMe
         return;
     }
 
-    ExpressionStatement *expStmt = dynamic_cast<ExpressionStatement *>(ast->statement);
+    ExpressionStatement *expStmt = AST::cast<ExpressionStatement *>(ast->statement);
     if (!expStmt) {
         addError(ast->statement->firstSourceLocation(), tr("Expected array of numbers after colon."));
         return;
     }
 
-    ArrayLiteral *arrayLit = dynamic_cast<ArrayLiteral *>(expStmt->expression);
+    ArrayLiteral *arrayLit = AST::cast<ArrayLiteral *>(expStmt->expression);
     if (!arrayLit) {
         addError(expStmt->firstSourceLocation(), tr("Expected array of numbers after colon."));
         return;
@@ -627,18 +641,20 @@ void TypeDescriptionReader::readMetaObjectRevisions(UiScriptBinding *ast, FakeMe
 
 void TypeDescriptionReader::readEnumValues(AST::UiScriptBinding *ast, LanguageUtils::FakeMetaEnum *fme)
 {
-    if (!ast || !ast->statement) {
+    if (!ast)
+        return;
+    if (!ast->statement) {
         addError(ast->colonToken, tr("Expected object literal after colon."));
         return;
     }
 
-    ExpressionStatement *expStmt = dynamic_cast<ExpressionStatement *>(ast->statement);
+    ExpressionStatement *expStmt = AST::cast<ExpressionStatement *>(ast->statement);
     if (!expStmt) {
         addError(ast->statement->firstSourceLocation(), tr("Expected object literal after colon."));
         return;
     }
 
-    ObjectLiteral *objectLit = dynamic_cast<ObjectLiteral *>(expStmt->expression);
+    ObjectLiteral *objectLit = AST::cast<ObjectLiteral *>(expStmt->expression);
     if (!objectLit) {
         addError(expStmt->firstSourceLocation(), tr("Expected object literal after colon."));
         return;
@@ -647,11 +663,11 @@ void TypeDescriptionReader::readEnumValues(AST::UiScriptBinding *ast, LanguageUt
     for (PropertyAssignmentList *it = objectLit->properties; it; it = it->next) {
         PropertyNameAndValue *assignement = AST::cast<PropertyNameAndValue *>(it->assignment);
         if (assignement) {
-            StringLiteralPropertyName *propName = dynamic_cast<StringLiteralPropertyName *>(assignement->name);
-            NumericLiteral *value = dynamic_cast<NumericLiteral *>(assignement->value);
-            UnaryMinusExpression *minus = dynamic_cast<UnaryMinusExpression *>(assignement->value);
+            StringLiteralPropertyName *propName = AST::cast<StringLiteralPropertyName *>(assignement->name);
+            NumericLiteral *value = AST::cast<NumericLiteral *>(assignement->value);
+            UnaryMinusExpression *minus = AST::cast<UnaryMinusExpression *>(assignement->value);
             if (minus)
-                value = dynamic_cast<NumericLiteral *>(minus->expression);
+                value = AST::cast<NumericLiteral *>(minus->expression);
             if (!propName || !value) {
                 addError(objectLit->firstSourceLocation(), tr("Expected object literal to contain only 'string: number' elements."));
                 continue;

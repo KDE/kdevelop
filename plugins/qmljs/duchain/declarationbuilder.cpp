@@ -198,14 +198,14 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
 }
 
 template<typename Node>
-void DeclarationBuilder::declareParameters(Node* node, QStringRef Node::*typeAttribute)
+void DeclarationBuilder::declareParameters(Node* node, QmlJS::AST::UiQualifiedId* Node::*typeFunc)
 {
     for (Node *plist = node; plist; plist = plist->next) {
         const Identifier name(plist->name.toString());
         const RangeInRevision range = m_session->locationToRange(plist->identifierToken);
 
-        AbstractType::Ptr type = (typeAttribute ?
-            typeFromName((plist->*typeAttribute).toString()) :              // The typeAttribute attribute of plist contains the type name of the argument
+        AbstractType::Ptr type = (typeFunc ?
+            typeFromName((plist->*typeFunc)->name.toString()) :             // The typeAttribute attribute of plist contains the type name of the argument
             AbstractType::Ptr(new IntegralType(IntegralType::TypeMixed))    // No type information, use mixed
         );
 
@@ -256,7 +256,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::FunctionExpression* node)
 
 bool DeclarationBuilder::visit(QmlJS::AST::FormalParameterList* node)
 {
-    declareParameters(node, (QStringRef QmlJS::AST::FormalParameterList::*)nullptr);
+    declareParameters(node, (QmlJS::AST::UiQualifiedId* QmlJS::AST::FormalParameterList::*)nullptr);
 
     return DeclarationBuilderBase::visit(node);
 }
@@ -1266,7 +1266,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiPublicMember* node)
 
     RangeInRevision range = m_session->locationToRange(node->identifierToken);
     Identifier id(node->name.toString());
-    QString typeName = node->memberType.toString();
+    QString typeName = node->memberTypeName().toString();
     bool res = DeclarationBuilderBase::visit(node);
 
     // Build the type of the public member

@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,29 +9,25 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
-#ifndef FILEUTILS_H
-#define FILEUTILS_H
+#pragma once
 
 #include "utils_global.h"
+
+#include "hostosinfo.h"
 
 #include <QCoreApplication>
 #include <QXmlStreamWriter> // Mac.
@@ -39,6 +35,7 @@
 #include <QStringList>
 
 #include <functional>
+#include <memory>
 
 namespace Utils {class FileName; }
 
@@ -46,7 +43,6 @@ QT_BEGIN_NAMESPACE
 class QDataStream;
 class QDateTime;
 class QDir;
-class QDropEvent;
 class QFile;
 class QFileInfo;
 class QTemporaryFile;
@@ -54,6 +50,11 @@ class QTextStream;
 class QWidget;
 
 QTCREATOR_UTILS_EXPORT QDebug operator<<(QDebug dbg, const Utils::FileName &c);
+
+// for withNtfsPermissions
+#ifdef Q_OS_WIN
+extern Q_CORE_EXPORT int qt_ntfs_permission_lookup;
+#endif
 
 QT_END_NAMESPACE
 
@@ -83,6 +84,7 @@ public:
     bool operator<=(const FileName &other) const;
     bool operator>(const FileName &other) const;
     bool operator>=(const FileName &other) const;
+    FileName operator+(const QString &s) const;
 
     bool isChildOf(const FileName &s) const;
     bool isChildOf(const QDir &dir) const;
@@ -93,36 +95,30 @@ public:
     FileName &appendString(const QString &str);
     FileName &appendString(QChar str);
 
-    using QString::size;
+    using QString::chop;
+    using QString::clear;
     using QString::count;
-    using QString::length;
     using QString::isEmpty;
     using QString::isNull;
-    using QString::clear;
+    using QString::length;
+    using QString::size;
 private:
     FileName(const QString &string);
 };
 
 QTCREATOR_UTILS_EXPORT QTextStream &operator<<(QTextStream &s, const FileName &fn);
 
-class QTCREATOR_UTILS_EXPORT FileNameList : public QList<FileName>
-{
-public:
-    inline FileNameList() { }
-    inline explicit FileNameList(const FileName &i) { append(i); }
-    inline FileNameList(const FileNameList &l) : QList<FileName>(l) { }
-    inline FileNameList(const QList<FileName> &l) : QList<FileName>(l) { }
-
-    int removeDuplicates();
-};
+using FileNameList = QList<FileName>;
 
 class QTCREATOR_UTILS_EXPORT FileUtils {
 public:
-    static bool removeRecursively(const FileName &filePath, QString *error = 0);
-    static bool copyRecursively(const FileName &srcFilePath, const FileName &tgtFilePath,
-                                QString *error = 0, const std::function<bool (QFileInfo, QFileInfo, QString *)> &copyHelper = std::function<bool (QFileInfo, QFileInfo, QString *)>());
+    static bool removeRecursively(const FileName &filePath, QString *error = nullptr);
+    static bool copyRecursively(
+            const FileName &srcFilePath, const FileName &tgtFilePath, QString *error = nullptr,
+            const std::function<bool (QFileInfo, QFileInfo, QString *)> &copyHelper = nullptr);
     static bool isFileNewerThan(const FileName &filePath, const QDateTime &timeStamp);
     static FileName resolveSymlinks(const FileName &path);
+    static FileName canonicalPath(const FileName &path);
     static QString shortNativePath(const FileName &path);
     static QString fileSystemFriendlyName(const QString &name);
     static int indexOfQmakeUnfriendly(const QString &name, int startpos = 0);
@@ -135,6 +131,31 @@ public:
     static QString resolvePath(const QString &baseDir, const QString &fileName);
 };
 
+// for actually finding out if e.g. directories are writable on Windows
+#ifdef Q_OS_WIN
+
+template <typename T>
+T withNtfsPermissions(const std::function<T()> &task)
+{
+    qt_ntfs_permission_lookup++;
+    T result = task();
+    qt_ntfs_permission_lookup--;
+    return result;
+}
+
+template <>
+QTCREATOR_UTILS_EXPORT void withNtfsPermissions(const std::function<void()> &task);
+
+#else // Q_OS_WIN
+
+template <typename T>
+T withNtfsPermissions(const std::function<T()> &task)
+{
+    return task();
+}
+
+#endif // Q_OS_WIN
+
 class QTCREATOR_UTILS_EXPORT FileReader
 {
     Q_DECLARE_TR_FUNCTIONS(Utils::FileUtils) // sic!
@@ -144,9 +165,11 @@ public:
     bool fetch(const QString &fileName, QIODevice::OpenMode mode, QString *errorString);
     bool fetch(const QString &fileName, QString *errorString)
         { return fetch(fileName, QIODevice::NotOpen, errorString); }
+#ifdef QT_GUI_LIB
     bool fetch(const QString &fileName, QIODevice::OpenMode mode, QWidget *parent);
     bool fetch(const QString &fileName, QWidget *parent)
         { return fetch(fileName, QIODevice::NotOpen, parent); }
+#endif // QT_GUI_LIB
     const QByteArray &data() const { return m_data; }
     const QString &errorString() const { return m_errorString; }
 private:
@@ -166,7 +189,9 @@ public:
     QString errorString() const { return m_errorString; }
     virtual bool finalize();
     bool finalize(QString *errStr);
+#ifdef QT_GUI_LIB
     bool finalize(QWidget *parent);
+#endif
 
     bool write(const char *data, int len);
     bool write(const QByteArray &bytes);
@@ -175,8 +200,10 @@ public:
     bool setResult(QXmlStreamWriter *stream);
     bool setResult(bool ok);
 
+    QFile *file() { return m_file.get(); }
+
 protected:
-    QFile *m_file;
+    std::unique_ptr<QFile> m_file;
     QString m_fileName;
     QString m_errorString;
     bool m_hasError;
@@ -189,11 +216,11 @@ class QTCREATOR_UTILS_EXPORT FileSaver : public FileSaverBase
 {
     Q_DECLARE_TR_FUNCTIONS(Utils::FileUtils) // sic!
 public:
-    explicit FileSaver(const QString &filename, QIODevice::OpenMode mode = QIODevice::NotOpen); // QIODevice::WriteOnly is implicit
+    // QIODevice::WriteOnly is implicit
+    explicit FileSaver(const QString &filename, QIODevice::OpenMode mode = QIODevice::NotOpen);
 
-    virtual bool finalize();
+    bool finalize() override;
     using FileSaverBase::finalize;
-    QFile *file() { return m_file; }
 
 private:
     bool m_isSafe;
@@ -204,9 +231,7 @@ class QTCREATOR_UTILS_EXPORT TempFileSaver : public FileSaverBase
     Q_DECLARE_TR_FUNCTIONS(Utils::FileUtils) // sic!
 public:
     explicit TempFileSaver(const QString &templ = QString());
-    ~TempFileSaver();
-
-    QTemporaryFile *file() { return reinterpret_cast<QTemporaryFile *>(m_file); }
+    ~TempFileSaver() override;
 
     void setAutoRemove(bool on) { m_autoRemove = on; }
 
@@ -220,6 +245,18 @@ QT_BEGIN_NAMESPACE
 QTCREATOR_UTILS_EXPORT uint qHash(const Utils::FileName &a);
 QT_END_NAMESPACE
 
-Q_DECLARE_METATYPE(Utils::FileName)
+namespace std {
+template<> struct hash<Utils::FileName>
+{
+    using argument_type = Utils::FileName;
+    using result_type = size_t;
+    result_type operator()(const argument_type &fn) const
+    {
+        if (Utils::HostOsInfo::fileNameCaseSensitivity() == Qt::CaseInsensitive)
+            return hash<string>()(fn.toString().toUpper().toStdString());
+        return hash<string>()(fn.toString().toStdString());
+    }
+};
+} // namespace std
 
-#endif // FILEUTILS_H
+Q_DECLARE_METATYPE(Utils::FileName)

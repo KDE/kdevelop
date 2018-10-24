@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,27 +9,21 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
-#ifndef QMLJS_INTERPRETER_H
-#define QMLJS_INTERPRETER_H
+#pragma once
 
 #include <qmljs/qmljs_global.h>
 #include <qmljs/qmljsconstants.h>
@@ -451,7 +445,7 @@ class QMLJS_EXPORT Reference: public Value
 {
 public:
     Reference(ValueOwner *valueOwner);
-    ~Reference() override;
+    ~Reference();
 
     ValueOwner *valueOwner() const;
 
@@ -496,7 +490,7 @@ class QMLJS_EXPORT ObjectValue: public Value
 {
 public:
     ObjectValue(ValueOwner *valueOwner, const QString &originId = QString());
-    ~ObjectValue() override;
+    ~ObjectValue();
 
     ValueOwner *valueOwner() const;
 
@@ -577,7 +571,7 @@ class QMLJS_EXPORT QmlEnumValue: public NumberValue
 {
 public:
     QmlEnumValue(const CppComponentValue *owner, int index);
-    ~QmlEnumValue() override;
+    ~QmlEnumValue();
 
     const QmlEnumValue *asQmlEnumValue() const override;
 
@@ -600,7 +594,7 @@ public:
                    const QString &moduleName, const LanguageUtils::ComponentVersion &componentVersion,
                    const LanguageUtils::ComponentVersion &importVersion, int metaObjectRevision,
                    ValueOwner *valueOwner, const QString &originId);
-    ~CppComponentValue() override;
+    ~CppComponentValue();
 
     const CppComponentValue *asCppComponentValue() const override;
 
@@ -650,7 +644,7 @@ class QMLJS_EXPORT FunctionValue: public ObjectValue
 {
 public:
     FunctionValue(ValueOwner *valueOwner);
-    ~FunctionValue() override;
+    ~FunctionValue();
 
     virtual const Value *returnValue() const;
 
@@ -681,7 +675,7 @@ class QMLJS_EXPORT Function: public FunctionValue
 {
 public:
     Function(ValueOwner *valueOwner);
-    ~Function() override;
+    ~Function();
 
     void addArgument(const Value *argument, const QString &name = QString());
     void setReturnValue(const Value *returnValue);
@@ -726,8 +720,12 @@ public:
 
     // parses the contents of a qmltypes file and fills the newObjects map
     static void parseQmlTypeDescriptions(const QByteArray &contents,
-        BuiltinObjects *newObjects,
-        QList<ModuleApiInfo> *newModuleApis, QString *errorMessage, QString *warningMessage, const QString &fileName);
+                                         BuiltinObjects *newObjects,
+                                         QList<ModuleApiInfo> *newModuleApis,
+                                         QStringList *newDependencies,
+                                         QString *errorMessage,
+                                         QString *warningMessage,
+                                         const QString &fileName);
 };
 
 class QMLJS_EXPORT FakeMetaObjectWithOrigin
@@ -794,7 +792,6 @@ protected:
     void visit(const StringValue *) override;
     void visit(const ObjectValue *) override;
     void visit(const FunctionValue *) override;
-    using ValueVisitor::visit;
 
 private:
     ValueOwner *m_valueOwner;
@@ -818,7 +815,6 @@ protected:
     void visit(const StringValue *) override;
     void visit(const ObjectValue *) override;
     void visit(const FunctionValue *) override;
-    using ValueVisitor::visit;
 
 private:
     ValueOwner *m_valueOwner;
@@ -842,7 +838,6 @@ protected:
     void visit(const StringValue *) override;
     void visit(const ObjectValue *) override;
     void visit(const FunctionValue *) override;
-    using ValueVisitor::visit;
 
 private:
     ValueOwner *m_valueOwner;
@@ -866,8 +861,6 @@ protected:
     void visit(const FunctionValue *object) override;
     void visit(const ColorValue *) override;
     void visit(const AnchorLineValue *) override;
-    using ValueVisitor::visit;
-
 };
 
 // internal
@@ -875,7 +868,7 @@ class QMLJS_EXPORT QmlPrototypeReference: public Reference
 {
 public:
     QmlPrototypeReference(AST::UiQualifiedId *qmlTypeName, const Document *doc, ValueOwner *valueOwner);
-    ~QmlPrototypeReference() override;
+    ~QmlPrototypeReference();
 
     const QmlPrototypeReference *asQmlPrototypeReference() const override;
 
@@ -896,7 +889,7 @@ class QMLJS_EXPORT ASTVariableReference: public Reference
 
 public:
     ASTVariableReference(AST::VariableDeclaration *ast, const Document *doc, ValueOwner *valueOwner);
-    ~ASTVariableReference() override;
+    ~ASTVariableReference();
     const ASTVariableReference *asAstVariableReference() const override;
     const AST::VariableDeclaration *ast() const;
 private:
@@ -913,7 +906,7 @@ class QMLJS_EXPORT ASTFunctionValue: public FunctionValue
 
 public:
     ASTFunctionValue(AST::FunctionExpression *ast, const Document *doc, ValueOwner *valueOwner);
-    ~ASTFunctionValue() override;
+    ~ASTFunctionValue();
 
     AST::FunctionExpression *ast() const;
 
@@ -933,7 +926,7 @@ class QMLJS_EXPORT ASTPropertyReference: public Reference
 
 public:
     ASTPropertyReference(AST::UiPublicMember *ast, const Document *doc, ValueOwner *valueOwner);
-    ~ASTPropertyReference() override;
+    ~ASTPropertyReference();
 
     const ASTPropertyReference *asAstPropertyReference() const override;
 
@@ -955,7 +948,7 @@ class QMLJS_EXPORT ASTSignal: public FunctionValue
 
 public:
     ASTSignal(AST::UiPublicMember *ast, const Document *doc, ValueOwner *valueOwner);
-    ~ASTSignal() override;
+    ~ASTSignal();
 
     const ASTSignal *asAstSignal() const override;
 
@@ -986,7 +979,7 @@ public:
                    AST::UiObjectInitializer *initializer,
                    const Document *doc,
                    ValueOwner *valueOwner);
-    ~ASTObjectValue() override;
+    ~ASTObjectValue();
 
     const ASTObjectValue *asAstObjectValue() const override;
 
@@ -1012,6 +1005,7 @@ public:
                                  const QString &as, AST::UiImport *ast = 0);
     static ImportInfo invalidImport(AST::UiImport *ast = 0);
     static ImportInfo implicitDirectoryImport(const QString &directory);
+    static ImportInfo qrcDirectoryImport(const QString &directory);
 
     bool isValid() const;
     ImportType::Enum type() const;
@@ -1062,10 +1056,9 @@ class QMLJS_EXPORT TypeScope: public ObjectValue
 public:
     TypeScope(const Imports *imports, ValueOwner *valueOwner);
 
-    const Value *lookupMember(const QString &name, const Context *context,
+    virtual const Value *lookupMember(const QString &name, const Context *context,
                                       const ObjectValue **foundInObject = 0,
                                       bool examinePrototypes = true) const override;
-    using ObjectValue::lookupMember;
     void processMembers(MemberProcessor *processor) const override;
     const TypeScope *asTypeScope() const override;
 private:
@@ -1077,10 +1070,9 @@ class QMLJS_EXPORT JSImportScope: public ObjectValue
 public:
     JSImportScope(const Imports *imports, ValueOwner *valueOwner);
 
-    const Value *lookupMember(const QString &name, const Context *context,
+    virtual const Value *lookupMember(const QString &name, const Context *context,
                                       const ObjectValue **foundInObject = 0,
                                       bool examinePrototypes = true) const override;
-    using ObjectValue::lookupMember;
     void processMembers(MemberProcessor *processor) const override;
     const JSImportScope *asJSImportScope() const override;
 private:
@@ -1135,11 +1127,12 @@ class QMLJS_EXPORT CustomImportsProvider : public QObject
 {
     Q_OBJECT
 public:
-    explicit CustomImportsProvider(QObject *parent = 0) : QObject(parent) {}
-    ~CustomImportsProvider() override {}
+    explicit CustomImportsProvider(QObject *parent = nullptr);
+    virtual ~CustomImportsProvider();
+
+    static const QList<CustomImportsProvider *> allProviders();
+
     virtual QList<Import> imports(ValueOwner *valueOwner, const Document *context) const = 0;
 };
 
 } // namespace QmlJS
-
-#endif // QMLJS_INTERPRETER_H

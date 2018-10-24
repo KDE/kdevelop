@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -73,12 +68,15 @@ class QrcParserPrivate
 public:
     typedef QMap<QString,QStringList> SMap;
     QrcParserPrivate(QrcParser *q);
-    bool parseFile(const QString &path);
+    bool parseFile(const QString &path, const QString &contents);
     QString firstFileAtPath(const QString &path, const QLocale &locale) const;
     void collectFilesAtPath(const QString &path, QStringList *res, const QLocale *locale = 0) const;
     bool hasDirAtPath(const QString &path, const QLocale *locale = 0) const;
     void collectFilesInPath(const QString &path, QMap<QString,QStringList> *res, bool addDirs = false,
                             const QLocale *locale = 0) const;
+    void collectResourceFilesForSourceFile(const QString &sourceFile, QStringList *res,
+                                           const QLocale *locale = 0) const;
+
     QStringList errorMessages() const;
     QStringList languages() const;
 private:
@@ -86,6 +84,7 @@ private:
     QStringList allUiLanguages(const QLocale *locale) const;
 
     SMap m_resources;
+    SMap m_files;
     QStringList m_languages;
     QStringList m_errorMessages;
 };
@@ -95,9 +94,9 @@ class QrcCachePrivate
     Q_DECLARE_TR_FUNCTIONS(QmlJS::QrcCachePrivate)
 public:
     QrcCachePrivate(QrcCache *q);
-    QrcParser::Ptr addPath(const QString &path);
+    QrcParser::Ptr addPath(const QString &path, const QString &contents);
     void removePath(const QString &path);
-    QrcParser::Ptr updatePath(const QString &path);
+    QrcParser::Ptr updatePath(const QString &path, const QString &contents);
     QrcParser::Ptr parsedPath(const QString &path);
     void clear();
 private:
@@ -135,6 +134,11 @@ QString QrcParser::normalizedQrcDirectoryPath(const QString &path) {
     return normPath;
 }
 
+QString QrcParser::qrcDirectoryPathForQrcFilePath(const QString &file)
+{
+    return file.left(file.lastIndexOf(QLatin1Char('/')));
+}
+
 QrcParser::QrcParser()
 {
     d = new Internal::QrcParserPrivate(this);
@@ -145,9 +149,9 @@ QrcParser::~QrcParser()
     delete d;
 }
 
-bool QrcParser::parseFile(const QString &path)
+bool QrcParser::parseFile(const QString &path, const QString &contents)
 {
-    return d->parseFile(path);
+    return d->parseFile(path, contents);
 }
 
 /*! \brief returns fs path of the first (active) file at the given qrc path
@@ -186,6 +190,12 @@ void QrcParser::collectFilesInPath(const QString &path, QMap<QString,QStringList
     d->collectFilesInPath(path, res, addDirs, locale);
 }
 
+void QrcParser::collectResourceFilesForSourceFile(const QString &sourceFile, QStringList *res,
+                                                  const QLocale *locale) const
+{
+    d->collectResourceFilesForSourceFile(sourceFile, res, locale);
+}
+
 /*! \brief returns the errors found while parsing
  */
 QStringList QrcParser::errorMessages() const
@@ -207,11 +217,11 @@ bool QrcParser::isValid() const
     return errorMessages().isEmpty();
 }
 
-QrcParser::Ptr QrcParser::parseQrcFile(const QString &path)
+QrcParser::Ptr QrcParser::parseQrcFile(const QString &path, const QString &contents)
 {
     Ptr res(new QrcParser);
     if (!path.isEmpty())
-        res->parseFile(path);
+        res->parseFile(path, contents);
     return res;
 }
 
@@ -227,9 +237,9 @@ QrcCache::~QrcCache()
     delete d;
 }
 
-QrcParser::ConstPtr QrcCache::addPath(const QString &path)
+QrcParser::ConstPtr QrcCache::addPath(const QString &path, const QString &contents)
 {
-    return d->addPath(path);
+    return d->addPath(path, contents);
 }
 
 void QrcCache::removePath(const QString &path)
@@ -237,9 +247,9 @@ void QrcCache::removePath(const QString &path)
     d->removePath(path);
 }
 
-QrcParser::ConstPtr QrcCache::updatePath(const QString &path)
+QrcParser::ConstPtr QrcCache::updatePath(const QString &path, const QString &contents)
 {
-    return d->updatePath(path);
+    return d->updatePath(path, contents);
 }
 
 QrcParser::ConstPtr QrcCache::parsedPath(const QString &path)
@@ -259,22 +269,35 @@ namespace Internal {
 QrcParserPrivate::QrcParserPrivate(QrcParser *)
 { }
 
-bool QrcParserPrivate::parseFile(const QString &path)
+bool QrcParserPrivate::parseFile(const QString &path, const QString &contents)
 {
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly)) {
-        m_errorMessages.append(file.errorString());
-        return false;
-    }
-
     QDomDocument doc;
+    QDir baseDir(QFileInfo(path).path());
 
-    QString error_msg;
-    int error_line, error_col;
-    if (!doc.setContent(&file, &error_msg, &error_line, &error_col)) {
-        m_errorMessages.append(tr("XML error on line %1, col %2: %3")
-                               .arg(error_line).arg(error_col).arg(error_msg));
-        return false;
+    if (contents.isEmpty()) {
+        // Regular file
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly)) {
+            m_errorMessages.append(file.errorString());
+            return false;
+        }
+
+        QString error_msg;
+        int error_line, error_col;
+        if (!doc.setContent(&file, &error_msg, &error_line, &error_col)) {
+            m_errorMessages.append(tr("XML error on line %1, col %2: %3")
+                                   .arg(error_line).arg(error_col).arg(error_msg));
+            return false;
+        }
+    } else {
+        // Virtual file from qmake evaluator
+        QString error_msg;
+        int error_line, error_col;
+        if (!doc.setContent(contents, &error_msg, &error_line, &error_col)) {
+            m_errorMessages.append(tr("XML error on line %1, col %2: %3")
+                                   .arg(error_line).arg(error_col).arg(error_msg));
+            return false;
+        }
     }
 
     QDomElement root = doc.firstChildElement(QLatin1String("RCC"));
@@ -294,21 +317,19 @@ bool QrcParserPrivate::parseFile(const QString &path)
         QDomElement felt = relt.firstChildElement(QLatin1String("file"));
         for (; !felt.isNull(); felt = felt.nextSiblingElement(QLatin1String("file"))) {
             const QString fileName = felt.text();
-            QTC_CHECK(!QDir::isAbsolutePath(fileName));
             const QString alias = felt.attribute(QLatin1String("alias"));
-            QString filePath = QFileInfo(path).path() + QLatin1Char('/') + fileName;
+            QString filePath = baseDir.absoluteFilePath(fileName);
             QString accessPath;
             if (!alias.isEmpty())
                 accessPath = language + prefix + alias;
             else
                 accessPath = language + prefix + fileName;
-            if (m_resources.contains(accessPath)) {
-                QStringList &val = m_resources[accessPath];
-                if (!val.contains(filePath))
-                    val.append(filePath);
-            } else {
-                m_resources.insert(accessPath, QStringList(filePath));
-            }
+            QStringList &resources = m_resources[accessPath];
+            if (!resources.contains(filePath))
+                resources.append(filePath);
+            QStringList &files = m_files[filePath];
+            if (!files.contains(accessPath))
+                files.append(accessPath);
         }
     }
     return true;
@@ -393,6 +414,24 @@ void QrcParserPrivate::collectFilesInPath(const QString &path, QMap<QString,QStr
     }
 }
 
+void QrcParserPrivate::collectResourceFilesForSourceFile(const QString &sourceFile,
+                                                         QStringList *results,
+                                                         const QLocale *locale) const
+{
+    // TODO: use FileName from fileutils for file pathes
+
+    QStringList langs = allUiLanguages(locale);
+    SMap::const_iterator file = m_files.find(sourceFile);
+    if (file == m_files.end())
+        return;
+    foreach (const QString &resource, file.value()) {
+        foreach (const QString &language, langs) {
+            if (resource.startsWith(language) && !results->contains(resource))
+                results->append(resource);
+        }
+    }
+}
+
 QStringList QrcParserPrivate::errorMessages() const
 {
     return m_errorMessages;
@@ -443,24 +482,24 @@ QStringList QrcParserPrivate::allUiLanguages(const QLocale *locale) const
 QrcCachePrivate::QrcCachePrivate(QrcCache *)
 { }
 
-QrcParser::Ptr QrcCachePrivate::addPath(const QString &path)
+QrcParser::Ptr QrcCachePrivate::addPath(const QString &path, const QString &contents)
 {
     QPair<QrcParser::Ptr,int> currentValue;
     {
         QMutexLocker l(&m_mutex);
-        currentValue = m_cache.value(path, qMakePair(QrcParser::Ptr(0), 0));
+        currentValue = m_cache.value(path, {QrcParser::Ptr(0), 0});
         currentValue.second += 1;
         if (currentValue.second > 1) {
             m_cache.insert(path, currentValue);
             return currentValue.first;
         }
     }
-    QrcParser::Ptr newParser = QrcParser::parseQrcFile(path);
+    QrcParser::Ptr newParser = QrcParser::parseQrcFile(path, contents);
     if (!newParser->isValid())
         qCWarning(qmljsLog) << "adding invalid qrc " << path << " to the cache:" << newParser->errorMessages();
     {
         QMutexLocker l(&m_mutex);
-        QPair<QrcParser::Ptr,int> currentValue = m_cache.value(path, qMakePair(QrcParser::Ptr(0), 0));
+        QPair<QrcParser::Ptr,int> currentValue = m_cache.value(path, {QrcParser::Ptr(0), 0});
         if (currentValue.first.isNull())
             currentValue.first = newParser;
         currentValue.second += 1;
@@ -474,7 +513,7 @@ void QrcCachePrivate::removePath(const QString &path)
     QPair<QrcParser::Ptr,int> currentValue;
     {
         QMutexLocker l(&m_mutex);
-        currentValue = m_cache.value(path, qMakePair(QrcParser::Ptr(0), 0));
+        currentValue = m_cache.value(path, {QrcParser::Ptr(0), 0});
         if (currentValue.second == 1) {
             m_cache.remove(path);
         } else if (currentValue.second > 1) {
@@ -486,12 +525,12 @@ void QrcCachePrivate::removePath(const QString &path)
     }
 }
 
-QrcParser::Ptr QrcCachePrivate::updatePath(const QString &path)
+QrcParser::Ptr QrcCachePrivate::updatePath(const QString &path, const QString &contents)
 {
-    QrcParser::Ptr newParser = QrcParser::parseQrcFile(path);
+    QrcParser::Ptr newParser = QrcParser::parseQrcFile(path, contents);
     {
         QMutexLocker l(&m_mutex);
-        QPair<QrcParser::Ptr,int> currentValue = m_cache.value(path, qMakePair(QrcParser::Ptr(0), 0));
+        QPair<QrcParser::Ptr,int> currentValue = m_cache.value(path, {QrcParser::Ptr(0), 0});
         currentValue.first = newParser;
         if (currentValue.second == 0)
             currentValue.second = 1; // add qrc files that are not in the resources of a project
@@ -503,7 +542,7 @@ QrcParser::Ptr QrcCachePrivate::updatePath(const QString &path)
 QrcParser::Ptr QrcCachePrivate::parsedPath(const QString &path)
 {
     QMutexLocker l(&m_mutex);
-    QPair<QrcParser::Ptr,int> currentValue = m_cache.value(path, qMakePair(QrcParser::Ptr(0), 0));
+    QPair<QrcParser::Ptr,int> currentValue = m_cache.value(path, {QrcParser::Ptr(0), 0});
     return currentValue.first;
 }
 

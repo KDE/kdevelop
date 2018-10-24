@@ -32,6 +32,7 @@ add_library(kdevqtc-qmlsupport STATIC
 	utils/filesystemwatcher.cpp
 	utils/environment.cpp
 	utils/hostosinfo.cpp
+	utils/runextensions.cpp
 
     qmljs/persistenttrie.cpp
     qmljs/qmljsbind.cpp
@@ -80,4 +81,8 @@ target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     Qt5::Widgets
     Qt5::Network
     Qt5::Xml
+)
+set_target_properties(kdevqtc-qmlsupport PROPERTIES
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED YES
 )

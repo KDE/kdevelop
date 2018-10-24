@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,426 +9,595 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
-#ifndef RUNEXTENSIONS_H
-#define RUNEXTENSIONS_H
+#pragma once
 
-#include <qrunnable.h>
-#include <qfuture.h>
-#include <qfutureinterface.h>
-#include <qthreadpool.h>
+#include "functiontraits.h"
+#include "optional.h"
+#include "utils_global.h"
+
+#include <QCoreApplication>
+#include <QFuture>
+#include <QFutureInterface>
+#include <QFutureWatcher>
+#include <QRunnable>
+#include <QThread>
+#include <QThreadPool>
 
 #include <functional>
 
-QT_BEGIN_NAMESPACE
+// hasCallOperator & Co must be outside of any namespace
+// because of internal compiler error with MSVC2015 Update 2
 
-namespace QtConcurrent {
+using testCallOperatorYes = char;
+using testCallOperatorNo = struct { char foo[2]; };
 
-template <typename T,  typename FunctionPointer>
-class StoredInterfaceFunctionCall0 : public QRunnable
+template<typename C>
+static testCallOperatorYes testCallOperator(decltype(&C::operator()));
+
+template<typename>
+static testCallOperatorNo testCallOperator(...);
+
+template<typename T>
+struct hasCallOperator
 {
-public:
-    StoredInterfaceFunctionCall0(const FunctionPointer &fn)
-    : fn(fn) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        fn(futureInterface);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-
-};
-template <typename T,  typename FunctionPointer, typename Class>
-class StoredInterfaceMemberFunctionCall0 : public QRunnable
-{
-public:
-    StoredInterfaceMemberFunctionCall0(void (Class::*fn)(QFutureInterface<T> &), Class *object)
-    : fn(fn), object(object) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        (object->*fn)(futureInterface);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Class *object;
-
+    static const bool value = (sizeof(testCallOperator<T>(nullptr)) == sizeof(testCallOperatorYes));
 };
 
-template <typename T,  typename FunctionPointer, typename Arg1>
-class StoredInterfaceFunctionCall1 : public QRunnable
+namespace Utils {
+
+using StackSizeInBytes = Utils::optional<uint>;
+
+namespace Internal {
+
+/*
+   resultType<F>::type
+
+   Returns the type of results that would be reported by a callable of type F
+   when called through the runAsync methods. I.e. the ResultType in
+
+   void f(QFutureInterface<Result> &fi, ...)
+   ResultType f(...)
+
+   Returns void if F is not callable, and if F is a callable that does not take
+   a QFutureInterface& as its first parameter and returns void.
+*/
+
+template <typename Function>
+struct resultType;
+
+template <typename Function, typename Arg>
+struct resultTypeWithArgument;
+
+template <typename Function, int index, bool>
+struct resultTypeTakesArguments;
+
+template <typename Function, bool>
+struct resultTypeIsMemberFunction;
+
+template <typename Function, bool>
+struct resultTypeIsFunctionLike;
+
+template <typename Function, bool>
+struct resultTypeHasCallOperator;
+
+template <typename Function, typename ResultType>
+struct resultTypeWithArgument<Function, QFutureInterface<ResultType>&>
 {
-public:
-    StoredInterfaceFunctionCall1(void (fn)(QFutureInterface<T> &, Arg1), const Arg1 &arg1)
-    : fn(fn), arg1(arg1) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        fn(futureInterface, arg1);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Arg1 arg1;
-};
-template <typename T,  typename FunctionPointer, typename Class, typename Arg1>
-class StoredInterfaceMemberFunctionCall1 : public QRunnable
-{
-public:
-    StoredInterfaceMemberFunctionCall1(void (Class::*fn)(QFutureInterface<T> &, Arg1), Class *object, const Arg1 &arg1)
-    : fn(fn), object(object), arg1(arg1) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        (object->*fn)(futureInterface, arg1);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Class *object;
-    Arg1 arg1;
+    using type = ResultType;
 };
 
-template <typename T,  typename FunctionPointer, typename Arg1, typename Arg2>
-class StoredInterfaceFunctionCall2 : public QRunnable
+template <typename Function, typename Arg>
+struct resultTypeWithArgument
 {
-public:
-    StoredInterfaceFunctionCall2(void (fn)(QFutureInterface<T> &, Arg1, Arg2), const Arg1 &arg1, const Arg2 &arg2)
-    : fn(fn), arg1(arg1), arg2(arg2) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        fn(futureInterface, arg1, arg2);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Arg1 arg1; Arg2 arg2;
-};
-template <typename T,  typename FunctionPointer, typename Class, typename Arg1, typename Arg2>
-class StoredInterfaceMemberFunctionCall2 : public QRunnable
-{
-public:
-    StoredInterfaceMemberFunctionCall2(void (Class::*fn)(QFutureInterface<T> &, Arg1, Arg2), Class *object, const Arg1 &arg1, const Arg2 &arg2)
-    : fn(fn), object(object), arg1(arg1), arg2(arg2) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        (object->*fn)(futureInterface, arg1, arg2);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Class *object;
-    Arg1 arg1; Arg2 arg2;
+    using type = functionResult_t<Function>;
 };
 
-template <typename T,  typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3>
-class StoredInterfaceFunctionCall3 : public QRunnable
+template <typename Function, int index>
+struct resultTypeTakesArguments<Function, index, true>
+        : public resultTypeWithArgument<Function, typename functionTraits<Function>::template argument<index>::type>
 {
-public:
-    StoredInterfaceFunctionCall3(void (fn)(QFutureInterface<T> &, Arg1, Arg2, Arg3), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
-    : fn(fn), arg1(arg1), arg2(arg2), arg3(arg3) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        fn(futureInterface, arg1, arg2, arg3);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Arg1 arg1; Arg2 arg2; Arg3 arg3;
-};
-template <typename T,  typename FunctionPointer, typename Class, typename Arg1, typename Arg2, typename Arg3>
-class StoredInterfaceMemberFunctionCall3 : public QRunnable
-{
-public:
-    StoredInterfaceMemberFunctionCall3(void (Class::*fn)(QFutureInterface<T> &, Arg1, Arg2, Arg3), Class *object, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
-    : fn(fn), object(object), arg1(arg1), arg2(arg2), arg3(arg3) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        (object->*fn)(futureInterface, arg1, arg2, arg3);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Class *object;
-    Arg1 arg1; Arg2 arg2; Arg3 arg3;
 };
 
-template <typename T,  typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-class StoredInterfaceFunctionCall4 : public QRunnable
+template <typename Function, int index>
+struct resultTypeTakesArguments<Function, index, false>
 {
-public:
-    StoredInterfaceFunctionCall4(void (fn)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4)
-    : fn(fn), arg1(arg1), arg2(arg2), arg3(arg3), arg4(arg4) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        fn(futureInterface, arg1, arg2, arg3, arg4);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Arg1 arg1; Arg2 arg2; Arg3 arg3; Arg4 arg4;
-};
-template <typename T,  typename FunctionPointer, typename Class, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-class StoredInterfaceMemberFunctionCall4 : public QRunnable
-{
-public:
-    StoredInterfaceMemberFunctionCall4(void (Class::*fn)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4), Class *object, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4)
-    : fn(fn), object(object), arg1(arg1), arg2(arg2), arg3(arg3), arg4(arg4) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        (object->*fn)(futureInterface, arg1, arg2, arg3, arg4);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Class *object;
-    Arg1 arg1; Arg2 arg2; Arg3 arg3; Arg4 arg4;
+    using type = functionResult_t<Function>;
 };
 
-template <typename T,  typename FunctionPointer, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
-class StoredInterfaceFunctionCall5 : public QRunnable
+template <typename Function>
+struct resultTypeIsFunctionLike<Function, true>
+        : public resultTypeTakesArguments<Function, 0, (functionTraits<Function>::arity > 0)>
 {
-public:
-    StoredInterfaceFunctionCall5(void (fn)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4, Arg5), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
-    : fn(fn), arg1(arg1), arg2(arg2), arg3(arg3), arg4(arg4), arg5(arg5) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        fn(futureInterface, arg1, arg2, arg3, arg4, arg5);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Arg1 arg1; Arg2 arg2; Arg3 arg3; Arg4 arg4; Arg5 arg5;
-};
-template <typename T,  typename FunctionPointer, typename Class, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
-class StoredInterfaceMemberFunctionCall5 : public QRunnable
-{
-public:
-    StoredInterfaceMemberFunctionCall5(void (Class::*fn)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4, Arg5), Class *object, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
-    : fn(fn), object(object), arg1(arg1), arg2(arg2), arg3(arg3), arg4(arg4), arg5(arg5) { }
-
-    QFuture<T> start()
-    {
-        futureInterface.reportStarted();
-        QFuture<T> future = futureInterface.future();
-        QThreadPool::globalInstance()->start(this);
-        return future;
-    }
-
-    void run()
-    {
-        (object->*fn)(futureInterface, arg1, arg2, arg3, arg4, arg5);
-        futureInterface.reportFinished();
-    }
-private:
-    QFutureInterface<T> futureInterface;
-    FunctionPointer fn;
-    Class *object;
-    Arg1 arg1; Arg2 arg2; Arg3 arg3; Arg4 arg4; Arg5 arg5;
 };
 
-template <typename T>
-QFuture<T> run(void (*functionPointer)(QFutureInterface<T> &))
+template <typename Function>
+struct resultTypeIsMemberFunction<Function, true>
+        : public resultTypeTakesArguments<Function, 1, (functionTraits<Function>::arity > 1)>
 {
-    return (new StoredInterfaceFunctionCall0<T, void (*)(QFutureInterface<T> &)>(functionPointer))->start();
-}
-template <typename T, typename Arg1>
-QFuture<T> run(void (*functionPointer)(QFutureInterface<T> &, Arg1), const Arg1 &arg1)
+};
+
+template <typename Function>
+struct resultTypeIsMemberFunction<Function, false>
 {
-    return (new StoredInterfaceFunctionCall1<T, void (*)(QFutureInterface<T> &, Arg1), Arg1>(functionPointer, arg1))->start();
-}
-template <typename T, typename Arg1, typename Arg2>
-QFuture<T> run(void (*functionPointer)(QFutureInterface<T> &, Arg1, Arg2), const Arg1 &arg1, const Arg2 &arg2)
+    using type = void;
+};
+
+template <typename Function>
+struct resultTypeIsFunctionLike<Function, false>
+        : public resultTypeIsMemberFunction<Function, std::is_member_function_pointer<Function>::value>
 {
-    return (new StoredInterfaceFunctionCall2<T, void (*)(QFutureInterface<T> &, Arg1, Arg2), Arg1, Arg2>(functionPointer, arg1, arg2))->start();
-}
-template <typename T, typename Arg1, typename Arg2, typename Arg3>
-QFuture<T> run(void (*functionPointer)(QFutureInterface<T> &, Arg1, Arg2, Arg3), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
+};
+
+template <typename Function>
+struct resultTypeHasCallOperator<Function, false>
+        : public resultTypeIsFunctionLike<Function, std::is_function<std::remove_pointer_t<std::decay_t<Function>>>::value>
 {
-    return (new StoredInterfaceFunctionCall3<T, void (*)(QFutureInterface<T> &, Arg1, Arg2, Arg3), Arg1, Arg2, Arg3>(functionPointer, arg1, arg2, arg3))->start();
-}
-template <typename T, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-QFuture<T> run(void (*functionPointer)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4)
+};
+
+template <typename Callable>
+struct resultTypeHasCallOperator<Callable, true>
+        : public resultTypeTakesArguments<Callable, 0, (functionTraits<Callable>::arity > 0)>
 {
-    return (new StoredInterfaceFunctionCall4<T, void (*)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4), Arg1, Arg2, Arg3, Arg4>(functionPointer, arg1, arg2, arg3, arg4))->start();
-}
-template <typename T, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
-QFuture<T> run(void (*functionPointer)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4, Arg5), const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
+};
+
+template <typename Function>
+struct resultType
+        : public resultTypeHasCallOperator<Function, hasCallOperator<Function>::value>
 {
-    return (new StoredInterfaceFunctionCall5<T, void (*)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4, Arg5), Arg1, Arg2, Arg3, Arg4, Arg5>(functionPointer, arg1, arg2, arg3, arg4, arg5))->start();
+};
+
+template <typename Function>
+struct resultType<Function&> : public resultType<Function>
+{
+};
+
+template <typename Function>
+struct resultType<const Function&> : public resultType<Function>
+{
+};
+
+template <typename Function>
+struct resultType<Function &&> : public resultType<Function>
+{
+};
+
+template <typename Function>
+struct resultType<std::reference_wrapper<Function>> : public resultType<Function>
+{
+};
+template <typename Function>
+struct resultType<std::reference_wrapper<const Function>> : public resultType<Function>
+{
+};
+
+/*
+   Callable object that wraps a member function pointer with the object it
+   will be called on.
+*/
+
+template <typename Function>
+class MemberCallable;
+
+template <typename Result, typename Obj, typename... Args>
+class MemberCallable<Result(Obj::*)(Args...) const>
+{
+public:
+    MemberCallable(Result(Obj::* function)(Args...) const, const Obj *obj)
+        : m_function(function),
+          m_obj(obj)
+    {
+    }
+
+    Result operator()(Args&&... args) const
+    {
+        return ((*m_obj).*m_function)(std::forward<Args>(args)...);
+    }
+
+private:
+    Result(Obj::* m_function)(Args...) const;
+    const Obj *m_obj;
+};
+
+template <typename Result, typename Obj, typename... Args>
+class MemberCallable<Result(Obj::*)(Args...)>
+{
+public:
+    MemberCallable(Result(Obj::* function)(Args...), Obj *obj)
+        : m_function(function),
+          m_obj(obj)
+    {
+    }
+
+    Result operator()(Args&&... args) const
+    {
+        return ((*m_obj).*m_function)(std::forward<Args>(args)...);
+    }
+
+private:
+    Result(Obj::* m_function)(Args...);
+    Obj *m_obj;
+};
+
+/*
+   Helper functions for runAsync that run in the started thread.
+*/
+
+// void function that does not take QFutureInterface
+template <typename ResultType, typename Function, typename... Args>
+void runAsyncReturnVoidDispatch(std::true_type, QFutureInterface<ResultType>, Function &&function, Args&&... args)
+{
+    function(std::forward<Args>(args)...);
 }
 
-template <typename Class, typename T>
-QFuture<T> run(void (Class::*fn)(QFutureInterface<T> &), Class *object)
+// non-void function that does not take QFutureInterface
+template <typename ResultType, typename Function, typename... Args>
+void runAsyncReturnVoidDispatch(std::false_type, QFutureInterface<ResultType> futureInterface, Function &&function, Args&&... args)
 {
-    return (new StoredInterfaceMemberFunctionCall0<T, void (Class::*)(QFutureInterface<T> &), Class>(fn, object))->start();
+    futureInterface.reportResult(function(std::forward<Args>(args)...));
 }
 
-template <typename Class, typename T, typename Arg1>
-QFuture<T> run(void (Class::*fn)(QFutureInterface<T> &, Arg1), Class *object, Arg1 arg1)
+// function that takes QFutureInterface
+template <typename ResultType, typename Function, typename... Args>
+void runAsyncQFutureInterfaceDispatch(std::true_type, QFutureInterface<ResultType> futureInterface, Function &&function, Args&&... args)
 {
-    return (new StoredInterfaceMemberFunctionCall1<T, void (Class::*)(QFutureInterface<T> &, Arg1), Class, Arg1>(fn, object, arg1))->start();
+    function(futureInterface, std::forward<Args>(args)...);
 }
 
-template <typename Class, typename T, typename Arg1, typename Arg2>
-QFuture<T> run(void (Class::*fn)(QFutureInterface<T> &, Arg1, Arg2), Class *object, const Arg1 &arg1, const Arg2 &arg2)
+// function that does not take QFutureInterface
+template <typename ResultType, typename Function, typename... Args>
+void runAsyncQFutureInterfaceDispatch(std::false_type, QFutureInterface<ResultType> futureInterface, Function &&function, Args&&... args)
 {
-    return (new StoredInterfaceMemberFunctionCall2<T, void (Class::*)(QFutureInterface<T> &, Arg1, Arg2), Class, Arg1, Arg2>(fn, object, arg1, arg2))->start();
+    runAsyncReturnVoidDispatch(std::is_void<std::result_of_t<Function(Args...)>>(),
+                               futureInterface, std::forward<Function>(function), std::forward<Args>(args)...);
 }
 
-template <typename Class, typename T, typename Arg1, typename Arg2, typename Arg3>
-QFuture<T> run(void (Class::*fn)(QFutureInterface<T> &, Arg1, Arg2, Arg3), Class *object, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3)
+// function, function pointer, or other callable object that is no member pointer
+template <typename ResultType, typename Function, typename... Args,
+          typename = std::enable_if_t<!std::is_member_pointer<std::decay_t<Function>>::value>
+         >
+void runAsyncMemberDispatch(QFutureInterface<ResultType> futureInterface, Function &&function, Args&&... args)
 {
-    return (new StoredInterfaceMemberFunctionCall3<T, void (Class::*)(QFutureInterface<T> &, Arg1, Arg2, Arg3), Class, Arg1, Arg2, Arg3>(fn, object, arg1, arg2, arg3))->start();
+    runAsyncQFutureInterfaceDispatch(functionTakesArgument<Function, 0, QFutureInterface<ResultType>&>(),
+                                     futureInterface, std::forward<Function>(function), std::forward<Args>(args)...);
 }
 
-template <typename Class, typename T, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-QFuture<T> run(void (Class::*fn)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4), Class *object, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4)
+// Function = member function
+template <typename ResultType, typename Function, typename Obj, typename... Args,
+          typename = std::enable_if_t<std::is_member_pointer<std::decay_t<Function>>::value>
+         >
+void runAsyncMemberDispatch(QFutureInterface<ResultType> futureInterface, Function &&function, Obj &&obj, Args&&... args)
 {
-    return (new StoredInterfaceMemberFunctionCall4<T, void (Class::*)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4), Class, Arg1, Arg2, Arg3, Arg4>(fn, object, arg1, arg2, arg3, arg4))->start();
+    // Wrap member function with object into callable
+    runAsyncImpl(futureInterface,
+                 MemberCallable<std::decay_t<Function>>(std::forward<Function>(function), std::forward<Obj>(obj)),
+                 std::forward<Args>(args)...);
 }
 
-template <typename Class, typename T, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
-QFuture<T> run(void (Class::*fn)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4, Arg5), Class *object, const Arg1 &arg1, const Arg2 &arg2, const Arg3 &arg3, const Arg4 &arg4, const Arg5 &arg5)
+// cref to function/callable
+template <typename ResultType, typename Function, typename... Args>
+void runAsyncImpl(QFutureInterface<ResultType> futureInterface,
+                  std::reference_wrapper<Function> functionWrapper, Args&&... args)
 {
-    return (new StoredInterfaceMemberFunctionCall5<T, void (Class::*)(QFutureInterface<T> &, Arg1, Arg2, Arg3, Arg4, Arg5), Class, Arg1, Arg2, Arg3, Arg4, Arg5>(fn, object, arg1, arg2, arg3, arg4, arg5))->start();
+    runAsyncMemberDispatch(futureInterface, functionWrapper.get(), std::forward<Args>(args)...);
 }
 
-template <typename T>
-QFuture<T> run(const std::function<void (QFutureInterface<T> &)> &fn)
+// function/callable, no cref
+template <typename ResultType, typename Function, typename... Args>
+void runAsyncImpl(QFutureInterface<ResultType> futureInterface,
+                  Function &&function, Args&&... args)
 {
-    return (new StoredInterfaceFunctionCall0<T, std::function<void (QFutureInterface<T> &)>>(fn))->start();
+    runAsyncMemberDispatch(futureInterface, std::forward<Function>(function),
+                           std::forward<Args>(args)...);
+}
+/*
+   AsyncJob is a QRunnable that wraps a function with the
+   arguments that are passed to it when it is run in a thread.
+*/
+
+template <class T>
+std::decay_t<T>
+decayCopy(T&& v)
+{
+    return std::forward<T>(v);
 }
 
-} // namespace QtConcurrent
+template <typename ResultType, typename Function, typename... Args>
+class AsyncJob : public QRunnable
+{
+public:
+    AsyncJob(Function &&function, Args&&... args)
+          // decay copy like std::thread
+        : data(decayCopy(std::forward<Function>(function)), decayCopy(std::forward<Args>(args))...)
+    {
+        // we need to report it as started even though it isn't yet, because someone might
+        // call waitForFinished on the future, which does _not_ block if the future is not started
+        futureInterface.setRunnable(this);
+        futureInterface.reportStarted();
+    }
 
-QT_END_NAMESPACE
+    ~AsyncJob() override
+    {
+        // QThreadPool can delete runnables even if they were never run (e.g. QThreadPool::clear).
+        // Since we reported them as started, we make sure that we always report them as finished.
+        // reportFinished only actually sends the signal if it wasn't already finished.
+        futureInterface.reportFinished();
+    }
 
-#endif // RUNEXTENSIONS_H
+    QFuture<ResultType> future() { return futureInterface.future(); }
+
+    void run() override
+    {
+        if (priority != QThread::InheritPriority)
+            if (QThread *thread = QThread::currentThread())
+                if (thread != qApp->thread())
+                    thread->setPriority(priority);
+        if (futureInterface.isCanceled()) {
+            futureInterface.reportFinished();
+            return;
+        }
+        runHelper(std::make_index_sequence<std::tuple_size<Data>::value>());
+    }
+
+    void setThreadPool(QThreadPool *pool)
+    {
+        futureInterface.setThreadPool(pool);
+    }
+
+    void setThreadPriority(QThread::Priority p)
+    {
+        priority = p;
+    }
+
+private:
+    using Data = std::tuple<std::decay_t<Function>, std::decay_t<Args>...>;
+
+    template <std::size_t... index>
+    void runHelper(std::index_sequence<index...>)
+    {
+        // invalidates data, which is moved into the call
+        runAsyncImpl(futureInterface, std::move(std::get<index>(data))...);
+        if (futureInterface.isPaused())
+            futureInterface.waitForResume();
+        futureInterface.reportFinished();
+    }
+
+    Data data;
+    QFutureInterface<ResultType> futureInterface;
+    QThread::Priority priority = QThread::InheritPriority;
+};
+
+class QTCREATOR_UTILS_EXPORT RunnableThread : public QThread
+{
+public:
+    explicit RunnableThread(QRunnable *runnable, QObject *parent = nullptr);
+
+protected:
+    void run() override;
+
+private:
+    QRunnable *m_runnable;
+};
+
+template<typename Function,
+         typename... Args,
+         typename ResultType = typename Internal::resultType<Function>::type>
+QFuture<ResultType> runAsync_internal(QThreadPool *pool,
+                                      StackSizeInBytes stackSize,
+                                      QThread::Priority priority,
+                                      Function &&function,
+                                      Args &&... args)
+{
+    Q_ASSERT(!(pool && stackSize)); // stack size cannot be changed once a thread is started
+    auto job = new Internal::AsyncJob<ResultType,Function,Args...>
+            (std::forward<Function>(function), std::forward<Args>(args)...);
+    job->setThreadPriority(priority);
+    QFuture<ResultType> future = job->future();
+    if (pool) {
+        job->setThreadPool(pool);
+        pool->start(job);
+    } else {
+        auto thread = new Internal::RunnableThread(job);
+        if (stackSize)
+            thread->setStackSize(stackSize.value());
+        thread->moveToThread(qApp->thread()); // make sure thread gets deleteLater on main thread
+        QObject::connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+        thread->start(priority);
+    }
+    return future;
+}
+
+} // Internal
+
+/*!
+    The interface of \c {runAsync} is similar to the std::thread constructor and \c {std::invoke}.
+
+    The \a function argument can be a member function,
+    an object with \c {operator()} (with no overloads),
+    a \c {std::function}, lambda, function pointer or function reference.
+    The \a args are passed to the function call after they are copied/moved to the thread.
+
+    The \a function can take a \c {QFutureInterface<ResultType>&} as its first argument, followed by
+    other custom arguments which need to be passed to this function.
+    If it does not take a \c {QFutureInterface<ResultType>&} as its first argument
+    and its return type is not void, the function call's result is reported to the QFuture.
+    If \a function is a (non-static) member function, the first argument in \a args is expected
+    to be the object that the function is called on.
+
+    If a thread \a pool is given, the function is run there. Otherwise a new, independent thread
+    is started.
+
+    \sa std::thread
+    \sa std::invoke
+    \sa QThreadPool
+    \sa QThread::Priority
+ */
+template <typename Function, typename... Args,
+          typename ResultType = typename Internal::resultType<Function>::type>
+QFuture<ResultType>
+runAsync(QThreadPool *pool, QThread::Priority priority, Function &&function, Args&&... args)
+{
+    return Internal::runAsync_internal(pool,
+                                       StackSizeInBytes(),
+                                       priority,
+                                       std::forward<Function>(function),
+                                       std::forward<Args>(args)...);
+}
+
+/*!
+    Runs \a function with \a args in a new thread with given thread \a priority.
+    \sa runAsync(QThreadPool*,QThread::Priority,Function&&,Args&&...)
+    \sa QThread::Priority
+ */
+template <typename Function, typename... Args,
+          typename ResultType = typename Internal::resultType<Function>::type>
+QFuture<ResultType>
+runAsync(QThread::Priority priority, Function &&function, Args&&... args)
+{
+    return runAsync(static_cast<QThreadPool *>(nullptr), priority,
+                    std::forward<Function>(function), std::forward<Args>(args)...);
+}
+
+/*!
+    Runs \a function with \a args in a new thread with given thread \a stackSize and
+    thread priority QThread::InheritPriority .
+    \sa runAsync(QThreadPool*,QThread::Priority,Function&&,Args&&...)
+    \sa QThread::Priority
+    \sa QThread::setStackSize
+*/
+template<typename Function,
+         typename... Args,
+         typename ResultType = typename Internal::resultType<Function>::type>
+QFuture<ResultType> runAsync(Utils::StackSizeInBytes stackSize, Function &&function, Args &&... args)
+{
+    return Internal::runAsync_internal(static_cast<QThreadPool *>(nullptr),
+                                       stackSize,
+                                       QThread::InheritPriority,
+                                       std::forward<Function>(function),
+                                       std::forward<Args>(args)...);
+}
+
+/*!
+    Runs \a function with \a args in a new thread with given thread \a stackSize and
+    given thread \a priority.
+    \sa runAsync(QThreadPool*,QThread::Priority,Function&&,Args&&...)
+    \sa QThread::Priority
+    \sa QThread::setStackSize
+*/
+template<typename Function,
+         typename... Args,
+         typename ResultType = typename Internal::resultType<Function>::type>
+QFuture<ResultType> runAsync(Utils::StackSizeInBytes stackSize,
+                             QThread::Priority priority,
+                             Function &&function,
+                             Args &&... args)
+{
+    return Internal::runAsync_internal(static_cast<QThreadPool *>(nullptr),
+                                       stackSize,
+                                       priority,
+                                       std::forward<Function>(function),
+                                       std::forward<Args>(args)...);
+}
+
+/*!
+    Runs \a function with \a args in a new thread with thread priority QThread::InheritPriority.
+    \sa runAsync(QThreadPool*,QThread::Priority,Function&&,Args&&...)
+    \sa QThread::Priority
+ */
+template <typename Function, typename... Args,
+          typename = std::enable_if_t<
+                !std::is_same<std::decay_t<Function>, QThreadPool>::value
+                && !std::is_same<std::decay_t<Function>, QThread::Priority>::value
+              >,
+          typename ResultType = typename Internal::resultType<Function>::type>
+QFuture<ResultType>
+runAsync(Function &&function, Args&&... args)
+{
+    return runAsync(static_cast<QThreadPool *>(nullptr),
+                    QThread::InheritPriority, std::forward<Function>(function),
+                    std::forward<Args>(args)...);
+}
+
+/*!
+    Runs \a function with \a args in a thread \a pool with thread priority QThread::InheritPriority.
+    \sa runAsync(QThreadPool*,QThread::Priority,Function&&,Args&&...)
+    \sa QThread::Priority
+ */
+template <typename Function, typename... Args,
+          typename = std::enable_if_t<!std::is_same<std::decay_t<Function>, QThread::Priority>::value>,
+          typename ResultType = typename Internal::resultType<Function>::type>
+QFuture<ResultType>
+runAsync(QThreadPool *pool, Function &&function, Args&&... args)
+{
+    return runAsync(pool, QThread::InheritPriority, std::forward<Function>(function),
+                    std::forward<Args>(args)...);
+}
+
+
+/*!
+    Adds a handler for when a result is ready.
+    This creates a new QFutureWatcher. Do not use if you intend to react on multiple conditions
+    or create a QFutureWatcher already for other reasons.
+*/
+template <typename R, typename T>
+const QFuture<T> &onResultReady(const QFuture<T> &future, R *receiver, void(R::*member)(const T &))
+{
+    auto watcher = new QFutureWatcher<T>();
+    QObject::connect(watcher, &QFutureWatcherBase::finished, watcher, &QObject::deleteLater);
+    QObject::connect(watcher, &QFutureWatcherBase::resultReadyAt, receiver,
+                     [receiver, member, watcher](int index) {
+                         (receiver->*member)(watcher->future().resultAt(index));
+                     });
+    watcher->setFuture(future);
+    return future;
+}
+
+/*!
+    Adds a handler for when a result is ready. The guard object determines the lifetime of
+    the connection.
+    This creates a new QFutureWatcher. Do not use if you intend to react on multiple conditions
+    or create a QFutureWatcher already for other reasons.
+*/
+template <typename T, typename Function>
+const QFuture<T> &onResultReady(const QFuture<T> &future, QObject *guard, Function f)
+{
+    auto watcher = new QFutureWatcher<T>();
+    QObject::connect(watcher, &QFutureWatcherBase::finished, watcher, &QObject::deleteLater);
+    QObject::connect(watcher, &QFutureWatcherBase::resultReadyAt, guard, [f, watcher](int index) {
+        f(watcher->future().resultAt(index));
+    });
+    watcher->setFuture(future);
+    return future;
+}
+
+/*!
+    Adds a handler for when a result is ready.
+    This creates a new QFutureWatcher. Do not use if you intend to react on multiple conditions
+    or create a QFutureWatcher already for other reasons.
+*/
+template <typename T, typename Function>
+const QFuture<T> &onResultReady(const QFuture<T> &future, Function f)
+{
+    auto watcher = new QFutureWatcher<T>();
+    QObject::connect(watcher, &QFutureWatcherBase::finished, watcher, &QObject::deleteLater);
+    QObject::connect(watcher, &QFutureWatcherBase::resultReadyAt, [f, watcher](int index) {
+        f(watcher->future().resultAt(index));
+    });
+    watcher->setFuture(future);
+    return future;
+}
+
+} // Utils

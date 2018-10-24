@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -32,16 +27,19 @@
 #include "savefile.h"
 
 #include "algorithm.h"
-#include "hostosinfo.h"
 #include "qtcassert.h"
 
+#include <QDataStream>
 #include <QDir>
 #include <QDebug>
 #include <QDateTime>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QMessageBox>
+#include <QRegExp>
+#include <QTimer>
 #include <QUrl>
+
+#ifdef QT_GUI_LIB
+#include <QMessageBox>
+#endif
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
@@ -211,9 +209,10 @@ bool FileUtils::isFileNewerThan(const FileName &filePath, const QDateTime &timeS
 }
 
 /*!
-  Recursively resolves possibly present symlinks in \a filePath.
-  Unlike QFileInfo::canonicalFilePath(), this function will still return the expected target file
-  even if the symlink is dangling.
+  Recursively resolves symlinks if \a filePath is a symlink.
+  To resolve symlinks anywhere in the path, see canonicalPath.
+  Unlike QFileInfo::canonicalFilePath(), this function will still return the expected deepest
+  target file even if the symlink is dangling.
 
   \note Maximum recursion depth == 16.
 
@@ -224,10 +223,25 @@ FileName FileUtils::resolveSymlinks(const FileName &path)
     QFileInfo f = path.toFileInfo();
     int links = 16;
     while (links-- && f.isSymLink())
-        f.setFile(f.symLinkTarget());
+        f.setFile(f.dir(), f.symLinkTarget());
     if (links <= 0)
         return FileName();
     return FileName::fromString(f.filePath());
+}
+
+/*!
+  Recursively resolves possibly present symlinks in \a filePath.
+  Unlike QFileInfo::canonicalFilePath(), this function will not return an empty
+  string if path doesn't exist.
+
+  Returns the canonical path.
+*/
+FileName FileUtils::canonicalPath(const FileName &path)
+{
+    const QString result = path.toFileInfo().canonicalFilePath();
+    if (result.isEmpty())
+        return path;
+    return FileName::fromString(result);
 }
 
 /*!
@@ -251,12 +265,12 @@ QString FileUtils::shortNativePath(const FileName &path)
 QString FileUtils::fileSystemFriendlyName(const QString &name)
 {
     QString result = name;
-    result.replace(QRegExp(QLatin1String("\\W")), QStringLiteral("_"));
-    result.replace(QRegExp(QLatin1String("_+")), QStringLiteral("_")); // compact _
+    result.replace(QRegExp(QLatin1String("\\W")), QLatin1String("_"));
+    result.replace(QRegExp(QLatin1String("_+")), QLatin1String("_")); // compact _
     result.remove(QRegExp(QLatin1String("^_*"))); // remove leading _
     result.remove(QRegExp(QLatin1String("_+$"))); // remove trailing _
     if (result.isEmpty())
-        result = QStringLiteral("unknown");
+        result = QLatin1String("unknown");
     return result;
 }
 
@@ -370,6 +384,7 @@ bool FileReader::fetch(const QString &fileName, QIODevice::OpenMode mode, QStrin
     return false;
 }
 
+#ifdef QT_GUI_LIB
 bool FileReader::fetch(const QString &fileName, QIODevice::OpenMode mode, QWidget *parent)
 {
     if (fetch(fileName, mode))
@@ -378,25 +393,20 @@ bool FileReader::fetch(const QString &fileName, QIODevice::OpenMode mode, QWidge
         QMessageBox::critical(parent, tr("File Error"), m_errorString);
     return false;
 }
-
+#endif // QT_GUI_LIB
 
 FileSaverBase::FileSaverBase()
-    : m_file(nullptr)
-    , m_hasError(false)
+    : m_hasError(false)
 {
 }
 
-FileSaverBase::~FileSaverBase()
-{
-}
+FileSaverBase::~FileSaverBase() = default;
 
 bool FileSaverBase::finalize()
 {
     m_file->close();
     setResult(m_file->error() == QFile::NoError);
-    // We delete the object, so it is really closed even if it is a QTemporaryFile.
-    delete m_file;
-    m_file = 0;
+    m_file.reset();
     return !m_hasError;
 }
 
@@ -409,6 +419,7 @@ bool FileSaverBase::finalize(QString *errStr)
     return false;
 }
 
+#ifdef QT_GUI_LIB
 bool FileSaverBase::finalize(QWidget *parent)
 {
     if (finalize())
@@ -416,6 +427,7 @@ bool FileSaverBase::finalize(QWidget *parent)
     QMessageBox::critical(parent, tr("File Error"), errorString());
     return false;
 }
+#endif // QT_GUI_LIB
 
 bool FileSaverBase::write(const char *data, int len)
 {
@@ -434,8 +446,13 @@ bool FileSaverBase::write(const QByteArray &bytes)
 bool FileSaverBase::setResult(bool ok)
 {
     if (!ok && !m_hasError) {
-        m_errorString = tr("Cannot write file %1. Disk full?").arg(
-                QDir::toNativeSeparators(m_fileName));
+        if (!m_file->errorString().isEmpty()) {
+            m_errorString = tr("Cannot write file %1: %2").arg(
+                        QDir::toNativeSeparators(m_fileName), m_file->errorString());
+        } else {
+            m_errorString = tr("Cannot write file %1. Disk full?").arg(
+                        QDir::toNativeSeparators(m_fileName));
+        }
         m_hasError = true;
     }
     return ok;
@@ -461,11 +478,27 @@ bool FileSaverBase::setResult(QXmlStreamWriter *stream)
 FileSaver::FileSaver(const QString &filename, QIODevice::OpenMode mode)
 {
     m_fileName = filename;
+    // Workaround an assert in Qt -- and provide a useful error message, too:
+    if (HostOsInfo::isWindowsHost()) {
+        // Taken from: https://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx
+        static const QStringList reservedNames
+                = {"CON", "PRN", "AUX", "NUL",
+                   "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+                   "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"};
+        const QString fn = QFileInfo(filename).baseName().toUpper();
+        for (const QString &rn : reservedNames) {
+            if (fn == rn) {
+                m_errorString = tr("%1: Is a reserved filename on Windows. Cannot save.").arg(filename);
+                m_hasError = true;
+                return;
+            }
+        }
+    }
     if (mode & (QIODevice::ReadOnly | QIODevice::Append)) {
-        m_file = new QFile(filename);
+        m_file.reset(new QFile{filename});
         m_isSafe = false;
     } else {
-        m_file = new SaveFile(filename);
+        m_file.reset(new SaveFile{filename});
         m_isSafe = true;
     }
     if (!m_file->open(QIODevice::WriteOnly | mode)) {
@@ -481,22 +514,22 @@ bool FileSaver::finalize()
     if (!m_isSafe)
         return FileSaverBase::finalize();
 
-    SaveFile *sf = static_cast<SaveFile *>(m_file);
+    SaveFile *sf = static_cast<SaveFile *>(m_file.get());
     if (m_hasError) {
         if (sf->isOpen())
             sf->rollback();
     } else {
         setResult(sf->commit());
     }
-    delete sf;
-    m_file = 0;
+    m_file.reset();
     return !m_hasError;
 }
 
 TempFileSaver::TempFileSaver(const QString &templ)
     : m_autoRemove(true)
 {
-    QTemporaryFile *tempFile = new QTemporaryFile();
+    m_file.reset(new QTemporaryFile{});
+    QTemporaryFile *tempFile = static_cast<QTemporaryFile *>(m_file.get());
     if (!templ.isEmpty())
         tempFile->setFileTemplate(templ);
     tempFile->setAutoRemove(false);
@@ -506,14 +539,12 @@ TempFileSaver::TempFileSaver(const QString &templ)
                 tempFile->errorString());
         m_hasError = true;
     }
-    m_file = tempFile;
     m_fileName = tempFile->fileName();
 }
 
 TempFileSaver::~TempFileSaver()
 {
-    delete m_file;
-    m_file = 0;
+    m_file.reset();
     if (m_autoRemove)
         QFile::remove(m_fileName);
 }
@@ -561,7 +592,6 @@ QString FileName::fileName(int pathComponents) const
     if (pathComponents < 0)
         return *this;
     const QChar slash = QLatin1Char('/');
-    QTC_CHECK(!endsWith(slash));
     int i = lastIndexOf(slash);
     if (pathComponents == 0 || i == -1)
         return mid(i + 1);
@@ -584,7 +614,7 @@ QString FileName::fileName(int pathComponents) const
 /// FileName exists.
 bool FileName::exists() const
 {
-    return QFileInfo::exists(*this);
+    return !isEmpty() && QFileInfo::exists(*this);
 }
 
 /// Find the parent directory of a given directory.
@@ -696,6 +726,13 @@ bool FileName::operator>=(const FileName &other) const
     return other <= *this;
 }
 
+FileName FileName::operator+(const QString &s) const
+{
+    FileName result(*this);
+    result.appendString(s);
+    return result;
+}
+
 /// \returns whether FileName is a child of \a s
 bool FileName::isChildOf(const FileName &s) const
 {
@@ -762,24 +799,15 @@ QTextStream &operator<<(QTextStream &s, const FileName &fn)
     return s << fn.toString();
 }
 
-int FileNameList::removeDuplicates()
+#ifdef Q_OS_WIN
+template <>
+void withNtfsPermissions(const std::function<void()> &task)
 {
-    QSet<FileName> seen;
-    int removed = 0;
-
-    for (int i = 0; i < size(); ) {
-        const FileName &fn = at(i);
-        if (seen.contains(fn)) {
-            removeAt(i);
-            ++removed;
-        } else {
-            seen.insert(fn);
-            ++i;
-        }
-    }
-
-    return removed;
+    qt_ntfs_permission_lookup++;
+    task();
+    qt_ntfs_permission_lookup--;
 }
+#endif
 
 } // namespace Utils
 

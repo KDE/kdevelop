@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -34,6 +29,8 @@
 #include <QtCore/qdebug.h>
 #include <QtCore/qfile.h>
 #include <QtCore/qstringlist.h>
+#include <QtCore/qvector.h>
+#include <QtCore/qpointer.h>
 
 
 
@@ -53,8 +50,8 @@ QT_BEGIN_NAMESPACE
     file:///home/user/test.qml:7:8: Invalid property assignment: double expected
     \endcode
 
-    You can use qDebug() or qWarning() to output errors to the console. This method
-    will attempt to open the file indicated by the error
+    You can use qDebug(), qInfo(), or qWarning() to output errors to the console.
+    This method will attempt to open the file indicated by the error
     and include additional contextual information.
     \code
     file:///home/user/test.qml:7:8: Invalid property assignment: double expected
@@ -81,11 +78,12 @@ public:
     QString description;
     quint16 line;
     quint16 column;
-    QObject *object;
+    QtMsgType messageType;
+    QPointer<QObject> object;
 };
 
 QmlErrorPrivate::QmlErrorPrivate()
-: line(0), column(0), object()
+: line(0), column(0), messageType(QtMsgType::QtWarningMsg), object()
 {
 }
 
@@ -115,12 +113,14 @@ QmlError &QmlError::operator=(const QmlError &other)
         delete d;
         d = 0;
     } else {
-        if (!d) d = new QmlErrorPrivate;
+        if (!d)
+            d = new QmlErrorPrivate;
         d->url = other.d->url;
         d->description = other.d->description;
         d->line = other.d->line;
         d->column = other.d->column;
         d->object = other.d->object;
+        d->messageType = other.d->messageType;
     }
     return *this;
 }
@@ -146,8 +146,9 @@ bool QmlError::isValid() const
 */
 QUrl QmlError::url() const
 {
-    if (d) return d->url;
-    else return QUrl();
+    if (d)
+        return d->url;
+    return QUrl();
 }
 
 /*!
@@ -155,7 +156,8 @@ QUrl QmlError::url() const
 */
 void QmlError::setUrl(const QUrl &url)
 {
-    if (!d) d = new QmlErrorPrivate;
+    if (!d)
+        d = new QmlErrorPrivate;
     d->url = url;
 }
 
@@ -164,8 +166,9 @@ void QmlError::setUrl(const QUrl &url)
 */
 QString QmlError::description() const
 {
-    if (d) return d->description;
-    else return QString();
+    if (d)
+        return d->description;
+    return QString();
 }
 
 /*!
@@ -173,7 +176,8 @@ QString QmlError::description() const
 */
 void QmlError::setDescription(const QString &description)
 {
-    if (!d) d = new QmlErrorPrivate;
+    if (!d)
+        d = new QmlErrorPrivate;
     d->description = description;
 }
 
@@ -182,8 +186,9 @@ void QmlError::setDescription(const QString &description)
 */
 int QmlError::line() const
 {
-    if (d) return qmlSourceCoordinate(d->line);
-    else return -1;
+    if (d)
+        return qmlSourceCoordinate(d->line);
+    return -1;
 }
 
 /*!
@@ -191,7 +196,8 @@ int QmlError::line() const
 */
 void QmlError::setLine(int line)
 {
-    if (!d) d = new QmlErrorPrivate;
+    if (!d)
+        d = new QmlErrorPrivate;
     d->line = qmlSourceCoordinate(line);
 }
 
@@ -200,8 +206,9 @@ void QmlError::setLine(int line)
 */
 int QmlError::column() const
 {
-    if (d) return qmlSourceCoordinate(d->column);
-    else return -1;
+    if (d)
+        return qmlSourceCoordinate(d->column);
+    return -1;
 }
 
 /*!
@@ -209,7 +216,8 @@ int QmlError::column() const
 */
 void QmlError::setColumn(int column)
 {
-    if (!d) d = new QmlErrorPrivate;
+    if (!d)
+        d = new QmlErrorPrivate;
     d->column = qmlSourceCoordinate(column);
 }
 
@@ -221,8 +229,9 @@ void QmlError::setColumn(int column)
  */
 QObject *QmlError::object() const
 {
-    if (d) return d->object;
-    else return 0;
+    if (d)
+        return d->object;
+    return 0;
 }
 
 /*!
@@ -230,8 +239,34 @@ QObject *QmlError::object() const
  */
 void QmlError::setObject(QObject *object)
 {
-    if (!d) d = new QmlErrorPrivate;
+    if (!d)
+        d = new QmlErrorPrivate;
     d->object = object;
+}
+
+/*!
+    \since 5.9
+
+    Returns the message type.
+ */
+QtMsgType QmlError::messageType() const
+{
+    if (d)
+        return d->messageType;
+    return QtMsgType::QtWarningMsg;
+}
+
+/*!
+    \since 5.9
+
+    Sets the \a messageType for this message. The message type determines which
+    QDebug handlers are responsible for recieving the message.
+ */
+void QmlError::setMessageType(QtMsgType messageType)
+{
+    if (!d)
+        d = new QmlErrorPrivate;
+    d->messageType = messageType;
 }
 
 /*!
@@ -244,16 +279,17 @@ QString QmlError::toString() const
     QUrl u(url());
     int l(line());
 
-    if (u.isEmpty()) {
-        rv = QLatin1String("<Unknown File>");
-    } else if (l != -1) {
-        rv = u.toString() + QLatin1Char(':') + QString::number(l);
+    if (u.isEmpty() || (u.isLocalFile() && u.path().isEmpty()))
+        rv += QLatin1String("<Unknown File>");
+    else
+        rv += u.toString();
+
+    if (l != -1) {
+        rv += QLatin1Char(':') + QString::number(l);
 
         int c(column());
         if (c != -1)
             rv += QLatin1Char(':') + QString::number(c);
-    } else {
-        rv = u.toString();
     }
 
     rv += QLatin1String(": ") + description();
@@ -280,15 +316,15 @@ QDebug operator<<(QDebug debug, const QmlError &error)
         if (f.open(QIODevice::ReadOnly)) {
             QByteArray data = f.readAll();
             QTextStream stream(data, QIODevice::ReadOnly);
-#ifndef QT_NO_TEXTCODEC
+#if QT_CONFIG(textcodec)
             stream.setCodec("UTF-8");
 #endif
             const QString code = stream.readAll();
-            const QStringList lines = code.split(QLatin1Char('\n'));
+            const auto lines = code.splitRef(QLatin1Char('\n'));
 
             if (lines.count() >= error.line()) {
-                const QString &line = lines.at(error.line() - 1);
-                debug << "\n    " << qPrintable(line);
+                const QStringRef &line = lines.at(error.line() - 1);
+                debug << "\n    " << line.toLocal8Bit().constData();
 
                 if (error.column() > 0) {
                     int column = qMax(0, error.column() - 1);

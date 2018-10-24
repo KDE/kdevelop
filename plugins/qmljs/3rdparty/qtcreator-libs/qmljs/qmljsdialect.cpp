@@ -1,7 +1,7 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing
+** Copyright (C) 2016 The Qt Company Ltd.
+** Contact: https://www.qt.io/licensing/
 **
 ** This file is part of Qt Creator.
 **
@@ -9,22 +9,17 @@
 ** Licensees holding valid commercial Qt licenses may use this file in
 ** accordance with the commercial license agreement provided with the
 ** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company.  For licensing terms and
-** conditions see http://www.qt.io/terms-conditions.  For further information
-** use the contact form at http://www.qt.io/contact-us.
+** a written agreement between you and The Qt Company. For licensing terms
+** and conditions see https://www.qt.io/terms-conditions. For further
+** information use the contact form at https://www.qt.io/contact-us.
 **
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, The Qt Company gives you certain additional
-** rights.  These rights are described in The Qt Company LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU
+** General Public License version 3 as published by the Free Software
+** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
+** included in the packaging of this file. Please review the following
+** information to ensure the GNU General Public License requirements will
+** be met: https://www.gnu.org/licenses/gpl-3.0.html.
 **
 ****************************************************************************/
 
@@ -40,7 +35,6 @@ bool Dialect::isQmlLikeLanguage() const
 {
     switch (m_dialect) {
     case Dialect::Qml:
-    case Dialect::QmlQtQuick1:
     case Dialect::QmlQtQuick2:
     case Dialect::QmlQtQuick2Ui:
     case Dialect::QmlQbs:
@@ -59,7 +53,6 @@ bool Dialect::isFullySupportedLanguage() const
     case Dialect::JavaScript:
     case Dialect::Json:
     case Dialect::Qml:
-    case Dialect::QmlQtQuick1:
     case Dialect::QmlQtQuick2:
     case Dialect::QmlQtQuick2Ui:
         return true;
@@ -77,7 +70,6 @@ bool Dialect::isQmlLikeOrJsLanguage() const
 {
     switch (m_dialect) {
     case Dialect::Qml:
-    case Dialect::QmlQtQuick1:
     case Dialect::QmlQtQuick2:
     case Dialect::QmlQtQuick2Ui:
     case Dialect::QmlQbs:
@@ -100,8 +92,6 @@ QString Dialect::toString() const
         return QLatin1String("Json");
     case Dialect::Qml:
         return QLatin1String("Qml");
-    case Dialect::QmlQtQuick1:
-        return QLatin1String("QmlQtQuick1");
     case Dialect::QmlQtQuick2:
         return QLatin1String("QmlQtQuick2");
     case Dialect::QmlQtQuick2Ui:
@@ -211,11 +201,7 @@ QList<Dialect> Dialect::companionLanguages() const
         langs << Dialect::JavaScript;
         break;
     case Dialect::Qml:
-        langs << Dialect::QmlQtQuick1 << Dialect::QmlQtQuick2 << Dialect::QmlQtQuick2Ui
-              << Dialect::JavaScript;
-        break;
-    case Dialect::QmlQtQuick1:
-        langs << Dialect::Qml << Dialect::JavaScript;
+        langs << Dialect::QmlQtQuick2 << Dialect::QmlQtQuick2Ui << Dialect::JavaScript;
         break;
     case Dialect::QmlQtQuick2:
     case Dialect::QmlQtQuick2Ui:
@@ -225,7 +211,7 @@ QList<Dialect> Dialect::companionLanguages() const
         break;
     case Dialect::AnyLanguage:
         langs << Dialect::JavaScript << Dialect::Json << Dialect::QmlProject << Dialect:: QmlQbs
-              << Dialect::QmlTypeInfo << Dialect::QmlQtQuick1 << Dialect::QmlQtQuick2
+              << Dialect::QmlTypeInfo << Dialect::QmlQtQuick2
               << Dialect::QmlQtQuick2Ui << Dialect::Qml;
         break;
     case Dialect::NoLanguage:
@@ -285,11 +271,10 @@ bool PathsAndLanguages::maybeInsert(const PathAndLanguage &pathAndLanguage) {
         if (currentElement.path() == pathAndLanguage.path()) {
             int j = i;
             do {
-                if (pathAndLanguage.language() < currentElement.language()) {
-                    if (currentElement.language() == pathAndLanguage.language())
-                        return false;
+                if (pathAndLanguage.language() < currentElement.language())
                     break;
-                }
+                if (currentElement.language() == pathAndLanguage.language())
+                    return false;
                 ++j;
                 if (j == m_list.length())
                     break;
