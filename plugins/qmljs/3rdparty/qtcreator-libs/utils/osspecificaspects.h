@@ -66,10 +66,10 @@ QTCREATOR_UTILS_EXPORT inline Qt::KeyboardModifier controlModifier(OsType osType
 QTCREATOR_UTILS_EXPORT inline QString pathWithNativeSeparators(OsType osType, const QString &pathName)
 {
     if (osType == OsTypeWindows) {
-        const int pos = pathName.indexOf('/');
+        const int pos = pathName.indexOf(QLatin1Char('/'));
         if (pos >= 0) {
             QString n = pathName;
-            std::replace(std::begin(n) + pos, std::end(n), '/', '\\');
+            std::replace(std::begin(n) + pos, std::end(n), QLatin1Char('/'), QLatin1Char('\\'));
             return n;
         }
     }

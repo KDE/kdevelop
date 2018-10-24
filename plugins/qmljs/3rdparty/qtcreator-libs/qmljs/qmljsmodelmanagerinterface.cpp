@@ -25,7 +25,7 @@
 
 #include "qmljsbind.h"
 #include "qmljsconstants.h"
-#include "qmljsfindexportedcpptypes.h"
+// #include "qmljsfindexportedcpptypes.h"
 #include "qmljsinterpreter.h"
 #include "qmljsmodelmanagerinterface.h"
 #include "qmljsplugindumper.h"
@@ -34,7 +34,7 @@
 #include "qmljsviewercontext.h"
 #include "qmljsutils.h"
 
-#include <cplusplus/cppmodelmanagerbase.h>
+// #include <cplusplus/cppmodelmanagerbase.h>
 #include <utils/algorithm.h>
 #include <utils/hostosinfo.h>
 #include <utils/runextensions.h>
@@ -103,11 +103,13 @@ ModelManagerInterface::ModelManagerInterface(QObject *parent)
 {
     m_indexerEnabled = qgetenv("QTC_NO_CODE_INDEXER") != "1";
 
+#if 0
     m_updateCppQmlTypesTimer = new QTimer(this);
     m_updateCppQmlTypesTimer->setInterval(1000);
     m_updateCppQmlTypesTimer->setSingleShot(true);
     connect(m_updateCppQmlTypesTimer, &QTimer::timeout,
             this, &ModelManagerInterface::startCppQmlTypeUpdate);
+#endif
 
     m_asyncResetTimer = new QTimer(this);
     m_asyncResetTimer->setInterval(15000);
@@ -134,8 +136,10 @@ ModelManagerInterface::ModelManagerInterface(QObject *parent)
 
 ModelManagerInterface::~ModelManagerInterface()
 {
+#if 0
     m_cppQmlTypesUpdater.cancel();
     m_cppQmlTypesUpdater.waitForFinished();
+#endif
     Q_ASSERT(g_instance == this);
     g_instance = 0;
 }
@@ -1179,6 +1183,7 @@ void ModelManagerInterface::loadPluginTypes(const QString &libraryPath, const QS
     m_pluginDumper->loadPluginTypes(libraryPath, importPath, importUri, importVersion);
 }
 
+#if 0
 // is called *inside a c++ parsing thread*, to allow hanging on to source and ast
 void ModelManagerInterface::maybeQueueCppQmlTypeUpdate(const CPlusPlus::Document::Ptr &doc)
 {
@@ -1225,6 +1230,7 @@ void ModelManagerInterface::startCppQmlTypeUpdate()
                 this, cppModelManager->snapshot(), m_queuedCppDocuments);
     m_queuedCppDocuments.clear();
 }
+#endif
 
 QMutex *ModelManagerInterface::mutex() const
 {
@@ -1236,6 +1242,7 @@ void ModelManagerInterface::asyncReset()
     m_asyncResetTimer->start();
 }
 
+#if 0
 bool rescanExports(const QString &fileName, FindExportedCppTypes &finder,
                    ModelManagerInterface::CppDataHash &newData)
 {
@@ -1337,6 +1344,7 @@ void ModelManagerInterface::updateCppQmlTypes(QFutureInterface<void> &futureInte
         // one could get away with re-linking the cpp types...
         QMetaObject::invokeMethod(qmlModelManager, "asyncReset");
 }
+#endif
 
 ModelManagerInterface::CppDataHash ModelManagerInterface::cppData() const
 {

@@ -66,7 +66,7 @@ public:
     bool watchesDirectory(const QString &file) const;
     QStringList directories() const;
 
-signals:
+Q_SIGNALS:
     void fileChanged(const QString &path);
     void directoryChanged(const QString &path);
 

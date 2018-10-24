@@ -31,7 +31,7 @@
 #include "qmljsqrcparser.h"
 #include "qmljsdialect.h"
 
-#include <cplusplus/CppDocument.h>
+// #include <cplusplus/CppDocument.h>
 #include <utils/environment.h>
 
 #include <QFuture>
@@ -209,9 +209,9 @@ public:
 
     virtual void resetCodeModel();
     void removeProjectInfo(ProjectExplorer::Project *project);
-    void maybeQueueCppQmlTypeUpdate(const CPlusPlus::Document::Ptr &doc);
+//     void maybeQueueCppQmlTypeUpdate(const CPlusPlus::Document::Ptr &doc);
 
-signals:
+Q_SIGNALS:
     void documentUpdated(QmlJS::Document::Ptr doc);
     void documentChangedOnDisk(QmlJS::Document::Ptr doc);
     void aboutToRemoveFiles(const QStringList &files);
@@ -220,9 +220,9 @@ signals:
     void projectPathChanged(const QString &projectPath);
 
 protected:
-    Q_INVOKABLE void queueCppQmlTypeUpdate(const CPlusPlus::Document::Ptr &doc, bool scan);
+//     Q_INVOKABLE void queueCppQmlTypeUpdate(const CPlusPlus::Document::Ptr &doc, bool scan);
     Q_INVOKABLE void asyncReset();
-    virtual void startCppQmlTypeUpdate();
+//     virtual void startCppQmlTypeUpdate();
     QMutex *mutex() const;
     virtual QHash<QString,Dialect> languageForSuffix() const;
     virtual void writeMessageInternal(const QString &msg) const;
@@ -242,10 +242,10 @@ protected:
                       ModelManagerInterface *modelManager,
                       QmlJS::Dialect mainLanguage,
                       bool emitDocChangedOnDisk);
-    static void updateCppQmlTypes(QFutureInterface<void> &futureInterface,
-                                  ModelManagerInterface *qmlModelManager,
-                                  CPlusPlus::Snapshot snapshot,
-                                  QHash<QString, QPair<CPlusPlus::Document::Ptr, bool> > documents);
+//     static void updateCppQmlTypes(QFutureInterface<void> &futureInterface,
+//                                   ModelManagerInterface *qmlModelManager,
+//                                   CPlusPlus::Snapshot snapshot,
+//                                   QHash<QString, QPair<CPlusPlus::Document::Ptr, bool> > documents);
 
     void maybeScan(const PathsAndLanguages &importPaths);
     void updateImportPaths();
@@ -271,13 +271,13 @@ private:
 
     QTimer *m_updateCppQmlTypesTimer;
     QTimer *m_asyncResetTimer;
-    QHash<QString, QPair<CPlusPlus::Document::Ptr, bool> > m_queuedCppDocuments;
+//     QHash<QString, QPair<CPlusPlus::Document::Ptr, bool> > m_queuedCppDocuments;
     QFuture<void> m_cppQmlTypesUpdater;
     QrcCache m_qrcCache;
     QHash<QString, QString> m_qrcContents;
 
     CppDataHash m_cppDataHash;
-    QHash<QString, QList<CPlusPlus::Document::Ptr> > m_cppDeclarationFiles;
+//     QHash<QString, QList<CPlusPlus::Document::Ptr> > m_cppDeclarationFiles;
     mutable QMutex m_cppDataMutex;
 
     // project integration
