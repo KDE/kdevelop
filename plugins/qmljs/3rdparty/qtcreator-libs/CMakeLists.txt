@@ -75,6 +75,9 @@ endif()
 target_compile_definitions(kdevqtc-qmlsupport PUBLIC -DLANGUAGEUTILS_BUILD_DIR -DQTCREATOR_UTILS_LIB -DQT_CREATOR -DQML_BUILD_STATIC_LIB)
 # add as SYSTEM include dir so compiler does not emit warnings for the lib headers
 target_include_directories(kdevqtc-qmlsupport SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+# optional.hpp needs -fexceptions
+# (otherwise: plugins/qmljs/3rdparty/qtcreator-libs/3rdparty/optional/optional.hpp:561:94: error: exception handling disabled, use -fexceptions to enable)
+kde_target_enable_exceptions(kdevqtc-qmlsupport PRIVATE)
 target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
     Qt5::Core
     Qt5::Gui
