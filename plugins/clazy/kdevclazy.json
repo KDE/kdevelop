@@ -3,7 +3,27 @@
         "Authors": [
             {
                 "Name": "Anton Anikin",
-                "Name[x-test]": "xxAnton Anikinxx"
+                "Name[ca@valencia]": "Anton Anikin",
+                "Name[ca]": "Anton Anikin",
+                "Name[cs]": "Anton Anikin",
+                "Name[de]": "Anton Anikin",
+                "Name[en_GB]": "Anton Anikin",
+                "Name[es]": "Anton Anikin",
+                "Name[fr]": "Anton Anikin",
+                "Name[gl]": "Anton Anikin",
+                "Name[it]": "Anton Anikin",
+                "Name[nl]": "Anton Anikin",
+                "Name[nn]": "Anton Anikin",
+                "Name[pl]": "Anton Anikin",
+                "Name[pt]": "Anton Anikin",
+                "Name[pt_BR]": "Anton Anikin",
+                "Name[sk]": "Anton Anikin",
+                "Name[sl]": "Anton Anikin",
+                "Name[sv]": "Anton Anikin",
+                "Name[tr]": "Anton Anikin",
+                "Name[uk]": "Anton Anikin",
+                "Name[x-test]": "xxAnton Anikinxx",
+                "Name[zh_CN]": "Anton Anikin"
             }
         ],
         "Category": "Analyzers",
