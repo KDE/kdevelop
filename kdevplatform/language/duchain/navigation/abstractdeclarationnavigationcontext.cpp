@@ -589,10 +589,24 @@ void AbstractDeclarationNavigationContext::htmlClass()
 
 void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType)
 {
-  Q_ASSERT(type);
-  Q_ASSERT(idType);
+  if (!type) {
+    qCDebug(LANGUAGE) << "null type!";
+    return;
+  }
 
-  if( Declaration* decl = idType->declaration(topContext().data()) ) {
+  if (!idType) {
+    qCDebug(LANGUAGE) << "no identified type for" << type->toString();
+    modifyHtml() += typeHighlight(type->toString().toHtmlEscaped());
+    return;
+  }
+
+  auto* decl = idType->declaration(topContext().data());
+  if (!decl) {
+    qCDebug(LANGUAGE) << "could not resolve declaration:" << idType->declarationId().isDirect() << idType->qualifiedIdentifier().toString() << "in top-context" << topContext()->url().str();
+    modifyHtml() += typeHighlight(type->toString().toHtmlEscaped());
+    return;
+  }
+
 
     //Remove the last template-identifiers, because we create those directly
     QualifiedIdentifier id = prettyQualifiedIdentifier(DeclarationPointer(decl));
@@ -617,10 +631,6 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
 
     //We leave out the * and & reference and pointer signs, those are added to the end
     makeLink(id.toString() , DeclarationPointer(idType->declaration(topContext().data())), NavigationAction::NavigateDeclaration );
-  } else {
-    qCDebug(LANGUAGE) << "could not resolve declaration:" << idType->declarationId().isDirect() << idType->qualifiedIdentifier().toString() << "in top-context" << topContext()->url().str();
-    modifyHtml() += typeHighlight(type->toString().toHtmlEscaped());
-  }
 }
 
 void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks( AbstractType::Ptr type )
