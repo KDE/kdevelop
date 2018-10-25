@@ -340,10 +340,11 @@ void DUContextDynamicData::removeImportedChildContext(DUContext* context)
 
 int DUContext::depth() const
 {
-    {
-        if (!parentContext())
-            return 0; return parentContext()->depth() + 1;
+    if (!parentContext()) {
+        return 0;
     }
+
+    return parentContext()->depth() + 1;
 }
 
 DUContext::DUContext(DUContextData& data)
