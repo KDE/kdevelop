@@ -2,7 +2,7 @@
 kdevplatform/language/codegen/tests/* : # (otherwise this breaks unit tests)
 
 # 2-space indentation
-kdevplatform/plugins/classbrowser/*.cpp kdevplatform/plugins/classbrowser/*.h kdevplatform/plugins/contextbrowser/*.cpp kdevplatform/plugins/contextbrowser/*.h languages/cpp/*.h languages/cpp/*.cpp : uncrustify -l CPP -f $TMPFILE -c format.config.uncrustify.2_spaces -o $TMPFILE
+kdevplatform/plugins/contextbrowser/*.cpp kdevplatform/plugins/contextbrowser/*.h languages/cpp/*.h languages/cpp/*.cpp : uncrustify -l CPP -f $TMPFILE -c format.config.uncrustify.2_spaces -o $TMPFILE
 
 # Default: 4-space indentation
 * : uncrustify -l CPP -f $TMPFILE -c format.config.uncrustify.4_spaces -o $TMPFILE

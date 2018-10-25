@@ -30,34 +30,35 @@
 
 class ClassTree;
 
-namespace KDevelop
-{
-  class Declaration;
+namespace KDevelop {
+class Declaration;
 }
 
-class ClassBrowserPlugin : public KDevelop::IPlugin
+class ClassBrowserPlugin
+    : public KDevelop::IPlugin
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit ClassBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
-  ~ClassBrowserPlugin() override;
+    explicit ClassBrowserPlugin(QObject* parent, const QVariantList& = QVariantList());
+    ~ClassBrowserPlugin() override;
 
-  void setActiveClassTree(ClassTree* a_classTree) { m_activeClassTree = a_classTree; }
+    void setActiveClassTree(ClassTree* a_classTree) { m_activeClassTree = a_classTree; }
 
 public: // KDevelop::Plugin overrides
-  void unload() override;
-  KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
+    void unload() override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
-  // The duchain must not be locked when this is called!
-  void showDefinition(const KDevelop::DeclarationPointer& declaration);
+    // The duchain must not be locked when this is called!
+    void showDefinition(const KDevelop::DeclarationPointer& declaration);
+
 private Q_SLOTS:
-  void findInClassBrowser();
+    void findInClassBrowser();
 
 private:
-  class ClassBrowserFactory* m_factory;
-  ClassTree* m_activeClassTree;
-  QAction* m_findInBrowser;
+    class ClassBrowserFactory* m_factory;
+    ClassTree* m_activeClassTree;
+    QAction* m_findInBrowser;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_CLASSBROWSERPLUGIN_H

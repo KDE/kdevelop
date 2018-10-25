@@ -33,31 +33,32 @@
 class ClassBrowserPlugin;
 class ClassModel;
 
-class ClassTree : public QTreeView
+class ClassTree
+    : public QTreeView
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  ClassTree(QWidget* parent, ClassBrowserPlugin* plugin);
-  ~ClassTree() override;
+    ClassTree(QWidget* parent, ClassBrowserPlugin* plugin);
+    ~ClassTree() override;
 
 public:
-  /// Find the given a_id in the tree and highlight it.
-  void highlightIdentifier(const KDevelop::IndexedQualifiedIdentifier& a_id);
+    /// Find the given a_id in the tree and highlight it.
+    void highlightIdentifier(const KDevelop::IndexedQualifiedIdentifier& a_id);
 
-  static bool populatingClassBrowserContextMenu();
-  
+    static bool populatingClassBrowserContextMenu();
+
 protected:
-  void contextMenuEvent(QContextMenuEvent* e) override;
-  ClassModel* model();
-  bool event(QEvent* event) override;
+    void contextMenuEvent(QContextMenuEvent* e) override;
+    ClassModel* model();
+    bool event(QEvent* event) override;
 
 private Q_SLOTS:
-  void itemActivated(const QModelIndex& index);
+    void itemActivated(const QModelIndex& index);
 
 private:
-  ClassBrowserPlugin* m_plugin;
-  QPointer<KDevelop::NavigationToolTip> m_tooltip;
+    ClassBrowserPlugin* m_plugin;
+    QPointer<KDevelop::NavigationToolTip> m_tooltip;
 };
 
 #endif

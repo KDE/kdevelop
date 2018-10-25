@@ -1,5 +1,5 @@
 /*
-  * This file is part of KDevelop
+ * This file is part of KDevelop
  *
  * Copyright 2006 Adam Treat <treat@kde.org>
  * Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
@@ -52,40 +52,41 @@ K_PLUGIN_FACTORY_WITH_JSON(KDevClassBrowserFactory, "kdevclassbrowser.json", reg
 
 using namespace KDevelop;
 
-class ClassBrowserFactory: public KDevelop::IToolViewFactory
+class ClassBrowserFactory
+    : public KDevelop::IToolViewFactory
 {
 public:
-  explicit ClassBrowserFactory(ClassBrowserPlugin *plugin): m_plugin(plugin) {}
+    explicit ClassBrowserFactory(ClassBrowserPlugin* plugin) : m_plugin(plugin) {}
 
-  QWidget* create(QWidget *parent = nullptr) override
-  {
-    return new ClassWidget(parent, m_plugin);
-  }
+    QWidget* create(QWidget* parent = nullptr) override
+    {
+        return new ClassWidget(parent, m_plugin);
+    }
 
-  Qt::DockWidgetArea defaultPosition() override
-  {
-    return Qt::LeftDockWidgetArea;
-  }
+    Qt::DockWidgetArea defaultPosition() override
+    {
+        return Qt::LeftDockWidgetArea;
+    }
 
-  QString id() const override
-  {
-    return QStringLiteral("org.kdevelop.ClassBrowserView");
-  }
+    QString id() const override
+    {
+        return QStringLiteral("org.kdevelop.ClassBrowserView");
+    }
 
 private:
-  ClassBrowserPlugin *m_plugin;
+    ClassBrowserPlugin* m_plugin;
 };
 
-ClassBrowserPlugin::ClassBrowserPlugin(QObject *parent, const QVariantList&)
+ClassBrowserPlugin::ClassBrowserPlugin(QObject* parent, const QVariantList&)
     : KDevelop::IPlugin(QStringLiteral("kdevclassbrowser"), parent)
     , m_factory(new ClassBrowserFactory(this))
     , m_activeClassTree(nullptr)
 {
-  core()->uiController()->addToolView(i18n("Classes"), m_factory);
-  setXMLFile( QStringLiteral("kdevclassbrowser.rc") );
+    core()->uiController()->addToolView(i18n("Classes"), m_factory);
+    setXMLFile(QStringLiteral("kdevclassbrowser.rc"));
 
-  m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
-  connect(m_findInBrowser, &QAction::triggered, this, &ClassBrowserPlugin::findInClassBrowser);
+    m_findInBrowser = new QAction(i18n("Find in &Class Browser"), this);
+    connect(m_findInBrowser, &QAction::triggered, this, &ClassBrowserPlugin::findInClassBrowser);
 }
 
 ClassBrowserPlugin::~ClassBrowserPlugin()
@@ -94,88 +95,87 @@ ClassBrowserPlugin::~ClassBrowserPlugin()
 
 void ClassBrowserPlugin::unload()
 {
-  core()->uiController()->removeToolView(m_factory);
+    core()->uiController()->removeToolView(m_factory);
 }
 
 KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
-  KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension(context, parent);
+    KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension(context, parent);
 
-  // No context menu if we don't have a class browser at hand.
-  if ( m_activeClassTree == nullptr )
-    return menuExt;
+    // No context menu if we don't have a class browser at hand.
+    if (m_activeClassTree == nullptr)
+        return menuExt;
 
-  KDevelop::DeclarationContext *codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
+    KDevelop::DeclarationContext* codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
 
-  if (!codeContext)
-      return menuExt;
+    if (!codeContext)
+        return menuExt;
 
-  DUChainReadLocker readLock(DUChain::lock());
-  Declaration* decl(codeContext->declaration().data());
+    DUChainReadLocker readLock(DUChain::lock());
+    Declaration* decl(codeContext->declaration().data());
 
-  if (decl)
-  {
-    if(decl->inSymbolTable()) {
-      if(!ClassTree::populatingClassBrowserContextMenu() && ICore::self()->projectController()->findProjectForUrl(decl->url().toUrl()) &&
-        decl->kind() == Declaration::Type && decl->internalContext() && decl->internalContext()->type() == DUContext::Class) {
-        //Currently "Find in Class Browser" seems to only work for classes, so only show it in that case
+    if (decl) {
+        if (decl->inSymbolTable()) {
+            if (!ClassTree::populatingClassBrowserContextMenu() &&
+                ICore::self()->projectController()->findProjectForUrl(decl->url().toUrl()) &&
+                decl->kind() == Declaration::Type && decl->internalContext() &&
+                decl->internalContext()->type() == DUContext::Class) {
+                //Currently "Find in Class Browser" seems to only work for classes, so only show it in that case
 
-        m_findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
-        menuExt.addAction( KDevelop::ContextMenuExtension::NavigationGroup, m_findInBrowser);
-      }
+                m_findInBrowser->setData(QVariant::fromValue(DUChainBasePointer(decl)));
+                menuExt.addAction(KDevelop::ContextMenuExtension::NavigationGroup, m_findInBrowser);
+            }
+        }
     }
-  }
 
-  return menuExt;
+    return menuExt;
 }
 
 void ClassBrowserPlugin::findInClassBrowser()
 {
-  ICore::self()->uiController()->findToolView(i18n("Classes"), m_factory, KDevelop::IUiController::CreateAndRaise);
+    ICore::self()->uiController()->findToolView(i18n("Classes"), m_factory, KDevelop::IUiController::CreateAndRaise);
 
-  Q_ASSERT(qobject_cast<QAction*>(sender()));
+    Q_ASSERT(qobject_cast<QAction*>(sender()));
 
-  if ( m_activeClassTree == nullptr )
-    return;
+    if (m_activeClassTree == nullptr)
+        return;
 
-  DUChainReadLocker readLock(DUChain::lock());
+    DUChainReadLocker readLock(DUChain::lock());
 
-  QAction* a = static_cast<QAction*>(sender());
+    QAction* a = static_cast<QAction*>(sender());
 
-  Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
+    Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
 
-  DeclarationPointer decl = qvariant_cast<DUChainBasePointer>(a->data()).dynamicCast<Declaration>();
-  if (decl)
-    m_activeClassTree->highlightIdentifier(decl->qualifiedIdentifier());
+    DeclarationPointer decl = qvariant_cast<DUChainBasePointer>(a->data()).dynamicCast<Declaration>();
+    if (decl)
+        m_activeClassTree->highlightIdentifier(decl->qualifiedIdentifier());
 }
 
 void ClassBrowserPlugin::showDefinition(const DeclarationPointer& declaration)
 {
-  DUChainReadLocker readLock(DUChain::lock());
+    DUChainReadLocker readLock(DUChain::lock());
 
-  if ( !declaration )
-    return;
+    if (!declaration)
+        return;
 
-  Declaration* decl = declaration.data();
-  // If it's a function, find the function definition to go to the actual declaration.
-  if ( decl && decl->isFunctionDeclaration() )
-  {
-    FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(decl);
-    if ( funcDefinition == nullptr )
-      funcDefinition = FunctionDefinition::definition(decl);
-    if ( funcDefinition )
-      decl = funcDefinition;
-  }
+    Declaration* decl = declaration.data();
+    // If it's a function, find the function definition to go to the actual declaration.
+    if (decl && decl->isFunctionDeclaration()) {
+        FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(decl);
+        if (funcDefinition == nullptr)
+            funcDefinition = FunctionDefinition::definition(decl);
+        if (funcDefinition)
+            decl = funcDefinition;
+    }
 
-  if (decl)
-  {
-    QUrl url = decl->url().toUrl();
-    KTextEditor::Range range = decl->rangeInCurrentRevision();
+    if (decl) {
+        QUrl url = decl->url().toUrl();
+        KTextEditor::Range range = decl->rangeInCurrentRevision();
 
-    readLock.unlock();
+        readLock.unlock();
 
-    ICore::self()->documentController()->openDocument(url, range.start());
-  }
+        ICore::self()->documentController()->openDocument(url, range.start());
+    }
 }
 
 #include "classbrowserplugin.moc"

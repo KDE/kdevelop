@@ -37,76 +37,75 @@
 #include "classbrowserplugin.h"
 
 using namespace KDevelop;
- 
+
 ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
-  : QWidget(parent)
-  , m_plugin(plugin)
-  , m_model(new ClassModel())
-  , m_tree(new ClassTree(this, plugin))
-  , m_searchLine(new QLineEdit(this))
-  , m_filterTimer(new QTimer(this))
+    : QWidget(parent)
+    , m_plugin(plugin)
+    , m_model(new ClassModel())
+    , m_tree(new ClassTree(this, plugin))
+    , m_searchLine(new QLineEdit(this))
+    , m_filterTimer(new QTimer(this))
 {
-  setObjectName(QStringLiteral("Class Browser Tree"));
-  setWindowTitle(i18n("Classes"));
-  setWindowIcon(QIcon::fromTheme(QStringLiteral("code-class"), windowIcon()));
+    setObjectName(QStringLiteral("Class Browser Tree"));
+    setWindowTitle(i18n("Classes"));
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("code-class"), windowIcon()));
 
-  // Set tree in the plugin
-  m_plugin->setActiveClassTree(m_tree);
+    // Set tree in the plugin
+    m_plugin->setActiveClassTree(m_tree);
 
-  // Set model in the tree view
-  m_tree->setModel(m_model);
-  m_tree->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-  m_tree->header()->setStretchLastSection(false);
+    // Set model in the tree view
+    m_tree->setModel(m_model);
+    m_tree->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    m_tree->header()->setStretchLastSection(false);
 
-  // We need notification in the model for the collapse/expansion of nodes.
-  connect(m_tree, &ClassTree::collapsed,
-          m_model, &ClassModel::collapsed);
-  connect(m_tree, &ClassTree::expanded,
-          m_model, &ClassModel::expanded);
+    // We need notification in the model for the collapse/expansion of nodes.
+    connect(m_tree, &ClassTree::collapsed,
+            m_model, &ClassModel::collapsed);
+    connect(m_tree, &ClassTree::expanded,
+            m_model, &ClassModel::expanded);
 
-  // Init filter timer
-  m_filterTimer->setSingleShot(true);
-  m_filterTimer->setInterval(500);
-  connect(m_filterTimer, &QTimer::timeout, this, [this]() {
-    m_model->updateFilterString(m_filterText);
+    // Init filter timer
+    m_filterTimer->setSingleShot(true);
+    m_filterTimer->setInterval(500);
+    connect(m_filterTimer, &QTimer::timeout, this, [this]() {
+        m_model->updateFilterString(m_filterText);
 
-    if (m_filterText.isEmpty())
-      m_tree->collapseAll();
-    else
-      m_tree->expandToDepth(0);
-  });
+        if (m_filterText.isEmpty())
+            m_tree->collapseAll();
+        else
+            m_tree->expandToDepth(0);
+    });
 
-  // Init search box
-  m_searchLine->setClearButtonEnabled( true );
-  connect(m_searchLine, &QLineEdit::textChanged, this, [this](const QString& newFilter) {
-    m_filterText = newFilter;
-    m_filterTimer->start();
-  });
+    // Init search box
+    m_searchLine->setClearButtonEnabled(true);
+    connect(m_searchLine, &QLineEdit::textChanged, this, [this](const QString& newFilter) {
+        m_filterText = newFilter;
+        m_filterTimer->start();
+    });
 
-  QLabel *searchLabel = new QLabel( i18n("S&earch:"), this );
-  searchLabel->setBuddy( m_searchLine );
+    QLabel* searchLabel = new QLabel(i18n("S&earch:"), this);
+    searchLabel->setBuddy(m_searchLine);
 
-  QHBoxLayout* layout = new QHBoxLayout();
-  layout->setSpacing( 5 );
-  layout->setMargin( 0 );
-  layout->addWidget(searchLabel);
-  layout->addWidget(m_searchLine);
+    QHBoxLayout* layout = new QHBoxLayout();
+    layout->setSpacing(5);
+    layout->setMargin(0);
+    layout->addWidget(searchLabel);
+    layout->addWidget(m_searchLine);
 
-  setFocusProxy( m_searchLine );
+    setFocusProxy(m_searchLine);
 
-  QVBoxLayout* vbox = new QVBoxLayout(this);
-  vbox->setMargin(0);
-  vbox->addLayout(layout);
-  vbox->addWidget(m_tree);
-  setLayout( vbox );
+    QVBoxLayout* vbox = new QVBoxLayout(this);
+    vbox->setMargin(0);
+    vbox->addLayout(layout);
+    vbox->addWidget(m_tree);
+    setLayout(vbox);
 
-  setWhatsThis( i18n( "Class Browser" ) );
+    setWhatsThis(i18n("Class Browser"));
 }
 
 ClassWidget::~ClassWidget()
 {
-  delete m_model;
+    delete m_model;
 }
 
 // kate: space-indent on; indent-width 2; tab-width: 4; replace-tabs on; auto-insert-doxygen on
-
