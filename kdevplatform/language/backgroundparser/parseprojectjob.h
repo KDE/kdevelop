@@ -1,6 +1,6 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
- 
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_PARSEPROJECTJOB_H
 #define KDEVPLATFORM_PARSEPROJECTJOB_H
@@ -30,11 +30,13 @@ class IProject;
 
 ///A job that parses all project-files in the given project
 ///Deletes itself as soon as the project is deleted
-class KDEVPLATFORMLANGUAGE_EXPORT ParseProjectJob : public KJob
+class KDEVPLATFORMLANGUAGE_EXPORT ParseProjectJob
+    : public KJob
 {
     Q_OBJECT
+
 public:
-    explicit ParseProjectJob(KDevelop::IProject* project, bool forceUpdate = false );
+    explicit ParseProjectJob(KDevelop::IProject* project, bool forceUpdate = false);
     ~ParseProjectJob() override;
     void start() override;
     bool doKill() override;
@@ -49,7 +51,6 @@ private:
 private:
     const QScopedPointer<class ParseProjectJobPrivate> d;
 };
-
 }
 
 #endif // KDEVPLATFORM_PARSEPROJECTJOB_H

@@ -29,86 +29,93 @@
 #include <language/duchain/duchainlock.h>
 
 namespace KDevelop {
-
 ///Always the last item of a grouping chain: Only inserts the items
-struct CodeCompletionItemLastGrouper {
-  CodeCompletionItemLastGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree, CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
-  {
-    tree.reserve(tree.size() + items.size());
-    for (auto& item : items) {
-      item->setParent(parent);
-      tree << QExplicitlySharedDataPointer<CompletionTreeElement>( item.data() );
+struct CodeCompletionItemLastGrouper
+{
+    CodeCompletionItemLastGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree,
+                                  CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
+    {
+        tree.reserve(tree.size() + items.size());
+        for (auto& item : items) {
+            item->setParent(parent);
+            tree << QExplicitlySharedDataPointer<CompletionTreeElement>(item.data());
+        }
     }
-  }
 };
 
 ///Helper class that helps us grouping the completion-list. A chain of groupers can be built, by using NextGrouper.
-template<class KeyExtractor, class NextGrouper = CodeCompletionItemLastGrouper>
-struct CodeCompletionItemGrouper {
-  typedef typename KeyExtractor::KeyType KeyType;
+template <class KeyExtractor, class NextGrouper = CodeCompletionItemLastGrouper>
+struct CodeCompletionItemGrouper
+{
+    typedef typename KeyExtractor::KeyType KeyType;
 
-  CodeCompletionItemGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree, CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
-  {
-    typedef QMap<KeyType, QList<CompletionTreeItemPointer> > GroupMap;
-    GroupMap groups;
+    CodeCompletionItemGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree,
+                              CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
+    {
+        typedef QMap<KeyType, QList<CompletionTreeItemPointer>> GroupMap;
+        GroupMap groups;
 
-    for (auto& item : items) {
-      KeyType key = KeyExtractor::extract(item);
-      typename GroupMap::iterator it = groups.find(key);
-      if(it == groups.end())
-        it = groups.insert(key, QList<CompletionTreeItemPointer>());
+        for (auto& item : items) {
+            KeyType key = KeyExtractor::extract(item);
+            typename GroupMap::iterator it = groups.find(key);
+            if (it == groups.end())
+                it = groups.insert(key, QList<CompletionTreeItemPointer>());
 
-      (*it).append(item);
+            (*it).append(item);
+        }
+
+        tree.reserve(tree.size() + groups.size());
+        for (typename GroupMap::const_iterator it = groups.constBegin(); it != groups.constEnd(); ++it) {
+            QExplicitlySharedDataPointer<CompletionTreeNode> node(new CompletionTreeNode());
+            node->setParent(parent);
+            node->role = ( KTextEditor::CodeCompletionModel::ExtraItemDataRoles )KeyExtractor::Role;
+            node->roleValue = QVariant(it.key());
+
+            tree << QExplicitlySharedDataPointer<CompletionTreeElement>(node.data());
+
+            NextGrouper nextGrouper(node->children, node.data(), *it);
+        }
     }
-
-    tree.reserve(tree.size() + groups.size());
-    for( typename GroupMap::const_iterator it = groups.constBegin(); it != groups.constEnd(); ++it ) {
-      QExplicitlySharedDataPointer<CompletionTreeNode> node(new CompletionTreeNode());
-      node->setParent(parent);
-      node->role = (KTextEditor::CodeCompletionModel::ExtraItemDataRoles)KeyExtractor::Role;
-      node->roleValue = QVariant(it.key());
-
-      tree << QExplicitlySharedDataPointer<CompletionTreeElement>( node.data() );
-      
-      NextGrouper nextGrouper(node->children, node.data(), *it);
-    }
-  }
 };
 
 ///Extracts the argument-hint depth from completion-items, to be used in ItemGrouper for grouping by argument-hint depth.
-struct ArgumentHintDepthExtractor {
-  typedef int KeyType;
-  enum { Role = KTextEditor::CodeCompletionModel::ArgumentHintDepth };
-  
-  static KeyType extract( const CompletionTreeItemPointer& item ) {
-    return item->argumentHintDepth();
-  }
+struct ArgumentHintDepthExtractor
+{
+    typedef int KeyType;
+    enum { Role = KTextEditor::CodeCompletionModel::ArgumentHintDepth };
+
+    static KeyType extract(const CompletionTreeItemPointer& item)
+    {
+        return item->argumentHintDepth();
+    }
 };
 
-struct InheritanceDepthExtractor {
-  typedef int KeyType;
-  
-  enum { Role = KTextEditor::CodeCompletionModel::InheritanceDepth };
-  
-  static KeyType extract( const CompletionTreeItemPointer& item ) {
-    return item->inheritanceDepth();
-  }
+struct InheritanceDepthExtractor
+{
+    typedef int KeyType;
+
+    enum { Role = KTextEditor::CodeCompletionModel::InheritanceDepth };
+
+    static KeyType extract(const CompletionTreeItemPointer& item)
+    {
+        return item->inheritanceDepth();
+    }
 };
 
-struct SimplifiedAttributesExtractor {
-  typedef int KeyType;
-  
-  enum { Role = KTextEditor::CodeCompletionModel::CompletionRole };
+struct SimplifiedAttributesExtractor
+{
+    typedef int KeyType;
 
-  static const int groupingProperties;
-  
-  static KeyType extract( const CompletionTreeItemPointer& item ) {
-      DUChainReadLocker lock(DUChain::lock());
-      return item->completionProperties() & groupingProperties;
-  }
+    enum { Role = KTextEditor::CodeCompletionModel::CompletionRole };
+
+    static const int groupingProperties;
+
+    static KeyType extract(const CompletionTreeItemPointer& item)
+    {
+        DUChainReadLocker lock(DUChain::lock());
+        return item->completionProperties() & groupingProperties;
+    }
 };
-
-
 }
 
 #endif // KDEVPLATFORM_CODECOMPLETIONITEMGROUPER_H

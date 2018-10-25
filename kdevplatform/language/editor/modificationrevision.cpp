@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "modificationrevision.h"
 
@@ -37,8 +37,8 @@ QMutex fileModificationTimeCacheMutex(QMutex::Recursive);
 
 struct FileModificationCache
 {
-  QDateTime m_readTime;
-  QDateTime m_modificationTime;
+    QDateTime m_readTime;
+    QDateTime m_modificationTime;
 };
 Q_DECLARE_TYPEINFO(FileModificationCache, Q_MOVABLE_TYPE);
 
@@ -46,99 +46,100 @@ typedef QHash<KDevelop::IndexedString, FileModificationCache> FileModificationMa
 
 FileModificationMap& fileModificationCache()
 {
-  static FileModificationMap cache;
-  return cache;
+    static FileModificationMap cache;
+    return cache;
 }
 
 typedef QHash<KDevelop::IndexedString, int> OpenDocumentRevisionsMap;
 
 OpenDocumentRevisionsMap& openDocumentsRevisionMap()
 {
-  static OpenDocumentRevisionsMap map;
-  return map;
+    static OpenDocumentRevisionsMap map;
+    return map;
 }
 
-QDateTime fileModificationTimeCached( const IndexedString& fileName )
+QDateTime fileModificationTimeCached(const IndexedString& fileName)
 {
-  const auto currentTime = QDateTime::currentDateTime();
+    const auto currentTime = QDateTime::currentDateTime();
 
-  auto it = fileModificationCache().constFind( fileName );
-  if ( it != fileModificationCache().constEnd() ) {
-    ///Use the cache for X seconds
-    if (it.value().m_readTime.secsTo(currentTime) < cacheModificationTimesForSeconds ) {
-      return it.value().m_modificationTime;
+    auto it = fileModificationCache().constFind(fileName);
+    if (it != fileModificationCache().constEnd()) {
+        ///Use the cache for X seconds
+        if (it.value().m_readTime.secsTo(currentTime) < cacheModificationTimesForSeconds) {
+            return it.value().m_modificationTime;
+        }
     }
-  }
 
-  QFileInfo fileInfo( fileName.str() );
-  FileModificationCache data = {currentTime, fileInfo.lastModified()};
-  fileModificationCache().insert(fileName, data);
-  return data.m_modificationTime;
+    QFileInfo fileInfo(fileName.str());
+    FileModificationCache data = {currentTime, fileInfo.lastModified()};
+    fileModificationCache().insert(fileName, data);
+    return data.m_modificationTime;
 }
 
 void ModificationRevision::clearModificationCache(const IndexedString& fileName)
 {
-  ///@todo Make the cache management more clever (don't clear the whole)
-  ModificationRevisionSet::clearCache();
+    ///@todo Make the cache management more clever (don't clear the whole)
+    ModificationRevisionSet::clearCache();
 
-  QMutexLocker lock(&fileModificationTimeCacheMutex);
+    QMutexLocker lock(&fileModificationTimeCacheMutex);
 
-  fileModificationCache().remove(fileName);
+    fileModificationCache().remove(fileName);
 }
 
 ModificationRevision ModificationRevision::revisionForFile(const IndexedString& url)
 {
-  QMutexLocker lock(&fileModificationTimeCacheMutex);
+    QMutexLocker lock(&fileModificationTimeCacheMutex);
 
-  ModificationRevision ret(fileModificationTimeCached(url));
+    ModificationRevision ret(fileModificationTimeCached(url));
 
-  OpenDocumentRevisionsMap::const_iterator it = openDocumentsRevisionMap().constFind(url);
-  if(it != openDocumentsRevisionMap().constEnd()) {
-    ret.revision = it.value();
-  }
+    OpenDocumentRevisionsMap::const_iterator it = openDocumentsRevisionMap().constFind(url);
+    if (it != openDocumentsRevisionMap().constEnd()) {
+        ret.revision = it.value();
+    }
 
-  return ret;
+    return ret;
 }
 
 void ModificationRevision::clearEditorRevisionForFile(const KDevelop::IndexedString& url)
 {
-  ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
+    ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
 
-  QMutexLocker lock(&fileModificationTimeCacheMutex);
-  openDocumentsRevisionMap().remove(url);
+    QMutexLocker lock(&fileModificationTimeCacheMutex);
+    openDocumentsRevisionMap().remove(url);
 }
 
 void ModificationRevision::setEditorRevisionForFile(const KDevelop::IndexedString& url, int revision)
 {
-  ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
+    ModificationRevisionSet::clearCache(); ///@todo Make the cache management more clever (don't clear the whole)
 
-  QMutexLocker lock(&fileModificationTimeCacheMutex);
-  openDocumentsRevisionMap().insert(url, revision);
-  Q_ASSERT(revisionForFile(url).revision == revision);
+    QMutexLocker lock(&fileModificationTimeCacheMutex);
+    openDocumentsRevisionMap().insert(url, revision);
+    Q_ASSERT(revisionForFile(url).revision == revision);
 }
 
-ModificationRevision::ModificationRevision( const QDateTime& modTime , int revision_ )
-: modificationTime(modTime.toTime_t())
-, revision(revision_)
+ModificationRevision::ModificationRevision(const QDateTime& modTime, int revision_)
+    : modificationTime(modTime.toTime_t())
+    , revision(revision_)
 {
 }
 
-bool ModificationRevision::operator <( const ModificationRevision& rhs ) const
+bool ModificationRevision::operator <(const ModificationRevision& rhs) const
 {
-  return modificationTime < rhs.modificationTime || (modificationTime == rhs.modificationTime && revision < rhs.revision);
+    return modificationTime < rhs.modificationTime ||
+           (modificationTime == rhs.modificationTime && revision < rhs.revision);
 }
 
-bool ModificationRevision::operator ==( const ModificationRevision& rhs ) const
+bool ModificationRevision::operator ==(const ModificationRevision& rhs) const
 {
-  return modificationTime == rhs.modificationTime && revision == rhs.revision;
+    return modificationTime == rhs.modificationTime && revision == rhs.revision;
 }
 
-bool ModificationRevision::operator !=( const ModificationRevision& rhs ) const
+bool ModificationRevision::operator !=(const ModificationRevision& rhs) const
 {
-  return modificationTime != rhs.modificationTime || revision != rhs.revision;
+    return modificationTime != rhs.modificationTime || revision != rhs.revision;
 }
 
 QString ModificationRevision::toString() const
 {
-  return QStringLiteral("%1 (rev %2)").arg(QDateTime::fromTime_t(modificationTime).time().toString()).arg(revision);
+    return QStringLiteral("%1 (rev %2)").arg(QDateTime::fromTime_t(modificationTime).time().toString()).arg(revision);
 }

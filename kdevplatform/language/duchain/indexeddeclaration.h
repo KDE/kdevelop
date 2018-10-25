@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_INDEXEDDECLARATION_H
 #define KDEVPLATFORM_INDEXEDDECLARATION_H
@@ -25,14 +25,14 @@
 #include <language/util/kdevhash.h>
 
 namespace KDevelop {
-
 class Declaration;
 
 /**
  * Represents a declaration only by its global indices
  */
-class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration
+{
+public:
     IndexedDeclaration(const Declaration* decl = nullptr);
     IndexedDeclaration(uint topContext, uint declarationIndex);
 
@@ -44,52 +44,61 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
     /**
      * \warning Duchain must be read locked
      */
-    Declaration* data() const {
-      return declaration();
+    Declaration* data() const
+    {
+        return declaration();
     }
 
-    inline bool operator==(const IndexedDeclaration& rhs) const {
-      return m_topContext == rhs.m_topContext && m_declarationIndex == rhs.m_declarationIndex;
+    inline bool operator==(const IndexedDeclaration& rhs) const
+    {
+        return m_topContext == rhs.m_topContext && m_declarationIndex == rhs.m_declarationIndex;
     }
 
-    inline uint hash() const {
-      if(isDummy())
-        return 0;
-      return KDevHash() << m_topContext << m_declarationIndex;
+    inline uint hash() const
+    {
+        if (isDummy())
+            return 0;
+        return KDevHash() << m_topContext << m_declarationIndex;
     }
 
     ///@warning The duchain needs to be locked when this is called
-    inline bool isValid() const {
-      return !isDummy() && declaration() != nullptr;
+    inline bool isValid() const
+    {
+        return !isDummy() && declaration() != nullptr;
     }
 
-    inline bool operator<(const IndexedDeclaration& rhs) const {
-      Q_ASSERT(!isDummy());
-      return m_topContext < rhs.m_topContext || (m_topContext == rhs.m_topContext && m_declarationIndex < rhs.m_declarationIndex);
+    inline bool operator<(const IndexedDeclaration& rhs) const
+    {
+        Q_ASSERT(!isDummy());
+        return m_topContext < rhs.m_topContext ||
+               (m_topContext == rhs.m_topContext && m_declarationIndex < rhs.m_declarationIndex);
     }
 
     /**
      * \return Index of the Declaration within the top context
      */
-    inline uint localIndex() const {
-      if(isDummy())
-        return 0;
-      else
-        return m_declarationIndex;
+    inline uint localIndex() const
+    {
+        if (isDummy())
+            return 0;
+        else
+            return m_declarationIndex;
     }
 
-    inline uint topContextIndex() const {
-      if(isDummy())
-        return 0;
-      else
-        return m_topContext;
+    inline uint topContextIndex() const
+    {
+        if (isDummy())
+            return 0;
+        else
+            return m_topContext;
     }
 
-    inline IndexedTopDUContext indexedTopContext() const {
-      if(isDummy())
-        return IndexedTopDUContext();
-      else
-        return IndexedTopDUContext(m_topContext);
+    inline IndexedTopDUContext indexedTopContext() const
+    {
+        if (isDummy())
+            return IndexedTopDUContext();
+        else
+            return IndexedTopDUContext(m_topContext);
     }
 
     /**
@@ -99,25 +108,28 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
      *
      * Clears the contained data
      */
-    void setIsDummy(bool dummy) {
-      if(isDummy() == dummy)
-        return;
-      if(dummy)
-        m_topContext = 1u << 31u;
-      else
-        m_topContext = 0;
-      m_declarationIndex = 0;
+    void setIsDummy(bool dummy)
+    {
+        if (isDummy() == dummy)
+            return;
+        if (dummy)
+            m_topContext = 1u << 31u;
+        else
+            m_topContext = 0;
+        m_declarationIndex = 0;
     }
 
-    inline bool isDummy() const {
-      //We use the second highest bit to mark dummies, because the highest is used for the sign bit of stored
-      //integers
-      return (bool)(m_topContext & static_cast<uint>(1u << 31u));
+    inline bool isDummy() const
+    {
+        //We use the second highest bit to mark dummies, because the highest is used for the sign bit of stored
+        //integers
+        return ( bool )(m_topContext & static_cast<uint>(1u << 31u));
     }
 
-    inline QPair<uint, uint> dummyData() const {
-      Q_ASSERT(isDummy());
-      return qMakePair(m_topContext & (~(1u<<31u)), m_declarationIndex);
+    inline QPair<uint, uint> dummyData() const
+    {
+        Q_ASSERT(isDummy());
+        return qMakePair(m_topContext & (~(1u << 31u)), m_declarationIndex);
     }
 
     /**
@@ -125,27 +137,27 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclaration {
      *
      * The first integer loses one bit of precision.
      */
-    void setDummyData(QPair<uint, uint> data) {
-      Q_ASSERT(isDummy());
+    void setDummyData(QPair<uint, uint> data)
+    {
+        Q_ASSERT(isDummy());
 
-      m_topContext = data.first;
-      m_declarationIndex = data.second;
-      Q_ASSERT(!isDummy());
-      m_topContext |= (1u << 31u); //Mark as dummy
-      Q_ASSERT(isDummy());
-      Q_ASSERT(dummyData() == data);
+        m_topContext = data.first;
+        m_declarationIndex = data.second;
+        Q_ASSERT(!isDummy());
+        m_topContext |= (1u << 31u); //Mark as dummy
+        Q_ASSERT(isDummy());
+        Q_ASSERT(dummyData() == data);
     }
 
-  private:
+private:
     uint m_topContext;
     uint m_declarationIndex;
 };
 
 inline uint qHash(const IndexedDeclaration& decl)
 {
-  return decl.hash();
+    return decl.hash();
 }
-
 }
 
 Q_DECLARE_METATYPE(KDevelop::IndexedDeclaration)

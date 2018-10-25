@@ -35,7 +35,6 @@ class Range;
 }
 
 namespace KDevelop {
-
 class ILanguageSupport;
 
 /**
@@ -54,7 +53,8 @@ class ILanguageSupport;
  * @sa textChanged()
  * @sa StaticAssistantsManager::registerAssistant
  */
-class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistant : public IAssistant
+class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistant
+    : public IAssistant
 {
     Q_OBJECT
 
@@ -96,7 +96,6 @@ public:
 private:
     const QScopedPointer<class StaticAssistantPrivate> d;
 };
-
 }
 
 #endif // KDEVPLATFORM_STATICASSISTANT_H

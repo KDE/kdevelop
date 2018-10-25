@@ -30,16 +30,13 @@
 #include <language/interfaces/ilanguagesupport.h>
 #include "parsejob.h"
 
-namespace ThreadWeaver
-{
+namespace ThreadWeaver {
 class Job;
 class QObjectDecorator;
 class Weaver;
 }
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class DocumentChangeTracker;
 
 class IDocument;
@@ -53,13 +50,15 @@ class ParserDependencyPolicy;
  * For performance reasons you must always use clean, canonical URLs. If you do not do that,
  * issues might arise (and the debug build will assert).
  */
-class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser : public QObject, public IStatus
+class KDEVPLATFORMLANGUAGE_EXPORT BackgroundParser
+    : public QObject
+    , public IStatus
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IStatus )
+    Q_INTERFACES(KDevelop::IStatus)
 
 public:
-    explicit BackgroundParser(ILanguageController *languageController);
+    explicit BackgroundParser(ILanguageController* languageController);
     ~BackgroundParser() override;
 
     QString statusName() const override;
@@ -67,7 +66,7 @@ public:
     enum {
         BestPriority = -10000,  ///Best possible job-priority. No jobs should actually have this.
         NormalPriority = 0,     ///Standard job-priority. This priority is used for parse-jobs caused by document-editing/opening.
-                                ///There is an additional parsing-thread reserved for jobs with this and better priority, to improve responsiveness.
+        ///There is an additional parsing-thread reserved for jobs with this and better priority, to improve responsiveness.
         InitialParsePriority = 10000, ///Priority used when adding file on project loading
         WorstPriority = 100000  ///Worst possible job-priority.
     };
@@ -129,11 +128,11 @@ Q_SIGNALS:
     void parseJobFinished(KDevelop::ParseJob* job);
 
     // Implementations of IStatus signals
-    void clearMessage( KDevelop::IStatus* ) override;
-    void showMessage( KDevelop::IStatus*, const QString & message, int timeout = 0) override;
-    void hideProgress( KDevelop::IStatus* ) override;
-    void showProgress( KDevelop::IStatus*, int minimum, int maximum, int value) override;
-    void showErrorMessage( const QString&, int ) override;
+    void clearMessage(KDevelop::IStatus*) override;
+    void showMessage(KDevelop::IStatus*, const QString& message, int timeout = 0) override;
+    void hideProgress(KDevelop::IStatus*) override;
+    void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value) override;
+    void showErrorMessage(const QString&, int) override;
 
 public Q_SLOTS:
     /**
@@ -232,7 +231,7 @@ protected Q_SLOTS:
 
 private:
     friend class BackgroundParserPrivate;
-    class BackgroundParserPrivate *d;
+    class BackgroundParserPrivate* d;
 
 private Q_SLOTS:
     /// Tracking of projects in state of loading.
@@ -240,6 +239,5 @@ private Q_SLOTS:
     void projectOpened(KDevelop::IProject* project);
     void projectOpeningAborted(KDevelop::IProject* project);
 };
-
 }
 #endif

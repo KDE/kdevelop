@@ -15,21 +15,19 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "duchainpointer.h"
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 DUChainBase* DUChainPointerData::base()
 {
-  return m_base;
+    return m_base;
 }
 
 DUChainBase* DUChainPointerData::base() const
 {
-  return m_base;
+    return m_base;
 }
 
 DUChainPointerData::DUChainPointerData()
@@ -40,9 +38,8 @@ DUChainPointerData::~DUChainPointerData()
 {
 }
 
-DUChainPointerData::DUChainPointerData( DUChainBase* base )
-  : m_base(base)
+DUChainPointerData::DUChainPointerData(DUChainBase* base)
+    : m_base(base)
 {
 }
-
 } //KDevelop

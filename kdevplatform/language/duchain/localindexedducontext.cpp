@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "localindexedducontext.h"
 
@@ -28,31 +28,31 @@
 using namespace KDevelop;
 
 LocalIndexedDUContext::LocalIndexedDUContext(uint contextIndex)
-  : m_contextIndex(contextIndex)
+    : m_contextIndex(contextIndex)
 {
 }
 
 LocalIndexedDUContext::LocalIndexedDUContext(DUContext* ctx)
 {
-  if(ctx) {
-    m_contextIndex = ctx->m_dynamicData->m_indexInTopContext;
-  }else{
-    m_contextIndex = 0;
-  }
+    if (ctx) {
+        m_contextIndex = ctx->m_dynamicData->m_indexInTopContext;
+    } else {
+        m_contextIndex = 0;
+    }
 }
 
 bool LocalIndexedDUContext::isLoaded(TopDUContext* top) const
 {
-  if(!m_contextIndex)
-    return false;
-  else
-    return top->m_dynamicData->isContextForIndexLoaded(m_contextIndex);
+    if (!m_contextIndex)
+        return false;
+    else
+        return top->m_dynamicData->isContextForIndexLoaded(m_contextIndex);
 }
 
 DUContext* LocalIndexedDUContext::data(TopDUContext* top) const
 {
-  if(!m_contextIndex)
-    return nullptr;
-  else
-    return top->m_dynamicData->contextForIndex(m_contextIndex);
+    if (!m_contextIndex)
+        return nullptr;
+    else
+        return top->m_dynamicData->contextForIndex(m_contextIndex);
 }

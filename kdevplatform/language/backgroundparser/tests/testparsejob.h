@@ -28,9 +28,11 @@
 
 using namespace KDevelop;
 
-class TestParseJob : public KDevelop::ParseJob
+class TestParseJob
+    : public KDevelop::ParseJob
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     TestParseJob(const IndexedString& url, ILanguageSupport* languageSupport);
     void run(ThreadWeaver::JobPointer self, ThreadWeaver::Thread* thread) override;
@@ -38,7 +40,7 @@ public:
     DataAccessRepository* dataAccessInformation() override;
 
     int duration_ms;
-    std::function<void(const IndexedString&)> run_callback;
+    std::function<void( const IndexedString& )> run_callback;
 };
 
 #endif

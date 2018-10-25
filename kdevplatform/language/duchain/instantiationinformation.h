@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_INSTANTIATIONINFORMATION_H
 #define KDEVPLATFORM_INSTANTIATIONINFORMATION_H
@@ -27,44 +27,50 @@
 #include <serialization/referencecounting.h>
 
 namespace KDevelop {
-  class IndexedInstantiationInformation;
-  class InstantiationInformation;
-  class QualifiedIdentifier;
+class IndexedInstantiationInformation;
+class InstantiationInformation;
+class QualifiedIdentifier;
 
-  KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
+KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(InstantiationInformation, templateParameters, IndexedType)
 
-  class KDEVPLATFORMLANGUAGE_EXPORT IndexedInstantiationInformation : public ReferenceCountManager {
-    public:
-      IndexedInstantiationInformation();
-      explicit IndexedInstantiationInformation(uint index);
-      IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs);
-      IndexedInstantiationInformation& operator=(const IndexedInstantiationInformation& rhs);
-      ~IndexedInstantiationInformation();
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedInstantiationInformation
+    : public ReferenceCountManager
+{
+public:
+    IndexedInstantiationInformation();
+    explicit IndexedInstantiationInformation(uint index);
+    IndexedInstantiationInformation(const IndexedInstantiationInformation& rhs);
+    IndexedInstantiationInformation& operator=(const IndexedInstantiationInformation& rhs);
+    ~IndexedInstantiationInformation();
 
-      const InstantiationInformation& information() const;
+    const InstantiationInformation& information() const;
 
-      uint hash() const {
+    uint hash() const
+    {
         return m_index * 73;
-      }
+    }
 
-      //Is always zero for the empty information
-      uint index() const {
+    //Is always zero for the empty information
+    uint index() const
+    {
         return m_index;
-      }
+    }
 
-      bool operator==(const IndexedInstantiationInformation& rhs) const {
+    bool operator==(const IndexedInstantiationInformation& rhs) const
+    {
         return m_index == rhs.m_index;
-      }
+    }
 
-      //Returns true if one of the values represented by this information is non-default
-      bool isValid() const;
+    //Returns true if one of the values represented by this information is non-default
+    bool isValid() const;
 
-    private:
-      uint m_index;
-  };
+private:
+    uint m_index;
+};
 
-  class KDEVPLATFORMLANGUAGE_EXPORT InstantiationInformation {
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT InstantiationInformation
+{
+public:
 
     InstantiationInformation();
     ///@todo include some information for instantiation only with default parameters
@@ -78,12 +84,14 @@ namespace KDevelop {
 
     uint hash() const;
 
-    bool isValid() const {
-      return previousInstantiationInformation.index() || templateParametersSize();
+    bool isValid() const
+    {
+        return previousInstantiationInformation.index() || templateParametersSize();
     }
 
-    bool persistent() const {
-      return (bool)m_refCount;
+    bool persistent() const
+    {
+        return ( bool )m_refCount;
     }
 
     /**
@@ -118,12 +126,14 @@ namespace KDevelop {
 
     START_APPENDED_LISTS(InstantiationInformation)
 
-    static uint classSize() {
-      return sizeof(InstantiationInformation);
+    static uint classSize()
+    {
+        return sizeof(InstantiationInformation);
     }
 
-    short unsigned int itemSize() const {
-      return dynamicSize();
+    short unsigned int itemSize() const
+    {
+        return dynamicSize();
     }
 
     /**
@@ -134,17 +144,20 @@ namespace KDevelop {
     END_APPENDED_LISTS(InstantiationInformation, templateParameters);
 
     IndexedInstantiationInformation indexed() const;
-    private:
-      friend class IndexedInstantiationInformation;
-      uint m_refCount;
-  };
 
-  inline uint qHash(const IndexedInstantiationInformation& info) {
+private:
+    friend class IndexedInstantiationInformation;
+    uint m_refCount;
+};
+
+inline uint qHash(const IndexedInstantiationInformation& info)
+{
     return info.hash();
-  }
-  inline uint qHash(const InstantiationInformation& info) {
+}
+inline uint qHash(const InstantiationInformation& info)
+{
     return info.hash();
-  }
+}
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::IndexedInstantiationInformation, Q_MOVABLE_TYPE);

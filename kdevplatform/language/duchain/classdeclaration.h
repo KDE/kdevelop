@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CLASSDECLARATION_H
 #define KDEVPLATFORM_CLASSDECLARATION_H
@@ -26,113 +26,115 @@
 #include <language/duchain/classmemberdeclaration.h>
 
 namespace KDevelop {
-  class DUContext;
-  class TopDUContext;
+class DUContext;
+class TopDUContext;
 }
 
 namespace KDevelop {
-
 struct KDEVPLATFORMLANGUAGE_EXPORT BaseClassInstance
 {
-  KDevelop::IndexedType baseClass; //May either be StructureType, or DelayedType
-  KDevelop::Declaration::AccessPolicy access;
-  bool virtualInheritance;
+    KDevelop::IndexedType baseClass; //May either be StructureType, or DelayedType
+    KDevelop::Declaration::AccessPolicy access;
+    bool virtualInheritance;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ClassDeclarationData, baseClasses, BaseClassInstance)
 
-class KDEVPLATFORMLANGUAGE_EXPORT ClassDeclarationData : public KDevelop::ClassMemberDeclarationData
+class KDEVPLATFORMLANGUAGE_EXPORT ClassDeclarationData
+    : public KDevelop::ClassMemberDeclarationData
 {
 public:
-  enum ClassType {
-    Class,
-    Struct,
-    Union,
-    Interface,
-    Trait
-  };
+    enum ClassType {
+        Class,
+        Struct,
+        Union,
+        Interface,
+        Trait
+    };
 
-  enum ClassModifier {
-    Final,
-    Abstract,
-    None
-  };
+    enum ClassModifier {
+        Final,
+        Abstract,
+        None
+    };
 
-  ClassDeclarationData()
-    : m_classType(Class), m_classModifier(None)
-  {
-    initializeAppendedLists();
-  }
+    ClassDeclarationData()
+        : m_classType(Class)
+        , m_classModifier(None)
+    {
+        initializeAppendedLists();
+    }
 
-  ~ClassDeclarationData()
-  {
-    freeAppendedLists();
-  }
+    ~ClassDeclarationData()
+    {
+        freeAppendedLists();
+    }
 
-  ClassDeclarationData(const ClassDeclarationData& rhs)
-    : KDevelop::ClassMemberDeclarationData(rhs)
-  {
-    initializeAppendedLists();
-    copyListsFrom(rhs);
-    m_classType = rhs.m_classType;
-    m_classModifier = rhs.m_classModifier;
-  }
+    ClassDeclarationData(const ClassDeclarationData& rhs)
+        : KDevelop::ClassMemberDeclarationData(rhs)
+    {
+        initializeAppendedLists();
+        copyListsFrom(rhs);
+        m_classType = rhs.m_classType;
+        m_classModifier = rhs.m_classModifier;
+    }
 
-  /// Type of the class (struct, class, etc.)
-  ClassType m_classType;
-  /// Modifier of the class (final, abstract, etc.)
-  ClassModifier m_classModifier;
+    /// Type of the class (struct, class, etc.)
+    ClassType m_classType;
+    /// Modifier of the class (final, abstract, etc.)
+    ClassModifier m_classModifier;
 
-  START_APPENDED_LISTS_BASE(ClassDeclarationData, KDevelop::ClassMemberDeclarationData);
-  APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
-  END_APPENDED_LISTS(ClassDeclarationData, baseClasses);
+    START_APPENDED_LISTS_BASE(ClassDeclarationData, KDevelop::ClassMemberDeclarationData);
+    APPENDED_LIST_FIRST(ClassDeclarationData, BaseClassInstance, baseClasses);
+    END_APPENDED_LISTS(ClassDeclarationData, baseClasses);
 };
 
 /**
  * Represents a single template-parameter definition
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ClassDeclaration : public KDevelop::ClassMemberDeclaration
+class KDEVPLATFORMLANGUAGE_EXPORT ClassDeclaration
+    : public KDevelop::ClassMemberDeclaration
 {
 public:
-  ClassDeclaration(const ClassDeclaration& rhs);
-  explicit ClassDeclaration(ClassDeclarationData& data);
-  ClassDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
-  ClassDeclaration(ClassDeclarationData& data, const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
-  ~ClassDeclaration() override;
+    ClassDeclaration(const ClassDeclaration& rhs);
+    explicit ClassDeclaration(ClassDeclarationData& data);
+    ClassDeclaration(const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
+    ClassDeclaration(ClassDeclarationData& data, const KDevelop::RangeInRevision& range, KDevelop::DUContext* context);
+    ~ClassDeclaration() override;
 
-  void clearBaseClasses();
-  ///Count of base-classes
-  uint baseClassesSize() const;
-  ///The types this class is based on
-  const BaseClassInstance* baseClasses() const;
-  void addBaseClass(const BaseClassInstance& klass);
-  //Replaces the n'th base-class with the given one. The replaced base-class must have existed.
-  void replaceBaseClass(uint n, const BaseClassInstance& klass);
+    void clearBaseClasses();
+    ///Count of base-classes
+    uint baseClassesSize() const;
+    ///The types this class is based on
+    const BaseClassInstance* baseClasses() const;
+    void addBaseClass(const BaseClassInstance& klass);
+    //Replaces the n'th base-class with the given one. The replaced base-class must have existed.
+    void replaceBaseClass(uint n, const BaseClassInstance& klass);
 
-  /**Returns whether base is a public base-class of this class
-   * @param baseConversionLevels If nonzero, this will count the distance of the classes.
-   * */
-  bool isPublicBaseClass( ClassDeclaration* base, const KDevelop::TopDUContext* topContext, int* baseConversionLevels = nullptr ) const;
+    /**Returns whether base is a public base-class of this class
+     * @param baseConversionLevels If nonzero, this will count the distance of the classes.
+     * */
+    bool isPublicBaseClass(ClassDeclaration* base, const KDevelop::TopDUContext* topContext,
+                           int* baseConversionLevels = nullptr) const;
 
-  QString toString() const override;
+    QString toString() const override;
 
-  void setClassType(ClassDeclarationData::ClassType type);
+    void setClassType(ClassDeclarationData::ClassType type);
 
-  ClassDeclarationData::ClassType classType() const;
+    ClassDeclarationData::ClassType classType() const;
 
-  void setClassModifier(ClassDeclarationData::ClassModifier modifier);
+    void setClassModifier(ClassDeclarationData::ClassModifier modifier);
 
-  ClassDeclarationData::ClassModifier classModifier() const;
+    ClassDeclarationData::ClassModifier classModifier() const;
 
-  enum {
-    Identity = 17
-  };
+    enum {
+        Identity = 17
+    };
 
 private:
-  KDevelop::Declaration* clonePrivate() const override;
-  DUCHAIN_DECLARE_DATA(ClassDeclaration)
+    KDevelop::Declaration* clonePrivate() const override;
+    DUCHAIN_DECLARE_DATA(ClassDeclaration)
 };
-
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::BaseClassInstance, Q_MOVABLE_TYPE);

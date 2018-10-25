@@ -36,16 +36,16 @@ class JobPrototype
 {
 public:
     JobPrototype()
-    : m_priority(0)
-    , m_duration(0)
-    , m_flags(ParseJob::IgnoresSequentialProcessing)
+        : m_priority(0)
+        , m_duration(0)
+        , m_flags(ParseJob::IgnoresSequentialProcessing)
     {
     }
     JobPrototype(const QUrl& url, int priority, ParseJob::SequentialProcessingFlags flags, int duration = 0)
-    : m_url(url)
-    , m_priority(priority)
-    , m_duration(duration)
-    , m_flags(flags)
+        : m_url(url)
+        , m_priority(priority)
+        , m_duration(duration)
+        , m_flags(flags)
     {
         Q_ASSERT(url.isValid());
     }
@@ -59,7 +59,8 @@ Q_DECLARE_TYPEINFO(JobPrototype, Q_MOVABLE_TYPE);
 
 class TestParseJob;
 
-class JobPlan : public QObject
+class JobPlan
+    : public QObject
 {
     Q_OBJECT
 
@@ -91,9 +92,10 @@ private:
     QVector<IndexedString> m_createdJobs;
 };
 
-class TestBackgroundparser : public QObject
+class TestBackgroundparser
+    : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 private Q_SLOTS:
     void initTestCase();
@@ -116,7 +118,7 @@ private Q_SLOTS:
 
 private:
     JobPlan m_jobPlan;
-    TestLanguageSupport *m_langSupport = nullptr;
+    TestLanguageSupport* m_langSupport = nullptr;
 };
 
 #endif // KDEVPLATFORM_TEST_BACKGROUNDPARSER_H

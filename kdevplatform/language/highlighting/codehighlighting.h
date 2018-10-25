@@ -35,8 +35,7 @@
 #include <KTextEditor/Attribute>
 #include <KTextEditor/MovingRange>
 
-namespace KDevelop
-{
+namespace KDevelop {
 class DUContext;
 class Declaration;
 
@@ -44,75 +43,82 @@ typedef QVector<KDevelop::Declaration*> ColorMap;
 
 class CodeHighlighting;
 
-struct HighlightingEnumContainer {
+struct HighlightingEnumContainer
+{
+    enum Types {
+        UnknownType,
+        //Primary highlighting:
+        LocalClassMemberType,
+        InheritedClassMemberType,
+        LocalVariableType,
 
-enum Types {
-  UnknownType,
-  //Primary highlighting:
-  LocalClassMemberType,
-  InheritedClassMemberType,
-  LocalVariableType,
+        //Other highlighting:
+        ClassType,
+        FunctionType,
+        ForwardDeclarationType,
+        EnumType,
+        EnumeratorType,
+        TypeAliasType,
+        MacroType, /// Declaration of a macro such as "#define FOO"
+        MacroFunctionLikeType, /// Declaration of a function like macro such as "#define FOO()"
 
-  //Other highlighting:
-  ClassType,
-  FunctionType,
-  ForwardDeclarationType,
-  EnumType,
-  EnumeratorType,
-  TypeAliasType,
-  MacroType,  /// Declaration of a macro such as "#define FOO"
-  MacroFunctionLikeType, /// Declaration of a function like macro such as "#define FOO()"
+        //If none of the above match:
+        MemberVariableType,
+        NamespaceVariableType,
+        GlobalVariableType,
 
-  //If none of the above match:
-  MemberVariableType,
-  NamespaceVariableType,
-  GlobalVariableType,
+        //Most of these are currently not used:
+        ArgumentType,
+        CodeType,
+        FileType,
+        NamespaceType,
+        ScopeType,
+        TemplateType,
+        TemplateParameterType,
+        FunctionVariableType,
+        ErrorVariableType
+    };
 
-  //Most of these are currently not used:
-  ArgumentType,
-  CodeType,
-  FileType,
-  NamespaceType,
-  ScopeType,
-  TemplateType,
-  TemplateParameterType,
-  FunctionVariableType,
-  ErrorVariableType
-};
-
-enum Contexts {
-  DefinitionContext,
-  DeclarationContext,
-  ReferenceContext
-};
+    enum Contexts {
+        DefinitionContext,
+        DeclarationContext,
+        ReferenceContext
+    };
 };
 
 struct HighlightedRange
 {
-  RangeInRevision range;
-  KTextEditor::Attribute::Ptr attribute;
-  bool operator<(const HighlightedRange& rhs) const {
-    return range.start < rhs.range.start;
-  }
+    RangeInRevision range;
+    KTextEditor::Attribute::Ptr attribute;
+    bool operator<(const HighlightedRange& rhs) const
+    {
+        return range.start < rhs.range.start;
+    }
 };
 
 /**
  * Code highlighting instance that is used to apply code highlighting to one specific top context
  * */
 
-class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public HighlightingEnumContainer {
-  public:
-    explicit CodeHighlightingInstance(const CodeHighlighting* highlighting) : m_useClassCache(false), m_highlighting(highlighting) {
+class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance
+    : public HighlightingEnumContainer
+{
+public:
+    explicit CodeHighlightingInstance(const CodeHighlighting* highlighting) : m_useClassCache(false)
+        , m_highlighting(highlighting)
+    {
     }
-    virtual ~CodeHighlightingInstance() {
+    virtual ~CodeHighlightingInstance()
+    {
     }
 
-    virtual void highlightDeclaration(KDevelop::Declaration* declaration, const QColor &color);
-    virtual void highlightUse(KDevelop::DUContext* context, int index, const QColor &color);
+    virtual void highlightDeclaration(KDevelop::Declaration* declaration, const QColor& color);
+    virtual void highlightUse(KDevelop::DUContext* context, int index, const QColor& color);
     virtual void highlightUses(KDevelop::DUContext* context);
 
     void highlightDUChain(KDevelop::TopDUContext* context);
-    void highlightDUChain(KDevelop::DUContext* context, QHash<KDevelop::Declaration*, uint> colorsForDeclarations, ColorMap);
+    void highlightDUChain(KDevelop::DUContext* context, QHash<KDevelop::Declaration*, uint> colorsForDeclarations,
+        ColorMap);
 
     KDevelop::Declaration* localClassFromCodeContext(KDevelop::DUContext* context) const;
     /**
@@ -129,7 +135,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public Highlighting
     mutable QHash<KDevelop::DUContext*, KDevelop::Declaration*> m_contextClasses;
 
     //Here the colors of function context are stored until they are merged into the function body
-    mutable QMap<KDevelop::IndexedDUContext, QHash<KDevelop::Declaration*, uint> > m_functionColorsForDeclarations;
+    mutable QMap<KDevelop::IndexedDUContext, QHash<KDevelop::Declaration*, uint>> m_functionColorsForDeclarations;
     mutable QMap<KDevelop::IndexedDUContext, ColorMap> m_functionDeclarationsForColors;
 
     mutable bool m_useClassCache;
@@ -141,12 +147,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlightingInstance : public Highlighting
 /**
  * General class representing the code highlighting for one language
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDevelop::ICodeHighlighting, public HighlightingEnumContainer
+class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting
+    : public QObject
+    , public KDevelop::ICodeHighlighting
+    , public HighlightingEnumContainer
 {
-  Q_OBJECT
-  Q_INTERFACES(KDevelop::ICodeHighlighting)
+    Q_OBJECT
+    Q_INTERFACES(KDevelop::ICodeHighlighting)
 
-  public:
+public:
 
     explicit CodeHighlighting(QObject* parent);
     ~CodeHighlighting() override;
@@ -156,36 +165,35 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     void highlightDUChain(ReferencedTopDUContext context) override;
 
     //color should be zero when undecided
-    KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, const QColor &color) const;
+    KTextEditor::Attribute::Ptr attributeForType(Types type, Contexts context, const QColor& color) const;
     KTextEditor::Attribute::Ptr attributeForDepth(int depth) const;
 
     /// This function is thread-safe
     /// Returns whether a highlighting is already given for the given url
     bool hasHighlighting(IndexedString url) const override;
 
-  private:
+private:
     //Returns whether the given attribute was set by the code highlighting, and not by something else
     //Always returns true when the attribute is zero
     bool isCodeHighlight(KTextEditor::Attribute::Ptr attr) const;
 
-  protected:
+protected:
     //Can be overridden to create an own instance type
     virtual CodeHighlightingInstance* createInstance() const;
 
-  private:
+private:
 
     /// Highlighting of one specific document
     struct DocumentHighlighting
     {
-      IndexedString m_document;
-      qint64 m_waitingRevision;
-      // The ranges are sorted by range start, so they can easily be matched
-      QVector<HighlightedRange> m_waiting;
-      QVector<KTextEditor::MovingRange*> m_highlightedRanges;
+        IndexedString m_document;
+        qint64 m_waitingRevision;
+        // The ranges are sorted by range start, so they can easily be matched
+        QVector<HighlightedRange> m_waiting;
+        QVector<KTextEditor::MovingRange*> m_highlightedRanges;
     };
 
     QMap<DocumentChangeTracker*, DocumentHighlighting*> m_highlights;
-
 
     friend class CodeHighlightingInstance;
 
@@ -200,7 +208,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
 
     mutable QMutex m_dataMutex;
 
-  private Q_SLOTS:
+private Q_SLOTS:
     void clearHighlightingForDocument(const KDevelop::IndexedString& document);
     void applyHighlighting(void* highlighting);
 
@@ -212,7 +220,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeHighlighting : public QObject, public KDev
     void aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*);
     void aboutToRemoveText(const KTextEditor::Range&);
 };
-
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::HighlightedRange, Q_MOVABLE_TYPE);

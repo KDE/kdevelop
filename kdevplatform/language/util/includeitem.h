@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_INCLUDEITEM_H
 #define KDEVPLATFORM_INCLUDEITEM_H
@@ -26,25 +26,23 @@
 class QDebug;
 
 namespace KDevelop {
-
 class KDEVPLATFORMLANGUAGE_EXPORT IncludeItem
 {
 public:
-  IncludeItem();
+    IncludeItem();
 
-  ///Constructs the url from basePath and name.
-  QUrl url() const;
+    ///Constructs the url from basePath and name.
+    QUrl url() const;
 
-  ///The name of this include-item, starting behind basePath.
-  QString name;
-  ///basePath + name = Absolute path of file
-  QUrl basePath;
-  ///Which path in the include-path was used to find this item?
-  int pathNumber = 0;
-  ///If this is true, this item represents a sub-directory. Else it represents a file.
-  bool isDirectory = false;
+    ///The name of this include-item, starting behind basePath.
+    QString name;
+    ///basePath + name = Absolute path of file
+    QUrl basePath;
+    ///Which path in the include-path was used to find this item?
+    int pathNumber = 0;
+    ///If this is true, this item represents a sub-directory. Else it represents a file.
+    bool isDirectory = false;
 };
-
 }
 
 KDEVPLATFORMLANGUAGE_EXPORT QDebug operator<<(const QDebug& dbg, const KDevelop::IncludeItem& item);

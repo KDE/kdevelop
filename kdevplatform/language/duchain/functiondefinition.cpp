@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "functiondefinition.h"
 #include "duchainregister.h"
@@ -28,74 +28,78 @@ FunctionDefinition::FunctionDefinition(FunctionDefinitionData& data) : FunctionD
 }
 
 FunctionDefinition::FunctionDefinition(const RangeInRevision& range, DUContext* context)
-  : FunctionDeclaration(*new FunctionDefinitionData, range)
+    : FunctionDeclaration(*new FunctionDefinitionData, range)
 {
-  d_func_dynamic()->setClassId(this);
-  setDeclarationIsDefinition(true);
-  if( context )
-    setContext( context );
+    d_func_dynamic()->setClassId(this);
+    setDeclarationIsDefinition(true);
+    if (context)
+        setContext(context);
 }
 
-FunctionDefinition::FunctionDefinition(const FunctionDefinition& rhs) : FunctionDeclaration(*new FunctionDefinitionData(*rhs.d_func())) {
+FunctionDefinition::FunctionDefinition(const FunctionDefinition& rhs) : FunctionDeclaration(*new FunctionDefinitionData(
+            *rhs.d_func()))
+{
 }
 
-FunctionDefinition::~FunctionDefinition() {
-  if(!topContext()->isOnDisk())
-    DUChain::definitions()->removeDefinition(d_func()->m_declaration, this);
+FunctionDefinition::~FunctionDefinition()
+{
+    if (!topContext()->isOnDisk())
+        DUChain::definitions()->removeDefinition(d_func()->m_declaration, this);
 }
 
 Declaration* FunctionDefinition::declaration(const TopDUContext* topContext) const
 {
-  ENSURE_CAN_READ
-  
-  const KDevVarLengthArray<Declaration*> declarations = d_func()->m_declaration.declarations(topContext ? topContext : this->topContext());
-  
-  for (Declaration* decl : declarations) {
-    if(!dynamic_cast<FunctionDefinition*>(decl))
-      return decl;
-  }
-  
-  return nullptr;
+    ENSURE_CAN_READ
+
+    const KDevVarLengthArray<Declaration*> declarations = d_func()->m_declaration.declarations(
+        topContext ? topContext : this->topContext());
+
+    for (Declaration* decl : declarations) {
+        if (!dynamic_cast<FunctionDefinition*>(decl))
+            return decl;
+    }
+
+    return nullptr;
 }
 
 bool FunctionDefinition::hasDeclaration() const
 {
-  return d_func()->m_declaration.isValid();
+    return d_func()->m_declaration.isValid();
 }
 
 void FunctionDefinition::setDeclaration(Declaration* declaration)
 {
-  ENSURE_CAN_WRITE
+    ENSURE_CAN_WRITE
 
-  if(declaration) {
-    DUChain::definitions()->addDefinition(declaration->id(), this);
-    d_func_dynamic()->m_declaration = declaration->id();
-  }else{
-    if(d_func()->m_declaration.isValid()) {
-      DUChain::definitions()->removeDefinition(d_func()->m_declaration, this);
-      d_func_dynamic()->m_declaration = DeclarationId();
+    if (declaration) {
+        DUChain::definitions()->addDefinition(declaration->id(), this);
+        d_func_dynamic()->m_declaration = declaration->id();
+    } else {
+        if (d_func()->m_declaration.isValid()) {
+            DUChain::definitions()->removeDefinition(d_func()->m_declaration, this);
+            d_func_dynamic()->m_declaration = DeclarationId();
+        }
     }
-  }
 }
 
 FunctionDefinition* FunctionDefinition::definition(const Declaration* decl)
 {
-  ENSURE_CHAIN_READ_LOCKED
-  if (!decl) {
-    return nullptr;
-  }
+    ENSURE_CHAIN_READ_LOCKED
+    if (!decl) {
+        return nullptr;
+    }
 
-  const KDevVarLengthArray<IndexedDeclaration> allDefinitions = DUChain::definitions()->definitions(decl->id());
-  for (const IndexedDeclaration decl : allDefinitions) {
-    if(decl.data()) ///@todo Find better ways of deciding which definition to use
-      return dynamic_cast<FunctionDefinition*>(decl.data());
-  }
-  return nullptr;
+    const KDevVarLengthArray<IndexedDeclaration> allDefinitions = DUChain::definitions()->definitions(decl->id());
+    for (const IndexedDeclaration decl : allDefinitions) {
+        if (decl.data()) ///@todo Find better ways of deciding which definition to use
+            return dynamic_cast<FunctionDefinition*>(decl.data());
+    }
+
+    return nullptr;
 }
 
 Declaration* FunctionDefinition::clonePrivate() const
 {
-  return new FunctionDefinition(*new FunctionDefinitionData(*d_func()));
+    return new FunctionDefinition(*new FunctionDefinitionData(*d_func()));
 }
-
 }

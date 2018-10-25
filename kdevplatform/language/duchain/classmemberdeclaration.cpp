@@ -17,16 +17,14 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "classmemberdeclaration.h"
 #include "classmemberdeclarationdata.h"
 #include "duchainregister.h"
 #include <editor/rangeinrevision.h>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 ClassMemberDeclarationData::ClassMemberDeclarationData()
     : m_accessPolicy(Declaration::Public)
     , m_alignOfExponent(ClassMemberDeclarationData::MaxAlignOfExponent)
@@ -41,30 +39,33 @@ ClassMemberDeclarationData::ClassMemberDeclarationData()
 {
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationData(*rhs.d_func())) {
+ClassMemberDeclaration::ClassMemberDeclaration(const ClassMemberDeclaration& rhs) : Declaration(*new ClassMemberDeclarationData(
+            *rhs.d_func()))
+{
 }
 
 REGISTER_DUCHAIN_ITEM(ClassMemberDeclaration);
 
-Declaration* ClassMemberDeclaration::clonePrivate() const {
-  return new ClassMemberDeclaration(*this);
+Declaration* ClassMemberDeclaration::clonePrivate() const
+{
+    return new ClassMemberDeclaration(*this);
 }
 
 ClassMemberDeclaration::ClassMemberDeclaration(const RangeInRevision& range, DUContext* context)
-  : Declaration(*new ClassMemberDeclarationData, range )
+    : Declaration(*new ClassMemberDeclarationData, range)
 {
-  d_func_dynamic()->setClassId(this);
-  if( context )
-    setContext( context );
+    d_func_dynamic()->setClassId(this);
+    if (context)
+        setContext(context);
 }
 
-ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationData& dd, const RangeInRevision& range )
-  : Declaration(dd, range)
+ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationData& dd, const RangeInRevision& range)
+    : Declaration(dd, range)
 {
 }
 
 ClassMemberDeclaration::ClassMemberDeclaration(ClassMemberDeclarationData& dd)
-  : Declaration(dd)
+    : Declaration(dd)
 {
 }
 
@@ -74,127 +75,124 @@ ClassMemberDeclaration::~ClassMemberDeclaration()
 
 bool ClassMemberDeclaration::isStatic() const
 {
-  return d_func()->m_isStatic;
+    return d_func()->m_isStatic;
 }
 
 void ClassMemberDeclaration::setStatic(bool isStatic)
 {
-  d_func_dynamic()->m_isStatic = isStatic;
+    d_func_dynamic()->m_isStatic = isStatic;
 }
 
 bool ClassMemberDeclaration::isAuto() const
 {
-  return d_func()->m_isAuto;
+    return d_func()->m_isAuto;
 }
 
 void ClassMemberDeclaration::setAuto(bool isAuto)
 {
-  d_func_dynamic()->m_isAuto = isAuto;
+    d_func_dynamic()->m_isAuto = isAuto;
 }
 
 bool ClassMemberDeclaration::isFriend() const
 {
-  return d_func()->m_isFriend;
+    return d_func()->m_isFriend;
 }
 
 void ClassMemberDeclaration::setFriend(bool isFriend)
 {
-  d_func_dynamic()->m_isFriend = isFriend;
+    d_func_dynamic()->m_isFriend = isFriend;
 }
 
 bool ClassMemberDeclaration::isRegister() const
 {
-  return d_func()->m_isRegister;
+    return d_func()->m_isRegister;
 }
 
 void ClassMemberDeclaration::setRegister(bool isRegister)
 {
-  d_func_dynamic()->m_isRegister = isRegister;
+    d_func_dynamic()->m_isRegister = isRegister;
 }
 
 bool ClassMemberDeclaration::isExtern() const
 {
-  return d_func()->m_isExtern;
+    return d_func()->m_isExtern;
 }
 
 void ClassMemberDeclaration::setExtern(bool isExtern)
 {
-  d_func_dynamic()->m_isExtern = isExtern;
+    d_func_dynamic()->m_isExtern = isExtern;
 }
 
 bool ClassMemberDeclaration::isMutable() const
 {
-  return d_func()->m_isMutable;
+    return d_func()->m_isMutable;
 }
 
 void ClassMemberDeclaration::setMutable(bool isMutable)
 {
-  d_func_dynamic()->m_isMutable = isMutable;
+    d_func_dynamic()->m_isMutable = isMutable;
 }
 
 Declaration::AccessPolicy ClassMemberDeclaration::accessPolicy() const
 {
-  return d_func()->m_accessPolicy;
+    return d_func()->m_accessPolicy;
 }
 
 void ClassMemberDeclaration::setAccessPolicy(Declaration::AccessPolicy accessPolicy)
 {
-  d_func_dynamic()->m_accessPolicy = accessPolicy;
+    d_func_dynamic()->m_accessPolicy = accessPolicy;
 }
-
 
 void ClassMemberDeclaration::setStorageSpecifiers(StorageSpecifiers specifiers)
 {
-  DUCHAIN_D_DYNAMIC(ClassMemberDeclaration);
-  d->m_isStatic = specifiers & StaticSpecifier;
-  d->m_isAuto = specifiers & AutoSpecifier;
-  d->m_isFriend = specifiers & FriendSpecifier;
-  d->m_isRegister = specifiers & RegisterSpecifier;
-  d->m_isExtern = specifiers & ExternSpecifier;
-  d->m_isMutable = specifiers & MutableSpecifier;
+    DUCHAIN_D_DYNAMIC(ClassMemberDeclaration);
+    d->m_isStatic = specifiers & StaticSpecifier;
+    d->m_isAuto = specifiers & AutoSpecifier;
+    d->m_isFriend = specifiers & FriendSpecifier;
+    d->m_isRegister = specifiers & RegisterSpecifier;
+    d->m_isExtern = specifiers & ExternSpecifier;
+    d->m_isMutable = specifiers & MutableSpecifier;
 }
-
 
 int64_t ClassMemberDeclaration::sizeOf() const
 {
-  return d_func()->m_sizeOf;
+    return d_func()->m_sizeOf;
 }
 
 void ClassMemberDeclaration::setSizeOf(int64_t sizeOf)
 {
-  d_func_dynamic()->m_sizeOf = sizeOf;
+    d_func_dynamic()->m_sizeOf = sizeOf;
 }
 
 int64_t ClassMemberDeclaration::bitOffsetOf() const
 {
-  return d_func()->m_bitOffsetOf;
+    return d_func()->m_bitOffsetOf;
 }
 
 void ClassMemberDeclaration::setBitOffsetOf(int64_t bitOffsetOf)
 {
-  d_func_dynamic()->m_bitOffsetOf = bitOffsetOf;
+    d_func_dynamic()->m_bitOffsetOf = bitOffsetOf;
 }
 
 int64_t ClassMemberDeclaration::alignOf() const
 {
-  if (d_func()->m_alignOfExponent == ClassMemberDeclarationData::MaxAlignOfExponent) {
-    return -1;
-  } else {
-    return 1 << d_func()->m_alignOfExponent;
-  }
+    if (d_func()->m_alignOfExponent == ClassMemberDeclarationData::MaxAlignOfExponent) {
+        return -1;
+    } else {
+        return 1 << d_func()->m_alignOfExponent;
+    }
 }
 
 void ClassMemberDeclaration::setAlignOf(int64_t alignedTo)
 {
-  if (alignedTo <= 0) {
-    d_func_dynamic()->m_alignOfExponent = ClassMemberDeclarationData::MaxAlignOfExponent;
-    return;
-  }
+    if (alignedTo <= 0) {
+        d_func_dynamic()->m_alignOfExponent = ClassMemberDeclarationData::MaxAlignOfExponent;
+        return;
+    }
 
-  unsigned int alignOfExponent = 0;
-  while (alignedTo >>= 1)
-    alignOfExponent++;
-  d_func_dynamic()->m_alignOfExponent = alignOfExponent;
+    unsigned int alignOfExponent = 0;
+    while (alignedTo >>= 1)
+        alignOfExponent++;
+    d_func_dynamic()->m_alignOfExponent = alignOfExponent;
 }
-
 }

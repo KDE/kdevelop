@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_INDEXEDTOPDUCONTEXT_H
 #define KDEVPLATFORM_INDEXEDTOPDUCONTEXT_H
@@ -25,7 +25,6 @@
 #include <language/languageexport.h>
 
 namespace KDevelop {
-
 class IndexedString;
 class IndexedTopDUContextEmbeddedTreeHandler;
 class TopDUContext;
@@ -35,15 +34,16 @@ class TopDUContext;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext
 {
-  public:
-    inline IndexedTopDUContext(uint index) : m_index(index) {
-      if(!index)
-        setIsDummy(true);
+public:
+    inline IndexedTopDUContext(uint index) : m_index(index)
+    {
+        if (!index)
+            setIsDummy(true);
     }
     IndexedTopDUContext(TopDUContext* context = nullptr);
 
     enum {
-      DummyMask = 1u<<31u
+        DummyMask = 1u << 31u
     };
 
     /**
@@ -62,38 +62,45 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext
      */
     bool isLoaded() const;
 
-    inline bool operator==(const IndexedTopDUContext& rhs) const {
-      return m_index == rhs.m_index;
+    inline bool operator==(const IndexedTopDUContext& rhs) const
+    {
+        return m_index == rhs.m_index;
     }
 
-    inline bool operator!=(const IndexedTopDUContext& rhs) const {
-      return m_index != rhs.m_index;
+    inline bool operator!=(const IndexedTopDUContext& rhs) const
+    {
+        return m_index != rhs.m_index;
     }
 
-    inline bool operator<(const IndexedTopDUContext& rhs) const {
-      return m_index < rhs.m_index;
+    inline bool operator<(const IndexedTopDUContext& rhs) const
+    {
+        return m_index < rhs.m_index;
     }
 
-    inline bool isValid() const {
-      return m_index && !isDummy();
+    inline bool isValid() const
+    {
+        return m_index && !isDummy();
     }
 
-    inline uint index() const {
-      if(isDummy())
-        return 0;
-      else
-        return m_index;
+    inline uint index() const
+    {
+        if (isDummy())
+            return 0;
+        else
+            return m_index;
     }
 
-    inline bool isDummy() const {
-      return m_index & DummyMask;
+    inline bool isDummy() const
+    {
+        return m_index & DummyMask;
     }
 
-    void setIsDummy(bool isDummy) {
-      if(isDummy)
-        m_index |= DummyMask;
-      else
-        m_index &= ~((uint)DummyMask);
+    void setIsDummy(bool isDummy)
+    {
+        if (isDummy)
+            m_index |= DummyMask;
+        else
+            m_index &= ~(( uint )DummyMask);
     }
 
     /**
@@ -103,42 +110,45 @@ class KDEVPLATFORMLANGUAGE_EXPORT IndexedTopDUContext
      *
      * @param first The highest of this value bit will be removed.
      */
-    void setDummyData(ushort first, ushort second) {
-      Q_ASSERT(isDummy());
-      m_index = ((((uint)first)<<16) + second) | DummyMask;
+    void setDummyData(ushort first, ushort second)
+    {
+        Q_ASSERT(isDummy());
+        m_index = (((( uint )first) << 16) + second) | DummyMask;
     }
 
     /**
      * The data previously set through setDummyData(). Initially 0.
      */
-    QPair<ushort, ushort> dummyData() const {
-      uint withoutMask = m_index & (~((uint)DummyMask));
-      return qMakePair((ushort)(withoutMask >> 16), (ushort)withoutMask);
+    QPair<ushort, ushort> dummyData() const
+    {
+        uint withoutMask = m_index & (~(( uint )DummyMask));
+        return qMakePair(( ushort )(withoutMask >> 16), ( ushort )withoutMask);
     }
 
     IndexedString url() const;
 
-  private:
+private:
     uint m_index;
     friend class IndexedTopDUContextEmbeddedTreeHandler;
 };
 
+struct IndexedTopDUContextIndexConversion
+{
+    inline static uint toIndex(const IndexedTopDUContext& top)
+    {
+        return top.index();
+    }
 
-struct IndexedTopDUContextIndexConversion {
-  inline static uint toIndex(const IndexedTopDUContext& top) {
-    return top.index();
-  }
-
-  inline static IndexedTopDUContext toItem(uint index) {
-    return IndexedTopDUContext(index);
-  }
+    inline static IndexedTopDUContext toItem(uint index)
+    {
+        return IndexedTopDUContext(index);
+    }
 };
 
 inline uint qHash(const IndexedTopDUContext& ctx)
 {
-  return ctx.index();
+    return ctx.index();
 }
-
 }
 
 Q_DECLARE_METATYPE(KDevelop::IndexedTopDUContext)

@@ -17,7 +17,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "identifiedtype.h"
 #include "../declaration.h"
@@ -25,25 +25,24 @@
 #include "../declarationid.h"
 #include <debug.h>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 IdentifiedType::~IdentifiedType()
 {
 }
 
-void IdentifiedType::clear() {
-  idData()->m_id = DeclarationId();
+void IdentifiedType::clear()
+{
+    idData()->m_id = DeclarationId();
 }
 
 bool IdentifiedType::equals(const IdentifiedType* rhs) const
 {
-  bool ret = false;
-  if( idData()->m_id == rhs->idData()->m_id )
-    ret = true;
+    bool ret = false;
+    if (idData()->m_id == rhs->idData()->m_id)
+        ret = true;
 
-  //qCDebug(LANGUAGE) << this << rhs << true;
-  return ret;
+    //qCDebug(LANGUAGE) << this << rhs << true;
+    return ret;
 }
 
 // QualifiedIdentifier IdentifiedType::identifier() const
@@ -51,46 +50,50 @@ bool IdentifiedType::equals(const IdentifiedType* rhs) const
 //   return idData()->m_id ? idData()->m_iidData()->qualifiedIdentifier() : QualifiedIdentifier();
 // }
 
-QualifiedIdentifier IdentifiedType::qualifiedIdentifier() const {
-  return idData()->m_id.qualifiedIdentifier();
+QualifiedIdentifier IdentifiedType::qualifiedIdentifier() const
+{
+    return idData()->m_id.qualifiedIdentifier();
 }
 
-uint IdentifiedType::hash() const {
-  return idData()->m_id.hash();
+uint IdentifiedType::hash() const
+{
+    return idData()->m_id.hash();
 }
 
-DeclarationId IdentifiedType::declarationId() const {
-  return idData()->m_id;
+DeclarationId IdentifiedType::declarationId() const
+{
+    return idData()->m_id;
 }
 
-void IdentifiedType::setDeclarationId(const DeclarationId& id) {
-  idData()->m_id = id;
+void IdentifiedType::setDeclarationId(const DeclarationId& id)
+{
+    idData()->m_id = id;
 }
 
 Declaration* IdentifiedType::declaration(const TopDUContext* top) const
 {
-  return idData()->m_id.declaration(top);
+    return idData()->m_id.declaration(top);
 }
 
-KDevelop::DUContext* IdentifiedType::internalContext(const KDevelop::TopDUContext* top) const {
-  Declaration* decl = declaration(top);
-  if(decl)
-    return decl->internalContext();
-  else
-    return nullptr;
+KDevelop::DUContext* IdentifiedType::internalContext(const KDevelop::TopDUContext* top) const
+{
+    Declaration* decl = declaration(top);
+    if (decl)
+        return decl->internalContext();
+    else
+        return nullptr;
 }
 
 void IdentifiedType::setDeclaration(Declaration* declaration)
 {
-  if(declaration)
-    idData()->m_id = declaration->id();
-  else
-    idData()->m_id = DeclarationId();
+    if (declaration)
+        idData()->m_id = declaration->id();
+    else
+        idData()->m_id = DeclarationId();
 }
 
 // QString IdentifiedType::idMangled() const
 // {
 //   return identifier().mangled();
 // }
-
 }

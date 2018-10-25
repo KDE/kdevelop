@@ -23,24 +23,24 @@
 
 #include <QObject>
 
-class TestIdentifier : public QObject
+class TestIdentifier
+    : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
 private Q_SLOTS:
-  void initTestCase();
-  void cleanupTestCase();
+    void initTestCase();
+    void cleanupTestCase();
 
-  void testIdentifier();
-  void testIdentifier_data();
+    void testIdentifier();
+    void testIdentifier_data();
 
-  void testQualifiedIdentifier();
-  void testQualifiedIdentifier_data();
+    void testQualifiedIdentifier();
+    void testQualifiedIdentifier_data();
 
-  void benchIdentifierCopyConstant();
-  void benchIdentifierCopyDynamic();
-  void benchQidCopyPush();
+    void benchIdentifierCopyConstant();
+    void benchIdentifierCopyDynamic();
+    void benchQidCopyPush();
 };
-
 
 #endif // KDEVPLATFORM_TESTIDENTIFIER_H

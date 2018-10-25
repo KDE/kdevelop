@@ -16,7 +16,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "abstracttype.h"
 
@@ -26,77 +26,77 @@
 #include "typerepository.h"
 #include <debug.h>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 //REGISTER_TYPE(AbstractType);
 
-void AbstractType::makeDynamic() {
-  if(d_ptr->m_dynamic)
-    return;
-  AbstractType::Ptr newType(clone()); //While cloning, all the data is cloned as well. So we use that mechanism and steal the cloned data.
-  Q_ASSERT(newType->equals(this));
-  AbstractTypeData* oldData = d_ptr;
-  d_ptr = newType->d_ptr;
-  newType->d_ptr = oldData;
-  Q_ASSERT(d_ptr->m_dynamic);
+void AbstractType::makeDynamic()
+{
+    if (d_ptr->m_dynamic)
+        return;
+    AbstractType::Ptr newType(clone()); //While cloning, all the data is cloned as well. So we use that mechanism and steal the cloned data.
+    Q_ASSERT(newType->equals(this));
+    AbstractTypeData* oldData = d_ptr;
+    d_ptr = newType->d_ptr;
+    newType->d_ptr = oldData;
+    Q_ASSERT(d_ptr->m_dynamic);
 }
 
-AbstractType::AbstractType( AbstractTypeData& dd )
-  : d_ptr(&dd)
+AbstractType::AbstractType(AbstractTypeData& dd)
+    : d_ptr(&dd)
 {
 }
 
 quint32 AbstractType::modifiers() const
 {
-  return d_func()->m_modifiers;
+    return d_func()->m_modifiers;
 }
 
 void AbstractType::setModifiers(quint32 modifiers)
 {
-  d_func_dynamic()->m_modifiers = modifiers;
+    d_func_dynamic()->m_modifiers = modifiers;
 }
 
 AbstractType::AbstractType()
-  : d_ptr(&createData<AbstractType>())
+    : d_ptr(&createData<AbstractType>())
 {
 }
 
 AbstractType::~AbstractType()
 {
-  if(!d_ptr->inRepository) {
-    TypeSystem::self().callDestructor(d_ptr);
-    delete[] (char*)d_ptr;
-  }
+    if (!d_ptr->inRepository) {
+        TypeSystem::self().callDestructor(d_ptr);
+        delete[] ( char* )d_ptr;
+    }
 }
 
-void AbstractType::accept(TypeVisitor *v) const
+void AbstractType::accept(TypeVisitor* v) const
 {
-  if (v->preVisit (this))
-    this->accept0 (v);
+    if (v->preVisit(this))
+        this->accept0(v);
 
-  v->postVisit (this);
+    v->postVisit(this);
 }
 
-void AbstractType::acceptType(AbstractType::Ptr type, TypeVisitor *v)
+void AbstractType::acceptType(AbstractType::Ptr type, TypeVisitor* v)
 {
-  if (! type)
-    return;
+    if (!type)
+        return;
 
-  type->accept (v);
+    type->accept(v);
 }
 
 AbstractType::WhichType AbstractType::whichType() const
 {
-  return TypeAbstract;
+    return TypeAbstract;
 }
 
-void AbstractType::exchangeTypes( TypeExchanger* /*exchanger */) {
+void AbstractType::exchangeTypes(TypeExchanger* /*exchanger */)
+{
 }
 
 IndexedType AbstractType::indexed() const
 {
-  return IndexedType(AbstractType::Ptr(const_cast<AbstractType*>(this)));
+    return IndexedType(AbstractType::Ptr(const_cast<AbstractType*>(this)));
 }
 
 bool AbstractType::equals(const AbstractType* rhs) const
@@ -107,44 +107,43 @@ bool AbstractType::equals(const AbstractType* rhs) const
 
 uint AbstractType::hash() const
 {
-  return KDevHash() << d_func()->typeClassId << d_func()->m_modifiers;
+    return KDevHash() << d_func()->typeClassId << d_func()->m_modifiers;
 }
 
 QString AbstractType::toString() const
 {
-  return toString(false);
+    return toString(false);
 }
 
 QString AbstractType::toString(bool spaceOnLeft) const
 {
-  // TODO complete
-  if(!spaceOnLeft) {
-    if(modifiers() & ConstModifier) {
-      if(modifiers() & VolatileModifier) {
-        return QStringLiteral("const volatile ");
-      }else{
-        return QStringLiteral("const ");
-      }
-    }else{
-      if(modifiers() & VolatileModifier)
-        return QStringLiteral("volatile ");
-      else
-        return QString();
+    // TODO complete
+    if (!spaceOnLeft) {
+        if (modifiers() & ConstModifier) {
+            if (modifiers() & VolatileModifier) {
+                return QStringLiteral("const volatile ");
+            } else {
+                return QStringLiteral("const ");
+            }
+        } else {
+            if (modifiers() & VolatileModifier)
+                return QStringLiteral("volatile ");
+            else
+                return QString();
+        }
+    } else {
+        if (modifiers() & ConstModifier) {
+            if (modifiers() & VolatileModifier) {
+                return QStringLiteral(" const volatile");
+            } else {
+                return QStringLiteral(" const");
+            }
+        } else {
+            if (modifiers() & VolatileModifier)
+                return QStringLiteral(" volatile");
+            else
+                return QString();
+        }
     }
-  }else{
-    if(modifiers() & ConstModifier) {
-      if(modifiers() & VolatileModifier) {
-        return QStringLiteral(" const volatile");
-      }else{
-        return QStringLiteral(" const");
-      }
-    }else{
-      if(modifiers() & VolatileModifier)
-        return QStringLiteral(" volatile");
-      else
-        return QString();
-    }
-  }
 }
-
 }

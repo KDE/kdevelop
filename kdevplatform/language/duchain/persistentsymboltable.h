@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H
 #define KDEVPLATFORM_PERSISTENTSYMBOLTABLE_H
@@ -27,7 +27,6 @@
 #include "topducontext.h"
 
 namespace KDevelop {
-
 class Declaration;
 class IndexedDeclaration;
 class IndexedDUContext;
@@ -36,61 +35,75 @@ class TopDUContext;
 class IndexedQualifiedIdentifier;
 
 ///@todo move into own header
-class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclarationHandler {
-    public:
-    inline static int leftChild(const IndexedDeclaration& m_data) {
-        return ((int)(m_data.dummyData().first))-1;
+class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclarationHandler
+{
+public:
+    inline static int leftChild(const IndexedDeclaration& m_data)
+    {
+        return (( int )(m_data.dummyData().first)) - 1;
     }
-    inline static void setLeftChild(IndexedDeclaration& m_data, int child) {
-        m_data.setDummyData(qMakePair((uint)(child+1), m_data.dummyData().second));
+    inline static void setLeftChild(IndexedDeclaration& m_data, int child)
+    {
+        m_data.setDummyData(qMakePair(( uint )(child + 1), m_data.dummyData().second));
     }
-    inline static int rightChild(const IndexedDeclaration& m_data) {
-        return ((int)m_data.dummyData().second)-1;
+    inline static int rightChild(const IndexedDeclaration& m_data)
+    {
+        return (( int )m_data.dummyData().second) - 1;
     }
-    inline static void setRightChild(IndexedDeclaration& m_data, int child) {
-        m_data.setDummyData(qMakePair(m_data.dummyData().first, (uint)(child+1)));
+    inline static void setRightChild(IndexedDeclaration& m_data, int child)
+    {
+        m_data.setDummyData(qMakePair(m_data.dummyData().first, ( uint )(child + 1)));
     }
-    inline static void createFreeItem(IndexedDeclaration& data) {
+    inline static void createFreeItem(IndexedDeclaration& data)
+    {
         data = IndexedDeclaration();
         data.setIsDummy(true);
         data.setDummyData(qMakePair(0u, 0u)); //Since we subtract 1, this equals children -1, -1
     }
     //Copies this item into the given one
-    inline static void copyTo(const IndexedDeclaration& m_data, IndexedDeclaration& data) {
+    inline static void copyTo(const IndexedDeclaration& m_data, IndexedDeclaration& data)
+    {
         data = m_data;
     }
-    
-    inline static bool isFree(const IndexedDeclaration& m_data) {
+
+    inline static bool isFree(const IndexedDeclaration& m_data)
+    {
         return m_data.isDummy();
     }
 
-    inline static bool equals(const IndexedDeclaration& m_data, const IndexedDeclaration& rhs) {
-      return m_data == rhs;
+    inline static bool equals(const IndexedDeclaration& m_data, const IndexedDeclaration& rhs)
+    {
+        return m_data == rhs;
     }
 };
 
-
-struct DeclarationTopContextExtractor {
-  inline static IndexedTopDUContext extract(const IndexedDeclaration& decl) {
-    return decl.indexedTopContext();
-  }
+struct DeclarationTopContextExtractor
+{
+    inline static IndexedTopDUContext extract(const IndexedDeclaration& decl)
+    {
+        return decl.indexedTopContext();
+    }
 };
 
-struct DUContextTopContextExtractor {
-  inline static IndexedTopDUContext extract(const IndexedDUContext& ctx) {
-    return ctx.indexedTopContext();
-  }
+struct DUContextTopContextExtractor
+{
+    inline static IndexedTopDUContext extract(const IndexedDUContext& ctx)
+    {
+        return ctx.indexedTopContext();
+    }
 };
 
-struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
-  static Utils::BasicSetRepository* repository();
+struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository
+{
+    static Utils::BasicSetRepository* repository();
 };
 
 /**
  * Global symbol-table that is stored to disk, and allows retrieving declarations that currently are not loaded to memory.
  * */
-  class KDEVPLATFORMLANGUAGE_EXPORT PersistentSymbolTable {
-    public:
+class KDEVPLATFORMLANGUAGE_EXPORT PersistentSymbolTable
+{
+public:
     /// Constructor.
     PersistentSymbolTable();
     /// Destructor.
@@ -112,34 +125,37 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportCacheRepository {
     void declarations(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDeclaration*& declarations) const;
 
     typedef ConstantConvenientEmbeddedSet<IndexedDeclaration, IndexedDeclarationHandler> Declarations;
-    
+
     ///Retrieves all the declarations for a given IndexedQualifiedIdentifier in an efficient way, and returns
     ///them in a structure that is more convenient than declarations().
     ///@param id The IndexedQualifiedIdentifier for which the declarations should be retrieved
     ///@warning DUChain must be read locked as long as the returned data is used
     Declarations declarations(const IndexedQualifiedIdentifier& id) const;
 
-    typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository, true> CachedIndexedRecursiveImports;
-    
-    typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, CachedIndexedRecursiveImports, DeclarationTopContextExtractor> FilteredDeclarationIterator;
+    typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository,
+        true> CachedIndexedRecursiveImports;
+
+    typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext,
+        CachedIndexedRecursiveImports, DeclarationTopContextExtractor> FilteredDeclarationIterator;
     ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @a visibility
     ///This is very efficient since it uses a cache
     ///The returned iterator is valid as long as the duchain read lock is held
-    FilteredDeclarationIterator filteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const;
+    FilteredDeclarationIterator filteredDeclarations(const IndexedQualifiedIdentifier& id,
+                                                     const TopDUContext::IndexedRecursiveImports& visibility) const;
 
     static PersistentSymbolTable& self();
 
     //Very expensive: Checks for problems in the symbol table
     void dump(const QTextStream& out);
-    
+
     //Clears the internal cache. Should be called regularly to save memory
     //The duchain must be read-locked
     void clearCache();
-    
-    private:
-      // cannot use QScopedPointer yet, see comment in ~PersistentSymbolTable()
-      class PersistentSymbolTablePrivate* const d;
-  };
+
+private:
+    // cannot use QScopedPointer yet, see comment in ~PersistentSymbolTable()
+    class PersistentSymbolTablePrivate* const d;
+};
 }
 
 #endif

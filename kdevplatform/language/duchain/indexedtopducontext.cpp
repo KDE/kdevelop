@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "indexedtopducontext.h"
 
@@ -22,31 +22,35 @@
 
 using namespace KDevelop;
 
-IndexedTopDUContext::IndexedTopDUContext(TopDUContext* context) {
-  if(context)
-    m_index = context->ownIndex();
-  else
-    m_index = DummyMask;
+IndexedTopDUContext::IndexedTopDUContext(TopDUContext* context)
+{
+    if (context)
+        m_index = context->ownIndex();
+    else
+        m_index = DummyMask;
 }
 
-bool IndexedTopDUContext::isLoaded() const {
-  if(index())
-    return DUChain::self()->isInMemory(index());
-  else
-    return false;
+bool IndexedTopDUContext::isLoaded() const
+{
+    if (index())
+        return DUChain::self()->isInMemory(index());
+    else
+        return false;
 }
 
-IndexedString IndexedTopDUContext::url() const {
-  if(index())
-    return DUChain::self()->urlForIndex(index());
-  else
-    return IndexedString();
+IndexedString IndexedTopDUContext::url() const
+{
+    if (index())
+        return DUChain::self()->urlForIndex(index());
+    else
+        return IndexedString();
 }
 
-TopDUContext* IndexedTopDUContext::data() const {
+TopDUContext* IndexedTopDUContext::data() const
+{
 //   ENSURE_CHAIN_READ_LOCKED
-  if(index())
-    return DUChain::self()->chainForIndex(index());
-  else
-    return nullptr;
+    if (index())
+        return DUChain::self()->chainForIndex(index());
+    else
+        return nullptr;
 }

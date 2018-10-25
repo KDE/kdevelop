@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CODEMODEL_H
 #define KDEVPLATFORM_CODEMODEL_H
@@ -24,47 +24,47 @@
 #include <QScopedPointer>
 
 namespace KDevelop {
+class Declaration;
+class IndexedDeclaration;
+class DeclarationId;
+class TopDUContext;
+class QualifiedIdentifier;
+class IndexedString;
 
-  class Declaration;
-  class IndexedDeclaration;
-  class DeclarationId;
-  class TopDUContext;
-  class QualifiedIdentifier;
-  class IndexedString;
-
-  struct CodeModelItem
-  {
+struct CodeModelItem
+{
     CodeModelItem()
-      : kind(Unknown)
+        : kind(Unknown)
     {
     }
     enum Kind {
-      Unknown = 0,
-      Function = 1,
-      Variable = 2,
-      Class = 4,
-      ForwardDeclaration = 8,
-      Namespace = 16,
-      ClassMember = 32
+        Unknown = 0,
+        Function = 1,
+        Variable = 2,
+        Class = 4,
+        ForwardDeclaration = 8,
+        Namespace = 16,
+        ClassMember = 32
     };
     IndexedQualifiedIdentifier id;
     uint referenceCount = 0;
     union {
-      Kind kind;
-      uint uKind;
+        Kind kind;
+        uint uKind;
     };
-    bool operator<(const CodeModelItem& rhs) const {
-      return id < rhs.id;
+    bool operator<(const CodeModelItem& rhs) const
+    {
+        return id < rhs.id;
     }
-  };
+};
 
-  /**
-   * Persistent store that efficiently holds a list of identifiers
-   * and their kind for each declaration-string.
-   */
-  class KDEVPLATFORMLANGUAGE_EXPORT CodeModel
-  {
-    public:
+/**
+ * Persistent store that efficiently holds a list of identifiers
+ * and their kind for each declaration-string.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT CodeModel
+{
+public:
     CodeModel();
     ~CodeModel();
 
@@ -93,9 +93,9 @@ namespace KDevelop {
 
     static CodeModel& self();
 
-    private:
-      const QScopedPointer<class CodeModelPrivate> d;
-  };
+private:
+    const QScopedPointer<class CodeModelPrivate> d;
+};
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::CodeModelItem, Q_MOVABLE_TYPE);

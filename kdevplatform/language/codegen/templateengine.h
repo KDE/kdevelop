@@ -29,7 +29,6 @@
 class QStringList;
 
 namespace KDevelop {
-
 class TemplateRenderer;
 
 /**
@@ -56,7 +55,6 @@ private:
     const QScopedPointer<class TemplateEnginePrivate> d;
     friend class TemplateRenderer;
 };
-
 }
 
 #endif // KDEVPLATFORM_TEMPLATEENGINE_H

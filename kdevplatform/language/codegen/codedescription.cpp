@@ -15,7 +15,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "codedescription.h"
 #include <debug.h>
@@ -40,18 +40,17 @@ using namespace KDevelop;
 QString accessPolicyName(const DeclarationPointer& declaration)
 {
     DUChainPointer<ClassMemberDeclaration> member = declaration.dynamicCast<ClassMemberDeclaration>();
-    if (member)
-    {
+    if (member) {
         switch (member->accessPolicy())
         {
-            case Declaration::Private:
-                return QStringLiteral("private");
-            case Declaration::Protected:
-                return QStringLiteral("protected");
-            case Declaration::Public:
-                return QStringLiteral("public");
-            default:
-                break;
+        case Declaration::Private:
+            return QStringLiteral("private");
+        case Declaration::Protected:
+            return QStringLiteral("protected");
+        case Declaration::Public:
+            return QStringLiteral("public");
+        default:
+            break;
         }
     }
     return QString();
@@ -59,22 +58,19 @@ QString accessPolicyName(const DeclarationPointer& declaration)
 
 VariableDescription::VariableDescription()
 {
-
 }
 
 VariableDescription::VariableDescription(const QString& type, const QString& name)
-: name(name)
-, type(type)
+    : name(name)
+    , type(type)
 {
-
 }
 
 VariableDescription::VariableDescription(const DeclarationPointer& declaration)
 {
     DUChainReadLocker lock;
 
-    if (declaration)
-    {
+    if (declaration) {
         name = declaration->identifier().toString();
         if (auto abstractType = declaration->abstractType()) {
             type = abstractType->toString();
@@ -91,16 +87,16 @@ FunctionDescription::FunctionDescription()
 
 FunctionDescription::FunctionDescription(const QString& name, const VariableDescriptionList& arguments,
                                          const VariableDescriptionList& returnArguments)
-: name(name)
-, arguments(arguments)
-, returnArguments(returnArguments)
-, isConstructor(false)
-, isDestructor(false)
-, isVirtual(false)
-, isStatic(false)
-, isSlot(false)
-, isSignal(false)
-, isConst(false)
+    : name(name)
+    , arguments(arguments)
+    , returnArguments(returnArguments)
+    , isConstructor(false)
+    , isDestructor(false)
+    , isVirtual(false)
+    , isStatic(false)
+    , isSlot(false)
+    , isSignal(false)
+    , isConst(false)
 {
 }
 
@@ -109,21 +105,18 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
 {
     DUChainReadLocker lock;
 
-    if (declaration)
-    {
+    if (declaration) {
         name = declaration->identifier().toString();
         DUContext* context = declaration->internalContext();
 
         DUChainPointer<FunctionDeclaration> function = declaration.dynamicCast<FunctionDeclaration>();
-        if (function)
-        {
+        if (function) {
             context = DUChainUtils::argumentContext(declaration.data());
         }
 
         DUChainPointer<ClassFunctionDeclaration> method = declaration.dynamicCast<ClassFunctionDeclaration>();
 
-        if (method)
-        {
+        if (method) {
             isConstructor = method->isConstructor();
             isDestructor = method->isDestructor();
             isVirtual = method->isVirtual();
@@ -140,8 +133,7 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
         arguments.reserve(localDeclarations.size());
         for (Declaration* arg : localDeclarations) {
             VariableDescription var = VariableDescription(DeclarationPointer(arg));
-            if (function)
-            {
+            if (function) {
                 var.value = function->defaultParameterForArgument(i).str();
                 qCDebug(LANGUAGE) << var.name << var.value;
             }
@@ -151,13 +143,11 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
 
         FunctionType::Ptr functionType = declaration->abstractType().cast<FunctionType>();
 
-        if (functionType)
-        {
+        if (functionType) {
             isConst = (functionType->modifiers() & AbstractType::ConstModifier);
         }
 
-        if (functionType && functionType->returnType())
-        {
+        if (functionType && functionType->returnType()) {
             returnArguments << VariableDescription(functionType->returnType()->toString(), QString());
         }
 
@@ -167,8 +157,7 @@ FunctionDescription::FunctionDescription(const DeclarationPointer& declaration)
 
 QString FunctionDescription::returnType() const
 {
-    if (returnArguments.isEmpty())
-    {
+    if (returnArguments.isEmpty()) {
         return QString();
     }
     return returnArguments.first().type;
@@ -176,11 +165,9 @@ QString FunctionDescription::returnType() const
 
 ClassDescription::ClassDescription()
 {
-
 }
 
 ClassDescription::ClassDescription(const QString& name)
-: name(name)
+    : name(name)
 {
-
 }

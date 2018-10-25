@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "indexeddeclaration.h"
 
@@ -25,33 +25,33 @@
 using namespace KDevelop;
 
 IndexedDeclaration::IndexedDeclaration(uint topContext, uint declarationIndex)
-  : m_topContext(topContext)
-  , m_declarationIndex(declarationIndex)
+    : m_topContext(topContext)
+    , m_declarationIndex(declarationIndex)
 {
 }
 
 IndexedDeclaration::IndexedDeclaration(const Declaration* decl)
 {
-  if(decl) {
-    m_topContext = decl->topContext()->ownIndex();
-    m_declarationIndex = decl->m_indexInTopContext;
-  }else{
-    m_topContext = 0;
-    m_declarationIndex = 0;
-  }
+    if (decl) {
+        m_topContext = decl->topContext()->ownIndex();
+        m_declarationIndex = decl->m_indexInTopContext;
+    } else {
+        m_topContext = 0;
+        m_declarationIndex = 0;
+    }
 }
 
 Declaration* IndexedDeclaration::declaration() const
 {
-  if(isDummy())
-    return nullptr;
+    if (isDummy())
+        return nullptr;
 //   ENSURE_CHAIN_READ_LOCKED
-  if(!m_topContext || !m_declarationIndex)
-    return nullptr;
+    if (!m_topContext || !m_declarationIndex)
+        return nullptr;
 
-  TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
-  if(!ctx)
-    return nullptr;
+    TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
+    if (!ctx)
+        return nullptr;
 
-  return ctx->m_dynamicData->declarationForIndex(m_declarationIndex);
+    return ctx->m_dynamicData->declarationForIndex(m_declarationIndex);
 }

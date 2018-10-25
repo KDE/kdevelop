@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CODEGEN_UTILITIES_H
 #define KDEVPLATFORM_CODEGEN_UTILITIES_H
@@ -23,33 +23,30 @@
 
 #include <QValidator>
 
-
-namespace KDevelop
-{
-
+namespace KDevelop {
 class IndexedString;
 class DUContext;
 class Declaration;
-    
-namespace CodeGenUtils
-{
 
+namespace CodeGenUtils {
 /*!
  * A validator object that  verifies if a string would be an acceptable identifier
  * If inserted into the given context, including if it conflicts with any other identifier
  */
-class KDEVPLATFORMLANGUAGE_EXPORT IdentifierValidator : public QValidator
+class KDEVPLATFORMLANGUAGE_EXPORT IdentifierValidator
+    : public QValidator
 {
     Q_OBJECT
-  public:
-    explicit IdentifierValidator( DUContext * context);
+
+public:
+    explicit IdentifierValidator(DUContext* context);
     ~IdentifierValidator() override;
-    
-    State validate(QString & input, int &) const override;
-      
-  private:
-    
-    DUContext * m_context;
+
+    State validate(QString& input, int&) const override;
+
+private:
+
+    DUContext* m_context;
 };
 
 /**
@@ -65,11 +62,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT IdentifierValidator : public QValidator
  * @return The file that matched best
  */
 KDEVPLATFORMLANGUAGE_EXPORT IndexedString
-fetchImplementationFileForClass(const Declaration & targetClass);
-
+fetchImplementationFileForClass(const Declaration& targetClass);
 }
-
-
 }
 
 #endif  //KDEVPLATFORM_CODEGEN_UTILITIES_H

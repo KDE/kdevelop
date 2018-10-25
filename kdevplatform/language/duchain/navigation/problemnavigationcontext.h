@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H
 #define KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H
@@ -28,14 +28,15 @@
 #include <QPointer>
 
 namespace KDevelop {
-
-class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavigationContext
+class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext
+    : public AbstractNavigationContext
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+
+public:
     enum Flag {
-      NoFlag = 0,
-      ShowLocation = 1 << 0,
+        NoFlag = 0,
+        ShowLocation = 1 << 0,
     };
     Q_DECLARE_FLAGS(Flags, Flag)
 
@@ -52,7 +53,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ProblemNavigationContext : public AbstractNavi
 public Q_SLOTS:
     void executeAction(int index); // TODO: Add API in base class?
 
-  private:
+private:
     void html(IProblem::Ptr problem);
 
     /**
@@ -68,7 +69,6 @@ public Q_SLOTS:
     QPointer<QWidget> m_widget;
     QVector<IAssistantAction::Ptr> m_assistantsActions;
 };
-
 }
 
 #endif // KDEVPLATFORM_PROBLEMNAVIGATIONCONTEXT_H

@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_MODIFICATIONREVISIONSET_H
 #define KDEVPLATFORM_MODIFICATIONREVISIONSET_H
@@ -22,23 +22,23 @@
 #include "modificationrevision.h"
 
 namespace KDevelop {
-
 /**
  * This class represents a set of modification-revisions assigned to file-names.
  * It is safe to store this class in the disk-mapped internal duchain data structures.
-* */
+ * */
 
 class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevisionSet
 {
-  public:
+public:
     explicit ModificationRevisionSet(uint index = 0);
 
     static void clearCache();
 
     void clear();
 
-    uint index() const {
-      return m_index;
+    uint index() const
+    {
+        return m_index;
     }
 
     ///Returns the count of file dependencies in this set
@@ -53,18 +53,20 @@ class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevisionSet
 
     QString toString() const;
 
-    bool operator!=(const ModificationRevisionSet& rhs) const {
-      return m_index != rhs.m_index;
+    bool operator!=(const ModificationRevisionSet& rhs) const
+    {
+        return m_index != rhs.m_index;
     }
 
-    bool operator==(const ModificationRevisionSet& rhs) const {
-      return m_index == rhs.m_index;
+    bool operator==(const ModificationRevisionSet& rhs) const
+    {
+        return m_index == rhs.m_index;
     }
 
     ModificationRevisionSet& operator+=(const ModificationRevisionSet& rhs);
     ModificationRevisionSet& operator-=(const ModificationRevisionSet& rhs);
 
-  private:
+private:
     uint m_index;
 };
 }

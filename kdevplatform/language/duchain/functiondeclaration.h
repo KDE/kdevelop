@@ -17,7 +17,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_FUNCTIONDECLARATION_H
 #define KDEVPLATFORM_FUNCTIONDECLARATION_H
@@ -26,26 +26,28 @@
 #include "abstractfunctiondeclaration.h"
 #include "declarationdata.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(FunctionDeclarationData, m_defaultParameters, IndexedString)
 
-class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclarationData : public DeclarationData, public AbstractFunctionDeclarationData
+class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclarationData
+    : public DeclarationData
+    , public AbstractFunctionDeclarationData
 {
-  public:
+public:
     FunctionDeclarationData()
     {
-      initializeAppendedLists();
+        initializeAppendedLists();
     }
-    FunctionDeclarationData( const FunctionDeclarationData& rhs )
-      :DeclarationData( rhs ), AbstractFunctionDeclarationData(rhs)
+    FunctionDeclarationData(const FunctionDeclarationData& rhs)
+        : DeclarationData(rhs)
+        , AbstractFunctionDeclarationData(rhs)
     {
-      initializeAppendedLists();
-      copyListsFrom(rhs);
+        initializeAppendedLists();
+        copyListsFrom(rhs);
     }
     ~FunctionDeclarationData()
     {
-      freeAppendedLists();
+        freeAppendedLists();
     }
 
     START_APPENDED_LISTS_BASE(FunctionDeclarationData, DeclarationData);
@@ -56,37 +58,38 @@ class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclarationData : public DeclarationDa
  * Represents a single variable definition in a definition-use chain.
  */
 typedef MergeAbstractFunctionDeclaration<Declaration, FunctionDeclarationData> FunctionDeclarationBase;
-class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration : public FunctionDeclarationBase
+class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration
+    : public FunctionDeclarationBase
 {
 public:
-  FunctionDeclaration(const FunctionDeclaration& rhs);
-  FunctionDeclaration(const RangeInRevision& range, DUContext* context);
-  explicit FunctionDeclaration(FunctionDeclarationData& data);
-  FunctionDeclaration(FunctionDeclarationData& data, const KDevelop::RangeInRevision&);
-  ~FunctionDeclaration() override;
+    FunctionDeclaration(const FunctionDeclaration& rhs);
+    FunctionDeclaration(const RangeInRevision& range, DUContext* context);
+    explicit FunctionDeclaration(FunctionDeclarationData& data);
+    FunctionDeclaration(FunctionDeclarationData& data, const KDevelop::RangeInRevision&);
+    ~FunctionDeclaration() override;
 
-  void setAbstractType(AbstractType::Ptr type) override;
+    void setAbstractType(AbstractType::Ptr type) override;
 
-  QString toString() const override;
+    QString toString() const override;
 
-  bool isFunctionDeclaration() const override;
-  
-  uint additionalIdentity() const override;
-  
-  const IndexedString* defaultParameters() const override;
-  unsigned int defaultParametersSize() const override;
-  void addDefaultParameter(const IndexedString& str) override;
-  void clearDefaultParameters() override;
-  
-  enum {
-    Identity = 12
-  };
-  
-  typedef Declaration Base;
+    bool isFunctionDeclaration() const override;
+
+    uint additionalIdentity() const override;
+
+    const IndexedString* defaultParameters() const override;
+    unsigned int defaultParametersSize() const override;
+    void addDefaultParameter(const IndexedString& str) override;
+    void clearDefaultParameters() override;
+
+    enum {
+        Identity = 12
+    };
+
+    typedef Declaration Base;
 
 private:
-  Declaration* clonePrivate() const override;
-  DUCHAIN_DECLARE_DATA(FunctionDeclaration)
+    Declaration* clonePrivate() const override;
+    DUCHAIN_DECLARE_DATA(FunctionDeclaration)
 };
 }
 

@@ -16,7 +16,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "topducontextutils.h"
 
@@ -27,42 +27,42 @@ using namespace KDevelop;
 
 ///Takes a set of conditions in the constructors, and checks with each call to operator() whether these conditions are fulfilled on the given declaration.
 ///The import-structure needs to be constructed and locked when this is used
-TopDUContext::DeclarationChecker::DeclarationChecker(const TopDUContext* _top, const CursorInRevision& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache)
-  : createVisibleCache(_createVisibleCache)
-  , top(_top)
-  , topDFunc(_top->d_func())
-  , position(_position)
-  , dataType(_dataType)
-  , flags(_flags)
+TopDUContext::DeclarationChecker::DeclarationChecker(const TopDUContext* _top, const CursorInRevision& _position,
+                                                     const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags,
+                                                     KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache)
+    : createVisibleCache(_createVisibleCache)
+    , top(_top)
+    , topDFunc(_top->d_func())
+    , position(_position)
+    , dataType(_dataType)
+    , flags(_flags)
 {
 }
 
 bool TopDUContext::DeclarationChecker::operator()(const Declaration* decl) const
 {
-  if(!decl)
-    return false;
+    if (!decl)
+        return false;
 
-  if (top != decl->topContext()) {
+    if (top != decl->topContext()) {
+        if (( flags& DUContext::OnlyFunctions ) && !dynamic_cast<const AbstractFunctionDeclaration*>(decl))
+            return false;
 
-    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<const AbstractFunctionDeclaration*>(decl))
-      return false;
+        if (dataType && decl->abstractType()->indexed() != dataType->indexed())
+            // The declaration doesn't match the type filter we are applying
+            return false;
+    } else {
+        if (( flags& DUContext::OnlyFunctions ) && !dynamic_cast<const AbstractFunctionDeclaration*>(decl))
+            return false;
 
-    if (dataType && decl->abstractType()->indexed() != dataType->indexed())
-      // The declaration doesn't match the type filter we are applying
-      return false;
+        if (dataType && decl->abstractType() != dataType)
+            // The declaration doesn't match the type filter we are applying
+            return false;
 
-  } else {
-    if((flags & DUContext::OnlyFunctions) && !dynamic_cast<const AbstractFunctionDeclaration*>(decl))
-      return false;
-
-    if (dataType && decl->abstractType() != dataType)
-      // The declaration doesn't match the type filter we are applying
-      return false;
-
-    if (decl->range().start >= position)
-      if(!decl->context() || decl->context()->type() != DUContext::Class)
-          return false; // The declaration is behind the position we're searching from, therefore not accessible
-  }
-  // Success, this declaration is accessible
-  return true;
+        if (decl->range().start >= position)
+            if (!decl->context() || decl->context()->type() != DUContext::Class)
+                return false; // The declaration is behind the position we're searching from, therefore not accessible
+    }
+    // Success, this declaration is accessible
+    return true;
 }

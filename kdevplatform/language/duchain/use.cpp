@@ -14,19 +14,16 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "use.h"
 #include "topducontext.h"
 
-
 using namespace KTextEditor;
 
-namespace KDevelop
+namespace KDevelop {
+KDevelop::Declaration* Use::usedDeclaration(KDevelop::TopDUContext* topContext) const
 {
-
-KDevelop::Declaration* Use::usedDeclaration(KDevelop::TopDUContext* topContext) const {
-  return topContext->usedDeclarationForIndex(m_declarationIndex);
+    return topContext->usedDeclarationForIndex(m_declarationIndex);
 }
-
 }

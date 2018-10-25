@@ -1,6 +1,6 @@
 /*
    Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -14,20 +14,20 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "waitforupdate.h"
 
 using namespace KDevelop;
 
 WaitForUpdate::WaitForUpdate()
-  : m_ready(false)
+    : m_ready(false)
 {
 }
 
 void WaitForUpdate::updateReady(const KDevelop::IndexedString& /*url*/,
                                 const KDevelop::ReferencedTopDUContext& topContext)
 {
-  m_ready = true;
-  m_topContext = topContext;
+    m_ready = true;
+    m_topContext = topContext;
 }

@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "utilities.h"
 #include <debug.h>
@@ -29,13 +29,10 @@
 #include <duchain/classfunctiondeclaration.h>
 #include <duchain/types/functiontype.h>
 
-namespace KDevelop
-{
-
-namespace CodeGenUtils
-{
-
-IdentifierValidator::IdentifierValidator( DUContext * context) : QValidator(nullptr), m_context(context)
+namespace KDevelop {
+namespace CodeGenUtils {
+IdentifierValidator::IdentifierValidator(DUContext* context) : QValidator(nullptr)
+    , m_context(context)
 {
 }
 
@@ -43,89 +40,81 @@ IdentifierValidator::~IdentifierValidator()
 {
 }
 
-QValidator::State IdentifierValidator::validate (QString & input, int &) const
+QValidator::State IdentifierValidator::validate(QString& input, int&) const
 {
     //I can't figure out why it wouln't compile when I tried to use Identifier identifier();
     Identifier identifier = Identifier(IndexedString(input));
 
-    if(identifier.isUnique())
+    if (identifier.isUnique())
         return Acceptable;
 
     DUChainReadLocker lock(DUChain::lock(), 10);
-    return m_context->findLocalDeclarations(identifier, CursorInRevision::invalid(), nullptr, AbstractType::Ptr(), DUContext::NoFiltering).empty() ? Acceptable : Invalid;
+    return m_context->findLocalDeclarations(identifier, CursorInRevision::invalid(), nullptr,
+                                            AbstractType::Ptr(), DUContext::NoFiltering).empty() ? Acceptable : Invalid;
 }
 
-IndexedString fetchImplementationFileForClass(const Declaration & targetClass)
+IndexedString fetchImplementationFileForClass(const Declaration& targetClass)
 {
     DUChainReadLocker lock(DUChain::lock());
     qCDebug(LANGUAGE) << "Looking for implementation file for class:" << targetClass.identifier().toString();
 
-    DUContext * context = targetClass.internalContext();
+    DUContext* context = targetClass.internalContext();
 
     //If this declaration is not a user defined type, then ignore and return empty file
-    if(targetClass.kind() != Declaration::Type)
+    if (targetClass.kind() != Declaration::Type)
         return IndexedString();
 
     //If this is a forward declaration attempt to resolve it.
-    const Declaration * realClass = &targetClass;
-    if(const ForwardDeclaration * forward = dynamic_cast<const ForwardDeclaration *>(realClass))
-    {
-        if(!(realClass = forward->resolve(context->topContext())))
+    const Declaration* realClass = &targetClass;
+    if (const ForwardDeclaration* forward = dynamic_cast<const ForwardDeclaration*>(realClass)) {
+        if (!(realClass = forward->resolve(context->topContext())))
             return IndexedString();
         context = realClass->internalContext();
     }
 
     const QVector<Declaration*> declarations = context->localDeclarations();
 
-    QMap<IndexedString, unsigned int > implementationsInFile;
+    QMap<IndexedString, unsigned int> implementationsInFile;
 
     for (Declaration* decl : declarations) {
         ///@todo check for static variable instantiation as well
-        if(ClassFunctionDeclaration * classFun = dynamic_cast<ClassFunctionDeclaration *>(decl))
-            if(FunctionDefinition * def = FunctionDefinition::definition(classFun))
-            {
+        if (ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl))
+            if (FunctionDefinition* def = FunctionDefinition::definition(classFun)) {
                 qCDebug(LANGUAGE) << "Definition For declaration in:" << def->url().toUrl();
                 ++implementationsInFile[def->url()];
             }
     }
 
     QMultiMap<unsigned int, IndexedString> sorter;
-    foreach(const IndexedString& file, implementationsInFile.keys())
+    foreach (const IndexedString& file, implementationsInFile.keys())
         sorter.insert(implementationsInFile[file], file);
 
     QList<IndexedString> sortedFiles = sorter.values();
 
     //If there are no methods, then just return the file the declaration is in
-    if(sortedFiles.empty())
+    if (sortedFiles.empty())
         return context->url();
 
-    if(sortedFiles.size() == 1)
+    if (sortedFiles.size() == 1)
         return sortedFiles[0];
 
     const QList<IndexedString> tiedFiles = sorter.values(sorter.end().key());
-    if(tiedFiles.size() > 1)
-    {
+    if (tiedFiles.size() > 1) {
         //Return the file that has the most uses
         const auto uses = realClass->uses();
 
         IndexedString mostUsesFile;
         unsigned int mostUses = 0;
         for (const IndexedString& currentFile : tiedFiles) {
-            if(static_cast<unsigned int>(uses[currentFile].size()) > mostUses)
-            {
+            if (static_cast<unsigned int>(uses[currentFile].size()) > mostUses) {
                 mostUses = uses[currentFile].size();
                 mostUsesFile = currentFile;
             }
         }
 
         return mostUsesFile;
-    }
-    else
+    } else
         return sortedFiles.back();
-
 }
-
 }
-
-
 }

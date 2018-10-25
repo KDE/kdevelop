@@ -57,36 +57,23 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
     entry.type = element.attribute(QStringLiteral("type"), QStringLiteral("String"));
 
     bool isDefaultValueSet = false;
-    for (QDomElement e = element.firstChildElement(); !e.isNull(); e = e.nextSiblingElement())
-    {
+    for (QDomElement e = element.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
         QString tag = e.tagName();
 
-        if (tag == QLatin1String("label"))
-        {
+        if (tag == QLatin1String("label")) {
             entry.label = e.text();
-        }
-        else if (tag == QLatin1String("tooltip"))
-        {
+        } else if (tag == QLatin1String("tooltip")) {
             entry.label = e.text();
-        }
-        else if (tag == QLatin1String("whatsthis"))
-        {
+        } else if (tag == QLatin1String("whatsthis")) {
             entry.label = e.text();
-        }
-        else if ( tag == QLatin1String("min") )
-        {
+        } else if (tag == QLatin1String("min")) {
             entry.minValue = e.text();
-        }
-        else if ( tag == QLatin1String("max") )
-        {
+        } else if (tag == QLatin1String("max")) {
             entry.maxValue = e.text();
-        }
-        else if ( tag == QLatin1String("default") )
-        {
+        } else if (tag == QLatin1String("default")) {
             entry.value = renderer->render(e.text(), entry.name);
             isDefaultValueSet = true;
-        }
-        else if (tag == QLatin1String("choices")) {
+        } else if (tag == QLatin1String("choices")) {
             QStringList values;
             QDomNodeList choices = element.elementsByTagName(QStringLiteral("choice"));
             values.reserve(choices.size());
@@ -94,6 +81,7 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
                 QDomElement choiceElement = choices.at(j).toElement();
                 values << choiceElement.attribute(QStringLiteral("name"));
             }
+
             Q_ASSERT(!values.isEmpty());
             if (values.isEmpty()) {
                 qCWarning(LANGUAGE) << "Entry " << entry.name << "has an enum without any choices";
@@ -120,22 +108,21 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
     return entry;
 }
 
-
 SourceFileTemplate::SourceFileTemplate (const QString& templateDescription)
-: d(new KDevelop::SourceFileTemplatePrivate)
+    : d(new KDevelop::SourceFileTemplatePrivate)
 {
     d->archive = nullptr;
     setTemplateDescription(templateDescription);
 }
 
 SourceFileTemplate::SourceFileTemplate()
-: d(new KDevelop::SourceFileTemplatePrivate)
+    : d(new KDevelop::SourceFileTemplatePrivate)
 {
     d->archive = nullptr;
 }
 
 SourceFileTemplate::SourceFileTemplate (const SourceFileTemplate& other)
-: d(new KDevelop::SourceFileTemplatePrivate)
+    : d(new KDevelop::SourceFileTemplatePrivate)
 {
     d->archive = nullptr;
     *this = other;
@@ -176,10 +163,12 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
 
     const QString templateBaseName = QFileInfo(templateDescription).baseName();
 
-    d->searchLocations.append(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("/kdevfiletemplates/templates/"), QStandardPaths::LocateDirectory));
+    d->searchLocations.append(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                        QStringLiteral("/kdevfiletemplates/templates/"),
+                                                        QStandardPaths::LocateDirectory));
 
-    foreach(const QString& dir, d->searchLocations) {
-        foreach(const auto& entry, QDir(dir).entryInfoList(QDir::Files)) {
+    foreach (const QString& dir, d->searchLocations) {
+        foreach (const auto& entry, QDir(dir).entryInfoList(QDir::Files)) {
             if (entry.baseName() == templateBaseName) {
                 archiveFileName = entry.absoluteFilePath();
                 qCDebug(LANGUAGE) << "Found template archive" << archiveFileName;
@@ -189,7 +178,8 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
     }
 
     if (archiveFileName.isEmpty() || !QFileInfo::exists(archiveFileName)) {
-        qCWarning(LANGUAGE) << "Could not find a template archive for description" << templateDescription << ", archive file" << archiveFileName;
+        qCWarning(LANGUAGE) << "Could not find a template archive for description" << templateDescription <<
+            ", archive file" << archiveFileName;
         d->archive = nullptr;
     } else {
         QFileInfo info(archiveFileName);
@@ -295,8 +285,7 @@ QVector<SourceFileTemplate::ConfigOptionGroup> SourceFileTemplate::customOptions
 
     QVector<ConfigOptionGroup> optionGroups;
 
-    if (!entry->isFile())
-    {
+    if (!entry->isFile()) {
         return optionGroups;
     }
     const KArchiveFile* file = static_cast<const KArchiveFile*>(entry);
@@ -308,41 +297,40 @@ QVector<SourceFileTemplate::ConfigOptionGroup> SourceFileTemplate::customOptions
     QString errorMsg;
     int errorRow;
     int errorCol;
-    if ( !doc.setContent( file->data(), &errorMsg, &errorRow, &errorCol ) ) {
+    if (!doc.setContent(file->data(), &errorMsg, &errorRow, &errorCol)) {
         qCDebug(LANGUAGE) << "Unable to load document.";
         qCDebug(LANGUAGE) << "Parse error in line " << errorRow << ", col " << errorCol << ": " << errorMsg;
         return optionGroups;
     }
 
     QDomElement cfgElement = doc.documentElement();
-    if ( cfgElement.isNull() ) {
+    if (cfgElement.isNull()) {
         qCDebug(LANGUAGE) << "No document in kcfg file";
         return optionGroups;
     }
 
     QDomNodeList groups = cfgElement.elementsByTagName(QStringLiteral("group"));
     optionGroups.reserve(groups.size());
-    for (int i = 0; i < groups.size(); ++i)
-    {
+    for (int i = 0; i < groups.size(); ++i) {
         QDomElement group = groups.at(i).toElement();
         ConfigOptionGroup optionGroup;
         optionGroup.name = group.attribute(QStringLiteral("name"));
 
         QDomNodeList entries = group.elementsByTagName(QStringLiteral("entry"));
         optionGroup.options.reserve(entries.size());
-        for (int j = 0; j < entries.size(); ++j)
-        {
+        for (int j = 0; j < entries.size(); ++j) {
             QDomElement entry = entries.at(j).toElement();
             optionGroup.options << d->readEntry(entry, renderer);
         }
 
         optionGroups << optionGroup;
     }
+
     return optionGroups;
 }
 
 void SourceFileTemplate::addAdditionalSearchLocation(const QString& location)
 {
-    if(!d->searchLocations.contains(location))
+    if (!d->searchLocations.contains(location))
         d->searchLocations.append(location);
 }

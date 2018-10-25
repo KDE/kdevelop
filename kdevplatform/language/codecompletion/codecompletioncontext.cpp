@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "codecompletioncontext.h"
 
@@ -28,64 +28,78 @@ using namespace KDevelop;
 typedef PushValue<int> IntPusher;
 
 ///Extracts the last line from the given string
-QString CodeCompletionContext::extractLastLine(const QString& str) {
-  int prevLineEnd = str.lastIndexOf(QLatin1Char('\n'));
-  if(prevLineEnd != -1)
-    return str.mid(prevLineEnd+1);
-  else
-    return str;
+QString CodeCompletionContext::extractLastLine(const QString& str)
+{
+    int prevLineEnd = str.lastIndexOf(QLatin1Char('\n'));
+    if (prevLineEnd != -1)
+        return str.mid(prevLineEnd + 1);
+    else
+        return str;
 }
 
 int completionRecursionDepth = 0;
 
-CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, const QString& text, const KDevelop::CursorInRevision& position, int depth)
-  : m_text(text), m_depth(depth), m_valid(true), m_position(position), m_duContext(context), m_parentContext(nullptr)
+CodeCompletionContext::CodeCompletionContext(const DUContextPointer& context, const QString& text,
+                                             const KDevelop::CursorInRevision& position, int depth)
+    : m_text(text)
+    , m_depth(depth)
+    , m_valid(true)
+    , m_position(position)
+    , m_duContext(context)
+    , m_parentContext(nullptr)
 {
-  IntPusher( completionRecursionDepth, completionRecursionDepth+1 );
+    IntPusher(completionRecursionDepth, completionRecursionDepth + 1);
 
-  if( depth > 10 ) {
-    qCWarning(LANGUAGE) << "too much recursion";
-    m_valid = false;
-    return;
-  }
+    if (depth > 10) {
+        qCWarning(LANGUAGE) << "too much recursion";
+        m_valid = false;
+        return;
+    }
 
-  if( completionRecursionDepth > 10 ) {
-    qCWarning(LANGUAGE) << "too much recursion";
-    m_valid = false;
-    return;
-  }
+    if (completionRecursionDepth > 10) {
+        qCWarning(LANGUAGE) << "too much recursion";
+        m_valid = false;
+        return;
+    }
 }
 
-CodeCompletionContext::~CodeCompletionContext() {
+CodeCompletionContext::~CodeCompletionContext()
+{
 }
 
-int CodeCompletionContext::depth() const {
-  return m_depth;
+int CodeCompletionContext::depth() const
+{
+    return m_depth;
 }
 
-bool CodeCompletionContext::isValid() const {
-  return m_valid;
+bool CodeCompletionContext::isValid() const
+{
+    return m_valid;
 }
 
-void KDevelop::CodeCompletionContext::setParentContext(QExplicitlySharedDataPointer< KDevelop::CodeCompletionContext > newParent) {
-  m_parentContext = newParent;
-  int newDepth = m_depth+1;
-  while(newParent) {
-    newParent->m_depth = newDepth;
-    ++newDepth;
-    newParent = newParent->m_parentContext;
-  }
+void KDevelop::CodeCompletionContext::setParentContext(
+    QExplicitlySharedDataPointer<KDevelop::CodeCompletionContext> newParent)
+{
+    m_parentContext = newParent;
+    int newDepth = m_depth + 1;
+    while (newParent) {
+        newParent->m_depth = newDepth;
+        ++newDepth;
+        newParent = newParent->m_parentContext;
+    }
 }
 
 CodeCompletionContext* CodeCompletionContext::parentContext()
 {
-  return m_parentContext.data();
+    return m_parentContext.data();
 }
 
-QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > > KDevelop::CodeCompletionContext::ungroupedElements() {
-  return QList< QExplicitlySharedDataPointer< KDevelop::CompletionTreeElement > >();
+QList<QExplicitlySharedDataPointer<KDevelop::CompletionTreeElement>> KDevelop::CodeCompletionContext::ungroupedElements()
+{
+    return QList<QExplicitlySharedDataPointer<KDevelop::CompletionTreeElement>>();
 }
 
-KDevelop::DUContext* KDevelop::CodeCompletionContext::duContext() const {
-  return m_duContext.data();
+KDevelop::DUContext* KDevelop::CodeCompletionContext::duContext() const
+{
+    return m_duContext.data();
 }

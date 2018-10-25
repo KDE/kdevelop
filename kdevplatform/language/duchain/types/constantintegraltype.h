@@ -17,7 +17,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CONSTANTINTEGRALTYPE_H
 #define KDEVPLATFORM_CONSTANTINTEGRALTYPE_H
@@ -25,97 +25,97 @@
 #include "integraltype.h"
 #include "typesystemdata.h"
 
-namespace KDevelop
-{
-
-template<typename T>
+namespace KDevelop {
+template <typename T>
 T constant_value(const qint64* realval)
 {
-  T value;
-  memcpy(&value, realval, sizeof(T));
-  return value;
+    T value;
+    memcpy(&value, realval, sizeof(T));
+    return value;
 }
 
-class KDEVPLATFORMLANGUAGE_EXPORT ConstantIntegralType : public IntegralType
+class KDEVPLATFORMLANGUAGE_EXPORT ConstantIntegralType
+    : public IntegralType
 {
 public:
-  ConstantIntegralType(const ConstantIntegralType& rhs);
+    ConstantIntegralType(const ConstantIntegralType& rhs);
 
-  explicit ConstantIntegralType(ConstantIntegralTypeData& data);
+    explicit ConstantIntegralType(ConstantIntegralTypeData& data);
 
-  explicit ConstantIntegralType(uint type = TypeNone);
+    explicit ConstantIntegralType(uint type = TypeNone);
 
-  typedef TypePtr<ConstantIntegralType> Ptr;
+    typedef TypePtr<ConstantIntegralType> Ptr;
 
     /**The types and modifiers are not changed!
-   * The values are casted internally to the local representation, so you can lose precision.
-   * */
-  template<class ValueType>
-  void setValue(ValueType value) {
-    if(AbstractType::modifiers() & UnsignedModifier)
-      setValueInternal<quint64>(value);
-    else if(IntegralType::dataType() == TypeFloat)
-      setValueInternal<float>(value);
-    else if(IntegralType::dataType() == TypeDouble)
-      setValueInternal<double>(value);
-    else
-      setValueInternal<qint64>(value);
-  }
-
-  /**
-   * For booleans, the value is 1 for true, and 0 for false.
-   * All signed values should be retrieved and set through value(),
-   *
-   * */
-  template<class ValueType>
-  ValueType value() const {
-    if(modifiers() & UnsignedModifier) {
-      return constant_value<quint64>(&d_func()->m_value);
-    } else if(dataType() == TypeFloat) {
-      return constant_value<float>(&d_func()->m_value);
-    } else if(dataType() == TypeDouble) {
-      return constant_value<double>(&d_func()->m_value);
-    } else {
-      return constant_value<qint64>(&d_func()->m_value);
+     * The values are casted internally to the local representation, so you can lose precision.
+     * */
+    template <class ValueType>
+    void setValue(ValueType value)
+    {
+        if (AbstractType::modifiers() & UnsignedModifier)
+            setValueInternal<quint64>(value);
+        else if (IntegralType::dataType() == TypeFloat)
+            setValueInternal<float>(value);
+        else if (IntegralType::dataType() == TypeDouble)
+            setValueInternal<double>(value);
+        else
+            setValueInternal<qint64>(value);
     }
-  }
 
-  qint64 plainValue() const;
+    /**
+     * For booleans, the value is 1 for true, and 0 for false.
+     * All signed values should be retrieved and set through value(),
+     *
+     * */
+    template <class ValueType>
+    ValueType value() const
+    {
+        if (modifiers() & UnsignedModifier) {
+            return constant_value<quint64>(&d_func()->m_value);
+        } else if (dataType() == TypeFloat) {
+            return constant_value<float>(&d_func()->m_value);
+        } else if (dataType() == TypeDouble) {
+            return constant_value<double>(&d_func()->m_value);
+        } else {
+            return constant_value<qint64>(&d_func()->m_value);
+        }
+    }
 
-  QString toString() const override;
+    qint64 plainValue() const;
 
-  QString valueAsString() const;
+    QString toString() const override;
 
-  bool equals(const KDevelop::AbstractType* rhs) const override;
+    QString valueAsString() const;
 
-  KDevelop::AbstractType* clone() const override;
+    bool equals(const KDevelop::AbstractType* rhs) const override;
 
-  uint hash() const override;
+    KDevelop::AbstractType* clone() const override;
 
-  enum {
-    Identity = 14
-  };
+    uint hash() const override;
 
-  typedef ConstantIntegralTypeData Data;
+    enum {
+        Identity = 14
+    };
+
+    typedef ConstantIntegralTypeData Data;
 
 protected:
-  TYPE_DECLARE_DATA(ConstantIntegralType);
+    TYPE_DECLARE_DATA(ConstantIntegralType);
 
 private:
-  //Sets the value without casting
-  template<class ValueType>
-  void setValueInternal(ValueType value);
+    //Sets the value without casting
+    template <class ValueType>
+    void setValueInternal(ValueType value);
 };
 
-template<>
-inline ConstantIntegralType* fastCast<ConstantIntegralType*>(AbstractType* from) {
-  if(!from || from->whichType() != KDevelop::AbstractType::TypeIntegral)
-    return nullptr;
-  else
-    return dynamic_cast<ConstantIntegralType*>(from);
+template <>
+inline ConstantIntegralType* fastCast<ConstantIntegralType*>(AbstractType* from)
+{
+    if (!from || from->whichType() != KDevelop::AbstractType::TypeIntegral)
+        return nullptr;
+    else
+        return dynamic_cast<ConstantIntegralType*>(from);
 }
-
 }
-
 
 #endif // KDEVPLATFORM_CONSTANTINTEGRALTYPE_H

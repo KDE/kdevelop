@@ -51,5 +51,3 @@ void TestHighlighting::testInitialization()
     CodeHighlighting highlighting(this);
     QVERIFY(highlighting.attributeForDepth(0));
 }
-
-

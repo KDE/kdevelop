@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "documentchangeset.h"
 
@@ -50,7 +50,6 @@
 #include <util/shellutils.h>
 
 namespace KDevelop {
-
 typedef QList<DocumentChangePointer> ChangesList;
 typedef QHash<IndexedString, ChangesList> ChangesHash;
 
@@ -79,8 +78,7 @@ public:
 };
 
 // Simple helpers to clear up code clutter
-namespace
-{
+namespace {
 inline bool changeIsValid(const DocumentChange& change, const QStringList& textLines)
 {
     return change.m_range.start() <= change.m_range.end() &&
@@ -99,14 +97,14 @@ inline bool duplicateChanges(const DocumentChangePointer& previous, const Docume
     return previous->m_range == current->m_range &&
            previous->m_newText == current->m_newText &&
            (previous->m_oldText == current->m_oldText ||
-           (previous->m_ignoreOldText && current->m_ignoreOldText));
+            (previous->m_ignoreOldText && current->m_ignoreOldText));
 }
 
 inline QString rangeText(const KTextEditor::Range& range, const QStringList& textLines)
 {
     QStringList ret;
     ret.reserve(range.end().line() - range.start().line() + 1);
-    for(int line = range.start().line(); line <= range.end().line(); ++line) {
+    for (int line = range.start().line(); line <= range.end().line(); ++line) {
         const QString lineText = textLines.at(line);
         int startColumn = 0;
         int endColumn = lineText.length();
@@ -118,6 +116,7 @@ inline QString rangeText(const KTextEditor::Range& range, const QStringList& tex
         }
         ret << lineText.mid(startColumn, endColumn - startColumn);
     }
+
     return ret.join(QLatin1Char('\n'));
 }
 
@@ -128,12 +127,10 @@ static QString printRange(const KTextEditor::Range& r)
                  r.start().line(), r.start().column(),
                  r.end().line(), r.end().column());
 }
-
-
 }
 
 DocumentChangeSet::DocumentChangeSet()
-: d(new DocumentChangeSetPrivate)
+    : d(new DocumentChangeSetPrivate)
 {
     d->replacePolicy = StopOnFailedChange;
     d->formatPolicy = AutoFormatChanges;
@@ -142,10 +139,9 @@ DocumentChangeSet::DocumentChangeSet()
 }
 
 DocumentChangeSet::DocumentChangeSet(const DocumentChangeSet& rhs)
-: d(new DocumentChangeSetPrivate(*rhs.d))
+    : d(new DocumentChangeSetPrivate(*rhs.d))
 {
 }
-
 
 DocumentChangeSet& DocumentChangeSet::operator=(const DocumentChangeSet& rhs)
 {
@@ -212,21 +208,20 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
         allFiles << file.toUrl();
     }
 
-    if (!KDevelop::ensureWritable(allFiles))
-    {
+    if (!KDevelop::ensureWritable(allFiles)) {
         return ChangeResult(QStringLiteral("some affected files are not writable"));
     }
 
     // rename files
     QHash<IndexedString, IndexedString>::const_iterator it = d->documentsRename.constBegin();
-    for(; it != d->documentsRename.constEnd(); ++it) {
+    for (; it != d->documentsRename.constEnd(); ++it) {
         QUrl url = it.key().toUrl();
         IProject* p = ICore::self()->projectController()->findProjectForUrl(url);
-        if(p) {
+        if (p) {
             QList<ProjectFileItem*> files = p->filesForPath(it.key());
-            if(!files.isEmpty()) {
+            if (!files.isEmpty()) {
                 ProjectBaseItem::RenameStatus renamed = files.first()->rename(it.value().str());
-                if(renamed == ProjectBaseItem::RenameOk) {
+                if (renamed == ProjectBaseItem::RenameOk) {
                     const QUrl newUrl = Path(Path(url).parent(), it.value().str()).toUrl();
                     if (url == oldActiveDoc) {
                         oldActiveDoc = newUrl;
@@ -243,14 +238,16 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
                         // adapt to new url
                         ChangesList::iterator itChange = value.begin();
                         ChangesList::iterator itEnd = value.end();
-                        for(; itChange != itEnd; ++itChange) {
+                        for (; itChange != itEnd; ++itChange) {
                             (*itChange)->m_document = idxNewDoc;
                         }
+
                         d->changes[idxNewDoc] = value;
                     }
                 } else {
                     ///FIXME: share code with project manager for the error code string representation
-                    return ChangeResult(i18n("Could not rename '%1' to '%2'", url.toDisplayString(QUrl::PreferLocalFile), it.value().str()));
+                    return ChangeResult(i18n("Could not rename '%1' to '%2'",
+                                             url.toDisplayString(QUrl::PreferLocalFile), it.value().str()));
                 }
             } else {
                 //TODO: do it outside the project management?
@@ -270,7 +267,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
 
     for (const IndexedString& file : files) {
         CodeRepresentation::Ptr repr = createCodeRepresentation(file);
-        if(!repr) {
+        if (!repr) {
             return ChangeResult(QStringLiteral("Could not create a Representation for %1").arg(file.str()));
         }
 
@@ -279,13 +276,13 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
         QList<DocumentChangePointer>& sortedChangesList(filteredSortedChanges[file]);
         {
             result = d->removeDuplicates(file, sortedChangesList);
-            if(!result)
+            if (!result)
                 return result;
         }
 
         {
             result = d->generateNewText(file, sortedChangesList, repr.data(), newTexts[file]);
-            if(!result)
+            if (!result)
                 return result;
         }
     }
@@ -297,9 +294,9 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
         oldTexts[file] = codeRepresentations[file]->text();
 
         result = d->replaceOldText(codeRepresentations[file].data(), newTexts[file], filteredSortedChanges[file]);
-        if(!result && d->replacePolicy == StopOnFailedChange) {
+        if (!result && d->replacePolicy == StopOnFailedChange) {
             //Revert all files
-            foreach(const IndexedString &revertFile, oldTexts.keys()) {
+            foreach (const IndexedString& revertFile, oldTexts.keys()) {
                 codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
             }
 
@@ -309,7 +306,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
 
     d->updateFiles();
 
-    if(d->activationPolicy == Activate) {
+    if (d->activationPolicy == Activate) {
         for (const IndexedString& file : files) {
             ICore::self()->documentController()->openDocument(file.toUrl());
         }
@@ -328,30 +325,31 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
                                                                          const ChangesList& sortedChangesList)
 {
     DynamicCodeRepresentation* dynamic = dynamic_cast<DynamicCodeRepresentation*>(repr);
-    if(dynamic) {
+    if (dynamic) {
         auto transaction = dynamic->makeEditTransaction();
         //Replay the changes one by one
 
-        for(int pos = sortedChangesList.size()-1; pos >= 0; --pos) {
+        for (int pos = sortedChangesList.size() - 1; pos >= 0; --pos) {
             const DocumentChange& change(*sortedChangesList[pos]);
-            if(!dynamic->replace(change.m_range, change.m_oldText, change.m_newText, change.m_ignoreOldText))
-            {
-                QString warningString = i18nc("Inconsistent change in <filename> between <range>, found <oldText> (encountered <foundText>) -> <newText>",
-                                              "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\""
-                    , change.m_document.str()
-                    , printRange(change.m_range)
-                    , change.m_oldText
-                    , dynamic->rangeText(change.m_range)
-                    , change.m_newText);
+            if (!dynamic->replace(change.m_range, change.m_oldText, change.m_newText, change.m_ignoreOldText)) {
+                QString warningString = i18nc(
+                    "Inconsistent change in <filename> between <range>, found <oldText> (encountered <foundText>) -> <newText>",
+                    "Inconsistent change in %1 between %2, found %3 (encountered \"%4\") -> \"%5\"",
+                    change.m_document.str(),
+                    printRange(change.m_range),
+                    change.m_oldText,
+                    dynamic->rangeText(change.m_range),
+                    change.m_newText);
 
-                if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
+                if (replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
                     qCWarning(LANGUAGE) << warningString;
-                } else if(replacePolicy == DocumentChangeSet::StopOnFailedChange) {
+                } else if (replacePolicy == DocumentChangeSet::StopOnFailedChange) {
                     return DocumentChangeSet::ChangeResult(warningString);
                 }
                 //If set to ignore failed changes just continue with the others
             }
         }
+
         return DocumentChangeSet::ChangeResult::successfulResult();
     }
 
@@ -359,7 +357,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
     if (!repr->setText(newText)) {
         QString warningString = i18n("Could not replace text in the document: %1",
                                      sortedChangesList.begin()->data()->m_document.str());
-        if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
+        if (replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
             qCWarning(LANGUAGE) << warningString;
         }
 
@@ -369,14 +367,13 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
     return DocumentChangeSet::ChangeResult::successfulResult();
 }
 
-DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const IndexedString & file,
+DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const IndexedString& file,
                                                                           ChangesList& sortedChanges,
-                                                                          const CodeRepresentation * repr,
-                                                                          QString & output)
+                                                                          const CodeRepresentation* repr,
+                                                                          QString& output)
 {
-
     ISourceFormatter* formatter = nullptr;
-    if(ICore::self()) {
+    if (ICore::self()) {
         formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
     }
 
@@ -388,31 +385,31 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
     QVector<int> removedLines;
 
-    for(int pos = sortedChanges.size()-1; pos >= 0; --pos) {
+    for (int pos = sortedChanges.size() - 1; pos >= 0; --pos) {
         DocumentChange& change(*sortedChanges[pos]);
         QString encountered;
-        if(changeIsValid(change, textLines)  && //We demand this, although it should be fixed
-            ((encountered = rangeText(change.m_range, textLines)) == change.m_oldText || change.m_ignoreOldText))
-        {
+        if (changeIsValid(change, textLines)  && //We demand this, although it should be fixed
+            ((encountered = rangeText(change.m_range, textLines)) == change.m_oldText || change.m_ignoreOldText)) {
             ///Problem: This does not work if the other changes significantly alter the context @todo Use the changed context
-            QString leftContext = QStringList(textLines.mid(0, change.m_range.start().line()+1)).join(QLatin1Char('\n'));
+            QString leftContext = QStringList(textLines.mid(0, change.m_range.start().line() + 1)).join(QLatin1Char(
+                                                                                                            '\n'));
             leftContext.chop(textLines[change.m_range.start().line()].length() - change.m_range.start().column());
 
-            QString rightContext = QStringList(textLines.mid(change.m_range.end().line())).join(QLatin1Char('\n')).mid(change.m_range.end().column());
+            QString rightContext = QStringList(textLines.mid(change.m_range.end().line())).join(QLatin1Char('\n')).mid(
+                change.m_range.end().column());
 
-            if(formatter && (formatPolicy == DocumentChangeSet::AutoFormatChanges
-                                || formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation))
-            {
+            if (formatter && (formatPolicy == DocumentChangeSet::AutoFormatChanges
+                              || formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation)) {
                 QString oldNewText = change.m_newText;
                 change.m_newText = formatter->formatSource(change.m_newText, url, mime, leftContext, rightContext);
 
-                if(formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation) {
+                if (formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation) {
                     // Reproduce the previous indentation
                     QStringList oldLines = oldNewText.split(QLatin1Char('\n'));
                     QStringList newLines = change.m_newText.split(QLatin1Char('\n'));
 
-                    if(oldLines.size() == newLines.size()) {
-                        for(int line = 0; line < newLines.size(); ++line) {
+                    if (oldLines.size() == newLines.size()) {
+                        for (int line = 0; line < newLines.size(); ++line) {
                             // Keep the previous indentation
                             QString oldIndentation;
                             for (int a = 0; a < oldLines[line].size(); ++a) {
@@ -425,8 +422,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
                             int newIndentationLength = 0;
 
-                            for(int a = 0; a < newLines[line].size(); ++a) {
-                                if(newLines[line][a].isSpace()) {
+                            for (int a = 0; a < newLines[line].size(); ++a) {
+                                if (newLines[line][a].isSpace()) {
                                     newIndentationLength = a;
                                 } else {
                                     break;
@@ -435,9 +432,11 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
                             newLines[line].replace(0, newIndentationLength, oldIndentation);
                         }
+
                         change.m_newText = newLines.join(QLatin1Char('\n'));
                     } else {
-                        qCDebug(LANGUAGE) << "Cannot keep the indentation because the line count has changed" << oldNewText;
+                        qCDebug(LANGUAGE) << "Cannot keep the indentation because the line count has changed" <<
+                            oldNewText;
                     }
                 }
             }
@@ -446,7 +445,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
             if (change.m_range.start().line() == change.m_range.end().line()) {
                 // simply replace existing line content
                 line.replace(change.m_range.start().column(),
-                             change.m_range.end().column()-change.m_range.start().column(),
+                             change.m_range.end().column() - change.m_range.start().column(),
                              change.m_newText);
             } else {
                 // replace first line contents
@@ -461,20 +460,20 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                     removedLines << i;
                 }
             }
-        }else{
+        } else {
             QString warningString = i18nc("Inconsistent change in <document> at <range>"
-                                         " = <oldText> (encountered <encountered>) -> <newText>",
-                                         "Inconsistent change in %1 at %2"
-                                         " = \"%3\"(encountered \"%4\") -> \"%5\""
-                                            , file.str()
-                                            , printRange(change.m_range)
-                                            , change.m_oldText
-                                            , encountered
-                                            , change.m_newText);
+                                          " = <oldText> (encountered <encountered>) -> <newText>",
+                                          "Inconsistent change in %1 at %2"
+                                          " = \"%3\"(encountered \"%4\") -> \"%5\"",
+                                          file.str(),
+                                          printRange(change.m_range),
+                                          change.m_oldText,
+                                          encountered,
+                                          change.m_newText);
 
-            if(replacePolicy == DocumentChangeSet::IgnoreFailedChange) {
+            if (replacePolicy == DocumentChangeSet::IgnoreFailedChange) {
                 //Just don't do the replacement
-            } else if(replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
+            } else if (replacePolicy == DocumentChangeSet::WarnOnFailedChange) {
                 qCWarning(LANGUAGE) << warningString;
             } else {
                 return DocumentChangeSet::ChangeResult(warningString, sortedChanges[pos]);
@@ -485,7 +484,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     if (!removedLines.isEmpty()) {
         int offset = 0;
         std::sort(removedLines.begin(), removedLines.end());
-        foreach(int l, removedLines) {
+        foreach (int l, removedLines) {
             textLines.removeAt(l - offset);
             ++offset;
         }
@@ -501,53 +500,52 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
     typedef QMultiMap<KTextEditor::Cursor, DocumentChangePointer> ChangesMap;
     ChangesMap sortedChanges;
 
-    foreach(const DocumentChangePointer &change, changes[file]) {
+    foreach (const DocumentChangePointer& change, changes[file]) {
         sortedChanges.insert(change->m_range.end(), change);
     }
 
     //Remove duplicates
     ChangesMap::iterator previous = sortedChanges.begin();
-    for(ChangesMap::iterator it = ++sortedChanges.begin(); it != sortedChanges.end(); ) {
-        if(( *previous ) && ( *previous )->m_range.end() > (*it)->m_range.start()) {
+    for (ChangesMap::iterator it = ++sortedChanges.begin(); it != sortedChanges.end();) {
+        if ((*previous) && (*previous)->m_range.end() > (*it)->m_range.start()) {
             //intersection
-            if(duplicateChanges(( *previous ), *it)) {
+            if (duplicateChanges((*previous), *it)) {
                 //duplicate, remove one
                 it = sortedChanges.erase(it);
                 continue;
             }
-
             //When two changes contain each other, and the container change is set to ignore old text, then it should be safe to
             //just ignore the contained change, and apply the bigger change
-            else if((*it)->m_range.contains(( *previous )->m_range) && (*it)->m_ignoreOldText  ) {
-                qCDebug(LANGUAGE) << "Removing change: " << ( *previous )->m_oldText << "->" << ( *previous )->m_newText
-                         << ", because it is contained by change: " << (*it)->m_oldText << "->" << (*it)->m_newText;
+            else if ((*it)->m_range.contains((*previous)->m_range) && (*it)->m_ignoreOldText) {
+                qCDebug(LANGUAGE) << "Removing change: " << (*previous)->m_oldText << "->" << (*previous)->m_newText
+                                  << ", because it is contained by change: " << (*it)->m_oldText << "->" <<
+                (*it)->m_newText;
                 sortedChanges.erase(previous);
             }
             //This case is for when both have the same end, either of them could be the containing range
-            else if((*previous)->m_range.contains((*it)->m_range) && (*previous)->m_ignoreOldText  ) {
+            else if ((*previous)->m_range.contains((*it)->m_range) && (*previous)->m_ignoreOldText) {
                 qCDebug(LANGUAGE) << "Removing change: " << (*it)->m_oldText << "->" << (*it)->m_newText
-                         << ", because it is contained by change: " << ( *previous )->m_oldText
-                         << "->" << ( *previous )->m_newText;
+                                  << ", because it is contained by change: " << (*previous)->m_oldText
+                                  << "->" << (*previous)->m_newText;
                 it = sortedChanges.erase(it);
                 continue;
             } else {
                 return DocumentChangeSet::ChangeResult(
-                       i18nc("Inconsistent change-request at <document>:"
-                             "intersecting changes: "
-                             "<previous-oldText> -> <previous-newText> @<range> & "
-                             "<new-oldText> -> <new-newText> @<range>",
-                               "Inconsistent change-request at %1; "
-                               "intersecting changes: "
-                               "\"%2\"->\"%3\"@%4 & \"%5\"->\"%6\"@%7 "
-                        , file.str()
-                        , ( *previous )->m_oldText
-                        , ( *previous )->m_newText
-                        , printRange(( *previous )->m_range)
-                        , (*it)->m_oldText
-                        , (*it)->m_newText
-                        , printRange((*it)->m_range)));
+                    i18nc("Inconsistent change-request at <document>:"
+                          "intersecting changes: "
+                          "<previous-oldText> -> <previous-newText> @<range> & "
+                          "<new-oldText> -> <new-newText> @<range>",
+                          "Inconsistent change-request at %1; "
+                          "intersecting changes: "
+                          "\"%2\"->\"%3\"@%4 & \"%5\"->\"%6\"@%7 ",
+                          file.str(),
+                          (*previous)->m_oldText,
+                          (*previous)->m_newText,
+                          printRange((*previous)->m_range),
+                          (*it)->m_oldText,
+                          (*it)->m_newText,
+                          printRange((*it)->m_range)));
             }
-
         }
         previous = it;
         ++it;
@@ -560,30 +558,30 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
 void DocumentChangeSetPrivate::updateFiles()
 {
     ModificationRevisionSet::clearCache();
-    foreach(const IndexedString& file, changes.keys()) {
+    foreach (const IndexedString& file, changes.keys()) {
         ModificationRevision::clearModificationCache(file);
     }
 
-    if(updatePolicy != DocumentChangeSet::NoUpdate && ICore::self())
-    {
+    if (updatePolicy != DocumentChangeSet::NoUpdate && ICore::self()) {
         // The active document should be updated first, so that the user sees the results instantly
-        if(IDocument* activeDoc = ICore::self()->documentController()->activeDocument()) {
+        if (IDocument* activeDoc = ICore::self()->documentController()->activeDocument()) {
             ICore::self()->languageController()->backgroundParser()->addDocument(IndexedString(activeDoc->url()));
         }
 
         // If there are currently open documents that now need an update, update them too
-        foreach(const IndexedString& doc, ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
+        foreach (const IndexedString& doc,
+                 ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
             DUChainReadLocker lock(DUChain::lock());
             TopDUContext* top = DUChainUtils::standardContextForUrl(doc.toUrl(), true);
-            if((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
+            if ((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
                 lock.unlock();
                 ICore::self()->languageController()->backgroundParser()->addDocument(doc);
             }
         }
 
         // Eventually update _all_ affected files
-        foreach(const IndexedString &file, changes.keys()) {
-            if(!file.toUrl().isValid()) {
+        foreach (const IndexedString& file, changes.keys()) {
+            if (!file.toUrl().isValid()) {
                 qCWarning(LANGUAGE) << "Trying to apply changes to an invalid document";
                 continue;
             }
@@ -592,5 +590,4 @@ void DocumentChangeSetPrivate::updateFiles()
         }
     }
 }
-
 }

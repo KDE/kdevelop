@@ -22,8 +22,7 @@
 
 #include <QExplicitlySharedDataPointer>
 
-namespace KDevelop
-{
+namespace KDevelop {
 class COMPILE_ERROR_Ast_Top_Node_Was_Not_Defined;
 
 /**
@@ -33,18 +32,17 @@ class COMPILE_ERROR_Ast_Top_Node_Was_Not_Defined;
  * in a KDevelop::TopDUContext, and passed over to Refactoring plugins so they can manipulate
  * their language-specific AstChangeSets.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT IAstContainer : public QSharedData
+class KDEVPLATFORMLANGUAGE_EXPORT IAstContainer
+    : public QSharedData
 {
-  public:
+public:
     virtual ~IAstContainer();
     typedef QExplicitlySharedDataPointer<IAstContainer> Ptr;
-    
+
     /// Derived classes must redifine this typedef for CodeGenerator to work
     /// with this AST
     typedef COMPILE_ERROR_Ast_Top_Node_Was_Not_Defined TopAstNode;
 };
-
 }
-
 
 #endif // KDEVPLATFORM_IASTCONTAINER_H

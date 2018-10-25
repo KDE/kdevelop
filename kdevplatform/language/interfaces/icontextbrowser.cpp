@@ -25,5 +25,4 @@ using namespace KDevelop;
 
 IContextBrowser::~IContextBrowser()
 {
-
 }

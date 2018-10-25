@@ -24,7 +24,8 @@
 
 #include <QObject>
 
-class TestHighlighting : public QObject
+class TestHighlighting
+    : public QObject
 {
     Q_OBJECT
 

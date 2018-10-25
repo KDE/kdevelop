@@ -1,23 +1,23 @@
 /*
-* This file is part of KDevelop
-*
-* Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Library General Public License as
-* published by the Free Software Foundation; either version 2 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ * This file is part of KDevelop
+ *
+ * Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #ifndef KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
 #define KDEVPLATFORM_DOCUMENTCHANGETRACKER_H
@@ -31,16 +31,13 @@
 
 #include <KTextEditor/MovingRange>
 
-namespace KTextEditor
-{
+namespace KTextEditor {
 class Document;
 class MovingRange;
 class MovingInterface;
 }
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class DocumentChangeTracker;
 /**
  * These objects belongs to the foreground, and thus can only be accessed from background threads if the foreground lock is held.
@@ -52,7 +49,9 @@ class RevisionLockerAndClearerPrivate;
  * Helper class that locks a revision, and clears it on its destruction within the foreground thread.
  * Just delete it using deleteLater().
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearer : public QSharedData {
+class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearer
+    : public QSharedData
+{
 public:
     typedef QExplicitlySharedDataPointer<RevisionLockerAndClearer> Ptr;
 
@@ -78,18 +77,20 @@ public:
      * If a zero target revision is given, the transformation is done to the current document revision.
      * */
     CursorInRevision transformToRevision(const CursorInRevision& cursor, const Ptr& to,
-                                         KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+                                         KTextEditor::MovingCursor::InsertBehavior behavior =
+                                             KTextEditor::MovingCursor::StayOnInsert) const;
 
     /**
-      * Transforms the given range from this revision into the current revision.
-      */
+     * Transforms the given range from this revision into the current revision.
+     */
     KTextEditor::Range transformToCurrentRevision(const RangeInRevision& range) const;
 
     /**
-    * Transforms the given cursor from this revision into the current revision.
-    */
+     * Transforms the given cursor from this revision into the current revision.
+     */
     KTextEditor::Cursor transformToCurrentRevision(const CursorInRevision& cursor,
-                                            KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+                                                   KTextEditor::MovingCursor::InsertBehavior behavior =
+                                                       KTextEditor::MovingCursor::StayOnInsert) const;
 
     /**
      * Transform ranges from the given document revision @p from to the this one.
@@ -100,19 +101,22 @@ public:
      * Transform ranges from the given document revision @p from to the this one.
      * If a zero @p from revision is given, the transformation is done from the current document revision.
      * */
-    CursorInRevision transformFromRevision(const CursorInRevision& cursor, const Ptr& from = Ptr(),
-                                           KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+    CursorInRevision transformFromRevision(const CursorInRevision& cursor,
+                                           const Ptr& from = Ptr(),
+                                           KTextEditor::MovingCursor::InsertBehavior behavior =
+                                               KTextEditor::MovingCursor::StayOnInsert) const;
 
     /**
-    * Transforms the given range from the current revision into this revision.
-    */
+     * Transforms the given range from the current revision into this revision.
+     */
     RangeInRevision transformFromCurrentRevision(const KTextEditor::Range& range) const;
 
     /**
-    * Transforms the given cursor from the current revision into this revision.
-    */
+     * Transforms the given cursor from the current revision into this revision.
+     */
     CursorInRevision transformFromCurrentRevision(const KTextEditor::Cursor& cursor,
-                                                  KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+                                                  KTextEditor::MovingCursor::InsertBehavior behavior =
+                                                      KTextEditor::MovingCursor::StayOnInsert) const;
 
 private:
     friend class DocumentChangeTracker;
@@ -122,18 +126,20 @@ private:
 
 typedef RevisionLockerAndClearer::Ptr RevisionReference;
 
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeTracker : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeTracker
+    : public QObject
 {
     Q_OBJECT
+
 public:
-    explicit DocumentChangeTracker( KTextEditor::Document* document );
+    explicit DocumentChangeTracker(KTextEditor::Document* document);
     ~DocumentChangeTracker() override;
 
     /**
      * Completions of the users current edits that are supposed to complete
      * not-yet-finished statements, like for example for-loops for parsing.
      * */
-    virtual QList<QPair<KTextEditor::Range, QString> > completions() const;
+    virtual QList<QPair<KTextEditor::Range, QString>> completions() const;
 
     /**
      * Resets the tracking to the current revision.
@@ -198,15 +204,21 @@ public:
      * @note It is much less error-prone to use RevisionReference->transformToRevision() and RevisionReference->transformFromRevision() directly.
      * */
     RangeInRevision transformBetweenRevisions(RangeInRevision range, qint64 fromRevision, qint64 toRevision) const;
-    CursorInRevision transformBetweenRevisions(CursorInRevision cursor, qint64 fromRevision, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+    CursorInRevision transformBetweenRevisions(CursorInRevision cursor, qint64 fromRevision, qint64 toRevision,
+                                               KTextEditor::MovingCursor::InsertBehavior behavior =
+                                                   KTextEditor::MovingCursor::StayOnInsert) const;
 
     KTextEditor::Range transformToCurrentRevision(RangeInRevision range, qint64 fromRevision) const;
-    KTextEditor::Cursor transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+    KTextEditor::Cursor transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision,
+                                                   KTextEditor::MovingCursor::InsertBehavior behavior =
+                                                       KTextEditor::MovingCursor::StayOnInsert) const;
 
     /// Transform the range from the current revision into the given one
     RangeInRevision transformToRevision(KTextEditor::Range range, qint64 toRevision) const;
     /// Transform the cursor from the current revision into the given one
-    CursorInRevision transformToRevision(KTextEditor::Cursor cursor, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior = KTextEditor::MovingCursor::StayOnInsert) const;
+    CursorInRevision transformToRevision(KTextEditor::Cursor cursor, qint64 toRevision,
+                                         KTextEditor::MovingCursor::InsertBehavior behavior =
+                                             KTextEditor::MovingCursor::StayOnInsert) const;
 
 protected:
     RevisionReference m_revisionAtLastReset;
@@ -220,16 +232,19 @@ protected:
     KDevelop::IndexedString m_url;
 
     void updateChangedRange(int delay);
-    int recommendedDelay(KTextEditor::Document* doc, const KTextEditor::Range& range, const QString& text, bool removal);
+    int recommendedDelay(KTextEditor::Document* doc, const KTextEditor::Range& range, const QString& text,
+                         bool removal);
+
 public Q_SLOTS:
     void textInserted(KTextEditor::Document* document, const KTextEditor::Cursor& position, const QString& inserted);
     void textRemoved(KTextEditor::Document* document, const KTextEditor::Range& range, const QString& oldText);
     void lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position);
     void lineUnwrapped(KTextEditor::Document* document, int line);
 
-    void documentDestroyed( QObject* );
-    void aboutToInvalidateMovingInterfaceContent ( KTextEditor::Document* document );
-    void documentSavedOrUploaded(KTextEditor::Document*,bool);
+    void documentDestroyed(QObject*);
+    void aboutToInvalidateMovingInterfaceContent (KTextEditor::Document* document);
+    void documentSavedOrUploaded(KTextEditor::Document*, bool);
+
 private:
     bool checkMergeTokens(const KTextEditor::Range& range);
 
@@ -239,6 +254,5 @@ private:
 
     QMap<qint64, int> m_revisionLocks;
 };
-
 }
 #endif

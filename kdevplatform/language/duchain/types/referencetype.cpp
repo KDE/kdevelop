@@ -16,7 +16,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "referencetype.h"
 
@@ -27,37 +27,39 @@
 #include "integraltype.h"
 #include "structuretype.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 REGISTER_TYPE(ReferenceType);
 
-ReferenceType::ReferenceType(const ReferenceType& rhs) : AbstractType(copyData<ReferenceType>(*rhs.d_func())) {
+ReferenceType::ReferenceType(const ReferenceType& rhs) : AbstractType(copyData<ReferenceType>(*rhs.d_func()))
+{
 }
 
-ReferenceType::ReferenceType(ReferenceTypeData& data) : AbstractType(data) {
+ReferenceType::ReferenceType(ReferenceTypeData& data) : AbstractType(data)
+{
 }
 
-AbstractType* ReferenceType::clone() const {
-  return new ReferenceType(*this);
+AbstractType* ReferenceType::clone() const
+{
+    return new ReferenceType(*this);
 }
 
 bool ReferenceType::equals(const AbstractType* _rhs) const
 {
-  if( this == _rhs )
-    return true;
+    if (this == _rhs)
+        return true;
 
-  if (!AbstractType::equals(_rhs))
-    return false;
+    if (!AbstractType::equals(_rhs))
+        return false;
 
-  Q_ASSERT(fastCast<const ReferenceType*>(_rhs));
+    Q_ASSERT(fastCast<const ReferenceType*>(_rhs));
 
-  const ReferenceType* rhs = static_cast<const ReferenceType*>(_rhs);
+    const ReferenceType* rhs = static_cast<const ReferenceType*>(_rhs);
 
-  return d_func()->m_baseType == rhs->d_func()->m_baseType;
+    return d_func()->m_baseType == rhs->d_func()->m_baseType;
 }
 
 ReferenceType::ReferenceType()
-  : AbstractType(createData<ReferenceType>())
+    : AbstractType(createData<ReferenceType>())
 {
 }
 
@@ -65,58 +67,57 @@ ReferenceType::~ReferenceType()
 {
 }
 
-AbstractType::Ptr ReferenceType::baseType () const
+AbstractType::Ptr ReferenceType::baseType() const
 {
-  return d_func()->m_baseType.abstractType();
+    return d_func()->m_baseType.abstractType();
 }
 
 void ReferenceType::setBaseType(const AbstractType::Ptr& type)
 {
-  d_func_dynamic()->m_baseType = IndexedType(type);
+    d_func_dynamic()->m_baseType = IndexedType(type);
 }
 
 bool ReferenceType::isRValue() const
 {
-  return d_func()->m_isRValue;
+    return d_func()->m_isRValue;
 }
 
 void ReferenceType::setIsRValue(bool isRValue)
 {
-  d_func_dynamic()->m_isRValue = isRValue;
+    d_func_dynamic()->m_isRValue = isRValue;
 }
 
-void ReferenceType::accept0 (TypeVisitor *v) const
+void ReferenceType::accept0(TypeVisitor* v) const
 {
-  if (v->visit (this))
-    acceptType (d_func()->m_baseType.abstractType(), v);
+    if (v->visit(this))
+        acceptType(d_func()->m_baseType.abstractType(), v);
 
-  v->endVisit (this);
+    v->endVisit(this);
 }
 
-void ReferenceType::exchangeTypes( TypeExchanger* exchanger )
+void ReferenceType::exchangeTypes(TypeExchanger* exchanger)
 {
-  d_func_dynamic()->m_baseType = IndexedType(exchanger->exchange(d_func()->m_baseType.abstractType()));
+    d_func_dynamic()->m_baseType = IndexedType(exchanger->exchange(d_func()->m_baseType.abstractType()));
 }
 
 QString ReferenceType::toString() const
 {
-  AbstractType::Ptr base = baseType();
-  QString baseString = (base ? base->toString() : QStringLiteral("<notype>"));
-  const QString ampersands = d_func()->m_isRValue ? QStringLiteral("&&") : QStringLiteral("&");
-  if(base.cast<IntegralType>() || base.cast<StructureType>())
-    return AbstractType::toString(false) + baseString + ampersands;
-  else
-    return baseString + AbstractType::toString(true) + ampersands;
+    AbstractType::Ptr base = baseType();
+    QString baseString = (base ? base->toString() : QStringLiteral("<notype>"));
+    const QString ampersands = d_func()->m_isRValue ? QStringLiteral("&&") : QStringLiteral("&");
+    if (base.cast<IntegralType>() || base.cast<StructureType>())
+        return AbstractType::toString(false) + baseString + ampersands;
+    else
+        return baseString + AbstractType::toString(true) + ampersands;
 }
 
 AbstractType::WhichType ReferenceType::whichType() const
 {
-  return TypeReference;
+    return TypeReference;
 }
 
 uint ReferenceType::hash() const
 {
-  return KDevHash(AbstractType::hash()) << d_func()->m_baseType.hash() << d_func()->m_isRValue;
+    return KDevHash(AbstractType::hash()) << d_func()->m_baseType.hash() << d_func()->m_isRValue;
 }
-
 }

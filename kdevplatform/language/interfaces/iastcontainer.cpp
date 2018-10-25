@@ -18,5 +18,6 @@
 
 using namespace KDevelop;
 
-IAstContainer::~IAstContainer() {
+IAstContainer::~IAstContainer()
+{
 }

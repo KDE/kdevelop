@@ -1,24 +1,24 @@
 /*
-* This file is part of KDevelop
-*
-* Copyright 2006 Adam Treat <treat@kde.org>
-* Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Library General Public License as
-* published by the Free Software Foundation; either version 2 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ * This file is part of KDevelop
+ *
+ * Copyright 2006 Adam Treat <treat@kde.org>
+ * Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #include "parsejob.h"
 
@@ -50,28 +50,25 @@
 #include <interfaces/icodehighlighting.h>
 #include <duchain/problem.h>
 
-
 using namespace KTextEditor;
 
 static QMutex minimumFeaturesMutex;
-static QHash<KDevelop::IndexedString, QList<KDevelop::TopDUContext::Features> > staticMinimumFeatures;
+static QHash<KDevelop::IndexedString, QList<KDevelop::TopDUContext::Features>> staticMinimumFeatures;
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class ParseJobPrivate
 {
 public:
 
     ParseJobPrivate(const IndexedString& url_, ILanguageSupport* languageSupport_) :
-          url( url_ )
-        , languageSupport( languageSupport_ )
-        , abortRequested( 0 )
-        , hasReadContents( false )
-        , aborted( false )
-        , features( TopDUContext::VisibleDeclarationsAndContexts )
-        , parsePriority( 0 )
-        , sequentialProcessingFlags( ParseJob::IgnoresSequentialProcessing )
+        url(url_)
+        , languageSupport(languageSupport_)
+        , abortRequested(0)
+        , hasReadContents(false)
+        , aborted(false)
+        , features(TopDUContext::VisibleDeclarationsAndContexts)
+        , parsePriority(0)
+        , sequentialProcessingFlags(ParseJob::IgnoresSequentialProcessing)
     {
     }
 
@@ -100,18 +97,20 @@ public:
     ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
 };
 
-ParseJob::ParseJob( const IndexedString& url, KDevelop::ILanguageSupport* languageSupport )
-        : ThreadWeaver::Sequence(),
-        d(new ParseJobPrivate(url, languageSupport))
+ParseJob::ParseJob(const IndexedString& url, KDevelop::ILanguageSupport* languageSupport)
+    : ThreadWeaver::Sequence()
+    , d(new ParseJobPrivate(url, languageSupport))
 {
 }
 
 ParseJob::~ParseJob()
 {
     typedef QPointer<QObject> QObjectPointer;
-    foreach(const QObjectPointer &p, d->notify) {
-        if(p) {
-            QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection, Q_ARG(KDevelop::IndexedString, d->url), Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
+    foreach (const QObjectPointer& p, d->notify) {
+        if (p) {
+            QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection,
+                                      Q_ARG(KDevelop::IndexedString, d->url),
+                                      Q_ARG(KDevelop::ReferencedTopDUContext, d->duContext));
         }
     }
 }
@@ -170,18 +169,18 @@ bool ParseJob::hasStaticMinimumFeatures()
 TopDUContext::Features ParseJob::staticMinimumFeatures(const IndexedString& url)
 {
     QMutexLocker lock(&minimumFeaturesMutex);
-    TopDUContext::Features features = (TopDUContext::Features)0;
+    TopDUContext::Features features = ( TopDUContext::Features )0;
 
-    if(::staticMinimumFeatures.contains(url))
-        foreach(const TopDUContext::Features f, ::staticMinimumFeatures[url])
-            features = (TopDUContext::Features)(features | f);
+    if (::staticMinimumFeatures.contains(url))
+        foreach (const TopDUContext::Features f, ::staticMinimumFeatures[url])
+            features = ( TopDUContext::Features )(features | f);
 
     return features;
 }
 
 TopDUContext::Features ParseJob::minimumFeatures() const
 {
-    return (TopDUContext::Features)(d->features | staticMinimumFeatures(d->url));
+    return ( TopDUContext::Features )(d->features | staticMinimumFeatures(d->url));
 }
 
 void ParseJob::setDuChain(const ReferencedTopDUContext& duChain)
@@ -215,16 +214,18 @@ void ParseJob::setNotifyWhenReady(const QVector<QPointer<QObject>>& notify)
     d->notify = notify;
 }
 
-void ParseJob::setStaticMinimumFeatures(const IndexedString& url, TopDUContext::Features features) {
+void ParseJob::setStaticMinimumFeatures(const IndexedString& url, TopDUContext::Features features)
+{
     QMutexLocker lock(&minimumFeaturesMutex);
     ::staticMinimumFeatures[url].append(features);
 }
 
-void ParseJob::unsetStaticMinimumFeatures(const IndexedString& url, TopDUContext::Features features) {
+void ParseJob::unsetStaticMinimumFeatures(const IndexedString& url, TopDUContext::Features features)
+{
     QMutexLocker lock(&minimumFeaturesMutex);
     ::staticMinimumFeatures[url].removeOne(features);
-    if(::staticMinimumFeatures[url].isEmpty())
-      ::staticMinimumFeatures.remove(url);
+    if (::staticMinimumFeatures[url].isEmpty())
+        ::staticMinimumFeatures.remove(url);
 }
 
 KDevelop::ProblemPointer ParseJob::readContents()
@@ -233,14 +234,14 @@ KDevelop::ProblemPointer ParseJob::readContents()
     d->hasReadContents = true;
 
     QString localFile(document().toUrl().toLocalFile());
-    QFileInfo fileInfo( localFile );
+    QFileInfo fileInfo(localFile);
 
     QDateTime lastModified = fileInfo.lastModified();
 
     d->tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(document());
 
     //Try using an artificial code-representation, which overrides everything else
-    if(artificialCodeRepresentationExists(document())) {
+    if (artificialCodeRepresentationExists(document())) {
         CodeRepresentation::Ptr repr = createCodeRepresentation(document());
         d->contents.contents = repr->text().toUtf8();
         qCDebug(LANGUAGE) << "took contents for " << document().str() << " from artificial code-representation";
@@ -248,11 +249,9 @@ KDevelop::ProblemPointer ParseJob::readContents()
     }
 
     bool hadTracker = false;
-    if(d->tracker)
-    {
+    if (d->tracker) {
         ForegroundLock lock;
-        if(DocumentChangeTracker* t = d->tracker.data())
-        {
+        if (DocumentChangeTracker* t = d->tracker.data()) {
             // The file is open in an editor
             d->previousRevision = t->revisionAtLastReset();
 
@@ -260,7 +259,8 @@ KDevelop::ProblemPointer ParseJob::readContents()
             Q_ASSERT(t->revisionAtLastReset());
 
             d->contents.contents = t->document()->text().toUtf8();
-            d->contents.modification = KDevelop::ModificationRevision( lastModified, t->revisionAtLastReset()->revision() );
+            d->contents.modification =
+                KDevelop::ModificationRevision(lastModified, t->revisionAtLastReset()->revision());
 
             d->revision = t->acquireRevision(d->contents.modification.revision);
             hadTracker = true;
@@ -271,7 +271,8 @@ KDevelop::ProblemPointer ParseJob::readContents()
 
         static const int maximumFileSize = 5 * 1024 * 1024; // 5 MB
         if (fileInfo.size() > maximumFileSize) {
-            QStringList paths = QStandardPaths::standardLocations(QStandardPaths::StandardLocation::GenericDataLocation);
+            QStringList paths =
+                QStandardPaths::standardLocations(QStandardPaths::StandardLocation::GenericDataLocation);
 
             bool internalFile = false;
             QString internalFilePath = fileInfo.canonicalPath();
@@ -279,7 +280,8 @@ KDevelop::ProblemPointer ParseJob::readContents()
             foreach (const QString path, paths) {
                 QDir dataPath = QDir(path);
                 if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev"))) {
-                    qCDebug(LANGUAGE) << "Found internal file " << fileInfo.absoluteFilePath() << " in " << path << ". Ignoring file size limit!";
+                    qCDebug(LANGUAGE) << "Found internal file " << fileInfo.absoluteFilePath() << " in " << path <<
+                        ". Ignoring file size limit!";
                     internalFile = true;
                     break;
                 }
@@ -290,7 +292,7 @@ KDevelop::ProblemPointer ParseJob::readContents()
 
                 KDevelop::ProblemPointer p(new Problem());
                 p->setSource(IProblem::Disk);
-                p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile ));
+                p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile));
                 p->setExplanation(i18nc("%1: file size, %2: limit file size",
                                         "The file is %1 and exceeds the limit of %2.",
                                         f.formatByteSize(fileInfo.size()),
@@ -300,29 +302,28 @@ KDevelop::ProblemPointer ParseJob::readContents()
                 return p;
             }
         }
-        QFile file( localFile );
+        QFile file(localFile);
 
-        if ( !file.open( QIODevice::ReadOnly ) )
-        {
+        if (!file.open(QIODevice::ReadOnly)) {
             KDevelop::ProblemPointer p(new Problem());
             p->setSource(IProblem::Disk);
-            p->setDescription(i18n( "Could not open file '%1'", localFile ));
+            p->setDescription(i18n("Could not open file '%1'", localFile));
             switch (file.error()) {
-              case QFile::ReadError:
-                  p->setExplanation(i18n("File could not be read from disk."));
-                  break;
-              case QFile::OpenError:
-                  p->setExplanation(i18n("File could not be opened."));
-                  break;
-              case QFile::PermissionsError:
-                  p->setExplanation(i18n("File could not be read from disk due to permissions."));
-                  break;
-              default:
-                  break;
+            case QFile::ReadError:
+                p->setExplanation(i18n("File could not be read from disk."));
+                break;
+            case QFile::OpenError:
+                p->setExplanation(i18n("File could not be opened."));
+                break;
+            case QFile::PermissionsError:
+                p->setExplanation(i18n("File could not be read from disk due to permissions."));
+                break;
+            default:
+                break;
             }
             p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
 
-            qCWarning(LANGUAGE) << "Could not open file" << document().str() << "(path" << localFile << ")" ;
+            qCWarning(LANGUAGE) << "Could not open file" << document().str() << "(path" << localFile << ")";
 
             return p;
         }
@@ -345,25 +346,30 @@ const KDevelop::ParseJob::Contents& ParseJob::contents() const
     return d->contents;
 }
 
-struct MovingRangeTranslator : public DUChainVisitor
+struct MovingRangeTranslator
+    : public DUChainVisitor
 {
-    MovingRangeTranslator(qint64 _source, qint64 _target, MovingInterface* _moving) : source(_source), target(_target), moving(_moving) {
+    MovingRangeTranslator(qint64 _source, qint64 _target, MovingInterface* _moving) : source(_source)
+        , target(_target)
+        , moving(_moving)
+    {
     }
 
-    void visit(DUContext* context) override {
+    void visit(DUContext* context) override
+    {
         translateRange(context);
         ///@todo Also map import-positions
         // Translate uses
         uint usesCount = context->usesCount();
-        for(uint u = 0; u < usesCount; ++u)
-        {
+        for (uint u = 0; u < usesCount; ++u) {
             RangeInRevision r = context->uses()[u].m_range;
             translateRange(r);
             context->changeUseRange(u, r);
         }
     }
 
-    void visit(Declaration* declaration) override {
+    void visit(Declaration* declaration) override
+    {
         translateRange(declaration);
     }
 
@@ -378,10 +384,10 @@ struct MovingRangeTranslator : public DUChainVisitor
     {
         // PHP and python use top contexts that start at (0, 0) end at INT_MAX, so make sure that doesn't overflow
         // or translate the start of the top context away from (0, 0)
-        if ( r.start.line != 0 || r.start.column != 0 ) {
+        if (r.start.line != 0 || r.start.column != 0) {
             moving->transformCursor(r.start.line, r.start.column, MovingCursor::MoveOnInsert, source, target);
         }
-        if ( r.end.line != std::numeric_limits<int>::max() || r.end.column != std::numeric_limits<int>::max() ) {
+        if (r.end.line != std::numeric_limits<int>::max() || r.end.column != std::numeric_limits<int>::max()) {
             moving->transformCursor(r.end.line, r.end.column, MovingCursor::StayOnInsert, source, target);
         }
     }
@@ -396,8 +402,7 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
 {
     qint64 targetRevision = d->contents.modification.revision;
 
-    if(targetRevision == -1)
-    {
+    if (targetRevision == -1) {
         qCDebug(LANGUAGE) << "invalid target revision" << targetRevision;
         return;
     }
@@ -412,36 +417,32 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
         // Cannot map if there is no source revision
         sourceRevision = context->parsingEnvironmentFile()->modificationRevision().revision;
 
-        if(sourceRevision == -1)
-        {
+        if (sourceRevision == -1) {
             qCDebug(LANGUAGE) << "invalid source revision" << sourceRevision;
             return;
         }
     }
 
-    if(sourceRevision > targetRevision)
-    {
-        qCDebug(LANGUAGE) << "for document" << document().str() << ": source revision is higher than target revision:" << sourceRevision << " > " << targetRevision;
+    if (sourceRevision > targetRevision) {
+        qCDebug(LANGUAGE) << "for document" << document().str() <<
+            ": source revision is higher than target revision:" << sourceRevision << " > " << targetRevision;
         return;
     }
 
     ForegroundLock lock;
-    if(DocumentChangeTracker* t = d->tracker.data())
-    {
-        if(!d->previousRevision)
-        {
+    if (DocumentChangeTracker* t = d->tracker.data()) {
+        if (!d->previousRevision) {
             qCDebug(LANGUAGE) << "not translating because there is no valid predecessor-revision";
             return;
         }
 
-        if(sourceRevision != d->previousRevision->revision() || !d->previousRevision->valid())
-        {
-            qCDebug(LANGUAGE) << "not translating because the document revision does not match the tracker start revision (maybe the document was cleared)";
+        if (sourceRevision != d->previousRevision->revision() || !d->previousRevision->valid()) {
+            qCDebug(LANGUAGE) <<
+                "not translating because the document revision does not match the tracker start revision (maybe the document was cleared)";
             return;
         }
 
-        if(!t->holdingRevision(sourceRevision) || !t->holdingRevision(targetRevision))
-        {
+        if (!t->holdingRevision(sourceRevision) || !t->holdingRevision(targetRevision)) {
             qCDebug(LANGUAGE) << "lost one of the translation revisions, not doing the map";
             return;
         }
@@ -454,9 +455,8 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
         MovingRangeTranslator translator(sourceRevision, targetRevision, moving);
         context->visit(translator);
 
-        QList< ProblemPointer > problems = context->problems();
-        for(QList< ProblemPointer >::iterator problem = problems.begin(); problem != problems.end(); ++problem)
-        {
+        QList<ProblemPointer> problems = context->problems();
+        for (QList<ProblemPointer>::iterator problem = problems.begin(); problem != problems.end(); ++problem) {
             RangeInRevision r = (*problem)->range();
             translator.translateRange(r);
             (*problem)->setRange(r);
@@ -483,7 +483,7 @@ bool ParseJob::isUpdateRequired(const IndexedString& languageString)
     if (abortRequested()) {
         return false;
     }
-    foreach(const ParsingEnvironmentFilePointer &file, DUChain::self()->allEnvironmentFiles(document())) {
+    foreach (const ParsingEnvironmentFilePointer& file, DUChain::self()->allEnvironmentFiles(document())) {
         if (file->language() != languageString) {
             continue;
         }
@@ -496,6 +496,7 @@ bool ParseJob::isUpdateRequired(const IndexedString& languageString)
         }
         break;
     }
+
     return !abortRequested();
 }
 
@@ -533,6 +534,4 @@ bool ParseJob::hasTracker() const
 {
     return d->tracker;
 }
-
 }
-

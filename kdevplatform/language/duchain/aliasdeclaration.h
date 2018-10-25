@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_ALIASDECLARATION_H
 #define KDEVPLATFORM_ALIASDECLARATION_H
@@ -24,71 +24,72 @@
 #include "duchainpointer.h"
 #include "declarationdata.h"
 
-namespace KDevelop
-{
-class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclarationData : public ClassMemberDeclarationData
+namespace KDevelop {
+class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclarationData
+    : public ClassMemberDeclarationData
 {
 public:
-  AliasDeclarationData() {}
-  AliasDeclarationData( const AliasDeclarationData& rhs )
-      : ClassMemberDeclarationData( rhs )
-      , m_aliasedDeclaration(rhs.m_aliasedDeclaration)
-  {
-  }
-  IndexedDeclaration m_aliasedDeclaration;
+    AliasDeclarationData() {}
+    AliasDeclarationData(const AliasDeclarationData& rhs)
+        : ClassMemberDeclarationData(rhs)
+        , m_aliasedDeclaration(rhs.m_aliasedDeclaration)
+    {
+    }
+    IndexedDeclaration m_aliasedDeclaration;
 };
 /**
  * An alias declaration maps one declaration to another.
  * While searching in the duchain, an AliasDeclaration is transparently
  * replaced by its aliased declaration.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclaration : public ClassMemberDeclaration
+class KDEVPLATFORMLANGUAGE_EXPORT AliasDeclaration
+    : public ClassMemberDeclaration
 {
 public:
-  /// Copy constructor \param rhs declaration to copy
-  AliasDeclaration(const AliasDeclaration& rhs);
-  /**
-   * Constructs an AliasDeclaration. The default value for isNamespaceAlias is true.
-   *
-   * \param range range of the alias declaration's identifier
-   * \param context context in which this declaration occurred
-   */
-  AliasDeclaration(const RangeInRevision& range, DUContext* context);
-  
-  explicit AliasDeclaration(AliasDeclarationData& data);
-  /// Destructor
-  ~AliasDeclaration() override;
+    /// Copy constructor \param rhs declaration to copy
+    AliasDeclaration(const AliasDeclaration& rhs);
+    /**
+     * Constructs an AliasDeclaration. The default value for isNamespaceAlias is true.
+     *
+     * \param range range of the alias declaration's identifier
+     * \param context context in which this declaration occurred
+     */
+    AliasDeclaration(const RangeInRevision& range, DUContext* context);
 
-  /**
-   * An AliasDeclaration cannot have a type, so setAbstractType does nothing here.
-   *
-   * \param type ignored type
-   */
-  void setAbstractType(AbstractType::Ptr type) override;
+    explicit AliasDeclaration(AliasDeclarationData& data);
+    /// Destructor
+    ~AliasDeclaration() override;
 
-  /**
-   * Set the declaration that is aliased by this declaration.
-   *
-   * \param decl the declaration that this declaration references
-   */
-  void setAliasedDeclaration(const IndexedDeclaration& decl);
+    /**
+     * An AliasDeclaration cannot have a type, so setAbstractType does nothing here.
+     *
+     * \param type ignored type
+     */
+    void setAbstractType(AbstractType::Ptr type) override;
 
-  /**
-   * Access the declaration that is aliased by this declaration.
-   *
-   * \returns the aliased declaration
-   */
-  IndexedDeclaration aliasedDeclaration() const;
+    /**
+     * Set the declaration that is aliased by this declaration.
+     *
+     * \param decl the declaration that this declaration references
+     */
+    void setAliasedDeclaration(const IndexedDeclaration& decl);
 
-  QString toString() const override;
+    /**
+     * Access the declaration that is aliased by this declaration.
+     *
+     * \returns the aliased declaration
+     */
+    IndexedDeclaration aliasedDeclaration() const;
 
-  enum {
-    Identity = 6
-  };
-  
+    QString toString() const override;
+
+    enum {
+        Identity = 6
+    };
+
 private:
-  Declaration* clonePrivate() const override;
-  DUCHAIN_DECLARE_DATA(AliasDeclaration)
+    Declaration* clonePrivate() const override;
+    DUCHAIN_DECLARE_DATA(AliasDeclaration)
 };
 }
 

@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_ABSTRACTDECLARATIONNAVIGATIONCONTEXT_H
 #define KDEVPLATFORM_ABSTRACTDECLARATIONNAVIGATIONCONTEXT_H
@@ -25,15 +25,16 @@
 #include "../types/abstracttype.h"
 
 namespace KDevelop {
-
 class IdentifiedType;
 class Identifier;
 class QualifiedIdentifier;
 
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public AbstractNavigationContext
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext
+    : public AbstractNavigationContext
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+
+public:
     AbstractDeclarationNavigationContext(const DeclarationPointer& decl, const TopDUContextPointer& topContext,
                                          AbstractNavigationContext* previousContext = nullptr);
     ~AbstractDeclarationNavigationContext() override;
@@ -48,7 +49,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
 
     QString html(bool shorten = false) override;
 
-  protected:
+protected:
     ///Should returns a stripped version of the declarations qualified identifier, with all implicit/redundant parts removed
     virtual QualifiedIdentifier prettyQualifiedIdentifier(const DeclarationPointer& decl) const;
     ///Returns a stripped version of the declarations identifier, using prettyQualifiedIdentifier
@@ -62,10 +63,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
      * @note In case @p declaration is deprecated, the resulting string will get a special formatting
      */
     QString identifierHighlight(const QString& identifier, const DeclarationPointer& decl) const;
-    
+
     static QString stringFromAccess(Declaration::AccessPolicy access);
     static QString stringFromAccess(const DeclarationPointer& decl);
-    QString declarationName( const DeclarationPointer& decl ) const;
+    QString declarationName(const DeclarationPointer& decl) const;
     static QStringList declarationDetails(const DeclarationPointer& decl);
     static QString declarationSizeInformation(const DeclarationPointer& decl);
 
@@ -73,7 +74,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     ///All types that are visualized in the navigation-context are/should be mangled through this.
     ///The default-implementation returns the original type.
     virtual AbstractType::Ptr typeToShow(AbstractType::Ptr type);
-    
+
     ///Print the function-signature in a way that return-type and argument can be jumped to
     virtual void htmlFunction();
     ///Navigation for additional less important links, like what function was overloaded etc.
@@ -83,15 +84,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext : public 
     virtual void htmlIdentifiedType(AbstractType::Ptr type, const IdentifiedType* idType);
 
     ///Creates and registers a link for the given type that jumps to its declaration and to the template-argument declarations
-    virtual void eventuallyMakeTypeLinks( KDevelop::AbstractType::Ptr type );
+    virtual void eventuallyMakeTypeLinks(KDevelop::AbstractType::Ptr type);
 
     ///Creates a link that triggers a recomputation of this context with m_fullBackwardSearch set to true
     void createFullBackwardSearchLink(const QString& string);
-    
+
 private:
     const QScopedPointer<class AbstractDeclarationNavigationContextPrivate> d;
 };
-
 }
 
 #endif

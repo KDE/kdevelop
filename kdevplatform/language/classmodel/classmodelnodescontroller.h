@@ -31,43 +31,45 @@ class QTimer;
 class ClassModelNodeDocumentChangedInterface
 {
 public:
-  virtual ~ClassModelNodeDocumentChangedInterface();
+    virtual ~ClassModelNodeDocumentChangedInterface();
 
-  /// Called when the registered document is changed.
-  virtual void documentChanged(const KDevelop::IndexedString& a_file) = 0;
+    /// Called when the registered document is changed.
+    virtual void documentChanged(const KDevelop::IndexedString& a_file) = 0;
 };
 
 /// This class provides notifications for updates between the different nodes
 /// and the various kdevelop sub-systems (such as notification when a DUChain gets
 /// updated).
-class ClassModelNodesController : public QObject
+class ClassModelNodesController
+    : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
+
 public:
-  ClassModelNodesController();
-  ~ClassModelNodesController() override;
+    ClassModelNodesController();
+    ~ClassModelNodesController() override;
 
-  static ClassModelNodesController& self();
+    static ClassModelNodesController& self();
 
-  /// Register the given class node to receive notifications about its top context changes.
-  void registerForChanges(const KDevelop::IndexedString& a_file, ClassModelNodeDocumentChangedInterface* a_node);
-  /// Unregister the given class node from further notifications.
-  void unregisterForChanges(const KDevelop::IndexedString& a_file, ClassModelNodeDocumentChangedInterface* a_node);
+    /// Register the given class node to receive notifications about its top context changes.
+    void registerForChanges(const KDevelop::IndexedString& a_file, ClassModelNodeDocumentChangedInterface* a_node);
+    /// Unregister the given class node from further notifications.
+    void unregisterForChanges(const KDevelop::IndexedString& a_file, ClassModelNodeDocumentChangedInterface* a_node);
 
 private Q_SLOTS:
-  // Files update.
-  void updateChangedFiles();
+    // Files update.
+    void updateChangedFiles();
 
 private: // File updates related.
-  /// List of updated files we check this list when update timer expires.
-  QSet<KDevelop::IndexedString> m_updatedFiles;
+    /// List of updated files we check this list when update timer expires.
+    QSet<KDevelop::IndexedString> m_updatedFiles;
 
-  /// Timer for batch updates.
-  QTimer* m_updateTimer;
+    /// Timer for batch updates.
+    QTimer* m_updateTimer;
 
-  typedef QMultiMap< KDevelop::IndexedString, ClassModelNodeDocumentChangedInterface* > FilesMap;
-  /// Maps between monitored files and their class nodes.
-  FilesMap m_filesMap;
+    typedef QMultiMap<KDevelop::IndexedString, ClassModelNodeDocumentChangedInterface*> FilesMap;
+    /// Maps between monitored files and their class nodes.
+    FilesMap m_filesMap;
 };
 
 #endif

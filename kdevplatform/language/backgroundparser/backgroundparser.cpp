@@ -55,7 +55,6 @@
 using namespace KDevelop;
 
 namespace {
-
 const bool separateThreadForHighPriority = true;
 
 /**
@@ -106,7 +105,6 @@ inline bool isValidURL(const IndexedString& url)
     QUrl cleaned = original.adjusted(QUrl::NormalizePathSegments);
     return original == cleaned;
 }
-
 }
 
 struct DocumentParseTarget
@@ -119,15 +117,15 @@ struct DocumentParseTarget
     bool operator==(const DocumentParseTarget& rhs) const
     {
         return notifyWhenReady == rhs.notifyWhenReady
-            && priority == rhs.priority
-            && features == rhs.features;
+               && priority == rhs.priority
+               && features == rhs.features;
     }
 };
 
 inline uint qHash(const DocumentParseTarget& target)
 {
     return target.features * 7 + target.priority * 13 + target.sequentialProcessingFlags * 17
-                               + reinterpret_cast<size_t>(target.notifyWhenReady.data());
+           + reinterpret_cast<size_t>(target.notifyWhenReady.data());
 }
 
 struct DocumentParsePlan
@@ -141,6 +139,7 @@ struct DocumentParsePlan
         for (const DocumentParseTarget& target : targets) {
             ret |= target.sequentialProcessingFlags;
         }
+
         return ret;
     }
 
@@ -149,20 +148,22 @@ struct DocumentParsePlan
         //Pick the best priority
         int ret = BackgroundParser::WorstPriority;
         for (const DocumentParseTarget& target : targets) {
-            if(target.priority < ret) {
+            if (target.priority < ret) {
                 ret = target.priority;
             }
         }
+
         return ret;
     }
 
     TopDUContext::Features features() const
     {
         //Pick the best features
-        TopDUContext::Features ret = (TopDUContext::Features)0;
+        TopDUContext::Features ret = ( TopDUContext::Features )0;
         for (const DocumentParseTarget& target : targets) {
-            ret = (TopDUContext::Features) (ret | target.features);
+            ret = ( TopDUContext::Features ) (ret | target.features);
         }
+
         return ret;
     }
 
@@ -171,7 +172,7 @@ struct DocumentParsePlan
         QVector<QPointer<QObject>> ret;
 
         for (const DocumentParseTarget& target : targets) {
-            if(target.notifyWhenReady)
+            if (target.notifyWhenReady)
                 ret << target.notifyWhenReady;
         }
 
@@ -185,8 +186,11 @@ Q_DECLARE_TYPEINFO(DocumentParsePlan, Q_MOVABLE_TYPE);
 class KDevelop::BackgroundParserPrivate
 {
 public:
-    BackgroundParserPrivate(BackgroundParser *parser, ILanguageController *languageController)
-        :m_parser(parser), m_languageController(languageController), m_shuttingDown(false), m_mutex(QMutex::Recursive)
+    BackgroundParserPrivate(BackgroundParser* parser, ILanguageController* languageController)
+        : m_parser(parser)
+        , m_languageController(languageController)
+        , m_shuttingDown(false)
+        , m_mutex(QMutex::Recursive)
     {
         parser->d = this; //Set this so we can safely call back BackgroundParser from within loadSettings()
 
@@ -200,7 +204,8 @@ public:
         QObject::connect(&m_progressTimer, &QTimer::timeout, m_parser, &BackgroundParser::updateProgressBar);
     }
 
-    void startTimerThreadSafe(int delay) {
+    void startTimerThreadSafe(int delay)
+    {
         QMetaObject::invokeMethod(m_parser, "startTimer", Qt::QueuedConnection, Q_ARG(int, delay));
     }
 
@@ -222,6 +227,7 @@ public:
                 bestRunningPriority = parseJob->parsePriority();
             }
         }
+
         return bestRunningPriority;
     }
 
@@ -232,10 +238,9 @@ public:
         const int bestRunningPriority = currentBestRunningPriority();
 
         for (auto it1 = m_documentsForPriority.begin();
-             it1 != m_documentsForPriority.end(); ++it1 )
-        {
+             it1 != m_documentsForPriority.end(); ++it1) {
             const auto priority = it1.key();
-            if(priority > m_neededPriority)
+            if (priority > m_neededPriority)
                 break; //The priority is not good enough to be processed right now
 
             if (m_parseJobs.count() >= m_threads && priority > BackgroundParser::NormalPriority && !specialParseJob) {
@@ -253,15 +258,15 @@ public:
                 const auto& parsePlan = m_documents[url];
                 // If the current job requires sequential processing, but not all jobs with a better priority have been
                 // completed yet, it will not be created now.
-                if (    parsePlan.sequentialProcessingFlags() & ParseJob::RequiresSequentialProcessing
-                     && parsePlan.priority() > bestRunningPriority )
-                {
+                if (parsePlan.sequentialProcessingFlags() & ParseJob::RequiresSequentialProcessing
+                    && parsePlan.priority() > bestRunningPriority) {
                     continue;
                 }
 
                 return url;
             }
         }
+
         return {};
     }
 
@@ -273,19 +278,19 @@ public:
      */
     void parseDocumentsInternal()
     {
-        if(m_shuttingDown)
+        if (m_shuttingDown)
             return;
 
         //Only create parse-jobs for up to thread-count * 2 documents, so we don't fill the memory unnecessarily
-        if (m_parseJobs.count() >= m_threads+1
-            || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority))
-        {
+        if (m_parseJobs.count() >= m_threads + 1
+            || (m_parseJobs.count() >= m_threads && !separateThreadForHighPriority)) {
             return;
         }
 
         const auto& url = nextDocumentToParse();
         if (!url.isEmpty()) {
-            qCDebug(LANGUAGE) << "creating parse-job" << url << "new count of active parse-jobs:" << m_parseJobs.count() + 1;
+            qCDebug(LANGUAGE) << "creating parse-job" << url << "new count of active parse-jobs:" <<
+                m_parseJobs.count() + 1;
 
             const QString elidedPathString = elidedPathLeft(url.str(), 70);
             emit m_parser->showMessage(m_parser, i18n("Parsing: %1", elidedPathString));
@@ -315,13 +320,14 @@ public:
                 for (const auto& target : qAsConst(parsePlanIt->targets)) {
                     m_documentsForPriority[target.priority].remove(url);
                 }
+
                 m_documents.erase(parsePlanIt);
             } else {
                 qCWarning(LANGUAGE) << "Document got removed during parse job creation:" << url;
             }
 
             if (decorator) {
-                if(m_parseJobs.count() == m_threads+1 && !specialParseJob)
+                if (m_parseJobs.count() == m_threads + 1 && !specialParseJob)
                     specialParseJob = decorator; //This parse-job is allocated into the reserved thread
 
                 m_parseJobs.insert(url, decorator);
@@ -338,9 +344,9 @@ public:
                 // make sure we cleaned up properly
                 // TODO: also empty m_documentsForPriority when m_documents is empty? or do we want to keep capacity?
                 Q_ASSERT(std::none_of(m_documentsForPriority.constBegin(), m_documentsForPriority.constEnd(),
-                                        [] (const QSet<IndexedString>& docs) {
-                                        return !docs.isEmpty();
-                                        }));
+                                      [](const QSet<IndexedString>& docs) {
+                    return !docs.isEmpty();
+                }));
             }
         }
 
@@ -404,7 +410,6 @@ public:
         return nullptr;
     }
 
-
     void loadSettings()
     {
         ///@todo re-load settings when they have been changed!
@@ -414,7 +419,7 @@ public:
         // stay backwards compatible
         KConfigGroup oldConfig(KSharedConfig::openConfig(), "Background Parser");
 #define BACKWARDS_COMPATIBLE_ENTRY(entry, default) \
-config.readEntry(entry, oldConfig.readEntry(entry, default))
+    config.readEntry(entry, oldConfig.readEntry(entry, default))
 
         m_delay = BACKWARDS_COMPATIBLE_ENTRY("Delay", 500);
         m_timer.setInterval(m_delay);
@@ -467,7 +472,7 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
         m_weaver.resume();
     }
 
-    BackgroundParser *m_parser;
+    BackgroundParser* m_parser;
     ILanguageController* m_languageController;
 
     //Current parse-job that is executed in the additional thread
@@ -480,9 +485,9 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     bool m_shuttingDown;
 
     // A list of documents that are planned to be parsed, and their priority
-    QHash<IndexedString, DocumentParsePlan > m_documents;
+    QHash<IndexedString, DocumentParsePlan> m_documents;
     // The documents ordered by priority
-    QMap<int, QSet<IndexedString> > m_documentsForPriority;
+    QMap<int, QSet<IndexedString>> m_documentsForPriority;
     // Currently running parse jobs
     QHash<IndexedString, ThreadWeaver::QObjectDecorator*> m_parseJobs;
     // The url for each managed document. Those may temporarily differ from the real url.
@@ -510,24 +515,31 @@ config.readEntry(entry, oldConfig.readEntry(entry, default))
     QTimer m_progressTimer;
 };
 
-BackgroundParser::BackgroundParser(ILanguageController *languageController)
-    : QObject(languageController), d(new BackgroundParserPrivate(this, languageController))
+BackgroundParser::BackgroundParser(ILanguageController* languageController)
+    : QObject(languageController)
+    , d(new BackgroundParserPrivate(this, languageController))
 {
     Q_ASSERT(ICore::self()->documentController());
-    connect(ICore::self()->documentController(), &IDocumentController::documentLoaded, this, &BackgroundParser::documentLoaded);
-    connect(ICore::self()->documentController(), &IDocumentController::documentUrlChanged, this, &BackgroundParser::documentUrlChanged);
-    connect(ICore::self()->documentController(), &IDocumentController::documentClosed, this, &BackgroundParser::documentClosed);
+    connect(
+        ICore::self()->documentController(), &IDocumentController::documentLoaded, this,
+        &BackgroundParser::documentLoaded);
+    connect(
+        ICore::self()->documentController(), &IDocumentController::documentUrlChanged, this,
+        &BackgroundParser::documentUrlChanged);
+    connect(
+        ICore::self()->documentController(), &IDocumentController::documentClosed, this,
+        &BackgroundParser::documentClosed);
     connect(ICore::self(), &ICore::aboutToShutdown, this, &BackgroundParser::aboutToQuit);
 
     QObject::connect(ICore::self()->projectController(),
-                                      &IProjectController::projectAboutToBeOpened,
-                                      this, &BackgroundParser::projectAboutToBeOpened);
+                     &IProjectController::projectAboutToBeOpened,
+                     this, &BackgroundParser::projectAboutToBeOpened);
     QObject::connect(ICore::self()->projectController(),
-                                 &IProjectController::projectOpened,
-                                 this, &BackgroundParser::projectOpened);
+                     &IProjectController::projectOpened,
+                     this, &BackgroundParser::projectOpened);
     QObject::connect(ICore::self()->projectController(),
-                                 &IProjectController::projectOpeningAborted,
-                                 this, &BackgroundParser::projectOpeningAborted);
+                     &IProjectController::projectOpeningAborted,
+                     this, &BackgroundParser::projectOpeningAborted);
 }
 
 void BackgroundParser::aboutToQuit()
@@ -560,17 +572,16 @@ void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, const
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 {
     QMutexLocker lock(&d->m_mutex);
-    for (auto it = d->m_documents.begin(); it != d->m_documents.end(); ) {
-
+    for (auto it = d->m_documents.begin(); it != d->m_documents.end();) {
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
 
-        foreach ( const DocumentParseTarget& target, (*it).targets ) {
-            if ( notifyWhenReady && target.notifyWhenReady.data() == notifyWhenReady ) {
+        foreach (const DocumentParseTarget& target, (*it).targets) {
+            if (notifyWhenReady && target.notifyWhenReady.data() == notifyWhenReady) {
                 (*it).targets.remove(target);
             }
         }
 
-        if((*it).targets.isEmpty()) {
+        if ((*it).targets.isEmpty()) {
             it = d->m_documents.erase(it);
             --d->m_maxParseJobs;
 
@@ -603,14 +614,14 @@ void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Featu
             d->m_documentsForPriority[it.value().priority()].remove(url);
             it.value().targets << target;
             d->m_documentsForPriority[it.value().priority()].insert(url);
-        }else{
+        } else {
 //             qCDebug(LANGUAGE) << "BackgroundParser::addDocument: queuing" << cleanedUrl;
             d->m_documents[url].targets << target;
             d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
             ++d->m_maxParseJobs; //So the progress-bar waits for this document
         }
 
-        if ( delay == ILanguageSupport::DefaultDelay ) {
+        if (delay == ILanguageSupport::DefaultDelay) {
             delay = d->m_delay;
         }
         d->startTimerThreadSafe(delay);
@@ -623,20 +634,19 @@ void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyW
 
     QMutexLocker lock(&d->m_mutex);
 
-    if(d->m_documents.contains(url)) {
-
+    if (d->m_documents.contains(url)) {
         d->m_documentsForPriority[d->m_documents[url].priority()].remove(url);
 
-        foreach(const DocumentParseTarget& target, d->m_documents[url].targets) {
-            if(target.notifyWhenReady.data() == notifyWhenReady) {
+        foreach (const DocumentParseTarget& target, d->m_documents[url].targets) {
+            if (target.notifyWhenReady.data() == notifyWhenReady) {
                 d->m_documents[url].targets.remove(target);
             }
         }
 
-        if(d->m_documents[url].targets.isEmpty()) {
+        if (d->m_documents[url].targets.isEmpty()) {
             d->m_documents.remove(url);
             --d->m_maxParseJobs;
-        }else{
+        } else {
             //Insert with an eventually different priority
             d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
         }
@@ -743,8 +753,9 @@ void BackgroundParser::resume()
 void BackgroundParser::updateProgressData()
 {
     if (d->m_doneParseJobs >= d->m_maxParseJobs) {
-        if(d->m_doneParseJobs > d->m_maxParseJobs) {
-            qCDebug(LANGUAGE) << "m_doneParseJobs larger than m_maxParseJobs:" << d->m_doneParseJobs << d->m_maxParseJobs;
+        if (d->m_doneParseJobs > d->m_maxParseJobs) {
+            qCDebug(LANGUAGE) << "m_doneParseJobs larger than m_maxParseJobs:" << d->m_doneParseJobs <<
+                d->m_maxParseJobs;
         }
         d->m_doneParseJobs = 0;
         d->m_maxParseJobs = 0;
@@ -754,8 +765,8 @@ void BackgroundParser::updateProgressData()
             additionalProgress += *it;
         }
 
-        d->m_progressMax = d->m_maxParseJobs*1000;
-        d->m_progressDone = (additionalProgress + d->m_doneParseJobs)*1000;
+        d->m_progressMax = d->m_maxParseJobs * 1000;
+        d->m_progressDone = (additionalProgress + d->m_doneParseJobs) * 1000;
 
         if (!d->m_progressTimer.isActive()) {
             d->m_progressTimer.start();
@@ -763,9 +774,8 @@ void BackgroundParser::updateProgressData()
     }
 
     // Cancel progress updating and hide progress-bar when parsing is done.
-    if(d->m_doneParseJobs == d->m_maxParseJobs
-        || (d->m_neededPriority == BackgroundParser::BestPriority && d->m_weaver.queueLength() == 0))
-    {
+    if (d->m_doneParseJobs == d->m_maxParseJobs
+        || (d->m_neededPriority == BackgroundParser::BestPriority && d->m_weaver.queueLength() == 0)) {
         if (d->m_progressTimer.isActive()) {
             d->m_progressTimer.stop();
         }
@@ -786,7 +796,7 @@ void BackgroundParser::setThreadCount(int threadCount)
 {
     if (d->m_threads != threadCount) {
         d->m_threads = threadCount;
-        d->m_weaver.setMaximumNumberOfThreads(d->m_threads+1); //1 Additional thread for high-priority parsing
+        d->m_weaver.setMaximumNumberOfThreads(d->m_threads + 1); //1 Additional thread for high-priority parsing
     }
 }
 
@@ -803,12 +813,11 @@ void BackgroundParser::setDelay(int milliseconds)
     }
 }
 
-QList< IndexedString > BackgroundParser::managedDocuments()
+QList<IndexedString> BackgroundParser::managedDocuments()
 {
     QMutexLocker l(&d->m_managedMutex);
     return d->m_managed.keys();
 }
-
 
 bool BackgroundParser::waitForIdle() const
 {
@@ -823,7 +832,9 @@ bool BackgroundParser::waitForIdle() const
 
             if (d->m_parseJobs.size() != runningParseJobsUrls.size()) {
                 runningParseJobsUrls = d->m_parseJobs.keys();
-                qCDebug(LANGUAGE) << "Waiting for background parser to get in idle state... -- the following parse jobs are still running:" << runningParseJobsUrls;
+                qCDebug(LANGUAGE) <<
+                    "Waiting for background parser to get in idle state... -- the following parse jobs are still running:"
+                                  << runningParseJobsUrls;
             }
         }
 
@@ -840,7 +851,7 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
         // yet associated with a top ctx.
         return nullptr;
     }
-    if ( !isValidURL(url) ) {
+    if (!isValidURL(url)) {
         qCWarning(LANGUAGE) << "Tracker requested for invalild URL:" << url.toUrl();
     }
     Q_ASSERT(isValidURL(url));
@@ -853,17 +864,16 @@ void BackgroundParser::documentClosed(IDocument* document)
 {
     QMutexLocker l(&d->m_mutex);
 
-    if(document->textDocument())
-    {
+    if (document->textDocument()) {
         KTextEditor::Document* textDocument = document->textDocument();
 
-        if(!d->m_managedTextDocumentUrls.contains(textDocument))
+        if (!d->m_managedTextDocumentUrls.contains(textDocument))
             return; // Probably the document had an invalid url, and thus it wasn't added to the background parser
 
         Q_ASSERT(d->m_managedTextDocumentUrls.contains(textDocument));
 
         IndexedString url(d->m_managedTextDocumentUrls[textDocument]);
-        
+
         QMutexLocker l2(&d->m_managedMutex);
         Q_ASSERT(d->m_managed.contains(url));
 
@@ -874,32 +884,29 @@ void BackgroundParser::documentClosed(IDocument* document)
     }
 }
 
-void BackgroundParser::documentLoaded( IDocument* document )
+void BackgroundParser::documentLoaded(IDocument* document)
 {
     QMutexLocker l(&d->m_mutex);
-    if(document->textDocument() && document->textDocument()->url().isValid())
-    {
+    if (document->textDocument() && document->textDocument()->url().isValid()) {
         KTextEditor::Document* textDocument = document->textDocument();
 
         IndexedString url(document->url());
         // Some debugging because we had issues with this
 
         QMutexLocker l2(&d->m_managedMutex);
-        if(d->m_managed.contains(url) && d->m_managed[url]->document() == textDocument)
-        {
+        if (d->m_managed.contains(url) && d->m_managed[url]->document() == textDocument) {
             qCDebug(LANGUAGE) << "Got redundant documentLoaded from" << document->url() << textDocument;
             return;
         }
 
         qCDebug(LANGUAGE) << "Creating change tracker for " << document->url();
 
-
         Q_ASSERT(!d->m_managed.contains(url));
         Q_ASSERT(!d->m_managedTextDocumentUrls.contains(textDocument));
 
         d->m_managedTextDocumentUrls[textDocument] = url;
         d->m_managed.insert(url, new DocumentChangeTracker(textDocument));
-    }else{
+    } else {
         qCDebug(LANGUAGE) << "NOT creating change tracker for" << document->url();
     }
 }
@@ -909,11 +916,12 @@ void BackgroundParser::documentUrlChanged(IDocument* document)
     documentClosed(document);
 
     // Only call documentLoaded if the file wasn't renamed to a filename that is already tracked.
-    if(document->textDocument() && !trackerForUrl(IndexedString(document->textDocument()->url())))
+    if (document->textDocument() && !trackerForUrl(IndexedString(document->textDocument()->url())))
         documentLoaded(document);
 }
 
-void BackgroundParser::startTimer(int delay) {
+void BackgroundParser::startTimer(int delay)
+{
     if (!d->isSuspended()) {
         d->m_timer.start(delay);
     }

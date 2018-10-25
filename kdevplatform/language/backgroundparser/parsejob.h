@@ -1,24 +1,24 @@
 /*
-* This file is part of KDevelop
-*
-* Copyright 2006 Adam Treat <treat@kde.org>
-* Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Library General Public License as
-* published by the Free Software Foundation; either version 2 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ * This file is part of KDevelop
+ *
+ * Copyright 2006 Adam Treat <treat@kde.org>
+ * Copyright 2006-2008 Hamish Rodda <rodda@kde.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #ifndef KDEVPLATFORM_PARSEJOB_H
 #define KDEVPLATFORM_PARSEJOB_H
@@ -35,9 +35,7 @@ namespace ThreadWeaver {
 class QObjectDecorator;
 }
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class ParsingEnvironment;
 class ControlFlowGraph;
 class DataAccessRepository;
@@ -50,12 +48,14 @@ class ILanguageSupport;
  *
  * In your language plugin, don't forget to use acquire an UrlParseLock before starting to the actual parsing.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ParseJob : public QObject, public ThreadWeaver::Sequence
+class KDEVPLATFORMLANGUAGE_EXPORT ParseJob
+    : public QObject
+    , public ThreadWeaver::Sequence
 {
     Q_OBJECT
 
 public:
-    explicit ParseJob( const IndexedString &url, ILanguageSupport* languageSupport );
+    explicit ParseJob(const IndexedString& url, ILanguageSupport* languageSupport);
     /**
      * _No_ mutexes/locks are allowed to be locked when this object is destroyed (except for optionally the foreground lock)
      * */
@@ -66,7 +66,8 @@ public:
      */
     ILanguageSupport* languageSupport() const;
 
-    struct Contents {
+    struct Contents
+    {
         // Modification-time of the read content
         ModificationRevision modification;
         // The contents in utf-8 format
@@ -131,11 +132,11 @@ public:
     KDevelop::IndexedString document() const;
 
     /**
-    * Sets a list of QObjects that should contain a slot
-    * "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
-    * The notification is guaranteed to be called once the parse-job finishes, from within its destructor.
-    * The given top-context may be invalid if the update failed.
-    */
+     * Sets a list of QObjects that should contain a slot
+     * "void updateReady(KDevelop::IndexedString url, KDevelop::ReferencedTopDUContext topContext)".
+     * The notification is guaranteed to be called once the parse-job finishes, from within its destructor.
+     * The given top-context may be invalid if the update failed.
+     */
     void setNotifyWhenReady(const QVector<QPointer<QObject>>& notify);
 
     /// Sets the du-context that was created by this parse-job
@@ -232,7 +233,6 @@ protected:
 private:
     const QScopedPointer<class ParseJobPrivate> d;
 };
-
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::ParseJob::SequentialProcessingFlags)

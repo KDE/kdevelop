@@ -24,51 +24,51 @@
 
 #include "documentclassesfolder.h"
 
-namespace KDevelop
-{
-  class IProject;
+namespace KDevelop {
+class IProject;
 }
 
-namespace ClassModelNodes
-{
-
+namespace ClassModelNodes {
 /// Special folder.
 /// It displays all the classes in the projects by using the IProject
-class AllClassesFolder : public DocumentClassesFolder
+class AllClassesFolder
+    : public DocumentClassesFolder
 {
-  Q_OBJECT
+    Q_OBJECT
+
 public:
-  explicit AllClassesFolder(NodesModelInterface* a_model);
+    explicit AllClassesFolder(NodesModelInterface* a_model);
 
 public: // Node overrides
-  void nodeCleared() override;
-  void populateNode() override;
+    void nodeCleared() override;
+    void populateNode() override;
 
 private Q_SLOTS:
-  // Project watching
-  void projectOpened(KDevelop::IProject* project);
-  void projectClosing(KDevelop::IProject* project);
+    // Project watching
+    void projectOpened(KDevelop::IProject* project);
+    void projectClosing(KDevelop::IProject* project);
 };
 
 /// Contains a filter for the all classes folder.
-class FilteredAllClassesFolder : public AllClassesFolder
+class FilteredAllClassesFolder
+    : public AllClassesFolder
 {
-  Q_OBJECT
+    Q_OBJECT
+
 public:
-  explicit FilteredAllClassesFolder(NodesModelInterface* a_model);
+    explicit FilteredAllClassesFolder(NodesModelInterface* a_model);
 
 public: // Operations.
-  /// Call this to update the classes filter string.
-  void updateFilterString(const QString& a_newFilterString);
+    /// Call this to update the classes filter string.
+    void updateFilterString(const QString& a_newFilterString);
 
 private: // DocumentClassesFolder overrides
-  bool isClassFiltered(const KDevelop::QualifiedIdentifier& a_id) override;
+    bool isClassFiltered(const KDevelop::QualifiedIdentifier& a_id) override;
 
 private:
-  /// We'll use this string to display only classes that match this string.
-  QString m_filterString;
+    /// We'll use this string to display only classes that match this string.
+    QString m_filterString;
 };
-
 } // namespace ClassModelNodes
 
 #endif

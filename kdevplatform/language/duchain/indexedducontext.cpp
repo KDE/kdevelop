@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "indexedducontext.h"
 
@@ -29,44 +29,44 @@
 using namespace KDevelop;
 
 IndexedDUContext::IndexedDUContext(uint topContext, uint contextIndex)
-  : m_topContext(topContext)
-  , m_contextIndex(contextIndex)
+    : m_topContext(topContext)
+    , m_contextIndex(contextIndex)
 {
 }
 
 IndexedDUContext::IndexedDUContext(DUContext* ctx)
 {
-  if(ctx) {
-    m_topContext = ctx->topContext()->ownIndex();
-    m_contextIndex = ctx->m_dynamicData->m_indexInTopContext;
-  }else{
-    m_topContext = 0;
-    m_contextIndex = 0;
-  }
+    if (ctx) {
+        m_topContext = ctx->topContext()->ownIndex();
+        m_contextIndex = ctx->m_dynamicData->m_indexInTopContext;
+    } else {
+        m_topContext = 0;
+        m_contextIndex = 0;
+    }
 }
 
 IndexedTopDUContext IndexedDUContext::indexedTopContext() const
 {
-  if(isDummy()) {
-    return IndexedTopDUContext();
-  }
-  return IndexedTopDUContext(m_topContext);
+    if (isDummy()) {
+        return IndexedTopDUContext();
+    }
+    return IndexedTopDUContext(m_topContext);
 }
 
 DUContext* IndexedDUContext::context() const
 {
-  if(isDummy())
-    return nullptr;
+    if (isDummy())
+        return nullptr;
 //   ENSURE_CHAIN_READ_LOCKED
-  if(!m_topContext)
-    return nullptr;
+    if (!m_topContext)
+        return nullptr;
 
-  TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
-  if(!ctx)
-    return nullptr;
+    TopDUContext* ctx = DUChain::self()->chainForIndex(m_topContext);
+    if (!ctx)
+        return nullptr;
 
-  if(!m_contextIndex)
-    return ctx;
+    if (!m_contextIndex)
+        return ctx;
 
-  return ctx->m_dynamicData->contextForIndex(m_contextIndex);
+    return ctx->m_dynamicData->contextForIndex(m_contextIndex);
 }

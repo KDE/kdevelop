@@ -15,7 +15,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "templatepreviewicon.h"
 
@@ -32,14 +32,14 @@
 
 using namespace KDevelop;
 
-class KDevelop::TemplatePreviewIconData : public QSharedData
+class KDevelop::TemplatePreviewIconData
+    : public QSharedData
 {
 public:
     QString iconName;
     QString archivePath;
     QString dataDir;
 };
-
 
 TemplatePreviewIcon::TemplatePreviewIcon(const QString& iconName, const QString& archivePath, const QString& dataDir)
     : d(new TemplatePreviewIconData)
@@ -94,7 +94,8 @@ QPixmap TemplatePreviewIcon::pixmap() const
         }
 
         // support legacy templates with image files installed separately in the filesystem
-        const QString iconFilePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->dataDir + d->iconName);
+        const QString iconFilePath = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                                            d->dataDir + d->iconName);
         if (!iconFilePath.isEmpty()) {
             QPixmap pixmap(iconFilePath);
             if (!pixmap.isNull()) {

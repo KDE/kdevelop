@@ -16,15 +16,14 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_INTEGRALTYPE_H
 #define KDEVPLATFORM_INTEGRALTYPE_H
 
 #include "abstracttype.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 class IntegralTypeData;
 
 /**
@@ -33,94 +32,95 @@ class IntegralTypeData;
  * IntegralType is used to represent types which are native to a programming languge,
  * such as (e.g.) int, float, double, char, bool etc.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT IntegralType: public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT IntegralType
+    : public AbstractType
 {
 public:
-  typedef TypePtr<IntegralType> Ptr;
+    typedef TypePtr<IntegralType> Ptr;
 
-  /**
-   * Enumeration of frequently used integral types.
-   * If your language has another integral type not listed here,
-   * you can create custom types staring from TypeLanguageSpecific.
-   */
-  enum CommonIntegralTypes {
-    TypeVoid,
-    TypeNone,
-    TypeNull,
-    TypeChar,
-    TypeBoolean,
-    TypeByte,
-    TypeSbyte,
-    TypeShort,
-    TypeInt,
-    TypeLong,
-    TypeFloat,
-    TypeDouble,
-    TypeWchar_t,
-    TypeString,
-    TypeMixed,
-    TypeChar16_t,
-    TypeChar32_t,
-    TypeLanguageSpecific = 200
-  };
+    /**
+     * Enumeration of frequently used integral types.
+     * If your language has another integral type not listed here,
+     * you can create custom types staring from TypeLanguageSpecific.
+     */
+    enum CommonIntegralTypes {
+        TypeVoid,
+        TypeNone,
+        TypeNull,
+        TypeChar,
+        TypeBoolean,
+        TypeByte,
+        TypeSbyte,
+        TypeShort,
+        TypeInt,
+        TypeLong,
+        TypeFloat,
+        TypeDouble,
+        TypeWchar_t,
+        TypeString,
+        TypeMixed,
+        TypeChar16_t,
+        TypeChar32_t,
+        TypeLanguageSpecific = 200
+    };
 
-  /// Default constructor
-  explicit IntegralType(uint type = TypeNone);
-  /// Copy constructor. \param rhs type to copy
-  IntegralType(const IntegralType& rhs);
-  /// Constructor using raw data. \param data internal data.
-  explicit IntegralType(IntegralTypeData& data);
-  /// Destructor
-  ~IntegralType() override;
+    /// Default constructor
+    explicit IntegralType(uint type = TypeNone);
+    /// Copy constructor. \param rhs type to copy
+    IntegralType(const IntegralType& rhs);
+    /// Constructor using raw data. \param data internal data.
+    explicit IntegralType(IntegralTypeData& data);
+    /// Destructor
+    ~IntegralType() override;
 
-  /**
-   * Access the integral type
-   *
-   * \returns the type's data type.
-   */
-  uint dataType() const;
+    /**
+     * Access the integral type
+     *
+     * \returns the type's data type.
+     */
+    uint dataType() const;
 
-  /**
-   * Set the type's data type.
-   *
-   * \param dataType data type of this type.
-   */
-  void setDataType(uint dataType);
+    /**
+     * Set the type's data type.
+     *
+     * \param dataType data type of this type.
+     */
+    void setDataType(uint dataType);
 
-  /**
-   * TODO: think of a way to make @c toString work properly for custom data types
-   *       right now you need to create a custom type and overload it...
-   */
-  QString toString() const override;
+    /**
+     * TODO: think of a way to make @c toString work properly for custom data types
+     *       right now you need to create a custom type and overload it...
+     */
+    QString toString() const override;
 
-  uint hash() const override;
+    uint hash() const override;
 
-  WhichType whichType() const override;
+    WhichType whichType() const override;
 
-  AbstractType* clone() const override;
+    AbstractType* clone() const override;
 
-  bool equals(const AbstractType* rhs) const override;
+    bool equals(const AbstractType* rhs) const override;
 
-  enum {
-    Identity = 2
-  };
+    enum {
+        Identity = 2
+    };
 
-  typedef IntegralTypeData Data;
+    typedef IntegralTypeData Data;
 
 protected:
-  void accept0 (TypeVisitor *v) const override;
+    void accept0 (TypeVisitor* v) const override;
 
-  TYPE_DECLARE_DATA(IntegralType)
+    TYPE_DECLARE_DATA(IntegralType)
 };
 
-template<>
-inline IntegralType* fastCast<IntegralType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeIntegral)
-    return nullptr;
-  else
-    return static_cast<IntegralType*>(from);
+template <>
+inline IntegralType* fastCast<IntegralType*>(AbstractType* from)
+{
+    if (!from || from->whichType() != AbstractType::TypeIntegral)
+        return nullptr;
+    else
+        return static_cast<IntegralType*>(from);
 }
-
 }
 
 #endif

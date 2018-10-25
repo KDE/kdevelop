@@ -39,20 +39,20 @@
 
 class QMutex;
 
-namespace KDevelop
-{
+namespace KDevelop {
 class DUContext;
 class Declaration;
 class CodeCompletionWorker;
 class CompletionWorkerThread;
 
-class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::CodeCompletionModel
-                                                      , public KTextEditor::CodeCompletionModelControllerInterface
+class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel
+    : public KTextEditor::CodeCompletionModel
+    , public KTextEditor::CodeCompletionModelControllerInterface
 {
-  Q_OBJECT
-  Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
+    Q_OBJECT
+    Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
 
-  public:
+public:
     explicit CodeCompletionModel(QObject* parent);
     ~CodeCompletionModel() override;
 
@@ -61,13 +61,14 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     virtual void initialize();
 
     ///Entry-point for code-completion. This determines ome settings, clears the model, and then calls completionInvokedInternal for further processing.
-    void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType) override;
+    void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range,
+                           KTextEditor::CodeCompletionModel::InvocationType invocationType) override;
 
-    QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const override;
+    QModelIndex index (int row, int column, const QModelIndex& parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
-    int rowCount ( const QModelIndex & parent = QModelIndex() ) const override;
-    QModelIndex parent ( const QModelIndex & index ) const override;
+    int rowCount (const QModelIndex& parent = QModelIndex()) const override;
+    QModelIndex parent (const QModelIndex& index) const override;
 
     ///Use this to set whether the code-completion widget should wait for this model until it's shown
     ///This makes sense when the model takes some time but not too much time, to make the UI less flickering and
@@ -92,36 +93,42 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
     MatchReaction matchingItem(const QModelIndex& matched) override;
 
-    QString filterString(KTextEditor::View* view, const KTextEditor::Range& range, const KTextEditor::Cursor& position) override;
+    QString filterString(KTextEditor::View* view, const KTextEditor::Range& range,
+                         const KTextEditor::Cursor& position) override;
 
     void clear();
 
     ///Returns the tree-element that belogns to the index, or zero
     QExplicitlySharedDataPointer<CompletionTreeElement> itemForIndex(const QModelIndex& index) const;
 
-  Q_SIGNALS:
+Q_SIGNALS:
     ///Connection from this completion-model into the background worker thread. You should emit this from within completionInvokedInternal.
-    void completionsNeeded(const KDevelop::DUContextPointer& context, const KTextEditor::Cursor& position, KTextEditor::View* view);
+    void completionsNeeded(const KDevelop::DUContextPointer& context, const KTextEditor::Cursor& position,
+                           KTextEditor::View* view);
     ///Additional signal that allows directly stepping into the worker-thread, bypassing computeCompletions(..) etc.
     ///doSpecialProcessing(data) will be executed in the background thread.
     void doSpecialProcessingInBackground(uint data);
 
-  protected Q_SLOTS:
+protected Q_SLOTS:
     ///Connection from the background-thread into the model: This is called when the background-thread is ready
     virtual void foundDeclarations(const QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& item,
                                    const QExplicitlySharedDataPointer<CodeCompletionContext>& completionContext);
 
-  protected:
+protected:
     ///Eventually override this, determine the context or whatever, and then emit completionsNeeded(..) to continue processing in the background tread.
     ///The default-implementation does this completely, so if you don't need to do anything special, you can just leave it.
-    virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range, KTextEditor::CodeCompletionModel::InvocationType invocationType, const QUrl& url);
+    virtual void completionInvokedInternal(KTextEditor::View* view, const KTextEditor::Range& range,
+                                           KTextEditor::CodeCompletionModel::InvocationType invocationType,
+                                           const QUrl& url);
 
-    void executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word, const QModelIndex& index) const override;
+    void executeCompletionItem(KTextEditor::View* view, const KTextEditor::Range& word,
+                               const QModelIndex& index) const override;
 
     QExplicitlySharedDataPointer<CodeCompletionContext> m_completionContext;
-    typedef QPair<KDevelop::DeclarationPointer, QExplicitlySharedDataPointer<CodeCompletionContext> > DeclarationContextPair;
+    typedef QPair<KDevelop::DeclarationPointer,
+        QExplicitlySharedDataPointer<CodeCompletionContext>> DeclarationContextPair;
 
-    QList< QExplicitlySharedDataPointer<CompletionTreeElement> > m_completionItems;
+    QList<QExplicitlySharedDataPointer<CompletionTreeElement>> m_completionItems;
 
     /// Should create a completion-worker. The worker must have no parent object,
     /// because else its thread-affinity can not be changed.
@@ -130,7 +137,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
 
     CodeCompletionWorker* worker() const;
 
-  private:
+private:
     bool m_forceWaitForModel;
     bool m_fullCompletion;
     QMutex* m_mutex;
@@ -138,8 +145,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionModel : public KTextEditor::Code
     QString m_filterString;
     KDevelop::TopDUContextPointer m_currentTopContext;
 };
-
 }
 
 #endif
-

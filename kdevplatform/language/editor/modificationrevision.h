@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_MODIFICATIONREVISION_H
 #define KDEVPLATFORM_MODIFICATIONREVISION_H
@@ -26,7 +26,6 @@
 class QString;
 
 namespace KDevelop {
-
 class IndexedString;
 
 KDEVPLATFORMLANGUAGE_EXPORT extern const int cacheModificationTimesForSeconds;
@@ -44,36 +43,35 @@ KDEVPLATFORMLANGUAGE_EXPORT extern const int cacheModificationTimesForSeconds;
  * */
 class KDEVPLATFORMLANGUAGE_EXPORT ModificationRevision
 {
-  public:
-	///Constructs a ModificationRevision for the file referenced by the given string, which should have been constructed using QUrl::pathOrUrl at some point
-	///This is efficient, because it uses a cache to look up the modification-revision, caching file-system stats for some time
-	static ModificationRevision revisionForFile(const IndexedString& fileName);
+public:
+    ///Constructs a ModificationRevision for the file referenced by the given string, which should have been constructed using QUrl::pathOrUrl at some point
+    ///This is efficient, because it uses a cache to look up the modification-revision, caching file-system stats for some time
+    static ModificationRevision revisionForFile(const IndexedString& fileName);
 
-	///You can use this when you want to make sure that any cached on-disk modification-time is discarded
+    ///You can use this when you want to make sure that any cached on-disk modification-time is discarded
     ///and it's re-read from disk on the next access.
     ///Otherwise, the on-disk modification-times are re-used for a specific amount of time
-	static void clearModificationCache(const IndexedString& fileName);
+    static void clearModificationCache(const IndexedString& fileName);
 
-	///The default-revision is 0, because that is the kate moving-revision for cleanly opened documents
-	explicit ModificationRevision( const QDateTime& modTime = QDateTime(), int revision_ = 0 );
+    ///The default-revision is 0, because that is the kate moving-revision for cleanly opened documents
+    explicit ModificationRevision(const QDateTime& modTime = QDateTime(), int revision_ = 0);
 
-	bool operator <( const ModificationRevision& rhs ) const;
+    bool operator <(const ModificationRevision& rhs) const;
 
-	bool operator==( const ModificationRevision& rhs ) const;
+    bool operator==(const ModificationRevision& rhs) const;
 
-	bool operator!=( const ModificationRevision& rhs ) const;
+    bool operator!=(const ModificationRevision& rhs) const;
 
-	QString toString() const;
+    QString toString() const;
 
-	uint modificationTime;  //On-disk modification-time of a document in time_t format
+    uint modificationTime;      //On-disk modification-time of a document in time_t format
     int revision;        //MovingInterface revision of a document
 
 private:
-  friend class DocumentChangeTracker;
+    friend class DocumentChangeTracker;
     static void setEditorRevisionForFile(const IndexedString& filename, int revision);
     static void clearEditorRevisionForFile(const IndexedString& filename);
 };
-
 }
 
 #endif

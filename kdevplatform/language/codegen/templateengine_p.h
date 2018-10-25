@@ -27,13 +27,11 @@
 #include <grantlee/grantlee_version.h>
 
 namespace KDevelop {
-
 class TemplateEnginePrivate
 {
 public:
     Grantlee::Engine engine;
 };
-
 }
 
 #endif // KDEVPLATFORM_TEMPLATEENGINE_P_H

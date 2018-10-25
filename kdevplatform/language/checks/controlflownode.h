@@ -14,24 +14,23 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CONTROLFLOWNODE_H
 #define KDEVPLATFORM_CONTROLFLOWNODE_H
 #include <language/editor/rangeinrevision.h>
 #include <language/languageexport.h>
 
-namespace KDevelop
-{
+namespace KDevelop {
 /** @brief Class that represents a node in the control flow graph
 
     This class will provide us the information to know how to navigate in a ControlFlowGraph.
     It has two methods (next and alternative) that will tell us what are the next nodes and
     nodeRange and conditionRange that will tell us the code ranges that this nodes is located at.
-*/
+ */
 class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowNode
 {
-  public:
+public:
     /** Defines the type of the node in terms of what's on the next and alternative method */
     enum Type {
         Conditional, /**< It's a conditional node. alternative and next are available, also conditionRange returns a valid range. */
@@ -79,6 +78,5 @@ private:
     ControlFlowNode* m_next = nullptr;
     ControlFlowNode* m_alternative = nullptr;
 };
-
 }
 #endif // KDEVPLATFORM_FLUXNODE_H

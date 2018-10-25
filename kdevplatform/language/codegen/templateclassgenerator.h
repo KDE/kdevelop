@@ -15,7 +15,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_TEMPLATECLASSGENERATOR_H
 #define KDEVPLATFORM_TEMPLATECLASSGENERATOR_H
@@ -32,9 +32,7 @@ namespace KTextEditor {
 class Cursor;
 }
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 struct ClassDescription;
 class TemplateRenderer;
 class SourceFileTemplate;
@@ -71,7 +69,7 @@ class DocumentChangeSet;
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassGenerator
 {
 public:
-    typedef QHash<QString,QUrl> UrlHash;
+    typedef QHash<QString, QUrl> UrlHash;
 
     /**
      * Creates a new generator.
@@ -138,7 +136,7 @@ public:
 
     virtual DocumentChangeSet generate();
 
-    QHash<QString,QString> fileLabels() const;
+    QHash<QString, QString> fileLabels() const;
 
     QUrl baseUrl() const;
     UrlHash fileUrls() const;
@@ -175,7 +173,6 @@ public:
 private:
     const QScopedPointer<class TemplateClassGeneratorPrivate> d;
 };
-
 }
 
 #endif // KDEVPLATFORM_TEMPLATECLASSGENERATOR_H

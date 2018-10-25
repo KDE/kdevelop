@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 #ifndef KDEVPLATFORM_IQUICKOPEN_H
 #define KDEVPLATFORM_IQUICKOPEN_H
 
@@ -27,15 +27,15 @@
 
 class QStringList;
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class QuickOpenDataProviderBase;
 class IndexedString;
 
-class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenLine : public QLineEdit
+class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenLine
+    : public QLineEdit
 {
     Q_OBJECT
+
 public:
     /**
      * Returns a non-zero declaration if it has been explicitly selected
@@ -66,7 +66,7 @@ public:
      * There might be other quick open providers with custom items.
      * Note, the item name has to be translated, for example i18n("Files") should be passed.
      */
-    virtual void showQuickOpen( const QStringList &types ) = 0;
+    virtual void showQuickOpen(const QStringList& types) = 0;
 
     /**
      * Registers a new provider under a specified name.
@@ -76,15 +76,15 @@ public:
      * @param type Types of the provided data, Examples: "Files", "Functions", "Classes", etc.
      * @param provider The provider. It does not need to be explicitly removed before its destruction.
      */
-    virtual void registerProvider( const QStringList& scopes, const QStringList& type,
-                                   QuickOpenDataProviderBase* provider ) = 0;
+    virtual void registerProvider(const QStringList& scopes, const QStringList& type,
+                                  QuickOpenDataProviderBase* provider) = 0;
 
     /**
      * Remove provider.
      * @param provider The provider to remove
      * @return Whether a provider was removed. If false, the provider was not attached.
      */
-    virtual bool removeProvider( QuickOpenDataProviderBase* provider ) = 0;
+    virtual bool removeProvider(QuickOpenDataProviderBase* provider) = 0;
 
     /**
      * Queries a set of files merged from all active data-providers that implement QuickOpenFileSetInterface.
@@ -101,7 +101,6 @@ public:
     virtual IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& types,
                                                 QuickOpenType type = Standard) = 0;
 };
-
 }
 
 Q_DECLARE_INTERFACE(KDevelop::IQuickOpen, "org.kdevelop.IQuickOpen")

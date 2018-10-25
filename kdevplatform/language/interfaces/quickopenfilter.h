@@ -29,7 +29,6 @@
 #include <util/path.h>
 
 namespace KDevelop {
-
 /**
  * This is a simple filter-implementation that helps you implementing own quickopen data-providers.
  * You should use it when possible, because that way additional features(like regexp filtering) can
@@ -56,7 +55,7 @@ namespace KDevelop {
  * @tparam Item should be the type that holds all the information you need.
  * The filter will hold the data, and you can access it through "items()".
  */
-template<class Item>
+template <class Item>
 class Filter
 {
 public:
@@ -89,7 +88,7 @@ public:
     }
 
     ///Changes the filter-text and refilters the data
-    void setFilter( const QString& text )
+    void setFilter(const QString& text)
     {
         if (m_oldFilterText == text) {
             return;
@@ -100,8 +99,8 @@ public:
         }
 
         const QVector<Item> filterBase = text.startsWith(m_oldFilterText) ?
-            m_filtered :
-            m_items; //Start filtering based on the whole data
+                                         m_filtered :
+                                         m_items; //Start filtering based on the whole data
 
         m_filtered.clear();
 
@@ -110,7 +109,7 @@ public:
             clearFilter();
             return;
         }
-        if ( typedFragments.last().endsWith(QLatin1Char(':')) ) {
+        if (typedFragments.last().endsWith(QLatin1Char(':'))) {
             // remove the trailing colon if there's only one; otherwise,
             // this breaks incremental filtering
             typedFragments.last().chop(1);
@@ -120,8 +119,8 @@ public:
             return;
         }
         for (const Item& data : filterBase) {
-            const QString& itemData = itemText( data );
-            if( itemData.contains(text, Qt::CaseInsensitive) || matchesAbbreviationMulti(itemData, typedFragments) ) {
+            const QString& itemData = itemText(data);
+            if (itemData.contains(text, Qt::CaseInsensitive) || matchesAbbreviationMulti(itemData, typedFragments)) {
                 m_filtered << data;
             }
         }
@@ -131,7 +130,7 @@ public:
 
 protected:
     ///Should return the text an item should be filtered by.
-    virtual QString itemText( const Item& data ) const = 0;
+    virtual QString itemText(const Item& data) const = 0;
 
 private:
     QString m_oldFilterText;
@@ -139,7 +138,7 @@ private:
     QVector<Item> m_items;
 };
 
-template<class Item, class Parent>
+template <class Item, class Parent>
 class PathFilter
 {
 public:
@@ -169,7 +168,7 @@ public:
     }
 
     ///Changes the filter-text and refilters the data
-    void setFilter( const QStringList& text )
+    void setFilter(const QStringList& text)
     {
         if (m_oldFilterText == text) {
             return;
@@ -181,7 +180,7 @@ public:
 
         QVector<Item> filterBase = m_filtered;
 
-        if ( m_oldFilterText.isEmpty()) {
+        if (m_oldFilterText.isEmpty()) {
             filterBase = m_items;
         } else if (m_oldFilterText.mid(0, m_oldFilterText.count() - 1) == text.mid(0, text.count() - 1)
                    && text.last().startsWith(m_oldFilterText.last())) {
@@ -203,16 +202,17 @@ public:
             }
             matches.push_back({matchQuality, i});
         }
+
         std::stable_sort(matches.begin(), matches.end(),
-                  [](const QPair<int, int>& lhs, const QPair<int, int>& rhs)
-                  {
-                    return lhs.first < rhs.first;
-                  });
+                         [](const QPair<int, int>& lhs, const QPair<int, int>& rhs)
+            {
+                return lhs.first < rhs.first;
+            });
         m_filtered.resize(matches.size());
         std::transform(matches.begin(), matches.end(), m_filtered.begin(),
                        [&filterBase](const QPair<int, int>& match) {
-                            return filterBase.at(match.second);
-                       });
+                return filterBase.at(match.second);
+            });
         m_oldFilterText = text;
     }
 
@@ -221,7 +221,6 @@ private:
     QVector<Item> m_filtered;
     QVector<Item> m_items;
 };
-
 }
 
 #endif

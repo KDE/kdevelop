@@ -18,7 +18,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 // Qt
 #include <QAction>
 // KF
@@ -48,23 +47,21 @@
 #include "ui_basicrefactoring.h"
 
 namespace {
-
 QPair<QString, QString> splitFileAtExtension(const QString& fileName)
 {
-  int idx = fileName.indexOf(QLatin1Char('.'));
-  if (idx == -1) {
-    return qMakePair(fileName, QString());
-  }
-  return qMakePair(fileName.left(idx), fileName.mid(idx));
+    int idx = fileName.indexOf(QLatin1Char('.'));
+    if (idx == -1) {
+        return qMakePair(fileName, QString());
+    }
+    return qMakePair(fileName.left(idx), fileName.mid(idx));
 }
-
 }
 
 using namespace KDevelop;
 
 //BEGIN: BasicRefactoringCollector
 
-BasicRefactoringCollector::BasicRefactoringCollector(const IndexedDeclaration &decl)
+BasicRefactoringCollector::BasicRefactoringCollector(const IndexedDeclaration& decl)
     : UsesWidgetCollector(decl)
 {
     setCollectConstructors(true);
@@ -87,7 +84,7 @@ void BasicRefactoringCollector::processUses(KDevelop::ReferencedTopDUContext top
 
 //BEGIN: BasicRefactoring
 
-BasicRefactoring::BasicRefactoring(QObject *parent)
+BasicRefactoring::BasicRefactoring(QObject* parent)
     : QObject(parent)
 {
     /* There's nothing to do here. */
@@ -95,16 +92,17 @@ BasicRefactoring::BasicRefactoring(QObject *parent)
 
 void BasicRefactoring::fillContextMenu(ContextMenuExtension& extension, Context* context, QWidget* parent)
 {
-    DeclarationContext *declContext = dynamic_cast<DeclarationContext *>(context);
+    DeclarationContext* declContext = dynamic_cast<DeclarationContext*>(context);
     if (!declContext)
         return;
 
     DUChainReadLocker lock;
-    Declaration *declaration = declContext->declaration().data();
+    Declaration* declaration = declContext->declaration().data();
     if (declaration && acceptForContextMenu(declaration)) {
         QFileInfo finfo(declaration->topContext()->url().str());
         if (finfo.isWritable()) {
-            QAction* action = new QAction(i18n("Rename \"%1\"...", declaration->qualifiedIdentifier().toString()), parent);
+            QAction* action = new QAction(i18n("Rename \"%1\"...",
+                                               declaration->qualifiedIdentifier().toString()), parent);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
             connect(action, &QAction::triggered, this, &BasicRefactoring::executeRenameAction);
@@ -118,7 +116,7 @@ bool BasicRefactoring::shouldRenameUses(KDevelop::Declaration* declaration) cons
     // Now we know we're editing a declaration, but some declarations we don't offer a rename for
     // basically that's any declaration that wouldn't be fully renamed just by renaming its uses().
     if (declaration->internalContext() || declaration->isForwardDeclaration()) {
-    //make an exception for non-class functions
+        //make an exception for non-class functions
         if (!declaration->isFunctionDeclaration() || dynamic_cast<ClassFunctionDeclaration*>(declaration))
             return false;
     }
@@ -137,8 +135,8 @@ QString BasicRefactoring::newFileName(const QUrl& current, const QString& newNam
 }
 
 DocumentChangeSet::ChangeResult BasicRefactoring::addRenameFileChanges(const QUrl& current,
-                                                                        const QString& newName,
-                                                                        DocumentChangeSet* changes)
+                                                                       const QString& newName,
+                                                                       DocumentChangeSet* changes)
 {
     return changes->addDocumentRenameChange(
         IndexedString(current), IndexedString(newFileName(current, newName)));
@@ -157,27 +155,29 @@ bool BasicRefactoring::shouldRenameFile(Declaration* declaration)
     return nameExtensionPair.first.compare(declaration->identifier().toString(), Qt::CaseInsensitive) == 0;
 }
 
-DocumentChangeSet::ChangeResult BasicRefactoring::applyChanges(const QString &oldName, const QString &newName,
-                                                               DocumentChangeSet &changes, DUContext *context,
+DocumentChangeSet::ChangeResult BasicRefactoring::applyChanges(const QString& oldName, const QString& newName,
+                                                               DocumentChangeSet& changes, DUContext* context,
                                                                int usedDeclarationIndex)
 {
     if (usedDeclarationIndex == std::numeric_limits<int>::max())
         return DocumentChangeSet::ChangeResult::successfulResult();
 
     for (int a = 0; a < context->usesCount(); ++a) {
-        const Use &use(context->uses()[a]);
+        const Use& use(context->uses()[a]);
         if (use.m_declarationIndex != usedDeclarationIndex)
             continue;
         if (use.m_range.isEmpty()) {
             qCDebug(LANGUAGE) << "found empty use";
             continue;
         }
-        DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(context->url(), context->transformFromLocalRevision(use.m_range), oldName, newName));
+        DocumentChangeSet::ChangeResult result =
+            changes.addChange(DocumentChange(context->url(), context->transformFromLocalRevision(use.m_range), oldName,
+                                             newName));
         if (!result)
             return result;
     }
 
-    foreach (DUContext *child, context->childContexts()) {
+    foreach (DUContext* child, context->childContexts()) {
         DocumentChangeSet::ChangeResult result = applyChanges(oldName, newName, changes, child, usedDeclarationIndex);
         if (!result)
             return result;
@@ -186,20 +186,21 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChanges(const QString &ol
     return DocumentChangeSet::ChangeResult::successfulResult();
 }
 
-DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(const QString &oldName,
-                                                                             const QString &newName,
-                                                                             DocumentChangeSet &changes,
-                                                                             const QList<IndexedDeclaration> &declarations)
+DocumentChangeSet::ChangeResult BasicRefactoring::applyChangesToDeclarations(const QString& oldName,
+                                                                             const QString& newName,
+                                                                             DocumentChangeSet& changes,
+                                                                             const QList<IndexedDeclaration>& declarations)
 {
     for (auto& decl : declarations) {
-        Declaration *declaration = decl.data();
+        Declaration* declaration = decl.data();
         if (!declaration)
             continue;
         if (declaration->range().isEmpty())
             qCDebug(LANGUAGE) << "found empty declaration";
 
-        TopDUContext *top = declaration->topContext();
-        DocumentChangeSet::ChangeResult result = changes.addChange(DocumentChange(top->url(), declaration->rangeInCurrentRevision(), oldName, newName));
+        TopDUContext* top = declaration->topContext();
+        DocumentChangeSet::ChangeResult result =
+            changes.addChange(DocumentChange(top->url(), declaration->rangeInCurrentRevision(), oldName, newName));
         if (!result)
             return result;
     }
@@ -218,14 +219,16 @@ KDevelop::IndexedDeclaration BasicRefactoring::declarationUnderCursor(bool allow
     if (allowUse)
         return DUChainUtils::itemUnderCursor(doc->url(), KTextEditor::Cursor(view->cursorPosition())).declaration;
     else
-        return DUChainUtils::declarationInLine(KTextEditor::Cursor(view->cursorPosition()), DUChainUtils::standardContextForUrl(doc->url()));
+        return DUChainUtils::declarationInLine(KTextEditor::Cursor(
+                                                   view->cursorPosition()),
+                                               DUChainUtils::standardContextForUrl(doc->url()));
 }
 
-void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration &decl)
+void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration& decl)
 {
     DUChainReadLocker lock(DUChain::lock());
 
-    Declaration *declaration = decl.data();
+    Declaration* declaration = decl.data();
     if (!declaration) {
         KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No declaration under cursor"));
         return;
@@ -233,7 +236,8 @@ void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration
     QFileInfo info(declaration->topContext()->url().str());
     if (!info.isWritable()) {
         KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                           i18n("Declaration is located in non-writeable file %1.", declaration->topContext()->url().str()));
+                           i18n("Declaration is located in non-writeable file %1.",
+                                declaration->topContext()->url().str()));
         return;
     }
 
@@ -248,7 +252,7 @@ void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration
     renameCollectedDeclarations(nc.collector.data(), nc.newName, originalName);
 }
 
-bool BasicRefactoring::acceptForContextMenu(const Declaration *decl)
+bool BasicRefactoring::acceptForContextMenu(const Declaration* decl)
 {
     // Default implementation. Some language plugins might override it to
     // handle some cases.
@@ -258,20 +262,21 @@ bool BasicRefactoring::acceptForContextMenu(const Declaration *decl)
 
 void BasicRefactoring::executeRenameAction()
 {
-    QAction *action = qobject_cast<QAction *>(sender());
+    QAction* action = qobject_cast<QAction*>(sender());
     if (action) {
         IndexedDeclaration decl = action->data().value<IndexedDeclaration>();
-        if(!decl.isValid())
+        if (!decl.isValid())
             decl = declarationUnderCursor();
 
-        if(!decl.isValid())
+        if (!decl.isValid())
             return;
 
         startInteractiveRename(decl);
     }
 }
 
-BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const KDevelop::DeclarationPointer& declaration)
+BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(
+    const KDevelop::DeclarationPointer& declaration)
 {
     DUChainReadLocker lock;
     if (!declaration) {
@@ -287,10 +292,11 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
     UsesWidget uses(declaration.data(), collector);
 
     //So the context-links work
-    QWidget *navigationWidget = declaration->context()->createNavigationWidget(declaration.data());
+    QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration.data());
     AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
     if (abstractNavigationWidget)
-        connect(&uses, &UsesWidget::navigateDeclaration, abstractNavigationWidget, &AbstractNavigationWidget::navigateDeclaration);
+        connect(&uses, &UsesWidget::navigateDeclaration, abstractNavigationWidget,
+                &AbstractNavigationWidget::navigateDeclaration);
 
     QString declarationName = declaration->toString();
     dialog.setWindowTitle(i18nc("Renaming some declaration", "Rename \"%1\"", declarationName));
@@ -306,7 +312,8 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
         return {};
 
     const auto text = renameDialog.edit->text().trimmed();
-    RefactoringProgressDialog refactoringProgress(i18n("Renaming \"%1\" to \"%2\"", declarationName, text), collector.data());
+    RefactoringProgressDialog refactoringProgress(i18n("Renaming \"%1\" to \"%2\"", declarationName,
+                                                       text), collector.data());
     if (!collector->isReady()) {
         if (refactoringProgress.exec() != QDialog::Accepted) { // krazy:exclude=crashy
             return {};
@@ -314,10 +321,14 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(const
     }
 
     //TODO: input validation
-    return {text,collector};
+    return {
+               text, collector
+    };
 }
 
-DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicRefactoringCollector* collector, const QString& replacementName, const QString& originalName, bool apply)
+DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicRefactoringCollector* collector,
+                                                                const QString& replacementName,
+                                                                const QString& originalName, bool apply)
 {
     DocumentChangeSet changes;
     DUChainReadLocker lock;
@@ -329,7 +340,8 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
             if (hadIndices.contains(usedDeclarationIndex))
                 continue;
             hadIndices.insert(usedDeclarationIndex);
-            DocumentChangeSet::ChangeResult result = applyChanges(originalName, replacementName, changes, collected.data(), usedDeclarationIndex);
+            DocumentChangeSet::ChangeResult result = applyChanges(originalName, replacementName, changes,
+                                                                  collected.data(), usedDeclarationIndex);
             if (!result) {
                 KMessageBox::error(nullptr, i18n("Applying changes failed: %1", result.m_failureReason));
                 return {};
@@ -337,7 +349,8 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
         }
     }
 
-    DocumentChangeSet::ChangeResult result = applyChangesToDeclarations(originalName, replacementName, changes, collector->declarations());
+    DocumentChangeSet::ChangeResult result = applyChangesToDeclarations(originalName, replacementName, changes,
+                                                                        collector->declarations());
     if (!result) {
         KMessageBox::error(nullptr, i18n("Applying changes failed: %1", result.m_failureReason));
         return {};
@@ -359,4 +372,3 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
 }
 
 //END: BasicRefactoring
-

@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_ABSTRACTNAVIGATIONCONTEXT_H
 #define KDEVPLATFORM_ABSTRACTNAVIGATIONCONTEXT_H
@@ -26,7 +26,6 @@
 #include "navigationaction.h"
 
 namespace KDevelop {
-
 /** A helper-class for elegant colorization of html-strings .
  *
  * Initialize it with a html-color like "990000". and colorize strings
@@ -34,30 +33,33 @@ namespace KDevelop {
  */
 struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
 {
-  enum FormattingFlag {
-    Nothing = 0x0,
-    Bold = 0x1,
-    Italic = 0x2,
-    Fixed = 0x4
-  };
-  Q_DECLARE_FLAGS(Formatting, FormattingFlag)
-  explicit Colorizer(const QString& color, Formatting formatting = Nothing)
-    : m_color(color), m_formatting(formatting)
-  {
-  }
+    enum FormattingFlag {
+        Nothing = 0x0,
+        Bold = 0x1,
+        Italic = 0x2,
+        Fixed = 0x4
+    };
+    Q_DECLARE_FLAGS(Formatting, FormattingFlag)
+    explicit Colorizer(const QString& color, Formatting formatting = Nothing)
+        : m_color(color)
+        , m_formatting(formatting)
+    {
+    }
 
-  QString operator()(const QString& str) const;
+    QString operator()(const QString& str) const;
 
-  QString m_color;
-  Formatting m_formatting;
+    QString m_color;
+    Formatting m_formatting;
 };
 
 class AbstractNavigationContext;
 typedef QExplicitlySharedDataPointer<AbstractNavigationContext> NavigationContextPointer;
 
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext : public QObject, public QSharedData
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext
+    : public QObject
+    , public QSharedData
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit AbstractNavigationContext(const TopDUContextPointer& topContext = TopDUContextPointer(),
@@ -74,7 +76,7 @@ public:
 
     QString prefix() const;
     QString suffix() const;
-    void setPrefixSuffix( const QString& prefix, const QString& suffix );
+    void setPrefixSuffix(const QString& prefix, const QString& suffix);
 
     NavigationContextPointer accept();
     NavigationContextPointer back();
@@ -91,7 +93,7 @@ public:
     ///The widget may have a signal "navigateDeclaration(KDevelop::IndexedDeclaration)".
     ///If that signal is emitted, the new declaration is navigated in the navigation-wdiget.
     virtual QWidget* widget() const;
-    
+
     ///Whether the widget returned by widget() should take the maximum possible spsace.
     ///The default implementation returns true.
     virtual bool isWidgetMaximized() const;
@@ -99,34 +101,37 @@ public:
     ///Returns whether this context's string has already been computed, and is up to date.
     ///After clear() was called, this returns false again.
     bool alreadyComputed() const;
-    
+
     TopDUContextPointer topContext() const;
     void setTopContext(const TopDUContextPointer& context);
 
     void executeLink(const QString& link);
     NavigationContextPointer execute(const NavigationAction& action);
 
-  Q_SIGNALS:
+Q_SIGNALS:
     void contentsChanged();
 
-  protected:
+protected:
     /// Returns the html font-size prefix (aka. &lt;small&gt; or similar) for the given mode
     QString fontSizePrefix(bool shorten) const;
     /// Returns the html font-size suffix (aka. &lt;small&gt; or similar) for the given mode
     QString fontSizeSuffix(bool shorten) const;
-    
+
     AbstractNavigationContext* previousContext() const;
     virtual void setPreviousContext(AbstractNavigationContext* previousContext);
-    
-    struct TextHandler {
-      explicit TextHandler(AbstractNavigationContext* c) : context(c) {
-      }
-      void operator+=(const QString& str) const {
-        context->addHtml(str);
-      }
-      AbstractNavigationContext* context;
+
+    struct TextHandler
+    {
+        explicit TextHandler(AbstractNavigationContext* c) : context(c)
+        {
+        }
+        void operator+=(const QString& str) const
+        {
+            context->addHtml(str);
+        }
+        AbstractNavigationContext* context;
     };
-    
+
     ///Override this to execute own key-actions using NavigationAction
     virtual NavigationContextPointer executeKeyAction(const QString& key);
 
@@ -135,21 +140,23 @@ public:
     ///Returns the html text being built in its current state
     QString currentHtml() const;
     ///Returns a convenience object that allows writing "modifyHtml() += "Hallo";"
-    TextHandler modifyHtml() {
-      return TextHandler(this);
+    TextHandler modifyHtml()
+    {
+        return TextHandler(this);
     }
 
     //Clears the computed html and links
     void clear();
 
-    void addExternalHtml( const QString& text );
+    void addExternalHtml(const QString& text);
 
     ///Creates and registers a link to the given declaration, labeled by the given name
-    virtual void makeLink(const QString& name, const DeclarationPointer& declaration, NavigationAction::Type actionType);
+    virtual void makeLink(const QString& name, const DeclarationPointer& declaration,
+                          NavigationAction::Type actionType);
 
     ///Creates a link that executes the given action and adds it to the current context
     void makeLink(const QString& name, const QString& targetId, const NavigationAction& action);
-    
+
     ///Creates a link that executes the given action and returns it
     QString createLink(const QString& name, const QString& targetId, const NavigationAction& action);
 
@@ -171,7 +178,6 @@ public:
 private:
     const QScopedPointer<class AbstractNavigationContextPrivate> d;
 };
-
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KDevelop::Colorizer::Formatting)

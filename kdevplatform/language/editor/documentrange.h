@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DOCUMENTRANGE_H
 #define KDEVPLATFORM_DOCUMENTRANGE_H
@@ -24,45 +24,48 @@
 
 #include <KTextEditor/Range>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 /**
  * Lightweight object that extends a range with information about the URL to which the range refers.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentRange : public KTextEditor::Range
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentRange
+    : public KTextEditor::Range
 {
 public:
-    DocumentRange() {
-    }
-  
-    inline DocumentRange(const IndexedString& document, const KTextEditor::Range& range)
-      : KTextEditor::Range(range), document(document)
+    DocumentRange()
     {
-      Q_ASSERT(document.toUrl() == document.toUrl().adjusted(QUrl::NormalizePathSegments));
     }
 
-    inline bool operator==(const DocumentRange& rhs) const {
-      return document == rhs.document && *static_cast<const KTextEditor::Range*>(this) == rhs;
+    inline DocumentRange(const IndexedString& document, const KTextEditor::Range& range)
+        : KTextEditor::Range(range)
+        , document(document)
+    {
+        Q_ASSERT(document.toUrl() == document.toUrl().adjusted(QUrl::NormalizePathSegments));
     }
 
-    static DocumentRange invalid() {
-      return DocumentRange(IndexedString(), KTextEditor::Range::invalid());
+    inline bool operator==(const DocumentRange& rhs) const
+    {
+        return document == rhs.document && *static_cast<const KTextEditor::Range*>(this) == rhs;
+    }
+
+    static DocumentRange invalid()
+    {
+        return DocumentRange(IndexedString(), KTextEditor::Range::invalid());
     }
 
     IndexedString document;
 };
-
 }
 Q_DECLARE_TYPEINFO(KDevelop::DocumentRange, Q_MOVABLE_TYPE);
 
 namespace QTest {
-template<>
-inline char *toString(const KDevelop::DocumentRange &documentRange)
+template <>
+inline char* toString(const KDevelop::DocumentRange& documentRange)
 {
-    QByteArray ba = "DocumentRange[range=" + QByteArray(QTest::toString(*static_cast<const KTextEditor::Range*>(&documentRange)))
-        + ", document=" + documentRange.document.toUrl().toDisplayString().toLatin1()
-        + "]";
+    QByteArray ba = "DocumentRange[range=" +
+                    QByteArray(QTest::toString(*static_cast<const KTextEditor::Range*>(&documentRange)))
+                    + ", document=" + documentRange.document.toUrl().toDisplayString().toLatin1()
+                    + "]";
     return qstrdup(ba.data());
 }
 }

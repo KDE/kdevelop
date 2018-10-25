@@ -29,16 +29,15 @@
 #ifndef KDEVPLATFORM_TYPEPOINTER_H
 #define KDEVPLATFORM_TYPEPOINTER_H
 
-
 #include <QExplicitlySharedDataPointer>
 
 namespace KDevelop {
-
 /**
  * @brief QExplicitlySharedDataPointer wrapper with convenience functions attached
  */
-template<class T>
-class TypePtr : public QExplicitlySharedDataPointer<T>
+template <class T>
+class TypePtr
+    : public QExplicitlySharedDataPointer<T>
 {
     using Base = QExplicitlySharedDataPointer<T>;
 
@@ -47,9 +46,10 @@ public:
     using Base::operator=;
 
     ///Uses dynamic_cast to cast this pointer to the given type
-    template<class U>
-    TypePtr<U> cast(U * /*dummy*/ = nullptr) const {
-      return TypePtr<U>(dynamic_cast<U*>(Base::data()));
+    template <class U>
+    TypePtr<U> cast(U* /*dummy*/ = nullptr) const
+    {
+        return TypePtr<U>(dynamic_cast<U*>(Base::data()));
     }
 
     /**
@@ -63,8 +63,9 @@ public:
      * @endcode
      */
     template <class U>
-    static TypePtr<T> staticCast( const TypePtr<U>& o ) {
-        return TypePtr<T>( static_cast<T *>( o.data() ) );
+    static TypePtr<T> staticCast(const TypePtr<U>& o)
+    {
+        return TypePtr<T>(static_cast<T*>(o.data()));
     }
     /**
      * Convert TypePtr<U> to TypePtr<T>, using a dynamic_cast.
@@ -78,11 +79,11 @@ public:
      * Since a dynamic_cast is used, if U derives from T, and tPtr isn't an instance of U, uPtr will be 0.
      */
     template <class U>
-    static TypePtr<T> dynamicCast( const TypePtr<U>& o ) {
-        return TypePtr<T>( dynamic_cast<T *>( o.data() ) );
+    static TypePtr<T> dynamicCast(const TypePtr<U>& o)
+    {
+        return TypePtr<T>(dynamic_cast<T*>(o.data()));
     }
 };
-
 }
 
 #endif

@@ -16,7 +16,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "pointertype.h"
 
@@ -25,81 +25,82 @@
 #include "typeregister.h"
 #include "typesystem.h"
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 REGISTER_TYPE(PointerType);
 
-PointerType::PointerType(const PointerType& rhs) : AbstractType(copyData<PointerType>(*rhs.d_func())) {
+PointerType::PointerType(const PointerType& rhs) : AbstractType(copyData<PointerType>(*rhs.d_func()))
+{
 }
 
-PointerType::PointerType(PointerTypeData& data) : AbstractType(data) {
+PointerType::PointerType(PointerTypeData& data) : AbstractType(data)
+{
 }
 
-AbstractType* PointerType::clone() const {
-  return new PointerType(*this);
+AbstractType* PointerType::clone() const
+{
+    return new PointerType(*this);
 }
 
 bool PointerType::equals(const AbstractType* _rhs) const
 {
-  if( this == _rhs )
-    return true;
+    if (this == _rhs)
+        return true;
 
-  if (!AbstractType::equals(_rhs))
-    return false;
+    if (!AbstractType::equals(_rhs))
+        return false;
 
-  Q_ASSERT(fastCast<const PointerType*>(_rhs));
+    Q_ASSERT(fastCast<const PointerType*>(_rhs));
 
-  const PointerType* rhs = static_cast<const PointerType*>(_rhs);
+    const PointerType* rhs = static_cast<const PointerType*>(_rhs);
 
-  return d_func()->m_baseType == rhs->d_func()->m_baseType;
+    return d_func()->m_baseType == rhs->d_func()->m_baseType;
 }
 
 PointerType::PointerType()
-  : AbstractType(createData<PointerType>())
+    : AbstractType(createData<PointerType>())
 {
 }
 
-void PointerType::accept0 (TypeVisitor *v) const
+void PointerType::accept0(TypeVisitor* v) const
 {
-  if (v->visit (this))
-    acceptType (d_func()->m_baseType.abstractType(), v);
+    if (v->visit(this))
+        acceptType(d_func()->m_baseType.abstractType(), v);
 
-  v->endVisit (this);
+    v->endVisit(this);
 }
 
-void PointerType::exchangeTypes( TypeExchanger* exchanger ) {
-  d_func_dynamic()->m_baseType = IndexedType(exchanger->exchange( d_func()->m_baseType.abstractType()));
+void PointerType::exchangeTypes(TypeExchanger* exchanger)
+{
+    d_func_dynamic()->m_baseType = IndexedType(exchanger->exchange(d_func()->m_baseType.abstractType()));
 }
 
 PointerType::~PointerType()
 {
 }
 
-AbstractType::Ptr PointerType::baseType () const
+AbstractType::Ptr PointerType::baseType() const
 {
-  return d_func()->m_baseType.abstractType();
+    return d_func()->m_baseType.abstractType();
 }
 
 void PointerType::setBaseType(const AbstractType::Ptr& type)
 {
-  d_func_dynamic()->m_baseType = IndexedType(type);
+    d_func_dynamic()->m_baseType = IndexedType(type);
 }
 
 QString PointerType::toString() const
 {
-  QString baseString = (baseType() ? baseType()->toString() : QStringLiteral("<notype>"));
-  return QStringLiteral("%1*").arg(baseString) + AbstractType::toString(true);
+    QString baseString = (baseType() ? baseType()->toString() : QStringLiteral("<notype>"));
+    return QStringLiteral("%1*").arg(baseString) + AbstractType::toString(true);
 }
 
 AbstractType::WhichType PointerType::whichType() const
 {
-  return TypePointer;
+    return TypePointer;
 }
 
 uint PointerType::hash() const
 {
-  return KDevHash(AbstractType::hash()) << d_func()->m_baseType.hash();
+    return KDevHash(AbstractType::hash()) << d_func()->m_baseType.hash();
 }
-
 }

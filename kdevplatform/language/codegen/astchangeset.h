@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_ASTCHANGESET_H
 #define KDEVPLATFORM_ASTCHANGESET_H
@@ -22,10 +22,8 @@
 #include <QVariant>
 
 namespace KDevelop {
-
 template <typename AstNode>
 class AstChangeSet;
-
 
 class AstChange;
 
@@ -63,7 +61,7 @@ public:
      */
     class AstChange
     {
-    public:
+public:
         enum ChangeTypes {
             ListRewrite,
             ListClear,
@@ -226,12 +224,12 @@ public:
     }
 
     /**
-    * Copy an existing node (whether from the Ast or from the change set).
-    *
-    * You may then modify this reference, and the modifications will be applied to the node when the change set is finalised.
-    *
-    * \returns a copy of \a source, which you may modify directly.
-    */
+     * Copy an existing node (whether from the Ast or from the change set).
+     *
+     * You may then modify this reference, and the modifications will be applied to the node when the change set is finalised.
+     *
+     * \returns a copy of \a source, which you may modify directly.
+     */
     AstNodeRef<AstNode>* copyNode(AstNode* source)
     {
         AstNodeRef<AstNode>* newRef = new AstNodeRef<AstNode>(this, source, false);
@@ -243,7 +241,6 @@ private:
     const AstNode* m_topNode;
     QList<AstNodeRef<AstNode>*> m_nodeRefs;
 };
-
 }
 
 #endif // KDEVPLATFORM_ASTCHANGESET_H

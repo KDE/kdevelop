@@ -15,7 +15,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_ARCHIVETEMPLATELOADER_H
 #define KDEVPLATFORM_ARCHIVETEMPLATELOADER_H
@@ -23,12 +23,11 @@
 #include <grantlee/templateloader.h>
 
 class KArchiveDirectory;
-namespace KDevelop
-{
-
+namespace KDevelop {
 class ArchiveTemplateLocation;
 
-class ArchiveTemplateLoader : public Grantlee::AbstractTemplateLoader
+class ArchiveTemplateLoader
+    : public Grantlee::AbstractTemplateLoader
 {
 public:
     static ArchiveTemplateLoader* self();
@@ -68,7 +67,6 @@ public:
 private:
     const KArchiveDirectory* m_directory;
 };
-
 }
 
 #endif // KDEVPLATFORM_ARCHIVETEMPLATELOADER_H

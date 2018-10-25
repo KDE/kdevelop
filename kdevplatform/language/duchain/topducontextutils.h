@@ -15,29 +15,29 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_TOPDUCONTEXTUTILS_H
 #define KDEVPLATFORM_TOPDUCONTEXTUTILS_H
 
 #include "topducontext.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 /// \todo move data to private d pointer classes
 struct KDEVPLATFORMLANGUAGE_EXPORT TopDUContext::DeclarationChecker
 {
-  DeclarationChecker(const TopDUContext* _top, const CursorInRevision& _position, const AbstractType::Ptr& _dataType, DUContext::SearchFlags _flags, KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache = nullptr);
-  bool operator()(const Declaration* dec) const;
+    DeclarationChecker(const TopDUContext* _top, const CursorInRevision& _position, const AbstractType::Ptr& _dataType,
+                       DUContext::SearchFlags _flags,
+                       KDevVarLengthArray<IndexedDeclaration>* _createVisibleCache = nullptr);
+    bool operator()(const Declaration* dec) const;
 
-  mutable KDevVarLengthArray<IndexedDeclaration>* createVisibleCache;
-  const TopDUContext* top;
-  const TopDUContextData* topDFunc;
-  const CursorInRevision& position;
-  const AbstractType::Ptr dataType;
-  DUContext::SearchFlags flags;
+    mutable KDevVarLengthArray<IndexedDeclaration>* createVisibleCache;
+    const TopDUContext* top;
+    const TopDUContextData* topDFunc;
+    const CursorInRevision& position;
+    const AbstractType::Ptr dataType;
+    DUContext::SearchFlags flags;
 };
-
 }
 
 #endif // KDEVPLATFORM_TOPDUCONTEXTUTILS_H

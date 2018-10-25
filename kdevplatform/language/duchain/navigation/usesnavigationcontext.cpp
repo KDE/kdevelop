@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "usesnavigationcontext.h"
 
@@ -26,39 +26,45 @@
 
 using namespace KDevelop;
 
-UsesNavigationContext::UsesNavigationContext(IndexedDeclaration declaration, AbstractNavigationContext* previousContext )
-  : AbstractNavigationContext(TopDUContextPointer(), previousContext),    m_declaration(declaration)
+UsesNavigationContext::UsesNavigationContext(IndexedDeclaration declaration, AbstractNavigationContext* previousContext)
+    : AbstractNavigationContext(TopDUContextPointer(), previousContext)
+    , m_declaration(declaration)
 {
-  m_widget = new UsesWidget(m_declaration);
+    m_widget = new UsesWidget(m_declaration);
 }
 
-UsesNavigationContext::~UsesNavigationContext() {
-  delete m_widget;
+UsesNavigationContext::~UsesNavigationContext()
+{
+    delete m_widget;
 }
 
-QString UsesNavigationContext::name() const {
-  return QStringLiteral("Uses");
+QString UsesNavigationContext::name() const
+{
+    return QStringLiteral("Uses");
 }
 
-QString UsesNavigationContext::html(bool shorten) {
-  clear();
-  modifyHtml()  += QLatin1String("<html><body><p>") + fontSizePrefix(shorten);
-  
-  if(auto context = previousContext()) {
-    modifyHtml() += navigationHighlight(i18n("Uses of "));
-    makeLink(context->name(), context->name(), NavigationAction(context));
-  }else{
-    KDevelop::DUChainReadLocker lock(DUChain::lock());
-    if(Declaration* decl = m_declaration.data()) {
-      makeLink( i18n("Uses of %1", decl->toString()), DeclarationPointer(decl), NavigationAction::NavigateDeclaration);
+QString UsesNavigationContext::html(bool shorten)
+{
+    clear();
+    modifyHtml()  += QLatin1String("<html><body><p>") + fontSizePrefix(shorten);
+
+    if (auto context = previousContext()) {
+        modifyHtml() += navigationHighlight(i18n("Uses of "));
+        makeLink(context->name(), context->name(), NavigationAction(context));
+    } else {
+        KDevelop::DUChainReadLocker lock(DUChain::lock());
+        if (Declaration* decl = m_declaration.data()) {
+            makeLink(i18n("Uses of %1", decl->toString()), DeclarationPointer(
+                         decl), NavigationAction::NavigateDeclaration);
+        }
     }
-  }
-  
-  modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
 
-  return currentHtml();
+    modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
+
+    return currentHtml();
 }
 
-QWidget* UsesNavigationContext::widget() const {
-  return m_widget;
+QWidget* UsesNavigationContext::widget() const
+{
+    return m_widget;
 }

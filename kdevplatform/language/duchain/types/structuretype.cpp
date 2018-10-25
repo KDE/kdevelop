@@ -16,7 +16,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "structuretype.h"
 
@@ -25,42 +25,41 @@
 #include "typeregister.h"
 #include "typesystem.h"
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 REGISTER_TYPE(StructureType);
 
 StructureType::StructureType(const StructureType& rhs)
-  : StructureTypeBase(copyData<StructureType>(*rhs.d_func()))
+    : StructureTypeBase(copyData<StructureType>(*rhs.d_func()))
 {
 }
 
 StructureType::StructureType(StructureTypeData& data)
-  : StructureTypeBase(data)
+    : StructureTypeBase(data)
 {
 }
 
-AbstractType* StructureType::clone() const {
-  return new StructureType(*this);
+AbstractType* StructureType::clone() const
+{
+    return new StructureType(*this);
 }
 
 bool StructureType::equals(const AbstractType* _rhs) const
 {
-  if( this == _rhs )
-    return true;
+    if (this == _rhs)
+        return true;
 
-  if (!StructureTypeBase::equals(_rhs))
-    return false;
+    if (!StructureTypeBase::equals(_rhs))
+        return false;
 
 //   Q_ASSERT(fastCast<const StructureType*>(_rhs));
 
 //   const StructureType* rhs = static_cast<const StructureType*>(_rhs);
 
-  return true;
+    return true;
 }
 
 StructureType::StructureType()
-  : StructureTypeBase(createData<StructureType>())
+    : StructureTypeBase(createData<StructureType>())
 {
 }
 
@@ -68,34 +67,33 @@ StructureType::~StructureType()
 {
 }
 
-void StructureType::accept0 (TypeVisitor *v) const
+void StructureType::accept0(TypeVisitor* v) const
 {
 //   TYPE_D(StructureType);
-  v->visit (this);
+    v->visit(this);
 
-  v->endVisit (this);
+    v->endVisit(this);
 }
 
 QString StructureType::toString() const
 {
-  QualifiedIdentifier id = qualifiedIdentifier();
-  if (!id.isEmpty()) {
-    return AbstractType::toString() + id.toString();
-  }
+    QualifiedIdentifier id = qualifiedIdentifier();
+    if (!id.isEmpty()) {
+        return AbstractType::toString() + id.toString();
+    }
 
-  QString type = QStringLiteral("class");
+    QString type = QStringLiteral("class");
 
-  return QStringLiteral("<%1>").arg(type) + AbstractType::toString(true);
+    return QStringLiteral("<%1>").arg(type) + AbstractType::toString(true);
 }
 
 AbstractType::WhichType StructureType::whichType() const
 {
-  return TypeStructure;
+    return TypeStructure;
 }
 
 uint StructureType::hash() const
 {
-  return KDevHash(AbstractType::hash()) << IdentifiedType::hash();
+    return KDevHash(AbstractType::hash()) << IdentifiedType::hash();
 }
-
 }

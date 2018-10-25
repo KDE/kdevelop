@@ -41,4 +41,3 @@ QString TestLanguageSupport::name() const
 {
     return QStringLiteral("TestLanguageSupport");
 }
-

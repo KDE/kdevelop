@@ -16,7 +16,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "typesystem.h"
 #include "typerepository.h"
@@ -25,45 +25,47 @@
 #include "integraltype.h"
 #include "structuretype.h"
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 AbstractTypeData::AbstractTypeData()
-  : inRepository(false)
+    : inRepository(false)
 {
-  initializeAppendedLists(true);
+    initializeAppendedLists(true);
 }
 
-uint AbstractTypeData::classSize() const {
-  return TypeSystem::self().dataClassSize(*this);
-}
-
-unsigned int AbstractTypeData::itemSize() const {
-  return TypeSystem::self().dynamicSize(*this);
-}
-
-unsigned int AbstractTypeData::hash() const {
-  AbstractType::Ptr type( TypeSystem::self().create(const_cast<AbstractTypeData*>(this)) );
-  return type->hash();
-}
-
-AbstractTypeData::AbstractTypeData( const AbstractTypeData& rhs )
-  : refCount(0)
-  , m_modifiers(rhs.m_modifiers)
-  , inRepository(false)
+uint AbstractTypeData::classSize() const
 {
-  initializeAppendedLists(!rhs.m_dynamic); //This type will be dynamic exactly if the copied one is not.
-  typeClassId = rhs.typeClassId;
+    return TypeSystem::self().dataClassSize(*this);
+}
+
+unsigned int AbstractTypeData::itemSize() const
+{
+    return TypeSystem::self().dynamicSize(*this);
+}
+
+unsigned int AbstractTypeData::hash() const
+{
+    AbstractType::Ptr type(TypeSystem::self().create(const_cast<AbstractTypeData*>(this)));
+    return type->hash();
+}
+
+AbstractTypeData::AbstractTypeData(const AbstractTypeData& rhs)
+    : refCount(0)
+    , m_modifiers(rhs.m_modifiers)
+    , inRepository(false)
+{
+    initializeAppendedLists(!rhs.m_dynamic); //This type will be dynamic exactly if the copied one is not.
+    typeClassId = rhs.typeClassId;
 }
 
 AbstractTypeData::~AbstractTypeData()
 {
-  freeAppendedLists();
+    freeAppendedLists();
 }
 
-AbstractTypeData& AbstractTypeData::operator=(const AbstractTypeData&) {
-  Q_ASSERT(0);
-  return *this;
+AbstractTypeData& AbstractTypeData::operator=(const AbstractTypeData&)
+{
+    Q_ASSERT(0);
+    return *this;
 }
 
 IntegralTypeData::IntegralTypeData()
@@ -71,8 +73,9 @@ IntegralTypeData::IntegralTypeData()
 {
 }
 
-IntegralTypeData::IntegralTypeData( const IntegralTypeData& rhs )
-  : AbstractTypeData(rhs), m_dataType(rhs.m_dataType)
+IntegralTypeData::IntegralTypeData(const IntegralTypeData& rhs)
+    : AbstractTypeData(rhs)
+    , m_dataType(rhs.m_dataType)
 {
 }
 
@@ -80,34 +83,39 @@ PointerTypeData::PointerTypeData()
 {
 }
 
-PointerTypeData::PointerTypeData( const PointerTypeData& rhs )
-  : AbstractTypeData(rhs), m_baseType( rhs.m_baseType )
+PointerTypeData::PointerTypeData(const PointerTypeData& rhs)
+    : AbstractTypeData(rhs)
+    , m_baseType(rhs.m_baseType)
 {
 }
 
-ReferenceTypeData::ReferenceTypeData() : m_isRValue( false )
+ReferenceTypeData::ReferenceTypeData() : m_isRValue(false)
 {
 }
 
-ReferenceTypeData::ReferenceTypeData( const ReferenceTypeData& rhs )
-  : AbstractTypeData( rhs ), m_baseType( rhs.m_baseType ), m_isRValue( rhs.m_isRValue )
+ReferenceTypeData::ReferenceTypeData(const ReferenceTypeData& rhs)
+    : AbstractTypeData(rhs)
+    , m_baseType(rhs.m_baseType)
+    , m_isRValue(rhs.m_isRValue)
 {
 }
 
 FunctionTypeData::FunctionTypeData()
 {
-  initializeAppendedLists(m_dynamic);
+    initializeAppendedLists(m_dynamic);
 }
 
-FunctionTypeData::~FunctionTypeData() {
-  freeAppendedLists();
-}
-
-FunctionTypeData::FunctionTypeData( const FunctionTypeData& rhs )
-  : AbstractTypeData( rhs ), m_returnType( rhs.m_returnType)
+FunctionTypeData::~FunctionTypeData()
 {
-  initializeAppendedLists(m_dynamic);
-  copyListsFrom(rhs);
+    freeAppendedLists();
+}
+
+FunctionTypeData::FunctionTypeData(const FunctionTypeData& rhs)
+    : AbstractTypeData(rhs)
+    , m_returnType(rhs.m_returnType)
+{
+    initializeAppendedLists(m_dynamic);
+    copyListsFrom(rhs);
 }
 
 void FunctionTypeData::operator=(const FunctionTypeData& rhs)
@@ -119,8 +127,8 @@ StructureTypeData::StructureTypeData()
 {
 }
 
-StructureTypeData::StructureTypeData( const StructureTypeData& rhs )
-  : MergeIdentifiedType<AbstractType>::Data( rhs )
+StructureTypeData::StructureTypeData(const StructureTypeData& rhs)
+    : MergeIdentifiedType<AbstractType>::Data(rhs)
 {
 }
 
@@ -134,94 +142,111 @@ ArrayTypeData::ArrayTypeData()
 {
 }
 
-ArrayTypeData::ArrayTypeData( const ArrayTypeData& rhs )
-  : AbstractTypeData( rhs ), m_dimension( rhs.m_dimension ),
-    m_elementType( rhs.m_elementType )
+ArrayTypeData::ArrayTypeData(const ArrayTypeData& rhs)
+    : AbstractTypeData(rhs)
+    , m_dimension(rhs.m_dimension)
+    , m_elementType(rhs.m_elementType)
 {
-  Q_ASSERT(m_dimension == rhs.m_dimension);
+    Q_ASSERT(m_dimension == rhs.m_dimension);
 }
 
-DelayedTypeData::DelayedTypeData() {
-}
-
-DelayedTypeData::DelayedTypeData( const DelayedTypeData& rhs )
-  : AbstractTypeData( rhs ), m_identifier( rhs.m_identifier ),
-    m_kind( rhs.m_kind )
+DelayedTypeData::DelayedTypeData()
 {
 }
 
-bool SimpleTypeVisitor::preVisit (const AbstractType *) {
-  return true;
+DelayedTypeData::DelayedTypeData(const DelayedTypeData& rhs)
+    : AbstractTypeData(rhs)
+    , m_identifier(rhs.m_identifier)
+    , m_kind(rhs.m_kind)
+{
 }
 
-void SimpleTypeVisitor::postVisit (const AbstractType *) {
+bool SimpleTypeVisitor::preVisit(const AbstractType*)
+{
+    return true;
 }
 
-void SimpleTypeVisitor::visit (const IntegralType * type) {
-  visit( (AbstractType*)type );
+void SimpleTypeVisitor::postVisit(const AbstractType*)
+{
 }
 
-bool SimpleTypeVisitor::visit (const PointerType * type) {
-  return visit( (AbstractType*)type );
+void SimpleTypeVisitor::visit(const IntegralType* type)
+{
+    visit(( AbstractType* )type);
 }
 
-void SimpleTypeVisitor::endVisit (const PointerType * type) {
-  visit( (AbstractType*)type );
+bool SimpleTypeVisitor::visit(const PointerType* type)
+{
+    return visit(( AbstractType* )type);
 }
 
-bool SimpleTypeVisitor::visit (const ReferenceType * type) {
-  return visit( (AbstractType*)type );
+void SimpleTypeVisitor::endVisit(const PointerType* type)
+{
+    visit(( AbstractType* )type);
 }
 
-void SimpleTypeVisitor::endVisit (const ReferenceType * type) {
-  visit( (AbstractType*)type );
+bool SimpleTypeVisitor::visit(const ReferenceType* type)
+{
+    return visit(( AbstractType* )type);
 }
 
-bool SimpleTypeVisitor::visit (const FunctionType * type) {
-  return visit( (AbstractType*)type );
+void SimpleTypeVisitor::endVisit(const ReferenceType* type)
+{
+    visit(( AbstractType* )type);
 }
 
-void SimpleTypeVisitor::endVisit (const FunctionType * type) {
-  visit( (AbstractType*)type );
+bool SimpleTypeVisitor::visit(const FunctionType* type)
+{
+    return visit(( AbstractType* )type);
 }
 
-bool SimpleTypeVisitor::visit (const StructureType * type) {
-  return visit( (AbstractType*)type );
+void SimpleTypeVisitor::endVisit(const FunctionType* type)
+{
+    visit(( AbstractType* )type);
 }
 
-void SimpleTypeVisitor::endVisit (const StructureType * type) {
-  visit( (AbstractType*)type );
+bool SimpleTypeVisitor::visit(const StructureType* type)
+{
+    return visit(( AbstractType* )type);
 }
 
-bool SimpleTypeVisitor::visit (const ArrayType * type) {
-  return visit( (AbstractType*)type );
+void SimpleTypeVisitor::endVisit(const StructureType* type)
+{
+    visit(( AbstractType* )type);
 }
 
-void SimpleTypeVisitor::endVisit (const ArrayType * type) {
-  visit( (AbstractType*)type );
+bool SimpleTypeVisitor::visit(const ArrayType* type)
+{
+    return visit(( AbstractType* )type);
+}
+
+void SimpleTypeVisitor::endVisit(const ArrayType* type)
+{
+    visit(( AbstractType* )type);
 }
 
 TypeVisitor::~TypeVisitor()
 {
 }
 
-TypePtr< KDevelop::AbstractType > TypeExchanger::exchange(const TypePtr< KDevelop::AbstractType >& type) {
-  const_cast<AbstractType*>(type.data())->exchangeTypes(this);
-  return type;
+TypePtr<KDevelop::AbstractType> TypeExchanger::exchange(const TypePtr<KDevelop::AbstractType>& type)
+{
+    const_cast<AbstractType*>(type.data())->exchangeTypes(this);
+    return type;
 }
 
-TypePtr< KDevelop::AbstractType > SimpleTypeExchanger::exchange(const TypePtr< KDevelop::AbstractType >& type) {
-  if(type && type->equals(m_replace.data()))
-    return m_replaceWith;
-  else
-    return TypeExchanger::exchange(type);
+TypePtr<KDevelop::AbstractType> SimpleTypeExchanger::exchange(const TypePtr<KDevelop::AbstractType>& type)
+{
+    if (type && type->equals(m_replace.data()))
+        return m_replaceWith;
+    else
+        return TypeExchanger::exchange(type);
 }
 
 SimpleTypeExchanger::SimpleTypeExchanger(const TypePtr<KDevelop::AbstractType>& replace,
                                          const TypePtr<KDevelop::AbstractType>& replaceWith)
     : m_replace(replace)
-    , m_replaceWith(replaceWith) {
+    , m_replaceWith(replaceWith)
+{
 }
-
-
 }

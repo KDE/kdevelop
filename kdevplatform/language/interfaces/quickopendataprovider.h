@@ -33,7 +33,6 @@ class QStringList;
 class QIcon;
 
 namespace KDevelop {
-
 class IndexedString;
 
 /**
@@ -48,16 +47,18 @@ class IndexedString;
  *
  * Example: A list of files in the include-path, a list of files in the project, etc.
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenFileSetInterface {
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenFileSetInterface
+{
+public:
     virtual QSet<IndexedString> files() const = 0;
     virtual ~QuickOpenFileSetInterface();
 };
 /**
  * You can use this as additional base-class for your embedded widgets to get additional interaction
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenEmbeddedWidgetInterface {
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenEmbeddedWidgetInterface
+{
+public:
     virtual ~QuickOpenEmbeddedWidgetInterface();
     ///Is called when the keyboard-shortcut "next" is triggered on the widget, which currently is SHIFT+Right
     virtual void next() = 0;
@@ -74,8 +75,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenEmbeddedWidgetInterface {
 /**
  * Reimplement this to represent single entries within the quickopen list.
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public QSharedData {
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase
+    : public QSharedData
+{
+public:
     virtual ~QuickOpenDataBase();
 
     ///Return the text to be shown in the list for this item
@@ -105,7 +108,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataBase : public QSharedData {
      *                   line-edit will be changed according to the new text.
      * @return Whether the dialog should be closed.
      * */
-    virtual bool execute( QString& filterText ) = 0;
+    virtual bool execute(QString& filterText) = 0;
 
     /**
      * Return true here if this data-item should be expandable with
@@ -137,9 +140,12 @@ typedef QExplicitlySharedDataPointer<QuickOpenDataBase> QuickOpenDataPointer;
  * to implement the actual filtering, so it is consistent.
  * */
 
-class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
-  Q_OBJECT
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase
+    : public QObject
+{
+    Q_OBJECT
+
+public:
     ~QuickOpenDataProviderBase() override;
 
     /**
@@ -151,7 +157,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
      * This is called whenever the search-text was changed, and the UI should be updated.
      * Store the text to track the exact difference.
      * */
-    virtual void setFilterText( const QString& text ) = 0;
+    virtual void setFilterText(const QString& text) = 0;
 
     /**
      * Filter-text should be completely reset and the context re-computed.
@@ -181,7 +187,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
      *
      * @param row Index of item to be returned.
      * */
-    virtual QuickOpenDataPointer data( uint row ) const  = 0;
+    virtual QuickOpenDataPointer data(uint row) const  = 0;
 
     /**
      * If the data-provider supports multiple different scopes/items, this will be called
@@ -189,7 +195,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
      * If the data-provider supports only one scope/item, this can be ignored.
      * The lists contains all scopes/items, even those that are not supported by this provider.
      * */
-    virtual void enableData( const QStringList& items, const QStringList& scopes );
+    virtual void enableData(const QStringList& items, const QStringList& scopes);
 };
 
 /**
@@ -200,7 +206,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenDataProviderBase : public QObject {
  * @return Whether @p from did match the expected template.
  * */
 bool KDEVPLATFORMLANGUAGE_EXPORT extractLineNumber(const QString& from, QString& path, uint& lineNumber);
-
 }
 
 #endif

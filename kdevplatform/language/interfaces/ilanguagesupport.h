@@ -1,22 +1,22 @@
 /***************************************************************************
- *   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>                   *
- *   Copyright 2014 Kevin Funk <kfunk@kde.org>                             *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 2 of the    *
- *   License, or (at your option) any later version.                       *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this program; if not, write to the                 *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
- ***************************************************************************/
+*   Copyright 2007 Alexander Dymo  <adymo@kdevelop.org>                   *
+*   Copyright 2014 Kevin Funk <kfunk@kde.org>                             *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU Library General Public License as       *
+*   published by the Free Software Foundation; either version 2 of the    *
+*   License, or (at your option) any later version.                       *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU Library General Public     *
+*   License along with this program; if not, write to the                 *
+*   Free Software Foundation, Inc.,                                       *
+*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
+***************************************************************************/
 
 #ifndef KDEVPLATFORM_ILANGUAGESUPPORT_H
 #define KDEVPLATFORM_ILANGUAGESUPPORT_H
@@ -37,7 +37,6 @@ class Document;
 }
 
 namespace KDevelop {
-
 class BasicRefactoring;
 class IndexedString;
 class ParseJob;
@@ -54,7 +53,7 @@ public:
     /** @return the name of the language.*/
     virtual QString name() const = 0;
     /** @return the parse job that is used by background parser to parse given @p url.*/
-    virtual ParseJob *createParseJob(const IndexedString &url) = 0;
+    virtual ParseJob* createParseJob(const IndexedString& url) = 0;
     /**
      * Only important for languages that can parse multiple different versions of a file, like C++ due to the preprocessor.
      * The default-implementation for other languages is "return DUChain::chainForDocument(url);"
@@ -70,16 +69,16 @@ public:
      *
      *  @return the standard context used by this language for the given @p url
      **/
-    virtual TopDUContext *standardContext(const QUrl& url, bool proxyContext = false);
+    virtual TopDUContext* standardContext(const QUrl& url, bool proxyContext = false);
 
     /**
-      * Should return a code-highlighting instance for this language, or zero.
-      */
+     * Should return a code-highlighting instance for this language, or zero.
+     */
     virtual ICodeHighlighting* codeHighlighting() const;
 
     /**
-      * Should return a BasicRefactoring instance that controls the language-agnostic refactoring rules, or zero
-      */
+     * Should return a BasicRefactoring instance that controls the language-agnostic refactoring rules, or zero
+     */
     virtual BasicRefactoring* refactoring() const;
 
     /**
@@ -105,26 +104,28 @@ public:
      * */
 
     /**Should return the local range within the given url that belongs to the
-      *special language-object that contains @p position , or (QUrl(), KTextEditor::Range:invalid()) */
+     * special language-object that contains @p position , or (QUrl(), KTextEditor::Range:invalid()) */
     virtual KTextEditor::Range specialLanguageObjectRange(const QUrl& url, const KTextEditor::Cursor& position);
 
     /**Should return the source-range and source-document that the
-      *special language-object that contains @p position refers to, or KTextEditor::Range:invalid(). */
-    virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl& url, const KTextEditor::Cursor& position);
+     * special language-object that contains @p position refers to, or KTextEditor::Range:invalid(). */
+    virtual QPair<QUrl, KTextEditor::Cursor> specialLanguageObjectJumpCursor(const QUrl& url,
+                                                                             const KTextEditor::Cursor& position);
 
     /**Should return a navigation-widget for the
-      *special language-object that contains @p position refers to as well as the range the object takes there,
-      *or nullptr and an invalid range.
-      *If you setProperty("DoNotCloseOnCursorMove", true) on the widget returned,
-      *then the widget will not close when the cursor moves in the document, which
-      *enables you to change the document contents from the widget without immediately closing the widget.*/
-    virtual QPair<QWidget*, KTextEditor::Range> specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position);
+     * special language-object that contains @p position refers to as well as the range the object takes there,
+     * or nullptr and an invalid range.
+     * If you setProperty("DoNotCloseOnCursorMove", true) on the widget returned,
+     * then the widget will not close when the cursor moves in the document, which
+     * enables you to change the document contents from the widget without immediately closing the widget.*/
+    virtual QPair<QWidget*, KTextEditor::Range> specialLanguageObjectNavigationWidget(const QUrl& url,
+                                                                                      const KTextEditor::Cursor& position);
 
     /**Should return a tiny piece of code which makes it possible for KDevelop to derive the indentation
-      *settings from an automatic source formatter. Example for C++: "class C{\n class D {\n void c() {\n int m;\n }\n }\n};\n"
-      *The sample must be completely unindented (no line must start with leading whitespace),
-      *and it must contain at least 4 indentation levels!
-      *The default implementation returns an empty string.*/
+     * settings from an automatic source formatter. Example for C++: "class C{\n class D {\n void c() {\n int m;\n }\n }\n};\n"
+     * The sample must be completely unindented (no line must start with leading whitespace),
+     * and it must contain at least 4 indentation levels!
+     * The default implementation returns an empty string.*/
     virtual QString indentationSample() const;
 
     /**
@@ -164,9 +165,8 @@ public:
 private:
     const QScopedPointer<class ILanguageSupportPrivate> d;
 };
-
 }
 
-Q_DECLARE_INTERFACE( KDevelop::ILanguageSupport, "org.kdevelop.ILanguageSupport")
+Q_DECLARE_INTERFACE(KDevelop::ILanguageSupport, "org.kdevelop.ILanguageSupport")
 
 #endif

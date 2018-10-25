@@ -12,7 +12,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CODEGENERATOR_H
 #define KDEVPLATFORM_CODEGENERATOR_H
@@ -24,9 +24,8 @@
 #include "language/interfaces/iastcontainer.h"
 #include <debug.h>
 
-namespace KDevelop
-{
-template<class AstNode >
+namespace KDevelop {
+template <class AstNode>
 class AstChangeSet;
 
 class DUContext;
@@ -87,7 +86,7 @@ public:
      */
     virtual bool process() = 0;
 
-    const QString & errorText() const;
+    const QString& errorText() const;
 
     // Implementation from kJob
     bool execute();
@@ -100,13 +99,12 @@ public:
      * @note If this function is called, then gather information will not be called.
      *       Derived classes should provide an alternative way of setting up the generator.
      */
-    void autoGenerate(DUContext * context, const DocumentRange * range);
+    void autoGenerate(DUContext* context, const DocumentRange* range);
 
     /**
      * \return The Document Change set to add a single Change, it is more addicient than creating a local DocumentChangeSet and merging it
      */
-    DocumentChangeSet & documentChangeSet();
-
+    DocumentChangeSet& documentChangeSet();
 
 protected:
 
@@ -118,12 +116,12 @@ protected:
      */
     void addChangeSet(DUChainChangeSet* duChainChange);
 
-    void addChangeSet(DocumentChangeSet & docChangeSet);
+    void addChangeSet(DocumentChangeSet& docChangeSet);
 
     /**
      * Accessor for KJob's KJob::setErrorText.
      */
-    void setErrorText(const QString & error);
+    void setErrorText(const QString& error);
 
     /**
      * Inform the derived class if this generation is being performed without user interaction
@@ -153,7 +151,8 @@ private:
  * \author Ramón Zarazúa <killerfox512+kde@gmail.com>
  */
 template <typename AstContainer>
-class CodeGenerator : public CodeGeneratorBase
+class CodeGenerator
+    : public CodeGeneratorBase
 {
 public:
     ~CodeGenerator()
@@ -170,32 +169,31 @@ protected:
     /**
      * Query an AST of a particular file
      */
-    TopAstNode * ast(const IndexedString & file)
+    TopAstNode* ast(const IndexedString& file)
     {
         return astContainer(file)->topAstNode();
     }
 
-    TopAstNode * ast(const TopDUContext & context)
+    TopAstNode* ast(const TopDUContext& context)
     {
         return astContainer(context)->topAstNode();
     }
 
-    typename AstContainer::Ptr astContainer(const IndexedString & file)
+    typename AstContainer::Ptr astContainer(const IndexedString& file)
     {
-        if(!m_AstContainers.contains(file))
-        {
+        if (!m_AstContainers.contains(file)) {
             qCDebug(LANGUAGE) << "Ast requested for: " << file.str();
 
-            TopDUContext * context = DUChain::self()->waitForUpdate(file, KDevelop::TopDUContext::AST).data();
+            TopDUContext* context = DUChain::self()->waitForUpdate(file, KDevelop::TopDUContext::AST).data();
 
             Q_ASSERT(context);
-            m_AstContainers[file] = AstContainer::Ptr::template staticCast<IAstContainer>( context->ast() );
+            m_AstContainers[file] = AstContainer::Ptr::template staticCast<IAstContainer>(context->ast());
         }
 
         return m_AstContainers[file];
     }
 
-    typename AstContainer::Ptr astContainer(const TopDUContext & context)
+    typename AstContainer::Ptr astContainer(const TopDUContext& context)
     {
         return astContainer(context.url());
     }
@@ -205,12 +203,12 @@ protected:
      *
      * You may call this method multiple times to edit different files.
      */
-    void addChangeSet(DUChainChangeSet * duChainChange)
+    void addChangeSet(DUChainChangeSet* duChainChange)
     {
         CodeGeneratorBase::addChangeSet(duChainChange);
     }
 
-    void addChangeSet(DocumentChangeSet & doc)
+    void addChangeSet(DocumentChangeSet& doc)
     {
         CodeGeneratorBase::addChangeSet(doc);
     }
@@ -220,7 +218,7 @@ protected:
      *
      * You may call this method multiple times to edit different files.
      */
-    void addChangeSet(LanguageChangeSet * astChange);
+    void addChangeSet(LanguageChangeSet* astChange);
 
     void clearChangeSets()
     {
@@ -238,7 +236,7 @@ protected:
     /**
      * Accessor for KJob's KJob::setErrorText.
      */
-    void setErrorText(const QString & error)
+    void setErrorText(const QString& error)
     {
         CodeGeneratorBase::setErrorText(error);
     }
@@ -247,7 +245,6 @@ private:
     typedef QMap<IndexedString, typename AstContainer::Ptr> AstContainerMap;
     AstContainerMap m_AstContainers;
 };
-
 }
 
 #endif // KDEVPLATFORM_CODEGENERATOR_H

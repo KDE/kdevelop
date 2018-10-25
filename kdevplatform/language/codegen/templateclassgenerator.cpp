@@ -15,7 +15,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "templateclassgenerator.h"
 #include "archivetemplateloader.h"
@@ -76,8 +76,7 @@ void TemplateClassGeneratorPrivate::fetchSuperClasses(const DeclarationPointer& 
     DUChainReadLocker lock;
 
     //Prevent duplicity
-    if(allBaseClasses.contains(declaration))
-    {
+    if (allBaseClasses.contains(declaration)) {
         return;
     }
 
@@ -86,18 +85,17 @@ void TemplateClassGeneratorPrivate::fetchSuperClasses(const DeclarationPointer& 
     DUContext* context = declaration->internalContext();
     if (context) {
         foreach (const DUContext::Import& import, context->importedParentContexts()) {
-            if (DUContext * parentContext = import.context(context->topContext())) {
+            if (DUContext* parentContext = import.context(context->topContext())) {
                 if (parentContext->type() == DUContext::Class) {
-                    fetchSuperClasses( DeclarationPointer(parentContext->owner()) );
+                    fetchSuperClasses(DeclarationPointer(parentContext->owner()));
                 }
             }
         }
     }
 }
 
-
 TemplateClassGenerator::TemplateClassGenerator(const QUrl& baseUrl)
- : d(new TemplateClassGeneratorPrivate)
+    : d(new TemplateClassGeneratorPrivate)
 {
     Q_ASSERT(QFileInfo(baseUrl.toLocalFile()).isDir()); // assume folder
 
@@ -121,10 +119,9 @@ DocumentChangeSet TemplateClassGenerator::generate()
 QHash<QString, QString> TemplateClassGenerator::fileLabels() const
 {
     Q_ASSERT(d->fileTemplate.isValid());
-    QHash<QString,QString> labels;
+    QHash<QString, QString> labels;
 
-    foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles())
-    {
+    foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles()) {
         labels.insert(outputFile.identifier, outputFile.label);
     }
 
@@ -133,10 +130,8 @@ QHash<QString, QString> TemplateClassGenerator::fileLabels() const
 
 TemplateClassGenerator::UrlHash TemplateClassGenerator::fileUrls() const
 {
-    if (d->fileUrls.isEmpty())
-    {
-        foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles())
-        {
+    if (d->fileUrls.isEmpty()) {
+        foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles()) {
             QString outputName = d->renderer.render(outputFile.outputName, outputFile.identifier);
             QUrl url = d->baseUrl.resolved(QUrl(outputName));
             d->fileUrls.insert(outputFile.identifier, url);
@@ -159,8 +154,10 @@ QUrl TemplateClassGenerator::fileUrl(const QString& outputFile) const
 void TemplateClassGenerator::setFileUrl(const QString& outputFile, const QUrl& url)
 {
     d->fileUrls.insert(outputFile, url);
-    d->renderer.addVariable(QLatin1String("output_file_") + outputFile.toLower(), QDir(d->baseUrl.path()).relativeFilePath(url.path()));
-    d->renderer.addVariable(QLatin1String("output_file_") + outputFile.toLower() + QLatin1String("_absolute"), url.toLocalFile());
+    d->renderer.addVariable(QLatin1String("output_file_") + outputFile.toLower(), QDir(
+                                d->baseUrl.path()).relativeFilePath(url.path()));
+    d->renderer.addVariable(QLatin1String("output_file_") + outputFile.toLower() + QLatin1String(
+                                "_absolute"), url.toLocalFile());
 }
 
 KTextEditor::Cursor TemplateClassGenerator::filePosition(const QString& outputFile) const
@@ -193,7 +190,6 @@ TemplateRenderer* TemplateClassGenerator::renderer() const
     return &(d->renderer);
 }
 
-
 QString TemplateClassGenerator::name() const
 {
     return d->name;
@@ -223,11 +219,11 @@ void TemplateClassGenerator::setIdentifier(const QString& identifier)
     QStringList ns;
     for (const QString& separator : separators) {
         ns = identifier.split(separator);
-        if (ns.size() > 1)
-        {
+        if (ns.size() > 1) {
             break;
         }
     }
+
     setName(ns.takeLast());
     setNamespaces(ns);
 }
@@ -242,7 +238,6 @@ void TemplateClassGenerator::setNamespaces(const QStringList& namespaces) const
     d->namespaces = namespaces;
     d->renderer.addVariable(QStringLiteral("namespaces"), namespaces);
 }
-
 
 /// Specify license for this class
 void TemplateClassGenerator::setLicense(const QString& license)
@@ -285,20 +280,18 @@ void TemplateClassGenerator::addBaseClass(const QString& base)
 
     DUChainReadLocker lock;
 
-    PersistentSymbolTable::Declarations decl = PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(QualifiedIdentifier(desc.baseType)));
+    PersistentSymbolTable::Declarations decl =
+        PersistentSymbolTable::self().declarations(IndexedQualifiedIdentifier(QualifiedIdentifier(desc.baseType)));
 
     //Search for all super classes
-    for(PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it)
-    {
+    for (PersistentSymbolTable::Declarations::Iterator it = decl.iterator(); it; ++it) {
         DeclarationPointer declaration = DeclarationPointer(it->declaration());
-        if(declaration->isForwardDeclaration())
-        {
+        if (declaration->isForwardDeclaration()) {
             continue;
         }
 
         // Check if it's a class/struct/etc
-        if(declaration->type<StructureType>())
-        {
+        if (declaration->type<StructureType>()) {
             d->fetchSuperClasses(declaration);
             d->directBaseClasses << declaration;
             break;
@@ -322,13 +315,12 @@ void TemplateClassGenerator::setBaseClasses(const QList<QString>& bases)
     }
 }
 
-QList< DeclarationPointer > TemplateClassGenerator::directBaseClasses() const
+QList<DeclarationPointer> TemplateClassGenerator::directBaseClasses() const
 {
     return d->directBaseClasses;
 }
 
-QList< DeclarationPointer > TemplateClassGenerator::allBaseClasses() const
+QList<DeclarationPointer> TemplateClassGenerator::allBaseClasses() const
 {
     return d->allBaseClasses;
 }
-

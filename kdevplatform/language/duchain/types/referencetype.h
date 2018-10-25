@@ -16,15 +16,14 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_REFERENCETYPE_H
 #define KDEVPLATFORM_REFERENCETYPE_H
 
 #include "abstracttype.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 class ReferenceTypeData;
 
 /**
@@ -33,80 +32,81 @@ class ReferenceTypeData;
  * ReferenceType is used to represent types which hold a reference to a
  * variable.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ReferenceType: public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT ReferenceType
+    : public AbstractType
 {
 public:
-  typedef TypePtr<ReferenceType> Ptr;
+    typedef TypePtr<ReferenceType> Ptr;
 
-  /// Default constructor
-  ReferenceType ();
-  /// Copy constructor. \param rhs type to copy
-  ReferenceType (const ReferenceType& rhs);
-  /// Constructor using raw data. \param data internal data.
-  explicit ReferenceType(ReferenceTypeData& data);
-  /// Destructor
-  ~ReferenceType() override;
+    /// Default constructor
+    ReferenceType ();
+    /// Copy constructor. \param rhs type to copy
+    ReferenceType (const ReferenceType& rhs);
+    /// Constructor using raw data. \param data internal data.
+    explicit ReferenceType(ReferenceTypeData& data);
+    /// Destructor
+    ~ReferenceType() override;
 
-  /**
-   * Retrieve the referenced type, ie. what type of data this type references.
-   *
-   * \returns the base type.
-   */
-  AbstractType::Ptr baseType () const;
+    /**
+     * Retrieve the referenced type, ie. what type of data this type references.
+     *
+     * \returns the base type.
+     */
+    AbstractType::Ptr baseType () const;
 
-  /**
-   * Sets the referenced type, ie. what type of data this type references.
-   *
-   * \param baseType the base type.
-   */
-  void setBaseType(const AbstractType::Ptr& baseType);
+    /**
+     * Sets the referenced type, ie. what type of data this type references.
+     *
+     * \param baseType the base type.
+     */
+    void setBaseType(const AbstractType::Ptr& baseType);
 
-  /**
-   * Checks whether this type is an rvalue- or lvalue-reference type.
-   * 
-   * \returns true for rvalue-references, false for lvalue-references
-   */
-  bool isRValue() const;
+    /**
+     * Checks whether this type is an rvalue- or lvalue-reference type.
+     *
+     * \returns true for rvalue-references, false for lvalue-references
+     */
+    bool isRValue() const;
 
-  /**
-   * Sets whether this type is an rvalue- or lvalue-reference type.
-   * 
-   * \param isRValue true for rvalue-references, false for lvalue-references
-   */
-  void setIsRValue(bool isRValue);
+    /**
+     * Sets whether this type is an rvalue- or lvalue-reference type.
+     *
+     * \param isRValue true for rvalue-references, false for lvalue-references
+     */
+    void setIsRValue(bool isRValue);
 
-  QString toString() const override;
+    QString toString() const override;
 
-  uint hash() const override;
+    uint hash() const override;
 
-  WhichType whichType() const override;
+    WhichType whichType() const override;
 
-  AbstractType* clone() const override;
+    AbstractType* clone() const override;
 
-  bool equals(const AbstractType* rhs) const override;
+    bool equals(const AbstractType* rhs) const override;
 
-  void exchangeTypes( TypeExchanger* exchanger ) override;
+    void exchangeTypes(TypeExchanger* exchanger) override;
 
-  enum {
-    Identity = 4
-  };
+    enum {
+        Identity = 4
+    };
 
-  typedef ReferenceTypeData Data;
+    typedef ReferenceTypeData Data;
 
 protected:
-  void accept0 (TypeVisitor *v) const override;
+    void accept0 (TypeVisitor* v) const override;
 
-  TYPE_DECLARE_DATA(ReferenceType)
+    TYPE_DECLARE_DATA(ReferenceType)
 };
 
-template<>
-inline ReferenceType* fastCast<ReferenceType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeReference)
-    return nullptr;
-  else
-    return static_cast<ReferenceType*>(from);
+template <>
+inline ReferenceType* fastCast<ReferenceType*>(AbstractType* from)
+{
+    if (!from || from->whichType() != AbstractType::TypeReference)
+        return nullptr;
+    else
+        return static_cast<ReferenceType*>(from);
 }
-
 }
 
 #endif // KDEVPLATFORM_TYPESYSTEM_H

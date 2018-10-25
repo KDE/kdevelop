@@ -17,7 +17,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "enumerationtype.h"
 
@@ -25,58 +25,57 @@
 #include "typeregister.h"
 
 namespace KDevelop {
-
 //Because all these classes have no d-pointers, shallow copies are perfectly fine
 
 REGISTER_TYPE(EnumerationType);
 
 EnumerationType::EnumerationType(const EnumerationType& rhs)
-  : EnumerationTypeBase(copyData<EnumerationType>(*rhs.d_func()))
+    : EnumerationTypeBase(copyData<EnumerationType>(*rhs.d_func()))
 {
 }
 
 EnumerationType::EnumerationType(EnumerationTypeData& data)
-  : EnumerationTypeBase(data)
+    : EnumerationTypeBase(data)
 {
 }
 
-AbstractType* EnumerationType::clone() const {
-  return new EnumerationType(*this);
+AbstractType* EnumerationType::clone() const
+{
+    return new EnumerationType(*this);
 }
 
 bool EnumerationType::equals(const AbstractType* _rhs) const
 {
-  if( this == _rhs )
+    if (this == _rhs)
+        return true;
+
+    if (!EnumerationTypeBase::equals(_rhs))
+        return false;
+
+    Q_ASSERT(fastCast<const EnumerationType*>(_rhs));
+
+    // Nothing enumeration type-specific to compare
     return true;
-
-  if (!EnumerationTypeBase::equals(_rhs))
-    return false;
-
-  Q_ASSERT(fastCast<const EnumerationType*>(_rhs));
-
-  // Nothing enumeration type-specific to compare
-  return true;
 }
 
 EnumerationType::EnumerationType()
-  : EnumerationTypeBase(createData<EnumerationType>())
+    : EnumerationTypeBase(createData<EnumerationType>())
 {
-  IntegralType::setDataType(TypeInt);
+    IntegralType::setDataType(TypeInt);
 }
 
 QString EnumerationType::toString() const
 {
-  return qualifiedIdentifier().toString();
+    return qualifiedIdentifier().toString();
 }
 
 uint EnumerationType::hash() const
 {
-  return KDevHash(IntegralType::hash()) << IdentifiedType::hash();
+    return KDevHash(IntegralType::hash()) << IdentifiedType::hash();
 }
 
 AbstractType::WhichType EnumerationType::whichType() const
 {
-  return TypeEnumeration;
+    return TypeEnumeration;
 }
-
 }

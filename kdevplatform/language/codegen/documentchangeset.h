@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DOCUMENTCHANGESET_H
 #define KDEVPLATFORM_DOCUMENTCHANGESET_H
@@ -29,13 +29,19 @@
 #include <QUrl>
 
 namespace KDevelop {
-
-class KDEVPLATFORMLANGUAGE_EXPORT DocumentChange : public QSharedData
+class KDEVPLATFORMLANGUAGE_EXPORT DocumentChange
+    : public QSharedData
 {
 public:
 
-    DocumentChange(const IndexedString& document, const KTextEditor::Range& range, const QString& oldText, const QString& newText) :
-                   m_document(document), m_range(range), m_oldText(oldText), m_newText(newText), m_ignoreOldText(false) {
+    DocumentChange(const IndexedString& document, const KTextEditor::Range& range, const QString& oldText,
+                   const QString& newText) :
+        m_document(document)
+        , m_range(range)
+        , m_oldText(oldText)
+        , m_newText(newText)
+        , m_ignoreOldText(false)
+    {
         //Clean the URL, so we don't get the same file be stored as a different one
         QUrl url = m_document.toUrl();
         m_document = IndexedString(url.adjusted(QUrl::NormalizePathSegments));
@@ -64,8 +70,9 @@ public:
     //Returns true on success
     class ChangeResult
     {
-    public:
-        explicit ChangeResult(const QString& failureReason, const DocumentChangePointer& reasonChange = DocumentChangePointer())
+public:
+        explicit ChangeResult(const QString& failureReason,
+                              const DocumentChangePointer& reasonChange = DocumentChangePointer())
             : ChangeResult(failureReason, reasonChange, false) {}
 
         static ChangeResult successfulResult()
@@ -85,7 +92,7 @@ public:
 
         bool m_success;
 
-    private:
+private:
         explicit ChangeResult(const QString& failureReason, const DocumentChangePointer& reasonChange, bool success)
             : m_failureReason(failureReason)
             , m_reasonChange(reasonChange)
@@ -103,7 +110,7 @@ public:
     enum ReplacementPolicy {
         IgnoreFailedChange,///If this is given, all changes that could not be applied are simply ignored
         WarnOnFailedChange,///If this is given to applyAllChanges, a warning is given when a change could not be applied,
-                            ///but following changes are applied, and success is returned.
+        ///but following changes are applied, and success is returned.
         StopOnFailedChange ///If this is given to applyAllChanges, then all replacements are reverted and an error returned on problems (default)
     };
 

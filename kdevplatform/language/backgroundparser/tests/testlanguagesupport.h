@@ -28,10 +28,13 @@
 
 using namespace KDevelop;
 
-class TestLanguageSupport : public QObject, public KDevelop::ILanguageSupport
+class TestLanguageSupport
+    : public QObject
+    , public KDevelop::ILanguageSupport
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::ILanguageSupport)
+
 public:
     using QObject::QObject;
 

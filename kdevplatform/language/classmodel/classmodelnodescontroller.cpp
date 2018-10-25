@@ -33,43 +33,42 @@ ClassModelNodeDocumentChangedInterface::~ClassModelNodeDocumentChangedInterface(
 }
 
 ClassModelNodesController::ClassModelNodesController()
-  : m_updateTimer( new QTimer(this) )
+    : m_updateTimer(new QTimer(this))
 {
-  m_updateTimer->setSingleShot(true);
-  connect( m_updateTimer, &QTimer::timeout, this, &ClassModelNodesController::updateChangedFiles);
+    m_updateTimer->setSingleShot(true);
+    connect(m_updateTimer, &QTimer::timeout, this, &ClassModelNodesController::updateChangedFiles);
 }
 
 ClassModelNodesController::~ClassModelNodesController()
 {
-
 }
 
 ClassModelNodesController& ClassModelNodesController::self()
 {
-  static ClassModelNodesController ret;
-  return ret;
+    static ClassModelNodesController ret;
+    return ret;
 }
 
-void ClassModelNodesController::registerForChanges(const KDevelop::IndexedString& a_file, ClassModelNodeDocumentChangedInterface* a_node)
+void ClassModelNodesController::registerForChanges(const KDevelop::IndexedString& a_file,
+                                                   ClassModelNodeDocumentChangedInterface* a_node)
 {
-  m_filesMap.insert(a_file, a_node);
+    m_filesMap.insert(a_file, a_node);
 }
 
-void ClassModelNodesController::unregisterForChanges(const KDevelop::IndexedString& a_file, ClassModelNodeDocumentChangedInterface* a_node)
+void ClassModelNodesController::unregisterForChanges(const KDevelop::IndexedString& a_file,
+                                                     ClassModelNodeDocumentChangedInterface* a_node)
 {
-  m_filesMap.remove(a_file, a_node);
+    m_filesMap.remove(a_file, a_node);
 }
 
 void ClassModelNodesController::updateChangedFiles()
 {
-  // re-parse changed documents.
-  foreach( const IndexedString& file, m_updatedFiles )
-    foreach( ClassModelNodeDocumentChangedInterface* value, m_filesMap.values(file) )
-    {
-      value->documentChanged(file);
-    }
+    // re-parse changed documents.
+    foreach (const IndexedString& file, m_updatedFiles)
+        foreach (ClassModelNodeDocumentChangedInterface* value, m_filesMap.values(file)) {
+            value->documentChanged(file);
+        }
 
-  // Processed all files.
-  m_updatedFiles.clear();
+    // Processed all files.
+    m_updatedFiles.clear();
 }
-

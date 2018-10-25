@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_RENAMEASSISTANT_H
 #define KDEVPLATFORM_RENAMEASSISTANT_H
@@ -29,8 +29,8 @@ class View;
 }
 
 namespace KDevelop {
-
-class KDEVPLATFORMLANGUAGE_EXPORT RenameAssistant : public StaticAssistant
+class KDEVPLATFORMLANGUAGE_EXPORT RenameAssistant
+    : public StaticAssistant
 {
     Q_OBJECT
 
@@ -48,7 +48,6 @@ public:
 private:
     const QScopedPointer<class RenameAssistantPrivate> d;
 };
-
 }
 
 #endif // KDEVPLATFORM_RENAMEASSISTANT_H

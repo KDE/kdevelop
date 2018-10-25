@@ -39,15 +39,14 @@
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class ApplyChangesWidgetPrivate
 {
 public:
 
-    explicit ApplyChangesWidgetPrivate(ApplyChangesWidget * p)
-        : parent(p), m_index(0) {}
+    explicit ApplyChangesWidgetPrivate(ApplyChangesWidget* p)
+        : parent(p)
+        , m_index(0) {}
     ~ApplyChangesWidgetPrivate()
     {
         qDeleteAll(m_temps);
@@ -55,21 +54,22 @@ public:
 
     void createEditPart(const KDevelop::IndexedString& url);
 
-    ApplyChangesWidget * const parent;
+    ApplyChangesWidget* const parent;
     int m_index;
     QList<KParts::ReadWritePart*> m_editParts;
-    QList<QTemporaryFile * > m_temps;
-    QList<IndexedString > m_files;
-    QTabWidget * m_documentTabs;
+    QList<QTemporaryFile*> m_temps;
+    QList<IndexedString> m_files;
+    QTabWidget* m_documentTabs;
     QLabel* m_info;
 };
 
 ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
-    : QDialog(parent), d(new ApplyChangesWidgetPrivate(this))
+    : QDialog(parent)
+    , d(new ApplyChangesWidgetPrivate(this))
 {
     setSizeGripEnabled(true);
 
-    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     auto mainLayout = new QVBoxLayout(this);
     auto okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
@@ -77,8 +77,8 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     connect(buttonBox, &QDialogButtonBox::accepted, this, &ApplyChangesWidget::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &ApplyChangesWidget::reject);
 
-    QWidget* w=new QWidget(this);
-    d->m_info=new QLabel(w);
+    QWidget* w = new QWidget(this);
+    d->m_info = new QLabel(w);
     d->m_documentTabs = new QTabWidget(w);
     connect(d->m_documentTabs, &QTabWidget::currentChanged,
             this, &ApplyChangesWidget::indexChanged);
@@ -105,23 +105,23 @@ KTextEditor::Document* ApplyChangesWidget::document() const
     return qobject_cast<KTextEditor::Document*>(d->m_editParts[d->m_index]);
 }
 
-void ApplyChangesWidget::setInformation(const QString & info)
+void ApplyChangesWidget::setInformation(const QString& info)
 {
     d->m_info->setText(info);
 }
 
-void ApplyChangesWidget::addDocuments(const IndexedString & original)
+void ApplyChangesWidget::addDocuments(const IndexedString& original)
 {
-    int idx=d->m_files.indexOf(original);
-    if(idx<0) {
-        QWidget * w = new QWidget;
+    int idx = d->m_files.indexOf(original);
+    if (idx < 0) {
+        QWidget* w = new QWidget;
         d->m_documentTabs->addTab(w, original.str());
         d->m_documentTabs->setCurrentWidget(w);
 
         d->m_files.insert(d->m_index, original);
         d->createEditPart(original);
     } else {
-        d->m_index=idx;
+        d->m_index = idx;
     }
 }
 
@@ -130,37 +130,35 @@ bool ApplyChangesWidget::applyAllChanges()
     /// @todo implement safeguard in case a file saving fails
 
     bool ret = true;
-    for(int i = 0; i < d->m_files.size(); ++i )
-        if(d->m_editParts[i]->saveAs(d->m_files[i].toUrl())) {
+    for (int i = 0; i < d->m_files.size(); ++i)
+        if (d->m_editParts[i]->saveAs(d->m_files[i].toUrl())) {
             IDocument* doc = ICore::self()->documentController()->documentForUrl(d->m_files[i].toUrl());
-            if(doc && doc->state()==IDocument::Dirty)
+            if (doc && doc->state() == IDocument::Dirty)
                 doc->reload();
         } else
             ret = false;
 
     return ret;
 }
-
 }
 
-namespace KDevelop
+namespace KDevelop {
+void ApplyChangesWidgetPrivate::createEditPart(const IndexedString& file)
 {
-
-void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
-{
-    QWidget * widget = m_documentTabs->currentWidget();
+    QWidget* widget = m_documentTabs->currentWidget();
     Q_ASSERT(widget);
 
-    QVBoxLayout *m=new QVBoxLayout(widget);
-    QSplitter *v=new QSplitter(widget);
+    QVBoxLayout* m = new QVBoxLayout(widget);
+    QSplitter* v = new QSplitter(widget);
     m->addWidget(v);
 
     QUrl url = file.toUrl();
 
     QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(url);
 
-    KParts::ReadWritePart* part=KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(mimetype.name(), widget, widget);
-    KTextEditor::Document* document=qobject_cast<KTextEditor::Document*>(part);
+    KParts::ReadWritePart* part = KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(
+        mimetype.name(), widget, widget);
+    KTextEditor::Document* document = qobject_cast<KTextEditor::Document*>(part);
     Q_ASSERT(document);
 
     Q_ASSERT(document->action("file_save"));
@@ -170,10 +168,10 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
 
     //Open the best code representation, even if it is artificial
     CodeRepresentation::Ptr repr = createCodeRepresentation(file);
-    if(!repr->fileExists())
-    {
-        const QString templateName = QDir::tempPath() + QLatin1Char('/') + url.fileName().split(QLatin1Char('.')).last();
-        QTemporaryFile * temp(new QTemporaryFile(templateName));
+    if (!repr->fileExists()) {
+        const QString templateName = QDir::tempPath() + QLatin1Char('/') +
+                                     url.fileName().split(QLatin1Char('.')).last();
+        QTemporaryFile* temp(new QTemporaryFile(templateName));
         temp->open();
         temp->write(repr->text().toUtf8());
         temp->close();
@@ -185,7 +183,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString & file)
     m_editParts[m_index]->openUrl(url);
 
     v->addWidget(m_editParts[m_index]->widget());
-    v->setSizes(QList<int>{400, 100});
+    v->setSizes(QList<int> {400, 100});
 }
 
 void ApplyChangesWidget::indexChanged(int newIndex)
@@ -198,6 +196,4 @@ void ApplyChangesWidget::updateDiffView(int index)
 {
     d->m_index = index == -1 ? d->m_index : index;
 }
-
 }
-

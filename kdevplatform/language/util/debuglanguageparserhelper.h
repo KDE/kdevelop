@@ -16,7 +16,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DEBUGLANGUAGEPARSERHELPER_H
 #define KDEVPLATFORM_DEBUGLANGUAGEPARSERHELPER_H
@@ -43,13 +43,11 @@
 #include <QTextStream>
 
 namespace KDevelopUtils {
-
-
 QTextStream qout(stdout);
 QTextStream qerr(stderr);
 QTextStream qin(stdin);
 
-typedef QString (*TokenTextFunc)(int);
+typedef QString (* TokenTextFunc)(int);
 /**
  * This class is a pure helper to use for binaries that you can
  * run on short snippets of test code or whole files and let
@@ -66,18 +64,20 @@ typedef QString (*TokenTextFunc)(int);
  * @tparam DebugVisitorT the debug visitor for your language.
  * @tparam TokenTextT function pointer to the function that returns a string representation for an integral token.
  */
-template<class SessionT, class TokenStreamT, class TokenT, class LexerT,
-         class StartAstT, class DebugVisitorT, TokenTextFunc TokenTextT>
-class DebugLanguageParserHelper {
+template <class SessionT, class TokenStreamT, class TokenT, class LexerT,
+    class StartAstT, class DebugVisitorT, TokenTextFunc TokenTextT>
+class DebugLanguageParserHelper
+{
 public:
     DebugLanguageParserHelper(const bool printAst, const bool printTokens)
-        : m_printAst(printAst), m_printTokens(printTokens)
+        : m_printAst(printAst)
+        , m_printTokens(printTokens)
     {
         m_session.setDebug(printAst);
     }
 
     /// parse contents of a file
-    void parseFile( const QString &fileName )
+    void parseFile(const QString& fileName)
     {
         if (!m_session.readFile(fileName, "utf-8")) {
             qerr << "Can't open file " << fileName << endl;
@@ -89,7 +89,7 @@ public:
     }
 
     /// parse code directly
-    void parseCode( const QString &code )
+    void parseCode(const QString& code)
     {
         m_session.setContents(code);
 
@@ -108,14 +108,14 @@ private:
             LexerT lexer(&tokenStream, m_session.contents());
             int token;
             while ((token = lexer.nextTokenKind())) {
-                TokenT &t = tokenStream.push();
+                TokenT& t = tokenStream.push();
                 t.begin = lexer.tokenBegin();
                 t.end = lexer.tokenEnd();
                 t.kind = token;
                 printToken(token, lexer);
             }
             printToken(token, lexer);
-            if ( tokenStream.size() > 0 ) {
+            if (tokenStream.size() > 0) {
                 qint64 line;
                 qint64 column;
                 tokenStream.endPosition(tokenStream.size() - 1, &line, &column);
@@ -137,7 +137,7 @@ private:
         }
         if (!m_session.problems().isEmpty()) {
             qout << endl << "problems encountered during parsing:" << endl;
-            foreach(KDevelop::ProblemPointer p, m_session.problems()) {
+            foreach (KDevelop::ProblemPointer p, m_session.problems()) {
                 qout << p->description() << endl;
             }
         } else {
@@ -162,13 +162,13 @@ private:
     const bool m_printTokens;
 };
 
-template<class ParserT>
+template <class ParserT>
 void setupCustomArgs(QCommandLineParser* parser)
 {
     Q_UNUSED(parser);
 }
 
-template<class ParserT>
+template <class ParserT>
 void setCustomArgs(ParserT* parser, QCommandLineParser* commandLineParser)
 {
     Q_UNUSED(parser);
@@ -176,7 +176,7 @@ void setCustomArgs(ParserT* parser, QCommandLineParser* commandLineParser)
 }
 
 /// call this after setting up @p aboutData in your @c main() function.
-template<class ParserT>
+template <class ParserT>
 int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
 {
     qout.setCodec("UTF-8");
@@ -190,7 +190,10 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
 
-    parser.addPositionalArgument("files", i18n("files or - to read from STDIN, the latter is the default if nothing is provided"), "[FILE...]");
+    parser.addPositionalArgument("files",
+                                 i18n(
+                                     "files or - to read from STDIN, the latter is the default if nothing is provided"),
+                                 "[FILE...]");
 
     parser.addOption(QCommandLineOption{QStringList{"a", "print-ast"}, i18n("print generated AST tree")});
     parser.addOption(QCommandLineOption{QStringList{"t", "print-tokens"}, i18n("print generated token stream")});
@@ -219,19 +222,18 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
         files << "-";
     }
 
-    foreach(const QString &fileName, files) {
-        if ( fileName == "-" ) {
+    foreach (const QString& fileName, files) {
+        if (fileName == "-") {
 #ifndef Q_OS_WIN
-            if ( isatty(STDIN_FILENO) ) {
+            if (isatty(STDIN_FILENO)) {
                 qerr << "no STDIN given" << endl;
                 return 255;
             }
 #endif
-            parserT.parseCode( qin.readAll().toUtf8() );
+            parserT.parseCode(qin.readAll().toUtf8());
         } else {
             parserT.parseFile(fileName);
         }
-
     }
 
     KDevelop::TestCore::shutdown();

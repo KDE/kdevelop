@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_IMPORTERS_H
 #define KDEVPLATFORM_IMPORTERS_H
@@ -25,9 +25,8 @@
 #include <QScopedPointer>
 
 namespace KDevelop {
-
-  class DeclarationId;
-  class IndexedDUContext;
+class DeclarationId;
+class IndexedDUContext;
 
 /**
  * Global mapping of Declaration-Ids to contexts that import the associated context, protected through DUChainLock.
@@ -38,8 +37,9 @@ namespace KDevelop {
  *
  * To retrieve the actual uses, query the duchain for the files.
  * */
-  class KDEVPLATFORMLANGUAGE_EXPORT Importers {
-    public:
+class KDEVPLATFORMLANGUAGE_EXPORT Importers
+{
+public:
     /// Constructor.
     Importers();
     /// Destructor.
@@ -57,10 +57,10 @@ namespace KDevelop {
     KDevVarLengthArray<IndexedDUContext> importers(const DeclarationId& id) const;
 
     static Importers& self();
-    
-    private:
-      const QScopedPointer<class ImportersPrivate> d;
-  };
+
+private:
+    const QScopedPointer<class ImportersPrivate> d;
+};
 }
 
 #endif

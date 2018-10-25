@@ -16,15 +16,14 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_POINTERTYPE_H
 #define KDEVPLATFORM_POINTERTYPE_H
 
 #include "abstracttype.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 class PointerTypeData;
 
 /**
@@ -33,66 +32,67 @@ class PointerTypeData;
  * PointerType is used to represent types which hold a pointer to a location
  * in memory.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT PointerType: public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT PointerType
+    : public AbstractType
 {
 public:
-  typedef TypePtr<PointerType> Ptr;
+    typedef TypePtr<PointerType> Ptr;
 
-  /// Default constructor
-  PointerType ();
-  /// Copy constructor. \param rhs type to copy
-  PointerType(const PointerType& rhs);
-  /// Constructor using raw data. \param data internal data.
-  explicit PointerType(PointerTypeData& data);
-  /// Destructor
-  ~PointerType() override;
+    /// Default constructor
+    PointerType ();
+    /// Copy constructor. \param rhs type to copy
+    PointerType(const PointerType& rhs);
+    /// Constructor using raw data. \param data internal data.
+    explicit PointerType(PointerTypeData& data);
+    /// Destructor
+    ~PointerType() override;
 
-  /**
-   * Sets the base type of the pointer, ie. what type of data the pointer points to.
-   *
-   * \param type the base type.
-   */
-  void setBaseType(const AbstractType::Ptr& type);
+    /**
+     * Sets the base type of the pointer, ie. what type of data the pointer points to.
+     *
+     * \param type the base type.
+     */
+    void setBaseType(const AbstractType::Ptr& type);
 
-  /**
-   * Retrieve the base type of the pointer, ie. what type of data the pointer points to.
-   *
-   * \returns the base type.
-   */
-  AbstractType::Ptr baseType () const;
+    /**
+     * Retrieve the base type of the pointer, ie. what type of data the pointer points to.
+     *
+     * \returns the base type.
+     */
+    AbstractType::Ptr baseType () const;
 
-  QString toString() const override;
+    QString toString() const override;
 
-  uint hash() const override;
+    uint hash() const override;
 
-  WhichType whichType() const override;
+    WhichType whichType() const override;
 
-  AbstractType* clone() const override;
+    AbstractType* clone() const override;
 
-  bool equals(const AbstractType* rhs) const override;
+    bool equals(const AbstractType* rhs) const override;
 
-  void exchangeTypes( TypeExchanger* exchanger ) override;
+    void exchangeTypes(TypeExchanger* exchanger) override;
 
-  enum {
-    Identity = 3
-  };
+    enum {
+        Identity = 3
+    };
 
-  typedef PointerTypeData Data;
+    typedef PointerTypeData Data;
 
 protected:
-  void accept0 (TypeVisitor *v) const override;
+    void accept0 (TypeVisitor* v) const override;
 
-  TYPE_DECLARE_DATA(PointerType)
+    TYPE_DECLARE_DATA(PointerType)
 };
 
-template<>
-inline PointerType* fastCast<PointerType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypePointer)
-    return nullptr;
-  else
-    return static_cast<PointerType*>(from);
+template <>
+inline PointerType* fastCast<PointerType*>(AbstractType* from)
+{
+    if (!from || from->whichType() != AbstractType::TypePointer)
+        return nullptr;
+    else
+        return static_cast<PointerType*>(from);
 }
-
 }
 
 #endif

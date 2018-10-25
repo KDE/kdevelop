@@ -17,7 +17,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "enumeratortype.h"
 
@@ -25,58 +25,56 @@
 #include "typeregister.h"
 
 namespace KDevelop {
-
 REGISTER_TYPE(EnumeratorType);
 
 EnumeratorType::EnumeratorType(const EnumeratorType& rhs)
-  : EnumeratorTypeBase(copyData<EnumeratorType>(*rhs.d_func()))
+    : EnumeratorTypeBase(copyData<EnumeratorType>(*rhs.d_func()))
 {
 }
 
 EnumeratorType::EnumeratorType(EnumeratorTypeData& data)
-  : EnumeratorTypeBase(data)
+    : EnumeratorTypeBase(data)
 {
 }
 
 EnumeratorType::EnumeratorType()
-  : EnumeratorTypeBase(createData<EnumeratorType>())
+    : EnumeratorTypeBase(createData<EnumeratorType>())
 {
-  IntegralType::setDataType(TypeInt);
-  setModifiers(ConstModifier);
+    IntegralType::setDataType(TypeInt);
+    setModifiers(ConstModifier);
 }
 
 AbstractType* EnumeratorType::clone() const
 {
-  return new EnumeratorType(*this);
+    return new EnumeratorType(*this);
 }
 
 bool EnumeratorType::equals(const AbstractType* _rhs) const
 {
-  if( this == _rhs )
+    if (this == _rhs)
+        return true;
+
+    if (!EnumeratorTypeBase::equals(_rhs))
+        return false;
+
+    Q_ASSERT(fastCast<const EnumeratorType*>(_rhs));
+
+    // Nothing Enumerator-type specific to compare
     return true;
-
-  if (!EnumeratorTypeBase::equals(_rhs))
-    return false;
-
-  Q_ASSERT(fastCast<const EnumeratorType*>(_rhs));
-
-  // Nothing Enumerator-type specific to compare
-  return true;
 }
 
 uint EnumeratorType::hash() const
 {
-  return KDevHash(ConstantIntegralType::hash()) << IdentifiedType::hash();
+    return KDevHash(ConstantIntegralType::hash()) << IdentifiedType::hash();
 }
 
 AbstractType::WhichType EnumeratorType::whichType() const
 {
-  return TypeEnumerator;
+    return TypeEnumerator;
 }
 
 QString EnumeratorType::toString() const
 {
-  return IdentifiedType::qualifiedIdentifier().toString();
+    return IdentifiedType::qualifiedIdentifier().toString();
 }
-
 }

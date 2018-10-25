@@ -27,27 +27,26 @@
 #include <KLocalizedString>
 
 namespace KDevelop {
-
 REGISTER_TYPE(ListType);
 REGISTER_TYPE(MapType);
 
 ListType::ListType()
-: KDevelop::StructureType(createData<ListType>()) { }
+    : KDevelop::StructureType(createData<ListType>()) { }
 
 ListType::ListType(StructureTypeData& data)
-: KDevelop::StructureType(data) { }
+    : KDevelop::StructureType(data) { }
 
 ListType::ListType(const ListType& rhs)
-: KDevelop::StructureType(copyData<ListType>(*rhs.d_func())) { }
+    : KDevelop::StructureType(copyData<ListType>(*rhs.d_func())) { }
 
 MapType::MapType()
-: ListType(createData<MapType>()) { }
+    : ListType(createData<MapType>()) { }
 
 MapType::MapType(ListTypeData& data)
-: ListType(data) { }
+    : ListType(data) { }
 
 MapType::MapType(const MapType& rhs)
-: ListType(copyData<MapType>(*rhs.d_func())) { }
+    : ListType(copyData<MapType>(*rhs.d_func())) { }
 
 void ListType::replaceContentType(const AbstractType::Ptr& newType)
 {
@@ -83,7 +82,7 @@ QString ListType::toString() const
 {
     QString prefix = KDevelop::StructureType::toString();
     auto content = contentType().abstractType();
-    if ( content ) {
+    if (content) {
         return i18n("%1 of %2", prefix, content->toString());
     }
     return prefix;
@@ -94,9 +93,9 @@ QString MapType::toString() const
     QString prefix = KDevelop::StructureType::toString();
     auto content = contentType().abstractType();
     auto key = keyType().abstractType();
-    auto key_str = ( key ? key->toString() : i18n("unknown") );
-    auto content_str = ( content ? content->toString() : i18n("unknown") );
-    if ( key || content ) {
+    auto key_str = (key ? key->toString() : i18n("unknown"));
+    auto content_str = (content ? content->toString() : i18n("unknown"));
+    if (key || content) {
         return i18n("%1 of %2 : %3", prefix, key_str, content_str);
     }
     return prefix;
@@ -109,17 +108,17 @@ QString ListType::containerToString() const
 
 bool ListType::equals(const AbstractType* rhs) const
 {
-    if ( this == rhs ) {
+    if (this == rhs) {
         return true;
     }
-    if ( ! KDevelop::StructureType::equals(rhs) ) {
+    if (!KDevelop::StructureType::equals(rhs)) {
         return false;
     }
     auto c = dynamic_cast<const ListType*>(rhs);
-    if ( ! c ) {
+    if (!c) {
         return false;
     }
-    if ( c->contentType() != d_func()->m_contentType ) {
+    if (c->contentType() != d_func()->m_contentType) {
         return false;
     }
     return true;
@@ -127,7 +126,7 @@ bool ListType::equals(const AbstractType* rhs) const
 
 bool MapType::equals(const AbstractType* rhs) const
 {
-    if ( ! ListType::equals(rhs) ) {
+    if (!ListType::equals(rhs)) {
         return false;
     }
     auto c = dynamic_cast<const MapType*>(rhs);
@@ -137,14 +136,13 @@ bool MapType::equals(const AbstractType* rhs) const
 
 uint ListType::hash() const
 {
-    return StructureType::hash() + ( contentType().abstractType() ? contentType().abstractType()->hash() : 1 );
+    return StructureType::hash() + (contentType().abstractType() ? contentType().abstractType()->hash() : 1);
 }
 
 uint MapType::hash() const
 {
-    return ListType::hash() + ( keyType().abstractType() ? keyType().abstractType()->hash() : 1 );
+    return ListType::hash() + (keyType().abstractType() ? keyType().abstractType()->hash() : 1);
 }
-
 } // namespace KDevelop
 
 // kate: space-indent on; indent-width 4

@@ -17,7 +17,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_ENUMERATIONTYPE_H
 #define KDEVPLATFORM_ENUMERATIONTYPE_H
@@ -26,52 +26,50 @@
 #include "identifiedtype.h"
 #include "typesystemdata.h" // for IntegralTypeData (used in EnumerationTypeBase)
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 typedef KDevelop::MergeIdentifiedType<IntegralType> EnumerationTypeBase;
 
 typedef EnumerationTypeBase::Data EnumerationTypeData;
 
-class KDEVPLATFORMLANGUAGE_EXPORT EnumerationType : public EnumerationTypeBase
+class KDEVPLATFORMLANGUAGE_EXPORT EnumerationType
+    : public EnumerationTypeBase
 {
 public:
-  EnumerationType();
+    EnumerationType();
 
-  EnumerationType(const EnumerationType& rhs);
+    EnumerationType(const EnumerationType& rhs);
 
-  explicit EnumerationType(EnumerationTypeData& data);
-  typedef TypePtr<EnumerationType> Ptr;
+    explicit EnumerationType(EnumerationTypeData& data);
+    typedef TypePtr<EnumerationType> Ptr;
 
-  uint hash() const override;
+    uint hash() const override;
 
-  KDevelop::AbstractType* clone() const override;
+    KDevelop::AbstractType* clone() const override;
 
-  bool equals(const KDevelop::AbstractType* rhs) const override;
+    bool equals(const KDevelop::AbstractType* rhs) const override;
 
-  QString toString() const override;
+    QString toString() const override;
 
-  WhichType whichType() const override;
+    WhichType whichType() const override;
 
-  enum {
-    Identity = 21
-  };
+    enum {
+        Identity = 21
+    };
 
-  typedef EnumerationTypeData Data;
+    typedef EnumerationTypeData Data;
 
 protected:
-  TYPE_DECLARE_DATA(EnumerationType);
+    TYPE_DECLARE_DATA(EnumerationType);
 };
 
-template<>
-inline EnumerationType* fastCast<EnumerationType*>(AbstractType* from) {
-  if(!from || from->whichType() != KDevelop::AbstractType::TypeEnumeration)
-    return nullptr;
-  else
-    return static_cast<EnumerationType*>(from);
+template <>
+inline EnumerationType* fastCast<EnumerationType*>(AbstractType* from)
+{
+    if (!from || from->whichType() != KDevelop::AbstractType::TypeEnumeration)
+        return nullptr;
+    else
+        return static_cast<EnumerationType*>(from);
 }
-
 }
-
 
 #endif // KDEVPLATFORM_ENUMERATIONTYPE_H

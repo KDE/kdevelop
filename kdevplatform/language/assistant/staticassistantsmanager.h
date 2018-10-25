@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_STATICASSISTANTSMANAGER_H
 #define KDEVPLATFORM_STATICASSISTANTSMANAGER_H
@@ -34,7 +34,6 @@
 typedef QPointer<KTextEditor::Document> SafeDocumentPointer;
 
 namespace KDevelop {
-
 class IDocument;
 class DUContext;
 class TopDUContext;
@@ -46,7 +45,8 @@ class TopDUContext;
  *
  * @sa StaticAssistant::textChanged
  */
-class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistantsManager : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistantsManager
+    : public QObject
 {
     Q_OBJECT
 
@@ -67,7 +67,6 @@ Q_SIGNALS:
 private:
     const QScopedPointer<class StaticAssistantsManagerPrivate> d;
 };
-
 }
 
 #endif // KDEVPLATFORM_STATICASSISTANTSMANAGER_H

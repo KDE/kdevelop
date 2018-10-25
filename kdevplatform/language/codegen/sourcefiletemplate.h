@@ -31,9 +31,7 @@
 class QStringList;
 class KArchiveDirectory;
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class TemplateRenderer;
 
 /**
@@ -330,7 +328,6 @@ public:
 private:
     const QScopedPointer<class SourceFileTemplatePrivate> d;
 };
-
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::SourceFileTemplate::OutputFile, Q_MOVABLE_TYPE);

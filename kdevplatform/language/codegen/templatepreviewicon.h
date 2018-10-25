@@ -15,7 +15,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_TEMPLATEPREVIEWICON_H
 #define KDEVPLATFORM_TEMPLATEPREVIEWICON_H
@@ -27,9 +27,7 @@
 
 class QPixmap;
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class TemplatePreviewIconData;
 
 /**
@@ -76,7 +74,6 @@ public:
 private:
     QSharedDataPointer<TemplatePreviewIconData> d;
 };
-
 }
 
 Q_DECLARE_METATYPE(KDevelop::TemplatePreviewIcon)

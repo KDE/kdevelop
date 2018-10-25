@@ -27,20 +27,21 @@
 #include <language/languageexport.h>
 
 namespace KDevelop {
-
-class KDEVPLATFORMLANGUAGE_EXPORT ListTypeData : public KDevelop::StructureTypeData {
+class KDEVPLATFORMLANGUAGE_EXPORT ListTypeData
+    : public KDevelop::StructureTypeData
+{
 public:
     ListTypeData()
-    : KDevelop::StructureTypeData()
-    , m_contentType() { }
+        : KDevelop::StructureTypeData()
+        , m_contentType() { }
 
     ListTypeData(const ListTypeData& rhs)
-    : KDevelop::StructureTypeData(rhs)
-    , m_contentType(rhs.m_contentType) { }
+        : KDevelop::StructureTypeData(rhs)
+        , m_contentType(rhs.m_contentType) { }
 
     explicit ListTypeData(const KDevelop::StructureTypeData& rhs)
-    : KDevelop::StructureTypeData(rhs)
-    , m_contentType() { }
+        : KDevelop::StructureTypeData(rhs)
+        , m_contentType() { }
 
     IndexedType m_contentType;
 };
@@ -75,7 +76,9 @@ public:
  *         add their argument's content to the type's content;
  *         Python does this through special comments for the method)
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ListType : public KDevelop::StructureType {
+class KDEVPLATFORMLANGUAGE_EXPORT ListType
+    : public KDevelop::StructureType
+{
 public:
     typedef TypePtr<ListType> Ptr;
 
@@ -139,19 +142,21 @@ protected:
     TYPE_DECLARE_DATA(ListType);
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT MapTypeData : public ListTypeData {
+class KDEVPLATFORMLANGUAGE_EXPORT MapTypeData
+    : public ListTypeData
+{
 public:
     MapTypeData()
-    : ListTypeData()
-    , m_keyType() { }
+        : ListTypeData()
+        , m_keyType() { }
 
     MapTypeData(const MapTypeData& rhs)
-    : ListTypeData(rhs)
-    , m_keyType(rhs.m_keyType) { }
+        : ListTypeData(rhs)
+        , m_keyType(rhs.m_keyType) { }
 
     explicit MapTypeData(const ListTypeData& rhs)
-    : ListTypeData(rhs)
-    , m_keyType() { }
+        : ListTypeData(rhs)
+        , m_keyType() { }
 
     IndexedType m_keyType;
 };
@@ -162,7 +167,9 @@ public:
  * @see ListType
  * This works the same as ListType, except that you can also track the object's key type.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT MapType : public ListType {
+class KDEVPLATFORMLANGUAGE_EXPORT MapType
+    : public ListType
+{
 public:
     typedef TypePtr<MapType> Ptr;
 
@@ -171,9 +178,9 @@ public:
     explicit MapType(ListTypeData& data);
 
     /**
-    * @brief Add @p typeToAdd to this map's key type.
-    * Behaves like addContentType, except that it modifies the key type instead.
-    */
+     * @brief Add @p typeToAdd to this map's key type.
+     * Behaves like addContentType, except that it modifies the key type instead.
+     */
     template <typename LanguageUnsureType>
     void addKeyType(const AbstractType::Ptr& typeToAdd)
     {
@@ -208,7 +215,6 @@ public:
 protected:
     TYPE_DECLARE_DATA(MapType);
 };
-
 } // namespace KDevelop
 
 #endif // KDEVPLATFORM_CONTAINER_TYPES_H

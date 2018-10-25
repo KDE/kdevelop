@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "codegenerator.h"
 
@@ -32,20 +32,19 @@
 #include "applychangeswidget.h"
 #include <debug.h>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class CodeGeneratorPrivate
 {
 public:
 
-    CodeGeneratorPrivate() : autoGen(false), context(0) {}
+    CodeGeneratorPrivate() : autoGen(false)
+        , context(0) {}
 
-    QMap<IndexedString, DUChainChangeSet *> duchainChanges;
+    QMap<IndexedString, DUChainChangeSet*> duchainChanges;
     DocumentChangeSet documentChanges;
 
     bool autoGen;
-    DUContext * context;
+    DUContext* context;
     DocumentRange range;
     QString error;
 };
@@ -60,41 +59,38 @@ CodeGeneratorBase::~CodeGeneratorBase()
     clearChangeSets();
 }
 
-void CodeGeneratorBase::autoGenerate ( DUContext* context, const KDevelop::DocumentRange* range )
+void CodeGeneratorBase::autoGenerate(DUContext* context, const KDevelop::DocumentRange* range)
 {
     d->autoGen = true;
     d->context = context;
     d->range = *range;
 }
 
-
-void CodeGeneratorBase::addChangeSet(DUChainChangeSet * duchainChange)
+void CodeGeneratorBase::addChangeSet(DUChainChangeSet* duchainChange)
 {
-    IndexedString file = duchainChange->topDuContext().data()->url() ;
+    IndexedString file = duchainChange->topDuContext().data()->url();
 
-    QMap<IndexedString, DUChainChangeSet *>::iterator it = d->duchainChanges.find(file);
+    QMap<IndexedString, DUChainChangeSet*>::iterator it = d->duchainChanges.find(file);
 
     //if we already have an entry for this file, merge it
-    if(it !=d->duchainChanges.end())
-    {
+    if (it != d->duchainChanges.end()) {
         **it << *duchainChange;
         delete duchainChange;
-    }
-    else
+    } else
         d->duchainChanges.insert(file, duchainChange);
 }
 
-void CodeGeneratorBase::addChangeSet(DocumentChangeSet & docChangeSet)
+void CodeGeneratorBase::addChangeSet(DocumentChangeSet& docChangeSet)
 {
     d->documentChanges << docChangeSet;
 }
 
-DocumentChangeSet & CodeGeneratorBase::documentChangeSet()
+DocumentChangeSet& CodeGeneratorBase::documentChangeSet()
 {
     return d->documentChanges;
 }
 
-const QString & CodeGeneratorBase::errorText() const
+const QString& CodeGeneratorBase::errorText() const
 {
     return d->error;
 }
@@ -104,7 +100,7 @@ bool CodeGeneratorBase::autoGeneration() const
     return d->autoGen;
 }
 
-void CodeGeneratorBase::setErrorText(const QString & errorText)
+void CodeGeneratorBase::setErrorText(const QString& errorText)
 {
     d->error = errorText;
 }
@@ -112,8 +108,9 @@ void CodeGeneratorBase::setErrorText(const QString & errorText)
 void CodeGeneratorBase::clearChangeSets()
 {
     qCDebug(LANGUAGE) << "Cleaning up all the changesets registered by the generator";
-    foreach(DUChainChangeSet * changeSet, d->duchainChanges)
+    foreach (DUChainChangeSet* changeSet, d->duchainChanges)
         delete changeSet;
+
     d->duchainChanges.clear();
 
     d->documentChanges = DocumentChangeSet();
@@ -126,85 +123,73 @@ bool CodeGeneratorBase::execute()
     //Shouldn't there be a method in iDocument to get a DocumentRange as well?
 
     QUrl document;
-    if(!d->autoGen)
-    {
-        if( !ICore::self()->documentController()->activeDocument() )
-        {
-            setErrorText( i18n("Could not find an open document" ) );
+    if (!d->autoGen) {
+        if (!ICore::self()->documentController()->activeDocument()) {
+            setErrorText(i18n("Could not find an open document"));
             return false;
         }
 
         document = ICore::self()->documentController()->activeDocument()->url();
 
-        if(d->range.isEmpty())
-        {
+        if (d->range.isEmpty()) {
             DUChainReadLocker lock(DUChain::lock());
-            d->range = DocumentRange(document.url(), ICore::self()->documentController()->activeDocument()->textSelection());
+            d->range = DocumentRange(document.url(),
+                                     ICore::self()->documentController()->activeDocument()->textSelection());
         }
     }
 
-    if(!d->context)
-    {
+    if (!d->context) {
         DUChainReadLocker lock(DUChain::lock());
-        TopDUContext * documentChain = DUChain::self()->chainForDocument(document);
-        if(!documentChain)
-        {
+        TopDUContext* documentChain = DUChain::self()->chainForDocument(document);
+        if (!documentChain) {
             setErrorText(i18n("Could not find the chain for the selected document: %1", document.url()));
             return false;
         }
         d->context = documentChain->findContextIncluding(d->range);
 
-        if(!d->context)
-        {
+        if (!d->context) {
             //Attempt to get the context again
             const QList<TopDUContext*> contexts = DUChain::self()->chainsForDocument(document);
             for (TopDUContext* top : contexts) {
                 qCDebug(LANGUAGE) << "Checking top context with range: " << top->range() << " for a context";
-                if((d->context = top->findContextIncluding(d->range)))
+                if ((d->context = top->findContextIncluding(d->range)))
                     break;
             }
         }
     }
 
-    if(!d->context)
-    {
+    if (!d->context) {
         setErrorText(i18n("Error finding context for selection range"));
         return false;
     }
 
-    if(!checkPreconditions(d->context,d->range))
-    {
-        setErrorText(i18n("Error checking conditions to generate code: %1",errorText()));
+    if (!checkPreconditions(d->context, d->range)) {
+        setErrorText(i18n("Error checking conditions to generate code: %1", errorText()));
         return false;
     }
 
-    if(!d->autoGen)
-    {
+    if (!d->autoGen) {
         qCDebug(LANGUAGE) << "Gathering user information for the codegenerator";
-        if(!gatherInformation())
-        {
-            setErrorText(i18n("Error Gathering user information: %1",errorText()));
+        if (!gatherInformation()) {
+            setErrorText(i18n("Error Gathering user information: %1", errorText()));
             return false;
         }
     }
 
     qCDebug(LANGUAGE) << "Generating code";
-    if(!process())
-    {
-        setErrorText(i18n("Error generating code: %1",errorText()));
+    if (!process()) {
+        setErrorText(i18n("Error generating code: %1", errorText()));
         return false;
     }
 
-    if(!d->autoGen)
-    {
+    if (!d->autoGen) {
         qCDebug(LANGUAGE) << "Submitting to the user for review";
         return displayChanges();
     }
 
     //If it is autogenerated, it shouldn't need to apply changes, instead return them to client that my be another generator
     DocumentChangeSet::ChangeResult result(true);
-    if(!d->autoGen && !(result = d->documentChanges.applyAllChanges()))
-    {
+    if (!d->autoGen && !(result = d->documentChanges.applyAllChanges())) {
         setErrorText(result.m_failureReason);
         return false;
     }
@@ -215,8 +200,7 @@ bool CodeGeneratorBase::execute()
 bool CodeGeneratorBase::displayChanges()
 {
     DocumentChangeSet::ChangeResult result = d->documentChanges.applyAllToTemp();
-    if(!result)
-    {
+    if (!result) {
         setErrorText(result.m_failureReason);
         return false;
     }
@@ -226,14 +210,13 @@ bool CodeGeneratorBase::displayChanges()
     widget.setInformation("Info?");
 
     QMap<IndexedString, IndexedString> temps = d->documentChanges.tempNamesForAll();
-    for(QMap<IndexedString, IndexedString>::iterator it = temps.begin();
-        it != temps.end(); ++it)
-        widget.addDocuments(it.key() , it.value());
+    for (QMap<IndexedString, IndexedString>::iterator it = temps.begin();
+         it != temps.end(); ++it)
+        widget.addDocuments(it.key(), it.value());
 
-    if(widget.exec())
+    if (widget.exec())
         return widget.applyAllChanges();
     else
         return false;
 }
-
 }

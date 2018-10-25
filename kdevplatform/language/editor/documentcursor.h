@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DOCUMENTCURSOR_H
 #define KDEVPLATFORM_DOCUMENTCURSOR_H
@@ -24,32 +24,35 @@
 
 #include <KTextEditor/Cursor>
 
-namespace KDevelop
-{
+namespace KDevelop {
 /**
  * Lightweight object that extends a cursor with information about the document URL to which the range
  * refers.
  */
-class DocumentCursor : public KTextEditor::Cursor
+class DocumentCursor
+    : public KTextEditor::Cursor
 {
 public:
-    DocumentCursor() {
-    }
-    
-    DocumentCursor(const IndexedString& document, const KTextEditor::Cursor& cursor) : KTextEditor::Cursor(cursor), document(document) {
+    DocumentCursor()
+    {
     }
 
-    static DocumentCursor invalid() {
-      return DocumentCursor({}, KTextEditor::Cursor::invalid());
+    DocumentCursor(const IndexedString& document, const KTextEditor::Cursor& cursor) : KTextEditor::Cursor(cursor)
+        , document(document)
+    {
     }
 
-    inline bool operator==(const DocumentCursor& rhs) const {
-      return document == rhs.document && *static_cast<const KTextEditor::Cursor*>(this) == rhs;
+    static DocumentCursor invalid()
+    {
+        return DocumentCursor({}, KTextEditor::Cursor::invalid());
+    }
+
+    inline bool operator==(const DocumentCursor& rhs) const
+    {
+        return document == rhs.document && *static_cast<const KTextEditor::Cursor*>(this) == rhs;
     }
 
     IndexedString document;
 };
-
 }
 #endif // KDEVPLATFORM_DOCUMENTCURSOR_H
-

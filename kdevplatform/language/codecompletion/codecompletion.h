@@ -25,31 +25,31 @@
 #include <QObject>
 #include <language/languageexport.h>
 
-namespace KTextEditor { class Document; class View; class CodeCompletionModel; 
+namespace KTextEditor {
+class Document; class View; class CodeCompletionModel;
 }
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class IDocument;
 class ILanguage;
 
 // TODO: cleanup this class for 5.1
-class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion
+    : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     /** CodeCompletion will be the @p aModel parent.
-      *  If @p language is empty, the completion model will work for all files,
-      *  otherwise only for ones that contain the selected language.
-    */
+     *  If @p language is empty, the completion model will work for all files,
+     *  otherwise only for ones that contain the selected language.
+     */
     CodeCompletion(QObject* parent, KTextEditor::CodeCompletionModel* aModel, const QString& language);
     ~CodeCompletion() override;
 
-  private Q_SLOTS:
+private Q_SLOTS:
     void textDocumentCreated(KDevelop::IDocument*);
-    void viewCreated(KTextEditor::Document *document, KTextEditor::View *view);
+    void viewCreated(KTextEditor::Document* document, KTextEditor::View* view);
     void documentUrlChanged(KDevelop::IDocument*);
 
     /**
@@ -59,20 +59,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletion : public QObject
      */
     void checkDocuments();
 
-  Q_SIGNALS:
+Q_SIGNALS:
     void registeredToView(KTextEditor::View* view);
     void unregisteredFromView(KTextEditor::View* view);
 
-  private:
-    
+private:
+
     void unregisterDocument(KTextEditor::Document*);
     void checkDocument(KTextEditor::Document*);
-    
+
     KTextEditor::CodeCompletionModel* m_model;
     QString m_language;
 };
-
 }
 
 #endif
-

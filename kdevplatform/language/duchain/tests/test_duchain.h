@@ -26,7 +26,8 @@
 
 #include <QObject>
 
-class TestDUChain : public QObject
+class TestDUChain
+    : public QObject
 {
     Q_OBJECT
 
@@ -35,7 +36,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 #ifndef Q_OS_WIN
-	// Causes stack overflow on Windows (MSVC2015)
+    // Causes stack overflow on Windows (MSVC2015)
     void testStringSets();
 #endif
     void testSymbolTableValid();

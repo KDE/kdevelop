@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "staticassistantsmanager.h"
 #include <debug.h>
@@ -62,13 +62,15 @@ StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
 {
     connect(KDevelop::ICore::self()->documentController(),
             &IDocumentController::documentLoaded,
-            this, [&] (IDocument* document) { d->documentLoaded(document); });
+            this, [&](IDocument* document) {
+        d->documentLoaded(document);
+    });
     foreach (IDocument* document, ICore::self()->documentController()->openDocuments()) {
         d->documentLoaded(document);
     }
+
     connect(DUChain::self(), &DUChain::updateReady,
             this, &StaticAssistantsManager::notifyAssistants);
-
 }
 
 StaticAssistantsManager::~StaticAssistantsManager()
@@ -98,56 +100,60 @@ void StaticAssistantsManagerPrivate::documentLoaded(IDocument* document)
     if (document->textDocument()) {
         auto doc = document->textDocument();
         QObject::connect(doc, &KTextEditor::Document::textInserted, q,
-                [&] (KTextEditor::Document* doc, const Cursor& cursor, const QString& text) {
-                    textInserted(doc, cursor, text);
-                });
+                         [&](KTextEditor::Document* doc, const Cursor& cursor, const QString& text) {
+            textInserted(doc, cursor, text);
+        });
         QObject::connect(doc, &KTextEditor::Document::textRemoved, q,
-                [&] (KTextEditor::Document* doc, const Range& range, const QString& removedText) {
-                    textRemoved(doc, range, removedText);
-                });
+                         [&](KTextEditor::Document* doc, const Range& range, const QString& removedText) {
+            textRemoved(doc, range, removedText);
+        });
     }
 }
 
 void StaticAssistantsManagerPrivate::textInserted(Document* doc, const Cursor& cursor, const QString& text)
 {
     auto changed = false;
-    Q_FOREACH ( auto assistant, m_registeredAssistants ) {
-        auto range = Range(cursor, cursor+Cursor(0, text.size()));
+    Q_FOREACH (auto assistant, m_registeredAssistants) {
+        auto range = Range(cursor, cursor + Cursor(0, text.size()));
         auto wasUseful = assistant->isUseful();
         assistant->textChanged(doc, range, {});
-        if ( wasUseful != assistant->isUseful() ) {
+        if (wasUseful != assistant->isUseful()) {
             changed = true;
         }
     }
-    if ( changed ) {
+
+    if (changed) {
         Q_EMIT q->problemsChanged(IndexedString(doc->url()));
     }
 }
 
 void StaticAssistantsManagerPrivate::textRemoved(Document* doc, const Range& range,
-                                      const QString& removedText)
+                                                 const QString& removedText)
 {
     auto changed = false;
-    Q_FOREACH ( auto assistant, m_registeredAssistants ) {
+    Q_FOREACH (auto assistant, m_registeredAssistants) {
         auto wasUseful = assistant->isUseful();
         assistant->textChanged(doc, range, removedText);
-        if ( wasUseful != assistant->isUseful() ) {
+        if (wasUseful != assistant->isUseful()) {
             changed = true;
         }
     }
-    if ( changed ) {
+
+    if (changed) {
         Q_EMIT q->problemsChanged(IndexedString(doc->url()));
     }
 }
 
-void StaticAssistantsManager::notifyAssistants(const IndexedString& url, const KDevelop::ReferencedTopDUContext& context)
+void StaticAssistantsManager::notifyAssistants(const IndexedString& url,
+                                               const KDevelop::ReferencedTopDUContext& context)
 {
-    Q_FOREACH ( auto assistant, d->m_registeredAssistants ) {
+    Q_FOREACH (auto assistant, d->m_registeredAssistants) {
         assistant->updateReady(url, context);
     }
 }
 
-QVector<KDevelop::Problem::Ptr> KDevelop::StaticAssistantsManager::problemsForContext(const KDevelop::ReferencedTopDUContext& top)
+QVector<KDevelop::Problem::Ptr> KDevelop::StaticAssistantsManager::problemsForContext(
+    const KDevelop::ReferencedTopDUContext& top)
 {
     View* view = ICore::self()->documentController()->activeTextDocumentView();
     if (!view || !top || IndexedString(view->document()->url()) != top->url()) {
@@ -181,9 +187,8 @@ QVector<KDevelop::Problem::Ptr> KDevelop::StaticAssistantsManager::problemsForCo
             ret.append(KDevelop::Problem::Ptr(p));
         }
     }
+
     return ret;
 }
-
-
 
 #include "moc_staticassistantsmanager.cpp"

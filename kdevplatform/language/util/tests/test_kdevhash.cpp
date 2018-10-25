@@ -17,7 +17,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include <QObject>
 #include <QTest>
@@ -28,8 +28,7 @@
 #include "../kdevhash.h"
 
 namespace {
-
-template<typename T>
+template <typename T>
 std::vector<T> generateData(std::size_t size)
 {
     auto ret = std::vector<T>(size);
@@ -37,7 +36,7 @@ std::vector<T> generateData(std::size_t size)
     return ret;
 }
 
-template<typename T>
+template <typename T>
 void runBench()
 {
     const auto data = generateData<T>(10000);
@@ -49,12 +48,13 @@ void runBench()
     }
     QVERIFY(static_cast<uint>(hash));
 }
-
 }
 
-class TestKDevHash : public QObject
+class TestKDevHash
+    : public QObject
 {
     Q_OBJECT
+
 private Q_SLOTS:
     void benchHash_int()
     {

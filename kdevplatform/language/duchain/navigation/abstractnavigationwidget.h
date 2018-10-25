@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_ABSTRACTNAVIGATIONWIDGET_H
 #define KDEVPLATFORM_ABSTRACTNAVIGATIONWIDGET_H
@@ -28,72 +28,73 @@
 
 class QTextBrowser;
 
-
 namespace KDevelop {
-
-  /**
-   * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
-   * The duchain must be read-locked for most operations
-   * */
-  class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationWidget : public QWidget, public QuickOpenEmbeddedWidgetInterface
-  {
+/**
+ * This class deleted itself when its part is deleted, so always use a QPointer when referencing it.
+ * The duchain must be read-locked for most operations
+ * */
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationWidget
+    : public QWidget
+    , public QuickOpenEmbeddedWidgetInterface
+{
     Q_OBJECT
-    public:
-      enum DisplayHint {
+
+public:
+    enum DisplayHint {
         NoHints = 0x0, // < Normal display
         EmbeddableWidget = 0x1, // < Omit parts which are only useful for the navigation popup
-      };
-      Q_DECLARE_FLAGS(DisplayHints, DisplayHint)
-      AbstractNavigationWidget();
-      ~AbstractNavigationWidget() override;
+    };
+    Q_DECLARE_FLAGS(DisplayHints, DisplayHint)
+    AbstractNavigationWidget();
+    ~AbstractNavigationWidget() override;
 
-      void setContext(NavigationContextPointer context, int initBrowser = 400);
-      void setDisplayHints(DisplayHints hints);
+    void setContext(NavigationContextPointer context, int initBrowser = 400);
+    void setDisplayHints(DisplayHints hints);
 
-      QSize sizeHint() const override;
+    QSize sizeHint() const override;
 
-    public Q_SLOTS:
-      ///Keyboard-action "next"
-      void next() override;
-      ///Keyboard-action "previous"
-      void previous() override;
-      ///Keyboard-action "accept"
-      void accept() override;
-      void up() override;
-      void down() override;
-      virtual void back();
+public Q_SLOTS:
+    ///Keyboard-action "next"
+    void next() override;
+    ///Keyboard-action "previous"
+    void previous() override;
+    ///Keyboard-action "accept"
+    void accept() override;
+    void up() override;
+    void down() override;
+    virtual void back();
 
-      ///These are temporarily for gettings these events directly from kate
-      ///@todo Do this through a public interface post 4.2
-      void embeddedWidgetRight();
-      ///Keyboard-action "previous"
-      void embeddedWidgetLeft();
-      ///Keyboard-action "accept"
-      void embeddedWidgetAccept();
-      void embeddedWidgetUp();
-      void embeddedWidgetDown();
+    ///These are temporarily for gettings these events directly from kate
+    ///@todo Do this through a public interface post 4.2
+    void embeddedWidgetRight();
+    ///Keyboard-action "previous"
+    void embeddedWidgetLeft();
+    ///Keyboard-action "accept"
+    void embeddedWidgetAccept();
+    void embeddedWidgetUp();
+    void embeddedWidgetDown();
 
-      NavigationContextPointer context();
+    NavigationContextPointer context();
 
-      void navigateDeclaration(const KDevelop::IndexedDeclaration& decl);
+    void navigateDeclaration(const KDevelop::IndexedDeclaration& decl);
 
-    Q_SIGNALS:
-      void sizeHintChanged();
-      /// Emitted whenever the current navigation-context has changed
-      /// @param wasInitial whether the previous context was the initial context
-      /// @param isInitial whether the current context is the initial context
-      void contextChanged(bool wasInitial, bool isInitial);
+Q_SIGNALS:
+    void sizeHintChanged();
+    /// Emitted whenever the current navigation-context has changed
+    /// @param wasInitial whether the previous context was the initial context
+    /// @param isInitial whether the current context is the initial context
+    void contextChanged(bool wasInitial, bool isInitial);
 
-    protected:
-      void wheelEvent(QWheelEvent* ) override;
-      void updateIdealSize() const;
+protected:
+    void wheelEvent(QWheelEvent*) override;
+    void updateIdealSize() const;
 
-      void initBrowser(int height);
-      void update();
+    void initBrowser(int height);
+    void update();
 
-    private:
-      const QScopedPointer<class AbstractNavigationWidgetPrivate> d;
-  };
+private:
+    const QScopedPointer<class AbstractNavigationWidgetPrivate> d;
+};
 }
 
 #endif

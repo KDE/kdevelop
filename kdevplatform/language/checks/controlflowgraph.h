@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CONTROLFLOWGRAPH_H
 #define KDEVPLATFORM_CONTROLFLOWGRAPH_H
@@ -24,7 +24,6 @@
 #include <language/languageexport.h>
 
 namespace KDevelop {
-
 class Declaration;
 class ControlFlowNode;
 
@@ -39,7 +38,7 @@ class ControlFlowNode;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowGraph
 {
-  public:
+public:
     /** Creates an empty graph. */
     ControlFlowGraph();
     ~ControlFlowGraph();
@@ -67,13 +66,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT ControlFlowGraph
 
     /** @returns all dead nodes in the graph */
     QVector<ControlFlowNode*> deadNodes() const;
-  private:
+
+private:
     ControlFlowGraph(const ControlFlowGraph&);
 
-  private:
+private:
     const QScopedPointer<class ControlFlowGraphPrivate> d;
 };
-
 }
 
 #endif

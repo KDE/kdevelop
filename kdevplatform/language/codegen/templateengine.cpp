@@ -41,18 +41,23 @@ TemplateEngine* TemplateEngine::self()
 }
 
 TemplateEngine::TemplateEngine()
-: d(new TemplateEnginePrivate)
+    : d(new TemplateEnginePrivate)
 {
     d->engine.setSmartTrimEnabled(true);
 
-    qCDebug(LANGUAGE) << "Generic data locations:" << QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+    qCDebug(LANGUAGE) << "Generic data locations:" << QStandardPaths::standardLocations(
+        QStandardPaths::GenericDataLocation);
 
     const auto templateDirectories = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-        QStringLiteral("kdevcodegen/templates"), QStandardPaths::LocateDirectory);
+                                                               QStringLiteral(
+                                                                   "kdevcodegen/templates"),
+                                                               QStandardPaths::LocateDirectory);
 
     if (!templateDirectories.isEmpty()) {
         qCDebug(LANGUAGE) << "Found template directories:" << templateDirectories;
-        addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevcodegen/templates"), QStandardPaths::LocateDirectory));
+        addTemplateDirectories(QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
+                                                         QStringLiteral("kdevcodegen/templates"),
+                                                         QStandardPaths::LocateDirectory));
     } else {
         qCWarning(LANGUAGE) << "No template directories found -- templating engine will not work!";
     }

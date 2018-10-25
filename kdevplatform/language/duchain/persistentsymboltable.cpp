@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "persistentsymboltable.h"
 
@@ -35,123 +35,148 @@
 const uint MinimumCountForCache = 1;
 
 namespace {
-QDebug fromTextStream(const QTextStream& out) { if (out.device()) return {out.device()}; return {out.string()}; }
+QDebug fromTextStream(const QTextStream& out)
+{
+    if (out.device())
+        return {
+                   out.device()
+        }; return {
+               out.string()
+    };
+}
 }
 
 namespace KDevelop {
-
-Utils::BasicSetRepository* RecursiveImportCacheRepository::repository() {
-  static Utils::BasicSetRepository recursiveImportCacheRepositoryObject(QStringLiteral("Recursive Imports Cache"), nullptr, false);
-  return &recursiveImportCacheRepositoryObject;
+Utils::BasicSetRepository* RecursiveImportCacheRepository::repository()
+{
+    static Utils::BasicSetRepository recursiveImportCacheRepositoryObject(QStringLiteral(
+            "Recursive Imports Cache"), nullptr, false);
+    return &recursiveImportCacheRepositoryObject;
 }
 
 DEFINE_LIST_MEMBER_HASH(PersistentSymbolTableItem, declarations, IndexedDeclaration)
 
-class PersistentSymbolTableItem {
-  public:
-  PersistentSymbolTableItem() : centralFreeItem(-1) {
-    initializeAppendedLists();
-  }
-  PersistentSymbolTableItem(const PersistentSymbolTableItem& rhs, bool dynamic = true) : id(rhs.id), centralFreeItem(rhs.centralFreeItem) {
-    initializeAppendedLists(dynamic);
-    copyListsFrom(rhs);
-  }
-  
-  ~PersistentSymbolTableItem() {
-    freeAppendedLists();
-  }
-  
-  inline unsigned int hash() const {
-    //We only compare the declaration. This allows us implementing a map, although the item-repository
-    //originally represents a set.
-    return id.index();
-  }
-  
-  unsigned int itemSize() const {
-    return dynamicSize();
-  }
-  
-  uint classSize() const {
-    return sizeof(PersistentSymbolTableItem);
-  }
-  
-  IndexedQualifiedIdentifier id;
-  int centralFreeItem;
-  
-  START_APPENDED_LISTS(PersistentSymbolTableItem);
-  APPENDED_LIST_FIRST(PersistentSymbolTableItem, IndexedDeclaration, declarations);
-  END_APPENDED_LISTS(PersistentSymbolTableItem, declarations);
+class PersistentSymbolTableItem
+{
+public:
+    PersistentSymbolTableItem() : centralFreeItem(-1)
+    {
+        initializeAppendedLists();
+    }
+    PersistentSymbolTableItem(const PersistentSymbolTableItem& rhs, bool dynamic = true) : id(rhs.id)
+        , centralFreeItem(rhs.centralFreeItem)
+    {
+        initializeAppendedLists(dynamic);
+        copyListsFrom(rhs);
+    }
+
+    ~PersistentSymbolTableItem()
+    {
+        freeAppendedLists();
+    }
+
+    inline unsigned int hash() const
+    {
+        //We only compare the declaration. This allows us implementing a map, although the item-repository
+        //originally represents a set.
+        return id.index();
+    }
+
+    unsigned int itemSize() const
+    {
+        return dynamicSize();
+    }
+
+    uint classSize() const
+    {
+        return sizeof(PersistentSymbolTableItem);
+    }
+
+    IndexedQualifiedIdentifier id;
+    int centralFreeItem;
+
+    START_APPENDED_LISTS(PersistentSymbolTableItem);
+    APPENDED_LIST_FIRST(PersistentSymbolTableItem, IndexedDeclaration, declarations);
+    END_APPENDED_LISTS(PersistentSymbolTableItem, declarations);
 };
 
-class PersistentSymbolTableRequestItem {
-  public:
-  
-  PersistentSymbolTableRequestItem(const PersistentSymbolTableItem& item) : m_item(item) {
-  }
-  enum {
-    AverageSize = 30 //This should be the approximate average size of an Item
-  };
+class PersistentSymbolTableRequestItem
+{
+public:
 
-  unsigned int hash() const {
-    return m_item.hash();
-  }
-  
-  uint itemSize() const {
-      return m_item.itemSize();
-  }
+    PersistentSymbolTableRequestItem(const PersistentSymbolTableItem& item) : m_item(item)
+    {
+    }
+    enum {
+        AverageSize = 30 //This should be the approximate average size of an Item
+    };
 
-  void createItem(PersistentSymbolTableItem* item) const {
-    new (item) PersistentSymbolTableItem(m_item, false);
-  }
-  
-  static void destroy(PersistentSymbolTableItem* item, KDevelop::AbstractItemRepository&) {
-    item->~PersistentSymbolTableItem();
-  }
+    unsigned int hash() const
+    {
+        return m_item.hash();
+    }
 
-  static bool persistent(const PersistentSymbolTableItem*) {
-    return true; //Nothing to do
-  }
-  
-  bool equals(const PersistentSymbolTableItem* item) const {
-    return m_item.id == item->id;
-  }
-  
-  const PersistentSymbolTableItem& m_item;
+    uint itemSize() const
+    {
+        return m_item.itemSize();
+    }
+
+    void createItem(PersistentSymbolTableItem* item) const
+    {
+        new (item) PersistentSymbolTableItem(m_item, false);
+    }
+
+    static void destroy(PersistentSymbolTableItem* item, KDevelop::AbstractItemRepository&)
+    {
+        item->~PersistentSymbolTableItem();
+    }
+
+    static bool persistent(const PersistentSymbolTableItem*)
+    {
+        return true; //Nothing to do
+    }
+
+    bool equals(const PersistentSymbolTableItem* item) const
+    {
+        return m_item.id == item->id;
+    }
+
+    const PersistentSymbolTableItem& m_item;
 };
 
-template<class ValueType>
-struct CacheEntry {
-  
-  typedef KDevVarLengthArray<ValueType> Data;
-  typedef QHash<TopDUContext::IndexedRecursiveImports, Data > DataHash;
-  
-  DataHash m_hash;
+template <class ValueType>
+struct CacheEntry
+{
+    typedef KDevVarLengthArray<ValueType> Data;
+    typedef QHash<TopDUContext::IndexedRecursiveImports, Data> DataHash;
+
+    DataHash m_hash;
 };
 
 class PersistentSymbolTablePrivate
 {
 public:
 
-  PersistentSymbolTablePrivate() : m_declarations(QStringLiteral("Persistent Declaration Table")) {
-  }
-  //Maps declaration-ids to declarations
-  ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem, true, false> m_declarations;
-  
-  
-  QHash<IndexedQualifiedIdentifier, CacheEntry<IndexedDeclaration> > m_declarationsCache;
-  
-  //We cache the imports so the currently used nodes are very close in memory, which leads to much better CPU cache utilization
-  QHash<TopDUContext::IndexedRecursiveImports, PersistentSymbolTable::CachedIndexedRecursiveImports> m_importsCache;
+    PersistentSymbolTablePrivate() : m_declarations(QStringLiteral("Persistent Declaration Table"))
+    {
+    }
+    //Maps declaration-ids to declarations
+    ItemRepository<PersistentSymbolTableItem, PersistentSymbolTableRequestItem, true, false> m_declarations;
+
+    QHash<IndexedQualifiedIdentifier, CacheEntry<IndexedDeclaration>> m_declarationsCache;
+
+    //We cache the imports so the currently used nodes are very close in memory, which leads to much better CPU cache utilization
+    QHash<TopDUContext::IndexedRecursiveImports, PersistentSymbolTable::CachedIndexedRecursiveImports> m_importsCache;
 };
 
 void PersistentSymbolTable::clearCache()
 {
-  ENSURE_CHAIN_WRITE_LOCKED
-  {
-    QMutexLocker lock(d->m_declarations.mutex());
-    d->m_importsCache.clear();
-    d->m_declarationsCache.clear();
-  }
+    ENSURE_CHAIN_WRITE_LOCKED
+    {
+        QMutexLocker lock(d->m_declarations.mutex());
+        d->m_importsCache.clear();
+        d->m_declarationsCache.clear();
+    }
 }
 
 PersistentSymbolTable::PersistentSymbolTable() : d(new PersistentSymbolTablePrivate())
@@ -160,263 +185,288 @@ PersistentSymbolTable::PersistentSymbolTable() : d(new PersistentSymbolTablePriv
 
 PersistentSymbolTable::~PersistentSymbolTable()
 {
-  //Workaround for a strange destruction-order related crash duing shutdown
-  //We just let the data leak. This doesn't hurt, as there is no meaningful destructors.
-  // TODO: analyze and fix it
+    //Workaround for a strange destruction-order related crash duing shutdown
+    //We just let the data leak. This doesn't hurt, as there is no meaningful destructors.
+    // TODO: analyze and fix it
 //   delete d;
 }
 
 void PersistentSymbolTable::addDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
 {
-  QMutexLocker lock(d->m_declarations.mutex());
-  ENSURE_CHAIN_WRITE_LOCKED
-  
-  d->m_declarationsCache.remove(id);
-  
-  PersistentSymbolTableItem item;
-  item.id = id;
-  PersistentSymbolTableRequestItem request(item);
-  
-  uint index = d->m_declarations.findIndex(item);
-  
-  if(index) {
-    //Check whether the item is already in the mapped list, else copy the list into the new created item
-    const PersistentSymbolTableItem* oldItem = d->m_declarations.itemFromIndex(index);
-    
-    EmbeddedTreeAlgorithms<IndexedDeclaration, IndexedDeclarationHandler> alg(oldItem->declarations(), oldItem->declarationsSize(), oldItem->centralFreeItem);
-    
-    if(alg.indexOf(declaration) != -1)
-      return;
-    
-    DynamicItem<PersistentSymbolTableItem, true> editableItem = d->m_declarations.dynamicItemFromIndex(index);
-    
-    EmbeddedTreeAddItem<IndexedDeclaration, IndexedDeclarationHandler> add(const_cast<IndexedDeclaration*>(editableItem->declarations()), editableItem->declarationsSize(), editableItem->centralFreeItem, declaration);
-    
-    uint newSize = add.newItemCount();
-    if(newSize != editableItem->declarationsSize()) {
-      //We need to resize. Update and fill the new item, and delete the old item.
-      item.declarationsList().resize(newSize);
-      add.transferData(item.declarationsList().data(), newSize, &item.centralFreeItem);
-      
-      d->m_declarations.deleteItem(index);
-      Q_ASSERT(!d->m_declarations.findIndex(request));
-    }else{
-      //We're fine, the item could be added to the existing list
-      return;
+    QMutexLocker lock(d->m_declarations.mutex());
+    ENSURE_CHAIN_WRITE_LOCKED
+
+    d->m_declarationsCache.remove(id);
+
+    PersistentSymbolTableItem item;
+    item.id = id;
+    PersistentSymbolTableRequestItem request(item);
+
+    uint index = d->m_declarations.findIndex(item);
+
+    if (index) {
+        //Check whether the item is already in the mapped list, else copy the list into the new created item
+        const PersistentSymbolTableItem* oldItem = d->m_declarations.itemFromIndex(index);
+
+        EmbeddedTreeAlgorithms<IndexedDeclaration, IndexedDeclarationHandler> alg(
+            oldItem->declarations(), oldItem->declarationsSize(), oldItem->centralFreeItem);
+
+        if (alg.indexOf(declaration) != -1)
+            return;
+
+        DynamicItem<PersistentSymbolTableItem, true> editableItem = d->m_declarations.dynamicItemFromIndex(index);
+
+        EmbeddedTreeAddItem<IndexedDeclaration, IndexedDeclarationHandler> add(
+            const_cast<IndexedDeclaration*>(editableItem->declarations()),
+            editableItem->declarationsSize(), editableItem->centralFreeItem, declaration);
+
+        uint newSize = add.newItemCount();
+        if (newSize != editableItem->declarationsSize()) {
+            //We need to resize. Update and fill the new item, and delete the old item.
+            item.declarationsList().resize(newSize);
+            add.transferData(item.declarationsList().data(), newSize, &item.centralFreeItem);
+
+            d->m_declarations.deleteItem(index);
+            Q_ASSERT(!d->m_declarations.findIndex(request));
+        } else {
+            //We're fine, the item could be added to the existing list
+            return;
+        }
+    } else {
+        item.declarationsList().append(declaration);
     }
-  }else{
-    item.declarationsList().append(declaration);
-  }
 
-  //This inserts the changed item
-  d->m_declarations.index(request);
-}
-
-void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& id, const IndexedDeclaration& declaration)
-{
-  QMutexLocker lock(d->m_declarations.mutex());
-  ENSURE_CHAIN_WRITE_LOCKED
-  
-  d->m_declarationsCache.remove(id);
-  Q_ASSERT(!d->m_declarationsCache.contains(id));
-  
-  PersistentSymbolTableItem item;
-  item.id = id;
-  PersistentSymbolTableRequestItem request(item);
-  
-  uint index = d->m_declarations.findIndex(item);
-  
-  if(index) {
-    //Check whether the item is already in the mapped list, else copy the list into the new created item
-    const PersistentSymbolTableItem* oldItem = d->m_declarations.itemFromIndex(index);
-    
-    EmbeddedTreeAlgorithms<IndexedDeclaration, IndexedDeclarationHandler> alg(oldItem->declarations(), oldItem->declarationsSize(), oldItem->centralFreeItem);
-    
-    if(alg.indexOf(declaration) == -1)
-      return;
-    
-    DynamicItem<PersistentSymbolTableItem, true> editableItem = d->m_declarations.dynamicItemFromIndex(index);
-    
-    EmbeddedTreeRemoveItem<IndexedDeclaration, IndexedDeclarationHandler> remove(const_cast<IndexedDeclaration*>(editableItem->declarations()), editableItem->declarationsSize(), editableItem->centralFreeItem, declaration);
-    
-    uint newSize = remove.newItemCount();
-    if(newSize != editableItem->declarationsSize()) {
-      //We need to resize. Update and fill the new item, and delete the old item.
-      item.declarationsList().resize(newSize);
-      remove.transferData(item.declarationsList().data(), newSize, &item.centralFreeItem);
-      
-      d->m_declarations.deleteItem(index);
-      Q_ASSERT(!d->m_declarations.findIndex(request));
-    }else{
-      //We're fine, the item could be added to the existing list
-      return;
-    }
-  }
-
-  //This inserts the changed item
-  if(item.declarationsSize())
+    //This inserts the changed item
     d->m_declarations.index(request);
 }
 
-struct DeclarationCacheVisitor {
-  explicit DeclarationCacheVisitor(KDevVarLengthArray<IndexedDeclaration>& _cache) : cache(_cache) {
-  }
-  
-  bool operator()(const IndexedDeclaration& decl) const {
-    cache.append(decl);
-    return true;
-  }
-  
-  KDevVarLengthArray<IndexedDeclaration>& cache;
+void PersistentSymbolTable::removeDeclaration(const IndexedQualifiedIdentifier& id,
+                                              const IndexedDeclaration& declaration)
+{
+    QMutexLocker lock(d->m_declarations.mutex());
+    ENSURE_CHAIN_WRITE_LOCKED
+
+    d->m_declarationsCache.remove(id);
+    Q_ASSERT(!d->m_declarationsCache.contains(id));
+
+    PersistentSymbolTableItem item;
+    item.id = id;
+    PersistentSymbolTableRequestItem request(item);
+
+    uint index = d->m_declarations.findIndex(item);
+
+    if (index) {
+        //Check whether the item is already in the mapped list, else copy the list into the new created item
+        const PersistentSymbolTableItem* oldItem = d->m_declarations.itemFromIndex(index);
+
+        EmbeddedTreeAlgorithms<IndexedDeclaration, IndexedDeclarationHandler> alg(
+            oldItem->declarations(), oldItem->declarationsSize(), oldItem->centralFreeItem);
+
+        if (alg.indexOf(declaration) == -1)
+            return;
+
+        DynamicItem<PersistentSymbolTableItem, true> editableItem = d->m_declarations.dynamicItemFromIndex(index);
+
+        EmbeddedTreeRemoveItem<IndexedDeclaration, IndexedDeclarationHandler> remove(
+            const_cast<IndexedDeclaration*>(editableItem->declarations()),
+            editableItem->declarationsSize(), editableItem->centralFreeItem, declaration);
+
+        uint newSize = remove.newItemCount();
+        if (newSize != editableItem->declarationsSize()) {
+            //We need to resize. Update and fill the new item, and delete the old item.
+            item.declarationsList().resize(newSize);
+            remove.transferData(item.declarationsList().data(), newSize, &item.centralFreeItem);
+
+            d->m_declarations.deleteItem(index);
+            Q_ASSERT(!d->m_declarations.findIndex(request));
+        } else {
+            //We're fine, the item could be added to the existing list
+            return;
+        }
+    }
+
+    //This inserts the changed item
+    if (item.declarationsSize())
+        d->m_declarations.index(request);
+}
+
+struct DeclarationCacheVisitor
+{
+    explicit DeclarationCacheVisitor(KDevVarLengthArray<IndexedDeclaration>& _cache) : cache(_cache)
+    {
+    }
+
+    bool operator()(const IndexedDeclaration& decl) const
+    {
+        cache.append(decl);
+        return true;
+    }
+
+    KDevVarLengthArray<IndexedDeclaration>& cache;
 };
 
-PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::filteredDeclarations(const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const {
-  
-  QMutexLocker lock(d->m_declarations.mutex());
-  ENSURE_CHAIN_READ_LOCKED
-  
-  Declarations decls = declarations(id).iterator();
-  
-  CachedIndexedRecursiveImports cachedImports;
-  
-  QHash<TopDUContext::IndexedRecursiveImports, CachedIndexedRecursiveImports>::const_iterator it = d->m_importsCache.constFind(visibility);
-  if(it != d->m_importsCache.constEnd()) {
-    cachedImports = *it;
-  }else{
-    cachedImports = CachedIndexedRecursiveImports(visibility.set().stdSet());
-    d->m_importsCache.insert(visibility, cachedImports);
-  }
-  
-  if(decls.dataSize() > MinimumCountForCache)
-  {
-    //Do visibility caching
-    CacheEntry<IndexedDeclaration>& cached(d->m_declarationsCache[id]);
-    CacheEntry<IndexedDeclaration>::DataHash::const_iterator cacheIt = cached.m_hash.constFind(visibility);
-    if(cacheIt != cached.m_hash.constEnd())
-      return FilteredDeclarationIterator(Declarations::Iterator(cacheIt->constData(), cacheIt->size(), -1), cachedImports);
-
-    CacheEntry<IndexedDeclaration>::DataHash::iterator insertIt = cached.m_hash.insert(visibility, KDevVarLengthArray<IndexedDeclaration>());
-    
-    KDevVarLengthArray<IndexedDeclaration>& cache(*insertIt);
-    
-    {
-      typedef ConvenientEmbeddedSetTreeFilterVisitor<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext, CachedIndexedRecursiveImports, DeclarationTopContextExtractor, DeclarationCacheVisitor> FilteredDeclarationCacheVisitor;
-    
-      //The visitor visits all the declarations from within its constructor
-      DeclarationCacheVisitor v(cache);
-      FilteredDeclarationCacheVisitor visitor(v, decls.iterator(), cachedImports);
-    }
-    
-    return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(), cache.size(), -1), cachedImports, true);
-  }else{
-    return FilteredDeclarationIterator(decls.iterator(), cachedImports);
-  }
-}
-
-PersistentSymbolTable::Declarations PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id) const {
-  QMutexLocker lock(d->m_declarations.mutex());
-  ENSURE_CHAIN_READ_LOCKED
-  
-  PersistentSymbolTableItem item;
-  item.id = id;
-  
-  uint index = d->m_declarations.findIndex(item);
-  
-  if(index) {
-    const PersistentSymbolTableItem* repositoryItem = d->m_declarations.itemFromIndex(index);
-    return PersistentSymbolTable::Declarations(repositoryItem->declarations(), repositoryItem->declarationsSize(), repositoryItem->centralFreeItem);
-  }else{
-    return PersistentSymbolTable::Declarations();
-  }
-}
-
-void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, uint& countTarget, const IndexedDeclaration*& declarationsTarget) const
+PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::filteredDeclarations(
+    const IndexedQualifiedIdentifier& id, const TopDUContext::IndexedRecursiveImports& visibility) const
 {
-  QMutexLocker lock(d->m_declarations.mutex());
-  ENSURE_CHAIN_READ_LOCKED
-  
-  PersistentSymbolTableItem item;
-  item.id = id;
-  
-  uint index = d->m_declarations.findIndex(item);
-  
-  if(index) {
-    const PersistentSymbolTableItem* repositoryItem = d->m_declarations.itemFromIndex(index);
-    countTarget = repositoryItem->declarationsSize();
-    declarationsTarget = repositoryItem->declarations();
-  }else{
-    countTarget = 0;
-    declarationsTarget = nullptr;
-  }
+    QMutexLocker lock(d->m_declarations.mutex());
+    ENSURE_CHAIN_READ_LOCKED
+
+    Declarations decls = declarations(id).iterator();
+
+    CachedIndexedRecursiveImports cachedImports;
+
+    QHash<TopDUContext::IndexedRecursiveImports,
+        CachedIndexedRecursiveImports>::const_iterator it = d->m_importsCache.constFind(visibility);
+    if (it != d->m_importsCache.constEnd()) {
+        cachedImports = *it;
+    } else {
+        cachedImports = CachedIndexedRecursiveImports(visibility.set().stdSet());
+        d->m_importsCache.insert(visibility, cachedImports);
+    }
+
+    if (decls.dataSize() > MinimumCountForCache) {
+        //Do visibility caching
+        CacheEntry<IndexedDeclaration>& cached(d->m_declarationsCache[id]);
+        CacheEntry<IndexedDeclaration>::DataHash::const_iterator cacheIt = cached.m_hash.constFind(visibility);
+        if (cacheIt != cached.m_hash.constEnd())
+            return FilteredDeclarationIterator(Declarations::Iterator(cacheIt->constData(),
+                                                                      cacheIt->size(), -1), cachedImports);
+
+        CacheEntry<IndexedDeclaration>::DataHash::iterator insertIt = cached.m_hash.insert(visibility,
+                                                                                           KDevVarLengthArray<IndexedDeclaration>());
+
+        KDevVarLengthArray<IndexedDeclaration>& cache(*insertIt);
+
+        {
+            typedef ConvenientEmbeddedSetTreeFilterVisitor<IndexedDeclaration, IndexedDeclarationHandler,
+                IndexedTopDUContext, CachedIndexedRecursiveImports, DeclarationTopContextExtractor,
+                DeclarationCacheVisitor> FilteredDeclarationCacheVisitor;
+
+            //The visitor visits all the declarations from within its constructor
+            DeclarationCacheVisitor v(cache);
+            FilteredDeclarationCacheVisitor visitor(v, decls.iterator(), cachedImports);
+        }
+
+        return FilteredDeclarationIterator(Declarations::Iterator(cache.constData(),
+                                                                  cache.size(), -1), cachedImports, true);
+    } else {
+        return FilteredDeclarationIterator(decls.iterator(), cachedImports);
+    }
+}
+
+PersistentSymbolTable::Declarations PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id) const
+{
+    QMutexLocker lock(d->m_declarations.mutex());
+    ENSURE_CHAIN_READ_LOCKED
+
+    PersistentSymbolTableItem item;
+    item.id = id;
+
+    uint index = d->m_declarations.findIndex(item);
+
+    if (index) {
+        const PersistentSymbolTableItem* repositoryItem = d->m_declarations.itemFromIndex(index);
+        return PersistentSymbolTable::Declarations(repositoryItem->declarations(),
+                                                   repositoryItem->declarationsSize(), repositoryItem->centralFreeItem);
+    } else {
+        return PersistentSymbolTable::Declarations();
+    }
+}
+
+void PersistentSymbolTable::declarations(const IndexedQualifiedIdentifier& id, uint& countTarget,
+                                         const IndexedDeclaration*& declarationsTarget) const
+{
+    QMutexLocker lock(d->m_declarations.mutex());
+    ENSURE_CHAIN_READ_LOCKED
+
+    PersistentSymbolTableItem item;
+    item.id = id;
+
+    uint index = d->m_declarations.findIndex(item);
+
+    if (index) {
+        const PersistentSymbolTableItem* repositoryItem = d->m_declarations.itemFromIndex(index);
+        countTarget = repositoryItem->declarationsSize();
+        declarationsTarget = repositoryItem->declarations();
+    } else {
+        countTarget = 0;
+        declarationsTarget = nullptr;
+    }
 }
 
 struct DebugVisitor
 {
-  explicit DebugVisitor(const QTextStream& _out)
-    : out(_out)
-  {
-  }
-
-  bool operator() (const PersistentSymbolTableItem* item) {
-    QDebug qout = fromTextStream(out);
-    QualifiedIdentifier id(item->id.identifier());
-    if(identifiers.contains(id)) {
-      qout << "identifier" << id.toString() << "appears for" << identifiers[id] << "th time";
+    explicit DebugVisitor(const QTextStream& _out)
+        : out(_out)
+    {
     }
-    
-    ++identifiers[id];
-    
-    for(uint a = 0; a < item->declarationsSize(); ++a) {
-      IndexedDeclaration decl(item->declarations()[a]);
-      if(!decl.isDummy()) {
-        if(declarations.contains(decl)) {
-          qout << "declaration found for multiple identifiers. Previous identifier:" << declarations[decl].toString() << "current identifier:" << id.toString() << endl;
-        }else{
-          declarations.insert(decl, id);
-        }
-      }
-      if(decl.data() && decl.data()->qualifiedIdentifier() != item->id.identifier()) {
-        qout << decl.data()->url().str() << "declaration" << decl.data()->qualifiedIdentifier() << "is registered as" << item->id.identifier() << endl;
-      }
-      
-      const QString url = IndexedTopDUContext(decl.topContextIndex()).url().str();
-      if(!decl.data() && !decl.isDummy()) {
-        qout << "Item in symbol-table is invalid:" << id.toString() << "- localIndex:" << decl.localIndex() << "- url:" << url << endl;
-      } else {
-        qout << "Item in symbol-table:" << id.toString() << "- localIndex:" << decl.localIndex() << "- url:" << url;
-        if (auto d = decl.data()) {
-          qout << "- range:" << d->range();
-        } else {
-          qout << "- null declaration";
-        }
-        qout << endl;
-      }
-    }
-    return true;
-  }
 
-  const QTextStream& out;
-  QHash<QualifiedIdentifier, uint> identifiers;
-  QHash<IndexedDeclaration, QualifiedIdentifier> declarations;
+    bool operator()(const PersistentSymbolTableItem* item)
+    {
+        QDebug qout = fromTextStream(out);
+        QualifiedIdentifier id(item->id.identifier());
+        if (identifiers.contains(id)) {
+            qout << "identifier" << id.toString() << "appears for" << identifiers[id] << "th time";
+        }
+
+        ++identifiers[id];
+
+        for (uint a = 0; a < item->declarationsSize(); ++a) {
+            IndexedDeclaration decl(item->declarations()[a]);
+            if (!decl.isDummy()) {
+                if (declarations.contains(decl)) {
+                    qout << "declaration found for multiple identifiers. Previous identifier:" <<
+                        declarations[decl].toString() << "current identifier:" << id.toString() << endl;
+                } else {
+                    declarations.insert(decl, id);
+                }
+            }
+            if (decl.data() && decl.data()->qualifiedIdentifier() != item->id.identifier()) {
+                qout << decl.data()->url().str() << "declaration" << decl.data()->qualifiedIdentifier() <<
+                    "is registered as" << item->id.identifier() << endl;
+            }
+
+            const QString url = IndexedTopDUContext(decl.topContextIndex()).url().str();
+            if (!decl.data() && !decl.isDummy()) {
+                qout << "Item in symbol-table is invalid:" << id.toString() << "- localIndex:" << decl.localIndex() <<
+                    "- url:" << url << endl;
+            } else {
+                qout << "Item in symbol-table:" << id.toString() << "- localIndex:" << decl.localIndex() << "- url:" <<
+                    url;
+                if (auto d = decl.data()) {
+                    qout << "- range:" << d->range();
+                } else {
+                    qout << "- null declaration";
+                }
+                qout << endl;
+            }
+        }
+
+        return true;
+    }
+
+    const QTextStream& out;
+    QHash<QualifiedIdentifier, uint> identifiers;
+    QHash<IndexedDeclaration, QualifiedIdentifier> declarations;
 };
 
 void PersistentSymbolTable::dump(const QTextStream& out)
 {
-  {
-    QMutexLocker lock(d->m_declarations.mutex());
-    
-    QDebug qout = fromTextStream(out);
-    DebugVisitor v(out);
-    d->m_declarations.visitAllItems(v);
+    {
+        QMutexLocker lock(d->m_declarations.mutex());
 
-    qout << "Statistics:" << endl;
-    qout << d->m_declarations.statistics() << endl;
-  }
+        QDebug qout = fromTextStream(out);
+        DebugVisitor v(out);
+        d->m_declarations.visitAllItems(v);
+
+        qout << "Statistics:" << endl;
+        qout << d->m_declarations.statistics() << endl;
+    }
 }
 
-PersistentSymbolTable& PersistentSymbolTable::self() {
-  static PersistentSymbolTable ret;
-  return ret;
+PersistentSymbolTable& PersistentSymbolTable::self()
+{
+    static PersistentSymbolTable ret;
+    return ret;
 }
-
 }

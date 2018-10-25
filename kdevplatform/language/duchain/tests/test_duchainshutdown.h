@@ -27,18 +27,19 @@ namespace KDevelop {
 class TestCore;
 }
 
-class TestDUChainShutdown : public QObject
+class TestDUChainShutdown
+    : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
 private Q_SLOTS:
-  void initTestCase();
-  void cleanupTestCase();
+    void initTestCase();
+    void cleanupTestCase();
 
-  void runTest();
+    void runTest();
 
 private:
-  KDevelop::TestCore* m_core;
+    KDevelop::TestCore* m_core;
 };
 
 #endif // TST_DUCHAINSHUTDOWN_H

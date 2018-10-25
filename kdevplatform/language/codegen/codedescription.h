@@ -15,7 +15,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CODEDESCRIPTION_H
 #define KDEVPLATFORM_CODEDESCRIPTION_H
@@ -32,9 +32,7 @@
  *       in codedescriptionmetatype.h!
  */
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 /**
  * @brief Represents a variable
  *
@@ -251,9 +249,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT ClassDescription
     FunctionDescriptionList methods;
 };
 
-namespace CodeDescription
-{
-
+namespace CodeDescription {
 template <class T> QVariant toVariantList(const QVector<T>& list)
 {
     QVariantList ret;
@@ -261,11 +257,10 @@ template <class T> QVariant toVariantList(const QVector<T>& list)
     for (const T& t : list) {
         ret << QVariant::fromValue<T>(t);
     }
+
     return QVariant::fromValue(ret);
 }
-
 }
-
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::VariableDescription, Q_MOVABLE_TYPE);

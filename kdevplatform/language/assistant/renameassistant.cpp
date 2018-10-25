@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "renameassistant.h"
 
@@ -41,7 +41,6 @@
 using namespace KDevelop;
 
 namespace {
-
 bool rangesConnect(const KTextEditor::Range& firstRange, const KTextEditor::Range& secondRange)
 {
     return !firstRange.intersect(secondRange + KTextEditor::Range(0, -1, 0, +1)).isEmpty();
@@ -55,7 +54,9 @@ Declaration* declarationForChangedRange(KTextEditor::Document* doc, const KTextE
     //If it's null we could be appending, but there's a case where appending gives a wrong decl
     //and not a null declaration ... "type var(init)", so check for that too
     if (!declaration || !rangesConnect(declaration->rangeInCurrentRevision(), changed)) {
-        declaration = DUChainUtils::itemUnderCursor(doc->url(), KTextEditor::Cursor(cursor.line(), cursor.column()-1)).declaration;
+        declaration =
+            DUChainUtils::itemUnderCursor(doc->url(),
+                                          KTextEditor::Cursor(cursor.line(), cursor.column() - 1)).declaration;
     }
 
     //In this case, we may either not have a decl at the cursor, or we got a decl, but are editing its use.
@@ -66,7 +67,6 @@ Declaration* declarationForChangedRange(KTextEditor::Document* doc, const KTextE
 
     return declaration;
 }
-
 }
 
 class KDevelop::RenameAssistantPrivate
@@ -123,7 +123,8 @@ bool RenameAssistant::isUseful() const
     return d->m_isUseful;
 }
 
-void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor::Range& invocationRange, const QString& removedText)
+void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor::Range& invocationRange,
+                                  const QString& removedText)
 {
     clearActions();
     d->m_lastChangedLocation = invocationRange.end();
@@ -151,7 +152,7 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
     //If we've stopped editing m_newDeclarationRange or switched the view,
     // reset and see if there's another declaration being edited
     if (!d->m_newDeclarationRange.data() || !rangesConnect(d->m_newDeclarationRange->range(), invocationRange)
-            || d->m_newDeclarationRange->document() != indexedUrl) {
+        || d->m_newDeclarationRange->document() != indexedUrl) {
         d->reset();
 
         Declaration* declAtCursor = declarationForChangedRange(doc, invocationRange);
@@ -168,15 +169,16 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
             }
 
             for (auto it = declUses.constBegin();
-                it != declUses.constEnd(); ++it)
-            {
-                foreach(const RangeInRevision range, it.value()) {
+                 it != declUses.constEnd(); ++it) {
+                foreach (const RangeInRevision range, it.value()) {
                     KTextEditor::Range currentRange = declAtCursor->transformFromLocalRevision(range);
-                    if(currentRange.isEmpty() || doc->text(currentRange) != declAtCursor->identifier().identifier().str()) {
+                    if (currentRange.isEmpty() ||
+                        doc->text(currentRange) != declAtCursor->identifier().identifier().str()) {
                         return; // One of the uses is invalid. Maybe the replacement has already been performed.
                     }
                 }
             }
+
             d->m_oldDeclarationUses = RevisionedFileRanges::convert(declUses);
         } else if (supportedLanguage()->refactoring()->shouldRenameFile(declAtCursor)) {
             d->m_renameFile = true;
@@ -206,7 +208,8 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
         return;
     }
 
-    if (d->m_renameFile && supportedLanguage()->refactoring()->newFileName(url, d->m_newDeclarationName) == url.fileName()) {
+    if (d->m_renameFile &&
+        supportedLanguage()->refactoring()->newFileName(url, d->m_newDeclarationName) == url.fileName()) {
         // no change, don't do anything
         return;
     }
@@ -219,20 +222,21 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
     } else {
         action = new RenameAction(d->m_oldDeclarationName, d->m_newDeclarationName, d->m_oldDeclarationUses);
     }
-    connect(action.data(), &IAssistantAction::executed, this, [&] { d->reset(); });
+    connect(action.data(), &IAssistantAction::executed, this, [&] {
+        d->reset();
+    });
     addAction(action);
     emit actionsChanged();
 }
 
 KTextEditor::Range KDevelop::RenameAssistant::displayRange() const
 {
-    if ( !d->m_lastChangedDocument ) {
+    if (!d->m_lastChangedDocument) {
         return {};
     }
     auto range = d->m_lastChangedDocument->wordRangeAt(d->m_lastChangedLocation);
     qCDebug(LANGUAGE) << "range:" << range;
     return range;
 }
-
 
 #include "moc_renameassistant.cpp"

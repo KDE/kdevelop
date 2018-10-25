@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DUCHAINPOINTER_H
 #define KDEVPLATFORM_DUCHAINPOINTER_H
@@ -27,7 +27,6 @@
 //krazy:excludeall=dpointer
 
 namespace KDevelop {
-
 class DUContext;
 class TopDUContext;
 class DUChainBase;
@@ -48,8 +47,10 @@ class AbstractFunctionDeclaration;
  * To make it even more convenient see DUChainPointer
  * */
 
-class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT DUChainPointerData
+    : public QSharedData
+{
+public:
     /**
      * Will return zero once the pointed-to object was deleted
      * */
@@ -65,12 +66,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
 
     ~DUChainPointerData();
 
-  private:
+private:
     ///Should not be used from outside, but is needed sometimes to construct an invalid dummy-pointer
-    explicit DUChainPointerData( DUChainBase* base );
+    explicit DUChainPointerData(DUChainBase* base);
 
     friend class DUChainBase;
-    DUChainBase * m_base = nullptr;
+    DUChainBase* m_base = nullptr;
     Q_DISABLE_COPY(DUChainPointerData)
 };
 
@@ -85,108 +86,122 @@ class KDEVPLATFORMLANGUAGE_EXPORT  DUChainPointerData : public QSharedData {
  * function(s) being called.
  **/
 
-  template<class Type>
-  class DUChainPointer {
-    template<class OtherType>
+template <class Type>
+class DUChainPointer
+{
+    template <class OtherType>
     friend class DUChainPointer;
 
-    public:
-    DUChainPointer() : d(QExplicitlySharedDataPointer<DUChainPointerData>(nullptr)) {
+public:
+    DUChainPointer() : d(QExplicitlySharedDataPointer<DUChainPointerData>(nullptr))
+    {
     }
 
     DUChainPointer(const DUChainPointer& rhs)
-      : d(rhs.d)
+        : d(rhs.d)
     {
     }
 
     ///This constructor includes dynamic casting. If the object cannot be casted to the type, the constructed DUChainPointer will have value zero.
-    template<class OtherType>
-    explicit DUChainPointer( OtherType* rhs ) {
-      if( dynamic_cast<Type*>(rhs) )
-        d = rhs->weakPointer();
+    template <class OtherType>
+    explicit DUChainPointer(OtherType* rhs)
+    {
+        if (dynamic_cast<Type*>(rhs))
+            d = rhs->weakPointer();
     }
 
-    template<class OtherType>
-    explicit DUChainPointer( DUChainPointer<OtherType> rhs ) {
-      if( dynamic_cast<Type*>(rhs.data()) )
-        d = rhs.d;
+    template <class OtherType>
+    explicit DUChainPointer(DUChainPointer<OtherType> rhs)
+    {
+        if (dynamic_cast<Type*>(rhs.data()))
+            d = rhs.d;
     }
 
-    explicit DUChainPointer( QExplicitlySharedDataPointer<DUChainPointerData> rhs ) {
-      if( dynamic_cast<Type*>(rhs->base()) )
-        d = rhs;
+    explicit DUChainPointer(QExplicitlySharedDataPointer<DUChainPointerData> rhs)
+    {
+        if (dynamic_cast<Type*>(rhs->base()))
+            d = rhs;
     }
 
-    explicit DUChainPointer( Type* rhs ) {
-      if( rhs )
-        d = rhs->weakPointer();
+    explicit DUChainPointer(Type* rhs)
+    {
+        if (rhs)
+            d = rhs->weakPointer();
     }
 
-    bool operator ==( const DUChainPointer<Type>& rhs ) const {
-      return d.data() == rhs.d.data();
+    bool operator ==(const DUChainPointer<Type>& rhs) const
+    {
+        return d.data() == rhs.d.data();
     }
 
-    bool operator !=( const DUChainPointer<Type>& rhs ) const {
-      return d.data() != rhs.d.data();
+    bool operator !=(const DUChainPointer<Type>& rhs) const
+    {
+        return d.data() != rhs.d.data();
     }
 
     ///Returns whether the pointed object is still existing
     operator bool() const {
-      return d && d->base();
+        return d && d->base();
     }
 
-    Type& operator* () const {
-      Q_ASSERT(d);
-      return *static_cast<Type*>(d->base());
+    Type& operator*() const
+    {
+        Q_ASSERT(d);
+        return *static_cast<Type*>(d->base());
     }
 
-    Type* operator->() const {
-      Q_ASSERT(d);
-      return static_cast<Type*>(d->base());
+    Type* operator->() const
+    {
+        Q_ASSERT(d);
+        return static_cast<Type*>(d->base());
     }
 
-    bool operator<(const DUChainPointer<Type>& rhs) const {
-      return d.data() < rhs.d.data();
+    bool operator<(const DUChainPointer<Type>& rhs) const
+    {
+        return d.data() < rhs.d.data();
     }
 
-    template<class NewType>
-    DUChainPointer<NewType> dynamicCast() const {
-      if( d && dynamic_cast<NewType*>( d->base() ) ) //When the reference to the pointer is constant that doesn't mean that the pointed object needs to be constant
-        return DUChainPointer<NewType>( static_cast<NewType*>(d->base()) );
-      else
-        return DUChainPointer<NewType>();
+    template <class NewType>
+    DUChainPointer<NewType> dynamicCast() const
+    {
+        if (d && dynamic_cast<NewType*>(d->base()))  //When the reference to the pointer is constant that doesn't mean that the pointed object needs to be constant
+            return DUChainPointer<NewType>(static_cast<NewType*>(d->base()));
+        else
+            return DUChainPointer<NewType>();
     }
 
-    Type* data() const {
-      if( !d )
-        return nullptr;
-      return static_cast<Type*>(d->base());
+    Type* data() const
+    {
+        if (!d)
+            return nullptr;
+        return static_cast<Type*>(d->base());
     }
 
-    DUChainPointer<Type>& operator= ( Type* rhs ) {
-      if( rhs )
-        d = rhs->weakPointer();
-      else
-        d = nullptr;
+    DUChainPointer<Type>& operator=(Type* rhs)
+    {
+        if (rhs)
+            d = rhs->weakPointer();
+        else
+            d = nullptr;
 
-      return *this;
+        return *this;
     }
 
-    private:
-      QExplicitlySharedDataPointer<DUChainPointerData> d;
-  };
+private:
+    QExplicitlySharedDataPointer<DUChainPointerData> d;
+};
 
-  typedef DUChainPointer<DUChainBase> DUChainBasePointer;
-  typedef DUChainPointer<DUContext> DUContextPointer;
-  typedef DUChainPointer<TopDUContext> TopDUContextPointer;
-  typedef DUChainPointer<Declaration> DeclarationPointer;
-  typedef DUChainPointer<AbstractFunctionDeclaration> FunctionDeclarationPointer;
+typedef DUChainPointer<DUChainBase> DUChainBasePointer;
+typedef DUChainPointer<DUContext> DUContextPointer;
+typedef DUChainPointer<TopDUContext> TopDUContextPointer;
+typedef DUChainPointer<Declaration> DeclarationPointer;
+typedef DUChainPointer<AbstractFunctionDeclaration> FunctionDeclarationPointer;
 }
 
-Q_DECLARE_METATYPE( KDevelop::DUChainBasePointer )
-Q_DECLARE_METATYPE( KDevelop::DeclarationPointer )
-Q_DECLARE_METATYPE( KDevelop::DUContextPointer )
-Q_DECLARE_METATYPE( KDevelop::TopDUContextPointer )
-Q_DECLARE_METATYPE( QList<KDevelop::DeclarationPointer> )
+Q_DECLARE_METATYPE(KDevelop::DUChainBasePointer)
+Q_DECLARE_METATYPE(KDevelop::DeclarationPointer)
+Q_DECLARE_METATYPE(KDevelop::DUContextPointer)
+Q_DECLARE_METATYPE(KDevelop::TopDUContextPointer)
+Q_DECLARE_METATYPE(QList<KDevelop::DeclarationPointer> )
 
 #endif

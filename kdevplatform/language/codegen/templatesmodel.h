@@ -16,7 +16,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_TEMPLATESMODEL_H
 #define KDEVPLATFORM_TEMPLATESMODEL_H
@@ -25,9 +25,7 @@
 
 #include <language/languageexport.h>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class TemplatesModelPrivate;
 
 /**
@@ -46,9 +44,11 @@ class TemplatesModelPrivate;
  *
  * @sa ITemplateProvider::templatesModel()
  **/
-class KDEVPLATFORMLANGUAGE_EXPORT TemplatesModel : public QStandardItemModel
+class KDEVPLATFORMLANGUAGE_EXPORT TemplatesModel
+    : public QStandardItemModel
 {
     Q_OBJECT
+
 public:
 
     /**
@@ -113,12 +113,11 @@ public:
      * @param path Path to a directory that contains normal user data. The template model will search for a kdevappwizard/templates (or your model name prefix) directory
      * inside @p path and will use them. Please note that the path has to end with a '/'.
      */
-    void addDataPath(const QString &path);
+    void addDataPath(const QString& path);
 
 private:
     const QScopedPointer<class TemplatesModelPrivate> d;
 };
-
 }
 
 #endif // KDEVPLATFORM_TEMPLATESMODEL_H

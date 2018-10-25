@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "includeitem.h"
 
@@ -32,13 +32,13 @@ IncludeItem::IncludeItem()
 // TODO: port this to Path
 QUrl IncludeItem::url() const
 {
-  QUrl u;
-  if( !basePath.isEmpty() ) {
-    u = Path(Path(basePath), name ).toUrl();
-  }else{
-    u = QUrl::fromLocalFile( name );
-  }
-  return u;
+    QUrl u;
+    if (!basePath.isEmpty()) {
+        u = Path(Path(basePath), name).toUrl();
+    } else {
+        u = QUrl::fromLocalFile(name);
+    }
+    return u;
 }
 
 QDebug operator<<(const QDebug& dbg, const IncludeItem& item)

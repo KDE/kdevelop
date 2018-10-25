@@ -18,10 +18,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef BASICREFACTORING_H_
 #define BASICREFACTORING_H_
-
 
 #include <QObject>
 #include <QSharedPointer>
@@ -29,11 +27,9 @@
 #include <language/codegen/documentchangeset.h>
 #include <language/duchain/navigation/useswidget.h>
 
-
 class CppLanguageSupport;
 
-namespace KDevelop
-{
+namespace KDevelop {
 class ContextMenuExtension;
 class IndexedDeclaration;
 class Context;
@@ -44,12 +40,13 @@ class DUContext;
  * A widget that show the uses that it has collected for
  * the given declaration.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT BasicRefactoringCollector : public UsesWidget::UsesWidgetCollector
+class KDEVPLATFORMLANGUAGE_EXPORT BasicRefactoringCollector
+    : public UsesWidget::UsesWidgetCollector
 {
     Q_OBJECT
 
 public:
-    explicit BasicRefactoringCollector(const IndexedDeclaration &decl);
+    explicit BasicRefactoringCollector(const IndexedDeclaration& decl);
     QVector<IndexedTopDUContext> allUsingContexts() const;
 
 protected:
@@ -60,19 +57,21 @@ private:
     QVector<IndexedTopDUContext> m_allUsingContexts;
 };
 
-
 /// The base class for Refactoring classes from Language plugins.
-class KDEVPLATFORMLANGUAGE_EXPORT BasicRefactoring : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT BasicRefactoring
+    : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit BasicRefactoring(QObject *parent = nullptr);
+    explicit BasicRefactoring(QObject* parent = nullptr);
 
     /// Update the context menu with the "Rename" action.
-    virtual void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context, QWidget* parent);
+    virtual void fillContextMenu(KDevelop::ContextMenuExtension& extension, KDevelop::Context* context,
+                                 QWidget* parent);
 
-    struct NameAndCollector {
+    struct NameAndCollector
+    {
         QString newName;
         QSharedPointer<BasicRefactoringCollector> collector;
     };
@@ -110,17 +109,17 @@ protected:
      * context and its children.
      * NOTE: the DUChain must be locked.
      */
-    virtual DocumentChangeSet::ChangeResult applyChanges(const QString &oldName, const QString &newName,
-                                                         DocumentChangeSet &changes, DUContext *context,
+    virtual DocumentChangeSet::ChangeResult applyChanges(const QString& oldName, const QString& newName,
+                                                         DocumentChangeSet& changes, DUContext* context,
                                                          int usedDeclarationIndex);
 
     /**
      * Apply the changes to the given declarations.
      * NOTE: the DUChain must be locked.
      */
-    virtual DocumentChangeSet::ChangeResult applyChangesToDeclarations(const QString &oldName, const QString &newName,
-                                                                       DocumentChangeSet &changes,
-                                                                       const QList<IndexedDeclaration> &declarations);
+    virtual DocumentChangeSet::ChangeResult applyChangesToDeclarations(const QString& oldName, const QString& newName,
+                                                                       DocumentChangeSet& changes,
+                                                                       const QList<IndexedDeclaration>& declarations);
 
     /**
      * Get the declaration under the current position of the cursor.
@@ -134,7 +133,7 @@ protected:
      * Start the renaming of a declaration.
      * This function retrieves the new name for declaration @p decl and if approved renames all instances of it.
      */
-    virtual void startInteractiveRename(const KDevelop::IndexedDeclaration &decl);
+    virtual void startInteractiveRename(const KDevelop::IndexedDeclaration& decl);
 
     /**
      * Asks user to input a new name for @p declaration
@@ -144,19 +143,20 @@ protected:
     virtual BasicRefactoring::NameAndCollector newNameForDeclaration(const KDevelop::DeclarationPointer& declaration);
 
     /**
-    * Renames all declarations collected by @p collector from @p oldName to @p newName
-    * @param apply - if changes should be applied immediately
-    * @return all changes if @p apply is false and empty set otherwise.
-    */
-    DocumentChangeSet renameCollectedDeclarations(KDevelop::BasicRefactoringCollector* collector, const QString& replacementName, const QString& originalName, bool apply = true);
+     * Renames all declarations collected by @p collector from @p oldName to @p newName
+     * @param apply - if changes should be applied immediately
+     * @return all changes if @p apply is false and empty set otherwise.
+     */
+    DocumentChangeSet renameCollectedDeclarations(KDevelop::BasicRefactoringCollector* collector,
+                                                  const QString& replacementName, const QString& originalName,
+                                                  bool apply = true);
 
     /**
      * @returns true if we can show the interactive rename widget for the
      * given declaration. The default implementation just returns true.
      */
-    virtual bool acceptForContextMenu(const Declaration *decl);
+    virtual bool acceptForContextMenu(const Declaration* decl);
 };
-
 } // End of namespace KDevelop
 
 #endif /* BASICREFACTORING_H_ */

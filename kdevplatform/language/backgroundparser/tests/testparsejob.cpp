@@ -24,8 +24,8 @@
 #include <QTest>
 
 TestParseJob::TestParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
-: ParseJob(url, languageSupport)
-, duration_ms(0)
+    : ParseJob(url, languageSupport)
+    , duration_ms(0)
 {
 }
 
@@ -50,6 +50,3 @@ DataAccessRepository* TestParseJob::dataAccessInformation()
 {
     return nullptr;
 }
-
-
-

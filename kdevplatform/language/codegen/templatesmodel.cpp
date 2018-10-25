@@ -16,7 +16,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "templatesmodel.h"
 
@@ -64,7 +64,7 @@ public:
      * @param parent the parent item
      * @return the created item
      **/
-    QStandardItem *createItem(const QString& name, const QString& category, QStandardItem* parent);
+    QStandardItem* createItem(const QString& name, const QString& category, QStandardItem* parent);
 
     enum ResourceType
     {
@@ -72,26 +72,26 @@ public:
         Template,
         Preview
     };
-    QString resourceFilter(ResourceType type, const QString &suffix = QString())
+    QString resourceFilter(ResourceType type, const QString& suffix = QString())
     {
         QString filter = typePrefix;
-        switch(type) {
-            case Description:
-                filter += QLatin1String("template_descriptions/");
-                break;
-            case Template:
-                filter += QLatin1String("templates/");
-                break;
-            case Preview:
-                filter += QLatin1String("template_previews/");
-                break;
+        switch (type) {
+        case Description:
+            filter += QLatin1String("template_descriptions/");
+            break;
+        case Template:
+            filter += QLatin1String("templates/");
+            break;
+        case Preview:
+            filter += QLatin1String("template_previews/");
+            break;
         }
         return filter + suffix;
     }
 };
 
 TemplatesModelPrivate::TemplatesModelPrivate(const QString& _typePrefix)
-: typePrefix(_typePrefix)
+    : typePrefix(_typePrefix)
 {
     if (!typePrefix.endsWith(QLatin1Char('/'))) {
         typePrefix.append(QLatin1Char('/'));
@@ -99,8 +99,8 @@ TemplatesModelPrivate::TemplatesModelPrivate(const QString& _typePrefix)
 }
 
 TemplatesModel::TemplatesModel(const QString& typePrefix, QObject* parent)
-: QStandardItemModel(parent)
-, d(new TemplatesModelPrivate(typePrefix))
+    : QStandardItemModel(parent)
+    , d(new TemplatesModelPrivate(typePrefix))
 {
 }
 
@@ -114,7 +114,7 @@ void TemplatesModel::refresh()
     d->extractTemplateDescriptions();
 
     QStringList templateArchives;
-    foreach(const QString& archivePath, d->searchPaths) {
+    foreach (const QString& archivePath, d->searchPaths) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
         for (const QString& file : files) {
             templateArchives.append(archivePath + file);
@@ -122,7 +122,9 @@ void TemplatesModel::refresh()
     }
 
     QStringList templateDescriptions;
-    const QStringList templatePaths = {QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + d->resourceFilter(TemplatesModelPrivate::Description)};
+    const QStringList templatePaths =
+    {QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + d->resourceFilter(
+         TemplatesModelPrivate::Description)};
     for (const QString& templateDescription : templatePaths) {
         const QStringList files = QDir(templateDescription).entryList(QDir::Files);
         for (const QString& file : files) {
@@ -130,11 +132,11 @@ void TemplatesModel::refresh()
         }
     }
 
-    foreach (const QString &templateDescription, templateDescriptions) {
+    foreach (const QString& templateDescription, templateDescriptions) {
         QFileInfo fi(templateDescription);
         bool archiveFound = false;
-        foreach( const QString& templateArchive, templateArchives ) {
-            if( QFileInfo(templateArchive).baseName() == fi.baseName() ) {
+        foreach (const QString& templateArchive, templateArchives) {
+            if (QFileInfo(templateArchive).baseName() == fi.baseName()) {
                 archiveFound = true;
 
                 KConfig templateConfig(templateDescription);
@@ -142,9 +144,10 @@ void TemplatesModel::refresh()
                 QString name = general.readEntry("Name");
                 QString category = general.readEntry("Category");
                 QString comment = general.readEntry("Comment");
-                TemplatePreviewIcon icon(general.readEntry("Icon"), templateArchive, d->resourceFilter(TemplatesModelPrivate::Preview));
+                TemplatePreviewIcon icon(general.readEntry("Icon"), templateArchive, d->resourceFilter(
+                        TemplatesModelPrivate::Preview));
 
-                QStandardItem *templateItem = d->createItem(name, category, invisibleRootItem());
+                QStandardItem* templateItem = d->createItem(name, category, invisibleRootItem());
                 templateItem->setData(templateDescription, DescriptionFileRole);
                 templateItem->setData(templateArchive, ArchiveFileRole);
                 templateItem->setData(comment, CommentRole);
@@ -152,8 +155,7 @@ void TemplatesModel::refresh()
             }
         }
 
-        if (!archiveFound)
-        {
+        if (!archiveFound) {
             // Template file doesn't exist anymore, so remove the description
             // saves us the extra lookups for templateExists on the next run
             QFile(templateDescription).remove();
@@ -161,7 +163,7 @@ void TemplatesModel::refresh()
     }
 }
 
-QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QString& category, QStandardItem* parent)
+QStandardItem* TemplatesModelPrivate::createItem(const QString& name, const QString& category, QStandardItem* parent)
 {
     const QStringList path = category.split(QLatin1Char('/'));
 
@@ -170,7 +172,7 @@ QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QStr
     for (const QString& entry : path) {
         currentPath << entry;
         if (!templateItems.contains(currentPath.join(QLatin1Char('/')))) {
-            QStandardItem *item = new QStandardItem(entry);
+            QStandardItem* item = new QStandardItem(entry);
             item->setEditable(false);
             parent->appendRow(item);
             templateItems[currentPath.join(QLatin1Char('/'))] = item;
@@ -180,7 +182,7 @@ QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QStr
         }
     }
 
-    QStandardItem *templateItem = new QStandardItem(name);
+    QStandardItem* templateItem = new QStandardItem(name);
     templateItem->setEditable(false);
     parent->appendRow(templateItem);
     return templateItem;
@@ -189,40 +191,38 @@ QStandardItem *TemplatesModelPrivate::createItem(const QString& name, const QStr
 void TemplatesModelPrivate::extractTemplateDescriptions()
 {
     QStringList templateArchives;
-    searchPaths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, resourceFilter(Template), QStandardPaths::LocateDirectory);
+    searchPaths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, resourceFilter(
+                                                 Template), QStandardPaths::LocateDirectory);
     searchPaths.removeDuplicates();
-    foreach(const QString &archivePath, searchPaths) {
+    foreach (const QString& archivePath, searchPaths) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
         for (const QString& file : files) {
-            if(file.endsWith(QLatin1String(".zip")) || file.endsWith(QLatin1String(".tar.bz2"))) {
+            if (file.endsWith(QLatin1String(".zip")) || file.endsWith(QLatin1String(".tar.bz2"))) {
                 QString archfile = archivePath + file;
                 templateArchives.append(archfile);
             }
         }
     }
 
-    QString localDescriptionsDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + resourceFilter(Description);
+    QString localDescriptionsDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char(
+        '/') + resourceFilter(Description);
 
     QDir dir(localDescriptionsDir);
-    if(!dir.exists())
+    if (!dir.exists())
         dir.mkpath(QStringLiteral("."));
 
-    foreach (const QString &archName, templateArchives)
-    {
+    foreach (const QString& archName, templateArchives) {
         qCDebug(LANGUAGE) << "processing template" << archName;
 
         QScopedPointer<KArchive> templateArchive;
-        if (QFileInfo(archName).completeSuffix() == QLatin1String("zip"))
-        {
+        if (QFileInfo(archName).completeSuffix() == QLatin1String("zip")) {
             templateArchive.reset(new KZip(archName));
-        }
-        else
+        } else
         {
             templateArchive.reset(new KTar(archName));
         }
 
-        if (templateArchive->open(QIODevice::ReadOnly))
-        {
+        if (templateArchive->open(QIODevice::ReadOnly)) {
             /*
              * This class looks for template description files in the following order
              *
@@ -236,11 +236,10 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
              */
             QFileInfo templateInfo(archName);
             QString suffix = QStringLiteral(".kdevtemplate");
-            const KArchiveEntry *templateEntry =
+            const KArchiveEntry* templateEntry =
                 templateArchive->directory()->entry(templateInfo.baseName() + suffix);
 
-            if (!templateEntry || !templateEntry->isFile())
-            {
+            if (!templateEntry || !templateEntry->isFile()) {
                 /*
                  * First, if the .kdevtemplate file is not found by name,
                  * we check all the files in the archive for any .kdevtemplate file
@@ -256,14 +255,12 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                 }
             }
 
-            if (!templateEntry || !templateEntry->isFile())
-            {
+            if (!templateEntry || !templateEntry->isFile()) {
                 suffix = QStringLiteral(".desktop");
                 templateEntry = templateArchive->directory()->entry(templateInfo.baseName() + suffix);
             }
 
-            if (!templateEntry || !templateEntry->isFile())
-            {
+            if (!templateEntry || !templateEntry->isFile()) {
                 const auto dirEntries = templateArchive->directory()->entries();
                 for (const QString& entryName : dirEntries) {
                     if (entryName.endsWith(suffix)) {
@@ -272,12 +269,11 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                     }
                 }
             }
-            if (!templateEntry || !templateEntry->isFile())
-            {
+            if (!templateEntry || !templateEntry->isFile()) {
                 qCDebug(LANGUAGE) << "template" << archName << "does not contain .kdevtemplate or .desktop file";
                 continue;
             }
-            const KArchiveFile *templateFile = static_cast<const KArchiveFile*>(templateEntry);
+            const KArchiveFile* templateFile = static_cast<const KArchiveFile*>(templateEntry);
 
             qCDebug(LANGUAGE) << "copy template description to" << localDescriptionsDir;
             const QString descriptionFileName = templateInfo.baseName() + suffix;
@@ -293,8 +289,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                 QFile::remove(destinationPath);
                 QFile::rename(dir.path() + QLatin1Char('/') + templateFile->name(), destinationPath);
             }
-        }
-        else
+        } else
         {
             qCWarning(LANGUAGE) << "could not open template" << archName;
         }
@@ -304,16 +299,20 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
 QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
 {
     QFileInfo info(fileName);
-    QString description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + QLatin1String(".kdevtemplate")));
-    if (description.isEmpty())
-    {
-        description = QStandardPaths::locate(QStandardPaths::GenericDataLocation, d->resourceFilter(TemplatesModelPrivate::Description, info.baseName() + QLatin1String(".desktop")));
+    QString description =
+        QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                               d->resourceFilter(TemplatesModelPrivate::Description,
+                                                 info.baseName() + QLatin1String(".kdevtemplate")));
+    if (description.isEmpty()) {
+        description =
+            QStandardPaths::locate(QStandardPaths::GenericDataLocation,
+                                   d->resourceFilter(TemplatesModelPrivate::Description,
+                                                     info.baseName() + QLatin1String(".desktop")));
     }
 
     QModelIndexList indexes;
 
-    if (!description.isEmpty())
-    {
+    if (!description.isEmpty()) {
         KConfig templateConfig(description);
         KConfigGroup general(&templateConfig, "General");
         const QStringList categories = general.readEntry("Category").split(QLatin1Char('/'));
@@ -325,15 +324,12 @@ QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
             indexes << d->templateItems[levels.join(QLatin1Char('/'))]->index();
         }
 
-        if (!indexes.isEmpty())
-        {
+        if (!indexes.isEmpty()) {
             QString name = general.readEntry("Name");
             QStandardItem* categoryItem = d->templateItems[levels.join(QLatin1Char('/'))];
-            for (int i = 0; i < categoryItem->rowCount(); ++i)
-            {
+            for (int i = 0; i < categoryItem->rowCount(); ++i) {
                 QStandardItem* templateItem = categoryItem->child(i);
-                if (templateItem->text() == name)
-                {
+                if (templateItem->text() == name) {
                     indexes << templateItem->index();
                     break;
                 }
@@ -357,10 +353,11 @@ void TemplatesModel::addDataPath(const QString& path)
 
 QString TemplatesModel::loadTemplateFile(const QString& fileName)
 {
-    QString saveLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') + d->resourceFilter(TemplatesModelPrivate::Template);
+    QString saveLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') +
+                           d->resourceFilter(TemplatesModelPrivate::Template);
 
     QDir dir(saveLocation);
-    if(!dir.exists())
+    if (!dir.exists())
         dir.mkpath(QStringLiteral("."));
 
     QFileInfo info(fileName);
@@ -369,8 +366,7 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
     QMimeType mimeType = QMimeDatabase().mimeTypeForFile(fileName);
     qCDebug(LANGUAGE) << "Loaded file" << fileName << "with type" << mimeType.name();
 
-    if (mimeType.name() == QLatin1String("application/x-desktop"))
-    {
+    if (mimeType.name() == QLatin1String("application/x-desktop")) {
         qCDebug(LANGUAGE) << "Loaded desktop file" << info.absoluteFilePath() << ", compressing";
 #ifdef Q_WS_WIN
         destination += ".zip";
@@ -385,18 +381,15 @@ QString TemplatesModel::loadTemplateFile(const QString& fileName)
         QDir dir(info.absoluteDir());
         const auto dirEntryInfos = dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
         for (const QFileInfo& entry : dirEntryInfos) {
-            if (entry.isFile())
-            {
+            if (entry.isFile()) {
                 archive.addLocalFile(entry.absoluteFilePath(), entry.fileName());
-            }
-            else if (entry.isDir())
-            {
+            } else if (entry.isDir()) {
                 archive.addLocalDirectory(entry.absoluteFilePath(), entry.fileName());
             }
         }
+
         archive.close();
-    }
-    else
+    } else
     {
         qCDebug(LANGUAGE) << "Copying" << fileName << "to" << saveLocation;
         QFile::copy(fileName, saveLocation + info.fileName());

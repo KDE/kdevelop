@@ -16,7 +16,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "arraytype.h"
 
@@ -25,39 +25,40 @@
 #include "typeregister.h"
 #include "typesystem.h"
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 REGISTER_TYPE(ArrayType);
 
-ArrayType::ArrayType(const ArrayType& rhs) : AbstractType(copyData<ArrayType>(*rhs.d_func())) {
+ArrayType::ArrayType(const ArrayType& rhs) : AbstractType(copyData<ArrayType>(*rhs.d_func()))
+{
 }
 
-ArrayType::ArrayType(ArrayTypeData& data) : AbstractType(data) {
+ArrayType::ArrayType(ArrayTypeData& data) : AbstractType(data)
+{
 }
 
-AbstractType* ArrayType::clone() const {
-  return new ArrayType(*this);
+AbstractType* ArrayType::clone() const
+{
+    return new ArrayType(*this);
 }
 
 bool ArrayType::equals(const AbstractType* _rhs) const
 {
-  if (!AbstractType::equals(_rhs))
-    return false;
+    if (!AbstractType::equals(_rhs))
+        return false;
 
-  Q_ASSERT(fastCast<const ArrayType*>(_rhs));
+    Q_ASSERT(fastCast<const ArrayType*>(_rhs));
 
-  const ArrayType* rhs = static_cast<const ArrayType*>(_rhs);
+    const ArrayType* rhs = static_cast<const ArrayType*>(_rhs);
 
-  TYPE_D(ArrayType);
-  if( d->m_dimension != rhs->d_func()->m_dimension )
-    return false;
+    TYPE_D(ArrayType);
+    if (d->m_dimension != rhs->d_func()->m_dimension)
+        return false;
 
-  return d->m_elementType == rhs->d_func()->m_elementType;
+    return d->m_elementType == rhs->d_func()->m_elementType;
 }
 
 ArrayType::ArrayType()
-  : AbstractType(createData<ArrayType>())
+    : AbstractType(createData<ArrayType>())
 {
 }
 
@@ -65,59 +66,58 @@ ArrayType::~ArrayType()
 {
 }
 
-int ArrayType::dimension () const
+int ArrayType::dimension() const
 {
-  return d_func()->m_dimension;
+    return d_func()->m_dimension;
 }
 
 void ArrayType::setDimension(int dimension)
 {
-  d_func_dynamic()->m_dimension = dimension;
+    d_func_dynamic()->m_dimension = dimension;
 }
 
-AbstractType::Ptr ArrayType::elementType () const
+AbstractType::Ptr ArrayType::elementType() const
 {
-  return d_func()->m_elementType.abstractType();
+    return d_func()->m_elementType.abstractType();
 }
 
 void ArrayType::setElementType(const AbstractType::Ptr& type)
 {
-  d_func_dynamic()->m_elementType = IndexedType(type);
+    d_func_dynamic()->m_elementType = IndexedType(type);
 }
 
 QString ArrayType::toString() const
 {
-  if (d_func()->m_dimension == 0) {
-    return QStringLiteral("%1[]").arg(elementType() ? elementType()->toString() : QStringLiteral("<notype>"));
-  }
-  return QStringLiteral("%1[%2]").arg(elementType() ? elementType()->toString() : QStringLiteral("<notype>")).arg(d_func()->m_dimension);
+    if (d_func()->m_dimension == 0) {
+        return QStringLiteral("%1[]").arg(elementType() ? elementType()->toString() : QStringLiteral("<notype>"));
+    }
+    return QStringLiteral("%1[%2]").arg(elementType() ? elementType()->toString() : QStringLiteral("<notype>")).arg(
+        d_func()->m_dimension);
 }
 
-void ArrayType::accept0 (TypeVisitor *v) const
+void ArrayType::accept0(TypeVisitor* v) const
 {
-  if (v->visit (this))
-    {
-      acceptType (d_func()->m_elementType.abstractType(), v);
+    if (v->visit(this)) {
+        acceptType(d_func()->m_elementType.abstractType(), v);
     }
 
-  v->endVisit (this);
+    v->endVisit(this);
 }
 
-void ArrayType::exchangeTypes( TypeExchanger* exchanger )
+void ArrayType::exchangeTypes(TypeExchanger* exchanger)
 {
-  TYPE_D_DYNAMIC(ArrayType);
-  d->m_elementType = IndexedType(exchanger->exchange(d->m_elementType.abstractType()));
+    TYPE_D_DYNAMIC(ArrayType);
+    d->m_elementType = IndexedType(exchanger->exchange(d->m_elementType.abstractType()));
 }
 
 AbstractType::WhichType ArrayType::whichType() const
 {
-  return TypeArray;
+    return TypeArray;
 }
 
 uint ArrayType::hash() const
 {
-  return KDevHash(AbstractType::hash())
-             << (elementType() ? elementType()->hash() : 0) << dimension();
+    return KDevHash(AbstractType::hash())
+           << (elementType() ? elementType()->hash() : 0) << dimension();
 }
-
 }

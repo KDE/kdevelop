@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "renameaction.h"
 
@@ -32,20 +32,21 @@
 
 using namespace KDevelop;
 
-QVector<RevisionedFileRanges> RevisionedFileRanges::convert(const QMap<IndexedString, QVector<RangeInRevision> >& uses)
+QVector<RevisionedFileRanges> RevisionedFileRanges::convert(const QMap<IndexedString, QVector<RangeInRevision>>& uses)
 {
     QVector<RevisionedFileRanges> ret(uses.size());
     auto insertIt = ret.begin();
-    for (auto it = uses.constBegin(); it != uses.constEnd(); ++it, ++insertIt)
-    {
+    for (auto it = uses.constBegin(); it != uses.constEnd(); ++it, ++insertIt) {
         insertIt->file = it.key();
         insertIt->ranges = it.value();
 
-        DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(it.key());
+        DocumentChangeTracker* tracker =
+            ICore::self()->languageController()->backgroundParser()->trackerForUrl(it.key());
         if (tracker) {
             insertIt->revision = tracker->revisionAtLastReset();
         }
     }
+
     return ret;
 }
 
@@ -89,7 +90,7 @@ void RenameAction::execute()
 {
     DocumentChangeSet changes;
 
-    foreach(const RevisionedFileRanges& ranges, d->m_oldDeclarationUses) {
+    foreach (const RevisionedFileRanges& ranges, d->m_oldDeclarationUses) {
         foreach (const RangeInRevision range, ranges.ranges) {
             KTextEditor::Range currentRange;
             if (ranges.revision && ranges.revision->valid()) {
@@ -98,8 +99,8 @@ void RenameAction::execute()
                 currentRange = range.castToSimpleRange();
             }
             DocumentChange useRename(ranges.file, currentRange,
-                                     d->m_oldDeclarationName.toString(), d->m_newDeclarationName);
-            changes.addChange( useRename );
+                d->m_oldDeclarationName.toString(), d->m_newDeclarationName);
+            changes.addChange(useRename);
             changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
         }
     }

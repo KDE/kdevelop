@@ -30,66 +30,70 @@
 #include "codecompletionmodel.h"
 
 namespace KDevelop {
-
 //A completion item used for completing include-files
-template<typename NavigationWidget>
-class AbstractIncludeFileCompletionItem : public CompletionTreeItem {
+template <typename NavigationWidget>
+class AbstractIncludeFileCompletionItem
+    : public CompletionTreeItem
+{
 public:
-  AbstractIncludeFileCompletionItem(const IncludeItem& include) : includeItem(include) {
-  }
-
-  QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override {
-    DUChainReadLocker lock(DUChain::lock(), 500);
-    if(!lock.locked()) {
-      qDebug() << "Failed to lock the du-chain in time";
-      return QVariant();
+    AbstractIncludeFileCompletionItem(const IncludeItem& include) : includeItem(include)
+    {
     }
 
-    const IncludeItem& item( includeItem );
-
-    switch (role) {
-      case CodeCompletionModel::IsExpandable:
-        return QVariant(true);
-      case CodeCompletionModel::ExpandingWidget: {
-        NavigationWidget* nav = new NavigationWidget(item, model->currentTopContext());
-
-        QVariant v;
-        v.setValue<QWidget*>((QWidget*)nav);
-        return v;
-      }
-      case Qt::DisplayRole:
-        switch (index.column()) {
-          case CodeCompletionModel::Prefix:
-            if(item.isDirectory)
-              return QStringLiteral("directory");
-            else
-              return QStringLiteral("file");
-          case CodeCompletionModel::Name: {
-            return item.isDirectory ? (item.name + QLatin1Char('/')) : item.name;
-          }
+    QVariant data(const QModelIndex& index, int role, const KDevelop::CodeCompletionModel* model) const override
+    {
+        DUChainReadLocker lock(DUChain::lock(), 500);
+        if (!lock.locked()) {
+            qDebug() << "Failed to lock the du-chain in time";
+            return QVariant();
         }
-        break;
-      case CodeCompletionModel::ItemSelected:
-      {
-        return QVariant( NavigationWidget::shortDescription(item) );
-      }
+
+        const IncludeItem& item(includeItem);
+
+        switch (role) {
+        case CodeCompletionModel::IsExpandable:
+            return QVariant(true);
+        case CodeCompletionModel::ExpandingWidget: {
+            NavigationWidget* nav = new NavigationWidget(item, model->currentTopContext());
+
+            QVariant v;
+            v.setValue<QWidget*>(( QWidget* )nav);
+            return v;
+        }
+        case Qt::DisplayRole:
+            switch (index.column()) {
+            case CodeCompletionModel::Prefix:
+                if (item.isDirectory)
+                    return QStringLiteral("directory");
+                else
+                    return QStringLiteral("file");
+            case CodeCompletionModel::Name: {
+                return item.isDirectory ? (item.name + QLatin1Char('/')) : item.name;
+            }
+            }
+            break;
+        case CodeCompletionModel::ItemSelected:
+        {
+            return QVariant(NavigationWidget::shortDescription(item));
+        }
+        }
+
+        return QVariant();
     }
 
-    return QVariant();
-  }
+    void execute(KTextEditor::View* view, const KTextEditor::Range& word) override = 0;
 
-  void execute(KTextEditor::View* view, const KTextEditor::Range& word) override = 0;
+    int inheritanceDepth() const override
+    {
+        return includeItem.pathNumber;
+    }
+    int argumentHintDepth() const override
+    {
+        return 0;
+    }
 
-  int inheritanceDepth() const override {
-    return includeItem.pathNumber;
-  }
-  int argumentHintDepth() const override {
-    return 0;
-  }
-
-  IncludeItem includeItem;
+    IncludeItem includeItem;
 };
-
 }
 
 #endif // KDEVPLATFORM_ABSTRACTINCLUDEFILECOMPLETIONITEM_H

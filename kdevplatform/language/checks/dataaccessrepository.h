@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DATAACCESSREPOSITORY_H
 #define KDEVPLATFORM_DATAACCESSREPOSITORY_H
@@ -23,9 +23,7 @@
 #include <language/editor/rangeinrevision.h>
 #include "dataaccess.h"
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 /**
  * @brief Stores all the data accesses in a file
  *
@@ -33,29 +31,28 @@ namespace KDevelop
  */
 class KDEVPLATFORMLANGUAGE_EXPORT DataAccessRepository
 {
-    public:
-        DataAccessRepository();
-        ~DataAccessRepository();
+public:
+    DataAccessRepository();
+    ~DataAccessRepository();
 
-        /** Constructs a DataAccess instance and adds it to the repository */
-        void addModification(const KDevelop::CursorInRevision& cursor, KDevelop::DataAccess::DataAccessFlags flags,
-                             const KDevelop::RangeInRevision& range = RangeInRevision::invalid());
+    /** Constructs a DataAccess instance and adds it to the repository */
+    void addModification(const KDevelop::CursorInRevision& cursor, KDevelop::DataAccess::DataAccessFlags flags,
+                         const KDevelop::RangeInRevision& range = RangeInRevision::invalid());
 
-        /** Clears the whole structure as if it was never used before */
-        void clear();
+    /** Clears the whole structure as if it was never used before */
+    void clear();
 
-        /** @returns all the data access stored in this repository */
-        QList<DataAccess*> modifications() const;
+    /** @returns all the data access stored in this repository */
+    QList<DataAccess*> modifications() const;
 
-        /** @returns the access located at the position specified by @p cursor */
-        DataAccess* accessAt(const KDevelop::CursorInRevision& cursor) const;
+    /** @returns the access located at the position specified by @p cursor */
+    DataAccess* accessAt(const KDevelop::CursorInRevision& cursor) const;
 
-        /** @returns all the data accesses inside the @p range range */
-        QList<DataAccess*> accessesInRange(const KDevelop::RangeInRevision& range) const;
+    /** @returns all the data accesses inside the @p range range */
+    QList<DataAccess*> accessesInRange(const KDevelop::RangeInRevision& range) const;
 
-    private:
-        const QScopedPointer<class DataAccessRepositoryPrivate> d;
+private:
+    const QScopedPointer<class DataAccessRepositoryPrivate> d;
 };
-
 }
 #endif

@@ -29,7 +29,6 @@
 #include <QObject>
 
 namespace KDevelop {
-
 /**
  * @brief Interface to the context browser plugin.
  */
@@ -43,9 +42,8 @@ public:
      */
     virtual void showUses(const DeclarationPointer& declaration) = 0;
 };
-
 }
 
-Q_DECLARE_INTERFACE( KDevelop::IContextBrowser, "org.kdevelop.IContextBrowser" )
+Q_DECLARE_INTERFACE(KDevelop::IContextBrowser, "org.kdevelop.IContextBrowser")
 
 #endif // KDEVPLATFORM_ICONTEXTBROWSER_H

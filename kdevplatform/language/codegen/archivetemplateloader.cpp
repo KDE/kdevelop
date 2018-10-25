@@ -15,7 +15,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "archivetemplateloader.h"
 
@@ -38,7 +38,7 @@ ArchiveTemplateLoader* ArchiveTemplateLoader::self()
 }
 
 ArchiveTemplateLoader::ArchiveTemplateLoader()
-: d(new ArchiveTemplateLoaderPrivate)
+    : d(new ArchiveTemplateLoaderPrivate)
 {
 }
 
@@ -56,17 +56,18 @@ void ArchiveTemplateLoader::removeLocation(ArchiveTemplateLocation* location)
 
 bool ArchiveTemplateLoader::canLoadTemplate(const QString& name) const
 {
-    foreach(ArchiveTemplateLocation* location, d->locations) {
+    foreach (ArchiveTemplateLocation* location, d->locations) {
         if (location->hasTemplate(name)) {
             return true;
         }
     }
+
     return false;
 }
 
 Grantlee::Template ArchiveTemplateLoader::loadByName(const QString& name, const Grantlee::Engine* engine) const
 {
-    foreach(ArchiveTemplateLocation* location, d->locations) {
+    foreach (ArchiveTemplateLocation* location, d->locations) {
         if (location->hasTemplate(name)) {
             return engine->newTemplate(location->templateContents(name), name);
         }
@@ -75,14 +76,14 @@ Grantlee::Template ArchiveTemplateLoader::loadByName(const QString& name, const 
     return Grantlee::Template();
 }
 
-QPair< QString, QString > ArchiveTemplateLoader::getMediaUri(const QString& fileName) const
+QPair<QString, QString> ArchiveTemplateLoader::getMediaUri(const QString& fileName) const
 {
     Q_UNUSED(fileName);
     return QPair<QString, QString>();
 }
 
 ArchiveTemplateLocation::ArchiveTemplateLocation(const KArchiveDirectory* directory)
-: m_directory(directory)
+    : m_directory(directory)
 {
     ArchiveTemplateLoader::self()->addLocation(this);
 }

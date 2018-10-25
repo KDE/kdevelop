@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_STRUCTURETYPE_H
 #define KDEVPLATFORM_STRUCTURETYPE_H
@@ -24,8 +24,7 @@
 #include "identifiedtype.h"
 #include "typesystemdata.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 class StructureTypeData;
 
 typedef MergeIdentifiedType<AbstractType> StructureTypeBase;
@@ -36,52 +35,53 @@ typedef MergeIdentifiedType<AbstractType> StructureTypeBase;
  * StructureType represents all structures, including classes,
  * interfaces, etc.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT StructureType : public StructureTypeBase
+class KDEVPLATFORMLANGUAGE_EXPORT StructureType
+    : public StructureTypeBase
 {
 public:
-  typedef TypePtr<StructureType> Ptr;
+    typedef TypePtr<StructureType> Ptr;
 
-  /// Default constructor
-  StructureType();
-  /// Copy constructor. \param rhs type to copy
-  StructureType(const StructureType& rhs);
-  /// Constructor using raw data. \param data internal data.
-  explicit StructureType(StructureTypeData& data);
-  /// Destructor
-  ~StructureType() override;
+    /// Default constructor
+    StructureType();
+    /// Copy constructor. \param rhs type to copy
+    StructureType(const StructureType& rhs);
+    /// Constructor using raw data. \param data internal data.
+    explicit StructureType(StructureTypeData& data);
+    /// Destructor
+    ~StructureType() override;
 
-  AbstractType* clone() const override;
+    AbstractType* clone() const override;
 
-  bool equals(const AbstractType* rhs) const override;
+    bool equals(const AbstractType* rhs) const override;
 
-  QString toString() const override;
+    QString toString() const override;
 
-  uint hash() const override;
+    uint hash() const override;
 
-  WhichType whichType() const override;
+    WhichType whichType() const override;
 
-  //virtual void exchangeTypes(KDevelop::TypeExchanger*);
+    //virtual void exchangeTypes(KDevelop::TypeExchanger*);
 
-  enum {
-    Identity = 6
-  };
+    enum {
+        Identity = 6
+    };
 
-  typedef StructureTypeData Data;
+    typedef StructureTypeData Data;
 
 protected:
-  void accept0 (TypeVisitor *v) const override;
+    void accept0 (TypeVisitor* v) const override;
 
-  TYPE_DECLARE_DATA(StructureType)
+    TYPE_DECLARE_DATA(StructureType)
 };
 
-template<>
-inline StructureType* fastCast<StructureType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeStructure)
-    return nullptr;
-  else
-    return static_cast<StructureType*>(from);
+template <>
+inline StructureType* fastCast<StructureType*>(AbstractType* from)
+{
+    if (!from || from->whichType() != AbstractType::TypeStructure)
+        return nullptr;
+    else
+        return static_cast<StructureType*>(from);
 }
-
 }
 
 #endif

@@ -47,13 +47,13 @@
 QTEST_MAIN(TestBackgroundparser)
 
 #define QVERIFY_RETURN(statement, retval) \
-do { if (!QTest::qVerify((statement), #statement, "", __FILE__, __LINE__)) return retval; } while (0)
+    do { if (!QTest::qVerify((statement), # statement, "", __FILE__, __LINE__)) \
+             return retval; } while (0)
 
 using namespace KDevelop;
 
 JobPlan::JobPlan()
 {
-
 }
 
 void JobPlan::addJob(const JobPrototype& job)
@@ -87,7 +87,7 @@ void JobPlan::parseJobCreated(ParseJob* job)
 void JobPlan::addJobsToParser()
 {
     // add parse jobs
-    foreach(const JobPrototype& job, m_jobs) {
+    foreach (const JobPrototype& job, m_jobs) {
         ICore::self()->languageController()->backgroundParser()->addDocument(
             job.m_url, TopDUContext::Empty, job.m_priority, this, job.m_flags
         );
@@ -103,7 +103,7 @@ bool JobPlan::runJobs(int timeoutMS)
     QElapsedTimer t;
     t.start();
 
-    while ( !t.hasExpired(timeoutMS) && m_jobs.size() != m_finishedJobs.size() ) {
+    while (!t.hasExpired(timeoutMS) && m_jobs.size() != m_finishedJobs.size()) {
         QTest::qWait(50);
     }
 
@@ -113,7 +113,7 @@ bool JobPlan::runJobs(int timeoutMS)
 
     // verify they're started in the right order
     int currentBestPriority = BackgroundParser::BestPriority;
-    foreach ( const IndexedString& url, m_createdJobs ) {
+    foreach (const IndexedString& url, m_createdJobs) {
         const JobPrototype p = jobForUrl(url);
         QVERIFY_RETURN(p.m_priority >= currentBestPriority, false);
         currentBestPriority = p.m_priority;
@@ -124,11 +124,12 @@ bool JobPlan::runJobs(int timeoutMS)
 
 JobPrototype JobPlan::jobForUrl(const IndexedString& url)
 {
-    foreach(const JobPrototype& job, m_jobs) {
+    foreach (const JobPrototype& job, m_jobs) {
         if (job.m_url == url) {
             return job;
         }
     }
+
     return JobPrototype();
 }
 
@@ -147,13 +148,12 @@ void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext
     if (job.m_flags & ParseJob::RequiresSequentialProcessing) {
         // ensure that all jobs that respect sequential processing
         // with lower priority have been run
-        foreach(const JobPrototype& otherJob, m_jobs) {
+        foreach (const JobPrototype& otherJob, m_jobs) {
             if (otherJob.m_url == job.m_url) {
                 continue;
             }
             if (otherJob.m_flags & ParseJob::RespectsSequentialProcessing &&
-                otherJob.m_priority < job.m_priority)
-            {
+                otherJob.m_priority < job.m_priority) {
                 QVERIFY(m_finishedJobs.contains(otherJob.m_url));
             }
         }
@@ -180,30 +180,30 @@ int JobPlan::numFinishedJobs() const
 
 void TestBackgroundparser::initTestCase()
 {
-  AutoTestShell::init();
-  TestCore* core = TestCore::initialize(Core::NoUi);
+    AutoTestShell::init();
+    TestCore* core = TestCore::initialize(Core::NoUi);
 
-  DUChain::self()->disablePersistentStorage();
+    DUChain::self()->disablePersistentStorage();
 
-  TestLanguageController* langController = new TestLanguageController(core);
-  core->setLanguageController(langController);
-  langController->backgroundParser()->setThreadCount(4);
-  langController->backgroundParser()->abortAllJobs();
+    TestLanguageController* langController = new TestLanguageController(core);
+    core->setLanguageController(langController);
+    langController->backgroundParser()->setThreadCount(4);
+    langController->backgroundParser()->abortAllJobs();
 
-  m_langSupport = new TestLanguageSupport(this);
-  connect(m_langSupport, &TestLanguageSupport::parseJobCreated,
-          &m_jobPlan, &JobPlan::parseJobCreated);
-  langController->addTestLanguage(m_langSupport, QStringList() << QStringLiteral("text/plain"));
+    m_langSupport = new TestLanguageSupport(this);
+    connect(m_langSupport, &TestLanguageSupport::parseJobCreated,
+            &m_jobPlan, &JobPlan::parseJobCreated);
+    langController->addTestLanguage(m_langSupport, QStringList() << QStringLiteral("text/plain"));
 
-  const auto languages = langController->languagesForUrl(QUrl::fromLocalFile(QStringLiteral("/foo.txt")));
-  QCOMPARE(languages.size(), 1);
-  QCOMPARE(languages.first(), m_langSupport);
+    const auto languages = langController->languagesForUrl(QUrl::fromLocalFile(QStringLiteral("/foo.txt")));
+    QCOMPARE(languages.size(), 1);
+    QCOMPARE(languages.first(), m_langSupport);
 }
 
 void TestBackgroundparser::cleanupTestCase()
 {
-  TestCore::shutdown();
-  m_langSupport = nullptr;
+    TestCore::shutdown();
+    m_langSupport = nullptr;
 }
 
 void TestBackgroundparser::init()
@@ -240,11 +240,13 @@ void TestBackgroundparser::testParseOrdering_foregroundThread()
     // foreground thread (active document being edited, ...) running all the time.
 
     // the long-running high-prio job
-    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_fgt_hp.txt")), -500, ParseJob::IgnoresSequentialProcessing, 630));
+    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_fgt_hp.txt")), -500,
+                                  ParseJob::IgnoresSequentialProcessing, 630));
 
     // several small background jobs
-    for ( int i = 0; i < 10; i++ ) {
-        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_fgt_lp__" + QString::number(i) + ".txt"), i, ParseJob::FullSequentialProcessing, 40));
+    for (int i = 0; i < 10; i++) {
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_fgt_lp__" + QString::number(i) + ".txt"), i,
+                                      ParseJob::FullSequentialProcessing, 40));
     }
 
     // not enough time if the small jobs run after the large one
@@ -254,26 +256,33 @@ void TestBackgroundparser::testParseOrdering_foregroundThread()
 void TestBackgroundparser::testParseOrdering_noSequentialProcessing()
 {
     m_jobPlan.clear();
-    for ( int i = 0; i < 20; i++ ) {
+    for (int i = 0; i < 20; i++) {
         // create jobs with no sequential processing, and different priorities
-        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_nsp1__" + QString::number(i) + ".txt"), i, ParseJob::IgnoresSequentialProcessing, i));
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_nsp1__" + QString::number(i) + ".txt"), i,
+                                      ParseJob::IgnoresSequentialProcessing, i));
     }
-    for ( int i = 0; i < 8; i++ ) {
+
+    for (int i = 0; i < 8; i++) {
         // create a few more jobs with the same priority
-        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_nsp2__" + QString::number(i) + ".txt"), 10, ParseJob::IgnoresSequentialProcessing, i));
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test_nsp2__" + QString::number(i) + ".txt"), 10,
+                                      ParseJob::IgnoresSequentialProcessing, i));
     }
+
     QVERIFY(m_jobPlan.runJobs(1000));
 }
 
 void TestBackgroundparser::testParseOrdering_lockup()
 {
     m_jobPlan.clear();
-    for ( int i = 3; i > 0; i-- ) {
+    for (int i = 3; i > 0; i--) {
         // add 3 jobs which do not care about sequential processing, at 4 threads it should take no more than 1s to process them
-        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test" + QString::number(i) + ".txt"), i, ParseJob::IgnoresSequentialProcessing, 200));
+        m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test" + QString::number(i) + ".txt"), i,
+                                      ParseJob::IgnoresSequentialProcessing, 200));
     }
+
     // add one job which requires sequential processing with high priority
-    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_hp.txt")), -200, ParseJob::FullSequentialProcessing, 200));
+    m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile(QStringLiteral("/test_hp.txt")), -200,
+                                  ParseJob::FullSequentialProcessing, 200));
     // verify that the low-priority nonsequential jobs are run simultaneously with the other one.
     QVERIFY(m_jobPlan.runJobs(700));
 }
@@ -281,18 +290,19 @@ void TestBackgroundparser::testParseOrdering_lockup()
 void TestBackgroundparser::testParseOrdering_simple()
 {
     m_jobPlan.clear();
-    for ( int i = 20; i > 0; i-- ) {
+    for (int i = 20; i > 0; i--) {
         // the job with priority i should be at place i in the finished list
         // (lower priority value -> should be parsed first)
         ParseJob::SequentialProcessingFlags flags = ParseJob::FullSequentialProcessing;
         m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test" + QString::number(i) + ".txt"),
                                       i, flags));
     }
+
     // also add a few jobs which ignore the processing
-    for ( int i = 0; i < 5; ++i ) {
+    for (int i = 0; i < 5; ++i) {
         m_jobPlan.addJob(JobPrototype(QUrl::fromLocalFile("/test2-" + QString::number(i) + ".txt"),
-                                       BackgroundParser::NormalPriority,
-                                       ParseJob::IgnoresSequentialProcessing));
+                                      BackgroundParser::NormalPriority,
+                                      ParseJob::IgnoresSequentialProcessing));
     }
 
     QVERIFY(m_jobPlan.runJobs(1000));
@@ -304,18 +314,18 @@ void TestBackgroundparser::benchmark()
 
     QVector<IndexedString> jobUrls;
     jobUrls.reserve(jobs);
-    for ( int i = 0; i < jobs; ++i ) {
+    for (int i = 0; i < jobs; ++i) {
         jobUrls << IndexedString("/test" + QString::number(i) + ".txt");
     }
 
     QBENCHMARK {
-        foreach ( const IndexedString& url, jobUrls ) {
+        foreach (const IndexedString& url, jobUrls) {
             ICore::self()->languageController()->backgroundParser()->addDocument(url);
         }
 
         ICore::self()->languageController()->backgroundParser()->parseDocuments();
 
-        while ( ICore::self()->languageController()->backgroundParser()->queuedCount() ) {
+        while (ICore::self()->languageController()->backgroundParser()->queuedCount()) {
             QTest::qWait(50);
         }
     }
@@ -343,7 +353,7 @@ void TestBackgroundparser::benchmarkDocumentChanges()
     // required for proper benchmark results
     doc->createView(nullptr);
     QBENCHMARK {
-        for ( int i = 0; i < 5000; i++ ) {
+        for (int i = 0; i < 5000; i++) {
             {
                 KTextEditor::Document::EditingTransaction t(doc);
                 doc->insertText(KTextEditor::Cursor(0, 0), QStringLiteral("This is a test line.\n"));
@@ -382,31 +392,32 @@ void TestBackgroundparser::testNoDeadlockInJobCreation()
     // actually distribute the complicate code across threads to trigger the
     // deadlock reliably
     QObject::connect(m_langSupport, &TestLanguageSupport::aboutToCreateParseJob,
-                     &lifetimeControl, [&] (const IndexedString& url, ParseJob** job) {
-                        if (url == run) {
-                            auto testJob = new TestParseJob(url, m_langSupport);
-                            testJob->run_callback = [&] (const IndexedString& url) {
-                                // this is run in the background parse thread
-                                DUChainWriteLocker lock;
-                                semaphoreA.release();
-                                // sync with the foreground parse job ctor
-                                semaphoreB.acquire();
-                                // this is acquiring the background parse lock
-                                // we want to support this order - i.e. DUChain -> Background Parser
-                                ICore::self()->languageController()->backgroundParser()->isQueued(url);
-                            };
-                            *job = testJob;
-                        } else if (url == ctor) {
-                            // this is run in the foreground, essentially the same
-                            // as code run within the parse job ctor
-                            semaphoreA.acquire();
-                            semaphoreB.release();
-                            // Note how currently, the background parser is locked while creating a parse job
-                            // thus locking the duchain here used to trigger a lock order inversion
-                            DUChainReadLocker lock;
-                            *job = new TestParseJob(url, m_langSupport);
-                        }
-                    }, Qt::DirectConnection);
+                     &lifetimeControl, [&](const IndexedString& url, ParseJob** job) {
+        if (url == run) {
+            auto testJob = new TestParseJob(url, m_langSupport);
+            testJob->run_callback = [&](const IndexedString& url) {
+                                        // this is run in the background parse thread
+                                        DUChainWriteLocker lock;
+                                        semaphoreA.release();
+                                        // sync with the foreground parse job ctor
+                                        semaphoreB.acquire();
+                                        // this is acquiring the background parse lock
+                                        // we want to support this order - i.e. DUChain -> Background Parser
+                                        ICore::self()->languageController()->backgroundParser()->isQueued(
+                                            url);
+                                    };
+            *job = testJob;
+        } else if (url == ctor) {
+            // this is run in the foreground, essentially the same
+            // as code run within the parse job ctor
+            semaphoreA.acquire();
+            semaphoreB.release();
+            // Note how currently, the background parser is locked while creating a parse job
+            // thus locking the duchain here used to trigger a lock order inversion
+            DUChainReadLocker lock;
+            *job = new TestParseJob(url, m_langSupport);
+        }
+    }, Qt::DirectConnection);
 
     // should be able to run quickly, if no deadlock occurs
     QVERIFY(m_jobPlan.runJobs(500));

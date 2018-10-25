@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_ABSTRACTINCLUDENAVIGATIONCONTEXT_H
 #define KDEVPLATFORM_ABSTRACTINCLUDENAVIGATIONCONTEXT_H
@@ -25,10 +25,9 @@
 #include <language/languageexport.h>
 
 namespace KDevelop {
-
 /**
  * Abstract navigation context for file includes.
- * 
+ *
  * Example usage:
  * \code
  * namespace LANG {
@@ -46,35 +45,37 @@ namespace KDevelop {
  * }
  * \endcode
  */
-class KDEVPLATFORMLANGUAGE_EXPORT AbstractIncludeNavigationContext : public AbstractNavigationContext {
-  Q_OBJECT
+class KDEVPLATFORMLANGUAGE_EXPORT AbstractIncludeNavigationContext
+    : public AbstractNavigationContext
+{
+    Q_OBJECT
+
 public:
-  AbstractIncludeNavigationContext(const IncludeItem& item, const TopDUContextPointer& topContext,
-                                   const ParsingEnvironmentType& type);
-  QString html(bool shorten) override;
-  QString name() const override;
+    AbstractIncludeNavigationContext(const IncludeItem& item, const TopDUContextPointer& topContext,
+                                     const ParsingEnvironmentType& type);
+    QString html(bool shorten) override;
+    QString name() const override;
 
 protected:
-  /// Overwrite this to add language dependent information for a given file.
-  /// By default only "included by" and "includes"
-  /// NOTE: You should always append a newline (<br />) if you write anything.
-  virtual void getFileInfo(KDevelop::TopDUContext* duchain);
-  
-  ///Should return true if this declaration should be shown, and false if not
-  ///The duchain is locked when this is called
-  virtual bool filterDeclaration(Declaration* decl);
+    /// Overwrite this to add language dependent information for a given file.
+    /// By default only "included by" and "includes"
+    /// NOTE: You should always append a newline (<br />) if you write anything.
+    virtual void getFileInfo(KDevelop::TopDUContext* duchain);
+
+    ///Should return true if this declaration should be shown, and false if not
+    ///The duchain is locked when this is called
+    virtual bool filterDeclaration(Declaration* decl);
 
 private:
-  /// Only environments with this type will be considered
-  ParsingEnvironmentType m_type;
-  typedef QPair<int, uint> IdentifierPair;
-  ///@param first must initially be true
-  void addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first,
-                                  QVector<IdentifierPair>& addedDeclarations,
-                                  const QString& indent = {} );
-  IncludeItem m_item;
+    /// Only environments with this type will be considered
+    ParsingEnvironmentType m_type;
+    typedef QPair<int, uint> IdentifierPair;
+    ///@param first must initially be true
+    void addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first,
+                                    QVector<IdentifierPair>& addedDeclarations,
+                                    const QString& indent = {});
+    IncludeItem m_item;
 };
-
 }
 
 #endif // KDEVPLATFORM_ABSTRACTINCLUDENAVIGATIONCONTEXT_H

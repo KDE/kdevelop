@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "controlflowgraph.h"
 #include "controlflownode.h"
@@ -33,10 +33,9 @@ ControlFlowGraph::ControlFlowGraph()
     : d(new ControlFlowGraphPrivate)
 {}
 
-
 ControlFlowGraph::~ControlFlowGraph()
 {
-  clear();
+    clear();
 }
 
 void ControlFlowGraph::addEntry(ControlFlowNode* n)
@@ -46,52 +45,52 @@ void ControlFlowGraph::addEntry(ControlFlowNode* n)
 
 void ControlFlowGraph::addEntry(Declaration* decl, ControlFlowNode* n)
 {
-  Q_ASSERT(d);
-  Q_ASSERT(decl);
-  d->m_funcNodes.insert(decl, n);
+    Q_ASSERT(d);
+    Q_ASSERT(decl);
+    d->m_funcNodes.insert(decl, n);
 }
 
 void ControlFlowGraph::addDeadNode(ControlFlowNode* n)
 {
-  d->m_deadNodes += n;
+    d->m_deadNodes += n;
 }
 
 void clearNodeRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& deleted)
 {
-  if(!node || deleted.contains(node))
-    return;
+    if (!node || deleted.contains(node))
+        return;
 
-  deleted += node;
+    deleted += node;
 
-  clearNodeRecursively(node->next(), deleted);
-  clearNodeRecursively(node->alternative(), deleted);
+    clearNodeRecursively(node->next(), deleted);
+    clearNodeRecursively(node->alternative(), deleted);
 
-  delete node;
+    delete node;
 }
 
 void ControlFlowGraph::clear()
 {
-  QSet<ControlFlowNode*> deleted;
-  foreach(ControlFlowNode* node, d->m_funcNodes)
-    clearNodeRecursively(node, deleted);
+    QSet<ControlFlowNode*> deleted;
+    foreach (ControlFlowNode* node, d->m_funcNodes)
+        clearNodeRecursively(node, deleted);
 
-  foreach(ControlFlowNode* node, d->m_nodes)
-    clearNodeRecursively(node, deleted);
+    foreach (ControlFlowNode* node, d->m_nodes)
+        clearNodeRecursively(node, deleted);
 
-  foreach(ControlFlowNode* node, d->m_deadNodes)
-    clearNodeRecursively(node, deleted);
+    foreach (ControlFlowNode* node, d->m_deadNodes)
+        clearNodeRecursively(node, deleted);
 
-  d->m_nodes.clear();
-  d->m_funcNodes.clear();
-  d->m_deadNodes.clear();
+    d->m_nodes.clear();
+    d->m_funcNodes.clear();
+    d->m_deadNodes.clear();
 }
 
-QList< ControlFlowNode* > ControlFlowGraph::rootNodes() const
+QList<ControlFlowNode*> ControlFlowGraph::rootNodes() const
 {
-    return d->m_funcNodes.values()+d->m_nodes;
+    return d->m_funcNodes.values() + d->m_nodes;
 }
 
-QVector< ControlFlowNode* > ControlFlowGraph::deadNodes() const
+QVector<ControlFlowNode*> ControlFlowGraph::deadNodes() const
 {
     return d->m_deadNodes;
 }

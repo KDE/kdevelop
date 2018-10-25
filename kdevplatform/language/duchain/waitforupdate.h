@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_WAITFORUPDATE_H
 #define KDEVPLATFORM_WAITFORUPDATE_H
@@ -26,23 +26,22 @@
 #include <QObject>
 
 namespace KDevelop {
-
-struct WaitForUpdate : public QObject
+struct WaitForUpdate
+    : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     WaitForUpdate();
 
-  public Q_SLOTS:
+public Q_SLOTS:
     void updateReady(const KDevelop::IndexedString& url,
                      const KDevelop::ReferencedTopDUContext& topContext);
 
-  public:
+public:
     bool m_ready;
     ReferencedTopDUContext m_topContext;
 };
-
 }
 
 #endif // KDEVPLATFORM_WAITFORUPDATE_H

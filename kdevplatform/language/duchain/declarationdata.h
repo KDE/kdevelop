@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DECLARATION_DATA_H
 #define KDEVPLATFORM_DECLARATION_DATA_H
@@ -31,39 +31,37 @@
 #include <language/languageexport.h>
 #include "types/indexedtype.h"
 
-namespace KDevelop
-{
-
-class KDEVPLATFORMLANGUAGE_EXPORT DeclarationData : public DUChainBaseData
+namespace KDevelop {
+class KDEVPLATFORMLANGUAGE_EXPORT DeclarationData
+    : public DUChainBaseData
 {
 public:
-  DeclarationData();
-  DeclarationData(const DeclarationData& rhs) = default;
+    DeclarationData();
+    DeclarationData(const DeclarationData& rhs) = default;
 
-  IndexedDUContext m_internalContext;
-  IndexedType m_type;
-  IndexedIdentifier m_identifier;
+    IndexedDUContext m_internalContext;
+    IndexedType m_type;
+    IndexedIdentifier m_identifier;
 
-  ///@todo Eventually move this and all the definition/declaration coupling functionality somewhere else
-  //Holds the declaration id for this definition, if this is a definition with separate declaration
-  DeclarationId m_declaration;
+    ///@todo Eventually move this and all the definition/declaration coupling functionality somewhere else
+    //Holds the declaration id for this definition, if this is a definition with separate declaration
+    DeclarationId m_declaration;
 
-  //Index in the comment repository
-  uint m_comment = 0;
+    //Index in the comment repository
+    uint m_comment = 0;
 
-  Declaration::Kind m_kind = Declaration::Instance;
+    Declaration::Kind m_kind = Declaration::Instance;
 
-  bool m_isDefinition  : 1;
-  bool m_inSymbolTable : 1;
-  bool m_isTypeAlias   : 1;
-  bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
-  bool m_isDeprecated      : 1;
-  bool m_alwaysForceDirect : 1;
-  bool m_isAutoDeclaration : 1;
-  bool m_isExplicitlyDeleted : 1;
-  bool m_isExplicitlyTyped : 1;
+    bool m_isDefinition  : 1;
+    bool m_inSymbolTable : 1;
+    bool m_isTypeAlias   : 1;
+    bool m_anonymousInContext : 1; //Whether the declaration was added into the parent-context anonymously
+    bool m_isDeprecated      : 1;
+    bool m_alwaysForceDirect : 1;
+    bool m_isAutoDeclaration : 1;
+    bool m_isExplicitlyDeleted : 1;
+    bool m_isExplicitlyTyped : 1;
 };
-
 }
 
 #endif

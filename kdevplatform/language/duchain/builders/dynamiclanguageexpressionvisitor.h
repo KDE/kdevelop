@@ -1,22 +1,22 @@
 /***************************************************************************
- *   This file is part of KDevelop                                         *
- *   Copyright 2014 Sven Brauch <svenbrauch@gmail.com>                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 2 of the    *
- *   License, or (at your option) any later version.                       *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this program; if not, write to the                 *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
- ***************************************************************************/
+*   This file is part of KDevelop                                         *
+*   Copyright 2014 Sven Brauch <svenbrauch@gmail.com>                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU Library General Public License as       *
+*   published by the Free Software Foundation; either version 2 of the    *
+*   License, or (at your option) any later version.                       *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU Library General Public     *
+*   License along with this program; if not, write to the                 *
+*   Free Software Foundation, Inc.,                                       *
+*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
+***************************************************************************/
 
 #ifndef KDEVPLATFORM_DYNAMICLANGUAGEEXPRESSIONVISITOR_H
 #define KDEVPLATFORM_DYNAMICLANGUAGEEXPRESSIONVISITOR_H
@@ -25,7 +25,6 @@
 #include <language/languageexport.h>
 
 namespace KDevelop {
-
 /**
  * @brief Provides functionality commonly needed for expression visitors in dynamically typed languages.
  *
@@ -89,7 +88,8 @@ namespace KDevelop {
  * \endcode
  * with little to no extra effort.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT DynamicLanguageExpressionVisitor {
+class KDEVPLATFORMLANGUAGE_EXPORT DynamicLanguageExpressionVisitor
+{
 public:
     /**
      * @brief Construct a new expression visitor in the given @p context.
@@ -108,11 +108,13 @@ public:
     /**
      * @brief Return the DUContext this visitor is working on.
      */
-    inline const DUContext* context() const {
+    inline const DUContext* context() const
+    {
         return m_context;
     }
 
-    inline const TopDUContext* topContext() const {
+    inline const TopDUContext* topContext() const
+    {
         return m_context->topContext();
     }
 
@@ -120,8 +122,9 @@ public:
      * @brief Retrieve this visitor's last encountered type.
      * This is never a null type.
      */
-    inline AbstractType::Ptr lastType() const {
-        if ( ! m_lastType ) {
+    inline AbstractType::Ptr lastType() const
+    {
+        if (!m_lastType) {
             return unknownType();
         }
         return m_lastType;
@@ -130,7 +133,8 @@ public:
     /**
      * @brief Retrieve this visitor's last encountered declaration. May be null.
      */
-    inline DeclarationPointer lastDeclaration() const {
+    inline DeclarationPointer lastDeclaration() const
+    {
         return m_lastDeclaration;
     }
 
@@ -142,7 +146,8 @@ public:
      * visitor which determined the type of the variable is confident of what it found, and
      * otherwise do nothing.
      */
-    inline bool isConfident() const {
+    inline bool isConfident() const
+    {
         return m_isConfident;
     }
 
@@ -172,7 +177,7 @@ public:
      * @param type Type to set as the last type
      * @param declaration Declaration to set as the last declaration; null by default
      */
-    void encounter(const AbstractType::Ptr& type, const DeclarationPointer& declaration=DeclarationPointer());
+    void encounter(const AbstractType::Ptr& type, const DeclarationPointer& declaration = DeclarationPointer());
 
     /**
      * @brief Set the last type to unknownType() and clear the last declaration.
@@ -190,7 +195,8 @@ protected:
     /**
      * @see isConfident
      */
-    inline void setConfident(bool confident) {
+    inline void setConfident(bool confident)
+    {
         m_isConfident = confident;
     }
 
@@ -209,7 +215,6 @@ protected:
     bool m_isConfident = true;
     DynamicLanguageExpressionVisitor* m_parentVisitor;
 };
-
 } // namespace KDevelop
 
 #endif // KDEVPLATFORM_DYNAMICLANGUAGEEXPRESSIONVISITOR_H

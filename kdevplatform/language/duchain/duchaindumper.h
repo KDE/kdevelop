@@ -18,7 +18,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DUCHAINDUMPER_H
 #define KDEVPLATFORM_DUCHAINDUMPER_H
@@ -30,8 +30,7 @@
 
 class QTextStream;
 
-namespace KDevelop
-{
+namespace KDevelop {
 class DUContext;
 
 /**
@@ -40,31 +39,30 @@ class DUContext;
 class KDEVPLATFORMLANGUAGE_EXPORT DUChainDumper
 {
 public:
-  enum Feature {
-    NoFeatures =        0,
-    DumpContext =       1 << 0,
-    DumpProblems =      1 << 1
-  };
-  Q_DECLARE_FLAGS(Features, Feature)
+    enum Feature {
+        NoFeatures =        0,
+        DumpContext =       1 << 0,
+        DumpProblems =      1 << 1
+    };
+    Q_DECLARE_FLAGS(Features, Feature)
 
-  explicit DUChainDumper(Features features = DumpContext);
-  ~DUChainDumper();
+    explicit DUChainDumper(Features features = DumpContext);
+    ~DUChainDumper();
 
-  /**
-   * Dump DUChain context to stdout
-   *
-   * NOTE: The DUChain must be readlocked when this is called.
-   *
-   * @param context The context to dump
-   * @param allowedDepth How deep the dump will go into imported contexts, printing all the contents.
-   */
-  void dump(DUContext* context, int allowedDepth = 0);
+    /**
+     * Dump DUChain context to stdout
+     *
+     * NOTE: The DUChain must be readlocked when this is called.
+     *
+     * @param context The context to dump
+     * @param allowedDepth How deep the dump will go into imported contexts, printing all the contents.
+     */
+    void dump(DUContext* context, int allowedDepth = 0);
 
-  void dump(DUContext* context, int allowedDepth, QTextStream& out);
+    void dump(DUContext* context, int allowedDepth, QTextStream& out);
 
 private:
-  const QScopedPointer<class DUChainDumperPrivate> d;
+    const QScopedPointer<class DUChainDumperPrivate> d;
 };
-
 }
 #endif // KDEVPLATFORM_DUCHAINDUMPER_H

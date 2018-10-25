@@ -27,9 +27,7 @@
 
 class QUrl;
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class SourceFileTemplate;
 
 class DocumentChangeSet;
@@ -200,7 +198,6 @@ public:
 private:
     const QScopedPointer<class TemplateRendererPrivate> d;
 };
-
 }
 
 #endif // KDEVPLATFORM_TEMPLATERENDERER_H

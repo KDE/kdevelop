@@ -17,7 +17,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CLASSMEMBERDECLARATIONDATA_H
 #define KDEVPLATFORM_CLASSMEMBERDECLARATIONDATA_H
@@ -25,38 +25,36 @@
 #include "declarationdata.h"
 #include <language/languageexport.h>
 
-namespace KDevelop
-{
-
-class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclarationData : public DeclarationData
+namespace KDevelop {
+class KDEVPLATFORMLANGUAGE_EXPORT ClassMemberDeclarationData
+    : public DeclarationData
 {
 public:
-  ClassMemberDeclarationData();
-  ClassMemberDeclarationData( const ClassMemberDeclarationData& rhs ) = default;
+    ClassMemberDeclarationData();
+    ClassMemberDeclarationData(const ClassMemberDeclarationData& rhs) = default;
 
-  Declaration::AccessPolicy m_accessPolicy;
+    Declaration::AccessPolicy m_accessPolicy;
 
-  /**
-   * Since alignOf must be integral power of 2, we only need to store the power.
-   * The max value (63) represents unknown alignment.
-   */
-  unsigned m_alignOfExponent : 6;
-  static constexpr unsigned MaxAlignOfExponent = 63;
+    /**
+     * Since alignOf must be integral power of 2, we only need to store the power.
+     * The max value (63) represents unknown alignment.
+     */
+    unsigned m_alignOfExponent : 6;
+    static constexpr unsigned MaxAlignOfExponent = 63;
 
-  bool m_isStatic: 1;
-  bool m_isAuto: 1;
-  bool m_isFriend: 1;
-  bool m_isRegister: 1;
-  bool m_isExtern: 1;
-  bool m_isMutable: 1;
+    bool m_isStatic : 1;
+    bool m_isAuto : 1;
+    bool m_isFriend : 1;
+    bool m_isRegister : 1;
+    bool m_isExtern : 1;
+    bool m_isMutable : 1;
 
-  /// Stores sizeOf in bytes or -1 if unknown.
-  int64_t m_sizeOf;
+    /// Stores sizeOf in bytes or -1 if unknown.
+    int64_t m_sizeOf;
 
-  /// Stores bitOffsetOf in bits or -1 if unknown.
-  int64_t m_bitOffsetOf;
+    /// Stores bitOffsetOf in bits or -1 if unknown.
+    int64_t m_bitOffsetOf;
 };
-
 }
 
 #endif

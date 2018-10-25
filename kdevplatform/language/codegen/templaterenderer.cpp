@@ -39,24 +39,23 @@
 
 using namespace Grantlee;
 
-class NoEscapeStream : public OutputStream
+class NoEscapeStream
+    : public OutputStream
 {
 public:
     NoEscapeStream();
     explicit NoEscapeStream (QTextStream* stream);
 
     QString escape (const QString& input) const override;
-    QSharedPointer< OutputStream > clone (QTextStream* stream) const override;
+    QSharedPointer<OutputStream> clone (QTextStream* stream) const override;
 };
 
 NoEscapeStream::NoEscapeStream() : OutputStream()
 {
-
 }
 
-NoEscapeStream::NoEscapeStream(QTextStream* stream) : OutputStream (stream)
+NoEscapeStream::NoEscapeStream(QTextStream* stream) : OutputStream(stream)
 {
-
 }
 
 QString NoEscapeStream::escape(const QString& input) const
@@ -66,14 +65,13 @@ QString NoEscapeStream::escape(const QString& input) const
 
 QSharedPointer<OutputStream> NoEscapeStream::clone(QTextStream* stream) const
 {
-    QSharedPointer<OutputStream> clonedStream = QSharedPointer<OutputStream>( new NoEscapeStream( stream ) );
+    QSharedPointer<OutputStream> clonedStream = QSharedPointer<OutputStream>(new NoEscapeStream(stream));
     return clonedStream;
 }
 
 using namespace KDevelop;
 
 namespace KDevelop {
-
 class TemplateRendererPrivate
 {
 public:
@@ -82,7 +80,6 @@ public:
     TemplateRenderer::EmptyLinesPolicy emptyLinesPolicy;
     QString errorString;
 };
-
 }
 
 TemplateRenderer::TemplateRenderer()
@@ -98,8 +95,7 @@ void TemplateRenderer::addVariables(const QVariantHash& variables)
 {
     QVariantHash::const_iterator it = variables.constBegin();
     QVariantHash::const_iterator end = variables.constEnd();
-    for (; it != end; ++it)
-    {
+    for (; it != end; ++it) {
         d->context.insert(it.key(), it.value());
     }
 }
@@ -123,11 +119,9 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
     NoEscapeStream stream(&textStream);
     t->render(&stream, &d->context);
 
-    if (t->error() != Grantlee::NoError)
-    {
+    if (t->error() != Grantlee::NoError) {
         d->errorString = t->errorString();
-    }
-    else
+    } else
     {
         d->errorString.clear();
     }
@@ -137,13 +131,10 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
         QMutableStringListIterator it(lines);
 
         // Remove empty lines from the start of the document
-        while (it.hasNext())
-        {
-            if (it.next().trimmed().isEmpty())
-            {
+        while (it.hasNext()) {
+            if (it.next().trimmed().isEmpty()) {
                 it.remove();
-            }
-            else
+            } else
             {
                 break;
             }
@@ -153,11 +144,9 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
         it.toFront();
         bool prePreviousEmpty = false;
         bool previousEmpty = false;
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             bool currentEmpty = it.peekNext().trimmed().isEmpty();
-            if (!prePreviousEmpty && previousEmpty && !currentEmpty)
-            {
+            if (!prePreviousEmpty && previousEmpty && !currentEmpty) {
                 it.remove();
             }
             prePreviousEmpty = previousEmpty;
@@ -168,11 +157,9 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
         // Compress multiple empty lines
         it.toFront();
         previousEmpty = false;
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             bool currentEmpty = it.next().trimmed().isEmpty();
-            if (currentEmpty && previousEmpty)
-            {
+            if (currentEmpty && previousEmpty) {
                 it.remove();
             }
             previousEmpty = currentEmpty;
@@ -180,13 +167,10 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
 
         // Remove empty lines from the end
         it.toBack();
-        while (it.hasPrevious())
-        {
-            if (it.previous().trimmed().isEmpty())
-            {
+        while (it.hasPrevious()) {
+            if (it.previous().trimmed().isEmpty()) {
                 it.remove();
-            }
-            else
+            } else
             {
                 break;
             }
@@ -197,21 +181,16 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
         it.insert(QString());
 
         output = lines.join(QLatin1Char('\n'));
-    }
-    else if (d->emptyLinesPolicy == RemoveEmptyLines)
-    {
+    } else if (d->emptyLinesPolicy == RemoveEmptyLines) {
         QStringList lines = output.split(QLatin1Char('\n'), QString::SkipEmptyParts);
         QMutableStringListIterator it(lines);
-        while (it.hasNext())
-        {
-            if (it.next().trimmed().isEmpty())
-            {
+        while (it.hasNext()) {
+            if (it.next().trimmed().isEmpty()) {
                 it.remove();
             }
         }
         it.toBack();
-        if (lines.size() > 1)
-        {
+        if (lines.size() > 1) {
             it.insert(QString());
         }
         output = lines.join(QLatin1Char('\n'));
@@ -239,6 +218,7 @@ QStringList TemplateRenderer::render(const QStringList& contents) const
     for (const QString& content : contents) {
         ret << render(content);
     }
+
     return ret;
 }
 
@@ -260,8 +240,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
     const QDir baseDir(baseUrl.path());
 
     QRegExp nonAlphaNumeric(QStringLiteral("\\W"));
-    for (QHash<QString,QUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it)
-    {
+    for (QHash<QString, QUrl>::const_iterator it = fileUrls.constBegin(); it != fileUrls.constEnd(); ++it) {
         QString cleanName = it.key().toLower();
         cleanName.replace(nonAlphaNumeric, QStringLiteral("_"));
         const QString path = it.value().toLocalFile();
@@ -271,18 +250,16 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
 
     const KArchiveDirectory* directory = fileTemplate.directory();
     ArchiveTemplateLocation location(directory);
-    foreach (const SourceFileTemplate::OutputFile& outputFile, fileTemplate.outputFiles())
-    {
+    foreach (const SourceFileTemplate::OutputFile& outputFile, fileTemplate.outputFiles()) {
         const KArchiveEntry* entry = directory->entry(outputFile.fileName);
-        if (!entry)
-        {
-            qCWarning(LANGUAGE) << "Entry" << outputFile.fileName << "is mentioned in group" << outputFile.identifier << "but is not present in the archive";
+        if (!entry) {
+            qCWarning(LANGUAGE) << "Entry" << outputFile.fileName << "is mentioned in group" << outputFile.identifier <<
+                "but is not present in the archive";
             continue;
         }
 
         const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
-        if (!file)
-        {
+        if (!file) {
             qCWarning(LANGUAGE) << "Entry" << entry->name() << "is not a file";
             continue;
         }
@@ -291,7 +268,8 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
         IndexedString document(url);
         KTextEditor::Range range(KTextEditor::Cursor(0, 0), 0);
 
-        DocumentChange change(document, range, QString(), render(QString::fromUtf8(file->data()), outputFile.identifier));
+        DocumentChange change(document, range, QString(),
+            render(QString::fromUtf8(file->data()), outputFile.identifier));
         changes.addChange(change);
         qCDebug(LANGUAGE) << "Added change for file" << document.str();
     }

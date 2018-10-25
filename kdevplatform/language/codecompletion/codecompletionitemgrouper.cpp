@@ -25,15 +25,14 @@
 using namespace KDevelop;
 
 ///@todo make configurable. These are the attributes that can be respected for grouping.
-const int SimplifiedAttributesExtractor::groupingProperties = 
-  CodeCompletionModel::Public
-| CodeCompletionModel::Protected
-| CodeCompletionModel::Private
-| CodeCompletionModel::Static
-| CodeCompletionModel::TypeAlias
-| CodeCompletionModel::Variable
-| CodeCompletionModel::Class
-| CodeCompletionModel::GlobalScope
-| CodeCompletionModel::LocalScope
-| CodeCompletionModel::NamespaceScope;
-
+const int SimplifiedAttributesExtractor::groupingProperties =
+    CodeCompletionModel::Public
+    | CodeCompletionModel::Protected
+    | CodeCompletionModel::Private
+    | CodeCompletionModel::Static
+    | CodeCompletionModel::TypeAlias
+    | CodeCompletionModel::Variable
+    | CodeCompletionModel::Class
+    | CodeCompletionModel::GlobalScope
+    | CodeCompletionModel::LocalScope
+    | CodeCompletionModel::NamespaceScope;

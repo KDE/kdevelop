@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DECLARATION_ID_H
 #define KDEVPLATFORM_DECLARATION_ID_H
@@ -27,7 +27,6 @@
 //krazy:excludeall=dpointer
 
 namespace KDevelop {
-
 class Declaration;
 class TopDUContext;
 
@@ -48,8 +47,9 @@ class TopDUContext;
  *
  * \note This only works when the Declaration is in the symbol table.
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId
+{
+public:
     /**
      * Constructor for indirect access to a declaration.  The resulting DeclarationId will not
      * have a direct reference to the Declaration, but will look it up as needed.
@@ -59,8 +59,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \param specialization Specialization index (see class documentation).
      */
     explicit DeclarationId(const IndexedQualifiedIdentifier& id = IndexedQualifiedIdentifier(),
-                  uint additionalId = 0,
-                  const IndexedInstantiationInformation& specialization = IndexedInstantiationInformation());
+                           uint additionalId = 0,
+                           const IndexedInstantiationInformation& specialization = IndexedInstantiationInformation());
 
     /**
      * Constructor for direct access to a declaration.  The resulting DeclarationId will
@@ -71,7 +71,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      */
     explicit DeclarationId(const IndexedDeclaration& decl,
                            const IndexedInstantiationInformation& specialization = IndexedInstantiationInformation());
-
 
     DeclarationId(const DeclarationId& rhs);
 
@@ -85,16 +84,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \param rhs declaration identifier to compare.
      * \returns true if equal, otherwise false.
      */
-    bool operator==(const DeclarationId& rhs) const {
-      if(m_isDirect != rhs.m_isDirect)
-        return false;
+    bool operator==(const DeclarationId& rhs) const
+    {
+        if (m_isDirect != rhs.m_isDirect)
+            return false;
 
-      if(!m_isDirect)
-        return m_indirectData.identifier == rhs.m_indirectData.identifier
-          && m_indirectData.additionalIdentity == rhs.m_indirectData.additionalIdentity
-          && m_specialization == rhs.m_specialization;
-      else
-        return m_directData == rhs.m_directData && m_specialization == rhs.m_specialization;
+        if (!m_isDirect)
+            return m_indirectData.identifier == rhs.m_indirectData.identifier
+                   && m_indirectData.additionalIdentity == rhs.m_indirectData.additionalIdentity
+                   && m_specialization == rhs.m_specialization;
+        else
+            return m_directData == rhs.m_directData && m_specialization == rhs.m_specialization;
     }
 
     /**
@@ -103,15 +103,17 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      * \param rhs declaration identifier to compare.
      * \returns true if not equal, otherwise false.
      */
-    bool operator!=(const DeclarationId& rhs) const {
-      return !operator==(rhs);
+    bool operator!=(const DeclarationId& rhs) const
+    {
+        return !operator==(rhs);
     }
 
     /**
      * Determine whether this declaration identifier references a valid declaration.
      */
-    bool isValid() const {
-      return (m_isDirect && m_directData.isValid()) || m_indirectData.identifier.isValid();
+    bool isValid() const
+    {
+        return (m_isDirect && m_directData.isValid()) || m_indirectData.identifier.isValid();
     }
 
     /**
@@ -121,11 +123,13 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      *          depending on whether the id is direct or indirect,
      *          and thus you cannot compare hashes for declaration equality (use operator==() instead)
      */
-    uint hash() const {
-      if(m_isDirect)
-        return KDevHash() << m_directData.hash() << m_specialization.index();
-      else
-        return KDevHash() << m_indirectData.identifier.index() << m_indirectData.additionalIdentity << m_specialization.index();
+    uint hash() const
+    {
+        if (m_isDirect)
+            return KDevHash() << m_directData.hash() << m_specialization.index();
+        else
+            return KDevHash() << m_indirectData.identifier.index() << m_indirectData.additionalIdentity <<
+                   m_specialization.index();
     }
 
     /**
@@ -174,20 +178,21 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
      */
     QualifiedIdentifier qualifiedIdentifier() const;
 
-  private:
+private:
     /// An indirect reference to the declaration, which uses the symbol-table for lookup. Should be preferred for all
     /// declarations that are in the symbol-table
-    struct Indirect {
-      IndexedQualifiedIdentifier identifier;
-      /// Hash from signature, or similar. Used to disambiguate multiple declarations of the same name.
-      uint additionalIdentity;
+    struct Indirect
+    {
+        IndexedQualifiedIdentifier identifier;
+        /// Hash from signature, or similar. Used to disambiguate multiple declarations of the same name.
+        uint additionalIdentity;
 
-      Indirect& operator=(const Indirect& rhs) = default;
+        Indirect& operator=(const Indirect& rhs) = default;
     };
 
     union {
-      Indirect m_indirectData;
-      IndexedDeclaration m_directData;
+        Indirect m_indirectData;
+        IndexedDeclaration m_directData;
     };
     bool m_isDirect;
 
@@ -197,10 +202,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT DeclarationId {
     IndexedInstantiationInformation m_specialization;
 };
 
-inline uint qHash(const KDevelop::DeclarationId& id) {
-  return id.hash();
+inline uint qHash(const KDevelop::DeclarationId& id)
+{
+    return id.hash();
 }
-
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::DeclarationId, Q_MOVABLE_TYPE);

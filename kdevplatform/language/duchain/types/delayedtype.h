@@ -16,7 +16,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DELAYEDTYPE_H
 #define KDEVPLATFORM_DELAYEDTYPE_H
@@ -24,8 +24,7 @@
 #include "abstracttype.h"
 #include "../identifier.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 class DelayedTypeData;
 
 /**
@@ -36,72 +35,73 @@ class DelayedTypeData;
  * In a template-class, many types can not be evaluated at the time they are used, because they depend on unknown template-parameters.
  * Delayed types store the way the type would be searched, and can be used to find the type once the template-paremeters have values.
  * */
-class KDEVPLATFORMLANGUAGE_EXPORT DelayedType : public KDevelop::AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT DelayedType
+    : public KDevelop::AbstractType
 {
 public:
-  typedef TypePtr<DelayedType> Ptr;
+    typedef TypePtr<DelayedType> Ptr;
 
-  /// An enumeration of
-  enum Kind : quint8 {
-    Delayed /**< The type should be resolved later. This is the default. */,
-    Unresolved /**< The type could not be resolved */
-  };
+    /// An enumeration of
+    enum Kind : quint8 {
+        Delayed /**< The type should be resolved later. This is the default. */,
+        Unresolved /**< The type could not be resolved */
+    };
 
-  /// Default constructor
-  DelayedType();
-  /// Copy constructor. \param rhs type to copy
-  DelayedType(const DelayedType& rhs);
-  /// Constructor using raw data. \param data internal data.
-  explicit DelayedType(DelayedTypeData& data);
-  /// Destructor
-  ~DelayedType() override;
+    /// Default constructor
+    DelayedType();
+    /// Copy constructor. \param rhs type to copy
+    DelayedType(const DelayedType& rhs);
+    /// Constructor using raw data. \param data internal data.
+    explicit DelayedType(DelayedTypeData& data);
+    /// Destructor
+    ~DelayedType() override;
 
-  /**
-   * Access the type identifier which this type represents.
-   *
-   * \returns the type identifier.
-   */
-  KDevelop::IndexedTypeIdentifier identifier() const;
+    /**
+     * Access the type identifier which this type represents.
+     *
+     * \returns the type identifier.
+     */
+    KDevelop::IndexedTypeIdentifier identifier() const;
 
-  /**
-   * Set the type identifier which this type represents.
-   *
-   * \param identifier the type identifier.
-   */
-  void setIdentifier(const KDevelop::IndexedTypeIdentifier& identifier);
+    /**
+     * Set the type identifier which this type represents.
+     *
+     * \param identifier the type identifier.
+     */
+    void setIdentifier(const KDevelop::IndexedTypeIdentifier& identifier);
 
-  QString toString() const override;
+    QString toString() const override;
 
-  AbstractType* clone() const override;
+    AbstractType* clone() const override;
 
-  bool equals(const AbstractType* rhs) const override;
+    bool equals(const AbstractType* rhs) const override;
 
-  Kind kind() const;
-  void setKind(Kind kind);
+    Kind kind() const;
+    void setKind(Kind kind);
 
-  uint hash() const override;
+    uint hash() const override;
 
-  WhichType whichType() const override;
+    WhichType whichType() const override;
 
-  enum {
-    Identity = 8
-  };
+    enum {
+        Identity = 8
+    };
 
-  typedef DelayedTypeData Data;
+    typedef DelayedTypeData Data;
 
-  protected:
-    void accept0 (KDevelop::TypeVisitor *v) const override ;
+protected:
+    void accept0 (KDevelop::TypeVisitor* v) const override;
     TYPE_DECLARE_DATA(DelayedType)
 };
 
-template<>
-inline DelayedType* fastCast<DelayedType*>(AbstractType* from) {
-  if(!from || from->whichType() != AbstractType::TypeDelayed)
-    return nullptr;
-  else
-    return static_cast<DelayedType*>(from);
+template <>
+inline DelayedType* fastCast<DelayedType*>(AbstractType* from)
+{
+    if (!from || from->whichType() != AbstractType::TypeDelayed)
+        return nullptr;
+    else
+        return static_cast<DelayedType*>(from);
 }
-
 }
 
 #endif

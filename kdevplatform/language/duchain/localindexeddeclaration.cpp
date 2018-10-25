@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "localindexeddeclaration.h"
 
@@ -25,28 +25,28 @@
 using namespace KDevelop;
 
 LocalIndexedDeclaration::LocalIndexedDeclaration(Declaration* decl)
-  : m_declarationIndex(decl ? decl->m_indexInTopContext : 0)
+    : m_declarationIndex(decl ? decl->m_indexInTopContext : 0)
 {
 }
 
 LocalIndexedDeclaration::LocalIndexedDeclaration(uint declarationIndex)
-  : m_declarationIndex(declarationIndex)
+    : m_declarationIndex(declarationIndex)
 {
 }
 
 Declaration* LocalIndexedDeclaration::data(TopDUContext* top) const
 {
-  if(!m_declarationIndex)
-    return nullptr;
-  Q_ASSERT(top);
-  return top->m_dynamicData->declarationForIndex(m_declarationIndex);
+    if (!m_declarationIndex)
+        return nullptr;
+    Q_ASSERT(top);
+    return top->m_dynamicData->declarationForIndex(m_declarationIndex);
 }
 
 bool LocalIndexedDeclaration::isLoaded(TopDUContext* top) const
 {
-  if(!m_declarationIndex)
-    return false;
+    if (!m_declarationIndex)
+        return false;
 
-  Q_ASSERT(top);
-  return top->m_dynamicData->isDeclarationForIndexLoaded(m_declarationIndex);
+    Q_ASSERT(top);
+    return top->m_dynamicData->isDeclarationForIndexLoaded(m_declarationIndex);
 }

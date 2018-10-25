@@ -31,8 +31,9 @@
 namespace KDevelop {
 class ColorCache;
 
-class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors {
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors
+{
+public:
     explicit ConfigurableHighlightingColors();
 
     void addAttribute(int number, const KTextEditor::Attribute::Ptr& attribute);
@@ -43,7 +44,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors {
 
     KTextEditor::Attribute::Ptr defaultAttribute() const;
 
-  private:
+private:
     KTextEditor::Attribute::Ptr m_defaultAttribute;
     QHash<int, KTextEditor::Attribute::Ptr> m_attributes;
     QString m_highlightingName;
@@ -51,8 +52,10 @@ class KDEVPLATFORMLANGUAGE_EXPORT ConfigurableHighlightingColors {
 
 // ######### start CodeHighlightingColors
 
-class CodeHighlightingColors : public ConfigurableHighlightingColors {
-  public:
+class CodeHighlightingColors
+    : public ConfigurableHighlightingColors
+{
+public:
     explicit CodeHighlightingColors(ColorCache* cache);
 };
 }

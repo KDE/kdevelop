@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_NAMESPACEALIASDECLARATION_H
 #define KDEVPLATFORM_NAMESPACEALIASDECLARATION_H
@@ -22,18 +22,18 @@
 #include "declaration.h"
 #include "declarationdata.h"
 
-namespace KDevelop
-{
-class KDEVPLATFORMLANGUAGE_EXPORT NamespaceAliasDeclarationData : public DeclarationData
+namespace KDevelop {
+class KDEVPLATFORMLANGUAGE_EXPORT NamespaceAliasDeclarationData
+    : public DeclarationData
 {
 public:
-  NamespaceAliasDeclarationData() {}
-  NamespaceAliasDeclarationData( const NamespaceAliasDeclarationData& rhs )
-      : DeclarationData( rhs )
-      , m_importIdentifier(rhs.m_importIdentifier)
-  {
-  }
-  IndexedQualifiedIdentifier m_importIdentifier; //The identifier that was imported
+    NamespaceAliasDeclarationData() {}
+    NamespaceAliasDeclarationData(const NamespaceAliasDeclarationData& rhs)
+        : DeclarationData(rhs)
+        , m_importIdentifier(rhs.m_importIdentifier)
+    {
+    }
+    IndexedQualifiedIdentifier m_importIdentifier; //The identifier that was imported
 };
 /**
  * A class which represents a "using namespace" statement, or a "namespace A = B" statement.
@@ -48,39 +48,41 @@ public:
  * the declaration is additionally added to the persistent symbol table with its real scope and globalAliasIdentifer
  * appended, to allow an efficient lookup.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT NamespaceAliasDeclaration : public Declaration
+class KDEVPLATFORMLANGUAGE_EXPORT NamespaceAliasDeclaration
+    : public Declaration
 {
 public:
-  NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs);
-  NamespaceAliasDeclaration(const RangeInRevision& range, DUContext* context);
-  explicit NamespaceAliasDeclaration(NamespaceAliasDeclarationData& data);
+    NamespaceAliasDeclaration(const NamespaceAliasDeclaration& rhs);
+    NamespaceAliasDeclaration(const RangeInRevision& range, DUContext* context);
+    explicit NamespaceAliasDeclaration(NamespaceAliasDeclarationData& data);
 
-  ~NamespaceAliasDeclaration() override;
-  ///A NamespaceAliasDeclaration cannot have a type, so setAbstractType does nothing here.
-  void setAbstractType(AbstractType::Ptr type) override;
+    ~NamespaceAliasDeclaration() override;
+    ///A NamespaceAliasDeclaration cannot have a type, so setAbstractType does nothing here.
+    void setAbstractType(AbstractType::Ptr type) override;
 
-  /**The identifier that was imported.*/
-  QualifiedIdentifier importIdentifier() const;
-  /**
-    * The identifier must be absolute (Resolve it before setting it!)
-    * Although the identifier is global, the explicitlyGlobal() member must not be set
-    */
-  void setImportIdentifier(const QualifiedIdentifier& id);
+    /**The identifier that was imported.*/
+    QualifiedIdentifier importIdentifier() const;
+    /**
+     * The identifier must be absolute (Resolve it before setting it!)
+     * Although the identifier is global, the explicitlyGlobal() member must not be set
+     */
+    void setImportIdentifier(const QualifiedIdentifier& id);
 
-  void setInSymbolTable(bool inSymbolTable) override;  
-  
-  enum {
-    Identity = 13
-  };
-  
-  typedef Declaration BaseClass;
+    void setInSymbolTable(bool inSymbolTable) override;
 
-  QString toString() const override;
+    enum {
+        Identity = 13
+    };
+
+    typedef Declaration BaseClass;
+
+    QString toString() const override;
+
 private:
-  void unregisterAliasIdentifier();
-  void registerAliasIdentifier();
-  Declaration* clonePrivate() const override;
-  DUCHAIN_DECLARE_DATA(NamespaceAliasDeclaration)
+    void unregisterAliasIdentifier();
+    void registerAliasIdentifier();
+    Declaration* clonePrivate() const override;
+    DUCHAIN_DECLARE_DATA(NamespaceAliasDeclaration)
 };
 }
 

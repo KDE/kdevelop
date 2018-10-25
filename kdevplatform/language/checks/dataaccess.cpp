@@ -14,14 +14,17 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "dataaccess.h"
 
 using namespace KDevelop;
 
-DataAccess::DataAccess(const CursorInRevision& cur, DataAccess::DataAccessFlags flags, const KDevelop::RangeInRevision& range)
-  : m_flags(flags), m_pos(cur), m_value(range)
+DataAccess::DataAccess(const CursorInRevision& cur, DataAccess::DataAccessFlags flags,
+                       const KDevelop::RangeInRevision& range)
+    : m_flags(flags)
+    , m_pos(cur)
+    , m_value(range)
 {}
 
 bool DataAccess::isRead() const
@@ -41,7 +44,7 @@ bool DataAccess::isCall() const
 
 CursorInRevision DataAccess::pos() const
 {
-    return m_pos; 
+    return m_pos;
 }
 
 DataAccess::DataAccessFlags DataAccess::flags() const

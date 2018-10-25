@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_TYPEREPOSITORY_H
 #define KDEVPLATFORM_TYPEREPOSITORY_H
@@ -22,7 +22,6 @@
 #include <language/duchain/types/abstracttype.h>
 
 namespace KDevelop {
-
 struct ReferenceCountManager;
 class AbstractRepositoryManager;
 
@@ -38,7 +37,6 @@ public:
 };
 
 AbstractRepositoryManager* typeRepositoryManager();
-
 }
 
 #endif

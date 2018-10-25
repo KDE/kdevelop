@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_RENAMEACTION_H
 #define KDEVPLATFORM_RENAMEACTION_H
@@ -26,7 +26,6 @@
 #include <language/languageexport.h>
 
 namespace KDevelop {
-
 class Identifier;
 
 /**
@@ -45,10 +44,12 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RevisionedFileRanges
     KDevelop::RevisionReference revision;
     QVector<KDevelop::RangeInRevision> ranges;
 
-    static QVector<RevisionedFileRanges> convert(const QMap<KDevelop::IndexedString, QVector<KDevelop::RangeInRevision> >& uses);
+    static QVector<RevisionedFileRanges> convert(const QMap<KDevelop::IndexedString,
+                                                     QVector<KDevelop::RangeInRevision>>& uses);
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT RenameAction : public KDevelop::IAssistantAction
+class KDEVPLATFORMLANGUAGE_EXPORT RenameAction
+    : public KDevelop::IAssistantAction
 {
     Q_OBJECT
 
@@ -66,7 +67,6 @@ public:
 private:
     const QScopedPointer<class RenameActionPrivate> d;
 };
-
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::RevisionedFileRanges, Q_MOVABLE_TYPE);

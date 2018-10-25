@@ -15,7 +15,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_LOCALINDEXEDDUCONTEXT_H
 #define KDEVPLATFORM_LOCALINDEXEDDUCONTEXT_H
@@ -24,15 +24,15 @@
 #include <QtGlobal>
 
 namespace KDevelop {
-
 class DUContext;
 class TopDUContext;
 
 /**
  * Represents a DUContext within a TopDUContext, without storing the TopDUContext(It must be given to data())
  */
-class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
-  public:
+class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext
+{
+public:
     explicit LocalIndexedDUContext(DUContext* decl);
     explicit LocalIndexedDUContext(uint contextIndex = 0);
 
@@ -41,35 +41,39 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedDUContext {
      */
     DUContext* data(TopDUContext* top) const;
 
-    bool operator==(const LocalIndexedDUContext& rhs) const {
-      return m_contextIndex == rhs.m_contextIndex;
+    bool operator==(const LocalIndexedDUContext& rhs) const
+    {
+        return m_contextIndex == rhs.m_contextIndex;
     }
 
-    bool isValid() const {
-      return m_contextIndex != 0;
+    bool isValid() const
+    {
+        return m_contextIndex != 0;
     }
 
-    uint hash() const {
-      return m_contextIndex * 29;
+    uint hash() const
+    {
+        return m_contextIndex * 29;
     }
 
-    bool operator<(const LocalIndexedDUContext& rhs) const {
-      return m_contextIndex < rhs.m_contextIndex;
+    bool operator<(const LocalIndexedDUContext& rhs) const
+    {
+        return m_contextIndex < rhs.m_contextIndex;
     }
 
     /**
      * Index within the top-context
      */
-    uint localIndex() const {
-      return m_contextIndex;
+    uint localIndex() const
+    {
+        return m_contextIndex;
     }
 
     bool isLoaded(TopDUContext* top) const;
 
-  private:
+private:
     uint m_contextIndex;
 };
-
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::LocalIndexedDUContext, Q_MOVABLE_TYPE);

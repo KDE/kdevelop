@@ -15,7 +15,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_ICREATECLASSHELPER_H
 #define KDEVPLATFORM_ICREATECLASSHELPER_H
@@ -26,7 +26,6 @@
 class QUrl;
 
 namespace KDevelop {
-
 class TemplateClassGenerator;
 
 /**
@@ -58,7 +57,6 @@ public:
      */
     virtual QList<DeclarationPointer> defaultMethods(const QString& name) const = 0;
 };
-
 }
 
 #endif // KDEVPLATFORM_ICREATECLASSHELPER_H

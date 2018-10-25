@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_CODEREPRESENTATION_H
 #define KDEVPLATFORM_CODEREPRESENTATION_H
@@ -30,34 +30,38 @@
 class QString;
 
 namespace KTextEditor {
-    class Range;
+class Range;
 }
 
 namespace KDevelop {
-
 struct KDevEditingTransaction;
 
 class IndexedString;
 
 //NOTE: this is ugly, but otherwise kate might remove tabs again :-/
 // see also: https://bugs.kde.org/show_bug.cgi?id=291074
-struct EditorDisableReplaceTabs {
-    explicit EditorDisableReplaceTabs(KTextEditor::Document* document) : m_iface(qobject_cast<KTextEditor::ConfigInterface*>(document)), m_count(0) {
+struct EditorDisableReplaceTabs
+{
+    explicit EditorDisableReplaceTabs(KTextEditor::Document* document) : m_iface(qobject_cast<KTextEditor::ConfigInterface*>(
+                document))
+        , m_count(0)
+    {
         ++m_count;
-        if( m_count > 1 )
+        if (m_count > 1)
             return;
-        if ( m_iface ) {
+        if (m_iface) {
             m_oldReplaceTabs = m_iface->configValue(configKey());
             m_iface->setConfigValue(configKey(), false);
         }
     }
 
-    ~EditorDisableReplaceTabs() {
+    ~EditorDisableReplaceTabs()
+    {
         --m_count;
-        if( m_count > 0 )
+        if (m_count > 0)
             return;
 
-        Q_ASSERT( m_count == 0 );
+        Q_ASSERT(m_count == 0);
 
         if (m_iface)
             m_iface->setConfigValue(configKey(), m_oldReplaceTabs);
@@ -73,7 +77,8 @@ struct EditorDisableReplaceTabs {
     QVariant m_oldReplaceTabs;
 };
 
-struct KDevEditingTransaction {
+struct KDevEditingTransaction
+{
     explicit KDevEditingTransaction(KTextEditor::Document* document)
         : edit(document)
         , disableReplaceTabs(document)
@@ -85,11 +90,14 @@ struct KDevEditingTransaction {
 };
 
 /**
-  * Allows getting code-lines conveniently, either through an open editor, or from a disk-loaded file.
-  */
-class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
-  public:
-    virtual ~CodeRepresentation() {
+ * Allows getting code-lines conveniently, either through an open editor, or from a disk-loaded file.
+ */
+class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation
+    : public QSharedData
+{
+public:
+    virtual ~CodeRepresentation()
+    {
     }
     virtual QString line(int line) const = 0;
     virtual int lines() const = 0;
@@ -105,48 +113,50 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation : public QSharedData {
      * */
     virtual QVector<KTextEditor::Range> grep(const QString& identifier, bool surroundedByBoundary = true) const = 0;
     /**
-      * Overwrites the text in the file with the new given one
-      *
-      * @return true on success
-      */
+     * Overwrites the text in the file with the new given one
+     *
+     * @return true on success
+     */
     virtual bool setText(const QString&) = 0;
     /** @return true if this representation represents an actual file on disk */
     virtual bool fileExists() const = 0;
-    
-    /** 
-      * Can be used for example from tests to disallow on-disk changes. When such a change is done, an assertion is triggered.
-      * You should enable this within tests, unless you really want to work on the disk.
-      */
-    static void setDiskChangesForbidden(bool changesForbidden);
-   
+
     /**
-      * Returns the specified name as a url for aritificial source code
-      * suitable for code being inserted into the parser
-      */
-    static QString artificialPath(const QString & name);
- 
+     * Can be used for example from tests to disallow on-disk changes. When such a change is done, an assertion is triggered.
+     * You should enable this within tests, unless you really want to work on the disk.
+     */
+    static void setDiskChangesForbidden(bool changesForbidden);
+
+    /**
+     * Returns the specified name as a url for aritificial source code
+     * suitable for code being inserted into the parser
+     */
+    static QString artificialPath(const QString& name);
+
     typedef QExplicitlySharedDataPointer<CodeRepresentation> Ptr;
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation : public CodeRepresentation {
-  public:
-      /** Used to group edit-history together. Call this optionally before a bunch
-       *  of replace() calls, to group them together. */
-      virtual KDevEditingTransaction::Ptr makeEditTransaction() = 0;
-      virtual bool replace(const KTextEditor::Range& range, const QString& oldText,
-                           const QString& newText, bool ignoreOldText = false) = 0;
-    
-      typedef QExplicitlySharedDataPointer<DynamicCodeRepresentation> Ptr;
+class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation
+    : public CodeRepresentation
+{
+public:
+    /** Used to group edit-history together. Call this optionally before a bunch
+     *  of replace() calls, to group them together. */
+    virtual KDevEditingTransaction::Ptr makeEditTransaction() = 0;
+    virtual bool replace(const KTextEditor::Range& range, const QString& oldText,
+                         const QString& newText, bool ignoreOldText = false) = 0;
+
+    typedef QExplicitlySharedDataPointer<DynamicCodeRepresentation> Ptr;
 };
 
 /**
-  * Creates a code-representation for the given url, that allows conveniently accessing its data. Returns zero on failure.
-  */
+ * Creates a code-representation for the given url, that allows conveniently accessing its data. Returns zero on failure.
+ */
 KDEVPLATFORMLANGUAGE_EXPORT CodeRepresentation::Ptr createCodeRepresentation(const IndexedString& url);
 
 /**
-  * @return true if an artificial code representation already exists for the specified URL
-  */
+ * @return true if an artificial code representation already exists for the specified URL
+ */
 KDEVPLATFORMLANGUAGE_EXPORT bool artificialCodeRepresentationExists(const IndexedString& url);
 
 /**
@@ -155,32 +165,33 @@ KDEVPLATFORMLANGUAGE_EXPORT bool artificialCodeRepresentationExists(const Indexe
  *
  *  The artificial code is automatically removed when the object is destroyed.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation : public QSharedData {
-    public:
-        /**
-         * Inserts an artifial source-code representation with filename @p file and the contents @p text
-         * If @p file is not an absolute path or url, it will be made absolute using the CodeRepresentation::artifialUrl()
-         * function, while ensuring that the name is unique.
-         */
-        InsertArtificialCodeRepresentation(const IndexedString& file, const QString& text);
-        ~InsertArtificialCodeRepresentation();
-        
-        void setText(const QString& text);
-        QString text() const;
-        /**
-          * Returns the file-name for this code-representation.
-          */
-        IndexedString file();
-    private:
-        InsertArtificialCodeRepresentation(const InsertArtificialCodeRepresentation&);
-        InsertArtificialCodeRepresentation& operator=(const InsertArtificialCodeRepresentation&);
-        
-        IndexedString m_file;
+class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation
+    : public QSharedData
+{
+public:
+    /**
+     * Inserts an artifial source-code representation with filename @p file and the contents @p text
+     * If @p file is not an absolute path or url, it will be made absolute using the CodeRepresentation::artifialUrl()
+     * function, while ensuring that the name is unique.
+     */
+    InsertArtificialCodeRepresentation(const IndexedString& file, const QString& text);
+    ~InsertArtificialCodeRepresentation();
+
+    void setText(const QString& text);
+    QString text() const;
+    /**
+     * Returns the file-name for this code-representation.
+     */
+    IndexedString file();
+
+private:
+    InsertArtificialCodeRepresentation(const InsertArtificialCodeRepresentation&);
+    InsertArtificialCodeRepresentation& operator=(const InsertArtificialCodeRepresentation&);
+
+    IndexedString m_file;
 };
 
 typedef QExplicitlySharedDataPointer<InsertArtificialCodeRepresentation> InsertArtificialCodeRepresentationPointer;
-
 }
-
 
 #endif

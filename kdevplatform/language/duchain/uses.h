@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_USES_H
 #define KDEVPLATFORM_USES_H
@@ -25,17 +25,17 @@
 #include <QScopedPointer>
 
 namespace KDevelop {
-
-  class DeclarationId;
-  class IndexedTopDUContext;
+class DeclarationId;
+class IndexedTopDUContext;
 
 /**
  * Global mapping of Declaration-Ids to top-contexts, protected through DUChainLock.
  *
  * To retrieve the actual uses, query the duchain for the files.
  * */
-  class KDEVPLATFORMLANGUAGE_EXPORT Uses {
-    public:
+class KDEVPLATFORMLANGUAGE_EXPORT Uses
+{
+public:
     /// Constructor.
     Uses();
     /// Destructor.
@@ -56,9 +56,9 @@ namespace KDevelop {
     ///Gets the top-contexts of all users assigned to the declaration-id
     KDevVarLengthArray<IndexedTopDUContext> uses(const DeclarationId& id) const;
 
-    private:
-      const QScopedPointer<class UsesPrivate> d;
-  };
+private:
+    const QScopedPointer<class UsesPrivate> d;
+};
 }
 
 #endif

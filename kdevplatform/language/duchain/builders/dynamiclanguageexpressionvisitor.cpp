@@ -1,22 +1,22 @@
 /***************************************************************************
- *   This file is part of KDevelop                                         *
- *   Copyright 2014 Sven Brauch <svenbrauch@gmail.com>                     *
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU Library General Public License as       *
- *   published by the Free Software Foundation; either version 2 of the    *
- *   License, or (at your option) any later version.                       *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU Library General Public     *
- *   License along with this program; if not, write to the                 *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
- ***************************************************************************/
+*   This file is part of KDevelop                                         *
+*   Copyright 2014 Sven Brauch <svenbrauch@gmail.com>                     *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU Library General Public License as       *
+*   published by the Free Software Foundation; either version 2 of the    *
+*   License, or (at your option) any later version.                       *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU Library General Public     *
+*   License along with this program; if not, write to the                 *
+*   Free Software Foundation, Inc.,                                       *
+*   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
+***************************************************************************/
 
 #include "dynamiclanguageexpressionvisitor.h"
 
@@ -24,7 +24,6 @@
 #include "language/duchain/declaration.h"
 
 namespace KDevelop {
-
 DynamicLanguageExpressionVisitor::DynamicLanguageExpressionVisitor(DynamicLanguageExpressionVisitor* parent)
     : m_context(parent->m_context)
     , m_parentVisitor(parent)
@@ -53,7 +52,7 @@ void DynamicLanguageExpressionVisitor::encounter(const AbstractType::Ptr& type, 
 void DynamicLanguageExpressionVisitor::encounterLvalue(const DeclarationPointer& lvalueDeclaration)
 {
     m_lastDeclaration = lvalueDeclaration;
-    if ( lvalueDeclaration ) {
+    if (lvalueDeclaration) {
         m_lastType = lvalueDeclaration->abstractType();
     }
 }
@@ -69,7 +68,6 @@ AbstractType::Ptr DynamicLanguageExpressionVisitor::encounterPreprocess(Abstract
 {
     return type;
 }
-
 } // namespace KDevelop
 
 // kate: space-indent on; indent-width 4;

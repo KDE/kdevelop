@@ -24,9 +24,11 @@
 
 #include <QObject>
 
-class TestDUChain : public QObject
+class TestDUChain
+    : public QObject
 {
     Q_OBJECT
+
 private Q_SLOTS:
     void testFormatComment_data();
     void testFormatComment();

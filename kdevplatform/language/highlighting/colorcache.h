@@ -35,18 +35,18 @@ class View;
 }
 
 namespace KDevelop {
-
 class CodeHighlightingColors;
 class IDocument;
 
 /**
  * A singleton which holds the global default colors, adapted to the current color scheme
  */
-class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
+class KDEVPLATFORMLANGUAGE_EXPORT ColorCache
+    : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     ~ColorCache() override;
 
     /// access the global color cache
@@ -87,11 +87,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     QColor generatedColor(uint num) const;
 
     /**
-      * @returns the number of primary and supplementary colors
-      *
-      * @see generatedColor()
-      * @see primaryColorCount()
-      */
+     * @returns the number of primary and supplementary colors
+     *
+     * @see generatedColor()
+     * @see primaryColorCount()
+     */
     uint validColorCount() const;
 
     /**
@@ -104,12 +104,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// access the foreground color
     QColor foregroundColor() const;
 
-  Q_SIGNALS:
+Q_SIGNALS:
     /// will be emitted whenever the colors got changed
     /// @see update()
     void colorsGotChanged();
 
-  private Q_SLOTS:
+private Q_SLOTS:
     /// if necessary, adapt to the colors of this document
     void slotDocumentActivated();
     /// settings got changed, update to the settings of the sender
@@ -126,8 +126,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
 
     bool tryActiveDocument();
 
-  private:
-    explicit ColorCache(QObject *parent = nullptr);
+private:
+    explicit ColorCache(QObject* parent = nullptr);
     static ColorCache* m_self;
 
     /// get @p totalGeneratedColors colors from the color wheel and adapt them to the current color scheme
@@ -174,7 +174,6 @@ class KDEVPLATFORMLANGUAGE_EXPORT ColorCache : public QObject
     /// The view we are listening to for setting changes.
     QPointer<KTextEditor::View> m_view;
 };
-
 }
 
 #endif // KDEVPLATFORM_COLORCACHE_H

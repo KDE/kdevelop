@@ -1,23 +1,23 @@
 /*
-* This file is part of KDevelop
-*
-* Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Library General Public License as
-* published by the Free Software Foundation; either version 2 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public
-* License along with this program; if not, write to the
-* Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ * This file is part of KDevelop
+ *
+ * Copyright 2010 David Nolden <david.nolden.kdevelop@art-master.de>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #include "documentchangetracker.h"
 
@@ -56,29 +56,30 @@ using namespace KTextEditor;
  *             -> Maybe alter the file-modification caches directly
  * */
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 /**
  * Internal helper class for RevisionLockerAndClearer
  * */
-class RevisionLockerAndClearerPrivate : public QObject
+class RevisionLockerAndClearerPrivate
+    : public QObject
 {
     Q_OBJECT
+
 public:
     RevisionLockerAndClearerPrivate(DocumentChangeTracker* tracker, qint64 revision);
     ~RevisionLockerAndClearerPrivate() override;
-    inline qint64 revision() const {
+    inline qint64 revision() const
+    {
         return m_revision;
     }
+
 private:
     friend class RevisionLockerAndClearer;
     QPointer<DocumentChangeTracker> m_tracker;
     qint64 m_revision;
 };
 
-
-DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
+DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
     : m_needUpdate(false)
     , m_document(document)
     , m_moving(nullptr)
@@ -98,18 +99,19 @@ DocumentChangeTracker::DocumentChangeTracker( KTextEditor::Document* document )
     Q_ASSERT(m_moving);
 
     // can't use new connect syntax here, MovingInterface is not a QObject
-    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this, SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
+    connect(m_document, SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
+            SLOT(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)));
 
     ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());
 
     reset();
 }
 
-QList< QPair< KTextEditor::Range, QString > > DocumentChangeTracker::completions() const
+QList<QPair<KTextEditor::Range, QString>> DocumentChangeTracker::completions() const
 {
     VERIFY_FOREGROUND_LOCKED
 
-    QList< QPair< KTextEditor::Range , QString > > ret;
+    QList<QPair<KTextEditor::Range, QString>> ret;
     return ret;
 }
 
@@ -118,7 +120,7 @@ void DocumentChangeTracker::reset()
     VERIFY_FOREGROUND_LOCKED
 
     // We don't reset the insertion here, as it may continue
-    m_needUpdate = false;
+        m_needUpdate = false;
 
     m_revisionAtLastReset = acquireRevision(m_moving->revision());
     Q_ASSERT(m_revisionAtLastReset);
@@ -153,7 +155,7 @@ void DocumentChangeTracker::updateChangedRange(int delay)
 
     ModificationRevision::setEditorRevisionForFile(m_url, m_moving->revision());
 
-    if(needUpdate()) {
+    if (needUpdate()) {
         ICore::self()->languageController()->backgroundParser()->addDocument(m_url,
                                                                              TopDUContext::AllDeclarationsContextsAndUses,
                                                                              0, nullptr,
@@ -179,15 +181,18 @@ int DocumentChangeTracker::recommendedDelay(KTextEditor::Document* doc, const KT
         // that if one language requires an update it actually happens
         delay = qMax<int>(lang->suggestedReparseDelayForChange(doc, range, text, removal), delay);
     }
+
     return delay;
 }
 
-void DocumentChangeTracker::lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position) {
+void DocumentChangeTracker::lineWrapped(KTextEditor::Document* document, const KTextEditor::Cursor& position)
+{
     textInserted(document, position, QStringLiteral("\n"));
 }
 
-void DocumentChangeTracker::lineUnwrapped(KTextEditor::Document* document, int line) {
-    textRemoved(document, {{document->lineLength(line), line}, {0, line+1}}, QStringLiteral("\n"));
+void DocumentChangeTracker::lineUnwrapped(KTextEditor::Document* document, int line)
+{
+    textRemoved(document, {{document->lineLength(line), line}, {0, line + 1}}, QStringLiteral("\n"));
 }
 
 void DocumentChangeTracker::textInserted(Document* document, const Cursor& cursor, const QString& text)
@@ -195,8 +200,7 @@ void DocumentChangeTracker::textInserted(Document* document, const Cursor& curso
     /// TODO: get this data from KTextEditor directly, make its signal public
     KTextEditor::Range range(cursor, cursorAdd(cursor, text));
 
-    if(!m_lastInsertionPosition.isValid() || m_lastInsertionPosition == cursor)
-    {
+    if (!m_lastInsertionPosition.isValid() || m_lastInsertionPosition == cursor) {
         m_currentCleanedInsertion.append(text);
         m_lastInsertionPosition = range.end();
     }
@@ -206,7 +210,7 @@ void DocumentChangeTracker::textInserted(Document* document, const Cursor& curso
     updateChangedRange(delay);
 }
 
-void DocumentChangeTracker::textRemoved( Document* document, const KTextEditor::Range& oldRange, const QString& oldText )
+void DocumentChangeTracker::textRemoved(Document* document, const KTextEditor::Range& oldRange, const QString& oldText)
 {
     m_currentCleanedInsertion.clear();
     m_lastInsertionPosition = KTextEditor::Cursor::invalid();
@@ -216,12 +220,12 @@ void DocumentChangeTracker::textRemoved( Document* document, const KTextEditor::
     updateChangedRange(delay);
 }
 
-void DocumentChangeTracker::documentSavedOrUploaded(KTextEditor::Document* doc,bool)
+void DocumentChangeTracker::documentSavedOrUploaded(KTextEditor::Document* doc, bool)
 {
     ModificationRevision::clearModificationCache(IndexedString(doc->url()));
 }
 
-void DocumentChangeTracker::documentDestroyed( QObject* )
+void DocumentChangeTracker::documentDestroyed(QObject*)
 {
     m_document = nullptr;
     m_moving = nullptr;
@@ -243,7 +247,7 @@ MovingInterface* DocumentChangeTracker::documentMovingInterface() const
     return m_moving;
 }
 
-void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent ( Document* )
+void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent(Document*)
 {
     // Release all revisions! They must not be used any more.
     qCDebug(LANGUAGE) << "clearing all revisions";
@@ -252,25 +256,29 @@ void DocumentChangeTracker::aboutToInvalidateMovingInterfaceContent ( Document* 
     ModificationRevision::setEditorRevisionForFile(m_url, 0);
 }
 
-KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::RangeInRevision range, qint64 fromRevision, qint64 toRevision) const
+KDevelop::RangeInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::RangeInRevision range,
+                                                                           qint64 fromRevision, qint64 toRevision) const
 {
     VERIFY_FOREGROUND_LOCKED
 
-    if((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision)))
-    {
-        m_moving->transformCursor(range.start.line, range.start.column, KTextEditor::MovingCursor::MoveOnInsert, fromRevision, toRevision);
-        m_moving->transformCursor(range.end.line, range.end.column, KTextEditor::MovingCursor::StayOnInsert, fromRevision, toRevision);
+    if ((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision))) {
+        m_moving->transformCursor(range.start.line, range.start.column, KTextEditor::MovingCursor::MoveOnInsert,
+                                  fromRevision, toRevision);
+        m_moving->transformCursor(range.end.line, range.end.column, KTextEditor::MovingCursor::StayOnInsert,
+                                  fromRevision, toRevision);
     }
 
     return range;
 }
 
-KDevelop::CursorInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::CursorInRevision cursor, qint64 fromRevision, qint64 toRevision, KTextEditor::MovingCursor::InsertBehavior behavior) const
+KDevelop::CursorInRevision DocumentChangeTracker::transformBetweenRevisions(KDevelop::CursorInRevision cursor,
+                                                                            qint64 fromRevision, qint64 toRevision,
+                                                                            KTextEditor::MovingCursor::InsertBehavior behavior)
+const
 {
     VERIFY_FOREGROUND_LOCKED
 
-    if((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision)))
-    {
+    if ((fromRevision == -1 || holdingRevision(fromRevision)) && (toRevision == -1 || holdingRevision(toRevision))) {
         m_moving->transformCursor(cursor.line, cursor.column, behavior, fromRevision, toRevision);
     }
 
@@ -282,7 +290,8 @@ RangeInRevision DocumentChangeTracker::transformToRevision(KTextEditor::Range ra
     return transformBetweenRevisions(RangeInRevision::castFromSimpleRange(range), -1, toRevision);
 }
 
-CursorInRevision DocumentChangeTracker::transformToRevision(KTextEditor::Cursor cursor, qint64 toRevision, MovingCursor::InsertBehavior behavior) const
+CursorInRevision DocumentChangeTracker::transformToRevision(KTextEditor::Cursor cursor, qint64 toRevision,
+                                                            MovingCursor::InsertBehavior behavior) const
 {
     return transformBetweenRevisions(CursorInRevision::castFromSimpleCursor(cursor), -1, toRevision, behavior);
 }
@@ -292,22 +301,26 @@ KTextEditor::Range DocumentChangeTracker::transformToCurrentRevision(RangeInRevi
     return transformBetweenRevisions(range, fromRevision, -1).castToSimpleRange();
 }
 
-KTextEditor::Cursor DocumentChangeTracker::transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision, MovingCursor::InsertBehavior behavior) const
+KTextEditor::Cursor DocumentChangeTracker::transformToCurrentRevision(CursorInRevision cursor, qint64 fromRevision,
+                                                                      MovingCursor::InsertBehavior behavior) const
 {
     return transformBetweenRevisions(cursor, fromRevision, -1, behavior).castToSimpleCursor();
 }
 
-RevisionLockerAndClearerPrivate::RevisionLockerAndClearerPrivate(DocumentChangeTracker* tracker, qint64 revision) : m_tracker(tracker), m_revision(revision)
+RevisionLockerAndClearerPrivate::RevisionLockerAndClearerPrivate(DocumentChangeTracker* tracker,
+                                                                 qint64 revision) : m_tracker(tracker)
+    , m_revision(revision)
 {
     VERIFY_FOREGROUND_LOCKED
 
-    moveToThread(QApplication::instance()->thread());
+        moveToThread(QApplication::instance()->thread());
 
     // Lock the revision
     m_tracker->lockRevision(revision);
 }
 
-RevisionLockerAndClearerPrivate::~RevisionLockerAndClearerPrivate() {
+RevisionLockerAndClearerPrivate::~RevisionLockerAndClearerPrivate()
+{
     if (m_tracker)
         m_tracker->unlockRevision(m_revision);
 }
@@ -321,7 +334,7 @@ RevisionReference DocumentChangeTracker::acquireRevision(qint64 revision)
 {
     VERIFY_FOREGROUND_LOCKED
 
-    if(!holdingRevision(revision) && revision != m_moving->revision())
+    if (!holdingRevision(revision) && revision != m_moving->revision())
         return RevisionReference();
 
     RevisionReference ret(new RevisionLockerAndClearer);
@@ -340,8 +353,8 @@ void DocumentChangeTracker::lockRevision(qint64 revision)
 {
     VERIFY_FOREGROUND_LOCKED
 
-    QMap< qint64, int >::iterator it = m_revisionLocks.find(revision);
-    if(it != m_revisionLocks.end())
+    QMap<qint64, int>::iterator it = m_revisionLocks.find(revision);
+    if (it != m_revisionLocks.end())
         ++(*it);
     else
     {
@@ -354,16 +367,14 @@ void DocumentChangeTracker::unlockRevision(qint64 revision)
 {
     VERIFY_FOREGROUND_LOCKED
 
-    QMap< qint64, int >::iterator it = m_revisionLocks.find(revision);
-    if(it == m_revisionLocks.end())
-    {
+    QMap<qint64, int>::iterator it = m_revisionLocks.find(revision);
+    if (it == m_revisionLocks.end()) {
         qCDebug(LANGUAGE) << "cannot unlock revision" << revision << ", probably the revisions have been cleared";
         return;
     }
     --(*it);
 
-    if(*it == 0)
-    {
+    if (*it == 0) {
         m_moving->unlockRevision(revision);
         m_revisionLocks.erase(it);
     }
@@ -379,13 +390,13 @@ RangeInRevision RevisionLockerAndClearer::transformToRevision(const KDevelop::Ra
 {
     VERIFY_FOREGROUND_LOCKED
 
-    if(!m_p->m_tracker || !valid() || (to && !to->valid()))
+    if (!m_p->m_tracker || !valid() || (to && !to->valid()))
         return range;
 
     qint64 fromRevision = revision();
     qint64 toRevision = -1;
 
-    if(to)
+    if (to)
         toRevision = to->revision();
 
     return m_p->m_tracker->transformBetweenRevisions(range, fromRevision, toRevision);
@@ -397,30 +408,31 @@ CursorInRevision RevisionLockerAndClearer::transformToRevision(const KDevelop::C
 {
     VERIFY_FOREGROUND_LOCKED
 
-    if(!m_p->m_tracker || !valid() || (to && !to->valid()))
+    if (!m_p->m_tracker || !valid() || (to && !to->valid()))
         return cursor;
 
     qint64 fromRevision = revision();
     qint64 toRevision = -1;
 
-    if(to)
+    if (to)
         toRevision = to->revision();
 
     return m_p->m_tracker->transformBetweenRevisions(cursor, fromRevision, toRevision, behavior);
 }
 
 RangeInRevision RevisionLockerAndClearer::transformFromRevision(const KDevelop::RangeInRevision& range,
-                                                                const KDevelop::RevisionLockerAndClearer::Ptr& from) const
+                                                                const KDevelop::RevisionLockerAndClearer::Ptr& from)
+const
 {
     VERIFY_FOREGROUND_LOCKED
 
-    if(!m_p->m_tracker || !valid())
+    if (!m_p->m_tracker || !valid())
         return range;
 
     qint64 toRevision = revision();
     qint64 fromRevision = -1;
 
-    if(from)
+    if (from)
         fromRevision = from->revision();
 
     return m_p->m_tracker->transformBetweenRevisions(range, fromRevision, toRevision);
@@ -432,13 +444,13 @@ CursorInRevision RevisionLockerAndClearer::transformFromRevision(const KDevelop:
 {
     VERIFY_FOREGROUND_LOCKED
 
-    if(!m_p->m_tracker)
+    if (!m_p->m_tracker)
         return cursor;
 
     qint64 toRevision = revision();
     qint64 fromRevision = -1;
 
-    if(from)
+    if (from)
         fromRevision = from->revision();
 
     return m_p->m_tracker->transformBetweenRevisions(cursor, fromRevision, toRevision, behavior);
@@ -450,7 +462,7 @@ KTextEditor::Range RevisionLockerAndClearer::transformToCurrentRevision(const KD
 }
 
 KTextEditor::Cursor RevisionLockerAndClearer::transformToCurrentRevision(const KDevelop::CursorInRevision& cursor,
-                                                                  MovingCursor::InsertBehavior behavior) const
+                                                                         MovingCursor::InsertBehavior behavior) const
 {
     return transformToRevision(cursor, KDevelop::RevisionLockerAndClearer::Ptr(), behavior).castToSimpleCursor();
 }
@@ -470,10 +482,10 @@ bool RevisionLockerAndClearer::valid() const
 {
     VERIFY_FOREGROUND_LOCKED
 
-    if(!m_p->m_tracker)
+    if (!m_p->m_tracker)
         return false;
 
-    if(revision() == -1)
+    if (revision() == -1)
         return true; // The 'current' revision is always valid
 
     return m_p->m_tracker->holdingRevision(revision());
@@ -484,7 +496,6 @@ RevisionReference DocumentChangeTracker::diskRevision() const
     ///@todo Track which revision was last saved to disk
     return RevisionReference();
 }
-
 }
 
 #include "documentchangetracker.moc"

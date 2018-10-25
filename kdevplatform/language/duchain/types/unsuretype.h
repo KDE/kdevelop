@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_UNSURETYPE_H
 #define KDEVPLATFORM_UNSURETYPE_H
@@ -24,66 +24,69 @@
 #include "../appendedlist.h"
 #include <language/languageexport.h>
 
-
 namespace KDevelop {
-
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(UnsureTypeData, m_types, IndexedType)
 
-struct KDEVPLATFORMLANGUAGE_EXPORT UnsureTypeData : public AbstractTypeData {
-  UnsureTypeData() {
-    initializeAppendedLists(m_dynamic);
-  }
-  
-   ~UnsureTypeData() {
-    freeAppendedLists();
-  }
-  
-  UnsureTypeData(const UnsureTypeData& rhs) : AbstractTypeData(rhs){
-    initializeAppendedLists(m_dynamic);
-    copyListsFrom(rhs);
-  }
-  
-  START_APPENDED_LISTS_BASE(UnsureTypeData, AbstractTypeData)
-  APPENDED_LIST_FIRST(UnsureTypeData, IndexedType, m_types)
-  END_APPENDED_LISTS(UnsureTypeData, m_types)
+struct KDEVPLATFORMLANGUAGE_EXPORT UnsureTypeData
+    : public AbstractTypeData
+{
+    UnsureTypeData()
+    {
+        initializeAppendedLists(m_dynamic);
+    }
+
+    ~UnsureTypeData()
+    {
+        freeAppendedLists();
+    }
+
+    UnsureTypeData(const UnsureTypeData& rhs) : AbstractTypeData(rhs)
+    {
+        initializeAppendedLists(m_dynamic);
+        copyListsFrom(rhs);
+    }
+
+    START_APPENDED_LISTS_BASE(UnsureTypeData, AbstractTypeData)
+    APPENDED_LIST_FIRST(UnsureTypeData, IndexedType, m_types)
+    END_APPENDED_LISTS(UnsureTypeData, m_types)
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT UnsureType : public AbstractType
+class KDEVPLATFORMLANGUAGE_EXPORT UnsureType
+    : public AbstractType
 {
 public:
-  typedef TypePtr<UnsureType> Ptr;
+    typedef TypePtr<UnsureType> Ptr;
 
-  UnsureType(const UnsureType& rhs);
-  UnsureType();
-  explicit UnsureType(UnsureTypeData& data);
-  
-  KDevelop::AbstractType* clone() const override;
-  QString toString() const override;
-  bool equals(const KDevelop::AbstractType* rhs) const override;
-  uint hash() const override;
-  KDevelop::AbstractType::WhichType whichType() const override;
-  void exchangeTypes(KDevelop::TypeExchanger* exchanger) override;
-  
-  virtual void addType(const IndexedType& type);
-  virtual void removeType(const IndexedType& type);
-  
-  ///Array of represented types. You can conveniently iterate it using the FOREACH_FUNCTION macro,
-  ///or just access them using indices
-  const IndexedType* types() const;
-  ///Count of types accessible through types()
-  uint typesSize() const;
-  
-  enum {
-    Identity = 39
-  };
-  
-  typedef UnsureTypeData Data;
-  
+    UnsureType(const UnsureType& rhs);
+    UnsureType();
+    explicit UnsureType(UnsureTypeData& data);
+
+    KDevelop::AbstractType* clone() const override;
+    QString toString() const override;
+    bool equals(const KDevelop::AbstractType* rhs) const override;
+    uint hash() const override;
+    KDevelop::AbstractType::WhichType whichType() const override;
+    void exchangeTypes(KDevelop::TypeExchanger* exchanger) override;
+
+    virtual void addType(const IndexedType& type);
+    virtual void removeType(const IndexedType& type);
+
+    ///Array of represented types. You can conveniently iterate it using the FOREACH_FUNCTION macro,
+    ///or just access them using indices
+    const IndexedType* types() const;
+    ///Count of types accessible through types()
+    uint typesSize() const;
+
+    enum {
+        Identity = 39
+    };
+
+    typedef UnsureTypeData Data;
+
 protected:
-  TYPE_DECLARE_DATA(UnsureType)
-  void accept0(KDevelop::TypeVisitor* v) const override;
+    TYPE_DECLARE_DATA(UnsureType)
+    void accept0(KDevelop::TypeVisitor* v) const override;
 };
-
 }
 
 #endif // KDEVPLATFORM_UNSURETYPE_H

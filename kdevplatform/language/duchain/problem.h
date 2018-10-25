@@ -1,25 +1,24 @@
 /* This file is part of KDevelop
-Copyright 2007 Hamish Rodda <rodda@kde.org>
+   Copyright 2007 Hamish Rodda <rodda@kde.org>
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Library General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Library General Public License for more details.
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-You should have received a copy of the GNU Library General Public License
-along with this library; see the file COPYING.LIB.  If not, write to
-the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-Boston, MA 02110-1301, USA.
-*/
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+ */
 
 #ifndef KDEVPLATFORM_PROBLEM_H
 #define KDEVPLATFORM_PROBLEM_H
-
 
 #include <QExplicitlySharedDataPointer>
 
@@ -31,8 +30,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/iproblem.h>
 #include <interfaces/iassistant.h>
 
-namespace KDevelop
-{
+namespace KDevelop {
 class IAssistant;
 class Problem;
 
@@ -45,10 +43,10 @@ using ProblemPointer = QExplicitlySharedDataPointer<Problem>;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
 {
-  public:
+public:
     LocalIndexedProblem(const ProblemPointer& problem, const TopDUContext* top);
     explicit LocalIndexedProblem(uint index = 0)
-      : m_index(index)
+        : m_index(index)
     {}
 
     /**
@@ -58,12 +56,12 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
 
     bool operator==(const LocalIndexedProblem& rhs) const
     {
-      return m_index == rhs.m_index;
+        return m_index == rhs.m_index;
     }
 
     bool isValid() const
     {
-      return m_index;
+        return m_index;
     }
 
     /**
@@ -71,38 +69,39 @@ class KDEVPLATFORMLANGUAGE_EXPORT LocalIndexedProblem
      */
     uint localIndex() const
     {
-      return m_index;
+        return m_index;
     }
 
-  private:
+private:
     uint m_index;
 };
 
 KDEVPLATFORMLANGUAGE_EXPORT DECLARE_LIST_MEMBER_HASH(ProblemData, diagnostics, LocalIndexedProblem)
 
-class KDEVPLATFORMLANGUAGE_EXPORT ProblemData : public DUChainBaseData
+class KDEVPLATFORMLANGUAGE_EXPORT ProblemData
+    : public DUChainBaseData
 {
 public:
     ProblemData()
     {
-      initializeAppendedLists();
+        initializeAppendedLists();
     }
 
     ProblemData(const ProblemData& rhs)
-      : DUChainBaseData(rhs)
-      , source(rhs.source)
-      , severity(rhs.severity)
-      , url(rhs.url)
-      , description(rhs.description)
-      , explanation(rhs.explanation)
+        : DUChainBaseData(rhs)
+        , source(rhs.source)
+        , severity(rhs.severity)
+        , url(rhs.url)
+        , description(rhs.description)
+        , explanation(rhs.explanation)
     {
-      initializeAppendedLists();
-      copyListsFrom(rhs);
+        initializeAppendedLists();
+        copyListsFrom(rhs);
     }
 
     ~ProblemData()
     {
-      freeAppendedLists();
+        freeAppendedLists();
     }
 
     IProblem::Source source = IProblem::Unknown;
@@ -125,7 +124,9 @@ public:
  *
  * @warning Access to problems must be serialized through DUChainLock.
  */
-class KDEVPLATFORMLANGUAGE_EXPORT Problem : public DUChainBase, public IProblem
+class KDEVPLATFORMLANGUAGE_EXPORT Problem
+    : public DUChainBase
+    , public IProblem
 {
 public:
     using Ptr = QExplicitlySharedDataPointer<Problem>;
@@ -173,8 +174,8 @@ public:
     void clearDiagnostics() override;
 
     QVector<IProblem::Ptr> diagnostics() const override;
-    void setDiagnostics(const QVector<IProblem::Ptr> &diagnostics) override;
-    void addDiagnostic(const IProblem::Ptr &diagnostic) override;
+    void setDiagnostics(const QVector<IProblem::Ptr>& diagnostics) override;
+    void addDiagnostic(const IProblem::Ptr& diagnostic) override;
 
     /**
      * A brief description of the problem.
@@ -206,7 +207,7 @@ public:
      */
     QString severityString() const override;
 
-     /**
+    /**
      * If this problem can be solved, this may return an assistant for the solution.
      */
     QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const override;
@@ -237,20 +238,22 @@ private:
     //END dynamic data
 };
 
-class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistantProblem : public KDevelop::Problem {
-  public:
-    KDevelop::IAssistant::Ptr solutionAssistant() const override {
-      return m_solution;
+class KDEVPLATFORMLANGUAGE_EXPORT StaticAssistantProblem
+    : public KDevelop::Problem
+{
+public:
+    KDevelop::IAssistant::Ptr solutionAssistant() const override
+    {
+        return m_solution;
     }
     void setSolutionAssistant(const KDevelop::IAssistant::Ptr& p)
     {
-      m_solution = p;
+        m_solution = p;
     }
 
-  private:
+private:
     KDevelop::IAssistant::Ptr m_solution;
 };
-
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::LocalIndexedProblem, Q_MOVABLE_TYPE);

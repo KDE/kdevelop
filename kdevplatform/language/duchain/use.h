@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DEFINITIONUSE_H
 #define KDEVPLATFORM_DEFINITIONUSE_H
@@ -25,8 +25,7 @@
 
 #include <language/languageexport.h>
 
-namespace KDevelop
-{
+namespace KDevelop {
 class TopDUContext;
 class Declaration;
 /**
@@ -49,18 +48,18 @@ class KDEVPLATFORMLANGUAGE_EXPORT Use
 {
 public:
 
-  explicit Use(const RangeInRevision& range = RangeInRevision::invalid(), int declarationIndex = std::numeric_limits<int>::max())
-    : m_range(range)
-    , m_declarationIndex(declarationIndex)
-  {
-  }
+    explicit Use(const RangeInRevision& range = RangeInRevision::invalid(),
+                 int declarationIndex = std::numeric_limits<int>::max())
+        : m_range(range)
+        , m_declarationIndex(declarationIndex)
+    {
+    }
 
-  Declaration* usedDeclaration(TopDUContext* topContext) const;
+    Declaration* usedDeclaration(TopDUContext* topContext) const;
 
-  RangeInRevision m_range;
-  int m_declarationIndex;
+    RangeInRevision m_range;
+    int m_declarationIndex;
 };
-
 }
 
 Q_DECLARE_TYPEINFO(KDevelop::Use, Q_MOVABLE_TYPE);

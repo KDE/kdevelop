@@ -1,21 +1,21 @@
 /* This file is part of KDevelop
-Copyright 2007 Hamish Rodda <rodda@kde.org>
+   Copyright 2007 Hamish Rodda <rodda@kde.org>
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Library General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Library General Public License for more details.
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
 
-You should have received a copy of the GNU Library General Public License
-along with this library; see the file COPYING.LIB.  If not, write to
-the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-Boston, MA 02110-1301, USA.
-*/
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+ */
 
 #include "problem.h"
 
@@ -41,7 +41,7 @@ DEFINE_LIST_MEMBER_HASH(ProblemData, diagnostics, LocalIndexedProblem)
 using namespace KDevelop;
 
 LocalIndexedProblem::LocalIndexedProblem(const ProblemPointer& problem, const TopDUContext* top)
-  : m_index(problem->m_indexInTopContext)
+    : m_index(problem->m_indexInTopContext)
 {
     ENSURE_CHAIN_READ_LOCKED
     // ensure child problems are properly serialized before we serialize the parent problem
@@ -50,7 +50,7 @@ LocalIndexedProblem::LocalIndexedProblem(const ProblemPointer& problem, const To
     auto& serialized = const_cast<Problem*>(problem.data())->d_func_dynamic()->diagnosticsList();
     serialized.clear();
     serialized.reserve(problem->m_diagnostics.size());
-    foreach(const ProblemPointer& child, problem->m_diagnostics) {
+    foreach (const ProblemPointer& child, problem->m_diagnostics) {
         serialized << LocalIndexedProblem(child, top);
     }
 
@@ -61,10 +61,10 @@ LocalIndexedProblem::LocalIndexedProblem(const ProblemPointer& problem, const To
 
 ProblemPointer LocalIndexedProblem::data(const TopDUContext* top) const
 {
-  if (!m_index) {
-    return {};
-  }
-  return top->m_dynamicData->problemForIndex(m_index);
+    if (!m_index) {
+        return {};
+    }
+    return top->m_dynamicData->problemForIndex(m_index);
 }
 
 Problem::Problem()
@@ -131,7 +131,7 @@ QVector<IProblem::Ptr> Problem::diagnostics() const
     return vector;
 }
 
-void Problem::setDiagnostics(const QVector<IProblem::Ptr> &diagnostics)
+void Problem::setDiagnostics(const QVector<IProblem::Ptr>& diagnostics)
 {
     clearDiagnostics();
 
@@ -140,9 +140,9 @@ void Problem::setDiagnostics(const QVector<IProblem::Ptr> &diagnostics)
     }
 }
 
-void Problem::addDiagnostic(const IProblem::Ptr &diagnostic)
+void Problem::addDiagnostic(const IProblem::Ptr& diagnostic)
 {
-    Problem *problem = dynamic_cast<Problem*>(diagnostic.data());
+    Problem* problem = dynamic_cast<Problem*>(diagnostic.data());
     Q_ASSERT(problem != nullptr);
 
     ProblemPointer ptr(problem);
@@ -197,15 +197,15 @@ void Problem::setSeverity(Severity severity)
 
 QString Problem::severityString() const
 {
-    switch(severity()) {
-        case IProblem::NoSeverity:
-            return {};
-        case IProblem::Error:
-            return i18n("Error");
-        case IProblem::Warning:
-            return i18n("Warning");
-        case IProblem::Hint:
-            return i18n("Hint");
+    switch (severity()) {
+    case IProblem::NoSeverity:
+        return {};
+    case IProblem::Error:
+        return i18n("Error");
+    case IProblem::Warning:
+        return i18n("Warning");
+    case IProblem::Hint:
+        return i18n("Hint");
     }
     return QString();
 }
@@ -213,39 +213,39 @@ QString Problem::severityString() const
 QString Problem::sourceString() const
 {
     switch (source()) {
-        case IProblem::Disk:
-            return i18n("Disk");
-        case IProblem::Preprocessor:
-            return i18n("Preprocessor");
-        case IProblem::Lexer:
-            return i18n("Lexer");
-        case IProblem::Parser:
-            return i18n("Parser");
-        case IProblem::DUChainBuilder:
-            return i18n("Definition-Use Chain");
-        case IProblem::SemanticAnalysis:
-            return i18n("Semantic analysis");
-        case IProblem::ToDo:
-            return i18n("To-do");
-        case IProblem::Unknown:
-        default:
-            return i18n("Unknown");
+    case IProblem::Disk:
+        return i18n("Disk");
+    case IProblem::Preprocessor:
+        return i18n("Preprocessor");
+    case IProblem::Lexer:
+        return i18n("Lexer");
+    case IProblem::Parser:
+        return i18n("Parser");
+    case IProblem::DUChainBuilder:
+        return i18n("Definition-Use Chain");
+    case IProblem::SemanticAnalysis:
+        return i18n("Semantic analysis");
+    case IProblem::ToDo:
+        return i18n("To-do");
+    case IProblem::Unknown:
+    default:
+        return i18n("Unknown");
     }
 }
 
 QString Problem::toString() const
 {
     return i18nc("<severity>: <description> in <url>:[<range>]: <explanation> (found by <source>)",
-                 "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)"
-        , severityString()
-        , description()
-        , url().str()
-        , range().start.line
-        , range().start.column
-        , range().end.line
-        , range().end.column
-        , (explanation().isEmpty() ? i18n("<no explanation>") : explanation())
-        , sourceString());
+                 "%1: %2 in %3:[(%4,%5),(%6,%7)]: %8 (found by %9)",
+                 severityString(),
+                 description(),
+                 url().str(),
+                 range().start.line,
+                 range().start.column,
+                 range().end.line,
+                 range().end.column,
+                 (explanation().isEmpty() ? i18n("<no explanation>") : explanation()),
+                 sourceString());
 }
 
 void Problem::rebuildDynamicData(DUContext* parent, uint ownIndex)

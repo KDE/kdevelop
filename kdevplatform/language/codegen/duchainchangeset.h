@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_DUCHAINCHANGESET_H
 #define KDEVPLATFORM_DUCHAINCHANGESET_H
@@ -26,7 +26,6 @@
 #include "../duchain/declaration.h"
 
 namespace KDevelop {
-
 class DUChainChangeSet;
 class DUChainChange;
 class DUChainBase;
@@ -53,33 +52,33 @@ class KDEVPLATFORMLANGUAGE_EXPORT DUChainRef
 public:
     /*virtual ~DUChainRef();
 
-    virtual const DUChainBase* object() const;
-    virtual const DUContext* context() const;
-    virtual const Declaration* declaration() const;
+       virtual const DUChainBase* object() const;
+       virtual const DUContext* context() const;
+       virtual const Declaration* declaration() const;
 
-    virtual DUChainRef* objectRef() const;
+       virtual DUChainRef* objectRef() const;
 
-    virtual DUChainBase* newObject() const;
-    virtual DUContext* newContext() const;
-    virtual Declaration* newDeclaration() const;
+       virtual DUChainBase* newObject() const;
+       virtual DUContext* newContext() const;
+       virtual Declaration* newDeclaration() const;
 
-    const QList<DUChainChange*>& changes() const;
+       const QList<DUChainChange*>& changes() const;
 
-    /// Rename this object, if applicable
-    void renameObject(const QualifiedIdentifier& newIdentifier);
-    /// Change the access policy
-    void setAccessPolicy(Declaration::AccessPolicy newPolicy);
+       /// Rename this object, if applicable
+       void renameObject(const QualifiedIdentifier& newIdentifier);
+       /// Change the access policy
+       void setAccessPolicy(Declaration::AccessPolicy newPolicy);
 
-    void deleteChildContext(DUContext* child);
-    void insertChildContext(DUContextRef* newChild);
+       void deleteChildContext(DUContext* child);
+       void insertChildContext(DUContextRef* newChild);
 
-    void deleteDeclaration(Declaration* declaration);
-    void insertDeclaration(Declaration* declaration, DUChainBase* afterObject);
-    void appendDeclaration(Declaration* declaration);
+       void deleteDeclaration(Declaration* declaration);
+       void insertDeclaration(Declaration* declaration, DUChainBase* afterObject);
+       void appendDeclaration(Declaration* declaration);
 
-    AbstractType::Ptr currentType() const;
-    void changeType(AbstractType::Ptr newType);
-*/
+       AbstractType::Ptr currentType() const;
+       void changeType(AbstractType::Ptr newType);
+     */
     /**
      * Rewrite the AST which created this duchain object. Eg:
      * - for declarations, the entire declaration.
@@ -96,7 +95,7 @@ public:
     /// Removes a change from this object reference, and deletes it.
     void deleteChange(DUChainChange* change);
 
-protected:
+   protected:
     /// Constructor.  Either takes an existing \a object (\a newObject = false), or a newly created \a object (\a newObject = true)
     DUChainRef(DUChainChangeSet* set, DUChainBase* object, bool newObject);
     /// Constructor.  Takes another object reference.
@@ -105,7 +104,7 @@ protected:
     /// Adds a change to this object reference. Takes ownership of the \a change.
     DUChainChange* addChange(DUChainChange* change);
 
-private:
+   private:
     DUChainChangeSet* m_changeSet;
     DUChainBase* m_object;
     DUChainRef* m_objectRef;
@@ -210,7 +209,7 @@ public:
      * \returns the new object reference
      */
     DUChainRef* copyRef(DUChainRef* ref);
-    
+
     /**
      * Merge another changeset with this one. This changeset
      * takes ownership of all the objects in the other changeset.
@@ -218,43 +217,42 @@ public:
      *
      * Both changesets must reference the same TopDuContext.
      */
-    DUChainChangeSet & operator<<(DUChainChangeSet & rhs);
+    DUChainChangeSet& operator<<(DUChainChangeSet& rhs);
 
     /**
-    * Produce a reference to an existing object in this chain, and replace the
-    * object with the reference so that modifications to the reference are already
-    * integrated into the change set.
-    *
-    * You may then modify this reference, and the modifications will be applied
-    * to the chain when the change set is finalised.
-    *
-    * \returns a reference to \a source, which you may modify directly.
-    */
+     * Produce a reference to an existing object in this chain, and replace the
+     * object with the reference so that modifications to the reference are already
+     * integrated into the change set.
+     *
+     * You may then modify this reference, and the modifications will be applied
+     * to the chain when the change set is finalised.
+     *
+     * \returns a reference to \a source, which you may modify directly.
+     */
     DUChainRef* modifyObject(DUChainBase* source);
 
     /**
-    * Copy an existing object (whether from the DUChain or from the change set).
-    * Does not insert the object into the chain.
-    *
-    * You may then modify this reference, and the modifications will be applied to the object when the change set is finalised.
-    *
-    * \returns a copy of \a source, which you may modify directly.
-    */
+     * Copy an existing object (whether from the DUChain or from the change set).
+     * Does not insert the object into the chain.
+     *
+     * You may then modify this reference, and the modifications will be applied to the object when the change set is finalised.
+     *
+     * \returns a copy of \a source, which you may modify directly.
+     */
     DUChainRef* copyObject(DUChainBase* source);
 
     /**
      * Retrieve the list of object references and changes.
      */
     QList<DUChainRef*> objectRefs() const;
-    
-    const ReferencedTopDUContext & topDuContext() const;
+
+    const ReferencedTopDUContext& topDuContext() const;
 
 private:
     ReferencedTopDUContext m_topContext;
 
     QList<DUChainRef*> m_objectRefs;
 };
-
 }
 
 #endif // KDEVPLATFORM_DUCHAINCHANGESET_H
