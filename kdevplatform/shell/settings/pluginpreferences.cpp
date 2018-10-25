@@ -38,7 +38,7 @@ namespace KDevelop
 PluginPreferences::PluginPreferences(QWidget* parent)
     : ConfigPage(nullptr, nullptr, parent)
 {
-    QVBoxLayout* lay = new QVBoxLayout(this );
+    auto* lay = new QVBoxLayout(this );
     lay->setMargin(0);
     selector = new KPluginSelector( this );
     lay->addWidget( selector );

@@ -150,7 +150,7 @@ bool ProjectManagerView::eventFilter(QObject* obj, QEvent* event)
 {
     if (obj == m_ui->projectTreeView) {
         if (event->type() == QEvent::KeyRelease) {
-            QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+            auto* keyEvent = static_cast<QKeyEvent*>(event);
             if (keyEvent->key() == Qt::Key_Delete && keyEvent->modifiers() == Qt::NoModifier) {
                 m_plugin->removeItems(selectedItems());
                 return true;

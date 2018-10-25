@@ -184,7 +184,7 @@ void MIDebugger::processLine(const QByteArray& line)
         switch(r->kind)
         {
         case MI::Record::Result: {
-            MI::ResultRecord& result = static_cast<MI::ResultRecord&>(*r);
+            auto& result = static_cast<MI::ResultRecord&>(*r);
 
             // it's still possible for the user to issue a MI command,
             // emit correct signal
@@ -250,7 +250,7 @@ void MIDebugger::processLine(const QByteArray& line)
         }
 
         case MI::Record::Async: {
-            MI::AsyncRecord& async = static_cast<MI::AsyncRecord&>(*r);
+            auto& async = static_cast<MI::AsyncRecord&>(*r);
 
             switch (async.subkind) {
             case MI::AsyncRecord::Exec: {
@@ -287,7 +287,7 @@ void MIDebugger::processLine(const QByteArray& line)
 
         case MI::Record::Stream: {
 
-            MI::StreamRecord& s = static_cast<MI::StreamRecord&>(*r);
+            auto& s = static_cast<MI::StreamRecord&>(*r);
 
             if (s.subkind == MI::StreamRecord::Target) {
                 emit applicationOutput(s.message);

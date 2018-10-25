@@ -133,7 +133,7 @@ DeclarationTest(internalContext)
 DeclarationTest(internalFunctionContext)
 {
   const QString NO_INTERNAL_CTXT = QStringLiteral("%1 has no internal function context.");
-  AbstractFunctionDeclaration *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
+  auto *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
   if (!absFuncDecl || !absFuncDecl->internalFunctionContext())
     return NO_INTERNAL_CTXT.arg(decl->qualifiedIdentifier().toString());
   return testObject(absFuncDecl->internalFunctionContext(), value, QStringLiteral("Declaration's internal function context"));
@@ -182,7 +182,7 @@ DeclarationTest(identifiedTypeDeclaration)
 {
   const QString UN_ID_ERROR = QStringLiteral("Unable to identify declaration of type \"%1\".");
   AbstractType::Ptr type = TypeUtils::targetType(decl->abstractType(), decl->topContext());
-  IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
+  auto* idType = dynamic_cast<IdentifiedType*>(type.data());
   Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : nullptr;
   if (!idDecl)
     return UN_ID_ERROR.arg(type->toString());
@@ -194,7 +194,7 @@ DeclarationTest(identifiedTypeDeclaration)
 DeclarationTest(isVirtual)
 {
   const QString NOT_A_FUNCTION = QStringLiteral("Non-function declaration cannot be virtual.");
-  AbstractFunctionDeclaration *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
+  auto *absFuncDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl);
   if (!absFuncDecl)
       return NOT_A_FUNCTION;
 
@@ -259,7 +259,7 @@ DeclarationTest(definition)
 ///@returns whether the tests for the function definition's declaration pass
 DeclarationTest(declaration)
 {
-  FunctionDefinition *def = dynamic_cast<FunctionDefinition*>(decl);
+  auto *def = dynamic_cast<FunctionDefinition*>(decl);
   Declaration *defDecl = nullptr;
   if (def)
     defDecl = def->declaration(decl->topContext());
@@ -280,7 +280,7 @@ DeclarationTest(defaultParameter)
   DUContext *context = decl->context();
   if (!context || context->type() != DUContext::Function)
     return NOT_IN_FUNC_CTXT;
-  AbstractFunctionDeclaration *funcDecl = dynamic_cast<AbstractFunctionDeclaration*>(context->owner());
+  auto *funcDecl = dynamic_cast<AbstractFunctionDeclaration*>(context->owner());
   if (!funcDecl)
     return OWNER_NOT_FUNC;
   int argIndex = context->localDeclarations().indexOf(decl);

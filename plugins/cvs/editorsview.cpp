@@ -44,7 +44,7 @@ void EditorsView::slotJobFinished(KJob* job)
         return;
     }
 
-    CvsJob * cvsjob = dynamic_cast<CvsJob*>(job);
+    auto * cvsjob = dynamic_cast<CvsJob*>(job);
     if (!cvsjob) {
         return;
     }

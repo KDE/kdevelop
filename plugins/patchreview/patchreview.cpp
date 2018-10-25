@@ -216,7 +216,7 @@ void PatchReviewPlugin::notifyPatchChanged() {
 void PatchReviewPlugin::forceUpdate() {
     if( m_patch ) {
         // don't trigger an update if we know the plugin cannot update itself
-        VCSDiffPatchSource *vcsPatch = dynamic_cast<VCSDiffPatchSource*>(m_patch.data());
+        auto *vcsPatch = dynamic_cast<VCSDiffPatchSource*>(m_patch.data());
         if (!vcsPatch || vcsPatch->m_updater) {
             m_patch->update();
             notifyPatchChanged();
@@ -365,7 +365,7 @@ void PatchReviewPlugin::closeReview()
             // Revert modifications to the text document which we've done in updateReview
             patchDocument->setPrettyName( QString() );
             patchDocument->textDocument()->setReadWrite( true );
-            KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( patchDocument->textDocument() );
+            auto* modif = dynamic_cast<KTextEditor::ModificationInterface*>( patchDocument->textDocument() );
             modif->setModifiedOnDiskWarning( true );
         }
 
@@ -459,12 +459,12 @@ void PatchReviewPlugin::updateReview()
 
     futureActiveDoc->textDocument()->setReadWrite( false );
     futureActiveDoc->setPrettyName( i18n( "Overview" ) );
-    KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>( futureActiveDoc->textDocument() );
+    auto* modif = dynamic_cast<KTextEditor::ModificationInterface*>( futureActiveDoc->textDocument() );
     modif->setModifiedOnDiskWarning( false );
 
     docController->activateDocument( futureActiveDoc );
 
-    PatchReviewToolView* toolView = qobject_cast<PatchReviewToolView*>(ICore::self()->uiController()->findToolView( i18n( "Patch Review" ), m_factory ));
+    auto* toolView = qobject_cast<PatchReviewToolView*>(ICore::self()->uiController()->findToolView( i18n( "Patch Review" ), m_factory ));
     Q_ASSERT( toolView );
 
     //Open all relates files
@@ -587,17 +587,17 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension(KDevelop:
     QList<QUrl> urls;
 
     if ( context->type() == KDevelop::Context::FileContext ) {
-        KDevelop::FileContext* filectx = static_cast<KDevelop::FileContext*>(context);
+        auto* filectx = static_cast<KDevelop::FileContext*>(context);
         urls = filectx->urls();
     } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
-        KDevelop::ProjectItemContext* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
+        auto* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
         foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
             if ( item->file() ) {
                 urls << item->file()->path().toUrl();
             }
         }
     } else if ( context->type() == KDevelop::Context::EditorContext ) {
-        KDevelop::EditorContext* econtext = static_cast<KDevelop::EditorContext*>(context);
+        auto* econtext = static_cast<KDevelop::EditorContext*>(context);
         urls << econtext->url();
     }
 
@@ -616,9 +616,9 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension(KDevelop:
 
 void PatchReviewPlugin::executeFileReviewAction()
 {
-    QAction* reviewAction = qobject_cast<QAction*>(sender());
+    auto* reviewAction = qobject_cast<QAction*>(sender());
     KDevelop::Path path(reviewAction->data().toUrl());
-    LocalPatchSource* ps = new LocalPatchSource();
+    auto* ps = new LocalPatchSource();
     ps->setFilename(path.toUrl());
     ps->setBaseDir(path.parent().toUrl());
     ps->setAlreadyApplied(true);

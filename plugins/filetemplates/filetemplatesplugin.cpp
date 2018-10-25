@@ -94,7 +94,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension(Context* context,
 
     if (context->type() == Context::ProjectItemContext)
     {
-        ProjectItemContext* projectContext = static_cast<ProjectItemContext*>(context);
+        auto* projectContext = static_cast<ProjectItemContext*>(context);
         QList<ProjectBaseItem*> items = projectContext->items();
         if (items.size() != 1)
         {
@@ -127,7 +127,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension(Context* context,
     }
     else if (context->type() == Context::EditorContext)
     {
-        KDevelop::EditorContext* editorContext = static_cast<KDevelop::EditorContext*>(context);
+        auto* editorContext = static_cast<KDevelop::EditorContext*>(context);
         fileUrl = editorContext->url();
     }
 
@@ -191,7 +191,7 @@ void FileTemplatesPlugin::loadTemplate(const QString& fileName)
 void FileTemplatesPlugin::createFromTemplate()
 {
     QUrl baseUrl;
-    if (QAction* action = qobject_cast<QAction*>(sender()))
+    if (auto* action = qobject_cast<QAction*>(sender()))
     {
         baseUrl = action->data().toUrl();
     }
@@ -204,7 +204,7 @@ void FileTemplatesPlugin::createFromTemplate()
     }
     if (!baseUrl.isValid()) {
         // fall-back to currently selected project's or item's base directory
-        ProjectItemContext* projectContext = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+        auto* projectContext = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
         if (projectContext) {
             const QList<ProjectBaseItem*> items = projectContext->items();
             if (items.size() == 1) {
@@ -228,7 +228,7 @@ void FileTemplatesPlugin::createFromTemplate()
         // last resort
         baseUrl = ICore::self()->projectController()->projectsBaseDirectory();
     }
-    TemplateClassAssistant* assistant = new TemplateClassAssistant(QApplication::activeWindow(), baseUrl);
+    auto* assistant = new TemplateClassAssistant(QApplication::activeWindow(), baseUrl);
     assistant->setAttribute(Qt::WA_DeleteOnClose);
     assistant->show();
 }
@@ -300,12 +300,12 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
 
 void FileTemplatesPlugin::previewTemplate()
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     if (!action || !action->data().toUrl().isValid())
     {
         return;
     }
-    TemplatePreviewToolView* preview = qobject_cast<TemplatePreviewToolView*>(core()->uiController()->findToolView(i18n("Template Preview"), m_toolView));
+    auto* preview = qobject_cast<TemplatePreviewToolView*>(core()->uiController()->findToolView(i18n("Template Preview"), m_toolView));
     if (!preview)
     {
         return;

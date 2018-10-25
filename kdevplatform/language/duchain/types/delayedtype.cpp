@@ -49,7 +49,7 @@ bool DelayedType::equals(const AbstractType* _rhs) const
 
     Q_ASSERT(fastCast<const DelayedType*>(_rhs));
 
-    const DelayedType* rhs = static_cast<const DelayedType*>(_rhs);
+    const auto* rhs = static_cast<const DelayedType*>(_rhs);
 
     return d_func()->m_identifier == rhs->d_func()->m_identifier && rhs->d_func()->m_kind == d_func()->m_kind;
 }

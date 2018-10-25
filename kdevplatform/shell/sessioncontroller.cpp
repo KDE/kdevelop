@@ -211,7 +211,7 @@ public:
             return;
         }
 
-        QAction* a = new QAction( grp );
+        auto* a = new QAction( grp );
         a->setText( s->description() );
         a->setCheckable( false );
         a->setData(QVariant::fromValue<Session*>(s));
@@ -537,14 +537,14 @@ SessionRunInfo SessionController::sessionRunInfo(const QString& id)
 QString SessionController::showSessionChooserDialog(const QString& headerText, bool onlyRunning)
 {
     ///FIXME: move this code into sessiondialog.cpp
-    QListView* view = new QListView;
-    QLineEdit* filter = new QLineEdit;
+    auto* view = new QListView;
+    auto* filter = new QLineEdit;
     filter->setClearButtonEnabled( true );
     filter->setPlaceholderText(i18n("Search"));
 
-    QStandardItemModel* model = new QStandardItemModel(view);
+    auto* model = new QStandardItemModel(view);
 
-    QSortFilterProxyModel *proxy = new QSortFilterProxyModel(model);
+    auto *proxy = new QSortFilterProxyModel(model);
     proxy->setSourceModel(model);
     proxy->setFilterKeyColumn( 1 );
     proxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
@@ -570,7 +570,7 @@ QString SessionController::showSessionChooserDialog(const QString& headerText, b
     view->setModel(proxy);
     view->setModelColumn(1);
 
-    QHBoxLayout* filterLayout = new QHBoxLayout();
+    auto* filterLayout = new QHBoxLayout();
     filterLayout->addWidget(new QLabel(i18n("Filter:")));
     filterLayout->addWidget(filter);
     layout.addLayout(filterLayout);

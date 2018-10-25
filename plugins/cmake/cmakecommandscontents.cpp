@@ -43,7 +43,7 @@ CMakeCommandsContents::CMakeCommandsContents(QObject* parent)
     for (int i = 0; i <= CMakeDocumentation::Policy; ++i) {
         const QStringList params = { args[i]+QStringLiteral("-list") };
 
-        QProcess* process = new QProcess(this);
+        auto* process = new QProcess(this);
         process->setProperty("type", i);
         process->setProgram(CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile());
         process->setArguments(params);
@@ -55,7 +55,7 @@ CMakeCommandsContents::CMakeCommandsContents(QObject* parent)
 
 void CMakeCommandsContents::processOutput(int code)
 {
-    QProcess* process = qobject_cast<QProcess*>(sender());
+    auto* process = qobject_cast<QProcess*>(sender());
     if (code!=0) {
         qDebug() << "failed" << process;
         return;

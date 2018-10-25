@@ -54,7 +54,7 @@ inline OktetaDocumentFactory::OktetaDocumentFactory( OktetaPlugin* plugin )
 
 inline IDocument* OktetaDocumentFactory::create( const QUrl &url, ICore* core )
 {
-    OktetaDocument* document = new OktetaDocument( url, core );
+    auto* document = new OktetaDocument( url, core );
     document->setPlugin( mPlugin );
 //             m_plugin->activateDocument(d);
     return document;

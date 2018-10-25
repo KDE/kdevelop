@@ -55,7 +55,7 @@ QVariant VcsOverlayProxyModel::data(const QModelIndex& proxyIndex, int role) con
 {
     if(role == VcsStatusRole) {
         if (!proxyIndex.parent().isValid()) {
-            IProject* p = qobject_cast<IProject*>(proxyIndex.data(ProjectModel::ProjectRole).value<QObject*>());
+            auto* p = qobject_cast<IProject*>(proxyIndex.data(ProjectModel::ProjectRole).value<QObject*>());
             return m_branchName.value(p);
         } else {
             ProjectChangesModel* model = ICore::self()->projectController()->changesModel();
@@ -74,7 +74,7 @@ void VcsOverlayProxyModel::addProject(IProject* p)
         return;
 
     // TODO: Show revision in case we're in "detached" state
-    IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
+    auto* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
     if(branchingExtension) {
         const QUrl url = p->path().toUrl();
         branchingExtension->registerRepositoryForCurrentBranchChanges(url);
@@ -103,7 +103,7 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const QUrl& url)
                 continue;
             }
 
-            IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
+            auto* branching = v->extension<IBranchingVersionControl>();
             Q_ASSERT(branching);
             VcsJob* job = branching->currentBranch(url);
             connect(job, &VcsJob::resultsReady, this, &VcsOverlayProxyModel::branchNameReady);

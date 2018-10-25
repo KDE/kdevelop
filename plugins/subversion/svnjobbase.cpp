@@ -197,7 +197,7 @@ void SvnJobBase::outputMessage(const QString& message)
     if (!model()) return;
     if (verbosity() == KDevelop::OutputJob::Silent) return;
 
-    QStandardItemModel *m = qobject_cast<QStandardItemModel*>(model());
+    auto *m = qobject_cast<QStandardItemModel*>(model());
     QStandardItem *previous = m->item(m->rowCount()-1);
     if (message == QLatin1String(".") && previous && previous->text().contains(QRegExp(QStringLiteral("\\.+"))))
         previous->setText(previous->text() + message);
@@ -206,7 +206,7 @@ void SvnJobBase::outputMessage(const QString& message)
     KDevelop::IPlugin* i = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
     if( i )
     {
-        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        auto* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
             view->raiseOutput( outputId() );

@@ -49,7 +49,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
 {
     Q_ASSERT(m_vcs);
     m_commitMessageWidget = new QWidget;
-    QVBoxLayout* layout = new QVBoxLayout(m_commitMessageWidget.data());
+    auto* layout = new QVBoxLayout(m_commitMessageWidget.data());
     layout->setMargin(0);
 
     m_commitMessageEdit = new KTextEdit;
@@ -57,7 +57,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
     m_commitMessageEdit.data()->setLineWrapMode(QTextEdit::NoWrap);
     m_vcs->setupCommitMessageEditor(updater->url(), m_commitMessageEdit.data());
 
-    QHBoxLayout* titleLayout = new QHBoxLayout;
+    auto* titleLayout = new QHBoxLayout;
     titleLayout->addWidget(new QLabel(i18n("Commit Message:")));
 
     m_oldMessages = new KComboBox(m_commitMessageWidget.data());
@@ -287,7 +287,7 @@ bool VCSCommitDiffPatchSource::finishReview(const QList<QUrl>& selection)
 
 bool showVcsDiff(IPatchSource* vcsDiff)
 {
-    KDevelop::IPatchReview* patchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>(QStringLiteral("org.kdevelop.IPatchReview"));
+    auto* patchReview = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>(QStringLiteral("org.kdevelop.IPatchReview"));
 
     if( patchReview ) {
         patchReview->startReview(vcsDiff);

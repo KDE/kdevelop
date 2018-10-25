@@ -204,7 +204,7 @@ void TestProjectModel::testCreateTargetItems_data()
 
 void TestProjectModel::testChangeWithProxyModel()
 {
-    QSortFilterProxyModel* proxy = new QSortFilterProxyModel( this );
+    auto* proxy = new QSortFilterProxyModel( this );
     proxy->setSourceModel( model );
     ProjectFolderItem* root = new ProjectFolderItem( nullptr, Path(QUrl::fromLocalFile(QStringLiteral("/folder1"))) );
     root->appendRow( new ProjectFileItem( nullptr, Path(QUrl::fromLocalFile(QStringLiteral("/folder1/file1"))) ) );
@@ -227,9 +227,9 @@ void TestProjectModel::testCreateSimpleHierarchy()
     QString cppFileName = QStringLiteral("file.cpp");
     ProjectFolderItem* rootFolder = new ProjectFolderItem( nullptr, Path(QUrl::fromLocalFile("/"+folderName)) );
     QCOMPARE(rootFolder->baseName(), folderName);
-    ProjectFileItem* file = new ProjectFileItem( fileName, rootFolder );
+    auto* file = new ProjectFileItem( fileName, rootFolder );
     QCOMPARE(file->baseName(), fileName);
-    ProjectTargetItem* target = new ProjectTargetItem( nullptr, targetName );
+    auto* target = new ProjectTargetItem( nullptr, targetName );
     rootFolder->appendRow( target );
     ProjectFileItem* targetfile = new ProjectFileItem( nullptr, Path(rootFolder->path(), cppFileName), target );
 
@@ -334,7 +334,7 @@ void TestProjectModel::testRename()
 
     const Path projectFolder = Path(QUrl::fromLocalFile(QStringLiteral("/dummyprojectfolder")));
     QScopedPointer<TestProject> proj(new TestProject());
-    ProjectFolderItem* rootItem = new ProjectFolderItem( proj.data(), projectFolder, nullptr);
+    auto* rootItem = new ProjectFolderItem( proj.data(), projectFolder, nullptr);
     proj->setProjectItem( rootItem );
 
     new ProjectFileItem(QStringLiteral("existing"), rootItem);
@@ -523,7 +523,7 @@ void TestProjectModel::testProjectFileSet()
 
     QVERIFY(project->fileSet().isEmpty());
     Path path(QUrl::fromLocalFile(QDir::tempPath() + "/a"));
-    ProjectFileItem* item = new ProjectFileItem(project.data(), path, project->projectItem());
+    auto* item = new ProjectFileItem(project.data(), path, project->projectItem());
     QCOMPARE(project->fileSet().size(), 1);
     qDebug() << path << project->fileSet().toList().at(0).toUrl();
     QCOMPARE(Path(project->fileSet().toList().at(0).toUrl()), path);

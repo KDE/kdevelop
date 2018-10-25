@@ -190,7 +190,7 @@ void TestProblems::testFixits()
 
     const ClangProblem* p1 = dynamic_cast<ClangProblem*>(problems[0].data());
     QVERIFY(p1);
-    ClangFixitAssistant* a1 = qobject_cast<ClangFixitAssistant*>(p1->solutionAssistant().data());
+    auto* a1 = qobject_cast<ClangFixitAssistant*>(p1->solutionAssistant().data());
     QVERIFY(a1);
 
     QCOMPARE(p1->allFixits(), fixits);

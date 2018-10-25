@@ -88,7 +88,7 @@ QList<View*> MainWindow::topViews() const
             QWidget* widget = view->widget();
             if(widget->parent() && widget->parent()->parent())
             {
-                Container* container = qobject_cast<Container*>(widget->parent()->parent());
+                auto* container = qobject_cast<Container*>(widget->parent()->parent());
                 if(container->currentWidget() == widget)
                     topViews << view;
             }
@@ -259,7 +259,7 @@ void MainWindow::loadSettings()
     // KMainWindow scans the widget tree for a QStatusBar-inheriting instance and
     // set enabled state by the config value stored by the key "StatusBar",
     // while the QStatusBar subclass used in sublime should always be enabled.
-    QMenuBar* mb = findChild<QMenuBar *>();
+    auto* mb = findChild<QMenuBar *>();
     if (mb) {
         QString entry = cg.readEntry ("MenuBar", "Enabled");
         if ( entry == QLatin1String("Disabled") )

@@ -67,7 +67,7 @@ public:
     {
         Q_UNUSED(parent);
 
-        ProblemsView* v = new ProblemsView();
+        auto* v = new ProblemsView();
         v->load();
         return v;
     }
@@ -180,7 +180,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
 {
     KDevelop::ContextMenuExtension extension;
 
-    KDevelop::EditorContext* editorContext = dynamic_cast<KDevelop::EditorContext*>(context);
+    auto* editorContext = dynamic_cast<KDevelop::EditorContext*>(context);
     if (editorContext) {
         DUChainReadLocker lock(DUChain::lock(), 1000);
         if (!lock.locked()) {
@@ -214,7 +214,7 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
                 text = i18n("Solve: %1", KDevelop::htmlToPlainText(title));
             }
 
-            QMenu* menu = new QMenu(text, parent);
+            auto* menu = new QMenu(text, parent);
             foreach (QAction* action, actions)
                 menu->addAction(action);
 

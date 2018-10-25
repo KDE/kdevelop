@@ -134,7 +134,7 @@ void SvnCommitJob::start()
     setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
     startOutput();
 
-    QStandardItemModel *m = qobject_cast<QStandardItemModel*>(model());
+    auto *m = qobject_cast<QStandardItemModel*>(model());
     m->setColumnCount(1);
     m->appendRow(new QStandardItem(i18n("Committing...")));
 

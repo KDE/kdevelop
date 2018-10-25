@@ -47,7 +47,7 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
         QString type=typeIdx.model()->data(typeIdx, Qt::DisplayRole).toString();
         if(type==QLatin1String("BOOL"))
         {
-            QCheckBox* box=new QCheckBox(parent);
+            auto* box=new QCheckBox(parent);
             connect(box, &QCheckBox::toggled, this, &CMakeCacheDelegate::checkboxToggled);
             ret = box;
         }
@@ -56,7 +56,7 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
             QModelIndex stringsIdx=index.sibling(index.row(), 5);
             QString strings=typeIdx.model()->data(stringsIdx, Qt::DisplayRole).toString();
             if (!strings.isEmpty()) {
-                QComboBox* comboBox = new QComboBox(parent);
+                auto* comboBox = new QComboBox(parent);
                 comboBox->setEditable(true);
                 comboBox->addItems(strings.split(QLatin1Char(';')));
                 ret = comboBox;
@@ -66,7 +66,7 @@ QWidget * CMakeCacheDelegate::createEditor(QWidget * parent, const QStyleOptionV
         }
         else if(type==QLatin1String("PATH") || type==QLatin1String("FILEPATH"))
         {
-            KUrlRequester *r=new KUrlRequester(parent);
+            auto *r=new KUrlRequester(parent);
             if(type==QLatin1String("FILEPATH"))
                 r->setMode(KFile::File);
             else
@@ -94,12 +94,12 @@ void CMakeCacheDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
         QString value=index.model()->data(index, Qt::DisplayRole).toString();
         if(type==QLatin1String("BOOL"))
         {
-            QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
+            auto *boolean=qobject_cast<QCheckBox*>(editor);
             boolean->setCheckState(value==QLatin1String("ON") ? Qt::Checked : Qt::Unchecked);
         }
         else if(type==QLatin1String("PATH") || type==QLatin1String("FILEPATH"))
         {
-            KUrlRequester *url=qobject_cast<KUrlRequester*>(editor);
+            auto *url=qobject_cast<KUrlRequester*>(editor);
             url->setUrl(QUrl(value));
         }
         else
@@ -120,12 +120,12 @@ void CMakeCacheDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
         QString value;
         if(type==QLatin1String("BOOL"))
         {
-            QCheckBox *boolean=qobject_cast<QCheckBox*>(editor);
+            auto *boolean=qobject_cast<QCheckBox*>(editor);
             value = boolean->isChecked() ? QStringLiteral("ON") : QStringLiteral("OFF");
         }
         else if(type==QLatin1String("PATH") || type==QLatin1String("FILEPATH"))
         {
-            KUrlRequester *urlreq=qobject_cast<KUrlRequester*>(editor);
+            auto *urlreq=qobject_cast<KUrlRequester*>(editor);
             value = urlreq->url().toDisplayString(QUrl::StripTrailingSlash | QUrl::PreferLocalFile); //CMake usually don't put it
         }
         else
@@ -173,7 +173,7 @@ void CMakeCacheDelegate::checkboxToggled()
     // model data which is done by closing the editor which in turn
     // calls setModelData. otherwise, the behavior is quite confusing, see e.g.
     // https://bugs.kde.org/show_bug.cgi?id=304352
-    QCheckBox* editor = qobject_cast<QCheckBox*>(sender());
+    auto* editor = qobject_cast<QCheckBox*>(sender());
     Q_ASSERT(editor);
     emit closeEditor(editor);
 }

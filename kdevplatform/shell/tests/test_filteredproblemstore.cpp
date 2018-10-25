@@ -156,20 +156,20 @@ void TestFilteredProblemStore::testGrouping()
 // Compares the node and it's children to a reference problem and it's diagnostics
 bool checkDiagnodes(const ProblemStoreNode *node, const IProblem::Ptr &reference)
 {
-    const ProblemNode *problemNode = dynamic_cast<const ProblemNode*>(node);
+    const auto *problemNode = dynamic_cast<const ProblemNode*>(node);
     MYVERIFY(problemNode);
     MYCOMPARE(problemNode->problem()->description(), reference->description());
     MYCOMPARE(problemNode->problem()->finalLocation().document.str(), reference->finalLocation().document.str());
     MYCOMPARE(problemNode->count(), 1);
 
     const IProblem::Ptr diag = reference->diagnostics().at(0);
-    const ProblemNode *diagNode = dynamic_cast<const ProblemNode*>(problemNode->child(0));
+    const auto *diagNode = dynamic_cast<const ProblemNode*>(problemNode->child(0));
     MYVERIFY(diagNode);
     MYCOMPARE(diagNode->problem()->description(), diag->description());
     MYCOMPARE(diagNode->count(), 1);
 
     const IProblem::Ptr diagdiag = diag->diagnostics().at(0);
-    const ProblemNode *diagdiagNode = dynamic_cast<const ProblemNode*>(diagNode->child(0));
+    const auto *diagdiagNode = dynamic_cast<const ProblemNode*>(diagNode->child(0));
     MYVERIFY(diagdiagNode);
     MYCOMPARE(diagdiagNode->problem()->description(), diagdiag->description());
     MYCOMPARE(diagdiagNode->count(), 0);
@@ -188,7 +188,7 @@ void TestFilteredProblemStore::testNoGrouping()
         QCOMPARE(m_store->count(), c);
     }
     for (int i = 0; i < c; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
         QVERIFY(node);
 
         QCOMPARE(node->problem()->description(), m_problems[i]->description());
@@ -202,7 +202,7 @@ void TestFilteredProblemStore::testNoGrouping()
     m_store->setProblems(m_problems);
     QCOMPARE(m_problems.count(), m_store->count());
     for (int i = 0; i < c; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
         QVERIFY(node);
         QCOMPARE(node->problem()->description(), m_problems[i]->description());
     }
@@ -213,7 +213,7 @@ void TestFilteredProblemStore::testNoGrouping()
     m_store->setSeverity(IProblem::Error);
     QCOMPARE(m_store->count(), ErrorFilterProblemCount);
     for (int i = 0; i < ErrorFilterProblemCount; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(0));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(0));
         QVERIFY(node);
         QCOMPARE(node->problem()->description(), m_problems[i]->description());
     }
@@ -222,7 +222,7 @@ void TestFilteredProblemStore::testNoGrouping()
     m_store->setSeverity(IProblem::Warning);
     QCOMPARE(m_store->count(), WarningFilterProblemCount);
     for (int i = 0; i < WarningFilterProblemCount; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
         QVERIFY(node);
 
         QCOMPARE(node->problem()->description(), m_problems[i]->description());
@@ -232,7 +232,7 @@ void TestFilteredProblemStore::testNoGrouping()
     m_store->setSeverity(IProblem::Hint);
     QCOMPARE(m_store->count(), HintFilterProblemCount);
     for (int i = 0; i < HintFilterProblemCount; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
         QVERIFY(node);
 
         QCOMPARE(node->problem()->description(), m_problems[i]->description());
@@ -243,7 +243,7 @@ void TestFilteredProblemStore::testNoGrouping()
     m_store->setSeverities(IProblem::Error);
     QCOMPARE(m_store->count(), ErrorCount);
     for (int i = 0; i < ErrorCount; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
         QVERIFY(node);
         QCOMPARE(node->problem()->description(), m_problems[i]->description());
     }
@@ -252,7 +252,7 @@ void TestFilteredProblemStore::testNoGrouping()
     m_store->setSeverities(IProblem::Warning);
     QCOMPARE(m_store->count(), WarningCount);
     for (int i = 0; i < WarningCount; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
         QVERIFY(node);
 
         QCOMPARE(node->problem()->description(), m_problems[i+ErrorCount]->description());
@@ -262,7 +262,7 @@ void TestFilteredProblemStore::testNoGrouping()
     m_store->setSeverities(IProblem::Hint);
     QCOMPARE(m_store->count(), HintCount);
     for (int i = 0; i < HintCount; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
         QVERIFY(node);
 
         QCOMPARE(node->problem()->description(), m_problems[i+ErrorCount+WarningCount]->description());
@@ -272,13 +272,13 @@ void TestFilteredProblemStore::testNoGrouping()
     m_store->setSeverities(IProblem::Error | IProblem::Hint);
     QCOMPARE(m_store->count(), HintCount + ErrorCount);
     for (int i = 0; i < ErrorCount; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
         QVERIFY(node);
 
         QCOMPARE(node->problem()->description(), m_problems[i]->description());
     }
     for (int i = ErrorCount; i < ErrorCount+HintCount; i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
         QVERIFY(node);
 
         QCOMPARE(node->problem()->description(), m_problems[i+WarningCount]->description());
@@ -296,7 +296,7 @@ void TestFilteredProblemStore::testNoGrouping()
 
 bool checkNodeLabel(const ProblemStoreNode *node, const QString &label)
 {
-    const LabelNode *parent = dynamic_cast<const LabelNode*>(node);
+    const auto *parent = dynamic_cast<const LabelNode*>(node);
 
     MYVERIFY(parent);
     MYCOMPARE(parent->label(), label);
@@ -306,7 +306,7 @@ bool checkNodeLabel(const ProblemStoreNode *node, const QString &label)
 
 bool checkNodeDescription(const ProblemStoreNode *node, const QString &descr)
 {
-    const ProblemNode *n = dynamic_cast<const ProblemNode*>(node);
+    const auto *n = dynamic_cast<const ProblemNode*>(node);
 
     MYVERIFY(n);
     MYCOMPARE(n->problem()->description(), descr);
@@ -448,7 +448,7 @@ void TestFilteredProblemStore::testPathGrouping()
     // Check if the diagnostics are added properly
     m_store->addProblem(m_diagnosticTestProblem);
     QCOMPARE(m_store->count(), 1);
-    const LabelNode *node = dynamic_cast<const LabelNode*>(m_store->findNode(0));
+    const auto *node = dynamic_cast<const LabelNode*>(m_store->findNode(0));
     QVERIFY(node);
     QCOMPARE(node->label(), m_diagnosticTestProblem->finalLocation().document.str());
     QVERIFY(checkDiagnodes(node->child(0), m_diagnosticTestProblem));

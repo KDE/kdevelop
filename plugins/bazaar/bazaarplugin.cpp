@@ -94,7 +94,7 @@ VcsJob* BazaarPlugin::annotate(const QUrl& localLocation, const VcsRevision& rev
 VcsJob* BazaarPlugin::commit(const QString& message, const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
     QDir dir = BazaarUtils::workingCopy(localLocations[0]);
-    DVcsJob* job = new DVcsJob(dir, this);
+    auto* job = new DVcsJob(dir, this);
     job->setType(VcsJob::Commit);
 
     *job << "bzr" << "commit" << BazaarUtils::handleRecursion(localLocations, recursion) << "-m" << message;
@@ -139,7 +139,7 @@ VcsJob* BazaarPlugin::init(const QUrl& localRepositoryRoot)
 bool BazaarPlugin::isVersionControlled(const QUrl& localLocation)
 {
     QDir workCopy = BazaarUtils::workingCopy(localLocation);
-    DVcsJob* job = new DVcsJob(workCopy, this, OutputJob::Silent);
+    auto* job = new DVcsJob(workCopy, this, OutputJob::Silent);
     job->setType(VcsJob::Unknown);
     job->setIgnoreError(true);
     *job << "bzr" << "ls" << "--from-root" << "-R" << "-V";

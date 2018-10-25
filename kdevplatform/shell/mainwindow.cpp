@@ -195,7 +195,7 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
     //instead of calling QMenuBar::addSeparator() because menubar separators are ignored
     if (element.tagName().toLower() == QLatin1String("separator")
             && element.attribute(QStringLiteral("style")) == QLatin1String("visible")) {
-        if ( QMenuBar* bar = qobject_cast<QMenuBar*>( parent ) ) {
+        if ( auto* bar = qobject_cast<QMenuBar*>( parent ) ) {
             QAction *separatorAction = new QAction(QStringLiteral("|"), this);
             bar->insertAction( before, separatorAction );
             separatorAction->setDisabled(true);
@@ -430,7 +430,7 @@ void MainWindow::updateCaption()
             title += QLatin1String(" - [ ");
 
         Sublime::Document* doc = area()->activeView()->document();
-        Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(doc);
+        auto* urlDoc = dynamic_cast<Sublime::UrlDocument*>(doc);
         if(urlDoc)
         {
             if (urlDoc->url().isLocalFile()) {

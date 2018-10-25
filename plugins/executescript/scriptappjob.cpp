@@ -53,7 +53,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     qCDebug(PLUGIN_EXECUTESCRIPT) << "creating script app job";
     setCapabilities(Killable);
 
-    IExecuteScriptPlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecuteScriptPlugin"))->extension<IExecuteScriptPlugin>();
+    auto* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecuteScriptPlugin"))->extension<IExecuteScriptPlugin>();
     Q_ASSERT(iface);
 
     const KDevelop::EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
@@ -127,11 +127,11 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
         return;
     }
 
-    KDevelop::OutputModel::OutputFilterStrategy currentFilterMode = static_cast<KDevelop::OutputModel::OutputFilterStrategy>( iface->outputFilterModeId( cfg ) );
+    auto currentFilterMode = static_cast<KDevelop::OutputModel::OutputFilterStrategy>( iface->outputFilterModeId( cfg ) );
 
     setStandardToolView(KDevelop::IOutputView::RunView);
     setBehaviours(KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll);
-    KDevelop::OutputModel* m = new KDevelop::OutputModel;
+    auto* m = new KDevelop::OutputModel;
     m->setFilteringStrategy(currentFilterMode);
     setModel( m );
     setDelegate( new KDevelop::OutputDelegate );

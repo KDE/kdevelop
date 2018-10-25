@@ -67,7 +67,7 @@ namespace {
 
 QAction* createSeparatorAction()
 {
-    QAction* separator = new QAction(nullptr);
+    auto* separator = new QAction(nullptr);
     separator->setSeparator(true);
     return separator;
 }
@@ -93,7 +93,7 @@ QMimeData* createClipboardMimeData(const bool cut)
         return nullptr;
     }
 
-    QMimeData* mimeData = new QMimeData;
+    auto* mimeData = new QMimeData;
     KIO::setClipboardDataCut(mimeData, cut);
     KUrlMimeData::setUrls(urls, mostLocalUrls, mimeData);
     return mimeData;
@@ -241,7 +241,7 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
     if( context->type() != KDevelop::Context::ProjectItemContext )
         return IPlugin::contextMenuExtension(context, parent);
 
-    KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(context);
+    auto* ctx = static_cast<KDevelop::ProjectItemContext*>(context);
     const QList<KDevelop::ProjectBaseItem*> items = ctx->items();
 
     d->ctxProjectItemList.clear();
@@ -447,7 +447,7 @@ QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectItems()
 
     } else
     {
-        KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+        auto* ctx = static_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
         items = ctx->items();
     }
 
@@ -456,7 +456,7 @@ QList<ProjectBaseItem*> ProjectManagerViewPlugin::collectItems()
 
 void ProjectManagerViewPlugin::runBuilderJob( BuilderJob::BuildType type, const QList<ProjectBaseItem*>& items )
 {
-    BuilderJob* builder = new BuilderJob;
+    auto* builder = new BuilderJob;
     builder->addItems( type, items );
     builder->updateJobName();
     ICore::self()->uiController()->registerStatus(new JobStatus(builder));
@@ -708,7 +708,7 @@ void ProjectManagerViewPlugin::createFileFromContextMenu( )
         if ( item->folder() ) {
             createFile(item->folder());
         } else if ( item->target() ) {
-            ProjectFolderItem* folder=dynamic_cast<ProjectFolderItem*>(item->parent());
+            auto* folder=dynamic_cast<ProjectFolderItem*>(item->parent());
             if(folder)
             {
                 ProjectFileItem* f=createFile(folder);
@@ -746,7 +746,7 @@ static void selectItemsByPaths(ProjectManagerView* view, const Path::List& paths
 
 void ProjectManagerViewPlugin::pasteFromContextMenu()
 {
-    KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+    auto* ctx = static_cast<KDevelop::ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
     if (ctx->items().count() != 1) {
         return; //do nothing if multiple or none items are selected
     }
@@ -768,7 +768,7 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
         isCut ? CutCopyPasteHelpers::Operation::CUT : CutCopyPasteHelpers::Operation::COPY);
 
     // Select new items in the project manager view
-    ProjectManagerViewItemContext* itemCtx = dynamic_cast<ProjectManagerViewItemContext*>(ICore::self()->selectionController()->currentSelection());
+    auto* itemCtx = dynamic_cast<ProjectManagerViewItemContext*>(ICore::self()->selectionController()->currentSelection());
     if (itemCtx) {
         Path::List finalPathsList;
         for (const auto& task : tasks) {

@@ -32,7 +32,7 @@ bool TypeAliasType::equals(const AbstractType* _rhs) const
 {
     if (!fastCast<const TypeAliasType*>(_rhs))
         return false;
-    const TypeAliasType* rhs = static_cast<const TypeAliasType*>(_rhs);
+    const auto* rhs = static_cast<const TypeAliasType*>(_rhs);
 
     if (this == rhs)
         return true;

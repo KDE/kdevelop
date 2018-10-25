@@ -130,7 +130,7 @@ public:
     {
         if( !obj )
             return;
-        Project* proj = qobject_cast<Project*>(obj);
+        auto* proj = qobject_cast<Project*>(obj);
         if( !proj )
             return;
 
@@ -218,13 +218,13 @@ public:
 
         for (auto plugin : plugins) {
             auto info = m_core->pluginController()->pluginInfo(plugin);
-            IProjectFileManager* manager = plugin->extension<KDevelop::IProjectFileManager>();
+            auto* manager = plugin->extension<KDevelop::IProjectFileManager>();
             if( manager && manager != project->projectFileManager() )
             {
                 // current plugin is a manager but does not apply to given project, skip
                 continue;
             }
-            IProjectBuilder* builder = plugin->extension<KDevelop::IProjectBuilder>();
+            auto* builder = plugin->extension<KDevelop::IProjectBuilder>();
             if ( builder && !buildersForKcm.contains( builder ) )
             {
                 continue;
@@ -243,7 +243,7 @@ public:
 
         if (itemCount == 0) {
             // otherwise base on selection
-            ProjectItemContext* itemContext = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+            auto* itemContext = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
             if (itemContext) {
                 itemCount = itemContext->items().count();
             }
@@ -260,7 +260,7 @@ public:
 
         // otherwise base on selection
         if (!project) {
-            ProjectItemContext* ctx = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+            auto* ctx = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
             if (ctx && ctx->items().count() == 1) {
                 project = ctx->items().at(0)->project();
             }
@@ -280,7 +280,7 @@ public:
             projects.insert(m_projects.at(0));
         } else {
             // otherwise base on selection
-            ProjectItemContext* ctx =  dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+            auto* ctx =  dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
             if (ctx) {
                 foreach (ProjectBaseItem* item, ctx->items()) {
                     projects.insert(item->project());
@@ -337,7 +337,7 @@ public:
 
         m_core->pluginControllerInternal()->loadProjectPlugins();
 
-        Project* project = new Project();
+        auto* project = new Project();
         QObject::connect(project, &Project::aboutToOpen,
                          q, &ProjectController::projectAboutToBeOpened);
         if ( !project->open( Path(url) ) )
@@ -610,7 +610,7 @@ void ProjectController::setupActions()
     d->m_recentProjectsAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
     d->m_recentProjectsAction->loadEntries( KConfigGroup(config, "RecentProjects") );
 
-    QAction* openProjectForFileAction = new QAction( this );
+    auto* openProjectForFileAction = new QAction( this );
     ac->addAction(QStringLiteral("project_open_for_file"), openProjectForFileAction);
     openProjectForFileAction->setText(i18n("Open Project for Current File"));
     connect( openProjectForFileAction, &QAction::triggered, this, &ProjectController::openProjectForUrlSlot);
@@ -722,7 +722,7 @@ QList<IProject*> ProjectController::projects() const
 
 void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, const KIO::UDSEntryList& entries)
 {
-    KIO::SimpleJob* job(dynamic_cast<KIO::SimpleJob*>(_job));
+    auto* job(dynamic_cast<KIO::SimpleJob*>(_job));
     Q_ASSERT(job);
     for (const KIO::UDSEntry& entry : entries) {
         if(d->m_foundProjectFile)
@@ -853,7 +853,7 @@ void ProjectController::openProject( const QUrl &projectFile )
             return;
 
         foreach ( const QObject* obj, sessions.children() ) {
-            if ( const QRadioButton* button = qobject_cast<const QRadioButton*>(obj) ) {
+            if ( const auto* button = qobject_cast<const QRadioButton*>(obj) ) {
                 QString sessionid = button->property("sessionid").toString();
                 if ( button->isChecked() && ! sessionid.isEmpty() ) {
                     Core::self()->sessionController()->loadSession(sessionid);
@@ -1199,7 +1199,7 @@ void ProjectController::commitCurrentProject()
 
     if(project && project->versionControlPlugin()) {
         IPlugin* plugin = project->versionControlPlugin();
-        IBasicVersionControl* vcs=plugin->extension<IBasicVersionControl>();
+        auto* vcs=plugin->extension<IBasicVersionControl>();
 
         if(vcs) {
             ICore::self()->documentController()->saveAllDocuments(KDevelop::IDocument::Silent);

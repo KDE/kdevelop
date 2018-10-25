@@ -67,7 +67,7 @@ ToolViewData::~ToolViewData()
 OutputData* ToolViewData::addOutput( int id, const QString& title,
                                      KDevelop::IOutputView::Behaviours behave )
 {
-    OutputData* d = new OutputData( this );
+    auto* d = new OutputData( this );
     d->id = id;
     d->title = title;
     d->behaviour = behave;

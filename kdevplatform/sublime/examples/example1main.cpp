@@ -74,7 +74,7 @@ Example1Main::Example1Main()
     //example main window stuff
     QWidget *w = new QWidget(this);
     setCentralWidget(w);
-    QVBoxLayout *l = new QVBoxLayout(w);
+    auto *l = new QVBoxLayout(w);
     QMenu *areaMenu = menuBar()->addMenu(QStringLiteral("Areas"));
     areaMenu->addAction(QStringLiteral("Area 1"), this, SLOT(selectArea1()));
     areaMenu->addAction(QStringLiteral("Area 2"), this, SLOT(selectArea2()));
@@ -88,7 +88,7 @@ Example1Main::Example1Main()
 
 void Example1Main::selectArea1()
 {
-    Sublime::MainWindow *main = new Sublime::MainWindow(m_controller);
+    auto *main = new Sublime::MainWindow(m_controller);
     connect(main, &Sublime::MainWindow::areaChanged, this, &Example1Main::updateTitle);
     m_controller->showArea(m_area1, main);
     main->show();
@@ -96,7 +96,7 @@ void Example1Main::selectArea1()
 
 void Example1Main::selectArea2()
 {
-    Sublime::MainWindow *main = new Sublime::MainWindow(m_controller);
+    auto *main = new Sublime::MainWindow(m_controller);
     connect(main, &Sublime::MainWindow::areaChanged, this, &Example1Main::updateTitle);
     m_controller->showArea(m_area2, main);
     main->show();
@@ -104,7 +104,7 @@ void Example1Main::selectArea2()
 
 void Example1Main::updateTitle(Sublime::Area *area)
 {
-    Sublime::MainWindow *main = qobject_cast<Sublime::MainWindow*>(sender());
+    auto *main = qobject_cast<Sublime::MainWindow*>(sender());
     main->setWindowTitle(area->objectName());
 }
 

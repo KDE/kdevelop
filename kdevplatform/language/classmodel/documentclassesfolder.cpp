@@ -410,7 +410,7 @@ StaticNamespaceFolderNode* DocumentClassesFolder::namespaceFolder(const KDevelop
             parentNode = this;
 
         // Create the new node.
-        StaticNamespaceFolderNode* newNode =
+        auto* newNode =
             new StaticNamespaceFolderNode(a_identifier, m_model);
         parentNode->addNode(newNode);
 

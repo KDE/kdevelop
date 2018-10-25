@@ -30,13 +30,13 @@ namespace QMake {
 
 void setIdentifierForStatement(StatementAST* stmt, ValueAST* val)
 {
-    if (OrAST* orop = dynamic_cast<OrAST*>(stmt)) {
+    if (auto* orop = dynamic_cast<OrAST*>(stmt)) {
         setIdentifierForStatement(orop->scopes.at(0), val);
-    } else if (AssignmentAST* assign = dynamic_cast<AssignmentAST*>(stmt)) {
+    } else if (auto* assign = dynamic_cast<AssignmentAST*>(stmt)) {
         assign->identifier = val;
-    } else if (FunctionCallAST* funcall = dynamic_cast<FunctionCallAST*>(stmt)) {
+    } else if (auto* funcall = dynamic_cast<FunctionCallAST*>(stmt)) {
         funcall->identifier = val;
-    } else if (SimpleScopeAST* simple = dynamic_cast<SimpleScopeAST*>(stmt)) {
+    } else if (auto* simple = dynamic_cast<SimpleScopeAST*>(stmt)) {
         simple->identifier = val;
     }
 }
@@ -74,23 +74,23 @@ void BuildASTVisitor::visitOrOperator(OrOperatorAst* node)
 void BuildASTVisitor::visitItem(ItemAst* node)
 {
     if (node->functionArguments) {
-        FunctionCallAST* call = createAst<FunctionCallAST>(node, aststack.top());
-        ValueAST* val = createAst<ValueAST>(node, call);
+        auto* call = createAst<FunctionCallAST>(node, aststack.top());
+        auto* val = createAst<ValueAST>(node, call);
         val->value = getTokenString(node->id);
         setPositionForToken(node->id, val);
         call->identifier = val;
-        OrAST* orast = stackTop<OrAST>();
+        auto* orast = stackTop<OrAST>();
         orast->scopes.append(call);
         aststack.push(call);
         DefaultVisitor::visitItem(node);
         aststack.pop();
     } else {
-        SimpleScopeAST* simple = createAst<SimpleScopeAST>(node, aststack.top());
-        ValueAST* val = createAst<ValueAST>(node, simple);
+        auto* simple = createAst<SimpleScopeAST>(node, aststack.top());
+        auto* val = createAst<ValueAST>(node, simple);
         val->value = getTokenString(node->id);
         setPositionForToken(node->id, val);
         simple->identifier = val;
-        OrAST* orast = stackTop<OrAST>();
+        auto* orast = stackTop<OrAST>();
         orast->scopes.append(simple);
         DefaultVisitor::visitItem(node);
     }
@@ -99,10 +99,10 @@ void BuildASTVisitor::visitItem(ItemAst* node)
 void BuildASTVisitor::visitScope(ScopeAst* node)
 {
     if (node->orOperator) {
-        OrAST* orast = createAst<OrAST>(node, aststack.top());
+        auto* orast = createAst<OrAST>(node, aststack.top());
         // qCDebug(KDEV_QMAKE) << "created orast:" << orast;
         if (node->functionArguments) {
-            FunctionCallAST* ast = createAst<FunctionCallAST>(node, orast);
+            auto* ast = createAst<FunctionCallAST>(node, orast);
             aststack.push(ast);
             // qCDebug(KDEV_QMAKE) << "creating function call as first or-op" << ast;
             visitNode(node->functionArguments);
@@ -110,7 +110,7 @@ void BuildASTVisitor::visitScope(ScopeAst* node)
             aststack.pop();
             orast->scopes.append(ast);
         } else {
-            SimpleScopeAST* simple = createAst<SimpleScopeAST>(node, orast);
+            auto* simple = createAst<SimpleScopeAST>(node, orast);
             // qCDebug(KDEV_QMAKE) << "creating simple scope as first or-op";
             orast->scopes.append(simple);
         }
@@ -118,17 +118,17 @@ void BuildASTVisitor::visitScope(ScopeAst* node)
         visitNode(node->orOperator);
     } else {
         if (node->functionArguments) {
-            FunctionCallAST* call = createAst<FunctionCallAST>(node, aststack.top());
+            auto* call = createAst<FunctionCallAST>(node, aststack.top());
             aststack.push(call);
             visitNode(node->functionArguments);
         } else {
-            SimpleScopeAST* simple = createAst<SimpleScopeAST>(node, aststack.top());
+            auto* simple = createAst<SimpleScopeAST>(node, aststack.top());
             aststack.push(simple);
         }
     }
     if (node->scopeBody) {
-        ScopeBodyAST* scopebody = createAst<ScopeBodyAST>(node, aststack.top());
-        ScopeAST* scope = stackTop<ScopeAST>();
+        auto* scopebody = createAst<ScopeBodyAST>(node, aststack.top());
+        auto* scope = stackTop<ScopeAST>();
         scope->body = scopebody;
         aststack.push(scopebody);
         visitNode(node->scopeBody);
@@ -138,8 +138,8 @@ void BuildASTVisitor::visitScope(ScopeAst* node)
 
 void BuildASTVisitor::visitOp(OpAst* node)
 {
-    AssignmentAST* assign = stackTop<AssignmentAST>();
-    ValueAST* val = createAst<ValueAST>(node, assign);
+    auto* assign = stackTop<AssignmentAST>();
+    auto* val = createAst<ValueAST>(node, assign);
     val->value = getTokenString(node->optoken);
     setPositionForToken(node->optoken, val);
     assign->op = val;
@@ -160,9 +160,9 @@ void BuildASTVisitor::visitStatement(StatementAst* node)
 {
     DefaultVisitor::visitStatement(node);
     if (!node->isNewline) {
-        StatementAST* stmt = stackPop<StatementAST>();
+        auto* stmt = stackPop<StatementAST>();
         // qCDebug(KDEV_QMAKE) << "got statement ast, setting value" << stmt;
-        ValueAST* val = createAst<ValueAST>(node, stmt);
+        auto* val = createAst<ValueAST>(node, stmt);
         // qCDebug(KDEV_QMAKE) << "created value ast:" << val;
         val->value = getTokenString(node->id);
         // qCDebug(KDEV_QMAKE) << "set value" << val << val->value;
@@ -173,7 +173,7 @@ void BuildASTVisitor::visitStatement(StatementAst* node)
         }
         setIdentifierForStatement(stmt, val);
 
-        ScopeBodyAST* scope = stackTop<ScopeBodyAST>();
+        auto* scope = stackTop<ScopeBodyAST>();
         //         qCDebug(KDEV_QMAKE) << "scope:" << scope;
         scope->statements.append(stmt);
     }
@@ -181,14 +181,14 @@ void BuildASTVisitor::visitStatement(StatementAst* node)
 
 void BuildASTVisitor::visitValue(ValueAst* node)
 {
-    AssignmentAST* assign = dynamic_cast<AssignmentAST*>(aststack.top());
+    auto* assign = dynamic_cast<AssignmentAST*>(aststack.top());
     if (assign) {
-        ValueAST* value = createAst<ValueAST>(node, assign);
+        auto* value = createAst<ValueAST>(node, assign);
         value->value = getTokenString(node->value);
         assign->values.append(value);
     } else {
-        FunctionCallAST* call = stackTop<FunctionCallAST>();
-        ValueAST* value = createAst<ValueAST>(node, call);
+        auto* call = stackTop<FunctionCallAST>();
+        auto* value = createAst<ValueAST>(node, call);
         value->value = getTokenString(node->value);
         setPositionForToken(node->value, value);
         call->args.append(value);
@@ -203,7 +203,7 @@ void BuildASTVisitor::visitValueList(ValueListAst* node)
 
 void BuildASTVisitor::visitVariableAssignment(VariableAssignmentAst* node)
 {
-    AssignmentAST* assign = createAst<AssignmentAST>(node, aststack.top());
+    auto* assign = createAst<AssignmentAST>(node, aststack.top());
     aststack.push(assign);
     DefaultVisitor::visitVariableAssignment(node);
 }

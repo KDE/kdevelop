@@ -381,7 +381,7 @@ void TestProjectLoad::addDuringImport()
     QCOMPARE(ICore::self()->projectController()->projectCount(), 0);
     // but about to be opened
     QCOMPARE(spy.count(), 1);
-    IProject* project = spy.value(0).at(0).value<IProject*>();
+    auto* project = spy.value(0).at(0).value<IProject*>();
     QVERIFY(project);
     QCOMPARE(project->path(), Path(KIO::upUrl(p.file)));
     QUrl file = p.file.resolved(QUrl(QStringLiteral("test/zzzzz/999")));

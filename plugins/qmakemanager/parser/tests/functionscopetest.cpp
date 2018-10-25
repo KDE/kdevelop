@@ -48,7 +48,7 @@ void FunctionScopeTest::cleanup()
 }
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, execBasicFunc, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "foobar")
     QVERIFY(scope->body == nullptr);
 ENDTESTFUNCIMPL
@@ -56,7 +56,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, execBasicFunc, "foobar()\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, execSimpleFunc, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "foobar")
     QVERIFY(scope->body == nullptr);
 
@@ -65,7 +65,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, execSimpleFunc, "foobar( arg1, arg2 )\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, argWithEqual, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "foobar")
     QVERIFY(scope->body == nullptr);
 
@@ -74,7 +74,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, argWithEqual, "foobar( arg1 = arg2 )\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, evalQMakeSyntax, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "eval")
     QVERIFY(scope->body == nullptr);
 
@@ -83,7 +83,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, evalQMakeSyntax, "eval($${subdir}.depends = $$basename($${subdir})/$(MAKEFILE) )\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, simpleVarArg, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "eval")
     QVERIFY(scope->body == nullptr);
 
@@ -92,7 +92,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, simpleVarArg, "eval($${subdir}, $$SOMEVAR, $(SHELLVAR))\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, partlyQuotedArg, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "eval")
     QVERIFY(scope->body == nullptr);
 
@@ -101,7 +101,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, partlyQuotedArg, "eval(\"SOMELITERALSTRNIG\" SOMETHINGELSE)\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, slashArg, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "eval")
     QVERIFY(scope->body == nullptr);
 
@@ -110,7 +110,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, slashArg, "eval(SOMELITERALSTRNIG/$$SOMETHINGELSE)\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, nestedFunccalls, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "eval")
     QVERIFY(scope->body == nullptr);
 
@@ -119,7 +119,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, nestedFunccalls, "eval(val, $$contains(QT_PROJECT, $$foobar(some)))\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, oneStatementScope, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "contains")
 
     QList<QMake::StatementAST*> teststmts;
@@ -143,7 +143,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, oneStatementScope, "contains(SOMETHINGELSE, foobar) : VARIABLE = val1 val2\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, oneStatementSubScope, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "contains")
 
     QList<QMake::StatementAST*> teststmts;
@@ -179,7 +179,7 @@ DATAFUNCIMPL(FunctionScopeTest, oneStatementSubScope,
              "contains(SOMETHINGELSE, foobar) : contains( foobar ) : VARIABLE = val1 val2\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, multiLineScope, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "contains")
 
     QList<QMake::StatementAST*> teststmts;
@@ -215,7 +215,7 @@ DATAFUNCIMPL(FunctionScopeTest, multiLineScope,
              "contains(SOMETHINGELSE, foobar) {\n  VARIABLE = val1 val2\nVARIABLE2 = val2\n}\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, multiLineScopeFuncCall, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "contains")
 
     QList<QMake::StatementAST*> teststmts;
@@ -260,7 +260,7 @@ DATAFUNCIMPL(FunctionScopeTest, multiLineScopeFuncCall,
              "contains(SOMETHINGELSE, foobar) {\n  VARIABLE = val1 val2\n  func2() {\n    VARIABLE2 = val2\n}\n}\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, notFunc, 1)
-    QMake::FunctionCallAST* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* scope = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(scope, "!contains")
 
     QList<QMake::StatementAST*> teststmts;
@@ -284,7 +284,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, notFunc, "!contains(SOMETHINGELSE, foobar) : VARIABLE = val1 val2\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, orOperator, 1)
-    QMake::OrAST* orop = dynamic_cast<QMake::OrAST*>(ast->statements.first());
+    auto* orop = dynamic_cast<QMake::OrAST*>(ast->statements.first());
     QStringList funcs;
     funcs << QStringLiteral("!contains")
           << QStringLiteral("contains");
@@ -312,7 +312,7 @@ DATAFUNCIMPL(FunctionScopeTest, orOperator,
              "!contains(SOMETHINGELSE, foobar) | contains(OTHER,foo) : VARIABLE = val1 val2\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, spaceBeforeBrace, 1)
-    QMake::FunctionCallAST* fn = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* fn = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(fn, "func")
     QStringList testlist;
     testlist << QStringLiteral("some ");
@@ -326,7 +326,7 @@ ENDTESTFUNCIMPL
 DATAFUNCIMPL(FunctionScopeTest, missingParenthesis, "eval(SOMETHINGELSE\n")
 
 BEGINTESTFUNCIMPL(FunctionScopeTest, missingStatement, 1)
-    QMake::FunctionCallAST* fn = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
+    auto* fn = dynamic_cast<QMake::FunctionCallAST*>(ast->statements.first());
     TESTFUNCNAME(fn, "eval")
     QStringList testlist;
     testlist << QStringLiteral("SOMETHINGELSE ");

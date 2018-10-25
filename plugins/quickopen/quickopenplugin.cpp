@@ -233,7 +233,7 @@ QString cursorItemText()
     }
 
     AbstractType::Ptr t = decl->abstractType();
-    IdentifiedType* idType = dynamic_cast<IdentifiedType*>(t.data());
+    auto* idType = dynamic_cast<IdentifiedType*>(t.data());
     if (idType && idType->declaration(context)) {
         decl = idType->declaration(context);
     }
@@ -325,7 +325,7 @@ void QuickOpenPlugin::createActionsForMainWindow(Sublime::MainWindow* /*window*/
     actions.setDefaultShortcut(m_quickOpenDefinition, Qt::CTRL | Qt::Key_Comma);
     connect(m_quickOpenDefinition, &QAction::triggered, this, &QuickOpenPlugin::quickOpenDefinition, Qt::QueuedConnection);
 
-    QWidgetAction* quickOpenLine = new QWidgetAction(this);
+    auto* quickOpenLine = new QWidgetAction(this);
     quickOpenLine->setText(i18n("Embedded Quick Open"));
     //     actions.setDefaultShortcut( quickOpenLine, Qt::CTRL | Qt::ALT | Qt::Key_E );
 //     connect(quickOpenLine, SIGNAL(triggered(bool)), this, SLOT(quickOpenLine(bool)));
@@ -420,7 +420,7 @@ ContextMenuExtension QuickOpenPlugin::contextMenuExtension(Context* context, QWi
 {
     KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension(context, parent);
 
-    KDevelop::DeclarationContext* codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
+    auto* codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
 
     if (!codeContext) {
         return menuExt;
@@ -1085,7 +1085,7 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
     }
     case QEvent::FocusIn:
         if (dynamic_cast<QWidget*>(obj)) {
-            QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(e);
+            auto* focusEvent = dynamic_cast<QFocusEvent*>(e);
             Q_ASSERT(focusEvent);
             //Eat the focus event, keep the focus
             qCDebug(PLUGIN_QUICKOPEN) << "focus change" << "inside this: " << insideThis(obj) << "this" << this << "obj" << obj;

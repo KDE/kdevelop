@@ -258,7 +258,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
             continue;
         }
 
-        const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(entry);
+        const auto* file = dynamic_cast<const KArchiveFile*>(entry);
         if (!file) {
             qCWarning(LANGUAGE) << "Entry" << entry->name() << "is not a file";
             continue;

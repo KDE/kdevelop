@@ -29,7 +29,7 @@
 CustomBuildSystemKCModule::CustomBuildSystemKCModule(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<CustomBuildSystemSettings>(plugin, options, parent)
 {
-    QVBoxLayout* layout = new QVBoxLayout( this );
+    auto* layout = new QVBoxLayout( this );
     configWidget = new CustomBuildSystemConfigWidget( this );
     connect(configWidget, &CustomBuildSystemConfigWidget::changed, this, &ConfigPage::changed);
     layout->addWidget( configWidget );

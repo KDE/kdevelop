@@ -63,7 +63,7 @@ KJob* MakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPa
         args << QLatin1String("DESTDIR=") + installPath.toLocalFile();
 
     if(installAsRoot) {
-        KDevelop::BuilderJob* job = new KDevelop::BuilderJob;
+        auto* job = new KDevelop::BuilderJob;
         job->addCustomJob( KDevelop::BuilderJob::Build, build(dom), dom );
         job->addCustomJob( KDevelop::BuilderJob::Install, runMake( dom, MakeJob::InstallCommand, args ), dom );
         job->updateJobName();
@@ -74,7 +74,7 @@ KJob* MakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPa
 
 void MakeBuilder::jobFinished(KJob* job)
 {
-    MakeJob* mj = dynamic_cast<MakeJob*>(job);
+    auto* mj = dynamic_cast<MakeJob*>(job);
 
     if( !mj )
         return;
@@ -132,7 +132,7 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
         }
     }
 
-    MakeJob* job = new MakeJob(this, item, c, overrideTargets, variables);
+    auto* job = new MakeJob(this, item, c, overrideTargets, variables);
     m_activeMakeJobs.append(job);
 
     connect(job, &MakeJob::finished, this, &MakeBuilder::jobFinished);

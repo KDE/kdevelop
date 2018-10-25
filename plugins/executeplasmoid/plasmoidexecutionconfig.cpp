@@ -195,7 +195,7 @@ KJob* PlasmoidLauncher::calculateDependencies(KDevelop::ILaunchConfiguration* cf
                                    i18n("Could not resolve the dependency: %1", dep.toString()));
             }
         }
-        KDevelop::BuilderJob* job = new KDevelop::BuilderJob;
+        auto* job = new KDevelop::BuilderJob;
         job->addItems( KDevelop::BuilderJob::Install, items );
         job->updateJobName();
         return job;
@@ -295,7 +295,7 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
             if (path.lastPathSegment() == QLatin1String("metadata.desktop") && canLaunchMetadataFile(path)) {
                 path = path.parent();
                 QString relUrl = p->path().relativePath(path);
-                QAction* action = new QAction(relUrl, this);
+                auto* action = new QAction(relUrl, this);
                 action->setProperty("url", relUrl);
                 action->setProperty("project", qVariantFromValue<KDevelop::IProject*>(p));
                 connect(action, &QAction::triggered, this, &PlasmoidExecutionConfigType::suggestionTriggered);
@@ -314,8 +314,8 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
 
 void PlasmoidExecutionConfigType::suggestionTriggered()
 {
-    QAction* action = qobject_cast<QAction*>(sender());
-    KDevelop::IProject* p = action->property("project").value<KDevelop::IProject*>();
+    auto* action = qobject_cast<QAction*>(sender());
+    auto* p = action->property("project").value<KDevelop::IProject*>();
     QString relUrl = action->property("url").toString();
 
     KDevelop::ILauncher* launcherInstance = launchers().at( 0 );

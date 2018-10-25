@@ -163,7 +163,7 @@ private:
 void TestProjectController::initTestCase()
 {
     AutoTestShell::init({{}});
-    TestCore* testCore = new TestCore;
+    auto* testCore = new TestCore;
     testCore->setPluginController( new FakePluginController(testCore) );
     testCore->initialize();
     qRegisterMetaType<KDevelop::IProject*>();
@@ -314,8 +314,8 @@ void TestProjectController::openMultiple()
     QVERIFY(m_projCtrl->isProjectNameUsed(QStringLiteral("bar")));
 
     QCOMPARE(spy->size(), 2);
-    IProject* emittedProj1 = (*spy)[0][0].value<IProject*>();
-    IProject* emittedProj2 = (*spy)[1][0].value<IProject*>();
+    auto* emittedProj1 = (*spy)[0][0].value<IProject*>();
+    auto* emittedProj2 = (*spy)[1][0].value<IProject*>();
     QCOMPARE(emittedProj1, proj1);
     QCOMPARE(emittedProj2, proj2);
 
@@ -533,7 +533,7 @@ void TestProjectController::assertProjectOpened(const QString& name, IProject*& 
 void TestProjectController::assertSpyCaughtProject(QSignalSpy* spy, IProject* proj)
 {
     QCOMPARE(spy->size(), 1);
-    IProject* emittedProj = (*spy)[0][0].value<IProject*>();
+    auto* emittedProj = (*spy)[0][0].value<IProject*>();
     QCOMPARE(proj, emittedProj);
 }
 
@@ -570,7 +570,7 @@ QSignalSpy* TestProjectController::createClosingSpy()
 
 FakeFileManager* TestProjectController::createFileManager()
 {
-    FakeFileManager* fileMng = new FakeFileManager;
+    auto* fileMng = new FakeFileManager;
     m_fileManagerGarbage << fileMng;
     return fileMng;
 }

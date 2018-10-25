@@ -67,7 +67,7 @@ clock_t std_insertion = 0, std_removal = 0, std_contains = 0, std_iteration = 0,
 
 QString toString(const std::set<uint>& set) {
     QString ret;
-    for(std::set<uint>::const_iterator it = set.begin(); it != set.end(); ++it)
+    for(auto it = set.begin(); it != set.end(); ++it)
         ret += QStringLiteral("%1 ").arg(*it);
     return ret;
 }
@@ -77,8 +77,8 @@ bool operator==(const std::set<uint>& a, const std::set<uint>& b) {
         qDebug() << "size mismatch" << toString(a) << ": " << toString(b);
         return false;
     }
-    std::set<uint>::const_iterator aIt = a.begin();
-    std::set<uint>::const_iterator bIt = b.begin();
+    auto aIt = a.begin();
+    auto bIt = b.begin();
     for(; aIt != a.end(); ++aIt, ++bIt)
         if(*aIt != *bIt) {
             qDebug() << "mismatch" << toString(a) << ": " << toString(b);
@@ -266,7 +266,7 @@ class TestSet {
         uint ret = 0;
 
         clock_t start = clock();
-        for(std::set<uint>::const_iterator it = realSet.begin(); it != realSet.end(); ++it) {
+        for(auto it = realSet.begin(); it != realSet.end(); ++it) {
             if(current == number) {
                 ret = *it;
             }
@@ -461,7 +461,7 @@ class TestEmbeddedFreeTree : public QObject {
                     continue;
 //                 qDebug() << "inserting" << value;
 
-                std::set<uint>::const_iterator it = testSet1.lower_bound(value);
+                auto it = testSet1.lower_bound(value);
                 int pos = set1.iterator().lowerBound(TestItem(value));
                 //This tests the upperBound functionality
                 if (pos != -1) {
@@ -553,7 +553,7 @@ class TestEmbeddedFreeTree : public QObject {
 
                 start = clock();
 
-                for(std::set<uint>::const_iterator it = testSet1.begin(); it != testSet1.end(); ++it) {
+                for(auto it = testSet1.begin(); it != testSet1.end(); ++it) {
                     if(testSet2.count((*it) / extractor_div_with) == 1) {
                     }
                 }
@@ -587,7 +587,7 @@ class TestEmbeddedFreeTree : public QObject {
 
             std::set<uint> stdFiltered;
 
-            for(std::set<uint>::const_iterator it = testSet1.begin(); it != testSet1.end(); ++it) {
+            for(auto it = testSet1.begin(); it != testSet1.end(); ++it) {
                 if(testSet2.count((*it) / extractor_div_with) == 1) {
                     stdFiltered.insert(*it);
                 }

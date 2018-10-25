@@ -103,7 +103,7 @@ void AbstractNavigationWidget::initBrowser(int height)
     d->m_browser->setOpenLinks(false);
     d->m_browser->setOpenExternalLinks(false);
 
-    QVBoxLayout* layout = new QVBoxLayout;
+    auto* layout = new QVBoxLayout;
     layout->addWidget(d->m_browser);
     layout->setMargin(0);
     setLayout(layout);

@@ -48,7 +48,7 @@ bool ArrayType::equals(const AbstractType* _rhs) const
 
     Q_ASSERT(fastCast<const ArrayType*>(_rhs));
 
-    const ArrayType* rhs = static_cast<const ArrayType*>(_rhs);
+    const auto* rhs = static_cast<const ArrayType*>(_rhs);
 
     TYPE_D(ArrayType);
     if (d->m_dimension != rhs->d_func()->m_dimension)

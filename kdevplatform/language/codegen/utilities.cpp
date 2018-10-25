@@ -66,7 +66,7 @@ IndexedString fetchImplementationFileForClass(const Declaration& targetClass)
 
     //If this is a forward declaration attempt to resolve it.
     const Declaration* realClass = &targetClass;
-    if (const ForwardDeclaration* forward = dynamic_cast<const ForwardDeclaration*>(realClass)) {
+    if (const auto* forward = dynamic_cast<const ForwardDeclaration*>(realClass)) {
         if (!(realClass = forward->resolve(context->topContext())))
             return IndexedString();
         context = realClass->internalContext();
@@ -78,7 +78,7 @@ IndexedString fetchImplementationFileForClass(const Declaration& targetClass)
 
     for (Declaration* decl : declarations) {
         ///@todo check for static variable instantiation as well
-        if (ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl))
+        if (auto* classFun = dynamic_cast<ClassFunctionDeclaration*>(decl))
             if (FunctionDefinition* def = FunctionDefinition::definition(classFun)) {
                 qCDebug(LANGUAGE) << "Definition For declaration in:" << def->url().toUrl();
                 ++implementationsInFile[def->url()];

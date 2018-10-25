@@ -77,7 +77,7 @@ OktetaWidget::OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayVie
 
     setupActions(plugin);
 
-    QVBoxLayout* layout = new QVBoxLayout( this );
+    auto* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );
     QWidget* widget = mByteArrayView->widget();
     layout->addWidget( widget );

@@ -34,7 +34,7 @@
 DefinesAndIncludesConfigPage::DefinesAndIncludesConfigPage(KDevelop::IPlugin* plugin, const KDevelop::ProjectConfigOptions& options, QWidget* parent)
     : ProjectConfigPage<CustomDefinesAndIncludes>(plugin, options, parent)
 {
-    QVBoxLayout* layout = new QVBoxLayout( this );
+    auto* layout = new QVBoxLayout( this );
     configWidget = new ProjectPathsWidget( this );
     configWidget->setProject( project() );
     connect(configWidget, &ProjectPathsWidget::changed, this, &DefinesAndIncludesConfigPage::changed);

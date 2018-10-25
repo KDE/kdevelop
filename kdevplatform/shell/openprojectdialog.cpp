@@ -142,7 +142,7 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
         nativeDialog->setFileMode(QFileDialog::Directory);
     }
 
-    ProjectInfoPage* page = new ProjectInfoPage( this );
+    auto* page = new ProjectInfoPage( this );
     connect( page, &ProjectInfoPage::projectNameChanged, this, &OpenProjectDialog::validateProjectName );
     connect( page, &ProjectInfoPage::projectManagerChanged, this, &OpenProjectDialog::validateProjectManager );
     projectInfoPage = addPage( page, i18n("Project Information") );
@@ -231,7 +231,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
         if( !urlInfo.isDir ) {
             m_url = m_url.adjusted(QUrl::StripTrailingSlash | QUrl::RemoveFilename);
         }
-        ProjectInfoPage* page = qobject_cast<ProjectInfoPage*>( projectInfoPage->widget() );
+        auto* page = qobject_cast<ProjectInfoPage*>( projectInfoPage->widget() );
         if( page )
         {
             page->setProjectName( m_url.fileName() );

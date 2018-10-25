@@ -80,7 +80,7 @@ IdealController::IdealController(Sublime::MainWindow* mainWindow):
 
 void IdealController::addView(Qt::DockWidgetArea area, View* view)
 {
-    IdealDockWidget *dock = new IdealDockWidget(this, m_mainWindow);
+    auto *dock = new IdealDockWidget(this, m_mainWindow);
     // dock object name is used to store tool view settings
     QString dockObjectName = view->document()->title();
     // support different configuration for same docks opened in different areas
@@ -104,7 +104,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
       dock->setWidget(w);
     } else {
       QMainWindow *toolView = new QMainWindow();
-      QToolBar *toolBar = new QToolBar(toolView);
+      auto *toolBar = new QToolBar(toolView);
       int iconSize = m_mainWindow->style()->pixelMetric(QStyle::PM_SmallIconSize);
       toolBar->setIconSize(QSize(iconSize, iconSize));
       toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -147,7 +147,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
 void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 {
-    IdealDockWidget *dock = qobject_cast<IdealDockWidget*>(sender());
+    auto *dock = qobject_cast<IdealDockWidget*>(sender());
     View *view = dock->view();
     QAction* action = m_view_to_action.value(view);
 
@@ -222,7 +222,7 @@ IdealButtonBarWidget* IdealController::barForDockArea(Qt::DockWidgetArea area) c
 
 void IdealController::slotDockBarContextMenuRequested(const QPoint& position)
 {
-    IdealButtonBarWidget* bar = qobject_cast<IdealButtonBarWidget*>(sender());
+    auto* bar = qobject_cast<IdealButtonBarWidget*>(sender());
     Q_ASSERT(bar);
 
     emit dockBarContextMenuRequested(bar->area(), bar->mapToGlobal(position));
@@ -329,7 +329,7 @@ void IdealController::removeView(View* view, bool nondestructive)
     QAction* action = m_view_to_action.value(view);
 
     QWidget *viewParent = view->widget()->parentWidget();
-    IdealDockWidget *dock = qobject_cast<IdealDockWidget *>(viewParent);
+    auto *dock = qobject_cast<IdealDockWidget *>(viewParent);
     if (!dock) { // tool views with a toolbar live in a QMainWindow which lives in a Dock
         Q_ASSERT(qobject_cast<QMainWindow*>(viewParent));
         viewParent = viewParent->parentWidget();
@@ -425,7 +425,7 @@ IdealDockWidget* IdealController::currentDockWidget() const
     QWidget *w = m_mainWindow->focusWidget();
     while (true) {
         if (!w) break;
-        IdealDockWidget *dockCandidate = qobject_cast<IdealDockWidget*>(w);
+        auto *dockCandidate = qobject_cast<IdealDockWidget*>(w);
         if (dockCandidate)
             return dockCandidate;
 

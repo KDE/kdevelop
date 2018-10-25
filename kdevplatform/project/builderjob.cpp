@@ -172,7 +172,7 @@ void BuilderJob::addItem( BuildType t, ProjectBaseItem* item )
 
 void BuilderJob::addCustomJob( BuilderJob::BuildType type, KJob* job, ProjectBaseItem* item )
 {
-    if( BuilderJob* builderJob = dynamic_cast<BuilderJob*>( job ) ) {
+    if( auto* builderJob = dynamic_cast<BuilderJob*>( job ) ) {
         // If a subjob is a builder job itself, re-own its job list to avoid having recursive composite jobs.
         const QVector<SubJobData> subjobs = builderJob->d->takeJobList();
         builderJob->deleteLater();

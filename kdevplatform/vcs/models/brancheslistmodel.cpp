@@ -71,7 +71,7 @@ class BranchItem : public QStandardItem
             if(role==Qt::EditRole && value.toString()!=text()) {
                 QString newBranch = value.toString();
 
-                BranchesListModel* bmodel = qobject_cast<BranchesListModel*>(model());
+                auto* bmodel = qobject_cast<BranchesListModel*>(model());
                 if(!bmodel->findItems(newBranch).isEmpty())
                 {
                     KMessageBox::messageBox(nullptr, KMessageBox::Sorry, i18n("Branch \"%1\" already exists.", newBranch));
@@ -198,7 +198,7 @@ void BranchesListModel::setProject(KDevelop::IProject* p)
         return;
     }
 
-    KDevelop::IBranchingVersionControl* branching = p->versionControlPlugin()->extension<KDevelop::IBranchingVersionControl>();
+    auto* branching = p->versionControlPlugin()->extension<KDevelop::IBranchingVersionControl>();
     if(branching) {
         initialize(branching, p->path().toUrl());
     } else

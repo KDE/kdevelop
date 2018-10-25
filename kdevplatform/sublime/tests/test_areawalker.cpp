@@ -55,7 +55,7 @@ struct AreaStopper {
 
 void TestAreaWalker::viewWalkerModes()
 {
-    Controller *controller = new Controller(this);
+    auto *controller = new Controller(this);
     Document *doc = new UrlDocument(controller, QUrl::fromLocalFile(QStringLiteral("~/foo.cpp")));
     Area *area = new Area(controller, QStringLiteral("Area"));
     View *view1 = doc->createView();
@@ -106,7 +106,7 @@ void TestAreaWalker::viewWalkerModes()
 
 void TestAreaWalker::toolViewWalkerModes()
 {
-    Controller *controller = new Controller(this);
+    auto *controller = new Controller(this);
     Document *doc = new UrlDocument(controller, QUrl::fromLocalFile(QStringLiteral("~/foo.cpp")));
     Area *area = new Area(controller, QStringLiteral("Area"));
     View *view = doc->createView();

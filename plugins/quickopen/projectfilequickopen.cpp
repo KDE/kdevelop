@@ -151,7 +151,7 @@ QWidget* ProjectFileData::expandingWidget() const
                                               + i18nc("%1: project name", "Project %1", project())
                                               + QLatin1String("</small></small><br/>"));
     } else {
-        QTextBrowser* ret = new QTextBrowser();
+        auto* ret = new QTextBrowser();
         ret->resize(400, 100);
         ret->setText(
             QLatin1String("<small><small>")

@@ -46,7 +46,7 @@ EditStyleDialog::EditStyleDialog(ISourceFormatter* formatter, const QMimeType& m
     m_content = new QWidget();
     m_ui.setupUi(m_content);
 
-    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    auto* mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(m_content);
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -72,7 +72,7 @@ void EditStyleDialog::init()
 {
     // add plugin settings widget
     if (m_settingsWidget) {
-        QVBoxLayout* layout = new QVBoxLayout(m_ui.settingsWidgetParent);
+        auto* layout = new QVBoxLayout(m_ui.settingsWidgetParent);
         layout->setMargin(0);
         layout->addWidget(m_settingsWidget);
         m_ui.settingsWidgetParent->setLayout(layout);
@@ -85,7 +85,7 @@ void EditStyleDialog::init()
     m_document->setHighlightingMode(m_style.modeForMimetype(m_mimeType));
 
     m_view = m_document->createView(m_ui.textEditor);
-    QVBoxLayout* layout2 = new QVBoxLayout(m_ui.textEditor);
+    auto* layout2 = new QVBoxLayout(m_ui.textEditor);
     layout2->setMargin(0);
     layout2->addWidget(m_view);
     m_ui.textEditor->setLayout(layout2);

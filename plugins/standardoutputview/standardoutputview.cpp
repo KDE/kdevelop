@@ -149,7 +149,7 @@ int StandardOutputView::registerToolView( const QString& title,
     // register new tool view
     const int newid = m_ids.isEmpty() ? 0 : (m_ids.last() + 1);
     qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Registering view" << title << "with type:" << type << "id:" << newid;
-    ToolViewData* tvdata = new ToolViewData( this );
+    auto* tvdata = new ToolViewData( this );
     tvdata->toolViewId = newid;
     tvdata->type = type;
     tvdata->title = title;
@@ -189,7 +189,7 @@ void StandardOutputView::raiseOutput(int outputId)
             foreach (Sublime::View* v, m_toolViews.value(_id)->views) {
                 if( v->hasWidget() )
                 {
-                    OutputWidget* w = qobject_cast<OutputWidget*>( v->widget() );
+                    auto* w = qobject_cast<OutputWidget*>( v->widget() );
                     w->raiseOutput( outputId );
                     v->requestRaise();
                 }
@@ -240,7 +240,7 @@ void StandardOutputView::removeToolView(int toolViewId)
         {
             if( view->hasWidget() )
             {
-                OutputWidget* outputWidget = qobject_cast<OutputWidget*>( view->widget() );
+                auto* outputWidget = qobject_cast<OutputWidget*>( view->widget() );
                 foreach( int outid, td->outputdata.keys() )
                 {
                     outputWidget->removeOutput( outid );

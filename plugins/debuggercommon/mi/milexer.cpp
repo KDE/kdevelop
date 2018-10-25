@@ -109,7 +109,7 @@ TokenStream *MILexer::tokenize(const FileSymbol *fileSymbol)
             break;
     }
 
-    TokenStream *tokenStream = new TokenStream;
+    auto *tokenStream = new TokenStream;
     tokenStream->m_contents = m_contents;
 
     tokenStream->m_lines = m_lines;

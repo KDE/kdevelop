@@ -197,7 +197,7 @@ KDevelop::DUChainBase* ClassModel::duObjectForIndex(const QModelIndex& a_index)
 
     Node* node = static_cast<Node*>(a_index.internalPointer());
 
-    if (IdentifierNode* identifierNode = dynamic_cast<IdentifierNode*>(node))
+    if (auto* identifierNode = dynamic_cast<IdentifierNode*>(node))
         return identifierNode->declaration();
 
     // Non was found.

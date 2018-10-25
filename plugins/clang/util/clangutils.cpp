@@ -124,7 +124,7 @@ CXChildVisitResult paramVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientDa
         return CXChildVisit_Continue;
     }
 
-    FunctionInfo *info = static_cast<FunctionInfo*>(data);
+    auto *info = static_cast<FunctionInfo*>(data);
     ClangRange range(clang_getCursorExtent(cursor));
 
     CXFile file;

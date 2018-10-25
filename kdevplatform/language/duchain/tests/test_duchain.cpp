@@ -144,13 +144,13 @@ void TestDUChain::testStringSets()
 
         if (tempSet != realSets[a]) {
             QString dbg = QStringLiteral("created set: ");
-            for (std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+            for (auto it = realSets[a].begin(); it != realSets[a].end(); ++it)
                 dbg += QStringLiteral("%1 ").arg(*it);
 
             qDebug() << dbg;
 
             dbg = QStringLiteral("repo.   set: ");
-            for (std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
+            for (auto it = tempSet.begin(); it != tempSet.end(); ++it)
                 dbg += QStringLiteral("%1 ").arg(*it);
 
             qDebug() << dbg;
@@ -188,7 +188,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET a:";
                         QString dbg;
-                        for (std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+                        for (auto it = realSets[a].begin(); it != realSets[a].end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
@@ -198,7 +198,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET b:";
                         QString dbg;
-                        for (std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
+                        for (auto it = realSets[b].begin(); it != realSets[b].end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
@@ -211,14 +211,14 @@ void TestDUChain::testStringSets()
 
                         qDebug() << "SET difference:";
                         QString dbg = QStringLiteral("real    set: ");
-                        for (std::set<Index>::const_iterator it = _realDifference.begin(); it != _realDifference.end();
+                        for (auto it = _realDifference.begin(); it != _realDifference.end();
                              ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
 
                         dbg = QStringLiteral("repo.   set: ");
-                        for (std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
+                        for (auto it = tempSet.begin(); it != tempSet.end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
@@ -250,7 +250,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET a:";
                         QString dbg;
-                        for (std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+                        for (auto it = realSets[a].begin(); it != realSets[a].end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
@@ -260,7 +260,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET b:";
                         QString dbg;
-                        for (std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
+                        for (auto it = realSets[b].begin(); it != realSets[b].end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
@@ -273,13 +273,13 @@ void TestDUChain::testStringSets()
 
                         qDebug() << "SET union:";
                         QString dbg = QStringLiteral("real    set: ");
-                        for (std::set<Index>::const_iterator it = _realUnion.begin(); it != _realUnion.end(); ++it)
+                        for (auto it = _realUnion.begin(); it != _realUnion.end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
 
                         dbg = QStringLiteral("repo.   set: ");
-                        for (std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
+                        for (auto it = tempSet.begin(); it != tempSet.end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
@@ -304,11 +304,11 @@ void TestDUChain::testStringSets()
 
                 //Just for fun: Test how fast QSet intersections are
                 QSet<Index> first, second;
-                for (std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it) {
+                for (auto it = realSets[a].begin(); it != realSets[a].end(); ++it) {
                     first.insert(*it);
                 }
 
-                for (std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it) {
+                for (auto it = realSets[b].begin(); it != realSets[b].end(); ++it) {
                     second.insert(*it);
                 }
 
@@ -329,7 +329,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET a:";
                         QString dbg;
-                        for (std::set<Index>::const_iterator it = realSets[a].begin(); it != realSets[a].end(); ++it)
+                        for (auto it = realSets[a].begin(); it != realSets[a].end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
@@ -339,7 +339,7 @@ void TestDUChain::testStringSets()
                     {
                         qDebug() << "SET b:";
                         QString dbg;
-                        for (std::set<Index>::const_iterator it = realSets[b].begin(); it != realSets[b].end(); ++it)
+                        for (auto it = realSets[b].begin(); it != realSets[b].end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
@@ -352,14 +352,14 @@ void TestDUChain::testStringSets()
 
                         qDebug() << "SET intersection:";
                         QString dbg = QStringLiteral("real    set: ");
-                        for (std::set<Index>::const_iterator it = _realIntersection.begin();
+                        for (auto it = _realIntersection.begin();
                              it != _realIntersection.end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
 
                         dbg = QStringLiteral("repo.   set: ");
-                        for (std::set<Index>::const_iterator it = tempSet.begin(); it != tempSet.end(); ++it)
+                        for (auto it = tempSet.begin(); it != tempSet.end(); ++it)
                             dbg += QStringLiteral("%1 ").arg(*it);
 
                         qDebug() << dbg;
@@ -678,8 +678,8 @@ public Q_SLOTS:
     }
     static QSharedPointer<QThread> createWorkerThread(const char* workerSlot)
     {
-        QThread* thread = new QThread;
-        TestWorker* worker = new TestWorker;
+        auto* thread = new QThread;
+        auto* worker = new TestWorker;
         connect(thread, SIGNAL(started()), worker, workerSlot);
         connect(thread, &QThread::finished, worker, &TestWorker::deleteLater);
         worker->moveToThread(thread);

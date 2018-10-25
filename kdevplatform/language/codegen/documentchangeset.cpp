@@ -324,7 +324,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::replaceOldText(CodeRep
                                                                          const QString& newText,
                                                                          const ChangesList& sortedChangesList)
 {
-    DynamicCodeRepresentation* dynamic = dynamic_cast<DynamicCodeRepresentation*>(repr);
+    auto* dynamic = dynamic_cast<DynamicCodeRepresentation*>(repr);
     if (dynamic) {
         auto transaction = dynamic->makeEditTransaction();
         //Replay the changes one by one

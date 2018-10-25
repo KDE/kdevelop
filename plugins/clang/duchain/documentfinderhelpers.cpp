@@ -68,7 +68,7 @@ public:
             return true;
         }
         else if (mode == Source && decl->isFunctionDeclaration()) {
-            FunctionDefinition* fdef = dynamic_cast<FunctionDefinition*>(decl);
+            auto* fdef = dynamic_cast<FunctionDefinition*>(decl);
             if (fdef) {
                 Declaration* fdecl = fdef->declaration();
                 if (fdecl) {

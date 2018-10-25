@@ -239,7 +239,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem(IProject* project, const
             qmscope->setMkSpecs(parentPro->mkSpecs());
         } else {
             // new project
-            QMakeFolderItem* root = dynamic_cast<QMakeFolderItem*>(project->projectItem());
+            auto* root = dynamic_cast<QMakeFolderItem*>(project->projectItem());
             Q_ASSERT(root);
             qmscope->setMkSpecs(root->projectFiles().first()->mkSpecs());
             if (root->projectFiles().first()->qmakeCache()) {
@@ -261,7 +261,7 @@ ProjectFolderItem* QMakeProjectManager::buildFolderItem(IProject* project, const
 
 void QMakeProjectManager::slotFolderAdded(ProjectFolderItem* folder)
 {
-    QMakeFolderItem* qmakeParent = dynamic_cast<QMakeFolderItem*>(folder);
+    auto* qmakeParent = dynamic_cast<QMakeFolderItem*>(folder);
     if (!qmakeParent) {
         return;
     }
@@ -324,7 +324,7 @@ void QMakeProjectManager::slotDirty(const QString& path)
 
     bool finished = false;
     foreach (ProjectFolderItem* folder, project->foldersForPath(IndexedString(KIO::upUrl(url)))) {
-        if (QMakeFolderItem* qmakeFolder = dynamic_cast<QMakeFolderItem*>(folder)) {
+        if (auto* qmakeFolder = dynamic_cast<QMakeFolderItem*>(folder)) {
             foreach (QMakeProjectFile* pro, qmakeFolder->projectFiles()) {
                 if (pro->absoluteFile() == path) {
                     // TODO: children
@@ -475,7 +475,7 @@ ContextMenuExtension QMakeProjectManager::contextMenuExtension(Context* context,
     ContextMenuExtension ext;
 
     if (context->hasType(Context::ProjectItemContext)) {
-        ProjectItemContext* pic = dynamic_cast<ProjectItemContext*>(context);
+        auto* pic = dynamic_cast<ProjectItemContext*>(context);
         Q_ASSERT(pic);
         if (pic->items().isEmpty()) {
             return ext;

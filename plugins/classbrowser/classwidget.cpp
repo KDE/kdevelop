@@ -86,7 +86,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
     QLabel* searchLabel = new QLabel(i18n("S&earch:"), this);
     searchLabel->setBuddy(m_searchLine);
 
-    QHBoxLayout* layout = new QHBoxLayout();
+    auto* layout = new QHBoxLayout();
     layout->setSpacing(5);
     layout->setMargin(0);
     layout->addWidget(searchLabel);
@@ -94,7 +94,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 
     setFocusProxy(m_searchLine);
 
-    QVBoxLayout* vbox = new QVBoxLayout(this);
+    auto* vbox = new QVBoxLayout(this);
     vbox->setMargin(0);
     vbox->addLayout(layout);
     vbox->addWidget(m_tree);

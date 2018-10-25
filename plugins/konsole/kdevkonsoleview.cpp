@@ -60,7 +60,7 @@ public:
             konsolepart->widget() ->setFocus();
             konsolepart->widget() ->installEventFilter( m_view );
 
-            if ( QFrame * frame = qobject_cast<QFrame*>( konsolepart->widget() ) )
+            if ( auto * frame = qobject_cast<QFrame*>( konsolepart->widget() ) )
                 frame->setFrameStyle( QFrame::Panel | QFrame::Sunken );
 
             m_vbox->addWidget( konsolepart->widget() );
@@ -145,7 +145,7 @@ bool KDevKonsoleView::eventFilter( QObject* obj, QEvent *e )
 {
     switch( e->type() ) {
         case QEvent::ShortcutOverride: {
-            QKeyEvent *k = static_cast<QKeyEvent *>(e);
+            auto *k = static_cast<QKeyEvent *>(e);
 
             // Don't propagate Esc to the top level, it should be used by konsole
             if (k->key() == Qt::Key_Escape) {

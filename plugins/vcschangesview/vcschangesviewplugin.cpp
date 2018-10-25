@@ -44,7 +44,7 @@ public:
 
     QWidget* create(QWidget *parent = nullptr) override
     {
-        VcsChangesView* modif = new VcsChangesView(m_plugin, parent);
+        auto* modif = new VcsChangesView(m_plugin, parent);
         modif->setModel(m_plugin->model());
         QObject::connect(modif, static_cast<void(VcsChangesView::*)(const QList<KDevelop::IProject*>&)>(&VcsChangesView::reload), m_plugin->model(), static_cast<void(ProjectChangesModel::*)(const QList<KDevelop::IProject*>&)>(&ProjectChangesModel::reload));
         QObject::connect(modif, static_cast<void(VcsChangesView::*)(const QList<KDevelop::IProject*>&)>(&VcsChangesView::reload), m_plugin->model(), static_cast<void(ProjectChangesModel::*)(const QList<KDevelop::IProject*>&)>(&ProjectChangesModel::reload));

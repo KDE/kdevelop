@@ -154,22 +154,22 @@ void EditExternalScript::save()
   m_item->setText( nameEdit->text() );
   m_item->setCommand( commandEdit->text() );
 
-  ExternalScriptItem::InputMode inputMode = static_cast<ExternalScriptItem::InputMode>(
+  auto inputMode = static_cast<ExternalScriptItem::InputMode>(
       stdinCombo->currentIndex()
   );
   m_item->setInputMode( inputMode );
 
-  ExternalScriptItem::OutputMode outputMode = static_cast<ExternalScriptItem::OutputMode>(
+  auto outputMode = static_cast<ExternalScriptItem::OutputMode>(
       stdoutCombo->currentIndex()
   );
   m_item->setOutputMode( outputMode );
 
-  ExternalScriptItem::ErrorMode errorMode = static_cast<ExternalScriptItem::ErrorMode>(
+  auto errorMode = static_cast<ExternalScriptItem::ErrorMode>(
       stderrCombo->currentIndex()
   );
   m_item->setErrorMode( errorMode );
 
-  ExternalScriptItem::SaveMode saveMode = static_cast<ExternalScriptItem::SaveMode>(
+  auto saveMode = static_cast<ExternalScriptItem::SaveMode>(
       saveCombo->currentIndex()
   );
   m_item->setSaveMode( saveMode );

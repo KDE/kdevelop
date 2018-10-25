@@ -103,7 +103,7 @@ TemplatePreview::TemplatePreview(QWidget* parent)
     m_preview.reset(doc);
     m_preview->setReadWrite(false);
 
-    QVBoxLayout* layout = new QVBoxLayout;
+    auto* layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
     m_view = m_preview->createView(this);

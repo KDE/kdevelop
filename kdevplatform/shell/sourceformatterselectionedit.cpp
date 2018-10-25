@@ -101,7 +101,7 @@ SourceFormatterSelectionEdit::SourceFormatterSelectionEdit(QWidget* parent)
     d->view = d->document->createView(d->ui.textEditor);
     d->view->setStatusBarEnabled(false);
 
-    QVBoxLayout *layout2 = new QVBoxLayout(d->ui.textEditor);
+    auto *layout2 = new QVBoxLayout(d->ui.textEditor);
     layout2->setMargin(0);
     layout2->addWidget(d->view);
     d->ui.textEditor->setLayout(layout2);
@@ -518,7 +518,7 @@ void SourceFormatterSelectionEdit::styleNameChanged( QListWidgetItem* item )
 
 QListWidgetItem* SourceFormatterSelectionEdit::addStyle( const SourceFormatterStyle& s )
 {
-    QListWidgetItem* item = new QListWidgetItem(d->ui.styleList);
+    auto* item = new QListWidgetItem(d->ui.styleList);
     item->setText( s.caption() );
     item->setData( STYLE_ROLE, s.name() );
     if( s.name().startsWith( Strings::userStylePrefix() ) )

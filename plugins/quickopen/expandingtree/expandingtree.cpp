@@ -48,7 +48,7 @@ void ExpandingTree::drawRow(QPainter* painter, const QStyleOptionViewItem& optio
 {
     QTreeView::drawRow(painter, option, index);
 
-    const ExpandingWidgetModel* eModel = qobject_cast<const ExpandingWidgetModel*>(qobject_cast<const QAbstractProxyModel*>(model())->sourceModel());
+    const auto* eModel = qobject_cast<const ExpandingWidgetModel*>(qobject_cast<const QAbstractProxyModel*>(model())->sourceModel());
     Q_ASSERT(eModel);
     const QModelIndex sourceIndex = eModel->mapToSource(index);
     if (eModel->isPartiallyExpanded(sourceIndex) != ExpandingWidgetModel::ExpansionType::NotExpanded) {

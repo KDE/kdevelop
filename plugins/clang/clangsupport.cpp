@@ -306,7 +306,7 @@ void ClangSupport::createActionsForMainWindow (Sublime::MainWindow* /*window*/, 
 KDevelop::ContextMenuExtension ClangSupport::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
     ContextMenuExtension cm;
-    EditorContext *ec = dynamic_cast<KDevelop::EditorContext *>(context);
+    auto *ec = dynamic_cast<KDevelop::EditorContext *>(context);
 
     if (ec && ICore::self()->languageController()->languagesForUrl(ec->url()).contains(this)) {
         // It's a C++ file, let's add our context menu.

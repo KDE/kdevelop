@@ -152,7 +152,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
     centralWidget = new QWidget;
     centralWidget->setObjectName(QStringLiteral("centralWidget"));
-    QVBoxLayout* layout = new QVBoxLayout(centralWidget);
+    auto* layout = new QVBoxLayout(centralWidget);
     layout->setMargin(0);
     centralWidget->setLayout(layout);
 
@@ -220,7 +220,7 @@ void MainWindowPrivate::restoreConcentrationMode()
         m_concentrateToolBar->setObjectName(QStringLiteral("concentrateToolBar"));
         m_concentrateToolBar->addAction(m_concentrationModeAction);
         m_concentrateToolBar->toggleViewAction()->setVisible(false);
-        QWidgetAction *action = new QWidgetAction(this);
+        auto *action = new QWidgetAction(this);
 
         action->setDefaultWidget(m_mainWindow->menuBar()->cornerWidget(Qt::TopRightCorner));
         m_concentrateToolBar->addAction(action);
@@ -552,7 +552,7 @@ void MainWindowPrivate::viewAdded(Sublime::AreaIndex *index, Sublime::View *view
 
             for(int w = 0; w < splitter->count(); ++w)
             {
-                Container *container = qobject_cast<Sublime::Container*>(splitter->widget(w));
+                auto *container = qobject_cast<Sublime::Container*>(splitter->widget(w));
                 //we need to remove extra container before reconstruction
                 //first reparent widgets in container so that they are not deleted
                 if(container)
@@ -592,7 +592,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
     qCDebug(SUBLIME) << "splitter " << splitter << " container " << splitter->widget(0);
     qCDebug(SUBLIME) << "structure: " << index->print() << " whole structure: " << area->rootIndex()->print();
     //find the container for the view and remove the widget
-    Container *container = qobject_cast<Container*>(splitter->widget(0));
+    auto *container = qobject_cast<Container*>(splitter->widget(0));
     if (!container) {
         qCWarning(SUBLIME) << "Splitter does not have a left widget!";
         return;
@@ -690,7 +690,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
 
 
             //find the container somewhere to activate
-            Container *containerToActivate = parentSplitter->findChild<Sublime::Container*>();
+            auto *containerToActivate = parentSplitter->findChild<Sublime::Container*>();
             //activate the current view there
             if (containerToActivate) {
                 m_mainWindow->setActiveView(containerToActivate->viewForWidget(containerToActivate->currentWidget()));

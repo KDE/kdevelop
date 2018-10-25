@@ -131,7 +131,7 @@ public:
     void widgetChanged(QWidget*, QWidget* now)
     {
         if (now) {
-            Sublime::MainWindow* win = qobject_cast<Sublime::MainWindow*>(now->window());
+            auto* win = qobject_cast<Sublime::MainWindow*>(now->window());
             if( win )
             {
                 activeSublimeWindow = win;
@@ -253,7 +253,7 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
         return;
     }
 
-    MainWindow *main = new MainWindow(this);
+    auto *main = new MainWindow(this);
 
     addMainWindow(main);
     showArea(areaName, main);
@@ -281,7 +281,7 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
 
     const QList<Sublime::View*> views = activeArea()->toolViews();
     for (Sublime::View* view : views) {
-        Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
+        auto *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
         if(doc && doc->title() == name && view->widget()) {
             if(flags & Raise)
                 view->requestRaise();
@@ -330,7 +330,7 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory, 
         return;
 
     qCDebug(SHELL) ;
-    Sublime::ToolDocument *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
+    auto *doc = new Sublime::ToolDocument(name, this, new UiToolViewFactory(factory));
     d->factoryDocuments[factory] = doc;
 
     /* Until areas are restored, we don't know which views should be really
@@ -441,7 +441,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
 
     auto mainLayout = new QVBoxLayout(dia);
 
-    NewToolViewListWidget *list = new NewToolViewListWidget(mw, dia);
+    auto *list = new NewToolViewListWidget(mw, dia);
 
     list->setSelectionMode(QAbstractItemView::ExtendedSelection);
     list->setSortingEnabled(true);
@@ -479,7 +479,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
 
 void UiController::addNewToolView(MainWindow *mw, QListWidgetItem* item)
 {
-    ViewSelectorItem *current = static_cast<ViewSelectorItem*>(item);
+    auto *current = static_cast<ViewSelectorItem*>(item);
     Sublime::ToolDocument *doc = d->factoryDocuments[current->factory];
     Sublime::View *view = doc->createView();
     mw->area()->addToolView(view,
@@ -722,7 +722,7 @@ void UiController::registerStatus(QObject* status)
 {
     Sublime::MainWindow* w = activeSublimeWindow();
     if (!w) return;
-    MainWindow* mw = qobject_cast<KDevelop::MainWindow*>(w);
+    auto* mw = qobject_cast<KDevelop::MainWindow*>(w);
     if (!mw) return;
     mw->registerStatus(status);
 }
@@ -731,7 +731,7 @@ void UiController::showErrorMessage(const QString& message, int timeout)
 {
     Sublime::MainWindow* w = activeSublimeWindow();
     if (!w) return;
-    MainWindow* mw = qobject_cast<KDevelop::MainWindow*>(w);
+    auto* mw = qobject_cast<KDevelop::MainWindow*>(w);
     if (!mw) return;
     QMetaObject::invokeMethod(mw, "showErrorMessage", Q_ARG(QString, message), Q_ARG(int, timeout));
 }

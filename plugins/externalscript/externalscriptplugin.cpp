@@ -107,7 +107,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
   foreach( const QString& group, config.groupList() ) {
     KConfigGroup script = config.group( group );
     if ( script.hasKey( "name" ) && script.hasKey( "command" ) ) {
-      ExternalScriptItem* item = new ExternalScriptItem;
+      auto* item = new ExternalScriptItem;
       item->setKey( script.name() );
       item->setText( script.readEntry( "name" ) );
       item->setCommand( script.readEntry( "command" ));
@@ -133,7 +133,7 @@ ExternalScriptPlugin::ExternalScriptPlugin( QObject* parent, const QVariantList&
   const bool firstUse = config.readEntry( "firstUse", true );
   if ( firstUse ) {
     // some example scripts
-    ExternalScriptItem* item = new ExternalScriptItem;
+    auto* item = new ExternalScriptItem;
     item->setText( i18n("Quick Compile") );
     item->setCommand( QStringLiteral("g++ -o %b %f && ./%b") );
     m_model->appendRow( item );
@@ -183,10 +183,10 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension(KDevel
   int folderCount = 0;
 
   if ( context->type() == KDevelop::Context::FileContext ) {
-    KDevelop::FileContext* filectx = static_cast<KDevelop::FileContext*>(context);
+    auto* filectx = static_cast<KDevelop::FileContext*>(context);
     m_urls = filectx->urls();
   } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
-    KDevelop::ProjectItemContext* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
+    auto* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
     foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
       if ( item->file() ) {
         m_urls << item->file()->path().toUrl();
@@ -196,7 +196,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension(KDevel
       }
     }
   } else if ( context->type() == KDevelop::Context::EditorContext ) {
-      KDevelop::EditorContext* econtext = static_cast<KDevelop::EditorContext*>(context);
+      auto* econtext = static_cast<KDevelop::EditorContext*>(context);
       m_urls << econtext->url();
   }
 
@@ -205,7 +205,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension(KDevel
     QMenu* menu = nullptr;
 
     for ( int row = 0; row < m_model->rowCount(); ++row ) {
-      ExternalScriptItem* item = dynamic_cast<ExternalScriptItem*>( m_model->item( row ) );
+      auto* item = dynamic_cast<ExternalScriptItem*>( m_model->item( row ) );
       Q_ASSERT( item );
 
       if (context->type() != KDevelop::Context::EditorContext) {
@@ -271,7 +271,7 @@ QStandardItemModel* ExternalScriptPlugin::model() const
 
 void ExternalScriptPlugin::execute( ExternalScriptItem* item, const QUrl& url ) const
 {
-  ExternalScriptJob* job = new ExternalScriptJob( item, url, const_cast<ExternalScriptPlugin*>(this) );
+  auto* job = new ExternalScriptJob( item, url, const_cast<ExternalScriptPlugin*>(this) );
 
   KDevelop::ICore::self()->runController()->registerJob( job );
 }
@@ -285,7 +285,7 @@ void ExternalScriptPlugin::execute(ExternalScriptItem* item) const
 bool ExternalScriptPlugin::executeCommand ( const QString& command, const QString& workingDirectory ) const
 {
 
-  ExternalScriptItem* item = new ExternalScriptItem;
+  auto* item = new ExternalScriptItem;
   item->setCommand(command);
   item->setWorkingDirectory(workingDirectory);
   item->setPerformParameterReplacement(false);
@@ -311,10 +311,10 @@ QString ExternalScriptPlugin::executeCommandSync ( const QString& command, const
 
 void ExternalScriptPlugin::executeScriptFromActionData() const
 {
-  QAction* action = dynamic_cast<QAction*>( sender() );
+  auto* action = dynamic_cast<QAction*>( sender() );
   Q_ASSERT( action );
 
-  ExternalScriptItem* item = action->data().value<ExternalScriptItem*>();
+  auto* item = action->data().value<ExternalScriptItem*>();
   Q_ASSERT( item );
 
   execute( item );
@@ -322,10 +322,10 @@ void ExternalScriptPlugin::executeScriptFromActionData() const
 
 void ExternalScriptPlugin::executeScriptFromContextMenu() const
 {
-  QAction* action = dynamic_cast<QAction*>( sender() );
+  auto* action = dynamic_cast<QAction*>( sender() );
   Q_ASSERT( action );
 
-  ExternalScriptItem* item = action->data().value<ExternalScriptItem*>();
+  auto* item = action->data().value<ExternalScriptItem*>();
   Q_ASSERT( item );
 
   foreach( const QUrl& url, m_urls) {
@@ -369,7 +369,7 @@ void ExternalScriptPlugin::saveItemForRow( int row )
   const QModelIndex idx = m_model->index( row, 0 );
   Q_ASSERT( idx.isValid() );
 
-  ExternalScriptItem* item = dynamic_cast<ExternalScriptItem*>( m_model->item( row ) );
+  auto* item = dynamic_cast<ExternalScriptItem*>( m_model->item( row ) );
   Q_ASSERT( item );
 
   qCDebug(PLUGIN_EXTERNALSCRIPT) << "save extern script:" << item << idx;
@@ -391,7 +391,7 @@ void ExternalScriptPlugin::setupKeys(int start, int end)
   QStringList keys = getConfig().groupList();
 
   for ( int row = start; row <= end; ++row ) {
-    ExternalScriptItem* const item = static_cast<ExternalScriptItem*>( m_model->item( row ) );
+    auto* const item = static_cast<ExternalScriptItem*>( m_model->item( row ) );
 
     int nextSuffix = 2;
     QString keyCandidate = item->text();

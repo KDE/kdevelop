@@ -295,7 +295,7 @@ TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString&
         dir.remove(fileName);
     }
 
-    TemplateClassGenerator* generator = new TemplateClassGenerator(baseUrl);
+    auto* generator = new TemplateClassGenerator(baseUrl);
 
     QString tplDescription = QStringLiteral(CODEGEN_DATA_DIR) + "/kdevcodegentest/templates/" + name + "/" + name + ".desktop";
     Q_ASSERT(!tplDescription.isEmpty());

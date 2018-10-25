@@ -36,7 +36,7 @@ using namespace Grantlee;
 
 TemplateEngine* TemplateEngine::self()
 {
-    static TemplateEngine* engine = new TemplateEngine;
+    static auto* engine = new TemplateEngine;
     return engine;
 }
 

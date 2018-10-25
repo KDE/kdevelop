@@ -131,7 +131,7 @@ void TestSvnRecursiveAdd::test()
     IBasicVersionControl* vcs = nullptr;
     for (IPlugin* p : plugins) {
         qDebug() << "checking plugin" << p;
-        ICentralizedVersionControl* icentr = p->extension<ICentralizedVersionControl>();
+        auto* icentr = p->extension<ICentralizedVersionControl>();
         if (!icentr)
             continue;
         if (icentr->name() == QLatin1String("Subversion")) {

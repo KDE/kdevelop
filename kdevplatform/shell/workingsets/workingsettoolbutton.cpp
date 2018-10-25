@@ -130,7 +130,7 @@ void WorkingSetToolButton::closeSet(bool ask)
 bool WorkingSetToolButton::event(QEvent* e)
 {
     if(m_toolTipEnabled && e->type() == QEvent::ToolTip) {
-        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(e);
+        auto* helpEvent = static_cast<QHelpEvent*>(e);
         showTooltip(helpEvent->globalPos());
         e->accept();
         return true;

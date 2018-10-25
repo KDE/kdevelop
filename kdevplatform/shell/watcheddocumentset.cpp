@@ -140,7 +140,7 @@ private:
 
         visitedContexts.insert(context);
         foreach (const DUContext::Import& ctx, context->importedParentContexts()) {
-            TopDUContext* topCtx = dynamic_cast<TopDUContext*>(ctx.context(nullptr));
+            auto* topCtx = dynamic_cast<TopDUContext*>(ctx.context(nullptr));
 
             if (topCtx)
                 getImportsFromDU(topCtx, visitedContexts);
@@ -286,7 +286,7 @@ void ProjectSet::trackProjectFiles(const IProject* project)
 {
     if (project) {
         // The implementation should derive from QObject somehow
-        QObject* fileManager = dynamic_cast<QObject*>(project->projectFileManager());
+        auto* fileManager = dynamic_cast<QObject*>(project->projectFileManager());
         if (fileManager) {
             // can't use new signal/slot syntax here, IProjectFileManager is no a QObject
             connect(fileManager, SIGNAL(fileAdded(ProjectFileItem*)),

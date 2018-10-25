@@ -79,7 +79,7 @@ public:
     {
         m_projectNumber = s_numBenchmarksRunning++;
         m_out << "Starting import of project " << m_project->path().toLocalFile() << endl;
-        ProjectControllerWrapper *projectController = qobject_cast<ProjectControllerWrapper*>(m_core->projectController());
+        auto *projectController = qobject_cast<ProjectControllerWrapper*>(m_core->projectController());
         projectController->addProject(m_project);
         m_timer.start();
         auto root = m_manager->import(m_project);

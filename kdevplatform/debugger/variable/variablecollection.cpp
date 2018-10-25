@@ -124,7 +124,7 @@ void Variable::setInScope(bool v)
 {
     m_inScope = v;
     for (int i=0; i < childCount(); ++i) {
-        if (Variable *var = qobject_cast<Variable*>(child(i))) {
+        if (auto *var = qobject_cast<Variable*>(child(i))) {
             var->setInScope(v);
         }
     }
@@ -315,7 +315,7 @@ void Watches::reinstall()
 {
     for (int i = 0; i < childItems.size(); ++i)
     {
-        Variable* v = static_cast<Variable*>(child(i));
+        auto* v = static_cast<Variable*>(child(i));
         v->attachMaybe();
     }
 }
@@ -332,7 +332,7 @@ QList<Variable*> Locals::updateLocals(const QStringList& locals)
     for (int i = 0; i < childItems.size(); i++)
     {
         Q_ASSERT(qobject_cast<KDevelop::Variable*>(child(i)));
-        Variable* var= static_cast<KDevelop::Variable*>(child(i));
+        auto* var= static_cast<KDevelop::Variable*>(child(i));
         existing << var->expression();
     }
 
@@ -352,7 +352,7 @@ QList<Variable*> Locals::updateLocals(const QStringList& locals)
     }
 
     for (int i = 0; i < childItems.size(); ++i) {
-        KDevelop::Variable* v = static_cast<KDevelop::Variable*>(child(i));
+        auto* v = static_cast<KDevelop::Variable*>(child(i));
         if (!current.contains(v->expression())) {
             removeChild(i);
             --i;
@@ -492,7 +492,7 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
 {
     Q_UNUSED(doc);
     using namespace KTextEditor;
-    TextHintInterface *iface = dynamic_cast<TextHintInterface*>(view);
+    auto *iface = dynamic_cast<TextHintInterface*>(view);
     if( !iface )
         return;
 

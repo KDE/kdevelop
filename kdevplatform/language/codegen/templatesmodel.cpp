@@ -172,7 +172,7 @@ QStandardItem* TemplatesModelPrivate::createItem(const QString& name, const QStr
     for (const QString& entry : path) {
         currentPath << entry;
         if (!templateItems.contains(currentPath.join(QLatin1Char('/')))) {
-            QStandardItem* item = new QStandardItem(entry);
+            auto* item = new QStandardItem(entry);
             item->setEditable(false);
             parent->appendRow(item);
             templateItems[currentPath.join(QLatin1Char('/'))] = item;
@@ -182,7 +182,7 @@ QStandardItem* TemplatesModelPrivate::createItem(const QString& name, const QStr
         }
     }
 
-    QStandardItem* templateItem = new QStandardItem(name);
+    auto* templateItem = new QStandardItem(name);
     templateItem->setEditable(false);
     parent->appendRow(templateItem);
     return templateItem;
@@ -273,7 +273,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
                 qCDebug(LANGUAGE) << "template" << archName << "does not contain .kdevtemplate or .desktop file";
                 continue;
             }
-            const KArchiveFile* templateFile = static_cast<const KArchiveFile*>(templateEntry);
+            const auto* templateFile = static_cast<const KArchiveFile*>(templateEntry);
 
             qCDebug(LANGUAGE) << "copy template description to" << localDescriptionsDir;
             const QString descriptionFileName = templateInfo.baseName() + suffix;

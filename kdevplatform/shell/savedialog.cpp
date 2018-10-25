@@ -88,7 +88,7 @@ KSaveSelectDialog::~KSaveSelectDialog()
 void KSaveSelectDialog::save( )
 {
     for (int i = 0; i < m_listWidget->count(); ++i) {
-        DocumentItem* item = static_cast<DocumentItem*>(m_listWidget->item(i));
+        auto* item = static_cast<DocumentItem*>(m_listWidget->item(i));
         if (item->data(Qt::CheckStateRole).toBool())
             item->doc()->save(IDocument::Silent);
     }

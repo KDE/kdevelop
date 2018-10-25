@@ -53,7 +53,7 @@ public:
         KDevelop::VcsDiff diff = m_job->fetchResults().value<KDevelop::VcsDiff>();
 
         // Try using the patch-review plugin if possible
-        VCSDiffPatchSource* patch = new VCSDiffPatchSource(diff);
+        auto* patch = new VCSDiffPatchSource(diff);
 
         if(showVcsDiff(patch))
         {

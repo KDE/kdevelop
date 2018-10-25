@@ -60,7 +60,7 @@ bool IntegralType::equals(const AbstractType* _rhs) const
 
     Q_ASSERT(fastCast<const IntegralType*>(_rhs));
 
-    const IntegralType* rhs = static_cast<const IntegralType*>(_rhs);
+    const auto* rhs = static_cast<const IntegralType*>(_rhs);
 
     return d_func()->m_dataType == rhs->d_func()->m_dataType;
 }

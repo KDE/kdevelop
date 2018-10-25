@@ -43,7 +43,7 @@ ManPageDocumentation::ManPageDocumentation(const QString& name, const QUrl& url)
 
 void ManPageDocumentation::finished(KJob* j)
 {
-    KIO::StoredTransferJob* job = qobject_cast<KIO::StoredTransferJob*>(j);
+    auto* job = qobject_cast<KIO::StoredTransferJob*>(j);
     if(job && job->error()==0) {
         m_description = QString::fromUtf8(job->data());
     } else {
@@ -64,7 +64,7 @@ QString ManPageDocumentation::description() const
 
 QWidget* ManPageDocumentation::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent )
 {
-    KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
+    auto* view = new KDevelop::StandardDocumentationView(findWidget, parent);
     view->initZoom(provider()->name());
     view->setDocumentation(IDocumentation::Ptr(this));
     view->setDelegateLinks(true);

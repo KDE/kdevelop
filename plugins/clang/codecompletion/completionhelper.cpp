@@ -151,7 +151,7 @@ void processBaseClass(CXCursor cursor, CXCursor parent, FunctionOverrideList* fu
 CXChildVisitResult baseClassVisitor(CXCursor cursor, CXCursor parent, CXClientData data)
 {
     QString templateParam;
-    OverrideInfo* info = static_cast<OverrideInfo*>(data);
+    auto* info = static_cast<OverrideInfo*>(data);
 
     switch(clang_getCursorKind(cursor)) {
     case CXCursor_TemplateTypeParameter:
@@ -231,7 +231,7 @@ bool isQtMocFunction(CXCursor cursor)
 CXChildVisitResult declVisitor(CXCursor cursor, CXCursor parent, CXClientData d)
 {
     CXCursorKind kind = clang_getCursorKind(cursor);
-    struct ImplementsInfo* data = static_cast<struct ImplementsInfo*>(d);
+    auto* data = static_cast<struct ImplementsInfo*>(d);
 
     auto location = clang_getCursorLocation(cursor);
     if (clang_Location_isInSystemHeader(location)) {

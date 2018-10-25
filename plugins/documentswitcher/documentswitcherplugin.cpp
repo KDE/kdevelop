@@ -131,7 +131,7 @@ void DocumentSwitcherPlugin::setViewGeometry(Sublime::MainWindow* window)
 
 void DocumentSwitcherPlugin::walk(const int from, const int to)
 {
-    Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    auto* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     if( !window || !documentLists.contains( window ) || !documentLists[window].contains( window->area() ) )
     {
         qCWarning(PLUGIN_DOCUMENTSWITCHER) << "This should not happen, tried to walk through document list of an unknown mainwindow!";
@@ -226,7 +226,7 @@ void DocumentSwitcherPlugin::itemActivated( const QModelIndex& idx )
     }
     int row = view->selectionModel()->selectedRows().first().row();
 
-    Sublime::MainWindow* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
+    auto* window = qobject_cast<Sublime::MainWindow*>( KDevelop::ICore::self()->uiController()->activeMainWindow() );
     Sublime::View* activatedView = nullptr;
     if( window && documentLists.contains( window ) && documentLists[window].contains( window->area() ) )
     {
@@ -301,7 +301,7 @@ void DocumentSwitcherPlugin::addMainWindow( Sublime::MainWindow* mainwindow )
 
 bool DocumentSwitcherPlugin::eventFilter( QObject* watched, QEvent* ev )
 {
-    Sublime::MainWindow* mw = dynamic_cast<Sublime::MainWindow*>( watched );
+    auto* mw = dynamic_cast<Sublime::MainWindow*>( watched );
     if( mw && ev->type() == QEvent::WindowActivate )
     {
         enableActions();
@@ -311,7 +311,7 @@ bool DocumentSwitcherPlugin::eventFilter( QObject* watched, QEvent* ev )
 
 void DocumentSwitcherPlugin::addView( Sublime::View* view )
 {
-    Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
+    auto* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     if( !mainwindow )
         return;
 
@@ -343,7 +343,7 @@ void DocumentSwitcherPlugin::removeMainWindow( QObject* obj )
 void DocumentSwitcherPlugin::changeArea( Sublime::Area* area )
 {
 
-    Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
+    auto* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     Q_ASSERT( mainwindow );
 
     qCDebug(PLUGIN_DOCUMENTSWITCHER) << "area changed:" << area << area->title() << "mainwindow:" << mainwindow << mainwindow->windowTitle();
@@ -363,7 +363,7 @@ void DocumentSwitcherPlugin::changeView( Sublime::View* view )
     if( !view )
         return;
 
-    Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
+    auto* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     Q_ASSERT( mainwindow );
 
     Sublime::Area* area = mainwindow->area();
@@ -385,7 +385,7 @@ void DocumentSwitcherPlugin::removeView( Sublime::View* view )
     if( !view )
         return;
 
-    Sublime::MainWindow* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
+    auto* mainwindow = qobject_cast<Sublime::MainWindow*>( sender() );
     Q_ASSERT( mainwindow );
 
     Sublime::Area* area = mainwindow->area();

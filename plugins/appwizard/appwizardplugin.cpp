@@ -299,7 +299,7 @@ QString AppWizardPlugin::createProject(const ApplicationInfo& info)
             metaDataFileNames << templateEntry->name();
 
             // check if a preview file is to be ignored
-            const KArchiveFile *templateFile = static_cast<const KArchiveFile*>(templateEntry);
+            const auto *templateFile = static_cast<const KArchiveFile*>(templateEntry);
             QTemporaryDir temporaryDir;
             templateFile->copyTo(temporaryDir.path());
 
@@ -434,7 +434,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory* dir, const QString&
 
         const auto entry = dir->entry(entryName);
         if (entry->isDirectory()) {
-            const KArchiveDirectory* subdir = static_cast<const KArchiveDirectory*>(entry);
+            const auto* subdir = static_cast<const KArchiveDirectory*>(entry);
             const QString newdest = dest + QLatin1Char('/') + KMacroExpander::expandMacros(subdir->name(), m_variables);
             if( !QFileInfo::exists( newdest ) )
             {
@@ -443,7 +443,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory* dir, const QString&
             ret |= unpackArchive(subdir, newdest);
         }
         else if (entry->isFile()) {
-            const KArchiveFile* file = static_cast<const KArchiveFile*>(entry);
+            const auto* file = static_cast<const KArchiveFile*>(entry);
             file->copyTo(tdir.path());
             const QString destName = dest + QLatin1Char('/') + file->name();
             if (!copyFileAndExpandMacros(QDir::cleanPath(tdir.path() + QLatin1Char('/') + file->name()),

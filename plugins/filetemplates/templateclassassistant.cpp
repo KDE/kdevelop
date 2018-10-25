@@ -203,7 +203,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
         auto mainLayout = new QVBoxLayout(d);
         mainLayout->addWidget(new QLabel(i18n("Choose one target to add the file or cancel if you do not want to do so.")));
 
-        QListWidget* targetsWidget = new QListWidget(d);
+        auto* targetsWidget = new QListWidget(d);
         targetsWidget->setSelectionMode(QAbstractItemView::SingleSelection);
         for (ProjectTargetItem* target : qAsConst(targets)) {
             targetsWidget->addItem(target->text());

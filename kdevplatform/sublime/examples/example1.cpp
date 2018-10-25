@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
 
-    Example1Main *m = new Example1Main();
+    auto *m = new Example1Main();
     m->show();
 
     return app.exec();

@@ -59,7 +59,7 @@ void TestProblemsView::initTestCase()
     TestCore::initialize(Core::NoUi);
 
     ProblemModelSet* pms = ICore::self()->languageController()->problemModelSet();
-    ProblemModel* model = new ProblemModel(pms);
+    auto* model = new ProblemModel(pms);
     IProblem::Ptr p(new DetectedProblem());
     model->addProblem(p);
     pms->addModel(QStringLiteral("MODEL1_ID"), QStringLiteral("MODEL1"), model);
@@ -202,7 +202,7 @@ void TestProblemsView::testSetProblems()
 
 QTabWidget* TestProblemsView::tabWidget()
 {
-    QTabWidget* tab = m_view->findChild<QTabWidget*>();
+    auto* tab = m_view->findChild<QTabWidget*>();
     return tab;
 }
 

@@ -167,7 +167,7 @@ QString QtHelpDocumentation::description() const
 
 void QtHelpDocumentation::setUserStyleSheet(StandardDocumentationView* view, const QUrl& url)
 {
-    QTemporaryFile* file = new QTemporaryFile(view);
+    auto* file = new QTemporaryFile(view);
     file->open();
 
     QTextStream ts(file);
@@ -188,7 +188,7 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
     if(m_info.isEmpty()) { //QtHelp sometimes has empty info maps. e.g. availableaudioeffects i 4.5.2
         return new QLabel(i18n("Could not find any documentation for '%1'", m_name), parent);
     } else {
-        StandardDocumentationView* view = new StandardDocumentationView(findWidget, parent);
+        auto* view = new StandardDocumentationView(findWidget, parent);
         view->initZoom(m_provider->name());
         view->setDelegateLinks(true);
         view->setNetworkAccessManager(m_provider->networkAccess());
@@ -205,7 +205,7 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
 
 void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
 {
-    StandardDocumentationView* view = qobject_cast<StandardDocumentationView*>(sender());
+    auto* view = qobject_cast<StandardDocumentationView*>(sender());
     if (!view)
         return;
 
@@ -216,9 +216,9 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
             menu->addSeparator();
         }
 
-        QActionGroup* actionGroup = new QActionGroup(menu);
+        auto* actionGroup = new QActionGroup(menu);
         foreach(const QString& name, m_info.keys()) {
-            QtHelpAlternativeLink* act=new QtHelpAlternativeLink(name, this, actionGroup);
+            auto* act=new QtHelpAlternativeLink(name, this, actionGroup);
             act->setCheckable(true);
             act->setChecked(name==m_current.key());
             menu->addAction(act);
@@ -259,7 +259,7 @@ HomeDocumentation::HomeDocumentation() : m_provider(QtHelpDocumentation::s_provi
 
 QWidget* HomeDocumentation::documentationWidget(DocumentationFindWidget*, QWidget* parent)
 {
-    QTreeView* w=new QTreeView(parent);
+    auto* w=new QTreeView(parent);
     w->header()->setVisible(false);
     w->setModel(m_provider->engine()->contentModel());
 

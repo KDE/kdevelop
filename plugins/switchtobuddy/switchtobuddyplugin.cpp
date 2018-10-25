@@ -102,7 +102,7 @@ SwitchToBuddyPlugin::~SwitchToBuddyPlugin()
 
 ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context, QWidget* parent)
 {
-    EditorContext* ctx = dynamic_cast<EditorContext*>(context);
+    auto* ctx = dynamic_cast<EditorContext*>(context);
     if (!ctx) {
         return ContextMenuExtension();
     }
@@ -234,7 +234,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
             definition = DUChainUtils::declarationInLine(cursor, ctx);
         }
 
-        if (ClassFunctionDeclaration* cDef = dynamic_cast<ClassFunctionDeclaration*>(definition)) {
+        if (auto* cDef = dynamic_cast<ClassFunctionDeclaration*>(definition)) {
             if (cDef->isSignal()) {
                 qCDebug(PLUGIN_SWITCHTOBUDDY) << "found definition is a signal, not switching to .moc implementation";
                 definition = nullptr;
@@ -242,7 +242,7 @@ void SwitchToBuddyPlugin::switchDefinitionDeclaration()
             }
         }
 
-        FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(definition);
+        auto* def = dynamic_cast<FunctionDefinition*>(definition);
         if (def && def->declaration()) {
             Declaration* declaration = def->declaration();
             KTextEditor::Range targetRange = declaration->rangeInCurrentRevision();

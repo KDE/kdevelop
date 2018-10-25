@@ -60,7 +60,7 @@ QString ProjectModelSaver::indexToConfigString(const QModelIndex& index) const
         return QString();
     }
 
-    ProjectBaseItem* item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
+    auto* item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
     if ( !item || item->project() != m_project ) {
         return QString();
     }

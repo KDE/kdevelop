@@ -122,7 +122,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     QString label = QStringLiteral("unknown");
 
     if (dynamic_cast<TopDUContext*>(context)) {
-        TopDUContext* topCtx = static_cast<TopDUContext*>(context);
+        auto* topCtx = static_cast<TopDUContext*>(context);
         if (topCtx->parsingEnvironmentFile()) {
             QUrl url = topCtx->parsingEnvironmentFile()->url().toUrl();
             const QString fileName = url.fileName();

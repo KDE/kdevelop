@@ -155,7 +155,7 @@ bool SessionChooserDialog::eventFilter(QObject* object, QEvent* event)
         m_deleteButton->hide();
         // don't eat the event, pass on
    } else if (object == m_filter && event->type() == QEvent::KeyPress) {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        auto *keyEvent = static_cast<QKeyEvent*>(event);
         if (keyEvent->key() == Qt::Key_Return) {
             accept();
             // don't eat the event, pass on

@@ -465,7 +465,7 @@ VcsJob* GitPlugin::commit(const QString& message,
         return errorsFound(i18n("Email or name for Git not specified"));
     }
 
-    DVcsJob* job = new DVcsJob(dir, this);
+    auto* job = new DVcsJob(dir, this);
     job->setType(VcsJob::Commit);
     QList<QUrl> files = (recursion == IBasicVersionControl::Recursive ? localLocations : preventRecursion(localLocations));
     addNotVersionedFiles(dir, files);
@@ -692,14 +692,14 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
 DVcsJob* GitPlugin::lsFiles(const QDir &repository, const QStringList &args,
                             OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = new DVcsJob(repository, this, verbosity);
+    auto* job = new DVcsJob(repository, this, verbosity);
     *job << "git" << "ls-files" << args;
     return job;
 }
 
 DVcsJob* GitPlugin::gitStash(const QDir& repository, const QStringList& args, OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = new DVcsJob(repository, this, verbosity);
+    auto* job = new DVcsJob(repository, this, verbosity);
     *job << "git" << "stash" << args;
     return job;
 }
@@ -722,7 +722,7 @@ VcsJob* GitPlugin::switchBranch(const QUrl &repository, const QString &branch)
         stash->exec();
     }
 
-    DVcsJob* job = new DVcsJob(d, this);
+    auto* job = new DVcsJob(d, this);
     *job << "git" << "checkout" << branch;
     return job;
 }
@@ -1407,7 +1407,7 @@ VcsJob* GitPlugin::move(const QUrl& source, const QUrl& destination)
 
     const QStringList otherStr = getLsFiles(dir, QStringList{QStringLiteral("--others"), QStringLiteral("--"), source.toLocalFile()}, KDevelop::OutputJob::Silent);
     if(otherStr.isEmpty()) {
-        DVcsJob* job = new DVcsJob(dir, this, KDevelop::OutputJob::Verbose);
+        auto* job = new DVcsJob(dir, this, KDevelop::OutputJob::Verbose);
         *job << "git" << "mv" << source.toLocalFile() << destination.toLocalFile();
         return job;
     } else {

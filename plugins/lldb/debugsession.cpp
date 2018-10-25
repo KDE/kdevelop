@@ -473,7 +473,7 @@ void DebugSession::updateAllVariables()
     // variables.
     QList<LldbVariable*> toplevels;
     for (auto it = m_allVariables.begin(), ite = m_allVariables.end(); it != ite; ++it) {
-        LldbVariable *var = qobject_cast<LldbVariable*>(it.value());
+        auto *var = qobject_cast<LldbVariable*>(it.value());
         if (var->topLevel()) {
             toplevels << var;
         }

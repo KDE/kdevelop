@@ -75,7 +75,7 @@ void JobPlan::parseJobCreated(ParseJob* job)
         return;
     }
 
-    TestParseJob* testJob = dynamic_cast<TestParseJob*>(job);
+    auto* testJob = dynamic_cast<TestParseJob*>(job);
     Q_ASSERT(testJob);
 
     qDebug() << "assigning propierties for created job" << testJob->document().toUrl();
@@ -185,7 +185,7 @@ void TestBackgroundparser::initTestCase()
 
     DUChain::self()->disablePersistentStorage();
 
-    TestLanguageController* langController = new TestLanguageController(core);
+    auto* langController = new TestLanguageController(core);
     core->setLanguageController(langController);
     langController->backgroundParser()->setThreadCount(4);
     langController->backgroundParser()->abortAllJobs();

@@ -76,7 +76,7 @@ QString StashPatchSource::name() const
 
 void StashPatchSource::updatePatchFile(KDevelop::VcsJob* job)
 {
-    KDevelop::DVcsJob* dvcsJob = qobject_cast<KDevelop::DVcsJob*>(job);
+    auto* dvcsJob = qobject_cast<KDevelop::DVcsJob*>(job);
     QFile f(m_patchFile.toLocalFile());
     QTextStream txtStream(&f);
 

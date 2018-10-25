@@ -42,7 +42,7 @@ public:
     QWidget* create(ToolDocument *doc, QWidget *parent = nullptr) override
     {
         QWidget *w = new QWidget(parent);
-        Widget *inner = new Widget(w);
+        auto *inner = new Widget(w);
         inner->setObjectName(doc->title()+"_inner");
         w->setObjectName(doc->title()+"_outer");
         return w;
@@ -98,7 +98,7 @@ void TestViewActivation::cleanup()
 
 void TestViewActivation::signalsOnViewCreationAndDeletion()
 {
-    Controller *controller = new Controller(this);
+    auto *controller = new Controller(this);
     ToolDocument *doc1 = new ToolDocument(QStringLiteral("doc1"), controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("doc1")));
     Area *area = new Area(controller, QStringLiteral("Area"));
 
@@ -125,7 +125,7 @@ void TestViewActivation::signalsOnViewCreationAndDeletion()
 
 void TestViewActivation::viewActivation()
 {
-    MainWindow* mw = new MainWindow(controller);
+    auto* mw = new MainWindow(controller);
     controller->addDefaultArea(area); // Q_ASSERT without this.
     controller->addMainWindow(mw);
 
@@ -134,9 +134,9 @@ void TestViewActivation::viewActivation()
     QCOMPARE(mw->activeView(), view211);
 
     //add some widgets that are not in layout
-    QTextEdit *breaker = new QTextEdit(mw);
+    auto *breaker = new QTextEdit(mw);
     breaker->setObjectName(QStringLiteral("breaker"));
-    QTextEdit *toolBreaker = new QTextEdit(mw);
+    auto *toolBreaker = new QTextEdit(mw);
     toolBreaker->setObjectName(QStringLiteral("toolBreaker"));
 
     QDockWidget *dock = new QDockWidget(mw);
@@ -172,7 +172,7 @@ void TestViewActivation::viewActivation()
     QCOMPARE(mw->activeToolView(), viewT31);
 
     //focus inner widget for view221
-    QListView *inner = mw->findChild<QListView*>(QStringLiteral("doc2_inner"));
+    auto *inner = mw->findChild<QListView*>(QStringLiteral("doc2_inner"));
     QVERIFY(inner);
     qApp->sendEvent(inner, &focusEvent);
     QCOMPARE(mw->activeView(), view221);

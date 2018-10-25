@@ -83,7 +83,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
 
     m_watchVarEditor = new KHistoryComboBox( this );
 
-    QVBoxLayout *topLayout = new QVBoxLayout(this);
+    auto *topLayout = new QVBoxLayout(this);
     topLayout->addWidget(m_varTree, 10);
     topLayout->addWidget(m_watchVarEditor);
     topLayout->setMargin(0);
@@ -199,7 +199,7 @@ void VariableTree::setupActions()
 
     // make Format menu action group
     m_formatMenu = new QMenu(i18n("&Format"), this);
-    QActionGroup *ag= new QActionGroup(m_formatMenu);
+    auto *ag= new QActionGroup(m_formatMenu);
 
     QAction* act;
 

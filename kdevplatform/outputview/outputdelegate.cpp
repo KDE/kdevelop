@@ -67,7 +67,7 @@ void OutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
     QStyleOptionViewItem opt = option;
     QVariant status = index.data(OutputModel::OutputItemTypeRole);
     if( status.isValid() ) {
-        FilteredItem::FilteredOutputItemType type = static_cast<FilteredItem::FilteredOutputItemType>(status.toInt());
+        auto type = static_cast<FilteredItem::FilteredOutputItemType>(status.toInt());
         switch(type) {
             case FilteredItem::ErrorItem:
                 opt.palette.setBrush( QPalette::Text, d->errorBrush.brush( option.palette ) );

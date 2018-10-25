@@ -36,7 +36,7 @@ namespace
 void addDiagnostics(ProblemStoreNode *node, const QVector<IProblem::Ptr> &diagnostics)
 {
     for (const IProblem::Ptr& ptr : diagnostics) {
-        ProblemNode *child = new ProblemNode(node, ptr);
+        auto *child = new ProblemNode(node, ptr);
         node->addChild(child);
 
         addDiagnostics(child, ptr->diagnostics());
@@ -105,7 +105,7 @@ public:
 
     void addProblem(const IProblem::Ptr &problem) override
     {
-        ProblemNode *node = new ProblemNode(m_groupedRootNode.data(), problem);
+        auto *node = new ProblemNode(m_groupedRootNode.data(), problem);
         addDiagnostics(node, problem->diagnostics());
         m_groupedRootNode->addChild(node);
 
@@ -143,7 +143,7 @@ public:
             m_groupedRootNode->addChild(parent);
         }
 
-        ProblemNode *node = new ProblemNode(parent, problem);
+        auto *node = new ProblemNode(parent, problem);
         addDiagnostics(node, problem->diagnostics());
         parent->addChild(node);
     }
@@ -183,7 +183,7 @@ public:
             default: break;
         }
 
-        ProblemNode *node = new ProblemNode(m_groupedRootNode.data(), problem);
+        auto *node = new ProblemNode(m_groupedRootNode.data(), problem);
         addDiagnostics(node, problem->diagnostics());
         parent->addChild(node);
     }
@@ -273,7 +273,7 @@ void FilteredProblemStore::rebuild()
 
 void FilteredProblemStore::setGrouping(int grouping)
 {
-    GroupingMethod g = GroupingMethod(grouping);
+    auto g = GroupingMethod(grouping);
     if(g == d->m_grouping)
         return;
 

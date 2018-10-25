@@ -155,7 +155,7 @@ void ColorCache::slotDocumentActivated()
 
 void ColorCache::slotViewSettingsChanged()
 {
-    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
+    auto* view = qobject_cast<KTextEditor::View*>(sender());
     Q_ASSERT(view);
 
     ifDebug(qCDebug(LANGUAGE) << "settings changed" << view; )

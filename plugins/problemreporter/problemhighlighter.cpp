@@ -115,7 +115,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     ///      this method...
     const uint errorMarkType = KTextEditor::MarkInterface::Error;
     const uint warningMarkType = KTextEditor::MarkInterface::Warning;
-    KTextEditor::MarkInterface* markIface = dynamic_cast<KTextEditor::MarkInterface*>(m_document.data());
+    auto* markIface = dynamic_cast<KTextEditor::MarkInterface*>(m_document.data());
     if (markIface && hadProblems) {
         // clear previously added marks
         foreach (KTextEditor::Mark* mark, markIface->marks()) {
@@ -133,7 +133,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
 
     TopDUContext* top = DUChainUtils::standardContextForUrl(m_document->url());
 
-    KTextEditor::MovingInterface* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
+    auto* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
     Q_ASSERT(iface);
 
     for (const IProblem::Ptr& problem : problems) {

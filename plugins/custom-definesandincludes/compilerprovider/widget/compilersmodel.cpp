@@ -148,7 +148,7 @@ QVariant CompilersModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+    auto *item = static_cast<TreeItem*>(index.internalPointer());
 
     if (role == CompilerDataRole) {
         QVariant v;
@@ -233,7 +233,7 @@ QModelIndex CompilersModel::parent(const QModelIndex& index) const
         return QModelIndex();
     }
 
-    TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
+    auto *childItem = static_cast<TreeItem*>(index.internalPointer());
     TreeItem *parentItem = childItem->parent();
 
     if (parentItem == m_rootItem) {

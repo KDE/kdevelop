@@ -151,7 +151,7 @@ QVariant ProblemModel::data(const QModelIndex& index, int role) const
     IProblem::Ptr p = problemForIndex(index);
     if (!p.constData()) {
         if (role == Qt::DisplayRole && index.column() == Error) {
-            ProblemStoreNode *node = reinterpret_cast<ProblemStoreNode*>(index.internalPointer());
+            auto *node = reinterpret_cast<ProblemStoreNode*>(index.internalPointer());
             if (node) {
                 return node->label();
             }
@@ -204,7 +204,7 @@ QVariant ProblemModel::data(const QModelIndex& index, int role) const
 
 QModelIndex ProblemModel::parent(const QModelIndex& index) const
 {
-    ProblemStoreNode *node = reinterpret_cast<ProblemStoreNode*>(index.internalPointer());
+    auto *node = reinterpret_cast<ProblemStoreNode*>(index.internalPointer());
     if (!node) {
         return {};
     }
@@ -224,7 +224,7 @@ QModelIndex ProblemModel::index(int row, int column, const QModelIndex& parent) 
         return QModelIndex();
     }
 
-    ProblemStoreNode *parentNode = reinterpret_cast<ProblemStoreNode*>(parent.internalPointer());
+    auto *parentNode = reinterpret_cast<ProblemStoreNode*>(parent.internalPointer());
     const ProblemStoreNode *node = d->m_problems->findNode(row, parentNode);
     return createIndex(row, column, (void*)node);
 }
@@ -237,7 +237,7 @@ int ProblemModel::columnCount(const QModelIndex& parent) const
 
 IProblem::Ptr ProblemModel::problemForIndex(const QModelIndex& index) const
 {
-    ProblemStoreNode *node = reinterpret_cast<ProblemStoreNode*>(index.internalPointer());
+    auto *node = reinterpret_cast<ProblemStoreNode*>(index.internalPointer());
     if (!node) {
         return {};
     } else {

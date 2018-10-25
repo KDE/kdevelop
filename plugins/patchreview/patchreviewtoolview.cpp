@@ -103,7 +103,7 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     connect( plugin, &PatchReviewPlugin::startingNewReview, this, &PatchReviewToolView::startingNewReview );
     connect( ICore::self()->documentController(), &IDocumentController::documentActivated, this, &PatchReviewToolView::documentActivated );
 
-    Sublime::MainWindow* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
+    auto* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
     connect(w, &Sublime::MainWindow::areaChanged, m_plugin, &PatchReviewPlugin::areaChanged);
 
     showEditDialog();
@@ -557,7 +557,7 @@ void PatchReviewToolView::runTests()
     m_editPatch.testProgressBar->setValue(0);
     m_editPatch.testProgressBar->show();
 
-    ProjectTestJob* job = new ProjectTestJob(project, this);
+    auto* job = new ProjectTestJob(project, this);
     connect(job, &ProjectTestJob::finished, this, &PatchReviewToolView::testJobResult);
     connect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(testJobPercent(KJob*,ulong)));
     ICore::self()->runController()->registerJob(job);
@@ -571,7 +571,7 @@ void PatchReviewToolView::testJobPercent(KJob* job, ulong percent)
 
 void PatchReviewToolView::testJobResult(KJob* job)
 {
-    ProjectTestJob* testJob = qobject_cast<ProjectTestJob*>(job);
+    auto* testJob = qobject_cast<ProjectTestJob*>(job);
     if (!testJob) {
         return;
     }

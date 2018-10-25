@@ -581,7 +581,7 @@ struct Checker
 
         if (declaration->kind() == Declaration::Alias && !(m_flags & DUContext::DontResolveAliases)) {
             //Apply alias declarations
-            AliasDeclaration* alias = static_cast<AliasDeclaration*>(declaration);
+            auto* alias = static_cast<AliasDeclaration*>(declaration);
             if (alias->aliasedDeclaration().isValid()) {
                 declaration = alias->aliasedDeclaration().declaration();
             } else {
@@ -1243,7 +1243,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
                 foreach (Declaration* importDecl, imports) {
                     //Search for the identifier with the import-identifier prepended
                     if (dynamic_cast<NamespaceAliasDeclaration*>(importDecl)) {
-                        NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
+                        auto* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
                         identifiers.append(SearchItem::Ptr(new SearchItem(alias->importIdentifier(), identifier)));
                     } else {
                         qCDebug(LANGUAGE) << "Declaration with namespace alias identifier has the wrong type" <<
@@ -1265,7 +1265,7 @@ void DUContext::applyAliases(const SearchItem::PtrList& baseIdentifiers, SearchI
                             continue;
 
                         addUnmodified = false; //The un-modified identifier can be ignored, because it will be replaced with the resolved alias
-                        NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
+                        auto* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
 
                         //Create an identifier where namespace-alias part is replaced with the alias target
                         identifiers.append(SearchItem::Ptr(new SearchItem(alias->importIdentifier(),
@@ -1499,7 +1499,7 @@ QWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topC
                                            AbstractNavigationWidget::DisplayHints hints) const
 {
     if (decl) {
-        AbstractNavigationWidget* widget = new AbstractNavigationWidget;
+        auto* widget = new AbstractNavigationWidget;
         widget->setDisplayHints(hints);
         AbstractDeclarationNavigationContext* context = new AbstractDeclarationNavigationContext(DeclarationPointer(
                                                                                                      decl),
@@ -1680,7 +1680,7 @@ DUContext* DUContext::Import::context(const TopDUContext* topContext, bool insta
         Declaration* decl = m_declaration.declaration(topContext, instantiateIfRequired);
         //This first case rests on the assumption that no context will ever import a function's expression context
         //More accurately, that no specialized or cross-topContext imports will, but if the former assumption fails the latter will too
-        if (AbstractFunctionDeclaration* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl)) {
+        if (auto* functionDecl = dynamic_cast<AbstractFunctionDeclaration*>(decl)) {
             if (functionDecl->internalFunctionContext()) {
                 return functionDecl->internalFunctionContext();
             } else {

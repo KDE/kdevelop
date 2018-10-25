@@ -113,7 +113,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     m_buttonsLayout = new IdealButtonBarLayout(orientation(), this);
     if (area == Qt::BottomDockWidgetArea)
     {
-        QBoxLayout *statusLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
+        auto *statusLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
         statusLayout->setMargin(0);
 
         statusLayout->addLayout(m_buttonsLayout);
@@ -121,12 +121,12 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
         statusLayout->addStretch(1);
 
         m_corner = new QWidget(this);
-        QBoxLayout *cornerLayout = new QBoxLayout(QBoxLayout::LeftToRight, m_corner);
+        auto *cornerLayout = new QBoxLayout(QBoxLayout::LeftToRight, m_corner);
         cornerLayout->setMargin(0);
         cornerLayout->setSpacing(0);
         statusLayout->addWidget(m_corner);
     } else {
-        QBoxLayout *superLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
+        auto *superLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
         superLayout->setMargin(0);
 
         superLayout->addLayout(m_buttonsLayout);
@@ -166,7 +166,7 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
 
     bool wasEmpty = isEmpty();
 
-    IdealToolButton *button = new IdealToolButton(m_area);
+    auto *button = new IdealToolButton(m_area);
     //apol: here we set the usual width of a button for the vertical toolbars as the minimumWidth
     //this is done because otherwise when we remove all the buttons and re-add new ones we get all
     //the screen flickering. This is solved by not defaulting to a smaller width when it's empty
@@ -323,7 +323,7 @@ void IdealButtonBarWidget::showWidget(bool checked)
 {
     Q_ASSERT(parentWidget() != nullptr);
 
-    QAction *action = qobject_cast<QAction *>(sender());
+    auto *action = qobject_cast<QAction *>(sender());
     Q_ASSERT(action);
 
     showWidget(action, checked);

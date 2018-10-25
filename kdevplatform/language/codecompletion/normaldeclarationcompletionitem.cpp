@@ -168,7 +168,7 @@ QVariant NormalDeclarationCompletionItem::data(const QModelIndex& index, int rol
                     }
                 }
                 if (FunctionType::Ptr functionType = m_declaration->type<FunctionType>()) {
-                    ClassFunctionDeclaration* funDecl = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
+                    auto* funDecl = dynamic_cast<ClassFunctionDeclaration*>(m_declaration.data());
 
                     if (functionType->returnType()) {
                         QString ret = shortenedTypeString(m_declaration, desiredTypeLength);

@@ -37,7 +37,7 @@ void DeclarationBuilder::startVisiting(CMakeContentIterator* node)
             CMakeFunctionArgument arg = func.arguments.first();
 
             DUChainWriteLocker lock;
-            Declaration* decl = openDeclaration<Declaration>(Identifier(arg.value), arg.range(), DeclarationIsDefinition);
+            auto* decl = openDeclaration<Declaration>(Identifier(arg.value), arg.range(), DeclarationIsDefinition);
             decl->setAbstractType(AbstractType::Ptr(new TargetType));
             closeDeclaration();
         } else if(func.name == QLatin1String("macro") || func.name == QLatin1String("function")) {
@@ -56,7 +56,7 @@ void DeclarationBuilder::startVisiting(CMakeContentIterator* node)
             }
 
             DUChainWriteLocker lock;
-            FunctionDeclaration* decl = openDeclaration<FunctionDeclaration>(Identifier(arg.value), arg.range(), DeclarationIsDefinition);
+            auto* decl = openDeclaration<FunctionDeclaration>(Identifier(arg.value), arg.range(), DeclarationIsDefinition);
             decl->setAbstractType( funcType );
             closeDeclaration();
         }

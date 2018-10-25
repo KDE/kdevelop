@@ -59,21 +59,21 @@ void ProblemsView::setupActions()
         m_scopeMenu->setToolTip(i18nc("@info:tooltip", "Which files to display the problems for"));
         m_scopeMenu->setObjectName(QStringLiteral("scopeMenu"));
 
-        QActionGroup* scopeActions = new QActionGroup(this);
+        auto* scopeActions = new QActionGroup(this);
 
         m_currentDocumentAction = new QAction(this);
         m_currentDocumentAction->setText(i18n("Current Document"));
         m_currentDocumentAction->setToolTip(i18nc("@info:tooltip", "Display problems in current document"));
 
-        QAction* openDocumentsAction = new QAction(this);
+        auto* openDocumentsAction = new QAction(this);
         openDocumentsAction->setText(i18n("Open Documents"));
         openDocumentsAction->setToolTip(i18nc("@info:tooltip", "Display problems in all open documents"));
 
-        QAction* currentProjectAction = new QAction(this);
+        auto* currentProjectAction = new QAction(this);
         currentProjectAction->setText(i18n("Current Project"));
         currentProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in current project"));
 
-        QAction* allProjectAction = new QAction(this);
+        auto* allProjectAction = new QAction(this);
         allProjectAction->setText(i18n("All Projects"));
         allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
 
@@ -153,7 +153,7 @@ void ProblemsView::setupActions()
         m_groupingMenu = new KActionMenu(i18n("Grouping"), this);
         m_groupingMenu->setDelayed(false);
 
-        QActionGroup* groupingActions = new QActionGroup(this);
+        auto* groupingActions = new QActionGroup(this);
 
         QAction* noGroupingAction = new QAction(i18n("None"), this);
         QAction* pathGroupingAction = new QAction(i18n("Path"), this);
@@ -176,7 +176,7 @@ void ProblemsView::setupActions()
     }
 
     {
-        QTimer* filterTimer = new QTimer(this);
+        auto* filterTimer = new QTimer(this);
         filterTimer->setSingleShot(true);
         filterTimer->setInterval(500);
 
@@ -191,7 +191,7 @@ void ProblemsView::setupActions()
         connect(m_filterEdit, &QLineEdit::textChanged,
                 filterTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
 
-        QWidgetAction* filterAction = new QWidgetAction(this);
+        auto* filterAction = new QWidgetAction(this);
         filterAction->setDefaultWidget(m_filterEdit);
         addAction(filterAction);
 
@@ -376,7 +376,7 @@ void ProblemsView::onCurrentChanged(int idx)
 
 void ProblemsView::onViewChanged()
 {
-    ProblemTreeView* view = static_cast<ProblemTreeView*>(sender());
+    auto* view = static_cast<ProblemTreeView*>(sender());
     int idx = m_tabWidget->indexOf(view);
     int rows = view->model()->rowCount();
 
@@ -482,7 +482,7 @@ void ProblemsView::setFilter(const QString& filterText, int tabIdx)
     if (tabIdx < 0 || tabIdx >= m_tabWidget->count())
         return;
 
-    ProblemTreeView* view = static_cast<ProblemTreeView*>(m_tabWidget->widget(tabIdx));
+    auto* view = static_cast<ProblemTreeView*>(m_tabWidget->widget(tabIdx));
     int rows = view->setFilter(filterText);
 
     updateTab(tabIdx, rows);

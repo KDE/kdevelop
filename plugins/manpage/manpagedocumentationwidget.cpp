@@ -50,7 +50,7 @@ ManPageDocumentationWidget::ManPageDocumentationWidget(QWidget *parent)
         connect(model, &ManPageModel::manPagesLoaded, this, &ManPageDocumentationWidget::manIndexLoaded);
         connect(model, &ManPageModel::error, this, &ManPageDocumentationWidget::handleError);
         m_statusLabel->setAlignment(Qt::AlignHCenter);
-        QVBoxLayout* layout = new QVBoxLayout();
+        auto* layout = new QVBoxLayout();
         layout->addWidget(m_statusLabel);
         layout->addWidget(m_progressBar);
         layout->addStretch();

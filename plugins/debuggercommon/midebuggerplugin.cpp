@@ -120,7 +120,7 @@ void MIDebuggerPlugin::setupActions()
 {
     KActionCollection* ac = actionCollection();
 
-    QAction * action = new QAction(this);
+    auto * action = new QAction(this);
     action->setIcon(QIcon::fromTheme(QStringLiteral("core")));
     action->setText(i18n("Examine Core File with %1", m_displayName));
     action->setWhatsThis(i18n("<b>Examine core file</b>"
@@ -208,7 +208,7 @@ ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QW
     if (context->type() != KDevelop::Context::EditorContext)
         return menuExt;
 
-    EditorContext *econtext = dynamic_cast<EditorContext*>(context);
+    auto *econtext = dynamic_cast<EditorContext*>(context);
     if (!econtext)
         return menuExt;
 
@@ -218,7 +218,7 @@ ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QW
     {
         QString squeezed = KStringHandler::csqueeze(contextIdent, 30);
 
-        QAction* action = new QAction(parent);
+        auto* action = new QAction(parent);
         action->setText(i18n("Evaluate: %1", squeezed));
         action->setWhatsThis(i18n("<b>Evaluate expression</b>"
                                   "<p>Shows the value of the expression under the cursor.</p>"));
@@ -252,7 +252,7 @@ void MIDebuggerPlugin::slotExamineCore()
         if (answer == KMessageBox::No)
             return;
     }
-    MIExamineCoreJob *job = new MIExamineCoreJob(this, core()->runController());
+    auto *job = new MIExamineCoreJob(this, core()->runController());
     core()->runController()->registerJob(job);
     // job->start() is called in registerJob
 }
@@ -290,7 +290,7 @@ void MIDebuggerPlugin::slotAttachProcess()
 
 MIAttachProcessJob* MIDebuggerPlugin::attachProcess(int pid)
 {
-    MIAttachProcessJob *job = new MIAttachProcessJob(this, pid, core()->runController());
+    auto *job = new MIAttachProcessJob(this, pid, core()->runController());
     core()->runController()->registerJob(job);
     // job->start() is called in registerJob
 

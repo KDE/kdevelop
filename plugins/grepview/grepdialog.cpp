@@ -278,14 +278,14 @@ void GrepDialog::addStringToMenu(QMenu* menu, const QString& string)
 
 void GrepDialog::synchronizeDirActionTriggered(bool)
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
     setSearchLocations(action->data().toString());
 }
 
 QMenu* GrepDialog::createSyncButtonMenu()
 {
-    QMenu* ret = new QMenu(this);
+    auto* ret = new QMenu(this);
 
     QSet<Path> hadUrls;
 

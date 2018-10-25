@@ -61,7 +61,7 @@ void OutputJob::startOutput()
     IPlugin* i = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
     if( i )
     {
-        KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+        auto* view = i->extension<KDevelop::IOutputView>();
         if( view )
         {
             int tvid;
@@ -119,7 +119,7 @@ void KDevelop::OutputJob::setTitle(const QString & title)
         IPlugin* i = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
         if( i )
         {
-            KDevelop::IOutputView* view = i->extension<KDevelop::IOutputView>();
+            auto* view = i->extension<KDevelop::IOutputView>();
             if( view )
             {
                 view->setTitle(d->outputId, title);

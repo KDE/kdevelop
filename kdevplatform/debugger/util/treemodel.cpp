@@ -68,7 +68,7 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+    auto *item = static_cast<TreeItem*>(index.internalPointer());
     if (role == ItemRole)
         return QVariant::fromValue(item);
 
@@ -117,7 +117,7 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    TreeItem *childItem = static_cast<TreeItem*>(index.internalPointer());
+    auto *childItem = static_cast<TreeItem*>(index.internalPointer());
     TreeItem *parentItem = childItem->parent();
 
     if (parentItem == d->root)
@@ -202,7 +202,7 @@ bool TreeModel::setData(const QModelIndex& index, const QVariant& value,
         && (role == Qt::EditRole || role == Qt::CheckStateRole))
     {
 
-        TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+        auto *item = static_cast<TreeItem*>(index.internalPointer());
         item->setColumn(index.column(), value);
         return true;
     }

@@ -45,10 +45,10 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
 {
     setLayout(new QVBoxLayout);
     m_projects = new QListView(this);
-    QHBoxLayout* topLayout = new QHBoxLayout;
+    auto* topLayout = new QHBoxLayout;
     auto filterLine = new FilterProxySearchLine(this);
-    KDEProjectsModel* model = new KDEProjectsModel(this);
-    KDEProjectsReader* reader = new KDEProjectsReader(model, model);
+    auto* model = new KDEProjectsModel(this);
+    auto* reader = new KDEProjectsReader(model, model);
     connect(reader, &KDEProjectsReader::downloadDone, reader, &KDEProjectsReader::deleteLater);
     connect(m_projects, &QListView::clicked, this, &KDEProviderWidget::projectIndexChanged);
 
@@ -64,7 +64,7 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     layout()->addItem(topLayout);
     layout()->addWidget(m_projects);
     
-    QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(this);
+    auto* proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(model);
     proxyModel->setDynamicSortFilter(true);
     proxyModel->sort(0);
@@ -98,7 +98,7 @@ VcsJob* KDEProviderWidget::createWorkingCopy(const QUrl &destinationDirectory)
         KMessageBox::error(nullptr, i18n("The Git plugin could not be loaded which is required to download a KDE project."), i18n("KDE Provider Error"));
         return nullptr;
     }
-    IBasicVersionControl* vcIface = plugin->extension<IBasicVersionControl>();
+    auto* vcIface = plugin->extension<IBasicVersionControl>();
     VcsJob* ret = vcIface->createWorkingCopy(extractLocation(pos), destinationDirectory);
     
     return ret;

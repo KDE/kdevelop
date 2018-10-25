@@ -28,7 +28,7 @@ KDEProjectsReader::KDEProjectsReader(KDEProjectsModel* m, QObject* parent)
     : QObject(parent)
     , m_m(m) //donuts
 {
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    auto *manager = new QNetworkAccessManager(this);
 
     QNetworkReply* reply = manager->get(QNetworkRequest(kdeProjectsUrl));
     connect(reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &KDEProjectsReader::downloadError);
@@ -98,7 +98,7 @@ void KDEProjectsReader::downloadFinished(QNetworkReply* reply)
                     Q_ASSERT(p.type == Source::Module);
 
                 if(!p.m_urls.isEmpty()) {
-                    SourceItem* item = new SourceItem(p);
+                    auto* item = new SourceItem(p);
                     m_m->appendRow(item);
                 }
             }

@@ -371,7 +371,7 @@ void ProvidersModel::unloaded(IPlugin* plugin)
 {
     removeProvider(plugin->extension<IDocumentationProvider>());
 
-    IDocumentationProviderProvider* providerProvider = plugin->extension<IDocumentationProviderProvider>();
+    auto* providerProvider = plugin->extension<IDocumentationProviderProvider>();
     if (providerProvider) {
         foreach(IDocumentationProvider* provider, providerProvider->providers())
             removeProvider(provider);
@@ -382,7 +382,7 @@ void ProvidersModel::loaded(IPlugin* plugin)
 {
     addProvider(plugin->extension<IDocumentationProvider>());
 
-    IDocumentationProviderProvider* providerProvider = plugin->extension<IDocumentationProviderProvider>();
+    auto* providerProvider = plugin->extension<IDocumentationProviderProvider>();
     if (providerProvider) {
         foreach(IDocumentationProvider* provider, providerProvider->providers())
             addProvider(provider);

@@ -41,7 +41,7 @@ namespace
 /// @param projectFile projectName.kdev4 file
 IProject* loadProject( const QString& projectFile, const QString& projectName )
 {
-    KDevSignalSpy* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)) );
+    auto* projectSpy = new KDevSignalSpy( ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)) );
     ICore::self()->projectController()->openProject( QUrl::fromLocalFile(projectFile) );
 
     if( !projectSpy->wait( 5000 ) ) {

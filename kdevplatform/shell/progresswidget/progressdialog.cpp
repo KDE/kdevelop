@@ -67,7 +67,7 @@ TransactionItemView::TransactionItemView( QWidget *parent, const char *name )
 
 TransactionItem *TransactionItemView::addTransactionItem( ProgressItem *item, bool first )
 {
-    TransactionItem *ti = new TransactionItem( mBigBox, item, first );
+    auto *ti = new TransactionItem( mBigBox, item, first );
     mBigBox->layout()->addWidget( ti );
 
     resize( mBigBox->width(), mBigBox->height() );

@@ -210,7 +210,7 @@ bool DebugSession::execInferior(KDevelop::ILaunchConfiguration *cfg, IExecutePlu
         QByteArray tty(m_tty->getSlave().toLatin1());
         QByteArray options = QByteArray(">") + tty + QByteArray("  2>&1 <") + tty;
 
-        QProcess *proc = new QProcess;
+        auto *proc = new QProcess;
         const QStringList arguments{
             QStringLiteral("-c"),
             KShell::quoteArg(runShellScript.toLocalFile()) + QLatin1Char(' ') + KShell::quoteArg(executable) + QString::fromLatin1(options),

@@ -98,7 +98,7 @@ QVariant OutlineModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    OutlineNode* node = static_cast<OutlineNode*>(index.internalPointer());
+    auto* node = static_cast<OutlineNode*>(index.internalPointer());
     Q_ASSERT(node);
     if (role == Qt::DecorationRole) {
         return node->icon();
@@ -122,7 +122,7 @@ int OutlineModel::rowCount(const QModelIndex& parent) const
     } else if (parent.column() != 0) {
         return 0;
     } else {
-        const OutlineNode* node = static_cast<const OutlineNode*>(parent.internalPointer());
+        const auto* node = static_cast<const OutlineNode*>(parent.internalPointer());
         return node->childCount();
     }
 }
@@ -142,7 +142,7 @@ QModelIndex OutlineModel::index(int row, int column, const QModelIndex &parent) 
         if (parent.column() != 0) {
             return QModelIndex(); //only column 0 should have children
         }
-        OutlineNode* node = static_cast<OutlineNode*>(parent.internalPointer());
+        auto* node = static_cast<OutlineNode*>(parent.internalPointer());
         if (row < node->childCount()) {
             return createIndex(row, column, const_cast<OutlineNode*>(node->childAt(row)));
         }
@@ -157,7 +157,7 @@ QModelIndex OutlineModel::parent(const QModelIndex& index) const
         return QModelIndex();
     }
 
-    const OutlineNode* node = static_cast<const OutlineNode*>(index.internalPointer());
+    const auto* node = static_cast<const OutlineNode*>(index.internalPointer());
 
     const OutlineNode* parentNode = node->parent();
     Q_ASSERT(parentNode);
@@ -201,7 +201,7 @@ void OutlineModel::activate(const QModelIndex& realIndex)
         qCWarning(PLUGIN_OUTLINE) << "attempting to activate invalid item!";
         return;
     }
-    OutlineNode* node = static_cast<OutlineNode*>(realIndex.internalPointer());
+    auto* node = static_cast<OutlineNode*>(realIndex.internalPointer());
     KTextEditor::Range range;
     {
         DUChainReadLocker lock;

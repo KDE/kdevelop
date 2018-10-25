@@ -59,7 +59,7 @@ void shutdownGracefully(int sig)
         handlingSignal = 1;
         qCDebug(SHELL) << "signal " << sig << " received, shutting down gracefully";
         QCoreApplication* app = QCoreApplication::instance();
-        if (QApplication* guiApp = qobject_cast<QApplication*>(app)) {
+        if (auto* guiApp = qobject_cast<QApplication*>(app)) {
             guiApp->closeAllWindows();
         }
         app->quit();

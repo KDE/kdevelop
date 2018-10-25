@@ -53,7 +53,7 @@ DockerPlugin::DockerPlugin(QObject *parent, const QVariantList & /*args*/)
     setXMLFile( QStringLiteral("kdevdockerplugin.rc") );
     connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, &DockerPlugin::runtimeChanged);
 
-    QProcess* process = new QProcess(this);
+    auto* process = new QProcess(this);
     connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &DockerPlugin::imagesListFinished);
     process->start(QStringLiteral("docker"), {QStringLiteral("images"), QStringLiteral("--filter"), QStringLiteral("dangling=false"), QStringLiteral("--format"), QStringLiteral("{{.Repository}}:{{.Tag}}\t{{.ID}}")}, QIODevice::ReadOnly);
 
@@ -70,7 +70,7 @@ void DockerPlugin::imagesListFinished(int code)
     if (code != 0)
         return;
 
-    QProcess* process = qobject_cast<QProcess*>(sender());
+    auto* process = qobject_cast<QProcess*>(sender());
     Q_ASSERT(process);
     QTextStream stream(process);
     while(!stream.atEnd()) {
@@ -100,10 +100,10 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
     QList<QUrl> urls;
 
     if ( context->type() == KDevelop::Context::FileContext ) {
-        KDevelop::FileContext* filectx = static_cast<KDevelop::FileContext*>(context);
+        auto* filectx = static_cast<KDevelop::FileContext*>(context);
         urls = filectx->urls();
     } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
-        KDevelop::ProjectItemContext* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
+        auto* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
         foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
             if ( item->file() ) {
                 urls << item->path().toUrl();

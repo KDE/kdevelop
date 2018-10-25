@@ -82,7 +82,7 @@ void LldbVariable::formatChanged()
     {
         foreach(TreeItem* item, childItems) {
             Q_ASSERT(dynamic_cast<MIVariable*>(item));
-            if( MIVariable* var=dynamic_cast<MIVariable*>(item))
+            if( auto* var=dynamic_cast<MIVariable*>(item))
                 var->setFormat(format());
         }
     }

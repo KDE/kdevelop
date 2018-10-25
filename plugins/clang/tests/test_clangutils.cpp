@@ -50,7 +50,7 @@ struct CursorCollectorVisitor
 
     static CXChildVisitResult visit(CXCursor cursor, CXCursor /*parent*/, CXClientData d)
     {
-        CursorCollectorVisitor* thisPtr = static_cast<CursorCollectorVisitor*>(d);
+        auto* thisPtr = static_cast<CursorCollectorVisitor*>(d);
         thisPtr->cursors << cursor;
 
         return CXChildVisit_Recurse;

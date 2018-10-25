@@ -234,7 +234,7 @@ ILanguageSupport* LanguageController::language(const QString &name) const
     }
 
     if(!supports.isEmpty()) {
-        ILanguageSupport *languageSupport = supports[0]->extension<ILanguageSupport>();
+        auto *languageSupport = supports[0]->extension<ILanguageSupport>();
         if(languageSupport) {
             d->addLanguageSupport(languageSupport);
             return languageSupport;
@@ -339,7 +339,7 @@ QList<ILanguageSupport*> LanguageController::languagesForMimetype(const QString&
             d->languageCache.insert(mimetype, QList<ILanguageSupport*>());
         } else {
             for (IPlugin *support : supports) {
-                ILanguageSupport* languageSupport = support->extension<ILanguageSupport>();
+                auto* languageSupport = support->extension<ILanguageSupport>();
                 qCDebug(SHELL) << "language-support:" << languageSupport;
                 if(languageSupport) {
                     d->addLanguageSupport(languageSupport);

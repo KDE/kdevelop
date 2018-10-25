@@ -290,7 +290,7 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
 
     m_layout->addLayout(m_headerLayout);
 
-    QHBoxLayout* spaceLayout = new QHBoxLayout;
+    auto* spaceLayout = new QHBoxLayout;
     spaceLayout->addSpacing(10);
     spaceLayout->addLayout(m_itemLayout);
 
@@ -326,7 +326,7 @@ QList<QWidget*> NavigatableWidgetList::items() const
 {
     QList<QWidget*> ret;
     for (int a = 0; a < m_itemLayout->count(); ++a) {
-        QWidgetItem* widgetItem = dynamic_cast<QWidgetItem*>(m_itemLayout->itemAt(a));
+        auto* widgetItem = dynamic_cast<QWidgetItem*>(m_itemLayout->itemAt(a));
         if (widgetItem) {
             ret << widgetItem->widget();
         }
@@ -482,7 +482,7 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration,
     setFrameShape(NoFrame);
     setUpdatesEnabled(false);
     DUChainReadLocker lock(DUChain::lock());
-    QHBoxLayout* labelLayout = new QHBoxLayout;
+    auto* labelLayout = new QHBoxLayout;
     labelLayout->setContentsMargins(0, -1, 0, 0); // let's keep the spacing *above* the line
     QWidget* headerWidget = new QWidget;
     headerWidget->setLayout(labelLayout);
@@ -636,7 +636,7 @@ unsigned int UsesWidget::countAllUses() const
 {
     unsigned int totalUses = 0;
     foreach (QWidget* w, items()) {
-        if (TopContextUsesWidget* useWidget = dynamic_cast<TopContextUsesWidget*>(w)) {
+        if (auto* useWidget = dynamic_cast<TopContextUsesWidget*>(w)) {
             totalUses += useWidget->usesCount();
         }
     }
@@ -647,7 +647,7 @@ unsigned int UsesWidget::countAllUses() const
 void UsesWidget::setAllExpanded(bool expanded)
 {
     foreach (QWidget* w, items()) {
-        if (TopContextUsesWidget* useWidget = dynamic_cast<TopContextUsesWidget*>(w)) {
+        if (auto* useWidget = dynamic_cast<TopContextUsesWidget*>(w)) {
             useWidget->setExpanded(expanded);
         }
     }

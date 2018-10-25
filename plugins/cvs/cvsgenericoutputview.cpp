@@ -35,7 +35,7 @@ void CvsGenericOutputView::appendText(const QString& text)
 
 void CvsGenericOutputView::slotJobFinished(KJob * job)
 {
-    CvsJob * cvsjob = dynamic_cast<CvsJob*>(job);
+    auto * cvsjob = dynamic_cast<CvsJob*>(job);
     if (cvsjob) {
         appendText( cvsjob->cvsCommand() );
         appendText( cvsjob->output() );

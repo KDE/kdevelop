@@ -270,7 +270,7 @@ void ParseSession::reparseImporters()
 void ParseSession::scheduleForParsing(const IndexedString& url, int priority)
 {
     BackgroundParser* bgparser = KDevelop::ICore::self()->languageController()->backgroundParser();
-    TopDUContext::Features features = (TopDUContext::Features)
+    auto features = (TopDUContext::Features)
         (TopDUContext::ForceUpdate | TopDUContext::AllDeclarationsContextsAndUses);
 
     if (bgparser->isQueued(url)) {

@@ -77,7 +77,7 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
         }
 
         for (int i=0; i < variableCollection()->watches()->childCount(); ++i) {
-            Variable *var = qobject_cast<Variable*>(variableCollection()->watches()->child(i));
+            auto *var = qobject_cast<Variable*>(variableCollection()->watches()->child(i));
             if (var) {
                 var->setInScope(false);
             }

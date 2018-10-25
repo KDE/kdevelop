@@ -195,7 +195,7 @@ void CodeHighlighting::highlightDUChain(ReferencedTopDUContext context)
 
     instance->highlightDUChain(context.data());
 
-    DocumentHighlighting* highlighting = new DocumentHighlighting;
+    auto* highlighting = new DocumentHighlighting;
     highlighting->m_document = url;
     highlighting->m_waitingRevision = revision;
     highlighting->m_waiting = instance->m_highlight;
@@ -355,7 +355,7 @@ KDevelop::Declaration* CodeHighlightingInstance::localClassFromCodeContext(KDeve
     ///Step 1: Find the function-declaration for the function we are in
     Declaration* functionDeclaration = nullptr;
 
-    if (FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(context->owner())) {
+    if (auto* def = dynamic_cast<FunctionDefinition*>(context->owner())) {
         if (m_contextClasses.contains(context))
             return m_contextClasses[context];
 
@@ -507,7 +507,7 @@ void CodeHighlighting::clearHighlightingForDocument(const IndexedString& documen
 
 void CodeHighlighting::applyHighlighting(void* _highlighting)
 {
-    CodeHighlighting::DocumentHighlighting* highlighting =
+    auto* highlighting =
         static_cast<CodeHighlighting::DocumentHighlighting*>(_highlighting);
 
     VERIFY_FOREGROUND_LOCKED
@@ -597,7 +597,7 @@ void CodeHighlighting::trackerDestroyed(QObject* object)
     // Called when a document is destroyed
     VERIFY_FOREGROUND_LOCKED
     QMutexLocker lock(&m_dataMutex);
-    DocumentChangeTracker* tracker = static_cast<DocumentChangeTracker*>(object);
+    auto* tracker = static_cast<DocumentChangeTracker*>(object);
     Q_ASSERT(m_highlights.contains(tracker));
     delete m_highlights[tracker]; // No need to care about the individual ranges, as the document is being destroyed
     m_highlights.remove(tracker);
@@ -616,7 +616,7 @@ void CodeHighlighting::aboutToRemoveText(const KTextEditor::Range& range)
     VERIFY_FOREGROUND_LOCKED
     QMutexLocker lock(&m_dataMutex);
     Q_ASSERT(dynamic_cast<KTextEditor::Document*>(sender()));
-    KTextEditor::Document* doc = static_cast<KTextEditor::Document*>(sender());
+    auto* doc = static_cast<KTextEditor::Document*>(sender());
 
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()
                                      ->trackerForUrl(IndexedString(doc->url()));

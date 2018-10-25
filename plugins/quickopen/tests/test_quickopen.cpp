@@ -304,11 +304,11 @@ void TestQuickOpen::testProjectFileFilter()
 {
     QTemporaryDir dir;
     TestProject* project = new TestProject(Path(dir.path()));
-    ProjectFolderItem* foo = createChild<ProjectFolderItem>(project->projectItem(), QStringLiteral("foo"));
+    auto* foo = createChild<ProjectFolderItem>(project->projectItem(), QStringLiteral("foo"));
     createChild<ProjectFileItem>(foo, QStringLiteral("bar"));
     createChild<ProjectFileItem>(foo, QStringLiteral("asdf"));
     createChild<ProjectFileItem>(foo, QStringLiteral("space bar"));
-    ProjectFolderItem* asdf = createChild<ProjectFolderItem>(project->projectItem(), QStringLiteral("asdf"));
+    auto* asdf = createChild<ProjectFolderItem>(project->projectItem(), QStringLiteral("asdf"));
     createChild<ProjectFileItem>(asdf, QStringLiteral("bar"));
 
     QTemporaryFile tmpFile;
@@ -354,7 +354,7 @@ void TestQuickOpen::testProjectFileFilter()
     provider.reset();
     QCOMPARE(items(provider), original);
 
-    ProjectFileItem* blub = createChild<ProjectFileItem>(project->projectItem(), QStringLiteral("blub"));
+    auto* blub = createChild<ProjectFileItem>(project->projectItem(), QStringLiteral("blub"));
     // lazy load
     QCOMPARE(provider.itemCount(), 5u);
     provider.reset();

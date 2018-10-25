@@ -81,11 +81,11 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
     // TODO: properly qualified identifier for out of line function definitions
     m_cachedText = decl->identifier().toString();
     m_cachedIcon = DUChainUtils::iconForDeclaration(decl);
-    if (NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl)) {
+    if (auto* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl)) {
         //e.g. C++ using namespace statement
         m_cachedText = alias->importIdentifier().toString();
     }
-    else if (ClassMemberDeclaration* member = dynamic_cast<ClassMemberDeclaration*>(decl)) {
+    else if (auto* member = dynamic_cast<ClassMemberDeclaration*>(decl)) {
         if (member->isFriend()) {
             m_cachedText = QLatin1String("friend ") + m_cachedText;
         }
@@ -237,7 +237,7 @@ void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
                 //  | \-- method2()
                 //  \ OtherStuff
                 auto it = std::find_if(m_children.begin(), m_children.end(), [childContext](const OutlineNode& node) {
-                    if (DUContext* ctx = dynamic_cast<DUContext*>(node.duChainObject())) {
+                    if (auto* ctx = dynamic_cast<DUContext*>(node.duChainObject())) {
                         return ctx->equalScopeIdentifier(childContext);
                     }
                     return false;

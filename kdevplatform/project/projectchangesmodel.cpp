@@ -72,14 +72,14 @@ void ProjectChangesModel::addProject(IProject* p)
     it->setData(p->name(), ProjectChangesModel::ProjectNameRole);
     IPlugin* plugin = p->versionControlPlugin();
     if(plugin) {
-        IBasicVersionControl* vcs = plugin->extension<IBasicVersionControl>();
+        auto* vcs = plugin->extension<IBasicVersionControl>();
 
         auto info = ICore::self()->pluginController()->pluginInfo(plugin);
 
         it->setIcon(QIcon::fromTheme(info.iconName()));
         it->setToolTip(vcs->name());
 
-        IBranchingVersionControl* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
+        auto* branchingExtension = plugin->extension<KDevelop::IBranchingVersionControl>();
         if(branchingExtension) {
             const auto pathUrl = p->path().toUrl();
             branchingExtension->registerRepositoryForCurrentBranchChanges(pathUrl);
@@ -144,10 +144,10 @@ void ProjectChangesModel::changes(IProject* project, const QList<QUrl>& urls, IB
 
 void ProjectChangesModel::statusReady(KJob* job)
 {
-    VcsJob* status=static_cast<VcsJob*>(job);
+    auto* status=static_cast<VcsJob*>(job);
 
     const QList<QVariant> states = status->fetchResults().toList();
-    IProject* project = job->property("project").value<KDevelop::IProject*>();
+    auto* project = job->property("project").value<KDevelop::IProject*>();
     if(!project)
         return;
 
@@ -251,7 +251,7 @@ void ProjectChangesModel::jobUnregistered(KJob* job)
         KDevelop::VcsJob::Revert,
     };
 
-    VcsJob* vcsjob=dynamic_cast<VcsJob*>(job);
+    auto* vcsjob=dynamic_cast<VcsJob*>(job);
     if(vcsjob && readOnly.contains(vcsjob->type())) {
         reloadAll();
     }
@@ -263,7 +263,7 @@ void ProjectChangesModel::repositoryBranchChanged(const QUrl& url)
     if(project) {
         IPlugin* v = project->versionControlPlugin();
         Q_ASSERT(v);
-        IBranchingVersionControl* branching = v->extension<IBranchingVersionControl>();
+        auto* branching = v->extension<IBranchingVersionControl>();
         Q_ASSERT(branching);
         VcsJob* job = branching->currentBranch(url);
         connect(job, &VcsJob::resultsReady, this, &ProjectChangesModel::branchNameReady);
@@ -274,7 +274,7 @@ void ProjectChangesModel::repositoryBranchChanged(const QUrl& url)
 
 void ProjectChangesModel::branchNameReady(VcsJob* job)
 {
-    IProject* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
+    auto* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
     if(job->status()==VcsJob::JobSucceeded) {
         QString name = job->fetchResults().toString();
         QString branchName = name.isEmpty() ? i18n("no branch") : name;

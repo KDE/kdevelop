@@ -82,7 +82,7 @@ void CMakeBuilder::addBuilder(const QString& neededfile, const QStringList& gene
 {
     if( i )
     {
-        IProjectBuilder* b = i->extension<KDevelop::IProjectBuilder>();
+        auto* b = i->extension<KDevelop::IProjectBuilder>();
         if( b )
         {
             m_builders[neededfile] = b;
@@ -114,7 +114,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         KJob* build = nullptr;
         if(dom->file())
         {
-            IMakeBuilder* makeBuilder = dynamic_cast<IMakeBuilder*>(builder);
+            auto* makeBuilder = dynamic_cast<IMakeBuilder*>(builder);
             if (!makeBuilder) {
                 return new ErrorJob(this, i18n("Could not find the make builder. Check your installation"));
             }
@@ -132,7 +132,7 @@ KJob* CMakeBuilder::build(KDevelop::ProjectBaseItem *dom)
         if( configure )
         {
             qCDebug(KDEV_CMAKEBUILDER) << "creating composite job";
-            KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+            auto* builderJob = new KDevelop::BuilderJob;
             builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, dom );
             builderJob->addCustomJob( KDevelop::BuilderJob::Build, build, dom );
             builderJob->updateJobName();
@@ -158,7 +158,7 @@ KJob* CMakeBuilder::clean(KDevelop::ProjectBaseItem *dom)
         qCDebug(KDEV_CMAKEBUILDER) << "Cleaning with" << builder;
         KJob* clean = builder->clean(item);
         if( configure ) {
-            KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+            auto* builderJob = new KDevelop::BuilderJob;
             builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, item );
             builderJob->addCustomJob( KDevelop::BuilderJob::Clean, clean, item );
             builderJob->updateJobName();
@@ -184,7 +184,7 @@ KJob* CMakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installP
         qCDebug(KDEV_CMAKEBUILDER) << "Installing with" << builder;
         KJob* install = builder->install(item, installPrefix);
         if( configure ) {
-            KDevelop::BuilderJob* builderJob = new KDevelop::BuilderJob;
+            auto* builderJob = new KDevelop::BuilderJob;
             builderJob->addCustomJob( KDevelop::BuilderJob::Configure, configure, item );
             builderJob->addCustomJob( KDevelop::BuilderJob::Install, install, item );
             builderJob->updateJobName();
@@ -218,7 +218,7 @@ KJob* CMakeBuilder::configure( KDevelop::IProject* project )
     {
         return new ErrorJob(this, i18n("No Build Directory configured, cannot configure"));
     }
-    CMakeJob* job = new CMakeJob(this);
+    auto* job = new CMakeJob(this);
     job->setProject(project);
     connect(job, &KJob::result, this, [this, project] {
         emit configured(project);

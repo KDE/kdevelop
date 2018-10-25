@@ -144,7 +144,7 @@ void UsesCollector::startCollecting()
 
     if (Declaration* decl = m_declaration.data()) {
         if (m_collectDefinitions) {
-            if (FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl)) {
+            if (auto* def = dynamic_cast<FunctionDefinition*>(decl)) {
                 //Jump from definition to declaration
                 Declaration* declaration = def->declaration();
                 if (declaration)
@@ -184,7 +184,7 @@ void UsesCollector::startCollecting()
                         d.data()->identifier(), CursorInRevision::invalid(), nullptr,
                         AbstractType::Ptr(), DUContext::OnlyFunctions);
                     for (Declaration* constructor : constructors) {
-                        ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(constructor);
+                        auto* classFun = dynamic_cast<ClassFunctionDeclaration*>(constructor);
                         if (classFun && classFun->isConstructor())
                             allDeclarations.insert(IndexedDeclaration(constructor));
                     }
@@ -195,7 +195,7 @@ void UsesCollector::startCollecting()
                         destructorId, CursorInRevision::invalid(), nullptr,
                         AbstractType::Ptr(), DUContext::OnlyFunctions);
                     for (Declaration* destructor : destructors) {
-                        ClassFunctionDeclaration* classFun = dynamic_cast<ClassFunctionDeclaration*>(destructor);
+                        auto* classFun = dynamic_cast<ClassFunctionDeclaration*>(destructor);
                         if (classFun && classFun->isDestructor())
                             allDeclarations.insert(IndexedDeclaration(destructor));
                     }

@@ -55,7 +55,7 @@ public:
 };
 
 WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* set, MainWindow* mainwindow) : QWidget(parent), m_set(set) {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
     layout->setSpacing(0);
 
     layout->setMargin(0);
@@ -72,7 +72,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 
     // title bar
     {
-        QHBoxLayout* topLayout = new QHBoxLayout;
+        auto* topLayout = new QHBoxLayout;
         m_setButton = new WorkingSetToolButton(this, set);
         m_setButton->hide();
 
@@ -117,7 +117,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     }
 
     // everything else is added to the following widget which just has a different background color
-    QVBoxLayout* bodyLayout = new QVBoxLayout;
+    auto* bodyLayout = new QVBoxLayout;
     {
         QWidget* body = new QWidget();
         body->setLayout(bodyLayout);
@@ -127,7 +127,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 
     // document list actions
     {
-        QHBoxLayout* actionsLayout = new QHBoxLayout;
+        auto* actionsLayout = new QHBoxLayout;
 
         m_documentsLabel = new QLabel(i18n("Documents:"));
         m_documentsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -155,7 +155,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 
     QSet<QString> hadFiles;
 
-    QVBoxLayout* filesLayout = new QVBoxLayout;
+    auto* filesLayout = new QVBoxLayout;
     filesLayout->setMargin(0);
 
     foreach(const QString& file, m_set->fileList()) {
@@ -165,16 +165,16 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 
         hadFiles.insert(file);
 
-        FileWidget* widget = new FileWidget;
+        auto* widget = new FileWidget;
         widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
-        QHBoxLayout* fileLayout = new QHBoxLayout(widget);
+        auto* fileLayout = new QHBoxLayout(widget);
 
-        QToolButton* plusButton = new QToolButton;
+        auto* plusButton = new QToolButton;
         plusButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
         fileLayout->addWidget(plusButton);
 
-        WorkingSetFileLabel* fileLabel = new WorkingSetFileLabel;
+        auto* fileLabel = new WorkingSetFileLabel;
         fileLabel->setTextFormat(Qt::RichText);
         // We add spaces behind and after, to make it look nicer
         fileLabel->setText(QLatin1String("&nbsp;") + Core::self()->projectController()->prettyFileName(QUrl::fromUserInput(file)) + QLatin1String("&nbsp;"));
@@ -260,7 +260,7 @@ void WorkingSetToolTipWidget::previousDocument()
 
 void WorkingSetToolTipWidget::updateFileButtons()
 {
-    MainWindow* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    auto* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
     Q_ASSERT(mainWindow);
 
     WorkingSetController* controller = Core::self()->workingSetControllerInternal();
@@ -343,10 +343,10 @@ void WorkingSetToolTipWidget::buttonClicked(bool)
 {
     QPointer<WorkingSetToolTipWidget> stillExists(this);
 
-    QToolButton* s = qobject_cast<QToolButton*>(sender());
+    auto* s = qobject_cast<QToolButton*>(sender());
     Q_ASSERT(s);
 
-    MainWindow* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    auto* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
     Q_ASSERT(mainWindow);
     QSet<QString> openFiles = Core::self()->workingSetControllerInternal()->workingSet(mainWindow->area()->workingSet())->fileList().toSet();
 
@@ -365,12 +365,12 @@ void WorkingSetToolTipWidget::labelClicked()
 {
     QPointer<WorkingSetToolTipWidget> stillExists(this);
 
-    WorkingSetFileLabel* s = qobject_cast<WorkingSetFileLabel*>(sender());
+    auto* s = qobject_cast<WorkingSetFileLabel*>(sender());
     Q_ASSERT(s);
 
     bool found = false;
 
-    Sublime::MainWindow* window = static_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
+    auto* window = static_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
 
     foreach(Sublime::View* view, window->area()->views())
     {

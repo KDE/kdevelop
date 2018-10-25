@@ -62,7 +62,7 @@ public:
      */
     void buildUses(T* node)
     {
-        TopDUContext* top = dynamic_cast<TopDUContext*>(this->contextFromNode(node));
+        auto* top = dynamic_cast<TopDUContext*>(this->contextFromNode(node));
 
         if (top) {
             DUChainWriteLocker lock(DUChain::lock());

@@ -96,7 +96,7 @@ void TestProblemStoreNode::testLabelNode()
     QString s1 = QStringLiteral("TEST1");
     QString s2 = QStringLiteral("TEST2");
 
-    LabelNode *node = new LabelNode(nullptr, s1);
+    auto *node = new LabelNode(nullptr, s1);
     QCOMPARE(node->label(), s1);
 
     node->setLabel(s2);

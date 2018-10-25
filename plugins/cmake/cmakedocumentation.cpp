@@ -138,7 +138,7 @@ KDevelop::IDocumentation::Ptr CMakeDocumentation::homePage() const
 
 QWidget* CMakeDoc::documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent)
 {
-    KDevelop::StandardDocumentationView* view = new KDevelop::StandardDocumentationView(findWidget, parent);
+    auto* view = new KDevelop::StandardDocumentationView(findWidget, parent);
     view->initZoom(provider()->name());
     view->setHtml(mDesc);
     return view;

@@ -204,7 +204,7 @@ void RegistersView::clear()
 
 void RegistersView::setupActions()
 {
-    QAction* updateAction = new QAction(this);
+    auto* updateAction = new QAction(this);
     updateAction->setShortcut(Qt::Key_U);
     updateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     updateAction->setText(i18n("Update"));
@@ -232,7 +232,7 @@ void RegistersView::setupActions()
 
 void RegistersView::insertAction(const QString& name, Qt::Key k)
 {
-    QAction* a = new QAction(this);
+    auto* a = new QAction(this);
     a->setCheckable(true);
     a->setShortcut(k);
     a->setText(name);

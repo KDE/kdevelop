@@ -333,7 +333,7 @@ void TestAssistants::testRenameAssistant()
         } else {
             qWarning() << assistant.data() << stateChange.result;
             QVERIFY(assistant && assistant->actions().size());
-            RenameAction *r = qobject_cast<RenameAction*>(assistant->actions().first().data());
+            auto *r = qobject_cast<RenameAction*>(assistant->actions().first().data());
             QCOMPARE(r->oldDeclarationName(), oldDeclarationName);
             QCOMPARE(r->newDeclarationName(), stateChange.result);
         }
@@ -364,7 +364,7 @@ void TestAssistants::testRenameAssistantUndoRename()
     QVERIFY(assistant);
 
     QVERIFY(assistant->actions().size() > 0);
-    RenameAction *r = qobject_cast<RenameAction*>(assistant->actions().first().data());
+    auto *r = qobject_cast<RenameAction*>(assistant->actions().first().data());
     qWarning() << topCtx->problems() << assistant->actions().first().data() << assistant->actions().size();
     QVERIFY(r);
 

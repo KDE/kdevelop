@@ -42,7 +42,7 @@ public:
     {
         page->setParent(this);
 
-        QVBoxLayout* layout = new QVBoxLayout(this);
+        auto* layout = new QVBoxLayout(this);
         layout->setMargin(0);
         layout->addWidget(page);
         setLayout(layout);

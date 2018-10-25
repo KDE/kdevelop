@@ -55,7 +55,7 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
         return QVariant();
     }
 
-    ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration *>(decl);
+    auto* classDecl = dynamic_cast<ClassDeclaration *>(decl);
     StructureType::Ptr declType = StructureType::Ptr::dynamicCast(decl->abstractType());
     auto funcType = QmlJS::FunctionType::Ptr::dynamicCast(decl->abstractType());
 
@@ -144,7 +144,7 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
             declType->declarationId().qualifiedIdentifier().isEmpty()) {
             // QML component instance. The type that should be displayed is the
             // base class of its anonymous class
-            ClassDeclaration* anonymousClass = dynamic_cast<ClassDeclaration *>(declType->declaration(decl->topContext()));
+            auto* anonymousClass = dynamic_cast<ClassDeclaration *>(declType->declaration(decl->topContext()));
 
             if (anonymousClass && anonymousClass->baseClassesSize() > 0) {
                 return anonymousClass->baseClasses()[0].baseClass.abstractType()->toString();

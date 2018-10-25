@@ -148,7 +148,7 @@ ProjectBaseItem* ProjectTreeView::itemAtPos(const QPoint& pos) const
 
 void ProjectTreeView::dropEvent(QDropEvent* event)
 {
-    ProjectItemContext* selectionCtxt =
+    auto* selectionCtxt =
             static_cast<ProjectItemContext*>(KDevelop::ICore::self()->selectionController()->currentSelection());
     ProjectBaseItem* destItem = itemAtPos(event->pos());
     if (destItem && (dropIndicatorPosition() == AboveItem || dropIndicatorPosition() == BelowItem))
@@ -262,7 +262,7 @@ QModelIndex ProjectTreeView::mapFromSource(const QAbstractProxyModel* proxy, con
     if(next == sourceIdx.model())
         return proxy->mapFromSource(sourceIdx);
     else {
-        const QAbstractProxyModel* nextProxy = qobject_cast<const QAbstractProxyModel*>(next);
+        const auto* nextProxy = qobject_cast<const QAbstractProxyModel*>(next);
         QModelIndex idx = mapFromSource(nextProxy, sourceIdx);
         Q_ASSERT(idx.model() == nextProxy);
         return proxy->mapFromSource(idx);
@@ -282,7 +282,7 @@ void ProjectTreeView::slotActivated( const QModelIndex &index )
         // Do not open file when Ctrl or Shift is pressed; that's for selection
         return;
     }
-    KDevelop::ProjectBaseItem *item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
+    auto *item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
     if ( item && item->file() )
     {
         emit activate( item->file()->path() );
@@ -302,7 +302,7 @@ QList<ProjectBaseItem*> ProjectTreeView::selectedProjects()
     if ( selectionModel()->hasSelection() ) {
         QModelIndexList indexes = selectionModel()->selectedRows();
         for ( const QModelIndex& index: indexes ) {
-            ProjectBaseItem* item = index.data( ProjectModel::ProjectItemRole ).value<ProjectBaseItem*>();
+            auto* item = index.data( ProjectModel::ProjectItemRole ).value<ProjectBaseItem*>();
             if ( item ) {
                 itemlist << item;
                 m_previousSelection = item->project();

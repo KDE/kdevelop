@@ -524,7 +524,7 @@ QList<ProjectFolderItem*> ProjectBaseItem::folderList() const
         ProjectBaseItem* item = child( i );
         if ( item->type() == Folder || item->type() == BuildFolder )
         {
-            ProjectFolderItem *kdevitem = dynamic_cast<ProjectFolderItem*>( item );
+            auto *kdevitem = dynamic_cast<ProjectFolderItem*>( item );
             if ( kdevitem )
                 lst.append( kdevitem );
         }
@@ -542,7 +542,7 @@ QList<ProjectTargetItem*> ProjectBaseItem::targetList() const
 
         if ( item->type() == Target || item->type() == LibraryTarget || item->type() == ExecutableTarget )
         {
-            ProjectTargetItem *kdevitem = dynamic_cast<ProjectTargetItem*>( item );
+            auto *kdevitem = dynamic_cast<ProjectTargetItem*>( item );
             if ( kdevitem )
                 lst.append( kdevitem );
         }
@@ -560,7 +560,7 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
         Q_ASSERT(item);
         if ( item && item->type() == File )
         {
-            ProjectFileItem *kdevitem = dynamic_cast<ProjectFileItem*>( item );
+            auto *kdevitem = dynamic_cast<ProjectFileItem*>( item );
             if ( kdevitem )
                 lst.append( kdevitem );
         }
@@ -948,7 +948,7 @@ int ProjectModel::rowCount( const QModelIndex& parent ) const
 QModelIndex ProjectModel::parent( const QModelIndex& child ) const
 {
     if( child.isValid() ) {
-        ProjectBaseItem* item = static_cast<ProjectBaseItem*>( child.internalPointer() );
+        auto* item = static_cast<ProjectBaseItem*>( child.internalPointer() );
         return indexFromItem( item );
     }
     return QModelIndex();
@@ -965,7 +965,7 @@ QModelIndex ProjectModel::indexFromItem( const ProjectBaseItem* item ) const
 ProjectBaseItem* ProjectModel::itemFromIndex( const QModelIndex& index ) const
 {
     if( index.row() >= 0 && index.column() == 0  && index.model() == this ) {
-        ProjectBaseItem* parent = static_cast<ProjectBaseItem*>( index.internalPointer() );
+        auto* parent = static_cast<ProjectBaseItem*>( index.internalPointer() );
         if( parent ) {
             return parent->child( index.row() );
         }

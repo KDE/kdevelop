@@ -94,7 +94,7 @@ std::unique_ptr<Record> MIParser::parse(FileSymbol *file)
     }
 
     if (record && record->kind == Record::Result) {
-        ResultRecord * result = static_cast<ResultRecord *>(record.get());
+        auto * result = static_cast<ResultRecord *>(record.get());
         result->token = token;
     } else {
         Q_ASSERT(token == 0);

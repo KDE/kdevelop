@@ -171,10 +171,10 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
         address_(0),
         m_splitter(new KDevelop::AutoOrientedSplitter(this))
 {
-        QVBoxLayout* topLayout = new QVBoxLayout(this);
+        auto* topLayout = new QVBoxLayout(this);
         topLayout->setMargin(0);
 
-        QHBoxLayout* controlsLayout = new QHBoxLayout;
+        auto* controlsLayout = new QHBoxLayout;
 
         topLayout->addLayout(controlsLayout);
 
@@ -242,7 +242,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
 }
 
 void DisassembleWidget::jumpToCursor() {
-    MIDebugSession *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
+    auto *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if (s && s->isRunning()) {
         QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
@@ -251,7 +251,7 @@ void DisassembleWidget::jumpToCursor() {
 }
 
 void DisassembleWidget::runToCursor(){
-    MIDebugSession *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
+    auto *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if (s && s->isRunning()) {
         QString address = m_disassembleWindow->selectedItems().at(0)->text(Address);
@@ -261,7 +261,7 @@ void DisassembleWidget::runToCursor(){
 
 void DisassembleWidget::currentSessionChanged(KDevelop::IDebugSession* s)
 {
-    MIDebugSession *session = qobject_cast<MIDebugSession*>(s);
+    auto *session = qobject_cast<MIDebugSession*>(s);
 
     enableControls( session != nullptr ); // disable if session closed
 
@@ -351,7 +351,7 @@ void DisassembleWidget::updateExecutionAddressHandler(const ResultRecord& r)
 
 void DisassembleWidget::disassembleMemoryRegion(const QString& from, const QString& to)
 {
-    MIDebugSession *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
+    auto *s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if(!s || !s->isRunning()) return;
 
@@ -476,7 +476,7 @@ void DisassembleWidget::update(const QString &address)
 
 void DisassembleWidget::setDisassemblyFlavor(QAction* action)
 {
-    MIDebugSession* s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
+    auto* s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if(!s || !s->isRunning()) {
         return;
@@ -512,7 +512,7 @@ void DisassembleWidget::setDisassemblyFlavorHandler(const ResultRecord& r)
 
 void DisassembleWidget::updateDisassemblyFlavor()
 {
-    MIDebugSession* s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
+    auto* s = qobject_cast<MIDebugSession*>(KDevelop::ICore::
             self()->debugController()->currentSession());
     if(!s || !s->isRunning()) {
         return;

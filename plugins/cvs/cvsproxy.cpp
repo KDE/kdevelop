@@ -168,7 +168,7 @@ CvsJob* CvsProxy::log(const QUrl &url, const KDevelop::VcsRevision& rev)
     // parent folder path for files, otherwise the folder path itself
     const QString repo = info.isFile() ? info.absolutePath() : info.absoluteFilePath();
 
-    CvsLogJob* job = new CvsLogJob(vcsplugin);
+    auto* job = new CvsLogJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "log";
@@ -196,7 +196,7 @@ CvsJob* CvsProxy::diff(const QUrl& url,
 {
     QFileInfo info(url.toLocalFile());
 
-    CvsDiffJob* job = new CvsDiffJob(vcsplugin);
+    auto* job = new CvsDiffJob(vcsplugin);
     if ( prepareJob(job, info.absolutePath()) ) {
         *job << "cvs";
         *job << "diff";
@@ -208,7 +208,7 @@ CvsJob* CvsProxy::diff(const QUrl& url,
         if (revA.revisionType() == KDevelop::VcsRevision::Special) {
             // We only support diffing to previous for now
             // Other special types might be added later
-            KDevelop::VcsRevision::RevisionSpecialType specialtype =
+            auto specialtype =
                     revA.revisionValue().value<KDevelop::VcsRevision::RevisionSpecialType>();
             if (specialtype == KDevelop::VcsRevision::Previous) {
                 rA = convertRevisionToPrevious(revB);
@@ -237,7 +237,7 @@ CvsJob * CvsProxy::annotate(const QUrl& url, const KDevelop::VcsRevision& rev)
 {
     QFileInfo info(url.toLocalFile());
 
-    CvsAnnotateJob* job = new CvsAnnotateJob(vcsplugin);
+    auto* job = new CvsAnnotateJob(vcsplugin);
     if ( prepareJob(job, info.absolutePath()) ) {
         *job << "cvs";
         *job << "annotate";
@@ -256,7 +256,7 @@ CvsJob * CvsProxy::annotate(const QUrl& url, const KDevelop::VcsRevision& rev)
 
 CvsJob* CvsProxy::edit(const QString& repo, const QList<QUrl>& files)
 {
-    CvsJob* job = new CvsJob(vcsplugin);
+    auto* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "edit";
@@ -272,7 +272,7 @@ CvsJob* CvsProxy::edit(const QString& repo, const QList<QUrl>& files)
 
 CvsJob* CvsProxy::unedit(const QString& repo, const QList<QUrl>& files)
 {
-    CvsJob* job = new CvsJob(vcsplugin);
+    auto* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "unedit";
@@ -287,7 +287,7 @@ CvsJob* CvsProxy::unedit(const QString& repo, const QList<QUrl>& files)
 
 CvsJob* CvsProxy::editors(const QString& repo, const QList<QUrl>& files)
 {
-    CvsJob* job = new CvsJob(vcsplugin);
+    auto* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "editors";
@@ -302,7 +302,7 @@ CvsJob* CvsProxy::editors(const QString& repo, const QList<QUrl>& files)
 
 CvsJob* CvsProxy::commit(const QString& repo, const QList<QUrl>& files, const QString& message)
 {
-    CvsJob* job = new CvsJob(vcsplugin);
+    auto* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "commit";
@@ -323,7 +323,7 @@ CvsJob* CvsProxy::add(const QString& repo, const QList<QUrl>& files,
 {
     Q_UNUSED(recursiv);
     // FIXME recursiv is not implemented yet
-    CvsJob* job = new CvsJob(vcsplugin);
+    auto* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "add";
@@ -342,7 +342,7 @@ CvsJob* CvsProxy::add(const QString& repo, const QList<QUrl>& files,
 
 CvsJob * CvsProxy::remove(const QString& repo, const QList<QUrl>& files)
 {
-    CvsJob* job = new CvsJob(vcsplugin);
+    auto* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "remove";
@@ -362,7 +362,7 @@ CvsJob * CvsProxy::update(const QString& repo, const QList<QUrl>& files,
                           const QString & updateOptions,
                           bool recursive, bool pruneDirs, bool createDirs)
 {
-    CvsJob* job = new CvsJob(vcsplugin);
+    auto* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, repo) ) {
         *job << "cvs";
         *job << "update";
@@ -395,7 +395,7 @@ CvsJob * CvsProxy::import(const QUrl& directory,
                           const QString & vendortag, const QString & releasetag,
                           const QString& message)
 {
-    CvsJob* job = new CvsJob(vcsplugin);
+    auto* job = new CvsJob(vcsplugin);
     if ( prepareJob(job, directory.toLocalFile(), CvsProxy::Import) ) {
         *job << "cvs";
         *job << "-q"; // don't print directory changes
@@ -423,7 +423,7 @@ CvsJob * CvsProxy::checkout(const QUrl& targetDir,
                             bool recursive,
                             bool pruneDirs)
 {
-    CvsJob* job = new CvsJob(vcsplugin);
+    auto* job = new CvsJob(vcsplugin);
     ///@todo when doing a checkout we don't have the targetdir yet,
     ///      for now it'll work to just run the command from the root
     if ( prepareJob(job, QStringLiteral("/"), CvsProxy::CheckOut) ) {
@@ -457,7 +457,7 @@ CvsJob * CvsProxy::checkout(const QUrl& targetDir,
 
 CvsJob * CvsProxy::status(const QString & repo, const QList<QUrl> & files, bool recursive, bool taginfo)
 {
-    CvsStatusJob* job = new CvsStatusJob(vcsplugin);
+    auto* job = new CvsStatusJob(vcsplugin);
     job->setCommunicationMode( KProcess::MergedChannels );
     if ( prepareJob(job, repo) ) {
         *job << "cvs";

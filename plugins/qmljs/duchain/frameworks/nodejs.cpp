@@ -69,7 +69,7 @@ void NodeJS::createObject(const QString& name, int index, DeclarationBuilder* bu
     Identifier identifier(name);
 
     StructureType::Ptr type(new StructureType);
-    Declaration* decl = builder->openDeclaration<Declaration>(identifier, RangeInRevision());
+    auto* decl = builder->openDeclaration<Declaration>(identifier, RangeInRevision());
 
     type->setDeclaration(decl);
     decl->setAlwaysForceDirect(true);

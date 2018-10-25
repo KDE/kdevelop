@@ -128,7 +128,7 @@ void CvsPlugin::setupActions()
 
 const QUrl CvsPlugin::urlFocusedDocument() const
 {
-    KParts::ReadOnlyPart *plugin =
+    auto *plugin =
         dynamic_cast<KParts::ReadOnlyPart*>(core()->partController()->activePart());
     if (plugin) {
         if (plugin->url().isLocalFile()) {
@@ -163,9 +163,9 @@ void CvsPlugin::slotStatus()
     urls << url;
 
     KDevelop::VcsJob* j = status(urls, KDevelop::IBasicVersionControl::Recursive);
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    auto* job = dynamic_cast<CvsJob*>(j);
     if (job) {
-        CvsGenericOutputView* view = new CvsGenericOutputView(job);
+        auto* view = new CvsGenericOutputView(job);
         emit addNewTabToMainView(view, i18n("Status"));
         KDevelop::ICore::self()->runController()->registerJob(job);
     }
@@ -219,7 +219,7 @@ void CvsPlugin::ctxEdit()
     Q_ASSERT(!urls.empty());
 
     KDevelop::VcsJob* j = edit(urls.front());
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    auto* job = dynamic_cast<CvsJob*>(j);
     if (job) {
         connect(job, &CvsJob::result,
                 this, &CvsPlugin::jobFinished);
@@ -233,7 +233,7 @@ void CvsPlugin::ctxUnEdit()
     Q_ASSERT(!urls.empty());
 
     KDevelop::VcsJob* j = unedit(urls.front());
-    CvsJob* job = dynamic_cast<CvsJob*>(j);
+    auto* job = dynamic_cast<CvsJob*>(j);
     if (job) {
         connect(job, &CvsJob::result,
                 this, &CvsPlugin::jobFinished);
@@ -250,7 +250,7 @@ void CvsPlugin::ctxEditors()
                                       urls);
     if (job) {
         KDevelop::ICore::self()->runController()->registerJob(job);
-        EditorsView* view = new EditorsView(job);
+        auto* view = new EditorsView(job);
         emit addNewTabToMainView(view, i18n("Editors"));
     }
 }

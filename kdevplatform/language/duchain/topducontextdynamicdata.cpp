@@ -185,7 +185,7 @@ void loadTopDUContextData(const uint topContextIndex, LoadType loadType, F callb
     // now readValue is filled with the top-context data size
     Q_ASSERT(readValue >= sizeof(TopDUContextData));
     const QByteArray data = file.read(loadType == FullLoad ? readValue : sizeof(TopDUContextData));
-    const TopDUContextData* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
+    const auto* topData = reinterpret_cast<const TopDUContextData*>(data.constData());
     callback(topData);
 }
 
@@ -606,8 +606,8 @@ TopDUContext* TopDUContextDynamicData::load(uint topContextIndex)
         //now readValue is filled with the top-context data size
         QByteArray topContextData = file.read(readValue);
 
-        DUChainBaseData* topData = reinterpret_cast<DUChainBaseData*>(topContextData.data());
-        TopDUContext* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
+        auto* topData = reinterpret_cast<DUChainBaseData*>(topContextData.data());
+        auto* ret = dynamic_cast<TopDUContext*>(DUChainItemSystem::self().create(topData));
         if (!ret) {
             qCWarning(LANGUAGE) << "Cannot load a top-context from file" << file.fileName() <<
                 "- the required language-support for handling ID" << topData->classId << "is probably not loaded";

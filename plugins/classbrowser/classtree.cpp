@@ -71,13 +71,13 @@ bool ClassTree::populatingClassBrowserContextMenu()
 
 void ClassTree::contextMenuEvent(QContextMenuEvent* e)
 {
-    QMenu* menu = new QMenu(this);
+    auto* menu = new QMenu(this);
     QModelIndex index = indexAt(e->pos());
     if (index.isValid()) {
         Context* c;
         {
             DUChainReadLocker readLock(DUChain::lock());
-            if (Declaration* decl = dynamic_cast<Declaration*>(model()->duObjectForIndex(index)))
+            if (auto* decl = dynamic_cast<Declaration*>(model()->duObjectForIndex(index)))
                 c = new DeclarationContext(decl);
             else
             {
@@ -103,11 +103,11 @@ bool ClassTree::event(QEvent* event)
 {
     if (event->type() == QEvent::ToolTip) {
         // if we request a tooltip over a duobject item, show a tooltip for it
-        QHelpEvent* helpEvent = static_cast<QHelpEvent*>(event);
+        auto* helpEvent = static_cast<QHelpEvent*>(event);
         const QModelIndex idxView = indexAt(helpEvent->pos());
 
         DUChainReadLocker readLock(DUChain::lock());
-        if (Declaration* decl = dynamic_cast<Declaration*>(model()->duObjectForIndex(idxView))) {
+        if (auto* decl = dynamic_cast<Declaration*>(model()->duObjectForIndex(idxView))) {
             if (m_tooltip) {
                 m_tooltip->close();
             }

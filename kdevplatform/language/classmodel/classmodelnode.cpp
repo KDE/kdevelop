@@ -83,7 +83,7 @@ bool EnumNode::getIcon(QIcon& a_resultIcon)
 {
     DUChainReadLocker readLock(DUChain::lock());
 
-    ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(declaration());
+    auto* decl = dynamic_cast<ClassMemberDeclaration*>(declaration());
     if (decl == nullptr) {
         static QIcon Icon = QIcon::fromTheme(QStringLiteral("enum"));
         a_resultIcon = Icon;
@@ -158,7 +158,7 @@ bool ClassNode::updateClassDeclarations()
     bool hadChanges = false;
     SubIdentifiersMap existingIdentifiers = m_subIdentifiers;
 
-    ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>(declaration());
+    auto* klass = dynamic_cast<ClassDeclaration*>(declaration());
 
     if (klass) {
         foreach (Declaration* decl, klass->internalContext()->localDeclarations()) {
@@ -178,9 +178,9 @@ bool ClassNode::updateClassDeclarations()
                 newNode = new EnumNode(decl, m_model);
             else if (decl->isFunctionDeclaration())
                 newNode = new FunctionNode(decl, m_model);
-            else if (ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(decl))
+            else if (auto* classDecl = dynamic_cast<ClassDeclaration*>(decl))
                 newNode = new ClassNode(classDecl, m_model);
-            else if (ClassMemberDeclaration* memDecl = dynamic_cast<ClassMemberDeclaration*>(decl))
+            else if (auto* memDecl = dynamic_cast<ClassMemberDeclaration*>(decl))
                 newNode = new ClassMemberNode(memDecl, m_model);
             else
             {
@@ -216,14 +216,14 @@ bool ClassNode::addBaseAndDerived()
 {
     bool added = false;
 
-    BaseClassesFolderNode* baseClassesNode = new BaseClassesFolderNode(m_model);
+    auto* baseClassesNode = new BaseClassesFolderNode(m_model);
     addNode(baseClassesNode);
     if (!baseClassesNode->hasChildren())
         removeNode(baseClassesNode);
     else
         added = true;
 
-    DerivedClassesFolderNode* derivedClassesNode = new DerivedClassesFolderNode(m_model);
+    auto* derivedClassesNode = new DerivedClassesFolderNode(m_model);
     addNode(derivedClassesNode);
     if (!derivedClassesNode->hasChildren())
         removeNode(derivedClassesNode);
@@ -259,7 +259,7 @@ ClassNode* ClassNode::findSubClass(const KDevelop::IndexedQualifiedIdentifier& a
     /// @todo This is slow - we go over all the sub identifiers but the assumption is that
     ///       this function call is rare and the list is not that long.
     foreach (Node* item, m_subIdentifiers) {
-        ClassNode* classNode = dynamic_cast<ClassNode*>(item);
+        auto* classNode = dynamic_cast<ClassNode*>(item);
         if (classNode == nullptr)
             continue;
 
@@ -281,7 +281,7 @@ FunctionNode::FunctionNode(Declaration* a_decl, NodesModelInterface* a_model)
         m_displayName += type->partToString(FunctionType::SignatureArguments);
 
     // Add special values for ctor / dtor to sort first
-    ClassFunctionDeclaration* classmember = dynamic_cast<ClassFunctionDeclaration*>(a_decl);
+    auto* classmember = dynamic_cast<ClassFunctionDeclaration*>(a_decl);
     if (classmember) {
         if (classmember->isConstructor() || classmember->isDestructor())
             m_sortableString = QLatin1Char('0') + m_displayName;
@@ -304,7 +304,7 @@ bool ClassMemberNode::getIcon(QIcon& a_resultIcon)
 {
     DUChainReadLocker readLock(DUChain::lock());
 
-    ClassMemberDeclaration* decl = dynamic_cast<ClassMemberDeclaration*>(declaration());
+    auto* decl = dynamic_cast<ClassMemberDeclaration*>(declaration());
     if (decl == nullptr)
         return false;
 
@@ -368,7 +368,7 @@ void BaseClassesFolderNode::populateNode()
 {
     DUChainReadLocker readLock(DUChain::lock());
 
-    ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>(static_cast<ClassNode*>(parent())->declaration());
+    auto* klass = dynamic_cast<ClassDeclaration*>(static_cast<ClassNode*>(parent())->declaration());
     if (klass) {
         // I use the imports instead of the baseClasses in the ClassDeclaration because I need
         // to get to the base class identifier which is not directly accessible through the
@@ -398,7 +398,7 @@ void DerivedClassesFolderNode::populateNode()
 {
     DUChainReadLocker readLock(DUChain::lock());
 
-    ClassDeclaration* klass = dynamic_cast<ClassDeclaration*>(static_cast<ClassNode*>(parent())->declaration());
+    auto* klass = dynamic_cast<ClassDeclaration*>(static_cast<ClassNode*>(parent())->declaration());
     if (klass) {
         uint steps = 10000;
         const QList<Declaration*> inheriters = DUChainUtils::inheriters(klass, steps, true);

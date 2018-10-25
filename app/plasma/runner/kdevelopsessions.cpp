@@ -51,7 +51,7 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     loadSessions();
 
     // listen for changes to the list of kdevelop sessions
-    KDirWatch *historyWatch = new KDirWatch(this);
+    auto *historyWatch = new KDirWatch(this);
     const QStringList sessiondirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
                                                               QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory);
     for (const QString& dir : sessiondirs) {

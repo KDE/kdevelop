@@ -80,7 +80,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     m_collapseAll = new QAction(QIcon::fromTheme(QStringLiteral("arrow-left-double")), i18n("C&ollapse All"), this); // TODO change icon
     m_expandAll = new QAction(QIcon::fromTheme(QStringLiteral("arrow-right-double")), i18n("&Expand All"), this); // TODO change icon
     updateButtonState(false);
-    QAction *separator = new QAction(this);
+    auto *separator = new QAction(this);
     separator->setSeparator(true);
     QAction *newSearchAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("New &Search"), this);
     m_refresh = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Refresh"), this);
@@ -101,7 +101,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     separator->setSeparator(true);
     addAction(separator);
 
-    QWidgetAction *statusWidget = new QWidgetAction(this);
+    auto *statusWidget = new QWidgetAction(this);
     m_statusLabel = new QLabel(this);
     statusWidget->setDefaultWidget(m_statusLabel);
     addAction(statusWidget);
@@ -165,7 +165,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     }
 
     // rerun the grep jobs with settings from the history
-    GrepDialog* dlg = new GrepDialog(m_plugin, this, false);
+    auto* dlg = new GrepDialog(m_plugin, this, false);
     dlg->historySearch(m_settingsHistory);
 
     updateCheckable();
@@ -219,7 +219,7 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
 
     replacementCombo->clearEditText();
 
-    GrepOutputModel* newModel = new GrepOutputModel(resultsTreeView);
+    auto* newModel = new GrepOutputModel(resultsTreeView);
     applyButton->setEnabled(false);
     // text may be already present
     newModel->setReplacement(replacementCombo->currentText());
@@ -263,7 +263,7 @@ void GrepOutputView::changeModel(int index)
     if(index >= 0)
     {
         QVariant var = modelSelector->itemData(index);
-        GrepOutputModel *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
+        auto *resultModel = static_cast<GrepOutputModel *>(qvariant_cast<QObject*>(var));
         resultsTreeView->setModel(resultModel);
         resultsTreeView->expandAll();
 
@@ -348,7 +348,7 @@ void GrepOutputView::refresh()
         });
         refresh_history.first().fromHistory = false;
 
-        GrepDialog* dlg = new GrepDialog(m_plugin, this, false);
+        auto* dlg = new GrepDialog(m_plugin, this, false);
         dlg->historySearch(refresh_history);
     }
 }

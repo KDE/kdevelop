@@ -125,7 +125,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
 {
     KDevelop::ContextMenuExtension extension = KDevelop::IPlugin::contextMenuExtension(context, parent);
     if( context->type() == KDevelop::Context::ProjectItemContext ) {
-        KDevelop::ProjectItemContext* ctx = static_cast<KDevelop::ProjectItemContext*>(context);
+        auto* ctx = static_cast<KDevelop::ProjectItemContext*>(context);
         QList<KDevelop::ProjectBaseItem*> items = ctx->items();
         // verify if there is only one folder selected
         if ((items.count() == 1) && (items.first()->folder())) {
@@ -138,7 +138,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     }
 
     if ( context->type() == KDevelop::Context::EditorContext ) {
-        KDevelop::EditorContext* econtext = static_cast<KDevelop::EditorContext*>(context);
+        auto* econtext = static_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
             QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Find/Replace in Files..."), parent);
             connect(action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromMenu);
@@ -147,7 +147,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     }
 
     if(context->type() == KDevelop::Context::FileContext) {
-        KDevelop::FileContext* fcontext = static_cast<KDevelop::FileContext*>(context);
+        auto* fcontext = static_cast<KDevelop::FileContext*>(context);
         // TODO: just stat() or QFileInfo().isDir() for local files? should be faster than mime type checking
         QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(fcontext->urls().at(0));
         static const QMimeType directoryMime = QMimeDatabase().mimeTypeForName(QStringLiteral("inode/directory"));
@@ -167,7 +167,7 @@ void GrepViewPlugin::showDialog(bool setLastUsed, const QString& pattern, bool s
     // check if dialog pointers are still valid, remove them otherwise
     m_currentDialogs.removeAll(QPointer<GrepDialog>());
 
-    GrepDialog* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow(), show );
+    auto* dlg = new GrepDialog( this, core()->uiController()->activeMainWindow(), show );
     m_currentDialogs << dlg;
 
     GrepJobSettings dlgSettings = dlg->settings();

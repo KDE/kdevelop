@@ -216,7 +216,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
     }
     case NavigationAction::NavigateUses:
     {
-        IContextBrowser* browser = ICore::self()->pluginController()->extensionForPlugin<IContextBrowser>();
+        auto* browser = ICore::self()->pluginController()->extensionForPlugin<IContextBrowser>();
         if (browser) {
             browser->showUses(action.decl);
             return NavigationContextPointer(this);
@@ -284,7 +284,7 @@ NavigationContextPointer AbstractNavigationContext::registerChild(const Declarat
 {
     //We create a navigation-widget here, and steal its context.. evil ;)
     QScopedPointer<QWidget> navigationWidget(declaration->context()->createNavigationWidget(declaration.data()));
-    if (AbstractNavigationWidget* abstractNavigationWidget =
+    if (auto* abstractNavigationWidget =
             dynamic_cast<AbstractNavigationWidget*>(navigationWidget.data())) {
         NavigationContextPointer ret = abstractNavigationWidget->context();
         ret->setPreviousContext(this);
@@ -457,7 +457,7 @@ NavigationAction AbstractNavigationContext::currentAction() const
 
 QString AbstractNavigationContext::declarationKind(const DeclarationPointer& decl)
 {
-    const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(decl.data());
+    const auto* function = dynamic_cast<const AbstractFunctionDeclaration*>(decl.data());
 
     QString kind;
 
@@ -472,7 +472,7 @@ QString AbstractNavigationContext::declarationKind(const DeclarationPointer& dec
         kind = i18n("Namespace");
     }
 
-    if (NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl.data())) {
+    if (auto* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl.data())) {
         if (alias->identifier().isEmpty())
             kind = i18n("Namespace import");
         else

@@ -79,7 +79,7 @@ struct CodeCompletionItemTester
             Item item(dynamic_cast<CompletionTreeItem*>(element.data()));
             if (item)
                 items << item;
-            CompletionTreeNode* node = dynamic_cast<CompletionTreeNode*>(element.data());
+            auto* node = dynamic_cast<CompletionTreeNode*>(element.data());
             if (node)
                 addElements(node->children);
         }

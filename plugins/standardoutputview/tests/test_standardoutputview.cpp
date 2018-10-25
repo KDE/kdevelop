@@ -78,7 +78,7 @@ OutputWidget* StandardOutputViewTest::toolViewPointer(const QString& toolViewTit
 {
     const QList< Sublime::View* > views = m_controller->activeArea()->toolViews();
     for (Sublime::View* view : views) {
-        Sublime::ToolDocument *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
+        auto *doc = dynamic_cast<Sublime::ToolDocument*>(view->document());
         if(doc) {
             if(doc->title() == toolViewTitle && view->hasWidget()) {
                 return dynamic_cast<OutputWidget*>(view->widget());

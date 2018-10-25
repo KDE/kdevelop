@@ -188,7 +188,7 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
     }
     if( launchMode == QLatin1String("execute") )
     {
-        IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
+        auto* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
         Q_ASSERT(iface);
         KJob* depjob = iface->dependencyJob( cfg );
         QList<KJob*> l;
@@ -320,7 +320,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                 if(target->executable()) {
                     QStringList path = model->pathFromIndex(target->index());
                     if(!path.isEmpty()){
-                        QAction* act = new QAction(projectMenu);
+                        auto* act = new QAction(projectMenu);
                         act->setData(KDevelop::joinWithEscaping(path, QLatin1Char('/'), QLatin1Char('\\')));
                         act->setProperty("name", target->text());
                         path.removeFirst();
@@ -365,7 +365,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
 
 void NativeAppConfigType::suggestionTriggered()
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     KDevelop::ProjectTargetItem* pitem = dynamic_cast<KDevelop::ProjectTargetItem*>(itemForPath(KDevelop::splitWithEscaping(action->data().toString(), QLatin1Char('/'), QLatin1Char('\\')), model));
     if(pitem) {

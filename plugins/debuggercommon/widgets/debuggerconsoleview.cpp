@@ -390,7 +390,7 @@ void DebuggerConsoleView::trySendCommand(QString cmd)
 
 void DebuggerConsoleView::handleSessionChanged(KDevelop::IDebugSession* s)
 {
-    MIDebugSession *session = qobject_cast<MIDebugSession*>(s);
+    auto *session = qobject_cast<MIDebugSession*>(s);
     if (!session) return;
 
     connect(this, &DebuggerConsoleView::sendCommand,

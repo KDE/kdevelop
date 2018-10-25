@@ -29,7 +29,7 @@ using namespace Sublime;
 
 void TestAggregateModel::modelAggregationInASingleView()
 {
-    AggregateModel *model = new AggregateModel(this);
+    auto *model = new AggregateModel(this);
     model->addModel(QStringLiteral("First Model"), newModel());
     model->addModel(QStringLiteral("Second Model"), newModel());
 
@@ -49,7 +49,7 @@ QStandardItemModel * TestAggregateModel::newModel()
                 item 3
     */
 
-    QStandardItemModel *model = new QStandardItemModel(this);
+    auto *model = new QStandardItemModel(this);
     QStandardItem *parentItem = model->invisibleRootItem();
 
     QStandardItem *item = new QStandardItem(QStringLiteral("cool item"));

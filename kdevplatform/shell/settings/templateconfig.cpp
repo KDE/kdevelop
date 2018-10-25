@@ -37,7 +37,7 @@ TemplateConfig::TemplateConfig(QWidget* parent)
 
     const QList<KDevelop::IPlugin*> plugins = KDevelop::ICore::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.ITemplateProvider"));
     for (KDevelop::IPlugin* plugin : plugins) {
-        if (KDevelop::ITemplateProvider* provider = plugin->extension<KDevelop::ITemplateProvider>()) {
+        if (auto* provider = plugin->extension<KDevelop::ITemplateProvider>()) {
             ui->tabWidget->addTab(new TemplatePage(provider), provider->icon(), provider->name());
         }
     }

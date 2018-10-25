@@ -45,7 +45,7 @@ QMakeBuilder::QMakeBuilder(QObject* parent, const QVariantList&)
 {
     m_makeBuilder = core()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IMakeBuilder"));
     if (m_makeBuilder) {
-        IMakeBuilder* mbuilder = m_makeBuilder->extension<IMakeBuilder>();
+        auto* mbuilder = m_makeBuilder->extension<IMakeBuilder>();
         if (mbuilder) {
             connect(m_makeBuilder, SIGNAL(built(KDevelop::ProjectBaseItem*)), this,
                     SIGNAL(built(KDevelop::ProjectBaseItem*)));
@@ -69,7 +69,7 @@ KJob* QMakeBuilder::prune(KDevelop::IProject* project)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Distcleaning";
     if (m_makeBuilder) {
-        IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
+        auto* builder = m_makeBuilder->extension<IMakeBuilder>();
         if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Distcleaning with make";
             return builder->executeMakeTarget(project->projectItem(), QStringLiteral("distclean"));
@@ -82,7 +82,7 @@ KJob* QMakeBuilder::build(KDevelop::ProjectBaseItem* dom)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Building";
     if (m_makeBuilder) {
-        IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
+        auto* builder = m_makeBuilder->extension<IMakeBuilder>();
         if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Building with make";
             return maybePrependConfigureJob(dom, builder->build(dom), BuilderJob::Build);
@@ -102,7 +102,7 @@ KJob* QMakeBuilder::clean(KDevelop::ProjectBaseItem* dom)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Cleaning";
     if (m_makeBuilder) {
-        IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
+        auto* builder = m_makeBuilder->extension<IMakeBuilder>();
         if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Cleaning with make";
             return maybePrependConfigureJob(dom, builder->clean(dom), BuilderJob::Clean);
@@ -115,7 +115,7 @@ KJob* QMakeBuilder::install(KDevelop::ProjectBaseItem* dom, const QUrl& /* prefi
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Installing";
     if (m_makeBuilder) {
-        IMakeBuilder* builder = m_makeBuilder->extension<IMakeBuilder>();
+        auto* builder = m_makeBuilder->extension<IMakeBuilder>();
         if (builder) {
             qCDebug(KDEV_QMAKEBUILDER) << "Installing with make";
             return maybePrependConfigureJob(dom, builder->install(dom), BuilderJob::Install);
@@ -144,7 +144,7 @@ QList<IProjectBuilder*> QMakeBuilder::additionalBuilderPlugins(KDevelop::IProjec
 {
     Q_UNUSED(project);
 
-    if (IMakeBuilder* makeBuilder = m_makeBuilder->extension<IMakeBuilder>()) {
+    if (auto* makeBuilder = m_makeBuilder->extension<IMakeBuilder>()) {
         return QList<KDevelop::IProjectBuilder*>() << makeBuilder;
     }
 

@@ -113,7 +113,7 @@ void TestViewPlugin::runAllTests()
         }
         if (!jobs.isEmpty())
         {
-            KDevelop::ExecuteCompositeJob* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
+            auto* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
             compositeJob->setObjectName(i18np("Run 1 test in %2", "Run %1 tests in %2",
                                               jobs.size(), project->name()));
             compositeJob->setProperty("test_job", true);

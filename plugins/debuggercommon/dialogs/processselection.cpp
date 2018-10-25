@@ -41,7 +41,7 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
 {
     setWindowTitle(i18n("Attach to a Process"));
     m_processList = new KSysGuardProcessList(this);
-    QVBoxLayout* mainLayout = new QVBoxLayout;
+    auto* mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(m_processList);
     QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);

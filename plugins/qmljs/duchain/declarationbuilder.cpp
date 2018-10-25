@@ -163,7 +163,7 @@ void DeclarationBuilder::declareFunction(QmlJS::AST::Node* node,
     // in it.
     if (newPrototypeContext) {
         DUChainWriteLocker lock;
-        QmlJS::FunctionDeclaration* d = reinterpret_cast<QmlJS::FunctionDeclaration*>(decl);
+        auto* d = reinterpret_cast<QmlJS::FunctionDeclaration*>(decl);
 
         d->setPrototypeContext(openContext(
             node + 2,                   // Don't call setContextOnNode on node, only the body context can be associated with node
@@ -525,7 +525,7 @@ void DeclarationBuilder::declareFieldMember(const KDevelop::DeclarationPointer& 
     RangeInRevision range = m_session->locationToRange(location);
     IntegralType::Ptr type = IntegralType::Ptr(new IntegralType(IntegralType::TypeMixed));
     DUContext* importedContext = openContext(node, range, DUContext::Class);
-    Declaration* decl = openDeclaration<Declaration>(identifier, range);
+    auto* decl = openDeclaration<Declaration>(identifier, range);
 
     decl->setInSymbolTable(false);  // This declaration is in an anonymous context, and the symbol table acts as if the declaration was in the global context
     openType(type);
@@ -594,7 +594,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::ObjectLiteral* node)
     StructureType::Ptr type(new StructureType);
     {
         DUChainWriteLocker lock;
-        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
+        auto* decl = openDeclaration<ClassDeclaration>(
             Identifier(),
             QmlJS::emptyRangeOnLine(node->lbraceToken)
         );
@@ -665,7 +665,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::PropertyNameAndValue* node)
     // Open the declaration
     {
         DUChainWriteLocker lock;
-        ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
+        auto* decl = openDeclaration<ClassMemberDeclaration>(name, range);
 
         decl->setInSymbolTable(inSymbolTable);
     }
@@ -740,7 +740,7 @@ void DeclarationBuilder::declareMethod(QmlJS::AST::UiObjectInitializer* node,
 
     {
         DUChainWriteLocker lock;
-        ClassFunctionDeclaration* decl = openDeclaration<ClassFunctionDeclaration>(name, range);
+        auto* decl = openDeclaration<ClassFunctionDeclaration>(name, range);
 
         decl->setIsSlot(isSlot);
         decl->setIsSignal(isSignal);
@@ -757,7 +757,7 @@ void DeclarationBuilder::declareProperty(QmlJS::AST::UiObjectInitializer* node,
 
     {
         DUChainWriteLocker lock;
-        ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
+        auto* decl = openDeclaration<ClassMemberDeclaration>(name, range);
 
         decl->setAbstractType(type);
     }
@@ -788,7 +788,7 @@ void DeclarationBuilder::declareEnum(const RangeInRevision &range,
 
     {
         DUChainWriteLocker lock;
-        ClassMemberDeclaration* decl = openDeclaration<ClassMemberDeclaration>(name, range);
+        auto* decl = openDeclaration<ClassMemberDeclaration>(name, range);
 
         decl->setKind(Declaration::Type);
         decl->setType(type);                // The type needs to be set here because closeContext is called before closeAndAssignType and needs to know the type of decl
@@ -840,7 +840,7 @@ void DeclarationBuilder::declareComponentSubclass(QmlJS::AST::UiObjectInitialize
 
         {
             DUChainWriteLocker lock;
-            ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
+            auto* decl = openDeclaration<ClassDeclaration>(
                 currentContext()->type() == DUContext::Global ?
                     Identifier(m_session->moduleName()) :
                     name,
@@ -902,7 +902,7 @@ void DeclarationBuilder::declareComponentInstance(QmlJS::AST::ExpressionStatemen
         DUChainWriteLocker lock;
 
         injectContext(topContext());
-        Declaration* decl = openDeclaration<Declaration>(
+        auto* decl = openDeclaration<Declaration>(
             Identifier(identifier->name.toString()),
             m_session->locationToRange(identifier->identifierToken)
         );
@@ -966,7 +966,7 @@ void DeclarationBuilder::declareExports(const ExportLiteralsAndNames& exports,
         StructureType::Ptr type(new StructureType);
 
         injectContext(currentContext()->parentContext());   // Don't declare the export in its C++-ish component, but in the scope above
-        ClassDeclaration* decl = openDeclaration<ClassDeclaration>(
+        auto* decl = openDeclaration<ClassDeclaration>(
             Identifier(name),
             m_session->locationToRange(literal->literalToken)
         );
@@ -1032,7 +1032,7 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
         Identifier identifier(node->importId.toString());
         RangeInRevision range = m_session->locationToRange(node->importIdToken);
 
-        Declaration* decl = openDeclaration<Declaration>(identifier, range);
+        auto* decl = openDeclaration<Declaration>(identifier, range);
         decl->setKind(Declaration::Namespace);
         decl->setInternalContext(openContext(node, range, DUContext::Class, QualifiedIdentifier(identifier)));
     }
@@ -1134,7 +1134,7 @@ bool DeclarationBuilder::visit(QmlJS::AST::UiObjectDefinition* node)
 
     // If we had a component with exported names, declare these exports
     if (baseclass == QLatin1String("Component")) {
-        ClassDeclaration* classDecl = currentDeclaration<ClassDeclaration>();
+        auto* classDecl = currentDeclaration<ClassDeclaration>();
 
         if (classDecl) {
             declareExports(exports, classDecl);
@@ -1445,7 +1445,7 @@ void DeclarationBuilder::addBaseClass(ClassDeclaration* classDecl, const Indexed
 
 void DeclarationBuilder::registerBaseClasses()
 {
-    ClassDeclaration* classdecl = currentDeclaration<ClassDeclaration>();
+    auto* classdecl = currentDeclaration<ClassDeclaration>();
     DUContext *ctx = currentContext();
 
     if (classdecl) {

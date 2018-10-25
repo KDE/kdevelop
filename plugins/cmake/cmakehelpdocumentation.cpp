@@ -41,7 +41,7 @@ KDevelop::IDocumentationProvider* CMakeHomeDocumentation::provider() const
 
 QWidget* CMakeHomeDocumentation::documentationWidget(KDevelop::DocumentationFindWidget*, QWidget* parent)
 {
-    QTreeView* contents=new QTreeView(parent);
+    auto* contents=new QTreeView(parent);
     contents->header()->setVisible(false);
 
     contents->setModel(CMakeDoc::s_provider->model());

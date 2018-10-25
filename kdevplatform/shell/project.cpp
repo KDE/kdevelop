@@ -322,7 +322,7 @@ public:
     {
         if (manager)
         {
-            IProjectFileManager* iface = manager->extension<KDevelop::IProjectFileManager>();
+            auto* iface = manager->extension<KDevelop::IProjectFileManager>();
             Q_ASSERT(iface);
             return iface;
         }
@@ -370,7 +370,7 @@ public:
         {
             const QList<IPlugin*> plugins = pluginManager->allPluginsForExtension( QStringLiteral( "org.kdevelop.IBasicVersionControl" ) );
             for (IPlugin* p : plugins) {
-                IBasicVersionControl* iface = p->extension<KDevelop::IBasicVersionControl>();
+                auto* iface = p->extension<KDevelop::IBasicVersionControl>();
                 if (!iface) {
                     continue;
                 }
@@ -466,7 +466,7 @@ void Project::reloadModel()
     model->removeRow( d->topItem->row() );
     d->topItem = nullptr;
 
-    IProjectFileManager* iface = d->manager->extension<IProjectFileManager>();
+    auto* iface = d->manager->extension<IProjectFileManager>();
     if (!d->importTopItem(iface))
     {
             d->loading = false;

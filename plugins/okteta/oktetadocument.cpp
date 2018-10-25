@@ -202,7 +202,7 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* /* document */ )
 {
     if( mByteArrayDocument == nullptr )
     {
-        Kasten::ByteArrayRawFileSynchronizerFactory* synchronizerFactory =
+        auto* synchronizerFactory =
             new Kasten::ByteArrayRawFileSynchronizerFactory();
         Kasten::AbstractModelSynchronizer* synchronizer = synchronizerFactory->createSynchronizer();
 
@@ -215,7 +215,7 @@ Sublime::View* OktetaDocument::newView( Sublime::Document* /* document */ )
     }
 
     Kasten::ByteArrayViewProfileManager* const viewProfileManager = mPlugin->viewProfileManager();
-    Kasten::ByteArrayViewProfileSynchronizer* viewProfileSynchronizer =
+    auto* viewProfileSynchronizer =
         new Kasten::ByteArrayViewProfileSynchronizer( viewProfileManager );
     viewProfileSynchronizer->setViewProfileId( viewProfileManager->defaultViewProfileId() );
     return new OktetaView( this, viewProfileSynchronizer );

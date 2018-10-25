@@ -51,7 +51,7 @@ IdealDockWidget::IdealDockWidget(IdealController *controller, Sublime::MainWindo
     connect(this, &IdealDockWidget::customContextMenuRequested,
             this, &IdealDockWidget::contextMenuRequested);
 
-    QAbstractButton *closeButton = findChild<QAbstractButton *>(QStringLiteral("qt_dockwidget_closebutton"));
+    auto *closeButton = findChild<QAbstractButton *>(QStringLiteral("qt_dockwidget_closebutton"));
     if (closeButton) {
     disconnect(closeButton, &QAbstractButton::clicked, nullptr, nullptr);
 
@@ -112,7 +112,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     }
 
     ///TODO: can this be cleaned up?
-    if(QToolBar* toolBar = widget()->findChild<QToolBar*>()) {
+    if(auto* toolBar = widget()->findChild<QToolBar*>()) {
         menu.addAction(toolBar->toggleViewAction());
         menu.addSeparator();
     }
@@ -120,7 +120,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     /// start position menu
     QMenu* positionMenu = menu.addMenu(i18n("Tool View Position"));
 
-    QActionGroup* g = new QActionGroup(positionMenu);
+    auto* g = new QActionGroup(positionMenu);
 
     QAction *left = new QAction(i18nc("tool view position", "Left"), g);
     QAction *bottom = new QAction(i18nc("tool view position", "Bottom"), g);
@@ -159,9 +159,9 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
         } else if ( triggered == setShortcut ) {
             QDialog* dialog(new QDialog(this));
             dialog->setWindowTitle(i18n("Assign Shortcut For '%1' Tool View", m_view->document()->title()));
-            KShortcutWidget *w = new KShortcutWidget(dialog);
+            auto *w = new KShortcutWidget(dialog);
             w->setShortcut(m_controller->actionForView(m_view)->shortcuts());
-            QVBoxLayout* dialogLayout = new QVBoxLayout(dialog);
+            auto* dialogLayout = new QVBoxLayout(dialog);
             dialogLayout->addWidget(w);
             QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
             dialogLayout->addWidget(buttonBox);

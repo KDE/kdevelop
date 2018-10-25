@@ -89,7 +89,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     ui.profileSelect->setModel(m_environmentProfileListModel);
     m_proxyModel->setSourceModel(m_environmentProfileModel);
 
-    PlaceholderItemProxyModel* topProxyModel  = new PlaceholderItemProxyModel(this);
+    auto* topProxyModel  = new PlaceholderItemProxyModel(this);
     topProxyModel->setSourceModel(m_proxyModel);
     topProxyModel->setColumnHint(0, i18n("Enter variable..."));
     connect(topProxyModel, &PlaceholderItemProxyModel::dataInserted, this, &EnvironmentWidget::onVariableInserted);
@@ -181,7 +181,7 @@ QString EnvironmentWidget::askNewProfileName(const QString& defaultName)
     ScopedDialog<QDialog> dialog(this);
     dialog->setWindowTitle(i18n("Enter Name of New Environment Profile"));
 
-    QVBoxLayout *layout = new QVBoxLayout(dialog);
+    auto *layout = new QVBoxLayout(dialog);
 
     auto editLayout = new QHBoxLayout;
 
@@ -245,7 +245,7 @@ void EnvironmentWidget::batchModeEditButtonClicked()
     ScopedDialog<QDialog> dialog(this);
     dialog->setWindowTitle( i18n( "Batch Edit Mode" ) );
 
-    QVBoxLayout *layout = new QVBoxLayout(dialog);
+    auto *layout = new QVBoxLayout(dialog);
 
     auto edit = new QPlainTextEdit;
     edit->setPlaceholderText(QStringLiteral("VARIABLE1=VALUE1\nVARIABLE2=VALUE2"));

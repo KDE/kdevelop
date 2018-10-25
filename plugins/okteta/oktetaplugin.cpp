@@ -73,7 +73,7 @@ void addTool( IUiController* uiController,
               Kasten::AbstractToolViewFactory* toolViewFactory,
               Kasten::AbstractToolFactory* toolFactory )
 {
-    OktetaToolViewFactory* factory =
+    auto* factory =
         new OktetaToolViewFactory( toolViewFactory, toolFactory );
 
     uiController->addToolView( toolViewFactory->title(), factory );
@@ -106,7 +106,7 @@ OktetaPlugin::OktetaPlugin( QObject* parent, const QVariantList& args )
 
 ContextMenuExtension OktetaPlugin::contextMenuExtension(Context* context, QWidget* parent)
 {
-    OpenWithContext* openWithContext = dynamic_cast<OpenWithContext*>( context );
+    auto* openWithContext = dynamic_cast<OpenWithContext*>( context );
 
     if( openWithContext && !openWithContext->mimeType().inherits(QStringLiteral("inode/directory")))
     {
@@ -125,7 +125,7 @@ ContextMenuExtension OktetaPlugin::contextMenuExtension(Context* context, QWidge
 
 void OktetaPlugin::onOpenTriggered()
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
 
     KDevelop::ICore* core = KDevelop::ICore::self();

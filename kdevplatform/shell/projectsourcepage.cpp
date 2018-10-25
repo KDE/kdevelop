@@ -166,7 +166,7 @@ VcsJob* ProjectSourcePage::jobPerCurrent()
     IPlugin* p=m_plugins[m_ui->sources->currentIndex()];
     VcsJob* job=nullptr;
 
-    if(IBasicVersionControl* iface=p->extension<IBasicVersionControl>()) {
+    if(auto* iface=p->extension<IBasicVersionControl>()) {
         Q_ASSERT(iface && m_locationWidget);
         job=iface->createWorkingCopy(m_locationWidget->location(), url);
     } else if(m_providerWidget) {

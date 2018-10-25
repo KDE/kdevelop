@@ -59,10 +59,10 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
 
     KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group( "Filesystem" );
 
-    QVBoxLayout *l = new QVBoxLayout(this);
+    auto *l = new QVBoxLayout(this);
     l->setMargin(0);
     l->setSpacing(0);
-    KFilePlacesModel* model = new KFilePlacesModel( this );
+    auto* model = new KFilePlacesModel( this );
     urlnav = new KUrlNavigator(model, QUrl(cg.readEntry( "LastLocation", QUrl::fromLocalFile( QDir::homePath() ) )), this );
 
     connect(urlnav, &KUrlNavigator::urlChanged, this, &FileManager::gotoUrl);
@@ -111,7 +111,7 @@ void FileManager::fillContextMenu(const KFileItem& item, QMenu* menu)
     KDevelop::FileContext context(QList<QUrl>() << item.url());
     QList<KDevelop::ContextMenuExtension> extensions = KDevelop::ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, menu);
     KDevelop::ContextMenuExtension::populateMenu(menu, extensions);
-    QMenu* tmpMenu = new QMenu();
+    auto* tmpMenu = new QMenu();
     KDevelop::ContextMenuExtension::populateMenu(tmpMenu, extensions);
     contextActions.append(tmpMenu->actions());
     delete tmpMenu;
@@ -140,7 +140,7 @@ void FileManager::setupActions()
     m_bookmarkHandler = new BookmarkHandler(this, acmBookmarks->menu());
     acmBookmarks->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
-    QAction* action = new QAction(this);
+    auto* action = new QAction(this);
     action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     action->setText(i18n("Current Document Directory"));
     action->setIcon(QIcon::fromTheme(QStringLiteral("dirsync")));

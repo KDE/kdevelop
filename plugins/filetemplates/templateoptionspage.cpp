@@ -79,18 +79,18 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
     d->groupBoxes.clear();
     delete layout();
 
-    QVBoxLayout* layout = new QVBoxLayout();
+    auto* layout = new QVBoxLayout();
 
     const auto customOptions = fileTemplate.customOptions(renderer);
     d->groupBoxes.reserve(customOptions.size());
     d->entries.reserve(customOptions.size());
     for (const auto& optionGroup : customOptions) {
-        QGroupBox* box = new QGroupBox(this);
+        auto* box = new QGroupBox(this);
         d->groupBoxes.append(box);
 
         box->setTitle(optionGroup.name);
 
-        QFormLayout* formLayout = new QFormLayout;
+        auto* formLayout = new QFormLayout;
 
         d->entries << optionGroup.options;
         for (const auto& entry : optionGroup.options) {
@@ -124,7 +124,7 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             else if (type == QLatin1String("Bool"))
             {
                 bool checked = (QString::compare(entry.value.toString(), QStringLiteral("true"), Qt::CaseInsensitive) == 0);
-                QCheckBox* checkBox = new QCheckBox(box);
+                auto* checkBox = new QCheckBox(box);
                 checkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
                 control = checkBox;
             }

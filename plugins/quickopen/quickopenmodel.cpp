@@ -439,7 +439,7 @@ QSet<IndexedString> QuickOpenModel::fileSet() const
     QSet<IndexedString> merged;
     for (const ProviderEntry& provider : m_providers) {
         if (m_enabledScopes.isEmpty() || !(m_enabledScopes & provider.scopes).isEmpty()) {
-            if (QuickOpenFileSetInterface* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider)) {
+            if (auto* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider)) {
                 QSet<IndexedString> ifiles = iface->files();
                 //qCDebug(PLUGIN_QUICKOPEN) << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
                 merged += ifiles;

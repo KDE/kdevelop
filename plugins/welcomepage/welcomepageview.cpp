@@ -60,7 +60,7 @@ WelcomePageWidget::WelcomePageWidget(const QList<IProject*> & /*projects*/, QWid
 
     setResizeMode(QQuickWidget::SizeRootObjectToView);
 
-    UiHelper* helper = new UiHelper(this);
+    auto* helper = new UiHelper(this);
     rootContext()->setContextProperty(QStringLiteral("kdev"), helper);
     rootContext()->setContextProperty(QStringLiteral("ICore"), KDevelop::ICore::self());
     areaChanged(ICore::self()->uiController()->activeArea());

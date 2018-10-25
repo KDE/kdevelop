@@ -182,8 +182,8 @@ void TestAstyle::varTypeAssistant()
 void TestAstyle::testMultipleFormatters()
 {
     // just test that multiple formatters can exist at the same time
-    AStyleFormatter* formatter1 = new AStyleFormatter;
-    AStyleFormatter* formatter2 = new AStyleFormatter;
+    auto* formatter1 = new AStyleFormatter;
+    auto* formatter2 = new AStyleFormatter;
     delete formatter1;
     delete formatter2;
 }
@@ -199,7 +199,7 @@ void TestAstyle::testMacroFormatting()
 
 void TestAstyle::testContext()
 {
-    AStyleFormatter* formatter = new AStyleFormatter;
+    auto* formatter = new AStyleFormatter;
     formatter->setBracketFormatMode(astyle::LINUX_MODE);
     formatter->setParensInsidePaddingMode(true);
     formatter->setBlockIndent(true);

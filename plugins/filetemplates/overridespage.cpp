@@ -148,12 +148,12 @@ void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
 
         //For this internal context get all the function declarations inside the class
         foreach (Declaration * childDeclaration, context->localDeclarations()) {
-            if (AbstractFunctionDeclaration * func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration))
+            if (auto * func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration))
             {
                 if (func->isVirtual())
                 {
                     // Its a virtual function, add it to the list unless it's a destructor
-                    ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
+                    auto* cFunc = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
                     if (cFunc && !cFunc->isDestructor())
                     {
                         addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
@@ -162,7 +162,7 @@ void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
                 else if (directBases.contains(baseClass))
                 {
                     // add ctors of direct parents
-                    ClassFunctionDeclaration* cFunc = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
+                    auto* cFunc = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration);
                     if (cFunc && cFunc->isConstructor())
                     {
                         addPotentialOverride(classItem, DeclarationPointer(childDeclaration));
@@ -178,7 +178,7 @@ void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
 
 void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const DeclarationPointer& childDeclaration)
 {
-    ClassFunctionDeclaration* function = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data());
+    auto* function = dynamic_cast<ClassFunctionDeclaration*>(childDeclaration.data());
     if (!function) {
         qCDebug(PLUGIN_FILETEMPLATES) << "Declaration is not a function:" << childDeclaration->identifier().toString();
         return;

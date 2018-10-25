@@ -146,7 +146,7 @@ struct SetRepositoryAlgorithms
         uint split = splitPositionForRange(startIndex, endIndex, splitBit);
         Q_ASSERT(split);
 
-        std::vector<uint>::const_iterator splitIterator = std::lower_bound(begin, end, split);
+        auto splitIterator = std::lower_bound(begin, end, split);
         Q_ASSERT(*splitIterator >= split);
         Q_ASSERT(splitIterator > begin);
         Q_ASSERT(*(splitIterator - 1) < split);
@@ -164,7 +164,7 @@ private:
 
 void SetNodeDataRequest::destroy(SetNodeData* data, KDevelop::AbstractItemRepository& _repository)
 {
-    SetDataRepository& repository(static_cast<SetDataRepository&>(_repository));
+    auto& repository(static_cast<SetDataRepository&>(_repository));
 
     if (repository.setRepository->delayedDeletion()) {
         if (data->leftNode()) {
@@ -935,7 +935,7 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices)
     std::vector<Index> indicesVector;
     indicesVector.reserve(indices.size());
 
-    for (std::set<Index>::const_iterator it = indices.begin(); it != indices.end(); ++it)
+    for (auto it = indices.begin(); it != indices.end(); ++it)
         indicesVector.push_back(*it);
 
     return createSetFromIndices(indicesVector);

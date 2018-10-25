@@ -159,7 +159,7 @@ struct DocumentParsePlan
     TopDUContext::Features features() const
     {
         //Pick the best features
-        TopDUContext::Features ret = ( TopDUContext::Features )0;
+        auto ret = ( TopDUContext::Features )0;
         for (const DocumentParseTarget& target : targets) {
             ret = ( TopDUContext::Features ) (ret | target.features);
         }
@@ -221,7 +221,7 @@ public:
     {
         int bestRunningPriority = BackgroundParser::WorstPriority;
         for (const auto* decorator : m_parseJobs) {
-            const ParseJob* parseJob = dynamic_cast<const ParseJob*>(decorator->job());
+            const auto* parseJob = dynamic_cast<const ParseJob*>(decorator->job());
             Q_ASSERT(parseJob);
             if (parseJob->respectsSequentialProcessing() && parseJob->parsePriority() < bestRunningPriority) {
                 bestRunningPriority = parseJob->parsePriority();
@@ -378,7 +378,7 @@ public:
             job->setNotifyWhenReady(notifyWhenReady);
             job->setSequentialProcessingFlags(parsePlan.sequentialProcessingFlags());
 
-            ThreadWeaver::QObjectDecorator* decorator = new ThreadWeaver::QObjectDecorator(job);
+            auto* decorator = new ThreadWeaver::QObjectDecorator(job);
 
             QObject::connect(decorator, &ThreadWeaver::QObjectDecorator::done,
                              m_parser, &BackgroundParser::parseComplete);
@@ -668,7 +668,7 @@ void BackgroundParser::parseComplete(const ThreadWeaver::JobPointer& job)
 {
     auto decorator = dynamic_cast<ThreadWeaver::QObjectDecorator*>(job.data());
     Q_ASSERT(decorator);
-    ParseJob* parseJob = dynamic_cast<ParseJob*>(decorator->job());
+    auto* parseJob = dynamic_cast<ParseJob*>(decorator->job());
     Q_ASSERT(parseJob);
     emit parseJobFinished(parseJob);
 

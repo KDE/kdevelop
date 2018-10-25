@@ -74,7 +74,7 @@ TaskInfo TaskInfo::createDeletion(const bool ok, const Path::List& src, const Pa
 static QWidget* createPasteStatsWidget(QWidget *parent, const QVector<TaskInfo>& tasks)
 {
     // TODO: Create a model for the task list, and use it here instead of using QTreeWidget
-    QTreeWidget* treeWidget = new QTreeWidget(parent);
+    auto* treeWidget = new QTreeWidget(parent);
     QList<QTreeWidgetItem *> items;
     items.reserve(tasks.size());
     for (const TaskInfo& task : tasks) {
@@ -131,7 +131,7 @@ static QWidget* createPasteStatsWidget(QWidget *parent, const QVector<TaskInfo>&
                 break;
         }
 
-        QTreeWidgetItem* item = new QTreeWidgetItem;
+        auto* item = new QTreeWidgetItem;
         item->setText(0, text);
         item->setIcon(0, QIcon::fromTheme(iconName));
         item->setToolTip(0, tooltip);
@@ -139,7 +139,7 @@ static QWidget* createPasteStatsWidget(QWidget *parent, const QVector<TaskInfo>&
 
         if (withChildren) {
             for (const Path& src : task.m_src) {
-                QTreeWidgetItem* childItem = new QTreeWidgetItem;
+                auto* childItem = new QTreeWidgetItem;
                 childItem->setText(0, src.pathOrUrl());
                 item->addChild(childItem);
             }
@@ -298,7 +298,7 @@ void showWarningDialogForFailedPaste(QWidget* parent, const QVector<TaskInfo>& t
 
     dialog->setWindowTitle(i18nc("@title:window", "Paste Failed"));
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(dialog);
+    auto *buttonBox = new QDialogButtonBox(dialog);
     buttonBox->setStandardButtons(QDialogButtonBox::Ok);
     QObject::connect(buttonBox, &QDialogButtonBox::clicked, dialog, &QDialog::accept);
 
@@ -306,12 +306,12 @@ void showWarningDialogForFailedPaste(QWidget* parent, const QVector<TaskInfo>& t
     dialog->setModal(true);
 
     QWidget* mainWidget = new QWidget(dialog);
-    QVBoxLayout* mainLayout = new QVBoxLayout(mainWidget);
+    auto* mainLayout = new QVBoxLayout(mainWidget);
     const int spacingHint = mainWidget->style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     mainLayout->setSpacing(spacingHint * 2); // provide extra spacing
     mainLayout->setMargin(0);
 
-    QHBoxLayout* hLayout = new QHBoxLayout;
+    auto* hLayout = new QHBoxLayout;
     hLayout->setMargin(0);
     hLayout->setSpacing(-1); // use default spacing
     mainLayout->addLayout(hLayout, 0);
@@ -324,7 +324,7 @@ void showWarningDialogForFailedPaste(QWidget* parent, const QVector<TaskInfo>& t
     QIcon icon = QIcon::fromTheme(QStringLiteral("dialog-warning"));
     iconLabel->setPixmap(icon.pixmap(mainWidget->style()->pixelMetric(QStyle::PM_MessageBoxIconSize, &option, mainWidget)));
 
-    QVBoxLayout* iconLayout = new QVBoxLayout();
+    auto* iconLayout = new QVBoxLayout();
     iconLayout->addStretch(1);
     iconLayout->addWidget(iconLabel);
     iconLayout->addStretch(5);
@@ -339,7 +339,7 @@ void showWarningDialogForFailedPaste(QWidget* parent, const QVector<TaskInfo>& t
 
     QWidget* statsWidget = createPasteStatsWidget(dialog, tasks);
 
-    QVBoxLayout* topLayout = new QVBoxLayout;
+    auto* topLayout = new QVBoxLayout;
     dialog->setLayout(topLayout);
     topLayout->addWidget(mainWidget);
     topLayout->addWidget(statsWidget, 1);

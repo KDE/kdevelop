@@ -83,7 +83,7 @@ void GrepOutputItem::propagateState()
 {
     for(int i = 0; i < rowCount(); i++)
     {
-        GrepOutputItem *item = static_cast<GrepOutputItem *>(child(i));
+        auto *item = static_cast<GrepOutputItem *>(child(i));
         if(item->isEnabled())
         {
             item->setCheckState(checkState());
@@ -138,14 +138,14 @@ void GrepOutputItem::refreshState()
         }
     }
     
-    if(GrepOutputItem *p = static_cast<GrepOutputItem *>(parent()))
+    if(auto *p = static_cast<GrepOutputItem *>(parent()))
     {
         p->refreshState();
     }
 }
 
 QVariant GrepOutputItem::data ( int role ) const {
-    GrepOutputModel *grepModel = static_cast<GrepOutputModel *>(model());
+    auto *grepModel = static_cast<GrepOutputModel *>(model());
     if(role == Qt::ToolTipRole && grepModel && isText())
     {
         QString start = text().left(m_change->m_range.start().column()).toHtmlEscaped();
@@ -218,7 +218,7 @@ QString GrepOutputModel::replacementFor(const QString &text)
 void GrepOutputModel::activate( const QModelIndex &idx )
 {
     QStandardItem *stditem = itemFromIndex(idx);
-    GrepOutputItem *grepitem = dynamic_cast<GrepOutputItem*>(stditem);
+    auto *grepitem = dynamic_cast<GrepOutputItem*>(stditem);
     if( !grepitem || !grepitem->isText() )
         return;
 
@@ -394,10 +394,10 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
     QString fnString = i18np("%2: 1 match", "%2: %1 matches",
                              items.length(), ICore::self()->projectController()->prettyFileName(QUrl::fromLocalFile(filename)));
 
-    GrepOutputItem *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
+    auto *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
     m_rootItem->appendRow(fileItem);
     for (const GrepOutputItem& item : items) {
-        GrepOutputItem* copy = new GrepOutputItem(item);
+        auto* copy = new GrepOutputItem(item);
         copy->setCheckable(m_itemsCheckable);
         if(m_itemsCheckable)
         {
@@ -422,7 +422,7 @@ void GrepOutputModel::updateCheckState(QStandardItem* item)
     // try to update checkstate on non checkable items would make a checkbox appear
     if(item->isCheckable())
     {
-        GrepOutputItem *it = static_cast<GrepOutputItem *>(item);
+        auto *it = static_cast<GrepOutputItem *>(item);
         it->propagateState();
         it->refreshState();
     }
@@ -441,11 +441,11 @@ void GrepOutputModel::doReplacements()
     changeSet.setFormatPolicy(DocumentChangeSet::NoAutoFormat);
     for(int fileRow = 0; fileRow < m_rootItem->rowCount(); fileRow++)
     {
-        GrepOutputItem *file = static_cast<GrepOutputItem *>(m_rootItem->child(fileRow));
+        auto *file = static_cast<GrepOutputItem *>(m_rootItem->child(fileRow));
         
         for(int matchRow = 0; matchRow < file->rowCount(); matchRow++)
         {
-            GrepOutputItem *match = static_cast<GrepOutputItem *>(file->child(matchRow));
+            auto *match = static_cast<GrepOutputItem *>(file->child(matchRow));
             if(match->checkState() == Qt::Checked) 
             {
                 DocumentChangePointer change = match->change();

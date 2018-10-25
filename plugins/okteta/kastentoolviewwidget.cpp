@@ -53,7 +53,7 @@ KastenToolViewWidget::KastenToolViewWidget( Kasten::AbstractToolView* toolView, 
         onMainWindowAdded( mainWindow );
     }
 
-    QVBoxLayout* layout = new QVBoxLayout( this );
+    auto* layout = new QVBoxLayout( this );
     layout->setMargin( 0 );
     layout->addWidget( mToolView->widget() );
 }
@@ -68,7 +68,7 @@ void KastenToolViewWidget::onMainWindowAdded( Sublime::MainWindow* mainWindow )
 void KastenToolViewWidget::onActiveViewChanged( Sublime::View* view )
 {
     // TODO: check if own mainWindow
-    OktetaView* oktetaView = qobject_cast<OktetaView*>( view );
+    auto* oktetaView = qobject_cast<OktetaView*>( view );
     Kasten::ByteArrayView* byteArrayView = oktetaView ? oktetaView->byteArrayView() : nullptr;
     mToolView->tool()->setTargetModel( byteArrayView );
 }

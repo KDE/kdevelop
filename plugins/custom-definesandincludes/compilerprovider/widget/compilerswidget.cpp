@@ -58,7 +58,7 @@ CompilersWidget::CompilersWidget(QWidget* parent)
     auto settings = SettingsManager::globalInstance();
     auto provider = settings->provider();
     foreach (const auto& factory, provider->compilerFactories()) {
-        QAction* action = new QAction(m_addMenu);
+        auto* action = new QAction(m_addMenu);
         const QString fname = factory->name();
         action->setText(fname);
         connect(action, &QAction::triggered, this, [this, fname]() { addCompiler(fname); });

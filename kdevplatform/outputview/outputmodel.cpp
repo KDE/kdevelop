@@ -334,7 +334,7 @@ QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
     {
         qCDebug(OUTPUTVIEW) << "searching next error";
         // Jump to the next error item
-        std::set< int >::const_iterator next = d->m_errorItems.lower_bound( startrow );
+        auto next = d->m_errorItems.lower_bound( startrow );
         if( next == d->m_errorItems.end() )
             next = d->m_errorItems.begin();
 
@@ -362,7 +362,7 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
         qCDebug(OUTPUTVIEW) << "searching previous error";
 
         // Jump to the previous error item
-        std::set< int >::const_iterator previous = d->m_errorItems.lower_bound( currentIdx.row() );
+        auto previous = d->m_errorItems.lower_bound( currentIdx.row() );
 
         if( previous == d->m_errorItems.begin() )
             previous = d->m_errorItems.end();

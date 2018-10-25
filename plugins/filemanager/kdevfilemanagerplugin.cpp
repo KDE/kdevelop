@@ -40,7 +40,7 @@ public:
 
     QList<QAction*> toolBarActions( QWidget* w ) const override
     {
-        FileManager* m = qobject_cast<FileManager*>(w);
+        auto* m = qobject_cast<FileManager*>(w);
         if( m )
             return m->toolBarActions();
         return KDevelop::IToolViewFactory::toolBarActions( w );

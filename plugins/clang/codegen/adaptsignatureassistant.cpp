@@ -57,7 +57,7 @@ Signature getDeclarationSignature(const Declaration *functionDecl, const DUConte
     ENSURE_CHAIN_READ_LOCKED
     int pos = 0;
     Signature signature;
-    const AbstractFunctionDeclaration* abstractFunDecl = dynamic_cast<const AbstractFunctionDeclaration*>(functionDecl);
+    const auto* abstractFunDecl = dynamic_cast<const AbstractFunctionDeclaration*>(functionDecl);
     const auto localDeclarations = functionCtxt->localDeclarations();
     const int localDeclarationsCount = localDeclarations.size();
     signature.defaultParams.reserve(localDeclarationsCount);
@@ -137,7 +137,7 @@ void AdaptSignatureAssistant::textChanged(KTextEditor::Document* doc, const KTex
      */
 
     Declaration* otherSide = nullptr;
-    FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(funDecl);
+    auto* definition = dynamic_cast<FunctionDefinition*>(funDecl);
     if (definition) {
         m_editingDefinition = true;
         otherSide = definition->declaration();

@@ -161,8 +161,8 @@ void FindReplaceTest::testReplace()
         file.close();
     }
 
-    GrepJob *job = new GrepJob(this);
-    GrepOutputModel *model = new GrepOutputModel(job);
+    auto *job = new GrepJob(this);
+    auto *model = new GrepOutputModel(job);
     GrepJobSettings settings;
 
     job->setOutputModel(model);

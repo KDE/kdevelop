@@ -63,7 +63,7 @@ ExternalScriptJob::ExternalScriptJob( ExternalScriptItem* item, const QUrl& url,
   setStandardToolView( KDevelop::IOutputView::RunView );
   setBehaviours( KDevelop::IOutputView::AllowUserClose | KDevelop::IOutputView::AutoScroll );
 
-  KDevelop::OutputModel* model = new KDevelop::OutputModel;
+  auto* model = new KDevelop::OutputModel;
   model->setFilteringStrategy(static_cast<KDevelop::OutputModel::OutputFilterStrategy>(m_filterMode));
   setModel( model );
 

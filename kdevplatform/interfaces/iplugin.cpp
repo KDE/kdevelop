@@ -101,7 +101,7 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
         d->guiClientAdded(client);
     };
     foreach (KMainWindow* mw, KMainWindow::memberList()) {
-        KXmlGuiWindow* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
+        auto* guiWindow = qobject_cast<KXmlGuiWindow*>(mw);
         if (! guiWindow)
             continue;
 

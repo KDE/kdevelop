@@ -225,7 +225,7 @@ void VcsPluginHelper::revert()
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
 
         if(doc && doc->textDocument()) {
-            KTextEditor::ModificationInterface* modif = dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            auto* modif = dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
             if (modif) {
                 modif->setModifiedOnDiskWarning(false);
             }
@@ -239,7 +239,7 @@ void VcsPluginHelper::revert()
 
 void VcsPluginHelper::revertDone(KJob* job)
 {
-    QTimer* modificationTimer = new QTimer;
+    auto* modificationTimer = new QTimer;
     modificationTimer->setInterval(100);
     connect(modificationTimer, &QTimer::timeout, this, &VcsPluginHelper::delayedModificationWarningOn);
     connect(modificationTimer, &QTimer::timeout, modificationTimer, &QTimer::deleteLater);
@@ -260,7 +260,7 @@ void VcsPluginHelper::delayedModificationWarningOn()
         if(doc) {
             doc->reload();
 
-            KTextEditor::ModificationInterface* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            auto* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
             modif->setModifiedOnDiskWarning(true);
         }
     }
@@ -269,7 +269,7 @@ void VcsPluginHelper::delayedModificationWarningOn()
 
 void VcsPluginHelper::diffJobFinished(KJob* job)
 {
-    KDevelop::VcsJob* vcsjob = qobject_cast<KDevelop::VcsJob*>(job);
+    auto* vcsjob = qobject_cast<KDevelop::VcsJob*>(job);
     Q_ASSERT(vcsjob);
 
     if (vcsjob->status() == KDevelop::VcsJob::JobSucceeded) {
@@ -279,7 +279,7 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
                                      i18n("There are no differences."),
                                      i18n("VCS support"));
         else {
-            VCSDiffPatchSource* patch=new VCSDiffPatchSource(d);
+            auto* patch=new VCSDiffPatchSource(d);
             showVcsDiff(patch);
         }
     } else {
@@ -292,7 +292,7 @@ void VcsPluginHelper::diffToBase()
     SINGLEURL_SETUP_VARS
     ICore::self()->documentController()->saveAllDocuments();
 
-    VCSDiffPatchSource* patch =new VCSDiffPatchSource(new VCSStandardDiffUpdater(iface, url));
+    auto* patch =new VCSDiffPatchSource(new VCSStandardDiffUpdater(iface, url));
     showVcsDiff(patch);
 }
 
@@ -320,7 +320,7 @@ void VcsPluginHelper::diffForRevGlobal()
 
 void VcsPluginHelper::diffForRev(const QUrl& url)
 {
-    QAction* action = qobject_cast<QAction*>( sender() );
+    auto* action = qobject_cast<QAction*>( sender() );
     Q_ASSERT(action);
     Q_ASSERT(action->data().canConvert<VcsRevision>());
     VcsRevision rev = action->data().value<VcsRevision>();
@@ -341,9 +341,9 @@ void VcsPluginHelper::history(const VcsRevision& rev)
     dlg->setWindowTitle(i18nc("%1: path or URL, %2: name of a version control system",
                           "%2 History (%1)", url.toDisplayString(QUrl::PreferLocalFile), iface->name()));
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(dlg);
+    auto *mainLayout = new QVBoxLayout(dlg);
 
-    KDevelop::VcsEventWidget* logWidget = new KDevelop::VcsEventWidget(url, rev, iface, dlg);
+    auto* logWidget = new KDevelop::VcsEventWidget(url, rev, iface, dlg);
     mainLayout->addWidget(logWidget);
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
@@ -389,7 +389,7 @@ void VcsPluginHelper::annotation()
 
         if (annotateiface && viewiface) {
             // TODO: only create model if there is none yet (e.g. from another view)
-            KDevelop::VcsAnnotationModel* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
+            auto* model = new KDevelop::VcsAnnotationModel(job, url, doc->textDocument(),
                                                                                    foreground, background);
             annotateiface->setAnnotationModel(model);
             viewiface->setAnnotationBorderVisible(true);
@@ -414,7 +414,7 @@ void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view,
     KTextEditor::AnnotationInterface* annotateiface =
         qobject_cast<KTextEditor::AnnotationInterface*>(view->document());
 
-    VcsAnnotationModel* model = qobject_cast<VcsAnnotationModel*>( annotateiface->annotationModel() );
+    auto* model = qobject_cast<VcsAnnotationModel*>( annotateiface->annotationModel() );
     Q_ASSERT(model);
 
     VcsRevision rev = model->revisionForLine(line);
@@ -474,7 +474,7 @@ void VcsPluginHelper::commit()
     QUrl url = d->ctxUrls.first();
 
     // We start the commit UI no matter whether there is real differences, as it can also be used to commit untracked files
-    VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url));
+    auto* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(d->vcs, url));
 
     bool ret = showVcsDiff(patchSource);
 

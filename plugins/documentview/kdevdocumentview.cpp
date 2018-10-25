@@ -181,7 +181,7 @@ void KDevDocumentView::contextMenuEvent( QContextMenuEvent * event )
 
     if (!m_selectedDocs.isEmpty())
     {
-        QMenu* ctxMenu = new QMenu(this);
+        auto* ctxMenu = new QMenu(this);
 
         KDevelop::FileContext context(m_selectedDocs);
         const QList<KDevelop::ContextMenuExtension> extensions =

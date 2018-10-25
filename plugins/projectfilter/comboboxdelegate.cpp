@@ -39,7 +39,7 @@ ComboBoxDelegate::~ComboBoxDelegate()
 
 QWidget* ComboBoxDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& /*option*/, const QModelIndex& /*index*/) const
 {
-    QComboBox* ret = new QComboBox(parent);
+    auto* ret = new QComboBox(parent);
     ret->setEditable(false);
     return ret;
 }
@@ -47,7 +47,7 @@ QWidget* ComboBoxDelegate::createEditor(QWidget* parent, const QStyleOptionViewI
 void ComboBoxDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
 {
     Q_ASSERT(qobject_cast<QComboBox*>(editor));
-    QComboBox* box = static_cast<QComboBox*>(editor);
+    auto* box = static_cast<QComboBox*>(editor);
     box->clear();
     const QString& current = index.data().toString();
     int currentIndex = -1;
@@ -67,7 +67,7 @@ void ComboBoxDelegate::setEditorData(QWidget* editor, const QModelIndex& index) 
 void ComboBoxDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
     Q_ASSERT(qobject_cast<QComboBox*>(editor));
-    QComboBox* box = static_cast<QComboBox*>(editor);
+    auto* box = static_cast<QComboBox*>(editor);
     model->setData(index, m_items.at(box->currentIndex()).data);
 }
 

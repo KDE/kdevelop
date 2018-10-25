@@ -105,8 +105,8 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     m_urls.clear();
     m_services.clear();
 
-    FileContext* filectx = dynamic_cast<FileContext*>( context );
-    ProjectItemContext* projctx = dynamic_cast<ProjectItemContext*>( context );
+    auto* filectx = dynamic_cast<FileContext*>( context );
+    auto* projctx = dynamic_cast<ProjectItemContext*>( context );
     if ( filectx && filectx->urls().count() > 0 ) {
         m_urls = filectx->urls();
     } else if ( projctx && projctx->items().count() > 0 ) {

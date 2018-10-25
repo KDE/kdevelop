@@ -165,7 +165,7 @@ void ContextBrowserView::declarationMenu()
 {
     DUChainReadLocker lock(DUChain::lock());
 
-    AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
+    auto* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
     if (navigationWidget) {
         AbstractDeclarationNavigationContext* navigationContext =
             dynamic_cast<AbstractDeclarationNavigationContext*>(navigationWidget->context().data());
@@ -246,10 +246,10 @@ void ContextBrowserView::focusOutEvent(QFocusEvent* event)
 
 bool ContextBrowserView::event(QEvent* event)
 {
-    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    auto* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     if (hasFocus() && keyEvent) {
-        AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
+        auto* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
         if (navigationWidget && event->type() == QEvent::KeyPress) {
             int key = keyEvent->key();
             if (key == Qt::Key_Left)

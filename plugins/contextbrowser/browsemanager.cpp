@@ -129,7 +129,7 @@ KTextEditor::View* viewFromWidget(QWidget* widget)
 {
     if (!widget)
         return nullptr;
-    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(widget);
+    auto* view = qobject_cast<KTextEditor::View*>(widget);
     if (view)
         return view;
     else
@@ -183,7 +183,7 @@ bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
     QWidget* widget = qobject_cast<QWidget*>(watched);
     Q_ASSERT(widget);
 
-    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    auto* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     const int browseKey = Qt::Key_Control;
     const int magicModifier = Qt::Key_Alt;
@@ -226,7 +226,7 @@ bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
         return false;
     }
 
-    QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(event);
+    auto* focusEvent = dynamic_cast<QFocusEvent*>(event);
     //Eventually stop key-browsing
     if ((keyEvent && m_browsingByKey && keyEvent->key() == m_browsingByKey && keyEvent->type() == QEvent::KeyRelease)
         || (focusEvent && focusEvent->lostFocus()) || event->type() == QEvent::WindowDeactivate) {
@@ -234,7 +234,7 @@ bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
         emit stopDelayedBrowsing();
     }
 
-    QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
+    auto* mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
     if (mouseEvent) {
         if (mouseEvent->type() == QEvent::MouseButtonPress && mouseEvent->button() == Qt::XButton1) {

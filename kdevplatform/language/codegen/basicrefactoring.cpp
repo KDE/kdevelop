@@ -92,7 +92,7 @@ BasicRefactoring::BasicRefactoring(QObject* parent)
 
 void BasicRefactoring::fillContextMenu(ContextMenuExtension& extension, Context* context, QWidget* parent)
 {
-    DeclarationContext* declContext = dynamic_cast<DeclarationContext*>(context);
+    auto* declContext = dynamic_cast<DeclarationContext*>(context);
     if (!declContext)
         return;
 
@@ -262,7 +262,7 @@ bool BasicRefactoring::acceptForContextMenu(const Declaration* decl)
 
 void BasicRefactoring::executeRenameAction()
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     if (action) {
         IndexedDeclaration decl = action->data().value<IndexedDeclaration>();
         if (!decl.isValid())
@@ -293,7 +293,7 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(
 
     //So the context-links work
     QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration.data());
-    AbstractNavigationWidget* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
+    auto* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
     if (abstractNavigationWidget)
         connect(&uses, &UsesWidget::navigateDeclaration, abstractNavigationWidget,
                 &AbstractNavigationWidget::navigateDeclaration);

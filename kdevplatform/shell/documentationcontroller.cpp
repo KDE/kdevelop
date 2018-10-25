@@ -75,7 +75,7 @@ Declaration* usefulDeclaration(Declaration* decl)
     // it makes no sense to pass the declaration pointer of instances of types
     if (decl->kind() == Declaration::Instance) {
         AbstractType::Ptr type = TypeUtils::targetTypeKeepAliases(decl->abstractType(), decl->topContext());
-        IdentifiedType* idType = dynamic_cast<IdentifiedType*>(type.data());
+        auto* idType = dynamic_cast<IdentifiedType*>(type.data());
         Declaration* idDecl = idType ? idType->declaration(decl->topContext()) : nullptr;
         if (idDecl) {
             decl = idDecl;
@@ -157,7 +157,7 @@ KDevelop::ContextMenuExtension KDevelop::DocumentationController::contextMenuExt
 
     ContextMenuExtension menuExt;
 
-    DeclarationContext* ctx = dynamic_cast<DeclarationContext*>(context);
+    auto* ctx = dynamic_cast<DeclarationContext*>(context);
     if(ctx) {
         DUChainReadLocker lock(DUChain::lock());
         if(!ctx->declaration().data())
@@ -198,7 +198,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
 
     QList<IDocumentationProvider*> ret;
     for (IPlugin* p : pluginsProvider) {
-        IDocumentationProviderProvider *docProvider=p->extension<IDocumentationProviderProvider>();
+        auto *docProvider=p->extension<IDocumentationProviderProvider>();
         if (!docProvider) {
             qCWarning(SHELL) << "plugin" << p << "does not implement ProviderProvider extension, rerun kbuildsycoca5";
             continue;
@@ -207,7 +207,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
     }
 
     for (IPlugin* p : plugins) {
-        IDocumentationProvider *doc=p->extension<IDocumentationProvider>();
+        auto *doc=p->extension<IDocumentationProvider>();
         if (!doc) {
             qCWarning(SHELL) << "plugin" << p << "does not implement Provider extension, rerun kbuildsycoca5";
             continue;
@@ -226,7 +226,7 @@ void KDevelop::DocumentationController::showDocumentation(const IDocumentation::
         return;
     }
 
-    DocumentationView* view = dynamic_cast<DocumentationView*>(w);
+    auto* view = dynamic_cast<DocumentationView*>(w);
     if( !view ) {
         qCWarning(SHELL) << "Could not cast tool view" << w << "to DocumentationView class!";
         return;

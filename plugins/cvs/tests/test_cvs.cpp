@@ -64,7 +64,7 @@ void TestCvs::cleanup()
 void TestCvs::repoInit()
 {
     // make job that creates the local repository
-    CvsJob* j = new CvsJob(nullptr);
+    auto* j = new CvsJob(nullptr);
     QVERIFY( j );
     j->setDirectory(CVSTEST_BASEDIR);
     *j << "cvs" << "-d" << CVS_REPO << "init";

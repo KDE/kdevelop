@@ -51,7 +51,7 @@ void NavigationToolTip::setNavigationWidget(QWidget* widget)
     if (auto newWidget = qobject_cast<AbstractNavigationWidget*>(widget)) {
         connect(newWidget, &AbstractNavigationWidget::sizeHintChanged, this, &NavigationToolTip::sizeHintChanged);
     }
-    QVBoxLayout* layout = new QVBoxLayout;
+    auto* layout = new QVBoxLayout;
     setLayout(layout);
     layout->setMargin(0);
     if (m_navigationWidget) {

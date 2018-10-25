@@ -125,7 +125,7 @@ void StatusBar::registerStatus(QObject* status)
 
 QWidget* errorMessage(QWidget* parent, const QString& text)
 {
-    KSqueezedTextLabel* label = new KSqueezedTextLabel(parent);
+    auto* label = new KSqueezedTextLabel(parent);
     KStatefulBrush red(KColorScheme::Window, KColorScheme::NegativeText);
     QPalette pal = label->palette();
     pal.setBrush(QPalette::WindowText, red.brush(label));
@@ -138,7 +138,7 @@ QWidget* errorMessage(QWidget* parent, const QString& text)
 
 QTimer* StatusBar::errorTimeout(QWidget* error, int timeout)
 {
-    QTimer* timer = new QTimer(error);
+    auto* timer = new QTimer(error);
     timer->setSingleShot(true);
     timer->setInterval(1000*timeout);
     connect(timer, &QTimer::timeout, this, [this, error](){ removeError(error); });

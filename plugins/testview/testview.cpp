@@ -68,7 +68,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     setWindowIcon(QIcon::fromTheme(QStringLiteral("preflight-verifier"), windowIcon()));
     setWindowTitle(i18n("Unit Tests"));
 
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
     layout->addWidget(m_tree);
@@ -98,10 +98,10 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     connect (runSelected, &QAction::triggered, this, &TestView::runSelectedTests);
     addAction(runSelected);
 
-    QLineEdit* edit = new QLineEdit(parent);
+    auto* edit = new QLineEdit(parent);
     edit->setPlaceholderText(i18n("Filter..."));
     edit->setClearButtonEnabled(true);
-    QWidgetAction* widgetAction = new QWidgetAction(this);
+    auto* widgetAction = new QWidgetAction(this);
     widgetAction->setDefaultWidget(edit);
     connect(edit, &QLineEdit::textChanged, this, &TestView::changeFilter);
     addAction(widgetAction);
@@ -305,7 +305,7 @@ void TestView::runSelectedTests()
 
     if (!jobs.isEmpty())
     {
-        KDevelop::ExecuteCompositeJob* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
+        auto* compositeJob = new KDevelop::ExecuteCompositeJob(this, jobs);
         compositeJob->setObjectName(i18np("Run 1 test", "Run %1 tests", jobs.size()));
         compositeJob->setProperty("test_job", true);
         ICore::self()->runController()->registerJob(compositeJob);

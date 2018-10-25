@@ -129,7 +129,7 @@ KJob* ExecutePlugin::dependencyJob( KDevelop::ILaunchConfiguration* cfg ) const
                                    i18n("Couldn't resolve the dependency: %1", dep.toString()));
             }
         }
-        KDevelop::BuilderJob* job = new KDevelop::BuilderJob();
+        auto* job = new KDevelop::BuilderJob();
         if( depAction == QLatin1String("Build") )
         {
             job->addItems( KDevelop::BuilderJob::Build, items );

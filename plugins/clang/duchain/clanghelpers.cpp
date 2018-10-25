@@ -79,7 +79,7 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
 
 ReferencedTopDUContext createTopContext(const IndexedString& path, const ClangParsingEnvironment& environment)
 {
-    ClangParsingEnvironmentFile* file = new ClangParsingEnvironmentFile(path, environment);
+    auto* file = new ClangParsingEnvironmentFile(path, environment);
     ReferencedTopDUContext context = new ClangTopDUContext(path, RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
     DUChain::self()->addDocumentChain(context);
     context->updateImportsCache();

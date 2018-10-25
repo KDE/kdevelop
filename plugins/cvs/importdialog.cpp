@@ -63,7 +63,7 @@ void ImportDialog::jobFinished(KJob * job)
     }
 
     // The job finished, now let's check the output is everything was OK
-    CvsJob* cvsjob = static_cast<CvsJob*>(job);
+    auto* cvsjob = static_cast<CvsJob*>(job);
 
     static QRegExp re_file(QStringLiteral("^[IN]\\s(.*)"));
     bool error = false;

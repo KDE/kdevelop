@@ -78,7 +78,7 @@ DeclarationPointer getDeclarationOrSignal(const QualifiedIdentifier& id, const D
         DeclarationPointer decl = getDeclaration(QualifiedIdentifier(identifier), context, searchInParent);
 
         if (decl) {
-            ClassFunctionDeclaration* classFuncDecl = dynamic_cast<ClassFunctionDeclaration *>(decl.data());
+            auto* classFuncDecl = dynamic_cast<ClassFunctionDeclaration *>(decl.data());
 
             if (classFuncDecl && classFuncDecl->isSignal()) {
                 // Removing "on" has given the identifier of a QML signal, return
@@ -96,7 +96,7 @@ QmlJS::AST::Statement* getQMLAttribute(QmlJS::AST::UiObjectMemberList* members, 
 {
     for (QmlJS::AST::UiObjectMemberList *it = members; it; it = it->next) {
         // The member needs to be a script binding whose name matches attribute
-        QmlJS::AST::UiScriptBinding* binding = QmlJS::AST::cast<QmlJS::AST::UiScriptBinding*>(it->member);
+        auto* binding = QmlJS::AST::cast<QmlJS::AST::UiScriptBinding*>(it->member);
 
         if (binding && binding->qualifiedId && binding->qualifiedId->name == attribute) {
             return binding->statement;
@@ -138,7 +138,7 @@ QMLAttributeValue getQMLAttributeValue(QmlJS::AST::UiObjectMemberList* members, 
     QmlJS::AST::Statement* node = getQMLAttribute(members, attribute);
 
     // The value of the binding must be an expression
-    QmlJS::AST::ExpressionStatement* statement = QmlJS::AST::cast<QmlJS::AST::ExpressionStatement*>(node);
+    auto* statement = QmlJS::AST::cast<QmlJS::AST::ExpressionStatement*>(node);
 
     if (!statement) {
         return res;

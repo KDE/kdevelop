@@ -196,7 +196,7 @@ public:
     {
         Q_UNUSED(index);
 
-        QPushButton *button = new QPushButton();
+        auto *button = new QPushButton();
         button->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
         setBlockedEventTypes(button, QList<QEvent::Type>{QEvent::MouseButtonPress, QEvent::MouseButtonRelease, QEvent::MouseButtonDblClick});
 
@@ -214,7 +214,7 @@ public:
             return;
         }
 
-        QPushButton *aboutPushButton = static_cast<QPushButton*>(widgets[0]);
+        auto *aboutPushButton = static_cast<QPushButton*>(widgets[0]);
         QSize aboutPushButtonSizeHint = aboutPushButton->sizeHint();
         aboutPushButton->resize(aboutPushButtonSizeHint);
         aboutPushButton->move(dependantLayoutValue(option.rect.width() - MARGIN - aboutPushButtonSizeHint.width(), aboutPushButtonSizeHint.width(), option.rect.width()), option.rect.height() / 2 - aboutPushButtonSizeHint.height() / 2);
@@ -238,7 +238,7 @@ public:
 private Q_SLOTS:
     void info()
     {
-        PluginsModel *m = static_cast<PluginsModel*>(itemView()->model());
+        auto *m = static_cast<PluginsModel*>(itemView()->model());
         KDevelop::IPlugin *p = m->pluginForIndex(focusedIndex());
         if (p) {
             KAboutData aboutData = KAboutData::fromPluginMetaData(pluginInfo(p));
@@ -287,9 +287,9 @@ LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
 {
     setWindowTitle(i18n("Loaded Plugins"));
 
-    QVBoxLayout* vbox = new QVBoxLayout(this);
+    auto* vbox = new QVBoxLayout(this);
 
-    KTitleWidget* title = new KTitleWidget(this);
+    auto* title = new KTitleWidget(this);
     title->setPixmap(QIcon::fromTheme(KAboutData::applicationData().programIconName()),
                      KTitleWidget::ImageLeft);
     title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>",

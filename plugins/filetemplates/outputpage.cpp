@@ -189,7 +189,7 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
         const QString fileLabelText = i18n("%1:", file.label);
         QLabel* label = new QLabel(fileLabelText, this);
         d->labels << label;
-        KUrlRequester* requester = new KUrlRequester(this);
+        auto* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );
 
         connect(requester, &KUrlRequester::textChanged, this, [this, id] () { d->updateFileRange(id); });
@@ -199,7 +199,7 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
 
         label = new QLabel(fileLabelText, this);
         d->labels << label;
-        QHBoxLayout* layout = new QHBoxLayout;
+        auto* layout = new QHBoxLayout;
 
         auto line = new QSpinBox(this);
         line->setPrefix(i18n("Line: "));

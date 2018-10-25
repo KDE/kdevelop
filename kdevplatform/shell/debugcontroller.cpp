@@ -171,8 +171,8 @@ VariableCollection* DebugController::variableCollection()
 
 void DebugController::partAdded(KParts::Part* part)
 {
-    if (KTextEditor::Document* doc = dynamic_cast<KTextEditor::Document*>(part)) {
-        KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(doc);
+    if (auto* doc = dynamic_cast<KTextEditor::Document*>(part)) {
+        auto *iface = dynamic_cast<KTextEditor::MarkInterface*>(doc);
         if( !iface )
             return;
 
@@ -319,7 +319,7 @@ void DebugController::clearExecutionPoint()
 {
     qCDebug(SHELL);
     foreach (KDevelop::IDocument* document, KDevelop::ICore::self()->documentController()->openDocuments()) {
-        KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(document->textDocument());
+        auto *iface = dynamic_cast<KTextEditor::MarkInterface*>(document->textDocument());
         if (!iface)
             continue;
 
@@ -349,7 +349,7 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
     if( !document )
         return;
 
-    KTextEditor::MarkInterface *iface = dynamic_cast<KTextEditor::MarkInterface*>(document->textDocument());
+    auto *iface = dynamic_cast<KTextEditor::MarkInterface*>(document->textDocument());
     if( !iface )
         return;
 
@@ -363,7 +363,7 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
 void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerState state)
 {
     Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
-    IDebugSession* session = static_cast<IDebugSession*>(sender());
+    auto* session = static_cast<IDebugSession*>(sender());
     qCDebug(SHELL) << session << state << "current" << m_currentSession.data();
     if (session == m_currentSession.data()) {
         updateDebuggerState(state, session);
@@ -455,7 +455,7 @@ ContextMenuExtension DebugController::contextMenuExtension(Context* context, QWi
     if( context->type() != Context::EditorContext )
         return menuExt;
 
-    KDevelop::EditorContext *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
+    auto *econtext = dynamic_cast<KDevelop::EditorContext*>(context);
     if (!econtext)
         return menuExt;
 

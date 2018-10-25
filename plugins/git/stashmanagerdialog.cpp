@@ -45,7 +45,7 @@ StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, Q
     m_ui = new Ui::StashManager;
     m_ui->setupUi(m_mainWidget);
 
-    StashModel* m = new StashModel(stashed, plugin, this);
+    auto* m = new StashModel(stashed, plugin, this);
     m_ui->stashView->setModel(m);
 
     connect(m_ui->show,   &QPushButton::clicked, this, &StashManagerDialog::showStash);
@@ -91,7 +91,7 @@ void StashManagerDialog::runStash(const QStringList& arguments)
 
 void StashManagerDialog::showStash()
 {
-    IPatchReview * review = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>();
+    auto * review = ICore::self()->pluginController()->extensionForPlugin<IPatchReview>();
     IPatchSource::Ptr stashPatch(new StashPatchSource(selection(), m_plugin, m_dir));
 
     review->startReview(stashPatch);
@@ -138,7 +138,7 @@ StashModel::StashModel(const QDir& dir, GitPlugin* git, QObject* parent)
 
 void StashModel::stashListReady(KJob* _job)
 {
-    DVcsJob* job = qobject_cast<DVcsJob*>(_job);
+    auto* job = qobject_cast<DVcsJob*>(_job);
     const QList<QByteArray> output = job->rawOutput().split('\n');
 
     for (const QByteArray& line : output) {

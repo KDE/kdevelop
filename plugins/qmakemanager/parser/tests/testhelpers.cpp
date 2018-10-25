@@ -38,12 +38,12 @@ void matchScopeBodies(const QList<QMake::StatementAST*>& realbody, const QList<Q
         testscope = dynamic_cast<QMake::ScopeAST*>(testbody.at(i));
 
         if (scope && testscope) {
-            QMake::FunctionCallAST* call = dynamic_cast<QMake::FunctionCallAST*>(scope);
-            QMake::FunctionCallAST* testcall = dynamic_cast<QMake::FunctionCallAST*>(testscope);
-            QMake::SimpleScopeAST* simple = dynamic_cast<QMake::SimpleScopeAST*>(scope);
-            QMake::SimpleScopeAST* testsimple = dynamic_cast<QMake::SimpleScopeAST*>(testscope);
-            QMake::OrAST* orop = dynamic_cast<QMake::OrAST*>(scope);
-            QMake::OrAST* testorop = dynamic_cast<QMake::OrAST*>(testscope);
+            auto* call = dynamic_cast<QMake::FunctionCallAST*>(scope);
+            auto* testcall = dynamic_cast<QMake::FunctionCallAST*>(testscope);
+            auto* simple = dynamic_cast<QMake::SimpleScopeAST*>(scope);
+            auto* testsimple = dynamic_cast<QMake::SimpleScopeAST*>(testscope);
+            auto* orop = dynamic_cast<QMake::OrAST*>(scope);
+            auto* testorop = dynamic_cast<QMake::OrAST*>(testscope);
             QVERIFY((call && testcall) || (simple && testsimple) || (orop && testorop));
             if (call && testcall) {
                 TESTFUNCNAME(call, testcall->identifier->value)

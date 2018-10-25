@@ -42,7 +42,7 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
         {}
         QWidget* create( QWidget *parent = nullptr ) override
         {
-            KDevDocumentView* view = new KDevDocumentView( m_plugin, parent );
+            auto* view = new KDevDocumentView( m_plugin, parent );
             KDevelop::IDocumentController* docController = m_plugin->core()->documentController();
             foreach(KDevelop::IDocument* doc, docController->openDocuments()) {
                 view->opened( doc );

@@ -110,7 +110,7 @@ void BreakpointModel::slotPartAdded(KParts::Part* part)
 {
     if (auto doc = qobject_cast<KTextEditor::Document*>(part))
     {
-        MarkInterface *iface = dynamic_cast<MarkInterface*>(doc);
+        auto *iface = dynamic_cast<MarkInterface*>(doc);
         if( !iface )
             return;
 
@@ -579,7 +579,7 @@ Breakpoint* BreakpointModel::breakpoint(int row) const
 Breakpoint* BreakpointModel::addCodeBreakpoint()
 {
     beginInsertRows(QModelIndex(), d->breakpoints.count(), d->breakpoints.count());
-    Breakpoint* n = new Breakpoint(this, Breakpoint::CodeBreakpoint);
+    auto* n = new Breakpoint(this, Breakpoint::CodeBreakpoint);
     endInsertRows();
     return n;
 }
@@ -601,7 +601,7 @@ Breakpoint* BreakpointModel::addCodeBreakpoint(const QString& expression)
 Breakpoint* BreakpointModel::addWatchpoint()
 {
     beginInsertRows(QModelIndex(), d->breakpoints.count(), d->breakpoints.count());
-    Breakpoint* n = new Breakpoint(this, Breakpoint::WriteBreakpoint);
+    auto* n = new Breakpoint(this, Breakpoint::WriteBreakpoint);
     endInsertRows();
     return n;
 }
@@ -616,7 +616,7 @@ Breakpoint* BreakpointModel::addWatchpoint(const QString& expression)
 Breakpoint* BreakpointModel::addReadWatchpoint()
 {
     beginInsertRows(QModelIndex(), d->breakpoints.count(), d->breakpoints.count());
-    Breakpoint* n = new Breakpoint(this, Breakpoint::ReadBreakpoint);
+    auto* n = new Breakpoint(this, Breakpoint::ReadBreakpoint);
     endInsertRows();
     return n;
 }
@@ -631,7 +631,7 @@ Breakpoint* BreakpointModel::addReadWatchpoint(const QString& expression)
 Breakpoint* BreakpointModel::addAccessWatchpoint()
 {
     beginInsertRows(QModelIndex(), d->breakpoints.count(), d->breakpoints.count());
-    Breakpoint* n = new Breakpoint(this, Breakpoint::AccessBreakpoint);
+    auto* n = new Breakpoint(this, Breakpoint::AccessBreakpoint);
     endInsertRows();
     return n;
 }

@@ -80,7 +80,7 @@ void TestSvnImport::initTestCase()
     const QList<IPlugin*> plugins = Core::self()->pluginController()->allPluginsForExtension(QStringLiteral("org.kdevelop.IBasicVersionControl"));
     for (IPlugin* p : plugins) {
         qDebug() << "checking plugin" << p;
-        ICentralizedVersionControl* icentr = p->extension<ICentralizedVersionControl>();
+        auto* icentr = p->extension<ICentralizedVersionControl>();
         if (!icentr)
             continue;
         if (icentr->name() == QLatin1String("Subversion")) {

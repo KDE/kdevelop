@@ -143,7 +143,7 @@ void VcsEventWidgetPrivate::diffToPrevious()
     KDevelop::VcsRevision prev = KDevelop::VcsRevision::createSpecialRevision(KDevelop::VcsRevision::Previous);
     KDevelop::VcsJob* job = m_iface->diff( m_url, prev, ev.revision() );
 
-    VcsDiffWidget* widget = new VcsDiffWidget( job );
+    auto* widget = new VcsDiffWidget( job );
     widget->setRevisions( prev, ev.revision() );
     QDialog* dlg = new QDialog( q );
 
@@ -153,7 +153,7 @@ void VcsEventWidgetPrivate::diffToPrevious()
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     auto mainWidget = new QWidget;
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    auto *mainLayout = new QVBoxLayout;
     dlg->setLayout(mainLayout);
     mainLayout->addWidget(mainWidget);
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
@@ -174,7 +174,7 @@ void VcsEventWidgetPrivate::diffRevisions()
     KDevelop::VcsEvent ev2 = m_logModel->eventForIndex( l.last() );
     KDevelop::VcsJob* job = m_iface->diff( m_url, ev1.revision(), ev2.revision() );
 
-    VcsDiffWidget* widget = new VcsDiffWidget( job );
+    auto* widget = new VcsDiffWidget( job );
     widget->setRevisions( ev1.revision(), ev2.revision() );
 
     auto dlg = new QDialog( q );

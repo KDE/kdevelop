@@ -225,7 +225,7 @@ void TestAreaOperation::checkArea1(MainWindow *mw)
     QVERIFY(splitter->inherits("QSplitter"));
 
     //check that we have a container and 4 views inside
-    Container *container = splitter->findChild<Sublime::Container*>();
+    auto *container = splitter->findChild<Sublime::Container*>();
     QVERIFY(container);
     ViewCounter c;
     area->walkViews(c, area->rootIndex());
@@ -577,7 +577,7 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QVERIFY(pSplitter->inherits("QSplitter"));
 
     // finally, get the splitter's container
-    Container *pContainer = pSplitter->findChild<Sublime::Container*>();
+    auto *pContainer = pSplitter->findChild<Sublime::Container*>();
     QVERIFY(pContainer);
 
     // verify that the current active widget in the container is the one in activeview (m_pView111)
@@ -611,9 +611,9 @@ void TestAreaOperation::splitViewActiveTabsTest()
     QVERIFY(pSecondSplitter);
 
     // for each splitter, get the corresponding container
-    Container *pFirstContainer = pFirstSplitter->findChild<Sublime::Container*>();
+    auto *pFirstContainer = pFirstSplitter->findChild<Sublime::Container*>();
     QVERIFY(pFirstContainer);
-    Container *pSecondContainer = pSecondSplitter->findChild<Sublime::Container*>();
+    auto *pSecondContainer = pSecondSplitter->findChild<Sublime::Container*>();
     QVERIFY(pSecondContainer);
 
     // the active view should have remained view121

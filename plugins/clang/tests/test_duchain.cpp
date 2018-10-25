@@ -1229,13 +1229,13 @@ void TestDUChain::testMacroDependentHeader()
     QCOMPARE(top->localDeclarations().size(), 10); // 2x macro, then a, aq, b, bq
     QCOMPARE(top->importedParentContexts().size(), 1);
     AbstractType::Ptr type = top->localDeclarations()[2]->abstractType();
-    StructureType* sType = dynamic_cast<StructureType*>(type.data());
+    auto* sType = dynamic_cast<StructureType*>(type.data());
     QVERIFY(sType);
     QCOMPARE(sType->toString(), QString("A"));
     Declaration* decl = sType->declaration(top);
     QVERIFY(decl);
     AbstractType::Ptr type2 = top->localDeclarations()[4]->abstractType();
-    StructureType* sType2 = dynamic_cast<StructureType*>(type2.data());
+    auto* sType2 = dynamic_cast<StructureType*>(type2.data());
     QVERIFY(sType2);
     QCOMPARE(sType2->toString(), QString("B"));
     Declaration* decl2 = sType2->declaration(top);
@@ -1283,11 +1283,11 @@ void TestDUChain::testHeaderParsingOrder1()
     QCOMPARE(top->localDeclarations().size(), 2);
     QCOMPARE(top->importedParentContexts().size(), 1);
     AbstractType::Ptr type = top->localDeclarations()[1]->abstractType();
-    TypeAliasType* aType = dynamic_cast<TypeAliasType*>(type.data());
+    auto* aType = dynamic_cast<TypeAliasType*>(type.data());
     QVERIFY(aType);
     AbstractType::Ptr targetType = aType->type();
     QVERIFY(targetType);
-    IdentifiedType *idType = dynamic_cast<IdentifiedType*>(targetType.data());
+    auto *idType = dynamic_cast<IdentifiedType*>(targetType.data());
     QVERIFY(idType);
     // this declaration could be resolved, because it was created with an
     // indirect DeclarationId that is resolved from the perspective of 'top'
@@ -1323,11 +1323,11 @@ void TestDUChain::testHeaderParsingOrder2()
     QCOMPARE(top->localDeclarations().size(), 1);
     QCOMPARE(top->importedParentContexts().size(), 2);
     AbstractType::Ptr type = top->localDeclarations()[0]->abstractType();
-    TypeAliasType* aType = dynamic_cast<TypeAliasType*>(type.data());
+    auto* aType = dynamic_cast<TypeAliasType*>(type.data());
     QVERIFY(aType);
     AbstractType::Ptr targetType = aType->type();
     QVERIFY(targetType);
-    IdentifiedType *idType = dynamic_cast<IdentifiedType*>(targetType.data());
+    auto *idType = dynamic_cast<IdentifiedType*>(targetType.data());
     QVERIFY(idType);
     Declaration* decl = idType->declaration(top);
     // NOTE: the decl. doesn't know (yet) about the template insantiation <int>

@@ -101,7 +101,7 @@ bool KDevSvnPlugin::isVersionControlled(const QUrl &localLocation)
         return false;
     }
 
-    SvnInfoJob* job = new SvnInfoJob(this);
+    auto* job = new SvnInfoJob(this);
 
     job->setLocation(localLocation);
 
@@ -121,7 +121,7 @@ bool KDevSvnPlugin::isVersionControlled(const QUrl &localLocation)
 
 KDevelop::VcsJob* KDevSvnPlugin::repositoryLocation(const QUrl &localLocation)
 {
-    SvnInfoJob* job = new SvnInfoJob(this);
+    auto* job = new SvnInfoJob(this);
 
     job->setLocation(localLocation);
     job->setProvideInformation(SvnInfoJob::RepoUrlOnly);
@@ -131,7 +131,7 @@ KDevelop::VcsJob* KDevSvnPlugin::repositoryLocation(const QUrl &localLocation)
 KDevelop::VcsJob* KDevSvnPlugin::status(const QList<QUrl>& localLocations,
                                         KDevelop::IBasicVersionControl::RecursionMode mode)
 {
-    SvnStatusJob* job = new SvnStatusJob(this);
+    auto* job = new SvnStatusJob(this);
     job->setLocations(localLocations);
     job->setRecursive((mode == KDevelop::IBasicVersionControl::Recursive));
     return job;
@@ -140,7 +140,7 @@ KDevelop::VcsJob* KDevSvnPlugin::status(const QList<QUrl>& localLocations,
 KDevelop::VcsJob* KDevSvnPlugin::add(const QList<QUrl>& localLocations,
                                      KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    SvnAddJob* job = new SvnAddJob(this);
+    auto* job = new SvnAddJob(this);
     job->setLocations(localLocations);
     job->setRecursive((recursion == KDevelop::IBasicVersionControl::Recursive));
     return job;
@@ -148,7 +148,7 @@ KDevelop::VcsJob* KDevSvnPlugin::add(const QList<QUrl>& localLocations,
 
 KDevelop::VcsJob* KDevSvnPlugin::remove(const QList<QUrl>& localLocations)
 {
-    SvnRemoveJob* job = new SvnRemoveJob(this);
+    auto* job = new SvnRemoveJob(this);
     job->setLocations(localLocations);
     return job;
 }
@@ -165,7 +165,7 @@ KDevelop::VcsJob* KDevSvnPlugin::unedit(const QUrl& /*localLocation*/)
 
 KDevelop::VcsJob* KDevSvnPlugin::localRevision(const QUrl &localLocation, KDevelop::VcsRevision::RevisionType type)
 {
-    SvnInfoJob* job = new SvnInfoJob(this);
+    auto* job = new SvnInfoJob(this);
 
     job->setLocation(localLocation);
     job->setProvideInformation(SvnInfoJob::RevisionOnly);
@@ -175,7 +175,7 @@ KDevelop::VcsJob* KDevSvnPlugin::localRevision(const QUrl &localLocation, KDevel
 
 KDevelop::VcsJob* KDevSvnPlugin::copy(const QUrl &localLocationSrc, const QUrl& localLocationDstn)
 {
-    SvnCopyJob* job = new SvnCopyJob(this);
+    auto* job = new SvnCopyJob(this);
     job->setSourceLocation(localLocationSrc);
     job->setDestinationLocation(localLocationDstn);
     return job;
@@ -183,7 +183,7 @@ KDevelop::VcsJob* KDevSvnPlugin::copy(const QUrl &localLocationSrc, const QUrl& 
 
 KDevelop::VcsJob* KDevSvnPlugin::move(const QUrl &localLocationSrc, const QUrl& localLocationDst)
 {
-    SvnMoveJob* job = new SvnMoveJob(this);
+    auto* job = new SvnMoveJob(this);
     job->setSourceLocation(localLocationSrc);
     job->setDestinationLocation(localLocationDst);
     return job;
@@ -192,7 +192,7 @@ KDevelop::VcsJob* KDevSvnPlugin::move(const QUrl &localLocationSrc, const QUrl& 
 KDevelop::VcsJob* KDevSvnPlugin::revert(const QList<QUrl>& localLocations,
                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    SvnRevertJob* job = new SvnRevertJob(this);
+    auto* job = new SvnRevertJob(this);
     job->setLocations(localLocations);
     job->setRecursive((recursion == KDevelop::IBasicVersionControl::Recursive));
     return job;
@@ -202,7 +202,7 @@ KDevelop::VcsJob* KDevSvnPlugin::update(const QList<QUrl>& localLocations,
                                         const KDevelop::VcsRevision& rev,
                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    SvnUpdateJob* job = new SvnUpdateJob(this);
+    auto* job = new SvnUpdateJob(this);
     job->setLocations(localLocations);
     job->setRevision(rev);
     job->setRecursive((recursion == KDevelop::IBasicVersionControl::Recursive));
@@ -212,7 +212,7 @@ KDevelop::VcsJob* KDevSvnPlugin::update(const QList<QUrl>& localLocations,
 KDevelop::VcsJob* KDevSvnPlugin::commit(const QString& message, const QList<QUrl>& localLocations,
                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    SvnCommitJob* job = new SvnCommitJob(this);
+    auto* job = new SvnCommitJob(this);
     qCDebug(PLUGIN_SVN) << "Committing locations:" << localLocations << endl;
     job->setUrls(localLocations);
     job->setCommitMessage(message) ;
@@ -235,7 +235,7 @@ KDevelop::VcsJob* KDevSvnPlugin::diff2(const KDevelop::VcsLocation& src,
                                        const KDevelop::VcsRevision& dstRevision,
                                        KDevelop::IBasicVersionControl::RecursionMode recurse)
 {
-    SvnDiffJob* job = new SvnDiffJob(this);
+    auto* job = new SvnDiffJob(this);
     job->setSource(src);
     job->setDestination(dst);
     job->setSrcRevision(srcRevision);
@@ -246,7 +246,7 @@ KDevelop::VcsJob* KDevSvnPlugin::diff2(const KDevelop::VcsLocation& src,
 
 KDevelop::VcsJob* KDevSvnPlugin::log(const QUrl &localLocation, const KDevelop::VcsRevision& rev, unsigned long limit)
 {
-    SvnLogJob* job = new SvnLogJob(this);
+    auto* job = new SvnLogJob(this);
     job->setLocation(localLocation);
     job->setStartRevision(rev);
     job->setLimit(limit);
@@ -257,7 +257,7 @@ KDevelop::VcsJob* KDevSvnPlugin::log(const QUrl &localLocation,
                                      const KDevelop::VcsRevision& startRev,
                                      const KDevelop::VcsRevision& endRev)
 {
-    SvnLogJob* job = new SvnLogJob(this);
+    auto* job = new SvnLogJob(this);
     job->setLocation(localLocation);
     job->setStartRevision(startRev);
     job->setEndRevision(endRev);
@@ -267,7 +267,7 @@ KDevelop::VcsJob* KDevSvnPlugin::log(const QUrl &localLocation,
 KDevelop::VcsJob* KDevSvnPlugin::annotate(const QUrl &localLocation,
         const KDevelop::VcsRevision& rev)
 {
-    SvnBlameJob* job = new SvnBlameJob(this);
+    auto* job = new SvnBlameJob(this);
     job->setLocation(localLocation);
     job->setEndRevision(rev);
     return job;
@@ -296,7 +296,7 @@ KDevelop::VcsJob* KDevSvnPlugin::resolve(const QList<QUrl>& /*localLocations*/,
 
 KDevelop::VcsJob* KDevSvnPlugin::import(const QString & commitMessage, const QUrl &sourceDirectory, const KDevelop::VcsLocation & destinationRepository)
 {
-    SvnImportJob* job = new SvnImportJob(this);
+    auto* job = new SvnImportJob(this);
     job->setMapping(sourceDirectory, destinationRepository);
     job->setMessage(commitMessage);
     return job;
@@ -304,7 +304,7 @@ KDevelop::VcsJob* KDevSvnPlugin::import(const QString & commitMessage, const QUr
 
 KDevelop::VcsJob* KDevSvnPlugin::createWorkingCopy(const KDevelop::VcsLocation & sourceRepository, const QUrl &destinationDirectory, KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
-    SvnCheckoutJob* job = new SvnCheckoutJob(this);
+    auto* job = new SvnCheckoutJob(this);
     job->setMapping(sourceRepository, destinationDirectory, recursion);
     return job;
 }

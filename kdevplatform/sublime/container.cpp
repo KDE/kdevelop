@@ -79,7 +79,7 @@ public:
         {
             ev->accept();
 
-            QHelpEvent* helpEvent = static_cast<QHelpEvent*>(ev);
+            auto* helpEvent = static_cast<QHelpEvent*>(ev);
             int tab = tabAt(helpEvent->pos());
 
             if(tab != -1)
@@ -305,7 +305,7 @@ Container::Container(QWidget *parent)
 {
     KAcceleratorManager::setNoAccel(this);
 
-    QBoxLayout *l = new QBoxLayout(QBoxLayout::TopToBottom, this);
+    auto *l = new QBoxLayout(QBoxLayout::TopToBottom, this);
     l->setMargin(0);
     l->setSpacing(0);
 
@@ -738,7 +738,7 @@ void Container::doubleClickTriggered(int tab)
 
 void Container::documentListActionTriggered(QAction* action)
 {
-    Sublime::View* view = action->data().value< Sublime::View* >();
+    auto* view = action->data().value< Sublime::View* >();
     Q_ASSERT(view);
     QWidget* widget = d->viewForWidget.key(view);
     Q_ASSERT(widget);

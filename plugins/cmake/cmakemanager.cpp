@@ -174,7 +174,7 @@ private:
         server = nullptr;
 
         // parse the JSON file
-        CMakeImportJsonJob* job = new CMakeImportJsonJob(project, this);
+        auto* job = new CMakeImportJsonJob(project, this);
 
         // create the JSON file if it doesn't exist
         auto commandsFile = CMake::commandsFile(project);
@@ -215,7 +215,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
     };
 
     Q_ASSERT(!jobs.contains(nullptr));
-    ExecuteCompositeJob* composite = new ExecuteCompositeJob(this, jobs);
+    auto* composite = new ExecuteCompositeJob(this, jobs);
 //     even if the cmake call failed, we want to load the project so that the project can be worked on
     composite->setAbortOnError(false);
     return composite;
@@ -294,7 +294,7 @@ KDevelop::IProjectBuilder * CMakeManager::builder() const
 {
     IPlugin* i = core()->pluginController()->pluginForExtension( QStringLiteral("org.kdevelop.IProjectBuilder"), QStringLiteral("KDevCMakeBuilder"));
     Q_ASSERT(i);
-    KDevelop::IProjectBuilder* _builder = i->extension<KDevelop::IProjectBuilder>();
+    auto* _builder = i->extension<KDevelop::IProjectBuilder>();
     Q_ASSERT(_builder );
     return _builder ;
 }

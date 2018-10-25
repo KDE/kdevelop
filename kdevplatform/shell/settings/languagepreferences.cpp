@@ -51,7 +51,7 @@ LanguagePreferences::LanguagePreferences(QWidget* parent)
 
 void LanguagePreferences::notifySettingsChanged()
 {
-    CompletionSettings& settings(static_cast<CompletionSettings&>(*ICore::self()->languageController()->completionSettings()));
+    auto& settings(static_cast<CompletionSettings&>(*ICore::self()->languageController()->completionSettings()));
 
     settings.emitChanged();
 }
@@ -68,7 +68,7 @@ void LanguagePreferences::apply()
     foreach (KDevelop::IDocument* doc, Core::self()->documentController()->openDocuments()) {
         if (Document* textDoc = doc->textDocument()) {
             foreach (View* view, textDoc->views()) {
-                if (CodeCompletionInterface* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
+                if (auto* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
                     cc->setAutomaticInvocationEnabled(preferencesDialog->kcfg_automaticInvocation->isChecked());
                 }
             }

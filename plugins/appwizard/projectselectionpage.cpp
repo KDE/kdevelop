@@ -71,7 +71,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, &ProjectSelectionPage::moreTemplatesClicked);
     ui->listView->addWidget(0, getMoreButton);
 
-    QPushButton* loadButton = new QPushButton(ui->listView);
+    auto* loadButton = new QPushButton(ui->listView);
     loadButton->setText(i18n("Load Template From File"));
     loadButton->setIcon(QIcon::fromTheme(QStringLiteral("application-x-archive")));
     connect (loadButton, &QPushButton::clicked, this, &ProjectSelectionPage::loadFileClicked);

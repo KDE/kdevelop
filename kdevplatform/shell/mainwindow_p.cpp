@@ -105,7 +105,7 @@ void MainWindowPrivate::addPlugin( IPlugin *plugin )
 
 void MainWindowPrivate::pluginDestroyed(QObject* pluginObj)
 {
-    IPlugin* plugin = static_cast<IPlugin*>(pluginObj);
+    auto* plugin = static_cast<IPlugin*>(pluginObj);
     KXMLGUIClient* p = m_pluginCustomClients.take(plugin);
     m_mainWindow->guiFactory()->removeClient( p );
     delete p;
@@ -152,7 +152,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     if(!view)
         return;
 
-    IDocument *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
+    auto *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
     if (doc)
     {
         doc->activate(view, m_mainWindow);
@@ -195,7 +195,7 @@ void MainWindowPrivate::mergeView(Sublime::View* view)
     qCDebug(SHELL) << "changing active view to" << view << "doc" << view->document() << "mw" << m_mainWindow;
 
     // If the new view is KXMLGUIClient, add it.
-    if (KXMLGUIClient* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
+    if (auto* c = dynamic_cast<KXMLGUIClient*>(viewWidget))
     {
         qCDebug(SHELL) << "setting new XMLGUI client" << viewWidget;
         lastXMLGUIClientView = viewWidget;
@@ -336,7 +336,7 @@ void MainWindowPrivate::setupActions()
 void MainWindowPrivate::toggleArea(bool b)
 {
     if (!b) return;
-    QAction* action = qobject_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     if (!action) return;
     m_mainWindow->controller()->showArea(action->data().toString(), m_mainWindow);
 }
@@ -375,7 +375,7 @@ void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, QMenu* menu
     connect(action, &QAction::triggered, this, &MainWindowPrivate::contextMenuFileNew);
 
     if (view) {
-        if (TextDocument* doc = dynamic_cast<TextDocument*>(view->document())) {
+        if (auto* doc = dynamic_cast<TextDocument*>(view->document())) {
             action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Reload"));
             connect(action, &QAction::triggered, doc, &TextDocument::reload);
 
@@ -396,7 +396,7 @@ void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Contai
         }
     }
 
-    Sublime::UrlDocument* urlDoc = dynamic_cast<Sublime::UrlDocument*>(view->document());
+    auto* urlDoc = dynamic_cast<Sublime::UrlDocument*>(view->document());
 
     if (urlDoc) {
         DUChainReadLocker lock;
@@ -440,7 +440,7 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         menu.addActions(actionMap.values());
     }
 
-    QAction* lockAction = new QAction(this);
+    auto* lockAction = new QAction(this);
     lockAction->setCheckable(true);
     lockAction->setText(i18n("Lock the Panel from Hiding"));
 

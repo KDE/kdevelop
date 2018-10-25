@@ -85,10 +85,10 @@ QuickOpenWidget::QuickOpenWidget(const QString& title, QuickOpenModel* model, co
         const QStringList allTypes = m_model->allTypes();
         const QStringList allScopes = m_model->allScopes();
 
-        QMenu* itemsMenu = new QMenu(this);
+        auto* itemsMenu = new QMenu(this);
 
         for (const QString& type : allTypes) {
-            QAction* action = new QAction(type, itemsMenu);
+            auto* action = new QAction(type, itemsMenu);
             action->setCheckable(true);
             action->setChecked(initialItems.isEmpty() || initialItems.contains(type));
             connect(action, &QAction::toggled, this, &QuickOpenWidget::updateProviders, Qt::QueuedConnection);
@@ -97,10 +97,10 @@ QuickOpenWidget::QuickOpenWidget(const QString& title, QuickOpenModel* model, co
 
         ui.itemsButton->setMenu(itemsMenu);
 
-        QMenu* scopesMenu = new QMenu(this);
+        auto* scopesMenu = new QMenu(this);
 
         for (const QString& scope : allScopes) {
-            QAction* action = new QAction(scope, scopesMenu);
+            auto* action = new QAction(scope, scopesMenu);
             action->setCheckable(true);
             action->setChecked(initialScopes.isEmpty() || initialScopes.contains(scope));
 
@@ -267,7 +267,7 @@ QuickOpenWidgetDialog::QuickOpenWidgetDialog(const QString& title, QuickOpenMode
     m_dialog->resize(QSize(800, 400));
 
     m_dialog->setWindowTitle(title);
-    QVBoxLayout* layout = new QVBoxLayout(m_dialog);
+    auto* layout = new QVBoxLayout(m_dialog);
     layout->addWidget(m_widget);
     m_widget->showStandardButtons(true);
     connect(m_widget, &QuickOpenWidget::ready, m_dialog, &QDialog::close);
@@ -287,7 +287,7 @@ void QuickOpenWidget::setPreselectedText(const QString& text)
 void QuickOpenWidget::updateProviders()
 {
     if (QAction* action = (sender() ? qobject_cast<QAction*>(sender()) : nullptr)) {
-        QMenu* menu = qobject_cast<QMenu*>(action->parentWidget());
+        auto* menu = qobject_cast<QMenu*>(action->parentWidget());
         if (menu) {
             menu->show();
             menu->setActiveAction(action);
@@ -298,7 +298,7 @@ void QuickOpenWidget::updateProviders()
 
     if (ui.itemsButton->menu()) {
         foreach (QObject* obj, ui.itemsButton->menu()->children()) {
-            QAction* box = qobject_cast<QAction*>(obj);
+            auto* box = qobject_cast<QAction*>(obj);
             if (box) {
                 if (box->isChecked()) {
                     checkedItems << box->text().remove(QLatin1Char('&'));
@@ -313,7 +313,7 @@ void QuickOpenWidget::updateProviders()
 
     if (ui.scopesButton->menu()) {
         foreach (QObject* obj, ui.scopesButton->menu()->children()) {
-            QAction* box = qobject_cast<QAction*>(obj);
+            auto* box = qobject_cast<QAction*>(obj);
             if (box) {
                 if (box->isChecked()) {
                     checkedScopes << box->text().remove(QLatin1Char('&'));
@@ -391,7 +391,7 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
         return dynamic_cast<KDevelop::QuickOpenEmbeddedWidgetInterface*>(widget);
     };
 
-    QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+    auto* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     if (event->type() == QEvent::KeyRelease) {
         if (keyEvent->key() == Qt::Key_Alt) {

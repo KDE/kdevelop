@@ -98,7 +98,7 @@ void TestCTestFindSuites::testCTestSuite()
     for (auto suite : suites) {
         QCOMPARE(suite->cases(), QStringList());
         QVERIFY(!suite->declaration().isValid());
-        CTestSuite* ctestSuite = static_cast<CTestSuite*>(suite);
+        auto* ctestSuite = static_cast<CTestSuite*>(suite);
         const auto buildDir = Path(CMake::allBuildDirs(project).at(0));
         QString exeSubdir = buildDir.relativePath(ctestSuite->executable().parent());
         QCOMPARE(exeSubdir, ctestSuite->name() == "fail" ? QStringLiteral("bin") : QString() );

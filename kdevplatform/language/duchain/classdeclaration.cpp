@@ -119,7 +119,7 @@ bool isPublicBaseClassInternal(const ClassDeclaration* self, ClassDeclaration* b
         if (b.access != KDevelop::Declaration::Private) {
             int nextBaseConversion = 0;
             if (StructureType::Ptr c = b.baseClass.type<StructureType>()) {
-                ClassDeclaration* decl = dynamic_cast<ClassDeclaration*>(c->declaration(topContext));
+                auto* decl = dynamic_cast<ClassDeclaration*>(c->declaration(topContext));
                 if (decl &&
                     isPublicBaseClassInternal(decl, base, topContext, &nextBaseConversion, depth + 1, checked)) {
                     if (baseConversionLevels)

@@ -314,7 +314,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsFromImports(C
             continue;
         }
 
-        NamespaceAliasDeclaration* decl = static_cast<NamespaceAliasDeclaration *>(import);
+        auto* decl = static_cast<NamespaceAliasDeclaration *>(import);
         realImports << m_duContext->findDeclarations(decl->importIdentifier());
     }
 
@@ -380,7 +380,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
                 // Decorate function calls with brackets
                 decorationOfThisItem = CompletionItem::Brackets;
             } else if (flags.testFlag(CompletionHideWrappers)) {
-                ClassDeclaration* classDecl = dynamic_cast<ClassDeclaration*>(declaration.data());
+                auto* classDecl = dynamic_cast<ClassDeclaration*>(declaration.data());
 
                 if (classDecl && classDecl->classType() == ClassDeclarationData::Interface) {
                     continue;

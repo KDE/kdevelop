@@ -152,7 +152,7 @@ void MultiLevelListViewPrivate::viewSelectionChanged(const QModelIndex& current,
     }
 
     // figure out which proxy this signal belongs to
-    QAbstractProxyModel* proxy = qobject_cast<QAbstractProxyModel*>(
+    auto* proxy = qobject_cast<QAbstractProxyModel*>(
         const_cast<QAbstractItemModel*>(current.model()));
     Q_ASSERT(proxy);
 
@@ -216,7 +216,7 @@ QModelIndex MultiLevelListViewPrivate::mapToSource(QModelIndex index)
     }
 
     while(index.model() != model) {
-        QAbstractProxyModel* proxy = qobject_cast<QAbstractProxyModel*>(
+        auto* proxy = qobject_cast<QAbstractProxyModel*>(
             const_cast<QAbstractItemModel*>(index.model()));
         Q_ASSERT(proxy);
         index = proxy->mapToSource(index);
@@ -233,14 +233,14 @@ QModelIndex MultiLevelListViewPrivate::mapFromSource(QModelIndex index, int leve
 
     Q_ASSERT(index.model() == model);
 
-    QAbstractProxyModel* proxy = qobject_cast<QAbstractProxyModel*>(views.at(level)->model());
+    auto* proxy = qobject_cast<QAbstractProxyModel*>(views.at(level)->model());
     Q_ASSERT(proxy);
 
     // find all proxies between the source and our view
     QVector<QAbstractProxyModel*> proxies;
     proxies << proxy;
     forever {
-        QAbstractProxyModel* child = qobject_cast<QAbstractProxyModel*>(proxy->sourceModel());
+        auto* child = qobject_cast<QAbstractProxyModel*>(proxy->sourceModel());
         if (child) {
             proxy = child;
             proxies << proxy;
@@ -292,9 +292,9 @@ void MultiLevelListView::setLevels(int levels)
     QTreeView* previousView = nullptr;
     for (int i = 0; i < d->levels; ++i)
     {
-        QVBoxLayout* levelLayout = new QVBoxLayout();
+        auto* levelLayout = new QVBoxLayout();
 
-        QTreeView* view = new QTreeView(this);
+        auto* view = new QTreeView(this);
         view->setContentsMargins(0, 0, 0, 0);
         // only the right-most view is decorated
         view->setRootIsDecorated(i + 1 == d->levels);
@@ -303,13 +303,13 @@ void MultiLevelListView::setLevels(int levels)
 
         if (!previousView) {
             // the root, i.e. left-most view
-            RootProxyModel* root = new RootProxyModel(this);
+            auto* root = new RootProxyModel(this);
             root->setDynamicSortFilter(true);
             d->proxies << root;
             root->setSourceModel(d->model);
             view->setModel(root);
         } else {
-            SubTreeProxyModel* subTreeProxy = new SubTreeProxyModel(previousView->selectionModel(), this);
+            auto* subTreeProxy = new SubTreeProxyModel(previousView->selectionModel(), this);
             if (i + 1 < d->levels) {
                 // middel views only shows children of selection
                 subTreeProxy->setFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
@@ -320,7 +320,7 @@ void MultiLevelListView::setLevels(int levels)
             d->proxies << subTreeProxy;
             subTreeProxy->setSourceModel(d->model);
             // sorting requires another proxy in-between
-            QSortFilterProxyModel* sortProxy = new QSortFilterProxyModel(subTreeProxy);
+            auto* sortProxy = new QSortFilterProxyModel(subTreeProxy);
             sortProxy->setSourceModel(subTreeProxy);
             sortProxy->setDynamicSortFilter(true);
             view->setModel(sortProxy);

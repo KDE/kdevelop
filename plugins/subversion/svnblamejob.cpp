@@ -76,7 +76,7 @@ void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::T
     try
     {
         const svn::LogEntries* entries = cli.log( ba.data(), svn::Revision(minrev), svn::Revision(maxrev), false, false );
-        for( svn::LogEntries::const_iterator it = entries->begin(); it != entries->end(); ++it )
+        for( auto it = entries->begin(); it != entries->end(); ++it )
         {
             commitMessages[(*it).revision] = QString::fromUtf8( (*it).message.c_str() );
         }

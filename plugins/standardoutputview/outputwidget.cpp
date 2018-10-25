@@ -68,7 +68,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 {
     setWindowTitle(i18n("Output View"));
     setWindowIcon(tvdata->icon);
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
     layout->setMargin(0);
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
@@ -112,7 +112,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         addAction(m_focusOnSelect);
     }
 
-    QAction *separator = new QAction(this);
+    auto *separator = new QAction(this);
     separator->setSeparator(true);
     addAction(separator);
 
@@ -149,7 +149,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 
     if( data->option & KDevelop::IOutputView::AddFilterAction )
     {
-        QAction *separator = new QAction(this);
+        auto *separator = new QAction(this);
         separator->setSeparator(true);
         addAction(separator);
 
@@ -359,11 +359,11 @@ KDevelop::IOutputViewModel *OutputWidget::outputViewModel() const
         return nullptr;
 
     QAbstractItemModel *absmodel = view->model();
-    KDevelop::IOutputViewModel *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
+    auto *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
     if ( ! iface )
     {
         // try if it's a proxy model?
-        if ( QAbstractProxyModel* proxy = qobject_cast<QAbstractProxyModel*>(absmodel) )
+        if ( auto* proxy = qobject_cast<QAbstractProxyModel*>(absmodel) )
         {
             iface = dynamic_cast<KDevelop::IOutputViewModel*>(proxy->sourceModel());
         }
@@ -480,7 +480,7 @@ void OutputWidget::activate(const QModelIndex& index)
 QTreeView* OutputWidget::createListView(int id)
 {
     auto createHelper = [&]() -> QTreeView* {
-        KDevelop::FocusedTreeView* listview = new KDevelop::FocusedTreeView(this);
+        auto* listview = new KDevelop::FocusedTreeView(this);
         listview->setEditTriggers( QAbstractItemView::NoEditTriggers );
         listview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn); //Always enable the scrollbar, so it doesn't flash around
         listview->setHeaderHidden(true);
@@ -602,7 +602,7 @@ void OutputWidget::scrollToIndex( const QModelIndex& idx )
     QWidget* w = currentWidget();
     if( !w )
         return;
-    QAbstractItemView *view = static_cast<QAbstractItemView*>(w);
+    auto *view = static_cast<QAbstractItemView*>(w);
     view->scrollTo( idx );
 }
 
@@ -611,7 +611,7 @@ void OutputWidget::copySelection()
     QWidget* widget = currentWidget();
     if( !widget )
         return;
-    QAbstractItemView *view = dynamic_cast<QAbstractItemView*>(widget);
+    auto *view = dynamic_cast<QAbstractItemView*>(widget);
     if( !view )
         return;
 
@@ -627,7 +627,7 @@ void OutputWidget::copySelection()
 
 void OutputWidget::selectAll()
 {
-    if (QAbstractItemView *view = qobject_cast<QAbstractItemView*>(currentWidget()))
+    if (auto *view = qobject_cast<QAbstractItemView*>(currentWidget()))
         view->selectAll();
 }
 
@@ -646,7 +646,7 @@ int OutputWidget::currentOutputIndex()
 
 void OutputWidget::outputFilter(const QString& filter)
 {
-    QAbstractItemView *view = qobject_cast<QAbstractItemView*>(currentWidget());
+    auto *view = qobject_cast<QAbstractItemView*>(currentWidget());
     if( !view )
         return;
 

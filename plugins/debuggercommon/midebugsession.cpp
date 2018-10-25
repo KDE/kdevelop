@@ -860,7 +860,7 @@ void MIDebugSession::executeCmd()
     if (length == 0) {
         // The command might decide it's no longer necessary to send
         // it.
-        if (SentinelCommand* sc = dynamic_cast<SentinelCommand*>(currentCmd))
+        if (auto* sc = dynamic_cast<SentinelCommand*>(currentCmd))
         {
             qCDebug(DEBUGGERCOMMON) << "SEND: sentinel command, not sending";
             sc->invokeHandler();

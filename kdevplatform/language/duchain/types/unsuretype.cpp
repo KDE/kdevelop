@@ -63,7 +63,7 @@ QString UnsureType::toString() const
 
 bool UnsureType::equals(const KDevelop::AbstractType* rhs) const
 {
-    const UnsureType* rhsU = dynamic_cast<const UnsureType*>(rhs);
+    const auto* rhsU = dynamic_cast<const UnsureType*>(rhs);
     if (!rhsU)
         return false;
     if (d_func()->typeClassId != rhsU->d_func()->typeClassId)

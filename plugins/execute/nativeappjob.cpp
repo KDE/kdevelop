@@ -55,7 +55,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
     }
     setCapabilities(Killable);
 
-    IExecutePlugin* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
+    auto* iface = KDevelop::ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))->extension<IExecutePlugin>();
     Q_ASSERT(iface);
 
     const KDevelop::EnvironmentProfileList environmentProfiles(KSharedConfig::openConfig());
@@ -124,7 +124,7 @@ NativeAppJob::NativeAppJob(QObject* parent, KDevelop::ILaunchConfiguration* cfg)
 
 NativeAppJob* findNativeJob(KJob* j)
 {
-    NativeAppJob* job = qobject_cast<NativeAppJob*>(j);
+    auto* job = qobject_cast<NativeAppJob*>(j);
     if (!job) {
         const QList<NativeAppJob*> jobs = j->findChildren<NativeAppJob*>();
         if (!jobs.isEmpty())

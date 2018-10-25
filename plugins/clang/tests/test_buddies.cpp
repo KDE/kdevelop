@@ -61,7 +61,7 @@ using namespace KDevelop;
 
 Sublime::MainWindow* toSublimeWindow(KParts::MainWindow* window)
 {
-    Sublime::MainWindow* ret = dynamic_cast<Sublime::MainWindow*>(window);
+    auto* ret = dynamic_cast<Sublime::MainWindow*>(window);
     Q_ASSERT(ret);
     return ret;
 }
@@ -96,7 +96,7 @@ void TestBuddies::verifyFilename(Sublime::View *view, const QString& endOfFilena
 {
     QVERIFY(view);
     if (view) {
-        Sublime::UrlDocument *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document());
+        auto *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document());
         QVERIFY(urlDoc);
         if (urlDoc) {
             qDebug() << urlDoc->url().toLocalFile() << endOfFilename;
@@ -399,7 +399,7 @@ void TestBuddies::testSplitViewBuddies()
     QVERIFY(pSplitter);
     QVERIFY(pSplitter->inherits("QSplitter"));
 
-    Sublime::Container *pContainer = pSplitter->findChild<Sublime::Container*>();
+    auto *pContainer = pSplitter->findChild<Sublime::Container*>();
     QVERIFY(pContainer);
 
     // check that it only contains pNewView

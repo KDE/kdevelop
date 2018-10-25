@@ -50,7 +50,7 @@ static T kTransform(const Q& list, W func)
 
 static KJob* createExecuteJob(const QStringList &program, const QString &title, const QUrl &wd = {})
 {
-    OutputExecuteJob* process = new OutputExecuteJob;
+    auto* process = new OutputExecuteJob;
     process->setProperties(OutputExecuteJob::DisplayStdout | OutputExecuteJob::DisplayStderr);
     process->setExecuteOnHost(true);
     process->setJobName(title);

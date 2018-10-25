@@ -299,7 +299,7 @@ void CodeCompletionModel::executeCompletionItem(View* view, const KTextEditor::R
                                                 const QModelIndex& index) const
 {
     //We must not lock the duchain at this place, because the items might rely on that
-    CompletionTreeElement* element = static_cast<CompletionTreeElement*>(index.internalPointer());
+    auto* element = static_cast<CompletionTreeElement*>(index.internalPointer());
     if (!element || !element->asItem())
         return;
 
@@ -309,7 +309,7 @@ void CodeCompletionModel::executeCompletionItem(View* view, const KTextEditor::R
 QExplicitlySharedDataPointer<KDevelop::CompletionTreeElement> CodeCompletionModel::itemForIndex(const QModelIndex& index)
 const
 {
-    CompletionTreeElement* element = static_cast<CompletionTreeElement*>(index.internalPointer());
+    auto* element = static_cast<CompletionTreeElement*>(index.internalPointer());
     return QExplicitlySharedDataPointer<KDevelop::CompletionTreeElement>(element);
 }
 
@@ -392,7 +392,7 @@ void CodeCompletionModel::setCurrentTopContext(const KDevelop::TopDUContextPoint
 QModelIndex CodeCompletionModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (parent.isValid()) {
-        CompletionTreeElement* element = static_cast<CompletionTreeElement*>(parent.internalPointer());
+        auto* element = static_cast<CompletionTreeElement*>(parent.internalPointer());
 
         CompletionTreeNode* node = element->asNode();
 
@@ -419,7 +419,7 @@ QModelIndex CodeCompletionModel::parent(const QModelIndex& index) const
         return QModelIndex();
 
     if (index.isValid()) {
-        CompletionTreeElement* element = static_cast<CompletionTreeElement*>(index.internalPointer());
+        auto* element = static_cast<CompletionTreeElement*>(index.internalPointer());
 
         if (element->parent())
             return createIndex(element->rowInParent(), element->columnInParent(), element->parent());
@@ -431,7 +431,7 @@ QModelIndex CodeCompletionModel::parent(const QModelIndex& index) const
 int CodeCompletionModel::rowCount(const QModelIndex& parent) const
 {
     if (parent.isValid()) {
-        CompletionTreeElement* element = static_cast<CompletionTreeElement*>(parent.internalPointer());
+        auto* element = static_cast<CompletionTreeElement*>(parent.internalPointer());
 
         CompletionTreeNode* node = element->asNode();
 

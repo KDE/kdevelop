@@ -189,7 +189,7 @@ WatchedDocumentSet* ProblemStore::documents() const
 
 void ProblemStore::setScope(int scope)
 {
-    ProblemScope cast_scope = static_cast<ProblemScope>(scope);
+    auto cast_scope = static_cast<ProblemScope>(scope);
     bool showImports = false;
 
     if (d->m_documents) {

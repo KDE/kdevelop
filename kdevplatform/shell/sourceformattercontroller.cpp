@@ -190,7 +190,7 @@ void SourceFormatterController::documentLoaded(const QPointer<TextDocument>& doc
 
 void SourceFormatterController::pluginLoaded(IPlugin* plugin)
 {
-    ISourceFormatter* sourceFormatter = plugin->extension<ISourceFormatter>();
+    auto* sourceFormatter = plugin->extension<ISourceFormatter>();
 
     if (!sourceFormatter) {
         return;
@@ -209,7 +209,7 @@ void SourceFormatterController::pluginLoaded(IPlugin* plugin)
 
 void SourceFormatterController::unloadingPlugin(IPlugin* plugin)
 {
-    ISourceFormatter* sourceFormatter = plugin->extension<ISourceFormatter>();
+    auto* sourceFormatter = plugin->extension<ISourceFormatter>();
 
     if (!sourceFormatter) {
         return;
@@ -293,7 +293,7 @@ static void populateStyleFromConfigGroup(SourceFormatterStyle* s, const KConfigG
 
 SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceFormatter *ifmt) const
 {
-    SourceFormatter* formatter = new SourceFormatter();
+    auto* formatter = new SourceFormatter();
     formatter->formatter = ifmt;
 
     // Inserted a new formatter. Now fill it with styles
@@ -304,7 +304,7 @@ SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceForm
     if( grp.hasGroup( ifmt->name() ) ) {
         KConfigGroup fmtgrp = grp.group( ifmt->name() );
         foreach( const QString& subgroup, fmtgrp.groupList() ) {
-            SourceFormatterStyle* s = new SourceFormatterStyle( subgroup );
+            auto* s = new SourceFormatterStyle( subgroup );
             KConfigGroup stylegrp = fmtgrp.group( subgroup );
             populateStyleFromConfigGroup(s, stylegrp);
             formatter->styles[ s->name() ] = s;
@@ -691,12 +691,12 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
         if (d->formatTextAction->isEnabled())
             ext.addAction(KDevelop::ContextMenuExtension::EditGroup, d->formatTextAction);
     } else if (context->hasType(KDevelop::Context::FileContext)) {
-        KDevelop::FileContext* filectx = static_cast<KDevelop::FileContext*>(context);
+        auto* filectx = static_cast<KDevelop::FileContext*>(context);
         d->urls = filectx->urls();
         ext.addAction(KDevelop::ContextMenuExtension::EditGroup, d->formatFilesAction);
     } else if (context->hasType(KDevelop::Context::CodeContext)) {
     } else if (context->hasType(KDevelop::Context::ProjectItemContext)) {
-        KDevelop::ProjectItemContext* prjctx = static_cast<KDevelop::ProjectItemContext*>(context);
+        auto* prjctx = static_cast<KDevelop::ProjectItemContext*>(context);
         d->prjItems = prjctx->items();
         if (!d->prjItems.isEmpty()) {
             ext.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, d->formatFilesAction);

@@ -64,7 +64,7 @@ class MemoryRangeSelector : public QWidget
     explicit MemoryRangeSelector(QWidget* parent)
     : QWidget(parent)
     {
-        QVBoxLayout* l = new QVBoxLayout(this);
+        auto* l = new QVBoxLayout(this);
 
         // Form layout: labels + address field
         auto formLayout = new QFormLayout();
@@ -117,7 +117,7 @@ MemoryView::MemoryView(QWidget* parent)
 
 void MemoryView::currentSessionChanged(KDevelop::IDebugSession* s)
 {
-    DebugSession *session = qobject_cast<DebugSession*>(s);
+    auto *session = qobject_cast<DebugSession*>(s);
     if (!session) return;
 
     connect(session, &DebugSession::debuggerStateChanged,
@@ -132,7 +132,7 @@ void MemoryView::slotStateChanged(DBGStateFlags oldState, DBGStateFlags newState
 
 void MemoryView::initWidget()
 {
-    QVBoxLayout *l = new QVBoxLayout(this);
+    auto *l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
 
     m_memViewModel = new Okteta::ByteArrayModel(0, -1, this);
@@ -194,7 +194,7 @@ void MemoryView::slotHideRangeDialog()
 
 void MemoryView::slotChangeMemoryRange()
 {
-    DebugSession *session = qobject_cast<DebugSession*>(
+    auto *session = qobject_cast<DebugSession*>(
         KDevelop::ICore::self()->debugController()->currentSession());
     if (!session) return;
 
@@ -207,7 +207,7 @@ void MemoryView::slotChangeMemoryRange()
 
 void MemoryView::sizeComputed(const QString& size)
 {
-    DebugSession *session = qobject_cast<DebugSession*>(
+    auto *session = qobject_cast<DebugSession*>(
         KDevelop::ICore::self()->debugController()->currentSession());
     if (!session) return;
 
@@ -244,7 +244,7 @@ void MemoryView::memoryRead(const MI::ResultRecord& r)
 
 void MemoryView::memoryEdited(int start, int end)
 {
-    DebugSession *session = qobject_cast<DebugSession*>(
+    auto *session = qobject_cast<DebugSession*>(
         KDevelop::ICore::self()->debugController()->currentSession());
     if (!session) return;
 
@@ -370,7 +370,7 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
         // not textual m_memStartStr and m_memAmountStr,
         // because program position might have changes and expressions
         // are no longer valid.
-        DebugSession *session = qobject_cast<DebugSession*>(
+        auto *session = qobject_cast<DebugSession*>(
             KDevelop::ICore::self()->debugController()->currentSession());
         if (session) {
             session->addCommand(MI::DataReadMemory,
@@ -426,7 +426,7 @@ MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* p
     setWindowIcon(QIcon::fromTheme(QStringLiteral("server-database"), windowIcon()));
     setWindowTitle(i18n("Memory viewer"));
 
-    QAction * newMemoryViewerAction = new QAction(this);
+    auto * newMemoryViewerAction = new QAction(this);
     newMemoryViewerAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     newMemoryViewerAction->setText(i18n("New memory viewer"));
     newMemoryViewerAction->setToolTip(i18nc("@info:tooltip", "Open a new memory viewer."));
@@ -434,7 +434,7 @@ MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* p
     connect(newMemoryViewerAction, &QAction::triggered, this , &MemoryViewerWidget::slotAddMemoryView);
     addAction(newMemoryViewerAction);
 
-    QVBoxLayout *l = new QVBoxLayout(this);
+    auto *l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
 
     m_toolBox = new QToolBox(this);
@@ -449,7 +449,7 @@ MemoryViewerWidget::MemoryViewerWidget(CppDebuggerPlugin* /*plugin*/, QWidget* p
 
 void MemoryViewerWidget::slotAddMemoryView()
 {
-    MemoryView* widget = new MemoryView(this);
+    auto* widget = new MemoryView(this);
     m_toolBox->addItem(widget, widget->windowTitle());
     m_toolBox->setCurrentIndex(m_toolBox->indexOf(widget));
 
@@ -459,8 +459,8 @@ void MemoryViewerWidget::slotAddMemoryView()
 
 void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
 {
-    const QWidget* s = static_cast<const QWidget*>(sender());
-    QWidget* ncs = const_cast<QWidget*>(s);
+    const auto* s = static_cast<const QWidget*>(sender());
+    auto* ncs = const_cast<QWidget*>(s);
     QString cap = caption;
     // Prevent intepreting '&' as accelerator specifier.
     cap.replace(QLatin1Char('&'), QLatin1String("&&"));

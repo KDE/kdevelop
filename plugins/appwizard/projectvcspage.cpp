@@ -46,7 +46,7 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
     m_ui->vcsImportOptions->insertWidget( 0, new QWidget(this) );
     m_ui->vcsTypes->insertItem( 0, i18nc("No Version Control Support chosen", "None") );
     for (KDevelop::IPlugin* plugin : vcsplugins) {
-        KDevelop::IBasicVersionControl* iface = plugin->extension<KDevelop::IBasicVersionControl>();
+        auto* iface = plugin->extension<KDevelop::IBasicVersionControl>();
         if( iface  )
         {
             KDevelop::VcsImportMetadataWidget* widget = iface->createImportMetadataWidget(

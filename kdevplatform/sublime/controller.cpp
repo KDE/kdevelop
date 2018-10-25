@@ -258,7 +258,7 @@ void Controller::addDocument(Document *document)
 
 void Controller::areaReleased()
 {
-    MainWindow *w = reinterpret_cast<Sublime::MainWindow*>(sender());
+    auto *w = reinterpret_cast<Sublime::MainWindow*>(sender());
     qCDebug(SUBLIME) << "marking areas as mainwindow-free" << w << d->controlledWindows.contains(w) << d->shownAreas.keys(w);
     foreach (Area *area, d->shownAreas.keys(w))
     {
@@ -319,7 +319,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
         return false;
 
     //is dialog or popup? - return
-    QWidget *w = static_cast<QWidget*>(obj);
+    auto *w = static_cast<QWidget*>(obj);
     if (((w->windowFlags().testFlag(Qt::Dialog)) && w->isModal()) ||
             (w->windowFlags().testFlag(Qt::Popup)) || (w->windowFlags().testFlag(Qt::Tool)))
         return false;
@@ -327,7 +327,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
     //not a mouse button that should activate the widget? - return
     if (ev->type() == QEvent::MouseButtonPress || ev->type() == QEvent::MouseButtonDblClick)
     {
-        QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
+        auto* mev = static_cast<QMouseEvent*>(ev);
         int activationButtonMask = Qt::LeftButton | Qt::MidButton | Qt::RightButton;
         if ((mev->button() & activationButtonMask) == 0)
             return false;
@@ -336,7 +336,7 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
     while (w)
     {
         //not inside sublime mainwindow
-        MainWindow *mw = qobject_cast<Sublime::MainWindow*>(w->topLevelWidget());
+        auto *mw = qobject_cast<Sublime::MainWindow*>(w->topLevelWidget());
         if (!mw || !d->controlledWindows.contains(mw))
             return false;
 

@@ -53,7 +53,7 @@ bool FunctionType::equals(const AbstractType* _rhs) const
 
     Q_ASSERT(fastCast<const FunctionType*>(_rhs));
 
-    const FunctionType* rhs = static_cast<const FunctionType*>(_rhs);
+    const auto* rhs = static_cast<const FunctionType*>(_rhs);
 
     TYPE_D(FunctionType);
     if (d->m_argumentsSize() != rhs->d_func()->m_argumentsSize())

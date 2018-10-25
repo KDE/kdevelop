@@ -33,7 +33,7 @@ public:
 
 ArchiveTemplateLoader* ArchiveTemplateLoader::self()
 {
-    static ArchiveTemplateLoader* loader = new ArchiveTemplateLoader;
+    static auto* loader = new ArchiveTemplateLoader;
     return loader;
 }
 
@@ -100,7 +100,7 @@ bool ArchiveTemplateLocation::hasTemplate(const QString& name) const
 
 QString ArchiveTemplateLocation::templateContents(const QString& name) const
 {
-    const KArchiveFile* file = dynamic_cast<const KArchiveFile*>(m_directory->entry(name));
+    const auto* file = dynamic_cast<const KArchiveFile*>(m_directory->entry(name));
     Q_ASSERT(file);
     return QString::fromUtf8(file->data());
 }

@@ -73,7 +73,7 @@ void AreaDisplay::newArea(Sublime::Area* area)
     m_button->setText(currentArea->title());
     m_button->setIcon(QIcon::fromTheme(currentArea->iconName()));
 
-    QMenu* m = new QMenu(m_button);
+    auto* m = new QMenu(m_button);
     m->addActions(area->actions());
     if(currentArea->objectName() != QStringLiteral("code")) {
         if(!m->actions().isEmpty())
@@ -83,7 +83,7 @@ void AreaDisplay::newArea(Sublime::Area* area)
     m_button->setMenu(m);
 
     //remove the additional widgets we might have added for the last area
-    QBoxLayout* l = qobject_cast<QBoxLayout*>(layout());
+    auto* l = qobject_cast<QBoxLayout*>(layout());
     if(l->count()>=4) {
         QLayoutItem* item = l->takeAt(0);
         delete item->widget();

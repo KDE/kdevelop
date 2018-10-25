@@ -50,7 +50,7 @@ QString DUChainItemData::text() const
         return i18n("Not available any more: %1", m_item.m_text);
     }
 
-    if (FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl)) {
+    if (auto* def = dynamic_cast<FunctionDefinition*>(decl)) {
         if (def->declaration()) {
             decl = def->declaration();
         }
@@ -79,7 +79,7 @@ QList<QVariant> DUChainItemData::highlighting() const
         return QList<QVariant>();
     }
 
-    if (FunctionDefinition* def = dynamic_cast<FunctionDefinition*>(decl)) {
+    if (auto* def = dynamic_cast<FunctionDefinition*>(decl)) {
         if (def->declaration()) {
             decl = def->declaration();
         }
@@ -190,7 +190,7 @@ QWidget* DUChainItemData::expandingWidget() const
 {
     DUChainReadLocker lock;
 
-    Declaration* decl = dynamic_cast<KDevelop::Declaration*>(m_item.m_item.data());
+    auto* decl = dynamic_cast<KDevelop::Declaration*>(m_item.m_item.data());
     if (!decl || !decl->context()) {
         return nullptr;
     }

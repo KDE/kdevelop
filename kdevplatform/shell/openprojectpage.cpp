@@ -29,7 +29,7 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, const QStringList& filte
     QWidget* parent )
         : QWidget( parent )
 {
-    QHBoxLayout* layout = new QHBoxLayout( this );
+    auto* layout = new QHBoxLayout( this );
 
     fileWidget = new KFileWidget( startUrl, this);
 

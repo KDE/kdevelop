@@ -133,7 +133,7 @@ void Resource::retrieveRepos(const QByteArray &data)
                 res.kind = Private;
             else
                 res.kind = Public;
-            ProviderItem *item = new ProviderItem(res);
+            auto *item = new ProviderItem(res);
             m_model->appendRow(item);
         }
     }

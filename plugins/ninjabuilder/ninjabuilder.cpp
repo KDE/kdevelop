@@ -134,7 +134,7 @@ NinjaJob* NinjaBuilder::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::Comm
     }
     jobArguments << args;
 
-    NinjaJob* job = new NinjaJob(item, commandType, jobArguments, signal, this);
+    auto* job = new NinjaJob(item, commandType, jobArguments, signal, this);
     m_activeNinjaJobs.append(job);
     return job;
 }
@@ -158,7 +158,7 @@ KJob* NinjaBuilder::install(KDevelop::ProjectBaseItem* item)
     KConfigGroup builderGroup(configPtr, "NinjaBuilder");
     bool installAsRoot = builderGroup.readEntry("Install As Root", false);
     if (installAsRoot) {
-        KDevelop::BuilderJob* job = new KDevelop::BuilderJob;
+        auto* job = new KDevelop::BuilderJob;
         job->addCustomJob(KDevelop::BuilderJob::Build, build(item), item);
         job->addCustomJob(KDevelop::BuilderJob::Install, installJob, item);
         job->updateJobName();

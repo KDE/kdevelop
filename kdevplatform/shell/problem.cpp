@@ -174,7 +174,7 @@ void DetectedProblem::setDiagnostics(const QVector<Ptr> &diagnostics)
 
 void DetectedProblem::addDiagnostic(const Ptr &diagnostic)
 {
-    DetectedProblem *dp = dynamic_cast<DetectedProblem*>(diagnostic.data());
+    auto *dp = dynamic_cast<DetectedProblem*>(diagnostic.data());
 
     Q_ASSERT(dp);
 

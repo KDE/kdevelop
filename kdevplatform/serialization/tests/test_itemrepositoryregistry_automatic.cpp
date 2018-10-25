@@ -13,7 +13,7 @@ class TestItemRepositoryRegistryAutomaticDeletion
     Q_OBJECT
     void initCore(const QString& sessionName = QString())
     {
-        TestCore* core = new TestCore();
+        auto* core = new TestCore();
         core->initialize(Core::NoUi, sessionName);
     }
 

@@ -83,7 +83,7 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     connect(d->m_documentTabs, &QTabWidget::currentChanged,
             this, &ApplyChangesWidget::indexChanged);
 
-    QVBoxLayout* l = new QVBoxLayout(w);
+    auto* l = new QVBoxLayout(w);
     l->addWidget(d->m_info);
     l->addWidget(d->m_documentTabs);
 
@@ -148,8 +148,8 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString& file)
     QWidget* widget = m_documentTabs->currentWidget();
     Q_ASSERT(widget);
 
-    QVBoxLayout* m = new QVBoxLayout(widget);
-    QSplitter* v = new QSplitter(widget);
+    auto* m = new QVBoxLayout(widget);
+    auto* v = new QSplitter(widget);
     m->addWidget(v);
 
     QUrl url = file.toUrl();
@@ -158,7 +158,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString& file)
 
     KParts::ReadWritePart* part = KMimeTypeTrader::self()->createPartInstanceFromQuery<KParts::ReadWritePart>(
         mimetype.name(), widget, widget);
-    KTextEditor::Document* document = qobject_cast<KTextEditor::Document*>(part);
+    auto* document = qobject_cast<KTextEditor::Document*>(part);
     Q_ASSERT(document);
 
     Q_ASSERT(document->action("file_save"));
@@ -171,7 +171,7 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString& file)
     if (!repr->fileExists()) {
         const QString templateName = QDir::tempPath() + QLatin1Char('/') +
                                      url.fileName().split(QLatin1Char('.')).last();
-        QTemporaryFile* temp(new QTemporaryFile(templateName));
+        auto* temp(new QTemporaryFile(templateName));
         temp->open();
         temp->write(repr->text().toUtf8());
         temp->close();

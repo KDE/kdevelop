@@ -77,7 +77,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
     m_Interrupt->setIcon ( QIcon::fromTheme( QStringLiteral("media-playback-pause") ) );
     m_Interrupt->setToolTip( i18n ( "Pause execution of the app to enter gdb commands" ) );
 
-    QVBoxLayout *topLayout = new QVBoxLayout(this);
+    auto *topLayout = new QVBoxLayout(this);
     topLayout->addWidget(m_gdbView);
     topLayout->setStretchFactor(m_gdbView, 1);
     topLayout->setMargin(0);
@@ -129,7 +129,7 @@ void GDBOutputWidget::currentSessionChanged(KDevelop::IDebugSession* s)
     if (!s)
         return;
 
-    DebugSession *session = qobject_cast<DebugSession*>(s);
+    auto *session = qobject_cast<DebugSession*>(s);
     if (!session)
         return;
 

@@ -193,8 +193,8 @@ bool ProjectItemLineEdit::selectItemDialog()
 
     auto mainLayout = new QVBoxLayout(&dialog);
 
-    QTreeView* view = new QTreeView(&dialog);
-    ProjectProxyModel* proxymodel = new ProjectProxyModel(view);
+    auto* view = new QTreeView(&dialog);
+    auto* proxymodel = new ProjectProxyModel(view);
     proxymodel->setSourceModel(model);
     view->header()->hide();
     view->setModel(proxymodel);

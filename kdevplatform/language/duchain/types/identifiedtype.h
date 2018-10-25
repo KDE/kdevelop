@@ -167,7 +167,7 @@ public:
         if (!Parent::equals(rhs))
             return false;
 
-        const IdentifiedType* rhsId = dynamic_cast<const IdentifiedType*>(rhs);
+        const auto* rhsId = dynamic_cast<const IdentifiedType*>(rhs);
         Q_ASSERT(rhsId);
 
         return IdentifiedType::equals(static_cast<const IdentifiedType*>(rhsId));

@@ -50,7 +50,7 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     setWindowTitle(i18n("Branch Manager"));
 
     QWidget *mainWidget = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    auto *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(mainWidget);
 
     m_ui = new Ui::BranchDialogBase;

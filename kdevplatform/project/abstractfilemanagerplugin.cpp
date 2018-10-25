@@ -137,7 +137,7 @@ void AbstractFileManagerPluginPrivate::projectClosing(IProject* project)
 
 KIO::Job* AbstractFileManagerPluginPrivate::eventuallyReadFolder(ProjectFolderItem* item)
 {
-    FileManagerListJob* listJob = new FileManagerListJob( item );
+    auto* listJob = new FileManagerListJob( item );
     m_projectJobs[ item->project() ] << listJob;
     qCDebug(FILEMANAGER) << "adding job" << listJob << item << item->path() << "for project" << item->project();
 
@@ -153,7 +153,7 @@ KIO::Job* AbstractFileManagerPluginPrivate::eventuallyReadFolder(ProjectFolderIt
 
 void AbstractFileManagerPluginPrivate::jobFinished(KJob* job)
 {
-    FileManagerListJob* gmlJob = qobject_cast<FileManagerListJob*>(job);
+    auto* gmlJob = qobject_cast<FileManagerListJob*>(job);
     if (gmlJob) {
         ifDebug(qCDebug(FILEMANAGER) << job << gmlJob << gmlJob->item();)
         m_projectJobs[ gmlJob->item()->project() ].removeOne( gmlJob );

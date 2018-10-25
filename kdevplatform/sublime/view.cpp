@@ -113,7 +113,7 @@ void View::writeSessionConfig(KConfigGroup& config)
 
 QList<QAction*> View::toolBarActions() const
 {
-    ToolDocument* tooldoc = dynamic_cast<ToolDocument*>( document() );
+    auto* tooldoc = dynamic_cast<ToolDocument*>( document() );
     if( tooldoc )
     {
         return tooldoc->factory()->toolBarActions( d->widget );
@@ -123,7 +123,7 @@ QList<QAction*> View::toolBarActions() const
 
 QList< QAction* > View::contextMenuActions() const
 {
-    ToolDocument* tooldoc = dynamic_cast<ToolDocument*>( document() );
+    auto* tooldoc = dynamic_cast<ToolDocument*>( document() );
     if( tooldoc )
     {
         return tooldoc->factory()->contextMenuActions( d->widget );

@@ -70,7 +70,7 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
         return ret;
     }
 
-    ProjectItemContext* ctx = static_cast<ProjectItemContext*>( context );
+    auto* ctx = static_cast<ProjectItemContext*>( context );
 
     QList<ProjectBaseItem*> items = ctx->items();
     // filter out project roots and items in targets
@@ -98,7 +98,7 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
 
 void ProjectFilterProvider::addFilterFromContextMenu()
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
     const QList<ProjectBaseItem*> items = action->data().value<QList<ProjectBaseItem*>>();
     QHash<IProject*, SerializedFilters> changedProjectFilters;

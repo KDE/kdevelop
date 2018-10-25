@@ -99,7 +99,7 @@ void TestProblemStore::testSetProblems()
 void TestProblemStore::testFindNode()
 {
     for (int i = 0; i < m_problems.count(); i++) {
-        const ProblemNode *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
+        const auto *node = dynamic_cast<const ProblemNode*>(m_store->findNode(i));
 
         QVERIFY(node);
         QVERIFY(node->problem().data());

@@ -132,7 +132,7 @@ WorkingSet* WorkingSetController::workingSet(const QString& id)
         return m_emptyWorkingSet;
 
     if(!m_workingSets.contains(id)) {
-        WorkingSet* set = new WorkingSet(id);
+        auto* set = new WorkingSet(id);
         connect(set, &WorkingSet::aboutToRemove,
                 this, &WorkingSetController::aboutToRemoveWorkingSet);
         m_workingSets[id] = set;
@@ -163,12 +163,12 @@ void WorkingSetController::showToolTip(WorkingSet* set, const QPoint& pos)
 {
     delete m_tooltip;
 
-    KDevelop::MainWindow* window = static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow());
+    auto* window = static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow());
 
     m_tooltip = new KDevelop::ActiveToolTip(window, pos);
-    QVBoxLayout* layout = new QVBoxLayout(m_tooltip);
+    auto* layout = new QVBoxLayout(m_tooltip);
     layout->setMargin(0);
-    WorkingSetToolTipWidget* widget = new WorkingSetToolTipWidget(m_tooltip, set, window);
+    auto* widget = new WorkingSetToolTipWidget(m_tooltip, set, window);
     layout->addWidget(widget);
     m_tooltip->resize( m_tooltip->sizeHint() );
 
@@ -179,7 +179,7 @@ void WorkingSetController::showToolTip(WorkingSet* set, const QPoint& pos)
 
 void WorkingSetController::showGlobalToolTip()
 {
-    KDevelop::MainWindow* window = static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow());
+    auto* window = static_cast<KDevelop::MainWindow*>(Core::self()->uiControllerInternal()->activeMainWindow());
 
     showToolTip(workingSet(window->area()->workingSet()),
                               window->mapToGlobal(window->geometry().topRight()));
@@ -199,7 +199,7 @@ WorkingSetToolTipWidget* WorkingSetController::workingSetToolTip()
 
     if(m_tooltip)
     {
-        WorkingSetToolTipWidget* widget = m_tooltip->findChild<WorkingSetToolTipWidget*>();
+        auto* widget = m_tooltip->findChild<WorkingSetToolTipWidget*>();
         Q_ASSERT(widget);
         return widget;
     }
@@ -284,7 +284,7 @@ void WorkingSetController::changedWorkingSet(Sublime::Area* area, const QString&
 
 void WorkingSetController::viewAdded( Sublime::AreaIndex* , Sublime::View* )
 {
-    Sublime::Area* area = qobject_cast< Sublime::Area* >(sender());
+    auto* area = qobject_cast< Sublime::Area* >(sender());
     Q_ASSERT(area);
 
     if (area->workingSet().isEmpty()) {

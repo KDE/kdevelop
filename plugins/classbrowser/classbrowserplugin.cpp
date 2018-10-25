@@ -106,7 +106,7 @@ KDevelop::ContextMenuExtension ClassBrowserPlugin::contextMenuExtension(KDevelop
     if (m_activeClassTree == nullptr)
         return menuExt;
 
-    KDevelop::DeclarationContext* codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
+    auto* codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
 
     if (!codeContext)
         return menuExt;
@@ -142,7 +142,7 @@ void ClassBrowserPlugin::findInClassBrowser()
 
     DUChainReadLocker readLock(DUChain::lock());
 
-    QAction* a = static_cast<QAction*>(sender());
+    auto* a = static_cast<QAction*>(sender());
 
     Q_ASSERT(a->data().canConvert<DUChainBasePointer>());
 
@@ -161,7 +161,7 @@ void ClassBrowserPlugin::showDefinition(const DeclarationPointer& declaration)
     Declaration* decl = declaration.data();
     // If it's a function, find the function definition to go to the actual declaration.
     if (decl && decl->isFunctionDeclaration()) {
-        FunctionDefinition* funcDefinition = dynamic_cast<FunctionDefinition*>(decl);
+        auto* funcDefinition = dynamic_cast<FunctionDefinition*>(decl);
         if (funcDefinition == nullptr)
             funcDefinition = FunctionDefinition::definition(decl);
         if (funcDefinition)

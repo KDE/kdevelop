@@ -232,7 +232,7 @@ AbstractType::Ptr stripType(const AbstractType::Ptr& type, DUContext* ctx)
 
             AbstractType::Ptr newType(type->clone());
 
-            if (const IdentifiedType * idType = dynamic_cast<const IdentifiedType*>(type.data())) {
+            if (const auto * idType = dynamic_cast<const IdentifiedType*>(type.data())) {
                 Declaration* decl = idType->declaration(ctx->topContext());
                 if (!decl) {
                     return type;

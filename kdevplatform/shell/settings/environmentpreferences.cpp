@@ -40,7 +40,7 @@ public:
 EnvironmentPreferences::EnvironmentPreferences(const QString& preselectedProfileName, QWidget* parent)
     : ConfigPage(nullptr, nullptr, parent), d(new EnvironmentPreferencesPrivate)
 {
-    QVBoxLayout * l = new QVBoxLayout( this );
+    auto * l = new QVBoxLayout( this );
     l->setMargin(0);
     d->preferencesDialog = new EnvironmentWidget( this );
     l->addWidget( d->preferencesDialog );

@@ -119,7 +119,7 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
     if (!model->item(0, 0)) {
         for (int row = 0; row < group.registers.count(); row++) {
             const Register& r = group.registers[row];
-            QStandardItem* n = new QStandardItem(r.name);
+            auto* n = new QStandardItem(r.name);
             n->setFlags(Qt::ItemIsEnabled);
             model->setItem(row, 0, n);
         }
@@ -153,7 +153,7 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
 
 void ModelsManager::flagChanged(const QModelIndex& idx)
 {
-    QAbstractItemView* view = static_cast<QAbstractItemView*>(sender());
+    auto* view = static_cast<QAbstractItemView*>(sender());
     int row = idx.row();
 
     QStandardItemModel* model = m_models->modelForView(view);
@@ -227,7 +227,7 @@ QStandardItemModel* Models::modelForView(QAbstractItemView* view) const
 
 void ModelsManager::itemChanged(QStandardItem* i)
 {
-    QStandardItemModel* model = static_cast<QStandardItemModel*>(sender());
+    auto* model = static_cast<QStandardItemModel*>(sender());
 
     int row = i->row();
 

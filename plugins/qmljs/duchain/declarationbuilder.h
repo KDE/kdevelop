@@ -151,7 +151,7 @@ protected:
                                   const KDevelop::RangeInRevision& newRange,
                                   DeclarationFlags flags = NoFlags)
     {
-        DeclarationT* res = DeclarationBuilderBase::openDeclaration<DeclarationT>(id, newRange, flags);
+        auto* res = DeclarationBuilderBase::openDeclaration<DeclarationT>(id, newRange, flags);
         res->setAlwaysForceDirect(true);
         return res;
     }

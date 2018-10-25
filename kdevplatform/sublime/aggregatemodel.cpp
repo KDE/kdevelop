@@ -122,7 +122,7 @@ int AggregateModel::rowCount(const QModelIndex &parent) const
         else
         {
             //we have a standard item in the source model - just map it into our model
-            QStandardItem *item = static_cast<QStandardItem*>(parent.internalPointer());
+            auto *item = static_cast<QStandardItem*>(parent.internalPointer());
             return item->rowCount();
         }
     }
@@ -141,7 +141,7 @@ QVariant AggregateModel::data(const QModelIndex &index, int role) const
     else
     {
         //we have a standard item in the source model - just map it into our model
-        QStandardItem *item = static_cast<QStandardItem*>(index.internalPointer());
+        auto *item = static_cast<QStandardItem*>(index.internalPointer());
         return item->data(role);
     }
 }
@@ -158,7 +158,7 @@ QModelIndex AggregateModel::parent(const QModelIndex &index) const
     }
 
     //this is just an item from the model
-    QStandardItem *item = static_cast<QStandardItem*>(index.internalPointer());
+    auto *item = static_cast<QStandardItem*>(index.internalPointer());
     QModelIndex parent;
     if (!item->parent())
     {
@@ -204,7 +204,7 @@ QModelIndex AggregateModel::index(int row, int column, const QModelIndex &parent
     else
     {
         //we have a standard item in the source model - just map it into our model
-        QStandardItem *parentItem = static_cast<QStandardItem*>(parent.internalPointer());
+        auto *parentItem = static_cast<QStandardItem*>(parent.internalPointer());
         return createIndex(row, column, parentItem->child(row, column));
     }
 }

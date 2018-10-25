@@ -95,7 +95,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
 
     m_model = new TreeModel(QVector<QString>{i18n("Name"), i18n("Value"), i18n("Type")}, this);
 
-    TooltipRoot* tr = new TooltipRoot(m_model);
+    auto* tr = new TooltipRoot(m_model);
     m_model->setRootItem(tr);
     m_var = ICore::self()->debugController()->currentSession()->
         variableController()->createVariable(
@@ -103,7 +103,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
     tr->init(m_var);
     m_var->attachMaybe(this, "variableCreated");
 
-    QVBoxLayout* l = new QVBoxLayout(this);
+    auto* l = new QVBoxLayout(this);
     l->setContentsMargins(0, 0, 0, 0);
     // setup proxy model
     m_proxy = new QSortFilterProxyModel;
@@ -129,7 +129,7 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
     m_selection->select(varIndex,
                         QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect);
 
-    QHBoxLayout* buttonBox = new QHBoxLayout();
+    auto* buttonBox = new QHBoxLayout();
     buttonBox->setContentsMargins(11, 0, 11, 6);
     QPushButton* watchThisButton = new QPushButton(i18n("Watch This"));
     buttonBox->addWidget(watchThisButton);
@@ -141,13 +141,13 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
     connect(stopOnChangeButton, &QPushButton::clicked,
             this, [this](){ slotLinkActivated(QStringLiteral("add_watchpoint")); });
 
-    QHBoxLayout* inner = new QHBoxLayout();
+    auto* inner = new QHBoxLayout();
     l->addLayout(inner);
     inner->setContentsMargins(0, 0, 0, 0);
     inner->addLayout(buttonBox);
     inner->addStretch();
 
-    SizeGrip* g = new SizeGrip(this);
+    auto* g = new SizeGrip(this);
     g->setFixedSize(16, 16);
     inner->addWidget(g, 0, (Qt::Alignment)(Qt::AlignRight | Qt::AlignBottom));
 
@@ -175,7 +175,7 @@ void VariableToolTip::slotLinkActivated(const QString& link)
         TreeItem *item = m_model->itemForIndex(sourceIndex);
         if (item)
         {
-            Variable* v2 = qobject_cast<Variable*>(item);
+            auto* v2 = qobject_cast<Variable*>(item);
             if (v2)
                 v = v2;
         }

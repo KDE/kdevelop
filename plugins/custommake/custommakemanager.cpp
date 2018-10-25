@@ -189,7 +189,7 @@ bool CustomMakeManager::hasBuildInfo(KDevelop::ProjectBaseItem* item) const
 
 Path CustomMakeManager::buildDirectory(KDevelop::ProjectBaseItem* item) const
 {
-    ProjectFolderItem *fi=dynamic_cast<ProjectFolderItem*>(item);
+    auto *fi=dynamic_cast<ProjectFolderItem*>(item);
     for(; !fi && item; )
     {
         item=item->parent();
@@ -229,7 +229,7 @@ void CustomMakeManager::createTargetItems(IProject* project, const Path& path, P
 
 ProjectFileItem* CustomMakeManager::createFileItem(IProject* project, const Path& path, ProjectBaseItem* parent)
 {
-    ProjectFileItem* item = new ProjectFileItem(project, path, parent);
+    auto* item = new ProjectFileItem(project, path, parent);
     if (isMakefile(path.lastPathSegment())){
         createTargetItems(project, path, parent);
     }

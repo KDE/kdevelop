@@ -61,7 +61,7 @@ AbstractDeclarationNavigationContext::AbstractDeclarationNavigationContext(const
     d->m_declaration = decl;
 
     //Jump from definition to declaration if possible
-    FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(d->m_declaration.data());
+    auto* definition = dynamic_cast<FunctionDefinition*>(d->m_declaration.data());
     if (definition && definition->declaration())
         d->m_declaration = DeclarationPointer(definition->declaration());
 }
@@ -108,7 +108,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     if (!shorten) {
         doc = ICore::self()->documentationController()->documentationForDeclaration(d->m_declaration.data());
 
-        const AbstractFunctionDeclaration* function =
+        const auto* function =
             dynamic_cast<const AbstractFunctionDeclaration*>(d->m_declaration.data());
         if (function) {
             htmlFunction();
@@ -165,7 +165,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
             }
 
             if (d->m_declaration->isForwardDeclaration()) {
-                ForwardDeclaration* forwardDec = static_cast<ForwardDeclaration*>(d->m_declaration.data());
+                auto* forwardDec = static_cast<ForwardDeclaration*>(d->m_declaration.data());
                 Declaration* resolved = forwardDec->resolve(topContext().data());
                 if (resolved) {
                     modifyHtml() += i18n("(resolved forward-declaration: ");
@@ -220,7 +220,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         if (d->m_declaration->context() && d->m_declaration->context()->owner()) {
             Declaration* decl = d->m_declaration->context()->owner();
 
-            FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(decl);
+            auto* definition = dynamic_cast<FunctionDefinition*>(decl);
             if (definition && definition->declaration())
                 decl = definition->declaration();
 
@@ -308,7 +308,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
             }
         }
 
-        if (FunctionDefinition* definition = dynamic_cast<FunctionDefinition*>(d->m_declaration.data())) {
+        if (auto* definition = dynamic_cast<FunctionDefinition*>(d->m_declaration.data())) {
             if (definition->declaration()) {
                 modifyHtml() += labelHighlight(i18n(" Decl.: "));
                 makeLink(QStringLiteral("%1 :%2").arg(definition->declaration()->url().toUrl().fileName()).arg(
@@ -379,11 +379,11 @@ AbstractType::Ptr AbstractDeclarationNavigationContext::typeToShow(AbstractType:
 
 void AbstractDeclarationNavigationContext::htmlFunction()
 {
-    const AbstractFunctionDeclaration* function =
+    const auto* function =
         dynamic_cast<const AbstractFunctionDeclaration*>(d->m_declaration.data());
     Q_ASSERT(function);
 
-    const ClassFunctionDeclaration* classFunDecl =
+    const auto* classFunDecl =
         dynamic_cast<const ClassFunctionDeclaration*>(d->m_declaration.data());
     const FunctionType::Ptr type = d->m_declaration->abstractType().cast<FunctionType>();
     if (!type) {
@@ -471,7 +471,7 @@ QString AbstractDeclarationNavigationContext::prettyQualifiedName(const Declarat
 void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
 {
     ///Check if the function overrides or hides another one
-    const ClassFunctionDeclaration* classFunDecl =
+    const auto* classFunDecl =
         dynamic_cast<const ClassFunctionDeclaration*>(d->m_declaration.data());
     if (classFunDecl) {
         Declaration* overridden = DUChainUtils::overridden(d->m_declaration.data());
@@ -659,7 +659,7 @@ void AbstractDeclarationNavigationContext::htmlIdentifiedType(AbstractType::Ptr 
     if (decl->context() && decl->context()->owner()) {
         //Also create full type-links for the context around
         AbstractType::Ptr contextType = decl->context()->owner()->abstractType();
-        IdentifiedType* contextIdType = dynamic_cast<IdentifiedType*>(contextType.data());
+        auto* contextIdType = dynamic_cast<IdentifiedType*>(contextType.data());
         if (contextIdType && !contextIdType->equals(idType)) {
             //Create full type information for the context
             if (!id.isEmpty())
@@ -684,7 +684,7 @@ void AbstractDeclarationNavigationContext::eventuallyMakeTypeLinks(AbstractType:
     }
 
     AbstractType::Ptr target = TypeUtils::targetTypeKeepAliases(type, topContext().data());
-    const IdentifiedType* idType = dynamic_cast<const IdentifiedType*>(target.data());
+    const auto* idType = dynamic_cast<const IdentifiedType*>(target.data());
 
     qCDebug(LANGUAGE) << "making type-links for" << type->toString();
 
@@ -753,7 +753,7 @@ QString AbstractDeclarationNavigationContext::stringFromAccess(Declaration::Acce
 
 QString AbstractDeclarationNavigationContext::stringFromAccess(const DeclarationPointer& decl)
 {
-    const ClassMemberDeclaration* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
+    const auto* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
     if (memberDecl) {
         return stringFromAccess(memberDecl->accessPolicy());
     }
@@ -762,7 +762,7 @@ QString AbstractDeclarationNavigationContext::stringFromAccess(const Declaration
 
 QString AbstractDeclarationNavigationContext::declarationName(const DeclarationPointer& decl) const
 {
-    if (NamespaceAliasDeclaration* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl.data())) {
+    if (auto* alias = dynamic_cast<NamespaceAliasDeclaration*>(decl.data())) {
         if (alias->identifier().isEmpty())
             return QLatin1String("using namespace ") + alias->importIdentifier().toString();
         else
@@ -779,8 +779,8 @@ QString AbstractDeclarationNavigationContext::declarationName(const DeclarationP
 QStringList AbstractDeclarationNavigationContext::declarationDetails(const DeclarationPointer& decl)
 {
     QStringList details;
-    const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(decl.data());
-    const ClassMemberDeclaration* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
+    const auto* function = dynamic_cast<const AbstractFunctionDeclaration*>(decl.data());
+    const auto* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
     if (memberDecl) {
         if (memberDecl->isMutable())
             details << QStringLiteral("mutable");
@@ -819,7 +819,7 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(const Decla
         if (function->isVirtual())
             details << QStringLiteral("virtual");
 
-        const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl.data());
+        const auto* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl.data());
         if (classFunDecl) {
             if (classFunDecl->isSignal())
                 details << QStringLiteral("signal");
@@ -845,7 +845,7 @@ QString AbstractDeclarationNavigationContext::declarationSizeInformation(const D
 {
     // Note that ClassMemberDeclaration also includes ClassDeclaration, which uses the sizeOf and alignOf fields,
     // but normally leaves the bitOffsetOf unset (-1).
-    const ClassMemberDeclaration* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
+    const auto* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
     if (memberDecl && (memberDecl->bitOffsetOf() > 0 || memberDecl->sizeOf() > 0 || memberDecl->alignOf() > 0)) {
         QString sizeInfo = QStringLiteral("<p>");
 

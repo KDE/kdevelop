@@ -54,7 +54,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
   CodeCompletionModel::CompletionProperties p;
 
   if(dec->context()->type() == DUContext::Class) {
-    if (const ClassMemberDeclaration* member = dynamic_cast<const ClassMemberDeclaration*>(dec)) {
+    if (const auto* member = dynamic_cast<const ClassMemberDeclaration*>(dec)) {
       switch (member->accessPolicy()) {
         case Declaration::Public:
           p |= CodeCompletionModel::Public;
@@ -84,7 +84,7 @@ CodeCompletionModel::CompletionProperties DUChainUtils::completionProperties(con
     }
   }
 
-  if (const AbstractFunctionDeclaration* function = dynamic_cast<const AbstractFunctionDeclaration*>(dec)) {
+  if (const auto* function = dynamic_cast<const AbstractFunctionDeclaration*>(dec)) {
     p |= CodeCompletionModel::Function;
     if (function->isVirtual())
       p |= CodeCompletionModel::Virtual;
@@ -575,7 +575,7 @@ uint DUChainUtils::contextCountUses(DUContext* context, Declaration* declaration
 }
 
 Declaration* DUChainUtils::overridden(const Declaration* decl) {
-  const ClassFunctionDeclaration* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl);
+  const auto* classFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(decl);
   if(!classFunDecl || !classFunDecl->isVirtual())
     return nullptr;
 
@@ -589,7 +589,7 @@ Declaration* DUChainUtils::overridden(const Declaration* decl) {
   }
 
   foreach(Declaration* found, decls) {
-    const ClassFunctionDeclaration* foundClassFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(found);
+    const auto* foundClassFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(found);
     if(foundClassFunDecl && foundClassFunDecl->isVirtual())
       return found;
   }

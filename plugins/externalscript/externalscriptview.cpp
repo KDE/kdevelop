@@ -121,7 +121,7 @@ bool ExternalScriptView::eventFilter( QObject* obj, QEvent* e )
 //     const bool singleClick = KGlobalSettings::singleClick();
     const bool singleClick = true; //FIXME: enable singleClick for the sake of porting, should find a proper way
     if ( ( !singleClick && e->type() == QEvent::MouseButtonDblClick ) || ( singleClick && e->type() == QEvent::MouseButtonRelease ) ) {
-      QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(e);
+      auto* mouseEvent = dynamic_cast<QMouseEvent*>(e);
       Q_ASSERT( mouseEvent );
       ExternalScriptItem* item = itemForIndex( scriptTree->indexAt( mouseEvent->pos() ) );
       if ( item ) {
@@ -136,7 +136,7 @@ bool ExternalScriptView::eventFilter( QObject* obj, QEvent* e )
 
 void ExternalScriptView::addScript()
 {
-  ExternalScriptItem* item = new ExternalScriptItem;
+  auto* item = new ExternalScriptItem;
   KDevelop::ScopedDialog<EditExternalScript> dlg( item, this );
   if ( dlg->exec() == QDialog::Accepted) {
     m_plugin->model()->appendRow( item );

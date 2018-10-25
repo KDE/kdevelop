@@ -308,7 +308,7 @@ svn::Revision SvnInternalJobBase::createSvnCppRevisionFromVcsRevision( const KDe
         {
             if( value.canConvert<KDevelop::VcsRevision::RevisionSpecialType>() )
             {
-                KDevelop::VcsRevision::RevisionSpecialType specialtype =
+                auto specialtype =
                         value.value<KDevelop::VcsRevision::RevisionSpecialType>();
                 switch( specialtype )
                 {

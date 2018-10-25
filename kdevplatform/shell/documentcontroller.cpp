@@ -357,7 +357,7 @@ public:
         //contains=>it's the same
         Q_ASSERT(!documents.contains(url) || documents[url]==doc);
 
-        Sublime::Document *sdoc = dynamic_cast<Sublime::Document*>(doc);
+        auto *sdoc = dynamic_cast<Sublime::Document*>(doc);
         if( !sdoc )
         {
             documents.remove(url);
@@ -414,7 +414,7 @@ public:
                 }
 
                 if(buddy) {
-                    Sublime::Document* sublimeDocBuddy = dynamic_cast<Sublime::Document*>(buddy);
+                    auto* sublimeDocBuddy = dynamic_cast<Sublime::Document*>(buddy);
 
                     if(sublimeDocBuddy) {
                         Sublime::AreaIndex *pActiveViewIndex = area->indexOf(uiController->activeSublimeWindow()->activeView());
@@ -723,7 +723,7 @@ bool DocumentController::closeDocument( const QUrl &url )
 
 void DocumentController::notifyDocumentClosed(Sublime::Document* doc_)
 {
-    IDocument* doc = dynamic_cast<IDocument*>(doc_);
+    auto* doc = dynamic_cast<IDocument*>(doc_);
     Q_ASSERT(doc);
 
     d->removeDocument(doc_);
@@ -760,7 +760,7 @@ QList<IDocument*> DocumentController::openDocuments() const
     QList<IDocument*> opened;
     foreach (IDocument *doc, d->documents)
     {
-        Sublime::Document *sdoc = dynamic_cast<Sublime::Document*>(doc);
+        auto *sdoc = dynamic_cast<Sublime::Document*>(doc);
         if( !sdoc )
         {
             continue;
@@ -821,7 +821,7 @@ QList< IDocument * > KDevelop::DocumentController::visibleDocumentsInWindow(Main
     // Does not find documents which are open in inactive areas
     QList<IDocument*> list;
     foreach (IDocument* doc, openDocuments()) {
-        if (Sublime::Document* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
+        if (auto* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
             foreach (Sublime::View* view, sdoc->views()) {
                 if (view->hasWidget() && view->widget()->window() == mw) {
                     list.append(doc);
@@ -839,7 +839,7 @@ QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(
     QList<IDocument*> checkSave;
 
     foreach (IDocument* doc, openDocuments()) {
-        if (Sublime::Document* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
+        if (auto* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
             bool inOtherWindow = false;
 
             foreach (Sublime::View* view, sdoc->views()) {
@@ -945,7 +945,7 @@ KTextEditor::View* DocumentController::activeTextDocumentView() const
     if( !mw || !mw->activeView() )
         return nullptr;
 
-    TextView* view = qobject_cast<TextView*>(mw->activeView());
+    auto* view = qobject_cast<TextView*>(mw->activeView());
     if(!view)
         return nullptr;
     return view->textView();
@@ -1135,7 +1135,7 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(urlsWithSeparators.front()),
                         KTextEditor::Cursor::invalid(),
                         IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
-            Sublime::Document *sublimeDoc = dynamic_cast<Sublime::Document*>(doc);
+            auto *sublimeDoc = dynamic_cast<Sublime::Document*>(doc);
             if (sublimeDoc) {
                 Sublime::View* view = sublimeDoc->createView();
                 area->addView(view, index);
@@ -1210,7 +1210,7 @@ void DocumentController::vcsAnnotateCurrentDocument()
     QUrl url = doc->url();
     IProject* project = KDevelop::ICore::self()->projectController()->findProjectForUrl(url);
     if(project && project->versionControlPlugin()) {
-        IBasicVersionControl* iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
+        auto* iface = project->versionControlPlugin()->extension<IBasicVersionControl>();
         auto helper = new VcsPluginHelper(project->versionControlPlugin(), iface);
         connect(doc->textDocument(), &KTextEditor::Document::aboutToClose,
                 helper, static_cast<void(VcsPluginHelper::*)(KTextEditor::Document*)>(&VcsPluginHelper::disposeEventually));

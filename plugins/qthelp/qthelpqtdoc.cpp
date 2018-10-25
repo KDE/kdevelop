@@ -62,7 +62,7 @@ void QtHelpQtDoc::registerDocumentations()
 {
     const QString qmake = qmakeCandidate();
     if (!qmake.isEmpty()) {
-        QProcess *p = new QProcess;
+        auto *p = new QProcess;
         p->setProcessChannelMode(QProcess::MergedChannels);
         p->setProgram(qmake);
         p->setArguments({QLatin1String("-query"), QLatin1String("QT_INSTALL_DOCS")});
@@ -73,7 +73,7 @@ void QtHelpQtDoc::registerDocumentations()
 
 void QtHelpQtDoc::lookupDone(int code)
 {
-    QProcess *p = qobject_cast<QProcess*>(sender());
+    auto *p = qobject_cast<QProcess*>(sender());
     if(code == QProcess::NormalExit) {
         m_path = QDir::fromNativeSeparators(QString::fromLatin1(p->readAllStandardOutput().trimmed()));
         qCDebug(QTHELP) << "Detected doc path:" << m_path;

@@ -43,7 +43,7 @@ PruneJob::PruneJob(KDevelop::IProject* project)
 
 void PruneJob::start()
 {
-    OutputModel* output = new OutputModel(this);
+    auto* output = new OutputModel(this);
     setModel(output);
     startOutput();
 
@@ -81,7 +81,7 @@ bool PruneJob::doKill()
 
 void PruneJob::jobFinished(KJob* job)
 {
-    OutputModel* output = qobject_cast<OutputModel*>(model());
+    auto* output = qobject_cast<OutputModel*>(model());
     if(job->error()==0)
         output->appendLine(i18n("** Prune successful **"));
     else

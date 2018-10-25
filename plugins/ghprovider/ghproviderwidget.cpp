@@ -57,14 +57,14 @@ ProviderWidget::ProviderWidget(QWidget *parent)
     m_waiting->setAlignment(Qt::AlignCenter);
     m_waiting->hide();
 
-    ProviderModel *model = new ProviderModel(this);
+    auto *model = new ProviderModel(this);
     m_projects->setModel(model);
     m_projects->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_resource = new Resource(this, model);
     m_account = new Account(m_resource);
     connect(m_resource, &Resource::reposUpdated, m_waiting, &QLabel::hide);
 
-    QHBoxLayout *topLayout = new QHBoxLayout();
+    auto *topLayout = new QHBoxLayout();
     m_edit = new LineEdit(this);
     m_edit->setPlaceholderText(i18n("Search"));
     m_edit->setToolTip(i18n("You can press the Return key if you do not want to wait"));
@@ -140,7 +140,7 @@ void ProviderWidget::projectIndexChanged(const QModelIndex &currentIndex)
 
 void ProviderWidget::showSettings()
 {
-    Dialog *dialog = new Dialog(this, m_account);
+    auto *dialog = new Dialog(this, m_account);
     connect(dialog, &Dialog::shouldUpdate, this, &ProviderWidget::fillCombo);
     dialog->show();
 }

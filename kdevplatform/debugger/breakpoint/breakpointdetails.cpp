@@ -46,14 +46,14 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     : QWidget(parent)
     , d(new BreakpointDetailsPrivate)
 {
-    QVBoxLayout* layout = new QVBoxLayout(this);
+    auto* layout = new QVBoxLayout(this);
 
     d->status = new QLabel(this);
     connect(d->status, &QLabel::linkActivated,
             this, &BreakpointDetails::showExplanation);
     layout->addWidget(d->status);
 
-    QGridLayout* hitsLayout = new QGridLayout();
+    auto* hitsLayout = new QGridLayout();
     layout->addLayout(hitsLayout);
 
     hitsLayout->setContentsMargins(0, 0, 0, 0);

@@ -49,7 +49,7 @@ public:
 
     void addAction(const QString &text)
     {
-        QAction* action = new QAction(text, nullptr);
+        auto* action = new QAction(text, nullptr);
         actionList.append(action);
     }
 
@@ -62,7 +62,7 @@ void TestToolViewToolBar::init()
     // this is starting to become a GeneralFixture
     controller = new Controller(this);
     area = new Area( controller, QStringLiteral("Area") );
-    MainWindow* mw = new MainWindow(controller);
+    auto* mw = new MainWindow(controller);
 
     // a horizontal tool with toolbar
     ToolViewToolBarFactory* factoryT1 = new ToolViewToolBarFactory(QStringLiteral("tool1factory"));
@@ -95,7 +95,7 @@ QToolBar* TestToolViewToolBar::fetchToolBarFor(Sublime::View* view)
     Q_UNUSED(loc);
     Q_ASSERT_X(toolWidget, loc, "Tool refuses to create widget (null).");
     Q_ASSERT(toolWidget->parent());
-    QMainWindow* toolWin = dynamic_cast<QMainWindow*>(toolWidget->parent());
+    auto* toolWin = dynamic_cast<QMainWindow*>(toolWidget->parent());
     Q_ASSERT_X(toolWin, loc, "Tool widget's parent is not a QMainWindow.");
     QList<QToolBar*> toolBars = toolWin->findChildren<QToolBar*>();
     int barCount = toolBars.count();

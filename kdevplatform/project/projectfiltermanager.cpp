@@ -67,7 +67,7 @@ public:
 
 void ProjectFilterManagerPrivate::pluginLoaded(IPlugin* plugin)
 {
-    IProjectFilterProvider* filterProvider = plugin->extension<IProjectFilterProvider>();
+    auto* filterProvider = plugin->extension<IProjectFilterProvider>();
     if (filterProvider) {
         m_filterProvider << filterProvider;
         // can't use qt5 signal slot syntax here, IProjectFilterProvider is not a QObject
@@ -86,7 +86,7 @@ void ProjectFilterManagerPrivate::pluginLoaded(IPlugin* plugin)
 
 void ProjectFilterManagerPrivate::unloadingPlugin(IPlugin* plugin)
 {
-    IProjectFilterProvider* filterProvider = plugin->extension<IProjectFilterProvider>();
+    auto* filterProvider = plugin->extension<IProjectFilterProvider>();
     if (filterProvider) {
         int idx = m_filterProvider.indexOf(qobject_cast<IProjectFilterProvider*>(plugin));
         Q_ASSERT(idx != -1);

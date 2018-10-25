@@ -211,7 +211,7 @@ public:
                                                             qMakePair( mode->id(), launcher->id() ),
                                                             contextItem->project(),
                                                             contextItem->text() );
-                    LaunchConfiguration* launch = static_cast<LaunchConfiguration*>(ilaunch);
+                    auto* launch = static_cast<LaunchConfiguration*>(ilaunch);
                     type->configureLaunchFromItem( launch->config(), contextItem );
                     launch->config().writeEntry(Strings::ConfiguredFromProjectItemEntry(), itemPath);
                     //qCDebug(SHELL) << "created config, launching";
@@ -392,7 +392,7 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
         qCDebug(SHELL) << "execute called without launch config!";
         return nullptr;
     }
-    LaunchConfiguration* run = static_cast<LaunchConfiguration*>(launch);
+    auto* run = static_cast<LaunchConfiguration*>(launch);
     //TODO: Port to launch framework, probably needs to be part of the launcher
     //if(!run.dependencies().isEmpty())
     //    ICore::self()->documentController()->saveAllDocuments(IDocument::Silent);
@@ -680,7 +680,7 @@ void KDevelop::RunController::stopAllProcesses()
 
 void KDevelop::RunController::slotKillJob()
 {
-    QAction* action = dynamic_cast<QAction*>(sender());
+    auto* action = dynamic_cast<QAction*>(sender());
     Q_ASSERT(action);
 
     KJob* job = static_cast<KJob*>(qvariant_cast<void*>(action->data()));
@@ -948,7 +948,7 @@ ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigura
     configs << groupName;
     launchGroup.writeEntry( Strings::LaunchConfigurationsListEntry(), configs );
     launchGroup.sync();
-    LaunchConfiguration* l = new LaunchConfiguration( launchConfigGroup, project );
+    auto* l = new LaunchConfiguration( launchConfigGroup, project );
     l->setLauncherForMode( launcher.first, launcher.second );
     Core::self()->runControllerInternal()->addLaunchConfiguration( l );
     return l;
@@ -965,7 +965,7 @@ ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* 
     d->contextItem = nullptr;
     ContextMenuExtension ext;
     if( ctx->type() == Context::ProjectItemContext ) {
-        KDevelop::ProjectItemContext* prjctx = static_cast<KDevelop::ProjectItemContext*>(ctx);
+        auto* prjctx = static_cast<KDevelop::ProjectItemContext*>(ctx);
         if( prjctx->items().count() == 1 )
         {
             ProjectBaseItem* itm = prjctx->items().at( 0 );
@@ -986,7 +986,7 @@ ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* 
                     if( hasLauncher && type->canLaunch(itm) )
                     {
                         d->launchAsInfo[i] = qMakePair( type->id(), mode->id() );
-                        QAction* act = new QAction(menu);
+                        auto* act = new QAction(menu);
                         act->setText( type->name() );
                         qCDebug(SHELL) << "Connect " << i << "for action" << act->text() << "in mode" << mode->name();
                         connect( act, &QAction::triggered, this, [this, i] () { d->launchAs(i); } );

@@ -288,7 +288,7 @@ QVector<SourceFileTemplate::ConfigOptionGroup> SourceFileTemplate::customOptions
     if (!entry->isFile()) {
         return optionGroups;
     }
-    const KArchiveFile* file = static_cast<const KArchiveFile*>(entry);
+    const auto* file = static_cast<const KArchiveFile*>(entry);
 
     /*
      * Copied from kconfig_compiler.kcfg

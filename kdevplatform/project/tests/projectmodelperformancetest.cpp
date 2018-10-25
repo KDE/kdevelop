@@ -62,7 +62,7 @@ void generateChilds( ProjectBaseItem* parent, int count, int depth )
 ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
     : QWidget(parent)
 {
-    QGridLayout * l = new QGridLayout( this );
+    auto * l = new QGridLayout( this );
     setLayout( l );
     view = new QTreeView( this );
     // This is used so the treeview layout performance is not influencing the test
@@ -92,7 +92,7 @@ void ProjectModelPerformanceTest::init()
     QElapsedTimer timer;
     timer.start();
     KDevelop::AutoTestShell::init();
-    KDevelop::TestCore* core = new KDevelop::TestCore;
+    auto* core = new KDevelop::TestCore;
     core->setPluginController(new KDevelop::TestPluginController(core));
     core->initialize();
 
@@ -195,7 +195,7 @@ void ProjectModelPerformanceTest::addSmallTree()
 int main( int argc, char** argv )
 {
     QApplication a( argc, argv );
-    ProjectModelPerformanceTest* w = new ProjectModelPerformanceTest;
+    auto* w = new ProjectModelPerformanceTest;
     w->show();
     w->setAttribute(Qt::WA_DeleteOnClose);
 

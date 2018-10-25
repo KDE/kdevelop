@@ -242,7 +242,7 @@ kdev_logReceiver (void *baton,
                 const char *msg,
                 apr_pool_t * pool)
 {
-    SvnClient* client = (SvnClient *) baton;
+    auto* client = (SvnClient *) baton;
 
     KDevelop::VcsEvent ev;
     ev.setAuthor( QString::fromUtf8( author ) );
@@ -262,7 +262,7 @@ kdev_logReceiver (void *baton,
             void *val;
             apr_hash_this (hi, (const void **)&path, nullptr, &val);
 
-            svn_log_changed_path_t *log_item = reinterpret_cast<svn_log_changed_path_t *> (val);
+            auto *log_item = reinterpret_cast<svn_log_changed_path_t *> (val);
             KDevelop::VcsItemEvent iev;
             iev.setRepositoryLocation( QString::fromUtf8( path ) );
             iev.setRepositoryCopySourceLocation( QString::fromUtf8( log_item->copyfrom_path ) );

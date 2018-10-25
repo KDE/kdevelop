@@ -1502,7 +1502,7 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
 
 CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData data)
 {
-    Visitor *visitor = static_cast<Visitor*>(data);
+    auto *visitor = static_cast<Visitor*>(data);
 
     const auto kind = clang_getCursorKind(cursor);
 

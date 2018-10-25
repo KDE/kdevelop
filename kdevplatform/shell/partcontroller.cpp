@@ -114,7 +114,7 @@ void PartController::setShowTextEditorStatusBar(bool show)
     }
 
     // also notify active view that it should update the "view status"
-    TextView* textView = qobject_cast<TextView*>(Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView());
+    auto* textView = qobject_cast<TextView*>(Core::self()->uiControllerInternal()->activeSublimeWindow()->activeView());
     if (textView) {
         emit textView->statusChanged(textView);
     }
@@ -272,7 +272,7 @@ void PartController::setActiveView(KTextEditor::View *view)
 
 KTextEditor::View *PartController::activeView()
 {
-    TextView* textView = dynamic_cast<TextView*>(Core::self()->uiController()->activeArea()->activeView());
+    auto* textView = dynamic_cast<TextView*>(Core::self()->uiController()->activeArea()->activeView());
     if (textView) {
         return textView->textView();
     }

@@ -30,12 +30,12 @@ QMakeIncludeFile::QMakeIncludeFile(const QString& incfile, QMakeFile* parent, co
 
     setProject(parent->project());
 
-    QMakeProjectFile* pro = dynamic_cast<QMakeProjectFile*>(parent);
+    auto* pro = dynamic_cast<QMakeProjectFile*>(parent);
     if (pro) {
         setMkSpecs(pro->mkSpecs());
         setQMakeCache(pro->qmakeCache());
     } else {
-        QMakeMkSpecs* specs = dynamic_cast<QMakeMkSpecs*>(parent);
+        auto* specs = dynamic_cast<QMakeMkSpecs*>(parent);
         setMkSpecs(specs);
     }
 }
@@ -47,7 +47,7 @@ QString QMakeIncludeFile::pwd() const
 
 QString QMakeIncludeFile::outPwd() const
 {
-    QMakeProjectFile* pro = dynamic_cast<QMakeProjectFile*>(m_parent);
+    auto* pro = dynamic_cast<QMakeProjectFile*>(m_parent);
     if (pro) {
         return pro->outPwd();
     } else {

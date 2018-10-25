@@ -144,7 +144,7 @@ public:
 
     QWidget* create(QWidget* parent = nullptr) override
     {
-        ContextBrowserView* ret = new ContextBrowserView(m_plugin, parent);
+        auto* ret = new ContextBrowserView(m_plugin, parent);
         return ret;
     }
 
@@ -196,7 +196,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow(Sublime::MainWindow*
     connect(m_nextButton.data(), &QToolButton::clicked, this, &ContextBrowserPlugin::historyNext);
     connect(m_nextMenu.data(), &QMenu::aboutToShow, this, &ContextBrowserPlugin::nextMenuAboutToShow);
 
-    IQuickOpen* quickOpen =
+    auto* quickOpen =
         KDevelop::ICore::self()->pluginController()->extensionForPlugin<IQuickOpen>(QStringLiteral(
                                                                                         "org.kdevelop.IQuickOpen"));
 
@@ -274,7 +274,7 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     actions.setDefaultShortcut(nextUse, Qt::META | Qt::SHIFT | Qt::Key_Right);
     QObject::connect(nextUse, &QAction::triggered, this, &ContextBrowserPlugin::nextUseShortcut);
 
-    QWidgetAction* outline = new QWidgetAction(this);
+    auto* outline = new QWidgetAction(this);
     outline->setText(i18n("Context Browser"));
     QWidget* w = toolbarWidgetForMainWindow(window);
     w->setHidden(false);
@@ -347,7 +347,7 @@ KDevelop::ContextMenuExtension ContextBrowserPlugin::contextMenuExtension(KDevel
 {
     KDevelop::ContextMenuExtension menuExt = KDevelop::IPlugin::contextMenuExtension(context, parent);
 
-    KDevelop::DeclarationContext* codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
+    auto* codeContext = dynamic_cast<KDevelop::DeclarationContext*>(context);
 
     if (!codeContext)
         return menuExt;
@@ -382,7 +382,7 @@ void ContextBrowserPlugin::showUsesDelayed(const DeclarationPointer& declaration
     if (!toolView) {
         return;
     }
-    ContextBrowserView* view = dynamic_cast<ContextBrowserView*>(toolView);
+    auto* view = dynamic_cast<ContextBrowserView*>(toolView);
     Q_ASSERT(view);
     view->allowLockedUpdate();
     view->setDeclaration(decl, decl->topContext(), true);
@@ -611,7 +611,7 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
     auto declUnderCursor = itemUnderCursor.declaration;
     Declaration* decl = DUChainUtils::declarationForDefinition(declUnderCursor);
     if (decl && decl->kind() == Declaration::Alias) {
-        AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(decl);
+        auto* alias = dynamic_cast<AliasDeclaration*>(decl);
         Q_ASSERT(alias);
         decl = alias->aliasedDeclaration().declaration();
     }
@@ -776,7 +776,7 @@ Declaration* ContextBrowserPlugin::findDeclaration(View* view, const KTextEditor
             DUChainUtils::declarationForDefinition(DUChainUtils::itemUnderCursor(
                                                        view->document()->url(), position).declaration);
         if (foundDeclaration && foundDeclaration->kind() == Declaration::Alias) {
-            AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(foundDeclaration);
+            auto* alias = dynamic_cast<AliasDeclaration*>(foundDeclaration);
             Q_ASSERT(alias);
             DUChainReadLocker lock;
             foundDeclaration = alias->aliasedDeclaration().declaration();
@@ -1002,7 +1002,7 @@ void ContextBrowserPlugin::viewCreated(KTextEditor::Document*, View* v)
     connect(v->document(), &KTextEditor::Document::textInserted, this, &ContextBrowserPlugin::textInserted);
     disconnect(v, &View::selectionChanged, this, &ContextBrowserPlugin::selectionChanged);
 
-    KTextEditor::TextHintInterface* iface = dynamic_cast<KTextEditor::TextHintInterface*>(v);
+    auto* iface = dynamic_cast<KTextEditor::TextHintInterface*>(v);
     if (!iface)
         return;
 
@@ -1054,7 +1054,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
                 decl = DUChainUtils::itemUnderCursor(doc->url(), cCurrent).declaration;
 
             if (decl && decl->kind() == Declaration::Alias) {
-                AliasDeclaration* alias = dynamic_cast<AliasDeclaration*>(decl);
+                auto* alias = dynamic_cast<AliasDeclaration*>(decl);
                 Q_ASSERT(alias);
                 DUChainReadLocker lock;
                 decl = alias->aliasedDeclaration().declaration();
@@ -1456,7 +1456,7 @@ void ContextBrowserPlugin::updateDeclarationListBox(DUContext* context)
 
 void ContextBrowserPlugin::actionTriggered()
 {
-    QAction* action = qobject_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action); Q_ASSERT(action->data().type() == QVariant::Int);
     int historyPosition = action->data().toInt();
     // qCDebug(PLUGIN_CONTEXTBROWSER) << "history pos" << historyPosition << m_history.size() << m_history;
@@ -1469,7 +1469,7 @@ void ContextBrowserPlugin::actionTriggered()
 
 void ContextBrowserPlugin::doNavigate(NavigationActionType action)
 {
-    KTextEditor::View* view = qobject_cast<KTextEditor::View*>(sender());
+    auto* view = qobject_cast<KTextEditor::View*>(sender());
     if (!view) {
         qCWarning(PLUGIN_CONTEXTBROWSER) << "sender is not a view";
         return;
@@ -1487,7 +1487,7 @@ void ContextBrowserPlugin::doNavigate(NavigationActionType action)
     }
 
     if (widget) {
-        AbstractNavigationWidget* navWidget = qobject_cast<AbstractNavigationWidget*>(widget);
+        auto* navWidget = qobject_cast<AbstractNavigationWidget*>(widget);
         if (navWidget) {
             switch (action) {
             case Accept:

@@ -316,7 +316,7 @@ QIcon QtHelpConfig::icon() const
 QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString &name,
                                              const QString &path, const QString &ghnsStatus)
 {
-    QTreeWidgetItem *item = new QTreeWidgetItem(m_configWidget->qchTable);
+    auto *item = new QTreeWidgetItem(m_configWidget->qchTable);
     item->setIcon(NameColumn, QIcon::fromTheme(icon));
     item->setText(NameColumn, name);
     item->setToolTip(NameColumn, name);
@@ -328,13 +328,13 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
     QWidget *ctrlWidget = new QWidget(item->treeWidget());
     ctrlWidget->setLayout(new QHBoxLayout(ctrlWidget));
 
-    QToolButton *modifyBtn = new QToolButton(item->treeWidget());
+    auto *modifyBtn = new QToolButton(item->treeWidget());
     modifyBtn->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
     modifyBtn->setToolTip(i18n("Modify"));
     connect(modifyBtn, &QPushButton::clicked, this, [=](){
         modify(item);
     });
-    QToolButton *removeBtn = new QToolButton(item->treeWidget());
+    auto *removeBtn = new QToolButton(item->treeWidget());
     removeBtn->setIcon(QIcon::fromTheme(QStringLiteral("entry-delete")));
     removeBtn->setToolTip(i18n("Delete"));
     if (item->text(GhnsColumn) != QLatin1String("0")) {

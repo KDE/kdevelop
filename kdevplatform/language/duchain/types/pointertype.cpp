@@ -51,7 +51,7 @@ bool PointerType::equals(const AbstractType* _rhs) const
 
     Q_ASSERT(fastCast<const PointerType*>(_rhs));
 
-    const PointerType* rhs = static_cast<const PointerType*>(_rhs);
+    const auto* rhs = static_cast<const PointerType*>(_rhs);
 
     return d_func()->m_baseType == rhs->d_func()->m_baseType;
 }

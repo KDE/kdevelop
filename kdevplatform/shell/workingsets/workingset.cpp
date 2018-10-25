@@ -332,7 +332,7 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
             }
             IDocument* doc = Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(specifier),
                              KTextEditor::Cursor::invalid(), IDocumentController::DoNotActivate | IDocumentController::DoNotCreateView);
-            Sublime::Document *document = dynamic_cast<Sublime::Document*>(doc);
+            auto *document = dynamic_cast<Sublime::Document*>(doc);
             if (document) {
                 Sublime::View* view = document->createView();
                 area->addView(view, areaIndex, previousView);
@@ -422,7 +422,7 @@ void WorkingSet::saveFromArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex
 }
 
 void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
-    Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
+    auto* area = qobject_cast<Sublime::Area*>(sender());
     Q_ASSERT(area);
     Q_ASSERT(area->workingSet() == m_id);
 
@@ -436,7 +436,7 @@ void WorkingSet::areaViewAdded(Sublime::AreaIndex*, Sublime::View*) {
 }
 
 void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View* view) {
-    Sublime::Area* area = qobject_cast<Sublime::Area*>(sender());
+    auto* area = qobject_cast<Sublime::Area*>(sender());
     Q_ASSERT(area);
     Q_ASSERT(area->workingSet() == m_id);
 

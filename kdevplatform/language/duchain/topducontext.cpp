@@ -165,7 +165,7 @@ public:
         QSet<QPair<TopDUContext*, const TopDUContext*>> rebuild;
 
         foreach (const DUContext::Import& import, m_importedContexts) {
-            TopDUContext* top = dynamic_cast<TopDUContext*>(import.context(nullptr));
+            auto* top = dynamic_cast<TopDUContext*>(import.context(nullptr));
             if (top) {
                 top->m_local->m_directImporters.remove(m_ctxt);
 
@@ -321,7 +321,7 @@ private:
 
         for (QSet<DUContext*>::const_iterator it = m_directImporters.constBegin(); it != m_directImporters.constEnd();
              ++it) {
-            TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(*it)); //Avoid detaching, so use const_cast
+            auto* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(*it)); //Avoid detaching, so use const_cast
             if (top) ///@todo also record this for local imports
                 top->m_local->addImportedContextRecursion(m_ctxt, imported, depth + 1);
         }
@@ -359,7 +359,7 @@ private:
                 //We MUST do this before finding another trace, because else we would create loops
                 for (QSet<DUContext*>::const_iterator childIt = m_directImporters.constBegin();
                      childIt != m_directImporters.constEnd(); ++childIt) {
-                    TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(*childIt)); //Avoid detaching, so use const iterator
+                    auto* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(*childIt)); //Avoid detaching, so use const iterator
                     if (top)
                         top->m_local->removeImportedContextRecursion(m_ctxt, imported, distance + 1, rebuild); //Don't use 'it' from here on, it may be invalid
                 }
@@ -486,7 +486,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported)
 
     for (QVector<DUContext::Import>::const_iterator parentIt = m_importedContexts.constBegin();
          parentIt != m_importedContexts.constEnd(); ++parentIt) {
-        TopDUContext* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context(nullptr))); //To avoid detaching, use const iterator
+        auto* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context(nullptr))); //To avoid detaching, use const iterator
         if (top) {
 //       top->m_local->needImportStructure();
             if (top == imported) {
@@ -501,7 +501,7 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported)
     }
 
     for (unsigned int a = 0; a < m_ctxt->d_func()->m_importedContextsSize(); ++a) {
-        TopDUContext* top =
+        auto* top =
             dynamic_cast<TopDUContext*>(const_cast<DUContext*>(m_ctxt->d_func()->m_importedContexts()[a].context(nullptr)));           //To avoid detaching, use const iterator
         if (top) {
 //       top->m_local->needImportStructure();
@@ -697,7 +697,7 @@ struct TopDUContext::FindDeclarationsAcceptor
 
             if (!(flags & DontResolveAliases) && decl->kind() == Declaration::Alias) {
                 //Apply alias declarations
-                AliasDeclaration* alias = static_cast<AliasDeclaration*>(decl);
+                auto* alias = static_cast<AliasDeclaration*>(decl);
                 if (alias->aliasedDeclaration().isValid()) {
                     decl = alias->aliasedDeclaration().declaration();
                 } else {
@@ -827,7 +827,7 @@ bool TopDUContext::applyAliases(const QualifiedIdentifier& previous, const Searc
 
                     Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(aliasDecl));
 
-                    NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
+                    auto* alias = static_cast<NamespaceAliasDeclaration*>(aliasDecl);
 
                     foundAlias = true;
 
@@ -902,7 +902,7 @@ bool TopDUContext::applyAliases(const QualifiedIdentifier& previous, const Searc
 
                     //Search for the identifier with the import-identifier prepended
                     Q_ASSERT(dynamic_cast<NamespaceAliasDeclaration*>(importDecl));
-                    NamespaceAliasDeclaration* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
+                    auto* alias = static_cast<NamespaceAliasDeclaration*>(importDecl);
 
   #ifdef DEBUG_SEARCH
                     qCDebug(LANGUAGE) << "found import of" << alias->importIdentifier().toString();
@@ -1024,7 +1024,7 @@ bool TopDUContext::importsPrivate(const DUContext* origin, const CursorInRevisio
 {
     Q_UNUSED(position);
 
-    if (const TopDUContext* top = dynamic_cast<const TopDUContext*>(origin)) {
+    if (const auto* top = dynamic_cast<const TopDUContext*>(origin)) {
         QMutexLocker lock(&importStructureMutex);
         bool ret = recursiveImportIndices().contains(IndexedTopDUContext(const_cast<TopDUContext*>(top)));
         if (top == this)

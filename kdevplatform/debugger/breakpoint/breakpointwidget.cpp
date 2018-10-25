@@ -90,7 +90,7 @@ BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent
 
     setStretchFactor(0, 2);
 
-    PlaceholderItemProxyModel* proxyModel = new PlaceholderItemProxyModel(this);
+    auto* proxyModel = new PlaceholderItemProxyModel(this);
     proxyModel->setSourceModel(d->debugController->breakpointModel());
     proxyModel->setColumnHint(Breakpoint::LocationColumn, i18n("New code breakpoint ..."));
     proxyModel->setColumnHint(Breakpoint::ConditionColumn, i18n("Enter condition ..."));
