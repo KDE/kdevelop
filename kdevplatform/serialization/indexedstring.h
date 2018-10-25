@@ -14,7 +14,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #ifndef KDEVPLATFORM_INDEXED_STRING_H
 #define KDEVPLATFORM_INDEXED_STRING_H
@@ -29,7 +29,6 @@
 #include "serializationexport.h"
 
 namespace KDevelop {
-
 /**
  * This string does "disk reference-counting", which means that reference-counts are maintainted,
  * but only when the string is in a disk-stored location. The file referencecounting.h is used
@@ -50,200 +49,211 @@ namespace KDevelop {
  * @note Strings of length one are not put into the repository, but are encoded directly within
  * the index: They are encoded like @c 0xffff00bb where @c bb is the byte of the character.
  */
-class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString {
- public:
-  IndexedString();
-  /**
-   * @param str must be a utf8 encoded string, does not need to be 0-terminated.
-   * @param length must be its length in bytes.
-   * @param hash must be a hash as constructed with the here defined hash functions.
-   *             If it is zero, it will be computed.
-   */
-  explicit IndexedString( const char* str, unsigned short length, unsigned int hash = 0 );
+class KDEVPLATFORMSERIALIZATION_EXPORT IndexedString
+{
+public:
+    IndexedString();
+    /**
+     * @param str must be a utf8 encoded string, does not need to be 0-terminated.
+     * @param length must be its length in bytes.
+     * @param hash must be a hash as constructed with the here defined hash functions.
+     *             If it is zero, it will be computed.
+     */
+    explicit IndexedString(const char* str, unsigned short length, unsigned int hash = 0);
 
-  /**
-   * Needs a zero terminated string. When the information is already available,
-   * try using the other constructor.
-   *
-   * WARNING There is a UTF8-related issue when attempting to retrieve the string
-   * using str from an IndexedString built from this constructor
-   */
-  explicit IndexedString( const char* str );
+    /**
+     * Needs a zero terminated string. When the information is already available,
+     * try using the other constructor.
+     *
+     * WARNING There is a UTF8-related issue when attempting to retrieve the string
+     * using str from an IndexedString built from this constructor
+     */
+    explicit IndexedString(const char* str);
 
-  explicit IndexedString( char c );
+    explicit IndexedString(char c);
 
-  /**
-   * When the information is already available, try using the other constructor.
-   *
-   * @note This is expensive.
-   */
-  explicit IndexedString( const QString& str );
+    /**
+     * When the information is already available, try using the other constructor.
+     *
+     * @note This is expensive.
+     */
+    explicit IndexedString(const QString& str);
 
-  /**
-   * When the information is already available, try using the other constructor.
-   *
-   * @note This is expensive.
-   */
-  explicit IndexedString( const QByteArray& str );
+    /**
+     * When the information is already available, try using the other constructor.
+     *
+     * @note This is expensive.
+     */
+    explicit IndexedString(const QByteArray& str);
 
-  IndexedString( IndexedString&& o ) Q_DECL_NOEXCEPT
-    : m_index(o.m_index)
-  {
-    o.m_index = 0;
-  }
+    IndexedString(IndexedString&& o) Q_DECL_NOEXCEPT
+        : m_index(o.m_index)
+    {
+        o.m_index = 0;
+    }
 
-  /**
-   * Returns a not reference-counted IndexedString that represents the given index.
-   *
-   * @warning It is dangerous dealing with indices directly, because it may break
-   *          the reference counting logic. Never store pure indices to disk.
-   */
-  static IndexedString fromIndex( unsigned int index ) {
-    IndexedString ret;
-    ret.m_index = index;
-    return ret;
-  }
+    /**
+     * Returns a not reference-counted IndexedString that represents the given index.
+     *
+     * @warning It is dangerous dealing with indices directly, because it may break
+     *          the reference counting logic. Never store pure indices to disk.
+     */
+    static IndexedString fromIndex(unsigned int index)
+    {
+        IndexedString ret;
+        ret.m_index = index;
+        return ret;
+    }
 
-  /**
-   * @warning This is relatively expensive: needs a mutex lock, hash lookups, and eventual loading,
-   *       so avoid it when possible.
-   */
-  static int lengthFromIndex(unsigned int index);
+    /**
+     * @warning This is relatively expensive: needs a mutex lock, hash lookups, and eventual loading,
+     *       so avoid it when possible.
+     */
+    static int lengthFromIndex(unsigned int index);
 
-  IndexedString( const IndexedString& );
+    IndexedString(const IndexedString&);
 
-  ~IndexedString();
+    ~IndexedString();
 
-  /**
-   * Creates an indexed string from a QUrl, this is expensive.
-   */
-  explicit IndexedString( const QUrl& url );
+    /**
+     * Creates an indexed string from a QUrl, this is expensive.
+     */
+    explicit IndexedString(const QUrl& url);
 
-  /**
-   * Re-construct a QUrl from this indexed string, the result can be used with the
-   * QUrl-using constructor.
-   *
-   * @note This is expensive.
-   */
-  QUrl toUrl() const;
+    /**
+     * Re-construct a QUrl from this indexed string, the result can be used with the
+     * QUrl-using constructor.
+     *
+     * @note This is expensive.
+     */
+    QUrl toUrl() const;
 
-  inline unsigned int hash() const {
-    return m_index;
-  }
+    inline unsigned int hash() const
+    {
+        return m_index;
+    }
 
-  /**
-   * The string is uniquely identified by this index. You can use it for comparison.
-   *
-   * @warning It is dangerous dealing with indices directly, because it may break the
-   *          reference counting logic. never store pure indices to disk
-   */
-  inline unsigned int index() const {
-    return m_index;
-  }
+    /**
+     * The string is uniquely identified by this index. You can use it for comparison.
+     *
+     * @warning It is dangerous dealing with indices directly, because it may break the
+     *          reference counting logic. never store pure indices to disk
+     */
+    inline unsigned int index() const
+    {
+        return m_index;
+    }
 
-  bool isEmpty() const {
-    return m_index == 0;
-  }
+    bool isEmpty() const
+    {
+        return m_index == 0;
+    }
 
-  /**
-   * @note This is relatively expensive: needs a mutex lock, hash lookups, and eventual loading,
-   * so avoid it when possible.
-   */
-  int length() const;
+    /**
+     * @note This is relatively expensive: needs a mutex lock, hash lookups, and eventual loading,
+     * so avoid it when possible.
+     */
+    int length() const;
 
-  /**
-   * Returns the underlying c string, in utf-8 encoding.
-   *
-   * @warning The string is not 0-terminated, consider length()!
-   */
-  const char* c_str() const;
+    /**
+     * Returns the underlying c string, in utf-8 encoding.
+     *
+     * @warning The string is not 0-terminated, consider length()!
+     */
+    const char* c_str() const;
 
-  /**
-   * Convenience function, avoid using it, it's relatively expensive
-   */
-  QString str() const;
+    /**
+     * Convenience function, avoid using it, it's relatively expensive
+     */
+    QString str() const;
 
-  /**
-   * Convenience function, avoid using it, it's relatively expensive (less expensive then str() though)
-   */
-  QByteArray byteArray() const;
+    /**
+     * Convenience function, avoid using it, it's relatively expensive (less expensive then str() though)
+     */
+    QByteArray byteArray() const;
 
-  IndexedString& operator=(const IndexedString&);
+    IndexedString& operator=(const IndexedString&);
 
-  IndexedString& operator=(IndexedString&& o) Q_DECL_NOEXCEPT
-  {
-    m_index = o.m_index;
-    o.m_index = 0;
-    return *this;
-  }
+    IndexedString& operator=(IndexedString&& o) Q_DECL_NOEXCEPT
+    {
+        m_index = o.m_index;
+        o.m_index = 0;
+        return *this;
+    }
 
-  /**
-   * Fast index-based comparison
-   */
-  bool operator == ( const IndexedString& rhs ) const {
-    return m_index == rhs.m_index;
-  }
+    /**
+     * Fast index-based comparison
+     */
+    bool operator ==(const IndexedString& rhs) const
+    {
+        return m_index == rhs.m_index;
+    }
 
-  /**
-   * Fast index-based comparison
-   */
-  bool operator != ( const IndexedString& rhs ) const {
-    return m_index != rhs.m_index;
-  }
+    /**
+     * Fast index-based comparison
+     */
+    bool operator !=(const IndexedString& rhs) const
+    {
+        return m_index != rhs.m_index;
+    }
 
-  /**
-   * Does not compare alphabetically, uses the index for ordering.
-   */
-  bool operator < ( const IndexedString& rhs ) const {
-    return m_index < rhs.m_index;
-  }
+    /**
+     * Does not compare alphabetically, uses the index for ordering.
+     */
+    bool operator <(const IndexedString& rhs) const
+    {
+        return m_index < rhs.m_index;
+    }
 
-  /**
-   * Use this to construct a hash-value on-the-fly
-   *
-   * To read it, just use the hash member, and when a new string is started, call @c clear().
-   *
-   * This needs very fast performance(per character operation), so it must stay inlined.
-   */
-  struct RunningHash {
-    enum {
-      HashInitialValue = 5381
+    /**
+     * Use this to construct a hash-value on-the-fly
+     *
+     * To read it, just use the hash member, and when a new string is started, call @c clear().
+     *
+     * This needs very fast performance(per character operation), so it must stay inlined.
+     */
+    struct RunningHash
+    {
+        enum {
+            HashInitialValue = 5381
+        };
+
+        RunningHash()
+        {
+        }
+        inline void append(const char c)
+        {
+            hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+        }
+        inline void clear()
+        {
+            hash = HashInitialValue;
+        }
+
+        /// We initialize the hash with zero, because we want empty strings to create a zero hash(invalid)
+        unsigned int hash = HashInitialValue;
     };
 
-    RunningHash() {
-    }
-    inline void append(const char c) {
-      hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-    }
-    inline void clear() {
-      hash = HashInitialValue;
-    }
+    static unsigned int hashString(const char* str, unsigned short length);
 
-    /// We initialize the hash with zero, because we want empty strings to create a zero hash(invalid)
-    unsigned int hash = HashInitialValue;
-  };
+    /**
+     * Optimized function that only computes the index of a string
+     * removes the overhead of the IndexedString ref counting
+     */
+    static uint indexForString(const char* str, unsigned short length, uint hash = 0);
+    static uint indexForString(const QString& str, uint hash = 0);
 
-  static unsigned int hashString(const char* str, unsigned short length);
-
-  /**
-   * Optimized function that only computes the index of a string
-   * removes the overhead of the IndexedString ref counting
-   */
-  static uint indexForString(const char* str, unsigned short length, uint hash = 0);
-  static uint indexForString(const QString& str, uint hash = 0);
-
- private:
-   explicit IndexedString(bool);
-   uint m_index = 0;
+private:
+    explicit IndexedString(bool);
+    uint m_index = 0;
 };
 
 // the following function would need to be exported in case you'd remove the inline keyword.
-inline uint qHash( const KDevelop::IndexedString& str ) {
-  return str.index();
+inline uint qHash(const KDevelop::IndexedString& str)
+{
+    return str.index();
 }
-
 }
-
 
 /**
  * qDebug() stream operator.  Writes the string to the debug output.

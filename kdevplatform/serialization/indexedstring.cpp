@@ -15,7 +15,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 #include "indexedstring.h"
 #include "serialization/stringrepository.h"
@@ -25,7 +25,6 @@
 using namespace KDevelop;
 
 namespace {
-
 struct IndexedStringData
 {
     unsigned short length;
@@ -39,11 +38,12 @@ struct IndexedStringData
     uint hash() const
     {
         IndexedString::RunningHash running;
-        const char* str = ((const char*)this) + sizeof(IndexedStringData);
+        const char* str = (( const char* )this) + sizeof(IndexedStringData);
         for (int a = length - 1; a >= 0; --a) {
             running.append(*str);
             ++str;
         }
+
         return running.hash;
     }
 };
@@ -104,7 +104,7 @@ struct IndexedStringRepositoryItemRequest
 
     static bool persistent(const IndexedStringData* item)
     {
-        return (bool)item->refCount;
+        return ( bool )item->refCount;
     }
 
     //Should return whether the here requested item equals the given item
@@ -152,11 +152,12 @@ inline char indexToChar(uint index)
 
 using IndexedStringRepository = ItemRepository<IndexedStringData, IndexedStringRepositoryItemRequest, false, false>;
 using IndexedStringRepositoryManagerBase = RepositoryManager<IndexedStringRepository, true, false>;
-class IndexedStringRepositoryManager : public IndexedStringRepositoryManagerBase
+class IndexedStringRepositoryManager
+    : public IndexedStringRepositoryManagerBase
 {
 public:
     IndexedStringRepositoryManager()
-      : IndexedStringRepositoryManagerBase(QStringLiteral("String Index"))
+        : IndexedStringRepositoryManagerBase(QStringLiteral("String Index"))
     {
         repository()->setMutex(&m_mutex);
     }
@@ -172,16 +173,16 @@ IndexedStringRepository* globalIndexedStringRepository()
     return manager.repository();
 }
 
-template<typename ReadAction>
-auto readRepo(ReadAction action) -> decltype(action(globalIndexedStringRepository()))
+template <typename ReadAction>
+auto readRepo(ReadAction action)->decltype(action(globalIndexedStringRepository()))
 {
     const auto* repo = globalIndexedStringRepository();
     QMutexLocker lock(repo->mutex());
     return action(repo);
 }
 
-template<typename EditAction>
-auto editRepo(EditAction action) -> decltype(action(globalIndexedStringRepository()))
+template <typename EditAction>
+auto editRepo(EditAction action)->decltype(action(globalIndexedStringRepository()))
 {
     auto* repo = globalIndexedStringRepository();
     QMutexLocker lock(repo->mutex());
@@ -193,9 +194,9 @@ inline void ref(IndexedString* string)
     const uint index = string->index();
     if (index && !isSingleCharIndex(index)) {
         if (shouldDoDUChainReferenceCounting(string)) {
-            editRepo([index] (IndexedStringRepository* repo) {
-                increase(repo->dynamicItemFromIndexSimple(index)->refCount);
-            });
+            editRepo([index](IndexedStringRepository* repo) {
+                    increase(repo->dynamicItemFromIndexSimple(index)->refCount);
+                });
         }
     }
 }
@@ -205,13 +206,12 @@ inline void deref(IndexedString* string)
     const uint index = string->index();
     if (index && !isSingleCharIndex(index)) {
         if (shouldDoDUChainReferenceCounting(string)) {
-            editRepo([index] (IndexedStringRepository* repo) {
-                decrease(repo->dynamicItemFromIndexSimple(index)->refCount);
-            });
+            editRepo([index](IndexedStringRepository* repo) {
+                    decrease(repo->dynamicItemFromIndexSimple(index)->refCount);
+                });
         }
     }
 }
-
 }
 
 IndexedString::IndexedString()
@@ -229,7 +229,7 @@ IndexedString::IndexedString(const char* str, unsigned short length, uint hash)
     } else {
         const auto request = IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length);
         bool refcount = shouldDoDUChainReferenceCounting(this);
-        m_index = editRepo([request, refcount] (IndexedStringRepository* repo) {
+        m_index = editRepo([request, refcount](IndexedStringRepository* repo) {
             auto index = repo->index(request);
             if (refcount) {
                 increase(repo->dynamicItemFromIndexSimple(index)->refCount);
@@ -249,7 +249,7 @@ IndexedString::IndexedString(const QUrl& url)
     Q_ASSERT(url.isEmpty() || !url.isRelative());
 #if !defined(QT_NO_DEBUG)
     if (url != url.adjusted(QUrl::NormalizePathSegments)) {
-      qWarning() << "wrong url" << url << url.adjusted(QUrl::NormalizePathSegments);
+        qWarning() << "wrong url" << url << url.adjusted(QUrl::NormalizePathSegments);
     }
 #endif
     Q_ASSERT(url == url.adjusted(QUrl::NormalizePathSegments));
@@ -311,7 +311,7 @@ QString IndexedString::str() const
         return QString(QLatin1Char(indexToChar(m_index)));
     } else {
         const uint index = m_index;
-        return readRepo([index] (const IndexedStringRepository* repo) {
+        return readRepo([index](const IndexedStringRepository* repo) {
             return stringFromItem(repo->itemFromIndex(index));
         });
     }
@@ -329,7 +329,7 @@ int IndexedString::lengthFromIndex(uint index)
     } else if (isSingleCharIndex(index)) {
         return 1;
     } else {
-        return readRepo([index] (const IndexedStringRepository* repo) {
+        return readRepo([index](const IndexedStringRepository* repo) {
             return repo->itemFromIndex(index)->length;
         });
     }
@@ -348,11 +348,10 @@ const char* IndexedString::c_str() const
         return reinterpret_cast<const char*>(&m_index) + offset;
     } else {
         const uint index = m_index;
-        return readRepo([index] (const IndexedStringRepository* repo) {
+        return readRepo([index](const IndexedStringRepository* repo) {
             return c_strFromItem(repo->itemFromIndex(index));
         });
     }
-
 }
 
 QByteArray IndexedString::byteArray() const
@@ -363,7 +362,7 @@ QByteArray IndexedString::byteArray() const
         return QByteArray(1, indexToChar(m_index));
     } else {
         const uint index = m_index;
-        return readRepo([index] (const IndexedStringRepository* repo) {
+        return readRepo([index](const IndexedStringRepository* repo) {
             return arrayFromItem(repo->itemFromIndex(index));
         });
     }
@@ -376,6 +375,7 @@ uint IndexedString::hashString(const char* str, unsigned short length)
         running.append(*str);
         ++str;
     }
+
     return running.hash;
 }
 
@@ -387,7 +387,7 @@ uint IndexedString::indexForString(const char* str, short unsigned length, uint 
         return charToIndex(str[0]);
     } else {
         const auto request = IndexedStringRepositoryItemRequest(str, hash ? hash : hashString(str, length), length);
-        return editRepo([request] (IndexedStringRepository* repo) {
+        return editRepo([request](IndexedStringRepository* repo) {
             return repo->index(request);
         });
     }

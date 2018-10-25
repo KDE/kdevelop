@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef ITEMREPOSITORYREGISTRY_H
 #define ITEMREPOSITORYREGISTRY_H
@@ -28,7 +28,6 @@ class QMutex;
 class QAtomicInt;
 
 namespace KDevelop {
-
 class ISession;
 class AbstractRepositoryManager;
 class AbstractItemRepository;
@@ -38,8 +37,9 @@ class AbstractItemRepository;
  * Does not automatically store contained repositories on destruction.
  * For the global registry, the storing is triggered from within duchain, so you don't need to care about it.
  */
-class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
-  public:
+class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry
+{
+public:
     ~ItemRepositoryRegistry();
 
     /**
@@ -96,7 +96,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
     /// @note    Can be used to protect the initialization.
     QMutex& mutex();
 
-  private:
+private:
     explicit ItemRepositoryRegistry(const QString& repositoryPath);
 
     const QScopedPointer<class ItemRepositoryRegistryPrivate> d;
@@ -106,7 +106,6 @@ class KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry {
 
 /// @returns The global item-repository registry (now it is @ref ItemRepositoryRegistry::self()).
 KDEVPLATFORMSERIALIZATION_EXPORT ItemRepositoryRegistry& globalItemRepositoryRegistry();
-
 }
 
 #endif // ITEMREPOSITORYREGISTRY_H

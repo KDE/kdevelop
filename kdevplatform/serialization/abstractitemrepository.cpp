@@ -14,17 +14,16 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #include "abstractitemrepository.h"
 
 #include "config-kdevplatform.h"
 
 namespace KDevelop {
-
 uint staticItemRepositoryVersion()
 {
-  return KDEV_ITEMREPOSITORY_VERSION;
+    return KDEV_ITEMREPOSITORY_VERSION;
 }
 
 AbstractItemRepository::~AbstractItemRepository()
@@ -41,8 +40,7 @@ AbstractRepositoryManager::~AbstractRepositoryManager()
 
 void AbstractRepositoryManager::deleteRepository()
 {
-  delete m_repository;
-  m_repository = nullptr;
+    delete m_repository;
+    m_repository = nullptr;
 }
-
 }

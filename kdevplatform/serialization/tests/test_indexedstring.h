@@ -25,9 +25,11 @@
 #include <QDir>
 #include <QObject>
 
-class TestIndexedString : public QObject
+class TestIndexedString
+    : public QObject
 {
     Q_OBJECT
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();

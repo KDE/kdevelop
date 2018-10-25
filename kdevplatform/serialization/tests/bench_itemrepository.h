@@ -25,9 +25,11 @@
 #include <QDir>
 #include <QObject>
 
-class BenchItemRepository : public QObject
+class BenchItemRepository
+    : public QObject
 {
     Q_OBJECT
+
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();

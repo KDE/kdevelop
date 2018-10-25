@@ -14,7 +14,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef ABSTRACTITEMREPOSITORY_H
 #define ABSTRACTITEMREPOSITORY_H
@@ -26,14 +26,13 @@
 class QString;
 
 namespace KDevelop {
-
 /// Returns a version-number that is used to reset the item-repository after incompatible layout changes.
 KDEVPLATFORMSERIALIZATION_EXPORT uint staticItemRepositoryVersion();
 
 /// The interface class for an item-repository object.
 class KDEVPLATFORMSERIALIZATION_EXPORT AbstractItemRepository
 {
-  public:
+public:
     virtual ~AbstractItemRepository();
     /// @param path A shared directory-name that the item-repository is to be loaded from.
     /// @returns    Whether the repository has been opened successfully.
@@ -51,7 +50,7 @@ class KDEVPLATFORMSERIALIZATION_EXPORT AbstractItemRepository
 /// Internal helper class that wraps around a repository object and manages its lifetime.
 class KDEVPLATFORMSERIALIZATION_EXPORT AbstractRepositoryManager
 {
-  public:
+public:
     AbstractRepositoryManager();
     virtual ~AbstractRepositoryManager();
 
@@ -59,10 +58,9 @@ class KDEVPLATFORMSERIALIZATION_EXPORT AbstractRepositoryManager
 
     virtual QMutex* repositoryMutex() const = 0;
 
-  protected:
+protected:
     mutable AbstractItemRepository* m_repository = nullptr;
 };
-
 }
 
 #endif // ABSTRACTITEMREPOSITORY_H
