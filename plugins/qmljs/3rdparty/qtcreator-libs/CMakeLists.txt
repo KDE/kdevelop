@@ -72,7 +72,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
    add_target_compile_flag_if_supported(kdevqtc-qmlsupport PRIVATE "-Wno-class-memaccess")
 endif()
 
-target_compile_definitions(kdevqtc-qmlsupport PUBLIC -DLANGUAGEUTILS_BUILD_DIR -DQTCREATOR_UTILS_LIB -DQT_CREATOR -DQML_BUILD_STATIC_LIB)
+target_compile_definitions(kdevqtc-qmlsupport PUBLIC -DLANGUAGEUTILS_LIBRARY -DUTILS_LIBRARY -DQT_CREATOR -DQML_BUILD_STATIC_LIB)
 # add as SYSTEM include dir so compiler does not emit warnings for the lib headers
 target_include_directories(kdevqtc-qmlsupport SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 # optional.hpp needs -fexceptions
