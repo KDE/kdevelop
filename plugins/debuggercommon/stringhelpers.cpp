@@ -28,45 +28,6 @@
 
 namespace {
 
-bool parenFits( QChar c1, QChar c2 ) {
-    if (c1 == QLatin1Char('<') && c2 == QLatin1Char('>')) return true;
-    if (c1 == QLatin1Char('(') && c2 == QLatin1Char(')')) return true;
-    if (c1 == QLatin1Char('[') && c2 == QLatin1Char(']')) return true;
-    if (c1 == QLatin1Char('{') && c2 == QLatin1Char('}')) return true;
-    return false;
-}
-
-bool isParen( QChar c1 ) {
-    if (c1 == QLatin1Char('<') || c1 == QLatin1Char('>')) return true;
-    if (c1 == QLatin1Char('(') || c1 == QLatin1Char(')')) return true;
-    if (c1 == QLatin1Char('[') || c1 == QLatin1Char(']')) return true;
-    if (c1 == QLatin1Char('{') || c1 == QLatin1Char('}')) return true;
-    return false;
-}
-
-bool isTypeParen( QChar c1 ) {
-    if (c1 == QLatin1Char('<') || c1 == QLatin1Char('>')) return true;
-    return false;
-}
-
-bool isTypeOpenParen( QChar c1 ) {
-    if (c1 == QLatin1Char('<')) return true;
-    return false;
-}
-
-bool isTypeCloseParen( QChar c1 ) {
-    if (c1 == QLatin1Char('>')) return true;
-    return false;
-}
-
-bool isLeftParen( QChar c1 ) {
-    if (c1 == QLatin1Char('<')) return true;
-    if (c1 == QLatin1Char('(')) return true;
-    if (c1 == QLatin1Char('[')) return true;
-    if (c1 == QLatin1Char('{')) return true;
-    return false;
-}
-
 enum { T_ACCESS, T_PAREN, T_BRACKET, T_IDE, T_UNKNOWN, T_TEMP };
 
 }

@@ -29,6 +29,10 @@ set_property(TARGET kdevsvncpp PROPERTY POSITION_INDEPENDENT_CODE ON)
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_target_compile_flag_if_supported(kdevsvncpp PRIVATE "-Wno-documentation")
 endif()
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_target_compile_flag_if_supported(kdevsvncpp PRIVATE "-Wno-cast-align")
+    add_target_compile_flag_if_supported(kdevsvncpp PRIVATE "-Wno-zero-as-null-pointer-constant")
+endif()
 target_include_directories(kdevsvncpp
     PRIVATE kdevsvncpp
 )
