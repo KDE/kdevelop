@@ -613,6 +613,7 @@ void ProjectController::setupActions()
     QAction* openProjectForFileAction = new QAction( this );
     ac->addAction(QStringLiteral("project_open_for_file"), openProjectForFileAction);
     openProjectForFileAction->setText(i18n("Open Project for Current File"));
+    openProjectForFileAction->setIcon(QIcon::fromTheme(QStringLiteral("project-open")));
     connect( openProjectForFileAction, &QAction::triggered, this, &ProjectController::openProjectForUrlSlot);
 }
 
