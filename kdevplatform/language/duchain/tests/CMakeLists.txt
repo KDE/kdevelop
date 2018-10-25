@@ -6,6 +6,7 @@ ecm_add_test(test_duchainshutdown.cpp
 
 ecm_add_test(test_identifier.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
+add_target_compile_flag_if_supported(test_identifier PRIVATE -Wno-self-assign-overloaded) # self-assignments are on purpose here
 
 ecm_add_test(test_stringhelpers.cpp
     LINK_LIBRARIES Qt5::Test KDev::Tests KDev::Language)
