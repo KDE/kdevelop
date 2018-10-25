@@ -1203,7 +1203,7 @@ void TestDUChain::testReparseChangeEnvironment()
 
 void TestDUChain::testMacroDependentHeader()
 {
-    TestFile header(QStringLiteral("struct MY_CLASS { class Q{Q(); int m;}; int m; };\n"), QStringLiteral("h"));
+    TestFile header(QStringLiteral("struct MY_CLASS { struct Q{Q(); int m;}; int m; };\n"), QStringLiteral("h"));
     TestFile impl("#define MY_CLASS A\n"
                   "#include \"" + header.url().str() + "\"\n"
                   "#undef MY_CLASS\n"
