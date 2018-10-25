@@ -47,21 +47,21 @@ class QMenu;
 class QToolButton;
 
 namespace Sublime {
-  class MainWindow;
+class MainWindow;
 }
 
 namespace KDevelop {
-  class IDocument;
-  class DUContext;
-  class TopDUContext;
-  class ReferencedTopDUContext;
-  class DUChainBase;
-  class AbstractNavigationWidget;
+class IDocument;
+class DUContext;
+class TopDUContext;
+class ReferencedTopDUContext;
+class DUChainBase;
+class AbstractNavigationWidget;
 }
 
 namespace KTextEditor {
-  class Document;
-  class View;
+class Document;
+class View;
 }
 
 class ContextBrowserViewFactory;
@@ -69,46 +69,51 @@ class ContextBrowserView;
 class ContextBrowserPlugin;
 class BrowseManager;
 
-class ContextBrowserHintProvider : public KTextEditor::TextHintProvider
+class ContextBrowserHintProvider
+    : public KTextEditor::TextHintProvider
 {
 public:
-  explicit ContextBrowserHintProvider(ContextBrowserPlugin* plugin);
-  QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
+    explicit ContextBrowserHintProvider(ContextBrowserPlugin* plugin);
+    QString textHint(KTextEditor::View* view, const KTextEditor::Cursor& position) override;
 
 private:
-  ContextBrowserPlugin* m_plugin;
+    ContextBrowserPlugin* m_plugin;
 };
 
 QWidget* masterWidget(QWidget* w);
 
 struct ViewHighlights
 {
-  ViewHighlights() : keep(false) {
-  }
-  // Whether the same highlighting should be kept highlighted (usually during typing)
-  bool keep;
-  // The declaration that is highlighted for this view
-  KDevelop::IndexedDeclaration declaration;
-  // Highlighted ranges. Those may also be contained by different views.
-  QList<KDevelop::PersistentMovingRange::Ptr> highlights;
+    ViewHighlights() : keep(false)
+    {
+    }
+    // Whether the same highlighting should be kept highlighted (usually during typing)
+    bool keep;
+    // The declaration that is highlighted for this view
+    KDevelop::IndexedDeclaration declaration;
+    // Highlighted ranges. Those may also be contained by different views.
+    QList<KDevelop::PersistentMovingRange::Ptr> highlights;
 };
 
-class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContextBrowser
+class ContextBrowserPlugin
+    : public KDevelop::IPlugin
+    , public KDevelop::IContextBrowser
 {
     Q_OBJECT
-    Q_INTERFACES( KDevelop::IContextBrowser )
-  public:
-    explicit ContextBrowserPlugin(QObject *parent, const QVariantList & = QVariantList() );
+    Q_INTERFACES(KDevelop::IContextBrowser)
+
+public:
+    explicit ContextBrowserPlugin(QObject* parent, const QVariantList& = QVariantList());
     ~ContextBrowserPlugin() override;
 
     void unload() override;
 
     void registerToolView(ContextBrowserView* view);
     void unRegisterToolView(ContextBrowserView* view);
-    
+
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
-    KXMLGUIClient* createGUIForMainWindow( Sublime::MainWindow* window ) override;
+    KXMLGUIClient* createGUIForMainWindow(Sublime::MainWindow* window) override;
 
     ///duchain must be locked
     ///@param force When this is true, the history-entry is added, no matter whether the context is "interesting" or not
@@ -122,31 +127,31 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     KTextEditor::Attribute::Ptr highlightedUseAttribute(KTextEditor::View* view) const;
     KTextEditor::Attribute::Ptr highlightedSpecialObjectAttribute(KTextEditor::View* view) const;
 
-  public Q_SLOTS:
+public Q_SLOTS:
     void showUsesDelayed(const KDevelop::DeclarationPointer& declaration);
     void previousContextShortcut();
     void nextContextShortcut();
-    
+
     void startDelayedBrowsing(KTextEditor::View* view);
     void stopDelayedBrowsing();
     void invokeAction(int index);
-    
+
     void previousUseShortcut();
     void nextUseShortcut();
 
     void declarationSelectedInUI(const KDevelop::DeclarationPointer& decl);
 
     void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
-    void textDocumentCreated( KDevelop::IDocument* document );
-    void documentActivated( KDevelop::IDocument* );
-    void viewDestroyed( QObject* obj );
-    void cursorPositionChanged( KTextEditor::View* view, const KTextEditor::Cursor& newPosition );
-    void viewCreated( KTextEditor::Document* , KTextEditor::View* );
+    void textDocumentCreated(KDevelop::IDocument* document);
+    void documentActivated(KDevelop::IDocument*);
+    void viewDestroyed(QObject* obj);
+    void cursorPositionChanged(KTextEditor::View* view, const KTextEditor::Cursor& newPosition);
+    void viewCreated(KTextEditor::Document*, KTextEditor::View*);
     void updateViews();
 
     void hideToolTip();
     void findUses();
-    
+
     void textInserted(KTextEditor::Document* doc, const KTextEditor::Cursor& cursor, const QString& text);
     void selectionChanged(KTextEditor::View*);
 
@@ -155,12 +160,12 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
 
     void colorSetupChanged();
 
-  private Q_SLOTS:
+private Q_SLOTS:
     // history browsing
-    void documentJumpPerformed( KDevelop::IDocument* newDocument,
-                                const KTextEditor::Cursor& newCursor,
-                                KDevelop::IDocument* previousDocument,
-                                const KTextEditor::Cursor& previousCursor);
+    void documentJumpPerformed(KDevelop::IDocument* newDocument,
+                               const KTextEditor::Cursor& newCursor,
+                               KDevelop::IDocument* previousDocument,
+                               const KTextEditor::Cursor& previousCursor);
 
     void nextMenuAboutToShow();
     void previousMenuAboutToShow();
@@ -173,16 +178,16 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void navigateAccept();
     void navigateBack();
 
-  private:
+private:
     QWidget* toolbarWidgetForMainWindow(Sublime::MainWindow* window);
     void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile,
-                                            KActionCollection& actions) override;
+                                    KActionCollection& actions) override;
     QWidget* navigationWidgetForPosition(KTextEditor::View* view, KTextEditor::Cursor position,
                                          KTextEditor::Range& itemRange);
     void switchUse(bool forward);
     void clearMouseHover();
 
-    void addHighlight( KTextEditor::View* view, KDevelop::Declaration* decl );
+    void addHighlight(KTextEditor::View* view, KDevelop::Declaration* decl);
 
     /** helper for updateBrowserView().
      *  Tries to find a 'specialLanguageObject' (eg macro) in @p view under cursor @c.
@@ -198,27 +203,27 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     void fillHistoryPopup(QMenu* menu, const QList<int>& historyIndices);
 
     enum NavigationActionType {
-      Accept,
-      Back,
-      Down,
-      Up,
-      Left,
-      Right
+        Accept,
+        Back,
+        Down,
+        Up,
+        Left,
+        Right
     };
     void doNavigate(NavigationActionType action);
 
-  private:
-    
+private:
+
     // Returns the currently active and visible context browser view that belongs
     // to the same context (mainwindow and area) as the given widget
     ContextBrowserView* browserViewForWidget(QWidget* widget);
-    
+
     void showToolTip(KTextEditor::View* view, KTextEditor::Cursor position);
     QTimer* m_updateTimer;
-    
+
     //Contains the range, the old attribute, and the attribute it was replaced with
     QSet<KTextEditor::View*> m_updateViews;
-    QMap<KTextEditor::View*, ViewHighlights > m_highlightedRanges;
+    QMap<KTextEditor::View*, ViewHighlights> m_highlightedRanges;
 
     //Holds a list of all active context browser tool views
     QList<ContextBrowserView*> m_views;
@@ -235,7 +240,7 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     KDevelop::IndexedDeclaration m_currentToolTipDeclaration;
     QVector<KDevelop::IProblem::Ptr> m_currentToolTipProblems;
     QAction* m_findUses;
-    
+
     QPointer<KTextEditor::Document> m_lastInsertionDocument;
     KTextEditor::Cursor m_lastInsertionPos;
 
@@ -245,9 +250,12 @@ class ContextBrowserPlugin : public KDevelop::IPlugin, public KDevelop::IContext
     QPointer<QWidget> m_toolbarWidget;
 
     // history browsing
-    struct HistoryEntry {
+    struct HistoryEntry
+    {
         //Duchain must be locked
-        explicit HistoryEntry(KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(), const KTextEditor::Cursor& cursorPosition = KTextEditor::Cursor());
+        explicit HistoryEntry(
+            KDevelop::IndexedDUContext ctx = KDevelop::IndexedDUContext(),
+            const KTextEditor::Cursor& cursorPosition = KTextEditor::Cursor());
         explicit HistoryEntry(const KDevelop::DocumentCursor& pos);
         //Duchain must be locked
         void setCursorPosition(const KTextEditor::Cursor& cursorPosition);

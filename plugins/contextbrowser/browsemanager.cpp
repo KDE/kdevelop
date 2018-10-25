@@ -1,5 +1,5 @@
 /*
-  * This file is part of KDevelop
+ * This file is part of KDevelop
  *
  * Copyright 2008 David Nolden <david.nolden.kdevelop@art-master.de>
  *
@@ -54,48 +54,57 @@ using namespace KTextEditor;
 EditorViewWatcher::EditorViewWatcher(QObject* parent)
     : QObject(parent)
 {
-    connect(ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this, &EditorViewWatcher::documentCreated);
-    foreach(KDevelop::IDocument* document, ICore::self()->documentController()->openDocuments())
+    connect(
+        ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this,
+        &EditorViewWatcher::documentCreated);
+    foreach (KDevelop::IDocument* document, ICore::self()->documentController()->openDocuments())
         documentCreated(document);
 }
 
-void EditorViewWatcher::documentCreated( KDevelop::IDocument* document ) {
+void EditorViewWatcher::documentCreated(KDevelop::IDocument* document)
+{
     KTextEditor::Document* textDocument = document->textDocument();
-    if(textDocument) {
+    if (textDocument) {
         connect(textDocument, &Document::viewCreated, this, &EditorViewWatcher::viewCreated);
-        foreach(KTextEditor::View* view, textDocument->views()) {
+        foreach (KTextEditor::View* view, textDocument->views()) {
             Q_ASSERT(view->parentWidget());
             addViewInternal(view);
         }
     }
 }
 
-void EditorViewWatcher::addViewInternal(KTextEditor::View* view) {
+void EditorViewWatcher::addViewInternal(KTextEditor::View* view)
+{
     m_views << view;
     viewAdded(view);
     connect(view, &View::destroyed, this, &EditorViewWatcher::viewDestroyed);
 }
 
-void EditorViewWatcher::viewAdded(KTextEditor::View*) {
+void EditorViewWatcher::viewAdded(KTextEditor::View*)
+{
 }
 
-void EditorViewWatcher::viewDestroyed(QObject* view) {
+void EditorViewWatcher::viewDestroyed(QObject* view)
+{
     m_views.removeAll(static_cast<KTextEditor::View*>(view));
 }
 
-void EditorViewWatcher::viewCreated(KTextEditor::Document* /*doc*/, KTextEditor::View* view) {
+void EditorViewWatcher::viewCreated(KTextEditor::Document* /*doc*/, KTextEditor::View* view)
+{
     Q_ASSERT(view->parentWidget());
     addViewInternal(view);
 }
 
-QList<KTextEditor::View*> EditorViewWatcher::allViews() {
+QList<KTextEditor::View*> EditorViewWatcher::allViews()
+{
     return m_views;
 }
 
-void BrowseManager::eventuallyStartDelayedBrowsing() {
+void BrowseManager::eventuallyStartDelayedBrowsing()
+{
     avoidMenuAltFocus();
 
-    if(m_browsingByKey == Qt::Key_Alt && m_browsingStartedInView)
+    if (m_browsingByKey == Qt::Key_Alt && m_browsingStartedInView)
         emit startDelayedBrowsing(m_browsingStartedInView);
 }
 
@@ -112,21 +121,23 @@ BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
 
     connect(m_delayedBrowsingTimer, &QTimer::timeout, this, &BrowseManager::eventuallyStartDelayedBrowsing);
 
-    foreach(KTextEditor::View* view, m_watcher.allViews())
+    foreach (KTextEditor::View* view, m_watcher.allViews())
         viewAdded(view);
 }
 
-KTextEditor::View* viewFromWidget(QWidget* widget) {
-    if(!widget)
+KTextEditor::View* viewFromWidget(QWidget* widget)
+{
+    if (!widget)
         return nullptr;
     KTextEditor::View* view = qobject_cast<KTextEditor::View*>(widget);
-    if(view)
+    if (view)
         return view;
     else
         return viewFromWidget(widget->parentWidget());
 }
 
-BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor textCursor, const QUrl& viewUrl) const {
+BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor textCursor, const QUrl& viewUrl) const
+{
     // @todo find out why this is needed, fix the code in kate
     if (textCursor.column() > 0) {
         textCursor.setColumn(textCursor.column() - 1);
@@ -136,7 +147,9 @@ BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor 
     foreach (const auto& language, ICore::self()->languageController()->languagesForUrl(viewUrl)) {
         auto jumpTo = language->specialLanguageObjectJumpCursor(viewUrl, textCursor);
         if (jumpTo.first.isValid() && jumpTo.second.isValid()) {
-            return {jumpTo.first, jumpTo.second};
+            return {
+                       jumpTo.first, jumpTo.second
+            };
         }
     }
 
@@ -157,13 +170,16 @@ BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor 
                 jumpDestination = definition;
             }
         }
-        return {jumpDestination->url().toUrl(), jumpDestination->rangeInCurrentRevision().start()};
+        return {
+                   jumpDestination->url().toUrl(), jumpDestination->rangeInCurrentRevision().start()
+        };
     }
 
     return {};
 }
 
-bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
+bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
+{
     QWidget* widget = qobject_cast<QWidget*>(watched);
     Q_ASSERT(widget);
 
@@ -175,21 +191,22 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     KTextEditor::View* view = viewFromWidget(widget);
 
     //Eventually start key-browsing
-    if(keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey && keyEvent->type() == QEvent::KeyPress) {
+    if (keyEvent && (keyEvent->key() == browseKey || keyEvent->key() == magicModifier) && !m_browsingByKey &&
+        keyEvent->type() == QEvent::KeyPress) {
         m_delayedBrowsingTimer->start(); // always start the timer, to get consistent behavior regarding the ALT key and the menu activation
         m_browsingByKey = keyEvent->key();
 
-        if(!view) {
+        if (!view) {
             return false;
         }
 
-        if(keyEvent->key() == magicModifier) {
-            if(dynamic_cast<KTextEditor::CodeCompletionInterface*>(view) && dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive())
-            {
+        if (keyEvent->key() == magicModifier) {
+            if (dynamic_cast<KTextEditor::CodeCompletionInterface*>(view) &&
+                dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive()) {
                 //Completion is active.
                 avoidMenuAltFocus();
                 m_delayedBrowsingTimer->stop();
-            }else{
+            } else {
                 m_browsingStartedInView = view;
             }
         }
@@ -205,13 +222,13 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         }
     }
 
-    if(!view) {
+    if (!view) {
         return false;
     }
 
     QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(event);
     //Eventually stop key-browsing
-    if((keyEvent && m_browsingByKey && keyEvent->key() == m_browsingByKey && keyEvent->type() == QEvent::KeyRelease)
+    if ((keyEvent && m_browsingByKey && keyEvent->key() == m_browsingByKey && keyEvent->type() == QEvent::KeyRelease)
         || (focusEvent && focusEvent->lostFocus()) || event->type() == QEvent::WindowDeactivate) {
         m_browsingByKey = 0;
         emit stopDelayedBrowsing();
@@ -219,7 +236,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
 
     QMouseEvent* mouseEvent = dynamic_cast<QMouseEvent*>(event);
 
-    if(mouseEvent) {
+    if (mouseEvent) {
         if (mouseEvent->type() == QEvent::MouseButtonPress && mouseEvent->button() == Qt::XButton1) {
             m_plugin->historyPrevious();
             return true;
@@ -230,29 +247,30 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
         }
     }
 
-    if(!m_browsing && !m_browsingByKey) {
+    if (!m_browsing && !m_browsingByKey) {
         resetChangedCursor();
         return false;
     }
 
-    if(mouseEvent) {
+    if (mouseEvent) {
         QPoint coordinatesInView = widget->mapTo(view, mouseEvent->pos());
 
         KTextEditor::Cursor textCursor = view->coordinatesToCursor(coordinatesInView);
         if (textCursor.isValid()) {
             JumpLocation jumpTo = determineJumpLoc(textCursor, view->document()->url());
             if (jumpTo.isValid()) {
-                if(mouseEvent->button() == Qt::LeftButton) {
-                    if(mouseEvent->type() == QEvent::MouseButtonPress) {
+                if (mouseEvent->button() == Qt::LeftButton) {
+                    if (mouseEvent->type() == QEvent::MouseButtonPress) {
                         m_buttonPressPosition = textCursor;
 //                         view->setCursorPosition(textCursor);
 //                         return false;
-                    }else if(mouseEvent->type() == QEvent::MouseButtonRelease && textCursor == m_buttonPressPosition) {
+                    } else if (mouseEvent->type() == QEvent::MouseButtonRelease &&
+                               textCursor == m_buttonPressPosition) {
                         ICore::self()->documentController()->openDocument(jumpTo.url, jumpTo.cursor);
 //                         event->accept();
 //                         return true;
                     }
-                }else if(mouseEvent->type() == QEvent::MouseMove) {
+                } else if (mouseEvent->type() == QEvent::MouseMove) {
                     //Make the cursor a "hand"
                     setHandCursor(widget);
                     return false;
@@ -264,17 +282,19 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
     return false;
 }
 
-void BrowseManager::resetChangedCursor() {
+void BrowseManager::resetChangedCursor()
+{
     QMap<QPointer<QWidget>, QCursor> cursors = m_oldCursors;
     m_oldCursors.clear();
 
-    for(QMap<QPointer<QWidget>, QCursor>::iterator it = cursors.begin(); it != cursors.end(); ++it)
-        if(it.key())
+    for (QMap<QPointer<QWidget>, QCursor>::iterator it = cursors.begin(); it != cursors.end(); ++it)
+        if (it.key())
             it.key()->setCursor(QCursor(Qt::IBeamCursor));
 }
 
-void BrowseManager::setHandCursor(QWidget* widget) {
-    if(m_oldCursors.contains(widget))
+void BrowseManager::setHandCursor(QWidget* widget)
+{
+    if (m_oldCursors.contains(widget))
         return; //Nothing to do
     m_oldCursors[widget] = widget->cursor();
     widget->setCursor(QCursor(Qt::PointingHandCursor));
@@ -295,18 +315,20 @@ void BrowseManager::avoidMenuAltFocus()
     QApplication::sendEvent(mainWindow->menuBar(), &event2);
 }
 
-void BrowseManager::applyEventFilter(QWidget* object, bool install) {
-    if(install)
+void BrowseManager::applyEventFilter(QWidget* object, bool install)
+{
+    if (install)
         object->installEventFilter(this);
     else
         object->removeEventFilter(this);
 
-    foreach(QObject* child, object->children())
-        if(qobject_cast<QWidget*>(child))
+    foreach (QObject* child, object->children())
+        if (qobject_cast<QWidget*>(child))
             applyEventFilter(qobject_cast<QWidget*>(child), install);
 }
 
-void BrowseManager::viewAdded(KTextEditor::View* view) {
+void BrowseManager::viewAdded(KTextEditor::View* view)
+{
     applyEventFilter(view, true);
     //We need to listen for cursorPositionChanged, to clear the shift-detector. The problem: Kate listens for the arrow-keys using shortcuts,
     //so those keys are not passed to the event-filter
@@ -321,28 +343,30 @@ void BrowseManager::viewAdded(KTextEditor::View* view) {
     connect(view, SIGNAL(navigateBack()), m_plugin, SLOT(navigateBack()));
 }
 
-void Watcher::viewAdded(KTextEditor::View* view) {
+void Watcher::viewAdded(KTextEditor::View* view)
+{
     m_manager->viewAdded(view);
 }
 
-void BrowseManager::setBrowsing(bool enabled) {
-    if(enabled == m_browsing)
+void BrowseManager::setBrowsing(bool enabled)
+{
+    if (enabled == m_browsing)
         return;
     m_browsing = enabled;
 
     //This collects all the views
-    if(enabled) {
+    if (enabled) {
         qCDebug(PLUGIN_CONTEXTBROWSER) << "Enabled browsing-mode";
-    }else{
+    } else {
         qCDebug(PLUGIN_CONTEXTBROWSER) << "Disabled browsing-mode";
         resetChangedCursor();
     }
 }
 
 Watcher::Watcher(BrowseManager* manager)
-    : EditorViewWatcher(manager), m_manager(manager) {
-    foreach(KTextEditor::View* view, allViews())
+    : EditorViewWatcher(manager)
+    , m_manager(manager)
+{
+    foreach (KTextEditor::View* view, allViews())
         m_manager->applyEventFilter(view, true);
 }
-
-

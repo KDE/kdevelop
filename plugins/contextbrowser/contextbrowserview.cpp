@@ -55,7 +55,6 @@
 using namespace KDevelop;
 
 namespace {
-
 enum Direction
 {
     NextUse,
@@ -75,7 +74,7 @@ void selectUse(ContextBrowserView* view, Direction direction)
         return;
     }
 
-    OneUseWidget* first = nullptr, *previous = nullptr, *current = nullptr;
+    OneUseWidget* first = nullptr, * previous = nullptr, * current = nullptr;
     const auto& usesWidgetItems = usesWidget->items();
     for (auto item : usesWidgetItems) {
         auto topContext = dynamic_cast<TopContextUsesWidget*>(item);
@@ -114,6 +113,7 @@ void selectUse(ContextBrowserView* view, Direction direction)
             }
         }
     }
+
     if (direction == NextUse && first) {
         first->setHighlighted(true);
         first->activateLink();
@@ -129,26 +129,29 @@ void selectUse(ContextBrowserView* view, Direction direction)
         }
     }
 }
-
 }
 
-QWidget* ContextBrowserView::createWidget(KDevelop::DUContext* context) {
-        m_context = IndexedDUContext(context);
-        if(m_context.data()) {
-            return m_context.data()->createNavigationWidget(nullptr, nullptr, {}, {}, AbstractNavigationWidget::EmbeddableWidget);
-        }
-        return nullptr;
+QWidget* ContextBrowserView::createWidget(KDevelop::DUContext* context)
+{
+    m_context = IndexedDUContext(context);
+    if (m_context.data()) {
+        return m_context.data()->createNavigationWidget(nullptr, nullptr, {}, {},
+                                                        AbstractNavigationWidget::EmbeddableWidget);
+    }
+    return nullptr;
 }
 
-KDevelop::IndexedDeclaration ContextBrowserView::declaration() const {
+KDevelop::IndexedDeclaration ContextBrowserView::declaration() const
+{
     return m_declaration;
 }
 
-QWidget* ContextBrowserView::createWidget(Declaration* decl, TopDUContext* topContext) {
+QWidget* ContextBrowserView::createWidget(Declaration* decl, TopDUContext* topContext)
+{
     m_declaration = IndexedDeclaration(decl);
-    return decl->context()->createNavigationWidget(decl, topContext, {}, {}, AbstractNavigationWidget::EmbeddableWidget);
+    return decl->context()->createNavigationWidget(decl, topContext, {}, {},
+                                                   AbstractNavigationWidget::EmbeddableWidget);
 }
-
 
 void ContextBrowserView::resetWidget()
 {
@@ -158,17 +161,20 @@ void ContextBrowserView::resetWidget()
     }
 }
 
-void ContextBrowserView::declarationMenu() {
+void ContextBrowserView::declarationMenu()
+{
     DUChainReadLocker lock(DUChain::lock());
 
     AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
-    if(navigationWidget) {
-        AbstractDeclarationNavigationContext* navigationContext = dynamic_cast<AbstractDeclarationNavigationContext*>(navigationWidget->context().data());
-        if(navigationContext && navigationContext->declaration().data()) {
+    if (navigationWidget) {
+        AbstractDeclarationNavigationContext* navigationContext =
+            dynamic_cast<AbstractDeclarationNavigationContext*>(navigationWidget->context().data());
+        if (navigationContext && navigationContext->declaration().data()) {
             KDevelop::DeclarationContext* c = new KDevelop::DeclarationContext(navigationContext->declaration().data());
             lock.unlock();
             QMenu menu(this);
-            QList<ContextMenuExtension> extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(c, &menu);
+            QList<ContextMenuExtension> extensions =
+                ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(c, &menu);
 
             ContextMenuExtension::populateMenu(&menu, extensions);
             menu.exec(QCursor::pos());
@@ -176,9 +182,13 @@ void ContextBrowserView::declarationMenu() {
     }
 }
 
-ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* parent ) : QWidget(parent), m_plugin(plugin), m_navigationWidget(new QTextBrowser()), m_autoLocked(false) {
+ContextBrowserView::ContextBrowserView(ContextBrowserPlugin* plugin, QWidget* parent) : QWidget(parent)
+    , m_plugin(plugin)
+    , m_navigationWidget(new QTextBrowser())
+    , m_autoLocked(false)
+{
     setWindowTitle(i18n("Code Browser"));
-    setWindowIcon( QIcon::fromTheme(QStringLiteral("code-context"), windowIcon()) );
+    setWindowIcon(QIcon::fromTheme(QStringLiteral("code-context"), windowIcon()));
 
     m_allowLockedUpdate = false;
 
@@ -189,9 +199,12 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     m_declarationMenuAction->setText(i18n("Declaration Menu"));
     connect(m_declarationMenuAction, &QAction::triggered, this, &ContextBrowserView::declarationMenu);
     addAction(m_declarationMenuAction);
-    m_lockAction = new KToggleAction(QIcon::fromTheme(QStringLiteral("object-unlocked")), i18n("Lock Current View"), this);
+    m_lockAction = new KToggleAction(QIcon::fromTheme(QStringLiteral("object-unlocked")), i18n(
+                                         "Lock Current View"), this);
     m_lockAction->setToolTip(i18n("Lock current view"));
-    m_lockAction->setCheckedState(KGuiItem(i18n("Unlock Current View"), QIcon::fromTheme(QStringLiteral("object-locked")), i18n("Unlock current view")));
+    m_lockAction->setCheckedState(KGuiItem(i18n("Unlock Current View"),
+                                           QIcon::fromTheme(QStringLiteral("object-locked")),
+                                           i18n("Unlock current view")));
     m_lockAction->setChecked(false);
     addAction(m_lockAction);
 
@@ -205,11 +218,13 @@ ContextBrowserView::ContextBrowserView( ContextBrowserPlugin* plugin, QWidget* p
     m_plugin->registerToolView(this);
 }
 
-ContextBrowserView::~ContextBrowserView() {
+ContextBrowserView::~ContextBrowserView()
+{
     m_plugin->unRegisterToolView(this);
 }
 
-void ContextBrowserView::focusInEvent(QFocusEvent* event) {
+void ContextBrowserView::focusInEvent(QFocusEvent* event)
+{
     //Indicate that we have focus
     qCDebug(PLUGIN_CONTEXTBROWSER) << "got focus";
 //     parentWidget()->setBackgroundRole(QPalette::ToolTipBase);
@@ -218,7 +233,8 @@ void ContextBrowserView::focusInEvent(QFocusEvent* event) {
     QWidget::focusInEvent(event);
 }
 
-void ContextBrowserView::focusOutEvent(QFocusEvent* event) {
+void ContextBrowserView::focusOutEvent(QFocusEvent* event)
+{
     qCDebug(PLUGIN_CONTEXTBROWSER) << "lost focus";
 //     parentWidget()->setBackgroundRole(QPalette::Background);
 /*    m_layout->insertLayout(0, m_buttons);
@@ -228,26 +244,26 @@ void ContextBrowserView::focusOutEvent(QFocusEvent* event) {
     QWidget::focusOutEvent(event);
 }
 
-bool ContextBrowserView::event(QEvent* event) {
+bool ContextBrowserView::event(QEvent* event)
+{
     QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
-    if(hasFocus() && keyEvent) {
+    if (hasFocus() && keyEvent) {
         AbstractNavigationWidget* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
-        if(navigationWidget && event->type() == QEvent::KeyPress) {
+        if (navigationWidget && event->type() == QEvent::KeyPress) {
             int key = keyEvent->key();
-            if(key == Qt::Key_Left)
+            if (key == Qt::Key_Left)
                 navigationWidget->previous();
-            if(key == Qt::Key_Right)
+            if (key == Qt::Key_Right)
                 navigationWidget->next();
-            if(key == Qt::Key_Up)
+            if (key == Qt::Key_Up)
                 navigationWidget->up();
-            if(key == Qt::Key_Down)
+            if (key == Qt::Key_Down)
                 navigationWidget->down();
-            if(key == Qt::Key_Return || key == Qt::Key_Enter)
+            if (key == Qt::Key_Return || key == Qt::Key_Enter)
                 navigationWidget->accept();
 
-
-            if(key == Qt::Key_L)
+            if (key == Qt::Key_L)
                 m_lockAction->toggle();
         }
     }
@@ -263,16 +279,17 @@ void ContextBrowserView::showEvent(QShowEvent* event)
     }
 
     TopDUContext* top = m_lastUsedTopContext.data();
-    if(top && m_navigationWidgetDeclaration.isValid()) {
+    if (top && m_navigationWidgetDeclaration.isValid()) {
         //Update the navigation-widget
         Declaration* decl = m_navigationWidgetDeclaration.declaration(top);
-        if(decl)
+        if (decl)
             setDeclaration(decl, top, true);
     }
     QWidget::showEvent(event);
 }
 
-bool ContextBrowserView::isLocked() const {
+bool ContextBrowserView::isLocked() const
+{
     bool isLocked;
     if (m_allowLockedUpdate) {
         isLocked = false;
@@ -292,7 +309,8 @@ void ContextBrowserView::updateMainWidget(QWidget* widget)
         m_layout->insertWidget(1, widget, 1);
         m_allowLockedUpdate = false;
         setUpdatesEnabled(true);
-        if (widget->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("contextChanged(bool,bool)").constData()) != -1) {
+        if (widget->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("contextChanged(bool,bool)").constData())
+            != -1) {
             connect(widget, SIGNAL(contextChanged(bool,bool)), this, SLOT(navigationContextChanged(bool,bool)));
         }
     }
@@ -300,15 +318,13 @@ void ContextBrowserView::updateMainWidget(QWidget* widget)
 
 void ContextBrowserView::navigationContextChanged(bool wasInitial, bool isInitial)
 {
-    if(wasInitial && !isInitial && !m_lockAction->isChecked())
-    {
+    if (wasInitial && !isInitial && !m_lockAction->isChecked()) {
         m_autoLocked = true;
         m_lockAction->setChecked(true);
-    }else if(!wasInitial && isInitial && m_autoLocked)
-    {
+    } else if (!wasInitial && isInitial && m_autoLocked) {
         m_autoLocked = false;
         m_lockAction->setChecked(false);
-    }else if(isInitial) {
+    } else if (isInitial) {
         m_autoLocked = false;
     }
 }
@@ -323,71 +339,73 @@ void ContextBrowserView::selectPreviousItem()
     selectUse(this, PreviousUse);
 }
 
-void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext, bool force) {
+void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext, bool force)
+{
     m_lastUsedTopContext = IndexedTopDUContext(topContext);
 
-    if(isLocked() && (!m_navigationWidget.data() || !isVisible()))
-    {
+    if (isLocked() && (!m_navigationWidget.data() || !isVisible())) {
         // Automatically remove the locked state if the view is not visible or the widget was deleted,
         // because the locked state has side-effects on other navigation functionality.
         m_autoLocked = false;
         m_lockAction->setChecked(false);
     }
 
-    if(m_navigationWidgetDeclaration == decl->id() && !force)
+    if (m_navigationWidgetDeclaration == decl->id() && !force)
         return;
 
     m_navigationWidgetDeclaration = decl->id();
 
     if (!isLocked() && (isVisible() || force)) {  // NO-OP if tool view is hidden, for performance reasons
-
         QWidget* w = createWidget(decl, topContext);
         updateMainWidget(w);
     }
 }
 
-KDevelop::IndexedDeclaration ContextBrowserView::lockedDeclaration() const {
-    if(m_lockAction->isChecked())
+KDevelop::IndexedDeclaration ContextBrowserView::lockedDeclaration() const
+{
+    if (m_lockAction->isChecked())
         return declaration();
     else
         return KDevelop::IndexedDeclaration();
 }
 
-void ContextBrowserView::allowLockedUpdate() {
+void ContextBrowserView::allowLockedUpdate()
+{
     m_allowLockedUpdate = true;
 }
 
-void ContextBrowserView::setNavigationWidget(QWidget* widget) {
+void ContextBrowserView::setNavigationWidget(QWidget* widget)
+{
     updateMainWidget(widget);
 }
 
-void ContextBrowserView::setContext(KDevelop::DUContext* context) {
-    if(!context)
+void ContextBrowserView::setContext(KDevelop::DUContext* context)
+{
+    if (!context)
         return;
 
     m_lastUsedTopContext = IndexedTopDUContext(context->topContext());
 
-    if(context->owner()) {
-        if(context->owner()->id() == m_navigationWidgetDeclaration)
+    if (context->owner()) {
+        if (context->owner()->id() == m_navigationWidgetDeclaration)
             return;
         m_navigationWidgetDeclaration = context->owner()->id();
-    }else{
+    } else {
         m_navigationWidgetDeclaration = DeclarationId();
     }
 
     if (!isLocked() && isVisible()) { // NO-OP if tool view is hidden, for performance reasons
-
         QWidget* w = createWidget(context);
         updateMainWidget(w);
     }
 }
 
-void ContextBrowserView::setSpecialNavigationWidget(QWidget* widget) {
+void ContextBrowserView::setSpecialNavigationWidget(QWidget* widget)
+{
     if (!isLocked() && isVisible()) {
         Q_ASSERT(widget);
         updateMainWidget(widget);
-    } else if(widget) {
+    } else if (widget) {
         widget->deleteLater();
     }
 }
-
