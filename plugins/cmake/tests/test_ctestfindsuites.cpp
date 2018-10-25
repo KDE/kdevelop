@@ -52,7 +52,7 @@ void waitForSuites(IProject* project, int count, int max)
     auto testController = ICore::self()->testController();
     for(int i = 0; testController->testSuitesForProject(project).size() < count && i < max * 10; ++i) {
         QSignalSpy spy(testController, &ITestController::testSuiteAdded);
-        QVERIFY(spy.wait(1000));
+        QVERIFY(spy.wait(5000));
     }
 }
 
