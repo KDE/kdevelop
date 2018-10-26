@@ -332,5 +332,3 @@ QColor ColorCache::foregroundColor() const
     return m_foregroundColor;
 }
 }
-
-// kate: space-indent on; indent-width 2; remove-trailing-spaces all; show-tabs on; tab-indents on; tab-width 2;

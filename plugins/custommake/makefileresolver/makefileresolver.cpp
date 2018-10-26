@@ -637,5 +637,3 @@ QString MakeFileResolver::internString(const QString& path) const
     m_stringCache.insert(path);
     return path;
 }
-
-// kate: indent-width 2; tab-width 2;

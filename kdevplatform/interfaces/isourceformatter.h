@@ -230,4 +230,3 @@ Q_DECLARE_TYPEINFO(KDevelop::SourceFormatterStyle, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(KDevelop::SourceFormatterStyleItem, Q_MOVABLE_TYPE);
 
 #endif // KDEVPLATFORM_ISOURCEFORMATTER_H
-// kate: indent-mode cstyle; space-indent off; tab-width 4;

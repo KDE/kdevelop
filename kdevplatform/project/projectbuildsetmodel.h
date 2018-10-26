@@ -92,5 +92,3 @@ private:
 Q_DECLARE_TYPEINFO(KDevelop::BuildItem, Q_MOVABLE_TYPE);
 
 #endif
-
-//kate: space-indent on; indent-width 4; replace-tabs on; auto-insert-doxygen on; indent-mode cstyle;

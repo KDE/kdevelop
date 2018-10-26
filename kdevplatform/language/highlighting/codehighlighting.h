@@ -225,5 +225,3 @@ private Q_SLOTS:
 Q_DECLARE_TYPEINFO(KDevelop::HighlightedRange, Q_MOVABLE_TYPE);
 
 #endif
-
-// kate: space-indent on; indent-width 2; remove-trailing-spaces all; show-tabs on; tab-indents on; tab-width 2;

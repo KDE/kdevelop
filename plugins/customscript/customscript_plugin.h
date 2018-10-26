@@ -106,5 +106,3 @@ private:
 };
 
 #endif // CUSTOMSCRIPTPLUGIN_H
-
-// kate: indent-mode cstyle; space-indent off; tab-width 4;

@@ -69,5 +69,3 @@ AbstractType::Ptr DynamicLanguageExpressionVisitor::encounterPreprocess(Abstract
     return type;
 }
 } // namespace KDevelop
-
-// kate: space-indent on; indent-width 4;

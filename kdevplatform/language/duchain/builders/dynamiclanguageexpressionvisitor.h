@@ -218,5 +218,3 @@ protected:
 } // namespace KDevelop
 
 #endif // KDEVPLATFORM_DYNAMICLANGUAGEEXPRESSIONVISITOR_H
-
-// kate: space-indent on; indent-width 4;

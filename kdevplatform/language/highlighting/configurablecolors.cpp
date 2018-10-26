@@ -87,5 +87,3 @@ CodeHighlightingColors::CodeHighlightingColors(ColorCache* cache) : Configurable
     ADD_COLOR(MacroFunctionLikeType, 0x008080)
 }
 }
-
-// kate: space-indent on; indent-width 2; remove-trailing-spaces all; show-tabs on; tab-indents on; tab-width 2;

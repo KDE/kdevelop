@@ -55,5 +55,3 @@ KDEVPLATFORMLANGUAGE_EXPORT int matchPathFilter(const Path& toFilter, const QStr
 }
 
 #endif
-
-// kate: space-indent on; indent-width 2

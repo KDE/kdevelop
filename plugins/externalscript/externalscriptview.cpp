@@ -176,6 +176,3 @@ void ExternalScriptView::editScript()
     item->save();
   }
 }
-
-
-// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on;

@@ -224,5 +224,3 @@ private:
 Q_DECLARE_METATYPE(ExternalScriptItem*)
 
 #endif // KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTITEM_H
-
-// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on; 

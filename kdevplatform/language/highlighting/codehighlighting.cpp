@@ -634,5 +634,3 @@ void CodeHighlighting::aboutToRemoveText(const KTextEditor::Range& range)
     }
 }
 }
-
-// kate: space-indent on; indent-width 2; remove-trailing-spaces all; show-tabs on; tab-indents on; tab-width 2;

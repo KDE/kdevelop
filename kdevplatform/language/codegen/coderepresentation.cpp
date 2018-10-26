@@ -409,5 +409,3 @@ QString InsertArtificialCodeRepresentation::text() const
     return artificialStrings[m_file]->data();
 }
 }
-
-// kate: indent-width 4;

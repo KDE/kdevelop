@@ -100,5 +100,3 @@ class MakeFileResolver
 };
 
 #endif
-
-// kate: indent-width 2; tab-width 2;

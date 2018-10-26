@@ -192,5 +192,3 @@ QString ISourceFormatter::missingExecutableMessage(const QString &name)
 }
 
 }
-
-// kate: indent-mode cstyle; space-indent off; tab-width 4; 

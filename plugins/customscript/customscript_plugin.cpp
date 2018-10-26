@@ -566,5 +566,3 @@ void CustomScriptPreferences::moreVariablesClicked(bool)
 }
 
 #include "customscript_plugin.moc"
-
-// kate: indent-mode cstyle; space-indent off; tab-width 4;

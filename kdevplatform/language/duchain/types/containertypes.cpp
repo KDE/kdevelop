@@ -144,5 +144,3 @@ uint MapType::hash() const
     return ListType::hash() + (keyType().abstractType() ? keyType().abstractType()->hash() : 1);
 }
 } // namespace KDevelop
-
-// kate: space-indent on; indent-width 4

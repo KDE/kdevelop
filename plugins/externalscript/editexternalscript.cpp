@@ -192,6 +192,3 @@ void EditExternalScript::validate()
   buttonBox->button(QDialogButtonBox::Ok)->setEnabled(valid);
   buttonBox->button(QDialogButtonBox::Apply)->setEnabled(valid);
 }
-
-
-// kate: indent-mode cstyle; space-indent on; indent-width 2; replace-tabs on;

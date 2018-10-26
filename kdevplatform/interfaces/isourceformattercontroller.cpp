@@ -31,6 +31,3 @@ ISourceFormatterController::~ISourceFormatterController()
 }
 
 }
-
-
-// kate: indent-mode cstyle; space-indent off; tab-width 4 = 0;
