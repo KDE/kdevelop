@@ -17,7 +17,7 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-*/
+ */
 
 #ifndef KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTPLUGIN_H
 #define KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTPLUGIN_H
@@ -33,80 +33,81 @@ class QStandardItem;
 class QStandardItemModel;
 class QModelIndex;
 
-class ExternalScriptPlugin : public KDevelop::IPlugin
+class ExternalScriptPlugin
+    : public KDevelop::IPlugin
 {
-  Q_OBJECT
-  Q_CLASSINFO( "D-Bus Interface", "org.kdevelop.ExternalScriptPlugin" )
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kdevelop.ExternalScriptPlugin")
 
 public:
-  explicit ExternalScriptPlugin( QObject *parent, const QVariantList &args = QVariantList() );
+    explicit ExternalScriptPlugin(QObject* parent, const QVariantList& args = QVariantList());
 
-  ~ExternalScriptPlugin() override;
-  void unload() override;
-  KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
+    ~ExternalScriptPlugin() override;
+    void unload() override;
+    KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
-  static ExternalScriptPlugin* self();
+    static ExternalScriptPlugin* self();
 
-  /**
-   * @return The model storing all external scripts managed by this plugin.
-   * @NOTE: always append() items, never insert in the middle!
-   */
-  QStandardItemModel* model() const;
+    /**
+     * @return The model storing all external scripts managed by this plugin.
+     * @NOTE: always append() items, never insert in the middle!
+     */
+    QStandardItemModel* model() const;
 
-  /**
-   * Executes @p script.
-   */
-  void execute(ExternalScriptItem* item, const QUrl &url) const;
+    /**
+     * Executes @p script.
+     */
+    void execute(ExternalScriptItem* item, const QUrl& url) const;
 
-  /**
-   * Executes @p script.
-   */
-  void execute(ExternalScriptItem* item) const;
+    /**
+     * Executes @p script.
+     */
+    void execute(ExternalScriptItem* item) const;
 
-  /**
-   * Returns config group to store all settings for this plugin in.
-   */
-  KConfigGroup getConfig() const;
+    /**
+     * Returns config group to store all settings for this plugin in.
+     */
+    KConfigGroup getConfig() const;
 
-  /**
-   * Saves the @p script to the config and updates the key
-   */
-  void saveItem(const ExternalScriptItem* item);
+    /**
+     * Saves the @p script to the config and updates the key
+     */
+    void saveItem(const ExternalScriptItem* item);
 
 public Q_SLOTS:
-  void executeScriptFromActionData() const;
+    void executeScriptFromActionData() const;
 
-  /**
-   * Executes the command (Used by the shell-integration)
-   * */
-  Q_SCRIPTABLE bool executeCommand(const QString& command, const QString& workingDirectory) const;
+    /**
+     * Executes the command (Used by the shell-integration)
+     * */
+    Q_SCRIPTABLE bool executeCommand(const QString& command, const QString& workingDirectory) const;
 
-  /**
-   * Executes the command synchronously and returns the output text (Used by the shell-integration)
-   * */
-  Q_SCRIPTABLE QString executeCommandSync(const QString& command, const QString& workingDirectory) const;
+    /**
+     * Executes the command synchronously and returns the output text (Used by the shell-integration)
+     * */
+    Q_SCRIPTABLE QString executeCommandSync(const QString& command, const QString& workingDirectory) const;
 
 private Q_SLOTS:
-  void rowsAboutToBeRemoved( const QModelIndex& parent, int start, int end );
-  void rowsInserted( const QModelIndex& parent, int start, int end );
-  void executeScriptFromContextMenu() const;
+    void rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
+    void rowsInserted(const QModelIndex& parent, int start, int end);
+    void executeScriptFromContextMenu() const;
 
 private:
-  /// @param row row in the model for the item to save
-  void saveItemForRow( int row );
+    /// @param row row in the model for the item to save
+    void saveItemForRow(int row);
 
-  /**
-   * Sets up unique keys for items in the range [start, end]
-   * @param start start of the range
-   * @param end end of the range
-   */
-  void setupKeys( int start, int end );
+    /**
+     * Sets up unique keys for items in the range [start, end]
+     * @param start start of the range
+     * @param end end of the range
+     */
+    void setupKeys(int start, int end);
 
-  QStandardItemModel* m_model;
-  QList<QUrl> m_urls;
-  static ExternalScriptPlugin* m_self;
+    QStandardItemModel* m_model;
+    QList<QUrl> m_urls;
+    static ExternalScriptPlugin* m_self;
 
-  class ExternalScriptViewFactory *m_factory;
+    class ExternalScriptViewFactory* m_factory;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTPLUGIN_H

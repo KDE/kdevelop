@@ -17,7 +17,7 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-*/
+ */
 
 #ifndef KDEVPLATFORM_PLUGIN_EDITEXTERNALSCRIPT_H
 #define KDEVPLATFORM_PLUGIN_EDITEXTERNALSCRIPT_H
@@ -28,20 +28,22 @@
 
 class ExternalScriptItem;
 
-class EditExternalScript : public QDialog, private Ui::EditExternalScriptBase
+class EditExternalScript
+    : public QDialog
+    , private Ui::EditExternalScriptBase
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  explicit EditExternalScript(ExternalScriptItem* item, QWidget* parent = nullptr);
-  ~EditExternalScript() override;
+    explicit EditExternalScript(ExternalScriptItem* item, QWidget* parent = nullptr);
+    ~EditExternalScript() override;
 
 private Q_SLOTS:
-  void save();
-  void validate();
+    void save();
+    void validate();
 
 private:
-  ExternalScriptItem* m_item;
+    ExternalScriptItem* m_item;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_EDITEXTERNALSCRIPT_H

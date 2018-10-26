@@ -16,7 +16,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/
+ */
 
 #ifndef KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
 #define KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
@@ -29,57 +29,57 @@
 #include <KTextEditor/Range>
 #include <QUrl>
 
-namespace KDevelop
-{
+namespace KDevelop {
 class ProcessLineMaker;
 class OutputModel;
 class Document;
 }
 
-namespace KTextEditor
-{
+namespace KTextEditor {
 class Document;
 }
 
 class KProcess;
 class ExternalScriptPlugin;
 
-class ExternalScriptJob : public KDevelop::OutputJob
+class ExternalScriptJob
+    : public KDevelop::OutputJob
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  ExternalScriptJob( ExternalScriptItem* item, const QUrl &url, ExternalScriptPlugin* parent );
-  void start() override;
-  KDevelop::OutputModel* model();
+    ExternalScriptJob(ExternalScriptItem* item, const QUrl& url, ExternalScriptPlugin* parent);
+    void start() override;
+    KDevelop::OutputModel* model();
 
 protected:
-  bool doKill() override;
+    bool doKill() override;
 
 private Q_SLOTS:
-  void processError( QProcess::ProcessError );
-  void processFinished( int, QProcess::ExitStatus );
+    void processError(QProcess::ProcessError);
+    void processFinished(int, QProcess::ExitStatus);
 
-  void receivedStdoutLines(const QStringList& lines);
-  void receivedStderrLines(const QStringList& lines);
+    void receivedStdoutLines(const QStringList& lines);
+    void receivedStderrLines(const QStringList& lines);
+
 private:
-  void appendLine( const QString &l );
+    void appendLine(const QString& l);
 
-  KProcess* m_proc;
-  KDevelop::ProcessLineMaker* m_lineMaker;
-  ExternalScriptItem::OutputMode m_outputMode;
-  ExternalScriptItem::InputMode m_inputMode;
-  ExternalScriptItem::ErrorMode m_errorMode;
-  int m_filterMode;
-  KTextEditor::Document* m_document;
-  QUrl m_url;
-  /// invalid when whole doc should be replaced
-  KTextEditor::Range m_selectionRange;
-  KTextEditor::Cursor m_cursorPosition;
-  bool m_showOutput;
+    KProcess* m_proc;
+    KDevelop::ProcessLineMaker* m_lineMaker;
+    ExternalScriptItem::OutputMode m_outputMode;
+    ExternalScriptItem::InputMode m_inputMode;
+    ExternalScriptItem::ErrorMode m_errorMode;
+    int m_filterMode;
+    KTextEditor::Document* m_document;
+    QUrl m_url;
+    /// invalid when whole doc should be replaced
+    KTextEditor::Range m_selectionRange;
+    KTextEditor::Cursor m_cursorPosition;
+    bool m_showOutput;
 
-  QStringList m_stdout;
-  QStringList m_stderr;
+    QStringList m_stdout;
+    QStringList m_stderr;
 };
 
 #endif // KDEVPLATFORM_PLUGIN_EXTERNALSCRIPTJOB_H
