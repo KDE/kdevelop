@@ -27,19 +27,19 @@
 class QEventLoop;
 class QTimer;
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 /*! A signal spy which exits the event loop when the signal is called,
  *  and remembers that the signal was emitted.
  *  adapted version of kdelibs/kdecore/utils/qtest_kde.cpp */
-class KDEVPLATFORMTESTS_EXPORT KDevSignalSpy : public QObject
+class KDEVPLATFORMTESTS_EXPORT KDevSignalSpy
+    : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     /*! Constructor. @p obj the object that is expected to emit @p signal. */
-    KDevSignalSpy(QObject *obj, const char *signal,
-                  Qt::ConnectionType ct = Qt::AutoConnection );
+    KDevSignalSpy(QObject* obj, const char* signal,
+                  Qt::ConnectionType ct = Qt::AutoConnection);
 
     /*! Blocks until either the expected signal has been emitted or
      *  @p timeout milliseconds have passed. */
@@ -54,8 +54,6 @@ private:
     QEventLoop* m_loop;
     QTimer* m_timer;
 };
-
 } // KDevelop
 
-
-#endif 
+#endif

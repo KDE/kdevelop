@@ -21,38 +21,37 @@
 #include <QDebug>
 #include <QStack>
 
-namespace KDevelop
-{
+namespace KDevelop {
 typedef QPair<QString, int> DepthedOutput;
 
 class DelayedOutputPrivate
 {
 public:
-  void flushOutput()
-  {
-    while (!output.isEmpty())
+    void flushOutput()
     {
-        DepthedOutput curOutput = output.pop();
-        qDebug().nospace() << qPrintable(QString(curOutput.second -1, QLatin1Char(' '))) << curOutput.first.toUtf8().data();
+        while (!output.isEmpty()) {
+            DepthedOutput curOutput = output.pop();
+            qDebug().nospace() <<
+                qPrintable(QString(curOutput.second - 1, QLatin1Char(' '))) << curOutput.first.toUtf8().data();
+        }
     }
-  }
-  QStack<DepthedOutput> output;
-  int delayDepth;
+    QStack<DepthedOutput> output;
+    int delayDepth;
 };
 DelayedOutput::Delay::Delay(DelayedOutput* output)
 {
-  m_output = output;
-  ++m_output->d->delayDepth;
+    m_output = output;
+    ++m_output->d->delayDepth;
 }
 DelayedOutput::Delay::~Delay()
 {
-  --m_output->d->delayDepth;
-  if (!m_output->d->delayDepth)
-    m_output->d->flushOutput();
+    --m_output->d->delayDepth;
+    if (!m_output->d->delayDepth)
+        m_output->d->flushOutput();
 }
 
 DelayedOutput::DelayedOutput()
-: d(new DelayedOutputPrivate())
+    : d(new DelayedOutputPrivate())
 {
 }
 DelayedOutput::~DelayedOutput()
@@ -65,7 +64,6 @@ DelayedOutput& DelayedOutput::self()
 }
 void DelayedOutput::push(const QString& output)
 {
-  d->output.push(DepthedOutput(output, d->delayDepth));
+    d->output.push(DepthedOutput(output, d->delayDepth));
 }
-
 }

@@ -43,7 +43,7 @@ TestDebugSession::~TestDebugSession()
     delete m_frameStackModel;
 }
 
-void TestDebugSession::setBreakpointController(IBreakpointController *breakpointController)
+void TestDebugSession::setBreakpointController(IBreakpointController* breakpointController)
 {
     delete m_breakpointController;
     m_breakpointController = breakpointController;
@@ -52,7 +52,7 @@ void TestDebugSession::setBreakpointController(IBreakpointController *breakpoint
     }
 }
 
-void TestDebugSession::setVariableController(IVariableController *variableController)
+void TestDebugSession::setVariableController(IVariableController* variableController)
 {
     delete m_variableController;
     m_variableController = variableController;
@@ -61,7 +61,7 @@ void TestDebugSession::setVariableController(IVariableController *variableContro
     }
 }
 
-void TestDebugSession::setFrameStackModel(IFrameStackModel *frameStackModel)
+void TestDebugSession::setFrameStackModel(IFrameStackModel* frameStackModel)
 {
     delete m_frameStackModel;
     m_frameStackModel = frameStackModel;

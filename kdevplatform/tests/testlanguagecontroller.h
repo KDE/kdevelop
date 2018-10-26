@@ -27,19 +27,19 @@
 #include <shell/languagecontroller.h>
 
 namespace KDevelop {
-
 class ILanguageSupport;
 
-class KDEVPLATFORMTESTS_EXPORT TestLanguageController : public LanguageController
+class KDEVPLATFORMTESTS_EXPORT TestLanguageController
+    : public LanguageController
 {
     Q_OBJECT
+
 public:
     explicit TestLanguageController(QObject* parent);
     ~TestLanguageController() override;
 
     void addTestLanguage(KDevelop::ILanguageSupport* languageSupport, const QStringList& mimetypes);
 };
-
 }
 
 #endif // KDEVPLATFORM_TESTLANGUAGECONTROLLER_H

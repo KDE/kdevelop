@@ -32,7 +32,6 @@
 #include <QTest>
 
 namespace QTest {
-
 template<>
 inline char* toString(const KDevelop::CursorInRevision& c)
 {
@@ -61,9 +60,9 @@ template<>
 inline char* toString(const KDevelop::Declaration& dec)
 {
     QString s = QStringLiteral("Declaration %1 (%2): %3")
-        .arg(dec.identifier().toString(),
-        dec.qualifiedIdentifier().toString(),
-        QString::number(reinterpret_cast<qint64>(&dec), 10));
+                .arg(dec.identifier().toString(),
+                     dec.qualifiedIdentifier().toString(),
+                     QString::number(reinterpret_cast<qint64>(&dec), 10));
     return qstrdup(s.toLatin1().constData());
 }
 
@@ -71,7 +70,7 @@ template<>
 inline char* toString(const KDevelop::AbstractType::Ptr& type)
 {
     QString s = QStringLiteral("Type: %1")
-        .arg(type ? type->toString() : QStringLiteral("<null>"));
+                .arg(type ? type->toString() : QStringLiteral("<null>"));
     return qstrdup(s.toLatin1().constData());
 }
 
@@ -80,7 +79,6 @@ inline char* toString(const KDevelop::IndexedString& string)
 {
     return qstrdup(qPrintable(string.str()));
 }
-
 }
 
 #endif // KDEVPLATFORM_TESTHELPERS_H

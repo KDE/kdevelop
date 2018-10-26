@@ -23,9 +23,7 @@
 #include "testsexport.h"
 #include <shell/core.h>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class SessionController;
 class RunController;
 class PluginController;
@@ -74,9 +72,11 @@ class UiController;
  * @note It is important to call initialize and cleanup, else the controllers
  * won't work properly.
  */
-class KDEVPLATFORMTESTS_EXPORT TestCore : public Core
+class KDEVPLATFORMTESTS_EXPORT TestCore
+    : public Core
 {
     Q_OBJECT
+
 public:
     TestCore();
     /**
@@ -91,7 +91,7 @@ public:
      *            will be opened.
      * @return the initialized test core
      */
-    static TestCore* initialize( Core::Setup mode = Core::Default, const QString& session = {} );
+    static TestCore* initialize(Core::Setup mode = Core::Default, const QString& session = {});
 
     /**
      * Calls @c cleanup() on the current TestCore instance,
@@ -108,19 +108,18 @@ public:
      */
     void setShuttingDown(bool shuttingDown);
 
-    void setSessionController( SessionController* );
-    void setPluginController( PluginController* );
-    void setRunController( RunController* );
-    void setDocumentController( DocumentController* );
-    void setPartController( PartController* );
-    void setProjectController( ProjectController* );
-    void setLanguageController( LanguageController* );
-    void setUiController( UiController* );
+    void setSessionController(SessionController*);
+    void setPluginController(PluginController*);
+    void setRunController(RunController*);
+    void setDocumentController(DocumentController*);
+    void setPartController(PartController*);
+    void setProjectController(ProjectController*);
+    void setLanguageController(LanguageController*);
+    void setUiController(UiController*);
 
 private:
-    void initializeNonStatic( Core::Setup mode, const QString& session );
+    void initializeNonStatic(Core::Setup mode, const QString& session);
 };
-
 }
 
 #endif

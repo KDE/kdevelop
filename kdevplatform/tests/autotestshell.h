@@ -42,10 +42,9 @@
 
  */
 
-namespace KDevelop
-{
-
-class KDEVPLATFORMTESTS_EXPORT AutoTestShell : public KDevelop::ShellExtension
+namespace KDevelop {
+class KDEVPLATFORMTESTS_EXPORT AutoTestShell
+    : public KDevelop::ShellExtension
 {
 public:
     explicit AutoTestShell(const QStringList& plugins);
@@ -53,7 +52,8 @@ public:
     QString xmlFile() override { return QString(); }
     QString executableFilePath() override { return QString(); };
     QString defaultProfile() { return QStringLiteral("kdevtest"); }
-    KDevelop::AreaParams defaultArea() override {
+    KDevelop::AreaParams defaultArea() override
+    {
         KDevelop::AreaParams params;
         params.name = QStringLiteral("test");
         params.title = QStringLiteral("Test");
@@ -74,8 +74,6 @@ public:
 private:
     QStringList m_plugins;
 };
-
 }
 
 #endif
-

@@ -33,7 +33,6 @@
 using std::unique_ptr;
 
 namespace KDevelop {
-
 class IBreakpointController;
 class IVariableController;
 class IFrameStackModel;
@@ -68,7 +67,8 @@ class IFrameStackModel;
  * debug session, and not change them inside the test code, as required by
  * IDebugSession that controllers do not change during the lifetime of a session
  */
-class KDEVPLATFORMTESTS_EXPORT TestDebugSession : public IDebugSession
+class KDEVPLATFORMTESTS_EXPORT TestDebugSession
+    : public IDebugSession
 {
     Q_OBJECT
 
@@ -76,9 +76,9 @@ public:
     TestDebugSession();
     ~TestDebugSession() override;
 
-    void setBreakpointController(IBreakpointController *breakpointController);
-    void setVariableController(IVariableController *variableController);
-    void setFrameStackModel(IFrameStackModel *frameStackModel);
+    void setBreakpointController(IBreakpointController* breakpointController);
+    void setVariableController(IVariableController* variableController);
+    void setFrameStackModel(IFrameStackModel* frameStackModel);
 
     DebuggerState state() const override;
 
@@ -101,11 +101,10 @@ public Q_SLOTS:
     void stepOut() override;
 
 private:
-    IBreakpointController *m_breakpointController = nullptr;
-    IVariableController *m_variableController = nullptr;
-    IFrameStackModel *m_frameStackModel = nullptr;
+    IBreakpointController* m_breakpointController = nullptr;
+    IVariableController* m_variableController = nullptr;
+    IFrameStackModel* m_frameStackModel = nullptr;
     DebuggerState m_sessionState = NotStartedState;
 };
-
 } // end of namespace KDevelop
 #endif // TESTDEBUGSESSION_H

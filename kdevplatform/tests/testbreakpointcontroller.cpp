@@ -25,13 +25,12 @@
 
 using namespace KDevelop;
 
-TestBreakpointController::TestBreakpointController(IDebugSession *parent)
+TestBreakpointController::TestBreakpointController(IDebugSession* parent)
     : IBreakpointController(parent)
 {
-
 }
 
-void TestBreakpointController::sendMaybe(Breakpoint *breakpoint)
+void TestBreakpointController::sendMaybe(Breakpoint* breakpoint)
 {
     Q_UNUSED(breakpoint);
 }

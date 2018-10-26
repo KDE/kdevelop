@@ -89,7 +89,7 @@ public:
 
 TestFile::TestFile(const QString& contents, const QString& fileExtension,
                    TestProject* project, const QString& dir)
-: d(new TestFilePrivate())
+    : d(new TestFilePrivate())
 {
     d->suffix = QLatin1Char('.') + fileExtension;
 
@@ -102,7 +102,7 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension,
 }
 
 TestFile::TestFile(const QString& contents, const QString& fileExtension, const TestFile* base)
-: d(new TestFilePrivate)
+    : d(new TestFilePrivate)
 {
     QString fileName = base->d->file.mid(0, base->d->file.length() - base->d->suffix.length());
     d->suffix = QLatin1Char('.') + fileExtension;

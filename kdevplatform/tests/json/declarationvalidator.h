@@ -24,20 +24,20 @@
 #include "language/duchain/ducontext.h"
 
 namespace KDevelop {
-
-class KDEVPLATFORMTESTS_EXPORT DeclarationValidator : public DUChainVisitor
+class KDEVPLATFORMTESTS_EXPORT DeclarationValidator
+    : public DUChainVisitor
 {
 public:
-  DeclarationValidator();
-  ~DeclarationValidator() override;
+    DeclarationValidator();
+    ~DeclarationValidator() override;
 
-  virtual bool testsPassed();
-  void visit(DUContext*) override;
-  void visit(Declaration *declaration) override;
+    virtual bool testsPassed();
+    void visit(DUContext*) override;
+    void visit(Declaration* declaration) override;
+
 private:
-  Q_DISABLE_COPY(DeclarationValidator)
-  const QScopedPointer<class DeclarationValidatorPrivate> d;
+    Q_DISABLE_COPY(DeclarationValidator)
+    const QScopedPointer<class DeclarationValidatorPrivate> d;
 };
-
 }
 #endif //KDEVPLATFORM_DECLARATIONVALIDATOR_H

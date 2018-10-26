@@ -29,12 +29,10 @@ using namespace KDevelop;
 
 TestPluginController::TestPluginController(Core* core) : PluginController(core)
 {
-
 }
 
 void TestPluginController::initialize()
 {
-
 }
 
 QList<IPlugin*> TestPluginController::allPluginsForExtension(const QString& extension,
@@ -59,7 +57,8 @@ IPlugin* TestPluginController::pluginForExtension(const QString& extension, cons
     return nullptr;
 }
 
-QVector<KPluginMetaData> TestPluginController::queryExtensionPlugins(const QString& extension, const QVariantMap& constraints) const
+QVector<KPluginMetaData> TestPluginController::queryExtensionPlugins(const QString& extension,
+                                                                     const QVariantMap& constraints) const
 {
     Q_UNUSED(extension);
     Q_UNUSED(constraints);
@@ -77,11 +76,12 @@ KPluginMetaData TestPluginController::pluginInfo(const IPlugin*) const
     return KPluginMetaData();
 }
 
-QList< ContextMenuExtension > TestPluginController::queryPluginsForContextMenuExtensions(Context* context, QWidget* parent) const
+QList<ContextMenuExtension> TestPluginController::queryPluginsForContextMenuExtensions(Context* context,
+                                                                                       QWidget* parent) const
 {
     Q_UNUSED(context);
     Q_UNUSED(parent);
-    return QList< ContextMenuExtension >();
+    return QList<ContextMenuExtension>();
 }
 
 bool TestPluginController::unloadPlugin(const QString& plugin)

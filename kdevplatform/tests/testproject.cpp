@@ -28,12 +28,12 @@
 using namespace KDevelop;
 
 TestProject::TestProject(const Path& path, QObject* parent)
-: IProject(parent)
-, m_projectConfiguration(KSharedConfig::openConfig())
+    : IProject(parent)
+    , m_projectConfiguration(KSharedConfig::openConfig())
 {
     m_path = path.isValid() ? path : Path(QDir::tempPath() + QLatin1String("/kdev-testproject/"));
     m_root = new ProjectFolderItem(this, m_path);
-    ICore::self()->projectController()->projectModel()->appendRow( m_root );
+    ICore::self()->projectController()->projectModel()->appendRow(m_root);
 }
 
 void TestProject::setPath(const Path& path)
@@ -59,14 +59,14 @@ ProjectFolderItem* TestProject::projectItem() const
 void TestProject::setProjectItem(ProjectFolderItem* item)
 {
     if (m_root) {
-        ICore::self()->projectController()->projectModel()->removeRow( m_root->row() );
+        ICore::self()->projectController()->projectModel()->removeRow(m_root->row());
         m_root = nullptr;
         m_path.clear();
     }
     if (item) {
         m_root = item;
         m_path = item->path();
-        ICore::self()->projectController()->projectModel()->appendRow( m_root );
+        ICore::self()->projectController()->projectModel()->appendRow(m_root);
     }
 }
 
@@ -87,7 +87,7 @@ bool TestProject::inProject(const IndexedString& path) const
 
 void findFileItems(ProjectBaseItem* root, QList<ProjectFileItem*>& items, const Path& path = {})
 {
-    foreach(ProjectBaseItem* item, root->children()) {
+    foreach (ProjectBaseItem* item, root->children()) {
         if (item->file() && (path.isEmpty() || item->path() == path)) {
             items << item->file();
         }
@@ -97,7 +97,7 @@ void findFileItems(ProjectBaseItem* root, QList<ProjectFileItem*>& items, const 
     }
 }
 
-QList< ProjectFileItem* > TestProject::files() const
+QList<ProjectFileItem*> TestProject::files() const
 {
     QList<ProjectFileItem*> ret;
     findFileItems(m_root, ret);
@@ -129,4 +129,3 @@ void TestProject::removeFromFileSet(ProjectFileItem* file)
 void TestProjectController::initialize()
 {
 }
-

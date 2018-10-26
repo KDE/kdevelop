@@ -29,11 +29,11 @@
 #include <debugger/interfaces/ivariablecontroller.h>
 
 namespace KDevelop {
-
 /**
  * Dummy VariableController that does nothing.
  */
-class KDEVPLATFORMTESTS_EXPORT TestVariableController : public IVariableController
+class KDEVPLATFORMTESTS_EXPORT TestVariableController
+    : public IVariableController
 {
     Q_OBJECT
 
@@ -61,6 +61,5 @@ protected:
 private:
     int m_updatedTimes;
 };
-
 } // end of namespace KDevelop
 #endif // TESTVARIABLECONTROLLER_H

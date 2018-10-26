@@ -29,20 +29,19 @@
 #include <debugger/interfaces/ibreakpointcontroller.h>
 
 namespace KDevelop {
-
 /**
  * Dummy BreakpointController
  */
-class KDEVPLATFORMTESTS_EXPORT TestBreakpointController : public IBreakpointController
+class KDEVPLATFORMTESTS_EXPORT TestBreakpointController
+    : public IBreakpointController
 {
     Q_OBJECT
 
 public:
-    explicit TestBreakpointController(IDebugSession *parent);
+    explicit TestBreakpointController(IDebugSession* parent);
 
 protected:
-    void sendMaybe(Breakpoint *breakpoint) override;
+    void sendMaybe(Breakpoint* breakpoint) override;
 };
-
 } // end of namespace KDevelop
 #endif // TESTBREAKPOINTCONTROLLER_H

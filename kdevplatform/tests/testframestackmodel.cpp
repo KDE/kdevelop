@@ -25,14 +25,13 @@
 
 using namespace KDevelop;
 
-TestFrameStackModel::TestFrameStackModel(IDebugSession *parent)
+TestFrameStackModel::TestFrameStackModel(IDebugSession* parent)
     : FrameStackModel(parent)
 {
 }
 
 void TestFrameStackModel::fetchThreads()
 {
-
 }
 
 void TestFrameStackModel::fetchFrames(int threadNumber, int from, int to)

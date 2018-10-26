@@ -34,7 +34,6 @@ TestVariableController::TestVariableController(IDebugSession* parent)
     : IVariableController(parent)
     , m_updatedTimes(0)
 {
-
 }
 
 Variable* TestVariableController::createVariable(TreeModel* model, TreeItem* parent,

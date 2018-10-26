@@ -28,12 +28,14 @@
 
 // always enable assertions here
 #undef Q_ASSERT
-#define Q_ASSERT(cond) ((!(cond)) ? qt_assert(#cond,__FILE__,__LINE__) : qt_noop())
+#define Q_ASSERT(cond) ((!(cond)) ? qt_assert(# cond, __FILE__, __LINE__) : qt_noop())
 
 /*!
     Connect to all of the models signals.  Whenever anything happens recheck everything.
 */
-ModelTest::ModelTest(QAbstractItemModel *_model, QObject *parent) : QObject(parent), model(_model), fetchingMore(false)
+ModelTest::ModelTest(QAbstractItemModel* _model, QObject* parent) : QObject(parent)
+    , model(_model)
+    , fetchingMore(false)
 {
     Q_ASSERT(model);
 
@@ -282,7 +284,7 @@ void ModelTest::parent()
     found the basic bugs because it is easier to figure out the problem in
     those tests then this one.
  */
-void ModelTest::checkChildren(const QModelIndex &parent, int currentDepth)
+void ModelTest::checkChildren(const QModelIndex& parent, int currentDepth)
 {
     // First just try walking back up the tree.
     QModelIndex p = parent;
@@ -358,7 +360,7 @@ void ModelTest::checkChildren(const QModelIndex &parent, int currentDepth)
             Q_ASSERT(model->parent(index) == parent);
 
             // recursively go down the children
-            if (model->hasChildren(index) && currentDepth < 10 ) {
+            if (model->hasChildren(index) && currentDepth < 10) {
                 //qDebug() << r << c << "has children" << model->rowCount(index);
                 checkChildren(index, ++currentDepth);
             }/* else { if (currentDepth >= 10) qDebug() << "checked 10 deep"; };*/
@@ -417,7 +419,7 @@ void ModelTest::data()
     QVariant textAlignmentVariant = model->data(model->index(0, 0), Qt::TextAlignmentRole);
     if (textAlignmentVariant.isValid()) {
         int alignment = textAlignmentVariant.toInt();
-       Q_ASSERT(alignment == (alignment & (Qt::AlignHorizontal_Mask | Qt::AlignVertical_Mask)));
+        Q_ASSERT(alignment == (alignment & (Qt::AlignHorizontal_Mask | Qt::AlignVertical_Mask)));
     }
 
     // General Purpose roles that should return a QColor
@@ -446,7 +448,7 @@ void ModelTest::data()
 
     \sa rowsInserted()
  */
-void ModelTest::rowsAboutToBeInserted(const QModelIndex &parent, int start, int end)
+void ModelTest::rowsAboutToBeInserted(const QModelIndex& parent, int start, int end)
 {
     Q_UNUSED(end);
     Changing c;
@@ -462,7 +464,7 @@ void ModelTest::rowsAboutToBeInserted(const QModelIndex &parent, int start, int 
 
     \sa rowsAboutToBeInserted()
  */
-void ModelTest::rowsInserted(const QModelIndex & parent, int start, int end)
+void ModelTest::rowsInserted(const QModelIndex& parent, int start, int end)
 {
     Changing c = insert.pop();
     Q_ASSERT(c.parent == parent);
@@ -491,6 +493,7 @@ void ModelTest::layoutChanged()
         QPersistentModelIndex p = changing[i];
         Q_ASSERT(p == model->index(p.row(), p.column(), p.parent()));
     }
+
     changing.clear();
 }
 
@@ -499,7 +502,7 @@ void ModelTest::layoutChanged()
 
     \sa rowsRemoved()
  */
-void ModelTest::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
+void ModelTest::rowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     Changing c;
     c.parent = parent;
@@ -514,7 +517,7 @@ void ModelTest::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int e
 
     \sa rowsAboutToBeRemoved()
  */
-void ModelTest::rowsRemoved(const QModelIndex & parent, int start, int end)
+void ModelTest::rowsRemoved(const QModelIndex& parent, int start, int end)
 {
     Changing c = remove.pop();
     Q_ASSERT(c.parent == parent);
@@ -522,4 +525,3 @@ void ModelTest::rowsRemoved(const QModelIndex & parent, int start, int end)
     Q_ASSERT(c.last == model->data(model->index(start - 1, 0, c.parent)));
     Q_ASSERT(c.next == model->data(model->index(start, 0, c.parent)));
 }
-

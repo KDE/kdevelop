@@ -32,37 +32,33 @@
  *   plainValue : qint64
  */
 
-namespace KDevelop
-{
-
-namespace TypeTests
-{
-
+namespace KDevelop {
+namespace TypeTests {
 using namespace JsonTestHelpers;
 
 ///JSON type: string
 ///@returns whether the type toString matches the given value
 TypeTest(toString)
 {
-  QString typeStr = type ? type->toString() : QStringLiteral("<no type>");
-  return compareValues(typeStr, value, QStringLiteral("Type's toString"));
+    QString typeStr = type ? type->toString() : QStringLiteral("<no type>");
+    return compareValues(typeStr, value, QStringLiteral("Type's toString"));
 }
 ///JSON type: bool
 ///@returns whether type's constness matches the given value
 TypeTest(isConst)
 {
-  VERIFY_TYPE(bool);
-  bool typeIsConst = false;
-  if (DelayedType::Ptr delayed = type.cast<DelayedType>())
-    typeIsConst = delayed->identifier().isConstant();
-  else
-    typeIsConst = (type->modifiers() & AbstractType::ConstModifier);
+    VERIFY_TYPE(bool);
+    bool typeIsConst = false;
+    if (DelayedType::Ptr delayed = type.cast<DelayedType>())
+        typeIsConst = delayed->identifier().isConstant();
+    else
+        typeIsConst = (type->modifiers() & AbstractType::ConstModifier);
 
-  if (typeIsConst != value.toBool())
-    return typeIsConst ? QStringLiteral("Type is constant, but test data expects non-const.") :
-                         QStringLiteral("Type is non-const, but test data expects constant.");
+    if (typeIsConst != value.toBool())
+        return typeIsConst ? QStringLiteral("Type is constant, but test data expects non-const.") :
+               QStringLiteral("Type is non-const, but test data expects constant.");
 
-  return SUCCESS();
+    return SUCCESS();
 }
 
 ///JSON type: qint64
@@ -72,11 +68,10 @@ TypeTest(plainValue)
     VERIFY_TYPE(qint64);
     auto constantIntegralType = type.cast<ConstantIntegralType>();
     VERIFY_NOT_NULL(constantIntegralType);
-    return compareValues(constantIntegralType->plainValue(), value, QStringLiteral("ConstantIntegralType's plainValue"));
+    return compareValues(constantIntegralType->plainValue(), value,
+                         QStringLiteral("ConstantIntegralType's plainValue"));
 }
-
 }
-
 }
 
 #endif //KDEVPLATFORM_JSONTYPETESTS_H

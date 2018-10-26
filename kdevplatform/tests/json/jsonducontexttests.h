@@ -40,95 +40,90 @@
  *   range : string
  */
 
-namespace KDevelop
-{
-
-namespace DUContextTests
-{
-
+namespace KDevelop {
+namespace DUContextTests {
 using namespace JsonTestHelpers;
 
 ///JSON type: FindDeclObject
 ///@returns whether each declaration can be found and passes its tests
 ContextTest(findDeclarations)
 {
-  VERIFY_TYPE(QVariantMap);
-  const QString INVALID_ERROR = QStringLiteral("Attempted to test invalid context.");
-  const QString NOT_FOUND_ERROR = QStringLiteral("Could not find declaration \"%1\".");
-  const QString DECL_ERROR = QStringLiteral("Declaration found with \"%1\" did not pass tests.");
-  if (!ctxt)
-    return INVALID_ERROR;
-  QVariantMap findDecls = value.toMap();
-  for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it)
-  {
-    QualifiedIdentifier searchId(it.key());
-    QList<Declaration*> ret = ctxt->findDeclarations(searchId, CursorInRevision::invalid());
-    if (!ret.size())
-      return NOT_FOUND_ERROR.arg(it.key());
+    VERIFY_TYPE(QVariantMap);
+    const QString INVALID_ERROR = QStringLiteral("Attempted to test invalid context.");
+    const QString NOT_FOUND_ERROR = QStringLiteral("Could not find declaration \"%1\".");
+    const QString DECL_ERROR = QStringLiteral("Declaration found with \"%1\" did not pass tests.");
+    if (!ctxt)
+        return INVALID_ERROR;
+    QVariantMap findDecls = value.toMap();
+    for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it) {
+        QualifiedIdentifier searchId(it.key());
+        QList<Declaration*> ret = ctxt->findDeclarations(searchId, CursorInRevision::invalid());
+        if (!ret.size())
+            return NOT_FOUND_ERROR.arg(it.key());
 
-    if (!runTests(it.value().toMap(), ret.first()))
-      return DECL_ERROR.arg(it.key());
-  }
-  return SUCCESS();
+        if (!runTests(it.value().toMap(), ret.first()))
+            return DECL_ERROR.arg(it.key());
+    }
+
+    return SUCCESS();
 }
 ///JSON type: IndexDeclObject
 ///@returns whether a declaration exists at each index and each declaration passes its tests
 ContextTest(declarations)
 {
-  VERIFY_TYPE(QVariantMap);
-  const QString INVALID_ERROR = QStringLiteral("Attempted to test invalid context.");
-  const QString NOT_FOUND_ERROR = QStringLiteral("No declaration at index \"%1\".");
-  const QString DECL_ERROR = QStringLiteral("Declaration at index \"%1\" did not pass tests.");
-  if (!ctxt)
-    return INVALID_ERROR;
-  QVariantMap findDecls = value.toMap();
-  for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it)
-  {
-    int index = it.key().toInt();
-    QVector<Declaration*> decls = ctxt->localDeclarations(nullptr);
-    if (decls.size() <= index)
-        return NOT_FOUND_ERROR;
+    VERIFY_TYPE(QVariantMap);
+    const QString INVALID_ERROR = QStringLiteral("Attempted to test invalid context.");
+    const QString NOT_FOUND_ERROR = QStringLiteral("No declaration at index \"%1\".");
+    const QString DECL_ERROR = QStringLiteral("Declaration at index \"%1\" did not pass tests.");
+    if (!ctxt)
+        return INVALID_ERROR;
+    QVariantMap findDecls = value.toMap();
+    for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it) {
+        int index = it.key().toInt();
+        QVector<Declaration*> decls = ctxt->localDeclarations(nullptr);
+        if (decls.size() <= index)
+            return NOT_FOUND_ERROR;
 
-    if (!runTests(it.value().toMap(), decls.at(index)))
-      return DECL_ERROR.arg(it.key());
-  }
-  return SUCCESS();
+        if (!runTests(it.value().toMap(), decls.at(index)))
+            return DECL_ERROR.arg(it.key());
+    }
+
+    return SUCCESS();
 }
 ///JSON type: int
 ///@returns whether the number of child contexts matches the given value
 ContextTest(childCount)
 {
-  return compareValues(ctxt->childContexts().size(), value, QStringLiteral("Context's child count"));
+    return compareValues(ctxt->childContexts().size(), value, QStringLiteral("Context's child count"));
 }
 ///JSON type: int
 ///@returns whether the number of local declarations matches the given value
 ContextTest(localDeclarationCount)
 {
-  return compareValues(ctxt->localDeclarations().size(), value, QStringLiteral("Context's local declaration count"));
+    return compareValues(ctxt->localDeclarations().size(), value, QStringLiteral("Context's local declaration count"));
 }
 ///JSON type: string
 ///@returns whether the context's type matches the given value
 ContextTest(type)
 {
-  QString contextTypeString;
-  switch(ctxt->type())
-  {
-  case DUContext::Class: contextTypeString = QStringLiteral("Class"); break;
-  case DUContext::Enum: contextTypeString = QStringLiteral("Enum"); break;
-  case DUContext::Namespace: contextTypeString = QStringLiteral("Namespace"); break;
-  case DUContext::Function: contextTypeString = QStringLiteral("Function"); break;
-  case DUContext::Template: contextTypeString = QStringLiteral("Template"); break;
-  case DUContext::Global: contextTypeString = QStringLiteral("Global"); break;
-  case DUContext::Helper: contextTypeString = QStringLiteral("Helper"); break;
-  case DUContext::Other: contextTypeString = QStringLiteral("Other"); break;
-  }
-  return compareValues(contextTypeString, value, QStringLiteral("Context's type"));
+    QString contextTypeString;
+    switch (ctxt->type()) {
+    case DUContext::Class: contextTypeString = QStringLiteral("Class"); break;
+    case DUContext::Enum: contextTypeString = QStringLiteral("Enum"); break;
+    case DUContext::Namespace: contextTypeString = QStringLiteral("Namespace"); break;
+    case DUContext::Function: contextTypeString = QStringLiteral("Function"); break;
+    case DUContext::Template: contextTypeString = QStringLiteral("Template"); break;
+    case DUContext::Global: contextTypeString = QStringLiteral("Global"); break;
+    case DUContext::Helper: contextTypeString = QStringLiteral("Helper"); break;
+    case DUContext::Other: contextTypeString = QStringLiteral("Other"); break;
+    }
+    return compareValues(contextTypeString, value, QStringLiteral("Context's type"));
 }
 ///JSON type: bool
 ///@returns whether the context's nullity matches the given value
 ContextTest(null)
 {
-  return compareValues(ctxt == nullptr, value, QStringLiteral("Context's nullity"));
+    return compareValues(ctxt == nullptr, value, QStringLiteral("Context's nullity"));
 }
 
 //JSON type: DeclTestObject
@@ -149,8 +144,7 @@ ContextTest(importedParents)
     if (!ctxt)
         return INVALID_ERROR;
     QVariantMap findDecls = value.toMap();
-    for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it)
-    {
+    for (QVariantMap::iterator it = findDecls.begin(); it != findDecls.end(); ++it) {
         int index = it.key().toInt();
         QVector<DUContext::Import> imports = ctxt->importedParentContexts();
         if (imports.size() <= index)
@@ -159,6 +153,7 @@ ContextTest(importedParents)
         if (!runTests(it.value().toMap(), imports.at(index).context(ctxt->topContext())))
             return CONTEXT_ERROR.arg(it.key());
     }
+
     return SUCCESS();
 }
 
@@ -171,9 +166,7 @@ ContextTest(range)
     }
     return compareValues(rangeStr(ctxt->range()), value, QStringLiteral("Contexts's range"));
 }
-
 }
-
 }
 
 #endif //KDEVPLATFORM_JSONDUCONTEXTTESTS_H

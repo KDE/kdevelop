@@ -32,15 +32,16 @@
 #include <util/path.h>
 
 namespace KDevelop {
-
 /**
  * Dummy Project than can be used for Unit Tests.
  *
  * Currently only FileSet methods are implemented.
  */
-class KDEVPLATFORMTESTS_EXPORT TestProject : public IProject
+class KDEVPLATFORMTESTS_EXPORT TestProject
+    : public IProject
 {
     Q_OBJECT
+
 public:
     /**
      * @p url Path to project directory.
@@ -54,17 +55,20 @@ public:
     ProjectFolderItem* projectItem() const override;
     void setProjectItem(ProjectFolderItem* item);
     int fileCount() const { return 0; }
-    ProjectFileItem* fileAt( int ) const { return nullptr; }
+    ProjectFileItem* fileAt(int) const { return nullptr; }
     QList<ProjectFileItem*> files() const;
-    QList< ProjectBaseItem* > itemsForPath(const IndexedString&) const override { return QList< ProjectBaseItem* >(); }
-    QList< ProjectFileItem* > filesForPath(const IndexedString&) const override;
-    QList< ProjectFolderItem* > foldersForPath(const IndexedString&) const override { return QList<ProjectFolderItem*>(); }
+    QList<ProjectBaseItem*> itemsForPath(const IndexedString&) const override { return QList<ProjectBaseItem*>(); }
+    QList<ProjectFileItem*> filesForPath(const IndexedString&) const override;
+    QList<ProjectFolderItem*> foldersForPath(const IndexedString&) const override
+    {
+        return QList<ProjectFolderItem*>();
+    }
     void reloadModel() override { }
     void close() override {}
     Path projectFile() const override;
     KSharedConfigPtr projectConfiguration() const override { return m_projectConfiguration; }
-    void addToFileSet( ProjectFileItem* file) override;
-    void removeFromFileSet( ProjectFileItem* file) override;
+    void addToFileSet(ProjectFileItem* file) override;
+    void removeFromFileSet(ProjectFileItem* file) override;
     QSet<IndexedString> fileSet() const override { return m_fileSet; }
     bool isReady() const override { return true; }
 
@@ -73,7 +77,8 @@ public:
     Path path() const override;
     QString name() const override { return QStringLiteral("Test Project"); }
     bool inProject(const IndexedString& path) const override;
-    void setReloadJob(KJob* ) override {}
+    void setReloadJob(KJob*) override {}
+
 private:
     QSet<IndexedString> m_fileSet;
     Path m_path;
@@ -84,7 +89,8 @@ private:
 /**
  * ProjectController that can clear open projects. Useful in Unit Tests.
  */
-class KDEVPLATFORMTESTS_EXPORT TestProjectController : public ProjectController
+class KDEVPLATFORMTESTS_EXPORT TestProjectController
+    : public ProjectController
 {
     Q_OBJECT
 
@@ -97,6 +103,5 @@ public:
 
     void initialize() override;
 };
-
 }
 #endif

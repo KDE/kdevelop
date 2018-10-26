@@ -28,12 +28,11 @@
 #include "testsexport.h"
 
 namespace KDevelop {
-
 class TestProject;
 
 /**
  * Helper file to parse a file using the full KDevelop architecture.
- * 
+ *
  * The file will be added to the background parser, and eventually
  * parsed by a fitting language plugin, just like a normal file
  * would be in an actual KDevelop instance.
@@ -46,7 +45,8 @@ class TestProject;
  * QVERIFY(file.topContext());
  * \endcode
  */
-class KDEVPLATFORMTESTS_EXPORT TestFile : public QObject
+class KDEVPLATFORMTESTS_EXPORT TestFile
+    : public QObject
 {
     Q_OBJECT
 
@@ -67,7 +67,7 @@ public:
      * file.topContext()->...
      * @endcode
      */
-    TestFile(const QString& contents, const QString& fileExtension, KDevelop::TestProject *project = nullptr,
+    TestFile(const QString& contents, const QString& fileExtension, KDevelop::TestProject* project = nullptr,
              const QString& dir = QString());
 
     /**
@@ -98,7 +98,7 @@ public:
 
     /**
      * Trigger (re-)parsing of this file with given @p features and @p priority.
-     * 
+     *
      * @see KDevelop::DUChain::updateContextForUrl
      */
     void parse(TopDUContext::Features features = TopDUContext::AllDeclarationsContextsAndUses, int priority = 1);
@@ -160,7 +160,6 @@ private:
 
     Q_PRIVATE_SLOT(d, void updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext))
 };
-
 }
 
 #endif // KDEVPLATFORM_TESTFILE_H

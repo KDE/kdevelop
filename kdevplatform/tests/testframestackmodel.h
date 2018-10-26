@@ -29,16 +29,16 @@
 #include <debugger/framestack/framestackmodel.h>
 
 namespace KDevelop {
-
 /**
  * Dummy frame stack model
  */
-class KDEVPLATFORMTESTS_EXPORT TestFrameStackModel : public FrameStackModel
+class KDEVPLATFORMTESTS_EXPORT TestFrameStackModel
+    : public FrameStackModel
 {
     Q_OBJECT
 
 public:
-    explicit TestFrameStackModel(IDebugSession *parent);
+    explicit TestFrameStackModel(IDebugSession* parent);
 
 protected:
     void fetchThreads() override;
@@ -46,6 +46,5 @@ protected:
 
 private:
 };
-
 } // end of namespace KDevelop
 #endif // TESTFRAMESTACKMODEL_H

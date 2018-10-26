@@ -24,9 +24,7 @@
 #include <language/duchain/types/abstracttype.h>
 #include <QDebug>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 class DUContext;
 
 class Declaration;
@@ -47,67 +45,68 @@ template<class T>
 class KDEVPLATFORMTESTS_EXPORT TestSuite
 {
 public:
-  typedef QString (*TestFunction)(const QVariant&, T);
-  static TestSuite& get();
-  bool addTest(const QString& testName, TestFunction testFunc)
-  {
-    m_testFunctions.insert(testName, testFunc);
-    return true;
-  }
-  bool runTests(const QVariantMap &testData, T object)
-  {
-    QVariantMap expectedFails = expectedFailures(testData);
-    QVariantMap::const_iterator it;
-    DelayedOutput::Delay delay(&DelayedOutput::self());
-    for (it = testData.begin(); it != testData.end(); ++it)
+    typedef QString (* TestFunction)(const QVariant&, T);
+    static TestSuite& get();
+    bool addTest(const QString& testName, TestFunction testFunc)
     {
-      if (it.key() == EXPECT_FAIL())
-        continue;
-
-      QString result = m_testFunctions.value(it.key(), &TestSuite<T>::noSuchTest)(it.value(), object);
-      QString expectedFailure = expectedFails.value(it.key(), QString()).toString();
-
-      //Either ("expected failure" & "no result failure") or ("no expected failure" & "result failure")
-      if (expectedFailure.isEmpty() ^ result.isEmpty())
-      {
-        DelayedOutput::self().push(result.isEmpty() ? FAILED_TO_FAIL().arg(it.key(), expectedFailure, objectInformation(object)) :
-                                   FAIL().arg(it.key(), result, objectInformation(object)));
-        return false;
-      }
-
-      if (!expectedFailure.isEmpty())
-        qDebug() << EXPECTED_FAIL().arg(it.key(), expectedFailure, objectInformation(object)).toUtf8().data();
+        m_testFunctions.insert(testName, testFunc);
+        return true;
     }
-    return true;
-  }
+    bool runTests(const QVariantMap& testData, T object)
+    {
+        QVariantMap expectedFails = expectedFailures(testData);
+        QVariantMap::const_iterator it;
+        DelayedOutput::Delay delay(&DelayedOutput::self());
+        for (it = testData.begin(); it != testData.end(); ++it) {
+            if (it.key() == EXPECT_FAIL())
+                continue;
+
+            QString result = m_testFunctions.value(it.key(), &TestSuite<T>::noSuchTest)(it.value(), object);
+            QString expectedFailure = expectedFails.value(it.key(), QString()).toString();
+
+            //Either ("expected failure" & "no result failure") or ("no expected failure" & "result failure")
+            if (expectedFailure.isEmpty() ^ result.isEmpty()) {
+                DelayedOutput::self().push(result.isEmpty() ? FAILED_TO_FAIL().arg(it.key(), expectedFailure,
+                                                                                   objectInformation(object)) :
+                                           FAIL().arg(it.key(), result, objectInformation(object)));
+                return false;
+            }
+
+            if (!expectedFailure.isEmpty())
+                qDebug() << EXPECTED_FAIL().arg(it.key(), expectedFailure, objectInformation(object)).toUtf8().data();
+        }
+
+        return true;
+    }
+
 private:
-  QVariantMap expectedFailures(const QVariantMap &testData)
-  {
-    if (!testData.contains(EXPECT_FAIL()))
-      return QVariantMap();
+    QVariantMap expectedFailures(const QVariantMap& testData)
+    {
+        if (!testData.contains(EXPECT_FAIL()))
+            return QVariantMap();
 
-    return testData[EXPECT_FAIL()].toMap();
-  }
-  static QString noSuchTest(const QVariant&, T)
-  {
-    return TEST_NOT_FOUND();
-  }
-  static QString objectInformation(T)
-  {
-    return QString();
-  }
-  QHash<QString, TestFunction> m_testFunctions;
+        return testData[EXPECT_FAIL()].toMap();
+    }
+    static QString noSuchTest(const QVariant&, T)
+    {
+        return TEST_NOT_FOUND();
+    }
+    static QString objectInformation(T)
+    {
+        return QString();
+    }
+    QHash<QString, TestFunction> m_testFunctions;
 
-  TestSuite() { }
-  Q_DISABLE_COPY(TestSuite)
+    TestSuite() { }
+    Q_DISABLE_COPY(TestSuite)
 
-  friend TestSuite<Declaration*>& declarationTestSuite();
-  friend TestSuite<DUContext*>& contextTestSuite();
-  friend TestSuite<AbstractType::Ptr>& typeTestSuite();
+    friend TestSuite<Declaration*>& declarationTestSuite();
+    friend TestSuite<DUContext*>& contextTestSuite();
+    friend TestSuite<AbstractType::Ptr>& typeTestSuite();
 };
 
 template<class T>
-inline bool runTests(const QVariantMap &data, T object)
+inline bool runTests(const QVariantMap& data, T object)
 {
     return TestSuite<T>::get().runTests(data, object);
 }
@@ -125,13 +124,11 @@ inline TestSuite<DUContext*>& TestSuite<DUContext*>::get()
     return contextTestSuite();
 }
 
-
 template<>
 inline TestSuite<AbstractType::Ptr>& TestSuite<AbstractType::Ptr>::get()
 {
     return typeTestSuite();
 }
-
 }
 
 #endif //KDEVPLATFORM_TESTSUITE_H

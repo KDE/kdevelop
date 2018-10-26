@@ -26,18 +26,15 @@
 using namespace KDevelop;
 
 TestLanguageController::TestLanguageController(QObject* parent)
-: LanguageController(parent)
+    : LanguageController(parent)
 {
 }
 
 TestLanguageController::~TestLanguageController()
 {
-
 }
 
 void TestLanguageController::addTestLanguage(ILanguageSupport* languageSupport, const QStringList& mimetypes)
 {
     addLanguageSupport(languageSupport, mimetypes);
 }
-
-

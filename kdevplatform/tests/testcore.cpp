@@ -35,16 +35,14 @@
 
 #include <KParts/MainWindow>
 
-namespace KDevelop
-{
-
+namespace KDevelop {
 TestCore::TestCore()
- : Core( new CorePrivate(this) )
+    : Core(new CorePrivate(this))
 {
     Core::m_self = this;
 }
 
-TestCore* TestCore::initialize( Core::Setup mode, const QString& session )
+TestCore* TestCore::initialize(Core::Setup mode, const QString& session)
 {
     qRegisterMetaType<QList<QUrl>>("QList<QUrl>");
 
@@ -65,8 +63,8 @@ TestCore* TestCore::initialize( Core::Setup mode, const QString& session )
     // resume the background parser when a unit test replaces the project controller
     QObject::connect(core->d->projectController.data(), &ProjectController::destroyed,
                      core, [core]() {
-                         core->d->languageController->backgroundParser()->resume();
-                     });
+            core->d->languageController->backgroundParser()->resume();
+        });
 
     return core;
 }
@@ -80,7 +78,7 @@ void TestCore::initializeNonStatic(Core::Setup mode, const QString& _session)
         session = QLatin1String("test-") + qApp->applicationName();
     }
 
-    d->initialize( mode, session );
+    d->initialize(mode, session);
 
     if (_session.isEmpty()) {
         activeSession()->setTemporary(true);
@@ -107,45 +105,43 @@ void TestCore::setShuttingDown(bool shuttingDown)
     d->m_shuttingDown = shuttingDown;
 }
 
-void TestCore::setSessionController( SessionController* ctrl )
+void TestCore::setSessionController(SessionController* ctrl)
 {
     d->sessionController = ctrl;
 }
 
-void TestCore::setPluginController( PluginController* ctrl )
+void TestCore::setPluginController(PluginController* ctrl)
 {
     d->pluginController = ctrl;
 }
 
-void TestCore::setRunController( RunController* ctrl )
+void TestCore::setRunController(RunController* ctrl)
 {
     d->runController = ctrl;
 }
 
-void TestCore::setDocumentController( DocumentController* ctrl )
+void TestCore::setDocumentController(DocumentController* ctrl)
 {
     d->documentController = ctrl;
 }
 
-void TestCore::setPartController( PartController* ctrl )
+void TestCore::setPartController(PartController* ctrl)
 {
     d->partController = ctrl;
 }
 
-void TestCore::setProjectController( ProjectController* ctrl )
+void TestCore::setProjectController(ProjectController* ctrl)
 {
     d->projectController = ctrl;
 }
 
-void TestCore::setLanguageController( LanguageController* ctrl )
+void TestCore::setLanguageController(LanguageController* ctrl)
 {
     d->languageController = ctrl;
 }
 
-void TestCore::setUiController( UiController* ctrl )
+void TestCore::setUiController(UiController* ctrl)
 {
     d->uiController = ctrl;
 }
-
 }
-
