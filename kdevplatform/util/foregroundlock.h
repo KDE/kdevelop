@@ -45,22 +45,22 @@ namespace KDevelop {
  */
 class KDEVPLATFORMUTIL_EXPORT ForegroundLock
 {
-    public:
-        explicit ForegroundLock(bool lock = true);
-        ~ForegroundLock();
-        void unlock();
-        void relock();
-        bool tryLock();
+public:
+    explicit ForegroundLock(bool lock = true);
+    ~ForegroundLock();
+    void unlock();
+    void relock();
+    bool tryLock();
 
-        /// Returns whether the current thread holds the foreground lock
-        static bool isLockedForThread();
+    /// Returns whether the current thread holds the foreground lock
+    static bool isLockedForThread();
 
-        bool isLocked() const;
+    bool isLocked() const;
 
-    private:
-        ForegroundLock(const ForegroundLock& rhs);
-        ForegroundLock& operator=(const ForegroundLock& rhs);
-        bool m_locked = false;
+private:
+    ForegroundLock(const ForegroundLock& rhs);
+    ForegroundLock& operator=(const ForegroundLock& rhs);
+    bool m_locked = false;
 };
 
 /**
@@ -71,10 +71,12 @@ class KDEVPLATFORMUTIL_EXPORT ForegroundLock
  * While this object is alive, you _must not_ access any non-threadsafe resources
  * that belong to the foreground, and you must not start an event-loop.
  */
-class KDEVPLATFORMUTIL_EXPORT TemporarilyReleaseForegroundLock {
+class KDEVPLATFORMUTIL_EXPORT TemporarilyReleaseForegroundLock
+{
 public:
     TemporarilyReleaseForegroundLock();
     ~TemporarilyReleaseForegroundLock();
+
 private:
     TemporarilyReleaseForegroundLock(const TemporarilyReleaseForegroundLock&);
     TemporarilyReleaseForegroundLock& operator=(const TemporarilyReleaseForegroundLock& rhs);
@@ -85,12 +87,13 @@ private:
 
 class KDEVPLATFORMUTIL_EXPORT DoInForeground : public QObject
 {
-Q_OBJECT
-public:
-    DoInForeground() ;
-    ~DoInForeground() override ;
+    Q_OBJECT
 
-    void doIt() ;
+public:
+    DoInForeground();
+    ~DoInForeground() override;
+
+    void doIt();
 
 private Q_SLOTS:
     void doInternalSlot();

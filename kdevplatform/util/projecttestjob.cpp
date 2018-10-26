@@ -61,22 +61,21 @@ void ProjectTestJobPrivate::gotResult(ITestSuite* suite, const TestResult& resul
         m_result.total++;
         q->emitPercent(m_result.total, m_result.total + m_suites.size());
 
-        switch (result.suiteResult)
-        {
-            case TestResult::Passed:
-                m_result.passed++;
-                break;
+        switch (result.suiteResult) {
+        case TestResult::Passed:
+            m_result.passed++;
+            break;
 
-            case TestResult::Failed:
-                m_result.failed++;
-                break;
+        case TestResult::Failed:
+            m_result.failed++;
+            break;
 
-            case TestResult::Error:
-                m_result.error++;
-                break;
+        case TestResult::Error:
+            m_result.error++;
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
 
         if (m_suites.isEmpty()) {
@@ -96,7 +95,9 @@ ProjectTestJob::ProjectTestJob(IProject* project, QObject* parent)
 
     d->m_suites = ICore::self()->testController()->testSuitesForProject(project);
     connect(ICore::self()->testController(), &ITestController::testRunFinished,
-            this, [&] (ITestSuite* suite, const TestResult& result) { d->gotResult(suite, result); });
+            this, [&](ITestSuite* suite, const TestResult& result) {
+        d->gotResult(suite, result);
+    });
 }
 
 ProjectTestJob::~ProjectTestJob()

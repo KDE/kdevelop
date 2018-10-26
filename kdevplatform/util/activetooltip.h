@@ -40,10 +40,11 @@ namespace KDevelop {
 class KDEVPLATFORMUTIL_EXPORT ActiveToolTip : public QWidget
 {
     Q_OBJECT
+
 public:
     ///@param parent Parent widget. Must not be zero, else the widget won't be shown.
     /// @param position Position where to show the tooltip, in global coordinates.
-    ActiveToolTip(QWidget *parent, const QPoint& position);
+    ActiveToolTip(QWidget* parent, const QPoint& position);
     ~ActiveToolTip() override;
 
     ///Shows and registers the given tool-tip.
@@ -57,7 +58,7 @@ public:
     ///@param uniqueId If this is nonempty, ActiveTooltip will make sure that only one tooltip with the given id is shown at a time
     static void showToolTip(ActiveToolTip* tooltip, float priority = 100, const QString& uniqueId = QString());
 
-    bool eventFilter(QObject *object, QEvent *e) override;
+    bool eventFilter(QObject* object, QEvent* e) override;
 
     bool insideThis(QObject* object);
 
@@ -84,8 +85,9 @@ Q_SIGNALS:
     void mouseIn();
     // Emitted whenever mouse-activity is noticed outside of the tooltip area
     void mouseOut();
+
 private:
-    void closeEvent(QCloseEvent* ) override;
+    void closeEvent(QCloseEvent*) override;
 
 private:
     const QScopedPointer<class ActiveToolTipPrivate> d;

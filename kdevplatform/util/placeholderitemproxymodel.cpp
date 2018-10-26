@@ -111,7 +111,7 @@ int PlaceholderItemProxyModel::rowCount(const QModelIndex& parent) const
 
 bool KDevelop::PlaceholderItemProxyModel::hasChildren(const QModelIndex& parent) const
 {
-    if ( !parent.isValid() ) {
+    if (!parent.isValid()) {
         return true;
     }
     return QIdentityProxyModel::hasChildren(parent);
@@ -160,7 +160,6 @@ QModelIndex PlaceholderItemProxyModel::sibling(int row, int column, const QModel
     }
     return QIdentityProxyModel::sibling(row, column, idx);
 }
-
 
 QModelIndex PlaceholderItemProxyModel::mapToSource(const QModelIndex& proxyIndex) const
 {

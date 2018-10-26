@@ -43,19 +43,20 @@ namespace KDevelop {
  * @sa QVarLengthArray
  */
 template<class T, int Prealloc = 32>
-class Stack : public QVarLengthArray<T, Prealloc>
+class Stack : public QVarLengthArray<T
+        , Prealloc>
 {
     using Base = QVarLengthArray<T, Prealloc>;
 
 public:
     using Base::QVarLengthArray;
 
-    inline void swap(Stack<T> &other)
+    inline void swap(Stack<T>& other)
     {
         // prevent Stack<->QVarLengthArray swaps
         Base::swap(other);
     }
-    inline void push(const T &t)
+    inline void push(const T& t)
     {
         Base::append(t);
     }
@@ -66,7 +67,8 @@ public:
         Base::removeLast();
         return r;
     }
-    inline T& top() {
+    inline T& top()
+    {
         return Base::last();
     }
     inline const T& top() const

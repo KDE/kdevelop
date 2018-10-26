@@ -27,8 +27,7 @@ class QTreeView;
 class QModelIndex;
 class QAbstractItemModel;
 
-namespace KDevelop
-{
+namespace KDevelop {
 
 /**
  * A view for displaying a tree structure in a series of list views.
@@ -42,6 +41,7 @@ namespace KDevelop
 class KDEVPLATFORMUTIL_EXPORT MultiLevelListView : public QWidget
 {
     Q_OBJECT
+
 public:
     enum LastLevelViewMode {
         SubTrees,      ///< Shows complete subtree for each child. Only leafs are selectable.
@@ -147,7 +147,7 @@ public Q_SLOTS:
 private:
     const QScopedPointer<class MultiLevelListViewPrivate> d;
     friend class MultiLevelListViewPrivate;
-    Q_PRIVATE_SLOT(d, void ensureViewSelected(QTreeView* view))
+    Q_PRIVATE_SLOT(d, void ensureViewSelected(QTreeView * view))
 };
 
 }

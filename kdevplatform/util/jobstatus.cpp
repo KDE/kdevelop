@@ -26,7 +26,6 @@
 
 using namespace KDevelop;
 
-
 class KDevelop::JobStatusPrivate
 {
 public:

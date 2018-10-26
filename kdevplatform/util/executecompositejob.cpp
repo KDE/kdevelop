@@ -20,8 +20,7 @@ Boston, MA 02110-1301, USA.
 #include "executecompositejob.h"
 #include "debug.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 class ExecuteCompositeJobPrivate
 {
 public:
@@ -35,7 +34,8 @@ public:
 };
 
 ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs)
-: KCompositeJob(parent), d(new ExecuteCompositeJobPrivate)
+    : KCompositeJob(parent)
+    , d(new ExecuteCompositeJobPrivate)
 {
     setCapabilities(Killable);
 
@@ -46,7 +46,8 @@ ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jo
             continue;
         }
         addSubjob(job);
-        if (objectName().isEmpty()) setObjectName(job->objectName());
+        if (objectName().isEmpty())
+            setObjectName(job->objectName());
     }
 }
 
@@ -62,7 +63,7 @@ void ExecuteCompositeJobPrivate::startNextJob(KJob* job)
 
 void ExecuteCompositeJob::start()
 {
-    if(hasSubjobs()) {
+    if (hasSubjobs()) {
         d->startNextJob(subjobs().first());
     } else {
         emitResult();
@@ -88,8 +89,8 @@ void ExecuteCompositeJob::slotPercent(KJob* job, unsigned long percent)
     Q_ASSERT(d->m_jobCount > 0);
     Q_ASSERT(d->m_jobIndex >= 0 && d->m_jobIndex < d->m_jobCount);
 
-    const float ratio = (float)d->m_jobIndex / d->m_jobCount;
-    const unsigned long totalPercent = ratio * 100 + ((float)percent / d->m_jobCount);
+    const float ratio = ( float )d->m_jobIndex / d->m_jobCount;
+    const unsigned long totalPercent = ratio * 100 + (( float )percent / d->m_jobCount);
 
     emitPercent(totalPercent, 100);
 }
@@ -102,7 +103,7 @@ void ExecuteCompositeJob::slotResult(KJob* job)
     const float ratio = d->m_jobIndex != -1 ? (d->m_jobIndex + 1.0) / d->m_jobCount : 1.0;
     emitPercent(ratio * 100, 100);
 
-    qCDebug(UTIL) << "finished: "<< job << job->error() << "percent:" << ratio * 100;
+    qCDebug(UTIL) << "finished: " << job << job->error() << "percent:" << ratio * 100;
     bool emitDone = false;
     if (d->m_abortOnError && job->error()) {
         qCDebug(UTIL) << "JOB ERROR:" << job->error() << job->errorString();
@@ -125,7 +126,7 @@ bool ExecuteCompositeJob::doKill()
 {
     qCDebug(UTIL) << "Killing subjobs:" << subjobs().size();
     d->m_killing = true;
-    while(hasSubjobs()) {
+    while (hasSubjobs()) {
         KJob* j = subjobs().first();
 
         if (!j || j->kill()) {
@@ -143,4 +144,3 @@ void ExecuteCompositeJob::setAbortOnError(bool abort)
 }
 
 }
-

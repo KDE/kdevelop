@@ -30,12 +30,15 @@ using namespace KDevelop;
 
 //BEGIN Helper Threads
 
-class TryLockThread : public QThread {
+class TryLockThread : public QThread
+{
     Q_OBJECT
+
 public:
-    void run() override {
+    void run() override
+    {
         ForegroundLock lock(false);
-        for(int i = 0; i < 1000; ++i) {
+        for (int i = 0; i < 1000; ++i) {
             if (lock.tryLock()) {
                 lock.unlock();
             }
@@ -62,20 +65,21 @@ void TestForegroundLock::testTryLock()
 
     ForegroundLock lock(true);
 
-    foreach(TryLockThread* thread, threads) {
+    foreach (TryLockThread* thread, threads) {
         thread->start();
     }
 
     lock.unlock();
 
-    while(true) {
+    while (true) {
         bool running = false;
-        foreach(TryLockThread* thread, threads) {
+        foreach (TryLockThread* thread, threads) {
             if (thread->isRunning()) {
                 running = true;
                 break;
             }
         }
+
         if (!running) {
             break;
         }

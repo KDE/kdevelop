@@ -33,7 +33,7 @@ public:
 
 ObjectListTracker::ObjectListTracker(CleanupBehavior behavior, QObject* parent)
     : QObject(parent)
-    , d(new ObjectListTrackerPrivate{{}, behavior})
+    , d(new ObjectListTrackerPrivate {{}, behavior})
 {
 }
 

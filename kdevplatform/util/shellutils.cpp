@@ -34,32 +34,32 @@
 
 namespace KDevelop {
 
-bool askUser( const QString& mainText,
-              const QString& ttyPrompt,
-              const QString& mboxTitle,
-              const QString& mboxAdditionalText,
-              const QString& confirmText,
-              const QString& rejectText,
-              bool ttyDefaultToYes )
+bool askUser(const QString& mainText,
+             const QString& ttyPrompt,
+             const QString& mboxTitle,
+             const QString& mboxAdditionalText,
+             const QString& confirmText,
+             const QString& rejectText,
+             bool ttyDefaultToYes)
 {
-    if( !qobject_cast<QGuiApplication*>(qApp) ) {
+    if (!qobject_cast<QGuiApplication*>(qApp)) {
         // no ui-mode e.g. for duchainify and other tools
-        QTextStream out( stdout );
+        QTextStream out(stdout);
         out << mainText << endl;
-        QTextStream in( stdin );
+        QTextStream in(stdin);
         QString input;
         forever {
-            if( ttyDefaultToYes ) {
-                out << QStringLiteral( "%1: [Y/n] " ).arg( ttyPrompt ) << flush;
+            if (ttyDefaultToYes) {
+                out << QStringLiteral("%1: [Y/n] ").arg(ttyPrompt) << flush;
             } else {
-                out << QStringLiteral( "%1: [y/N] ").arg( ttyPrompt ) << flush;
+                out << QStringLiteral("%1: [y/N] ").arg(ttyPrompt) << flush;
             }
             input = in.readLine().trimmed();
-            if( input.isEmpty() ) {
+            if (input.isEmpty()) {
                 return ttyDefaultToYes;
-            } else if( input.toLower() == QLatin1String("y") ) {
+            } else if (input.toLower() == QLatin1String("y")) {
                 return true;
-            } else if( input.toLower() == QLatin1String("n") ) {
+            } else if (input.toLower() == QLatin1String("n")) {
                 return false;
             }
         }
@@ -68,34 +68,36 @@ bool askUser( const QString& mainText,
         okButton.setText(confirmText);
         auto rejectButton = KStandardGuiItem::cancel();
         rejectButton.setText(rejectText);
-        int userAnswer = KMessageBox::questionYesNo( ICore::self()->uiController()->activeMainWindow(),
-                                                     mainText + QLatin1String("\n\n") + mboxAdditionalText,
-                                                     mboxTitle,
-                                                     okButton,
-                                                     rejectButton );
+        int userAnswer = KMessageBox::questionYesNo(ICore::self()->uiController()->activeMainWindow(),
+                                                    mainText + QLatin1String("\n\n") + mboxAdditionalText,
+                                                    mboxTitle,
+                                                    okButton,
+                                                    rejectButton);
         return userAnswer == KMessageBox::Yes;
     }
 }
 
-bool ensureWritable( const QList<QUrl> &urls )
+bool ensureWritable(const QList<QUrl>& urls)
 {
     QStringList notWritable;
     for (const QUrl& url : urls) {
-        if (url.isLocalFile())
-        {
+        if (url.isLocalFile()) {
             QFile file(url.toLocalFile());
-            if (file.exists() && !(file.permissions() & QFileDevice::WriteOwner) && !(file.permissions() & QFileDevice::WriteGroup))
-            {
+            if (file.exists() && !(file.permissions() & QFileDevice::WriteOwner) &&
+                !(file.permissions() & QFileDevice::WriteGroup)) {
                 notWritable << url.toLocalFile();
             }
         }
     }
-    if (!notWritable.isEmpty())
-    {
+
+    if (!notWritable.isEmpty()) {
         int answer = KMessageBox::questionYesNoCancel(ICore::self()->uiController()->activeMainWindow(),
-            i18n("You don't have write permissions for the following files; add write permissions for owner before saving?") + QLatin1String("\n\n") + notWritable.join(QLatin1Char('\n')),
-            i18n("Some files are write-protected"),
-            KStandardGuiItem::yes(), KStandardGuiItem::no(), KStandardGuiItem::cancel());
+                                                      i18n(
+                                                          "You don't have write permissions for the following files; add write permissions for owner before saving?") +
+                                                      QLatin1String("\n\n") + notWritable.join(QLatin1Char('\n')),
+                                                      i18n("Some files are write-protected"),
+                                                      KStandardGuiItem::yes(),
+                                                      KStandardGuiItem::no(), KStandardGuiItem::cancel());
         if (answer == KMessageBox::Yes) {
             bool success = true;
             foreach (const QString& filename, notWritable) {
@@ -104,9 +106,11 @@ bool ensureWritable( const QList<QUrl> &urls )
                 permissions |= QFileDevice::WriteOwner;
                 success &= file.setPermissions(permissions);
             }
-            if (!success)
-            {
-                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("Failed adding write permissions for some files."), i18n("Failed setting permissions"));
+
+            if (!success) {
+                KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
+                                   i18n("Failed adding write permissions for some files."),
+                                   i18n("Failed setting permissions"));
                 return false;
             }
         }

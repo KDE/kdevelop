@@ -35,10 +35,13 @@ namespace KDevelop {
  * @param rightContext The right context of the text fragment
  * @param tabWidth The width of one tab, required while matching tabs vs. spaces
  * @param fuzzyCharacters Characters which are ignored in case of mismatches
- * 
+ *
  * @return The re-formatted version of @p text
  * */
-KDEVPLATFORMUTIL_EXPORT QString extractFormattedTextFromContext(const QString& formattedMergedText, const QString& text, const QString& leftContext, const QString& rightContext, int tabWidth = 4, const QString& fuzzyCharacters = QStringLiteral("{}()/*/"));
+KDEVPLATFORMUTIL_EXPORT QString extractFormattedTextFromContext(const QString& formattedMergedText, const QString& text,
+                                                                const QString& leftContext, const QString& rightContext,
+                                                                int tabWidth = 4,
+                                                                const QString& fuzzyCharacters = QStringLiteral( "{}()/*/" ));
 }
 
 #endif // KDEVPLATFORM_FORMATTINGHELPERS_H

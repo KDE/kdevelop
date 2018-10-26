@@ -32,23 +32,23 @@ namespace {
 // TODO: this is a hack, but Kate does not provide interface for this
 int lineHeight(const KTextEditor::View* view, int curLine)
 {
-  KTextEditor::Cursor c(curLine, 0);
-  int currentHeight = view->cursorToCoordinate(c).y();
-  c.setLine(curLine + 1);
-  if (view->cursorToCoordinate(c).y() < 0) {
-    c.setLine(curLine - 1);
-  }
-  return std::abs(view->cursorToCoordinate(c).y() - currentHeight);
+    KTextEditor::Cursor c(curLine, 0);
+    int currentHeight = view->cursorToCoordinate(c).y();
+    c.setLine(curLine + 1);
+    if (view->cursorToCoordinate(c).y() < 0) {
+        c.setLine(curLine - 1);
+    }
+    return std::abs(view->cursorToCoordinate(c).y() - currentHeight);
 }
 
 }
 
 QRect KTextEditorHelpers::itemBoundingRect(const KTextEditor::View* view, const KTextEditor::Range& itemRange)
 {
-  QPoint startPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.start()));
-  QPoint endPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.end()));
-  endPoint.ry() += lineHeight(view, itemRange.start().line());
-  return QRect(startPoint, endPoint);
+    QPoint startPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.start()));
+    QPoint endPoint = view->mapToGlobal(view->cursorToCoordinate(itemRange.end()));
+    endPoint.ry() += lineHeight(view, itemRange.start().line());
+    return QRect(startPoint, endPoint);
 }
 
 KTextEditor::Cursor KTextEditorHelpers::extractCursor(const QString& input, int* pathLength)
@@ -77,7 +77,9 @@ KTextEditor::Cursor KTextEditorHelpers::extractCursor(const QString& input, int*
 
     if (pathLength)
         *pathLength = match.capturedStart(0);
-    return {line, column};
+    return {
+               line, column
+    };
 }
 
 }

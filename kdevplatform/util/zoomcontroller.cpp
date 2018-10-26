@@ -29,7 +29,6 @@
 
 #include <cmath>
 
-
 namespace {
 
 constexpr const char* factorConfigEntryKey() { return "Zoom Factor"; }
@@ -45,7 +44,6 @@ double multiplier(double scale)
 }
 
 } // namespace
-
 
 using KDevelop::ZoomControllerPrivate;
 using KDevelop::ZoomController;

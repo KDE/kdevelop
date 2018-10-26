@@ -1,6 +1,6 @@
 /*
    Copyright 2009 David Nolden <david.nolden.kdevelop@art-master.de>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License version 2 as published by the Free Software Foundation.
@@ -24,32 +24,39 @@
 
 namespace KDevelop {
 
-struct FakeAtomic {
-    inline FakeAtomic(QObject& object, QSharedData& real) : m_object(object), m_real(real) {
+struct FakeAtomic
+{
+    inline FakeAtomic(QObject& object, QSharedData& real) : m_object(object)
+        , m_real(real)
+    {
     }
-    inline operator int() const {
-      const int value = m_real.ref.loadAcquire();
-      if(value == 0)
-          return 1; //Always return true, because we handle the deleting by ourself using deleteLater
-      return value;
-    }
-    
-    inline bool ref() {
-      return m_real.ref.ref();
-    }
-    
-    inline bool deref() {
-      bool ret = m_real.ref.deref();
-      if(!ret)
-        m_object.deleteLater();
-
-      return true; //Always return true, because we handle the deleting by ourself
+    inline operator int() const
+    {
+        const int value = m_real.ref.loadAcquire();
+        if (value == 0)
+            return 1; //Always return true, because we handle the deleting by ourself using deleteLater
+        return value;
     }
 
-    inline int load() const {
+    inline bool ref()
+    {
+        return m_real.ref.ref();
+    }
+
+    inline bool deref()
+    {
+        bool ret = m_real.ref.deref();
+        if (!ret)
+            m_object.deleteLater();
+
+        return true; //Always return true, because we handle the deleting by ourself
+    }
+
+    inline int load() const
+    {
         return m_real.ref.load();
     }
-    
+
     QObject& m_object;
     QSharedData& m_real;
 };
@@ -62,11 +69,13 @@ struct FakeAtomic {
  *
  * Notice however that the object will not be deleted immediately, which may lead to unintended behavior.
  */
-struct KSharedObject : public QSharedData {
-  inline explicit KSharedObject(QObject& object) : ref(object, *this) {
-  }
-  
-  mutable FakeAtomic ref;
+struct KSharedObject : public QSharedData
+{
+    inline explicit KSharedObject(QObject& object) : ref(object, *this)
+    {
+    }
+
+    mutable FakeAtomic ref;
 };
 
 }

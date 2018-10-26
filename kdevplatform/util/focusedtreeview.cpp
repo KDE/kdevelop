@@ -41,7 +41,8 @@ FocusedTreeView::FocusedTreeView(QWidget* parent)
     d->timer.setSingleShot(true);
     connect(&d->timer, &QTimer::timeout, this, &FocusedTreeView::delayedAutoScrollAndResize);
 
-    connect(verticalScrollBar(), &QScrollBar::valueChanged, &d->timer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, &d->timer,
+            static_cast<void ( QTimer::* )()>(&QTimer::start));
 }
 
 FocusedTreeView::~FocusedTreeView()
@@ -67,18 +68,19 @@ void FocusedTreeView::setAutoScrollAtEnd(bool enable)
     d->autoScrollAtEnd = enable;
 }
 
-int FocusedTreeView::sizeHintForColumn(int column) const {
+int FocusedTreeView::sizeHintForColumn(int column) const
+{
     QModelIndex i = indexAt(QPoint(0, 0));
-    if(i.isValid()) {
+    if (i.isValid()) {
         QSize hint = sizeHintForIndex(i);
         int maxWidth = hint.width();
-        if(hint.height()) {
+        if (hint.height()) {
             //Also consider one item above, because else we can get problems with
             //the vertical scroll-bar
-            for(int a = -1; a < (height() / hint.height())+1; ++a) {
-                QModelIndex current = i.sibling(i.row()+a, column);
+            for (int a = -1; a < (height() / hint.height()) + 1; ++a) {
+                QModelIndex current = i.sibling(i.row() + a, column);
                 QSize tempHint = sizeHintForIndex(current);
-                if(tempHint.width() > maxWidth)
+                if (tempHint.width() > maxWidth)
                     maxWidth = tempHint.width();
             }
         }
@@ -98,7 +100,7 @@ void FocusedTreeView::delayedAutoScrollAndResize()
         scrollToBottom();
     }
 
-    for(int a = 0; a < model()->columnCount(); ++a)
+    for (int a = 0; a < model()->columnCount(); ++a)
         resizeColumnToContents(a);
 
     d->insertedBegin = -1;
@@ -138,6 +140,5 @@ void FocusedTreeView::rowsRemoved(const QModelIndex& parent, int first, int last
     if (!d->timer.isActive())
         d->timer.start();
 }
-
 
 }

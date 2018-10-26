@@ -234,6 +234,7 @@ bool TestKdevFormatSource::writeLines(const QString& path, const QStringList& li
     for (const QString& line : lines) {
         outStream << line << "\n";
     }
+
     outStream.flush();
     outFile.close();
 

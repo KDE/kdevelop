@@ -28,7 +28,8 @@
  * Extended QVarLengthArray with additional convenience API.
  */
 template<class T, int Prealloc = 256>
-class KDevVarLengthArray : public QVarLengthArray<T, Prealloc>
+class KDevVarLengthArray : public QVarLengthArray<T
+        , Prealloc>
 {
     using Base = QVarLengthArray<T, Prealloc>;
 
@@ -45,7 +46,7 @@ public:
     QVector<T> toVector() const;
 };
 
-template <class T, int Prealloc>
+template<class T, int Prealloc>
 Q_INLINE_TEMPLATE bool KDevVarLengthArray<T, Prealloc>::removeOne(const T& value)
 {
     const int idx = Base::indexOf(value);
@@ -56,26 +57,26 @@ Q_INLINE_TEMPLATE bool KDevVarLengthArray<T, Prealloc>::removeOne(const T& value
     return true;
 }
 
-template <class T, int Prealloc>
-Q_OUTOFLINE_TEMPLATE QList< T > KDevVarLengthArray<T, Prealloc>::toList() const
+template<class T, int Prealloc>
+Q_OUTOFLINE_TEMPLATE QList<T> KDevVarLengthArray<T, Prealloc>::toList() const
 {
     QList<T> ret;
     ret.reserve(Base::size());
     const T* const end = Base::constEnd();
-    for(const T* it = Base::constBegin(); it != end; ++it) {
+    for (const T* it = Base::constBegin(); it != end; ++it) {
         ret << *it;
     }
 
     return ret;
 }
 
-template <class T, int Prealloc>
-Q_OUTOFLINE_TEMPLATE QVector< T > KDevVarLengthArray<T, Prealloc>::toVector() const
+template<class T, int Prealloc>
+Q_OUTOFLINE_TEMPLATE QVector<T> KDevVarLengthArray<T, Prealloc>::toVector() const
 {
     QVector<T> ret;
     ret.reserve(Base::size());
     const T* const end = Base::constEnd();
-    for(const T* it = Base::constBegin(); it != end; ++it) {
+    for (const T* it = Base::constBegin(); it != end; ++it) {
         ret << *it;
     }
 

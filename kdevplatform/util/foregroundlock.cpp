@@ -23,7 +23,6 @@
 #include <QMutex>
 #include <QThread>
 
-
 using namespace KDevelop;
 
 namespace {
@@ -37,12 +36,12 @@ QWaitCondition condition;
 volatile QThread* holderThread = nullptr;
 volatile int recursion = 0;
 
-void lockForegroundMutexInternal() {
-    if(holderThread == QThread::currentThread())
-    {
+void lockForegroundMutexInternal()
+{
+    if (holderThread == QThread::currentThread()) {
         // We already have the mutex
         ++recursion;
-    }else{
+    } else {
         internalMutex.lock();
         Q_ASSERT(recursion == 0 && holderThread == nullptr);
         holderThread = QThread::currentThread();
@@ -50,26 +49,26 @@ void lockForegroundMutexInternal() {
     }
 }
 
-bool tryLockForegroundMutexInternal(int interval = 0) {
-    if(holderThread == QThread::currentThread())
-    {
+bool tryLockForegroundMutexInternal(int interval = 0)
+{
+    if (holderThread == QThread::currentThread()) {
         // We already have the mutex
         ++recursion;
         return true;
-    }else{
-        if(internalMutex.tryLock(interval))
-        {
+    } else {
+        if (internalMutex.tryLock(interval)) {
             Q_ASSERT(recursion == 0 && holderThread == nullptr);
             holderThread = QThread::currentThread();
             recursion = 1;
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 }
 
-void unlockForegroundMutexInternal(bool duringDestruction = false) {
+void unlockForegroundMutexInternal(bool duringDestruction = false)
+{
     /// Note: QThread::currentThread() might already be invalid during destruction.
     if (!duringDestruction) {
         Q_ASSERT(holderThread == QThread::currentThread());
@@ -77,8 +76,7 @@ void unlockForegroundMutexInternal(bool duringDestruction = false) {
 
     Q_ASSERT(recursion > 0);
     recursion -= 1;
-    if(recursion == 0)
-    {
+    if (recursion == 0) {
         holderThread = nullptr;
         internalMutex.unlock();
     }
@@ -87,7 +85,7 @@ void unlockForegroundMutexInternal(bool duringDestruction = false) {
 
 ForegroundLock::ForegroundLock(bool lock)
 {
-    if(lock)
+    if (lock)
         relock();
 }
 
@@ -95,22 +93,22 @@ void KDevelop::ForegroundLock::relock()
 {
     Q_ASSERT(!m_locked);
 
-    if(!QApplication::instance() || // Initialization isn't complete yet
+    if (!QApplication::instance() || // Initialization isn't complete yet
         QThread::currentThread() == QApplication::instance()->thread() || // We're the main thread (deadlock might happen if we'd enter the trylock loop)
-        holderThread == QThread::currentThread())  // We already have the foreground lock (deadlock might happen if we'd enter the trylock loop)
-    {
+        holderThread == QThread::currentThread()) { // We already have the foreground lock (deadlock might happen if we'd enter the trylock loop)
         lockForegroundMutexInternal();
-    }else{
+    } else {
         QMutexLocker lock(&tryLockMutex);
 
-        while(!tryLockForegroundMutexInternal(10))
-        {
+        while (!tryLockForegroundMutexInternal(10)) {
             // In case an additional event-loop was started from within the foreground, we send
             // events to the foreground to temporarily release the lock.
 
-            class ForegroundReleaser : public DoInForeground {
-                public:
-                void doInternal() override {
+            class ForegroundReleaser : public DoInForeground
+            {
+public:
+                void doInternal() override
+                {
                     // By locking the mutex, we make sure that the requester is actually waiting for the condition
                     waitMutex.lock();
                     // Now we release the foreground lock
@@ -134,11 +132,10 @@ void KDevelop::ForegroundLock::relock()
             // and the foreground is waiting without an event-loop running. (For example through TemporarilyReleaseForegroundLock)
             condition.wait(&waitMutex, 30);
 
-            if(tryLockForegroundMutexInternal())
-            {
+            if (tryLockForegroundMutexInternal()) {
                 //success
                 break;
-            }else{
+            } else {
                 //Probably a third thread has creeped in and
                 //got the foreground lock before us. Just try again.
             }
@@ -156,8 +153,7 @@ bool KDevelop::ForegroundLock::isLockedForThread()
 
 bool KDevelop::ForegroundLock::tryLock()
 {
-    if(tryLockForegroundMutexInternal())
-    {
+    if (tryLockForegroundMutexInternal()) {
         m_locked = true;
         return true;
     }
@@ -177,8 +173,7 @@ TemporarilyReleaseForegroundLock::TemporarilyReleaseForegroundLock()
 
     m_recursion = 0;
 
-    while(holderThread == QThread::currentThread())
-    {
+    while (holderThread == QThread::currentThread()) {
         unlockForegroundMutexInternal();
         ++m_recursion;
     }
@@ -186,14 +181,15 @@ TemporarilyReleaseForegroundLock::TemporarilyReleaseForegroundLock()
 
 TemporarilyReleaseForegroundLock::~TemporarilyReleaseForegroundLock()
 {
-    for(int a = 0; a < m_recursion; ++a)
+    for (int a = 0; a < m_recursion; ++a)
         lockForegroundMutexInternal();
+
     Q_ASSERT(recursion == m_recursion && holderThread == QThread::currentThread());
 }
 
 KDevelop::ForegroundLock::~ForegroundLock()
 {
-    if(m_locked)
+    if (m_locked)
         unlock();
 }
 
@@ -203,40 +199,45 @@ bool KDevelop::ForegroundLock::isLocked() const
 }
 
 namespace KDevelop {
-    void DoInForeground::doIt() {
-        if(QThread::currentThread() == QApplication::instance()->thread())
-        {
-            // We're already in the foreground, just call the handler code
-            doInternal();
-        }else{
-            QMutexLocker lock(&m_mutex);
-            QMetaObject::invokeMethod(this, "doInternalSlot", Qt::QueuedConnection);
-            m_wait.wait(&m_mutex);
-        }
-    }
-
-    DoInForeground::~DoInForeground() {
-    }
-
-    DoInForeground::DoInForeground() {
-        moveToThread(QApplication::instance()->thread());
-    }
-
-    void DoInForeground::doInternalSlot()
-    {
-        VERIFY_FOREGROUND_LOCKED
+void DoInForeground::doIt()
+{
+    if (QThread::currentThread() == QApplication::instance()->thread()) {
+        // We're already in the foreground, just call the handler code
         doInternal();
+    } else {
         QMutexLocker lock(&m_mutex);
-        m_wait.wakeAll();
+        QMetaObject::invokeMethod(this, "doInternalSlot", Qt::QueuedConnection);
+        m_wait.wait(&m_mutex);
     }
 }
 
+DoInForeground::~DoInForeground()
+{
+}
+
+DoInForeground::DoInForeground()
+{
+    moveToThread(QApplication::instance()->thread());
+}
+
+void DoInForeground::doInternalSlot()
+{
+    VERIFY_FOREGROUND_LOCKED
+        doInternal();
+    QMutexLocker lock(&m_mutex);
+    m_wait.wakeAll();
+}
+}
+
 // Important: The foreground lock has to be held by default, so lock it during static initialization
-static struct StaticLock {
-    StaticLock() {
+static struct StaticLock
+{
+    StaticLock()
+    {
         lockForegroundMutexInternal();
     }
-    ~StaticLock() {
+    ~StaticLock()
+    {
         unlockForegroundMutexInternal(true);
     }
 } staticLock;

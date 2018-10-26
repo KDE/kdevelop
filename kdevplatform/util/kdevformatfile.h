@@ -57,9 +57,9 @@ public:
     }
 
     template<typename T>
-    AutoFlushingQTextStream& operator << (T&& s)
+    AutoFlushingQTextStream& operator <<(T&& s)
     {
-        *((QTextStream*) this) << std::forward<T>(s);
+        *(( QTextStream* ) this) << std::forward<T>(s);
         flush();
         return *this;
     }

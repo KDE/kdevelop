@@ -119,7 +119,7 @@ Path::Path(const QUrl& url)
 }
 
 Path::Path(const Path& other, const QString& child)
-: m_data(other.m_data)
+    : m_data(other.m_data)
 {
     if (isAbsolutePath(child)) {
         // absolute path: only share the remote part of @p other
@@ -208,7 +208,7 @@ QString Path::relativePath(const Path& path) const
     // Find where they meet
     int level = isRemote() ? 1 : 0;
     const int maxLevel = qMin(m_data.count(), path.m_data.count());
-    while(level < maxLevel && m_data.at(level) == path.m_data.at(level)) {
+    while (level < maxLevel && m_data.at(level) == path.m_data.at(level)) {
         ++level;
     }
 
@@ -231,15 +231,17 @@ QString Path::relativePath(const Path& path) const
 
     QString relativePath;
     relativePath.reserve((backwardSegments * 3) + forwardSegmentsLength);
-    for(int i = 0; i < backwardSegments; ++i) {
+    for (int i = 0; i < backwardSegments; ++i) {
         relativePath.append(QLatin1String("../"));
     }
+
     for (int i = level; i < path.m_data.count(); ++i) {
         relativePath.append(path.m_data.at(i));
         if (i + 1 != path.m_data.count()) {
             relativePath.append(QLatin1Char('/'));
         }
     }
+
     Q_ASSERT(relativePath.length() == ((backwardSegments * 3) + forwardSegmentsLength));
 
     return relativePath;
@@ -262,6 +264,7 @@ static bool isParentPath(const QVector<QString>& parent, const QVector<QString>&
             return false;
         }
     }
+
     return true;
 }
 
@@ -303,6 +306,7 @@ bool Path::operator<(const Path& other) const
             return comparison < 0;
         }
     }
+
     // when we reach this point, all elements that we compared where equal
     // thus return whether we have less items than the other Path
     return size < otherSize;
@@ -354,7 +358,7 @@ static void cleanPath(QVector<QString>* data, const bool isRemote)
     const auto start = data->begin() + startOffset;
 
     auto it = start;
-    while(it != data->end()) {
+    while (it != data->end()) {
         if (*it == QLatin1String("..")) {
             if (it == start) {
                 it = data->erase(it);
@@ -377,7 +381,7 @@ static void cleanPath(QVector<QString>* data, const bool isRemote)
 }
 
 // Optimized QString::split code for the specific Path use-case
-static QVarLengthArray<QString, 16> splitPath(const QString &source)
+static QVarLengthArray<QString, 16> splitPath(const QString& source)
 {
     QVarLengthArray<QString, 16> list;
     int start = 0;
@@ -466,6 +470,7 @@ uint qHash(const Path& path)
     foreach (const QString& segment, path.segments()) {
         hash << qHash(segment);
     }
+
     return hash;
 }
 
@@ -480,6 +485,7 @@ static Path::List toPathList_impl(const Container& list)
             ret << path;
         }
     }
+
     ret.squeeze();
     return ret;
 }
@@ -489,7 +495,7 @@ Path::List toPathList(const QList<QUrl>& list)
     return toPathList_impl(list);
 }
 
-Path::List toPathList(const QList< QString >& list)
+Path::List toPathList(const QList<QString>& list)
 {
     return toPathList_impl(list);
 }
@@ -504,7 +510,7 @@ QDebug operator<<(QDebug s, const Path& string)
 
 namespace QTest {
 template<>
-char *toString(const Path &path)
+char* toString(const Path& path)
 {
     return qstrdup(qPrintable(path.pathOrUrl()));
 }

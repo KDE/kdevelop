@@ -29,24 +29,27 @@
 
 class QCommandLineParser;
 
-class Manager : public QObject {
+class Manager : public QObject
+{
     Q_OBJECT
-    public:
-        explicit Manager(QCommandLineParser* args);
-        void addToBackgroundParser(const QString& path, KDevelop::TopDUContext::Features features);
-        QSet<QUrl> waiting();
-    private:
-        QSet<QUrl> m_waiting;
-        uint m_total;
-        QCommandLineParser* m_args;
-        QAtomicInt m_allFilesAdded;
 
-    public Q_SLOTS:
-        // delay init into event loop so the DUChain can always shutdown gracefully
-        void init();
-        void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
-        void finish();
-        void dump(const KDevelop::ReferencedTopDUContext& topContext);
+public:
+    explicit Manager(QCommandLineParser* args);
+    void addToBackgroundParser(const QString& path, KDevelop::TopDUContext::Features features);
+    QSet<QUrl> waiting();
+
+private:
+    QSet<QUrl> m_waiting;
+    uint m_total;
+    QCommandLineParser* m_args;
+    QAtomicInt m_allFilesAdded;
+
+public Q_SLOTS:
+    // delay init into event loop so the DUChain can always shutdown gracefully
+    void init();
+    void updateReady(const KDevelop::IndexedString& url, const KDevelop::ReferencedTopDUContext& topContext);
+    void finish();
+    void dump(const KDevelop::ReferencedTopDUContext& topContext);
 };
 
 #endif

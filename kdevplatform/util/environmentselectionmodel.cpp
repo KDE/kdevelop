@@ -21,8 +21,7 @@ Boston, MA 02110-1301, USA.
 
 #include <KLocalizedString>
 
-namespace
-{
+namespace {
 
 QStringList entriesFromEnv(const KDevelop::EnvironmentProfileList& env)
 {
@@ -32,58 +31,57 @@ QStringList entriesFromEnv(const KDevelop::EnvironmentProfileList& env)
 
 }
 
-namespace KDevelop
-{
+namespace KDevelop {
 
-EnvironmentSelectionModel::EnvironmentSelectionModel( QObject* parent ) :
-    QStringListModel( parent ),
-    m_env( KSharedConfig::openConfig() )
+EnvironmentSelectionModel::EnvironmentSelectionModel(QObject* parent) :
+    QStringListModel(parent)
+    , m_env(KSharedConfig::openConfig())
 {
-    setStringList( entriesFromEnv( m_env ) );
+    setStringList(entriesFromEnv(m_env));
     m_profilesLookupTable = stringList().toSet();
 }
 
-QVariant EnvironmentSelectionModel::headerData( int section, Qt::Orientation orientation, int role ) const
+QVariant EnvironmentSelectionModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if( section != 0 ||
+    if (section != 0 ||
         orientation != Qt::Horizontal ||
-        role != Qt::DisplayRole ) {
+        role != Qt::DisplayRole) {
         return QVariant();
     }
 
     return i18nc("@title:column", "Profile");
 }
 
-QVariant EnvironmentSelectionModel::data( const QModelIndex& index, int role ) const
+QVariant EnvironmentSelectionModel::data(const QModelIndex& index, int role) const
 {
-    QVariant nativeData = QStringListModel::data( index, Qt::DisplayRole );
+    QVariant nativeData = QStringListModel::data(index, Qt::DisplayRole);
     QString profileName = nativeData.toString();
 
-    switch( role ) {
+    switch (role) {
     case Qt::DisplayRole:
-        if( profileName.isEmpty() ) {
+        if (profileName.isEmpty()) {
             return i18nc("@item:inlistbox", "Use default profile (currently: %1)", m_env.defaultProfileName());
         }
 
         if (!m_profilesLookupTable.contains(profileName)) {
-            return i18nc( "@item:inlistbox", "%1 (does not exist)", profileName );
+            return i18nc("@item:inlistbox", "%1 (does not exist)", profileName);
         }
 
         return nativeData;
 
     case EffectiveNameRole:
-        if( profileName.isEmpty() ) {
+        if (profileName.isEmpty()) {
             return m_env.defaultProfileName();
         }
 
         return nativeData;
 
     default:
-        return QStringListModel::data( index, role );
+        return QStringListModel::data(index, role);
     }
 }
 
-bool EnvironmentSelectionModel::setData( const QModelIndex& /*index*/, const QVariant& /*value*/, int /*role*/ )
+bool EnvironmentSelectionModel::setData(const QModelIndex& /*index*/, const QVariant& /*value*/, int /*role*/)
 {
     return false;
 }
@@ -97,11 +95,11 @@ void EnvironmentSelectionModel::reload()
 {
     m_env = EnvironmentProfileList(KSharedConfig::openConfig());
 
-    setStringList( entriesFromEnv( m_env ) );
+    setStringList(entriesFromEnv(m_env));
     m_profilesLookupTable = stringList().toSet();
 }
 
-QString EnvironmentSelectionModel::reloadSelectedItem( const QString& currentProfile )
+QString EnvironmentSelectionModel::reloadSelectedItem(const QString& currentProfile)
 {
     if (m_profilesLookupTable.contains(currentProfile)) {
         return currentProfile;
@@ -111,4 +109,3 @@ QString EnvironmentSelectionModel::reloadSelectedItem( const QString& currentPro
 }
 
 } // namespace KDevelop
-

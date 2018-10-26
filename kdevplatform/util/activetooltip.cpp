@@ -41,11 +41,12 @@ namespace {
 class ActiveToolTipManager : public QObject
 {
     Q_OBJECT
+
 public Q_SLOTS:
     void doVisibility();
 
 public:
-    typedef QMultiMap<float, QPair<QPointer<ActiveToolTip>, QString> > ToolTipPriorityMap;
+    typedef QMultiMap<float, QPair<QPointer<ActiveToolTip>, QString>> ToolTipPriorityMap;
     ToolTipPriorityMap registeredToolTips;
 };
 
@@ -71,7 +72,7 @@ void ActiveToolTipManager::doVisibility()
     QRect fullGeometry; //Geometry of all visible tooltips together
 
     for (auto it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it) {
-        QPointer< ActiveToolTip > w = (*it).first;
+        QPointer<ActiveToolTip> w = (*it).first;
         if (w) {
             if (exclusive) {
                 (w.data())->hide();
@@ -100,19 +101,20 @@ void ActiveToolTipManager::doVisibility()
             }
         }
     }
+
     if (!fullGeometry.isEmpty()) {
         QRect oldFullGeometry = fullGeometry;
         QRect screenGeometry = QApplication::desktop()->screenGeometry(fullGeometry.topLeft());
         if (fullGeometry.bottom() > screenGeometry.bottom()) {
             //Move up, avoiding the mouse-cursor
-            fullGeometry.moveBottom(fullGeometry.top()-10);
+            fullGeometry.moveBottom(fullGeometry.top() - 10);
             if (fullGeometry.adjusted(-20, -20, 20, 20).contains(QCursor::pos())) {
                 fullGeometry.moveBottom(QCursor::pos().y() - 20);
             }
         }
         if (fullGeometry.right() > screenGeometry.right()) {
             //Move to left, avoiding the mouse-cursor
-            fullGeometry.moveRight(fullGeometry.left()-10);
+            fullGeometry.moveRight(fullGeometry.left() - 10);
             if (fullGeometry.adjusted(-20, -20, 20, 20).contains(QCursor::pos())) {
                 fullGeometry.moveRight(QCursor::pos().x() - 20);
             }
@@ -139,7 +141,7 @@ void ActiveToolTipManager::doVisibility()
     fullGeometry = fullGeometry.united(QRect(QCursor::pos(), QCursor::pos()));
 
     //Set bounding geometry, and remove old tooltips
-    for (auto it = registeredToolTips.begin(); it != registeredToolTips.end(); ) {
+    for (auto it = registeredToolTips.begin(); it != registeredToolTips.end();) {
         if (!it->first) {
             it = registeredToolTips.erase(it);
         } else {
@@ -171,7 +173,7 @@ public:
 };
 }
 
-ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
+ActiveToolTip::ActiveToolTip(QWidget* parent, const QPoint& position)
     : QWidget(parent, Qt::ToolTip)
     , d(new ActiveToolTipPrivate)
 {
@@ -199,7 +201,7 @@ ActiveToolTip::ActiveToolTip(QWidget *parent, const QPoint& position)
 
 ActiveToolTip::~ActiveToolTip() = default;
 
-bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
+bool ActiveToolTip::eventFilter(QObject* object, QEvent* e)
 {
     switch (e->type()) {
     case QEvent::MouseMove:
@@ -237,7 +239,7 @@ bool ActiveToolTip::eventFilter(QObject *object, QEvent *e)
 
 void ActiveToolTip::addFriendWidget(QWidget* widget)
 {
-    d->friendWidgets_.append((QObject*)widget);
+    d->friendWidgets_.append(( QObject* )widget);
 }
 
 bool ActiveToolTip::insideThis(QObject* object)
@@ -247,7 +249,7 @@ bool ActiveToolTip::insideThis(QObject* object)
             return true;
         }
 
-        if (object == this || object == (QObject*)this->windowHandle() || d->friendWidgets_.contains(object)) {
+        if (object == this || object == ( QObject* )this->windowHandle() || d->friendWidgets_.contains(object)) {
             return true;
         }
         object = object->parent();
@@ -273,8 +275,8 @@ void ActiveToolTip::resizeEvent(QResizeEvent*)
     opt.init(this);
 
     QStyleHintReturnMask mask;
-    if (style()->styleHint( QStyle::SH_ToolTip_Mask, &opt, this, &mask ) && !mask.region.isEmpty()) {
-        setMask( mask.region );
+    if (style()->styleHint(QStyle::SH_ToolTip_Mask, &opt, this, &mask) && !mask.region.isEmpty()) {
+        setMask(mask.region);
     }
 
     emit resized();
@@ -282,8 +284,8 @@ void ActiveToolTip::resizeEvent(QResizeEvent*)
 
 void ActiveToolTip::paintEvent(QPaintEvent* event)
 {
-    QStylePainter painter( this );
-    painter.setClipRegion( event->region() );
+    QStylePainter painter(this);
+    painter.setClipRegion(event->region());
     QStyleOptionFrame opt;
     opt.init(this);
     painter.drawPrimitive(QStyle::PE_PanelTipLabel, opt);
@@ -291,7 +293,7 @@ void ActiveToolTip::paintEvent(QPaintEvent* event)
 
 void ActiveToolTip::setHandleRect(const QRect& rect)
 {
-    d->handleRect_= rect;
+    d->handleRect_ = rect;
 }
 
 void ActiveToolTip::adjustRect()
@@ -325,7 +327,6 @@ void ActiveToolTip::showToolTip(ActiveToolTip* tooltip, float priority, const QS
             manager(), &ActiveToolTipManager::doVisibility);
     QMetaObject::invokeMethod(manager(), "doVisibility", Qt::QueuedConnection);
 }
-
 
 void ActiveToolTip::closeEvent(QCloseEvent* event)
 {

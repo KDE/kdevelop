@@ -28,7 +28,7 @@
 
 QTEST_MAIN(TestEnvironment)
 
-using ProcEnv = QMap<QString,QString>;
+using ProcEnv = QMap<QString, QString>;
 
 void TestEnvironment::testExpandVariables_data()
 {
@@ -37,31 +37,31 @@ void TestEnvironment::testExpandVariables_data()
 
     QTest::newRow("no variables") << ProcEnv({}) << ProcEnv({});
     QTest::newRow("simple variables") << ProcEnv{
-        {"VAR1","data"},
-        {"Var2","some other data"}
-    } << ProcEnv({
-        {"VAR1","data"},
-        {"Var2","some other data"}
+        {"VAR1", "data"},
+        {"Var2", "some other data"}
+        } << ProcEnv({
+        {"VAR1", "data"},
+        {"Var2", "some other data"}
     });
-    QTest::newRow("PATH append and prepend")    << ProcEnv({
-        {"PATH","/home/usr/bin:$PATH:/home/user/folder"}
+    QTest::newRow("PATH append and prepend") << ProcEnv({
+        {"PATH", "/home/usr/bin:$PATH:/home/user/folder"}
     }) << ProcEnv({
         {"PATH", "/home/usr/bin:/bin:/usr/bin:/home/user/folder"}
     });
     QTest::newRow("\\$VAR") << ProcEnv({
-        {"MY_VAR","\\$PATH something \\$HOME"}
+        {"MY_VAR", "\\$PATH something \\$HOME"}
     }) << ProcEnv({
-        {"MY_VAR","$PATH something $HOME"}
+        {"MY_VAR", "$PATH something $HOME"}
     });
     QTest::newRow("spaces, \\$VAR after $VAR") << ProcEnv({
-        {"MY_VAR","$PATH:$HOME something \\$HOME"}
+        {"MY_VAR", "$PATH:$HOME something \\$HOME"}
     }) << ProcEnv({
-        {"MY_VAR","/bin:/usr/bin:/home/tom something $HOME"}
+        {"MY_VAR", "/bin:/usr/bin:/home/tom something $HOME"}
     });
     QTest::newRow("VAR2=$VAR1") << ProcEnv({
-        {"VAR1","/some/path"},{"VAR2","$VAR1"}
+        {"VAR1", "/some/path"}, {"VAR2", "$VAR1"}
     }) << ProcEnv({
-        {"VAR1","/some/path"},{"VAR2",""}
+        {"VAR1", "/some/path"}, {"VAR2", ""}
     });
 }
 
@@ -71,12 +71,12 @@ void TestEnvironment::testExpandVariables()
     QFETCH(ProcEnv, expectedEnv);
 
     QProcessEnvironment fakeSysEnv;
-    fakeSysEnv.insert(QStringLiteral("PATH"),QStringLiteral("/bin:/usr/bin"));
-    fakeSysEnv.insert(QStringLiteral("HOME"),QStringLiteral("/home/tom"));
+    fakeSysEnv.insert(QStringLiteral("PATH"), QStringLiteral("/bin:/usr/bin"));
+    fakeSysEnv.insert(QStringLiteral("HOME"), QStringLiteral("/home/tom"));
 
     KDevelop::expandVariables(env, fakeSysEnv);
 
-    for (auto it = expectedEnv.cbegin(); it!= expectedEnv.cend(); ++it) {
+    for (auto it = expectedEnv.cbegin(); it != expectedEnv.cend(); ++it) {
         QCOMPARE(env.value(it.key()), it.value());
     }
 }

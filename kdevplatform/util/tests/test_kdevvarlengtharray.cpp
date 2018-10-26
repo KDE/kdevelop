@@ -23,7 +23,8 @@
 
 #include "../kdevvarlengtharray.h"
 
-struct TestValue {
+struct TestValue
+{
     TestValue()
     {}
     TestValue(const TestValue& other)
@@ -37,7 +38,8 @@ struct TestValue {
     uint m_index = 0;
 };
 
-class TestKDevVarLengthArray : public QObject {
+class TestKDevVarLengthArray : public QObject
+{
     Q_OBJECT
 
 private Q_SLOTS:
@@ -45,7 +47,8 @@ private Q_SLOTS:
      * Make sure that valgrind does not report any warnings here
      * about uninitialized member variables.
      */
-    void appendReallocIntegrity() {
+    void appendReallocIntegrity()
+    {
         KDevVarLengthArray<TestValue, 2> array;
         QCOMPARE(array.size(), 0);
         QCOMPARE(array.capacity(), 2);

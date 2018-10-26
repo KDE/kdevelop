@@ -36,10 +36,9 @@ AutoOrientedSplitter::AutoOrientedSplitter(Qt::Orientation orientation, QWidget*
 void AutoOrientedSplitter::resizeEvent(QResizeEvent* e)
 {
     const QSize size = e->size();
-    const float ratio = (float)size.width() / size.height();
+    const float ratio = ( float )size.width() / size.height();
     const Qt::Orientation orientation = (ratio < 1.0 ? Qt::Vertical : Qt::Horizontal);
     setOrientation(orientation);
 
     QSplitter::resizeEvent(e);
 }
-

@@ -35,19 +35,19 @@ using namespace KDevelop;
 QColor WidgetColorizer::blendForeground(QColor color, float ratio,
                                         const QColor& foreground, const QColor& background)
 {
-  if (KColorUtils::luma(foreground) > KColorUtils::luma(background)) {
-    // for dark color schemes, produce a fitting color first
-    color = KColorUtils::tint(foreground, color, 0.5);
-  }
-  // adapt contrast
-  return KColorUtils::mix(foreground, color, ratio);
+    if (KColorUtils::luma(foreground) > KColorUtils::luma(background)) {
+        // for dark color schemes, produce a fitting color first
+        color = KColorUtils::tint(foreground, color, 0.5);
+    }
+    // adapt contrast
+    return KColorUtils::mix(foreground, color, ratio);
 }
 
 QColor WidgetColorizer::blendBackground(const QColor& color, float ratio,
                                         const QColor& /*foreground*/, const QColor& background)
 {
-  // adapt contrast
-  return KColorUtils::mix(background, color, ratio);
+    // adapt contrast
+    return KColorUtils::mix(background, color, ratio);
 }
 
 void WidgetColorizer::drawBranches(const QTreeView* treeView, QPainter* painter,
@@ -63,9 +63,9 @@ QColor WidgetColorizer::colorForId(uint id, const QPalette& activePalette, bool 
 {
     const int high = 255;
     const int low = 100;
-    auto color = QColor(qAbs(id % (high-low)),
-                        qAbs((id / 50) % (high-low)),
-                        qAbs((id / (50 * 50)) % (high-low)));
+    auto color = QColor(qAbs(id % (high - low)),
+                        qAbs((id / 50) % (high - low)),
+                        qAbs((id / (50 * 50)) % (high - low)));
     const auto& foreground = activePalette.foreground().color();
     const auto& background = activePalette.background().color();
     if (forBackground) {

@@ -36,7 +36,8 @@ namespace KDevelop {
  *
  * Using this class you use any KJob-based class as source for IStatus updates
  */
-class KDEVPLATFORMUTIL_EXPORT JobStatus : public QObject, public IStatus
+class KDEVPLATFORMUTIL_EXPORT JobStatus : public QObject
+    , public IStatus
 {
     Q_OBJECT
     Q_INTERFACES(KDevelop::IStatus)

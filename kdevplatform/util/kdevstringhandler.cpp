@@ -15,10 +15,10 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-    
-    This file mostly code takes from Qt's QSettings class, the copyright 
+
+    This file mostly code takes from Qt's QSettings class, the copyright
     header from that file follows:
-    
+
     ****************************************************************************
     **
     ** Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
@@ -61,7 +61,6 @@
     ****************************************************************************
 */
 
-
 #include "kdevstringhandler.h"
 
 #include <QStringList>
@@ -73,96 +72,96 @@
 #include <QRegExp>
 #include <QTextDocument>
 
-namespace KDevelop
+namespace KDevelop {
+QString joinWithEscaping(const QStringList& input, const QChar& joinchar, const QChar& escapechar)
 {
-    QString joinWithEscaping( const QStringList& input, const QChar& joinchar, const QChar& escapechar )
-    {
-        QStringList tmp = input;
-        return tmp.replaceInStrings( joinchar, QString( joinchar ) + QString( escapechar ) ).join( joinchar );
+    QStringList tmp = input;
+    return tmp.replaceInStrings(joinchar, QString(joinchar) + QString(escapechar)).join(joinchar);
+}
+
+QStringList splitWithEscaping(const QString& input, const QChar& splitchar, const QChar& escapechar)
+{
+    enum State { Normal, SeenEscape } state;
+
+    state = Normal;
+
+    QStringList result;
+    QString currentstring;
+    for (int i = 0; i < input.size(); i++) {
+        switch (state) {
+        case Normal:
+            if (input[i] == escapechar) {
+                state = SeenEscape;
+            } else if (input[i] == splitchar) {
+                result << currentstring;
+                currentstring.clear();
+            } else {
+                currentstring += input[i];
+            }
+            break;
+        case SeenEscape:
+            currentstring += input[i];
+            state = Normal;
+            break;
+        }
     }
-    
-    QStringList splitWithEscaping( const QString& input, const QChar& splitchar, const QChar& escapechar )
-    {
-        enum State { Normal, SeenEscape } state;
 
-        state = Normal;
+    if (!currentstring.isEmpty()) {
+        result << currentstring;
+    }
+    return result;
+}
 
-        QStringList result;
-        QString currentstring;
-        for( int i = 0; i < input.size(); i++ ) {
-            switch( state ) {
-                case Normal:
-                    if( input[i] == escapechar ) {
-                        state = SeenEscape;
-                    } else if( input[i] == splitchar ) {
-                        result << currentstring;
-                        currentstring.clear();
-                    } else {
-                        currentstring += input[i];
-                    }
-                    break;
-                case SeenEscape:
-                    currentstring += input[i];
-                    state = Normal;
-                    break;
+QVariant stringToQVariant(const QString& s)
+{
+    // Taken from qsettings.cpp, stringToVariant()
+    if (s.startsWith(QLatin1Char('@'))) {
+        if (s.endsWith(QLatin1Char(')'))) {
+            if (s.startsWith(QLatin1String("@Variant("))) {
+                QByteArray a(s.toLatin1().mid(9));
+                QDataStream stream(&a, QIODevice::ReadOnly);
+                stream.setVersion(QDataStream::Qt_4_4);
+                QVariant result;
+                stream >> result;
+                return result;
             }
         }
-        if( !currentstring.isEmpty() ) {
-            result << currentstring;
-        }
-        return result;
     }
-    
-    QVariant stringToQVariant(const QString& s)
+    return QVariant();
+
+}
+
+QString qvariantToString(const QVariant& variant)
+{
+    // Taken from qsettings.cpp, variantToString()
+    QByteArray a;
     {
-        // Taken from qsettings.cpp, stringToVariant()
-        if (s.startsWith(QLatin1Char('@'))) {
-            if (s.endsWith(QLatin1Char(')'))) {
-                if (s.startsWith(QLatin1String("@Variant("))) {
-                    QByteArray a(s.toLatin1().mid(9));
-                    QDataStream stream(&a, QIODevice::ReadOnly);
-                    stream.setVersion(QDataStream::Qt_4_4);
-                    QVariant result;
-                    stream >> result;
-                    return result;
-                }
-            }
-        }
-        return QVariant();
-        
-    }
-    
-    QString qvariantToString(const QVariant& variant)
-    {
-        // Taken from qsettings.cpp, variantToString()
-        QByteArray a;
-        {
-            QDataStream s(&a, QIODevice::WriteOnly);
-            s.setVersion(QDataStream::Qt_4_4);
-            s << variant;
-        }
-        
-        QString result = QStringLiteral("@Variant(") + QString::fromLatin1(a.constData(), a.size()) + QLatin1Char(')');
-        return result;
-        
+        QDataStream s(&a, QIODevice::WriteOnly);
+        s.setVersion(QDataStream::Qt_4_4);
+        s << variant;
     }
 
-    QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode)
-    {
-        switch (mode) {
-        case FastMode: {
-            QString result(s);
-            result.remove(QRegExp(QStringLiteral("<[^>]+>")));
-            return result;
-        }
-        case CompleteMode: {
-            QTextDocument doc;
-            doc.setHtml(s);
-            return doc.toPlainText();
-        }
-        }
-        return QString(); // never reached
+    QString result = QStringLiteral("@Variant(") + QString::fromLatin1(a.constData(), a.size()) + QLatin1Char(')');
+    return result;
+
+}
+
+QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode)
+{
+    switch (mode) {
+    case FastMode: {
+        QString result(s);
+        result.remove(QRegExp(QStringLiteral("<[^>]+>")));
+        return result;
     }
+    case CompleteMode: {
+        QTextDocument doc;
+        doc.setHtml(s);
+        return doc.toPlainText();
+    }
+    }
+    return QString();     // never reached
+}
 }
 
 QString KDevelop::stripAnsiSequences(const QString& str)
@@ -226,6 +225,7 @@ QString KDevelop::stripAnsiSequences(const QString& str)
             break;
         }
     }
+
     return result;
 }
 

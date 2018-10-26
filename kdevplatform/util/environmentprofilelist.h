@@ -26,12 +26,11 @@ Boston, MA 02110-1301, USA.
 
 class QProcessEnvironment;
 class KConfig;
-template <typename T1, typename T2> class QMap;
+template<typename T1, typename T2> class QMap;
 class QString;
 class QStringList;
 
-namespace KDevelop
-{
+namespace KDevelop {
 
 /**
  * This class manages a list of environment profiles, each profile containing a number
@@ -79,7 +78,7 @@ public:
      * @param config the KConfig object to read the environment profiles from
      */
     explicit EnvironmentProfileList(const KSharedConfigPtr& config);
-    explicit EnvironmentProfileList(KConfig* config );
+    explicit EnvironmentProfileList(KConfig* config);
     ~EnvironmentProfileList();
 
     /**
@@ -132,9 +131,9 @@ protected:
      * Stores the environment profiles in this list to the given KConfig object
      * @param config a KConfig object to which the environment settings should be stored
      */
-    void saveSettings( KConfig* config ) const;
+    void saveSettings(KConfig* config) const;
 
-    void loadSettings( KConfig* config );
+    void loadSettings(KConfig* config);
     void removeProfile(const QString& profileName);
 
 private:

@@ -27,6 +27,7 @@
 class TestPath : public QObject
 {
     Q_OBJECT
+
 private Q_SLOTS:
     void bench_qurl();
     void bench_qstringlist();

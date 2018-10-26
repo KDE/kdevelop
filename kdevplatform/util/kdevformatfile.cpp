@@ -111,7 +111,7 @@ bool KDevFormatFile::apply()
             return executeCommand(formatLine.command);
         }
 
-        foreach(const QString& wildcard, formatLine.wildcards) {
+        foreach (const QString& wildcard, formatLine.wildcards) {
             if (QDir::match(QDir::current().canonicalPath() + QDir::separator() + wildcard.trimmed(), m_origFilePath)) {
                 qStdOut() << "matched \"" << m_origFilePath << "\" with wildcard \"" << wildcard << '\"';
                 return executeCommand(formatLine.command);

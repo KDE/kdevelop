@@ -22,7 +22,8 @@
 #include <QObject>
 
 namespace KDevelop {
-class TestForegroundLock : public QObject {
+class TestForegroundLock : public QObject
+{
     Q_OBJECT
 
 private Q_SLOTS:
@@ -30,6 +31,5 @@ private Q_SLOTS:
     void testTryLock();
 };
 }
-
 
 #endif // KDEVPLATFORM_TEST_FOREGROUNDLOCK_H

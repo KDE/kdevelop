@@ -25,8 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QStringListModel>
 #include <QSet>
 
-namespace KDevelop
-{
+namespace KDevelop {
 
 class EnvironmentSelectionModel : public QStringListModel
 {
@@ -38,12 +37,12 @@ public:
         EffectiveNameRole = Qt::UserRole + 1
     };
 
-    explicit EnvironmentSelectionModel( QObject* parent = nullptr );
+    explicit EnvironmentSelectionModel(QObject* parent = nullptr);
 
-    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
-    QVariant data( const QModelIndex& index, int role ) const override;
-    bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
     /**
      * @returns The @ref EnvironmentProfileList which has been used to populate this
@@ -62,7 +61,7 @@ public:
      * @param currentProfile Previous selected item.
      * @returns              The item which shall become selected.
      */
-    QString reloadSelectedItem( const QString& currentProfile );
+    QString reloadSelectedItem(const QString& currentProfile);
 
 private:
     EnvironmentProfileList m_env;

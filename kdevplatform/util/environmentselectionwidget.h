@@ -23,8 +23,7 @@ Boston, MA 02110-1301, USA.
 
 #include "utilexport.h"
 
-namespace KDevelop
-{
+namespace KDevelop {
 class EnvironmentProfileList;
 
 /**
@@ -40,10 +39,10 @@ class EnvironmentProfileList;
 class KDEVPLATFORMUTIL_EXPORT EnvironmentSelectionWidget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY( QString currentProfile READ currentProfile WRITE setCurrentProfile NOTIFY currentProfileChanged USER true )
+    Q_PROPERTY(QString currentProfile READ currentProfile WRITE setCurrentProfile NOTIFY currentProfileChanged USER true)
 
 public:
-    explicit EnvironmentSelectionWidget( QWidget *parent = nullptr );
+    explicit EnvironmentSelectionWidget(QWidget* parent = nullptr);
     ~EnvironmentSelectionWidget() override;
 
     /**
@@ -56,7 +55,7 @@ public:
      *
      * @param text The environment profile name to select
      */
-    void setCurrentProfile( const QString& text );
+    void setCurrentProfile(const QString& text);
 
     /**
      * @returns The currently effective environment profile name (like @ref currentProfile(),

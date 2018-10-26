@@ -29,6 +29,7 @@
 class TestJob : public KJob
 {
     Q_OBJECT
+
 public:
     void start() override
     {
@@ -47,6 +48,7 @@ Q_SIGNALS:
 class TestExecuteCompositeJob : public QObject
 {
     Q_OBJECT
+
 private Q_SLOTS:
     void runOneJob();
     void runTwoJobs();

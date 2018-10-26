@@ -39,6 +39,7 @@ namespace KDevelop {
 class KDEVPLATFORMUTIL_EXPORT ZoomController : public QObject
 {
     Q_OBJECT
+
 public:
     /**
      * @param configGroup A place to store zoom factor in

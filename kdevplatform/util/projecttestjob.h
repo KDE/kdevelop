@@ -68,6 +68,7 @@ struct KDEVPLATFORMUTIL_EXPORT ProjectTestResult
 class KDEVPLATFORMUTIL_EXPORT ProjectTestJob : public KJob
 {
     Q_OBJECT
+
 public:
     /**
      * Create a project test job

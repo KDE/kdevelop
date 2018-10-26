@@ -81,6 +81,7 @@ QVector<T> generateData(const T& parent, int level)
         Q_ASSERT(!ret.contains(file));
         ret << file;
     }
+
     // nesting depth
     if (level < TREE_DEPTH) {
         // folders per folder
@@ -127,14 +128,14 @@ void TestPath::bench_fromLocalPath()
     const int repeat = 1000;
     if (variant == 1) {
         QBENCHMARK {
-            for(int i = 0; i < repeat; ++i) {
+            for (int i = 0; i < repeat; ++i) {
                 Path path = Path(QUrl::fromLocalFile(input));
                 Q_UNUSED(path);
             }
         }
     } else if (variant == 2) {
         QBENCHMARK {
-            for(int i = 0; i < repeat; ++i) {
+            for (int i = 0; i < repeat; ++i) {
                 Path path = Path(input);
                 Q_UNUSED(path);
             }
@@ -186,12 +187,16 @@ QUrl preserveWindowsDriveLetter(const QUrl& base, Func op)
 
 QUrl resolvedUrl(const QUrl& base, const QUrl& relative)
 {
-    return preserveWindowsDriveLetter(base, [&](const QUrl& url) { return url.resolved(relative); });
+    return preserveWindowsDriveLetter(base, [&](const QUrl& url) {
+        return url.resolved(relative);
+    });
 }
 
 QUrl comparableUpUrl(const QUrl& url)
 {
-    QUrl ret = preserveWindowsDriveLetter(url, [&](const QUrl& url) { return KIO::upUrl(url).adjusted(QUrl::RemovePassword); });
+    QUrl ret = preserveWindowsDriveLetter(url, [&](const QUrl& url) {
+        return KIO::upUrl(url).adjusted(QUrl::RemovePassword);
+    });
     return ret.adjusted(QUrl::StripTrailingSlash);
 }
 
@@ -446,19 +451,19 @@ void TestPath::testPathAddData_data()
     QTest::addColumn<QString>("pathToAdd");
 
     const QStringList paths = QStringList()
-        << QStringLiteral("file.txt")
-        << QStringLiteral("path/file.txt")
-        << QStringLiteral("path//file.txt")
-        << QStringLiteral("/absolute")
-        << QStringLiteral("../")
-        << QStringLiteral("..")
-        << QStringLiteral("../../../")
-        << QStringLiteral("./foo")
-        << QStringLiteral("../relative")
-        << QStringLiteral("../../relative")
-        << QStringLiteral("../foo/../bar")
-        << QStringLiteral("../foo/./bar")
-        << QStringLiteral("../../../../../../../invalid");
+                              << QStringLiteral("file.txt")
+                              << QStringLiteral("path/file.txt")
+                              << QStringLiteral("path//file.txt")
+                              << QStringLiteral("/absolute")
+                              << QStringLiteral("../")
+                              << QStringLiteral("..")
+                              << QStringLiteral("../../../")
+                              << QStringLiteral("./foo")
+                              << QStringLiteral("../relative")
+                              << QStringLiteral("../../relative")
+                              << QStringLiteral("../foo/../bar")
+                              << QStringLiteral("../foo/./bar")
+                              << QStringLiteral("../../../../../../../invalid");
     for (const QString& path : paths) {
         QTest::newRow(qstrdup(path.toUtf8().constData())) << path;
     }
@@ -549,7 +554,8 @@ void TestPath::testPathCd_data()
 #else
         "C:/foo", "C:/foo/bar/asdf",
 #endif
-        QStringLiteral("http://foo.com/"), QStringLiteral("http://foo.com/foo"), QStringLiteral("http://foo.com/foo/bar/asdf")
+        QStringLiteral("http://foo.com/"), QStringLiteral("http://foo.com/foo"), QStringLiteral(
+            "http://foo.com/foo/bar/asdf")
     };
     for (const QString& base : bases) {
         QTest::newRow(qstrdup(qPrintable(base + "-"))) << base << "";
@@ -564,13 +570,14 @@ void TestPath::testPathCd_data()
         QTest::newRow(qstrdup(qPrintable(base + "-foo/"))) << base << "foo/";
         QTest::newRow(qstrdup(qPrintable(base + "-foo/../bar"))) << base << "foo/../bar";
 #ifdef Q_OS_WIN
-        if (!base.startsWith("C:/") ) {
+        if (!base.startsWith("C:/")) {
             // only add next rows for remote URLs on Windows
 #endif
         QTest::newRow(qstrdup(qPrintable(base + "-/foo"))) << base << "/foo";
         QTest::newRow(qstrdup(qPrintable(base + "-/foo/../bar"))) << base << "/foo/../bar";
 #ifdef Q_OS_WIN
-        }
+    }
+
 #endif
     }
 }

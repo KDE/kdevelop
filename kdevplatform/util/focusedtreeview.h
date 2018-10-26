@@ -36,28 +36,30 @@ namespace KDevelop {
  * @warning Either the scroll-mode ScrollPerItem must be enabled, or the uniformRowHeight flag, for this to work efficiently.
  * @warning This currently only works with flat list models(todo).
  */
-class KDEVPLATFORMUTIL_EXPORT FocusedTreeView : public QTreeView {
+class KDEVPLATFORMUTIL_EXPORT FocusedTreeView : public QTreeView
+{
     Q_OBJECT
-    public:
-        explicit FocusedTreeView(QWidget* parent) ;
-        ~FocusedTreeView() override;
 
-        /**
-         * When enabled, automatically scroll to bottom when new rows are inserted at the end
-         * and the end was previously visible. (Default: false)
-         */
-        void setAutoScrollAtEnd(bool enable);
+public:
+    explicit FocusedTreeView(QWidget* parent);
+    ~FocusedTreeView() override;
 
-        void setModel(QAbstractItemModel* model) override;
-        int sizeHintForColumn(int column) const override;
+    /**
+     * When enabled, automatically scroll to bottom when new rows are inserted at the end
+     * and the end was previously visible. (Default: false)
+     */
+    void setAutoScrollAtEnd(bool enable);
 
-    private Q_SLOTS:
-        void rowsAboutToBeInserted(const QModelIndex& parent, int first, int last);
-        void rowsRemoved(const QModelIndex& parent, int first, int last);
-        void delayedAutoScrollAndResize();
+    void setModel(QAbstractItemModel* model) override;
+    int sizeHintForColumn(int column) const override;
 
-    private:
-        const QScopedPointer<class FocusedTreeViewPrivate> d;
+private Q_SLOTS:
+    void rowsAboutToBeInserted(const QModelIndex& parent, int first, int last);
+    void rowsRemoved(const QModelIndex& parent, int first, int last);
+    void delayedAutoScrollAndResize();
+
+private:
+    const QScopedPointer<class FocusedTreeViewPrivate> d;
 };
 
 }

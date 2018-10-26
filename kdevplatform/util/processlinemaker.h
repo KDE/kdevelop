@@ -38,17 +38,16 @@ class QStringList;
 Convenience class to catch output of QProcess.
 */
 
-namespace KDevelop
-{
+namespace KDevelop {
 
 class KDEVPLATFORMUTIL_EXPORT ProcessLineMaker : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit ProcessLineMaker( QObject* parent = nullptr );
-    explicit ProcessLineMaker( QProcess* process, QObject* parent = nullptr );
-    
+    explicit ProcessLineMaker(QObject* parent = nullptr);
+    explicit ProcessLineMaker(QProcess* process, QObject* parent = nullptr);
+
     ~ProcessLineMaker() override;
 
     /**
@@ -58,14 +57,14 @@ public:
     void discardBuffers();
 
     /**
-     * Flush the data from the buffers and then clear them. 
-     * This should be called once when the process has 
+     * Flush the data from the buffers and then clear them.
+     * This should be called once when the process has
      * exited to make sure all data that was received from the
      * process is properly converted and emitted.
      *
      * Note: Connecting this class to the process finished signal
      * is not going to work, as the user of this class will do
-     * that itself too and possibly delete the process, making 
+     * that itself too and possibly delete the process, making
      * it impossible to fetch the last output.
      */
     void flushBuffers();
@@ -78,7 +77,7 @@ public Q_SLOTS:
      * it to QString lines.
      * @param buffer the output from the process
      */
-    void slotReceivedStdout( const QByteArray& buffer );
+    void slotReceivedStdout(const QByteArray& buffer);
 
     /**
      * This should be used (instead of hand-crafted code) when
@@ -87,7 +86,7 @@ public Q_SLOTS:
      * it to QString lines.
      * @param buffer the output from the process
      */
-    void slotReceivedStderr( const QByteArray& buffer );
+    void slotReceivedStderr(const QByteArray& buffer);
 
 Q_SIGNALS:
     /**
@@ -97,7 +96,7 @@ Q_SIGNALS:
      * be split on '\n'.
      * @param lines the lines that the process printed
      */
-    void receivedStdoutLines( const QStringList& lines );
+    void receivedStdoutLines(const QStringList& lines);
 
     /**
      * Emitted whenever the process prints something
@@ -106,7 +105,7 @@ Q_SIGNALS:
      * be split on '\n'.
      * @param lines the lines that the process printed
      */
-    void receivedStderrLines( const QStringList& lines );
+    void receivedStderrLines(const QStringList& lines);
 
 private:
     const QScopedPointer<class ProcessLineMakerPrivate> d;

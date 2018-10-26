@@ -47,6 +47,7 @@ public:
             return QVariant();
         }
     }
+
 protected:
     QString m_label;
 };
@@ -54,20 +55,21 @@ protected:
 /**
  * The left-most view's model which only contains the root nodes of the source model.
  */
-class RootProxyModel : public QSortFilterProxyModel, public LabeledProxy
+class RootProxyModel : public QSortFilterProxyModel
+    , public LabeledProxy
 {
     Q_OBJECT
 
 public:
-    explicit RootProxyModel( QObject* parent = nullptr )
-    : QSortFilterProxyModel( parent )
+    explicit RootProxyModel(QObject* parent = nullptr)
+        : QSortFilterProxyModel(parent)
     {
     }
-    bool filterAcceptsRow( int /*source_row*/, const QModelIndex& source_parent ) const override
+    bool filterAcceptsRow(int /*source_row*/, const QModelIndex& source_parent) const override
     {
         return !source_parent.isValid();
     }
-    QVariant headerData( int section, Qt::Orientation orientation, int role ) const override
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override
     {
         return header(sourceModel(), section, orientation, role);
     }
@@ -76,15 +78,16 @@ public:
 /**
  * A class that automatically updates its contents based on the selection in another view.
  */
-class SubTreeProxyModel : public KSelectionProxyModel, public LabeledProxy
+class SubTreeProxyModel : public KSelectionProxyModel
+    , public LabeledProxy
 {
     Q_OBJECT
 
 public:
-    explicit SubTreeProxyModel( QItemSelectionModel* selectionModel, QObject* parent = nullptr )
-    : KSelectionProxyModel( selectionModel, parent )
+    explicit SubTreeProxyModel(QItemSelectionModel* selectionModel, QObject* parent = nullptr)
+        : KSelectionProxyModel(selectionModel, parent)
     {}
-    QVariant headerData( int section, Qt::Orientation orientation, int role ) const override
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override
     {
         return header(sourceModel(), section, orientation, role);
     }
@@ -133,9 +136,9 @@ public:
 };
 
 MultiLevelListViewPrivate::MultiLevelListViewPrivate(MultiLevelListView* view_)
-: view(view_)
-, levels(0)
-, model(nullptr)
+    : view(view_)
+    , levels(0)
+    , model(nullptr)
 {
 }
 
@@ -158,12 +161,13 @@ void MultiLevelListViewPrivate::viewSelectionChanged(const QModelIndex& current,
 
     // what level is this proxy in
     int level = -1;
-    for(int i = 0; i < levels; ++i) {
+    for (int i = 0; i < levels; ++i) {
         if (views.at(i)->model() == proxy) {
             level = i;
             break;
         }
     }
+
     Q_ASSERT(level >= 0 && level < levels);
 
     if (level + 1 == levels) {
@@ -172,7 +176,7 @@ void MultiLevelListViewPrivate::viewSelectionChanged(const QModelIndex& current,
             // select the first leaf node for this view
             QModelIndex idx = current;
             QModelIndex child = proxy->index(0, 0, idx);
-            while(child.isValid()) {
+            while (child.isValid()) {
                 idx = child;
                 child = proxy->index(0, 0, idx);
             }
@@ -215,7 +219,7 @@ QModelIndex MultiLevelListViewPrivate::mapToSource(QModelIndex index)
         return index;
     }
 
-    while(index.model() != model) {
+    while (index.model() != model) {
         auto* proxy = qobject_cast<QAbstractProxyModel*>(
             const_cast<QAbstractItemModel*>(index.model()));
         Q_ASSERT(proxy);
@@ -250,17 +254,18 @@ QModelIndex MultiLevelListViewPrivate::mapFromSource(QModelIndex index, int leve
         }
     }
     // iterate in reverse order to find the view's index
-    for(int i = proxies.size() - 1; i >= 0; --i) {
+    for (int i = proxies.size() - 1; i >= 0; --i) {
         proxy = proxies.at(i);
         index = proxy->mapFromSource(index);
         Q_ASSERT(index.isValid());
     }
+
     return index;
 }
 
 MultiLevelListView::MultiLevelListView(QWidget* parent, Qt::WindowFlags f)
-: QWidget(parent, f)
-, d(new MultiLevelListViewPrivate(this))
+    : QWidget(parent, f)
+    , d(new MultiLevelListViewPrivate(this))
 {
     setLayout(new QHBoxLayout());
     layout()->setContentsMargins(0, 0, 0, 0);
@@ -290,8 +295,7 @@ void MultiLevelListView::setLevels(int levels)
     d->layouts.reserve(levels);
 
     QTreeView* previousView = nullptr;
-    for (int i = 0; i < d->levels; ++i)
-    {
+    for (int i = 0; i < d->levels; ++i) {
         auto* levelLayout = new QVBoxLayout();
 
         auto* view = new QTreeView(this);
@@ -328,11 +332,15 @@ void MultiLevelListView::setLevels(int levels)
 
         // view->setModel creates the selection model
         connect(view->selectionModel(), &QItemSelectionModel::currentChanged,
-                this, [&] (const QModelIndex& current, const QModelIndex& previous) { d->viewSelectionChanged(current, previous); });
+                this, [&](const QModelIndex& current, const QModelIndex& previous) {
+            d->viewSelectionChanged(current, previous);
+        });
 
         if (i + 1 == d->levels) {
             connect(view->model(), &QAbstractItemModel::rowsInserted,
-                    this, [&] { d->lastViewsContentsChanged(); });
+                    this, [&] {
+                d->lastViewsContentsChanged();
+            });
         }
 
         view->setSortingEnabled(true);
@@ -359,18 +367,16 @@ void MultiLevelListView::setModel(QAbstractItemModel* model)
 {
     d->model = model;
 
-    foreach (LabeledProxy* proxy, d->proxies)
-    {
+    foreach (LabeledProxy* proxy, d->proxies) {
         dynamic_cast<QAbstractProxyModel*>(proxy)->setSourceModel(model);
     }
 
-    if (model && !d->views.isEmpty())
-    {
+    if (model && !d->views.isEmpty()) {
         d->views.first()->setCurrentIndex(d->views.first()->model()->index(0, 0));
     }
 }
 
-QTreeView* MultiLevelListView::viewForLevel( int level ) const
+QTreeView* MultiLevelListView::viewForLevel(int level) const
 {
     return d->views[level];
 }
@@ -396,14 +402,12 @@ void MultiLevelListView::setCurrentIndex(const QModelIndex& index)
     QModelIndex idx(index);
     QVector<QModelIndex> indexes;
 
-    while (idx.isValid())
-    {
+    while (idx.isValid()) {
         indexes.prepend(idx);
         idx = idx.parent();
     }
 
-    for (int i = 0; i < d->levels; ++i)
-    {
+    for (int i = 0; i < d->levels; ++i) {
         QTreeView* view = d->views.at(i);
         if (indexes.size() <= i) {
             // select first item by default
@@ -434,8 +438,7 @@ void MultiLevelListView::setRootIndex(const QModelIndex& index)
 void MultiLevelListView::setHeaderLabels(const QStringList& labels)
 {
     int n = qMin(d->levels, labels.size());
-    for (int i = 0; i < n; ++i)
-    {
+    for (int i = 0; i < n; ++i) {
         d->proxies.at(i)->setLabel(labels[i]);
     }
 }
@@ -444,10 +447,10 @@ static
 KSelectionProxyModel::FilterBehavior toSelectionProxyModelFilterBehavior(MultiLevelListView::LastLevelViewMode mode)
 {
     switch (mode) {
-        case MultiLevelListView::SubTrees:
-            return KSelectionProxyModel::SubTreesWithoutRoots;
-        case MultiLevelListView::DirectChildren:
-            return KSelectionProxyModel::ChildrenOfExactSelection;
+    case MultiLevelListView::SubTrees:
+        return KSelectionProxyModel::SubTreesWithoutRoots;
+    case MultiLevelListView::DirectChildren:
+        return KSelectionProxyModel::ChildrenOfExactSelection;
     }
     Q_UNREACHABLE();
 }
@@ -460,7 +463,6 @@ void MultiLevelListView::setLastLevelViewMode(LastLevelViewMode mode)
     const auto filterBehavior = toSelectionProxyModelFilterBehavior(mode);
     dynamic_cast<KSelectionProxyModel*>(d->proxies.last())->setFilterBehavior(filterBehavior);
 }
-
 
 #include "multilevellistview.moc"
 #include "moc_multilevellistview.cpp"

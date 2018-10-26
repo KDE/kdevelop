@@ -28,49 +28,50 @@ class QChar;
 class QStringList;
 class QVariant;
 
-namespace KDevelop
-{
-    KDEVPLATFORMUTIL_EXPORT QStringList splitWithEscaping( const QString& input, const QChar& splitChar, const QChar& escapeChar );
-    KDEVPLATFORMUTIL_EXPORT QString joinWithEscaping( const QStringList& input, const QChar& joinChar, const QChar& escapeChar );
-    
-    /**
-    * convert the @p variant into a string which can then be stored
-    * easily in a KConfig entry. This supports any QVariant type (including custom types)
-    * for which there is a QDataStream operator defined
-    * @returns a QString containing the data from the QVariant.
-    */
-    KDEVPLATFORMUTIL_EXPORT QString qvariantToString( const QVariant& variant );
-    
-    /**
-    * convert the @p s into a QVariant, usually the string is read from KConfig.
-    * This supports any QVariant type (including custom types)
-    * for which there is a QDataStream operator defined
-    * @returns a QVariant created from the bytearray
-    */
-    KDEVPLATFORMUTIL_EXPORT QVariant stringToQVariant( const QString& s );
+namespace KDevelop {
+KDEVPLATFORMUTIL_EXPORT QStringList splitWithEscaping(const QString& input, const QChar& splitChar,
+                                                      const QChar& escapeChar);
+KDEVPLATFORMUTIL_EXPORT QString joinWithEscaping(const QStringList& input, const QChar& joinChar,
+                                                 const QChar& escapeChar);
 
-    enum HtmlToPlainTextMode {
-        FastMode,     /**< Fast (conversion via regular expression) */
-        CompleteMode, /**< Slower, but with expected behavior (conversion via QTextDocument::toPlainText).
+/**
+* convert the @p variant into a string which can then be stored
+* easily in a KConfig entry. This supports any QVariant type (including custom types)
+* for which there is a QDataStream operator defined
+* @returns a QString containing the data from the QVariant.
+*/
+KDEVPLATFORMUTIL_EXPORT QString qvariantToString(const QVariant& variant);
+
+/**
+* convert the @p s into a QVariant, usually the string is read from KConfig.
+* This supports any QVariant type (including custom types)
+* for which there is a QDataStream operator defined
+* @returns a QVariant created from the bytearray
+*/
+KDEVPLATFORMUTIL_EXPORT QVariant stringToQVariant(const QString& s);
+
+enum HtmlToPlainTextMode {
+    FastMode,         /**< Fast (conversion via regular expression) */
+    CompleteMode,     /**< Slower, but with expected behavior (conversion via QTextDocument::toPlainText).
             This also replaces <br/> with newline chars, for example. */
-    };
+};
 
-    /**
-     * Strip HTML tags from string @p s
-     *
-     * @return String no longer containing any HTML tags
-     */
-    KDEVPLATFORMUTIL_EXPORT QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode = FastMode);
+/**
+ * Strip HTML tags from string @p s
+ *
+ * @return String no longer containing any HTML tags
+ */
+KDEVPLATFORMUTIL_EXPORT QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode = FastMode);
 
-    /**
-     * Strip ANSI sequences from string @p str
-     */
-    KDEVPLATFORMUTIL_EXPORT QString stripAnsiSequences(const QString& str);
+/**
+ * Strip ANSI sequences from string @p str
+ */
+KDEVPLATFORMUTIL_EXPORT QString stripAnsiSequences(const QString& str);
 
-    /**
-     * Replace all occurrences of "\r" or "\r\n" in @p text with "\n".
-     */
-    KDEVPLATFORMUTIL_EXPORT void normalizeLineEndings(QByteArray& text);
+/**
+ * Replace all occurrences of "\r" or "\r\n" in @p text with "\n".
+ */
+KDEVPLATFORMUTIL_EXPORT void normalizeLineEndings(QByteArray& text);
 }
 
 #endif // KDEVPLATFORM_KDEVSTRINGHANDLER_H

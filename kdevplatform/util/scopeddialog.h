@@ -52,37 +52,43 @@ namespace KDevelop {
   without need to manually clean up afterwards.
  */
 template<typename DialogType>
-class ScopedDialog {
-    public:
-        /// Construct the dialog with any set of allowed arguments
-        /// for the construction of DialogType
-        template<typename ... Arguments>
-        explicit ScopedDialog(Arguments ... args) : ptr(new DialogType(args...)) {
-        }
-        /// Automatically deletes the dialog if it is still present
-        ~ScopedDialog() {
-            delete ptr;
-        }
+class ScopedDialog
+{
+public:
+    /// Construct the dialog with any set of allowed arguments
+    /// for the construction of DialogType
+    template<typename ... Arguments>
+    explicit ScopedDialog(Arguments ... args) : ptr(new DialogType(args ...))
+    {
+    }
+    /// Automatically deletes the dialog if it is still present
+    ~ScopedDialog()
+    {
+        delete ptr;
+    }
 
-        /// Access the raw pointer to the dialog
-        DialogType* data() const {
-            return ptr;
-        }
-        /// Access members of the dialog
-        DialogType* operator->() const {
-            return ptr;
-        }
-        /// Access the dialog
-        DialogType & operator*() const {
-            return *ptr;
-        }
-        /// Return the corresponding pointer
-        operator DialogType*() const {
-            return ptr;
-        }
+    /// Access the raw pointer to the dialog
+    DialogType* data() const
+    {
+        return ptr;
+    }
+    /// Access members of the dialog
+    DialogType* operator->() const
+    {
+        return ptr;
+    }
+    /// Access the dialog
+    DialogType& operator*() const
+    {
+        return *ptr;
+    }
+    /// Return the corresponding pointer
+    operator DialogType*() const {
+        return ptr;
+    }
 
-    private:
-        QPointer<DialogType> ptr;
+private:
+    QPointer<DialogType> ptr;
 };
 
 }

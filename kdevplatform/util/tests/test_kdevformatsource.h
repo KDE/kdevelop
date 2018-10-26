@@ -24,8 +24,7 @@
 
 class QTemporaryDir;
 
-namespace KDevelop
-{
+namespace KDevelop {
 
 struct Source
 {

@@ -23,14 +23,14 @@ Boston, MA 02110-1301, USA.
 
 #include "utilexport.h"
 
-template <typename T> class QList;
+template<typename T> class QList;
 
-namespace KDevelop
-{
+namespace KDevelop {
 
 class KDEVPLATFORMUTIL_EXPORT ExecuteCompositeJob : public KCompositeJob
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
     explicit ExecuteCompositeJob(QObject* parent = nullptr, const QList<KJob*>& jobs = {});
     ~ExecuteCompositeJob() override;

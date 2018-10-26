@@ -24,8 +24,7 @@
 #include <QProcess>
 #include <QStringList>
 
-namespace KDevelop
-{
+namespace KDevelop {
 
 class ProcessLineMakerPrivate
 {
@@ -35,7 +34,7 @@ public:
     ProcessLineMaker* p;
     QProcess* m_proc;
 
-    explicit ProcessLineMakerPrivate( ProcessLineMaker* maker )
+    explicit ProcessLineMakerPrivate(ProcessLineMaker* maker)
         : p(maker)
     {
     }
@@ -46,16 +45,16 @@ public:
         processStdOut();
     }
 
-    static QStringList streamToStrings(QByteArray &data)
+    static QStringList streamToStrings(QByteArray& data)
     {
         QStringList lineList;
         int pos;
-        while ( (pos = data.indexOf('\n')) != -1) {
+        while ((pos = data.indexOf('\n')) != -1) {
             if (pos > 0 && data.at(pos - 1) == '\r')
                 lineList << QString::fromLocal8Bit(data.constData(), pos - 1);
             else
                 lineList << QString::fromLocal8Bit(data.constData(), pos);
-            data.remove(0, pos+1);
+            data.remove(0, pos + 1);
         }
         return lineList;
     }
@@ -80,36 +79,40 @@ public:
 
 ProcessLineMaker::ProcessLineMaker(QObject* parent)
     : QObject(parent)
-    , d( new ProcessLineMakerPrivate( this ) )
+    , d(new ProcessLineMakerPrivate(this))
 {
 }
 
-ProcessLineMaker::ProcessLineMaker( QProcess* proc, QObject* parent )
+ProcessLineMaker::ProcessLineMaker(QProcess* proc, QObject* parent)
     : QObject(parent)
-    , d( new ProcessLineMakerPrivate( this ) )
+    , d(new ProcessLineMakerPrivate(this))
 {
     d->m_proc = proc;
     connect(proc, &QProcess::readyReadStandardOutput,
-            this, [&] { d->slotReadyReadStdout(); } );
+            this, [&] {
+            d->slotReadyReadStdout();
+        });
     connect(proc, &QProcess::readyReadStandardError,
-            this, [&] { d->slotReadyReadStderr(); } );
+            this, [&] {
+            d->slotReadyReadStderr();
+        });
 }
 
 ProcessLineMaker::~ProcessLineMaker() = default;
 
-void ProcessLineMaker::slotReceivedStdout( const QByteArray& buffer )
+void ProcessLineMaker::slotReceivedStdout(const QByteArray& buffer)
 {
     d->stdoutbuf += buffer;
     d->processStdOut();
 }
 
-void ProcessLineMaker::slotReceivedStderr( const QByteArray& buffer )
+void ProcessLineMaker::slotReceivedStderr(const QByteArray& buffer)
 {
     d->stderrbuf += buffer;
     d->processStdErr();
 }
 
-void ProcessLineMaker::discardBuffers( )
+void ProcessLineMaker::discardBuffers()
 {
     d->stderrbuf.truncate(0);
     d->stdoutbuf.truncate(0);
