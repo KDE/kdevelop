@@ -159,7 +159,7 @@ void EditExternalScript::save()
     auto outputMode = static_cast<ExternalScriptItem::OutputMode>(stdoutCombo->currentIndex());
     m_item->setOutputMode(outputMode);
 
-    auto errorMode = static_cast<ExternalScriptItem::ErrorMode>(sderrCombo->currentIndex());
+    auto errorMode = static_cast<ExternalScriptItem::ErrorMode>(stderrCombo->currentIndex());
     m_item->setErrorMode(errorMode);
 
     auto saveMode = static_cast<ExternalScriptItem::SaveMode>(saveCombo->currentIndex());
