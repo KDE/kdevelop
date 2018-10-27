@@ -113,7 +113,7 @@ public:
     QList<DUChainChange*> m_changes;*/
 };
 
-typedef QList<DUChainRef*> DUChainBaseList;
+using DUChainBaseList = QList<DUChainRef*>;
 
 /**
  * \short Container class for a change to a duchain object.

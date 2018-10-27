@@ -37,7 +37,7 @@ class IProject;
 class QMakeProjectFile : public QMakeFile
 {
 public:
-    typedef QPair< QString, QString > DefinePair;
+    using DefinePair = QPair<QString, QString>;
     static const QStringList FileVariables;
 
     explicit QMakeProjectFile( const QString& projectfile );

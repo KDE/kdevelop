@@ -147,8 +147,8 @@ public:
 template <class ValueType>
 struct CacheEntry
 {
-    typedef KDevVarLengthArray<ValueType> Data;
-    typedef QHash<TopDUContext::IndexedRecursiveImports, Data> DataHash;
+    using Data = KDevVarLengthArray<ValueType>;
+    using DataHash = QHash<TopDUContext::IndexedRecursiveImports, Data>;
 
     DataHash m_hash;
 };
@@ -338,9 +338,10 @@ PersistentSymbolTable::FilteredDeclarationIterator PersistentSymbolTable::filter
         KDevVarLengthArray<IndexedDeclaration>& cache(*insertIt);
 
         {
-            typedef ConvenientEmbeddedSetTreeFilterVisitor<IndexedDeclaration, IndexedDeclarationHandler,
+            using FilteredDeclarationCacheVisitor =
+                ConvenientEmbeddedSetTreeFilterVisitor<IndexedDeclaration, IndexedDeclarationHandler,
                 IndexedTopDUContext, CachedIndexedRecursiveImports, DeclarationTopContextExtractor,
-                DeclarationCacheVisitor> FilteredDeclarationCacheVisitor;
+                DeclarationCacheVisitor>;
 
             //The visitor visits all the declarations from within its constructor
             DeclarationCacheVisitor v(cache);

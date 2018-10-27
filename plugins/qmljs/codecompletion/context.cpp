@@ -45,7 +45,7 @@
 
 using namespace KDevelop;
 
-typedef QPair<Declaration*, int> DeclarationDepthPair;
+using DeclarationDepthPair = QPair<Declaration*, int>;
 
 namespace QmlJS {
 

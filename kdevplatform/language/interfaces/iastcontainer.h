@@ -37,11 +37,11 @@ class KDEVPLATFORMLANGUAGE_EXPORT IAstContainer
 {
 public:
     virtual ~IAstContainer();
-    typedef QExplicitlySharedDataPointer<IAstContainer> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<IAstContainer>;
 
     /// Derived classes must redifine this typedef for CodeGenerator to work
     /// with this AST
-    typedef COMPILE_ERROR_Ast_Top_Node_Was_Not_Defined TopAstNode;
+    using TopAstNode = COMPILE_ERROR_Ast_Top_Node_Was_Not_Defined;
 };
 }
 

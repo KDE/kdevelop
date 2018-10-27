@@ -74,7 +74,7 @@ QString KDEVPLATFORMUTIL_EXPORT toUrlOrLocalFile(const QUrl& url,
 class KDEVPLATFORMUTIL_EXPORT Path
 {
 public:
-    typedef QVector<Path> List;
+    using List = QVector<Path>;
 
     /**
      * Construct an empty, invalid Path.

@@ -63,8 +63,8 @@ struct LanguageSettings {
 };
 
 
-typedef QMap<QString, LanguageSettings> LanguageMap;
-typedef QMap<QString, SourceFormatter*> FormatterMap;
+using LanguageMap = QMap<QString, LanguageSettings>;
+using FormatterMap = QMap<QString, SourceFormatter*>;
 
 
 class KDevelop::SourceFormatterSelectionEditPrivate

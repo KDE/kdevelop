@@ -67,7 +67,7 @@ private: // File updates related.
     /// Timer for batch updates.
     QTimer* m_updateTimer;
 
-    typedef QMultiMap<KDevelop::IndexedString, ClassModelNodeDocumentChangedInterface*> FilesMap;
+    using FilesMap = QMultiMap<KDevelop::IndexedString, ClassModelNodeDocumentChangedInterface*>;
     /// Maps between monitored files and their class nodes.
     FilesMap m_filesMap;
 };

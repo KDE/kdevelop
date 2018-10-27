@@ -47,7 +47,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT PersistentMovingRange
     : public QSharedData
 {
 public:
-    typedef QExplicitlySharedDataPointer<PersistentMovingRange> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<PersistentMovingRange>;
 
     /**
      * Creates a new persistent moving range based on the current revision of the given document

@@ -36,7 +36,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT FunctionType
     : public AbstractType
 {
 public:
-    typedef TypePtr<FunctionType> Ptr;
+    using Ptr = TypePtr<FunctionType>;
 
     /// An enumeration of sections of the function signature that can be returned.
     enum SignaturePart {
@@ -128,7 +128,7 @@ public:
         Identity = 5
     };
 
-    typedef FunctionTypeData Data;
+    using Data = FunctionTypeData;
 
 protected:
     void accept0 (TypeVisitor* v) const override;

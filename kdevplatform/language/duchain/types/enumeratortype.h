@@ -26,9 +26,9 @@
 #include "constantintegraltype.h"
 
 namespace KDevelop {
-typedef KDevelop::MergeIdentifiedType<ConstantIntegralType> EnumeratorTypeBase;
+using EnumeratorTypeBase = KDevelop::MergeIdentifiedType<ConstantIntegralType>;
 
-typedef EnumeratorTypeBase::Data EnumeratorTypeData;
+using EnumeratorTypeData = EnumeratorTypeBase::Data;
 
 //The same as EnumerationType, with the difference that here the value is also known
 class KDEVPLATFORMLANGUAGE_EXPORT EnumeratorType
@@ -41,7 +41,7 @@ public:
 
     EnumeratorType();
 
-    typedef TypePtr<EnumeratorType> Ptr;
+    using Ptr = TypePtr<EnumeratorType>;
 
     bool equals(const KDevelop::AbstractType* rhs) const override;
 
@@ -57,7 +57,7 @@ public:
         Identity = 20
     };
 
-    typedef EnumeratorTypeData Data;
+    using Data = EnumeratorTypeData;
 
 protected:
     TYPE_DECLARE_DATA(EnumeratorType);

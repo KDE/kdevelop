@@ -125,8 +125,8 @@ protected:
                                const QModelIndex& index) const override;
 
     QExplicitlySharedDataPointer<CodeCompletionContext> m_completionContext;
-    typedef QPair<KDevelop::DeclarationPointer,
-        QExplicitlySharedDataPointer<CodeCompletionContext>> DeclarationContextPair;
+    using DeclarationContextPair = QPair<KDevelop::DeclarationPointer,
+        QExplicitlySharedDataPointer<CodeCompletionContext>>;
 
     QList<QExplicitlySharedDataPointer<CompletionTreeElement>> m_completionItems;
 

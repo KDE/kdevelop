@@ -39,7 +39,7 @@
 
 QTEST_MAIN(TestQMakeFile)
 
-typedef QHash<QString, QString> DefineHash;
+using DefineHash = QHash<QString, QString>;
 
 Q_DECLARE_METATYPE(QMakeFile::VariableMap)
 Q_DECLARE_METATYPE(DefineHash)

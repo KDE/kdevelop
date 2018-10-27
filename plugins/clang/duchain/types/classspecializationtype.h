@@ -55,7 +55,7 @@ public:
 
     explicit ClassSpecializationType(ClassSpecializationTypeData& data);
 
-    typedef KDevelop::TypePtr<ClassSpecializationType> Ptr;
+    using Ptr = KDevelop::TypePtr<ClassSpecializationType>;
 
     ClassSpecializationType();
 
@@ -76,7 +76,7 @@ public:
         Identity = 18
     };
 
-    typedef ClassSpecializationTypeData Data;
+    using Data = ClassSpecializationTypeData;
 
 protected:
     TYPE_DECLARE_DATA(ClassSpecializationType);

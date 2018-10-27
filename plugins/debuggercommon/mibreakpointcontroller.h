@@ -46,7 +46,7 @@ struct BreakpointData {
     {}
 };
 
-typedef QSharedPointer<BreakpointData> BreakpointDataPtr;
+using BreakpointDataPtr = QSharedPointer<BreakpointData>;
 
 class MIDebugSession;
 /**

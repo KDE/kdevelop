@@ -153,7 +153,7 @@ public:
         return -1;
     }
 
-    typedef ConvenientEmbeddedSetIterator<Data, Handler> Iterator;
+    using Iterator = ConvenientEmbeddedSetIterator<Data, Handler>;
 
     ConvenientEmbeddedSetIterator<Data, Handler> iterator() const;
 
@@ -566,7 +566,7 @@ public:
     {
     }
 
-    typedef QPair<QPair<uint, uint>, typename TreeSet::Node> Bounds;
+    using Bounds = QPair<QPair<uint, uint>, typename TreeSet::Node>;
 
     struct Bound
     {
@@ -762,7 +762,7 @@ class ConvenientFreeListSet
 {
 public:
 
-    typedef ConvenientEmbeddedSetIterator<Data, Handler> Iterator;
+    using Iterator = ConvenientEmbeddedSetIterator<Data, Handler>;
 
     ConvenientFreeListSet()
     {

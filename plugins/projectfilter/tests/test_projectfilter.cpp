@@ -34,7 +34,7 @@ QTEST_GUILESS_MAIN(TestProjectFilter)
 
 using namespace KDevelop;
 
-typedef QSharedPointer<ProjectFilter> TestFilter;
+using TestFilter = QSharedPointer<ProjectFilter>;
 
 Q_DECLARE_METATYPE(TestFilter)
 

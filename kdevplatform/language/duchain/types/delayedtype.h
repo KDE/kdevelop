@@ -39,7 +39,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT DelayedType
     : public KDevelop::AbstractType
 {
 public:
-    typedef TypePtr<DelayedType> Ptr;
+    using Ptr = TypePtr<DelayedType>;
 
     /// An enumeration of
     enum Kind : quint8 {
@@ -87,7 +87,7 @@ public:
         Identity = 8
     };
 
-    typedef DelayedTypeData Data;
+    using Data = DelayedTypeData;
 
 protected:
     void accept0 (KDevelop::TypeVisitor* v) const override;

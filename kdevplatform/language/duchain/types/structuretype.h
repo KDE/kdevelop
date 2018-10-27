@@ -27,7 +27,7 @@
 namespace KDevelop {
 class StructureTypeData;
 
-typedef MergeIdentifiedType<AbstractType> StructureTypeBase;
+using StructureTypeBase = MergeIdentifiedType<AbstractType>;
 
 /**
  * \short A type representing structure types.
@@ -39,7 +39,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT StructureType
     : public StructureTypeBase
 {
 public:
-    typedef TypePtr<StructureType> Ptr;
+    using Ptr = TypePtr<StructureType>;
 
     /// Default constructor
     StructureType();
@@ -66,7 +66,7 @@ public:
         Identity = 6
     };
 
-    typedef StructureTypeData Data;
+    using Data = StructureTypeData;
 
 protected:
     void accept0 (TypeVisitor* v) const override;

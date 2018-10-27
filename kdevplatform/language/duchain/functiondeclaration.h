@@ -57,7 +57,7 @@ public:
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-typedef MergeAbstractFunctionDeclaration<Declaration, FunctionDeclarationData> FunctionDeclarationBase;
+using FunctionDeclarationBase = MergeAbstractFunctionDeclaration<Declaration, FunctionDeclarationData>;
 class KDEVPLATFORMLANGUAGE_EXPORT FunctionDeclaration
     : public FunctionDeclarationBase
 {
@@ -85,7 +85,7 @@ public:
         Identity = 12
     };
 
-    typedef Declaration Base;
+    using Base = Declaration;
 
 private:
     Declaration* clonePrivate() const override;

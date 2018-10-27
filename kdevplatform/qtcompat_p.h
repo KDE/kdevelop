@@ -28,7 +28,7 @@
 namespace QtPrivate
 {
 template <typename T> struct QAddConst {
-    typedef const T Type;
+    using Type = const T;
 };
 }
 

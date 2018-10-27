@@ -124,7 +124,7 @@ public:
     ///@warning DUChain must be read locked as long as the returned data is used
     void declarations(const IndexedQualifiedIdentifier& id, uint& count, const IndexedDeclaration*& declarations) const;
 
-    typedef ConstantConvenientEmbeddedSet<IndexedDeclaration, IndexedDeclarationHandler> Declarations;
+    using Declarations = ConstantConvenientEmbeddedSet<IndexedDeclaration, IndexedDeclarationHandler>;
 
     ///Retrieves all the declarations for a given IndexedQualifiedIdentifier in an efficient way, and returns
     ///them in a structure that is more convenient than declarations().
@@ -132,11 +132,13 @@ public:
     ///@warning DUChain must be read locked as long as the returned data is used
     Declarations declarations(const IndexedQualifiedIdentifier& id) const;
 
-    typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository,
-        true> CachedIndexedRecursiveImports;
+    using CachedIndexedRecursiveImports =
+        Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportCacheRepository,
+        true>;
 
-    typedef ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext,
-        CachedIndexedRecursiveImports, DeclarationTopContextExtractor> FilteredDeclarationIterator;
+    using FilteredDeclarationIterator =
+        ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext,
+        CachedIndexedRecursiveImports, DeclarationTopContextExtractor>;
     ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @a visibility
     ///This is very efficient since it uses a cache
     ///The returned iterator is valid as long as the duchain read lock is held

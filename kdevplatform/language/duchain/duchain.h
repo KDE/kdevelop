@@ -37,7 +37,7 @@ class DUChainLock;
 class ParsingEnvironmentManager;
 class ParsingEnvironment;
 class ParsingEnvironmentFile;
-typedef QExplicitlySharedDataPointer<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
+using ParsingEnvironmentFilePointer = QExplicitlySharedDataPointer<ParsingEnvironmentFile>;
 class Definitions;
 class Uses;
 

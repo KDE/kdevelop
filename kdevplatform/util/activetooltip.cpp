@@ -46,7 +46,7 @@ public Q_SLOTS:
     void doVisibility();
 
 public:
-    typedef QMultiMap<float, QPair<QPointer<ActiveToolTip>, QString>> ToolTipPriorityMap;
+    using ToolTipPriorityMap = QMultiMap<float, QPair<QPointer<ActiveToolTip>, QString>>;
     ToolTipPriorityMap registeredToolTips;
 };
 

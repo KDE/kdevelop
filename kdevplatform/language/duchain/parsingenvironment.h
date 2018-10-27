@@ -104,7 +104,7 @@ public:
     TopDUContext::IndexedRecursiveImports m_importsCache;
 };
 
-typedef QExplicitlySharedDataPointer<ParsingEnvironmentFile> ParsingEnvironmentFilePointer;
+using ParsingEnvironmentFilePointer = QExplicitlySharedDataPointer<ParsingEnvironmentFile>;
 
 /**
  * This represents all information about a specific parsed file that is needed

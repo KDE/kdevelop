@@ -110,7 +110,7 @@ private:
     void recursiveSortInternal();
 
 protected:
-    typedef QList<Node*> NodesList;
+    using NodesList = QList<Node*>;
     NodesList m_children;
     QString m_displayName;
     QIcon m_cachedIcon;
@@ -225,7 +225,7 @@ protected: // ClassModelNodeDocumentChangedInterface overrides
     void documentChanged(const KDevelop::IndexedString& a_file) override;
 
 private:
-    typedef QMap<uint, Node*> SubIdentifiersMap;
+    using SubIdentifiersMap = QMap<uint, Node*>;
     /// Set of known sub-identifiers. It's used for updates check.
     SubIdentifiersMap m_subIdentifiers;
 

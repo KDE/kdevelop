@@ -95,7 +95,7 @@ private:
     QString m_factoryName;
 };
 
-typedef QSharedPointer<ICompiler> CompilerPointer;
+using CompilerPointer = QSharedPointer<ICompiler>;
 
 Q_DECLARE_METATYPE(CompilerPointer)
 

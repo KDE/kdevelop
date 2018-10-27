@@ -55,7 +55,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT UnsureType
     : public AbstractType
 {
 public:
-    typedef TypePtr<UnsureType> Ptr;
+    using Ptr = TypePtr<UnsureType>;
 
     UnsureType(const UnsureType& rhs);
     UnsureType();
@@ -81,7 +81,7 @@ public:
         Identity = 39
     };
 
-    typedef UnsureTypeData Data;
+    using Data = UnsureTypeData;
 
 protected:
     TYPE_DECLARE_DATA(UnsureType)

@@ -88,7 +88,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractType
     : public QSharedData
 {
 public:
-    typedef TypePtr<AbstractType> Ptr;
+    using Ptr = TypePtr<AbstractType>;
 
     /**
      * An enumeration of common modifiers for data types.
@@ -271,7 +271,7 @@ public:
         return ret;
     }
 
-    typedef AbstractTypeData Data;
+    using Data = AbstractTypeData;
 
 protected:
     /**

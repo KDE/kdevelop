@@ -127,8 +127,8 @@ public:
     }
 };
 
-typedef KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, false, false,
-    sizeof(SetNodeData)> SetDataRepositoryBase;
+using SetDataRepositoryBase =
+    KDevelop::ItemRepository<SetNodeData, SetNodeDataRequest, false, false, sizeof(SetNodeData)>;
 
 struct SetDataRepository;
 
@@ -147,7 +147,7 @@ public:
 
     ~SetNodeDataRequest();
 
-    typedef unsigned int HashType;
+    using HashType = unsigned int;
 
     //Should return the m_hash-value associated with this request(For example the m_hash of a string)
     inline HashType hash() const
@@ -201,7 +201,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Set
 {
 public:
     class Iterator;
-    typedef unsigned int Index;
+    using Index = unsigned int;
 
     Set();
     //Internal constructor
@@ -281,7 +281,7 @@ public:
                                 KDevelop::ItemRepositoryRegistry* registry = & KDevelop::globalItemRepositoryRegistry(),
                                 bool delayedDeletion = delayedDeletionByDefault);
     virtual ~BasicSetRepository();
-    typedef unsigned int Index;
+    using Index = unsigned int;
 
     /**
      * Takes a sorted list indices, returns a set representing them

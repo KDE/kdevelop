@@ -69,8 +69,7 @@ public:
 /**
  * Represents a single variable definition in a definition-use chain.
  */
-typedef MergeAbstractFunctionDeclaration<ClassMemberDeclaration,
-    ClassFunctionDeclarationData> ClassFunctionDeclarationBase;
+using ClassFunctionDeclarationBase = MergeAbstractFunctionDeclaration<ClassMemberDeclaration, ClassFunctionDeclarationData>;
 class KDEVPLATFORMLANGUAGE_EXPORT ClassFunctionDeclaration
     : public ClassFunctionDeclarationBase
 {

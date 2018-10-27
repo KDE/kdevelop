@@ -33,7 +33,7 @@ namespace KDevelop {
 
 class ProgressItem;
 class ProgressManager;
-typedef QMap<ProgressItem *, bool> ProgressItemMap;
+using ProgressItemMap = QMap<ProgressItem*, bool>;
 
 class ProgressItem : public QObject
 {

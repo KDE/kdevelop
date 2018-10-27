@@ -26,7 +26,7 @@
 #include <language/duchain/topducontext.h>
 #include <language/duchain/builders/abstractdeclarationbuilder.h>
 
-typedef KDevelop::AbstractDeclarationBuilder<CMakeContentIterator, CMakeFunctionDesc, ContextBuilder> DeclarationBuilderBase;
+using DeclarationBuilderBase = KDevelop::AbstractDeclarationBuilder<CMakeContentIterator, CMakeFunctionDesc, ContextBuilder>;
 
 class DeclarationBuilder : public DeclarationBuilderBase
 {

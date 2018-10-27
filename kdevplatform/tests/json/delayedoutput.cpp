@@ -22,7 +22,7 @@
 #include <QStack>
 
 namespace KDevelop {
-typedef QPair<QString, int> DepthedOutput;
+using DepthedOutput = QPair<QString, int>;
 
 class DelayedOutputPrivate
 {

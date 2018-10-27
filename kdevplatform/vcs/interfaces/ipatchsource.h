@@ -33,7 +33,7 @@ class KDEVPLATFORMVCS_EXPORT IPatchSource : public QObject
 {
     Q_OBJECT
     public:
-        typedef QPointer<IPatchSource> Ptr;
+        using Ptr = QPointer<IPatchSource>;
 
         ///Name of the patch, that will be shown in a combo box. Should
         ///describe the patch in a useful way, for example "Difference to base in kdevplatform/language"

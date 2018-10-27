@@ -184,9 +184,9 @@ KDevelop::StandardDocumentationView::~StandardDocumentationView() = default;
 void StandardDocumentationView::search ( const QString& text, DocumentationFindWidget::FindOptions options )
 {
 #ifdef USE_QTWEBKIT
-    typedef QWebPage WebkitThing;
+    using WebkitThing = QWebPage;
 #else
-    typedef QWebEnginePage WebkitThing;
+    using WebkitThing = QWebEnginePage;
 #endif
     WebkitThing::FindFlags ff = {};
     if(options & DocumentationFindWidget::Previous)
@@ -201,9 +201,9 @@ void StandardDocumentationView::search ( const QString& text, DocumentationFindW
 void StandardDocumentationView::searchIncremental(const QString& text, DocumentationFindWidget::FindOptions options)
 {
 #ifdef USE_QTWEBKIT
-    typedef QWebPage WebkitThing;
+    using WebkitThing = QWebPage;
 #else
-    typedef QWebEnginePage WebkitThing;
+    using WebkitThing = QWebEnginePage;
 #endif
     WebkitThing::FindFlags findFlags;
 
@@ -334,9 +334,9 @@ QMenu* StandardDocumentationView::createStandardContextMenu()
 {
     auto menu = new QMenu(this);
 #ifdef USE_QTWEBKIT
-    typedef QWebPage WebkitThing;
+    using WebkitThing = QWebPage;
 #else
-    typedef QWebEnginePage WebkitThing;
+    using WebkitThing = QWebEnginePage;
 #endif
     auto copyAction = d->m_view->pageAction(WebkitThing::Copy);
     if (copyAction) {

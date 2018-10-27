@@ -77,7 +77,7 @@ struct CodeModelViewItem
 
 Q_DECLARE_TYPEINFO(CodeModelViewItem, Q_MOVABLE_TYPE);
 
-typedef QMap<uint, QList<KDevelop::QuickOpenDataPointer> > AddedItems;
+using AddedItems = QMap<uint, QList<KDevelop::QuickOpenDataPointer>>;
 
 class ProjectItemDataProvider
     : public KDevelop::QuickOpenDataProviderBase

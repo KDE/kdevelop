@@ -37,8 +37,8 @@ namespace QmlJS
     class NodeJS;
 }
 
-typedef KDevelop::AbstractTypeBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder> TypeBuilder;
-typedef KDevelop::AbstractDeclarationBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, TypeBuilder> DeclarationBuilderBase;
+using TypeBuilder = KDevelop::AbstractTypeBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder>;
+using DeclarationBuilderBase = KDevelop::AbstractDeclarationBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, TypeBuilder>;
 
 class KDEVQMLJSDUCHAIN_EXPORT DeclarationBuilder : public DeclarationBuilderBase
 {
@@ -56,7 +56,7 @@ protected:
     using Visitor::visit;
     using Visitor::endVisit;
 
-    typedef QList<QPair<QmlJS::AST::StringLiteral*, QString>> ExportLiteralsAndNames;
+    using ExportLiteralsAndNames = QList<QPair<QmlJS::AST::StringLiteral*, QString>>;
 
     // Functions
     template<typename Decl>

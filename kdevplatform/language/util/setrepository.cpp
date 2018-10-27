@@ -58,7 +58,7 @@ namespace Utils {
  * ...
  * */
 
-typedef BasicSetRepository::Index Index;
+using Index = BasicSetRepository::Index;
 
 ///The returned split position shall be the end of the first sub-range, and the start of the second
 ///@param splitBit should be initialized with 31, unless you know better. The value can then be used on while computing child split positions.

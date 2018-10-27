@@ -37,7 +37,7 @@ class ValueAST;
 
 class KDEVQMAKEPARSER_EXPORT ASTVisitor
 {
-    typedef void (ASTVisitor::*parser_fun_t)(AST*);
+    using parser_fun_t = void (ASTVisitor::*)(AST*);
     static parser_fun_t _S_parser_table[];
     public:
         virtual ~ASTVisitor();

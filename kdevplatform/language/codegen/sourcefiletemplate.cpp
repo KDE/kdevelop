@@ -36,7 +36,7 @@
 #include <QDir>
 
 using namespace KDevelop;
-typedef SourceFileTemplate::ConfigOption ConfigOption;
+using ConfigOption = SourceFileTemplate::ConfigOption;
 
 class KDevelop::SourceFileTemplatePrivate
 {

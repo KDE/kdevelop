@@ -44,7 +44,7 @@ public:
 
     explicit ConstantIntegralType(uint type = TypeNone);
 
-    typedef TypePtr<ConstantIntegralType> Ptr;
+    using Ptr = TypePtr<ConstantIntegralType>;
 
     /**The types and modifiers are not changed!
      * The values are casted internally to the local representation, so you can lose precision.
@@ -97,7 +97,7 @@ public:
         Identity = 14
     };
 
-    typedef ConstantIntegralTypeData Data;
+    using Data = ConstantIntegralTypeData;
 
 protected:
     TYPE_DECLARE_DATA(ConstantIntegralType);

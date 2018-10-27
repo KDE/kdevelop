@@ -52,7 +52,7 @@ public:
 
     IndexedQualifiedIdentifier m_scopeIdentifier;
     IndexedDeclaration m_owner;
-    typedef DUContext::Import Import;
+    using Import = DUContext::Import;
     START_APPENDED_LISTS_BASE(DUContextData, DUChainBaseData);
     APPENDED_LIST_FIRST(DUContextData, Import, m_importedContexts);
     APPENDED_LIST(DUContextData, LocalIndexedDUContext, m_childContexts, m_importedContexts);

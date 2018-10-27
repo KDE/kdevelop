@@ -751,7 +751,7 @@ private:
     }
 
     // Declaration and it's context
-    typedef QPair<Declaration*, Declaration*> DeclarationContext;
+    using DeclarationContext = QPair<Declaration*, Declaration*>;
 
     /// Types of declarations that look-ahead completion items can have
     QSet<IndexedType> matchedTypes;

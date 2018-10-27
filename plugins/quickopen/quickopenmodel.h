@@ -101,7 +101,7 @@ private:
 
     KDevelop::QuickOpenDataPointer getItem(int row, bool noReset = false) const;
 
-    typedef QHash<int, KDevelop::QuickOpenDataPointer> DataList;
+    using DataList = QHash<int, KDevelop::QuickOpenDataPointer>;
     mutable DataList m_cachedData;
 
     QTreeView* m_treeView;
@@ -118,7 +118,7 @@ private:
         KDevelop::QuickOpenDataProviderBase* provider;
     };
 
-    //typedef QMultiMap< QString, ProviderEntry > ProviderMap;
+    //using ProviderMap = QMultiMap<QString, ProviderEntry>;
     using ProviderList = QVector<ProviderEntry>;
     ProviderList m_providers;
     QString m_filterText;

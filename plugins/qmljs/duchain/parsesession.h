@@ -34,7 +34,7 @@ class SimpleRange;
 class RangeInRevision;
 }
 
-typedef QPair<KDevelop::DUContextPointer, KDevelop::RangeInRevision> SimpleUse;
+using SimpleUse = QPair<KDevelop::DUContextPointer, KDevelop::RangeInRevision>;
 
 /**
  * This class wraps the qmljs parser and offers some helper functions
@@ -180,7 +180,7 @@ private:
     bool m_allDependenciesSatisfied;
 
     QList<KDevelop::ProblemPointer> m_problems;
-    typedef QHash<QmlJS::AST::Node*, KDevelop::DUContextPointer> NodeToContextHash;
+    using NodeToContextHash = QHash<QmlJS::AST::Node*, KDevelop::DUContextPointer>;
     NodeToContextHash m_astToContext;
 };
 

@@ -47,6 +47,6 @@ public:
     virtual ~ICompilerFactory() = default;
 };
 
-typedef QSharedPointer<ICompilerFactory> CompilerFactoryPointer;
+using CompilerFactoryPointer = QSharedPointer<ICompilerFactory>;
 
 #endif // ICOMPILERFACTORY_H

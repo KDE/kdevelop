@@ -80,7 +80,7 @@ public:
 
 class FunctionCommandHandler : public MICommandHandler {
 public:
-    typedef std::function<void (const ResultRecord&)> Function;
+    using Function = std::function<void (const ResultRecord&)>;
 
     explicit FunctionCommandHandler(const Function& callback, CommandFlags flags = {});
 
@@ -264,7 +264,7 @@ public:
 class SentinelCommand : public MICommand
 {
 public:
-    typedef std::function<void ()> Function;
+    using Function = std::function<void ()>;
 
     template<class Handler>
     SentinelCommand(Handler* handler_this,
@@ -306,7 +306,7 @@ class ExpressionValueCommand : public QObject, public MICommand
     Q_OBJECT
 
 public:
-    typedef void (QObject::*handler_method_t)(const QString&);
+    using handler_method_t = void (QObject::*)(const QString&);
 
     template<class Handler>
     ExpressionValueCommand(

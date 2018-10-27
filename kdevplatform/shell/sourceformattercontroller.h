@@ -55,7 +55,7 @@ struct SourceFormatter
 {
     KDevelop::ISourceFormatter* formatter;
     // style name -> style. style objects owned by this
-    typedef QMap<QString,KDevelop::SourceFormatterStyle*> StyleMap;
+    using StyleMap = QMap<QString,KDevelop::SourceFormatterStyle*>;
     StyleMap styles;
     // Get a list of supported mime types from the style map.
     QSet<QString> supportedMimeTypes() const

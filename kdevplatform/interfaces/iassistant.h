@@ -36,7 +36,7 @@ class KDEVPLATFORMINTERFACES_EXPORT IAssistantAction : public QObject, public KS
 public:
     IAssistantAction();
 
-    typedef QExplicitlySharedDataPointer<IAssistantAction> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<IAssistantAction>;
 
     ~IAssistantAction() override;
 
@@ -107,7 +107,7 @@ public:
     IAssistant();
     ~IAssistant() override;
 
-    typedef QExplicitlySharedDataPointer<IAssistant> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<IAssistant>;
 
     ///Returns the stored list of actions
     QList<IAssistantAction::Ptr> actions() const;

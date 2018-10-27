@@ -72,8 +72,8 @@ public:
     };
 };
 
-typedef QmlJSDUContext<KDevelop::TopDUContext, 110> QmlJSTopDUContext;
-typedef QmlJSDUContext<KDevelop::DUContext, 111> QmlJSNormalDUContext;
+using QmlJSTopDUContext = QmlJSDUContext<KDevelop::TopDUContext, 110>;
+using QmlJSNormalDUContext = QmlJSDUContext<KDevelop::DUContext, 111>;
 
 }
 

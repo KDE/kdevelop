@@ -47,7 +47,7 @@ namespace KDevelop {
         if ((mustDo__ == 0 || mustDo__ == 1) && (mustDo__ = 2)) \
             for (item(container()[a__]); mustDo__; mustDo__ = 0)
 
-#define START_APPENDED_LISTS_STATIC(selftype) typedef selftype SelfType;
+#define START_APPENDED_LISTS_STATIC(selftype) using SelfType = selftype;
 
 #define APPENDED_LIST_COMMON_STATIC(type, name) \
     KDevelop::AppendedList<dynamic, type> name ## List; \

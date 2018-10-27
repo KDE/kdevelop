@@ -25,7 +25,7 @@
 
 using namespace KDevelop;
 
-typedef PushValue<int> IntPusher;
+using IntPusher = PushValue<int>;
 
 ///Extracts the last line from the given string
 QString CodeCompletionContext::extractLastLine(const QString& str)

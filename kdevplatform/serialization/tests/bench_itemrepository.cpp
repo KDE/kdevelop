@@ -61,7 +61,7 @@ struct TestDataRepositoryItemRequest
         AverageSize = 10 //This should be the approximate average size of an Item
     };
 
-    typedef uint HashType;
+    using HashType = uint;
 
     //Should return the hash-value associated with this request(For example the hash of a string)
     HashType hash() const
@@ -105,7 +105,7 @@ struct TestDataRepositoryItemRequest
     unsigned int m_hash;
 };
 
-typedef ItemRepository<TestData, TestDataRepositoryItemRequest, false, true> TestDataRepository;
+using TestDataRepository = ItemRepository<TestData, TestDataRepositoryItemRequest, false, true>;
 
 void BenchItemRepository::initTestCase()
 {

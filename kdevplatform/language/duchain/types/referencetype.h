@@ -36,7 +36,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ReferenceType
     : public AbstractType
 {
 public:
-    typedef TypePtr<ReferenceType> Ptr;
+    using Ptr = TypePtr<ReferenceType>;
 
     /// Default constructor
     ReferenceType ();
@@ -91,7 +91,7 @@ public:
         Identity = 4
     };
 
-    typedef ReferenceTypeData Data;
+    using Data = ReferenceTypeData;
 
 protected:
     void accept0 (TypeVisitor* v) const override;

@@ -36,7 +36,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT PointerType
     : public AbstractType
 {
 public:
-    typedef TypePtr<PointerType> Ptr;
+    using Ptr = TypePtr<PointerType>;
 
     /// Default constructor
     PointerType ();
@@ -77,7 +77,7 @@ public:
         Identity = 3
     };
 
-    typedef PointerTypeData Data;
+    using Data = PointerTypeData;
 
 protected:
     void accept0 (TypeVisitor* v) const override;

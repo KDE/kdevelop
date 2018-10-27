@@ -132,7 +132,7 @@ private:
     QScopedPointer< Kompare::Info > m_kompareInfo;
     QScopedPointer< Diff2::KompareModelList > m_modelList;
     uint m_depth = 0; // depth of the patch represented by m_modelList
-    typedef QMap< QUrl, QPointer< PatchHighlighter > > HighlightMap;
+    using HighlightMap = QMap<QUrl, QPointer<PatchHighlighter>>;
     HighlightMap m_highlighters;
 
     friend class PatchReviewToolView; // to access slot exporterSelected();

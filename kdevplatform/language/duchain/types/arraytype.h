@@ -30,7 +30,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ArrayType
     : public AbstractType
 {
 public:
-    typedef TypePtr<ArrayType> Ptr;
+    using Ptr = TypePtr<ArrayType>;
 
     /// Default constructor
     ArrayType();
@@ -85,7 +85,7 @@ public:
         Identity = 7
     };
 
-    typedef ArrayTypeData Data;
+    using Data = ArrayTypeData;
 
 protected:
     void accept0 (TypeVisitor* v) const override;

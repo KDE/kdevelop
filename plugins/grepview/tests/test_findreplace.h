@@ -36,10 +36,10 @@ public:
         int start;
         int end;
     };
-    typedef QList<Match> MatchList;
+    using MatchList = QList<Match>;
 
-    typedef QPair<QString, QString> File;  /// Represent a file with name => content
-    typedef QList<File> FileList;
+    using File = QPair<QString, QString>;  /// Represent a file with name => content
+    using FileList = QList<File>;
 
 private:
     GrepViewPlugin* m_plugin;

@@ -490,7 +490,7 @@ private Q_SLOTS:
         clock_t insertionAlgoTime = 0;
         clock_t insertionTreeAlgoTime = 0;
 
-        typedef Utils::StorableSet<TestItem, TestItemConversion, StaticRepository> RepositorySet;
+        using RepositorySet = Utils::StorableSet<TestItem, TestItemConversion, StaticRepository>;
 
         const uint cycles = 3000;
         const uint setSize = 1500;

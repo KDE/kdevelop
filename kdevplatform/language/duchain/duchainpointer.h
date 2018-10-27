@@ -191,11 +191,11 @@ private:
     QExplicitlySharedDataPointer<DUChainPointerData> d;
 };
 
-typedef DUChainPointer<DUChainBase> DUChainBasePointer;
-typedef DUChainPointer<DUContext> DUContextPointer;
-typedef DUChainPointer<TopDUContext> TopDUContextPointer;
-typedef DUChainPointer<Declaration> DeclarationPointer;
-typedef DUChainPointer<AbstractFunctionDeclaration> FunctionDeclarationPointer;
+using DUChainBasePointer = DUChainPointer<DUChainBase>;
+using DUContextPointer = DUChainPointer<DUContext>;
+using TopDUContextPointer = DUChainPointer<TopDUContext>;
+using DeclarationPointer = DUChainPointer<Declaration>;
+using FunctionDeclarationPointer = DUChainPointer<AbstractFunctionDeclaration>;
 }
 
 Q_DECLARE_METATYPE(KDevelop::DUChainBasePointer)

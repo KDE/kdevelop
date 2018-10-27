@@ -25,7 +25,7 @@
 #include <config.h>
 
 
-typedef KGenericFactory<Preferences> PreferencesFactory;
+using PreferencesFactory = KGenericFactory<Preferences>;
 K_EXPORT_COMPONENT_FACTORY( kcm_documentview_settings, PreferencesFactory( "kcm_documentview_settings" ) )
 
 Preferences::Preferences(QWidget *parent, const QStringList &args)

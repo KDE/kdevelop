@@ -182,31 +182,31 @@ struct IdType;
 template<CXCursorKind CK>
 struct IdType<CK, typename std::enable_if<CursorKindTraits::isClass(CK)>::type>
 {
-    typedef StructureType Type;
+    using Type = StructureType;
 };
 
 template<CXCursorKind CK>
 struct IdType<CK, typename std::enable_if<CK == CXCursor_TypedefDecl>::type>
 {
-    typedef TypeAliasType Type;
+    using Type = TypeAliasType;
 };
 
 template<CXCursorKind CK>
 struct IdType<CK, typename std::enable_if<CK == CXCursor_TypeAliasDecl>::type>
 {
-    typedef TypeAliasType Type;
+    using Type = TypeAliasType;
 };
 
 template<CXCursorKind CK>
 struct IdType<CK, typename std::enable_if<CK == CXCursor_EnumDecl>::type>
 {
-    typedef EnumerationType Type;
+    using Type = EnumerationType;
 };
 
 template<CXCursorKind CK>
 struct IdType<CK, typename std::enable_if<CK == CXCursor_EnumConstantDecl>::type>
 {
-    typedef EnumeratorType Type;
+    using Type = EnumeratorType;
 };
 //END IdType
 
@@ -218,63 +218,63 @@ template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevDeclaration(CK, isInClass)>::type>
 {
-    typedef Declaration Type;
+    using Type = Declaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CK == CXCursor_MacroDefinition>::type>
 {
-    typedef MacroDefinition Type;
+    using Type = MacroDefinition;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevForwardDeclaration(CK, isDefinition)>::type>
 {
-    typedef ForwardDeclaration Type;
+    using Type = ForwardDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevClassDeclaration(CK, isDefinition)>::type>
 {
-    typedef ClassDeclaration Type;
+    using Type = ClassDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevClassFunctionDeclaration(CK, isInClass)>::type>
 {
-    typedef ClassFunctionDeclaration Type;
+    using Type = ClassFunctionDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevFunctionDeclaration(CK, isDefinition, isInClass)>::type>
 {
-    typedef FunctionDeclaration Type;
+    using Type = FunctionDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevFunctionDefinition(CK, isDefinition, isInClass)>::type>
 {
-    typedef FunctionDefinition Type;
+    using Type = FunctionDefinition;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevNamespaceAliasDeclaration(CK, isDefinition)>::type>
 {
-    typedef NamespaceAliasDeclaration Type;
+    using Type = NamespaceAliasDeclaration;
 };
 
 template<CXCursorKind CK, bool isDefinition, bool isInClass>
 struct DeclType<CK, isDefinition, isInClass,
     typename std::enable_if<CursorKindTraits::isKDevClassMemberDeclaration(CK, isInClass)>::type>
 {
-    typedef ClassMemberDeclaration Type;
+    using Type = ClassMemberDeclaration;
 };
 //END DeclType
 

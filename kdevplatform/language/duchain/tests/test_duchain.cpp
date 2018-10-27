@@ -60,7 +60,7 @@ QTEST_MAIN(TestDUChain)
 using namespace KDevelop;
 using namespace Utils;
 
-typedef BasicSetRepository::Index Index;
+using Index = BasicSetRepository::Index;
 
 struct Timer
 {

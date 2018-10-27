@@ -53,7 +53,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT Colorizer
 };
 
 class AbstractNavigationContext;
-typedef QExplicitlySharedDataPointer<AbstractNavigationContext> NavigationContextPointer;
+using NavigationContextPointer = QExplicitlySharedDataPointer<AbstractNavigationContext>;
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationContext
     : public QObject

@@ -102,8 +102,8 @@ public:
     mutable uint m_hash = 0;
 };
 
-typedef IdentifierPrivate<true> DynamicIdentifierPrivate;
-typedef IdentifierPrivate<false> ConstantIdentifierPrivate;
+using DynamicIdentifierPrivate = IdentifierPrivate<true>;
+using ConstantIdentifierPrivate = IdentifierPrivate<false>;
 
 struct IdentifierItemRequest
 {
@@ -264,8 +264,8 @@ public:
     }
 };
 
-typedef QualifiedIdentifierPrivate<true> DynamicQualifiedIdentifierPrivate;
-typedef QualifiedIdentifierPrivate<false> ConstantQualifiedIdentifierPrivate;
+using DynamicQualifiedIdentifierPrivate = QualifiedIdentifierPrivate<true>;
+using ConstantQualifiedIdentifierPrivate = QualifiedIdentifierPrivate<false>;
 
 struct QualifiedIdentifierItemRequest
 {

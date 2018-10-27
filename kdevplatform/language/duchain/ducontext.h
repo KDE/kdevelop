@@ -54,7 +54,7 @@ public:
     virtual ~DUChainVisitor();
 };
 
-typedef DUChainPointer<DUContext> DUContextPointer;
+using DUContextPointer = DUChainPointer<DUContext>;
 
 /**
  * A single context in source code, represented as a node in a
@@ -707,8 +707,8 @@ private:
     struct KDEVPLATFORMLANGUAGE_EXPORT SearchItem
         : public QSharedData
     {
-        typedef QExplicitlySharedDataPointer<SearchItem> Ptr;
-        typedef KDevVarLengthArray<Ptr, 256> PtrList;
+        using Ptr = QExplicitlySharedDataPointer<SearchItem>;
+        using PtrList = KDevVarLengthArray<Ptr, 256>;
 
         /**
          * Constructs a representation of the given @p id qualified identifier,
@@ -771,7 +771,7 @@ private:
 
     /// Declaration search implementation
 
-    typedef QList<Declaration*> DeclarationList;
+    using DeclarationList = QList<Declaration*>;
 
     /**
      * This is a more complex interface to the declaration search engine.

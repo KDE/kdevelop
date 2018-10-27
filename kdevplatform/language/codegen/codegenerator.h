@@ -163,8 +163,8 @@ public:
 protected:
 
     /// Convenience definition of the TopAstNode that is contained by this AstContainer
-    typedef typename AstContainer::TopAstNode TopAstNode;
-    typedef AstChangeSet<TopAstNode> LanguageChangeSet;
+    using TopAstNode = typename AstContainer::TopAstNode ;
+    using LanguageChangeSet = AstChangeSet<TopAstNode>;
 
     /**
      * Query an AST of a particular file
@@ -242,7 +242,7 @@ protected:
     }
 
 private:
-    typedef QMap<IndexedString, typename AstContainer::Ptr> AstContainerMap;
+    using AstContainerMap = QMap<IndexedString, typename AstContainer::Ptr>;
     AstContainerMap m_AstContainers;
 };
 }

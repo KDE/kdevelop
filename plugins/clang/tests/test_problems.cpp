@@ -348,7 +348,7 @@ struct ExpectedTodo
     KTextEditor::Cursor start;
     KTextEditor::Cursor end;
 };
-typedef QVector<ExpectedTodo> ExpectedTodos;
+using ExpectedTodos = QVector<ExpectedTodo>;
 Q_DECLARE_METATYPE(ExpectedTodos)
 
 void TestProblems::testTodoProblems()

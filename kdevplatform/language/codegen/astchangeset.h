@@ -52,7 +52,7 @@ public:
             delete m_node;
     }
 
-    typedef QList<AstNodeRef*> AstNodeList;
+    using AstNodeList = QList<AstNodeRef*>;
 
     /**
      * \short Container class for a change to an AST node.

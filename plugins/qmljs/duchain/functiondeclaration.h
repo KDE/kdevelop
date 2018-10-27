@@ -82,7 +82,7 @@ public:
         Identity = 112
     };
 
-    typedef KDevelop::DUChainPointer<FunctionDeclaration> Ptr;
+    using Ptr = KDevelop::DUChainPointer<FunctionDeclaration>;
 
 private:
     DUCHAIN_DECLARE_DATA(FunctionDeclaration)

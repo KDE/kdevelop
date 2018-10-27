@@ -27,13 +27,13 @@
 namespace KDevelop {
 class TypeAliasTypeData;
 
-typedef MergeIdentifiedType<AbstractType> TypeAliasTypeBase;
+using TypeAliasTypeBase = MergeIdentifiedType<AbstractType>;
 
 class KDEVPLATFORMLANGUAGE_EXPORT TypeAliasType
     : public TypeAliasTypeBase
 {
 public:
-    typedef TypePtr<TypeAliasType> Ptr;
+    using Ptr = TypePtr<TypeAliasType>;
 
     TypeAliasType(const TypeAliasType& rhs) : TypeAliasTypeBase(copyData<TypeAliasType>(*rhs.d_func()))
     {
@@ -68,7 +68,7 @@ public:
         Identity = 9
     };
 
-    typedef TypeAliasTypeData Data;
+    using Data = TypeAliasTypeData;
 
 protected:
     TYPE_DECLARE_DATA(TypeAliasType);

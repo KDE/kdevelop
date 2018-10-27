@@ -81,7 +81,7 @@ public:
         Identity = 10
     };
 
-    typedef Declaration BaseClass;
+    using BaseClass = Declaration;
 
 private:
     Declaration* clonePrivate() const override;

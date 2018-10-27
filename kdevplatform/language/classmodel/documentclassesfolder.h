@@ -101,17 +101,17 @@ private: // Opened class identifiers container definition.
     struct ClassIdentifierIndex {};
 
     // Member types definitions.
-    typedef boost::multi_index::member<
+    using FileMember = boost::multi_index::member<
         OpenedFileClassItem,
         KDevelop::IndexedString,
-        & OpenedFileClassItem::file> FileMember;
-    typedef boost::multi_index::member<
+        & OpenedFileClassItem::file>;
+    using ClassIdentifierMember = boost::multi_index::member<
         OpenedFileClassItem,
         KDevelop::IndexedQualifiedIdentifier,
-        & OpenedFileClassItem::classIdentifier> ClassIdentifierMember;
+        & OpenedFileClassItem::classIdentifier>;
 
     // Container definition.
-    typedef boost::multi_index::multi_index_container<
+    using OpenFilesContainer = boost::multi_index::multi_index_container<
         OpenedFileClassItem,
         boost::multi_index::indexed_by<
             boost::multi_index::ordered_non_unique<
@@ -123,11 +123,11 @@ private: // Opened class identifiers container definition.
                 ClassIdentifierMember
             >
         >
-    > OpenFilesContainer;
+    >;
 
     // Iterators definition.
-    typedef OpenFilesContainer::index_iterator<FileIndex>::type FileIterator;
-    typedef OpenFilesContainer::index_iterator<ClassIdentifierIndex>::type ClassIdentifierIterator;
+    using FileIterator = OpenFilesContainer::index_iterator<FileIndex>::type;
+    using ClassIdentifierIterator = OpenFilesContainer::index_iterator<ClassIdentifierIndex>::type;
 
     /// Maps all displayed classes and their referenced files.
     OpenFilesContainer m_openFilesClasses;
@@ -136,7 +136,7 @@ private: // Opened class identifiers container definition.
     QSet<KDevelop::IndexedString> m_openFiles;
 
 private:
-    typedef QMap<KDevelop::IndexedQualifiedIdentifier, StaticNamespaceFolderNode*> NamespacesMap;
+    using NamespacesMap = QMap<KDevelop::IndexedQualifiedIdentifier, StaticNamespaceFolderNode*>;
     /// Holds a map between an identifier and a namespace folder we hold.
     NamespacesMap m_namespaces;
 

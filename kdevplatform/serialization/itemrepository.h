@@ -1089,9 +1089,9 @@ template <class Item, class ItemRequest, bool markForReferenceCounting = true, b
 class ItemRepository
     : public AbstractItemRepository
 {
-    typedef Locker<threadSafe> ThisLocker;
+    using ThisLocker = Locker<threadSafe>;
 
-    typedef Bucket<Item, ItemRequest, markForReferenceCounting, fixedItemSize> MyBucket;
+    using MyBucket = Bucket<Item, ItemRequest, markForReferenceCounting, fixedItemSize>;
 
     enum {
         //Must be a multiple of Bucket::ObjectMapSize, so Bucket::hasClashingItem can be computed
@@ -1500,7 +1500,7 @@ public:
         }
     }
 
-    typedef DynamicItem<Item, markForReferenceCounting> MyDynamicItem;
+    using MyDynamicItem = DynamicItem<Item, markForReferenceCounting>;
 
     ///This returns an editable version of the item. @warning: Never change an entry that affects the hash,
     ///or the equals(..) function. That would completely destroy the consistency.

@@ -53,7 +53,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT RevisionLockerAndClearer
     : public QSharedData
 {
 public:
-    typedef QExplicitlySharedDataPointer<RevisionLockerAndClearer> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<RevisionLockerAndClearer>;
 
     ~RevisionLockerAndClearer();
 
@@ -124,7 +124,7 @@ private:
     RevisionLockerAndClearerPrivate* m_p;
 };
 
-typedef RevisionLockerAndClearer::Ptr RevisionReference;
+using RevisionReference = RevisionLockerAndClearer::Ptr;
 
 class KDEVPLATFORMLANGUAGE_EXPORT DocumentChangeTracker
     : public QObject

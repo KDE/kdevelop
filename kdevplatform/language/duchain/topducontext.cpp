@@ -262,7 +262,7 @@ public:
     //Has an entry for every single recursively imported file, that contains the shortest path, and the next context on that path to the imported context.
     //This does not need to be stored to disk, because it is defined implicitly.
     //What makes this most complicated is the fact that loops are allowed in the import structure.
-    typedef QHash<const TopDUContext*, QPair<int, const TopDUContext*>> RecursiveImports;
+    using RecursiveImports = QHash<const TopDUContext*, QPair<int, const TopDUContext*>>;
     mutable RecursiveImports m_recursiveImports;
     mutable TopDUContext::IndexedRecursiveImports m_indexedRecursiveImports;
 
@@ -1082,7 +1082,7 @@ void TopDUContext::removeImportedParentContext(DUContext* context)
 void TopDUContext::addImportedParentContexts(const QVector<QPair<TopDUContext*, CursorInRevision>>& contexts,
                                              bool temporary)
 {
-    typedef QPair<TopDUContext*, CursorInRevision> Pair;
+    using Pair = QPair<TopDUContext*, CursorInRevision>;
 
     for (const Pair pair : contexts) {
         addImportedParentContext(pair.first, pair.second, false, temporary);

@@ -103,8 +103,7 @@ struct FileModificationPairRequest
     }
 };
 
-typedef KDevelop::ItemRepository<FileModificationPair, FileModificationPairRequest, true,
-    false> FileModificationPairRepository;
+using FileModificationPairRepository = KDevelop::ItemRepository<FileModificationPair, FileModificationPairRequest, true, false>;
 
 static FileModificationPairRepository& fileModificationPairRepository()
 {
@@ -231,8 +230,8 @@ bool ModificationRevisionSet::removeModificationRevision(const IndexedString& ur
 //   return ret;
 // }
 
-typedef Utils::VirtualSetNode<uint, Utils::IdentityConversion<uint>,
-    FileModificationSetRepositoryRepresenter> ModificationRevisionSetNode;
+using ModificationRevisionSetNode = Utils::VirtualSetNode<uint, Utils::IdentityConversion<uint>,
+    FileModificationSetRepositoryRepresenter>;
 // static bool (const Utils::SetNodeData* node) {
 //   ModificationRevisionSetNode
 //   if(!node)

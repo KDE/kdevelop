@@ -77,7 +77,7 @@ private:
     QString fileOrDirectoryPath(const QString& baseName);
 
 private:
-    typedef QHash<QPair<QString, QString>, QString> CachedModuleFileNamesHash;
+    using CachedModuleFileNamesHash = QHash<QPair<QString, QString>, QString>;
     CachedModuleFileNamesHash m_cachedModuleFileNames;
     QMutex m_mutex;
 };

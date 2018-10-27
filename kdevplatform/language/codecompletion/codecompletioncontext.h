@@ -34,8 +34,8 @@ class CursorInRevision;
 
 class CompletionTreeItem;
 class CompletionTreeElement;
-typedef QExplicitlySharedDataPointer<CompletionTreeItem> CompletionTreeItemPointer;
-typedef QExplicitlySharedDataPointer<CompletionTreeElement> CompletionTreeElementPointer;
+using CompletionTreeItemPointer = QExplicitlySharedDataPointer<CompletionTreeItem>;
+using CompletionTreeElementPointer = QExplicitlySharedDataPointer<CompletionTreeElement>;
 
 /**
  * This class is responsible for finding out what kind of completion is needed, what expression should be evaluated for the container-class of the completion, what conversion will be applied to the result of the completion, etc.
@@ -44,7 +44,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT CodeCompletionContext
     : public QSharedData
 {
 public:
-    typedef QExplicitlySharedDataPointer<CodeCompletionContext> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<CodeCompletionContext>;
 
     /**
      * @param text the text to analyze. It usually is the text in the range starting at the beginning of the context,

@@ -83,7 +83,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT VariableDescription
 /**
  * List of variable descriptions
  **/
-typedef QVector<VariableDescription> VariableDescriptionList;
+using VariableDescriptionList = QVector<VariableDescription>;
 
 /**
  * @brief Represents a function
@@ -184,7 +184,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT FunctionDescription
 /**
  * List of function descriptions
  **/
-typedef QVector<FunctionDescription> FunctionDescriptionList;
+using FunctionDescriptionList = QVector<FunctionDescription>;
 
 /**
  * Description of an inheritance relation.
@@ -210,7 +210,7 @@ struct KDEVPLATFORMLANGUAGE_EXPORT InheritanceDescription
 /**
  * List of inheritance descriptions
  **/
-typedef QVector<InheritanceDescription> InheritanceDescriptionList;
+using InheritanceDescriptionList = QVector<InheritanceDescription>;
 
 /**
  * @brief Represents a class

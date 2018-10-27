@@ -42,7 +42,7 @@ struct FileModificationCache
 };
 Q_DECLARE_TYPEINFO(FileModificationCache, Q_MOVABLE_TYPE);
 
-typedef QHash<KDevelop::IndexedString, FileModificationCache> FileModificationMap;
+using FileModificationMap = QHash<KDevelop::IndexedString, FileModificationCache>;
 
 FileModificationMap& fileModificationCache()
 {
@@ -50,7 +50,7 @@ FileModificationMap& fileModificationCache()
     return cache;
 }
 
-typedef QHash<KDevelop::IndexedString, int> OpenDocumentRevisionsMap;
+using OpenDocumentRevisionsMap = QHash<KDevelop::IndexedString, int>;
 
 OpenDocumentRevisionsMap& openDocumentsRevisionMap()
 {

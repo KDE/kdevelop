@@ -48,11 +48,11 @@ struct KDEVPLATFORMLANGUAGE_EXPORT RecursiveImportRepository
 ///Maps an imported top-context to a pair:
 ///1. The distance to the top-context, and 2. The next step towards the top-context
 ///in the chain.
-typedef QHash<const TopDUContext*, QPair<int, const TopDUContext*>> RecursiveImports;
+using RecursiveImports = QHash<const TopDUContext*, QPair<int, const TopDUContext*>>;
 
-typedef DUChainPointer<TopDUContext> TopDUContextPointer;
+using TopDUContextPointer = DUChainPointer<TopDUContext>;
 
-typedef QExplicitlySharedDataPointer<Problem> ProblemPointer;
+using ProblemPointer = QExplicitlySharedDataPointer<Problem>;
 
 ///KDevelop can unload unused top-context at any time. To prevent unloading,
 ///keep a ReferencedTopDUContext.
@@ -283,8 +283,8 @@ public:
     ///When this top-context does not own its private data, only the local imports of this context are removed, not those from the shared data.
     void clearImportedParentContexts() override;
 
-    typedef Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportRepository,
-        true> IndexedRecursiveImports;
+    using IndexedRecursiveImports = Utils::StorableSet<IndexedTopDUContext, IndexedTopDUContextIndexConversion, RecursiveImportRepository,
+        true>;
 
     QVector<Import> importedParentContexts() const override;
 

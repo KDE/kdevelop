@@ -56,8 +56,8 @@ inline uint qHash(const QMimeType& mime, uint seed = 0)
 namespace KDevelop {
 
 
-typedef QHash<QString, ILanguageSupport*> LanguageHash;
-typedef QHash<QString, QList<ILanguageSupport*> > LanguageCache;
+using LanguageHash = QHash<QString, ILanguageSupport*>;
+using LanguageCache = QHash<QString, QList<ILanguageSupport*>>;
 
 class LanguageControllerPrivate
 {
@@ -93,7 +93,7 @@ public:
 
     LanguageHash languages; //Maps language-names to languages
     LanguageCache languageCache; //Maps mimetype-names to languages
-    typedef QMultiHash<QMimeType, ILanguageSupport*> MimeTypeCache;
+    using MimeTypeCache = QMultiHash<QMimeType, ILanguageSupport*>;
     MimeTypeCache mimeTypeCache; //Maps mimetypes to languages
 
     BackgroundParser* const backgroundParser;

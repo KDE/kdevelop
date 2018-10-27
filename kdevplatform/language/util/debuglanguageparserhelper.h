@@ -47,7 +47,7 @@ QTextStream qout(stdout);
 QTextStream qerr(stderr);
 QTextStream qin(stdin);
 
-typedef QString (* TokenTextFunc)(int);
+using TokenTextFunc = QString (*)(int);
 /**
  * This class is a pure helper to use for binaries that you can
  * run on short snippets of test code or whole files and let

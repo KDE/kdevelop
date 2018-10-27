@@ -39,7 +39,7 @@ namespace KDevelop {
 class DUContext;
 class Declaration;
 
-typedef QVector<KDevelop::Declaration*> ColorMap;
+using ColorMap = QVector<KDevelop::Declaration*>;
 
 class CodeHighlighting;
 

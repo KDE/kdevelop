@@ -163,7 +163,7 @@ class StorableSet
 {
 public:
 
-    typedef VirtualSetNode<T, Conversion, StaticRepository> Node;
+    using Node = VirtualSetNode<T, Conversion, StaticRepository>;
 
     StorableSet(const StorableSet& rhs) : m_setIndex(rhs.m_setIndex)
     {
@@ -360,7 +360,7 @@ public:
         return m_setIndex == rhs.m_setIndex;
     }
 
-    typedef ConvenientIterator<T, Conversion> Iterator;
+    using Iterator = ConvenientIterator<T, Conversion>;
 
     Iterator iterator() const
     {
@@ -530,7 +530,7 @@ private:
     BasicSetRepository* m_rep;
     mutable Set m_set;
     QMutex* m_lockBeforeAccess;
-    typedef std::set<Utils::BasicSetRepository::Index> IndexList;
+    using IndexList = std::set<Utils::BasicSetRepository::Index>;
     mutable IndexList m_temporaryIndices;
     mutable IndexList m_temporaryRemoveIndices;
 };

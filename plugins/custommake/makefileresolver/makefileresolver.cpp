@@ -72,7 +72,7 @@ namespace {
     QMap<QString,bool> failedFiles;
     QDateTime failTime;
   };
-  typedef QMap<QString, CacheEntry> Cache;
+  using Cache = QMap<QString, CacheEntry>;
 
   static Cache s_cache;
   static QMutex s_cacheMutex;

@@ -47,12 +47,12 @@ struct CodeCompletionItemLastGrouper
 template <class KeyExtractor, class NextGrouper = CodeCompletionItemLastGrouper>
 struct CodeCompletionItemGrouper
 {
-    typedef typename KeyExtractor::KeyType KeyType;
+    using KeyType = typename KeyExtractor::KeyType;
 
     CodeCompletionItemGrouper(QList<QExplicitlySharedDataPointer<CompletionTreeElement>>& tree,
                               CompletionTreeNode* parent, const QList<CompletionTreeItemPointer>& items)
     {
-        typedef QMap<KeyType, QList<CompletionTreeItemPointer>> GroupMap;
+        using GroupMap = QMap<KeyType, QList<CompletionTreeItemPointer>>;
         GroupMap groups;
 
         for (auto& item : items) {
@@ -81,7 +81,7 @@ struct CodeCompletionItemGrouper
 ///Extracts the argument-hint depth from completion-items, to be used in ItemGrouper for grouping by argument-hint depth.
 struct ArgumentHintDepthExtractor
 {
-    typedef int KeyType;
+    using KeyType = int;
     enum { Role = KTextEditor::CodeCompletionModel::ArgumentHintDepth };
 
     static KeyType extract(const CompletionTreeItemPointer& item)
@@ -92,7 +92,7 @@ struct ArgumentHintDepthExtractor
 
 struct InheritanceDepthExtractor
 {
-    typedef int KeyType;
+    using KeyType = int;
 
     enum { Role = KTextEditor::CodeCompletionModel::InheritanceDepth };
 
@@ -104,7 +104,7 @@ struct InheritanceDepthExtractor
 
 struct SimplifiedAttributesExtractor
 {
-    typedef int KeyType;
+    using KeyType = int;
 
     enum { Role = KTextEditor::CodeCompletionModel::CompletionRole };
 

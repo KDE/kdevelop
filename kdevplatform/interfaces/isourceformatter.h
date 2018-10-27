@@ -37,7 +37,7 @@ public:
 		QString mimeType;
 		QString highlightMode;
 	};
-	typedef QVector<MimeHighlightPair> MimeList;
+	using MimeList = QVector<MimeHighlightPair>;
 
 	SourceFormatterStyle();
 	explicit SourceFormatterStyle( const QString& name );
@@ -89,7 +89,7 @@ struct SourceFormatterStyleItem {
 	SourceFormatterStyle style;
 };
 
-typedef QVector<SourceFormatterStyleItem> SourceFormatterItemList;
+using SourceFormatterItemList = QVector<SourceFormatterStyleItem>;
 
 /**
 * @short A widget to edit a style

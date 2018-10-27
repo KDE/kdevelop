@@ -211,7 +211,7 @@ private:
             for (item(container()[a__]); mustDo__; mustDo__ = 0)
 
 #define DEFINE_LIST_MEMBER_HASH(container, member, type) \
-    typedef KDevelop::TemporaryDataManager<KDevVarLengthArray<type, 10>> temporaryHash ## container ## member ## Type; \
+    using temporaryHash ## container ## member ## Type = KDevelop::TemporaryDataManager<KDevVarLengthArray<type, 10>>; \
     Q_GLOBAL_STATIC_WITH_ARGS(temporaryHash ## container ## member ## Type, \
                               temporaryHash ## container ## member ## Static, ( # container "::" # member)) \
     temporaryHash ## container ## member ## Type & temporaryHash ## container ## member() { \

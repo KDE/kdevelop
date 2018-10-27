@@ -54,7 +54,7 @@ public:
     bool m_ignoreOldText; //Set this to disable the verification of m_oldText. This can be used to overwrite arbitrary text, but is dangerous!
 };
 
-typedef QExplicitlySharedDataPointer<DocumentChange> DocumentChangePointer;
+using DocumentChangePointer = QExplicitlySharedDataPointer<DocumentChange>;
 
 /**
  * Object representing an arbitrary set of changes to an arbitrary set of files that can be applied atomically.

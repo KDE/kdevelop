@@ -37,8 +37,8 @@ struct DataT
     QDateTime b;
 };
 
-typedef QPair<KDevelop::IndexedString, DataT> DataPair;
-typedef QVector<DataPair> InputData;
+using DataPair = QPair<KDevelop::IndexedString, DataT>;
+using InputData = QVector<DataPair>;
 
 struct IndexedStringHash
 {
@@ -48,7 +48,7 @@ struct IndexedStringHash
     }
 };
 
-typedef std::unordered_map<KDevelop::IndexedString, DataT, IndexedStringHash> StlHash;
+using StlHash = std::unordered_map<KDevelop::IndexedString, DataT, IndexedStringHash>;
 
 inline void insertData(StlHash& hash, const InputData& data)
 {
@@ -57,7 +57,7 @@ inline void insertData(StlHash& hash, const InputData& data)
     }
 }
 
-typedef QHash<KDevelop::IndexedString, DataT> QStringHash;
+using QStringHash = QHash<KDevelop::IndexedString, DataT>;
 inline void insertData(QStringHash& hash, const InputData& data)
 {
     for (const DataPair& pair : data) {
@@ -284,8 +284,8 @@ void BenchHashes::typeRepo()
     } else if (type == 6) {
         // for the idea, look at c++'s lexer.cpp
         const int vectors = 5;
-        typedef QPair<int, TypeRepoTestData*> Pair;
-        typedef QVarLengthArray<Pair, vectors> InnerVector;
+        using Pair = QPair<int, TypeRepoTestData*>;
+        using InnerVector = QVarLengthArray<Pair, vectors>;
         QVarLengthArray <InnerVector, 10> v;
         v.resize(vectors);
         for (int i = 0; i < 100; ++i) {

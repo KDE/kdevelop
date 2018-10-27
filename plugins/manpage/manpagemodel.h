@@ -32,7 +32,7 @@
 class QStringListModel;
 
 // id and name for man section
-typedef QPair<QString, QString> ManSection;
+using ManSection = QPair<QString, QString>;
 
 class ManPageModel : public QAbstractItemModel
 {

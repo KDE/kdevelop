@@ -37,7 +37,7 @@ public:
     /**
      * Use this shared pointer to pass around the session lock.
      */
-    typedef QSharedPointer<ISessionLock> Ptr;
+    using Ptr = QSharedPointer<ISessionLock>;
 
     virtual ~ISessionLock();
 

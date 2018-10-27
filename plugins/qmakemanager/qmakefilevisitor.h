@@ -29,7 +29,7 @@ public:
     virtual ~QMakeVariableResolver() {}
     virtual QStringList resolveVariable(const QString& variable, VariableInfo::VariableType type) const = 0;
 
-    typedef QHash< QString, QStringList > VariableMap;
+    using VariableMap = QHash<QString, QStringList>;
 };
 
 class QMakeFile;

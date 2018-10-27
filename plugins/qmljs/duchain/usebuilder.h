@@ -24,7 +24,7 @@
 
 #include "contextbuilder.h"
 
-typedef KDevelop::AbstractUseBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder> UseBuilderBase;
+using UseBuilderBase = KDevelop::AbstractUseBuilder<QmlJS::AST::Node, QmlJS::AST::IdentifierPropertyName, ContextBuilder>;
 
 class KDEVQMLJSDUCHAIN_EXPORT UseBuilder : public UseBuilderBase
 {

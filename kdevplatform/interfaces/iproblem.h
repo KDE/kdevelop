@@ -36,7 +36,7 @@ class DocumentRange;
 class KDEVPLATFORMINTERFACES_EXPORT IProblem : public QSharedData
 {
 public:
-    typedef QExplicitlySharedDataPointer<IProblem> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<IProblem>;
 
     /// The source of the problem. That is which tool / which part found this problem.
     enum Source {

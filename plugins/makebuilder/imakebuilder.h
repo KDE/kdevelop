@@ -36,7 +36,7 @@ class KJob;
 /**
  * Used to create make variables of the form KEY=VALUE.
  */
-typedef QVector<QPair<QString, QString>> MakeVariables;
+using MakeVariables = QVector<QPair<QString, QString>>;
 
 class IMakeBuilder : public KDevelop::IProjectBuilder
 {

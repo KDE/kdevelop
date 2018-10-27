@@ -86,7 +86,7 @@ struct KDevEditingTransaction
     // NOTE: It's important to close the transaction first and only then destroy the EditorDisableReplaceTabs. Otherwise we hit asserts in KTextEditor.
     KTextEditor::Document::EditingTransaction edit;
     EditorDisableReplaceTabs disableReplaceTabs;
-    typedef std::unique_ptr<KDevEditingTransaction> Ptr;
+    using Ptr = std::unique_ptr<KDevEditingTransaction>;
 };
 
 /**
@@ -133,7 +133,7 @@ public:
      */
     static QString artificialPath(const QString& name);
 
-    typedef QExplicitlySharedDataPointer<CodeRepresentation> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<CodeRepresentation>;
 };
 
 class KDEVPLATFORMLANGUAGE_EXPORT DynamicCodeRepresentation
@@ -146,7 +146,7 @@ public:
     virtual bool replace(const KTextEditor::Range& range, const QString& oldText,
                          const QString& newText, bool ignoreOldText = false) = 0;
 
-    typedef QExplicitlySharedDataPointer<DynamicCodeRepresentation> Ptr;
+    using Ptr = QExplicitlySharedDataPointer<DynamicCodeRepresentation>;
 };
 
 /**
@@ -191,7 +191,7 @@ private:
     IndexedString m_file;
 };
 
-typedef QExplicitlySharedDataPointer<InsertArtificialCodeRepresentation> InsertArtificialCodeRepresentationPointer;
+using InsertArtificialCodeRepresentationPointer = QExplicitlySharedDataPointer<InsertArtificialCodeRepresentation>;
 }
 
 #endif

@@ -36,7 +36,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT IntegralType
     : public AbstractType
 {
 public:
-    typedef TypePtr<IntegralType> Ptr;
+    using Ptr = TypePtr<IntegralType>;
 
     /**
      * Enumeration of frequently used integral types.
@@ -105,7 +105,7 @@ public:
         Identity = 2
     };
 
-    typedef IntegralTypeData Data;
+    using Data = IntegralTypeData;
 
 protected:
     void accept0 (TypeVisitor* v) const override;

@@ -44,7 +44,7 @@ struct LicensePagePrivate
             return name.localeAwareCompare(o.name) < 0;
         }
     };
-    typedef QVector<LicenseInfo> LicenseList;
+    using LicenseList = QVector<LicenseInfo>;
 
 
     explicit LicensePagePrivate(LicensePage* page_)

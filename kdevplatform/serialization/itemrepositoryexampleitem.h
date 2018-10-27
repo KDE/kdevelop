@@ -61,7 +61,7 @@ class ExampleItemRequest
         AverageSize = 10 //! This should be the approximate average size of an Item requested.
     };
 
-    typedef unsigned int HashType;
+    using HashType = unsigned int;
 
     /// @returns The hash associated with this request (e. g. the hash of a string).
     HashType hash() const

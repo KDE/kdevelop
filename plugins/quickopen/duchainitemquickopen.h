@@ -74,7 +74,7 @@ class DUChainItemDataProvider
 {
     Q_OBJECT
 public:
-    typedef KDevelop::Filter<DUChainItem> Base;
+    using Base = KDevelop::Filter<DUChainItem>;
 
     /// When openDefinitions is true, the definitions will be opened if available on execute().
     explicit DUChainItemDataProvider(KDevelop::IQuickOpen* quickopen, bool openDefinitions = false);

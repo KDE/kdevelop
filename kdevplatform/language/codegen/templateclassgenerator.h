@@ -69,7 +69,7 @@ class DocumentChangeSet;
 class KDEVPLATFORMLANGUAGE_EXPORT TemplateClassGenerator
 {
 public:
-    typedef QHash<QString, QUrl> UrlHash;
+    using UrlHash = QHash<QString, QUrl>;
 
     /**
      * Creates a new generator.

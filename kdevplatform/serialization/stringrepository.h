@@ -60,7 +60,7 @@ struct StringRepositoryItemRequest
         AverageSize = 10 //This should be the approximate average size of an Item
     };
 
-    typedef unsigned int HashType;
+    using HashType = unsigned int;
 
     //Should return the hash-value associated with this request(For example the hash of a string)
     HashType hash() const
@@ -102,7 +102,7 @@ struct StringRepositoryItemRequest
     const char* m_text;
 };
 
-typedef ItemRepository<StringData, StringRepositoryItemRequest, false, true> StringRepository;
+using StringRepository = ItemRepository<StringData, StringRepositoryItemRequest, false, true>;
 
 ///@param item must be valid(nonzero)
 inline QString stringFromItem(const StringData* item)

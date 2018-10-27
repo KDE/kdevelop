@@ -116,7 +116,7 @@ Q_DECLARE_METATYPE( CMakeFunctionDesc )
  * @author Aleix Pol <aleixpol@gmail.com>
  */
 
-typedef QVector<CMakeFunctionDesc> CMakeFileContent;
+using CMakeFileContent = QVector<CMakeFunctionDesc>;
 
 namespace CMakeListsParser
 {

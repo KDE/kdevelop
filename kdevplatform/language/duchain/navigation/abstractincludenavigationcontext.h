@@ -69,7 +69,7 @@ protected:
 private:
     /// Only environments with this type will be considered
     ParsingEnvironmentType m_type;
-    typedef QPair<int, uint> IdentifierPair;
+    using IdentifierPair = QPair<int, uint>;
     ///@param first must initially be true
     void addDeclarationsFromContext(KDevelop::DUContext* ctx, bool& first,
                                     QVector<IdentifierPair>& addedDeclarations,

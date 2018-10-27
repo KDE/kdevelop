@@ -43,7 +43,7 @@ struct CacheEntry
 
 struct Target
 {
-    typedef QMap<QString, QString> Properties;
+    using Properties = QMap<QString, QString>;
     enum Type { Library, Executable, Custom };
     KDevelop::IndexedDeclaration declaration;
     QStringList files;
@@ -75,12 +75,12 @@ Q_DECLARE_TYPEINFO(CacheEntry, Q_MOVABLE_TYPE);
 Q_DECLARE_TYPEINFO(Macro, Q_MOVABLE_TYPE);
 
 enum PropertyType { GlobalProperty, DirectoryProperty, TargetProperty, SourceProperty, TestProperty, CacheProperty, VariableProperty };
-typedef QHash<QString, QMap<QString, QStringList> > CategoryType;
-typedef QMap<PropertyType, CategoryType > CMakeProperties;
+using CategoryType = QHash<QString, QMap<QString, QStringList>>;
+using CMakeProperties = QMap<PropertyType, CategoryType>;
 
-typedef QHash<QString, Macro> MacroMap;
-typedef QHash<QString, QString> CMakeDefinitions;
-typedef QHash<QString, CacheEntry> CacheValues;
+using MacroMap = QHash<QString, Macro>;
+using CMakeDefinitions = QHash<QString, QString>;
+using CacheValues = QHash<QString, CacheEntry>;
 
 Q_DECLARE_METATYPE(QList<Test>)
 Q_DECLARE_METATYPE(PropertyType)

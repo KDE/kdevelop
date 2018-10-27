@@ -27,7 +27,7 @@ namespace KDevMI { namespace MI {
 class MILexer;
 struct TokenStream;
 
-typedef void (MILexer::*scan_fun_ptr)(int *kind);
+using scan_fun_ptr = void (MILexer::*)(int*);
 
 struct Token
 {

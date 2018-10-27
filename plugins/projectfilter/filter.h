@@ -66,7 +66,7 @@ public:
     Type type = Exclusive;
 };
 
-typedef QVector<Filter> Filters;
+using Filters = QVector<Filter>;
 
 /**
  * SerializedFilter is what gets stored on disk in the configuration and represents
@@ -81,7 +81,7 @@ struct SerializedFilter
     Filter::Type type = Filter::Exclusive;
 };
 
-typedef QVector<SerializedFilter> SerializedFilters;
+using SerializedFilters = QVector<SerializedFilter>;
 
 SerializedFilters defaultFilters();
 SerializedFilters readFilters(const KSharedConfigPtr& config);

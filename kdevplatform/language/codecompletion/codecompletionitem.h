@@ -148,8 +148,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT CompletionCustomGroupNode
     int inheritanceDepth;
 };
 
-typedef QExplicitlySharedDataPointer<CompletionTreeItem> CompletionTreeItemPointer;
-typedef QExplicitlySharedDataPointer<CompletionTreeElement> CompletionTreeElementPointer;
+using CompletionTreeItemPointer = QExplicitlySharedDataPointer<CompletionTreeItem>;
+using CompletionTreeElementPointer = QExplicitlySharedDataPointer<CompletionTreeElement>;
 }
 
 Q_DECLARE_METATYPE(KDevelop::CompletionTreeElementPointer)

@@ -131,7 +131,7 @@ public:
     virtual QWidget* expandingWidget() const;
 };
 
-typedef QExplicitlySharedDataPointer<QuickOpenDataBase> QuickOpenDataPointer;
+using QuickOpenDataPointer = QExplicitlySharedDataPointer<QuickOpenDataBase>;
 
 /**
  * Use this interface to provide custom quickopen-data to the quickopen-widget.

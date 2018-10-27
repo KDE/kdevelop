@@ -31,7 +31,7 @@
 
 namespace QmlJS {
 
-typedef KDevelop::MergeIdentifiedType<KDevelop::FunctionType> FunctionTypeBase;
+using FunctionTypeBase = KDevelop::MergeIdentifiedType<KDevelop::FunctionType>;
 
 /**
  * Function type bound to a function declaration, so that the name of its parameters
@@ -40,7 +40,7 @@ typedef KDevelop::MergeIdentifiedType<KDevelop::FunctionType> FunctionTypeBase;
 class KDEVQMLJSDUCHAIN_EXPORT FunctionType : public FunctionTypeBase
 {
 public:
-    typedef KDevelop::TypePtr<FunctionType> Ptr;
+    using Ptr = KDevelop::TypePtr<FunctionType>;
 
     FunctionType();
     FunctionType(const FunctionType& rhs);
@@ -55,7 +55,7 @@ public:
         Identity = 30
     };
 
-    typedef FunctionTypeBase::Data Data;
+    using Data = FunctionTypeBase::Data;
 };
 
 }

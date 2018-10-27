@@ -28,7 +28,7 @@ namespace KDevelop {
 class RenameAction;
 }
 
-typedef QPair<KDevelop::IndexedType, QString> ParameterItem;
+using ParameterItem = QPair<KDevelop::IndexedType, QString>;
 struct Signature
 {
     Signature(){};

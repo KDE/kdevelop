@@ -50,8 +50,8 @@
 #include <util/shellutils.h>
 
 namespace KDevelop {
-typedef QList<DocumentChangePointer> ChangesList;
-typedef QHash<IndexedString, ChangesList> ChangesHash;
+using ChangesList = QList<DocumentChangePointer>;
+using ChangesHash = QHash<IndexedString, ChangesList>;
 
 class DocumentChangeSetPrivate
 {
@@ -497,7 +497,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const IndexedString& file,
                                                                            ChangesList& filteredChanges)
 {
-    typedef QMultiMap<KTextEditor::Cursor, DocumentChangePointer> ChangesMap;
+    using ChangesMap = QMultiMap<KTextEditor::Cursor, DocumentChangePointer>;
     ChangesMap sortedChanges;
 
     foreach (const DocumentChangePointer& change, changes[file]) {

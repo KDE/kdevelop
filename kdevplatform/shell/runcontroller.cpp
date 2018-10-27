@@ -84,7 +84,7 @@ QString ConfiguredFromProjectItemEntry()
 }
 }
 
-typedef QPair<QString, IProject*> Target;
+using Target = QPair<QString, IProject*>;
 Q_DECLARE_METATYPE(Target)
 
 

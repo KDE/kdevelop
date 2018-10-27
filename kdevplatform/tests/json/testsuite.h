@@ -45,7 +45,7 @@ template<class T>
 class KDEVPLATFORMTESTS_EXPORT TestSuite
 {
 public:
-    typedef QString (* TestFunction)(const QVariant&, T);
+    using TestFunction = QString (*)(const QVariant&, T);
     static TestSuite& get();
     bool addTest(const QString& testName, TestFunction testFunc)
     {

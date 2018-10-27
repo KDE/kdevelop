@@ -80,7 +80,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT ListType
     : public KDevelop::StructureType
 {
 public:
-    typedef TypePtr<ListType> Ptr;
+    using Ptr = TypePtr<ListType>;
 
     ListType();
     ListType(const ListType& rhs);
@@ -136,7 +136,7 @@ public:
 
     enum { Identity = 58 };
 
-    typedef ListTypeData Data;
+    using Data = ListTypeData;
 
 protected:
     TYPE_DECLARE_DATA(ListType);
@@ -171,7 +171,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT MapType
     : public ListType
 {
 public:
-    typedef TypePtr<MapType> Ptr;
+    using Ptr = TypePtr<MapType>;
 
     MapType();
     MapType(const MapType& rhs);
@@ -210,7 +210,7 @@ public:
 
     enum { Identity = 57 };
 
-    typedef MapTypeData Data;
+    using Data = MapTypeData;
 
 protected:
     TYPE_DECLARE_DATA(MapType);

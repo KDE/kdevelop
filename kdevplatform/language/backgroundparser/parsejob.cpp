@@ -105,7 +105,7 @@ ParseJob::ParseJob(const IndexedString& url, KDevelop::ILanguageSupport* languag
 
 ParseJob::~ParseJob()
 {
-    typedef QPointer<QObject> QObjectPointer;
+    using QObjectPointer = QPointer<QObject>;
     foreach (const QObjectPointer& p, d->notify) {
         if (p) {
             QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection,

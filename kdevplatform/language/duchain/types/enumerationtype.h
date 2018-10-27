@@ -27,9 +27,9 @@
 #include "typesystemdata.h" // for IntegralTypeData (used in EnumerationTypeBase)
 
 namespace KDevelop {
-typedef KDevelop::MergeIdentifiedType<IntegralType> EnumerationTypeBase;
+using EnumerationTypeBase = KDevelop::MergeIdentifiedType<IntegralType>;
 
-typedef EnumerationTypeBase::Data EnumerationTypeData;
+using EnumerationTypeData = EnumerationTypeBase::Data;
 
 class KDEVPLATFORMLANGUAGE_EXPORT EnumerationType
     : public EnumerationTypeBase
@@ -40,7 +40,7 @@ public:
     EnumerationType(const EnumerationType& rhs);
 
     explicit EnumerationType(EnumerationTypeData& data);
-    typedef TypePtr<EnumerationType> Ptr;
+    using Ptr = TypePtr<EnumerationType>;
 
     uint hash() const override;
 
@@ -56,7 +56,7 @@ public:
         Identity = 21
     };
 
-    typedef EnumerationTypeData Data;
+    using Data = EnumerationTypeData;
 
 protected:
     TYPE_DECLARE_DATA(EnumerationType);

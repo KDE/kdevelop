@@ -153,7 +153,7 @@ public:
     QVector<KPluginMetaData> plugins;
 
     //map plugin infos to currently loaded plugins
-    typedef QHash<KPluginMetaData, IPlugin*> InfoToPluginMap;
+    using InfoToPluginMap = QHash<KPluginMetaData, IPlugin*>;
     InfoToPluginMap loadedPlugins;
 
     // The plugin manager's mode. The mode is StartingUp until loadAllPlugins()

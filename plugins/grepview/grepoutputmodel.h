@@ -30,7 +30,7 @@ namespace KDevelop {
 class GrepOutputItem : public QStandardItem
 {
 public:
-    typedef QList<GrepOutputItem> List;
+    using List = QList<GrepOutputItem>;
 
     GrepOutputItem(const KDevelop::DocumentChangePointer& change, const QString& text, bool checkable);
     GrepOutputItem(const QString &filename, const QString &text, bool checkable);

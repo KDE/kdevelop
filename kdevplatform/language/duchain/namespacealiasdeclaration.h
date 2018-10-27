@@ -74,7 +74,7 @@ public:
         Identity = 13
     };
 
-    typedef Declaration BaseClass;
+    using BaseClass = Declaration;
 
     QString toString() const override;
 
