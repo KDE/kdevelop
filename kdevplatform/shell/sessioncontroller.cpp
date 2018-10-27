@@ -361,7 +361,7 @@ void SessionController::loadSession( const QString& nameOrId )
 
 QList<QString> SessionController::sessionNames() const
 {
-    QStringList l;
+    QList<QString> l;
     const auto sessions = d->sessionActions.keys();
     l.reserve(sessions.size());
     for(const auto* s : sessions) {

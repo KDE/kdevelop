@@ -239,6 +239,7 @@ void MainWindowPrivate::setupActions()
     action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog that lets you configure notifications." ) );
 
     action = actionCollection()->addAction( QStringLiteral("about_platform"), this, SLOT(showAboutPlatform()) );
+    action->setIcon(QIcon::fromTheme(QStringLiteral("kdevelop")));
     action->setText( i18n("About KDevelop Platform") );
     action->setMenuRole( QAction::NoRole ); // OSX: prevent QT from hiding this due to conflict with 'About KDevelop'
     action->setStatusTip( i18n("Show Information about KDevelop Platform") );
