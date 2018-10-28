@@ -9,7 +9,7 @@ set(KDEVELOP_SOVERSION 54)
 set(KDEV_PLUGIN_VERSION 32)
 
 # we need some parts of the ECM CMake helpers
-find_package (ECM 5.14.0 REQUIRED NO_MODULE)
+find_package (ECM 5.28.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
 include(KDECompilerSettings NO_POLICY_SCOPE) # needs to be first, as set policies influence following macros
@@ -40,12 +40,12 @@ if(POLICY CMP0071)
   cmake_policy(SET CMP0071 OLD)
 endif()
 
-set(QT_MIN_VERSION "5.5.0")
+set(QT_MIN_VERSION "5.7.0")
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED Widgets Concurrent Quick QuickWidgets)
 if(BUILD_TESTING)
   find_package(Qt5Test ${QT_MIN_VERSION} CONFIG REQUIRED)
 endif()
-set(KF5_DEP_VERSION "5.15.0") # we need KCrash::initialize
+set(KF5_DEP_VERSION "5.28.0")
 find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Config
   Declarative
@@ -106,7 +106,7 @@ endif()
 
 add_definitions(
     -DQT_DEPRECATED_WARNINGS
-    -DQT_DISABLE_DEPRECATED_BEFORE=0x050500
+    -DQT_DISABLE_DEPRECATED_BEFORE=0x050700
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_NO_CAST_FROM_ASCII
