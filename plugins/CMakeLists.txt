@@ -84,7 +84,6 @@ endif()
 
 # BEGIN: VCS
 ecm_optional_add_subdirectory(bazaar)
-ecm_optional_add_subdirectory(cvs)
 ecm_optional_add_subdirectory(git)
 ecm_optional_add_subdirectory(perforce)
 
