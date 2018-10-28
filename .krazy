@@ -1,1 +1,2 @@
+SKIP /3rdparty/\|/file_templates/\|/app_templates/
 EXCLUDE dpointer
