@@ -2086,3 +2086,45 @@ void TestDUChain::testHasInclude()
         }
     }
 }
+
+void TestDUChain::testSameFunctionDefinition()
+{
+    QString source(QStringLiteral(R"(
+        #include <stdio.h>
+        #include <stdlib.h>
+
+        void configure()
+        {
+            printf("do stuff\n");
+        }
+    )"));
+
+    QTemporaryDir dir;
+    auto project = new TestProject(Path(dir.path()), this);
+    m_projectController->addProject(project);
+
+    TestFile file1(source, QStringLiteral("c"), project);
+    TestFile file2(source, QStringLiteral("c"), project);
+    TestFile file3(source, QStringLiteral("c"), project);
+
+    file1.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    file2.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    file3.parse(TopDUContext::AllDeclarationsContextsAndUses);
+
+    QVERIFY(file1.waitForParsed(1000));
+    QVERIFY(file2.waitForParsed(1000));
+    QVERIFY(file3.waitForParsed(1000));
+
+    auto checkFunctionDefinition = [] (TestFile & file) {
+        DUChainReadLocker lock;
+        QCOMPARE(file.topContext()->localDeclarations().count(), 1);
+        auto configureFunc = file.topContext()->localDeclarations().first();
+        QCOMPARE(FunctionDefinition::definition(configureFunc), configureFunc);
+    };
+
+    checkFunctionDefinition(file1);
+    checkFunctionDefinition(file2);
+    checkFunctionDefinition(file3);
+
+    m_projectController->closeAllProjects();
+}

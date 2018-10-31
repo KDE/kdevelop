@@ -102,6 +102,8 @@ private Q_SLOTS:
     void testQtIntegration();
     void testHasInclude();
 
+    void testSameFunctionDefinition();
+
 private:
     QScopedPointer<TestEnvironmentProvider> m_provider;
     KDevelop::TestProjectController* m_projectController;
