@@ -32,7 +32,13 @@ add_subdirectory(customscript)
 
 # BEGIN: Languages
 ecm_optional_add_subdirectory(custom-definesandincludes)
-ecm_optional_add_subdirectory(qmljs)
+
+# 3rdparty/qtcreator-libs uses QT_CONFIG which was added for 5.8
+if(NOT Qt5_VERSION VERSION_LESS "5.8.0")
+    ecm_optional_add_subdirectory(qmljs)
+else()
+    message(WARNING "Will not build QML/JS plugin, needs Qt >= 5.8.0")
+endif()
 
 find_package(Clang 3.8)
 set(clangSearchHint "")
