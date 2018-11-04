@@ -49,7 +49,7 @@
         "Description[tr]": "Proje içeriğini yönetmenizi sağlar.",
         "Description[uk]": "Надає вам змогу керувати вмістом проектів.",
         "Description[x-test]": "xxLets you manage the project contents.xx",
-        "Description[zh_CN]": "让您管理工程内容。",
+        "Description[zh_CN]": "让您管理项目内容。",
         "Icon": "kdevelop",
         "Id": "KDevProjectManagerView",
         "License": "LGPL",
