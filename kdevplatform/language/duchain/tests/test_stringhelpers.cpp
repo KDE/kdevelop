@@ -38,6 +38,16 @@ void TestDUChain::testFormatComment_data()
     QTest::newRow("doxy-cpp-style") << QByteArrayLiteral("/// foo\n/// bar") << QByteArrayLiteral("foo\n bar");
     QTest::newRow("c-style") << QByteArrayLiteral("/*\n foo\n bar\n*/") << QByteArrayLiteral("foo\n bar");
     QTest::newRow("doxy-c-style") << QByteArrayLiteral("/**\n * foo\n * bar\n */") << QByteArrayLiteral("foo\n bar");
+    QTest::newRow("doxy-c-style2") << QByteArrayLiteral("/**\n * foo\n * bar\n **/") << QByteArrayLiteral("foo\n bar");
+    QTest::newRow("real multiline") << QByteArrayLiteral(
+                          "/**\n"
+                          " * This is a real comment of some imaginary code.\n"
+                          " *\n"
+                          " * @param foo bar\n"
+                          " * @return meh\n"
+                          " */\n"
+                      )
+                    << QByteArrayLiteral("This is a real comment of some imaginary code.\n\n @param foo bar\n @return meh");
 }
 
 void TestDUChain::testFormatComment()
