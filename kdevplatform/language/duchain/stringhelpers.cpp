@@ -91,33 +91,31 @@ int rStrip_impl(const T& str, T& from)
 template <typename T>
 T formatComment_impl(const T& comment)
 {
+    if (comment.isEmpty())
+        return comment;
+
     T ret;
 
     QList<T> lines = comment.split('\n');
 
-    if (!lines.isEmpty()) {
-        auto it = lines.begin();
-        auto eit = lines.end();
+    // remove common leading chars from the beginning of lines
+    for (T &l : lines) {
+        // don't trigger repeated temporary allocations here
+        static const T tripleSlash("///");
+        static const T doubleSlash("//");
+        static const T doubleStar("**");
+        static const T slashDoubleStar("/**");
+        strip_impl(tripleSlash, l);
+        strip_impl(doubleSlash, l);
+        strip_impl(doubleStar, l);
+        rStrip_impl(slashDoubleStar, l);
+    }
 
-        // remove common leading chars from the beginning of lines
-        for (; it != eit; ++it) {
-            // don't trigger repeated temporary allocations here
-            static const T tripleSlash("///");
-            static const T doubleSlash("//");
-            static const T doubleStar("**");
-            static const T slashDoubleStar("/**");
-            strip_impl(tripleSlash, *it);
-            strip_impl(doubleSlash, *it);
-            strip_impl(doubleStar, *it);
-            rStrip_impl(slashDoubleStar, *it);
-        }
-
-        // TODO add method with QStringList specialisation
-        foreach (const T& line, lines) {
-            if (!ret.isEmpty())
-                ret += '\n';
-            ret += line;
-        }
+    // TODO add method with QStringList specialisation
+    foreach (const T& line, lines) {
+        if (!ret.isEmpty())
+            ret += '\n';
+        ret += line;
     }
 
     return ret.trimmed();
