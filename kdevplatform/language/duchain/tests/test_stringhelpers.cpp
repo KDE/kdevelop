@@ -34,10 +34,10 @@ void TestDUChain::testFormatComment_data()
     QTest::addColumn<QByteArray>("input");
     QTest::addColumn<QByteArray>("output");
 
-    QTest::newRow("c-style") << QByteArrayLiteral("// foo\n// bar") << QByteArrayLiteral("foo\n bar");
-    QTest::newRow("doxy-c-style") << QByteArrayLiteral("/// foo\n/// bar") << QByteArrayLiteral("foo\n bar");
-    QTest::newRow("cpp-style") << QByteArrayLiteral("/*\n foo\n bar\n*/") << QByteArrayLiteral("foo\n bar");
-    QTest::newRow("doxy-cpp-style") << QByteArrayLiteral("/**\n * foo\n * bar\n */") << QByteArrayLiteral("foo\n bar");
+    QTest::newRow("cpp-style") << QByteArrayLiteral("// foo\n// bar") << QByteArrayLiteral("foo\n bar");
+    QTest::newRow("doxy-cpp-style") << QByteArrayLiteral("/// foo\n/// bar") << QByteArrayLiteral("foo\n bar");
+    QTest::newRow("c-style") << QByteArrayLiteral("/*\n foo\n bar\n*/") << QByteArrayLiteral("foo\n bar");
+    QTest::newRow("doxy-c-style") << QByteArrayLiteral("/**\n * foo\n * bar\n */") << QByteArrayLiteral("foo\n bar");
 }
 
 void TestDUChain::testFormatComment()
