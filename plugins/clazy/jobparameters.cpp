@@ -109,16 +109,21 @@ QUrl JobGlobalParameters::defaultExecutablePath()
 
 QUrl JobGlobalParameters::defaultDocsPath()
 {
-    const auto docsPath = QStandardPaths::locate(
-        QStandardPaths::GenericDataLocation,
+    const QString subPathsCandidates[2]{
+        // since clazy 1.4
+        QStringLiteral("doc/clazy"),
+        // before
         QStringLiteral("clazy/doc"),
-        QStandardPaths::LocateDirectory);
+    };
+    for (auto subPath : subPathsCandidates) {
+        const auto docsPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath, QStandardPaths::LocateDirectory);
 
-    if (docsPath.isEmpty()) {
-        return {};
+        if (!docsPath.isEmpty()) {
+            return QUrl::fromLocalFile(QDir(docsPath).canonicalPath());
+        }
     }
 
-    return QUrl::fromLocalFile(QDir(docsPath).canonicalPath());
+    return {};
 }
 
 bool JobGlobalParameters::isValid() const
