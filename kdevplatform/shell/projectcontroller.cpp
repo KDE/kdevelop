@@ -206,12 +206,13 @@ public:
     QVector<IPlugin*> findPluginsForProject( IProject* project ) const
     {
         const QList<IPlugin*> plugins = m_core->pluginController()->loadedPlugins();
+        const IBuildSystemManager* const buildSystemManager = project->buildSystemManager();
         QVector<IPlugin*> projectPlugins;
         QList<IProjectBuilder*> buildersForKcm;
         // Important to also include the "top" builder for the project, so
         // projects with only one such builder are kept working. Otherwise the project config
         // dialog is empty for such cases.
-        if( IBuildSystemManager* buildSystemManager = project->buildSystemManager() ) {
+        if (buildSystemManager) {
             buildersForKcm << buildSystemManager->builder();
             collectBuilders( buildersForKcm, buildSystemManager->builder(), project );
         }
@@ -229,6 +230,15 @@ public:
             {
                 continue;
             }
+            // Do not show config pages for analyzer tools which need a buildSystemManager
+            // TODO: turn into generic feature to disable plugin config pages which do not apply for a project
+            if (!buildSystemManager) {
+                const auto required = KPluginMetaData::readStringList(info.rawData(), QStringLiteral("X-KDevelop-IRequired"));
+                if (required.contains(QLatin1String("org.kdevelop.IBuildSystemManager"))) {
+                    continue;
+                }
+            }
+
             qCDebug(SHELL) << "Using plugin" << info.pluginId() << "for project" << project->name();
             projectPlugins << plugin;
         }
