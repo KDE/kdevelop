@@ -143,6 +143,10 @@ void Plugin::updateActions()
         return;
     }
 
+    if (!currentProject->buildSystemManager()) {
+        return;
+    }
+
     if (isSupportedMimeType(activeDocument->mimeType())) {
         m_checkFileAction->setEnabled(true);
     }
@@ -274,6 +278,10 @@ ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* par
 
     if (context->hasType(KDevelop::Context::EditorContext) && !isRunning()) {
         IDocument* doc = core()->documentController()->activeDocument();
+
+        if (!core()->projectController()->findProjectForUrl(doc->url())->buildSystemManager()) {
+            return extension;
+        }
         if (isSupportedMimeType(doc->mimeType())) {
             auto action = new QAction(QIcon::fromTheme(QStringLiteral("dialog-ok")), i18n("Clang-Tidy"), parent);
             connect(action, &QAction::triggered, this, &Plugin::runClangTidyFile);
@@ -303,6 +311,9 @@ ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* par
             if (!isSupportedMimeType(mimetype)) {
                 return extension;
             }
+        }
+        if (!item->project()->buildSystemManager()) {
+            return extension;
         }
 
         auto action = new QAction(QIcon::fromTheme(QStringLiteral("dialog-ok")), i18n("Clang-Tidy"), parent);
