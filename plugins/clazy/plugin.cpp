@@ -146,6 +146,10 @@ void Plugin::updateActions()
         return;
     }
 
+    if (!m_project->buildSystemManager()) {
+        return;
+    }
+
     m_menuActionFile->setEnabled(true);
     m_menuActionProject->setEnabled(true);
 }
@@ -229,7 +233,7 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
     Q_UNUSED(parent);
     KDevelop::ContextMenuExtension extension;
 
-    if (context->hasType(KDevelop::Context::EditorContext) && m_project && !isRunning()) {
+    if (context->hasType(KDevelop::Context::EditorContext) && m_project && m_project->buildSystemManager() && !isRunning()) {
         extension.addAction(KDevelop::ContextMenuExtension::AnalyzeFileGroup, m_contextActionFile);
         extension.addAction(KDevelop::ContextMenuExtension::AnalyzeProjectGroup, m_contextActionProject);
     }
@@ -251,6 +255,10 @@ KDevelop::ContextMenuExtension Plugin::contextMenuExtension(KDevelop::Context* c
             default:
                 return extension;
         }
+        if (!item->project()->buildSystemManager()) {
+            return extension;
+        }
+
 
         m_contextActionProjectItem->disconnect();
         connect(m_contextActionProjectItem, &QAction::triggered, this, [this, item](){
