@@ -71,5 +71,8 @@
         ]
     },
     "X-KDevelop-Category": "Global",
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IBuildSystemManager"
+    ],
     "X-KDevelop-Mode": "GUI"
 }
