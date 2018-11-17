@@ -38,7 +38,6 @@
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
 #include <util/environmentprofilelist.h>
-#include <qtcompat_p.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>

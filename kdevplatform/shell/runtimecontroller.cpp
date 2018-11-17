@@ -37,22 +37,14 @@ public:
     QString name() const override { return i18n("Host System"); }
 
     void startProcess(KProcess *process) const override {
-#if QT_VERSION < 0x050600
-        connect(process, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),
-#else
         connect(process, &QProcess::errorOccurred,
-#endif
             this, [](QProcess::ProcessError error) {
             qCWarning(SHELL) << "process finished with error:" << error;
         });
         process->start();
     }
     void startProcess(QProcess *process) const override {
-#if QT_VERSION < 0x050600
-        connect(process, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),
-#else
         connect(process, &QProcess::errorOccurred,
-#endif
             this, [](QProcess::ProcessError error) {
             qCWarning(SHELL) << "process finished with error:" << error;
         });

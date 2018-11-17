@@ -18,8 +18,7 @@
 
 #include "qmakeconfig.h"
 
-#include "qtcompat_p.h"
-
+#include <QDir>
 #include <QMutex>
 #include <QFileInfo>
 #include <QStandardPaths>
@@ -130,7 +129,7 @@ QString QMakeConfig::findBasicMkSpec(const QHash<QString, QString>& qmakeVars)
     QStringList paths;
     if (qmakeVars.contains(QStringLiteral("QMAKE_MKSPECS"))) {
         // qt4
-        const auto mkspecDirs = qmakeVars[QStringLiteral("QMAKE_MKSPECS")].split(QtCompat::listSeparator());
+        const auto mkspecDirs = qmakeVars[QStringLiteral("QMAKE_MKSPECS")].split(QDir::listSeparator());
         foreach (const QString& dir, mkspecDirs) {
             paths << dir + QLatin1String("/default/qmake.conf");
         }

@@ -19,8 +19,6 @@
 #include "ui/perforceimportmetadatawidget.h"
 #include "debug.h"
 
-#include "qtcompat_p.h"
-
 #include <KLocalizedString>
 #include <QFileInfo>
 #include <QDateTime>

@@ -25,7 +25,6 @@
 // plugin
 #include "utils.h"
 #include "plugin.h"
-#include "qtcompat_p.h"
 // KDevPlatform
 #include <interfaces/iproject.h>
 #include <language/editor/documentrange.h>

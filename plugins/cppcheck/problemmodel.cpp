@@ -28,7 +28,6 @@
 #include <interfaces/iproject.h>
 #include <language/editor/documentrange.h>
 #include <shell/problemmodelset.h>
-#include <qtcompat_p.h>
 
 #include <KLocalizedString>
 

@@ -53,7 +53,6 @@
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
 #include <serialization/indexedstring.h>
-#include <qtcompat_p.h>
 
 #include "projectmanagerview.h"
 #include "debug.h"

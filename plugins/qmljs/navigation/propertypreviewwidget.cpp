@@ -32,7 +32,6 @@
 
 #include <language/duchain/ducontext.h>
 #include <language/duchain/duchainlock.h>
-#include <qtcompat_p.h>
 
 // List of supported properties. The string must be the name of the property,
 // which can contain dots if necessary

@@ -45,7 +45,6 @@
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <util/foregroundlock.h>
-#include <qtcompat_p.h>
 
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"

@@ -28,7 +28,6 @@
 
 #include <language/duchain/duchainlock.h>
 #include <language/codegen/documentchangeset.h>
-#include <qtcompat_p.h>
 
 #include <KLocalizedString>
 

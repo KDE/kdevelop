@@ -21,8 +21,6 @@
 
 #include "bench_itemrepository.h"
 
-#include <qtcompat_p.h>
-
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
 

@@ -31,7 +31,6 @@
 #include <QMutex>
 #include <QTimer>
 
-#include <qtcompat_p.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>

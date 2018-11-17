@@ -22,8 +22,6 @@
 
 #include "job.h"
 
-// plugin
-#include <qtcompat_p.h>
 // KF
 #include <KLocalizedString>
 #include <KMessageBox>

@@ -29,7 +29,6 @@
 #include <editor/documentrange.h>
 
 #include <interfaces/iassistant.h>
-#include <qtcompat_p.h>
 
 #include <KLocalizedString>
 

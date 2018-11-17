@@ -19,8 +19,6 @@
 #include "test_kdevformatsource.h"
 #include "../kdevformatfile.h"
 
-#include "qtcompat_p.h"
-
 #include <QTest>
 #include <QDebug>
 #include <QDir>

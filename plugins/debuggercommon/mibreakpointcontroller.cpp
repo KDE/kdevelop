@@ -30,7 +30,6 @@
 
 #include <debugger/breakpoint/breakpoint.h>
 #include <debugger/breakpoint/breakpointmodel.h>
-#include <qtcompat_p.h>
 
 #include <KLocalizedString>
 

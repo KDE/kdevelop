@@ -37,11 +37,7 @@ Visualizer::Visualizer(const QString& resultsFile, QObject* parent)
     : QProcess(parent)
     , m_resultsFile(resultsFile)
 {
-#if QT_VERSION < 0x050600
-    connect(this, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error),
-#else
     connect(this, &QProcess::errorOccurred,
-#endif
             this, [this](QProcess::ProcessError error) {
         QString errorMessage;
         if (error == QProcess::FailedToStart) {

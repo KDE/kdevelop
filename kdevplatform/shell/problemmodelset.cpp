@@ -20,7 +20,6 @@
 #include "problemmodelset.h"
 
 #include "problemmodel.h"
-#include "qtcompat_p.h"
 
 namespace KDevelop
 {

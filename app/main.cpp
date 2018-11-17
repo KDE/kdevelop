@@ -64,7 +64,6 @@
 #include <interfaces/launchconfigurationtype.h>
 #include <util/path.h>
 #include <debug.h>
-#include <qtcompat_p.h>
 
 #include "kdevideextension.h"
 #if KDEVELOP_SINGLE_APP
@@ -345,9 +344,7 @@ int main( int argc, char *argv[] )
         qputenv("QT_ENABLE_REGEXP_JIT", "0");
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
     QCoreApplication::setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
 #ifdef Q_OS_MAC

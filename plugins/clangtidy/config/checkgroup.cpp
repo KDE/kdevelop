@@ -23,7 +23,6 @@
 
 // plugin
 #include <debug.h>
-#include <qtcompat_p.h>
 // Qt
 #include <QRegularExpression>
 

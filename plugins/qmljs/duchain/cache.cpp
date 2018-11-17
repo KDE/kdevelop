@@ -24,7 +24,6 @@
 #include "cache.h"
 #include "debug.h"
 
-#include <qtcompat_p.h>
 #include <QString>
 #include <QProcess>
 #include <QDir>

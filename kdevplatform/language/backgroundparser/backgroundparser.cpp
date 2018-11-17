@@ -23,7 +23,6 @@
 
 #include "backgroundparser.h"
 
-#include "qtcompat_p.h"
 #include <QCoreApplication>
 #include <QList>
 #include <QMutex>

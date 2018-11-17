@@ -31,7 +31,6 @@
 #include <util/scopeddialog.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <interfaces/ilanguagecontroller.h>// TODO: remove later
-#include <qtcompat_p.h>
 
 #include <KMessageBox>
 #include <KTextEditor/Editor>

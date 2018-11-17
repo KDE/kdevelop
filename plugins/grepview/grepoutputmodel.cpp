@@ -49,11 +49,7 @@ GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, boo
     setCheckable(checkable);
     if(checkable)
     {
-#if QT_VERSION >= 0x050600
         setAutoTristate(true);
-#else
-        setTristate(true);
-#endif
         setCheckState(Qt::Checked);
     }
 }
@@ -362,11 +358,7 @@ void GrepOutputModel::makeItemsCheckable(bool checkable, GrepOutputItem* item)
     {
         item->setCheckState(Qt::Checked);
         if(item->rowCount() && checkable)
-#if QT_VERSION >= 0x050600
             item->setAutoTristate(true);
-#else
-            item->setTristate(true);
-#endif
     }
     for(int row = 0; row < item->rowCount(); ++row)
         makeItemsCheckable(checkable, static_cast<GrepOutputItem*>(item->child(row, 0)));
@@ -403,11 +395,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
         {
             copy->setCheckState(Qt::Checked);
             if(copy->rowCount())
-#if QT_VERSION >= 0x050600
                 copy->setAutoTristate(true);
-#else
-                copy->setTristate(true);
-#endif
         }
         
         fileItem->appendRow(copy);

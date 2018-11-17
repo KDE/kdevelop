@@ -22,8 +22,6 @@ Boston, MA 02110-1301, USA.
 #include "mainwindow.h"
 #include "mainwindow_p.h"
 
-#include "qtcompat_p.h"
-
 #include <QDBusConnection>
 #include <QDomElement>
 #include <QDragEnterEvent>

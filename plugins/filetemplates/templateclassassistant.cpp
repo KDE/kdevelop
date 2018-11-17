@@ -46,7 +46,6 @@
 #include <project/interfaces/iprojectfilemanager.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <util/scopeddialog.h>
-#include <qtcompat_p.h>
 
 #include <QDialog>
 #include <QDialogButtonBox>

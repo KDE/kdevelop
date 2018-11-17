@@ -21,8 +21,6 @@
 
 #include "clangtidyparser.h"
 
-// plugin
-#include <qtcompat_p.h>
 // KDevPlatform
 #include <language/editor/documentrange.h>
 #include <serialization/indexedstring.h>

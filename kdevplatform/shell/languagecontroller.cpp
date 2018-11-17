@@ -24,7 +24,6 @@
 #include <QMutexLocker>
 #include <QThread>
 
-#include <qtcompat_p.h>
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iplugin.h>
@@ -45,13 +44,6 @@ namespace {
 QString KEY_SupportedMimeTypes() { return QStringLiteral("X-KDevelop-SupportedMimeTypes"); }
 QString KEY_ILanguageSupport() { return QStringLiteral("ILanguageSupport"); }
 }
-
-#if QT_VERSION < 0x050600
-inline uint qHash(const QMimeType& mime, uint seed = 0)
-{
-    return qHash(mime.name(), seed);
-}
-#endif
 
 namespace KDevelop {
 

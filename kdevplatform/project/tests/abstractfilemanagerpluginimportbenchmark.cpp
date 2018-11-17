@@ -32,7 +32,6 @@
 #include <tests/testplugincontroller.h>
 
 #include <util/path.h>
-#include <qtcompat_p.h>
 
 #include <KJob>
 #include <KDirWatch>
