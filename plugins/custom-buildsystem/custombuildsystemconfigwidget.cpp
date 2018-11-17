@@ -58,7 +58,7 @@ CustomBuildSystemConfigWidget::CustomBuildSystemConfigWidget( QWidget* parent )
     ui->addConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
     ui->removeConfig->setFixedHeight( ui->currentConfig->sizeHint().height() );
 
-    connect( ui->currentConfig, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated), this, &CustomBuildSystemConfigWidget::changeCurrentConfig);
+    connect( ui->currentConfig, QOverload<int>::of(&QComboBox::activated), this, &CustomBuildSystemConfigWidget::changeCurrentConfig);
     connect( ui->configWidget, &ConfigWidget::changed, this, &CustomBuildSystemConfigWidget::configChanged );
 
     connect( ui->addConfig, &QPushButton::clicked, this, &CustomBuildSystemConfigWidget::addConfig);

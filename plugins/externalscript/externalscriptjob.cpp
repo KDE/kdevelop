@@ -208,7 +208,7 @@ ExternalScriptJob::ExternalScriptJob(ExternalScriptItem* item, const QUrl& url, 
             this, &ExternalScriptJob::receivedStderrLines);
     connect(m_proc, &QProcess::errorOccurred,
             this, &ExternalScriptJob::processError);
-    connect(m_proc, static_cast<void ( KProcess::* )(int, QProcess::ExitStatus)>(&KProcess::finished),
+    connect(m_proc, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this, &ExternalScriptJob::processFinished);
 
     // Now setup the process parameters

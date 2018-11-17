@@ -523,7 +523,7 @@ CustomScriptPreferences::CustomScriptPreferences()
              "If you add <b>$TMPFILE</b> into the command, then <br />"
              "a temporary file is used for transferring the code."));
     connect(m_commandEdit, &QLineEdit::textEdited,
-            m_updateTimer, static_cast<void (QTimer::*)()>(&QTimer::start));
+            m_updateTimer, QOverload<>::of(&QTimer::start));
 
     m_vLayout->addSpacing(10);
 

@@ -50,7 +50,8 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, const QStringList& filte
     // Emitted when clicking on a file in the fileview area
     connect( fileWidget, &KFileWidget::fileHighlighted, this, &OpenProjectPage::highlightFile );
 
-    connect( fileWidget->dirOperator()->dirLister(), static_cast<void(KDirLister::*)(const QUrl&)>(&KDirLister::completed), this, &OpenProjectPage::dirChanged);
+    connect(fileWidget->dirOperator()->dirLister(), QOverload<const QUrl&>::of(&KDirLister::completed),
+            this, &OpenProjectPage::dirChanged);
 
     connect( fileWidget, &KFileWidget::accepted, this, &OpenProjectPage::accepted);
 }

@@ -88,7 +88,7 @@ OutputExecuteJob::OutputExecuteJob( QObject* parent, OutputJob::OutputJobVerbosi
 {
     d->m_process->setOutputChannelMode( KProcess::SeparateChannels );
 
-    connect( d->m_process, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
+    connect( d->m_process, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
              this, &OutputExecuteJob::childProcessExited );
     connect( d->m_process, &QProcess::errorOccurred,
              this, &OutputExecuteJob::childProcessError );

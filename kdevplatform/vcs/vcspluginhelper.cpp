@@ -104,7 +104,7 @@ public:
         QObject::connect(revertAction, &QAction::triggered, parent, &VcsPluginHelper::revert);
         QObject::connect(historyAction, &QAction::triggered, parent, [=] { parent->history(); });
         QObject::connect(annotationAction, &QAction::triggered, parent, &VcsPluginHelper::annotation);
-        QObject::connect(diffForRevAction, &QAction::triggered, parent, static_cast<void(VcsPluginHelper::*)()>(&VcsPluginHelper::diffForRev));
+        QObject::connect(diffForRevAction, &QAction::triggered, parent, QOverload<>::of(&VcsPluginHelper::diffForRev));
         QObject::connect(diffForRevGlobalAction, &QAction::triggered, parent, &VcsPluginHelper::diffForRevGlobal);
         QObject::connect(pullAction, &QAction::triggered, parent, &VcsPluginHelper::pull);
         QObject::connect(pushAction, &QAction::triggered, parent, &VcsPluginHelper::push);

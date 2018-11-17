@@ -116,7 +116,7 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     m_configWidget->tableCtrlLayout->insertWidget(1, knsButton);
     connect(knsButton, &KNS3::Button::dialogFinished, this, &QtHelpConfig::knsUpdate);
     connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled,
-            this, static_cast<void(QtHelpConfig::*)()>(&QtHelpConfig::changed));
+            this, QOverload<>::of(&QtHelpConfig::changed));
     m_configWidget->qchSearchDir->setMode(KFile::Directory);
     connect(m_configWidget->qchSearchDir, &KUrlRequester::textChanged,
             this, &QtHelpConfig::changed);

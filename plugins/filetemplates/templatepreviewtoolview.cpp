@@ -59,7 +59,7 @@ TemplatePreviewToolView::TemplatePreviewToolView(FileTemplatesPlugin* plugin, QW
 
     connect(ui->projectRadioButton, &QRadioButton::toggled,
             this, &TemplatePreviewToolView::selectedRendererChanged);
-    connect(ui->emptyLinesPolicyComboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+    connect(ui->emptyLinesPolicyComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &TemplatePreviewToolView::selectedRendererChanged);
     selectedRendererChanged();
 

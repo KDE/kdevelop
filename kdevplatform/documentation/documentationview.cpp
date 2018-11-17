@@ -106,7 +106,7 @@ void DocumentationView::setupActions()
 
     /* vertical size policy should be left to the style. */
     mIdentifiers->setSizePolicy(QSizePolicy::Expanding, mIdentifiers->sizePolicy().verticalPolicy());
-    connect(mIdentifiers->completer(), static_cast<void(QCompleter::*)(const QModelIndex&)>(&QCompleter::activated),
+    connect(mIdentifiers->completer(), QOverload<const QModelIndex&>::of(&QCompleter::activated),
             this, &DocumentationView::changedSelection);
     connect(mIdentifiers, &QLineEdit::returnPressed, this, &DocumentationView::returnPressed);
     auto identifiersAction = new QWidgetAction(this);
@@ -131,7 +131,7 @@ void DocumentationView::setupActions()
 void DocumentationView::initialize()
 {
     mProviders->setModel(mProvidersModel);
-    connect(mProviders, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &DocumentationView::changedProvider);
+    connect(mProviders, QOverload<int>::of(&QComboBox::activated), this, &DocumentationView::changedProvider);
     connect(mProvidersModel, &ProvidersModel::providersChanged, this, &DocumentationView::emptyHistory);
 
     const bool hasProviders = (mProviders->count() > 0);

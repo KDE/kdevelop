@@ -81,8 +81,7 @@ public:
                 &CodeCompletionModel::foundDeclarations, Qt::QueuedConnection);
 
         connect(m_model, &CodeCompletionModel::completionsNeeded, m_worker,
-                static_cast<void ( CodeCompletionWorker::* )(const DUChainPointer<KDevelop::DUContext>&, const Cursor&,
-                                                             View*)>(&CodeCompletionWorker::computeCompletions),
+                QOverload<const DUChainPointer<KDevelop::DUContext>&, const Cursor&, View*>::of(&CodeCompletionWorker::computeCompletions),
                 Qt::QueuedConnection);
         connect(m_model, &CodeCompletionModel::doSpecialProcessingInBackground, m_worker,
                 &CodeCompletionWorker::doSpecialProcessing);

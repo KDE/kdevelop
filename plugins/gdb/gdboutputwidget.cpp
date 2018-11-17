@@ -93,7 +93,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
 
     slotStateChanged(s_none, s_dbgNotStarted);
 
-    connect(m_userGDBCmdEditor, static_cast<void(KHistoryComboBox::*)()>(&KHistoryComboBox::returnPressed),
+    connect(m_userGDBCmdEditor, QOverload<>::of(&KHistoryComboBox::returnPressed),
             this, &GDBOutputWidget::slotGDBCmd);
     connect(m_Interrupt, &QToolButton::clicked, this, &GDBOutputWidget::breakInto);
 

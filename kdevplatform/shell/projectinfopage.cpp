@@ -23,7 +23,7 @@ ProjectInfoPage::ProjectInfoPage( QWidget* parent )
     page_ui->setupUi( this );
     connect( page_ui->nameEdit, &QLineEdit::textEdited, 
              this, &ProjectInfoPage::projectNameChanged );
-    connect( page_ui->managerCombo, static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+    connect( page_ui->managerCombo, QOverload<int>::of(&QComboBox::activated),
              this, &ProjectInfoPage::changeProjectManager );
 }
 

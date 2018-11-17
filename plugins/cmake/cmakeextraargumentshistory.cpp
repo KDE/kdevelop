@@ -39,8 +39,8 @@ CMakeExtraArgumentsHistory::CMakeExtraArgumentsHistory(KComboBox* widget)
         m_arguments->addItems(lastExtraArguments);
         m_arguments->setInsertPolicy(QComboBox::InsertAtTop);
         KCompletion *comp = m_arguments->completionObject();
-        KComboBox::connect(m_arguments, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::returnPressed),
-                comp, static_cast<void(KCompletion::*)(const QString&)>(&KCompletion::addItem));
+        QObject::connect(m_arguments, QOverload<const QString&>::of(&KComboBox::returnPressed),
+                        comp, QOverload<const QString&>::of(&KCompletion::addItem));
         comp->insertItems(lastExtraArguments);
     } else {
         qFatal("CMakeExtraArgumentsHistory initialised with invalid widget");

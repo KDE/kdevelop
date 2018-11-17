@@ -41,15 +41,15 @@ ConfigWidget::ConfigWidget( QWidget* parent )
     ui->buildAction->insertItem( CustomBuildSystemTool::Clean, i18n("Clean"), QVariant() );
     ui->buildAction->insertItem( CustomBuildSystemTool::Prune, i18n("Prune"), QVariant() );
 
-    connect( ui->buildAction, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated), this, &ConfigWidget::changeAction );
+    connect( ui->buildAction, QOverload<int>::of(&KComboBox::activated), this, &ConfigWidget::changeAction );
 
     connect( ui->enableAction, &QCheckBox::toggled, this, &ConfigWidget::toggleActionEnablement );
     connect( ui->actionArguments, &QLineEdit::textEdited, this, &ConfigWidget::actionArgumentsEdited );
     connect( ui->actionEnvironment, &EnvironmentSelectionWidget::currentProfileChanged, this, &ConfigWidget::actionEnvironmentChanged );
-    connect( ui->buildDir, &KUrlRequester::urlSelected, this, static_cast<void(ConfigWidget::*)()>(&ConfigWidget::changed) );
-    connect( ui->buildDir->lineEdit(), &KLineEdit::textEdited, this, static_cast<void(ConfigWidget::*)()>(&ConfigWidget::changed) );
-    connect( ui->actionExecutable, &KUrlRequester::urlSelected, this, static_cast<void(ConfigWidget::*)(const QUrl&)>(&ConfigWidget::actionExecutableChanged) );
-    connect( ui->actionExecutable->lineEdit(), &KLineEdit::textEdited, this, static_cast<void(ConfigWidget::*)(const QString&)>(&ConfigWidget::actionExecutableChanged) );
+    connect( ui->buildDir, &KUrlRequester::urlSelected, this, QOverload<>::of(&ConfigWidget::changed) );
+    connect( ui->buildDir->lineEdit(), &KLineEdit::textEdited, this, QOverload<>::of(&ConfigWidget::changed) );
+    connect( ui->actionExecutable, &KUrlRequester::urlSelected, this, QOverload<const QUrl&>::of(&ConfigWidget::actionExecutableChanged) );
+    connect( ui->actionExecutable->lineEdit(), &KLineEdit::textEdited, this, QOverload<const QString&>::of(&ConfigWidget::actionExecutableChanged) );
 }
 
 CustomBuildSystemConfig ConfigWidget::config() const

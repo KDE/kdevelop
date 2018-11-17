@@ -67,7 +67,8 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
         m_oldMessages->addItem(message, message);
     m_oldMessages->setMaximumWidth(200);
 
-    connect(m_oldMessages, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::currentIndexChanged), this, &VCSCommitDiffPatchSource::oldMessageChanged);
+    connect(m_oldMessages, QOverload<const QString&>::of(&KComboBox::currentIndexChanged),
+            this, &VCSCommitDiffPatchSource::oldMessageChanged);
 
     titleLayout->addWidget(m_oldMessages);
 

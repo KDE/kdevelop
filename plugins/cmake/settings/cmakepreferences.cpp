@@ -63,7 +63,7 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
     m_prefsUi->extraArguments->setMinimumWidth(static_cast<QComboBox*>(m_prefsUi->extraArguments)->minimumSizeHint().width());
     m_extraArgumentsHistory = new CMakeExtraArgumentsHistory(m_prefsUi->extraArguments);
 
-    connect(m_prefsUi->buildDirs, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+    connect(m_prefsUi->buildDirs, QOverload<int>::of(&KComboBox::currentIndexChanged),
             this, &CMakePreferences::buildDirChanged);
     connect(m_prefsUi->showInternal, &QCheckBox::stateChanged,
             this, &CMakePreferences::showInternal);
@@ -77,7 +77,7 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
 
     connect(m_prefsUi->installationPrefix, &KUrlRequester::textChanged,
             this, &CMakePreferences::changed);
-    connect(m_prefsUi->buildType, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged),
+    connect(m_prefsUi->buildType, QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
             this, &CMakePreferences::changed);
     connect(m_prefsUi->buildType, &QComboBox::currentTextChanged,
             this, &CMakePreferences::changed);

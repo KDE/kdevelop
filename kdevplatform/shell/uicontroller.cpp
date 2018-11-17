@@ -712,7 +712,7 @@ Sublime::View* UiController::addToolViewToArea(IToolViewFactory* factory,
         p == Sublime::AllPositions ? Sublime::dockAreaToPosition(factory->defaultPosition()) : p);
 
     connect(view, &Sublime::View::raise,
-            this, static_cast<void(UiController::*)(Sublime::View*)>(&UiController::raiseToolView));
+            this, QOverload<Sublime::View*>::of(&UiController::raiseToolView));
 
     factory->viewCreated(view);
     return view;

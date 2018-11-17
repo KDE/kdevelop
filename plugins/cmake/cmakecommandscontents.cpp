@@ -49,7 +49,7 @@ CMakeCommandsContents::CMakeCommandsContents(QObject* parent)
         process->setArguments(params);
         KDevelop::ICore::self()->runtimeController()->currentRuntime()->startProcess(process);
 
-        connect(process, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, &CMakeCommandsContents::processOutput);
+        connect(process, QOverload<int>::of(&QProcess::finished), this, &CMakeCommandsContents::processOutput);
     }
 }
 

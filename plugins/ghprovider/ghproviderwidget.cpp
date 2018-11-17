@@ -73,7 +73,7 @@ ProviderWidget::ProviderWidget(QWidget *parent)
 
     m_combo = new QComboBox(this);
     m_combo->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
-    connect(m_combo, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ProviderWidget::searchRepo);
+    connect(m_combo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ProviderWidget::searchRepo);
     fillCombo();
     topLayout->addWidget(m_combo);
 

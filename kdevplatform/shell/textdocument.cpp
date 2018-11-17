@@ -282,7 +282,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
         // Connect to the first text changed signal, it occurs before the completed() signal
         connect(d->document.data(), &KTextEditor::Document::textChanged, this, &TextDocument::slotDocumentLoaded);
         // Also connect to the completed signal, sometimes the first text changed signal is missed because the part loads too quickly (? TODO - confirm this is necessary)
-        connect(d->document.data(), static_cast<void(KTextEditor::Document::*)()>(&KTextEditor::Document::completed), this, &TextDocument::slotDocumentLoaded);
+        connect(d->document.data(), QOverload<>::of(&KTextEditor::Document::completed),
+                this, &TextDocument::slotDocumentLoaded);
 
         // force a reparse when a document gets reloaded
         connect(d->document.data(), &KTextEditor::Document::reloaded,

@@ -67,7 +67,7 @@ void QtHelpQtDoc::registerDocumentations()
         p->setProgram(qmake);
         p->setArguments({QLatin1String("-query"), QLatin1String("QT_INSTALL_DOCS")});
         p->start();
-        connect(p, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, &QtHelpQtDoc::lookupDone);
+        connect(p, QOverload<int>::of(&QProcess::finished), this, &QtHelpQtDoc::lookupDone);
     }
 }
 

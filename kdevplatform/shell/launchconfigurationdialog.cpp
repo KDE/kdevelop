@@ -187,12 +187,14 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     messageWidget->setText( i18n("No launch configurations available. (Is any of the Execute plugins loaded?)") );
     messageWidget->setVisible( m->isEmpty() );
 
-    connect(debugger, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &LaunchConfigurationDialog::launchModeChanged);
+    connect(debugger, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &LaunchConfigurationDialog::launchModeChanged);
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &LaunchConfigurationDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &LaunchConfigurationDialog::reject);
-    connect(buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, static_cast<void(LaunchConfigurationDialog::*)()>(&LaunchConfigurationDialog::saveConfig) );
-    connect(buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, static_cast<void(LaunchConfigurationDialog::*)()>(&LaunchConfigurationDialog::saveConfig) );
+    connect(buttonBox->button(QDialogButtonBox::Ok), &QPushButton::clicked,
+            this, QOverload<>::of(&LaunchConfigurationDialog::saveConfig));
+    connect(buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked,
+            this, QOverload<>::of(&LaunchConfigurationDialog::saveConfig));
     mainLayout->addWidget(buttonBox);
 
     resize( QSize(qMax(1200, sizeHint().width()), qMax(500, sizeHint().height())) );

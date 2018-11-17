@@ -57,8 +57,8 @@ QMakeBuildDirChooser::QMakeBuildDirChooser(KDevelop::IProject* project, QWidget*
     connect(kcfg_qmakeExecutable, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
     connect(kcfg_buildDir, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
     connect(kcfg_installPrefix, &KUrlRequester::textChanged, this, &QMakeBuildDirChooser::changed);
-    connect(kcfg_buildType, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this,
-            &QMakeBuildDirChooser::changed);
+    connect(kcfg_buildType, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &QMakeBuildDirChooser::changed);
     connect(kcfg_extraArgs, &KLineEdit::textChanged, this, &QMakeBuildDirChooser::changed);
 }
 

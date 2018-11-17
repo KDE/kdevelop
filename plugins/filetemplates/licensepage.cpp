@@ -212,7 +212,7 @@ LicensePage::LicensePage(QWidget* parent)
     d->license = new Ui::LicenseChooserDialog;
     d->license->setupUi(this);
 
-    connect(d->license->licenseComboBox, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+    connect(d->license->licenseComboBox, QOverload<int>::of(&KComboBox::currentIndexChanged),
             this, [&] (int selectedLicense) { d->licenseComboChanged(selectedLicense); });
     connect(d->license->saveLicense, &QCheckBox::clicked,
             d->license->licenseName, &QLineEdit::setEnabled);

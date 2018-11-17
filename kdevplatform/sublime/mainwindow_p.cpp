@@ -381,7 +381,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
                     d->m_mainWindow, &MainWindow::tabContextMenuRequested);
             connect(container, &Container::tabToolTipRequested,
                     d->m_mainWindow, &MainWindow::tabToolTipRequested);
-            connect(container, static_cast<void(Container::*)(QWidget*)>(&Container::requestClose),
+            connect(container, QOverload<QWidget*>::of(&Container::requestClose),
                     d, &MainWindowPrivate::widgetCloseRequest, Qt::QueuedConnection);
             connect(container, &Container::newTabRequested,
                     d->m_mainWindow, &MainWindow::newTabRequested);

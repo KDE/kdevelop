@@ -95,13 +95,13 @@ ParserWidget::ParserWidget(QWidget* parent)
     connect(m_ui->parserOptionsOpenCl, &QLineEdit::textEdited, this, &ParserWidget::textEdited);
     connect(m_ui->parserOptionsCuda, &QLineEdit::textEdited, this, &ParserWidget::textEdited);
     connect(m_ui->parseHeadersInPlainC, &QCheckBox::stateChanged, this, &ParserWidget::textEdited);
-    connect(m_ui->languageStandardsC, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated),
+    connect(m_ui->languageStandardsC, QOverload<const QString&>::of(&QComboBox::activated),
             this, &ParserWidget::languageStandardChangedC);
-    connect(m_ui->languageStandardsCpp, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated),
+    connect(m_ui->languageStandardsCpp, QOverload<const QString&>::of(&QComboBox::activated),
             this, &ParserWidget::languageStandardChangedCpp);
-    connect(m_ui->languageStandardsOpenCl, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated),
+    connect(m_ui->languageStandardsOpenCl, QOverload<const QString&>::of(&QComboBox::activated),
             this, &ParserWidget::languageStandardChangedOpenCl);
-    connect(m_ui->languageStandardsCuda, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated),
+    connect(m_ui->languageStandardsCuda, QOverload<const QString&>::of(&QComboBox::activated),
             this, &ParserWidget::languageStandardChangedCuda);
 
     updateEnablements();

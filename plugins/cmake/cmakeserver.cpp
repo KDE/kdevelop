@@ -61,13 +61,13 @@ CMakeServer::CMakeServer(QObject* parent)
             this, [this, path](QProcess::ProcessError error) {
         qCWarning(CMAKE) << "cmake server error:" << error << path << m_process.readAllStandardError() << m_process.readAllStandardOutput();
     });
-    connect(&m_process, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, [](int code){
+    connect(&m_process, QOverload<int>::of(&QProcess::finished), this, [](int code){
         qCDebug(CMAKE) << "cmake server finished with code" << code;
     });
-    connect(&m_process, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, &CMakeServer::finished);
+    connect(&m_process, QOverload<int>::of(&QProcess::finished), this, &CMakeServer::finished);
 
     connect(m_localSocket, &QIODevice::readyRead, this, &CMakeServer::processOutput);
-    connect(m_localSocket, static_cast<void(QLocalSocket::*)(QLocalSocket::LocalSocketError)>(&QLocalSocket::error), this, [this, path](QLocalSocket::LocalSocketError socketError) {
+    connect(m_localSocket, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error), this, [this, path](QLocalSocket::LocalSocketError socketError) {
         qCWarning(CMAKE) << "cmake server socket error:" << socketError << path;
         setConnected(false);
     });

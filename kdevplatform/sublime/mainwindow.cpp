@@ -43,7 +43,7 @@ namespace Sublime {
 MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 : KParts::MainWindow(nullptr, flags), d(new MainWindowPrivate(this, controller))
 {
-    connect(this, &MainWindow::destroyed, controller, static_cast<void(Controller::*)()>(&Controller::areaReleased));
+    connect(this, &MainWindow::destroyed, controller, QOverload<>::of(&Controller::areaReleased));
 
     loadGeometry(KSharedConfig::openConfig()->group("Main Window"));
 

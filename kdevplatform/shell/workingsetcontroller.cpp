@@ -187,7 +187,7 @@ void WorkingSetController::showGlobalToolTip()
     connect(m_hideToolTipTimer, &QTimer::timeout,  m_tooltip.data(), &ActiveToolTip::deleteLater);
     m_hideToolTipTimer->start();
     connect(m_tooltip.data(), &ActiveToolTip::mouseIn, m_hideToolTipTimer, &QTimer::stop);
-    connect(m_tooltip.data(), &ActiveToolTip::mouseOut, m_hideToolTipTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
+    connect(m_tooltip.data(), &ActiveToolTip::mouseOut, m_hideToolTipTimer, QOverload<>::of(&QTimer::start));
 }
 
 WorkingSetToolTipWidget* WorkingSetController::workingSetToolTip()

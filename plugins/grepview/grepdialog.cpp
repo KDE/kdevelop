@@ -207,14 +207,16 @@ GrepDialog::GrepDialog(GrepViewPlugin *plugin, QWidget *parent, bool show)
     templateEdit->setEditable(true);
     templateEdit->setCompletionMode(KCompletion::CompletionPopup);
     KCompletion* comp = templateEdit->completionObject();
-    connect(templateEdit, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::returnPressed), comp, static_cast<void(KCompletion::*)(const QString&)>(&KCompletion::addItem));
+    connect(templateEdit, QOverload<const QString&>::of(&KComboBox::returnPressed),
+            comp, QOverload<const QString&>::of(&KCompletion::addItem));
     for(int i=0; i<templateEdit->count(); i++)
         comp->addItem(templateEdit->itemText(i));
     replacementTemplateEdit->addItems( cg.readEntry("LastUsedReplacementTemplateString", repl_template()) );
     replacementTemplateEdit->setEditable(true);
     replacementTemplateEdit->setCompletionMode(KCompletion::CompletionPopup);
     comp = replacementTemplateEdit->completionObject();
-    connect(replacementTemplateEdit, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::returnPressed), comp, static_cast<void(KCompletion::*)(const QString&)>(&KCompletion::addItem));
+    connect(replacementTemplateEdit, QOverload<const QString&>::of(&KComboBox::returnPressed),
+            comp, QOverload<const QString&>::of(&KCompletion::addItem));
     for(int i=0; i<replacementTemplateEdit->count(); i++)
         comp->addItem(replacementTemplateEdit->itemText(i));
 
@@ -239,14 +241,15 @@ GrepDialog::GrepDialog(GrepViewPlugin *plugin, QWidget *parent, bool show)
     filesCombo->addItems(cg.readEntry("file_patterns", filepatterns()));
     excludeCombo->addItems(cg.readEntry("exclude_patterns", excludepatterns()) );
 
-    connect(templateTypeCombo, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated),
+    connect(templateTypeCombo, QOverload<int>::of(&KComboBox::activated),
             this, &GrepDialog::templateTypeComboActivated);
     connect(patternCombo, &QComboBox::editTextChanged,
             this, &GrepDialog::patternComboEditTextChanged);
     patternComboEditTextChanged( patternCombo->currentText() );
     patternCombo->setFocus();
 
-    connect(searchPaths, static_cast<void(KComboBox::*)(const QString&)>(&KComboBox::activated), this, &GrepDialog::setSearchLocations);
+    connect(searchPaths, QOverload<const QString&>::of(&KComboBox::activated),
+            this, &GrepDialog::setSearchLocations);
 
     directorySelector->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     connect(directorySelector, &QPushButton::clicked, this, &GrepDialog::selectDirectoryDialog );

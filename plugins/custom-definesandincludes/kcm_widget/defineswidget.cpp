@@ -34,9 +34,9 @@ DefinesWidget::DefinesWidget( QWidget* parent )
     ui->setupUi( this );
     ui->defines->setModel( definesModel );
     ui->defines->horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
-    connect( definesModel, &DefinesModel::dataChanged, this, static_cast<void(DefinesWidget::*)()>(&DefinesWidget::definesChanged) );
-    connect( definesModel, &DefinesModel::rowsInserted, this, static_cast<void(DefinesWidget::*)()>(&DefinesWidget::definesChanged) );
-    connect( definesModel, &DefinesModel::rowsRemoved, this, static_cast<void(DefinesWidget::*)()>(&DefinesWidget::definesChanged) );
+    connect(definesModel, &DefinesModel::dataChanged, this, QOverload<>::of(&DefinesWidget::definesChanged));
+    connect(definesModel, &DefinesModel::rowsInserted, this, QOverload<>::of(&DefinesWidget::definesChanged));
+    connect(definesModel, &DefinesModel::rowsRemoved, this, QOverload<>::of(&DefinesWidget::definesChanged));
 
     QAction* delDefAction = new QAction( i18n("Delete Define"), this );
     delDefAction->setShortcut( QKeySequence(Qt::Key_Delete) );

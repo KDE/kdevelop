@@ -146,7 +146,8 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
     d->formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
     d->formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
     d->formatFilesAction->setEnabled(false);
-    connect(d->formatFilesAction, &QAction::triggered, this, static_cast<void(SourceFormatterController::*)()>(&SourceFormatterController::formatFiles));
+    connect(d->formatFilesAction, &QAction::triggered,
+            this, QOverload<>::of(&SourceFormatterController::formatFiles));
 
 
     connect(Core::self()->pluginController(), &IPluginController::pluginLoaded,

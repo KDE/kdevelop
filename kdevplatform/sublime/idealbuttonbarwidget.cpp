@@ -180,7 +180,7 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
 
     Q_ASSERT(action->dockWidget());
 
-    connect(action, &QAction::toggled, this, static_cast<void(IdealButtonBarWidget::*)(bool)>(&IdealButtonBarWidget::showWidget));
+    connect(action, &QAction::toggled, this, QOverload<bool>::of(&IdealButtonBarWidget::showWidget));
     connect(button, &IdealToolButton::customContextMenuRequested,
             action->dockWidget(), &IdealDockWidget::contextMenuRequested);
 

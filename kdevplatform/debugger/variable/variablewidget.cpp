@@ -88,7 +88,7 @@ VariableWidget::VariableWidget(IDebugController* controller, QWidget *parent)
     topLayout->addWidget(m_watchVarEditor);
     topLayout->setMargin(0);
 
-    connect(m_watchVarEditor, static_cast<void(KHistoryComboBox::*)(const QString&)>(&KHistoryComboBox::returnPressed),
+    connect(m_watchVarEditor, QOverload<const QString&>::of(&KHistoryComboBox::returnPressed),
             this, &VariableWidget::slotAddWatch);
 
     //TODO

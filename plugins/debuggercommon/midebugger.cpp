@@ -57,8 +57,7 @@ MIDebugger::MIDebugger(QObject* parent)
             this, &MIDebugger::readyReadStandardOutput);
     connect(m_process, &KProcess::readyReadStandardError,
             this, &MIDebugger::readyReadStandardError);
-    connect(m_process,
-            static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
+    connect(m_process, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
             this, &MIDebugger::processFinished);
     connect(m_process, &QProcess::errorOccurred,
             this, &MIDebugger::processErrored);

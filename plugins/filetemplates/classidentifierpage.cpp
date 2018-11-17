@@ -52,11 +52,9 @@ ClassIdentifierPage::ClassIdentifierPage(QWidget* parent)
     // workaround for KEditListWidget bug:
     // ensure keyboard focus is returned to edit line
     connect(d->classid->keditlistwidget, &KEditListWidget::added,
-            d->classid->keditlistwidget->lineEdit(),
-            static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+            d->classid->keditlistwidget->lineEdit(), QOverload<>::of(&QWidget::setFocus));
     connect(d->classid->keditlistwidget, &KEditListWidget::removed,
-            d->classid->keditlistwidget->lineEdit(),
-            static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+            d->classid->keditlistwidget->lineEdit(), QOverload<>::of(&QWidget::setFocus));
 #endif
 }
 

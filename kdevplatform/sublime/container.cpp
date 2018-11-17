@@ -353,7 +353,7 @@ Container::Container(QWidget *parent)
     l->addWidget(d->stack);
 
     connect(d->tabBar, &ContainerTabBar::currentChanged, this, &Container::widgetActivated);
-    connect(d->tabBar, &ContainerTabBar::tabCloseRequested, this, static_cast<void(Container::*)(int)>(&Container::requestClose));
+    connect(d->tabBar, &ContainerTabBar::tabCloseRequested, this, QOverload<int>::of(&Container::requestClose));
     connect(d->tabBar, &ContainerTabBar::newTabRequested, this, &Container::newTabRequested);
     connect(d->tabBar, &ContainerTabBar::tabMoved, this, &Container::tabMoved);
     connect(d->tabBar, &ContainerTabBar::customContextMenuRequested, this, &Container::contextMenu);

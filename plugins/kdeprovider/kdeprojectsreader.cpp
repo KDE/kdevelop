@@ -31,7 +31,8 @@ KDEProjectsReader::KDEProjectsReader(KDEProjectsModel* m, QObject* parent)
     auto *manager = new QNetworkAccessManager(this);
 
     QNetworkReply* reply = manager->get(QNetworkRequest(kdeProjectsUrl));
-    connect(reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &KDEProjectsReader::downloadError);
+    connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+            this, &KDEProjectsReader::downloadError);
     connect(manager,&QNetworkAccessManager::finished, this, &KDEProjectsReader::downloadFinished);
 }
 

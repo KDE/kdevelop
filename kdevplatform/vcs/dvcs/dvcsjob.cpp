@@ -75,7 +75,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
     setModel(d->model);
     setCapabilities(Killable);
 
-    connect(d->childproc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
+    connect(d->childproc, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
             this, &DVcsJob::slotProcessExited);
     connect(d->childproc, &QProcess::errorOccurred,
             this, &DVcsJob::slotProcessError);

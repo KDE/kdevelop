@@ -64,15 +64,15 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( ui->batchEdit, &QPushButton::clicked, this, &ProjectPathsWidget::batchEdit );
 
     ui->projectPaths->setModel( pathsModel );
-    connect( ui->projectPaths, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &ProjectPathsWidget::projectPathSelected );
+    connect( ui->projectPaths, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ProjectPathsWidget::projectPathSelected );
     connect( pathsModel, &ProjectPathsModel::dataChanged, this, &ProjectPathsWidget::changed );
     connect( pathsModel, &ProjectPathsModel::rowsInserted, this, &ProjectPathsWidget::changed );
     connect( pathsModel, &ProjectPathsModel::rowsRemoved, this, &ProjectPathsWidget::changed );
-    connect( ui->compiler, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ProjectPathsWidget::changed );
-    connect( ui->compiler, static_cast<void(QComboBox::*)(const QString&)>(&QComboBox::activated), this, &ProjectPathsWidget::changeCompilerForPath );
+    connect( ui->compiler, QOverload<const QString&>::of(&QComboBox::activated), this, &ProjectPathsWidget::changed );
+    connect( ui->compiler, QOverload<const QString&>::of(&QComboBox::activated), this, &ProjectPathsWidget::changeCompilerForPath );
 
-    connect( ui->includesWidget, static_cast<void(IncludesWidget::*)(const QStringList&)>(&IncludesWidget::includesChanged), this, &ProjectPathsWidget::includesChanged );
-    connect( ui->definesWidget, static_cast<void(DefinesWidget::*)(const KDevelop::Defines&)>(&DefinesWidget::definesChanged), this, &ProjectPathsWidget::definesChanged );
+    connect( ui->includesWidget, QOverload<const QStringList&>::of(&IncludesWidget::includesChanged), this, &ProjectPathsWidget::includesChanged );
+    connect( ui->definesWidget, QOverload<const KDevelop::Defines&>::of(&DefinesWidget::definesChanged), this, &ProjectPathsWidget::definesChanged );
 
     connect(ui->languageParameters, &QTabWidget::currentChanged, this, &ProjectPathsWidget::tabChanged);
 

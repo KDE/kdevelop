@@ -85,9 +85,9 @@ SourceFormatterSelectionEdit::SourceFormatterSelectionEdit(QWidget* parent)
 {
     d->ui.setupUi(this);
 
-    connect(d->ui.cbLanguages, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+    connect(d->ui.cbLanguages, QOverload<int>::of(&KComboBox::currentIndexChanged),
             this, &SourceFormatterSelectionEdit::selectLanguage);
-    connect(d->ui.cbFormatters, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+    connect(d->ui.cbFormatters, QOverload<int>::of(&KComboBox::currentIndexChanged),
             this, &SourceFormatterSelectionEdit::selectFormatter);
     connect(d->ui.styleList, &QListWidget::currentRowChanged, this, &SourceFormatterSelectionEdit::selectStyle);
     connect(d->ui.btnDelStyle, &QPushButton::clicked, this, &SourceFormatterSelectionEdit::deleteStyle);

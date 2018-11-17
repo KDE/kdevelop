@@ -76,7 +76,7 @@ CommandExecutor::CommandExecutor(const QString& command, QObject* parent)
             this, [&](QProcess::ProcessError error) {
             d->procError(error);
         });
-    connect(d->m_process, static_cast<void (KProcess::*)(int, QProcess::ExitStatus)>(&KProcess::finished),
+    connect(d->m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this, [&](int code, QProcess::ExitStatus status) {
             d->procFinished(code, status);
         });

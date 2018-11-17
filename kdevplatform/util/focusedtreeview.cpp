@@ -41,8 +41,8 @@ FocusedTreeView::FocusedTreeView(QWidget* parent)
     d->timer.setSingleShot(true);
     connect(&d->timer, &QTimer::timeout, this, &FocusedTreeView::delayedAutoScrollAndResize);
 
-    connect(verticalScrollBar(), &QScrollBar::valueChanged, &d->timer,
-            static_cast<void ( QTimer::* )()>(&QTimer::start));
+    connect(verticalScrollBar(), &QScrollBar::valueChanged,
+            &d->timer, QOverload<>::of(&QTimer::start));
 }
 
 FocusedTreeView::~FocusedTreeView()

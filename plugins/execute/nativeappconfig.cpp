@@ -112,7 +112,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     configureEnvironment->setSelectionWidget(environment);
 
     //connect signals to changed signal
-    connect( projectTarget, static_cast<void(ProjectTargetsComboBox::*)(const QString&)>(&ProjectTargetsComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
+    connect( projectTarget, QOverload<const QString&>::of(&ProjectTargetsComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
     connect( projectTargetRadio, &QRadioButton::toggled, this, &NativeAppConfigPage::changed );
     connect( executableRadio, &QRadioButton::toggled, this, &NativeAppConfigPage::changed );
     connect( executablePath->lineEdit(), &KLineEdit::textEdited, this, &NativeAppConfigPage::changed );
@@ -121,11 +121,11 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( workingDirectory, &KUrlRequester::urlSelected, this, &NativeAppConfigPage::changed );
     connect( workingDirectory->lineEdit(), &KLineEdit::textEdited, this, &NativeAppConfigPage::changed );
     connect( environment, &EnvironmentSelectionWidget::currentProfileChanged, this, &NativeAppConfigPage::changed );
-    connect( dependencyAction, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
+    connect( dependencyAction, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
     connect( runInTerminal, &QCheckBox::toggled, this, &NativeAppConfigPage::changed );
     connect( terminal, &KComboBox::editTextChanged, this, &NativeAppConfigPage::changed );
-    connect( terminal, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
-    connect( dependencyAction, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::activateDeps );
+    connect( terminal, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
+    connect( dependencyAction, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::activateDeps );
     connect( dependencies, &DependenciesWidget::changed, this, &NativeAppConfigPage::changed );
 }
 

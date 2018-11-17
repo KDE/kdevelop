@@ -54,9 +54,9 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     connect( ui->includePaths->selectionModel(), &QItemSelectionModel::currentChanged, this, &IncludesWidget::includePathSelected );
     connect( ui->includePathRequester, &KUrlRequester::textChanged, this, &IncludesWidget::includePathEdited );
     connect( ui->includePathRequester, &KUrlRequester::urlSelected, this, &IncludesWidget::includePathUrlSelected );
-    connect( includesModel, &IncludesModel::dataChanged, this, static_cast<void(IncludesWidget::*)()>(&IncludesWidget::includesChanged) );
-    connect( includesModel, &IncludesModel::rowsInserted, this, static_cast<void(IncludesWidget::*)()>(&IncludesWidget::includesChanged)  );
-    connect( includesModel, &IncludesModel::rowsRemoved, this, static_cast<void(IncludesWidget::*)()>(&IncludesWidget::includesChanged)  );
+    connect(includesModel, &IncludesModel::dataChanged, this, QOverload<>::of(&IncludesWidget::includesChanged));
+    connect(includesModel, &IncludesModel::rowsInserted, this, QOverload<>::of(&IncludesWidget::includesChanged));
+    connect(includesModel, &IncludesModel::rowsRemoved, this, QOverload<>::of(&IncludesWidget::includesChanged));
 
     QAction* delIncAction = new QAction( i18n("Delete Include Path"), this );
     delIncAction->setShortcut( QKeySequence( Qt::Key_Delete ) );

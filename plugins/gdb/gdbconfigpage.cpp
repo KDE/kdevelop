@@ -59,7 +59,7 @@ GdbConfigPage::GdbConfigPage( QWidget* parent )
     connect(ui->kcfg_gdbPath, &KUrlRequester::textChanged, this, &GdbConfigPage::changed);
     connect(ui->kcfg_runGdbScript, &KUrlRequester::textChanged, this, &GdbConfigPage::changed);
     connect(ui->kcfg_runShellScript, &KUrlRequester::textChanged, this, &GdbConfigPage::changed);
-    connect(ui->kcfg_startWith, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &GdbConfigPage::changed);
+    connect(ui->kcfg_startWith, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &GdbConfigPage::changed);
 
     //Setup data info for combobox
     ui->kcfg_startWith->setItemData(0, QStringLiteral("ApplicationOutput"));

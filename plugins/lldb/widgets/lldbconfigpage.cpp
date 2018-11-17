@@ -60,7 +60,7 @@ LldbConfigPage::LldbConfigPage(QWidget* parent)
             this, &LldbConfigPage::changed);
 
     connect(ui->lineConfigScript, &KUrlRequester::textChanged, this, &LldbConfigPage::changed);
-    connect(ui->comboStartWith, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+    connect(ui->comboStartWith, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &LldbConfigPage::changed);
 
     connect(ui->groupRemote, &QGroupBox::clicked, this, &LldbConfigPage::changed);

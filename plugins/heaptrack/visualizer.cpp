@@ -56,7 +56,7 @@ Visualizer::Visualizer(const QString& resultsFile, QObject* parent)
         KMessageBox::error(activeMainWindow(), errorMessage, i18n("Heaptrack Error"));
     });
 
-    connect(this, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+    connect(this, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
             this, [this]() {
                 deleteLater();
             });

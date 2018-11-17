@@ -86,7 +86,8 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
     // during setup and due to a bug will ignore any but the first call
     // Only fixed for KF5 5.32
     connect(m_ui->workingDir, &KUrlRequester::textChanged, this, &ProjectSourcePage::reevaluateCorrection);
-    connect(m_ui->sources, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ProjectSourcePage::setSourceIndex);
+    connect(m_ui->sources, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &ProjectSourcePage::setSourceIndex);
     connect(m_ui->get, &QPushButton::clicked, this, &ProjectSourcePage::checkoutVcsProject);
 }
 

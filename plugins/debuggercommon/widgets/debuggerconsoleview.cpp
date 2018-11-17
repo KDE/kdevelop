@@ -145,8 +145,7 @@ void DebuggerConsoleView::setupUi()
 
     m_cmdEditor = new KHistoryComboBox(this);
     m_cmdEditor->setDuplicatesEnabled(false);
-    connect(m_cmdEditor,
-            static_cast<void(KHistoryComboBox::*)(const QString&)>(&KHistoryComboBox::returnPressed),
+    connect(m_cmdEditor, QOverload<const QString&>::of(&KHistoryComboBox::returnPressed),
             this, &DebuggerConsoleView::trySendCommand);
 
     auto label = new QLabel(i18n("&Command:"), this);

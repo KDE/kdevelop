@@ -62,7 +62,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect (ui->listView, &MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
     typeChanged(ui->listView->currentIndex());
 
-    connect( ui->templateType, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+    connect( ui->templateType, QOverload<int>::of(&QComboBox::currentIndexChanged),
              this, &ProjectSelectionPage::templateChanged );
 
     QPushButton* getMoreButton = new QPushButton(i18n("Get More Templates"), ui->listView);

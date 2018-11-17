@@ -108,7 +108,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
     connect(ui.addProfileButton, &QPushButton::clicked, this, &EnvironmentWidget::addProfile);
     connect(ui.removeProfileButton, &QPushButton::clicked, this, &EnvironmentWidget::removeSelectedProfile);
     connect(ui.setAsDefaultProfileButton, &QPushButton::clicked, this, &EnvironmentWidget::setSelectedProfileAsDefault);
-    connect(ui.profileSelect, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged),
+    connect(ui.profileSelect, QOverload<int>::of(&KComboBox::currentIndexChanged),
             this, &EnvironmentWidget::onSelectedProfileChanged);
 
     connect(m_environmentProfileListModel, &EnvironmentProfileListModel::defaultProfileChanged,

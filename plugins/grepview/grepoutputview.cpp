@@ -110,7 +110,8 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     modelSelector->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(modelSelector, &KComboBox::customContextMenuRequested,
             this, &GrepOutputView::modelSelectorContextMenu);
-    connect(modelSelector, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &GrepOutputView::changeModel);
+    connect(modelSelector, QOverload<int>::of(&KComboBox::currentIndexChanged),
+            this, &GrepOutputView::changeModel);
 
     resultsTreeView->setItemDelegate(GrepOutputDelegate::self());
     resultsTreeView->setRootIsDecorated(false);
@@ -131,7 +132,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     applyButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")));
 
     connect(replacementCombo, &KComboBox::editTextChanged, this, &GrepOutputView::replacementTextChanged);
-    connect(replacementCombo, static_cast<void(KComboBox::*)()>(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
+    connect(replacementCombo, QOverload<>::of(&KComboBox::returnPressed), this, &GrepOutputView::onApply);
 
     connect(newSearchAction, &QAction::triggered, this, &GrepOutputView::showDialog);
 

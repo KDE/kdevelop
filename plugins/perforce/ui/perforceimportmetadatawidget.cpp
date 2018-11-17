@@ -52,7 +52,8 @@ PerforceImportMetadataWidget::PerforceImportMetadataWidget(QWidget* parent)
 
     m_ui->p4clientEdit->setEditable(true);
 
-    connect(m_ui->p4clientEdit, static_cast<void(KComboBox::*)()>(&KComboBox::returnPressed), this, &PerforceImportMetadataWidget::changed );
+    connect(m_ui->p4clientEdit, QOverload<>::of(&KComboBox::returnPressed),
+            this, &PerforceImportMetadataWidget::changed);
 
     connect(m_ui->radioButtonConfig, &QRadioButton::clicked, m_ui->p4configEdit, &QLineEdit::setEnabled);
     connect(m_ui->radioButtonVariables, &QRadioButton::clicked, m_ui->p4configEdit, &QLineEdit::setDisabled);

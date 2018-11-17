@@ -96,32 +96,32 @@ void AStylePreferences::init()
 
     connect(tabWidget, &QTabWidget::currentChanged, this, &AStylePreferences::currentTabChanged);
 
-    connect(cbIndentType, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &AStylePreferences::indentChanged);
-    connect(inpNuberSpaces, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &AStylePreferences::indentChanged);
+    connect(cbIndentType, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &AStylePreferences::indentChanged);
+    connect(inpNuberSpaces, QOverload<int>::of(&QSpinBox::valueChanged), this, &AStylePreferences::indentChanged);
     connect(chkConvertTabs, &QCheckBox::stateChanged, this, &AStylePreferences::indentChanged);
     connect(chkFillEmptyLines, &QCheckBox::stateChanged, this, &AStylePreferences::indentChanged);
 
     connect(listIdentObjects, &QListWidget::itemChanged,
              this, &AStylePreferences::indentObjectsChanged);
 
-    connect(inpMaxStatement, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &AStylePreferences::minMaxValuesChanged);
-    connect(inpMinConditional, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &AStylePreferences::minMaxValuesChanged);
+    connect(inpMaxStatement, QOverload<int>::of(&QSpinBox::valueChanged), this, &AStylePreferences::minMaxValuesChanged);
+    connect(inpMinConditional, QOverload<int>::of(&QSpinBox::valueChanged), this, &AStylePreferences::minMaxValuesChanged);
 
-    connect(cbBrackets, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &AStylePreferences::bracketsChanged);
+    connect(cbBrackets, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &AStylePreferences::bracketsChanged);
     connect(chkBracketsCloseHeaders, &QCheckBox::stateChanged, this, &AStylePreferences::bracketsChanged);
 
     connect(chkBlockBreak, &QCheckBox::stateChanged, this, &AStylePreferences::blocksChanged);
     connect(chkBlockBreakAll, &QCheckBox::stateChanged, this, &AStylePreferences::blocksChanged);
     connect(chkBlockIfElse, &QCheckBox::stateChanged, this, &AStylePreferences::blocksChanged);
 
-    connect(cbParenthesisPadding, static_cast<void(KComboBox::*)(int)>(&KComboBox::currentIndexChanged), this, &AStylePreferences::paddingChanged);
+    connect(cbParenthesisPadding, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &AStylePreferences::paddingChanged);
     connect(chkPadParenthesisHeader, &QCheckBox::stateChanged, this, &AStylePreferences::paddingChanged);
     connect(chkPadOperators, &QCheckBox::stateChanged, this, &AStylePreferences::paddingChanged);
 
     connect(chkKeepStatements, &QCheckBox::stateChanged, this, &AStylePreferences::onelinersChanged);
     connect(chkKeepBlocks, &QCheckBox::stateChanged, this, &AStylePreferences::onelinersChanged);
 
-    connect(cbPointerAlign, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+    connect(cbPointerAlign, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &AStylePreferences::pointerAlignChanged);
 }
 

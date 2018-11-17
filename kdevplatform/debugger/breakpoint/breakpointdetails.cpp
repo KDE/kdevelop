@@ -68,7 +68,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     d->ignore = new QSpinBox(this);
     hitsLayout->addWidget(d->ignore, 2, 1);
     d->ignore->setRange(0, 99999);
-    connect(d->ignore, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &BreakpointDetails::setIgnoreHits);
+    connect(d->ignore, QOverload<int>::of(&QSpinBox::valueChanged), this, &BreakpointDetails::setIgnoreHits);
 
     QLabel *l3 = new QLabel(i18n("next hits"), this);
     hitsLayout->addWidget(l3, 2, 2);

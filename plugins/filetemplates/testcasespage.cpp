@@ -46,11 +46,9 @@ TestCasesPage::TestCasesPage(QWidget* parent)
     // workaround for KEditListWidget bug:
     // ensure keyboard focus is returned to edit line
     connect(d->ui->keditlistwidget, &KEditListWidget::added,
-            d->ui->keditlistwidget->lineEdit(),
-            static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+            d->ui->keditlistwidget->lineEdit(), QOverload<>::(&QWidget::setFocus));
     connect(d->ui->keditlistwidget, &KEditListWidget::removed,
-            d->ui->keditlistwidget->lineEdit(),
-            static_cast<void(QWidget::*)()>(&QWidget::setFocus));
+            d->ui->keditlistwidget->lineEdit(), QOverload<>::of(&QWidget::setFocus));
 #endif
 
     connect(d->ui->identifierLineEdit, &QLineEdit::textChanged, this, &TestCasesPage::identifierChanged);

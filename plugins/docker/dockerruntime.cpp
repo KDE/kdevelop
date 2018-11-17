@@ -53,7 +53,8 @@ DockerRuntime::DockerRuntime(const QString &tag)
 void DockerRuntime::inspectContainer()
 {
     auto* process = new QProcess(this);
-    connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, [process, this](int code, QProcess::ExitStatus status){
+    connect(process, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
+            this, [process, this](int code, QProcess::ExitStatus status){
         process->deleteLater();
         qCDebug(DOCKER) << "inspect container" << code << status;
         if (code || status) {

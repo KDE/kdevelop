@@ -40,7 +40,7 @@ FilterProxySearchLine::FilterProxySearchLine(QWidget *parent)
     connect(m_delayTimer, &QTimer::timeout,
             this, &FilterProxySearchLine::updateFilter);
     connect(this, &FilterProxySearchLine::textChanged,
-            m_delayTimer, static_cast<void(QTimer::*)()>(&QTimer::start));
+            m_delayTimer, QOverload<>::of(&QTimer::start));
 }
 
 void FilterProxySearchLine::setFilterProxyModel(QSortFilterProxyModel* filterProxyModel)

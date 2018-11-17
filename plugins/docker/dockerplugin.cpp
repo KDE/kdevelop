@@ -54,7 +54,8 @@ DockerPlugin::DockerPlugin(QObject *parent, const QVariantList & /*args*/)
     connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, &DockerPlugin::runtimeChanged);
 
     auto* process = new QProcess(this);
-    connect(process, static_cast<void(QProcess::*)(int,QProcess::ExitStatus)>(&QProcess::finished), this, &DockerPlugin::imagesListFinished);
+    connect(process, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
+            this, &DockerPlugin::imagesListFinished);
     process->start(QStringLiteral("docker"), {QStringLiteral("images"), QStringLiteral("--filter"), QStringLiteral("dangling=false"), QStringLiteral("--format"), QStringLiteral("{{.Repository}}:{{.Tag}}\t{{.ID}}")}, QIODevice::ReadOnly);
 
     DockerRuntime::s_settings = m_settings.data();

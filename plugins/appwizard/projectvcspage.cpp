@@ -66,9 +66,9 @@ ProjectVcsPage::ProjectVcsPage( KDevelop::IPluginController* controller, QWidget
             }
         }
     }
-    connect( m_ui->vcsTypes, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated),
+    connect( m_ui->vcsTypes, QOverload<int>::of(&KComboBox::activated),
              m_ui->vcsImportOptions, &QStackedWidget::setCurrentIndex );
-    connect( m_ui->vcsTypes, static_cast<void(KComboBox::*)(int)>(&KComboBox::activated),
+    connect( m_ui->vcsTypes, QOverload<int>::of(&KComboBox::activated),
              this, &ProjectVcsPage::vcsTypeChanged );
     vcsTypeChanged(m_ui->vcsTypes->currentIndex());
 }

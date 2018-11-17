@@ -51,7 +51,7 @@ void GitPluginCheckInRepositoryJob::start()
     m_hashjob->setWorkingDirectory(m_rootDirectory);
     m_hashjob->setStandardOutputProcess(m_findjob);
 
-    connect(m_findjob, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, &GitPluginCheckInRepositoryJob::repositoryQueryFinished);
+    connect(m_findjob, QOverload<int>::of(&QProcess::finished), this, &GitPluginCheckInRepositoryJob::repositoryQueryFinished);
     connect(m_hashjob, &QProcess::errorOccurred, this, &GitPluginCheckInRepositoryJob::processFailed);
     connect(m_findjob, &QProcess::errorOccurred, this, &GitPluginCheckInRepositoryJob::processFailed);
 
