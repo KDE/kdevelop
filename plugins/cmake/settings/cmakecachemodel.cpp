@@ -139,10 +139,6 @@ void CMakeCacheModel::read()
             m_internalBegin=currentIdx;
 //                 qCDebug(CMAKE) << "Comment: " << line << " -.- " << currentIdx;
         }
-        else if(!line.startsWith(QLatin1Char('#')) && !line.isEmpty())
-        {
-            qCDebug(CMAKE) << "unrecognized cache line: " << line;
-        }
     }
 }
 
