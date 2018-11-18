@@ -241,8 +241,10 @@ void OutputWidget::setCurrentWidget( QTreeView* view )
 
 void OutputWidget::changeDelegate( int id )
 {
-    if( data->outputdata.contains( id ) && m_views.contains( id ) ) {
-        m_views.value(id).view->setItemDelegate(data->outputdata.value(id)->delegate);
+    const auto viewIt = m_views.constFind(id);
+    const auto dataIt = data->outputdata.constFind(id);
+    if (dataIt != data->outputdata.constEnd() && viewIt != m_views.constEnd()) {
+        (*viewIt).view->setItemDelegate((*dataIt)->delegate);
     } else {
         addOutput(id);
     }
@@ -250,10 +252,10 @@ void OutputWidget::changeDelegate( int id )
 
 void OutputWidget::changeModel( int id )
 {
-    if( data->outputdata.contains( id ) && m_views.contains( id ) )
-    {
-        OutputData* od = data->outputdata.value(id);
-        m_views.value(id).view->setModel(od->model);
+    const auto viewIt = m_views.constFind(id);
+    const auto dataIt = data->outputdata.constFind(id);
+    if (dataIt != data->outputdata.constEnd() && viewIt != m_views.constEnd()) {
+        (*viewIt).view->setModel((*dataIt)->model);
     }
     else
     {
@@ -263,9 +265,9 @@ void OutputWidget::changeModel( int id )
 
 void OutputWidget::removeOutput( int id )
 {
-    if( data->outputdata.contains( id ) && m_views.contains( id ) )
-    {
-        auto view = m_views.value(id).view;
+    const auto viewIt = m_views.constFind(id);
+    if (data->outputdata.contains(id) && (viewIt != m_views.constEnd())) {
+        auto view = viewIt->view;
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
         {
             if( data->type & KDevelop::IOutputView::MultipleView )
@@ -289,9 +291,9 @@ void OutputWidget::removeOutput( int id )
             // during it's destroy
         }
 
-        auto fv = m_views.take(id);
+        m_views.erase(viewIt);
         // remove our view with proxy model which is view's child (see outputFilter() method).
-        delete fv.view;
+        delete view;
 
         emit outputRemoved( data->toolViewId, id );
     }
@@ -499,8 +501,10 @@ QTreeView* OutputWidget::createListView(int id)
     };
 
     QTreeView* listview = nullptr;
-    if( !m_views.contains(id) )
-    {
+    const auto viewIt = m_views.constFind(id);
+    if (viewIt != m_views.constEnd()) {
+        listview = viewIt->view;
+    } else {
         bool newView = true;
 
         if( data->type & KDevelop::IOutputView::MultipleView || data->type & KDevelop::IOutputView::HistoryView )
@@ -535,9 +539,6 @@ QTreeView* OutputWidget::createListView(int id)
 
         if (newView)
             listview->scrollToBottom();
-    } else
-    {
-        listview = m_views.value(id).view;
     }
     enableActions();
     return listview;
@@ -545,9 +546,9 @@ QTreeView* OutputWidget::createListView(int id)
 
 void OutputWidget::raiseOutput(int id)
 {
-    if( m_views.contains(id) )
-    {
-        auto view = m_views.value(id).view;
+    const auto viewIt = m_views.constFind(id);
+    if (viewIt != m_views.constEnd()) {
+        auto view = viewIt->view;
         if( data->type & KDevelop::IOutputView::MultipleView )
         {
             int idx = m_tabwidget->indexOf(view);

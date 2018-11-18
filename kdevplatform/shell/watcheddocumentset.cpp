@@ -112,10 +112,11 @@ public:
 
     void delDocument(const IndexedString& doc, ActionFlags flags = {})
     {
-        if (!m_documents.contains(doc))
+        const auto documentIt = m_documents.find(doc);
+        if (documentIt == m_documents.end())
             return;
 
-        m_documents.remove(doc);
+        m_documents.erase(documentIt);
         doUpdate(flags);
     }
 

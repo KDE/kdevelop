@@ -81,12 +81,12 @@ QList<QAction*> ContextMenuExtension::actions( const QString& group ) const
 
 void ContextMenuExtension::addAction( const QString& group, QAction* action )
 {
-    if( !d->extensions.contains( group ) )
-    {
+    auto actionGroupIt = d->extensions.find(group);
+    if (actionGroupIt == d->extensions.end()) {
         d->extensions.insert( group, QList<QAction*>() << action );
     } else
     {
-        d->extensions[group].append( action );
+        actionGroupIt->append(action);
     }
 }
 

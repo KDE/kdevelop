@@ -203,11 +203,12 @@ static ClassifiedPaths classifyPaths(const Path::List& paths, KDevelop::ProjectM
         if (!items.empty()) {
             for (ProjectBaseItem* item : items) {
                 IProject* project = item->project();
-                if (!result.itemsPerProject.contains(project)) {
-                    result.itemsPerProject[project] = QList<KDevelop::ProjectBaseItem*>();
+                auto itemsIt = result.itemsPerProject.find(project);
+                if (itemsIt == result.itemsPerProject.end()) {
+                    itemsIt = result.itemsPerProject.insert(project, QList<KDevelop::ProjectBaseItem*>());
                 }
 
-                result.itemsPerProject[project].append(item);
+                itemsIt->append(item);
             }
         } else {
             result.alienSrcPaths.append(path);

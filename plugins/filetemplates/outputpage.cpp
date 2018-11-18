@@ -71,12 +71,12 @@ void OutputPagePrivate::updateRanges(QSpinBox* line, QSpinBox* column, bool enab
 
 void OutputPagePrivate::updateFileRange(const QString& field)
 {
-    if (!outputFiles.contains(field))
-    {
+    const auto outputFileIt = outputFiles.constFind(field);
+    if (outputFileIt == outputFiles.constEnd()) {
         return;
     }
 
-    QString url = outputFiles[field]->url().toLocalFile();
+    const QString url = (*outputFileIt)->url().toLocalFile();
     QFileInfo info(url);
 
     updateRanges(outputLines[field], outputColumns[field], info.exists() && !info.isDir());

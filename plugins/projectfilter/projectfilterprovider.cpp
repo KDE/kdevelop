@@ -103,10 +103,11 @@ void ProjectFilterProvider::addFilterFromContextMenu()
     const QList<ProjectBaseItem*> items = action->data().value<QList<ProjectBaseItem*>>();
     QHash<IProject*, SerializedFilters> changedProjectFilters;
     for (ProjectBaseItem* item : items) {
-        if (!changedProjectFilters.contains(item->project())) {
-            changedProjectFilters[item->project()] = readFilters(item->project()->projectConfiguration());
+        auto filterIt = changedProjectFilters.find(item->project());
+        if (filterIt == changedProjectFilters.end()) {
+            filterIt = changedProjectFilters.insert(item->project(), readFilters(item->project()->projectConfiguration()));
         }
-        SerializedFilters& filters = changedProjectFilters[item->project()];
+        SerializedFilters& filters = *filterIt;
         Path path;
         if (item->target()) {
             path = Path(item->parent()->path(), item->text());

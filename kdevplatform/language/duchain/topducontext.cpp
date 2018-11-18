@@ -250,7 +250,8 @@ public:
 
                 QHash<const TopDUContext*, QPair<int, const TopDUContext*>> b = context->m_local->m_recursiveImports;
                 for (RecursiveImports::const_iterator it = b.constBegin(); it != b.constEnd(); ++it) {
-                    if (m_recursiveImports.contains(it.key()) && m_recursiveImports[it.key()].second == context)
+                    const auto recursiveImportIt = m_recursiveImports.constFind(it.key());
+                    if (recursiveImportIt != m_recursiveImports.constEnd() && recursiveImportIt->second == context)
                         removeImportedContextRecursion(context, it.key(), it->first + 1, rebuild); //Remove all contexts that are imported through the context
                 }
             }

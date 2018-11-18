@@ -167,8 +167,9 @@ bool ClassNode::updateClassDeclarations()
                 continue;
 
             // Don't add existing declarations.
-            if (existingIdentifiers.contains(decl->ownIndex())) {
-                existingIdentifiers.remove(decl->ownIndex());
+            const auto identifierIt = existingIdentifiers.find(decl->ownIndex());
+            if (identifierIt != existingIdentifiers.end()) {
+                existingIdentifiers.erase(identifierIt);
                 continue;
             }
 

@@ -421,11 +421,12 @@ public:
         {
             QMutexLocker l(&m_referenceCountsMutex);
 
-            if (m_referenceCounts.contains(context)) {
+            auto countIt = m_referenceCounts.constFind(context);
+            if (countIt != m_referenceCounts.constEnd()) {
                 //This happens during shutdown, since everything is unloaded
                 qCDebug(LANGUAGE) << "removed a top-context that was reference-counted:" << context->url().str() <<
                     context->ownIndex();
-                m_referenceCounts.remove(context);
+                m_referenceCounts.erase(countIt);
             }
         }
 

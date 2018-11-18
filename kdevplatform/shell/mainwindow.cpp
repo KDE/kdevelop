@@ -300,8 +300,9 @@ void MainWindow::configureShortcuts()
         foreach(KXMLGUIClient* client, Core::self()->uiControllerInternal()->mainWindows()[a]->guiFactory()->clients()) {
             foreach(QAction* action, client->actionCollection()->actions()) {
                 qCDebug(SHELL) << "transferring setting shortcut for" << action->objectName();
-                if(shortcuts.contains(action->objectName())) {
-                    action->setShortcut(shortcuts[action->objectName()]);
+                const auto shortcutIt = shortcuts.constFind(action->objectName());
+                if (shortcutIt != shortcuts.constEnd()) {
+                    action->setShortcut(*shortcutIt);
                 }
             }
         }

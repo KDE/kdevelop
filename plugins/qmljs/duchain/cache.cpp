@@ -142,8 +142,9 @@ QStringList QmlJS::Cache::getFileNames(const QFileInfoList& fileInfos)
         {
             QMutexLocker lock(&m_mutex);
 
-            if (m_modulePaths.contains(filePath)) {
-                QString cachedFilePath = m_modulePaths.value(filePath);
+            const auto modulePathIt = m_modulePaths.constFind(filePath);
+            if (modulePathIt != m_modulePaths.constEnd()) {
+                const QString& cachedFilePath = *modulePathIt;
 
                 if (!cachedFilePath.isEmpty()) {
                     result.append(cachedFilePath);

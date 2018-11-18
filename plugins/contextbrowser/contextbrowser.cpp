@@ -971,16 +971,18 @@ void ContextBrowserPlugin::selectionChanged(View* view)
 
 void ContextBrowserPlugin::cursorPositionChanged(View* view, const KTextEditor::Cursor& newPosition)
 {
-    if (view->document() == m_lastInsertionDocument && newPosition == m_lastInsertionPos) {
+    const bool atInsertPosition = (view->document() == m_lastInsertionDocument && newPosition == m_lastInsertionPos);
+    if (atInsertPosition) {
         //Do not update the highlighting while typing
         m_lastInsertionDocument = nullptr;
         m_lastInsertionPos = KTextEditor::Cursor();
-        if (m_highlightedRanges.contains(view))
-            m_highlightedRanges[view].keep = true;
-    } else {
-        if (m_highlightedRanges.contains(view))
-            m_highlightedRanges[view].keep = false;
     }
+
+    const auto viewHighlightsIt = m_highlightedRanges.find(view);
+    if (viewHighlightsIt != m_highlightedRanges.end()) {
+        viewHighlightsIt->keep = atInsertPosition;
+    }
+
     clearMouseHover();
     m_updateViews.insert(view);
     m_updateTimer->start(highlightingTimeout / 2); // triggers updateViews()

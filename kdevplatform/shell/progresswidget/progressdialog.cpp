@@ -291,8 +291,9 @@ ProgressDialog::~ProgressDialog()
 void ProgressDialog::slotTransactionAdded( ProgressItem *item )
 {
     if ( item->parent() ) {
-        if ( mTransactionsToListviewItems.contains( item->parent() ) ) {
-            TransactionItem * parent = mTransactionsToListviewItems[ item->parent() ];
+        const auto parentItemIt = mTransactionsToListviewItems.constFind(item->parent());
+        if (parentItemIt != mTransactionsToListviewItems.constEnd()) {
+            TransactionItem* parent = *parentItemIt;
             parent->addSubTransaction( item );
         }
     } else {
@@ -310,9 +311,10 @@ void ProgressDialog::slotTransactionAdded( ProgressItem *item )
 
 void ProgressDialog::slotTransactionCompleted( ProgressItem *item )
 {
-    if ( mTransactionsToListviewItems.contains( item ) ) {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
-        mTransactionsToListviewItems.remove( item );
+    const auto itemIt = mTransactionsToListviewItems.find(item);
+    if (itemIt != mTransactionsToListviewItems.end()) {
+        TransactionItem* ti = *itemIt;
+        mTransactionsToListviewItems.erase(itemIt);
         ti->setItemComplete();
         QTimer::singleShot( 3000, mScrollView, [=] { mScrollView->slotItemCompleted(ti); } );
     }
@@ -329,8 +331,9 @@ void ProgressDialog::slotTransactionCanceled( ProgressItem * )
 void ProgressDialog::slotTransactionProgress( ProgressItem *item,
                                               unsigned int progress )
 {
-    if ( mTransactionsToListviewItems.contains( item ) ) {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
+    const auto itemIt = mTransactionsToListviewItems.constFind(item);
+    if (itemIt != mTransactionsToListviewItems.constEnd()) {
+        TransactionItem* ti = *itemIt;
         ti->setProgress( progress );
     }
 }
@@ -338,8 +341,9 @@ void ProgressDialog::slotTransactionProgress( ProgressItem *item,
 void ProgressDialog::slotTransactionStatus( ProgressItem *item,
                                             const QString &status )
 {
-    if ( mTransactionsToListviewItems.contains( item ) ) {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
+    const auto itemIt = mTransactionsToListviewItems.constFind(item);
+    if (itemIt != mTransactionsToListviewItems.constEnd()) {
+        TransactionItem* ti = *itemIt;
         ti->setStatus( status );
     }
 }
@@ -347,16 +351,18 @@ void ProgressDialog::slotTransactionStatus( ProgressItem *item,
 void ProgressDialog::slotTransactionLabel( ProgressItem *item,
                                            const QString &label )
 {
-    if ( mTransactionsToListviewItems.contains( item ) ) {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
+    const auto itemIt = mTransactionsToListviewItems.constFind(item);
+    if (itemIt != mTransactionsToListviewItems.constEnd()) {
+        TransactionItem* ti = *itemIt;
         ti->setLabel( label );
     }
 }
 
 void ProgressDialog::slotTransactionUsesBusyIndicator( KDevelop::ProgressItem *item, bool value )
 {
-    if ( mTransactionsToListviewItems.contains( item ) ) {
-        TransactionItem *ti = mTransactionsToListviewItems[ item ];
+    const auto itemIt = mTransactionsToListviewItems.constFind(item);
+    if (itemIt != mTransactionsToListviewItems.constEnd()) {
+        TransactionItem* ti = *itemIt;
         if ( value ) {
             ti->setTotalSteps( 0 );
         } else {

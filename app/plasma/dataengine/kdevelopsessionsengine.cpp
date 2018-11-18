@@ -103,8 +103,8 @@ void KDevelopSessionsEngine::updateSessions()
     {
         const Session& session = it2.value();
 
-        if ( !m_currentSessions.contains( session.hash ) )
-        {
+        auto sessionIt = m_currentSessions.constFind(session.hash);
+        if (sessionIt == m_currentSessions.constEnd()) {
             // Publish new session.
 
             m_currentSessions.insert( session.hash, session );
@@ -115,7 +115,7 @@ void KDevelopSessionsEngine::updateSessions()
         {
             // Publish data changes for older sessions.
 
-            Session oldSession( m_currentSessions.value(session.hash) );
+            Session oldSession(*sessionIt);
 
             bool modified = false;
 

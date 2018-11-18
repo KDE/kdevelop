@@ -61,8 +61,9 @@ static QString replaceVariables(QString command, QMap<QString, QString> variable
         }
         QString key = command.mid(pos + 2, end - pos - 2);
 
-        if (variables.contains(key)) {
-            command.replace(pos, 1 + end - pos, variables[key]);
+        const auto variableIt = variables.constFind(key);
+        if (variableIt != variables.constEnd()) {
+            command.replace(pos, 1 + end - pos, *variableIt );
         } else {
             qCDebug(CUSTOMSCRIPT) << "found no variable while replacing in shell-command" << command << "key" << key << "available:" << variables;
             command.remove(pos, 1 + end - pos);

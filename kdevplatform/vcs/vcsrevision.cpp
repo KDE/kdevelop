@@ -92,9 +92,9 @@ QStringList VcsRevision::keys() const
 
 QVariant VcsRevision::value(const QString& key) const
 {
-    if( d->internalValues.contains(key) )
-    {
-        return d->internalValues[key];
+    const auto valueIt = d->internalValues.constFind(key);
+    if (valueIt != d->internalValues.constEnd()) {
+        return *valueIt;
     }
     return QVariant();
 }

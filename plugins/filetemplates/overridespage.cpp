@@ -190,10 +190,10 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
     }
 
     qCDebug(PLUGIN_FILETEMPLATES) << childDeclaration->toString();
-    if (d->overriddenFunctions.contains(childDeclaration->identifier()))
-    {
-        foreach (const DeclarationPointer& decl, d->overriddenFunctions.values(childDeclaration->identifier()))
-        {
+    auto overridenFunctionIt = d->overriddenFunctions.constFind(childDeclaration->identifier());
+    if (overridenFunctionIt != d->overriddenFunctions.constEnd()) {
+        for (; overridenFunctionIt != d->overriddenFunctions.constEnd(); ++overridenFunctionIt) {
+            const DeclarationPointer& decl = *overridenFunctionIt;
             if (decl->indexedType() == childDeclaration->indexedType())
             {
                 qCDebug(PLUGIN_FILETEMPLATES) << "Declaration is already shown";

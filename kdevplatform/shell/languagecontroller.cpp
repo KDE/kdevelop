@@ -201,8 +201,9 @@ ILanguageSupport* LanguageController::language(const QString &name) const
     if(d->m_cleanedUp)
         return nullptr;
 
-    if(d->languages.contains(name))
-        return d->languages[name];
+    const auto languageIt = d->languages.constFind(name);
+    if (languageIt != d->languages.constEnd())
+        return *languageIt;
 
     // temporary support for deprecated-in-5.1 "X-KDevelop-Language" as fallback
     // remove in later version

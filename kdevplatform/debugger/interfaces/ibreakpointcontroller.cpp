@@ -120,8 +120,9 @@ void IBreakpointController::breakpointModelChanged(int row, BreakpointModel::Col
         for (int column = 0; column < BreakpointModel::NumColumns; ++column) {
             if (columns & (1 << column)) {
                 m_dirty[breakpoint].insert(Breakpoint::Column(column));
-                if (m_errors.contains(breakpoint)) {
-                    m_errors[breakpoint].remove(Breakpoint::Column(column));
+                auto errorIt = m_errors.find(breakpoint);
+                if (errorIt != m_errors.end()) {
+                    errorIt->remove(Breakpoint::Column(column));
                 }
             }
         }

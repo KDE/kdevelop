@@ -203,16 +203,18 @@ void StatusBar::updateMessage()
 
 void StatusBar::clearMessage( IStatus* status )
 {
-    if (m_messages.contains(status)) {
-        m_messages.remove(status);
+    const auto messageIt = m_messages.find(status);
+    if (messageIt != m_messages.end()) {
+        m_messages.erase(messageIt);
         updateMessage();
     }
 }
 
 void StatusBar::showMessage( IStatus* status, const QString & message, int timeout)
 {
-    if ( m_progressItems.contains(status) ) {
-        ProgressItem* i = m_progressItems[status];
+    const auto progressItemIt = m_progressItems.constFind(status);
+    if (progressItemIt != m_progressItems.constEnd()) {
+        ProgressItem* i = *progressItemIt;
         i->setStatus(message);
     } else {
         Message m;
@@ -225,22 +227,23 @@ void StatusBar::showMessage( IStatus* status, const QString & message, int timeo
 
 void StatusBar::hideProgress( IStatus* status )
 {
-   if (m_progressItems.contains(status)) {
-        m_progressItems[status]->setComplete();
-        m_progressItems.remove(status);
-   }
-
+    const auto progressItemIt = m_progressItems.find(status);
+    if (progressItemIt != m_progressItems.end()) {
+        (*progressItemIt)->setComplete();
+        m_progressItems.erase(progressItemIt);
+    }
 }
 
 void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int value)
 {
-    if (!m_progressItems.contains(status)) {
+    auto progressItemIt = m_progressItems.find(status);
+    if (progressItemIt == m_progressItems.end()) {
         bool canBeCanceled = false;
-        m_progressItems[status] = m_progressController->createProgressItem(
-            ProgressManager::createUniqueID(), status->statusName(), QString(), canBeCanceled);
+        progressItemIt = m_progressItems.insert(status, m_progressController->createProgressItem(
+            ProgressManager::createUniqueID(), status->statusName(), QString(), canBeCanceled));
     }
     
-    ProgressItem* i = m_progressItems[status];
+    ProgressItem* i = *progressItemIt;
     m_progressWidget->raise();
     m_progressDialog->raise();
     if( minimum == 0 && maximum == 0 ) {

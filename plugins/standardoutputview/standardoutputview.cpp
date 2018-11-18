@@ -95,10 +95,11 @@ StandardOutputView::~StandardOutputView()
 
 int StandardOutputView::standardToolView( KDevelop::IOutputView::StandardToolView view )
 {
-    if( m_standardViews.contains( view ) )
-    {
-        return m_standardViews.value( view );
+    const auto standardViewIt = m_standardViews.constFind(view);
+    if (standardViewIt != m_standardViews.constEnd()) {
+        return *standardViewIt;
     }
+
     int ret = -1;
     switch( view )
     {
@@ -167,7 +168,8 @@ int StandardOutputView::registerOutputInToolView( int toolViewId,
                                                   const QString& title,
                                                   KDevelop::IOutputView::Behaviours behaviour )
 {
-    if (!m_toolViews.contains(toolViewId))
+    const auto toolViewIt = m_toolViews.constFind(toolViewId);
+    if (toolViewIt == m_toolViews.constEnd())
         return -1;
     int newid;
     if( m_ids.isEmpty() )
@@ -178,7 +180,7 @@ int StandardOutputView::registerOutputInToolView( int toolViewId,
         newid = m_ids.last()+1;
     }
     m_ids << newid;
-    m_toolViews.value(toolViewId)->addOutput(newid, title, behaviour);
+    (*toolViewIt)->addOutput(newid, title, behaviour);
     return newid;
 }
 
@@ -234,8 +236,9 @@ void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* deleg
 
 void StandardOutputView::removeToolView(int toolViewId)
 {
-    if (m_toolViews.contains(toolViewId)) {
-        ToolViewData* td = m_toolViews.value(toolViewId);
+    const auto toolViewIt = m_toolViews.find(toolViewId);
+    if (toolViewIt != m_toolViews.end()) {
+        ToolViewData* td = *toolViewIt;
         foreach( Sublime::View* view, td->views )
         {
             if( view->hasWidget() )
@@ -252,7 +255,7 @@ void StandardOutputView::removeToolView(int toolViewId)
             }
         }
         delete td;
-        m_toolViews.remove(toolViewId);
+        m_toolViews.erase(toolViewIt);
         emit toolViewRemoved(toolViewId);
     }
 }
@@ -282,14 +285,14 @@ void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )
 void StandardOutputView::removeOutput( int outputId )
 {
     foreach (ToolViewData* td, m_toolViews) {
-        if( td->outputdata.contains( outputId ) )
-        {
+        const auto outputIt = td->outputdata.find(outputId);
+        if (outputIt != td->outputdata.end()) {
             foreach( Sublime::View* view, td->views )
             {
                 if( view->hasWidget() )
                     qobject_cast<OutputWidget*>( view->widget() )->removeOutput( outputId );
             }
-            td->outputdata.remove( outputId );
+            td->outputdata.erase(outputIt);
         }
     }
 }

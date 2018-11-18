@@ -152,9 +152,10 @@ void IRegisterController::generalRegistersHandler(const ResultRecord& r)
 
     GroupsName group = groupForRegisterName(registerName);
 
-    if (m_pendingGroups.contains(group)) {
+    const int groupIndex = m_pendingGroups.indexOf(group);
+    if (groupIndex != -1) {
         emit registersChanged(registersFromGroup(group));
-        m_pendingGroups.remove(m_pendingGroups.indexOf(group));
+        m_pendingGroups.remove(groupIndex);
     }
 }
 
@@ -172,8 +173,9 @@ QString IRegisterController::registerValue(const QString& name) const
 {
     QString value;
     if (!name.isEmpty()) {
-        if (m_registers.contains(name)) {
-            value = m_registers.value(name);
+        const auto registerIt = m_registers.find(name);
+        if (registerIt != m_registers.end()) {
+            value = *registerIt;
         }
     }
     return value;
@@ -210,8 +212,10 @@ void IRegisterController::updateValuesForRegisters(RegistersGroup* registers) co
     Q_ASSERT(!m_registers.isEmpty());
 
     for (int i = 0; i < registers->registers.size(); i++) {
-        if (m_registers.contains(registers->registers[i].name)) {
-            registers->registers[i].value = m_registers.value(registers->registers[i].name);
+        auto& reg = registers->registers[i];
+        const auto registerIt = m_registers.find(reg.name);
+        if (registerIt != m_registers.end()) {
+            reg.value = *registerIt;
         }
     }
 }
@@ -373,9 +377,10 @@ void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
         m_registers.insert(registerName, value);
     }
 
-    if (m_pendingGroups.contains(group)) {
+    const int groupIndex = m_pendingGroups.indexOf(group);
+    if (groupIndex != -1) {
         emit registersChanged(registersFromGroup(group));
-        m_pendingGroups.remove(m_pendingGroups.indexOf(group));
+        m_pendingGroups.remove(groupIndex);
     }
 }
 

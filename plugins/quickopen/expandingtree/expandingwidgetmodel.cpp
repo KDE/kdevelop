@@ -165,8 +165,9 @@ void ExpandingWidgetModel::clearExpanding()
 
 ExpandingWidgetModel::ExpansionType ExpandingWidgetModel::isPartiallyExpanded(const QModelIndex& index) const
 {
-    if (m_partiallyExpanded.contains(firstColumn(index))) {
-        return m_partiallyExpanded[firstColumn(index)];
+    const auto expansionIt = m_partiallyExpanded.find(firstColumn(index));
+    if (expansionIt != m_partiallyExpanded.end()) {
+        return *expansionIt;
     } else {
         return NotExpanded;
     }
@@ -336,15 +337,16 @@ bool ExpandingWidgetModel::isExpandable(const QModelIndex& idx_) const
 
     QModelIndex idx(firstColumn(idx_));
 
-    if (!m_expandState.contains(idx)) {
-        m_expandState.insert(idx, NotExpandable);
+    auto expandStateIt = m_expandState.find(idx);
+    if (expandStateIt == m_expandState.end()) {
+        expandStateIt = m_expandState.insert(idx, NotExpandable);
         QVariant v = data(idx, CodeCompletionModel::IsExpandable);
         if (v.canConvert<bool>() && v.toBool()) {
-            m_expandState[idx] = Expandable;
+            *expandStateIt = Expandable;
         }
     }
 
-    return m_expandState[idx] != NotExpandable;
+    return *expandStateIt != NotExpandable;
 }
 
 bool ExpandingWidgetModel::isExpanded(const QModelIndex& idx_) const
@@ -426,8 +428,9 @@ void ExpandingWidgetModel::placeExpandingWidget(const QModelIndex& idx_)
     QModelIndex idx(firstColumn(idx_));
 
     QWidget* w = nullptr;
-    if (m_expandingWidgets.contains(idx)) {
-        w = m_expandingWidgets[idx];
+    const auto widgetIt = m_expandingWidgets.constFind(idx);
+    if (widgetIt != m_expandingWidgets.constEnd()) {
+        w = *widgetIt;
     }
 
     if (w && isExpanded(idx)) {
@@ -491,8 +494,9 @@ QWidget* ExpandingWidgetModel::expandingWidget(const QModelIndex& idx_) const
 {
     QModelIndex idx(firstColumn(idx_));
 
-    if (m_expandingWidgets.contains(idx)) {
-        return m_expandingWidgets[idx];
+    const auto widgetIt = m_expandingWidgets.find(idx);
+    if (widgetIt != m_expandingWidgets.end()) {
+        return *widgetIt;
     } else {
         return nullptr;
     }

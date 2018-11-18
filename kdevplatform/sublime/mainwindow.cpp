@@ -182,7 +182,8 @@ View *MainWindow::activeToolView() const
 
 void MainWindow::activateView(Sublime::View* view, bool focus)
 {
-    if (!d->viewContainers.contains(view))
+    const auto containerIt = d->viewContainers.constFind(view);
+    if (containerIt == d->viewContainers.constEnd())
         return;
 
     if (d->activeView == view)
@@ -192,7 +193,7 @@ void MainWindow::activateView(Sublime::View* view, bool focus)
         return;
     }
 
-    d->viewContainers[view]->setCurrentWidget(view->widget());
+    (*containerIt)->setCurrentWidget(view->widget());
 
     setActiveView(view, focus);
     d->area->setActiveView(view);

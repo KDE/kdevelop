@@ -398,11 +398,12 @@ VariablesRoot::VariablesRoot(TreeModel* model)
 
 Locals* VariablesRoot::locals(const QString& name)
 {
-    if (!m_locals.contains(name)) {
-        m_locals[name] = new Locals(model(), this, name);
-        appendChild(m_locals[name]);
+    auto localsIt = m_locals.find(name);
+    if (localsIt == m_locals.end()) {
+        localsIt = m_locals.insert(name, new Locals(model(), this, name));
+        appendChild(*localsIt);
     }
-    return m_locals[name];
+    return *localsIt;
 }
 
 QHash<QString, Locals*> VariablesRoot::allLocals() const

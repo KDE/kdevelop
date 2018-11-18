@@ -141,10 +141,11 @@ VariableInfo VariableReferenceParser::variableInfo(const QString& var) const
 
 void VariableReferenceParser::appendPosition(const QString& var, int start, int end, VariableInfo::VariableType type)
 {
-    if (!m_variables.contains(var)) {
+    auto variableIt = m_variables.find(var);
+    if (variableIt == m_variables.end()) {
         VariableInfo vi;
         vi.type = type;
-        m_variables[var] = vi;
+        variableIt = m_variables.insert(var, vi);
     }
-    m_variables[var].positions << VariableInfo::Position(start, end);
+    variableIt->positions << VariableInfo::Position(start, end);
 }

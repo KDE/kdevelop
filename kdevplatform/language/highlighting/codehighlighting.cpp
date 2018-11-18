@@ -154,7 +154,8 @@ bool CodeHighlighting::hasHighlighting(IndexedString url) const
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(url);
     if (tracker) {
         QMutexLocker lock(&m_dataMutex);
-        return m_highlights.contains(tracker) && !m_highlights[tracker]->m_highlightedRanges.isEmpty();
+        const auto highlightingIt = m_highlights.constFind(tracker);
+        return highlightingIt != m_highlights.constEnd() && !(*highlightingIt)->m_highlightedRanges.isEmpty();
     }
     return false;
 }
@@ -234,10 +235,12 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
             (imported.context(top)->type() != DUContext::Other && imported.context(top)->type() != DUContext::Function))
             continue;
         //For now it's enough simply copying them, because we only pass on colors within function bodies.
-        if (m_functionColorsForDeclarations.contains(imported.context(top)))
-            colorsForDeclarations = m_functionColorsForDeclarations[imported.context(top)];
-        if (m_functionDeclarationsForColors.contains(imported.context(top)))
-            declarationsForColors = m_functionDeclarationsForColors[imported.context(top)];
+        const auto functionColorsIt = m_functionColorsForDeclarations.constFind(imported.context(top));
+        if (functionColorsIt != m_functionColorsForDeclarations.constEnd())
+            colorsForDeclarations = *functionColorsIt;
+        const auto functionDeclarationsIt = m_functionDeclarationsForColors.constFind(imported.context(top));
+        if (functionDeclarationsIt != m_functionDeclarationsForColors.constEnd())
+            declarationsForColors = *functionDeclarationsIt;
     }
 
     QList<Declaration*> takeFreeColors;
@@ -300,8 +303,9 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
     for (int a = 0; a < context->usesCount(); ++a) {
         Declaration* decl = context->topContext()->usedDeclarationForIndex(context->uses()[a].m_declarationIndex);
         QColor color(QColor::Invalid);
-        if (colorsForDeclarations.contains(decl))
-            color = ColorCache::self()->generatedColor(colorsForDeclarations[decl]);
+        const auto colorsIt = colorsForDeclarations.constFind(decl);
+        if (colorsIt != colorsForDeclarations.constEnd())
+            color = ColorCache::self()->generatedColor(*colorsIt);
         highlightUse(context, a, color);
     }
 
@@ -338,8 +342,9 @@ KDevelop::Declaration* CodeHighlightingInstance::localClassFromCodeContext(KDeve
     if (!context)
         return nullptr;
 
-    if (m_contextClasses.contains(context))
-        return m_contextClasses[context];
+    const auto classIt = m_contextClasses.constFind(context);
+    if (classIt != m_contextClasses.constEnd())
+        return *classIt;
 
     DUContext* startContext = context;
 
@@ -356,8 +361,9 @@ KDevelop::Declaration* CodeHighlightingInstance::localClassFromCodeContext(KDeve
     Declaration* functionDeclaration = nullptr;
 
     if (auto* def = dynamic_cast<FunctionDefinition*>(context->owner())) {
-        if (m_contextClasses.contains(context))
-            return m_contextClasses[context];
+        const auto classIt = m_contextClasses.constFind(context);
+        if (classIt != m_contextClasses.constEnd())
+            return *classIt;
 
         functionDeclaration = def->declaration(startContext->topContext());
     }
@@ -497,11 +503,13 @@ void CodeHighlighting::clearHighlightingForDocument(const IndexedString& documen
     VERIFY_FOREGROUND_LOCKED
     QMutexLocker lock(&m_dataMutex);
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()->trackerForUrl(document);
-    if (m_highlights.contains(tracker)) {
+    auto highlightingIt = m_highlights.find(tracker);
+    if (highlightingIt != m_highlights.end()) {
         disconnect(tracker, &DocumentChangeTracker::destroyed, this, &CodeHighlighting::trackerDestroyed);
-        qDeleteAll(m_highlights[tracker]->m_highlightedRanges);
-        delete m_highlights[tracker];
-        m_highlights.remove(tracker);
+        auto& highlighting = *highlightingIt;
+        qDeleteAll(highlighting->m_highlightedRanges);
+        delete highlighting;
+        m_highlights.erase(highlightingIt);
     }
 }
 
@@ -530,9 +538,11 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
 
     QVector<MovingRange*> oldHighlightedRanges;
 
-    if (m_highlights.contains(tracker)) {
-        oldHighlightedRanges = m_highlights[tracker]->m_highlightedRanges;
-        delete m_highlights[tracker];
+    const auto highlightingIt = m_highlights.find(tracker);
+    if (highlightingIt != m_highlights.end()) {
+        oldHighlightedRanges = (*highlightingIt)->m_highlightedRanges;
+        delete *highlightingIt;
+        *highlightingIt = highlighting;
     } else {
         // we newly add this tracker, so add the connection
         // This can't use new style connect syntax since MovingInterface is not a QObject
@@ -541,9 +551,8 @@ void CodeHighlighting::applyHighlighting(void* _highlighting)
         connect(tracker->document(), SIGNAL(aboutToRemoveText(KTextEditor::Range)),
                 this, SLOT(aboutToRemoveText(KTextEditor::Range)));
         connect(tracker, &DocumentChangeTracker::destroyed, this, &CodeHighlighting::trackerDestroyed);
+        m_highlights.insert(tracker, highlighting);
     }
-
-    m_highlights[tracker] = highlighting;
 
     // Now create MovingRanges (match old ones with the incoming ranges)
 
@@ -620,8 +629,9 @@ void CodeHighlighting::aboutToRemoveText(const KTextEditor::Range& range)
 
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()
                                      ->trackerForUrl(IndexedString(doc->url()));
-    if (m_highlights.contains(tracker)) {
-        QVector<MovingRange*>& ranges = m_highlights.value(tracker)->m_highlightedRanges;
+    const auto highlightingIt = m_highlights.constFind(tracker);
+    if (highlightingIt != m_highlights.constEnd()) {
+        QVector<MovingRange*>& ranges = (*highlightingIt)->m_highlightedRanges;
         QVector<MovingRange*>::iterator it = ranges.begin();
         while (it != ranges.end()) {
             if (range.contains((*it)->toRange())) {

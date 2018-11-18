@@ -148,10 +148,9 @@ void TestView::updateTestSuite(ITestSuite* suite, const TestResult& result)
     {
         qCDebug(PLUGIN_TESTVIEW) << "Found a test case" << item->child(i)->text();
         QStandardItem* caseItem = item->child(i);
-        if (result.testCaseResults.contains(caseItem->text()))
-        {
-            TestResult::TestCaseResult caseResult = result.testCaseResults.value(caseItem->text(), TestResult::NotRun);
-            caseItem->setIcon(iconForTestResult(caseResult));
+        const auto resultIt = result.testCaseResults.constFind(caseItem->text());
+        if (resultIt != result.testCaseResults.constEnd()) {
+            caseItem->setIcon(iconForTestResult(*resultIt));
         }
     }
 }

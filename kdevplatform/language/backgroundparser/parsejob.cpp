@@ -171,8 +171,9 @@ TopDUContext::Features ParseJob::staticMinimumFeatures(const IndexedString& url)
     QMutexLocker lock(&minimumFeaturesMutex);
     auto features = ( TopDUContext::Features )0;
 
-    if (::staticMinimumFeatures.contains(url))
-        foreach (const TopDUContext::Features f, ::staticMinimumFeatures[url])
+    const auto featuresIt = ::staticMinimumFeatures.constFind(url);
+    if (featuresIt != ::staticMinimumFeatures.constEnd())
+        for (const TopDUContext::Features f : *featuresIt)
             features = ( TopDUContext::Features )(features | f);
 
     return features;

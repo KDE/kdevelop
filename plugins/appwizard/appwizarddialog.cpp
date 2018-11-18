@@ -75,15 +75,17 @@ ApplicationInfo AppWizardDialog::appInfo() const
 
 void AppWizardDialog::pageValid( QWidget* w )
 {
-    if( m_pageItems.contains(w) )
-        setValid( m_pageItems[w], true );
+    const auto pageItemId = m_pageItems.constFind(w);
+    if (pageItemId != m_pageItems.constEnd())
+        setValid(*pageItemId, true);
 }
 
 
 void AppWizardDialog::pageInValid( QWidget* w )
 {
-    if( m_pageItems.contains(w) )
-        setValid( m_pageItems[w], false );
+    const auto pageItemId =  m_pageItems.constFind(w);
+    if (pageItemId != m_pageItems.constEnd())
+        setValid(*pageItemId, false);
 }
 
 void AppWizardDialog::next()

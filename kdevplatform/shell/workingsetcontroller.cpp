@@ -131,15 +131,16 @@ WorkingSet* WorkingSetController::workingSet(const QString& id)
     if(id.isEmpty())
         return m_emptyWorkingSet;
 
-    if(!m_workingSets.contains(id)) {
+    auto workingSetIt = m_workingSets.find(id);
+    if (workingSetIt == m_workingSets.end()) {
         auto* set = new WorkingSet(id);
         connect(set, &WorkingSet::aboutToRemove,
                 this, &WorkingSetController::aboutToRemoveWorkingSet);
-        m_workingSets[id] = set;
+        workingSetIt= m_workingSets.insert(id, set);
         emit workingSetAdded(set);
     }
 
-    return m_workingSets[id];
+    return *workingSetIt;
 }
 
 QWidget* WorkingSetController::createSetManagerWidget(MainWindow* parent, Sublime::Area* fixedArea) {

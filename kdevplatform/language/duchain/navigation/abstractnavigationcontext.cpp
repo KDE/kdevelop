@@ -176,10 +176,11 @@ void AbstractNavigationContext::clear()
 
 void AbstractNavigationContext::executeLink(const QString& link)
 {
-    if (!d->m_links.contains(link))
+    const auto actionIt = d->m_links.constFind(link);
+    if (actionIt == d->m_links.constEnd())
         return;
 
-    execute(d->m_links[link]);
+    execute(*actionIt);
 }
 
 NavigationContextPointer AbstractNavigationContext::executeKeyAction(const QString& key)
@@ -442,12 +443,13 @@ NavigationContextPointer AbstractNavigationContext::accept(IndexedDeclaration de
 
 NavigationContextPointer AbstractNavigationContext::acceptLink(const QString& link)
 {
-    if (!d->m_links.contains(link)) {
+    const auto actionIt = d->m_links.constFind(link);
+    if (actionIt == d->m_links.constEnd()) {
         qCDebug(LANGUAGE) << "Executed unregistered link " << link << endl;
         return NavigationContextPointer(this);
     }
 
-    return execute(d->m_links[link]);
+    return execute(*actionIt);
 }
 
 NavigationAction AbstractNavigationContext::currentAction() const

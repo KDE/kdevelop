@@ -111,10 +111,11 @@ public:
 
 void AbstractFileManagerPluginPrivate::projectClosing(IProject* project)
 {
-    if ( m_projectJobs.contains(project) ) {
+    const auto projectJobIt = m_projectJobs.constFind(project);
+    if (projectJobIt != m_projectJobs.constEnd()) {
         // make sure the import job does not live longer than the project
         // see also addLotsOfFiles test
-        foreach( FileManagerListJob* job, m_projectJobs[project] ) {
+        for (FileManagerListJob* job : *projectJobIt) {
             qCDebug(FILEMANAGER) << "killing project job:" << job;
             job->abort();
         }

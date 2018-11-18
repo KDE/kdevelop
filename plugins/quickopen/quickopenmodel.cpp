@@ -397,8 +397,9 @@ QuickOpenDataPointer QuickOpenModel::getItem(int row, bool noReset) const
     ///@todo Deal with unexpected item-counts, like for example in the case of overloaded function-declarations
 
 #ifdef QUICKOPEN_USE_ITEM_CACHING
-    if (m_cachedData.contains(row)) {
-        return m_cachedData[row];
+    const auto dataIt = m_cachedData.constFind(row);
+    if (dataIt != m_cachedData.constEnd()) {
+        return *dataIt;
     }
 #endif
     int rowOffset = 0;

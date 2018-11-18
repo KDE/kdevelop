@@ -61,11 +61,14 @@ QStringList QMakeFileVisitor::visitMacro(QMake::ScopeBodyAST* node, const QStrin
 
 QStringList QMakeFileVisitor::resolveVariable(const QString& variable, VariableInfo::VariableType type) const
 {
-    if (type == VariableInfo::QMakeVariable && m_variableValues.contains(variable)) {
-        return m_variableValues.value(variable);
-    } else {
-        return m_resolver->resolveVariable(variable, type);
+    if (type == VariableInfo::QMakeVariable) {
+        const auto variableValueIt = m_variableValues.find(variable);
+        if (variableValueIt != m_variableValues.end()) {
+            return *variableValueIt;
+        }
     }
+
+    return m_resolver->resolveVariable(variable, type);
 }
 
 QStringList QMakeFileVisitor::getValueList(const QList<QMake::ValueAST*>& list) const

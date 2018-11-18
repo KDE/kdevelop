@@ -253,9 +253,10 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
                 continue;
 
             // Is this a new class or an existing class?
-            if (removedClasses.contains(id)) {
+            const auto classIt = removedClasses.find(id);
+            if (classIt != removedClasses.end()) {
                 // It already exist - remove it from the known classes and continue.
-                removedClasses.remove(id);
+                removedClasses.erase(classIt);
                 continue;
             }
 

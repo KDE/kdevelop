@@ -324,13 +324,15 @@ static QHash<IndexedString, QExplicitlySharedDataPointer<ArtificialStringData>> 
 //Return the representation for the given URL if it exists, or an empty pointer otherwise
 static QExplicitlySharedDataPointer<ArtificialStringData> representationForPath(const IndexedString& path)
 {
-    if (artificialStrings.contains(path))
-        return artificialStrings[path];
+    const auto artificialStringIt = artificialStrings.constFind(path);
+    if (artificialStringIt != artificialStrings.constEnd())
+        return *artificialStringIt;
     else
     {
         IndexedString constructedPath(CodeRepresentation::artificialPath(path.str()));
-        if (artificialStrings.contains(constructedPath))
-            return artificialStrings[constructedPath];
+        const auto artificialStringIt = artificialStrings.constFind(constructedPath);
+        if (artificialStringIt != artificialStrings.constEnd())
+            return *artificialStringIt;
         else
             return QExplicitlySharedDataPointer<ArtificialStringData>();
     }

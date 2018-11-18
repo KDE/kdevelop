@@ -174,12 +174,15 @@ QMakeFile::VariableMap QMakeFile::variableMap() const
 
 QStringList QMakeFile::resolveVariable(const QString& variable, VariableInfo::VariableType type) const
 {
-    if (type == VariableInfo::QMakeVariable && m_variableValues.contains(variable)) {
-        return m_variableValues.value(variable);
-    } else {
-        qCWarning(KDEV_QMAKE) << "unresolved variable:" << variable << "type:" << type;
-        return QStringList();
+    if (type == VariableInfo::QMakeVariable) {
+        const auto variableValueIt = m_variableValues.find(variable);
+        if (variableValueIt != m_variableValues.end()) {
+            return *variableValueIt;
+        }
     }
+
+    qCWarning(KDEV_QMAKE) << "unresolved variable:" << variable << "type:" << type;
+    return QStringList();
 }
 
 QStringList QMakeFile::resolveShellGlobbing(const QString& pattern, const QString& base) const

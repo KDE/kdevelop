@@ -66,9 +66,10 @@ QString repairDiff(const QString& diff) {
             if(tail.indexOf(spaceRegExp) != -1) {
                 QString file = tail.left(tail.indexOf(spaceRegExp));
                 qCDebug(PLUGIN_SVN) << "checking for" << file;
-                if(headers.contains(file)) {
-                    qCDebug(PLUGIN_SVN) << "adding header for" << file << ":" << headers[file];
-                    lines[a] = headers[file] + QLatin1Char('\n') + lines[a];
+                const auto headerIt = headers.constFind(file);
+                if (headerIt != headers.constEnd()) {
+                    qCDebug(PLUGIN_SVN) << "adding header for" << file << ":" << *headerIt;
+                    lines[a] = *headerIt + QLatin1Char('\n') + lines[a];
                 }
             }
         }

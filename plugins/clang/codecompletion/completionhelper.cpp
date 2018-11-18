@@ -103,8 +103,9 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
         CXCursor arg = clang_Cursor_getArgument(cursor, i);
         QString id = ClangString(clang_getCursorDisplayName(arg)).toString();
         QString type = ClangString(clang_getTypeSpelling(clang_getCursorType(arg))).toString();
-        if (info->templateTypeMap.contains(type)) {
-            type = info->templateTypeMap.value(type);
+        const auto templateTypeIt = info->templateTypeMap.constFind(type);
+        if (templateTypeIt != info->templateTypeMap.constEnd()) {
+            type = *templateTypeIt;
         }
         FuncParameterInfo param;
         param.type = type;
@@ -114,8 +115,9 @@ FuncOverrideInfo processCXXMethod(CXCursor cursor, OverrideInfo* info)
 
     FuncOverrideInfo fp;
     QString retType = ClangString(clang_getTypeSpelling(clang_getCursorResultType(cursor))).toString();
-    if (info->templateTypeMap.contains(retType)) {
-        retType = info->templateTypeMap.value(retType);
+    const auto templateTypeIt = info->templateTypeMap.constFind(retType);
+    if (templateTypeIt != info->templateTypeMap.constEnd()) {
+        retType = *templateTypeIt;
     }
 
     fp.returnType = retType;

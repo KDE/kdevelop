@@ -141,8 +141,9 @@ void ProblemReporterPlugin::documentActivated(KDevelop::IDocument* document)
 {
   IndexedString documentUrl(document->url());
 
-  if (m_reHighlightNeeded.contains(documentUrl)) {
-    m_reHighlightNeeded.remove(documentUrl);
+  const auto neededIt = m_reHighlightNeeded.find(documentUrl);
+  if (neededIt != m_reHighlightNeeded.end()) {
+    m_reHighlightNeeded.erase(neededIt);
     updateHighlight(documentUrl);
   }
 }

@@ -185,9 +185,11 @@ QMutex& ItemRepositoryRegistry::mutex()
 
 QAtomicInt& ItemRepositoryRegistry::customCounter(const QString& identity, int initialValue)
 {
-    if (!d->m_customCounters.contains(identity))
-        d->m_customCounters.insert(identity, new QAtomicInt(initialValue));
-    return *d->m_customCounters[identity];
+    auto customCounterIt = d->m_customCounters.find(identity);
+    if (customCounterIt == d->m_customCounters.end()) {
+        customCounterIt = d->m_customCounters.insert(identity, new QAtomicInt(initialValue));
+    }
+    return **customCounterIt;
 }
 
 ///The global item-repository registry that is used by default

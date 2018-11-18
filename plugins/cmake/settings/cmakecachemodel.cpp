@@ -98,9 +98,9 @@ void CMakeCacheModel::read()
                     m_internal.insert(name);
                 } else if(flag==QLatin1String("ADVANCED") || flag==QLatin1String("STRINGS"))
                 {
-                    if(variablePos.contains(name))
-                    {
-                        int pos=variablePos[name];
+                    const auto posIt = variablePos.constFind(name);
+                    if (posIt != variablePos.constEnd()) {
+                        const int pos = *posIt;
                         
                         // if the flag is not ADVANCED, it's STRINGS.
                         // The latter is stored in column 5

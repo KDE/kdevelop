@@ -173,8 +173,9 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
     QMutexLocker lock(&m_mutex);
     auto pair = qMakePair(moduleName, url);
 
-    if (m_cachedModuleFileNames.contains(pair)) {
-        return m_cachedModuleFileNames.value(pair);
+    const auto cachedModuleFileNameIt = m_cachedModuleFileNames.constFind(pair);
+    if (cachedModuleFileNameIt != m_cachedModuleFileNames.constEnd()) {
+        return *cachedModuleFileNameIt;
     }
 
     QString& fileName = m_cachedModuleFileNames[pair];

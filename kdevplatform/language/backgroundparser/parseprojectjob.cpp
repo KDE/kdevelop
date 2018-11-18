@@ -139,22 +139,24 @@ void ParseProjectJob::start()
 
     if (auto currentDocument = ICore::self()->documentController()->activeDocument()) {
         const auto path = IndexedString(currentDocument->url());
-        if (d->filesToParse.contains(path)) {
+        auto fileIt = d->filesToParse.find(path);
+        if (fileIt != d->filesToParse.end()) {
             ICore::self()->languageController()->backgroundParser()->addDocument(path,
                                                                                  TopDUContext::AllDeclarationsContextsAndUses, BackgroundParser::BestPriority,
                                                                                  this);
-            d->filesToParse.remove(path);
+            d->filesToParse.erase(fileIt);
         }
     }
 
     // Add all currently open files that belong to the project to the background-parser, so that they'll be parsed first of all
     foreach (auto document, ICore::self()->documentController()->openDocuments()) {
         const auto path = IndexedString(document->url());
-        if (d->filesToParse.contains(path)) {
+        auto fileIt = d->filesToParse.find(path);
+        if (fileIt != d->filesToParse.end()) {
             ICore::self()->languageController()->backgroundParser()->addDocument(path,
                                                                                  TopDUContext::AllDeclarationsContextsAndUses, 10,
                                                                                  this);
-            d->filesToParse.remove(path);
+            d->filesToParse.erase(fileIt);
         }
     }
 

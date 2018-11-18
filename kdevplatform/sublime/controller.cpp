@@ -115,8 +115,9 @@ Controller::~Controller()
 void Controller::showArea(Area *area, MainWindow *mainWindow)
 {
     Area *areaToShow = nullptr;
+    const auto windowIt = d->shownAreas.find(area);
     //if the area is already shown in another mainwindow then we need to clone it
-    if (d->shownAreas.contains(area) && (mainWindow != d->shownAreas[area]))
+    if (windowIt != d->shownAreas.end() && (mainWindow != *windowIt))
         areaToShow = new Area(*area);
     else
         areaToShow = area;

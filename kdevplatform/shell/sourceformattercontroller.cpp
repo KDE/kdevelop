@@ -270,8 +270,9 @@ KConfigGroup SourceFormatterController::globalConfig() const
 ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const QMimeType& mime ) const
 {
     static QHash<QString, ISourceFormatter*> knownFormatters;
-    if (knownFormatters.contains(mime.name()))
-        return knownFormatters[mime.name()];
+    const auto formatterIt = knownFormatters.constFind(mime.name());
+    if (formatterIt != knownFormatters.constEnd())
+        return *formatterIt;
 
     foreach (ISourceFormatter* iformatter, d->sourceFormatters) {
         QSharedPointer<SourceFormatter> formatter(createFormatterForPlugin(iformatter));

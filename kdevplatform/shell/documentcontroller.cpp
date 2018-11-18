@@ -159,9 +159,10 @@ public:
         QMutableHashIterator<QUrl, IDocument*> it = documents;
         while (it.hasNext()) {
             if (it.next().value() == document) {
-                if (documents.contains(document->url())) {
+                const auto documentIt = documents.constFind(document->url());
+                if (documentIt != documents.constEnd()) {
                     // Weird situation (saving as a file that is aready open)
-                    IDocument* origDoc = documents[document->url()];
+                    IDocument* origDoc = *documentIt;
                     if (origDoc->state() & IDocument::Modified) {
                         // given that the file has been saved, close the saved file as the other instance will become conflicted on disk
                         document->close();
@@ -711,13 +712,14 @@ void DocumentController::fileClose()
 
 bool DocumentController::closeDocument( const QUrl &url )
 {
-    if( !d->documents.contains(url) )
+    const auto documentIt = d->documents.constFind(url);
+    if (documentIt == d->documents.constEnd())
         return false;
 
     //this will remove all views and after the last view is removed, the
     //document will be self-destructed and removeDocument() slot will catch that
     //and clean up internal data structures
-    d->documents[url]->close();
+    (*documentIt)->close();
     return true;
 }
 

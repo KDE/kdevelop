@@ -633,21 +633,23 @@ void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyW
 
     QMutexLocker lock(&d->m_mutex);
 
-    if (d->m_documents.contains(url)) {
-        d->m_documentsForPriority[d->m_documents[url].priority()].remove(url);
+    auto documentParsePlanIt = d->m_documents.find(url);
+    if (documentParsePlanIt != d->m_documents.end()) {
+        auto& documentParsePlan = *documentParsePlanIt;
+        d->m_documentsForPriority[documentParsePlan.priority()].remove(url);
 
-        foreach (const DocumentParseTarget& target, d->m_documents[url].targets) {
+        foreach (const DocumentParseTarget& target, documentParsePlan.targets) {
             if (target.notifyWhenReady.data() == notifyWhenReady) {
-                d->m_documents[url].targets.remove(target);
+                documentParsePlan.targets.remove(target);
             }
         }
 
-        if (d->m_documents[url].targets.isEmpty()) {
-            d->m_documents.remove(url);
+        if (documentParsePlan.targets.isEmpty()) {
+            d->m_documents.erase(documentParsePlanIt);
             --d->m_maxParseJobs;
         } else {
             //Insert with an eventually different priority
-            d->m_documentsForPriority[d->m_documents[url].priority()].insert(url);
+            d->m_documentsForPriority[documentParsePlan.priority()].insert(url);
         }
     }
 }
@@ -866,20 +868,22 @@ void BackgroundParser::documentClosed(IDocument* document)
     if (document->textDocument()) {
         KTextEditor::Document* textDocument = document->textDocument();
 
-        if (!d->m_managedTextDocumentUrls.contains(textDocument))
+        auto documentUrlIt = d->m_managedTextDocumentUrls.find(textDocument);
+        if (documentUrlIt == d->m_managedTextDocumentUrls.end())
             return; // Probably the document had an invalid url, and thus it wasn't added to the background parser
 
-        Q_ASSERT(d->m_managedTextDocumentUrls.contains(textDocument));
+        Q_ASSERT(documentUrlIt != d->m_managedTextDocumentUrls.end());
 
-        IndexedString url(d->m_managedTextDocumentUrls[textDocument]);
+        IndexedString url(*documentUrlIt);
 
         QMutexLocker l2(&d->m_managedMutex);
-        Q_ASSERT(d->m_managed.contains(url));
+        auto urlIt = d->m_managed.find(url);
+        Q_ASSERT(urlIt != d->m_managed.end());
 
         qCDebug(LANGUAGE) << "removing" << url.str() << "from background parser";
-        delete d->m_managed[url];
-        d->m_managedTextDocumentUrls.remove(textDocument);
-        d->m_managed.remove(url);
+        delete *urlIt;
+        d->m_managedTextDocumentUrls.erase(documentUrlIt);
+        d->m_managed.erase(urlIt);
     }
 }
 
@@ -893,7 +897,8 @@ void BackgroundParser::documentLoaded(IDocument* document)
         // Some debugging because we had issues with this
 
         QMutexLocker l2(&d->m_managedMutex);
-        if (d->m_managed.contains(url) && d->m_managed[url]->document() == textDocument) {
+        auto urlIt = d->m_managed.find(url);
+        if (urlIt != d->m_managed.end() && (*urlIt)->document() == textDocument) {
             qCDebug(LANGUAGE) << "Got redundant documentLoaded from" << document->url() << textDocument;
             return;
         }
