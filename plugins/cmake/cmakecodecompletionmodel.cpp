@@ -93,7 +93,7 @@ void CMakeCodeCompletionModel::completionInvoked(View* view, const Range& range,
     for(int l=range.end().line(); l>=0 && !m_inside; --l)
     {
         QString cline=d->line(l);
-        QString line=cline.left(cline.indexOf(QLatin1Char('#')));
+        const QStringRef line = cline.leftRef(cline.indexOf(QLatin1Char('#')));
         
         int close=line.lastIndexOf(QLatin1Char(')')), open=line.indexOf(QLatin1Char('('));
         

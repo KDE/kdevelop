@@ -218,7 +218,7 @@ void EnvironmentProfileModel::setVariablesFromString(const QString& plainText)
         if (pos < 0) {
             continue;
         }
-        const QString variableName = line.left(pos).trimmed();
+        const QString variableName = line.leftRef(pos).trimmed().toString();
         if (variableName.isEmpty()) {
             continue;
         }
