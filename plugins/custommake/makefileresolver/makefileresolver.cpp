@@ -473,7 +473,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
           //We use the second directory. For t hat reason we search for the last index of "cd "
           int cdIndex = prefix.lastIndexOf(QLatin1String("cd "));
           if (cdIndex != -1) {
-            newWorkingDirectory = prefix.mid(cdIndex + 3).trimmed();
+            newWorkingDirectory = prefix.midRef(cdIndex + 3).trimmed().toString();
             if (QFileInfo(newWorkingDirectory).isRelative())
               newWorkingDirectory = workingDirectory + QLatin1Char('/') + newWorkingDirectory;
             newWorkingDirectory = QDir::cleanPath(newWorkingDirectory);

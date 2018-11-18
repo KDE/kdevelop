@@ -47,7 +47,7 @@ QString repairDiff(const QString& diff) {
     QMap<QString, QString> headers;
     for(int a = 0; a < lines.size()-1; ++a) {
         if(lines[a].startsWith(QLatin1String("Index: ")) && lines[a+1].startsWith(QLatin1String("====="))) {
-            QString fileName = lines[a].mid(strlen("Index: ")).trimmed();
+            const QString fileName = lines[a].midRef(strlen("Index: ")).trimmed().toString();
             headers[fileName] = lines[a];
             qCDebug(PLUGIN_SVN) << "found header for" << fileName;
             lines[a] = QString();

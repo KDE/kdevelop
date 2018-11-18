@@ -47,7 +47,7 @@ int Utils::expressionAt( const QString& text, int index ) {
     }
 
     QChar ch = text[ index ];
-    QString ch2 = text.mid( index - 1, 2 );
+    const QStringRef ch2 = text.midRef(index - 1, 2);
     if ((last != T_IDE) && (ch.isLetterOrNumber() || ch == QLatin1Char('_'))) {
       while (index > 0 && (text[index].isLetterOrNumber() || text[index] == QLatin1Char('_'))) {
         --index;

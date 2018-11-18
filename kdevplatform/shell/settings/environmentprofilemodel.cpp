@@ -222,7 +222,7 @@ void EnvironmentProfileModel::setVariablesFromString(const QString& plainText)
         if (variableName.isEmpty()) {
             continue;
         }
-        const QString value = line.mid(pos+1).trimmed();
+        const QString value = line.midRef(pos+1).trimmed().toString();
         m_varsByIndex << variableName;
         variables.insert(variableName, value);
     }
