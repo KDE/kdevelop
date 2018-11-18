@@ -127,7 +127,7 @@ void ChecksWidget::setChecks(const QString& checks)
 
         auto state = Qt::Checked;
         if (checkName.startsWith(QStringLiteral("no-"))) {
-            checkName = checkName.mid(3);
+            checkName.remove(0, 3);
             state = Qt::Unchecked;
         }
 

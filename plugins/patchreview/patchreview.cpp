@@ -425,7 +425,7 @@ QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
     KDevelop::Path path(QDir::cleanPath(m_patch->baseDir().toLocalFile()));
     QVector<QString> destPath = KDevelop::Path(QLatin1Char('/') + model->destinationPath()).segments();
     if (destPath.size() >= (int)m_depth) {
-        destPath = destPath.mid(m_depth);
+        destPath.remove(0, m_depth);
     }
     foreach(const QString& segment, destPath) {
         path.addPath(segment);

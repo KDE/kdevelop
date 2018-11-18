@@ -161,7 +161,7 @@ public:
                 // separator line between items
                 setState(EMPTY);
                 setState(LIST);
-                line = line.mid(2);
+                line.remove(0, 2);
             }
 
             if (state == EMPTY) {
