@@ -463,9 +463,9 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
         ///Extract the new working-directory
         if (!prefix.isEmpty()) {
           if (prefix.endsWith(QLatin1String("&&")))
-            prefix.truncate(prefix.length() - 2);
+            prefix.chop(2);
           else if (prefix.endsWith(QLatin1Char(';')))
-            prefix.truncate(prefix.length() - 1);
+            prefix.chop(1);
 
           ///Now test if what we have as prefix is a simple "cd /foo/bar" call.
 
