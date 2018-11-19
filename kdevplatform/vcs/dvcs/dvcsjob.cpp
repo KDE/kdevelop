@@ -77,7 +77,7 @@ DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVe
 
     connect(d->childproc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
             this, &DVcsJob::slotProcessExited);
-    connect(d->childproc, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+    connect(d->childproc, &QProcess::errorOccurred,
             this, &DVcsJob::slotProcessError);
 
     connect(d->childproc, &KProcess::readyReadStandardOutput,

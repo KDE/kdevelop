@@ -60,7 +60,7 @@ MIDebugger::MIDebugger(QObject* parent)
     connect(m_process,
             static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
             this, &MIDebugger::processFinished);
-    connect(m_process, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+    connect(m_process, &QProcess::errorOccurred,
             this, &MIDebugger::processErrored);
 }
 
@@ -68,7 +68,7 @@ MIDebugger::~MIDebugger()
 {
     // prevent Qt warning: QProcess: Destroyed while process is still running.
     if (m_process && m_process->state() == QProcess::Running) {
-        disconnect(m_process, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+        disconnect(m_process, &QProcess::errorOccurred,
                     this, &MIDebugger::processErrored);
         m_process->kill();
         m_process->waitForFinished(10);

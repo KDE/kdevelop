@@ -90,7 +90,7 @@ OutputExecuteJob::OutputExecuteJob( QObject* parent, OutputJob::OutputJobVerbosi
 
     connect( d->m_process, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished),
              this, &OutputExecuteJob::childProcessExited );
-    connect( d->m_process, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+    connect( d->m_process, &QProcess::errorOccurred,
              this, &OutputExecuteJob::childProcessError );
     connect( d->m_process, &KProcess::readyReadStandardOutput,
              this, [=] { d->childProcessStdout(); } );

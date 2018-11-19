@@ -206,7 +206,7 @@ ExternalScriptJob::ExternalScriptJob(ExternalScriptItem* item, const QUrl& url, 
             model, &OutputModel::appendLines);
     connect(m_lineMaker, &ProcessLineMaker::receivedStderrLines,
             this, &ExternalScriptJob::receivedStderrLines);
-    connect(m_proc, static_cast<void ( KProcess::* )( QProcess::ProcessError )>(&KProcess::error),
+    connect(m_proc, &QProcess::errorOccurred,
             this, &ExternalScriptJob::processError);
     connect(m_proc, static_cast<void ( KProcess::* )(int, QProcess::ExitStatus)>(&KProcess::finished),
             this, &ExternalScriptJob::processFinished);

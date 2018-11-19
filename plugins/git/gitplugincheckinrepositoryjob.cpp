@@ -52,8 +52,8 @@ void GitPluginCheckInRepositoryJob::start()
     m_hashjob->setStandardOutputProcess(m_findjob);
 
     connect(m_findjob, static_cast<void(QProcess::*)(int)>(&QProcess::finished), this, &GitPluginCheckInRepositoryJob::repositoryQueryFinished);
-    connect(m_hashjob, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), this, &GitPluginCheckInRepositoryJob::processFailed);
-    connect(m_findjob, static_cast<void(QProcess::*)(QProcess::ProcessError)>(&QProcess::error), this, &GitPluginCheckInRepositoryJob::processFailed);
+    connect(m_hashjob, &QProcess::errorOccurred, this, &GitPluginCheckInRepositoryJob::processFailed);
+    connect(m_findjob, &QProcess::errorOccurred, this, &GitPluginCheckInRepositoryJob::processFailed);
 
     m_hashjob->start(QStringLiteral("git"), QStringList{QStringLiteral("hash-object"), QStringLiteral("--stdin")});
     m_findjob->start(QStringLiteral("git"), QStringList{QStringLiteral("cat-file"), QStringLiteral("--batch-check")});

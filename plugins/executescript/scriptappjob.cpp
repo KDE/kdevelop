@@ -137,7 +137,7 @@ ScriptAppJob::ScriptAppJob(ExecuteScriptPlugin* parent, KDevelop::ILaunchConfigu
     setDelegate( new KDevelop::OutputDelegate );
 
     connect( lineMaker, &ProcessLineMaker::receivedStdoutLines, model(), &OutputModel::appendLines );
-    connect( proc, static_cast<void(KProcess::*)(QProcess::ProcessError)>(&KProcess::error), this, &ScriptAppJob::processError );
+    connect(proc, &QProcess::errorOccurred, this, &ScriptAppJob::processError);
     connect( proc, static_cast<void(KProcess::*)(int,QProcess::ExitStatus)>(&KProcess::finished), this, &ScriptAppJob::processFinished );
 
     // Now setup the process parameters

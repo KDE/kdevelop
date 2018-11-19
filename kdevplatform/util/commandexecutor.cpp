@@ -72,7 +72,7 @@ CommandExecutor::CommandExecutor(const QString& command, QObject* parent)
             this, &CommandExecutor::receivedStandardOutput);
     connect(d->m_lineMaker, &ProcessLineMaker::receivedStderrLines,
             this, &CommandExecutor::receivedStandardError);
-    connect(d->m_process, static_cast<void (KProcess::*)(QProcess::ProcessError)>(&KProcess::error),
+    connect(d->m_process, &QProcess::errorOccurred,
             this, [&](QProcess::ProcessError error) {
             d->procError(error);
         });
