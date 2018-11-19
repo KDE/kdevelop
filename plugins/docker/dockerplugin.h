@@ -22,7 +22,9 @@
 #include <interfaces/iruntime.h>
 #include <interfaces/iplugin.h>
 #include <util/path.h>
+// Qt
 #include <QProcess>
+#include <QHash>
 
 class DockerPreferencesSettings;
 

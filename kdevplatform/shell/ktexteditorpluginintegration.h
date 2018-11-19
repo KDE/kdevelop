@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QPointer>
+#include <QHash>
 
 #include <KTextEditor/MainWindow>
 #include <KTextEditor/Plugin>

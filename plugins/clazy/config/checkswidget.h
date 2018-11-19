@@ -22,6 +22,7 @@
 #define KDEVCLAZY_CHECKS_WIDGET_H
 
 #include <QWidget>
+#include <QHash>
 
 class QTreeWidget;
 class QTreeWidgetItem;
