@@ -21,6 +21,7 @@ kde_enable_exceptions()
 
 if(LibKompareDiff2_VERSION VERSION_LESS 5.1)
     remove_definitions(
+        -DQT_NO_CAST_FROM_ASCII
         -DQT_NO_SIGNALS_SLOTS_KEYWORDS
     )
 endif()
