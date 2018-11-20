@@ -1950,7 +1950,7 @@ void TestDUChain::testGccCompatibility()
         )"), QStringLiteral("cpp"), project, dir.path());
 
         file.parse();
-        QVERIFY(file.waitForParsed(5000));
+        QVERIFY(file.waitForParsed(50000));
 
         DUChainReadLocker lock;
         QSet<TopDUContext*> checked;
