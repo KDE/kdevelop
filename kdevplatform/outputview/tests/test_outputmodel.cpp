@@ -38,7 +38,13 @@ QStringList generateLines()
     do {
         outputlines << buildCompilerActionLine();
         outputlines << buildCppCheckInformationLine();
-        for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        for (TestPathType pathType :
+#ifdef Q_OS_WIN
+            {WindowsFilePathNoSpaces, WindowsFilePathWithSpaces}
+#else
+            {UnixFilePathNoSpaces, UnixFilePathWithSpaces}
+#endif
+        ) {
             outputlines << buildCompilerErrorLine(pathType);
             outputlines << buildCompilerLine(pathType);
             outputlines << buildCppCheckErrorLine(pathType);
