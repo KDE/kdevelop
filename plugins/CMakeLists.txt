@@ -132,13 +132,13 @@ if (Qt5QuickWidgets_FOUND)
     add_subdirectory(welcomepage)
 endif()
 
-find_package(OktetaKastenControllers 0.3.1)
+find_package(OktetaKastenControllers 0.3.1 CONFIG)
 set_package_properties(OktetaKastenControllers PROPERTIES
     PURPOSE "Required for building Okteta KDevelop plugin."
     URL "http://kde.org/"
     TYPE OPTIONAL)
 if (OktetaKastenControllers_FOUND)
-    find_package( KastenControllers )
+    find_package(KastenControllers CONFIG)
 
     set_package_properties(KastenControllers PROPERTIES
         PURPOSE "Required for building Okteta KDevelop plugin."
