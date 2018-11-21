@@ -221,8 +221,8 @@ build_project kdev-python $KDEVELOP_VERSION
 build_project kdev-clang-tidy $KDEV_CLANG_TIDY_VERSION
 
 # Install some colorschemes
-cd $SRC
-$SCRIPT_DIR/install_colorschemes.sh
+cd $BUILD
+$SCRIPT_DIR/../release-scripts/install_colorschemes.sh /kdevelop.appdir/usr
 
 cd /kdevelop.appdir
 
