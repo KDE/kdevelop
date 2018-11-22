@@ -215,8 +215,8 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
 build_project kdev-python $KDEVELOP_VERSION
 
 # Install some colorschemes
-cd $SRC
-$SCRIPT_DIR/install_colorschemes.sh
+cd $BUILD
+$SCRIPT_DIR/../release-scripts/install_colorschemes.py /kdevelop.appdir/usr
 
 cd /kdevelop.appdir
 
@@ -417,21 +417,9 @@ kdevelop \$@
 EOF
 chmod +x AppRun
 
-cat > kdevelop.desktop << EOF
-[Desktop Entry]
-GenericName=Integrated development environment
-Name=KDevelop
-MimeType=text/plain;
-Exec=AppRun -b %U
-StartupNotify=true
-X-KDE-HasTempFileOption=true
-Icon=kdevelop
-X-DocPath=kdevelop/index.html
-Type=Application
-Terminal=false
-InitialPreference=9
-Categories=Qt;KDE;Utility;TextEditor;
-EOF
+# use normal desktop file, but remove actions, not yet handled by appimaged & Co
+cp $SRC/kdevelop/app/org.kde.kdevelop.desktop kdevelop.desktop
+sed -i -e '/^Actions=/d;/^\[Desktop Action /Q' kdevelop.desktop
 
 cp $SRC/kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
 cp -R /usr/lib/python3.6 /kdevelop.appdir/usr/lib/
