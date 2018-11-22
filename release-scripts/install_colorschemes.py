@@ -36,6 +36,9 @@ downloadAndExtract('https://download.kde.org/stable/plasma/{0}/breeze-{0}.tar.xz
 downloadAndExtract('https://download.kde.org/stable/plasma/{0}/plasma-desktop-{0}.tar.xz'.format(ver),
                    "plasma-desktop-{0}/kcms/colors/schemes/".format(ver))
 
+# Cleanup
+os.remove(os.path.join(colorSchemesDir, "CMakeLists.txt"))
+
 print("Available color schemes: {0}".format(", ".join(os.listdir(colorSchemesDir))))
 
 if installDir:
