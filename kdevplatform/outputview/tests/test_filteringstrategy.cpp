@@ -74,24 +74,29 @@ void TestFilteringStrategy::testNoFilterStrategy_data()
     QTest::addColumn<QString>("line");
     QTest::addColumn<FilteredItem::FilteredOutputItemType>("expected");
 
-    QTest::newRow("cppcheck-info-line")
-    << buildCppCheckInformationLine() << FilteredItem::InvalidItem;
-    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+    for (TestPathType pathType :
+#ifdef Q_OS_WIN
+        {WindowsFilePathNoSpaces, WindowsFilePathWithSpaces}
+
+#else
+        {UnixFilePathNoSpaces, UnixFilePathWithSpaces}
+#endif
+    ) {
         QTest::newRowForPathType("cppcheck-error-line", pathType)
         << buildCppCheckErrorLine(pathType) << FilteredItem::InvalidItem;
         QTest::newRowForPathType("compiler-line", pathType)
         << buildCompilerLine(pathType) << FilteredItem::InvalidItem;
         QTest::newRowForPathType("compiler-error-line", pathType)
         << buildCompilerErrorLine(pathType) << FilteredItem::InvalidItem;
-    }
-    QTest::newRow("compiler-action-line")
-    << buildCompilerActionLine() << FilteredItem::InvalidItem;
-    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
         QTest::newRowForPathType("compiler-information-line", pathType)
         << buildCompilerInformationLine(pathType) << FilteredItem::InvalidItem;
         QTest::newRowForPathType("python-error-line", pathType)
         << buildPythonErrorLine(pathType) << FilteredItem::InvalidItem;
     }
+    QTest::newRow("cppcheck-info-line")
+    << buildCppCheckInformationLine() << FilteredItem::InvalidItem;
+    QTest::newRow("compiler-action-line")
+    << buildCompilerActionLine() << FilteredItem::InvalidItem;
 }
 
 void TestFilteringStrategy::testNoFilterStrategy()
@@ -114,7 +119,13 @@ void TestFilteringStrategy::testCompilerFilterStrategy_data()
 
     QTest::newRow("cppcheck-info-line")
     << buildCppCheckInformationLine() << FilteredItem::InvalidItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
-    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+    for (TestPathType pathType :
+#ifdef Q_OS_WIN
+        {WindowsFilePathNoSpaces, WindowsFilePathWithSpaces}
+#else
+        {UnixFilePathNoSpaces, UnixFilePathWithSpaces}
+#endif
+    ) {
         QTest::newRowForPathType("cppcheck-error-line", pathType)
         << buildCppCheckErrorLine(pathType) << FilteredItem::InvalidItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("compiler-line", pathType)
@@ -127,26 +138,22 @@ void TestFilteringStrategy::testCompilerFilterStrategy_data()
         << buildInfileIncludedFromFirstLine(pathType) << FilteredItem::InformationItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("compiler-information-line3", pathType)
         << buildInfileIncludedFromSecondLine(pathType) << FilteredItem::InformationItem << FilteredItem::InvalidItem << pathType;
-    }
-    QTest::newRow("cmake-error-line1")
-    << "CMake Error at CMakeLists.txt:2 (cmake_minimum_required):" << FilteredItem::ErrorItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
-    QTest::newRow("cmake-error-multiline1")
-    << "CMake Error: Error in cmake code at" << FilteredItem::InvalidItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
-    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRow("cmake-error-line1")
+        << "CMake Error at CMakeLists.txt:2 (cmake_minimum_required):" << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRow("cmake-error-multiline1")
+        << "CMake Error: Error in cmake code at" << FilteredItem::InvalidItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("cmake-error-multiline2", pathType)
         << buildCmakeConfigureMultiLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
-    }
-    QTest::newRow("cmake-warning-line")
-    << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
-    QTest::newRow("cmake-automoc-error")
-    << "AUTOMOC: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
-    QTest::newRow("cmake-automoc4-error")
-    << "automoc4: The file \"/foo/bar.cpp\" includes the moc file \"bar1.moc\"" << FilteredItem::InformationItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
-    QTest::newRow("cmake-autogen-error")
-    << "AUTOGEN: error: /foo/bar.cpp The file includes the moc file \"moc_bar1.cpp\"" << FilteredItem::ErrorItem << FilteredItem::InvalidItem << UnixFilePathNoSpaces;
-    QTest::newRow("linker-action-line")
-    << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem << UnixFilePathNoSpaces;
-    for (TestPathType pathType : {UnixFilePathNoSpaces, UnixFilePathWithSpaces}) {
+        QTest::newRowForPathType("cmake-warning-line", pathType)
+        << "CMake Warning (dev) in CMakeLists.txt:" << FilteredItem::WarningItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("cmake-automoc-error", pathType)
+        << buildAutoMocLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("cmake-automoc4-error", pathType)
+        << buildOldAutoMocLine(pathType) << FilteredItem::InformationItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("cmake-autogen-error", pathType)
+        << buildAutoMocLine(pathType, false) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
+        QTest::newRowForPathType("linker-action-line", pathType)
+        << "linking testCustombuild (g++)" << FilteredItem::InvalidItem << FilteredItem::ActionItem << pathType;
         QTest::newRowForPathType("linker-error-line", pathType)
         << buildLinkerErrorLine(pathType) << FilteredItem::ErrorItem << FilteredItem::InvalidItem << pathType;
         QTest::newRowForPathType("python-error-line", pathType)
@@ -191,10 +198,15 @@ void TestFilteringStrategy::testCompilerFilterstrategyMultipleKeywords_data()
 
 void TestFilteringStrategy::testCompilerFilterstrategyMultipleKeywords()
 {
+#ifdef Q_OS_WIN
+    TestPathType pathTypeToUse = WindowsFilePathNoSpaces;
+#else
+    TestPathType pathTypeToUse = UnixFilePathNoSpaces;
+#endif
     QFETCH(QString, line);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedError);
     QFETCH(FilteredItem::FilteredOutputItemType, expectedAction);
-    QUrl projecturl = QUrl::fromLocalFile( projectPath() );
+    QUrl projecturl = QUrl::fromLocalFile( projectPath(pathTypeToUse) );
     CompilerFilterStrategy testee(projecturl);
     FilteredItem item1 = testee.errorInLine(line);
     QCOMPARE(item1.type, expectedError);

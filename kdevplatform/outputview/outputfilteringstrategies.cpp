@@ -259,21 +259,21 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         ErrorFormat( QStringLiteral("^([a-zA-Z]:\\\\.+)\\(([1-9][0-9]*)\\): ((?:error|warning) .+\\:).*$"), 1, 2, 3 ),
 #endif
         // GCC - another case, eg. for #include "pixmap.xpm" which does not exists
-        ErrorFormat( QStringLiteral("^([^:\\t]+):([0-9]+):([0-9]+):([^0-9]+)"), 1, 2, 4, 3 ),
+        ErrorFormat( QStringLiteral("^(.:?[^:\\t]+):([0-9]+):([0-9]+):([^0-9]+)"), 1, 2, 4, 3 ),
         // ant
         ErrorFormat( QStringLiteral("\\[javac\\][\\s]+([^:\\t]+):([0-9]+): (warning: .*|error: .*)"), 1, 2, 3, QStringLiteral("javac")),
         // GCC
-        ErrorFormat( QStringLiteral("^([^:\\t]+):([0-9]+):([^0-9]+)"), 1, 2, 3 ),
+        ErrorFormat( QStringLiteral("^(.:?[^:\\t]+):([0-9]+):([^0-9]+)"), 1, 2, 3 ),
         // GCC
-        ErrorFormat( QStringLiteral("^(In file included from |[ ]+from )([^:\\t]+):([0-9]+)(:|,)(|[0-9]+)"), 2, 3, 5 ),
+        ErrorFormat( QStringLiteral("^(In file included from |[ ]+from )(..[^:\\t]+):([0-9]+)(:|,)(|[0-9]+)"), 2, 3, 5 ),
         // ICC
-        ErrorFormat( QStringLiteral("^([^:\\t]+)\\(([0-9]+)\\):([^0-9]+)"), 1, 2, 3, QStringLiteral("intel") ),
+        ErrorFormat( QStringLiteral("^(.:?[^:\\t]+)\\(([0-9]+)\\):([^0-9]+)"), 1, 2, 3, QStringLiteral("intel") ),
         //libtool link
         ErrorFormat( QStringLiteral("^(libtool):( link):( warning): "), 0, 0, 0 ),
         // make
         ErrorFormat( QStringLiteral("No rule to make target"), 0, 0, 0 ),
         // cmake - multiline expression
-        ErrorFormat( QStringLiteral("(^\\/[\\w|\\/| |\\.]+):([0-9]+):"), 1, 2, 0, QStringLiteral("cmake") ),
+        ErrorFormat( QStringLiteral("((^\\/|^[a-zA-Z]:)[\\w|\\/| |\\.]+):([0-9]+):"), 1, 2, 0, QStringLiteral("cmake") ),
         // cmake
         ErrorFormat( QStringLiteral("CMake (Error|Warning) (|\\([a-zA-Z]+\\) )(in|at) ([^:]+):($|[0-9]+)"), 4, 5, 1, QStringLiteral("cmake") ),
         // cmake/automoc
@@ -282,7 +282,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         // note: ':' after file name isn't always appended, see http://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=317d8498aa02c9f486bf5071963bb2034777cdd6
         // example: AUTOGEN: error: /foo/bar.cpp: The file includes (...)
         // note: AUTOMOC got renamed to AUTOGEN at some point
-        ErrorFormat( QStringLiteral("^(AUTOMOC|AUTOGEN): error: ([^:]+):? (The file .*)$"), 2, 0, 0 ),
+        ErrorFormat( QStringLiteral("^(AUTOMOC|AUTOGEN): error: (.*?) (The file .*)$"), 2, 0, 0 ),
         // via qt4_automoc
         // example: automoc4: The file "/foo/bar.cpp" includes the moc file "bar1.moc", but ...
         ErrorFormat( QStringLiteral("^automoc4: The file \"([^\"]+)\" includes the moc file"), 1, 0, 0 ),

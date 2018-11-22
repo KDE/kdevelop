@@ -153,6 +153,23 @@ QString buildCmakeConfigureMultiLine(TestPathType pathType = UnixFilePathNoSpace
     return outputline;
 }
 
+QString buildAutoMocLine(TestPathType pathType = UnixFilePathNoSpaces, bool useAutoMoc = true)
+{
+    QString outputline;
+    useAutoMoc ? outputline.append("AUTOMOC: error: ") : outputline.append("AUTOGEN: error: ");
+    outputline.append(projectPath(pathType));
+    outputline.append("bar.cpp The file includes the moc file \"moc_bar1.cpp\"");
+    return outputline;
+}
+
+QString buildOldAutoMocLine(TestPathType pathType = UnixFilePathNoSpaces)
+{
+    QString outputline;
+    outputline.append("automoc4: The file \"");
+    outputline.append(projectPath(pathType));
+    outputline.append("bar.cpp\" includes the moc file \"bar1.moc\"");
+    return outputline;
+}
 
 QString buildLinkerErrorLine(TestPathType pathType = UnixFilePathNoSpaces)
 {
