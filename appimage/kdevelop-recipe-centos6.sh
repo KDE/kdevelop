@@ -222,7 +222,7 @@ build_project kdev-clang-tidy $KDEV_CLANG_TIDY_VERSION
 
 # Install some colorschemes
 cd $BUILD
-$SCRIPT_DIR/../release-scripts/install_colorschemes.py /kdevelop.appdir/usr
+$SCRIPT_DIR/../release-scripts/install_colorschemes.py /kdevelop.appdir/usr/share
 
 cd /kdevelop.appdir
 
