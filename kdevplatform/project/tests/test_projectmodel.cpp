@@ -114,6 +114,8 @@ void TestProjectModel::testCreateFileSystemItems()
 
 void TestProjectModel::testCreateFileSystemItems_data()
 {
+    QString testRootDir = QDir::rootPath() + QStringLiteral("rootdir");
+    QString testRootFile = QDir::rootPath() + QStringLiteral("rootfile");
     QTest::addColumn<int>( "itemType" );
     QTest::addColumn<Path>( "itemPath" );
     QTest::addColumn<Path>( "expectedItemPath" );
@@ -123,24 +125,24 @@ void TestProjectModel::testCreateFileSystemItems_data()
 
     QTest::newRow("RootFolder")
         << (int)ProjectBaseItem::Folder
-        << Path(QUrl::fromLocalFile(QStringLiteral("/rootdir")))
-        << Path(QUrl::fromLocalFile(QStringLiteral("/rootdir/")))
+        << Path(QUrl::fromLocalFile(testRootDir))
+        << Path(QUrl::fromLocalFile(testRootDir))
         << QStringLiteral("rootdir")
         << ( QStringList() << QStringLiteral("rootdir") )
         << 0;
 
     QTest::newRow("RootBuildFolder")
         << (int)ProjectBaseItem::BuildFolder
-        << Path(QUrl::fromLocalFile(QStringLiteral("/rootdir")))
-        << Path(QUrl::fromLocalFile(QStringLiteral("/rootdir/")))
+        << Path(QUrl::fromLocalFile(testRootDir))
+        << Path(QUrl::fromLocalFile(testRootDir))
         << QStringLiteral("rootdir")
         << ( QStringList() << QStringLiteral("rootdir") )
         << 0;
 
     QTest::newRow("RootFile")
         << (int)ProjectBaseItem::File
-        << Path(QUrl::fromLocalFile(QStringLiteral("/rootfile")))
-        << Path(QUrl::fromLocalFile(QStringLiteral("/rootfile")))
+        << Path(QUrl::fromLocalFile(testRootFile))
+        << Path(QUrl::fromLocalFile(testRootFile))
         << QStringLiteral("rootfile")
         << ( QStringList() << QStringLiteral("rootfile") )
         << 0;
@@ -204,10 +206,12 @@ void TestProjectModel::testCreateTargetItems_data()
 
 void TestProjectModel::testChangeWithProxyModel()
 {
+    QString projectFolderPath = QDir::rootPath() + QStringLiteral("folder1");
+    QString projectFilePath = QDir::rootPath() + QStringLiteral("folder1/file1");
     QSortFilterProxyModel* proxy = new QSortFilterProxyModel( this );
     proxy->setSourceModel( model );
-    ProjectFolderItem* root = new ProjectFolderItem( nullptr, Path(QUrl::fromLocalFile(QStringLiteral("/folder1"))) );
-    root->appendRow( new ProjectFileItem( nullptr, Path(QUrl::fromLocalFile(QStringLiteral("/folder1/file1"))) ) );
+    ProjectFolderItem* root = new ProjectFolderItem( nullptr, Path(QUrl::fromLocalFile(projectFolderPath)) );
+    root->appendRow( new ProjectFileItem( nullptr, Path(QUrl::fromLocalFile(projectFilePath)) ) );
     model->appendRow( root );
 
     QCOMPARE( model->rowCount(), 1 );
@@ -225,7 +229,7 @@ void TestProjectModel::testCreateSimpleHierarchy()
     QString fileName = QStringLiteral("file");
     QString targetName = QStringLiteral("testtarged");
     QString cppFileName = QStringLiteral("file.cpp");
-    ProjectFolderItem* rootFolder = new ProjectFolderItem( nullptr, Path(QUrl::fromLocalFile("/"+folderName)) );
+    ProjectFolderItem* rootFolder = new ProjectFolderItem( nullptr, Path(QUrl::fromLocalFile( QDir::rootPath() + folderName )) );
     QCOMPARE(rootFolder->baseName(), folderName);
     ProjectFileItem* file = new ProjectFileItem( fileName, rootFolder );
     QCOMPARE(file->baseName(), fileName);
@@ -272,11 +276,19 @@ void TestProjectModel::testCreateSimpleHierarchy()
 
 void TestProjectModel::testItemSanity()
 {
+#ifdef Q_OS_WIN
+    QString child3Path = QStringLiteral("file:///c:/bcd");
+    QString child4Path = QStringLiteral("file:///c:/abcd");
+#else
+    QString child3Path = QStringLiteral("file:///bcd");
+    QString child4Path = QStringLiteral("file:///abcd");
+#endif
+    QString newtestPath = QDir::rootPath() + QStringLiteral("newtest");
     ProjectBaseItem* parent = new ProjectBaseItem( nullptr, QStringLiteral("test") );
     ProjectBaseItem* child = new ProjectBaseItem( nullptr, QStringLiteral("test"), parent );
     ProjectBaseItem* child2 = new ProjectBaseItem( nullptr, QStringLiteral("ztest"), parent );
-    ProjectFileItem* child3 = new ProjectFileItem( nullptr, Path(QUrl(QStringLiteral("file:///bcd"))), parent );
-    ProjectFileItem* child4 = new ProjectFileItem(  nullptr, Path(QUrl(QStringLiteral("file:///abcd"))), parent  );
+    ProjectFileItem* child3 = new ProjectFileItem( nullptr, Path(QUrl(child3Path)), parent );
+    ProjectFileItem* child4 = new ProjectFileItem(  nullptr, Path(QUrl(child4Path)), parent  );
 
     // Just some basic santiy checks on the API
     QCOMPARE( parent->child( 0 ), child );
@@ -298,7 +310,7 @@ void TestProjectModel::testItemSanity()
     model->appendRow( parent );
     QCOMPARE( parent->index(), model->index(0, 0, QModelIndex()) );
     QSignalSpy s( model, SIGNAL(dataChanged(QModelIndex,QModelIndex)) );
-    parent->setPath( Path(QStringLiteral("/newtest")) );
+    parent->setPath( Path(newtestPath) );
     QCOMPARE( s.count(), 1 );
     QCOMPARE( model->data( parent->index() ).toString(), QStringLiteral("newtest") );
 
@@ -325,6 +337,7 @@ void TestProjectModel::testTakeRow()
 
 void TestProjectModel::testRename()
 {
+    QString projectFolderPath = QDir::rootPath() + QStringLiteral("dummyprojectfolder");
     QFETCH( int, itemType );
     QFETCH( QString, itemText );
     QFETCH( QString, newName );
@@ -332,7 +345,7 @@ void TestProjectModel::testRename()
     QFETCH( QString, expectedItemText );
     QFETCH( int, expectedRenameCode );
 
-    const Path projectFolder = Path(QUrl::fromLocalFile(QStringLiteral("/dummyprojectfolder")));
+    const Path projectFolder = Path(QUrl::fromLocalFile(projectFolderPath));
     QScopedPointer<TestProject> proj(new TestProject());
     ProjectFolderItem* rootItem = new ProjectFolderItem( proj.data(), projectFolder, nullptr);
     proj->setProjectItem( rootItem );
@@ -448,8 +461,9 @@ void TestProjectModel::testRename_data()
 
 void TestProjectModel::testWithProject()
 {
+    QString projectFolderPath = QDir::rootPath() + QStringLiteral("dummyprojectfolder");
     QScopedPointer<TestProject> proj(new TestProject());
-    ProjectFolderItem* rootItem = new ProjectFolderItem( proj.data(), Path(QUrl::fromLocalFile(QStringLiteral("/dummyprojectfolder"))), nullptr);
+    ProjectFolderItem* rootItem = new ProjectFolderItem( proj.data(), Path(QUrl::fromLocalFile(projectFolderPath)), nullptr);
     proj->setProjectItem( rootItem );
     ProjectBaseItem* item = model->itemFromIndex( model->index( 0, 0 ) );
     QCOMPARE( item, rootItem );
