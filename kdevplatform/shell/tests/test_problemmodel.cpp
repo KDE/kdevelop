@@ -52,6 +52,7 @@ private Q_SLOTS:
     void testPlaceholderText();
 
 private:
+    QString prependPathRoot(QString const& currentPath) const;
     void generateProblems();
     bool checkIsSame(int row, const QModelIndex &parent, const IProblem::Ptr &problem);
     bool checkDiagnostics(int row, const QModelIndex &parent);
@@ -418,6 +419,17 @@ void TestProblemModel::testPlaceholderText()
     QVERIFY(checkLabel(0, QModelIndex(), text1));
 }
 
+// Needed because util/Path.cpp asserts e.g. C: on Windows
+QString TestProblemModel::prependPathRoot(QString const& currentPath) const
+{
+#ifdef Q_OS_WIN
+    QString pathRoot = QStringLiteral("x:/");
+#else
+    QString pathRoot = QStringLiteral("/");
+#endif
+    return pathRoot + currentPath;
+}
+
 // Generate 3 problems, all with different paths, different severity
 // Also generates a problem with diagnostics
 void TestProblemModel::generateProblems()
@@ -427,21 +439,21 @@ void TestProblemModel::generateProblems()
     IProblem::Ptr p3(new DetectedProblem());
 
     DocumentRange r1;
-    r1.document = IndexedString("/just/a/random/path");
+    r1.document = IndexedString( prependPathRoot("just/a/random/path") );
 
     p1->setDescription(QStringLiteral("PROBLEM1"));
     p1->setSeverity(IProblem::Error);
     p1->setFinalLocation(r1);
 
     DocumentRange r2;
-    r2.document = IndexedString("/just/another/path");
+    r2.document = IndexedString( prependPathRoot("just/another/path") );
 
     p2->setDescription(QStringLiteral("PROBLEM2"));
     p2->setSeverity(IProblem::Warning);
     p2->setFinalLocation(r2);
 
     DocumentRange r3;
-    r3.document = IndexedString("/yet/another/test/path");
+    r3.document = IndexedString( prependPathRoot("yet/another/test/path") );
 
     p2->setDescription(QStringLiteral("PROBLEM3"));
     p3->setSeverity(IProblem::Hint);
