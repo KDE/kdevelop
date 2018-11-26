@@ -87,7 +87,7 @@ void TestQMakeProject::testBuildDirectory()
     QFETCH(QString, target);
     QFETCH(QString, expected);
 
-    const QString buildDir = QStringLiteral("/tmp/some/path"); // some dummy directory to build (nothing will be built anyway)
+    const QString buildDir = QDir::rootPath() + QStringLiteral("tmp/some/path"); // some dummy directory to build (nothing will be built anyway)
 
     foreach (IProject* p, ICore::self()->projectController()->projects()) {
         ICore::self()->projectController()->closeProject(p);
