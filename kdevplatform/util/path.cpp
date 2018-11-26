@@ -21,6 +21,7 @@
  */
 
 #include "path.h"
+#include "debug.h"
 
 #include <QStringList>
 #include <QDebug>
@@ -91,8 +92,8 @@ Path::Path(const QUrl& url)
     // nor do we support relative urls
     if (url.hasFragment() || url.hasQuery() || url.isRelative() || url.path().isEmpty()) {
         // invalid
-        qWarning("Path::init: invalid/unsupported Path encountered: \"%s\"",
-                 qPrintable(url.toDisplayString(QUrl::PreferLocalFile)));
+        qCWarning(UTIL) << "Path::init: invalid/unsupported Path encountered: " <<
+            qPrintable(url.toDisplayString(QUrl::PreferLocalFile));
         return;
     }
 
@@ -125,8 +126,8 @@ Path::Path(const Path& other, const QString& child)
         // absolute path: only share the remote part of @p other
         m_data.resize(isRemote() ? 1 : 0);
     } else if (!other.isValid() && !child.isEmpty()) {
-        qWarning("Path::Path: tried to append relative path \"%s\" to invalid base",
-                 qPrintable(child));
+        qCWarning(UTIL) << "Path::Path: tried to append relative path " << qPrintable(child) <<
+            " to invalid base";
         return;
     }
     addPath(child);
@@ -160,8 +161,8 @@ static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<
 #ifdef Q_OS_WIN
     if (start == 0 && isLocalFile) {
         if(!data.at(0).endsWith(QLatin1Char(':'))) {
-            qWarning("Path::generatePathOrUrl: invalid Windows drive encountered (expected C: or similar): \"%s\"",
-                     qPrintable(data.at(0)));
+            qCWarning(UTIL) << "Path::generatePathOrUrl: Invalid Windows drive encountered (expected C: or similar), got: " <<
+                qPrintable(data.at(0));
         }
         Q_ASSERT(data.at(0).endsWith(QLatin1Char(':'))); // assume something along "C:"
         res += data.at(0);
