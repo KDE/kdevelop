@@ -63,7 +63,7 @@ void TestDefinesAndIncludes::loadSimpleProject()
 
     qDebug() << actualDefines << actualIncludes;
 
-    QCOMPARE( actualIncludes, Path::List() << Path( "/usr/include/mydir") );
+    QCOMPARE( actualIncludes, Path::List() << Path( QDir::rootPath() + QStringLiteral("usr/include/mydir") ) );
 
     Defines defines;
     defines.insert( QStringLiteral("_DEBUG"), QString() );
@@ -80,7 +80,7 @@ void TestDefinesAndIncludes::loadMultiPathProject()
 
     auto manager = IDefinesAndIncludesManager::manager();
     QVERIFY( manager );
-    Path::List includes = Path::List() << Path(QStringLiteral("/usr/include/otherdir"));
+    Path::List includes = Path::List() << Path( QDir::rootPath() + QStringLiteral("usr/include/otherdir") );
 
     QHash<QString,QString> defines;
     defines.insert(QStringLiteral("SOURCE"), QStringLiteral("CONTENT"));
@@ -102,7 +102,7 @@ void TestDefinesAndIncludes::loadMultiPathProject()
     }
     QVERIFY(mainfile);
 
-    includes.prepend(Path(QStringLiteral("/usr/local/include/mydir")));
+    includes.prepend(Path(QDir::rootPath() + QStringLiteral("usr/local/include/mydir")));
     defines.insert(QStringLiteral("BUILD"), QStringLiteral("debug"));
     qDebug() << includes << "VS" << manager->includes( mainfile, IDefinesAndIncludesManager::UserDefined );
     qDebug() << mainfile << mainfile->path();
