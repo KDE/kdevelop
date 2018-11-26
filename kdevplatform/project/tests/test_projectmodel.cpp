@@ -206,6 +206,8 @@ void TestProjectModel::testCreateTargetItems_data()
 
 void TestProjectModel::testChangeWithProxyModel()
 {
+    QString projectFolderPath = QDir::rootPath() + QStringLiteral("folder1");
+    QString projectFilePath = QDir::rootPath() + QStringLiteral("folder1/file1");
     auto* proxy = new QSortFilterProxyModel( this );
     proxy->setSourceModel( model );
     ProjectFolderItem* root = new ProjectFolderItem( nullptr, Path(QUrl::fromLocalFile(projectFolderPath)) );
