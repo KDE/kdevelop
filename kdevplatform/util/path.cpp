@@ -159,6 +159,10 @@ static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<
 
 #ifdef Q_OS_WIN
     if (start == 0 && isLocalFile) {
+        if(!data.at(0).endsWith(QLatin1Char(':'))) {
+            qWarning("Path::generatePathOrUrl: invalid Windows drive encountered (expected C: or similar): \"%s\"",
+                     qPrintable(data.at(0)));
+        }
         Q_ASSERT(data.at(0).endsWith(QLatin1Char(':'))); // assume something along "C:"
         res += data.at(0);
         start++;
