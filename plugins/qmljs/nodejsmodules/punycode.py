@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # This file is part of qmljs, the QML/JS language support plugin for KDevelop
 # Copyright (c) 2014 Denis Steckelmacher <steckdenis@yahoo.fr>
