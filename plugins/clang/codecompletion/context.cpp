@@ -27,6 +27,8 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iproject.h>
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/ducontext.h>
@@ -45,6 +47,8 @@
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
 #include <util/foregroundlock.h>
 #include <qtcompat_p.h>
+#include <custom-definesandincludes/idefinesandincludesmanager.h>
+#include <project/projectmodel.h>
 
 #include "../util/clangdebug.h"
 #include "../util/clangtypes.h"
@@ -170,7 +174,29 @@ public:
 
     void execute(KTextEditor::View* view, const KTextEditor::Range& word) override
     {
-        view->document()->replaceText(word, m_returnType + QLatin1Char(' ') + m_display.replace(QRegularExpression(QStringLiteral("\\s*=\\s*0")), QString()) + QLatin1String(" override;"));
+        QString replacement = m_returnType + QLatin1Char(' ') + m_display.replace(QRegularExpression(QStringLiteral("\\s*=\\s*0")), QString());
+
+        bool appendSpecifer = true;
+        if (const auto* project =
+            KDevelop::ICore::self()->projectController()->findProjectForUrl(view->document()->url())) {
+            const auto arguments = KDevelop::IDefinesAndIncludesManager::manager()->parserArguments(
+                project->filesForPath(IndexedString(view->document()->url().path())).first());
+            const auto match = QRegularExpression(QStringLiteral(R"(-std=c\+\+(\w+))")).match(arguments);
+
+            appendSpecifer = match.hasMatch(); // assume non-modern if no standard is specified
+            if (appendSpecifer) {
+                const auto standard = match.captured(1);
+                appendSpecifer = (standard != QLatin1String("98") && standard != QLatin1String("03"));
+            }
+        }
+
+        if (appendSpecifer) {
+            replacement.append(QLatin1String(" override;"));
+        } else {
+            replacement.append(QLatin1Char(';'));
+        }
+
+        view->document()->replaceText(word, replacement);
     }
 
 private:

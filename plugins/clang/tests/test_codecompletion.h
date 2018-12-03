@@ -37,6 +37,8 @@ private Q_SLOTS:
     void testClangCodeCompletion_data();
     void testVirtualOverride();
     void testVirtualOverride_data();
+    void testOverrideExecute();
+    void testOverrideExecute_data();
     void testImplement();
     void testImplement_data();
     void testImplementOtherFile();

@@ -613,6 +613,71 @@ void TestCodeCompletion::testVirtualOverride_data()
         )" << CompletionItems{{8, 14}, {}};
 }
 
+void TestCodeCompletion::testOverrideExecute()
+{
+    QFETCH(QString, code);
+    QFETCH(CompletionItems, expectedItems);
+    QFETCH(QString, itemToExecute);
+    QFETCH(QString, cppStandard);
+    QFETCH(QString, expectedCode);
+
+    QTemporaryDir directory;
+    TestProject testProject {Path{directory.path()}};
+    auto t = testProject.path().toLocalFile();
+    auto configGroup = testProject.projectConfiguration()->group("CustomDefinesAndIncludes").group("ProjectPath0");
+    configGroup.writeEntry("Path", ".");
+    configGroup.writeEntry("parserArguments", cppStandard);
+    configGroup.sync();
+    m_projectController->addProject(&testProject);
+
+    TestFile file(code, QStringLiteral("cpp"), &testProject, directory.path());
+    QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
+
+    auto executeItem = [=] (const ClangCodeCompletionItemTester& tester) {
+        auto item = tester.findItem(itemToExecute);
+        QVERIFY(item);
+        auto view = createView(tester.completionContext->duContext()->url().toUrl(), this);
+        item->execute(view.get(), view->document()->wordRangeAt(expectedItems.position));
+        QCOMPARE(view->document()->text(), expectedCode);
+    };
+    executeCompletionTest(file.topContext(), expectedItems, NoMacroOrBuiltin, executeItem);
+    m_projectController->closeProject(&testProject);
+}
+
+void TestCodeCompletion::testOverrideExecute_data()
+{
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionItems>("expectedItems");
+    QTest::addColumn<QString>("itemToExecute");
+    QTest::addColumn<QString>("cppStandard");
+    QTest::addColumn<QString>("expectedCode");
+
+    QTest::newRow("override-modern")
+        << "class Foo { virtual int bar(char c); };\nclass Baz : Foo\n{\n};"
+        << CompletionItems{{3, 0}, {"Baz", "Foo", "bar(char c)"}}
+        << "bar(char c)"
+        << "-std=c++11"
+        << "class Foo { virtual int bar(char c); };\n"
+           "class Baz : Foo\n{\nint bar(char c) override;};";
+
+    QTest::newRow("override-non-modern")
+        << "class Foo { virtual int bar(char c); };\nclass Baz : Foo\n{\n};"
+        << CompletionItems{{3, 0}, {"Baz", "Foo", "bar(char c)"}}
+        << "bar(char c)"
+        << "-std=c++98"
+        << "class Foo { virtual int bar(char c); };\n"
+           "class Baz : Foo\n{\nint bar(char c);};";
+
+     QTest::newRow("override-unknown")
+        << "class Foo { virtual int bar(char c); };\nclass Baz : Foo\n{\n};"
+        << CompletionItems{{3, 0}, {"Baz", "Foo", "bar(char c)"}}
+        << "bar(char c)"
+        << "-std=c++1z"
+        << "class Foo { virtual int bar(char c); };\n"
+           "class Baz : Foo\n{\nint bar(char c) override;};";
+}
+
+
 void TestCodeCompletion::testImplement()
 {
     QFETCH(QString, code);
