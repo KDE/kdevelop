@@ -30,6 +30,7 @@
   <name xml:lang="uk">KDevelop</name>
   <name xml:lang="x-test">xxKDevelopxx</name>
   <name xml:lang="zh-CN">KDevelop</name>
+  <name xml:lang="zh-TW">KDevelop</name>
   <summary>Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
   <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
   <summary xml:lang="ca-valencia">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
