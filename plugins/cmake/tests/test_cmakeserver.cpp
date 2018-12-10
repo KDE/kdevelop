@@ -50,7 +50,7 @@ private Q_SLOTS:
         QVERIFY(p.waitForFinished());
         auto output = p.readAll();
 
-        QRegularExpression rx("cmake version (\\d\\.\\d).*");
+        QRegularExpression rx("cmake version (\\d\\.\\d+).*");
         const auto match = rx.match(output);
         QVERIFY(match.isValid());
         const auto capture = match.capturedRef(1);

@@ -138,7 +138,8 @@ void PatchReviewToolView::patchChanged() {
         m_exportMenu->model()->setInputData(QJsonObject {
             { QStringLiteral("urls"), QJsonArray { p->file().toString() } },
             { QStringLiteral("mimeType"), { QStringLiteral("text/x-patch") } },
-            { QStringLiteral("localBaseDir"), { p->baseDir().toString() } }
+            { QStringLiteral("localBaseDir"), { p->baseDir().toString() } },
+            { QStringLiteral("updateComment"), { QStringLiteral("Patch updated through KDevelop's Patch Review plugin") } }
         });
     }
 #endif
@@ -227,6 +228,11 @@ void PatchReviewToolView::showEditDialog() {
         } else {
             QMessageBox::warning(nullptr, i18n("Error exporting"), i18n("Couldn't export the patch.\n%1", message));
         }
+    });
+    // set the model input parameters to avoid terminal warnings
+    m_exportMenu->model()->setInputData(QJsonObject {
+        { QStringLiteral("urls"), QJsonArray { QString() } },
+        { QStringLiteral("mimeType"), { QStringLiteral("text/x-patch") } }
     });
     m_exportMenu->model()->setPluginType(QStringLiteral("Export"));
     m_editPatch.exportReview->setMenu( m_exportMenu );
