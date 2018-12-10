@@ -139,7 +139,7 @@ void PatchReviewToolView::patchChanged() {
             { QStringLiteral("urls"), QJsonArray { p->file().toString() } },
             { QStringLiteral("mimeType"), { QStringLiteral("text/x-patch") } },
             { QStringLiteral("localBaseDir"), { p->baseDir().toString() } },
-            { QStringLiteral("updateComment"), { i18n("patch updated through KDevelop's patchreview plugin") } }
+            { QStringLiteral("updateComment"), { QStringLiteral("Patch updated through KDevelop's Patch Review plugin") } }
         });
     }
 #endif
