@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Robert Gruber &lt;rgruber@users.salomon.at&gt;</author>
+ <class>ScratchpadBaseView</class>
+ <widget class="QWidget" name="ScratchpadBaseView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>232</width>
+    <height>389</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="spacing">
+    <number>2</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="EmptyMessageListView" name="scratchView"/>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLineEdit" name="commandWidget"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EmptyMessageListView</class>
+   <extends>QListView</extends>
+   <header>emptymessagelistview.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>scratchTree</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

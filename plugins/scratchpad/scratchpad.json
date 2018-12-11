@@ -1,0 +1,12 @@
+{
+    "KPlugin": {
+        "Description": "Scratchpad lets you quickly run and experiment with code without a full project, and even store todos.",
+        "Id": "scratchpad",
+        "Name": "Scratchpad",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-Category": "Global",
+    "X-KDevelop-Mode": "GUI"
+}
