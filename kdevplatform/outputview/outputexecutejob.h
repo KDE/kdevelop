@@ -229,6 +229,16 @@ public:
     void setExecuteOnHost(bool executeHost);
     bool executeOnHost() const;
 
+    /**
+     * The job fails whether the process exit code is different to 0 depending on @p check
+     */
+    void setCheckExitCode(bool check);
+
+    /**
+     * @returns whether the job will fail if the process returns other than 0
+     */
+    bool checkExitCode() const;
+
 protected:
     bool doKill() override;
 

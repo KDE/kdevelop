@@ -69,6 +69,7 @@ public:
     QString m_jobName;
     bool m_outputStarted;
     bool m_executeOnHost = false;
+    bool m_checkExitCode = true;
 };
 
 OutputExecuteJobPrivate::OutputExecuteJobPrivate( OutputExecuteJob* owner ) :
@@ -153,6 +154,7 @@ void OutputExecuteJob::setJobName( const QString& name )
     const QString jobDisplayName = d->jobDisplayName();
     setObjectName(jobDisplayName);
     setTitle(jobDisplayName);
+    setToolTitle(jobDisplayName);
 }
 
 QUrl OutputExecuteJob::workingDirectory() const
@@ -374,7 +376,7 @@ void OutputExecuteJob::childProcessExited( int exitCode, QProcess::ExitStatus ex
 
     if( exitStatus == QProcess::CrashExit ) {
         childProcessError( QProcess::Crashed );
-    } else if ( exitCode != 0 ) {
+    } else if ( d->m_checkExitCode && exitCode != 0 ) {
         childProcessError( QProcess::UnknownError );
     } else {
         d->m_status = JobSucceeded;
@@ -484,6 +486,16 @@ void OutputExecuteJob::setExecuteOnHost(bool executeHost)
 bool OutputExecuteJob::executeOnHost() const
 {
     return d->m_executeOnHost;
+}
+
+bool OutputExecuteJob::checkExitCode() const
+{
+    return d->m_checkExitCode;
+}
+
+void OutputExecuteJob::setCheckExitCode(bool check)
+{
+    d->m_checkExitCode = check;
 }
 
 template< typename T >
