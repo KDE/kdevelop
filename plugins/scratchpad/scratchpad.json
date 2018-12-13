@@ -1,8 +1,22 @@
 {
     "KPlugin": {
         "Description": "Scratchpad lets you quickly run and experiment with code without a full project, and even store todos.",
+        "Description[ca]": "L'Scratchpad permet executar i experimentar ràpidament amb el codi sense un projecte complet, i inclús emmagatzemar tasques pendents.",
+        "Description[gl]": "O caderno de notas permítelle executar e experimentar con código rapidamente sen un proxecto completo, e mesmo pode gardar listas de tarefas.",
+        "Description[nl]": "Kladblol laat u snel code uitvoeren en mee experimenteren zonder een volledig project en zelfs to-do's opslaan.",
+        "Description[pt]": "A Área de Rascunhos permite-lhe executar e experimentar rapidamente código sem ter um projecto completo ou mesmo guardar listas de tarefas.",
+        "Description[sv]": "Kladdblock låter dig snabbt köra och experimentera med kod utan ett fullständigt projekt, och till och med lagra uppgifter.",
+        "Description[uk]": "За допомогою нотатника ви можете швидко створити фрагмент коду та поекспериментувати з ним без створення повноцінного проекту. Можливе навіть створення завдань на майбутнє.",
+        "Description[x-test]": "xxScratchpad lets you quickly run and experiment with code without a full project, and even store todos.xx",
         "Id": "scratchpad",
         "Name": "Scratchpad",
+        "Name[ca]": "Scratchpad",
+        "Name[gl]": "Caderno de notas",
+        "Name[nl]": "Kladblok",
+        "Name[pt]": "Área de Rascunhos",
+        "Name[sv]": "Kladdblock",
+        "Name[uk]": "Нотатник для чернеток",
+        "Name[x-test]": "xxScratchpadxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
