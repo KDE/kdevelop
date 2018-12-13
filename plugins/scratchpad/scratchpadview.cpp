@@ -159,7 +159,9 @@ void ScratchpadView::setupActions()
     addAction(action);
     m_itemActions.push_back(action);
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-start")), i18n("Run Scratch"), this);
+    action = m_scratchpad->runAction();
+    action->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
+    action->setText(i18n("Run Scratch"));
     connect(action, &QAction::triggered, this, &ScratchpadView::runSelectedScratch);
     addAction(action);
     m_itemActions.push_back(action);

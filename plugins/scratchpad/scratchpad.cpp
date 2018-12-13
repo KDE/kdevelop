@@ -33,6 +33,7 @@
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <KConfigGroup>
+#include <KActionCollection>
 
 #include <QStandardItemModel>
 #include <QStandardPaths>
@@ -108,6 +109,7 @@ Scratchpad::Scratchpad(QObject* parent, const QVariantList& args)
     : KDevelop::IPlugin(QStringLiteral("scratchpad"), parent)
     , m_factory(new ScratchpadToolViewFactory(this))
     , m_model(new QStandardItemModel(this))
+    , m_runAction(new QAction(this))
 {
     Q_UNUSED(args);
 
@@ -257,5 +259,22 @@ void Scratchpad::setCommand(const QModelIndex& index, const QString& command)
 
     mimeCommands().writeEntry(QFileInfo(index.data().toString()).suffix(), command);
 }
+
+QAction* Scratchpad::runAction() const
+{
+    return m_runAction;
+}
+
+void Scratchpad::createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions)
+{
+    Q_UNUSED(window);
+
+    xmlFile = QStringLiteral("kdevscratchpad.rc");
+
+    // add to gui action collection, so that the shorcut is easily configurable
+    // action setup done in ScratchpadView
+    actions.addAction(QStringLiteral("run_scratch"), m_runAction);
+}
+
 
 #include "scratchpad.moc"

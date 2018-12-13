@@ -7,6 +7,8 @@ set(scratchpad_SRCS
 
 ki18n_wrap_ui(scratchpad_SRCS scratchpadview.ui)
 
+qt5_add_resources(scratchpad_SRCS kdevscratchpad.qrc)
+
 declare_qt_logging_category(scratchpad_SRCS
     TYPE PLUGIN
     IDENTIFIER PLUGIN_SCRATCHPAD

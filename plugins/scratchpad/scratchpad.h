@@ -31,6 +31,7 @@ class QStandardItemModel;
 class QModelIndex;
 class QFileInfo;
 class QString;
+class QAction;
 
 class Scratchpad
     : public KDevelop::IPlugin
@@ -42,7 +43,11 @@ public:
 
     QStandardItemModel* model() const;
 
+    QAction* runAction() const;
+
     static QString dataDirectory();
+
+    void createActionsForMainWindow(Sublime::MainWindow* window, QString& xmlFile, KActionCollection& actions) override;
 
     enum ExtraRoles {
         FullPathRole = Qt::UserRole + 1,
@@ -66,6 +71,8 @@ private:
     ScratchpadToolViewFactory* m_factory;
     QStandardItemModel* m_model;
     QFileIconProvider m_iconProvider;
+
+    QAction* const m_runAction;
 };
 
 #endif // SCRATCHPAD_H

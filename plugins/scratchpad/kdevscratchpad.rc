@@ -1,0 +1,8 @@
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="scratchpad" version="1" translationDomain="kdevscratchpad">
+<MenuBar>
+  <Menu name="run">
+    <Action name="run_scratch"/>
+  </Menu>
+</MenuBar>
+</gui>
