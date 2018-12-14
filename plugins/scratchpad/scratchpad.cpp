@@ -189,7 +189,7 @@ void Scratchpad::createScratch(const QString& name)
     }
 
     QFile file(dataDirectory() + name);
-    if (file.open(QIODevice::NewOnly)) { // create a new file
+    if (!file.exists() && file.open(QIODevice::WriteOnly)) { // create a new file if it doesn't exist
         file.close();
     }
 
