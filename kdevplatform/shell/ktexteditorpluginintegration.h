@@ -89,6 +89,9 @@ public Q_SLOTS:
     void hideViewBar(KTextEditor::View *view);
     void addWidgetToViewBar(KTextEditor::View *view, QWidget *widget);
 
+    KTextEditor::View *openUrl(const QUrl &url, const QString &encoding = QString());
+    bool showToolView(QWidget *widget);
+
 public:
     KTextEditor::MainWindow *interface() const;
 

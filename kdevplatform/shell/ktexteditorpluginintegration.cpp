@@ -351,6 +351,20 @@ void MainWindow::addWidgetToViewBar(KTextEditor::View *view, QWidget *widget)
     m_mainWindow->viewBarContainer()->addViewBar(widget);
 }
 
+KTextEditor::View *MainWindow::openUrl(const QUrl &url, const QString &encoding)
+{
+    return activateView(KTextEditor::Editor::instance()->application()->openUrl(url, encoding));
+}
+
+bool MainWindow::showToolView(QWidget *widget)
+{
+    if (widget->parentWidget()) {
+        Core::self()->uiController()->raiseToolView(widget->parentWidget());
+        return true;
+    }
+    return false;
+}
+
 KTextEditor::MainWindow *MainWindow::interface() const
 {
     return m_interface;
