@@ -377,6 +377,10 @@ rm -f ./usr/bin/kwrite ./usr/bin/kate
 # remove unused registration data
 rm -rf ./usr/share/applications/ || true
 
+# remove all appdata besides kdevelop one
+rm -f ./usr/share/metainfo/org.kde.{breezedark.desktop,kate,kwrite,konsole}.appdata.xml
+rm -f ./usr/share/metainfo/org.kde.kdev-{php,python}.metainfo.xml
+
 cp /kdevelop.appdir/usr/lib/libexec/kf5/* /kdevelop.appdir/usr/bin/
 
 cd /
