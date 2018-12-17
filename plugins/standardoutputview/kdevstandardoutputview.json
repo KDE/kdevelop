@@ -9,6 +9,7 @@
         "Description[en_GB]": "Provides a text output tool view for other plugins to use, to show things like compiler messages.",
         "Description[es]": "Proporciona un visor de salida de texto para que otros complementos muestren cosas como mensajes del compilador, por ejemplo.",
         "Description[fr]": "Fournit un outil d'affichage de la sortie texte pour utilisation par d'autres modules, pour afficher des choses comme des messages de compilateur.",
+        "Description[gl]": "Fornece unha ferramenta de saída de texto a outros complementos, para mostrar cousas como mensaxes do compilador.",
         "Description[it]": "Fornisce una vista degli strumenti testuale che può essere usata dalla estensioni per mostrare cose come i messaggi del compilatore.",
         "Description[nl]": "Levert tekstuitvoer van hulpmiddelen voor andere te gebruiken plugins, om zaken te tonen zoals berichten van compilers.",
         "Description[pl]": "Zapewnia widok narzędzia wyjścia tekstu dla wykorzystania w innych wtyczkach, aby pokazać rzeczy takie jak komunikaty kompilatora.",
