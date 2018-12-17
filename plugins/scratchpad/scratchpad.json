@@ -1,7 +1,9 @@
 {
     "KPlugin": {
         "Description": "Scratchpad lets you quickly run and experiment with code without a full project, and even store todos.",
+        "Description[ca@valencia]": "L'Scratchpad permet executar i experimentar ràpidament amb el codi sense un projecte complet, i inclús emmagatzemar tasques pendents.",
         "Description[ca]": "L'Scratchpad permet executar i experimentar ràpidament amb el codi sense un projecte complet, i inclús emmagatzemar tasques pendents.",
+        "Description[es]": "Scratchpad le permite ejecutar y experimentar con código rápidamente con código sin un proyecto completo, e incluso guardar listas de cosas por hacer.",
         "Description[gl]": "O caderno de notas permítelle executar e experimentar con código rapidamente sen un proxecto completo, e mesmo pode gardar listas de tarefas.",
         "Description[nl]": "Kladblol laat u snel code uitvoeren en mee experimenteren zonder een volledig project en zelfs to-do's opslaan.",
         "Description[pt]": "A Área de Rascunhos permite-lhe executar e experimentar rapidamente código sem ter um projecto completo ou mesmo guardar listas de tarefas.",
@@ -10,7 +12,9 @@
         "Description[x-test]": "xxScratchpad lets you quickly run and experiment with code without a full project, and even store todos.xx",
         "Id": "scratchpad",
         "Name": "Scratchpad",
+        "Name[ca@valencia]": "Scratchpad",
         "Name[ca]": "Scratchpad",
+        "Name[es]": "Scratchpad",
         "Name[gl]": "Caderno de notas",
         "Name[nl]": "Kladblok",
         "Name[pt]": "Área de Rascunhos",
