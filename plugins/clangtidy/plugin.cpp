@@ -279,7 +279,8 @@ ContextMenuExtension Plugin::contextMenuExtension(Context* context, QWidget* par
     if (context->hasType(KDevelop::Context::EditorContext) && !isRunning()) {
         IDocument* doc = core()->documentController()->activeDocument();
 
-        if (!core()->projectController()->findProjectForUrl(doc->url())->buildSystemManager()) {
+        auto project = core()->projectController()->findProjectForUrl(doc->url());
+        if (!project || !project->buildSystemManager()) {
             return extension;
         }
         if (isSupportedMimeType(doc->mimeType())) {
