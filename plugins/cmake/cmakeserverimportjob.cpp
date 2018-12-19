@@ -118,6 +118,13 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
                     file.compileFlags = fileGroup.value(QStringLiteral("compileFlags")).toString();
                     file.defines = processDefines(file.compileFlags, fileGroup.value(QStringLiteral("defines")).toArray());
 
+                    // apparently some file groups do not contain build system information
+                    // skip these, as they would produce bogus results for us and break the fallback
+                    // implemented in CMakeManager::fileInformation
+                    if (file.isEmpty()) {
+                        continue;
+                    }
+
                     const auto sourcesArray = fileGroup.value(QStringLiteral("sources")).toArray();
                     const KDevelop::Path::List sources = kTransform<KDevelop::Path::List>(sourcesArray, [targetDir](const QJsonValue& val) { return KDevelop::Path(targetDir, val.toString()); });
                     targetSources.reserve(targetSources.size() + sources.size());
