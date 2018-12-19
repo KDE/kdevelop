@@ -41,6 +41,12 @@ struct CMakeFile
     KDevelop::Path::List frameworkDirectories;
     QString compileFlags;
     QHash<QString, QString> defines;
+
+    bool isEmpty() const
+    {
+        return includes.isEmpty() && frameworkDirectories.isEmpty()
+            && compileFlags.isEmpty() && defines.isEmpty();
+    }
 };
 inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
 {
