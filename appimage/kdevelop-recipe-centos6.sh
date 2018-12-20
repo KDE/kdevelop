@@ -269,7 +269,6 @@ cp $(ldconfig -p | grep libsasl2.so.2 | cut -d ">" -f 2 | xargs) ./usr/lib/
 # Which means that we have to copy libEGL.so.1 in too
 cp $(ldconfig -p | grep libEGL.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ # Otherwise F23 cannot load the Qt platform plugin "xcb"
 cp $(ldconfig -p | grep libxcb.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ 
-cp $(ldconfig -p | grep libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/ # For Fedora 20
 
 ldd usr/bin/kdevelop | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
 cp /usr/bin/cmake usr/bin/cmake
@@ -293,6 +292,7 @@ rm -f usr/lib/libcrypt.so.1 || true
 rm -f usr/lib/libdl.so.2 || true
 rm -f usr/lib/libexpat.so.1 || true
 rm -f usr/lib/libfontconfig.so.1 || true
+rm -f usr/lib/libfreetype.so.6 || true
 rm -f usr/lib/libgcc_s.so.1 || true
 rm -f usr/lib/libglib-2.0.so.0 || true
 rm -f usr/lib/libgpg-error.so.0 || true
@@ -327,7 +327,8 @@ rm -f usr/lib/libwind.so.0 || true
 rm -f usr/lib/libGL.so.* || true
 rm -f usr/lib/libdrm.so.* || true
 
-#rm -f usr/lib/libz.so.1 || true
+# see https://github.com/AppImage/AppImageKit/issues/629#issuecomment-359013844 -- we assume this to be present on all systems
+rm -f usr/lib/libz.so.1 || true
 
 # These seem to be available on most systems but not Ubuntu 11.04
 # rm -f usr/lib/libffi.so.6 usr/lib/libGL.so.1 usr/lib/libglapi.so.0 usr/lib/libxcb.so.1 usr/lib/libxcb-glx.so.0 || true
