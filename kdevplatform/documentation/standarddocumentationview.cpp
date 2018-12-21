@@ -99,6 +99,13 @@ public:
     QWebEngineView* m_view = nullptr;
     StandardDocumentationPage* m_page = nullptr;
 
+    ~StandardDocumentationViewPrivate()
+    {
+        // make sure the page is deleted before the profile
+        // see https://doc.qt.io/qt-5/qwebenginepage.html#QWebEnginePage-1
+        delete m_page;
+    }
+
     void init(StandardDocumentationView* parent)
     {
         // prevent QWebEngine (Chromium) from overriding the signal handlers of KCrash
