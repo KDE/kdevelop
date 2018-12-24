@@ -29,7 +29,7 @@ if [ -z "$KDEV_PG_QT_VERSION" ]; then
 fi
 KF5_VERSION=v5.51.0
 KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
-KDE_APPLICATION_VERSION=v18.08.0
+KDE_APPLICATION_VERSION=v18.12.0
 GRANTLEE_VERSION=v5.1.0
 
 export LLVM_ROOT=/opt/llvm/
@@ -143,12 +143,14 @@ function build_project
 
 function build_framework
 { (
-    build_project $1 $KF5_VERSION $2
+    PROJECT=$1
+    shift
+    build_project $PROJECT $KF5_VERSION $@
 ) }
 
 # KDE Frameworks
 if [ -z "$SKIP_FRAMEWORKS" ]; then
-build_framework extra-cmake-modules
+build_framework extra-cmake-modules -DBUILD_HTML_DOCS=OFF -DBUILD_MAN_DOCS=OFF
 
 build_framework kconfig
 build_framework kguiaddons
@@ -216,7 +218,7 @@ build_project kdev-python $KDEVELOP_VERSION
 
 # Install some colorschemes
 cd $BUILD
-$SCRIPT_DIR/../release-scripts/install_colorschemes.py /kdevelop.appdir/usr/share
+$SRC/kdevelop/release-scripts/install_colorschemes.py /kdevelop.appdir/usr/share
 
 cd /kdevelop.appdir
 
@@ -263,7 +265,6 @@ cp $(ldconfig -p | grep libsasl2.so.2 | cut -d ">" -f 2 | xargs) ./usr/lib/
 # Which means that we have to copy libEGL.so.1 in too
 cp $(ldconfig -p | grep libEGL.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ # Otherwise F23 cannot load the Qt platform plugin "xcb"
 cp $(ldconfig -p | grep libxcb.so.1 | cut -d ">" -f 2 | xargs) ./usr/lib/ 
-cp $(ldconfig -p | grep libfreetype.so.6 | cut -d ">" -f 2 | xargs) ./usr/lib/ # For Fedora 20
 
 ldd usr/bin/kdevelop | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -v '{}' ./usr/lib || true
 cp /usr/bin/cmake usr/bin/cmake
@@ -287,6 +288,7 @@ rm -f usr/lib/libcrypt.so.1 || true
 rm -f usr/lib/libdl.so.2 || true
 rm -f usr/lib/libexpat.so.1 || true
 rm -f usr/lib/libfontconfig.so.1 || true
+rm -f usr/lib/libfreetype.so.6 || true
 rm -f usr/lib/libgcc_s.so.1 || true
 rm -f usr/lib/libglib-2.0.so.0 || true
 rm -f usr/lib/libgpg-error.so.0 || true
@@ -321,7 +323,8 @@ rm -f usr/lib/libwind.so.0 || true
 rm -f usr/lib/libGL.so.* || true
 rm -f usr/lib/libdrm.so.* || true
 
-#rm -f usr/lib/libz.so.1 || true
+# see https://github.com/AppImage/AppImageKit/issues/629#issuecomment-359013844 -- we assume this to be present on all systems
+rm -f usr/lib/libz.so.1 || true
 
 # These seem to be available on most systems but not Ubuntu 11.04
 # rm -f usr/lib/libffi.so.6 usr/lib/libGL.so.1 usr/lib/libglapi.so.0 usr/lib/libxcb.so.1 usr/lib/libxcb-glx.so.0 || true
@@ -338,6 +341,7 @@ rm -rf usr/lib/pkgconfig || true
 rm -rf usr/share/ECM/ || true
 rm -rf usr/share/gettext || true
 rm -rf usr/share/pkgconfig || true
+rm -rf usr/etc/xdg/*.categories || true
 
 strip -g $(find usr/bin usr/lib -type f) || true
 
@@ -363,6 +367,13 @@ rm -f ./usr/bin/pyenv*
 rm -f ./usr/bin/verify-uselistorder
 rm -f ./usr/bin/obj2yaml ./usr/bin/yaml2obj
 rm -f ./usr/bin/kwrite ./usr/bin/kate
+
+# remove unused registration data
+rm -rf ./usr/share/applications/ || true
+
+# remove all appdata besides kdevelop one
+rm -f ./usr/share/metainfo/org.kde.{breezedark.desktop,kate,kwrite,konsole}.appdata.xml
+rm -f ./usr/share/metainfo/org.kde.kdev-{php,python}.metainfo.xml
 
 cp /kdevelop.appdir/usr/lib/libexec/kf5/* /kdevelop.appdir/usr/bin/
 
@@ -418,8 +429,8 @@ EOF
 chmod +x AppRun
 
 # use normal desktop file, but remove actions, not yet handled by appimaged & Co
-cp $SRC/kdevelop/app/org.kde.kdevelop.desktop kdevelop.desktop
-sed -i -e '/^Actions=/d;/^\[Desktop Action /Q' kdevelop.desktop
+cp $SRC/kdevelop/app/org.kde.kdevelop.desktop org.kde.kdevelop.desktop
+sed -i -e '/^Actions=/d;/^\[Desktop Action /Q' org.kde.kdevelop.desktop
 
 cp $SRC/kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
 cp -R /usr/lib/python3.6 /kdevelop.appdir/usr/lib/
@@ -429,8 +440,9 @@ mkdir -p /kdevelop.appdir/usr/share/kdevelop/
 
 # Breeze cruft
 cp $BUILD/breeze-icons/icons/breeze-icons.rcc /kdevelop.appdir/usr/share/kdevelop/icontheme.rcc
-rm -Rf /kdevelop.appdir/usr/share/icons/breeze* # not needed because of the rcc
+rm -Rf /kdevelop.appdir/usr/share/icons/{B,b}reeze* # not needed because of the rcc
 rm -Rf /kdevelop.appdir/usr/share/wallpapers
+rm -Rf /kdevelop.appdir/usr/share/plasma
 
 rm -f /kdevelop.appdir/usr/bin/llvm*
 rm -f /kdevelop.appdir/usr/bin/clang*
