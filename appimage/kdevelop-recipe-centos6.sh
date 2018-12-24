@@ -32,7 +32,7 @@ if [ -z "$KDEV_CLANG_TIDY_VERSION" ]; then
 fi
 KF5_VERSION=v5.51.0
 KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
-KDE_APPLICATION_VERSION=v18.08.0
+KDE_APPLICATION_VERSION=v18.12.0
 GRANTLEE_VERSION=v5.1.0
 
 export LLVM_ROOT=/opt/llvm/
