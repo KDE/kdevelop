@@ -435,8 +435,8 @@ EOF
 chmod +x AppRun
 
 # use normal desktop file, but remove actions, not yet handled by appimaged & Co
-cp $SRC/kdevelop/app/org.kde.kdevelop.desktop kdevelop.desktop
-sed -i -e '/^Actions=/d;/^\[Desktop Action /Q' kdevelop.desktop
+cp $SRC/kdevelop/app/org.kde.kdevelop.desktop org.kde.kdevelop.desktop
+sed -i -e '/^Actions=/d;/^\[Desktop Action /Q' org.kde.kdevelop.desktop
 
 cp $SRC/kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
 cp -R /usr/lib/python3.6 /kdevelop.appdir/usr/lib/
