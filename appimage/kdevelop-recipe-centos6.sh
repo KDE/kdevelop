@@ -347,6 +347,7 @@ rm -rf usr/lib/pkgconfig || true
 rm -rf usr/share/ECM/ || true
 rm -rf usr/share/gettext || true
 rm -rf usr/share/pkgconfig || true
+rm -rf usr/etc/xdg/*.categories || true
 
 strip -g $(find usr/bin usr/lib -type f) || true
 
@@ -372,6 +373,9 @@ rm -f ./usr/bin/pyenv*
 rm -f ./usr/bin/verify-uselistorder
 rm -f ./usr/bin/obj2yaml ./usr/bin/yaml2obj
 rm -f ./usr/bin/kwrite ./usr/bin/kate
+
+# remove unused registration data
+rm -rf ./usr/share/applications/ || true
 
 cp /kdevelop.appdir/usr/lib/libexec/kf5/* /kdevelop.appdir/usr/bin/
 
@@ -438,8 +442,9 @@ mkdir -p /kdevelop.appdir/usr/share/kdevelop/
 
 # Breeze cruft
 cp $BUILD/breeze-icons/icons/breeze-icons.rcc /kdevelop.appdir/usr/share/kdevelop/icontheme.rcc
-rm -Rf /kdevelop.appdir/usr/share/icons/breeze* # not needed because of the rcc
+rm -Rf /kdevelop.appdir/usr/share/icons/{B,b}reeze* # not needed because of the rcc
 rm -Rf /kdevelop.appdir/usr/share/wallpapers
+rm -Rf /kdevelop.appdir/usr/share/plasma
 
 rm -f /kdevelop.appdir/usr/bin/llvm*
 rm -f /kdevelop.appdir/usr/bin/clang*
