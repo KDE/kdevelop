@@ -146,12 +146,14 @@ function build_project
 
 function build_framework
 { (
-    build_project $1 $KF5_VERSION $2
+    PROJECT=$1
+    shift
+    build_project $PROJECT $KF5_VERSION $@
 ) }
 
 # KDE Frameworks
 if [ -z "$SKIP_FRAMEWORKS" ]; then
-build_framework extra-cmake-modules
+build_framework extra-cmake-modules -DBUILD_HTML_DOCS=OFF -DBUILD_MAN_DOCS=OFF
 
 build_framework kconfig
 build_framework kguiaddons
