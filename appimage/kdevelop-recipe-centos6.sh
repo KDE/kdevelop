@@ -438,7 +438,7 @@ chmod +x AppRun
 cp $SRC/kdevelop/app/org.kde.kdevelop.desktop org.kde.kdevelop.desktop
 sed -i -e '/^Actions=/d;/^\[Desktop Action /Q' org.kde.kdevelop.desktop
 
-cp $SRC/kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
+cp $SRC/kdevelop/app/icons/256-apps-kdevelop.png kdevelop.png
 cp -R /usr/lib/python3.6 /kdevelop.appdir/usr/lib/
 rm -Rf /kdevelop.appdir/usr/lib/python3.6/{test,config-3.5m,__pycache__,site-packages,lib-dynload,distutils,idlelib,unittest,tkinter,ensurepip}
 
