@@ -89,6 +89,7 @@
     <p xml:lang="tr">Bir çok programlama dili için düzenleme, gezinme ve hata ayıklama özellikleri sağlar, ayrıca bir çok inşa sistemi ve sürüm kontrol sistemi ile tümleşik olup eklenti-tabanlı mimari kullanır.</p>
     <p xml:lang="uk">У програмі передбачено можливості з редагування, навігації та діагностики коду декількома мовами програмування, а також інтеграцію із декількома системами збирання коду та керування версіями. Використовується архітектура з додатками.</p>
     <p xml:lang="x-test">xxIt provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.xx</p>
+    <p xml:lang="zh-CN">它提供了多种编程语言的编辑、导航和调试功能，以及与多种构建系统和版本控制系统的集成，使用基于插件的体系结构。</p>
     <p>KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
     <p xml:lang="ca">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
     <p xml:lang="ca-valencia">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
@@ -108,6 +109,7 @@
     <p xml:lang="tr">KDevelop C, C++ ve Javascript/QML için ayrıştırma arka uçlarına sahiptir, harici eklentilerle örn. PHP veya Python da desteklenir.</p>
     <p xml:lang="uk">У KDevelop передбачено модулі обробки коду мовами C, C++ та Javascript/QML та додатки для розширення підтримки коду іншими мовами програмування, зокрема PHP і Python.</p>
     <p xml:lang="x-test">xxKDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.xx</p>
+    <p xml:lang="zh-CN">KDevelop 提供了 C、C++ 和 JavaScript/QML 的解析器后端，并通过插件提供 PHP 和 Python 等语言的支持。</p>
   </description>
   <url type="homepage">https://kdevelop.org</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kdevelop</url>
