@@ -19,20 +19,28 @@ ecm_qt_declare_logging_category(kdevelop_SRCS
 qt5_add_resources(kdevelop_SRCS kdevelop.qrc)
 
 #TODO: remove CMAKE_CURRENT_SOURCE_DIR prefix when ECM is fixed
-set(kdevelop_ICONS
+set(kdevelop_PNG_ICONS
     ${CMAKE_CURRENT_SOURCE_DIR}/icons/16-apps-kdevelop.png
     ${CMAKE_CURRENT_SOURCE_DIR}/icons/32-apps-kdevelop.png
     ${CMAKE_CURRENT_SOURCE_DIR}/icons/48-apps-kdevelop.png
     ${CMAKE_CURRENT_SOURCE_DIR}/icons/64-apps-kdevelop.png
     ${CMAKE_CURRENT_SOURCE_DIR}/icons/128-apps-kdevelop.png
     ${CMAKE_CURRENT_SOURCE_DIR}/icons/256-apps-kdevelop.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/icons/512-apps-kdevelop.png
+    ${CMAKE_CURRENT_SOURCE_DIR}/icons/1024-apps-kdevelop.png
 )
-
-ecm_install_icons(ICONS ${kdevelop_ICONS}
-    DESTINATION ${KDE_INSTALL_ICONDIR})
-    
-ecm_add_app_icon(kdevelop_SRCS ICONS
-    ${kdevelop_ICONS})
+set(kdevelop_SVG_ICONS
+    ${CMAKE_CURRENT_SOURCE_DIR}/icons/sc-apps-kdevelop.svg
+)
+ecm_install_icons(
+    ICONS
+        ${kdevelop_PNG_ICONS}
+        ${kdevelop_SVG_ICONS}
+    DESTINATION ${KDE_INSTALL_ICONDIR}
+)
+ecm_add_app_icon(kdevelop_SRCS
+    ICONS ${kdevelop_PNG_ICONS}
+)
 
 qt5_add_resources(kdevelop_SRCS kdevelop.qrc)
 add_executable(kdevelop ${kdevelop_SRCS} )
