@@ -485,7 +485,7 @@ boundsUp:
                 if (leftSearchLast > ( int )ownStart) {
                     recurseLeft = true;     //There must be something in the range ownStart -> leftSearchLast that matches the range
                 } else if (( int )ownStart == leftSearchLast) {
-                    //Check if the one item item under leftSearchStart is contained in the range
+                    //Check if the one item under leftSearchStart is contained in the range
                     Data2 leftFoundStartData = KeyExtractor::extract(this->m_data[ownStart]);
                     recurseLeft = leftFoundStartData < leftLastItem || leftFoundStartData == leftLastItem;
                 }
@@ -665,7 +665,7 @@ private:
                 if (leftSearchLast > ( int )bound.start) {
                     recurseLeft = true;     //There must be something in the range bound.start -> leftSearchLast that matches the range
                 } else if (( int )bound.start == leftSearchLast) {
-                    //Check if the one item item under leftSearchStart is contained in the range
+                    //Check if the one item under leftSearchStart is contained in the range
                     Data2 leftFoundStartData = KeyExtractor::extract(this->m_data[bound.start]);
                     recurseLeft = leftFoundStartData < leftLastItem || leftFoundStartData == leftLastItem;
                 }

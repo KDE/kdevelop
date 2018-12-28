@@ -32,7 +32,7 @@ PropertyWidget {
 
     onInitialValueChanged: {
         // QML does not expose any way of getting the components of a color
-        // parsed by Qt, thus we have to to the parsing ourselves (this breaks
+        // parsed by Qt, thus we have to do the parsing ourselves (this breaks
         // named colors)
         // TODO: QtQuick2 exposes the r, g and b attributes of color.
         var clr = picker.initialValue;

@@ -166,7 +166,7 @@ public:
      * int main() { foo(0); }
      * @endcode
      *
-     * => foo(0) is ambigous. This will give us a ProblemPointer pointing to 'foo(0)'.
+     * => foo(0) is ambiguous. This will give us a ProblemPointer pointing to 'foo(0)'.
      *
      * Additionally, @p diagnostics may return the two locations to the ambiguous overloads,
      * with descriptions such as 'test.cpp:1: candidate : ...'

@@ -44,7 +44,7 @@ if ! [ "$KDEV_SHELL_ENVIRONMENT_ID" ]; then
 fi
 
 if ! [ "$KDEV_DBUS_ID" ]; then
-    echo "The required environment variable KDEV_DBUS_ID is not set. This variable defines the dbus id of the application instance instance which is supposed to be attached."
+    echo "The required environment variable KDEV_DBUS_ID is not set. This variable defines the dbus id of the application instance which is supposed to be attached."
     exit 5
 fi
 

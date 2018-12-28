@@ -57,7 +57,7 @@ public:
     ~CodeCompletionModel() override;
 
     ///This MUST be called after the creation of this completion-model.
-    ///If you use use the KDevelop::CodeCompletion helper-class, that one cares about it.
+    ///If you use the KDevelop::CodeCompletion helper-class, that one cares about it.
     virtual void initialize();
 
     ///Entry-point for code-completion. This determines ome settings, clears the model, and then calls completionInvokedInternal for further processing.

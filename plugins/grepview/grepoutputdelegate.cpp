@@ -55,7 +55,7 @@ GrepOutputDelegate::~GrepOutputDelegate()
 
 void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 { 
-    // there is no function in QString to left-trim. A call to remove this this regexp does the job
+    // there is no function in QString to left-trim. A call to remove this regexp does the job
     static const QRegExp leftspaces(QStringLiteral("^\\s*"), Qt::CaseSensitive, QRegExp::RegExp);
     
     // rich text component

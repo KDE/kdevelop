@@ -535,7 +535,7 @@ ClangFixits fixUnknownDeclaration( const QualifiedIdentifier& identifier, const 
 
 QString symbolFromDiagnosticSpelling(const QString& str)
 {
-    /* in all error messages the symbol is in in the first pair of quotes */
+    /* in all error messages the symbol is in the first pair of quotes */
     const auto split = str.split( QLatin1Char('\'') );
     auto symbol = split.value( 1 );
 

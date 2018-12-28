@@ -282,7 +282,7 @@ void OutlineNode::sortByLocation(bool requiresSorting)
         return n1.m_declOrContext->range().start < n2.m_declOrContext->range().start;
     };
     // since most nodes will be correctly sorted we check that before calling std::sort().
-    // This saves a lot of move ctor/assingnment calls in the common case.
+    // This saves a lot of move ctor/assignment calls in the common case.
     // If we appended a context without a Declaration* we know that it will be unsorted
     // so we can pass requiresSorting = true to skip the useless std::is_sorted() call.
     // uncomment the following qDebug() lines to see whether this optimization really makes sense

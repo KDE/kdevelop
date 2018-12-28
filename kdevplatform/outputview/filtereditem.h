@@ -34,7 +34,7 @@ namespace KDevelop
 /**
  * Holds all metadata of a given compiler/script/whatever output line. E.g. if it is an error or
  * a warning, if it is clickable or not, line number, column number, etc.
- * Note that line and column number are stored as starting with with 0 (Your compiler/whatever tool 
+ * Note that line and column number are stored as starting with 0 (Your compiler/whatever tool
  * may count from 1 ).
  **/
 struct KDEVPLATFORMOUTPUTVIEW_EXPORT FilteredItem

@@ -71,7 +71,7 @@ public: // KDevelop::IPlugin API
 public:
     /**
      *\function
-     *\returns all available checks, obtained from clang-tidy program, ran with with "--checks=* --list-checks"
+     *\returns all available checks, obtained from clang-tidy program, ran with "--checks=* --list-checks"
      * parameters.
      */
     QStringList allAvailableChecks() { return m_checkSet.all(); }

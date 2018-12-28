@@ -307,7 +307,7 @@ KDevelop::VcsJob* PerforcePlugin::diff(const QUrl& fileOrDirectory, const KDevel
     QFileInfo curFile(fileOrDirectory.toLocalFile());
     QString depotSrcFileName = getRepositoryName(curFile);
     QString depotDstFileName = depotSrcFileName;
-    depotSrcFileName.append(toRevisionName(srcRevision, dstRevision.prettyValue())); // dstRevision acutally contains the number that we want to take previous of
+    depotSrcFileName.append(toRevisionName(srcRevision, dstRevision.prettyValue())); // dstRevision actually contains the number that we want to take previous of
 
     DVcsJob* job = new DVcsJob(curFile.dir(), this, KDevelop::OutputJob::Verbose);
     setEnvironmentForJob(job, curFile);

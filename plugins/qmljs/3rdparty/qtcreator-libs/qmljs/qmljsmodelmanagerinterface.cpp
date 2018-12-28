@@ -170,7 +170,7 @@ Dialect ModelManagerInterface::guessLanguageOfFile(const QString &fileName)
 
     /*
      * I was reluctant to use complete suffix in all cases, because it is a huge
-     * change in behaivour. But in case of .qml this should be safe.
+     * change in behavior. But in case of .qml this should be safe.
      */
 
     if (fileSuffix == QLatin1String("qml"))

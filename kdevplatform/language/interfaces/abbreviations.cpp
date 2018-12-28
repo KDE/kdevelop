@@ -93,7 +93,7 @@ bool matchesAbbreviation(const QStringRef& word, const QString& typed)
     // We want to make "KComplM" match "KateCompletionModel"; this means we need
     // to allow parts of the typed text to be not part of the actual abbreviation,
     // which consists only of the uppercased / underscored letters (so "KCM" in this case).
-    // However it might be ambigous whether a letter is part of such a word or part of
+    // However it might be ambiguous whether a letter is part of such a word or part of
     // the following abbreviation, so we need to find all possible word offsets first,
     // then compare.
     for (int i = 0; i < word.size(); i++) {

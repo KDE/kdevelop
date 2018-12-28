@@ -101,7 +101,7 @@ public:
     /** Return the default area with given @p id.*/
     Area *defaultArea(const QString &id) const;
 
-    /** Add a main window to the set of of windows managed by this
+    /** Add a main window to the set of windows managed by this
         controller.  The ownership of the window is passed to the
         controller.  The window will be associated with a set of
         areas created by cloning the current defaultAreas.  */

@@ -161,7 +161,7 @@ public:
             if (it.next().value() == document) {
                 const auto documentIt = documents.constFind(document->url());
                 if (documentIt != documents.constEnd()) {
-                    // Weird situation (saving as a file that is aready open)
+                    // Weird situation (saving as a file that is already open)
                     IDocument* origDoc = *documentIt;
                     if (origDoc->state() & IDocument::Modified) {
                         // given that the file has been saved, close the saved file as the other instance will become conflicted on disk

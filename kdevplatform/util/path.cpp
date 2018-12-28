@@ -224,7 +224,7 @@ QString Path::relativePath(const Path& path) const
         --backwardSegments;
     }
 
-    // Now up up from the common branch to the second path.
+    // Now up from the common branch to the second path.
     int forwardSegmentsLength = 0;
     for (int i = level; i < path.m_data.count(); ++i) {
         forwardSegmentsLength += path.m_data.at(i).length();

@@ -302,7 +302,7 @@ QVariant Watches::data(int column, int role) const
 #if 0
     if (column == 0 && role == Qt::FontRole)
     {
-        /* FIXME: is creating font again and agian efficient? */
+        /* FIXME: is creating font again and again efficient? */
         QFont f = font();
         f.setBold(true);
         return f;

@@ -63,7 +63,7 @@ void AsyncTreeView::slotClicked(const QModelIndex &index)
 
 QSize AsyncTreeView::sizeHint() const
 {
-    //Assuming that columns are awlays resized to fit their contents, return a size that will fit all without a scrollbar
+    //Assuming that columns are always resized to fit their contents, return a size that will fit all without a scrollbar
     QMargins margins = contentsMargins();
     int horizontalSize = margins.left() + margins.right();
     for (int i = 0; i < model()->columnCount(); ++i) {

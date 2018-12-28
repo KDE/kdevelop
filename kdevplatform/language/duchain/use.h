@@ -37,7 +37,7 @@ class Declaration;
  * For that reason they are built in a way that a use can completely be stored in a simple vector,
  * and they only contain indices that represent the actual declaration used. Since the same
  * Declarations are used over and over again, the actual declarations are stored and indexed centrally
- * in the enclosing top-context. Additionally, because a use may refer to a not globally adressable item,
+ * in the enclosing top-context. Additionally, because a use may refer to a not globally addressable item,
  * each top-context contains a local map that maps declaration-indices to local decarations.
  *
  * Since only a small fraction of all files is loaded as document at any time, only few documents actually

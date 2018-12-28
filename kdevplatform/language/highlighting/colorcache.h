@@ -157,7 +157,7 @@ private:
     /// the text color for the current color scheme
     QColor m_foregroundColor;
 
-    /// the editor background color color for the current color scheme
+    /// the editor background color for the current color scheme
     QColor m_backgroundColor;
 
     /// How generated colors for local variables should be mixed with the foreground color.

@@ -128,7 +128,7 @@ public:
     static void setDiskChangesForbidden(bool changesForbidden);
 
     /**
-     * Returns the specified name as a url for aritificial source code
+     * Returns the specified name as a url for artificial source code
      * suitable for code being inserted into the parser
      */
     static QString artificialPath(const QString& name);
@@ -170,8 +170,8 @@ class KDEVPLATFORMLANGUAGE_EXPORT InsertArtificialCodeRepresentation
 {
 public:
     /**
-     * Inserts an artifial source-code representation with filename @p file and the contents @p text
-     * If @p file is not an absolute path or url, it will be made absolute using the CodeRepresentation::artifialUrl()
+     * Inserts an artificial source-code representation with filename @p file and the contents @p text
+     * If @p file is not an absolute path or url, it will be made absolute using the CodeRepresentation::artificialUrl()
      * function, while ensuring that the name is unique.
      */
     InsertArtificialCodeRepresentation(const IndexedString& file, const QString& text);

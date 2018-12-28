@@ -95,7 +95,7 @@ public:
     virtual bool accept(DUContext* ctx) = 0;
     virtual ~DUChainItemFilter();
 };
-///walks a context, all its sub-contexts, and all its declarations in exactly the order they appear in in the file.
+///walks a context, all its sub-contexts, and all its declarations in exactly the order they appear in the file.
 ///Re-implement DUChainItemFilter to do something with the items.
 KDEVPLATFORMLANGUAGE_EXPORT void collectItems(DUContext* context, DUChainItemFilter& filter);
 

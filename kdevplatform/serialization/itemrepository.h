@@ -463,7 +463,7 @@ public:
     /// @param modulo Returns whether this bucket contains an item with (hash % modulo) == (item.hash % modulo)
     ///               The default-parameter is the size of the next-bucket hash that is used by setNextBucketForHash and nextBucketForHash
     /// @note modulo MUST be a multiple of ObjectMapSize, because (b-a) | (x * h1) => (b-a) | h2, where a|b means a is a multiple of b.
-    ///               This this allows efficiently computing the clashes using the local object map hash.
+    ///               This allows efficiently computing the clashes using the local object map hash.
     bool hasClashingItem(uint hash, uint modulo)
     {
         Q_ASSERT(modulo % ObjectMapSize == 0);

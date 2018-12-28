@@ -71,7 +71,7 @@ public:
     /**
      * Makes sure the standard-context for the given url is up-to-date.
      * This may trigger a parsing in background, so a QObject can be given that will be notified
-     * asyonchronously once the update is ready.
+     * asynchronously once the update is ready.
      * If the context is already up to date, the given QObject is notified directly.
      *
      * @param document Document to update

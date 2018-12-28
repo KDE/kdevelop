@@ -46,7 +46,7 @@ public:
 
 Q_SIGNALS:
     /**
-     * Gets emitted whenever the dialog was acceppted
+     * Gets emitted whenever the dialog was accepted
      * and the env settings might have changed.
      */
     void environmentConfigured();

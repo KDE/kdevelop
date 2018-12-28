@@ -316,7 +316,7 @@ public:
      * temporary filename will be ensured.
      *
      * @param dstPath Filename in which the contents
-     *                of the file file will be safed.
+     *                of the file will be saved.
      * @param path path or url
      * @param peg_revision peg revision to retrieve, by default is the latest one
      */

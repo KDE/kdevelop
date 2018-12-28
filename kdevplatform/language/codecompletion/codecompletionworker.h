@@ -89,7 +89,7 @@ protected:
     virtual void updateContextRange(KTextEditor::Range& contextRange, KTextEditor::View* view,
                                     const DUContextPointer& context) const;
 
-    ///Can be used to retrieve and set the aborting flag(Enabling it is equivalent to caling abortCompletion())
+    ///Can be used to retrieve and set the aborting flag(Enabling it is equivalent to calling abortCompletion())
     ///Is always reset from within computeCompletions
     bool& aborting();
 

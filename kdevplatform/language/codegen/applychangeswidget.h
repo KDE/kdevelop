@@ -45,7 +45,7 @@ public:
 
     KTextEditor::Document* document() const;
 
-    ///@param original may be an artifial code representation @ref KDevelop::InsertArtificialCodeRepresentation
+    ///@param original may be an artificial code representation @ref KDevelop::InsertArtificialCodeRepresentation
     void addDocuments(const IndexedString& original);
 
     ///This will save all the modified files into their originals

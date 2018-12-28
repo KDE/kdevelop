@@ -417,7 +417,7 @@ bool AppWizardPlugin::unpackArchive(const KArchiveDirectory* dir, const QString&
     const QStringList entries = dir->entries();
     qCDebug(PLUGIN_APPWIZARD) << "entries:" << entries.join(QLatin1Char(','));
 
-    //This extra tempdir is needed just for the files files have special names,
+    //This extra tempdir is needed just for the files that have special names,
     //which may contain macros also files contain content with macros. So the
     //easiest way to extract the files from the archive and then rename them
     //and replace the macros is to use a tempdir and copy the file (and

@@ -180,7 +180,7 @@ QString NodeJS::moduleFileName(const QString& moduleName, const QString& url)
 
     QString& fileName = m_cachedModuleFileNames[pair];
 
-    // Absolue and relative URLs
+    // Absolute and relative URLs
     if (moduleName.startsWith(QLatin1Char('/')) || moduleName.startsWith(QLatin1Char('.'))) {
         // NOTE: This is not portable to Windows, but the Node.js documentation
         // only talks about module names that start with /, ./ and ../ .
