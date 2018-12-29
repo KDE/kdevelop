@@ -55,7 +55,7 @@ public:
     /**
      * Creates and returns a menu with common actions.
      * Ownership of the actions in the menu stays with this VcsPluginHelper object.
-     * @param parent the parent widget set for the QMenu for memory menagement
+     * @param parent the parent widget set for the QMenu for memory management
      */
     QMenu* commonActions(QWidget* parent);
 

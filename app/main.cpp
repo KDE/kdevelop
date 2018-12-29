@@ -224,20 +224,20 @@ static int openFilesInRunningInstance(const QVector<UrlInfo>& files, qint64 pid)
     QDBusInterface iface(service, QStringLiteral("/org/kdevelop/DocumentController"), QStringLiteral("org.kdevelop.DocumentController"));
 
     QStringList urls;
-    bool errors_occured = false;
+    bool errors_occurred = false;
     for (const UrlInfo& file : files) {
         QDBusReply<bool> result = iface.call(QStringLiteral("openDocumentSimple"), file.url.toString(), file.cursor.line(), file.cursor.column());
         if ( ! result.value() ) {
             QTextStream err(stderr);
             err << i18n("Could not open file '%1'.", file.url.toDisplayString(QUrl::PreferLocalFile)) << "\n";
-            errors_occured = true;
+            errors_occurred = true;
         }
     }
     // make the window visible
     QDBusMessage makeVisible = QDBusMessage::createMethodCall( service, QStringLiteral("/kdevelop/MainWindow"), QStringLiteral("org.kdevelop.MainWindow"),
                                                                QStringLiteral("ensureVisible") );
     QDBusConnection::sessionBus().asyncCall( makeVisible );
-    return errors_occured;
+    return errors_occurred;
 }
 
 /// Performs a DBus call to open the given @p files in the running kdev instance identified by @p pid

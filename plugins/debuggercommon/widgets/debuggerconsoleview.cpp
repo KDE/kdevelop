@@ -219,7 +219,7 @@ void DebuggerConsoleView::showContextMenu(const QPoint &pos)
 {
     // FIXME: QTextEdit::createStandardContextMenu takes position in document coordinates
     // while pos is in QTextEdit::viewport coordinates.
-    // Seems not a big issue currently as menu content seems position indepedent, but still better fix
+    // Seems not a big issue currently as menu content seems position independent, but still better fix
     QScopedPointer<QMenu> popup(m_textView->createStandardContextMenu(pos));
 
     popup->addSeparator();

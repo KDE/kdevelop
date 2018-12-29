@@ -23,7 +23,7 @@
 #include <KIO/Job>
 #include <QQueue>
 
-// uncomment to time imort jobs
+// uncomment to time import jobs
 // #define TIME_IMPORT_JOB
 
 #ifdef TIME_IMPORT_JOB
@@ -65,7 +65,7 @@ private:
     /// current base dir
     ProjectFolderItem* m_item;
     KIO::UDSEntryList entryList;
-    // kill does not delete the job instantaniously
+    // kill does not delete the job instantaneously
     QAtomicInt m_aborted;
 
 #ifdef TIME_IMPORT_JOB

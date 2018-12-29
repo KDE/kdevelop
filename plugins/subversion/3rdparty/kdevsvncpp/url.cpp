@@ -34,14 +34,14 @@
 
 static void findAndReplace(std::string & source, const std::string & find, const std::string & replace)
 {
-  // start seaching from the beginning
+  // start searching from the beginning
   size_t pos = 0;
   size_t findLength = find.length();
   size_t replaceLength = replace.length();
 
   do
   {
-    // search for the next occurrenc
+    // search for the next occurrence
     pos = source.find(find, pos);
     
     // found?
@@ -51,7 +51,7 @@ static void findAndReplace(std::string & source, const std::string & find, const
       source.replace(pos, findLength, replace);
 
       // Make sure we do not search from the beginning
-      // othwise replacing % with %25 would result 
+      // otherwise replacing % with %25 would result 
       // in an endless loop
       pos = pos + replaceLength;
     }

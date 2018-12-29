@@ -125,10 +125,10 @@ IF (NOT WIN32)
         ENDFOREACH(_ARG)
     ENDIF(NOT APU_CONFIG)
 ELSE (NOT WIN32)
-#search libaries for Windows
+#search libraries for Windows
 #this needs more work
 
-# search for pathes
+# search for paths
 
     MACRO(FIND_SUB_INC targetvar include pathadd)
       IF (SUBVERSION_INSTALL_PATH)

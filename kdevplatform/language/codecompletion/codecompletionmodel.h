@@ -87,7 +87,7 @@ public:
     KDevelop::TopDUContextPointer currentTopContext() const;
     void setCurrentTopContext(const KDevelop::TopDUContextPointer& topContext);
 
-    ///Whether the completion should be fully detailed. If false, it should be simplifed, so no argument-hints,
+    ///Whether the completion should be fully detailed. If false, it should be simplified, so no argument-hints,
     ///no expanding information, no type-information, etc.
     bool fullCompletion() const;
 
@@ -98,7 +98,7 @@ public:
 
     void clear();
 
-    ///Returns the tree-element that belogns to the index, or zero
+    ///Returns the tree-element that belongs to the index, or zero
     QExplicitlySharedDataPointer<CompletionTreeElement> itemForIndex(const QModelIndex& index) const;
 
 Q_SIGNALS:

@@ -482,7 +482,7 @@ public:
                         }
                         else {
                             // The active document's buddy is not directly after it
-                            // => no ploblem, insert after active document
+                            // => no problem, insert after active document
                             area->addView(partView, activeView);
                         }
                     }

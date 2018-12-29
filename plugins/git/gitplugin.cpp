@@ -816,22 +816,22 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
 }
 
 /* Few words about how this hardcore works:
-1. get all commits (with --paretns)
-2. select master (root) branch and get all unicial commits for branches (git-rev-list br2 ^master ^br3)
+1. get all commits (with --parents)
+2. select master (root) branch and get all unique commits for branches (git-rev-list br2 ^master ^br3)
 3. parse allCommits. While parsing set mask (columns state for every row) for BRANCH, INITIAL, CROSS,
    MERGE and INITIAL are also set in DVCScommit::setParents (depending on parents count)
    another setType(INITIAL) is used for "bottom/root/first" commits of branches
-4. find and set merges, HEADS. It's an ittaration through all commits.
+4. find and set merges, HEADS. It's an iteration through all commits.
     - first we check if parent is from the same branch, if no then we go through all commits searching parent's index
       and set CROSS/HCROSS for rows (in 3 rows are set EMPTY after commit with parent from another tree met)
     - then we check branchesShas[i][0] to mark heads
 
-4 can be a seporate function. TODO: All this porn require refactoring (rewriting is better)!
+4 can be a separate function. TODO: All this porn require refactoring (rewriting is better)!
 
 It's a very dirty implementation.
 FIXME:
 1. HEAD which is head has extra line to connect it with further commit
-2. If you menrge branch2 to master, only new commits of branch2 will be visible (it's fine, but there will be
+2. If you merge branch2 to master, only new commits of branch2 will be visible (it's fine, but there will be
 extra merge rectangle in master. If there are no extra commits in branch2, but there are another branches, then the place for branch2 will be empty (instead of be used for branch3).
 3. Commits that have additional commit-data (not only history merging, but changes to fix conflicts) are shown incorrectly
 */
@@ -913,7 +913,7 @@ QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
                     mask.append(item.type()); //we set type in setParents
 
                     //check if parent from the same branch, if not then we have found a root of the branch
-                    //and will use empty column for all futher (from top to bottom) revisions
+                    //and will use empty column for all further (from top to bottom) revisions
                     //FIXME: we should set CROSS between parent and child (and do it when find merge point)
                     additionalFlags[i] = false;
                     foreach(const QString &sha, item.parents())

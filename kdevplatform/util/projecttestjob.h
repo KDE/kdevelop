@@ -93,7 +93,7 @@ public:
     /**
      * @brief The result of this job
      *
-     * This function only returns a correnct result after all the tests are completed.
+     * This function only returns a correct result after all the tests are completed.
      * It is therefore best to call this after the KJob::result() signal is emitted.
      *
      * @sa ProjectTestResult

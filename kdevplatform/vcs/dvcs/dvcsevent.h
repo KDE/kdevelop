@@ -61,7 +61,7 @@ public:
      * if branch has this commit (after merge several branches can have one commit) properties[branch] is set to BRANCH.
      */
     enum CommitType {
-        INITIAL, /**< Initial (first) commit, we should'n draw bottom line to connect with parent */
+        INITIAL, /**< Initial (first) commit, we shouldn't draw bottom line to connect with parent */
         HEAD,    /**< HEAD commit, we should use its for branch label, and shouldn't draw head line to connect with child */
         BRANCH,  /**< draw a circle in the branch column */
         MERGE,   /**< draw a square (current implementation requires drawing connections */

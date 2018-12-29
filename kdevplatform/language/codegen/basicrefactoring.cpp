@@ -236,7 +236,7 @@ void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration
     QFileInfo info(declaration->topContext()->url().str());
     if (!info.isWritable()) {
         KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                           i18n("Declaration is located in non-writeable file %1.",
+                           i18n("Declaration is located in non-writable file %1.",
                                 declaration->topContext()->url().str()));
         return;
     }

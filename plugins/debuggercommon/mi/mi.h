@@ -194,7 +194,7 @@ namespace KDevMI { namespace MI {
         enum { StringLiteral, Tuple, List } kind = StringLiteral;
 
         /** If this value is a string literals, returns the string value.
-            Othewise, throws type_error.
+            Otherwise, throws type_error.
         */
         virtual QString literal() const;
 

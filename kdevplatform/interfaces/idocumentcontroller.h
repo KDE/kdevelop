@@ -76,7 +76,7 @@ public:
     virtual QList<KDevelop::IDocument*> openDocuments() const = 0;
 
     /**
-     * Returns the curently active or focused document.
+     * Returns the currently active or focused document.
      *
      * @return The active document.
      */

@@ -99,7 +99,7 @@ public:
     ///The referenced declaration
     IndexedDeclaration declaration() const;
     ///If this code-context represents the use of a declaration, then this contains the exact position+range
-    ///of that use. declaration() returnes the used declaration, and context() the context
+    ///of that use. declaration() returns the used declaration, and context() the context
     ///that surrounds the use.
     DocumentRange use() const;
 

@@ -49,7 +49,7 @@
  *
  * This is how the EXTERNAL mechanism works (I found this in a comment of some ruby dbus library):
  *   Take the user id (eg integer 1000) make a string out of it "1000", take
- *   each character and determin hex value "1" => 0x31, "0" => 0x30. You
+ *   each character and determine hex value "1" => 0x31, "0" => 0x30. You
  *   obtain for "1000" => 31303030 This is what the server is expecting.
  *   Why? I dunno. How did I come to that conclusion? by looking at rbus
  *   code. I have no idea how he found that out.

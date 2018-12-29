@@ -92,7 +92,7 @@ void KDevelop::PersistentMovingRangePrivate::aboutToDeleteMovingInterfaceContent
         m_range = KTextEditor::Range::invalid();
     }
 
-    // No need to disconnect, as the document is being deleted. Simply set the referenes to zero.
+    // No need to disconnect, as the document is being deleted. Simply set the references to zero.
     delete m_movingRange;
     m_movingRange = nullptr;
     m_tracker.clear();

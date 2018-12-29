@@ -59,7 +59,7 @@ CMakePreferences::CMakePreferences(IPlugin* plugin, const ProjectConfigOptions& 
 
     // configure the extraArguments widget to span the advanced box width but not
     // expand the dialog to the width of the longest element in the argument history.
-    // static_cast<QComboBox*> needed because KComboBox::minimumSizeHint() override mistakingly made it protected
+    // static_cast<QComboBox*> needed because KComboBox::minimumSizeHint() override by mistake made it protected
     m_prefsUi->extraArguments->setMinimumWidth(static_cast<QComboBox*>(m_prefsUi->extraArguments)->minimumSizeHint().width());
     m_extraArgumentsHistory = new CMakeExtraArgumentsHistory(m_prefsUi->extraArguments);
 

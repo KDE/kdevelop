@@ -210,7 +210,7 @@ VcsJob* BazaarPlugin::pull(const VcsLocation& localOrRepoLocationSrc, const QUrl
     if (!localOrRepoLocationSrc.localUrl().isEmpty()) {
         *job << localOrRepoLocationSrc.localUrl();
     }
-    // localUrl always makes sense. Even on remote repositores which are handled
+    // localUrl always makes sense. Even on remote repositories which are handled
     // transparently.
     return job;
 }
@@ -220,7 +220,7 @@ VcsJob* BazaarPlugin::push(const QUrl& localRepositoryLocation, const VcsLocatio
     DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localRepositoryLocation), this);
     job->setType(VcsJob::JobType::Push);
     *job << "bzr" << "push" << localOrRepoLocationDst.localUrl();
-    // localUrl always makes sense. Even on remote repositores which are handled
+    // localUrl always makes sense. Even on remote repositories which are handled
     // transparently.
     return job;
 }

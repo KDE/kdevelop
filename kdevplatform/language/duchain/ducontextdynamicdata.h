@@ -25,7 +25,7 @@
 #include "ducontextdata.h"
 
 namespace KDevelop {
-///This class contains data that is only runtime-dependant and does not need to be stored to disk
+///This class contains data that is only runtime-dependent and does not need to be stored to disk
 class DUContextDynamicData
 {
 private:

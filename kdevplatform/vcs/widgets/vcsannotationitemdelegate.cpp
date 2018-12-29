@@ -191,7 +191,7 @@ void VcsAnnotationItemDelegate::renderMessageAndAge(QPainter* painter,
     painter->drawText(messageRect, Qt::AlignLeading | Qt::AlignVCenter,
                       painter->fontMetrics().elidedText(messageText, Qt::ElideRight, messageRect.width()));
 
-    // TODO: defaultStyleAttribute only returns relyably for dsNormal, so what to do for a comment-like color?
+    // TODO: defaultStyleAttribute only returns reliably for dsNormal, so what to do for a comment-like color?
     KTextEditor::Attribute::Ptr commentStyle = option.view->defaultStyleAttribute(KTextEditor::dsNormal);
     painter->setPen(commentStyle->foreground().color());
     painter->drawText(ageRect, Qt::AlignTrailing | Qt::AlignVCenter, ageText);
@@ -207,7 +207,7 @@ void VcsAnnotationItemDelegate::renderAuthor(QPainter* painter,
 
     painter->save();
 
-    // TODO: defaultStyleAttribute only returns relyably for dsNormal, so what to do for a comment-like color?
+    // TODO: defaultStyleAttribute only returns reliably for dsNormal, so what to do for a comment-like color?
     KTextEditor::Attribute::Ptr commentStyle = option.view->defaultStyleAttribute(KTextEditor::dsNormal);
     painter->setPen(commentStyle->foreground().color());
     painter->drawText(authorRect, Qt::AlignLeading | Qt::AlignVCenter,

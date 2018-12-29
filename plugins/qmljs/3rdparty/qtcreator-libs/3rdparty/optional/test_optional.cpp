@@ -556,7 +556,7 @@ TEST(example_rationale)
   // FAILS: run({});              // ambiguous
 
   if (opt1 == nullopt) {} // fine
-  // FAILS: if (opt2 == {}) {}   // ilegal
+  // FAILS: if (opt2 == {}) {}   // illegal
   
   ////////////////////////////////
   assert (optional<unsigned>{}  < optional<unsigned>{0});

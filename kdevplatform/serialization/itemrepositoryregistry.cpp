@@ -34,7 +34,7 @@
 using namespace KDevelop;
 
 namespace {
-//If KDevelop crashed this many times consicutively, clean up the repository
+//If KDevelop crashed this many times consecutively, clean up the repository
 const int crashesBeforeCleanup = 1;
 
 void setCrashCounter(QFile& crashesFile, int count)
@@ -139,7 +139,7 @@ public:
     void close();
 };
 
-//The global item-reposity registry
+//The global item-repository registry
 ItemRepositoryRegistry* ItemRepositoryRegistry::m_self = nullptr;
 
 ItemRepositoryRegistry::ItemRepositoryRegistry(const QString& repositoryPath)

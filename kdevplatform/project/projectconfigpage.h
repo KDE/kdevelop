@@ -67,7 +67,7 @@ public:
     ~ProjectConfigPage() override
     {
         // we have to delete T::self otherwise we get the following message on the
-        // next call to T::intance(QString):
+        // next call to T::instance(QString):
         // "T::instance called after the first use - ignoring"
         // which means that we will continue using the old file
         delete T::self();

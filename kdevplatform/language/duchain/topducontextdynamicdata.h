@@ -81,7 +81,7 @@ public:
     ///Stores this top-context to disk
     void store();
 
-    ///Stores all remainings of this top-context that are on disk. The top-context will be fully dynamic after this.
+    ///Stores all remnants of this top-context that are on disk. The top-context will be fully dynamic after this.
     void deleteOnDisk();
 
     ///Whether this top-context is on disk(Either has been loaded, or has been stored)

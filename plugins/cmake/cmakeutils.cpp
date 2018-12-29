@@ -81,7 +81,7 @@ static const QString buildDirPathKey = QStringLiteral("Build Directory Path");
 // Support the old "CMake Binary" key too for backwards compatibility during
 // a reasonable transition period. Both keys are saved at least until 5.2.0
 // is released. Import support for the old key will need to remain for a
-// considably longer period, ideally.
+// considerably longer period, ideally.
 static const QString cmakeBinaryKey = QStringLiteral("CMake Binary");
 static const QString cmakeExecutableKey = QStringLiteral("CMake Executable");
 static const QString cmakeBuildTypeKey = QStringLiteral("Build Type");

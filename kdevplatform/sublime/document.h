@@ -71,7 +71,7 @@ public:
     virtual QString documentSpecifier() const = 0;
 
     /**
-     * If the document is in a state where data may be lost while closking,
+     * If the document is in a state where data may be lost while closing,
      * asks the user whether he really wants to close the document.
      * 
      * This function may also take actions like saving the document before closing

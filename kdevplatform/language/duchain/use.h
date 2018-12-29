@@ -38,7 +38,7 @@ class Declaration;
  * and they only contain indices that represent the actual declaration used. Since the same
  * Declarations are used over and over again, the actual declarations are stored and indexed centrally
  * in the enclosing top-context. Additionally, because a use may refer to a not globally addressable item,
- * each top-context contains a local map that maps declaration-indices to local decarations.
+ * each top-context contains a local map that maps declaration-indices to local declarations.
  *
  * Since only a small fraction of all files is loaded as document at any time, only few documents actually
  * need smart-ranges. For that reason we do not store them here, but instead only map them to the uses

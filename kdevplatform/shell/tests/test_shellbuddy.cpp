@@ -388,7 +388,7 @@ void TestShellBuddy::testsplitViewBuddies()
     // check that it only contains pClassAHeaderSplitView
     QVERIFY(pRightContainer->count() == 1 && pRightContainer->hasWidget(pClassAHeaderSplitView->widget()));
 
-    // now open the correponding definition file, classA.r.txt
+    // now open the corresponding definition file, classA.r.txt
     IDocument *pClassAImplem = m_documentController->openDocument(QUrl::fromLocalFile(dirA.path() + "classA.r.txt"));
     QVERIFY(pClassAImplem);
     pMainWindow->activeView()->setObjectName(QStringLiteral("classA.r.txt"));

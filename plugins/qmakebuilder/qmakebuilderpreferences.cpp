@@ -123,13 +123,13 @@ void QMakeBuilderPreferences::loadOtherConfig(const QString& config)
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Loading config " << config;
     m_chooserUi->loadConfig(config);
-    apply(); // since current config has changed, it must be saved immediateley
+    apply(); // since current config has changed, it must be saved immediately
 }
 
 void QMakeBuilderPreferences::addBuildConfig()
 {
     qCDebug(KDEV_QMAKEBUILDER) << "Adding a new config.";
-    // for more simpicity, just launch regular dialog
+    // for more simplicity, just launch regular dialog
     auto dlg = new QMakeBuildDirChooserDialog(m_project);
     if (dlg->exec() == QDialog::Accepted) {
         m_prefsUi->buildDirCombo->setCurrentItem(dlg->buildDir(), true);

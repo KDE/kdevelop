@@ -46,7 +46,7 @@ static QString stateToString(KDevelop::VcsStatusInfo::State state)
         case KDevelop::VcsStatusInfo::ItemDeleted:
             return i18nc("file was deleted from versioncontrolsystem", "Deleted");
         case KDevelop::VcsStatusInfo::ItemHasConflicts:
-            return i18nc("file is confilicting (versioncontrolsystem)", "Has Conflicts");
+            return i18nc("file is conflicting (versioncontrolsystem)", "Has Conflicts");
         case KDevelop::VcsStatusInfo::ItemModified:
             return i18nc("version controlled file was modified", "Modified");
         case KDevelop::VcsStatusInfo::ItemUpToDate:

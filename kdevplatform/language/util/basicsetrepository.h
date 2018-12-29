@@ -212,7 +212,7 @@ public:
 
     QString dumpDotGraph() const;
 
-    //Returns an itrator that can be used to iterate over the contained indices
+    //Returns an iterator that can be used to iterate over the contained indices
     Iterator iterator() const;
 
     //Returns this set converted to a standard set that contains all indices contained by this set.

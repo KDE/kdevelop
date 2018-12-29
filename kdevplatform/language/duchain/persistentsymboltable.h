@@ -139,7 +139,7 @@ public:
     using FilteredDeclarationIterator =
         ConvenientEmbeddedSetTreeFilterIterator<IndexedDeclaration, IndexedDeclarationHandler, IndexedTopDUContext,
         CachedIndexedRecursiveImports, DeclarationTopContextExtractor>;
-    ///Retrieves an iterator to all declarations of the given id, filtered by the visilibity given through @a visibility
+    ///Retrieves an iterator to all declarations of the given id, filtered by the visibility given through @a visibility
     ///This is very efficient since it uses a cache
     ///The returned iterator is valid as long as the duchain read lock is held
     FilteredDeclarationIterator filteredDeclarations(const IndexedQualifiedIdentifier& id,

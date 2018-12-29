@@ -309,7 +309,7 @@ bool FilteredProblemStorePrivate::match(const IProblem::Ptr &problem) const
     }
     else
     {
-        if(!q->severities().testFlag(IProblem::Hint))//workaround for problems wothout correctly set severity
+        if(!q->severities().testFlag(IProblem::Hint))//workaround for problems without correctly set severity
             return false;
     }
 

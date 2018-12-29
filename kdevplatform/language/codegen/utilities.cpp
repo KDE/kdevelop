@@ -42,7 +42,7 @@ IdentifierValidator::~IdentifierValidator()
 
 QValidator::State IdentifierValidator::validate(QString& input, int&) const
 {
-    //I can't figure out why it wouln't compile when I tried to use Identifier identifier();
+    //I can't figure out why it wouldn't compile when I tried to use Identifier identifier();
     Identifier identifier = Identifier(IndexedString(input));
 
     if (identifier.isUnique())

@@ -121,7 +121,7 @@ Q_SIGNALS:
         by KDevelop. */
     void internalCommandOutput(const QString& s);
 
-    /** Reports debugger interal output, including stderr output from debugger
+    /** Reports debugger internal output, including stderr output from debugger
         and the 'log' MI channel */
     void debuggerInternalOutput(const QString& s);
 

@@ -700,7 +700,7 @@ void MIDebugSession::addUserCommand(const QString& cmd)
         return;
 
     queueCmd(usercmd);
-    // User command can theoreticall modify absolutely everything,
+    // User command can theoretically modify absolutely everything,
     // so need to force a reload.
 
     // We can do it right now, and don't wait for user command to finish
@@ -1033,9 +1033,9 @@ void MIDebugSession::slotInferiorStopped(const MI::AsyncRecord& r)
     }
 
     if (reason == QLatin1String("watchpoint-scope")) {
-        // FIXME: shuld remove this watchpoint
+        // FIXME: should remove this watchpoint
         // But first, we should consider if removing all
-        // watchpoinst on program exit is the right thing to
+        // watchpoints on program exit is the right thing to
         // do.
 
         addCommand(ExecContinue, QString(), CmdMaybeStartsRunning);

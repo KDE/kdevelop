@@ -43,7 +43,7 @@ namespace KDevelop {
  * What you need to do to use it:
  *
  * Reimplement itemText(..) to provide the text filtering
- * should be performend on(This must be efficient).
+ * should be performed on (This must be efficient).
  *
  * Call setItems(..) when starting a new quickopen session, or when the content
  * changes, to initialize the filter with your data.

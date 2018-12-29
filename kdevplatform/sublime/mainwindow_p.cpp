@@ -339,7 +339,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         {
             if (!d->m_indexSplitters.value(index->parent())) {
                 // can happen in working set code, as that adds a view to a child index first
-                // hence, recursively reconstruct the parent indizes first
+                // hence, recursively reconstruct the parent indices first
                 operator()(index->parent());
             }
             QSplitter *parent = d->m_indexSplitters.value(index->parent());
@@ -685,7 +685,7 @@ void MainWindowPrivate::aboutToRemoveView(Sublime::AreaIndex *index, Sublime::Vi
                 parentSplitter->setSizes(sizes);
             }
 
-            qCDebug(SUBLIME) << "after deleation " << parent << " has "
+            qCDebug(SUBLIME) << "after deletion " << parent << " has "
                          << parentSplitter->count() << " elements";
 
 

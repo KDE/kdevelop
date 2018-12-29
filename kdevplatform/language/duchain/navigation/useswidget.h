@@ -39,7 +39,7 @@ namespace KDevelop {
 class CodeRepresentation;
 
 class IndexedDeclaration;
-///A widget representing one use of a Declaration in a speicific context
+///A widget representing one use of a Declaration in a specific context
 class KDEVPLATFORMLANGUAGE_EXPORT OneUseWidget
     : public QWidget
 {

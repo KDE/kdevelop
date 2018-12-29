@@ -54,7 +54,7 @@ public:
 };
 
 /**
- * This filter stategy checks if a given line contains output
+ * This filter strategy checks if a given line contains output
  * that is defined as an error (or an action) from a compiler.
  **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT CompilerFilterStrategy : public IFilterStrategy
@@ -75,7 +75,7 @@ private:
 };
 
 /**
- * This filter stategy filters out errors (no actions) from Python and PHP scripts.
+ * This filter strategy filters out errors (no actions) from Python and PHP scripts.
  **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT ScriptErrorFilterStrategy : public IFilterStrategy
 {
@@ -105,7 +105,7 @@ public:
 };
 
 /**
- * This filter stategy filters out errors (no actions) from Static code analysis tools (Cppcheck,)
+ * This filter strategy filters out errors (no actions) from Static code analysis tools (Cppcheck,)
  **/
 class KDEVPLATFORMOUTPUTVIEW_EXPORT StaticAnalysisFilterStrategy : public IFilterStrategy
 {

@@ -55,7 +55,7 @@ bool KDevFormatFile::find()
 
 bool KDevFormatFile::read()
 {
-    static const QChar delimeter = QLatin1Char(':');
+    static const QChar delimiter = QLatin1Char(':');
 
     QFile formatFile(formatFileName);
     if (!formatFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -75,7 +75,7 @@ bool KDevFormatFile::read()
         if (line.isEmpty() || line.startsWith(QLatin1Char('#')))
             continue;
 
-        if (line.indexOf(delimeter) < 0) {
+        if (line.indexOf(delimiter) < 0) {
             // We found the simple syntax without wildcards, and only with the command
 
             wildcards.clear();
@@ -83,8 +83,8 @@ bool KDevFormatFile::read()
         } else {
             // We found the correct syntax with "wildcards : command"
 
-            wildcards = line.section(delimeter, 0, 0).split(QLatin1Char(' '), QString::SkipEmptyParts);
-            command = line.section(delimeter, 1).trimmed();
+            wildcards = line.section(delimiter, 0, 0).split(QLatin1Char(' '), QString::SkipEmptyParts);
+            command = line.section(delimiter, 1).trimmed();
 
             if (wildcards.isEmpty()) {
                 qStdOut() << formatFileName << ":" << lineNumber

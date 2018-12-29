@@ -27,7 +27,7 @@
 namespace KDevelop {
 
 /**
- * Simplifying the exeuction of a Command through (QK)Process.
+ * Simplifying the execution of a Command through (QK)Process.
  *
  * This class emits only very basic signals when the process writes something
  * to stdout or stderr and for signaling completed and failed status of running

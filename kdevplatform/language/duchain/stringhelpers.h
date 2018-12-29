@@ -46,6 +46,7 @@ int KDEVPLATFORMLANGUAGE_EXPORT findCommaOrEnd(const QString& str, int pos, QCha
 
 /**
  * Skips in the string backwards over function-arguments, and stops at the right side of a "("
+ * @param str string to skip
  * @param skippedArguments Will contain all skipped arguments
  * @param argumentsStart Should be set to the position where the seeking should start, will be changed to the right side of a "(" when found. Should be at the right side of a '(', and may be max. str.length()
  */

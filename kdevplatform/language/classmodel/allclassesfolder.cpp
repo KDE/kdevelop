@@ -97,7 +97,7 @@ void FilteredAllClassesFolder::updateFilterString(const QString& a_newFilterStri
     if (isPopulated()) {
 #if 1 // Choose speed over correctness.
         // Close the node and re-open it should be quicker than reload each document
-        // and remove indevidual nodes (at the cost of loosing the current selection).
+        // and remove individual nodes (at the cost of loosing the current selection).
         performPopulateNode(true);
 #else
         bool hadChanges = false;

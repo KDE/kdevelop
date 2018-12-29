@@ -336,7 +336,7 @@ void DebugSession::ensureDebuggerListening()
     // no need to interrupt
     setDebuggerStateOff(s_dbgNotListening);
     // NOTE: there is actually a bug in lldb-mi that, when receiving SIGINT,
-    // it would print '^done', which doesn't coresponds to any previous command.
+    // it would print '^done', which doesn't corresponds to any previous command.
     // This confuses our command queue.
 }
 
@@ -488,7 +488,7 @@ void DebugSession::handleSessionStateChange(IDebugSession::DebuggerState state)
     if (state == IDebugSession::PausedState) {
         // session is paused, the user can input any commands now.
         // Turn off delete duplicate breakpoints mode, as the user
-        // may intentionaly want to do this.
+        // may intentionally want to do this.
         qCDebug(DEBUGGERLLDB) << "Turn off delete duplicate mode";
         breakpointController()->setDeleteDuplicateBreakpoints(false);
     }

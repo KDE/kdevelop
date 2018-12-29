@@ -180,7 +180,7 @@ void ProjectBuildSetWidget::addItems()
 
 void ProjectBuildSetWidget::removeItems()
 {
-    // We only support contigous selection, so we only need to remove the first range
+    // We only support contiguous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
     int top = range.top();
     qCDebug(PLUGIN_PROJECTMANAGERVIEW) << "removing:" << range.top() << range.height();
@@ -196,7 +196,7 @@ void ProjectBuildSetWidget::removeItems()
 
 void ProjectBuildSetWidget::moveDown()
 {
-    // We only support contigous selection, so we only need to remove the first range
+    // We only support contiguous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
     int top = range.top(), height = range.height();
     KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();
@@ -211,7 +211,7 @@ void ProjectBuildSetWidget::moveDown()
 
 void ProjectBuildSetWidget::moveToBottom()
 {
-    // We only support contigous selection, so we only need to remove the first range
+    // We only support contiguous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
     int top = range.top(), height = range.height();
     KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();
@@ -227,7 +227,7 @@ void ProjectBuildSetWidget::moveToBottom()
 
 void ProjectBuildSetWidget::moveUp()
 {
-    // We only support contigous selection, so we only need to remove the first range
+    // We only support contiguous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
     int top = range.top(), height = range.height();
     KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();
@@ -243,7 +243,7 @@ void ProjectBuildSetWidget::moveUp()
 
 void ProjectBuildSetWidget::moveToTop()
 {
-    // We only support contigous selection, so we only need to remove the first range
+    // We only support contiguous selection, so we only need to remove the first range
     QItemSelectionRange range = m_ui->itemView->selectionModel()->selection().first();
     int top = range.top(), height = range.height();
     KDevelop::ProjectBuildSetModel* buildSet = KDevelop::ICore::self()->projectController()->buildSetModel();

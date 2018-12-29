@@ -1281,7 +1281,7 @@ void LldbTest::testAttach()
 
     breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 35);
 
-    // lldb-mi sliently stops when attaching to a process. Force it continue to run.
+    // lldb-mi silently stops when attaching to a process. Force it continue to run.
     session->addCommand(MI::ExecContinue, QString(), MI::CmdMaybeStartsRunning);
     WAIT_FOR_A_WHILE(session, 2000);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);

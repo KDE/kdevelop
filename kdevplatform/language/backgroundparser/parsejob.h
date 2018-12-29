@@ -163,7 +163,7 @@ public:
     /// Allows statically specifying an amount of features required for an url.
     /// These features will automatically be or'ed with the minimumFeatures() returned
     /// by any ParseJob with the given url.
-    /// Since this causes some additional complixity in update-checking, minimum features should not
+    /// Since this causes some additional complexity in update-checking, minimum features should not
     /// be set permanently.
     static void setStaticMinimumFeatures(const IndexedString& url, TopDUContext::Features features);
 

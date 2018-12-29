@@ -370,7 +370,7 @@ QList<CompletionTreeItemPointer> CodeCompletionContext::completionsInContext(con
                        ) && decl.second != 0 && decl.second != 1001) {
                 // Only show the local declarations of modules, or the declarations
                 // immediately in its imported parent contexts (that are global
-                // contexts, hence the distance of 1001). This prevens "String()",
+                // contexts, hence the distance of 1001). This prevents "String()",
                 // "QtQuick1.0" and "builtins" from being listed when the user
                 // types "PlasmaCore.".
                 continue;

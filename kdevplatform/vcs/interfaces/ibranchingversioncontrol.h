@@ -68,7 +68,7 @@ public:
     * Switches to the desired branch inside the specified repository
     *
     * @param repository The repository path where the branch will be switched
-    * @param branchName The branch name that will be switched to inside the specified repostory
+    * @param branchName The branch name that will be switched to inside the specified repository
     */
    virtual VcsJob* switchBranch(const QUrl &repository, const QString &branchName) = 0;
 

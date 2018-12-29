@@ -1369,7 +1369,7 @@ public:
                         ifDebugInfiniteRecursion(Q_ASSERT(walkBucketLinks(*bucketHashPosition, hash, intersect.second));
                         )
                     } else {
-                        //State: intersect.first == 0 && intersect.second != 0. This means that whole compleet
+                        //State: intersect.first == 0 && intersect.second != 0. This means that whole complete
                         //chain opened by *bucketHashPosition with the hash-value is also following useBucket,
                         //so useBucket can just be inserted at the top
 

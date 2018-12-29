@@ -45,7 +45,7 @@ void SvnInternalMoveJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Th
         cli.move( svn::Path( srcba.data() ), svn::Revision(), svn::Path( dstba.data() ), force() );
     }catch( const svn::ClientException& ce )
     {
-        qCDebug(PLUGIN_SVN) << "Exception while moveing file: "
+        qCDebug(PLUGIN_SVN) << "Exception while moving file: "
                 << sourceLocation() << "to" << destinationLocation()
                 << QString::fromUtf8( ce.message() );
         setErrorMessage( QString::fromUtf8( ce.message() ) );
@@ -108,7 +108,7 @@ void SvnMoveJob::start()
         internalJobFailed();
         setErrorText( i18n( "Not enough information to move file" ) );
     } else {
-        qCDebug(PLUGIN_SVN) << "moveing url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
+        qCDebug(PLUGIN_SVN) << "moving url:" << m_job->sourceLocation() << "to url" << m_job->destinationLocation();
         startInternalJob();
     }
 }

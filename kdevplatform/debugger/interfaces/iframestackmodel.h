@@ -76,7 +76,7 @@ public:
     virtual void fetchMoreFrames() = 0;
 
 Q_SIGNALS:
-    /* FIXME: It might make for a more conscise interface if those
+    /* FIXME: It might make for a more concise interface if those
        two were removed, and the clients react to thread_or_frame_changed
        event and compare the current thread/frame in the framestack model
        with the one they are displaying.  */

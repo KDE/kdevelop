@@ -273,8 +273,8 @@ QStandardItem* ProjectSelectionPage::currentItem() const
     QStandardItem* item = m_templatesModel->itemFromIndex( ui->listView->currentIndex() );
     if ( item && item->hasChildren() )
     {
-        const int currect = ui->templateType->currentIndex();
-        const QModelIndex idx = m_templatesModel->index( currect, 0, ui->templateType->rootModelIndex() );
+        const int current = ui->templateType->currentIndex();
+        const QModelIndex idx = m_templatesModel->index( current, 0, ui->templateType->rootModelIndex() );
         item = m_templatesModel->itemFromIndex(idx);
     }
     return item;

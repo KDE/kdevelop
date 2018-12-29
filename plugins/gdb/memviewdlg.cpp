@@ -462,7 +462,7 @@ void MemoryViewerWidget::slotChildCaptionChanged(const QString& caption)
     const auto* s = static_cast<const QWidget*>(sender());
     auto* ncs = const_cast<QWidget*>(s);
     QString cap = caption;
-    // Prevent intepreting '&' as accelerator specifier.
+    // Prevent interpreting '&' as accelerator specifier.
     cap.replace(QLatin1Char('&'), QLatin1String("&&"));
     m_toolBox->setItemText(m_toolBox->indexOf(ncs), cap);
 }

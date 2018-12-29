@@ -64,7 +64,7 @@ QString CMakeFunctionArgument::unescapeValue(const QString& value)
         last=i+2;
     }
     newValue+=value.midRef(last, value.size());
-//     qCDebug(CMAKE) << "escapiiiiiiiiing" << value << newValue;
+//     qCDebug(CMAKE) << "escaping" << value << newValue;
     return newValue;
 }
 

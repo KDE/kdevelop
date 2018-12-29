@@ -194,7 +194,7 @@ public:
     /**
      * Changes whether this declaration is explicitly typed.
      *
-     * Explicitly typed declaration has the type writen as part of the
+     * Explicitly typed declaration has the type written as part of the
      * declaration. The opposite, implicitly typed declaration, has the type
      * deduced by the compiler.
      *
@@ -327,7 +327,7 @@ public:
 
     /**
      * Return an indexed form of this declaration's type.
-     * Should be preferred, this is the fastest way, and the correct way for doing equality-comparsion.
+     * Should be preferred, this is the fastest way, and the correct way for doing equality-comparison.
      *
      * \returns the declaration's type.
      */
@@ -439,7 +439,7 @@ public:
      * \note The ranges are in the documents local revision,
      *       use \c DUChainUtils::transformFromRevision or \c usesCurrentRevision()
      *
-     * \note The uses are unique, no 2 uses are returend that have the same range within the same file.
+     * \note The uses are unique, no 2 uses are returned that have the same range within the same file.
      *
      * \note This is a non-trivial operation and hence expensive.
      */
@@ -458,7 +458,7 @@ public:
      * The key of the returned map is an url of a file. The value
      * is a list with all use-ranges of this declaration in that file.
      *
-     * \note The uses are unique, no 2 uses are returend that have the same range within the same file.
+     * \note The uses are unique, no 2 uses are returned that have the same range within the same file.
      *
      * \warning This must be called only from within the foreground, or with the foreground lock locked.
      *

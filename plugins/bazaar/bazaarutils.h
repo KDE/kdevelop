@@ -105,7 +105,7 @@ KDevelop::VcsItemEvent::Action parseActionDescription(const QString& action);
 /**
  * Some methods in interface provides @p recursion parameter. In general
  * Bazaar don't support this (only part of interface has native recursion
- * handling support). This function removes directiories from list if
+ * handling support). This function removes directories from list if
  * we are in NonRecursive mode (as directory for self is not versioned).
  */
 QList<QUrl> handleRecursion(const QList<QUrl>& listOfUrls, KDevelop::IBasicVersionControl::RecursionMode recursion);

@@ -547,7 +547,7 @@ public:
             KDevVarLengthArray<uint> topContextIndices;
 
             {
-                //First store all the possible intices into the KDevVarLengthArray, so we can unlock the mutex before processing them.
+                //First store all the possible indices into the KDevVarLengthArray, so we can unlock the mutex before processing them.
 
                 QMutexLocker lock(m_environmentListInfo.mutex()); //Lock the mutex to make sure the item isn't changed while it's being iterated
                 const EnvironmentInformationListItem* item = m_environmentListInfo.itemFromIndex(listIndex);
@@ -563,7 +563,7 @@ public:
                 if (p) {
                     ret << p;
                 } else {
-                    qCDebug(LANGUAGE) << "Failed to load enviromment-information for" <<
+                    qCDebug(LANGUAGE) << "Failed to load environment-information for" <<
                         TopDUContextDynamicData::loadUrl(topContextIndex).str();
                 }
             }

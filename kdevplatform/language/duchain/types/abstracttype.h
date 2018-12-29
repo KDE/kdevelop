@@ -140,7 +140,7 @@ public:
     void setModifiers(quint32 modifiers);
 
     /**
-     * Visitor method.  Called by TypeVisitor to visit the type heirachy.
+     * Visitor method.  Called by TypeVisitor to visit the type hierarchy.
      * Do not reimplement this, reimplement accept0 instead.
      *
      * \param v visitor which is calling this function.

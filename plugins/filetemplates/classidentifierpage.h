@@ -66,7 +66,7 @@ Q_SIGNALS:
     /**
      * Emitted whenever the content of the page changes.
      *
-     * @param valid @c true if the content is valid and the user can procede to
+     * @param valid @c true if the content is valid and the user can proceed to
      *        the next page, @c false otherwise.
      */
     void isValid(bool valid);

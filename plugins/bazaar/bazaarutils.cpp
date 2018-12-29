@@ -172,10 +172,10 @@ KDevelop::VcsEvent BazaarUtils::parseBzrLogPart(const QString& output)
                 commitInfo.setRevision(revision);
             } else if (line.startsWith(QStringLiteral("committer: "))) {
                 QString commiter = line.mid(QStringLiteral("committer: ").length());
-                commitInfo.setAuthor(commiter);     // Author goes after commiter, but only if is different
+                commitInfo.setAuthor(commiter);     // Author goes after committer, but only if is different
             } else if (line.startsWith(QStringLiteral("author"))) {
                 QString author = line.mid(QStringLiteral("author: ").length());
-                commitInfo.setAuthor(author);       // It may override commiter (In fact commiter is not supported by VcsEvent)
+                commitInfo.setAuthor(author);       // It may override committer (In fact committer is not supported by VcsEvent)
             } else if (line.startsWith(QStringLiteral("timestamp"))) {
                 const QString formatString = QStringLiteral("yyyy-MM-dd hh:mm:ss");
                 QString timestamp = line.mid(QStringLiteral("timestamp: ddd ").length(), formatString.length());

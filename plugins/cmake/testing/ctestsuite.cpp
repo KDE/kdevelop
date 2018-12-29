@@ -111,7 +111,7 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
             qCDebug(CMAKE) << "Found a definition for a function 'main()' at" << declaration->range();
 
             /*
-             * This is a rather hacky soluction to get the test class for a Qt test.
+             * This is a rather hacky solution to get the test class for a Qt test.
              *
              * The class is used as the argument to the QTEST_MAIN or QTEST_GUILESS_MAIN macro.
              * This macro expands to a main() function with a variable declaration with 'tc' as

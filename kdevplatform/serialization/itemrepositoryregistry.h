@@ -33,7 +33,7 @@ class AbstractRepositoryManager;
 class AbstractItemRepository;
 
 /**
- * Manages a set of item-repositores and allows loading/storing them all at once from/to disk.
+ * Manages a set of item-repositories and allows loading/storing them all at once from/to disk.
  * Does not automatically store contained repositories on destruction.
  * For the global registry, the storing is triggered from within duchain, so you don't need to care about it.
  */

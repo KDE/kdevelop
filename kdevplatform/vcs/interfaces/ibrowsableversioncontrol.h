@@ -71,7 +71,7 @@ public:
      * @param rev Show information about the revision @p rev.
      * @param repoLocation Any repository path that specifies what VCS server
      * is to be queried. For VCS's that support global versioning, the actual
-     * path is unimportant (and ignored), as long as it contains the repoitory
+     * path is unimportant (and ignored), as long as it contains the repository
      * root. Otherwise look up the change associated with the requested path.
      *
      * @note VcsRevision objects with type VcsRevision::FileNumber may store the

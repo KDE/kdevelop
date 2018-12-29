@@ -596,7 +596,7 @@ void KDevelop::RunController::registerJob(KJob * job)
         connect( job, &KJob::finished, this, &RunController::finished );
         connect( job, &KJob::destroyed, this, &RunController::jobDestroyed );
 
-        // FIXME percent is a private signal and thus we cannot use new connext syntax
+        // FIXME percent is a private signal and thus we cannot use new connect syntax
         connect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(jobPercentChanged()));
 
         IRunController::registerJob(job);

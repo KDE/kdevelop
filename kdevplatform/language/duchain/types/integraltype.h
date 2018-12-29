@@ -29,7 +29,7 @@ class IntegralTypeData;
 /**
  * \short A type representing inbuilt data types.
  *
- * IntegralType is used to represent types which are native to a programming languge,
+ * IntegralType is used to represent types which are native to a programming language,
  * such as (e.g.) int, float, double, char, bool etc.
  */
 class KDEVPLATFORMLANGUAGE_EXPORT IntegralType

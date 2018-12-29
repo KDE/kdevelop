@@ -99,7 +99,7 @@ public:
 
     virtual void setSeverities(KDevelop::IProblem::Severities severities);///new-style severity access
 
-    /// Retrives the severity filter settings
+    /// Retrieves the severity filter settings
     int severity() const;///old-style severity access
 
     KDevelop::IProblem::Severities severities() const;//new-style severity access
@@ -125,7 +125,7 @@ public:
     /// Sets the currently shown document (in the editor, it's triggered by the IDE)
     void setCurrentDocument(const IndexedString &doc);
 
-    /// Retrives the path of the current document
+    /// Retrieves the path of the current document
     const KDevelop::IndexedString& currentDocument() const;
 
 Q_SIGNALS:

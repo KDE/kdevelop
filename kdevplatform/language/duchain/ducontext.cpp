@@ -1291,7 +1291,7 @@ void DUContext::applyUpwardsAliases(SearchItem::PtrList& identifiers, const TopD
         //We do this by prepending items to the current identifiers that equal the local scope identifier.
         SearchItem::Ptr newItem(new SearchItem(d_func()->m_scopeIdentifier.identifier()));
 
-        //This will exclude explictly global identifiers
+        //This will exclude explicitly global identifiers
         newItem->addToEachNode(identifiers);
 
         if (!newItem->next.isEmpty()) {
@@ -1378,7 +1378,7 @@ DUContext* DUContext::findContextAt(const CursorInRevision& position, bool inclu
 {
     ENSURE_CAN_READ
 
-//   qCDebug(LANGUAGE) << "searchign" << position << "in:" << scopeIdentifier(true).toString() << range() << includeRightBorder;
+//   qCDebug(LANGUAGE) << "searching" << position << "in:" << scopeIdentifier(true).toString() << range() << includeRightBorder;
 
     if (!range().contains(position) && (!includeRightBorder || range().end != position)) {
 //     qCDebug(LANGUAGE) << "mismatch";

@@ -404,7 +404,7 @@ void TestProjectLoad::addDuringImport()
     QCOMPARE(project->filesForPath(IndexedString(file)).size(), 0);
     QCOMPARE(project->filesForPath(IndexedString(file2)).size(), 1);
 
-    //NOTE: this test is probabably incomplete, I bet there are some race conditions left,
+    //NOTE: this test is probably incomplete, I bet there are some race conditions left,
     //      esp. when adding a file at a point where the parent folder was already imported
     //      or removing a file that was already imported
 }

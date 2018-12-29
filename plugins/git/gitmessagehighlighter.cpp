@@ -25,11 +25,11 @@
 #include <QTextEdit>
 #include <KLocalizedString>
 
-/// Recomended summary limit from http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+/// Recommended summary limit from http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 static const int summarySoftLimit = 50;
 /// Summary length limit causing warning messages from 'git push'
 static const int summaryHardLimit = 65;
-/// Recommended line kength from http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+/// Recommended line length from http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
 static const int lineLenLimit = 72;
 
 void GitMessageHighlighter::applyErrorFormat(GitMessageHighlighter* text, bool warning, const QString& tooltip, int startPos, int endPos)

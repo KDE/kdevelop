@@ -71,7 +71,7 @@ public:
 };
 
 /**
- * @short A model that holds a convinient representation of the defined class in the project
+ * @short A model that holds a convenient representation of the defined class in the project
  *
  * This model doesn't have much code in it, it mostly acts as a glue between the different
  * nodes and the tree view.

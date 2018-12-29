@@ -630,7 +630,7 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
     
     VcsEvent item;
     QMap<qlonglong, VcsEvent> globalCommits;
-    /// Move the VcsEvents to a more suitable data strucure
+    /// Move the VcsEvents to a more suitable data structure
     for (QList<QVariant>::const_iterator commitsIt = commits.constBegin(), commitsEnd = commits.constEnd(); 
            commitsIt != commitsEnd; ++commitsIt) {
         if(commitsIt->canConvert<VcsEvent>())

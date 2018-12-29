@@ -87,7 +87,7 @@ bool compareData(const QModelIndex& index, const QString& expected, const char *
     } else {
         matched = s == expected;
     }
-    return QTest::qVerify(matched, "Comparsion of data", qPrintable(QString("'%0' didn't match expected '%1' in %2:%3")
+    return QTest::qVerify(matched, "Comparison of data", qPrintable(QString("'%0' didn't match expected '%1' in %2:%3")
                                        .arg(s, expected, file).arg(line)),
                           file, line);
 }
