@@ -344,6 +344,7 @@ rm -f usr/lib/libstdc* usr/lib/libgobject* usr/lib/libc.so.* || true
 rm -rf usr/include || true
 rm -rf usr/lib/cmake || true
 rm -rf usr/lib/pkgconfig || true
+rm -rf usr/mkspecs || true
 rm -rf usr/share/ECM/ || true
 rm -rf usr/share/gettext || true
 rm -rf usr/share/pkgconfig || true
