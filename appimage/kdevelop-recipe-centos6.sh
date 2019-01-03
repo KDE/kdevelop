@@ -338,6 +338,7 @@ rm -f usr/lib/libstdc* usr/lib/libgobject* usr/lib/libc.so.* || true
 rm -rf usr/include || true
 rm -rf usr/lib/cmake || true
 rm -rf usr/lib/pkgconfig || true
+rm -rf usr/mkspecs || true
 rm -rf usr/share/ECM/ || true
 rm -rf usr/share/gettext || true
 rm -rf usr/share/pkgconfig || true
@@ -432,7 +433,7 @@ chmod +x AppRun
 cp $SRC/kdevelop/app/org.kde.kdevelop.desktop org.kde.kdevelop.desktop
 sed -i -e '/^Actions=/d;/^\[Desktop Action /Q' org.kde.kdevelop.desktop
 
-cp $SRC/kdevelop/app/icons/48-apps-kdevelop.png kdevelop.png
+cp $SRC/kdevelop/app/icons/256-apps-kdevelop.png kdevelop.png
 cp -R /usr/lib/python3.6 /kdevelop.appdir/usr/lib/
 rm -Rf /kdevelop.appdir/usr/lib/python3.6/{test,config-3.5m,__pycache__,site-packages,lib-dynload,distutils,idlelib,unittest,tkinter,ensurepip}
 
