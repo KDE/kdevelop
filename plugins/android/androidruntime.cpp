@@ -89,3 +89,16 @@ QByteArray AndroidRuntime::getenv(const QByteArray &varname) const
 {
     return qgetenv(varname.constData());
 }
+
+QString AndroidRuntime::findExecutable(const QString& executableName) const
+{
+    QStringList rtPaths;
+
+    auto envPaths = getenv(QByteArrayLiteral("PATH")).split(':');
+    std::transform(envPaths.begin(), envPaths.end(), std::back_inserter(rtPaths),
+                    [this](QByteArray p) {
+                        return pathInHost(Path(QString::fromLocal8Bit(p))).toLocalFile();
+                    });
+
+    return QStandardPaths::findExecutable(executableName, rtPaths);
+}

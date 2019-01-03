@@ -41,6 +41,7 @@ public:
     KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) const override { return runtimePath; }
     KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) const override { return localPath; }
     QByteArray getenv(const QByteArray &varname) const override;
+    QString findExecutable(const QString& executableName) const override;
     KDevelop::Path buildPath() const override { return {}; }
 
     static AndroidPreferencesSettings* s_settings;

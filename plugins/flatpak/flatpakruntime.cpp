@@ -230,6 +230,19 @@ Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath) const
     return ret;
 }
 
+QString FlatpakRuntime::findExecutable(const QString& executableName) const
+{
+    QStringList rtPaths;
+
+    auto envPaths = getenv(QByteArrayLiteral("PATH")).split(':');
+    std::transform(envPaths.begin(), envPaths.end(), std::back_inserter(rtPaths),
+                    [this](QByteArray p) {
+                        return pathInHost(Path(QString::fromLocal8Bit(p))).toLocalFile();
+                    });
+
+    return QStandardPaths::findExecutable(executableName, rtPaths);
+}
+
 QByteArray FlatpakRuntime::getenv(const QByteArray& varname) const
 {
     if (varname == "KDEV_DEFAULT_INSTALL_PREFIX")

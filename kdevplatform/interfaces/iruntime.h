@@ -76,6 +76,13 @@ public:
     virtual Path pathInHost(const Path& runtimePath) const = 0;
 
     /**
+     * Analogous to QStandardPaths::findExecutable(), searches for the executable
+     * named @p executableName in the runtime system paths.
+     * @returns the absolute file path to the executable, or an empty string if not found.
+     */
+    virtual QString findExecutable(const QString& executableName) const = 0;
+
+    /**
      * @returns the value for an environment variable in the runtime
      */
     virtual QByteArray getenv(const QByteArray& varname) const = 0;

@@ -40,6 +40,7 @@ public:
     void startProcess(QProcess *process) const override;
     KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) const override;
     KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) const override;
+    QString findExecutable(const QString& executableName) const override;
     QByteArray getenv(const QByteArray &varname) const override;
 
     static KJob* createBuildDirectory(const KDevelop::Path &path, const KDevelop::Path &file, const QString &arch);

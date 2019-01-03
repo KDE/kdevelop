@@ -261,15 +261,10 @@ CompilerPointer CompilerProvider::defaultCompiler() const
         return m_defaultProvider;
 
     auto rt = ICore::self()->runtimeController()->currentRuntime();
-    const auto path = QFile::decodeName(rt->getenv("PATH")).split(QDir::listSeparator());
 
     for ( const CompilerPointer& compiler : m_compilers ) {
-        const bool absolutePath = QDir::isAbsolutePath(compiler->path());
-        if ((absolutePath && QFileInfo::exists(rt->pathInHost(Path(compiler->path())).toLocalFile()))
-            || QStandardPaths::findExecutable( compiler->path(), path).isEmpty() ) {
+        if (rt->findExecutable(compiler->path()).isEmpty())
             continue;
-        }
-
         m_defaultProvider = compiler;
         break;
     }

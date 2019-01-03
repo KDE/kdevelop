@@ -52,6 +52,10 @@ public:
     }
     KDevelop::Path pathInHost(const KDevelop::Path & runtimePath) const override { return runtimePath; }
     KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) const override { return localPath; }
+    QString findExecutable(const QString& executableName) const override
+    {
+        return QStandardPaths::findExecutable(executableName);
+    }
     void setEnabled(bool /*enabled*/) override {}
     QByteArray getenv(const QByteArray & varname) const override { return qgetenv(varname.constData()); }
     KDevelop::Path buildPath() const override { return {}; }

@@ -71,6 +71,8 @@ public:
      */
     KDevelop::Path pathInRuntime(const KDevelop::Path & localPath) const override;
 
+    QString findExecutable(const QString& executableName) const override;
+
     /**
      * @returns the environment variable with @p varname set by the recipe (usually the Dockerfile)
      */
