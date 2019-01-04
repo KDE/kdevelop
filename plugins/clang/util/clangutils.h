@@ -167,6 +167,11 @@ namespace ClangUtils
      * Returns special attributes (isFinal, isQtSlot, ...) given a @p cursor representing a CXXmethod
      */
     KDevelop::ClassFunctionFlags specialAttributes(CXCursor cursor);
+
+    /**
+     * @return the top most line in a file skipping any comment block
+     */
+    unsigned int skipTopCommentBlock(CXTranslationUnit unit, CXFile file);
 }
 
 #endif // CLANGUTILS_H

@@ -32,9 +32,11 @@
 #include "util/clangdebug.h"
 #include "util/clangtypes.h"
 #include "util/clangutils.h"
+#include "headerguardassistant.h"
 
 #include <language/duchain/duchainlock.h>
 #include <language/duchain/duchain.h>
+#include <language/codegen/coderepresentation.h>
 
 #include <KShell>
 
@@ -144,7 +146,7 @@ void addIncludes(QVector<const char*>* args, QVector<QByteArray>* otherArgs,
         if (url.isEmpty()) {
             continue;
         }
-        
+
         QFileInfo info(url.toLocalFile());
         QByteArray path = url.toLocalFile().toUtf8();
 
@@ -475,15 +477,16 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
     if (ClangHelpers::isHeader(path) && !clang_isFileMultipleIncludeGuarded(unit(), file)
         && !clang_Location_isInSystemHeader(clang_getLocationForOffset(d->m_unit, file, 0)))
     {
-        ProblemPointer problem(new Problem);
+        QExplicitlySharedDataPointer<StaticAssistantProblem> problem(new StaticAssistantProblem);
         problem->setSeverity(IProblem::Warning);
         problem->setDescription(i18n("Header is not guarded against multiple inclusions"));
         problem->setExplanation(i18n("The given header is not guarded against multiple inclusions, "
             "either with the conventional #ifndef/#define/#endif macro guards or with #pragma once."));
-        problem->setFinalLocation({indexedPath, KTextEditor::Range()});
+        const KTextEditor::Range problemRange(0, 0, KDevelop::createCodeRepresentation(indexedPath)->lines(), 0);
+        problem->setFinalLocation(DocumentRange{indexedPath, problemRange});
         problem->setSource(IProblem::Preprocessor);
+        problem->setSolutionAssistant(KDevelop::IAssistant::Ptr(new HeaderGuardAssistant(d->m_unit, file)));
         problems << problem;
-        // TODO: Easy to add an assistant here that adds the guards -- any takers?
     }
 #endif
 

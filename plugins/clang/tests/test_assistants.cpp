@@ -20,6 +20,7 @@
 #include "test_assistants.h"
 
 #include "codegen/clangrefactoring.h"
+#include "codegen/adaptsignatureassistant.h"
 
 #include <QTest>
 #include <QLoggingCategory>
@@ -303,6 +304,18 @@ ProblemPointer findStaticAssistantProblem(const QVector<ProblemPointer>& problem
     return {};
 }
 
+template <typename T>
+ProblemPointer findProblemWithAssistant(const QVector<ProblemPointer>& problems)
+{
+    const auto problemIterator = std::find_if(problems.cbegin(), problems.cend(), [](const ProblemPointer& p) {
+        return dynamic_cast<const T*>(p->solutionAssistant().constData());
+    });
+    if (problemIterator != problems.cend())
+        return *problemIterator;
+
+    return {};
+}
+
 void TestAssistants::testRenameAssistant()
 {
     QFETCH(QString, fileContents);
@@ -528,7 +541,7 @@ void TestAssistants::testSignatureAssistant()
         auto topCtx = DUChain::self()->chainForDocument(document->url());
         QVERIFY(topCtx);
 
-        const auto problem = findStaticAssistantProblem(DUChainUtils::allProblemsForContext(topCtx));
+        const auto problem = findProblemWithAssistant<AdaptSignatureAssistant>(DUChainUtils::allProblemsForContext(topCtx));
         if (problem) {
             assistant = problem->solutionAssistant();
         }
@@ -797,4 +810,95 @@ void TestAssistants::testMoveIntoSource_data()
             << QStringLiteral("class Class{Class();\n};")
             << QStringLiteral("Class::Class() {}\n")
             << QualifiedIdentifier(QStringLiteral("Class::Class"));
+}
+
+void TestAssistants::testHeaderGuardAssistant()
+{
+    CodeRepresentation::setDiskChangesForbidden(false);
+
+    QFETCH(QString, filename);
+    QFETCH(QString, code);
+    QFETCH(QString, pragmaExpected);
+    QFETCH(QString, macroExpected);
+
+    TestFile pragmaFile (code, QStringLiteral("h"));
+    TestFile macroFile (code, QStringLiteral("h"), filename);
+
+    QExplicitlySharedDataPointer<IAssistant> pragmaAssistant;
+    QExplicitlySharedDataPointer<IAssistant> macroAssistant;
+
+    pragmaFile.parse(TopDUContext::Empty);
+    macroFile.parse(TopDUContext::Empty);
+    QVERIFY(pragmaFile.waitForParsed());
+    QVERIFY(macroFile.waitForParsed());
+
+    DUChainReadLocker lock;
+    const auto pragmaTopContext = DUChain::self()->chainForDocument(pragmaFile.url());
+    const auto macroTopContext = DUChain::self()->chainForDocument(macroFile.url());
+    QVERIFY(pragmaTopContext);
+    QVERIFY(macroTopContext);
+
+    const auto pragmaProblem = findStaticAssistantProblem(DUChainUtils::allProblemsForContext(pragmaTopContext));
+    const auto macroProblem = findStaticAssistantProblem(DUChainUtils::allProblemsForContext(macroTopContext));
+    QVERIFY(pragmaProblem && macroProblem);
+    pragmaAssistant = pragmaProblem->solutionAssistant();
+    macroAssistant = macroProblem->solutionAssistant();
+    QVERIFY(pragmaAssistant && macroAssistant);
+
+    pragmaAssistant->actions()[0]->execute();
+    macroAssistant->actions()[1]->execute();
+
+    QCOMPARE(pragmaFile.fileContents(), pragmaExpected);
+    QCOMPARE(macroFile.fileContents(), macroExpected);
+
+    CodeRepresentation::setDiskChangesForbidden(true);
+}
+
+void TestAssistants::testHeaderGuardAssistant_data()
+{
+    QTest::addColumn<QString>("filename");
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<QString>("pragmaExpected");
+    QTest::addColumn<QString>("macroExpected");
+
+    QTest::newRow("simple") << QStringLiteral("simpleheaderguard")
+        << QStringLiteral("int main()\n{\nreturn 0;\n}\n")
+        << QStringLiteral("#pragma once\n\nint main()\n{\nreturn 0;\n}\n")
+        << QStringLiteral(
+            "#ifndef SIMPLEHEADERGUARD_H_INCLUDED\n"
+            "#define SIMPLEHEADERGUARD_H_INCLUDED\n\n"
+            "int main()\n{\nreturn 0;\n}\n\n"
+            "#endif // SIMPLEHEADERGUARD_H_INCLUDED"
+        );
+
+    QTest::newRow("licensed") << QStringLiteral("licensed-headerguard")
+        << QStringLiteral("/* Copyright 3019 John Doe\n */\n// Some comment\n"
+                          "int main()\n{\nreturn 0;\n}\n")
+        << QStringLiteral("/* Copyright 3019 John Doe\n */\n// Some comment\n"
+                          "#pragma once\n\n"
+                          "int main()\n{\nreturn 0;\n}\n")
+        << QStringLiteral(
+            "/* Copyright 3019 John Doe\n */\n// Some comment\n"
+            "#ifndef LICENSED_HEADERGUARD_H_INCLUDED\n"
+            "#define LICENSED_HEADERGUARD_H_INCLUDED\n\n"
+            "int main()\n{\nreturn 0;\n}\n\n"
+            "#endif // LICENSED_HEADERGUARD_H_INCLUDED"
+        );
+
+    QTest::newRow("empty") << QStringLiteral("empty-file")
+        << QStringLiteral("")
+        << QStringLiteral("#pragma once\n\n")
+        << QStringLiteral("#ifndef EMPTY_FILE_H_INCLUDED\n"
+                          "#define EMPTY_FILE_H_INCLUDED\n\n\n"
+                          "#endif // EMPTY_FILE_H_INCLUDED"
+        );
+
+    QTest::newRow("no-trailinig-newline") << QStringLiteral("no-endline-file")
+        << QStringLiteral("int foo;")
+        << QStringLiteral("#pragma once\n\nint foo;")
+        << QStringLiteral("#ifndef NO_ENDLINE_FILE_H_INCLUDED\n"
+                            "#define NO_ENDLINE_FILE_H_INCLUDED\n\n"
+                            "int foo;\n"
+                            "#endif // NO_ENDLINE_FILE_H_INCLUDED"
+        );
 }

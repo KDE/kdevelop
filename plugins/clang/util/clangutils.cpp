@@ -35,6 +35,9 @@
 #include <QTextStream>
 #include <QRegularExpression>
 
+#include <memory>
+#include <functional>
+
 using namespace KDevelop;
 
 CXCursor ClangUtils::getCXCursor(int line, int column, const CXTranslationUnit& unit, const CXFile& file)
@@ -457,4 +460,16 @@ KDevelop::ClassFunctionFlags ClangUtils::specialAttributes(CXCursor cursor)
         }, &flags);
     }
     return flags;
+}
+
+unsigned int ClangUtils::skipTopCommentBlock(CXTranslationUnit unit, CXFile file)
+{
+    const auto fileRange = clang_getRange(clang_getLocation(unit, file, 1, 1),
+                                          clang_getLocation(unit, file, std::numeric_limits<unsigned>::max(), 1));
+    const ClangTokens tokens (unit, fileRange);
+    const auto nonCommentToken = std::find_if(tokens.begin(), tokens.end(),
+                                    [&](CXToken token) { return clang_getTokenKind(token) != CXToken_Comment; });
+
+    const auto location = (nonCommentToken != tokens.end()) ? clang_getTokenExtent(unit, *nonCommentToken) : fileRange;
+    return KTextEditor::Cursor(ClangRange(location).end()).line() + 1;
 }

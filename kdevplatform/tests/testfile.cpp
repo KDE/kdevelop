@@ -110,6 +110,17 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension, const 
     d->init(fileName, contents, base->d->project);
 }
 
+TestFile::TestFile(const QString& contents, const QString& fileExtension, const QString& fileName,
+                   KDevelop::TestProject* project, const QString& dir)
+    : d(new TestFilePrivate)
+{
+    d->suffix = QLatin1Char('.') + fileExtension;
+    const QString file = (!dir.isEmpty() ? dir : QDir::tempPath())
+                    + QLatin1Char('/') + fileName + d->suffix;
+    d->init(file, contents, project);
+}
+
+
 TestFile::~TestFile()
 {
     if (d->topContext && !d->keepDUChainData) {

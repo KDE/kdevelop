@@ -72,6 +72,7 @@ set(kdevclangprivate_SRCS
     duchain/types/classspecializationtype.cpp
     duchain/unknowndeclarationproblem.cpp
     duchain/unsavedfile.cpp
+    duchain/headerguardassistant.cpp
 
     util/clangdebug.cpp
     util/clangtypes.cpp

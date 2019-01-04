@@ -87,6 +87,23 @@ public:
     TestFile(const QString& contents, const QString& fileExtension, const TestFile* base);
 
     /**
+     * Create a temporary file named @p fileName from @p contents with file extension @p extension.
+     *
+     * @param fileExtension the file extension without the dot.
+     * @param fileName the name to use for the file
+     * @param project this file will be added to the project's fileset and gets
+     *                removed from there on destruction
+     * @param dir optional path to a (sub-) directory in which this file should
+     *            be created. The directory must exist.
+     *
+     * Example:
+     * @code
+     * TestFile file("int i = 0;", "h", "guard_test");
+     * @endcode
+     */    TestFile(const QString& contents, const QString& fileExtension, const QString& fileName,
+             KDevelop::TestProject* project = nullptr, const QString& dir = QString());
+
+    /**
      * Removes temporary file and cleans up.
      */
     ~TestFile() override;

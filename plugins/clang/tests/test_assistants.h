@@ -39,6 +39,9 @@ private Q_SLOTS:
 
     void testMoveIntoSource_data();
     void testMoveIntoSource();
+
+    void testHeaderGuardAssistant();
+    void testHeaderGuardAssistant_data();
 };
 
 #endif
