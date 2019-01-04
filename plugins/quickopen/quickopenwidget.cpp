@@ -331,9 +331,11 @@ void QuickOpenWidget::updateProviders()
 
 void QuickOpenWidget::textChanged(const QString& str)
 {
+    QString strTrimmed = str.trimmed();
+    
     // "cheap" when something was just appended to the current filter
-    updateTimerInterval(str.startsWith(m_filter));
-    m_filter = str;
+    updateTimerInterval(strTrimmed.startsWith(m_filter));
+    m_filter = strTrimmed;
     m_filterTimer.start();
 }
 
