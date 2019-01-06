@@ -1,8 +1,9 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="KDevClangSupport" version="1" translationDomain="kdevclang">
+<gui name="KDevClangSupport" version="2" translationDomain="kdevclang">
 <MenuBar>
   <Menu name="code">
     <Action name="code_rename_declaration"/>
+    <Action name="code_move_definition"/>
   </Menu>
 </MenuBar>
 </gui>
