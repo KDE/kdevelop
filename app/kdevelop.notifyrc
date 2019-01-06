@@ -193,7 +193,7 @@ Name[tr]=İşlem hatası
 Name[ug]=بىر تەرەپ قىلىشتا خاتالىق كۆرۈلدى
 Name[uk]=Помилка процесу
 Name[x-test]=xxProcess errorxx
-Name[zh_CN]=处理出错
+Name[zh_CN]=处理错误
 Name[zh_TW]=行程錯誤
 Comment=Process finished with errors
 Comment[ar]=انتهت العمليّة بأخطاء
@@ -241,7 +241,7 @@ Comment[tr]=İşlem hatalarla bitti
 Comment[ug]=بىر تەرەپ قىلىشتا خاتالىق كۆرۈلدى
 Comment[uk]=Виконання завершилося з помилками
 Comment[x-test]=xxProcess finished with errorsxx
-Comment[zh_CN]=处理完成，但有错误
+Comment[zh_CN]=处理完成，有错误
 Comment[zh_TW]=行程發生錯誤
 Action=None
 

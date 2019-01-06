@@ -51,7 +51,7 @@
         "Description[tr]": "Bu eklenti KDE projelerini edinmeye yardım eder",
         "Description[uk]": "За допомогою цього додатка можна отримувати проекти KDE",
         "Description[x-test]": "xxThis plugin helps to obtain KDE projectsxx",
-        "Description[zh_CN]": "此插件帮助您获取 KDE 项目",
+        "Description[zh_CN]": "此插件帮助您获取 KDE 工程",
         "Icon": "kde",
         "Id": "kdevkdeprovider",
         "License": "GPL",
