@@ -20,6 +20,7 @@
         <comment xml:lang="nl">OpenCL C broncode</comment>
         <comment xml:lang="pl">Kod źródłowy OpenCL C</comment>
         <comment xml:lang="pt">Código-fonte em C do OpenCL</comment>
+        <comment xml:lang="pt_BR">Código-fonte em C do OpenCL</comment>
         <comment xml:lang="sk">Zdrojový kód OpenCL C</comment>
         <comment xml:lang="sv">OpenCL C-källkod</comment>
         <comment xml:lang="tr">OpenCL C kaynak kodu</comment>
@@ -47,6 +48,7 @@
         <comment xml:lang="nl">NVIDIA CUDA C broncode</comment>
         <comment xml:lang="pl">Kod źródłowy NVIDIA CUDA C</comment>
         <comment xml:lang="pt">Código-fonte em CUDA C da NVIDIA</comment>
+        <comment xml:lang="pt_BR">Código-fonte em CUDA C da NVIDIA</comment>
         <comment xml:lang="sk">Zdrojový kód NVIDIA CUDA C</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-källkod</comment>
         <comment xml:lang="tr">NVIDIA CUDA C kaynak kodu</comment>
