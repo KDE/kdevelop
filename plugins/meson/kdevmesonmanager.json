@@ -1,0 +1,26 @@
+{
+    "KPlugin": {
+        "Category": "Project Management",
+        "Description": "Imports and edits Meson projects",
+        "Icon": "meson",
+        "Id": "KDevMesonManager",
+        "Name": "Meson Project Manager",
+        "ServiceTypes": [
+            "KDevelop/Plugin"
+        ]
+    },
+    "X-KDevelop-Category": "Project",
+    "X-KDevelop-FileManager": "Meson",
+    "X-KDevelop-IRequired": [
+        "org.kdevelop.IProjectBuilder"
+    ],
+    "X-KDevelop-Interfaces": [
+        "org.kdevelop.IBuildSystemManager",
+        "org.kdevelop.IProjectFileManager"
+    ],
+    "X-KDevelop-Mode": "NoGUI",
+    "X-KDevelop-ProjectFilesFilter": [
+        "meson.build"
+    ],
+    "X-KDevelop-ProjectFilesFilterDescription": "Meson Project Files"
+}
