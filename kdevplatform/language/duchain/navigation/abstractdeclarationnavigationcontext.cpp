@@ -353,7 +353,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     }
 
     if (!shorten) {
-        modifyHtml() += declarationSizeInformation(d->m_declaration);
+        modifyHtml() += declarationSizeInformation(d->m_declaration, topContext().data());
     }
 
     if (!shorten && doc) {
@@ -841,8 +841,21 @@ QStringList AbstractDeclarationNavigationContext::declarationDetails(const Decla
     return details;
 }
 
-QString AbstractDeclarationNavigationContext::declarationSizeInformation(const DeclarationPointer& decl)
+QString AbstractDeclarationNavigationContext::declarationSizeInformation(const DeclarationPointer& decl,
+                                                                         const TopDUContext* topContext)
 {
+    if (!decl) {
+        return {};
+    }
+
+    if (decl->isTypeAlias()) {
+        // show size information for underlying type of aliases / typedefs etc.
+        const auto type = TypeUtils::targetType(decl->abstractType(), topContext);
+        if (const auto* idType = dynamic_cast<const IdentifiedType*>(type.data())) {
+            return declarationSizeInformation(DeclarationPointer(idType->declaration(topContext)), topContext);
+        }
+        return {};
+    }
     // Note that ClassMemberDeclaration also includes ClassDeclaration, which uses the sizeOf and alignOf fields,
     // but normally leaves the bitOffsetOf unset (-1).
     const auto* memberDecl = dynamic_cast<const ClassMemberDeclaration*>(decl.data());
