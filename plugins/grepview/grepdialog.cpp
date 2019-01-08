@@ -94,9 +94,9 @@ inline QStringList repl_template()
 inline QStringList filepatterns()
 {
     return QStringList{
-        QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.m,*.mm,*.M,*.y,*.ypp,*.yxx,*.y++,*.l"),
-        QStringLiteral("*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.m,*.mm,*.M"),
-        QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.idl"),
+        QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cuh,*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.idl,*.c,*.cu,*.m,*.mm,*.M,*.y,*.ypp,*.yxx,*.y++,*.l,*.txt,*.xml,*.rc"),
+        QStringLiteral("*.cpp,*.cc,*.C,*.c++,*.cxx,*.ocl,*.inl,*.c,*.cu,*.m,*.mm,*.M"),
+        QStringLiteral("*.h,*.hxx,*.hpp,*.hh,*.h++,*.H,*.tlh,*.cuh,*.idl"),
         QStringLiteral("*.adb"),
         QStringLiteral("*.cs"),
         QStringLiteral("*.f"),
