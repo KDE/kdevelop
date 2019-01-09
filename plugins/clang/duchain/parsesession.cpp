@@ -102,8 +102,11 @@ QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Option
 
     // TODO: No proper mime type detection possible yet
     // cf. https://bugs.freedesktop.org/show_bug.cgi?id=23700
-    if (path.endsWith(QLatin1String(".cu"), Qt::CaseInsensitive)) {
-        return {QByteArrayLiteral("-xcuda")};
+    if (path.endsWith(QLatin1String(".cu"), Qt::CaseInsensitive) ||
+        path.endsWith(QLatin1String(".cuh"), Qt::CaseInsensitive)) {
+        auto result = parserSettings.toClangAPI();
+        result.append(QByteArrayLiteral("-xcuda"));
+        return result;
     }
 
     if (parserSettings.parserOptions.isEmpty()) {

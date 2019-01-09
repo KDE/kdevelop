@@ -54,7 +54,13 @@
         <comment xml:lang="tr">NVIDIA CUDA C kaynak kodu</comment>
         <comment xml:lang="uk">початковий код C NVIDIA CUDA</comment>
         <comment xml:lang="zh_CN">NVIDIA CUDA C 源代码</comment>
-        <sub-class-of type="text/x-csrc"/>
+        <sub-class-of type="text/x-c++src"/>
         <glob pattern="*.cu"/>
+    </mime-type>
+
+    <mime-type type="text/vnd.nvidia.cuda.chdr">
+        <comment>NVIDIA CUDA C header</comment>
+        <sub-class-of type="text/x-c++hdr"/>
+        <glob pattern="*.cuh"/>
     </mime-type>
 </mime-info>

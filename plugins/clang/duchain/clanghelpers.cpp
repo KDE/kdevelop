@@ -311,6 +311,7 @@ QStringList ClangHelpers::headerExtensions()
             QStringLiteral("hxx"),
             QStringLiteral("hpp"),
             QStringLiteral("tlh"),
+            QStringLiteral("cuh"),
             QStringLiteral("h++"),
     };
     return headerExtensions;
@@ -325,6 +326,7 @@ QStringList ClangHelpers::sourceExtensions()
         QStringLiteral("c++"),
         QStringLiteral("cxx"),
         QStringLiteral("C"),
+        QStringLiteral("cu"),
         QStringLiteral("m"),
         QStringLiteral("mm"),
         QStringLiteral("M"),
