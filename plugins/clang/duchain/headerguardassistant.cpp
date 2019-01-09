@@ -55,7 +55,7 @@ public:
     {
         switch (m_type) {
             case GuardType::Pragma: return i18n("Add #pragma once");
-            case GuardType::Macro: return i18n("Add macro-based #ifndef/#define/#endif heard guard");
+            case GuardType::Macro: return i18n("Add macro-based #ifndef/#define/#endif header guard");
         }
         return {};
     }
