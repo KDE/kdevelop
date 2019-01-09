@@ -119,7 +119,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>TODO -- Implement in seperate UI file</string>
+             <string>TODO -- Implement in separate UI file</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>

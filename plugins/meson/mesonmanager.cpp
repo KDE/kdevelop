@@ -48,7 +48,7 @@ MesonManager::MesonManager(QObject* parent, const QVariantList& args)
     , m_builder(new MesonBuilder(this))
 {
     if (m_builder->hasError()) {
-        setErrorDescription(i18n("Meson builder error: %s", m_builder->errorDescription()));
+        setErrorDescription(i18n("Meson builder error: %1", m_builder->errorDescription()));
     }
 }
 

@@ -189,28 +189,28 @@ void MesonConfigPage::updateUI()
 
     switch (status) {
     case MesonBuilder::DOES_NOT_EXIST:
-        setStatus(i18n("The current build direcory does not exist"), 1);
+        setStatus(i18n("The current build directory does not exist"), 1);
         break;
     case MesonBuilder::CLEAN:
-        setStatus(i18n("The current build direcory is empty"), 1);
+        setStatus(i18n("The current build directory is empty"), 1);
         break;
     case MesonBuilder::MESON_CONFIGURED:
-        setStatus(i18n("Build direcory configured"), 0);
+        setStatus(i18n("Build directory configured"), 0);
         break;
     case MesonBuilder::MESON_FAILED_CONFIGURATION:
-        setStatus(i18n("This meson build direcory is not fully configured"), 1);
+        setStatus(i18n("This meson build directory is not fully configured"), 1);
         break;
     case MesonBuilder::INVALID_BUILD_DIR:
         setStatus(i18n("The current build directory is invalid"), 2);
         break;
     case MesonBuilder::DIR_NOT_EMPTY:
-        setStatus(i18n("This directory does not seem to be a meson build direcory"), 2);
+        setStatus(i18n("This directory does not seem to be a meson build directory"), 2);
         break;
     case MesonBuilder::EMPTY_STRING:
-        setStatus(i18n("Invalid build directory configuration (empty build direcory string)"), 2);
+        setStatus(i18n("Invalid build directory configuration (empty build directory string)"), 2);
         break;
     case MesonBuilder::___UNDEFINED___:
-        setStatus(i18n("Something went verry wrong. This is a bug"), 2);
+        setStatus(i18n("Something went very wrong. This is a bug"), 2);
         break;
     }
 }
