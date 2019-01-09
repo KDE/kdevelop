@@ -110,7 +110,7 @@ MesonBuilder::DirectoryStatus MesonBuilder::evaluateBuildDirectory(const Path& p
     }
 #else
     dir.setFilter(QDir::NoDotAndDotDot | QDir::Hidden | QDir::AllEntries);
-    if (dir.count() == 0)
+    if (dir.count() == 0) {
         return CLEAN;
     }
 #endif
