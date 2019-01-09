@@ -337,7 +337,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
             foreach(KDevelop::ProjectBaseItem* folder, targetsContainer.keys()) {
                 QList<QAction*> actions = targetsContainer.value(folder);
                 if(actions.size()==1 || !folder->parent()) {
-                    separateActions += actions.first();
+                    separateActions.append(actions);
                 } else {
                     foreach(QAction* a, actions) {
                         a->setText(a->property("name").toString());
