@@ -34,6 +34,7 @@
 #include <algorithm>
 #include <debug.h>
 #include <kcolorscheme.h>
+#include <kio_version.h>
 
 using namespace KDevelop;
 
@@ -58,6 +59,12 @@ MesonNewBuildDir::MesonNewBuildDir(IProject* project, QWidget* parent)
             resetFields();
         }
     });
+
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 33, 0)
+    m_ui->i_buildDir->setAcceptMode(QFileDialog::AcceptSave);
+#else
+    m_ui->i_buildDir->fileDialog()->setAcceptMode(QFileDialog::AcceptSave);
+#endif
 
     resetFields();
 }

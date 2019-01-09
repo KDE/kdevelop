@@ -45,9 +45,6 @@
         <property name="mode">
          <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
         </property>
-        <property name="acceptMode">
-         <enum>QFileDialog::AcceptSave</enum>
-        </property>
         <property name="placeholderText">
          <string>Full Path to the new build directory</string>
         </property>
