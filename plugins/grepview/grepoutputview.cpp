@@ -413,6 +413,8 @@ void GrepOutputView::expandAllItems()
 
 void GrepOutputView::rowsRemoved()
 {
+    Q_ASSERT(model());
+
     updateButtonState(model()->rowCount() > 0);
 }
 
@@ -473,6 +475,10 @@ void GrepOutputView::modelSelectorContextMenu(const QPoint& pos)
 
 void GrepOutputView::updateScrollArea()
 {
+    if (!model()) {
+        return;
+    }
+
     for (int col = 0; col < model()->columnCount(); ++col)
         resultsTreeView->resizeColumnToContents(col);
 }
