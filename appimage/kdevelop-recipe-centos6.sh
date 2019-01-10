@@ -31,6 +31,7 @@ KF5_VERSION=v5.51.0
 KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
 KDE_APPLICATION_VERSION=v18.12.0
 GRANTLEE_VERSION=v5.1.0
+OKTETA_VERSION=v0.25.5
 
 export LLVM_ROOT=/opt/llvm/
 export PATH=/opt/rh/python27/root/usr/bin/:$PATH
@@ -90,6 +91,8 @@ function build_project
 { (
     PROJECT=$1
     VERSION=$2
+    shift
+    shift
 
     # clone if not there
     mkdir -p $SRC
@@ -132,7 +135,7 @@ function build_project
     cd $BUILD/$PROJECT
 
     # cmake it
-    cmake3 $SRC/$PROJECT -G Ninja -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $3
+    cmake3 $SRC/$PROJECT -G Ninja -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX:PATH=$PREFIX $@
 
     # make
     ninja
@@ -203,6 +206,7 @@ build_project breeze $KDE_PLASMA_VERSION
 build_project libkomparediff2 $KDE_APPLICATION_VERSION
 build_project kate $KDE_APPLICATION_VERSION # for snippet plugin, see T3826
 build_project konsole $KDE_APPLICATION_VERSION
+build_project okteta $OKTETA_VERSION -DBUILD_DESIGNERPLUGIN=OFF -DBUILD_OKTETAKASTENLIBS=OFF
 
 # Extra
 (CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git PATCH_FILE=$SCRIPT_DIR/grantlee_avoid_recompilation.patch build_project grantlee $GRANTLEE_VERSION)

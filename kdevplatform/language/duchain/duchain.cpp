@@ -313,7 +313,8 @@ private:
         void run() override
         {
             QTimer timer;
-            connect(&timer, &QTimer::timeout, this, [this]() {
+            connect(&timer, &QTimer::timeout, &timer, [this]() {
+                    Q_ASSERT(QThread::currentThread() == this);
                     //Just to make sure the cache is cleared periodically
                     ModificationRevisionSet::clearCache();
 
