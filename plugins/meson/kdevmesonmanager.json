@@ -2,9 +2,21 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "Imports and edits Meson projects",
+        "Description[ca]": "Importa i edita projectes del Meson",
+        "Description[nl]": "Importeert en bewerkt Meson-projecten",
+        "Description[pt]": "Importa e edita os projectos do Meson",
+        "Description[sv]": "Importerar och redigerar Meson-projekt",
+        "Description[uk]": "Імпортує і дає змогу редагувати проекти Meson",
+        "Description[x-test]": "xxImports and edits Meson projectsxx",
         "Icon": "meson",
         "Id": "KDevMesonManager",
         "Name": "Meson Project Manager",
+        "Name[ca]": "Gestor de projectes Meson",
+        "Name[nl]": "Meson projectbeheerder",
+        "Name[pt]": "Gestor de Projectos do Meson",
+        "Name[sv]": "Meson projekthanterare",
+        "Name[uk]": "Керування проектами Meson",
+        "Name[x-test]": "xxMeson Project Managerxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ]
