@@ -369,11 +369,18 @@ QString ClangHelpers::clangVersion()
     return clangVersion;
 }
 
+bool ClangHelpers::isValidClangBuiltingIncludePath(const QString& path)
+{
+    return QFile::exists(path + QLatin1String("/cpuid.h"));
+}
+
 QString ClangHelpers::clangBuiltinIncludePath()
 {
+    // use a lambda to store the result in a static variable which can be
+    // returned without recomputing the string on subsequent calls.
     static const auto dir = []() -> QString {
         auto dir = QString::fromUtf8(qgetenv("KDEV_CLANG_BUILTIN_DIR"));
-        if (!dir.isEmpty()) {
+        if (!dir.isEmpty() && isValidClangBuiltingIncludePath(dir)) {
             clangDebug() << "Using dir from $KDEV_CLANG_BUILTIN_DIR:" << dir;
             return dir;
         }
@@ -382,8 +389,19 @@ QString ClangHelpers::clangBuiltinIncludePath()
         // attempt to use the bundled copy on Windows
         dir = QDir::cleanPath(QStringLiteral("%1/../lib/clang/%2/include")
             .arg(QCoreApplication::applicationDirPath(), clangVersion()));
-        clangDebug() << "Trying" << dir;
-        if (QFileInfo(dir).isDir()) {
+        if (isValidClangBuiltingIncludePath(dir)) {
+            clangDebug() << "Using builtin dir:" << dir;
+            return dir;
+        }
+#elif defined(Q_OS_UNIX)
+        // a clang version upgrade since we were last built can
+        // cause problems if the "clang/$fullversion/include" path component
+        // changed. Try to generate the correct builtin_dir for the current
+        // major.minor.patchlevel version: pop the last 2 components then
+        // chdir through with the updated version directory.
+        dir = QDir::cleanPath(QStringLiteral(KDEV_CLANG_BUILTIN_DIR "/../../%1/include").arg(clangVersion()));
+        if (isValidClangBuiltingIncludePath(dir)) {
+            clangDebug() << "Using builtin dir:" << dir;
             return dir;
         }
 #endif
