@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MesonListEditor</class>
+ <widget class="QDialog" name="MesonListEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>450</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QListWidget" name="array">
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="uniformItemSizes">
+      <bool>true</bool>
+     </property>
+     <property name="selectionRectVisible">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="b_new">
+       <property name="text">
+        <string>New</string>
+       </property>
+       <property name="icon">
+        <iconset theme="list-add"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_del">
+       <property name="text">
+        <string>Delete</string>
+       </property>
+       <property name="icon">
+        <iconset theme="list-remove"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_first">
+       <property name="text">
+        <string>First</string>
+       </property>
+       <property name="icon">
+        <iconset theme="arrow-up-double"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_up">
+       <property name="text">
+        <string>Up</string>
+       </property>
+       <property name="icon">
+        <iconset theme="arrow-up"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_down">
+       <property name="text">
+        <string>Down</string>
+       </property>
+       <property name="icon">
+        <iconset theme="arrow-down"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="b_last">
+       <property name="text">
+        <string>Last</string>
+       </property>
+       <property name="icon">
+        <iconset theme="arrow-down-double"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+       <property name="centerButtons">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>MesonListEditor</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>404</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>MesonListEditor</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>404</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_new</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonListEditor</receiver>
+   <slot>add()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_del</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonListEditor</receiver>
+   <slot>remove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>65</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_up</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonListEditor</receiver>
+   <slot>up()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_down</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonListEditor</receiver>
+   <slot>down()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>156</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>array</sender>
+   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
+   <receiver>MesonListEditor</receiver>
+   <slot>currentItemChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>224</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_first</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonListEditor</receiver>
+   <slot>first()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_last</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonListEditor</receiver>
+   <slot>last()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>347</x>
+     <y>238</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>add()</slot>
+  <slot>remove()</slot>
+  <slot>up()</slot>
+  <slot>down()</slot>
+  <slot>currentItemChanged()</slot>
+  <slot>first()</slot>
+  <slot>last()</slot>
+ </slots>
+</ui>

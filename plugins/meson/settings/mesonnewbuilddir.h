@@ -45,6 +45,7 @@ public:
 
     bool isConfigValid() const;
     Meson::BuildDir currentConfig() const;
+    QStringList mesonArgs() const;
 
 private Q_SLOTS:
     void resetFields();
@@ -54,4 +55,5 @@ private:
     bool m_configIsValid = false;
     KDevelop::IProject* m_project = nullptr;
     Ui::MesonNewBuildDir* m_ui = nullptr;
+    QString m_oldBuildDir;
 };

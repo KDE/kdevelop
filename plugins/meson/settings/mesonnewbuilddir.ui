@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>650</width>
-    <height>625</height>
+    <width>670</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,129 +15,37 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="c_01_basic">
-     <property name="title">
-      <string>Basic configuration</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="l_buildDir">
-        <property name="text">
-         <string>Build directory:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="l_installPrefix">
-        <property name="text">
-         <string>Installation prefix:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KUrlRequester" name="i_buildDir">
-        <property name="mode">
-         <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
-        </property>
-        <property name="placeholderText">
-         <string>Full Path to the new build directory</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="l_buildType">
-        <property name="text">
-         <string>Build type:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="KComboBox" name="i_buildType"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="KUrlRequester" name="i_installPrefix">
-        <property name="mode">
-         <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
-        </property>
-        <property name="placeholderText">
-         <string>Full path to the installation prefix</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+    <layout class="QHBoxLayout" name="hl_buildDir">
+     <item>
+      <widget class="QLabel" name="l_buildDir">
+       <property name="text">
+        <string>Build directory:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KUrlRequester" name="i_buildDir">
+       <property name="mode">
+        <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
+       </property>
+       <property name="placeholderText">
+        <string>Full Path to the new build directory</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="c_02_buildConfig">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="title">
-      <string>Build configuration</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QScrollArea" name="scrollArea">
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="scrollAreaWidgetContents">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>618</width>
-           <height>353</height>
-          </rect>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QLabel" name="l_TODO">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>TODO -- Implement in separate UI file</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+    <widget class="MesonOptionsView" name="options" native="true"/>
    </item>
    <item>
     <widget class="MesonAdvancedSettings" name="advanced" native="true"/>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="hl_bottomBar">
      <item>
       <widget class="QLabel" name="l_statusMessage">
        <property name="text">
@@ -164,11 +72,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
    <header>kurlrequester.h</header>
@@ -177,6 +80,15 @@
    <class>MesonAdvancedSettings</class>
    <extends>QWidget</extends>
    <header>settings/mesonadvancedsettings.h</header>
+   <container>1</container>
+   <slots>
+    <signal>configChanged()</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>MesonOptionsView</class>
+   <extends>QWidget</extends>
+   <header>settings/mesonoptionsview.h</header>
    <container>1</container>
    <slots>
     <signal>configChanged()</signal>
@@ -218,22 +130,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>i_buildDir</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>MesonNewBuildDir</receiver>
-   <slot>updated()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>383</x>
-     <y>55</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>324</x>
-     <y>312</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>advanced</sender>
    <signal>configChanged()</signal>
    <receiver>MesonNewBuildDir</receiver>
@@ -246,6 +142,38 @@
     <hint type="destinationlabel">
      <x>324</x>
      <y>312</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>options</sender>
+   <signal>configChanged()</signal>
+   <receiver>MesonNewBuildDir</receiver>
+   <slot>updated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>334</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>349</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>i_buildDir</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>MesonNewBuildDir</receiver>
+   <slot>updated()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>399</x>
+     <y>89</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>334</x>
+     <y>349</y>
     </hint>
    </hints>
   </connection>

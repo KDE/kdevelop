@@ -19,6 +19,7 @@
 
 #include "mesonconfigpage.h"
 #include "mesonbuilder.h"
+#include "mesonintrospectjob.h"
 #include "mesonjob.h"
 #include "mesonmanager.h"
 #include "mesonnewbuilddir.h"
@@ -91,14 +92,26 @@ void MesonConfigPage::apply()
     if (m_config.currentIndex >= 0 && m_configChanged) {
         QList<KJob*> joblist;
 
+        auto options = m_ui->options->options();
+        if (!options) {
+            qCWarning(KDEV_Meson) << "Options is nullptr. Can not update meson config";
+            return;
+        }
+
+        QStringList mesonArgs = options->getMesonArgs();
+        if (mesonArgs.empty()) {
+            qCDebug(KDEV_Meson) << "Config has not changed --> nothing has to be updated";
+            return;
+        }
+
         // Check if a configuration is required
         auto status = MesonBuilder::evaluateBuildDirectory(m_current.buildDir, m_current.mesonBackend);
         if (status != MesonBuilder::MESON_CONFIGURED) {
-            joblist << new MesonJob(m_current, m_project, MesonJob::CONFIGURE, {}, nullptr);
+            joblist << new MesonJob(m_current, m_project, MesonJob::CONFIGURE, mesonArgs, nullptr);
         }
 
-        joblist << new MesonJob(m_current, m_project, MesonJob::SET_CONFIG, {}, nullptr);
-        joblist << new MesonJob(m_current, m_project, MesonJob::RE_CONFIGURE, {}, nullptr);
+        joblist << new MesonJob(m_current, m_project, MesonJob::SET_CONFIG, mesonArgs, nullptr);
+        joblist << m_ui->options->repopulateFromBuildDir(m_project->path(), m_current);
         KJob* job = new ExecuteCompositeJob(nullptr, joblist);
         connect(job, &KJob::result, this, [this]() {
             setDisabled(false);
@@ -119,6 +132,7 @@ void MesonConfigPage::defaults()
     m_current.mesonArgs.clear();
     m_current.mesonBackend = mgr->defaultMesonBackend();
     m_current.mesonExecutable = mgr->findMeson();
+    m_ui->options->resetAll();
 
     updateUI();
 }
@@ -141,28 +155,12 @@ void MesonConfigPage::reset()
     qCDebug(KDEV_Meson) << "Resetting changes for build dir " << m_current.buildDir;
 
     m_current = m_config.buildDirs[m_config.currentIndex];
+    m_ui->options->repopulateFromBuildDir(m_project->path(), m_current)->start();
     updateUI();
 }
 
-void MesonConfigPage::updateUI()
+void MesonConfigPage::checkStatus()
 {
-    m_ui->i_buildType->setCurrentIndex(1);
-
-    QStringList buildTypes = { QStringLiteral("plain"),   QStringLiteral("debug"),   QStringLiteral("debugoptimized"),
-                               QStringLiteral("release"), QStringLiteral("minsize"), QStringLiteral("custom") };
-
-    m_ui->i_buildType->clear();
-    m_ui->i_buildType->addItems(buildTypes);
-    m_ui->i_buildType->setCurrentIndex(std::max(0, buildTypes.indexOf(m_current.buildType)));
-
-    m_ui->i_installPrefix->setUrl(m_current.installPrefix.toUrl());
-
-    auto aConf = m_ui->advanced->getConfig();
-    aConf.args = m_current.mesonArgs;
-    aConf.backend = m_current.mesonBackend;
-    aConf.meson = m_current.mesonExecutable;
-    m_ui->advanced->setConfig(aConf);
-
     // Get the config build dir status
     auto status = MesonBuilder::evaluateBuildDirectory(m_current.buildDir, m_current.mesonBackend);
     auto setStatus = [this](QString const& msg, int color) -> void {
@@ -213,13 +211,43 @@ void MesonConfigPage::updateUI()
         setStatus(i18n("Something went very wrong. This is a bug"), 2);
         break;
     }
+
+    KColorScheme scheme(QPalette::Normal);
+    KColorScheme::ForegroundRole role;
+    int numChanged = 0;
+    auto options = m_ui->options->options();
+
+    if (options) {
+        numChanged = options->numChanged();
+    }
+
+    if (numChanged == 0) {
+        role = KColorScheme::NormalText;
+        m_ui->l_changed->setText(i18n("No changes"));
+    } else {
+        role = KColorScheme::NeutralText;
+        m_ui->l_changed->setText(i18n("%1 options changed", numChanged));
+    }
+
+    QPalette pal = m_ui->l_changed->palette();
+    pal.setColor(QPalette::Foreground, scheme.foreground(role).color());
+    m_ui->l_changed->setPalette(pal);
+}
+
+void MesonConfigPage::updateUI()
+{
+    auto aConf = m_ui->advanced->getConfig();
+    aConf.args = m_current.mesonArgs;
+    aConf.backend = m_current.mesonBackend;
+    aConf.meson = m_current.mesonExecutable;
+    m_ui->advanced->setConfig(aConf);
+
+    checkStatus();
 }
 
 void MesonConfigPage::readUI()
 {
     qCDebug(KDEV_Meson) << "Reading current build configuration from the UI " << m_current.buildDir.toLocalFile();
-    m_current.installPrefix = Path(m_ui->i_installPrefix->url());
-    m_current.buildType = m_ui->i_buildType->currentText();
 
     auto aConf = m_ui->advanced->getConfig();
     m_current.mesonArgs = aConf.args;
@@ -230,9 +258,10 @@ void MesonConfigPage::readUI()
 void MesonConfigPage::setWidgetsDisabled(bool disabled)
 {
     m_ui->advanced->setDisabled(disabled);
-    m_ui->c_01_basic->setDisabled(disabled);
-    m_ui->c_02_buildConfig->setDisabled(disabled);
+    m_ui->i_buildDirs->setDisabled(disabled);
+    m_ui->b_addDir->setDisabled(disabled);
     m_ui->b_rmDir->setDisabled(disabled);
+    m_ui->options->setDisabled(disabled);
 }
 
 void MesonConfigPage::addBuildDir()
@@ -250,6 +279,7 @@ void MesonConfigPage::addBuildDir()
     }
 
     m_current = newBD.currentConfig();
+    m_current.canonicalizePaths();
     m_config.currentIndex = m_config.addBuildDir(m_current);
     m_ui->i_buildDirs->blockSignals(true);
     m_ui->i_buildDirs->addItem(m_current.buildDir.toLocalFile());
@@ -258,7 +288,7 @@ void MesonConfigPage::addBuildDir()
 
     setWidgetsDisabled(true);
     writeConfig();
-    KJob* job = bld->configure(m_project);
+    KJob* job = bld->configure(m_project, m_current, newBD.mesonArgs());
     connect(job, &KJob::result, this, [this]() { reset(); });
     job->start();
 }
@@ -301,6 +331,7 @@ void MesonConfigPage::changeBuildDirIndex(int index)
 void MesonConfigPage::emitChanged()
 {
     m_configChanged = true;
+    checkStatus();
     emit changed();
 }
 

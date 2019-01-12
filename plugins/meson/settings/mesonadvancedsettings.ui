@@ -76,6 +76,9 @@
         </item>
         <item row="0" column="1">
          <widget class="KLineEdit" name="i_mesonArgs">
+          <property name="toolTip">
+           <string>Changing this will reset the build options</string>
+          </property>
           <property name="placeholderText">
            <string>Extra meson configuration arguments</string>
           </property>
@@ -115,14 +118,14 @@
    <header>klineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
    <header>kurlrequester.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

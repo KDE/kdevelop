@@ -1,0 +1,249 @@
+/* This file is part of KDevelop
+    Copyright 2019 Daniel Mensinger <daniel@mensinger-ka.de>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
+#include "mesonintrospectjob.h"
+#include "mesonconfig.h"
+#include "mesonmanager.h"
+#include "mesonoptions.h"
+
+#include <KProcess>
+#include <QDir>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QtConcurrentRun>
+#include <debug.h>
+#include <klocalizedstring.h>
+
+using namespace Meson;
+using namespace KDevelop;
+
+MesonIntrospectJob::MesonIntrospectJob(KDevelop::IProject* project, QVector<MesonIntrospectJob::Type> types,
+                                       MesonIntrospectJob::Mode mode, QObject* parent)
+    : KJob(parent)
+    , m_types(types)
+    , m_mode(mode)
+{
+    Q_ASSERT(project);
+
+    if (mode == MESON_FILE) {
+        // Since we are parsing the meson file in this mode, no build directory
+        // is required and we have to fake a build directory
+        m_buildDir.buildDir = project->path();
+        auto* bsm = project->buildSystemManager();
+        MesonManager* manager = dynamic_cast<MesonManager*>(bsm);
+        if (manager) {
+            m_buildDir.mesonExecutable = manager->findMeson();
+        }
+    } else {
+        m_buildDir = Meson::currentBuildDir(project);
+    }
+
+    m_projectPath = project->path();
+    connect(&m_futureWatcher, &QFutureWatcher<QString>::finished, this, &MesonIntrospectJob::finished);
+}
+
+MesonIntrospectJob::MesonIntrospectJob(KDevelop::Path projectPath, KDevelop::Path meson,
+                                       QVector<MesonIntrospectJob::Type> types, QObject* parent)
+    : KJob(parent)
+    , m_types(types)
+    , m_mode(MESON_FILE)
+    , m_projectPath(projectPath)
+{
+    // Since we are parsing the meson file in this mode, no build directory
+    // is required and we have to fake a build directory
+    m_buildDir.buildDir = m_projectPath;
+    m_buildDir.mesonExecutable = meson;
+    connect(&m_futureWatcher, &QFutureWatcher<QString>::finished, this, &MesonIntrospectJob::finished);
+}
+
+MesonIntrospectJob::MesonIntrospectJob(KDevelop::Path projectPath, Meson::BuildDir buildDir,
+                                       QVector<MesonIntrospectJob::Type> types, MesonIntrospectJob::Mode mode,
+                                       QObject* parent)
+    : KJob(parent)
+    , m_types(types)
+    , m_mode(mode)
+    , m_buildDir(buildDir)
+    , m_projectPath(projectPath)
+{
+    connect(&m_futureWatcher, &QFutureWatcher<QString>::finished, this, &MesonIntrospectJob::finished);
+}
+
+QString MesonIntrospectJob::getTypeString(MesonIntrospectJob::Type type) const
+{
+    switch (type) {
+    case BENCHMARKS:
+        return QStringLiteral("benchmarks");
+    case BUILDOPTIONS:
+        return QStringLiteral("buildoptions");
+    case BUILDSYSTEM_FILES:
+        return QStringLiteral("buildsystem_files");
+    case DEPENDENCIES:
+        return QStringLiteral("dependencies");
+    case INSTALLED:
+        return QStringLiteral("installed");
+    case PROJECTINFO:
+        return QStringLiteral("projectinfo");
+    case TARGETS:
+        return QStringLiteral("targets");
+    case TESTS:
+        return QStringLiteral("tests");
+    }
+
+    return QStringLiteral("error");
+}
+
+QString MesonIntrospectJob::importJSONFile(const BuildDir& buildDir, MesonIntrospectJob::Type type, QJsonObject* out)
+{
+    QString typeStr = getTypeString(type);
+    QString fileName = QStringLiteral("intro-") + typeStr + QStringLiteral(".json");
+    QString infoDir = buildDir.buildDir.toLocalFile() + QStringLiteral("/") + QStringLiteral("meson-info");
+    QFile introFile(infoDir + QStringLiteral("/") + fileName);
+
+    if (!introFile.exists()) {
+        return i18n("Introspection file '%1' does not exist", QFileInfo(introFile).canonicalFilePath());
+    }
+
+    if (!introFile.open(QFile::ReadOnly | QFile::Text)) {
+        return i18n("Failed to open introspection file '%1'", QFileInfo(introFile).canonicalFilePath());
+    }
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(introFile.readAll(), &error);
+    if (error.error) {
+        return i18n("In %1:%2: %3", QFileInfo(introFile).canonicalFilePath(), error.offset, error.errorString());
+    }
+
+    if (doc.isArray()) {
+        (*out)[typeStr] = doc.array();
+    } else if (doc.isObject()) {
+        (*out)[typeStr] = doc.object();
+    } else {
+        return i18n("The introspection file '%1' contains neither an array nor an object",
+                    QFileInfo(introFile).canonicalFilePath());
+    }
+
+    return QStringLiteral("");
+}
+
+QString MesonIntrospectJob::importMesonAPI(const BuildDir& buildDir, MesonIntrospectJob::Type type, QJsonObject* out)
+{
+    QString typeStr = getTypeString(type);
+    QString option = QStringLiteral("--") + typeStr;
+    option.replace(QChar::fromLatin1('_'), QChar::fromLatin1('-'));
+
+    KProcess proc(this);
+    proc.setWorkingDirectory(m_projectPath.toLocalFile());
+    proc.setOutputChannelMode(KProcess::SeparateChannels);
+    proc.setProgram(buildDir.mesonExecutable.toLocalFile());
+    proc << QStringLiteral("introspect") << option << QStringLiteral("meson.build");
+
+    int ret = proc.execute();
+    if (ret != 0) {
+        return i18n("%1 returned %2", proc.program().join(QChar::fromLatin1(' ')), ret);
+    }
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(proc.readAll(), &error);
+    if (error.error) {
+        return i18n("JSON parser error: %1", error.errorString());
+    }
+
+    if (doc.isArray()) {
+        (*out)[typeStr] = doc.array();
+    } else if (doc.isObject()) {
+        (*out)[typeStr] = doc.object();
+    } else {
+        return i18n("The introspection output of '%1' contains neither an array nor an object",
+                    proc.program().join(QChar::fromLatin1(' ')));
+    }
+
+    return QStringLiteral("");
+}
+
+QString MesonIntrospectJob::import(BuildDir buildDir)
+{
+    QJsonObject rawData;
+
+    // First load the complete JSON data
+    for (auto i : m_types) {
+        QString err;
+        switch (m_mode) {
+        case BUILD_DIR:
+            err = importJSONFile(buildDir, i, &rawData);
+            break;
+        case MESON_FILE:
+            err = importMesonAPI(buildDir, i, &rawData);
+            break;
+        }
+
+        if (!err.isEmpty()) {
+            qCWarning(KDEV_Meson) << "MINTRO: " << err;
+            setError(true);
+            setErrorText(err);
+            return err;
+        }
+    }
+
+    auto buildOptionsJSON = rawData[QStringLiteral("buildoptions")];
+    if (buildOptionsJSON.isArray()) {
+        m_res_options = std::make_shared<MesonOptions>(buildOptionsJSON.toArray());
+        if (m_res_options) {
+            qCDebug(KDEV_Meson) << "MINTRO: Imported " << m_res_options->options().size() << " buildoptions";
+        } else {
+            qCWarning(KDEV_Meson) << "MINTRO: Failed to parse buildoptions";
+        }
+    }
+
+    return QStringLiteral("");
+}
+
+void MesonIntrospectJob::start()
+{
+    qCDebug(KDEV_Meson) << "MINTRO: Starting meson introspection job";
+    if (!m_buildDir.isValid()) {
+        qCWarning(KDEV_Meson) << "The current build directory is invalid";
+        setError(true);
+        setErrorText(i18n("The current build directory is invalid"));
+        emitResult();
+        return;
+    }
+
+    auto future = QtConcurrent::run(this, &MesonIntrospectJob::import, m_buildDir);
+    m_futureWatcher.setFuture(future);
+}
+
+void MesonIntrospectJob::finished()
+{
+    qCDebug(KDEV_Meson) << "MINTRO: Meson introspection job finished";
+    emitResult();
+}
+
+bool MesonIntrospectJob::doKill()
+{
+    if (m_futureWatcher.isRunning()) {
+        m_futureWatcher.cancel();
+    }
+    return true;
+}
+
+MESON_OPT_PTR MesonIntrospectJob::buildOptions()
+{
+    return m_res_options;
+}

@@ -33,9 +33,7 @@ namespace Meson
 
 struct BuildDir {
     KDevelop::Path buildDir;
-    KDevelop::Path installPrefix;
     KDevelop::Path mesonExecutable;
-    QString buildType;
     QString mesonBackend;
     QString mesonArgs;
 

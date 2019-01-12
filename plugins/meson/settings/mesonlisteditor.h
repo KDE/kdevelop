@@ -1,5 +1,5 @@
 /* This file is part of KDevelop
-    Copyright 2018 Daniel Mensinger <daniel@mensinger-ka.de>
+    Copyright 2019 Daniel Mensinger <daniel@mensinger-ka.de>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,43 +19,32 @@
 
 #pragma once
 
-#include "util/path.h"
-#include <QWidget>
+#include <QDialog>
 
-namespace Ui
-{
-class MesonAdvancedSettings;
+namespace Ui {
+    class MesonListEditor;
 }
 
-class MesonAdvancedSettings : public QWidget
-{
+class MesonListEditor : public QDialog {
     Q_OBJECT
-public:
-    struct Data {
-        QString backend;
-        QString args;
-        KDevelop::Path meson;
-    };
 
 public:
-    explicit MesonAdvancedSettings(QWidget* parent = nullptr);
-    ~MesonAdvancedSettings() override;
+    explicit MesonListEditor(QStringList content, QWidget *parent);
+    virtual ~MesonListEditor();
 
-    Data getConfig() const;
-    void setConfig(Data const& conf);
-
-    void setSupportedBackends(QStringList const& backends);
-
-    bool hasMesonChanged();
-
-Q_SIGNALS:
-    void configChanged();
+    QStringList content() const;
 
 public Q_SLOTS:
-    void updated();
+    void add();
+    void remove();
+    void first();
+    void up();
+    void down();
+    void last();
+    void currentItemChanged();
 
 private:
-    Ui::MesonAdvancedSettings* m_ui = nullptr;
-    QStringList m_backendList;
-    KDevelop::Path m_mesonOldPath;
+    Ui::MesonListEditor *m_ui = nullptr;
+
+    void moveItem(int src, int dst);
 };

@@ -21,6 +21,7 @@
 
 #include <interfaces/configpage.h>
 #include "mesonconfig.h"
+#include "mesonoptions.h"
 
 namespace KDevelop
 {
@@ -53,6 +54,7 @@ public Q_SLOTS:
     void emitChanged();
 
 private:
+    void checkStatus();
     void updateUI();
     void readUI();
     void writeConfig();
@@ -64,4 +66,6 @@ private:
     Meson::MesonConfig m_config;
     Meson::BuildDir m_current;
     bool m_configChanged = false;
+
+    MESON_OPT_PTR m_options = nullptr;
 };

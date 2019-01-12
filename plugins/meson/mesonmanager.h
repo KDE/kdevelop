@@ -40,8 +40,11 @@ public:
     // * Custom functions *
     // ********************
 
-    /// Create a new build directory and write it into the config
-    Meson::BuildDir newBuildDirectory(KDevelop::IProject* project);
+    /**
+     * Create a new build directory and write it into the config.
+     * @returns The configuration job on success or nullptr on error.
+     */
+    KJob *newBuildDirectory(KDevelop::IProject* project);
 
     /// Returns a list of all supported Meson backends (for now only ninja)
     QStringList supportedMesonBackends() const;

@@ -115,23 +115,23 @@ IProjectBuilder* MesonManager::builder() const
     return m_builder;
 }
 
-Meson::BuildDir MesonManager::newBuildDirectory(IProject* project)
+KJob *MesonManager::newBuildDirectory(IProject* project)
 {
     Q_ASSERT(project);
     MesonNewBuildDir newBD(project);
 
     if (!newBD.exec() || !newBD.isConfigValid()) {
         qCWarning(KDEV_Meson) << "Failed to create new build directory for project " << project->name();
-        return Meson::BuildDir();
+        return nullptr;
     }
 
     Meson::BuildDir buildDir = newBD.currentConfig();
     Meson::MesonConfig mesonCfg = Meson::getMesonConfig(project);
     buildDir.canonicalizePaths();
-    mesonCfg.addBuildDir(buildDir);
+    mesonCfg.currentIndex = mesonCfg.addBuildDir(buildDir);
     Meson::writeMesonConfig(project, mesonCfg);
 
-    return buildDir;
+    return m_builder->configure(project, buildDir, newBD.mesonArgs());
 }
 
 QStringList MesonManager::supportedMesonBackends() const

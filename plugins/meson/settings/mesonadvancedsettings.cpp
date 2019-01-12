@@ -64,3 +64,14 @@ void MesonAdvancedSettings::updated()
 {
     emit configChanged();
 }
+
+/// Check if meson has changed since the last call
+bool MesonAdvancedSettings::hasMesonChanged()
+{
+    if(m_mesonOldPath != Path(m_ui->i_mesonExe->url())) {
+        m_mesonOldPath = Path(m_ui->i_mesonExe->url()); // Reset
+        return true;
+    }
+
+    return false;
+}

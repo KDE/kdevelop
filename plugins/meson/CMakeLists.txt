@@ -3,19 +3,31 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevmesonmanager\")
 set(mesonbuilder_SRCS
     mesonbuilder.cpp
     mesonconfig.cpp
+    mesonintrospectjob.cpp
     mesonimportjob.cpp
     mesonjob.cpp
     mesonjobprune.cpp
     mesonmanager.cpp
+    mesonoptions.cpp
 
     settings/mesonadvancedsettings.cpp
     settings/mesonconfigpage.cpp
+    settings/mesonlisteditor.cpp
     settings/mesonnewbuilddir.cpp
+    settings/mesonoptionbaseview.cpp
+    settings/mesonoptionsview.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-ki18n_wrap_ui(mesonbuilder_SRCS settings/mesonadvancedsettings.ui settings/mesonconfigpage.ui settings/mesonnewbuilddir.ui)
+ki18n_wrap_ui(mesonbuilder_SRCS
+              settings/mesonadvancedsettings.ui
+              settings/mesonconfigpage.ui
+              settings/mesonlisteditor.ui
+              settings/mesonnewbuilddir.ui
+              settings/mesonoptionbaseview.ui
+              settings/mesonoptionsview.ui
+)
 ecm_qt_declare_logging_category(mesonbuilder_SRCS
     HEADER debug.h
     IDENTIFIER KDEV_Meson
@@ -34,4 +46,9 @@ target_link_libraries(kdevmesonmanager
     KDev::Project
     KDev::Util
     KDev::OutputView
+)
+
+set_target_properties(kdevmesonmanager PROPERTIES
+    CXX_STANDARD 14
+    CXX_STANDARD_REQUIRED YES
 )

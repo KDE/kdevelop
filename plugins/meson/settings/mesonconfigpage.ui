@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>587</width>
-    <height>499</height>
+    <width>670</width>
+    <height>500</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="hl_buildDir">
      <item>
       <widget class="QComboBox" name="i_buildDirs">
        <property name="sizePolicy">
@@ -48,131 +48,48 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="c_01_basic">
-     <property name="title">
-      <string>Basic configuration</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="l_buildType">
-        <property name="text">
-         <string>Build type:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KComboBox" name="i_buildType"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="KUrlRequester" name="i_installPrefix">
-        <property name="mode">
-         <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
-        </property>
-        <property name="placeholderText">
-         <string>Full path to the installation prefix</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="l_installPrefix">
-        <property name="text">
-         <string>Installation prefix:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="c_02_buildConfig">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="title">
-      <string>Build configuration</string>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QScrollArea" name="scrollArea">
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="scrollAreaWidgetContents">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>555</width>
-           <height>237</height>
-          </rect>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QLabel" name="l_TODO">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>TODO -- Implement in separate UI file</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </widget>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+    <widget class="MesonOptionsView" name="options" native="true"/>
    </item>
    <item>
     <widget class="MesonAdvancedSettings" name="advanced" native="true"/>
    </item>
    <item>
-    <widget class="QLabel" name="l_status">
-     <property name="text">
-      <string>Status message...</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="hl_status">
+     <item>
+      <widget class="QLabel" name="l_status">
+       <property name="text">
+        <string>Status message...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="l_changed">
+       <property name="text">
+        <string>Num changed</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KUrlRequester</class>
-   <extends>QWidget</extends>
-   <header>kurlrequester.h</header>
-  </customwidget>
-  <customwidget>
    <class>MesonAdvancedSettings</class>
    <extends>QWidget</extends>
    <header>settings/mesonadvancedsettings.h</header>
+   <container>1</container>
+   <slots>
+    <signal>configChanged()</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>MesonOptionsView</class>
+   <extends>QWidget</extends>
+   <header>settings/mesonoptionsview.h</header>
    <container>1</container>
    <slots>
     <signal>configChanged()</signal>
@@ -246,22 +163,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>i_installPrefix</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>MesonConfigPage</receiver>
-   <slot>emitChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>351</x>
-     <y>133</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>293</x>
-     <y>249</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>advanced</sender>
    <signal>configChanged()</signal>
    <receiver>MesonConfigPage</receiver>
@@ -278,17 +179,17 @@
    </hints>
   </connection>
   <connection>
-   <sender>i_buildType</sender>
-   <signal>currentIndexChanged(int)</signal>
+   <sender>options</sender>
+   <signal>configChanged()</signal>
    <receiver>MesonConfigPage</receiver>
    <slot>emitChanged()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>351</x>
-     <y>95</y>
+     <x>334</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
-     <x>293</x>
+     <x>334</x>
      <y>249</y>
     </hint>
    </hints>

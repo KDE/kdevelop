@@ -36,10 +36,8 @@ static const QString CURRENT_INDEX = QStringLiteral("Current Build Directory Ind
 
 static const QString BUILD_DIR_SEC = QStringLiteral("BuildDir %1");
 static const QString BUILD_DIR_PATH = QStringLiteral("Build Directory Path");
-static const QString INSTALL_PREFIX = QStringLiteral("Installation prefix");
 static const QString MESON_EXE = QStringLiteral("Meson executable");
 static const QString EXTRA_ARGS = QStringLiteral("Additional meson arguments");
-static const QString BUILD_TYPE = QStringLiteral("Build type");
 static const QString BACKEND = QStringLiteral("Meson Generator Backend");
 
 int MesonConfig::addBuildDir(BuildDir dir)
@@ -99,9 +97,7 @@ MesonConfig Meson::getMesonConfig(IProject* project)
         KConfigGroup current = root.group(section);
         BuildDir currBD;
         currBD.buildDir = Path(current.readEntry(BUILD_DIR_PATH, QString()));
-        currBD.installPrefix = Path(current.readEntry(INSTALL_PREFIX, QString()));
         currBD.mesonExecutable = Path(current.readEntry(MESON_EXE, QString()));
-        currBD.buildType = current.readEntry(BUILD_TYPE, QStringLiteral("debug"));
         currBD.mesonBackend = current.readEntry(BACKEND, QString());
         currBD.mesonArgs = current.readEntry(EXTRA_ARGS, QString());
 
@@ -149,9 +145,7 @@ void Meson::writeMesonConfig(IProject* project, const MesonConfig& cfg)
         KConfigGroup current = root.group(BUILD_DIR_SEC.arg(counter++));
 
         current.writeEntry(BUILD_DIR_PATH, i.buildDir.path());
-        current.writeEntry(INSTALL_PREFIX, i.installPrefix.path());
         current.writeEntry(MESON_EXE, i.mesonExecutable.path());
-        current.writeEntry(BUILD_TYPE, i.buildType);
         current.writeEntry(BACKEND, i.mesonBackend);
         current.writeEntry(EXTRA_ARGS, i.mesonArgs);
     }
@@ -164,18 +158,9 @@ BuildDir Meson::currentBuildDir(IProject* project)
     if (cfg.currentIndex < 0 || cfg.currentIndex >= cfg.buildDirs.size()) {
         cfg.currentIndex = 0; // Default to the first build dir
 
-        // Request a new build directory if neccessary
+        // Return an invalid build dir
         if (cfg.buildDirs.isEmpty()) {
-            IBuildSystemManager* ibsm = project->buildSystemManager();
-            MesonManager* bsm = dynamic_cast<MesonManager*>(ibsm);
-            if (!bsm) {
-                qCCritical(KDEV_Meson) << "Invalid build system manager for mesonconfig";
-                qCCritical(KDEV_Meson) << "Project " << project->name() << "is probably broken";
-                return BuildDir();
-            }
-
-            // newBuildDirectory() will add the build dir to the config and set cfg.currentIndex
-            return bsm->newBuildDirectory(project);
+            return BuildDir();
         }
     }
 
@@ -184,12 +169,16 @@ BuildDir Meson::currentBuildDir(IProject* project)
 
 bool Meson::BuildDir::isValid() const
 {
-    return !(buildDir.isEmpty() || mesonExecutable.isEmpty() || buildType.isEmpty());
+    return !(buildDir.isEmpty() || mesonExecutable.isEmpty());
 }
 
 void Meson::BuildDir::canonicalizePaths()
 {
-    for (auto* i : { &buildDir, &installPrefix, &mesonExecutable }) {
-        *i = Path(QFileInfo(i->toLocalFile()).canonicalFilePath());
+    for (auto* i : { &buildDir, &mesonExecutable }) {
+        // canonicalFilePath checks if the file / directory exists and returns "" if it doesn't.
+        QString tmp = QFileInfo(i->toLocalFile()).canonicalFilePath();
+        if (!tmp.isEmpty()) {
+            *i = Path(tmp);
+        }
     }
 }

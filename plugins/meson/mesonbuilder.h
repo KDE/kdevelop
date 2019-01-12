@@ -52,7 +52,7 @@ public:
     KJob* prune(KDevelop::IProject* project) override;
 
     KJob* configure(KDevelop::IProject* project) override;
-    KJob* configure(KDevelop::IProject* project, Meson::BuildDir const& buildDir,
+    KJob* configure(KDevelop::IProject* project, Meson::BuildDir const& buildDir, QStringList args,
                     DirectoryStatus status = ___UNDEFINED___);
 
     /// Evaluate a directory for the use with meson

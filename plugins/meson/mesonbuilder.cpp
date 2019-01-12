@@ -22,6 +22,7 @@
 #include "mesonconfig.h"
 #include "mesonjob.h"
 #include "mesonjobprune.h"
+#include "mesonmanager.h"
 #include <QDir>
 #include <QFileInfo>
 #include <debug.h>
@@ -147,7 +148,8 @@ MesonBuilder::DirectoryStatus MesonBuilder::evaluateBuildDirectory(const Path& p
     return MESON_CONFIGURED;
 }
 
-KJob* MesonBuilder::configure(IProject* project, const Meson::BuildDir& buildDir, DirectoryStatus status)
+KJob* MesonBuilder::configure(IProject* project, const Meson::BuildDir& buildDir, QStringList args,
+                              DirectoryStatus status)
 {
     Q_ASSERT(project);
 
@@ -165,11 +167,11 @@ KJob* MesonBuilder::configure(IProject* project, const Meson::BuildDir& buildDir
     case DOES_NOT_EXIST:
     case CLEAN:
     case MESON_FAILED_CONFIGURATION:
-        job = new MesonJob(buildDir, project, MesonJob::CONFIGURE, {}, this);
+        job = new MesonJob(buildDir, project, MesonJob::CONFIGURE, args, this);
         connect(job, &KJob::result, this, [this, project]() { emit configured(project); });
         return job;
     case MESON_CONFIGURED:
-        job = new MesonJob(buildDir, project, MesonJob::RE_CONFIGURE, {}, this);
+        job = new MesonJob(buildDir, project, MesonJob::RE_CONFIGURE, args, this);
         connect(job, &KJob::result, this, [this, project]() { emit configured(project); });
         return job;
     case DIR_NOT_EMPTY:
@@ -198,7 +200,20 @@ KJob* MesonBuilder::configure(KDevelop::IProject* project)
 {
     Q_ASSERT(project);
     auto buildDir = Meson::currentBuildDir(project);
-    return configure(project, buildDir);
+    if(!buildDir.isValid()) {
+        auto *bsm = project->buildSystemManager();
+        MesonManager *manager = dynamic_cast<MesonManager *>(bsm);
+        if(!manager) {
+            return new ErrorJob(this, i18n("Internal error: The buildsystem manager is not the MesonManager"));
+        }
+
+        KJob *newBDJob = manager->newBuildDirectory(project);
+        if(!newBDJob) {
+            return new ErrorJob(this, i18n("Failed to create a new build directory"));
+        }
+        return newBDJob;
+    }
+    return configure(project, buildDir, {});
 }
 
 KJob* MesonBuilder::configureIfRequired(KDevelop::IProject* project, KJob* realJob)
@@ -211,8 +226,25 @@ KJob* MesonBuilder::configureIfRequired(KDevelop::IProject* project, KJob* realJ
         return realJob;
     }
 
+    KJob *configureJob = nullptr;
+    if(buildDir.isValid()) {
+        configureJob = configure(project, buildDir, {}, status);
+    } else {
+        // Create a new build directory
+        auto *bsm = project->buildSystemManager();
+        MesonManager *manager = dynamic_cast<MesonManager *>(bsm);
+        if(!manager) {
+            return new ErrorJob(this, i18n("Internal error: The buildsystem manager is not the MesonManager"));
+        }
+
+        configureJob = manager->newBuildDirectory(project);
+        if(!configureJob) {
+            return new ErrorJob(this, i18n("Failed to create a new build directory"));
+        }
+    }
+
     QList<KJob*> jobs = {
-        configure(project, buildDir, status), // First configure the build directory
+        configure(project, buildDir, {}, status), // First configure the build directory
         realJob // If this succeeds execute the real job
     };
 

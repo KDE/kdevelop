@@ -103,18 +103,6 @@ void MesonNewBuildDir::resetFields()
 
     m_ui->i_buildDir->setUrl(buildDirPath.toUrl());
 
-    // Init build type
-    // TODO use introspection once https://github.com/mesonbuild/meson/pull/4564 is merged
-    QStringList buildTypes = { QStringLiteral("plain"),   QStringLiteral("debug"),   QStringLiteral("debugoptimized"),
-                               QStringLiteral("release"), QStringLiteral("minsize"), QStringLiteral("custom") };
-
-    m_ui->i_buildType->clear();
-    m_ui->i_buildType->addItems(buildTypes);
-    m_ui->i_buildType->setCurrentIndex(std::max(0, buildTypes.indexOf(QStringLiteral("debug"))));
-
-    // Install prefix
-    m_ui->i_installPrefix->clear();
-
     // Extra args
     aConf.args.clear();
 
@@ -159,7 +147,7 @@ void MesonNewBuildDir::updated()
     Path buildDir = Path(m_ui->i_buildDir->url());
     QFileInfo mesonExe(advanced.meson.toLocalFile());
 
-    if (!mesonExe.exists() || !mesonExe.isExecutable()
+    if (!mesonExe.exists() || !mesonExe.isExecutable() || !mesonExe.isFile()
         || !mesonExe.permission(QFileDevice::ReadUser | QFileDevice::ExeUser)) {
         setStatus(i18n("Specified meson executable does not exist"), false);
         return;
@@ -190,6 +178,21 @@ void MesonNewBuildDir::updated()
         setStatus(i18n("You have reached unreachable code. This is a bug"), false);
         break;
     }
+
+    bool buildDirChanged = false;
+    if(m_oldBuildDir != buildDir.toLocalFile()) {
+        m_oldBuildDir = buildDir.toLocalFile();
+        buildDirChanged = true;
+    }
+
+    bool mesonHasChanged = m_ui->advanced->hasMesonChanged(); // Outside if to prevent lazy evaluation
+    if (!m_ui->options->options() || mesonHasChanged || buildDirChanged) {
+        if (status == MesonBuilder::MESON_CONFIGURED) {
+            m_ui->options->repopulateFromBuildDir(m_project->path(), currentConfig())->start();
+        } else {
+            m_ui->options->repopulateFromMesonFile(m_project->path(), advanced.meson)->start();
+        }
+    }
 }
 
 Meson::BuildDir MesonNewBuildDir::currentConfig() const
@@ -203,13 +206,21 @@ Meson::BuildDir MesonNewBuildDir::currentConfig() const
     auto advanced = m_ui->advanced->getConfig();
 
     buildDir.buildDir = Path(m_ui->i_buildDir->url());
-    buildDir.buildType = m_ui->i_buildType->currentText();
-    buildDir.installPrefix = Path(m_ui->i_installPrefix->url());
     buildDir.mesonArgs = advanced.args;
     buildDir.mesonBackend = advanced.backend;
     buildDir.mesonExecutable = advanced.meson;
 
     return buildDir;
+}
+
+QStringList MesonNewBuildDir::mesonArgs() const
+{
+    auto options = m_ui->options->options();
+    if (!options) {
+        return {};
+    }
+
+    return options->getMesonArgs();
 }
 
 bool MesonNewBuildDir::isConfigValid() const
