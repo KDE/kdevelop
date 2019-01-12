@@ -38,6 +38,7 @@
 #include <QLineEdit>
 #include <QInputDialog>
 #include <QPainter>
+#include <QAbstractItemView>
 
 // Use a delegate because the dataChanged signal doesn't tell us the previous name
 class FileRenameDelegate
@@ -135,6 +136,8 @@ ScratchpadView::ScratchpadView(QWidget* parent, Scratchpad* scratchpad)
         }
     });
 
+    connect(scratchView, &QAbstractItemView::pressed, this, &ScratchpadView::validateItemActions);
+
     validateItemActions();
 }
 
@@ -185,6 +188,7 @@ void ScratchpadView::validateItemActions()
     if (!enable) {
         commandWidget->clear();
     }
+    commandWidget->setText(currentIndex().data(Scratchpad::RunCommandRole).toString());
 }
 
 void ScratchpadView::runSelectedScratch()
@@ -202,7 +206,6 @@ void ScratchpadView::scratchActivated(const QModelIndex& index)
 {
     validateItemActions();
     m_scratchpad->openScratch(proxyModel()->mapToSource(index));
-    commandWidget->setText(index.data(Scratchpad::RunCommandRole).toString());
 }
 
 void ScratchpadView::createScratch()
