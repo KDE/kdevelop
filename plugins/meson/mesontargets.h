@@ -35,7 +35,7 @@ using MESON_SOURCES = QVector<MESON_SOURCE>;
 using MESON_TARGET = std::shared_ptr<MesonTarget>;
 using MESON_TARGETS = QVector<MESON_TARGET>;
 
-using MESON_TGT_PTR  =std::shared_ptr<MesonTargets>;
+using MESON_TGT_PTR = std::shared_ptr<MesonTargets>;
 
 class MesonTargetSources
 {
@@ -82,6 +82,7 @@ public:
 
     QString name() const;
     QString type() const;
+    KDevelop::Path definedIn() const;
     QStringList filename() const;
     bool buildByDefault() const;
     bool installed() const;
@@ -93,6 +94,7 @@ public:
 private:
     QString m_name;
     QString m_type;
+    KDevelop::Path m_definedIn;
     QStringList m_filename;
     bool m_buildByDefault;
     bool m_installed;

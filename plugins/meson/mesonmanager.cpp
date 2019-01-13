@@ -21,6 +21,8 @@
 #include "mesonmanager.h"
 #include "mesonbuilder.h"
 #include "mesonconfig.h"
+#include "mesonintrospectjob.h"
+#include "mesontargets.h"
 #include "settings/mesonconfigpage.h"
 #include "settings/mesonnewbuilddir.h"
 #include <interfaces/iproject.h>
@@ -80,10 +82,23 @@ ProjectFolderItem* MesonManager::createFolderItem(IProject* project, const Path&
 
 KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 {
-    auto project = item->project();
+    IProject* project = item->project();
+    auto buildDir = Meson::currentBuildDir(project);
+    auto introJob = new MesonIntrospectJob(project->path(), buildDir, { MesonIntrospectJob::TARGETS },
+                                           MesonIntrospectJob::BUILD_DIR, this);
+
+    connect(introJob, &KJob::result, this, [this, introJob, project]() {
+        auto targets = introJob->targets();
+        if (!targets) {
+            qCWarning(KDEV_Meson) << "Failed to import targets from project" << project->name();
+            return;
+        }
+        m_projectTargets[project] = targets;
+    });
 
     const QList<KJob*> jobs = {
         builder()->configure(project), // Make sure the project is configured
+        introJob, // Load targets from the build directory introspection files
         AbstractFileManagerPlugin::createImportJob(item) // generate the file system listing
     };
 
@@ -105,7 +120,65 @@ IProjectBuilder* MesonManager::builder() const
     return m_builder;
 }
 
-KJob *MesonManager::newBuildDirectory(IProject* project)
+MESON_SOURCE MesonManager::sourceFromItem(KDevelop::ProjectBaseItem* item) const
+{
+    Q_ASSERT(item);
+    auto it = m_projectTargets.find(item->project());
+    if (it == end(m_projectTargets)) {
+        qCDebug(KDEV_Meson) << item->path().toLocalFile() << "not found";
+        return {};
+    }
+
+    auto targets = *it;
+    return targets->fileSource(item->path());
+}
+
+KDevelop::Path::List MesonManager::includeDirectories(KDevelop::ProjectBaseItem* item) const
+{
+    auto src = sourceFromItem(item);
+    if (!src) {
+        return {};
+    }
+    return src->includeDirs();
+}
+
+KDevelop::Path::List MesonManager::frameworkDirectories(KDevelop::ProjectBaseItem*) const
+{
+    return {};
+}
+
+QHash<QString, QString> MesonManager::defines(KDevelop::ProjectBaseItem* item) const
+{
+    auto src = sourceFromItem(item);
+    if (!src) {
+        return {};
+    }
+    return src->defines();
+}
+
+QString MesonManager::extraArguments(KDevelop::ProjectBaseItem* item) const
+{
+    auto src = sourceFromItem(item);
+    if (!src) {
+        return {};
+    }
+    return src->extraArgs().join(QChar::fromLatin1(' '));
+}
+
+bool MesonManager::hasBuildInfo(KDevelop::ProjectBaseItem* item) const
+{
+    auto src = sourceFromItem(item);
+    if (!src) {
+        return false;
+    }
+    return true;
+}
+
+// ********************
+// * Custom functions *
+// ********************
+
+KJob* MesonManager::newBuildDirectory(IProject* project)
 {
     Q_ASSERT(project);
     MesonNewBuildDir newBD(project);
@@ -157,6 +230,10 @@ Path MesonManager::findMeson() const
 
     return Path(mesonPath);
 }
+
+// ***********
+// * IPlugin *
+// ***********
 
 ConfigPage* MesonManager::perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent)
 {

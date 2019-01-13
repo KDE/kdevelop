@@ -22,10 +22,16 @@
 #define KDEVPLATFORM_PLUGIN_MESONMANAGER_H
 
 #include "mesonconfig.h"
+#include <memory>
 #include <project/abstractfilemanagerplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 
 class MesonBuilder;
+class MesonTargets;
+class MesonTargetSources;
+
+using MESON_SOURCE = std::shared_ptr<MesonTargetSources>;
+using MESON_TGT_PTR = std::shared_ptr<MesonTargets>;
 
 class MesonManager : public KDevelop::AbstractFileManagerPlugin, public KDevelop::IBuildSystemManager
 {
@@ -44,7 +50,7 @@ public:
      * Create a new build directory and write it into the config.
      * @returns The configuration job on success or nullptr on error.
      */
-    KJob *newBuildDirectory(KDevelop::IProject* project);
+    KJob* newBuildDirectory(KDevelop::IProject* project);
 
     /// Returns a list of all supported Meson backends (for now only ninja)
     QStringList supportedMesonBackends() const;
@@ -76,12 +82,11 @@ public:
 
     KDevelop::IProjectBuilder* builder() const override;
 
-    // FIXME now: should use compile_commands.json for these (i.e. m_projects)
-    KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem*) const override { return {}; }
-    KDevelop::Path::List frameworkDirectories(KDevelop::ProjectBaseItem*) const override { return {}; }
-    QHash<QString, QString> defines(KDevelop::ProjectBaseItem*) const override { return {}; }
-    QString extraArguments(KDevelop::ProjectBaseItem* /*item*/) const override { return {}; }
-    bool hasBuildInfo(KDevelop::ProjectBaseItem* /*item*/) const override { return false; }
+    KDevelop::Path::List includeDirectories(KDevelop::ProjectBaseItem* item) const override;
+    KDevelop::Path::List frameworkDirectories(KDevelop::ProjectBaseItem* item) const override;
+    QHash<QString, QString> defines(KDevelop::ProjectBaseItem* item) const override;
+    QString extraArguments(KDevelop::ProjectBaseItem* item) const override;
+    bool hasBuildInfo(KDevelop::ProjectBaseItem* item) const override;
 
     KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const override;
 
@@ -104,6 +109,9 @@ public:
 
 private:
     MesonBuilder* m_builder;
+    QHash<KDevelop::IProject*, MESON_TGT_PTR> m_projectTargets;
+
+    MESON_SOURCE sourceFromItem(KDevelop::ProjectBaseItem* item) const;
 };
 
 #endif

@@ -102,9 +102,9 @@ void MesonTargetSources::fromJSON(const QJsonObject& json)
               [](auto const& x) { return Path(x.toString()); });
 
     splitParamerters();
-    qCDebug(KDEV_Meson) << "    - language: '" << m_language << "' " << m_sources.count() + m_generatedSources.count()
-                        << " files with " << m_includeDirs.count() << " include directories and " << m_defines.count()
-                        << " defines";
+    qCDebug(KDEV_Meson) << "    - language:" << m_language << "has" << m_sources.count() + m_generatedSources.count()
+                        << "files with" << m_includeDirs.count() << "include directories and" << m_defines.count()
+                        << "defines";
 }
 
 void MesonTargetSources::splitParamerters()
@@ -164,6 +164,11 @@ QStringList MesonTarget::filename() const
     return m_filename;
 }
 
+KDevelop::Path MesonTarget::definedIn() const
+{
+    return m_definedIn;
+}
+
 bool MesonTarget::buildByDefault() const
 {
     return m_buildByDefault;
@@ -183,13 +188,14 @@ void MesonTarget::fromJSON(const QJsonObject& json)
 {
     m_name = json[QStringLiteral("name")].toString();
     m_type = json[QStringLiteral("type")].toString();
+    m_definedIn = Path(json[QStringLiteral("defined_in")].toString());
     m_buildByDefault = json[QStringLiteral("build_by_default")].toBool();
     m_installed = json[QStringLiteral("installed")].toBool();
 
     QJsonArray files = json[QStringLiteral("filename")].toArray();
     transform(begin(files), end(files), back_inserter(m_filename), [](auto const& x) { return x.toString(); });
 
-    qCDebug(KDEV_Meson) << "  - " << m_type << " '" << m_name << "': " << m_filename.join(QStringLiteral(", "));
+    qCDebug(KDEV_Meson) << "  - " << m_type << m_name << "output:" << m_filename.join(QStringLiteral(" and "));
 
     for (auto const& i : json[QStringLiteral("target_sources")].toArray()) {
         m_targetSources << make_shared<MesonTargetSources>(i.toObject(), this);
@@ -233,7 +239,8 @@ void MesonTargets::fromJSON(const QJsonArray& json)
     }
 
     buildHashMap();
-    qCDebug(KDEV_Meson) << "MINTRO: Loaded " << m_targets.count() << " with " << m_sourceHash.count() << " total files";
+    qCDebug(KDEV_Meson) << "MINTRO: Loaded" << m_targets.count() << "targets with" << m_sourceHash.count()
+                        << "total files";
 }
 
 void MesonTargets::buildHashMap()
