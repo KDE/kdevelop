@@ -13,7 +13,7 @@
         <comment xml:lang="cs">Zdrojový kód OpenCL C</comment>
         <comment xml:lang="de">OpenCL C Quelltext</comment>
         <comment xml:lang="en_GB">OpenCL C source code</comment>
-        <comment xml:lang="es">Código fuente OpenCL C</comment>
+        <comment xml:lang="es">Código fuente de OpenCL C</comment>
         <comment xml:lang="fr">Code source C OpenCL</comment>
         <comment xml:lang="gl">Código fonte en C de OpenCL</comment>
         <comment xml:lang="it">Codice sorgente OpenCL C</comment>
@@ -41,7 +41,7 @@
         <comment xml:lang="cs">Zdrojový kód NVIDIA CUDA C</comment>
         <comment xml:lang="de">NVIDIA CUDA C Quelltext</comment>
         <comment xml:lang="en_GB">NVIDIA CUDA C source code</comment>
-        <comment xml:lang="es">Código fuente NVIDIA CUDA C</comment>
+        <comment xml:lang="es">Código fuente de NVIDIA CUDA C</comment>
         <comment xml:lang="fr">Code source C CUDA NVIDIA</comment>
         <comment xml:lang="gl">Código fonte en C de NVIDIA CUDA</comment>
         <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
@@ -60,6 +60,13 @@
 
     <mime-type type="text/vnd.nvidia.cuda.chdr">
         <comment>NVIDIA CUDA C header</comment>
+        <comment xml:lang="ca">Capçalera en C per a CUDA de NVIDIA</comment>
+        <comment xml:lang="ca@valencia">Capçalera en C per a CUDA de NVIDIA</comment>
+        <comment xml:lang="es">Cabecera de NVIDIA CUDA C</comment>
+        <comment xml:lang="nl">NVIDIA CUDA C header</comment>
+        <comment xml:lang="pt">Ficheiro de inclusão em CUDA C da NVIDIA</comment>
+        <comment xml:lang="sv">NVIDIA CUDA C-deklarationsfil</comment>
+        <comment xml:lang="uk">файл заголовків C NVIDIA CUDA</comment>
         <sub-class-of type="text/x-c++hdr"/>
         <glob pattern="*.cuh"/>
     </mime-type>
