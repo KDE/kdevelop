@@ -159,14 +159,14 @@ QString MesonTarget::type() const
     return m_type;
 }
 
-QStringList MesonTarget::filename() const
-{
-    return m_filename;
-}
-
 KDevelop::Path MesonTarget::definedIn() const
 {
     return m_definedIn;
+}
+
+KDevelop::Path::List MesonTarget::filename() const
+{
+    return m_filename;
 }
 
 bool MesonTarget::buildByDefault() const
@@ -193,9 +193,9 @@ void MesonTarget::fromJSON(const QJsonObject& json)
     m_installed = json[QStringLiteral("installed")].toBool();
 
     QJsonArray files = json[QStringLiteral("filename")].toArray();
-    transform(begin(files), end(files), back_inserter(m_filename), [](auto const& x) { return x.toString(); });
+    transform(begin(files), end(files), back_inserter(m_filename), [](auto const& x) { return Path(x.toString()); });
 
-    qCDebug(KDEV_Meson) << "  - " << m_type << m_name << "output:" << m_filename.join(QStringLiteral(" and "));
+    qCDebug(KDEV_Meson) << "  - " << m_type << m_name;
 
     for (auto const& i : json[QStringLiteral("target_sources")].toArray()) {
         m_targetSources << make_shared<MesonTargetSources>(i.toObject(), this);

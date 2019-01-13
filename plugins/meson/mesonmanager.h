@@ -27,6 +27,7 @@
 #include <project/interfaces/ibuildsystemmanager.h>
 
 class MesonBuilder;
+class MesonTarget;
 class MesonTargets;
 class MesonTargetSources;
 
@@ -89,11 +90,9 @@ public:
     bool hasBuildInfo(KDevelop::ProjectBaseItem* item) const override;
 
     KDevelop::Path buildDirectory(KDevelop::ProjectBaseItem*) const override;
+    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const override;
 
-    // fill if&when we have targets
-    QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const override { return {}; }
-
-    // you can ignore these for now I guess, but TODO
+    // Not sure when/if these will be implemented. This would require modifying meson files. Regardless: TODO
     KDevelop::ProjectTargetItem* createTarget(const QString& /*target*/,
                                               KDevelop::ProjectFolderItem* /*parent*/) override
     {
@@ -112,6 +111,7 @@ private:
     QHash<KDevelop::IProject*, MESON_TGT_PTR> m_projectTargets;
 
     MESON_SOURCE sourceFromItem(KDevelop::ProjectBaseItem* item) const;
+    void populateTargets(KDevelop::ProjectFolderItem *item, QVector<MesonTarget *> targets);
 };
 
 #endif

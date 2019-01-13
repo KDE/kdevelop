@@ -83,7 +83,7 @@ public:
     QString name() const;
     QString type() const;
     KDevelop::Path definedIn() const;
-    QStringList filename() const;
+    KDevelop::Path::List filename() const;
     bool buildByDefault() const;
     bool installed() const;
 
@@ -95,7 +95,7 @@ private:
     QString m_name;
     QString m_type;
     KDevelop::Path m_definedIn;
-    QStringList m_filename;
+    KDevelop::Path::List m_filename;
     bool m_buildByDefault;
     bool m_installed;
 

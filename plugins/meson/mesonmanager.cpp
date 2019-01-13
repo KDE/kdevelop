@@ -25,6 +25,7 @@
 #include "mesontargets.h"
 #include "settings/mesonconfigpage.h"
 #include "settings/mesonnewbuilddir.h"
+#include <algorithm>
 #include <interfaces/iproject.h>
 #include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
@@ -39,10 +40,38 @@
 #include "debug.h"
 
 using namespace KDevelop;
+using namespace std;
 
 static const QString GENERATOR_NINJA = QStringLiteral("ninja");
 
 K_PLUGIN_FACTORY_WITH_JSON(MesonSupportFactory, "kdevmesonmanager.json", registerPlugin<MesonManager>();)
+
+// ***********************************
+// * Meson specific executable class *
+// ***********************************
+
+class MesonProjectExecutableTargetItem final : public ProjectExecutableTargetItem
+{
+public:
+    MesonProjectExecutableTargetItem(IProject* project, const QString& name, ProjectBaseItem* parent, Path buildPath,
+                                     Path installPath = Path())
+        : ProjectExecutableTargetItem(project, name, parent)
+        , m_buildPath(buildPath)
+        , m_installPath(installPath)
+    {
+    }
+
+    QUrl builtUrl() const override { return m_buildPath.toUrl(); }
+    QUrl installedUrl() const override { return m_installPath.toUrl(); }
+
+private:
+    Path m_buildPath;
+    Path m_installPath;
+};
+
+// ***************
+// * Constructor *
+// ***************
 
 MesonManager::MesonManager(QObject* parent, const QVariantList& args)
     : AbstractFileManagerPlugin(QStringLiteral("KDevMesonManager"), parent, args)
@@ -80,6 +109,53 @@ ProjectFolderItem* MesonManager::createFolderItem(IProject* project, const Path&
 // * IBuildSystemManager API *
 // ***************************
 
+void MesonManager::populateTargets(ProjectFolderItem* item, QVector<MesonTarget*> targets)
+{
+    // Remove all old targets
+    for (ProjectTargetItem* i : item->targetList()) {
+        delete i;
+    }
+
+    // Add the new targets
+    auto dirPath = item->path();
+    for (MesonTarget* i : targets) {
+        if (!dirPath.isDirectParentOf(i->definedIn())) {
+            continue;
+        }
+
+        if (i->type().contains(QStringLiteral("executable"))) {
+            auto outFiles = i->filename();
+            Path outFile;
+            if (outFiles.size() > 0) {
+                outFile = outFiles[0];
+            }
+            new MesonProjectExecutableTargetItem(item->project(), i->name(), item, outFile);
+        } else if (i->type().contains(QStringLiteral("library"))) {
+            new ProjectLibraryTargetItem(item->project(), i->name(), item);
+        } else {
+            new ProjectTargetItem(item->project(), i->name(), item);
+        }
+    }
+
+    // Recurse
+    for (ProjectFolderItem* i : item->folderList()) {
+        QVector<MesonTarget*> filteredTargets;
+        copy_if(begin(targets), end(targets), back_inserter(filteredTargets),
+                [i](MesonTarget* t) -> bool { return i->path().isParentOf(t->definedIn()); });
+        populateTargets(i, filteredTargets);
+    }
+}
+
+QList<ProjectTargetItem*> MesonManager::targets(ProjectFolderItem* item) const
+{
+    Q_ASSERT(item);
+    QList<ProjectTargetItem*> res = item->targetList();
+    for (ProjectFolderItem* i : item->folderList()) {
+        res << targets(i);
+    }
+    return res;
+}
+
 KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 {
     IProject* project = item->project();
@@ -87,19 +163,25 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
     auto introJob = new MesonIntrospectJob(project->path(), buildDir, { MesonIntrospectJob::TARGETS },
                                            MesonIntrospectJob::BUILD_DIR, this);
 
-    connect(introJob, &KJob::result, this, [this, introJob, project]() {
+    connect(introJob, &KJob::result, this, [this, introJob, item, project]() {
         auto targets = introJob->targets();
         if (!targets) {
-            qCWarning(KDEV_Meson) << "Failed to import targets from project" << project->name();
             return;
         }
+
         m_projectTargets[project] = targets;
+        auto tgtList = targets->targets();
+        QVector<MesonTarget*> tgtCopy;
+        tgtCopy.reserve(tgtList.size());
+        transform(begin(tgtList), end(tgtList), back_inserter(tgtCopy), [](auto const& a) { return a.get(); });
+
+        populateTargets(item, tgtCopy);
     });
 
     const QList<KJob*> jobs = {
         builder()->configure(project), // Make sure the project is configured
-        introJob, // Load targets from the build directory introspection files
-        AbstractFileManagerPlugin::createImportJob(item) // generate the file system listing
+        AbstractFileManagerPlugin::createImportJob(item), // generate the file system listing
+        introJob // Load targets from the build directory introspection files
     };
 
     Q_ASSERT(!jobs.contains(nullptr));
