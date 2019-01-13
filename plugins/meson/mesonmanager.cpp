@@ -21,7 +21,6 @@
 #include "mesonmanager.h"
 #include "mesonbuilder.h"
 #include "mesonconfig.h"
-#include "mesonimportjob.h"
 #include "settings/mesonconfigpage.h"
 #include "settings/mesonnewbuilddir.h"
 #include <interfaces/iproject.h>
@@ -82,18 +81,9 @@ ProjectFolderItem* MesonManager::createFolderItem(IProject* project, const Path&
 KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 {
     auto project = item->project();
-    auto job = new MesonImportJob(this, project, this);
-
-    connect(job, &KJob::result, this, [this, job, project]() {
-        if (job->error() != 0) {
-            qCWarning(KDEV_Meson) << "couldn't load project successfully" << project->name();
-            m_projects.remove(project);
-        }
-    });
 
     const QList<KJob*> jobs = {
         builder()->configure(project), // Make sure the project is configured
-        job, // Import the compile_commands.json file
         AbstractFileManagerPlugin::createImportJob(item) // generate the file system listing
     };
 
@@ -166,11 +156,6 @@ Path MesonManager::findMeson() const
     }
 
     return Path(mesonPath);
-}
-
-void MesonManager::setProjectData(IProject* project, const QJsonObject& data)
-{
-    m_projects[project] = data;
 }
 
 ConfigPage* MesonManager::perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent)

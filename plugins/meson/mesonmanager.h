@@ -52,8 +52,6 @@ public:
 
     KDevelop::Path findMeson() const;
 
-    void setProjectData(KDevelop::IProject* project, const QJsonObject& data);
-
     // *********************************
     // * AbstractFileManagerPlugin API *
     // *********************************
@@ -106,7 +104,6 @@ public:
 
 private:
     MesonBuilder* m_builder;
-    QHash<KDevelop::IProject*, QJsonObject> m_projects;
 };
 
 #endif

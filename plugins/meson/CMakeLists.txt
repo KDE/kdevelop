@@ -4,7 +4,6 @@ set(mesonbuilder_SRCS
     mesonbuilder.cpp
     mesonconfig.cpp
     mesonintrospectjob.cpp
-    mesonimportjob.cpp
     mesonjob.cpp
     mesonjobprune.cpp
     mesonmanager.cpp
