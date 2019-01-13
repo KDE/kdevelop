@@ -9,6 +9,7 @@ set(mesonbuilder_SRCS
     mesonjobprune.cpp
     mesonmanager.cpp
     mesonoptions.cpp
+    mesontargets.cpp
 
     settings/mesonadvancedsettings.cpp
     settings/mesonconfigpage.cpp

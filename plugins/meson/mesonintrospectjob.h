@@ -21,6 +21,7 @@
 
 #include "mesonconfig.h"
 #include "mesonoptions.h"
+#include "mesontargets.h"
 #include <QFutureWatcher>
 #include <interfaces/iproject.h>
 #include <kjob.h>
@@ -48,6 +49,7 @@ public:
     QString getTypeString(Type type) const;
 
     MESON_OPT_PTR buildOptions();
+    MESON_TGT_PTR targets();
 
 private:
     QString importJSONFile(Meson::BuildDir const& buildDir, Type type, QJsonObject* out);
@@ -65,4 +67,5 @@ private:
 
     // The results
     MESON_OPT_PTR m_res_options = nullptr;
+    MESON_TGT_PTR m_res_targets = nullptr;
 };

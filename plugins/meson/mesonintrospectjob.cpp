@@ -211,6 +211,11 @@ QString MesonIntrospectJob::import(BuildDir buildDir)
         }
     }
 
+    auto targetsJSON = rawData[QStringLiteral("targets")];
+    if (targetsJSON.isArray()) {
+        m_res_targets = std::make_shared<MesonTargets>(targetsJSON.toArray());
+    }
+
     return QStringLiteral("");
 }
 
@@ -246,4 +251,9 @@ bool MesonIntrospectJob::doKill()
 MESON_OPT_PTR MesonIntrospectJob::buildOptions()
 {
     return m_res_options;
+}
+
+MESON_TGT_PTR MesonIntrospectJob::targets()
+{
+    return m_res_targets;
 }
