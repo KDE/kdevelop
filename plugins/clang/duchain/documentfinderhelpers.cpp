@@ -179,8 +179,10 @@ QStringList mimeTypesList()
     static const QStringList mimeTypes = {
         QStringLiteral("text/x-chdr"),
         QStringLiteral("text/x-c++hdr"),
+        QStringLiteral("text/vnd.nvidia.cuda.chdr"),
         QStringLiteral("text/x-csrc"),
         QStringLiteral("text/x-c++src"),
+        QStringLiteral("text/vnd.nvidia.cuda.csrc"),
         QStringLiteral("text/x-objcsrc")
     };
     return mimeTypes;

@@ -181,11 +181,10 @@ ClangSupport::ClangSupport(QObject* parent, const QVariantList& )
 
     {
         const auto builtinDir = ClangHelpers::clangBuiltinIncludePath();
-        const auto headerToCheck = QLatin1String("cpuid.h");
-        if (!QFile::exists(builtinDir + QLatin1Char('/') + headerToCheck)) {
-            setErrorDescription(i18n("The clang builtin include path \"%1\" is invalid (missing %2 header).\n"
+        if (!ClangHelpers::isValidClangBuiltingIncludePath(builtinDir)) {
+            setErrorDescription(i18n("The clang builtin include path \"%1\" is invalid (missing cpuid.h header).\n"
                                      "Try setting the KDEV_CLANG_BUILTIN_DIR environment variable manually to fix this.\n"
-                                     "See also: https://bugs.kde.org/show_bug.cgi?id=393779", builtinDir, headerToCheck));
+                                     "See also: https://bugs.kde.org/show_bug.cgi?id=393779", builtinDir));
             return;
         }
     }

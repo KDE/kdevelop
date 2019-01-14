@@ -104,10 +104,19 @@ KDEVCLANGPRIVATE_EXPORT QString clangVersion();
 
 /**
  * @return The path containing Clang built includes (e.g. stddef.h, stdarg.h, cpuid.h)
+ * The returned path is the env. var KDEV_CLANG_BUILTIN_DIR when set otherwise the path
+ * to the headers used when kdev-clang was built, possibly updated for  upgrades to
+ * the library (e.g. 7.0.0 -> 7.0.1).
+ * Returns an empty string if none of the checked locations contain the file cpuid.h .
  *
  * Also see: https://clang.llvm.org/docs/FAQ.html
  */
 KDEVCLANGPRIVATE_EXPORT QString clangBuiltinIncludePath();
+
+/**
+ * @return True if the given @a path is a valid clang builtin directory.
+ */
+KDEVCLANGPRIVATE_EXPORT bool isValidClangBuiltingIncludePath(const QString& path);
 
 }
 
