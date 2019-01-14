@@ -2,6 +2,7 @@
     "KPlugin": {
         "Category": "Project Management",
         "Description": "Imports and edits Meson projects",
+        "Description[ca@valencia]": "Importa i edita projectes del Meson",
         "Description[ca]": "Importa i edita projectes del Meson",
         "Description[es]": "Importa y edita proyectos Meson",
         "Description[nl]": "Importeert en bewerkt Meson-projecten",
@@ -12,6 +13,7 @@
         "Icon": "meson",
         "Id": "KDevMesonManager",
         "Name": "Meson Project Manager",
+        "Name[ca@valencia]": "Gestor de projectes Meson",
         "Name[ca]": "Gestor de projectes Meson",
         "Name[es]": "Gestor de proyectos Meson",
         "Name[nl]": "Meson projectbeheerder",
