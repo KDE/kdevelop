@@ -34,7 +34,7 @@ class CMakeServerImportJob : public KJob
 {
     Q_OBJECT
 public:
-    CMakeServerImportJob(KDevelop::IProject* project, CMakeServer* server, QObject* parent);
+    CMakeServerImportJob(KDevelop::IProject* project, const QSharedPointer<CMakeServer> &server, QObject* parent);
 
     enum Error { NoError, UnexpectedDisconnect, ErrorResponse };
 

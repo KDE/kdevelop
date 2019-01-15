@@ -160,7 +160,7 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
     }
 }
 
-CMakeServerImportJob::CMakeServerImportJob(KDevelop::IProject* project, CMakeServer* server, QObject* parent)
+CMakeServerImportJob::CMakeServerImportJob(KDevelop::IProject* project, const QSharedPointer<CMakeServer> &server, QObject* parent)
     : KJob(parent)
     , m_server(server)
     , m_project(project)
