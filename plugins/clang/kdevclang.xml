@@ -64,6 +64,7 @@
         <comment xml:lang="ca@valencia">Capçalera en C per a CUDA de NVIDIA</comment>
         <comment xml:lang="es">Cabecera de NVIDIA CUDA C</comment>
         <comment xml:lang="nl">NVIDIA CUDA C header</comment>
+        <comment xml:lang="pl">Nagłówek NVIDIA CUDA C</comment>
         <comment xml:lang="pt">Ficheiro de inclusão em CUDA C da NVIDIA</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-deklarationsfil</comment>
         <comment xml:lang="uk">файл заголовків C NVIDIA CUDA</comment>
