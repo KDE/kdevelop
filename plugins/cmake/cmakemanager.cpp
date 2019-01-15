@@ -149,9 +149,9 @@ public:
     }
 
     void start() override {
-        server = new CMakeServer(project);
-        connect(server, &CMakeServer::connected, this, &ChooseCMakeInterfaceJob::successfulConnection);
-        connect(server, &CMakeServer::finished, this, &ChooseCMakeInterfaceJob::failedConnection);
+        server.reset(new CMakeServer(project));
+        connect(server.data(), &CMakeServer::connected, this, &ChooseCMakeInterfaceJob::successfulConnection);
+        connect(server.data(), &CMakeServer::finished, this, &ChooseCMakeInterfaceJob::failedConnection);
     }
 
 private:
@@ -192,7 +192,7 @@ private:
         ExecuteCompositeJob::start();
     }
 
-    CMakeServer* server = nullptr;
+    QSharedPointer<CMakeServer> server;
     IProject* const project;
     CMakeManager* const manager;
 };

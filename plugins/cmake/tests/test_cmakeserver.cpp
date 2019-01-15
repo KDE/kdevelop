@@ -63,7 +63,7 @@ private Q_SLOTS:
 
     void testRun()
     {
-        CMakeServer server(this);
+        CMakeServer server(nullptr);
         QSignalSpy spyConnected(&server, &CMakeServer::connected);
         QVERIFY(server.isServerAvailable() || spyConnected.wait());
 

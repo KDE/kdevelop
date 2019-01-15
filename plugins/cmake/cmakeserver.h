@@ -26,11 +26,13 @@
 #include <QLocalSocket>
 #include "cmakecommonexport.h"
 
+namespace KDevelop { class IProject; }
+
 class KDEVCMAKECOMMON_EXPORT CMakeServer : public QObject
 {
 Q_OBJECT
 public:
-    explicit CMakeServer(QObject* parent = nullptr);
+    explicit CMakeServer(KDevelop::IProject* project);
     ~CMakeServer() override;
 
     bool isServerAvailable();
