@@ -202,7 +202,7 @@ IProjectBuilder* MesonManager::builder() const
     return m_builder;
 }
 
-MESON_SOURCE MesonManager::sourceFromItem(KDevelop::ProjectBaseItem* item) const
+MesonSourcePtr MesonManager::sourceFromItem(KDevelop::ProjectBaseItem* item) const
 {
     Q_ASSERT(item);
     auto it = m_projectTargets.find(item->project());

@@ -38,7 +38,7 @@ class MesonOptionBaseView : public QWidget
     Q_OBJECT
 
 public:
-    explicit MesonOptionBaseView(OPT_PTR option, QWidget* parent);
+    explicit MesonOptionBaseView(MesonOptionPtr option, QWidget* parent);
     virtual ~MesonOptionBaseView();
 
     int nameWidth();
@@ -67,7 +67,7 @@ class MesonOptionArrayView : public MesonOptionBaseView
     Q_OBJECT
 
 public:
-    MesonOptionArrayView(OPT_PTR option, QWidget* parent);
+    MesonOptionArrayView(MesonOptionPtr option, QWidget* parent);
 
     MesonOptionBase* option() override;
     void updateInput() override;
@@ -82,7 +82,7 @@ class MesonOptionBoolView : public MesonOptionBaseView
     Q_OBJECT
 
 public:
-    MesonOptionBoolView(OPT_PTR option, QWidget* parent);
+    MesonOptionBoolView(MesonOptionPtr option, QWidget* parent);
 
     MesonOptionBase* option() override;
     void updateInput() override;
@@ -100,7 +100,7 @@ class MesonOptionComboView : public MesonOptionBaseView
     Q_OBJECT
 
 public:
-    MesonOptionComboView(OPT_PTR option, QWidget* parent);
+    MesonOptionComboView(MesonOptionPtr option, QWidget* parent);
 
     MesonOptionBase* option() override;
     void updateInput() override;
@@ -118,7 +118,7 @@ class MesonOptionIntegerView : public MesonOptionBaseView
     Q_OBJECT
 
 public:
-    MesonOptionIntegerView(OPT_PTR option, QWidget* parent);
+    MesonOptionIntegerView(MesonOptionPtr option, QWidget* parent);
 
     MesonOptionBase* option() override;
     void updateInput() override;
@@ -136,7 +136,7 @@ class MesonOptionStringView : public MesonOptionBaseView
     Q_OBJECT
 
 public:
-    MesonOptionStringView(OPT_PTR option, QWidget* parent);
+    MesonOptionStringView(MesonOptionPtr option, QWidget* parent);
 
     MesonOptionBase* option() override;
     void updateInput() override;

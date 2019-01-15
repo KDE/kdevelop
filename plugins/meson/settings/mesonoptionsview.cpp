@@ -158,7 +158,7 @@ void MesonOptionsView::emitChanged()
     emit configChanged();
 }
 
-MESON_OPT_PTR MesonOptionsView::options()
+MesonOptsPtr MesonOptionsView::options()
 {
     return m_options;
 }

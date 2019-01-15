@@ -302,7 +302,7 @@ bool MesonOptionBase::isUpdated() const
     return value() != initialValue();
 }
 
-OPT_PTR MesonOptionBase::fromJSON(const QJsonObject& obj)
+MesonOptionPtr MesonOptionBase::fromJSON(const QJsonObject& obj)
 {
     auto nameJV = obj[QStringLiteral("name")];
     auto descriptionJV = obj[QStringLiteral("description")];
@@ -431,7 +431,7 @@ void MesonOptions::print() const
     }
 }
 
-QVector<OPT_PTR> MesonOptions::options()
+QVector<MesonOptionPtr> MesonOptions::options()
 {
     return m_options;
 }

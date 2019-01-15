@@ -29,8 +29,8 @@ class QWidget;
 class MesonOptionBase;
 class MesonOptions;
 
-using OPT_PTR = std::shared_ptr<MesonOptionBase>;
-using MESON_OPT_PTR = std::shared_ptr<MesonOptions>;
+using MesonOptionPtr = std::shared_ptr<MesonOptionBase>;
+using MesonOptsPtr = std::shared_ptr<MesonOptions>;
 
 /*!
  * Base class for a single meson option.
@@ -57,7 +57,7 @@ public:
     QString mesonArg() const;
     bool isUpdated() const;
 
-    static OPT_PTR fromJSON(QJsonObject const& obj);
+    static MesonOptionPtr fromJSON(QJsonObject const& obj);
 
 private:
     QString m_name;
@@ -169,10 +169,10 @@ public:
     QStringList getMesonArgs() const;
     void print() const;
 
-    QVector<OPT_PTR> options();
+    QVector<MesonOptionPtr> options();
 
 private:
-    QVector<OPT_PTR> m_options;
+    QVector<MesonOptionPtr> m_options;
 
     void fromJSON(QJsonArray const& arr);
 };

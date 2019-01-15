@@ -55,7 +55,7 @@ private:
     QWidget* m_widget = nullptr;
 };
 
-MesonOptionBaseView::MesonOptionBaseView(OPT_PTR option, QWidget* parent)
+MesonOptionBaseView::MesonOptionBaseView(MesonOptionPtr option, QWidget* parent)
     : QWidget(parent)
 {
     Q_ASSERT(option);
@@ -130,7 +130,7 @@ void MesonOptionBaseView::setChanged(bool changed)
 
 // Derived class constructors
 
-MesonOptionArrayView::MesonOptionArrayView(OPT_PTR option, QWidget* parent)
+MesonOptionArrayView::MesonOptionArrayView(MesonOptionPtr option, QWidget* parent)
     : MesonOptionBaseView(option, parent)
     , m_option(dynamic_pointer_cast<MesonOptionArray>(option))
 {
@@ -148,7 +148,7 @@ MesonOptionArrayView::MesonOptionArrayView(OPT_PTR option, QWidget* parent)
     setInputWidget(m_input);
 }
 
-MesonOptionBoolView::MesonOptionBoolView(OPT_PTR option, QWidget* parent)
+MesonOptionBoolView::MesonOptionBoolView(MesonOptionPtr option, QWidget* parent)
     : MesonOptionBaseView(option, parent)
     , m_option(dynamic_pointer_cast<MesonOptionBool>(option))
 {
@@ -159,7 +159,7 @@ MesonOptionBoolView::MesonOptionBoolView(OPT_PTR option, QWidget* parent)
     setInputWidget(m_input);
 }
 
-MesonOptionComboView::MesonOptionComboView(OPT_PTR option, QWidget* parent)
+MesonOptionComboView::MesonOptionComboView(MesonOptionPtr option, QWidget* parent)
     : MesonOptionBaseView(option, parent)
     , m_option(dynamic_pointer_cast<MesonOptionCombo>(option))
 {
@@ -173,7 +173,7 @@ MesonOptionComboView::MesonOptionComboView(OPT_PTR option, QWidget* parent)
     setInputWidget(m_input);
 }
 
-MesonOptionIntegerView::MesonOptionIntegerView(OPT_PTR option, QWidget* parent)
+MesonOptionIntegerView::MesonOptionIntegerView(MesonOptionPtr option, QWidget* parent)
     : MesonOptionBaseView(option, parent)
     , m_option(dynamic_pointer_cast<MesonOptionInteger>(option))
 {
@@ -186,7 +186,7 @@ MesonOptionIntegerView::MesonOptionIntegerView(OPT_PTR option, QWidget* parent)
     setInputWidget(m_input);
 }
 
-MesonOptionStringView::MesonOptionStringView(OPT_PTR option, QWidget* parent)
+MesonOptionStringView::MesonOptionStringView(MesonOptionPtr option, QWidget* parent)
     : MesonOptionBaseView(option, parent)
     , m_option(dynamic_pointer_cast<MesonOptionString>(option))
 {

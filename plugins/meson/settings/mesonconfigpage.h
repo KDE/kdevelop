@@ -67,5 +67,5 @@ private:
     Meson::BuildDir m_current;
     bool m_configChanged = false;
 
-    MESON_OPT_PTR m_options = nullptr;
+    MesonOptsPtr m_options = nullptr;
 };

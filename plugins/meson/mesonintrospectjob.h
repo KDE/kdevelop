@@ -48,8 +48,8 @@ public:
 
     QString getTypeString(Type type) const;
 
-    MESON_OPT_PTR buildOptions();
-    MESON_TGT_PTR targets();
+    MesonOptsPtr buildOptions();
+    MesonTargetsPtr targets();
 
 private:
     QString importJSONFile(Meson::BuildDir const& buildDir, Type type, QJsonObject* out);
@@ -66,6 +66,6 @@ private:
     KDevelop::Path m_projectPath;
 
     // The results
-    MESON_OPT_PTR m_res_options = nullptr;
-    MESON_TGT_PTR m_res_targets = nullptr;
+    MesonOptsPtr m_res_options = nullptr;
+    MesonTargetsPtr m_res_targets = nullptr;
 };

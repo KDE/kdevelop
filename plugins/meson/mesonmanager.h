@@ -31,8 +31,8 @@ class MesonTarget;
 class MesonTargets;
 class MesonTargetSources;
 
-using MESON_SOURCE = std::shared_ptr<MesonTargetSources>;
-using MESON_TGT_PTR = std::shared_ptr<MesonTargets>;
+using MesonSourcePtr = std::shared_ptr<MesonTargetSources>;
+using MesonTargetsPtr = std::shared_ptr<MesonTargets>;
 
 class MesonManager : public KDevelop::AbstractFileManagerPlugin, public KDevelop::IBuildSystemManager
 {
@@ -108,9 +108,9 @@ public:
 
 private:
     MesonBuilder* m_builder;
-    QHash<KDevelop::IProject*, MESON_TGT_PTR> m_projectTargets;
+    QHash<KDevelop::IProject*, MesonTargetsPtr> m_projectTargets;
 
-    MESON_SOURCE sourceFromItem(KDevelop::ProjectBaseItem* item) const;
+    MesonSourcePtr sourceFromItem(KDevelop::ProjectBaseItem* item) const;
     void populateTargets(KDevelop::ProjectFolderItem *item, QVector<MesonTarget *> targets);
 };
 

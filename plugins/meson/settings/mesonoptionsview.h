@@ -59,7 +59,7 @@ public:
     KJob* repopulateFromBuildDir(KDevelop::Path projectPath, Meson::BuildDir const& buildDir);
     KJob* repopulateFromMesonFile(KDevelop::Path projectPath, KDevelop::Path mesonExe);
 
-    MESON_OPT_PTR options();
+    MesonOptsPtr options();
 
 public Q_SLOTS:
     void emitChanged();
@@ -70,7 +70,7 @@ Q_SIGNALS:
 private:
     Ui::MesonOptionsView* m_ui = nullptr;
     QVector<OPT_VIEW_PTR> m_optViews;
-    MESON_OPT_PTR m_options;
+    MesonOptsPtr m_options;
 
     KJob* repopulate(MesonIntrospectJob* introJob);
 };

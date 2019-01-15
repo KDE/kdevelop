@@ -179,7 +179,7 @@ bool MesonTarget::installed() const
     return m_installed;
 }
 
-MESON_SOURCES MesonTarget::targetSources()
+QVector<MesonSourcePtr> MesonTarget::targetSources()
 {
     return m_targetSources;
 }
@@ -211,12 +211,12 @@ MesonTargets::MesonTargets(const QJsonArray& json)
 
 MesonTargets::~MesonTargets() {}
 
-MESON_TARGETS MesonTargets::targets()
+QVector<MesonTargetPtr> MesonTargets::targets()
 {
     return m_targets;
 }
 
-MESON_SOURCE MesonTargets::fileSource(KDevelop::Path p)
+MesonSourcePtr MesonTargets::fileSource(KDevelop::Path p)
 {
     auto it = m_sourceHash.find(p);
     if (it == end(m_sourceHash)) {
@@ -226,7 +226,7 @@ MESON_SOURCE MesonTargets::fileSource(KDevelop::Path p)
     return *it;
 }
 
-MESON_SOURCE MesonTargets::operator[](KDevelop::Path p)
+MesonSourcePtr MesonTargets::operator[](KDevelop::Path p)
 {
     return fileSource(p);
 }

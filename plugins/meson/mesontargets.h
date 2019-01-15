@@ -30,12 +30,9 @@ class MesonTarget;
 class MesonTargets;
 class MesonTargetSources;
 
-using MESON_SOURCE = std::shared_ptr<MesonTargetSources>;
-using MESON_SOURCES = QVector<MESON_SOURCE>;
-using MESON_TARGET = std::shared_ptr<MesonTarget>;
-using MESON_TARGETS = QVector<MESON_TARGET>;
-
-using MESON_TGT_PTR = std::shared_ptr<MesonTargets>;
+using MesonSourcePtr = std::shared_ptr<MesonTargetSources>;
+using MesonTargetPtr = std::shared_ptr<MesonTarget>;
+using MesonTargetsPtr = std::shared_ptr<MesonTargets>;
 
 class MesonTargetSources
 {
@@ -87,7 +84,7 @@ public:
     bool buildByDefault() const;
     bool installed() const;
 
-    MESON_SOURCES targetSources();
+    QVector<MesonSourcePtr> targetSources();
 
     void fromJSON(QJsonObject const& json);
 
@@ -99,7 +96,7 @@ private:
     bool m_buildByDefault;
     bool m_installed;
 
-    MESON_SOURCES m_targetSources;
+    QVector<MesonSourcePtr> m_targetSources;
 };
 
 class MesonTargets
@@ -108,16 +105,16 @@ public:
     explicit MesonTargets(QJsonArray const& json);
     virtual ~MesonTargets();
 
-    MESON_TARGETS targets();
+    QVector<MesonTargetPtr> targets();
 
-    MESON_SOURCE fileSource(KDevelop::Path p);
-    MESON_SOURCE operator[](KDevelop::Path p);
+    MesonSourcePtr fileSource(KDevelop::Path p);
+    MesonSourcePtr operator[](KDevelop::Path p);
 
     void fromJSON(QJsonArray const& json);
 
 private:
-    MESON_TARGETS m_targets;
-    QHash<KDevelop::Path, MESON_SOURCE> m_sourceHash;
+    QVector<MesonTargetPtr> m_targets;
+    QHash<KDevelop::Path, MesonSourcePtr> m_sourceHash;
 
     void buildHashMap();
 };
