@@ -10,9 +10,6 @@
     <height>700</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string/>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="hl_buildDir">
