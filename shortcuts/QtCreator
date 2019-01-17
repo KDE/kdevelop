@@ -38,7 +38,7 @@
     <Action shortcut="Down" name="move_line_down"/>
     <Action shortcut="Up" name="move_line_up"/>
     <Action shortcut="Right" name="move_cursor_right"/>
-    <Action shortcut="Left" name="move_cusor_left"/>
+    <Action shortcut="Left" name="move_cursor_left"/>
     <Action shortcut="Shift+Down" name="select_line_down"/>
     <Action shortcut="PgUp" name="scroll_page_up"/>
     <Action shortcut="Shift+PgUp" name="select_page_up"/>
