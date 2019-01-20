@@ -169,7 +169,7 @@ MesonOptionComboView::MesonOptionComboView(MesonOptionPtr option, QWidget* paren
     m_input->clear();
     m_input->addItems(m_option->choices());
     m_input->setEditable(false);
-    connect(m_input, qOverload<int>(&QComboBox::currentIndexChanged), this, &MesonOptionComboView::updated);
+    connect(m_input, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MesonOptionComboView::updated);
     setInputWidget(m_input);
 }
 
@@ -182,7 +182,7 @@ MesonOptionIntegerView::MesonOptionIntegerView(MesonOptionPtr option, QWidget* p
     m_input = new QSpinBox(this);
     m_input->setMinimum(INT32_MIN);
     m_input->setMaximum(INT32_MAX);
-    connect(m_input, qOverload<int>(&QSpinBox::valueChanged), this, &MesonOptionIntegerView::updated);
+    connect(m_input, QOverload<int>::of(&QSpinBox::valueChanged), this, &MesonOptionIntegerView::updated);
     setInputWidget(m_input);
 }
 
