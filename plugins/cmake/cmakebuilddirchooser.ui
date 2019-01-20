@@ -79,6 +79,12 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>The prefix under which the project will be installed. Leaving this empty will let CMake use its default install prefix.</string>
+     </property>
+     <property name="placeholderText">
+      <string>CMake's default install prefix</string>
+     </property>
     </widget>
    </item>
    <item row="4" column="0">

@@ -187,6 +187,7 @@ install(FILES
     problemmodel.h
     problemmodelset.h
     problemconstants.h
+    problemstore.h
     filteredproblemstore.h
     DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/shell COMPONENT Devel
 )

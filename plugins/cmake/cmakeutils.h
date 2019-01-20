@@ -116,7 +116,8 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project, int builddir = -1);
 
     /**
-     * @returns the current install dir for the given project or "/usr/local" as default value.
+     * @returns the current install dir for the given project or an empty string if none has been defined
+     * (in that case, whatever default CMake sets for the platform will be used.)
      */
     KDEVCMAKECOMMON_EXPORT KDevelop::Path currentInstallDir( KDevelop::IProject* project, int builddir = -1 );
     
