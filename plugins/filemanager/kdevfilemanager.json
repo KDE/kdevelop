@@ -50,6 +50,7 @@
         "Description[uk]": "За допомогою цього додатка можна отримати доступ до менеджера файлів у KDevelop.",
         "Description[x-test]": "xxThis plugin brings a filemanager to KDevelop.xx",
         "Description[zh_CN]": "此插件为 KDevelop 提供了一个文件管理器。",
+        "Description[zh_TW]": "此外掛程式讓 KDevelop 可使用檔案管理員。",
         "Icon": "system-file-manager",
         "Id": "kdevfilemanager",
         "License": "GPL",

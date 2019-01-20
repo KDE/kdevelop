@@ -50,6 +50,7 @@
         "Description[uk]": "Майстер створення програм",
         "Description[x-test]": "xxApplication Wizardxx",
         "Description[zh_CN]": "应用程序向导",
+        "Description[zh_TW]": "應用程式精靈",
         "Icon": "project-development-new-template",
         "Id": "kdevappwizard",
         "License": "GPL",

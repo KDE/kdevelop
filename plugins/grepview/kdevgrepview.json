@@ -23,6 +23,7 @@
         "Description[uk]": "Надає можливості швидкого пошуку та заміни у декількох файлів на основі шаблонів або формальних виразів.",
         "Description[x-test]": "xxAllows fast searching of multiple files using patterns or regular expressions. And allow to replace it too.xx",
         "Description[zh_CN]": "可以用模式或正则表达式快速搜索多个文件，还可以替换。",
+        "Description[zh_TW]": "允許使用樣式或正規表示式來快速搜尋與取代多個檔案。",
         "Icon": "kfind",
         "Id": "kdevgrepview",
         "Name": "Find/Replace In Files",

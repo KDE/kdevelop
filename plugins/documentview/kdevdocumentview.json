@@ -49,6 +49,7 @@
         "Description[uk]": "Цей додаток відображає у графічному вигляді всі відкриті документи і впорядковує їх за типом MIME.",
         "Description[x-test]": "xxThis plugin displays a graphical view of all documents currently loaded and separates them by mimetype.xx",
         "Description[zh_CN]": "此插件显示当前已装入文档的图形视图并按照 mime 类型分类。",
+        "Description[zh_TW]": "這個外掛程式顯示目前載入並依 MIME 型態分類的文件的圖形檢視。",
         "Icon": "document-preview",
         "Id": "kdevdocumentview",
         "License": "LGPL",

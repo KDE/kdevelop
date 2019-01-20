@@ -52,6 +52,7 @@
         "Description[uk]": "За допомогою цього додатка забезпечується інтеграція між проектами та інфраструктурою системи керування версіями (VCS)",
         "Description[x-test]": "xxThis plugin provides integration between the projects and their VCS infrastructurexx",
         "Description[zh_CN]": "此插件提供工程和它们的代码管理系统的集成",
+        "Description[zh_TW]": "此外掛程式提供專案與它們之間版本控制系統基礎間的整合",
         "Icon": "kdevelop",
         "Id": "kdevvcschangesviewplugin",
         "License": "GPL",

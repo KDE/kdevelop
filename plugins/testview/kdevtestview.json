@@ -49,6 +49,7 @@
         "Description[uk]": "Надає вам змогу переглядати і виконувати перевірки модулів.",
         "Description[x-test]": "xxLets you see and run unit tests.xx",
         "Description[zh_CN]": "让您查看并运行单元测试。",
+        "Description[zh_TW]": "讓您查看並執行單元測試。",
         "Icon": "preflight-verifier",
         "Id": "kdevtestview",
         "License": "GPL",

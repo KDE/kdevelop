@@ -50,6 +50,7 @@
         "Description[uk]": "Керування шаблонами для початкових файлів коду",
         "Description[x-test]": "xxManages templates for source filesxx",
         "Description[zh_CN]": "管理源文件的模板",
+        "Description[zh_TW]": "管理源碼檔的樣本",
         "Icon": "code-class",
         "Id": "kdevfiletemplates",
         "License": "GPL",
