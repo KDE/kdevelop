@@ -419,9 +419,11 @@ void AbstractDeclarationNavigationContext::htmlFunction()
             first = false;
 
             eventuallyMakeTypeLinks(argType);
-            if (currentArgNum < decls.size()) {
+            // Must count from the back to skip possible template arguments before the function arguments.
+            int currentArgIndex = decls.size() - type->arguments().size() + currentArgNum;
+            if (currentArgIndex >= 0 && currentArgIndex < decls.size()) {
                 modifyHtml() += QLatin1Char(' ') + identifierHighlight(
-                    decls[currentArgNum]->identifier().toString().toHtmlEscaped(), d->m_declaration);
+                    decls[currentArgIndex]->identifier().toString().toHtmlEscaped(), d->m_declaration);
             }
 
             if (currentArgNum >= firstDefaultParam) {
