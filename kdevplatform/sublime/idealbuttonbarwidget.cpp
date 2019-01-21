@@ -80,7 +80,9 @@ public:
 private:
     bool eventFilter(QObject * watched, QEvent * event) override
     {
-        if (watched == m_dock->view()->widget() && event->type() == QEvent::EnabledChange) {
+        // an event may arrive when m_dock->view()->widget() is already destroyed
+        // so check for event type first.
+        if (event->type() == QEvent::EnabledChange && watched == m_dock->view()->widget()) {
             refreshText();
         }
 
