@@ -589,22 +589,10 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
     }
 
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
+    QVector<KDevelop::IProblem::Ptr> problems;
     if (topContext) {
         // first pass: find problems under the cursor
-        const auto problems = findProblemsUnderCursor(topContext, position, itemRange);
-        if (!problems.isEmpty()) {
-            if (problems == m_currentToolTipProblems && m_currentToolTip) {
-                return nullptr;
-            }
-
-            m_currentToolTipProblems = problems;
-
-            auto widget = new AbstractNavigationWidget;
-            auto context = new ProblemNavigationContext(problems);
-            context->setTopContext(TopDUContextPointer(topContext));
-            widget->setContext(NavigationContextPointer(context));
-            return widget;
-        }
+        problems = findProblemsUnderCursor(topContext, position, itemRange);
     }
 
     const auto itemUnderCursor = DUChainUtils::itemUnderCursor(viewUrl, position);
@@ -615,18 +603,56 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
         Q_ASSERT(alias);
         decl = alias->aliasedDeclaration().declaration();
     }
-    if (decl) {
-        if (m_currentToolTipDeclaration == IndexedDeclaration(decl) && m_currentToolTip)
-            return nullptr;
 
+    // Return nullptr if the correct contents are already shown.
+    if (m_currentToolTip &&
+        problems == m_currentToolTipProblems &&
+        (!decl || IndexedDeclaration(decl) == m_currentToolTipDeclaration)) {
+        return nullptr;
+    }
+
+    // Remember current state.
+    m_currentToolTipProblems = problems;
+    if (decl) {
         m_currentToolTipDeclaration = IndexedDeclaration(decl);
-        itemRange = itemUnderCursor.range;
-        return decl->context()->createNavigationWidget(decl, DUChainUtils::standardContextForUrl(viewUrl));
+    }
+
+    AbstractNavigationWidget* problemWidget = nullptr;
+    if (!problems.isEmpty()) {
+        problemWidget = new AbstractNavigationWidget;
+        auto context = new ProblemNavigationContext(problems);
+        context->setTopContext(TopDUContextPointer(topContext));
+        problemWidget->setContext(NavigationContextPointer(context));
+    }
+
+    QWidget* declWidget = nullptr;
+    if (decl) {
+        if (itemRange.isValid()) {
+            itemRange.expandToRange(itemUnderCursor.range);
+        } else {
+            itemRange = itemUnderCursor.range;
+        }
+        declWidget = decl->context()->createNavigationWidget(decl, DUChainUtils::standardContextForUrl(viewUrl));
+    }
+
+    if (problemWidget && declWidget) {
+        QWidget* combinedWidget = new QWidget();
+        QVBoxLayout* layout = new QVBoxLayout();
+        layout->setContentsMargins(2, 2, 2, 2);
+        layout->setSpacing(0);
+        layout->addWidget(problemWidget);
+        layout->addWidget(declWidget);
+        combinedWidget->setLayout(layout);
+        return combinedWidget;
+    } else if (problemWidget) {
+        return problemWidget;
+    } else if (declWidget) {
+        return declWidget;
     }
 
     if (topContext) {
         // second pass: find closest problem to the cursor
-        const auto problems = findProblemsCloseToCursor(topContext, position, view, itemRange);
+        problems = findProblemsCloseToCursor(topContext, position, view, itemRange);
         if (!problems.isEmpty()) {
             if (problems == m_currentToolTipProblems && m_currentToolTip) {
                 return nullptr;
