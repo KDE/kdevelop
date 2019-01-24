@@ -87,6 +87,8 @@ void AStyleFormatter::updateFormatter()
     AStyleFormatter::setLabelIndent(m_options[QStringLiteral("IndentLabels")].toBool());
     AStyleFormatter::setBlockIndent(m_options[QStringLiteral("IndentBlocks")].toBool());
     AStyleFormatter::setPreprocessorIndent(m_options[QStringLiteral("IndentPreprocessors")].toBool());
+    AStyleFormatter::setAfterParens(m_options[QStringLiteral("AfterParens")].toBool());
+    AStyleFormatter::setContinuation(m_options[QStringLiteral("Continuation")].toInt());
 
     // continuation
     AStyleFormatter::setMaxInStatementIndentLength(m_options[QStringLiteral("MaxStatement")].toInt());
@@ -162,6 +164,8 @@ void AStyleFormatter::resetStyle()
     setLabelIndent(true);
     setBlockIndent(false);
     setPreprocessorIndent(false);
+    setAfterParens(false);
+    setContinuation(1);
     //padding
     setOperatorPaddingMode(false);
     setParensInsidePaddingMode(true);
@@ -415,6 +419,18 @@ void AStyleFormatter::setMinConditionalIndentLength(int min)
     m_options[QStringLiteral("MinConditional")] = min;
     ASFormatter::setMinConditionalIndentOption(min);
     ASFormatter::setMinConditionalIndentLength();
+}
+
+void AStyleFormatter::setAfterParens(bool on)
+{
+    m_options[QStringLiteral("AfterParens")] = on;
+    ASFormatter::setAfterParenIndent(on);
+}
+
+void AStyleFormatter::setContinuation(int n)
+{
+    m_options[QStringLiteral("Continuation")] = n;
+    ASFormatter::setContinuationIndentation(n);
 }
 
 void AStyleFormatter::setBracketFormatMode(astyle::BraceMode mode)

@@ -55,6 +55,7 @@ private Q_SLOTS:
     void paddingChanged();
     void onelinersChanged();
     void pointerAlignChanged();
+    void afterParensChanged();
 
 private:
     QScopedPointer<AStyleFormatter> m_formatter;

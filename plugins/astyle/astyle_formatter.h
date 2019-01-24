@@ -59,6 +59,8 @@ public:
     void setSwitchIndent(bool on);
     void setMaxInStatementIndentLength(int max);
     void setMinConditionalIndentLength(int min);
+    void setAfterParens(bool on);
+    void setContinuation(int n);
     //brackets
     void setBracketFormatMode(astyle::BraceMode mode);
     void setBreakClosingHeaderBracketsMode(bool state);

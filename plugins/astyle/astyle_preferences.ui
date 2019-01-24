@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>332</width>
-    <height>519</height>
+    <height>600</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -247,6 +247,29 @@ relative to the previous line.</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QSpinBox" name="inpContinuation">
+           <property name="toolTip">
+            <string>Number of indents</string>
+           </property>
+           <property name="maximum">
+            <number>4</number>
+           </property>
+           <property name="value">
+            <number>1</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QCheckBox" name="chkAfterParens">
+           <property name="toolTip">
+            <string>Indent, instead of align, continuation lines following lines that contain an opening paren '(' or an assignment '='.</string>
+           </property>
+           <property name="text">
+            <string>Continuation lines:</string>
            </property>
           </widget>
          </item>

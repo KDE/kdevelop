@@ -123,6 +123,9 @@ void AStylePreferences::init()
 
     connect(cbPointerAlign, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, &AStylePreferences::pointerAlignChanged);
+
+    connect(chkAfterParens, &QCheckBox::stateChanged, this, &AStylePreferences::afterParensChanged);
+    connect(inpContinuation, QOverload<int>::of(&QSpinBox::valueChanged), this, &AStylePreferences::afterParensChanged);
 }
 
 void AStylePreferences::load(const SourceFormatterStyle &style)
@@ -174,6 +177,10 @@ void AStylePreferences::updateWidgets()
 
     inpMaxStatement->setValue(m_formatter->option(QStringLiteral("MaxStatement")).toInt());
     inpMinConditional->setValue(m_formatter->option(QStringLiteral("MinConditional")).toInt());
+
+    chkAfterParens->setChecked(m_formatter->option(QStringLiteral("AfterParens")).toBool());
+    inpContinuation->setValue(m_formatter->option(QStringLiteral("Continuation")).toInt());
+    inpContinuation->setEnabled(chkAfterParens->isChecked());
 
     // brackets
     QString s = m_formatter->option(QStringLiteral("Brackets")).toString();
@@ -431,3 +438,13 @@ void AStylePreferences::pointerAlignChanged()
     updatePreviewText();
 }
 
+void AStylePreferences::afterParensChanged()
+{
+    if(!m_enableWidgetSignals)
+        return;
+    m_formatter->setAfterParens(chkAfterParens->isChecked());
+    inpContinuation->setEnabled(chkAfterParens->isChecked());
+    m_formatter->setContinuation(inpContinuation->value());
+
+    updatePreviewText();
+}
