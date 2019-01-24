@@ -9,6 +9,7 @@ set(mesonbuilder_SRCS
     mesonmanager.cpp
     mesonoptions.cpp
     mesontargets.cpp
+    mesontests.cpp
 
     settings/mesonadvancedsettings.cpp
     settings/mesonconfigpage.cpp
@@ -43,6 +44,7 @@ add_subdirectory(icons)
 target_link_libraries(kdevmesonmanager
     Qt5::Concurrent
     KDev::Interfaces
+    KDev::Language
     KDev::Project
     KDev::Util
     KDev::OutputView

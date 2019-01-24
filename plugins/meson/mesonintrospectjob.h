@@ -22,6 +22,7 @@
 #include "mesonconfig.h"
 #include "mesonoptions.h"
 #include "mesontargets.h"
+#include "mesontests.h"
 
 #include <interfaces/iproject.h>
 
@@ -54,6 +55,7 @@ public:
 
     MesonOptsPtr buildOptions();
     MesonTargetsPtr targets();
+    MesonTestSuitesPtr tests();
 
 private:
     QString importJSONFile(Meson::BuildDir const& buildDir, Type type, QJsonObject* out);
@@ -72,4 +74,5 @@ private:
     // The results
     MesonOptsPtr m_res_options = nullptr;
     MesonTargetsPtr m_res_targets = nullptr;
+    MesonTestSuitesPtr m_res_tests = nullptr;
 };
