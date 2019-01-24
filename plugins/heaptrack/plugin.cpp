@@ -33,15 +33,18 @@
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/launchconfigurationtype.h>
 #include <shell/core.h>
 #include <shell/launchconfiguration.h>
 #include <shell/runcontroller.h>
 #include <util/executecompositejob.h>
 
 #include <KActionCollection>
+#include <KMessageBox>
 #include <KPluginFactory>
 
 #include <QAction>
+#include <QApplication>
 #include <QFile>
 
 K_PLUGIN_FACTORY_WITH_JSON(HeaptrackFactory, "kdevheaptrack.json", registerPlugin<Heaptrack::Plugin>();)
@@ -79,25 +82,43 @@ Plugin::~Plugin()
 
 void Plugin::launchHeaptrack()
 {
-    auto runController = KDevelop::Core::self()->runControllerInternal();
-    if (runController->launchConfigurations().isEmpty()) {
-        runController->showConfigurationDialog();
-    }
+    IExecutePlugin* executePlugin = nullptr;
 
-    auto defaultLaunch = runController->defaultLaunch();
-    if (!defaultLaunch) {
+    // First we should check that our "kdevexecute" plugin is loaded. This is needed since
+    // current plugin controller logic allows us to unload this plugin with keeping dependent
+    // plugins like Heaptrack in "loaded" state. This seems to be wrong behaviour but now we have
+    // to do additional checks.
+    // TODO fix plugin controller to avoid such inconsistent states.
+    auto pluginController = core()->pluginController();
+    if (auto plugin = pluginController->pluginForExtension(
+        QStringLiteral("org.kdevelop.IExecutePlugin"), QStringLiteral("kdevexecute"))) {
+        executePlugin = plugin->extension<IExecutePlugin>();
+    } else {
+        auto pluginInfo = pluginController->infoForPluginId(QStringLiteral("kdevexecute"));
+        KMessageBox::error(
+            qApp->activeWindow(),
+            i18n("Unable to start Heaptrack analysis - \"%1\" plugin is not loaded.", pluginInfo.name()));
         return;
     }
 
-    auto pluginController = core()->self()->pluginController();
-    auto iface = pluginController->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
+    auto runController = KDevelop::Core::self()->runControllerInternal();
+    auto defaultLaunch = runController->defaultLaunch();
+    if (!defaultLaunch) {
+        runController->showConfigurationDialog();
+    }
 
-    auto heaptrackJob = new Job(defaultLaunch);
+    if (!defaultLaunch->type()->launcherForId(QStringLiteral("nativeAppLauncher"))) {
+        KMessageBox::error(
+            qApp->activeWindow(),
+            i18n("Heaptrack analysis can be started only for native applications."));
+        return;
+    }
+
+    auto heaptrackJob = new Job(defaultLaunch, executePlugin);
     connect(heaptrackJob, &Job::finished, this, &Plugin::jobFinished);
 
     QList<KJob*> jobList;
-    if (KJob* depJob = iface->dependencyJob(defaultLaunch)) {
+    if (KJob* depJob = executePlugin->dependencyJob(defaultLaunch)) {
         jobList += depJob;
     }
     jobList += heaptrackJob;

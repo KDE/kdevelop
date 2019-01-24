@@ -78,7 +78,7 @@
     },
     "X-KDevelop-Category": "Global",
     "X-KDevelop-IRequired": [
-        "org.kdevelop.IExecutePlugin"
+        "org.kdevelop.IExecutePlugin@kdevexecute"
     ],
     "X-KDevelop-Mode": "GUI"
 }

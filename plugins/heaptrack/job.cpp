@@ -25,7 +25,6 @@
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/icore.h>
-#include <interfaces/iplugincontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <util/environmentprofilelist.h>
 #include <util/path.h>
@@ -38,16 +37,13 @@
 namespace Heaptrack
 {
 
-Job::Job(KDevelop::ILaunchConfiguration* launchConfig)
+Job::Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePlugin)
     : m_pid(-1)
 {
     Q_ASSERT(launchConfig);
+    Q_ASSERT(executePlugin);
 
-    auto pluginController = KDevelop::ICore::self()->pluginController();
-    auto iface = pluginController->pluginForExtension(QStringLiteral("org.kdevelop.IExecutePlugin"))->extension<IExecutePlugin>();
-    Q_ASSERT(iface);
-
-    QString envProfile = iface->environmentProfileName(launchConfig);
+    QString envProfile = executePlugin->environmentProfileName(launchConfig);
     if (envProfile.isEmpty()) {
         envProfile = KDevelop::EnvironmentProfileList(KSharedConfig::openConfig()).defaultProfileName();
     }
@@ -55,19 +51,19 @@ Job::Job(KDevelop::ILaunchConfiguration* launchConfig)
 
     QString errorString;
 
-    m_analyzedExecutable = iface->executable(launchConfig, errorString).toLocalFile();
+    m_analyzedExecutable = executePlugin->executable(launchConfig, errorString).toLocalFile();
     if (!errorString.isEmpty()) {
         setError(-1);
         setErrorText(errorString);
     }
 
-    QStringList analyzedExecutableArguments = iface->arguments(launchConfig, errorString);
+    QStringList analyzedExecutableArguments = executePlugin->arguments(launchConfig, errorString);
     if (!errorString.isEmpty()) {
         setError(-1);
         setErrorText(errorString);
     }
 
-    QUrl workDir = iface->workingDirectory(launchConfig);
+    QUrl workDir = executePlugin->workingDirectory(launchConfig);
     if (workDir.isEmpty() || !workDir.isValid()) {
         workDir = QUrl::fromLocalFile(QFileInfo(m_analyzedExecutable).absolutePath());
     }

@@ -22,10 +22,8 @@
 #include <interfaces/istatus.h>
 #include <outputview/outputexecutejob.h>
 
-namespace KDevelop
-{
-    class ILaunchConfiguration;
-}
+class IExecutePlugin;
+namespace KDevelop { class ILaunchConfiguration; }
 
 namespace Heaptrack
 {
@@ -36,7 +34,7 @@ class Job : public KDevelop::OutputExecuteJob, public KDevelop::IStatus
     Q_INTERFACES(KDevelop::IStatus)
 
 public:
-    explicit Job(KDevelop::ILaunchConfiguration* launchConfig);
+    Job(KDevelop::ILaunchConfiguration* launchConfig, IExecutePlugin* executePlugin);
     explicit Job(long int pid);
     ~Job() override;
 
