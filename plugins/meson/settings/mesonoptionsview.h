@@ -59,8 +59,8 @@ public:
 
     void clear();
     void resetAll();
-    KJob* repopulateFromBuildDir(KDevelop::Path projectPath, Meson::BuildDir const& buildDir);
-    KJob* repopulateFromMesonFile(KDevelop::Path projectPath, KDevelop::Path mesonExe);
+    KJob* repopulateFromBuildDir(KDevelop::IProject *project, Meson::BuildDir const& buildDir);
+    KJob* repopulateFromMesonFile(KDevelop::IProject *project, KDevelop::Path mesonExe);
 
     MesonOptsPtr options();
 

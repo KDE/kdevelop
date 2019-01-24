@@ -191,9 +191,9 @@ void MesonNewBuildDir::updated()
     bool mesonHasChanged = m_ui->advanced->hasMesonChanged(); // Outside if to prevent lazy evaluation
     if (!m_ui->options->options() || mesonHasChanged || buildDirChanged) {
         if (status == MesonBuilder::MESON_CONFIGURED) {
-            m_ui->options->repopulateFromBuildDir(m_project->path(), currentConfig())->start();
+            m_ui->options->repopulateFromBuildDir(m_project, currentConfig())->start();
         } else {
-            m_ui->options->repopulateFromMesonFile(m_project->path(), advanced.meson)->start();
+            m_ui->options->repopulateFromMesonFile(m_project, advanced.meson)->start();
         }
     }
 }

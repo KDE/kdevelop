@@ -162,7 +162,7 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 {
     IProject* project = item->project();
     auto buildDir = Meson::currentBuildDir(project);
-    auto introJob = new MesonIntrospectJob(project->path(), buildDir, { MesonIntrospectJob::TARGETS },
+    auto introJob = new MesonIntrospectJob(project, buildDir, { MesonIntrospectJob::TARGETS },
                                            MesonIntrospectJob::BUILD_DIR, this);
 
     connect(introJob, &KJob::result, this, [this, introJob, item, project]() {

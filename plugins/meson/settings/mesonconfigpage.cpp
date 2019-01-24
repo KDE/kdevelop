@@ -116,7 +116,7 @@ void MesonConfigPage::apply()
         }
 
         joblist << new MesonJob(m_current, m_project, MesonJob::SET_CONFIG, mesonArgs, nullptr);
-        joblist << m_ui->options->repopulateFromBuildDir(m_project->path(), m_current);
+        joblist << m_ui->options->repopulateFromBuildDir(m_project, m_current);
         KJob* job = new ExecuteCompositeJob(nullptr, joblist);
         connect(job, &KJob::result, this, [this]() {
             setDisabled(false);
@@ -160,7 +160,7 @@ void MesonConfigPage::reset()
     qCDebug(KDEV_Meson) << "Resetting changes for build dir " << m_current.buildDir;
 
     m_current = m_config.buildDirs[m_config.currentIndex];
-    m_ui->options->repopulateFromBuildDir(m_project->path(), m_current)->start();
+    m_ui->options->repopulateFromBuildDir(m_project, m_current)->start();
     updateUI();
 }
 

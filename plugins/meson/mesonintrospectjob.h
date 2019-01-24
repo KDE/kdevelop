@@ -44,8 +44,9 @@ public:
 
 public:
     explicit MesonIntrospectJob(KDevelop::IProject* project, QVector<Type> types, Mode mode, QObject* parent);
-    explicit MesonIntrospectJob(KDevelop::Path projectPath, KDevelop::Path meson, QVector<Type> types, QObject* parent);
-    explicit MesonIntrospectJob(KDevelop::Path projectPath, Meson::BuildDir buildDir, QVector<Type> types, Mode mode,
+    explicit MesonIntrospectJob(KDevelop::IProject* project, KDevelop::Path meson, QVector<Type> types,
+                                QObject* parent);
+    explicit MesonIntrospectJob(KDevelop::IProject* project, Meson::BuildDir buildDir, QVector<Type> types, Mode mode,
                                 QObject* parent);
 
     void start() override;
@@ -70,6 +71,7 @@ private:
     Mode m_mode = BUILD_DIR;
     Meson::BuildDir m_buildDir;
     KDevelop::Path m_projectPath;
+    KDevelop::IProject* m_project = nullptr;
 
     // The results
     MesonOptsPtr m_res_options = nullptr;

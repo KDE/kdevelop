@@ -40,7 +40,8 @@ MesonIntrospectJob::MesonIntrospectJob(KDevelop::IProject* project, QVector<Meso
                                        MesonIntrospectJob::Mode mode, QObject* parent)
     : KJob(parent)
     , m_types(types)
-    , m_mode(mode)
+    , m_mode(mode),
+    m_project(project)
 {
     Q_ASSERT(project);
 
@@ -61,29 +62,34 @@ MesonIntrospectJob::MesonIntrospectJob(KDevelop::IProject* project, QVector<Meso
     connect(&m_futureWatcher, &QFutureWatcher<QString>::finished, this, &MesonIntrospectJob::finished);
 }
 
-MesonIntrospectJob::MesonIntrospectJob(KDevelop::Path projectPath, KDevelop::Path meson,
+MesonIntrospectJob::MesonIntrospectJob(KDevelop::IProject* project, KDevelop::Path meson,
                                        QVector<MesonIntrospectJob::Type> types, QObject* parent)
     : KJob(parent)
     , m_types(types)
     , m_mode(MESON_FILE)
-    , m_projectPath(projectPath)
+    , m_project(project)
 {
+    Q_ASSERT(project);
+
     // Since we are parsing the meson file in this mode, no build directory
     // is required and we have to fake a build directory
     m_buildDir.buildDir = m_projectPath;
     m_buildDir.mesonExecutable = meson;
+    m_projectPath = project->path();
     connect(&m_futureWatcher, &QFutureWatcher<QString>::finished, this, &MesonIntrospectJob::finished);
 }
 
-MesonIntrospectJob::MesonIntrospectJob(KDevelop::Path projectPath, Meson::BuildDir buildDir,
+MesonIntrospectJob::MesonIntrospectJob(KDevelop::IProject* project, Meson::BuildDir buildDir,
                                        QVector<MesonIntrospectJob::Type> types, MesonIntrospectJob::Mode mode,
                                        QObject* parent)
     : KJob(parent)
     , m_types(types)
     , m_mode(mode)
     , m_buildDir(buildDir)
-    , m_projectPath(projectPath)
+    , m_project(project)
 {
+    Q_ASSERT(project);
+    m_projectPath = project->path();
     connect(&m_futureWatcher, &QFutureWatcher<QString>::finished, this, &MesonIntrospectJob::finished);
 }
 
@@ -220,7 +226,7 @@ QString MesonIntrospectJob::import(BuildDir buildDir)
 
     auto testsJSON = rawData[QStringLiteral("tests")];
     if (testsJSON.isArray()) {
-        m_res_tests = std::make_shared<MesonTestSuites>(testsJSON.toArray(), nullptr);
+        m_res_tests = std::make_shared<MesonTestSuites>(testsJSON.toArray(), m_project);
         if (m_res_options) {
             qCDebug(KDEV_Meson) << "MINTRO: Imported " << m_res_tests->testSuites().size() << " test suites";
         } else {

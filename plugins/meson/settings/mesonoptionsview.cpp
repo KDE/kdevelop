@@ -60,15 +60,15 @@ void MesonOptionsView::resetAll()
     }
 }
 
-KJob* MesonOptionsView::repopulateFromBuildDir(KDevelop::Path projectPath, Meson::BuildDir const& buildDir)
+KJob* MesonOptionsView::repopulateFromBuildDir(KDevelop::IProject* project, Meson::BuildDir const& buildDir)
 {
-    return repopulate(new MesonIntrospectJob(projectPath, buildDir, { MesonIntrospectJob::BUILDOPTIONS },
+    return repopulate(new MesonIntrospectJob(project, buildDir, { MesonIntrospectJob::BUILDOPTIONS },
                                              MesonIntrospectJob::BUILD_DIR, this));
 }
 
-KJob* MesonOptionsView::repopulateFromMesonFile(KDevelop::Path projectPath, KDevelop::Path mesonExe)
+KJob* MesonOptionsView::repopulateFromMesonFile(KDevelop::IProject* project, KDevelop::Path mesonExe)
 {
-    return repopulate(new MesonIntrospectJob(projectPath, mesonExe, { MesonIntrospectJob::BUILDOPTIONS }, this));
+    return repopulate(new MesonIntrospectJob(project, mesonExe, { MesonIntrospectJob::BUILDOPTIONS }, this));
 }
 
 KJob* MesonOptionsView::repopulate(MesonIntrospectJob* introJob)
@@ -165,4 +165,3 @@ MesonOptsPtr MesonOptionsView::options()
 {
     return m_options;
 }
-
