@@ -18,10 +18,10 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVPLATFORM_PLUGIN_MESONMANAGER_H
-#define KDEVPLATFORM_PLUGIN_MESONMANAGER_H
+#pragma once
 
 #include "mesonconfig.h"
+#include "mesontests.h"
 
 #include <project/abstractfilemanagerplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
@@ -111,9 +111,8 @@ public:
 private:
     MesonBuilder* m_builder;
     QHash<KDevelop::IProject*, MesonTargetsPtr> m_projectTargets;
+    QHash<KDevelop::IProject*, MesonTestSuitesPtr> m_projectTestSuites;
 
     MesonSourcePtr sourceFromItem(KDevelop::ProjectBaseItem* item) const;
-    void populateTargets(KDevelop::ProjectFolderItem *item, QVector<MesonTarget *> targets);
+    void populateTargets(KDevelop::ProjectFolderItem* item, QVector<MesonTarget*> targets);
 };
-
-#endif

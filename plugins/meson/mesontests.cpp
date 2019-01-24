@@ -24,6 +24,7 @@
 #include <debug.h>
 #include <interfaces/iproject.h>
 #include <kjob.h>
+#include <outputview/outputexecutejob.h>
 #include <util/executecompositejob.h>
 
 using namespace std;
@@ -54,9 +55,28 @@ IProject* MesonTest::project() const
     return m_project;
 }
 
-KJob* MesonTest::job(ITestSuite::TestJobVerbosity)
+KJob* MesonTest::job(ITestSuite::TestJobVerbosity verbosity)
 {
-    return nullptr;
+    OutputJob::OutputJobVerbosity convVerbosity;
+    switch (verbosity) {
+    case KDevelop::ITestSuite::Verbose:
+        convVerbosity = OutputJob::Verbose;
+        break;
+    case KDevelop::ITestSuite::Silent:
+        convVerbosity = OutputJob::Silent;
+        break;
+    }
+
+    OutputExecuteJob* job = new OutputExecuteJob(m_project, convVerbosity);
+    *job << m_command;
+    if (!m_workDir.isEmpty()) {
+        job->setWorkingDirectory(m_workDir.toUrl());
+    }
+    job->setJobName(m_name);
+    for (auto i = begin(m_env); i != end(m_env); ++i) {
+        job->addEnvironmentOverride(i.key(), i.value());
+    }
+    return job;
 }
 
 void MesonTest::fromJson(const QJsonObject& json)
@@ -65,7 +85,7 @@ void MesonTest::fromJson(const QJsonObject& json)
     m_workDir = Path(json[QStringLiteral("workdir")].toString());
 
     QJsonArray cmd = json[QStringLiteral("cmd")].toArray();
-    QJsonArray suites = json[QStringLiteral("suites")].toArray();
+    QJsonArray suites = json[QStringLiteral("suite")].toArray();
     QJsonObject env = json[QStringLiteral("env")].toObject();
 
     transform(begin(cmd), end(cmd), back_inserter(m_command), [](auto const& x) { return x.toString(); });
@@ -74,6 +94,8 @@ void MesonTest::fromJson(const QJsonObject& json)
     for (auto i = begin(env); i != end(env); ++i) {
         m_env[i.key()] = i.value().toString();
     }
+
+    qCDebug(KDEV_Meson) << "MINTRO:   - Loaded test" << m_name << "suites:" << m_suites;
 }
 
 // Class MesonTestSuite
@@ -82,6 +104,7 @@ MesonTestSuite::MesonTestSuite(QString name, IProject* project)
     : m_name(name)
     , m_project(project)
 {
+    qCDebug(KDEV_Meson) << "MINTRO:   - New test suite" << m_name;
 }
 
 MesonTestSuite::~MesonTestSuite() {}
@@ -197,14 +220,21 @@ MesonTestSuitePtr MesonTestSuites::operator[](QString name)
 void MesonTestSuites::fromJSON(const QJsonArray& json)
 {
     QVector<MesonTestPtr> tests;
+    qCDebug(KDEV_Meson) << "MINTRO: -- Loading tests from JSON...";
     for (auto const& i : json) {
         tests << make_shared<MesonTest>(i.toObject(), m_project);
     }
 
+    qCDebug(KDEV_Meson) << "MINTRO: -- Adding tests to suites";
     for (auto& i : tests) {
         for (QString j : i->suites()) {
             auto suite = testSuite(j);
+            if (!suite) {
+                suite = make_shared<MesonTestSuite>(j, m_project);
+                m_suites[j] = suite;
+            }
             suite->addTestCase(i);
+            qCDebug(KDEV_Meson) << "MINTRO:   - Added test" << i->name() << "to suite" << suite->name();
         }
     }
 }

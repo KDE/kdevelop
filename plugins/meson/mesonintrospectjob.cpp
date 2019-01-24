@@ -40,8 +40,8 @@ MesonIntrospectJob::MesonIntrospectJob(KDevelop::IProject* project, QVector<Meso
                                        MesonIntrospectJob::Mode mode, QObject* parent)
     : KJob(parent)
     , m_types(types)
-    , m_mode(mode),
-    m_project(project)
+    , m_mode(mode)
+    , m_project(project)
 {
     Q_ASSERT(project);
 
@@ -274,4 +274,9 @@ MesonOptsPtr MesonIntrospectJob::buildOptions()
 MesonTargetsPtr MesonIntrospectJob::targets()
 {
     return m_res_targets;
+}
+
+MesonTestSuitesPtr MesonIntrospectJob::tests()
+{
+    return m_res_tests;
 }

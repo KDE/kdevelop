@@ -28,7 +28,9 @@
 #include "settings/mesonconfigpage.h"
 #include "settings/mesonnewbuilddir.h"
 
+#include <interfaces/icore.h>
 #include <interfaces/iproject.h>
+#include <interfaces/itestcontroller.h>
 #include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
 #include <util/executecompositejob.h>
@@ -162,22 +164,30 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 {
     IProject* project = item->project();
     auto buildDir = Meson::currentBuildDir(project);
-    auto introJob = new MesonIntrospectJob(project, buildDir, { MesonIntrospectJob::TARGETS },
-                                           MesonIntrospectJob::BUILD_DIR, this);
+    auto introJob
+        = new MesonIntrospectJob(project, buildDir, { MesonIntrospectJob::TARGETS, MesonIntrospectJob::TESTS },
+                                 MesonIntrospectJob::BUILD_DIR, this);
 
     connect(introJob, &KJob::result, this, [this, introJob, item, project]() {
         auto targets = introJob->targets();
-        if (!targets) {
+        auto tests = introJob->tests();
+        if (!targets || !tests) {
             return;
         }
 
         m_projectTargets[project] = targets;
+        m_projectTestSuites[project] = tests;
         auto tgtList = targets->targets();
         QVector<MesonTarget*> tgtCopy;
         tgtCopy.reserve(tgtList.size());
         transform(begin(tgtList), end(tgtList), back_inserter(tgtCopy), [](auto const& a) { return a.get(); });
 
         populateTargets(item, tgtCopy);
+
+        // Add test suites
+        for (auto& i : tests->testSuites()) {
+            ICore::self()->testController()->addTestSuite(i.get());
+        }
     });
 
     const QList<KJob*> jobs = {
