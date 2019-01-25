@@ -450,6 +450,11 @@ Path ProjectBaseItem::path() const
     return d->m_path;
 }
 
+IndexedString ProjectBaseItem::indexedPath() const
+{
+    return IndexedString::fromIndex( d_ptr->m_pathIndex );
+}
+
 QString ProjectBaseItem::baseName() const
 {
     return text();
@@ -705,11 +710,6 @@ ProjectFileItem::~ProjectFileItem()
     if( project() && d_ptr->m_pathIndex ) {
         project()->removeFromFileSet( this );
     }
-}
-
-IndexedString ProjectFileItem::indexedPath() const
-{
-    return IndexedString::fromIndex( d_ptr->m_pathIndex );
 }
 
 ProjectBaseItem::RenameStatus ProjectFileItem::rename(const QString& newName)

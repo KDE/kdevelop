@@ -210,6 +210,12 @@ class KDEVPLATFORMPROJECT_EXPORT ProjectBaseItem
         Path path() const;
 
         /**
+         * @return the items indexed path, which is often required for performant
+         * lookups or memory efficient storage.
+         */
+        IndexedString indexedPath() const;
+
+        /**
          * @returns the basename of this items path (if any)
          *
          * Convenience function, returns the same as @c text() for most items.
@@ -403,12 +409,6 @@ public:
     void setPath( const Path& ) override;
     QString iconName() const override;
     RenameStatus rename(const QString& newname) override;
-
-    /**
-     * @return the items indexed path, which is often required for performant
-     * lookups or memory efficient storage.
-     */
-    IndexedString indexedPath() const;
 };
 
 /**
