@@ -101,17 +101,17 @@ class ProjectBaseItemPrivate
 {
 public:
     ProjectBaseItemPrivate() {}
+    ProjectModel* model = nullptr;
     IProject* project = nullptr;
     ProjectBaseItem* parent = nullptr;
-    int row = -1;
     QList<ProjectBaseItem*> children;
     QString text;
+    Path m_path;
+    QString iconName;
+    int row = -1;
+    uint m_pathIndex = 0;
     ProjectBaseItem::ProjectItemType type;
     Qt::ItemFlags flags;
-    ProjectModel* model = nullptr;
-    Path m_path;
-    uint m_pathIndex = 0;
-    QString iconName;
 
     ProjectBaseItem::RenameStatus renameBaseItem(ProjectBaseItem* item, const QString& newName)
     {
