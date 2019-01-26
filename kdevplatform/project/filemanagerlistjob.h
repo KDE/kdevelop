@@ -32,7 +32,8 @@
 
 namespace KDevelop
 {
-    class ProjectFolderItem;
+class ProjectFolderItem;
+class ProjectBaseItem;
 
 class FileManagerListJob : public KIO::Job
 {
@@ -40,10 +41,9 @@ class FileManagerListJob : public KIO::Job
 
 public:
     explicit FileManagerListJob(ProjectFolderItem* item);
-    ProjectFolderItem* item() const;
 
     void addSubDir(ProjectFolderItem* item);
-    void removeSubDir(ProjectFolderItem* item);
+    void handleRemovedItem(ProjectBaseItem* item);
 
     void abort();
     void start() override;

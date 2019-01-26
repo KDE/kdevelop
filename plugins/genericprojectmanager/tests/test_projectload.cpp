@@ -339,6 +339,8 @@ void TestProjectLoad::raceJob()
     IProject *project = ICore::self()->projectController()->projectAt(0);
     QCOMPARE(project->projectFile().toUrl(), p.file);
     ProjectFolderItem* root = project->projectItem();
+    QCOMPARE(root->project(), project);
+    QVERIFY(root->model());
     QCOMPARE(root->rowCount(), 1);
     ProjectBaseItem* testItem = root->child(0);
     QVERIFY(testItem->folder());
@@ -348,16 +350,32 @@ void TestProjectLoad::raceJob()
     ProjectBaseItem* asdfItem = testItem->children().at(last);
     QVERIFY(asdfItem->folder());
 
+    // reload to trigger new list job
+    project->projectFileManager()->reload(testItem->folder());
     // move dir
     QVERIFY(dir.rename(QStringLiteral("test"), QStringLiteral("test2")));
     // move sub dir
     QVERIFY(dir.rename(QStringLiteral("test2/zzzzz"), QStringLiteral("test2/bla")));
 
     QTest::qWait(500);
+
     QCOMPARE(root->rowCount(), 1);
     testItem = root->child(0);
     QVERIFY(testItem->folder());
     QCOMPARE(testItem->baseName(), QStringLiteral("test2"));
+
+    // reload full model and then move dir
+    project->reloadModel();
+    QVERIFY(dir.rename(QStringLiteral("test2"), QStringLiteral("test3")));
+    QTest::qWait(500);
+
+    // note: this actually invalidates the root, so query that again
+    root = project->projectItem();
+    QVERIFY(root);
+    QCOMPARE(root->rowCount(), 1);
+    testItem = root->child(0);
+    QVERIFY(testItem->folder());
+    QCOMPARE(testItem->baseName(), QStringLiteral("test3"));
 }
 
 void TestProjectLoad::addDuringImport()

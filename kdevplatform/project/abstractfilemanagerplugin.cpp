@@ -101,8 +101,6 @@ public:
     /// Common renaming function.
     bool rename(ProjectBaseItem* item, const Path& newPath);
 
-    void removeFolder(ProjectFolderItem* folder);
-
     QHash<IProject*, KDirWatch*> m_watchers;
     QHash<IProject*, QList<FileManagerListJob*> > m_projectJobs;
     QVector<QString> m_stoppedFolders;
@@ -154,17 +152,12 @@ KIO::Job* AbstractFileManagerPluginPrivate::eventuallyReadFolder(ProjectFolderIt
 
 void AbstractFileManagerPluginPrivate::jobFinished(KJob* job)
 {
-    auto* gmlJob = qobject_cast<FileManagerListJob*>(job);
-    if (gmlJob) {
-        ifDebug(qCDebug(FILEMANAGER) << job << gmlJob << gmlJob->item();)
-        m_projectJobs[ gmlJob->item()->project() ].removeOne( gmlJob );
-    } else {
-        // job emitted its finished signal from its destructor
-        // ensure we don't keep a dangling point in our list
-        foreach (auto jobs, m_projectJobs) {
-            if (jobs.removeOne(reinterpret_cast<FileManagerListJob*>(job))) {
-                break;
-            }
+    // ensure we don't keep a dangling point in our list
+    // NOTE: job is potentially emitting its finished signal from its destructor
+    // or the item that was used internally may have been deleted already
+    for (auto& jobs : m_projectJobs) {
+        if (jobs.removeOne(reinterpret_cast<FileManagerListJob*>(job))) {
+            break;
         }
     }
 }
@@ -217,7 +210,7 @@ void AbstractFileManagerPluginPrivate::addJobItems(FileManagerListJob* job,
             int index = folders.indexOf( f->path() );
             if ( index == -1 ) {
                 // folder got removed or is now invalid
-                removeFolder(f);
+                delete f;
                 --j;
             } else {
                 // this folder already exists in the view
@@ -232,7 +225,7 @@ void AbstractFileManagerPluginPrivate::addJobItems(FileManagerListJob* job,
             if ( index == -1 ) {
                 // file got removed or is now invalid
                 ifDebug(qCDebug(FILEMANAGER) << "removing file:" << f << f->path();)
-                baseItem->removeRow( j );
+                delete f;
                 --j;
             } else {
                 // this file already exists in the view
@@ -349,12 +342,12 @@ void AbstractFileManagerPluginPrivate::deleted(const QString& path_)
             continue;
         }
         foreach ( ProjectFolderItem* item, p->foldersForPath(indexed) ) {
-            removeFolder(item);
+            delete item;
         }
         foreach ( ProjectFileItem* item, p->filesForPath(indexed) ) {
             emit q->fileRemoved(item);
             ifDebug(qCDebug(FILEMANAGER) << "removing file" << item;)
-            item->parent()->removeRow(item->row());
+            delete item;
         }
     }
 }
@@ -423,33 +416,6 @@ void AbstractFileManagerPluginPrivate::continueWatcher(ProjectFolderItem* folder
         m_stoppedFolders.remove(idx);
     }
 }
-
-bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
-{
-    do {
-        if (child == parent) {
-            return true;
-        }
-        child = child->parent();
-    } while(child);
-    return false;
-}
-
-void AbstractFileManagerPluginPrivate::removeFolder(ProjectFolderItem* folder)
-{
-    ifDebug(qCDebug(FILEMANAGER) << "removing folder:" << folder << folder->path();)
-    foreach(FileManagerListJob* job, m_projectJobs[folder->project()]) {
-        if (isChildItem(folder, job->item())) {
-            qCDebug(FILEMANAGER) << "killing list job for removed folder" << job << folder->path();
-            job->abort();
-            Q_ASSERT(!m_projectJobs.value(folder->project()).contains(job));
-        } else {
-            job->removeSubDir(folder);
-        }
-    }
-    folder->parent()->removeRow( folder->row() );
-}
-
 //END Private
 
 //BEGIN Plugin
@@ -463,6 +429,19 @@ AbstractFileManagerPlugin::AbstractFileManagerPlugin( const QString& componentNa
 {
     connect(core()->projectController(), &IProjectController::projectClosing,
             this, [&] (IProject* project) { d->projectClosing(project); });
+    connect(core()->projectController()->projectModel(), &ProjectModel::rowsAboutToBeRemoved,
+            this, [&] (const QModelIndex& parent, int first, int last) {
+                // cleanup list jobs to remove about-to-be-dangling pointers
+                auto* model = core()->projectController()->projectModel();
+                for (int i = first; i <= last; ++i) {
+                    const auto index = model->index(i, 0, parent);
+                    auto* item = index.data(ProjectModel::ProjectItemRole).value<ProjectBaseItem*>();
+                    Q_ASSERT(item);
+                    for (auto* job : d->m_projectJobs.value(item->project())) {
+                        job->handleRemovedItem(item);
+                    }
+                }
+            });
 }
 
 AbstractFileManagerPlugin::~AbstractFileManagerPlugin() = default;
@@ -579,7 +558,7 @@ bool AbstractFileManagerPlugin::removeFilesAndFolders(const QList<ProjectBaseIte
                 Q_ASSERT(item->folder());
                 emit folderRemoved(item->folder());
             }
-            item->parent()->removeRow( item->row() );
+            delete item;
         }
 
         d->continueWatcher(parent);
@@ -609,7 +588,7 @@ bool AbstractFileManagerPlugin::moveFilesAndFolders(const QList< ProjectBaseItem
             } else {
                 emit folderRemoved(item->folder());
             }
-            oldParent->removeRow( item->row() );
+            delete item;
             KIO::Job *readJob = d->eventuallyReadFolder(newParent);
             // reload first level synchronously, deeper levels will run async
             // this is required for code that expects the new item to exist after

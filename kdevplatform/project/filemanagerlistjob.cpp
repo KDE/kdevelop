@@ -32,6 +32,19 @@
 
 using namespace KDevelop;
 
+namespace {
+bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
+{
+    do {
+        if (child == parent) {
+            return true;
+        }
+        child = child->parent();
+    } while(child);
+    return false;
+}
+}
+
 FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
     : KIO::Job(), m_item(item), m_aborted(false)
 {
@@ -51,11 +64,6 @@ FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
 #endif
 }
 
-ProjectFolderItem* FileManagerListJob::item() const
-{
-    return m_item;
-}
-
 void FileManagerListJob::addSubDir( ProjectFolderItem* item )
 {
     Q_ASSERT(!m_listQueue.contains(item));
@@ -64,9 +72,16 @@ void FileManagerListJob::addSubDir( ProjectFolderItem* item )
     m_listQueue.enqueue(item);
 }
 
-void FileManagerListJob::removeSubDir(ProjectFolderItem* item)
+void FileManagerListJob::handleRemovedItem(ProjectBaseItem* item)
 {
-    m_listQueue.removeAll(item);
+    // NOTE: the item could be (partially) destroyed already, thus it's not save
+    // to call e.g. item->folder to cast the base item to a folder item...
+    auto *folder = reinterpret_cast<ProjectFolderItem*>(item);
+    m_listQueue.removeAll(folder);
+
+    if (isChildItem(item, m_item)) {
+        abort();
+    }
 }
 
 void FileManagerListJob::slotEntries(KIO::Job* job, const KIO::UDSEntryList& entriesIn)
