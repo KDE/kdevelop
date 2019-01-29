@@ -1,0 +1,5 @@
+include:
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-before.yml
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-kdevelop-linux.yml
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-kdevelop-freebsd.yml
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-kdevelop-windows.yml

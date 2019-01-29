@@ -61,6 +61,10 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_chooserUi->buildFolder->setMode(KFile::Directory|KFile::ExistingOnly);
     m_chooserUi->installPrefix->setMode(KFile::Directory|KFile::ExistingOnly);
 
+    // configure the extraArguments widget to span the widget width but not
+    // expand the dialog to the width of the longest element in the argument history.
+    // static_cast<QComboBox*> needed because KComboBox::minimumSizeHint() override by mistake made it protected
+    m_chooserUi->extraArguments->setMinimumWidth(static_cast<QComboBox*>(m_chooserUi->extraArguments)->minimumSizeHint().width());
     m_extraArgumentsHistory = new CMakeExtraArgumentsHistory(m_chooserUi->extraArguments);
 
     connect(m_chooserUi->buildFolder, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);

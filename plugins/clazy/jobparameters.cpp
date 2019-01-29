@@ -147,6 +147,7 @@ JobParameters::JobParameters(KDevelop::IProject* project, const QString& checkPa
     Q_ASSERT(project);
 
     auto projectRootPath = project->path().toLocalFile();
+    auto projectCanonicalRootPath = QFileInfo(projectRootPath).canonicalFilePath();
 
     auto buildPath = project->buildSystemManager()->buildDirectory(project->projectItem());
     m_projectBuildPath = buildPath.toLocalFile();
@@ -158,6 +159,10 @@ JobParameters::JobParameters(KDevelop::IProject* project, const QString& checkPa
         m_error = i18n("Compile commands file '%1' does not exist.", commandsFilePath);
         return;
     }
+ 
+    const auto pathInfo = QFileInfo(m_checkPath);
+    const bool checkPathIsFile = pathInfo.isFile();
+    const auto canonicalPathToCheck = checkPathIsFile ? pathInfo.canonicalFilePath() : QStringLiteral("");
 
     if (!m_checkPath.isEmpty()) {
         const auto allFiles = compileCommandsFiles(commandsFilePath, m_error);
@@ -165,18 +170,17 @@ JobParameters::JobParameters(KDevelop::IProject* project, const QString& checkPa
             return;
         }
 
-        if (m_checkPath == projectRootPath) {
+        if (canonicalPathToCheck == projectCanonicalRootPath) {
             m_sources = allFiles;
         } else {
-            const bool checkPathIsFile = QFileInfo(m_checkPath).isFile();
             for (auto& file : allFiles) {
                 if (checkPathIsFile) {
-                    if (file == m_checkPath) {
+                    if (file == canonicalPathToCheck) {
                         m_sources.clear();
-                        m_sources += m_checkPath;
+                        m_sources += canonicalPathToCheck;
                         break;
                     }
-                } else if (file.startsWith(m_checkPath)) {
+                } else if (file.startsWith(m_checkPath) || file.startsWith(canonicalPathToCheck)) {
                     m_sources += file;
                 }
             }
