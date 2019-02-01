@@ -9,6 +9,7 @@
         "Description[es]": "Implementación del lenguaje QML/JS (basado en qmljs de QtCreator)",
         "Description[fr]": "Prise en charge du langage QML/JS (utilisant qmljs de QtCreator)",
         "Description[gl]": "Compatibilidade con QML/JS (baseada en qmljs de QtCreator)",
+        "Description[it]": "Supporto al linguaggio QML/JS (basato su qmljs di QtCreator)",
         "Description[nl]": "Taalondersteuning voor QML/JS (gebaseerd op qmljs uit QtCreator)",
         "Description[pl]": "Obsługa języka QML/JS (oparty na qmljs z QtCreator)",
         "Description[pt]": "Suporte para a linguagem QML/JS (baseado no 'qmljs' do QtCreator)",
