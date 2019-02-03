@@ -25,7 +25,7 @@
 // plugin
 #include "oktetaview.h"
 // Okteta Kasten
-#include "kasten/okteta/bytearrayview.h"
+#include <Kasten/Okteta/ByteArrayView>
 // Kasten
 #include <Kasten/AbstractToolView>
 #include <Kasten/AbstractTool>
