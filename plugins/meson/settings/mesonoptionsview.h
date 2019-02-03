@@ -20,10 +20,13 @@
 #pragma once
 
 #include "mesonoptions.h"
+
+#include <util/path.h>
+
 #include <QVector>
 #include <QWidget>
+
 #include <memory>
-#include <util/path.h>
 
 namespace Ui
 {

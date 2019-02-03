@@ -18,8 +18,13 @@
 */
 
 #include "mesonoptionbaseview.h"
+
 #include "mesonlisteditor.h"
 #include "ui_mesonoptionbaseview.h"
+#include <debug.h>
+
+#include <KColorScheme>
+
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLineEdit>
@@ -27,8 +32,6 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QtGlobal>
-#include <debug.h>
-#include <kcolorscheme.h>
 
 using namespace std;
 

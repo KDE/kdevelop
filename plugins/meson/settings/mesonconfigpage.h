@@ -19,9 +19,10 @@
 
 #pragma once
 
-#include <interfaces/configpage.h>
 #include "mesonconfig.h"
 #include "mesonoptions.h"
+
+#include <interfaces/configpage.h>
 
 namespace KDevelop
 {

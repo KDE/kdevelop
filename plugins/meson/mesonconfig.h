@@ -20,8 +20,9 @@
 
 #pragma once
 
-#include <KConfigGroup>
 #include <util/path.h>
+
+#include <KConfigGroup>
 
 namespace KDevelop
 {

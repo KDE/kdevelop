@@ -19,13 +19,15 @@
 
 #include "mesonoptions.h"
 
+#include <debug.h>
+
 #include <QHash>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QList>
 #include <QWidget>
+
 #include <algorithm>
-#include <debug.h>
 #include <vector>
 
 using namespace std;

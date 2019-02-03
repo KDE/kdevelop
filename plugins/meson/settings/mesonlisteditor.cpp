@@ -18,6 +18,7 @@
 */
 
 #include "mesonlisteditor.h"
+
 #include "ui_mesonlisteditor.h"
 
 QListWidgetItem* genItem(QString const& label)

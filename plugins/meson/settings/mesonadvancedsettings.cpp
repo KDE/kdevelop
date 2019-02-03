@@ -18,6 +18,7 @@
 */
 
 #include "mesonadvancedsettings.h"
+
 #include "ui_mesonadvancedsettings.h"
 
 using namespace KDevelop;

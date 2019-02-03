@@ -20,6 +20,7 @@
 #pragma once
 
 #include "mesonoptions.h"
+
 #include <QWidget>
 
 namespace Ui

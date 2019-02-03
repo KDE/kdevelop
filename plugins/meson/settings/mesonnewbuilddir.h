@@ -20,6 +20,7 @@
 #pragma once
 
 #include "mesonconfig.h"
+
 #include <QDialog>
 
 class QDialogButtonBox;

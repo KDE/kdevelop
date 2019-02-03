@@ -19,21 +19,25 @@
 */
 
 #include "mesonbuilder.h"
+
 #include "mesonconfig.h"
 #include "mesonjob.h"
 #include "mesonjobprune.h"
 #include "mesonmanager.h"
-#include <QDir>
-#include <QFileInfo>
 #include <debug.h>
+
 #include <executecompositejob.h>
 #include <interfaces/icore.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iproject.h>
-#include <klocalizedstring.h>
 #include <outputview/outputexecutejob.h>
 #include <project/projectmodel.h>
 #include <util/path.h>
+
+#include <KLocalizedString>
+
+#include <QDir>
+#include <QFileInfo>
 
 using namespace KDevelop;
 

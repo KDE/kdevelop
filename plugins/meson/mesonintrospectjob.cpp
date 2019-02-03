@@ -18,18 +18,20 @@
 */
 
 #include "mesonintrospectjob.h"
+
 #include "mesonconfig.h"
 #include "mesonmanager.h"
 #include "mesonoptions.h"
+#include <debug.h>
 
 #include <KProcess>
+#include <KLocalizedString>
+
 #include <QDir>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QtConcurrentRun>
-#include <debug.h>
-#include <klocalizedstring.h>
 
 using namespace Meson;
 using namespace KDevelop;

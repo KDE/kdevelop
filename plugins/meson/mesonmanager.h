@@ -22,9 +22,11 @@
 #define KDEVPLATFORM_PLUGIN_MESONMANAGER_H
 
 #include "mesonconfig.h"
-#include <memory>
+
 #include <project/abstractfilemanagerplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>
+
+#include <memory>
 
 class MesonBuilder;
 class MesonTarget;

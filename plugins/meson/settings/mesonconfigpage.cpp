@@ -18,18 +18,23 @@
 */
 
 #include "mesonconfigpage.h"
+
 #include "mesonbuilder.h"
 #include "mesonintrospectjob.h"
 #include "mesonjob.h"
 #include "mesonmanager.h"
 #include "mesonnewbuilddir.h"
 #include "ui_mesonconfigpage.h"
-#include <QIcon>
 #include <debug.h>
+
 #include <executecompositejob.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/iproject.h>
-#include <kcolorscheme.h>
+
+#include <KColorScheme>
+
+#include <QIcon>
+
 
 using namespace KDevelop;
 

@@ -18,9 +18,11 @@
 */
 
 #include "mesonnewbuilddir.h"
+
 #include "mesonbuilder.h"
 #include "mesonmanager.h"
 #include "ui_mesonnewbuilddir.h"
+#include <debug.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -29,12 +31,13 @@
 #include <interfaces/iruntimecontroller.h>
 #include <project/helper.h>
 
+#include <KColorScheme>
+#include <kio_version.h>
+
 #include <QDialogButtonBox>
 #include <QFileInfo>
+
 #include <algorithm>
-#include <debug.h>
-#include <kcolorscheme.h>
-#include <kio_version.h>
 
 using namespace KDevelop;
 

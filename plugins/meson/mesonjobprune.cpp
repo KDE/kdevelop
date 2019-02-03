@@ -18,12 +18,16 @@
 */
 
 #include "mesonjobprune.h"
+
 #include "mesonbuilder.h"
 #include "mesonconfig.h"
-#include <KIO/DeleteJob>
-#include <QDir>
-#include <klocalizedstring.h>
+
 #include <outputview/outputmodel.h>
+
+#include <KIO/DeleteJob>
+#include <KLocalizedString>
+
+#include <QDir>
 
 using namespace KDevelop;
 

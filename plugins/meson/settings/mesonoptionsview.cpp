@@ -18,13 +18,16 @@
 */
 
 #include "mesonoptionsview.h"
+
 #include "mesonconfig.h"
 #include "mesonintrospectjob.h"
 #include "mesonoptionbaseview.h"
 #include "ui_mesonoptionsview.h"
-#include <algorithm>
 #include <debug.h>
+
 #include <interfaces/iproject.h>
+
+#include <algorithm>
 
 using namespace std;
 

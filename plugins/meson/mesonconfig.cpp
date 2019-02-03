@@ -19,13 +19,17 @@
 */
 
 #include "mesonconfig.h"
+
 #include "mesonmanager.h"
-#include <KLocalizedString>
-#include <QFileDialog>
 #include <debug.h>
+
 #include <interfaces/iproject.h>
 #include <project/interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
+
+#include <KLocalizedString>
+
+#include <QFileDialog>
 
 using namespace KDevelop;
 using namespace Meson;

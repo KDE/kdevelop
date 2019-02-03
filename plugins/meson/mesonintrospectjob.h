@@ -22,9 +22,13 @@
 #include "mesonconfig.h"
 #include "mesonoptions.h"
 #include "mesontargets.h"
-#include <QFutureWatcher>
+
 #include <interfaces/iproject.h>
-#include <kjob.h>
+
+#include <KJob>
+
+#include <QFutureWatcher>
+
 #include <memory>
 
 class QJsonObject;

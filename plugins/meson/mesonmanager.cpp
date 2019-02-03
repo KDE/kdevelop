@@ -19,13 +19,15 @@
 */
 
 #include "mesonmanager.h"
+
 #include "mesonbuilder.h"
 #include "mesonconfig.h"
 #include "mesonintrospectjob.h"
 #include "mesontargets.h"
+#include "debug.h"
 #include "settings/mesonconfigpage.h"
 #include "settings/mesonnewbuilddir.h"
-#include <algorithm>
+
 #include <interfaces/iproject.h>
 #include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
@@ -37,7 +39,7 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 
-#include "debug.h"
+#include <algorithm>
 
 using namespace KDevelop;
 using namespace std;

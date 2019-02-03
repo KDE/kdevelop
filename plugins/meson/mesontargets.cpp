@@ -18,10 +18,13 @@
 */
 
 #include "mesontargets.h"
+
+#include <debug.h>
+
 #include <QJsonArray>
 #include <QJsonObject>
+
 #include <algorithm>
-#include <debug.h>
 
 using namespace std;
 using namespace KDevelop;

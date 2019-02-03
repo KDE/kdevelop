@@ -19,10 +19,12 @@
 
 #pragma once
 
+#include <util/path.h>
+
 #include <QHash>
 #include <QVector>
+
 #include <memory>
-#include <util/path.h>
 
 class QJsonArray;
 class QJsonObject;

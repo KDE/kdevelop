@@ -18,10 +18,13 @@
 */
 
 #include "mesonjob.h"
+
 #include "mesonconfig.h"
+
 #include <interfaces/iproject.h>
-#include <klocalizedstring.h>
 #include <project/projectmodel.h>
+
+#include <KLocalizedString>
 
 using namespace KDevelop;
 
