@@ -139,7 +139,7 @@ QString MesonIntrospectJob::importJSONFile(const BuildDir& buildDir, MesonIntros
                     QFileInfo(introFile).canonicalFilePath());
     }
 
-    return QStringLiteral("");
+    return QString();
 }
 
 QString MesonIntrospectJob::importMesonAPI(const BuildDir& buildDir, MesonIntrospectJob::Type type, QJsonObject* out)
@@ -174,7 +174,7 @@ QString MesonIntrospectJob::importMesonAPI(const BuildDir& buildDir, MesonIntros
                     proc.program().join(QChar::fromLatin1(' ')));
     }
 
-    return QStringLiteral("");
+    return QString();
 }
 
 QString MesonIntrospectJob::import(BuildDir buildDir)
@@ -216,7 +216,7 @@ QString MesonIntrospectJob::import(BuildDir buildDir)
         m_res_targets = std::make_shared<MesonTargets>(targetsJSON.toArray());
     }
 
-    return QStringLiteral("");
+    return QString();
 }
 
 void MesonIntrospectJob::start()

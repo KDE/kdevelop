@@ -117,7 +117,7 @@ void MesonOptionBaseView::setChanged(bool changed)
         m_ui->b_reset->setDisabled(false);
         role = KColorScheme::NeutralText;
     } else {
-        m_ui->l_name->setStyleSheet(QStringLiteral(""));
+        m_ui->l_name->setStyleSheet(QString());
         m_ui->b_reset->setDisabled(true);
         role = KColorScheme::NormalText;
     }

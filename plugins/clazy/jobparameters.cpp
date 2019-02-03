@@ -162,7 +162,7 @@ JobParameters::JobParameters(KDevelop::IProject* project, const QString& checkPa
  
     const auto pathInfo = QFileInfo(m_checkPath);
     const bool checkPathIsFile = pathInfo.isFile();
-    const auto canonicalPathToCheck = checkPathIsFile ? pathInfo.canonicalFilePath() : QStringLiteral("");
+    const auto canonicalPathToCheck = checkPathIsFile ? pathInfo.canonicalFilePath() : QString();
 
     if (!m_checkPath.isEmpty()) {
         const auto allFiles = compileCommandsFiles(commandsFilePath, m_error);

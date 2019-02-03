@@ -73,7 +73,7 @@ Q_SIGNALS:
 
 private:
     KDevelop::IProjectBuilder* m_ninjaBuilder = nullptr;
-    QString m_errorString = QStringLiteral("");
+    QString m_errorString;
 
     KJob* configureIfRequired(KDevelop::IProject* project, KJob *realJob);
 };
