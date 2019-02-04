@@ -69,7 +69,6 @@
         <comment xml:lang="nl">NVIDIA CUDA C header</comment>
         <comment xml:lang="pl">Nagłówek NVIDIA CUDA C</comment>
         <comment xml:lang="pt">Ficheiro de inclusão em CUDA C da NVIDIA</comment>
-        <comment xml:lang="pt_BR">Cabeçalho C da NVIDIA CUDA</comment>
         <comment xml:lang="sv">NVIDIA CUDA C-deklarationsfil</comment>
         <comment xml:lang="uk">файл заголовків C NVIDIA CUDA</comment>
         <sub-class-of type="text/x-c++hdr"/>
