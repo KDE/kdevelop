@@ -131,21 +131,24 @@ static QStringList availableArches(const KDevelop::Path& url)
     QProcess supportedArchesProcess;
     QStringList ret;
 
-    QObject::connect(&supportedArchesProcess, QOverload<int>::of(&QProcess::finished),
-                     &supportedArchesProcess, [&supportedArchesProcess, &ret]() {
-        supportedArchesProcess.deleteLater();
-
-        QTextStream stream(&supportedArchesProcess);
-        while (!stream.atEnd()) {
-            const QString line = stream.readLine();
-            ret << line.section(QLatin1Char('/'), 2, 2);
-        }
-    });
-
     const auto doc = FlatpakRuntime::config(url);
     const QString sdkName = doc[QLatin1String("sdk")].toString();
     const QString runtimeVersion = doc[QLatin1String("runtime-version")].toString();
-    supportedArchesProcess.start(QStringLiteral("flatpak"), {QStringLiteral("info"), QStringLiteral("-r"), sdkName + QLatin1String("//") + runtimeVersion });
+    const QString match = sdkName + QLatin1String("/(.+)/") + runtimeVersion + QLatin1Char('$');
+    QObject::connect(&supportedArchesProcess, QOverload<int>::of(&QProcess::finished),
+                     &supportedArchesProcess, [&supportedArchesProcess, &match, &ret]() {
+        QTextStream stream(&supportedArchesProcess);
+        QRegularExpression rx(match);
+        while (!stream.atEnd()) {
+            const QString line = stream.readLine();
+            auto m = rx.match(line);
+            if (m.hasMatch()) {
+                ret << m.captured(1);
+            }
+        }
+    });
+
+    supportedArchesProcess.start(QStringLiteral("flatpak"), {QStringLiteral("list"), QStringLiteral("--runtime"), QStringLiteral("--columns=ref") });
     supportedArchesProcess.waitForFinished();
     return ret;
 }
