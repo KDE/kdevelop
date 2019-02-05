@@ -85,7 +85,26 @@ public:
     QList<KDevelop::ProjectBaseItem*> prjItems;
     QList<QUrl> urls;
     bool enabled = true;
+
+    ISourceFormatter* formatterForConfigEntry(const QString& entry, const QString& mimename);
 };
+
+ISourceFormatter* SourceFormatterControllerPrivate::formatterForConfigEntry(const QString& entry, const QString& mimename)
+{
+    QStringList formatterinfo = entry.split( QStringLiteral("||"), QString::SkipEmptyParts );
+
+    if( formatterinfo.size() != 2 ) {
+        qCDebug(SHELL) << "Broken formatting entry for mime:" << mimename << "current value:" << entry;
+    }
+
+    foreach (ISourceFormatter* iformatter, sourceFormatters) {
+        if (iformatter->name() == formatterinfo.first()) {
+            return iformatter;
+        }
+    }
+
+    return nullptr;
+}
 
 QString SourceFormatterController::kateModeLineConfigKey()
 {
@@ -171,6 +190,7 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
                 const auto textDoc = QPointer<TextDocument>(dynamic_cast<TextDocument*>(doc));
                 QMetaObject::invokeMethod(this, "documentLoaded", Qt::QueuedConnection, Q_ARG(QPointer<KDevelop::TextDocument>, textDoc));
             });
+    connect(Core::self()->projectController(), &IProjectController::projectOpened, this, &SourceFormatterController::projectOpened);
 
     updateFormatTextAction();
 }
@@ -187,6 +207,32 @@ void SourceFormatterController::documentLoaded(const QPointer<TextDocument>& doc
     const auto url = doc->url();
     const auto mime = QMimeDatabase().mimeTypeForUrl(url);
     adaptEditorIndentationMode(doc->textDocument(), formatterForUrl(url, mime), url);
+}
+
+void SourceFormatterController::projectOpened(const IProject* project)
+{
+    // Adapt the indentation mode if a project was just opened. Otherwise if a document
+    // is loaded before its project, it might not have the correct indentation mode set.
+
+    auto config = project->projectConfiguration()->group(Strings::SourceFormatter());
+    if (!config.isValid() || config.readEntry(Strings::UseDefault(), true)) {
+        return;
+    }
+
+    QHash<QString, ISourceFormatter*> formatters;
+    foreach (const KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+        if (project->inProject(IndexedString(doc->url()))) {
+            const QString mimename = QMimeDatabase().mimeTypeForUrl(doc->url()).name();
+            auto it = formatters.find(mimename);
+            if (it == formatters.end()) {
+                const auto entry = config.readEntry(mimename, QString());
+                it = formatters.insert(mimename, entry.isEmpty() ? nullptr : d->formatterForConfigEntry(entry, mimename));
+            }
+            if (it.value()) {
+                adaptEditorIndentationMode(doc->textDocument(), it.value(), doc->url());
+            }
+        }
+    }
 }
 
 void SourceFormatterController::pluginLoaded(IPlugin* plugin)
@@ -328,20 +374,7 @@ ISourceFormatter* SourceFormatterController::formatterForUrl(const QUrl& url, co
         return findFirstFormatterForMimeType( mime );
     }
 
-    QStringList formatterinfo = formatter.split( QStringLiteral("||"), QString::SkipEmptyParts );
-
-    if( formatterinfo.size() != 2 ) {
-        qCDebug(SHELL) << "Broken formatting entry for mime:" << mime.name() << "current value:" << formatter;
-        return nullptr;
-    }
-
-    foreach (ISourceFormatter* iformatter, d->sourceFormatters) {
-        if (iformatter->name() == formatterinfo.first()) {
-            return iformatter;
-        }
-    }
-
-    return nullptr;
+    return d->formatterForConfigEntry(formatter, mime.name());
 }
 
 bool SourceFormatterController::isMimeTypeSupported(const QMimeType& mime)
