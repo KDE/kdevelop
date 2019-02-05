@@ -170,8 +170,7 @@ private:
         Q_ASSERT(code > 0);
         Q_ASSERT(!server->isServerAvailable());
 
-        server->deleteLater();
-        server = nullptr;
+        server.clear();
 
         // parse the JSON file
         auto* job = new CMakeImportJsonJob(project, this);
