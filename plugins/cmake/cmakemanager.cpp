@@ -344,6 +344,9 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
         if (idx < 0) {
             delete item;
         } else {
+            auto cmakeItem = dynamic_cast<CMakeTargetItem*>(item);
+            if (cmakeItem)
+                cmakeItem->setBuiltUrl(dirTargets[idx].artifacts.value(0));
             dirTargets.removeAt(idx);
         }
     }

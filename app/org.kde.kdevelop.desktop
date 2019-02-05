@@ -6,6 +6,7 @@ Icon=kdevelop
 X-DocPath=kdevelop/index.html
 Actions=OpenSession;
 Terminal=false
+StartupWMClass=kdevelop
 Name=KDevelop
 Name[ca]=KDevelop
 Name[ca@valencia]=KDevelop

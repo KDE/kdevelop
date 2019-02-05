@@ -33,6 +33,7 @@ class CMakeTargetItem : public KDevelop::ProjectExecutableTargetItem
     public:
         CMakeTargetItem(KDevelop::ProjectFolderItem* parent, const QString& name, const KDevelop::Path &builtUrl);
 
+        void setBuiltUrl(const KDevelop::Path &builtUrl) { m_builtUrl = builtUrl; }
         QUrl builtUrl() const override;
         QUrl installedUrl() const override;
 
