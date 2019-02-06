@@ -231,3 +231,11 @@ QByteArray FlatpakRuntime::getenv(const QByteArray& varname) const
         return "/app";
     return qgetenv(varname.constData());
 }
+
+KDevelop::Path FlatpakRuntime::buildPath() const
+{
+    auto file = m_file;
+    file.setLastPathSegment(QStringLiteral(".flatpak-builder"));
+    file.addPath(QStringLiteral("kdevelop"));
+    return file;
+}

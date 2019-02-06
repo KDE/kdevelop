@@ -49,6 +49,7 @@ public:
     KJob* executeOnDevice(const QString &host, const QString &path) const;
 
     static QJsonObject config(const KDevelop::Path& path);
+    KDevelop::Path buildPath() const override;
 
 private:
     void refreshJson();

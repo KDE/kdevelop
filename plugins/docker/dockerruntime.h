@@ -76,6 +76,8 @@ public:
      */
     QByteArray getenv(const QByteArray & varname) const override;
 
+    KDevelop::Path buildPath() const override { return {}; }
+
     static DockerPreferencesSettings* s_settings;
 
 private:

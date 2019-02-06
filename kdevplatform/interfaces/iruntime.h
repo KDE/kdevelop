@@ -80,6 +80,15 @@ public:
      */
     virtual QByteArray getenv(const QByteArray& varname) const = 0;
 
+    /**
+     * @returns a path for binary directories or empty if there's no such thing.
+     *
+     * Some runtime systems won't be benefiting much from having custom build directories.
+     * For such systems, the project manager will offer to initialise the build directories
+     * there instead of asking where to create them.
+     */
+    virtual Path buildPath() const = 0;
+
 protected:
     friend class RuntimeController;
 
