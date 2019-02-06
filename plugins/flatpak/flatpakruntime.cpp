@@ -195,10 +195,15 @@ QJsonObject FlatpakRuntime::config() const
 Path FlatpakRuntime::pathInHost(const KDevelop::Path& runtimePath) const
 {
     KDevelop::Path ret = runtimePath;
-    if (runtimePath.isLocalFile() && runtimePath.segments().at(0) == QLatin1String("usr")) {
+    if (!runtimePath.isLocalFile()) {
+        return ret;
+    }
+
+    const auto prefix = runtimePath.segments().at(0);
+    if (prefix == QLatin1String("usr")) {
         const auto relpath = KDevelop::Path(QStringLiteral("/usr")).relativePath(runtimePath);
         ret = Path(m_sdkPath, relpath);
-    } else if (runtimePath.isLocalFile() && runtimePath.segments().at(0) == QLatin1String("app")) {
+    } else if (prefix == QLatin1String("app")) {
         const auto relpath = KDevelop::Path(QStringLiteral("/app")).relativePath(runtimePath);
         ret = Path(m_buildDirectory, QLatin1String("/active/files/") + relpath);
     }
