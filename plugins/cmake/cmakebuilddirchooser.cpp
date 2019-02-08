@@ -109,9 +109,9 @@ void CMakeBuildDirChooser::buildDirSettings(
     QString& installDir,
     QString& buildType)
 {
-    static const QString srcLine = QStringLiteral("CMAKE_HOME_DIRECTORY:INTERNAL=");
-    static const QString installLine = QStringLiteral("CMAKE_INSTALL_PREFIX:PATH=");
-    static const QString buildLine = QStringLiteral("CMAKE_BUILD_TYPE:STRING=");
+    const QByteArray srcLine = QByteArrayLiteral("CMAKE_HOME_DIRECTORY:INTERNAL=");
+    const QByteArray installLine = QByteArrayLiteral("CMAKE_INSTALL_PREFIX:PATH=");
+    const QByteArray buildLine = QByteArrayLiteral("CMAKE_BUILD_TYPE:STRING=");
 
     const Path cachePath(buildDir, QStringLiteral("CMakeCache.txt"));
     QFile file(cachePath.toLocalFile());
@@ -129,24 +129,19 @@ void CMakeBuildDirChooser::buildDirSettings(
     int cnt = 0;
     while (cnt != 3 && !file.atEnd())
     {
-        // note: CMakeCache.txt is UTF8-encoded, also see bug 329305
-        QString line = QString::fromUtf8(file.readLine().trimmed());
+        const auto rawLine = file.readLine();
 
-        if (line.startsWith(srcLine))
+        auto match = [&rawLine](const QByteArray& prefix, QString* target) -> bool
         {
-            srcDir = line.mid(srcLine.count());
-            ++cnt;
-        }
+            if (rawLine.startsWith(prefix)) {
+                // note: CMakeCache.txt is UTF8-encoded, also see bug 329305
+                *target = QString::fromUtf8(rawLine.constData() + prefix.size(), rawLine.size() - prefix.size());
+                return true;
+            }
+            return false;
+        };
 
-        if (line.startsWith(installLine))
-        {
-            installDir = line.mid(installLine.count());
-            ++cnt;
-        }
-
-        if (line.startsWith(buildLine))
-        {
-            buildType = line.mid(buildLine.count());
+        if (match(srcLine, &srcDir) || match(installLine, &installDir) || match(buildLine, &buildType)) {
             ++cnt;
         }
     }
