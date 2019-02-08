@@ -76,7 +76,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
 
     const auto defaultInstallPrefix = ICore::self()->runtimeController()->currentRuntime()->getenv("KDEV_DEFAULT_INSTALL_PREFIX");
     if (!defaultInstallPrefix.isEmpty()) {
-        m_chooserUi->installPrefix->setPath(QFile::decodeName(defaultInstallPrefix));
+        m_chooserUi->installPrefix->setUrl(QUrl::fromLocalFile(QFile::decodeName(defaultInstallPrefix)));
     }
 
     updated();
