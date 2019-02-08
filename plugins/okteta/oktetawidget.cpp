@@ -122,33 +122,7 @@ void OktetaWidget::setupActions(OktetaPlugin* plugin)
 
     foreach( Kasten::AbstractXmlGuiController* controller, mControllers )
         controller->setTargetModel( mByteArrayView );
-#if 0
-    QDesignerFormWindowManagerInterface* manager = mDocument->form()->core()->formWindowManager();
-    KActionCollection* ac = actionCollection();
-
-    KStandardAction::save( this, SLOT(save()), ac);
-    ac->addAction( "adjust_size", manager->actionAdjustSize() );
-    ac->addAction( "break_layout", manager->actionBreakLayout() );
-    ac->addAction( "designer_cut", manager->actionCut() );
-    ac->addAction( "designer_copy", manager->actionCopy() );
-    ac->addAction( "designer_paste", manager->actionPaste() );
-    ac->addAction( "designer_delete", manager->actionDelete() );
-    ac->addAction( "layout_grid", manager->actionGridLayout() );
-    ac->addAction( "layout_horiz", manager->actionHorizontalLayout() );
-    ac->addAction( "layout_vertical", manager->actionVerticalLayout() );
-    ac->addAction( "layout_split_horiz", manager->actionSplitHorizontal() );
-    ac->addAction( "layout_split_vert", manager->actionSplitVertical() );
-    ac->addAction( "designer_undo", manager->actionUndo() );
-    ac->addAction( "designer_redo", manager->actionRedo() );
-    ac->addAction( "designer_select_all", manager->actionSelectAll() );
-#endif
 }
-#if 0
-void OktetaWidget::save()
-{
-    mDocument->save();
-}
-#endif
 
 OktetaWidget::~OktetaWidget()
 {
