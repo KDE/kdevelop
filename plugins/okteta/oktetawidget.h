@@ -45,14 +45,7 @@ class OktetaWidget : public QWidget, public KXMLGUIClient
   public:
     OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayView, OktetaPlugin* plugin );
     ~OktetaWidget() override;
-#if 0
-    private Q_SLOTS:
-        void save();
-        void editWidgets();
-        void editBuddys();
-        void editSignals();
-        void editTabOrder();
-#endif
+
   private:
     void setupActions(OktetaPlugin* plugin);
 
