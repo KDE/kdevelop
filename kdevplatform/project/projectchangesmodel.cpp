@@ -98,7 +98,11 @@ void ProjectChangesModel::addProject(IProject* p)
 void ProjectChangesModel::removeProject(IProject* p)
 {
     QStandardItem* it=projectItem(p);
-    
+    if (!it) {
+        // when the project is closed before it was fully populated, we won't ever see a
+        // projectOpened signal - handle this gracefully by just ignoring the remove request
+        return;
+    }
     removeRow(it->row());
 }
 
