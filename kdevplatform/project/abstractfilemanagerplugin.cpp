@@ -27,6 +27,7 @@
 #include <QHashIterator>
 #include <QFileInfo>
 #include <QApplication>
+#include <QTimer>
 #ifdef TIME_IMPORT_JOB
 #include <QElapsedTimer>
 #endif
@@ -255,6 +256,10 @@ void AbstractFileManagerPluginPrivate::created(const QString& path_)
 {
     qCDebug(FILEMANAGER) << "created:" << path_;
     QFileInfo info(path_);
+    if (!info.exists()) {
+        // we delay handling of the signal, so maybe the path actually got removed again
+        return;
+    }
 
     ///FIXME: share memory with parent
     const Path path(path_);
@@ -310,7 +315,7 @@ void AbstractFileManagerPluginPrivate::created(const QString& path_)
 void AbstractFileManagerPluginPrivate::deleted(const QString& path_)
 {
     if ( QFile::exists(path_) ) {
-        // stopDirScan...
+        // we delay handling of the signal, so maybe the path actually exists again
         return;
     }
     // ensure that the path is not inside a stopped folder
@@ -470,10 +475,24 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
         auto watcher = new KDirWatch( project );
 
         // set up the signal handling
+        // NOTE: We delay handling of the creation/deletion events here by one second to prevent
+        //       useless or even outright wrong handling of events during comming git workflows.
+        //       I.e. sometimes we used to get a 'delete' event during a rebase which was never
+        //       followed up by a 'created' signal, even though the file actually exists after
+        //       the rebase.
+        //       see also: https://bugs.kde.org/show_bug.cgi?id=404184
         connect(watcher, &KDirWatch::created,
-                this, [&] (const QString& path_) { d->created(path_); });
+                this, [&] (const QString& path) {
+                    QTimer::singleShot(1000, this, [this, path]() {
+                        d->created(path);
+                    });
+                });
         connect(watcher, &KDirWatch::deleted,
-                this, [&] (const QString& path_) { d->deleted(path_); });
+                this, [&] (const QString& path) {
+                    QTimer::singleShot(1000, this, [this, path]() {
+                        d->deleted(path);
+                    });
+                });
         watcher->addDir(project->path().toLocalFile(), KDirWatch::WatchSubDirs | KDirWatch:: WatchFiles );
         d->m_watchers[project] = watcher;
     }
