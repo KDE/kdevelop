@@ -195,6 +195,10 @@ bool ClangCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, co
     if (noCompletionAfter.contains(lastChar)) {
         return false;
     }
+    const auto wordAtPosition = view->document()->wordAt(position);
+    if (!wordAtPosition.isEmpty() && wordAtPosition.at(0).isDigit()) {
+        return false;
+    }
     // also show include path completion after dashes
     if (userInsertion && lastChar == QLatin1Char('-') && includePathCompletionRequired(view->document()->line(position.line()))) {
         return true;
