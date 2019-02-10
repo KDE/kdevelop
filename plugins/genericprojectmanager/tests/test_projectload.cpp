@@ -184,12 +184,6 @@ void TestProjectLoad::removeDirRecursive()
         }
     }
 
-    //close previously opened projects
-    QTest::qWait(1000); //wait for projects to load
-    foreach ( IProject* p, ICore::self()->projectController()->projects()) {
-        ICore::self()->projectController()->closeProject(p);
-        QTest::qWait(100);
-    }
     QVERIFY(ICore::self()->projectController()->projects().isEmpty());
 
     ICore::self()->projectController()->openProject(p.file);
