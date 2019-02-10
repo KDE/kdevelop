@@ -64,6 +64,13 @@ FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
 #endif
 }
 
+FileManagerListJob::~FileManagerListJob()
+{
+    // lock and abort to ensure our background list job is stopped
+    std::lock_guard<std::mutex> lock(m_listing);
+    m_aborted = true;
+}
+
 void FileManagerListJob::addSubDir( ProjectFolderItem* item )
 {
     Q_ASSERT(!m_listQueue.contains(item));
@@ -103,7 +110,10 @@ void FileManagerListJob::startNextJob()
     m_item = m_listQueue.dequeue();
     if (m_item->path().isLocalFile()) {
         // optimized version for local projects using QDir directly
+        // start locking to ensure we don't get destroyed while waiting for the list to finish
+        m_listing.lock();
         QtConcurrent::run([this] (const Path& path) {
+            std::lock_guard<std::mutex> lock(m_listing, std::adopt_lock);
             if (m_aborted) {
                 return;
             }

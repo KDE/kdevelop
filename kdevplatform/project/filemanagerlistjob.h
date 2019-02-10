@@ -23,6 +23,8 @@
 #include <KIO/Job>
 #include <QQueue>
 
+#include <mutex>
+
 // uncomment to time import jobs
 // #define TIME_IMPORT_JOB
 
@@ -41,6 +43,7 @@ class FileManagerListJob : public KIO::Job
 
 public:
     explicit FileManagerListJob(ProjectFolderItem* item);
+    virtual ~FileManagerListJob();
 
     void addSubDir(ProjectFolderItem* item);
     void handleRemovedItem(ProjectBaseItem* item);
@@ -67,6 +70,7 @@ private:
     KIO::UDSEntryList entryList;
     // kill does not delete the job instantaneously
     QAtomicInt m_aborted;
+    std::mutex m_listing;
 
 #ifdef TIME_IMPORT_JOB
     QElapsedTimer m_timer;
