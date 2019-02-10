@@ -41,8 +41,7 @@ declare_qt_logging_category(debuggercommon_SRCS
     TYPE PLUGIN
     HEADER debuglog.h
     IDENTIFIER DEBUGGERCOMMON
-    CATEGORY_BASENAME "common"
-    DESCRIPTION "debuggers common"
+    CATEGORY_BASENAME "debuggercommon"
 )
 
 ki18n_wrap_ui(debuggercommon_SRCS

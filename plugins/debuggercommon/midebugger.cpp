@@ -340,7 +340,7 @@ void MIDebugger::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
 
 void MIDebugger::processErrored(QProcess::ProcessError error)
 {
-    qCDebug(DEBUGGERCOMMON) << "Debugger ERRORED" << error;
+    qCWarning(DEBUGGERCOMMON) << "Debugger ERRORED" << error << m_process->errorString();
     if(error == QProcess::FailedToStart)
     {
         KMessageBox::information(

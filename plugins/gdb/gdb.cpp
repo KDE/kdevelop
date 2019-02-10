@@ -61,6 +61,8 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
     QStringList arguments = extraArguments;
     arguments << QStringLiteral("--interpreter=mi2") << QStringLiteral("-quiet");
 
+    QString fullCommand;
+
     QUrl shell = config.readEntry(Config::DebuggerShellEntry, QUrl());
     if(!shell.isEmpty()) {
         qCDebug(DEBUGGERGDB) << "have shell" << shell;
@@ -85,14 +87,14 @@ bool GdbDebugger::start(KConfigGroup& config, const QStringList& extraArguments)
         m_process->setShellCommand(KShell::joinArgs(arguments));
     } else {
         m_process->setProgram(m_debuggerExecutable, arguments);
+        fullCommand = m_debuggerExecutable + QLatin1Char(' ');
     }
+    fullCommand += arguments.join(QLatin1Char(' '));
 
     m_process->start();
 
-    qCDebug(DEBUGGERGDB) << "Starting GDB with command" << shell.toLocalFile() + QLatin1Char(' ') + m_debuggerExecutable
-                           + QLatin1Char(' ') + arguments.join(QLatin1Char(' '));
+    qCDebug(DEBUGGERGDB) << "Starting GDB with command" << fullCommand;
     qCDebug(DEBUGGERGDB) << "GDB process pid:" << m_process->pid();
-    emit userCommandOutput(shell.toLocalFile() + QLatin1Char(' ') + m_debuggerExecutable
-                           + QLatin1Char(' ') + arguments.join(QLatin1Char(' ')) + QLatin1Char('\n'));
+    emit userCommandOutput(fullCommand + QLatin1Char('\n'));
     return true;
 }
