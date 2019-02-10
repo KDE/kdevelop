@@ -151,19 +151,20 @@ void TestProjectLoad::addRemoveFiles()
         QVERIFY(f2.exists());
         f2.remove();
     }
-    QTest::qWait(500);
+    QTRY_COMPARE(project->projectItem()->fileList().count(), 51);
 
     QUrl url = QUrl::fromLocalFile(p.dir->path()+"/blub"+QString::number(50)).adjusted(QUrl::NormalizePathSegments);
     QCOMPARE(project->filesForPath(IndexedString(url)).count(), 1);
     ProjectFileItem* file = project->filesForPath(IndexedString(url)).at(0);
     project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
+    QTRY_COMPARE(project->projectItem()->fileList().count(), 50);
+
     for (int i=51; i<100; ++i) {
         QFile f2(p.dir->path()+"/blub"+QString::number(i));
         f2.remove();
     }
 
-    QTest::qWait(2000);
-    QCOMPARE(project->projectItem()->fileList().count(), 1);
+    QTRY_COMPARE(project->projectItem()->fileList().count(), 1);
 }
 
 void TestProjectLoad::removeDirRecursive()
@@ -200,8 +201,7 @@ void TestProjectLoad::removeDirRecursive()
         project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file );
     }
 
-    QTest::qWait(2000);
-    QCOMPARE(project->projectItem()->fileList().count(), 1);
+    QTRY_COMPARE(project->projectItem()->fileList().count(), 1);
 }
 
 bool createFile(const QString& path)
@@ -277,9 +277,7 @@ void TestProjectLoad::addLotsOfFiles()
     TestProject p = makeProject();
 
     ICore::self()->projectController()->openProject(p.file);
-    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(),
-                       SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
-    QCOMPARE(ICore::self()->projectController()->projects().size(), 1);
+    QTRY_COMPARE(ICore::self()->projectController()->projects().size(), 1);
     IProject* project = ICore::self()->projectController()->projects().first();
     QCOMPARE(project->projectFile().toUrl(), p.file);
 
@@ -295,20 +293,10 @@ void TestProjectLoad::addMultipleJobs()
     const TestProject p2 = makeProject();
     QVERIFY(fillProject(10, 25, p2, false));
 
-    QSignalSpy spy(ICore::self()->projectController(),
-                   SIGNAL(projectOpened(KDevelop::IProject*)));
     ICore::self()->projectController()->openProject(p1.file);
     ICore::self()->projectController()->openProject(p2.file);
 
-    const int wait = 25;
-    const int maxWait = 2000;
-    int waited = 0;
-    while(waited < maxWait && spy.count() != 2) {
-        QTest::qWait(wait);
-        waited += wait;
-    }
-
-    QCOMPARE(ICore::self()->projectController()->projects().size(), 2);
+    QTRY_COMPARE(ICore::self()->projectController()->projects().size(), 2);
 }
 
 void TestProjectLoad::raceJob()
@@ -326,10 +314,7 @@ void TestProjectLoad::raceJob()
     }
 
     ICore::self()->projectController()->openProject(p.file);
-    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(),
-                       SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
-
-    QCOMPARE(ICore::self()->projectController()->projectCount(), 1);
+    QTRY_COMPARE(ICore::self()->projectController()->projectCount(), 1);
     IProject *project = ICore::self()->projectController()->projectAt(0);
     QCOMPARE(project->projectFile().toUrl(), p.file);
     ProjectFolderItem* root = project->projectItem();
@@ -351,25 +336,18 @@ void TestProjectLoad::raceJob()
     // move sub dir
     QVERIFY(dir.rename(QStringLiteral("test2/zzzzz"), QStringLiteral("test2/bla")));
 
-    QTest::qWait(500);
-
-    QCOMPARE(root->rowCount(), 1);
-    testItem = root->child(0);
-    QVERIFY(testItem->folder());
-    QCOMPARE(testItem->baseName(), QStringLiteral("test2"));
+    QTRY_COMPARE(root->rowCount() == 1 ? root->child(0)->baseName() : QString(), QStringLiteral("test2"));
 
     // reload full model and then move dir
     project->reloadModel();
     QVERIFY(dir.rename(QStringLiteral("test2"), QStringLiteral("test3")));
-    QTest::qWait(500);
 
     // note: this actually invalidates the root, so query that again
+    QTRY_VERIFY(root != project->projectItem());
     root = project->projectItem();
     QVERIFY(root);
-    QCOMPARE(root->rowCount(), 1);
-    testItem = root->child(0);
-    QVERIFY(testItem->folder());
-    QCOMPARE(testItem->baseName(), QStringLiteral("test3"));
+
+    QTRY_COMPARE(root->rowCount() == 1 ? root->child(0)->baseName() : QString(), QStringLiteral("test3"));
 }
 
 void TestProjectLoad::addDuringImport()
@@ -409,9 +387,7 @@ void TestProjectLoad::addDuringImport()
     createFile(file2.toLocalFile());
     QVERIFY(!project->isReady());
     // now wait for finish
-    QVERIFY(QSignalSpy(KDevelop::ICore::self()->projectController(),\
-                       SIGNAL(projectOpened(KDevelop::IProject*))).wait(2000));
-    QVERIFY(project->isReady());
+    QTRY_VERIFY(project->isReady());
     // make sure our file removal + addition was properly tracked
     QCOMPARE(project->filesForPath(IndexedString(file)).size(), 0);
     QCOMPARE(project->filesForPath(IndexedString(file2)).size(), 1);
