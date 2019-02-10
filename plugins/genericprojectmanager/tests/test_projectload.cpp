@@ -45,42 +45,7 @@ Q_DECLARE_METATYPE(KDevelop::IProject*)
 
 using namespace KDevelop;
 
-///FIXME: get rid of this, use temporary dir+file classes!
-void exec(const QString &cmd)
-{
-    QProcess proc;
-    proc.setProcessChannelMode(QProcess::ForwardedChannels);
-    proc.start(cmd);
-    proc.waitForFinished();
-    Q_ASSERT(proc.exitStatus() == QProcess::NormalExit);
-    Q_ASSERT(proc.exitStatus() == 0);
-}
-
-void TestProjectLoad::initTestCase()
-{
-    AutoTestShell::init({QStringLiteral("KDevGenericManager")});
-    TestCore::initialize();
-    ICore::self()->languageController()->backgroundParser()->disableProcessing();
-
-    qRegisterMetaType<IProject*>();
-
-    foreach(IProject* p, ICore::self()->projectController()->projects()) {
-        ICore::self()->projectController()->closeProject(p);
-    }
-}
-
-void TestProjectLoad::cleanupTestCase()
-{
-    TestCore::shutdown();
-}
-
-void TestProjectLoad::init()
-{
-    foreach(IProject* p, ICore::self()->projectController()->projects()) {
-        ICore::self()->projectController()->closeProject(p);
-    }
-    QCOMPARE(ICore::self()->projectController()->projects().size(), 0);
-}
+namespace {
 
 struct TestProject
 {
@@ -124,84 +89,6 @@ TestProject makeProject()
     Q_ASSERT(projecturl.adjusted(QUrl::RemoveFilename).toLocalFile() == ret.dir->path() + '/');
 
     return ret;
-}
-
-void TestProjectLoad::addRemoveFiles()
-{
-    const TestProject p = makeProject();
-
-    QFile f(p.dir->path()+"/sdf");
-    f.open(QIODevice::WriteOnly);
-    f.close();
-
-    ICore::self()->projectController()->openProject(p.file);
-    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
-    QVERIFY(spy.wait(2000));
-    IProject* project = ICore::self()->projectController()->projects().first();
-    QCOMPARE(project->projectFile().toUrl(), p.file);
-
-    //KDirWatch adds/removes the file automatically
-    for (int i=0; i<100; ++i) {
-        QFile f2(p.dir->path()+"/blub"+QString::number(i));
-        f2.open(QIODevice::WriteOnly);
-        f2.close();
-    }
-    for (int i=0; i<50; ++i) {
-        QFile f2(p.dir->path()+"/blub"+QString::number(i));
-        QVERIFY(f2.exists());
-        f2.remove();
-    }
-    QTRY_COMPARE(project->projectItem()->fileList().count(), 51);
-
-    QUrl url = QUrl::fromLocalFile(p.dir->path()+"/blub"+QString::number(50)).adjusted(QUrl::NormalizePathSegments);
-    QCOMPARE(project->filesForPath(IndexedString(url)).count(), 1);
-    ProjectFileItem* file = project->filesForPath(IndexedString(url)).at(0);
-    project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
-    QTRY_COMPARE(project->projectItem()->fileList().count(), 50);
-
-    for (int i=51; i<100; ++i) {
-        QFile f2(p.dir->path()+"/blub"+QString::number(i));
-        f2.remove();
-    }
-
-    QTRY_COMPARE(project->projectItem()->fileList().count(), 1);
-}
-
-void TestProjectLoad::removeDirRecursive()
-{
-    const TestProject p = makeProject();
-
-    {
-        QFile f(p.dir->path()+"/sdf");
-        f.open(QIODevice::WriteOnly);
-        f.close();
-    }
-    {
-        QDir(p.dir->path()).mkdir(QStringLiteral("blub"));
-        for (int i=0; i<10; ++i) {
-            QFile f(p.dir->path()+"/blub/file"+QString::number(i));
-            f.open(QIODevice::WriteOnly);
-            f.close();
-        }
-    }
-
-    QVERIFY(ICore::self()->projectController()->projects().isEmpty());
-
-    ICore::self()->projectController()->openProject(p.file);
-    QSignalSpy spy(KDevelop::ICore::self()->projectController(), SIGNAL(projectOpened(KDevelop::IProject*)));
-    QVERIFY(spy.wait(20000));
-    IProject* project = ICore::self()->projectController()->projects().first();
-    QCOMPARE(project->projectFile().toUrl(), p.file);
-
-    for (int i=0; i<1; ++i) {
-        QUrl url = QUrl::fromLocalFile(p.dir->path()+"/blub").adjusted(QUrl::NormalizePathSegments);
-        QCOMPARE(project->foldersForPath(IndexedString(url)).count(), 1);
-
-        ProjectFolderItem* file = project->foldersForPath(IndexedString(url)).at(0);
-        project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file );
-    }
-
-    QTRY_COMPARE(project->projectItem()->fileList().count(), 1);
 }
 
 bool createFile(const QString& path)
@@ -270,6 +157,98 @@ bool fillProject(int filesPerDir, int dirs, const TestProject& project, bool wai
         }
     }
     return true;
+}
+}
+
+void TestProjectLoad::initTestCase()
+{
+    AutoTestShell::init({QStringLiteral("KDevGenericManager")});
+    TestCore::initialize();
+    ICore::self()->languageController()->backgroundParser()->disableProcessing();
+
+    qRegisterMetaType<IProject*>();
+
+    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+        ICore::self()->projectController()->closeProject(p);
+    }
+}
+
+void TestProjectLoad::cleanupTestCase()
+{
+    TestCore::shutdown();
+}
+
+void TestProjectLoad::init()
+{
+    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+        ICore::self()->projectController()->closeProject(p);
+    }
+    QCOMPARE(ICore::self()->projectController()->projects().size(), 0);
+}
+
+void TestProjectLoad::addRemoveFiles()
+{
+    const TestProject p = makeProject();
+
+    createFile(p.dir->path()+"/sdf");
+
+    ICore::self()->projectController()->openProject(p.file);
+    QTRY_COMPARE(ICore::self()->projectController()->projects().size(), 1);
+    IProject* project = ICore::self()->projectController()->projects().first();
+    QCOMPARE(project->projectFile().toUrl(), p.file);
+
+    //KDirWatch adds/removes the file automatically
+    for (int i=0; i<100; ++i) {
+        createFile(p.dir->path()+"/blub"+QString::number(i));
+    }
+    for (int i=0; i<50; ++i) {
+        QFile::remove(p.dir->path()+"/blub"+QString::number(i));
+    }
+    QTRY_COMPARE(project->projectItem()->fileList().count(), 51);
+
+    QUrl url = QUrl::fromLocalFile(p.dir->path()+"/blub"+QString::number(50)).adjusted(QUrl::NormalizePathSegments);
+    QCOMPARE(project->filesForPath(IndexedString(url)).count(), 1);
+    ProjectFileItem* file = project->filesForPath(IndexedString(url)).at(0);
+    project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file ); //message box has to be accepted manually :(
+    QTRY_COMPARE(project->projectItem()->fileList().count(), 50);
+
+    for (int i=51; i<100; ++i) {
+        QFile::remove(p.dir->path()+"/blub"+QString::number(i));
+    }
+
+    QTRY_COMPARE(project->projectItem()->fileList().count(), 1);
+}
+
+void TestProjectLoad::removeDirRecursive()
+{
+    const TestProject p = makeProject();
+
+    createFile(p.dir->path()+"/sdf");
+    {
+        QDir d(p.dir->path());
+        QVERIFY(d.mkdir(QStringLiteral("blub")));
+        QVERIFY(d.cd(QStringLiteral("blub")));
+        for (int i=0; i<10; ++i) {
+            createFile(d.filePath("file"+QString::number(i)));
+        }
+    }
+
+    QVERIFY(ICore::self()->projectController()->projects().isEmpty());
+
+    ICore::self()->projectController()->openProject(p.file);
+    QTRY_COMPARE(ICore::self()->projectController()->projects().size(), 1);
+    IProject* project = ICore::self()->projectController()->projects().first();
+    QCOMPARE(project->projectFile().toUrl(), p.file);
+
+    for (int i=0; i<1; ++i) {
+        QUrl url = QUrl::fromLocalFile(p.dir->path()+"/blub").adjusted(QUrl::NormalizePathSegments);
+        QCOMPARE(project->foldersForPath(IndexedString(url)).count(), 1);
+
+        ProjectFolderItem* file = project->foldersForPath(IndexedString(url)).at(0);
+        project->projectFileManager()->removeFilesAndFolders(QList<ProjectBaseItem*>() << file );
+    }
+
+    QTRY_COMPARE(project->projectItem()->fileList().count(), 1);
 }
 
 void TestProjectLoad::addLotsOfFiles()
