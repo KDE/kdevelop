@@ -268,6 +268,12 @@ bool MesonManager::hasBuildInfo(KDevelop::ProjectBaseItem* item) const
     return true;
 }
 
+KDevelop::Path MesonManager::compiler(KDevelop::ProjectTargetItem* item) const
+{
+    const auto source = sourceFromItem(item);
+    return source && !source->compiler().isEmpty() ? KDevelop::Path(source->compiler().constFirst()) : KDevelop::Path();
+}
+
 // ********************
 // * Custom functions *
 // ********************
