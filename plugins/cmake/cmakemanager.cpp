@@ -170,7 +170,7 @@ private:
         Q_ASSERT(code > 0);
         Q_ASSERT(!server->isServerAvailable());
 
-        server.clear();
+        qCDebug(CMAKE) << "CMake does not provide server mode, using compile_commands.json to import" << project->name();
 
         // parse the JSON file
         CMakeImportJsonJob* job = new CMakeImportJsonJob(project, this);
