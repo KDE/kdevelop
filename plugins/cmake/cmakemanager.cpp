@@ -313,6 +313,8 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
         connect(job, &KJob::finished, this, [project](KJob* job) {
             if (job->error())
                 return;
+
+            KDevelop::ICore::self()->projectController()->projectConfigurationChanged(project);
             KDevelop::ICore::self()->projectController()->reparseProject(project, true);
         });
     }
@@ -1023,6 +1025,37 @@ void CMakeManager::reloadProjects()
         CMake::checkForNeedingConfigure(project);
         reload(project->projectItem());
     }
+}
+
+CMakeTarget CMakeManager::targetInformation(KDevelop::ProjectTargetItem* item) const
+{
+    const auto targets = m_projects[item->project()].targets[item->parent()->path()];
+    for (auto target: targets) {
+        if (item->text() == target.name) {
+            return target;
+        }
+    }
+    return {};
+}
+
+KDevelop::Path CMakeManager::compiler(KDevelop::ProjectTargetItem* item) const
+{
+    const auto targetInfo = targetInformation(item);
+    if (targetInfo.sources.isEmpty()) {
+        qCDebug(CMAKE) << "could not find target" << item->text();
+        return {};
+    }
+
+    const auto info = m_projects[item->project()].compilationData.files[targetInfo.sources.constFirst()];
+    const auto lang = info.language;
+    if (lang.isEmpty()) {
+        qCDebug(CMAKE) << "no language for" << item << item->text() << info.defines << targetInfo.sources.constFirst();
+        return {};
+    }
+    const QString var = QLatin1String("CMAKE_") + lang + QLatin1String("_COMPILER");
+    const auto ret = CMake::readCacheValues(KDevelop::Path(buildDirectory(item), QStringLiteral("CMakeCache.txt")), {var});
+    qCDebug(CMAKE) << "compiler for" << lang << var << ret;
+    return KDevelop::Path(ret.value(var));
 }
 
 #include "cmakemanager.moc"

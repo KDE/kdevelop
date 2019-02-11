@@ -130,6 +130,11 @@ public:
      * @returns the extra arguments that will be passed to the compiler when building @p item
      */
     virtual QString extraArguments(ProjectBaseItem* item) const = 0;
+
+    /**
+     * @returns the absolute path to the tool that will be used or an empty path if unknown
+     */
+    virtual Path compiler(KDevelop::ProjectTargetItem* p) const = 0;
 };
 
 }

@@ -32,6 +32,12 @@ QString ClangFactory::name() const
     return QStringLiteral("Clang");
 }
 
+bool ClangFactory::isSupported(const KDevelop::Path& path) const
+{
+    const auto filename = path.lastPathSegment();
+    return filename.contains(QLatin1String("clang")) && !filename.contains(QLatin1String("clang-cl"));
+}
+
 CompilerPointer ClangFactory::createCompiler(const QString& name, const QString& path, bool editable ) const
 {
     return CompilerPointer(new GccLikeCompiler(name, path, editable, this->name()));
@@ -48,6 +54,11 @@ void ClangFactory::registerDefaultCompilers(CompilerProvider* provider) const
 QString GccFactory::name() const
 {
     return QStringLiteral("GCC");
+}
+
+bool GccFactory::isSupported(const KDevelop::Path& path) const
+{
+    return path.lastPathSegment().contains(QLatin1String("gcc")) || path.lastPathSegment().contains(QLatin1String("g++"));
 }
 
 CompilerPointer GccFactory::createCompiler(const QString& name, const QString& path, bool editable ) const
@@ -76,4 +87,9 @@ CompilerPointer MsvcFactory::createCompiler(const QString& name, const QString& 
 void MsvcFactory::registerDefaultCompilers(CompilerProvider* provider) const
 {
     provider->registerCompiler(createCompiler(name(), QStringLiteral("cl.exe"), false));
+}
+
+bool MsvcFactory::isSupported(const KDevelop::Path& path) const
+{
+    return path.lastPathSegment() == QLatin1String("cl.exe") || path.lastPathSegment().contains(QLatin1String("clang-cl"));
 }

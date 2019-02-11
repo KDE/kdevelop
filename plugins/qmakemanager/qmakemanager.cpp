@@ -510,4 +510,9 @@ void QMakeProjectManager::slotRunQMake()
     KDevelop::ICore::self()->runController()->registerJob(job);
 }
 
+KDevelop::Path QMakeProjectManager::compiler(KDevelop::ProjectTargetItem* p) const
+{
+    return {};
+}
+
 #include "qmakemanager.moc"

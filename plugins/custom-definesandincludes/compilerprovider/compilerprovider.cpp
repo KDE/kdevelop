@@ -30,6 +30,8 @@
 #include <interfaces/iruntime.h>
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/ibuildsystemmanager.h>
 #include <project/projectmodel.h>
 
 #include <KLocalizedString>
@@ -100,6 +102,22 @@ ConfigEntry configForItem(KDevelop::ProjectBaseItem* item)
 }
 }
 
+ProjectTargetItem* findCompiledTarget(ProjectBaseItem* item)
+{
+    for(auto item: item->targetList()) {
+        if (item->type() == ProjectBaseItem::ExecutableTarget || item->type() == ProjectBaseItem::LibraryTarget) {
+            return item;
+        }
+    }
+
+    for(auto folder: item->folderList()) {
+        auto target = findCompiledTarget(folder);
+        if (target)
+            return target;
+    }
+    return nullptr;
+}
+
 CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
     : QObject( parent )
     , m_settings(settings)
@@ -128,9 +146,43 @@ CompilerProvider::CompilerProvider( SettingsManager* settings, QObject* parent )
     retrieveUserDefinedCompilers();
 
     connect(ICore::self()->runtimeController(), &IRuntimeController::currentRuntimeChanged, this, [this]() { m_defaultProvider.clear(); });
+    connect(ICore::self()->projectController(), &IProjectController::projectConfigurationChanged, this, &CompilerProvider::projectChanged);
+    connect(ICore::self()->projectController(), &IProjectController::projectOpened, this, &CompilerProvider::projectChanged);
 }
 
 CompilerProvider::~CompilerProvider() = default;
+
+void CompilerProvider::projectChanged(KDevelop::IProject* p)
+{
+    const auto target = findCompiledTarget(p->projectItem());
+    if (!target)
+        return;
+
+    auto path = p->buildSystemManager()->compiler(target);
+    qCDebug(DEFINESANDINCLUDES) << "found compiler" << path;
+    if (path.isEmpty())
+        return;
+
+    Q_ASSERT(QDir::isAbsolutePath(path.toLocalFile()));
+    const auto pathString = path.toLocalFile();
+    auto it = std::find_if(m_compilers.begin(), m_compilers.end(),
+        [pathString](const CompilerPointer& compiler) { return compiler->path() == pathString; });
+    if (it != m_compilers.end()) {
+        m_defaultProvider = *it;
+        return;
+    }
+
+    //we need to search, sdk compiler names are weird: arm-linux-androideabi-g++
+    for (auto factory : m_factories) {
+        if (factory->isSupported(path)) {
+            auto compiler = factory->createCompiler(path.lastPathSegment(), pathString);
+            const auto registered = registerCompiler(compiler);
+            m_defaultProvider = compiler;
+        }
+    }
+
+    qCDebug(DEFINESANDINCLUDES) << "using compiler" << m_defaultProvider << path;
+}
 
 QHash<QString, QString> CompilerProvider::defines( const QString& path ) const
 {

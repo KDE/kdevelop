@@ -324,5 +324,9 @@ void CustomMakeManager::unload()
   IDefinesAndIncludesManager::manager()->unregisterBackgroundProvider(m_provider.data());
 }
 
-#include "custommakemanager.moc"
+KDevelop::Path CustomMakeManager::compiler(KDevelop::ProjectTargetItem* item) const
+{
+    return {};
+}
 
+#include "custommakemanager.moc"

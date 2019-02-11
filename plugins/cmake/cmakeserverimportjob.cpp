@@ -115,6 +115,7 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
                     CMakeFile file;
                     file.includes = kTransform<KDevelop::Path::List>(fileGroup.value(QStringLiteral("includePath")).toArray(), [](const QJsonValue& val) { return KDevelop::Path(val.toObject().value(QStringLiteral("path")).toString()); });
 
+                    file.language = fileGroup.value(QStringLiteral("language")).toString(),
                     file.compileFlags = fileGroup.value(QStringLiteral("compileFlags")).toString();
                     file.defines = processDefines(file.compileFlags, fileGroup.value(QStringLiteral("defines")).toArray());
 

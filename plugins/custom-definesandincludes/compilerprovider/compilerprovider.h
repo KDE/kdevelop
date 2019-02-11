@@ -67,6 +67,7 @@ public:
 
 private Q_SLOTS:
     void retrieveUserDefinedCompilers();
+    void projectChanged(KDevelop::IProject* p);
 
 private:
     mutable CompilerPointer m_defaultProvider;

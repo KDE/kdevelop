@@ -113,6 +113,8 @@ public:
      */
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const override;
 
+    KDevelop::Path compiler(KDevelop::ProjectTargetItem * p) const override;
+
 protected:
     KDevelop::ProjectFileItem* createFileItem(KDevelop::IProject* project,
                                                       const KDevelop::Path& path,

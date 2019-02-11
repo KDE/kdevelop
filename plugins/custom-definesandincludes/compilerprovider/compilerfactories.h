@@ -32,6 +32,7 @@ public:
     CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
 
     QString name() const override;
+    bool isSupported(const KDevelop::Path& path) const override;
 
     void registerDefaultCompilers(CompilerProvider* provider) const override;
 };
@@ -42,6 +43,7 @@ public:
     CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
 
     QString name() const override;
+    bool isSupported(const KDevelop::Path& path) const override;
 
     void registerDefaultCompilers(CompilerProvider* provider) const override;
 };
@@ -52,6 +54,7 @@ public:
     CompilerPointer createCompiler( const QString& name, const QString& path, bool editable = true ) const override;
 
     QString name() const override;
+    bool isSupported(const KDevelop::Path& path) const override;
 
     void registerDefaultCompilers(CompilerProvider* provider) const override;
 };

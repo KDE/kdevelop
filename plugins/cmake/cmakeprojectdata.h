@@ -40,6 +40,7 @@ struct CMakeFile
     KDevelop::Path::List includes;
     KDevelop::Path::List frameworkDirectories;
     QString compileFlags;
+    QString language;
     QHash<QString, QString> defines;
 
     bool isEmpty() const
@@ -50,7 +51,7 @@ struct CMakeFile
 };
 inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
 {
-    debug << "CMakeFile(-I" << file.includes << ", -F" << file.frameworkDirectories << ", -D" << file.defines << ")";
+    debug << "CMakeFile(-I" << file.includes << ", -F" << file.frameworkDirectories << ", -D" << file.defines << ", " << file.language << ")";
     return debug.maybeSpace();
 }
 

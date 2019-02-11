@@ -44,6 +44,9 @@ public:
      */
     virtual void registerDefaultCompilers(CompilerProvider* provider) const = 0;
 
+    /** @returns whether @p path is a compiler supported by the factory */
+    virtual bool isSupported(const KDevelop::Path &path) const = 0;
+
     virtual ~ICompilerFactory() = default;
 };
 

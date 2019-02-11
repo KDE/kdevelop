@@ -82,6 +82,8 @@ public:
     }
 
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem*) const override;
+
+    KDevelop::Path compiler(KDevelop::ProjectTargetItem* item) const override;
     //END IBuildSystemManager
 
 private Q_SLOTS:

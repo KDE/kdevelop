@@ -195,4 +195,9 @@ KDevelop::ConfigPage* CustomBuildSystem::perProjectConfigPage(int number, const 
     return nullptr;
 }
 
+KDevelop::Path CustomBuildSystem::compiler(KDevelop::ProjectTargetItem* item) const
+{
+    return {};
+}
+
 #include "custombuildsystemplugin.moc"

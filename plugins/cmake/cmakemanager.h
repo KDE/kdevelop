@@ -137,6 +137,8 @@ public:
 
     void integrateData(const CMakeProjectData &data, KDevelop::IProject* project);
 
+    KDevelop::Path compiler(KDevelop::ProjectTargetItem * p) const override;
+
 Q_SIGNALS:
     void folderRenamed(const KDevelop::Path& oldFolder, KDevelop::ProjectFolderItem* newFolder);
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
@@ -154,6 +156,7 @@ private Q_SLOTS:
 private:
     void reloadProjects();
     CMakeFile fileInformation(KDevelop::ProjectBaseItem* item) const;
+    CMakeTarget targetInformation(KDevelop::ProjectTargetItem* item) const;
 
     void folderAdded(KDevelop::ProjectFolderItem* folder);
     KTextEditor::Range termRangeAtPosition(const KTextEditor::Document* textDocument,
