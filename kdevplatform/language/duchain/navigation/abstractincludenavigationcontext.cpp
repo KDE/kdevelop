@@ -23,6 +23,7 @@
 #include <language/duchain/duchain.h>
 #include <language/duchain/parsingenvironment.h>
 #include <language/duchain/declaration.h>
+#include <language/duchain/duchainlock.h>
 
 namespace KDevelop {
 AbstractIncludeNavigationContext::AbstractIncludeNavigationContext(const IncludeItem& item,
@@ -84,6 +85,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
     makeLink(u.toDisplayString(QUrl::PreferLocalFile), u.toString(), action);
     modifyHtml() += QStringLiteral("<br />");
 
+    DUChainReadLocker lock;
     QList<TopDUContext*> duchains = DUChain::self()->chainsForDocument(u);
     //Pick the one duchain for this document that has the most child-contexts/declarations.
     //This prevents picking a context that is empty due to header-guards.
