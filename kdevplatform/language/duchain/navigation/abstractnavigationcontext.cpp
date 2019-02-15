@@ -257,10 +257,10 @@ NavigationContextPointer AbstractNavigationContext::registerChild(AbstractNaviga
 NavigationContextPointer AbstractNavigationContext::registerChild(const DeclarationPointer& declaration)
 {
     //We create a navigation-widget here, and steal its context.. evil ;)
-    QScopedPointer<QWidget> navigationWidget(declaration->context()->createNavigationWidget(declaration.data()));
-    if (auto* abstractNavigationWidget =
-            dynamic_cast<AbstractNavigationWidget*>(navigationWidget.data())) {
-        NavigationContextPointer ret = abstractNavigationWidget->context();
+    QScopedPointer<AbstractNavigationWidget> navigationWidget(
+        declaration->context()->createNavigationWidget(declaration.data()));
+    if (navigationWidget) {
+        NavigationContextPointer ret = navigationWidget->context();
         ret->setPreviousContext(this);
         d->m_children << ret;
         return ret;

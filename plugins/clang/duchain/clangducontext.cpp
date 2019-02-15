@@ -28,9 +28,10 @@
 
 using namespace KDevelop;
 
-template<>
-QWidget* ClangTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
-                                                   KDevelop::AbstractNavigationWidget::DisplayHints hints) const
+template <>
+KDevelop::AbstractNavigationWidget*
+ClangTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
+                                          KDevelop::AbstractNavigationWidget::DisplayHints hints) const
 {
     if (!decl) {
         const QUrl u = url().toUrl();
@@ -45,9 +46,10 @@ QWidget* ClangTopDUContext::createNavigationWidget(Declaration* decl, TopDUConte
     return new ClangNavigationWidget(DeclarationPointer(decl), hints);
 }
 
-template<>
-QWidget* ClangNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* /*topContext*/,
-                                                      KDevelop::AbstractNavigationWidget::DisplayHints hints) const
+template <>
+KDevelop::AbstractNavigationWidget*
+ClangNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* /*topContext*/,
+                                             KDevelop::AbstractNavigationWidget::DisplayHints hints) const
 {
     if (!decl) {
         clangDebug() << "no declaration, not returning navigationwidget";

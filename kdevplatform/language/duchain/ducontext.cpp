@@ -1495,8 +1495,8 @@ TopDUContext* DUContext::topContext() const
     return m_dynamicData->m_topContext;
 }
 
-QWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
-                                           AbstractNavigationWidget::DisplayHints hints) const
+AbstractNavigationWidget* DUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
+                                                            AbstractNavigationWidget::DisplayHints hints) const
 {
     if (decl) {
         auto* widget = new AbstractNavigationWidget;

@@ -666,9 +666,6 @@ private:
     /**
      * Can be specialized by languages to create a navigation/information-widget.
      *
-     * Ideally, the widget would be based on @c KDevelop::QuickOpenEmbeddedWidgetInterface
-     * for user-interaction within the quickopen list.
-     *
      * The returned widget will be owned by the caller.
      *
      * @param decl A member-declaration of this context the navigation-widget should be created for.
@@ -682,9 +679,9 @@ private:
      * then the widget will not close when the cursor moves in the document, which
      * enables you to change the document contents from the widget without immediately closing the widget.
      */
-    virtual QWidget* createNavigationWidget(Declaration* decl = nullptr, TopDUContext* topContext = nullptr,
-                                            AbstractNavigationWidget::DisplayHints hints =
-                                                AbstractNavigationWidget::NoHints) const;
+    virtual AbstractNavigationWidget*
+    createNavigationWidget(Declaration* decl = nullptr, TopDUContext* topContext = nullptr,
+                           AbstractNavigationWidget::DisplayHints hints = AbstractNavigationWidget::NoHints) const;
 
     enum {
         Identity = 2

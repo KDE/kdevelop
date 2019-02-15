@@ -111,8 +111,7 @@ bool ClassTree::event(QEvent* event)
             if (m_tooltip) {
                 m_tooltip->close();
             }
-            QWidget* navigationWidget = decl->topContext()->createNavigationWidget(decl);
-            if (navigationWidget) {
+            if (auto* navigationWidget = decl->topContext()->createNavigationWidget(decl)) {
                 m_tooltip = new KDevelop::NavigationToolTip(this, helpEvent->globalPos() + QPoint(40,
                                                                                                   0), navigationWidget);
                 m_tooltip->resize(navigationWidget->sizeHint() + QSize(10, 10));

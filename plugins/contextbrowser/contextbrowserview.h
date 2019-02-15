@@ -70,10 +70,10 @@ public:
     }
 
     //duchain must be locked
-    QWidget* createWidget(KDevelop::DUContext* context);
+    KDevelop::AbstractNavigationWidget* createWidget(KDevelop::DUContext* context);
 
     //duchain must be locked
-    QWidget* createWidget(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext);
+    KDevelop::AbstractNavigationWidget* createWidget(KDevelop::Declaration* decl, KDevelop::TopDUContext* topContext);
 
     KDevelop::IndexedDeclaration declaration() const;
 

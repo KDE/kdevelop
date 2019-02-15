@@ -292,10 +292,9 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(
     UsesWidget uses(declaration.data(), collector);
 
     //So the context-links work
-    QWidget* navigationWidget = declaration->context()->createNavigationWidget(declaration.data());
-    auto* abstractNavigationWidget = dynamic_cast<AbstractNavigationWidget*>(navigationWidget);
-    if (abstractNavigationWidget)
-        connect(&uses, &UsesWidget::navigateDeclaration, abstractNavigationWidget,
+    auto* navigationWidget = declaration->context()->createNavigationWidget(declaration.data());
+    if (navigationWidget)
+        connect(&uses, &UsesWidget::navigateDeclaration, navigationWidget,
                 &AbstractNavigationWidget::navigateDeclaration);
 
     QString declarationName = declaration->toString();

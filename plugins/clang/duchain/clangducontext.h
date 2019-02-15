@@ -39,9 +39,10 @@ public:
         static_cast<KDevelop::DUChainBase*>(this)->d_func_dynamic()->setClassId(this);
     }
 
-    QWidget* createNavigationWidget(KDevelop::Declaration* decl = nullptr,
-                                    KDevelop::TopDUContext* topContext = nullptr,
-                                    KDevelop::AbstractNavigationWidget::DisplayHints hints = KDevelop::AbstractNavigationWidget::NoHints) const override;
+    KDevelop::AbstractNavigationWidget*
+    createNavigationWidget(KDevelop::Declaration* decl = nullptr, KDevelop::TopDUContext* topContext = nullptr,
+                           KDevelop::AbstractNavigationWidget::DisplayHints hints
+                           = KDevelop::AbstractNavigationWidget::NoHints) const override;
 
     enum {
         Identity = IdentityT

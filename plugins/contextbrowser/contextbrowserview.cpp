@@ -131,7 +131,7 @@ void selectUse(ContextBrowserView* view, Direction direction)
 }
 }
 
-QWidget* ContextBrowserView::createWidget(KDevelop::DUContext* context)
+AbstractNavigationWidget* ContextBrowserView::createWidget(KDevelop::DUContext* context)
 {
     m_context = IndexedDUContext(context);
     if (m_context.data()) {
@@ -145,7 +145,7 @@ KDevelop::IndexedDeclaration ContextBrowserView::declaration() const
     return m_declaration;
 }
 
-QWidget* ContextBrowserView::createWidget(Declaration* decl, TopDUContext* topContext)
+AbstractNavigationWidget* ContextBrowserView::createWidget(Declaration* decl, TopDUContext* topContext)
 {
     m_declaration = IndexedDeclaration(decl);
     return decl->context()->createNavigationWidget(decl, topContext, AbstractNavigationWidget::EmbeddableWidget);
@@ -354,8 +354,7 @@ void ContextBrowserView::setDeclaration(KDevelop::Declaration* decl, KDevelop::T
     m_navigationWidgetDeclaration = decl->id();
 
     if (!isLocked() && (isVisible() || force)) {  // NO-OP if tool view is hidden, for performance reasons
-        QWidget* w = createWidget(decl, topContext);
-        updateMainWidget(w);
+        updateMainWidget(createWidget(decl, topContext));
     }
 }
 
@@ -393,8 +392,7 @@ void ContextBrowserView::setContext(KDevelop::DUContext* context)
     }
 
     if (!isLocked() && isVisible()) { // NO-OP if tool view is hidden, for performance reasons
-        QWidget* w = createWidget(context);
-        updateMainWidget(w);
+        updateMainWidget(createWidget(context));
     }
 }
 

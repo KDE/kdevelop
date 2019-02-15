@@ -35,9 +35,9 @@ using namespace KDevelop;
 
 namespace QmlJS {
 
-template<>
-QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
-                                                   AbstractNavigationWidget::DisplayHints hints) const
+template <>
+AbstractNavigationWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
+                                                                    AbstractNavigationWidget::DisplayHints hints) const
 {
     if (!decl) {
         const QUrl u = url().toUrl();
@@ -52,15 +52,17 @@ QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUConte
     return new NavigationWidget(decl, topContext, hints);
 }
 
-template<>
-QWidget* QmlJSNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, AbstractNavigationWidget::DisplayHints hints) const {
+template <>
+AbstractNavigationWidget*
+QmlJSNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
+                                             AbstractNavigationWidget::DisplayHints hints) const
+{
     if (!decl) {
         qCDebug(KDEV_QMLJS_DUCHAIN) << "no declaration, not returning navigationwidget";
         return nullptr;
     }
     return new NavigationWidget(decl, topContext, hints);
 }
-
 }
 
 DUCHAIN_DEFINE_TYPE_WITH_DATA(QmlJS::QmlJSNormalDUContext, DUContextData)

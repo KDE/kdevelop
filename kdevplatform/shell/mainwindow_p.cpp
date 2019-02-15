@@ -404,7 +404,7 @@ void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Contai
         TopDUContext* top = DUChainUtils::standardContextForUrl(urlDoc->url());
 
         if (top) {
-            if ( QWidget* navigationWidget = top->createNavigationWidget() ) {
+            if (auto* navigationWidget = top->createNavigationWidget()) {
                 NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(m_mainWindow, QCursor::pos() + QPoint(20, 20), navigationWidget);
                 tooltip->resize(navigationWidget->sizeHint() + QSize(10, 10));
                 tooltip->setHandleRect(container->tabRect(tab));

@@ -199,8 +199,7 @@ bool ProjectModelItemDelegate::helpEvent(QHelpEvent* event,
                 const TopDUContext* top = DUChainUtils::standardContextForUrl(it->file()->path().toUrl());
 
                 if (top) {
-                    QWidget* navigationWidget = top->createNavigationWidget();
-                    if (navigationWidget) {
+                    if (auto* navigationWidget = top->createNavigationWidget()) {
                         // force possible existing normal tooltip for other list item to hide
                         // Seems that is still only done with a small delay though,
                         // but the API seems not to allow more control.
