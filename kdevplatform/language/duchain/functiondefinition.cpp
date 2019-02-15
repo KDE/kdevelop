@@ -89,6 +89,10 @@ FunctionDefinition* FunctionDefinition::definition(const Declaration* decl)
         return nullptr;
     }
 
+    if (decl->isFunctionDeclaration() && decl->isDefinition()) {
+        return const_cast<FunctionDefinition *>(static_cast<const FunctionDefinition *>(decl));
+    }
+
     const KDevVarLengthArray<IndexedDeclaration> allDefinitions = DUChain::definitions()->definitions(decl->id());
     for (const IndexedDeclaration decl : allDefinitions) {
         if (decl.data()) ///@todo Find better ways of deciding which definition to use
