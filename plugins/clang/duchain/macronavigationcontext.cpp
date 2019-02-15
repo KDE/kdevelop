@@ -46,7 +46,7 @@ QString MacroNavigationContext::html(bool shorten)
 {
     clear();
 
-    modifyHtml() += QLatin1String("<html><body><p>") + fontSizePrefix(shorten);
+    modifyHtml() += QLatin1String("<html><body><p>");
     addExternalHtml(prefix());
 
     QStringList parameterList;
@@ -79,7 +79,7 @@ QString MacroNavigationContext::html(bool shorten)
     modifyHtml() += QLatin1String("<tt>") + code.toHtmlEscaped().replace(QLatin1Char('\n'), QStringLiteral("<br/>")) + QLatin1String("</tt>");
     modifyHtml() += QStringLiteral("</p>");
 
-    modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
+    modifyHtml() += QLatin1String("</p></body></html>");
     return currentHtml();
 }
 

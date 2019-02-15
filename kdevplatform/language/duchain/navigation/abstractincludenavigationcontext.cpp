@@ -77,7 +77,7 @@ TopDUContext* pickContextWithData(const QList<TopDUContext*>& duchains, uint max
 QString AbstractIncludeNavigationContext::html(bool shorten)
 {
     clear();
-    modifyHtml()  += QLatin1String("<html><body><p>") + fontSizePrefix(shorten);
+    modifyHtml()  += QLatin1String("<html><body><p>");
     addExternalHtml(prefix());
 
     QUrl u = m_item.url();
@@ -104,7 +104,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
 
     addExternalHtml(suffix());
 
-    modifyHtml() += fontSizeSuffix(shorten) + QLatin1String("</p></body></html>");
+    modifyHtml() += QLatin1String("</p></body></html>");
     return currentHtml();
 }
 

@@ -545,16 +545,6 @@ QString AbstractNavigationContext::currentHtml() const
     return d->m_currentText;
 }
 
-QString AbstractNavigationContext::fontSizePrefix(bool /*shorten*/) const
-{
-    return QString();
-}
-
-QString AbstractNavigationContext::fontSizeSuffix(bool /*shorten*/) const
-{
-    return QString();
-}
-
 QString Colorizer::operator()(const QString& str) const
 {
     QString ret = QLatin1String("<font color=\"#") + m_color + QLatin1String("\">") + str + QLatin1String("</font>");

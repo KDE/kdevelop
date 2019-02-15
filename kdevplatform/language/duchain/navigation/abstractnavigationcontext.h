@@ -112,11 +112,6 @@ Q_SIGNALS:
     void contentsChanged();
 
 protected:
-    /// Returns the html font-size prefix (aka. &lt;small&gt; or similar) for the given mode
-    QString fontSizePrefix(bool shorten) const;
-    /// Returns the html font-size suffix (aka. &lt;small&gt; or similar) for the given mode
-    QString fontSizeSuffix(bool shorten) const;
-
     AbstractNavigationContext* previousContext() const;
     virtual void setPreviousContext(AbstractNavigationContext* previousContext);
 
