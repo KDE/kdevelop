@@ -88,10 +88,10 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     clear();
     AbstractNavigationContext::html(shorten);
 
-    modifyHtml()  += QLatin1String("<html><body><p>");
+    modifyHtml()  += QLatin1String("<html><body>");
 
     if (!d->m_declaration.data()) {
-        modifyHtml() += i18n("<br /> lost declaration <br />");
+        modifyHtml() += QLatin1String("<p>") + i18n("lost declaration") + QLatin1String("</p></body></html>");
         return currentHtml();
     }
 
@@ -102,6 +102,8 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     }
 
     QExplicitlySharedDataPointer<IDocumentation> doc;
+
+    modifyHtml() += QStringLiteral("<p>");
 
     if (!shorten) {
         doc = ICore::self()->documentationController()->documentationForDeclaration(d->m_declaration.data());
@@ -318,12 +320,12 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         modifyHtml() += QStringLiteral(" "); //The action name _must_ stay "show_uses", since that is also used from outside
         makeLink(i18n("Show uses"), QStringLiteral("show_uses"),
                  NavigationAction(d->m_declaration, NavigationAction::NavigateUses));
+
     }
+    modifyHtml() += QStringLiteral("</p>");
 
     QByteArray declarationComment = d->m_declaration->comment();
     if (!shorten && (!declarationComment.isEmpty() || doc)) {
-        modifyHtml() += QStringLiteral("<p>");
-
         if (doc) {
             QString comment = doc->description();
             connect(
@@ -345,8 +347,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
                 comment = comment.toHtmlEscaped();
                 comment.replace(QLatin1Char('\n'), QLatin1String("<br />")); //Replicate newlines in html
             }
-            modifyHtml() += commentHighlight(comment);
-            modifyHtml() += QStringLiteral("</p>");
+            modifyHtml() += QLatin1String("<p>") + commentHighlight(comment) + QLatin1String("</p>");
         }
     }
 
@@ -361,9 +362,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         modifyHtml() += QStringLiteral("</p>");
     }
 
-    //modifyHtml() += "<br />";
-
-    modifyHtml() += QLatin1String("</p></body></html>");
+    modifyHtml() += QLatin1String("</body></html>");
 
     return currentHtml();
 }

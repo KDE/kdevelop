@@ -281,6 +281,7 @@ void AbstractNavigationContext::down()
 
     int fromLine = d->m_currentPositionLine;
 
+    // try to select the next link within our lineJump distance
     if (d->m_selectedLink >= 0 && d->m_selectedLink < d->m_linkCount) {
         if (fromLine == -1)
             fromLine = d->m_linkLines[d->m_selectedLink];
@@ -293,13 +294,18 @@ void AbstractNavigationContext::down()
             }
         }
     }
+
+    if (fromLine == d->m_currentLine - 1) // nothing to do, we are at the end of the document
+        return;
+
+    // scroll down by applying the lineJump
     if (fromLine == -1)
         fromLine = 0;
 
     d->m_currentPositionLine = fromLine + lineJump;
 
-    if (d->m_currentPositionLine > d->m_currentLine)
-        d->m_currentPositionLine = d->m_currentLine;
+    if (d->m_currentPositionLine >= d->m_currentLine)
+        d->m_currentPositionLine = d->m_currentLine - 1;
 }
 
 void AbstractNavigationContext::up()
@@ -326,7 +332,7 @@ void AbstractNavigationContext::up()
     }
 
     if (fromLine == -1)
-        fromLine = d->m_currentLine;
+        fromLine = d->m_currentLine - 1;
 
     d->m_currentPositionLine = fromLine - lineJump;
     if (d->m_currentPositionLine < 0)
@@ -484,7 +490,7 @@ static QStringList splitAndKeep(QString str, const QRegExp& regExp)
 
 void AbstractNavigationContext::addHtml(const QString& html)
 {
-    QRegExp newLineRegExp(QStringLiteral("<br>|<br */>"));
+    QRegExp newLineRegExp(QStringLiteral("<br>|<br */>|</p>"));
     foreach (const QString& line, splitAndKeep(html, newLineRegExp)) {
         d->m_currentText +=  line;
         if (line.indexOf(newLineRegExp) != -1) {
