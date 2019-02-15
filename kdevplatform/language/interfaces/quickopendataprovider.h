@@ -60,15 +60,15 @@ class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenEmbeddedWidgetInterface
 {
 public:
     virtual ~QuickOpenEmbeddedWidgetInterface();
-    ///Is called when the keyboard-shortcut "next" is triggered on the widget, which currently is SHIFT+Right
+    ///Is called when the keyboard-shortcut "next" is triggered on the widget, which currently is ALT+Right
     virtual void next() = 0;
-    ///Is called when the keyboard-shortcut "previous" is triggered on the widget, which currently is SHIFT+Left
+    ///Is called when the keyboard-shortcut "previous" is triggered on the widget, which currently is ALT+Left
     virtual void previous() = 0;
-    ///Is called when the keyboard-shortcut "accept" is triggered on the widget, which currently is SHIFT+Return
+    ///Is called when the keyboard-shortcut "accept" is triggered on the widget, which currently is ALT+Return
     virtual void accept() = 0;
-    ///Is called when the keyboard-shortcut "scroll up" is triggered on the widget, which currently is SHIFT+Up
+    ///Is called when the keyboard-shortcut "scroll up" is triggered on the widget, which currently is ALT+Up
     virtual void up() = 0;
-    ///Is called when the keyboard-shortcut "scroll down" is triggered on the widget, which currently is SHIFT+Down
+    ///Is called when the keyboard-shortcut "scroll down" is triggered on the widget, which currently is ALT+Down
     virtual void down() = 0;
 };
 
