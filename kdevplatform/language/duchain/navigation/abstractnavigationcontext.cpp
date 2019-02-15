@@ -271,12 +271,19 @@ NavigationContextPointer AbstractNavigationContext::registerChild(const Declarat
 
 const int lineJump = 3;
 
-void AbstractNavigationContext::down()
+bool AbstractNavigationContext::down()
 {
     //Make sure link-count is valid
     if (d->m_linkCount == -1) {
         DUChainReadLocker lock;
         html();
+    }
+
+    // select first link when we enter via down
+    if (d->m_selectedLink == -1 && d->m_linkCount) {
+        d->m_selectedLink = 0;
+        d->m_currentPositionLine = -1;
+        return true;
     }
 
     int fromLine = d->m_currentPositionLine;
@@ -290,13 +297,13 @@ void AbstractNavigationContext::down()
             if (d->m_linkLines[newSelectedLink] > fromLine && d->m_linkLines[newSelectedLink] - fromLine <= lineJump) {
                 d->m_selectedLink = newSelectedLink;
                 d->m_currentPositionLine = -1;
-                return;
+                return true;
             }
         }
     }
 
     if (fromLine == d->m_currentLine - 1) // nothing to do, we are at the end of the document
-        return;
+        return false;
 
     // scroll down by applying the lineJump
     if (fromLine == -1)
@@ -304,16 +311,25 @@ void AbstractNavigationContext::down()
 
     d->m_currentPositionLine = fromLine + lineJump;
 
-    if (d->m_currentPositionLine >= d->m_currentLine)
+    if (d->m_currentPositionLine >= d->m_currentLine) {
         d->m_currentPositionLine = d->m_currentLine - 1;
+    }
+    return fromLine != d->m_currentPositionLine;
 }
 
-void AbstractNavigationContext::up()
+bool AbstractNavigationContext::up()
 {
     //Make sure link-count is valid
     if (d->m_linkCount == -1) {
         DUChainReadLocker lock;
         html();
+    }
+
+    // select last link when we enter via up
+    if (d->m_selectedLink == -1 && d->m_linkCount) {
+        d->m_selectedLink = d->m_linkCount - 1;
+        d->m_currentPositionLine = -1;
+        return true;
     }
 
     int fromLine = d->m_currentPositionLine;
@@ -326,7 +342,7 @@ void AbstractNavigationContext::up()
             if (d->m_linkLines[newSelectedLink] < fromLine && fromLine - d->m_linkLines[newSelectedLink] <= lineJump) {
                 d->m_selectedLink = newSelectedLink;
                 d->m_currentPositionLine = -1;
-                return;
+                return true;
             }
         }
     }
@@ -337,9 +353,11 @@ void AbstractNavigationContext::up()
     d->m_currentPositionLine = fromLine - lineJump;
     if (d->m_currentPositionLine < 0)
         d->m_currentPositionLine = 0;
+
+    return fromLine || d->m_currentPositionLine;
 }
 
-void AbstractNavigationContext::nextLink()
+bool AbstractNavigationContext::nextLink()
 {
     //Make sure link-count is valid
     if (d->m_linkCount == -1) {
@@ -347,13 +365,20 @@ void AbstractNavigationContext::nextLink()
         html();
     }
 
+    if (!d->m_linkCount)
+        return false;
+
     d->m_currentPositionLine = -1;
 
-    if (d->m_linkCount > 0)
-        d->m_selectedLink = (d->m_selectedLink + 1) % d->m_linkCount;
+    d->m_selectedLink++;
+    if (d->m_selectedLink >= d->m_linkCount) {
+        d->m_selectedLink = 0;
+        return false;
+    }
+    return true;
 }
 
-void AbstractNavigationContext::previousLink()
+bool AbstractNavigationContext::previousLink()
 {
     //Make sure link-count is valid
     if (d->m_linkCount == -1) {
@@ -361,20 +386,29 @@ void AbstractNavigationContext::previousLink()
         html();
     }
 
+    if (!d->m_linkCount)
+        return false;
+
     d->m_currentPositionLine = -1;
 
-    if (d->m_linkCount > 0) {
-        --d->m_selectedLink;
-        if (d->m_selectedLink <  0)
-            d->m_selectedLink += d->m_linkCount;
+    d->m_selectedLink--;
+    if (d->m_selectedLink < 0) {
+        d->m_selectedLink = d->m_linkCount - 1;
+        return false;
     }
-
-    Q_ASSERT(d->m_selectedLink >= 0);
+    return true;
 }
 
 int AbstractNavigationContext::linkCount() const
 {
     return d->m_linkCount;
+}
+
+void AbstractNavigationContext::resetNavigation()
+{
+    d->m_currentPositionLine = -1;
+    d->m_selectedLink = -1;
+    d->m_selectedLinkAction = {};
 }
 
 NavigationContextPointer AbstractNavigationContext::back()

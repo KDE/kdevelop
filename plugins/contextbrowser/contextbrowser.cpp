@@ -71,6 +71,7 @@
 #include <language/duchain/types/functiontype.h>
 #include <language/duchain/navigation/abstractnavigationwidget.h>
 #include <language/duchain/navigation/problemnavigationcontext.h>
+#include <language/duchain/navigation/quickopenembeddedwidgetcombiner.h>
 
 #include <language/util/navigationtooltip.h>
 
@@ -625,7 +626,7 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
         problemWidget->setContext(NavigationContextPointer(context));
     }
 
-    QWidget* declWidget = nullptr;
+    AbstractNavigationWidget* declWidget = nullptr;
     if (decl) {
         if (itemRange.isValid()) {
             itemRange.expandToRange(itemUnderCursor.range);
@@ -636,13 +637,9 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
     }
 
     if (problemWidget && declWidget) {
-        QWidget* combinedWidget = new QWidget();
-        QVBoxLayout* layout = new QVBoxLayout();
-        layout->setContentsMargins(2, 2, 2, 2);
-        layout->setSpacing(0);
-        layout->addWidget(problemWidget);
-        layout->addWidget(declWidget);
-        combinedWidget->setLayout(layout);
+        auto* combinedWidget = new QuickOpenEmbeddedWidgetCombiner;
+        combinedWidget->layout()->addWidget(problemWidget);
+        combinedWidget->layout()->addWidget(declWidget);
         return combinedWidget;
     } else if (problemWidget) {
         return problemWidget;
@@ -1514,29 +1511,26 @@ void ContextBrowserPlugin::doNavigate(NavigationActionType action)
             widget = contextView->navigationWidget();
     }
 
-    if (widget) {
-        auto* navWidget = qobject_cast<AbstractNavigationWidget*>(widget);
-        if (navWidget) {
-            switch (action) {
-            case Accept:
-                navWidget->accept();
-                break;
-            case Back:
-                navWidget->back();
-                break;
-            case Left:
-                navWidget->previous();
-                break;
-            case Right:
-                navWidget->next();
-                break;
-            case Up:
-                navWidget->up();
-                break;
-            case Down:
-                navWidget->down();
-                break;
-            }
+    if (auto* navWidget = dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(widget)) {
+        switch (action) {
+        case Accept:
+            navWidget->accept();
+            break;
+        case Back:
+            navWidget->back();
+            break;
+        case Left:
+            navWidget->previous();
+            break;
+        case Right:
+            navWidget->next();
+            break;
+        case Up:
+            navWidget->up();
+            break;
+        case Down:
+            navWidget->down();
+            break;
         }
     }
 }

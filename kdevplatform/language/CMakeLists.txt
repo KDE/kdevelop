@@ -113,6 +113,7 @@ set(KDevPlatformLanguage_LIB_SRCS
     duchain/navigation/abstractincludenavigationcontext.cpp
     duchain/navigation/useswidget.cpp
     duchain/navigation/usescollector.cpp
+    duchain/navigation/quickopenembeddedwidgetcombiner.cpp
 
     interfaces/abbreviations.cpp
     interfaces/iastcontainer.cpp

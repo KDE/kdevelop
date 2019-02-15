@@ -55,12 +55,13 @@ public:
 
 public Q_SLOTS:
     /// keyboard navigation support
-    void next() override;
-    void previous() override;
+    bool next() override;
+    bool previous() override;
+    bool up() override;
+    bool down() override;
     void accept() override;
-    void up() override;
-    void down() override;
     void back() override;
+    void resetNavigationState() override;
 
     ///These are temporarily for gettings these events directly from kate
     ///@todo Do this through a public interface post 4.2

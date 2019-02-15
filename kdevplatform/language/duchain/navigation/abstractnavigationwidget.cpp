@@ -266,18 +266,20 @@ void AbstractNavigationWidgetPrivate::anchorClicked(const QUrl& url)
         q->setContext(nextContext);
 }
 
-void AbstractNavigationWidget::next()
+bool AbstractNavigationWidget::next()
 {
     Q_ASSERT(d->m_context);
-    d->m_context->nextLink();
+    auto ret = d->m_context->nextLink();
     update();
+    return ret;
 }
 
-void AbstractNavigationWidget::previous()
+bool AbstractNavigationWidget::previous()
 {
     Q_ASSERT(d->m_context);
-    d->m_context->previousLink();
+    auto ret = d->m_context->previousLink();
     update();
+    return ret;
 }
 
 void AbstractNavigationWidget::accept()
@@ -300,15 +302,23 @@ void AbstractNavigationWidget::back()
         setContext(nextContext);
 }
 
-void AbstractNavigationWidget::up()
+bool AbstractNavigationWidget::up()
 {
-    d->m_context->up();
+    auto ret = d->m_context->up();
     update();
+    return ret;
 }
 
-void AbstractNavigationWidget::down()
+bool AbstractNavigationWidget::down()
 {
-    d->m_context->down();
+    auto ret = d->m_context->down();
+    update();
+    return ret;
+}
+
+void AbstractNavigationWidget::resetNavigationState()
+{
+    d->m_context->resetNavigation();
     update();
 }
 

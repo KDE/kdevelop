@@ -66,13 +66,12 @@ public:
                                        AbstractNavigationContext* previousContext = nullptr);
     ~AbstractNavigationContext() override;
 
-    void nextLink();
-    void previousLink();
-
     int linkCount() const;
-
-    void up();
-    void down();
+    bool nextLink();
+    bool previousLink();
+    bool up();
+    bool down();
+    void resetNavigation();
 
     NavigationContextPointer accept();
     NavigationContextPointer back();
