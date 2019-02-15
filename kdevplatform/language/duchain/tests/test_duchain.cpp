@@ -974,7 +974,7 @@ void TestDUChain::benchTypeRegistry()
     IntegralTypeData data;
     data.m_dataType = IntegralType::TypeInt;
     data.typeClassId = IntegralType::Identity;
-    data.inRepository = false;
+    data.inRepository = true;
     data.m_modifiers = 42;
     data.m_dynamic = false;
     data.refCount = 1;
@@ -991,9 +991,10 @@ void TestDUChain::benchTypeRegistry()
         case 1:
             TypeSystem::self().dynamicSize(data);
             break;
-        case 2:
-            TypeSystem::self().create(&data);
+        case 2: {
+            AbstractType::Ptr t(TypeSystem::self().create(&data));
             break;
+        }
         case 3:
             TypeSystem::self().isFactoryLoaded(data);
             break;
@@ -1067,7 +1068,9 @@ void TestDUChain::benchDeclarationQualifiedIdentifier()
     QVector<DUContext*> contexts;
     contexts.reserve(10);
     DUChainWriteLocker lock;
-    contexts << new TopDUContext(IndexedString("/tmp/something"), {0, 0, INT_MAX, INT_MAX});
+    auto topDUContext = new TopDUContext(IndexedString("/tmp/something"), {0, 0, INT_MAX, INT_MAX});
+    DUChain::self()->addDocumentChain(topDUContext);
+    contexts << topDUContext;
     for (int i = 1; i < contexts.capacity(); ++i) {
         contexts << new DUContext({0, 0, INT_MAX, INT_MAX}, contexts.at(i - 1));
         contexts.last()->setLocalScopeIdentifier(QualifiedIdentifier(QString::number(i)));
@@ -1082,6 +1085,10 @@ void TestDUChain::benchDeclarationQualifiedIdentifier()
         count += dec->qualifiedIdentifier().count();
     }
     QVERIFY(count > 0);
+
+    // manually delete as QScopedPointer does not work well with QBENCHMARK
+    delete dec;
+    DUChain::self()->removeDocumentChain(topDUContext);
 }
 
 #include "test_duchain.moc"
