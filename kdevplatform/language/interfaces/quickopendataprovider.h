@@ -70,6 +70,8 @@ public:
     virtual void up() = 0;
     ///Is called when the keyboard-shortcut "scroll down" is triggered on the widget, which currently is ALT+Down
     virtual void down() = 0;
+    ///Is called when the keyboard-shortcut "back" is triggered on the widget, which currently is ALT+Backspace
+    virtual void back() = 0;
 };
 
 /**

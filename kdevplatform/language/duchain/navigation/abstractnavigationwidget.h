@@ -54,15 +54,13 @@ public:
     QSize sizeHint() const override;
 
 public Q_SLOTS:
-    ///Keyboard-action "next"
+    /// keyboard navigation support
     void next() override;
-    ///Keyboard-action "previous"
     void previous() override;
-    ///Keyboard-action "accept"
     void accept() override;
     void up() override;
     void down() override;
-    virtual void back();
+    void back() override;
 
     ///These are temporarily for gettings these events directly from kate
     ///@todo Do this through a public interface post 4.2

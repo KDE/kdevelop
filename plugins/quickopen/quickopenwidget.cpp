@@ -447,13 +447,16 @@ bool QuickOpenWidget::eventFilter(QObject* watched, QEvent* event)
             break;
         case Qt::Key_Down:
         case Qt::Key_Up:
+        case Qt::Key_Backspace:
         {
             if (keyEvent->modifiers() == Qt::AltModifier) {
                 if (auto interface = getInterface()) {
                     if (keyEvent->key() == Qt::Key_Down) {
                         interface->down();
-                    } else {
+                    } else if (keyEvent->key() == Qt::Key_Up) {
                         interface->up();
+                    } else {
+                        interface->back();
                     }
                     return true; // eat event
                 }
