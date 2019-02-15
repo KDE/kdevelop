@@ -110,7 +110,6 @@ ClangNavigationWidget::ClangNavigationWidget(const MacroDefinition::Ptr& macro, 
 }
 
 ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, const KDevelop::TopDUContextPointer& topContext,
-                                             const QString& htmlPrefix, const QString& htmlSuffix,
                                              KDevelop::AbstractNavigationWidget::DisplayHints hints)
     : AbstractNavigationWidget()
 {
@@ -119,7 +118,6 @@ ClangNavigationWidget::ClangNavigationWidget(const IncludeItem& includeItem, con
 
     //The first context is registered so it is kept alive by the shared-pointer mechanism
     auto context = new IncludeNavigationContext(includeItem, topContext);
-    context->setPrefixSuffix(htmlPrefix, htmlSuffix);
     setContext(NavigationContextPointer(context));
 }
 

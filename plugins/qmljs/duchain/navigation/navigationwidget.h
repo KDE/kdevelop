@@ -38,13 +38,9 @@ class KDEVQMLJSDUCHAIN_EXPORT NavigationWidget : public KDevelop::AbstractNaviga
 public:
     NavigationWidget(KDevelop::Declaration* decl,
                      KDevelop::TopDUContext* topContext,
-                     const QString& htmlPrefix,
-                     const QString& htmlSuffix,
                      KDevelop::AbstractNavigationWidget::DisplayHints hints);
     NavigationWidget(const KDevelop::IncludeItem& includeItem,
                      const KDevelop::TopDUContextPointer& topContext,
-                     const QString& htmlPrefix,
-                     const QString& htmlSuffix,
                      KDevelop::AbstractNavigationWidget::DisplayHints hints);
 };
 

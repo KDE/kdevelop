@@ -30,7 +30,6 @@ using namespace KDevelop;
 
 template<>
 QWidget* ClangTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
-                                                   const QString& htmlPrefix, const QString& htmlSuffix,
                                                    KDevelop::AbstractNavigationWidget::DisplayHints hints) const
 {
     if (!decl) {
@@ -41,14 +40,13 @@ QWidget* ClangTopDUContext::createNavigationWidget(Declaration* decl, TopDUConte
         item.isDirectory = false;
         item.basePath = u.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
 
-        return new ClangNavigationWidget(item, TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix, hints);
+        return new ClangNavigationWidget(item, TopDUContextPointer(topContext ? topContext : this->topContext()), hints);
     }
     return new ClangNavigationWidget(DeclarationPointer(decl), hints);
 }
 
 template<>
 QWidget* ClangNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* /*topContext*/,
-                                                      const QString& /*htmlPrefix*/, const QString& /*htmlSuffix*/,
                                                       KDevelop::AbstractNavigationWidget::DisplayHints hints) const
 {
     if (!decl) {

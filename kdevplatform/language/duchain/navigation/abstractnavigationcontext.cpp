@@ -56,7 +56,6 @@ public:
     QMap<int, int> m_linkLines; //Holds the line for each link
     QMap<int, NavigationAction> m_intLinks;
     AbstractNavigationContext* m_previousContext;
-    QString m_prefix, m_suffix;
     TopDUContextPointer m_topContext;
 
     QString m_currentText; //Here the text is built
@@ -85,32 +84,6 @@ AbstractNavigationContext::AbstractNavigationContext(const TopDUContextPointer& 
 
 AbstractNavigationContext::~AbstractNavigationContext()
 {
-}
-
-void AbstractNavigationContext::addExternalHtml(const QString& text)
-{
-    int lastPos = 0;
-    int pos = 0;
-    QString fileMark = QStringLiteral("KDEV_FILE_LINK{");
-    while (pos < text.length() && (pos = text.indexOf(fileMark, pos)) != -1) {
-        modifyHtml() +=  text.mid(lastPos, pos - lastPos);
-
-        pos += fileMark.length();
-
-        if (pos != text.length()) {
-            int fileEnd = text.indexOf(QLatin1Char('}'), pos);
-            if (fileEnd != -1) {
-                QString file = text.mid(pos, fileEnd - pos);
-                pos = fileEnd + 1;
-                const QUrl url = QUrl::fromUserInput(file);
-                makeLink(url.fileName(), file, NavigationAction(url, KTextEditor::Cursor()));
-            }
-        }
-
-        lastPos = pos;
-    }
-
-    modifyHtml() +=  text.mid(lastPos, text.length() - lastPos);
 }
 
 void AbstractNavigationContext::makeLink(const QString& name, const DeclarationPointer& declaration,
@@ -396,22 +369,6 @@ void AbstractNavigationContext::previousLink()
 int AbstractNavigationContext::linkCount() const
 {
     return d->m_linkCount;
-}
-
-QString AbstractNavigationContext::prefix() const
-{
-    return d->m_prefix;
-}
-
-QString AbstractNavigationContext::suffix() const
-{
-    return d->m_suffix;
-}
-
-void AbstractNavigationContext::setPrefixSuffix(const QString& prefix, const QString& suffix)
-{
-    d->m_prefix = prefix;
-    d->m_suffix = suffix;
 }
 
 NavigationContextPointer AbstractNavigationContext::back()

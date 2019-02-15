@@ -675,8 +675,6 @@ private:
      *            Zero to create a widget for this context.
      * @param topContext Top-context from where the navigation-widget is triggered.
      *                   In C++, this is needed to resolve forward-declarations.
-     * @param htmlPrefix Html-formatted text that should be prepended before any information shown by this widget
-     * @param htmlSuffix Html-formatted text that should be appended to any information shown by this widget
      *
      * Can return zero which disables the navigation widget.
      *
@@ -685,8 +683,6 @@ private:
      * enables you to change the document contents from the widget without immediately closing the widget.
      */
     virtual QWidget* createNavigationWidget(Declaration* decl = nullptr, TopDUContext* topContext = nullptr,
-                                            const QString& htmlPrefix = QString(),
-                                            const QString& htmlSuffix = QString(),
                                             AbstractNavigationWidget::DisplayHints hints =
                                                 AbstractNavigationWidget::NoHints) const;
 

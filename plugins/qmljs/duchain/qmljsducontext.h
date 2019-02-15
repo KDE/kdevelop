@@ -63,8 +63,6 @@ public:
 
     QWidget* createNavigationWidget(KDevelop::Declaration* decl,
                                    KDevelop::TopDUContext* topContext,
-                                   const QString& htmlPrefix,
-                                   const QString& htmlSuffix,
                                    KDevelop::AbstractNavigationWidget::DisplayHints hints) const override;
 
     enum {

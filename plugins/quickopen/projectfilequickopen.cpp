@@ -146,10 +146,8 @@ QWidget* ProjectFileData::expandingWidget() const
     }
 
     if (chosen) {
-        return chosen->createNavigationWidget(nullptr, nullptr,
-                                              QLatin1String("<small><small>")
-                                              + i18nc("%1: project name", "Project %1", project())
-                                              + QLatin1String("</small></small><br/>"));
+        // TODO: show project name, by introducing a generic wrapper widget that supports QuickOpenEmbeddedWidgetInterface
+        return chosen->createNavigationWidget();
     } else {
         auto* ret = new QTextBrowser();
         ret->resize(400, 100);

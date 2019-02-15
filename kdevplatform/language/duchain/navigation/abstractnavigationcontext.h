@@ -74,10 +74,6 @@ public:
     void up();
     void down();
 
-    QString prefix() const;
-    QString suffix() const;
-    void setPrefixSuffix(const QString& prefix, const QString& suffix);
-
     NavigationContextPointer accept();
     NavigationContextPointer back();
     NavigationContextPointer accept(IndexedDeclaration decl);
@@ -142,8 +138,6 @@ protected:
 
     //Clears the computed html and links
     void clear();
-
-    void addExternalHtml(const QString& text);
 
     ///Creates and registers a link to the given declaration, labeled by the given name
     virtual void makeLink(const QString& name, const DeclarationPointer& declaration,

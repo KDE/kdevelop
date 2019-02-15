@@ -196,7 +196,7 @@ QWidget* DUChainItemData::expandingWidget() const
     }
 
     return decl->context()->createNavigationWidget(decl, decl->topContext(),
-                                                   QString(), QString(), AbstractNavigationWidget::EmbeddableWidget);
+                                                   AbstractNavigationWidget::EmbeddableWidget);
 }
 
 QIcon DUChainItemData::icon() const

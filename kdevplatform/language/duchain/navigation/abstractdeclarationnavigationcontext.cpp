@@ -90,8 +90,6 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
 
     modifyHtml()  += QLatin1String("<html><body><p>");
 
-    addExternalHtml(prefix());
-
     if (!d->m_declaration.data()) {
         modifyHtml() += i18n("<br /> lost declaration <br />");
         return currentHtml();
@@ -364,8 +362,6 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     }
 
     //modifyHtml() += "<br />";
-
-    addExternalHtml(suffix());
 
     modifyHtml() += QLatin1String("</p></body></html>");
 

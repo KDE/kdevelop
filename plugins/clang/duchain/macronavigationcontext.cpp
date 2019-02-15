@@ -47,7 +47,6 @@ QString MacroNavigationContext::html(bool shorten)
     clear();
 
     modifyHtml() += QLatin1String("<html><body><p>");
-    addExternalHtml(prefix());
 
     QStringList parameterList;
     parameterList.reserve(m_macro->parametersSize());

@@ -37,7 +37,6 @@ namespace QmlJS {
 
 template<>
 QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext,
-                                                   const QString& htmlPrefix, const QString& htmlSuffix,
                                                    AbstractNavigationWidget::DisplayHints hints) const
 {
     if (!decl) {
@@ -48,19 +47,18 @@ QWidget* QmlJSTopDUContext::createNavigationWidget(Declaration* decl, TopDUConte
         item.isDirectory = false;
         item.basePath = u.adjusted(QUrl::RemoveFilename | QUrl::StripTrailingSlash);
 
-        return new NavigationWidget(item, TopDUContextPointer(topContext ? topContext : this->topContext()), htmlPrefix, htmlSuffix, hints);
+        return new NavigationWidget(item, TopDUContextPointer(topContext ? topContext : this->topContext()), hints);
     }
-    return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix, hints);
+    return new NavigationWidget(decl, topContext, hints);
 }
 
 template<>
-QWidget* QmlJSNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, const QString& htmlPrefix,
-                                                      const QString& htmlSuffix, AbstractNavigationWidget::DisplayHints hints) const {
+QWidget* QmlJSNormalDUContext::createNavigationWidget(Declaration* decl, TopDUContext* topContext, AbstractNavigationWidget::DisplayHints hints) const {
     if (!decl) {
         qCDebug(KDEV_QMLJS_DUCHAIN) << "no declaration, not returning navigationwidget";
         return nullptr;
     }
-    return new NavigationWidget(decl, topContext, htmlPrefix, htmlSuffix, hints);
+    return new NavigationWidget(decl, topContext, hints);
 }
 
 }

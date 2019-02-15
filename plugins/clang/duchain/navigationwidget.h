@@ -44,7 +44,6 @@ public:
     ClangNavigationWidget(const MacroDefinition::Ptr& macro, const KDevelop::DocumentCursor& expansionLocation,
                           KDevelop::AbstractNavigationWidget::DisplayHints hints = KDevelop::AbstractNavigationWidget::NoHints);
     ClangNavigationWidget(const KDevelop::IncludeItem& includeItem, const KDevelop::TopDUContextPointer& topContext,
-                          const QString& htmlPrefix = QString(), const QString& htmlSuffix = QString(),
                           KDevelop::AbstractNavigationWidget::DisplayHints hints = KDevelop::AbstractNavigationWidget::NoHints);
     ~ClangNavigationWidget() override = default;
 
