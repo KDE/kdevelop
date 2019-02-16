@@ -41,14 +41,16 @@ using namespace KDevelop;
 class KDevelop::ParseProjectJobPrivate
 {
 public:
-    ParseProjectJobPrivate(IProject* project, bool forceUpdate)
+    ParseProjectJobPrivate(IProject* project, bool forceUpdate, bool forceAll)
         : forceUpdate(forceUpdate)
+        , forceAll(forceAll)
         , project(project)
     {
     }
 
     int updated = 0;
     bool forceUpdate;
+    bool forceAll;
     KDevelop::IProject* project;
     QSet<IndexedString> filesToParse;
 };
@@ -68,12 +70,14 @@ ParseProjectJob::~ParseProjectJob()
         ICore::self()->runController()->unregisterJob(this);
 }
 
-ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate)
-    : d(new ParseProjectJobPrivate(project, forceUpdate))
+ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool forceAll)
+    : d(new ParseProjectJobPrivate(project, forceUpdate, forceAll))
 {
     connect(project, &IProject::destroyed, this, &ParseProjectJob::deleteNow);
 
-    if (!ICore::self()->projectController()->parseAllProjectSources()) {
+    if (forceAll || ICore::self()->projectController()->parseAllProjectSources()) {
+        d->filesToParse = project->fileSet();
+    } else {
         // In case we don't want to parse the whole project, still add all currently open files that belong to the project to the background-parser
         foreach (auto document, ICore::self()->documentController()->openDocuments()) {
             const auto path = IndexedString(document->url());
@@ -81,8 +85,6 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate)
                 d->filesToParse.insert(path);
             }
         }
-    } else {
-        d->filesToParse = project->fileSet();
     }
 
     setCapabilities(Killable);
@@ -160,7 +162,7 @@ void ParseProjectJob::start()
         }
     }
 
-    if (!ICore::self()->projectController()->parseAllProjectSources()) {
+    if (!d->forceAll && !ICore::self()->projectController()->parseAllProjectSources()) {
         return;
     }
 

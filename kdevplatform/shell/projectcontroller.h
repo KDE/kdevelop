@@ -113,7 +113,7 @@ public Q_SLOTS:
     void closeAllProjects() override;
     void configureProject( IProject* ) override;
 
-    void reparseProject( IProject* project, bool forceUpdate = false  ) override;
+    void reparseProject( IProject* project, bool forceUpdate = false, bool forceAll = false  ) override;
 
     void eventuallyOpenProjectFile(KIO::Job* job, const KIO::UDSEntryList& entries);
     void openProjectForUrlSlot(bool);

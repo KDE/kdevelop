@@ -263,25 +263,7 @@ public:
         m_closeProject->setEnabled(itemCount > 0);
     }
 
-    void openProjectConfig()
-    {
-        // if only one project loaded, this is our target
-        IProject *project = (m_projects.count() == 1) ? m_projects.at(0) : nullptr;
-
-        // otherwise base on selection
-        if (!project) {
-            auto* ctx = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
-            if (ctx && ctx->items().count() == 1) {
-                project = ctx->items().at(0)->project();
-            }
-        }
-
-        if (project) {
-            q->configureProject(project);
-        }
-    }
-
-    void closeSelectedProjects()
+    QSet<IProject*> selectedProjects()
     {
         QSet<IProject*> projects;
 
@@ -290,15 +272,28 @@ public:
             projects.insert(m_projects.at(0));
         } else {
             // otherwise base on selection
-            auto* ctx =  dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
+            auto* ctx = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
             if (ctx) {
                 foreach (ProjectBaseItem* item, ctx->items()) {
                     projects.insert(item->project());
                 }
             }
         }
+        return projects;
+    }
 
-        foreach (IProject* project, projects) {
+    void openProjectConfig()
+    {
+        auto projects = selectedProjects();
+
+        if (projects.count() == 1) {
+            q->configureProject(*projects.constBegin());
+        }
+    }
+
+    void closeSelectedProjects()
+    {
+        foreach (IProject* project, selectedProjects()) {
             q->closeProject(project);
         }
     }
@@ -1180,12 +1175,26 @@ ContextMenuExtension ProjectController::contextMenuExtension(Context* ctx, QWidg
 {
     Q_UNUSED(parent);
     ContextMenuExtension ext;
-    if ( ctx->type() != Context::ProjectItemContext || !static_cast<ProjectItemContext*>(ctx)->items().isEmpty() ) {
+    if ( ctx->type() != Context::ProjectItemContext) {
         return ext;
     }
+    if (!static_cast<ProjectItemContext*>(ctx)->items().isEmpty() ) {
+
+        auto* action = new QAction(i18n("Reparse the Entire Project"), this);
+        connect(action, &QAction::triggered, this, [&] {
+            foreach (auto project, d->selectedProjects()) {
+                reparseProject(project, true, true);
+            }
+        });
+
+        ext.addAction(ContextMenuExtension::ProjectGroup, action);
+        return ext;
+    }
+
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_openProject);
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_fetchProject);
     ext.addAction(ContextMenuExtension::ProjectGroup, d->m_recentProjectsAction);
+
     return ext;
 }
 
@@ -1285,13 +1294,13 @@ QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, b
     return QString();
 }
 
-void ProjectController::reparseProject( IProject* project, bool forceUpdate )
-{
+    void KDevelop::ProjectController::reparseProject(IProject *project, bool forceUpdate, bool forceAll)
+    {
     if (auto job = d->m_parseJobs.value(project)) {
         job->kill();
     }
 
-    d->m_parseJobs[project] = new KDevelop::ParseProjectJob(project, forceUpdate);
+    d->m_parseJobs[project] = new KDevelop::ParseProjectJob(project, forceUpdate, forceAll);
     ICore::self()->runController()->registerJob(d->m_parseJobs[project]);
 }
 

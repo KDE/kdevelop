@@ -148,8 +148,12 @@ public Q_SLOTS:
 
     virtual void configureProject( IProject* ) = 0;
 
-    /// Schedules all files of the @p project for reparsing by @see BackgroundParser
-    virtual void reparseProject( IProject* project, bool ForceUpdate = false ) = 0;
+    /**
+     * Schedules all files of the @p project for reparsing by @see BackgroundParser
+     * The @p forceAll argument is for triggering a full reparse of the entire project
+     * after the initial import.
+     */
+    virtual void reparseProject( IProject* project, bool forceUpdate = false, bool forceAll = false ) = 0;
 
 //     virtual void changeCurrentProject( KDevelop::ProjectBaseItem* ) = 0;
 
