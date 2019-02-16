@@ -128,6 +128,16 @@ public:
 
     void setSequentialProcessingFlags(SequentialProcessingFlags flags);
 
+    /**
+     * Files greater than this size will not be parsed.
+     *
+     * Plugins can use the setMaximumFileSize method to override the default value of 5 MB for internal files
+     * they might require to be parsed.
+     **/
+    qint64 maximumFileSize() const;
+
+    void setMaximumFileSize(qint64 value);
+
     /// \returns the indexed url of the document to be parsed.
     KDevelop::IndexedString document() const;
 

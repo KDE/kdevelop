@@ -69,6 +69,7 @@ public:
         , features(TopDUContext::VisibleDeclarationsAndContexts)
         , parsePriority(0)
         , sequentialProcessingFlags(ParseJob::IgnoresSequentialProcessing)
+        , maximumFileSize(5 * 1024 * 1024) // 5 MB
     {
     }
 
@@ -95,6 +96,7 @@ public:
 
     int parsePriority;
     ParseJob::SequentialProcessingFlags sequentialProcessingFlags;
+    qint64 maximumFileSize;
 };
 
 ParseJob::ParseJob(const IndexedString& url, KDevelop::ILanguageSupport* languageSupport)
@@ -143,6 +145,16 @@ bool ParseJob::respectsSequentialProcessing() const
 void ParseJob::setSequentialProcessingFlags(SequentialProcessingFlags flags)
 {
     d->sequentialProcessingFlags = flags;
+}
+
+qint64 ParseJob::maximumFileSize() const
+{
+    return d->maximumFileSize;
+}
+
+void ParseJob::setMaximumFileSize(qint64 value)
+{
+    d->maximumFileSize = value;
 }
 
 IndexedString ParseJob::document() const
@@ -270,38 +282,19 @@ KDevelop::ProblemPointer ParseJob::readContents()
     if (!hadTracker) {
         // We have to load the file from disk
 
-        static const int maximumFileSize = 5 * 1024 * 1024; // 5 MB
-        if (fileInfo.size() > maximumFileSize) {
-            QStringList paths =
-                QStandardPaths::standardLocations(QStandardPaths::StandardLocation::GenericDataLocation);
+        if (fileInfo.size() > d->maximumFileSize) {
+            KFormat f;
 
-            bool internalFile = false;
-            QString internalFilePath = fileInfo.canonicalPath();
-
-            foreach (const QString path, paths) {
-                QDir dataPath = QDir(path);
-                if (internalFilePath.startsWith(dataPath.canonicalPath() + QStringLiteral("/kdev"))) {
-                    qCDebug(LANGUAGE) << "Found internal file " << fileInfo.absoluteFilePath() << " in " << path <<
-                        ". Ignoring file size limit!";
-                    internalFile = true;
-                    break;
-                }
-            }
-
-            if (!internalFile) {
-                KFormat f;
-
-                KDevelop::ProblemPointer p(new Problem());
-                p->setSource(IProblem::Disk);
-                p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile));
-                p->setExplanation(i18nc("%1: file size, %2: limit file size",
-                                        "The file is %1 and exceeds the limit of %2.",
-                                        f.formatByteSize(fileInfo.size()),
-                                        f.formatByteSize(maximumFileSize)));
-                p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
-                qCWarning(LANGUAGE) << p->description() << p->explanation();
-                return p;
-            }
+            KDevelop::ProblemPointer p(new Problem());
+            p->setSource(IProblem::Disk);
+            p->setDescription(i18nc("%1: filename", "Skipped file that is too large: '%1'", localFile));
+            p->setExplanation(i18nc("%1: file size, %2: limit file size",
+                                    "The file is %1 and exceeds the limit of %2.",
+                                    f.formatByteSize(fileInfo.size()),
+                                    f.formatByteSize(d->maximumFileSize)));
+            p->setFinalLocation(DocumentRange(document(), KTextEditor::Range::invalid()));
+            qCWarning(LANGUAGE) << p->description() << p->explanation();
+            return p;
         }
         QFile file(localFile);
 
