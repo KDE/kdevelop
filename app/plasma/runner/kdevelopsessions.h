@@ -22,8 +22,6 @@
 
 #include <KRunner/AbstractRunner>
 
-#include <QIcon>
-
 struct Session
 {
     QString id;
@@ -46,7 +44,6 @@ class KDevelopSessions : public Plasma::AbstractRunner {
         void loadSessions();
 
     private:
-        QIcon m_icon;
         QVector<Session> m_sessions;
 };
 

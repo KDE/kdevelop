@@ -25,7 +25,6 @@
 
 
 #include <QDebug>
-#include <QIcon>
 #include <QFile>
 #include <KDirWatch>
 #include <KToolInvocation>
@@ -46,7 +45,6 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
 {
     setObjectName(QStringLiteral("KDevelop Sessions"));
     setIgnoredTypes(Plasma::RunnerContext::File | Plasma::RunnerContext::Directory | Plasma::RunnerContext::NetworkLocation);
-    m_icon = QIcon::fromTheme(QStringLiteral("kdevelop"));
 
     loadSessions();
 
@@ -158,7 +156,7 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
                     match.setRelevance(0.8);
                 }
             }
-            match.setIcon(m_icon);
+            match.setIconName(QStringLiteral("kdevelop"));
             match.setData(session.id);
             match.setText(session.name);
             match.setSubtext(i18n("Open KDevelop Session"));
