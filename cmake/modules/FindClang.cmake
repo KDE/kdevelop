@@ -37,12 +37,16 @@ foreach(version ${KNOWN_VERSIONS})
         break()
     endif ()
 
-    if (${Clang_FIND_REQUIRED})
-        find_package(LLVM ${version} REQUIRED)
-    else ()
-        find_package(LLVM ${version})
-    endif ()
+    find_package(LLVM ${version})
 endforeach()
+
+if (${Clang_FIND_REQUIRED})
+    if(NOT DEFINED Clang_FIND_VERSION)
+        message(SEND_ERROR "Could not find Clang.")
+    else()
+        message("Found version ${Clang_FIND_VERSION}")
+    endif()
+endif()
 
 set(CLANG_FOUND FALSE)
 
