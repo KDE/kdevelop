@@ -46,6 +46,7 @@
 #include <language/duchain/stringhelpers.h>
 #include <language/codecompletion/codecompletionmodel.h>
 #include <language/codecompletion/normaldeclarationcompletionitem.h>
+#include <language/codegen/documentchangeset.h>
 #include <util/foregroundlock.h>
 #include <custom-definesandincludes/idefinesandincludesmanager.h>
 #include <project/projectmodel.h>
@@ -197,7 +198,14 @@ public:
             replacement.append(QLatin1Char(';'));
         }
 
-        view->document()->replaceText(word, replacement);
+        DocumentChange overrideChange(IndexedString(view->document()->url()),
+                                            word,
+                                            QString{},
+                                            replacement);
+        overrideChange.m_ignoreOldText = true;
+        DocumentChangeSet changes;
+        changes.addChange(overrideChange);
+        changes.applyAllChanges();
     }
 
 private:
@@ -367,6 +375,9 @@ public:
     {
         auto* const document = view->document();
 
+        DocumentChangeSet changes;
+        KTextEditor::Cursor rangeStart = word.start();
+
         // try and replace leading typed text that match the proposed implementation
         const QString leading = document->line(word.end().line()).left(word.end().column());
         const QString leadingNoSpace = removeWhitespace(leading);
@@ -374,14 +385,24 @@ public:
             || removeWhitespace(m_replacement).startsWith(leadingNoSpace))) {
             const int removeSize = leading.end() - std::find_if_not(leading.begin(), leading.end(),
                                         [](QChar c){ return c.isSpace(); });
-            const KTextEditor::Cursor newStart = {word.end().line(), word.end().column() - removeSize};
-            document->replaceText({newStart, word.end()}, m_replacement);
-        } else {
-            document->replaceText(word, m_replacement);
+            rangeStart = {word.end().line(), word.end().column() - removeSize};
         }
 
-        // place cursor after the opening brace
-        view->setCursorPosition(view->cursorPosition() + KTextEditor::Cursor{-2, 1});
+        DocumentChange change(IndexedString(view->document()->url()),
+                              KTextEditor::Range(rangeStart, word.end()),
+                              QString(),
+                              m_replacement);
+        change.m_ignoreOldText = true;
+        changes.addChange(change);
+        changes.applyAllChanges();
+
+        // Place cursor after the opening brace
+        // arbitrarily chose 4, as it would accomodate the template and return types on their own line
+        const auto searchRange = KTextEditor::Range(rangeStart, rangeStart.line() + 4, 0);
+        const auto results = view->document()->searchText(searchRange, QStringLiteral("{"));
+        if (!results.isEmpty()) {
+            view->setCursorPosition(results.first().end());
+        }
     }
 };
 
