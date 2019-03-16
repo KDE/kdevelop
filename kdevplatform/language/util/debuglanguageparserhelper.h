@@ -229,7 +229,7 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
 #endif
             parserT.parseCode( qin.readAll().toUtf8() );
         } else {
-            parserT.parseFile(fileName);
+            parserT.parseFile(QFileInfo(fileName).absoluteFilePath());
         }
 
     }
