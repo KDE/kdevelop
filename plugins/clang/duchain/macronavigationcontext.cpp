@@ -44,6 +44,7 @@ QString MacroNavigationContext::name() const
 
 QString MacroNavigationContext::html(bool shorten)
 {
+    Q_UNUSED(shorten);
     clear();
 
     modifyHtml() += QLatin1String("<html><body><p>");

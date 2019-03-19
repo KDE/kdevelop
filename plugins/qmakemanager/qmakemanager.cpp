@@ -512,6 +512,7 @@ void QMakeProjectManager::slotRunQMake()
 
 KDevelop::Path QMakeProjectManager::compiler(KDevelop::ProjectTargetItem* p) const
 {
+    Q_UNUSED(p);
     return {};
 }
 

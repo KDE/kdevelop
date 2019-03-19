@@ -197,6 +197,7 @@ KDevelop::ConfigPage* CustomBuildSystem::perProjectConfigPage(int number, const 
 
 KDevelop::Path CustomBuildSystem::compiler(KDevelop::ProjectTargetItem* item) const
 {
+    Q_UNUSED(item);
     return {};
 }
 

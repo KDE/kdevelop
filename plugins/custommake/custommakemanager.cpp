@@ -326,6 +326,7 @@ void CustomMakeManager::unload()
 
 KDevelop::Path CustomMakeManager::compiler(KDevelop::ProjectTargetItem* item) const
 {
+    Q_UNUSED(item);
     return {};
 }
 

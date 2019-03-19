@@ -45,6 +45,7 @@ QString UsesNavigationContext::name() const
 
 QString UsesNavigationContext::html(bool shorten)
 {
+    Q_UNUSED(shorten);
     clear();
     modifyHtml()  += QLatin1String("<html><body><p>");
 
