@@ -188,6 +188,7 @@ bool CMakeListsParser::readCMakeFunction(cmListFileLexer *lexer, CMakeFunctionDe
                 func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text, token->length), false, token->line, token->column );
                 break;
             case cmListFileLexer_Token_Identifier:
+            case cmListFileLexer_Token_ArgumentBracket:
             case cmListFileLexer_Token_ArgumentUnquoted:
                 func.arguments << CMakeFunctionArgument( QString::fromLocal8Bit(token->text, token->length), false, token->line, token->column );
                 break;

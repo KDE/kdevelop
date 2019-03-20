@@ -691,15 +691,15 @@ QString defaultGenerator()
     return defGen;
 }
 
-QVector<Test> importTestSuites(const Path &buildDir)
+QVector<Test> importTestSuites(const Path &buildDir, const QString &cmakeTestFileName)
 {
-    const auto contents = CMakeListsParser::readCMakeFile(buildDir.toLocalFile() + QLatin1String("/CTestTestfile.cmake"));
-
+    const auto cmakeTestFile = Path(buildDir, cmakeTestFileName).toLocalFile()  ;
+    const auto contents = CMakeListsParser::readCMakeFile(cmakeTestFile);
+    
     QVector<Test> tests;
     for (const auto& entry: contents) {
         if (entry.name == QLatin1String("add_test")) {
             auto args = entry.arguments;
-
             Test test;
             test.name = args.takeFirst().value;
             test.executable = args.takeFirst().value;
@@ -707,6 +707,9 @@ QVector<Test> importTestSuites(const Path &buildDir)
             tests += test;
         } else if (entry.name == QLatin1String("subdirs")) {
             tests += importTestSuites(Path(buildDir, entry.arguments.first().value));
+        } else if (entry.name == QLatin1String("include")) {
+            // Include directive points directly to a .cmake file hosting the tests
+            tests += importTestSuites(Path(buildDir, entry.arguments.first().value), QString());
         } else if (entry.name == QLatin1String("set_tests_properties")) {
             if(entry.arguments.count() < 4 || entry.arguments.count() % 2) {
                 qCWarning(CMAKE) << "found set_tests_properties() with unexpected number of arguments:"
@@ -730,6 +733,10 @@ QVector<Test> importTestSuites(const Path &buildDir)
     }
 
     return tests;
+}
+
+QVector<Test> importTestSuites(const Path &buildDir) {
+    return importTestSuites(buildDir, QStringLiteral("CTestTestfile.cmake"));
 }
 
 }
