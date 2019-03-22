@@ -46,7 +46,7 @@ class CodeCompletionTestBase : public QObject
     Q_OBJECT
 
 public:
-    std::unique_ptr<KTextEditor::View, DeleteDocument> createView(const QUrl& url, QObject* parent) const;
+    std::unique_ptr<KTextEditor::View, DeleteDocument> createView(const QUrl& url) const;
 
 private Q_SLOTS:
     void initTestCase();

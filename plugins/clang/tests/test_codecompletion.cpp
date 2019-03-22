@@ -182,6 +182,7 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
     }
     QCOMPARE(tester.names, expectedCompletionItems.completions);
 
+    lock.unlock(); // customTestFunction should lock appropriately
     customTestFunction(tester);
 }
 
@@ -636,7 +637,8 @@ void TestCodeCompletion::testOverrideExecute()
     auto executeItem = [=] (const ClangCodeCompletionItemTester& tester) {
         auto item = tester.findItem(itemToExecute);
         QVERIFY(item);
-        auto view = createView(tester.completionContext->duContext()->url().toUrl(), this);
+        auto view = createView(tester.completionContext->duContext()->url().toUrl());
+        DUChainReadLocker lock;
         item->execute(view.get(), view->document()->wordRangeAt(expectedItems.position));
         QCOMPARE(view->document()->text(), expectedCode);
     };
@@ -1046,7 +1048,7 @@ void TestCodeCompletion::testIncludePathCompletion()
     auto item = tester.findItem(itemId);
     QVERIFY(item);
 
-    auto view = createView(file.url().toUrl(), this);
+    auto view = createView(file.url().toUrl());
     QVERIFY(view.get());
     auto doc = view->document();
     item->execute(view.get(), KTextEditor::Range(cursor, cursor));
@@ -1233,6 +1235,7 @@ void TestCodeCompletion::testArgumentHintCompletion()
     QFETCH(HintItemList, hints);
 
     executeCompletionTest(code, expectedItems, NoMacroOrBuiltin, [&](const ClangCodeCompletionItemTester& tester) {
+        DUChainReadLocker lock;
         HintItemList actualHints;
         for (const auto& item : tester.items) {
             if (item->argumentHintDepth() == 1) {
@@ -1403,7 +1406,8 @@ void TestCodeCompletion::testCompleteFunction()
     auto executeItem = [=] (const ClangCodeCompletionItemTester& tester) {
         auto item = tester.findItem(itemToExecute);
         QVERIFY(item);
-        auto view = createView(tester.completionContext->duContext()->url().toUrl(), this);
+        auto view = createView(tester.completionContext->duContext()->url().toUrl());
+        DUChainReadLocker lock;
         item->execute(view.get(), view->document()->wordRangeAt(expectedItems.position));
         QCOMPARE(view->document()->text(), expectedCode);
     };

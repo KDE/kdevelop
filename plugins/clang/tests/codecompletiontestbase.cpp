@@ -41,21 +41,20 @@
 
 void DeleteDocument::operator()(KTextEditor::View* view) const
 {
-    delete view->document();
+    // explicitly close the document when all references are valid, otherwise we have problems during cleanup
+    const auto url = view->document()->url();
+    ICore::self()->documentController()->documentForUrl(url)->close(IDocument::Discard);
 }
 
-std::unique_ptr<KTextEditor::View, DeleteDocument> CodeCompletionTestBase::createView(const QUrl& url, QObject* parent) const
+std::unique_ptr<KTextEditor::View, DeleteDocument> CodeCompletionTestBase::createView(const QUrl& url) const
 {
-    KTextEditor::Editor* editor = KTextEditor::Editor::instance();
-    Q_ASSERT(editor);
-
-    auto doc = editor->createDocument(parent);
+    auto doc = KDevelop::ICore::self()
+                ->documentController()
+                ->openDocument(url, KTextEditor::Range::invalid(), KDevelop::IDocumentController::DoNotActivate)
+                ->textDocument();
     Q_ASSERT(doc);
-    bool opened = doc->openUrl(url);
-    Q_ASSERT(opened);
-    Q_UNUSED(opened);
 
-    auto view = doc->createView(nullptr);
+    auto view = doc->views().first();
     Q_ASSERT(view);
     return std::unique_ptr<KTextEditor::View, DeleteDocument>(view);
 }
