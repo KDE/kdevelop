@@ -210,7 +210,7 @@ Path FlatpakRuntime::pathInRuntime(const KDevelop::Path& localPath) const
         const auto relpath = m_sdkPath.relativePath(localPath);
         ret = Path(Path(QStringLiteral("/usr")), relpath);
     } else {
-        const Path bdfiles(m_buildDirectory, QStringLiteral("/active/flies"));
+        const Path bdfiles(m_buildDirectory, QStringLiteral("/active/files"));
         if (bdfiles.isParentOf(localPath)) {
             const auto relpath = bdfiles.relativePath(localPath);
             ret = Path(Path(QStringLiteral("/app")), relpath);
