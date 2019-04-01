@@ -505,12 +505,18 @@ void UiController::showSettingsDialog()
         new ProjectPreferences(&cfgDlg),
         new EnvironmentPreferences(QString(), &cfgDlg),
         templateConfig,
+        documentationPreferences,
+        analyzersPreferences,
+        runtimesPreferences,
+        languageConfigPage,
         editorConfigPage
     };
 
     for (auto page : configPages) {
         cfgDlg.appendConfigPage(page);
     }
+
+    cfgDlg.appendSubConfigPage(languageConfigPage, new BGPreferences(&cfgDlg));
 
     auto addPluginPages = [&](IPlugin* plugin) {
         for (int i = 0, numPages = plugin->configPages(); i < numPages; ++i) {
@@ -532,14 +538,10 @@ void UiController::showSettingsDialog()
         }
     };
 
-    cfgDlg.insertConfigPage(templateConfig, documentationPreferences);
-    cfgDlg.insertConfigPage(documentationPreferences, analyzersPreferences);
-    cfgDlg.insertConfigPage(analyzersPreferences, runtimesPreferences);
+    auto plugins = ICore::self()->pluginController()->loadedPlugins();
+    std::sort(plugins.begin(), plugins.end());
 
-    cfgDlg.insertConfigPage(runtimesPreferences, languageConfigPage);
-    cfgDlg.appendSubConfigPage(languageConfigPage, new BGPreferences(&cfgDlg));
-
-    foreach (IPlugin* plugin, ICore::self()->pluginController()->loadedPlugins()) {
+    foreach (IPlugin* plugin, plugins) {
         addPluginPages(plugin);
     }
 
