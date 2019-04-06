@@ -186,7 +186,11 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
 #endif
 }
 
-KDevelop::StandardDocumentationView::~StandardDocumentationView() = default;
+KDevelop::StandardDocumentationView::~StandardDocumentationView()
+{
+    // Prevent getting a loadFinished() signal on destruction.
+    disconnect(d->m_view, nullptr, this, nullptr);
+}
 
 void StandardDocumentationView::search ( const QString& text, DocumentationFindWidget::FindOptions options )
 {
