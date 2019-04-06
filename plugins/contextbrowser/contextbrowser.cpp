@@ -489,7 +489,6 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsUnderCursor(TopDUContext* to
 
 static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(const TopDUContext* topContext,
                                                                   KTextEditor::Cursor position,
-                                                                  const KTextEditor::View* view,
                                                                   KTextEditor::Range& handleRange)
 {
     handleRange = KTextEditor::Range::invalid();
@@ -537,28 +536,6 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(const TopDUCon
             closestProblems += problem;
         else
             break;
-    }
-
-    // If not, only show it in case there's only whitespace
-    // between the current cursor position and the problem line
-    if (closestProblems.isEmpty()) {
-        for (auto& problem : qAsConst(allProblems)) {
-            auto r = problem->finalLocation();
-
-            KTextEditor::Range dist;
-            KTextEditor::Cursor bound(r.start().line(), 0);
-            if (position < r.start())
-                dist = KTextEditor::Range(position, bound);
-            else {
-                bound.setLine(r.end().line() + 1);
-                dist = KTextEditor::Range(bound, position);
-            }
-
-            if (view->document()->text(dist).trimmed().isEmpty())
-                closestProblems += problem;
-            else
-                break;
-        }
     }
 
     if (!closestProblems.isEmpty()) {
@@ -657,7 +634,7 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
     // Nothing has been found so far which created a widget.
     // Thus, find the closest problem to the cursor in a second pass.
     if (topContext) {
-        problems = findProblemsCloseToCursor(topContext, position, view, itemRange);
+        problems = findProblemsCloseToCursor(topContext, position, itemRange);
         if (!problems.isEmpty()) {
             // Return nullptr if the correct contents are already being shown in the tool tip currently.
             if (m_currentToolTip &&
