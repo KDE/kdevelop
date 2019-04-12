@@ -68,6 +68,7 @@ public:
 
     QString parserArguments(KDevelop::ProjectBaseItem* item) const override;
     QString parserArguments(const QString& path) const override;
+    QString parserArgumentsInBackground(const QString& path) const override;
 
     void openConfigurationDialog( const QString& pathToFile ) override;
     int perProjectConfigPages() const override;

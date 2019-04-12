@@ -99,6 +99,7 @@ LINK_LIBRARIES
     Qt5::Core
     KDev::Language
     KDev::Tests
+    KDev::DefinesAndIncludesManager
 )
 
 if(NOT COMPILER_OPTIMIZATIONS_DISABLED)

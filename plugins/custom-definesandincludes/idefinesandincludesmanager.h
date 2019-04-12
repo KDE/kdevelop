@@ -96,6 +96,8 @@ public:
 
         virtual Defines definesInBackground( const QString& path ) const = 0;
 
+        virtual QString parserArgumentsInBackground(const QString& path) const = 0;
+
         /// @return the type of i/d this provider provides
         virtual Type type() const = 0;
     };
@@ -168,6 +170,7 @@ public:
     virtual QString parserArguments(ProjectBaseItem* item) const = 0;
 
     virtual QString parserArguments(const QString& path) const = 0;
+    virtual QString parserArgumentsInBackground(const QString& path) const = 0;
 
     ///@return the instance of the plugin.
     inline static IDefinesAndIncludesManager* manager();

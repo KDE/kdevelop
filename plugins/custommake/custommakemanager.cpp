@@ -84,6 +84,11 @@ public:
         return resolvePathInBackground(path, true);
     }
 
+    QString parserArgumentsInBackground(const QString& /*path*/) const override
+    {
+        return {};
+    }
+
     IDefinesAndIncludesManager::Type type() const override
     {
         return IDefinesAndIncludesManager::ProjectSpecific;

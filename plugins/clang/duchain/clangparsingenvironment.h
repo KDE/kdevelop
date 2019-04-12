@@ -100,6 +100,7 @@ public:
     void setParserSettings(const ParserSettings& arguments);
 
     ParserSettings parserSettings() const;
+    void addParserArguments(const QString &parserArguments);
 
     /**
      * Hash all contents of this environment and return the result.

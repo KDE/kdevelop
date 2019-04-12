@@ -374,6 +374,16 @@ QString DefinesAndIncludesManager::parserArguments(const QString& path) const
     return argumentsForPath(path, args);
 }
 
+QString DefinesAndIncludesManager::parserArgumentsInBackground(const QString& path) const
+{
+    QString ret;
+    for (auto provider: m_backgroundProviders) {
+        ret += provider->parserArgumentsInBackground(path) + QLatin1Char(' ');
+    }
+
+    return ret;
+}
+
 int DefinesAndIncludesManager::perProjectConfigPages() const
 {
     return 1;

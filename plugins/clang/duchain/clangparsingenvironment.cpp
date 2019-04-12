@@ -167,3 +167,9 @@ ParserSettings ClangParsingEnvironment::parserSettings() const
 {
     return m_parserSettings;
 }
+
+void ClangParsingEnvironment::addParserArguments(const QString& parserArguments)
+{
+    m_parserSettings.parserOptions += QLatin1Char(' ') + parserArguments;
+}
+

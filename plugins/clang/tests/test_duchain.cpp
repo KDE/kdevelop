@@ -52,7 +52,7 @@
 #include "duchain/clangparsingenvironment.h"
 #include "duchain/parsesession.h"
 
-#include <custom-definesandincludes/idefinesandincludesmanager.h>
+#include "testprovider.h"
 
 #include <KConfigGroup>
 
@@ -64,34 +64,6 @@
 QTEST_MAIN(TestDUChain)
 
 using namespace KDevelop;
-
-class TestEnvironmentProvider final : public IDefinesAndIncludesManager::BackgroundProvider
-{
-public:
-    ~TestEnvironmentProvider() override = default;
-    QHash< QString, QString > definesInBackground(const QString& /*path*/) const override
-    {
-        return defines;
-    }
-
-    Path::List includesInBackground(const QString& /*path*/) const override
-    {
-        return includes;
-    }
-
-    Path::List frameworkDirectoriesInBackground(const QString&) const override
-    {
-        return {};
-    }
-
-    IDefinesAndIncludesManager::Type type() const override
-    {
-        return IDefinesAndIncludesManager::UserDefined;
-    }
-
-    QHash<QString, QString> defines;
-    Path::List includes;
-};
 
 TestDUChain::~TestDUChain() = default;
 

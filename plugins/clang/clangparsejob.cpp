@@ -237,6 +237,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includesInBackground(tuUrlStr));
         m_environment.addFrameworkDirectories(IDefinesAndIncludesManager::manager()->frameworkDirectoriesInBackground(tuUrlStr));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->definesInBackground(tuUrlStr));
+        m_environment.addParserArguments(IDefinesAndIncludesManager::manager()->parserArgumentsInBackground(tuUrlStr));
         m_environment.setPchInclude(userDefinedPchIncludeForFile(tuUrlStr));
     }
 
