@@ -53,9 +53,9 @@ void someFunc(int a, int f) { }
 void someFunc(int a) { }
 
 // Pointer-to-member functions
-/// "type" : { "toString"  : "void ()*" }
+/// "type" : { "toString"  : "function void ()*" }
 void (Base::*f1)();
-/// "type" : { "toString"  : "void (int, int)*" }
+/// "type" : { "toString"  : "function void (int, int)*" }
 void (Base::*f2)(int a, int b);
 
 #define STDCALL __stdcall
