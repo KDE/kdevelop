@@ -22,14 +22,19 @@
 
 #include <QObject>
 
+class TestEnvironmentProvider;
+
 class TestFiles : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
+    void cleanup();
     void testFiles_data();
     void testFiles();
+private:
+    TestEnvironmentProvider *m_provider;
 };
 
 #endif // TEST_FILES_H
