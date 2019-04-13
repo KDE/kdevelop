@@ -227,11 +227,15 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
         }
     });
 
-    const QList<KJob*> jobs = {
-        builder()->configure(project), // Make sure the project is configured
-        AbstractFileManagerPlugin::createImportJob(item), // generate the file system listing
-        introJob // Load targets from the build directory introspection files
-    };
+    QList<KJob*> jobs;
+
+    // Configure the project if necessary
+    if (m_builder->evaluateBuildDirectory(buildDir.buildDir, buildDir.mesonBackend) != MesonBuilder::MESON_CONFIGURED) {
+        jobs << builder()->configure(project);
+    }
+
+    jobs << AbstractFileManagerPlugin::createImportJob(item); // generate the file system listing
+    jobs << introJob;
 
     Q_ASSERT(!jobs.contains(nullptr));
     auto composite = new ExecuteCompositeJob(this, jobs);
