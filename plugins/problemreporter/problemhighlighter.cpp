@@ -119,8 +119,8 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
     if (markIface && hadProblems) {
         // clear previously added marks
         foreach (KTextEditor::Mark* mark, markIface->marks()) {
-            if (mark->type == errorMarkType || mark->type == warningMarkType) {
-                markIface->removeMark(mark->line, mark->type);
+            if (mark->type & (errorMarkType | warningMarkType)) {
+                markIface->removeMark(mark->line, errorMarkType | warningMarkType);
             }
         }
     }
