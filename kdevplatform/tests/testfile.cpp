@@ -30,6 +30,7 @@
 #include <language/duchain/duchain.h>
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/icore.h>
+#include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilanguagecontroller.h>
 #include <project/projectmodel.h>
 
@@ -123,6 +124,14 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension, const 
 
 TestFile::~TestFile()
 {
+    if (auto* document = ICore::self()->documentController()->documentForUrl(d->url.toUrl())) {
+        document->close(KDevelop::IDocument::Discard);
+    }
+
+    auto backgroundParser = ICore::self()->languageController()->backgroundParser();
+    backgroundParser->removeDocument(d->url, this);
+    QTRY_VERIFY(!backgroundParser->parseJobForDocument(d->url));
+
     if (d->topContext && !d->keepDUChainData) {
         DUChainWriteLocker lock;
         DUChain::self()->removeDocumentChain(d->topContext.data());
