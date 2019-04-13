@@ -38,6 +38,7 @@
 #include <util/executecompositejob.h>
 
 #include <KConfigGroup>
+#include <KDirWatch>
 #include <KLocalizedString>
 #include <KPluginFactory>
 #include <QFileDialog>
@@ -132,7 +133,7 @@ bool MesonManager::reload(KDevelop::ProjectFolderItem* item)
             }
 
             KDevelop::ICore::self()->projectController()->projectConfigurationChanged(project);
-            KDevelop::ICore::self()->projectController()->reparseProject(project, true);
+            KDevelop::ICore::self()->projectController()->reparseProject(project);
         });
     }
 
@@ -190,13 +191,54 @@ QList<ProjectTargetItem*> MesonManager::targets(ProjectFolderItem* item) const
     return res;
 }
 
+void MesonManager::onMesonInfoChanged(QString path, QString projectName)
+{
+    qCDebug(KDEV_Meson) << "File" << path << "changed --> reparsing project";
+    IProject* foundProject = ICore::self()->projectController()->findProjectByName(projectName);
+    if (!foundProject) {
+        return;
+    }
+
+    KJob* job = createImportJob(foundProject->projectItem());
+    foundProject->setReloadJob(job);
+    ICore::self()->runController()->registerJob(job);
+    connect(job, &KJob::finished, this, [foundProject](KJob* job) -> void {
+        if (job->error()) {
+            return;
+        }
+
+        KDevelop::ICore::self()->projectController()->projectConfigurationChanged(foundProject);
+        KDevelop::ICore::self()->projectController()->reparseProject(foundProject);
+    });
+}
+
 KJob* MesonManager::createImportJob(ProjectFolderItem* item)
 {
     IProject* project = item->project();
+    Q_ASSERT(project);
+
     auto buildDir = Meson::currentBuildDir(project);
     auto introJob
         = new MesonIntrospectJob(project, buildDir, { MesonIntrospectJob::TARGETS, MesonIntrospectJob::TESTS },
                                  MesonIntrospectJob::BUILD_DIR, this);
+
+    KDirWatchPtr watcher = m_projectWatchers[project];
+    if (!watcher) {
+        // Create a new watcher
+        watcher = m_projectWatchers[project] = make_shared<KDirWatch>(nullptr);
+        QString projectName = project->name();
+
+        connect(watcher.get(), &KDirWatch::dirty, this, [=](QString p) { onMesonInfoChanged(p, projectName); });
+        connect(watcher.get(), &KDirWatch::created, this, [=](QString p) { onMesonInfoChanged(p, projectName); });
+    }
+
+    Path watchFile = buildDir.buildDir;
+    watchFile.addPath(QStringLiteral("meson-info"));
+    watchFile.addPath(QStringLiteral("meson-info.json"));
+    if (!watcher->contains(watchFile.path())) {
+        qCDebug(KDEV_Meson) << "Start watching file" << watchFile;
+        watcher->addFile(watchFile.path());
+    }
 
     connect(introJob, &KJob::result, this, [this, introJob, item, project]() {
         auto targets = introJob->targets();
