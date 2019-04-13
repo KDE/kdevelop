@@ -20,16 +20,18 @@
 
 #include "mesonmanager.h"
 
+#include "debug.h"
 #include "mesonbuilder.h"
 #include "mesonconfig.h"
 #include "mesonintrospectjob.h"
 #include "mesontargets.h"
-#include "debug.h"
 #include "settings/mesonconfigpage.h"
 #include "settings/mesonnewbuilddir.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
+#include <interfaces/iruncontroller.h>
 #include <interfaces/itestcontroller.h>
 #include <project/projectconfigpage.h>
 #include <project/projectmodel.h>
@@ -109,6 +111,34 @@ ProjectFolderItem* MesonManager::createFolderItem(IProject* project, const Path&
         return AbstractFileManagerPlugin::createFolderItem(project, path, parent);
 }
 
+bool MesonManager::reload(KDevelop::ProjectFolderItem* item)
+{
+    // "Inspired" by CMakeManager::reload
+
+    IProject* project = item->project();
+    if (!project->isReady()) {
+        return false;
+    }
+
+    qCDebug(KDEV_Meson) << "reloading meson project" << project->name() << "; Path:" << item->path();
+
+    KJob* job = createImportJob(item);
+    project->setReloadJob(job);
+    ICore::self()->runController()->registerJob(job);
+    if (item == project->projectItem()) {
+        connect(job, &KJob::finished, this, [project](KJob* job) -> void {
+            if (job->error()) {
+                return;
+            }
+
+            KDevelop::ICore::self()->projectController()->projectConfigurationChanged(project);
+            KDevelop::ICore::self()->projectController()->reparseProject(project, true);
+        });
+    }
+
+    return true;
+}
+
 // ***************************
 // * IBuildSystemManager API *
 // ***************************
@@ -173,6 +203,13 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
         auto tests = introJob->tests();
         if (!targets || !tests) {
             return;
+        }
+
+        // Remove old test suites before deleting them
+        if (m_projectTestSuites[project]) {
+            for (auto i : m_projectTestSuites[project]->testSuites()) {
+                ICore::self()->testController()->removeTestSuite(i.get());
+            }
         }
 
         m_projectTargets[project] = targets;

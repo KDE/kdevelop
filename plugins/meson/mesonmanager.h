@@ -69,6 +69,8 @@ public:
     KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KDevelop::Path& path,
                                                   KDevelop::ProjectBaseItem* parent = nullptr) override;
 
+    bool reload(KDevelop::ProjectFolderItem* item) override;
+
     // ***********
     // * IPlugin *
     // ***********
@@ -108,7 +110,7 @@ public:
     }
     bool removeFilesFromTargets(const QList<KDevelop::ProjectFileItem*>& /*files*/) override { return false; }
 
-    KDevelop::Path compiler(KDevelop::ProjectTargetItem * p) const override;
+    KDevelop::Path compiler(KDevelop::ProjectTargetItem* p) const override;
 
 private:
     MesonBuilder* m_builder;
