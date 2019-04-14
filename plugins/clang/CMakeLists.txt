@@ -2,6 +2,11 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevclang\")
 add_definitions(${LLVM_CFLAGS})
 include_directories(${CLANG_INCLUDE_DIRS})
 
+set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_DL_LIBS})
+check_cxx_source_compiles(
+    "#include <dlfcn.h>\nint main() { Dl_info info; return dladdr(nullptr, &info); }"
+    HAVE_DLFCN)
+
 configure_file(
   "${CMAKE_CURRENT_SOURCE_DIR}/libclang_include_path.h.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/libclang_include_path.h"
@@ -115,6 +120,10 @@ LINK_PUBLIC
     KDev::Util
     Clang::clang
 )
+
+if (HAVE_DLFCN)
+    target_link_libraries(KDevClangPrivate LINK_PRIVATE ${CMAKE_DL_LIBS})
+endif()
 
 install(DIRECTORY duchain/wrappedQtHeaders DESTINATION ${KDE_INSTALL_DATADIR}/kdevclangsupport
         DIRECTORY_PERMISSIONS

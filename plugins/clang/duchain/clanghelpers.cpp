@@ -44,6 +44,10 @@
 
 #include <algorithm>
 
+#if HAVE_DLFCN
+#include <dlfcn.h>
+#endif
+
 using namespace KDevelop;
 
 namespace {
@@ -405,6 +409,20 @@ QString ClangHelpers::clangBuiltinIncludePath()
         if (isValidClangBuiltingIncludePath(dir)) {
             clangDebug() << "Using builtin dir:" << dir;
             return dir;
+        }
+#endif
+
+#if HAVE_DLFCN
+        // maybe the location of clang changed, try to use the library path instead
+        // we find it by pass any symbol in libclang to dladdr
+        Dl_info info;
+        if (dladdr(reinterpret_cast<void*>(&clang_getClangVersion), &info)) {
+            dir = QDir::cleanPath(QStringLiteral("%1/../clang/%2/include")
+                .arg(QString::fromUtf8(info.dli_fname), clangVersion()));
+            if (isValidClangBuiltingIncludePath(dir)) {
+                clangDebug() << "Using builtin dir:" << dir;
+                return dir;
+            }
         }
 #endif
 

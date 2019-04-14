@@ -20,3 +20,5 @@
 */
 
 #define KDEV_CLANG_BUILTIN_DIR "@CLANG_BUILTIN_DIR@"
+
+#cmakedefine01 HAVE_DLFCN
