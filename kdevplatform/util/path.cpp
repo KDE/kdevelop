@@ -138,7 +138,7 @@ static QString generatePathOrUrl(bool onlyPath, bool isLocalFile, const QVector<
     // more or less a copy of QtPrivate::QStringList_join
     const int size = data.size();
 
-    if (size == 0 || data.at(0).isEmpty()) {
+    if (size == 0) {
         return QString();
     }
 
