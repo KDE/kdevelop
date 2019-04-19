@@ -27,6 +27,8 @@ class KJob;
 
 namespace Ui { class BranchDialogBase; }
 
+class QSortFilterProxyModel;
+
 namespace KDevelop
 {
 class BranchesListModel;
@@ -58,6 +60,7 @@ private:
 
     Ui::BranchDialogBase* m_ui;
     KDevelop::BranchesListModel* m_model;
+    QSortFilterProxyModel* m_filterModel;
 };
 
 #endif
