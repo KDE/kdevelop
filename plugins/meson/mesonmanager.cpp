@@ -23,8 +23,8 @@
 #include "debug.h"
 #include "mesonbuilder.h"
 #include "mesonconfig.h"
-#include "mesonintrospectjob.h"
-#include "mesontargets.h"
+#include "mintro/mesonintrospectjob.h"
+#include "mintro/mesontargets.h"
 #include "settings/mesonconfigpage.h"
 #include "settings/mesonnewbuilddir.h"
 

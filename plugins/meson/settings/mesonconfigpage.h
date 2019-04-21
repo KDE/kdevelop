@@ -20,7 +20,7 @@
 #pragma once
 
 #include "mesonconfig.h"
-#include "mesonoptions.h"
+#include "mintro/mesonoptions.h"
 
 #include <interfaces/configpage.h>
 
@@ -30,15 +30,16 @@ class IPlugin;
 class IProject;
 }
 
-namespace Ui {
-    class MesonConfigPage;
+namespace Ui
+{
+class MesonConfigPage;
 }
 
 class MesonConfigPage : public KDevelop::ConfigPage
 {
     Q_OBJECT
 public:
-    explicit MesonConfigPage(KDevelop::IPlugin* plugin, KDevelop::IProject *project, QWidget* parent = nullptr);
+    explicit MesonConfigPage(KDevelop::IPlugin* plugin, KDevelop::IProject* project, QWidget* parent = nullptr);
 
     QString name() const override;
     QString fullName() const override;
@@ -62,8 +63,8 @@ private:
     void setWidgetsDisabled(bool disabled);
 
 private:
-    KDevelop::IProject *m_project = nullptr;
-    Ui::MesonConfigPage *m_ui = nullptr;
+    KDevelop::IProject* m_project = nullptr;
+    Ui::MesonConfigPage* m_ui = nullptr;
     Meson::MesonConfig m_config;
     Meson::BuildDir m_current;
     bool m_configChanged = false;

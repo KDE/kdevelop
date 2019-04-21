@@ -20,10 +20,10 @@
 #include "mesonconfigpage.h"
 
 #include "mesonbuilder.h"
-#include "mesonintrospectjob.h"
 #include "mesonjob.h"
 #include "mesonmanager.h"
 #include "mesonnewbuilddir.h"
+#include "mintro/mesonintrospectjob.h"
 #include "ui_mesonconfigpage.h"
 #include <debug.h>
 
@@ -34,7 +34,6 @@
 #include <KColorScheme>
 
 #include <QIcon>
-
 
 using namespace KDevelop;
 

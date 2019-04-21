@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "mesonoptions.h"
+#include "mintro/mesonoptions.h"
 
 #include <util/path.h>
 

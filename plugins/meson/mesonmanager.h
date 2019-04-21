@@ -21,7 +21,7 @@
 #pragma once
 
 #include "mesonconfig.h"
-#include "mesontests.h"
+#include "mintro/mesontests.h"
 
 #include <project/abstractfilemanagerplugin.h>
 #include <project/interfaces/ibuildsystemmanager.h>

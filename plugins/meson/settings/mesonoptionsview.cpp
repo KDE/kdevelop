@@ -20,8 +20,8 @@
 #include "mesonoptionsview.h"
 
 #include "mesonconfig.h"
-#include "mesonintrospectjob.h"
 #include "mesonoptionbaseview.h"
+#include "mintro/mesonintrospectjob.h"
 #include "ui_mesonoptionsview.h"
 #include <debug.h>
 

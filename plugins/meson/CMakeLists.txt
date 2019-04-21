@@ -3,13 +3,14 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevmesonmanager\")
 set(mesonbuilder_SRCS
     mesonbuilder.cpp
     mesonconfig.cpp
-    mesonintrospectjob.cpp
     mesonjob.cpp
     mesonjobprune.cpp
     mesonmanager.cpp
-    mesonoptions.cpp
-    mesontargets.cpp
-    mesontests.cpp
+
+    mintro/mesonintrospectjob.cpp
+    mintro/mesonoptions.cpp
+    mintro/mesontargets.cpp
+    mintro/mesontests.cpp
 
     settings/mesonadvancedsettings.cpp
     settings/mesonconfigpage.cpp
