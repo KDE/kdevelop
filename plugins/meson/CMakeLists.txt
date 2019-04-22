@@ -9,6 +9,7 @@ set(mesonbuilder_SRCS
 
     mintro/mesonintrospectjob.cpp
     mintro/mesonoptions.cpp
+    mintro/mesonprojectinfo.cpp
     mintro/mesontargets.cpp
     mintro/mesontests.cpp
 

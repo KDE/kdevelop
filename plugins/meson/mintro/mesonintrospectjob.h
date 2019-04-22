@@ -21,6 +21,7 @@
 
 #include "mesonconfig.h"
 #include "mesonoptions.h"
+#include "mesonprojectinfo.h"
 #include "mesontargets.h"
 #include "mesontests.h"
 
@@ -55,6 +56,7 @@ public:
     QString getTypeString(Type type) const;
 
     MesonOptsPtr buildOptions();
+    MesonProjectInfoPtr projectInfo();
     MesonTargetsPtr targets();
     MesonTestSuitesPtr tests();
 
@@ -75,6 +77,7 @@ private:
 
     // The results
     MesonOptsPtr m_res_options = nullptr;
+    MesonProjectInfoPtr m_res_projectInfo = nullptr;
     MesonTargetsPtr m_res_targets = nullptr;
     MesonTestSuitesPtr m_res_tests = nullptr;
 };

@@ -24,8 +24,8 @@
 #include "mesonoptions.h"
 #include <debug.h>
 
-#include <KProcess>
 #include <KLocalizedString>
+#include <KProcess>
 
 #include <QDir>
 #include <QJsonArray>
@@ -219,6 +219,14 @@ QString MesonIntrospectJob::import(BuildDir buildDir)
         }
     }
 
+    auto projectInfoJSON = rawData[QStringLiteral("projectinfo")];
+    if (projectInfoJSON.isObject()) {
+        m_res_projectInfo = std::make_shared<MesonProjectInfo>(projectInfoJSON.toObject());
+        if (!m_res_projectInfo) {
+            qCWarning(KDEV_Meson) << "MINTRO: Failed to parse projectinfo";
+        }
+    }
+
     auto targetsJSON = rawData[QStringLiteral("targets")];
     if (targetsJSON.isArray()) {
         m_res_targets = std::make_shared<MesonTargets>(targetsJSON.toArray());
@@ -269,6 +277,11 @@ bool MesonIntrospectJob::doKill()
 MesonOptsPtr MesonIntrospectJob::buildOptions()
 {
     return m_res_options;
+}
+
+MesonProjectInfoPtr MesonIntrospectJob::projectInfo()
+{
+    return m_res_projectInfo;
 }
 
 MesonTargetsPtr MesonIntrospectJob::targets()

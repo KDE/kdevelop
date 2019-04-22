@@ -265,9 +265,9 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
         }
     }
 
-    auto introJob
-        = new MesonIntrospectJob(project, buildDir, { MesonIntrospectJob::TARGETS, MesonIntrospectJob::TESTS },
-                                 MesonIntrospectJob::BUILD_DIR, this);
+    auto introJob = new MesonIntrospectJob(
+        project, buildDir, { MesonIntrospectJob::TARGETS, MesonIntrospectJob::TESTS, MesonIntrospectJob::PROJECTINFO },
+        MesonIntrospectJob::BUILD_DIR, this);
 
     KDirWatchPtr watcher = m_projectWatchers[project];
     if (!watcher) {
