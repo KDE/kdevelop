@@ -13,12 +13,17 @@ set(mesonbuilder_SRCS
     mintro/mesontargets.cpp
     mintro/mesontests.cpp
 
+    rewriter/mesonactionbase.cpp
+    rewriter/mesonkwargsinfo.cpp
+    rewriter/mesonrewriterjob.cpp
+
     settings/mesonadvancedsettings.cpp
     settings/mesonconfigpage.cpp
     settings/mesonlisteditor.cpp
     settings/mesonnewbuilddir.cpp
     settings/mesonoptionbaseview.cpp
     settings/mesonoptionsview.cpp
+    settings/mesonrewriterpage.cpp
 )
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -30,6 +35,7 @@ ki18n_wrap_ui(mesonbuilder_SRCS
               settings/mesonnewbuilddir.ui
               settings/mesonoptionbaseview.ui
               settings/mesonoptionsview.ui
+              settings/mesonrewriterpage.ui
 )
 ecm_qt_declare_logging_category(mesonbuilder_SRCS
     HEADER debug.h

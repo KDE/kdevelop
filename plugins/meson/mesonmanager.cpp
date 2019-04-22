@@ -27,6 +27,7 @@
 #include "mintro/mesontargets.h"
 #include "settings/mesonconfigpage.h"
 #include "settings/mesonnewbuilddir.h"
+#include "settings/mesonrewriterpage.h"
 
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
@@ -477,15 +478,18 @@ Path MesonManager::findMeson() const
 
 ConfigPage* MesonManager::perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent)
 {
-    if (number == 0) {
+    switch (number) {
+    case 0:
         return new MesonConfigPage(this, options.project, parent);
+    case 1:
+        return new MesonRewriterPage(this, options.project, parent);
     }
     return nullptr;
 }
 
 int MesonManager::perProjectConfigPages() const
 {
-    return 1;
+    return 2;
 }
 
 #include "mesonmanager.moc"
