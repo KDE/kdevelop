@@ -81,6 +81,11 @@
           <string>c++17</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>c++2a</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="1" column="0">
