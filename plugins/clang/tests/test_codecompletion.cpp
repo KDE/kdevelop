@@ -672,7 +672,7 @@ void TestCodeCompletion::testOverrideExecute_data()
         << "class Foo { virtual int bar(char c); };\nclass Baz : Foo\n{\n};"
         << CompletionItems{{3, 0}, {"Baz", "Foo", "bar(char c)"}}
         << "bar(char c)"
-        << "-std=c++1z"
+        << "-std=c++17"
         << "class Foo { virtual int bar(char c); };\n"
            "class Baz : Foo\n{\nint bar(char c) override;};";
 }

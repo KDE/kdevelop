@@ -78,7 +78,7 @@
         </item>
         <item>
          <property name="text">
-          <string>c++1z</string>
+          <string>c++17</string>
          </property>
         </item>
        </widget>
