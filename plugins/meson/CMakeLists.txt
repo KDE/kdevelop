@@ -23,6 +23,7 @@ set(mesonbuilder_SRCS
     settings/mesonnewbuilddir.cpp
     settings/mesonoptionbaseview.cpp
     settings/mesonoptionsview.cpp
+    settings/mesonrewriterinput.cpp
     settings/mesonrewriterpage.cpp
 )
 
@@ -35,6 +36,7 @@ ki18n_wrap_ui(mesonbuilder_SRCS
               settings/mesonnewbuilddir.ui
               settings/mesonoptionbaseview.ui
               settings/mesonoptionsview.ui
+              settings/mesonrewriterinput.ui
               settings/mesonrewriterpage.ui
 )
 ecm_qt_declare_logging_category(mesonbuilder_SRCS

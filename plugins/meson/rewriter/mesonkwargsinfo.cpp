@@ -40,7 +40,7 @@ QJsonObject MesonKWARGSInfo::command()
             return QStringLiteral("dependency");
         }
 
-        return  QStringLiteral("ERROR");
+        return QStringLiteral("ERROR");
     };
 
     res[QStringLiteral("type")] = QStringLiteral("kwargs");
@@ -87,6 +87,9 @@ QJsonObject MesonKWARGSInfo::result() const
 
 QString MesonKWARGSInfo::getString(QString kwarg) const
 {
+    if (!m_result.contains(kwarg)) {
+        return QString();
+    }
     return m_result[kwarg].toString();
 }
 

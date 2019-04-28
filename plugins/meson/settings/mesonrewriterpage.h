@@ -21,6 +21,7 @@
 
 #include <interfaces/configpage.h>
 #include <QAbstractButton>
+#include <vector>
 
 namespace KDevelop
 {
@@ -32,6 +33,8 @@ namespace Ui
 {
 class MesonRewriterPage;
 }
+
+class MesonRewriterInputBase;
 
 class MesonRewriterPage : public KDevelop::ConfigPage
 {
@@ -63,4 +66,6 @@ private:
     Ui::MesonRewriterPage* m_ui = nullptr;
     bool m_configChanged = false;
     State m_state = START;
+
+    std::vector<MesonRewriterInputBase *> m_projectKwargs;
 };

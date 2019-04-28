@@ -26,39 +26,65 @@
       <attribute name="toolTip">
        <string>Project settings</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
-        <widget class="QLabel" name="l_project">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h3&gt;projectName&lt;/h3&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="l_dispProject">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>150</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Name:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="l_project">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h3&gt;projectName&lt;/h3&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="MesonRewriterInputString" name="w_version" native="true">
+         <property name="name" stdset="0">
+          <string>Version</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="l_dispLicense">
-         <property name="text">
-          <string>License:</string>
+       <item>
+        <widget class="MesonRewriterInputString" name="w_license" native="true">
+         <property name="name" stdset="0">
+          <string>License</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="l_dispVersion">
-         <property name="text">
-          <string>Project version:</string>
+       <item>
+        <widget class="MesonRewriterInputString" name="w_mesonVersion" native="true">
+         <property name="name" stdset="0">
+          <string>Meson version</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="l_version">
-         <property name="text">
-          <string>version</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::RichText</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="2">
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QListWidget" name="listWidget"/>
@@ -71,7 +97,8 @@
               <string>+</string>
              </property>
              <property name="icon">
-              <iconset theme="list-add"/>
+              <iconset theme="list-add">
+               <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
              </property>
             </widget>
            </item>
@@ -81,7 +108,8 @@
               <string>-</string>
              </property>
              <property name="icon">
-              <iconset theme="list-remove"/>
+              <iconset theme="list-remove">
+               <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
              </property>
             </widget>
            </item>
@@ -101,34 +129,6 @@
           </layout>
          </item>
         </layout>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="l_dispProject">
-         <property name="text">
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="l_dispMVersion">
-         <property name="text">
-          <string>Meson version:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="l_license">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="l_mversion">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -157,6 +157,20 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MesonRewriterInputString</class>
+   <extends>QWidget</extends>
+   <header>settings/mesonrewriterinput.h</header>
+   <container>1</container>
+   <slots>
+    <signal>configChanged()</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
+ <slots>
+  <slot>emitChanged()</slot>
+ </slots>
 </ui>

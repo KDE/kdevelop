@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MesonRewriterInputBase</class>
+ <widget class="QWidget" name="MesonRewriterInputBase">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>32</height>
+   </rect>
+  </property>
+  <layout class="QHBoxLayout" name="layout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="l_name">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>50</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>Name:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolButton" name="b_reset">
+     <property name="icon">
+      <iconset theme="document-revert">
+       <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolButton" name="b_delete">
+     <property name="icon">
+      <iconset theme="edit-delete">
+       <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolButton" name="b_add">
+     <property name="icon">
+      <iconset theme="list-add">
+       <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>b_reset</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonRewriterInputBase</receiver>
+   <slot>reset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>15</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>15</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_add</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonRewriterInputBase</receiver>
+   <slot>add()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>526</x>
+     <y>15</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>15</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_delete</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonRewriterInputBase</receiver>
+   <slot>remove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>15</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>271</x>
+     <y>15</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>reset()</slot>
+  <slot>remove()</slot>
+  <slot>add()</slot>
+ </slots>
+</ui>

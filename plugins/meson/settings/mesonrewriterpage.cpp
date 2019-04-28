@@ -33,9 +33,11 @@
 
 #include <KColorScheme>
 #include <QIcon>
+#include <algorithm>
 #include <debug.h>
 
 using namespace KDevelop;
+using namespace std;
 
 class JobDeleter
 {
@@ -63,6 +65,19 @@ MesonRewriterPage::MesonRewriterPage(IPlugin* plugin, IProject* project, QWidget
 
     m_ui = new Ui::MesonRewriterPage;
     m_ui->setupUi(this);
+
+    int maxWidth = 50;
+    m_projectKwargs = { m_ui->w_version, m_ui->w_license, m_ui->w_mesonVersion };
+
+    for (auto* i : m_projectKwargs) {
+        maxWidth = std::max(maxWidth, i->nameWidth());
+    }
+
+    for (auto* i : m_projectKwargs) {
+        i->setMinNameWidth(maxWidth);
+        connect(i, &MesonRewriterInputBase::configChanged, this, &MesonRewriterPage::emitChanged);
+    }
+    m_ui->l_dispProject->setMinimumWidth(maxWidth);
 
     reset();
 }
@@ -121,7 +136,8 @@ void MesonRewriterPage::checkStatus()
     KColorScheme scheme(QPalette::Normal);
     KColorScheme::ForegroundRole role;
     int numChanged = 0;
-    // TODO compute num of changes here
+
+    numChanged += count_if(begin(m_projectKwargs), end(m_projectKwargs), [](auto* x) { return x->hasChanged(); });
 
     if (numChanged == 0) {
         role = KColorScheme::NormalText;
@@ -187,9 +203,9 @@ void MesonRewriterPage::reset()
 
         m_ui->l_project->setText(QStringLiteral("<html><head/><body><h3>") + prInfo->name()
                                  + QStringLiteral("</h3></body></html>"));
-        m_ui->l_version->setText(projectInfo->version());
-        m_ui->l_license->setText(projectInfo->license());
-        m_ui->l_mversion->setText(projectInfo->mesonVersion());
+        m_ui->w_version->resetWidget(projectInfo->version());
+        m_ui->w_license->resetWidget(projectInfo->license());
+        m_ui->w_mesonVersion->resetWidget(projectInfo->mesonVersion());
 
         setStatus(READY);
         return;
