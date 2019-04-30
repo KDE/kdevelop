@@ -1,5 +1,6 @@
 [Global]
 IconName=kdevelop
+DesktopEntry=org.kde.kdevelop
 Comment=KDevelop
 Comment[ar]=مطوّرك
 Comment[br]=KDevelop
