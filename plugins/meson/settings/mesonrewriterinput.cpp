@@ -18,17 +18,22 @@
 */
 
 #include "mesonrewriterinput.h"
+#include "rewriter/mesonkwargsinfo.h"
+#include "rewriter/mesonkwargsmodify.h"
 #include "ui_mesonrewriterinput.h"
 
 #include <KColorScheme>
 #include <QLineEdit>
 #include <debug.h>
 
-MesonRewriterInputBase::MesonRewriterInputBase(QWidget* parent)
+MesonRewriterInputBase::MesonRewriterInputBase(QString name, QString kwarg, QWidget* parent)
     : QWidget(parent)
+    , m_name(name)
+    , m_kwarg(kwarg)
 {
     m_ui = new Ui::MesonRewriterInputBase;
     m_ui->setupUi(this);
+    m_ui->l_name->setText(m_name + QStringLiteral(":"));
 
     connect(this, &MesonRewriterInputBase::configChanged, this, &MesonRewriterInputBase::updateUi);
 }
@@ -58,8 +63,6 @@ void MesonRewriterInputBase::setInputWidget(QWidget* input)
 
 void MesonRewriterInputBase::updateUi()
 {
-    m_ui->l_name->setText(m_name + QStringLiteral(":"));
-
     KColorScheme scheme(QPalette::Normal);
     KColorScheme::ForegroundRole role;
 
@@ -103,14 +106,20 @@ void MesonRewriterInputBase::add()
     reset();
 }
 
-void MesonRewriterInputBase::resetWidgetBase(bool enabled)
+void MesonRewriterInputBase::resetFromAction(MesonKWARGSInfo* action)
 {
-    m_default_enabled = m_enabled = enabled;
+    resetValue(action->get(m_kwarg));
+    m_default_enabled = m_enabled = action->hasKWARG(m_kwarg);
     if (m_enabled) {
         add();
     } else {
         remove();
     }
+}
+
+void MesonRewriterInputBase::writeToAction(MesonKWARGSModify* action)
+{
+    action->set(m_kwarg, value());
 }
 
 bool MesonRewriterInputBase::hasChanged() const
@@ -125,8 +134,8 @@ bool MesonRewriterInputBase::isEnabled() const
 
 // String input class
 
-MesonRewriterInputString::MesonRewriterInputString(QWidget* parent)
-    : MesonRewriterInputBase(parent)
+MesonRewriterInputString::MesonRewriterInputString(QString name, QString kwarg, QWidget* parent)
+    : MesonRewriterInputBase(name, kwarg, parent)
 {
     m_lineEdit = new QLineEdit(this);
     connect(m_lineEdit, &QLineEdit::textChanged, this, [=]() { emit configChanged(); });
@@ -155,8 +164,12 @@ void MesonRewriterInputString::doReset()
     m_lineEdit->setText(m_initialValue);
 }
 
-void MesonRewriterInputString::resetWidget(QString initialValue)
+void MesonRewriterInputString::resetValue(QJsonValue val)
 {
-    m_initialValue = initialValue;
-    resetWidgetBase(!initialValue.isNull());
+    m_initialValue = val.toString();
+}
+
+QJsonValue MesonRewriterInputString::value()
+{
+    return QJsonValue(m_lineEdit->text());
 }

@@ -80,39 +80,22 @@ QString MesonKWARGSInfo::id() const
     return m_id;
 }
 
-QJsonObject MesonKWARGSInfo::result() const
+bool MesonKWARGSInfo::hasKWARG(QString kwarg) const
 {
-    return m_result;
+    return m_result.contains(kwarg);
+}
+
+QJsonValue MesonKWARGSInfo::get(QString kwarg) const
+{
+    if (!hasKWARG(kwarg)) {
+        return QJsonValue();
+    }
+    return m_result[kwarg];
 }
 
 QString MesonKWARGSInfo::getString(QString kwarg) const
 {
-    if (!m_result.contains(kwarg)) {
-        return QString();
-    }
-    return m_result[kwarg].toString();
-}
-
-// Getters for Project
-
-QString MesonKWARGSProjectInfo::mesonVersion() const
-{
-    return getString(QStringLiteral("meson_version"));
-}
-
-QString MesonKWARGSProjectInfo::license() const
-{
-    return getString(QStringLiteral("license"));
-}
-
-QString MesonKWARGSProjectInfo::subprojectDir() const
-{
-    return getString(QStringLiteral("subproject_dir"));
-}
-
-QString MesonKWARGSProjectInfo::version() const
-{
-    return getString(QStringLiteral("version"));
+    return get(kwarg).toString();
 }
 
 // Constructors

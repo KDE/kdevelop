@@ -21,7 +21,7 @@
 
 #include "mesonactionbase.h"
 
-#include <QHash>
+#include <QJsonObject>
 
 class MesonKWARGSInfo;
 class MesonKWARGSProjectInfo;
@@ -47,8 +47,9 @@ public:
 
     Function function() const;
     QString id() const;
-    QJsonObject result() const;
 
+    bool hasKWARG(QString kwarg) const;
+    QJsonValue get(QString kwarg) const;
     QString getString(QString kwarg) const;
 
 private:
@@ -64,11 +65,6 @@ class MesonKWARGSProjectInfo : public MesonKWARGSInfo
 public:
     explicit MesonKWARGSProjectInfo();
     virtual ~MesonKWARGSProjectInfo();
-
-    QString mesonVersion() const;
-    QString license() const;
-    QString subprojectDir() const;
-    QString version() const;
 };
 
 class MesonKWARGSTargetInfo : public MesonKWARGSInfo
@@ -76,8 +72,6 @@ class MesonKWARGSTargetInfo : public MesonKWARGSInfo
 public:
     explicit MesonKWARGSTargetInfo(QString id);
     virtual ~MesonKWARGSTargetInfo();
-
-    // TODO some accessors similar to MesonKWARGSProjectInfo
 };
 
 class MesonKWARGSDependencyInfo : public MesonKWARGSInfo
@@ -85,6 +79,4 @@ class MesonKWARGSDependencyInfo : public MesonKWARGSInfo
 public:
     explicit MesonKWARGSDependencyInfo(QString id);
     virtual ~MesonKWARGSDependencyInfo();
-
-    // TODO some accessors similar to MesonKWARGSProjectInfo
 };

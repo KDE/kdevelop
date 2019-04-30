@@ -15,6 +15,7 @@ set(mesonbuilder_SRCS
 
     rewriter/mesonactionbase.cpp
     rewriter/mesonkwargsinfo.cpp
+    rewriter/mesonkwargsmodify.cpp
     rewriter/mesonrewriterjob.cpp
 
     settings/mesonadvancedsettings.cpp

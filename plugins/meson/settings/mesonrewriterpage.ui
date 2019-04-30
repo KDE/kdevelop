@@ -64,25 +64,7 @@
         </layout>
        </item>
        <item>
-        <widget class="MesonRewriterInputString" name="w_version" native="true">
-         <property name="name" stdset="0">
-          <string>Version</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="MesonRewriterInputString" name="w_license" native="true">
-         <property name="name" stdset="0">
-          <string>License</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="MesonRewriterInputString" name="w_mesonVersion" native="true">
-         <property name="name" stdset="0">
-          <string>Meson version</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="c_project"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -157,17 +139,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>MesonRewriterInputString</class>
-   <extends>QWidget</extends>
-   <header>settings/mesonrewriterinput.h</header>
-   <container>1</container>
-   <slots>
-    <signal>configChanged()</signal>
-   </slots>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
  <slots>

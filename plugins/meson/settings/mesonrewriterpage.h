@@ -19,9 +19,9 @@
 
 #pragma once
 
-#include <interfaces/configpage.h>
 #include <QAbstractButton>
-#include <vector>
+#include <QVector>
+#include <interfaces/configpage.h>
 
 namespace KDevelop
 {
@@ -40,7 +40,7 @@ class MesonRewriterPage : public KDevelop::ConfigPage
 {
     Q_OBJECT
 public:
-    enum State {START, LOADING, WRITING, READY, ERROR};
+    enum State { START, LOADING, WRITING, READY, ERROR };
 
 public:
     explicit MesonRewriterPage(KDevelop::IPlugin* plugin, KDevelop::IProject* project, QWidget* parent = nullptr);
@@ -56,6 +56,8 @@ public Q_SLOTS:
 
     void emitChanged();
 
+    QVector<MesonRewriterInputBase*> constructPojectInputs();
+
 private:
     void setWidgetsDisabled(bool disabled);
     void checkStatus();
@@ -67,5 +69,5 @@ private:
     bool m_configChanged = false;
     State m_state = START;
 
-    std::vector<MesonRewriterInputBase *> m_projectKwargs;
+    QVector<MesonRewriterInputBase*> m_projectKwargs;
 };

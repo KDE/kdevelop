@@ -20,9 +20,11 @@
 #include "mesonrewriterpage.h"
 #include "mesonconfig.h"
 #include "mesonmanager.h"
+#include "mesonrewriterinput.h"
 #include "mintro/mesonintrospectjob.h"
 #include "mintro/mesonprojectinfo.h"
 #include "rewriter/mesonkwargsinfo.h"
+#include "rewriter/mesonkwargsmodify.h"
 #include "rewriter/mesonrewriterjob.h"
 
 #include "ui_mesonrewriterpage.h"
@@ -66,20 +68,41 @@ MesonRewriterPage::MesonRewriterPage(IPlugin* plugin, IProject* project, QWidget
     m_ui = new Ui::MesonRewriterPage;
     m_ui->setupUi(this);
 
+    m_projectKwargs = constructPojectInputs();
+
+    // Calculate the maximum name width to align all widgets
+    vector<int> lengths;
     int maxWidth = 50;
-    m_projectKwargs = { m_ui->w_version, m_ui->w_license, m_ui->w_mesonVersion };
+    lengths.reserve(m_projectKwargs.size());
 
-    for (auto* i : m_projectKwargs) {
-        maxWidth = std::max(maxWidth, i->nameWidth());
-    }
+    auto transform_op = [](MesonRewriterInputBase* x) -> int { return x->nameWidth(); };
 
+    transform(begin(m_projectKwargs), end(m_projectKwargs), back_inserter(lengths), transform_op);
+
+    maxWidth = accumulate(begin(lengths), end(lengths), maxWidth, [](int a, int b) -> int { return max(a, b); });
+
+    // Initialize widgets
     for (auto* i : m_projectKwargs) {
+        m_ui->c_project->addWidget(i);
         i->setMinNameWidth(maxWidth);
         connect(i, &MesonRewriterInputBase::configChanged, this, &MesonRewriterPage::emitChanged);
     }
+
     m_ui->l_dispProject->setMinimumWidth(maxWidth);
 
     reset();
+}
+
+#define STRING_INPUT(name, id) new MesonRewriterInputString(QStringLiteral(name), QStringLiteral(id), this)
+
+QVector<MesonRewriterInputBase*> MesonRewriterPage::constructPojectInputs()
+{
+    return {
+        STRING_INPUT("Version", "version"),
+        STRING_INPUT("License", "license"),
+        STRING_INPUT("Meson version", "meson_version"),
+        STRING_INPUT("Subprojects directory", "subproject_dir"),
+    };
 }
 
 void MesonRewriterPage::setWidgetsDisabled(bool disabled)
@@ -161,6 +184,33 @@ void MesonRewriterPage::setStatus(MesonRewriterPage::State s)
 void MesonRewriterPage::apply()
 {
     qCDebug(KDEV_Meson) << "REWRITER GUI: APPLY";
+
+    auto projectSet = make_shared<MesonKWARGSProjectModify>(MesonKWARGSProjectModify::SET);
+    auto projectDel = make_shared<MesonKWARGSProjectModify>(MesonKWARGSProjectModify::DELETE);
+
+    auto writer = [](MesonRewriterInputBase* widget, MesonKWARGSModifyPtr set, MesonKWARGSModifyPtr del) {
+        if (!widget->hasChanged()) {
+            return;
+        }
+
+        if (widget->isEnabled()) {
+            widget->writeToAction(set.get());
+        } else {
+            widget->writeToAction(del.get());
+        }
+    };
+
+    for_each(begin(m_projectKwargs), end(m_projectKwargs), [&](auto* w) { writer(w, projectSet, projectDel); });
+
+    QVector<MesonRewriterActionPtr> actions = { projectSet, projectDel };
+
+    KJob* rewriterJob = new MesonRewriterJob(m_project, actions, this);
+
+    // Reload the GUI once the data has been written
+    connect(rewriterJob, &KJob::result, this, &MesonRewriterPage::reset);
+
+    setStatus(WRITING);
+    rewriterJob->start();
 }
 
 void MesonRewriterPage::reset()
@@ -203,9 +253,10 @@ void MesonRewriterPage::reset()
 
         m_ui->l_project->setText(QStringLiteral("<html><head/><body><h3>") + prInfo->name()
                                  + QStringLiteral("</h3></body></html>"));
-        m_ui->w_version->resetWidget(projectInfo->version());
-        m_ui->w_license->resetWidget(projectInfo->license());
-        m_ui->w_mesonVersion->resetWidget(projectInfo->mesonVersion());
+
+        auto setter = [](MesonRewriterInputBase* w, MesonKWARGSInfoPtr i) { w->resetFromAction(i.get()); };
+
+        for_each(begin(m_projectKwargs), end(m_projectKwargs), [=](auto* x) { setter(x, projectInfo); });
 
         setStatus(READY);
         return;
