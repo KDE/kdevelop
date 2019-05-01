@@ -1902,6 +1902,129 @@ void TestDUChain::testVariadicTemplateArguments()
     }
 }
 
+void TestDUChain::testProblemRequestedHere()
+{
+    auto headerCode = QStringLiteral(R"(
+#pragma once
+
+template <typename T>
+T AddObjects(const T& a, const T& b)
+{
+  return a + b;
+}
+    )");
+    TestFile header(headerCode, QStringLiteral("h"));
+
+    QString sourceCode = QStringLiteral(R"(
+#include "%1"
+struct A {};
+
+int main()
+{
+    A a, b;
+    AddObjects(a, b);
+    return 0;
+}
+    )").arg(header.url().str());
+    TestFile impl(sourceCode, QStringLiteral("cpp"), &header);
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses));
+
+    DUChainReadLocker lock;
+
+    auto top = impl.topContext();
+    QVERIFY(top);
+
+    auto* headerCtx = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().context(top));
+    QVERIFY(headerCtx);
+    QCOMPARE(headerCtx->url(), header.url());
+
+    QCOMPARE(headerCtx->problems().count(), 1);
+    QCOMPARE(headerCtx->localDeclarations().count(), 1);
+
+    // Verify that the problem is reported for the source file.
+    QCOMPARE(top->problems().count(), 1);
+    QCOMPARE(top->localDeclarations().count(), 2);
+}
+
+void TestDUChain::testProblemRequestedHereSameFile()
+{
+    auto sourceCode = QStringLiteral(R"(
+struct A {};
+
+template <typename T>
+T AddObjects(const T& a, const T& b)
+{
+  return a + b;
+}
+
+int main()
+{
+    A a, b;
+    AddObjects(a, b);
+    return 0;
+}
+    )");
+    TestFile impl(sourceCode, QStringLiteral("cpp"));
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses));
+
+    DUChainReadLocker lock;
+
+    auto top = impl.topContext();
+    QVERIFY(top);
+
+    QCOMPARE(top->problems().count(), 2);
+}
+
+void TestDUChain::testProblemRequestedHereChain()
+{
+    auto headerCode = QStringLiteral(R"(
+#pragma once
+
+template <typename T>
+T AddObjects(const T& a, const T& b)
+{
+  return a + b;
+}
+    )");
+    TestFile header(headerCode, QStringLiteral("h"));
+
+    QString sourceCode = QStringLiteral(R"(
+#include "%1"
+struct A {};
+
+template <typename T>
+T AddObjects2(const T& a, const T& b)
+{
+  return AddObjects(a, b);
+}
+
+int main()
+{
+    A a, b;
+    AddObjects2(a, b);
+    return 0;
+}
+    )").arg(header.url().str());
+    TestFile impl(sourceCode, QStringLiteral("cpp"), &header);
+    QVERIFY(impl.parseAndWait(TopDUContext::AllDeclarationsContextsAndUses));
+
+    DUChainReadLocker lock;
+
+    auto top = impl.topContext();
+    QVERIFY(top);
+
+    auto* headerCtx = dynamic_cast<TopDUContext*>(top->importedParentContexts().first().context(top));
+    QVERIFY(headerCtx);
+    QCOMPARE(headerCtx->url(), header.url());
+
+    QCOMPARE(headerCtx->problems().count(), 1);
+    QCOMPARE(headerCtx->localDeclarations().count(), 1);
+
+    // Verify that the problem is reported for the source file.
+    QCOMPARE(top->problems().count(), 2);
+    QCOMPARE(top->localDeclarations().count(), 3);
+}
+
 void TestDUChain::testGccCompatibility()
 {
     // TODO: make it easier to change the compiler provider for testing purposes

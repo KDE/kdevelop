@@ -97,6 +97,9 @@ private Q_SLOTS:
     void testTemplateFunctionParameterName();
     void testFriendDeclaration();
     void testVariadicTemplateArguments();
+    void testProblemRequestedHere();
+    void testProblemRequestedHereSameFile();
+    void testProblemRequestedHereChain();
 
     void testGccCompatibility();
     void testQtIntegration();

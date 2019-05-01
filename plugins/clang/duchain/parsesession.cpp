@@ -23,7 +23,6 @@
 
 #include "parsesession.h"
 #include <QStandardPaths>
-#include "clangproblem.h"
 #include "clangdiagnosticevaluator.h"
 #include "todoextractor.h"
 #include "clanghelpers.h"
@@ -432,6 +431,77 @@ IndexedString ParseSession::languageString()
     return lang;
 }
 
+ClangProblem::Ptr ParseSession::getOrCreateProblem(int indexInTU, CXDiagnostic diagnostic) const
+{
+    auto& problem = d->m_diagnosticsCache[indexInTU];
+    if (!problem) {
+        problem = ClangDiagnosticEvaluator::createProblem(diagnostic, d->m_unit);
+    }
+    return problem;
+}
+
+ClangProblem::Ptr ParseSession::createExternalProblem(int indexInTU,
+                                                      CXDiagnostic diagnostic,
+                                                      const KLocalizedString& descriptionTemplate,
+                                                      int childProblemFinalLocationIndex) const
+{
+    // Make a copy of the original (cached) problem since it is modified later
+    auto problem = ClangProblem::Ptr(new ClangProblem(*getOrCreateProblem(indexInTU, diagnostic)));
+
+    // Insert a copy of the parent problem (without child problems) as the first
+    // child problem to preserve its location.
+    auto* problemCopy = new ClangProblem();
+    problemCopy->setSource(problem->source());
+    problemCopy->setFinalLocation(problem->finalLocation());
+    problemCopy->setFinalLocationMode(problem->finalLocationMode());
+    problemCopy->setDescription(problem->description());
+    problemCopy->setExplanation(problem->explanation());
+    problemCopy->setSeverity(problem->severity());
+
+    auto childProblems = problem->diagnostics();
+    childProblems.prepend(IProblem::Ptr(problemCopy));
+    problem->setDiagnostics(childProblems);
+
+    // Override the problem's finalLocation with that of the child problem in this document.
+    // This is required to make the problem show up in the problem reporter for this
+    // file, since it filters by finalLocation. It will also lead the user to the correct
+    // location when clicking the problem and cause proper error highlighting.
+    int index = (childProblemFinalLocationIndex >= 0) ?
+                (1 + childProblemFinalLocationIndex) :
+                (childProblems.size() - 1);
+    problem->setFinalLocation(childProblems[index]->finalLocation());
+
+    problem->setDescription(descriptionTemplate.subs(problem->description()).toString());
+
+    return problem;
+}
+
+QList<ClangProblem::Ptr> ParseSession::createRequestedHereProblems(int indexInTU, CXDiagnostic diagnostic, CXFile file) const
+{
+    QList<ClangProblem::Ptr> results;
+
+    auto childDiagnostics = clang_getChildDiagnostics(diagnostic);
+    auto numChildDiagnostics = clang_getNumDiagnosticsInSet(childDiagnostics);
+    for (uint j = 0; j < numChildDiagnostics; ++j) {
+        auto childDiagnostic = clang_getDiagnosticInSet(childDiagnostics, j);
+        CXSourceLocation childLocation = clang_getDiagnosticLocation(childDiagnostic);
+        CXFile childDiagnosticFile;
+        clang_getFileLocation(childLocation, &childDiagnosticFile, nullptr, nullptr, nullptr);
+        if (childDiagnosticFile == file) {
+            QString description = ClangString(clang_getDiagnosticSpelling(childDiagnostic)).toString();
+            if (description.endsWith(QLatin1String("requested here"))) {
+                // Note: Using the index j here assumes a 1:1 mapping from clang child diagnostics to KDevelop
+                // problem diagnostics (i.e., child problems). If we wanted to avoid making this assumption, we'd have
+                // to use ClangDiagnosticEvaluator::createProblem() first and then search within its
+                // child problems to find the correct index.
+                results << createExternalProblem(indexInTU, diagnostic, ki18n("Requested here: %1"), j);
+            }
+        }
+    }
+
+    return results;
+}
+
 QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
 {
     if (!d) {
@@ -451,18 +521,21 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         CXSourceLocation location = clang_getDiagnosticLocation(diagnostic);
         CXFile diagnosticFile;
         clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
+
+        auto requestedHereProblems = createRequestedHereProblems(i, diagnostic, file);
+        for (const auto& ptr : requestedHereProblems) {
+            problems.append(static_cast<const ProblemPointer&>(ptr));
+        }
+
         // missing-include problems are so severe in clang that we always propagate
         // them to this document, to ensure that the user will see the error.
         if (diagnosticFile != file && ClangDiagnosticEvaluator::diagnosticType(diagnostic) != ClangDiagnosticEvaluator::IncludeFileNotFoundProblem) {
             continue;
         }
 
-        auto& problem = d->m_diagnosticsCache[i];
-        if (!problem) {
-            problem = ClangDiagnosticEvaluator::createProblem(diagnostic, d->m_unit);
-        }
-
-        problems << problem;
+        problems << ((diagnosticFile == file) ?
+                     getOrCreateProblem(i, diagnostic) :
+                     createExternalProblem(i, diagnostic, ki18n("In included file: %1")));
 
         clang_disposeDiagnostic(diagnostic);
     }

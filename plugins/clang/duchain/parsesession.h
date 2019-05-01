@@ -36,7 +36,7 @@
 #include <language/interfaces/iastcontainer.h>
 
 #include "clangprivateexport.h"
-
+#include "clangproblem.h"
 #include "clangparsingenvironment.h"
 #include "unsavedfile.h"
 
@@ -80,7 +80,7 @@ private:
     ///       best would be a PCH, if possible
     QTemporaryFile m_definesFile;
     // cached ProblemPointer representation for diagnostics
-    QVector<KDevelop::ProblemPointer> m_diagnosticsCache;
+    QVector<ClangProblem::Ptr> m_diagnosticsCache;
 };
 
 /**
@@ -132,6 +132,15 @@ public:
 
 private:
     Q_DISABLE_COPY(ParseSession)
+
+    ClangProblem::Ptr getOrCreateProblem(int indexInTU, CXDiagnostic diagnostic) const;
+    
+    ClangProblem::Ptr createExternalProblem(int indexInTU,
+                                            CXDiagnostic diagnostic,
+                                            const KLocalizedString& descriptionTemplate,
+                                            int childProblemFinalLocationIndex = -1) const;
+    
+    QList<ClangProblem::Ptr> createRequestedHereProblems(int indexInTU, CXDiagnostic diagnostic, CXFile file) const;
 
     ParseSessionData::Ptr d;
 

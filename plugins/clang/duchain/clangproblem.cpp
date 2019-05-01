@@ -96,6 +96,28 @@ QDebug operator<<(QDebug debug, const ClangFixit& fixit)
     return debug;
 }
 
+ClangProblem::ClangProblem() = default;
+
+ClangProblem::ClangProblem(const ClangProblem& other)
+    : Problem(),
+      m_fixits(other.m_fixits)
+{
+    setSource(other.source());
+    setFinalLocation(other.finalLocation());
+    setFinalLocationMode(other.finalLocationMode());
+    setDescription(other.description());
+    setExplanation(other.explanation());
+    setSeverity(other.severity());
+
+    auto diagnostics = other.diagnostics();
+    for (auto& diagnostic : diagnostics) {
+        auto* clangDiagnostic = dynamic_cast<ClangProblem*>(diagnostic.data());
+        Q_ASSERT(clangDiagnostic);
+        diagnostic = ClangProblem::Ptr(new ClangProblem(*clangDiagnostic));
+    }
+    setDiagnostics(diagnostics);
+}
+
 ClangProblem::ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
 {
     const QString diagnosticOption = ClangString(clang_getDiagnosticOption(diagnostic, nullptr)).toString();

@@ -72,6 +72,16 @@ public:
     using ConstPtr = QExplicitlySharedDataPointer<const ClangProblem>;
 
     /**
+     * Creates an empty ClangProblem.
+     */
+    ClangProblem();
+
+    /**
+     * Creates a deep copy of a ClangProblem.
+     */
+    ClangProblem(const ClangProblem& other);
+
+    /**
      * Import @p diagnostic into a ClangProblem object
      *
      * @param[in] diagnostic To-be-imported clang diagnostic
