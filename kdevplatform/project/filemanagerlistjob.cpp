@@ -67,7 +67,7 @@ FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
 FileManagerListJob::~FileManagerListJob()
 {
     // lock and abort to ensure our background list job is stopped
-    std::lock_guard<std::mutex> lock(m_listing);
+    std::lock_guard<std::recursive_mutex> lock(m_listing);
     m_aborted = true;
 }
 
@@ -113,7 +113,7 @@ void FileManagerListJob::startNextJob()
         // start locking to ensure we don't get destroyed while waiting for the list to finish
         m_listing.lock();
         QtConcurrent::run([this] (const Path& path) {
-            std::lock_guard<std::mutex> lock(m_listing, std::adopt_lock);
+            std::lock_guard<std::recursive_mutex> lock(m_listing, std::adopt_lock);
             if (m_aborted) {
                 return;
             }

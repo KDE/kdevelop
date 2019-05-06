@@ -70,7 +70,7 @@ private:
     KIO::UDSEntryList entryList;
     // kill does not delete the job instantaneously
     QAtomicInt m_aborted;
-    std::mutex m_listing;
+    std::recursive_mutex m_listing;
 
 #ifdef TIME_IMPORT_JOB
     QElapsedTimer m_timer;
