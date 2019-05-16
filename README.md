@@ -4,6 +4,7 @@ This repository contains the source code for the KDevelop IDE.
 
 The idea that this repository contains
 - Every plugin related to C/C++ development
+- Every plugin related to JS/QML development
 - Every plugin only specific for KDevelop (e.g. the Welcome Page plugin)
 
 ## User Documentation
