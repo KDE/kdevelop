@@ -19,6 +19,7 @@
   <name xml:lang="hu">KDevelop</name>
   <name xml:lang="id">KDevelop</name>
   <name xml:lang="it">KDevelop</name>
+  <name xml:lang="ko">KDevelop</name>
   <name xml:lang="nl">KDevelop</name>
   <name xml:lang="pl">KDevelop</name>
   <name xml:lang="pt">KDevelop</name>
@@ -67,7 +68,7 @@
     <p xml:lang="gl">KDevelop é un ambiente integrado de desenvolvemento (IDE) libre e de código aberto.</p>
     <p xml:lang="id">KDevelop adalah sebuah IDE (integrated development environment) lingkungan pengembangan terintegrasi yang Gratis dan Bebas Terbuka.</p>
     <p xml:lang="it">KDevelop è un ambiente di sviluppo integrato (IDE) libero e open source.</p>
-    <p xml:lang="ko">KDevelop은 무료 오픈 소스 통합 개발 환경(IDE)입니다.</p>
+    <p xml:lang="ko">KDevelop은 자유 오픈 소스 통합 개발 환경(IDE)입니다.</p>
     <p xml:lang="nl">KDevelop is een vrije geïntegreerde ontwikkelomgeving (IDE) binnen het open source principe.</p>
     <p xml:lang="pl">KDevelop to darmowe i otwartoźródłowe zintegrowane środkowisko programistyczne (IDE).</p>
     <p xml:lang="pt">O KDevelop é um ambiente de desenvolvimento integrado (IDE) livre e em código aberto.</p>
