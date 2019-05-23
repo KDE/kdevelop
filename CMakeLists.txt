@@ -160,6 +160,7 @@ add_subdirectory(app_templates)
 add_subdirectory(file_templates)
 add_subdirectory(shortcuts)
 add_subdirectory(doc)
+add_subdirectory(share)
 
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KDevelop")
 configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KDevelopConfig.cmake.in"
