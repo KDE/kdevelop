@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>611</width>
-    <height>244</height>
+    <height>280</height>
    </rect>
   </property>
   <layout class="QFormLayout" name="formLayout">
@@ -56,7 +56,14 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="KUrlRequester" name="buildFolder"/>
+    <widget class="KUrlRequester" name="buildFolder">
+     <property name="minimumSize">
+      <size>
+       <width>500</width>
+       <height>0</height>
+      </size>
+     </property>
+    </widget>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label">
@@ -78,6 +85,12 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>500</width>
+       <height>0</height>
+      </size>
      </property>
      <property name="toolTip">
       <string>The prefix under which the project will be installed. Leaving this empty will let CMake use its default install prefix.</string>
