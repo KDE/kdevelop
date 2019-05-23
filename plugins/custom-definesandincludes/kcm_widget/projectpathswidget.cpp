@@ -81,6 +81,10 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     tabChanged(IncludesPage);
 }
 
+ProjectPathsWidget::~ProjectPathsWidget()
+{
+}
+
 QVector<ConfigEntry> ProjectPathsWidget::paths() const
 {
     return pathsModel->paths();
