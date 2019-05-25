@@ -899,4 +899,14 @@ void TestAssistants::testHeaderGuardAssistant_data()
                             "int foo;\n"
                             "#endif // NO_ENDLINE_FILE_H_INCLUDED"
         );
+
+    QTest::newRow("whitespace-at-start") << QStringLiteral("whitespace-at-start")
+        << QStringLiteral("\nint foo;")
+        << QStringLiteral("#pragma once\n\n\nint foo;")
+        << QStringLiteral(
+            "#ifndef WHITESPACE_AT_START_H_INCLUDED\n"
+            "#define WHITESPACE_AT_START_H_INCLUDED\n\n"
+            "\nint foo;\n"
+            "#endif // WHITESPACE_AT_START_H_INCLUDED"
+        );
 }

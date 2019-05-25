@@ -471,6 +471,11 @@ unsigned int ClangUtils::skipTopCommentBlock(CXTranslationUnit unit, CXFile file
     const auto nonCommentToken = std::find_if(tokens.begin(), tokens.end(),
                                     [&](CXToken token) { return clang_getTokenKind(token) != CXToken_Comment; });
 
+    // explicitly handle this case, otherwise we skip the preceding whitespace
+    if (nonCommentToken == tokens.begin()) {
+        return 1;
+    }
+
     const auto location = (nonCommentToken != tokens.end()) ? clang_getTokenExtent(unit, *nonCommentToken) : fileRange;
     return KTextEditor::Cursor(ClangRange(location).end()).line() + 1;
 }
