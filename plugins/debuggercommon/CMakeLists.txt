@@ -58,7 +58,7 @@ ki18n_wrap_ui(debuggercommon_SRCS
 # which doesn't set CMP0063 so old behavior is used.
 # If kdevdebuggercommon honors visibility properties (set to hidden), it will cause
 # linker warnings about direct access to global weak symbol when link against test_gdb
-if(NOT CMAKE_VERSION VERSION_LESS "3.3")
+if(POLICY CMP0063)
     cmake_policy(SET CMP0063 OLD)
 endif()
 
