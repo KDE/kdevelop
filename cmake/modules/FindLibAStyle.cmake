@@ -29,9 +29,6 @@ find_path(LibAStyle_INCLUDE_DIR
 # astyle is built without RTTI
 set(LibAStyle_CFLAGS "-fno-rtti")
 
-# fallback in case the version is not detected later on
-set(_libastyle_version "0")
-
 if(LibAStyle_LIBRARIES AND LibAStyle_INCLUDE_DIR)
   include(CMakePushCheckState)
   include(CheckCXXSourceCompiles)
@@ -48,11 +45,11 @@ int main()
 }" LIBASTYLE_HAS_ASPEEKSTREAM)
   if(LIBASTYLE_HAS_ASPEEKSTREAM)
     set(_libastyle_version "3.1")
+    message(STATUS "LibAStyle version autodetected as ${_libastyle_version} or greater")
+  else()
+    set(_libastyle_version "0")
   endif()
   cmake_pop_check_state()
-  if(NOT (_libastyle_version STREQUAL "0"))
-    message(STATUS "LibAStyle version autodetected as ${_libastyle_version} or greater")
-  endif()
 endif()
 
 include(FindPackageHandleStandardArgs)
