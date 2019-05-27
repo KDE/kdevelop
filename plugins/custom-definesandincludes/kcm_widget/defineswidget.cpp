@@ -47,6 +47,10 @@ DefinesWidget::DefinesWidget( QWidget* parent )
     connect( delDefAction, &QAction::triggered, this, &DefinesWidget::deleteDefine );
 }
 
+DefinesWidget::~DefinesWidget()
+{
+}
+
 void DefinesWidget::setDefines( const Defines& defines )
 {
     bool b = blockSignals( true );

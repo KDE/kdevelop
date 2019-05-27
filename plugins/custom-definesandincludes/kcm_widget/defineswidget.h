@@ -40,6 +40,8 @@ class DefinesWidget : public QWidget
 Q_OBJECT
 public:
     explicit DefinesWidget( QWidget* parent = nullptr );
+    ~DefinesWidget() override;
+
     void setDefines( const KDevelop::Defines& defines );
     void clear();
 Q_SIGNALS:
@@ -51,7 +53,7 @@ private Q_SLOTS:
     // Handle Del key in defines list
     void deleteDefine();
 private:
-    Ui::DefinesWidget* ui;
+    QScopedPointer<Ui::DefinesWidget> ui;
     DefinesModel* definesModel;
 };
 

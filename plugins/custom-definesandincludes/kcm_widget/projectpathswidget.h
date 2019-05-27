@@ -19,6 +19,7 @@
 #ifndef KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
 #define KDEVELOP_PROJECTMANAGERS_CUSTOM_BUILDSYSTEM_PROJECTPATHSWIDGET_H
 
+#include <QScopedPointer>
 #include <QWidget>
 
 #include "../compilerprovider/icompiler.h"
@@ -41,6 +42,8 @@ class ProjectPathsWidget : public QWidget
 Q_OBJECT
 public:
     explicit ProjectPathsWidget( QWidget* parent = nullptr );
+    ~ProjectPathsWidget() override;
+
     void setProject(KDevelop::IProject* w_project);
     void setPaths( const QVector<ConfigEntry>& );
     QVector<ConfigEntry> paths() const;
@@ -72,7 +75,7 @@ private Q_SLOTS:
     void parserArgumentsChanged();
 
 private:
-    Ui::ProjectPathsWidget* ui;
+    QScopedPointer<Ui::ProjectPathsWidget> ui;
     ProjectPathsModel* pathsModel;
     // Enables/Disables widgets based on UI state/selection
     void updateEnablements();
