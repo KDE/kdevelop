@@ -1,5 +1,12 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevastyle\")
 
+find_package(LibAStyle 3.1)
+set_package_properties(LibAStyle PROPERTIES
+    DESCRIPTION "Artistic Style library"
+    PURPOSE "External library for the astyle plugin"
+    URL "http://astyle.sourceforge.net/"
+    TYPE RECOMMENDED)
+
 declare_qt_logging_category(kdevastyle_LOG_SRCS
     TYPE PLUGIN
     IDENTIFIER KDEV_ASTYLE
@@ -30,7 +37,9 @@ target_link_libraries(kdevastyle
     KDev::Interfaces
     KDev::Util)
 
-add_subdirectory(3rdparty/libastyle)
+if(NOT LibAStyle_FOUND)
+    add_subdirectory(3rdparty/libastyle)
+endif()
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
