@@ -42,7 +42,7 @@ _kdevelop_completions()
             local IFS=$'\n'
             CANDIDATES=(
                 $(compgen -W \
-                    "$(kdevelop --list-sessions 2>/dev/null | egrep '^{' | cut -f2 | sed 's/\s*\[running\]//' | sed 's/\(.*\):.*/\1/' | sed 's/ /\\ /g')" \
+                    "$(kdevelop --list-sessions 2>/dev/null | egrep '^{' | cut -f2 | sed 's/\s*\[running\]//;s/\(.*\):.*/\1/;s/ /\\ /g')" \
                     -- "${cur}"
                 )
             )
