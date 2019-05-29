@@ -85,7 +85,7 @@ void BenchCodeCompletion::benchCodeCompletion()
     TestFile file(code, "cpp");
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST, 1, 5000));
 
-    auto view = createView(file.url().toUrl(), this);
+    auto view = createView(file.url().toUrl());
 
     QSignalSpy spy(m_model, &QAbstractItemModel::modelReset);
     QBENCHMARK {
