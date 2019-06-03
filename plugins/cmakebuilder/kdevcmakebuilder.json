@@ -21,7 +21,7 @@
         "Description[sl]": "Izgradi projekte CMake",
         "Description[sv]": "Bygger CMake-projekt",
         "Description[tr]": "CMake Projelerini Derler",
-        "Description[uk]": "Збирає проекти CMake",
+        "Description[uk]": "Збирає проєкти CMake",
         "Description[x-test]": "xxBuilds CMake Projectsxx",
         "Description[zh_CN]": "构建 CMake 工程",
         "Icon": "cmake",
@@ -46,7 +46,7 @@
         "Name[sl]": "Izgrajevalnik projektov CMake",
         "Name[sv]": "CMake-projektbyggverktyg",
         "Name[tr]": "CMake Proje Oluşturucu",
-        "Name[uk]": "Інструмент збирання проектів CMake",
+        "Name[uk]": "Інструмент збирання проєктів CMake",
         "Name[x-test]": "xxCMake Project Builderxx",
         "Name[zh_CN]": "CMake 工程构建器",
         "ServiceTypes": [
