@@ -50,7 +50,7 @@
         "Description[sl]": "Omogoča, da KDevelop upravlja s projekti temelječimi na CMake",
         "Description[sv]": "Låter KDevelop hantera CMake-baserade projekt",
         "Description[tr]": "KDevelop uygulamasının CMake temelli projeleri yönetmesine izin verir",
-        "Description[uk]": "Надає змогу KDevelop керувати заснованими на CMake проектами",
+        "Description[uk]": "Надає змогу KDevelop керувати заснованими на CMake проєктами",
         "Description[x-test]": "xxAllows KDevelop to manage CMake-based projectsxx",
         "Description[zh_CN]": "允许 KDevelop 管理基于 CMake 的工程",
         "Icon": "cmake",
@@ -76,7 +76,7 @@
         "Name[sl]": "Upravljalnik projektov CMake",
         "Name[sv]": "CMake projekthanterare",
         "Name[tr]": "CMake Proje Yöneticisi",
-        "Name[uk]": "Керування проектами CMake",
+        "Name[uk]": "Керування проєктами CMake",
         "Name[x-test]": "xxCMake Project Managerxx",
         "Name[zh_CN]": "CMake 工程管理器",
         "ServiceTypes": [

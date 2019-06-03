@@ -20,7 +20,7 @@
         "Description[sl]": "Uvozi in ureja projekte po meri temelječe na QMake",
         "Description[sv]": "Importerar och redigerar QMake-projekt",
         "Description[tr]": "QMake projelerini içeriye aktarır ve düzenler",
-        "Description[uk]": "Імпортує і дає змогу редагувати проекти QMake",
+        "Description[uk]": "Імпортує і дає змогу редагувати проєкти QMake",
         "Description[x-test]": "xxImports and edits QMake projectsxx",
         "Description[zh_CN]": "导入并编辑 QMake 工程",
         "Icon": "qtlogo",
@@ -44,7 +44,7 @@
         "Name[sl]": "Upravljalnik projektov QMake",
         "Name[sv]": "QMake-projekthantering",
         "Name[tr]": "QMake Proje Yöneticisi",
-        "Name[uk]": "Керування проектами QMake",
+        "Name[uk]": "Керування проєктами QMake",
         "Name[x-test]": "xxQMake Project Managerxx",
         "Name[zh_CN]": "QMake 工程管理器",
         "ServiceTypes": [

@@ -13,7 +13,7 @@
         "Description[pt]": "A Área de Rascunhos permite-lhe executar e experimentar rapidamente código sem ter um projecto completo ou mesmo guardar listas de tarefas.",
         "Description[pt_BR]": "A área de rascunhos permite-lhe executar e experimentar rapidamente o código sem ter um projeto completo ou mesmo guardar listas de tarefas.",
         "Description[sv]": "Kladdblock låter dig snabbt köra och experimentera med kod utan ett fullständigt projekt, och till och med lagra uppgifter.",
-        "Description[uk]": "За допомогою нотатника ви можете швидко створити фрагмент коду та поекспериментувати з ним без створення повноцінного проекту. Можливе навіть створення завдань на майбутнє.",
+        "Description[uk]": "За допомогою нотатника ви можете швидко створити фрагмент коду та поекспериментувати з ним без створення повноцінного проєкту. Можливе навіть створення завдань на майбутнє.",
         "Description[x-test]": "xxScratchpad lets you quickly run and experiment with code without a full project, and even store todos.xx",
         "Description[zh_CN]": "通过刮板，您可以在没有完整项目的情况下快速运行和试验代码，甚至可以存储待办事项。",
         "Id": "scratchpad",

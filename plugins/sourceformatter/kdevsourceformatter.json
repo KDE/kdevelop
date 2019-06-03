@@ -18,7 +18,7 @@
         "Description[sl]": "Nastavite, kateri slog naj bo v projektu uporabljen za oblikovanje izvorne kode.",
         "Description[sv]": "Anpassa vilken stil som ska användas för att formatera källkoden i ett projekt.",
         "Description[tr]": "Bir projedeki kaynak kodun biçimlendirilmesi için hangi biçimin kullanılması gerektiğini yapılandırın.",
-        "Description[uk]": "Налаштувати стиль, який буде використано для форматування початкового коду у проекті.",
+        "Description[uk]": "Налаштувати стиль, який буде використано для форматування початкового коду у проєкті.",
         "Description[x-test]": "xxConfigure which style should be used for formatting of the sourcecode in a project.xx",
         "Description[zh_CN]": "配置工程中源代码应使用哪个样式进行格式化。",
         "Icon": "text-field",
