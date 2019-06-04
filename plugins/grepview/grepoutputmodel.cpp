@@ -30,7 +30,7 @@
 
 using namespace KDevelop;
 
-GrepOutputItem::GrepOutputItem(const DocumentChangePointer& change, const QString &text, bool checkable)
+GrepOutputItem::GrepOutputItem(const DocumentChangePointer &change, const QString &text, bool checkable)
     : QStandardItem(), m_change(change)
 {
     setText(text);
@@ -43,6 +43,18 @@ GrepOutputItem::GrepOutputItem(const DocumentChangePointer& change, const QStrin
 
 GrepOutputItem::GrepOutputItem(const QString& filename, const QString& text, bool checkable)
     : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), KTextEditor::Range::invalid(), QString(), QString()))
+{
+    setText(text);
+    setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+    setCheckable(checkable);
+    if(checkable)
+    {
+        setAutoTristate(true);
+        setCheckState(Qt::Checked);
+    }
+}
+GrepOutputItem::GrepOutputItem(const QString &filename, const QString &text, int line, bool checkable)
+    : QStandardItem(), m_change(new DocumentChange(IndexedString(filename), KTextEditor::Range(line, 0, line, text.length() - 1), QString(), QString()))
 {
     setText(text);
     setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -144,13 +156,28 @@ QVariant GrepOutputItem::data ( int role ) const {
     auto *grepModel = static_cast<GrepOutputModel *>(model());
     if(role == Qt::ToolTipRole && grepModel && isText())
     {
-        QString start = text().left(m_change->m_range.start().column()).toHtmlEscaped();
-        // show replaced version in tooltip if we are in replace mode
-        const QString match = isCheckable() ? grepModel->replacementFor(m_change->m_oldText) : m_change->m_oldText;
-        const QString repl  = QLatin1String("<b>") + match.toHtmlEscaped() + QLatin1String("</b>");
-        QString end   = text().mid(m_change->m_range.end().column()).toHtmlEscaped();
-        const QString toolTip = QLatin1String("<span style=\"white-space:nowrap\">") + QString(start + repl + end).trimmed() + QLatin1String("</span>");
-        return toolTip;
+        if (hasChildren()) {
+            QString toolTip;
+            KTextEditor::Range previousRange(lineNumber(), 0, lineNumber(), 0);
+            for (int i = 0; i < rowCount(); ++i) {
+                const GrepOutputItem *item = static_cast<GrepOutputItem*>(child(i));
+                const KTextEditor::Range range = item->change()->m_range;
+                toolTip += text().mid(previousRange.end().column(), range.start().column() - previousRange.end().column()).toHtmlEscaped();
+                const QString match = isCheckable() ? grepModel->replacementFor(item->change()->m_oldText) : item->change()->m_oldText;
+                toolTip += QLatin1String("<b>") + match.toHtmlEscaped() + QLatin1String("</b>");
+                previousRange = range;
+            }
+            toolTip += text().mid(previousRange.end().column());
+            return  QString(QLatin1String("<span style=\"white-space:nowrap\">") + toolTip.trimmed() + QLatin1String("</span>"));
+        } else {
+            QString start = text().left(m_change->m_range.start().column()).toHtmlEscaped();
+            // show replaced version in tooltip if we are in replace mode
+            const QString match = isCheckable() ? grepModel->replacementFor(m_change->m_oldText) : m_change->m_oldText;
+            const QString repl  = QLatin1String("<b>") + match.toHtmlEscaped() + QLatin1String("</b>");
+            QString end   = text().mid(m_change->m_range.end().column()).toHtmlEscaped();
+            const QString toolTip = QLatin1String("<span style=\"white-space:nowrap\">") + QString(start + repl + end).trimmed() + QLatin1String("</span>");
+            return toolTip;
+        }
     } else if (role == Qt::FontRole) {
         return QFontDatabase::systemFont(QFontDatabase::FixedFont);
     } else {
@@ -260,29 +287,31 @@ QModelIndex GrepOutputModel::previousItemIndex(const QModelIndex &currentIdx) co
 
     if (current_item->parent() != nullptr) {
         int row = currentIdx.row();
-
         if(!current_item->isText()) // the item is a file
         {
             int item_row = current_item->row();
-            if(item_row > 0)
-            {
-                int idx_last_item = current_item->parent()->child(item_row - 1)->rowCount() - 1;
-                return current_item->parent()->child(item_row - 1)->child(idx_last_item)->index();
+            if(item_row > 0) {
+                int last_line = current_item->parent()->child(item_row-1)->rowCount() - 1;
+                int last_item = current_item->parent()->child(item_row-1)->child(last_line)->rowCount() - 1;
+                return current_item->parent()->child(item_row-1)->child(last_line)->child(last_item)->index();
             }
+        }
+        else if (current_item->hasChildren())//the item is a line
+        {
+            int idx_line = current_item->row();
+            if (idx_line > 0)
+            {
+                int last_item = current_item->parent()->child(idx_line - 1)->rowCount() - 1;
+                return current_item->parent()->child(idx_line - 1)->child(last_item)->index();
+            }
+           return previousItemIndex(current_item->parent()->index());
         }
         else // the item is a match
         {
-            if(row > 0)
+            if(row > 0) {
                 return current_item->parent()->child(row - 1)->index();
-            else // we return the index of the last item of the previous file
-            {
-                int parrent_row = current_item->parent()->row();
-                if(parrent_row > 0)
-                {
-                    int idx_last_item = current_item->parent()->parent()->child(parrent_row - 1)->rowCount() - 1;
-                    return current_item->parent()->parent()->child(parrent_row - 1)->child(idx_last_item)->index();
-                }
             }
+            return previousItemIndex(current_item->parent()->index());
         }
     }
     return currentIdx;
@@ -313,19 +342,27 @@ QModelIndex GrepOutputModel::nextItemIndex(const QModelIndex &currentIdx) const
             int item_row = current_item->row();
             if(item_row < current_item->parent()->rowCount())
             {
-                return current_item->parent()->child(item_row)->child(0)->index();
+                return current_item->parent()->child(item_row)->child(0)->child(0)->index();
             }
+        }
+        else if(current_item->hasChildren()) //the item is a line
+        {
+            return current_item->child(0)->index();
         }
         else // the item is a match
         {
             if(row < current_item->parent()->rowCount() - 1)
                 return current_item->parent()->child(row + 1)->index();
+            else  if(current_item->parent()->row() < current_item->parent()->parent()->rowCount() - 1) //next line
+            {
+                return current_item->parent()->parent()->child(current_item->parent()->row() + 1)->child(0)->index();
+            }
             else // we return the index of the first item of the next file
             {
-                int parrent_row = current_item->parent()->row();
+                int parrent_row = current_item->parent()->parent()->row();
                 if(parrent_row < current_item->parent()->parent()->rowCount() - 1)
                 {
-                    return current_item->parent()->parent()->child(parrent_row + 1)->child(0)->index();
+                    return current_item->parent()->parent()->parent()->child(parrent_row + 1)->child(0)->child(0)->index();
                 }
             }
         }
@@ -388,6 +425,7 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
 
     auto *fileItem = new GrepOutputItem(filename, fnString, m_itemsCheckable);
     m_rootItem->appendRow(fileItem);
+    GrepOutputItem *lineItem = new GrepOutputItem(filename, items[0].text(), items[0].change()->m_range.start().line(), m_itemsCheckable);
     for (const GrepOutputItem& item : items) {
         auto* copy = new GrepOutputItem(item);
         copy->setCheckable(m_itemsCheckable);
@@ -397,9 +435,13 @@ void GrepOutputModel::appendOutputs( const QString &filename, const GrepOutputIt
             if(copy->rowCount())
                 copy->setAutoTristate(true);
         }
-        
-        fileItem->appendRow(copy);
+        if (copy->change()->m_range.start().line() != lineItem->change()->m_range.start().line()) {
+            fileItem->appendRow(lineItem);
+            lineItem = new GrepOutputItem(filename, copy->text(), copy->change()->m_range.start().line(), m_itemsCheckable);
+        }
+        lineItem->appendRow(copy);
     }
+    fileItem->appendRow(lineItem);
 }
 
 void GrepOutputModel::updateCheckState(QStandardItem* item)
@@ -430,19 +472,22 @@ void GrepOutputModel::doReplacements()
     for(int fileRow = 0; fileRow < m_rootItem->rowCount(); fileRow++)
     {
         auto *file = static_cast<GrepOutputItem *>(m_rootItem->child(fileRow));
-        
-        for(int matchRow = 0; matchRow < file->rowCount(); matchRow++)
+        for(int lineRow = 0; lineRow < file->rowCount(); lineRow++)
         {
-            auto *match = static_cast<GrepOutputItem *>(file->child(matchRow));
-            if(match->checkState() == Qt::Checked) 
+            auto *line = static_cast<GrepOutputItem*>(file->child(lineRow));
+            for(int matchRow = 0; matchRow < line->rowCount(); matchRow++)
             {
-                DocumentChangePointer change = match->change();
-                // setting replacement text based on current replace value
-                change->m_newText = replacementFor(change->m_oldText);
-                changeSet.addChange(change);
-                // this item cannot be checked anymore
-                match->setCheckState(Qt::Unchecked);
-                match->setEnabled(false);
+                auto *match = static_cast<GrepOutputItem *>(line->child(matchRow));
+                if(match->checkState() == Qt::Checked)
+                {
+                    DocumentChangePointer change = match->change();
+                    // setting replacement text based on current replace value
+                    change->m_newText = replacementFor(change->m_oldText);
+                    changeSet.addChange(change);
+                    // this item cannot be checked anymore
+                    match->setCheckState(Qt::Unchecked);
+                    match->setEnabled(false);
+                }
             }
         }
     }

@@ -34,6 +34,7 @@ public:
 
     GrepOutputItem(const KDevelop::DocumentChangePointer& change, const QString& text, bool checkable);
     GrepOutputItem(const QString &filename, const QString &text, bool checkable);
+    GrepOutputItem(const QString &filename, const QString &text, int line, bool checkable);
     ~GrepOutputItem() override;
 
     QString filename() const ;
