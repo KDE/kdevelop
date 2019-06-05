@@ -18,9 +18,11 @@
 */
 
 #include "mesonrewriterinput.h"
+#include "mesonoptionbaseview.h"
 #include "rewriter/mesonkwargsinfo.h"
 #include "rewriter/mesonkwargsmodify.h"
 #include "ui_mesonrewriterinput.h"
+#include "ui_mesonrewriteroptioncontainer.h"
 
 #include <KColorScheme>
 #include <QLineEdit>
@@ -172,4 +174,38 @@ void MesonRewriterInputString::resetValue(QJsonValue val)
 QJsonValue MesonRewriterInputString::value()
 {
     return QJsonValue(m_lineEdit->text());
+}
+
+// Options container
+
+MesonRewriterOptionContainer::MesonRewriterOptionContainer(MesonOptViewPtr optView, QWidget* parent)
+    : QWidget(parent)
+    , m_optView(optView)
+{
+    m_ui = new Ui::MesonRewriterOptionContainer;
+    m_ui->setupUi(this);
+    m_ui->h_layout->insertWidget(0, m_optView.get());
+
+    connect(optView.get(), &MesonOptionBaseView::configChanged, this, [this]() { emit configChanged(); });
+}
+
+void MesonRewriterOptionContainer::deleteMe()
+{
+    m_markedForDeletion = true;
+    emit configChanged();
+}
+
+bool MesonRewriterOptionContainer::shouldDelete() const
+{
+    return m_markedForDeletion;
+}
+
+bool MesonRewriterOptionContainer::hasChanged() const
+{
+    return m_optView->option()->isUpdated();
+}
+
+MesonOptViewPtr MesonRewriterOptionContainer::view()
+{
+    return m_optView;
 }

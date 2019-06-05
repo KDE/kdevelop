@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>824</width>
-    <height>543</height>
+    <width>977</width>
+    <height>657</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,89 +26,141 @@
       <attribute name="toolTip">
        <string>Project settings</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <layout class="QVBoxLayout" name="c_projectRoot">
          <item>
-          <widget class="QLabel" name="l_dispProject">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>150</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Name:</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="c_projectName">
+           <item>
+            <widget class="QLabel" name="l_dispProject">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Name:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="l_project">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h3&gt;projectName&lt;/h3&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLabel" name="l_project">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h3&gt;projectName&lt;/h3&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="c_project"/>
          </item>
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="c_project"/>
+        <widget class="Line" name="c_prSep">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QVBoxLayout" name="c_defOptsRoot">
          <item>
-          <widget class="QListWidget" name="listWidget"/>
-         </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <layout class="QHBoxLayout" name="c_defOptTitle">
            <item>
-            <widget class="QToolButton" name="toolButton">
-             <property name="text">
-              <string>+</string>
-             </property>
-             <property name="icon">
-              <iconset theme="list-add">
-               <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="toolButton_2">
-             <property name="text">
-              <string>-</string>
-             </property>
-             <property name="icon">
-              <iconset theme="list-remove">
-               <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer">
+            <spacer name="s_defOptTitle1">
              <property name="orientation">
-              <enum>Qt::Vertical</enum>
+              <enum>Qt::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
-               <width>20</width>
-               <height>40</height>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="l_defOpts">
+             <property name="text">
+              <string>Project default options</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="s_defOptTitle2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
               </size>
              </property>
             </spacer>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QScrollArea" name="scroll_defOpts">
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="c_scrollDefOpts">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>939</width>
+              <height>487</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <layout class="QVBoxLayout" name="c_defOpts"/>
+             </item>
+             <item>
+              <widget class="QPushButton" name="b_newOpt">
+               <property name="text">
+                <string>New Option</string>
+               </property>
+               <property name="icon">
+                <iconset theme="list-add">
+                 <normaloff>.</normaloff>.</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>423</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </widget>
          </item>
         </layout>
        </item>
@@ -117,7 +169,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="c_status">
      <item>
       <widget class="QLabel" name="l_status">
        <property name="text">
@@ -140,8 +192,26 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>b_newOpt</sender>
+   <signal>clicked()</signal>
+   <receiver>MesonRewriterPage</receiver>
+   <slot>newOption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>488</x>
+     <y>155</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>488</x>
+     <y>328</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>emitChanged()</slot>
+  <slot>newOption()</slot>
  </slots>
 </ui>

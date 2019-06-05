@@ -21,10 +21,17 @@
 
 #include <QJsonValue>
 #include <QWidget>
+#include <memory>
+
+class MesonOptionBaseView;
+class MesonRewriterOptionContainer;
+using MesonOptViewPtr = std::shared_ptr<MesonOptionBaseView>;
+using MesonOptContainerPtr = std::shared_ptr<MesonRewriterOptionContainer>;
 
 namespace Ui
 {
 class MesonRewriterInputBase;
+class MesonRewriterOptionContainer;
 }
 
 class QLineEdit;
@@ -99,4 +106,28 @@ protected:
 private:
     QString m_initialValue;
     QLineEdit* m_lineEdit = nullptr;
+};
+
+class MesonRewriterOptionContainer : public QWidget
+{
+    Q_OBJECT
+
+public:
+    MesonRewriterOptionContainer(MesonOptViewPtr optView, QWidget* parent);
+
+    bool shouldDelete() const;
+    bool hasChanged() const;
+    MesonOptViewPtr view();
+
+public Q_SLOTS:
+    void deleteMe();
+
+Q_SIGNALS:
+    void configChanged();
+
+private:
+    Ui::MesonRewriterOptionContainer* m_ui = nullptr;
+    MesonOptViewPtr m_optView = nullptr;
+
+    bool m_markedForDeletion = false;
 };

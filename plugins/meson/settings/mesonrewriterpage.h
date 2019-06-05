@@ -23,6 +23,9 @@
 #include <QVector>
 #include <interfaces/configpage.h>
 
+#include "mintro/mesonoptions.h"
+#include "mesonrewriterinput.h"
+
 namespace KDevelop
 {
 class IPlugin;
@@ -33,8 +36,6 @@ namespace Ui
 {
 class MesonRewriterPage;
 }
-
-class MesonRewriterInputBase;
 
 class MesonRewriterPage : public KDevelop::ConfigPage
 {
@@ -55,19 +56,26 @@ public Q_SLOTS:
     void reset() override;
 
     void emitChanged();
-
-    QVector<MesonRewriterInputBase*> constructPojectInputs();
+    void recalculateLengths();
+    void newOption();
 
 private:
     void setWidgetsDisabled(bool disabled);
     void checkStatus();
     void setStatus(State s);
 
+    QVector<MesonRewriterInputBase*> constructPojectInputs();
+    MesonOptContainerPtr constructDefaultOpt(QString name, QString value);
+
 private:
     KDevelop::IProject* m_project = nullptr;
     Ui::MesonRewriterPage* m_ui = nullptr;
     bool m_configChanged = false;
     State m_state = START;
+    MesonOptsPtr m_opts = nullptr;
 
     QVector<MesonRewriterInputBase*> m_projectKwargs;
+    QVector<MesonOptContainerPtr> m_defaultOpts;
+
+    QStringList m_initialDefaultOpts;
 };

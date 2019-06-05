@@ -20,6 +20,8 @@
 #include "mesonkwargsinfo.h"
 #include "debug.h"
 
+#include <QJsonArray>
+
 MesonKWARGSInfo::MesonKWARGSInfo(MesonKWARGSInfo::Function fn, QString id)
     : m_func(fn)
     , m_id(id)
@@ -96,6 +98,15 @@ QJsonValue MesonKWARGSInfo::get(QString kwarg) const
 QString MesonKWARGSInfo::getString(QString kwarg) const
 {
     return get(kwarg).toString();
+}
+
+QStringList MesonKWARGSInfo::getArray(QString kwarg) const
+{
+    QStringList result;
+    for (auto i : get(kwarg).toArray()) {
+        result += i.toString();
+    }
+    return result;
 }
 
 // Constructors

@@ -39,6 +39,7 @@ ki18n_wrap_ui(mesonbuilder_SRCS
               settings/mesonoptionbaseview.ui
               settings/mesonoptionsview.ui
               settings/mesonrewriterinput.ui
+              settings/mesonrewriteroptioncontainer.ui
               settings/mesonrewriterpage.ui
 )
 ecm_qt_declare_logging_category(mesonbuilder_SRCS

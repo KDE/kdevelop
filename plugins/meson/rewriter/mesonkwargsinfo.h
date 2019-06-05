@@ -51,6 +51,7 @@ public:
     bool hasKWARG(QString kwarg) const;
     QJsonValue get(QString kwarg) const;
     QString getString(QString kwarg) const;
+    QStringList getArray(QString kwarg) const;
 
 private:
     Function m_func;
