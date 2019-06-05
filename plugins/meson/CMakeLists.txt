@@ -14,6 +14,7 @@ set(mesonbuilder_SRCS
     mintro/mesontests.cpp
 
     rewriter/mesonactionbase.cpp
+    rewriter/mesondefaultopts.cpp
     rewriter/mesonkwargsinfo.cpp
     rewriter/mesonkwargsmodify.cpp
     rewriter/mesonrewriterjob.cpp
