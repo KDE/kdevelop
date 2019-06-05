@@ -131,6 +131,30 @@ void MesonOptionBaseView::setChanged(bool changed)
     emit configChanged();
 }
 
+std::shared_ptr<MesonOptionBaseView> MesonOptionBaseView::fromOption(MesonOptionPtr option, QWidget* parent)
+{
+    std::shared_ptr<MesonOptionBaseView> opt = nullptr;
+    switch (option->type()) {
+    case MesonOptionBase::ARRAY:
+        opt = make_shared<MesonOptionArrayView>(option, parent);
+        break;
+    case MesonOptionBase::BOOLEAN:
+        opt = make_shared<MesonOptionBoolView>(option, parent);
+        break;
+    case MesonOptionBase::COMBO:
+        opt = make_shared<MesonOptionComboView>(option, parent);
+        break;
+    case MesonOptionBase::INTEGER:
+        opt = make_shared<MesonOptionIntegerView>(option, parent);
+        break;
+    case MesonOptionBase::STRING:
+        opt = make_shared<MesonOptionStringView>(option, parent);
+        break;
+    }
+
+    return opt;
+}
+
 // Derived class constructors
 
 MesonOptionArrayView::MesonOptionArrayView(MesonOptionPtr option, QWidget* parent)

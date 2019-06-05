@@ -275,6 +275,33 @@ void MesonOptionString::setValue(QString val)
     m_value = val;
 }
 
+// Set value from string
+
+void MesonOptionArray::setFromString(QString value)
+{
+    setValue({ value });
+}
+
+void MesonOptionBool::setFromString(QString value)
+{
+    setValue(value.toLower() == QStringLiteral("true"));
+}
+
+void MesonOptionCombo::setFromString(QString value)
+{
+    setValue(value);
+}
+
+void MesonOptionInteger::setFromString(QString value)
+{
+    setValue(value.toInt());
+}
+
+void MesonOptionString::setFromString(QString value)
+{
+    setValue(value);
+}
+
 // Base option functions
 
 MesonOptionBase::~MesonOptionBase() {}
@@ -393,7 +420,7 @@ MesonOptionPtr MesonOptionBase::fromJSON(const QJsonObject& obj)
 int MesonOptions::numChanged() const
 {
     int sum = 0;
-    for(auto i : m_options) {
+    for (auto i : m_options) {
         if (i && i->isUpdated()) {
             ++sum;
         }
@@ -401,13 +428,12 @@ int MesonOptions::numChanged() const
     return sum;
 }
 
-
 QStringList MesonOptions::getMesonArgs() const
 {
     QStringList result;
     result.reserve(m_options.size());
 
-    for(auto i : m_options) {
+    for (auto i : m_options) {
         if (i && i->isUpdated()) {
             result << i->mesonArg();
         }

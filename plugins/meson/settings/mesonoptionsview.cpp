@@ -84,24 +84,7 @@ KJob* MesonOptionsView::repopulate(MesonIntrospectJob* introJob)
         }
 
         for (auto i : m_options->options()) {
-            OPT_VIEW_PTR opt = nullptr;
-            switch (i->type()) {
-            case MesonOptionBase::ARRAY:
-                opt = make_shared<MesonOptionArrayView>(i, m_ui->tabWidget);
-                break;
-            case MesonOptionBase::BOOLEAN:
-                opt = make_shared<MesonOptionBoolView>(i, m_ui->tabWidget);
-                break;
-            case MesonOptionBase::COMBO:
-                opt = make_shared<MesonOptionComboView>(i, m_ui->tabWidget);
-                break;
-            case MesonOptionBase::INTEGER:
-                opt = make_shared<MesonOptionIntegerView>(i, m_ui->tabWidget);
-                break;
-            case MesonOptionBase::STRING:
-                opt = make_shared<MesonOptionStringView>(i, m_ui->tabWidget);
-                break;
-            }
+            OPT_VIEW_PTR opt = MesonOptionBaseView::fromOption(i, m_ui->tabWidget);
 
             if (!opt) {
                 qCWarning(KDEV_Meson) << "Unhandled option type " << i->type();

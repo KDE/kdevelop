@@ -49,6 +49,7 @@ public:
     virtual Type type() const = 0;
     virtual QString value() const = 0;
     virtual QString initialValue() const = 0;
+    virtual void setFromString(QString value) = 0;
     virtual void reset() = 0;
 
     QString name() const;
@@ -74,6 +75,7 @@ public:
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
+    void setFromString(QString value) override;
     void reset() override;
 
     QStringList rawValue() const;
@@ -92,6 +94,7 @@ public:
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
+    void setFromString(QString value) override;
     void reset() override;
 
     bool rawValue() const;
@@ -110,6 +113,7 @@ public:
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
+    void setFromString(QString value) override;
     void reset() override;
 
     QString rawValue() const;
@@ -130,6 +134,7 @@ public:
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
+    void setFromString(QString value) override;
     void reset() override;
 
     int rawValue() const;
@@ -148,6 +153,7 @@ public:
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
+    void setFromString(QString value) override;
     void reset() override;
 
     QString rawValue() const;

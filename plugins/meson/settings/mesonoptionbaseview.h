@@ -50,6 +50,8 @@ public:
 
     void setInputWidget(QWidget* input);
 
+    static std::shared_ptr<MesonOptionBaseView> fromOption(MesonOptionPtr option, QWidget* parent);
+
 protected:
     void setChanged(bool changed);
 
