@@ -123,6 +123,7 @@ public:
     KDevelop::VcsJob* switchBranch(const QUrl& repository, const QString& branchName) override;
     KDevelop::VcsJob* renameBranch(const QUrl& repository, const QString& oldBranchName, const QString& newBranchName) override;
     KDevelop::VcsJob* mergeBranch(const QUrl& repository, const QString& branchName) override;
+    KDevelop::VcsJob* rebase(const QUrl& repository, const QString& branchName);
 
     //graph helpers
     QVector<KDevelop::DVcsEvent> allCommits(const QString& repo) override;
@@ -184,6 +185,7 @@ private Q_SLOTS:
     void parseGitBranchOutput(KDevelop::DVcsJob* job);
     void parseGitCurrentBranch(KDevelop::DVcsJob* job);
     
+    void ctxRebase();
     void ctxPushStash();
     void ctxPopStash();
     void ctxStashManager();

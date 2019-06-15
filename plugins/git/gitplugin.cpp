@@ -45,6 +45,7 @@
 #include <vcs/widgets/standardvcslocationwidget.h>
 #include "gitclonejob.h"
 #include <interfaces/iruncontroller.h>
+#include "rebasedialog.h"
 #include "stashmanagerdialog.h"
 
 #include <KDirWatch>
@@ -231,10 +232,19 @@ void GitPlugin::additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls)
 
     QDir dir=urlDir(urls);
     bool hasSt = hasStashes(dir);
+
+    menu->addAction(i18n("Rebase"), this, SLOT(ctxRebase()));
     menu->addSeparator()->setText(i18n("Git Stashes"));
     menu->addAction(i18n("Stash Manager"), this, SLOT(ctxStashManager()))->setEnabled(hasSt);
     menu->addAction(i18n("Push Stash"), this, SLOT(ctxPushStash()));
     menu->addAction(i18n("Pop Stash"), this, SLOT(ctxPopStash()))->setEnabled(hasSt);
+}
+
+void GitPlugin::ctxRebase()
+{
+    RebaseDialog *dialog = new RebaseDialog(this, m_urls.first(), nullptr);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    dialog->open();
 }
 
 void GitPlugin::ctxPushStash()
@@ -762,6 +772,14 @@ VcsJob* GitPlugin::mergeBranch(const QUrl& repository, const QString& branchName
 
     DVcsJob* job = new DVcsJob(urlDir(repository), this);
     *job << "git" << "merge" << branchName;
+
+    return job;
+}
+
+VcsJob* GitPlugin::rebase(const QUrl& repository, const QString& branchName)
+{
+    DVcsJob* job = new DVcsJob(urlDir(repository), this);
+    *job << "git" << "rebase" << branchName;
 
     return job;
 }

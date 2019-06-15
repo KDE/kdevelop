@@ -20,6 +20,7 @@ if (GIT_FOUND)
         ../gitclonejob.cpp
         ../stashmanagerdialog.cpp
         ../stashpatchsource.cpp
+        ../rebasedialog.cpp
         ../gitjob.cpp
         ../gitmessagehighlighter.cpp
         ../gitplugincheckinrepositoryjob.cpp
