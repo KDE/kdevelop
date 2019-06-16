@@ -75,7 +75,8 @@ QString findSwitchCandidate(const QUrl& docUrl)
     IBuddyDocumentFinder* finder = IBuddyDocumentFinder::finderForMimeType(db.mimeTypeForUrl(docUrl).name());
     if (finder) {
         // get the first entry that exists, use that as candidate
-        foreach(const QUrl& buddyUrl, finder->potentialBuddies(docUrl)) {
+        const auto potentialBuddies = finder->potentialBuddies(docUrl);
+        for (const QUrl& buddyUrl : potentialBuddies) {
             if (!QFile::exists(buddyUrl.toLocalFile())) {
                 continue;
             }
