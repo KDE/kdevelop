@@ -153,8 +153,9 @@ void OktetaWidget::setupActions(OktetaPlugin* plugin)
     viewprofilesManageAction->setText( i18nc("@action:inmenu",
                                              "Manage Byte Array View Profiles...") );
 
-    foreach( Kasten::AbstractXmlGuiController* controller, mControllers )
+    for (Kasten::AbstractXmlGuiController* controller : qAsConst(mControllers)) {
         controller->setTargetModel( mByteArrayView );
+    }
 }
 
 OktetaWidget::~OktetaWidget()

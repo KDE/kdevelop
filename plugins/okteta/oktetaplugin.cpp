@@ -131,8 +131,8 @@ void OktetaPlugin::onOpenTriggered()
     KDevelop::ICore* core = KDevelop::ICore::self();
     IDocumentController* documentController = core->documentController();
 
-    foreach( const QUrl &url, action->data().value<QList<QUrl>>() )
-    {
+    const auto urls = action->data().value<QList<QUrl>>();
+    for (const QUrl& url : urls) {
         IDocument* existingDocument = documentController->documentForUrl(url);
         if( existingDocument )
             if( ! existingDocument->close() )
