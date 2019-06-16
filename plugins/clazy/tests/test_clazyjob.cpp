@@ -181,8 +181,8 @@ void TestClazyJob::testJob()
     QCOMPARE(jobTester.problems().size(), 3);
 
     // test common values
-    auto problems = jobTester.problems();
-    foreach (auto problem, problems) {
+    const auto problems = jobTester.problems();
+    for (auto problem : problems) {
         QCOMPARE(problem->severity(), KDevelop::IProblem::Warning);
         QCOMPARE(problem->source(), KDevelop::IProblem::Plugin);
     }
