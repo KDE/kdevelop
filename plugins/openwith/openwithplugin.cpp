@@ -111,8 +111,9 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
         m_urls = filectx->urls();
     } else if ( projctx && projctx->items().count() > 0 ) {
         // For now, let's handle *either* files only *or* directories only
-        const int wantedType = projctx->items().at(0)->type();
-        foreach( ProjectBaseItem* item, projctx->items() ) {
+        const auto items = projctx->items();
+        const int wantedType = items.at(0)->type();
+        for (ProjectBaseItem* item : items) {
             if (wantedType == ProjectBaseItem::File && item->file()) {
                 m_urls << item->file()->path().toUrl();
             } else if ((wantedType == ProjectBaseItem::Folder || wantedType == ProjectBaseItem::BuildFolder) && item->folder()) {
@@ -226,7 +227,7 @@ void OpenWithPlugin::openDefault()
         KService::Ptr service = KMimeTypeTrader::self()->preferredService(m_mimeType);
         KRun::runService(*service, m_urls, ICore::self()->uiController()->activeMainWindow());
     } else {
-        foreach( const QUrl& u, m_urls ) {
+        for (const QUrl& u : qAsConst(m_urls)) {
             ICore::self()->documentController()->openDocument( u );
         }
     }
@@ -249,7 +250,7 @@ void OpenWithPlugin::openService(const KService::Ptr& service)
             // TODO: Solve this rather inside DocumentController
             prefName.clear();
         }
-        foreach( const QUrl& u, m_urls ) {
+        for (const QUrl& u : qAsConst(m_urls)) {
             ICore::self()->documentController()->openDocument( u, prefName );
         }
     }
