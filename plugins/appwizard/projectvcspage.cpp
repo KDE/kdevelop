@@ -108,8 +108,7 @@ ProjectVcsPage::~ProjectVcsPage( )
 
 void ProjectVcsPage::setSourceLocation( const QUrl& s )
 {
-    foreach(KDevelop::VcsImportMetadataWidget* widget, importWidgets)
-    {
+    for (KDevelop::VcsImportMetadataWidget* widget : qAsConst(importWidgets)) {
         widget->setSourceLocation( KDevelop::VcsLocation( s ) );
     }
 }
