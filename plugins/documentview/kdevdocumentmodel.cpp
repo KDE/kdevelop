@@ -104,8 +104,8 @@ QList<KDevFileItem*> KDevCategoryItem::fileList() const
 
 KDevFileItem* KDevCategoryItem::file( const QUrl &url ) const
 {
-    foreach( KDevFileItem * item, fileList() )
-    {
+    const auto fileList = this->fileList();
+    for (KDevFileItem* item : fileList) {
         if ( item->url() == url )
             return item;
     }
@@ -152,8 +152,8 @@ QList<KDevCategoryItem*> KDevDocumentModel::categoryList() const
 
 KDevCategoryItem* KDevDocumentModel::category( const QString& category ) const
 {
-    foreach( KDevCategoryItem * item, categoryList() )
-    {
+    const auto categoryList = this->categoryList();
+    for (KDevCategoryItem* item : categoryList) {
         if ( item->toolTip() == category )
             return item;
     }

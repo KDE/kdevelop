@@ -229,8 +229,7 @@ void KDevDocumentView::appendActions(QMenu* menu, const QList<QAction*>& actions
 bool KDevDocumentView::selectedDocHasChanges()
 {
     KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-    foreach(const QUrl& url, m_selectedDocs)
-    {
+    for (const QUrl& url : qAsConst(m_selectedDocs)) {
         KDevelop::IDocument* doc = dc->documentForUrl(url);
         if (!doc) continue;
         if (doc->state() != KDevelop::IDocument::Clean)
@@ -321,8 +320,10 @@ void KDevDocumentView::updateCategoryItem( KDevCategoryItem *item )
 
 void KDevDocumentView::updateProjectPaths()
 {
-    foreach ( KDevCategoryItem *it, m_documentModel->categoryList() )
+    const auto categoryList = m_documentModel->categoryList();
+    for (KDevCategoryItem* it : categoryList) {
         updateCategoryItem( it );
+    }
 }
 
 void KDevDocumentView::contentChanged( KDevelop::IDocument* )

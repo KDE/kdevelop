@@ -44,7 +44,8 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
         {
             auto* view = new KDevDocumentView( m_plugin, parent );
             KDevelop::IDocumentController* docController = m_plugin->core()->documentController();
-            foreach(KDevelop::IDocument* doc, docController->openDocuments()) {
+            const auto openDocuments = docController->openDocuments();
+            for (KDevelop::IDocument* doc : openDocuments) {
                 view->opened( doc );
             }
             QObject::connect( docController, &IDocumentController::documentActivated,
