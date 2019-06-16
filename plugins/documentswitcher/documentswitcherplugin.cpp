@@ -164,8 +164,8 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
 {
     model->clear();
     auto projectController = KDevelop::ICore::self()->projectController();
-    foreach( Sublime::View* v, documentLists[window][window->area()] )
-    {
+    const auto& views = documentLists[window][window->area()];
+    for (Sublime::View* v : views) {
         using namespace KDevelop;
         Sublime::Document const* const slDoc = v->document();
         if( !slDoc )
@@ -256,8 +256,8 @@ void DocumentSwitcherPlugin::itemActivated( const QModelIndex& idx )
 
 void DocumentSwitcherPlugin::unload()
 {
-    foreach( QObject* mw, documentLists.keys() )
-    {
+    const auto mainWindows = documentLists.keys();
+    for (QObject* mw : mainWindows) {
         removeMainWindow( mw );
     }
     delete forwardAction;
@@ -272,11 +272,12 @@ void DocumentSwitcherPlugin::storeAreaViewList( Sublime::MainWindow* mainwindow,
     {
         QHash<Sublime::Area*, QList<Sublime::View*> > areas;
         qCDebug(PLUGIN_DOCUMENTSWITCHER) << "adding area views for area:" << area << area->title() << "mainwindow:" << mainwindow << mainwindow->windowTitle();
-        foreach( Sublime::View* v, area->views() ) {
+        const auto views = area->views();
+        for (Sublime::View* v : views) {
             qCDebug(PLUGIN_DOCUMENTSWITCHER) << "view:" << v  << v->document()->title();
         }
         qCDebug(PLUGIN_DOCUMENTSWITCHER) << "done";
-        areas.insert( area, area->views() );
+        areas.insert(area, views);
         documentLists.insert( mainwindow, areas );
     }
 
