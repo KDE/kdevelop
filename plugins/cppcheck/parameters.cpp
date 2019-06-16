@@ -39,7 +39,8 @@ namespace cppcheck
 
 void includesForItem(KDevelop::ProjectBaseItem* parent, QSet<KDevelop::Path>& includes)
 {
-    foreach (auto child, parent->children()) {
+    const auto children = parent->children();
+    for (auto* child : children) {
         if (child->type() == KDevelop::ProjectBaseItem::ProjectItemType::File) {
             continue;
         }
@@ -49,7 +50,8 @@ void includesForItem(KDevelop::ProjectBaseItem* parent, QSet<KDevelop::Path>& in
                  child->type() == KDevelop::ProjectBaseItem::ProjectItemType::Target) {
 
             if (auto buildSystemManager = child->project()->buildSystemManager()) {
-                foreach (auto dir, buildSystemManager->includeDirectories(child)) {
+                const auto includeDirectories = buildSystemManager->includeDirectories(child);
+                for (auto& dir : includeDirectories) {
                     includes.insert(dir);
                 }
             }
@@ -184,7 +186,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
     if (!mocParametersRegex.match(extraParameters).hasMatch()) {
         bool qtUsed = false;
         bool mocDefineFound = false;
-        foreach (auto dir, m_includeDirectories) {
+        for (const auto& dir : m_includeDirectories) {
             if (dir.path().endsWith(QLatin1String("QtCore"))) {
                 qtUsed = true;
 
@@ -224,7 +226,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
             }
         }
 
-        foreach (const auto& dir, m_includeDirectories) {
+        for (const auto& dir : m_includeDirectories) {
             if (ignored.contains(dir)) {
                 continue;
             }
