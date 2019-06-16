@@ -99,7 +99,7 @@ FileManager::~FileManager()
 
 void FileManager::fillContextMenu(const KFileItem& item, QMenu* menu)
 {
-    foreach(QAction* a, contextActions){
+    for (QAction* a : qAsConst(contextActions)) {
         if(menu->actions().contains(a)){
             menu->removeAction(a);
         }

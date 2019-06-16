@@ -48,7 +48,8 @@ BookmarkHandler::BookmarkHandler( FileManager *parent, QMenu* kpopupmenu )
     m_bookmarkMenu = new KBookmarkMenu( manager, this, m_menu, parent->actionCollection() );
 
      //remove shortcuts as they might conflict with others (eg. Ctrl+B)
-    foreach (QAction *action, parent->actionCollection()->actions()) {
+    const auto actions = parent->actionCollection()->actions();
+    for (QAction* action : actions) {
         action->setShortcut(QKeySequence());
     }
 }
