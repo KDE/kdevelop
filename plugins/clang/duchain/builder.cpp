@@ -504,7 +504,7 @@ struct Visitor
     {
         // TODO: would be nice to instantiate a ConstantIntegralType here and set a value if possible
         // but unfortunately libclang doesn't offer API to that
-        // also see http://marc.info/?l=cfe-commits&m=131609142917881&w=2
+        // also see https://marc.info/?l=cfe-commits&m=131609142917881&w=2
         return new IntegralType(CursorKindTraits::integralType(TK));
     }
 
@@ -989,7 +989,7 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
 
     // TODO: Quite lacking API in libclang here.
     // No way to find out if this macro is function-like or not
-    // cf. http://clang.llvm.org/doxygen/classclang_1_1MacroInfo.html
+    // cf. https://clang.llvm.org/doxygen/classclang_1_1MacroInfo.html
     // And no way to get the actual definition text range
     // Should be quite easy to expose that in libclang, though
     // Let' still get some basic support for this and parse on our own, it's not that difficult

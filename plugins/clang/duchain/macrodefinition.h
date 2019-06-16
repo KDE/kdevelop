@@ -39,7 +39,7 @@ class MacroDefinitionData;
  *
  * In this example, the identifer is 'FOO_BAR', and the macro is function-like
  *
- * @note API designed after of http://clang.llvm.org/doxygen/classclang_1_1MacroInfo.html
+ * @note API designed after of https://clang.llvm.org/doxygen/classclang_1_1MacroInfo.html
  */
 class KDEVCLANGPRIVATE_EXPORT MacroDefinition : public KDevelop::Declaration
 {

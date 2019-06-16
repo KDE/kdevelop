@@ -22,7 +22,7 @@ Name[uk]=Шаблони файлів (SDK)
 Name[x-test]=xxFile Templates (SDK)xx
 Name[zh_CN]=文件模板 (SDK)
 
-ProvidersUrl=http://download.kde.org/ocs/providers.xml
+ProvidersUrl=https://download.kde.org/ocs/providers.xml
 Categories=KDevelop File Template
 TargetDir=kdevfiletemplates/templates
 Uncompress=never

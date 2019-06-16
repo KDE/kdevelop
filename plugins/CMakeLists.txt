@@ -97,7 +97,7 @@ ecm_optional_add_subdirectory(perforce)
 find_package(SubversionLibrary)
 set_package_properties(SubversionLibrary PROPERTIES
     PURPOSE "Support for Subversion integration"
-    URL "http://subversion.tigris.org"
+    URL "https://subversion.apache.org/"
     TYPE OPTIONAL)
 
 if(SubversionLibrary_FOUND)
@@ -144,14 +144,14 @@ endif()
 find_package(OktetaKastenControllers 0.3.1 CONFIG)
 set_package_properties(OktetaKastenControllers PROPERTIES
     PURPOSE "Required for building Okteta KDevelop plugin."
-    URL "http://kde.org/"
+    URL "https://kde.org/"
     TYPE OPTIONAL)
 if (OktetaKastenControllers_FOUND)
     find_package(KastenControllers CONFIG)
 
     set_package_properties(KastenControllers PROPERTIES
         PURPOSE "Required for building Okteta KDevelop plugin."
-        URL "http://kde.org/"
+        URL "https://kde.org/"
         TYPE OPTIONAL)
 endif()
 if (OktetaKastenControllers_FOUND AND KastenControllers_FOUND)

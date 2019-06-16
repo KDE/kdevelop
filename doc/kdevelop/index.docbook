@@ -11,7 +11,7 @@
 <authorgroup>
 <author>
 <personname>
-    <firstname>This documentation was converted from the KDE UserBase <ulink url=" http://userbase.kde.org/KDevelop4/Manual">KDevelop4/Manual</ulink> page.</firstname>
+    <firstname>This documentation was converted from the KDE UserBase <ulink url=" https://userbase.kde.org/KDevelop4/Manual">KDevelop4/Manual</ulink> page.</firstname>
 <surname></surname>
 </personname>
     </author>
@@ -35,7 +35,7 @@
 
 <!--userbase-content-->
 <chapter id="what-is-kdevelop"><title>What is &kdevelop;?</title>
-<para><ulink url="http://www.KDevelop.org">&kdevelop;</ulink> is a modern integrated development environment (IDE) for C++ (and other languages) that is one of many <ulink url="http://www.kde.org/applications/">KDE applications</ulink>. As such it runs on &Linux; (even if you run one of the other desktops, such as GNOME) but it is also available for most other variants of &UNIX; and for Windows as well.</para>
+<para><ulink url="https://www.kdevelop.org/">&kdevelop;</ulink> is a modern integrated development environment (IDE) for C++ (and other languages) that is one of many <ulink url="https://kde.org/applications/">KDE applications</ulink>. As such it runs on &Linux; (even if you run one of the other desktops, such as GNOME) but it is also available for most other variants of &UNIX; and for Windows as well.</para>
 <para>&kdevelop; offers all amenities of modern IDEs. For large projects and applications, the most important feature is that &kdevelop; <emphasis>understands C++</emphasis>: it parses the entire source base and remembers which classes have which member functions, where variables are defined, what their types are, and many other things about your code. For example, let's say one of your project's header files declares a class</para>
 <para><programlisting>
 class Car {
@@ -98,7 +98,7 @@ double bar ()
 </para></listitem>
 </itemizedlist>
 </para></listitem>
-</itemizedlist><para><note><para>The problem with the progress bar has been reported as <ulink url="http://bugs.kde.org/show_bug.cgi?id=256832">&kdevelop; bug 256832</ulink>.</para></note></para>
+</itemizedlist><para><note><para>The problem with the progress bar has been reported as <ulink url="https://bugs.kde.org/show_bug.cgi?id=256832">&kdevelop; bug 256832</ulink>.</para></note></para>
 <para><note><para>In this process, I also get the error message <emphasis>You need to specify a valid location for the project</emphasis> which can be safely ignored.</para></note></para>
 <itemizedlist>
 <listitem><para>It asks you to select a &kdevelop; project file in this directory. Since you probably don't have one yet, simply hit <guilabel>Next</guilabel>
@@ -187,7 +187,7 @@ double bar ()
 <listitem><para><guilabel>Konsole</guilabel>: Opens a command line window inside &kdevelop;'s main window, for the occasional command you may want to enter (&eg; to run <varname>./configure</varname>).
 </para></listitem>
 </itemizedlist>
-<para>A complete list of tools and views is given <ulink url="http://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list">here</ulink>.</para>
+<para>A complete list of tools and views is given <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool list">here</ulink>.</para>
 <para>For many programmers, vertical screen space is the most important. To this end, you can arrange your tool views at the left and right margin of the window: to move a tool, click on its symbol with the right mouse button and select a new position for it.</para>
 </sect1>
 <sect1 id="exploring-source-code"><title>Exploring source code</title>
@@ -796,7 +796,7 @@ for (typename Triangulation::active_cell_iterator
   </mediaobject>
 </screenshot></para>
 <para>Note that for this to work, the <guilabel>Snippets</guilabel> tool view need not be open or visible: you only ever need the tool view to define new snippets. An alternative, if less convenient, way to expand a snippet is to simply click on it in the respective tool view.</para>
-<para><note><para>Snippets are much more powerful than just explained. For a full description of what you can do with them, see the <ulink url="http://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets">detailed documentation of the Snippets tool</ulink>.</para></note></para>
+<para><note><para>Snippets are much more powerful than just explained. For a full description of what you can do with them, see the <ulink url="https://userbase.kde.org/Special:myLanguage/KDevelop4/Manual/Tool_list/Snippets">detailed documentation of the Snippets tool</ulink>.</para></note></para>
 </sect2>
 </sect1>
 <sect1 id="modes-and-working-sets"><title>Modes and working sets</title>
@@ -1116,7 +1116,7 @@ for (typename Triangulation::active_cell_iterator
   </mediaobject>
 </screenshot>
 </para>
-<para>Of course, if none of the available template suit your project, you can always create new ones. The easiest way is probably to copy and modify an existing template, while a short <ulink url="http://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template">tutorial</ulink> and a longer <ulink url="http://techbase.kde.org/Projects/KDevelop4/File_template_specification">specification document</ulink> are there to help you. To copy an installed template, open the template manager by clicking <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure KDevelop...</guisubmenu><guimenuitem>Templates</guimenuitem></menuchoice>, select the template you wish to copy, then click the <guilabel>Extract Template</guilabel> button. Select a destination folder, then click <guilabel>OK</guilabel>, and the contents of the template will be extracted into the selected folder. Now you can edit the template by opening the extracted files and modifying them. After you are done, you can import your new
+<para>Of course, if none of the available template suit your project, you can always create new ones. The easiest way is probably to copy and modify an existing template, while a short <ulink url="https://techbase.kde.org/Development/Tutorials/KDevelop/Creating_a_class_template">tutorial</ulink> and a longer <ulink url="https://techbase.kde.org/Projects/KDevelop4/File_template_specification">specification document</ulink> are there to help you. To copy an installed template, open the template manager by clicking <menuchoice><guimenu>Settings</guimenu><guisubmenu>Configure KDevelop...</guisubmenu><guimenuitem>Templates</guimenuitem></menuchoice>, select the template you wish to copy, then click the <guilabel>Extract Template</guilabel> button. Select a destination folder, then click <guilabel>OK</guilabel>, and the contents of the template will be extracted into the selected folder. Now you can edit the template by opening the extracted files and modifying them. After you are done, you can import your new
 template into &kdevelop; by opening the template manager, activating the appropriate tab (either <guilabel>Project Templates</guilabel> or <guilabel>File Templates</guilabel>) and clicking <guilabel>Load Template</guilabel>. Open the template description file, which is the one with the suffix either <varname>.kdevtemplate</varname> or <varname>.desktop</varname>. &kdevelop; will compress the files into a template archive and import the template.
 </para>
 <para><note><para>When copying an existing template, make sure you rename it before importing it again. Otherwise, you will either overwrite the old template, or will end up with two templates with identical names. To rename a template, rename the description file to something unique (but keep the suffix), and change the <filename>Name</filename> entry in the description file. </para></note>
@@ -1126,7 +1126,7 @@ template into &kdevelop; by opening the template manager, activating the appropr
 </sect1>
 </chapter>
 <chapter id="building-compiling-projects-with-custom-makefiles"><title>Building (compiling) projects with custom Makefiles</title>
-<para>Many projects describe how source files have to be compiled (and which files have to be recompiled once a source or header file changes) using Makefiles that are interpreted by the <guilabel>make</guilabel> program (see, for example, <ulink url="http://www.gnu.org/software/make/">GNU make</ulink>). For simple projects, it is often very easy to set up such a file by hand. Larger projects often integrate their Makefiles with the <guilabel>GNU autotools</guilabel> (autoconf, autoheader, automake). In this section, let us simply assume that you have a Makefile for your project and you want to teach &kdevelop; how to interact with it.</para>
+<para>Many projects describe how source files have to be compiled (and which files have to be recompiled once a source or header file changes) using Makefiles that are interpreted by the <guilabel>make</guilabel> program (see, for example, <ulink url="https://www.gnu.org/software/make/">GNU make</ulink>). For simple projects, it is often very easy to set up such a file by hand. Larger projects often integrate their Makefiles with the <guilabel>GNU autotools</guilabel> (autoconf, autoheader, automake). In this section, let us simply assume that you have a Makefile for your project and you want to teach &kdevelop; how to interact with it.</para>
 <para><note><para>&kdevelop; 4.x doesn't know about the <guilabel>GNU autotools</guilabel> at the time this section is written. If your project uses them, you will have to run <varname>./configure</varname> or any of the other related commands by hand on a command line. If you want to do this within &kdevelop;, open the <guilabel>Konsole</guilabel> tool (if necessary add it to the perimeter of the main window using the menu <menuchoice><guimenu>Windows</guimenu><guimenuitem>Add tool view</guimenuitem></menuchoice>) that gives you a shell window view and run <varname>./configure</varname> from the command line in this view.</para></note></para>
 <para>The first step is to teach &kdevelop; about targets in your Makefiles. There are two ways to do that: selecting individual Makefile targets, and choosing a set of targets you may want to build frequently. For both approaches, open the <guilabel>Projects</guilabel> tool by clicking on the <guilabel>Projects</guilabel> button on the perimeter of &kdevelop;'s main window (if you don't have this button see above how to add a tool's button there). The <guilabel>Projects</guilabel> tool window has two parts: the top half &mdash; titled <guilabel>Projects</guilabel> &mdash; lists all of your projects and let's you expand the underlying directory trees. The bottom half &mdash; titled <guilabel>Project Selection</guilabel> &mdash; lists a subset of those projects that will be built if you choose the menu item <menuchoice><guimenu>Project</guimenu><guimenuitem>Build selection</guimenuitem></menuchoice> or hit <keycap>F8</keycap>; we'll come back to this part below.</para>
 <sect1 id="building-individual-makefile-targets"><title>Building individual Makefile targets</title>
@@ -1301,7 +1301,7 @@ be another way).</para>
 </sect1>
 </chapter>
 <chapter id="working-with-version-control-systems"><title>Working with version control systems</title>
-<para>If you are working with larger projects, chances are that the source code is managed by a version control system such as <ulink url="http://subversion.apache.org">subversion</ulink> or <ulink url="http://git-scm.com/">git</ulink>. The following description is written with <guilabel>subversion</guilabel> in view but will be equally true if you use <guilabel>git</guilabel> or any other supported version control system.</para>
+<para>If you are working with larger projects, chances are that the source code is managed by a version control system such as <ulink url="https://subversion.apache.org/">subversion</ulink> or <ulink url="https://git-scm.com/">git</ulink>. The following description is written with <guilabel>subversion</guilabel> in view but will be equally true if you use <guilabel>git</guilabel> or any other supported version control system.</para>
 <para>First not that if the directory in which a project is located is under version control, &kdevelop; will automatically notice. In other words: It is not necessary that you tell &kdevelop; to check out a copy itself when setting up your project; it is ok to point &kdevelop; at a directory into which you have previously checked out a copy from the repository. If you have such a directory under version control, open the <guilabel>Projects</guilabel> tool view. There are then a number of things you can do:</para>
 <itemizedlist>
 <listitem><para>If your directory has become outdated, you can update it from the repository: Click on the project name with the right mouse button, go to the menu <guilabel>Subversion</guilabel> and select <guilabel>Update</guilabel>. This will bring all files that belong to this project up to date with respect to the repository.
@@ -1431,21 +1431,19 @@ changes in these files have nothing to do with the other ones I made to this pro
 </chapter>
 <chapter id="building-kdevelop-from-sources"><title>Building &kdevelop; from Sources</title>
 <para>If you want to have the latest features and bugfixes, you can build &kdevelop; yourself from the sources.</para>
-<para>There exists a more in-detail article <ulink url="http://techbase.kde.org/KDevelop4/HowToCompile">here</ulink>.</para>
-<para>Be aware that you <emphasis>could</emphasis> build an unstable version. To help the developers fix bugs, please keep the <varname>RelWithDebInfo</varname> and report bugs to http://bugs.kde.org, either per hand or using Dr. Konqi.</para>
+<para>There exists a more in-detail article <ulink url="https://community.kde.org/KDevelop/HowToCompile_v5">here</ulink>.</para>
+<para>Be aware that you <emphasis>could</emphasis> build an unstable version. To help the developers fix bugs, please keep the <varname>RelWithDebInfo</varname> and report bugs to https://bugs.kde.org, either per hand or using Dr. Konqi.</para>
 <sect1 id="requirements"><title>Requirements</title>
 <itemizedlist>
-<listitem><para>kdelibs-devel &gt;= 4.3 - http://www.kde.org
+<listitem><para>KDE Frameworks &gt;= 5.28 - https://www.kde.org/
 </para></listitem>
-<listitem><para>qt-devel &gt;= 4.5.2 - http://qt-project.org/
+<listitem><para>Qt &gt;= 5.7 - https://www.qt.io/
 </para></listitem>
-<listitem><para>boost-devel &gt;= 1.35 - http://www.boost.org
+<listitem><para>boost-devel &gt;= 1.35 - https://www.boost.org/
 </para></listitem>
-<listitem><para>g++ &gt;= 4.0 - http://gcc.gnu.org
+<listitem><para>g++ &gt;= 4.0 - https://gcc.gnu.org/
 </para></listitem>
-<listitem><para>CMake &gt;= 2.6.2 - http://www.cmake.org
-</para></listitem>
-<listitem><para>qjson-devel
+<listitem><para>CMake &gt;= 3.0 - https://www.cmake.org/
 </para></listitem>
 </itemizedlist>
 </sect1>
@@ -1511,7 +1509,7 @@ kbuildsycoca4
 <title>Credits and License</title>
     <para>
 Documentation Copyright see the UserBase
-    <ulink url="http://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history">KDevelop4/Manual page history</ulink></para>
+    <ulink url="https://userbase.kde.org/index.php?title=KDevelop4/Manual&amp;action=history">KDevelop4/Manual page history</ulink></para>
     <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 &underFDL;
 </chapter>

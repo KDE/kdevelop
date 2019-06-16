@@ -20,7 +20,7 @@
 #
 
 # BEGIN: Utilities for wrapping differences of Python 2.x and Python 3
-# Inspired by http://pythonhosted.org/six/
+# Inspired by https://pythonhosted.org/six/
 from __future__ import print_function
 import sys
 import lldb

@@ -16,7 +16,7 @@
 #
 # Uses the same include and library paths detected by FindLLVM.cmake
 #
-# See http://clang.llvm.org/docs/InternalsManual.html for full list of libraries
+# See https://clang.llvm.org/docs/InternalsManual.html for full list of libraries
 
 #=============================================================================
 # Copyright 2014-2015 Kevin Funk <kfunk@kde.org>

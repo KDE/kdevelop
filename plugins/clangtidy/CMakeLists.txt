@@ -3,7 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevclangtidy\")
 find_package(ClangTidy QUIET)
 set_package_properties(ClangTidy PROPERTIES
     DESCRIPTION "A clang-based C++ “linter” tool"
-    URL "http://clang.llvm.org/extra/clang-tidy/"
+    URL "https://clang.llvm.org/extra/clang-tidy/"
     TYPE RUNTIME
 )
 

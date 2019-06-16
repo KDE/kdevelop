@@ -262,7 +262,7 @@ int main(int argc, char** argv)
 
     KAboutData aboutData(QStringLiteral("duchainify"), i18n("duchainify"),
         QStringLiteral("1"), i18n("DUChain builder application"), KAboutLicense::GPL,
-        i18n("(c) 2009 David Nolden"), QString(), QStringLiteral("http://www.kdevelop.org"));
+        i18n("(c) 2009 David Nolden"), QString(), QStringLiteral("https://www.kdevelop.org/"));
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;

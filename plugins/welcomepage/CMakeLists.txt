@@ -17,7 +17,7 @@ declare_qt_logging_category(welcomepage_SRCS
 kdevplatform_add_plugin(kdevwelcomepage JSON kdevwelcomepage.json SOURCES ${welcomepage_SRCS})
 option(WELCOMEPAGE_ENABLE_QMLJSDEBUGGING "Enable the QML debugging infrastructure for the welcomepage plugin" OFF)
 if (WELCOMEPAGE_ENABLE_QMLJSDEBUGGING)
-    # cf. http://doc.qt.io/qt-5/qtquick-debugging.html#enabling-the-infrastructure
+    # cf. https://doc.qt.io/qt-5/qtquick-debugging.html#enabling-the-infrastructure
     target_compile_definitions(kdevwelcomepage PRIVATE QT_QML_DEBUG=1)
 endif()
 target_link_libraries(kdevwelcomepage

@@ -279,7 +279,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
         // cmake/automoc
         // example: AUTOMOC: error: /foo/bar.cpp The file includes (...),
         // example: AUTOMOC: error: /foo/bar.cpp: The file includes (...)
-        // note: ':' after file name isn't always appended, see http://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=317d8498aa02c9f486bf5071963bb2034777cdd6
+        // note: ':' after file name isn't always appended, see https://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=317d8498aa02c9f486bf5071963bb2034777cdd6
         // example: AUTOGEN: error: /foo/bar.cpp: The file includes (...)
         // note: AUTOMOC got renamed to AUTOGEN at some point
         ErrorFormat( QStringLiteral("^(AUTOMOC|AUTOGEN): error: (.*?) (The file .*)$"), 2, 0, 0 ),

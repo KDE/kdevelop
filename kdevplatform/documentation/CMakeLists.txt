@@ -4,13 +4,13 @@ find_package(Qt5WebEngineWidgets CONFIG)
 if(TARGET Qt5::WebEngineWidgets)
     set_package_properties(Qt5WebEngineWidgets PROPERTIES
         PURPOSE "QtWebEngine, for integrated documentation"
-        URL "http://qt-project.org/"
+        URL "https://qt.io/"
         TYPE REQUIRED)
 else()
     find_package(Qt5WebKitWidgets CONFIG)
     set_package_properties(Qt5WebKitWidgets PROPERTIES
         PURPOSE "QtWebKit, for integrated documentation"
-        URL "http://qt-project.org/"
+        URL "https://qt.io/"
         TYPE REQUIRED)
     set(USE_QTWEBKIT 1)
 endif()

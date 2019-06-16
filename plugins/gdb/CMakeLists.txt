@@ -1,7 +1,7 @@
 find_package(OktetaGui CONFIG)
 set_package_properties(OktetaGui PROPERTIES
     PURPOSE "Required for building MemoryViewer Widget."
-    URL "http://kde.org/"
+    URL "https://kde.org/"
     TYPE OPTIONAL)
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevgdb\")
 

@@ -104,7 +104,7 @@ void TestVcsAnnotation::testAssignOperator()
     const QDateTime date = QDateTime::fromString("2001-01-01T00:00:00+00:00", Qt::ISODate);
     const QString commitMessage("Commit A");
     const VcsAnnotationLine annotationLine = createAnnotationLine(lineNumber, text, author, revision, date, commitMessage);
-    const QUrl location(QStringLiteral("http://kdevelop.org"));
+    const QUrl location(QStringLiteral("https://kdevelop.org"));
 
     // test plain copy
     {
@@ -123,7 +123,7 @@ void TestVcsAnnotation::testAssignOperator()
         QVERIFY(annotationB.containsLine(lineNumber));
     }
 
-    const QUrl locationNew(QStringLiteral("http://kate-editor.org"));
+    const QUrl locationNew(QStringLiteral("https://kate-editor.org"));
 
     // test detach after changing A
     {

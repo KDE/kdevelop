@@ -175,7 +175,7 @@ bool MIParser::parseResult(Result *&result)
 {
     // be less strict about the format, see e.g.:
     // https://bugs.kde.org/show_bug.cgi?id=304730
-    // http://sourceware.org/bugzilla/show_bug.cgi?id=9659
+    // https://sourceware.org/bugzilla/show_bug.cgi?id=9659
 
     std::unique_ptr<Result> res(new Result);
 

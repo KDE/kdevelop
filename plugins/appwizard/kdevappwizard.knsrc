@@ -22,7 +22,7 @@ Name[uk]=Шаблони програм (SDK)
 Name[x-test]=xxApplication Templates (SDK)xx
 Name[zh_CN]=应用程序模板 (SDK)
 
-ProvidersUrl=http://download.kde.org/ocs/providers.xml
+ProvidersUrl=https://download.kde.org/ocs/providers.xml
 Categories=KDE App Template
 TargetDir=kdevappwizard/templates
 Uncompress=never

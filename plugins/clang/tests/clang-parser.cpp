@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
 {
     KAboutData aboutData( QStringLiteral("clang-parser"), i18n( "clang-parser" ),
                           QStringLiteral("1"), i18n("KDevelop Clang parser debugging utility"), KAboutLicense::GPL,
-                          i18n( "2013 Milian Wolff" ), QString(), QStringLiteral("http://www.kdevelop.org") );
+                          i18n( "2013 Milian Wolff" ), QString(), QStringLiteral("https://www.kdevelop.org/") );
 
     return KDevelopUtils::initAndRunParser<ClangParser>(aboutData, argc, argv);
 }

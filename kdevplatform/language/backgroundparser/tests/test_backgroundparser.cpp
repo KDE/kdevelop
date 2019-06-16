@@ -365,7 +365,7 @@ void TestBackgroundparser::benchmarkDocumentChanges()
     doc->save();
 }
 
-// see also: http://bugs.kde.org/355100
+// see also: https://bugs.kde.org/355100
 void TestBackgroundparser::testNoDeadlockInJobCreation()
 {
     m_jobPlan.clear();

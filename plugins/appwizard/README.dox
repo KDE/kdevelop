@@ -35,7 +35,7 @@ an example for a php template:
 [General]
 Name=Simple PHP script
 Category=PHP
-Comment=This generates a simplistic 'Hello world' program in PHP (http://www.php.net)
+Comment=This generates a simplistic 'Hello world' program in PHP (https://www.php.net/)
 Icon= php.png
 ShowFilesAfterGeneration=README.devel
 DefaultDestinatonDir=HOMEDIR/public_html
@@ -71,10 +71,10 @@ GNOME     GNOME application
 \feature Development for 3rd party developers made easy. :)
 \feature A further step to rapid application development (RAD).
 
-\bug bugs in <a href="http://bugs.kde.org/buglist.cgi?product=kdevelop&component=appwizard&bug_status=UNCONFIRMED&bug_status=NEW&bug_status=ASSIGNED&bug_status=REOPENED&order=Bug+Number">appwizard component at Bugzilla database</a>
+\bug bugs in <a href=https://bugs.kde.org/buglist.cgi?component=appwizard&product=kdevplatform&resolution=---">appwizard component at Bugzilla database</a>
 \bug The C/C++ applications use libtool as a degugging shell. That doesn't work. Please remove libtool from "Project Options...-> Debugger -> Debugging Shell" to make them work.
 
-\requirement <a href="http://www.perl.com"> perl </a> >= 5.004
+\requirement <a href="https://www.perl.com/"> perl </a> >= 5.004
 
 
 */

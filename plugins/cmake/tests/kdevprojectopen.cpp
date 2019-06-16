@@ -74,7 +74,7 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
 
     KAboutData aboutData( QStringLiteral("kdevprojectopen"), i18n( "KDevelop" ), QStringLiteral("0.99"), i18n("opens a project then closes it, debugging tool"), KAboutLicense::GPL,
-                          i18n( "Copyright 1999-2012, The KDevelop developers" ), QString(), QStringLiteral("http://www.kdevelop.org/") );
+                          i18n( "Copyright 1999-2012, The KDevelop developers" ), QString(), QStringLiteral("https://www.kdevelop.org/") );
     aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "" ), QStringLiteral("aleixpol@kde.org") );
     KAboutData::setApplicationData(aboutData);
 

@@ -25,7 +25,7 @@ set(Boost_ADDITIONAL_VERSIONS 1.39.0 1.39)
 find_package(Boost 1.35.0)
 set_package_properties(Boost PROPERTIES
     PURPOSE "Boost libraries for enabling the classbrowser"
-    URL "http://www.boost.org"
+    URL "https://www.boost.org/"
     TYPE REQUIRED)
 
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config-kdevplatform.h.cmake
