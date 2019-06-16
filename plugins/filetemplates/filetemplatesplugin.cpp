@@ -245,8 +245,8 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
     while (dir.cdUp() && level < 5)
     {
         const QStringList filters{QStringLiteral("*.kdevtemplate"), QStringLiteral("*.desktop")};
-        foreach (const QString& entry, dir.entryList(filters))
-        {
+        const auto entries = dir.entryList(filters);
+        for (const QString& entry : entries) {
             qCDebug(PLUGIN_FILETEMPLATES) << "Trying entry" << entry;
             /*
             * This logic is not perfect, but it works for most cases.
@@ -277,8 +277,8 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
             if (group.hasKey("Files"))
             {
                 qCDebug(PLUGIN_FILETEMPLATES) << "Group has files " << group.readEntry("Files", QStringList());
-                foreach (const QString& outputFile, group.readEntry("Files", QStringList()))
-                {
+                const auto outputFiles = group.readEntry("Files", QStringList());
+                for (const QString& outputFile : outputFiles) {
                     if (dir.absoluteFilePath(config->group(outputFile).readEntry("File")) == url.toLocalFile())
                     {
                         return FileTemplate;

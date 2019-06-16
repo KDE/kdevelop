@@ -88,7 +88,7 @@ void LicensePagePrivate::initializeLicenses()
 
     std::sort(availableLicenses.begin(), availableLicenses.end());
 
-    foreach(const LicenseInfo& info, availableLicenses) {
+    for (const LicenseInfo& info : qAsConst(availableLicenses)) {
         license->licenseComboBox->addItem(info.name);
     }
     //Finally add the option other for user specified licenses

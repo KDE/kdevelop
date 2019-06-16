@@ -86,8 +86,8 @@ void ClassMembersPage::setMembers(const VariableDescriptionList& members)
 VariableDescriptionList ClassMembersPage::members() const
 {
     VariableDescriptionList list;
-    foreach (const QString& item, d->editListWidget->items())
-    {
+    const auto items = d->editListWidget->items();
+    for (const QString& item : items) {
         VariableDescription var;
         QStringList parts = item.split(QLatin1Char(' '));
         switch (parts.size())

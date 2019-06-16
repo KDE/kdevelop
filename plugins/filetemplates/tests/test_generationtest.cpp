@@ -119,7 +119,8 @@ void TestGenerationTest::cppTemplate()
 QHash< QString, QUrl > TestGenerationTest::urls (const SourceFileTemplate& file)
 {
     QHash<QString, QUrl> ret;
-    foreach (const SourceFileTemplate::OutputFile& output, file.outputFiles()) {
+    const auto outputFiles = file.outputFiles();
+    for (const SourceFileTemplate::OutputFile& output : outputFiles) {
         QUrl url = Path(Path(baseUrl), renderer->render(output.outputName).toLower()).toUrl();
         ret.insert(output.identifier, url);
     }

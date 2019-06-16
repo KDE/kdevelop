@@ -113,7 +113,8 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     QTemporaryDir dir;
     QUrl base = QUrl::fromLocalFile(dir.path() + QLatin1Char('/'));
     QHash<QString, QUrl> fileUrls;
-    foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
+    const auto outputFiles = fileTemplate.outputFiles();
+    for (const SourceFileTemplate::OutputFile& out : outputFiles) {
         QUrl url = base.resolved(QUrl(renderer.render(out.outputName)));
         fileUrls.insert(out.identifier, url);
     }
@@ -126,7 +127,7 @@ void TemplateSelectionPagePrivate::previewTemplate(const QString& file)
     }
 
     int idx = 0;
-    foreach(const SourceFileTemplate::OutputFile& out, fileTemplate.outputFiles()) {
+    for (const SourceFileTemplate::OutputFile& out : outputFiles) {
         TemplatePreview* preview = nullptr;
         if (ui->tabWidget->count() > idx) {
             // reuse existing tab
@@ -169,9 +170,9 @@ void TemplateSelectionPagePrivate::loadFileClicked()
     {
         return;
     }
-    
-    foreach(const QString& fileName, dlg->selectedFiles())
-    {
+
+    const auto selectedFiles = dlg->selectedFiles();
+    for (const QString& fileName : selectedFiles) {
         QString destination = model->loadTemplateFile(fileName);
         QModelIndexList indexes = model->templateIndexes(destination);
         int n = indexes.size();

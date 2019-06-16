@@ -246,8 +246,8 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
 
     QList<ProjectFileItem*> fileItems;
     for (const QUrl& fileUrl : fileUrls) {
-        foreach (ProjectBaseItem* item, project->itemsForPath(IndexedString(KIO::upUrl(fileUrl))))
-        {
+        const auto items = project->itemsForPath(IndexedString(KIO::upUrl(fileUrl)));
+        for (ProjectBaseItem* item : items) {
             if (ProjectFolderItem* folder = item->folder())
             {
                 ///FIXME: use Path instead of QUrl in the template class assistant

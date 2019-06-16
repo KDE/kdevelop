@@ -157,8 +157,7 @@ QVariantHash TemplateOptionsPage::templateOptions() const
 {
     QVariantHash values;
 
-    foreach (const SourceFileTemplate::ConfigOption& entry, d->entries)
-    {
+    for (const SourceFileTemplate::ConfigOption& entry : qAsConst(d->entries)) {
         Q_ASSERT(d->controls.contains(entry.name));
         Q_ASSERT(d->typeProperties.contains(entry.type));
 

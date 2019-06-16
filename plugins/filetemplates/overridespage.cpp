@@ -147,7 +147,8 @@ void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
         }
 
         //For this internal context get all the function declarations inside the class
-        foreach (Declaration * childDeclaration, context->localDeclarations()) {
+        const auto localDeclarations = context->localDeclarations();
+        for (Declaration* childDeclaration : localDeclarations) {
             if (auto * func = dynamic_cast<AbstractFunctionDeclaration*>(childDeclaration))
             {
                 if (func->isVirtual())
