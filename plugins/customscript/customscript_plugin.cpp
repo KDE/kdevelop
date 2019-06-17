@@ -124,7 +124,8 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
     useText = leftContext + useText + rightContext;
 
     QMap<QString, QString> projectVariables;
-    foreach (IProject* project, ICore::self()->projectController()->projects()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* project : projects) {
         projectVariables[project->name()] = project->path().toUrl().toLocalFile();
     }
 
@@ -212,7 +213,8 @@ QString CustomScriptPlugin::formatSource(const QString& text, const QUrl& url, c
 static QVector<SourceFormatterStyle> stylesFromLanguagePlugins()
 {
     QVector<KDevelop::SourceFormatterStyle> styles;
-    foreach (auto lang, ICore::self()->languageController()->loadedLanguages()) {
+    const auto loadedLanguages = ICore::self()->languageController()->loadedLanguages();
+    for (auto* lang : loadedLanguages) {
         const SourceFormatterItemList& languageStyles = lang->sourceFormatterItems();
         for (const SourceFormatterStyleItem& item: languageStyles) {
             if (item.engine == QLatin1String("customscript")) {
