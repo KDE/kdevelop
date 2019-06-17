@@ -162,7 +162,8 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
         urls = filectx->urls();
     } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
         auto* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
-        foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
+        const auto items = projctx->items();
+        for (KDevelop::ProjectBaseItem* item : items) {
             if ( item->file() ) {
                 urls << item->file()->path().toUrl();
             }
@@ -180,10 +181,10 @@ KDevelop::ContextMenuExtension FlatpakPlugin::contextMenuExtension(KDevelop::Con
 
     if ( !urls.isEmpty() ) {
         KDevelop::ContextMenuExtension ext;
-        foreach(const QUrl &url, urls) {
+        for (const QUrl& url : qAsConst(urls)) {
             const KDevelop::Path file(url);
-
-            foreach(const QString &arch, availableArches(file)) {
+            const auto arches = availableArches(file);
+            for (const QString& arch : arches) {
                 auto action = new QAction(i18n("Build flatpak %1 for %2", file.lastPathSegment(), arch), parent);
                 connect(action, &QAction::triggered, this, [this, file, arch]() {
                     createRuntime(file, arch);
