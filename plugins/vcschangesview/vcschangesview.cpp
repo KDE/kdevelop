@@ -54,9 +54,11 @@ VcsChangesView::VcsChangesView(VcsProjectIntegrationPlugin* plugin, QWidget* par
     setWindowIcon(QIcon::fromTheme(QStringLiteral("exchange-positions"), windowIcon()));
     
     connect(this, &VcsChangesView::customContextMenuRequested, this, &VcsChangesView::popupContextMenu);
-    
-    foreach(QAction* action, plugin->actionCollection()->actions())
+
+    const auto pluginActions = plugin->actionCollection()->actions();
+    for (QAction* action : pluginActions) {
         addAction(action);
+    }
     
     QAction* action = plugin->actionCollection()->action(QStringLiteral("locate_document"));
     connect(action, &QAction::triggered, this, &VcsChangesView::selectCurrentDocument);
@@ -101,9 +103,10 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     } else {
         QList<ProjectBaseItem*> items;
         items.reserve(projects.size());
-        foreach(IProject* p, projects)
+        for (IProject* p : qAsConst(projects)) {
             items += p->projectItem();
-        
+        }
+
         KDevelop::ProjectItemContextImpl context(items);
         extensions = ICore::self()->pluginController()->queryPluginsForContextMenuExtensions(&context, menu);
         
@@ -115,8 +118,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     QList<QAction*> projectActions;
     QList<QAction*> fileActions;
     QList<QAction*> runActions;
-    foreach( const ContextMenuExtension& ext, extensions )
-    {
+    for (const ContextMenuExtension& ext : qAsConst(extensions)) {
         buildActions += ext.actions(ContextMenuExtension::BuildGroup);
         fileActions += ext.actions(ContextMenuExtension::FileGroup);
         projectActions += ext.actions(ContextMenuExtension::ProjectGroup);
