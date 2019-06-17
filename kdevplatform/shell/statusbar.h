@@ -21,7 +21,7 @@
 #define KDEVPLATFORM_STATUSBAR_H
 
 #include <QTime>
-#include <QMap>
+#include <QHash>
 #include <QStatusBar>
 
 class QTimer;
@@ -82,11 +82,11 @@ private:
         int timeout;
     };
 
-    QMap<IStatus*, Message> m_messages;
+    QHash<IStatus*, Message> m_messages;
     QTimer* const m_timer;
     QTime m_time;
     Sublime::View* m_currentView;
-    QMap<IStatus*,ProgressItem*> m_progressItems;
+    QHash<IStatus*,ProgressItem*> m_progressItems;
     StatusbarProgressWidget* m_progressWidget; // embedded in the statusbar, shows a single progressbar & button to expand the overlay widget
     ProgressDialog* m_progressDialog; // the actual overlay widget that contains multiple progressbars and status messages
     ProgressManager* m_progressController; // progress item model

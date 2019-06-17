@@ -155,7 +155,7 @@ void StatusBar::showErrorMessage(const QString& message, int timeout)
 
 void StatusBar::slotTimeout()
 {
-    QMutableMapIterator<IStatus*, Message> it = m_messages;
+    QMutableHashIterator<IStatus*, Message> it = m_messages;
 
     while (it.hasNext()) {
         it.next();
