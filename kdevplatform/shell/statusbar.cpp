@@ -107,20 +107,15 @@ void StatusBar::registerStatus(QObject* status)
     Q_ASSERT(qobject_cast<IStatus*>(status));
     // can't convert this to new signal slot syntax, IStatus is not a QObject
     connect(status, SIGNAL(clearMessage(KDevelop::IStatus*)),
-            SLOT(clearMessage(KDevelop::IStatus*)),
-            Qt::QueuedConnection);
+            SLOT(clearMessage(KDevelop::IStatus*)));
     connect(status, SIGNAL(showMessage(KDevelop::IStatus*,QString,int)),
-            SLOT(showMessage(KDevelop::IStatus*,QString,int)),
-            Qt::QueuedConnection);
+            SLOT(showMessage(KDevelop::IStatus*,QString,int)));
     connect(status, SIGNAL(hideProgress(KDevelop::IStatus*)),
-            SLOT(hideProgress(KDevelop::IStatus*)),
-            Qt::QueuedConnection);
+            SLOT(hideProgress(KDevelop::IStatus*)));
     connect(status, SIGNAL(showProgress(KDevelop::IStatus*,int,int,int)),
-            SLOT(showProgress(KDevelop::IStatus*,int,int,int)),
-            Qt::QueuedConnection);
+            SLOT(showProgress(KDevelop::IStatus*,int,int,int)));
     connect(status, SIGNAL(showErrorMessage(QString,int)),
-            SLOT(showErrorMessage(QString,int)),
-            Qt::QueuedConnection);
+            SLOT(showErrorMessage(QString,int)));
 }
 
 QWidget* errorMessage(QWidget* parent, const QString& text)
@@ -203,55 +198,69 @@ void StatusBar::updateMessage()
 
 void StatusBar::clearMessage( IStatus* status )
 {
-    const auto messageIt = m_messages.find(status);
-    if (messageIt != m_messages.end()) {
-        m_messages.erase(messageIt);
-        updateMessage();
-    }
+    QTimer::singleShot(0, this, [this, status]() {
+        const auto messageIt = m_messages.find(status);
+        if (messageIt != m_messages.end()) {
+            m_messages.erase(messageIt);
+            updateMessage();
+        }
+    });
 }
 
 void StatusBar::showMessage( IStatus* status, const QString & message, int timeout)
 {
-    const auto progressItemIt = m_progressItems.constFind(status);
-    if (progressItemIt != m_progressItems.constEnd()) {
-        ProgressItem* i = *progressItemIt;
-        i->setStatus(message);
-    } else {
-        Message m;
-        m.text = message;
-        m.timeout = timeout;
-        m_messages.insert(status, m);
-        updateMessage();
-    }
+    QPointer<QObject> context = dynamic_cast<QObject*>(status);
+    QTimer::singleShot(0, this, [this, context, status, message, timeout]() {
+        if (!context)
+            return;
+        const auto progressItemIt = m_progressItems.constFind(status);
+        if (progressItemIt != m_progressItems.constEnd()) {
+            ProgressItem* i = *progressItemIt;
+            i->setStatus(message);
+        } else {
+            Message m;
+            m.text = message;
+            m.timeout = timeout;
+            m_messages.insert(status, m);
+            updateMessage();
+        }
+    });
 }
 
 void StatusBar::hideProgress( IStatus* status )
 {
-    const auto progressItemIt = m_progressItems.find(status);
-    if (progressItemIt != m_progressItems.end()) {
-        (*progressItemIt)->setComplete();
-        m_progressItems.erase(progressItemIt);
-    }
+    QTimer::singleShot(0, this, [this, status]() {
+        const auto progressItemIt = m_progressItems.find(status);
+        if (progressItemIt != m_progressItems.end()) {
+            (*progressItemIt)->setComplete();
+            m_progressItems.erase(progressItemIt);
+        }
+    });
 }
 
 void StatusBar::showProgress( IStatus* status, int minimum, int maximum, int value)
 {
-    auto progressItemIt = m_progressItems.find(status);
-    if (progressItemIt == m_progressItems.end()) {
-        bool canBeCanceled = false;
-        progressItemIt = m_progressItems.insert(status, m_progressController->createProgressItem(
-            ProgressManager::createUniqueID(), status->statusName(), QString(), canBeCanceled));
-    }
-    
-    ProgressItem* i = *progressItemIt;
-    m_progressWidget->raise();
-    m_progressDialog->raise();
-    if( minimum == 0 && maximum == 0 ) {
-        i->setUsesBusyIndicator( true );
-    } else {
-        i->setUsesBusyIndicator( false );
-        i->setProgress( 100*value/maximum );
-    }
+    QPointer<QObject> context = dynamic_cast<QObject*>(status);
+    QTimer::singleShot(0, this, [this, context, status, minimum, maximum, value]() {
+        if (!context)
+            return;
+        auto progressItemIt = m_progressItems.find(status);
+        if (progressItemIt == m_progressItems.end()) {
+            bool canBeCanceled = false;
+            progressItemIt = m_progressItems.insert(status, m_progressController->createProgressItem(
+                ProgressManager::createUniqueID(), status->statusName(), QString(), canBeCanceled));
+        }
+
+        ProgressItem* i = *progressItemIt;
+        m_progressWidget->raise();
+        m_progressDialog->raise();
+        if( minimum == 0 && maximum == 0 ) {
+            i->setUsesBusyIndicator( true );
+        } else {
+            i->setUsesBusyIndicator( false );
+            i->setProgress( 100*value/maximum );
+        }
+    });
 }
 
 }
