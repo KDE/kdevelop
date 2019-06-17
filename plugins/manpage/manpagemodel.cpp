@@ -165,7 +165,7 @@ void ManPageModel::sectionLoaded()
         // End of init
         m_loaded = true;
         m_index.clear();
-        foreach (const auto& entries, m_manMap) {
+        for (const auto& entries : qAsConst(m_manMap)) {
             m_index += entries.toList();
         }
         m_index.sort();
