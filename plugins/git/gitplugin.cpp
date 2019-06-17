@@ -523,7 +523,8 @@ void GitPlugin::addNotVersionedFiles(const QDir& dir, const QList<QUrl>& files)
 
 bool isEmptyDirStructure(const QDir &dir)
 {
-    foreach (const QFileInfo &i, dir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot)) {
+    const auto infos = dir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
+    for (const QFileInfo& i : infos) {
         if (i.isDir()) {
             if (!isEmptyDirStructure(QDir(i.filePath()))) return false;
         } else if (i.isFile()) {
@@ -916,8 +917,8 @@ QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
                     //and will use empty column for all further (from top to bottom) revisions
                     //FIXME: we should set CROSS between parent and child (and do it when find merge point)
                     additionalFlags[i] = false;
-                    foreach(const QString &sha, item.parents())
-                    {
+                    const auto parentShas = item.parents();
+                    for (const QString& sha : parentShas) {
                         if (branchesShas[i].contains(sha))
                             additionalFlags[i] = true;
                     }
