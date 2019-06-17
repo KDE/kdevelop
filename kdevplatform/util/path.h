@@ -125,6 +125,8 @@ public:
      */
     Path(const Path& base, const QString& subPath = QString());
 
+    inline Path& operator=(const Path& other) = default;
+
     /**
      * Equality comparison between @p other and this Path.
      *

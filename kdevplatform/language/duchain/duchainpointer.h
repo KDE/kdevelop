@@ -177,6 +177,8 @@ public:
         return static_cast<Type*>(d->base());
     }
 
+    DUChainPointer<Type>& operator=(const DUChainPointer<Type>& rhs) = default;
+
     DUChainPointer<Type>& operator=(Type* rhs)
     {
         if (rhs)
