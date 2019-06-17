@@ -217,7 +217,8 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
         }
 
         auto* actionGroup = new QActionGroup(menu);
-        foreach(const QString& name, m_info.keys()) {
+        for (auto it = m_info.constBegin(), end = m_info.constEnd(); it != end; ++it) {
+            const QString& name = it.key();
             auto* act=new QtHelpAlternativeLink(name, this, actionGroup);
             act->setCheckable(true);
             act->setChecked(name==m_current.key());
