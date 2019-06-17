@@ -105,7 +105,8 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
         urls = filectx->urls();
     } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
         auto* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
-        foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
+        const auto items = projctx->items();
+        for (KDevelop::ProjectBaseItem* item : items) {
             if ( item->file() ) {
                 urls << item->path().toUrl();
             }
@@ -122,7 +123,7 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
 
     if ( !urls.isEmpty() ) {
         KDevelop::ContextMenuExtension ext;
-        foreach(const QUrl &url, urls) {
+        for (const QUrl& url : qAsConst(urls)) {
             const KDevelop::Path file(url);
 
             auto action = new QAction(QIcon::fromTheme(QStringLiteral("text-dockerfile")), i18n("docker build '%1'", file.path()), parent);
