@@ -43,7 +43,9 @@ class TypePtr
 
 public:
     using Base::QExplicitlySharedDataPointer;
+    TypePtr<T>() = default;
     TypePtr<T>(const TypePtr<T>&) = default;
+
     using Base::operator=;
     TypePtr<T>& operator=(const TypePtr<T>&) = default;
 
