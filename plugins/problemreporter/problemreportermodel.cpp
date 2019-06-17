@@ -100,7 +100,7 @@ void ProblemReporterModel::forceFullUpdate()
         documents += store()->documents()->imports();
 
     DUChainReadLocker lock(DUChain::lock());
-    foreach (const IndexedString& document, documents) {
+    for (const IndexedString& document : qAsConst(documents)) {
         if (document.isEmpty())
             continue;
 

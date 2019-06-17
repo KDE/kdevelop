@@ -88,7 +88,7 @@ void ProblemsView::setupActions()
         m_showAllAction->setToolTip(i18nc("@info:tooltip", "Display ALL problems"));
         actions.push_back(m_showAllAction);
 
-        foreach (QAction* action, actions) {
+        for (QAction* action : qAsConst(actions)) {
             action->setCheckable(true);
             scopeActions->addAction(action);
             m_scopeMenu->addAction(action);

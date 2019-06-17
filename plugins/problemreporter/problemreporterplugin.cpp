@@ -163,7 +163,8 @@ void ProblemReporterPlugin::updateHighlight(const KDevelop::IndexedString& url)
     KDevelop::ProblemModelSet* pms(core()->languageController()->problemModelSet());
     QVector<IProblem::Ptr> documentProblems;
 
-    foreach (const ModelData& modelData, pms->models()) {
+    const auto models = pms->models();
+    for (const ModelData& modelData : models) {
         documentProblems += modelData.model->problems({url});
     }
 
@@ -194,14 +195,17 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
 
         TopDUContext* top = DUChainUtils::standardContextForUrl(editorContext->url());
         if (top) {
-            foreach (KDevelop::ProblemPointer problem, top->problems()) {
+            const auto problems = top->problems();
+            for (auto& problem : problems) {
                 if (problem->range().contains(
                         top->transformToLocalRevision(KTextEditor::Cursor(editorContext->position())))) {
                     KDevelop::IAssistant::Ptr solution = problem->solutionAssistant();
                     if (solution) {
                         title = solution->title();
-                        foreach (KDevelop::IAssistantAction::Ptr action, solution->actions())
+                        const auto solutionActions = solution->actions();
+                        for (auto& action : solutionActions) {
                             actions << action->toQAction(parent);
+                        }
                     }
                 }
             }
@@ -216,8 +220,9 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
             }
 
             auto* menu = new QMenu(text, parent);
-            foreach (QAction* action, actions)
+            for (QAction* action : qAsConst(actions)) {
                 menu->addAction(action);
+            }
 
             extension.addAction(ContextMenuExtension::ExtensionGroup, menu->menuAction());
         }
@@ -227,7 +232,8 @@ KDevelop::ContextMenuExtension ProblemReporterPlugin::contextMenuExtension(KDeve
 
 void ProblemReporterPlugin::updateOpenedDocumentsHighlight()
 {
-    foreach(auto document, core()->documentController()->openDocuments()) {
+    const auto openDocuments = core()->documentController()->openDocuments();
+    for (auto* document : openDocuments) {
         // Skip non-text documents.
         // This also fixes crash caused by calling updateOpenedDocumentsHighlight() method without
         // any opened documents. In this case documentController()->openDocuments() returns single
