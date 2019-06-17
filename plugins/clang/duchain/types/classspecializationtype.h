@@ -39,12 +39,11 @@ struct ClassSpecializationTypeData : public KDevelop::StructureTypeData
 
     ~ClassSpecializationTypeData();
 
+    ClassSpecializationTypeData& operator=(const ClassSpecializationTypeData&) = delete;
+
     START_APPENDED_LISTS_BASE(ClassSpecializationTypeData, StructureTypeData);
     APPENDED_LIST_FIRST(ClassSpecializationTypeData, IndexedType, parameters);
     END_APPENDED_LISTS(ClassSpecializationTypeData, parameters);
-
-private:
-    ClassSpecializationTypeData& operator=(const ClassSpecializationTypeData&);
 };
 
 // This type represents a template class specialization.

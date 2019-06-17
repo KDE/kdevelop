@@ -49,6 +49,7 @@ public:
     DUContextData();
     ~DUContextData();
     DUContextData(const DUContextData& rhs);
+    DUContextData& operator=(const DUContextData&) = delete;
 
     IndexedQualifiedIdentifier m_scopeIdentifier;
     IndexedDeclaration m_owner;
@@ -74,12 +75,6 @@ public:
     bool m_inSymbolTable : 1;
     bool m_anonymousInParent : 1; //Whether this context was added anonymously into the parent. This means that it cannot be found as child-context in the parent.
     bool m_propagateDeclarations : 1;
-
-private:
-    DUContextData& operator=(const DUContextData&)
-    {
-        return *this;
-    }
 };
 }
 

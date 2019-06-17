@@ -176,6 +176,8 @@ public:
      */
     InsertArtificialCodeRepresentation(const IndexedString& file, const QString& text);
     ~InsertArtificialCodeRepresentation();
+    InsertArtificialCodeRepresentation(const InsertArtificialCodeRepresentation&) = delete;
+    InsertArtificialCodeRepresentation& operator=(const InsertArtificialCodeRepresentation&) = delete;
 
     void setText(const QString& text);
     QString text() const;
@@ -185,9 +187,6 @@ public:
     IndexedString file();
 
 private:
-    InsertArtificialCodeRepresentation(const InsertArtificialCodeRepresentation&);
-    InsertArtificialCodeRepresentation& operator=(const InsertArtificialCodeRepresentation&);
-
     IndexedString m_file;
 };
 

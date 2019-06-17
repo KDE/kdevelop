@@ -1063,6 +1063,8 @@ public:
         rhs.m_start = nullptr;
     }
 
+    DynamicItem& operator=(const DynamicItem&) = delete;
+
     Item* operator->()
     {
         return m_item;
@@ -1072,7 +1074,6 @@ public:
 
 private:
     mutable void* m_start;
-    DynamicItem& operator=(const DynamicItem&);
 };
 
 ///@tparam Item See ExampleItem

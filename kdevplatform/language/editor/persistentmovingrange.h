@@ -55,6 +55,9 @@ public:
     PersistentMovingRange(const KTextEditor::Range& range, const IndexedString& document, bool shouldExpand = false);
     ~PersistentMovingRange();
 
+    PersistentMovingRange(const PersistentMovingRange&) = delete;
+    PersistentMovingRange& operator=(const PersistentMovingRange& rhs) = delete;
+
     IndexedString document() const;
 
     /**
@@ -85,9 +88,6 @@ public:
     bool valid() const;
 
 private:
-
-    PersistentMovingRange(const PersistentMovingRange&);
-    PersistentMovingRange& operator=(const PersistentMovingRange& rhs);
     PersistentMovingRangePrivate* m_p;
 };
 }

@@ -47,6 +47,9 @@ public:
     /**Destructor.*/
     ~EditorContext() override;
 
+    EditorContext(const EditorContext&) = delete;
+    EditorContext& operator=(const EditorContext&) = delete;
+
     int type() const override;
 
     /**@return The url for the file which this context was invoked for.*/
@@ -71,9 +74,6 @@ public:
 
 private:
     const QScopedPointer<class EditorContextPrivate> d;
-
-    EditorContext(const EditorContext&);
-    EditorContext& operator=(const EditorContext&);
 };
 }
 

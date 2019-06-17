@@ -50,11 +50,6 @@ ClassSpecializationTypeData::~ClassSpecializationTypeData()
     freeAppendedLists();
 }
 
-ClassSpecializationTypeData& ClassSpecializationTypeData::operator=(const ClassSpecializationTypeData&)
-{
-    return *this;
-}
-
 ClassSpecializationType::ClassSpecializationType(const ClassSpecializationType& rhs)
     : KDevelop::StructureType(copyData<ClassSpecializationType>(*rhs.d_func()))
 {}

@@ -48,6 +48,9 @@ class KDEVPLATFORMUTIL_EXPORT ForegroundLock
 public:
     explicit ForegroundLock(bool lock = true);
     ~ForegroundLock();
+    ForegroundLock(const ForegroundLock& rhs) = delete;
+    ForegroundLock& operator=(const ForegroundLock& rhs) = delete;
+
     void unlock();
     void relock();
     bool tryLock();
@@ -58,8 +61,6 @@ public:
     bool isLocked() const;
 
 private:
-    ForegroundLock(const ForegroundLock& rhs);
-    ForegroundLock& operator=(const ForegroundLock& rhs);
     bool m_locked = false;
 };
 
