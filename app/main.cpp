@@ -268,7 +268,8 @@ static int openProjectInRunningInstance(const QVector<UrlInfo>& paths, qint64 pi
 static qint64 getRunningSessionPid()
 {
     SessionInfos candidates;
-    foreach( const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfos() ) {
+    const auto availableSessionInfos = KDevelop::SessionController::availableSessionInfos();
+    for (const KDevelop::SessionInfo& si : availableSessionInfos) {
         if( KDevelop::SessionController::isSessionRunning(si.uuid.toString()) ) {
             candidates << si;
         }
@@ -297,7 +298,7 @@ static QString findSessionId(const SessionInfos& availableSessionInfos, const QS
         if ( session == si.name || session == si.uuid.toString() ) {
             return si.uuid.toString();
         } else if (projectAsSession.isEmpty()) {
-            foreach(const QUrl& k, si.projects) {
+            for (const QUrl& k : si.projects) {
                 QString fn(k.fileName());
                 fn = fn.left(fn.indexOf(QLatin1Char('.')));
                 if ( session == fn ) {
@@ -525,8 +526,8 @@ int main( int argc, char *argv[] )
         QTextStream qout(stdout);
         qout << endl << ki18n("Available sessions (use '-s HASH' or '-s NAME' to open a specific one):").toString() << endl << endl;
         qout << QStringLiteral("%1").arg(ki18n("Hash").toString(), -38) << '\t' << ki18n("Name: Opened Projects").toString() << endl;
-        foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfos())
-        {
+        const auto availableSessionInfos = KDevelop::SessionController::availableSessionInfos();
+        for (const KDevelop::SessionInfo& si : availableSessionInfos) {
             if ( si.name.isEmpty() && si.projects.isEmpty() ) {
                 continue;
             }
@@ -543,7 +544,8 @@ int main( int argc, char *argv[] )
     // Handle extra arguments, which stand for files to open
     QVector<UrlInfo> initialFiles;
     QVector<UrlInfo> initialDirectories;
-    foreach (const QString &file, parser.positionalArguments()) {
+    const auto files = parser.positionalArguments();
+    for (const QString& file : files) {
         const UrlInfo info(file);
         if (info.isDirectory()) {
             initialDirectories.append(info);
@@ -775,7 +777,8 @@ int main( int argc, char *argv[] )
 
         KDevelop::LaunchConfiguration* launch = nullptr;
         qCDebug(APP) << launchName;
-        foreach (KDevelop::LaunchConfiguration *l, core->runControllerInternal()->launchConfigurationsInternal()) {
+        const auto launchconfigurations = core->runControllerInternal()->launchConfigurationsInternal();
+        for (KDevelop::LaunchConfiguration* l : launchconfigurations) {
             qCDebug(APP) << l->name();
             if (l->name() == launchName) {
                 launch = l;
@@ -783,7 +786,8 @@ int main( int argc, char *argv[] )
         }
 
         KDevelop::LaunchConfigurationType *type = nullptr;
-        foreach (KDevelop::LaunchConfigurationType *t, core->runController()->launchConfigurationTypes()) {
+        const auto launchConfigurationTypes = core->runController()->launchConfigurationTypes();
+        for (KDevelop::LaunchConfigurationType* t : launchConfigurationTypes) {
             qCDebug(APP) << t->id();
             if (t->id() == QLatin1String("Native Application")) {
                 type = t;
@@ -802,7 +806,8 @@ int main( int argc, char *argv[] )
             qCDebug(APP) << launchName << "not found, creating a new one";
             QPair<QString,QString> launcher;
             launcher.first = debugStr;
-            foreach (KDevelop::ILauncher *l, type->launchers()) {
+            const auto typeLaunchers = type->launchers();
+            for (KDevelop::ILauncher* l : typeLaunchers) {
                 if (l->id() == parser.value(debugStr)) {
                     if (l->supportedModes().contains(debugStr)) {
                         launcher.second = l->id();

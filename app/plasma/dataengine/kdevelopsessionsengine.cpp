@@ -62,7 +62,8 @@ QStringList findSessions()
     QStringList sessionrcs;
     for (const QString& dir : sessionDirs) {
         QDir d(dir);
-        Q_FOREACH(const QString& sessionDir, d.entryList(QDir::Dirs)) {
+        const auto dirEntries = d.entryList(QDir::Dirs);
+        for (const QString& sessionDir : dirEntries) {
             QDir sd(d.absoluteFilePath(sessionDir));
             QString path(sd.filePath(QStringLiteral("sessionrc")));
             if(QFile::exists(path)) {
