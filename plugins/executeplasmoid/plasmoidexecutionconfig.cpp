@@ -76,12 +76,14 @@ PlasmoidExecutionConfig::PlasmoidExecutionConfig( QWidget* parent )
     pThemes.waitForFinished();
     pPlasmoids.waitForFinished();
 
-    foreach(const QString& plasmoid, readProcess(&pPlasmoids)) {
+    const auto plasmoidListing = readProcess(&pPlasmoids);
+    for (const QString& plasmoid : plasmoidListing) {
         identifier->addItem(plasmoid);
     }
 
     themes->addItem(QString());
-    foreach(const QString& theme, readProcess(&pThemes)) {
+    const auto themeListing = readProcess(&pThemes);
+    for (const QString& theme : themeListing) {
         themes->addItem(theme);
     }
 
