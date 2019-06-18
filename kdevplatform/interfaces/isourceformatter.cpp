@@ -147,7 +147,8 @@ bool SourceFormatterStyle::supportsLanguage(const QString &language) const
 
 QString SourceFormatterStyle::modeForMimetype(const QMimeType& mime) const
 {
-	foreach (const auto& item, mimeTypes()) {
+	const auto mimeTypes = this->mimeTypes();
+	for (const auto& item : mimeTypes) {
 		if (mime.inherits(item.mimeType)) {
 			return item.highlightMode;
 		}
