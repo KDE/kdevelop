@@ -225,7 +225,7 @@ private Q_SLOTS:
             repository.index(TestItemRequest(*item));
         }
 
-        foreach (auto item, items) {
+        for (auto item : qAsConst(items)) {
             delete[] item;
         }
     }

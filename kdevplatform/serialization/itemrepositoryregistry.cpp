@@ -285,8 +285,8 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
 
     QDir().mkpath(path);
 
-    foreach (AbstractItemRepository* repository, m_repositories.keys()) {
-        if (!repository->open(path)) {
+    for (auto it = m_repositories.constBegin(), end = m_repositories.constEnd(); it != end; ++it) {
+        if (!it.key()->open(path)) {
             deleteDataDirectory(path);
             qCritical() << "failed to open a repository";
             abort();
@@ -315,8 +315,8 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
 void ItemRepositoryRegistry::store()
 {
     QMutexLocker lock(&d->m_mutex);
-    foreach (AbstractItemRepository* repository, d->m_repositories.keys()) {
-        repository->store();
+    for (auto it = d->m_repositories.constBegin(), end = d->m_repositories.constEnd(); it != end; ++it) {
+        it.key()->store();
     }
 
     QFile versionFile(d->m_path + QStringLiteral("/version_%1").arg(staticItemRepositoryVersion()));
@@ -345,7 +345,8 @@ void ItemRepositoryRegistry::store()
 void ItemRepositoryRegistry::printAllStatistics() const
 {
     QMutexLocker lock(&d->m_mutex);
-    foreach (AbstractItemRepository* repository, d->m_repositories.keys()) {
+    for (auto it = d->m_repositories.constBegin(), end = d->m_repositories.constEnd(); it != end; ++it) {
+        AbstractItemRepository* repository = it.key();
         qCDebug(SERIALIZATION) << "statistics in" << repository->repositoryName() << ":";
         qCDebug(SERIALIZATION) << repository->printStatistics();
     }
@@ -355,7 +356,8 @@ int ItemRepositoryRegistry::finalCleanup()
 {
     QMutexLocker lock(&d->m_mutex);
     int changed = false;
-    foreach (AbstractItemRepository* repository, d->m_repositories.keys()) {
+    for (auto it = d->m_repositories.constBegin(), end = d->m_repositories.constEnd(); it != end; ++it) {
+        AbstractItemRepository* repository = it.key();
         int added = repository->finalCleanup();
         changed += added;
         qCDebug(SERIALIZATION) << "cleaned in" << repository->repositoryName() << ":" << added;
@@ -368,8 +370,8 @@ void ItemRepositoryRegistryPrivate::close()
 {
     QMutexLocker lock(&m_mutex);
 
-    foreach (AbstractItemRepository* repository, m_repositories.keys()) {
-        repository->close();
+    for (auto it = m_repositories.constBegin(), end = m_repositories.constEnd(); it != end; ++it) {
+        it.key()->close();
     }
 
     m_path.clear();
@@ -379,7 +381,7 @@ ItemRepositoryRegistry::~ItemRepositoryRegistry()
 {
     QMutexLocker lock(&d->m_mutex);
     d->close();
-    foreach (QAtomicInt* counter, d->m_customCounters) {
+    for (QAtomicInt* counter : qAsConst(d->m_customCounters)) {
         delete counter;
     }
 }

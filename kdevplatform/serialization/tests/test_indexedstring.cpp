@@ -172,7 +172,7 @@ void TestIndexedString::bench_hashString()
 
     quint64 sum = 0;
     QBENCHMARK {
-        foreach (const auto& array, byteArrays) {
+        for (const auto& array : qAsConst(byteArrays)) {
             sum += IndexedString::hashString(array.constData(), array.length());
         }
     }
@@ -190,7 +190,7 @@ void TestIndexedString::bench_kdevhash()
 
     quint64 sum = 0;
     QBENCHMARK {
-        foreach (const auto& array, byteArrays) {
+        for (const auto& array : qAsConst(byteArrays)) {
             sum += KDevHash() << array;
         }
     }
