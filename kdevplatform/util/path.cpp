@@ -472,7 +472,8 @@ namespace KDevelop {
 uint qHash(const Path& path)
 {
     KDevHash hash;
-    foreach (const QString& segment, path.segments()) {
+    const auto pathSegments = path.segments();
+    for (const QString& segment : pathSegments) {
         hash << qHash(segment);
     }
 

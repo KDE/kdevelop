@@ -105,13 +105,13 @@ bool KDevFormatFile::read()
 
 bool KDevFormatFile::apply()
 {
-    foreach (const KDevFormatLine& formatLine, m_formatLines) {
+    for (const KDevFormatLine& formatLine : qAsConst(m_formatLines)) {
         if (formatLine.wildcards.isEmpty()) {
             qStdOut() << "matched \"" << m_origFilePath << "\" without wildcard";
             return executeCommand(formatLine.command);
         }
 
-        foreach (const QString& wildcard, formatLine.wildcards) {
+        for (const QString& wildcard : formatLine.wildcards) {
             if (QDir::match(QDir::current().canonicalPath() + QDir::separator() + wildcard.trimmed(), m_origFilePath)) {
                 qStdOut() << "matched \"" << m_origFilePath << "\" with wildcard \"" << wildcard << '\"';
                 return executeCommand(formatLine.command);

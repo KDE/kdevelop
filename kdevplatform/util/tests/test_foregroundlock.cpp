@@ -65,20 +65,16 @@ void TestForegroundLock::testTryLock()
 
     ForegroundLock lock(true);
 
-    foreach (TryLockThread* thread, threads) {
+    for (TryLockThread* thread : qAsConst(threads)) {
         thread->start();
     }
 
     lock.unlock();
 
     while (true) {
-        bool running = false;
-        foreach (TryLockThread* thread, threads) {
-            if (thread->isRunning()) {
-                running = true;
-                break;
-            }
-        }
+        const bool running = std::any_of(threads.constBegin(), threads.constEnd(), [](TryLockThread* thread) {
+            return thread->isRunning();
+        });
 
         if (!running) {
             break;

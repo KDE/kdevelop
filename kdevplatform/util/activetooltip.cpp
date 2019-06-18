@@ -151,7 +151,7 @@ void ActiveToolTipManager::doVisibility()
     }
 
     //Final step: Show tooltips
-    foreach (const auto& tooltip, registeredToolTips) {
+    for (const auto& tooltip : qAsConst(registeredToolTips)) {
         if (tooltip.first.data() && masterWidget(tooltip.first.data())->isActiveWindow()) {
             tooltip.first.data()->show();
         }
@@ -314,7 +314,7 @@ void ActiveToolTip::showToolTip(ActiveToolTip* tooltip, float priority, const QS
 {
     auto& registeredToolTips = manager()->registeredToolTips;
     if (!uniqueId.isEmpty()) {
-        foreach (const auto& tooltip, registeredToolTips) {
+        for (const auto& tooltip : qAsConst(registeredToolTips)) {
             if (tooltip.second == uniqueId) {
                 delete tooltip.first.data();
             }

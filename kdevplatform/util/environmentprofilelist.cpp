@@ -59,7 +59,8 @@ void decode(KConfig* config, EnvironmentProfileListPrivate* d)
     for (const auto& profileName : profileNames) {
         KConfigGroup envgrp(&cfg, profileName);
         QMap<QString, QString> variables;
-        foreach (const QString& varname, envgrp.keyList()) {
+        const auto varNames = envgrp.keyList();
+        for (const QString& varname : varNames) {
             variables[varname] = envgrp.readEntry(varname, QString());
         }
 
@@ -72,7 +73,8 @@ void encode(KConfig* config, EnvironmentProfileListPrivate* d)
     KConfigGroup cfg(config, Strings::envGroup());
     cfg.writeEntry(Strings::defaultEnvProfileKey(), d->m_defaultProfileName);
     cfg.writeEntry(Strings::profileListKey(), d->m_profiles.keys());
-    foreach (const QString& group, cfg.groupList()) {
+    const auto oldGroupList = cfg.groupList();
+    for (const QString& group : oldGroupList) {
         if (!d->m_profiles.contains(group)) {
             cfg.deleteGroup(group);
         }

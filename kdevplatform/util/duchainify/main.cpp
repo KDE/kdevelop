@@ -134,7 +134,8 @@ void Manager::init()
         ICore::self()->languageController()->backgroundParser(), &BackgroundParser::hideProgress, this,
         &Manager::finish);
 
-    foreach (const auto& file, m_args->positionalArguments()) {
+    const auto files = m_args->positionalArguments();
+    for (const auto& file : files) {
         addToBackgroundParser(file, ( TopDUContext::Features )features);
     }
 
@@ -210,7 +211,8 @@ void Manager::dump(const ReferencedTopDUContext& topContext)
 
     if (m_args->isSet(QStringLiteral("dump-imported-errors"))) {
         DUChainReadLocker lock;
-        foreach (const auto& import, topContext->importedParentContexts()) {
+        const auto imports = topContext->importedParentContexts();
+        for (const auto& import : imports) {
             auto top = dynamic_cast<TopDUContext*>(import.indexedContext().context());
             if (top && top != topContext && !top->problems().isEmpty()) {
                 DUChainDumper dumpChain(DUChainDumper::DumpProblems);

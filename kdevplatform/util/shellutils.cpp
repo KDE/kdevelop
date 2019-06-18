@@ -100,7 +100,7 @@ bool ensureWritable(const QList<QUrl>& urls)
                                                       KStandardGuiItem::no(), KStandardGuiItem::cancel());
         if (answer == KMessageBox::Yes) {
             bool success = true;
-            foreach (const QString& filename, notWritable) {
+            for (const QString& filename : qAsConst(notWritable)) {
                 QFile file(filename);
                 QFileDevice::Permissions permissions = file.permissions();
                 permissions |= QFileDevice::WriteOwner;
