@@ -85,7 +85,8 @@ using namespace JsonTestHelpers;
 DeclarationTest(useCount)
 {
     int uses = 0;
-    foreach (const auto& useRanges, decl->uses()) {
+    const auto declarationUses = decl->uses();
+    for (const auto& useRanges : declarationUses) {
         uses += useRanges.size();
     }
 
@@ -96,7 +97,8 @@ DeclarationTest(useCount)
 DeclarationTest(useRanges)
 {
     QStringList ranges;
-    foreach (const auto& useRanges, decl->uses()) {
+    const auto declarationUses = decl->uses();
+    for (const auto& useRanges : declarationUses) {
         for (const RangeInRevision range : useRanges) {
             ranges << rangeStr(range);
         }

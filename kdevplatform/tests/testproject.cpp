@@ -87,7 +87,8 @@ bool TestProject::inProject(const IndexedString& path) const
 
 void findFileItems(ProjectBaseItem* root, QList<ProjectFileItem*>& items, const Path& path = {})
 {
-    foreach (ProjectBaseItem* item, root->children()) {
+    const auto children = root->children();
+    for (ProjectBaseItem* item : children) {
         if (item->file() && (path.isEmpty() || item->path() == path)) {
             items << item->file();
         }
