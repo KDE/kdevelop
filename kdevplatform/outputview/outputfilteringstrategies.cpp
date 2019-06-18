@@ -152,7 +152,7 @@ QVector<QString> CompilerFilterStrategy::currentDirs() const
 {
     QVector<QString> ret;
     ret.reserve(d->m_currentDirs.size());
-    foreach (const auto& path, d->m_currentDirs) {
+    for (const auto& path : qAsConst(d->m_currentDirs)) {
         ret << path.pathOrUrl();
     }
     return ret;

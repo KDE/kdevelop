@@ -116,7 +116,7 @@ private Q_SLOTS:
                        m_cachedLines.begin(), &KDevelop::stripAnsiSequences);
 
         // apply filtering strategy
-        foreach(const QString& line, m_cachedLines) {
+        for (const QString& line : qAsConst(m_cachedLines)) {
             FilteredItem item = m_filter->errorInLine(line);
             if( item.type == FilteredItem::InvalidItem ) {
                 item = m_filter->actionInLine(line);
