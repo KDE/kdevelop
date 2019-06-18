@@ -70,8 +70,8 @@ QVariant CamelCaseFilter::doFilter(const QVariant& input, const QVariant& /*argu
                                    bool /*autoescape*/) const
 {
     QString ret;
-    foreach (const QString& word, words(input))
-    {
+    const auto words = ::words(input);
+    for (const QString& word : words) {
         QString w = word;
         w[0] = w[0].toUpper();
         ret += w;
@@ -83,8 +83,8 @@ QVariant LowerCamelCaseFilter::doFilter(const QVariant& input, const QVariant& /
                                         bool /*autoescape*/) const
 {
     QString ret;
-    foreach (const QString& word, words(input))
-    {
+    const auto words = ::words(input);
+    for (const QString& word :  words) {
         QString w = word;
         w[0] = w[0].toUpper();
         ret += w;
