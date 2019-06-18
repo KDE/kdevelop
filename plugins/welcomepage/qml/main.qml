@@ -18,7 +18,7 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 2.2
+import QtQuick 2.7
 
 Rectangle {
     id: root

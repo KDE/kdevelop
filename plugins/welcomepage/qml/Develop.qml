@@ -19,9 +19,10 @@
  * 02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.2
-import QtQuick.Controls 1.3
+import QtQuick 2.7
+import QtQuick.Layouts 1.6
+import QtQuick.Controls 2.0
+import QtQuick.Controls 1.4 as QQC1
 
 import org.kdevelop.welcomepage 4.3
 
@@ -40,25 +41,25 @@ StandardPage
 
             width: parent.width
 
-            Button {
+            QQC1.Button {
                 iconName: "project-development-new-template"
                 text: i18n("New Project")
                 onClicked: kdev.retrieveMenuAction("project/project_new").trigger()
             }
 
-            Button {
+            QQC1.Button {
                 text: i18n("Open Project")
                 iconName: "project-open"
                 onClicked: ICore.projectController.openProject()
             }
 
-            Button {
+            QQC1.Button {
                 text: i18n("Fetch Project")
                 iconName: "edit-download"
                 onClicked: kdev.retrieveMenuAction("project/project_fetch").trigger()
             }
 
-            Button {
+            QQC1.Button {
                 iconName: "document-open-recent"
                 text: i18n("Recent Projects")
                 onClicked: kdev.showMenu("project/project_open_recent")
@@ -97,43 +98,46 @@ StandardPage
             }
         }
 
-        ScrollView {
+        ListView {
+            id: sessionsView
+
             Layout.fillHeight: true
             Layout.fillWidth: true
 
             visible: sessionsView.count > 1 // we always have at least one active session
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
 
-            ListView {
-                id: sessionsView
+            ScrollBar.vertical: ScrollBar { id: verticalScrollBar }
 
-                anchors.fill: parent
+            delegate: Label {
+                readonly property string projectNamesString: projectNames.join(", ").replace(/.kdev4/g, "")
 
-                delegate: MouseArea {
-                    width: sessionsView.width
-                    height: visible ? 30 : 0
+                width: sessionsView.width - verticalScrollBar.width
+                height: visible ? 30 : 0
 
-                    visible: projects.length > 0
+                visible: projects.length > 0
+
+                text: display == "" ? projectNamesString : i18n("%1: %2", display, projectNamesString)
+                elide: Text.ElideRight
+                opacity: labelMouseArea.containsMouse ? 0.8 : 1
+
+                MouseArea {
+                    id: labelMouseArea
+
+                    anchors.fill: parent
+
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
 
                     onClicked: sessionsModel.loadSession(uuid)
-
-                    Label {
-                        readonly property string projectNamesString: projectNames.join(", ").replace(/.kdev4/g, "")
-
-                        width: parent.width
-
-                        text: display == "" ? projectNamesString : i18n("%1: %2", display, projectNamesString)
-                        elide: Text.ElideRight
-                        opacity: parent.containsMouse ? 0.8 : 1
-                    }
                 }
+            }
 
-                model: SessionsModel { id: sessionsModel }
+            model: SessionsModel { id: sessionsModel }
 
-                header: Heading {
-                    text: i18n("Sessions")
-                }
+            header: Heading {
+                text: i18n("Sessions")
             }
         }
     }
