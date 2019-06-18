@@ -264,8 +264,10 @@ QStringList MakeJob::commandLine() const
     QString extraOptions = builderGroup.readEntry("Additional Options", QString());
     if( ! extraOptions.isEmpty() )
     {
-        foreach(const QString& option, KShell::splitArgs( extraOptions ) )
+        const auto options = KShell::splitArgs(extraOptions);
+        for (const QString& option : options) {
             cmdline << option;
+        }
     }
 
     for (MakeVariables::const_iterator it = m_variables.constBegin(); it != m_variables.constEnd(); ++it)

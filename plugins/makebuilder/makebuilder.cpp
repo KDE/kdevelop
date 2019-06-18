@@ -96,11 +96,13 @@ void MakeBuilder::jobFinished(KJob* job)
             case MakeJob::CleanCommand:
                 emit cleaned( mj->item() );
                 break;
-            case MakeJob::CustomTargetCommand:
-                foreach( const QString& target, mj->customTargets() ) {
+            case MakeJob::CustomTargetCommand: {
+                const auto targets = mj->customTargets();
+                for (const QString& target : targets) {
                     emit makeTargetBuilt( mj->item(), target );
                 }
                 break;
+            }
         }
     }
 }
@@ -124,8 +126,8 @@ KJob* MakeBuilder::runMake( KDevelop::ProjectBaseItem* item, MakeJob::CommandTyp
 {
     ///Running the same builder twice may result in serious problems,
     ///so kill jobs already running on the same project
-    foreach (MakeJob* makeJob, m_activeMakeJobs.data())
-    {
+    const auto makeJobs = m_activeMakeJobs.data();
+    for (MakeJob* makeJob : makeJobs) {
         if(item && makeJob->item() && makeJob->item()->project() == item->project() && makeJob->commandType() == c) {
             qCDebug(KDEV_MAKEBUILDER) << "killing running make job, due to new started build on same project:" << makeJob;
             makeJob->kill(KJob::EmitResult);
