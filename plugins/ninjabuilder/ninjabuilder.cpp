@@ -98,7 +98,8 @@ NinjaJob* NinjaBuilder::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::Comm
 {
     ///Running the same builder twice may result in serious problems,
     ///so kill jobs already running on the same project
-    foreach (NinjaJob* ninjaJob, m_activeNinjaJobs.data()) {
+    const auto ninjaJobs = m_activeNinjaJobs.data();
+    for (NinjaJob* ninjaJob : ninjaJobs) {
         if (item && ninjaJob->item() && ninjaJob->item()->project() == item->project() && ninjaJob->commandType() == commandType) {
             qCDebug(NINJABUILDER) << "killing running ninja job, due to new started build on same project:" << ninjaJob;
             ninjaJob->kill(KJob::EmitResult);
@@ -128,7 +129,8 @@ NinjaJob* NinjaBuilder::runNinja(KDevelop::ProjectBaseItem* item, NinjaJob::Comm
     }
     QString extraOptions = group.readEntry("Additional Options", QString());
     if (!extraOptions.isEmpty()) {
-        foreach (const QString& option, KShell::splitArgs(extraOptions)) {
+        const auto options = KShell::splitArgs(extraOptions);
+        for (const QString& option : options) {
             jobArguments << option;
         }
     }
