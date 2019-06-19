@@ -209,11 +209,12 @@ void TestAreaOperation::checkArea1(MainWindow *mw)
 {
     Area *area = mw->area();
     //check that all docks have their widgets
-    foreach (View *dock, mw->toolDocks()) {
+    const auto toolDocks = mw->toolDocks();
+    for (View* dock : toolDocks) {
         //QVERIFY(dock->widget() != 0);
         QVERIFY(dock->hasWidget());
     }
-    QCOMPARE(mw->toolDocks().count(), area->toolViews().count());
+    QCOMPARE(toolDocks.count(), area->toolViews().count());
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
@@ -238,11 +239,12 @@ void TestAreaOperation::checkArea2(MainWindow *mw)
 {
     Area *area = mw->area();
     //check that all docks have their widgets
-    foreach (View *dock, mw->toolDocks()) {
+    const auto toolDocks = mw->toolDocks();
+    for (View* dock : toolDocks) {
         //QVERIFY(dock->widget() != 0);
         QVERIFY(dock->hasWidget());
     }
-    QCOMPARE(mw->toolDocks().count(), area->toolViews().count());
+    QCOMPARE(toolDocks.count(), area->toolViews().count());
 
     //check that mainwindow have all splitters and widgets in splitters inside centralWidget
     QWidget *central = mw->centralWidget();
@@ -274,8 +276,7 @@ void TestAreaOperation::checkArea2(MainWindow *mw)
     QCOMPARE(splitters.count(), 6+1); //6 child splitters + 1 central itself = 7 splitters
     int verticalSplitterCount = 0;
     int horizontalSplitterCount = 0;
-    foreach (QSplitter *s, splitters)
-    {
+    for (QSplitter* s : qAsConst(splitters)) {
         if (s->count() == 1)
             continue;   //this is a splitter with container inside, its orientation is not relevant
         if (s->orientation() == Qt::Vertical)
@@ -316,8 +317,7 @@ struct AreaWidgetChecker {
     AreaWidgetChecker() = default;
     Area::WalkerMode operator()(AreaIndex *index)
     {
-        foreach (View *view, index->views())
-        {
+        for (View* view : qAsConst(index->views())) {
             if (!view->hasWidget()) {
                 failureMessage += view->objectName() + " has no widget\n";
                 foundViewWithoutWidget = true;
@@ -520,9 +520,13 @@ toolview1.4.1 [ right ]\n\
 "));
 
     //check that mainwindow has newly added tool view
-    foreach (View *dock, mw.toolDocks())
+    {
+    const auto toolDocks = mw.toolDocks();
+    for (View* dock : toolDocks) {
         QVERIFY(dock->widget() != nullptr);
-    QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
+    }
+    QCOMPARE(toolDocks.count(), m_area1->toolViews().count());
+    }
 
     //now remove tool view
     m_area1->removeToolView(view);
@@ -537,9 +541,13 @@ toolview1.2.2 [ bottom ]\n\
 "));
 
     //check that mainwindow has newly added tool view
-    foreach (View *dock, mw.toolDocks())
+    {
+    const auto toolDocks = mw.toolDocks();
+    for (View* dock : toolDocks) {
         QVERIFY(dock->widget() != nullptr);
-    QCOMPARE(mw.toolDocks().count(), m_area1->toolViews().count());
+    }
+    QCOMPARE(toolDocks.count(), m_area1->toolViews().count());
+    }
 }
 
 
@@ -714,9 +722,11 @@ void TestAreaOperation::checkAreaViewsDisplay(MainWindow *mw, Area *area,
 
 View *TestAreaOperation::findNamedView(Area *area, const QString &name)
 {
-    foreach (View *view, area->views())
+    const auto views = area->views();
+    for (View* view : views) {
         if (view->objectName() == name)
             return view;
+    }
     return nullptr;
 }
 

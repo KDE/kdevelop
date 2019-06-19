@@ -38,8 +38,9 @@ public:
     {
         delete first;
         delete second;
-        foreach( View* v, views )
-        {
+        // TODO: does this still make sense?
+        const auto oldViews = views;
+        for (View* v : oldViews) {
             // Do the same as AreaIndex::remove(), seems like deletion of the view is happening elsewhere
             views.removeAll( v );
         }
@@ -87,8 +88,9 @@ AreaIndex::AreaIndex(const AreaIndex &index)  : d(new AreaIndexPrivate( *(index.
         d->second->setParent(this);
     //clone views in this index
     d->views.clear();
-    foreach (View *view, index.views())
+    for (View* view : qAsConst(index.views())) {
         add(view->document()->createView());
+    }
 }
 
 AreaIndex::~AreaIndex() = default;

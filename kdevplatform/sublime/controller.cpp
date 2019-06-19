@@ -38,8 +38,7 @@ struct WidgetFinder {
     explicit WidgetFinder(QWidget *_w) :w(_w), view(nullptr) {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
-        foreach (View *v, index->views())
-        {
+        for (View* v : qAsConst(index->views())) {
             if (v->hasWidget() && (v->widget() == w))
             {
                 view = v;
@@ -152,8 +151,7 @@ void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
     Q_ASSERT(index != -1);
 
     Area* area = nullptr;
-    foreach (Area* a, d->mainWindowAreas[index])
-    {
+    for (Area* a : qAsConst(d->mainWindowAreas[index])) {
         qCDebug(SUBLIME) << "Object name: " << a->objectName() << " id "
                      << areaTypeId;
         if (a->objectName() == areaTypeId)
@@ -173,7 +171,7 @@ void Controller::resetCurrentArea(MainWindow *mainWindow)
 
     int areaIndex = 0;
     Area* def = nullptr;
-    foreach (Area* a, d->areas) {
+    for (Area* a : qAsConst(d->areas)) {
         if (a->objectName() == id)
         {
             def = a;
@@ -261,8 +259,8 @@ void Controller::areaReleased()
 {
     auto *w = reinterpret_cast<Sublime::MainWindow*>(sender());
     qCDebug(SUBLIME) << "marking areas as mainwindow-free" << w << d->controlledWindows.contains(w) << d->shownAreas.keys(w);
-    foreach (Area *area, d->shownAreas.keys(w))
-    {
+    const auto areas = d->shownAreas.keys(w);
+    for (Area* area : areas) {
         qCDebug(SUBLIME) << "" << area->objectName();
         areaReleased(area);
         disconnect(area, nullptr, w, nullptr);
@@ -284,8 +282,7 @@ Area *Controller::defaultArea(const QString &id) const
 
 Area *Controller::area(int mainWindow, const QString& id) const
 {
-    foreach (Area* area, areas(mainWindow))
-    {
+    for (Area* area : areas(mainWindow)) {
         if (area->objectName() == id)
             return area;
     }
@@ -294,9 +291,10 @@ Area *Controller::area(int mainWindow, const QString& id) const
 
 Area* Controller::areaForView(View* view) const
 {
-    foreach (Area* area, allAreas())
+    for (Area* area : allAreas()) {
         if(area->views().contains(view))
             return area;
+    }
 
     return nullptr;
 }

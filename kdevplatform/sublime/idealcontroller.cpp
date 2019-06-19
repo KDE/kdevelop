@@ -378,7 +378,8 @@ void IdealController::showRightDock(bool show)
 
 void IdealController::hideDocks(IdealButtonBarWidget *bar)
 {
-    foreach (QAction *action, bar->actions()) {
+    const auto barActions = bar->actions();
+    for (QAction* action : barActions) {
         if (action->isChecked())
             action->setChecked(false);
     }

@@ -53,10 +53,11 @@ MainWindow::MainWindow(Controller *controller, Qt::WindowFlags flags)
 
 bool MainWindow::containsView(View* view) const
 {
-    foreach(Area* area, areas())
-        if(area->views().contains(view))
-            return true;
-    return false;
+    const auto areas = this->areas();
+
+    return std::any_of(areas.begin(), areas.end(), [view](Area* area) {
+        return area->views().contains(view);
+    });
 }
 
 QList< Area* > MainWindow::areas() const
@@ -81,8 +82,8 @@ void MainWindow::reconstructViews(const QList<View*>& topViews)
 QList<View*> MainWindow::topViews() const
 {
     QList<View*> topViews;
-    foreach(View* view, d->area->views())
-    {
+    const auto views = d->area->views();
+    for (View* view : views) {
         if(view->hasWidget())
         {
             QWidget* widget = view->widget();
@@ -230,7 +231,8 @@ void MainWindow::saveSettings()
     saveMainWindowSettings(cg);
 
     //debugToolBar visibility is stored separately to allow a area dependent default value
-    foreach (KToolBar* toolbar, toolBars()) {
+    const auto toolBars = this->toolBars();
+    for (KToolBar* toolbar : toolBars) {
         if (toolbar->objectName() == QLatin1String("debugToolBar")) {
             cg.writeEntry("debugToolBarVisibility", toolbar->isVisibleTo(this));
         }
@@ -298,7 +300,8 @@ void MainWindow::loadSettings()
     }
 
     int n = 1; // Toolbar counter. toolbars are counted from 1,
-    foreach (KToolBar* toolbar, toolBars()) {
+    const auto toolBars = this->toolBars();
+    for (KToolBar* toolbar : toolBars) {
         QString group(QStringLiteral("Toolbar"));
         // Give a number to the toolbar, but prefer a name if there is one,
         // because there's no real guarantee on the ordering of toolbars
@@ -316,8 +319,7 @@ void MainWindow::loadSettings()
     }
 
     const bool tabBarHidden = !Container::configTabBarVisible();
-    foreach (Container *container, d->viewContainers)
-    {
+    for (Container *container : qAsConst(d->viewContainers)) {
         container->setTabBarHidden(tabBarHidden);
     }
 
@@ -419,8 +421,7 @@ void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea , const QPoint& 
 
 View* MainWindow::viewForPosition(const QPoint& globalPos) const
 {
-    foreach(Container* container, d->viewContainers)
-    {
+    for (Container* container : qAsConst(d->viewContainers)) {
         QRect globalGeom = QRect(container->mapToGlobal(QPoint(0,0)), container->mapToGlobal(QPoint(container->width(), container->height())));
        if(globalGeom.contains(globalPos))
        {

@@ -34,8 +34,7 @@ struct AreaStopper {
     explicit AreaStopper(const QString& stopAt): m_stopAt(stopAt) {}
     Area::WalkerMode operator()(AreaIndex *index)
     {
-        foreach (View *view, index->views())
-        {
+        for (View* view : qAsConst(index->views())) {
             list << view->objectName();
             if (view->objectName() == m_stopAt)
                 return Area::StopWalker;

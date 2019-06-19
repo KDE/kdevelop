@@ -395,8 +395,7 @@ Area::WalkerMode MainWindowPrivate::ViewCreator::operator() (AreaIndex *index)
         bool hadActiveView = false;
         Sublime::View* activeView = d->activeView;
 
-        foreach (View *view, index->views())
-        {
+        for (View* view : qAsConst(index->views())) {
             QWidget *widget = view->widget(container);
 
             if (widget)
@@ -442,8 +441,7 @@ void MainWindowPrivate::reconstruct()
     {
         QSignalBlocker blocker(m_mainWindow);
         qCDebug(SUBLIME) << "RECONSTRUCT" << area << area->shownToolViews(Sublime::Left);
-        foreach (View *view, area->toolViews())
-        {
+        for (View* view : qAsConst(area->toolViews())) {
             QString id = view->document()->documentSpecifier();
             if (!id.isEmpty())
             {
@@ -463,8 +461,7 @@ void MainWindowPrivate::clearArea()
         m_leftTabbarCornerWidget->setParent(nullptr);
 
     //reparent tool view widgets to nullptr to prevent their deletion together with dockwidgets
-    foreach (View *view, area->toolViews())
-    {
+    for (View* view : qAsConst(area->toolViews())) {
         // FIXME should we really delete here??
         bool nonDestructive = true;
         idealController->removeView(view, nonDestructive);
@@ -477,8 +474,8 @@ void MainWindowPrivate::clearArea()
 
     //reparent all view widgets to 0 to prevent their deletion together with central
     //widget. this reparenting is necessary when switching areas inside the same mainwindow
-    foreach (View *view, area->views())
-    {
+    const auto views = area->views();
+    for (View* view : views) {
         if (view->hasWidget())
             view->widget()->setParent(nullptr);
     }
@@ -520,7 +517,7 @@ void MainWindowPrivate::slotDockShown(Sublime::View* /*view*/, Sublime::Position
 
     QStringList ids;
     ids.reserve(finder.views.size());
-    foreach (View *v, finder.views) {
+    for (View* v : qAsConst(finder.views)) {
         ids << v->document()->documentSpecifier();
     }
     area->setShownToolViews(pos, ids);

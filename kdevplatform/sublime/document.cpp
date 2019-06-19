@@ -132,8 +132,7 @@ QIcon Document::statusIcon() const
 
 void Document::closeViews()
 {
-    foreach (Sublime::Area *area, controller()->allAreas())
-    {
+    for (Sublime::Area* area : controller()->allAreas()) {
         const QList<Sublime::View*> areaViews = area->views();
         for (Sublime::View* view : areaViews) {
             if (views().contains(view)) {

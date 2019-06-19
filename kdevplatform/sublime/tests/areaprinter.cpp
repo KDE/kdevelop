@@ -37,8 +37,9 @@ Area::WalkerMode AreaViewsPrinter::operator()(Sublime::AreaIndex *index)
         result += printOrientation(index->orientation()) + ' ';
     else
     {
-        foreach (View *view, index->views())
+        for (View* view : qAsConst(index->views())) {
             result += view->objectName() + ' ';
+        }
     }
     result += QLatin1String("]\n");
     return Area::ContinueWalker;

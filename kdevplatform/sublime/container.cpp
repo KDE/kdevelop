@@ -175,7 +175,7 @@ public:
         QVector<View*> views;
         views.reserve(viewForWidget.size());
 
-        foreach(View* view, viewForWidget){
+        for (View* view : qAsConst(viewForWidget)) {
             views << view;
         }
 
@@ -687,7 +687,7 @@ void Container::contextMenu( const QPoint& pos )
                 }
             }
             // finally close other tabs
-            foreach( QWidget* tab, otherTabs ) {
+            for (QWidget* tab : qAsConst(otherTabs)) {
                 emit requestClose(tab);
             }
         } else if ( triggered == closeAllTabsAction ) {

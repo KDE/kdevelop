@@ -51,9 +51,8 @@ void Area::walkViews(Operator &op, AreaIndex *index)
 template <typename Operator>
 void Area::walkToolViews(Operator &op, Positions positions)
 {
-    QList<View*> currViews = toolViews();
-    foreach (View* view, currViews)
-    {
+    const QList<View*> currViews = toolViews();
+    for (View* view : currViews) {
         Sublime::Position position = toolViewPosition(view);
         if (position & positions)
             if (op(view, position) == Area::StopWalker)

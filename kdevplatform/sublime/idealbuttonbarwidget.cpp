@@ -231,7 +231,8 @@ bool IdealButtonBarWidget::lastShowState()
 
 QString IdealButtonBarWidget::id(const IdealToolButton* button) const
 {
-    foreach (QAction* a, actions()) {
+    const auto actions = this->actions();
+    for (QAction* a : actions) {
         auto tva = dynamic_cast<ToolViewAction*>(a);
         if (tva && tva->button() == button) {
             return tva->id();
@@ -243,7 +244,8 @@ QString IdealButtonBarWidget::id(const IdealToolButton* button) const
 
 IdealToolButton* IdealButtonBarWidget::button(const QString& id) const
 {
-    foreach (QAction* a, actions()) {
+    const auto actions = this->actions();
+    for (QAction* a : actions) {
         auto tva = dynamic_cast<ToolViewAction*>(a);
         if (tva && tva->id() == id) {
             return tva->button();
@@ -291,7 +293,7 @@ void IdealButtonBarWidget::applyOrderToLayout()
         }
     }
 
-    foreach(const QString& id, m_buttonsOrder) {
+    for (const QString& id : qAsConst(m_buttonsOrder)) {
         if (auto b = button(id)) {
             m_buttonsLayout->addWidget(b);
         }
@@ -344,7 +346,8 @@ void IdealButtonBarWidget::showWidget(QAction *action, bool checked)
             // The alternative to use a QActionCollection and setting that to "exclusive"
             // has a big drawback: QActions in a collection that is exclusive cannot
             // be un-checked by the user, e.g. in the View -> Tool Views menu.
-            foreach(QAction *otherAction, actions()) {
+            const auto actions = this->actions();
+            for (QAction* otherAction : actions) {
                 if ( otherAction != widgetAction && otherAction->isChecked() )
                     otherAction->setChecked(false);
             }

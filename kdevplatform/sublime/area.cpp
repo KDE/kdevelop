@@ -122,8 +122,9 @@ Area::Area(const Area &area)
 
     //clone tool views
     d->toolViews.clear();
-    foreach (View *view, area.toolViews())
+    for (View* view : qAsConst(area.toolViews())) {
         addToolView(view->document()->createView(), area.toolViewPosition(view));
+    }
     initialize();
 }
 
@@ -421,8 +422,7 @@ bool Area::closeView(View* view, bool silent)
         int viewsInOtherAreas = 0; // Number of views for the same document in other areas
         int viewsInOtherWorkingSets = 0; // Number of views for the same document in areas with different working-set
 
-        foreach(View* otherView, doc.data()->views())
-        {
+        for (View* otherView : qAsConst(doc.data()->views())) {
             Area* area = controller()->areaForView(otherView);
             if(area == this)
                 viewsInCurrentArea += 1;
@@ -450,7 +450,8 @@ bool Area::closeView(View* view, bool silent)
 
 void Area::clearViews(bool silent)
 {
-    foreach(Sublime::View* view, views()) {
+    const auto views = this->views();
+    for (Sublime::View* view : views) {
         closeView(view, silent);
     }
 }
