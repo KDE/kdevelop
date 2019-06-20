@@ -384,6 +384,8 @@ double bar ()
   </mediaobject>
 </screenshot> Clicking on the links for the declaration of a symbol or expanding the list of uses allows you to jump to these locations, if necessary opening the respective file and placing the cursor at the corresponding location. A similar effect can be achieved by using the <guilabel>Code Browser</guilabel> tool view also discussed previously.
 </para></listitem>
+<listitem><para>A quicker way to jump to the declaration of a symbol without having to click on the links in the tooltip is to temporary enabling <guilabel>Source Browse Mode</guilabel> by holding down the &Alt; or &Ctrl; key. In this mode, it is possible to directly click on any symbol in the editor to jump to its declaration.
+</para></listitem>
 <listitem><para><guilabel>Quick open</guilabel>: A very powerful way of jumping to other files or locations is to use the various <emphasis>quick open</emphasis> methods in &kdevelop;. There are four versions of these:
 <itemizedlist>
 <listitem><para><guilabel>Quick open class</guilabel> (<menuchoice><guimenu>Navigate</guimenu><guimenuitem>Quick open class</guimenuitem></menuchoice> or <keycombo>&Alt;&Ctrl;<keycap>C</keycap></keycombo>): You will get a list of all classes in this session. Start typing (a part of) the name of a class and the list will continue to whittle down to only those that actually match what you've typed so far. If the list is short enough, select an element using the up and down keys and &kdevelop; will get you to the place where the class is declared.

@@ -211,7 +211,7 @@ bool BrowseManager::eventFilter(QObject * watched, QEvent * event) {
 
     QFocusEvent* focusEvent = dynamic_cast<QFocusEvent*>(event);
     //Eventually stop key-browsing
-    if((keyEvent && m_browsingByKey && keyEvent->key() == m_browsingByKey && keyEvent->type() == QEvent::KeyRelease)
+    if((keyEvent && m_browsingByKey && ( keyEvent->key() == m_browsingByKey || keyEvent->modifiers() == Qt::ControlModifier ) && keyEvent->type() == QEvent::KeyRelease)
         || (focusEvent && focusEvent->lostFocus()) || event->type() == QEvent::WindowDeactivate) {
         m_browsingByKey = 0;
         emit stopDelayedBrowsing();
