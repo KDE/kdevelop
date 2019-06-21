@@ -72,5 +72,5 @@ QModelIndex ProjectProxyModel::proxyIndexFromItem(KDevelop::ProjectBaseItem* ite
 
 KDevelop::ProjectBaseItem* ProjectProxyModel::itemFromProxyIndex( const QModelIndex& idx ) const
 {
-    return static_cast<KDevelop::ProjectBaseItem*>( projectModel()->itemFromIndex( mapToSource( idx ) ) );
+    return projectModel()->itemFromIndex( mapToSource(idx));
 }

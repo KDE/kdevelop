@@ -181,8 +181,6 @@ bool ProjectModelItemDelegate::helpEvent(QHelpEvent* event,
     }
 
     if (event->type() == QEvent::ToolTip) {
-        auto* helpEvent = static_cast<QHelpEvent*>(event);
-
         // explicitly close current tooltip, as its autoclose margins overlap items
         if ((m_tooltippedIndex != index) && m_tooltip) {
             m_tooltip->close();
@@ -205,7 +203,7 @@ bool ProjectModelItemDelegate::helpEvent(QHelpEvent* event,
                         // but the API seems not to allow more control.
                         QToolTip::hideText();
 
-                        m_tooltip = new KDevelop::NavigationToolTip(view, helpEvent->globalPos() + QPoint(40, 0), navigationWidget);
+                        m_tooltip = new KDevelop::NavigationToolTip(view, event->globalPos() + QPoint(40, 0), navigationWidget);
                         m_tooltip->resize(navigationWidget->sizeHint() + QSize(10, 10));
                         auto rect = view->visualRect(m_tooltippedIndex);
                         rect.moveTopLeft(view->mapToGlobal(rect.topLeft()));
