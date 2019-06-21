@@ -89,7 +89,7 @@ public:
      * @param id the id of the launcher to be found
      * @returns the launcher with the given id or 0 if there's no such launcher in this configuration type
      */
-    ILauncher* launcherForId( const QString& id );
+    ILauncher* launcherForId(const QString& id) const;
 
     /**
      * Provide a list of widgets to configure a launch configuration for this type
