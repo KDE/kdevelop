@@ -116,7 +116,7 @@ ProblemTreeView::ProblemTreeView(QWidget* parent, QAbstractItemModel* itemModel)
     m_proxy->setDynamicSortFilter(true);
     m_proxy->sort(0, Qt::AscendingOrder);
 
-    auto* problemModel = dynamic_cast<ProblemModel*>(itemModel);
+    auto* problemModel = qobject_cast<ProblemModel*>(itemModel);
     Q_ASSERT(problemModel);
     setModel(problemModel);
 

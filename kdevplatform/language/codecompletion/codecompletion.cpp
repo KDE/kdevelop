@@ -44,7 +44,7 @@ CodeCompletion::CodeCompletion(QObject* parent, KTextEditor::CodeCompletionModel
     , m_model(aModel)
     , m_language(language)
 {
-    auto* kdevModel = dynamic_cast<KDevelop::CodeCompletionModel*>(aModel);
+    auto* kdevModel = qobject_cast<KDevelop::CodeCompletionModel*>(aModel);
     if (kdevModel)
         kdevModel->initialize();
     connect(KDevelop::ICore::self()->documentController(), &IDocumentController::textDocumentCreated,

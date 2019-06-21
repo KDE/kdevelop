@@ -383,12 +383,12 @@ void ContextBrowserPlugin::showUsesDelayed(const DeclarationPointer& declaration
     if (!toolView) {
         return;
     }
-    auto* view = dynamic_cast<ContextBrowserView*>(toolView);
+    auto* view = qobject_cast<ContextBrowserView*>(toolView);
     Q_ASSERT(view);
     view->allowLockedUpdate();
     view->setDeclaration(decl, decl->topContext(), true);
     //We may get deleted while the call to acceptLink, so make sure we don't crash in that case
-    QPointer<AbstractNavigationWidget> widget = dynamic_cast<AbstractNavigationWidget*>(view->navigationWidget());
+    QPointer<AbstractNavigationWidget> widget = qobject_cast<AbstractNavigationWidget*>(view->navigationWidget());
     if (widget && widget->context()) {
         auto nextContext = widget->context()->execute(
             NavigationAction(declaration, KDevelop::NavigationAction::ShowUses));

@@ -728,7 +728,7 @@ QList<IProject*> ProjectController::projects() const
 
 void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, const KIO::UDSEntryList& entries)
 {
-    auto* job(dynamic_cast<KIO::SimpleJob*>(_job));
+    auto* job = qobject_cast<KIO::SimpleJob*>(_job);
     Q_ASSERT(job);
     for (const KIO::UDSEntry& entry : entries) {
         if(d->m_foundProjectFile)

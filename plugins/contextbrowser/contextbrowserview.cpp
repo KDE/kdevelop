@@ -63,13 +63,13 @@ enum Direction
 
 void selectUse(ContextBrowserView* view, Direction direction)
 {
-    auto abstractNaviWidget = dynamic_cast<AbstractNavigationWidget*>(view->navigationWidget());
+    auto abstractNaviWidget = qobject_cast<AbstractNavigationWidget*>(view->navigationWidget());
 
     if (!abstractNaviWidget) {
         return;
     }
 
-    auto usesWidget = dynamic_cast<UsesWidget*>(abstractNaviWidget->context()->widget());
+    auto usesWidget = qobject_cast<UsesWidget*>(abstractNaviWidget->context()->widget());
     if (!usesWidget) {
         return;
     }
@@ -77,19 +77,19 @@ void selectUse(ContextBrowserView* view, Direction direction)
     OneUseWidget* first = nullptr, * previous = nullptr, * current = nullptr;
     const auto& usesWidgetItems = usesWidget->items();
     for (auto item : usesWidgetItems) {
-        auto topContext = dynamic_cast<TopContextUsesWidget*>(item);
+        auto topContext = qobject_cast<TopContextUsesWidget*>(item);
         if (!topContext) {
             continue;
         }
         const auto& topContextItems = topContext->items();
         for (auto item : topContextItems) {
-            auto navigationList = dynamic_cast<NavigatableWidgetList*>(item);
+            auto navigationList = qobject_cast<NavigatableWidgetList*>(item);
             if (!navigationList) {
                 continue;
             }
             const auto& navigationListItems = navigationList->items();
             for (auto item : navigationListItems) {
-                auto use = dynamic_cast<OneUseWidget*>(item);
+                auto use = qobject_cast<OneUseWidget*>(item);
                 if (!use) {
                     continue;
                 }
@@ -163,10 +163,9 @@ void ContextBrowserView::declarationMenu()
 {
     DUChainReadLocker lock(DUChain::lock());
 
-    auto* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
+    auto* navigationWidget = qobject_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
     if (navigationWidget) {
-        AbstractDeclarationNavigationContext* navigationContext =
-            dynamic_cast<AbstractDeclarationNavigationContext*>(navigationWidget->context().data());
+        auto* navigationContext = qobject_cast<AbstractDeclarationNavigationContext*>(navigationWidget->context().data());
         if (navigationContext && navigationContext->declaration().data()) {
             KDevelop::DeclarationContext* c = new KDevelop::DeclarationContext(navigationContext->declaration().data());
             lock.unlock();
@@ -247,7 +246,7 @@ bool ContextBrowserView::event(QEvent* event)
     auto* keyEvent = dynamic_cast<QKeyEvent*>(event);
 
     if (hasFocus() && keyEvent) {
-        auto* navigationWidget = dynamic_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
+        auto* navigationWidget = qobject_cast<AbstractNavigationWidget*>(m_navigationWidget.data());
         if (navigationWidget && event->type() == QEvent::KeyPress) {
             int key = keyEvent->key();
             if (key == Qt::Key_Left)

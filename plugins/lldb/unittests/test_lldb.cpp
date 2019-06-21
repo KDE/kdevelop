@@ -183,7 +183,7 @@ Variable *LldbTest::watchVariableAt(int i)
 {
     auto watchRoot = variableCollection()->indexForItem(variableCollection()->watches(), 0);
     auto idx = variableCollection()->index(i, 0, watchRoot);
-    return dynamic_cast<Variable*>(variableCollection()->itemForIndex(idx));
+    return qobject_cast<Variable*>(variableCollection()->itemForIndex(idx));
 }
 
 QModelIndex LldbTest::localVariableIndexAt(int i, int col)
@@ -1551,11 +1551,11 @@ void LldbTest::testVariablesWatchesTwoSessions()
 
     //check if variable is marked as out-of-scope
     QCOMPARE(variableCollection()->watches()->childCount(), 1);
-    auto v = dynamic_cast<LldbVariable*>(watchVariableAt(0));
+    auto v = qobject_cast<LldbVariable*>(watchVariableAt(0));
     QVERIFY(v);
     QVERIFY(!v->inScope());
     QCOMPARE(v->childCount(), 3);
-    v = dynamic_cast<LldbVariable*>(v->child(0));
+    v = qobject_cast<LldbVariable*>(v->child(0));
     QVERIFY(!v->inScope());
 
     //start a second debug session
@@ -1566,11 +1566,11 @@ void LldbTest::testVariablesWatchesTwoSessions()
 
     QCOMPARE(variableCollection()->watches()->childCount(), 1);
     ts = variableCollection()->index(0, 0, variableCollection()->index(0, 0));
-    v = dynamic_cast<LldbVariable*>(watchVariableAt(0));
+    v = qobject_cast<LldbVariable*>(watchVariableAt(0));
     QVERIFY(v);
     QVERIFY(v->inScope());
     QCOMPARE(v->childCount(), 3);
-    v = dynamic_cast<LldbVariable*>(v->child(0));
+    v = qobject_cast<LldbVariable*>(v->child(0));
     QVERIFY(v->inScope());
     COMPARE_DATA(variableCollection()->indexForItem(v, 1), QString::number(0));
 
@@ -1578,9 +1578,9 @@ void LldbTest::testVariablesWatchesTwoSessions()
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 
     //check if variable is marked as out-of-scope
-    v = dynamic_cast<LldbVariable*>(watchVariableAt(0));
+    v = qobject_cast<LldbVariable*>(watchVariableAt(0));
     QVERIFY(!v->inScope());
-    QVERIFY(!dynamic_cast<KDevelop::Variable*>(v->child(0))->inScope());
+    QVERIFY(!qobject_cast<KDevelop::Variable*>(v->child(0))->inScope());
 }
 
 void LldbTest::testVariablesStopDebugger()

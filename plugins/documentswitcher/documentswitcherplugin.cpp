@@ -302,7 +302,7 @@ void DocumentSwitcherPlugin::addMainWindow( Sublime::MainWindow* mainwindow )
 
 bool DocumentSwitcherPlugin::eventFilter( QObject* watched, QEvent* ev )
 {
-    auto* mw = dynamic_cast<Sublime::MainWindow*>( watched );
+    auto* mw = qobject_cast<Sublime::MainWindow*>(watched);
     if( mw && ev->type() == QEvent::WindowActivate )
     {
         enableActions();

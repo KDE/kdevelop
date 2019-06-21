@@ -61,7 +61,7 @@ using namespace KDevelop;
 
 Sublime::MainWindow* toSublimeWindow(KParts::MainWindow* window)
 {
-    auto* ret = dynamic_cast<Sublime::MainWindow*>(window);
+    auto* ret = qobject_cast<Sublime::MainWindow*>(window);
     Q_ASSERT(ret);
     return ret;
 }
@@ -96,7 +96,7 @@ void TestBuddies::verifyFilename(Sublime::View *view, const QString& endOfFilena
 {
     QVERIFY(view);
     if (view) {
-        auto *urlDoc = dynamic_cast<Sublime::UrlDocument *>(view->document());
+        auto* urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
         QVERIFY(urlDoc);
         if (urlDoc) {
             qDebug() << urlDoc->url().toLocalFile() << endOfFilename;

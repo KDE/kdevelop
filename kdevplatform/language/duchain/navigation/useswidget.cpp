@@ -636,7 +636,7 @@ unsigned int UsesWidget::countAllUses() const
 {
     unsigned int totalUses = 0;
     foreach (QWidget* w, items()) {
-        if (auto* useWidget = dynamic_cast<TopContextUsesWidget*>(w)) {
+        if (auto* useWidget = qobject_cast<TopContextUsesWidget*>(w)) {
             totalUses += useWidget->usesCount();
         }
     }
@@ -647,7 +647,7 @@ unsigned int UsesWidget::countAllUses() const
 void UsesWidget::setAllExpanded(bool expanded)
 {
     foreach (QWidget* w, items()) {
-        if (auto* useWidget = dynamic_cast<TopContextUsesWidget*>(w)) {
+        if (auto* useWidget = qobject_cast<TopContextUsesWidget*>(w)) {
             useWidget->setExpanded(expanded);
         }
     }

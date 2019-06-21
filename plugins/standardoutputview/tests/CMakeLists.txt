@@ -4,6 +4,10 @@ include_directories(
 )
 set(test_standardOutputView_SRCS
     test_standardoutputview.cpp
+    # TODO: this is partially broken:
+    # these classes seem to be recompiled as their symbols are not exposed from the code in the plugin
+    # a) results in that the compiler optimized the data structure differently,
+    # b) results in separate staticMetaObject instances for the QObject subclasses, qobject_cast e.g. fails
     ../outputwidget.cpp
     ../toolviewdata.cpp
     ../standardoutputview.cpp

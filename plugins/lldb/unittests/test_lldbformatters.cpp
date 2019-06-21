@@ -188,7 +188,7 @@ void LldbFormattersTest::init()
 
     while (variableCollection()->watches()->childCount() > 0) {
         auto idx = watchVariableIndexAt(0);
-        auto var = dynamic_cast<LldbVariable*>(variableCollection()->itemForIndex(idx));
+        auto var = qobject_cast<LldbVariable*>(variableCollection()->itemForIndex(idx));
         if (!var) break;
         var->die();
     }

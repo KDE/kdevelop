@@ -1084,7 +1084,7 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
         break;
     }
     case QEvent::FocusIn:
-        if (dynamic_cast<QWidget*>(obj)) {
+        if (qobject_cast<QWidget*>(obj)) {
             auto* focusEvent = dynamic_cast<QFocusEvent*>(e);
             Q_ASSERT(focusEvent);
             //Eat the focus event, keep the focus

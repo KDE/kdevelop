@@ -50,7 +50,7 @@ TestCore* TestCore::initialize(Core::Setup mode, const QString& session)
         new TestCore;
     }
 
-    auto* core = dynamic_cast<TestCore*>(Core::m_self);
+    auto* core = qobject_cast<TestCore*>(Core::m_self);
     Q_ASSERT(core);
     core->initializeNonStatic(mode, session);
 

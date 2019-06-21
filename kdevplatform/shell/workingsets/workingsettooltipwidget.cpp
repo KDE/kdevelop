@@ -260,7 +260,7 @@ void WorkingSetToolTipWidget::previousDocument()
 
 void WorkingSetToolTipWidget::updateFileButtons()
 {
-    auto* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    auto* mainWindow = qobject_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
     Q_ASSERT(mainWindow);
 
     WorkingSetController* controller = Core::self()->workingSetControllerInternal();
@@ -346,7 +346,7 @@ void WorkingSetToolTipWidget::buttonClicked(bool)
     auto* s = qobject_cast<QToolButton*>(sender());
     Q_ASSERT(s);
 
-    auto* mainWindow = dynamic_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
+    auto* mainWindow = qobject_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
     Q_ASSERT(mainWindow);
     QSet<QString> openFiles = Core::self()->workingSetControllerInternal()->workingSet(mainWindow->area()->workingSet())->fileList().toSet();
 

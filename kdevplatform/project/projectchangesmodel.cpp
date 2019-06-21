@@ -255,7 +255,7 @@ void ProjectChangesModel::jobUnregistered(KJob* job)
         KDevelop::VcsJob::Revert,
     };
 
-    auto* vcsjob=dynamic_cast<VcsJob*>(job);
+    auto* vcsjob = qobject_cast<VcsJob*>(job);
     if(vcsjob && readOnly.contains(vcsjob->type())) {
         reloadAll();
     }

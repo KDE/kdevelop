@@ -117,7 +117,7 @@ OutputExecuteJob::JobStatus OutputExecuteJob::status() const
 
 OutputModel* OutputExecuteJob::model() const
 {
-    return dynamic_cast<OutputModel*> ( OutputJob::model() );
+    return qobject_cast<OutputModel*>(OutputJob::model());
 }
 
 QStringList OutputExecuteJob::commandLine() const

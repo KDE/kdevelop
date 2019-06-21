@@ -451,7 +451,7 @@ public:
                     Sublime::UrlDocument *activeDoc = nullptr;
                     IBuddyDocumentFinder *buddyFinder = nullptr;
                     if(activeView)
-                        activeDoc = dynamic_cast<Sublime::UrlDocument *>(activeView->document());
+                        activeDoc = qobject_cast<Sublime::UrlDocument *>(activeView->document());
                     if(activeDoc && Core::self()->uiControllerInternal()->arrangeBuddies()) {
                         QString mime = QMimeDatabase().mimeTypeForUrl(activeDoc->url()).name();
                         buddyFinder = IBuddyDocumentFinder::finderForMimeType(mime);
@@ -471,8 +471,8 @@ public:
 
                         Sublime::UrlDocument *activeDoc = nullptr, *afterActiveDoc = nullptr;
                         if(activeView && afterActiveView) {
-                            activeDoc = dynamic_cast<Sublime::UrlDocument *>(activeView->document());
-                            afterActiveDoc = dynamic_cast<Sublime::UrlDocument *>(afterActiveView->document());
+                            activeDoc = qobject_cast<Sublime::UrlDocument *>(activeView->document());
+                            afterActiveDoc = qobject_cast<Sublime::UrlDocument *>(afterActiveView->document());
                         }
                         if(activeDoc && afterActiveDoc &&
                            buddyFinder->areBuddies(activeDoc->url(), afterActiveDoc->url()))
@@ -869,7 +869,7 @@ QList< IDocument * > KDevelop::DocumentController::modifiedDocuments(const QList
 
 bool DocumentController::saveAllDocumentsForWindow(KParts::MainWindow* mw, KDevelop::IDocument::DocumentSaveMode mode, bool currentAreaOnly)
 {
-    QList<IDocument*> checkSave = documentsExclusivelyInWindow(dynamic_cast<KDevelop::MainWindow*>(mw), currentAreaOnly);
+    QList<IDocument*> checkSave = documentsExclusivelyInWindow(qobject_cast<KDevelop::MainWindow*>(mw), currentAreaOnly);
 
     return saveSomeDocuments(checkSave, mode);
 }
@@ -877,7 +877,7 @@ bool DocumentController::saveAllDocumentsForWindow(KParts::MainWindow* mw, KDeve
 void DocumentController::reloadAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        const QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        const QList<IDocument*> views = visibleDocumentsInWindow(qobject_cast<KDevelop::MainWindow*>(mw));
 
         if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
@@ -893,7 +893,7 @@ void DocumentController::reloadAllDocuments()
 bool DocumentController::closeAllDocuments()
 {
     if (Sublime::MainWindow* mw = Core::self()->uiControllerInternal()->activeSublimeWindow()) {
-        const QList<IDocument*> views = visibleDocumentsInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        const QList<IDocument*> views = visibleDocumentsInWindow(qobject_cast<KDevelop::MainWindow*>(mw));
 
         if (!saveSomeDocuments(views, IDocument::Default))
             // User cancelled or other error
@@ -917,7 +917,7 @@ void DocumentController::closeAllOtherDocuments()
         }
 
         // Deal with saving unsaved solo views
-        QList<IDocument*> soloViews = documentsExclusivelyInWindow(dynamic_cast<KDevelop::MainWindow*>(mw));
+        QList<IDocument*> soloViews = documentsExclusivelyInWindow(qobject_cast<KDevelop::MainWindow*>(mw));
         soloViews.removeAll(dynamic_cast<IDocument*>(activeView->document()));
 
         if (!saveSomeDocuments(soloViews, IDocument::Default))

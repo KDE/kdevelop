@@ -395,7 +395,7 @@ void ExternalScriptJob::appendLine(const QString& l)
 
 KDevelop::OutputModel* ExternalScriptJob::model()
 {
-    return dynamic_cast<KDevelop::OutputModel*>(OutputJob::model());
+    return qobject_cast<KDevelop::OutputModel*>(OutputJob::model());
 }
 
 void ExternalScriptJob::receivedStderrLines(const QStringList& lines)

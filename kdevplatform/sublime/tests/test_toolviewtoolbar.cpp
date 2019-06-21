@@ -95,7 +95,7 @@ QToolBar* TestToolViewToolBar::fetchToolBarFor(Sublime::View* view)
     Q_UNUSED(loc);
     Q_ASSERT_X(toolWidget, loc, "Tool refuses to create widget (null).");
     Q_ASSERT(toolWidget->parent());
-    auto* toolWin = dynamic_cast<QMainWindow*>(toolWidget->parent());
+    auto* toolWin = qobject_cast<QMainWindow*>(toolWidget->parent());
     Q_ASSERT_X(toolWin, loc, "Tool widget's parent is not a QMainWindow.");
     QList<QToolBar*> toolBars = toolWin->findChildren<QToolBar*>();
     int barCount = toolBars.count();

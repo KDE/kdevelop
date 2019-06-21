@@ -272,7 +272,7 @@ void PartController::setActiveView(KTextEditor::View *view)
 
 KTextEditor::View *PartController::activeView()
 {
-    auto* textView = dynamic_cast<TextView*>(Core::self()->uiController()->activeArea()->activeView());
+    auto* textView = qobject_cast<TextView*>(Core::self()->uiController()->activeArea()->activeView());
     if (textView) {
         return textView->textView();
     }

@@ -173,7 +173,7 @@ void ProblemReporterPlugin::updateHighlight(const KDevelop::IndexedString& url)
 
 void ProblemReporterPlugin::showModel(const QString& id)
 {
-    auto w = dynamic_cast<ProblemsView*>(core()->uiController()->findToolView(i18n("Problems"), m_factory));
+    auto w = qobject_cast<ProblemsView*>(core()->uiController()->findToolView(i18n("Problems"), m_factory));
     if (w)
       w->showModel(id);
 }

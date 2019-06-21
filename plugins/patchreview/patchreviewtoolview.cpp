@@ -103,7 +103,7 @@ PatchReviewToolView::PatchReviewToolView( QWidget* parent, PatchReviewPlugin* pl
     connect( plugin, &PatchReviewPlugin::startingNewReview, this, &PatchReviewToolView::startingNewReview );
     connect( ICore::self()->documentController(), &IDocumentController::documentActivated, this, &PatchReviewToolView::documentActivated );
 
-    auto* w = dynamic_cast<Sublime::MainWindow*>( ICore::self()->uiController()->activeMainWindow() );
+    auto* w = qobject_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
     connect(w, &Sublime::MainWindow::areaChanged, m_plugin, &PatchReviewPlugin::areaChanged);
 
     showEditDialog();
@@ -154,7 +154,7 @@ LocalPatchSource* PatchReviewToolView::GetLocalPatchSource() {
 
     if ( !ips )
         return nullptr;
-    return dynamic_cast<LocalPatchSource*>( ips.data() );
+    return qobject_cast<LocalPatchSource*>(ips.data());
 }
 
 void PatchReviewToolView::fillEditFromPatch() {

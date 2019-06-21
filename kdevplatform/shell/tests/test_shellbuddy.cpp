@@ -170,7 +170,7 @@ void TestShellBuddy::testDeclarationDefinitionOrder()
     //QCOMPARE(m_uiController->documents().count(), 6);
     QCOMPARE(areaIndex->viewCount(), 6);
 
-    qDebug() << dynamic_cast<Sublime::UrlDocument*>(areaIndex->viewAt(0)->document())->url();
+    qDebug() << qobject_cast<Sublime::UrlDocument*>(areaIndex->viewAt(0)->document())->url();
     verifyFilename(areaIndex->views().value(0), "a.l.txt");
     verifyFilename(areaIndex->views().value(1), "a.r.txt");
     verifyFilename(areaIndex->views().value(2), "b.l.txt");

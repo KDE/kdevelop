@@ -81,9 +81,10 @@ void LldbVariable::formatChanged()
     if(childCount())
     {
         foreach(TreeItem* item, childItems) {
-            Q_ASSERT(dynamic_cast<MIVariable*>(item));
-            if( auto* var=dynamic_cast<MIVariable*>(item))
+            Q_ASSERT(qobject_cast<MIVariable*>(item));
+            if (auto* var = qobject_cast<MIVariable*>(item)) {
                 var->setFormat(format());
+            }
         }
     }
     else

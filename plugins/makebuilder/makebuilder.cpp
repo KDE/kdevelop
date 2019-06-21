@@ -74,7 +74,7 @@ KJob* MakeBuilder::install(KDevelop::ProjectBaseItem *dom, const QUrl &installPa
 
 void MakeBuilder::jobFinished(KJob* job)
 {
-    auto* mj = dynamic_cast<MakeJob*>(job);
+    auto* mj = qobject_cast<MakeJob*>(job);
 
     if( !mj )
         return;

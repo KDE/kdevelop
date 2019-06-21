@@ -171,7 +171,7 @@ VariableCollection* DebugController::variableCollection()
 
 void DebugController::partAdded(KParts::Part* part)
 {
-    if (auto* doc = dynamic_cast<KTextEditor::Document*>(part)) {
+    if (auto* doc = qobject_cast<KTextEditor::Document*>(part)) {
         auto *iface = dynamic_cast<KTextEditor::MarkInterface*>(doc);
         if( !iface )
             return;
@@ -340,7 +340,7 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
     clearExecutionPoint();
     qCDebug(SHELL) << url << lineNum;
 
-    Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
+    Q_ASSERT(qobject_cast<IDebugSession*>(sender()));
     QPair<QUrl,int> openUrl = static_cast<IDebugSession*>(sender())->convertToLocalUrl(qMakePair<QUrl,int>( url, lineNum ));
     KDevelop::IDocument* document = KDevelop::ICore::self()
         ->documentController()
@@ -362,7 +362,7 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
 
 void DebugController::debuggerStateChanged(KDevelop::IDebugSession::DebuggerState state)
 {
-    Q_ASSERT(dynamic_cast<IDebugSession*>(sender()));
+    Q_ASSERT(qobject_cast<IDebugSession*>(sender()));
     auto* session = static_cast<IDebugSession*>(sender());
     qCDebug(SHELL) << session << state << "current" << m_currentSession.data();
     if (session == m_currentSession.data()) {

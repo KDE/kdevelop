@@ -326,7 +326,7 @@ QString ExternalScriptPlugin::executeCommandSync(const QString& command, const Q
 
 void ExternalScriptPlugin::executeScriptFromActionData() const
 {
-    auto* action = dynamic_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
 
     auto* item = action->data().value<ExternalScriptItem*>();
@@ -337,7 +337,7 @@ void ExternalScriptPlugin::executeScriptFromActionData() const
 
 void ExternalScriptPlugin::executeScriptFromContextMenu() const
 {
-    auto* action = dynamic_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
 
     auto* item = action->data().value<ExternalScriptItem*>();

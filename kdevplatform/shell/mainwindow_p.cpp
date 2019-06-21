@@ -376,7 +376,7 @@ void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, QMenu* menu
     connect(action, &QAction::triggered, this, &MainWindowPrivate::contextMenuFileNew);
 
     if (view) {
-        if (auto* doc = dynamic_cast<TextDocument*>(view->document())) {
+        if (auto* doc = qobject_cast<TextDocument*>(view->document())) {
             action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Reload"));
             connect(action, &QAction::triggered, doc, &TextDocument::reload);
 
@@ -397,7 +397,7 @@ void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Contai
         }
     }
 
-    auto* urlDoc = dynamic_cast<Sublime::UrlDocument*>(view->document());
+    auto* urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
 
     if (urlDoc) {
         DUChainReadLocker lock;

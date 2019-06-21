@@ -246,7 +246,7 @@ void ScriptAppJob::appendLine(const QString& l)
 
 KDevelop::OutputModel* ScriptAppJob::model()
 {
-    return dynamic_cast<KDevelop::OutputModel*>( OutputJob::model() );
+    return qobject_cast<KDevelop::OutputModel*>(OutputJob::model());
 }
 
 

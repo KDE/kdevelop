@@ -161,7 +161,7 @@ void IdealButtonBarWidget::addAction(QAction* qaction)
 {
     QWidget::addAction(qaction);
 
-    auto action = dynamic_cast<ToolViewAction*>(qaction);
+    auto action = qobject_cast<ToolViewAction*>(qaction);
     if (!action || action->button()) {
       return;
     }
@@ -233,7 +233,7 @@ QString IdealButtonBarWidget::id(const IdealToolButton* button) const
 {
     const auto actions = this->actions();
     for (QAction* a : actions) {
-        auto tva = dynamic_cast<ToolViewAction*>(a);
+        auto tva = qobject_cast<ToolViewAction*>(a);
         if (tva && tva->button() == button) {
             return tva->id();
         }
@@ -246,7 +246,7 @@ IdealToolButton* IdealButtonBarWidget::button(const QString& id) const
 {
     const auto actions = this->actions();
     for (QAction* a : actions) {
-        auto tva = dynamic_cast<ToolViewAction*>(a);
+        auto tva = qobject_cast<ToolViewAction*>(a);
         if (tva && tva->id() == id) {
             return tva->button();
         }
@@ -287,7 +287,7 @@ void IdealButtonBarWidget::applyOrderToLayout()
     // to situations when loaded order does not contains all existing buttons. Therefore we should
     // fix this with using addToOrder() method.
     for (int i = 0; i < m_buttonsLayout->count(); ++i) {
-        if (auto button = dynamic_cast<IdealToolButton*>(m_buttonsLayout->itemAt(i)->widget())) {
+        if (auto button = qobject_cast<IdealToolButton*>(m_buttonsLayout->itemAt(i)->widget())) {
             addButtonToOrder(button);
             m_buttonsLayout->removeWidget(button);
         }
@@ -304,7 +304,7 @@ void IdealButtonBarWidget::takeOrderFromLayout()
 {
     m_buttonsOrder.clear();
     for (int i = 0; i < m_buttonsLayout->count(); ++i) {
-        if (auto button = dynamic_cast<IdealToolButton*>(m_buttonsLayout->itemAt(i)->widget())) {
+        if (auto button = qobject_cast<IdealToolButton*>(m_buttonsLayout->itemAt(i)->widget())) {
             m_buttonsOrder += id(button);
         }
     }

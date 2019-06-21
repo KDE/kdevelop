@@ -680,7 +680,7 @@ void KDevelop::RunController::stopAllProcesses()
 
 void KDevelop::RunController::slotKillJob()
 {
-    auto* action = dynamic_cast<QAction*>(sender());
+    auto* action = qobject_cast<QAction*>(sender());
     Q_ASSERT(action);
 
     KJob* job = static_cast<KJob*>(qvariant_cast<void*>(action->data()));

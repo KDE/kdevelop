@@ -612,7 +612,7 @@ void OutputWidget::copySelection()
     QWidget* widget = currentWidget();
     if( !widget )
         return;
-    auto *view = dynamic_cast<QAbstractItemView*>(widget);
+    auto* view = qobject_cast<QAbstractItemView*>(widget);
     if( !view )
         return;
 

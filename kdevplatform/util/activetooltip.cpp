@@ -245,7 +245,7 @@ void ActiveToolTip::addFriendWidget(QWidget* widget)
 bool ActiveToolTip::insideThis(QObject* object)
 {
     while (object) {
-        if (dynamic_cast<QMenu*>(object)) {
+        if (qobject_cast<QMenu*>(object)) {
             return true;
         }
 

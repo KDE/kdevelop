@@ -204,8 +204,7 @@ void MIVariableController::addWatch(KDevelop::Variable* variable)
     // to MIVariable, not poke at varobj. In that case,
     // we will be able to make addWatch a generic method, not
     // gdb-specific one.
-    if (auto *gv = dynamic_cast<MIVariable*>(variable))
-    {
+    if (auto* gv = qobject_cast<MIVariable*>(variable)) {
         debugSession()->addCommand(VarInfoPathExpression,
                                    gv->varobj(),
                                    this, &MIVariableController::addWatch);
@@ -218,8 +217,7 @@ void MIVariableController::addWatchpoint(KDevelop::Variable* variable)
     // to MIVariable, not poke at varobj. In that case,
     // we will be able to make addWatchpoint a generic method, not
     // gdb-specific one.
-    if (auto *gv = dynamic_cast<MIVariable*>(variable))
-    {
+    if (auto* gv = qobject_cast<MIVariable*>(variable)) {
         debugSession()->addCommand(VarInfoPathExpression,
                                    gv->varobj(),
                                    this, &MIVariableController::addWatchpoint);

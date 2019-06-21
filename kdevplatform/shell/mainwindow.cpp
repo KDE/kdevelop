@@ -429,7 +429,7 @@ void MainWindow::updateCaption()
             title += QLatin1String(" - [ ");
 
         Sublime::Document* doc = area()->activeView()->document();
-        auto* urlDoc = dynamic_cast<Sublime::UrlDocument*>(doc);
+        auto* urlDoc = qobject_cast<Sublime::UrlDocument*>(doc);
         if(urlDoc)
         {
             if (urlDoc->url().isLocalFile()) {

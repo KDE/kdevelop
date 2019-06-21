@@ -160,7 +160,7 @@ void PatchReviewPlugin::addHighlighting( const QUrl& highlightFile, IDocument* d
 
             removeHighlighting( file );
 
-            m_highlighters[file] = new PatchHighlighter( model, doc, this, dynamic_cast<LocalPatchSource*>(m_patch.data()) == nullptr );
+            m_highlighters[file] = new PatchHighlighter(model, doc, this, (qobject_cast<LocalPatchSource*>(m_patch.data()) == nullptr));
         }
     } catch ( const QString & str ) {
         qCDebug(PLUGIN_PATCHREVIEW) << "highlightFile():" << str;
@@ -216,7 +216,7 @@ void PatchReviewPlugin::notifyPatchChanged() {
 void PatchReviewPlugin::forceUpdate() {
     if( m_patch ) {
         // don't trigger an update if we know the plugin cannot update itself
-        auto *vcsPatch = dynamic_cast<VCSDiffPatchSource*>(m_patch.data());
+        auto* vcsPatch = qobject_cast<VCSDiffPatchSource*>(m_patch.data());
         if (!vcsPatch || vcsPatch->m_updater) {
             m_patch->update();
             notifyPatchChanged();
@@ -373,7 +373,7 @@ void PatchReviewPlugin::closeReview()
         m_modelList.reset( nullptr );
         m_depth = 0;
 
-        if( !dynamic_cast<LocalPatchSource*>( m_patch.data() ) ) {
+        if (!qobject_cast<LocalPatchSource*>(m_patch.data())) {
             // make sure "show" button still openes the file dialog to open a custom patch file
             setPatch( new LocalPatchSource );
         } else
@@ -557,8 +557,9 @@ void PatchReviewPlugin::documentSaved( IDocument* doc ) {
     // Also, don't automatically update local patch sources, because
     // they may correspond to static files which don't match any more
     // after an edit was done.
-    if( m_patch && doc->url() != m_patch->file() && !dynamic_cast<LocalPatchSource*>(m_patch.data()) )
+    if (m_patch && doc->url() != m_patch->file() && !qobject_cast<LocalPatchSource*>(m_patch.data())) {
         forceUpdate();
+    }
 }
 
 void PatchReviewPlugin::textDocumentCreated( IDocument* doc ) {
