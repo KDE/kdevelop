@@ -166,7 +166,7 @@ VariableTree::VariableTree(IDebugController *controller,
     setAllColumnsShowFocus(true);
 
     // setting proxy model
-    m_model = static_cast<TreeModel *>(controller->variableCollection());
+    m_model = controller->variableCollection();
     m_proxy->setSourceModel(m_model);
     setModel(m_proxy);
     setSortingEnabled(true);

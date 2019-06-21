@@ -60,10 +60,10 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
 
     layout->setMargin(0);
 
-    connect(static_cast<Sublime::MainWindow*>(mainwindow)->area(),
+    connect(mainwindow->area(),
             &Sublime::Area::viewAdded, this, &WorkingSetToolTipWidget::updateFileButtons,
             Qt::QueuedConnection);
-    connect(static_cast<Sublime::MainWindow*>(mainwindow)->area(),
+    connect(mainwindow->area(),
             &Sublime::Area::viewRemoved, this, &WorkingSetToolTipWidget::updateFileButtons,
             Qt::QueuedConnection);
 
