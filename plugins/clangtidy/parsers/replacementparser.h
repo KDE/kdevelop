@@ -45,7 +45,7 @@ namespace ClangTidy
 struct Replacement {
     size_t offset, length; ///< read from YAML.
     QString replacementText; ///< read from YAML.
-    DocumentRange range; ///< created from line and colum.
+    DocumentRange range; ///< created from line and column.
 };
 
 using Replacements = QVector<Replacement>;
