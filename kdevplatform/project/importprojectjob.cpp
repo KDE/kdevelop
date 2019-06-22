@@ -47,7 +47,8 @@ public:
 
     void import(ProjectFolderItem* folder)
     {
-        foreach(ProjectFolderItem* sub, m_importer->parse(folder)) {
+        const auto subs = m_importer->parse(folder);
+        for (ProjectFolderItem* sub : subs) {
             if(!cancel) {
                 import(sub);
             }

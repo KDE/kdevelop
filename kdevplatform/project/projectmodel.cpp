@@ -116,7 +116,8 @@ public:
     ProjectBaseItem::RenameStatus renameBaseItem(ProjectBaseItem* item, const QString& newName)
     {
         if (item->parent()) {
-            foreach(ProjectBaseItem* sibling, item->parent()->children()) {
+            const auto siblings = item->parent()->children();
+            for (ProjectBaseItem* sibling : siblings) {
                 if (sibling->text() == newName) {
                     return ProjectBaseItem::ExistingItemSameName;
                 }
@@ -249,7 +250,7 @@ void ProjectBaseItem::removeRows(int row, int count)
     //NOTE: we unset parent, row and model manually to speed up the deletion
     if (row == 0 && count == d->children.size()) {
         // optimize if we want to delete all
-        foreach(ProjectBaseItem* item, d->children) {
+        for (ProjectBaseItem* item : qAsConst(d->children)) {
             item->d_func()->parent = nullptr;
             item->d_func()->row = -1;
             item->setModel( nullptr );
@@ -343,7 +344,7 @@ void ProjectBaseItem::setModel( ProjectModel* model )
         model->d->pathLookupTable.insert(d->m_pathIndex, this);
     }
 
-    foreach( ProjectBaseItem* item, d->children ) {
+    for (ProjectBaseItem* item : qAsConst(d->children)) {
         item->setModel( model );
     }
 }
@@ -630,8 +631,8 @@ void ProjectFolderItem::propagateRename( const Path& newBase ) const
 {
     Path path = newBase;
     path.addPath(QStringLiteral("dummy"));
-    foreach( KDevelop::ProjectBaseItem* child, children() )
-    {
+    const auto children = this->children();
+    for (KDevelop::ProjectBaseItem* child : children) {
         path.setLastPathSegment( child->text() );
         child->setPath( path );
 
@@ -649,15 +650,11 @@ ProjectBaseItem::RenameStatus ProjectFolderItem::rename(const QString& newName)
 
 bool ProjectFolderItem::hasFileOrFolder(const QString& name) const
 {
-    foreach ( ProjectBaseItem* item, children() )
-    {
-        if ( (item->type() == Folder || item->type() == File || item->type() == BuildFolder)
-             && name == item->baseName() )
-        {
-            return true;
-        }
-    }
-    return false;
+    const auto children = this->children();
+    return std::any_of(children.begin(), children.end(), [&](ProjectBaseItem* item) {
+        return ((item->type() == Folder || item->type() == File || item->type() == BuildFolder)
+                && name == item->baseName());
+    });
 }
 
 bool ProjectBaseItem::isProjectRoot() const
@@ -1096,8 +1093,8 @@ ProjectBaseItem* ProjectModel::itemForPath(const IndexedString& path) const
 
 void ProjectVisitor::visit( ProjectModel* model )
 {
-    foreach( ProjectBaseItem* item, model->topItems() )
-    {
+    const auto topItems = model->topItems();
+    for (ProjectBaseItem* item : topItems) {
         visit( item->project() );
     }
 }
@@ -1114,20 +1111,20 @@ void ProjectVisitor::visit ( ProjectBuildFolderItem* folder )
 
 void ProjectVisitor::visit ( ProjectExecutableTargetItem* exec )
 {
-    foreach( ProjectFileItem* item, exec->fileList() )
-    {
+    const auto fileItems = exec->fileList();
+    for (ProjectFileItem* item : fileItems) {
         visit( item );
     }
 }
 
 void ProjectVisitor::visit ( ProjectFolderItem* folder )
 {
-    foreach( ProjectFileItem* item, folder->fileList() )
-    {
+    const auto fileItems = folder->fileList();
+    for (ProjectFileItem* item : fileItems) {
         visit( item );
     }
-    foreach( ProjectTargetItem* item, folder->targetList() )
-    {
+    const auto targetItems = folder->targetList();
+    for (ProjectTargetItem* item : targetItems) {
         if( item->type() == ProjectBaseItem::LibraryTarget )
         {
             visit( dynamic_cast<ProjectLibraryTargetItem*>( item ) );
@@ -1136,8 +1133,8 @@ void ProjectVisitor::visit ( ProjectFolderItem* folder )
             visit( dynamic_cast<ProjectExecutableTargetItem*>( item ) );
         }
     }
-    foreach( ProjectFolderItem* item, folder->folderList() )
-    {
+    const auto folderItems = folder->folderList();
+    for (ProjectFolderItem* item : folderItems) {
         if( item->type() == ProjectBaseItem::BuildFolder )
         {
             visit( dynamic_cast<ProjectBuildFolderItem*>( item ) );
@@ -1154,8 +1151,8 @@ void ProjectVisitor::visit ( ProjectFileItem* )
 
 void ProjectVisitor::visit ( ProjectLibraryTargetItem* lib )
 {
-    foreach( ProjectFileItem* item, lib->fileList() )
-    {
+    const auto fileItems = lib->fileList();
+    for (ProjectFileItem* item : fileItems) {
         visit( item );
     }
 }

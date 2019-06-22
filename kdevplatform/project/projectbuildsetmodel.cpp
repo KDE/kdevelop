@@ -136,7 +136,7 @@ void ProjectBuildSetModel::storeToSession( ISession* session )
     // Store the item ordering cache
     QVariantList sessionBuildItems;
     sessionBuildItems.reserve(d->orderingCache.size());
-    foreach (const QStringList& item, d->orderingCache) {
+    for (const QStringList& item : qAsConst(d->orderingCache)) {
         sessionBuildItems.append( item );
     }
     KConfigGroup sessionBuildSetConfig = session->config()->group( "Buildset" );
@@ -351,7 +351,7 @@ void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 {
     QVariantList paths;
-    foreach (const BuildItem& item, d->items) {
+    for (const BuildItem& item : qAsConst(d->items)) {
         if( item.itemProject() == project->name() )
             paths.append(item.itemPath());
     }

@@ -47,9 +47,11 @@ using namespace KDevelop;
 ProjectChangesModel::ProjectChangesModel(QObject* parent)
     : VcsFileChangesModel(parent)
 {
-    foreach(IProject* p, ICore::self()->projectController()->projects())
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* p : projects) {
         addProject(p);
-    
+    }
+
     connect(ICore::self()->projectController(), &IProjectController::projectOpened,
                                               this, &ProjectChangesModel::addProject);
     connect(ICore::self()->projectController(), &IProjectController::projectClosing,

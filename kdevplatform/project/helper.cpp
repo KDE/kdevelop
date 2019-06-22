@@ -170,7 +170,8 @@ bool KDevelop::renameUrl(const KDevelop::IProject* project, const QUrl& oldname,
             // save files that where opened in this folder under the new name
             Path oldBasePath(oldname);
             Path newBasePath(newname);
-            foreach (auto doc, ICore::self()->documentController()->openDocuments()) {
+            const auto documents = ICore::self()->documentController()->openDocuments();
+            for (auto* doc : documents) {
                 auto textDoc = doc->textDocument();
                 if (textDoc && oldname.isParentOf(doc->url())) {
                     const auto path = Path(textDoc->url());

@@ -479,9 +479,9 @@ void TestProjectModel::testItemsForPath()
 
     model->appendRow(root);
 
-    auto items = model->itemsForPath(IndexedString(path.pathOrUrl()));
+    const auto items = model->itemsForPath(IndexedString(path.pathOrUrl()));
     QCOMPARE(items.size(), matches);
-    foreach(ProjectBaseItem* item, items) {
+    for (ProjectBaseItem* item : items) {
         QVERIFY(item->path() == path);
     }
 

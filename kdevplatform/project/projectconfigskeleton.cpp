@@ -90,8 +90,8 @@ void ProjectConfigSkeleton::setDefaults()
 {
     qCDebug(PROJECT) << "Setting Defaults";
     KConfig cfg( d->m_projectTempFile );
-    Q_FOREACH( KConfigSkeletonItem* item, items() )
-    {
+    const auto items = this->items();
+    for (KConfigSkeletonItem* item : items) {
         item->swapDefault();
         if( cfg.hasGroup( item->group() ) )
         {
@@ -110,8 +110,8 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
     if( b )
     {
         KConfig cfg( d->m_projectTempFile );
-        Q_FOREACH( KConfigSkeletonItem* item, items() )
-        {
+        const auto items = this->items();
+        for (KConfigSkeletonItem* item : items) {
             item->swapDefault();
             if( cfg.hasGroup( item->group() ) )
             {
@@ -125,8 +125,8 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
     {
         KConfig cfg( d->m_developerTempFile );
         KConfig defCfg( d->m_projectTempFile );
-        Q_FOREACH( KConfigSkeletonItem* item, items() )
-        {
+        const auto items = this->items();
+        for (KConfigSkeletonItem* item : items) {
             if( cfg.hasGroup( item->group() ) )
             {
                 KConfigGroup grp = cfg.group( item->group() );

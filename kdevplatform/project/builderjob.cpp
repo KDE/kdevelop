@@ -213,7 +213,7 @@ void BuilderJob::updateJobName()
     // Whether there are jobs without any specific item
     bool hasNullItems = false;
 
-    foreach( const SubJobData& subjob, d->m_metadata ) {
+    for (const SubJobData& subjob : qAsConst(d->m_metadata)) {
         if( subjob.item ) {
             if( !registeredItems.contains( subjob.item ) ) {
                 registeredItems.append( subjob.item );
@@ -230,7 +230,7 @@ void BuilderJob::updateJobName()
     if( !hasNullItems ) {
         QStringList itemNamesList;
         itemNamesList.reserve(registeredItems.size());
-        foreach( ProjectBaseItem* item, registeredItems ) {
+        for (ProjectBaseItem* item : qAsConst(registeredItems)) {
             itemNamesList << item->text();
         }
         itemNames = itemNamesList.join(QStringLiteral(", "));
@@ -241,7 +241,7 @@ void BuilderJob::updateJobName()
     QString methodNames;
     QStringList methodNamesList;
     methodNamesList.reserve(buildTypes.size());
-    foreach( BuildType type, buildTypes ) {
+    for (BuildType type : qAsConst(buildTypes)) {
         methodNamesList << d->buildTypeToString( type );
     }
     methodNames = methodNamesList.join( QStringLiteral( ", " ) );

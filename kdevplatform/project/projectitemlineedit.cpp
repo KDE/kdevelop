@@ -133,13 +133,12 @@ QValidator::State ProjectItemValidator::validate(QString& input, int& pos) const
     {
         // Check for a project whose name beings with the input
         QString first = path.first();
-        foreach( KDevelop::IProject* project, KDevelop::ICore::self()->projectController()->projects() )
-        {
-            if( project->name().startsWith( first, Qt::CaseInsensitive ) )
-            {
-                state = QValidator::Intermediate;
-                break;
-            }
+        const auto projects = KDevelop::ICore::self()->projectController()->projects();
+        bool matchesAnyName = std::any_of(projects.begin(), projects.end(), [&](KDevelop::IProject* project) {
+            return (project->name().startsWith(first, Qt::CaseInsensitive));
+        });
+        if (matchesAnyName) {
+            state = QValidator::Intermediate;
         }
     }
     return state;

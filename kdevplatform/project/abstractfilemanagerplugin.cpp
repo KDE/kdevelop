@@ -237,13 +237,13 @@ void AbstractFileManagerPluginPrivate::addJobItems(FileManagerListJob* job,
     }
 
     // add new rows
-    foreach ( const Path& path, files ) {
+    for (const Path& path : qAsConst(files)) {
         ProjectFileItem* file = q->createFileItem( baseItem->project(), path, baseItem );
         if (file) {
             emit q->fileAdded( file );
         }
     }
-    foreach ( const Path& path, folders ) {
+    for (const Path& path : qAsConst(folders)) {
         ProjectFolderItem* folder = q->createFolderItem( baseItem->project(), path, baseItem );
         if (folder) {
             emit q->folderAdded( folder );
@@ -279,7 +279,8 @@ void AbstractFileManagerPluginPrivate::created(const QString& path_)
         }
         if ( info.isDir() ) {
             bool found = false;
-            foreach ( ProjectFolderItem* folder, p->foldersForPath(indexedPath) ) {
+            const auto folderItems = p->foldersForPath(indexedPath);
+            for (ProjectFolderItem* folder : folderItems) {
                 // exists already in this project, happens e.g. when we restart the dirwatcher
                 // or if we delete and remove folders consecutively https://bugs.kde.org/show_bug.cgi?id=260741
                 qCDebug(FILEMANAGER) << "force reload of" << path << folder;
@@ -294,7 +295,8 @@ void AbstractFileManagerPluginPrivate::created(const QString& path_)
             // also gets triggered for kate's backup files
             continue;
         }
-        foreach ( ProjectFolderItem* parentItem, p->foldersForPath(indexedParent) ) {
+        const auto parentItems = p->foldersForPath(indexedParent);
+        for (ProjectFolderItem* parentItem : parentItems) {
             if ( info.isDir() ) {
                 ProjectFolderItem* folder = q->createFolderItem( p, path, parentItem );
                 if (folder) {
@@ -319,7 +321,7 @@ void AbstractFileManagerPluginPrivate::deleted(const QString& path_)
         return;
     }
     // ensure that the path is not inside a stopped folder
-    foreach(const QString& folder, m_stoppedFolders) {
+    for (const QString& folder : qAsConst(m_stoppedFolders)) {
         if (path_.startsWith(folder)) {
             return;
         }
@@ -346,10 +348,12 @@ void AbstractFileManagerPluginPrivate::deleted(const QString& path_)
             // FIXME: how should this be handled? see unit test
             continue;
         }
-        foreach ( ProjectFolderItem* item, p->foldersForPath(indexed) ) {
+        const auto folderItems = p->foldersForPath(indexed);
+        for (ProjectFolderItem* item : folderItems) {
             delete item;
         }
-        foreach ( ProjectFileItem* item, p->filesForPath(indexed) ) {
+        const auto fileItems = p->filesForPath(indexed);
+        for (ProjectFileItem* item : fileItems) {
             emit q->fileRemoved(item);
             ifDebug(qCDebug(FILEMANAGER) << "removing file" << item;)
             delete item;
@@ -369,7 +373,8 @@ bool AbstractFileManagerPluginPrivate::rename(ProjectBaseItem* item, const Path&
             return false;
         }
     }
-    foreach ( ProjectFolderItem* parent, item->project()->foldersForPath(IndexedString(newPath.parent().pathOrUrl())) ) {
+    const auto parentItems = item->project()->foldersForPath(IndexedString(newPath.parent().pathOrUrl()));
+    for (ProjectFolderItem* parent : parentItems) {
         if ( parent->folder() ) {
             stopWatcher(parent);
             const Path source = item->path();

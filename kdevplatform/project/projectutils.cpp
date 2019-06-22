@@ -33,7 +33,8 @@ ProjectItemContextImpl::ProjectItemContextImpl(const QList<ProjectBaseItem*>& it
 QList<QUrl> ProjectItemContextImpl::urls() const
 {
     QList<QUrl> urls;
-    foreach (const auto& item, items()) {
+    const auto items = this->items();
+    for (const auto& item : items) {
         const auto url = item->path().toUrl();
         if (url.isValid()) {
             urls << url;

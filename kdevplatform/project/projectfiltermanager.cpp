@@ -140,7 +140,8 @@ ProjectFilterManager::ProjectFilterManager(QObject* parent)
     connect(ICore::self()->pluginController(), &IPluginController::unloadingPlugin,
             this, [&] (IPlugin* plugin) { d->unloadingPlugin(plugin); });
 
-    foreach(IPlugin* plugin, ICore::self()->pluginController()->loadedPlugins()) {
+    const auto plugins = ICore::self()->pluginController()->loadedPlugins();
+    for (IPlugin* plugin : plugins) {
         d->pluginLoaded(plugin);
     }
 }
@@ -154,7 +155,7 @@ void ProjectFilterManager::add(IProject* project)
 {
     QVector<Filter> filters;
     filters.reserve(d->m_filterProvider.size());
-    foreach(IProjectFilterProvider* provider, d->m_filterProvider) {
+    for (IProjectFilterProvider* provider : qAsConst(d->m_filterProvider)) {
         Filter filter;
         filter.provider = provider;
         filter.filter = provider->createFilter(project);
@@ -175,12 +176,10 @@ bool ProjectFilterManager::isManaged(IProject* project) const
 
 bool ProjectFilterManager::isValid(const Path& path, bool isFolder, IProject* project) const
 {
-    foreach(const Filter& filter, d->m_filters[project]) {
-        if (!filter.filter->isValid(path, isFolder)) {
-            return false;
-        }
-    }
-    return true;
+    const auto filters = d->m_filters[project];
+    return std::all_of(filters.begin(), filters.end(), [&](const Filter& filter) {
+        return (filter.filter->isValid(path, isFolder));
+    });
 }
 
 QVector< QSharedPointer< IProjectFilter > > ProjectFilterManager::filtersForProject(IProject* project) const
