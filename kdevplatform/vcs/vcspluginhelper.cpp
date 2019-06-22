@@ -123,7 +123,7 @@ public:
     QMenu* createMenu(QWidget* parent)
     {
         bool allVersioned=true;
-        foreach(const QUrl &url, ctxUrls) {
+        for (const QUrl& url : qAsConst(ctxUrls)) {
             allVersioned=allVersioned && vcs->isVersionControlled(url);
 
             if(!allVersioned)
@@ -226,7 +226,7 @@ void VcsPluginHelper::revert()
     VcsJob* job=d->vcs->revert(d->ctxUrls);
     connect(job, &VcsJob::finished, this, &VcsPluginHelper::revertDone);
 
-    foreach(const QUrl &url, d->ctxUrls) {
+    for (const QUrl& url : qAsConst(d->ctxUrls)) {
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
 
         if(doc && doc->textDocument()) {
@@ -509,7 +509,7 @@ void VcsPluginHelper::commit()
 
 void VcsPluginHelper::push()
 {
-    foreach(const QUrl &url, d->ctxUrls) {
+    for (const QUrl& url : qAsConst(d->ctxUrls)) {
         VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->push(url, VcsLocation());
         ICore::self()->runController()->registerJob(job);
     }
@@ -517,7 +517,7 @@ void VcsPluginHelper::push()
 
 void VcsPluginHelper::pull()
 {
-    foreach(const QUrl &url, d->ctxUrls) {
+    for (const QUrl& url : qAsConst(d->ctxUrls)) {
         VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->pull(VcsLocation(), url);
         ICore::self()->runController()->registerJob(job);
     }

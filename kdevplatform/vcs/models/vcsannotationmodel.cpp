@@ -73,8 +73,8 @@ public:
     {
         if( job == this->job )
         {
-            foreach( const QVariant& v, job->fetchResults().toList() )
-            {
+            const auto results = job->fetchResults().toList();
+            for (const QVariant& v : results) {
                 if( v.canConvert<KDevelop::VcsAnnotationLine>() )
                 {
                     VcsAnnotationLine l = v.value<KDevelop::VcsAnnotationLine>();
