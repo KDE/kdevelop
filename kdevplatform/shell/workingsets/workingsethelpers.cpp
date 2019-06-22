@@ -40,7 +40,8 @@ void filterViews(const QSet< QString >& keepFiles)
 {
     MainWindow* window = mainWindow();
 
-    foreach(Sublime::View* view, window->area()->views()) {
+    const auto views = window->area()->views();
+    for (Sublime::View* view : views) {
 
         auto* partDoc = qobject_cast<PartDocument*>(view->document());
         if(partDoc && !keepFiles.contains(partDoc->documentSpecifier())) {

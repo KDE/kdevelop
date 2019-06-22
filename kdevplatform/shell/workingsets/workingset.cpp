@@ -88,7 +88,7 @@ QIcon generateIcon(const WorkingSetIconParameters& params)
         brightColor = brightColor.lighter(120 + (params.setId*13) % 55);
     }
     int at = 0;
-    foreach ( const QRect rect, rects ) {
+    for (const QRect& rect : qAsConst(rects)) {
         QColor currentColor;
         // pick the colored squares; you can get different patterns by re-ordering the "rects" list
         if ( (at + params.setId*7) % 4 < coloredCount ) {
@@ -138,7 +138,8 @@ void WorkingSet::saveFromArea( Sublime::Area* a, Sublime::AreaIndex * area, KCon
         setGroup.writeEntry("View Count", area->viewCount());
         areaGroup.writeEntry("View Count", area->viewCount());
         int index = 0;
-        foreach (Sublime::View* view, area->views()) {
+        const auto views = area->views();
+        for (Sublime::View* view : views) {
             //The working set config gets an updated list of files
             QString docSpec = view->document()->documentSpecifier();
 
@@ -169,7 +170,8 @@ struct DisableMainWindowUpdatesFromArea
 {
     explicit DisableMainWindowUpdatesFromArea(Sublime::Area* area) : m_area(area) {
         if(area) {
-            foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
+            const auto windows = Core::self()->uiControllerInternal()->mainWindows();
+            for (Sublime::MainWindow* window : windows) {
                 if(window->area() == area) {
                     if(window->updatesEnabled()) {
                         wasUpdatesEnabled.insert(window);
@@ -182,7 +184,7 @@ struct DisableMainWindowUpdatesFromArea
 
     ~DisableMainWindowUpdatesFromArea() {
         if(m_area) {
-            foreach(Sublime::MainWindow* window, wasUpdatesEnabled) {
+            for (Sublime::MainWindow* window : qAsConst(wasUpdatesEnabled)) {
                 window->setUpdatesEnabled(wasUpdatesEnabled.contains(window));
             }
         }
@@ -244,8 +246,10 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
 
     QMultiMap<QString, Sublime::View*> recycle;
 
-    foreach( Sublime::View* view, area->views() )
+    const auto viewsBefore = area->views();
+    for (Sublime::View* view : viewsBefore) {
         recycle.insert( view->document()->documentSpecifier(), area->removeView(view) );
+    }
 
     qCDebug(SHELL) << "recycling" << recycle.size() << "old views";
 
@@ -266,7 +270,8 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
     //activate view in the working set
     /// @todo correctly select one out of multiple equal views
     QString activeView = areaGroup.readEntry("Active View", QString());
-    foreach (Sublime::View *v, area->views()) {
+    const auto viewsAfter = area->views();
+    for (Sublime::View* v : viewsAfter) {
         if (v->document()->documentSpecifier() == activeView) {
             area->setActiveView(v);
             break;
@@ -277,7 +282,8 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) 
         area->setActiveView( area->views().at(0) );
 
     if( area->activeView() ) {
-        foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
+        const auto windows = Core::self()->uiControllerInternal()->mainWindows();
+        for (Sublime::MainWindow* window : windows) {
                 if(window->area() == area) {
                     window->activateView( area->activeView() );
                 }
@@ -354,12 +360,14 @@ void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex, 
 
 void deleteGroupRecursive(KConfigGroup group) {
 //     qCDebug(SHELL) << "deleting" << group.name();
-    foreach(const QString& entry, group.entryMap().keys()) {
-        group.deleteEntry(entry);
+    const auto entryMap = group.entryMap();
+    for (auto it = entryMap.begin(), end = entryMap.end(); it != end; ++it) {
+        group.deleteEntry(it.key());
     }
     Q_ASSERT(group.entryMap().isEmpty());
 
-    foreach(const QString& subGroup, group.groupList()) {
+    const auto groupList = group.groupList();
+    for (const QString& subGroup : groupList) {
         deleteGroupRecursive(group.group(subGroup));
         group.deleteGroup(subGroup);
     }
@@ -446,14 +454,14 @@ void WorkingSet::areaViewRemoved(Sublime::AreaIndex*, Sublime::View* view) {
         return;
     }
 
-    foreach(Sublime::Area* otherArea, m_areas)
-    {
+    const auto areasBefore = m_areas; // TODO: check if areas could be changed, otherwise use m_areas directly
+    for (Sublime::Area* otherArea : areasBefore) {
         if(otherArea == area)
             continue;
-        bool hadDocument = false;
-        foreach(Sublime::View* areaView, otherArea->views())
-            if(view->document() == areaView->document())
-                hadDocument = true;
+        const auto otherAreaViews = otherArea->views();
+        bool hadDocument = std::any_of(otherAreaViews.begin(), otherAreaViews.end(), [&](Sublime::View* otherView) {
+            return (view->document() == otherView->document());
+        });
 
         if(!hadDocument)
         {

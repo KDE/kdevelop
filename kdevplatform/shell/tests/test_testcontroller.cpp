@@ -97,8 +97,8 @@ void TestTestController::emitTestResult(ITestSuite* suite, TestResult::TestCaseR
 {
     TestResult result;
     result.suiteResult = caseResult;
-    foreach (const QString& testCase, suite->cases())
-    {
+    const auto testCases = suite->cases();
+    for (const QString& testCase : testCases) {
         result.testCaseResults.insert(testCase, caseResult);
     }
 
@@ -203,8 +203,7 @@ void TestTestController::testResults()
     QList<TestResult::TestCaseResult> results;
     results << TestResult::Passed << TestResult::Failed << TestResult::Error << TestResult::Skipped << TestResult::NotRun;
 
-    foreach (const TestResult::TestCaseResult result, results)
-    {
+    for (const TestResult::TestCaseResult result : qAsConst(results)) {
         emitTestResult(suite, result);
         QCOMPARE(spy.size(), 1);
 
@@ -217,8 +216,8 @@ void TestTestController::testResults()
         QVERIFY(arguments.at(1).canConvert<TestResult>());
         QCOMPARE(arguments.at(1).value<TestResult>().suiteResult, result);
 
-        foreach (const QString& testCase, suite->cases())
-        {
+        const auto testCases = suite->cases();
+        for (const QString& testCase : testCases) {
             QCOMPARE(arguments.at(1).value<TestResult>().testCaseResults[testCase], result);
         }
     }

@@ -195,10 +195,11 @@ void TestProjectController::cleanup()
 {
     // also close any opened projects as we do not get a clean fixture,
     // following tests should start off clean.
-    foreach(IProject* p, m_projCtrl->projects()) {
+    const auto projects = m_projCtrl->projects();
+    for (IProject* p : projects) {
         m_projCtrl->closeProject(p);
     }
-    foreach(const Path &cfg, m_tmpConfigs) {
+    for (const Path& cfg : qAsConst(m_tmpConfigs)) {
         QFile::remove(cfg.pathOrUrl());
     }
     qDeleteAll(m_fileManagerGarbage);

@@ -167,20 +167,19 @@ public:
     // Determines whether the current contents of this document in the editor
     // could be retrieved from the VCS if they were dismissed.
     void queryCanRecreateFromVcs(KTextEditor::Document* document) const {
-        IProject* project = nullptr;
         // Find projects by checking which one contains the file's parent directory,
         // to avoid issues with the cmake manager temporarily removing files from a project
         // during reloading.
         KDevelop::Path path(document->url());
-        foreach ( KDevelop::IProject* current, Core::self()->projectController()->projects() ) {
-            if ( current->path().isParentOf(path) ) {
-                project = current;
-                break;
-            }
-        }
-        if (!project) {
+        const auto projects = Core::self()->projectController()->projects();
+        auto projectIt = std::find_if(projects.begin(), projects.end(), [&](KDevelop::IProject* project) {
+            return project->path().isParentOf(path);
+        });
+        if (projectIt == projects.end()) {
             return;
         }
+        IProject* project = *projectIt;
+
         IContentAwareVersionControl* iface;
         iface = qobject_cast< KDevelop::IContentAwareVersionControl* >(project->versionControlPlugin());
         if (!iface) {
@@ -674,7 +673,8 @@ void KDevelop::TextDocument::textChanged(KTextEditor::Document *document)
 void KDevelop::TextDocument::populateContextMenu( KTextEditor::View* v, QMenu* menu )
 {
     if (d->addedContextMenu) {
-        foreach ( QAction* action, d->addedContextMenu->actions() ) {
+        const auto actions = d->addedContextMenu->actions();
+        for (QAction* action : actions) {
             menu->removeAction(action);
         }
         delete d->addedContextMenu;
@@ -687,7 +687,8 @@ void KDevelop::TextDocument::populateContextMenu( KTextEditor::View* v, QMenu* m
 
     ContextMenuExtension::populateMenu(d->addedContextMenu, extensions);
 
-    foreach ( QAction* action, d->addedContextMenu->actions() ) {
+    const auto actions = d->addedContextMenu->actions();
+    for (QAction* action : actions) {
         menu->addAction(action);
     }
 }

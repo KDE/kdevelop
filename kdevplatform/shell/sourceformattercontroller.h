@@ -63,7 +63,8 @@ struct SourceFormatter
     {
         QSet<QString> supported;
         for ( auto style: styles ) {
-            foreach ( auto& item, style->mimeTypes() ) {
+            const auto mimeTypes = style->mimeTypes();
+            for (auto& item : mimeTypes) {
                 supported.insert(item.mimeType);
             }
         }

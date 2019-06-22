@@ -141,7 +141,7 @@ void TestProblemModelSet::testRemoveModel()
     QSignalSpy spy(m_set.data(), &ProblemModelSet::removed);
 
     int c = 0;
-    foreach (const TestModelData &data, m_testData) {
+    for (const TestModelData& data : qAsConst(m_testData)) {
         m_set->removeModel(data.id);
         c++;
 

@@ -251,21 +251,21 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
             }
             // Now find a manager for the file(s) in our filelist.
             QVector<ProjectFileChoice> choices;
-            Q_FOREACH ( const auto& file, m_fileList ) {
+            for (const auto& file : qAsConst(m_fileList)) {
                 auto plugins = projectManagerForFile(file);
                 if ( plugins.contains(QStringLiteral("<built-in>")) ) {
                     plugins.removeAll(QStringLiteral("<built-in>"));
                     choices.append({i18n("Open existing file \"%1\"", file), QStringLiteral("<built-in>"), QString()});
                 }
                 choices.reserve(choices.size() + plugins.size());
-                Q_FOREACH ( const auto& plugin, plugins ) {
+                for (const auto& plugin : qAsConst(plugins)) {
                     auto meta = m_projectPlugins.value(plugin);
                     choices.append({file + QLatin1String(" (") + plugin + QLatin1Char(')'), meta.pluginId(), meta.iconName(), file});
                 }
             }
             // add managers that work in any case (e.g. KDevGenericManager)
                 choices.reserve(choices.size() + m_genericProjectPlugins.size());
-            Q_FOREACH ( const auto& plugin, m_genericProjectPlugins ) {
+            for (const auto& plugin : qAsConst(m_genericProjectPlugins)) {
                 qCDebug(SHELL) << plugin;
                 auto meta = m_projectPlugins.value(plugin);
                 choices.append({plugin, meta.pluginId(), meta.iconName()});
@@ -285,10 +285,9 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
 QStringList OpenProjectDialog::projectManagerForFile(const QString& file) const
 {
     QStringList ret;
-    foreach( const QString& manager, m_projectFilters.keys() )
-    {
-        foreach( const QString& filterexp, m_projectFilters.value(manager) )
-        {
+    for (auto it = m_projectFilters.begin(), end = m_projectFilters.end(); it != end; ++it) {
+        const QString& manager = it.key();
+        for (const QString& filterexp : it.value()) {
             QRegExp exp( filterexp, Qt::CaseSensitive, QRegExp::Wildcard );
             if ( exp.exactMatch(file) ) {
                 ret.append(manager);

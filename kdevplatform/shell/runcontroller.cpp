@@ -185,27 +185,26 @@ public:
         //qCDebug(SHELL) << "got mode and type:" << type << type->id() << mode << mode->id();
         if( type && mode )
         {
-            ILauncher* launcher = nullptr;
-            foreach (ILauncher *l, type->launchers())
-            {
+            const auto launchers = type->launchers();
+            auto it = std::find_if(launchers.begin(), launchers.end(), [&](ILauncher* l) {
                 //qCDebug(SHELL) << "available launcher" << l << l->id() << l->supportedModes();
-                if (l->supportedModes().contains(mode->id())) {
-                    launcher = l;
-                    break;
-                }
-            }
-            if (launcher)
-            {
+                return (l->supportedModes().contains(mode->id()));
+            });
+            if (it != launchers.end()) {
+                ILauncher* launcher = *it;
+
                 QStringList itemPath = Core::self()->projectController()->projectModel()->pathFromIndex(contextItem->index());
-                ILaunchConfiguration* ilaunch = nullptr;
-                foreach (LaunchConfiguration *l, launchConfigurations) {
+                auto it = std::find_if(launchConfigurations.constBegin(), launchConfigurations.constEnd(),
+                                       [&] (LaunchConfiguration* l) {
                     QStringList path = l->config().readEntry(Strings::ConfiguredFromProjectItemEntry(), QStringList());
                     if (l->type() == type && path == itemPath) {
                         qCDebug(SHELL) << "already generated ilaunch" << path;
-                        ilaunch = l;
-                        break;
+                        return true;
                     }
-                }
+                    return false;
+                });
+                ILaunchConfiguration* ilaunch = (it != launchConfigurations.constEnd()) ? *it : nullptr;
+
                 if (!ilaunch) {
                     ilaunch = q->createLaunchConfiguration( type,
                                                             qMakePair( mode->id(), launcher->id() ),
@@ -243,8 +242,8 @@ public:
 
         if( l && ( ( !currentLaunchProject.isEmpty() && ( !l->project() || l->project()->name() != currentLaunchProject ) ) || l->configGroupName() != currentLaunchName ) )
         {
-            foreach( QAction* a, currentTargetAction->actions() )
-            {
+            const auto actions = currentTargetAction->actions();
+            for (QAction* a : actions) {
                 LaunchConfiguration* l = static_cast<LaunchConfiguration*>( qvariant_cast<void*>( a->data() ) );
                 if( currentLaunchName == l->configGroupName()
                     && ( ( currentLaunchProject.isEmpty() && !l->project() )
@@ -335,8 +334,8 @@ RunController::~RunController() = default;
 
 void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 {
-    foreach( QAction* a, d->currentTargetAction->actions() )
-    {
+    const auto actions = d->currentTargetAction->actions();
+    for (QAction* a : actions) {
         if( static_cast<LaunchConfiguration*>( a->data().value<void*>() ) == l )
         {
             a->setText( d->launchActionText( l ) );
@@ -368,7 +367,8 @@ void RunController::initialize()
     addLaunchMode( d->debugMode );
     d->readLaunchConfigs( Core::self()->activeSession()->config(), nullptr );
 
-    foreach (IProject* project, Core::self()->projectController()->projects()) {
+    const auto projects = Core::self()->projectController()->projects();
+    for (IProject* project : projects) {
         slotProjectOpened(project);
     }
     connect(Core::self()->projectController(), &IProjectController::projectOpened,
@@ -503,7 +503,8 @@ void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
 {
     if (!d->currentTargetAction) return;
 
-    foreach (QAction* action, d->currentTargetAction->actions()) {
+    const auto actions = d->currentTargetAction->actions();
+    for (QAction* action : actions) {
         LaunchConfiguration* l = static_cast<LaunchConfiguration*>(qvariant_cast<void*>(action->data()));
         if ( project == l->project() ) {
             l->save();
@@ -665,8 +666,8 @@ void KDevelop::RunController::stopAllProcesses()
 {
     // composite jobs might remove child jobs, see also:
     // https://bugs.kde.org/show_bug.cgi?id=258904
-    // foreach already iterates over a copy
-    foreach (KJob* job, d->jobs.keys()) {
+    const auto jobs = d->jobs.keys();
+    for (KJob* job : jobs) {
         // now we check the real list whether it was deleted
         if (!d->jobs.contains(job))
             continue;
@@ -779,8 +780,8 @@ void RunController::addConfigurationType( LaunchConfigurationType* type )
 
 void RunController::removeConfigurationType( LaunchConfigurationType* type )
 {
-    foreach( LaunchConfiguration* l, d->launchConfigurations )
-    {
+    const auto oldLaunchConfigurations = d->launchConfigurations;
+    for (LaunchConfiguration* l : oldLaunchConfigurations) {
         if( l->type() == type )
         {
             removeLaunchConfigurationInternal( l );
@@ -853,7 +854,8 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
 
 void RunController::removeLaunchConfigurationInternal(LaunchConfiguration *l)
 {
-    foreach( QAction* a, d->currentTargetAction->actions() ) {
+    const auto actions = d->currentTargetAction->actions();
+    for (QAction* a : actions) {
         if( static_cast<LaunchConfiguration*>( a->data().value<void*>() ) == l ) {
             bool wasSelected = a->isChecked();
             d->currentTargetAction->removeAction( a );
@@ -880,8 +882,8 @@ void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
 
 void RunController::setDefaultLaunch(ILaunchConfiguration* l)
 {
-    foreach( QAction* a, d->currentTargetAction->actions() )
-    {
+    const auto actions = d->currentTargetAction->actions();
+    for (QAction* a : actions) {
         if( static_cast<ILaunchConfiguration*>( a->data().value<void*>() ) == l )
         {
             a->setChecked(true);
@@ -892,11 +894,11 @@ void RunController::setDefaultLaunch(ILaunchConfiguration* l)
 
 bool launcherNameExists(const QString& name)
 {
-    foreach(ILaunchConfiguration* config, Core::self()->runControllerInternal()->launchConfigurations()) {
-        if(config->name()==name)
-            return true;
-    }
-    return false;
+    const auto configs = Core::self()->runControllerInternal()->launchConfigurations();
+
+    return std::any_of(configs.begin(), configs.end(), [&](ILaunchConfiguration* config) {
+        return (config->name() == name);
+    });
 }
 
 QString makeUnique(const QString& name)
@@ -970,14 +972,13 @@ ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* 
         {
             ProjectBaseItem* itm = prjctx->items().at( 0 );
             int i = 0;
-            foreach( ILaunchMode* mode, d->launchModes )
-            {
+            for (ILaunchMode* mode : qAsConst(d->launchModes)) {
                 KActionMenu* menu = new KActionMenu(i18n("%1 As...", mode->name() ), parent);
-                foreach( LaunchConfigurationType* type, launchConfigurationTypes() )
-                {
+                const auto types = launchConfigurationTypes();
+                for (LaunchConfigurationType* type : types) {
                     bool hasLauncher = false;
-                    foreach( ILauncher* launcher, type->launchers() )
-                    {
+                    const auto launchers = type->launchers();
+                    for (ILauncher* launcher : launchers) {
                         if( launcher->supportedModes().contains( mode->id() ) )
                         {
                             hasLauncher = true;

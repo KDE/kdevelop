@@ -176,7 +176,7 @@ void StatusBar::updateMessage()
 
     QStringList messages;
     messages.reserve(m_messages.size());
-    foreach (const Message& m, m_messages) {
+    for (const Message& m : qAsConst(m_messages)) {
         messages.append(m.text);
 
         if (timeout)

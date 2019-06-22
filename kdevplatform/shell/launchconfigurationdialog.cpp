@@ -143,8 +143,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     auto* m = new QMenu(this);
     QList<LaunchConfigurationType*> types = Core::self()->runController()->launchConfigurationTypes();
     std::sort(types.begin(), types.end(), launchConfigGreaterThan); //we want it in reverse order
-    foreach(LaunchConfigurationType* type, types)
-    {
+    for (LaunchConfigurationType* type : qAsConst(types)) {
         connect(type, &LaunchConfigurationType::signalAddLaunchConfiguration, this, &LaunchConfigurationDialog::addConfiguration);
         QMenu* suggestionsMenu = type->launcherSuggestions();
 
@@ -169,7 +168,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
         m->insertAction(m->actions().at(0), separator);
     }
 
-    foreach(LaunchConfigurationType* type, types) {
+    for (LaunchConfigurationType* type : qAsConst(types)) {
         QAction* action = new QAction(type->icon(), type->name(), m);
         action->setProperty("configtype", qVariantFromValue<QObject*>(type));
         connect(action, &QAction::triggered, this, &LaunchConfigurationDialog::createEmptyLauncher);
@@ -501,8 +500,8 @@ LaunchConfigurationsModel::LaunchConfigurationsModel(QObject* parent): QAbstract
         t->row = topItems.count();
         topItems << t;
     }
-    foreach( LaunchConfiguration* l, Core::self()->runControllerInternal()->launchConfigurationsInternal() )
-    {
+    const auto launchConfigurations = Core::self()->runControllerInternal()->launchConfigurationsInternal();
+    for (LaunchConfiguration* l : launchConfigurations) {
         addItemForLaunchConfig( l );
     }
 }
@@ -527,10 +526,10 @@ void LaunchConfigurationsModel::addLaunchModeItemsForLaunchConfig ( LaunchItem* 
 {
     QList<TreeItem*> items;
     QSet<QString> modes;
-    foreach( ILauncher* launcher, t->launch->type()->launchers() )
-    {
-        foreach( const QString& mode, launcher->supportedModes() )
-        {
+    const auto launchers = t->launch->type()->launchers();
+    for (ILauncher* launcher : launchers) {
+        const auto supportedModes = launcher->supportedModes();
+        for (const QString& mode : supportedModes) {
             if( !modes.contains( mode ) && launcher->configPages().count() > 0 )
             {
                 modes.insert( mode );
@@ -551,10 +550,9 @@ void LaunchConfigurationsModel::addLaunchModeItemsForLaunchConfig ( LaunchItem* 
     }
 }
 
-LaunchConfigurationsModel::ProjectItem* LaunchConfigurationsModel::findItemForProject( IProject* p )
+LaunchConfigurationsModel::ProjectItem* LaunchConfigurationsModel::findItemForProject(IProject* p) const
 {
-    foreach( TreeItem* t, topItems )
-    {
+    for (TreeItem* t : topItems) {
         auto* pi = dynamic_cast<ProjectItem*>( t );
         if( pi && pi->project == p )
         {
@@ -840,8 +838,7 @@ QModelIndex LaunchConfigurationsModel::indexForConfig( LaunchConfiguration* l ) 
 
         if( tparent )
         {
-            foreach( TreeItem* c, tparent->children )
-            {
+            for (TreeItem* c : qAsConst(tparent->children)) {
                 auto* li = dynamic_cast<LaunchItem*>( c );
                 if( li->launch && li->launch == l )
                 {
@@ -940,16 +937,14 @@ LaunchConfigPagesContainer::LaunchConfigPagesContainer( const QList<LaunchConfig
 void LaunchConfigPagesContainer::setLaunchConfiguration( KDevelop::LaunchConfiguration* l )
 {
     config = l;
-    foreach( LaunchConfigurationPage* p, pages )
-    {
+    for (LaunchConfigurationPage* p : qAsConst(pages)) {
         p->loadFromConfiguration( config->config(), config->project() );
     }
 }
 
 void LaunchConfigPagesContainer::save()
 {
-    foreach( LaunchConfigurationPage* p, pages )
-    {
+    for (LaunchConfigurationPage* p : qAsConst(pages)) {
         p->saveToConfiguration( config->config() );
     }
     config->config().sync();

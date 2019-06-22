@@ -101,8 +101,10 @@ void PartController::setShowTextEditorStatusBar(bool show)
     d->m_showTextEditorStatusBar = show;
 
     // update
-    foreach (Sublime::Area* area, Core::self()->uiControllerInternal()->allAreas()) {
-        foreach (Sublime::View* view, area->views()) {
+    const auto areas = Core::self()->uiControllerInternal()->allAreas();
+    for (Sublime::Area* area : areas) {
+        const auto views = area->views();
+        for (Sublime::View* view : views) {
             if (!view->hasWidget())
                 continue;
 

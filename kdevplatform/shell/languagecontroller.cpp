@@ -189,8 +189,9 @@ QList<ILanguageSupport*> LanguageController::loadedLanguages() const
         return ret;
 
     ret.reserve(d->languages.size());
-    foreach(ILanguageSupport* lang, d->languages)
+    for (ILanguageSupport* lang : qAsConst(d->languages)) {
         ret << lang;
+    }
     return ret;
 }
 
@@ -264,7 +265,8 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
     for(LanguageControllerPrivate::MimeTypeCache::const_iterator it = d->mimeTypeCache.constBegin();
         it != d->mimeTypeCache.constEnd(); ++it)
     {
-        foreach(const QString& pattern, it.key().globPatterns()) {
+        const auto globPatterns = it.key().globPatterns();
+        for (const QString& pattern : globPatterns) {
             if(pattern.startsWith(QLatin1Char('*'))) {
                 const QStringRef subPattern = pattern.midRef(1);
                 if (!subPattern.contains(QLatin1Char('*'))) {
@@ -350,11 +352,11 @@ QList<QString> LanguageController::mimetypesForLanguageName(const QString& langu
 
     QList<QString> mimetypes;
     for (LanguageCache::ConstIterator iter = d->languageCache.constBegin(); iter != d->languageCache.constEnd(); ++iter) {
-        foreach (ILanguageSupport* language, iter.value()) {
-            if (language->name() == languageName) {
-                mimetypes << iter.key();
-                break;
-            }
+        bool isFromLanguage = std::any_of(iter.value().begin(), iter.value().end(), [&] (ILanguageSupport* language ) {
+            return (language->name() == languageName);
+        });
+        if (isFromLanguage) {
+            mimetypes << iter.key();
         }
     }
     return mimetypes;

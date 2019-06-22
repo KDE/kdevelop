@@ -266,8 +266,10 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 #if 0
     //we need to add all existing guiclients to the new mainwindow
     //@todo adymo: add only ones that belong to the area (when the area code is there)
-    foreach (KXMLGUIClient *client, oldMain->guiFactory()->clients())
+    const auto clients = oldMain->guiFactory()->clients();
+    for (KXMLGUIClient *client : clients) {
         main->guiFactory()->addClient(client);
+    }
 #endif
 
     main->show();
@@ -336,7 +338,8 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory, 
     /* Until areas are restored, we don't know which views should be really
        added, and which not, so we just record view availability.  */
     if (d->areasRestored && state != None) {
-         foreach (Sublime::Area* area, allAreas()) {
+         const auto areas = allAreas();
+         for (Sublime::Area* area : areas) {
              addToolViewToArea(factory, doc, area);
          }
     }
@@ -344,7 +347,8 @@ void UiController::addToolView(const QString & name, IToolViewFactory *factory, 
 
 void KDevelop::UiController::raiseToolView(Sublime::View * view)
 {
-    foreach( Sublime::Area* area, allAreas() ) {
+    const auto areas = allAreas();
+    for (Sublime::Area* area : areas) {
         if( area->toolViews().contains( view ) )
             area->raiseToolView( view );
     }
@@ -360,7 +364,7 @@ void UiController::slotAreaChanged(Sublime::Area*)
     if (area) {
         // walk through shown tool views and maku sure the
         const auto shownIds = area->shownToolViews(Sublime::AllPositions);
-        foreach (Sublime::View* toolView, area->toolViews()) {
+        for (Sublime::View* toolView : qAsConst(area->toolViews())) {
             if (shownIds.contains(toolView->document()->documentSpecifier())) {
                 slotActiveToolViewChanged(toolView);
             }
@@ -390,10 +394,12 @@ void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
     Sublime::ToolDocument *doc = d->factoryDocuments.value(factory);
 
     ///@todo adymo: on document deletion all its views shall be also deleted
-    foreach (Sublime::View *view, doc->views()) {
-        foreach (Sublime::Area *area, allAreas())
+    for (Sublime::View* view : doc->views()) {
+        const auto areas = allAreas();
+        for (Sublime::Area *area : areas) {
             if (area->removeToolView(view))
                 view->deleteLater();
+        }
     }
 
     d->factoryDocuments.remove(factory);
@@ -426,8 +432,9 @@ void UiController::initialize()
 
 void UiController::cleanup()
 {
-    foreach (Sublime::MainWindow* w, mainWindows())
+    for (Sublime::MainWindow* w : mainWindows()) {
         w->saveSettings();
+    }
     saveAllAreas(KSharedConfig::openConfig());
 }
 
@@ -470,8 +477,8 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
 
     if (dia->exec() == QDialog::Accepted)
     {
-        foreach (QListWidgetItem* item, list->selectedItems())
-        {
+        const auto items = list->selectedItems();
+        for (QListWidgetItem* item : items) {
             addNewToolView(mw, item);
         }
     }
@@ -541,7 +548,7 @@ void UiController::showSettingsDialog()
     auto plugins = ICore::self()->pluginController()->loadedPlugins();
     std::sort(plugins.begin(), plugins.end());
 
-    foreach (IPlugin* plugin, plugins) {
+    for (IPlugin* plugin : qAsConst(plugins)) {
         addPluginPages(plugin);
     }
 
@@ -592,8 +599,7 @@ void UiController::saveAllAreas(const KSharedConfigPtr& config)
         KConfigGroup mainWindowConfig(&uiConfig,
                                       QStringLiteral("Main Window %1").arg(w));
 
-        foreach (Sublime::Area* defaultArea, defaultAreas())
-        {
+        for (Sublime::Area* defaultArea : defaultAreas()) {
             // FIXME: using object name seems ugly.
             QString type = defaultArea->objectName();
             Sublime::Area* area = this->area(w, type);
@@ -619,8 +625,7 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
         wc = mainWindows().size();
 
     /* Offer all tool views to the default areas.  */
-    foreach (Sublime::Area *area, defaultAreas())
-    {
+    for (Sublime::Area* area : defaultAreas()) {
         QHash<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator i, e;
         for (i = d->factoryDocuments.constBegin(),
                  e = d->factoryDocuments.constEnd(); i != e; ++i)
@@ -643,8 +648,7 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
            the model were a given mainwindow can has it's own
            area types not represented in the default set is way
            too complex.  */
-        foreach (Sublime::Area* defaultArea, defaultAreas())
-        {
+        for (Sublime::Area* defaultArea : defaultAreas()) {
             QString type = defaultArea->objectName();
             Sublime::Area* area = this->area(w, type);
 

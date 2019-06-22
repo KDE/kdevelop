@@ -140,7 +140,8 @@ private:
             return;
 
         visitedContexts.insert(context);
-        foreach (const DUContext::Import& ctx, context->importedParentContexts()) {
+        const auto importedParentContexts = context->importedParentContexts();
+        for (const DUContext::Import& ctx : importedParentContexts) {
             auto* topCtx = dynamic_cast<TopDUContext*>(ctx.context(nullptr));
 
             if (topCtx)
@@ -154,13 +155,13 @@ private:
         QSet<TopDUContext*> visitedContexts;
 
         m_imports.clear();
-        foreach (const IndexedString& doc, m_documents) {
+        for (const IndexedString& doc : qAsConst(m_documents)) {
             TopDUContext* ctx = DUChain::self()->chainForDocument(doc);
             getImportsFromDU(ctx, visitedContexts);
             visitedContexts.remove(ctx);
         }
 
-        foreach (TopDUContext* ctx, visitedContexts) {
+        for (TopDUContext* ctx : qAsConst(visitedContexts)) {
             m_imports.insert(ctx->url());
         }
     }
@@ -238,7 +239,8 @@ ProblemScope CurrentDocumentSet::scope() const
 OpenDocumentSet::OpenDocumentSet(QObject* parent)
     : WatchedDocumentSet(parent)
 {
-    foreach (IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (IDocument* doc : documents) {
         d->addDocument(IndexedString(doc->url()));
     }
     d->updateImports();
@@ -331,8 +333,10 @@ ProblemScope CurrentProjectSet::scope() const
 AllProjectSet::AllProjectSet(QObject* parent)
     : ProjectSet(parent)
 {
-    foreach(const IProject* project, ICore::self()->projectController()->projects()) {
-        foreach (const IndexedString &indexedString, project->fileSet()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (const IProject* project : projects) {
+        const auto fileSet = project->fileSet();
+        for (const IndexedString& indexedString : fileSet) {
             d->addDocument(indexedString);
         }
         d->addDocument(IndexedString(project->path().toLocalFile()));

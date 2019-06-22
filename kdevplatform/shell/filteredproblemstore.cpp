@@ -129,13 +129,11 @@ public:
         QString path = problem->finalLocation().document.str();
 
         /// See if we already have this path
-        ProblemStoreNode *parent = nullptr;
-        foreach (ProblemStoreNode *node, m_groupedRootNode->children()) {
-            if (node->label() == path) {
-                parent = node;
-                break;
-            }
-        }
+        const auto childrenNodes = m_groupedRootNode->children();
+        auto it = std::find_if(childrenNodes.begin(), childrenNodes.end(), [&](ProblemStoreNode* node) {
+            return (node->label() == path);
+        });
+        ProblemStoreNode* parent = (it != childrenNodes.end()) ? *it : nullptr;
 
         /// If not add it!
         if (parent == nullptr) {
@@ -261,7 +259,8 @@ void FilteredProblemStore::rebuild()
 
     d->m_strategy->clear();
 
-    foreach (ProblemStoreNode *node, rootNode()->children()) {
+    const auto childrenNodes = rootNode()->children();
+    for (ProblemStoreNode* node : childrenNodes) {
         IProblem::Ptr problem = node->problem();
         if (d->match(problem)) {
             d->m_strategy->addProblem(problem);

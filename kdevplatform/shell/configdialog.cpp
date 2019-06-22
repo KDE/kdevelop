@@ -129,7 +129,8 @@ void ConfigDialog::removeConfigPage(ConfigPage* page)
 void ConfigDialog::removePagesForPlugin(IPlugin* plugin)
 {
     Q_ASSERT(plugin);
-    foreach (auto&& item, m_pages) {
+    const auto oldPages = m_pages;
+    for (auto&& item : oldPages) {
         if (!item) {
             continue;
         }

@@ -86,10 +86,10 @@ public:
     QList<QUrl> urls;
     bool enabled = true;
 
-    ISourceFormatter* formatterForConfigEntry(const QString& entry, const QString& mimename);
+    ISourceFormatter* formatterForConfigEntry(const QString& entry, const QString& mimename) const;
 };
 
-ISourceFormatter* SourceFormatterControllerPrivate::formatterForConfigEntry(const QString& entry, const QString& mimename)
+ISourceFormatter* SourceFormatterControllerPrivate::formatterForConfigEntry(const QString& entry, const QString& mimename) const
 {
     QStringList formatterinfo = entry.split( QStringLiteral("||"), QString::SkipEmptyParts );
 
@@ -97,13 +97,11 @@ ISourceFormatter* SourceFormatterControllerPrivate::formatterForConfigEntry(cons
         qCDebug(SHELL) << "Broken formatting entry for mime:" << mimename << "current value:" << entry;
     }
 
-    foreach (ISourceFormatter* iformatter, sourceFormatters) {
-        if (iformatter->name() == formatterinfo.first()) {
-            return iformatter;
-        }
-    }
+    auto it = std::find_if(sourceFormatters.begin(), sourceFormatters.end(), [&](ISourceFormatter* iformatter) {
+        return (iformatter->name() == formatterinfo.first());
+    });
 
-    return nullptr;
+    return (it != sourceFormatters.end()) ? *it : nullptr;
 }
 
 QString SourceFormatterController::kateModeLineConfigKey()
@@ -220,7 +218,8 @@ void SourceFormatterController::projectOpened(const IProject* project)
     }
 
     QHash<QString, ISourceFormatter*> formatters;
-    foreach (const KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (const KDevelop::IDocument* doc : documents) {
         if (project->inProject(IndexedString(doc->url()))) {
             const QString mimename = QMimeDatabase().mimeTypeForUrl(doc->url()).name();
             auto it = formatters.find(mimename);
@@ -320,15 +319,17 @@ ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const
     if (formatterIt != knownFormatters.constEnd())
         return *formatterIt;
 
-    foreach (ISourceFormatter* iformatter, d->sourceFormatters) {
+    auto it = std::find_if(d->sourceFormatters.constBegin(), d->sourceFormatters.constEnd(),
+                           [&](ISourceFormatter* iformatter) {
         QSharedPointer<SourceFormatter> formatter(createFormatterForPlugin(iformatter));
-        if( formatter->supportedMimeTypes().contains(mime.name()) ) {
-            knownFormatters[mime.name()] = iformatter;
-            return iformatter;
-        }
-    }
-    knownFormatters[mime.name()] = nullptr;
-    return nullptr;
+        return (formatter->supportedMimeTypes().contains(mime.name()));
+    });
+
+    ISourceFormatter* iformatter = (it != d->sourceFormatters.constEnd()) ? *it : nullptr;
+
+    // cache result in any case
+    knownFormatters.insert(mime.name(), iformatter);
+    return iformatter;
 }
 
 static void populateStyleFromConfigGroup(SourceFormatterStyle* s, const KConfigGroup& stylegrp)
@@ -345,13 +346,15 @@ SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceForm
     formatter->formatter = ifmt;
 
     // Inserted a new formatter. Now fill it with styles
-    foreach( const KDevelop::SourceFormatterStyle& style, ifmt->predefinedStyles() ) {
+    const auto predefinedStyles = ifmt->predefinedStyles();
+    for (const KDevelop::SourceFormatterStyle& style : predefinedStyles) {
         formatter->styles[ style.name() ] = new SourceFormatterStyle(style);
     }
     KConfigGroup grp = globalConfig();
     if( grp.hasGroup( ifmt->name() ) ) {
         KConfigGroup fmtgrp = grp.group( ifmt->name() );
-        foreach( const QString& subgroup, fmtgrp.groupList() ) {
+        const auto subgroups = fmtgrp.groupList();
+        for (const QString& subgroup : subgroups) {
             auto* s = new SourceFormatterStyle( subgroup );
             KConfigGroup stylegrp = fmtgrp.group( subgroup );
             populateStyleFromConfigGroup(s, stylegrp);
@@ -591,7 +594,8 @@ void SourceFormatterController::formatDocument(KDevelop::IDocument* doc, ISource
 
 void SourceFormatterController::settingsChanged()
 {
-    foreach (KDevelop::IDocument* doc, ICore::self()->documentController()->openDocuments()) {
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (KDevelop::IDocument* doc : documents) {
         adaptEditorIndentationMode(doc->textDocument(), formatterForUrl(doc->url()), doc->url());
     }
 }
@@ -637,9 +641,11 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
                 Q_ASSERT(command);
                 QString msg;
                 qCDebug(SHELL) << "calling" << cmd;
-                foreach(KTextEditor::View* view, doc->views())
+                const auto views = doc->views();
+                for (KTextEditor::View* view : views) {
                     if (!command->exec(view, cmd, msg))
                         qCWarning(SHELL) << "setting indentation width failed: " << msg;
+                }
             }
 
             KTextEditor::Document* doc;
@@ -667,7 +673,7 @@ void SourceFormatterController::formatFiles()
 
     //get a list of all files in this folder recursively
     QList<KDevelop::ProjectFolderItem*> folders;
-    foreach (KDevelop::ProjectBaseItem *item, d->prjItems) {
+    for (KDevelop::ProjectBaseItem* item : qAsConst(d->prjItems)) {
         if (!item)
             continue;
         if (item->folder())
@@ -675,21 +681,30 @@ void SourceFormatterController::formatFiles()
         else if (item->file())
             d->urls.append(item->file()->path().toUrl());
         else if (item->target()) {
-            foreach(KDevelop::ProjectFileItem *f, item->fileList())
-            d->urls.append(f->path().toUrl());
+            const auto files = item->fileList();
+            for (KDevelop::ProjectFileItem* f : files) {
+                d->urls.append(f->path().toUrl());
+            }
         }
     }
 
     while (!folders.isEmpty()) {
         KDevelop::ProjectFolderItem *item = folders.takeFirst();
-        foreach(KDevelop::ProjectFolderItem *f, item->folderList())
-        folders.append(f);
-        foreach(KDevelop::ProjectTargetItem *f, item->targetList()) {
-            foreach(KDevelop::ProjectFileItem *child, f->fileList())
-            d->urls.append(child->path().toUrl());
+        const auto folderList = item->folderList();
+        for (KDevelop::ProjectFolderItem* f : folderList) {
+            folders.append(f);
         }
-        foreach(KDevelop::ProjectFileItem *f, item->fileList())
-        d->urls.append(f->path().toUrl());
+        const auto targets = item->targetList();
+        for (KDevelop::ProjectTargetItem* f : targets) {
+            const auto childs = f->fileList();
+            for (KDevelop::ProjectFileItem* child : childs) {
+                d->urls.append(child->path().toUrl());
+            }
+        }
+        const auto files = item->fileList();
+        for (KDevelop::ProjectFileItem* f : files) {
+            d->urls.append(f->path().toUrl());
+        }
     }
 
     auto win = ICore::self()->uiController()->activeMainWindow()->window();

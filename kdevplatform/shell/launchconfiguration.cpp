@@ -129,14 +129,13 @@ QString LaunchConfiguration::launcherForMode(const QString& mode) const
     int idx = modes.indexOf( mode );
     if( idx != -1 )
     {
-        QStringList launchers = d->baseGroup.readEntry("Configured Launchers", QStringList());
-        if( launchers.count() > idx )
-        {
-            foreach( ILauncher* l, type()->launchers() )
-            {
-                if( l->id() == launchers.at( idx ) )
-                {
-                    return launchers.at( idx );
+        const QStringList launcherIds = d->baseGroup.readEntry("Configured Launchers", QStringList());
+        if (launcherIds.count() > idx ) {
+            const auto& id = launcherIds.at(idx);
+            const auto typeLaunchers = type()->launchers();
+            for (ILauncher* l : typeLaunchers) {
+                if (l->id() == id) {
+                    return id;
                 }
             }
         }
@@ -145,8 +144,8 @@ QString LaunchConfiguration::launcherForMode(const QString& mode) const
     // No launcher configured, if it's debug mode, prefer GDB if available.
     if( mode == QLatin1String("debug") )
     {
-        foreach( ILauncher* l, type()->launchers() )
-        {
+        const auto launchers = type()->launchers();
+        for (ILauncher* l : launchers) {
             if( l->supportedModes().contains( mode ) && l->id() == QLatin1String("gdb") )
             {
                 return l->id();
@@ -154,8 +153,8 @@ QString LaunchConfiguration::launcherForMode(const QString& mode) const
         }
     }
     // Otherwise, lets just try with the first one in the list and hope it works
-    foreach( ILauncher* l, type()->launchers() )
-    {
+    const auto launchers = type()->launchers();
+    for (ILauncher* l : launchers) {
         if( l->supportedModes().contains( mode ) )
         {
             return l->id();

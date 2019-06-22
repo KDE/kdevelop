@@ -66,7 +66,8 @@ void TestDocumentController::init()
 void TestDocumentController::cleanup()
 {
     // ensure there are not opened documents for next test
-    foreach(IDocument* document, m_subject->openDocuments()) {
+    const auto documents = m_subject->openDocuments();
+    for (IDocument* document : documents) {
         document->close(IDocument::Discard);
     }
 

@@ -158,7 +158,8 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     auto* filesLayout = new QVBoxLayout;
     filesLayout->setMargin(0);
 
-    foreach(const QString& file, m_set->fileList()) {
+    const auto setFiles = m_set->fileList();
+    for (const QString& file : setFiles) {
 
         if(hadFiles.contains(file))
             continue;
@@ -372,8 +373,8 @@ void WorkingSetToolTipWidget::labelClicked()
 
     auto* window = static_cast<Sublime::MainWindow*>(ICore::self()->uiController()->activeMainWindow());
 
-    foreach(Sublime::View* view, window->area()->views())
-    {
+    const auto views = window->area()->views();
+    for (Sublime::View* view : views) {
         if(view->document()->documentSpecifier() == s->objectName())
         {
             window->activateView(view);

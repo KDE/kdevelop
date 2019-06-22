@@ -136,8 +136,10 @@ void DebugController::initializeUi()
             this, QStringLiteral("org.kdevelop.debugger.VariablesView"),
             Qt::LeftDockWidgetArea));
 
-    foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
+    const auto parts = KDevelop::ICore::self()->partController()->parts();
+    for (KParts::Part* p : parts) {
         partAdded(p);
+    }
     connect(KDevelop::ICore::self()->partController(),
             &IPartController::partAdded,
             this,
@@ -318,7 +320,8 @@ void DebugController::addSession(IDebugSession* session)
 void DebugController::clearExecutionPoint()
 {
     qCDebug(SHELL);
-    foreach (KDevelop::IDocument* document, KDevelop::ICore::self()->documentController()->openDocuments()) {
+    const auto documents = KDevelop::ICore::self()->documentController()->openDocuments();
+    for (KDevelop::IDocument* document : documents) {
         auto *iface = dynamic_cast<KTextEditor::MarkInterface*>(document->textDocument());
         if (!iface)
             continue;

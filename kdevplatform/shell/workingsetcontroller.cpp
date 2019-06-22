@@ -55,7 +55,8 @@ void WorkingSetController::initialize()
 {
     //Load all working-sets
     KConfigGroup setConfig(Core::self()->activeSession()->config(), "Working File Sets");
-    foreach(const QString& set, setConfig.groupList()) {
+    const auto sets = setConfig.groupList();
+    for (const QString& set : sets) {
         // do not load working set if the id contains an '|', because it then belongs to an area.
         // this is functionally equivalent to the if ( ! config->icon ) stuff which was there before.
         if (set.contains(QLatin1Char('|'))) {
@@ -73,8 +74,10 @@ void WorkingSetController::initialize()
 
 void WorkingSetController::cleanup()
 {
-    foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows()) {
-        foreach (Sublime::Area *area, window->areas()) {
+    const auto windows = Core::self()->uiControllerInternal()->mainWindows();
+    for (Sublime::MainWindow* window : windows) {
+        const auto areas = window->areas();
+        for (Sublime::Area* area : areas) {
             if (!area->workingSet().isEmpty()) {
                 Q_ASSERT(m_workingSets.contains(area->workingSet()));
                 m_workingSets[area->workingSet()]->saveFromArea(area, area->rootIndex());
@@ -82,7 +85,8 @@ void WorkingSetController::cleanup()
         }
     }
 
-    foreach(WorkingSet* set, m_workingSets) {
+    const auto oldWorkingSet = m_workingSets;
+    for (WorkingSet* set : oldWorkingSet) {
         qCDebug(SHELL) << "set" << set->id() << "persistent" << set->isPersistent() << "has areas:" << set->hasConnectedAreas() << "files" << set->fileList();
         if(!set->isPersistent() && !set->hasConnectedAreas()) {
             qCDebug(SHELL) << "deleting";

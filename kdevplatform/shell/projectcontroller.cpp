@@ -146,7 +146,8 @@ public:
         options.projectTempFile = proj->projectTempFile();
         options.project = proj;
 
-        foreach (IPlugin* plugin, findPluginsForProject(proj)) {
+        const auto plugins = findPluginsForProject(proj);
+        for (IPlugin* plugin : plugins) {
             const int perProjectConfigPagesCount = plugin->perProjectConfigPages();
             configPages.reserve(configPages.size() + perProjectConfigPagesCount);
             for (int i = 0; i < perProjectConfigPagesCount; ++i) {
@@ -186,7 +187,7 @@ public:
         QList<QUrl> openProjects;
         openProjects.reserve( m_projects.size() );
 
-        foreach( IProject* project, m_projects ) {
+        for (IProject* project : qAsConst(m_projects)) {
             openProjects.append(project->projectFile().toUrl());
         }
 
@@ -274,7 +275,8 @@ public:
             // otherwise base on selection
             auto* ctx = dynamic_cast<ProjectItemContext*>(ICore::self()->selectionController()->currentSelection());
             if (ctx) {
-                foreach (ProjectBaseItem* item, ctx->items()) {
+                const auto items = ctx->items();
+                for (ProjectBaseItem* item : items) {
                     projects.insert(item->project());
                 }
             }
@@ -293,7 +295,8 @@ public:
 
     void closeSelectedProjects()
     {
-        foreach (IProject* project, selectedProjects()) {
+        const auto projects = selectedProjects();
+        for (IProject* project : projects) {
             q->closeProject(project);
         }
     }
@@ -325,8 +328,8 @@ public:
             return;
         }
 
-        foreach( IProject* project, m_projects )
-        {
+        const auto projects = m_projects;
+        for (IProject* project : projects) {
             if ( url == project->projectFile().toUrl() )
             {
                 if ( dialog->userWantsReopen() )
@@ -808,8 +811,8 @@ void ProjectController::openProject( const QUrl &projectFile )
     QList<const Session*> existingSessions;
     if(!Core::self()->sessionController()->activeSession()->containedProjects().contains(url))
     {
-        foreach( const Session* session, Core::self()->sessionController()->sessions())
-        {
+        const auto sessions = Core::self()->sessionController()->sessions();
+        for (const Session* session : sessions) {
             if(session->containedProjects().contains(url))
             {
                 existingSessions << session;
@@ -819,8 +822,10 @@ void ProjectController::openProject( const QUrl &projectFile )
                     if(Core::self()->sessionController()->activeSession()->description().isEmpty())
                     {
                         //Terminate this instance of kdevelop if the user agrees
-                        foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
+                        const auto windows = Core::self()->uiController()->controller()->mainWindows();
+                        for (Sublime::MainWindow* window : windows) {
                             window->close();
+                        }
                     }
 #endif
             }
@@ -839,7 +844,7 @@ void ProjectController::openProject( const QUrl &projectFile )
         QRadioButton* newSession = new QRadioButton(i18n("Add project to current session"));
         sessions.layout()->addWidget(newSession);
         newSession->setChecked(true);
-        foreach ( const Session* session, existingSessions ) {
+        for (const Session* session : qAsConst(existingSessions)) {
             QRadioButton* button = new QRadioButton(i18n("Open session %1", session->description()));
             button->setProperty("sessionid", session->id().toString());
             sessions.layout()->addWidget(button);
@@ -858,7 +863,7 @@ void ProjectController::openProject( const QUrl &projectFile )
         if (!dialog->exec())
             return;
 
-        foreach ( const QObject* obj, sessions.children() ) {
+        for (const QObject* obj : sessions.children()) {
             if ( const auto* button = qobject_cast<const QRadioButton*>(obj) ) {
                 QString sessionid = button->property("sessionid").toString();
                 if ( button->isChecked() && ! sessionid.isEmpty() ) {
@@ -958,9 +963,7 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
     d->m_projectPlugins.remove( proj );
 
     QList<IPlugin*> otherProjectPlugins;
-    otherProjectPlugins.reserve(d->m_projectPlugins.size());
-    Q_FOREACH( const QList<IPlugin*>& _list, d->m_projectPlugins )
-    {
+    for (const QList<IPlugin*>& _list : qAsConst(d->m_projectPlugins)) {
         otherProjectPlugins << _list;
     }
 
@@ -982,7 +985,8 @@ void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
 // helper method for closeProject()
 void ProjectController::closeAllOpenedFiles(IProject* proj)
 {
-    foreach(IDocument* doc, Core::self()->documentController()->openDocuments()) {
+    const auto documents = Core::self()->documentController()->openDocuments();
+    for (IDocument* doc : documents) {
         if (proj->inProject(IndexedString(doc->url()))) {
             doc->close();
         }
@@ -1033,7 +1037,8 @@ void ProjectController::closeProject(IProject* proj)
 
 void ProjectController::closeAllProjects()
 {
-    foreach (auto project, d->m_projects) {
+    const auto projects = d->m_projects;
+    for (auto* project : projects) {
         closeProject(project);
     }
 }
@@ -1064,14 +1069,10 @@ IProject* ProjectController::findProjectForUrl( const QUrl& url ) const
 
 IProject* ProjectController::findProjectByName( const QString& name )
 {
-    Q_FOREACH( IProject* proj, d->m_projects )
-    {
-        if( proj->name() == name )
-        {
-            return proj;
-        }
-    }
-    return nullptr;
+    auto it = std::find_if(d->m_projects.constBegin(), d->m_projects.constEnd(), [&](IProject* proj) {
+        return (proj->name() == name);
+    });
+    return (it != d->m_projects.constEnd()) ? *it : nullptr;
 }
 
 
@@ -1097,14 +1098,10 @@ void ProjectController::addProject(IProject* project)
 
 bool ProjectController::isProjectNameUsed( const QString& name ) const
 {
-    foreach( IProject* p, projects() )
-    {
-        if( p->name() == name )
-        {
-            return true;
-        }
-    }
-    return false;
+    const auto projects = this->projects();
+    return std::any_of(projects.begin(), projects.end(), [&](IProject* p) {
+        return (p->name() == name);
+    });
 }
 
 QUrl ProjectController::projectsBaseDirectory() const
@@ -1120,13 +1117,12 @@ QString ProjectController::prettyFilePath(const QUrl& url, FormattingOptions for
     if(!project)
     {
         // Find a project with the correct base directory at least
-        foreach(IProject* candidateProject, Core::self()->projectController()->projects())
-        {
-            if(candidateProject->path().toUrl().isParentOf(url))
-            {
-                project = candidateProject;
-                break;
-            }
+        const auto projects = Core::self()->projectController()->projects();
+        auto it = std::find_if(projects.begin(), projects.end(), [&](IProject* candidateProject) {
+            return (candidateProject->path().toUrl().isParentOf(url));
+        });
+        if (it != projects.end()) {
+            project = *it;
         }
     }
 
@@ -1182,7 +1178,8 @@ ContextMenuExtension ProjectController::contextMenuExtension(Context* ctx, QWidg
 
         auto* action = new QAction(i18n("Reparse the Entire Project"), this);
         connect(action, &QAction::triggered, this, [&] {
-            foreach (auto project, d->selectedProjects()) {
+            const auto projects = d->selectedProjects();
+            for (auto* project : projects) {
                 reparseProject(project, true, true);
             }
         });
@@ -1242,8 +1239,7 @@ QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, b
 {
     Path path(path_);
     IProject* sourceDirProject = nullptr, *buildDirProject = nullptr;
-    Q_FOREACH(IProject* proj, d->m_projects)
-    {
+    for (IProject* proj : qAsConst(d->m_projects)) {
         if(proj->path().isParentOf(path) || proj->path() == path)
             sourceDirProject = proj;
         if(proj->buildSystemManager())

@@ -559,24 +559,24 @@ QList< ProjectBaseItem* > Project::itemsForPath(const IndexedString& path) const
 
 QList< ProjectFileItem* > Project::filesForPath(const IndexedString& file) const
 {
-    QList<ProjectFileItem*> items;
-    foreach(ProjectBaseItem* item,  d->itemsForPath( file ) )
-    {
+    QList<ProjectFileItem*> fileItems;
+    const auto items = d->itemsForPath(file);
+    for (ProjectBaseItem* item : items) {
         if( item->type() == ProjectBaseItem::File )
-            items << static_cast<ProjectFileItem*>(item);
+            fileItems << static_cast<ProjectFileItem*>(item);
     }
-    return items;
+    return fileItems;
 }
 
 QList<ProjectFolderItem*> Project::foldersForPath(const IndexedString& folder) const
 {
-    QList<ProjectFolderItem*> items;
-    foreach(ProjectBaseItem* item,  d->itemsForPath( folder ) )
-    {
+    QList<ProjectFolderItem*> folderItems;
+    const auto items = d->itemsForPath(folder);
+    for (ProjectBaseItem* item : items) {
         if( item->type() == ProjectBaseItem::Folder || item->type() == ProjectBaseItem::BuildFolder )
-            items << static_cast<ProjectFolderItem*>(item);
+            folderItems << static_cast<ProjectFolderItem*>(item);
     }
-    return items;
+    return folderItems;
 }
 
 IProjectFileManager* Project::projectFileManager() const

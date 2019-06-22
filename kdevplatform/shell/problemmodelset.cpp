@@ -51,16 +51,11 @@ void ProblemModelSet::addModel(const QString &id, const QString &name, ProblemMo
 
 ProblemModel* ProblemModelSet::findModel(const QString &id) const
 {
-    ProblemModel *model = nullptr;
+    auto it = std::find_if(d->data.constBegin(), d->data.constEnd(), [&](const ModelData& data) {
+        return (data.id == id);
+    });
 
-    foreach (const ModelData &data, qAsConst(d->data)) {
-        if (data.id == id) {
-            model = data.model;
-            break;
-        }
-    }
-
-    return model;
+    return (it != d->data.constEnd()) ? it->model : nullptr;
 }
 
 void ProblemModelSet::removeModel(const QString &id)

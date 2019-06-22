@@ -75,7 +75,8 @@ void ClosedWorkingSetsWidget::areaChanged( Sublime::Area* area )
     m_buttons.clear();
 
     // add sets from new area
-    foreach(WorkingSet* set, Core::self()->workingSetControllerInternal()->allWorkingSets()) {
+    const auto allWorkingSets = Core::self()->workingSetControllerInternal()->allWorkingSets();
+    for (WorkingSet* set : allWorkingSets) {
         addWorkingSet(set);
     }
 }

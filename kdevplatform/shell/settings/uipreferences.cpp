@@ -47,8 +47,10 @@ void UiPreferences::apply()
     KDevelop::ConfigPage::apply();
 
     UiController *uiController = Core::self()->uiControllerInternal();
-    foreach (Sublime::MainWindow *window, uiController->mainWindows())
+    const auto windows = uiController->mainWindows();
+    for (Sublime::MainWindow* window : windows) {
         (static_cast<KDevelop::MainWindow*>(window))->loadSettings();
+    }
     uiController->loadSettings();
 }
 

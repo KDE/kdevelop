@@ -65,9 +65,11 @@ void LanguagePreferences::apply()
 {
     ConfigPage::apply();
 
-    foreach (KDevelop::IDocument* doc, Core::self()->documentController()->openDocuments()) {
+    const auto documents = Core::self()->documentController()->openDocuments();
+    for (KDevelop::IDocument* doc : documents) {
         if (Document* textDoc = doc->textDocument()) {
-            foreach (View* view, textDoc->views()) {
+            const auto views = textDoc->views();
+            for (View* view : views) {
                 if (auto* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
                     cc->setAutomaticInvocationEnabled(preferencesDialog->kcfg_automaticInvocation->isChecked());
                 }

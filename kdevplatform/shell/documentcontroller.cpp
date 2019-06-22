@@ -147,7 +147,7 @@ public:
         const auto res = showOpenFile();
         if( !res.urls.isEmpty() ) {
             QString encoding = res.encoding;
-            foreach( const QUrl& u, res.urls ) {
+            for (const QUrl& u : res.urls) {
                 openDocumentInternal(u, QString(), KTextEditor::Range::invalid(), encoding  );
             }
         }
@@ -376,17 +376,13 @@ public:
         if (!activationParams.testFlag(IDocumentController::DoNotCreateView))
         {
             //find a view if there's one already opened in this area
-            Sublime::View *partView = nullptr;
             Sublime::AreaIndex* activeViewIdx = area->indexOf(uiController->activeSublimeWindow()->activeView());
-            foreach (Sublime::View *view, sdoc->views())
-            {
+            const auto& views = sdoc->views();
+            auto it = std::find_if(views.begin(), views.end(), [&](Sublime::View* view) {
                 Sublime::AreaIndex* areaIdx = area->indexOf(view);
-                if (areaIdx && areaIdx == activeViewIdx)
-                {
-                    partView = view;
-                    break;
-                }
-            }
+                return (areaIdx && areaIdx == activeViewIdx);
+            });
+            Sublime::View* partView = (it != views.end()) ? *it : nullptr;
             bool addView = false;
             if (!partView)
             {
@@ -421,11 +417,13 @@ public:
                         Sublime::AreaIndex *pActiveViewIndex = area->indexOf(uiController->activeSublimeWindow()->activeView());
                         if(pActiveViewIndex) {
                             // try to find existing View of buddy document in current active view's tab
-                            foreach (Sublime::View *pView, pActiveViewIndex->views()) {
-                                if(sublimeDocBuddy->views().contains(pView)) {
-                                    buddyView = pView;
-                                    break;
-                                }
+                            const auto& activeAreaViews = pActiveViewIndex->views();
+                            const auto& buddyViews = sublimeDocBuddy->views();
+                            auto it = std::find_if(activeAreaViews.begin(), activeAreaViews.end(), [&](Sublime::View* view) {
+                                return buddyViews.contains(view);
+                            });
+                            if (it != activeAreaViews.end()) {
+                                buddyView = *it;
                             }
                         }
                     }
@@ -577,8 +575,10 @@ void DocumentController::cleanup()
 
     // Close all documents without checking if they should be saved.
     // This is because the user gets a chance to save them during MainWindow::queryClose.
-    foreach (IDocument* doc, openDocuments())
+    const auto documents = openDocuments();
+    for (IDocument* doc : documents) {
         doc->close(IDocument::Discard);
+    }
 }
 
 DocumentController::~DocumentController() = default;
@@ -760,8 +760,7 @@ IDocument * DocumentController::documentForUrl( const QUrl & dirtyUrl ) const
 QList<IDocument*> DocumentController::openDocuments() const
 {
     QList<IDocument*> opened;
-    foreach (IDocument *doc, d->documents)
-    {
+    for (IDocument* doc : qAsConst(d->documents)) {
         auto *sdoc = dynamic_cast<Sublime::Document*>(doc);
         if( !sdoc )
         {
@@ -793,7 +792,8 @@ bool DocumentController::saveAllDocuments(IDocument::DocumentSaveMode mode)
 bool KDevelop::DocumentController::saveSomeDocuments(const QList< IDocument * > & list, IDocument::DocumentSaveMode mode)
 {
     if (mode & IDocument::Silent) {
-        foreach (IDocument* doc, modifiedDocuments(list)) {
+        const auto documents = modifiedDocuments(list);
+        for (IDocument* doc : documents) {
             if( !DocumentController::isEmptyDocumentUrl(doc->url()) && !doc->save(mode) )
             {
                 if( doc )
@@ -822,13 +822,15 @@ QList< IDocument * > KDevelop::DocumentController::visibleDocumentsInWindow(Main
     // Gather a list of all documents which do have a view in the given main window
     // Does not find documents which are open in inactive areas
     QList<IDocument*> list;
-    foreach (IDocument* doc, openDocuments()) {
+    const auto documents = openDocuments();
+    for (IDocument* doc : documents) {
         if (auto* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
-            foreach (Sublime::View* view, sdoc->views()) {
-                if (view->hasWidget() && view->widget()->window() == mw) {
-                    list.append(doc);
-                    break;
-                }
+            const auto views = sdoc->views();
+            auto hasViewInWindow = std::any_of(views.begin(), views.end(), [&](Sublime::View* view) {
+                return (view->hasWidget() && view->widget()->window() == mw);
+            });
+            if (hasViewInWindow) {
+                list.append(doc);
             }
         }
     }
@@ -840,14 +842,23 @@ QList< IDocument * > KDevelop::DocumentController::documentsExclusivelyInWindow(
     // Gather a list of all documents which have views only in the given main window
     QList<IDocument*> checkSave;
 
-    foreach (IDocument* doc, openDocuments()) {
+    const auto documents = openDocuments();
+    for (IDocument* doc : documents) {
         if (auto* sdoc = dynamic_cast<Sublime::Document*>(doc)) {
             bool inOtherWindow = false;
 
-            foreach (Sublime::View* view, sdoc->views()) {
-                foreach(Sublime::MainWindow* window, Core::self()->uiControllerInternal()->mainWindows())
-                    if(window->containsView(view) && (window != mw || (currentAreaOnly && window == mw && !mw->area()->views().contains(view))))
+            const auto views = sdoc->views();
+            for (Sublime::View* view : views) {
+                const auto windows = Core::self()->uiControllerInternal()->mainWindows();
+                for (Sublime::MainWindow* window : windows) {
+                    if(window->containsView(view) && (window != mw || (currentAreaOnly && window == mw && !mw->area()->views().contains(view)))) {
                         inOtherWindow = true;
+                        break;
+                    }
+                }
+                if (inOtherWindow) {
+                    break;
+                }
             }
 
             if (!inOtherWindow)
@@ -924,7 +935,8 @@ void DocumentController::closeAllOtherDocuments()
             // User cancelled or other error
             return;
 
-        foreach (Sublime::View* view, mw->area()->views()) {
+        const auto views = mw->area()->views();
+        for (Sublime::View* view : views) {
             if (view != activeView)
                 mw->area()->closeView(view);
         }
@@ -956,7 +968,8 @@ KTextEditor::View* DocumentController::activeTextDocumentView() const
 QString DocumentController::activeDocumentPath( const QString& target ) const
 {
     if(!target.isEmpty()) {
-        foreach(IProject* project, Core::self()->projectController()->projects()) {
+        const auto projects = Core::self()->projectController()->projects();
+        for (IProject* project : projects) {
             if(project->name().startsWith(target, Qt::CaseInsensitive)) {
                 return project->path().pathOrUrl() + QLatin1String("/.");
             }
@@ -984,8 +997,10 @@ QStringList DocumentController::activeDocumentPaths() const
     if( !uiController->activeSublimeWindow() ) return QStringList();
 
     QSet<QString> documents;
-    foreach(Sublime::View* view, uiController->activeSublimeWindow()->area()->views())
+    const auto views = uiController->activeSublimeWindow()->area()->views();
+    for (Sublime::View* view : views) {
         documents.insert(view->document()->documentSpecifier());
+    }
 
     return documents.toList();
 }
@@ -1017,7 +1032,8 @@ QUrl DocumentController::nextEmptyDocumentUrl()
 {
     int nextEmptyDocNumber = 0;
     const auto& pattern = emptyDocumentPattern();
-    foreach (IDocument *doc, Core::self()->documentControllerInternal()->openDocuments()) {
+    const auto openDocuments = Core::self()->documentControllerInternal()->openDocuments();
+    for (IDocument* doc : openDocuments) {
         if (DocumentController::isEmptyDocumentUrl(doc->url())) {
             const auto match = pattern.match(doc->url().toDisplayString(QUrl::PreferLocalFile));
             if (match.hasMatch()) {
@@ -1128,8 +1144,9 @@ bool DocumentController::openDocumentsWithSplitSeparators( Sublime::AreaIndex* i
     {
         if(urlsWithSeparators.size() > 1)
         {
-            foreach(const QStringList& group, groups)
+            for (const QStringList& group : qAsConst(groups)) {
                 ret &= openDocumentsWithSplitSeparators( index, group, isFirstView );
+            }
         }else{
             while(index->isSplit())
                 index = index->first();

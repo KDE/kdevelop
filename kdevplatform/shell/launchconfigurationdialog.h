@@ -115,7 +115,7 @@ private:
     QList<TreeItem*> topItems;
 
 public:
-    ProjectItem* findItemForProject( IProject* );
+    ProjectItem* findItemForProject(IProject* p) const;
 };
 
 class LaunchConfigPagesContainer : public QWidget

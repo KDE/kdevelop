@@ -237,7 +237,8 @@ void MainWindowPrivate::contextMenuSplitVertical()
 
 void MainWindowPrivate::reloadAll()
 {
-    foreach ( IDocument* doc, Core::self()->documentController()->openDocuments() ) {
+    const auto documents = Core::self()->documentController()->openDocuments() ;
+    for (IDocument* doc : documents) {
         doc->reload();
     }
 }

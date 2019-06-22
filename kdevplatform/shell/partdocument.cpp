@@ -149,8 +149,9 @@ bool PartDocument::close(DocumentSaveMode mode)
     //close all views and then delete ourself
     closeViews();
 
-    foreach (KParts::Part* part, d->partForView)
+    for (KParts::Part* part : qAsConst(d->partForView)) {
         part->deleteLater();
+    }
 
     // The document will be deleted automatically if there are no views left
 

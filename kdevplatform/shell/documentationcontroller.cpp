@@ -177,7 +177,8 @@ IDocumentation::Ptr DocumentationController::documentationForDeclaration(Declara
     if (!decl)
         return {};
 
-    foreach (IDocumentationProvider* doc, documentationProviders()) {
+    const auto documentationProviders = this->documentationProviders();
+    for (IDocumentationProvider* doc : documentationProviders) {
         qCDebug(SHELL) << "Documentation provider found:" << doc;
         auto ret = doc->documentationForDeclaration(decl);
 

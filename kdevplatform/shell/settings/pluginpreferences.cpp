@@ -56,7 +56,8 @@ PluginPreferences::PluginPreferences(QWidget* parent)
         { QStringLiteral("Runtimes"),           i18nc("@title:group", "Runtimes") },
         { QStringLiteral("Other"),              i18nc("@title:group", "Other") }
     };
-    foreach (const KPluginMetaData& info, Core::self()->pluginControllerInternal()->allPluginInfos()) {
+    const auto pluginInfos = Core::self()->pluginControllerInternal()->allPluginInfos();
+    for (const KPluginMetaData& info : pluginInfos) {
         const QString loadMode = info.value(QStringLiteral("X-KDevelop-LoadMode"));
         if( loadMode.isEmpty() || loadMode == QLatin1String("UserSelectable") )
         {

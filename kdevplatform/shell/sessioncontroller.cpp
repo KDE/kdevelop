@@ -101,20 +101,20 @@ public:
 
     Session* findSessionForName( const QString& name ) const
     {
-        foreach( Session* s, sessionActions.keys() )
-        {
+        for (auto it = sessionActions.begin(), end = sessionActions.end(); it != end; ++it) {
+            Session* s = it.key();
             if( s->name() == name )
                 return s;
         }
         return nullptr;
     }
 
-    Session* findSessionForId(const QString& idString)
+    Session* findSessionForId(const QString& idString) const
     {
         QUuid id(idString);
 
-        foreach( Session* s, sessionActions.keys() )
-        {
+        for (auto it = sessionActions.begin(), end = sessionActions.end(); it != end; ++it) {
+            Session* s = it.key();
             if( s->id() == id)
                 return s;
         }
@@ -130,8 +130,10 @@ public:
         delete session;
 #if 0
         //Terminate this instance of kdevelop if the user agrees
-        foreach(Sublime::MainWindow* window, Core::self()->uiController()->controller()->mainWindows())
+        const auto windows = Core::self()->uiController()->controller()->mainWindows();
+        for (Sublime::MainWindow* window : windows) {
             window->close();
+        }
 #endif
     }
 
@@ -316,8 +318,8 @@ void SessionController::initialize( const QString& session )
 {
     QDir sessiondir( SessionControllerPrivate::sessionBaseDirectory() );
 
-    foreach( const QString& s, sessiondir.entryList( QDir::AllDirs | QDir::NoDotAndDotDot ) )
-    {
+    const auto sessionDirs = sessiondir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+    for (const QString& s : sessionDirs) {
         QUuid id( s );
         if( id.isNull() )
             continue;
@@ -581,8 +583,8 @@ QString SessionController::showSessionChooserDialog(const QString& headerText, b
 
     QString defaultSession = KSharedConfig::openConfig()->group( cfgSessionGroup() ).readEntry( cfgActiveSessionEntry(), "default" );
 
-    foreach(const KDevelop::SessionInfo& si, KDevelop::SessionController::availableSessionInfos())
-    {
+    const auto availableSessionInfos = KDevelop::SessionController::availableSessionInfos();
+    for (const KDevelop::SessionInfo& si : availableSessionInfos) {
         if ( si.name.isEmpty() && si.projects.isEmpty() ) {
             continue;
         }

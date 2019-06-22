@@ -278,8 +278,9 @@ void MainWindow::configureShortcuts()
 // so we can connect to the saved() signal to propagate changes in the editor shortcuts
 
    KShortcutsDialog dlg(KShortcutsEditor::AllActions, KShortcutsEditor::LetterShortcutsAllowed, this);
-    foreach (KXMLGUIClient *client, Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->clients())
-    {
+
+    const auto firstMainWindowClientsBefore = Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->clients();
+    for (KXMLGUIClient* client : firstMainWindowClientsBefore) {
         if(client && !client->xmlFile().isEmpty())
             dlg.addCollection( client->actionCollection() );
     }
@@ -288,8 +289,11 @@ void MainWindow::configureShortcuts()
     dlg.configure(true);
 
     QMap<QString, QKeySequence> shortcuts;
-    foreach(KXMLGUIClient* client, Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->clients()) {
-        foreach(QAction* action, client->actionCollection()->actions()) {
+    // querying again just in case something changed behind our back
+    const auto firstMainWindowClientsAfter = Core::self()->uiControllerInternal()->mainWindows()[0]->guiFactory()->clients();
+    for (KXMLGUIClient* client : firstMainWindowClientsAfter) {
+        const auto actions = client->actionCollection()->actions();
+        for (QAction* action : actions) {
             if(!action->objectName().isEmpty()) {
                 shortcuts[action->objectName()] = action->shortcut();
             }
@@ -297,8 +301,10 @@ void MainWindow::configureShortcuts()
     }
 
     for(int a = 1; a < Core::self()->uiControllerInternal()->mainWindows().size(); ++a) {
-        foreach(KXMLGUIClient* client, Core::self()->uiControllerInternal()->mainWindows()[a]->guiFactory()->clients()) {
-            foreach(QAction* action, client->actionCollection()->actions()) {
+        const auto clients = Core::self()->uiControllerInternal()->mainWindows()[a]->guiFactory()->clients();
+        for (KXMLGUIClient* client : clients) {
+            const auto actions = client->actionCollection()->actions();
+            for (QAction* action : actions) {
                 qCDebug(SHELL) << "transferring setting shortcut for" << action->objectName();
                 const auto shortcutIt = shortcuts.constFind(action->objectName());
                 if (shortcutIt != shortcuts.constEnd()) {
@@ -316,10 +322,12 @@ void MainWindow::shortcutsChanged()
     if(!activeClient)
         return;
 
-    foreach(IDocument * doc, Core::self()->documentController()->openDocuments()) {
+    const auto documents = Core::self()->documentController()->openDocuments();
+    for (IDocument* doc : documents) {
         KTextEditor::Document *textDocument = doc->textDocument();
         if (textDocument) {
-            foreach(KTextEditor::View *client, textDocument->views()) {
+            const auto views = textDocument->views();
+            for (KTextEditor::View* client : views) {
                 if (client != activeClient) {
                     client->reloadXML();
                 }
@@ -348,8 +356,10 @@ void MainWindow::initialize()
     connect(Core::self()->sourceFormatterControllerInternal(), &SourceFormatterController::hasFormattersChanged,
              d, &MainWindowPrivate::updateSourceFormatterGuiClient);
 
-    foreach(IPlugin* plugin, Core::self()->pluginController()->loadedPlugins())
+    const auto plugins = Core::self()->pluginController()->loadedPlugins();
+    for (IPlugin* plugin : plugins) {
         d->addPlugin(plugin);
+    }
 
     guiFactory()->addClient(Core::self()->sessionController());
     if (Core::self()->sourceFormatterControllerInternal()->hasFormatters()) {
@@ -460,7 +470,8 @@ void MainWindow::updateAllTabColors()
     const auto defaultColor = ::defaultColor(palette());
     if (UiConfig::colorizeByProject()) {
         QHash<const Sublime::View*, QColor> viewColors;
-        foreach (auto container, containers()) {
+        const auto containers = this->containers();
+        for (auto* container : containers) {
             const auto views = container->views();
             viewColors.reserve(views.size());
             viewColors.clear();
@@ -473,7 +484,8 @@ void MainWindow::updateAllTabColors()
             container->setTabColors(viewColors);
         }
     } else {
-        foreach (auto container, containers()) {
+        const auto containers = this->containers();
+        for (auto* container : containers) {
             container->resetTabColors(defaultColor);
         }
     }
@@ -485,8 +497,10 @@ void MainWindow::updateTabColor(IDocument* doc)
         return;
 
     const auto color = colorForDocument(doc->url(), palette(), defaultColor(palette()));
-    foreach (auto container, containers()) {
-        foreach (auto view, container->views()) {
+    const auto containers = this->containers();
+    for (auto* container : containers) {
+        const auto views = container->views();
+        for (auto* view : views) {
             const auto urlDoc = qobject_cast<Sublime::UrlDocument*>(view->document());
             if (urlDoc && urlDoc->url() == doc->url()) {
                 container->setTabColor(view, color);

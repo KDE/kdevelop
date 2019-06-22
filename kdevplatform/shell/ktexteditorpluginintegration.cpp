@@ -276,15 +276,17 @@ QWidget *MainWindow::window() const
 
 QList<KTextEditor::View *> MainWindow::views() const
 {
-    QList<KTextEditor::View *> views;
-    foreach (auto area, m_mainWindow->areas()) {
-        foreach (auto view, area->views()) {
+    QList<KTextEditor::View *> kteViews;
+    const auto areas = m_mainWindow->areas();
+    for (auto* area : areas) {
+        const auto views = area->views();
+        for (auto* view : views) {
             if (auto kteView = toKteView(view)) {
-                views << kteView;
+                kteViews << kteView;
             }
         }
     }
-    return views;
+    return kteViews;
 }
 
 KTextEditor::View *MainWindow::activeView() const
@@ -294,8 +296,10 @@ KTextEditor::View *MainWindow::activeView() const
 
 KTextEditor::View *MainWindow::activateView(KTextEditor::Document *doc)
 {
-    foreach (auto area, m_mainWindow->areas()) {
-        foreach (auto view, area->views()) {
+    const auto areas = m_mainWindow->areas();
+    for (auto* area : areas) {
+        const auto views = area->views();
+        for (auto* view : views) {
             if (auto kteView = toKteView(view)) {
                 if (kteView->document() == doc) {
                     m_mainWindow->activateView(view);
