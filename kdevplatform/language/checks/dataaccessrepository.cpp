@@ -51,18 +51,17 @@ QList<DataAccess*> DataAccessRepository::modifications() const { return d->m_mod
 
 DataAccess* DataAccessRepository::accessAt(const CursorInRevision& cursor) const
 {
-    foreach (DataAccess* a, d->m_modifications) {
-        if (a->pos() == cursor)
-            return a;
-    }
+    auto it = std::find_if(d->m_modifications.constBegin(), d->m_modifications.constEnd(), [&](DataAccess* a) {
+        return (a->pos() == cursor);
+    });
 
-    return nullptr;
+    return (it != d->m_modifications.constEnd()) ? *it : nullptr;
 }
 
 QList<DataAccess*> DataAccessRepository::accessesInRange(const RangeInRevision& range) const
 {
     QList<DataAccess*> ret;
-    foreach (DataAccess* a, d->m_modifications) {
+    for (DataAccess* a : qAsConst(d->m_modifications)) {
         if (range.contains(a->pos()))
             ret += a;
     }

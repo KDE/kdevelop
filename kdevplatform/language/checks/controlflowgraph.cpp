@@ -71,14 +71,17 @@ void clearNodeRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& deleted
 void ControlFlowGraph::clear()
 {
     QSet<ControlFlowNode*> deleted;
-    foreach (ControlFlowNode* node, d->m_funcNodes)
+    for (ControlFlowNode* node : qAsConst(d->m_funcNodes)) {
         clearNodeRecursively(node, deleted);
+    }
 
-    foreach (ControlFlowNode* node, d->m_nodes)
+    for (ControlFlowNode* node : qAsConst(d->m_nodes)) {
         clearNodeRecursively(node, deleted);
+    }
 
-    foreach (ControlFlowNode* node, d->m_deadNodes)
+    for (ControlFlowNode* node : qAsConst(d->m_deadNodes)) {
         clearNodeRecursively(node, deleted);
+    }
 
     d->m_nodes.clear();
     d->m_funcNodes.clear();
