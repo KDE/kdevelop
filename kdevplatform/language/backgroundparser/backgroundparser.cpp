@@ -574,7 +574,8 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
     for (auto it = d->m_documents.begin(); it != d->m_documents.end();) {
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
 
-        foreach (const DocumentParseTarget& target, (*it).targets) {
+        const auto oldTargets = (*it).targets;
+        for (const DocumentParseTarget& target : oldTargets) {
             if (notifyWhenReady && target.notifyWhenReady.data() == notifyWhenReady) {
                 (*it).targets.remove(target);
             }
@@ -638,7 +639,8 @@ void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyW
         auto& documentParsePlan = *documentParsePlanIt;
         d->m_documentsForPriority[documentParsePlan.priority()].remove(url);
 
-        foreach (const DocumentParseTarget& target, documentParsePlan.targets) {
+        const auto oldTargets = documentParsePlan.targets;
+        for (const DocumentParseTarget& target : oldTargets) {
             if (target.notifyWhenReady.data() == notifyWhenReady) {
                 documentParsePlan.targets.remove(target);
             }

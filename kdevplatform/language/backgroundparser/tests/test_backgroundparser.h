@@ -74,7 +74,7 @@ public:
 
     void clear();
 
-    JobPrototype jobForUrl(const IndexedString& url);
+    JobPrototype jobForUrl(const IndexedString& url) const;
 
     int numJobs() const;
     int numFinishedJobs() const;

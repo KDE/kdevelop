@@ -107,8 +107,7 @@ ParseJob::ParseJob(const IndexedString& url, KDevelop::ILanguageSupport* languag
 
 ParseJob::~ParseJob()
 {
-    using QObjectPointer = QPointer<QObject>;
-    foreach (const QObjectPointer& p, d->notify) {
+    for (auto& p : qAsConst(d->notify)) {
         if (p) {
             QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection,
                                       Q_ARG(KDevelop::IndexedString, d->url),
@@ -477,7 +476,8 @@ bool ParseJob::isUpdateRequired(const IndexedString& languageString)
     if (abortRequested()) {
         return false;
     }
-    foreach (const ParsingEnvironmentFilePointer& file, DUChain::self()->allEnvironmentFiles(document())) {
+    const auto files = DUChain::self()->allEnvironmentFiles(document());
+    for (const ParsingEnvironmentFilePointer& file : files) {
         if (file->language() != languageString) {
             continue;
         }

@@ -87,7 +87,7 @@ void JobPlan::parseJobCreated(ParseJob* job)
 void JobPlan::addJobsToParser()
 {
     // add parse jobs
-    foreach (const JobPrototype& job, m_jobs) {
+    for (const JobPrototype& job : qAsConst(m_jobs)) {
         ICore::self()->languageController()->backgroundParser()->addDocument(
             job.m_url, TopDUContext::Empty, job.m_priority, this, job.m_flags
         );
@@ -113,7 +113,7 @@ bool JobPlan::runJobs(int timeoutMS)
 
     // verify they're started in the right order
     int currentBestPriority = BackgroundParser::BestPriority;
-    foreach (const IndexedString& url, m_createdJobs) {
+    for (const IndexedString& url : qAsConst(m_createdJobs)) {
         const JobPrototype p = jobForUrl(url);
         QVERIFY_RETURN(p.m_priority >= currentBestPriority, false);
         currentBestPriority = p.m_priority;
@@ -122,15 +122,13 @@ bool JobPlan::runJobs(int timeoutMS)
     return true;
 }
 
-JobPrototype JobPlan::jobForUrl(const IndexedString& url)
+JobPrototype JobPlan::jobForUrl(const IndexedString& url) const
 {
-    foreach (const JobPrototype& job, m_jobs) {
-        if (job.m_url == url) {
-            return job;
-        }
-    }
+    auto it = std::find_if(m_jobs.begin(), m_jobs.end(), [&](const JobPrototype& job) {
+        return (job.m_url == url);
+    });
 
-    return JobPrototype();
+    return (it != m_jobs.end()) ? *it: JobPrototype();
 }
 
 void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext& /*context*/)
@@ -148,7 +146,7 @@ void JobPlan::updateReady(const IndexedString& url, const ReferencedTopDUContext
     if (job.m_flags & ParseJob::RequiresSequentialProcessing) {
         // ensure that all jobs that respect sequential processing
         // with lower priority have been run
-        foreach (const JobPrototype& otherJob, m_jobs) {
+        for (const JobPrototype& otherJob : qAsConst(m_jobs)) {
             if (otherJob.m_url == job.m_url) {
                 continue;
             }
@@ -319,7 +317,7 @@ void TestBackgroundparser::benchmark()
     }
 
     QBENCHMARK {
-        foreach (const IndexedString& url, jobUrls) {
+        for (const IndexedString& url : qAsConst(jobUrls)) {
             ICore::self()->languageController()->backgroundParser()->addDocument(url);
         }
 

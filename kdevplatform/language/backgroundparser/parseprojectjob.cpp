@@ -79,7 +79,8 @@ ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool force
         d->filesToParse = project->fileSet();
     } else {
         // In case we don't want to parse the whole project, still add all currently open files that belong to the project to the background-parser
-        foreach (auto document, ICore::self()->documentController()->openDocuments()) {
+        const auto documents = ICore::self()->documentController()->openDocuments();
+        for (auto* document : documents) {
             const auto path = IndexedString(document->url());
             if (project->fileSet().contains(path)) {
                 d->filesToParse.insert(path);
@@ -151,7 +152,8 @@ void ParseProjectJob::start()
     }
 
     // Add all currently open files that belong to the project to the background-parser, so that they'll be parsed first of all
-    foreach (auto document, ICore::self()->documentController()->openDocuments()) {
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (auto* document : documents) {
         const auto path = IndexedString(document->url());
         auto fileIt = d->filesToParse.find(path);
         if (fileIt != d->filesToParse.end()) {
@@ -172,7 +174,7 @@ void ParseProjectJob::start()
     int processed = 0;
     // guard against reentrancy issues, see also bug 345480
     auto crashGuard = QPointer<ParseProjectJob> {this};
-    foreach (const IndexedString& url, d->filesToParse) {
+    for (const IndexedString& url : qAsConst(d->filesToParse)) {
         ICore::self()->languageController()->backgroundParser()->addDocument(url, processingLevel,
                                                                              BackgroundParser::InitialParsePriority,
                                                                              this);
