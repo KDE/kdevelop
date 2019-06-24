@@ -64,10 +64,13 @@ void ClassModelNodesController::unregisterForChanges(const KDevelop::IndexedStri
 void ClassModelNodesController::updateChangedFiles()
 {
     // re-parse changed documents.
-    foreach (const IndexedString& file, m_updatedFiles)
-        foreach (ClassModelNodeDocumentChangedInterface* value, m_filesMap.values(file)) {
+    // TODO: m_updatedFiles seems no longer set, check again and remove if
+    for (const IndexedString& file : qAsConst(m_updatedFiles)) {
+        const auto values = m_filesMap.values(file);
+        for (ClassModelNodeDocumentChangedInterface* value : values) {
             value->documentChanged(file);
         }
+    }
 
     // Processed all files.
     m_updatedFiles.clear();

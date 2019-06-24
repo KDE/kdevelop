@@ -61,7 +61,8 @@ void AllClassesFolder::populateNode()
         &AllClassesFolder::projectClosing);
 
     // Parse each existing project file
-    foreach (IProject* project, ICore::self()->projectController()->projects()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* project : projects) {
         projectOpened(project);
     }
 }
@@ -69,15 +70,19 @@ void AllClassesFolder::populateNode()
 void AllClassesFolder::projectClosing(KDevelop::IProject* project)
 {
     // Run over all the files in the project.
-    foreach (const IndexedString& file, project->fileSet())
+    const auto files = project->fileSet();
+    for (const IndexedString& file : files) {
         closeDocument(file);
+    }
 }
 
 void AllClassesFolder::projectOpened(KDevelop::IProject* project)
 {
     // Run over all the files in the project.
-    foreach (const IndexedString& file, project->fileSet())
+    const auto files = project->fileSet();
+    for (const IndexedString& file : files) {
         parseDocument(file);
+    }
 
     recursiveSort();
 }

@@ -111,9 +111,12 @@ void EnumNode::populateNode()
 
     Declaration* decl = declaration();
 
-    if (decl->internalContext())
-        foreach (Declaration* enumDecl, decl->internalContext()->localDeclarations())
+    if (decl->internalContext()) {
+        const auto localDeclarations = decl->internalContext()->localDeclarations();
+        for (Declaration* enumDecl : localDeclarations) {
             addNode(new EnumNode(enumDecl, m_model));
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -161,7 +164,8 @@ bool ClassNode::updateClassDeclarations()
     auto* klass = dynamic_cast<ClassDeclaration*>(declaration());
 
     if (klass) {
-        foreach (Declaration* decl, klass->internalContext()->localDeclarations()) {
+        const auto localDeclarations = klass->internalContext()->localDeclarations();
+        for (Declaration* decl : localDeclarations) {
             // Ignore forward declarations.
             if (decl->isForwardDeclaration())
                 continue;
@@ -259,7 +263,7 @@ ClassNode* ClassNode::findSubClass(const KDevelop::IndexedQualifiedIdentifier& a
 
     /// @todo This is slow - we go over all the sub identifiers but the assumption is that
     ///       this function call is rare and the list is not that long.
-    foreach (Node* item, m_subIdentifiers) {
+    for (Node* item : qAsConst(m_subIdentifiers)) {
         auto* classNode = dynamic_cast<ClassNode*>(item);
         if (classNode == nullptr)
             continue;
@@ -374,7 +378,8 @@ void BaseClassesFolderNode::populateNode()
         // I use the imports instead of the baseClasses in the ClassDeclaration because I need
         // to get to the base class identifier which is not directly accessible through the
         // baseClasses function.
-        foreach (const DUContext::Import& import, klass->internalContext()->importedParentContexts()) {
+        const auto imports = klass->internalContext()->importedParentContexts();
+        for (const DUContext::Import& import : imports) {
             DUContext* baseContext = import.context(klass->topContext());
             if (baseContext && baseContext->type() == DUContext::Class) {
                 Declaration* baseClassDeclaration = baseContext->owner();
@@ -473,8 +478,9 @@ void Node::recursiveSortInternal()
     std::sort(m_children.begin(), m_children.end(), SortNodesFunctor());
 
     // Tell each node to sort it self.
-    foreach (Node* node, m_children)
+    for (Node* node : qAsConst(m_children)) {
         node->recursiveSortInternal();
+    }
 }
 
 void Node::recursiveSort()

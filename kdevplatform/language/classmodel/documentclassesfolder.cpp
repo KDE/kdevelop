@@ -97,7 +97,8 @@ void DocumentClassesFolder::updateChangedFiles()
     bool hadChanges = false;
 
     // re-parse changed documents.
-    foreach (const IndexedString& file, m_updatedFiles) {
+    // TODO: m_updatedFiles seems no longer set, check again and remove if
+    for (const IndexedString& file : qAsConst(m_updatedFiles)) {
         // Make sure it's one of the monitored files.
         if (m_openFiles.contains(file))
             hadChanges |= updateDocument(file);
@@ -339,11 +340,12 @@ bool DocumentClassesFolder::updateDocument(const KDevelop::IndexedString& a_file
     // We need this because when a file gets unloaded, we unload the declared classes in it
     // and if a namespace has no class in it, it'll forever exist and no one will remove it
     // from the children list.
-    foreach (const QualifiedIdentifier& id, declaredNamespaces)
+    for (const QualifiedIdentifier& id : qAsConst(declaredNamespaces)) {
         removeEmptyNamespace(id);
+    }
 
     // Clear erased classes.
-    foreach (const FileIterator item, removedClasses) {
+    for (const FileIterator item : qAsConst(removedClasses)) {
         if (item->nodeItem)
             removeClassNode(item->nodeItem);
         m_openFilesClasses.get<FileIndex>().erase(item);

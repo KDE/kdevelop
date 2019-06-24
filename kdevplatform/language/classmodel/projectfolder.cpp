@@ -40,7 +40,8 @@ ProjectFolder::ProjectFolder(NodesModelInterface* a_model)
 
 void ProjectFolder::populateNode()
 {
-    foreach (const IndexedString& file, m_project->fileSet()) {
+    const auto files = m_project->fileSet();
+    for (const IndexedString& file : files) {
         parseDocument(file);
     }
 

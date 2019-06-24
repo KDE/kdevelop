@@ -61,7 +61,8 @@ ClassModel::ClassModel()
     connect(ICore::self()->projectController(), &IProjectController::projectOpened,
             this, &ClassModel::addProjectNode);
 
-    foreach (IProject* project, ICore::self()->projectController()->projects()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* project : projects) {
         addProjectNode(project);
     }
 }
@@ -74,7 +75,7 @@ ClassModel::~ClassModel()
 void ClassModel::updateFilterString(const QString& a_newFilterString)
 {
     m_allClassesNode->updateFilterString(a_newFilterString);
-    foreach (ClassModelNodes::FilteredProjectFolder* folder, m_projectNodes) {
+    for (ClassModelNodes::FilteredProjectFolder* folder : qAsConst(m_projectNodes)) {
         folder->updateFilterString(a_newFilterString);
     }
 }
