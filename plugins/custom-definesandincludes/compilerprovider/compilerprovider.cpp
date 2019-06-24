@@ -104,13 +104,15 @@ ConfigEntry configForItem(KDevelop::ProjectBaseItem* item)
 
 ProjectTargetItem* findCompiledTarget(ProjectBaseItem* item)
 {
-    for(auto item: item->targetList()) {
+    const auto targets = item->targetList();
+    for (auto* item : targets) {
         if (item->type() == ProjectBaseItem::ExecutableTarget || item->type() == ProjectBaseItem::LibraryTarget) {
             return item;
         }
     }
 
-    for(auto folder: item->folderList()) {
+    const auto folders = item->folderList();
+    for (auto* folder: folders) {
         auto target = findCompiledTarget(folder);
         if (target)
             return target;
@@ -173,7 +175,7 @@ void CompilerProvider::projectChanged(KDevelop::IProject* p)
     }
 
     //we need to search, sdk compiler names are weird: arm-linux-androideabi-g++
-    for (auto factory : m_factories) {
+    for (auto& factory : qAsConst(m_factories)) {
         if (factory->isSupported(path)) {
             auto compiler = factory->createCompiler(path.lastPathSegment(), pathString);
             const auto registered = registerCompiler(compiler);
