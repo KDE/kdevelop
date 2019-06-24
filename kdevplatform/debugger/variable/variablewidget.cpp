@@ -228,8 +228,8 @@ void VariableTree::setupActions()
     act->setShortcut(Qt::Key_H);
     m_formatMenu->addAction(act);
 
-    foreach(QAction* act, m_formatMenu->actions())
-    {
+    const auto formatMenuActions = m_formatMenu->actions();
+    for (QAction* act : formatMenuActions) {
         act->setCheckable(true);
         act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
         const int id = act->data().toInt();
@@ -274,7 +274,8 @@ void VariableTree::contextMenuEvent(QContextMenuEvent* event)
     if(selectedVariable()->canSetFormat())
         contextMenu.addMenu(m_formatMenu);
 
-    foreach(QAction* act, m_formatMenu->actions()) {
+    const auto formatMenuActions = m_formatMenu->actions();
+    for (QAction* act : formatMenuActions) {
         if(act->data().toInt()==selectedVariable()->format())
             act->setChecked(true);
     }

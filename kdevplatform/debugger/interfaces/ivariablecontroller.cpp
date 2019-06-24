@@ -71,7 +71,8 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
         d->activeFrame = -1;
     } else if (state == IDebugSession::EndedState || state == IDebugSession::NotStartedState) {
         // Remove all locals.
-        foreach (Locals *l, variableCollection()->allLocals()) {
+        const auto locals = variableCollection()->allLocals();
+        for (Locals* l : locals) {
             l->deleteChildren();
             l->setHasMore(false);
         }
@@ -102,7 +103,8 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
     case IDebugSession::thread_or_frame_changed:
         qCDebug(DEBUGGER) << d->autoUpdate;
         if (!(d->autoUpdate & UpdateLocals)) {
-            foreach (Locals *l, variableCollection()->allLocals()) {
+            const auto locals = variableCollection()->allLocals();
+            for (Locals* l : locals) {
                 if (!l->isExpanded() && !l->childCount()) {
                     l->setHasMore(true);
                 }

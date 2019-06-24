@@ -140,7 +140,8 @@ void IBreakpointController::debuggerStateChanged(IDebugSession::DebuggerState st
         return;
 
     //breakpoint state changes when session started or stopped
-    foreach (Breakpoint* breakpoint, model->breakpoints()) {
+    const auto breakpoints = model->breakpoints();
+    for (Breakpoint* breakpoint : breakpoints) {
         if (state == IDebugSession::StartingState) {
             auto& dirty = m_dirty[breakpoint];
 
@@ -163,7 +164,8 @@ void IBreakpointController::sendMaybeAll()
     if (!model)
         return;
 
-    foreach (Breakpoint *breakpoint, model->breakpoints()) {
+    const auto breakpoints = model->breakpoints();
+    for (Breakpoint* breakpoint : breakpoints) {
         sendMaybe(breakpoint);
     }
 }

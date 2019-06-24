@@ -39,7 +39,8 @@ namespace {
 static QUrl rebaseMatchingUrl(const QUrl& toRebase, const KConfigGroup& config, const QString& baseEntry, const QString& rebaseEntry)
 {
     const QUrl::UrlFormattingOption matchOpts = QUrl::NormalizePathSegments;
-    foreach (const QString &group, config.groupList()) {
+    const auto configGroups = config.groupList();
+    for (const QString& group : configGroups) {
         KConfigGroup pathCfg = config.group(group);
         const QString baseStr = pathCfg.readEntry(baseEntry, QUrl()).url(matchOpts);
         const QString searchStr = toRebase.url(matchOpts);
@@ -185,14 +186,14 @@ public:
         endResetModel();
     }
 
-    void saveToConfiguration(KConfigGroup config)
+    void saveToConfiguration(KConfigGroup config) const
     {
         qCDebug(DEBUGGER) << m_paths.count();
 
         KConfigGroup cfg = config.group(PathMappings::pathMappingsEntry);
         cfg.writeEntry("Count", m_paths.count());
         int i=0;
-        foreach (const Path &p, m_paths) {
+        for (const Path& p : m_paths) {
             i++;
             KConfigGroup pCfg = cfg.group(QString::number(i));
             pCfg.writeEntry(PathMappings::pathMappingRemoteEntry, p.remote);
@@ -240,7 +241,8 @@ PathMappingsWidget::PathMappingsWidget(QWidget* parent): QWidget(parent)
 
 void PathMappingsWidget::deletePath()
 {
-    foreach (const QModelIndex &i, m_pathMappingTable->selectionModel()->selectedRows()) {
+    const auto selectedRows = m_pathMappingTable->selectionModel()->selectedRows();
+    for (const QModelIndex& i : selectedRows) {
         m_pathMappingTable->model()->removeRow(i.row(), i.parent());
     }
 }

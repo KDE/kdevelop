@@ -336,7 +336,7 @@ QList<Variable*> Locals::updateLocals(const QStringList& locals)
         existing << var->expression();
     }
 
-    foreach (const QString& var, locals) {
+    for (const QString& var : locals) {
         current << var;
         // If we currently don't display this local var, add it.
         if( !existing.contains( var ) ) {
@@ -371,7 +371,7 @@ QList<Variable*> Locals::updateLocals(const QStringList& locals)
 
     QList<Variable*> ret;
     ret.reserve(childItems.size());
-    foreach (TreeItem *i, childItems) {
+    for (TreeItem* i : qAsConst(childItems)) {
         Q_ASSERT(qobject_cast<Variable*>(i));
         ret << static_cast<Variable*>(i);
     }
@@ -414,7 +414,7 @@ QHash<QString, Locals*> VariablesRoot::allLocals() const
 void VariablesRoot::resetChanged()
 {
     m_watches->resetChanged();
-    foreach (Locals *l, m_locals) {
+    for (Locals* l : qAsConst(m_locals)) {
         l->resetChanged();
     }
 }
@@ -484,8 +484,10 @@ void VariableCollection::textDocumentCreated(IDocument* doc)
        &KTextEditor::Document::viewCreated,
        this, &VariableCollection::viewCreated );
 
-  foreach( KTextEditor::View* view, doc->textDocument()->views() )
+  const auto views = doc->textDocument()->views();
+  for (KTextEditor::View* view : views) {
     viewCreated( doc->textDocument(), view );
+  }
 }
 
 void VariableCollection::viewCreated(KTextEditor::Document* doc,

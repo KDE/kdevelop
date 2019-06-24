@@ -83,8 +83,10 @@ BreakpointModel::BreakpointModel(QObject* parent)
     connect(this, &BreakpointModel::dataChanged, this, &BreakpointModel::updateMarks);
 
     if (KDevelop::ICore::self()->partController()) { //TODO remove if
-        foreach(KParts::Part* p, KDevelop::ICore::self()->partController()->parts())
+        const auto parts = KDevelop::ICore::self()->partController()->parts();
+        for (KParts::Part* p : parts) {
             slotPartAdded(p);
+        }
         connect(KDevelop::ICore::self()->partController(),
                 &IPartController::partAdded,
                 this,
@@ -457,7 +459,7 @@ void KDevelop::BreakpointModel::updateMarks()
         return;
 
     //add marks
-    foreach (Breakpoint* breakpoint, d->breakpoints) {
+    for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
         if (breakpoint->line() == -1) continue;
         IDocument *doc = ICore::self()->documentController()->documentForUrl(breakpoint->url());
@@ -481,16 +483,17 @@ void KDevelop::BreakpointModel::updateMarks()
     }
 
     //remove marks
-    foreach (IDocument *doc, ICore::self()->documentController()->openDocuments()) {
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (IDocument* doc : documents) {
         KTextEditor::MarkInterface *mark = qobject_cast<KTextEditor::MarkInterface*>(doc->textDocument());
         if (!mark) continue;
 
         {
             QSignalBlocker blocker(doc->textDocument());
-            foreach (KTextEditor::Mark *m, mark->marks()) {
+            for (KTextEditor::Mark* m : mark->marks()) {
                 if (!(m->type & AllBreakpointMarks)) continue;
                 IF_DEBUG( qCDebug(DEBUGGER) << m->line << m->type; )
-                foreach (Breakpoint* breakpoint, d->breakpoints) {
+                for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
                     if (breakpoint->kind() != Breakpoint::CodeBreakpoint) continue;
                     if (doc->url() == breakpoint->url() && m->line == breakpoint->line()) {
                         goto continueNextMark;
@@ -506,7 +509,7 @@ void KDevelop::BreakpointModel::updateMarks()
 void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 {
     IF_DEBUG( qCDebug(DEBUGGER); )
-    foreach (Breakpoint* breakpoint, d->breakpoints) {
+    for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (breakpoint->movingCursor()) {
             if (breakpoint->movingCursor()->document() != doc->textDocument()) continue;
             if (breakpoint->movingCursor()->line() == breakpoint->line()) continue;
@@ -518,7 +521,7 @@ void BreakpointModel::documentSaved(KDevelop::IDocument* doc)
 }
 void BreakpointModel::aboutToDeleteMovingInterfaceContent(KTextEditor::Document* document)
 {
-    foreach (Breakpoint* breakpoint, d->breakpoints) {
+    for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {
         if (breakpoint->movingCursor() && breakpoint->movingCursor()->document() == document) {
             breakpoint->setMovingCursor(nullptr);
         }
@@ -548,7 +551,7 @@ void BreakpointModel::save()
     KConfigGroup breakpoints = ICore::self()->activeSession()->config()->group("Breakpoints");
     breakpoints.writeEntry("number", d->breakpoints.count());
     int i = 0;
-    foreach (Breakpoint* b, d->breakpoints) {
+    for (Breakpoint* b : qAsConst(d->breakpoints)) {
         KConfigGroup g = breakpoints.group(QString::number(i));
         b->save(g);
         ++i;
@@ -657,10 +660,8 @@ void BreakpointModel::registerBreakpoint(Breakpoint* breakpoint)
 
 Breakpoint* BreakpointModel::breakpoint(const QUrl& url, int line) const
 {
-    foreach (Breakpoint* b, d->breakpoints) {
-        if (b->url() == url && b->line() == line) {
-            return b;
-        }
-    }
-    return nullptr;
+    auto it = std::find_if(d->breakpoints.constBegin(), d->breakpoints.constEnd(), [&](Breakpoint* b) {
+        return (b->url() == url && b->line() == line);
+    });
+    return (it != d->breakpoints.constEnd()) ? *it : nullptr;
 }

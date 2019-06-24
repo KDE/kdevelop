@@ -36,8 +36,10 @@ TreeItem::TreeItem(TreeModel* model, TreeItem *parent)
 
 TreeItem::~TreeItem()
 {
-    foreach (TreeItem *it, childItems)
+    const auto copy = childItems;
+    for (TreeItem* it : copy) {
         delete it;
+    }
     delete ellipsis_;
 }
 
