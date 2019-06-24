@@ -170,7 +170,7 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
 
             for (auto it = declUses.constBegin();
                  it != declUses.constEnd(); ++it) {
-                foreach (const RangeInRevision range, it.value()) {
+                for (const RangeInRevision range : qAsConst(it.value())) {
                     KTextEditor::Range currentRange = declAtCursor->transformFromLocalRevision(range);
                     if (currentRange.isEmpty() ||
                         doc->text(currentRange) != declAtCursor->identifier().identifier().str()) {

@@ -90,8 +90,8 @@ void RenameAction::execute()
 {
     DocumentChangeSet changes;
 
-    foreach (const RevisionedFileRanges& ranges, d->m_oldDeclarationUses) {
-        foreach (const RangeInRevision range, ranges.ranges) {
+    for (const RevisionedFileRanges& ranges : qAsConst(d->m_oldDeclarationUses)) {
+        for (const RangeInRevision range : ranges.ranges) {
             KTextEditor::Range currentRange;
             if (ranges.revision && ranges.revision->valid()) {
                 currentRange = ranges.revision->transformToCurrentRevision(range);
