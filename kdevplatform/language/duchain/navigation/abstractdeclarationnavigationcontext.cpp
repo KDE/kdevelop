@@ -408,7 +408,8 @@ void AbstractDeclarationNavigationContext::htmlFunction()
         if (DUContext* argumentContext = DUChainUtils::argumentContext(d->m_declaration.data())) {
             decls = argumentContext->localDeclarations(topContext().data());
         }
-        foreach (const AbstractType::Ptr& argType, type->arguments()) {
+        const auto argTypes = type->arguments();
+        for (const AbstractType::Ptr& argType : argTypes) {
             if (!first)
                 modifyHtml() += QStringLiteral(", ");
             first = false;
@@ -487,7 +488,8 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
         } else {
             //Check if this declarations hides other declarations
             QList<Declaration*> decls;
-            foreach (const DUContext::Import& import, d->m_declaration->context()->importedParentContexts())
+            const auto importedParentContexts = d->m_declaration->context()->importedParentContexts();
+            for (const DUContext::Import& import : importedParentContexts) {
                 if (import.context(topContext().data()))
                     decls +=
                         import.context(topContext().data())->findDeclarations(QualifiedIdentifier(d->m_declaration->
@@ -496,9 +498,10 @@ void AbstractDeclarationNavigationContext::htmlAdditionalNavigation()
                                                                               AbstractType::Ptr(),
                                                                               topContext().data(),
                                                                               DUContext::DontSearchInParent);
+            }
 
             uint num = 0;
-            foreach (Declaration* decl, decls) {
+            for (Declaration* decl : qAsConst(decls)) {
                 modifyHtml() += i18n("Hides a ");
                 makeLink(i18n("function"), QStringLiteral("jump_to_hide_%1").arg(num),
                          NavigationAction(DeclarationPointer(decl),

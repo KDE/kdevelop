@@ -58,9 +58,11 @@ TopDUContext* pickContextWithData(const QList<TopDUContext*>& duchains, uint max
         if (maxDepth != 0) {
             for (TopDUContext* ctx : duchains) {
                 QList<TopDUContext*> children;
-                foreach (const DUContext::Import& import, ctx->importedParentContexts())
+                const auto importedParentContexts = ctx->importedParentContexts();
+                for (const DUContext::Import& import : importedParentContexts) {
                     if (import.context(nullptr))
                         children << import.context(nullptr)->topContext();
+                }
 
                 duchain = pickContextWithData(children, maxDepth - 1, type, false);
                 if (duchain)

@@ -65,11 +65,13 @@ void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* curren
     if (checker(current))
         collected.insert(current);
 
-    foreach (const ParsingEnvironmentFilePointer& importer, current->importers())
+    const auto importers = current->importers();
+    for (const ParsingEnvironmentFilePointer& importer : importers) {
         if (importer.data())
             collectImporters(checker, importer.data(), visited, collected);
         else
             qCDebug(LANGUAGE) << "missing environment-file, strange";
+    }
 }
 
 ///The returned set does not include the file itself
@@ -77,7 +79,8 @@ void collectImporters(ImportanceChecker& checker, ParsingEnvironmentFile* curren
 void allImportedFiles(ParsingEnvironmentFilePointer file, QSet<IndexedString>& set,
                       QSet<ParsingEnvironmentFilePointer>& visited)
 {
-    foreach (const ParsingEnvironmentFilePointer& import, file->imports()) {
+    const auto imports = file->imports();
+    for (const ParsingEnvironmentFilePointer& import : imports) {
         if (!import) {
             qCDebug(LANGUAGE) << "warning: missing import";
             continue;
@@ -171,9 +174,9 @@ void UsesCollector::startCollecting()
         ///Collect all "parsed versions" or forward-declarations etc. here, into allDeclarations
         QSet<IndexedDeclaration> allDeclarations;
 
-        foreach (Declaration* overload, decls) {
+        for (Declaration* overload : qAsConst(decls)) {
             m_declarations = DUChainUtils::collectAllVersions(overload);
-            foreach (const IndexedDeclaration& d, m_declarations) {
+            for (const IndexedDeclaration& d : qAsConst(m_declarations)) {
                 if (!d.data() || d.data()->id() != overload->id())
                     continue;
                 allDeclarations.insert(d);
@@ -205,7 +208,7 @@ void UsesCollector::startCollecting()
 
         ///Collect definitions for declarations
         if (m_collectDefinitions) {
-            foreach (const IndexedDeclaration d, allDeclarations) {
+            for (const IndexedDeclaration d : qAsConst(allDeclarations)) {
                 Declaration* definition = FunctionDefinition::definition(d.data());
                 if (definition) {
                     qCDebug(LANGUAGE) << "adding definition";
@@ -220,7 +223,7 @@ void UsesCollector::startCollecting()
         QList<ReferencedTopDUContext> candidateTopContexts;
         candidateTopContexts.reserve(allDeclarations.size());
         m_declarations.reserve(allDeclarations.size());
-        foreach (const IndexedDeclaration d, allDeclarations) {
+        for (const IndexedDeclaration d : qAsConst(allDeclarations)) {
             m_declarations << d;
             m_declarationTopContexts.insert(d.indexedTopContext());
             //We only collect declarations with the same type here..
@@ -238,7 +241,7 @@ void UsesCollector::startCollecting()
         ///to loading a whole TopDUContext.
         if (decl->inSymbolTable()) {
             //The declaration can only be used from other contexts if it is in the symbol table
-            foreach (const ReferencedTopDUContext& top, candidateTopContexts) {
+            for (const ReferencedTopDUContext& top : qAsConst(candidateTopContexts)) {
                 if (top->parsingEnvironmentFile()) {
                     collectImporters(checker, top->parsingEnvironmentFile().data(), visited, collected);
                     //In C++, visibility is not handled strictly through the import-structure.
@@ -264,7 +267,7 @@ void UsesCollector::startCollecting()
             QSet<ParsingEnvironmentFile*> filteredCollected;
             QMap<IndexedString, bool> grepCache;
             // Filter the collected files by performing a grep
-            foreach (ParsingEnvironmentFile* file, collected) {
+            for (ParsingEnvironmentFile* file : qAsConst(collected)) {
                 IndexedString url = file->url();
                 QMap<IndexedString, bool>::iterator grepCacheIt = grepCache.find(url);
                 if (grepCacheIt == grepCache.end()) {
@@ -287,7 +290,7 @@ void UsesCollector::startCollecting()
         ///update the "root" top-contexts that open the whole set with their imports.
         QSet<IndexedString> rootFiles;
         QSet<IndexedString> allFiles;
-        foreach (ParsingEnvironmentFile* importer, collected) {
+        for (ParsingEnvironmentFile* importer : qAsConst(collected)) {
             QSet<IndexedString> allImports;
             QSet<ParsingEnvironmentFilePointer> visited;
             allImportedFiles(ParsingEnvironmentFilePointer(importer), allImports, visited);
@@ -304,17 +307,20 @@ void UsesCollector::startCollecting()
 
         //If we used the AllDeclarationsContextsAndUsesRecursive flag here, we would compute way too much. This way we only
         //set the minimum-features selectively on the files we really require them on.
-        foreach (ParsingEnvironmentFile* file, collected)
+        for (ParsingEnvironmentFile* file : qAsConst(collected)) {
             m_staticFeaturesManipulated.insert(file->url());
+        }
 
         m_staticFeaturesManipulated.insert(decl->url());
 
-        foreach (const IndexedString& file, m_staticFeaturesManipulated)
+        const auto currentFeaturesManipulated = m_staticFeaturesManipulated;
+        for (const IndexedString& file : currentFeaturesManipulated) {
             ParseJob::setStaticMinimumFeatures(file, TopDUContext::AllDeclarationsContextsAndUses);
+        }
 
         m_waitForUpdate = rootFiles;
 
-        foreach (const IndexedString& file, rootFiles) {
+        for (const IndexedString& file : qAsConst(rootFiles)) {
             qCDebug(LANGUAGE) << "updating root file:" << file.str();
             DUChain::self()->updateContextForUrl(file, TopDUContext::AllDeclarationsContextsAndUses, this);
         }
@@ -341,8 +347,10 @@ UsesCollector::~UsesCollector()
 {
     ICore::self()->languageController()->backgroundParser()->revertAllRequests(this);
 
-    foreach (const IndexedString& file, m_staticFeaturesManipulated)
+    const auto currentFeaturesManipulated = m_staticFeaturesManipulated;
+    for (const IndexedString& file : currentFeaturesManipulated) {
         ParseJob::unsetStaticMinimumFeatures(file, TopDUContext::AllDeclarationsContextsAndUses);
+    }
 }
 
 void UsesCollector::progress(uint processed, uint total)
@@ -360,7 +368,8 @@ void UsesCollector::updateReady(const KDevelop::IndexedString& url, KDevelop::Re
     } else {
         if (topContext->parsingEnvironmentFile() && topContext->parsingEnvironmentFile()->isProxyContext()) {
             ///Use the attached content-context instead
-            foreach (const DUContext::Import& import, topContext->importedParentContexts()) {
+            const auto importedParentContexts = topContext->importedParentContexts();
+            for (const DUContext::Import& import : importedParentContexts) {
                 if (import.context(nullptr) && import.context(nullptr)->topContext()->parsingEnvironmentFile() &&
                     !import.context(nullptr)->topContext()->parsingEnvironmentFile()->isProxyContext()) {
                     if ((import.context(nullptr)->topContext()->features() &
@@ -450,11 +459,13 @@ void UsesCollector::updateReady(const KDevelop::IndexedString& url, KDevelop::Re
 
     QList<KDevelop::ReferencedTopDUContext> imports;
 
-    foreach (const DUContext::Import& imported, topContext->importedParentContexts())
+    const auto importedParentContexts = topContext->importedParentContexts();
+    for (const DUContext::Import& imported : importedParentContexts) {
         if (imported.context(nullptr) && imported.context(nullptr)->topContext())
             imports << KDevelop::ReferencedTopDUContext(imported.context(nullptr)->topContext());
+    }
 
-    foreach (const KDevelop::ReferencedTopDUContext& import, imports) {
+    for (const KDevelop::ReferencedTopDUContext& import : qAsConst(imports)) {
         IndexedString url = import->url();
         lock.unlock();
         updateReady(url, import);

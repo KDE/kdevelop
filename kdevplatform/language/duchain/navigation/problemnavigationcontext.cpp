@@ -206,7 +206,8 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
 
         const int startIndex = m_assistantsActions.size();
         int currentIndex = startIndex;
-        foreach (auto assistantAction, assistant->actions()) {
+        const auto assistantActions = assistant->actions();
+        for (auto& assistantAction : assistantActions) {
             m_assistantsActions.append(assistantAction);
 
             if (currentIndex != startIndex)
@@ -232,7 +233,7 @@ QString ProblemNavigationContext::html(bool shorten)
     m_assistantsActions.clear();
 
     int problemIndex = 0;
-    foreach (auto problem, m_problems) {
+    for (auto& problem : qAsConst(m_problems)) {
         html(problem);
 
         if (++problemIndex != m_problems.size())

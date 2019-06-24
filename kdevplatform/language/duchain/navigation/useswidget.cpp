@@ -310,8 +310,8 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
 
 void NavigatableWidgetList::deleteItems()
 {
-    foreach (QWidget* item, items())
-        delete item;
+    const auto items = this->items();
+    qDeleteAll(items);
 }
 
 void NavigatableWidgetList::addItem(QWidget* widget, int pos)
@@ -370,9 +370,11 @@ uint countUses(int usedDeclarationIndex, DUContext* context)
         if (context->uses()[useIndex].m_declarationIndex == usedDeclarationIndex)
             ++ret;
 
-    foreach (DUContext* child, context->childContexts())
+    const auto childContexts = context->childContexts();
+    for (DUContext* child : childContexts) {
         if (!isNewGroup(context, child))
             ret += countUses(usedDeclarationIndex, child);
+    }
 
     return ret;
 }
@@ -389,9 +391,11 @@ QList<OneUseWidget*> createUseWidgets(const CodeRepresentation& code, int usedDe
                 new OneUseWidget(decl, context->url(), context->transformFromLocalRevision(
                                      context->uses()[useIndex].m_range), code);
 
-    foreach (DUContext* child, context->childContexts())
+    const auto childContexts = context->childContexts();
+    for (DUContext* child : childContexts) {
         if (!isNewGroup(context, child))
             ret += createUseWidgets(code, usedDeclarationIndex, decl, child);
+    }
 
     return ret;
 }
@@ -426,8 +430,10 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, const QList
             hadIndices.insert(usedDeclarationIndex);
 
             if (usedDeclarationIndex != std::numeric_limits<int>::max()) {
-                foreach (OneUseWidget* widget, createUseWidgets(code, usedDeclarationIndex, usedDeclaration, ctx))
+                const auto useWidgets = createUseWidgets(code, usedDeclarationIndex, usedDeclaration, ctx);
+                for (OneUseWidget* widget : useWidgets) {
                     addItem(widget);
+                }
             }
         }
     }
@@ -531,8 +537,10 @@ QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code,
             delete created;
     }
 
-    foreach (DUContext* child, context->childContexts())
+    const auto childContexts = context->childContexts();
+    for (DUContext* child : childContexts) {
         ret += buildContextUses(code, declarations, child);
+    }
 
     return ret;
 }
@@ -556,13 +564,14 @@ void TopContextUsesWidget::setExpanded(bool expanded)
             setUpdatesEnabled(false);
 
             IndexedTopDUContext localTopContext(topContext);
-            foreach (const IndexedDeclaration& decl, m_allDeclarations) {
+            for (const IndexedDeclaration& decl : qAsConst(m_allDeclarations)) {
                 if (decl.indexedTopContext() == localTopContext) {
                     addItem(new DeclarationWidget(*code, decl));
                 }
             }
 
-            foreach (ContextUsesWidget* usesWidget, buildContextUses(*code, m_allDeclarations, topContext)) {
+            const auto contextUseWidgets = buildContextUses(*code, m_allDeclarations, topContext);
+            for (ContextUsesWidget* usesWidget : contextUseWidgets) {
                 addItem(usesWidget);
             }
 
@@ -635,7 +644,8 @@ const QString UsesWidget::headerLineText() const
 unsigned int UsesWidget::countAllUses() const
 {
     unsigned int totalUses = 0;
-    foreach (QWidget* w, items()) {
+    const auto items = this->items();
+    for (QWidget* w : items) {
         if (auto* useWidget = qobject_cast<TopContextUsesWidget*>(w)) {
             totalUses += useWidget->usesCount();
         }
@@ -646,7 +656,8 @@ unsigned int UsesWidget::countAllUses() const
 
 void UsesWidget::setAllExpanded(bool expanded)
 {
-    foreach (QWidget* w, items()) {
+    const auto items = this->items();
+    for (QWidget* w : items) {
         if (auto* useWidget = qobject_cast<TopContextUsesWidget*>(w)) {
             useWidget->setExpanded(expanded);
         }

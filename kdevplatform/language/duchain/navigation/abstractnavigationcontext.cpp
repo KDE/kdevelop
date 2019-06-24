@@ -525,7 +525,8 @@ static QStringList splitAndKeep(QString str, const QRegExp& regExp)
 void AbstractNavigationContext::addHtml(const QString& html)
 {
     QRegExp newLineRegExp(QStringLiteral("<br>|<br */>|</p>"));
-    foreach (const QString& line, splitAndKeep(html, newLineRegExp)) {
+    const auto lines = splitAndKeep(html, newLineRegExp);
+    for (const QString& line : lines) {
         d->m_currentText +=  line;
         if (line.indexOf(newLineRegExp) != -1) {
             ++d->m_currentLine;

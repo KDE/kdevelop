@@ -115,8 +115,10 @@ void AbstractNavigationWidget::initBrowser(int height)
             d->anchorClicked(url);
         });
 
-    foreach (QWidget* w, findChildren<QWidget*>())
+    const auto childWidgets = findChildren<QWidget*>();
+    for (QWidget* w : childWidgets) {
         w->setContextMenuPolicy(Qt::NoContextMenu);
+    }
 }
 
 AbstractNavigationWidget::~AbstractNavigationWidget()
