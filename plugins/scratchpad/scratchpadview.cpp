@@ -180,7 +180,7 @@ void ScratchpadView::validateItemActions()
 {
     bool enable = currentIndex().isValid();
 
-    for (auto* action : m_itemActions) {
+    for (auto* action : qAsConst(m_itemActions)) {
         action->setEnabled(enable);
     }
 
