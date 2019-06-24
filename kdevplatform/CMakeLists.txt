@@ -48,14 +48,6 @@ ecm_setup_version(PROJECT
                   SOVERSION ${KDEVPLATFORM_SOVERSION}
 )
 
-string(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_TOLOWER)
-if(CMAKE_BUILD_TYPE_TOLOWER MATCHES "debug"
-  OR CMAKE_BUILD_TYPE_TOLOWER STREQUAL "")
-  set(COMPILER_OPTIMIZATIONS_DISABLED TRUE)
-else()
-  set(COMPILER_OPTIMIZATIONS_DISABLED FALSE)
-endif()
-
 add_subdirectory(sublime)
 add_subdirectory(interfaces)
 add_subdirectory(project)
