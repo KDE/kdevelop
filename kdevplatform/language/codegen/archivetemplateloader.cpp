@@ -56,18 +56,14 @@ void ArchiveTemplateLoader::removeLocation(ArchiveTemplateLocation* location)
 
 bool ArchiveTemplateLoader::canLoadTemplate(const QString& name) const
 {
-    foreach (ArchiveTemplateLocation* location, d->locations) {
-        if (location->hasTemplate(name)) {
-            return true;
-        }
-    }
-
-    return false;
+    return std::any_of(d->locations.constBegin(), d->locations.constEnd(), [&](ArchiveTemplateLocation* location) {
+        return (location->hasTemplate(name));
+    });
 }
 
 Grantlee::Template ArchiveTemplateLoader::loadByName(const QString& name, const Grantlee::Engine* engine) const
 {
-    foreach (ArchiveTemplateLocation* location, d->locations) {
+    for (ArchiveTemplateLocation* location : qAsConst(d->locations)) {
         if (location->hasTemplate(name)) {
             return engine->newTemplate(location->templateContents(name), name);
         }

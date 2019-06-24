@@ -290,8 +290,8 @@ void TestTemplateClassGenerator::yamlOutput()
 TemplateClassGenerator* TestTemplateClassGenerator::loadTemplate (const QString& name)
 {
     QDir dir(baseUrl.toLocalFile());
-    foreach (const QString& fileName, dir.entryList(QDir::Files | QDir::NoDotAndDotDot))
-    {
+    const auto files = dir.entryList(QDir::Files | QDir::NoDotAndDotDot);
+    for (const QString& fileName : files) {
         dir.remove(fileName);
     }
 

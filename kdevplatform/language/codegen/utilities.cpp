@@ -86,9 +86,11 @@ IndexedString fetchImplementationFileForClass(const Declaration& targetClass)
     }
 
     QMultiMap<unsigned int, IndexedString> sorter;
-    foreach (const IndexedString& file, implementationsInFile.keys())
-        sorter.insert(implementationsInFile[file], file);
-
+    for (auto it = implementationsInFile.constBegin(), end = implementationsInFile.constEnd(); it != end; ++it) {
+        const IndexedString& file = it.key();
+        unsigned int count = it.value();
+        sorter.insert(count, file);
+    }
     QList<IndexedString> sortedFiles = sorter.values();
 
     //If there are no methods, then just return the file the declaration is in

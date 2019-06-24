@@ -114,7 +114,7 @@ void TemplatesModel::refresh()
     d->extractTemplateDescriptions();
 
     QStringList templateArchives;
-    foreach (const QString& archivePath, d->searchPaths) {
+    for (const QString& archivePath : qAsConst(d->searchPaths)) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
         for (const QString& file : files) {
             templateArchives.append(archivePath + file);
@@ -132,10 +132,10 @@ void TemplatesModel::refresh()
         }
     }
 
-    foreach (const QString& templateDescription, templateDescriptions) {
+    for (const QString& templateDescription : qAsConst(templateDescriptions)) {
         QFileInfo fi(templateDescription);
         bool archiveFound = false;
-        foreach (const QString& templateArchive, templateArchives) {
+        for (const QString& templateArchive : qAsConst(templateArchives)) {
             if (QFileInfo(templateArchive).baseName() == fi.baseName()) {
                 archiveFound = true;
 
@@ -194,7 +194,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
     searchPaths << QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, resourceFilter(
                                                  Template), QStandardPaths::LocateDirectory);
     searchPaths.removeDuplicates();
-    foreach (const QString& archivePath, searchPaths) {
+    for (const QString& archivePath : qAsConst(searchPaths)) {
         const QStringList files = QDir(archivePath).entryList(QDir::Files);
         for (const QString& file : files) {
             if (file.endsWith(QLatin1String(".zip")) || file.endsWith(QLatin1String(".tar.bz2"))) {
@@ -211,7 +211,7 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
     if (!dir.exists())
         dir.mkpath(QStringLiteral("."));
 
-    foreach (const QString& archName, templateArchives) {
+    for (const QString& archName : qAsConst(templateArchives)) {
         qCDebug(LANGUAGE) << "processing template" << archName;
 
         QScopedPointer<KArchive> templateArchive;

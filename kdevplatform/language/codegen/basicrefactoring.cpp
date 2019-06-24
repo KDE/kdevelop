@@ -177,7 +177,8 @@ DocumentChangeSet::ChangeResult BasicRefactoring::applyChanges(const QString& ol
             return result;
     }
 
-    foreach (DUContext* child, context->childContexts()) {
+    const auto childContexts = context->childContexts();
+    for (DUContext* child : childContexts) {
         DocumentChangeSet::ChangeResult result = applyChanges(oldName, newName, changes, child, usedDeclarationIndex);
         if (!result)
             return result;
@@ -332,9 +333,11 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
     DocumentChangeSet changes;
     DUChainReadLocker lock;
 
-    foreach (const KDevelop::IndexedTopDUContext collected, collector->allUsingContexts()) {
+    const auto allUsingContexts = collector->allUsingContexts();
+    for (const KDevelop::IndexedTopDUContext collected : allUsingContexts) {
         QSet<int> hadIndices;
-        foreach (const IndexedDeclaration decl, collector->declarations()) {
+        const auto declarations = collector->declarations();
+        for (const IndexedDeclaration decl : declarations) {
             uint usedDeclarationIndex = collected.data()->indexForUsedDeclaration(decl.data(), false);
             if (hadIndices.contains(usedDeclarationIndex))
                 continue;

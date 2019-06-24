@@ -250,7 +250,8 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
 
     const KArchiveDirectory* directory = fileTemplate.directory();
     ArchiveTemplateLocation location(directory);
-    foreach (const SourceFileTemplate::OutputFile& outputFile, fileTemplate.outputFiles()) {
+    const auto outputFiles = fileTemplate.outputFiles();
+    for (const SourceFileTemplate::OutputFile& outputFile : outputFiles) {
         const KArchiveEntry* entry = directory->entry(outputFile.fileName);
         if (!entry) {
             qCWarning(LANGUAGE) << "Entry" << outputFile.fileName << "is mentioned in group" << outputFile.identifier <<

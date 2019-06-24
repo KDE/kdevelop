@@ -296,8 +296,10 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
         result = d->replaceOldText(codeRepresentations[file].data(), newTexts[file], filteredSortedChanges[file]);
         if (!result && d->replacePolicy == StopOnFailedChange) {
             //Revert all files
-            foreach (const IndexedString& revertFile, oldTexts.keys()) {
-                codeRepresentations[revertFile]->setText(oldTexts[revertFile]);
+            for (auto it = oldTexts.constBegin(), end = oldTexts.constEnd(); it != end; ++it) {
+                const IndexedString& revertFile = it.key();
+                const QString& oldText = it.value();
+                codeRepresentations[revertFile]->setText(oldText);
             }
 
             return result;
@@ -484,7 +486,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
     if (!removedLines.isEmpty()) {
         int offset = 0;
         std::sort(removedLines.begin(), removedLines.end());
-        foreach (int l, removedLines) {
+        for (int l : qAsConst(removedLines)) {
             textLines.removeAt(l - offset);
             ++offset;
         }
@@ -500,7 +502,7 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
     using ChangesMap = QMultiMap<KTextEditor::Cursor, DocumentChangePointer>;
     ChangesMap sortedChanges;
 
-    foreach (const DocumentChangePointer& change, changes[file]) {
+    for (const DocumentChangePointer& change : qAsConst(changes[file])) {
         sortedChanges.insert(change->m_range.end(), change);
     }
 
@@ -558,7 +560,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::removeDuplicates(const
 void DocumentChangeSetPrivate::updateFiles()
 {
     ModificationRevisionSet::clearCache();
-    foreach (const IndexedString& file, changes.keys()) {
+    const auto files = changes.keys();
+    for (const IndexedString& file : files) {
         ModificationRevision::clearModificationCache(file);
     }
 
@@ -569,8 +572,8 @@ void DocumentChangeSetPrivate::updateFiles()
         }
 
         // If there are currently open documents that now need an update, update them too
-        foreach (const IndexedString& doc,
-                 ICore::self()->languageController()->backgroundParser()->managedDocuments()) {
+        const auto documents = ICore::self()->languageController()->backgroundParser()->managedDocuments();
+        for (const IndexedString& doc : documents) {
             DUChainReadLocker lock(DUChain::lock());
             TopDUContext* top = DUChainUtils::standardContextForUrl(doc.toUrl(), true);
             if ((top && top->parsingEnvironmentFile() && top->parsingEnvironmentFile()->needsUpdate()) || !top) {
@@ -580,7 +583,8 @@ void DocumentChangeSetPrivate::updateFiles()
         }
 
         // Eventually update _all_ affected files
-        foreach (const IndexedString& file, changes.keys()) {
+        const auto files = changes.keys();
+        for (const IndexedString& file : files) {
             if (!file.toUrl().isValid()) {
                 qCWarning(LANGUAGE) << "Trying to apply changes to an invalid document";
                 continue;

@@ -84,7 +84,8 @@ void TemplateClassGeneratorPrivate::fetchSuperClasses(const DeclarationPointer& 
 
     DUContext* context = declaration->internalContext();
     if (context) {
-        foreach (const DUContext::Import& import, context->importedParentContexts()) {
+        const auto importedParentContexts = context->importedParentContexts();
+        for (const DUContext::Import& import : importedParentContexts) {
             if (DUContext* parentContext = import.context(context->topContext())) {
                 if (parentContext->type() == DUContext::Class) {
                     fetchSuperClasses(DeclarationPointer(parentContext->owner()));
@@ -121,7 +122,9 @@ QHash<QString, QString> TemplateClassGenerator::fileLabels() const
     Q_ASSERT(d->fileTemplate.isValid());
     QHash<QString, QString> labels;
 
-    foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles()) {
+    const auto outputFiles = d->fileTemplate.outputFiles();
+    labels.reserve(outputFiles.size());
+    for (const SourceFileTemplate::OutputFile& outputFile : outputFiles) {
         labels.insert(outputFile.identifier, outputFile.label);
     }
 
@@ -131,7 +134,8 @@ QHash<QString, QString> TemplateClassGenerator::fileLabels() const
 TemplateClassGenerator::UrlHash TemplateClassGenerator::fileUrls() const
 {
     if (d->fileUrls.isEmpty()) {
-        foreach (const SourceFileTemplate::OutputFile& outputFile, d->fileTemplate.outputFiles()) {
+        const auto outputFiles = d->fileTemplate.outputFiles();
+        for (const SourceFileTemplate::OutputFile& outputFile : outputFiles) {
             QString outputName = d->renderer.render(outputFile.outputName, outputFile.identifier);
             QUrl url = d->baseUrl.resolved(QUrl(outputName));
             d->fileUrls.insert(outputFile.identifier, url);

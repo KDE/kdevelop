@@ -108,8 +108,7 @@ void CodeGeneratorBase::setErrorText(const QString& errorText)
 void CodeGeneratorBase::clearChangeSets()
 {
     qCDebug(LANGUAGE) << "Cleaning up all the changesets registered by the generator";
-    foreach (DUChainChangeSet* changeSet, d->duchainChanges)
-        delete changeSet;
+    qDeleteAll(d->duchainChanges);
 
     d->duchainChanges.clear();
 

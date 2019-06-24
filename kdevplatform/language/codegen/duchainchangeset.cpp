@@ -33,8 +33,7 @@ DUChainChangeSet::DUChainChangeSet(const ReferencedTopDUContext& topContext) :
 
 DUChainChangeSet::~DUChainChangeSet()
 {
-    foreach (DUChainRef* reference, m_objectRefs)
-        delete reference;
+    qDeleteAll(m_objectRefs);
 }
 
 DUChainChangeSet& DUChainChangeSet::operator<<(DUChainChangeSet& rhs)
