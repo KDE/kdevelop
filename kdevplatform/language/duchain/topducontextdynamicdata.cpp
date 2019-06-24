@@ -741,15 +741,17 @@ void TopDUContextDynamicData::store()
         file.resize(0);
 
         file.write(( char* )&topContextDataSize, sizeof(uint));
-        foreach (const ArrayWithPosition& pos, m_topContextData)
+        for (const ArrayWithPosition& pos : qAsConst(m_topContextData)) {
             file.write(pos.array.constData(), pos.position);
+        }
 
         m_contexts.writeData(&file);
         m_declarations.writeData(&file);
         m_problems.writeData(&file);
 
-        foreach (const ArrayWithPosition& pos, m_data)
+        for (const ArrayWithPosition& pos : qAsConst(m_data)) {
             file.write(pos.array.constData(), pos.position);
+        }
 
         m_onDisk = true;
 

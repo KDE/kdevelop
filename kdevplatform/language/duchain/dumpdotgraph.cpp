@@ -156,11 +156,13 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
 
     if (isMaster && !dynamic_cast<TopDUContext*>(context)) {
         //Also draw contexts that import this one
-        foreach (DUContext* ctx, context->importers())
+        const auto importers = context->importers();
+        for (DUContext* ctx : importers) {
             stream << dotGraphInternal(ctx, false, true);
+        }
     }
-
-    foreach (const DUContext::Import& parent, context->importedParentContexts()) {
+    const auto importedParentContexts = context->importedParentContexts();
+    for (const DUContext::Import& parent : importedParentContexts) {
         if (parent.context(m_topContext)) {
             stream << dotGraphInternal(parent.context(m_topContext), false, true);
             QString label = QStringLiteral("imports");
@@ -175,23 +177,28 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
         }
     }
 
-    if (!context->childContexts().isEmpty())
-        label += QStringLiteral(", %1 C.").arg(context->childContexts().count());
+    const auto childContexts = context->childContexts();
+    if (!childContexts.isEmpty()) {
+        label += QStringLiteral(", %1 C.").arg(childContexts.count());
+    }
 
     if (!shortened) {
-        foreach (DUContext* child, context->childContexts()) {
+        for (DUContext* child : childContexts) {
             stream << dotGraphInternal(child, false, false);
             stream << shortLabel(context) << QLatin1String(" -> ") << shortLabel(child) << QLatin1String(
                 "[style=dotted,color=green];\n");
         }
     }
 
-    if (!context->localDeclarations().isEmpty())
-        label += QStringLiteral(", %1 D.").arg(context->localDeclarations().count());
+    const auto localDeclarations = context->localDeclarations();
+    if (!localDeclarations.isEmpty()) {
+        label += QStringLiteral(", %1 D.").arg(localDeclarations.count());
+    }
 
     if (!shortened) {
-        foreach (Declaration* dec, context->localDeclarations())
+        for (Declaration* dec : localDeclarations) {
             addDeclaration(stream, dec);
+        }
     }
 
     if (context->owner()) {

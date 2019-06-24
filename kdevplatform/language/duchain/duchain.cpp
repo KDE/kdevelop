@@ -403,8 +403,10 @@ public:
 
         QMutexLocker l(&m_chainsMutex);
 
-        foreach (TopDUContext* top, m_chainsByUrl)
+        const auto currentChainsByUrl = m_chainsByUrl;
+        for (TopDUContext* top : currentChainsByUrl) {
             removeDocumentChainFromMemory(top);
+        }
 
         m_indexEnvironmentInformations.clear();
         m_fileEnvironmentInformations.clear();
@@ -558,7 +560,7 @@ public:
 
             //Process the indices in a separate step after copying them from the array, so we don't need m_environmentListInfo.mutex locked,
             //and can call loadInformation(..) safely, which else might lead to a deadlock.
-            foreach (uint topContextIndex, topContextIndices) {
+            for (uint topContextIndex : qAsConst(topContextIndices)) {
                 QExplicitlySharedDataPointer<ParsingEnvironmentFile> p =
                     ParsingEnvironmentFilePointer(loadInformation(topContextIndex));
                 if (p) {
@@ -573,9 +575,11 @@ public:
         QMutexLocker l(&m_chainsMutex);
 
         //Add those information that have not been added to the stored lists yet
-        foreach (const ParsingEnvironmentFilePointer& file, m_fileEnvironmentInformations.values(url))
+        const auto files = m_fileEnvironmentInformations.values(url);
+        for (const ParsingEnvironmentFilePointer& file : files) {
             if (!ret.contains(file))
                 ret << file;
+        }
 
         return ret;
     }
@@ -626,7 +630,8 @@ public:
 
                 if (!chain->usingImportsCache()) {
                     //Eventually also load all the imported chains, so the import-structure is built
-                    foreach (const DUContext::Import& import, chain->DUContext::importedParentContexts()) {
+                    const auto importedParentContexts = chain->DUContext::importedParentContexts();
+                    for (const DUContext::Import& import : importedParentContexts) {
                         if (!loaded.contains(import.topContextIndex())) {
                             loadChain(import.topContextIndex(), loaded);
                         }
@@ -656,14 +661,14 @@ public:
             urls += m_fileEnvironmentInformations.keys();
         }
 
-        foreach (const IndexedString& url, urls) {
+        for (const IndexedString& url : qAsConst(urls)) {
             QList<ParsingEnvironmentFilePointer> check;
             {
                 QMutexLocker lock(&m_chainsMutex);
                 check = m_fileEnvironmentInformations.values(url);
             }
 
-            foreach (ParsingEnvironmentFilePointer file, check) {
+            for (const ParsingEnvironmentFilePointer& file : qAsConst(check)) {
                 EnvironmentInformationRequest req(file.data());
                 QMutexLocker lock(m_environmentInfo.mutex());
                 uint index = m_environmentInfo.findIndex(req);
@@ -768,13 +773,13 @@ public:
             writeLock.unlock();
 
             //Here we wait for all parsing-threads to stop their processing
-            foreach (const auto language, languages) {
+            for (const auto language : qAsConst(languages)) {
                 if (lockFlag == TryLock) {
                     if (!language->parseLock()->tryLockForWrite()) {
                         qCDebug(LANGUAGE) << "Aborting cleanup because language plugin is still parsing:" <<
                             language->name();
                         // some language is still parsing, don't interfere with the cleanup
-                        foreach (auto* lock, locked) {
+                        for (auto* lock : qAsConst(locked)) {
                             lock->unlock();
                         }
 
@@ -804,13 +809,13 @@ public:
             QMutexLocker l(&m_chainsMutex);
 
             workOnContexts.reserve(m_chainsByUrl.size());
-            foreach (TopDUContext* top, m_chainsByUrl) {
+            for (TopDUContext* top : qAsConst(m_chainsByUrl)) {
                 workOnContexts << top;
                 Q_ASSERT(hasChainForIndex(top->ownIndex()));
             }
         }
 
-        foreach (TopDUContext* context, workOnContexts) {
+        for (TopDUContext* context : qAsConst(workOnContexts)) {
             context->m_dynamicData->store();
 
             if (retries) {
@@ -839,7 +844,8 @@ public:
 
 unloadContexts:
 
-            foreach (TopDUContext * unload, workOnContexts) {
+            const auto currentWorkOnContexts = workOnContexts;
+            for (TopDUContext * unload : currentWorkOnContexts) {
                 bool hasReference = false;
 
                 {
@@ -957,8 +963,9 @@ unloadContexts:
                 m_chainsByUrl.size() << "- retries" << retries;
         }
 
-        foreach (QReadWriteLock* lock, locked)
+        for (QReadWriteLock* lock : qAsConst(locked)) {
             lock->unlock();
+        }
 
 #if HAVE_MALLOC_TRIM
         // trim unused memory but keep a pad buffer of about 50 MB
@@ -1063,7 +1070,7 @@ unloadContexts:
             if (check.size() < checkContextsCount)
                 addContextsForRemoval(check, IndexedTopDUContext(visitor.checkContexts[a]));
 
-        foreach (uint topIndex, check) {
+        for (uint topIndex : qAsConst(check)) {
             IndexedTopDUContext top(topIndex);
             if (top.data()) {
                 qCDebug(LANGUAGE) << "removing top-context for" << top.data()->url().str() <<
@@ -1525,7 +1532,7 @@ QList<QUrl> DUChain::documents() const
 
     QList<QUrl> ret;
     ret.reserve(sdDUChainPrivate->m_chainsByUrl.count());
-    foreach (TopDUContext* top, sdDUChainPrivate->m_chainsByUrl) {
+    for (TopDUContext* top : qAsConst(sdDUChainPrivate->m_chainsByUrl)) {
         ret << top->url().toUrl();
     }
 
@@ -1538,7 +1545,7 @@ QList<IndexedString> DUChain::indexedDocuments() const
 
     QList<IndexedString> ret;
     ret.reserve(sdDUChainPrivate->m_chainsByUrl.count());
-    foreach (TopDUContext* top, sdDUChainPrivate->m_chainsByUrl) {
+    for (TopDUContext* top : qAsConst(sdDUChainPrivate->m_chainsByUrl)) {
         ret << top->url();
     }
 
@@ -1580,9 +1587,11 @@ void DUChain::documentClosed(IDocument* document)
 
     IndexedString url(document->url());
 
-    foreach (const ReferencedTopDUContext& top, sdDUChainPrivate->m_openDocumentContexts)
+    const auto currentDocumentContexts = sdDUChainPrivate->m_openDocumentContexts;
+    for (const ReferencedTopDUContext& top : currentDocumentContexts) {
         if (top->url() == url)
             sdDUChainPrivate->m_openDocumentContexts.remove(top);
+    }
 }
 
 void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
@@ -1614,9 +1623,11 @@ void DUChain::documentLoadedPrepare(KDevelop::IDocument* doc)
             //This is not exactly right, as the direct imports don't necessarily equal the real imports used by uses
             //but it approximates the correct behavior.
             bool allImportsLoaded = true;
-            foreach (const DUContext::Import& import, standardContext->importedParentContexts())
+            const auto importedParentContexts = standardContext->importedParentContexts();
+            for (const DUContext::Import& import : importedParentContexts) {
                 if (!import.indexedContext().indexedTopContext().isLoaded())
                     allImportsLoaded = false;
+            }
 
             if (allImportsLoaded) {
                 l.unlock();

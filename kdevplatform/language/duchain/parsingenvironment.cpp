@@ -202,7 +202,7 @@ QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> ParsingEnvironmentFi
     }
 
     QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> ret;
-    foreach (const IndexedDUContext ctx, imp) {
+    for (const IndexedDUContext ctx : qAsConst(imp)) {
         QExplicitlySharedDataPointer<ParsingEnvironmentFile> item = DUChain::self()->environmentFileForDocument(
             ctx.topContextIndex());
         if (item) {
@@ -231,7 +231,7 @@ QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> ParsingEnvironmentFi
     }
 
     QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> ret;
-    foreach (const IndexedDUContext ctx, imp) {
+    for (const IndexedDUContext ctx : qAsConst(imp)) {
         QExplicitlySharedDataPointer<ParsingEnvironmentFile> f = DUChain::self()->environmentFileForDocument(
             ctx.topContextIndex());
         if (f)
@@ -273,11 +273,13 @@ bool ParsingEnvironmentFile::featuresMatch(TopDUContext::Features minimumFeature
     if (ParseJob::hasStaticMinimumFeatures()) {
         //Do a manual recursion to check whether any of the relevant contexts has static minimum features set
         ///@todo Only do this if one of the imports actually has static features attached (by RecursiveImports set intersection)
-        foreach (const ParsingEnvironmentFilePointer& import, imports())
+        const auto imports = this->imports();
+        for (const ParsingEnvironmentFilePointer& import : imports) {
             if (!import->featuresMatch(minimumFeatures &
                                        TopDUContext::Recursive ? minimumFeatures : (( TopDUContext::Features )0),
                                        checked))
                 return false;
+        }
     } else if (minimumFeatures & TopDUContext::Recursive) {
         QMutexLocker lock(&featureSatisfactionMutex);
 

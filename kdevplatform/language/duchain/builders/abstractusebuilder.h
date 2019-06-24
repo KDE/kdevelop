@@ -95,12 +95,13 @@ protected:
         DUChainReadLocker lock(DUChain::lock());
         QList<Declaration*> declarations = LanguageSpecificUseBuilderBase::currentContext()->findDeclarations(id,
                                                                                                               newRange.start);
-        foreach (Declaration* declaration, declarations)
+        for (Declaration* declaration : qAsConst(declarations)) {
             if (!declaration->isForwardDeclaration()) {
                 declarations.clear();
                 declarations.append(declaration);
                 break;
             }
+        }
 
         // If we don't break, there's no non-forward declaration
 

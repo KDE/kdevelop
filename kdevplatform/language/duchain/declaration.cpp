@@ -683,8 +683,10 @@ QMap<IndexedString, QVector<RangeInRevision>> Declaration::uses() const
     //First, search for uses within the own context
     {
         QMap<RangeInRevision, bool>& ranges(tempUses[topContext()->url()]);
-        foreach (const RangeInRevision range, allUses(topContext(), const_cast<Declaration*>(this)))
+        const auto useRanges = allUses(topContext(), const_cast<Declaration*>(this));
+        for (const RangeInRevision range : useRanges) {
             ranges[range] = true;
+        }
     }
 
     DeclarationId _id = id();
@@ -694,12 +696,14 @@ QMap<IndexedString, QVector<RangeInRevision>> Declaration::uses() const
         useContexts.append(directUseContexts.data(), directUseContexts.size());
     }
 
-    foreach (const IndexedTopDUContext indexedContext, useContexts) {
+    for (const IndexedTopDUContext indexedContext : qAsConst(useContexts)) {
         TopDUContext* context = indexedContext.data();
         if (context) {
             QMap<RangeInRevision, bool>& ranges(tempUses[context->url()]);
-            foreach (const RangeInRevision range, allUses(context, const_cast<Declaration*>(this)))
+            const auto useRanges = allUses(context, const_cast<Declaration*>(this));
+            for (const RangeInRevision range : useRanges) {
                 ranges[range] = true;
+            }
         }
     }
 
@@ -728,7 +732,8 @@ bool hasDeclarationUse(DUContext* context, int declIdx)
         ret = uses[i].m_declarationIndex == declIdx;
     }
 
-    foreach (DUContext* child, context->childContexts()) {
+    const auto childContexts = context->childContexts();
+    for (DUContext* child : childContexts) {
         ret = ret || hasDeclarationUse(child, declIdx);
         if (ret)
             break;
@@ -763,7 +768,8 @@ QMap<IndexedString, QVector<KTextEditor::Range>> Declaration::usesCurrentRevisio
     //First, search for uses within the own context
     {
         QMap<KTextEditor::Range, bool>& ranges(tempUses[topContext()->url()]);
-        foreach (const RangeInRevision range, allUses(topContext(), const_cast<Declaration*>(this))) {
+        const auto useRanges = allUses(topContext(), const_cast<Declaration*>(this));
+        for (const RangeInRevision range : useRanges) {
             ranges[topContext()->transformFromLocalRevision(range)] = true;
         }
     }
@@ -775,12 +781,14 @@ QMap<IndexedString, QVector<KTextEditor::Range>> Declaration::usesCurrentRevisio
         useContexts.append(directUseContexts.data(), directUseContexts.size());
     }
 
-    foreach (const IndexedTopDUContext indexedContext, useContexts) {
+    for (const IndexedTopDUContext indexedContext : qAsConst(useContexts)) {
         TopDUContext* context = indexedContext.data();
         if (context) {
             QMap<KTextEditor::Range, bool>& ranges(tempUses[context->url()]);
-            foreach (const RangeInRevision range, allUses(context, const_cast<Declaration*>(this)))
+            const auto useRanges = allUses(context, const_cast<Declaration*>(this));
+            for (const RangeInRevision range : useRanges) {
                 ranges[context->transformFromLocalRevision(range)] = true;
+            }
         }
     }
 

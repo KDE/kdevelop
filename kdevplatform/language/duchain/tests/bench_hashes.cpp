@@ -130,13 +130,13 @@ void BenchHashes::insert_data()
 void BenchHashes::find()
 {
     QFETCH(bool, useStl);
-    QFETCH(InputData, data);
+    QFETCH(const InputData, data);
 
     if (useStl) {
         StlHash hash;
         insertData(hash, data);
         QBENCHMARK {
-            foreach (const DataPair& pair, data) {
+            for (const DataPair& pair : data) {
                 ( void ) hash.find(pair.first);
             }
         }
@@ -144,7 +144,7 @@ void BenchHashes::find()
         QStringHash hash;
         insertData(hash, data);
         QBENCHMARK {
-            foreach (const DataPair& pair, data) {
+            for (const DataPair& pair : data) {
                 ( void ) hash.find(pair.first);
             }
         }
@@ -159,14 +159,14 @@ void BenchHashes::find_data()
 void BenchHashes::constFind()
 {
     QFETCH(bool, useStl);
-    QFETCH(InputData, data);
+    QFETCH(const InputData, data);
 
     if (useStl) {
         StlHash hash;
         insertData(hash, data);
         const StlHash& constHash = hash;
         QBENCHMARK {
-            foreach (const DataPair& pair, data) {
+            for (const DataPair& pair : data) {
                 ( void ) constHash.find(pair.first);
             }
         }
@@ -174,7 +174,7 @@ void BenchHashes::constFind()
         QStringHash hash;
         insertData(hash, data);
         QBENCHMARK {
-            foreach (const DataPair& pair, data) {
+            for (const DataPair& pair : data) {
                 ( void ) hash.constFind(pair.first);
             }
         }
@@ -189,13 +189,13 @@ void BenchHashes::constFind_data()
 void BenchHashes::remove()
 {
     QFETCH(bool, useStl);
-    QFETCH(InputData, data);
+    QFETCH(const InputData, data);
 
     if (useStl) {
         StlHash hash;
         insertData(hash, data);
         QBENCHMARK {
-            foreach (const DataPair& pair, data) {
+            for (const DataPair& pair : data) {
                 hash.erase(pair.first);
             }
         }
@@ -203,7 +203,7 @@ void BenchHashes::remove()
         QStringHash hash;
         insertData(hash, data);
         QBENCHMARK {
-            foreach (const DataPair& pair, data) {
+            for (const DataPair& pair : data) {
                 hash.remove(pair.first);
             }
         }
@@ -294,7 +294,7 @@ void BenchHashes::typeRepo()
 
         QBENCHMARK {
             for (int i = 0; i < 100; ++i) {
-                foreach (const Pair& p, v.at(i % vectors)) {
+                for (const Pair& p : qAsConst(v.at(i % vectors))) {
                     if (p.first == i) {
                         p.second->size++;
                         break;

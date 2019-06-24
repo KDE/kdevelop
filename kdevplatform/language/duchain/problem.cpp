@@ -49,7 +49,7 @@ LocalIndexedProblem::LocalIndexedProblem(const ProblemPointer& problem, const To
     auto& serialized = const_cast<Problem*>(problem.data())->d_func_dynamic()->diagnosticsList();
     serialized.clear();
     serialized.reserve(problem->m_diagnostics.size());
-    foreach (const ProblemPointer& child, problem->m_diagnostics) {
+    for (const ProblemPointer& child : qAsConst(problem->m_diagnostics)) {
         serialized << LocalIndexedProblem(child, top);
     }
 

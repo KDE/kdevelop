@@ -112,7 +112,7 @@ T formatComment_impl(const T& comment)
     }
 
     // TODO add method with QStringList specialisation
-    foreach (const T& line, lines) {
+    for (const T& line : qAsConst(lines)) {
         if (!ret.isEmpty())
             ret += '\n';
         ret += line;

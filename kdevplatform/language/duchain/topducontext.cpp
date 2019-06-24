@@ -108,10 +108,11 @@ public:
         //Either we use some other contexts data and have no users, or we own the data and have users that share it.
         QMutexLocker lock(&importStructureMutex);
 
-        foreach (const DUContext::Import& import, m_importedContexts)
+        for (const DUContext::Import& import : qAsConst(m_importedContexts)) {
             if (DUChain::self()->isInMemory(import.topContextIndex()) &&
                 dynamic_cast<TopDUContext*>(import.context(nullptr)))
                 dynamic_cast<TopDUContext*>(import.context(nullptr))->m_local->m_directImporters.remove(m_ctxt);
+        }
     }
 
     ///@todo Make all this work consistently together with import-caching
@@ -164,7 +165,7 @@ public:
 
         QSet<QPair<TopDUContext*, const TopDUContext*>> rebuild;
 
-        foreach (const DUContext::Import& import, m_importedContexts) {
+        for (const DUContext::Import& import : qAsConst(m_importedContexts)) {
             auto* top = dynamic_cast<TopDUContext*>(import.context(nullptr));
             if (top) {
                 top->m_local->m_directImporters.remove(m_ctxt);
@@ -727,9 +728,12 @@ bool TopDUContext::findDeclarationsInternal(const SearchItem::PtrList& identifie
     ENSURE_CAN_READ
 
 #ifdef DEBUG_SEARCH
-    for (const SearchItem::Ptr& idTree : identifiers)
-        foreach (const QualifiedIdentifier &id, idTree->toList())
+    for (const SearchItem::Ptr& idTree : identifiers) {
+        const auto ids = idTree->toList();
+        for (const QualifiedIdentifier& id : ids) {
             qCDebug(LANGUAGE) << "searching item" << id.toString();
+        }
+    }
 
 #endif
 
@@ -850,10 +854,11 @@ bool TopDUContext::applyAliases(const QualifiedIdentifier& previous, const Searc
                             return false;
                     } else {
                         //Create an identifiers where namespace-alias part is replaced with the alias target
-                        foreach (const SearchItem::Ptr& item, identifier->next)
+                        for (const SearchItem::Ptr& item : qAsConst(identifier->next)) {
                             if (!applyAliases(importIdentifier, item, accept, position, canBeNamespace, &info,
                                               recursionDepth + 1))
                                 return false;
+                        }
                     }
                 }
             }
@@ -865,9 +870,10 @@ bool TopDUContext::applyAliases(const QualifiedIdentifier& previous, const Searc
             if (!accept(id)) //We're at the end of a qualified identifier, accept it
                 return false;
         } else {
-            foreach (const SearchItem::Ptr& next, identifier->next)
+            for (const SearchItem::Ptr& next : qAsConst(identifier->next)) {
                 if (!applyAliases(id, next, accept, position, canBeNamespace, nullptr, recursionDepth + 1))
                     return false;
+            }
         }
     }
 

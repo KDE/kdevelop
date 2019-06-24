@@ -117,7 +117,8 @@ void DUChainDumperPrivate::dumpProblems(TopDUContext* top, QTextStream& out)
 
     if (!top->problems().isEmpty()) {
         qout << top->problems().size() << "problems encountered:" << endl;
-        foreach (const ProblemPointer& p, top->problems()) {
+        const auto problems = top->problems();
+        for (const ProblemPointer& p : problems) {
             qout << Indent(m_indent * 2) << p->description() << p->explanation() << p->finalLocation() << endl;
         }
 
@@ -147,7 +148,8 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
 
     auto top = context->topContext();
     if (allowedDepth >= 0) {
-        foreach (Declaration* dec, context->localDeclarations(top)) {
+        const auto localDeclarations = context->localDeclarations(top);
+        for (Declaration* dec : localDeclarations) {
             //IdentifiedType* idType = dynamic_cast<IdentifiedType*>(dec->abstractType().data());
 
             qout << Indent((m_indent + 2) * 2) << "Declaration:" << dec->toString() << "[" <<
@@ -162,8 +164,9 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
             const auto uses = dec->uses();
             for (auto it = uses.constBegin(); it != uses.constEnd(); ++it) {
                 qout << Indent((m_indent + 3) * 2) << "File:" << it.key().str() << endl;
-                foreach (const RangeInRevision range, * it)
+                for (const RangeInRevision range : qAsConst(*it)) {
                     qout << Indent((m_indent + 4) * 2) << "Use:" << range.castToSimpleRange() << endl;
+                }
             }
         }
     } else {
@@ -174,7 +177,8 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
     ++m_indent;
     {
         /*
-           foreach (const DUContext::Import &parent, context->importedParentContexts()) {
+           const auto importedParentContexts = context->importedParentContexts();
+           for (const DUContext::Import& parent : importedParentContexts) {
            DUContext* import = parent.context(top);
            if(!import) {
               qout << Indent((m_indent+2) * 2+1) << "Could not get parent, is it registered in the DUChain?" << endl;
@@ -185,8 +189,10 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
            }
          */
 
-        foreach (DUContext* child, context->childContexts())
+        const auto childContexts = context->childContexts();
+        for (DUContext* child : childContexts) {
             dump(child, allowedDepth - 1, false, out);
+        }
     }
     --m_indent;
 }

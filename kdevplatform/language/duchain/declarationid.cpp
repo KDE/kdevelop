@@ -140,7 +140,7 @@ KDevVarLengthArray<Declaration*> DeclarationId::declarations(const TopDUContext*
 
     if (!ret.isEmpty() && m_specialization.index()) {
         KDevVarLengthArray<Declaration*> newRet;
-        foreach (Declaration* decl, ret) {
+        for (Declaration* decl : qAsConst(ret)) {
             Declaration* specialized = decl->specialize(m_specialization, top ? top : decl->topContext());
             if (specialized)
                 newRet.append(specialized);

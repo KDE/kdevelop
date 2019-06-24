@@ -301,7 +301,8 @@ struct ItemUnderCursorInternal
 ItemUnderCursorInternal itemUnderCursorInternal(const CursorInRevision& c, DUContext* ctx, RangeInRevision::ContainsBehavior behavior)
 {
   //Search all collapsed sub-contexts. In C++, those can contain declarations that have ranges out of the context
-  foreach(DUContext* subCtx, ctx->childContexts()) {
+  const auto childContexts = ctx->childContexts();
+  for (DUContext* subCtx : childContexts) {
     //This is a little hacky, but we need it in case of foreach macros and similar stuff
     if(subCtx->range().contains(c, behavior) || subCtx->range().isEmpty() || subCtx->range().start.line == c.line || subCtx->range().end.line == c.line) {
       ItemUnderCursorInternal sub = itemUnderCursorInternal(c, subCtx, behavior);
@@ -311,7 +312,8 @@ ItemUnderCursorInternal itemUnderCursorInternal(const CursorInRevision& c, DUCon
     }
   }
 
-  foreach(Declaration* decl, ctx->localDeclarations()) {
+  const auto localDeclarations = ctx->localDeclarations();
+  for (Declaration* decl : localDeclarations) {
     if(decl->range().contains(c, behavior)) {
       return {decl, ctx, decl->range()};
     }
@@ -366,7 +368,8 @@ Declaration* DUChainUtils::declarationInLine(const KTextEditor::Cursor& _cursor,
 
   CursorInRevision cursor = ctx->transformToLocalRevision(_cursor);
 
-  foreach(Declaration* decl, ctx->localDeclarations()) {
+  const auto localDeclarations = ctx->localDeclarations();
+  for (Declaration* decl : localDeclarations) {
     if(decl->range().start.line == cursor.line)
       return decl;
     DUContext* funCtx = functionContext(decl);
@@ -374,7 +377,8 @@ Declaration* DUChainUtils::declarationInLine(const KTextEditor::Cursor& _cursor,
       return decl;
   }
 
-  foreach(DUContext* child, ctx->childContexts()){
+  const auto childContexts = ctx->childContexts();
+  for (DUContext* child : childContexts){
     Declaration* decl = declarationInLine(_cursor, child);
     if(decl)
       return decl;
@@ -438,7 +442,8 @@ KDevelop::DUContext* DUChainUtils::argumentContext(KDevelop::Declaration* decl) 
     return nullptr;
   if( internal->type() == DUContext::Function )
     return internal;
-  foreach( const DUContext::Import &ctx, internal->importedParentContexts() ) {
+  const auto importedParentContexts = internal->importedParentContexts();
+  for (const DUContext::Import& ctx : importedParentContexts) {
     if( ctx.context(decl->topContext()) )
       if( ctx.context(decl->topContext())->type() == DUContext::Function )
         return ctx.context(decl->topContext());
@@ -474,7 +479,8 @@ static QList<Declaration*> inheritersInternal(const Declaration* decl, uint& max
     return ret;
 
   if(decl->internalContext() && decl->internalContext()->type() == DUContext::Class) {
-    foreach (const IndexedDUContext importer, decl->internalContext()->indexedImporters()) {
+    const auto indexedImporters = decl->internalContext()->indexedImporters();
+    for (const IndexedDUContext importer : indexedImporters) {
 
       DUContext* imp = importer.data();
 
@@ -530,8 +536,10 @@ QList<Declaration*> DUChainUtils::overriders(const Declaration* currentClass, co
   if(currentClass != overriddenDeclaration->context()->owner() && currentClass->internalContext())
     ret += currentClass->internalContext()->findLocalDeclarations(overriddenDeclaration->identifier(), CursorInRevision::invalid(), currentClass->topContext(), overriddenDeclaration->abstractType());
 
-  foreach(Declaration* inheriter, inheriters(currentClass, maxAllowedSteps))
+  const auto inheriters = DUChainUtils::inheriters(currentClass, maxAllowedSteps);
+  for (Declaration* inheriter : inheriters) {
     ret += overriders(inheriter, overriddenDeclaration, maxAllowedSteps);
+  }
 
   return ret;
 }
@@ -544,10 +552,10 @@ static bool hasUse(DUContext* context, int usedDeclarationIndex) {
     if(context->uses()[a].m_declarationIndex == usedDeclarationIndex)
       return true;
 
-  foreach(DUContext* child, context->childContexts())
-    if(hasUse(child, usedDeclarationIndex))
-      return true;
-  return false;
+  const auto childContexts = context->childContexts();
+  return std::any_of(childContexts.begin(), childContexts.end(), [&](DUContext* child) {
+    return hasUse(child, usedDeclarationIndex);
+  });
 }
 
 bool DUChainUtils::contextHasUse(DUContext* context, Declaration* declaration) {
@@ -564,8 +572,10 @@ static uint countUses(DUContext* context, int usedDeclarationIndex) {
     if(context->uses()[a].m_declarationIndex == usedDeclarationIndex)
       ++ret;
 
-  foreach(DUContext* child, context->childContexts())
+  const auto childContexts = context->childContexts();
+  for (DUContext* child : childContexts) {
     ret += countUses(child, usedDeclarationIndex);
+  }
 
   return ret;
 }
@@ -581,26 +591,27 @@ Declaration* DUChainUtils::overridden(const Declaration* decl) {
 
   QList<Declaration*> decls;
 
-  foreach(const DUContext::Import &import, decl->context()->importedParentContexts()) {
+  const auto importedParentContexts = decl->context()->importedParentContexts();
+  for (const DUContext::Import &import : importedParentContexts) {
     DUContext* ctx = import.context(decl->topContext());
     if(ctx)
       decls += ctx->findDeclarations(QualifiedIdentifier(decl->identifier()),
                                             CursorInRevision::invalid(), decl->abstractType(), decl->topContext(), DUContext::DontSearchInParent);
   }
 
-  foreach(Declaration* found, decls) {
+  auto it = std::find_if(decls.constBegin(), decls.constEnd(), [&](Declaration* found) {
     const auto* foundClassFunDecl = dynamic_cast<const ClassFunctionDeclaration*>(found);
-    if(foundClassFunDecl && foundClassFunDecl->isVirtual())
-      return found;
-  }
+    return (foundClassFunDecl && foundClassFunDecl->isVirtual());
+  });
 
-  return nullptr;
+  return (it != decls.constEnd()) ? *it : nullptr;
 }
 
 DUContext* DUChainUtils::functionContext(Declaration* decl) {
   DUContext* functionContext = decl->internalContext();
   if(functionContext && functionContext->type() != DUContext::Function) {
-    foreach(const DUContext::Import& import, functionContext->importedParentContexts()) {
+    const auto importedParentContexts = functionContext->importedParentContexts();
+    for (const DUContext::Import& import : importedParentContexts) {
       DUContext* ctx = import.context(decl->topContext());
       if(ctx && ctx->type() == DUContext::Function)
         functionContext = ctx;
@@ -614,13 +625,19 @@ DUContext* DUChainUtils::functionContext(Declaration* decl) {
 
 QVector<KDevelop::Problem::Ptr> KDevelop::DUChainUtils::allProblemsForContext(const KDevelop::ReferencedTopDUContext& top)
 {
-  QVector<KDevelop::Problem::Ptr> ret;
-  Q_FOREACH ( const auto& p, top->problems() ) {
-    ret << p;
-  }
-  Q_FOREACH ( const auto& p, ICore::self()->languageController()->staticAssistantsManager()->problemsForContext(top) ) {
-    ret << p;
-  }
-  return ret;
+    QVector<KDevelop::Problem::Ptr> ret;
+
+    const auto problems = top->problems();
+    const auto contextProblems = ICore::self()->languageController()->staticAssistantsManager()->problemsForContext(top);
+    ret.reserve(problems.size() + contextProblems.size());
+
+    for (const auto& p : problems) {
+        ret << p;
+    }
+    for (const auto& p : contextProblems) {
+        ret << p;
+    }
+
+    return ret;
 }
 

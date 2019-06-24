@@ -437,8 +437,10 @@ struct TestContext
 
     ~TestContext()
     {
-        foreach (TestContext* importer, importers)
+        const auto currentImporters = importers;
+        for (TestContext* importer : currentImporters) {
             importer->unImport(QList<TestContext*>() << this);
+        }
 
         unImport(imports);
 
@@ -460,7 +462,7 @@ struct TestContext
         collected.remove(this);
 
         DUChainReadLocker lock(DUChain::lock());
-        foreach (TestContext* context, collected) {
+        for (TestContext* context : qAsConst(collected)) {
             QVERIFY(m_context->imports(context->m_context, CursorInRevision::invalid()));
 #ifdef TEST_NORMAL_IMPORTS
             QVERIFY(m_normalContext->imports(context->m_normalContext));
@@ -469,7 +471,7 @@ struct TestContext
 
         //Verify that no other contexts are imported
 
-        foreach (TestContext* context, allContexts)
+        for (TestContext* context : qAsConst(allContexts)) {
             if (context != this) {
                 QVERIFY(collected.contains(context) ||
                         !m_context->imports(context->m_context, CursorInRevision::invalid()));
@@ -478,6 +480,7 @@ struct TestContext
                         !m_normalContext->imports(context->m_normalContext, CursorInRevision::invalid()));
 #endif
             }
+        }
     }
 
     void collectImports(QSet<TestContext*>& collected)
@@ -485,8 +488,9 @@ struct TestContext
         if (collected.contains(this))
             return;
         collected.insert(this);
-        foreach (TestContext* context, imports)
+        for (TestContext* context : qAsConst(imports)) {
             context->collectImports(collected);
+        }
     }
     void import(TestContext* ctx)
     {
@@ -506,7 +510,7 @@ struct TestContext
         QList<TopDUContext*> list;
         QList<DUContext*> normalList;
 
-        foreach (TestContext* ctx, ctxList) {
+        for (TestContext* ctx : qAsConst(ctxList)) {
             if (!imports.contains(ctx))
                 continue;
             list << ctx->m_context;
@@ -520,8 +524,9 @@ struct TestContext
         m_context->removeImportedParentContexts(list);
 
 #ifdef TEST_NORMAL_IMPORTS
-        foreach (DUContext* ctx, normalList)
+        for (DUContext* ctx : qAsConst(normalList)) {
             m_normalContext->removeImportedParentContext(ctx);
+        }
 
 #endif
     }
@@ -534,7 +539,8 @@ struct TestContext
             m_context->clearImportedParentContexts();
             m_normalContext->clearImportedParentContexts();
         }
-        foreach (TestContext* ctx, imports) {
+        const auto currentImports = imports;
+        for (TestContext* ctx : currentImports) {
             imports.removeAll(ctx);
             ctx->importers.removeAll(this);
         }
@@ -693,7 +699,7 @@ class ThreadList
 public:
     bool join(int timeout)
     {
-        foreach (const QSharedPointer<QThread>& thread, * this) {
+        for (const QSharedPointer<QThread>& thread : qAsConst(*this)) {
             // quit event loop
             Q_ASSERT(thread->isRunning());
             thread->quit();
@@ -708,7 +714,7 @@ public:
     }
     void start()
     {
-        foreach (const QSharedPointer<QThread>& thread, * this) {
+        for (const QSharedPointer<QThread>& thread : qAsConst(*this)) {
             thread->start();
         }
     }
