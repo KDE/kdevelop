@@ -135,9 +135,10 @@ private:
                 debugVisitor.visitStart(ast);
             }
         }
-        if (!m_session.problems().isEmpty()) {
+        const auto problems = m_session.problems();
+        if (!problems.isEmpty()) {
             qout << endl << "problems encountered during parsing:" << endl;
-            foreach (KDevelop::ProblemPointer p, m_session.problems()) {
+            for (auto& p : problems) {
                 qout << p->description() << endl;
             }
         } else {
@@ -222,7 +223,7 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
         files << "-";
     }
 
-    foreach (const QString& fileName, files) {
+    for (const QString& fileName : qAsConst(files)) {
         if (fileName == "-") {
 #ifndef Q_OS_WIN
             if (isatty(STDIN_FILENO)) {
