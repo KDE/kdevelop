@@ -144,7 +144,7 @@ private:
         addElements(completionContext->ungroupedElements());
 
         names.reserve(items.size());
-        foreach (Item i, items) {
+        for (const Item& i : qAsConst(items)) {
             names <<
                 i->data(fakeModel().index(0, KTextEditor::CodeCompletionModel::Name), Qt::DisplayRole,
                         nullptr).toString();

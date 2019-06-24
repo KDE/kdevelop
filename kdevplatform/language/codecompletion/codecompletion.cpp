@@ -63,7 +63,8 @@ CodeCompletion::~CodeCompletion()
 
 void CodeCompletion::checkDocuments()
 {
-    foreach (KDevelop::IDocument* doc, KDevelop::ICore::self()->documentController()->openDocuments()) {
+    const auto documents = KDevelop::ICore::self()->documentController()->openDocuments();
+    for (KDevelop::IDocument* doc : documents) {
         if (doc->textDocument()) {
             checkDocument(doc->textDocument());
         }
@@ -99,7 +100,8 @@ void CodeCompletion::textDocumentCreated(KDevelop::IDocument* document)
 
 void CodeCompletion::unregisterDocument(Document* textDocument)
 {
-    foreach (KTextEditor::View* view, textDocument->views()) {
+    const auto views = textDocument->views();
+    for (KTextEditor::View* view : views) {
         if (auto* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
             cc->unregisterCompletionModel(m_model);
             emit unregisteredFromView(view);
@@ -126,8 +128,10 @@ void CodeCompletion::checkDocument(Document* textDocument)
     if (!found && !m_language.isEmpty())
         return;
 
-    foreach (KTextEditor::View* view, textDocument->views())
+    const auto views = textDocument->views();
+    for (KTextEditor::View* view : views) {
         viewCreated(textDocument, view);
+    }
 
     connect(textDocument, &Document::viewCreated, this, &CodeCompletion::viewCreated);
 }
