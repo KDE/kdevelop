@@ -265,8 +265,10 @@ void ColorCache::updateInternal()
     if (!ICore::self() || ICore::self()->shuttingDown()) {
         return;
     }
-    foreach (IDocument* doc, ICore::self()->documentController()->openDocuments()) {
-        foreach (const auto lang, ICore::self()->languageController()->languagesForUrl(doc->url())) {
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (IDocument* doc : documents) {
+        const auto languages = ICore::self()->languageController()->languagesForUrl(doc->url());
+        for (const auto lang : languages) {
             ReferencedTopDUContext top;
             {
                 DUChainReadLocker lock;

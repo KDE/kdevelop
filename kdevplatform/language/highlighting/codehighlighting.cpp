@@ -230,7 +230,8 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
     TopDUContext* top = context->topContext();
 
     //Merge the colors from the function arguments
-    foreach (const DUContext::Import& imported, context->importedParentContexts()) {
+    const auto importedParentContexts = context->importedParentContexts();
+    for (const DUContext::Import& imported : importedParentContexts) {
         if (!imported.context(top) ||
             (imported.context(top)->type() != DUContext::Other && imported.context(top)->type() != DUContext::Function))
             continue;
@@ -245,7 +246,8 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
 
     QList<Declaration*> takeFreeColors;
 
-    foreach (Declaration* dec, context->localDeclarations()) {
+    const auto localDeclarations = context->localDeclarations();
+    for (Declaration* dec : localDeclarations) {
         if (!useRainbowColor(dec)) {
             highlightDeclaration(dec, QColor(QColor::Invalid));
             continue;
@@ -264,7 +266,7 @@ void CodeHighlightingInstance::highlightDUChain(DUContext* context, QHash<Declar
         highlightDeclaration(dec, ColorCache::self()->generatedColor(colorNum));
     }
 
-    foreach (Declaration* dec, takeFreeColors) {
+    for (Declaration* dec : qAsConst(takeFreeColors)) {
         uint colorNum = dec->identifier().hash() % ColorCache::self()->primaryColorCount();
         uint oldColorNum = colorNum;
         while (declarationsForColors[colorNum]) {
