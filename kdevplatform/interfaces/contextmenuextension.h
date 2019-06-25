@@ -32,6 +32,8 @@ class QMenu;
 
 namespace KDevelop
 {
+class ContextMenuExtensionPrivate;
+
 /**
  * For documentation on how to use this class, @see interfaces/context.h
  */
@@ -102,7 +104,8 @@ public:
     static void populateMenu(QMenu* menu, const QList<ContextMenuExtension>& extensions);
 
 private:
-    const QScopedPointer<class ContextMenuExtensionPrivate> d;
+    const QScopedPointer<class ContextMenuExtensionPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ContextMenuExtension)
 };
 
 }

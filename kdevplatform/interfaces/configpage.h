@@ -30,6 +30,7 @@ class KCoreConfigSkeleton;
 
 namespace KDevelop {
 class IPlugin;
+class ConfigPagePrivate;
 
 class KDEVPLATFORMINTERFACES_EXPORT ConfigPage : public KTextEditor::ConfigPage
 {
@@ -104,7 +105,8 @@ public Q_SLOTS:
     void reset() override;
 
 private:
-    const QScopedPointer<class ConfigPagePrivate> d;
+    const QScopedPointer<class ConfigPagePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ConfigPage)
 };
 
 }

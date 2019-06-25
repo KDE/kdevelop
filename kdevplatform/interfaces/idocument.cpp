@@ -37,7 +37,7 @@ public:
     /* Internal access to the wrapper script object */
     static inline QObject *&getWrapper(IDocument *doc)
     {
-        return doc->d->scriptWrapper;
+        return doc->d_func()->scriptWrapper;
     }
 };
 
@@ -50,17 +50,21 @@ QObject *&getWrapper(IDocument *doc)
 }
 
 IDocument::IDocument( KDevelop::ICore* core )
-  : d(new IDocumentPrivate(core))
+    : d_ptr(new IDocumentPrivate(core))
 {
 }
 
 IDocument::~IDocument()
 {
+    Q_D(IDocument);
+
     delete d->scriptWrapper;
 }
 
 KDevelop::ICore* IDocument::core()
 {
+    Q_D(IDocument);
+
     return d->m_core;
 }
 
@@ -111,11 +115,15 @@ QString IDocument::textWord() const
 
 QString IDocument::prettyName() const
 {
+    Q_D(const IDocument);
+
     return d->m_prettyName;
 }
 
 void IDocument::setPrettyName(const QString& name)
 {
+    Q_D(IDocument);
+
     d->m_prettyName = name;
 }
 

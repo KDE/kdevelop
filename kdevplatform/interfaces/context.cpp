@@ -40,7 +40,11 @@ class ContextPrivate
 };
 
 Context::Context()
-    : d(nullptr)
+    : d_ptr(nullptr)
+{}
+
+Context::Context(ContextPrivate* d)
+    : d_ptr(d)
 {}
 
 Context::~Context() = default;
@@ -50,7 +54,7 @@ bool Context::hasType( int aType ) const
     return aType == this->type();
 }
 
-class FileContextPrivate
+class FileContextPrivate : public ContextPrivate
 {
 public:
     explicit FileContextPrivate( const QList<QUrl> &urls )
@@ -61,7 +65,7 @@ public:
 };
 
 FileContext::FileContext( const QList<QUrl> &urls )
-        : Context(), d( new FileContextPrivate( urls ) )
+    : Context(new FileContextPrivate(urls))
 {}
 
 FileContext::~FileContext() = default;
@@ -73,10 +77,12 @@ int FileContext::type() const
 
 QList<QUrl> FileContext::urls() const
 {
+    Q_D(const FileContext);
+
     return d->m_urls;
 }
 
-class ProjectItemContextPrivate
+class ProjectItemContextPrivate : public ContextPrivate
 {
 public:
     explicit ProjectItemContextPrivate( const QList<ProjectBaseItem*> &items )
@@ -87,7 +93,7 @@ public:
 };
 
 ProjectItemContext::ProjectItemContext( const QList<ProjectBaseItem*> &items )
-        : Context(), d( new ProjectItemContextPrivate( items ) )
+    : Context(new ProjectItemContextPrivate(items))
 {}
 
 ProjectItemContext::~ProjectItemContext() = default;
@@ -99,10 +105,12 @@ int ProjectItemContext::type() const
 
 QList<ProjectBaseItem*> ProjectItemContext::items() const
 {
+    Q_D(const ProjectItemContext);
+
     return d->m_items;
 }
 
-class OpenWithContextPrivate
+class OpenWithContextPrivate : public ContextPrivate
 {
 public:
     OpenWithContextPrivate(const QList<QUrl>& urls, const QMimeType& mimeType)
@@ -115,8 +123,7 @@ public:
 };
 
 OpenWithContext::OpenWithContext(const QList<QUrl>& urls, const QMimeType& mimeType)
-: Context()
-, d(new OpenWithContextPrivate(urls, mimeType))
+    : Context(new OpenWithContextPrivate(urls, mimeType))
 {
 }
 
@@ -129,11 +136,15 @@ int OpenWithContext::type() const
 
 QList<QUrl> OpenWithContext::urls() const
 {
+    Q_D(const OpenWithContext);
+
     return d->m_urls;
 }
 
 QMimeType OpenWithContext::mimeType() const
 {
+    Q_D(const OpenWithContext);
+
     return d->m_mimeType;
 }
 

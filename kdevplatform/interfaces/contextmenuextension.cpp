@@ -52,7 +52,7 @@ public:
 };
 
 ContextMenuExtension::ContextMenuExtension()
-    : d(new ContextMenuExtensionPrivate)
+    : d_ptr(new ContextMenuExtensionPrivate)
 {
 }
 
@@ -60,27 +60,35 @@ ContextMenuExtension::~ContextMenuExtension() = default;
 
 
 ContextMenuExtension::ContextMenuExtension( const ContextMenuExtension& rhs )
-    : d( new ContextMenuExtensionPrivate )
+    : d_ptr(new ContextMenuExtensionPrivate)
 {
-    d->extensions = rhs.d->extensions;
+    Q_D(ContextMenuExtension);
+
+    d->extensions = rhs.d_func()->extensions;
 }
 
 ContextMenuExtension& ContextMenuExtension::operator=( const ContextMenuExtension& rhs )
 {
+    Q_D(ContextMenuExtension);
+
     if( this == &rhs )
         return *this;
 
-    d->extensions = rhs.d->extensions;
+    d->extensions = rhs.d_func()->extensions;
     return *this;
 }
 
 QList<QAction*> ContextMenuExtension::actions( const QString& group ) const
 {
+    Q_D(const ContextMenuExtension);
+
     return d->extensions.value( group, QList<QAction*>() );
 }
 
 void ContextMenuExtension::addAction( const QString& group, QAction* action )
 {
+    Q_D(ContextMenuExtension);
+
     auto actionGroupIt = d->extensions.find(group);
     if (actionGroupIt == d->extensions.end()) {
         d->extensions.insert( group, QList<QAction*>() << action );

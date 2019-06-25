@@ -48,6 +48,7 @@ class ConfigPage;
 class Context;
 class ContextMenuExtension;
 struct ProjectConfigOptions;
+class IPluginPrivate;
 
 /**
  * The base class for all KDevelop plugins.
@@ -269,7 +270,8 @@ protected:
     virtual void initializeGuiState();
 
 private:
-    const QScopedPointer<class IPluginPrivate> d;
+    const QScopedPointer<class IPluginPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(IPlugin)
     friend class IPluginPrivate;
 };
 

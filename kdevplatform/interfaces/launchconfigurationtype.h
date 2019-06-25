@@ -37,6 +37,7 @@ class ILaunchConfiguration;
 class ProjectBaseItem;
 class ILauncher;
 class LaunchConfigurationPageFactory;
+class LaunchConfigurationTypePrivate;
 
 /**
  * Launch configuration types are used to be able to create
@@ -145,7 +146,8 @@ Q_SIGNALS:
     void signalAddLaunchConfiguration(KDevelop::ILaunchConfiguration* launch);
 
 private:
-    const QScopedPointer<class LaunchConfigurationTypePrivate> d;
+    const QScopedPointer<class LaunchConfigurationTypePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(LaunchConfigurationType)
 };
 
 }

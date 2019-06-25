@@ -83,8 +83,10 @@ public:
 IPlugin::IPlugin( const QString &componentName, QObject *parent )
     : QObject(parent)
     , KXMLGUIClient()
-    , d(new IPluginPrivate(this))
+    , d_ptr(new IPluginPrivate(this))
 {
+    Q_D(IPlugin);
+
     // The following cast is safe, there's no component in KDevPlatform that
     // creates plugins except the plugincontroller. The controller passes
     // Core::self() as parent to KServiceTypeTrader::createInstanceFromQuery
@@ -97,7 +99,8 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
     auto metaData = core()->pluginController()->infoForPluginId(componentName);
     setComponentName(componentName, metaData.name());
 
-    auto clientAdded = [=] (KXMLGUIClient* client) {
+    auto clientAdded = [this] (KXMLGUIClient* client) {
+        Q_D(IPlugin);
         d->guiClientAdded(client);
     };
     const auto mainWindows = KMainWindow::memberList();
@@ -110,7 +113,10 @@ IPlugin::IPlugin( const QString &componentName, QObject *parent )
                 this, clientAdded);
     }
 
-    auto updateState = [=] { d->updateState(); };
+    auto updateState = [this] {
+        Q_D(IPlugin);
+        d->updateState();
+    };
     connect(ICore::self()->projectController(), &IProjectController::projectOpened,
             this, updateState);
     connect(ICore::self()->projectController(), &IProjectController::projectClosed,
@@ -125,6 +131,8 @@ void IPlugin::unload()
 
 ICore *IPlugin::core() const
 {
+    Q_D(const IPlugin);
+
     return d->core;
 }
 
@@ -172,17 +180,23 @@ void KDevelop::IPlugin::createActionsForMainWindow( Sublime::MainWindow* /*windo
 
 bool KDevelop::IPlugin::hasError() const
 {
+    Q_D(const IPlugin);
+
     return !d->m_errorDescription.isEmpty();
 }
 
 void KDevelop::IPlugin::setErrorDescription(const QString& description)
 {
+    Q_D(IPlugin);
+
     d->m_errorDescription = description;
 }
 
 
 QString KDevelop::IPlugin::errorDescription() const
 {
+    Q_D(const IPlugin);
+
     return d->m_errorDescription;
 }
 

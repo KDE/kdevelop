@@ -38,7 +38,7 @@ public:
 
 ConfigPage::ConfigPage(IPlugin* plugin, KCoreConfigSkeleton* config, QWidget* parent)
     : KTextEditor::ConfigPage(parent)
-    , d(new ConfigPagePrivate(plugin))
+    , d_ptr(new ConfigPagePrivate(plugin))
 {
     setConfigSkeleton(config);
 }
@@ -49,6 +49,8 @@ ConfigPage::~ConfigPage()
 
 void ConfigPage::apply()
 {
+    Q_D(ConfigPage);
+
     // if d->configManager is null, this method must be overridden
     Q_ASSERT_X(d->configManager, metaObject()->className(),
                "Config page does not use a KConfigSkeleton, but doesn't override apply()");
@@ -61,6 +63,8 @@ void ConfigPage::apply()
 
 void ConfigPage::defaults()
 {
+    Q_D(ConfigPage);
+
     // if d->configManager is null, this method must be overridden
     Q_ASSERT_X(d->configManager, metaObject()->className(),
                "Config page does not use a KConfigSkeleton, but doesn't override defaults()");
@@ -69,6 +73,8 @@ void ConfigPage::defaults()
 
 void ConfigPage::reset()
 {
+    Q_D(ConfigPage);
+
     // if d->configManager is null, this method must be overridden
     Q_ASSERT_X(d->configManager, metaObject()->className(),
                "Config page does not use a KConfigSkeleton, but doesn't override reset()");
@@ -77,6 +83,8 @@ void ConfigPage::reset()
 
 void ConfigPage::initConfigManager()
 {
+    Q_D(ConfigPage);
+
     if (d->configManager) {
         d->configManager->addWidget(this);
     }
@@ -84,11 +92,15 @@ void ConfigPage::initConfigManager()
 
 KCoreConfigSkeleton* ConfigPage::configSkeleton() const
 {
+    Q_D(const ConfigPage);
+
     return d->configSkeleton;
 }
 
 void ConfigPage::setConfigSkeleton(KCoreConfigSkeleton* skel)
 {
+    Q_D(ConfigPage);
+
     if (d->configSkeleton == skel) {
         return;
     }
@@ -120,6 +132,8 @@ ConfigPage* ConfigPage::childPage(int number)
 
 IPlugin* ConfigPage::plugin() const
 {
+    Q_D(const ConfigPage);
+
     return d->plugin;
 }
 

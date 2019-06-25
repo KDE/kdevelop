@@ -42,6 +42,10 @@ template <typename T> class QList;
 namespace KDevelop
 {
 class ProjectBaseItem;
+class ContextPrivate;
+class FileContextPrivate;
+class ProjectItemContextPrivate;
+class OpenWithContextPrivate;
 
 /**
 Base class for every context.
@@ -119,10 +123,15 @@ public:
 protected:
     /**Constructor.*/
     Context();
+    explicit Context(ContextPrivate* d);
 
 private:
-    const QScopedPointer<class ContextPrivate> d;
+    const QScopedPointer<class ContextPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Context)
     Q_DISABLE_COPY(Context)
+    friend class FileContext;
+    friend class ProjectItemContext;
+    friend class OpenWithContext;
 };
 
 /**
@@ -144,7 +153,7 @@ public:
     QList<QUrl> urls() const override;
 
 private:
-    const QScopedPointer<class FileContextPrivate> d;
+    Q_DECLARE_PRIVATE(FileContext)
     Q_DISABLE_COPY(FileContext)
 };
 
@@ -169,7 +178,7 @@ public:
     QList<ProjectBaseItem*> items() const;
 
 private:
-    const QScopedPointer<class ProjectItemContextPrivate> d;
+    Q_DECLARE_PRIVATE(ProjectItemContext)
     Q_DISABLE_COPY(ProjectItemContext)
 };
 
@@ -203,7 +212,7 @@ public:
     QMimeType mimeType() const;
 
 private:
-    const QScopedPointer<class OpenWithContextPrivate> d;
+    Q_DECLARE_PRIVATE(OpenWithContext)
     Q_DISABLE_COPY(OpenWithContext)
 };
 

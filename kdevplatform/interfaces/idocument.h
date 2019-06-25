@@ -40,6 +40,7 @@ class QWidget;
 
 namespace KDevelop {
 class ICore;
+class IDocumentPrivate;
 
 /**
  * A single document being edited by the IDE.
@@ -210,7 +211,8 @@ protected:
     void notifyLoaded();
 
 private:
-    const QScopedPointer<class IDocumentPrivate> d;
+    const QScopedPointer<class IDocumentPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(IDocument)
     friend class IDocumentPrivate;
 };
 
