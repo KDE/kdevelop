@@ -39,14 +39,20 @@ public:
 };
 
 ProjectConfigSkeleton::ProjectConfigSkeleton( const QString & configname )
-        : KConfigSkeleton( configname ), d( new ProjectConfigSkeletonPrivate )
+    : KConfigSkeleton(configname)
+    , d_ptr(new ProjectConfigSkeletonPrivate)
 {
+    Q_D(ProjectConfigSkeleton);
+
     d->m_developerTempFile = configname;
 }
 
 ProjectConfigSkeleton::ProjectConfigSkeleton( KSharedConfigPtr config )
-        : KConfigSkeleton( config ), d( new ProjectConfigSkeletonPrivate )
+    : KConfigSkeleton(config)
+    , d_ptr(new ProjectConfigSkeletonPrivate)
 {
+    Q_D(ProjectConfigSkeleton);
+
     Q_ASSERT(config);
     d->m_developerTempFile = config->name();
 }
@@ -55,12 +61,16 @@ ProjectConfigSkeleton::~ProjectConfigSkeleton() = default;
 
 void ProjectConfigSkeleton::setDeveloperTempFile( const QString& cfg )
 {
+    Q_D(ProjectConfigSkeleton);
+
     d->m_developerTempFile = cfg;
     setSharedConfig( KSharedConfig::openConfig( cfg ) );
 }
 
 void ProjectConfigSkeleton::setProjectTempFile( const QString& cfg )
 {
+    Q_D(ProjectConfigSkeleton);
+
     d->m_projectTempFile = cfg;
     config()->addConfigSources( QStringList() << cfg );
     load();
@@ -68,26 +78,36 @@ void ProjectConfigSkeleton::setProjectTempFile( const QString& cfg )
 
 void ProjectConfigSkeleton::setProjectFile( const Path& cfg )
 {
+    Q_D(ProjectConfigSkeleton);
+
     d->m_projectFile = cfg;
 }
 
 void ProjectConfigSkeleton::setDeveloperFile( const Path& cfg )
 {
+    Q_D(ProjectConfigSkeleton);
+
     d->m_developerFile = cfg;
 }
 
 Path ProjectConfigSkeleton::projectFile() const
 {
+    Q_D(const ProjectConfigSkeleton);
+
     return d->m_projectFile;
 }
 
 Path ProjectConfigSkeleton::developerFile() const
 {
+    Q_D(const ProjectConfigSkeleton);
+
     return d->m_developerFile;
 }
 
 void ProjectConfigSkeleton::setDefaults()
 {
+    Q_D(ProjectConfigSkeleton);
+
     qCDebug(PROJECT) << "Setting Defaults";
     KConfig cfg( d->m_projectTempFile );
     const auto items = this->items();
@@ -104,6 +124,8 @@ void ProjectConfigSkeleton::setDefaults()
 
 bool ProjectConfigSkeleton::useDefaults( bool b )
 {
+    Q_D(ProjectConfigSkeleton);
+
     if( b == d->mUseDefaults )
         return d->mUseDefaults;
 
@@ -150,6 +172,8 @@ bool ProjectConfigSkeleton::useDefaults( bool b )
 
 bool ProjectConfigSkeleton::writeConfig()
 {
+    Q_D(ProjectConfigSkeleton);
+
     KConfigSkeletonItem::List myitems = items();
     KConfigSkeletonItem::List::ConstIterator it;
     for( it = myitems.constBegin(); it != myitems.constEnd(); ++it )

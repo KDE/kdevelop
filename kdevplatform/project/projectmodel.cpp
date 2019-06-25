@@ -83,7 +83,8 @@ public:
     }
     ProjectBaseItem* rootItem;
     ProjectModel* model;
-    ProjectBaseItem* itemFromIndex( const QModelIndex& idx ) {
+    ProjectBaseItem* itemFromIndex(const QModelIndex& idx) const
+    {
         if( !idx.isValid() ) {
             return rootItem;
         }
@@ -179,7 +180,7 @@ ProjectBaseItem::~ProjectBaseItem()
     Q_D(ProjectBaseItem);
 
     if (model() && d->m_pathIndex) {
-        model()->d->pathLookupTable.remove(d->m_pathIndex, this);
+        model()->d_func()->pathLookupTable.remove(d->m_pathIndex, this);
     }
 
     if( parent() ) {
@@ -304,7 +305,7 @@ ProjectModel* ProjectBaseItem::model() const
 ProjectBaseItem* ProjectBaseItem::parent() const
 {
     Q_D(const ProjectBaseItem);
-    if( model() && model()->d->rootItem == d->parent ) {
+    if( model() && model()->d_func()->rootItem == d->parent ) {
         return nullptr;
     }
     return d->parent;
@@ -335,13 +336,13 @@ void ProjectBaseItem::setModel( ProjectModel* model )
     }
 
     if (d->model && d->m_pathIndex) {
-        d->model->d->pathLookupTable.remove(d->m_pathIndex, this);
+        d->model->d_func()->pathLookupTable.remove(d->m_pathIndex, this);
     }
 
     d->model = model;
 
     if (model && d->m_pathIndex) {
-        model->d->pathLookupTable.insert(d->m_pathIndex, this);
+        model->d_func()->pathLookupTable.insert(d->m_pathIndex, this);
     }
 
     for (ProjectBaseItem* item : qAsConst(d->children)) {
@@ -466,7 +467,7 @@ void ProjectBaseItem::setPath( const Path& path)
     Q_D(ProjectBaseItem);
 
     if (model() && d->m_pathIndex) {
-        model()->d->pathLookupTable.remove(d->m_pathIndex, this);
+        model()->d_func()->pathLookupTable.remove(d->m_pathIndex, this);
     }
 
     d->m_path = path;
@@ -474,7 +475,7 @@ void ProjectBaseItem::setPath( const Path& path)
     setText( path.lastPathSegment() );
 
     if (model() && d->m_pathIndex) {
-        model()->d->pathLookupTable.insert(d->m_pathIndex, this);
+        model()->d_func()->pathLookupTable.insert(d->m_pathIndex, this);
     }
 }
 
@@ -577,6 +578,8 @@ QList<ProjectFileItem*> ProjectBaseItem::fileList() const
 
 void ProjectModel::clear()
 {
+    Q_D(ProjectModel);
+
     d->rootItem->removeRows(0, d->rootItem->rowCount());
 }
 
@@ -938,6 +941,8 @@ int ProjectModel::columnCount( const QModelIndex& ) const
 
 int ProjectModel::rowCount( const QModelIndex& parent ) const
 {
+    Q_D(const ProjectModel);
+
     ProjectBaseItem* item = d->itemFromIndex( parent );
     return item ? item->rowCount() : 0;
 }
@@ -1003,14 +1008,19 @@ QVariant ProjectModel::data( const QModelIndex& index, int role ) const
 }
 
 ProjectModel::ProjectModel( QObject *parent )
-        : QAbstractItemModel( parent ), d( new ProjectModelPrivate( this ) )
+    : QAbstractItemModel(parent)
+    , d_ptr(new ProjectModelPrivate(this))
 {
+    Q_D(ProjectModel);
+
     d->rootItem = new ProjectBaseItem( nullptr, QString(), nullptr );
     d->rootItem->setModel( this );
 }
 
 ProjectModel::~ProjectModel()
 {
+    Q_D(ProjectModel);
+
     d->rootItem->setModel(nullptr);
     delete d->rootItem;
 }
@@ -1022,6 +1032,8 @@ ProjectVisitor::ProjectVisitor()
 
 QModelIndex ProjectModel::index( int row, int column, const QModelIndex& parent ) const
 {
+    Q_D(const ProjectModel);
+
     ProjectBaseItem* parentItem = d->itemFromIndex( parent );
     if( parentItem && row >= 0 && row < parentItem->rowCount() && column == 0 ) {
         return createIndex( row, column, parentItem );
@@ -1031,26 +1043,36 @@ QModelIndex ProjectModel::index( int row, int column, const QModelIndex& parent 
 
 void ProjectModel::appendRow( ProjectBaseItem* item )
 {
+    Q_D(ProjectModel);
+
     d->rootItem->appendRow( item );
 }
 
 void ProjectModel::removeRow( int row )
 {
+    Q_D(ProjectModel);
+
     d->rootItem->removeRow( row );
 }
 
 ProjectBaseItem* ProjectModel::takeRow( int row )
 {
+    Q_D(ProjectModel);
+
     return d->rootItem->takeRow( row );
 }
 
 ProjectBaseItem* ProjectModel::itemAt(int row) const
 {
+    Q_D(const ProjectModel);
+
     return d->rootItem->child(row);
 }
 
 QList< ProjectBaseItem* > ProjectModel::topItems() const
 {
+    Q_D(const ProjectModel);
+
     return d->rootItem->children();
 }
 
@@ -1083,11 +1105,15 @@ bool ProjectModel::setData(const QModelIndex&, const QVariant&, int)
 
 QList<ProjectBaseItem*> ProjectModel::itemsForPath(const IndexedString& path) const
 {
+    Q_D(const ProjectModel);
+
     return d->pathLookupTable.values(path.index());
 }
 
 ProjectBaseItem* ProjectModel::itemForPath(const IndexedString& path) const
 {
+    Q_D(const ProjectModel);
+
     return d->pathLookupTable.value(path.index());
 }
 

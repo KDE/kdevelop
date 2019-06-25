@@ -117,7 +117,8 @@ Q_SIGNALS:
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 
 private:
-    const QScopedPointer<class AbstractFileManagerPluginPrivate> d;
+    const QScopedPointer<class AbstractFileManagerPluginPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(AbstractFileManagerPlugin)
     friend class AbstractFileManagerPluginPrivate;
 public:
     friend class AbstractFileManagerPluginImportBenchmark;

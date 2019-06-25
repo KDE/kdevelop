@@ -43,6 +43,7 @@ class ProjectLibraryTargetItem;
 class ProjectModel;
 class IndexedString;
 class Path;
+class ProjectModelPrivate;
 
 /**
  * Base class to implement the visitor pattern for the project item tree.
@@ -469,7 +470,8 @@ public:
     ProjectBaseItem* itemForPath(const IndexedString& path) const;
 
 private:
-    const QScopedPointer<class ProjectModelPrivate> d;
+    const QScopedPointer<class ProjectModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ProjectModel)
     friend class ProjectBaseItem;
 };
 

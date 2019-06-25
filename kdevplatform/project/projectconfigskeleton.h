@@ -29,6 +29,7 @@ namespace KDevelop
 {
 
 class Path;
+class ProjectConfigSkeletonPrivate;
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectConfigSkeleton: public KConfigSkeleton
 {
@@ -60,7 +61,8 @@ protected:
     explicit ProjectConfigSkeleton( const QString & configname );
 
 private:
-    const QScopedPointer<class ProjectConfigSkeletonPrivate> d;
+    const QScopedPointer<class ProjectConfigSkeletonPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ProjectConfigSkeleton)
 };
 
 }

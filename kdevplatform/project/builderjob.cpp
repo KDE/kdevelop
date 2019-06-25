@@ -145,7 +145,7 @@ void BuilderJobPrivate::addJob( BuilderJob::BuildType t, ProjectBaseItem* item )
 }
 
 BuilderJob::BuilderJob()
-    : d( new BuilderJobPrivate( this ) )
+    : d_ptr(new BuilderJobPrivate(this))
 {
 }
 
@@ -153,6 +153,8 @@ BuilderJob::~BuilderJob() = default;
 
 void BuilderJob::addItems( BuildType t, const QList<ProjectBaseItem*>& items )
 {
+    Q_D(BuilderJob);
+
     for (ProjectBaseItem* item : items) {
         d->addJob( t, item );
     }
@@ -160,6 +162,8 @@ void BuilderJob::addItems( BuildType t, const QList<ProjectBaseItem*>& items )
 
 void BuilderJob::addProjects( BuildType t, const QList<IProject*>& projects )
 {
+    Q_D(BuilderJob);
+
     for (IProject* project : projects) {
         d->addJob( t, project->projectItem() );
     }
@@ -167,14 +171,18 @@ void BuilderJob::addProjects( BuildType t, const QList<IProject*>& projects )
 
 void BuilderJob::addItem( BuildType t, ProjectBaseItem* item )
 {
+    Q_D(BuilderJob);
+
     d->addJob( t, item );
 }
 
 void BuilderJob::addCustomJob( BuilderJob::BuildType type, KJob* job, ProjectBaseItem* item )
 {
+    Q_D(BuilderJob);
+
     if (auto* builderJob = qobject_cast<BuilderJob*>(job)) {
         // If a subjob is a builder job itself, re-own its job list to avoid having recursive composite jobs.
-        const QVector<SubJobData> subjobs = builderJob->d->takeJobList();
+        const QVector<SubJobData> subjobs = builderJob->d_func()->takeJobList();
         builderJob->deleteLater();
         for (const SubJobData& subjob : subjobs) {
             subjob.job->setParent(this);
@@ -204,6 +212,8 @@ QVector< SubJobData > BuilderJobPrivate::takeJobList()
 
 void BuilderJob::updateJobName()
 {
+    Q_D(BuilderJob);
+
     // Which items are mentioned in the set
     // Make it a list to preserve ordering; search overhead (n^2) isn't too big
     QList< ProjectBaseItem* > registeredItems;

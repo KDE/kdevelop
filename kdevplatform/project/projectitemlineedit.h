@@ -27,6 +27,7 @@ namespace KDevelop {
 class ProjectBaseItem;
 class IProject;
 }
+class ProjectItemLineEditPrivate;
 
 class KDEVPLATFORMPROJECT_EXPORT ProjectItemLineEdit : public QLineEdit
 {
@@ -72,7 +73,8 @@ private Q_SLOTS:
     void showCtxMenu(const QPoint& p);
     
 private:
-    const QScopedPointer<class ProjectItemLineEditPrivate> d;
+    const QScopedPointer<class ProjectItemLineEditPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ProjectItemLineEdit)
 };
 
 #endif

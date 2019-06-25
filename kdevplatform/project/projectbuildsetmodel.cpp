@@ -106,7 +106,7 @@ public:
 
 ProjectBuildSetModel::ProjectBuildSetModel( QObject* parent )
     : QAbstractTableModel( parent )
-    , d(new ProjectBuildSetModelPrivate)
+    , d_ptr(new ProjectBuildSetModelPrivate)
 {
 }
 
@@ -114,6 +114,8 @@ ProjectBuildSetModel::~ProjectBuildSetModel() = default;
 
 void ProjectBuildSetModel::loadFromSession( ISession* session )
 {
+    Q_D(ProjectBuildSetModel);
+
     if (!session) {
         return;
     }
@@ -129,6 +131,8 @@ void ProjectBuildSetModel::loadFromSession( ISession* session )
 
 void ProjectBuildSetModel::storeToSession( ISession* session )
 {
+    Q_D(ProjectBuildSetModel);
+
     if (!session) {
         return;
     }
@@ -160,6 +164,8 @@ int ProjectBuildSetModel::findInsertionPlace( const QStringList& itemPath )
      *
      * If an item cannot be found in the ordering list, we append it to the list.
      */
+
+    Q_D(ProjectBuildSetModel);
 
     int insertionIndex = 0;
     bool found = false;
@@ -198,6 +204,8 @@ void ProjectBuildSetModel::removeItemsWithCache( const QList<int>& itemIndices )
      * Indices in the list shall be sorted.
      */
 
+    Q_D(ProjectBuildSetModel);
+
     QList<int> itemIndicesCopy = itemIndices;
 
     beginRemoveRows( QModelIndex(), itemIndices.first(), itemIndices.last() );
@@ -221,6 +229,8 @@ void ProjectBuildSetModel::removeItemsWithCache( const QList<int>& itemIndices )
 
 void ProjectBuildSetModel::insertItemWithCache( const BuildItem& item )
 {
+    Q_D(ProjectBuildSetModel);
+
     int insertionPlace = findInsertionPlace( item.itemPath() );
     beginInsertRows( QModelIndex(), insertionPlace, insertionPlace );
     d->items.insert(insertionPlace, item);
@@ -229,6 +239,8 @@ void ProjectBuildSetModel::insertItemWithCache( const BuildItem& item )
 
 void ProjectBuildSetModel::insertItemsOverrideCache( int index, const QList< BuildItem >& items )
 {
+    Q_D(ProjectBuildSetModel);
+
     Q_ASSERT( index >= 0 && index <= d->items.size() );
 
     if (index == d->items.size()) {
@@ -255,6 +267,8 @@ void ProjectBuildSetModel::insertItemsOverrideCache( int index, const QList< Bui
 
 QVariant ProjectBuildSetModel::data( const QModelIndex& idx, int role ) const
 {
+    Q_D(const ProjectBuildSetModel);
+
     if( !idx.isValid() || idx.row() < 0 || idx.column() < 0
          || idx.row() >= rowCount() || idx.column() >= columnCount())
     {
@@ -296,6 +310,8 @@ QVariant ProjectBuildSetModel::headerData( int section, Qt::Orientation orientat
 
 int ProjectBuildSetModel::rowCount( const QModelIndex& parent ) const
 {
+    Q_D(const ProjectBuildSetModel);
+
     if( parent.isValid() )
         return 0;
     return d->items.count();
@@ -310,6 +326,8 @@ int ProjectBuildSetModel::columnCount( const QModelIndex& parent ) const
 
 void ProjectBuildSetModel::addProjectItem( KDevelop::ProjectBaseItem* item )
 {
+    Q_D(ProjectBuildSetModel);
+
     BuildItem buildItem( item );
     if (d->items.contains(buildItem))
         return;
@@ -332,13 +350,17 @@ bool ProjectBuildSetModel::removeRows( int row, int count, const QModelIndex& pa
     return true;
 }
 
-QList<BuildItem> ProjectBuildSetModel::items()
+QList<BuildItem> ProjectBuildSetModel::items() const
 {
+    Q_D(const ProjectBuildSetModel);
+
     return d->items;
 }
 
 void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 {
+    Q_D(ProjectBuildSetModel);
+
     for (int i = d->items.count() - 1; i >= 0; --i) {
         if (d->items.at(i).itemProject() == project->name()) {
             beginRemoveRows( QModelIndex(), i, i );
@@ -350,6 +372,8 @@ void ProjectBuildSetModel::projectClosed( KDevelop::IProject* project )
 
 void ProjectBuildSetModel::saveToProject( KDevelop::IProject* project ) const
 {
+    Q_D(const ProjectBuildSetModel);
+
     QVariantList paths;
     for (const BuildItem& item : qAsConst(d->items)) {
         if( item.itemProject() == project->name() )
@@ -377,6 +401,8 @@ void ProjectBuildSetModel::loadFromProject( KDevelop::IProject* project )
 
 void ProjectBuildSetModel::moveRowsDown(int row, int count)
 {
+    Q_D(ProjectBuildSetModel);
+
     QList<BuildItem> items = d->items.mid(row, count);
     removeRows( row, count );
     insertItemsOverrideCache( row + 1, items );
@@ -384,6 +410,8 @@ void ProjectBuildSetModel::moveRowsDown(int row, int count)
 
 void ProjectBuildSetModel::moveRowsToBottom(int row, int count)
 {
+    Q_D(ProjectBuildSetModel);
+
     QList<BuildItem> items = d->items.mid(row, count);
     removeRows( row, count );
     insertItemsOverrideCache( rowCount(), items );
@@ -391,6 +419,8 @@ void ProjectBuildSetModel::moveRowsToBottom(int row, int count)
 
 void ProjectBuildSetModel::moveRowsUp(int row, int count)
 {
+    Q_D(ProjectBuildSetModel);
+
     QList<BuildItem> items = d->items.mid(row, count);
     removeRows( row, count );
     insertItemsOverrideCache( row - 1, items );
@@ -398,6 +428,8 @@ void ProjectBuildSetModel::moveRowsUp(int row, int count)
 
 void ProjectBuildSetModel::moveRowsToTop(int row, int count)
 {
+    Q_D(ProjectBuildSetModel);
+
     QList<BuildItem> items = d->items.mid(row, count);
     removeRows( row, count );
     insertItemsOverrideCache( 0, items );

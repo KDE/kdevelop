@@ -160,8 +160,10 @@ public:
 
 ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     : QLineEdit(parent),
-      d(new ProjectItemLineEditPrivate(this))
+      d_ptr(new ProjectItemLineEditPrivate(this))
 {
+    Q_D(ProjectItemLineEdit);
+
     setCompleter(d->completer);
     setValidator(d->validator);
     setPlaceholderText( i18n("Enter the path to an item from the projects tree" ) );
@@ -185,6 +187,8 @@ void ProjectItemLineEdit::showCtxMenu(const QPoint& p)
 
 bool ProjectItemLineEdit::selectItemDialog()
 {
+    Q_D(ProjectItemLineEdit);
+
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
 
     QDialog dialog;
@@ -228,16 +232,22 @@ bool ProjectItemLineEdit::selectItemDialog()
 
 void ProjectItemLineEdit::setItemPath(const QStringList& list)
 {
+    Q_D(ProjectItemLineEdit);
+
     setText(KDevelop::joinWithEscaping(removeProjectBasePath(list, d->base), sep, escape));
 }
 
 QStringList ProjectItemLineEdit::itemPath() const
 {
+    Q_D(const ProjectItemLineEdit);
+
     return joinProjectBasePath(KDevelop::splitWithEscaping(text(), sep, escape), d->base);
 }
 
 void ProjectItemLineEdit::setBaseItem(KDevelop::ProjectBaseItem* item)
 {
+    Q_D(ProjectItemLineEdit);
+
     d->base = item;
     d->validator->setBaseItem(d->base);
     d->completer->setBaseItem(d->base);
@@ -245,6 +255,8 @@ void ProjectItemLineEdit::setBaseItem(KDevelop::ProjectBaseItem* item)
 
 KDevelop::ProjectBaseItem* ProjectItemLineEdit::baseItem() const
 {
+    Q_D(const ProjectItemLineEdit);
+
     return d->base;
 }
 
@@ -256,6 +268,8 @@ KDevelop::ProjectBaseItem* ProjectItemLineEdit::currentItem() const
 
 void ProjectItemLineEdit::setSuggestion(KDevelop::IProject* project)
 {
+    Q_D(ProjectItemLineEdit);
+
     d->suggestion = project;
 }
 

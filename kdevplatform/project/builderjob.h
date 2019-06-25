@@ -29,6 +29,7 @@ namespace KDevelop
 {
 class ProjectBaseItem;
 class IProject;
+class BuilderJobPrivate;
 
 /**
  * Allows to build a list of project items or projects sequentially, where
@@ -108,7 +109,8 @@ public:
     void start() override;
 
 private:
-    const QScopedPointer<class BuilderJobPrivate> d;
+    const QScopedPointer<class BuilderJobPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(BuilderJob)
     friend class BuilderJobPrivate;
 };
 
