@@ -36,6 +36,9 @@ class View;
 
 namespace KDevelop {
 
+class TextViewPrivate;
+class TextDocumentPrivate;
+
 /**
 Text document which represents KTextEditor documents.
 
@@ -81,8 +84,8 @@ protected:
     Sublime::View *newView(Sublime::Document *doc) override;
 
 private:
-    Q_PRIVATE_SLOT(d, void saveSessionConfig())
-    Q_PRIVATE_SLOT(d, void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::ModificationInterface::ModifiedOnDiskReason))
+    Q_PRIVATE_SLOT(d_func(), void saveSessionConfig())
+    Q_PRIVATE_SLOT(d_func(), void modifiedOnDisk(KTextEditor::Document *, bool, KTextEditor::ModificationInterface::ModifiedOnDiskReason))
 
     void newDocumentStatus(KTextEditor::Document*);
     void populateContextMenu(KTextEditor::View*, QMenu*);
@@ -93,7 +96,8 @@ private:
     void repositoryCheckFinished(bool);
 
 private:
-    const QScopedPointer<class TextDocumentPrivate> d;
+    const QScopedPointer<class TextDocumentPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TextDocument)
     friend class TextDocumentPrivate;
 };
 
@@ -120,7 +124,8 @@ private:
     void sendStatusChanged();
 
 private:
-    const QScopedPointer<class TextViewPrivate> d;
+    const QScopedPointer<class TextViewPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TextView)
 };
 
 }

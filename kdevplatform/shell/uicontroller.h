@@ -37,6 +37,7 @@ namespace KDevelop {
 
 class Core;
 class MainWindow;
+class UiControllerPrivate;
 
 class KDEVPLATFORMSHELL_EXPORT UiController: public Sublime::Controller, public IUiController
 {
@@ -119,7 +120,8 @@ private:
     void setupActions();
 
 private:
-    const QScopedPointer<class UiControllerPrivate> d;
+    const QScopedPointer<class UiControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(UiController)
     friend class UiControllerPrivate;
 };
 

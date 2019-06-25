@@ -80,21 +80,25 @@ public:
 
 EnvironmentConfigureButton::EnvironmentConfigureButton(QWidget* parent)
     : QPushButton(parent),
-      d(new EnvironmentConfigureButtonPrivate(this))
+      d_ptr(new EnvironmentConfigureButtonPrivate(this))
 {
+    Q_D(EnvironmentConfigureButton);
+
     setText(QString());
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     setToolTip(i18n("Configure environment variables"));
 
     connect(this, &EnvironmentConfigureButton::clicked,
-            this, [&] { d->showDialog(); });
+            this, [this] { Q_D(EnvironmentConfigureButton); d->showDialog(); });
 }
 
 EnvironmentConfigureButton::~EnvironmentConfigureButton() = default;
 
 void EnvironmentConfigureButton::setSelectionWidget(EnvironmentSelectionWidget* widget)
 {
+    Q_D(EnvironmentConfigureButton);
+
     connect(this, &EnvironmentConfigureButton::environmentConfigured,
             widget, &EnvironmentSelectionWidget::reconfigure);
     d->selectionWidget = widget;

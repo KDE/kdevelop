@@ -33,6 +33,7 @@ namespace KDevelop
 {
 class SourceFormatterStyle;
 class ISourceFormatter;
+class SourceFormatterSelectionEditPrivate;
 
 class KDEVPLATFORMSHELL_EXPORT SourceFormatterSelectionEdit : public QWidget
 {
@@ -44,7 +45,7 @@ public:
 
 public:
     void loadSettings(const KConfigGroup& config);
-    void saveSettings(KConfigGroup& config);
+    void saveSettings(KConfigGroup& config) const;
 
 Q_SIGNALS:
     void changed();
@@ -68,7 +69,8 @@ private:
     void enableStyleButtons();
 
 private:
-    const QScopedPointer<class SourceFormatterSelectionEditPrivate> d;
+    const QScopedPointer<class SourceFormatterSelectionEditPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(SourceFormatterSelectionEdit)
 };
 
 }

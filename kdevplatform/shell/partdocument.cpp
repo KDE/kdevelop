@@ -48,7 +48,7 @@ public:
 PartDocument::PartDocument(const QUrl& url, KDevelop::ICore* core, const QString& preferredPart)
     : Sublime::UrlDocument(core->uiController()->controller(), url)
     , KDevelop::IDocument(core)
-    , d(new PartDocumentPrivate(preferredPart))
+    , d_ptr(new PartDocumentPrivate(preferredPart))
 {
 }
 
@@ -56,6 +56,8 @@ PartDocument::~PartDocument() = default;
 
 QWidget *PartDocument::createViewWidget(QWidget* /*parent*/)
 {
+    Q_D(PartDocument);
+
     KParts::Part *part = Core::self()->partControllerInternal()->createPart(url(), d->preferredPart);
     if( part )
     {
@@ -69,6 +71,8 @@ QWidget *PartDocument::createViewWidget(QWidget* /*parent*/)
 
 KParts::Part *PartDocument::partForView(QWidget *view) const
 {
+    Q_D(const PartDocument);
+
     return d->partForView[view];
 }
 
@@ -136,6 +140,8 @@ bool PartDocument::askForCloseFeedback()
 
 bool PartDocument::close(DocumentSaveMode mode)
 {
+    Q_D(PartDocument);
+
     if (!(mode & Discard)) {
         if (mode & Silent) {
             if (!save(mode))
@@ -222,11 +228,15 @@ void PartDocument::setPrettyName(const QString& name)
 
 QMap<QWidget*, KParts::Part*> PartDocument::partForView() const
 {
+    Q_D(const PartDocument);
+
     return d->partForView;
 }
 
 void PartDocument::addPartForView(QWidget* w, KParts::Part* p)
 {
+    Q_D(PartDocument);
+
     d->partForView[w]=p;
 }
 

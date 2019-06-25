@@ -51,6 +51,7 @@ class IProject;
 class TextDocument;
 class ISourceFormatter;
 class IPlugin;
+class SourceFormatterControllerPrivate;
 
 struct SourceFormatter
 {
@@ -170,7 +171,8 @@ private:
     void resetUi();
 
 private:
-    const QScopedPointer<class SourceFormatterControllerPrivate> d;
+    const QScopedPointer<class SourceFormatterControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(SourceFormatterController)
 };
 
 }

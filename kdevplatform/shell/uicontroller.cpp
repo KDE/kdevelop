@@ -219,15 +219,18 @@ private:
 };
 
 UiController::UiController(Core *core)
-    :Sublime::Controller(nullptr), IUiController(), d(new UiControllerPrivate(core, this))
+    : Sublime::Controller(nullptr), IUiController()
+    , d_ptr(new UiControllerPrivate(core, this))
 {
+    Q_D(UiController);
+
     setObjectName(QStringLiteral("UiController"));
 
     if (!defaultMainWindow() || (Core::self()->setupFlags() & Core::NoUi))
         return;
 
     connect(qApp, &QApplication::focusChanged,
-            this, [&] (QWidget* old, QWidget* now) { d->widgetChanged(old, now); } );
+            this, [this] (QWidget* old, QWidget* now) { Q_D(UiController); d->widgetChanged(old, now); } );
 
     setupActions();
 }
@@ -278,6 +281,8 @@ void UiController::switchToArea(const QString &areaName, SwitchMode switchMode)
 
 QWidget* UiController::findToolView(const QString& name, IToolViewFactory *factory, FindFlags flags)
 {
+    Q_D(UiController);
+
     if(!d->areasRestored || !activeArea())
         return nullptr;
 
@@ -314,6 +319,8 @@ QWidget* UiController::findToolView(const QString& name, IToolViewFactory *facto
 
 void UiController::raiseToolView(QWidget* toolViewWidget)
 {
+    Q_D(UiController);
+
     if(!d->areasRestored)
         return;
 
@@ -328,6 +335,8 @@ void UiController::raiseToolView(QWidget* toolViewWidget)
 
 void UiController::addToolView(const QString & name, IToolViewFactory *factory, FindFlags state)
 {
+    Q_D(UiController);
+
     if (!factory)
         return;
 
@@ -374,6 +383,8 @@ void UiController::slotAreaChanged(Sublime::Area*)
 
 void UiController::slotActiveToolViewChanged(Sublime::View* view)
 {
+    Q_D(UiController);
+
     if (!view) {
         return;
     }
@@ -386,6 +397,8 @@ void UiController::slotActiveToolViewChanged(Sublime::View* view)
 
 void KDevelop::UiController::removeToolView(IToolViewFactory *factory)
 {
+    Q_D(UiController);
+
     if (!factory)
         return;
 
@@ -416,11 +429,15 @@ Sublime::Area *UiController::activeArea()
 
 Sublime::MainWindow *UiController::activeSublimeWindow()
 {
+    Q_D(UiController);
+
     return d->activeSublimeWindow;
 }
 
 MainWindow *UiController::defaultMainWindow()
 {
+    Q_D(UiController);
+
     return d->defaultMainWindow;
 }
 
@@ -440,6 +457,8 @@ void UiController::cleanup()
 
 void UiController::selectNewToolViewToAdd(MainWindow *mw)
 {
+    Q_D(UiController);
+
     if (!mw || !mw->area())
         return;
 
@@ -486,6 +505,8 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
 
 void UiController::addNewToolView(MainWindow *mw, QListWidgetItem* item)
 {
+    Q_D(UiController);
+
     auto *current = static_cast<ViewSelectorItem*>(item);
     Sublime::ToolDocument *doc = d->factoryDocuments[current->factory];
     Sublime::View *view = doc->createView();
@@ -616,6 +637,8 @@ void UiController::saveAllAreas(const KSharedConfigPtr& config)
 
 void UiController::loadAllAreas(const KSharedConfigPtr& config)
 {
+    Q_D(UiController);
+
     KConfigGroup uiConfig(config, "User Interface");
     int wc = uiConfig.readEntry("Main Windows Count", 1);
 
@@ -686,6 +709,8 @@ void UiController::loadAllAreas(const KSharedConfigPtr& config)
 
 void UiController::addToolViewToDockArea(IToolViewFactory* factory, Qt::DockWidgetArea area)
 {
+    Q_D(UiController);
+
     addToolViewToArea(factory, d->factoryDocuments.value(factory), activeArea(), Sublime::dockAreaToPosition(area));
 }
 
@@ -744,11 +769,15 @@ void UiController::showErrorMessage(const QString& message, int timeout)
 
 const QHash< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const
 {
+    Q_D(const UiController);
+
     return d->factoryDocuments;
 }
 
 QWidget* UiController::activeToolViewActionListener() const
 {
+    Q_D(const UiController);
+
     return d->activeActionListener;
 }
 

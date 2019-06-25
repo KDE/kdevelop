@@ -96,8 +96,10 @@ public:
 
 ProblemModel::ProblemModel(QObject * parent, ProblemStore *store)
   : QAbstractItemModel(parent)
-  , d(new ProblemModelPrivate(store))
+  , d_ptr(new ProblemModelPrivate(store))
 {
+    Q_D(ProblemModel);
+
     if (!d->m_problems) {
         d->m_problems.reset(new FilteredProblemStore());
         d->m_features = ScopeFilter | SeverityFilter | Grouping | CanByPassScopeFilter;
@@ -126,6 +128,8 @@ ProblemModel::~ ProblemModel()
 
 int ProblemModel::rowCount(const QModelIndex& parent) const
 {
+    Q_D(const ProblemModel);
+
     if (!parent.isValid()) {
         return d->m_problems->count();
     } else {
@@ -144,6 +148,8 @@ static QString displayUrl(const QUrl &url, const QUrl &base)
 
 QVariant ProblemModel::data(const QModelIndex& index, int role) const
 {
+    Q_D(const ProblemModel);
+
     if (!index.isValid())
         return QVariant();
 
@@ -220,6 +226,8 @@ QModelIndex ProblemModel::parent(const QModelIndex& index) const
 
 QModelIndex ProblemModel::index(int row, int column, const QModelIndex& parent) const
 {
+    Q_D(const ProblemModel);
+
     if (row < 0 || row >= rowCount(parent) || column < 0 || column >= LastColumn) {
         return QModelIndex();
     }
@@ -247,21 +255,29 @@ IProblem::Ptr ProblemModel::problemForIndex(const QModelIndex& index) const
 
 ProblemModel::Features ProblemModel::features() const
 {
+    Q_D(const ProblemModel);
+
     return d->m_features;
 }
 
 void ProblemModel::setFeatures(Features features)
 {
+    Q_D(ProblemModel);
+
     d->m_features = features;
 }
 
 QString ProblemModel::fullUpdateTooltip() const
 {
+    Q_D(const ProblemModel);
+
     return d->m_fullUpdateTooltip;
 }
 
 void ProblemModel::setFullUpdateTooltip(const QString& tooltip)
 {
+    Q_D(ProblemModel);
+
     if (d->m_fullUpdateTooltip == tooltip) {
         return;
     }
@@ -272,6 +288,8 @@ void ProblemModel::setFullUpdateTooltip(const QString& tooltip)
 
 void ProblemModel::setPlaceholderText(const QString& text, const KDevelop::DocumentRange& location, const QString& source)
 {
+    Q_D(ProblemModel);
+
     d->m_placeholderText = text;
     d->m_placeholderLocation = location;
     d->m_placeholderSource = source;
@@ -284,6 +302,8 @@ void ProblemModel::setPlaceholderText(const QString& text, const KDevelop::Docum
 
 void ProblemModel::addProblem(const IProblem::Ptr &problem)
 {
+    Q_D(ProblemModel);
+
     if (d->m_isPlaceholderShown) {
         setProblems({ problem });
     } else {
@@ -296,6 +316,8 @@ void ProblemModel::addProblem(const IProblem::Ptr &problem)
 
 void ProblemModel::setProblems(const QVector<IProblem::Ptr> &problems)
 {
+    Q_D(ProblemModel);
+
     beginResetModel();
     if (problems.isEmpty() && !d->m_placeholderText.isEmpty()) {
         d->m_problems->setProblems({ d->createPlaceholdreProblem() });
@@ -314,6 +336,8 @@ void ProblemModel::clearProblems()
 
 QVector<IProblem::Ptr> ProblemModel::problems(const KDevelop::IndexedString& document) const
 {
+    Q_D(const ProblemModel);
+
     return d->m_problems->problems(document);
 }
 
@@ -342,6 +366,8 @@ QVariant ProblemModel::headerData(int section, Qt::Orientation orientation, int 
 
 void ProblemModel::setCurrentDocument(IDocument* document)
 {
+    Q_D(ProblemModel);
+
     Q_ASSERT(thread() == QThread::currentThread());
 
     QUrl currentDocument = document->url();
@@ -351,6 +377,8 @@ void ProblemModel::setCurrentDocument(IDocument* document)
 
 void ProblemModel::closedDocument(IDocument* document)
 {
+    Q_D(ProblemModel);
+
     if (IndexedString(document->url()) == d->m_problems->currentDocument())
     {   // reset current document
         d->m_problems->setCurrentDocument(IndexedString());
@@ -369,18 +397,24 @@ void ProblemModel::onEndRebuild()
 
 void ProblemModel::setShowImports(bool showImports)
 {
+    Q_D(ProblemModel);
+
     Q_ASSERT(thread() == QThread::currentThread());
 
     d->m_problems->setShowImports(showImports);
 }
 
-bool ProblemModel::showImports()
+bool ProblemModel::showImports() const
 {
+    Q_D(const ProblemModel);
+
     return d->m_problems->showImports();
 }
 
 void ProblemModel::setScope(int scope)
 {
+    Q_D(ProblemModel);
+
     Q_ASSERT(thread() == QThread::currentThread());
 
     if (!features().testFlag(ScopeFilter))
@@ -408,6 +442,8 @@ void ProblemModel::setSeverity(int severity)
 
 void ProblemModel::setSeverities(KDevelop::IProblem::Severities severities)
 {
+    Q_D(ProblemModel);
+
     Q_ASSERT(thread() == QThread::currentThread());
     /// Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
     d->m_problems->setSeverities(severities);
@@ -415,12 +451,16 @@ void ProblemModel::setSeverities(KDevelop::IProblem::Severities severities)
 
 void ProblemModel::setGrouping(int grouping)
 {
+    Q_D(ProblemModel);
+
     /// Will trigger signals beginRebuild(), endRebuild() if problems change and are rebuilt
     d->m_problems->setGrouping(grouping);
 }
 
 ProblemStore* ProblemModel::store() const
 {
+    Q_D(const ProblemModel);
+
     return d->m_problems.data();
 }
 

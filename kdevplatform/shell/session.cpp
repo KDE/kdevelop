@@ -77,7 +77,7 @@ public:
 
 Session::Session( const QString& id, QObject* parent )
         : ISession(parent)
-        , d( new SessionPrivate( this, id ) )
+        , d_ptr(new SessionPrivate(this, id))
 {
 }
 
@@ -85,36 +85,50 @@ Session::~Session() = default;
 
 QString Session::name() const
 {
+    Q_D(const Session);
+
     return d->info.name;
 }
 
 QList<QUrl> Session::containedProjects() const
 {
+    Q_D(const Session);
+
     return d->info.projects;
 }
 
 QString Session::description() const
 {
+    Q_D(const Session);
+
     return d->info.description;
 }
 
 QUrl Session::pluginDataArea( const IPlugin* p )
 {
+    Q_D(Session);
+
     return d->pluginArea( p );
 }
 
 KSharedConfigPtr Session::config()
 {
+    Q_D(Session);
+
     return d->info.config;
 }
 
 QUuid Session::id() const
 {
+    Q_D(const Session);
+
     return d->info.uuid;
 }
 
 void Session::setName( const QString& newname )
 {
+    Q_D(Session);
+
     d->info.name = newname;
     d->info.config->group( QString() ).writeEntry( cfgSessionNameEntry, newname );
     d->updateDescription();
@@ -122,6 +136,8 @@ void Session::setName( const QString& newname )
 
 void Session::setContainedProjects( const QList<QUrl>& projects )
 {
+    Q_D(Session);
+
     d->info.projects = projects;
     d->info.config->group( cfgSessionOptionsGroup ).writeEntry( cfgSessionProjectsEntry, projects );
     d->updateDescription();
@@ -129,16 +145,22 @@ void Session::setContainedProjects( const QList<QUrl>& projects )
 
 void Session::setTemporary(bool temp)
 {
+    Q_D(Session);
+
     d->isTemporary = temp;
 }
 
 bool Session::isTemporary() const
 {
+    Q_D(const Session);
+
     return d->isTemporary;
 }
 
 QString Session::path() const
 {
+    Q_D(const Session);
+
     return d->info.path;
 }
 

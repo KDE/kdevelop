@@ -32,7 +32,7 @@ public:
 
 ProblemModelSet::ProblemModelSet(QObject *parent)
     : QObject(parent)
-    , d(new ProblemModelSetPrivate())
+    , d_ptr(new ProblemModelSetPrivate())
 {
 }
 
@@ -40,6 +40,8 @@ ProblemModelSet::~ProblemModelSet() = default;
 
 void ProblemModelSet::addModel(const QString &id, const QString &name, ProblemModel *model)
 {
+    Q_D(ProblemModelSet);
+
     ModelData m{id, name, model};
 
     d->data.push_back(m);
@@ -51,6 +53,8 @@ void ProblemModelSet::addModel(const QString &id, const QString &name, ProblemMo
 
 ProblemModel* ProblemModelSet::findModel(const QString &id) const
 {
+    Q_D(const ProblemModelSet);
+
     auto it = std::find_if(d->data.constBegin(), d->data.constEnd(), [&](const ModelData& data) {
         return (data.id == id);
     });
@@ -60,6 +64,8 @@ ProblemModel* ProblemModelSet::findModel(const QString &id) const
 
 void ProblemModelSet::removeModel(const QString &id)
 {
+    Q_D(ProblemModelSet);
+
     QVector<ModelData>::iterator itr = d->data.begin();
 
     while (itr != d->data.end()) {
@@ -77,6 +83,8 @@ void ProblemModelSet::removeModel(const QString &id)
 
 void ProblemModelSet::showModel(const QString &id)
 {
+    Q_D(ProblemModelSet);
+
     for (const ModelData &data : qAsConst(d->data)) {
         if (data.id == id) {
             emit showRequested(data.id);
@@ -87,6 +95,8 @@ void ProblemModelSet::showModel(const QString &id)
 
 QVector<ModelData> ProblemModelSet::models() const
 {
+    Q_D(const ProblemModelSet);
+
     return d->data;
 }
 

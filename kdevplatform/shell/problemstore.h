@@ -31,6 +31,7 @@ namespace KDevelop
 class WatchedDocumentSet;
 class ProblemStoreNode;
 class IndexedString;
+class ProblemStorePrivate;
 
 /**
  * @brief Stores and handles problems. Does no ordering or filtering, those should be done in subclasses.
@@ -148,10 +149,11 @@ private Q_SLOTS:
     virtual void onDocumentSetChanged();
 
 protected:
-    ProblemStoreNode* rootNode();
+    ProblemStoreNode* rootNode() const;
 
 private:
-    const QScopedPointer<class ProblemStorePrivate> d;
+    const QScopedPointer<class ProblemStorePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ProblemStore)
 };
 
 }

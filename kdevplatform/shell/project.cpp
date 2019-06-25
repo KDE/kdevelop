@@ -141,17 +141,22 @@ public:
     Path developerFile;
     QString developerTempFile;
     QTemporaryFile projectTempFile;
-    IPlugin* manager;
+    IPlugin* manager = nullptr;
     QPointer<IPlugin> vcsPlugin;
-    ProjectFolderItem* topItem;
+    ProjectFolderItem* topItem = nullptr;
     QString name;
     KSharedConfigPtr m_cfg;
-    IProject *project;
+    Project * const project;
     QSet<KDevelop::IndexedString> fileSet;
-    bool loading;
+    bool loading = false;
     bool fullReload;
-    bool scheduleReload;
+    bool scheduleReload = false;
     ProjectProgress* progress;
+
+public:
+    explicit ProjectPrivate(Project* project)
+        : project(project)
+    {}
 
     void reloadDone(KJob* job)
     {
@@ -411,49 +416,60 @@ public:
 
 Project::Project( QObject *parent )
         : IProject( parent )
-        , d( new ProjectPrivate )
+        , d_ptr(new ProjectPrivate(this))
 {
-    d->project = this;
-    d->manager = nullptr;
-    d->topItem = nullptr;
-    d->loading = false;
-    d->scheduleReload = false;
+    Q_D(Project);
+
     d->progress = new ProjectProgress;
     Core::self()->uiController()->registerStatus( d->progress );
 }
 
 Project::~Project()
 {
+    Q_D(Project);
+
     delete d->progress;
 }
 
 QString Project::name() const
 {
+    Q_D(const Project);
+
     return d->name;
 }
 
 QString Project::developerTempFile() const
 {
+    Q_D(const Project);
+
     return d->developerTempFile;
 }
 
 QString Project::projectTempFile() const
 {
+    Q_D(const Project);
+
     return d->projectTempFile.fileName();
 }
 
 KSharedConfigPtr Project::projectConfiguration() const
 {
+    Q_D(const Project);
+
     return d->m_cfg;
 }
 
 Path Project::path() const
 {
+    Q_D(const Project);
+
     return d->projectPath;
 }
 
 void Project::reloadModel()
 {
+    Q_D(Project);
+
     if (d->loading) {
         d->scheduleReload = true;
         return;
@@ -482,14 +498,19 @@ void Project::reloadModel()
 
 void Project::setReloadJob(KJob* job)
 {
+    Q_D(Project);
+
     d->loading = true;
     d->fullReload = false;
     d->progress->setBuzzy();
-    connect(job, &KJob::finished, this, [&] (KJob* job) { d->reloadDone(job); });
+    connect(job, &KJob::finished,
+            this, [this] (KJob* job) { Q_D(Project); d->reloadDone(job); });
 }
 
 bool Project::open( const Path& projectFile )
 {
+    Q_D(Project);
+
     d->initProject(projectFile);
     if (!d->initProjectFiles())
         return false;
@@ -515,13 +536,16 @@ bool Project::open( const Path& projectFile )
     d->loadVersionControlPlugin(projectGroup);
     d->progress->setBuzzy();
     KJob* importJob = iface->createImportJob(d->topItem );
-    connect( importJob, &KJob::result, this, [&] (KJob* job) { d->importDone(job); } );
+    connect(importJob, &KJob::result,
+            this, [this] (KJob* job) { Q_D(Project); d->importDone(job); } );
     Core::self()->runController()->registerJob( importJob );
     return true;
 }
 
 void Project::close()
 {
+    Q_D(Project);
+
     Q_ASSERT(d->topItem);
     if (d->topItem->row() == -1) {
         qCWarning(SHELL) << "Something went wrong. ProjectFolderItem detached. Project closed during reload?";
@@ -546,6 +570,8 @@ void Project::close()
 
 bool Project::inProject( const IndexedString& path ) const
 {
+    Q_D(const Project);
+
     if (d->fileSet.contains( path )) {
         return true;
     }
@@ -554,11 +580,15 @@ bool Project::inProject( const IndexedString& path ) const
 
 QList< ProjectBaseItem* > Project::itemsForPath(const IndexedString& path) const
 {
+    Q_D(const Project);
+
     return d->itemsForPath(path);
 }
 
 QList< ProjectFileItem* > Project::filesForPath(const IndexedString& file) const
 {
+    Q_D(const Project);
+
     QList<ProjectFileItem*> fileItems;
     const auto items = d->itemsForPath(file);
     for (ProjectBaseItem* item : items) {
@@ -570,6 +600,8 @@ QList< ProjectFileItem* > Project::filesForPath(const IndexedString& file) const
 
 QList<ProjectFolderItem*> Project::foldersForPath(const IndexedString& folder) const
 {
+    Q_D(const Project);
+
     QList<ProjectFolderItem*> folderItems;
     const auto items = d->itemsForPath(folder);
     for (ProjectBaseItem* item : items) {
@@ -581,46 +613,64 @@ QList<ProjectFolderItem*> Project::foldersForPath(const IndexedString& folder) c
 
 IProjectFileManager* Project::projectFileManager() const
 {
+    Q_D(const Project);
+
     return d->manager->extension<IProjectFileManager>();
 }
 
 IBuildSystemManager* Project::buildSystemManager() const
 {
+    Q_D(const Project);
+
     return d->manager->extension<IBuildSystemManager>();
 }
 
 IPlugin* Project::managerPlugin() const
 {
-  return d->manager;
+    Q_D(const Project);
+
+    return d->manager;
 }
 
 void Project::setManagerPlugin( IPlugin* manager )
 {
+    Q_D(Project);
+
     d->manager = manager;
 }
 
 Path Project::projectFile() const
 {
+    Q_D(const Project);
+
     return d->projectFile;
 }
 
 Path Project::developerFile() const
 {
+    Q_D(const Project);
+
     return d->developerFile;
 }
 
 ProjectFolderItem* Project::projectItem() const
 {
+    Q_D(const Project);
+
     return d->topItem;
 }
 
 IPlugin* Project::versionControlPlugin() const
 {
+    Q_D(const Project);
+
     return d->vcsPlugin.data();
 }
 
 void Project::addToFileSet( ProjectFileItem* file )
 {
+    Q_D(Project);
+
     if (d->fileSet.contains(file->indexedPath())) {
         return;
     }
@@ -631,6 +681,8 @@ void Project::addToFileSet( ProjectFileItem* file )
 
 void Project::removeFromFileSet( ProjectFileItem* file )
 {
+    Q_D(Project);
+
     QSet<IndexedString>::iterator it = d->fileSet.find(file->indexedPath());
     if (it == d->fileSet.end()) {
         return;
@@ -642,11 +694,15 @@ void Project::removeFromFileSet( ProjectFileItem* file )
 
 QSet<IndexedString> Project::fileSet() const
 {
+    Q_D(const Project);
+
     return d->fileSet;
 }
 
 bool Project::isReady() const
 {
+    Q_D(const Project);
+
     return !d->loading;
 }
 

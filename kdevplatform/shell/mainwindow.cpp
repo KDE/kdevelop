@@ -87,6 +87,8 @@ QColor colorForDocument(const QUrl& url, const QPalette& palette, const QColor& 
 
 void MainWindow::applyMainWindowSettings(const KConfigGroup& config)
 {
+    Q_D(MainWindow);
+
     if(!d->changingActiveView())
         KXmlGuiWindow::applyMainWindowSettings(config);
 }
@@ -137,7 +139,9 @@ MainWindow::MainWindow( Sublime::Controller *parent, Qt::WindowFlags flags )
     initializeCorners();
 
     setObjectName( QStringLiteral("MainWindow") );
-    d = new MainWindowPrivate(this);
+    d_ptr = new MainWindowPrivate(this);
+
+    Q_D(MainWindow);
 
     setStandardToolBarMenuEnabled( true );
     d->setupActions();
@@ -157,16 +161,20 @@ MainWindow::~ MainWindow()
         Core::self()->shutdown();
     }
 
-    delete d;
+    delete d_ptr;
 }
 
 KTextEditorIntegration::MainWindow *MainWindow::kateWrapper() const
 {
+    Q_D(const MainWindow);
+
     return d->kateWrapper();
 }
 
 void MainWindow::split(Qt::Orientation orientation)
 {
+    Q_D(MainWindow);
+
     d->split(orientation);
 }
 
@@ -339,6 +347,8 @@ void MainWindow::shortcutsChanged()
 
 void MainWindow::initialize()
 {
+    Q_D(MainWindow);
+
     KStandardAction::keyBindings(this, SLOT(configureShortcuts()), actionCollection());
     setupGUI( KXmlGuiWindow::ToolBar | KXmlGuiWindow::Create | KXmlGuiWindow::Save );
 
@@ -417,6 +427,8 @@ bool MainWindow::queryClose()
 
 void MainWindow::documentActivated(const QPointer<KTextEditor::Document>& textDocument)
 {
+    Q_D(MainWindow);
+
     updateCaption();
 
     // update active document connection
@@ -511,37 +523,51 @@ void MainWindow::updateTabColor(IDocument* doc)
 
 void MainWindow::registerStatus(QObject* status)
 {
+    Q_D(MainWindow);
+
     d->registerStatus(status);
 }
 
 void MainWindow::initializeStatusBar()
 {
+    Q_D(MainWindow);
+
     d->setupStatusBar();
 }
 
 void MainWindow::showErrorMessage(const QString& message, int timeout)
 {
+    Q_D(MainWindow);
+
     d->showErrorMessage(message, timeout);
 }
 
 void MainWindow::tabContextMenuRequested(Sublime::View* view, QMenu* menu)
 {
+    Q_D(MainWindow);
+
     Sublime::MainWindow::tabContextMenuRequested(view, menu);
     d->tabContextMenuRequested(view, menu);
 }
 
 void MainWindow::tabToolTipRequested(Sublime::View* view, Sublime::Container* container, int tab)
 {
+    Q_D(MainWindow);
+
     d->tabToolTipRequested(view, container, tab);
 }
 
 void MainWindow::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position)
 {
+    Q_D(MainWindow);
+
     d->dockBarContextMenuRequested(area, position);
 }
 
 void MainWindow::newTabRequested()
 {
+    Q_D(MainWindow);
+
     Sublime::MainWindow::newTabRequested();
 
     d->fileNew();

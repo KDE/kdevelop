@@ -27,6 +27,8 @@
 namespace KDevelop
 {
 
+class CheckerStatusPrivate;
+
 /**
 * Status / Progress reporter for checker tools. It shows a progress bar as more and more items are checked.
 * As part of initialization the max. number of items have to be set, and then when an item is checked that has to be indicated to the class. When stopped the progressbar first filled up to max, then it disappears.
@@ -87,7 +89,8 @@ Q_SIGNALS:
     void showProgress(KDevelop::IStatus*, int minimum, int maximum, int value) override;
 
 private:
-    const QScopedPointer<class CheckerStatusPrivate> d;
+    const QScopedPointer<class CheckerStatusPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(CheckerStatus)
 };
 
 }

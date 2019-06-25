@@ -25,6 +25,7 @@
 #include "shellexport.h"
 
 namespace KDevelop {
+class TestControllerPrivate;
 
 class KDEVPLATFORMSHELL_EXPORT TestController : public KDevelop::ITestController
 {
@@ -48,7 +49,8 @@ public:
     void notifyTestRunStarted(KDevelop::ITestSuite* suite, const QStringList& test_cases) override;
 
 private:
-    const QScopedPointer<class TestControllerPrivate> d;
+    const QScopedPointer<class TestControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TestController)
 };
 
 }

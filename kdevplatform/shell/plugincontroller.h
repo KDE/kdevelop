@@ -56,7 +56,7 @@ public:
      * Get the plugin instance based on the ID. The ID should be whatever is
      * in X-KDE-PluginInfo-Name
      */
-    IPlugin* plugin( const QString& );
+    IPlugin* plugin(const QString& pluginId) const;
 
     /**
      * Get the plugin info for a loaded plugin
@@ -126,7 +126,7 @@ public:
 
     QList<ContextMenuExtension> queryPluginsForContextMenuExtensions(KDevelop::Context* context, QWidget* parent) const override;
 
-    QStringList projectPlugins();
+    QStringList projectPlugins() const;
 
     void loadProjectPlugins();
     void unloadProjectPlugins();
@@ -172,7 +172,8 @@ private:
     virtual void initialize();
 
 private:
-    const QScopedPointer<class PluginControllerPrivate> d;
+    const QScopedPointer<class PluginControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(PluginController)
 };
 
 }

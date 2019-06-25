@@ -28,6 +28,7 @@
 namespace KDevelop {
 
 class ILanguageSupport;
+class LanguageControllerPrivate;
 
 class KDEVPLATFORMSHELL_EXPORT LanguageController : public ILanguageController {
     Q_OBJECT
@@ -68,7 +69,8 @@ protected:
     void addLanguageSupport(KDevelop::ILanguageSupport* languageSupport, const QStringList& mimetypes);
 
 private:
-    const QScopedPointer<class LanguageControllerPrivate> d;
+    const QScopedPointer<class LanguageControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(LanguageController)
 };
 
 }

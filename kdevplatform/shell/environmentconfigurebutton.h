@@ -28,6 +28,7 @@ namespace KDevelop
 {
 
 class EnvironmentSelectionWidget;
+class EnvironmentConfigureButtonPrivate;
 
 /**
  * A tool button that shows a dialog to configure the environment settings.
@@ -52,7 +53,9 @@ Q_SIGNALS:
     void environmentConfigured();
 
 private:
-    const QScopedPointer<class EnvironmentConfigureButtonPrivate> d;
+    const QScopedPointer<class EnvironmentConfigureButtonPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(EnvironmentConfigureButton)
+
     friend class EnvironmentConfigureButtonPrivate;
 };
 

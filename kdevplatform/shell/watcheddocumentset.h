@@ -35,6 +35,7 @@ class IDocument;
 class IProject;
 class ProjectFileItem;
 class Path;
+class WatchedDocumentSetPrivate;
 
 /**
  * Helper class that tracks set of documents and notifies its owner whenever this set changes. Derived classes implement different tracking strategies.
@@ -61,7 +62,8 @@ Q_SIGNALS:
     void changed();
 
 protected:
-    const QScopedPointer<class WatchedDocumentSetPrivate> d;
+    const QScopedPointer<class WatchedDocumentSetPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(WatchedDocumentSet)
 };
 
 /**

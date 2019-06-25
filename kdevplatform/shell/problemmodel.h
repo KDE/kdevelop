@@ -32,6 +32,7 @@ namespace KDevelop {
     class IDocument;
 class IndexedString;
 class ProblemStore;
+class ProblemModelPrivate;
 
 /**
  * @brief Wraps a ProblemStore and adds the QAbstractItemModel interface, so the it can be used in a model/view architecture.
@@ -149,7 +150,7 @@ public:
     Features features() const;
 
     /// Retrieve 'show imports' filter setting
-    bool showImports();
+    bool showImports() const;
 
     /// Set the supported features
     void setFeatures(Features features);
@@ -213,7 +214,8 @@ protected:
     ProblemStore *store() const;
 
 private:
-    const QScopedPointer<class ProblemModelPrivate> d;
+    const QScopedPointer<class ProblemModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ProblemModel)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ProblemModel::Features)

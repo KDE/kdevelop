@@ -33,6 +33,8 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+class SessionControllerPrivate;
+
 struct SessionRunInfo
 {
     SessionRunInfo()
@@ -165,7 +167,8 @@ Q_SIGNALS:
     void quitSession();
 
 private:
-    const QScopedPointer<class SessionControllerPrivate> d;
+    const QScopedPointer<class SessionControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(SessionController)
 };
 
 

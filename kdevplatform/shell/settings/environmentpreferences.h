@@ -24,6 +24,7 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop
 {
+class EnvironmentPreferencesPrivate;
 
 class EnvironmentPreferences : public ConfigPage
 {
@@ -41,7 +42,8 @@ public:
     void defaults() override;
 
 private:
-    const QScopedPointer<class EnvironmentPreferencesPrivate> d;
+    const QScopedPointer<class EnvironmentPreferencesPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(EnvironmentPreferences)
 };
 
 }

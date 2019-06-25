@@ -37,7 +37,7 @@ public:
 
 
 CheckerStatus::CheckerStatus() :
-    d(new CheckerStatusPrivate())
+    d_ptr(new CheckerStatusPrivate())
 {
 }
 
@@ -45,21 +45,29 @@ CheckerStatus::~CheckerStatus() = default;
 
 QString CheckerStatus::statusName() const
 {
+    Q_D(const CheckerStatus);
+
     return i18nc("@info:progress", "Running %1", d->m_name);
 }
 
 void CheckerStatus::setCheckerName(const QString &name)
 {
+    Q_D(CheckerStatus);
+
     d->m_name = name;
 }
 
 void CheckerStatus::setMaxItems(int maxItems)
 {
+    Q_D(CheckerStatus);
+
     d->m_maxItems = maxItems;
 }
 
 void CheckerStatus::itemChecked()
 {
+    Q_D(CheckerStatus);
+
     if (d->m_checkedItems >= d->m_maxItems)
         return;
 
@@ -69,12 +77,16 @@ void CheckerStatus::itemChecked()
 
 void CheckerStatus::start()
 {
+    Q_D(CheckerStatus);
+
     d->m_checkedItems = 0;
     emit showProgress(this, 0, d->m_maxItems, d->m_checkedItems);
 }
 
 void CheckerStatus::stop()
 {
+    Q_D(CheckerStatus);
+
     emit clearMessage(this);
     emit showProgress(this, 0, d->m_maxItems, d->m_maxItems);
     emit hideProgress(this);

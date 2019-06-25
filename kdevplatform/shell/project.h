@@ -43,6 +43,7 @@ class IProjectFileManager;
 class IBuildSystemManager;
 class ProjectFileItem;
 class PersistentHash;
+class ProjectPrivate;
 
 /**
  * \brief Object which represents a KDevelop project
@@ -132,7 +133,8 @@ Q_SIGNALS:
     void aboutToOpen(KDevelop::IProject*);
 
 private:
-    const QScopedPointer<class ProjectPrivate> d;
+    const QScopedPointer<class ProjectPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Project)
 };
 
 } // namespace KDevelop

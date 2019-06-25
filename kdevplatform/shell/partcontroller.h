@@ -51,6 +51,7 @@ Q_DECLARE_METATYPE(KSharedConfigPtr)
 
 namespace KDevelop
 {
+class PartControllerPrivate;
 
 class KDEVPLATFORMSHELL_EXPORT PartController : public IPartController
 {
@@ -104,7 +105,8 @@ private:
     void setupActions();
 
 private:
-    const QScopedPointer<class PartControllerPrivate> d;
+    const QScopedPointer<class PartControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(PartController)
 };
 
 }

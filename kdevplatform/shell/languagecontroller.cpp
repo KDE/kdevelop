@@ -133,7 +133,7 @@ void LanguageControllerPrivate::addLanguageSupport(KDevelop::ILanguageSupport* l
 
 LanguageController::LanguageController(QObject *parent)
     : ILanguageController(parent)
-    , d(new LanguageControllerPrivate(this))
+    , d_ptr(new LanguageControllerPrivate(this))
 {
     setObjectName(QStringLiteral("LanguageController"));
 }
@@ -142,6 +142,8 @@ LanguageController::~LanguageController() = default;
 
 void LanguageController::initialize()
 {
+    Q_D(LanguageController);
+
     d->backgroundParser->loadSettings();
     d->staticAssistantsManager = new StaticAssistantsManager(this);
 
@@ -149,17 +151,21 @@ void LanguageController::initialize()
     DUChain::self();
 
     connect(Core::self()->documentController(), &IDocumentController::documentActivated,
-            this, [&] (IDocument* document) { d->documentActivated(document); });
+            this, [this] (IDocument* document) { Q_D(LanguageController); d->documentActivated(document); });
 }
 
 void LanguageController::cleanup()
 {
+    Q_D(LanguageController);
+
     QMutexLocker lock(&d->dataMutex);
     d->m_cleanedUp = true;
 }
 
 QList<ILanguageSupport*> LanguageController::activeLanguages()
 {
+    Q_D(LanguageController);
+
     QMutexLocker lock(&d->dataMutex);
 
     return d->activeLanguages;
@@ -167,6 +173,8 @@ QList<ILanguageSupport*> LanguageController::activeLanguages()
 
 StaticAssistantsManager* LanguageController::staticAssistantsManager() const
 {
+    Q_D(const LanguageController);
+
     return d->staticAssistantsManager;
 }
 
@@ -177,11 +185,15 @@ ICompletionSettings *LanguageController::completionSettings() const
 
 ProblemModelSet* LanguageController::problemModelSet() const
 {
+    Q_D(const LanguageController);
+
     return d->problemModelSet;
 }
 
 QList<ILanguageSupport*> LanguageController::loadedLanguages() const
 {
+    Q_D(const LanguageController);
+
     QMutexLocker lock(&d->dataMutex);
     QList<ILanguageSupport*> ret;
 
@@ -197,6 +209,8 @@ QList<ILanguageSupport*> LanguageController::loadedLanguages() const
 
 ILanguageSupport* LanguageController::language(const QString &name) const
 {
+    Q_D(const LanguageController);
+
     QMutexLocker lock(&d->dataMutex);
 
     if(d->m_cleanedUp)
@@ -230,7 +244,7 @@ ILanguageSupport* LanguageController::language(const QString &name) const
     if(!supports.isEmpty()) {
         auto *languageSupport = supports[0]->extension<ILanguageSupport>();
         if(languageSupport) {
-            d->addLanguageSupport(languageSupport);
+            const_cast<LanguageControllerPrivate*>(d)->addLanguageSupport(languageSupport);
             return languageSupport;
         }
     }
@@ -250,6 +264,8 @@ bool isNumeric(const QString& str)
 
 QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
 {
+    Q_D(LanguageController);
+
     QMutexLocker lock(&d->dataMutex);
 
     QList<ILanguageSupport*> languages;
@@ -318,6 +334,8 @@ QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
 
 QList<ILanguageSupport*> LanguageController::languagesForMimetype(const QString& mimetype)
 {
+    Q_D(LanguageController);
+
     QMutexLocker lock(&d->dataMutex);
 
     QList<ILanguageSupport*> languages;
@@ -348,6 +366,8 @@ QList<ILanguageSupport*> LanguageController::languagesForMimetype(const QString&
 
 QList<QString> LanguageController::mimetypesForLanguageName(const QString& languageName)
 {
+    Q_D(LanguageController);
+
     QMutexLocker lock(&d->dataMutex);
 
     QList<QString> mimetypes;
@@ -364,11 +384,15 @@ QList<QString> LanguageController::mimetypesForLanguageName(const QString& langu
 
 BackgroundParser *LanguageController::backgroundParser() const
 {
+    Q_D(const LanguageController);
+
     return d->backgroundParser;
 }
 
 void LanguageController::addLanguageSupport(ILanguageSupport* languageSupport, const QStringList& mimetypes)
 {
+    Q_D(LanguageController);
+
     d->addLanguageSupport(languageSupport, mimetypes);
 }
 

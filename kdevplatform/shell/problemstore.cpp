@@ -56,13 +56,15 @@ public:
 
 ProblemStore::ProblemStore(QObject *parent)
     : QObject(parent),
-      d(new ProblemStorePrivate)
+      d_ptr(new ProblemStorePrivate)
 {
     setScope(BypassScopeFilter);
 }
 
 ProblemStore::~ProblemStore()
 {
+    Q_D(ProblemStore);
+
     clear();
 
     delete d->m_rootNode;
@@ -70,6 +72,8 @@ ProblemStore::~ProblemStore()
 
 void ProblemStore::addProblem(const IProblem::Ptr &problem)
 {
+    Q_D(ProblemStore);
+
     ProblemNode *node = new ProblemNode(d->m_rootNode);
     node->setProblem(problem);
     d->m_rootNode->addChild(node);
@@ -80,6 +84,8 @@ void ProblemStore::addProblem(const IProblem::Ptr &problem)
 
 void ProblemStore::setProblems(const QVector<IProblem::Ptr> &problems)
 {
+    Q_D(ProblemStore);
+
     int oldSize = d->m_allProblems.size();
 
     // set signals block to prevent problemsChanged() emitting during clean
@@ -102,6 +108,8 @@ void ProblemStore::setProblems(const QVector<IProblem::Ptr> &problems)
 
 QVector<IProblem::Ptr> ProblemStore::problems(const KDevelop::IndexedString& document) const
 {
+    Q_D(const ProblemStore);
+
     QVector<IProblem::Ptr> documentProblems;
 
     for (auto& problem : qAsConst(d->m_allProblems)) {
@@ -114,12 +122,16 @@ QVector<IProblem::Ptr> ProblemStore::problems(const KDevelop::IndexedString& doc
 
 const ProblemStoreNode* ProblemStore::findNode(int row, ProblemStoreNode *parent) const
 {
+    Q_D(const ProblemStore);
+
     Q_UNUSED(parent);
     return d->m_rootNode->child(row);
 }
 
 int ProblemStore::count(ProblemStoreNode *parent) const
 {
+    Q_D(const ProblemStore);
+
     if(parent)
         return parent->count();
     else
@@ -128,6 +140,8 @@ int ProblemStore::count(ProblemStoreNode *parent) const
 
 void ProblemStore::clear()
 {
+    Q_D(ProblemStore);
+
     d->m_rootNode->clear();
 
     if (!d->m_allProblems.isEmpty()) {
@@ -158,6 +172,8 @@ void ProblemStore::setSeverity(int severity)
 
 void ProblemStore::setSeverities(KDevelop::IProblem::Severities severities)
 {
+    Q_D(ProblemStore);
+
     if(severities != d->m_severities)
     {
         d->m_severities = severities;
@@ -168,6 +184,8 @@ void ProblemStore::setSeverities(KDevelop::IProblem::Severities severities)
 
 int ProblemStore::severity() const
 {
+    Q_D(const ProblemStore);
+
     if (d->m_severities.testFlag(KDevelop::IProblem::Hint))
         return KDevelop::IProblem::Hint;
     if (d->m_severities.testFlag(KDevelop::IProblem::Warning))
@@ -179,16 +197,22 @@ int ProblemStore::severity() const
 
 KDevelop::IProblem::Severities ProblemStore::severities() const
 {
+    Q_D(const ProblemStore);
+
     return d->m_severities;
 }
 
 WatchedDocumentSet* ProblemStore::documents() const
 {
+    Q_D(const ProblemStore);
+
     return d->m_documents;
 }
 
 void ProblemStore::setScope(int scope)
 {
+    Q_D(ProblemStore);
+
     auto cast_scope = static_cast<ProblemScope>(scope);
     bool showImports = false;
 
@@ -229,6 +253,8 @@ void ProblemStore::setScope(int scope)
 
 int ProblemStore::scope() const
 {
+    Q_D(const ProblemStore);
+
     Q_ASSERT(d->m_documents);
 
     return d->m_documents->scope();
@@ -241,16 +267,22 @@ void ProblemStore::setGrouping(int grouping)
 
 void ProblemStore::setShowImports(bool showImports)
 {
+    Q_D(ProblemStore);
+
     d->m_documents->setShowImports(showImports);
 }
 
 int ProblemStore::showImports() const
 {
+    Q_D(const ProblemStore);
+
     return d->m_documents->showImports();
 }
 
 void ProblemStore::setCurrentDocument(const IndexedString &doc)
 {
+    Q_D(ProblemStore);
+
     d->m_currentDocument = doc;
     d->m_documents->setCurrentDocument(doc);
 }
@@ -258,6 +290,8 @@ void ProblemStore::setCurrentDocument(const IndexedString &doc)
 
 const KDevelop::IndexedString& ProblemStore::currentDocument() const
 {
+    Q_D(const ProblemStore);
+
     return d->m_currentDocument;
 }
 
@@ -269,8 +303,10 @@ void ProblemStore::onDocumentSetChanged()
     emit changed();
 }
 
-ProblemStoreNode* ProblemStore::rootNode()
+ProblemStoreNode* ProblemStore::rootNode() const
 {
+    Q_D(const ProblemStore);
+
     return d->m_rootNode;
 }
 

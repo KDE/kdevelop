@@ -302,8 +302,10 @@ public:
 
 RunController::RunController(QObject *parent)
     : IRunController(parent)
-    , d(new RunControllerPrivate)
+    , d_ptr(new RunControllerPrivate)
 {
+    Q_D(RunController);
+
     setObjectName(QStringLiteral("RunController"));
 
     QDBusConnection::sessionBus().registerObject(QStringLiteral("/org/kdevelop/RunController"),
@@ -334,6 +336,8 @@ RunController::~RunController() = default;
 
 void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 {
+    Q_D(RunController);
+
     const auto actions = d->currentTargetAction->actions();
     for (QAction* a : actions) {
         if( static_cast<LaunchConfiguration*>( a->data().value<void*>() ) == l )
@@ -346,6 +350,8 @@ void KDevelop::RunController::launchChanged( LaunchConfiguration* l )
 
 void RunController::cleanup()
 {
+    Q_D(RunController);
+
     delete d->executeMode;
     d->executeMode = nullptr;
     delete d->profileMode;
@@ -359,6 +365,8 @@ void RunController::cleanup()
 
 void RunController::initialize()
 {
+    Q_D(RunController);
+
     d->executeMode = new ExecuteMode();
     addLaunchMode( d->executeMode );
     d->profileMode = new ProfileMode();
@@ -423,6 +431,8 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
 
 void RunController::setupActions()
 {
+    Q_D(RunController);
+
     QAction* action;
 
     // TODO not multi-window friendly, FIXME
@@ -490,17 +500,23 @@ void RunController::setupActions()
 
 LaunchConfigurationType* RunController::launchConfigurationTypeForId( const QString& id )
 {
+    Q_D(RunController);
+
     return d->launchConfigurationTypeForId( id );
 }
 
 void KDevelop::RunController::slotProjectOpened(KDevelop::IProject * project)
 {
+    Q_D(RunController);
+
     d->readLaunchConfigs( project->projectConfiguration(), project );
     d->updateCurrentLaunchAction();
 }
 
 void KDevelop::RunController::slotProjectClosing(KDevelop::IProject * project)
 {
+    Q_D(RunController);
+
     if (!d->currentTargetAction) return;
 
     const auto actions = d->currentTargetAction->actions();
@@ -526,6 +542,8 @@ void KDevelop::RunController::slotRefreshProject(KDevelop::IProject* project)
 
 void RunController::slotDebug()
 {
+    Q_D(RunController);
+
     if (d->launchConfigurations.isEmpty()) {
         showConfigurationDialog();
     }
@@ -537,6 +555,8 @@ void RunController::slotDebug()
 
 void RunController::slotProfile()
 {
+    Q_D(RunController);
+
     if (d->launchConfigurations.isEmpty()) {
         showConfigurationDialog();
     }
@@ -548,6 +568,8 @@ void RunController::slotProfile()
 
 void RunController::slotExecute()
 {
+    Q_D(RunController);
+
     if (d->launchConfigurations.isEmpty()) {
         showConfigurationDialog();
     }
@@ -565,6 +587,8 @@ void KDevelop::RunController::showConfigurationDialog() const
 
 LaunchConfiguration* KDevelop::RunController::defaultLaunch() const
 {
+    Q_D(const RunController);
+
     QAction* projectAction = d->currentTargetAction->currentAction();
     if( projectAction )
         return static_cast<LaunchConfiguration*>(qvariant_cast<void*>(projectAction->data()));
@@ -573,6 +597,8 @@ LaunchConfiguration* KDevelop::RunController::defaultLaunch() const
 
 void KDevelop::RunController::registerJob(KJob * job)
 {
+    Q_D(RunController);
+
     if (!job)
         return;
 
@@ -612,6 +638,8 @@ void KDevelop::RunController::registerJob(KJob * job)
 
 void KDevelop::RunController::unregisterJob(KJob * job)
 {
+    Q_D(RunController);
+
     IRunController::unregisterJob(job);
 
     Q_ASSERT(d->jobs.contains(job));
@@ -628,6 +656,8 @@ void KDevelop::RunController::unregisterJob(KJob * job)
 
 void KDevelop::RunController::checkState()
 {
+    Q_D(RunController);
+
     bool running = false;
 
     int jobCount = 0;
@@ -664,6 +694,8 @@ void KDevelop::RunController::checkState()
 
 void KDevelop::RunController::stopAllProcesses()
 {
+    Q_D(RunController);
+
     // composite jobs might remove child jobs, see also:
     // https://bugs.kde.org/show_bug.cgi?id=258904
     const auto jobs = d->jobs.keys();
@@ -718,6 +750,8 @@ void KDevelop::RunController::finished(KJob * job)
 
 void RunController::jobDestroyed(QObject* job)
 {
+    Q_D(RunController);
+
     KJob* kjob = static_cast<KJob*>(job);
     if (d->jobs.contains(kjob)) {
         qCWarning(SHELL) << "job destroyed without emitting finished signal!";
@@ -746,6 +780,8 @@ void KDevelop::RunController::resumed(KJob * job)
 
 QList< KJob * > KDevelop::RunController::currentJobs() const
 {
+    Q_D(const RunController);
+
     return d->jobs.keys();
 }
 
@@ -762,16 +798,22 @@ QList<ILaunchConfiguration*> RunController::launchConfigurations() const
 
 QList<LaunchConfiguration*> RunController::launchConfigurationsInternal() const
 {
+    Q_D(const RunController);
+
     return d->launchConfigurations;
 }
 
 QList<LaunchConfigurationType*> RunController::launchConfigurationTypes() const
 {
+    Q_D(const RunController);
+
     return d->launchConfigurationTypes.values();
 }
 
 void RunController::addConfigurationType( LaunchConfigurationType* type )
 {
+    Q_D(RunController);
+
     if( !d->launchConfigurationTypes.contains( type->id() ) )
     {
         d->launchConfigurationTypes.insert( type->id(), type );
@@ -780,6 +822,8 @@ void RunController::addConfigurationType( LaunchConfigurationType* type )
 
 void RunController::removeConfigurationType( LaunchConfigurationType* type )
 {
+    Q_D(RunController);
+
     const auto oldLaunchConfigurations = d->launchConfigurations;
     for (LaunchConfiguration* l : oldLaunchConfigurations) {
         if( l->type() == type )
@@ -792,6 +836,8 @@ void RunController::removeConfigurationType( LaunchConfigurationType* type )
 
 void KDevelop::RunController::addLaunchMode(KDevelop::ILaunchMode* mode)
 {
+    Q_D(RunController);
+
     if( !d->launchModes.contains( mode->id() ) )
     {
         d->launchModes.insert( mode->id(), mode );
@@ -800,17 +846,23 @@ void KDevelop::RunController::addLaunchMode(KDevelop::ILaunchMode* mode)
 
 QList< KDevelop::ILaunchMode* > KDevelop::RunController::launchModes() const
 {
+    Q_D(const RunController);
+
     return d->launchModes.values();
 }
 
 void KDevelop::RunController::removeLaunchMode(KDevelop::ILaunchMode* mode)
 {
+    Q_D(RunController);
+
     d->launchModes.remove( mode->id() );
 }
 
 KDevelop::ILaunchMode* KDevelop::RunController::launchModeForId(const QString& id) const
 {
-    QMap<QString,ILaunchMode*>::iterator it = d->launchModes.find( id );
+    Q_D(const RunController);
+
+    auto it = d->launchModes.find( id );
     if( it != d->launchModes.end() )
     {
         return it.value();
@@ -820,6 +872,8 @@ KDevelop::ILaunchMode* KDevelop::RunController::launchModeForId(const QString& i
 
 void KDevelop::RunController::addLaunchConfiguration(KDevelop::LaunchConfiguration* l)
 {
+    Q_D(RunController);
+
     if( !d->launchConfigurations.contains( l ) )
     {
         d->addLaunchAction( l );
@@ -854,6 +908,8 @@ void KDevelop::RunController::removeLaunchConfiguration(KDevelop::LaunchConfigur
 
 void RunController::removeLaunchConfigurationInternal(LaunchConfiguration *l)
 {
+    Q_D(RunController);
+
     const auto actions = d->currentTargetAction->actions();
     for (QAction* a : actions) {
         if( static_cast<LaunchConfiguration*>( a->data().value<void*>() ) == l ) {
@@ -882,6 +938,8 @@ void KDevelop::RunController::executeDefaultLaunch(const QString& runMode)
 
 void RunController::setDefaultLaunch(ILaunchConfiguration* l)
 {
+    Q_D(RunController);
+
     const auto actions = d->currentTargetAction->actions();
     for (QAction* a : actions) {
         if( static_cast<ILaunchConfiguration*>( a->data().value<void*>() ) == l )
@@ -958,11 +1016,15 @@ ILaunchConfiguration* RunController::createLaunchConfiguration ( LaunchConfigura
 
 QItemDelegate * KDevelop::RunController::delegate() const
 {
+    Q_D(const RunController);
+
     return d->delegate;
 }
 
 ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* parent)
 {
+    Q_D(RunController);
+
     d->launchAsInfo.clear();
     d->contextItem = nullptr;
     ContextMenuExtension ext;
@@ -990,7 +1052,8 @@ ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* 
                         auto* act = new QAction(menu);
                         act->setText( type->name() );
                         qCDebug(SHELL) << "Connect " << i << "for action" << act->text() << "in mode" << mode->name();
-                        connect( act, &QAction::triggered, this, [this, i] () { d->launchAs(i); } );
+                        connect(act, &QAction::triggered,
+                                this, [this, i] () { Q_D(RunController); d->launchAs(i); } );
                         menu->addAction(act);
                         i++;
                     }

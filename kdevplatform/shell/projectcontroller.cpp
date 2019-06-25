@@ -530,6 +530,8 @@ bool ProjectDialogProvider::userWantsReopen()
 
 void ProjectController::setDialogProvider(IProjectDialogProvider* dialog)
 {
+    Q_D(ProjectController);
+
     Q_ASSERT(d->dialog);
     delete d->dialog;
     d->dialog = dialog;
@@ -537,7 +539,7 @@ void ProjectController::setDialogProvider(IProjectDialogProvider* dialog)
 
 ProjectController::ProjectController( Core* core )
     : IProjectController(core)
-    , d(new ProjectControllerPrivate(core, this))
+    , d_ptr(new ProjectControllerPrivate(core, this))
 {
     qRegisterMetaType<QList<QUrl>>();
 
@@ -553,6 +555,8 @@ ProjectController::ProjectController( Core* core )
 
 void ProjectController::setupActions()
 {
+    Q_D(ProjectController);
+
     KActionCollection * ac =
         d->m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
@@ -588,14 +592,16 @@ void ProjectController::setupActions()
 //    action->setEnabled( false );
 
     d->m_closeProject = action = ac->addAction( QStringLiteral("project_close") );
-    connect( action, &QAction::triggered, this, [&] { d->closeSelectedProjects(); } );
+    connect(action, &QAction::triggered,
+            this, [this] { Q_D(ProjectController); d->closeSelectedProjects(); } );
     action->setText( i18nc( "@action", "Close Project(s)" ) );
     action->setIcon( QIcon::fromTheme( QStringLiteral("project-development-close") ) );
     action->setToolTip( i18nc( "@info:tooltip", "Closes all currently selected projects" ) );
     action->setEnabled( false );
 
     d->m_openConfig = action = ac->addAction( QStringLiteral("project_open_config") );
-    connect( action, &QAction::triggered, this, [&] { d->openProjectConfig(); } );
+    connect(action, &QAction::triggered,
+            this, [this] { Q_D(ProjectController); d->openProjectConfig(); } );
     action->setText( i18n( "Open Configuration..." ) );
     action->setIcon( QIcon::fromTheme(QStringLiteral("configure")) );
     action->setEnabled( false );
@@ -606,7 +612,7 @@ void ProjectController::setupActions()
     action->setIconText( i18n( "Commit..." ) );
     action->setIcon( QIcon::fromTheme(QStringLiteral("svn-commit")) );
     connect(d->m_core->uiControllerInternal()->defaultMainWindow(), &MainWindow::areaChanged,
-            this, [&] (Sublime::Area* area) { d->areaChanged(area); });
+            this, [this] (Sublime::Area* area) { Q_D(ProjectController); d->areaChanged(area); });
     d->m_core->uiControllerInternal()->area(0, QStringLiteral("code"))->addAction(action);
 
     KSharedConfig * config = KSharedConfig::openConfig().data();
@@ -627,12 +633,16 @@ void ProjectController::setupActions()
 
 ProjectController::~ProjectController()
 {
+    Q_D(ProjectController);
+
     delete d->model;
     delete d->dialog;
 }
 
 void ProjectController::cleanup()
 {
+    Q_D(ProjectController);
+
     if ( d->m_currentlyOpening.isEmpty() ) {
         d->saveListOfOpenedProjects();
     }
@@ -649,6 +659,8 @@ void ProjectController::cleanup()
 
 void ProjectController::saveRecentProjectsActionEntries()
 {
+    Q_D(ProjectController);
+
     if (!d->m_recentProjectsAction)
         return;
 
@@ -660,6 +672,8 @@ void ProjectController::saveRecentProjectsActionEntries()
 
 void ProjectController::initialize()
 {
+    Q_D(ProjectController);
+
     d->buildset = new ProjectBuildSetModel( this );
     buildSetModel()->loadFromSession( Core::self()->activeSession() );
     connect( this, &ProjectController::projectOpened,
@@ -672,7 +686,7 @@ void ProjectController::initialize()
     d->m_changesModel = new ProjectChangesModel(this);
 
     loadSettings(false);
-    d->dialog = new ProjectDialogProvider(d.data());
+    d->dialog = new ProjectDialogProvider(d);
 
     QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/ProjectController"),
         this, QDBusConnection::ExportScriptableSlots );
@@ -682,11 +696,11 @@ void ProjectController::initialize()
     const auto projects = group.readEntry( "Open Projects", QList<QUrl>() );
 
     connect( Core::self()->selectionController(), &ISelectionController::selectionChanged,
-             this, [&] () { d->updateActionStates(); } );
+             this, [this]() { Q_D(ProjectController); d->updateActionStates(); } );
     connect(this, &ProjectController::projectOpened,
-            this, [&] () { d->updateActionStates(); });
+            this, [this]() { Q_D(ProjectController); d->updateActionStates(); });
     connect(this, &ProjectController::projectClosing,
-            this, [&] () { d->updateActionStates(); });
+            this, [this]() { Q_D(ProjectController); d->updateActionStates(); });
 
     QTimer::singleShot(0, this, [this, projects](){
         openProjects(projects);
@@ -714,11 +728,15 @@ void ProjectController::saveSettings( bool projectIsLoaded )
 
 int ProjectController::projectCount() const
 {
+    Q_D(const ProjectController);
+
     return d->m_projects.count();
 }
 
 IProject* ProjectController::projectAt( int num ) const
 {
+    Q_D(const ProjectController);
+
     if( !d->m_projects.isEmpty() && num >= 0 && num < d->m_projects.count() )
         return d->m_projects.at( num );
     return nullptr;
@@ -726,11 +744,15 @@ IProject* ProjectController::projectAt( int num ) const
 
 QList<IProject*> ProjectController::projects() const
 {
+    Q_D(const ProjectController);
+
     return d->m_projects;
 }
 
 void ProjectController::eventuallyOpenProjectFile(KIO::Job* _job, const KIO::UDSEntryList& entries)
 {
+    Q_D(ProjectController);
+
     auto* job = qobject_cast<KIO::SimpleJob*>(_job);
     Q_ASSERT(job);
     for (const KIO::UDSEntry& entry : entries) {
@@ -764,6 +786,8 @@ void ProjectController::openProjectForUrlSlot(bool) {
 
 
 void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
+    Q_D(ProjectController);
+
     Q_ASSERT(!sourceUrl.isRelative());
     QUrl dirUrl = sourceUrl;
     if (sourceUrl.isLocalFile() && !QFileInfo(sourceUrl.toLocalFile()).isDir()) {
@@ -797,6 +821,8 @@ void ProjectController::openProjectForUrl(const QUrl& sourceUrl) {
 
 void ProjectController::openProject( const QUrl &projectFile )
 {
+    Q_D(ProjectController);
+
     QUrl url = projectFile;
 
     if ( url.isEmpty() ) {
@@ -887,6 +913,8 @@ void ProjectController::openProject( const QUrl &projectFile )
 
 bool ProjectController::fetchProjectFromUrl(const QUrl& repoUrl)
 {
+    Q_D(ProjectController);
+
     IPlugin* vcsOrProviderPlugin = nullptr;
 
     // TODO: query also projectprovider plugins, and that before plain vcs plugins
@@ -918,6 +946,8 @@ bool ProjectController::fetchProjectFromUrl(const QUrl& repoUrl)
 
 void ProjectController::fetchProject()
 {
+    Q_D(ProjectController);
+
     QUrl url = d->dialog->askProjectConfigLocation(true);
 
     if ( !url.isEmpty() )
@@ -928,6 +958,8 @@ void ProjectController::fetchProject()
 
 void ProjectController::projectImportingFinished( IProject* project )
 {
+    Q_D(ProjectController);
+
     if( !project )
     {
         qCWarning(SHELL) << "OOOPS: 0-pointer project";
@@ -959,6 +991,8 @@ void ProjectController::projectImportingFinished( IProject* project )
 // helper method for closeProject()
 void ProjectController::unloadUnusedProjectPlugins(IProject* proj)
 {
+    Q_D(ProjectController);
+
     QList<IPlugin*> pluginsForProj = d->m_projectPlugins.value( proj );
     d->m_projectPlugins.remove( proj );
 
@@ -996,14 +1030,19 @@ void ProjectController::closeAllOpenedFiles(IProject* proj)
 // helper method for closeProject()
 void ProjectController::initializePluginCleanup(IProject* proj)
 {
+    Q_D(ProjectController);
+
     // Unloading (and thus deleting) these plugins is not a good idea just yet
     // as we're being called by the view part and it gets deleted when we unload the plugin(s)
     // TODO: find a better place to unload
-    connect(proj, &IProject::destroyed, this, [&] { d->unloadAllProjectPlugins(); });
+    connect(proj, &IProject::destroyed,
+            this, [this] { Q_D(ProjectController); d->unloadAllProjectPlugins(); });
 }
 
 void ProjectController::takeProject(IProject* proj)
 {
+    Q_D(ProjectController);
+
     if (!proj) {
         return;
     }
@@ -1037,6 +1076,8 @@ void ProjectController::closeProject(IProject* proj)
 
 void ProjectController::closeAllProjects()
 {
+    Q_D(ProjectController);
+
     const auto projects = d->m_projects;
     for (auto* project : projects) {
         closeProject(project);
@@ -1045,17 +1086,23 @@ void ProjectController::closeAllProjects()
 
 void ProjectController::abortOpeningProject(IProject* proj)
 {
+    Q_D(ProjectController);
+
     d->m_currentlyOpening.removeAll(proj->projectFile().toUrl());
     emit projectOpeningAborted(proj);
 }
 
 ProjectModel* ProjectController::projectModel()
 {
+    Q_D(ProjectController);
+
     return d->model;
 }
 
 IProject* ProjectController::findProjectForUrl( const QUrl& url ) const
 {
+    Q_D(const ProjectController);
+
     if (d->m_projects.isEmpty()) {
         return nullptr;
     }
@@ -1069,6 +1116,8 @@ IProject* ProjectController::findProjectForUrl( const QUrl& url ) const
 
 IProject* ProjectController::findProjectByName( const QString& name )
 {
+    Q_D(ProjectController);
+
     auto it = std::find_if(d->m_projects.constBegin(), d->m_projects.constEnd(), [&](IProject* proj) {
         return (proj->name() == name);
     });
@@ -1078,11 +1127,15 @@ IProject* ProjectController::findProjectByName( const QString& name )
 
 void ProjectController::configureProject( IProject* project )
 {
+    Q_D(ProjectController);
+
     d->projectConfig( project );
 }
 
 void ProjectController::addProject(IProject* project)
 {
+    Q_D(ProjectController);
+
     Q_ASSERT(project);
     if (d->m_projects.contains(project)) {
         qCWarning(SHELL) << "Project already tracked by this project controller:" << project;
@@ -1169,6 +1222,8 @@ QString ProjectController::prettyFileName(const QUrl& url, FormattingOptions for
 
 ContextMenuExtension ProjectController::contextMenuExtension(Context* ctx, QWidget* parent)
 {
+    Q_D(ProjectController);
+
     Q_UNUSED(parent);
     ContextMenuExtension ext;
     if ( ctx->type() != Context::ProjectItemContext) {
@@ -1177,7 +1232,8 @@ ContextMenuExtension ProjectController::contextMenuExtension(Context* ctx, QWidg
     if (!static_cast<ProjectItemContext*>(ctx)->items().isEmpty() ) {
 
         auto* action = new QAction(i18n("Reparse the Entire Project"), this);
-        connect(action, &QAction::triggered, this, [&] {
+        connect(action, &QAction::triggered, this, [this] {
+            Q_D(ProjectController);
             const auto projects = d->selectedProjects();
             for (auto* project : projects) {
                 reparseProject(project, true, true);
@@ -1197,11 +1253,15 @@ ContextMenuExtension ProjectController::contextMenuExtension(Context* ctx, QWidg
 
 ProjectBuildSetModel* ProjectController::buildSetModel()
 {
+    Q_D(ProjectController);
+
     return d->buildset;
 }
 
 ProjectChangesModel* ProjectController::changesModel()
 {
+    Q_D(ProjectController);
+
     return d->m_changesModel;
 }
 
@@ -1237,6 +1297,8 @@ void ProjectController::commitCurrentProject()
 
 QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, bool fallbackRoot ) const
 {
+    Q_D(const ProjectController);
+
     Path path(path_);
     IProject* sourceDirProject = nullptr, *buildDirProject = nullptr;
     for (IProject* proj : qAsConst(d->m_projects)) {
@@ -1292,6 +1354,8 @@ QString ProjectController::mapSourceBuild( const QString& path_, bool reverse, b
 
     void KDevelop::ProjectController::reparseProject(IProject *project, bool forceUpdate, bool forceAll)
     {
+    Q_D(ProjectController);
+
     if (auto job = d->m_parseJobs.value(project)) {
         job->kill();
     }

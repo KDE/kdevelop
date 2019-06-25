@@ -40,6 +40,7 @@ namespace KDevelop
 {
 
 class IDocument;
+class MainWindowPrivate;
 
 /**
 KDevelop main window.
@@ -109,7 +110,9 @@ private Q_SLOTS:
 private:
     void initializeCorners();
 
-    class MainWindowPrivate *d;
+private:
+    MainWindowPrivate* d_ptr;
+    Q_DECLARE_PRIVATE(MainWindow)
     friend class MainWindowPrivate;
 };
 

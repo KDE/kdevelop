@@ -45,6 +45,7 @@ namespace Sublime {
 
 namespace KDevelop {
 class MainWindow;
+class DocumentControllerPrivate;
 
 /**
  * \short Interface to control open documents.
@@ -171,7 +172,9 @@ private:
     void setupActions();
 
 private:
-    const QScopedPointer<class DocumentControllerPrivate> d;
+    const QScopedPointer<class DocumentControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DocumentController)
+
     friend class DocumentControllerPrivate;
 };
 

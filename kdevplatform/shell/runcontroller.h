@@ -41,6 +41,7 @@ class IPlugin;
 class IProject;
 class LaunchConfiguration;
 class LaunchConfigurationType;
+class RunControllerPrivate;
 
 class KDEVPLATFORMSHELL_EXPORT RunController : public IRunController
 {
@@ -147,7 +148,8 @@ private:
     void removeLaunchConfigurationInternal( LaunchConfiguration* l );
 
 private:
-    const QScopedPointer<class RunControllerPrivate> d;
+    const QScopedPointer<class RunControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(RunController)
 };
 
 class RunDelegate : public QItemDelegate

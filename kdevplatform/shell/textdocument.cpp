@@ -245,8 +245,11 @@ public:
 };
 
 TextDocument::TextDocument(const QUrl &url, ICore* core, const QString& encoding)
-    :PartDocument(url, core), d(new TextDocumentPrivate(this))
+    : PartDocument(url, core)
+    , d_ptr(new TextDocumentPrivate(this))
 {
+    Q_D(TextDocument);
+
     d->encoding = encoding;
 }
 
@@ -254,6 +257,8 @@ TextDocument::~TextDocument() = default;
 
 bool TextDocument::isTextDocument() const
 {
+    Q_D(const TextDocument);
+
     if( !d->document )
     {
         /// @todo Somehow it can happen that d->document is zero, which makes
@@ -267,11 +272,15 @@ bool TextDocument::isTextDocument() const
 
 KTextEditor::Document *TextDocument::textDocument() const
 {
+    Q_D(const TextDocument);
+
     return d->document;
 }
 
 QWidget *TextDocument::createViewWidget(QWidget *parent)
 {
+    Q_D(TextDocument);
+
     KTextEditor::View* view = nullptr;
 
     if (!d->document)
@@ -355,6 +364,8 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
 KParts::Part *TextDocument::partForView(QWidget *view) const
 {
+    Q_D(const TextDocument);
+
     if (d->document && d->document->views().contains((KTextEditor::View*)view))
         return d->document;
     return nullptr;
@@ -366,6 +377,8 @@ KParts::Part *TextDocument::partForView(QWidget *view) const
 
 void TextDocument::reload()
 {
+    Q_D(TextDocument);
+
     if (!d->document)
         return;
 
@@ -381,6 +394,8 @@ void TextDocument::reload()
 
 bool TextDocument::save(DocumentSaveMode mode)
 {
+    Q_D(TextDocument);
+
     if (!d->document)
         return true;
 
@@ -427,11 +442,15 @@ bool TextDocument::save(DocumentSaveMode mode)
 
 IDocument::DocumentState TextDocument::state() const
 {
+    Q_D(const TextDocument);
+
     return d->state;
 }
 
 KTextEditor::Cursor KDevelop::TextDocument::cursorPosition() const
 {
+    Q_D(const TextDocument);
+
     if (!d->document) {
         return KTextEditor::Cursor::invalid();
     }
@@ -446,6 +465,8 @@ KTextEditor::Cursor KDevelop::TextDocument::cursorPosition() const
 
 void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 {
+    Q_D(TextDocument);
+
     if (!cursor.isValid() || !d->document)
         return;
 
@@ -460,6 +481,8 @@ void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
 
 KTextEditor::Range TextDocument::textSelection() const
 {
+    Q_D(const TextDocument);
+
     if (!d->document) {
         return KTextEditor::Range::invalid();
     }
@@ -475,6 +498,8 @@ KTextEditor::Range TextDocument::textSelection() const
 
 QString TextDocument::text(const KTextEditor::Range &range) const
 {
+    Q_D(const TextDocument);
+
     if (!d->document) {
         return QString();
     }
@@ -484,6 +509,8 @@ QString TextDocument::text(const KTextEditor::Range &range) const
 
 QString TextDocument::textLine() const
 {
+    Q_D(const TextDocument);
+
     if (!d->document) {
         return QString();
     }
@@ -499,6 +526,8 @@ QString TextDocument::textLine() const
 
 QString TextDocument::textWord() const
 {
+    Q_D(const TextDocument);
+
     if (!d->document) {
         return QString();
     }
@@ -533,6 +562,8 @@ QString TextDocument::textWord() const
 
 void TextDocument::setTextSelection(const KTextEditor::Range &range)
 {
+    Q_D(TextDocument);
+
     if (!range.isValid() || !d->document)
         return;
 
@@ -552,7 +583,8 @@ Sublime::View* TextDocument::newView(Sublime::Document* doc)
 }
 
 KDevelop::TextView::TextView(TextDocument * doc)
-    : View(doc, View::TakeOwnership), d(new TextViewPrivate(this))
+    : View(doc, View::TakeOwnership)
+    , d_ptr(new TextViewPrivate(this))
 {
 }
 
@@ -560,6 +592,8 @@ KDevelop::TextView::~TextView() = default;
 
 QWidget * KDevelop::TextView::createWidget(QWidget * parent)
 {
+    Q_D(TextView);
+
     auto textDocument = qobject_cast<TextDocument*>(document());
     Q_ASSERT(textDocument);
     QWidget* widget = textDocument->createViewWidget(parent);
@@ -571,6 +605,8 @@ QWidget * KDevelop::TextView::createWidget(QWidget * parent)
 
 void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range)
 {
+    Q_D(TextView);
+
     if (d->view) {
         selectAndReveal(d->view, range);
     } else {
@@ -580,11 +616,15 @@ void KDevelop::TextView::setInitialRange(const KTextEditor::Range& range)
 
 KTextEditor::Range KDevelop::TextView::initialRange() const
 {
+    Q_D(const TextView);
+
     return d->initialRange;
 }
 
 void KDevelop::TextView::readSessionConfig(KConfigGroup& config)
 {
+    Q_D(TextView);
+
     if (!d->view) {
         return;
     }
@@ -593,6 +633,8 @@ void KDevelop::TextView::readSessionConfig(KConfigGroup& config)
 
 void KDevelop::TextView::writeSessionConfig(KConfigGroup& config)
 {
+    Q_D(TextView);
+
     if (!d->view) {
         return;
     }
@@ -606,6 +648,8 @@ QString KDevelop::TextDocument::documentType() const
 
 QIcon KDevelop::TextDocument::defaultIcon() const
 {
+    Q_D(const TextDocument);
+
     if (d->document) {
         QMimeType mime = QMimeDatabase().mimeTypeForName(d->document->mimeType());
         QIcon icon = QIcon::fromTheme(mime.iconName());
@@ -618,11 +662,15 @@ QIcon KDevelop::TextDocument::defaultIcon() const
 
 KTextEditor::View *KDevelop::TextView::textView() const
 {
+    Q_D(const TextView);
+
     return d->view;
 }
 
 QString KDevelop::TextView::viewStatus() const
 {
+    Q_D(const TextView);
+
     // only show status when KTextEditor's own status bar isn't already enabled
     const bool showStatus = !Core::self()->partControllerInternal()->showTextEditorStatusBar();
     if (!showStatus) {
@@ -659,6 +707,8 @@ KTextEditor::View* KDevelop::TextDocument::activeTextView() const
 
 void KDevelop::TextDocument::newDocumentStatus(KTextEditor::Document *document)
 {
+    Q_D(TextDocument);
+
     bool dirty = (d->state == IDocument::Dirty || d->state == IDocument::DirtyAndModified);
 
     d->setStatus(document, dirty);
@@ -672,6 +722,8 @@ void KDevelop::TextDocument::textChanged(KTextEditor::Document *document)
 
 void KDevelop::TextDocument::populateContextMenu( KTextEditor::View* v, QMenu* menu )
 {
+    Q_D(TextDocument);
+
     if (d->addedContextMenu) {
         const auto actions = d->addedContextMenu->actions();
         for (QAction* action : actions) {
@@ -694,6 +746,8 @@ void KDevelop::TextDocument::populateContextMenu( KTextEditor::View* v, QMenu* m
 }
 
 void KDevelop::TextDocument::repositoryCheckFinished(bool canRecreate) {
+    Q_D(TextDocument);
+
     if ( d->state != IDocument::Dirty && d->state != IDocument::DirtyAndModified ) {
         // document is not dirty for whatever reason, nothing to do.
         return;
@@ -716,6 +770,8 @@ void KDevelop::TextDocument::repositoryCheckFinished(bool canRecreate) {
 
 void KDevelop::TextDocument::slotDocumentLoaded()
 {
+    Q_D(TextDocument);
+
     if (d->loaded)
         return;
     // Tell the editor integrator first
@@ -733,6 +789,8 @@ void KDevelop::TextDocument::documentSaved(KTextEditor::Document* document, bool
 
 void KDevelop::TextDocument::documentUrlChanged(KTextEditor::Document* document)
 {
+    Q_D(TextDocument);
+
     Q_UNUSED(document);
     if (url() != d->document->url())
         setUrl(d->document->url());

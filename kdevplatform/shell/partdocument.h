@@ -29,6 +29,7 @@ class Part;
 }
 
 namespace KDevelop {
+class PartDocumentPrivate;
 
 /**
 The generic document which represents KParts.
@@ -79,7 +80,8 @@ protected:
     void addPartForView(QWidget* widget, KParts::Part* part);
     
 private:
-    const QScopedPointer<class PartDocumentPrivate> d;
+    const QScopedPointer<class PartDocumentPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(PartDocument)
 };
 
 }

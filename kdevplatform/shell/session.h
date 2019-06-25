@@ -28,6 +28,8 @@ Boston, MA 02110-1301, USA.
 namespace KDevelop
 {
 
+class SessionPrivate;
+
 struct SessionInfo
 {
     QString name;
@@ -76,7 +78,8 @@ public:
     static SessionInfo parse( const QString& id, bool mkdir = false );
 
 private:
-    const QScopedPointer<class SessionPrivate> d;
+    const QScopedPointer<class SessionPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Session)
     friend class SessionPrivate;
 };
 

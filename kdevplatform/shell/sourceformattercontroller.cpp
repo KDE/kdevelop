@@ -136,8 +136,10 @@ QString SourceFormatterController::styleSampleKey()
 
 SourceFormatterController::SourceFormatterController(QObject *parent)
     : ISourceFormatterController(parent)
-    , d(new SourceFormatterControllerPrivate)
+    , d_ptr(new SourceFormatterControllerPrivate)
 {
+    Q_D(SourceFormatterController);
+
     setObjectName(QStringLiteral("SourceFormatterController"));
     setComponentName(QStringLiteral("kdevsourceformatter"), i18n("Source Formatter"));
     setXMLFile(QStringLiteral("kdevsourceformatter.rc"));
@@ -209,6 +211,8 @@ void SourceFormatterController::documentLoaded(const QPointer<TextDocument>& doc
 
 void SourceFormatterController::projectOpened(const IProject* project)
 {
+    Q_D(SourceFormatterController);
+
     // Adapt the indentation mode if a project was just opened. Otherwise if a document
     // is loaded before its project, it might not have the correct indentation mode set.
 
@@ -236,6 +240,8 @@ void SourceFormatterController::projectOpened(const IProject* project)
 
 void SourceFormatterController::pluginLoaded(IPlugin* plugin)
 {
+    Q_D(SourceFormatterController);
+
     auto* sourceFormatter = plugin->extension<ISourceFormatter>();
 
     if (!sourceFormatter) {
@@ -255,6 +261,8 @@ void SourceFormatterController::pluginLoaded(IPlugin* plugin)
 
 void SourceFormatterController::unloadingPlugin(IPlugin* plugin)
 {
+    Q_D(SourceFormatterController);
+
     auto* sourceFormatter = plugin->extension<ISourceFormatter>();
 
     if (!sourceFormatter) {
@@ -314,6 +322,8 @@ KConfigGroup SourceFormatterController::globalConfig() const
 
 ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const QMimeType& mime ) const
 {
+    Q_D(const SourceFormatterController);
+
     static QHash<QString, ISourceFormatter*> knownFormatters;
     const auto formatterIt = knownFormatters.constFind(mime.name());
     if (formatterIt != knownFormatters.constEnd())
@@ -366,6 +376,8 @@ SourceFormatter* SourceFormatterController::createFormatterForPlugin(ISourceForm
 
 ISourceFormatter* SourceFormatterController::formatterForUrl(const QUrl& url, const QMimeType& mime)
 {
+    Q_D(SourceFormatterController);
+
     if (!d->enabled || !isMimeTypeSupported(mime)) {
         return nullptr;
     }
@@ -477,6 +489,8 @@ void SourceFormatterController::cleanup()
 
 void SourceFormatterController::updateFormatTextAction()
 {
+    Q_D(SourceFormatterController);
+
     bool enabled = false;
 
     if (!d->sourceFormatters.isEmpty()) {
@@ -668,6 +682,8 @@ void SourceFormatterController::adaptEditorIndentationMode(KTextEditor::Document
 
 void SourceFormatterController::formatFiles()
 {
+    Q_D(SourceFormatterController);
+
     if (d->prjItems.isEmpty() && d->urls.isEmpty())
         return;
 
@@ -726,6 +742,8 @@ void SourceFormatterController::formatFiles()
 
 KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(KDevelop::Context* context, QWidget* parent)
 {
+    Q_D(SourceFormatterController);
+
     Q_UNUSED(parent);
 
     KDevelop::ContextMenuExtension ext;
@@ -773,26 +791,36 @@ SourceFormatterStyle SourceFormatterController::styleForUrl(const QUrl& url, con
 
 void SourceFormatterController::disableSourceFormatting(bool disable)
 {
+    Q_D(SourceFormatterController);
+
     d->enabled = !disable;
 }
 
 bool SourceFormatterController::sourceFormattingEnabled()
 {
+    Q_D(SourceFormatterController);
+
     return d->enabled;
 }
 
 bool SourceFormatterController::hasFormatters() const
 {
+    Q_D(const SourceFormatterController);
+
     return !d->sourceFormatters.isEmpty();
 }
 
 QVector<ISourceFormatter*> SourceFormatterController::formatters() const
 {
+    Q_D(const SourceFormatterController);
+
     return d->sourceFormatters;
 }
 
 void SourceFormatterController::resetUi()
 {
+    Q_D(SourceFormatterController);
+
     d->formatFilesAction->setEnabled(!d->sourceFormatters.isEmpty());
 
     updateFormatTextAction();

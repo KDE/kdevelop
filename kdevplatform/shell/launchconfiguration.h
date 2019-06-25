@@ -33,6 +33,7 @@ namespace KDevelop
 
 class LaunchConfigurationType;
 class IProject;
+class LaunchConfigurationPrivate;
 
 /**
  * @copydoc KDevelop::ILaunchConfiguration
@@ -93,7 +94,8 @@ Q_SIGNALS:
     void typeChanged( LaunchConfigurationType* );
 
 private:
-    const QScopedPointer<class LaunchConfigurationPrivate> d;
+    const QScopedPointer<class LaunchConfigurationPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(LaunchConfiguration)
 };
 
 }

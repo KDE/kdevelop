@@ -38,8 +38,11 @@ public:
 };
 
 EnvironmentPreferences::EnvironmentPreferences(const QString& preselectedProfileName, QWidget* parent)
-    : ConfigPage(nullptr, nullptr, parent), d(new EnvironmentPreferencesPrivate)
+    : ConfigPage(nullptr, nullptr, parent)
+    , d_ptr(new EnvironmentPreferencesPrivate)
 {
+    Q_D(EnvironmentPreferences);
+
     auto * l = new QVBoxLayout( this );
     l->setMargin(0);
     d->preferencesDialog = new EnvironmentWidget( this );
@@ -58,12 +61,16 @@ EnvironmentPreferences::~EnvironmentPreferences() = default;
 
 void EnvironmentPreferences::apply()
 {
+    Q_D(EnvironmentPreferences);
+
     d->preferencesDialog->saveSettings(d->skel->config());
     ConfigPage::apply();
 }
 
 void EnvironmentPreferences::reset()
 {
+    Q_D(EnvironmentPreferences);
+
     d->preferencesDialog->loadSettings(d->skel->config());
     if (!d->preselectedProfileName.isEmpty()) {
         d->preferencesDialog->selectProfile(d->preselectedProfileName);
@@ -73,6 +80,8 @@ void EnvironmentPreferences::reset()
 
 void EnvironmentPreferences::defaults()
 {
+    Q_D(EnvironmentPreferences);
+
     d->preferencesDialog->defaults(d->skel->config());
     ConfigPage::defaults();
 }

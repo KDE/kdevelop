@@ -45,6 +45,7 @@ class Core;
 class Context;
 class ContextMenuExtension;
 class IPlugin;
+class ProjectControllerPrivate;
 
 class KDEVPLATFORMSHELL_EXPORT IProjectDialogProvider : public QObject
 {
@@ -168,7 +169,8 @@ private:
     void initializePluginCleanup(IProject* proj);
 
 private:
-    const QScopedPointer<class ProjectControllerPrivate> d;
+    const QScopedPointer<class ProjectControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ProjectController)
     friend class ProjectControllerPrivate;
 };
 

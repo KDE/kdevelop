@@ -27,6 +27,7 @@ namespace KDevelop
 {
 
 class ProblemModel;
+class ProblemModelSetPrivate;
 
 /// Struct that handles the model and it's name as one unit, stored in ProblemModelSet
 struct ModelData
@@ -89,7 +90,8 @@ Q_SIGNALS:
     void problemsChanged();
 
 private:
-    const QScopedPointer<class ProblemModelSetPrivate> d;
+    const QScopedPointer<class ProblemModelSetPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ProblemModelSet)
 };
 
 }

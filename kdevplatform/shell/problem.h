@@ -28,6 +28,7 @@
 
 namespace KDevelop
 {
+class DetectedProblemPrivate;
 
 /**
  * @brief Represents a problem as one unit with the IProblem interface so can be used with anything that can handle IProblem.
@@ -100,7 +101,8 @@ public:
     QExplicitlySharedDataPointer<IAssistant> solutionAssistant() const override;
 
 private:
-    const QScopedPointer<class DetectedProblemPrivate> d;
+    const QScopedPointer<class DetectedProblemPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DetectedProblem)
 };
 
 }

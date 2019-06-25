@@ -27,6 +27,7 @@ namespace KDevelop
 {
 
 class Context;
+class SelectionControllerPrivate;
 
 /**
  * The main controller for running processes.
@@ -56,7 +57,8 @@ public Q_SLOTS:
     void updateSelection( Context* context ) override;
 
 private:
-    const QScopedPointer<class SelectionControllerPrivate> d;
+    const QScopedPointer<class SelectionControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(SelectionController)
 };
 
 }
