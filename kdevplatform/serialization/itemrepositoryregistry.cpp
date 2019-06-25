@@ -143,8 +143,10 @@ public:
 ItemRepositoryRegistry* ItemRepositoryRegistry::m_self = nullptr;
 
 ItemRepositoryRegistry::ItemRepositoryRegistry(const QString& repositoryPath)
-    : d(new ItemRepositoryRegistryPrivate(this))
+    : d_ptr(new ItemRepositoryRegistryPrivate(this))
 {
+    Q_D(ItemRepositoryRegistry);
+
     Q_ASSERT(!repositoryPath.isEmpty());
     d->open(repositoryPath);
 }
@@ -168,9 +170,9 @@ void ItemRepositoryRegistry::deleteRepositoryFromDisk(const QString& repositoryP
 {
     // Now, as we have only the global item-repository registry, assume that if and only if
     // the given session is ours, its cache path is used by the said global item-repository registry.
-    if (m_self && m_self->d->m_path == repositoryPath) {
+    if (m_self && m_self->d_func()->m_path == repositoryPath) {
         // remove later
-        m_self->d->m_shallDelete = true;
+        m_self->d_func()->m_shallDelete = true;
     } else {
         // Otherwise, given session is not ours.
         // remove its item-repository directory directly.
@@ -180,11 +182,15 @@ void ItemRepositoryRegistry::deleteRepositoryFromDisk(const QString& repositoryP
 
 QMutex& ItemRepositoryRegistry::mutex()
 {
+    Q_D(ItemRepositoryRegistry);
+
     return d->m_mutex;
 }
 
 QAtomicInt& ItemRepositoryRegistry::customCounter(const QString& identity, int initialValue)
 {
+    Q_D(ItemRepositoryRegistry);
+
     auto customCounterIt = d->m_customCounters.find(identity);
     if (customCounterIt == d->m_customCounters.end()) {
         customCounterIt = d->m_customCounters.insert(identity, new QAtomicInt(initialValue));
@@ -200,6 +206,8 @@ ItemRepositoryRegistry& globalItemRepositoryRegistry()
 
 void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* repository, AbstractRepositoryManager* manager)
 {
+    Q_D(ItemRepositoryRegistry);
+
     QMutexLocker lock(&d->m_mutex);
     d->m_repositories.insert(repository, manager);
     if (!d->m_path.isEmpty()) {
@@ -213,6 +221,8 @@ void ItemRepositoryRegistry::registerRepository(AbstractItemRepository* reposito
 
 QString ItemRepositoryRegistry::path() const
 {
+    Q_D(const ItemRepositoryRegistry);
+
     //We cannot lock the mutex here, since this may be called with one of the repositories locked,
     //and that may lead to a deadlock when at the same time a storing is requested
     return d->m_path;
@@ -229,6 +239,8 @@ void ItemRepositoryRegistryPrivate::lockForWriting()
 
 void ItemRepositoryRegistry::lockForWriting()
 {
+    Q_D(ItemRepositoryRegistry);
+
     d->lockForWriting();
 }
 
@@ -241,11 +253,15 @@ void ItemRepositoryRegistryPrivate::unlockForWriting()
 
 void ItemRepositoryRegistry::unlockForWriting()
 {
+    Q_D(ItemRepositoryRegistry);
+
     d->unlockForWriting();
 }
 
 void ItemRepositoryRegistry::unRegisterRepository(AbstractItemRepository* repository)
 {
+    Q_D(ItemRepositoryRegistry);
+
     QMutexLocker lock(&d->m_mutex);
     Q_ASSERT(d->m_repositories.contains(repository));
     repository->close();
@@ -314,6 +330,8 @@ bool ItemRepositoryRegistryPrivate::open(const QString& path)
 
 void ItemRepositoryRegistry::store()
 {
+    Q_D(ItemRepositoryRegistry);
+
     QMutexLocker lock(&d->m_mutex);
     for (auto it = d->m_repositories.constBegin(), end = d->m_repositories.constEnd(); it != end; ++it) {
         it.key()->store();
@@ -344,6 +362,8 @@ void ItemRepositoryRegistry::store()
 
 void ItemRepositoryRegistry::printAllStatistics() const
 {
+    Q_D(const ItemRepositoryRegistry);
+
     QMutexLocker lock(&d->m_mutex);
     for (auto it = d->m_repositories.constBegin(), end = d->m_repositories.constEnd(); it != end; ++it) {
         AbstractItemRepository* repository = it.key();
@@ -354,6 +374,8 @@ void ItemRepositoryRegistry::printAllStatistics() const
 
 int ItemRepositoryRegistry::finalCleanup()
 {
+    Q_D(ItemRepositoryRegistry);
+
     QMutexLocker lock(&d->m_mutex);
     int changed = false;
     for (auto it = d->m_repositories.constBegin(), end = d->m_repositories.constEnd(); it != end; ++it) {
@@ -379,6 +401,8 @@ void ItemRepositoryRegistryPrivate::close()
 
 ItemRepositoryRegistry::~ItemRepositoryRegistry()
 {
+    Q_D(ItemRepositoryRegistry);
+
     QMutexLocker lock(&d->m_mutex);
     d->close();
     for (QAtomicInt* counter : qAsConst(d->m_customCounters)) {
@@ -388,6 +412,8 @@ ItemRepositoryRegistry::~ItemRepositoryRegistry()
 
 void ItemRepositoryRegistry::shutdown()
 {
+    Q_D(ItemRepositoryRegistry);
+
     QMutexLocker lock(&d->m_mutex);
     QString path = d->m_path;
 

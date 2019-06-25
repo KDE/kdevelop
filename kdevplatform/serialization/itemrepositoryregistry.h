@@ -31,6 +31,7 @@ namespace KDevelop {
 class ISession;
 class AbstractRepositoryManager;
 class AbstractItemRepository;
+class ItemRepositoryRegistryPrivate;
 
 /**
  * Manages a set of item-repositories and allows loading/storing them all at once from/to disk.
@@ -99,7 +100,8 @@ public:
 private:
     explicit ItemRepositoryRegistry(const QString& repositoryPath);
 
-    const QScopedPointer<class ItemRepositoryRegistryPrivate> d;
+    const QScopedPointer<class ItemRepositoryRegistryPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ItemRepositoryRegistry)
 
     static ItemRepositoryRegistry* m_self;
 };
