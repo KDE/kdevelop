@@ -28,6 +28,7 @@
 #include <debugger/interfaces/iframestackmodel.h>
 
 namespace KDevelop {
+class FrameStackModelPrivate;
 
 /** FIXME: This class needs rework, since at present it is not true model.
     Client cannot just obtain frames by grabbing a thread and listing
@@ -94,7 +95,8 @@ private:
     void handleEvent(IDebugSession::event_t event) override;
 
 private:
-    const QScopedPointer<class FrameStackModelPrivate> d;
+    const QScopedPointer<class FrameStackModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(FrameStackModel)
 };
 
 }

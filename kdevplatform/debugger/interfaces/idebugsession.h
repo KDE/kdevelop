@@ -33,6 +33,7 @@ class IBreakpointController;
 class IFrameStackModel;
 class Breakpoint;
 class StackModel;
+class IDebugSessionPrivate;
 
 class KDEVPLATFORMDEBUGGER_EXPORT IDebugSession : public QObject
 {
@@ -188,7 +189,8 @@ protected:
 
 private:
     friend class IDebugSessionPrivate;
-    const QScopedPointer<class IDebugSessionPrivate> d;
+    const QScopedPointer<class IDebugSessionPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(IDebugSession)
 };
 
 }

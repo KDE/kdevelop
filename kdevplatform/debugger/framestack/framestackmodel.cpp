@@ -62,12 +62,12 @@ public:
     QHash<int, bool> m_hasMoreFrames;
 
     // Caches
-    QHash<QString, bool> m_fileExistsCache;
+    mutable QHash<QString, bool> m_fileExistsCache;
 };
 
 FrameStackModel::FrameStackModel(IDebugSession *session)
     : IFrameStackModel(session)
-    , d(new FrameStackModelPrivate(this))
+    , d_ptr(new FrameStackModelPrivate(this))
 {
     connect(session, &IDebugSession::stateChanged, this, &FrameStackModel::stateChanged);
 }
@@ -78,6 +78,8 @@ FrameStackModel::~FrameStackModel()
 
 void FrameStackModel::setThreads(const QVector<ThreadItem>& threads)
 {
+    Q_D(FrameStackModel);
+
     qCDebug(DEBUGGER) << threads.count();
 
     if (!d->m_threads.isEmpty()) {
@@ -107,6 +109,8 @@ QModelIndex FrameStackModelPrivate::indexForThreadNumber(int threadNumber)
 
 void FrameStackModel::setFrames(int threadNumber, const QVector<FrameItem>& frames)
 {
+    Q_D(FrameStackModel);
+
     QModelIndex threadIndex = d->indexForThreadNumber(threadNumber);
     Q_ASSERT(threadIndex.isValid());
 
@@ -139,6 +143,8 @@ void FrameStackModel::setFrames(int threadNumber, const QVector<FrameItem>& fram
 
 void FrameStackModel::insertFrames(int threadNumber, const QVector<FrameItem>& frames)
 {
+    Q_D(FrameStackModel);
+
     QModelIndex threadIndex = d->indexForThreadNumber(threadNumber);
     Q_ASSERT(threadIndex.isValid());
 
@@ -150,11 +156,15 @@ void FrameStackModel::insertFrames(int threadNumber, const QVector<FrameItem>& f
 
 void FrameStackModel::setHasMoreFrames(int threadNumber, bool hasMoreFrames)
 {
+    Q_D(FrameStackModel);
+
     d->m_hasMoreFrames[threadNumber] = hasMoreFrames;
 }
 
 FrameStackModel::FrameItem FrameStackModel::frame(const QModelIndex& index)
 {
+    Q_D(FrameStackModel);
+
     Q_ASSERT(index.internalId());
     Q_ASSERT(static_cast<quintptr>(d->m_threads.count()) >= index.internalId());
     const ThreadItem &thread = d->m_threads.at(index.internalId()-1);
@@ -163,11 +173,15 @@ FrameStackModel::FrameItem FrameStackModel::frame(const QModelIndex& index)
 
 QVector<FrameStackModel::FrameItem> FrameStackModel::frames(int threadNumber) const
 {
+    Q_D(const FrameStackModel);
+
     return d->m_frames.value(threadNumber);
 }
 
 QVariant FrameStackModel::data(const QModelIndex& index, int role) const
 {
+    Q_D(const FrameStackModel);
+
     if (!index.internalId()) {
         //thread
         if (d->m_threads.count() <= index.row()) return QVariant();
@@ -236,6 +250,8 @@ int FrameStackModel::columnCount(const QModelIndex& parent) const
 
 int FrameStackModel::rowCount(const QModelIndex& parent) const
 {
+    Q_D(const FrameStackModel);
+
     if (!parent.isValid()) {
         return d->m_threads.count();
     } else if (!parent.internalId() && parent.column() == 0) {
@@ -257,6 +273,8 @@ QModelIndex FrameStackModel::parent(const QModelIndex& child) const
 
 QModelIndex FrameStackModel::index(int row, int column, const QModelIndex& parent) const
 {
+    Q_D(const FrameStackModel);
+
     if (parent.isValid()) {
         Q_ASSERT(!parent.internalId());
         Q_ASSERT(parent.column() == 0);
@@ -284,6 +302,8 @@ QVariant FrameStackModel::headerData(int section, Qt::Orientation orientation, i
 
 void FrameStackModel::setCurrentThread(int threadNumber)
 {
+    Q_D(FrameStackModel);
+
     qCDebug(DEBUGGER) << threadNumber;
     if (d->m_currentThread != threadNumber && threadNumber != -1) {
         // FIXME: this logic means that if we switch to thread 3 and
@@ -306,6 +326,8 @@ void FrameStackModel::setCurrentThread(int threadNumber)
 
 void FrameStackModel::setCurrentThread(const QModelIndex& index)
 {
+    Q_D(const FrameStackModel);
+
     Q_ASSERT(index.isValid());
     Q_ASSERT(!index.internalId());
     Q_ASSERT(index.column() == 0);
@@ -314,21 +336,29 @@ void FrameStackModel::setCurrentThread(const QModelIndex& index)
 
 void FrameStackModel::setCrashedThreadIndex(int index)
 {
+    Q_D(FrameStackModel);
+
     d->m_crashedThreadIndex = index;
 }
 
 int FrameStackModel::crashedThreadIndex() const
 {
+    Q_D(const FrameStackModel);
+
     return d->m_crashedThreadIndex;
 }
 
 int FrameStackModel::currentThread() const
 {
+    Q_D(const FrameStackModel);
+
     return d->m_currentThread;
 }
 
 QModelIndex FrameStackModel::currentThreadIndex() const
 {
+    Q_D(const FrameStackModel);
+
     int i = 0;
     for (const ThreadItem& t : qAsConst(d->m_threads)) {
         if (t.nr == currentThread()) {
@@ -341,16 +371,22 @@ QModelIndex FrameStackModel::currentThreadIndex() const
 
 int FrameStackModel::currentFrame() const
 {
+    Q_D(const FrameStackModel);
+
     return d->m_currentFrame;
 }
 
 QModelIndex FrameStackModel::currentFrameIndex() const
 {
+    Q_D(const FrameStackModel);
+
     return index(d->m_currentFrame, 0, currentThreadIndex());
 }
 
 void FrameStackModel::setCurrentFrame(int frame)
 {
+    Q_D(FrameStackModel);
+
     qCDebug(DEBUGGER) << frame;
     if (frame != d->m_currentFrame)
     {
@@ -371,6 +407,8 @@ void FrameStackModelPrivate::update()
 
 void FrameStackModel::handleEvent(IDebugSession::event_t event)
 {
+    Q_D(FrameStackModel);
+
     switch (event)
     {
     case IDebugSession::program_state_changed:
@@ -384,6 +422,8 @@ void FrameStackModel::handleEvent(IDebugSession::event_t event)
 
 void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
 {
+    Q_D(FrameStackModel);
+
     if (state == IDebugSession::PausedState) {
         setCurrentFrame(-1);
         d->m_updateCurrentFrameOnNextFetch = true;
@@ -396,6 +436,8 @@ void FrameStackModel::stateChanged(IDebugSession::DebuggerState state)
 // an arbitrary thread, without making it current.
 void FrameStackModel::fetchMoreFrames()
 {
+    Q_D(FrameStackModel);
+
     d->m_subsequentFrameFetchOperations += 1;
     const int fetch = 20 * d->m_subsequentFrameFetchOperations * d->m_subsequentFrameFetchOperations;
     if (d->m_currentThread != -1 && d->m_hasMoreFrames[d->m_currentThread]) {

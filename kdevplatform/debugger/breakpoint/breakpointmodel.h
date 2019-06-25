@@ -38,6 +38,7 @@ namespace KDevelop
 {
 class IDocument;
 class Breakpoint;
+class BreakpointModelPrivate;
 
 class KDEVPLATFORMDEBUGGER_EXPORT BreakpointModel : public QAbstractTableModel
 {
@@ -191,7 +192,8 @@ private:
     Breakpoint *breakpoint(const QUrl& url, int line) const;
 
 private:
-    const QScopedPointer<class BreakpointModelPrivate> d;
+    const QScopedPointer<class BreakpointModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(BreakpointModel)
 };
 
 }

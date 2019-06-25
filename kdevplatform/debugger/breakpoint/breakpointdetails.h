@@ -27,6 +27,7 @@
 
 namespace KDevelop {
 class Breakpoint;
+class BreakpointDetailsPrivate;
 
 class KDEVPLATFORMDEBUGGER_EXPORT BreakpointDetails : public QWidget
 {
@@ -43,7 +44,8 @@ private Q_SLOTS:
     void setIgnoreHits(int ignoreHits);
 
 private:
-    const QScopedPointer<class BreakpointDetailsPrivate> d;
+    const QScopedPointer<class BreakpointDetailsPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(BreakpointDetails)
 };
 
 

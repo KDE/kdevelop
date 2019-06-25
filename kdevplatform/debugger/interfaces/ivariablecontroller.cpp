@@ -40,7 +40,7 @@ public:
 
 IVariableController::IVariableController(IDebugSession* parent)
     : QObject(parent)
-    , d(new IVariableControllerPrivate)
+    , d_ptr(new IVariableControllerPrivate)
 {
     connect(parent, &IDebugSession::stateChanged,
             this, &IVariableController::stateChanged);
@@ -61,6 +61,8 @@ IDebugSession* IVariableController::session() const
 
 void IVariableController::stateChanged(IDebugSession::DebuggerState state)
 {
+    Q_D(IVariableController);
+
     if (!ICore::self() || ICore::self()->shuttingDown()) {
         return;
     }
@@ -88,6 +90,8 @@ void IVariableController::stateChanged(IDebugSession::DebuggerState state)
 
 void IVariableController::updateIfFrameOrThreadChanged()
 {
+    Q_D(IVariableController);
+
     IFrameStackModel *sm = session()->frameStackModel();
     if (sm->currentThread() != d->activeThread || sm->currentFrame() != d->activeFrame) {
         variableCollection()->root()->resetChanged();
@@ -97,6 +101,8 @@ void IVariableController::updateIfFrameOrThreadChanged()
 
 void IVariableController::handleEvent(IDebugSession::event_t event)
 {
+    Q_D(IVariableController);
+
     if (!variableCollection()) return;
 
     switch (event) {
@@ -127,6 +133,8 @@ void IVariableController::handleEvent(IDebugSession::event_t event)
 
 void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)
 {
+    Q_D(IVariableController);
+
     IDebugSession::DebuggerState state = session()->state();
     d->autoUpdate = autoUpdate;
     qCDebug(DEBUGGER) << d->autoUpdate;
@@ -137,6 +145,8 @@ void IVariableController::setAutoUpdate(QFlags<UpdateType> autoUpdate)
 
 QFlags<IVariableController::UpdateType> IVariableController::autoUpdate()
 {
+    Q_D(IVariableController);
+
     return d->autoUpdate;
 }
 

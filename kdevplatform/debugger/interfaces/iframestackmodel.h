@@ -29,6 +29,7 @@
 #include <QString>
 
 namespace KDevelop {
+class IFrameStackModelPrivate;
 
 class KDEVPLATFORMDEBUGGER_EXPORT IFrameStackModel : public QAbstractItemModel
 {
@@ -88,7 +89,8 @@ private:
 
 private:
     friend class IDebugSession;
-    const QScopedPointer<class IFrameStackModelPrivate> d;
+    const QScopedPointer<class IFrameStackModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(IFrameStackModel)
 };
 
 }

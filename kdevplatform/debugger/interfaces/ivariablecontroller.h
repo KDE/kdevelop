@@ -37,6 +37,7 @@ class VariableCollection;
 class Variable;
 class TreeModel;
 class TreeItem;
+class IVariableControllerPrivate;
 
 class KDEVPLATFORMDEBUGGER_EXPORT IVariableController : public QObject
 {
@@ -88,7 +89,8 @@ private:
     void updateIfFrameOrThreadChanged();
 
 private:
-    const QScopedPointer<class IVariableControllerPrivate> d;
+    const QScopedPointer<class IVariableControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(IVariableController)
 };
  
 } // namespace KDevelop

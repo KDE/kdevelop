@@ -30,8 +30,10 @@ public:
 
 IFrameStackModel::IFrameStackModel(KDevelop::IDebugSession* session)
     : QAbstractItemModel(session)
-    , d(new IFrameStackModelPrivate)
+    , d_ptr(new IFrameStackModelPrivate)
 {
+    Q_D(IFrameStackModel);
+
     d->m_session = session;
 }
 
@@ -41,6 +43,8 @@ IFrameStackModel::~IFrameStackModel()
 
 IDebugSession* IFrameStackModel::session() const
 {
+    Q_D(const IFrameStackModel);
+
     return d->m_session;
 }
 

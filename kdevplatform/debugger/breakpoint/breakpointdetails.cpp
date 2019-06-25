@@ -44,8 +44,10 @@ public:
 
 BreakpointDetails::BreakpointDetails(QWidget *parent)
     : QWidget(parent)
-    , d(new BreakpointDetailsPrivate)
+    , d_ptr(new BreakpointDetailsPrivate)
 {
+    Q_D(BreakpointDetails);
+
     auto* layout = new QVBoxLayout(this);
 
     d->status = new QLabel(this);
@@ -82,6 +84,8 @@ BreakpointDetails::~BreakpointDetails() = default;
 
 void KDevelop::BreakpointDetails::setIgnoreHits(int ignoreHits)
 {
+    Q_D(BreakpointDetails);
+
     if (!d->currentBreakpoint)
         return;
     d->currentBreakpoint->setIgnoreHits(ignoreHits);
@@ -90,6 +94,8 @@ void KDevelop::BreakpointDetails::setIgnoreHits(int ignoreHits)
 
 void BreakpointDetails::setItem(Breakpoint *breakpoint)
 {
+    Q_D(BreakpointDetails);
+
     d->currentBreakpoint = breakpoint;
 
     if (!breakpoint) {
@@ -142,6 +148,8 @@ void BreakpointDetails::setItem(Breakpoint *breakpoint)
 
 void BreakpointDetails::showExplanation(const QString& link)
 {
+    Q_D(BreakpointDetails);
+
     QPoint pos = d->status->mapToGlobal(d->status->geometry().topLeft());
     if (link == QLatin1String("pending"))
     {

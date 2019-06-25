@@ -32,6 +32,7 @@ class QModelIndex;
 namespace KDevelop {
 class IDebugController;
 class Breakpoint;
+class BreakpointWidgetPrivate;
 
 class KDEVPLATFORMDEBUGGER_EXPORT BreakpointWidget : public AutoOrientedSplitter
 {
@@ -66,7 +67,8 @@ private Q_SLOTS:
     void slotPopupMenuAboutToShow();
     
 private:
-    const QScopedPointer<class BreakpointWidgetPrivate> d;
+    const QScopedPointer<class BreakpointWidgetPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(BreakpointWidget)
 };
 
 }

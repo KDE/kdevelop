@@ -33,6 +33,7 @@
 namespace KDevelop {
 
 class TreeItem;
+class TreeModelPrivate;
 
 class KDEVPLATFORMDEBUGGER_EXPORT TreeModel : public QAbstractItemModel
 {
@@ -81,7 +82,8 @@ public:
     using QAbstractItemModel::dataChanged;
 
 private:
-    const QScopedPointer<class TreeModelPrivate> d;
+    const QScopedPointer<class TreeModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TreeModel)
 };
 
 }

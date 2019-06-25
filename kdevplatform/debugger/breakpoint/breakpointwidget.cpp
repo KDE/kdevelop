@@ -68,8 +68,10 @@ public:
 
 BreakpointWidget::BreakpointWidget(IDebugController *controller, QWidget *parent)
     : AutoOrientedSplitter(parent)
-    , d(new BreakpointWidgetPrivate(controller))
+    , d_ptr(new BreakpointWidgetPrivate(controller))
 {
+    Q_D(BreakpointWidget);
+
     setWindowTitle(i18nc("@title:window", "Debugger Breakpoints"));
     setWhatsThis(i18nc("@info:whatsthis", "Displays a list of breakpoints with "
                                           "their current status. Clicking on a "
@@ -121,6 +123,8 @@ BreakpointWidget::~BreakpointWidget() = default;
 
 void BreakpointWidget::setupPopupMenu()
 {
+    Q_D(BreakpointWidget);
+
     d->popup = new QMenu(this);
 
     QMenu* newBreakpoint = d->popup->addMenu(i18nc("New breakpoint", "&New"));
@@ -166,11 +170,15 @@ void BreakpointWidget::setupPopupMenu()
 
 void BreakpointWidget::contextMenuEvent(QContextMenuEvent* event)
 {
+    Q_D(BreakpointWidget);
+
     d->popup->popup(event->globalPos());
 }
 
 void BreakpointWidget::slotPopupMenuAboutToShow()
 {
+    Q_D(BreakpointWidget);
+
     if (d->debugController->breakpointModel()->rowCount() < 1) {
         d->breakpointDisableAllAction->setDisabled(true);
         d->breakpointEnableAllAction->setDisabled(true);
@@ -194,6 +202,8 @@ void BreakpointWidget::slotPopupMenuAboutToShow()
 
 void BreakpointWidget::showEvent(QShowEvent *)
 {
+    Q_D(BreakpointWidget);
+
     if (d->firstShow && d->debugController->breakpointModel()->rowCount() > 0) {
         for (int i = 0; i < d->breakpointsView->model()->columnCount(); ++i) {
             if(i == Breakpoint::LocationColumn){
@@ -212,6 +222,8 @@ void BreakpointWidget::showEvent(QShowEvent *)
 
 void BreakpointWidget::edit(KDevelop::Breakpoint *n)
 {
+    Q_D(BreakpointWidget);
+
     QModelIndex index = d->proxyModel->mapFromSource(d->debugController->breakpointModel()->breakpointIndex(n, Breakpoint::LocationColumn));
     d->breakpointsView->setCurrentIndex(index);
     d->breakpointsView->edit(index);
@@ -219,34 +231,46 @@ void BreakpointWidget::edit(KDevelop::Breakpoint *n)
 
 void BreakpointWidget::slotDataInserted(int column, const QVariant& value)
 {
+    Q_D(BreakpointWidget);
+
     Breakpoint* breakpoint = d->debugController->breakpointModel()->addCodeBreakpoint();
     breakpoint->setData(column, value);
 }
 
 void BreakpointWidget::slotAddBlankBreakpoint()
 {
+    Q_D(BreakpointWidget);
+
     edit(d->debugController->breakpointModel()->addCodeBreakpoint());
 }
 
 void BreakpointWidget::slotAddBlankWatchpoint()
 {
+    Q_D(BreakpointWidget);
+
     edit(d->debugController->breakpointModel()->addWatchpoint());
 }
 
 void BreakpointWidget::slotAddBlankReadWatchpoint()
 {
+    Q_D(BreakpointWidget);
+
     edit(d->debugController->breakpointModel()->addReadWatchpoint());
 }
 
 
 void KDevelop::BreakpointWidget::slotAddBlankAccessWatchpoint()
 {
+    Q_D(BreakpointWidget);
+
     edit(d->debugController->breakpointModel()->addAccessWatchpoint());
 }
 
 
 void BreakpointWidget::slotRemoveBreakpoint()
 {
+    Q_D(BreakpointWidget);
+
     QItemSelectionModel* sel = d->breakpointsView->selectionModel();
     QModelIndexList selected = sel->selectedIndexes();
     IF_DEBUG( qCDebug(DEBUGGER) << selected; )
@@ -257,12 +281,16 @@ void BreakpointWidget::slotRemoveBreakpoint()
 
 void BreakpointWidget::slotRemoveAllBreakpoints()
 {
+    Q_D(BreakpointWidget);
+
     d->debugController->breakpointModel()->removeRows(0, d->debugController->breakpointModel()->rowCount());
 }
 
 
 void BreakpointWidget::slotUpdateBreakpointDetail()
 {
+    Q_D(BreakpointWidget);
+
     showEvent(nullptr);
     QModelIndexList selected = d->breakpointsView->selectionModel()->selectedIndexes();
     IF_DEBUG( qCDebug(DEBUGGER) << selected; )
@@ -275,6 +303,8 @@ void BreakpointWidget::slotUpdateBreakpointDetail()
 
 void BreakpointWidget::breakpointHit(int row)
 {
+    Q_D(BreakpointWidget);
+
     const QModelIndex index = d->proxyModel->mapFromSource(d->debugController->breakpointModel()->index(row, 0));
     d->breakpointsView->selectionModel()->select(
         index,
@@ -284,6 +314,8 @@ void BreakpointWidget::breakpointHit(int row)
 
 void BreakpointWidget::breakpointError(int row, const QString& msg)
 {
+    Q_D(BreakpointWidget);
+
     // FIXME: we probably should prevent this error notification during
     // initial setting of breakpoint, to avoid a cloud of popups.
     if (!d->breakpointsView->isVisible())
@@ -305,6 +337,8 @@ void BreakpointWidget::breakpointError(int row, const QString& msg)
 
 void BreakpointWidget::slotOpenFile(const QModelIndex& breakpointIdx)
 {
+    Q_D(BreakpointWidget);
+
     if (breakpointIdx.column() != Breakpoint::LocationColumn){
         return;
     }
@@ -318,6 +352,8 @@ void BreakpointWidget::slotOpenFile(const QModelIndex& breakpointIdx)
 
 void BreakpointWidget::slotDisableAllBreakpoints()
 {
+    Q_D(BreakpointWidget);
+
     for (int i = 0; i < d->debugController->breakpointModel()->rowCount(); ++i) {
         Breakpoint* bp = d->debugController->breakpointModel()->breakpoint(i);
         bp->setData(Breakpoint::EnableColumn, Qt::Unchecked);
@@ -326,6 +362,8 @@ void BreakpointWidget::slotDisableAllBreakpoints()
 
 void BreakpointWidget::slotEnableAllBreakpoints()
 {
+    Q_D(BreakpointWidget);
+
     for (int i = 0; i < d->debugController->breakpointModel()->rowCount(); ++i) {
         Breakpoint* bp = d->debugController->breakpointModel()->breakpoint(i);
         bp->setData(Breakpoint::EnableColumn, Qt::Checked);

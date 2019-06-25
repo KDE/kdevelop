@@ -42,23 +42,29 @@ public:
 TreeModel::TreeModel(const QVector<QString>& headers,
                      QObject *parent)
   : QAbstractItemModel(parent)
-  , d(new TreeModelPrivate(headers))
+  , d_ptr(new TreeModelPrivate(headers))
 {
 }
 
 void TreeModel::setRootItem(TreeItem *item)
 {
+    Q_D(TreeModel);
+
     d->root = item;
     d->root->fetchMoreChildren();
 }
 
 TreeModel::~TreeModel()
 {
+    Q_D(TreeModel);
+
     delete d->root;
 }
 
 int TreeModel::columnCount(const QModelIndex &parent) const
 {
+    Q_D(const TreeModel);
+
     Q_UNUSED(parent);
     return d->headers.size();
 }
@@ -86,6 +92,8 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex &index) const
 QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
                                int role) const
 {
+    Q_D(const TreeModel);
+
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         return d->headers.value(section);
 
@@ -95,6 +103,8 @@ QVariant TreeModel::headerData(int section, Qt::Orientation orientation,
 QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
     const
 {
+    Q_D(const TreeModel);
+
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
@@ -114,6 +124,8 @@ QModelIndex TreeModel::index(int row, int column, const QModelIndex &parent)
 
 QModelIndex TreeModel::parent(const QModelIndex &index) const
 {
+    Q_D(const TreeModel);
+
     if (!index.isValid())
         return QModelIndex();
 
@@ -128,6 +140,8 @@ QModelIndex TreeModel::parent(const QModelIndex &index) const
 
 int TreeModel::rowCount(const QModelIndex &parent) const
 {
+    Q_D(const TreeModel);
+
     TreeItem *parentItem;
     if (parent.column() > 0)
         return 0;
@@ -145,6 +159,8 @@ int TreeModel::rowCount(const QModelIndex &parent) const
 
 TreeItem* TreeModel::itemForIndex(const QModelIndex& index) const
 {
+    Q_D(const TreeModel);
+
     if (!index.isValid())
         return d->root;
     else
@@ -211,6 +227,8 @@ bool TreeModel::setData(const QModelIndex& index, const QVariant& value,
 
 KDevelop::TreeItem* KDevelop::TreeModel::root() const
 {
+    Q_D(const TreeModel);
+
     return d->root;
 }
 

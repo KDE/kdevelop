@@ -44,10 +44,10 @@ public:
 };
 
 IDebugSession::IDebugSession()
-    : d(new IDebugSessionPrivate(this))
+    : d_ptr(new IDebugSessionPrivate(this))
 {
     connect(this, &IDebugSession::stateChanged,
-            this, [&](IDebugSession::DebuggerState state) { d->slotStateChanged(state); });
+            this, [this](IDebugSession::DebuggerState state) { Q_D(IDebugSession); d->slotStateChanged(state); });
 }
 
 IDebugSession::~IDebugSession()
@@ -84,6 +84,8 @@ QPair<QUrl, int> IDebugSession::convertToRemoteUrl(const QPair<QUrl, int>& local
 
 void IDebugSession::clearCurrentPosition()
 {
+    Q_D(IDebugSession);
+
     qCDebug(DEBUGGER);
     d->m_url.clear();
     d->m_addr.clear();
@@ -93,6 +95,8 @@ void IDebugSession::clearCurrentPosition()
 
 void IDebugSession::setCurrentPosition(const QUrl& url, int line, const QString& addr)
 {
+    Q_D(IDebugSession);
+
     qCDebug(DEBUGGER) << url << line << addr;
 
     if (url.isEmpty() || !QFileInfo::exists(convertToLocalUrl(qMakePair(url,line)).first.path())) {
@@ -109,16 +113,22 @@ void IDebugSession::setCurrentPosition(const QUrl& url, int line, const QString&
 
 QUrl IDebugSession::currentUrl() const
 {
+    Q_D(const IDebugSession);
+
     return d->m_url;
 }
 
 int IDebugSession::currentLine() const
 {
+    Q_D(const IDebugSession);
+
     return d->m_line;
 }
 
 QString IDebugSession::currentAddr() const
 {
+    Q_D(const IDebugSession);
+
     return d->m_addr;
 }
 
