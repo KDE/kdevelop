@@ -32,6 +32,7 @@ class QMenu;
 
 namespace KDevelop
 {
+class StandardDocumentationViewPrivate;
 
 /**
  * A standard documentation view, based on QtWebKit or QtWebEngine, depending on your distribution preferences.
@@ -99,7 +100,9 @@ private:
     void keyPressEvent(QKeyEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
 
-    const QScopedPointer<class StandardDocumentationViewPrivate> d;
+private:
+    const QScopedPointer<class StandardDocumentationViewPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(StandardDocumentationView)
 };
 
 }

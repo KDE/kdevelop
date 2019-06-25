@@ -130,8 +130,10 @@ public:
 
 StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent)
     : QWidget(parent)
-    , d(new StandardDocumentationViewPrivate)
+    , d_ptr(new StandardDocumentationViewPrivate)
 {
+    Q_D(StandardDocumentationView);
+
     auto mainLayout = new QVBoxLayout(this);
     mainLayout->setMargin(0);
     setLayout(mainLayout);
@@ -174,10 +176,12 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
     // after loading with using standard QWebFrame method scrollToAnchor().
 
     connect(d->m_view, &QWebView::loadStarted, d->m_view, [this]() {
+        Q_D(StandardDocumentationView);
         d->m_view->setUpdatesEnabled(false);
     });
 
     connect(d->m_view, &QWebView::loadFinished, this, [this](bool) {
+        Q_D(StandardDocumentationView);
         if (d->m_view->url().isValid()) {
             d->m_view->page()->mainFrame()->scrollToAnchor(d->m_view->url().fragment());
         }
@@ -188,12 +192,16 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
 
 KDevelop::StandardDocumentationView::~StandardDocumentationView()
 {
+    Q_D(StandardDocumentationView);
+
     // Prevent getting a loadFinished() signal on destruction.
     disconnect(d->m_view, nullptr, this, nullptr);
 }
 
 void StandardDocumentationView::search ( const QString& text, DocumentationFindWidget::FindOptions options )
 {
+    Q_D(StandardDocumentationView);
+
 #ifdef USE_QTWEBKIT
     using WebkitThing = QWebPage;
 #else
@@ -211,6 +219,8 @@ void StandardDocumentationView::search ( const QString& text, DocumentationFindW
 
 void StandardDocumentationView::searchIncremental(const QString& text, DocumentationFindWidget::FindOptions options)
 {
+    Q_D(StandardDocumentationView);
+
 #ifdef USE_QTWEBKIT
     using WebkitThing = QWebPage;
 #else
@@ -235,12 +245,16 @@ void StandardDocumentationView::searchIncremental(const QString& text, Documenta
 
 void StandardDocumentationView::finishSearch()
 {
+    Q_D(StandardDocumentationView);
+
     // passing emptry string to reset search, as told in API docs
     d->m_view->page()->findText(QString());
 }
 
 void StandardDocumentationView::initZoom(const QString& configSubGroup)
 {
+    Q_D(StandardDocumentationView);
+
     Q_ASSERT_X(!d->m_zoomController, "StandardDocumentationView::initZoom", "Can not initZoom a second time.");
 
     const KConfigGroup outerGroup(KSharedConfig::openConfig(), QStringLiteral("Documentation View"));
@@ -253,6 +267,8 @@ void StandardDocumentationView::initZoom(const QString& configSubGroup)
 
 void StandardDocumentationView::setDocumentation(const IDocumentation::Ptr& doc)
 {
+    Q_D(StandardDocumentationView);
+
     if(d->m_doc)
         disconnect(d->m_doc.data());
     d->m_doc = doc;
@@ -263,6 +279,8 @@ void StandardDocumentationView::setDocumentation(const IDocumentation::Ptr& doc)
 
 void StandardDocumentationView::update()
 {
+    Q_D(StandardDocumentationView);
+
     if(d->m_doc) {
         setHtml(d->m_doc->description());
     } else
@@ -271,6 +289,8 @@ void StandardDocumentationView::update()
 
 void KDevelop::StandardDocumentationView::setOverrideCss(const QUrl& url)
 {
+    Q_D(StandardDocumentationView);
+
 #ifdef USE_QTWEBKIT
     d->m_view->settings()->setUserStyleSheetUrl(url);
 #else
@@ -287,6 +307,8 @@ void KDevelop::StandardDocumentationView::setOverrideCss(const QUrl& url)
 
 void KDevelop::StandardDocumentationView::load(const QUrl& url)
 {
+    Q_D(StandardDocumentationView);
+
 #ifdef USE_QTWEBKIT
     d->m_view->load(url);
 #else
@@ -296,6 +318,8 @@ void KDevelop::StandardDocumentationView::load(const QUrl& url)
 
 void KDevelop::StandardDocumentationView::setHtml(const QString& html)
 {
+    Q_D(StandardDocumentationView);
+
 #ifdef USE_QTWEBKIT
     d->m_view->setHtml(html);
 #else
@@ -325,6 +349,8 @@ private:
 
 void KDevelop::StandardDocumentationView::setNetworkAccessManager(QNetworkAccessManager* manager)
 {
+    Q_D(StandardDocumentationView);
+
 #ifdef USE_QTWEBKIT
     d->m_view->page()->setNetworkAccessManager(manager);
 #else
@@ -334,6 +360,8 @@ void KDevelop::StandardDocumentationView::setNetworkAccessManager(QNetworkAccess
 
 void KDevelop::StandardDocumentationView::setDelegateLinks(bool delegate)
 {
+    Q_D(StandardDocumentationView);
+
 #ifdef USE_QTWEBKIT
     d->m_view->page()->setLinkDelegationPolicy(delegate ? QWebPage::DelegateAllLinks : QWebPage::DontDelegateLinks);
 #else
@@ -343,6 +371,8 @@ void KDevelop::StandardDocumentationView::setDelegateLinks(bool delegate)
 
 QMenu* StandardDocumentationView::createStandardContextMenu()
 {
+    Q_D(StandardDocumentationView);
+
     auto menu = new QMenu(this);
 #ifdef USE_QTWEBKIT
     using WebkitThing = QWebPage;
@@ -359,6 +389,8 @@ QMenu* StandardDocumentationView::createStandardContextMenu()
 
 bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
 {
+    Q_D(StandardDocumentationView);
+
 #ifndef USE_QTWEBKIT
     if (object == d->m_view) {
         // help QWebEngineView properly behave like expected as if Qt::NoContextMenu was set
@@ -386,11 +418,15 @@ void StandardDocumentationView::contextMenuEvent(QContextMenuEvent* event)
 
 void StandardDocumentationView::updateZoomFactor(double zoomFactor)
 {
+    Q_D(StandardDocumentationView);
+
     d->m_view->setZoomFactor(zoomFactor);
 }
 
 void StandardDocumentationView::keyPressEvent(QKeyEvent* event)
 {
+    Q_D(StandardDocumentationView);
+
     if (d->m_zoomController && d->m_zoomController->handleKeyPressEvent(event)) {
         return;
     }
@@ -399,6 +435,8 @@ void StandardDocumentationView::keyPressEvent(QKeyEvent* event)
 
 void StandardDocumentationView::wheelEvent(QWheelEvent* event)
 {
+    Q_D(StandardDocumentationView);
+
     if (d->m_zoomController && d->m_zoomController->handleWheelEvent(event)) {
         return;
     }
