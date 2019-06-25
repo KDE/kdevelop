@@ -29,6 +29,7 @@ class QIcon;
 
 namespace KDevelop
 {
+class OutputJobPrivate;
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputJob : public KJob
 {
@@ -89,7 +90,8 @@ private Q_SLOTS:
     void outputViewRemoved(int , int id);
 
 private:
-    const QScopedPointer<class OutputJobPrivate> d;
+    const QScopedPointer<class OutputJobPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(OutputJob)
 };
 
 }

@@ -28,6 +28,7 @@
 
 namespace KDevelop
 {
+class OutputDelegatePrivate;
 
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputDelegate : public QItemDelegate
 {
@@ -38,7 +39,8 @@ public:
     void paint( QPainter*, const QStyleOptionViewItem&, const QModelIndex& ) const override;
 
 private:
-    const QScopedPointer<class OutputDelegatePrivate> d;
+    const QScopedPointer<class OutputDelegatePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(OutputDelegate)
 };
 
 }

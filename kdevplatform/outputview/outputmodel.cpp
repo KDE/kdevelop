@@ -240,13 +240,13 @@ OutputModelPrivate::~OutputModelPrivate()
 
 OutputModel::OutputModel( const QUrl& builddir, QObject* parent )
 : QAbstractListModel(parent)
-, d( new OutputModelPrivate( this, builddir ) )
+, d_ptr(new OutputModelPrivate(this, builddir))
 {
 }
 
 OutputModel::OutputModel( QObject* parent )
     : QAbstractListModel(parent)
-, d( new OutputModelPrivate( this ) )
+    , d_ptr(new OutputModelPrivate(this))
 {
 }
 
@@ -254,6 +254,8 @@ OutputModel::~OutputModel() = default;
 
 QVariant OutputModel::data(const QModelIndex& idx , int role ) const
 {
+    Q_D(const OutputModel);
+
     if( d->isValidIndex(idx, rowCount()) )
     {
         switch( role )
@@ -271,6 +273,8 @@ QVariant OutputModel::data(const QModelIndex& idx , int role ) const
 
 int OutputModel::rowCount( const QModelIndex& parent ) const
 {
+    Q_D(const OutputModel);
+
     if( !parent.isValid() )
         return d->m_filteredItems.count();
     return 0;
@@ -283,6 +287,8 @@ QVariant OutputModel::headerData( int, Qt::Orientation, int ) const
 
 void OutputModel::activate( const QModelIndex& index )
 {
+    Q_D(OutputModel);
+
     if( index.model() != this || !d->isValidIndex(index, rowCount()) )
     {
         return;
@@ -313,6 +319,8 @@ void OutputModel::activate( const QModelIndex& index )
 
 QModelIndex OutputModel::firstHighlightIndex()
 {
+    Q_D(OutputModel);
+
     if( !d->m_errorItems.empty() ) {
         return index( *d->m_errorItems.begin(), 0, QModelIndex() );
     }
@@ -328,6 +336,8 @@ QModelIndex OutputModel::firstHighlightIndex()
 
 QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 {
+    Q_D(OutputModel);
+
     int startrow = d->isValidIndex(currentIdx, rowCount()) ? currentIdx.row() + 1 : 0;
 
     if( !d->m_errorItems.empty() )
@@ -354,6 +364,8 @@ QModelIndex OutputModel::nextHighlightIndex( const QModelIndex &currentIdx )
 
 QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 {
+    Q_D(OutputModel);
+
     //We have to ensure that startrow is >= rowCount - 1 to get a positive value from the % operation.
     int startrow = rowCount() + (d->isValidIndex(currentIdx, rowCount()) ? currentIdx.row() : rowCount()) - 1;
 
@@ -385,6 +397,8 @@ QModelIndex OutputModel::previousHighlightIndex( const QModelIndex &currentIdx )
 
 QModelIndex OutputModel::lastHighlightIndex()
 {
+    Q_D(OutputModel);
+
     if( !d->m_errorItems.empty() ) {
         return index( *d->m_errorItems.rbegin(), 0, QModelIndex() );
     }
@@ -400,6 +414,8 @@ QModelIndex OutputModel::lastHighlightIndex()
 
 void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrategy)
 {
+    Q_D(OutputModel);
+
     // TODO: Turn into factory, decouple from OutputModel
     IFilterStrategy* filter = nullptr;
     switch( currentStrategy )
@@ -430,12 +446,16 @@ void OutputModel::setFilteringStrategy(const OutputFilterStrategy& currentStrate
 
 void OutputModel::setFilteringStrategy(IFilterStrategy* filterStrategy)
 {
+    Q_D(OutputModel);
+
     QMetaObject::invokeMethod(d->worker, "changeFilterStrategy",
                               Q_ARG(KDevelop::IFilterStrategy*, filterStrategy));
 }
 
 void OutputModel::appendLines( const QStringList& lines )
 {
+    Q_D(OutputModel);
+
     if( lines.isEmpty() )
         return;
 
@@ -450,11 +470,15 @@ void OutputModel::appendLine( const QString& line )
 
 void OutputModel::ensureAllDone()
 {
+    Q_D(OutputModel);
+
     QMetaObject::invokeMethod(d->worker, "flushBuffers");
 }
 
 void OutputModel::clear()
 {
+    Q_D(OutputModel);
+
     ensureAllDone();
     beginResetModel();
     d->m_filteredItems.clear();

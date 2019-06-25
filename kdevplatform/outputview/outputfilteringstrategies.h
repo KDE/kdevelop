@@ -36,6 +36,7 @@
 
 namespace KDevelop
 {
+class CompilerFilterStrategyPrivate;
 
 /**
  * This filter strategy is for not applying any filtering at all. Implementation of the
@@ -71,7 +72,8 @@ public:
     QVector<QString> currentDirs() const;
 
 private:
-    const QScopedPointer<class CompilerFilterStrategyPrivate> d;
+    const QScopedPointer<class CompilerFilterStrategyPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(CompilerFilterStrategy)
 };
 
 /**

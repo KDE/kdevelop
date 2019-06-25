@@ -142,7 +142,7 @@ void CompilerFilterStrategyPrivate::putDirAtEnd(const Path& pathToInsert)
 }
 
 CompilerFilterStrategy::CompilerFilterStrategy(const QUrl& buildDir)
-: d(new CompilerFilterStrategyPrivate( buildDir ))
+    : d_ptr(new CompilerFilterStrategyPrivate(buildDir))
 {
 }
 
@@ -150,6 +150,8 @@ CompilerFilterStrategy::~CompilerFilterStrategy() = default;
 
 QVector<QString> CompilerFilterStrategy::currentDirs() const
 {
+    Q_D(const CompilerFilterStrategy);
+
     QVector<QString> ret;
     ret.reserve(d->m_currentDirs.size());
     for (const auto& path : qAsConst(d->m_currentDirs)) {
@@ -160,6 +162,8 @@ QVector<QString> CompilerFilterStrategy::currentDirs() const
 
 FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 {
+    Q_D(CompilerFilterStrategy);
+
     // A list of filters for possible compiler, linker, and make actions
     static const ActionFormat ACTION_FILTERS[] = {
         ActionFormat( 2,
@@ -233,6 +237,8 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
 
 FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
 {
+    Q_D(CompilerFilterStrategy);
+
     // All the possible string that indicate an error if we via Regex have been able to
     // extract file and linenumber from a given outputline
     // TODO: This seems clumsy -- and requires another scan of the line.

@@ -50,7 +50,7 @@ public:
 
 OutputJob::OutputJob(QObject* parent, OutputJobVerbosity verbosity)
     : KJob(parent)
-    , d(new OutputJobPrivate(verbosity))
+    , d_ptr(new OutputJobPrivate(verbosity))
 {
 }
 
@@ -58,6 +58,8 @@ OutputJob::~OutputJob() = default;
 
 void OutputJob::startOutput()
 {
+    Q_D(OutputJob);
+
     IPlugin* i = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
     if( i )
     {
@@ -102,6 +104,8 @@ void OutputJob::startOutput()
 
 void OutputJob::outputViewRemoved(int toolViewId, int id)
 {
+    Q_D(OutputJob);
+
     Q_UNUSED(toolViewId);
     if (id == d->outputId && d->killJobOnOutputClose) {
         // Make sure that the job emits result signal as the job
@@ -114,6 +118,8 @@ void OutputJob::outputViewRemoved(int toolViewId, int id)
 
 void KDevelop::OutputJob::setTitle(const QString & title)
 {
+    Q_D(OutputJob);
+
     d->title = title;
     if (d->outputId >= 0 && d->standardToolView >= 0) {
         IPlugin* i = ICore::self()->pluginController()->pluginForExtension(QStringLiteral("org.kdevelop.IOutputView"));
@@ -130,21 +136,29 @@ void KDevelop::OutputJob::setTitle(const QString & title)
 
 void KDevelop::OutputJob::setViewType(IOutputView::ViewType type)
 {
+    Q_D(OutputJob);
+
     d->type = type;
 }
 
 void KDevelop::OutputJob::setBehaviours(IOutputView::Behaviours behaviours)
 {
+    Q_D(OutputJob);
+
     d->behaviours = behaviours;
 }
 
 void KDevelop::OutputJob::setKillJobOnOutputClose(bool killJobOnOutputClose)
 {
+    Q_D(OutputJob);
+
     d->killJobOnOutputClose = killJobOnOutputClose;
 }
 
 void KDevelop::OutputJob::setModel(QAbstractItemModel * model)
 {
+    Q_D(OutputJob);
+
     if (d->outputModel) {
         delete d->outputModel;
     }
@@ -158,41 +172,57 @@ void KDevelop::OutputJob::setModel(QAbstractItemModel * model)
 
 void KDevelop::OutputJob::setDelegate(QAbstractItemDelegate * delegate)
 {
+    Q_D(OutputJob);
+
     d->outputDelegate = delegate;
 }
 
 QAbstractItemModel * KDevelop::OutputJob::model() const
 {
+    Q_D(const OutputJob);
+
     return d->outputModel;
 }
 
 void KDevelop::OutputJob::setStandardToolView(IOutputView::StandardToolView standard)
 {
+    Q_D(OutputJob);
+
     d->standardToolView = standard;
 }
 
 void OutputJob::setToolTitle(const QString& title)
 {
+    Q_D(OutputJob);
+
     d->toolTitle = title;
 }
 
 void OutputJob::setToolIcon(const QIcon& icon)
 {
+    Q_D(OutputJob);
+
     d->toolIcon = icon;
 }
 
 int OutputJob::outputId() const
 {
+    Q_D(const OutputJob);
+
     return d->outputId;
 }
 
 OutputJob::OutputJobVerbosity OutputJob::verbosity() const
 {
+    Q_D(const OutputJob);
+
     return d->verbosity;
 }
 
 void OutputJob::setVerbosity(OutputJob::OutputJobVerbosity verbosity)
 {
+    Q_D(OutputJob);
+
     d->verbosity = verbosity;
 }
 

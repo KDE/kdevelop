@@ -85,8 +85,10 @@ OutputExecuteJobPrivate::OutputExecuteJobPrivate( OutputExecuteJob* owner ) :
 
 OutputExecuteJob::OutputExecuteJob( QObject* parent, OutputJob::OutputJobVerbosity verbosity ):
     OutputJob( parent, verbosity ),
-    d( new OutputExecuteJobPrivate( this ) )
+    d_ptr(new OutputExecuteJobPrivate(this))
 {
+    Q_D(OutputExecuteJob);
+
     d->m_process->setOutputChannelMode( KProcess::SeparateChannels );
 
     connect( d->m_process, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
@@ -94,13 +96,15 @@ OutputExecuteJob::OutputExecuteJob( QObject* parent, OutputJob::OutputJobVerbosi
     connect( d->m_process, &QProcess::errorOccurred,
              this, &OutputExecuteJob::childProcessError );
     connect( d->m_process, &KProcess::readyReadStandardOutput,
-             this, [=] { d->childProcessStdout(); } );
+             this, [this] { Q_D(OutputExecuteJob); d->childProcessStdout(); } );
     connect( d->m_process, &KProcess::readyReadStandardError,
-             this, [=] { d->childProcessStderr(); } );
+             this, [this] { Q_D(OutputExecuteJob); d->childProcessStderr(); } );
 }
 
 OutputExecuteJob::~OutputExecuteJob()
 {
+    Q_D(OutputExecuteJob);
+
     // indicates if process is running and survives kill, then we cannot do anything
     bool killSuccessful = d->m_process->state() == QProcess::NotRunning;
     if( !killSuccessful ) {
@@ -112,6 +116,8 @@ OutputExecuteJob::~OutputExecuteJob()
 
 OutputExecuteJob::JobStatus OutputExecuteJob::status() const
 {
+    Q_D(const OutputExecuteJob);
+
     return d->m_status;
 }
 
@@ -122,33 +128,45 @@ OutputModel* OutputExecuteJob::model() const
 
 QStringList OutputExecuteJob::commandLine() const
 {
+    Q_D(const OutputExecuteJob);
+
     return d->m_arguments;
 }
 
 OutputExecuteJob& OutputExecuteJob::operator<<( const QString& argument )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_arguments << argument;
     return *this;
 }
 
 OutputExecuteJob& OutputExecuteJob::operator<<( const QStringList& arguments )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_arguments << arguments;
     return *this;
 }
 
 QStringList OutputExecuteJob::privilegedExecutionCommand() const
 {
+    Q_D(const OutputExecuteJob);
+
     return d->m_privilegedExecutionCommand;
 }
 
 void OutputExecuteJob::setPrivilegedExecutionCommand( const QStringList& command )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_privilegedExecutionCommand = command;
 }
 
 void OutputExecuteJob::setJobName( const QString& name )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_jobName = name;
 
     const QString jobDisplayName = d->jobDisplayName();
@@ -159,16 +177,22 @@ void OutputExecuteJob::setJobName( const QString& name )
 
 QUrl OutputExecuteJob::workingDirectory() const
 {
+    Q_D(const OutputExecuteJob);
+
     return d->m_workingDirectory;
 }
 
 void OutputExecuteJob::setWorkingDirectory( const QUrl& url )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_workingDirectory = url;
 }
 
 void OutputExecuteJob::start()
 {
+    Q_D(OutputExecuteJob);
+
     Q_ASSERT( d->m_status == JobNotStarted );
     d->m_status = JobRunning;
 
@@ -245,7 +269,8 @@ void OutputExecuteJob::start()
 
     setDelegate( new OutputDelegate );
 
-    connect(model(), &OutputModel::progress, this, [&](const IFilterStrategy::Progress& progress) {
+    connect(model(), &OutputModel::progress, this, [this](const IFilterStrategy::Progress& progress) {
+        Q_D(OutputExecuteJob);
         d->emitProgress(progress);
     });
 
@@ -296,6 +321,8 @@ void OutputExecuteJob::start()
 
 bool OutputExecuteJob::doKill()
 {
+    Q_D(OutputExecuteJob);
+
     const int terminateKillTimeout = 1000; // msecs
 
     if( d->m_status != JobRunning ) {
@@ -323,6 +350,8 @@ bool OutputExecuteJob::doKill()
 
 void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
 {
+    Q_D(OutputExecuteJob);
+
     // This can be called twice: one time via an error() signal, and second - from childProcessExited().
     // Avoid doing things in second time.
     if( d->m_status != OutputExecuteJob::JobRunning )
@@ -371,6 +400,8 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
 
 void OutputExecuteJob::childProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
+    Q_D(OutputExecuteJob);
+
     if( d->m_status != JobRunning )
         return;
 
@@ -424,6 +455,8 @@ void OutputExecuteJob::postProcessStderr( const QStringList& lines )
 
 void OutputExecuteJob::setFilteringStrategy( OutputModel::OutputFilterStrategy strategy )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_filteringStrategy = strategy;
 
     // clear the other
@@ -432,6 +465,8 @@ void OutputExecuteJob::setFilteringStrategy( OutputModel::OutputFilterStrategy s
 
 void OutputExecuteJob::setFilteringStrategy(IFilterStrategy* filterStrategy)
 {
+    Q_D(OutputExecuteJob);
+
     d->m_filteringStrategyPtr.reset(filterStrategy);
 
     // clear the other
@@ -440,11 +475,15 @@ void OutputExecuteJob::setFilteringStrategy(IFilterStrategy* filterStrategy)
 
 OutputExecuteJob::JobProperties OutputExecuteJob::properties() const
 {
+    Q_D(const OutputExecuteJob);
+
     return d->m_properties;
 }
 
 void OutputExecuteJob::setProperties( OutputExecuteJob::JobProperties properties, bool override )
 {
+    Q_D(OutputExecuteJob);
+
     if( override ) {
         d->m_properties = properties;
     } else {
@@ -454,47 +493,65 @@ void OutputExecuteJob::setProperties( OutputExecuteJob::JobProperties properties
 
 void OutputExecuteJob::unsetProperties( OutputExecuteJob::JobProperties properties )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_properties &= ~properties;
 }
 
 QString OutputExecuteJob::environmentProfile() const
 {
+    Q_D(const OutputExecuteJob);
+
     return d->m_environmentProfile;
 }
 
 void OutputExecuteJob::setEnvironmentProfile( const QString& profile )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_environmentProfile = profile;
 }
 
 void OutputExecuteJob::addEnvironmentOverride( const QString& name, const QString& value )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_environmentOverrides[name] = value;
 }
 
 void OutputExecuteJob::removeEnvironmentOverride( const QString& name )
 {
+    Q_D(OutputExecuteJob);
+
     d->m_environmentOverrides.remove( name );
 }
 
 
 void OutputExecuteJob::setExecuteOnHost(bool executeHost)
 {
+    Q_D(OutputExecuteJob);
+
     d->m_executeOnHost = executeHost;
 }
 
 bool OutputExecuteJob::executeOnHost() const
 {
+    Q_D(const OutputExecuteJob);
+
     return d->m_executeOnHost;
 }
 
 bool OutputExecuteJob::checkExitCode() const
 {
+    Q_D(const OutputExecuteJob);
+
     return d->m_checkExitCode;
 }
 
 void OutputExecuteJob::setCheckExitCode(bool check)
 {
+    Q_D(OutputExecuteJob);
+
     d->m_checkExitCode = check;
 }
 

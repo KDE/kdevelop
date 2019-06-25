@@ -56,7 +56,7 @@ OutputDelegatePrivate::OutputDelegatePrivate()
 
 OutputDelegate::OutputDelegate( QObject* parent )
 : QItemDelegate( parent )
-, d(new OutputDelegatePrivate)
+, d_ptr(new OutputDelegatePrivate)
 {
 }
 
@@ -64,6 +64,8 @@ OutputDelegate::~OutputDelegate() = default;
 
 void OutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    Q_D(const OutputDelegate);
+
     QStyleOptionViewItem opt = option;
     QVariant status = index.data(OutputModel::OutputItemTypeRole);
     if( status.isValid() ) {
