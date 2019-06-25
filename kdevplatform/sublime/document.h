@@ -34,6 +34,7 @@ namespace Sublime {
 class Area;
 class View;
 class Controller;
+class DocumentPrivate;
 
 /**
 @short Abstract base class for all Sublime documents
@@ -134,7 +135,8 @@ protected:
     virtual void closeViews();
 
 private:
-    const QScopedPointer<class DocumentPrivate> d;
+    const QScopedPointer<class DocumentPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Document)
 
     friend class DocumentPrivate;
     friend class View;

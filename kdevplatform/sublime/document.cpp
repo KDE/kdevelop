@@ -60,8 +60,11 @@ public:
 //class Document
 
 Document::Document(const QString &title, Controller *controller)
-    :QObject(controller), d( new DocumentPrivate(controller, this) )
+    : QObject(controller)
+    , d_ptr(new DocumentPrivate(controller, this))
 {
+    Q_D(Document);
+
     setObjectName(title);
     d->controller->addDocument(this);
     // Functor will be called after destructor has run -> capture controller pointer by value
@@ -74,19 +77,26 @@ Document::~Document() = default;
 
 Controller *Document::controller() const
 {
+    Q_D(const Document);
+
     return d->controller;
 }
 
 View *Document::createView()
 {
+    Q_D(Document);
+
     View *view = newView(this);
-    connect(view, &View::destroyed, this, [&] (QObject* obj) { d->removeView(static_cast<View*>(obj)); });
+    connect(view, &View::destroyed,
+            this, [this] (QObject* obj) { Q_D(Document); d->removeView(static_cast<View*>(obj)); });
     d->views.append(view);
     return view;
 }
 
 const QList<View*> &Document::views() const
 {
+    Q_D(const Document);
+
     return d->views;
 }
 
@@ -97,6 +107,8 @@ QString Document::title(TitleType /*type*/) const
 
 QString Document::toolTip() const
 {
+    Q_D(const Document);
+
     return d->documentToolTip;
 }
 
@@ -108,6 +120,8 @@ void Document::setTitle(const QString& newTitle)
 
 void Document::setToolTip(const QString& newToolTip)
 {
+    Q_D(Document);
+
     d->documentToolTip=newToolTip;
 }
 
@@ -121,12 +135,16 @@ View *Document::newView(Document *doc)
 
 void Document::setStatusIcon(const QIcon& icon)
 {
+    Q_D(Document);
+
     d->statusIcon = icon;
     emit statusIconChanged(this);
 }
 
 QIcon Document::statusIcon() const
 {
+    Q_D(const Document);
+
     return d->statusIcon;
 }
 

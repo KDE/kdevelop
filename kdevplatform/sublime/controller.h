@@ -33,6 +33,7 @@ class Area;
 class AreaIndex;
 class Document;
 class MainWindow;
+class ControllerPrivate;
 
 /**
 @short Handles association of areas to main windows.
@@ -188,7 +189,8 @@ private:
     void addDocument(Document *document);
 
 private:
-    const QScopedPointer<class ControllerPrivate> d;
+    const QScopedPointer<class ControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Controller)
 
     friend class Area;
     friend class Document;

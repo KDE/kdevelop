@@ -28,6 +28,7 @@
 namespace Sublime {
 
 class View;
+class AreaIndexPrivate;
 
 /**
 @short Index denotes the position of the view in the split area.
@@ -119,7 +120,7 @@ public:
     /**@return the orientation of the splitter for this index.*/
     Qt::Orientation orientation() const;
     /**Set the orientation of the splitter for this index.*/
-    void setOrientation(Qt::Orientation orientation) const;
+    void setOrientation(Qt::Orientation orientation);
 
     /**Adds view to the list of views in this position.
     Does nothing if the view is already split.
@@ -154,7 +155,9 @@ public:
     /**@return true if there's a stacked @p view at this index.*/
     bool hasView(View *view) const;
     /**@return the list of views at this index.*/
-    QList<View*> &views() const;
+    const QList<View*>& views() const;
+    /** Moves @p view to position @p newPos */
+    void moveViewPosition(View* view, int newPos);
 
 protected:
     /**Constructor for Root index.*/
@@ -173,7 +176,8 @@ private:
     void copyChildrenTo(AreaIndex *target);
 
 private:
-    const QScopedPointer<class AreaIndexPrivate> d;
+    const QScopedPointer<class AreaIndexPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(AreaIndex)
 };
 
 /**

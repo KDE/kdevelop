@@ -24,6 +24,8 @@
 
 namespace Sublime {
 
+class ViewBarContainerPrivate;
+
 /**
 @short Container for view bars.
 
@@ -66,7 +68,8 @@ public:
     void hideViewBar(QWidget* viewBar);
 
 private:
-    const QScopedPointer<class ViewBarContainerPrivate> d;
+    const QScopedPointer<class ViewBarContainerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ViewBarContainer)
 };
 
 }

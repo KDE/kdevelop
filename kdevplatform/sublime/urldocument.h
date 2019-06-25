@@ -27,6 +27,8 @@
 
 namespace Sublime {
 
+class UrlDocumentPrivate;
+
 /**
 @short Basic document that has an URL.
 */
@@ -55,7 +57,8 @@ protected:
     void setUrl(const QUrl& newUrl);
 
 private:
-    const QScopedPointer<class UrlDocumentPrivate> d;
+    const QScopedPointer<class UrlDocumentPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(UrlDocument)
 };
 
 }

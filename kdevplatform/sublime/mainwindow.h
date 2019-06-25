@@ -34,6 +34,7 @@ class View;
 class Controller;
 class MainWindowOperator;
 class ViewBarContainer;
+class MainWindowPrivate;
 
 /**
 @short Sublime Main Window
@@ -170,7 +171,9 @@ private:
     void loadGeometry(const KConfigGroup &config);
 
 private:
-    const QScopedPointer<class MainWindowPrivate> d;
+    const QScopedPointer<class MainWindowPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(MainWindow)
+
     friend class MainWindowOperator;
     friend class MainWindowPrivate;
 };

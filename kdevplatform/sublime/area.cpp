@@ -102,8 +102,11 @@ public:
 // class Area
 
 Area::Area(Controller *controller, const QString &name, const QString &title)
-    :QObject(controller), d( new AreaPrivate() )
+    : QObject(controller)
+    , d_ptr(new AreaPrivate())
 {
+    Q_D(Area);
+
     // FIXME: using objectName seems fishy. Introduce areaType method,
     // or some such.
     setObjectName(name);
@@ -116,8 +119,11 @@ Area::Area(Controller *controller, const QString &name, const QString &title)
 }
 
 Area::Area(const Area &area)
-    : QObject(area.controller()), d( new AreaPrivate( *(area.d) ) )
+    : QObject(area.controller())
+    , d_ptr(new AreaPrivate(*(area.d_ptr)))
 {
+    Q_D(Area);
+
     setObjectName(area.objectName());
 
     //clone tool views
@@ -130,6 +136,8 @@ Area::Area(const Area &area)
 
 void Area::initialize()
 {
+    Q_D(Area);
+
     connect(this, &Area::viewAdded,
             d->controller, &Controller::notifyViewAdded);
     connect(this, &Area::aboutToRemoveView,
@@ -154,16 +162,22 @@ Area::~Area() = default;
 
 View* Area::activeView()
 {
+    Q_D(Area);
+
     return d->activeView.data();
 }
 
 void Area::setActiveView(View* view)
 {
+    Q_D(Area);
+
     d->activeView = view;
 }
 
 void Area::addView(View *view, AreaIndex *index, View *after)
 {
+    Q_D(Area);
+
     //View *after = 0;
     if (!after  &&  controller()->openAfterCurrent()) {
         after = activeView();
@@ -177,6 +191,8 @@ void Area::addView(View *view, AreaIndex *index, View *after)
 
 void Area::addView(View *view, View *after)
 {
+    Q_D(Area);
+
     AreaIndex *index = d->currentIndex;
     if (after)
     {
@@ -215,6 +231,8 @@ View* Area::removeView(View *view)
 
 AreaIndex *Area::indexOf(View *view)
 {
+    Q_D(Area);
+
     AreaPrivate::ViewFinder f(view);
     walkViews(f, d->rootIndex.data());
     return f.index;
@@ -222,11 +240,15 @@ AreaIndex *Area::indexOf(View *view)
 
 RootAreaIndex *Area::rootIndex() const
 {
+    Q_D(const Area);
+
     return d->rootIndex.data();
 }
 
 void Area::addToolView(View *view, Position defaultPosition)
 {
+    Q_D(Area);
+
     d->toolViews.append(view);
     const QString id = view->document()->documentSpecifier();
     const Position position = d->desiredToolViews.value(id, defaultPosition);
@@ -242,6 +264,8 @@ void Sublime::Area::raiseToolView(View * toolView)
 
 View* Area::removeToolView(View *view)
 {
+    Q_D(Area);
+
     if (!d->toolViews.contains(view))
         return nullptr;
 
@@ -256,6 +280,8 @@ View* Area::removeToolView(View *view)
 
 void Area::moveToolView(View *toolView, Position newPosition)
 {
+    Q_D(Area);
+
     if (!d->toolViews.contains(toolView))
         return;
 
@@ -265,23 +291,31 @@ void Area::moveToolView(View *toolView, Position newPosition)
     emit toolViewMoved(toolView, newPosition);
 }
 
-QList<View*> &Area::toolViews() const
+const QList<View*> &Area::toolViews() const
 {
+    Q_D(const Area);
+
     return d->toolViews;
 }
 
 Position Area::toolViewPosition(View *toolView) const
 {
+    Q_D(const Area);
+
     return d->toolViewPositions[toolView];
 }
 
 Controller *Area::controller() const
 {
+    Q_D(const Area);
+
     return d->controller;
 }
 
 QList<View*> Sublime::Area::views()
 {
+    Q_D(Area);
+
     AreaPrivate::ViewLister lister;
     walkViews(lister, d->rootIndex.data());
     return lister.views;
@@ -289,21 +323,25 @@ QList<View*> Sublime::Area::views()
 
 QString Area::title() const
 {
+    Q_D(const Area);
+
     return d->title;
 }
 
 void Area::setTitle(const QString &title)
 {
+    Q_D(Area);
+
     d->title = title;
 }
 
 void Area::save(KConfigGroup& group) const
 {
+    Q_D(const Area);
+
     QStringList desired;
     desired.reserve(d->desiredToolViews.size());
-    QMap<QString, Sublime::Position>::iterator i, e;
-    for (i = d->desiredToolViews.begin(), e = d->desiredToolViews.end(); i != e; ++i)
-    {
+    for (auto i = d->desiredToolViews.begin(), e = d->desiredToolViews.end(); i != e; ++i) {
         desired << i.key() + QLatin1Char(':') + QString::number(static_cast<int>(i.value()));
     }
     group.writeEntry("desired views", desired);
@@ -317,6 +355,8 @@ void Area::save(KConfigGroup& group) const
 
 void Area::load(const KConfigGroup& group)
 {
+    Q_D(Area);
+
     qCDebug(SUBLIME) << "loading areas config";
     d->desiredToolViews.clear();
     const QStringList desired = group.readEntry("desired views", QStringList());
@@ -346,16 +386,22 @@ void Area::load(const KConfigGroup& group)
 
 bool Area::wantToolView(const QString& id)
 {
+    Q_D(Area);
+
     return (d->desiredToolViews.contains(id));
 }
 
 void Area::setShownToolViews(Sublime::Position pos, const QStringList& ids)
 {
+    Q_D(Area);
+
     d->shownToolViews[pos] = ids;
 }
 
 QStringList Area::shownToolViews(Sublime::Position pos) const
 {
+    Q_D(const Area);
+
     if (pos == Sublime::AllPositions) {
         QStringList allIds;
         allIds.reserve(d->shownToolViews.size());
@@ -371,16 +417,22 @@ QStringList Area::shownToolViews(Sublime::Position pos) const
 void Area::setDesiredToolViews(
     const QMap<QString, Sublime::Position>& desiredToolViews)
 {
+    Q_D(Area);
+
     d->desiredToolViews = desiredToolViews;
 }
 
 QString Area::iconName() const
 {
+    Q_D(const Area);
+
     return d->iconName;
 }
 
 void Area::setIconName(const QString& iconName)
 {
+    Q_D(Area);
+
     d->iconName = iconName;
 }
 
@@ -388,18 +440,22 @@ void Area::positionChanged(View *view, int newPos)
 {
     qCDebug(SUBLIME) << view << newPos;
     AreaIndex *index = indexOf(view);
-    index->views().move(index->views().indexOf(view), newPos);
+    index->moveViewPosition(view, newPos);
 }
 
 
 QString Area::workingSet() const
 {
+    Q_D(const Area);
+
     return d->workingSet;
 }
 
 
 void Area::setWorkingSet(const QString& name)
 {
+    Q_D(Area);
+
     if(name != d->workingSet) {
         qCDebug(SUBLIME) << this << "setting new working-set" << name;
         QString oldName = d->workingSet;
@@ -466,11 +522,15 @@ void Area::clearDocuments()
 
 QList<QAction*> Area::actions() const
 {
+    Q_D(const Area);
+
     return d->m_actions;
 }
 
 void Area::addAction(QAction* action)
 {
+    Q_D(Area);
+
     Q_ASSERT(!d->m_actions.contains(action));
     connect(action, &QAction::destroyed, this, &Area::actionDestroyed);
     d->m_actions.append(action);
@@ -478,6 +538,8 @@ void Area::addAction(QAction* action)
 
 void Area::actionDestroyed(QObject* action)
 {
+    Q_D(Area);
+
     d->m_actions.removeAll(qobject_cast<QAction*>(action));
 }
 

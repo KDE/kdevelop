@@ -65,12 +65,14 @@ public:
 
 ViewBarContainer::ViewBarContainer(QWidget *parent)
     : QWidget(parent)
-    , d(new ViewBarContainerPrivate(this))
+    , d_ptr(new ViewBarContainerPrivate(this))
 {
 }
 
 ViewBarContainer::~ViewBarContainer()
 {
+    Q_D(ViewBarContainer);
+
     // unparent any viewbars which may still exist
     // other code is still tracking those
     for (int i = d->layout->count(); i > 0; --i) {
@@ -85,12 +87,16 @@ ViewBarContainer::~ViewBarContainer()
 
 void ViewBarContainer::addViewBar(QWidget* viewBar)
 {
+    Q_D(ViewBarContainer);
+
     Q_ASSERT(viewBar);
     d->layout->addWidget(viewBar);
 }
 
 void ViewBarContainer::removeViewBar(QWidget* viewBar)
 {
+    Q_D(ViewBarContainer);
+
     Q_ASSERT(viewBar);
     d->layout->removeWidget(viewBar);
     viewBar->hide();
@@ -102,12 +108,16 @@ void ViewBarContainer::removeViewBar(QWidget* viewBar)
 
 void ViewBarContainer::setCurrentViewBar(QWidget* viewBar)
 {
+    Q_D(ViewBarContainer);
+
     Q_ASSERT(viewBar);
     d->layout->setCurrentWidget(viewBar);
 }
 
 void ViewBarContainer::showViewBar(QWidget* viewBar)
 {
+    Q_D(ViewBarContainer);
+
     Q_ASSERT(viewBar);
     d->layout->setCurrentWidget(viewBar);
     viewBar->show();
@@ -117,6 +127,8 @@ void ViewBarContainer::showViewBar(QWidget* viewBar)
 
 void ViewBarContainer::hideViewBar(QWidget* viewBar)
 {
+    Q_D(ViewBarContainer);
+
     Q_ASSERT(viewBar);
     d->layout->setCurrentWidget(viewBar);
     viewBar->hide();

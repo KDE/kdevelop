@@ -50,7 +50,7 @@ public:
 
 AggregateModel::AggregateModel(QObject *parent)
     :QAbstractItemModel(parent)
-    ,d(new AggregateModelPrivate())
+    ,d_ptr(new AggregateModelPrivate())
 {
 }
 
@@ -58,6 +58,8 @@ AggregateModel::~AggregateModel() = default;
 
 void AggregateModel::addModel(const QString &name, QStandardItemModel *model)
 {
+    Q_D(AggregateModel);
+
     beginResetModel();
     d->modelList << model;
     d->modelNames[model] = name;
@@ -66,6 +68,8 @@ void AggregateModel::addModel(const QString &name, QStandardItemModel *model)
 
 void AggregateModel::removeModel(QStandardItemModel *model)
 {
+    Q_D(AggregateModel);
+
     beginResetModel();
     d->modelList.removeAll(model);
     d->modelNames.remove(model);
@@ -102,6 +106,8 @@ int AggregateModel::columnCount(const QModelIndex &parent) const
 
 int AggregateModel::rowCount(const QModelIndex &parent) const
 {
+    Q_D(const AggregateModel);
+
     if (!parent.isValid())
     {
         //toplevel items represent aggregated models
@@ -130,6 +136,8 @@ int AggregateModel::rowCount(const QModelIndex &parent) const
 
 QVariant AggregateModel::data(const QModelIndex &index, int role) const
 {
+    Q_D(const AggregateModel);
+
     if (!index.isValid() || (role != Qt::DisplayRole))
         return QVariant();
 
@@ -148,6 +156,8 @@ QVariant AggregateModel::data(const QModelIndex &index, int role) const
 
 QModelIndex AggregateModel::parent(const QModelIndex &index) const
 {
+    Q_D(const AggregateModel);
+
     if (!index.isValid())
         return QModelIndex();
 
@@ -179,6 +189,8 @@ QModelIndex AggregateModel::parent(const QModelIndex &index) const
 
 QModelIndex AggregateModel::index(int row, int column, const QModelIndex &parent) const
 {
+    Q_D(const AggregateModel);
+
     if (row < 0 || column < 0)
         return QModelIndex();
 

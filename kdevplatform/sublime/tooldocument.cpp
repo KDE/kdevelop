@@ -40,8 +40,10 @@ public:
 
 ToolDocument::ToolDocument(const QString &title, Controller *controller, ToolFactory *factory)
     :Document(title, controller)
-    , d( new ToolDocumentPrivate() )
+    , d_ptr(new ToolDocumentPrivate())
 {
+    Q_D(ToolDocument);
+
     d->factory = factory;
 }
 
@@ -49,6 +51,8 @@ ToolDocument::~ToolDocument() = default;
 
 ToolFactory *ToolDocument::factory() const
 {
+    Q_D(const ToolDocument);
+
     return d->factory;
 }
 

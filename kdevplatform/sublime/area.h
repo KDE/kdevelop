@@ -35,6 +35,7 @@ class AreaIndex;
 class RootAreaIndex;
 class Controller;
 class View;
+class AreaPrivate;
 
 /**
 @short Area - the universal view container
@@ -152,7 +153,7 @@ public:
     /**Raise tool view.*/
     void raiseToolView(View *toolView);
     /**@return the list of tool views in the area. No particular sort order is guaranteed.*/
-    QList<View*> &toolViews() const;
+    const QList<View*> &toolViews() const;
     /**@return the current position of @p toolView in the area.*/
     Position toolViewPosition(View *toolView) const;
 
@@ -276,7 +277,8 @@ private:
     void initialize();
 
 private:
-    const QScopedPointer<class AreaPrivate> d;
+    const QScopedPointer<class AreaPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Area)
 };
 
 }

@@ -29,6 +29,7 @@ namespace Sublime {
 
 class View;
 class Document;
+class ContainerPrivate;
 
 /**
 @short Container for the widgets.
@@ -47,7 +48,7 @@ public:
     /**Removes the widget from the container.*/
     void removeWidget(QWidget *w);
     /** @return true if widget is placed inside this container.*/
-    bool hasWidget(QWidget *w);
+    bool hasWidget(QWidget* w) const;
 
     QList<View*> views() const;
 
@@ -112,7 +113,8 @@ protected:
     void focusInEvent(QFocusEvent*) override;
 
 private:
-    const QScopedPointer<class ContainerPrivate> d;
+    const QScopedPointer<class ContainerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Container)
 };
 
 }

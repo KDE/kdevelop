@@ -301,8 +301,11 @@ public:
 // class Container
 
 Container::Container(QWidget *parent)
-    :QWidget(parent), d(new ContainerPrivate())
+    : QWidget(parent)
+    , d_ptr(new ContainerPrivate())
 {
+    Q_D(Container);
+
     KAcceleratorManager::setNoAccel(this);
 
     auto *l = new QBoxLayout(QBoxLayout::TopToBottom, this);
@@ -378,6 +381,8 @@ bool Container::configTabBarVisible()
 
 void Container::setLeftCornerWidget(QWidget* widget)
 {
+    Q_D(Container);
+
     if(d->leftCornerWidget.data() == widget) {
         if(d->leftCornerWidget)
             d->leftCornerWidget.data()->setParent(nullptr);
@@ -395,6 +400,8 @@ void Container::setLeftCornerWidget(QWidget* widget)
 
 QList<View*> Container::views() const
 {
+    Q_D(const Container);
+
     return d->viewForWidget.values();
 }
 
@@ -405,6 +412,8 @@ void Container::requestClose(int idx)
 
 void Container::widgetActivated(int idx)
 {
+    Q_D(Container);
+
     if (idx < 0)
         return;
     if (QWidget* w = d->stack->widget(idx)) {
@@ -416,6 +425,8 @@ void Container::widgetActivated(int idx)
 
 void Container::addWidget(View *view, int position)
 {
+    Q_D(Container);
+
     QWidget *w = view->widget(this);
     int idx = 0;
     if (position != -1)
@@ -447,6 +458,8 @@ void Container::addWidget(View *view, int position)
 
 void Container::statusChanged(Sublime::View* view)
 {
+    Q_D(Container);
+
     const auto statusText = view->viewStatus();
     d->statusCorner->setText(statusText);
     d->statusCorner->setVisible(!statusText.isEmpty());
@@ -454,6 +467,8 @@ void Container::statusChanged(Sublime::View* view)
 
 void Container::statusIconChanged(Document* doc)
 {
+    Q_D(Container);
+
     QHashIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         if (it.next().value()->document() == doc) {
@@ -474,6 +489,8 @@ void Container::statusIconChanged(Document* doc)
 
 void Container::documentTitleChanged(Sublime::Document* doc)
 {
+    Q_D(Container);
+
     QHashIterator<QWidget*, View*> it = d->viewForWidget;
     while (it.hasNext()) {
         Sublime::View* view = it.next().value();
@@ -498,16 +515,21 @@ void Container::documentTitleChanged(Sublime::Document* doc)
 
 int Container::count() const
 {
+    Q_D(const Container);
+
     return d->stack->count();
 }
 
 QWidget* Container::currentWidget() const
 {
+    Q_D(const Container);
+
     return d->stack->currentWidget();
 }
 
 void Container::setCurrentWidget(QWidget* w)
 {
+    Q_D(Container);
 
     if (d->stack->currentWidget() == w) {
         return;
@@ -529,16 +551,22 @@ void Container::setCurrentWidget(QWidget* w)
 
 QWidget* Container::widget(int i) const
 {
+    Q_D(const Container);
+
     return d->stack->widget(i);
 }
 
 int Container::indexOf(QWidget* w) const
 {
+    Q_D(const Container);
+
     return d->stack->indexOf(w);
 }
 
 void Container::removeWidget(QWidget *w)
 {
+    Q_D(Container);
+
     if (w) {
         int widgetIdx = d->stack->indexOf(w);
         d->stack->removeWidget(w);
@@ -566,18 +594,24 @@ void Container::removeWidget(QWidget *w)
     }
 }
 
-bool Container::hasWidget(QWidget *w)
+bool Container::hasWidget(QWidget* w) const
 {
+    Q_D(const Container);
+
     return d->stack->indexOf(w) != -1;
 }
 
 View *Container::viewForWidget(QWidget *w) const
 {
+    Q_D(const Container);
+
     return d->viewForWidget.value(w);
 }
 
 void Container::setTabBarHidden(bool hide)
 {
+    Q_D(Container);
+
     if (hide)
     {
         d->tabBar->hide();
@@ -600,6 +634,8 @@ void Container::setTabBarHidden(bool hide)
 
 void Container::resetTabColors(const QColor& color)
 {
+    Q_D(Container);
+
     for (int i = 0; i < count(); i++){
         d->tabBar->setTabTextColor(i, color);
     }
@@ -607,6 +643,8 @@ void Container::resetTabColors(const QColor& color)
 
 void Container::setTabColor(const View* view, const QColor& color)
 {
+    Q_D(Container);
+
     for (int i = 0; i < count(); i++){
         if (view == viewForWidget(widget(i))) {
             d->tabBar->setTabTextColor(i, color);
@@ -616,6 +654,8 @@ void Container::setTabColor(const View* view, const QColor& color)
 
 void Container::setTabColors(const QHash<const View*, QColor>& colors)
 {
+    Q_D(Container);
+
     for (int i = 0; i < count(); i++) {
         auto view = viewForWidget(widget(i));
         auto color = colors[view];
@@ -627,6 +667,8 @@ void Container::setTabColors(const QHash<const View*, QColor>& colors)
 
 void Container::tabMoved(int from, int to)
 {
+    Q_D(Container);
+
     QWidget *w = d->stack->widget(from);
     d->stack->removeWidget(w);
     d->stack->insertWidget(to, w);
@@ -635,6 +677,8 @@ void Container::tabMoved(int from, int to)
 
 void Container::contextMenu( const QPoint& pos )
 {
+    Q_D(Container);
+
     QWidget* senderWidget = qobject_cast<QWidget*>(sender());
     Q_ASSERT(senderWidget);
 
@@ -719,11 +763,15 @@ void Container::showTooltipForTab(int tab)
 
 bool Container::isCurrentTab(int tab) const
 {
+    Q_D(const Container);
+
     return d->tabBar->currentIndex() == tab;
 }
 
 QRect Container::tabRect(int tab) const
 {
+    Q_D(const Container);
+
     return d->tabBar->tabRect(tab).translated(d->tabBar->mapToGlobal(QPoint(0, 0)));
 }
 
@@ -738,6 +786,8 @@ void Container::doubleClickTriggered(int tab)
 
 void Container::documentListActionTriggered(QAction* action)
 {
+    Q_D(Container);
+
     auto* view = action->data().value< Sublime::View* >();
     Q_ASSERT(view);
     QWidget* widget = d->viewForWidget.key(view);
@@ -746,11 +796,15 @@ void Container::documentListActionTriggered(QAction* action)
 }
 Sublime::View* Container::currentView() const
 {
+    Q_D(const Container);
+
     return d->viewForWidget.value(widget( d->tabBar->currentIndex() ));
 }
 
 void Container::focusInEvent(QFocusEvent* event)
 {
+    Q_D(Container);
+
     d->setAsDockMenu();
     QWidget::focusInEvent(event);
 }

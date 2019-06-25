@@ -95,7 +95,9 @@ public:
 // class Controller
 
 Controller::Controller(QObject *parent)
-    :QObject(parent), MainWindowOperator(), d( new ControllerPrivate() )
+    : QObject(parent)
+    , MainWindowOperator()
+    , d_ptr(new ControllerPrivate())
 {
     init();
 }
@@ -108,11 +110,15 @@ void Controller::init()
 
 Controller::~Controller()
 {
+    Q_D(Controller);
+
     qDeleteAll(d->controlledWindows);
 }
 
 void Controller::showArea(Area *area, MainWindow *mainWindow)
 {
+    Q_D(Controller);
+
     Area *areaToShow = nullptr;
     const auto windowIt = d->shownAreas.find(area);
     //if the area is already shown in another mainwindow then we need to clone it
@@ -137,16 +143,22 @@ void Controller::showAreaInternal(Area* area, MainWindow *mainWindow)
 
 void Controller::removeArea(Area *obj)
 {
+    Q_D(Controller);
+
     d->areas.removeAll(obj);
 }
 
 void Controller::removeDocument(Document *obj)
 {
+    Q_D(Controller);
+
     d->documents.removeAll(obj);
 }
 
 void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
 {
+    Q_D(Controller);
+
     int index = d->controlledWindows.indexOf(mainWindow);
     Q_ASSERT(index != -1);
 
@@ -167,6 +179,8 @@ void Controller::showArea(const QString& areaTypeId, MainWindow *mainWindow)
 
 void Controller::resetCurrentArea(MainWindow *mainWindow)
 {
+    Q_D(Controller);
+
     QString id = mainWindow->area()->objectName();
 
     int areaIndex = 0;
@@ -192,12 +206,16 @@ void Controller::resetCurrentArea(MainWindow *mainWindow)
 
 const QList<Area*> &Controller::defaultAreas() const
 {
+    Q_D(const Controller);
+
     return d->areas;
 }
 
 
 const QList< Area* >& Controller::areas(MainWindow* mainWindow) const
 {
+    Q_D(const Controller);
+
     int index = d->controlledWindows.indexOf(mainWindow);
     Q_ASSERT(index != -1);
     return areas(index);
@@ -205,21 +223,29 @@ const QList< Area* >& Controller::areas(MainWindow* mainWindow) const
 
 const QList<Area*> &Controller::areas(int mainWindow) const
 {
+    Q_D(const Controller);
+
     return d->mainWindowAreas[mainWindow];
 }
 
 const QList<Area*> &Controller::allAreas() const
 {
+    Q_D(const Controller);
+
     return d->allAreas;
 }
 
 const QList<Document*> &Controller::documents() const
 {
+    Q_D(const Controller);
+
     return d->documents;
 }
 
 void Controller::addDefaultArea(Area *area)
 {
+    Q_D(Controller);
+
     d->areas.append(area);
     d->allAreas.append(area);
     d->namedAreas[area->objectName()] = area;
@@ -228,6 +254,8 @@ void Controller::addDefaultArea(Area *area)
 
 void Controller::addMainWindow(MainWindow* mainWindow)
 {
+    Q_D(Controller);
+
     Q_ASSERT(mainWindow);
 
     Q_ASSERT (!d->controlledWindows.contains(mainWindow));
@@ -252,11 +280,15 @@ void Controller::addMainWindow(MainWindow* mainWindow)
 
 void Controller::addDocument(Document *document)
 {
+    Q_D(Controller);
+
     d->documents.append(document);
 }
 
 void Controller::areaReleased()
 {
+    Q_D(Controller);
+
     auto *w = reinterpret_cast<Sublime::MainWindow*>(sender());
     qCDebug(SUBLIME) << "marking areas as mainwindow-free" << w << d->controlledWindows.contains(w) << d->shownAreas.keys(w);
     const auto areas = d->shownAreas.keys(w);
@@ -271,12 +303,16 @@ void Controller::areaReleased()
 
 void Controller::areaReleased(Sublime::Area *area)
 {
+    Q_D(Controller);
+
     d->shownAreas.remove(area);
     d->namedAreas.remove(area->objectName());
 }
 
 Area *Controller::defaultArea(const QString &id) const
 {
+    Q_D(const Controller);
+
     return d->namedAreas[id];
 }
 
@@ -307,6 +343,7 @@ after that."*/
 //implementation is based upon KParts::PartManager::eventFilter
 bool Controller::eventFilter(QObject *obj, QEvent *ev)
 {
+    Q_D(Controller);
 
     if (ev->type() != QEvent::MouseButtonPress &&
         ev->type() != QEvent::MouseButtonDblClick &&
@@ -370,6 +407,8 @@ bool Controller::eventFilter(QObject *obj, QEvent *ev)
 
 const QList< MainWindow * > & Controller::mainWindows() const
 {
+    Q_D(const Controller);
+
     return d->controlledWindows;
 }
 
@@ -401,6 +440,8 @@ void Controller::setStatusIcon(Document * document, const QIcon & icon)
 
 void Controller::loadSettings()
 {
+    Q_D(Controller);
+
     KConfigGroup uiGroup = KSharedConfig::openConfig()->group("UiSettings");
     d->openAfterCurrent = (uiGroup.readEntry("TabBarOpenAfterCurrent", 1) == 1);
     d->arrangeBuddies = (uiGroup.readEntry("TabBarArrangeBuddies", 1) == 1);
@@ -408,11 +449,15 @@ void Controller::loadSettings()
 
 bool Controller::openAfterCurrent() const
 {
+    Q_D(const Controller);
+
     return d->openAfterCurrent;
 }
 
 bool Controller::arrangeBuddies() const
 {
+    Q_D(const Controller);
+
     return d->arrangeBuddies;
 }
 

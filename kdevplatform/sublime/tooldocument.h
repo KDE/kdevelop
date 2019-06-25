@@ -28,6 +28,7 @@ class QAction;
 namespace Sublime {
 
 class ToolDocument;
+class ToolDocumentPrivate;
 
 /**
 @short Factory to create widgets for tool views
@@ -80,7 +81,8 @@ protected:
     ToolFactory *factory() const;
 
 private:
-    const QScopedPointer<class ToolDocumentPrivate> d;
+    const QScopedPointer<class ToolDocumentPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ToolDocument)
 
     friend class View;
 };

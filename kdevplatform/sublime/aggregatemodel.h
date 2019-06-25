@@ -26,6 +26,8 @@ class QStandardItemModel;
 
 namespace Sublime {
 
+class AggregateModelPrivate;
+
 /**
 @short A model to combine several QStandardItemModel's into one.
 Combine standard models into the aggregate model to display them in the one view.
@@ -87,7 +89,8 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
 
 private:
-    const QScopedPointer<class AggregateModelPrivate> d;
+    const QScopedPointer<class AggregateModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(AggregateModel)
 };
 
 }

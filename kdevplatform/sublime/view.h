@@ -31,6 +31,7 @@ class QAction;
 namespace Sublime {
 
 class Document;
+class ViewPrivate;
 
 /**
 @short View - the wrapper to the widget that knows about its document
@@ -110,7 +111,8 @@ protected:
 private:
     //copy is not allowed, create a new view from the document instead
     View(const View &v);
-    const QScopedPointer<class ViewPrivate> d;
+    const QScopedPointer<class ViewPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(View)
 
     friend class Document;
 };

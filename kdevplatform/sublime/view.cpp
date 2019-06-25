@@ -53,12 +53,14 @@ void ViewPrivate::unsetWidget()
 
 View::View(Document *doc, WidgetOwnership ws )
     : QObject(doc)
-    , d(new ViewPrivate(doc, ws))
+    , d_ptr(new ViewPrivate(doc, ws))
 {
 }
 
 View::~View()
 {
+    Q_D(View);
+
     if (d->widget && d->ws == View::TakeOwnership ) {
         d->widget->hide();
         d->widget->setParent(nullptr);
@@ -68,11 +70,15 @@ View::~View()
 
 Document *View::document() const
 {
+    Q_D(const View);
+
     return d->doc;
 }
 
 QWidget *View::widget(QWidget *parent)
 {
+    Q_D(View);
+
     if (!d->widget)
     {
         d->widget = createWidget(parent);
@@ -81,18 +87,23 @@ QWidget *View::widget(QWidget *parent)
         // a reference to the connection.
         // As the d object still exists in the destructor when we delete the widget
         // this lambda method though can be still safely executed, so we spare ourselves such disconnect.
-        connect(d->widget, &QWidget::destroyed, this, [&] { d->unsetWidget(); });
+        connect(d->widget, &QWidget::destroyed,
+                this, [this] { Q_D(View); d->unsetWidget(); });
     }
     return d->widget;
 }
 
 QWidget *View::createWidget(QWidget *parent)
 {
+    Q_D(View);
+
     return d->doc->createViewWidget(parent);
 }
 
 bool View::hasWidget() const
 {
+    Q_D(const View);
+
     return d->widget != nullptr;
 }
 
@@ -113,6 +124,8 @@ void View::writeSessionConfig(KConfigGroup& config)
 
 QList<QAction*> View::toolBarActions() const
 {
+    Q_D(const View);
+
     auto* tooldoc = qobject_cast<ToolDocument*>(document());
     if( tooldoc )
     {
@@ -123,6 +136,8 @@ QList<QAction*> View::toolBarActions() const
 
 QList< QAction* > View::contextMenuActions() const
 {
+    Q_D(const View);
+
     auto* tooldoc = qobject_cast<ToolDocument*>(document());
     if( tooldoc )
     {
