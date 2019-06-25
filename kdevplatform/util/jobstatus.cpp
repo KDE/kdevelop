@@ -49,8 +49,10 @@ void JobStatusPrivate::slotPercent(KJob* job, long unsigned int percent)
 
 JobStatus::JobStatus(KJob* job, const QString& statusName, QObject* parent)
     : QObject(parent)
-    , d(new JobStatusPrivate(this))
+    , d_ptr(new JobStatusPrivate(this))
 {
+    Q_D(JobStatus);
+
     d->m_job = job;
     d->m_statusName = statusName;
 
@@ -74,6 +76,8 @@ JobStatus::~JobStatus()
 
 QString JobStatus::statusName() const
 {
+    Q_D(const JobStatus);
+
     return d->m_statusName;
 }
 

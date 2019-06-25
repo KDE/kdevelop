@@ -49,8 +49,10 @@ public:
 
 EnvironmentSelectionWidget::EnvironmentSelectionWidget(QWidget* parent)
     : QWidget(parent)
-    , d(new EnvironmentSelectionWidgetPrivate(this))
+    , d_ptr(new EnvironmentSelectionWidgetPrivate(this))
 {
+    Q_D(EnvironmentSelectionWidget);
+
     // since 5.32 the signal is by default taken as set for the used property
 #if KCONFIGWIDGETS_VERSION < QT_VERSION_CHECK(5, 32, 0)
     KConfigDialogManager::changedMap()->insert(QStringLiteral("KDevelop::EnvironmentSelectionWidget"),
@@ -71,17 +73,23 @@ EnvironmentSelectionWidget::~EnvironmentSelectionWidget() = default;
 
 QString EnvironmentSelectionWidget::currentProfile() const
 {
+    Q_D(const EnvironmentSelectionWidget);
+
     return d->model->index(d->comboBox->currentIndex(), 0).data(Qt::EditRole).toString();
 }
 
 void EnvironmentSelectionWidget::setCurrentProfile(const QString& profile)
 {
+    Q_D(EnvironmentSelectionWidget);
+
     d->comboBox->setCurrentIndex(d->comboBox->findData(profile, Qt::EditRole));
     emit currentProfileChanged(profile);
 }
 
 void EnvironmentSelectionWidget::reconfigure()
 {
+    Q_D(EnvironmentSelectionWidget);
+
     QString selectedProfile = currentProfile();
     d->model->reload();
     setCurrentProfile(d->model->reloadSelectedItem(selectedProfile));
@@ -89,12 +97,16 @@ void EnvironmentSelectionWidget::reconfigure()
 
 QString EnvironmentSelectionWidget::effectiveProfileName() const
 {
+    Q_D(const EnvironmentSelectionWidget);
+
     return d->model->index(d->comboBox->currentIndex(),
                            0).data(EnvironmentSelectionModel::EffectiveNameRole).toString();
 }
 
 EnvironmentProfileList EnvironmentSelectionWidget::environmentProfiles() const
 {
+    Q_D(const EnvironmentSelectionWidget);
+
     return d->model->environmentProfiles();
 }
 

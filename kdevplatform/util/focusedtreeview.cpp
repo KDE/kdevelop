@@ -33,8 +33,10 @@ public:
 
 FocusedTreeView::FocusedTreeView(QWidget* parent)
     : QTreeView(parent)
-    , d(new FocusedTreeViewPrivate)
+    , d_ptr(new FocusedTreeViewPrivate)
 {
+    Q_D(FocusedTreeView);
+
     setVerticalScrollMode(ScrollPerItem);
 
     d->timer.setInterval(200);
@@ -65,6 +67,8 @@ void FocusedTreeView::setModel(QAbstractItemModel* newModel)
 
 void FocusedTreeView::setAutoScrollAtEnd(bool enable)
 {
+    Q_D(FocusedTreeView);
+
     d->autoScrollAtEnd = enable;
 }
 
@@ -91,6 +95,8 @@ int FocusedTreeView::sizeHintForColumn(int column) const
 
 void FocusedTreeView::delayedAutoScrollAndResize()
 {
+    Q_D(FocusedTreeView);
+
     if (!model()) {
         // might happen on shutdown
         return;
@@ -113,6 +119,8 @@ void FocusedTreeView::delayedAutoScrollAndResize()
 
 void FocusedTreeView::rowsAboutToBeInserted(const QModelIndex&, int first, int last)
 {
+    Q_D(FocusedTreeView);
+
     if (d->insertedBegin == -1) {
         d->insertedBegin = d->insertedEnd = first;
 
@@ -135,6 +143,8 @@ void FocusedTreeView::rowsAboutToBeInserted(const QModelIndex&, int first, int l
 // column resize
 void FocusedTreeView::rowsRemoved(const QModelIndex& parent, int first, int last)
 {
+    Q_D(FocusedTreeView);
+
     QTreeView::rowsRemoved(parent, first, last);
 
     if (!d->timer.isActive())

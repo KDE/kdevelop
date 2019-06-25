@@ -88,14 +88,17 @@ void ProjectTestJobPrivate::gotResult(ITestSuite* suite, const TestResult& resul
 
 ProjectTestJob::ProjectTestJob(IProject* project, QObject* parent)
     : KJob(parent)
-    , d(new ProjectTestJobPrivate(this))
+    , d_ptr(new ProjectTestJobPrivate(this))
 {
+    Q_D(ProjectTestJob);
+
     setCapabilities(Killable);
     setObjectName(i18n("Run all tests in %1", project->name()));
 
     d->m_suites = ICore::self()->testController()->testSuitesForProject(project);
     connect(ICore::self()->testController(), &ITestController::testRunFinished,
-            this, [&](ITestSuite* suite, const TestResult& result) {
+            this, [this](ITestSuite* suite, const TestResult& result) {
+        Q_D(ProjectTestJob);
         d->gotResult(suite, result);
     });
 }
@@ -107,11 +110,13 @@ ProjectTestJob::~ProjectTestJob()
 
 void ProjectTestJob::start()
 {
+    Q_D(ProjectTestJob);
     d->runNext();
 }
 
 bool ProjectTestJob::doKill()
 {
+    Q_D(ProjectTestJob);
     if (d->m_currentJob) {
         d->m_currentJob->kill();
     } else {
@@ -122,6 +127,7 @@ bool ProjectTestJob::doKill()
 
 ProjectTestResult ProjectTestJob::testResult()
 {
+    Q_D(ProjectTestJob);
     return d->m_result;
 }
 

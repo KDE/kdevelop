@@ -25,6 +25,7 @@ Boston, MA 02110-1301, USA.
 
 namespace KDevelop {
 class EnvironmentProfileList;
+class EnvironmentSelectionWidgetPrivate;
 
 /**
  * Simple combobox which allows each plugin to decide which environment
@@ -79,7 +80,8 @@ Q_SIGNALS:
     void currentProfileChanged(const QString& currentProfile);
 
 private:
-    const QScopedPointer<class EnvironmentSelectionWidgetPrivate> d;
+    const QScopedPointer<class EnvironmentSelectionWidgetPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(EnvironmentSelectionWidget)
     friend class EnvironmentSelectionWidgetPrivate;
 };
 

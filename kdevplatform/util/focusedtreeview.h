@@ -25,6 +25,7 @@
 #include "utilexport.h"
 
 namespace KDevelop {
+class FocusedTreeViewPrivate;
 
 /**
  * Specialized version of QTreeView, that allows efficiently managing an extremely
@@ -59,7 +60,8 @@ private Q_SLOTS:
     void delayedAutoScrollAndResize();
 
 private:
-    const QScopedPointer<class FocusedTreeViewPrivate> d;
+    const QScopedPointer<class FocusedTreeViewPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(FocusedTreeView)
 };
 
 }

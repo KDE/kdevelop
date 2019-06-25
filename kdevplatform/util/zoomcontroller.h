@@ -33,6 +33,8 @@ class QWheelEvent;
 
 namespace KDevelop {
 
+class ZoomControllerPrivate;
+
 /**
  * @brief Stores zoom factor; provides common zoom operations and notifications
  */
@@ -111,7 +113,8 @@ Q_SIGNALS:
     void factorChanged(double factor);
 
 private:
-    const QScopedPointer<class ZoomControllerPrivate> d;
+    const QScopedPointer<class ZoomControllerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ZoomController)
 };
 
 }

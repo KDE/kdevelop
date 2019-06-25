@@ -28,6 +28,7 @@
 #include "utilexport.h"
 
 namespace KDevelop {
+class ObjectListTrackerPrivate;
 
 /**
  * @brief Class for tracking a set of alive objects inheriting from QObject.
@@ -85,7 +86,8 @@ private:
     void objectDestroyed(QObject*);
 
 private:
-    const QScopedPointer<class ObjectListTrackerPrivate> d;
+    const QScopedPointer<class ObjectListTrackerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ObjectListTracker)
 };
 
 /**

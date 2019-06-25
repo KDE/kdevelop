@@ -35,7 +35,7 @@ public:
 
 ExecuteCompositeJob::ExecuteCompositeJob(QObject* parent, const QList<KJob*>& jobs)
     : KCompositeJob(parent)
-    , d(new ExecuteCompositeJobPrivate)
+    , d_ptr(new ExecuteCompositeJobPrivate)
 {
     setCapabilities(Killable);
 
@@ -63,6 +63,8 @@ void ExecuteCompositeJobPrivate::startNextJob(KJob* job)
 
 void ExecuteCompositeJob::start()
 {
+    Q_D(ExecuteCompositeJob);
+
     if (hasSubjobs()) {
         d->startNextJob(subjobs().first());
     } else {
@@ -72,6 +74,8 @@ void ExecuteCompositeJob::start()
 
 bool ExecuteCompositeJob::addSubjob(KJob* job)
 {
+    Q_D(ExecuteCompositeJob);
+
     const bool success = KCompositeJob::addSubjob(job);
     if (!success)
         return false;
@@ -84,6 +88,8 @@ bool ExecuteCompositeJob::addSubjob(KJob* job)
 
 void ExecuteCompositeJob::slotPercent(KJob* job, unsigned long percent)
 {
+    Q_D(ExecuteCompositeJob);
+
     Q_UNUSED(job);
 
     Q_ASSERT(d->m_jobCount > 0);
@@ -97,6 +103,8 @@ void ExecuteCompositeJob::slotPercent(KJob* job, unsigned long percent)
 
 void ExecuteCompositeJob::slotResult(KJob* job)
 {
+    Q_D(ExecuteCompositeJob);
+
     disconnect(job, SIGNAL(percent(KJob*,ulong)), this, SLOT(slotPercent(KJob*,ulong)));
 
     // jobIndex + 1 because this job just finished
@@ -124,6 +132,8 @@ void ExecuteCompositeJob::slotResult(KJob* job)
 
 bool ExecuteCompositeJob::doKill()
 {
+    Q_D(ExecuteCompositeJob);
+
     qCDebug(UTIL) << "Killing subjobs:" << subjobs().size();
     d->m_killing = true;
     while (hasSubjobs()) {
@@ -140,6 +150,8 @@ bool ExecuteCompositeJob::doKill()
 
 void ExecuteCompositeJob::setAbortOnError(bool abort)
 {
+    Q_D(ExecuteCompositeJob);
+
     d->m_abortOnError = abort;
 }
 

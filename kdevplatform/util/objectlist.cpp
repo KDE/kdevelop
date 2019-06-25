@@ -33,12 +33,14 @@ public:
 
 ObjectListTracker::ObjectListTracker(CleanupBehavior behavior, QObject* parent)
     : QObject(parent)
-    , d(new ObjectListTrackerPrivate {{}, behavior})
+    , d_ptr(new ObjectListTrackerPrivate {{}, behavior})
 {
 }
 
 ObjectListTracker::~ObjectListTracker()
 {
+    Q_D(ObjectListTracker);
+
     if (d->m_cleanupBehavior == CleanupWhenDone) {
         deleteAll();
     }
@@ -46,11 +48,15 @@ ObjectListTracker::~ObjectListTracker()
 
 const QList<QObject*>& ObjectListTracker::data() const
 {
+    Q_D(const ObjectListTracker);
+
     return d->m_list;
 }
 
 void ObjectListTracker::objectDestroyed(QObject* object)
 {
+    Q_D(ObjectListTracker);
+
     bool success = d->m_list.removeOne(object);
     Q_ASSERT(success);
     Q_UNUSED(success);
@@ -58,6 +64,8 @@ void ObjectListTracker::objectDestroyed(QObject* object)
 
 void ObjectListTracker::append(QObject* object)
 {
+    Q_D(ObjectListTracker);
+
     if (!object || d->m_list.contains(object)) {
         return;
     }
@@ -68,6 +76,8 @@ void ObjectListTracker::append(QObject* object)
 
 bool ObjectListTracker::remove(QObject* object)
 {
+    Q_D(ObjectListTracker);
+
     if (!object) {
         return false;
     }
@@ -78,6 +88,8 @@ bool ObjectListTracker::remove(QObject* object)
 
 void ObjectListTracker::deleteAll()
 {
+    Q_D(ObjectListTracker);
+
     qDeleteAll(d->m_list);
     d->m_list.clear();
 }

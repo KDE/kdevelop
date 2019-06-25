@@ -24,6 +24,7 @@
 #include "utilexport.h"
 
 namespace KDevelop {
+class ActiveToolTipPrivate;
 
 /** This class implements a tooltip that can contain arbitrary
     widgets that the user can interact with.
@@ -90,7 +91,8 @@ private:
     void closeEvent(QCloseEvent*) override;
 
 private:
-    const QScopedPointer<class ActiveToolTipPrivate> d;
+    const QScopedPointer<class ActiveToolTipPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ActiveToolTip)
 };
 
 }

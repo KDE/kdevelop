@@ -118,12 +118,12 @@ public:
      * @param index index in any of our proxy models
      * @return an index in the source model
      */
-    QModelIndex mapToSource(QModelIndex index);
+    QModelIndex mapToSource(QModelIndex index) const;
     /**
      * @param index an index in the source model
      * @return an index in the view's model at level @p level
      */
-    QModelIndex mapFromSource(QModelIndex index, int level);
+    QModelIndex mapFromSource(QModelIndex index, int level) const;
 
     MultiLevelListView* view;
 
@@ -213,7 +213,7 @@ void MultiLevelListViewPrivate::ensureViewSelected(QTreeView* view)
     }
 }
 
-QModelIndex MultiLevelListViewPrivate::mapToSource(QModelIndex index)
+QModelIndex MultiLevelListViewPrivate::mapToSource(QModelIndex index) const
 {
     if (!index.isValid()) {
         return index;
@@ -229,7 +229,7 @@ QModelIndex MultiLevelListViewPrivate::mapToSource(QModelIndex index)
     return index;
 }
 
-QModelIndex MultiLevelListViewPrivate::mapFromSource(QModelIndex index, int level)
+QModelIndex MultiLevelListViewPrivate::mapFromSource(QModelIndex index, int level) const
 {
     if (!index.isValid()) {
         return index;
@@ -265,7 +265,7 @@ QModelIndex MultiLevelListViewPrivate::mapFromSource(QModelIndex index, int leve
 
 MultiLevelListView::MultiLevelListView(QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f)
-    , d(new MultiLevelListViewPrivate(this))
+    , d_ptr(new MultiLevelListViewPrivate(this))
 {
     setLayout(new QHBoxLayout());
     layout()->setContentsMargins(0, 0, 0, 0);
@@ -277,11 +277,15 @@ MultiLevelListView::~MultiLevelListView() = default;
 
 int MultiLevelListView::levels() const
 {
+    Q_D(const MultiLevelListView);
+
     return d->levels;
 }
 
 void MultiLevelListView::setLevels(int levels)
 {
+    Q_D(MultiLevelListView);
+
     qDeleteAll(d->views);
     qDeleteAll(d->proxies);
     qDeleteAll(d->layouts);
@@ -332,13 +336,15 @@ void MultiLevelListView::setLevels(int levels)
 
         // view->setModel creates the selection model
         connect(view->selectionModel(), &QItemSelectionModel::currentChanged,
-                this, [&](const QModelIndex& current, const QModelIndex& previous) {
+                this, [this](const QModelIndex& current, const QModelIndex& previous) {
+            Q_D(MultiLevelListView);
             d->viewSelectionChanged(current, previous);
         });
 
         if (i + 1 == d->levels) {
             connect(view->model(), &QAbstractItemModel::rowsInserted,
-                    this, [&] {
+                    this, [this] {
+                Q_D(MultiLevelListView);
                 d->lastViewsContentsChanged();
             });
         }
@@ -360,11 +366,15 @@ void MultiLevelListView::setLevels(int levels)
 
 QAbstractItemModel* MultiLevelListView::model() const
 {
+    Q_D(const MultiLevelListView);
+
     return d->model;
 }
 
 void MultiLevelListView::setModel(QAbstractItemModel* model)
 {
+    Q_D(MultiLevelListView);
+
     d->model = model;
 
     for (LabeledProxy* proxy : qAsConst(d->proxies)) {
@@ -378,22 +388,30 @@ void MultiLevelListView::setModel(QAbstractItemModel* model)
 
 QTreeView* MultiLevelListView::viewForLevel(int level) const
 {
-    return d->views[level];
+    Q_D(const MultiLevelListView);
+
+    return d->views.value(level);
 }
 
 void MultiLevelListView::addWidget(int level, QWidget* widget)
 {
+    Q_D(MultiLevelListView);
+
     Q_ASSERT(level < d->levels);
     d->layouts[level]->addWidget(widget);
 }
 
 QModelIndex MultiLevelListView::currentIndex() const
 {
+    Q_D(const MultiLevelListView);
+
     return d->mapToSource(d->views.last()->currentIndex());
 }
 
 void MultiLevelListView::setCurrentIndex(const QModelIndex& index)
 {
+    Q_D(MultiLevelListView);
+
     // incoming index is for the original model
     Q_ASSERT(!index.isValid() || index.model() == d->model);
 
@@ -431,12 +449,16 @@ void MultiLevelListView::setCurrentIndex(const QModelIndex& index)
 
 void MultiLevelListView::setRootIndex(const QModelIndex& index)
 {
+    Q_D(MultiLevelListView);
+
     Q_ASSERT(!index.isValid() || index.model() == d->model);
     d->views.first()->setRootIndex(index);
 }
 
 void MultiLevelListView::setHeaderLabels(const QStringList& labels)
 {
+    Q_D(MultiLevelListView);
+
     int n = qMin(d->levels, labels.size());
     for (int i = 0; i < n; ++i) {
         d->proxies.at(i)->setLabel(labels[i]);
@@ -457,6 +479,8 @@ KSelectionProxyModel::FilterBehavior toSelectionProxyModelFilterBehavior(MultiLe
 
 void MultiLevelListView::setLastLevelViewMode(LastLevelViewMode mode)
 {
+    Q_D(MultiLevelListView);
+
     if (d->proxies.isEmpty()) {
         return;
     }

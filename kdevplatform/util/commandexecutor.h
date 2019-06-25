@@ -25,6 +25,7 @@
 #include "utilexport.h"
 
 namespace KDevelop {
+class CommandExecutorPrivate;
 
 /**
  * Simplifying the execution of a Command through (QK)Process.
@@ -133,7 +134,8 @@ Q_SIGNALS:
     void completed(int code);
 
 private:
-    const QScopedPointer<class CommandExecutorPrivate> d;
+    const QScopedPointer<class CommandExecutorPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(CommandExecutor)
     friend class CommandExecutorPrivate;
 };
 

@@ -68,7 +68,7 @@ void decode(KConfig* config, EnvironmentProfileListPrivate* d)
     }
 }
 
-void encode(KConfig* config, EnvironmentProfileListPrivate* d)
+void encode(KConfig* config, const EnvironmentProfileListPrivate* d)
 {
     KConfigGroup cfg(config, Strings::envGroup());
     cfg.writeEntry(Strings::defaultEnvProfileKey(), d->m_defaultProfileName);
@@ -96,47 +96,61 @@ void encode(KConfig* config, EnvironmentProfileListPrivate* d)
 }
 
 EnvironmentProfileList::EnvironmentProfileList(const EnvironmentProfileList& rhs)
-    : d(new EnvironmentProfileListPrivate(*rhs.d))
+    : d_ptr(new EnvironmentProfileListPrivate(*rhs.d_ptr))
 {
 }
 
 EnvironmentProfileList& EnvironmentProfileList::operator=(const EnvironmentProfileList& rhs)
 {
-    *d = *rhs.d;
+    Q_D(EnvironmentProfileList);
+
+    *d = *rhs.d_ptr;
     return *this;
 }
 
 EnvironmentProfileList::EnvironmentProfileList(const KSharedConfigPtr& config)
-    : d(new EnvironmentProfileListPrivate)
+    : d_ptr(new EnvironmentProfileListPrivate)
 {
-    decode(config.data(), d.data());
+    Q_D(EnvironmentProfileList);
+
+    decode(config.data(), d);
 }
 
 EnvironmentProfileList::EnvironmentProfileList(KConfig* config)
-    : d(new EnvironmentProfileListPrivate)
+    : d_ptr(new EnvironmentProfileListPrivate)
 {
-    decode(config, d.data());
+    Q_D(EnvironmentProfileList);
+
+    decode(config, d);
 }
 
 EnvironmentProfileList::~EnvironmentProfileList() = default;
 
 QMap<QString, QString> EnvironmentProfileList::variables(const QString& profileName) const
 {
-    return d->m_profiles[profileName.isEmpty() ? d->m_defaultProfileName : profileName];
+    Q_D(const EnvironmentProfileList);
+
+    return d->m_profiles.value(profileName.isEmpty() ? d->m_defaultProfileName : profileName);
 }
 
 QMap<QString, QString>& EnvironmentProfileList::variables(const QString& profileName)
 {
+    Q_D(EnvironmentProfileList);
+
     return d->m_profiles[profileName.isEmpty() ? d->m_defaultProfileName : profileName];
 }
 
 QString EnvironmentProfileList::defaultProfileName() const
 {
+    Q_D(const EnvironmentProfileList);
+
     return d->m_defaultProfileName;
 }
 
 void EnvironmentProfileList::setDefaultProfile(const QString& profileName)
 {
+    Q_D(EnvironmentProfileList);
+
     if (profileName.isEmpty() ||
         !d->m_profiles.contains(profileName)) {
         return;
@@ -147,28 +161,36 @@ void EnvironmentProfileList::setDefaultProfile(const QString& profileName)
 
 void EnvironmentProfileList::saveSettings(KConfig* config) const
 {
-    encode(config, d.data());
+    Q_D(const EnvironmentProfileList);
+
+    encode(config, d);
     config->sync();
 }
 
 void EnvironmentProfileList::loadSettings(KConfig* config)
 {
+    Q_D(EnvironmentProfileList);
+
     d->m_profiles.clear();
-    decode(config, d.data());
+    decode(config, d);
 }
 
 QStringList EnvironmentProfileList::profileNames() const
 {
+    Q_D(const EnvironmentProfileList);
+
     return d->m_profiles.keys();
 }
 
 void EnvironmentProfileList::removeProfile(const QString& profileName)
 {
+    Q_D(EnvironmentProfileList);
+
     d->m_profiles.remove(profileName);
 }
 
 EnvironmentProfileList::EnvironmentProfileList()
-    : d(new EnvironmentProfileListPrivate)
+    : d_ptr(new EnvironmentProfileListPrivate)
 {
 }
 

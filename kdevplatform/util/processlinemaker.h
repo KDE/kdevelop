@@ -39,6 +39,7 @@ Convenience class to catch output of QProcess.
 */
 
 namespace KDevelop {
+class ProcessLineMakerPrivate;
 
 class KDEVPLATFORMUTIL_EXPORT ProcessLineMaker : public QObject
 {
@@ -108,7 +109,8 @@ Q_SIGNALS:
     void receivedStderrLines(const QStringList& lines);
 
 private:
-    const QScopedPointer<class ProcessLineMakerPrivate> d;
+    const QScopedPointer<class ProcessLineMakerPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ProcessLineMaker)
     friend class ProcessLineMakerPrivate;
 };
 

@@ -28,6 +28,7 @@
 #include <QScopedPointer>
 
 namespace KDevelop {
+class PlaceholderItemProxyModelPrivate;
 
 /**
  * Proxy model adding a placeholder item for new entries
@@ -110,7 +111,8 @@ Q_SIGNALS:
     void dataInserted(int column, const QVariant& values);
 
 private:
-    const QScopedPointer<class PlaceholderItemProxyModelPrivate> d;
+    const QScopedPointer<class PlaceholderItemProxyModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(PlaceholderItemProxyModel)
 };
 
 }

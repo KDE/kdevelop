@@ -53,7 +53,7 @@ public:
 
 PlaceholderItemProxyModel::PlaceholderItemProxyModel(QObject* parent)
     : QIdentityProxyModel(parent)
-    , d(new PlaceholderItemProxyModelPrivate(this))
+    , d_ptr(new PlaceholderItemProxyModelPrivate(this))
 {}
 
 PlaceholderItemProxyModel::~PlaceholderItemProxyModel()
@@ -62,11 +62,15 @@ PlaceholderItemProxyModel::~PlaceholderItemProxyModel()
 
 QVariant PlaceholderItemProxyModel::columnHint(int column) const
 {
+    Q_D(const PlaceholderItemProxyModel);
+
     return d->m_columnHints.value(column);
 }
 
 void PlaceholderItemProxyModel::setColumnHint(int column, const QVariant& hint)
 {
+    Q_D(PlaceholderItemProxyModel);
+
     if (column < 0) {
         return;
     }
@@ -79,6 +83,8 @@ void PlaceholderItemProxyModel::setColumnHint(int column, const QVariant& hint)
 
 Qt::ItemFlags PlaceholderItemProxyModel::flags(const QModelIndex& index) const
 {
+    Q_D(const PlaceholderItemProxyModel);
+
     if (d->isPlaceholderRow(index)) {
         Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
         const int column = index.column();
@@ -119,6 +125,8 @@ bool KDevelop::PlaceholderItemProxyModel::hasChildren(const QModelIndex& parent)
 
 QVariant PlaceholderItemProxyModel::data(const QModelIndex& proxyIndex, int role) const
 {
+    Q_D(const PlaceholderItemProxyModel);
+
     const int column = proxyIndex.column();
     if (d->isPlaceholderRow(proxyIndex)) {
         switch (role) {
@@ -137,6 +145,8 @@ QVariant PlaceholderItemProxyModel::data(const QModelIndex& proxyIndex, int role
 
 QModelIndex PlaceholderItemProxyModel::parent(const QModelIndex& child) const
 {
+    Q_D(const PlaceholderItemProxyModel);
+
     if (d->isPlaceholderRow(child)) {
         return QModelIndex();
     }
@@ -146,6 +156,8 @@ QModelIndex PlaceholderItemProxyModel::parent(const QModelIndex& child) const
 
 QModelIndex PlaceholderItemProxyModel::buddy(const QModelIndex& index) const
 {
+    Q_D(const PlaceholderItemProxyModel);
+
     if (d->isPlaceholderRow(index)) {
         return index;
     }
@@ -163,6 +175,8 @@ QModelIndex PlaceholderItemProxyModel::sibling(int row, int column, const QModel
 
 QModelIndex PlaceholderItemProxyModel::mapToSource(const QModelIndex& proxyIndex) const
 {
+    Q_D(const PlaceholderItemProxyModel);
+
     if (d->isPlaceholderRow(proxyIndex)) {
         return QModelIndex();
     }
@@ -171,6 +185,8 @@ QModelIndex PlaceholderItemProxyModel::mapToSource(const QModelIndex& proxyIndex
 
 bool PlaceholderItemProxyModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
+    Q_D(PlaceholderItemProxyModel);
+
     const int column = index.column();
     if (d->isPlaceholderRow(index) && role == Qt::EditRole && d->m_columnHints.contains(column)) {
         const bool accept = validateRow(index, value);

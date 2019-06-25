@@ -72,7 +72,7 @@ void ZoomControllerPrivate::writeConfig()
 
 ZoomController::ZoomController(const KConfigGroup& configGroup, QObject* parent)
     : QObject(parent)
-    , d{new ZoomControllerPrivate(configGroup)}
+    , d_ptr{new ZoomControllerPrivate(configGroup)}
 {
 }
 
@@ -80,11 +80,15 @@ ZoomController::~ZoomController() = default;
 
 double ZoomController::factor() const
 {
+    Q_D(const ZoomController);
+
     return d->m_factor;
 }
 
 void ZoomController::setFactor(double factor)
 {
+    Q_D(ZoomController);
+
     factor = qBound(0.1, factor, 10.0);
     if (d->m_factor == factor) {
         return;
@@ -96,6 +100,8 @@ void ZoomController::setFactor(double factor)
 
 void ZoomController::zoomBy(double scale)
 {
+    Q_D(ZoomController);
+
     setFactor(d->m_factor * multiplier(scale));
 }
 
@@ -143,11 +149,15 @@ bool ZoomController::handleWheelEvent(QWheelEvent* event)
 
 void ZoomController::zoomIn()
 {
+    Q_D(ZoomController);
+
     setFactor(d->m_factor * defaultMultiplier);
 }
 
 void ZoomController::zoomOut()
 {
+    Q_D(ZoomController);
+
     setFactor(d->m_factor / defaultMultiplier);
 }
 

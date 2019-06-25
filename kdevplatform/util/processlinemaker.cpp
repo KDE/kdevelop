@@ -79,21 +79,25 @@ public:
 
 ProcessLineMaker::ProcessLineMaker(QObject* parent)
     : QObject(parent)
-    , d(new ProcessLineMakerPrivate(this))
+    , d_ptr(new ProcessLineMakerPrivate(this))
 {
 }
 
 ProcessLineMaker::ProcessLineMaker(QProcess* proc, QObject* parent)
     : QObject(parent)
-    , d(new ProcessLineMakerPrivate(this))
+    , d_ptr(new ProcessLineMakerPrivate(this))
 {
+    Q_D(ProcessLineMaker);
+
     d->m_proc = proc;
     connect(proc, &QProcess::readyReadStandardOutput,
-            this, [&] {
+            this, [this] {
+            Q_D(ProcessLineMaker);
             d->slotReadyReadStdout();
         });
     connect(proc, &QProcess::readyReadStandardError,
-            this, [&] {
+            this, [this] {
+            Q_D(ProcessLineMaker);
             d->slotReadyReadStderr();
         });
 }
@@ -102,24 +106,32 @@ ProcessLineMaker::~ProcessLineMaker() = default;
 
 void ProcessLineMaker::slotReceivedStdout(const QByteArray& buffer)
 {
+    Q_D(ProcessLineMaker);
+
     d->stdoutbuf += buffer;
     d->processStdOut();
 }
 
 void ProcessLineMaker::slotReceivedStderr(const QByteArray& buffer)
 {
+    Q_D(ProcessLineMaker);
+
     d->stderrbuf += buffer;
     d->processStdErr();
 }
 
 void ProcessLineMaker::discardBuffers()
 {
+    Q_D(ProcessLineMaker);
+
     d->stderrbuf.truncate(0);
     d->stdoutbuf.truncate(0);
 }
 
 void ProcessLineMaker::flushBuffers()
 {
+    Q_D(ProcessLineMaker);
+
     if (!d->stdoutbuf.isEmpty())
         emit receivedStdoutLines(QStringList(QString::fromLocal8Bit(d->stdoutbuf)));
     if (!d->stderrbuf.isEmpty())

@@ -28,6 +28,7 @@ class QModelIndex;
 class QAbstractItemModel;
 
 namespace KDevelop {
+class MultiLevelListViewPrivate;
 
 /**
  * A view for displaying a tree structure in a series of list views.
@@ -145,9 +146,10 @@ public Q_SLOTS:
     void setCurrentIndex(const QModelIndex& index);
 
 private:
-    const QScopedPointer<class MultiLevelListViewPrivate> d;
+    const QScopedPointer<class MultiLevelListViewPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(MultiLevelListView)
     friend class MultiLevelListViewPrivate;
-    Q_PRIVATE_SLOT(d, void ensureViewSelected(QTreeView * view))
+    Q_PRIVATE_SLOT(d_func(), void ensureViewSelected(QTreeView * view))
 };
 
 }

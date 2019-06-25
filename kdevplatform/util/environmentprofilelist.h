@@ -31,6 +31,7 @@ class QString;
 class QStringList;
 
 namespace KDevelop {
+class EnvironmentProfileListPrivate;
 
 /**
  * This class manages a list of environment profiles, each profile containing a number
@@ -137,7 +138,8 @@ protected:
     void removeProfile(const QString& profileName);
 
 private:
-    const QScopedPointer<class EnvironmentProfileListPrivate> d;
+    const QScopedPointer<class EnvironmentProfileListPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(EnvironmentProfileList)
 };
 
 KDEVPLATFORMUTIL_EXPORT void expandVariables(QMap<QString, QString>& variables, const QProcessEnvironment& environment);

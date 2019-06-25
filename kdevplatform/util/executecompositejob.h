@@ -26,6 +26,7 @@ Boston, MA 02110-1301, USA.
 template<typename T> class QList;
 
 namespace KDevelop {
+class ExecuteCompositeJobPrivate;
 
 class KDEVPLATFORMUTIL_EXPORT ExecuteCompositeJob : public KCompositeJob
 {
@@ -49,7 +50,8 @@ protected:
     bool doKill() override;
 
 private:
-    const QScopedPointer<class ExecuteCompositeJobPrivate> d;
+    const QScopedPointer<class ExecuteCompositeJobPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ExecuteCompositeJob)
 };
 
 }
