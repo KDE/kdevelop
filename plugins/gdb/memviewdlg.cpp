@@ -299,8 +299,8 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
         hex->setShortcut(Qt::Key_H);
         formatMenu->addAction(hex);
 
-        foreach(QAction* act, formatGroup->actions())
-        {
+        const auto formatActions = formatGroup->actions();
+        for (QAction* act : formatActions) {
             act->setCheckable(true);
             act->setChecked(act->data().toInt() ==  m_memViewView->valueCoding());
             act->setShortcutContext(Qt::WidgetWithChildrenShortcut);
@@ -341,8 +341,8 @@ void MemoryView::contextMenuEvent(QContextMenuEvent *e)
         group16->setShortcut(Qt::Key_6);
         groupingMenu->addAction(group16);
 
-        foreach(QAction* act, groupingGroup->actions())
-        {
+        const auto groupingActions = groupingGroup->actions();
+        for (QAction* act : groupingActions) {
             act->setCheckable(true);
             act->setChecked(act->data().toInt() == m_memViewView->noOfGroupedBytes());
             act->setShortcutContext(Qt::WidgetWithChildrenShortcut);

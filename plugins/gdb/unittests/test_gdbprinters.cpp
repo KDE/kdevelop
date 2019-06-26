@@ -60,7 +60,7 @@ public:
           << "from kde import register_kde_printers"
           << "register_kde_printers (None)"
           << "end";
-        foreach (const QByteArray &i, p) {
+        for (const QByteArray& i : qAsConst(p)) {
             write(i + "\n");
         }
         waitForPrompt();
