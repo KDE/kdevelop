@@ -52,7 +52,7 @@ void ComboBoxDelegate::setEditorData(QWidget* editor, const QModelIndex& index) 
     const QString& current = index.data().toString();
     int currentIndex = -1;
     int i = 0;
-    foreach(const Item& item, m_items) {
+    for (const Item& item : m_items) {
         if (item.text == current) {
             currentIndex = i;
         }

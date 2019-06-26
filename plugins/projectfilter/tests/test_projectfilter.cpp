@@ -359,10 +359,10 @@ static QVector<BenchData> createBenchData(const Path& base, int folderDepth, int
 void TestProjectFilter::bench()
 {
     QFETCH(TestFilter, filter);
-    QFETCH(QVector<BenchData>, data);
+    QFETCH(const QVector<BenchData>, data);
 
     QBENCHMARK {
-        foreach(const BenchData& bench, data) {
+        for (const BenchData& bench : data) {
             filter->isValid(bench.path, bench.isFolder);
         }
     }

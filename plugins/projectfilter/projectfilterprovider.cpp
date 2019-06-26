@@ -53,7 +53,8 @@ ProjectFilterProvider::ProjectFilterProvider( QObject* parent, const QVariantLis
             this, &ProjectFilterProvider::projectAboutToBeOpened);
 
     // initialize the filters for each project
-    foreach(IProject* project, core()->projectController()->projects()) {
+    const auto projects = core()->projectController()->projects();
+    for (IProject* project : projects) {
         updateProjectFilters(project);
     }
 }

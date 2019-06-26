@@ -170,7 +170,8 @@ void ProjectFilterConfigPage::checkFilters()
 {
     // check for errors, only show one error at once
     QString errorText;
-    foreach(const Filter& filter, m_model->filters()) {
+    const auto filters = m_model->filters();
+    for (const Filter& filter : filters) {
         const QString &pattern = filter.pattern.pattern();
         if (pattern.isEmpty()) {
             errorText = i18n("A filter with an empty pattern will match all items. Use <code>\"*\"</code> to make this explicit.");

@@ -67,7 +67,7 @@ bool ProjectFilter::isValid( const Path &path, const bool isFolder ) const
     }
 
     bool isValid = true;
-    foreach( const Filter& filter, m_filters ) {
+    for (const Filter& filter : m_filters) {
         if (isFolder && !(filter.targets & Filter::Folders)) {
             continue;
         } else if (!isFolder && !(filter.targets & Filter::Files)) {
