@@ -63,18 +63,24 @@ public:
 
 void AbstractNavigationContext::setTopContext(const TopDUContextPointer& context)
 {
+    Q_D(AbstractNavigationContext);
+
     d->m_topContext = context;
 }
 
 TopDUContextPointer AbstractNavigationContext::topContext() const
 {
+    Q_D(const AbstractNavigationContext);
+
     return d->m_topContext;
 }
 
 AbstractNavigationContext::AbstractNavigationContext(const TopDUContextPointer& topContext,
                                                      AbstractNavigationContext* previousContext)
-    : d(new AbstractNavigationContextPrivate)
+    : d_ptr(new AbstractNavigationContextPrivate)
 {
+    Q_D(AbstractNavigationContext);
+
     d->m_previousContext = previousContext;
     d->m_topContext = topContext;
 
@@ -95,6 +101,8 @@ void AbstractNavigationContext::makeLink(const QString& name, const DeclarationP
 
 QString AbstractNavigationContext::createLink(const QString& name, const QString&, const NavigationAction& action)
 {
+    Q_D(AbstractNavigationContext);
+
     if (d->m_shorten) {
         //Do not create links in shortened mode, it's only for viewing
         return typeHighlight(name.toHtmlEscaped());
@@ -139,6 +147,8 @@ void AbstractNavigationContext::makeLink(const QString& name, const QString& tar
 
 void AbstractNavigationContext::clear()
 {
+    Q_D(AbstractNavigationContext);
+
     d->m_linkCount = 0;
     d->m_currentLine = 0;
     d->m_currentText.clear();
@@ -149,6 +159,8 @@ void AbstractNavigationContext::clear()
 
 void AbstractNavigationContext::executeLink(const QString& link)
 {
+    Q_D(AbstractNavigationContext);
+
     const auto actionIt = d->m_links.constFind(link);
     if (actionIt == d->m_links.constEnd())
         return;
@@ -164,6 +176,8 @@ NavigationContextPointer AbstractNavigationContext::executeKeyAction(const QStri
 
 NavigationContextPointer AbstractNavigationContext::execute(const NavigationAction& action)
 {
+    Q_D(AbstractNavigationContext);
+
     if (action.targetContext)
         return NavigationContextPointer(action.targetContext);
 
@@ -240,22 +254,30 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
 
 AbstractNavigationContext* AbstractNavigationContext::previousContext() const
 {
+    Q_D(const AbstractNavigationContext);
+
     return d->m_previousContext;
 }
 
 void AbstractNavigationContext::setPreviousContext(AbstractNavigationContext* previous)
 {
+    Q_D(AbstractNavigationContext);
+
     d->m_previousContext = previous;
 }
 
 NavigationContextPointer AbstractNavigationContext::registerChild(AbstractNavigationContext* context)
 {
+    Q_D(AbstractNavigationContext);
+
     d->m_children << NavigationContextPointer(context);
     return d->m_children.last();
 }
 
 NavigationContextPointer AbstractNavigationContext::registerChild(const DeclarationPointer& declaration)
 {
+    Q_D(AbstractNavigationContext);
+
     //We create a navigation-widget here, and steal its context.. evil ;)
     QScopedPointer<AbstractNavigationWidget> navigationWidget(
         declaration->context()->createNavigationWidget(declaration.data()));
@@ -273,6 +295,8 @@ const int lineJump = 3;
 
 bool AbstractNavigationContext::down()
 {
+    Q_D(AbstractNavigationContext);
+
     //Make sure link-count is valid
     if (d->m_linkCount == -1) {
         DUChainReadLocker lock;
@@ -319,6 +343,8 @@ bool AbstractNavigationContext::down()
 
 bool AbstractNavigationContext::up()
 {
+    Q_D(AbstractNavigationContext);
+
     //Make sure link-count is valid
     if (d->m_linkCount == -1) {
         DUChainReadLocker lock;
@@ -359,6 +385,8 @@ bool AbstractNavigationContext::up()
 
 bool AbstractNavigationContext::nextLink()
 {
+    Q_D(AbstractNavigationContext);
+
     //Make sure link-count is valid
     if (d->m_linkCount == -1) {
         DUChainReadLocker lock;
@@ -380,6 +408,8 @@ bool AbstractNavigationContext::nextLink()
 
 bool AbstractNavigationContext::previousLink()
 {
+    Q_D(AbstractNavigationContext);
+
     //Make sure link-count is valid
     if (d->m_linkCount == -1) {
         DUChainReadLocker lock;
@@ -401,11 +431,15 @@ bool AbstractNavigationContext::previousLink()
 
 int AbstractNavigationContext::linkCount() const
 {
+    Q_D(const AbstractNavigationContext);
+
     return d->m_linkCount;
 }
 
 void AbstractNavigationContext::resetNavigation()
 {
+    Q_D(AbstractNavigationContext);
+
     d->m_currentPositionLine = -1;
     d->m_selectedLink = -1;
     d->m_selectedLinkAction = {};
@@ -413,6 +447,8 @@ void AbstractNavigationContext::resetNavigation()
 
 NavigationContextPointer AbstractNavigationContext::back()
 {
+    Q_D(AbstractNavigationContext);
+
     if (d->m_previousContext)
         return NavigationContextPointer(d->m_previousContext);
     else
@@ -421,6 +457,8 @@ NavigationContextPointer AbstractNavigationContext::back()
 
 NavigationContextPointer AbstractNavigationContext::accept()
 {
+    Q_D(AbstractNavigationContext);
+
     if (d->m_selectedLink >= 0 &&  d->m_selectedLink < d->m_linkCount) {
         NavigationAction action = d->m_intLinks[d->m_selectedLink];
         return execute(action);
@@ -430,6 +468,8 @@ NavigationContextPointer AbstractNavigationContext::accept()
 
 NavigationContextPointer AbstractNavigationContext::accept(IndexedDeclaration decl)
 {
+    Q_D(AbstractNavigationContext);
+
     if (decl.data()) {
         NavigationAction action(DeclarationPointer(decl.data()), NavigationAction::NavigateDeclaration);
         return execute(action);
@@ -440,6 +480,8 @@ NavigationContextPointer AbstractNavigationContext::accept(IndexedDeclaration de
 
 NavigationContextPointer AbstractNavigationContext::acceptLink(const QString& link)
 {
+    Q_D(AbstractNavigationContext);
+
     const auto actionIt = d->m_links.constFind(link);
     if (actionIt == d->m_links.constEnd()) {
         qCDebug(LANGUAGE) << "Executed unregistered link " << link << endl;
@@ -451,6 +493,8 @@ NavigationContextPointer AbstractNavigationContext::acceptLink(const QString& li
 
 NavigationAction AbstractNavigationContext::currentAction() const
 {
+    Q_D(const AbstractNavigationContext);
+
     return d->m_selectedLinkAction;
 }
 
@@ -489,12 +533,16 @@ QString AbstractNavigationContext::declarationKind(const DeclarationPointer& dec
 
 QString AbstractNavigationContext::html(bool shorten)
 {
+    Q_D(AbstractNavigationContext);
+
     d->m_shorten = shorten;
     return QString();
 }
 
 bool AbstractNavigationContext::alreadyComputed() const
 {
+    Q_D(const AbstractNavigationContext);
+
     return !d->m_currentText.isEmpty();
 }
 
@@ -524,6 +572,8 @@ static QStringList splitAndKeep(QString str, const QRegExp& regExp)
 
 void AbstractNavigationContext::addHtml(const QString& html)
 {
+    Q_D(AbstractNavigationContext);
+
     QRegExp newLineRegExp(QStringLiteral("<br>|<br */>|</p>"));
     const auto lines = splitAndKeep(html, newLineRegExp);
     for (const QString& line : lines) {
@@ -540,6 +590,8 @@ void AbstractNavigationContext::addHtml(const QString& html)
 
 QString AbstractNavigationContext::currentHtml() const
 {
+    Q_D(const AbstractNavigationContext);
+
     return d->m_currentText;
 }
 

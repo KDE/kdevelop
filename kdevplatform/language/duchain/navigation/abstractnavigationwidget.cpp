@@ -57,7 +57,7 @@ public:
 };
 
 AbstractNavigationWidget::AbstractNavigationWidget()
-    : d(new AbstractNavigationWidgetPrivate(this))
+    : d_ptr(new AbstractNavigationWidgetPrivate(this))
 {
     setPalette(QApplication::palette());
     setFocusPolicy(Qt::NoFocus);
@@ -66,6 +66,8 @@ AbstractNavigationWidget::AbstractNavigationWidget()
 
 QSize AbstractNavigationWidget::sizeHint() const
 {
+    Q_D(const AbstractNavigationWidget);
+
     if (d->m_browser) {
         updateIdealSize();
         QSize ret = QSize(qMin(d->m_idealTextSize.width(), maxNavigationWidgetWidth),
@@ -89,6 +91,8 @@ QSize AbstractNavigationWidget::sizeHint() const
 
 void AbstractNavigationWidget::initBrowser(int height)
 {
+    Q_D(AbstractNavigationWidget);
+
     Q_ASSERT(!d->m_browser);
     Q_UNUSED(height);
     d->m_browser = new QTextBrowser;
@@ -109,9 +113,11 @@ void AbstractNavigationWidget::initBrowser(int height)
     setLayout(layout);
 
     connect(d->m_browser.data(), &QTextEdit::selectionChanged, this, [this]() {
+            Q_D(AbstractNavigationWidget);
             d->m_browser->copy();
         });
-    connect(d->m_browser.data(), &QTextBrowser::anchorClicked, this, [&](const QUrl& url) {
+    connect(d->m_browser.data(), &QTextBrowser::anchorClicked, this, [this](const QUrl& url) {
+            Q_D(AbstractNavigationWidget);
             d->anchorClicked(url);
         });
 
@@ -123,12 +129,16 @@ void AbstractNavigationWidget::initBrowser(int height)
 
 AbstractNavigationWidget::~AbstractNavigationWidget()
 {
+    Q_D(AbstractNavigationWidget);
+
     if (d->m_currentWidget)
         layout()->removeWidget(d->m_currentWidget);
 }
 
 void AbstractNavigationWidget::setContext(NavigationContextPointer context, int initBrows)
 {
+    Q_D(AbstractNavigationWidget);
+
     if (d->m_browser == nullptr)
         initBrowser(initBrows);
 
@@ -154,6 +164,8 @@ void AbstractNavigationWidget::setContext(NavigationContextPointer context, int 
 
 void AbstractNavigationWidget::updateIdealSize() const
 {
+    Q_D(const AbstractNavigationWidget);
+
     if (d->m_context && !d->m_idealTextSize.isValid()) {
         QTextDocument doc;
         doc.setHtml(d->m_currentText);
@@ -169,11 +181,15 @@ void AbstractNavigationWidget::updateIdealSize() const
 
 void AbstractNavigationWidget::setDisplayHints(DisplayHints hints)
 {
+    Q_D(AbstractNavigationWidget);
+
     d->m_hints = hints;
 }
 
 void AbstractNavigationWidget::update()
 {
+    Q_D(AbstractNavigationWidget);
+
     setUpdatesEnabled(false);
     Q_ASSERT(d->m_context);
 
@@ -246,13 +262,17 @@ void AbstractNavigationWidget::update()
     setUpdatesEnabled(true);
 }
 
-NavigationContextPointer AbstractNavigationWidget::context()
+NavigationContextPointer AbstractNavigationWidget::context() const
 {
+    Q_D(const AbstractNavigationWidget);
+
     return d->m_context;
 }
 
 void AbstractNavigationWidget::navigateDeclaration(const IndexedDeclaration& decl)
 {
+    Q_D(AbstractNavigationWidget);
+
     setContext(d->m_context->accept(decl));
 }
 
@@ -270,6 +290,8 @@ void AbstractNavigationWidgetPrivate::anchorClicked(const QUrl& url)
 
 bool AbstractNavigationWidget::next()
 {
+    Q_D(AbstractNavigationWidget);
+
     Q_ASSERT(d->m_context);
     auto ret = d->m_context->nextLink();
     update();
@@ -278,6 +300,8 @@ bool AbstractNavigationWidget::next()
 
 bool AbstractNavigationWidget::previous()
 {
+    Q_D(AbstractNavigationWidget);
+
     Q_ASSERT(d->m_context);
     auto ret = d->m_context->previousLink();
     update();
@@ -286,6 +310,8 @@ bool AbstractNavigationWidget::previous()
 
 void AbstractNavigationWidget::accept()
 {
+    Q_D(AbstractNavigationWidget);
+
     Q_ASSERT(d->m_context);
 
     QPointer<AbstractNavigationWidget> thisPtr(this);
@@ -297,6 +323,8 @@ void AbstractNavigationWidget::accept()
 
 void AbstractNavigationWidget::back()
 {
+    Q_D(AbstractNavigationWidget);
+
     QPointer<AbstractNavigationWidget> thisPtr(this);
     NavigationContextPointer nextContext = d->m_context->back();
 
@@ -306,6 +334,8 @@ void AbstractNavigationWidget::back()
 
 bool AbstractNavigationWidget::up()
 {
+    Q_D(AbstractNavigationWidget);
+
     auto ret = d->m_context->up();
     update();
     return ret;
@@ -313,6 +343,8 @@ bool AbstractNavigationWidget::up()
 
 bool AbstractNavigationWidget::down()
 {
+    Q_D(AbstractNavigationWidget);
+
     auto ret = d->m_context->down();
     update();
     return ret;
@@ -320,6 +352,8 @@ bool AbstractNavigationWidget::down()
 
 void AbstractNavigationWidget::resetNavigationState()
 {
+    Q_D(AbstractNavigationWidget);
+
     d->m_context->resetNavigation();
     update();
 }

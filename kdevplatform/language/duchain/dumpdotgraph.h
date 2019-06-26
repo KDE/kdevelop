@@ -23,6 +23,9 @@ class QString;
 namespace KDevelop {
 class TopDUContext;
 class DUContext;
+class DumpDotGraphPrivate;
+
+
 /**
  * A helper-class for debugging, that nicely visualizes the whole structure of a du-context.
  * */
@@ -41,7 +44,8 @@ public:
     QString dotGraph(KDevelop::DUContext* context, bool shortened = false);
 
 private:
-    const QScopedPointer<class DumpDotGraphPrivate> d;
+    const QScopedPointer<class DumpDotGraphPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DumpDotGraph)
 };
 }
 

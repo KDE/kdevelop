@@ -53,13 +53,16 @@ public:
 
 QString DumpDotGraph::dotGraph(KDevelop::DUContext* context, bool shortened)
 {
+    Q_D(DumpDotGraph);
+
     d->m_hadObjects.clear();
     d->m_hadVersions.clear();
     d->m_topContext = context->topContext(); ///@todo maybe get this as a parameter
     return d->dotGraphInternal(context, true, shortened);
 }
 
-DumpDotGraph::DumpDotGraph() : d(new DumpDotGraphPrivate())
+DumpDotGraph::DumpDotGraph()
+    : d_ptr(new DumpDotGraphPrivate())
 {
 }
 

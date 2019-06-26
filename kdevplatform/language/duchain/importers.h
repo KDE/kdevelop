@@ -27,6 +27,7 @@
 namespace KDevelop {
 class DeclarationId;
 class IndexedDUContext;
+class ImportersPrivate;
 
 /**
  * Global mapping of Declaration-Ids to contexts that import the associated context, protected through DUChainLock.
@@ -59,7 +60,8 @@ public:
     static Importers& self();
 
 private:
-    const QScopedPointer<class ImportersPrivate> d;
+    const QScopedPointer<class ImportersPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Importers)
 };
 }
 

@@ -67,7 +67,7 @@ public:
 };
 
 DUChainLock::DUChainLock()
-    : d(new DUChainLockPrivate)
+    : d_ptr(new DUChainLockPrivate)
 {
 }
 
@@ -75,6 +75,8 @@ DUChainLock::~DUChainLock() = default;
 
 bool DUChainLock::lockForRead(unsigned int timeout)
 {
+    Q_D(DUChainLock);
+
     ///Step 1: Increase the own reader-recursion. This will make sure no further write-locks will succeed
     d->changeOwnReaderRecursion(1);
 
@@ -105,16 +107,22 @@ bool DUChainLock::lockForRead(unsigned int timeout)
 
 void DUChainLock::releaseReadLock()
 {
+    Q_D(DUChainLock);
+
     d->changeOwnReaderRecursion(-1);
 }
 
 bool DUChainLock::currentThreadHasReadLock()
 {
+    Q_D(DUChainLock);
+
     return ( bool )d->ownReaderRecursion();
 }
 
 bool DUChainLock::lockForWrite(uint timeout)
 {
+    Q_D(DUChainLock);
+
     //It is not allowed to acquire a write-lock while holding read-lock
 
     Q_ASSERT(d->ownReaderRecursion() == 0);
@@ -158,6 +166,8 @@ bool DUChainLock::lockForWrite(uint timeout)
 
 void DUChainLock::releaseWriteLock()
 {
+    Q_D(DUChainLock);
+
     Q_ASSERT(currentThreadHasWriteLock());
 
     //The order is important here, m_writerRecursion protects m_writer
@@ -171,8 +181,10 @@ void DUChainLock::releaseWriteLock()
     }
 }
 
-bool DUChainLock::currentThreadHasWriteLock()
+bool DUChainLock::currentThreadHasWriteLock() const
 {
+    Q_D(const DUChainLock);
+
     return d->m_writer.load() == QThread::currentThread();
 }
 

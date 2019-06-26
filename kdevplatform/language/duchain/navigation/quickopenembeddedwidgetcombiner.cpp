@@ -30,8 +30,9 @@ QuickOpenEmbeddedWidgetInterface* toInterface(QObject *object)
     return dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(object);
 }
 
-struct QuickOpenEmbeddedWidgetCombiner::Private
+class KDevelop::QuickOpenEmbeddedWidgetCombinerPrivate
 {
+public:
     QuickOpenEmbeddedWidgetInterface* currentChild = nullptr;
 
     bool init(const QObjectList& children)
@@ -117,7 +118,7 @@ struct QuickOpenEmbeddedWidgetCombiner::Private
 
 QuickOpenEmbeddedWidgetCombiner::QuickOpenEmbeddedWidgetCombiner(QWidget* parent)
     : QWidget(parent)
-    , d(new Private)
+    , d_ptr(new QuickOpenEmbeddedWidgetCombinerPrivate)
 {
     setLayout(new QVBoxLayout);
     layout()->setContentsMargins(2, 2, 2, 2);
@@ -128,26 +129,36 @@ QuickOpenEmbeddedWidgetCombiner::~QuickOpenEmbeddedWidgetCombiner() = default;
 
 bool QuickOpenEmbeddedWidgetCombiner::next()
 {
-    return d->navigate(Private::Next, children());
+    Q_D(QuickOpenEmbeddedWidgetCombiner);
+
+    return d->navigate(QuickOpenEmbeddedWidgetCombinerPrivate::Next, children());
 }
 
 bool QuickOpenEmbeddedWidgetCombiner::previous()
 {
-    return d->navigate(Private::Previous, children());
+    Q_D(QuickOpenEmbeddedWidgetCombiner);
+
+    return d->navigate(QuickOpenEmbeddedWidgetCombinerPrivate::Previous, children());
 }
 
 bool QuickOpenEmbeddedWidgetCombiner::up()
 {
-    return d->navigate(Private::Up, children());
+    Q_D(QuickOpenEmbeddedWidgetCombiner);
+
+    return d->navigate(QuickOpenEmbeddedWidgetCombinerPrivate::Up, children());
 }
 
 bool QuickOpenEmbeddedWidgetCombiner::down()
 {
-    return d->navigate(Private::Down, children());
+    Q_D(QuickOpenEmbeddedWidgetCombiner);
+
+    return d->navigate(QuickOpenEmbeddedWidgetCombinerPrivate::Down, children());
 }
 
 void QuickOpenEmbeddedWidgetCombiner::back()
 {
+    Q_D(QuickOpenEmbeddedWidgetCombiner);
+
     if (d->currentChild) {
         d->currentChild->back();
     }
@@ -155,6 +166,8 @@ void QuickOpenEmbeddedWidgetCombiner::back()
 
 void QuickOpenEmbeddedWidgetCombiner::accept()
 {
+    Q_D(QuickOpenEmbeddedWidgetCombiner);
+
     if (d->currentChild) {
         d->currentChild->accept();
     }

@@ -32,6 +32,7 @@ class Declaration;
 class IndexedDeclaration;
 class DeclarationId;
 class TopDUContext;
+class DefinitionsPrivate;
 
 /**
  * Global mapping of one Declaration-Ids to multiple Definitions, protected through DUChainLock.
@@ -57,7 +58,8 @@ public:
     void dump(const QTextStream& out);
 
 private:
-    const QScopedPointer<class DefinitionsPrivate> d;
+    const QScopedPointer<class DefinitionsPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Definitions)
 };
 }
 

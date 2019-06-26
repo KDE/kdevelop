@@ -24,6 +24,7 @@
 
 namespace KDevelop {
 // #define NO_DUCHAIN_LOCK_TESTING
+class DUChainLockPrivate;
 
 /**
  * Macros for ensuring the DUChain is locked properly.
@@ -100,10 +101,11 @@ public:
     /**
      * Determines if the current thread has a write lock.
      */
-    bool currentThreadHasWriteLock();
+    bool currentThreadHasWriteLock() const;
 
 private:
-    const QScopedPointer<class DUChainLockPrivate> d;
+    const QScopedPointer<class DUChainLockPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DUChainLock)
 };
 
 /**

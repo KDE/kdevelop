@@ -30,6 +30,7 @@ class DeclarationId;
 class TopDUContext;
 class QualifiedIdentifier;
 class IndexedString;
+class CodeModelPrivate;
 
 struct CodeModelItem
 {
@@ -94,7 +95,8 @@ public:
     static CodeModel& self();
 
 private:
-    const QScopedPointer<class CodeModelPrivate> d;
+    const QScopedPointer<class CodeModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(CodeModel)
 };
 }
 

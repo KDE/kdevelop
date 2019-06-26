@@ -120,10 +120,12 @@ public:
     {
     }
     //Maps declaration-ids to Uses
-    ItemRepository<UsesItem, UsesRequestItem> m_uses;
+    // mutable as things like findIndex are not const
+    mutable ItemRepository<UsesItem, UsesRequestItem> m_uses;
 };
 
-Uses::Uses() : d(new UsesPrivate())
+Uses::Uses()
+    : d_ptr(new UsesPrivate())
 {
 }
 
@@ -131,6 +133,8 @@ Uses::~Uses() = default;
 
 void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
 {
+    Q_D(Uses);
+
     UsesItem item;
     item.declaration = id;
     item.usesList().append(use);
@@ -156,6 +160,8 @@ void Uses::addUse(const DeclarationId& id, const IndexedTopDUContext& use)
 
 void Uses::removeUse(const DeclarationId& id, const IndexedTopDUContext& use)
 {
+    Q_D(Uses);
+
     UsesItem item;
     item.declaration = id;
     UsesRequestItem request(item);
@@ -180,6 +186,8 @@ void Uses::removeUse(const DeclarationId& id, const IndexedTopDUContext& use)
 
 bool Uses::hasUses(const DeclarationId& id) const
 {
+    Q_D(const Uses);
+
     UsesItem item;
     item.declaration = id;
     return ( bool ) d->m_uses.findIndex(item);
@@ -187,6 +195,8 @@ bool Uses::hasUses(const DeclarationId& id) const
 
 KDevVarLengthArray<IndexedTopDUContext> Uses::uses(const DeclarationId& id) const
 {
+    Q_D(const Uses);
+
     KDevVarLengthArray<IndexedTopDUContext> ret;
 
     UsesItem item;

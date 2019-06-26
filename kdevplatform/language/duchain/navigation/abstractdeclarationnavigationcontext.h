@@ -28,6 +28,7 @@ namespace KDevelop {
 class IdentifiedType;
 class Identifier;
 class QualifiedIdentifier;
+class AbstractDeclarationNavigationContextPrivate;
 
 class KDEVPLATFORMLANGUAGE_EXPORT AbstractDeclarationNavigationContext
     : public AbstractNavigationContext
@@ -90,7 +91,8 @@ protected:
     void createFullBackwardSearchLink(const QString& string);
 
 private:
-    const QScopedPointer<class AbstractDeclarationNavigationContextPrivate> d;
+    const QScopedPointer<class AbstractDeclarationNavigationContextPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(AbstractDeclarationNavigationContext)
 };
 }
 

@@ -29,6 +29,8 @@ class QString;
 class QStringList;
 
 namespace KDevelop {
+class ParamIteratorPrivate;
+
 /**
  * Searches a fitting closing brace from left to right: a ')' for '(', ']' for '[', ...
  */
@@ -138,7 +140,8 @@ public:
     uint position() const;
 
 private:
-    const QScopedPointer<class ParamIteratorPrivate> d;
+    const QScopedPointer<class ParamIteratorPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ParamIterator)
 };
 }
 

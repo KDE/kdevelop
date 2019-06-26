@@ -27,6 +27,7 @@
 namespace KDevelop {
 class DeclarationId;
 class IndexedTopDUContext;
+class UsesPrivate;
 
 /**
  * Global mapping of Declaration-Ids to top-contexts, protected through DUChainLock.
@@ -57,7 +58,8 @@ public:
     KDevVarLengthArray<IndexedTopDUContext> uses(const DeclarationId& id) const;
 
 private:
-    const QScopedPointer<class UsesPrivate> d;
+    const QScopedPointer<class UsesPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Uses)
 };
 }
 

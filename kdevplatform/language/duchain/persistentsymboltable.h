@@ -33,6 +33,7 @@ class IndexedDUContext;
 class DeclarationId;
 class TopDUContext;
 class IndexedQualifiedIdentifier;
+class PersistentSymbolTablePrivate;
 
 ///@todo move into own header
 class KDEVPLATFORMLANGUAGE_EXPORT IndexedDeclarationHandler
@@ -156,7 +157,8 @@ public:
 
 private:
     // cannot use QScopedPointer yet, see comment in ~PersistentSymbolTable()
-    class PersistentSymbolTablePrivate* const d;
+    class PersistentSymbolTablePrivate* const d_ptr;
+    Q_DECLARE_PRIVATE(PersistentSymbolTable)
 };
 }
 

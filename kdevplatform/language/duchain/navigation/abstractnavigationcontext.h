@@ -26,6 +26,8 @@
 #include "navigationaction.h"
 
 namespace KDevelop {
+class AbstractNavigationContextPrivate;
+
 /** A helper-class for elegant colorization of html-strings .
  *
  * Initialize it with a html-color like "990000". and colorize strings
@@ -164,7 +166,8 @@ protected:
     static const Colorizer nameHighlight;
 
 private:
-    const QScopedPointer<class AbstractNavigationContextPrivate> d;
+    const QScopedPointer<class AbstractNavigationContextPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(AbstractNavigationContext)
 };
 }
 

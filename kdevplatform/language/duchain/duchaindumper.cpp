@@ -84,8 +84,10 @@ public:
 };
 
 DUChainDumper::DUChainDumper(Features features)
-    : d(new DUChainDumperPrivate)
+    : d_ptr(new DUChainDumperPrivate)
 {
+    Q_D(DUChainDumper);
+
     d->m_features = features;
 }
 
@@ -199,6 +201,8 @@ void DUChainDumperPrivate::dump(DUContext* context, int allowedDepth, bool isFro
 
 void DUChainDumper::dump(DUContext* context, int allowedDepth, QTextStream& out)
 {
+    Q_D(DUChainDumper);
+
     d->m_visitedContexts.clear();
 
     if (!context) {

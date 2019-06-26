@@ -511,8 +511,10 @@ QString removeWhitespace(const QString& str)
 ParamIterator::~ParamIterator() = default;
 
 ParamIterator::ParamIterator(const QString& parens, const QString& source, int offset)
-    : d(new ParamIteratorPrivate)
+    : d_ptr(new ParamIteratorPrivate)
 {
+    Q_D(ParamIterator);
+
     d->m_source = source;
     d->m_parens = parens;
 
@@ -557,6 +559,8 @@ ParamIterator::ParamIterator(const QString& parens, const QString& source, int o
 
 ParamIterator& ParamIterator::operator ++()
 {
+    Q_D(ParamIterator);
+
     if (d->m_source[d->m_curEnd] == d->m_parens[1]) {
         //We have reached the end-paren. Stop iterating.
         d->m_cur = d->m_end = d->m_curEnd + 1;
@@ -572,21 +576,29 @@ ParamIterator& ParamIterator::operator ++()
 
 QString ParamIterator::operator *()
 {
+    Q_D(ParamIterator);
+
     return d->m_source.mid(d->m_cur, d->m_curEnd - d->m_cur).trimmed();
 }
 
 ParamIterator::operator bool() const
 {
+    Q_D(const ParamIterator);
+
     return d->m_cur < ( int ) d->m_end;
 }
 
 QString ParamIterator::prefix() const
 {
+    Q_D(const ParamIterator);
+
     return d->m_prefix;
 }
 
 uint ParamIterator::position() const
 {
+    Q_D(const ParamIterator);
+
     return ( uint )d->m_cur;
 }
 }
