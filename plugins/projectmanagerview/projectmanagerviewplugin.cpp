@@ -381,8 +381,7 @@ void ProjectManagerViewPlugin::closeProjects()
 {
     QList<KDevelop::IProject*> projectsToClose;
     ProjectModel* model = ICore::self()->projectController()->projectModel();
-    foreach( const QModelIndex& index, d->ctxProjectItemList )
-    {
+    for (const QModelIndex& index : qAsConst(d->ctxProjectItemList)) {
         KDevelop::ProjectBaseItem* item = model->itemFromIndex(index);
         if( !projectsToClose.contains( item->project() ) )
         {
@@ -390,8 +389,7 @@ void ProjectManagerViewPlugin::closeProjects()
         }
     }
     d->ctxProjectItemList.clear();
-    foreach( KDevelop::IProject* proj, projectsToClose )
-    {
+    for (KDevelop::IProject* proj : qAsConst(projectsToClose)) {
         core()->projectController()->closeProject( proj );
     }
 }
@@ -489,16 +487,16 @@ void ProjectManagerViewPlugin::buildProjectItems()
 
 void ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset( )
 {
-    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ))
-    {
+    const auto items = itemsFromIndexes(d->ctxProjectItemList);
+    for (KDevelop::ProjectBaseItem* item : items) {
         ICore::self()->projectController()->buildSetModel()->addProjectItem( item );
     }
 }
 
 void ProjectManagerViewPlugin::runTargetsFromContextMenu( )
 {
-    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ))
-    {
+    const auto items = itemsFromIndexes(d->ctxProjectItemList);
+    for (KDevelop::ProjectBaseItem* item : items) {
         KDevelop::ProjectExecutableTargetItem* t=item->executable();
         if(t)
         {
@@ -519,12 +517,13 @@ void ProjectManagerViewPlugin::projectConfiguration( )
 void ProjectManagerViewPlugin::reloadFromContextMenu( )
 {
     QList< KDevelop::ProjectFolderItem* > folders;
-    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ) )
-    {
+    const auto items = itemsFromIndexes(d->ctxProjectItemList);
+    for (KDevelop::ProjectBaseItem* item : items) {
         if ( item->folder() ) {
             // since reloading should be recursive, only pass the upper-most items
             bool found = false;
-            foreach ( KDevelop::ProjectFolderItem* existing, folders ) {
+            const auto currentFolders = folders;
+            for (KDevelop::ProjectFolderItem* existing : currentFolders) {
                 if ( existing->path().isParentOf(item->folder()->path()) ) {
                     // simply skip this child
                     found = true;
@@ -540,15 +539,15 @@ void ProjectManagerViewPlugin::reloadFromContextMenu( )
             }
         }
     }
-    foreach( KDevelop::ProjectFolderItem* folder, folders ) {
+    for (KDevelop::ProjectFolderItem* folder : qAsConst(folders)) {
         folder->project()->projectFileManager()->reload(folder);
     }
 }
 
 void ProjectManagerViewPlugin::createFolderFromContextMenu( )
 {
-    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ))
-    {
+    const auto items = itemsFromIndexes(d->ctxProjectItemList);
+    for (KDevelop::ProjectBaseItem* item : items) {
         if ( item->folder() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
             QString name = QInputDialog::getText ( window,
@@ -578,8 +577,7 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
     Path lastFolder;
     QHash< IProjectFileManager*, QList<KDevelop::ProjectBaseItem*> > filteredItems;
     QStringList itemPaths;
-    foreach( KDevelop::ProjectBaseItem* item, sortedItems )
-    {
+    for (KDevelop::ProjectBaseItem* item : qAsConst(sortedItems)) {
         if (item->isProjectRoot()) {
             continue;
         } else if (item->folder() || item->file()) {
@@ -702,8 +700,8 @@ ProjectFileItem* createFile(const ProjectFolderItem* item)
 
 void ProjectManagerViewPlugin::createFileFromContextMenu( )
 {
-    foreach( KDevelop::ProjectBaseItem* item, itemsFromIndexes( d->ctxProjectItemList ) )
-    {
+    const auto items = itemsFromIndexes(d->ctxProjectItemList);
+    for (KDevelop::ProjectBaseItem* item : items) {
         if ( item->folder() ) {
             createFile(item->folder());
         } else if ( item->target() ) {

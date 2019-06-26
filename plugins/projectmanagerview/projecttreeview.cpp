@@ -192,7 +192,7 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
             filterDroppedItems(usefulItems, destItem);
             Path::List paths;
             paths.reserve(usefulItems.size());
-            foreach (ProjectBaseItem* i, usefulItems) {
+            for (ProjectBaseItem* i : qAsConst(usefulItems)) {
                 paths << i->path();
             }
             bool success = false;
@@ -208,9 +208,10 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
                 //and select new items
                 QItemSelection selection;
-                foreach (const Path &path, paths) {
+                for (const Path& path : qAsConst(paths)) {
                     const Path targetPath(folder->path(), path.lastPathSegment());
-                    foreach (ProjectBaseItem *item, folder->children()) {
+                    const auto folderChildren = folder->children();
+                    for (ProjectBaseItem* item : folderChildren) {
                         if (item->path() == targetPath) {
                             QModelIndex indx = mapFromItem( item );
                             selection.append(QItemSelectionRange(indx, indx));
@@ -359,8 +360,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     {
         QMenu* analyzeMenu = new QMenu(i18n("Analyze With"), &menu);
         analyzeMenu->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
-        foreach( QAction* act, analyzeActions )
-        {
+        for (QAction* act : qAsConst(analyzeActions)) {
             analyzeMenu->addAction( act );
         }
         analyzeActions = {analyzeMenu->menuAction()};

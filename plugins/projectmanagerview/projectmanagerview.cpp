@@ -199,8 +199,8 @@ ProjectManagerView::~ProjectManagerView()
 QList<KDevelop::ProjectBaseItem*> ProjectManagerView::selectedItems() const
 {
     QList<KDevelop::ProjectBaseItem*> items;
-    foreach( const QModelIndex &idx, m_ui->projectTreeView->selectionModel()->selectedIndexes() )
-    {
+    const auto selectedIndexes = m_ui->projectTreeView->selectionModel()->selectedIndexes();
+    for (const QModelIndex& idx : selectedIndexes) {
         KDevelop::ProjectBaseItem* item = ICore::self()->projectController()->projectModel()->itemFromIndex(indexFromView(idx));
         if( item )
             items << item;
@@ -249,8 +249,10 @@ void ProjectManagerView::locateCurrentDocument()
     }
 
     QModelIndex bestMatch;
-    foreach (IProject* proj, ICore::self()->projectController()->projects()) {
-        foreach (KDevelop::ProjectFileItem* item, proj->filesForPath(IndexedString(doc->url()))) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* proj : projects) {
+        const auto files = proj->filesForPath(IndexedString(doc->url()));
+        for (KDevelop::ProjectFileItem* item : files) {
             QModelIndex index = indexToView(item->index());
             if (index.isValid()) {
                 if (!bestMatch.isValid()) {

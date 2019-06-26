@@ -172,8 +172,8 @@ void ProjectBuildSetWidget::showContextMenu( const QPoint& p )
 
 void ProjectBuildSetWidget::addItems()
 {
-    foreach( KDevelop::ProjectBaseItem* item, m_view->selectedItems() )
-    {
+    const auto selectedItems = m_view->selectedItems();
+    for (KDevelop::ProjectBaseItem* item : selectedItems) {
         KDevelop::ICore::self()->projectController()->buildSetModel()->addProjectItem( item );
     }
 }
