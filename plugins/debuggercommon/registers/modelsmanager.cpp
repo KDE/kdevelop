@@ -84,7 +84,8 @@ QString ModelsManager::addView(QAbstractItemView* view)
     Q_ASSERT(m_controller);
 
     QString name;
-    foreach (const GroupsName & group, m_controller->namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = m_controller->namesOfRegisterGroups();
+    for (const GroupsName& group : namesOfRegisterGroups) {
         if (!m_models->contains(group.name())) {
             QStandardItemModel* m = m_models->addModel(Model(group.name(), QSharedPointer<QStandardItemModel>(new QStandardItemModel()), view));
             view->setModel(m);
@@ -278,7 +279,8 @@ void ModelsManager::updateRegisters(const QString& group)
     if (group.isEmpty()) {
         m_controller->updateRegisters(GroupsName());
     } else {
-        foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+        const auto namesOfRegisterGroups = m_controller->namesOfRegisterGroups();
+        for (const GroupsName& g : namesOfRegisterGroups) {
             if (g.name() == group) {
                 m_controller->updateRegisters(g);
                 break;
@@ -294,7 +296,8 @@ void Models::clear()
 
 void ModelsManager::setFormat(const QString& group, Format format)
 {
-    foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = m_controller->namesOfRegisterGroups();
+    for (const GroupsName& g : namesOfRegisterGroups) {
         if (g.name() == group) {
             m_controller->setFormat(format, g);
             save(g);
@@ -307,7 +310,8 @@ QVector<Format> ModelsManager::formats(const QString& group) const
 {
     QVector<Format> formats; formats << Raw;
 
-    foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = m_controller->namesOfRegisterGroups();
+    for (const GroupsName& g : namesOfRegisterGroups) {
         if (g.name() == group) {
             formats = m_controller->formats(g);
             break;
@@ -339,7 +343,8 @@ QVector< Mode > ModelsManager::modes(const QString& group) const
 {
     QVector<Mode> modes;
 
-    foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = m_controller->namesOfRegisterGroups();
+    for (const GroupsName& g : namesOfRegisterGroups) {
         if (g.name() == group) {
             modes = m_controller->modes(g);
             break;
@@ -351,7 +356,8 @@ QVector< Mode > ModelsManager::modes(const QString& group) const
 
 void ModelsManager::setMode(const QString& group, Mode mode)
 {
-    foreach (const GroupsName & g, m_controller->namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = m_controller->namesOfRegisterGroups();
+    for (const GroupsName& g : namesOfRegisterGroups) {
         if (g.name() == group) {
             m_controller->setMode(mode, g);
             save(g);

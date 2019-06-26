@@ -37,7 +37,7 @@ void ArchitectureParser::parseArchitecture()
 {
     Architecture arch = other;
 
-    foreach (const QString & reg, m_registerNames) {
+    for (const QString& reg : qAsConst(m_registerNames)) {
         if (reg == QLatin1String("rax")) {
             arch = x86_64;
             break;

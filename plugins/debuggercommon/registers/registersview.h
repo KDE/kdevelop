@@ -73,7 +73,7 @@ private:
     ///Adds new action into m_actions and to this widget's list of actions.
     void insertAction(const QString& name, Qt::Key k);
     ///Returns action for given @p name.
-    QAction* findAction(const QString& name);
+    QAction* findAction(const QString& name) const;
 private Q_SLOTS:
     ///Enables/disables actions based on current view.
     void changeAvaliableActions();

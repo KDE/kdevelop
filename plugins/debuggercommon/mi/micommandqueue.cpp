@@ -51,11 +51,11 @@ void CommandQueue::enqueue(MICommand* command)
     dumpQueue();
 }
 
-void CommandQueue::dumpQueue()
+void CommandQueue::dumpQueue() const
 {
     qCDebug(DEBUGGERCOMMON) << "Pending commands" << m_commandList.count();
     unsigned commandNum = 0;
-    foreach(const MICommand* command, m_commandList) {
+    for (const MICommand* command : m_commandList) {
         qCDebug(DEBUGGERCOMMON) << "Command" << commandNum << command->initialString();
         ++commandNum;
     }

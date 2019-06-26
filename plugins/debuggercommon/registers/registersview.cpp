@@ -56,7 +56,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
 
     QString group = activeViews().first();
 
-    foreach (QAction * act, m_actions) {
+    for (QAction* act : qAsConst(m_actions)) {
         act->setChecked(false);
     }
 
@@ -85,7 +85,8 @@ void RegistersView::updateRegisters()
 {
     changeAvaliableActions();
 
-    foreach (const QString & v, activeViews()) {
+    const auto views = activeViews();
+    for (const QString& v : views) {
         m_modelsManager->updateRegisters(v);
     }
 }
@@ -112,7 +113,7 @@ void RegistersView::changeAvaliableActions()
     const QVector<Format> formats = m_modelsManager->formats(view) ;
     const QVector<Mode> modes = m_modelsManager->modes(view);
 
-    foreach (QAction * a, m_actions) {
+    for (QAction* a : qAsConst(m_actions)) {
         bool enable = false;
         for (Format f : formats) {
             if (a->text() == Converters::formatToString(f)) {
@@ -135,14 +136,12 @@ void RegistersView::changeAvaliableActions()
     }
 }
 
-QAction* RegistersView::findAction(const QString& name)
+QAction* RegistersView::findAction(const QString& name) const
 {
-    foreach (QAction * a, m_actions) {
-        if (a->text() == name) {
-            return a;
-        }
-    }
-    return nullptr;
+    auto it = std::find_if(m_actions.begin(), m_actions.end(), [&](QAction* a) {
+        return (a->text() == name);
+    });
+    return (it != m_actions.end()) ? *it : nullptr;
 }
 
 void RegistersView::addView(QTableView* view, int idx)

@@ -49,7 +49,8 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     }
 
     if (group.name().isEmpty()) {
-        foreach (const GroupsName & g, namesOfRegisterGroups()) {
+        const auto namesOfRegisterGroups = this->namesOfRegisterGroups();
+        for (const GroupsName& g : namesOfRegisterGroups) {
             IRegisterController::updateRegisters(g);
         }
         return;
@@ -93,7 +94,8 @@ void IRegisterController::updateRegisters(const GroupsName& group)
     if (group.type() == flag) {
         registers += numberForName(group.flagName());
     } else {
-        foreach (const QString & name, registerNamesForGroup(group)) {
+        const auto names = registerNamesForGroup(group);
+        for (const QString& name : names) {
             registers += numberForName(name) + QLatin1Char(' ');
         }
     }
@@ -193,7 +195,8 @@ bool IRegisterController::initializeRegisters()
 
 GroupsName IRegisterController::groupForRegisterName(const QString& name) const
 {
-    foreach (const GroupsName & group, namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = this->namesOfRegisterGroups();
+    for (const GroupsName& group : namesOfRegisterGroups) {
         const QStringList registersInGroup = registerNamesForGroup(group);
         if (group.flagName() == name) {
             return group;
@@ -265,7 +268,8 @@ void IRegisterController::updateFlagValues(RegistersGroup* flagsGroup, const Fla
 QVector<Format> IRegisterController::formats(const GroupsName& group)
 {
     int idx = -1;
-    foreach (const GroupsName & g, namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = this->namesOfRegisterGroups();
+    for (const GroupsName& g : namesOfRegisterGroups) {
         if (g == group) {
             idx = g.index();
         }
@@ -281,7 +285,8 @@ GroupsName IRegisterController::createGroupName(const QString& name, int idx, Re
 
 void IRegisterController::setFormat(Format f, const GroupsName& group)
 {
-    foreach (const GroupsName & g, namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = this->namesOfRegisterGroups();
+    for (const GroupsName& g : namesOfRegisterGroups) {
         if (g == group) {
             int i = m_formatsModes[g.index()].formats.indexOf(f);
             if (i != -1) {
@@ -387,7 +392,8 @@ void IRegisterController::structuredRegistersHandler(const ResultRecord& r)
 QVector< Mode > IRegisterController::modes(const GroupsName& group)
 {
     int idx = -1;
-    foreach (const GroupsName & g, namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = this->namesOfRegisterGroups();
+    for (const GroupsName& g : namesOfRegisterGroups) {
         if (g == group) {
             idx = g.index();
         }
@@ -398,7 +404,8 @@ QVector< Mode > IRegisterController::modes(const GroupsName& group)
 
 void IRegisterController::setMode(Mode m, const GroupsName& group)
 {
-    foreach (const GroupsName & g, namesOfRegisterGroups()) {
+    const auto namesOfRegisterGroups = this->namesOfRegisterGroups();
+    for (const GroupsName& g : namesOfRegisterGroups) {
         if (g == group) {
             int i = m_formatsModes[g.index()].modes.indexOf(m);
             if (i != -1) {
