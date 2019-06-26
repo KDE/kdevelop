@@ -117,7 +117,8 @@ ExternalScriptJob::ExternalScriptJob(ExternalScriptItem* item, const QUrl& url, 
     if (item->saveMode() == ExternalScriptItem::SaveCurrentDocument && view) {
         view->document()->save();
     } else if (item->saveMode() == ExternalScriptItem::SaveAllDocuments) {
-        foreach (KDevelop::IDocument* doc, KDevelop::ICore::self()->documentController()->openDocuments()) {
+        const auto documents = KDevelop::ICore::self()->documentController()->openDocuments();
+        for (KDevelop::IDocument* doc : documents) {
             doc->save();
         }
     }

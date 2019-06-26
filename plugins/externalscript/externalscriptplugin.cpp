@@ -116,7 +116,8 @@ ExternalScriptPlugin::ExternalScriptPlugin(QObject* parent, const QVariantList& 
 
     //BEGIN load config
     KConfigGroup config = getConfig();
-    foreach (const QString& group, config.groupList()) {
+    const auto groups = config.groupList();
+    for (const QString& group : groups) {
         KConfigGroup script = config.group(group);
         if (script.hasKey("name") && script.hasKey("command")) {
             auto* item = new ExternalScriptItem;
@@ -201,7 +202,8 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension(KDevel
         m_urls = filectx->urls();
     } else if (context->type() == KDevelop::Context::ProjectItemContext) {
         auto* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
-        foreach (KDevelop::ProjectBaseItem* item, projctx->items()) {
+        const auto items = projctx->items();
+        for (KDevelop::ProjectBaseItem* item : items) {
             if (item->file()) {
                 m_urls << item->file()->path().toUrl();
             } else if (item->folder()) {
@@ -343,7 +345,7 @@ void ExternalScriptPlugin::executeScriptFromContextMenu() const
     auto* item = action->data().value<ExternalScriptItem*>();
     Q_ASSERT(item);
 
-    foreach (const QUrl& url, m_urls) {
+    for (const QUrl& url : m_urls) {
         KDevelop::ICore::self()->documentController()->openDocument(url);
         execute(item, url);
     }
