@@ -90,8 +90,10 @@ public:
 
 TestFile::TestFile(const QString& contents, const QString& fileExtension,
                    TestProject* project, const QString& dir)
-    : d(new TestFilePrivate())
+    : d_ptr(new TestFilePrivate())
 {
+    Q_D(TestFile);
+
     d->suffix = QLatin1Char('.') + fileExtension;
 
     QTemporaryFile file((!dir.isEmpty() ? dir : QDir::tempPath()) + QLatin1String("/testfile_XXXXXX") + d->suffix);
@@ -103,18 +105,22 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension,
 }
 
 TestFile::TestFile(const QString& contents, const QString& fileExtension, const TestFile* base)
-    : d(new TestFilePrivate)
+    : d_ptr(new TestFilePrivate)
 {
-    QString fileName = base->d->file.mid(0, base->d->file.length() - base->d->suffix.length());
+    Q_D(TestFile);
+
+    QString fileName = base->d_func()->file.mid(0, base->d_func()->file.length() - base->d_func()->suffix.length());
     d->suffix = QLatin1Char('.') + fileExtension;
     fileName += d->suffix;
-    d->init(fileName, contents, base->d->project);
+    d->init(fileName, contents, base->d_func()->project);
 }
 
 TestFile::TestFile(const QString& contents, const QString& fileExtension, const QString& fileName,
                    KDevelop::TestProject* project, const QString& dir)
-    : d(new TestFilePrivate)
+    : d_ptr(new TestFilePrivate)
 {
+    Q_D(TestFile);
+
     d->suffix = QLatin1Char('.') + fileExtension;
     const QString file = (!dir.isEmpty() ? dir : QDir::tempPath())
                     + QLatin1Char('/') + fileName + d->suffix;
@@ -124,6 +130,8 @@ TestFile::TestFile(const QString& contents, const QString& fileExtension, const 
 
 TestFile::~TestFile()
 {
+    Q_D(TestFile);
+
     if (auto* document = ICore::self()->documentController()->documentForUrl(d->url.toUrl())) {
         document->close(KDevelop::IDocument::Discard);
     }
@@ -141,11 +149,15 @@ TestFile::~TestFile()
 
 IndexedString TestFile::url() const
 {
+    Q_D(const TestFile);
+
     return d->url;
 }
 
 void TestFile::parse(TopDUContext::Features features, int priority)
 {
+    Q_D(TestFile);
+
     d->ready = false;
     DUChain::self()->updateContextForUrl(d->url, features, this, priority);
 }
@@ -158,6 +170,8 @@ bool TestFile::parseAndWait(TopDUContext::Features features, int priority, int t
 
 bool TestFile::waitForParsed(int timeout)
 {
+    Q_D(TestFile);
+
     if (!d->ready) {
         // optimize: we don't want to wait the usual timeout before parsing documents here
         ICore::self()->languageController()->backgroundParser()->parseDocuments();
@@ -172,22 +186,30 @@ bool TestFile::waitForParsed(int timeout)
 
 bool TestFile::isReady() const
 {
+    Q_D(const TestFile);
+
     return d->ready;
 }
 
 ReferencedTopDUContext TestFile::topContext()
 {
+    Q_D(TestFile);
+
     waitForParsed();
     return d->topContext;
 }
 
 void TestFile::setFileContents(const QString& contents)
 {
+    Q_D(TestFile);
+
     d->setFileContents(contents);
 }
 
 QString TestFile::fileContents() const
 {
+    Q_D(const TestFile);
+
     QFile file(d->file);
     file.open(QIODevice::ReadOnly);
     Q_ASSERT(file.isOpen());
@@ -197,11 +219,15 @@ QString TestFile::fileContents() const
 
 void TestFile::setKeepDUChainData(bool keep)
 {
+    Q_D(TestFile);
+
     d->keepDUChainData = keep;
 }
 
-bool TestFile::keepDUChainData()
+bool TestFile::keepDUChainData() const
 {
+    Q_D(const TestFile);
+
     return d->keepDUChainData;
 }
 

@@ -41,17 +41,17 @@ public:
 DelayedOutput::Delay::Delay(DelayedOutput* output)
 {
     m_output = output;
-    ++m_output->d->delayDepth;
+    ++m_output->d_func()->delayDepth;
 }
 DelayedOutput::Delay::~Delay()
 {
-    --m_output->d->delayDepth;
-    if (!m_output->d->delayDepth)
-        m_output->d->flushOutput();
+    --m_output->d_func()->delayDepth;
+    if (!m_output->d_func()->delayDepth)
+        m_output->d_func()->flushOutput();
 }
 
 DelayedOutput::DelayedOutput()
-    : d(new DelayedOutputPrivate())
+    : d_ptr(new DelayedOutputPrivate())
 {
 }
 DelayedOutput::~DelayedOutput()
@@ -64,6 +64,8 @@ DelayedOutput& DelayedOutput::self()
 }
 void DelayedOutput::push(const QString& output)
 {
+    Q_D(DelayedOutput);
+
     d->output.push(DepthedOutput(output, d->delayDepth));
 }
 }

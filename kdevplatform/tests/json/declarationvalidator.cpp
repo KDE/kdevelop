@@ -49,21 +49,25 @@ QByteArray preprocess(QByteArray json)
 }
 
 DeclarationValidator::DeclarationValidator()
-    : d(new DeclarationValidatorPrivate)
+    : d_ptr(new DeclarationValidatorPrivate)
 {
 }
 DeclarationValidator::~DeclarationValidator()
 {
 }
 
-bool DeclarationValidator::testsPassed()
+bool DeclarationValidator::testsPassed() const
 {
+    Q_D(const DeclarationValidator);
+
     return d->testsPassed;
 }
 
 void DeclarationValidator::visit(DUContext*) { }
 void DeclarationValidator::visit(Declaration* declaration)
 {
+    Q_D(DeclarationValidator);
+
     QJsonParseError error;
     const auto json = preprocess(declaration->comment());
     QJsonDocument doc = QJsonDocument::fromJson(json, &error);

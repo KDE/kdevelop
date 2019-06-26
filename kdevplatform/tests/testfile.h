@@ -29,6 +29,7 @@
 
 namespace KDevelop {
 class TestProject;
+class TestFilePrivate;
 
 /**
  * Helper file to parse a file using the full KDevelop architecture.
@@ -170,12 +171,13 @@ public:
      * By default the DUChain data is removed on destruction of the TestFile.
      */
     void setKeepDUChainData(bool keep);
-    bool keepDUChainData();
+    bool keepDUChainData() const;
 
 private:
-    const QScopedPointer<class TestFilePrivate> d;
+    const QScopedPointer<class TestFilePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TestFile)
 
-    Q_PRIVATE_SLOT(d, void updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext))
+    Q_PRIVATE_SLOT(d_func(), void updateReady(const KDevelop::IndexedString& url, KDevelop::ReferencedTopDUContext topContext))
 };
 }
 
