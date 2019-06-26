@@ -31,7 +31,7 @@ public:
 };
 
 ILanguageSupport::ILanguageSupport()
-    : d(new ILanguageSupportPrivate)
+    : d_ptr(new ILanguageSupportPrivate)
 {
 }
 
@@ -97,6 +97,8 @@ QString ILanguageSupport::indentationSample() const
 
 QReadWriteLock* ILanguageSupport::parseLock() const
 {
+    Q_D(const ILanguageSupport);
+
     return &d->lock;
 }
 

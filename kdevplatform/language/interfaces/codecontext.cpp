@@ -52,7 +52,7 @@ public:
 
 DUContextContext::DUContextContext(const IndexedDUContext& item)
     : Context()
-    , d(new DUContextContextPrivate(item))
+    , d_ptr(new DUContextContextPrivate(item))
 {}
 
 DUContextContext::~DUContextContext() = default;
@@ -64,6 +64,8 @@ int DUContextContext::type() const
 
 QList<QUrl> DUContextContext::urls() const
 {
+    Q_D(const DUContextContext);
+
     DUChainReadLocker lock;
     if (auto context = d->m_item.context()) {
         return {
@@ -75,10 +77,14 @@ QList<QUrl> DUContextContext::urls() const
 
 IndexedDUContext DUContextContext::context() const
 {
+    Q_D(const DUContextContext);
+
     return d->m_item;
 }
 void DUContextContext::setContext(IndexedDUContext context)
 {
+    Q_D(DUContextContext);
+
     d->m_item = context;
 }
 
@@ -97,7 +103,7 @@ public:
 DeclarationContext::DeclarationContext(const IndexedDeclaration& declaration, const DocumentRange& use,
                                        const IndexedDUContext& context)
     : DUContextContext(context)
-    , d(new DeclarationContextPrivate(declaration, use))
+    , d_ptr(new DeclarationContextPrivate(declaration, use))
 {}
 
 DeclarationContext::DeclarationContext(KTextEditor::View* view, const KTextEditor::Cursor& position) : DUContextContext(
@@ -112,7 +118,7 @@ DeclarationContext::DeclarationContext(KTextEditor::View* view, const KTextEdito
     if (declaration) {
         indexed = IndexedDeclaration(declaration);
     }
-    d.reset(new DeclarationContextPrivate(declaration, useRange));
+    d_ptr.reset(new DeclarationContextPrivate(declaration, useRange));
     setContext(IndexedDUContext(item.context));
 }
 
@@ -125,11 +131,15 @@ int DeclarationContext::type() const
 
 IndexedDeclaration DeclarationContext::declaration() const
 {
+    Q_D(const DeclarationContext);
+
     return d->m_declaration;
 }
 
 DocumentRange DeclarationContext::use() const
 {
+    Q_D(const DeclarationContext);
+
     return d->m_use;
 }
 }

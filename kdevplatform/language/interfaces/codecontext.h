@@ -66,7 +66,8 @@ protected:
     void setContext(IndexedDUContext context);
 
 private:
-    const QScopedPointer<class DUContextContextPrivate> d;
+    const QScopedPointer<class DUContextContextPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DUContextContext)
 
     Q_DISABLE_COPY(DUContextContext)
 };
@@ -105,7 +106,8 @@ public:
 
 private:
     // TODO: fix constructor and make const
-    QScopedPointer<class DeclarationContextPrivate> d;
+    QScopedPointer<class DeclarationContextPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DeclarationContext)
 
     Q_DISABLE_COPY(DeclarationContext)
 };

@@ -43,6 +43,7 @@ class ParseJob;
 class TopDUContext;
 class ICodeHighlighting;
 class ICreateClassHelper;
+class ILanguageSupportPrivate;
 
 class KDEVPLATFORMLANGUAGE_EXPORT ILanguageSupport
 {
@@ -163,7 +164,8 @@ public:
                                                const QString& changedText, bool removal) const;
 
 private:
-    const QScopedPointer<class ILanguageSupportPrivate> d;
+    const QScopedPointer<class ILanguageSupportPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ILanguageSupport)
 };
 }
 

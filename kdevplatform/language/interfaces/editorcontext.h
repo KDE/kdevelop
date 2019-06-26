@@ -32,6 +32,8 @@ class Cursor;
 class QUrl;
 
 namespace KDevelop {
+class EditorContextPrivate;
+
 /**A context for the KTextEditor.*/
 class KDEVPLATFORMLANGUAGE_EXPORT EditorContext
     : public DeclarationContext
@@ -73,7 +75,8 @@ public:
     KTextEditor::View* view() const;
 
 private:
-    const QScopedPointer<class EditorContextPrivate> d;
+    const QScopedPointer<class EditorContextPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(EditorContext)
 };
 }
 

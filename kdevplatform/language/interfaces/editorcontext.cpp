@@ -53,7 +53,7 @@ public:
 
 EditorContext::EditorContext(KTextEditor::View* view, const KTextEditor::Cursor& position)
     : DeclarationContext(view, position)
-    , d(new EditorContextPrivate(view, position))
+    , d_ptr(new EditorContextPrivate(view, position))
 {}
 
 EditorContext::~EditorContext() = default;
@@ -65,11 +65,15 @@ int EditorContext::type() const
 
 QUrl EditorContext::url() const
 {
+    Q_D(const EditorContext);
+
     return d->m_url;
 }
 
 QList<QUrl> EditorContext::urls() const
 {
+    Q_D(const EditorContext);
+
     return {
                d->m_url
     };
@@ -77,21 +81,29 @@ QList<QUrl> EditorContext::urls() const
 
 KTextEditor::Cursor EditorContext::position() const
 {
+    Q_D(const EditorContext);
+
     return d->m_position;
 }
 
 QString EditorContext::currentLine() const
 {
+    Q_D(const EditorContext);
+
     return d->m_currentLine;
 }
 
 QString EditorContext::currentWord() const
 {
+    Q_D(const EditorContext);
+
     return d->m_currentWord;
 }
 
 KTextEditor::View* EditorContext::view() const
 {
+    Q_D(const EditorContext);
+
     return d->m_view;
 }
 }
