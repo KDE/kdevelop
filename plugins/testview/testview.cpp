@@ -121,8 +121,8 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     connect (tc, &ITestController::testRunStarted,
              this, &TestView::notifyTestCaseStarted);
 
-    foreach (ITestSuite* suite, tc->testSuites())
-    {
+    const auto suites = tc->testSuites();
+    for (ITestSuite* suite : suites) {
         addTestSuite(suite);
     }
 }
@@ -222,15 +222,12 @@ QIcon TestView::iconForTestResult(TestResult::TestCaseResult result)
 
 QStandardItem* TestView::itemForSuite(ITestSuite* suite)
 {
-    foreach (QStandardItem* item, m_model->findItems(suite->name(), Qt::MatchRecursive))
-    {
-        if (item->parent() && item->parent()->text() == suite->project()->name()
-            && !item->parent()->parent())
-        {
-            return item;
-        }
-    }
-    return nullptr;
+    const auto items = m_model->findItems(suite->name(), Qt::MatchRecursive);
+    auto it = std::find_if(items.begin(), items.end(), [&](QStandardItem* item) {
+        return (item->parent() && item->parent()->text() == suite->project()->name()
+                && !item->parent()->parent());
+    });
+    return (it != items.end()) ? *it : nullptr;
 }
 
 QStandardItem* TestView::itemForProject(IProject* project)
@@ -268,8 +265,7 @@ void TestView::runSelectedTests()
      * This is the somewhat-intuitive approach. Maybe a configuration should be offered.
      */
 
-    foreach (const QModelIndex& idx, indexes)
-    {
+    for (const QModelIndex& idx : qAsConst(indexes)) {
         QModelIndex index = m_filter->mapToSource(idx);
         if (index.parent().isValid() && indexes.contains(index.parent()))
         {
@@ -280,8 +276,8 @@ void TestView::runSelectedTests()
         {
             // A project was selected
             IProject* project = ICore::self()->projectController()->findProjectByName(item->data(ProjectRole).toString());
-            foreach (ITestSuite* suite, tc->testSuitesForProject(project))
-            {
+            const auto suites = tc->testSuitesForProject(project);
+            for (ITestSuite* suite : suites) {
                 jobs << suite->launchAllCases(ITestSuite::Silent);
             }
         }
@@ -366,8 +362,8 @@ void TestView::addTestSuite(ITestSuite* suite)
     QStandardItem* suiteItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("view-list-tree")), suite->name());
 
     suiteItem->setData(suite->name(), SuiteRole);
-    foreach (const QString& caseName, suite->cases())
-    {
+    const auto caseNames = suite->cases();
+    for (const QString& caseName : caseNames) {
         QStandardItem* caseItem = new QStandardItem(iconForTestResult(TestResult::NotRun), caseName);
         caseItem->setData(caseName, CaseRole);
         suiteItem->appendRow(caseItem);

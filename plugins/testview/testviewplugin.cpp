@@ -101,11 +101,11 @@ void TestViewPlugin::unload()
 void TestViewPlugin::runAllTests()
 {
     ITestController* tc = core()->testController();
-    foreach (IProject* project, core()->projectController()->projects())
-    {
+    const auto projects = core()->projectController()->projects();
+    for (IProject* project : projects) {
         QList<KJob*> jobs;
-        foreach (ITestSuite* suite, tc->testSuitesForProject(project))
-        {
+        const auto suites = tc->testSuitesForProject(project);
+        for (ITestSuite* suite : suites) {
             if (KJob* job = suite->launchAllCases(ITestSuite::Silent))
             {
                 jobs << job;
@@ -124,8 +124,8 @@ void TestViewPlugin::runAllTests()
 
 void TestViewPlugin::stopRunningTests()
 {
-    foreach (KJob* job, core()->runController()->currentJobs())
-    {
+    const auto jobs = core()->runController()->currentJobs();
+    for (KJob* job : jobs) {
         if (job->property("test_job").toBool())
         {
             job->kill();
@@ -135,15 +135,11 @@ void TestViewPlugin::stopRunningTests()
 
 void TestViewPlugin::jobStateChanged()
 {
-    bool found = false;
-    foreach (KJob* job, core()->runController()->currentJobs())
-    {
-        if (job->property("test_job").toBool())
-        {
-            found = true;
-            break;
-        }
-    }
+    const auto jobs = core()->runController()->currentJobs();
+    const bool found = std::any_of(jobs.begin(), jobs.end(), [](KJob* job) {
+        return (job->property("test_job").toBool());
+    });
+
     actionCollection()->action(QStringLiteral("run_all_tests"))->setEnabled(!found);
     actionCollection()->action(QStringLiteral("stop_running_tests"))->setEnabled(found);
 }
