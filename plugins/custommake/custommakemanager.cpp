@@ -223,8 +223,8 @@ static bool isMakefile(const QString& fileName)
 void CustomMakeManager::createTargetItems(IProject* project, const Path& path, ProjectBaseItem* parent)
 {
     Q_ASSERT(isMakefile(path.lastPathSegment()));
-    foreach(const QString& target, parseCustomMakeFile( path ))
-    {
+    const auto targets = parseCustomMakeFile(path);
+    for (const QString& target : targets) {
         if (!isValid(Path(parent->path(), target), false, project)) {
             continue;
         }
@@ -248,7 +248,8 @@ void CustomMakeManager::reloadMakefile(ProjectFileItem* file)
     }
     ProjectBaseItem* parent = file->parent();
     // remove the items that are Makefile targets
-    foreach(ProjectBaseItem* item, parent->children()){
+    const auto items = parent->children();
+    for (ProjectBaseItem* item : items) {
         if (item->target()){
             delete item;
         }
