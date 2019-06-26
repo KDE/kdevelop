@@ -27,6 +27,7 @@
 namespace KDevelop {
 class ReferencedTopDUContext;
 class IProject;
+class ParseProjectJobPrivate;
 
 ///A job that parses all project-files in the given project either
 ///when KDevelop is configured to parse all files at project import
@@ -55,7 +56,8 @@ private:
     void updateProgress();
 
 private:
-    const QScopedPointer<class ParseProjectJobPrivate> d;
+    const QScopedPointer<class ParseProjectJobPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ParseProjectJob)
 };
 }
 

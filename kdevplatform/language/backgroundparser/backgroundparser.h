@@ -231,7 +231,8 @@ protected Q_SLOTS:
 
 private:
     friend class BackgroundParserPrivate;
-    class BackgroundParserPrivate* d;
+    class BackgroundParserPrivate* d_ptr;
+    Q_DECLARE_PRIVATE(BackgroundParser)
 
 private Q_SLOTS:
     /// Tracking of projects in state of loading.

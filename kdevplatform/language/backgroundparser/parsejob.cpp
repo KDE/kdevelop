@@ -101,12 +101,14 @@ public:
 
 ParseJob::ParseJob(const IndexedString& url, KDevelop::ILanguageSupport* languageSupport)
     : ThreadWeaver::Sequence()
-    , d(new ParseJobPrivate(url, languageSupport))
+    , d_ptr(new ParseJobPrivate(url, languageSupport))
 {
 }
 
 ParseJob::~ParseJob()
 {
+    Q_D(ParseJob);
+
     for (auto& p : qAsConst(d->notify)) {
         if (p) {
             QMetaObject::invokeMethod(p.data(), "updateReady", Qt::QueuedConnection,
@@ -118,56 +120,78 @@ ParseJob::~ParseJob()
 
 ILanguageSupport* ParseJob::languageSupport() const
 {
+    Q_D(const ParseJob);
+
     return d->languageSupport;
 }
 
 void ParseJob::setParsePriority(int priority)
 {
+    Q_D(ParseJob);
+
     d->parsePriority = priority;
 }
 
 int ParseJob::parsePriority() const
 {
+    Q_D(const ParseJob);
+
     return d->parsePriority;
 }
 
 bool ParseJob::requiresSequentialProcessing() const
 {
+    Q_D(const ParseJob);
+
     return d->sequentialProcessingFlags & RequiresSequentialProcessing;
 }
 
 bool ParseJob::respectsSequentialProcessing() const
 {
+    Q_D(const ParseJob);
+
     return d->sequentialProcessingFlags & RespectsSequentialProcessing;
 }
 
 void ParseJob::setSequentialProcessingFlags(SequentialProcessingFlags flags)
 {
+    Q_D(ParseJob);
+
     d->sequentialProcessingFlags = flags;
 }
 
 qint64 ParseJob::maximumFileSize() const
 {
+    Q_D(const ParseJob);
+
     return d->maximumFileSize;
 }
 
 void ParseJob::setMaximumFileSize(qint64 value)
 {
+    Q_D(ParseJob);
+
     d->maximumFileSize = value;
 }
 
 IndexedString ParseJob::document() const
 {
+    Q_D(const ParseJob);
+
     return d->url;
 }
 
 bool ParseJob::success() const
 {
+    Q_D(const ParseJob);
+
     return !d->aborted;
 }
 
 void ParseJob::setMinimumFeatures(TopDUContext::Features features)
 {
+    Q_D(ParseJob);
+
     d->features = features;
 }
 
@@ -192,37 +216,51 @@ TopDUContext::Features ParseJob::staticMinimumFeatures(const IndexedString& url)
 
 TopDUContext::Features ParseJob::minimumFeatures() const
 {
+    Q_D(const ParseJob);
+
     return ( TopDUContext::Features )(d->features | staticMinimumFeatures(d->url));
 }
 
 void ParseJob::setDuChain(const ReferencedTopDUContext& duChain)
 {
+    Q_D(ParseJob);
+
     d->duContext = duChain;
 }
 
 ReferencedTopDUContext ParseJob::duChain() const
 {
+    Q_D(const ParseJob);
+
     return d->duContext;
 }
 
 bool ParseJob::abortRequested() const
 {
+    Q_D(const ParseJob);
+
     return d->abortRequested.load();
 }
 
 void ParseJob::requestAbort()
 {
+    Q_D(ParseJob);
+
     d->abortRequested = 1;
 }
 
 void ParseJob::abortJob()
 {
+    Q_D(ParseJob);
+
     d->aborted = true;
     setStatus(Status_Aborted);
 }
 
 void ParseJob::setNotifyWhenReady(const QVector<QPointer<QObject>>& notify)
 {
+    Q_D(ParseJob);
+
     d->notify = notify;
 }
 
@@ -242,6 +280,8 @@ void ParseJob::unsetStaticMinimumFeatures(const IndexedString& url, TopDUContext
 
 KDevelop::ProblemPointer ParseJob::readContents()
 {
+    Q_D(ParseJob);
+
     Q_ASSERT(!d->hasReadContents);
     d->hasReadContents = true;
 
@@ -335,6 +375,8 @@ KDevelop::ProblemPointer ParseJob::readContents()
 
 const KDevelop::ParseJob::Contents& ParseJob::contents() const
 {
+    Q_D(const ParseJob);
+
     Q_ASSERT(d->hasReadContents);
     return d->contents;
 }
@@ -393,6 +435,8 @@ struct MovingRangeTranslator
 
 void ParseJob::translateDUChainToRevision(TopDUContext* context)
 {
+    Q_D(ParseJob);
+
     qint64 targetRevision = d->contents.modification.revision;
 
     if (targetRevision == -1) {
@@ -501,6 +545,8 @@ const ParsingEnvironment* ParseJob::environment() const
 
 void ParseJob::highlightDUChain()
 {
+    Q_D(ParseJob);
+
     ENSURE_CHAIN_NOT_LOCKED
     if (!d->languageSupport->codeHighlighting() || !duChain() || abortRequested()) {
         // language doesn't support highlighting
@@ -526,6 +572,8 @@ DataAccessRepository* ParseJob::dataAccessInformation()
 
 bool ParseJob::hasTracker() const
 {
+    Q_D(const ParseJob);
+
     return d->tracker;
 }
 }

@@ -42,6 +42,7 @@ class DataAccessRepository;
 class TopDUContext;
 class ReferencedTopDUContext;
 class ILanguageSupport;
+class ParseJobPrivate;
 
 /**
  * The base class for background parser jobs.
@@ -241,7 +242,8 @@ protected:
     bool hasTracker() const;
 
 private:
-    const QScopedPointer<class ParseJobPrivate> d;
+    const QScopedPointer<class ParseJobPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ParseJob)
 };
 }
 

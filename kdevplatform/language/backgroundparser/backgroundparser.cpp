@@ -191,7 +191,7 @@ public:
         , m_shuttingDown(false)
         , m_mutex(QMutex::Recursive)
     {
-        parser->d = this; //Set this so we can safely call back BackgroundParser from within loadSettings()
+        parser->d_ptr = this; //Set this so we can safely call back BackgroundParser from within loadSettings()
 
         m_timer.setSingleShot(true);
         m_progressTimer.setSingleShot(true);
@@ -497,10 +497,10 @@ public:
     ThreadWeaver::Queue m_weaver;
 
     // generic high-level mutex
-    QMutex m_mutex;
+    mutable QMutex m_mutex;
 
     // local mutex only protecting m_managed
-    QMutex m_managedMutex;
+    mutable QMutex m_managedMutex;
     // A change tracker for each managed document
     QHash<IndexedString, DocumentChangeTracker*> m_managed;
 
@@ -516,7 +516,7 @@ public:
 
 BackgroundParser::BackgroundParser(ILanguageController* languageController)
     : QObject(languageController)
-    , d(new BackgroundParserPrivate(this, languageController))
+    , d_ptr(new BackgroundParserPrivate(this, languageController))
 {
     Q_ASSERT(ICore::self()->documentController());
     connect(
@@ -543,12 +543,14 @@ BackgroundParser::BackgroundParser(ILanguageController* languageController)
 
 void BackgroundParser::aboutToQuit()
 {
+    Q_D(BackgroundParser);
+
     d->m_shuttingDown = true;
 }
 
 BackgroundParser::~BackgroundParser()
 {
-    delete d;
+    delete d_ptr;
 }
 
 QString BackgroundParser::statusName() const
@@ -558,18 +560,25 @@ QString BackgroundParser::statusName() const
 
 void BackgroundParser::loadSettings()
 {
+    Q_D(BackgroundParser);
+
     d->loadSettings();
 }
 
 void BackgroundParser::parseProgress(KDevelop::ParseJob* job, float value, const QString& text)
 {
     Q_UNUSED(text)
+
+    Q_D(BackgroundParser);
+
     d->m_jobProgress[job] = value;
     updateProgressData();
 }
 
 void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 {
+    Q_D(BackgroundParser);
+
     QMutexLocker lock(&d->m_mutex);
     for (auto it = d->m_documents.begin(); it != d->m_documents.end();) {
         d->m_documentsForPriority[it.value().priority()].remove(it.key());
@@ -596,6 +605,8 @@ void BackgroundParser::revertAllRequests(QObject* notifyWhenReady)
 void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Features features, int priority,
                                    QObject* notifyWhenReady, ParseJob::SequentialProcessingFlags flags, int delay)
 {
+    Q_D(BackgroundParser);
+
     qCDebug(LANGUAGE) << "BackgroundParser::addDocument" << url << url.toUrl();
     Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
@@ -630,6 +641,8 @@ void BackgroundParser::addDocument(const IndexedString& url, TopDUContext::Featu
 
 void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyWhenReady)
 {
+    Q_D(BackgroundParser);
+
     Q_ASSERT(isValidURL(url));
 
     QMutexLocker lock(&d->m_mutex);
@@ -658,6 +671,8 @@ void BackgroundParser::removeDocument(const IndexedString& url, QObject* notifyW
 
 void BackgroundParser::parseDocuments()
 {
+    Q_D(BackgroundParser);
+
     if (d->isSuspended() || !d->m_loadingProjects.empty()) {
         startTimer(d->m_delay);
         return;
@@ -669,6 +684,8 @@ void BackgroundParser::parseDocuments()
 
 void BackgroundParser::parseComplete(const ThreadWeaver::JobPointer& job)
 {
+    Q_D(BackgroundParser);
+
     auto decorator = dynamic_cast<ThreadWeaver::QObjectDecorator*>(job.data());
     Q_ASSERT(decorator);
     auto* parseJob = dynamic_cast<ParseJob*>(decorator->job());
@@ -702,6 +719,8 @@ void BackgroundParser::enableProcessing()
 
 int BackgroundParser::priorityForDocument(const IndexedString& url) const
 {
+    Q_D(const BackgroundParser);
+
     Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
     return d->m_documents[url].priority();
@@ -709,6 +728,8 @@ int BackgroundParser::priorityForDocument(const IndexedString& url) const
 
 bool BackgroundParser::isQueued(const IndexedString& url) const
 {
+    Q_D(const BackgroundParser);
+
     Q_ASSERT(isValidURL(url));
     QMutexLocker lock(&d->m_mutex);
     return d->m_documents.contains(url);
@@ -716,18 +737,24 @@ bool BackgroundParser::isQueued(const IndexedString& url) const
 
 int BackgroundParser::queuedCount() const
 {
+    Q_D(const BackgroundParser);
+
     QMutexLocker lock(&d->m_mutex);
     return d->m_documents.count();
 }
 
 bool BackgroundParser::isIdle() const
 {
+    Q_D(const BackgroundParser);
+
     QMutexLocker lock(&d->m_mutex);
     return d->m_documents.isEmpty() && d->m_weaver.isIdle();
 }
 
 void BackgroundParser::setNeededPriority(int priority)
 {
+    Q_D(BackgroundParser);
+
     QMutexLocker lock(&d->m_mutex);
     d->m_neededPriority = priority;
     d->startTimerThreadSafe(d->m_delay);
@@ -735,6 +762,8 @@ void BackgroundParser::setNeededPriority(int priority)
 
 void BackgroundParser::abortAllJobs()
 {
+    Q_D(BackgroundParser);
+
     qCDebug(LANGUAGE) << "Aborting all parse jobs";
 
     d->m_weaver.requestAbort();
@@ -742,6 +771,8 @@ void BackgroundParser::abortAllJobs()
 
 void BackgroundParser::suspend()
 {
+    Q_D(BackgroundParser);
+
     d->suspend();
 
     emit hideProgress(this);
@@ -749,12 +780,16 @@ void BackgroundParser::suspend()
 
 void BackgroundParser::resume()
 {
+    Q_D(BackgroundParser);
+
     d->resume();
     updateProgressData();
 }
 
 void BackgroundParser::updateProgressData()
 {
+    Q_D(BackgroundParser);
+
     if (d->m_doneParseJobs >= d->m_maxParseJobs) {
         if (d->m_doneParseJobs > d->m_maxParseJobs) {
             qCDebug(LANGUAGE) << "m_doneParseJobs larger than m_maxParseJobs:" << d->m_doneParseJobs <<
@@ -788,6 +823,8 @@ void BackgroundParser::updateProgressData()
 
 ParseJob* BackgroundParser::parseJobForDocument(const IndexedString& document) const
 {
+    Q_D(const BackgroundParser);
+
     Q_ASSERT(isValidURL(document));
 
     QMutexLocker lock(&d->m_mutex);
@@ -797,6 +834,8 @@ ParseJob* BackgroundParser::parseJobForDocument(const IndexedString& document) c
 
 void BackgroundParser::setThreadCount(int threadCount)
 {
+    Q_D(BackgroundParser);
+
     if (d->m_threads != threadCount) {
         d->m_threads = threadCount;
         d->m_weaver.setMaximumNumberOfThreads(d->m_threads + 1); //1 Additional thread for high-priority parsing
@@ -805,11 +844,15 @@ void BackgroundParser::setThreadCount(int threadCount)
 
 int BackgroundParser::threadCount() const
 {
+    Q_D(const BackgroundParser);
+
     return d->m_threads;
 }
 
 void BackgroundParser::setDelay(int milliseconds)
 {
+    Q_D(BackgroundParser);
+
     if (d->m_delay != milliseconds) {
         d->m_delay = milliseconds;
         d->m_timer.setInterval(d->m_delay);
@@ -818,12 +861,16 @@ void BackgroundParser::setDelay(int milliseconds)
 
 QList<IndexedString> BackgroundParser::managedDocuments()
 {
+    Q_D(BackgroundParser);
+
     QMutexLocker l(&d->m_managedMutex);
     return d->m_managed.keys();
 }
 
 bool BackgroundParser::waitForIdle() const
 {
+    Q_D(const BackgroundParser);
+
     QList<IndexedString> runningParseJobsUrls;
     forever {
         {
@@ -849,6 +896,8 @@ bool BackgroundParser::waitForIdle() const
 
 DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedString& url) const
 {
+    Q_D(const BackgroundParser);
+
     if (url.isEmpty()) {
         // this happens e.g. when setting the final location of a problem that is not
         // yet associated with a top ctx.
@@ -865,6 +914,8 @@ DocumentChangeTracker* BackgroundParser::trackerForUrl(const KDevelop::IndexedSt
 
 void BackgroundParser::documentClosed(IDocument* document)
 {
+    Q_D(BackgroundParser);
+
     QMutexLocker l(&d->m_mutex);
 
     if (document->textDocument()) {
@@ -891,6 +942,8 @@ void BackgroundParser::documentClosed(IDocument* document)
 
 void BackgroundParser::documentLoaded(IDocument* document)
 {
+    Q_D(BackgroundParser);
+
     QMutexLocker l(&d->m_mutex);
     if (document->textDocument() && document->textDocument()->url().isValid()) {
         KTextEditor::Document* textDocument = document->textDocument();
@@ -928,6 +981,8 @@ void BackgroundParser::documentUrlChanged(IDocument* document)
 
 void BackgroundParser::startTimer(int delay)
 {
+    Q_D(BackgroundParser);
+
     if (!d->isSuspended()) {
         d->m_timer.start(delay);
     }
@@ -935,20 +990,28 @@ void BackgroundParser::startTimer(int delay)
 
 void BackgroundParser::projectAboutToBeOpened(IProject* project)
 {
+    Q_D(BackgroundParser);
+
     d->m_loadingProjects.insert(project);
 }
 
 void BackgroundParser::projectOpened(IProject* project)
 {
+    Q_D(BackgroundParser);
+
     d->m_loadingProjects.remove(project);
 }
 
 void BackgroundParser::projectOpeningAborted(IProject* project)
 {
+    Q_D(BackgroundParser);
+
     d->m_loadingProjects.remove(project);
 }
 
 void BackgroundParser::updateProgressBar()
 {
+    Q_D(BackgroundParser);
+
     emit showProgress(this, 0, d->m_progressMax, d->m_progressDone);
 }

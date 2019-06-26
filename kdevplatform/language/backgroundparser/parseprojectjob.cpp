@@ -71,8 +71,10 @@ ParseProjectJob::~ParseProjectJob()
 }
 
 ParseProjectJob::ParseProjectJob(IProject* project, bool forceUpdate, bool forceAll)
-    : d(new ParseProjectJobPrivate(project, forceUpdate, forceAll))
+    : d_ptr(new ParseProjectJobPrivate(project, forceUpdate, forceAll))
 {
+    Q_D(ParseProjectJob);
+
     connect(project, &IProject::destroyed, this, &ParseProjectJob::deleteNow);
 
     if (forceAll || ICore::self()->projectController()->parseAllProjectSources()) {
@@ -104,6 +106,8 @@ void ParseProjectJob::updateProgress()
 
 void ParseProjectJob::updateReady(const IndexedString& url, const ReferencedTopDUContext& topContext)
 {
+    Q_D(ParseProjectJob);
+
     Q_UNUSED(url);
     Q_UNUSED(topContext);
     ++d->updated;
@@ -116,6 +120,8 @@ void ParseProjectJob::updateReady(const IndexedString& url, const ReferencedTopD
 
 void ParseProjectJob::start()
 {
+    Q_D(ParseProjectJob);
+
     if (ICore::self()->shuttingDown()) {
         return;
     }
