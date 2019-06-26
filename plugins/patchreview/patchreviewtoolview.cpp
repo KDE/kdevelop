@@ -278,8 +278,7 @@ void PatchReviewToolView::customContextMenuRequested(const QPoint& pos)
     }
 
     QList<QAction*> vcsActions;
-    foreach( const ContextMenuExtension& ext, extensions )
-    {
+    for (const ContextMenuExtension& ext : qAsConst(extensions)) {
         vcsActions += ext.actions(ContextMenuExtension::VcsGroup);
     }
 
@@ -365,8 +364,8 @@ void PatchReviewToolView::open( const QUrl& url, bool activate ) const
     qCDebug(PLUGIN_PATCHREVIEW) << "activating url" << url;
     // If the document is already open in this area, just re-activate it
     if(KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url)) {
-        foreach(Sublime::View* view, ICore::self()->uiController()->activeArea()->views())
-        {
+        const auto views = ICore::self()->uiController()->activeArea()->views();
+        for (Sublime::View* view : views) {
             if(view->document() == dynamic_cast<Sublime::Document*>(doc))
             {
                 if (activate) {
@@ -426,8 +425,8 @@ void PatchReviewToolView::fileItemChanged( QStandardItem* item )
     {   // The file was deselected, so eventually close it
         if(doc && doc->state() == IDocument::Clean)
         {
-            foreach(Sublime::View* view, ICore::self()->uiController()->activeArea()->views())
-            {
+            const auto views = ICore::self()->uiController()->activeArea()->views();
+            for (Sublime::View* view : views) {
                 if(view->document() == dynamic_cast<Sublime::Document*>(doc))
                 {
                     ICore::self()->uiController()->activeArea()->closeView(view);

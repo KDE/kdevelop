@@ -272,19 +272,23 @@ bool PatchHighlighter::isRemoval( Diff2::Difference* diff ) {
 
 void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const QStringList& oldLines, const QStringList& newLines, int editLineNumber ) {
     QPair<QList<Diff2::Difference*>, QList<Diff2::Difference*> > diffChange = m_model->linesChanged( oldLines, newLines, editLineNumber );
-    QList<Diff2::Difference*> inserted = diffChange.first;
-    QList<Diff2::Difference*> removed = diffChange.second;
+    const QList<Diff2::Difference*>& inserted = diffChange.first;
+    const QList<Diff2::Difference*>& removed = diffChange.second;
 
-    foreach(Diff2::Difference* d, removed) {
-        foreach(Diff2::DifferenceString* s, d->sourceLines())
+    for (Diff2::Difference* d : removed) {
+        const auto sourceLines = d->sourceLines();
+        for (Diff2::DifferenceString* s : sourceLines)
             qCDebug(PLUGIN_PATCHREVIEW) << "removed source" << s->string();
-        foreach(Diff2::DifferenceString* s, d->destinationLines())
+        const auto destinationLines = d->destinationLines();
+        for (Diff2::DifferenceString* s : destinationLines)
             qCDebug(PLUGIN_PATCHREVIEW) << "removed destination" << s->string();
     }
-    foreach(Diff2::Difference* d, inserted) {
-        foreach(Diff2::DifferenceString* s, d->sourceLines())
+    for (Diff2::Difference* d : inserted) {
+        const auto sourceLines = d->sourceLines();
+        for (Diff2::DifferenceString* s : sourceLines)
             qCDebug(PLUGIN_PATCHREVIEW) << "inserted source" << s->string();
-        foreach(Diff2::DifferenceString* s, d->destinationLines())
+        const auto destinationLines = d->destinationLines();
+        for (Diff2::DifferenceString* s : destinationLines)
             qCDebug(PLUGIN_PATCHREVIEW) << "inserted destination" << s->string();
     }
 
@@ -306,7 +310,7 @@ void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const Q
     if ( !moving )
         return;
 
-    foreach( Diff2::Difference* diff, inserted ) {
+    for (Diff2::Difference* diff : inserted) {
         int lineStart = diff->destinationLineNumber();
         if ( lineStart > 0 ) {
             --lineStart;
@@ -658,7 +662,8 @@ void PatchHighlighter::clear() {
     if( !markIface )
         return;
 
-    foreach( int line, markIface->marks().keys() ) {
+    for (auto it = markIface->marks().begin(), end = markIface->marks().end(); it != end; ++it) {
+        int line = it.key();
         markIface->removeMark( line, m_allmarks );
     }
 

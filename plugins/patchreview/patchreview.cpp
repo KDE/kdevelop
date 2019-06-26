@@ -410,7 +410,8 @@ void PatchReviewPlugin::startReview( IPatchSource* patch, IPatchReview::ReviewMo
 
 void PatchReviewPlugin::switchToEmptyReviewArea()
 {
-    foreach(Sublime::Area* area, ICore::self()->uiController()->allAreas()) {
+    const auto allAreas = ICore::self()->uiController()->allAreas();
+    for (Sublime::Area* area : allAreas) {
         if (area->objectName() == QLatin1String("review")) {
             area->clearDocuments();
         }
@@ -427,7 +428,7 @@ QUrl PatchReviewPlugin::urlForFileModel( const Diff2::DiffModel* model )
     if (destPath.size() >= (int)m_depth) {
         destPath.remove(0, m_depth);
     }
-    foreach(const QString& segment, destPath) {
+    for (const QString& segment : qAsConst(destPath)) {
         path.addPath(segment);
     }
     path.addPath(model->destinationFile());
@@ -536,7 +537,8 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     actionCollection()->setDefaultShortcut( m_finishReview, Qt::CTRL|Qt::Key_Return );
     actionCollection()->addAction(QStringLiteral("commit_or_finish_review"), m_finishReview);
 
-    foreach(Sublime::Area* area, ICore::self()->uiController()->allAreas()) {
+    const auto allAreas = ICore::self()->uiController()->allAreas();
+    for (Sublime::Area* area : allAreas) {
         if (area->objectName() == QLatin1String("review"))
             area->addAction(m_finishReview);
     }
@@ -592,7 +594,8 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension(KDevelop:
         urls = filectx->urls();
     } else if ( context->type() == KDevelop::Context::ProjectItemContext ) {
         auto* projctx = static_cast<KDevelop::ProjectItemContext*>(context);
-        foreach( KDevelop::ProjectBaseItem* item, projctx->items() ) {
+        const auto items = projctx->items();
+        for (KDevelop::ProjectBaseItem* item : items) {
             if ( item->file() ) {
                 urls << item->file()->path().toUrl();
             }
