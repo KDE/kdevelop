@@ -287,8 +287,10 @@ void NativeAppConfigType::configureLaunchFromCmdLineArguments ( KConfigGroup cfg
 QList<KDevelop::ProjectTargetItem*> targetsInFolder(KDevelop::ProjectFolderItem* folder)
 {
     QList<KDevelop::ProjectTargetItem*> ret;
-    foreach(KDevelop::ProjectFolderItem* f, folder->folderList())
+    const auto folders = folder->folderList();
+    for (KDevelop::ProjectFolderItem* f : folders) {
         ret += targetsInFolder(f);
+    }
 
     ret += folder->targetList();
     return ret;
@@ -334,12 +336,13 @@ QMenu* NativeAppConfigType::launcherSuggestions()
 
             QList<QAction*> separateActions;
             QList<QMenu*> submenus;
-            foreach(KDevelop::ProjectBaseItem* folder, targetsContainer.keys()) {
-                QList<QAction*> actions = targetsContainer.value(folder);
+            for (auto it = targetsContainer.constBegin(), end = targetsContainer.constEnd(); it != end; ++it) {
+                KDevelop::ProjectBaseItem* folder = it.key();
+                QList<QAction*> actions = it.value();
                 if(actions.size()==1 || !folder->parent()) {
                     separateActions.append(actions);
                 } else {
-                    foreach(QAction* a, actions) {
+                    for (QAction* a : qAsConst(actions)) {
                         a->setText(a->property("name").toString());
                     }
                     QStringList path = model->pathFromIndex(folder->index());
@@ -352,8 +355,9 @@ QMenu* NativeAppConfigType::launcherSuggestions()
             }
             std::sort(separateActions.begin(), separateActions.end(), actionLess);
             std::sort(submenus.begin(), submenus.end(), menuLess);
-            foreach(QMenu* m, submenus)
+            for (QMenu* m : qAsConst(submenus)) {
                 projectMenu->addMenu(m);
+            }
             projectMenu->addActions(separateActions);
 
             projectMenu->setEnabled(!projectMenu->isEmpty());

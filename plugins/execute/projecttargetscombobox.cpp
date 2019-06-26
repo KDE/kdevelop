@@ -72,13 +72,15 @@ void ProjectTargetsComboBox::setBaseItem(ProjectFolderItem* item, bool exec)
     }
 
     ExecutablePathsVisitor walker(exec);
-    foreach(ProjectFolderItem* item, items) {
+    for (ProjectFolderItem* item : qAsConst(items)) {
         walker.visit(item);
     }
     walker.sort();
 
-    foreach(const QString& item, walker.paths())
+    const auto executableItems = walker.paths();
+    for (const QString& item : executableItems) {
         addItem(QIcon::fromTheme(QStringLiteral("system-run")), item);
+    }
 
 }
 
