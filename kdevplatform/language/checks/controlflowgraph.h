@@ -26,6 +26,7 @@
 namespace KDevelop {
 class Declaration;
 class ControlFlowNode;
+class ControlFlowGraphPrivate;
 
 /**
  * @brief The ControlFlowGraph describes the way a code interacts with the current state of a system
@@ -71,7 +72,8 @@ private:
     ControlFlowGraph(const ControlFlowGraph&);
 
 private:
-    const QScopedPointer<class ControlFlowGraphPrivate> d;
+    const QScopedPointer<class ControlFlowGraphPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ControlFlowGraph)
 };
 }
 

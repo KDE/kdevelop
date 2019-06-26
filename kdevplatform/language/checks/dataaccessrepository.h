@@ -24,6 +24,8 @@
 #include "dataaccess.h"
 
 namespace KDevelop {
+class DataAccessRepositoryPrivate;
+
 /**
  * @brief Stores all the data accesses in a file
  *
@@ -52,7 +54,8 @@ public:
     QList<DataAccess*> accessesInRange(const KDevelop::RangeInRevision& range) const;
 
 private:
-    const QScopedPointer<class DataAccessRepositoryPrivate> d;
+    const QScopedPointer<class DataAccessRepositoryPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DataAccessRepository)
 };
 }
 #endif

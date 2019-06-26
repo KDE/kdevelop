@@ -30,7 +30,7 @@ public:
 };
 
 ControlFlowGraph::ControlFlowGraph()
-    : d(new ControlFlowGraphPrivate)
+    : d_ptr(new ControlFlowGraphPrivate)
 {}
 
 ControlFlowGraph::~ControlFlowGraph()
@@ -40,11 +40,15 @@ ControlFlowGraph::~ControlFlowGraph()
 
 void ControlFlowGraph::addEntry(ControlFlowNode* n)
 {
+    Q_D(ControlFlowGraph);
+
     d->m_nodes += n;
 }
 
 void ControlFlowGraph::addEntry(Declaration* decl, ControlFlowNode* n)
 {
+    Q_D(ControlFlowGraph);
+
     Q_ASSERT(d);
     Q_ASSERT(decl);
     d->m_funcNodes.insert(decl, n);
@@ -52,6 +56,8 @@ void ControlFlowGraph::addEntry(Declaration* decl, ControlFlowNode* n)
 
 void ControlFlowGraph::addDeadNode(ControlFlowNode* n)
 {
+    Q_D(ControlFlowGraph);
+
     d->m_deadNodes += n;
 }
 
@@ -70,6 +76,8 @@ void clearNodeRecursively(ControlFlowNode* node, QSet<ControlFlowNode*>& deleted
 
 void ControlFlowGraph::clear()
 {
+    Q_D(ControlFlowGraph);
+
     QSet<ControlFlowNode*> deleted;
     for (ControlFlowNode* node : qAsConst(d->m_funcNodes)) {
         clearNodeRecursively(node, deleted);
@@ -90,20 +98,28 @@ void ControlFlowGraph::clear()
 
 QList<ControlFlowNode*> ControlFlowGraph::rootNodes() const
 {
+    Q_D(const ControlFlowGraph);
+
     return d->m_funcNodes.values() + d->m_nodes;
 }
 
 QVector<ControlFlowNode*> ControlFlowGraph::deadNodes() const
 {
+    Q_D(const ControlFlowGraph);
+
     return d->m_deadNodes;
 }
 
 QList<Declaration*> ControlFlowGraph::declarations() const
 {
+    Q_D(const ControlFlowGraph);
+
     return d->m_funcNodes.keys();
 }
 
 ControlFlowNode* ControlFlowGraph::nodeForDeclaration(Declaration* decl) const
 {
+    Q_D(const ControlFlowGraph);
+
     return d->m_funcNodes.value(decl);
 }
