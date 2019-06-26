@@ -32,6 +32,7 @@ namespace KDevelop
 {
 
 class IPlugin;
+class VcsJobPrivate;
 
 /**
  * This class provides an extension of KJob to get various VCS-specific
@@ -138,7 +139,8 @@ private Q_SLOTS:
     void delayedModelInitialize();
 
 private:
-    const QScopedPointer<class VcsJobPrivate> d;
+    const QScopedPointer<class VcsJobPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(VcsJob)
 };
 
 }

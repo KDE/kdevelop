@@ -21,6 +21,7 @@ namespace KDevelop
 
 class VcsStatusInfo;
 class IPatchSource;
+class VcsCommitDialogPrivate;
 
 class KDEVPLATFORMVCS_EXPORT VcsCommitDialog : public QDialog
 {
@@ -38,7 +39,8 @@ private Q_SLOTS:
     void cancel();
 
 private:
-    const QScopedPointer<class VcsCommitDialogPrivate> d;
+    const QScopedPointer<class VcsCommitDialogPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(VcsCommitDialog)
 };
 
 }

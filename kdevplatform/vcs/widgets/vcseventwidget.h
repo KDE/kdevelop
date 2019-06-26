@@ -31,7 +31,7 @@ namespace KDevelop
 {
 class VcsRevision;
 class IBasicVersionControl;
-
+class VcsEventWidgetPrivate;
 
 class KDEVPLATFORMVCS_EXPORT VcsEventWidget : public QWidget
 {
@@ -41,7 +41,8 @@ public:
     ~VcsEventWidget() override;
 
 private:
-    const QScopedPointer<class VcsEventWidgetPrivate> d;
+    const QScopedPointer<class VcsEventWidgetPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(VcsEventWidget)
 };
 }
 

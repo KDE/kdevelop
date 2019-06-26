@@ -35,6 +35,7 @@ class QUrl;
 namespace KDevelop
 {
 class VcsStatusInfo;
+class VcsFileChangesModelPrivate;
 
 class KDEVPLATFORMVCS_EXPORT VcsFileChangesSortProxyModel : public QSortFilterProxyModel
 {
@@ -143,7 +144,8 @@ protected:
     QStandardItem* fileItemForUrl(QStandardItem *parent, const QUrl &url) const;
 
 private:
-    const QScopedPointer<class VcsFileChangesModelPrivate> d;
+    const QScopedPointer<class VcsFileChangesModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(VcsFileChangesModel)
 };
 }
 

@@ -88,15 +88,17 @@ public:
 
 VcsAnnotationModel::VcsAnnotationModel(VcsJob *job, const QUrl& url, QObject* parent,
                                        const QColor &foreground, const QColor &background)
-    : d( new VcsAnnotationModelPrivate( this ) )
+    : d_ptr(new VcsAnnotationModelPrivate(this))
 {
+    Q_D(VcsAnnotationModel);
+
     setParent( parent );
     d->m_annotation.setLocation( url );
     d->job = job;
     d->foreground = foreground;
     d->background = background;
     qsrand( QDateTime().toTime_t() );
-    connect( d->job, &VcsJob::resultsReady,this, [&] (VcsJob* job) { d->addLines(job); } );
+    connect( d->job, &VcsJob::resultsReady,this, [this] (VcsJob* job) { Q_D(VcsAnnotationModel); d->addLines(job); } );
     ICore::self()->runController()->registerJob( d->job );
 }
 
@@ -144,6 +146,8 @@ static QString annotationToolTip(const VcsAnnotationLine& aline)
 
 QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
 {
+    Q_D(const VcsAnnotationModel);
+
     if( line < 0 || !d->m_annotation.containsLine( line ) )
     {
         return QVariant();
@@ -172,6 +176,8 @@ QVariant VcsAnnotationModel::data( int line, Qt::ItemDataRole role ) const
 
 VcsRevision VcsAnnotationModel::revisionForLine( int line ) const
 {
+    Q_D(const VcsAnnotationModel);
+
     ///FIXME: update the annotation bar on edit/reload somehow
     ///BUG: https://bugs.kde.org/show_bug.cgi?id=269757
     if (!d->m_annotation.containsLine(line)) {
@@ -184,6 +190,8 @@ VcsRevision VcsAnnotationModel::revisionForLine( int line ) const
 
 VcsAnnotationLine VcsAnnotationModel::annotationLine(int line) const
 {
+    Q_D(const VcsAnnotationModel);
+
     if (line < 0 || !d->m_annotation.containsLine(line)) {
         return VcsAnnotationLine();
     }

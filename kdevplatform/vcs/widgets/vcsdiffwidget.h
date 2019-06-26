@@ -28,6 +28,7 @@ namespace KDevelop
 {
 class VcsJob;
 class VcsRevision;
+class VcsDiffWidgetPrivate;
 
 class KDEVPLATFORMVCS_EXPORT VcsDiffWidget : public QWidget
 {
@@ -38,7 +39,8 @@ public:
     void setRevisions( const KDevelop::VcsRevision&, const KDevelop::VcsRevision& );
     
 private:
-    const QScopedPointer<class VcsDiffWidgetPrivate> d;
+    const QScopedPointer<class VcsDiffWidgetPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(VcsDiffWidget)
 };
 
 }

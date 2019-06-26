@@ -36,6 +36,7 @@ class QMenu;
 namespace KDevelop
 {
 class DVcsJob;
+class DistributedVersionControlPluginPrivate;
 
 /**
  * DistributedVersionControlPlugin is a base class for git/hg/bzr plugins. This class implements
@@ -93,7 +94,8 @@ protected:
     virtual bool isValidDirectory(const QUrl &dirPath) = 0;
 
 private:
-    const QScopedPointer<class DistributedVersionControlPluginPrivate> d;
+    const QScopedPointer<class DistributedVersionControlPluginPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DistributedVersionControlPlugin)
 };
 
 }

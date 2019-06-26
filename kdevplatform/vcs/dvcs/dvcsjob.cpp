@@ -64,8 +64,11 @@ public:
 };
 
 DVcsJob::DVcsJob(const QDir& workingDir, IPlugin* parent, OutputJob::OutputJobVerbosity verbosity)
-    : VcsJob(parent, verbosity), d(new DVcsJobPrivate)
+    : VcsJob(parent, verbosity)
+    , d_ptr(new DVcsJobPrivate)
 {
+    Q_D(DVcsJob);
+
     Q_ASSERT(workingDir.exists());
     d->status = JobNotStarted;
     d->vcsplugin = parent;
@@ -89,34 +92,46 @@ DVcsJob::~DVcsJob() = default;
 
 QDir DVcsJob::directory() const
 {
+    Q_D(const DVcsJob);
+
     return QDir(d->childproc->workingDirectory());
 }
 
 DVcsJob& DVcsJob::operator<<(const QString& arg)
 {
+    Q_D(DVcsJob);
+
     *d->childproc << arg;
     return *this;
 }
 
 DVcsJob& DVcsJob::operator<<(const char* arg)
 {
+    Q_D(DVcsJob);
+
     *d->childproc << QString::fromUtf8(arg);
     return *this;
 }
 
 DVcsJob& DVcsJob::operator<<(const QStringList& args)
 {
+    Q_D(DVcsJob);
+
     *d->childproc << args;
     return *this;
 }
 
 QStringList DVcsJob::dvcsCommand() const
 {
+    Q_D(const DVcsJob);
+
     return d->childproc->program();
 }
 
 QString DVcsJob::output() const
 {
+    Q_D(const DVcsJob);
+
     QByteArray stdoutbuf = rawOutput();
     int endpos = stdoutbuf.size();
     if (d->status==JobRunning) {    // We may have received only part of a code-point. apol: ASSERT?
@@ -128,31 +143,43 @@ QString DVcsJob::output() const
 
 QByteArray DVcsJob::rawOutput() const
 {
+    Q_D(const DVcsJob);
+
     return d->output;
 }
 
 QByteArray DVcsJob::errorOutput() const
 {
+    Q_D(const DVcsJob);
+
     return d->errorOutput;
 }
 
 void DVcsJob::setIgnoreError(bool ignore)
 {
+    Q_D(DVcsJob);
+
     d->ignoreError = ignore;
 }
 
 void DVcsJob::setResults(const QVariant &res)
 {
+    Q_D(DVcsJob);
+
     d->results = res;
 }
 
 QVariant DVcsJob::fetchResults()
 {
+    Q_D(DVcsJob);
+
     return d->results;
 }
 
 void DVcsJob::start()
 {
+    Q_D(DVcsJob);
+
     Q_ASSERT_X(d->status != JobRunning, "DVCSjob::start", "Another process was started using this job class");
 
     const QDir& workingdir = directory();
@@ -193,16 +220,22 @@ void DVcsJob::start()
 
 void DVcsJob::setCommunicationMode(KProcess::OutputChannelMode comm)
 {
+    Q_D(DVcsJob);
+
     d->childproc->setOutputChannelMode(comm);
 }
 
 void DVcsJob::cancel()
 {
+    Q_D(DVcsJob);
+
     d->childproc->kill();
 }
 
 void DVcsJob::slotProcessError( QProcess::ProcessError err )
 {
+    Q_D(DVcsJob);
+
     d->status = JobFailed;
 
     setError(OutputJob::FailedShownError); //we don't want to trigger a message box
@@ -252,6 +285,8 @@ void DVcsJob::slotProcessError( QProcess::ProcessError err )
 
 void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
+    Q_D(DVcsJob);
+
     d->status = JobSucceeded;
     d->model->appendLine(i18n("Command exited with value %1.", exitCode));
 
@@ -267,11 +302,15 @@ void DVcsJob::slotProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 
 void DVcsJob::displayOutput(const QString& data)
 {
+    Q_D(DVcsJob);
+
     d->model->appendLines(data.split(QLatin1Char('\n')));
 }
 
 void DVcsJob::slotReceivedStdout()
 {
+    Q_D(DVcsJob);
+
     QByteArray output = d->childproc->readAllStandardOutput();
 
     // accumulate output
@@ -282,22 +321,30 @@ void DVcsJob::slotReceivedStdout()
 
 VcsJob::JobStatus DVcsJob::status() const
 {
+    Q_D(const DVcsJob);
+
     return d->status;
 }
 
 IPlugin* DVcsJob::vcsPlugin() const
 {
+    Q_D(const DVcsJob);
+
     return d->vcsplugin;
 }
 
 DVcsJob& DVcsJob::operator<<(const QUrl& url)
 {
+    Q_D(DVcsJob);
+
     *d->childproc << url.toLocalFile();
     return *this;
 }
 
 DVcsJob& DVcsJob::operator<<(const QList< QUrl >& urls)
 {
+    Q_D(DVcsJob);
+
     for (const QUrl& url : urls) {
         operator<<(url);
     }
@@ -306,6 +353,8 @@ DVcsJob& DVcsJob::operator<<(const QList< QUrl >& urls)
 
 bool DVcsJob::doKill()
 {
+    Q_D(DVcsJob);
+
     if (d->childproc->state() == QProcess::NotRunning) {
         return true;
     }
@@ -327,4 +376,9 @@ void DVcsJob::jobIsReady()
     emit resultsReady(this); //VcsJob
 }
 
-KProcess* DVcsJob::process() {return d->childproc;}
+KProcess* DVcsJob::process() const
+{
+    Q_D(const DVcsJob);
+
+    return d->childproc;
+}

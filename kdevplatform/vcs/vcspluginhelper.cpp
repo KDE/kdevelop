@@ -160,8 +160,10 @@ public:
 
 VcsPluginHelper::VcsPluginHelper(KDevelop::IPlugin* parent, KDevelop::IBasicVersionControl* vcs)
         : QObject(parent)
-        , d(new VcsPluginHelperPrivate())
+        , d_ptr(new VcsPluginHelperPrivate())
 {
+    Q_D(VcsPluginHelper);
+
     Q_ASSERT(vcs);
     Q_ASSERT(parent);
     d->plugin = parent;
@@ -174,6 +176,8 @@ VcsPluginHelper::~VcsPluginHelper()
 
 void VcsPluginHelper::addContextDocument(const QUrl &url)
 {
+    Q_D(VcsPluginHelper);
+
     d->ctxUrls.append(url);
 }
 
@@ -191,16 +195,22 @@ void VcsPluginHelper::disposeEventually(KTextEditor::Document *)
 
 void VcsPluginHelper::setupFromContext(Context* context)
 {
+    Q_D(VcsPluginHelper);
+
     d->ctxUrls = context->urls();
 }
 
 QList<QUrl> VcsPluginHelper::contextUrlList() const
 {
+    Q_D(const VcsPluginHelper);
+
     return d->ctxUrls;
 }
 
 QMenu* VcsPluginHelper::commonActions(QWidget* parent)
 {
+    Q_D(VcsPluginHelper);
+
     /* TODO: the following logic to determine which actions need to be enabled
      * or disabled does not work properly. What needs to be implemented is that
      * project items that are vc-controlled enable all except add, project
@@ -223,6 +233,8 @@ QMenu* VcsPluginHelper::commonActions(QWidget* parent)
 
 void VcsPluginHelper::revert()
 {
+    Q_D(VcsPluginHelper);
+
     VcsJob* job=d->vcs->revert(d->ctxUrls);
     connect(job, &VcsJob::finished, this, &VcsPluginHelper::revertDone);
 
@@ -294,6 +306,8 @@ void VcsPluginHelper::diffJobFinished(KJob* job)
 
 void VcsPluginHelper::diffToBase()
 {
+    Q_D(VcsPluginHelper);
+
     SINGLEURL_SETUP_VARS
     ICore::self()->documentController()->saveAllDocuments();
 
@@ -303,6 +317,8 @@ void VcsPluginHelper::diffToBase()
 
 void VcsPluginHelper::diffForRev()
 {
+    Q_D(VcsPluginHelper);
+
     if (d->ctxUrls.isEmpty()) {
         return;
     }
@@ -311,6 +327,8 @@ void VcsPluginHelper::diffForRev()
 
 void VcsPluginHelper::diffForRevGlobal()
 {
+    Q_D(VcsPluginHelper);
+
     if (d->ctxUrls.isEmpty()) {
         return;
     }
@@ -325,6 +343,8 @@ void VcsPluginHelper::diffForRevGlobal()
 
 void VcsPluginHelper::diffForRev(const QUrl& url)
 {
+    Q_D(VcsPluginHelper);
+
     auto* action = qobject_cast<QAction*>( sender() );
     Q_ASSERT(action);
     Q_ASSERT(action->data().canConvert<VcsRevision>());
@@ -340,6 +360,8 @@ void VcsPluginHelper::diffForRev(const QUrl& url)
 
 void VcsPluginHelper::history(const VcsRevision& rev)
 {
+    Q_D(VcsPluginHelper);
+
     SINGLEURL_SETUP_VARS
     QDialog* dlg = new QDialog(ICore::self()->uiController()->activeMainWindow());
     dlg->setAttribute(Qt::WA_DeleteOnClose);
@@ -361,6 +383,8 @@ void VcsPluginHelper::history(const VcsRevision& rev)
 
 void VcsPluginHelper::annotation()
 {
+    Q_D(VcsPluginHelper);
+
     SINGLEURL_SETUP_VARS
     KDevelop::IDocument* doc = ICore::self()->documentController()->documentForUrl(url);
 
@@ -426,6 +450,8 @@ void VcsPluginHelper::annotation()
 
 void VcsPluginHelper::annotationContextMenuAboutToShow( KTextEditor::View* view, QMenu* menu, int line )
 {
+    Q_D(VcsPluginHelper);
+
 #if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,53,0)
     auto viewifaceV2 = qobject_cast<KTextEditor::AnnotationViewInterfaceV2*>(view);
     if (viewifaceV2) {
@@ -480,16 +506,22 @@ void VcsPluginHelper::handleAnnotationBorderVisibilityChanged(View* view, bool v
 
 void VcsPluginHelper::update()
 {
+    Q_D(VcsPluginHelper);
+
     EXECUTE_VCS_METHOD(update);
 }
 
 void VcsPluginHelper::add()
 {
+    Q_D(VcsPluginHelper);
+
     EXECUTE_VCS_METHOD(add);
 }
 
 void VcsPluginHelper::commit()
 {
+    Q_D(VcsPluginHelper);
+
     Q_ASSERT(!d->ctxUrls.isEmpty());
     ICore::self()->documentController()->saveAllDocuments();
 
@@ -509,6 +541,8 @@ void VcsPluginHelper::commit()
 
 void VcsPluginHelper::push()
 {
+    Q_D(VcsPluginHelper);
+
     for (const QUrl& url : qAsConst(d->ctxUrls)) {
         VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->push(url, VcsLocation());
         ICore::self()->runController()->registerJob(job);
@@ -517,6 +551,8 @@ void VcsPluginHelper::push()
 
 void VcsPluginHelper::pull()
 {
+    Q_D(VcsPluginHelper);
+
     for (const QUrl& url : qAsConst(d->ctxUrls)) {
         VcsJob* job = d->plugin->extension<IDistributedVersionControl>()->pull(VcsLocation(), url);
         ICore::self()->runController()->registerJob(job);

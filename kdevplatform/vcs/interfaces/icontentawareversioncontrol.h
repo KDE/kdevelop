@@ -30,6 +30,7 @@ namespace KTextEditor {
 }
 
 namespace KDevelop {
+class CheckInRepositoryJobPrivate;
 
 class KDEVPLATFORMVCS_EXPORT CheckInRepositoryJob : public KJob
 {
@@ -47,8 +48,9 @@ public Q_SLOTS:
 Q_SIGNALS:
     void finished(bool canRecreate);
 
-protected:
-    const QScopedPointer<class CheckInRepositoryJobPrivate> d;
+private:
+    const QScopedPointer<class CheckInRepositoryJobPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(CheckInRepositoryJob)
 };
 
 /**

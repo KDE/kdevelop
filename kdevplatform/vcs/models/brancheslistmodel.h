@@ -30,6 +30,7 @@
 namespace KDevelop {
 class IBranchingVersionControl;
 class IProject;
+class BranchesListModelPrivate;
 
 class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
 {
@@ -50,7 +51,7 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
         Q_INVOKABLE void removeBranch(const QString& branch);
 
         QUrl repository() const;
-        KDevelop::IBranchingVersionControl* interface();
+        KDevelop::IBranchingVersionControl* interface() const;
         void refresh();
         QString currentBranch() const;
         void setCurrentBranch(const QString& branch);
@@ -65,7 +66,8 @@ class KDEVPLATFORMVCS_EXPORT BranchesListModel : public QStandardItemModel
         void currentBranchChanged();
 
     private:
-        const QScopedPointer<class BranchesListModelPrivate> d;
+        const QScopedPointer<class BranchesListModelPrivate> d_ptr;
+        Q_DECLARE_PRIVATE(BranchesListModel)
 };
 
 }

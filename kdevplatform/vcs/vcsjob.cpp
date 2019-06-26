@@ -30,8 +30,11 @@ public:
 };
 
 VcsJob::VcsJob( QObject* parent, OutputJobVerbosity verbosity )
-    : OutputJob(parent, verbosity), d(new VcsJobPrivate)
+    : OutputJob(parent, verbosity)
+    , d_ptr(new VcsJobPrivate)
 {
+    Q_D(VcsJob);
+
     d->m_type = Unknown;
     setStandardToolView(IOutputView::VcsView);
 
@@ -49,11 +52,15 @@ VcsJob::~VcsJob() = default;
 
 VcsJob::JobType VcsJob::type() const
 {
+    Q_D(const VcsJob);
+
     return d->m_type;
 }
 
 void VcsJob::setType( VcsJob::JobType t )
 {
+    Q_D(VcsJob);
+
     d->m_type = t;
 }
 

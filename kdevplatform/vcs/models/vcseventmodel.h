@@ -34,6 +34,8 @@ namespace KDevelop
 class VcsRevision;
 class IBasicVersionControl;
 class VcsEvent;
+class VcsEventLogModelPrivate;
+class VcsBasicEventModelPrivate;
 
 /**
  * This is a generic model to store a list of VcsEvents.
@@ -64,7 +66,8 @@ protected:
     void addEvents(const QList<KDevelop::VcsEvent>&);
 
 private:
-    const QScopedPointer<class VcsBasicEventModelPrivate> d;
+    const QScopedPointer<class VcsBasicEventModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(VcsBasicEventModel)
 };
 
 /**
@@ -88,7 +91,8 @@ private Q_SLOTS:
     void jobReceivedResults( KJob* job );
 
 private:
-    const QScopedPointer<class VcsEventLogModelPrivate> d;
+    const QScopedPointer<class VcsEventLogModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(VcsEventLogModel)
 };
 
 }

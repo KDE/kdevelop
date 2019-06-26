@@ -108,7 +108,8 @@ static QVariant runSynchronously(KDevelop::VcsJob* job)
 }
 
 BranchesListModel::BranchesListModel(QObject* parent)
-    : QStandardItemModel(parent), d(new BranchesListModelPrivate())
+    : QStandardItemModel(parent)
+    , d_ptr(new BranchesListModelPrivate())
 {
 }
 
@@ -125,6 +126,8 @@ QHash<int, QByteArray> BranchesListModel::roleNames() const
 
 void BranchesListModel::createBranch(const QString& baseBranch, const QString& newBranch)
 {
+    Q_D(BranchesListModel);
+
     qCDebug(VCS) << "Creating " << baseBranch << " based on " << newBranch;
     KDevelop::VcsRevision rev;
     rev.setRevisionValue(baseBranch, KDevelop::VcsRevision::GlobalNumber);
@@ -137,6 +140,8 @@ void BranchesListModel::createBranch(const QString& baseBranch, const QString& n
 
 void BranchesListModel::removeBranch(const QString& branch)
 {
+    Q_D(BranchesListModel);
+
     KDevelop::VcsJob *branchJob = d->dvcsplugin->deleteBranch(d->repo, branch);
 
     qCDebug(VCS) << "Removing branch:" << branch;
@@ -150,16 +155,22 @@ void BranchesListModel::removeBranch(const QString& branch)
 
 QUrl BranchesListModel::repository() const
 {
+    Q_D(const BranchesListModel);
+
     return d->repo;
 }
 
-KDevelop::IBranchingVersionControl* BranchesListModel::interface()
+KDevelop::IBranchingVersionControl* BranchesListModel::interface() const
 {
+    Q_D(const BranchesListModel);
+
     return d->dvcsplugin;
 }
 
 void BranchesListModel::initialize(KDevelop::IBranchingVersionControl* branching, const QUrl& r)
 {
+    Q_D(BranchesListModel);
+
     d->dvcsplugin = branching;
     d->repo = r;
     refresh();
@@ -167,6 +178,8 @@ void BranchesListModel::initialize(KDevelop::IBranchingVersionControl* branching
 
 void BranchesListModel::refresh()
 {
+    Q_D(BranchesListModel);
+
     const QStringList branches = runSynchronously(d->dvcsplugin->branches(d->repo)).toStringList();
     QString curBranch = runSynchronously(d->dvcsplugin->currentBranch(d->repo)).toString();
 
@@ -183,11 +196,15 @@ void BranchesListModel::resetCurrent()
 
 QString BranchesListModel::currentBranch() const
 {
+    Q_D(const BranchesListModel);
+
     return runSynchronously(d->dvcsplugin->currentBranch(d->repo)).toString();
 }
 
 KDevelop::IProject* BranchesListModel::project() const
 {
+    Q_D(const BranchesListModel);
+
     return KDevelop::ICore::self()->projectController()->findProjectForUrl(d->repo);
 }
 
@@ -207,6 +224,8 @@ void BranchesListModel::setProject(KDevelop::IProject* p)
 
 void BranchesListModel::setCurrentBranch(const QString& branch)
 {
+    Q_D(BranchesListModel);
+
     KDevelop::VcsJob* job = d->dvcsplugin->switchBranch(d->repo, branch);
     connect(job, &VcsJob::finished, this, &BranchesListModel::currentBranchChanged);
     KDevelop::ICore::self()->runController()->registerJob(job);

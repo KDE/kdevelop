@@ -35,8 +35,11 @@ public:
 };
 
 VcsCommitDialog::VcsCommitDialog( IPatchSource *patchSource, QWidget *parent )
-    : QDialog( parent ), d(new VcsCommitDialogPrivate())
+    : QDialog(parent)
+    , d_ptr(new VcsCommitDialogPrivate())
 {
+    Q_D(VcsCommitDialog);
+
     auto mainWidget = new QWidget(this);
     d->ui.setupUi(mainWidget);
 
@@ -61,11 +64,15 @@ VcsCommitDialog::~VcsCommitDialog() = default;
 
 void VcsCommitDialog::setRecursive( bool recursive )
 {
+    Q_D(VcsCommitDialog);
+
     d->ui.recursiveChk->setChecked( recursive );
 }
 
 void VcsCommitDialog::setCommitCandidates( const QList<KDevelop::VcsStatusInfo>& statuses )
 {
+    Q_D(VcsCommitDialog);
+
     for (const VcsStatusInfo& info : statuses) {
         d->m_model->updateState( info );
     }
@@ -73,11 +80,15 @@ void VcsCommitDialog::setCommitCandidates( const QList<KDevelop::VcsStatusInfo>&
 
 bool VcsCommitDialog::recursive() const
 {
+    Q_D(const VcsCommitDialog);
+
     return d->ui.recursiveChk->isChecked();
 }
 
 void VcsCommitDialog::ok()
 {
+    Q_D(VcsCommitDialog);
+
     if( d->m_patchSource->finishReview( d->m_model->checkedUrls() ) )
     {
         deleteLater();
@@ -86,6 +97,8 @@ void VcsCommitDialog::ok()
 
 void VcsCommitDialog::cancel()
 {
+    Q_D(VcsCommitDialog);
+
     d->m_patchSource->cancelReview();
 }
 

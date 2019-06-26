@@ -33,7 +33,7 @@ class CheckInRepositoryJobPrivate
 
 CheckInRepositoryJob::CheckInRepositoryJob(KTextEditor::Document* document)
     : KJob()
-    , d(new CheckInRepositoryJobPrivate(document))
+    , d_ptr(new CheckInRepositoryJobPrivate(document))
 {
     connect(this, &CheckInRepositoryJob::finished, this, &CheckInRepositoryJob::deleteLater);
     setCapabilities(Killable);
@@ -43,6 +43,8 @@ CheckInRepositoryJob::~CheckInRepositoryJob() = default;
 
 KTextEditor::Document* CheckInRepositoryJob::document() const
 {
+    Q_D(const CheckInRepositoryJob);
+
     return d->document;
 }
 

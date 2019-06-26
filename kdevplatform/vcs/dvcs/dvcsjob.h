@@ -37,6 +37,11 @@
 class QDir;
 class QStringList;
 
+
+namespace KDevelop
+{
+class DVcsJobPrivate;
+
 /**
  * This class is capable of running our dvcs commands. 
  * Most of all DVcsJob are created in DVCS executors, but executed in DistributedVersionControlPlugin or
@@ -79,10 +84,6 @@ class QStringList;
  * @author Robert Gruber <rgruber@users.sourceforge.net>
  * @author Evgeniy Ivanov <powerfox@kde.ru>
  */
-
-namespace KDevelop
-{
-
 class KDEVPLATFORMVCS_EXPORT DVcsJob : public KDevelop::VcsJob
 {
     Q_OBJECT
@@ -197,7 +198,7 @@ public:
     KDevelop::IPlugin* vcsPlugin() const override;
     // End:  KDevelop::VcsJob
     
-    KProcess *process();
+    KProcess* process() const;
     
     void displayOutput(const QString& output);
 
@@ -224,7 +225,8 @@ private:
     void jobIsReady();
 
 private:
-    const QScopedPointer<class DVcsJobPrivate> d;
+    const QScopedPointer<class DVcsJobPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DVcsJob)
 };
 
 }

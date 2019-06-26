@@ -72,24 +72,31 @@ public:
 };
 
 VcsDiffWidget::VcsDiffWidget( KDevelop::VcsJob* job, QWidget* parent )
-    : QWidget( parent ), d(new VcsDiffWidgetPrivate(this))
+    : QWidget(parent)
+    , d_ptr(new VcsDiffWidgetPrivate(this))
 {
+    Q_D(VcsDiffWidget);
+
     d->m_job = job;
     d->m_ui = new Ui::VcsDiffWidget();
     d->m_ui->setupUi( this );
     connect( d->m_job, &VcsJob::resultsReady,
-             this, [&] (VcsJob* job) { d->diffReady(job); } );
+             this, [this] (VcsJob* job) { Q_D(VcsDiffWidget); d->diffReady(job); } );
     ICore::self()->runController()->registerJob( d->m_job );
 }
 
 VcsDiffWidget::~VcsDiffWidget()
 {
+    Q_D(VcsDiffWidget);
+
     delete d->m_ui;
 }
 
 void VcsDiffWidget::setRevisions( const KDevelop::VcsRevision& first,
                                   const KDevelop::VcsRevision& second )
 {
+    Q_D(VcsDiffWidget);
+
     d->m_ui->revLabel->setText( i18n("Difference between revision %1 and %2:",
                        first.prettyValue(),
                        second.prettyValue() ) );

@@ -40,6 +40,7 @@ namespace KDevelop
 class IPlugin;
 class IBasicVersionControl;
 class Context;
+class VcsPluginHelperPrivate;
 
 class KDEVPLATFORMVCS_EXPORT VcsPluginHelper
             : public QObject
@@ -87,7 +88,8 @@ private:
     void diffForRev(const QUrl& url);
 
 private:
-    const QScopedPointer<class VcsPluginHelperPrivate> d;
+    const QScopedPointer<class VcsPluginHelperPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(VcsPluginHelper)
 };
 
 } // namespace KDevelop

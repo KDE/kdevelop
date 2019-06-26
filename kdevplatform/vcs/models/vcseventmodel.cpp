@@ -45,7 +45,8 @@ public:
 };
 
 VcsBasicEventModel::VcsBasicEventModel(QObject* parent)
-    : QAbstractTableModel(parent), d(new VcsBasicEventModelPrivate)
+    : QAbstractTableModel(parent)
+    , d_ptr(new VcsBasicEventModelPrivate)
 {
 }
 
@@ -53,6 +54,8 @@ VcsBasicEventModel::~VcsBasicEventModel() = default;
 
 int VcsBasicEventModel::rowCount(const QModelIndex& parent) const
 {
+    Q_D(const VcsBasicEventModel);
+
     return parent.isValid() ? 0 : d->m_events.count();
 }
 
@@ -63,6 +66,8 @@ int VcsBasicEventModel::columnCount(const QModelIndex& parent) const
 
 QVariant VcsBasicEventModel::data(const QModelIndex& idx, int role) const
 {
+    Q_D(const VcsBasicEventModel);
+
     if( !idx.isValid() || role != Qt::DisplayRole )
         return QVariant();
 
@@ -109,6 +114,8 @@ QVariant VcsBasicEventModel::headerData(int section, Qt::Orientation orientation
 
 void VcsBasicEventModel::addEvents(const QList<KDevelop::VcsEvent>& list)
 {
+    Q_D(VcsBasicEventModel);
+
     if( list.isEmpty() )
         return;
 
@@ -119,6 +126,8 @@ void VcsBasicEventModel::addEvents(const QList<KDevelop::VcsEvent>& list)
 
 KDevelop::VcsEvent VcsBasicEventModel::eventForIndex(const QModelIndex& idx) const
 {
+    Q_D(const VcsBasicEventModel);
+
     if( !idx.isValid() || idx.row() < 0 || idx.row() >= rowCount() )
     {
         return KDevelop::VcsEvent();
@@ -137,8 +146,11 @@ public:
 };
 
 VcsEventLogModel::VcsEventLogModel(KDevelop::IBasicVersionControl* iface, const VcsRevision& rev, const QUrl& url, QObject* parent)
-    : KDevelop::VcsBasicEventModel(parent), d(new VcsEventLogModelPrivate)
+    : KDevelop::VcsBasicEventModel(parent)
+    , d_ptr(new VcsEventLogModelPrivate)
 {
+    Q_D(VcsEventLogModel);
+
     d->m_iface = iface;
     d->m_rev = rev;
     d->m_url = url;
@@ -150,11 +162,15 @@ VcsEventLogModel::~VcsEventLogModel() = default;
 
 bool VcsEventLogModel::canFetchMore(const QModelIndex& parent) const
 {
+    Q_D(const VcsEventLogModel);
+
     return !d->done && !d->fetching && !parent.isValid();
 }
 
 void VcsEventLogModel::fetchMore(const QModelIndex& parent)
 {
+    Q_D(VcsEventLogModel);
+
     d->fetching = true;
     Q_ASSERT(!parent.isValid());
     Q_UNUSED(parent);
@@ -166,6 +182,8 @@ void VcsEventLogModel::fetchMore(const QModelIndex& parent)
 
 void VcsEventLogModel::jobReceivedResults(KJob* job)
 {
+    Q_D(VcsEventLogModel);
+
     const QList<QVariant> l = qobject_cast<KDevelop::VcsJob *>(job)->fetchResults().toList();
     if(l.isEmpty() || job->error()!=0) {
         d->done = true;

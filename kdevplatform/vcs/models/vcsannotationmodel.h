@@ -36,7 +36,8 @@ namespace KDevelop
 
 class VcsJob;
 class VcsAnnotationLine;
-    
+class VcsAnnotationModelPrivate;
+
 class KDEVPLATFORMVCS_EXPORT VcsAnnotationModel : public KTextEditor::AnnotationModel
 {
 Q_OBJECT
@@ -54,7 +55,8 @@ public:
     VcsAnnotationLine annotationLine(int line) const;
 
 private:
-    const QScopedPointer<class VcsAnnotationModelPrivate> d;
+    const QScopedPointer<class VcsAnnotationModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(VcsAnnotationModel)
     friend class VcsAnnotationModelPrivate;
 };
 

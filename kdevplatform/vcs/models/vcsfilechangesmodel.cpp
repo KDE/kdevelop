@@ -137,7 +137,8 @@ public:
 };
 
 VcsFileChangesModel::VcsFileChangesModel(QObject *parent, bool allowSelection)
-    : QStandardItemModel(parent), d(new VcsFileChangesModelPrivate {allowSelection} )
+    : QStandardItemModel(parent)
+    , d_ptr(new VcsFileChangesModelPrivate{allowSelection})
 {
     setColumnCount(2);
     setHeaderData(0, Qt::Horizontal, i18n("Filename"));
@@ -150,7 +151,9 @@ VcsFileChangesModel::~VcsFileChangesModel()
 
 int VcsFileChangesModel::updateState(QStandardItem *parent, const KDevelop::VcsStatusInfo &status)
 {
-    if(status.state()==VcsStatusInfo::ItemUnknown || status.state()==VcsStatusInfo::ItemUpToDate) {
+     Q_D(VcsFileChangesModel);
+
+   if(status.state()==VcsStatusInfo::ItemUnknown || status.state()==VcsStatusInfo::ItemUpToDate) {
         removeUrl(status.url());
         return -1;
     } else {
@@ -209,6 +212,8 @@ QStandardItem* VcsFileChangesModel::fileItemForUrl(QStandardItem* parent, const 
 
 void VcsFileChangesModel::setAllChecked(bool checked)
 {
+    Q_D(VcsFileChangesModel);
+
     if(!d->allowSelection)
         return;
     QStandardItem* parent = invisibleRootItem();
@@ -220,6 +225,8 @@ void VcsFileChangesModel::setAllChecked(bool checked)
 
 QList<QUrl> VcsFileChangesModel::checkedUrls(QStandardItem *parent) const
 {
+    Q_D(const VcsFileChangesModel);
+
     Q_ASSERT(parent);
     if (!parent) {
         qCWarning(VCS) << "null QStandardItem passed to" << Q_FUNC_INFO;
@@ -256,6 +263,8 @@ QList<QUrl> VcsFileChangesModel::urls(QStandardItem *parent) const
 
 void VcsFileChangesModel::checkUrls(QStandardItem *parent, const QList<QUrl>& urls) const
 {
+    Q_D(const VcsFileChangesModel);
+
     Q_ASSERT(parent);
     if (!parent) {
         qCWarning(VCS) << "null QStandardItem passed to" << Q_FUNC_INFO;
@@ -276,11 +285,15 @@ void VcsFileChangesModel::checkUrls(QStandardItem *parent, const QList<QUrl>& ur
 
 void VcsFileChangesModel::setIsCheckbable(bool checkable)
 {
+    Q_D(VcsFileChangesModel);
+
     d->allowSelection = checkable;
 }
 
 bool VcsFileChangesModel::isCheckable() const
 {
+    Q_D(const VcsFileChangesModel);
+
     return d->allowSelection;
 }
 

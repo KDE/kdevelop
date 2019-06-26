@@ -62,7 +62,7 @@ public:
 //class DistributedVersionControlPlugin
 DistributedVersionControlPlugin::DistributedVersionControlPlugin(QObject *parent, const QString& componentName)
         : IPlugin(componentName, parent)
-        , d(new DistributedVersionControlPluginPrivate(this))
+        , d_ptr(new DistributedVersionControlPluginPrivate(this))
 {}
 
 DistributedVersionControlPlugin::~DistributedVersionControlPlugin()
@@ -87,6 +87,8 @@ DistributedVersionControlPlugin::createImportMetadataWidget(QWidget* parent)
 KDevelop::ContextMenuExtension
 DistributedVersionControlPlugin::contextMenuExtension(Context* context, QWidget* parent)
 {
+    Q_D(DistributedVersionControlPlugin);
+
     d->m_common->setupFromContext(context);
     QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
 
@@ -125,6 +127,8 @@ static QString stripPathToDir(const QString &path)
 
 void DistributedVersionControlPlugin::ctxBranchManager()
 {
+    Q_D(DistributedVersionControlPlugin);
+
     QList<QUrl> const & ctxUrlList = d->m_common->contextUrlList();
     Q_ASSERT(!ctxUrlList.isEmpty());    
     

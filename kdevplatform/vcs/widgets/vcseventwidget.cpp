@@ -195,8 +195,11 @@ void VcsEventWidgetPrivate::diffRevisions()
 }
 
 VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelop::IBasicVersionControl* iface, QWidget* parent )
-    : QWidget(parent), d(new VcsEventWidgetPrivate(this) )
+    : QWidget(parent)
+    , d_ptr(new VcsEventWidgetPrivate(this))
 {
+    Q_D(VcsEventWidget);
+
     d->m_iface = iface;
     d->m_url = url;
     d->m_ui = new Ui::VcsEventWidget();
@@ -213,6 +216,7 @@ VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelo
     header->setSectionResizeMode( 3, QHeaderView::ResizeToContents );
     // Select first row as soon as the model got populated
     connect(d->m_logModel, &QAbstractItemModel::rowsInserted, this, [this]() {
+        Q_D(VcsEventWidget);
         auto view = d->m_ui->eventView;
         view->setCurrentIndex(view->model()->index(0, 0));
     });
@@ -220,12 +224,20 @@ VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelo
     d->m_detailModel = new VcsItemEventModel(this);
     d->m_ui->itemEventView->setModel( d->m_detailModel );
 
-    connect( d->m_ui->eventView, &QTreeView::clicked,
-             this, [&] (const QModelIndex& index) { d->eventViewClicked(index); } );
-    connect( d->m_ui->eventView->selectionModel(), &QItemSelectionModel::currentRowChanged,
-             this, [&] (const QModelIndex& start, const QModelIndex& end) { d->currentRowChanged(start, end); });
-    connect( d->m_ui->eventView, &QTreeView::customContextMenuRequested,
-             this, [&] (const QPoint& point) { d->eventViewCustomContextMenuRequested(point); } );
+    connect(d->m_ui->eventView, &QTreeView::clicked, this, [this] (const QModelIndex& index) {
+        Q_D(VcsEventWidget);
+        d->eventViewClicked(index);
+    });
+    connect(d->m_ui->eventView->selectionModel(), &QItemSelectionModel::currentRowChanged,
+            this, [this] (const QModelIndex& start, const QModelIndex& end) {
+        Q_D(VcsEventWidget);
+        d->currentRowChanged(start, end);
+    });
+    connect(d->m_ui->eventView, &QTreeView::customContextMenuRequested,
+            this, [this] (const QPoint& point) {
+        Q_D(VcsEventWidget);
+        d->eventViewCustomContextMenuRequested(point);
+    });
 
     connect(d->m_ui->message, &QTextBrowser::anchorClicked,
             this, [&] (const QUrl& url) { QDesktopServices::openUrl(url); });
@@ -233,6 +245,8 @@ VcsEventWidget::VcsEventWidget( const QUrl& url, const VcsRevision& rev, KDevelo
 
 VcsEventWidget::~VcsEventWidget()
 {
+    Q_D(VcsEventWidget);
+
     delete d->m_ui;
 }
 
