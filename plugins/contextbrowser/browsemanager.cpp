@@ -57,8 +57,10 @@ EditorViewWatcher::EditorViewWatcher(QObject* parent)
     connect(
         ICore::self()->documentController(), &IDocumentController::textDocumentCreated, this,
         &EditorViewWatcher::documentCreated);
-    foreach (KDevelop::IDocument* document, ICore::self()->documentController()->openDocuments())
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (KDevelop::IDocument* document : documents) {
         documentCreated(document);
+    }
 }
 
 void EditorViewWatcher::documentCreated(KDevelop::IDocument* document)
@@ -66,7 +68,8 @@ void EditorViewWatcher::documentCreated(KDevelop::IDocument* document)
     KTextEditor::Document* textDocument = document->textDocument();
     if (textDocument) {
         connect(textDocument, &Document::viewCreated, this, &EditorViewWatcher::viewCreated);
-        foreach (KTextEditor::View* view, textDocument->views()) {
+        const auto views = textDocument->views();
+        for (KTextEditor::View* view : views) {
             Q_ASSERT(view->parentWidget());
             addViewInternal(view);
         }
@@ -121,8 +124,10 @@ BrowseManager::BrowseManager(ContextBrowserPlugin* controller)
 
     connect(m_delayedBrowsingTimer, &QTimer::timeout, this, &BrowseManager::eventuallyStartDelayedBrowsing);
 
-    foreach (KTextEditor::View* view, m_watcher.allViews())
+    const auto views = m_watcher.allViews();
+    for (KTextEditor::View* view : views) {
         viewAdded(view);
+    }
 }
 
 KTextEditor::View* viewFromWidget(QWidget* widget)
@@ -144,7 +149,8 @@ BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor 
     }
 
     // Step 1: Look for a special language object(Macro, included header, etc.)
-    foreach (const auto& language, ICore::self()->languageController()->languagesForUrl(viewUrl)) {
+    const auto languages = ICore::self()->languageController()->languagesForUrl(viewUrl);
+    for (const auto& language : languages) {
         auto jumpTo = language->specialLanguageObjectJumpCursor(viewUrl, textCursor);
         if (jumpTo.first.isValid() && jumpTo.second.isValid()) {
             return {
@@ -322,9 +328,11 @@ void BrowseManager::applyEventFilter(QWidget* object, bool install)
     else
         object->removeEventFilter(this);
 
-    foreach (QObject* child, object->children())
+    const auto children = object->children();
+    for (QObject* child : children) {
         if (qobject_cast<QWidget*>(child))
             applyEventFilter(qobject_cast<QWidget*>(child), install);
+    }
 }
 
 void BrowseManager::viewAdded(KTextEditor::View* view)
@@ -367,6 +375,8 @@ Watcher::Watcher(BrowseManager* manager)
     : EditorViewWatcher(manager)
     , m_manager(manager)
 {
-    foreach (KTextEditor::View* view, allViews())
+    const auto views = allViews();
+    for (KTextEditor::View* view : views) {
         m_manager->applyEventFilter(view, true);
+    }
 }

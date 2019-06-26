@@ -468,7 +468,8 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsUnderCursor(TopDUContext* to
 
     const auto modelsData = ICore::self()->languageController()->problemModelSet()->models();
     for (const auto& modelData : modelsData) {
-        foreach (const auto& problem, modelData.model->problems(topContext->url())) {
+        const auto modelProblems = modelData.model->problems(topContext->url());
+        for (const auto& problem : modelProblems) {
             DocumentRange problemRange = problem->finalLocation();
             if (problemRange.contains(position) ||
                 (problemRange.isEmpty() && problemRange.boundaryAtCursor(position))) {
@@ -530,7 +531,7 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(const TopDUCon
     QVector<KDevelop::IProblem::Ptr> closestProblems;
 
     // Show problems, located on the same line
-    foreach (auto problem, allProblems) {
+    for (auto& problem : qAsConst(allProblems)) {
         auto r = problem->finalLocation();
         if (r.onSingleLine() && r.start().line() == position.line())
             closestProblems += problem;
@@ -541,7 +542,7 @@ static QVector<KDevelop::IProblem::Ptr> findProblemsCloseToCursor(const TopDUCon
     // If not, only show it in case there's only whitespace
     // between the current cursor position and the problem line
     if (closestProblems.isEmpty()) {
-        foreach (auto problem, allProblems) {
+        for (auto& problem : qAsConst(allProblems)) {
             auto r = problem->finalLocation();
 
             KTextEditor::Range dist;
@@ -808,15 +809,14 @@ Declaration* ContextBrowserPlugin::findDeclaration(View* view, const KTextEditor
     return foundDeclaration;
 }
 
-ContextBrowserView* ContextBrowserPlugin::browserViewForWidget(QWidget* widget)
+ContextBrowserView* ContextBrowserPlugin::browserViewForWidget(QWidget* widget) const
 {
-    foreach (ContextBrowserView* contextView, m_views) {
-        if (masterWidget(contextView) == masterWidget(widget)) {
-            return contextView;
-        }
-    }
+    const auto masterWidgetOfWidget = masterWidget(widget);
+    auto it = std::find_if(m_views.begin(), m_views.end(), [&](ContextBrowserView* contextView) {
+        return (masterWidget(contextView) == masterWidgetOfWidget);
+    });
 
-    return nullptr;
+    return (it != m_views.end()) ? *it : nullptr;
 }
 
 void ContextBrowserPlugin::updateForView(View* view)
@@ -920,7 +920,7 @@ void ContextBrowserPlugin::updateForView(View* view)
 
 void ContextBrowserPlugin::updateViews()
 {
-    foreach (View* view, m_updateViews) {
+    for (View* view : qAsConst(m_updateViews)) {
         updateForView(view);
     }
 
@@ -965,8 +965,10 @@ void ContextBrowserPlugin::textDocumentCreated(KDevelop::IDocument* document)
 
     connect(document->textDocument(), &KTextEditor::Document::viewCreated, this, &ContextBrowserPlugin::viewCreated);
 
-    foreach (View* view, document->textDocument()->views())
+    const auto views = document->textDocument()->views();
+    for (View* view : views) {
         viewCreated(document->textDocument(), view);
+    }
 }
 
 void ContextBrowserPlugin::documentActivated(IDocument* doc)
@@ -1069,7 +1071,7 @@ void ContextBrowserPlugin::switchUse(bool forward)
 
             Declaration* decl = nullptr;
             //If we have a locked declaration, use that for jumping
-            foreach (ContextBrowserView* view, m_views) {
+            for (ContextBrowserView* view : qAsConst(m_views)) {
                 decl = view->lockedDeclaration().data(); ///@todo Somehow match the correct context-browser view if there is multiple
                 if (decl)
                     break;
