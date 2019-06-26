@@ -88,7 +88,8 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
         config.title = subgrp.readEntry(ConfigConstants::configTitleKey(), QString());
         config.buildDir = subgrp.readEntry(ConfigConstants::buildDirKey(), QUrl());
 
-        foreach( const QString& subgrpName, subgrp.groupList() ) {
+        const auto subgrpNames = subgrp.groupList();
+        for (const QString& subgrpName : subgrpNames) {
             if (subgrpName.startsWith(ConfigConstants::toolGroupPrefix())) {
                 KConfigGroup toolgrp = subgrp.group( subgrpName );
                 CustomBuildSystemTool tool;
@@ -112,7 +113,7 @@ void CustomBuildSystemConfigWidget::loadFrom( KConfig* cfg )
     changeCurrentConfig( idx );
 }
 
-void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSystemConfig& c, int index )
+void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, const CustomBuildSystemConfig& c, int index )
 {
     // Generate group name, access and clear it
     KConfigGroup subgrp = grp.group(ConfigConstants::buildConfigPrefix() + QString::number(index));
@@ -124,7 +125,7 @@ void CustomBuildSystemConfigWidget::saveConfig( KConfigGroup& grp, CustomBuildSy
 
     subgrp.writeEntry(ConfigConstants::configTitleKey(), c.title);
     subgrp.writeEntry<QUrl>(ConfigConstants::buildDirKey(), c.buildDir);
-    foreach( const CustomBuildSystemTool& tool, c.tools ) {
+    for (const CustomBuildSystemTool& tool : c.tools) {
         KConfigGroup toolgrp = subgrp.group( generateToolGroupName( tool.type ) );
         toolgrp.writeEntry(ConfigConstants::toolType(), int(tool.type));
         toolgrp.writeEntry(ConfigConstants::toolEnvironment(), tool.envGrp);
