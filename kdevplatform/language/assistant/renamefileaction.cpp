@@ -41,8 +41,10 @@ public:
 };
 
 RenameFileAction::RenameFileAction(BasicRefactoring* refactoring, const QUrl& file, const QString& newName)
-    : d(new RenameFileActionPrivate)
+    : d_ptr(new RenameFileActionPrivate)
 {
+    Q_D(RenameFileAction);
+
     d->m_refactoring = refactoring;
     d->m_file = file;
     d->m_newName = newName;
@@ -54,12 +56,16 @@ RenameFileAction::~RenameFileAction()
 
 QString RenameFileAction::description() const
 {
+    Q_D(const RenameFileAction);
+
     return i18n("Rename file from \"%1\" to \"%2\".",
                 d->m_file.fileName(), d->m_refactoring->newFileName(d->m_file, d->m_newName));
 }
 
 void RenameFileAction::execute()
 {
+    Q_D(RenameFileAction);
+
     // save document to prevent unwanted dialogs
     IDocument* doc = ICore::self()->documentController()->documentForUrl(d->m_file);
     if (!doc) {

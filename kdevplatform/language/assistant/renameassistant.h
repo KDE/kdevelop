@@ -29,6 +29,8 @@ class View;
 }
 
 namespace KDevelop {
+class RenameAssistantPrivate;
+
 class KDEVPLATFORMLANGUAGE_EXPORT RenameAssistant
     : public StaticAssistant
 {
@@ -46,7 +48,8 @@ public:
     QString title() const override;
 
 private:
-    const QScopedPointer<class RenameAssistantPrivate> d;
+    const QScopedPointer<class RenameAssistantPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(RenameAssistant)
 };
 }
 

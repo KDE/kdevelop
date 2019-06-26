@@ -27,6 +27,7 @@
 
 namespace KDevelop {
 class Identifier;
+class RenameActionPrivate;
 
 /**
  * A HACK to circumvent the bad RangeInRevision API without rewriting everything.
@@ -65,7 +66,8 @@ public:
     QString oldDeclarationName() const;
 
 private:
-    const QScopedPointer<class RenameActionPrivate> d;
+    const QScopedPointer<class RenameActionPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(RenameAction)
 };
 }
 

@@ -32,8 +32,10 @@ public:
 };
 
 StaticAssistant::StaticAssistant(ILanguageSupport* supportedLanguage)
-    : d(new StaticAssistantPrivate)
+    : d_ptr(new StaticAssistantPrivate)
 {
+    Q_D(StaticAssistant);
+
     d->m_supportedLanguage = supportedLanguage;
 }
 
@@ -43,5 +45,7 @@ StaticAssistant::~StaticAssistant()
 
 ILanguageSupport* StaticAssistant::supportedLanguage() const
 {
+    Q_D(const StaticAssistant);
+
     return d->m_supportedLanguage;
 }

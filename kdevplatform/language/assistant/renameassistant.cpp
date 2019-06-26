@@ -105,7 +105,7 @@ public:
 
 RenameAssistant::RenameAssistant(ILanguageSupport* supportedLanguage)
     : StaticAssistant(supportedLanguage)
-    , d(new RenameAssistantPrivate(this))
+    , d_ptr(new RenameAssistantPrivate(this))
 {
 }
 
@@ -120,12 +120,16 @@ QString RenameAssistant::title() const
 
 bool RenameAssistant::isUseful() const
 {
+    Q_D(const RenameAssistant);
+
     return d->m_isUseful;
 }
 
 void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor::Range& invocationRange,
                                   const QString& removedText)
 {
+    Q_D(RenameAssistant);
+
     clearActions();
     d->m_lastChangedLocation = invocationRange.end();
     d->m_lastChangedDocument = doc;
@@ -222,7 +226,8 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
     } else {
         action = new RenameAction(d->m_oldDeclarationName, d->m_newDeclarationName, d->m_oldDeclarationUses);
     }
-    connect(action.data(), &IAssistantAction::executed, this, [&] {
+    connect(action.data(), &IAssistantAction::executed, this, [this] {
+        Q_D(RenameAssistant);
         d->reset();
     });
     addAction(action);
@@ -231,6 +236,8 @@ void RenameAssistant::textChanged(KTextEditor::Document* doc, const KTextEditor:
 
 KTextEditor::Range KDevelop::RenameAssistant::displayRange() const
 {
+    Q_D(const RenameAssistant);
+
     if (!d->m_lastChangedDocument) {
         return {};
     }

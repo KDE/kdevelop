@@ -58,11 +58,14 @@ public:
 
 StaticAssistantsManager::StaticAssistantsManager(QObject* parent)
     : QObject(parent)
-    , d(new StaticAssistantsManagerPrivate(this))
+    , d_ptr(new StaticAssistantsManagerPrivate(this))
 {
+    Q_D(StaticAssistantsManager);
+
     connect(KDevelop::ICore::self()->documentController(),
             &IDocumentController::documentLoaded,
-            this, [&](IDocument* document) {
+            this, [this](IDocument* document) {
+        Q_D(StaticAssistantsManager);
         d->documentLoaded(document);
     });
     const auto documents = ICore::self()->documentController()->openDocuments();
@@ -80,6 +83,8 @@ StaticAssistantsManager::~StaticAssistantsManager()
 
 void StaticAssistantsManager::registerAssistant(const StaticAssistant::Ptr& assistant)
 {
+    Q_D(StaticAssistantsManager);
+
     if (d->m_registeredAssistants.contains(assistant))
         return;
 
@@ -88,11 +93,15 @@ void StaticAssistantsManager::registerAssistant(const StaticAssistant::Ptr& assi
 
 void StaticAssistantsManager::unregisterAssistant(const StaticAssistant::Ptr& assistant)
 {
+    Q_D(StaticAssistantsManager);
+
     d->m_registeredAssistants.removeOne(assistant);
 }
 
 QVector<StaticAssistant::Ptr> StaticAssistantsManager::registeredAssistants() const
 {
+    Q_D(const StaticAssistantsManager);
+
     return d->m_registeredAssistants;
 }
 
@@ -148,14 +157,18 @@ void StaticAssistantsManagerPrivate::textRemoved(Document* doc, const Range& ran
 void StaticAssistantsManager::notifyAssistants(const IndexedString& url,
                                                const KDevelop::ReferencedTopDUContext& context)
 {
+    Q_D(StaticAssistantsManager);
+
     for (auto& assistant : qAsConst(d->m_registeredAssistants)) {
         assistant->updateReady(url, context);
     }
 }
 
 QVector<KDevelop::Problem::Ptr> KDevelop::StaticAssistantsManager::problemsForContext(
-    const KDevelop::ReferencedTopDUContext& top)
+    const KDevelop::ReferencedTopDUContext& top) const
 {
+    Q_D(const StaticAssistantsManager);
+
     View* view = ICore::self()->documentController()->activeTextDocumentView();
     if (!view || !top || IndexedString(view->document()->url()) != top->url()) {
         return {};

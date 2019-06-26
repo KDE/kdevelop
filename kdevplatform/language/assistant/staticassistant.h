@@ -36,6 +36,7 @@ class Range;
 
 namespace KDevelop {
 class ILanguageSupport;
+class StaticAssistantPrivate;
 
 /**
  * @brief This class serves as a base for long-living assistants
@@ -94,7 +95,8 @@ public:
     virtual void updateReady(const IndexedString&, const KDevelop::ReferencedTopDUContext&) { }
 
 private:
-    const QScopedPointer<class StaticAssistantPrivate> d;
+    const QScopedPointer<class StaticAssistantPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(StaticAssistant)
 };
 }
 

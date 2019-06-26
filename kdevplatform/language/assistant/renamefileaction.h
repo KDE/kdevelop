@@ -27,6 +27,7 @@
 namespace KDevelop {
 class BasicRefactoring;
 }
+class RenameFileActionPrivate;
 
 class RenameFileAction
     : public KDevelop::IAssistantAction
@@ -41,7 +42,8 @@ public:
     void execute() override;
 
 private:
-    const QScopedPointer<class RenameFileActionPrivate> d;
+    const QScopedPointer<class RenameFileActionPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(RenameFileAction)
 };
 
 #endif // KDEVPLATFORM_RENAMEFILEACTION_H
