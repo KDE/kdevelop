@@ -242,7 +242,8 @@ void DebugSession::configInferior(ILaunchConfiguration *cfg, IExecutePlugin *iex
     if (breakOnStart) {
         BreakpointModel* m = ICore::self()->debugController()->breakpointModel();
         bool found = false;
-        foreach (Breakpoint *b, m->breakpoints()) {
+        const auto breakpoints = m->breakpoints();
+        for (Breakpoint* b : breakpoints) {
             if (b->location() == QLatin1String("main")) {
                 found = true;
                 break;
