@@ -201,6 +201,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT Set
 {
 public:
     class Iterator;
+    class IteratorPrivate;
     using Index = unsigned int;
 
     Set();
@@ -367,9 +368,10 @@ public:
 
 private:
     friend class Set;
-    friend class SetIteratorPrivate;
+    friend class IteratorPrivate;
     static inline SetDataRepository& getDataRepository(BasicSetRepository* repo) { return repo->m_dataRepository; }
-    const QScopedPointer<class SetIteratorPrivate> d;
+    const QScopedPointer<class IteratorPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(Iterator)
 };
 }
 

@@ -367,16 +367,16 @@ QString SetRepositoryAlgorithms::dumpDotGraph(uint nodeIndex) const
 
 const int nodeStackAlloc = 500;
 
-class SetIteratorPrivate
+class Set::IteratorPrivate
 {
 public:
-    SetIteratorPrivate()
+    IteratorPrivate()
     {
         nodeStackData.resize(nodeStackAlloc);
         nodeStack = nodeStackData.data();
     }
 
-    SetIteratorPrivate(const SetIteratorPrivate& rhs)
+    IteratorPrivate(const Set::IteratorPrivate& rhs)
         : nodeStackData(rhs.nodeStackData)
         , nodeStackSize(rhs.nodeStackSize)
         , currentIndex(rhs.currentIndex)
@@ -385,7 +385,7 @@ public:
         nodeStack = nodeStackData.data();
     }
 
-    SetIteratorPrivate& operator=(const SetIteratorPrivate& rhs)
+    Set::IteratorPrivate& operator=(const Set::IteratorPrivate& rhs)
     {
         nodeStackData = rhs.nodeStackData;
         nodeStackSize = rhs.nodeStackSize;
@@ -445,18 +445,18 @@ std::set<Index> Set::stdSet() const
 }
 
 Set::Iterator::Iterator(const Iterator& rhs)
-    : d(new SetIteratorPrivate(*rhs.d))
+    : d_ptr(new Set::IteratorPrivate(*rhs.d_ptr))
 {
 }
 
 Set::Iterator& Set::Iterator::operator=(const Iterator& rhs)
 {
-    *d = *rhs.d;
+    *d_ptr = *rhs.d_ptr;
     return *this;
 }
 
 Set::Iterator::Iterator()
-    : d(new SetIteratorPrivate)
+    : d_ptr(new Set::IteratorPrivate)
 {
 }
 
@@ -464,11 +464,15 @@ Set::Iterator::~Iterator() = default;
 
 Set::Iterator::operator bool() const
 {
+    Q_D(const Iterator);
+
     return d->nodeStackSize;
 }
 
 Set::Iterator& Set::Iterator::operator++()
 {
+    Q_D(Iterator);
+
     Q_ASSERT(d->nodeStackSize);
 
     if (d->repository->m_mutex)
@@ -509,6 +513,8 @@ Set::Iterator& Set::Iterator::operator++()
 
 BasicSetRepository::Index Set::Iterator::operator*() const
 {
+    Q_D(const Iterator);
+
     return d->currentIndex;
 }
 
@@ -520,10 +526,10 @@ Set::Iterator Set::iterator() const
     QMutexLocker lock(m_repository->m_mutex);
 
     Iterator ret;
-    ret.d->repository = m_repository;
+    ret.d_ptr->repository = m_repository;
 
     if (m_tree)
-        ret.d->startAtNode(m_repository->m_dataRepository.itemFromIndex(m_tree));
+        ret.d_ptr->startAtNode(m_repository->m_dataRepository.itemFromIndex(m_tree));
     return ret;
 }
 
