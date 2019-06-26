@@ -168,7 +168,8 @@ void TestProjectLoad::initTestCase()
 
     qRegisterMetaType<IProject*>();
 
-    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* p : projects) {
         ICore::self()->projectController()->closeProject(p);
     }
 }
@@ -180,7 +181,8 @@ void TestProjectLoad::cleanupTestCase()
 
 void TestProjectLoad::init()
 {
-    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* p : projects) {
         ICore::self()->projectController()->closeProject(p);
     }
     QCOMPARE(ICore::self()->projectController()->projects().size(), 0);
