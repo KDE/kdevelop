@@ -84,7 +84,7 @@ bool ProjectPathsModel::setData( const QModelIndex& index, const QVariant& value
         QString addedPath = sanitizePath( value.toString(), false );
 
         // Do not allow duplicates
-        foreach( const ConfigEntry& existingConfig, projectPaths ) {
+        for (const ConfigEntry& existingConfig : qAsConst(projectPaths)) {
             if( addedPath == existingConfig.path ) {
                 return false;
             }
@@ -191,7 +191,7 @@ void ProjectPathsModel::addPathInternal( const ConfigEntry& config, bool prepend
     Q_ASSERT(!config.parserArguments.isAnyEmpty());
 
     // Do not allow duplicates
-    foreach( const ConfigEntry& existingConfig, projectPaths ) {
+    for (const ConfigEntry& existingConfig : qAsConst(projectPaths)) {
         if( config.path == existingConfig.path ) {
             return;
         }

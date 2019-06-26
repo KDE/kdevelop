@@ -52,7 +52,8 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 
     auto settings = SettingsManager::globalInstance();
     auto provider = settings->provider();
-    foreach (const auto& factory, provider->compilerFactories()) {
+    const auto compilerFactories = provider->compilerFactories();
+    for (const auto& factory : compilerFactories) {
         auto* action = new QAction(m_addMenu);
         const QString fname = factory->name();
         action->setText(fname);
@@ -99,7 +100,8 @@ void CompilersWidget::deleteCompiler()
 {
     qCDebug(DEFINESANDINCLUDES) << "Deleting compiler";
     auto selectionModel = m_ui->compilers->selectionModel();
-    foreach (const QModelIndex& row, selectionModel->selectedIndexes()) {
+    const auto selectedRowsBefore = selectionModel->selectedIndexes();
+    for (const QModelIndex& row : selectedRowsBefore) {
         if (row.column() == 1) {
             //Don't remove the same compiler twice
             continue;
@@ -118,7 +120,8 @@ void CompilersWidget::addCompiler(const QString& factoryName)
 {
     auto settings = SettingsManager::globalInstance();
     auto provider = settings->provider();
-    foreach (const auto& factory, provider->compilerFactories()) {
+    const auto compilerFactories = provider->compilerFactories();
+    for (const auto& factory : compilerFactories) {
         if (factoryName == factory->name()) {
             //add compiler without any information, the user will fill the data in later
             auto compilerIndex = m_compilersModel->addCompiler(factory->createCompiler(QString(), QString()));

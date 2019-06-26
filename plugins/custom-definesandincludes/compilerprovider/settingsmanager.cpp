@@ -272,7 +272,8 @@ QVector<ConfigEntry> convertedPaths( KConfig* cfg )
         return {};
 
     QVector<ConfigEntry> paths;
-    foreach( const QString &grpName, sorted(group.groupList()) ) {
+    const auto sortedGroupNames = sorted(group.groupList());
+    for (const QString& grpName : sortedGroupNames) {
         KConfigGroup subgroup = group.group( grpName );
         if ( !subgroup.isValid() )
             continue;
