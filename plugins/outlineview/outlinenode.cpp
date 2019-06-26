@@ -102,7 +102,8 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
             if (DUContext* fCtx = DUChainUtils::functionContext(decl)) {
                 m_cachedText += QLatin1Char('(');
                 bool first = true;
-                foreach (Declaration* childDecl, fCtx->localDeclarations(decl->topContext())) {
+                const auto childDecls = fCtx->localDeclarations(decl->topContext());
+                for (Declaration* childDecl : childDecls) {
                     if (first) {
                         first = false;
                     } else {
@@ -196,13 +197,15 @@ std::unique_ptr<OutlineNode> OutlineNode::fromTopContext(TopDUContext* ctx)
 void OutlineNode::appendContext(DUContext* ctx, TopDUContext* top)
 {
     // qDebug() << ctx->scopeIdentifier().toString() << "context type=" << ctx->type();
-    foreach (Declaration* childDecl, ctx->localDeclarations(top)) {
+    const auto childDecls = ctx->localDeclarations(top);
+    for (Declaration* childDecl : childDecls) {
         if (childDecl) {
             m_children.emplace_back(childDecl, this);
         }
     }
     bool certainlyRequiresSorting = false;
-    foreach (DUContext* childContext, ctx->childContexts()) {
+    const auto childContexts = ctx->childContexts();
+    for (DUContext* childContext : childContexts) {
         if (childContext->owner()) {
             // if there is a onwner, this will already have been handled by the loop above
             // TODO: is this always true? With my testing so far it seems to be
