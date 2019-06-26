@@ -65,8 +65,10 @@ public:
 
 ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     : QDialog(parent)
-    , d(new ApplyChangesWidgetPrivate(this))
+    , d_ptr(new ApplyChangesWidgetPrivate(this))
 {
+    Q_D(ApplyChangesWidget);
+
     setSizeGripEnabled(true);
 
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -97,21 +99,29 @@ ApplyChangesWidget::~ApplyChangesWidget() = default;
 
 bool ApplyChangesWidget::hasDocuments() const
 {
+    Q_D(const ApplyChangesWidget);
+
     return d->m_editParts.size() > 0;
 }
 
 KTextEditor::Document* ApplyChangesWidget::document() const
 {
-    return qobject_cast<KTextEditor::Document*>(d->m_editParts[d->m_index]);
+    Q_D(const ApplyChangesWidget);
+
+    return qobject_cast<KTextEditor::Document*>(d->m_editParts.value(d->m_index));
 }
 
 void ApplyChangesWidget::setInformation(const QString& info)
 {
+    Q_D(ApplyChangesWidget);
+
     d->m_info->setText(info);
 }
 
 void ApplyChangesWidget::addDocuments(const IndexedString& original)
 {
+    Q_D(ApplyChangesWidget);
+
     int idx = d->m_files.indexOf(original);
     if (idx < 0) {
         QWidget* w = new QWidget;
@@ -127,6 +137,8 @@ void ApplyChangesWidget::addDocuments(const IndexedString& original)
 
 bool ApplyChangesWidget::applyAllChanges()
 {
+    Q_D(ApplyChangesWidget);
+
     /// @todo implement safeguard in case a file saving fails
 
     bool ret = true;
@@ -188,12 +200,16 @@ void ApplyChangesWidgetPrivate::createEditPart(const IndexedString& file)
 
 void ApplyChangesWidget::indexChanged(int newIndex)
 {
+    Q_D(ApplyChangesWidget);
+
     Q_ASSERT(newIndex != -1);
     d->m_index = newIndex;
 }
 
 void ApplyChangesWidget::updateDiffView(int index)
 {
+    Q_D(ApplyChangesWidget);
+
     d->m_index = index == -1 ? d->m_index : index;
 }
 }

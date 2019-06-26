@@ -32,6 +32,7 @@ class DUContext;
 class DUChainChangeSet;
 class DocumentChangeSet;
 class DocumentRange;
+class CodeGeneratorBasePrivate;
 
 /**
  * \short Base class for generic code generators
@@ -137,7 +138,8 @@ private:
     bool displayChanges();
 
 private:
-    const QScopedPointer<class CodeGeneratorPrivate> d;
+    const QScopedPointer<class CodeGeneratorBasePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(CodeGeneratorBase)
 };
 
 /**

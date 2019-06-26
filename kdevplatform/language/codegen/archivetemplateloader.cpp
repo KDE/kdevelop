@@ -38,7 +38,7 @@ ArchiveTemplateLoader* ArchiveTemplateLoader::self()
 }
 
 ArchiveTemplateLoader::ArchiveTemplateLoader()
-    : d(new ArchiveTemplateLoaderPrivate)
+    : d_ptr(new ArchiveTemplateLoaderPrivate)
 {
 }
 
@@ -46,16 +46,22 @@ ArchiveTemplateLoader::~ArchiveTemplateLoader() = default;
 
 void ArchiveTemplateLoader::addLocation(ArchiveTemplateLocation* location)
 {
+    Q_D(ArchiveTemplateLoader);
+
     d->locations.append(location);
 }
 
 void ArchiveTemplateLoader::removeLocation(ArchiveTemplateLocation* location)
 {
+    Q_D(ArchiveTemplateLoader);
+
     d->locations.removeOne(location);
 }
 
 bool ArchiveTemplateLoader::canLoadTemplate(const QString& name) const
 {
+    Q_D(const ArchiveTemplateLoader);
+
     return std::any_of(d->locations.constBegin(), d->locations.constEnd(), [&](ArchiveTemplateLocation* location) {
         return (location->hasTemplate(name));
     });
@@ -63,6 +69,8 @@ bool ArchiveTemplateLoader::canLoadTemplate(const QString& name) const
 
 Grantlee::Template ArchiveTemplateLoader::loadByName(const QString& name, const Grantlee::Engine* engine) const
 {
+    Q_D(const ArchiveTemplateLoader);
+
     for (ArchiveTemplateLocation* location : qAsConst(d->locations)) {
         if (location->hasTemplate(name)) {
             return engine->newTemplate(location->templateContents(name), name);

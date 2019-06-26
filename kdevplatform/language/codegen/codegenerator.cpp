@@ -33,11 +33,11 @@
 #include <debug.h>
 
 namespace KDevelop {
-class CodeGeneratorPrivate
+class CodeGeneratorBasePrivate
 {
 public:
 
-    CodeGeneratorPrivate() : autoGen(false)
+    CodeGeneratorBasePrivate() : autoGen(false)
         , context(0) {}
 
     QMap<IndexedString, DUChainChangeSet*> duchainChanges;
@@ -50,7 +50,7 @@ public:
 };
 
 CodeGeneratorBase::CodeGeneratorBase()
-    : d(new CodeGeneratorPrivate)
+    : d_ptr(new CodeGeneratorBasePrivate)
 {
 }
 
@@ -61,6 +61,8 @@ CodeGeneratorBase::~CodeGeneratorBase()
 
 void CodeGeneratorBase::autoGenerate(DUContext* context, const KDevelop::DocumentRange* range)
 {
+    Q_D(CodeGeneratorBase);
+
     d->autoGen = true;
     d->context = context;
     d->range = *range;
@@ -68,6 +70,8 @@ void CodeGeneratorBase::autoGenerate(DUContext* context, const KDevelop::Documen
 
 void CodeGeneratorBase::addChangeSet(DUChainChangeSet* duchainChange)
 {
+    Q_D(CodeGeneratorBase);
+
     IndexedString file = duchainChange->topDuContext().data()->url();
 
     QMap<IndexedString, DUChainChangeSet*>::iterator it = d->duchainChanges.find(file);
@@ -82,31 +86,43 @@ void CodeGeneratorBase::addChangeSet(DUChainChangeSet* duchainChange)
 
 void CodeGeneratorBase::addChangeSet(DocumentChangeSet& docChangeSet)
 {
+    Q_D(CodeGeneratorBase);
+
     d->documentChanges << docChangeSet;
 }
 
 DocumentChangeSet& CodeGeneratorBase::documentChangeSet()
 {
+    Q_D(CodeGeneratorBase);
+
     return d->documentChanges;
 }
 
 const QString& CodeGeneratorBase::errorText() const
 {
+    Q_D(const CodeGeneratorBase);
+
     return d->error;
 }
 
 bool CodeGeneratorBase::autoGeneration() const
 {
+    Q_D(const CodeGeneratorBase);
+
     return d->autoGen;
 }
 
 void CodeGeneratorBase::setErrorText(const QString& errorText)
 {
+    Q_D(CodeGeneratorBase);
+
     d->error = errorText;
 }
 
 void CodeGeneratorBase::clearChangeSets()
 {
+    Q_D(CodeGeneratorBase);
+
     qCDebug(LANGUAGE) << "Cleaning up all the changesets registered by the generator";
     qDeleteAll(d->duchainChanges);
 
@@ -117,6 +133,8 @@ void CodeGeneratorBase::clearChangeSets()
 
 bool CodeGeneratorBase::execute()
 {
+    Q_D(CodeGeneratorBase);
+
     qCDebug(LANGUAGE) << "Checking Preconditions for the codegenerator";
 
     //Shouldn't there be a method in iDocument to get a DocumentRange as well?
@@ -198,6 +216,8 @@ bool CodeGeneratorBase::execute()
 
 bool CodeGeneratorBase::displayChanges()
 {
+    Q_D(CodeGeneratorBase);
+
     DocumentChangeSet::ChangeResult result = d->documentChanges.applyAllToTemp();
     if (!result) {
         setErrorText(result.m_failureReason);

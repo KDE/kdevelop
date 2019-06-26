@@ -45,11 +45,11 @@ public:
     QString descriptionFileName;
     QStringList searchLocations;
 
-    ConfigOption readEntry(const QDomElement& element, TemplateRenderer* renderer);
+    ConfigOption readEntry(const QDomElement& element, TemplateRenderer* renderer) const;
 };
 
 ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
-                                                  TemplateRenderer* renderer)
+                                                  TemplateRenderer* renderer) const
 {
     ConfigOption entry;
 
@@ -109,53 +109,65 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
 }
 
 SourceFileTemplate::SourceFileTemplate (const QString& templateDescription)
-    : d(new KDevelop::SourceFileTemplatePrivate)
+    : d_ptr(new KDevelop::SourceFileTemplatePrivate)
 {
+    Q_D(SourceFileTemplate);
+
     d->archive = nullptr;
     setTemplateDescription(templateDescription);
 }
 
 SourceFileTemplate::SourceFileTemplate()
-    : d(new KDevelop::SourceFileTemplatePrivate)
+    : d_ptr(new KDevelop::SourceFileTemplatePrivate)
 {
+    Q_D(SourceFileTemplate);
+
     d->archive = nullptr;
 }
 
 SourceFileTemplate::SourceFileTemplate (const SourceFileTemplate& other)
-    : d(new KDevelop::SourceFileTemplatePrivate)
+    : d_ptr(new KDevelop::SourceFileTemplatePrivate)
 {
+    Q_D(SourceFileTemplate);
+
     d->archive = nullptr;
     *this = other;
 }
 
 SourceFileTemplate::~SourceFileTemplate()
 {
+    Q_D(SourceFileTemplate);
+
     delete d->archive;
 }
 
 SourceFileTemplate& SourceFileTemplate::operator=(const SourceFileTemplate& other)
 {
-    if (other.d == d) {
+    Q_D(SourceFileTemplate);
+
+    if (other.d_ptr == d_ptr) {
         return *this;
     }
 
     delete d->archive;
-    if (other.d->archive) {
-        if (other.d->archive->fileName().endsWith(QLatin1String(".zip"))) {
-            d->archive = new KZip(other.d->archive->fileName());
+    if (other.d_ptr->archive) {
+        if (other.d_ptr->archive->fileName().endsWith(QLatin1String(".zip"))) {
+            d->archive = new KZip(other.d_ptr->archive->fileName());
         } else {
-            d->archive = new KTar(other.d->archive->fileName());
+            d->archive = new KTar(other.d_ptr->archive->fileName());
         }
         d->archive->open(QIODevice::ReadOnly);
     } else {
         d->archive = nullptr;
     }
-    d->descriptionFileName = other.d->descriptionFileName;
+    d->descriptionFileName = other.d_ptr->descriptionFileName;
     return *this;
 }
 
 void SourceFileTemplate::setTemplateDescription(const QString& templateDescription)
 {
+    Q_D(SourceFileTemplate);
+
     delete d->archive;
 
     d->descriptionFileName = templateDescription;
@@ -196,11 +208,15 @@ void SourceFileTemplate::setTemplateDescription(const QString& templateDescripti
 
 bool SourceFileTemplate::isValid() const
 {
+    Q_D(const SourceFileTemplate);
+
     return d->archive;
 }
 
 QString SourceFileTemplate::name() const
 {
+    Q_D(const SourceFileTemplate);
+
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
     return cg.readEntry("Name");
@@ -208,6 +224,8 @@ QString SourceFileTemplate::name() const
 
 QString SourceFileTemplate::type() const
 {
+    Q_D(const SourceFileTemplate);
+
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
     return cg.readEntry("Type", QString());
@@ -215,6 +233,8 @@ QString SourceFileTemplate::type() const
 
 QString SourceFileTemplate::languageName() const
 {
+    Q_D(const SourceFileTemplate);
+
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
     return cg.readEntry("Language", QString());
@@ -222,6 +242,8 @@ QString SourceFileTemplate::languageName() const
 
 QStringList SourceFileTemplate::category() const
 {
+    Q_D(const SourceFileTemplate);
+
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
     return cg.readEntry("Category", QStringList());
@@ -229,6 +251,8 @@ QStringList SourceFileTemplate::category() const
 
 QStringList SourceFileTemplate::defaultBaseClasses() const
 {
+    Q_D(const SourceFileTemplate);
+
     KConfig templateConfig(d->descriptionFileName);
     KConfigGroup cg(&templateConfig, "General");
     return cg.readEntry("BaseClasses", QStringList());
@@ -236,12 +260,16 @@ QStringList SourceFileTemplate::defaultBaseClasses() const
 
 const KArchiveDirectory* SourceFileTemplate::directory() const
 {
+    Q_D(const SourceFileTemplate);
+
     Q_ASSERT(isValid());
     return d->archive->directory();
 }
 
 QVector<SourceFileTemplate::OutputFile> SourceFileTemplate::outputFiles() const
 {
+    Q_D(const SourceFileTemplate);
+
     QVector<SourceFileTemplate::OutputFile> outputFiles;
 
     KConfig templateConfig(d->descriptionFileName);
@@ -266,6 +294,8 @@ QVector<SourceFileTemplate::OutputFile> SourceFileTemplate::outputFiles() const
 
 bool SourceFileTemplate::hasCustomOptions() const
 {
+    Q_D(const SourceFileTemplate);
+
     Q_ASSERT(isValid());
 
     KConfig templateConfig(d->descriptionFileName);
@@ -278,6 +308,8 @@ bool SourceFileTemplate::hasCustomOptions() const
 
 QVector<SourceFileTemplate::ConfigOptionGroup> SourceFileTemplate::customOptions(TemplateRenderer* renderer) const
 {
+    Q_D(const SourceFileTemplate);
+
     Q_ASSERT(isValid());
 
     KConfig templateConfig(d->descriptionFileName);
@@ -332,6 +364,8 @@ QVector<SourceFileTemplate::ConfigOptionGroup> SourceFileTemplate::customOptions
 
 void SourceFileTemplate::addAdditionalSearchLocation(const QString& location)
 {
+    Q_D(SourceFileTemplate);
+
     if (!d->searchLocations.contains(location))
         d->searchLocations.append(location);
 }

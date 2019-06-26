@@ -83,9 +83,11 @@ public:
 }
 
 TemplateRenderer::TemplateRenderer()
-    : d(new TemplateRendererPrivate)
+    : d_ptr(new TemplateRendererPrivate)
 {
-    d->engine = &TemplateEngine::self()->d->engine;
+    Q_D(TemplateRenderer);
+
+    d->engine = &TemplateEngine::self()->d_ptr->engine;
     d->emptyLinesPolicy = KeepEmptyLines;
 }
 
@@ -93,6 +95,8 @@ TemplateRenderer::~TemplateRenderer() = default;
 
 void TemplateRenderer::addVariables(const QVariantHash& variables)
 {
+    Q_D(TemplateRenderer);
+
     QVariantHash::const_iterator it = variables.constBegin();
     QVariantHash::const_iterator end = variables.constEnd();
     for (; it != end; ++it) {
@@ -102,16 +106,22 @@ void TemplateRenderer::addVariables(const QVariantHash& variables)
 
 void TemplateRenderer::addVariable(const QString& name, const QVariant& value)
 {
+    Q_D(TemplateRenderer);
+
     d->context.insert(name, value);
 }
 
 QVariantHash TemplateRenderer::variables() const
 {
+    Q_D(const TemplateRenderer);
+
     return d->context.stackHash(0);
 }
 
-QString TemplateRenderer::render(const QString& content, const QString& name) const
+QString TemplateRenderer::render(const QString& content, const QString& name)
 {
+    Q_D(TemplateRenderer);
+
     Template t = d->engine->newTemplate(content, name);
 
     QString output;
@@ -199,7 +209,7 @@ QString TemplateRenderer::render(const QString& content, const QString& name) co
     return output;
 }
 
-QString TemplateRenderer::renderFile(const QUrl& url, const QString& name) const
+QString TemplateRenderer::renderFile(const QUrl& url, const QString& name)
 {
     QFile file(url.toLocalFile());
     file.open(QIODevice::ReadOnly);
@@ -210,8 +220,10 @@ QString TemplateRenderer::renderFile(const QUrl& url, const QString& name) const
     return render(content, name);
 }
 
-QStringList TemplateRenderer::render(const QStringList& contents) const
+QStringList TemplateRenderer::render(const QStringList& contents)
 {
+    Q_D(TemplateRenderer);
+
     qCDebug(LANGUAGE) << d->context.stackHash(0);
     QStringList ret;
     ret.reserve(contents.size());
@@ -224,11 +236,15 @@ QStringList TemplateRenderer::render(const QStringList& contents) const
 
 void TemplateRenderer::setEmptyLinesPolicy(TemplateRenderer::EmptyLinesPolicy policy)
 {
+    Q_D(TemplateRenderer);
+
     d->emptyLinesPolicy = policy;
 }
 
 TemplateRenderer::EmptyLinesPolicy TemplateRenderer::emptyLinesPolicy() const
 {
+    Q_D(const TemplateRenderer);
+
     return d->emptyLinesPolicy;
 }
 
@@ -280,5 +296,7 @@ DocumentChangeSet TemplateRenderer::renderFileTemplate(const SourceFileTemplate&
 
 QString TemplateRenderer::errorString() const
 {
+    Q_D(const TemplateRenderer);
+
     return d->errorString;
 }

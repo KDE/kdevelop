@@ -25,6 +25,7 @@
 class KArchiveDirectory;
 namespace KDevelop {
 class ArchiveTemplateLocation;
+class ArchiveTemplateLoaderPrivate;
 
 class ArchiveTemplateLoader
     : public Grantlee::AbstractTemplateLoader
@@ -46,7 +47,8 @@ private:
     Q_DISABLE_COPY(ArchiveTemplateLoader)
     ArchiveTemplateLoader();
 
-    const QScopedPointer<class ArchiveTemplateLoaderPrivate> d;
+    const QScopedPointer<class ArchiveTemplateLoaderPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(ArchiveTemplateLoader)
 };
 
 /**

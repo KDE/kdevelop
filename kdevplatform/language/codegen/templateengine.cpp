@@ -41,8 +41,10 @@ TemplateEngine* TemplateEngine::self()
 }
 
 TemplateEngine::TemplateEngine()
-    : d(new TemplateEnginePrivate)
+    : d_ptr(new TemplateEnginePrivate)
 {
+    Q_D(TemplateEngine);
+
     d->engine.setSmartTrimEnabled(true);
 
     qCDebug(LANGUAGE) << "Generic data locations:" << QStandardPaths::standardLocations(
@@ -76,6 +78,8 @@ TemplateEngine::~TemplateEngine()
 
 void TemplateEngine::addTemplateDirectories(const QStringList& directories)
 {
+    Q_D(TemplateEngine);
+
     FileSystemTemplateLoader* loader = new FileSystemTemplateLoader;
     loader->setTemplateDirs(directories);
     d->engine.addTemplateLoader(QSharedPointer<AbstractTemplateLoader>(loader));

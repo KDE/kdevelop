@@ -31,6 +31,7 @@ namespace KDevelop {
 class SourceFileTemplate;
 
 class DocumentChangeSet;
+class TemplateRendererPrivate;
 
 /**
  * @brief Convenience class for rendering multiple templates with the same context
@@ -121,7 +122,7 @@ public:
      * @param name (optional) the name of this template
      * @return the rendered template
      **/
-    QString render(const QString& content, const QString& name = QString()) const;
+    QString render(const QString& content, const QString& name = QString());
 
     /**
      * @brief Renders a single template from a file
@@ -133,7 +134,7 @@ public:
      * @param name (optional) the name of this template
      * @return the rendered template
      **/
-    QString renderFile(const QUrl& url, const QString& name = QString()) const;
+    QString renderFile(const QUrl& url, const QString& name = QString());
 
     /**
      * @brief Renders a list of templates
@@ -144,7 +145,7 @@ public:
      * @param contents the template contents
      * @return the rendered templates
      **/
-    QStringList render(const QStringList& contents) const;
+    QStringList render(const QStringList& contents);
 
     /**
      * @brief Sets the policy for empty lines in the rendered output
@@ -196,7 +197,8 @@ public:
     QString errorString() const;
 
 private:
-    const QScopedPointer<class TemplateRendererPrivate> d;
+    const QScopedPointer<class TemplateRendererPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TemplateRenderer)
 };
 }
 

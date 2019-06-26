@@ -130,8 +130,10 @@ static QString printRange(const KTextEditor::Range& r)
 }
 
 DocumentChangeSet::DocumentChangeSet()
-    : d(new DocumentChangeSetPrivate)
+    : d_ptr(new DocumentChangeSetPrivate)
 {
+    Q_D(DocumentChangeSet);
+
     d->replacePolicy = StopOnFailedChange;
     d->formatPolicy = AutoFormatChanges;
     d->updatePolicy = SimpleUpdate;
@@ -139,13 +141,13 @@ DocumentChangeSet::DocumentChangeSet()
 }
 
 DocumentChangeSet::DocumentChangeSet(const DocumentChangeSet& rhs)
-    : d(new DocumentChangeSetPrivate(*rhs.d))
+    : d_ptr(new DocumentChangeSetPrivate(*rhs.d_ptr))
 {
 }
 
 DocumentChangeSet& DocumentChangeSet::operator=(const DocumentChangeSet& rhs)
 {
-    *d = *rhs.d;
+    *d_ptr = *rhs.d_ptr;
     return *this;
 }
 
@@ -153,17 +155,23 @@ DocumentChangeSet::~DocumentChangeSet() = default;
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChange& change)
 {
+    Q_D(DocumentChangeSet);
+
     return d->addChange(DocumentChangePointer(new DocumentChange(change)));
 }
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::addChange(const DocumentChangePointer& change)
 {
+    Q_D(DocumentChangeSet);
+
     return d->addChange(change);
 }
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::addDocumentRenameChange(const IndexedString& oldFile,
                                                                            const IndexedString& newname)
 {
+    Q_D(DocumentChangeSet);
+
     d->documentsRename.insert(oldFile, newname);
     return DocumentChangeSet::ChangeResult::successfulResult();
 }
@@ -176,26 +184,36 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::addChange(const Docume
 
 void DocumentChangeSet::setReplacementPolicy(DocumentChangeSet::ReplacementPolicy policy)
 {
+    Q_D(DocumentChangeSet);
+
     d->replacePolicy = policy;
 }
 
 void DocumentChangeSet::setFormatPolicy(DocumentChangeSet::FormatPolicy policy)
 {
+    Q_D(DocumentChangeSet);
+
     d->formatPolicy = policy;
 }
 
 void DocumentChangeSet::setUpdateHandling(DocumentChangeSet::DUChainUpdateHandling policy)
 {
+    Q_D(DocumentChangeSet);
+
     d->updatePolicy = policy;
 }
 
 void DocumentChangeSet::setActivationPolicy(DocumentChangeSet::ActivationPolicy policy)
 {
+    Q_D(DocumentChangeSet);
+
     d->activationPolicy = policy;
 }
 
 DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
 {
+    Q_D(DocumentChangeSet);
+
     QUrl oldActiveDoc;
     if (IDocument* activeDoc = ICore::self()->documentController()->activeDocument()) {
         oldActiveDoc = activeDoc->url();

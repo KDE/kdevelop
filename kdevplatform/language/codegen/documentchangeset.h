@@ -29,6 +29,8 @@
 #include <QUrl>
 
 namespace KDevelop {
+class DocumentChangeSetPrivate;
+
 class KDEVPLATFORMLANGUAGE_EXPORT DocumentChange
     : public QSharedData
 {
@@ -147,7 +149,8 @@ private:
     ChangeResult applyAllChanges();
 
 private:
-    const QScopedPointer<class DocumentChangeSetPrivate> d;
+    const QScopedPointer<class DocumentChangeSetPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(DocumentChangeSet)
 };
 }
 

@@ -33,6 +33,7 @@ class KArchiveDirectory;
 
 namespace KDevelop {
 class TemplateRenderer;
+class SourceFileTemplatePrivate;
 
 /**
  * Represents a source file template archive
@@ -326,7 +327,8 @@ public:
     void addAdditionalSearchLocation(const QString& location);
 
 private:
-    const QScopedPointer<class SourceFileTemplatePrivate> d;
+    const QScopedPointer<class SourceFileTemplatePrivate> d_ptr;
+    Q_DECLARE_PRIVATE(SourceFileTemplate)
 };
 }
 

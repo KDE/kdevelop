@@ -37,6 +37,7 @@ struct ClassDescription;
 class TemplateRenderer;
 class SourceFileTemplate;
 class DocumentChangeSet;
+class TemplateClassGeneratorPrivate;
 
 /**
  * Generates new classes from templates
@@ -116,7 +117,7 @@ public:
     /**
      * \param namespaces The list of nested namespaces in which this class is to be declared
      */
-    virtual void setNamespaces(const QStringList& namespaces) const;
+    virtual void setNamespaces(const QStringList& namespaces);
 
     /**
      * \return The list of nested namespace in which this class will be declared
@@ -171,7 +172,8 @@ public:
     TemplateRenderer* renderer() const;
 
 private:
-    const QScopedPointer<class TemplateClassGeneratorPrivate> d;
+    const QScopedPointer<class TemplateClassGeneratorPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TemplateClassGenerator)
 };
 }
 

@@ -72,7 +72,7 @@ public:
         Template,
         Preview
     };
-    QString resourceFilter(ResourceType type, const QString& suffix = QString())
+    QString resourceFilter(ResourceType type, const QString& suffix = QString()) const
     {
         QString filter = typePrefix;
         switch (type) {
@@ -100,7 +100,7 @@ TemplatesModelPrivate::TemplatesModelPrivate(const QString& _typePrefix)
 
 TemplatesModel::TemplatesModel(const QString& typePrefix, QObject* parent)
     : QStandardItemModel(parent)
-    , d(new TemplatesModelPrivate(typePrefix))
+    , d_ptr(new TemplatesModelPrivate(typePrefix))
 {
 }
 
@@ -108,6 +108,8 @@ TemplatesModel::~TemplatesModel() = default;
 
 void TemplatesModel::refresh()
 {
+    Q_D(TemplatesModel);
+
     clear();
     d->templateItems.clear();
     d->templateItems[QString()] = invisibleRootItem();
@@ -298,6 +300,8 @@ void TemplatesModelPrivate::extractTemplateDescriptions()
 
 QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
 {
+    Q_D(const TemplatesModel);
+
     QFileInfo info(fileName);
     QString description =
         QStandardPaths::locate(QStandardPaths::GenericDataLocation,
@@ -342,17 +346,23 @@ QModelIndexList TemplatesModel::templateIndexes(const QString& fileName) const
 
 QString TemplatesModel::typePrefix() const
 {
+    Q_D(const TemplatesModel);
+
     return d->typePrefix;
 }
 
 void TemplatesModel::addDataPath(const QString& path)
 {
+    Q_D(TemplatesModel);
+
     QString realpath = path + d->resourceFilter(TemplatesModelPrivate::Template);
     d->searchPaths.append(realpath);
 }
 
 QString TemplatesModel::loadTemplateFile(const QString& fileName)
 {
+    Q_D(TemplatesModel);
+
     QString saveLocation = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1Char('/') +
                            d->resourceFilter(TemplatesModelPrivate::Template);
 

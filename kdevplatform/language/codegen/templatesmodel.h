@@ -116,7 +116,8 @@ public:
     void addDataPath(const QString& path);
 
 private:
-    const QScopedPointer<class TemplatesModelPrivate> d;
+    const QScopedPointer<class TemplatesModelPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(TemplatesModel)
 };
 }
 
