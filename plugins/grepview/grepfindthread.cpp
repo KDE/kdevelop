@@ -82,8 +82,7 @@ static QList<QUrl> thread_findFiles(const QDir& dir, int depth, const QStringLis
         infos << QFileInfo(dir.path());
 
     QList<QUrl> dirFiles;
-    foreach(const QFileInfo &currFile, infos)
-    {
+    for (const QFileInfo& currFile : qAsConst(infos)) {
         QString currName = currFile.canonicalFilePath();
         if(!QDir::match(exclude, currName))
             dirFiles << QUrl::fromLocalFile(currName);
@@ -91,8 +90,8 @@ static QList<QUrl> thread_findFiles(const QDir& dir, int depth, const QStringLis
     if(depth != 0)
     {
         static const QDir::Filters dirFilter = QDir::NoDotAndDotDot|QDir::AllDirs|QDir::Readable|QDir::NoSymLinks;
-        foreach(const QFileInfo &currDir, dir.entryInfoList(QStringList(), dirFilter))
-        {
+        const auto dirs = dir.entryInfoList(QStringList(), dirFilter);
+        for (const QFileInfo& currDir : dirs) {
             if(abort)
                 break;
             QString canonical = currDir.canonicalFilePath();
@@ -142,8 +141,7 @@ void GrepFindFilesThread::run()
 
     qCDebug(PLUGIN_GREPVIEW) << "running with start dir" << m_startDirs;
 
-    foreach(const QUrl& directory, m_startDirs)
-    {
+    for (const QUrl& directory : qAsConst(m_startDirs)) {
         if(m_project)
             m_files += thread_getProjectFiles(directory, m_depth, include, exclude, m_tryAbort);
         else

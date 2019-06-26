@@ -160,14 +160,11 @@ QList<QUrl> getDirectoryChoice(const QString& text)
 ///Check if all directories are part of a project
 bool directoriesInProject(const QString& dir)
 {
-    foreach (const QUrl& url, getDirectoryChoice(dir)) {
+    const auto urls = getDirectoryChoice(dir);
+    return std::all_of(urls.begin(), urls.end(), [&](const QUrl& url) {
         IProject *proj = ICore::self()->projectController()->findProjectForUrl(url);
-        if (!proj || !proj->path().toUrl().isLocalFile()) {
-           return false;
-        }
-    }
-
-    return true;
+        return (proj && proj->path().toUrl().isLocalFile());
+    });
 }
 
 ///Max number of items in paths combo box.
@@ -314,8 +311,8 @@ QMenu* GrepDialog::createSyncButtonMenu()
     }
 
     QVector<QUrl> otherProjectUrls;
-    foreach(IProject* project, m_plugin->core()->projectController()->projects())
-    {
+    const auto projects = m_plugin->core()->projectController()->projects();
+    for (IProject* project : projects) {
         if (!hadUrls.contains(project->path())) {
             otherProjectUrls.append(project->path().toUrl());
         }
@@ -323,8 +320,7 @@ QMenu* GrepDialog::createSyncButtonMenu()
 
     // sort the remaining project URLs alphabetically
     std::sort(otherProjectUrls.begin(), otherProjectUrls.end());
-    foreach(const QUrl& url, otherProjectUrls)
-    {
+    for (const QUrl& url : qAsConst(otherProjectUrls)) {
         addUrlToMenu(ret, url);
     }
 
@@ -442,7 +438,8 @@ bool GrepDialog::checkProjectsOpened()
         KDevelop::ICore::self()->projectController()->projects().count())
         return false;
 
-    foreach (IProject* p, KDevelop::ICore::self()->projectController()->projects()) {
+    const auto projects = KDevelop::ICore::self()->projectController()->projects();
+    for (IProject* p : projects) {
         if (!p->isReady())
             return false;
     }
@@ -466,7 +463,8 @@ void GrepDialog::nextHistory(bool next)
 
 bool GrepDialog::isPartOfChoice(const QUrl& url) const
 {
-    foreach(const QUrl& choice, getDirectoryChoice(m_settings.searchPaths)) {
+    const auto choices = getDirectoryChoice(m_settings.searchPaths);
+    for (const QUrl& choice : choices) {
         if(choice.isParentOf(url) || choice == url)
             return true;
     }
@@ -484,8 +482,8 @@ void GrepDialog::startSearch()
 
     // search for unsaved documents
     QList<IDocument*> unsavedFiles;
-    foreach(IDocument* doc, ICore::self()->documentController()->openDocuments())
-    {
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (IDocument* doc : documents) {
         QUrl docUrl = doc->url();
         if (doc->state() != IDocument::Clean &&
             isPartOfChoice(docUrl) &&
