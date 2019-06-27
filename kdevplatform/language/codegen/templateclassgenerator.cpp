@@ -239,8 +239,6 @@ void TemplateClassGenerator::setName(const QString& newName)
 
 QString TemplateClassGenerator::identifier() const
 {
-    Q_D(const TemplateClassGenerator);
-
     return name();
 }
 

@@ -468,8 +468,6 @@ NavigationContextPointer AbstractNavigationContext::accept()
 
 NavigationContextPointer AbstractNavigationContext::accept(IndexedDeclaration decl)
 {
-    Q_D(AbstractNavigationContext);
-
     if (decl.data()) {
         NavigationAction action(DeclarationPointer(decl.data()), NavigationAction::NavigateDeclaration);
         return execute(action);

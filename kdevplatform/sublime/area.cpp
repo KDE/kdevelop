@@ -176,8 +176,6 @@ void Area::setActiveView(View* view)
 
 void Area::addView(View *view, AreaIndex *index, View *after)
 {
-    Q_D(Area);
-
     //View *after = 0;
     if (!after  &&  controller()->openAfterCurrent()) {
         after = activeView();

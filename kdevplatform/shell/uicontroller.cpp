@@ -222,8 +222,6 @@ UiController::UiController(Core *core)
     : Sublime::Controller(nullptr), IUiController()
     , d_ptr(new UiControllerPrivate(core, this))
 {
-    Q_D(UiController);
-
     setObjectName(QStringLiteral("UiController"));
 
     if (!defaultMainWindow() || (Core::self()->setupFlags() & Core::NoUi))

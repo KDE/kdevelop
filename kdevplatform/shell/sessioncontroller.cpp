@@ -686,8 +686,6 @@ QString SessionController::sessionDir()
 
 QString SessionController::sessionName()
 {
-    Q_D(SessionController);
-
     if(!activeSession())
         return QString();
     return activeSession()->description();

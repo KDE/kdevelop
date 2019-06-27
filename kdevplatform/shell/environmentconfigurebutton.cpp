@@ -82,8 +82,6 @@ EnvironmentConfigureButton::EnvironmentConfigureButton(QWidget* parent)
     : QPushButton(parent),
       d_ptr(new EnvironmentConfigureButtonPrivate(this))
 {
-    Q_D(EnvironmentConfigureButton);
-
     setText(QString());
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setIcon(QIcon::fromTheme(QStringLiteral("configure")));

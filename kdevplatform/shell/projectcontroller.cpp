@@ -1030,8 +1030,6 @@ void ProjectController::closeAllOpenedFiles(IProject* proj)
 // helper method for closeProject()
 void ProjectController::initializePluginCleanup(IProject* proj)
 {
-    Q_D(ProjectController);
-
     // Unloading (and thus deleting) these plugins is not a good idea just yet
     // as we're being called by the view part and it gets deleted when we unload the plugin(s)
     // TODO: find a better place to unload

@@ -555,8 +555,6 @@ DocumentController::DocumentController( QObject *parent )
         : IDocumentController( parent )
         , d_ptr(new DocumentControllerPrivate(this))
 {
-    Q_D(DocumentController);
-
     setObjectName(QStringLiteral("DocumentController"));
     QDBusConnection::sessionBus().registerObject( QStringLiteral("/org/kdevelop/DocumentController"),
         this, QDBusConnection::ExportScriptableSlots );

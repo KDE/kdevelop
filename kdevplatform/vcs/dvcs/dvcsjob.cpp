@@ -343,8 +343,6 @@ DVcsJob& DVcsJob::operator<<(const QUrl& url)
 
 DVcsJob& DVcsJob::operator<<(const QList< QUrl >& urls)
 {
-    Q_D(DVcsJob);
-
     for (const QUrl& url : urls) {
         operator<<(url);
     }
