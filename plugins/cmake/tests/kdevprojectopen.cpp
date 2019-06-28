@@ -45,7 +45,8 @@ KDevProjectOpen::KDevProjectOpen(QObject* parent)
 
 void KDevProjectOpen::cleanup()
 {
-    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* p : projects) {
         ICore::self()->projectController()->closeProject(p);
     }
     Q_ASSERT(ICore::self()->projectController()->projects().isEmpty());
@@ -90,7 +91,8 @@ int main(int argc, char** argv)
     }
 
     KDevProjectOpen opener;
-    foreach(const QString& arg, parser.positionalArguments()) {
+    const auto args = parser.positionalArguments();
+    for (const QString& arg : args) {
         opener.openProject(QUrl::fromUserInput(arg));
     }
     return app.exec();

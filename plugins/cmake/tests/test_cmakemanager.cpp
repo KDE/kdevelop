@@ -57,7 +57,8 @@ void TestCMakeManager::cleanupTestCase()
 
 void TestCMakeManager::cleanup()
 {
-    foreach(IProject* p, ICore::self()->projectController()->projects()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* p : projects) {
         ICore::self()->projectController()->closeProject(p);
     }
     QVERIFY(ICore::self()->projectController()->projects().isEmpty());

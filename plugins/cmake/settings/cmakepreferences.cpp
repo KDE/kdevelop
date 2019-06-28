@@ -197,7 +197,8 @@ void CMakePreferences::configureCacheView()
 
     if( m_currentModel ) {
         m_prefsUi->cacheList->setEnabled( true );
-        foreach(const QModelIndex & idx, m_currentModel->persistentIndices()) {
+        const auto persistentIndices = m_currentModel->persistentIndices();
+        for (const QModelIndex& idx : persistentIndices) {
             m_prefsUi->cacheList->openPersistentEditor(idx);
         }
     } else {

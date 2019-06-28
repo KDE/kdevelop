@@ -47,8 +47,8 @@ Declaration* findTestClassDeclaration(const CursorInRevision& c, DUContext* ctx,
      * or range.
      */
 
-    foreach(DUContext* subCtx, ctx->childContexts())
-    {
+    const auto subContexts = ctx->childContexts();
+    for (DUContext* subCtx : subContexts) {
         //This is a little hacky, but we need it in case of foreach macros and similar stuff
         if(subCtx->range().contains(c, behavior) || subCtx->range().isEmpty() || subCtx->range().start.line == c.line || subCtx->range().end.line == c.line)
         {
@@ -103,8 +103,8 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
     Declaration* testClass = nullptr;
 
     const auto mainId = Identifier(QStringLiteral("main"));
-    foreach (Declaration* declaration, topContext->findLocalDeclarations(mainId))
-    {
+    const auto mainDeclarations = topContext->findLocalDeclarations(mainId);
+    for (Declaration* declaration : mainDeclarations) {
         if (declaration->isDefinition())
         {
             qCDebug(CMAKE) << "Found a definition for a function 'main()' at" << declaration->range();
@@ -170,8 +170,8 @@ void CTestSuite::loadDeclarations(const IndexedString& document, const KDevelop:
         m_suiteDeclaration = IndexedDeclaration(testClass);
     }
 
-    foreach (Declaration* decl, testClass->internalContext()->localDeclarations(topContext))
-    {
+    const auto testClassDeclarations = testClass->internalContext()->localDeclarations(topContext);
+    for (Declaration* decl : testClassDeclarations) {
         qCDebug(CMAKE) << "Found declaration" << decl->toString() << decl->identifier().identifier().byteArray();
         if (auto* function = dynamic_cast<ClassFunctionDeclaration*>(decl))
         {

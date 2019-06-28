@@ -70,8 +70,8 @@ void CTestFindJob::findTestCases()
         return;
     }
 
-    foreach (const KDevelop::Path &file, m_pendingFiles)
-    {
+    const auto currentPendingFiles = m_pendingFiles;
+    for (const KDevelop::Path& file : currentPendingFiles) {
         KDevelop::DUChain::self()->updateContextForUrl(KDevelop::IndexedString(file.toUrl()), KDevelop::TopDUContext::AllDeclarationsAndContexts, this);
     }
 }

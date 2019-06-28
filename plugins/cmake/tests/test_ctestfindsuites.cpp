@@ -68,8 +68,8 @@ void TestCTestFindSuites::initTestCase()
 
 void TestCTestFindSuites::cleanup()
 {
-    foreach(IProject* p, ICore::self()->projectController()->projects())
-    {
+    const auto projects = ICore::self()->projectController()->projects() ;
+    for (IProject* p : projects) {
         if (p && p->buildSystemManager() && p->buildSystemManager()->builder())
         {
             p->buildSystemManager()->builder()->prune(p)->exec();
@@ -151,8 +151,8 @@ void TestCTestFindSuites::testQtTestCases()
         QCOMPARE(suite->cases(), cases);
         QVERIFY(suite->declaration().isValid());
 
-        foreach (const auto& caseName, suite->cases())
-        {
+        const auto caseNames = suite->cases();
+        for (const auto& caseName : caseNames) {
             QVERIFY(suite->caseDeclaration(caseName).isValid());
         }
     }

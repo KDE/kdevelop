@@ -75,7 +75,8 @@ CMakeFilesCompilationData importCommands(const Path& commandsFile)
     static const QString KEY_DIRECTORY = QStringLiteral("directory");
     static const QString KEY_FILE = QStringLiteral("file");
     auto rt = ICore::self()->runtimeController()->currentRuntime();
-    foreach(const QJsonValue& value, document.array()) {
+    const auto values = document.array();
+    for (const QJsonValue& value : values) {
         if (!value.isObject()) {
             qCWarning(CMAKE) << "JSON command file entry is not an object:" << value;
             continue;

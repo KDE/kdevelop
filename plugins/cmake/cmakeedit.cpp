@@ -125,8 +125,7 @@ bool followUses(KTextEditor::Document* doc, RangeInRevision r, const QString& na
             doc->insertText(r.castToSimpleRange().start(), ' '+name);
             ret=true;
         }
-        else foreach(Declaration* d, decls)
-        {
+        else for (Declaration* d : qAsConst(decls)) {
             r.start=d->range().end;
             
             for(int lineNum = r.start.line; lineNum <= r.end.line; lineNum++)

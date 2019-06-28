@@ -62,8 +62,8 @@ static KJob* createTestJob(const QString& launchModeId, const QStringList& argum
     Q_ASSERT(type && mode);
 
     ILauncher* launcher = nullptr;
-    foreach (ILauncher *l, type->launchers())
-    {
+    const auto launchers = type->launchers();
+    for (ILauncher* l : launchers) {
         //qCDebug(CMAKE) << "available launcher" << l << l->id() << l->supportedModes();
         if (l->supportedModes().contains(mode->id())) {
             launcher = l;

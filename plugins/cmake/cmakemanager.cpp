@@ -228,8 +228,8 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
 QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 {
     QList<KDevelop::ProjectTargetItem*> ret;
-    foreach(IProject* p, m_projects.keys())
-    {
+    for (auto it = m_projects.begin(), end = m_projects.end(); it != end; ++it) {
+        IProject* p = it.key();
         ret+=p->projectItem()->targetList();
     }
     return ret;
@@ -353,7 +353,7 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
         }
     }
 
-    foreach (const auto& target, dirTargets) {
+    for (const auto& target : qAsConst(dirTargets)) {
         switch(target.type) {
             case CMakeTarget::Executable:
                 new CMakeTargetItem(folder, target.name, target.artifacts.value(0));
@@ -367,7 +367,8 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
         }
     }
 
-    foreach (ProjectFolderItem* children, folder->folderList()) {
+    const auto folderItems = folder->folderList();
+    for (ProjectFolderItem* children : folderItems) {
         populateTargets(children, targets);
     }
 }
