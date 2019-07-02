@@ -66,7 +66,7 @@ QColor WidgetColorizer::colorForId(uint id, const QPalette& activePalette, bool 
     auto color = QColor(qAbs(id % (high - low)),
                         qAbs((id / 50) % (high - low)),
                         qAbs((id / (50 * 50)) % (high - low)));
-    const auto& foreground = activePalette.foreground().color();
+    const auto& foreground = activePalette.windowText().color();
     const auto& background = activePalette.background().color();
     if (forBackground) {
         return blendBackground(color, .5, foreground, background);

@@ -71,7 +71,7 @@ namespace {
 
 QColor defaultColor(const QPalette& palette)
 {
-    return palette.foreground().color();
+    return palette.windowText().color();
 }
 
 QColor colorForDocument(const QUrl& url, const QPalette& palette, const QColor& defaultColor)
