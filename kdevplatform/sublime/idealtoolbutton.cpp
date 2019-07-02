@@ -64,8 +64,11 @@ QSize IdealToolButton::sizeHint() const
 
     QFontMetrics fm = fontMetrics();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    const int charWidth = fm.horizontalAdvance(QLatin1Char('x'));
+#else
     const int charWidth = fm.width(QLatin1Char('x'));
-
+#endif
     QSize textSize;
     // Use text size only if we request text
     if (toolButtonStyle() != Qt::ToolButtonIconOnly || opt.icon.isNull()) {

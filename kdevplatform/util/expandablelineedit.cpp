@@ -48,7 +48,11 @@ QSize KExpandableLineEdit::sizeHint() const
 {
     auto idealSize = QLineEdit::sizeHint();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    int idealWidth = fontMetrics().horizontalAdvance(text());
+#else
     int idealWidth = fontMetrics().width(text());
+#endif
     if (isClearButtonEnabled()) {
         idealWidth += 2 * idealSize.height();
     }

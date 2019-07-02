@@ -173,18 +173,30 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
             for (int i = 0; i < item->rowCount(); ++i) {
                 bWidth += static_cast<GrepOutputItem*>(item->child(i))->change()->m_range.columnWidth();
             }
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+            int width = option.fontMetrics.horizontalAdvance(i18n("Line %1: ",item->lineNumber())) +
+                        metrics.horizontalAdvance(item->text().length() - bWidth) + bMetrics.horizontalAdvance(bWidth) +
+                        std::max(option.decorationSize.width(), 0);
+#else
             int width = option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
                         metrics.width(item->text().length() - bWidth) + bMetrics.width(bWidth) +
                         std::max(option.decorationSize.width(), 0);
-
+#endif
             ret.setWidth(width);
         } else {
             const KTextEditor::Range rng = item->change()->m_range;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+            int width = metrics.horizontalAdvance(item->text().left(rng.start().column())) +
+                        metrics.horizontalAdvance(item->text().mid(rng.end().column())) +
+                        bMetrics.horizontalAdvance(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
+                        std::max(option.decorationSize.width(), 0);
+#else
             int width = metrics.width(item->text().left(rng.start().column())) +
                         metrics.width(item->text().mid(rng.end().column())) +
                         bMetrics.width(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
                         std::max(option.decorationSize.width(), 0);
+#endif
             ret.setWidth(width);
         }
     }else{

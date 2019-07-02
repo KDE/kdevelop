@@ -282,11 +282,19 @@ void VcsAnnotationItemDelegate::paint(QPainter* painter, const KTextEditor::Styl
         if (date.isValid()) {
             ageText = ageOfDate(date.date());
             ageRect = QRect(QPoint(0, 0),
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+                            QSize(option.fontMetrics.horizontalAdvance(ageText), option.rect.height()));
+#else
                             QSize(option.fontMetrics.width(ageText), option.rect.height()));
+#endif
         }
         const auto messageText = annotationLine.commitMessage();
         auto messageRect = QRect(QPoint(0, 0),
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+                                 QSize(option.fontMetrics.horizontalAdvance(messageText), option.rect.height()));
+#else
                                  QSize(option.fontMetrics.width(messageText), option.rect.height()));
+#endif
 
         doMessageLineLayout(option, &messageRect, &ageRect);
 
@@ -296,7 +304,11 @@ void VcsAnnotationItemDelegate::paint(QPainter* painter, const KTextEditor::Styl
         if (!author.isEmpty()) {
             const auto authorText = i18nc("By: commit author", "By: %1", author);
             auto authorRect = QRect(QPoint(0, 0),
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+                                    QSize(option.fontMetrics.horizontalAdvance(authorText), option.rect.height()));
+#else
                                     QSize(option.fontMetrics.width(authorText), option.rect.height()));
+#endif
 
             doAuthorLineLayout(option, &authorRect);
 
