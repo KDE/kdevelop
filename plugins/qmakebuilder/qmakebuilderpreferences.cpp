@@ -53,7 +53,7 @@ QMakeBuilderPreferences::QMakeBuilderPreferences(KDevelop::IPlugin* plugin,
     connect(m_chooserUi, &QMakeBuildDirChooser::changed, this, &QMakeBuilderPreferences::changed);
     connect(m_chooserUi, &QMakeBuildDirChooser::changed, this, &QMakeBuilderPreferences::validate);
 
-    connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
+    connect(m_prefsUi->buildDirCombo, &QComboBox::currentTextChanged, this, &QMakeBuilderPreferences::loadOtherConfig);
     connect(m_prefsUi->buildDirCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &QMakeBuilderPreferences::changed);
     connect(m_prefsUi->addButton, &QAbstractButton::pressed, this, &QMakeBuilderPreferences::addBuildConfig);
@@ -76,7 +76,7 @@ void QMakeBuilderPreferences::reset()
     const QString buildPath = cg.readEntry(QMakeConfig::BUILD_FOLDER, QString());
 
     // update build list (this will trigger loadOtherConfig if signals are still connected)
-    disconnect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
+    disconnect(m_prefsUi->buildDirCombo, &QComboBox::currentTextChanged, this, &QMakeBuilderPreferences::loadOtherConfig);
     m_prefsUi->buildDirCombo->clear();
     m_prefsUi->buildDirCombo->insertItems(0, cg.groupList());
     if (m_prefsUi->buildDirCombo->contains(buildPath)) {
@@ -85,7 +85,7 @@ void QMakeBuilderPreferences::reset()
     }
     qCDebug(KDEV_QMAKEBUILDER) << "Loaded" << cg.groupList() << buildPath;
     m_prefsUi->removeButton->setEnabled(m_prefsUi->buildDirCombo->count() > 1);
-    connect(m_prefsUi->buildDirCombo, SIGNAL(currentIndexChanged(QString)), this, SLOT(loadOtherConfig(QString)));
+    connect(m_prefsUi->buildDirCombo, &QComboBox::currentTextChanged, this, &QMakeBuilderPreferences::loadOtherConfig);
 
     validate();
 }

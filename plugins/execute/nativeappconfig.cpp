@@ -112,7 +112,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     configureEnvironment->setSelectionWidget(environment);
 
     //connect signals to changed signal
-    connect( projectTarget, QOverload<const QString&>::of(&ProjectTargetsComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
+    connect( projectTarget, &QComboBox::currentTextChanged, this, &NativeAppConfigPage::changed );
     connect( projectTargetRadio, &QRadioButton::toggled, this, &NativeAppConfigPage::changed );
     connect( executableRadio, &QRadioButton::toggled, this, &NativeAppConfigPage::changed );
     connect( executablePath->lineEdit(), &KLineEdit::textEdited, this, &NativeAppConfigPage::changed );

@@ -68,7 +68,7 @@ CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     m_extraArgumentsHistory = new CMakeExtraArgumentsHistory(m_chooserUi->extraArguments);
 
     connect(m_chooserUi->buildFolder, &KUrlRequester::textChanged, this, &CMakeBuildDirChooser::updated);
-    connect(m_chooserUi->buildType, QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
+    connect(m_chooserUi->buildType, &QComboBox::currentTextChanged,
             this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->extraArguments, &KComboBox::editTextChanged, this, &CMakeBuildDirChooser::updated);
     connect(m_chooserUi->availableBuildDirs, QOverload<int>::of(&QComboBox::currentIndexChanged),
