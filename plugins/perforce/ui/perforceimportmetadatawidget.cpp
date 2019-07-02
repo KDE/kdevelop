@@ -116,7 +116,7 @@ void PerforceImportMetadataWidget::testP4setup()
     QDir execDir(m_ui->sourceLoc->url().toLocalFile());
     QTemporaryDir tmpDir;
     if (!execDir.exists())
-        execDir = tmpDir.path();
+        execDir.setPath(tmpDir.path());
 
     if(!validateP4port(execDir.path()))
         return;
