@@ -329,7 +329,7 @@ KTextEditor::Attribute::Ptr CodeHighlighting::attributeForDepth(int depth) const
 {
     while (depth >= m_depthAttributes.count()) {
         KTextEditor::Attribute::Ptr a(new KTextEditor::Attribute());
-        a->setBackground(QColor(Qt::white).dark(100 + (m_depthAttributes.count() * 25)));
+        a->setBackground(QColor(Qt::white).darker(100 + (m_depthAttributes.count() * 25)));
         a->setBackgroundFillWhitespace(true);
         if (depth % 2)
             a->setOutline(Qt::red);
