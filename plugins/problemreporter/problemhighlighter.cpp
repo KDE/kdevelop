@@ -134,7 +134,7 @@ void ProblemHighlighter::setProblems(const QVector<IProblem::Ptr>& problems)
 
     TopDUContext* top = DUChainUtils::standardContextForUrl(m_document->url());
 
-    auto* iface = dynamic_cast<KTextEditor::MovingInterface*>(m_document.data());
+    auto* iface = qobject_cast<KTextEditor::MovingInterface*>(m_document.data());
     Q_ASSERT(iface);
 
     for (const IProblem::Ptr& problem : problems) {

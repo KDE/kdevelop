@@ -495,7 +495,7 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
 {
     Q_UNUSED(doc);
     using namespace KTextEditor;
-    auto *iface = dynamic_cast<TextHintInterface*>(view);
+    auto* iface = qobject_cast<TextHintInterface*>(view);
     if( !iface )
         return;
 

@@ -1029,7 +1029,7 @@ void ContextBrowserPlugin::viewCreated(KTextEditor::Document*, View* v)
     connect(v->document(), &KTextEditor::Document::textInserted, this, &ContextBrowserPlugin::textInserted);
     disconnect(v, &View::selectionChanged, this, &ContextBrowserPlugin::selectionChanged);
 
-    auto* iface = dynamic_cast<KTextEditor::TextHintInterface*>(v);
+    auto* iface = qobject_cast<KTextEditor::TextHintInterface*>(v);
     if (!iface)
         return;
 

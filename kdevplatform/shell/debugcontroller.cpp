@@ -174,7 +174,7 @@ VariableCollection* DebugController::variableCollection()
 void DebugController::partAdded(KParts::Part* part)
 {
     if (auto* doc = qobject_cast<KTextEditor::Document*>(part)) {
-        auto *iface = dynamic_cast<KTextEditor::MarkInterface*>(doc);
+        auto* iface = qobject_cast<KTextEditor::MarkInterface*>(doc);
         if( !iface )
             return;
 
@@ -322,7 +322,7 @@ void DebugController::clearExecutionPoint()
     qCDebug(SHELL);
     const auto documents = KDevelop::ICore::self()->documentController()->openDocuments();
     for (KDevelop::IDocument* document : documents) {
-        auto *iface = dynamic_cast<KTextEditor::MarkInterface*>(document->textDocument());
+        auto* iface = qobject_cast<KTextEditor::MarkInterface*>(document->textDocument());
         if (!iface)
             continue;
 
@@ -352,7 +352,7 @@ void DebugController::showStepInSource(const QUrl &url, int lineNum)
     if( !document )
         return;
 
-    auto *iface = dynamic_cast<KTextEditor::MarkInterface*>(document->textDocument());
+    auto* iface = qobject_cast<KTextEditor::MarkInterface*>(document->textDocument());
     if( !iface )
         return;
 

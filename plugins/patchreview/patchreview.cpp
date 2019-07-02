@@ -365,7 +365,7 @@ void PatchReviewPlugin::closeReview()
             // Revert modifications to the text document which we've done in updateReview
             patchDocument->setPrettyName( QString() );
             patchDocument->textDocument()->setReadWrite( true );
-            auto* modif = dynamic_cast<KTextEditor::ModificationInterface*>( patchDocument->textDocument() );
+            auto* modif = qobject_cast<KTextEditor::ModificationInterface*>(patchDocument->textDocument());
             modif->setModifiedOnDiskWarning( true );
         }
 
@@ -460,7 +460,7 @@ void PatchReviewPlugin::updateReview()
 
     futureActiveDoc->textDocument()->setReadWrite( false );
     futureActiveDoc->setPrettyName( i18n( "Overview" ) );
-    auto* modif = dynamic_cast<KTextEditor::ModificationInterface*>( futureActiveDoc->textDocument() );
+    auto* modif = qobject_cast<KTextEditor::ModificationInterface*>(futureActiveDoc->textDocument());
     modif->setModifiedOnDiskWarning( false );
 
     docController->activateDocument( futureActiveDoc );

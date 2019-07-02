@@ -95,7 +95,7 @@ DocumentChangeTracker::DocumentChangeTracker(KTextEditor::Document* document)
     connect(document, &Document::destroyed, this, &DocumentChangeTracker::documentDestroyed);
     connect(document, &Document::documentSavedOrUploaded, this, &DocumentChangeTracker::documentSavedOrUploaded);
 
-    m_moving = dynamic_cast<KTextEditor::MovingInterface*>(document);
+    m_moving = qobject_cast<KTextEditor::MovingInterface*>(document);
     Q_ASSERT(m_moving);
 
     // can't use new connect syntax here, MovingInterface is not a QObject

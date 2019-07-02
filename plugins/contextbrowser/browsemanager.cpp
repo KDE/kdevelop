@@ -207,8 +207,8 @@ bool BrowseManager::eventFilter(QObject* watched, QEvent* event)
         }
 
         if (keyEvent->key() == magicModifier) {
-            if (dynamic_cast<KTextEditor::CodeCompletionInterface*>(view) &&
-                dynamic_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive()) {
+            if (qobject_cast<KTextEditor::CodeCompletionInterface*>(view) &&
+                qobject_cast<KTextEditor::CodeCompletionInterface*>(view)->isCompletionActive()) {
                 //Completion is active.
                 avoidMenuAltFocus();
                 m_delayedBrowsingTimer->stop();

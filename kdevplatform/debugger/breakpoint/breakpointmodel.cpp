@@ -114,7 +114,7 @@ void BreakpointModel::slotPartAdded(KParts::Part* part)
 {
     if (auto doc = qobject_cast<KTextEditor::Document*>(part))
     {
-        auto *iface = dynamic_cast<MarkInterface*>(doc);
+        auto *iface = qobject_cast<MarkInterface*>(doc);
         if( !iface )
             return;
 

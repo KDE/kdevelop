@@ -75,7 +75,7 @@ void CodeCompletion::viewCreated(KTextEditor::Document* document, KTextEditor::V
 {
     Q_UNUSED(document);
 
-    if (auto* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
+    if (auto* cc = qobject_cast<CodeCompletionInterface*>(view)) {
         cc->registerCompletionModel(m_model);
         qCDebug(LANGUAGE) << "Registered completion model";
         emit registeredToView(view);
@@ -102,7 +102,7 @@ void CodeCompletion::unregisterDocument(Document* textDocument)
 {
     const auto views = textDocument->views();
     for (KTextEditor::View* view : views) {
-        if (auto* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
+        if (auto* cc = qobject_cast<CodeCompletionInterface*>(view)) {
             cc->unregisterCompletionModel(m_model);
             emit unregisteredFromView(view);
         }

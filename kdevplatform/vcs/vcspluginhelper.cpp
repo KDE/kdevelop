@@ -242,7 +242,7 @@ void VcsPluginHelper::revert()
         IDocument* doc=ICore::self()->documentController()->documentForUrl(url);
 
         if(doc && doc->textDocument()) {
-            auto* modif = dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            auto* modif = qobject_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
             if (modif) {
                 modif->setModifiedOnDiskWarning(false);
             }
@@ -277,7 +277,7 @@ void VcsPluginHelper::delayedModificationWarningOn()
         if(doc) {
             doc->reload();
 
-            auto* modif=dynamic_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
+            auto* modif = qobject_cast<KTextEditor::ModificationInterface*>(doc->textDocument());
             modif->setModifiedOnDiskWarning(true);
         }
     }

@@ -306,7 +306,7 @@ void PatchHighlighter::performContentChange( KTextEditor::Document* doc, const Q
     }
     qDeleteAll(removed);
 
-    auto* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
+    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(doc);
     if ( !moving )
         return;
 
@@ -395,11 +395,11 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
     //The document was loaded / reloaded
     if ( !m_model->differences() )
         return;
-    auto* moving = dynamic_cast<KTextEditor::MovingInterface*>( doc );
+    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(doc);
     if ( !moving )
         return;
 
-    auto* markIface = dynamic_cast<KTextEditor::MarkInterface*>( doc );
+    auto* markIface = qobject_cast<KTextEditor::MarkInterface*>(doc);
     if( !markIface )
         return;
 
@@ -553,11 +553,11 @@ PatchHighlighter::PatchHighlighter( Diff2::DiffModel* model, IDocument* kdoc, Pa
 }
 
 void PatchHighlighter::removeLineMarker( KTextEditor::MovingRange* range ) {
-    auto* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
+    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(range->document());
     if ( !moving )
         return;
 
-    auto* markIface = dynamic_cast<KTextEditor::MarkInterface*>( range->document() );
+    auto* markIface = qobject_cast<KTextEditor::MarkInterface*>(range->document());
     if( !markIface )
         return;
 
@@ -577,11 +577,11 @@ void PatchHighlighter::removeLineMarker( KTextEditor::MovingRange* range ) {
 }
 
 void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Difference* diff ) {
-    auto* moving = dynamic_cast<KTextEditor::MovingInterface*>( range->document() );
+    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(range->document());
     if ( !moving )
         return;
 
-    auto* markIface = dynamic_cast<KTextEditor::MarkInterface*>( range->document() );
+    auto* markIface = qobject_cast<KTextEditor::MarkInterface*>(range->document());
     if( !markIface )
         return;
 
@@ -654,11 +654,11 @@ void PatchHighlighter::clear() {
     if( m_ranges.empty() )
         return;
 
-    auto* moving = dynamic_cast<KTextEditor::MovingInterface*>( m_doc->textDocument() );
+    auto* moving = qobject_cast<KTextEditor::MovingInterface*>(m_doc->textDocument());
     if ( !moving )
         return;
 
-    auto* markIface = dynamic_cast<KTextEditor::MarkInterface*>( m_doc->textDocument() );
+    auto* markIface = qobject_cast<KTextEditor::MarkInterface*>(m_doc->textDocument());
     if( !markIface )
         return;
 

@@ -70,7 +70,7 @@ void LanguagePreferences::apply()
         if (Document* textDoc = doc->textDocument()) {
             const auto views = textDoc->views();
             for (View* view : views) {
-                if (auto* cc = dynamic_cast<CodeCompletionInterface*>(view)) {
+                if (auto* cc = qobject_cast<CodeCompletionInterface*>(view)) {
                     cc->setAutomaticInvocationEnabled(preferencesDialog->kcfg_automaticInvocation->isChecked());
                 }
             }

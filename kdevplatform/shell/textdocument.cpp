@@ -356,7 +356,7 @@ QWidget *TextDocument::createViewWidget(QWidget *parent)
 
     connect(view, &KTextEditor::View::contextMenuAboutToShow, this, &TextDocument::populateContextMenu);
 
-    if (auto* cc = dynamic_cast<KTextEditor::CodeCompletionInterface*>(view))
+    if (auto* cc = qobject_cast<KTextEditor::CodeCompletionInterface*>(view))
         cc->setAutomaticInvocationEnabled(core()->languageController()->completionSettings()->automaticCompletionEnabled());
 
     return view;
