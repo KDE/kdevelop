@@ -135,7 +135,7 @@ static QStringList availableArches(const KDevelop::Path& url)
     const QString sdkName = doc[QLatin1String("sdk")].toString();
     const QString runtimeVersion = doc[QLatin1String("runtime-version")].toString();
     const QString match = sdkName + QLatin1String("/(.+)/") + runtimeVersion + QLatin1Char('$');
-    QObject::connect(&supportedArchesProcess, QOverload<int>::of(&QProcess::finished),
+    QObject::connect(&supportedArchesProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                      &supportedArchesProcess, [&supportedArchesProcess, &match, &ret]() {
         QTextStream stream(&supportedArchesProcess);
         QRegularExpression rx(match);

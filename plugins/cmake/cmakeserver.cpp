@@ -57,10 +57,10 @@ CMakeServer::CMakeServer(KDevelop::IProject* project)
             this, [this, path](QProcess::ProcessError error) {
         qCWarning(CMAKE) << "cmake server error:" << error << path << m_process.readAllStandardError() << m_process.readAllStandardOutput();
     });
-    connect(&m_process, QOverload<int>::of(&QProcess::finished), this, [](int code){
+    connect(&m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [](int code){
         qCDebug(CMAKE) << "cmake server finished with code" << code;
     });
-    connect(&m_process, QOverload<int>::of(&QProcess::finished), this, &CMakeServer::finished);
+    connect(&m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &CMakeServer::finished);
 
     connect(m_localSocket, &QIODevice::readyRead, this, &CMakeServer::processOutput);
     connect(m_localSocket, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error), this, [this, path](QLocalSocket::LocalSocketError socketError) {
