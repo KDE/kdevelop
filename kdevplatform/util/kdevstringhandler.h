@@ -29,10 +29,10 @@ class QStringList;
 class QVariant;
 
 namespace KDevelop {
-KDEVPLATFORMUTIL_EXPORT QStringList splitWithEscaping(const QString& input, const QChar& splitChar,
-                                                      const QChar& escapeChar);
-KDEVPLATFORMUTIL_EXPORT QString joinWithEscaping(const QStringList& input, const QChar& joinChar,
-                                                 const QChar& escapeChar);
+KDEVPLATFORMUTIL_EXPORT QStringList splitWithEscaping(const QString& input, QChar splitChar,
+                                                      QChar escapeChar);
+KDEVPLATFORMUTIL_EXPORT QString joinWithEscaping(const QStringList& input, QChar joinChar,
+                                                 QChar escapeChar);
 
 /**
 * convert the @p variant into a string which can then be stored

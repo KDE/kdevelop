@@ -54,7 +54,7 @@ bool isFunction(const Declaration* decl)
     return decl->abstractType().cast<FunctionType>();
 }
 
-bool isPathChar(const QChar& c)
+bool isPathChar(QChar c)
 {
     return c.isLetterOrNumber() || c == QLatin1Char('/') || c == QLatin1Char('.');
 }

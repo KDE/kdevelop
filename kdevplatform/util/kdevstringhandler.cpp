@@ -73,13 +73,13 @@
 #include <QTextDocument>
 
 namespace KDevelop {
-QString joinWithEscaping(const QStringList& input, const QChar& joinchar, const QChar& escapechar)
+QString joinWithEscaping(const QStringList& input, QChar joinchar, QChar escapechar)
 {
     QStringList tmp = input;
     return tmp.replaceInStrings(joinchar, QString(joinchar) + QString(escapechar)).join(joinchar);
 }
 
-QStringList splitWithEscaping(const QString& input, const QChar& splitchar, const QChar& escapechar)
+QStringList splitWithEscaping(const QString& input, QChar splitchar, QChar escapechar)
 {
     enum State { Normal, SeenEscape } state;
 
