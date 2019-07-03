@@ -125,6 +125,8 @@ public:
      */
     Path(const Path& base, const QString& subPath = QString());
 
+    ~Path() = default;
+
     inline Path& operator=(const Path& other) = default;
 
     /**

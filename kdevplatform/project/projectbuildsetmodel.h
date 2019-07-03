@@ -41,6 +41,8 @@ public:
     explicit BuildItem( const QStringList& itemPath );
     BuildItem( const BuildItem& rhs );
     explicit BuildItem( KDevelop::ProjectBaseItem* );
+    ~BuildItem() = default;
+
     void initializeFromItem( KDevelop::ProjectBaseItem* item );
     KDevelop::ProjectBaseItem* findItem() const;
     BuildItem& operator=( const BuildItem& );
