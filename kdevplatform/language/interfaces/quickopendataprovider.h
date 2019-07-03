@@ -212,4 +212,6 @@ public:
 bool KDEVPLATFORMLANGUAGE_EXPORT extractLineNumber(const QString& from, QString& path, uint& lineNumber);
 }
 
+Q_DECLARE_INTERFACE(KDevelop::QuickOpenEmbeddedWidgetInterface, "org.kdevelop.QuickOpenEmbeddedWidgetInterface")
+
 #endif

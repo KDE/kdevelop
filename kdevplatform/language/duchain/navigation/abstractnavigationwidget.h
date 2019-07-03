@@ -40,6 +40,7 @@ class KDEVPLATFORMLANGUAGE_EXPORT AbstractNavigationWidget
     , public QuickOpenEmbeddedWidgetInterface
 {
     Q_OBJECT
+    Q_INTERFACES(KDevelop::QuickOpenEmbeddedWidgetInterface)
 
 public:
     enum DisplayHint {

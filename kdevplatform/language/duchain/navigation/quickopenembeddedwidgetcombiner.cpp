@@ -27,7 +27,7 @@ using namespace KDevelop;
 
 QuickOpenEmbeddedWidgetInterface* toInterface(QObject *object)
 {
-    return dynamic_cast<QuickOpenEmbeddedWidgetInterface*>(object);
+    return qobject_cast<QuickOpenEmbeddedWidgetInterface*>(object);
 }
 
 class KDevelop::QuickOpenEmbeddedWidgetCombinerPrivate
