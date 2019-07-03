@@ -194,6 +194,9 @@ struct DisableMainWindowUpdatesFromArea
         }
     }
 
+private:
+    Q_DISABLE_COPY(DisableMainWindowUpdatesFromArea)
+
     Sublime::Area* m_area;
     QSet<Sublime::MainWindow*> wasUpdatesEnabled;
 };

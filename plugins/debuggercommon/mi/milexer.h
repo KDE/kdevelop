@@ -44,6 +44,9 @@ struct FileSymbol
     inline FileSymbol() {}
 
     inline ~FileSymbol();
+
+private:
+    Q_DISABLE_COPY(FileSymbol)
 };
 
 struct TokenStream

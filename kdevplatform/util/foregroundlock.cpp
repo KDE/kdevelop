@@ -240,4 +240,6 @@ static struct StaticLock
     {
         unlockForegroundMutexInternal(true);
     }
+private:
+    Q_DISABLE_COPY(StaticLock)
 } staticLock;

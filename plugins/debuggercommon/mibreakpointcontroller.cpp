@@ -177,6 +177,9 @@ struct MIBreakpointController::IgnoreChanges {
     }
 
     MIBreakpointController& controller;
+
+private:
+    Q_DISABLE_COPY(IgnoreChanges)
 };
 
 MIBreakpointController::MIBreakpointController(MIDebugSession * parent)

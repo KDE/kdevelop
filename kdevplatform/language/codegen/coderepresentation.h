@@ -72,6 +72,9 @@ struct EditorDisableReplaceTabs
         return QStringLiteral("replace-tabs");
     }
 
+private:
+    Q_DISABLE_COPY(EditorDisableReplaceTabs)
+
     KTextEditor::ConfigInterface* m_iface;
     int m_count;
     QVariant m_oldReplaceTabs;

@@ -59,6 +59,8 @@ public:
     const QMap<QString, Check*>& checks() const;
 
 private:
+    Q_DISABLE_COPY(ChecksDB)
+
     QString m_error;
 
     QMap<QString, Check*> m_checks;

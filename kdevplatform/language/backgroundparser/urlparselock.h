@@ -41,6 +41,8 @@ public:
     ~UrlParseLock();
 
 private:
+    Q_DISABLE_COPY(UrlParseLock)
+
     IndexedString m_url;
 };
 }

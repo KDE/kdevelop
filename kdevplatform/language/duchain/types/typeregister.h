@@ -205,6 +205,8 @@ struct TypeSystemRegistrator
     {
         TypeSystem::self().unregisterTypeClass<T, Data>();
     }
+private:
+    Q_DISABLE_COPY(TypeSystemRegistrator)
 };
 
 ///You must add this into your source-files for every AbstractType based class

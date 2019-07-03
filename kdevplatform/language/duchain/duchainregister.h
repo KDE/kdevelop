@@ -213,6 +213,8 @@ struct DUChainItemRegistrator
     {
         DUChainItemSystem::self().unregisterTypeClass<T, Data>();
     }
+private:
+    Q_DISABLE_COPY(DUChainItemRegistrator)
 };
 
 ///You must add this into your source-files for every DUChainBase based class

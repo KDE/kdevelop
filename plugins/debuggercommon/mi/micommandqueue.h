@@ -55,6 +55,9 @@ private:
     void removeStackListUpdates();
     void dumpQueue() const;
 
+private:
+    Q_DISABLE_COPY(CommandQueue)
+
     QList<MICommand*> m_commandList;
     int m_immediatelyCounter = 0;
     uint32_t m_tokenCounter = 0;

@@ -45,6 +45,7 @@ public:
 private:
     explicit CheckGroup(const QString& name, CheckGroup* superGroup = nullptr);
     CheckGroup() = default;
+    Q_DISABLE_COPY(CheckGroup)
 
 public:
     const QString& prefix() const;

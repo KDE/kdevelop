@@ -67,6 +67,8 @@ public:
     QString templateContents(const QString& name) const;
 
 private:
+    Q_DISABLE_COPY(ArchiveTemplateLocation)
+
     const KArchiveDirectory* m_directory;
 };
 }

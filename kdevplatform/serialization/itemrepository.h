@@ -992,6 +992,9 @@ private:
         *reinterpret_cast<unsigned short*>(m_data + index) = size;
     }
 
+private:
+    Q_DISABLE_COPY(Bucket)
+
     int m_monsterBucketExtent = 0; //If this is a monster-bucket, this contains the count of follower-buckets that belong to this one
     unsigned int m_available = 0;
     char* m_data = nullptr; //Structure of the data: <Position of next item with same hash modulo ItemRepositoryBucketSize>(2 byte), <Item>(item.size() byte)
@@ -1026,6 +1029,10 @@ struct Locker<true>
     {
         m_mutex->unlock();
     }
+
+private:
+    Q_DISABLE_COPY(Locker)
+
     QMutex* m_mutex;
 };
 

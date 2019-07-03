@@ -88,6 +88,8 @@ public:
     }
 
 private:
+    Q_DISABLE_COPY(ScopedDialog)
+
     QPointer<DialogType> ptr;
 };
 

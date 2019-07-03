@@ -245,6 +245,9 @@ namespace KDevMI { namespace MI {
 
         QString variable;
         Value *value = nullptr;
+
+    private:
+        Q_DISABLE_COPY(Result)
     };
 
     struct StringLiteralValue : public Value

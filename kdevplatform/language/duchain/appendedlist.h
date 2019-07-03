@@ -195,6 +195,9 @@ private:
         item->clear(); ///@todo make this a template specialization that only does this for containers
     }
 
+    Q_DISABLE_COPY(TemporaryDataManager)
+
+private:
     QVector<T*> m_items; /// note: non-shared, ref count of 1 when accessed with non-const methods => no detach
     Stack<int> m_freeIndicesWithData;
     Stack<int> m_freeIndices;

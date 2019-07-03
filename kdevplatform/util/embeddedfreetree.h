@@ -766,6 +766,9 @@ private:
         return true;
     }
 
+    Q_DISABLE_COPY(EmbeddedTreeAddItem)
+
+private:
     const Data& m_add;
     Data* m_items;
     uint m_itemCount;

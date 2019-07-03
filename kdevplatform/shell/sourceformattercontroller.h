@@ -71,10 +71,13 @@ struct SourceFormatter
         }
         return supported;
     }
+    SourceFormatter() = default;
     ~SourceFormatter()
     {
         qDeleteAll(styles);
     };
+private:
+    Q_DISABLE_COPY(SourceFormatter)
 };
 
 /** \short A singleton class managing all source formatter plugins

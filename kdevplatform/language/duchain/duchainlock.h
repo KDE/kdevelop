@@ -134,6 +134,8 @@ public:
     bool locked() const;
 
 private:
+    Q_DISABLE_COPY(DUChainReadLocker)
+
     ///This class does not use a d-pointer for performance reasons (allocation+deletion in every high frequency is expensive)
     DUChainLock* m_lock;
     bool m_locked;
@@ -165,6 +167,8 @@ public:
     bool locked() const;
 
 private:
+    Q_DISABLE_COPY(DUChainWriteLocker)
+
     ///This class does not use a d-pointer for performance reasons (allocation+deletion in every high frequency is expensive)
     DUChainLock* m_lock;
     bool m_locked;

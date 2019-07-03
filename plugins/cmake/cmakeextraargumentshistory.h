@@ -44,6 +44,8 @@ class KDEVCMAKECOMMON_EXPORT CMakeExtraArgumentsHistory
         QStringList list() const;
 
     private:
+        Q_DISABLE_COPY(CMakeExtraArgumentsHistory)
+
         KComboBox* m_arguments;
 };
 
