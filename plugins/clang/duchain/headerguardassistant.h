@@ -29,6 +29,8 @@
 class HeaderGuardAssistant
     : public KDevelop::IAssistant
 {
+    Q_OBJECT
+
 public:
     HeaderGuardAssistant(const CXTranslationUnit unit, const CXFile file);
     virtual ~HeaderGuardAssistant() override = default;

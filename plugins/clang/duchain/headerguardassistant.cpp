@@ -41,6 +41,8 @@ enum class GuardType
 class AddHeaderGuardAction
     : public KDevelop::IAssistantAction
 {
+    Q_OBJECT
+
 public:
     AddHeaderGuardAction(const GuardType type, const int startLine, const KDevelop::IndexedString& path)
         : m_type(type)
@@ -126,3 +128,5 @@ void HeaderGuardAssistant::createActions()
     addAction(KDevelop::IAssistantAction::Ptr{new AddHeaderGuardAction(GuardType::Pragma, m_line, m_path)});
     addAction(KDevelop::IAssistantAction::Ptr{new AddHeaderGuardAction(GuardType::Macro, m_line, m_path)});
 }
+
+#include "headerguardassistant.moc"

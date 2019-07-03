@@ -23,6 +23,8 @@
 
 class TestThread : public QThread
 {
+    Q_OBJECT
+
 public:
     void run() override {
         sleep(1);
@@ -42,3 +44,5 @@ int main(int /*argc*/, char** /*argv*/) {
     QThread::usleep(600000);
     return 0;
 }
+
+#include "debugeethreads.moc"

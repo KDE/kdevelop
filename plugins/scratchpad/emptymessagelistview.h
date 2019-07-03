@@ -26,6 +26,8 @@
 class EmptyMessageListView
     : public QListView
 {
+    Q_OBJECT
+
 public:
     EmptyMessageListView(QWidget* parent);
     void setEmptyMessage(const QString& message);

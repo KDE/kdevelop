@@ -36,6 +36,8 @@ class QuickOpenEmbeddedWidgetCombinerPrivate;
  */
 class KDEVPLATFORMLANGUAGE_EXPORT QuickOpenEmbeddedWidgetCombiner : public QWidget, public QuickOpenEmbeddedWidgetInterface
 {
+    Q_OBJECT
+
 public:
     explicit QuickOpenEmbeddedWidgetCombiner(QWidget* parent = nullptr);
     ~QuickOpenEmbeddedWidgetCombiner() override;

@@ -37,6 +37,8 @@ using namespace ClangTidy;
 
 class JobTester : public Job
 {
+    Q_OBJECT
+
 public:
     JobTester(Job::Parameters params)
         : Job(params)
@@ -101,3 +103,5 @@ void TestClangTidyJob::testJob()
 }
 
 QTEST_GUILESS_MAIN(TestClangTidyJob)
+
+#include "test_clangtidyjob.moc"

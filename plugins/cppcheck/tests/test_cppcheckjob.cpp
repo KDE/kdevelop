@@ -30,6 +30,8 @@ using namespace cppcheck;
 
 class JobTester : public Job
 {
+    Q_OBJECT
+
 public:
     explicit JobTester(const Parameters& params) : Job(params) {}
 
@@ -89,3 +91,5 @@ void TestCppcheckJob::testJob()
 }
 
 QTEST_GUILESS_MAIN(TestCppcheckJob)
+
+#include "test_cppcheckjob.moc"

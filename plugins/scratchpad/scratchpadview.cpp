@@ -44,6 +44,8 @@
 class FileRenameDelegate
     : public QStyledItemDelegate
 {
+    Q_OBJECT
+
 public:
     FileRenameDelegate(QObject* parent, Scratchpad* scratchpad)
         : QStyledItemDelegate(parent)
@@ -228,3 +230,6 @@ QModelIndex ScratchpadView::currentIndex() const
 {
     return scratchView->currentIndex();
 }
+
+#include "scratchpadview.moc"
+#include "moc_emptymessagelistview.cpp"

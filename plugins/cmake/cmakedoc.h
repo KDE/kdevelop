@@ -26,6 +26,8 @@ class CMakeDocumentation;
 
 class CMakeDoc : public KDevelop::IDocumentation
 {
+    Q_OBJECT
+
     public:
         CMakeDoc(const QString& name, const QString& desc) : mName(name), mDesc(desc) {}
         

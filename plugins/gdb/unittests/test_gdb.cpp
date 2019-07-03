@@ -136,6 +136,8 @@ private:
 
 class TestFrameStackModel : public GdbFrameStackModel
 {
+    Q_OBJECT
+
 public:
 
     explicit TestFrameStackModel(DebugSession* session)

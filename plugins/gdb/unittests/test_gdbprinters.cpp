@@ -30,6 +30,8 @@ const QString BINARY_PATH(DEBUGGEE_BIN_DIR);
 
 class GdbProcess : private QProcess
 {
+    Q_OBJECT
+
 public:
     explicit GdbProcess(const QString &program) : QProcess()
     {
@@ -470,3 +472,5 @@ void QtPrintersTest::testKDevelopTypes()
 }
 
 QTEST_MAIN(QtPrintersTest)
+
+#include "test_gdbprinters.moc"
