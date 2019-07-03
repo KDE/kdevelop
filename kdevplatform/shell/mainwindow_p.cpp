@@ -152,7 +152,7 @@ void MainWindowPrivate::changeActiveView(Sublime::View *view)
     if(!view)
         return;
 
-    auto *doc = dynamic_cast<KDevelop::IDocument*>(view->document());
+    auto* doc = qobject_cast<KDevelop::IDocument*>(view->document());
     if (doc)
     {
         doc->activate(view, m_mainWindow);

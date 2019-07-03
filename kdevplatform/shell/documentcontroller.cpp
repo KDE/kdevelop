@@ -108,7 +108,7 @@ public:
 
     void removeDocument(Sublime::Document *doc)
     {
-        const QList<QUrl> urlsForDoc = documents.keys(dynamic_cast<KDevelop::IDocument*>(doc));
+        const QList<QUrl> urlsForDoc = documents.keys(qobject_cast<KDevelop::IDocument*>(doc));
         for (const QUrl& url : urlsForDoc) {
             qCDebug(SHELL) << "destroying document" << doc;
             documents.remove(url);
@@ -741,7 +741,7 @@ void DocumentController::notifyDocumentClosed(Sublime::Document* doc_)
 {
     Q_D(DocumentController);
 
-    auto* doc = dynamic_cast<IDocument*>(doc_);
+    auto* doc = qobject_cast<IDocument*>(doc_);
     Q_ASSERT(doc);
 
     d->removeDocument(doc_);
@@ -949,7 +949,7 @@ void DocumentController::closeAllOtherDocuments()
 
         // Deal with saving unsaved solo views
         QList<IDocument*> soloViews = documentsExclusivelyInWindow(qobject_cast<KDevelop::MainWindow*>(mw));
-        soloViews.removeAll(dynamic_cast<IDocument*>(activeView->document()));
+        soloViews.removeAll(qobject_cast<IDocument*>(activeView->document()));
 
         if (!saveSomeDocuments(soloViews, IDocument::Default))
             // User cancelled or other error
@@ -969,7 +969,7 @@ IDocument* DocumentController::activeDocument() const
     UiController *uiController = Core::self()->uiControllerInternal();
     Sublime::MainWindow* mw = uiController->activeSublimeWindow();
     if( !mw || !mw->activeView() ) return nullptr;
-    return dynamic_cast<IDocument*>(mw->activeView()->document());
+    return qobject_cast<IDocument*>(mw->activeView()->document());
 }
 
 KTextEditor::View* DocumentController::activeTextDocumentView() const

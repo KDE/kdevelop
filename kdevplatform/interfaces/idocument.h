@@ -21,6 +21,7 @@
 #ifndef KDEVPLATFORM_IDOCUMENT_H
 #define KDEVPLATFORM_IDOCUMENT_H
 
+#include <QObject>
 #include <QUrl>
 #include <QScopedPointer>
 
@@ -217,6 +218,8 @@ private:
 };
 
 }
+
+Q_DECLARE_INTERFACE(KDevelop::IDocument, "org.kdevelop.IDocument")
 
 #endif
 

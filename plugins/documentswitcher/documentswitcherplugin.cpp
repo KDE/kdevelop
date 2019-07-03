@@ -173,7 +173,7 @@ void DocumentSwitcherPlugin::fillModel( Sublime::MainWindow* window )
             continue;
         }
         QString itemText = slDoc->title();// file name
-        IDocument const* const doc = dynamic_cast<IDocument*>(v->document());
+        IDocument const* const doc = qobject_cast<IDocument*>(v->document());
         IProject* project = nullptr;
         if( doc )
         {
