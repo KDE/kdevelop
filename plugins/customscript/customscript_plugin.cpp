@@ -51,7 +51,7 @@ static QPointer<CustomScriptPlugin> indentPluginSingleton;
 K_PLUGIN_FACTORY_WITH_JSON(CustomScriptFactory, "kdevcustomscript.json", registerPlugin<CustomScriptPlugin>(); )
 
 // Replaces ${KEY} in command with variables[KEY]
-static QString replaceVariables(QString command, QMap<QString, QString> variables)
+static QString replaceVariables(QString command, const QMap<QString, QString>& variables)
 {
     while (command.contains(QLatin1String("${"))) {
         int pos = command.indexOf(QLatin1String("${"));

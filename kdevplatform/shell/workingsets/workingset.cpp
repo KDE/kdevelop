@@ -198,7 +198,7 @@ struct DisableMainWindowUpdatesFromArea
     QSet<Sublime::MainWindow*> wasUpdatesEnabled;
 };
 
-void loadFileList(QStringList& ret, KConfigGroup group)
+void loadFileList(QStringList& ret, const KConfigGroup& group)
 {
     if (group.hasKey("Orientation")) {
         QStringList subgroups = group.groupList();
