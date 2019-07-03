@@ -75,7 +75,7 @@ void JobPlan::parseJobCreated(ParseJob* job)
         return;
     }
 
-    auto* testJob = dynamic_cast<TestParseJob*>(job);
+    auto* testJob = qobject_cast<TestParseJob*>(job);
     Q_ASSERT(testJob);
 
     qDebug() << "assigning propierties for created job" << testJob->document().toUrl();

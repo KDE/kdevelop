@@ -626,7 +626,7 @@ void CodeHighlighting::aboutToRemoveText(const KTextEditor::Range& range)
 
     VERIFY_FOREGROUND_LOCKED
     QMutexLocker lock(&m_dataMutex);
-    Q_ASSERT(dynamic_cast<KTextEditor::Document*>(sender()));
+    Q_ASSERT(qobject_cast<KTextEditor::Document*>(sender()));
     auto* doc = static_cast<KTextEditor::Document*>(sender());
 
     DocumentChangeTracker* tracker = ICore::self()->languageController()->backgroundParser()
