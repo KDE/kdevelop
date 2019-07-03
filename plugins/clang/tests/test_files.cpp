@@ -104,7 +104,8 @@ void TestFiles::testFiles()
     DeclarationValidator validator;
     top->visit(validator);
 
-    foreach(auto problem, top->problems()) {
+    const auto problems = top->problems();
+    for (auto& problem : problems) {
         qDebug() << problem;
     }
 

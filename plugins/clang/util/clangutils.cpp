@@ -61,7 +61,8 @@ CXCursor ClangUtils::getCXCursor(int line, int column, const CXTranslationUnit& 
 QVector<UnsavedFile> ClangUtils::unsavedFiles()
 {
     QVector<UnsavedFile> ret;
-    foreach(auto document, ICore::self()->documentController()->openDocuments()) {
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (auto* document : documents) {
         auto textDocument = document->textDocument();
         // TODO: Introduce a cache so we don't have to re-read all the open documents
         // which were not changed since the last run

@@ -62,7 +62,7 @@ private:
     Signature m_oldSignature;
     Signature m_newSignature;
     bool m_editingDefinition;
-    QList<KDevelop::RenameAction*> m_renameActions;
+    const QList<KDevelop::RenameAction*> m_renameActions;
 };
 
 #endif // ADAPTSIGNATUREACTION_H

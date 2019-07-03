@@ -195,7 +195,8 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
 
     m_unsavedFiles = ClangUtils::unsavedFiles();
 
-    foreach(auto document, ICore::self()->documentController()->openDocuments()) {
+    const auto documents = ICore::self()->documentController()->openDocuments();
+    for (auto* document : documents) {
         auto textDocument = document->textDocument();
         if ( !textDocument ) {
             continue;
@@ -346,7 +347,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
 #endif
     }
 
-    foreach(const auto& context, includedFiles) {
+    for (const auto& context : qAsConst(includedFiles)) {
         if (!context) {
             continue;
         }

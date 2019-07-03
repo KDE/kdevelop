@@ -328,8 +328,7 @@ void TestAssistants::testRenameAssistant()
 
     QFETCH(QString, oldDeclarationName);
     QFETCH(QList<StateChange>, stateChanges);
-    foreach(StateChange stateChange, stateChanges)
-    {
+    for (const StateChange& stateChange : qAsConst(stateChanges)) {
         testbed.changeDocument(Testbed::CppDoc, stateChange.range, stateChange.newText, true);
 
         DUChainReadLocker lock;
@@ -529,8 +528,7 @@ void TestAssistants::testSignatureAssistant()
     QExplicitlySharedDataPointer<IAssistant> assistant;
 
     QFETCH(QList<StateChange>, stateChanges);
-    foreach (StateChange stateChange, stateChanges)
-    {
+    for (const StateChange& stateChange : qAsConst(stateChanges)) {
         testbed.changeDocument(stateChange.document, stateChange.range, stateChange.newText, true);
 
         const auto document = testbed.document(stateChange.document);

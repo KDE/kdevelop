@@ -118,7 +118,8 @@ QPair<TopDUContextPointer, KTextEditor::Range> importedContextForPosition(const 
     }
 
     // It's an #include, find out which file was included at the given line
-    foreach(const DUContext::Import &imported, topContext->importedParentContexts()) {
+    const auto importedParentContexts = topContext->importedParentContexts();
+    for (const DUContext::Import& imported : importedParentContexts) {
         auto context = imported.context(nullptr);
         if (context) {
             if(topContext->transformFromLocalRevision(topContext->importPosition(context)).line() == wordRange.start().line()) {

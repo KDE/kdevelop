@@ -293,7 +293,7 @@ struct CurrentContext
     ~CurrentContext()
     {
         DUChainWriteLocker lock;
-        foreach (auto childContext, previousChildContexts) {
+        for (auto* childContext : qAsConst(previousChildContexts)) {
             if (!keepAliveContexts.contains(childContext)) {
                 delete childContext;
             }
@@ -1428,7 +1428,8 @@ Visitor::Visitor(CXTranslationUnit tu, CXFile file,
     QSet<DUContext*> keepAliveContexts;
     {
         DUChainReadLocker lock;
-        foreach (const auto& problem, top->problems()) {
+        const auto problems = top->problems();
+        for (const auto& problem : problems) {
             const auto& desc = problem->description();
             if (desc.startsWith(QLatin1String("Return type of out-of-line definition of '"))
                 && desc.endsWith(QLatin1String("' differs from that in the declaration"))) {

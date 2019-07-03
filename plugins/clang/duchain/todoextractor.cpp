@@ -95,7 +95,7 @@ private:
         // make sure this case is sufficiently fast
 
         // for each to-do marker, scan the comment text
-        foreach (const QString& todoMarker, m_todoMarkerWords) {
+        for (const QString& todoMarker : m_todoMarkerWords) {
             int offset = m_str.indexOf(todoMarker, m_offset);
             if (offset != -1) {
                 m_offset = offset;

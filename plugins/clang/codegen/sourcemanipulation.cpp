@@ -95,7 +95,7 @@ QString zeroIndentation(const QString& str, int fromLine = 0)
 
     QRegExp nonWhiteSpace(QStringLiteral("\\S"));
     int minLineStart = 10000;
-    foreach (const auto& line, lines) {
+    for (const auto& line : qAsConst(lines)) {
         int lineStart = line.indexOf(nonWhiteSpace);
         if (lineStart < minLineStart) {
             minLineStart = lineStart;
@@ -103,7 +103,7 @@ QString zeroIndentation(const QString& str, int fromLine = 0)
     }
 
     ret.reserve(ret.size() + lines.size());
-    foreach (const auto& line, lines) {
+    for (const auto& line : qAsConst(lines)) {
         ret << line.mid(minLineStart);
     }
 
@@ -130,7 +130,8 @@ void SourceCodeInsertion::setSubScope(const QualifiedIdentifier& scope)
     while (!needNamespace.isEmpty() && foundChild) {
         foundChild = false;
 
-        foreach (DUContext* child, m_context->childContexts()) {
+        const auto childContexts = m_context->childContexts();
+        for (DUContext* child : childContexts) {
             clangDebug() << "checking child" << child->localScopeIdentifier().toString() << "against"
                      << needNamespace.first();
             if (child->localScopeIdentifier().toString() == needNamespace.first() && child->type() == DUContext::Namespace) {
@@ -161,7 +162,8 @@ QString SourceCodeInsertion::applySubScope(const QString& decl) const
     }
 
     QString ret;
-    foreach (const QString& scope, m_scope.toStringList()) {
+    const auto scopes = m_scope.toStringList();
+    for (const QString& scope : scopes) {
         ret += scopeType + QLatin1Char(' ') + scope + QStringLiteral(" {\n");
     }
 
@@ -266,7 +268,8 @@ int SourceCodeInsertion::findInsertionPoint() const
 {
     int line = end().line();
 
-    foreach (auto decl, m_context->localDeclarations()) {
+    const auto localDeclarations = m_context->localDeclarations();
+    for (auto* decl : localDeclarations) {
         if (m_context->type() == DUContext::Class) {
             continue;
         }

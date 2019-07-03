@@ -427,8 +427,7 @@ QString makeSignatureString(const KDevelop::Declaration* functionDecl, const Sig
 
     QStringList parameters;
     parameters.reserve(signature.parameters.size());
-    foreach(const ParameterItem &item, signature.parameters)
-    {
+    for (const ParameterItem& item : signature.parameters) {
         QString parameter;
         AbstractType::Ptr type = item.first.abstractType();
 

@@ -69,7 +69,8 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor, CXClientData data)
     uint line, column;
     clang_getFileLocation(location, &parentFile, &line, &column, nullptr);
 
-    foreach (const auto& import, imports->values(parentFile)) {
+    const auto parentFileImports = imports->values(parentFile);
+    for (const auto& import : parentFileImports) {
         // clang_getInclusions doesn't include the same import twice, so we shouldn't do it too.
         if (import.file == file) {
             return CXChildVisit_Continue;
@@ -128,7 +129,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
     QList<Import> sortedImports = imports.values(file);
     std::sort(sortedImports.begin(), sortedImports.end(), importLocationLessThan);
 
-    foreach(const auto& import, sortedImports) {
+    for (const auto& import : qAsConst(sortedImports)) {
         buildDUChain(import.file, imports, session, features, includedFiles, index, abortFunction);
     }
 
@@ -180,7 +181,7 @@ ReferencedTopDUContext ClangHelpers::buildDUChain(CXFile file, const Imports& im
         }
         context->setFeatures(features);
 
-        foreach(const auto& import, sortedImports) {
+        for (const auto& import : qAsConst(sortedImports)) {
             auto ctx = includedFiles.value(import.file);
             if (!ctx) {
                 // happens for cyclic imports

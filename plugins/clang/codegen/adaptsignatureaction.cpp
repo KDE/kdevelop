@@ -123,7 +123,7 @@ void AdaptSignatureAction::execute()
     }
     emit executed(this);
 
-    foreach(RenameAction * renAct, m_renameActions) {
+    for (RenameAction* renAct : m_renameActions) {
         renAct->execute();
     }
 }
