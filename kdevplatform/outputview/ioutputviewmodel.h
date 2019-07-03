@@ -22,6 +22,9 @@
 #define KDEVPLATFORM_IOUTPUTVIEWMODEL_H
 
 #include "outputviewexport.h"
+
+#include <QObject>
+
 class QModelIndex;
 
 namespace KDevelop
@@ -80,6 +83,8 @@ public:
 };
 
 }
+
+Q_DECLARE_INTERFACE(KDevelop::IOutputViewModel, "org.kdevelop.IOutputViewModel")
 
 #endif
 

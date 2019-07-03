@@ -361,13 +361,13 @@ KDevelop::IOutputViewModel *OutputWidget::outputViewModel() const
         return nullptr;
 
     QAbstractItemModel *absmodel = view->model();
-    auto *iface = dynamic_cast<KDevelop::IOutputViewModel*>(absmodel);
+    auto* iface = qobject_cast<KDevelop::IOutputViewModel*>(absmodel);
     if ( ! iface )
     {
         // try if it's a proxy model?
         if ( auto* proxy = qobject_cast<QAbstractProxyModel*>(absmodel) )
         {
-            iface = dynamic_cast<KDevelop::IOutputViewModel*>(proxy->sourceModel());
+            iface = qobject_cast<KDevelop::IOutputViewModel*>(proxy->sourceModel());
         }
     }
     return iface;

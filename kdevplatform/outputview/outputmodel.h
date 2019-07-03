@@ -37,6 +37,8 @@ class OutputModelPrivate;
 class KDEVPLATFORMOUTPUTVIEW_EXPORT OutputModel : public QAbstractListModel, public KDevelop::IOutputViewModel
 {
     Q_OBJECT
+    Q_INTERFACES(KDevelop::IOutputViewModel)
+
 public:
 
     enum CustomRoles {
