@@ -92,6 +92,8 @@ class BaseFileDataProvider
     , public KDevelop::QuickOpenFileSetInterface
 {
     Q_OBJECT
+    Q_INTERFACES(KDevelop::QuickOpenFileSetInterface)
+
 public:
     BaseFileDataProvider();
     void setFilterText(const QString& text) override;

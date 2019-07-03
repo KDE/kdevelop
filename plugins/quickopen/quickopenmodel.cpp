@@ -118,7 +118,7 @@ void QuickOpenModel::enableProviders(const QStringList& _items, const QStringLis
     //We use 2 iterations here: In the first iteration, all providers that implement QuickOpenFileSetInterface are initialized, then the other ones.
     //The reason is that the second group can refer to the first one.
     for (ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it) {
-        if (!dynamic_cast<QuickOpenFileSetInterface*>((*it).provider)) {
+        if (!qobject_cast<QuickOpenFileSetInterface*>((*it).provider)) {
             continue;
         }
         qCDebug(PLUGIN_QUICKOPEN) << "comparing" << (*it).scopes << (*it).types;
@@ -136,7 +136,7 @@ void QuickOpenModel::enableProviders(const QStringList& _items, const QStringLis
     }
 
     for (ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it) {
-        if (dynamic_cast<QuickOpenFileSetInterface*>((*it).provider)) {
+        if (qobject_cast<QuickOpenFileSetInterface*>((*it).provider)) {
             continue;
         }
         qCDebug(PLUGIN_QUICKOPEN) << "comparing" << (*it).scopes << (*it).types;
@@ -204,7 +204,7 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
     }
 
     foreach (const ProviderEntry& provider, m_providers) {
-        if (!dynamic_cast<QuickOpenFileSetInterface*>(provider.provider)) {
+        if (!qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
             continue;
         }
 
@@ -215,7 +215,7 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
     }
 
     foreach (const ProviderEntry& provider, m_providers) {
-        if (dynamic_cast<QuickOpenFileSetInterface*>(provider.provider)) {
+        if (qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
             continue;
         }
 
@@ -440,7 +440,7 @@ QSet<IndexedString> QuickOpenModel::fileSet() const
     QSet<IndexedString> merged;
     for (const ProviderEntry& provider : m_providers) {
         if (m_enabledScopes.isEmpty() || !(m_enabledScopes & provider.scopes).isEmpty()) {
-            if (auto* iface = dynamic_cast<QuickOpenFileSetInterface*>(provider.provider)) {
+            if (auto* iface = qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
                 QSet<IndexedString> ifiles = iface->files();
                 //qCDebug(PLUGIN_QUICKOPEN) << "got file-list with" << ifiles.count() << "entries from data-provider" << typeid(*iface).name();
                 merged += ifiles;
