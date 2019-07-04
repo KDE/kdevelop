@@ -168,6 +168,8 @@ public:
     static DUChainItemSystem& self();
 
 private:
+    Q_DISABLE_COPY(DUChainItemSystem)
+    DUChainItemSystem() = default;
     ~DUChainItemSystem();
 
     QVector<DUChainBaseFactory*> m_factories;
