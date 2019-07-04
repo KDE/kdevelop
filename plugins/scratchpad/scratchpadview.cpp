@@ -114,19 +114,19 @@ ScratchpadView::ScratchpadView(QWidget* parent, Scratchpad* scratchpad)
 
     connect(scratchView, &QListView::activated, this, &ScratchpadView::scratchActivated);
 
-    connect(m_scratchpad, &Scratchpad::actionFailed, [this](const QString& message) {
+    connect(m_scratchpad, &Scratchpad::actionFailed, this, [this](const QString& message) {
         KMessageBox::sorry(this, message);
     });
 
     connect(commandWidget, &QLineEdit::returnPressed, this, &ScratchpadView::runSelectedScratch);
-    connect(commandWidget, &QLineEdit::returnPressed, [this] {
+    connect(commandWidget, &QLineEdit::returnPressed, this, [this] {
         m_scratchpad->setCommand(proxyModel()->mapToSource(currentIndex()), commandWidget->text());
     });
     commandWidget->setToolTip(i18n("Command to run this scratch. $f will expand to the scratch path"));
     commandWidget->setPlaceholderText(commandWidget->toolTip());
 
     // change active scratch when changing document
-    connect(KDevelop::ICore::self()->documentController(), &KDevelop::IDocumentController::documentActivated,
+    connect(KDevelop::ICore::self()->documentController(), &KDevelop::IDocumentController::documentActivated, this,
         [this](const KDevelop::IDocument* document) {
         if (document->url().isLocalFile()) {
             const auto* model = scratchView->model();
@@ -150,7 +150,7 @@ void ScratchpadView::setupActions()
     addAction(action);
 
     action = new QAction(QIcon::fromTheme(QStringLiteral("list-remove")), i18n("Remove Scratch"), this);
-    connect(action, &QAction::triggered, [this] {
+    connect(action, &QAction::triggered, this, [this] {
         m_scratchpad->removeScratch(proxyModel()->mapToSource(currentIndex()));
         validateItemActions();
     });
@@ -158,7 +158,7 @@ void ScratchpadView::setupActions()
     m_itemActions.push_back(action);
 
     action = new QAction(QIcon::fromTheme(QStringLiteral("edit-rename")), i18n("Rename Scratch"), this);
-    connect(action, &QAction::triggered, [this] {
+    connect(action, &QAction::triggered, this, [this] {
         scratchView->edit(scratchView->currentIndex());
     });
     addAction(action);
