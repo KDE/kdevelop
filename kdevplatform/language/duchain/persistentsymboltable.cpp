@@ -75,6 +75,8 @@ public:
         freeAppendedLists();
     }
 
+    PersistentSymbolTableItem& operator=(const PersistentSymbolTableItem& rhs) = delete;
+
     inline unsigned int hash() const
     {
         //We only compare the declaration. This allows us implementing a map, although the item-repository

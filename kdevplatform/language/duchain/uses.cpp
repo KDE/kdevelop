@@ -44,6 +44,8 @@ public:
         freeAppendedLists();
     }
 
+    UsesItem& operator=(const UsesItem& rhs) = delete;
+
     unsigned int hash() const
     {
         //We only compare the declaration. This allows us implementing a map, although the item-repository

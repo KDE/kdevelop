@@ -55,6 +55,8 @@ public:
         templateIdentifiersList.free(const_cast<IndexedTypeIdentifier*>(templateIdentifiers()));
     }
 
+    IdentifierPrivate& operator=(const IdentifierPrivate& rhs) = delete;
+
     //Flags the stored hash-value invalid
     void clearHash()
     {
@@ -210,6 +212,8 @@ public:
     {
         identifiersList.free(const_cast<IndexedIdentifier*>(identifiers()));
     }
+
+    QualifiedIdentifierPrivate& operator=(const QualifiedIdentifierPrivate& rhs) = delete;
 
     bool m_explicitlyGlobal : 1;
     bool m_isExpression : 1;

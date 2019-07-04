@@ -13,6 +13,9 @@ struct TestItem
         , m_dataSize(dataSize)
     {
     }
+
+    TestItem& operator=(const TestItem& rhs) = delete;
+
     //Every item has to implement this function, and return a valid hash.
     //Must be exactly the same hash value as ExampleItemRequest::hash() has returned while creating the item.
     unsigned int hash() const

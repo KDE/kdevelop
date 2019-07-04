@@ -44,6 +44,8 @@ struct FileModificationPair
     {
     }
 
+    FileModificationPair& operator=(const FileModificationPair& rhs) = delete;
+
     unsigned int hash() const
     {
         return ((file.hash() + revision.modificationTime) * 17 + revision.revision) * 73;

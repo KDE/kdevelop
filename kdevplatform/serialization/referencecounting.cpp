@@ -155,6 +155,8 @@ struct ReferenceCountItem
     {
     }
 
+    ReferenceCountItem& operator=(const ReferenceCountItem& rhs) = delete;
+
     //Every item has to implement this function, and return a valid hash.
     //Must be exactly the same hash value as ReferenceCountItemRequest::hash() has returned while creating the item.
     unsigned int hash() const

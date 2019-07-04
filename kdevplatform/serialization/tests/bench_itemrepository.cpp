@@ -34,6 +34,9 @@ using namespace KDevelop;
 struct TestData
 {
     uint length;
+
+    TestData& operator=(const TestData& rhs) = delete;
+
     uint itemSize() const
     {
         return sizeof(TestData) + length;

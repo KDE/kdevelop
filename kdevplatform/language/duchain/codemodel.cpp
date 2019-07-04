@@ -98,6 +98,8 @@ public:
         freeAppendedLists();
     }
 
+    CodeModelRepositoryItem& operator=(const CodeModelRepositoryItem& rhs) = delete;
+
     unsigned int hash() const
     {
         //We only compare the declaration. This allows us implementing a map, although the item-repository

@@ -30,6 +30,9 @@ using namespace KDevelop;
 struct StringData
 {
     unsigned short length;
+
+    StringData& operator=(const StringData& rhs) = delete;
+
     unsigned int itemSize() const
     {
         return sizeof(StringData) + length;

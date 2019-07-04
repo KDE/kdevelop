@@ -103,6 +103,8 @@ public:
     {
     }
 
+    EnvironmentInformationItem& operator=(const EnvironmentInformationItem& rhs) = delete;
+
     unsigned int hash() const
     {
         return m_topContext;

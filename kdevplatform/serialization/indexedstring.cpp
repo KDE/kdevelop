@@ -30,6 +30,8 @@ struct IndexedStringData
     unsigned short length;
     uint refCount;
 
+    IndexedStringData& operator=(const IndexedStringData& rhs) = delete;
+
     uint itemSize() const
     {
         return sizeof(IndexedStringData) + length;
