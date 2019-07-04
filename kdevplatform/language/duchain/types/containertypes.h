@@ -43,6 +43,8 @@ public:
         : KDevelop::StructureTypeData(rhs)
         , m_contentType() { }
 
+    ~ListTypeData() = default;
+
     ListTypeData& operator=(const ListTypeData& rhs) = delete;
 
     IndexedType m_contentType;
@@ -161,6 +163,8 @@ public:
     explicit MapTypeData(const ListTypeData& rhs)
         : ListTypeData(rhs)
         , m_keyType() { }
+
+    ~MapTypeData() = default;
 
     MapTypeData& operator=(const ListTypeData& rhs) = delete;
 

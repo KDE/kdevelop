@@ -35,6 +35,7 @@ public:
         : DeclarationData(rhs)
     {
     }
+    ~ForwardDeclarationData() = default;
     ForwardDeclarationData& operator=(const ForwardDeclarationData& rhs) = delete;
 };
 /**

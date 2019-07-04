@@ -35,6 +35,7 @@ public:
         , m_aliasedDeclaration(rhs.m_aliasedDeclaration)
     {
     }
+    ~AliasDeclarationData() = default;
     AliasDeclarationData& operator=(const AliasDeclarationData& rhs) = delete;
 
     IndexedDeclaration m_aliasedDeclaration;

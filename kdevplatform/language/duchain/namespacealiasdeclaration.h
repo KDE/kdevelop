@@ -33,6 +33,7 @@ public:
         , m_importIdentifier(rhs.m_importIdentifier)
     {
     }
+    ~NamespaceAliasDeclarationData() = default;
     NamespaceAliasDeclarationData& operator=(const NamespaceAliasDeclarationData& rhs) = delete;
     IndexedQualifiedIdentifier m_importIdentifier; //The identifier that was imported
 };

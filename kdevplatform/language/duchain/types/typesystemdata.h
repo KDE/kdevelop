@@ -111,6 +111,7 @@ public:
     /// Copy constructor. \param rhs data to copy
     IntegralTypeData(const IntegralTypeData& rhs);
     IntegralTypeData& operator=(const IntegralTypeData& rhs) = delete;
+    ~IntegralTypeData() = default;
     /// Data type
     uint m_dataType = IntegralType::TypeNone;
 };
@@ -124,6 +125,7 @@ public:
     PointerTypeData();
     /// Copy constructor. \param rhs data to copy
     PointerTypeData(const PointerTypeData& rhs);
+    ~PointerTypeData() = default;
     PointerTypeData& operator=(const PointerTypeData& rhs) = delete;
     /// Type of data at which the pointer points
     IndexedType m_baseType;
@@ -138,6 +140,7 @@ public:
     ReferenceTypeData();
     /// Copy constructor. \param rhs data to copy
     ReferenceTypeData(const ReferenceTypeData& rhs);
+    ~ReferenceTypeData() = default;
     ReferenceTypeData& operator=(const ReferenceTypeData& rhs) = delete;
     /// Type of data which is referenced
     IndexedType m_baseType;
@@ -190,6 +193,7 @@ public:
     StructureTypeData();
     /// Copy constructor. \param rhs data to copy
     StructureTypeData(const StructureTypeData& rhs);
+    ~StructureTypeData() = default;
     /// Whether the type is closed yet
     StructureTypeData& operator=(const StructureTypeData& rhs) = delete;
 };
@@ -203,6 +207,7 @@ public:
     ArrayTypeData();
     /// Copy constructor. \param rhs data to copy
     ArrayTypeData(const ArrayTypeData& rhs);
+    ~ArrayTypeData() = default;
     ArrayTypeData& operator=(const ArrayTypeData& rhs) = delete;
     /// Dimension of the array
     int m_dimension = 0;
@@ -219,6 +224,7 @@ public:
     DelayedTypeData();
     /// Copy constructor. \param rhs data to copy
     DelayedTypeData(const DelayedTypeData& rhs);
+    ~DelayedTypeData() = default;
     DelayedTypeData& operator=(const DelayedTypeData& rhs) = delete;
     /// Identifier of the delayed type
     IndexedTypeIdentifier m_identifier;
