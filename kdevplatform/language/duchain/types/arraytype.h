@@ -41,6 +41,8 @@ public:
     /// Destructor
     ~ArrayType() override;
 
+    ArrayType& operator=(const ArrayType& rhs) = delete;
+
     AbstractType* clone() const override;
 
     bool equals(const AbstractType* rhs) const override;

@@ -55,6 +55,8 @@ public:
     /// Destructor
     ~FunctionType() override;
 
+    FunctionType& operator=(const FunctionType& rhs) = delete;
+
     /**
      * Retrieve the return type of the function.
      *

@@ -50,6 +50,8 @@ public:
     /// Destructor
     ~StructureType() override;
 
+    StructureType& operator=(const StructureType& rhs) = delete;
+
     AbstractType* clone() const override;
 
     bool equals(const AbstractType* rhs) const override;

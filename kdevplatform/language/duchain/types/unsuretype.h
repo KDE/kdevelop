@@ -46,6 +46,8 @@ struct KDEVPLATFORMLANGUAGE_EXPORT UnsureTypeData
         copyListsFrom(rhs);
     }
 
+    UnsureTypeData& operator=(const UnsureTypeData& rhs) = delete;
+
     START_APPENDED_LISTS_BASE(UnsureTypeData, AbstractTypeData)
     APPENDED_LIST_FIRST(UnsureTypeData, IndexedType, m_types)
     END_APPENDED_LISTS(UnsureTypeData, m_types)
@@ -60,6 +62,8 @@ public:
     UnsureType(const UnsureType& rhs);
     UnsureType();
     explicit UnsureType(UnsureTypeData& data);
+
+    UnsureType& operator=(const UnsureType& rhs) = delete;
 
     KDevelop::AbstractType* clone() const override;
     QString toString() const override;

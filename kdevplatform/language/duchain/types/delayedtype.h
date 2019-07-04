@@ -56,6 +56,8 @@ public:
     /// Destructor
     ~DelayedType() override;
 
+    DelayedType& operator=(const DelayedType& rhs) = delete;
+
     /**
      * Access the type identifier which this type represents.
      *

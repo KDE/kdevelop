@@ -40,6 +40,9 @@ public:
     EnumerationType(const EnumerationType& rhs);
 
     explicit EnumerationType(EnumerationTypeData& data);
+
+    EnumerationType& operator=(const EnumerationType& rhs) = delete;
+
     using Ptr = TypePtr<EnumerationType>;
 
     uint hash() const override;

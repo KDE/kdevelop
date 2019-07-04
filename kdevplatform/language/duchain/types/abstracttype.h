@@ -125,6 +125,8 @@ public:
     /// Destructor.
     virtual ~AbstractType ();
 
+    AbstractType& operator=(const AbstractType& rhs) = delete;
+
     /**
      * Access the type modifiers
      *

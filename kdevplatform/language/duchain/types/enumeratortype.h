@@ -41,6 +41,8 @@ public:
 
     EnumeratorType();
 
+    EnumeratorType& operator=(const EnumeratorType& rhs) = delete;
+
     using Ptr = TypePtr<EnumeratorType>;
 
     bool equals(const KDevelop::AbstractType* rhs) const override;

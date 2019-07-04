@@ -47,6 +47,8 @@ public:
     /// Destructor
     ~PointerType() override;
 
+    PointerType& operator=(const PointerType& rhs) = delete;
+
     /**
      * Sets the base type of the pointer, ie. what type of data the pointer points to.
      *

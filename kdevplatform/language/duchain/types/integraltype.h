@@ -73,6 +73,8 @@ public:
     /// Destructor
     ~IntegralType() override;
 
+    IntegralType& operator=(const IntegralType& rhs) = delete;
+
     /**
      * Access the integral type
      *

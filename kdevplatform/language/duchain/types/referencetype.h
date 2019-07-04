@@ -47,6 +47,8 @@ public:
     /// Destructor
     ~ReferenceType() override;
 
+    ReferenceType& operator=(const ReferenceType& rhs) = delete;
+
     /**
      * Retrieve the referenced type, ie. what type of data this type references.
      *

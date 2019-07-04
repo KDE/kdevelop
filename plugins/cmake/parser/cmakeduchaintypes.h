@@ -30,6 +30,7 @@ struct KDEVCMAKECOMMON_EXPORT TargetTypeData : public KDevelop::AbstractTypeData
   ~TargetTypeData() {}
    
   TargetTypeData(const TargetTypeData& rhs) : AbstractTypeData(rhs) {}
+  TargetTypeData& operator=(const TargetTypeData& rhs) = delete;
 };
 
 class KDEVCMAKECOMMON_EXPORT TargetType : public KDevelop::AbstractType
@@ -38,6 +39,7 @@ class KDEVCMAKECOMMON_EXPORT TargetType : public KDevelop::AbstractType
         TargetType();
         TargetType(const TargetType& rhs);
         explicit TargetType(KDevelop::AbstractTypeData& dd);
+        TargetType& operator=(const TargetType& rhs) = delete;
 
         void accept0(KDevelop::TypeVisitor* v) const override;
         AbstractType* clone() const override;

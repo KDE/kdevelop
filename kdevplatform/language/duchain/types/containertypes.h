@@ -43,6 +43,8 @@ public:
         : KDevelop::StructureTypeData(rhs)
         , m_contentType() { }
 
+    ListTypeData& operator=(const ListTypeData& rhs) = delete;
+
     IndexedType m_contentType;
 };
 
@@ -85,6 +87,8 @@ public:
     ListType();
     ListType(const ListType& rhs);
     explicit ListType(StructureTypeData& data);
+
+    ListType& operator=(const ListType& rhs) = delete;
 
     /**
      * @brief Adds @p typeToAdd to the content type of this list.
@@ -158,6 +162,8 @@ public:
         : ListTypeData(rhs)
         , m_keyType() { }
 
+    MapTypeData& operator=(const ListTypeData& rhs) = delete;
+
     IndexedType m_keyType;
 };
 
@@ -176,6 +182,8 @@ public:
     MapType();
     MapType(const MapType& rhs);
     explicit MapType(ListTypeData& data);
+
+    MapType& operator=(const MapType& rhs) = delete;
 
     /**
      * @brief Add @p typeToAdd to this map's key type.

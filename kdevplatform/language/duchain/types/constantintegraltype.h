@@ -44,6 +44,8 @@ public:
 
     explicit ConstantIntegralType(uint type = TypeNone);
 
+    ConstantIntegralType& operator=(const ConstantIntegralType& rhs) = delete;
+
     using Ptr = TypePtr<ConstantIntegralType>;
 
     /**The types and modifiers are not changed!

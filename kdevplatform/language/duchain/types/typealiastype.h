@@ -47,6 +47,8 @@ public:
     {
     }
 
+    TypeAliasType& operator=(const TypeAliasType& rhs) = delete;
+
     KDevelop::AbstractType::Ptr type() const;
     void setType(const KDevelop::AbstractType::Ptr& type);
 
