@@ -152,6 +152,8 @@ public:
     {
     }
 
+    MergeIdentifiedType(const MergeIdentifiedType& rhs) = delete;
+
     IdentifiedTypeData* idData() override
     {
         return static_cast<Data*>(this->d_func_dynamic());
@@ -172,9 +174,6 @@ public:
 
         return IdentifiedType::equals(static_cast<const IdentifiedType*>(rhsId));
     }
-
-private:
-    MergeIdentifiedType(const MergeIdentifiedType& rhs);
 };
 }
 

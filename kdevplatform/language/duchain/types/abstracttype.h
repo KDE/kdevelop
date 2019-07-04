@@ -125,6 +125,7 @@ public:
     /// Destructor.
     virtual ~AbstractType ();
 
+    AbstractType(const AbstractType& rhs) = delete;
     AbstractType& operator=(const AbstractType& rhs) = delete;
 
     /**
@@ -291,9 +292,6 @@ protected:
     TYPE_DECLARE_DATA(AbstractType)
 
     friend class AbstractTypeDataRequest;
-
-private:
-    AbstractType(const AbstractType& rhs);
 };
 
 /**
