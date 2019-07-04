@@ -1,23 +1,31 @@
 <!DOCTYPE RCC><RCC version="1.0">
  <qresource>
      <!-- project dashboard plugins -->
+    <!-- used only by disabled areas
      <file>qml/plugins/Branches.qml</file>
      <file>qml/plugins/Projects.qml</file>
+    -->
 
     <!-- components  -->
     <file>qml/Develop.qml</file>
+    <!-- used only by disabled areas
     <file>qml/GettingStarted.qml</file>
+    -->
     <file>qml/Link.qml</file>
     <file>qml/StandardPage.qml</file>
     <file>qml/NewsFeed.qml</file>
     <file>qml/Heading.qml</file>
     <file>qml/StandardBackground.qml</file>
+    <!-- used only by disabled areas
     <file>qml/ProjectsDashboard.qml</file>
+    -->
 
     <!-- areas  -->
     <file>qml/area_code.qml</file>
+    <!-- non-code areas are broken ATM
     <file>qml/area_debug.qml</file>
     <file>qml/area_review.qml</file>
+    -->
 
     <file>qml/storage.js</file>
 
