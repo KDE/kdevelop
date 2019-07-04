@@ -159,7 +159,7 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
     }
 
     KDevVarLengthArray<SubstringCache, 5> cache;
-    foreach (const QString& searchPart, search) {
+    for (const QString& searchPart : qAsConst(search)) {
         cache.append(SubstringCache(searchPart));
     }
 
@@ -241,7 +241,8 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data(uint pos) const
         QList<Declaration*> decls = ctx->findDeclarations(filteredItem.m_id, CursorInRevision::invalid(), AbstractType::Ptr(), nullptr, DUContext::DirectQualifiedLookup);
 
         //Filter out forward-declarations or duplicate imported declarations
-        foreach (Declaration* decl, decls) {
+        const auto unfilteredDecls = decls;
+        for (Declaration* decl : unfilteredDecls) {
             bool filter = false;
             if (decls.size() > 1 && decl->isForwardDeclaration()) {
                 filter = true;
@@ -254,7 +255,7 @@ KDevelop::QuickOpenDataPointer ProjectItemDataProvider::data(uint pos) const
         }
 
         ret.reserve(ret.size() + decls.size());
-        foreach (Declaration* decl, decls) {
+        for (Declaration* decl : qAsConst(decls)) {
             DUChainItem item;
             item.m_item = decl;
             item.m_text = decl->qualifiedIdentifier().toString();
@@ -309,7 +310,7 @@ void ProjectItemDataProvider::reset()
     m_addedItemsCountCache.markDirty();
 
     KDevelop::DUChainReadLocker lock(DUChain::lock());
-    foreach (const IndexedString& u, m_files) {
+    for (const IndexedString& u : qAsConst(m_files)) {
         uint count;
         const KDevelop::CodeModelItem* items;
         CodeModel::self().items(u, count, items);

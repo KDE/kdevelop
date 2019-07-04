@@ -297,7 +297,7 @@ void QuickOpenWidget::updateProviders()
     QStringList checkedItems;
 
     if (ui.itemsButton->menu()) {
-        foreach (QObject* obj, ui.itemsButton->menu()->children()) {
+        for (QObject* obj : ui.itemsButton->menu()->children()) {
             auto* box = qobject_cast<QAction*>(obj);
             if (box) {
                 if (box->isChecked()) {
@@ -312,7 +312,7 @@ void QuickOpenWidget::updateProviders()
     QStringList checkedScopes;
 
     if (ui.scopesButton->menu()) {
-        foreach (QObject* obj, ui.scopesButton->menu()->children()) {
+        for (QObject* obj : ui.scopesButton->menu()->children()) {
             auto* box = qobject_cast<QAction*>(obj);
             if (box) {
                 if (box->isChecked()) {

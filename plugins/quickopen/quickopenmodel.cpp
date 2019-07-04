@@ -53,7 +53,7 @@ QStringList QuickOpenModel::allScopes() const
 {
     QStringList scopes;
     for (const ProviderEntry& provider : m_providers) {
-        foreach (const QString& scope, provider.scopes) {
+        for (const QString& scope : provider.scopes) {
             if (!scopes.contains(scope)) {
                 scopes << scope;
             }
@@ -162,7 +162,7 @@ void QuickOpenModel::textChanged(const QString& str)
     beginResetModel();
 
     m_filterText = str;
-    foreach (const ProviderEntry& provider, m_providers) {
+    for (const ProviderEntry& provider : qAsConst(m_providers)) {
         if (provider.enabled) {
             provider.provider->setFilterText(str);
         }
@@ -193,17 +193,15 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
         m_filterText.clear();
     }
 
-    bool anyEnabled = false;
-
-    foreach (const ProviderEntry& e, m_providers) {
-        anyEnabled |= e.enabled;
-    }
+    bool anyEnabled = std::any_of(m_providers.constBegin(), m_providers.constEnd(), [](const ProviderEntry& e) {
+        return e.enabled;
+    });
 
     if (!anyEnabled) {
         return;
     }
 
-    foreach (const ProviderEntry& provider, m_providers) {
+    for (const ProviderEntry& provider : qAsConst(m_providers)) {
         if (!qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
             continue;
         }
@@ -214,7 +212,7 @@ void QuickOpenModel::restart_internal(bool keepFilterText)
         }
     }
 
-    foreach (const ProviderEntry& provider, m_providers) {
+    for (const ProviderEntry& provider : qAsConst(m_providers)) {
         if (qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
             continue;
         }

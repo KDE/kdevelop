@@ -240,14 +240,16 @@ ProjectFileDataProvider::ProjectFileDataProvider()
             this, &ProjectFileDataProvider::projectClosing);
     connect(projectController, &IProjectController::projectOpened,
             this, &ProjectFileDataProvider::projectOpened);
-    foreach (const auto project, projectController->projects()) {
+    const auto projects = projectController->projects();
+    for (auto* project : projects) {
         projectOpened(project);
     }
 }
 
 void ProjectFileDataProvider::projectClosing(IProject* project)
 {
-    foreach (ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
+    const auto files = KDevelop::allFiles(project->projectItem());
+    for (ProjectFileItem* file : files) {
         fileRemovedFromSet(file);
     }
 }
@@ -256,7 +258,8 @@ void ProjectFileDataProvider::projectOpened(IProject* project)
 {
     const int processAfter = 1000;
     int processed = 0;
-    foreach (ProjectFileItem* file, KDevelop::allFiles(project->projectItem())) {
+    const auto files = KDevelop::allFiles(project->projectItem());
+    for (ProjectFileItem* file : files) {
         fileAddedToSet(file);
         if (++processed == processAfter) {
             // prevent UI-lockup when a huge project was imported
@@ -330,7 +333,8 @@ QSet<IndexedString> ProjectFileDataProvider::files() const
 {
     QSet<IndexedString> ret;
 
-    foreach (IProject* project, ICore::self()->projectController()->projects()) {
+    const auto projects = ICore::self()->projectController()->projects();
+    for (IProject* project : projects) {
         ret += project->fileSet();
     }
 
