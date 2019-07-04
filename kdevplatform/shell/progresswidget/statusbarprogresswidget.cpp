@@ -342,7 +342,7 @@ void StatusbarProgressWidget::slotClean()
     }
 }
 
-bool StatusbarProgressWidget::eventFilter( QObject *, QEvent *ev )
+bool StatusbarProgressWidget::eventFilter(QObject* object, QEvent* ev)
 {
     if ( ev->type() == QEvent::MouseButtonPress ) {
         auto *e = (QMouseEvent*)ev;
@@ -354,7 +354,7 @@ bool StatusbarProgressWidget::eventFilter( QObject *, QEvent *ev )
             return true;
         }
     }
-    return false;
+    return QFrame::eventFilter(object, ev);
 }
 
 void StatusbarProgressWidget::slotProgressDialogVisible( bool b )
