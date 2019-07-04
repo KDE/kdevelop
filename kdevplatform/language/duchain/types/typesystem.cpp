@@ -62,12 +62,6 @@ AbstractTypeData::~AbstractTypeData()
     freeAppendedLists();
 }
 
-AbstractTypeData& AbstractTypeData::operator=(const AbstractTypeData&)
-{
-    Q_ASSERT(0);
-    return *this;
-}
-
 IntegralTypeData::IntegralTypeData()
 
 {

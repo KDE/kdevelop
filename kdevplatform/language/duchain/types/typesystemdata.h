@@ -58,6 +58,8 @@ public:
     /// Destructor.
     ~AbstractTypeData();
 
+    AbstractTypeData& operator=(const AbstractTypeData&) = delete;
+
     /**
      * Internal setup for the data structure.
      *
@@ -97,9 +99,6 @@ public:
     void freeDynamicData()
     {
     }
-
-private:
-    AbstractTypeData& operator=(const AbstractTypeData&);
 };
 
 /// Private data structure for IntegralType
