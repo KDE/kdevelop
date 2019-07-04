@@ -197,6 +197,7 @@ GrepDialog::GrepDialog(GrepViewPlugin *plugin, QWidget *parent, bool show)
 
     patternCombo->addItems( cg.readEntry("LastSearchItems", QStringList()) );
     patternCombo->setInsertPolicy(QComboBox::InsertAtTop);
+    patternCombo->setCompleter(nullptr);
 
     templateTypeCombo->addItems(template_desc());
     templateTypeCombo->setCurrentIndex( cg.readEntry("LastUsedTemplateIndex", 0) );
