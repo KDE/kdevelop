@@ -61,6 +61,7 @@ public:
     {
         freeAppendedLists();
     }
+    ClassFunctionDeclarationData& operator=(const ClassFunctionDeclarationData& rhs) = delete;
     ClassFunctionFlags m_functionFlags;
     START_APPENDED_LISTS_BASE(ClassFunctionDeclarationData, ClassMemberDeclarationData);
     APPENDED_LIST_FIRST(ClassFunctionDeclarationData, IndexedString, m_defaultParameters);

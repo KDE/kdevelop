@@ -79,6 +79,8 @@ public:
         m_classModifier = rhs.m_classModifier;
     }
 
+    ClassDeclarationData& operator=(const ClassDeclarationData& rhs) = delete;
+
     /// Type of the class (struct, class, etc.)
     ClassType m_classType;
     /// Modifier of the class (final, abstract, etc.)

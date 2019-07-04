@@ -48,6 +48,8 @@ public:
         freeAppendedLists();
     }
 
+    MacroDefinitionData& operator=(const MacroDefinitionData& rhs) = delete;
+
     IndexedString definition;
     bool isFunctionLike : 1;
 

@@ -118,6 +118,8 @@ public:
                           ParsingEnvironmentFile* file = nullptr);
     explicit TopDUContext(TopDUContextData& data);
 
+    TopDUContext& operator=(const TopDUContext& rhs) = delete;
+
     TopDUContext* topContext() const override;
 
     ///Returns an indexed representation of this top-context. Indexed representations stay valid even if the top-context is unloaded.

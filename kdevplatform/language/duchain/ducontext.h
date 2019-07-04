@@ -97,6 +97,8 @@ public:
      */
     ~DUContext() override;
 
+    DUContext& operator=(const DUContext& rhs) = delete;
+
     enum ContextType : quint8 {
         Global /**< A context that declares functions, namespaces or classes */,
         Namespace /**< A context that declares namespace members */,

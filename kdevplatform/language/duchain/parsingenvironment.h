@@ -125,6 +125,8 @@ public:
     ParsingEnvironmentFile(ParsingEnvironmentFileData& data, const IndexedString& url);
     explicit ParsingEnvironmentFile(ParsingEnvironmentFileData& data);
 
+    ParsingEnvironmentFile& operator=(const ParsingEnvironmentFile& rhs) = delete;
+
     ///@see ParsingEnvironmentType
     virtual int type() const;
 

@@ -62,6 +62,8 @@ public:
         freeAppendedLists();
     }
 
+    TopDUContextData& operator=(const TopDUContextData& rhs) = delete;
+
     TopDUContext::Features m_features;
 
     IndexedString m_url;

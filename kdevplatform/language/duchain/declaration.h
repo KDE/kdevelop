@@ -87,6 +87,8 @@ public:
     /// Uses the given data
     explicit Declaration(DeclarationData& dd);
 
+    Declaration& operator=(const Declaration& rhs) = delete;
+
     TopDUContext* topContext() const override;
 
     /**

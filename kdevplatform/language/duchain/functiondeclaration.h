@@ -49,6 +49,7 @@ public:
     {
         freeAppendedLists();
     }
+    FunctionDeclarationData& operator=(const FunctionDeclarationData& rhs) = delete;
 
     START_APPENDED_LISTS_BASE(FunctionDeclarationData, DeclarationData);
     APPENDED_LIST_FIRST(FunctionDeclarationData, IndexedString, m_defaultParameters);
@@ -67,6 +68,8 @@ public:
     explicit FunctionDeclaration(FunctionDeclarationData& data);
     FunctionDeclaration(FunctionDeclarationData& data, const KDevelop::RangeInRevision&);
     ~FunctionDeclaration() override;
+
+    FunctionDeclaration& operator=(const FunctionDeclaration& rhs) = delete;
 
     void setAbstractType(AbstractType::Ptr type) override;
 

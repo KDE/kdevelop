@@ -104,6 +104,8 @@ public:
         freeAppendedLists();
     }
 
+    ProblemData& operator=(const ProblemData& rhs) = delete;
+
     IProblem::Source source = IProblem::Unknown;
     IProblem::Severity severity = IProblem::Error;
     IndexedString url;

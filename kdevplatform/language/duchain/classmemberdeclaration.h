@@ -38,6 +38,8 @@ public:
     explicit ClassMemberDeclaration(ClassMemberDeclarationData& dd);
     ~ClassMemberDeclaration() override;
 
+    ClassMemberDeclaration& operator=(const ClassMemberDeclaration& rhs) = delete;
+
     AccessPolicy accessPolicy() const;
     void setAccessPolicy(AccessPolicy accessPolicy);
 

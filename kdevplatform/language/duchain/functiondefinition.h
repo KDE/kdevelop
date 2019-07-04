@@ -40,6 +40,8 @@ public:
     explicit FunctionDefinition(FunctionDefinitionData& data);
     ~FunctionDefinition() override;
 
+    FunctionDefinition& operator=(const FunctionDefinition& rhs) = delete;
+
     /**
      * Find the declaration for this definition, if one exists.
      *

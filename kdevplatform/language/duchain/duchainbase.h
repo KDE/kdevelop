@@ -75,6 +75,8 @@ public:
         freeAppendedLists();
     }
 
+    DUChainBaseData& operator=(const DUChainBaseData& rhs) = delete;
+
     RangeInRevision m_range;
 
     APPENDED_LISTS_STUB(DUChainBaseData)
@@ -159,6 +161,8 @@ public:
     void makeDynamic();
 
     explicit DUChainBase(DUChainBaseData& dd);
+
+    DUChainBase& operator=(const DUChainBase& rhs) = delete;
 
     ///This must only be used to change the storage-location or storage-kind(dynamic/constant) of the data, but
     ///the data must always be equal!
