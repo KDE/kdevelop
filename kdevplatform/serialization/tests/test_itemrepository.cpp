@@ -68,7 +68,7 @@ struct TestItemRequest
 
     void createItem(TestItem* item) const
     {
-        memcpy(item, &m_item, m_item.itemSize());
+        memcpy(reinterpret_cast<void*>(item), &m_item, m_item.itemSize());
     }
 
     static void destroy(TestItem* /*item*/, AbstractItemRepository&)
