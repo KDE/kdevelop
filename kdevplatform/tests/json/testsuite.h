@@ -100,9 +100,9 @@ private:
     TestSuite() { }
     Q_DISABLE_COPY(TestSuite)
 
-    friend TestSuite<Declaration*>& declarationTestSuite();
-    friend TestSuite<DUContext*>& contextTestSuite();
-    friend TestSuite<AbstractType::Ptr>& typeTestSuite();
+    friend KDEVPLATFORMTESTS_EXPORT TestSuite<Declaration*>& declarationTestSuite();
+    friend KDEVPLATFORMTESTS_EXPORT TestSuite<DUContext*>& contextTestSuite();
+    friend KDEVPLATFORMTESTS_EXPORT TestSuite<AbstractType::Ptr>& typeTestSuite();
 };
 
 template<class T>
