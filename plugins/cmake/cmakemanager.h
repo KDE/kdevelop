@@ -162,6 +162,8 @@ private:
     KTextEditor::Range termRangeAtPosition(const KTextEditor::Document* textDocument,
                                            const KTextEditor::Cursor& position) const;
 
+    void showConfigureErrorMessage(const QString& errorMessage) const;
+
 private:
     QHash<KDevelop::IProject*, CMakeProjectData> m_projects;
     KDevelop::ProjectFilterManager* m_filter;

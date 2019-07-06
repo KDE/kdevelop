@@ -206,7 +206,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
         if (job->error() != 0) {
             qCWarning(CMAKE) << "couldn't load project successfully" << project->name();
             m_projects.remove(project);
-            KMessageBox::error(QApplication::activeWindow(), i18n("Failed to configure the project. Code understanding will likely be broken. Please ensure that the project's CMakeLists.txt files are correct, and KDevelop is configured to use the correct CMake version."));
+            showConfigureErrorMessage(job->errorText());
         }
     });
 
@@ -398,6 +398,8 @@ void CMakeManager::serverResponse(KDevelop::IProject* project, const QJsonObject
             m_projects[project].m_server->configure({});
         } else
             qCDebug(CMAKE) << "unhandled signal response..." << project << response;
+    } else if (response[QStringLiteral("type")] == QLatin1String("error")) {
+        showConfigureErrorMessage(response[QStringLiteral("errorMessage")].toString());
     } else if (response[QStringLiteral("type")] == QLatin1String("reply")) {
         const auto inReplyTo = response[QStringLiteral("inReplyTo")];
         if (inReplyTo == QLatin1String("configure")) {
@@ -856,6 +858,17 @@ KTextEditor::Range CMakeManager::termRangeAtPosition(const KTextEditor::Document
     }
 
     return KTextEditor::Range(start, end);
+}
+
+void CMakeManager::showConfigureErrorMessage(const QString& errorMessage) const
+{
+    KMessageBox::error(QApplication::activeWindow(), i18n(
+        "Failed to configure the project (error message: %1)."
+        " As a result, KDevelop's code understanding will likely be broken.\n"
+        "\n"
+        "To fix this issue, please ensure that the project's CMakeLists.txt files"
+        " are correct, and KDevelop is configured to use the correct CMake version and settings."
+        " Then right-click the project item in the projects tool view and click 'Reload'.", errorMessage));
 }
 
 QPair<QWidget*, KTextEditor::Range> CMakeManager::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position)
