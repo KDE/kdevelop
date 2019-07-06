@@ -35,6 +35,7 @@
 #include "cmakeserverimportjob.h"
 #include "cmakeserver.h"
 
+#include <QApplication>
 #include <QDir>
 #include <QReadWriteLock>
 #include <QThread>
@@ -205,6 +206,7 @@ KJob* CMakeManager::createImportJob(ProjectFolderItem* item)
         if (job->error() != 0) {
             qCWarning(CMAKE) << "couldn't load project successfully" << project->name();
             m_projects.remove(project);
+            KMessageBox::error(QApplication::activeWindow(), i18n("Failed to configure the project. Code understanding will likely be broken. Please ensure that the project's CMakeLists.txt files are correct, and KDevelop is configured to use the correct CMake version."));
         }
     });
 
