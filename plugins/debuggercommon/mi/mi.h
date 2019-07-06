@@ -181,17 +181,24 @@ namespace KDevMI { namespace MI {
      */
     struct Value
     {
-        Value()
-        {}
-    private: // Copy disabled to prevent slicing.
-        Value(const Value&);
-        Value& operator=(const Value&);
+        enum Kind {
+            StringLiteral,
+            Tuple,
+            List
+        };
+
+    protected:
+        constexpr explicit Value(Kind k) : kind(k) {}
 
     public:
+        virtual ~Value() = default;
 
-        virtual ~Value() {}
+        Value() = delete;
+        // Copy disabled to prevent slicing.
+        Value(const Value&) = delete;
+        Value& operator=(const Value&) = delete;
 
-        enum { StringLiteral, Tuple, List } kind = StringLiteral;
+        const Kind kind = StringLiteral;
 
         /** If this value is a string literals, returns the string value.
             Otherwise, throws type_error.
@@ -240,7 +247,7 @@ namespace KDevMI { namespace MI {
     */
     struct Result
     {
-        Result() {}
+        Result() = default;
         ~Result() { delete value; value = nullptr; }
 
         QString variable;
@@ -253,7 +260,9 @@ namespace KDevMI { namespace MI {
     struct StringLiteralValue : public Value
     {
         explicit StringLiteralValue(const QString &lit)
-            : literal_(lit) { Value::kind = StringLiteral; }
+            : Value(StringLiteral)
+            , literal_(lit)
+        {}
 
     public: // Value overrides
 
@@ -266,7 +275,7 @@ namespace KDevMI { namespace MI {
 
     struct TupleValue : public Value
     {
-        TupleValue() { Value::kind = Tuple; }
+        TupleValue() : Value(Tuple) {}
         ~TupleValue() override;
 
         bool hasField(const QString&) const override;
@@ -280,7 +289,7 @@ namespace KDevMI { namespace MI {
 
     struct ListValue : public Value
     {
-        ListValue() { Value::kind = List; }
+        ListValue() : Value(List) {}
         ~ListValue() override;
 
         bool empty() const override;
@@ -295,26 +304,42 @@ namespace KDevMI { namespace MI {
 
     struct Record
     {
-        virtual ~Record() {}
+        enum Kind {
+            Prompt,
+            Stream,
+            Result,
+            Async
+        };
+
+    protected:
+        constexpr explicit Record(Kind k) : kind(k) {}
+
+    public:
+        Record() = delete;
+        Record(const Record&) = delete;
+        Record& operator=(const Record&) = delete;
+
+        virtual ~Record() = default;
         virtual QString toString() const { Q_ASSERT( 0 ); return QString(); }
 
-        enum { Prompt, Stream, Result, Async } kind;
+        const Kind kind;
     };
 
     struct TupleRecord : public Record, public TupleValue
     {
+    protected:
+        explicit TupleRecord(Record::Kind k) : Record(k) {}
     };
 
     struct ResultRecord : public TupleRecord
     {
         explicit ResultRecord(const QString& reason)
-            : token(0)
+            : TupleRecord(Result)
             , reason(reason)
         {
-            Record::kind = Result;
         }
 
-        uint32_t token;
+        uint32_t token = 0;
         QString reason;
     };
 
@@ -327,10 +352,10 @@ namespace KDevMI { namespace MI {
         };
 
         AsyncRecord(Subkind subkind, const QString& reason)
-            : subkind(subkind)
+            : TupleRecord(Async)
+            , subkind(subkind)
             , reason(reason)
         {
-            Record::kind = Async;
         }
 
         Subkind subkind;
@@ -339,7 +364,7 @@ namespace KDevMI { namespace MI {
 
     struct PromptRecord : public Record
     {
-        inline PromptRecord() { Record::kind = Prompt; }
+        PromptRecord() : Record(Prompt) {}
 
         QString toString() const override
         { return QStringLiteral("(prompt)\n"); }
@@ -360,9 +385,9 @@ namespace KDevMI { namespace MI {
         };
 
         explicit StreamRecord(Subkind subkind)
-            : subkind(subkind)
+            : Record(Stream)
+            , subkind(subkind)
         {
-            Record::kind = Stream;
         }
 
         Subkind subkind;
