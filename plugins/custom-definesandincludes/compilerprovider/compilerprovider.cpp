@@ -178,7 +178,7 @@ void CompilerProvider::projectChanged(KDevelop::IProject* p)
     for (auto& factory : qAsConst(m_factories)) {
         if (factory->isSupported(path)) {
             auto compiler = factory->createCompiler(path.lastPathSegment(), pathString);
-            const auto registered = registerCompiler(compiler);
+            registerCompiler(compiler);
             m_defaultProvider = compiler;
         }
     }
