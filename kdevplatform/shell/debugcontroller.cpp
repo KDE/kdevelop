@@ -326,12 +326,11 @@ void DebugController::clearExecutionPoint()
         if (!iface)
             continue;
 
-        QHashIterator<int, KTextEditor::Mark*> it = iface->marks();
-        while (it.hasNext())
-        {
-            KTextEditor::Mark* mark = it.next().value();
-            if( mark->type & KTextEditor::MarkInterface::Execution )
+        const auto oldMarks = iface->marks();
+        for (KTextEditor::Mark* mark : oldMarks) {
+            if (mark->type & KTextEditor::MarkInterface::Execution) {
                 iface->removeMark( mark->line, KTextEditor::MarkInterface::Execution );
+            }
         }
     }
 }

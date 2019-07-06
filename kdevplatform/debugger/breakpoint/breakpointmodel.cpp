@@ -512,7 +512,8 @@ void KDevelop::BreakpointModel::updateMarks()
 
         {
             QSignalBlocker blocker(doc->textDocument());
-            for (KTextEditor::Mark* m : mark->marks()) {
+            const auto oldMarks = mark->marks();
+            for (KTextEditor::Mark* m : oldMarks) {
                 if (!(m->type & AllBreakpointMarks)) continue;
                 IF_DEBUG( qCDebug(DEBUGGER) << m->line << m->type; )
                 for (Breakpoint* breakpoint : qAsConst(d->breakpoints)) {

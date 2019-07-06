@@ -662,8 +662,8 @@ void PatchHighlighter::clear() {
     if( !markIface )
         return;
 
-    for (auto it = markIface->marks().begin(), end = markIface->marks().end(); it != end; ++it) {
-        int line = it.key();
+    const auto lines = markIface->marks().keys();
+    for (int line : lines) {
         markIface->removeMark( line, m_allmarks );
     }
 
