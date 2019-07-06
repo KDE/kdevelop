@@ -30,6 +30,7 @@
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/MarkInterface>
+#include <ktexteditor_version.h>
 #include <KXMLGUIFactory>
 
 #include "../interfaces/idocument.h"
@@ -569,8 +570,13 @@ void DebugController::showCurrentLine()
 
 const QPixmap* DebugController::executionPointPixmap()
 {
-  static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("go-next")).pixmap(QSize(22,22), QIcon::Normal, QIcon::Off);
-  return &pixmap;
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,50,0)
+    constexpr int markPixmapSize = 32;
+#else
+    constexpr int markPixmapSize = 22;
+#endif
+    static QPixmap pixmap=QIcon::fromTheme(QStringLiteral("go-next")).pixmap(QSize(markPixmapSize, markPixmapSize), QIcon::Normal, QIcon::Off);
+    return &pixmap;
 }
 
 }

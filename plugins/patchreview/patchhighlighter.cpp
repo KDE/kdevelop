@@ -29,6 +29,7 @@
 
 #include <KTextEditor/MovingInterface>
 #include <KTextEditor/MarkInterface>
+#include <ktexteditor_version.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
@@ -405,13 +406,18 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
 
     clear();
 
+#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,50,0)
+    constexpr int markPixmapSize = 32;
+#else
+    constexpr int markPixmapSize = 16;
+#endif
     KColorScheme scheme( QPalette::Active );
 
-    QImage tintedInsertion = QIcon::fromTheme( QStringLiteral("insert-text") ).pixmap( 16, 16 ).toImage();
+    QImage tintedInsertion = QIcon::fromTheme(QStringLiteral("insert-text")).pixmap(markPixmapSize, markPixmapSize).toImage();
     KIconEffect::colorize( tintedInsertion, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
-    QImage tintedRemoval = QIcon::fromTheme( QStringLiteral("edit-delete") ).pixmap( 16, 16 ).toImage();
+    QImage tintedRemoval = QIcon::fromTheme(QStringLiteral("edit-delete")).pixmap(markPixmapSize, markPixmapSize).toImage();
     KIconEffect::colorize( tintedRemoval, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
-    QImage tintedChange = QIcon::fromTheme( QStringLiteral("text-field") ).pixmap( 16, 16 ).toImage();
+    QImage tintedChange = QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize).toImage();
     KIconEffect::colorize( tintedChange, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
 
     markIface->setMarkDescription( KTextEditor::MarkInterface::markType22, i18n( "Insertion" ) );
@@ -422,11 +428,11 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
     markIface->setMarkPixmap( KTextEditor::MarkInterface::markType24, QPixmap::fromImage( tintedChange ) );
 
     markIface->setMarkDescription( KTextEditor::MarkInterface::markType25, i18n( "Insertion" ) );
-    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType25, QIcon::fromTheme( QStringLiteral("insert-text") ).pixmap( 16, 16 ) );
+    markIface->setMarkPixmap(KTextEditor::MarkInterface::markType25, QIcon::fromTheme(QStringLiteral("insert-text")).pixmap(markPixmapSize, markPixmapSize));
     markIface->setMarkDescription( KTextEditor::MarkInterface::markType26, i18n( "Removal" ) );
-    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType26, QIcon::fromTheme( QStringLiteral("edit-delete") ).pixmap( 16, 16 ) );
+    markIface->setMarkPixmap(KTextEditor::MarkInterface::markType26, QIcon::fromTheme(QStringLiteral("edit-delete")).pixmap(markPixmapSize, markPixmapSize));
     markIface->setMarkDescription( KTextEditor::MarkInterface::markType27, i18n( "Change" ) );
-    markIface->setMarkPixmap( KTextEditor::MarkInterface::markType27, QIcon::fromTheme( QStringLiteral("text-field") ).pixmap( 16, 16 ) );
+    markIface->setMarkPixmap(KTextEditor::MarkInterface::markType27, QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize));
 
     for ( Diff2::DifferenceList::const_iterator it = m_model->differences()->constBegin(); it != m_model->differences()->constEnd(); ++it ) {
         Diff2::Difference* diff = *it;
