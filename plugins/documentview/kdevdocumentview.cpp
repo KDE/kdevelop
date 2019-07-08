@@ -103,19 +103,37 @@ void KDevDocumentView::mousePressEvent( QMouseEvent * event )
     QModelIndex proxyIndex = indexAt( event->pos() );
     QModelIndex index = m_proxy->mapToSource( proxyIndex );
 
-    if (event->button() == Qt::LeftButton && event->modifiers() == Qt::NoModifier) {
-        if (proxyIndex.parent().isValid()) {
-            // this is a document item
-            KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
-            QUrl documentUrl = static_cast<KDevDocumentItem*>(m_documentModel->itemFromIndex(index))->fileItem()->url();
-            if (dc->documentForUrl(documentUrl) != dc->activeDocument()) {
-                dc->openDocument(documentUrl);
+    if (event->modifiers() == Qt::NoModifier) {
+        const bool actionOpen = event->button() == Qt::LeftButton;
+        const bool actionClose = event->button() == Qt::MidButton;
+        const bool action = actionOpen || actionClose;
+
+        if (action) {
+            if (proxyIndex.parent().isValid()) {
+                // this is a document item
+                KDevelop::IDocumentController* dc = m_plugin->core()->documentController();
+                QUrl documentUrl = static_cast<KDevDocumentItem*>(m_documentModel->itemFromIndex(index))->fileItem()->url();
+                KDevelop::IDocument *doc = dc->documentForUrl(documentUrl);
+
+                // Try to open a document by url.
+                if (actionOpen) {
+                    if (doc != dc->activeDocument()) {
+                        dc->openDocument(documentUrl);
+                        return;
+                    }
+                }
+                // Try to close a document.
+                else if (actionClose) {
+                    if (doc) {
+                        doc->close();
+                        return;
+                    }
+                }
+            } else if (actionOpen) {
+                // this is a folder item
+                setExpanded(proxyIndex, !isExpanded(proxyIndex));
                 return;
             }
-        } else {
-            // this is a folder item
-            setExpanded(proxyIndex, !isExpanded(proxyIndex));
-            return;
         }
     }
 
