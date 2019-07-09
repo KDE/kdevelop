@@ -324,7 +324,6 @@ void TestProjectLoad::raceJob()
     QVERIFY(dir.rename(QStringLiteral("test2"), QStringLiteral("test3")));
 
     // note: this actually invalidates the root, so query that again
-    QTRY_VERIFY(root != project->projectItem());
     root = project->projectItem();
     QVERIFY(root);
 
