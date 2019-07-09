@@ -25,14 +25,15 @@ if [ -z "$KDEVELOP_VERSION" ]; then
     KDEVELOP_VERSION=5.3
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
-    KDEV_PG_QT_VERSION=v2.1.0
+    KDEV_PG_QT_VERSION=v2.2.0
 fi
 if [ -z "$KDEV_CLANG_TIDY_VERSION" ]; then
     KDEV_CLANG_TIDY_VERSION=v0.3.0
 fi
-KF5_VERSION=v5.51.0
-KDE_PLASMA_VERSION=v5.13.4 # note: need libksysguard commit a0e69617442d720c76da5ebe3323e7a977929db4 (patch which makes plasma dep optional)
-KDE_APPLICATION_VERSION=v18.12.1
+KF5_VERSION=v5.54.0
+KDE_PLASMA_BREEZE_VERSION=v5.13.5 # latest version still supporting Qt 5.9
+LIBKSYSGUARD_VERSION=v5.15.5 # latest version still supporting Qt 5.9
+KDE_APPLICATION_VERSION=v19.04.3
 GRANTLEE_VERSION=v5.1.0
 OKTETA_VERSION=v0.26.2
 
@@ -42,8 +43,7 @@ export LD_LIBRARY_PATH=/opt/rh/python27/root/usr/lib64:$LD_LIBRARY_PATH
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment. That's
 # not always set correctly in CentOS 6.7
-export LC_ALL=en_US.UTF-8
-export LANG=en_us.UTF-8
+export LANG=en_US.UTF-8
 
 # Determine which architecture should be built
 if [[ "$(arch)" = "i686" || "$(arch)" = "x86_64" ]] ; then
@@ -201,13 +201,13 @@ build_framework kinit
 fi
 
 # KDE Plasma
-build_project libksysguard $KDE_PLASMA_VERSION
-build_project kdecoration $KDE_PLASMA_VERSION # for breeze
-build_project breeze $KDE_PLASMA_VERSION
+build_project libksysguard $LIBKSYSGUARD_VERSION
+build_project kdecoration $KDE_PLASMA_BREEZE_VERSION # needed by breeze
+build_project breeze $KDE_PLASMA_BREEZE_VERSION
 
 # KDE Applications
 build_project libkomparediff2 $KDE_APPLICATION_VERSION
-build_project kate $KDE_APPLICATION_VERSION # for snippet plugin, see T3826
+build_project kate $KDE_APPLICATION_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE # for snippet plugin, see T3826
 build_project konsole $KDE_APPLICATION_VERSION
 build_project okteta $OKTETA_VERSION -DBUILD_DESIGNERPLUGIN=OFF -DBUILD_OKTETAKASTENLIBS=OFF
 
@@ -428,7 +428,7 @@ export APPIMAGE_STARTUP_XDG_DATA_DIRS=\$XDG_DATA_DIRS
 export APPIMAGE_STARTUP_PATH=\$PATH
 export APPIMAGE_STARTUP_PYTHONHOME=\$PYTHONHOME
 
-export KDEV_CLANG_BUILTIN_DIR=\$DIR/opt/llvm/lib/clang/6.0.1/include
+export KDEV_CLANG_BUILTIN_DIR=\$DIR/opt/llvm/lib/clang/8.0.0/include
 export KDEV_DISABLE_PLUGINS=KDevWelcomePage
 
 cd \$HOME

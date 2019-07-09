@@ -1,29 +1,34 @@
 To build the AppImage, you basically just have to:
 
-1) Build the base docker container
-    a) By doing it manually:
-    ```
-    docker pull centos:6.8
-    docker build .
-    docker images (should show the image ID of the newly created image)
-    docker run <image id>
-    ```
-    Once created, you can just detach/attach and start/stop the container, i.e.
-    ```
-    docker start <container id>
-    docker attach <container id>
-    ```
-    Building the container will take several hours at least.
+1) Build the base docker image
 
-    b) **OR**: Get Sven's pre-built version:
-    ```
-    docker pull scummos/centos6.8-qt5.7
-    ```
+```
+docker pull centos:6.10
+docker build <path/to/this/folder/where/Dockerfile>
+```
+Building the image will take several hours at least.
 
-2) Copy the script into the docker container, using docker cp.
+2) Create a container from image and open a shell
+```
+docker images (should show the image ID of the newly created image)
+docker run -t -i --name kdevelopappimagecreator <image id>
+```
 
-3) Run the script.
-   Running the script will also take quite a while the first time you do it,
-   so it is advisable to always re-use the same container.
+3) Copy the script and patches into the docker container
+```
+docker cp kdevelop-recipe-centos6.sh kdevelopappimagecreator:/
+for p in *.patch ; do docker cp $p kdevelop5.3appimagecreator:/ ; done
+```
 
-4) Copy the resulting AppImage out of the container using docker cp.
+4) Run the script in the interactive shell of the container
+```
+./kdevelop-recipe-centos6.sh
+```
+
+Running the script will also take quite a while the first time you do it,
+so it is advisable to always re-use the same container.
+
+5) Copy the resulting AppImage out of the container
+```
+docker cp kdevelopappimagecreator:/out/KDevelop-git-x86_64.AppImage .
+```
