@@ -317,6 +317,13 @@ PluginController::PluginController(Core *core)
     d->plugins.reserve(d->plugins.size() + ktePlugins.size());
     for (const auto& info : ktePlugins) {
         auto data = info.rawData();
+        // temporary workaround for Kate's ctags plugin being enabled by default
+        // see https://mail.kde.org/pipermail/kwrite-devel/2019-July/004821.html
+        if (info.pluginId() == QLatin1String("katectagsplugin")) {
+            auto kpluginData = data[KEY_KPlugin()].toObject();
+            kpluginData[KEY_EnabledByDefault()] = false;
+            data[KEY_KPlugin()] = kpluginData;
+        }
         // add some KDevelop specific JSON data
         data[KEY_Category()] = KEY_Global();
         data[KEY_Mode()] = KEY_Gui();
