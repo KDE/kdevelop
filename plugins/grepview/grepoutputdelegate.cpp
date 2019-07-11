@@ -78,50 +78,28 @@ void GrepOutputDelegate::paint( QPainter* painter, const QStyleOptionViewItem& o
 
     if(item && item->isText())
     {
-        if (item->hasChildren()) {
-             // the line number appears grayed
-            fmt.setForeground(options.palette.brush(QPalette::Disabled, cr));
-            cur.insertText(i18n("Line %1: ",item->lineNumber()), fmt);
-            fmt.setForeground(options.palette.brush(cg, cr));
+        // Use custom manual highlighting
 
-            int firstStart = static_cast<GrepOutputItem*>(item->child(0))->change()->m_range.start().column();
-            cur.insertText(item->text().left(firstStart).remove(leftspaces), fmt);
-            KTextEditor::Range previousRange(item->lineNumber(), 0, item->lineNumber(), firstStart);
-            for (int i = 0; i < item->rowCount(); ++i) {
-                const KTextEditor::Range range = static_cast<GrepOutputItem*>(item->child(i))->change()->m_range;
-                fmt.setForeground(options.palette.brush(cg, cr));
-                cur.insertText(item->text().mid(previousRange.end().column(), range.start().column() - previousRange.end().column()), fmt);
-                fmt.setFontWeight(QFont::Bold);
-                if ( !(options.state & QStyle::State_Selected) ) {
-                    QColor bgHighlight = option.palette.color(QPalette::AlternateBase);
-                    fmt.setBackground(bgHighlight);
-                }
-                cur.insertText(item->text().mid(range.start().column(), range.columnWidth()), fmt);
-                fmt.clearBackground();
-                previousRange = range;
-            }
-            fmt.setFontWeight(QFont::Normal);
-            cur.insertText(item->text().mid(previousRange.end().column()), fmt);
-        } else {
-            // Use custom manual highlighting
+        const KTextEditor::Range rng = item->change()->m_range;
 
-            const KTextEditor::Range rng = item->change()->m_range;
-
-            // switch to normal color
-            fmt.setForeground(options.palette.brush(cg, cr));
-            cur.insertText(item->text().left(rng.start().column()).remove(leftspaces), fmt);
-
-            fmt.setFontWeight(QFont::Bold);
-            if ( !(options.state & QStyle::State_Selected) ) {
-                QColor bgHighlight = option.palette.color(QPalette::AlternateBase);
-                fmt.setBackground(bgHighlight);
-            }
-            cur.insertText(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column()), fmt);
-            fmt.clearBackground();
-
-            fmt.setFontWeight(QFont::Normal);
-            cur.insertText(item->text().mid(rng.end().column()), fmt);
+        // the line number appears grayed
+        fmt.setForeground(options.palette.brush(QPalette::Disabled, cr));
+        cur.insertText(i18n("Line %1: ",item->lineNumber()), fmt);
+        
+        // switch to normal color
+        fmt.setForeground(options.palette.brush(cg, cr));
+        cur.insertText(item->text().left(rng.start().column()).remove(leftspaces), fmt);
+        
+        fmt.setFontWeight(QFont::Bold);
+        if ( !(options.state & QStyle::State_Selected) ) {
+            QColor bgHighlight = option.palette.color(QPalette::AlternateBase);
+            fmt.setBackground(bgHighlight);
         }
+        cur.insertText(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column()), fmt);
+        fmt.clearBackground();
+        
+        fmt.setFontWeight(QFont::Normal);
+        cur.insertText(item->text().mid(rng.end().column()), fmt);
     }else{
         QString text;
         if(item)
@@ -168,37 +146,21 @@ QSize GrepOutputDelegate::sizeHint(const QStyleOptionViewItem& option, const QMo
         QFontMetrics metrics(font);
         font.setBold(true);
         QFontMetrics bMetrics(font);
-        if (item->hasChildren()) {
-            int bWidth = 0;
-            for (int i = 0; i < item->rowCount(); ++i) {
-                bWidth += static_cast<GrepOutputItem*>(item->child(i))->change()->m_range.columnWidth();
-            }
+        const KTextEditor::Range rng = item->change()->m_range;
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
-            int width = option.fontMetrics.horizontalAdvance(i18n("Line %1: ",item->lineNumber())) +
-                        metrics.horizontalAdvance(item->text().length() - bWidth) + bMetrics.horizontalAdvance(bWidth) +
-                        std::max(option.decorationSize.width(), 0);
+        int width = metrics.horizontalAdvance(item->text().left(rng.start().column())) +
+                    metrics.horizontalAdvance(item->text().mid(rng.end().column())) +
+                    bMetrics.horizontalAdvance(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
+                    option.fontMetrics.horizontalAdvance(i18n("Line %1: ",item->lineNumber())) +
+                    std::max(option.decorationSize.width(), 0);
 #else
-            int width = option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
-                        metrics.width(item->text().length() - bWidth) + bMetrics.width(bWidth) +
-                        std::max(option.decorationSize.width(), 0);
+        int width = metrics.width(item->text().left(rng.start().column())) +
+                    metrics.width(item->text().mid(rng.end().column())) +
+                    bMetrics.width(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
+                    option.fontMetrics.width(i18n("Line %1: ",item->lineNumber())) +
+                    std::max(option.decorationSize.width(), 0);
 #endif
-            ret.setWidth(width);
-        } else {
-            const KTextEditor::Range rng = item->change()->m_range;
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
-            int width = metrics.horizontalAdvance(item->text().left(rng.start().column())) +
-                        metrics.horizontalAdvance(item->text().mid(rng.end().column())) +
-                        bMetrics.horizontalAdvance(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
-                        std::max(option.decorationSize.width(), 0);
-#else
-            int width = metrics.width(item->text().left(rng.start().column())) +
-                        metrics.width(item->text().mid(rng.end().column())) +
-                        bMetrics.width(item->text().mid(rng.start().column(), rng.end().column() - rng.start().column())) +
-                        std::max(option.decorationSize.width(), 0);
-#endif
-            ret.setWidth(width);
-        }
+        ret.setWidth(width);
     }else{
         // This is only used for titles, so not very performance critical
         QString text;
