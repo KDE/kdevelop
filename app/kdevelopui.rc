@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui version="147" name="kdevelop" translationDomain="kdevelop">
+<gui version="148" name="kdevelop" translationDomain="kdevelop">
 <MenuBar>
 
   <Menu name="session" append="first_menu">
