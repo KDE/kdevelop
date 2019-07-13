@@ -29,7 +29,7 @@ class MesonListEditor : public QDialog {
     Q_OBJECT
 
 public:
-    explicit MesonListEditor(QStringList content, QWidget *parent);
+    explicit MesonListEditor(QStringList const& content, QWidget *parent);
     virtual ~MesonListEditor();
 
     QStringList content() const;

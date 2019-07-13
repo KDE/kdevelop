@@ -39,7 +39,7 @@ public:
     enum Function { PROJECT, TARGET, DEPENDENCY };
 
 public:
-    explicit MesonKWARGSInfo(Function fn, QString id);
+    explicit MesonKWARGSInfo(Function fn, QString const& id);
     virtual ~MesonKWARGSInfo();
 
     QJsonObject command() override;
@@ -48,10 +48,10 @@ public:
     Function function() const;
     QString id() const;
 
-    bool hasKWARG(QString kwarg) const;
-    QJsonValue get(QString kwarg) const;
-    QString getString(QString kwarg) const;
-    QStringList getArray(QString kwarg) const;
+    bool hasKWARG(QString const& kwarg) const;
+    QJsonValue get(QString const& kwarg) const;
+    QString getString(QString const& kwarg) const;
+    QStringList getArray(QString const& kwarg) const;
 
 private:
     Function m_func;
@@ -71,13 +71,13 @@ public:
 class MesonKWARGSTargetInfo : public MesonKWARGSInfo
 {
 public:
-    explicit MesonKWARGSTargetInfo(QString id);
+    explicit MesonKWARGSTargetInfo(QString const& id);
     virtual ~MesonKWARGSTargetInfo();
 };
 
 class MesonKWARGSDependencyInfo : public MesonKWARGSInfo
 {
 public:
-    explicit MesonKWARGSDependencyInfo(QString id);
+    explicit MesonKWARGSDependencyInfo(QString const& id);
     virtual ~MesonKWARGSDependencyInfo();
 };

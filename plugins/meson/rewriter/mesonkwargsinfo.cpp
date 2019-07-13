@@ -22,7 +22,7 @@
 
 #include <QJsonArray>
 
-MesonKWARGSInfo::MesonKWARGSInfo(MesonKWARGSInfo::Function fn, QString id)
+MesonKWARGSInfo::MesonKWARGSInfo(MesonKWARGSInfo::Function fn, QString const& id)
     : m_func(fn)
     , m_id(id)
 {
@@ -82,12 +82,12 @@ QString MesonKWARGSInfo::id() const
     return m_id;
 }
 
-bool MesonKWARGSInfo::hasKWARG(QString kwarg) const
+bool MesonKWARGSInfo::hasKWARG(QString const& kwarg) const
 {
     return m_result.contains(kwarg);
 }
 
-QJsonValue MesonKWARGSInfo::get(QString kwarg) const
+QJsonValue MesonKWARGSInfo::get(QString const& kwarg) const
 {
     if (!hasKWARG(kwarg)) {
         return QJsonValue();
@@ -95,12 +95,12 @@ QJsonValue MesonKWARGSInfo::get(QString kwarg) const
     return m_result[kwarg];
 }
 
-QString MesonKWARGSInfo::getString(QString kwarg) const
+QString MesonKWARGSInfo::getString(QString const& kwarg) const
 {
     return get(kwarg).toString();
 }
 
-QStringList MesonKWARGSInfo::getArray(QString kwarg) const
+QStringList MesonKWARGSInfo::getArray(QString const& kwarg) const
 {
     QStringList result;
     for (auto i : get(kwarg).toArray()) {
@@ -115,11 +115,11 @@ MesonKWARGSProjectInfo::MesonKWARGSProjectInfo()
     : MesonKWARGSInfo(PROJECT, QStringLiteral("/"))
 {
 }
-MesonKWARGSTargetInfo::MesonKWARGSTargetInfo(QString id)
+MesonKWARGSTargetInfo::MesonKWARGSTargetInfo(QString const& id)
     : MesonKWARGSInfo(TARGET, id)
 {
 }
-MesonKWARGSDependencyInfo::MesonKWARGSDependencyInfo(QString id)
+MesonKWARGSDependencyInfo::MesonKWARGSDependencyInfo(QString const& id)
     : MesonKWARGSInfo(DEPENDENCY, id)
 {
 }

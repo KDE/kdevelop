@@ -28,7 +28,7 @@ QListWidgetItem* genItem(QString const& label)
     return item;
 }
 
-MesonListEditor::MesonListEditor(QStringList content, QWidget* parent)
+MesonListEditor::MesonListEditor(QStringList const& content, QWidget* parent)
     : QDialog(parent)
 {
     m_ui = new Ui::MesonListEditor;

@@ -47,7 +47,7 @@ public:
     enum Type { STRING };
 
 public:
-    explicit MesonRewriterInputBase(QString name, QString kwarg, QWidget* parent);
+    explicit MesonRewriterInputBase(QString const& name, QString const& kwarg, QWidget* parent);
     virtual ~MesonRewriterInputBase();
 
     int nameWidth();
@@ -66,7 +66,7 @@ protected:
     virtual bool hasValueChanged() const = 0;
     virtual void doReset() = 0;
     virtual QWidget* inputWidget() = 0;
-    virtual void resetValue(QJsonValue val) = 0;
+    virtual void resetValue(QJsonValue const& val) = 0;
     virtual QJsonValue value() = 0;
 
 public Q_SLOTS:
@@ -91,7 +91,7 @@ class MesonRewriterInputString : public MesonRewriterInputBase
     Q_OBJECT
 
 public:
-    explicit MesonRewriterInputString(QString name, QString kwarg, QWidget* parent);
+    explicit MesonRewriterInputString(QString const& name, QString const& kwarg, QWidget* parent);
     virtual ~MesonRewriterInputString();
 
     MesonRewriterInputBase::Type type() const override;
@@ -100,7 +100,7 @@ protected:
     void doReset() override;
     QWidget* inputWidget() override;
     bool hasValueChanged() const override;
-    void resetValue(QJsonValue val) override;
+    void resetValue(QJsonValue const& val) override;
     QJsonValue value() override;
 
 private:

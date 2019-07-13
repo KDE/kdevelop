@@ -48,7 +48,7 @@ void MesonRewriterDefaultOpts::clear()
     m_data = QJsonObject();
 }
 
-void MesonRewriterDefaultOpts::set(QString name, QString value)
+void MesonRewriterDefaultOpts::set(QString const& name, QString const& value)
 {
     m_data[name] = value;
 }

@@ -38,7 +38,7 @@ public:
     enum Operation { SET, DELETE };
 
 public:
-    explicit MesonKWARGSModify(Function fn, Operation op, QString id);
+    explicit MesonKWARGSModify(Function fn, Operation op, QString const& id);
     virtual ~MesonKWARGSModify();
 
     QJsonObject command() override;
@@ -47,11 +47,11 @@ public:
     Operation operation() const;
     QString id() const;
 
-    void set(QString kwarg, QJsonValue value);
-    void unset(QString kwarg);
+    void set(QString const& kwarg, QJsonValue const& value);
+    void unset(QString const& kwarg);
     void clear();
 
-    bool isSet(QString kwarg);
+    bool isSet(QString const& kwarg);
 
 private:
     Function m_func;
@@ -71,13 +71,13 @@ public:
 class MesonKWARGSTargetModify : public MesonKWARGSModify
 {
 public:
-    explicit MesonKWARGSTargetModify(Operation op, QString id);
+    explicit MesonKWARGSTargetModify(Operation op, QString const& id);
     virtual ~MesonKWARGSTargetModify();
 };
 
 class MesonKWARGSDependencyModify : public MesonKWARGSModify
 {
 public:
-    explicit MesonKWARGSDependencyModify(Operation op, QString id);
+    explicit MesonKWARGSDependencyModify(Operation op, QString const& id);
     virtual ~MesonKWARGSDependencyModify();
 };

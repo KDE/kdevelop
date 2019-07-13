@@ -43,13 +43,13 @@ public:
     enum Type { ARRAY, BOOLEAN, COMBO, INTEGER, STRING };
 
 public:
-    explicit MesonOptionBase(QString name, QString description, Section section);
+    explicit MesonOptionBase(QString const& name, QString const& description, Section section);
     virtual ~MesonOptionBase();
 
     virtual Type type() const = 0;
     virtual QString value() const = 0;
     virtual QString initialValue() const = 0;
-    virtual void setFromString(QString value) = 0;
+    virtual void setFromString(QString const& value) = 0;
     virtual void reset() = 0;
 
     QString name() const;
@@ -70,16 +70,16 @@ private:
 class MesonOptionArray : public MesonOptionBase
 {
 public:
-    MesonOptionArray(QString name, QString description, Section section, QStringList value);
+    MesonOptionArray(QString const& name, QString const& description, Section section, QStringList value);
 
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
-    void setFromString(QString value) override;
+    void setFromString(QString const& value) override;
     void reset() override;
 
     QStringList rawValue() const;
-    void setValue(QStringList val);
+    void setValue(QStringList const& val);
 
 private:
     QStringList m_value;
@@ -89,12 +89,12 @@ private:
 class MesonOptionBool : public MesonOptionBase
 {
 public:
-    MesonOptionBool(QString name, QString description, Section section, bool value);
+    MesonOptionBool(QString const& name, QString const& description, Section section, bool value);
 
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
-    void setFromString(QString value) override;
+    void setFromString(QString const& value) override;
     void reset() override;
 
     bool rawValue() const;
@@ -108,16 +108,17 @@ private:
 class MesonOptionCombo : public MesonOptionBase
 {
 public:
-    MesonOptionCombo(QString name, QString description, Section section, QString value, QStringList choices);
+    MesonOptionCombo(QString const& name, QString const& description, Section section, QString value,
+                     QStringList choices);
 
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
-    void setFromString(QString value) override;
+    void setFromString(QString const& value) override;
     void reset() override;
 
     QString rawValue() const;
-    void setValue(QString val);
+    void setValue(QString const& val);
     QStringList choices() const;
 
 private:
@@ -129,12 +130,12 @@ private:
 class MesonOptionInteger : public MesonOptionBase
 {
 public:
-    MesonOptionInteger(QString name, QString description, Section section, int value);
+    MesonOptionInteger(QString const& name, QString const& description, Section section, int value);
 
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
-    void setFromString(QString value) override;
+    void setFromString(QString const& value) override;
     void reset() override;
 
     int rawValue() const;
@@ -148,16 +149,16 @@ private:
 class MesonOptionString : public MesonOptionBase
 {
 public:
-    MesonOptionString(QString name, QString description, Section section, QString value);
+    MesonOptionString(QString const& name, QString const& description, Section section, QString value);
 
     MesonOptionBase::Type type() const override;
     QString value() const override;
     QString initialValue() const override;
-    void setFromString(QString value) override;
+    void setFromString(QString const& value) override;
     void reset() override;
 
     QString rawValue() const;
-    void setValue(QString val);
+    void setValue(QString const& val);
 
 private:
     QString m_value;

@@ -95,7 +95,7 @@ QVector<MesonRewriterInputBase*> MesonRewriterPage::constructPojectInputs()
     };
 }
 
-MesonOptContainerPtr MesonRewriterPage::constructDefaultOpt(QString name, QString value)
+MesonOptContainerPtr MesonRewriterPage::constructDefaultOpt(QString const& name, QString const& value)
 {
     if (!m_opts) {
         return nullptr;

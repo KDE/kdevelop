@@ -65,7 +65,7 @@ private:
     void setStatus(State s);
 
     QVector<MesonRewriterInputBase*> constructPojectInputs();
-    MesonOptContainerPtr constructDefaultOpt(QString name, QString value);
+    MesonOptContainerPtr constructDefaultOpt(QString const& name, QString const& value);
 
 private:
     KDevelop::IProject* m_project = nullptr;
