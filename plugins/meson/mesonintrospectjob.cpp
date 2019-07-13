@@ -73,9 +73,9 @@ MesonIntrospectJob::MesonIntrospectJob(KDevelop::IProject* project, KDevelop::Pa
 
     // Since we are parsing the meson file in this mode, no build directory
     // is required and we have to fake a build directory
+    m_projectPath = project->path();
     m_buildDir.buildDir = m_projectPath;
     m_buildDir.mesonExecutable = meson;
-    m_projectPath = project->path();
     connect(&m_futureWatcher, &QFutureWatcher<QString>::finished, this, &MesonIntrospectJob::finished);
 }
 
