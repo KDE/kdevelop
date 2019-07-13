@@ -35,7 +35,7 @@ MesonRewriterInputBase::MesonRewriterInputBase(QString const& name, QString cons
 {
     m_ui = new Ui::MesonRewriterInputBase;
     m_ui->setupUi(this);
-    m_ui->l_name->setText(m_name + QStringLiteral(":"));
+    m_ui->l_name->setText(m_name + QLatin1Char(':'));
 
     connect(this, &MesonRewriterInputBase::configChanged, this, &MesonRewriterInputBase::updateUi);
 }
@@ -142,7 +142,7 @@ MesonRewriterInputString::MesonRewriterInputString(QString const& name, QString 
     : MesonRewriterInputBase(name, kwarg, parent)
 {
     m_lineEdit = new QLineEdit(this);
-    connect(m_lineEdit, &QLineEdit::textChanged, this, [=]() { emit configChanged(); });
+    connect(m_lineEdit, &QLineEdit::textChanged, this, [this]() { emit configChanged(); });
     setInputWidget(m_lineEdit);
 }
 

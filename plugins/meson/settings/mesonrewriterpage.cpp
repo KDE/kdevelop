@@ -340,7 +340,7 @@ void MesonRewriterPage::reset()
             auto options = m_opts->options();
 
             for (auto i : rawValues) {
-                int idx = i.indexOf(QChar::fromLatin1('='));
+                int idx = i.indexOf(QLatin1Char('='));
                 if (idx < 0) {
                     continue;
                 }

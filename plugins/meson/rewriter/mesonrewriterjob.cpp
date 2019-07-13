@@ -69,7 +69,7 @@ QString MesonRewriterJob::execute()
 
     int ret = proc.execute();
     if (ret != 0) {
-        return i18n("%1 returned %2", proc.program().join(QChar::fromLatin1(' ')), ret);
+        return i18n("%1 returned %2", proc.program().join(QLatin1Char(' ')), ret);
     }
 
     auto rawData = proc.readAllStandardError();
@@ -84,7 +84,7 @@ QString MesonRewriterJob::execute()
     }
 
     if (!result.isObject()) {
-        return i18n("The rewriter output of '%1' is not an object", proc.program().join(QChar::fromLatin1(' ')));
+        return i18n("The rewriter output of '%1' is not an object", proc.program().join(QLatin1Char(' ')));
     }
 
     for (auto& i : m_actions) {

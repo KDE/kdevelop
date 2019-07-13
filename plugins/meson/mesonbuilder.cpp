@@ -59,7 +59,7 @@ public:
         startOutput();
 
         output->appendLine(i18n("    *** MESON ERROR ***\n"));
-        QStringList lines = m_error.split(QChar::fromLatin1('\n'));
+        QStringList lines = m_error.split(QLatin1Char('\n'));
         output->appendLines(lines);
 
         setError(!m_error.isEmpty());

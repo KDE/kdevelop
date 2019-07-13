@@ -154,7 +154,7 @@ QString MesonIntrospectJob::importMesonAPI(const BuildDir& buildDir, MesonIntros
 {
     QString typeStr = getTypeString(type);
     QString option = QStringLiteral("--") + typeStr;
-    option.replace(QChar::fromLatin1('_'), QChar::fromLatin1('-'));
+    option.replace(QLatin1Char('_'), QLatin1Char('-'));
 
     KProcess proc(this);
     proc.setWorkingDirectory(m_projectPath.toLocalFile());
@@ -164,7 +164,7 @@ QString MesonIntrospectJob::importMesonAPI(const BuildDir& buildDir, MesonIntros
 
     int ret = proc.execute();
     if (ret != 0) {
-        return i18n("%1 returned %2", proc.program().join(QChar::fromLatin1(' ')), ret);
+        return i18n("%1 returned %2", proc.program().join(QLatin1Char(' ')), ret);
     }
 
     QJsonParseError error;
@@ -179,7 +179,7 @@ QString MesonIntrospectJob::importMesonAPI(const BuildDir& buildDir, MesonIntros
         (*out)[typeStr] = doc.object();
     } else {
         return i18n("The introspection output of '%1' contains neither an array nor an object",
-                    proc.program().join(QChar::fromLatin1(' ')));
+                    proc.program().join(QLatin1Char(' ')));
     }
 
     return QString();

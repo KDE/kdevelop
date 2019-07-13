@@ -393,7 +393,7 @@ QString MesonManager::extraArguments(KDevelop::ProjectBaseItem* item) const
     if (!src) {
         return {};
     }
-    return src->extraArgs().join(QChar::fromLatin1(' '));
+    return src->extraArgs().join(QLatin1Char(' '));
 }
 
 bool MesonManager::hasBuildInfo(KDevelop::ProjectBaseItem* item) const

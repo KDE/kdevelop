@@ -127,7 +127,7 @@ void MesonTargetSources::splitParamerters()
                     QString name = define;
                     QString value;
 
-                    int equalPos = define.indexOf(QChar::fromLatin1('='));
+                    int equalPos = define.indexOf(QLatin1Char('='));
                     if (equalPos > 0) {
                         name = define.left(equalPos);
                         value = define.mid(equalPos + 1);

@@ -284,7 +284,7 @@ void MesonOptionArray::setFromString(QString const& value)
 
 void MesonOptionBool::setFromString(QString const& value)
 {
-    setValue(value.toLower() == QStringLiteral("true"));
+    setValue(value.toLower() == QLatin1String("true"));
 }
 
 void MesonOptionCombo::setFromString(QString const& value)

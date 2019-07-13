@@ -50,7 +50,7 @@ QJsonObject MesonKWARGSInfo::command()
     res[QStringLiteral("id")] = m_id;
     res[QStringLiteral("operation")] = QStringLiteral("info");
 
-    m_infoID = func2str(m_func) + QStringLiteral("#") + m_id;
+    m_infoID = func2str(m_func) + QLatin1Char('#') + m_id;
 
     return res;
 }

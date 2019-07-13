@@ -59,7 +59,7 @@ MesonJob::MesonJob(Meson::BuildDir const& buildDir, IProject* project, MesonJob:
 
     *this << m_arguments;
 
-    for (auto i : buildDir.mesonArgs.split(QChar::fromLatin1(' '))) {
+    for (auto i : buildDir.mesonArgs.split(QLatin1Char(' '))) {
         if (!i.isEmpty()) {
             *this << i;
         }
