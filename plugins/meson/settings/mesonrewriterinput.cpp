@@ -44,6 +44,8 @@ MesonRewriterInputBase::~MesonRewriterInputBase() {}
 
 int MesonRewriterInputBase::nameWidth()
 {
+    // Make the name a bit (by 25) wider than it actually is to create a margin. Maybe do
+    // something smarter in the future (TODO)
     return m_ui->l_name->fontMetrics().boundingRect(m_ui->l_name->text()).width() + 25;
 }
 

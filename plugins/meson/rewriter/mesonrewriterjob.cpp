@@ -52,7 +52,7 @@ QString MesonRewriterJob::execute()
     QTemporaryFile tempFile;
     tempFile.setAutoRemove(false);
     if (!tempFile.open()) {
-        return i18n("Failed to create a temorary file");
+        return i18n("Failed to create a temporary file.");
     }
 
     QJsonDocument doc(command);
