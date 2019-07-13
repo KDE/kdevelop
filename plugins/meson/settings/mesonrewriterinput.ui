@@ -45,24 +45,21 @@
    <item>
     <widget class="QToolButton" name="b_reset">
      <property name="icon">
-      <iconset theme="document-revert">
-       <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+      <iconset theme="document-revert"/>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QToolButton" name="b_delete">
      <property name="icon">
-      <iconset theme="edit-delete">
-       <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+      <iconset theme="edit-delete"/>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QToolButton" name="b_add">
      <property name="icon">
-      <iconset theme="list-add">
-       <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+      <iconset theme="list-add"/>
      </property>
     </widget>
    </item>

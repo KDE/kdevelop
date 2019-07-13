@@ -29,8 +29,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="list-add">
-         <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+        <iconset theme="list-add"/>
        </property>
       </widget>
      </item>
@@ -40,8 +39,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="edit-delete">
-         <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
+        <iconset theme="edit-delete"/>
        </property>
       </widget>
      </item>

@@ -51,8 +51,7 @@
       <string/>
      </property>
      <property name="icon">
-      <iconset theme="document-revert">
-       <normaloff>.</normaloff>.</iconset>
+      <iconset theme="document-revert"/>
      </property>
     </widget>
    </item>
