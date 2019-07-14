@@ -42,6 +42,7 @@
 #include <KLocalizedString>
 #include <KPluginFactory>
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QStandardPaths>
 
 #include <algorithm>
@@ -52,6 +53,39 @@ using namespace std;
 static const QString GENERATOR_NINJA = QStringLiteral("ninja");
 
 K_PLUGIN_FACTORY_WITH_JSON(MesonSupportFactory, "kdevmesonmanager.json", registerPlugin<MesonManager>();)
+
+// ********************************
+// * Error job for failed imports *
+// ********************************
+
+namespace mmanager_internal {
+
+class ErrorJob : public KJob
+{
+    Q_OBJECT
+public:
+    ErrorJob(QObject* parent, const QString& error)
+        : KJob(parent)
+        , m_error(error)
+    {
+    }
+
+    void start() override
+    {
+        QMessageBox::critical(nullptr, i18n("Importing project failed"), m_error);
+
+        setError(KJob::UserDefinedError + 1); // Indicate that there was an error
+        setErrorText(m_error);
+        emitResult();
+    }
+
+private:
+    QString m_error;
+};
+
+}
+
+using namespace mmanager_internal;
 
 // ***********************************
 // * Meson specific executable class *
@@ -217,7 +251,20 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
     IProject* project = item->project();
     Q_ASSERT(project);
 
+    qCDebug(KDEV_Meson) << "Importing project" << project->name();
+
     auto buildDir = Meson::currentBuildDir(project);
+
+    KJob* configureJob = nullptr;
+    if (!buildDir.isValid()) {
+        configureJob = newBuildDirectory(project, &buildDir);
+        if (!configureJob) {
+            QString error = i18n("Importing %1 failed because no build directory could be created.", project->name());
+            qCDebug(KDEV_Meson) << error;
+            return new ErrorJob(this, error);
+        }
+    }
+
     auto introJob
         = new MesonIntrospectJob(project, buildDir, { MesonIntrospectJob::TARGETS, MesonIntrospectJob::TESTS },
                                  MesonIntrospectJob::BUILD_DIR, this);
@@ -272,8 +319,14 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
     QList<KJob*> jobs;
 
     // Configure the project if necessary
-    if (m_builder->evaluateBuildDirectory(buildDir.buildDir, buildDir.mesonBackend) != MesonBuilder::MESON_CONFIGURED) {
-        jobs << builder()->configure(project);
+    if (!configureJob
+        && m_builder->evaluateBuildDirectory(buildDir.buildDir, buildDir.mesonBackend)
+            != MesonBuilder::MESON_CONFIGURED) {
+        configureJob = builder()->configure(project);
+    }
+
+    if (configureJob) {
+        jobs << configureJob;
     }
 
     jobs << AbstractFileManagerPlugin::createImportJob(item); // generate the file system listing
@@ -361,7 +414,7 @@ KDevelop::Path MesonManager::compiler(KDevelop::ProjectTargetItem* item) const
 // * Custom functions *
 // ********************
 
-KJob* MesonManager::newBuildDirectory(IProject* project)
+KJob* MesonManager::newBuildDirectory(IProject* project, Meson::BuildDir* outBuildDir)
 {
     Q_ASSERT(project);
     MesonNewBuildDir newBD(project);
@@ -376,6 +429,10 @@ KJob* MesonManager::newBuildDirectory(IProject* project)
     buildDir.canonicalizePaths();
     mesonCfg.currentIndex = mesonCfg.addBuildDir(buildDir);
     Meson::writeMesonConfig(project, mesonCfg);
+
+    if (outBuildDir) {
+        *outBuildDir = buildDir;
+    }
 
     return m_builder->configure(project, buildDir, newBD.mesonArgs());
 }

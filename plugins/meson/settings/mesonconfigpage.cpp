@@ -148,6 +148,7 @@ void MesonConfigPage::reset()
         m_config.currentIndex = -1;
         m_ui->i_buildDirs->clear();
         setWidgetsDisabled(true);
+        m_ui->b_addDir->setDisabled(false); // Allow adding a new build dir when there are none
         return;
     } else if (m_config.currentIndex < 0 || m_config.currentIndex >= m_config.buildDirs.size()) {
         m_config.currentIndex = 0;
