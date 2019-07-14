@@ -320,7 +320,15 @@ MesonOptionPtr MesonOptionBase::fromJSON(const QJsonObject& obj)
         }
     }
 
-    auto sectionIter = STRING2SECTION.find(sectionJV.toString());
+    // Work around meson bug https://github.com/mesonbuild/meson/pull/5646 by
+    // removing the first space and everything after that.
+    QString sectionStr = sectionJV.toString();
+    int spacePos = sectionStr.indexOf(QLatin1Char(' '));
+    if (spacePos > 0) {
+        sectionStr = sectionStr.left(spacePos);
+    }
+
+    auto sectionIter = STRING2SECTION.find(sectionStr);
     auto typeIter = STRING2TYPE.find(typeJV.toString());
 
     if (sectionIter == end(STRING2SECTION) || typeIter == end(STRING2TYPE)) {
