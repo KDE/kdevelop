@@ -74,7 +74,8 @@ SerializedFilters defaultFilters()
     ret << SerializedFilter(QStringLiteral(".*"), Filter::Targets(Filter::Files | Filter::Folders));
     // but do show some with special meaning
     ret << SerializedFilter(QStringLiteral(".gitignore"), Filter::Files, Filter::Inclusive)
-        << SerializedFilter(QStringLiteral(".gitmodules"), Filter::Files, Filter::Inclusive);
+        << SerializedFilter(QStringLiteral(".gitmodules"), Filter::Files, Filter::Inclusive)
+        << SerializedFilter(QStringLiteral(".clang-format"), Filter::Files, Filter::Inclusive);
 
     // common vcs folders which we want to hide
     static const QVector<QString> invalidFolders = {
