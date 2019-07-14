@@ -249,6 +249,15 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
         result.setCaption(i18n("Gnu Indent: Original Berkeley indent style"));
         result.setContent(QStringLiteral("indent -orig"));
         result.setUsePreview(true);
+    } else if (name == QLatin1String("clang_format")) {
+        result.setCaption(i18n("Clang Format"));
+        result.setContent(QStringLiteral("clang-format -assume-filename=\"$FILE\""));
+        result.setUsePreview(false);
+        result.setDescription(i18n("Description:<br /><br />"
+                                   "<b>clang-format</b> is an automatic source formater by the LLVM"
+                                   "project. It supports a variety of formating style options via"
+                                   "a <b>.clang-format</b> configuration file, usually located in"
+                                   "the project root directory."));
     } else if (name == QLatin1String("kdev_format_source")) {
         result.setCaption(QStringLiteral("KDevelop: kdev_format_source"));
         result.setContent(QStringLiteral("kdev_format_source $FILE $TMPFILE"));
@@ -288,6 +297,7 @@ QVector<KDevelop::SourceFormatterStyle> CustomScriptPlugin::predefinedStyles() c
 {
     const QVector<KDevelop::SourceFormatterStyle> styles = stylesFromLanguagePlugins() + QVector<KDevelop::SourceFormatterStyle>{
         predefinedStyle(QStringLiteral("kdev_format_source")),
+        predefinedStyle(QStringLiteral("clang_format")),
         predefinedStyle(QStringLiteral("GNU_indent_GNU")),
         predefinedStyle(QStringLiteral("GNU_indent_KR")),
         predefinedStyle(QStringLiteral("GNU_indent_orig")),
