@@ -144,6 +144,13 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
 
 void IdealController::dockLocationChanged(Qt::DockWidgetArea area)
 {
+    // Seems since Qt 5.13 the signal QDockWidget::dockLocationChanged is emitted also when the dock changes
+    // to be floating, with area = Qt::NoDockWidgetArea. The current code is not designed for this,
+    // so just ignore the signal in that case for now
+    if (area == Qt::NoDockWidgetArea) {
+        return;
+    }
+
     auto *dock = qobject_cast<IdealDockWidget*>(sender());
     View *view = dock->view();
     QAction* action = m_view_to_action.value(view);

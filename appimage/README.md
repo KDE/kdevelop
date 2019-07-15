@@ -17,7 +17,7 @@ docker run -t -i --name kdevelopappimagecreator <image id>
 3) Copy the script and patches into the docker container
 ```
 docker cp kdevelop-recipe-centos6.sh kdevelopappimagecreator:/
-for p in *.patch ; do docker cp $p kdevelop5.3appimagecreator:/ ; done
+for p in *.patch ; do docker cp $p kdevelopappimagecreator:/ ; done
 ```
 
 4) Run the script in the interactive shell of the container
