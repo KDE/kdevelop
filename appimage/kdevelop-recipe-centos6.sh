@@ -495,13 +495,16 @@ fi
 echo $APPIMAGE
 
 # Get appimagetool
-mkdir -p $SRC/appimagetool
-pushd $SRC/appimagetool
-wget -c -O appimagetool https://github.com/AppImage/AppImageKit/releases/download/11/appimagetool-x86_64.AppImage
-chmod +x ./appimagetool
-./appimagetool --appimage-extract # no fuse on this docker instance...
-export PATH=$PWD/squashfs-root/usr/bin:$PATH
-popd
+APPIMAGETOOL_DIR=$SRC/appimagetool
+if [ ! -d $APPIMAGETOOL_DIR ]; then
+    mkdir -p $APPIMAGETOOL_DIR
+    pushd $APPIMAGETOOL_DIR
+    wget -c -O appimagetool https://github.com/AppImage/AppImageKit/releases/download/11/appimagetool-x86_64.AppImage
+    chmod +x ./appimagetool
+    ./appimagetool --appimage-extract # no fuse on this docker instance...
+    popd
+fi
+export PATH=$APPIMAGETOOL_DIR/squashfs-root/usr/bin:$PATH # add path to extracted appimage binary
 
 mkdir -p /out
 
