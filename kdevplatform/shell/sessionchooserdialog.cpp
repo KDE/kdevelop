@@ -196,8 +196,10 @@ void SessionChooserDialog::deleteButtonPressed()
     if(m_deleteCandidateRow == -1)
         return;
 
-    QModelIndex index = m_model->index(m_deleteCandidateRow, 0);
-    const QString uuid = m_model->data(index, Qt::DisplayRole).toString();
+    QModelIndex uuidIndex = m_model->index(m_deleteCandidateRow, 0);
+    QModelIndex sessionNameIndex = m_model->index(m_deleteCandidateRow, 3);
+    const QString uuid = m_model->data(uuidIndex, Qt::DisplayRole).toString();
+    const QString sessionName = m_model->data(sessionNameIndex, Qt::DisplayRole).toString();
 
     TryLockSessionResult result = SessionController::tryLockSession( uuid );
     if( !result.lock ) {
@@ -205,15 +207,15 @@ void SessionChooserDialog::deleteButtonPressed()
         QString errText = i18nc("@info", "<p>Cannot delete a locked session.");
 
         if( result.runInfo.holderPid != -1 ) {
-            errText += i18nc("@info", "<p>The session is locked by %1 on %2 (PID %3).",
-                                result.runInfo.holderApp, result.runInfo.holderHostname, result.runInfo.holderPid);
+            errText += i18nc("@info", "<p>The session <b>%1</b> is locked by %2 on %3 (PID %4).",
+                                sessionName, result.runInfo.holderApp, result.runInfo.holderHostname, result.runInfo.holderPid);
         }
 
         KMessageBox::error( this, errText, errCaption );
         return;
     }
 
-    const QString text = i18nc("@info", "The session and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?");
+    const QString text = i18nc("@info", "The session <b>%1</b> and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?", sessionName);
     const QString caption = i18nc("@title", "Delete Session");
     const KGuiItem deleteItem = KStandardGuiItem::del();
     const KGuiItem cancelItem = KStandardGuiItem::cancel();

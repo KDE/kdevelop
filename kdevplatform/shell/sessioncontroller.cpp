@@ -599,10 +599,11 @@ QString SessionController::showSessionChooserDialog(const QString& headerText, b
         layout.addWidget(heading);
     }
 
-    model->setColumnCount(3);
+    model->setColumnCount(4);
     model->setHeaderData(0, Qt::Horizontal,i18n("Identity"));
-    model->setHeaderData(1, Qt::Horizontal, i18n("Contents"));
+    model->setHeaderData(1, Qt::Horizontal,i18n("Contents"));
     model->setHeaderData(2, Qt::Horizontal,i18n("State"));
+    model->setHeaderData(3, Qt::Horizontal,i18n("Name"));
 
     view->setModel(proxy);
     view->setModelColumn(1);
@@ -628,10 +629,11 @@ QString SessionController::showSessionChooserDialog(const QString& headerText, b
 
         if(onlyRunning && !running)
             continue;
-
+            
         model->setItem(row, 0, new QStandardItem(si.uuid.toString()));
         model->setItem(row, 1, new QStandardItem(si.description));
         model->setItem(row, 2, new QStandardItem);
+        model->setItem(row, 3, new QStandardItem(si.name));
 
         ++row;
     }
