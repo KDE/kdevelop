@@ -184,8 +184,8 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     connect( this, &OutputWidget::outputRemoved,
              data->plugin, &StandardOutputView::outputRemoved );
 
-    foreach( int id, data->outputdata.keys() )
-    {
+    for (auto it = data->outputdata.keyBegin(), end =data->outputdata.keyEnd(); it != end; ++it) {
+        int id = *it;
         changeModel( id );
         changeDelegate( id );
     }
@@ -305,8 +305,8 @@ void OutputWidget::closeActiveView()
     QWidget* widget = m_tabwidget->currentWidget();
     if( !widget )
         return;
-    foreach( int id, m_views.keys() )
-    {
+    const auto ids = m_views.keys();
+    for (int id : ids) {
         if (m_views.value(id).view == widget)
         {
             OutputData* od = data->outputdata.value(id);
@@ -325,7 +325,8 @@ void OutputWidget::closeOtherViews()
     if (!widget)
         return;
 
-    foreach (int id, m_views.keys()) {
+    const auto ids = m_views.keys();
+    for (int id : ids) {
         if (m_views.value(id).view == widget) {
             continue; // leave the active view open
         }

@@ -73,18 +73,25 @@ StandardOutputView::StandardOutputView(QObject *parent, const QVariantList &)
 
 void StandardOutputView::removeSublimeView( Sublime::View* v )
 {
-    foreach (ToolViewData* d, m_toolViews) {
+    auto it = m_toolViews.begin();
+    while (it != m_toolViews.end()) {
+        ToolViewData* d = it.value();
+        bool isErased = false;
         if( d->views.contains(v) )
         {
             if( d->views.count() == 1 )
             {
-                m_toolViews.remove(d->toolViewId);
+                isErased = true;
+                it = m_toolViews.erase(it);
                 m_ids.removeAll( d->toolViewId );
                 delete d;
             } else
             {
                 d->views.removeAll(v);
             }
+        }
+        if (!isErased) {
+            ++it;
         }
     }
 }
@@ -141,7 +148,7 @@ int StandardOutputView::registerToolView( const QString& title,
                                           const QList<QAction*>& actionList )
 {
     // try to reuse existing tool view
-    foreach (ToolViewData* d, m_toolViews) {
+    for (ToolViewData* d : qAsConst(m_toolViews)) {
         if ( d->type == type && d->title == title ) {
             return d->toolViewId;
         }
@@ -186,9 +193,9 @@ int StandardOutputView::registerOutputInToolView( int toolViewId,
 
 void StandardOutputView::raiseOutput(int outputId)
 {
-    foreach (int _id, m_toolViews.keys()) {
-        if (m_toolViews.value(_id)->outputdata.contains(outputId)) {
-            foreach (Sublime::View* v, m_toolViews.value(_id)->views) {
+    for (const auto* toolViewData : qAsConst(m_toolViews))  {
+        if (toolViewData->outputdata.contains(outputId)) {
+            for (Sublime::View* v : qAsConst(toolViewData->views)) {
                 if( v->hasWidget() )
                 {
                     auto* w = qobject_cast<OutputWidget*>( v->widget() );
@@ -197,40 +204,43 @@ void StandardOutputView::raiseOutput(int outputId)
                 }
             }
         }
+        // TODO: not break here?
     }
 }
 
 void StandardOutputView::setModel( int outputId, QAbstractItemModel* model )
 {
-    int tvid = -1;
-    foreach (int _id, m_toolViews.keys()) {
-        if (m_toolViews.value( _id)->outputdata.contains(outputId)) {
-            tvid = _id;
+    OutputData* outputData = nullptr;
+    for (const auto* toolViewData : qAsConst(m_toolViews))  {
+        const auto& outputDataMap = toolViewData->outputdata;
+        auto outputDataIt = outputDataMap.find(outputId);
+        if (outputDataIt != outputDataMap.end()) {
+            outputData = outputDataIt.value();
             break;
         }
     }
-    if( tvid == -1 )
+    if (!outputData) {
         qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Trying to set model on unknown view-id:" << outputId;
-    else
-    {
-        m_toolViews.value(tvid)->outputdata.value(outputId)->setModel(model);
+    } else {
+        outputData->setModel(model);
     }
 }
 
 void StandardOutputView::setDelegate( int outputId, QAbstractItemDelegate* delegate )
 {
-    int tvid = -1;
-    foreach (int _id, m_toolViews.keys()) {
-        if (m_toolViews.value(_id)->outputdata.contains(outputId)) {
-            tvid = _id;
+    OutputData* outputData = nullptr;
+    for (const auto* toolViewData : qAsConst(m_toolViews))  {
+        const auto& outputDataMap = toolViewData->outputdata;
+        auto outputDataIt = outputDataMap.find(outputId);
+        if (outputDataIt != outputDataMap.end()) {
+            outputData = outputDataIt.value();
             break;
         }
     }
-    if( tvid == -1 )
+    if (!outputData) {
         qCDebug(PLUGIN_STANDARDOUTPUTVIEW) << "Trying to set model on unknown view-id:" << outputId;
-    else
-    {
-        m_toolViews.value(tvid)->outputdata.value(outputId)->setDelegate(delegate);
+    } else {
+        outputData->setDelegate(delegate);
     }
 }
 
@@ -239,18 +249,16 @@ void StandardOutputView::removeToolView(int toolViewId)
     const auto toolViewIt = m_toolViews.find(toolViewId);
     if (toolViewIt != m_toolViews.end()) {
         ToolViewData* td = *toolViewIt;
-        foreach( Sublime::View* view, td->views )
-        {
+        const auto views = td->views;
+        for (Sublime::View* view : views) {
             if( view->hasWidget() )
             {
                 auto* outputWidget = qobject_cast<OutputWidget*>( view->widget() );
-                foreach( int outid, td->outputdata.keys() )
-                {
-                    outputWidget->removeOutput( outid );
+                for (auto it = td->outputdata.keyBegin(), end = td->outputdata.keyEnd(); it != end; ++it) {
+                    outputWidget->removeOutput(*it);
                 }
             }
-            foreach( Sublime::Area* area, KDevelop::ICore::self()->uiController()->controller()->allAreas() )
-            {
+            for (Sublime::Area* area : KDevelop::ICore::self()->uiController()->controller()->allAreas()) {
                 area->removeToolView( view );
             }
         }
@@ -265,8 +273,7 @@ OutputWidget* StandardOutputView::outputWidgetForId( int outputId ) const
     for (ToolViewData* td : m_toolViews) {
         if( td->outputdata.contains( outputId ) )
         {
-            foreach( Sublime::View* view, td->views )
-            {
+            for (Sublime::View* view : qAsConst(td->views)) {
                 if( view->hasWidget() )
                     return qobject_cast<OutputWidget*>( view->widget() );
             }
@@ -284,11 +291,10 @@ void StandardOutputView::scrollOutputTo( int outputId, const QModelIndex& idx )
 
 void StandardOutputView::removeOutput( int outputId )
 {
-    foreach (ToolViewData* td, m_toolViews) {
+    for (ToolViewData* td : qAsConst(m_toolViews)) {
         const auto outputIt = td->outputdata.find(outputId);
         if (outputIt != td->outputdata.end()) {
-            foreach( Sublime::View* view, td->views )
-            {
+            for (Sublime::View* view : qAsConst(td->views)) {
                 if( view->hasWidget() )
                     qobject_cast<OutputWidget*>( view->widget() )->removeOutput( outputId );
             }
