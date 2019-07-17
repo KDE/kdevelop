@@ -89,4 +89,8 @@ install( EXPORT KDevPlatformTargets
          FILE KDevPlatformTargets.cmake )
 
 # kdebugsettings file
-install( FILES kdevplatform.categories DESTINATION ${KDE_INSTALL_CONFDIR} )
+if (ECM_VERSION VERSION_GREATER "5.58.0")
+    install(FILES kdevplatform.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+else()
+    install(FILES kdevplatform.categories DESTINATION ${KDE_INSTALL_CONFDIR})
+endif()

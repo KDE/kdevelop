@@ -180,7 +180,11 @@ install(FILES
 install(EXPORT KDevelopTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" NAMESPACE KDev:: FILE KDevelopTargets.cmake)
 
 # kdebugsettings file
-install(FILES kdevelop.categories DESTINATION ${KDE_INSTALL_CONFDIR})
+if (ECM_VERSION VERSION_GREATER "5.58.0")
+    install(FILES kdevelop.categories DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
+else()
+    install(FILES kdevelop.categories DESTINATION ${KDE_INSTALL_CONFDIR})
+endif()
 
 # CTestCustom.cmake has to be in the CTEST_BINARY_DIR.
 # in the KDE build system, this is the same as CMAKE_BINARY_DIR.
