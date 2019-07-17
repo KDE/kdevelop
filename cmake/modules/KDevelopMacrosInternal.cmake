@@ -244,16 +244,22 @@ function(_install_qt_logging_categories)
 
     foreach(_category IN LISTS _categories)
         get_target_property(_description ${_targetname} "DESCRIPTION_${_category}")
+        get_target_property(_identifier ${_targetname} "IDENTIFIER_${_category}")
 
-        # Format:
-        # logname<space>description
-        string(APPEND _content "${_category} ${_description}\n")
-
-        # TODO: support newer not backward-compatible format as supported by kdebugsettings 18.12
-        # Format:
-        # logname<space>description(optional <space> DEFAULT_SEVERITY [DEFAULT_CATEGORY] as WARNING/DEBUG/INFO/CRITICAL) optional IDENTIFIER [...])
-        # example: logname<space>description<space>DEFAULT_SEVERITY<space>[DEBUG]<space>IDENTIFIER<space>[foo]
-        # Needs idea how to ensure that at runtime kdebugsettings is min KA 18.12
+        # kdebugsettings >= 18.12 supports/pushes for some newer, not backward-compatible format.
+        # In case of no presence of kdebugsettings at build time, we have to make a guess anyway,
+        # so to simplify code whe just always guess (other software does not even guess, but just switched)
+        # For ECM >= 5.59 we install categories files to new location, which is only supported by
+        # newer kdebugsettings also supporting the new content format, so we use that as base.
+        if (ECM_VERSION VERSION_GREATER "5.58.0")
+            # Format:
+            # logname<space>description(optional <space> DEFAULT_SEVERITY [DEFAULT_CATEGORY] as WARNING/DEBUG/INFO/CRITICAL) optional IDENTIFIER [...])
+            string(APPEND _content "${_category} ${_description} IDENTIFIER [${_identifier}]\n")
+        else()
+            # Format:
+            # logname<space>description
+            string(APPEND _content "${_category} ${_description}\n")
+        endif()
     endforeach()
 
     if (NOT IS_ABSOLUTE ${ARGS_FILE})
