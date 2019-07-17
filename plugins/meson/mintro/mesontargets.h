@@ -39,7 +39,7 @@ using MesonTargetsPtr = std::shared_ptr<MesonTargets>;
 class MesonTargetSources
 {
 public:
-    explicit MesonTargetSources(QJsonObject const& json, MesonTarget* target);
+    explicit MesonTargetSources(const QJsonObject& json, MesonTarget* target);
     virtual ~MesonTargetSources();
 
     QString language() const;
@@ -55,7 +55,7 @@ public:
 
     MesonTarget* target();
 
-    void fromJSON(QJsonObject const& json);
+    void fromJSON(const QJsonObject& json);
 
 private:
     QString m_language;
@@ -76,7 +76,7 @@ private:
 class MesonTarget
 {
 public:
-    explicit MesonTarget(QJsonObject const& json);
+    explicit MesonTarget(const QJsonObject& json);
     virtual ~MesonTarget();
 
     QString name() const;
@@ -88,7 +88,7 @@ public:
 
     QVector<MesonSourcePtr> targetSources();
 
-    void fromJSON(QJsonObject const& json);
+    void fromJSON(const QJsonObject& json);
 
 private:
     QString m_name;
@@ -104,7 +104,7 @@ private:
 class MesonTargets
 {
 public:
-    explicit MesonTargets(QJsonArray const& json);
+    explicit MesonTargets(const QJsonArray& json);
     virtual ~MesonTargets();
 
     QVector<MesonTargetPtr> targets();
@@ -112,7 +112,7 @@ public:
     MesonSourcePtr fileSource(KDevelop::Path p);
     MesonSourcePtr operator[](KDevelop::Path p);
 
-    void fromJSON(QJsonArray const& json);
+    void fromJSON(const QJsonArray& json);
 
 private:
     QVector<MesonTargetPtr> m_targets;

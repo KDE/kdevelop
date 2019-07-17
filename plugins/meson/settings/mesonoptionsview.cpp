@@ -60,7 +60,7 @@ void MesonOptionsView::resetAll()
     }
 }
 
-KJob* MesonOptionsView::repopulateFromBuildDir(KDevelop::IProject* project, Meson::BuildDir const& buildDir)
+KJob* MesonOptionsView::repopulateFromBuildDir(KDevelop::IProject* project, const Meson::BuildDir& buildDir)
 {
     return repopulate(new MesonIntrospectJob(project, buildDir, { MesonIntrospectJob::BUILDOPTIONS },
                                              MesonIntrospectJob::BUILD_DIR, this));

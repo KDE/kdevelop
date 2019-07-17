@@ -90,8 +90,8 @@ void MesonNewBuildDir::resetFields()
     Path buildDirPath = projectPath;
     buildDirPath.addPath(QStringLiteral("build"));
 
-    auto checkInCfg = [](Meson::MesonConfig const& cfg, Path const& p) -> bool {
-        for (auto const& i : cfg.buildDirs) {
+    auto checkInCfg = [](const Meson::MesonConfig& cfg, const Path& p) -> bool {
+        for (const auto& i : cfg.buildDirs) {
             if (i.buildDir == p) {
                 return true;
             }
@@ -183,7 +183,7 @@ void MesonNewBuildDir::updated()
     }
 
     bool buildDirChanged = false;
-    if(m_oldBuildDir != buildDir.toLocalFile()) {
+    if (m_oldBuildDir != buildDir.toLocalFile()) {
         m_oldBuildDir = buildDir.toLocalFile();
         buildDirChanged = true;
     }

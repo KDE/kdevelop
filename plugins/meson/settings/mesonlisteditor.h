@@ -21,15 +21,17 @@
 
 #include <QDialog>
 
-namespace Ui {
-    class MesonListEditor;
+namespace Ui
+{
+class MesonListEditor;
 }
 
-class MesonListEditor : public QDialog {
+class MesonListEditor : public QDialog
+{
     Q_OBJECT
 
 public:
-    explicit MesonListEditor(QStringList const& content, QWidget *parent);
+    explicit MesonListEditor(const QStringList& content, QWidget* parent);
     virtual ~MesonListEditor();
 
     QStringList content() const;
@@ -44,7 +46,7 @@ public Q_SLOTS:
     void currentItemChanged();
 
 private:
-    Ui::MesonListEditor *m_ui = nullptr;
+    Ui::MesonListEditor* m_ui = nullptr;
 
     void moveItem(int src, int dst);
 };

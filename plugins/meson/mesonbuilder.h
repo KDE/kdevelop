@@ -52,16 +52,16 @@ public:
     KJob* prune(KDevelop::IProject* project) override;
 
     KJob* configure(KDevelop::IProject* project) override;
-    KJob* configure(KDevelop::IProject* project, Meson::BuildDir const& buildDir, QStringList args,
+    KJob* configure(KDevelop::IProject* project, const Meson::BuildDir& buildDir, QStringList args,
                     DirectoryStatus status = ___UNDEFINED___);
 
     /// Evaluate a directory for the use with meson
-    static DirectoryStatus evaluateBuildDirectory(KDevelop::Path const& path, QString const& backend);
+    static DirectoryStatus evaluateBuildDirectory(const KDevelop::Path& path, const QString& backend);
 
     bool hasError() const;
     QString errorDescription() const;
 
-    QList<KDevelop::IProjectBuilder *> additionalBuilderPlugins(KDevelop::IProject * project) const override;
+    QList<KDevelop::IProjectBuilder*> additionalBuilderPlugins(KDevelop::IProject* project) const override;
 
 Q_SIGNALS:
     void built(KDevelop::ProjectBaseItem*);
@@ -75,5 +75,5 @@ private:
     KDevelop::IProjectBuilder* m_ninjaBuilder = nullptr;
     QString m_errorString;
 
-    KJob* configureIfRequired(KDevelop::IProject* project, KJob *realJob);
+    KJob* configureIfRequired(KDevelop::IProject* project, KJob* realJob);
 };

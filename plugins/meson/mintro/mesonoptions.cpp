@@ -48,21 +48,21 @@ static const QHash<QString, MesonOptionBase::Type> STRING2TYPE = {
     { QStringLiteral("string"), MesonOptionBase::STRING },
 };
 
-MesonOptions::MesonOptions(QJsonArray const& arr)
+MesonOptions::MesonOptions(const QJsonArray& arr)
 {
     fromJSON(arr);
 }
 
 // Option constructors
 
-MesonOptionBase::MesonOptionBase(QString const& name, QString const& description, MesonOptionBase::Section section)
+MesonOptionBase::MesonOptionBase(const QString& name, const QString& description, MesonOptionBase::Section section)
     : m_name(name)
     , m_description(description)
     , m_section(section)
 {
 }
 
-MesonOptionArray::MesonOptionArray(QString const& name, QString const& description, MesonOptionBase::Section section,
+MesonOptionArray::MesonOptionArray(const QString& name, const QString& description, MesonOptionBase::Section section,
                                    QStringList value)
     : MesonOptionBase(name, description, section)
     , m_value(value)
@@ -70,15 +70,16 @@ MesonOptionArray::MesonOptionArray(QString const& name, QString const& descripti
 {
 }
 
-MesonOptionBool::MesonOptionBool(QString const& name, QString const& description, MesonOptionBase::Section section, bool value)
+MesonOptionBool::MesonOptionBool(const QString& name, const QString& description, MesonOptionBase::Section section,
+                                 bool value)
     : MesonOptionBase(name, description, section)
     , m_value(value)
     , m_initialValue(value)
 {
 }
 
-MesonOptionCombo::MesonOptionCombo(QString const& name, QString const& description, MesonOptionBase::Section section, QString value,
-                                   QStringList choices)
+MesonOptionCombo::MesonOptionCombo(const QString& name, const QString& description, MesonOptionBase::Section section,
+                                   QString value, QStringList choices)
     : MesonOptionBase(name, description, section)
     , m_value(value)
     , m_initialValue(value)
@@ -86,14 +87,16 @@ MesonOptionCombo::MesonOptionCombo(QString const& name, QString const& descripti
 {
 }
 
-MesonOptionInteger::MesonOptionInteger(QString const& name, QString const& description, MesonOptionBase::Section section, int value)
+MesonOptionInteger::MesonOptionInteger(const QString& name, const QString& description,
+                                       MesonOptionBase::Section section, int value)
     : MesonOptionBase(name, description, section)
     , m_value(value)
     , m_initialValue(value)
 {
 }
 
-MesonOptionString::MesonOptionString(QString const& name, QString const& description, MesonOptionBase::Section section, QString value)
+MesonOptionString::MesonOptionString(const QString& name, const QString& description, MesonOptionBase::Section section,
+                                     QString value)
     : MesonOptionBase(name, description, section)
     , m_value(value)
     , m_initialValue(value)
@@ -139,7 +142,7 @@ QString MesonOptionArray::value() const
     QStringList tmp;
     tmp.reserve(m_value.size());
     transform(begin(m_value), end(m_value), back_inserter(tmp),
-              [](QString const& str) -> QString { return QStringLiteral("'") + str + QStringLiteral("'"); });
+              [](const QString& str) -> QString { return QStringLiteral("'") + str + QStringLiteral("'"); });
     return QStringLiteral("[") + tmp.join(QStringLiteral(", ")) + QStringLiteral("]");
 }
 
@@ -170,7 +173,7 @@ QString MesonOptionArray::initialValue() const
     QStringList tmp;
     tmp.reserve(m_initialValue.size());
     transform(begin(m_initialValue), end(m_initialValue), back_inserter(tmp),
-              [](QString const& str) -> QString { return QStringLiteral("'") + str + QStringLiteral("'"); });
+              [](const QString& str) -> QString { return QStringLiteral("'") + str + QStringLiteral("'"); });
     return QStringLiteral("[") + tmp.join(QStringLiteral(", ")) + QStringLiteral("]");
 }
 
@@ -250,7 +253,7 @@ QString MesonOptionString::rawValue() const
 
 // Set value functions
 
-void MesonOptionArray::setValue(QStringList const& val)
+void MesonOptionArray::setValue(const QStringList& val)
 {
     m_value = val;
 }
@@ -260,7 +263,7 @@ void MesonOptionBool::setValue(bool val)
     m_value = val;
 }
 
-void MesonOptionCombo::setValue(QString const& val)
+void MesonOptionCombo::setValue(const QString& val)
 {
     m_value = val;
 }
@@ -270,34 +273,34 @@ void MesonOptionInteger::setValue(int val)
     m_value = val;
 }
 
-void MesonOptionString::setValue(QString const& val)
+void MesonOptionString::setValue(const QString& val)
 {
     m_value = val;
 }
 
 // Set value from string
 
-void MesonOptionArray::setFromString(QString const& value)
+void MesonOptionArray::setFromString(const QString& value)
 {
     setValue({ value });
 }
 
-void MesonOptionBool::setFromString(QString const& value)
+void MesonOptionBool::setFromString(const QString& value)
 {
     setValue(value.toLower() == QLatin1String("true"));
 }
 
-void MesonOptionCombo::setFromString(QString const& value)
+void MesonOptionCombo::setFromString(const QString& value)
 {
     setValue(value);
 }
 
-void MesonOptionInteger::setFromString(QString const& value)
+void MesonOptionInteger::setFromString(const QString& value)
 {
     setValue(value.toInt());
 }
 
-void MesonOptionString::setFromString(QString const& value)
+void MesonOptionString::setFromString(const QString& value)
 {
     setValue(value);
 }
@@ -340,7 +343,7 @@ MesonOptionPtr MesonOptionBase::fromJSON(const QJsonObject& obj)
     auto valueJV = obj[QStringLiteral("value")];
 
     // Check all values
-    for (auto const& i : { nameJV, descriptionJV, sectionJV, typeJV }) {
+    for (const auto& i : { nameJV, descriptionJV, sectionJV, typeJV }) {
         if (!i.isString()) {
             qCWarning(KDEV_Meson) << "OPT: Base type validation failed" << typeJV.toString();
             return nullptr;
@@ -377,7 +380,7 @@ MesonOptionPtr MesonOptionBase::fromJSON(const QJsonObject& obj)
         QJsonArray raw = valueJV.toArray();
         QStringList values;
         values.reserve(raw.size());
-        transform(begin(raw), end(raw), back_inserter(values), [](QJsonValue const& v) { return v.toString(); });
+        transform(begin(raw), end(raw), back_inserter(values), [](const QJsonValue& v) { return v.toString(); });
         return make_shared<MesonOptionArray>(name, description, section, values);
     }
 
@@ -396,7 +399,7 @@ MesonOptionPtr MesonOptionBase::fromJSON(const QJsonObject& obj)
         QJsonArray raw = choicesJV.toArray();
         QStringList choices;
         choices.reserve(raw.size());
-        transform(begin(raw), end(raw), back_inserter(choices), [](QJsonValue const& v) { return v.toString(); });
+        transform(begin(raw), end(raw), back_inserter(choices), [](const QJsonValue& v) { return v.toString(); });
         return make_shared<MesonOptionCombo>(name, description, section, valueJV.toString(), choices);
     }
 
@@ -446,7 +449,7 @@ void MesonOptions::fromJSON(const QJsonArray& arr)
     m_options.clear();
     m_options.reserve(arr.size());
 
-    for (QJsonValue const& i : arr) {
+    for (const QJsonValue& i : arr) {
         if (!i.isObject()) {
             continue;
         }
@@ -462,7 +465,7 @@ void MesonOptions::fromJSON(const QJsonArray& arr)
 
 void MesonOptions::print() const
 {
-    for (auto const& i : m_options) {
+    for (const auto& i : m_options) {
         qCDebug(KDEV_Meson) << i->name() << " = " << i->value() << "  [" << i->type() << "] -- " << i->section();
     }
 }

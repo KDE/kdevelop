@@ -95,7 +95,7 @@ QVector<MesonRewriterInputBase*> MesonRewriterPage::constructPojectInputs()
     };
 }
 
-MesonOptContainerPtr MesonRewriterPage::constructDefaultOpt(QString const& name, QString const& value)
+MesonOptContainerPtr MesonRewriterPage::constructDefaultOpt(const QString& name, const QString& value)
 {
     if (!m_opts) {
         return nullptr;
@@ -162,7 +162,7 @@ void MesonRewriterPage::recalculateLengths()
 void MesonRewriterPage::checkStatus()
 {
     // Get the config build dir status
-    auto setStatus = [this](QString const& msg, int color) -> void {
+    auto setStatus = [this](const QString& msg, int color) -> void {
         KColorScheme scheme(QPalette::Normal);
         KColorScheme::ForegroundRole role;
         switch (color) {
@@ -260,7 +260,7 @@ void MesonRewriterPage::apply()
 
     QStringList deletedOptions = m_initialDefaultOpts;
 
-    for (auto &i : m_defaultOpts) {
+    for (auto& i : m_defaultOpts) {
         auto opt = i->view()->option();
 
         // Detect deleted options by removing all current present options from the initial option list

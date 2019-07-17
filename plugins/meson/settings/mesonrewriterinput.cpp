@@ -28,7 +28,7 @@
 #include <QLineEdit>
 #include <debug.h>
 
-MesonRewriterInputBase::MesonRewriterInputBase(QString const& name, QString const& kwarg, QWidget* parent)
+MesonRewriterInputBase::MesonRewriterInputBase(const QString& name, const QString& kwarg, QWidget* parent)
     : QWidget(parent)
     , m_name(name)
     , m_kwarg(kwarg)
@@ -138,7 +138,7 @@ bool MesonRewriterInputBase::isEnabled() const
 
 // String input class
 
-MesonRewriterInputString::MesonRewriterInputString(QString const& name, QString const& kwarg, QWidget* parent)
+MesonRewriterInputString::MesonRewriterInputString(const QString& name, const QString& kwarg, QWidget* parent)
     : MesonRewriterInputBase(name, kwarg, parent)
 {
     m_lineEdit = new QLineEdit(this);
@@ -168,7 +168,7 @@ void MesonRewriterInputString::doReset()
     m_lineEdit->setText(m_initialValue);
 }
 
-void MesonRewriterInputString::resetValue(QJsonValue const& val)
+void MesonRewriterInputString::resetValue(const QJsonValue& val)
 {
     m_initialValue = val.toString();
 }

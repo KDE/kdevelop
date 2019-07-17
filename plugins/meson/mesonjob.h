@@ -38,8 +38,8 @@ public:
     enum CommandType { CONFIGURE, RE_CONFIGURE, SET_CONFIG };
 
 public:
-    MesonJob(Meson::BuildDir const& buildDir, KDevelop::IProject* project, CommandType commandType,
-             QStringList const& arguments, QObject* parent);
+    MesonJob(const Meson::BuildDir& buildDir, KDevelop::IProject* project, CommandType commandType,
+             const QStringList& arguments, QObject* parent);
 
     QUrl workingDirectory() const override;
 

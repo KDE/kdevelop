@@ -32,7 +32,7 @@ using namespace KDevelop;
 
 // Class MesonTest
 
-MesonTest::MesonTest(QJsonObject const& json, IProject* project)
+MesonTest::MesonTest(const QJsonObject& json, IProject* project)
     : m_project(project)
 {
     fromJson(json);
@@ -88,8 +88,8 @@ void MesonTest::fromJson(const QJsonObject& json)
     QJsonArray suites = json[QStringLiteral("suite")].toArray();
     QJsonObject env = json[QStringLiteral("env")].toObject();
 
-    transform(begin(cmd), end(cmd), back_inserter(m_command), [](auto const& x) { return x.toString(); });
-    transform(begin(suites), end(suites), back_inserter(m_suites), [](auto const& x) { return x.toString(); });
+    transform(begin(cmd), end(cmd), back_inserter(m_command), [](const auto& x) { return x.toString(); });
+    transform(begin(suites), end(suites), back_inserter(m_suites), [](const auto& x) { return x.toString(); });
 
     for (auto i = begin(env); i != end(env); ++i) {
         m_env[i.key()] = i.value().toString();
@@ -141,7 +141,7 @@ KJob* MesonTestSuite::launchCase(const QString& testCase, TestJobVerbosity verbo
 KJob* MesonTestSuite::launchCases(const QStringList& testCases, TestJobVerbosity verbosity)
 {
     QList<KJob*> jobs;
-    for (auto const& i : testCases) {
+    for (const auto& i : testCases) {
         auto iter = m_tests.find(i);
         if (iter == end(m_tests)) {
             continue;
@@ -221,7 +221,7 @@ void MesonTestSuites::fromJSON(const QJsonArray& json)
 {
     QVector<MesonTestPtr> tests;
     qCDebug(KDEV_Meson) << "MINTRO: -- Loading tests from JSON...";
-    for (auto const& i : json) {
+    for (const auto& i : json) {
         tests << make_shared<MesonTest>(i.toObject(), m_project);
     }
 

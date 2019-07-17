@@ -56,7 +56,7 @@ public:
      * Create a new build directory and write it into the config.
      * @returns The configuration job on success or nullptr on error.
      */
-    KJob* newBuildDirectory(KDevelop::IProject* project, Meson::BuildDir *outBuildDir = nullptr);
+    KJob* newBuildDirectory(KDevelop::IProject* project, Meson::BuildDir* outBuildDir = nullptr);
 
     /// Returns a list of all supported Meson backends (for now only ninja)
     QStringList supportedMesonBackends() const;

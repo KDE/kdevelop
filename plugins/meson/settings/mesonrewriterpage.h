@@ -23,8 +23,8 @@
 #include <QVector>
 #include <interfaces/configpage.h>
 
-#include "mintro/mesonoptions.h"
 #include "mesonrewriterinput.h"
+#include "mintro/mesonoptions.h"
 
 namespace KDevelop
 {
@@ -65,7 +65,7 @@ private:
     void setStatus(State s);
 
     QVector<MesonRewriterInputBase*> constructPojectInputs();
-    MesonOptContainerPtr constructDefaultOpt(QString const& name, QString const& value);
+    MesonOptContainerPtr constructDefaultOpt(const QString& name, const QString& value);
 
 private:
     KDevelop::IProject* m_project = nullptr;

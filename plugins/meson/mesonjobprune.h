@@ -32,7 +32,7 @@ class MesonJobPrune : public KDevelop::OutputJob
 {
     Q_OBJECT
 public:
-    explicit MesonJobPrune(Meson::BuildDir const& buildDir, QObject* parent);
+    explicit MesonJobPrune(const Meson::BuildDir& buildDir, QObject* parent);
     void start() override;
     bool doKill() override;
 

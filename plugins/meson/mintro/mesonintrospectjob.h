@@ -61,8 +61,8 @@ public:
     MesonTestSuitesPtr tests();
 
 private:
-    QString importJSONFile(Meson::BuildDir const& buildDir, Type type, QJsonObject* out);
-    QString importMesonAPI(Meson::BuildDir const& buildDir, Type type, QJsonObject* out);
+    QString importJSONFile(const Meson::BuildDir& buildDir, Type type, QJsonObject* out);
+    QString importMesonAPI(const Meson::BuildDir& buildDir, Type type, QJsonObject* out);
     QString import(Meson::BuildDir buildDir);
     void finished();
 

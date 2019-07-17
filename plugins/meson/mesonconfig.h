@@ -42,8 +42,7 @@ struct BuildDir {
     void canonicalizePaths();
 };
 
-struct MesonConfig
-{
+struct MesonConfig {
     int currentIndex = -1;
     QVector<BuildDir> buildDirs;
 
@@ -54,6 +53,6 @@ struct MesonConfig
 KConfigGroup rootGroup(KDevelop::IProject* project);
 BuildDir currentBuildDir(KDevelop::IProject* project);
 MesonConfig getMesonConfig(KDevelop::IProject* project);
-void writeMesonConfig(KDevelop::IProject* project, MesonConfig const& cfg);
+void writeMesonConfig(KDevelop::IProject* project, const MesonConfig& cfg);
 
 }

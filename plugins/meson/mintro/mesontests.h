@@ -40,7 +40,7 @@ using MesonTestSuitesPtr = std::shared_ptr<MesonTestSuites>;
 class MesonTest
 {
 public:
-    explicit MesonTest(QJsonObject const& json, KDevelop::IProject* project);
+    explicit MesonTest(const QJsonObject& json, KDevelop::IProject* project);
     virtual ~MesonTest();
 
     QString name() const;
@@ -48,7 +48,7 @@ public:
     KDevelop::IProject* project() const;
     KJob* job(KDevelop::ITestSuite::TestJobVerbosity verbosity);
 
-    void fromJson(QJsonObject const& json);
+    void fromJson(const QJsonObject& json);
 
 private:
     QString m_name;
@@ -90,14 +90,14 @@ private:
 class MesonTestSuites
 {
 public:
-    explicit MesonTestSuites(QJsonArray const& json, KDevelop::IProject* project);
+    explicit MesonTestSuites(const QJsonArray& json, KDevelop::IProject* project);
     virtual ~MesonTestSuites();
 
     QHash<QString, MesonTestSuitePtr> testSuites();
     MesonTestSuitePtr testSuite(QString name);
     MesonTestSuitePtr operator[](QString name);
 
-    void fromJSON(QJsonArray const& json);
+    void fromJSON(const QJsonArray& json);
 
 private:
     KDevelop::IProject* m_project = nullptr;

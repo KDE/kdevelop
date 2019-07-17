@@ -59,7 +59,8 @@ K_PLUGIN_FACTORY_WITH_JSON(MesonSupportFactory, "kdevmesonmanager.json", registe
 // * Error job for failed imports *
 // ********************************
 
-namespace mmanager_internal {
+namespace mmanager_internal
+{
 
 class ErrorJob : public KJob
 {
@@ -307,7 +308,7 @@ KJob* MesonManager::createImportJob(ProjectFolderItem* item)
         auto tgtList = targets->targets();
         QVector<MesonTarget*> tgtCopy;
         tgtCopy.reserve(tgtList.size());
-        transform(begin(tgtList), end(tgtList), back_inserter(tgtCopy), [](auto const& a) { return a.get(); });
+        transform(begin(tgtList), end(tgtList), back_inserter(tgtCopy), [](const auto& a) { return a.get(); });
 
         populateTargets(item, tgtCopy);
 
@@ -457,7 +458,7 @@ Path MesonManager::findMeson() const
     const static QStringList mesonPaths
         = { QStringLiteral("%1/.local/bin").arg(QStandardPaths::standardLocations(QStandardPaths::HomeLocation)[0]) };
 
-    for (auto const& i : mesonExecutables) {
+    for (const auto& i : mesonExecutables) {
         mesonPath = QStandardPaths::findExecutable(i);
         if (!mesonPath.isEmpty()) {
             break;

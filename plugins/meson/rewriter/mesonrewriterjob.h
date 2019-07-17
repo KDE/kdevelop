@@ -34,7 +34,7 @@ class MesonRewriterJob : public KJob
 {
     Q_OBJECT
 public:
-    explicit MesonRewriterJob(KDevelop::IProject* project, QVector<MesonRewriterActionPtr> const& actions,
+    explicit MesonRewriterJob(KDevelop::IProject* project, const QVector<MesonRewriterActionPtr>& actions,
                               QObject* parent);
 
     void start() override;

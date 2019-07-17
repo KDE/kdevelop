@@ -30,10 +30,10 @@ using MesonProjectInfoPtr = std::shared_ptr<MesonProjectInfo>;
 class MesonProjectInfo
 {
 public:
-    explicit MesonProjectInfo(QJsonObject const& json);
+    explicit MesonProjectInfo(const QJsonObject& json);
     virtual ~MesonProjectInfo();
 
-    void fromJSON(QJsonObject const& json);
+    void fromJSON(const QJsonObject& json);
 
     QString name() const;
     QString version() const;

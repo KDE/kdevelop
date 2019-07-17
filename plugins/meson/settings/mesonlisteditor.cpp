@@ -21,20 +21,20 @@
 
 #include "ui_mesonlisteditor.h"
 
-QListWidgetItem* genItem(QString const& label)
+QListWidgetItem* genItem(const QString& label)
 {
     QListWidgetItem* item = new QListWidgetItem(label);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
     return item;
 }
 
-MesonListEditor::MesonListEditor(QStringList const& content, QWidget* parent)
+MesonListEditor::MesonListEditor(const QStringList& content, QWidget* parent)
     : QDialog(parent)
 {
     m_ui = new Ui::MesonListEditor;
     m_ui->setupUi(this);
 
-    for (auto const& i : content) {
+    for (const auto& i : content) {
         m_ui->array->addItem(genItem(i));
     }
 

@@ -43,9 +43,9 @@ public:
     ~MesonAdvancedSettings() override;
 
     Data getConfig() const;
-    void setConfig(Data const& conf);
+    void setConfig(const Data& conf);
 
-    void setSupportedBackends(QStringList const& backends);
+    void setSupportedBackends(const QStringList& backends);
 
     bool hasMesonChanged();
 

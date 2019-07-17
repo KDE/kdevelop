@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <memory>
 #include <QJsonObject>
+#include <memory>
 
 class MesonRewriterActionBase;
 

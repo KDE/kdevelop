@@ -145,7 +145,7 @@ void Meson::writeMesonConfig(IProject* project, const MesonConfig& cfg)
     root.writeEntry(CURRENT_INDEX, currentIndex);
 
     int counter = 0;
-    for (auto const& i : cfg.buildDirs) {
+    for (const auto& i : cfg.buildDirs) {
         KConfigGroup current = root.group(BUILD_DIR_SEC.arg(counter++));
 
         current.writeEntry(BUILD_DIR_PATH, i.buildDir.path());

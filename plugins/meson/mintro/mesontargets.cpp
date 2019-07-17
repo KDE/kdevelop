@@ -98,11 +98,11 @@ void MesonTargetSources::fromJSON(const QJsonObject& json)
     QJsonArray src = json[QStringLiteral("sources")].toArray();
     QJsonArray gensrc = json[QStringLiteral("generated_sources")].toArray();
 
-    transform(begin(comp), end(comp), back_inserter(m_compiler), [](auto const& x) { return x.toString(); });
-    transform(begin(param), end(param), back_inserter(m_paramerters), [](auto const& x) { return x.toString(); });
-    transform(begin(src), end(src), back_inserter(m_sources), [](auto const& x) { return Path(x.toString()); });
+    transform(begin(comp), end(comp), back_inserter(m_compiler), [](const auto& x) { return x.toString(); });
+    transform(begin(param), end(param), back_inserter(m_paramerters), [](const auto& x) { return x.toString(); });
+    transform(begin(src), end(src), back_inserter(m_sources), [](const auto& x) { return Path(x.toString()); });
     transform(begin(gensrc), end(gensrc), back_inserter(m_generatedSources),
-              [](auto const& x) { return Path(x.toString()); });
+              [](const auto& x) { return Path(x.toString()); });
 
     splitParamerters();
     qCDebug(KDEV_Meson) << "    - language:" << m_language << "has" << m_sources.count() + m_generatedSources.count()
@@ -112,7 +112,7 @@ void MesonTargetSources::fromJSON(const QJsonObject& json)
 
 void MesonTargetSources::splitParamerters()
 {
-    for (QString const& i : m_paramerters) {
+    for (const QString& i : m_paramerters) {
         [&]() {
             for (auto j : { QStringLiteral("-I"), QStringLiteral("/I"), QStringLiteral("-isystem") }) {
                 if (i.startsWith(j)) {
@@ -196,11 +196,11 @@ void MesonTarget::fromJSON(const QJsonObject& json)
     m_installed = json[QStringLiteral("installed")].toBool();
 
     QJsonArray files = json[QStringLiteral("filename")].toArray();
-    transform(begin(files), end(files), back_inserter(m_filename), [](auto const& x) { return Path(x.toString()); });
+    transform(begin(files), end(files), back_inserter(m_filename), [](const auto& x) { return Path(x.toString()); });
 
     qCDebug(KDEV_Meson) << "  - " << m_type << m_name;
 
-    for (auto const& i : json[QStringLiteral("target_sources")].toArray()) {
+    for (const auto& i : json[QStringLiteral("target_sources")].toArray()) {
         m_targetSources << make_shared<MesonTargetSources>(i.toObject(), this);
     }
 }
@@ -237,7 +237,7 @@ MesonSourcePtr MesonTargets::operator[](KDevelop::Path p)
 void MesonTargets::fromJSON(const QJsonArray& json)
 {
     qCDebug(KDEV_Meson) << "MINTRO: Loading targets from json...";
-    for (auto const& i : json) {
+    for (const auto& i : json) {
         m_targets << make_shared<MesonTarget>(i.toObject());
     }
 

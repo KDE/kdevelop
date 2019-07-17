@@ -25,8 +25,9 @@
 
 class QDialogButtonBox;
 
-namespace KDevelop {
-    class IProject;
+namespace KDevelop
+{
+class IProject;
 }
 
 namespace Ui
@@ -38,11 +39,11 @@ class MesonNewBuildDir : public QDialog
 {
     Q_OBJECT
 public:
-    explicit MesonNewBuildDir(KDevelop::IProject *project, QWidget* parent = nullptr);
+    explicit MesonNewBuildDir(KDevelop::IProject* project, QWidget* parent = nullptr);
     ~MesonNewBuildDir() override;
     MesonNewBuildDir() = delete;
 
-    void setStatus(QString const& str, bool validConfig);
+    void setStatus(const QString& str, bool validConfig);
 
     bool isConfigValid() const;
     Meson::BuildDir currentConfig() const;

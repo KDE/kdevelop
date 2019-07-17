@@ -34,7 +34,7 @@
 
 using namespace KDevelop;
 
-MesonRewriterJob::MesonRewriterJob(IProject* project, QVector<MesonRewriterActionPtr> const& actions, QObject* parent)
+MesonRewriterJob::MesonRewriterJob(IProject* project, const QVector<MesonRewriterActionPtr>& actions, QObject* parent)
     : KJob(parent)
     , m_project(project)
     , m_actions(actions)

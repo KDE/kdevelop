@@ -31,7 +31,7 @@
 
 using namespace KDevelop;
 
-MesonJobPrune::MesonJobPrune(Meson::BuildDir const& buildDir, QObject* parent)
+MesonJobPrune::MesonJobPrune(const Meson::BuildDir& buildDir, QObject* parent)
     : OutputJob(parent, Verbose)
     , m_buildDir(buildDir.buildDir)
     , m_backend(buildDir.mesonBackend)

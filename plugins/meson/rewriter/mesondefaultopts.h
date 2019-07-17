@@ -38,7 +38,7 @@ public:
 
     Action action() const;
 
-    void set(QString const& name, QString const& value);
+    void set(const QString& name, const QString& value);
     void clear();
 
 private:

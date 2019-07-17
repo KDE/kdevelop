@@ -21,7 +21,7 @@
 
 #include <QStringList>
 
-MesonKWARGSModify::MesonKWARGSModify(MesonKWARGSModify::Function fn, MesonKWARGSModify::Operation op, QString const& id)
+MesonKWARGSModify::MesonKWARGSModify(MesonKWARGSModify::Function fn, MesonKWARGSModify::Operation op, const QString& id)
     : m_func(fn)
     , m_op(op)
     , m_id(id)
@@ -65,12 +65,12 @@ QJsonObject MesonKWARGSModify::command()
     return res;
 }
 
-void MesonKWARGSModify::set(QString const& kwarg, QJsonValue const& value)
+void MesonKWARGSModify::set(const QString& kwarg, const QJsonValue& value)
 {
     m_kwargs[kwarg] = value;
 }
 
-void MesonKWARGSModify::unset(QString const& kwarg)
+void MesonKWARGSModify::unset(const QString& kwarg)
 {
     if (isSet(kwarg)) {
         m_kwargs.remove(kwarg);
@@ -85,7 +85,7 @@ void MesonKWARGSModify::clear()
     }
 }
 
-bool MesonKWARGSModify::isSet(QString const& kwarg)
+bool MesonKWARGSModify::isSet(const QString& kwarg)
 {
     return m_kwargs.contains(kwarg);
 }
@@ -111,11 +111,11 @@ MesonKWARGSProjectModify::MesonKWARGSProjectModify(MesonKWARGSModify::Operation 
     : MesonKWARGSModify(PROJECT, op, QStringLiteral("/"))
 {
 }
-MesonKWARGSTargetModify::MesonKWARGSTargetModify(MesonKWARGSModify::Operation op, QString const& id)
+MesonKWARGSTargetModify::MesonKWARGSTargetModify(MesonKWARGSModify::Operation op, const QString& id)
     : MesonKWARGSModify(TARGET, op, id)
 {
 }
-MesonKWARGSDependencyModify::MesonKWARGSDependencyModify(MesonKWARGSModify::Operation op, QString const& id)
+MesonKWARGSDependencyModify::MesonKWARGSDependencyModify(MesonKWARGSModify::Operation op, const QString& id)
     : MesonKWARGSModify(DEPENDENCY, op, id)
 {
 }

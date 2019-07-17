@@ -28,7 +28,7 @@
 
 using namespace KDevelop;
 
-MesonJob::MesonJob(Meson::BuildDir const& buildDir, IProject* project, MesonJob::CommandType commandType,
+MesonJob::MesonJob(const Meson::BuildDir& buildDir, IProject* project, MesonJob::CommandType commandType,
                    const QStringList& arguments, QObject* parent)
     : OutputExecuteJob(parent)
     , m_project(project)

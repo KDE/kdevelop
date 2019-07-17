@@ -168,7 +168,7 @@ void MesonConfigPage::checkStatus()
 {
     // Get the config build dir status
     auto status = MesonBuilder::evaluateBuildDirectory(m_current.buildDir, m_current.mesonBackend);
-    auto setStatus = [this](QString const& msg, int color) -> void {
+    auto setStatus = [this](const QString& msg, int color) -> void {
         KColorScheme scheme(QPalette::Normal);
         KColorScheme::ForegroundRole role;
         switch (color) {
