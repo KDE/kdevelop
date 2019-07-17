@@ -264,10 +264,17 @@ function(_install_qt_logging_categories)
         CONTENT "${_content}"
     )
 
-    install(
-        FILES "${ARGS_FILE}"
-        DESTINATION ${KDE_INSTALL_CONFDIR}
-    )
+    if (ECM_VERSION VERSION_GREATER "5.58.0")
+        install(
+            FILES "${ARGS_FILE}"
+            DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
+        )
+    else()
+        install(
+            FILES "${ARGS_FILE}"
+            DESTINATION ${KDE_INSTALL_CONFDIR}
+        )
+    endif()
 endfunction()
 
 # install_qt_logging_categories(TYPE LIBRARY|APP_PLUGIN)
