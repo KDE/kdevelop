@@ -25,7 +25,7 @@ Boston, MA 02110-1301, USA.
 #include <QObject>
 #include <QPointer>
 #include <QWidget>
-
+#include <QMap>
 #include <KXMLGUIClient>
 
 #include <language/util/navigationtooltip.h>
