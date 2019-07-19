@@ -52,8 +52,6 @@ kdevplatform_add_plugin(kdevmesonmanager
                         JSON kdevmesonmanager.json
                         SOURCES ${mesonbuilder_SRCS})
 
-add_subdirectory(icons)
-
 target_link_libraries(kdevmesonmanager
     Qt5::Concurrent
     KDev::Interfaces

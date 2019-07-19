@@ -352,5 +352,5 @@ QString MesonConfigPage::fullName() const
 
 QIcon MesonConfigPage::icon() const
 {
-    return QIcon::fromTheme(QStringLiteral("meson"));
+    return QIcon::fromTheme(QStringLiteral("run-build"));
 }
