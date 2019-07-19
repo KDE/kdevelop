@@ -189,9 +189,10 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
 template<typename CustomTestFunction = NoopTestFunction>
 void executeCompletionTest(const QString& code, const CompletionItems& expectedCompletionItems,
                            const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin,
-                           CustomTestFunction customTestFunction = {})
+                           CustomTestFunction customTestFunction = {},
+                           QString fileExtension = QStringLiteral("cpp"))
 {
-    TestFile file(code, QStringLiteral("cpp"));
+    TestFile file(code, fileExtension);
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
     executeCompletionTest(file.topContext(), expectedCompletionItems, filters, customTestFunction);
 }
@@ -503,6 +504,46 @@ struct my_class : Head, my_class<Tail...>
     using base = Head;
 };)"
         << CompletionItems{{3, 17}, { "Head", "Tail", "my_class" }};
+}
+
+
+void TestCodeCompletion::testClangCodeCompletionType()
+{
+    QFETCH(QString, fileExtension);
+    QFETCH(QString, code);
+    QFETCH(CompletionItems, expectedItems);
+    QFETCH(QString, expedtedItem);
+    QFETCH(QString, expectedType);
+
+    auto executeItem = [=] (const ClangCodeCompletionItemTester& tester) {
+        auto item = tester.findItem(expedtedItem);
+        QVERIFY(item);
+        auto declaration = item->declaration();
+        QVERIFY(declaration);
+        QCOMPARE(declaration->abstractType()->toString(), expectedType);
+    };
+
+    executeCompletionTest(code, expectedItems, NoMacroOrBuiltin, executeItem, fileExtension);
+}
+
+void TestCodeCompletion::testClangCodeCompletionType_data()
+{
+    QTest::addColumn<QString>("fileExtension");
+    QTest::addColumn<QString>("code");
+    QTest::addColumn<CompletionItems>("expectedItems");
+    QTest::addColumn<QString>("expedtedItem");
+    QTest::addColumn<QString>("expectedType");
+
+    QTest::newRow("bug409041")
+        << "c"
+        << "typedef struct { int bitmask[1]; } bitmask_a;\n"
+           "typedef struct { int bitmask[6]; } bitmask_c;\n"
+           "typedef union { bitmask_c bitmask; } bitmask_union;\n"
+           "int main() { bitmask_union u;\n"
+           "u. \n "
+        << CompletionItems{{4, 2}, { "bitmask" }}
+        << "bitmask"
+        << "bitmask_c";
 }
 
 void TestCodeCompletion::testReplaceMemberAccess()

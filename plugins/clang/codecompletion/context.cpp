@@ -1187,6 +1187,19 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
             auto found = findDeclaration(qid, ctx, m_position, isOverloadCandidate ? overloadsHandled : handled);
 
+            if (found && found->type<FunctionType>() == nullptr && parent.isEmpty() && !resultType.isEmpty()) {
+                // workaround: for multiple nameless structs with the same member.
+                // Check the type of the member to have at least a higher probability.
+                auto typeCheckedDeclaration = found;
+                while (typeCheckedDeclaration != nullptr && typeCheckedDeclaration->abstractType() != nullptr) {
+                    if (typeCheckedDeclaration->abstractType()->toString() == resultType) {
+                        found = typeCheckedDeclaration;
+                        break;
+                    }
+                    typeCheckedDeclaration = findDeclaration(qid, ctx, m_position, isOverloadCandidate ? overloadsHandled : handled);
+                }
+            }
+
             CompletionTreeItemPointer item;
             if (found) {
                 // TODO: Bug in Clang: protected members from base classes not accessible in derived classes.
