@@ -862,6 +862,10 @@ KTextEditor::Range CMakeManager::termRangeAtPosition(const KTextEditor::Document
 
 void CMakeManager::showConfigureErrorMessage(const QString& errorMessage) const
 {
+    if (!QApplication::activeWindow()) {
+        // Do not show a message box if there is no active window in order not to block unit tests.
+        return;
+    }
     KMessageBox::error(QApplication::activeWindow(), i18n(
         "Failed to configure the project (error message: %1)."
         " As a result, KDevelop's code understanding will likely be broken.\n"
