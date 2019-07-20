@@ -84,6 +84,9 @@ public:
     void setPchInclude(const KDevelop::Path& path);
     KDevelop::Path pchInclude() const;
 
+    void setWorkingDirectory(const KDevelop::Path& path);
+    KDevelop::Path workingDirectory() const;
+
     void setTranslationUnitUrl(const KDevelop::IndexedString& url);
     KDevelop::IndexedString translationUnitUrl() const;
 
@@ -123,6 +126,7 @@ private:
     // NOTE: As elements in QHash stored in an unordered sequence, we're using QMap instead
     QMap<QString, QString> m_defines;
     KDevelop::Path m_pchInclude;
+    KDevelop::Path m_workingDirectory;
     KDevelop::IndexedString m_tuUrl;
     Quality m_quality = Unknown;
     ParserSettings m_parserSettings;

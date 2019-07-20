@@ -103,6 +103,16 @@ Path ClangParsingEnvironment::pchInclude() const
     return m_pchInclude;
 }
 
+void ClangParsingEnvironment::setWorkingDirectory(const Path& path)
+{
+    m_workingDirectory = path;
+}
+
+Path ClangParsingEnvironment::workingDirectory() const
+{
+    return m_workingDirectory;
+}
+
 void ClangParsingEnvironment::setTranslationUnitUrl(const IndexedString& url)
 {
     m_tuUrl = url;

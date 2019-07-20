@@ -283,6 +283,13 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     smartArgs << writeDefinesFile(environment.defines());
     clangArguments << "-imacros" << smartArgs.last().constData();
 
+    if (!environment.workingDirectory().isEmpty()) {
+        QByteArray workingDirectory = environment.workingDirectory().toLocalFile().toUtf8();
+        workingDirectory.prepend("-working-directory");
+        smartArgs << workingDirectory;
+        clangArguments << workingDirectory.constData();
+    }
+
     // append extra args from environment variable
     static const auto extraArgs = ::extraArgs();
     for (const QByteArray& arg : extraArgs) {

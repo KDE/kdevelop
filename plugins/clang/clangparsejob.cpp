@@ -172,6 +172,10 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
         m_environment.addFrameworkDirectories(IDefinesAndIncludesManager::manager()->frameworkDirectories(file));
         m_environment.addDefines(IDefinesAndIncludesManager::manager()->defines(file));
         m_environment.setParserSettings(ClangSettingsManager::self()->parserSettings(file));
+        if (hasBuildSystemInfo) {
+            // Assume the builder invokes the compiler in the build directory.
+            m_environment.setWorkingDirectory(file->project()->buildSystemManager()->buildDirectory(file));
+        }
     } else {
         m_environment.addIncludes(IDefinesAndIncludesManager::manager()->includes(tuUrl.str()));
         m_environment.addFrameworkDirectories(IDefinesAndIncludesManager::manager()->frameworkDirectories(tuUrl.str()));
