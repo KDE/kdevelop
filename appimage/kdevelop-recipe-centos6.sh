@@ -22,7 +22,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 QTDIR=/opt/qt5
 
 if [ -z "$KDEVELOP_VERSION" ]; then
-    KDEVELOP_VERSION=5.3
+    KDEVELOP_VERSION=5.4
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
