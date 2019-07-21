@@ -590,13 +590,14 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
         }
     }
 
+    // Find problems under the cursor (first pass)
     TopDUContext* topContext = DUChainUtils::standardContextForUrl(view->document()->url());
     QVector<KDevelop::IProblem::Ptr> problems;
     if (topContext) {
-        // first pass: find problems under the cursor
         problems = findProblemsUnderCursor(topContext, position, itemRange);
     }
 
+    // Find decl (declaration) under the cursor
     const auto itemUnderCursor = DUChainUtils::itemUnderCursor(viewUrl, position);
     auto declUnderCursor = itemUnderCursor.declaration;
     Declaration* decl = DUChainUtils::declarationForDefinition(declUnderCursor);
@@ -606,19 +607,14 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
         decl = alias->aliasedDeclaration().declaration();
     }
 
-    // Return nullptr if the correct contents are already shown.
+    // Return nullptr if the found problems / decl are already being shown in the tool tip currently.
     if (m_currentToolTip &&
         problems == m_currentToolTipProblems &&
-        (!decl || IndexedDeclaration(decl) == m_currentToolTipDeclaration)) {
+        IndexedDeclaration(decl) == m_currentToolTipDeclaration) {
         return nullptr;
     }
 
-    // Remember current state.
-    m_currentToolTipProblems = problems;
-    if (decl) {
-        m_currentToolTipDeclaration = IndexedDeclaration(decl);
-    }
-
+    // Create a widget for problems, if any have been found.
     AbstractNavigationWidget* problemWidget = nullptr;
     if (!problems.isEmpty()) {
         problemWidget = new AbstractNavigationWidget;
@@ -627,6 +623,8 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
         problemWidget->setContext(NavigationContextPointer(context));
     }
 
+    // Let the context create a widget for decl, if there is one.
+    // Note that createNavigationWidget() might also return nullptr for a valid decl however.
     AbstractNavigationWidget* declWidget = nullptr;
     if (decl) {
         if (itemRange.isValid()) {
@@ -637,26 +635,40 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
         declWidget = decl->context()->createNavigationWidget(decl, DUChainUtils::standardContextForUrl(viewUrl));
     }
 
-    if (problemWidget && declWidget) {
-        auto* combinedWidget = new QuickOpenEmbeddedWidgetCombiner;
-        combinedWidget->layout()->addWidget(problemWidget);
-        combinedWidget->layout()->addWidget(declWidget);
-        return combinedWidget;
-    } else if (problemWidget) {
-        return problemWidget;
-    } else if (declWidget) {
+    // If at least one widget was created for problems or decl, show it.
+    // If two widgets were created, combine them.
+    if (problemWidget || declWidget) {
+        // Remember current tool tip state.
+        m_currentToolTipProblems = problems;
+        m_currentToolTipDeclaration = IndexedDeclaration(decl);
+
+        if (problemWidget && declWidget) {
+            auto* combinedWidget = new QuickOpenEmbeddedWidgetCombiner;
+            combinedWidget->layout()->addWidget(problemWidget);
+            combinedWidget->layout()->addWidget(declWidget);
+            return combinedWidget;
+        }
+        if (problemWidget) {
+            return problemWidget;
+        }
         return declWidget;
     }
 
+    // Nothing has been found so far which created a widget.
+    // Thus, find the closest problem to the cursor in a second pass.
     if (topContext) {
-        // second pass: find closest problem to the cursor
         problems = findProblemsCloseToCursor(topContext, position, view, itemRange);
         if (!problems.isEmpty()) {
-            if (problems == m_currentToolTipProblems && m_currentToolTip) {
+            // Return nullptr if the correct contents are already being shown in the tool tip currently.
+            if (m_currentToolTip &&
+                problems == m_currentToolTipProblems &&
+                !m_currentToolTipDeclaration.isValid()) {
                 return nullptr;
             }
 
+            // Remember current tool tip state.
             m_currentToolTipProblems = problems;
+            m_currentToolTipDeclaration = {};
 
             auto widget = new AbstractNavigationWidget;
             // since the problem is not under cursor: show location
@@ -667,6 +679,8 @@ QWidget* ContextBrowserPlugin::navigationWidgetForPosition(KTextEditor::View* vi
         }
     }
 
+    // Nothing to show has been found under or next to the cursor, so hide the tool tip (if visible).
+    hideToolTip();
     return nullptr;
 }
 
