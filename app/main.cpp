@@ -391,8 +391,8 @@ int main( int argc, char *argv[] )
 
     KAboutData aboutData( QStringLiteral("kdevelop"), i18n("KDevelop"), QStringLiteral(KDEVELOP_VERSION_STRING),
                           i18n("The KDevelop Integrated Development Environment"),
-                          KAboutLicense::GPL,
-                          i18n("Copyright 1999-2018, The KDevelop developers"), QString(), QStringLiteral("https://www.kdevelop.org/"));
+                          KAboutLicense::GPL, i18n("Copyright 1999-%1, The KDevelop developers", 2019),
+                          QString(), QStringLiteral("https://www.kdevelop.org/"));
     aboutData.setDesktopFileName(QStringLiteral("org.kde.kdevelop"));
     aboutData.addAuthor( i18n("Kevin Funk"), i18n( "Co-maintainer, C++/Clang, QA, Windows Support" ), QStringLiteral("kfunk@kde.org") );
     aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Co-maintainer, AppImage, Python Support, User Interface improvements" ), QStringLiteral("svenbrauch@gmail.com") );
