@@ -4,7 +4,6 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>KDevelop</name>
-  <name xml:lang="ar">مطوّرك</name>
   <name xml:lang="bs">KDevelop</name>
   <name xml:lang="ca">KDevelop</name>
   <name xml:lang="ca-valencia">KDevelop</name>
@@ -13,6 +12,7 @@
   <name xml:lang="de">KDevelop</name>
   <name xml:lang="en-GB">KDevelop</name>
   <name xml:lang="es">KDevelop</name>
+  <name xml:lang="et">KDevelop</name>
   <name xml:lang="fi">KDevelop</name>
   <name xml:lang="fr">KDevelop</name>
   <name xml:lang="gl">KDevelop</name>
@@ -34,7 +34,6 @@
   <name xml:lang="zh-CN">KDevelop</name>
   <name xml:lang="zh-TW">KDevelop</name>
   <summary>Featureful, plugin-extensible IDE for C/C++ and other programming languages</summary>
-  <summary xml:lang="ar">بيئة تطوير متكاملة بمزايا عديدة ودعم للملحقات للغتي سي/سي++ ولغات البرمجة الأخرى</summary>
   <summary xml:lang="ca">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
   <summary xml:lang="ca-valencia">És un IDE, extensible amb connectors, amb totes les característiques per a C/C++ i altres llenguatges de programació.</summary>
   <summary xml:lang="de">Eine leistungsfähige integrierte Entwicklungsumgebung (IDE) für C/C++ und andere Programmiersprachen, die durch Module erweitert werden kann.</summary>
@@ -50,7 +49,6 @@
   <summary xml:lang="pt">IDE pleno de funcionalidades e modular para o C/C++ e outras linguagens de programação</summary>
   <summary xml:lang="pt-BR">IDE repleto de funcionalidades e expansível através de plugins, para C/C++ e outras linguagens de programação.</summary>
   <summary xml:lang="sk">Plne funkčné, pluginmi rozšíriteľné IDE pre C/C++ a iné programovacie jazyky</summary>
-  <summary xml:lang="sl">Zmogljivo integrirano razvojno okolje za C/C++ in druge programske jezike, ki je razširljivo z vstavki.</summary>
   <summary xml:lang="sv">Funktionsrik, integrerad utvecklingsmiljö för C/C++ och andra programspråk</summary>
   <summary xml:lang="tr">Tam özellikli, eklenti ile geliştirilebilir C/C++ ve diğer programlama dilleri için tümleşik geliştirme ortamı.</summary>
   <summary xml:lang="uk">Це повноцінне, розширюване за допомогою додатків комплексне середовище розробки мовами C/C++ та іншими мовами програмування.</summary>
@@ -58,7 +56,6 @@
   <summary xml:lang="zh-CN">全功能，可扩展的支持 C/C++ 和其他语言的集成开发环境。</summary>
   <description>
     <p>KDevelop is a Free and Open Source integrated development environment (IDE).</p>
-    <p xml:lang="ar">«مطوّرك» هي بيئة تطوير متكاملة (IDE) حرّة ومفتوحة المصدر.</p>
     <p xml:lang="ca">El KDevelop és un entorn de desenvolupament integrat (IDE) lliure i de codi obert.</p>
     <p xml:lang="ca-valencia">El KDevelop és un entorn de desenvolupament integrat (IDE) lliure i de codi obert.</p>
     <p xml:lang="de">KDevelop ist eine integrierte Entwicklungsumgebung (Frei und Open Source).</p>
@@ -74,14 +71,12 @@
     <p xml:lang="pt">O KDevelop é um ambiente de desenvolvimento integrado (IDE) livre e em código aberto.</p>
     <p xml:lang="pt-BR">Ambiente de Desenvolvimento Integrado (IDE) em Software Livre e Código Aberto.</p>
     <p xml:lang="sk">KDevelop je slobodné a otvorené integrované vývojové prostredie (IDE).</p>
-    <p xml:lang="sl">KDevelop je prosto in odprtokodno integrirano razvojno okolje  (IDE).</p>
     <p xml:lang="sv">KDevelop är en fri integrerad utvecklingsmiljö (IDE) med öppen källkod för olika programvaruprojekt.</p>
     <p xml:lang="tr">KDevelop Özgür ve Açık Kaynaklı tümleşik geliştirme ortamıdır (IDE).</p>
     <p xml:lang="uk">KDevelop є вільним комплексним середовищем розробки (IDE) з відкритим кодом.</p>
     <p xml:lang="x-test">xxKDevelop is a Free and Open Source integrated development environment (IDE).xx</p>
     <p xml:lang="zh-CN">可用于您的不同软件项目的自由和开源的集成开发环境</p>
     <p>It provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.</p>
-    <p xml:lang="ar">توفّر البرمجيّة مزايا التّحرير والتّنقّل والتّنقيح لمختلف لغات البرمجة، إلى جانب التّكامل مع مختلف أنظمة البناء وأنظمة التّحكّم بالإصدارات، وذلك عبر البنية المعتمدة على الملحقات.</p>
     <p xml:lang="ca">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
     <p xml:lang="ca-valencia">Proporciona característiques per a l'edició, navegació i depuració per a diversos llenguatges de programació, així com la integració amb múltiples sistemes de construcció i sistemes de control de versions, emprant una arquitectura basada en connectors.</p>
     <p xml:lang="de">Funktionen zum Editieren, Navigieren und zur Fehlersuche für mehrere Programmiersprachen, dazu auch Integration von mehreren Build- und Versionskontrollsystemen auf der Basis einer modularen Architektur.</p>
@@ -104,7 +99,6 @@
     <p xml:lang="x-test">xxIt provides editing, navigation and debugging features for several programming languages, as well as integration with multiple build systems and version-control systems, using a plugin-based architecture.xx</p>
     <p xml:lang="zh-CN">它提供了多种编程语言的编辑、导航和调试功能，以及与多种构建系统和版本控制系统的集成，使用基于插件的体系结构。</p>
     <p>KDevelop has parser backends for C, C++ and Javascript/QML, with further external plugins supporting e.g. PHP or Python.</p>
-    <p xml:lang="ar">لدى «مطوّرك» سندات تحليل للغات سي، وسي++، وجاڤاسكربت/QML كما وملحقات خارجيّة أخرى تدعم PHP أو پيثون.</p>
     <p xml:lang="ca">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
     <p xml:lang="ca-valencia">El KDevelop disposa de dorsals d'analitzador per a C, C ++ i Javascript/QML, amb altres connectors externs que implementen, p. ex., PHP o Python.</p>
     <p xml:lang="de">KDevelop beinhaltet Parser-Module für  C, C++ und Javascript/QML, weitere externe Module unterstützten zum Beispiel PHP oder Python.</p>
