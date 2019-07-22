@@ -87,6 +87,7 @@ public:
         desired[QStringLiteral("org.kdevelop.KonsoleView")] = Sublime::Bottom;
         desired[QStringLiteral("org.kdevelop.SnippetView")] = Sublime::Right;
         desired[QStringLiteral("org.kdevelop.ExternalScriptView")] = Sublime::Right;
+        desired[QStringLiteral("org.kdevelop.scratchpad")] = Sublime::Left;
         Sublime::Area* a =
             new Sublime::Area(m_controller, QStringLiteral("code"), i18n("Code"));
         a->setDesiredToolViews(desired);
