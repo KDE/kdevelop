@@ -254,9 +254,9 @@ KDevelop::SourceFormatterStyle CustomScriptPlugin::predefinedStyle(const QString
         result.setContent(QStringLiteral("clang-format -assume-filename=\"$FILE\""));
         result.setUsePreview(false);
         result.setDescription(i18n("Description:<br /><br />"
-                                   "<b>clang-format</b> is an automatic source formater by the LLVM"
-                                   "project. It supports a variety of formatting style options via"
-                                   "a <b>.clang-format</b> configuration file, usually located in"
+                                   "<b>clang-format</b> is an automatic source formater by the LLVM "
+                                   "project. It supports a variety of formatting style options via "
+                                   "a <b>.clang-format</b> configuration file, usually located in "
                                    "the project root directory."));
     } else if (name == QLatin1String("kdev_format_source")) {
         result.setCaption(QStringLiteral("KDevelop: kdev_format_source"));
