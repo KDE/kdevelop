@@ -2,7 +2,14 @@
     "KPlugin": {
         "Authors": [
             {
-                "Name": "Carlos Nihelton"
+                "Name": "Carlos Nihelton",
+                "Name[ca]": "Carlos Nihelton",
+                "Name[cs]": "Carlos Nihelton",
+                "Name[fr]": "Carlos Nihelton",
+                "Name[it]": "Carlos Nihelton",
+                "Name[pt]": "Carlos Nihelton",
+                "Name[uk]": "Carlos Nihelton",
+                "Name[x-test]": "xxCarlos Niheltonxx"
             },
             {
                 "Name": "Friedrich W. H. Kossebau",
@@ -34,10 +41,22 @@
         ],
         "Category": "Analyzers",
         "Description": "clang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. https://clang.llvm.org/extra/clang-tidy/",
+        "Description[ca]": "El clang-tidy proporciona un marc de treball extensible per al diagnòstic i esmena d'errors de programació típics, com ara infraccions de l'estil, mal ús de la interfície o errors que es poden deduir mitjançant anàlisi estàtica. https://clang.llvm.org/extra/clang-tidy/",
+        "Description[it]": "clang-tidy fornisce un'infrastruttura estensibile per diagnosticare e correggere dei classici errori di programmazione, che includono violazioni di stile, uso incorretto delle interfacce o errori che possono essere dedotti tramite analisi statica. https://clang.llvm.org/extra/clang-tidy/",
+        "Description[pt]": "O 'clang-tidy' oferece uma plataforma extensível para diagnosticar e corrigir erros de programação típicos, como violações do estilo, mau uso de interfaces ou erros que possam ser deduzidos por análise estática. https://clang.llvm.org/extra/clang-tidy/",
+        "Description[uk]": "clang-tidy — розширена оболонка діагностування та виправлення типових помилок у програмах, зокрема порушень стилю, помилкового використання інтерфейсу та вад, які можна виявити за допомогою статичного аналізу. https://clang.llvm.org/extra/clang-tidy/",
+        "Description[x-test]": "xxclang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. https://clang.llvm.org/extra/clang-tidy/xx",
         "Icon": "dialog-ok",
         "Id": "kdevclangtidy",
         "License": "GPL",
         "Name": "Clang-Tidy Support",
+        "Name[ca]": "Implementació del Clang-Tidy",
+        "Name[cs]": "Podpora Clang-Tidy",
+        "Name[fr]": "Prise en charge de Clang-Tidy",
+        "Name[it]": "Supporto per Clang-Tidy",
+        "Name[pt]": "Suporte para o Clang-Tidy",
+        "Name[uk]": "Підтримка Clang-Tidy",
+        "Name[x-test]": "xxClang-Tidy Supportxx",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],
