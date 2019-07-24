@@ -1,12 +1,12 @@
 {
     "KPlugin": {
         "Description": "Allows to use custom buildsystems for KDevelop projects",
+        "Description[bs]": "DOpušta korištene vlastitih sistema za gradnju KDevelop projekata",
         "Description[ca@valencia]": "Permet utilitzar sistemes de construcció personalitzats per a projectes del KDevelop",
         "Description[ca]": "Permet utilitzar sistemes de construcció personalitzats per a projectes del KDevelop",
         "Description[de]": "Ermöglicht ein benutzerdefiniertes Erstellungssystem für KDevelop-Projekte",
         "Description[en_GB]": "Allows to use custom build systems for KDevelop projects",
         "Description[es]": "Permite el uso de sistemas de compilación personalizados en proyectos de KDevelop",
-        "Description[et]": "Võimaldab kasutada KDevelopi projektide puhul kohandatud ehitamissüsteemi",
         "Description[fi]": "Mahdollistaa omien käännösjärjestelmien käytön KDevelop-projekteissa",
         "Description[fr]": "Permet d'utiliser des systèmes de construction personnalisés pour des projets KDevelop",
         "Description[gl]": "Permite empregar sistemas de construción personalizados cos proxectos de KDevelop.",
@@ -39,6 +39,7 @@
         "Name[pt]": "Sistema de Compilação Personalizado",
         "Name[pt_BR]": "Sistema de compilação personalizado",
         "Name[sk]": "Vlastný zostavovací systém",
+        "Name[sl]": "Sistem za izgradnjo po meri",
         "Name[sv]": "Eget byggsystem",
         "Name[tr]": "Özel İnşa Sistemi",
         "Name[uk]": "Нетипова система збирання",
