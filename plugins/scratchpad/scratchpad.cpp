@@ -207,7 +207,7 @@ void Scratchpad::renameScratch(const QModelIndex& index, const QString& previous
     const QString newName = index.data().toString();
     if (newName.contains(QDir::separator())) {
         m_model->setData(index, previousName); // undo
-        emit actionFailed(i18n("Failed to rename scratch: Names must not include path seperator"));
+        emit actionFailed(i18n("Failed to rename scratch: Names must not include path separator"));
         return;
     }
 
