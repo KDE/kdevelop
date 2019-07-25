@@ -65,7 +65,7 @@ public:
 
     QString id() const override
     {
-        return QStringLiteral("org.kdevelop.scratchpad");
+        return QStringLiteral("org.kdevelop.ScratchpadView");
     }
 
 private:
