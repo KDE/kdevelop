@@ -149,7 +149,7 @@ void ScratchpadView::setupActions()
     connect(action, &QAction::triggered, this, &ScratchpadView::createScratch);
     addAction(action);
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("list-remove")), i18n("Remove Scratch"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("Remove Scratch"), this);
     connect(action, &QAction::triggered, this, [this] {
         m_scratchpad->removeScratch(proxyModel()->mapToSource(currentIndex()));
         validateItemActions();
