@@ -190,7 +190,12 @@ template<typename CustomTestFunction = NoopTestFunction>
 void executeCompletionTest(const QString& code, const CompletionItems& expectedCompletionItems,
                            const ClangCodeCompletionContext::ContextFilters& filters = NoMacroOrBuiltin,
                            CustomTestFunction customTestFunction = {},
-                           QString fileExtension = QStringLiteral("cpp"))
+                           // Using QStringLiteral fails here with Ubuntu Bionic's GNU 7.4.0 C++ compiler,
+                           // Assembler messages:  Error: symbol `_ZZNK12_GLOBAL__N_1UlvE_clEvE15qstring_literal' is already defined
+                           // Seems the symbol is not including the template arguments, but might be created
+                           // per instantiation of the template
+                           // Seems fixed in newer versions of GCC
+                           const QString& fileExtension = QString::fromLatin1("cpp"))
 {
     TestFile file(code, fileExtension);
     QVERIFY(file.parseAndWait(TopDUContext::AllDeclarationsContextsUsesAndAST));
