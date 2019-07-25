@@ -50,9 +50,6 @@
    <header>emptymessagelistview.h</header>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>scratchTree</tabstop>
- </tabstops>
  <resources/>
  <connections/>
 </ui>
