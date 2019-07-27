@@ -231,7 +231,7 @@ void MesonConfigPage::checkStatus()
         m_ui->l_changed->setText(i18n("No changes"));
     } else {
         role = KColorScheme::NeutralText;
-        m_ui->l_changed->setText(i18n("%1 options changed", numChanged));
+        m_ui->l_changed->setText(i18np("%1 option changed", "%1 options changed", numChanged));
     }
 
     QPalette pal = m_ui->l_changed->palette();
