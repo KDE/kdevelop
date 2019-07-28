@@ -87,6 +87,7 @@ class HomeDocumentation : public KDevelop::IDocumentation
         void clicked(const QModelIndex& idx);
     private:
         QtHelpProviderAbstract *m_provider;
+        bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 class QtHelpAlternativeLink : public QAction

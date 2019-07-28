@@ -28,6 +28,7 @@
 #include <QAbstractItemView>
 #include <QLineEdit>
 #include <QShortcut>
+#include <QMouseEvent>
 
 #include <KLocalizedString>
 
@@ -294,6 +295,15 @@ void DocumentationView::changedProvider(int row)
     mIdentifiers->clear();
 
     showHome();
+}
+
+void DocumentationView::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::MouseButton::ForwardButton) {
+        mForward->trigger();
+    } else if (event->button() == Qt::MouseButton::BackButton) {
+        mBack->trigger();
+    }
 }
 
 ////////////// ProvidersModel //////////////////

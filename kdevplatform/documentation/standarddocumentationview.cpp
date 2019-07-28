@@ -94,7 +94,6 @@ public:
         m_view = new QWebView(parent);
         m_view->setContextMenuPolicy(Qt::NoContextMenu);
         QObject::connect(m_view, &QWebView::linkClicked, parent, &StandardDocumentationView::linkClicked);
-    }
 #else
     QWebEngineView* m_view = nullptr;
     StandardDocumentationPage* m_page = nullptr;
@@ -120,12 +119,13 @@ public:
         m_page = new StandardDocumentationPage(profile, parent);
         m_view = new QWebEngineView(parent);
         m_view->setPage(m_page);
+#endif
         // workaround for Qt::NoContextMenu broken with QWebEngineView, contextmenu event is always eaten
         // see https://bugreports.qt.io/browse/QTBUG-62345
         // we have to enforce deferring of event ourselves
+        // also for handling mouse forwards and backwards buttons since they are swallowed by both views
         m_view->installEventFilter(parent);
     }
-#endif
 };
 
 StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* findWidget, QWidget* parent)
@@ -390,7 +390,6 @@ QMenu* StandardDocumentationView::createStandardContextMenu()
 bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
 {
     Q_D(StandardDocumentationView);
-
 #ifndef USE_QTWEBKIT
     if (object == d->m_view) {
         // help QWebEngineView properly behave like expected as if Qt::NoContextMenu was set
@@ -398,9 +397,26 @@ bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
             event->ignore();
             return true;
         }
+        /* HACK / Workaround for QTBUG-43602
+         * Need to set an eventFilter on the child of WebengineView because it swallows
+         * MousePressEvents.
+         */
+        else if (event->type() == QEvent::ChildAdded) {
+            QObject* child = static_cast<QChildEvent*>(event)->child();
+            if(qobject_cast<QWidget*>(child)) {
+                child->installEventFilter(this);
+            }
+        } else if (event->type() == QEvent::ChildRemoved) {
+            QObject* child = static_cast<QChildEvent*>(event)->child();
+            if(qobject_cast<QWidget*>(child)) {
+                child->removeEventFilter(this);
+            }
+        }
     }
 #endif
-
+    if (event->type() == QEvent::MouseButtonPress) {
+        event->setAccepted(false);
+    }
     return QWidget::eventFilter(object, event);
 }
 

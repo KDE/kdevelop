@@ -57,6 +57,7 @@ public Q_SLOTS:
     void showHome();
 
 private:
+    void mousePressEvent(QMouseEvent* event) override;
     void setupActions();
     void updateView();
     void returnPressed();

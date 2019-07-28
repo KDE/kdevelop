@@ -27,6 +27,7 @@
 #include <QHelpContentModel>
 #include <QHeaderView>
 #include <QMenu>
+#include <QMouseEvent>
 #include <QTemporaryFile>
 #include <QRegularExpression>
 
@@ -261,6 +262,8 @@ HomeDocumentation::HomeDocumentation() : m_provider(QtHelpDocumentation::s_provi
 QWidget* HomeDocumentation::documentationWidget(DocumentationFindWidget*, QWidget* parent)
 {
     auto* w=new QTreeView(parent);
+    // install an event filter to get the mouse events out of it
+    w->viewport()->installEventFilter(this);
     w->header()->setVisible(false);
     w->setModel(m_provider->engine()->contentModel());
 
@@ -287,4 +290,13 @@ QString HomeDocumentation::name() const
 IDocumentationProvider* HomeDocumentation::provider() const
 {
     return m_provider;
+}
+
+bool HomeDocumentation::eventFilter(QObject* obj, QEvent* event)
+{
+    if(event->type() == QEvent::MouseButtonPress) {
+        // Here we need to set accpeted to false to let it propagate up
+        event->setAccepted(false);
+    }
+    return QObject::eventFilter(obj, event);
 }
