@@ -140,5 +140,10 @@
   <provides>
     <binary>kdevelop</binary>
   </provides>
+  <icon type="stock">kdevelop</icon>
+  <categories>
+    <category>Development</category>
+    <category>IDE</category>
+  </categories>
   <update_contact>kfunk@kde.org</update_contact>
 </component>
