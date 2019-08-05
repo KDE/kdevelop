@@ -92,6 +92,7 @@ void DocumentationView::setupActions()
     addAction(mHomeAction);
 
     mProviders = new QComboBox(this);
+    mProviders->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     auto providersAction = new QWidgetAction(this);
     providersAction->setDefaultWidget(mProviders);
     addAction(providersAction);
