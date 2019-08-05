@@ -391,6 +391,11 @@ make
 cd /kdevelop.appdir
 cp -v /appimage-exec-wrapper/exec.so exec_wrapper.so
 
+# Disabled plugins (yet build and bundled, as more complicated to remove from build):
+# * KDevWelcomePage - issues with Qt failing to load SSL during news feed fetching
+#                     thus causing KDevelop to hang while creating network connections
+# * KDevManPage - man:/ kio-slave & deps not bundled yet
+
 cat > AppRun << EOF
 #!/bin/bash
 
@@ -423,7 +428,7 @@ export APPIMAGE_STARTUP_PATH=\$PATH
 export APPIMAGE_STARTUP_PYTHONHOME=\$PYTHONHOME
 
 export KDEV_CLANG_BUILTIN_DIR=\$DIR/opt/llvm/lib/clang/8.0.0/include
-export KDEV_DISABLE_PLUGINS=KDevWelcomePage
+export KDEV_DISABLE_PLUGINS="KDevWelcomePage;KDevManPage"
 
 cd \$HOME
 
