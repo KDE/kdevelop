@@ -1,7 +1,7 @@
 # Find the meson executable
 #
 # Defines the following variables
-#  Meson_EXECUTABLE - path of the Cppcheck executable
+#  Meson_EXECUTABLE - path of the meson executable
 #  Meson_VERSION    - version of the found meson executable
 
 #=============================================================================
