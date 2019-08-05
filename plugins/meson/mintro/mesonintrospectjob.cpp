@@ -235,7 +235,7 @@ QString MesonIntrospectJob::import(BuildDir buildDir)
     auto testsJSON = rawData[QStringLiteral("tests")];
     if (testsJSON.isArray()) {
         m_res_tests = std::make_shared<MesonTestSuites>(testsJSON.toArray(), m_project);
-        if (m_res_options) {
+        if (m_res_tests) {
             qCDebug(KDEV_Meson) << "MINTRO: Imported " << m_res_tests->testSuites().size() << " test suites";
         } else {
             qCWarning(KDEV_Meson) << "MINTRO: Failed to parse tests";
