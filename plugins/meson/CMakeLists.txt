@@ -1,5 +1,13 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"kdevmesonmanager\")
 
+find_package(Meson 0.51 QUIET)
+set_package_properties(Meson PROPERTIES
+    DESCRIPTION "The Meson build system"
+    URL "https://mesonbuild.com"
+    PURPOSE "Recommended: required by the Meson project manager plugin"
+    TYPE RUNTIME
+)
+
 set(mesonbuilder_SRCS
     mesonbuilder.cpp
     mesonconfig.cpp
