@@ -75,6 +75,16 @@ SerializedFilters defaultFilters()
     // but do show some with special meaning
     ret << SerializedFilter(QStringLiteral(".gitignore"), Filter::Files, Filter::Inclusive)
         << SerializedFilter(QStringLiteral(".gitmodules"), Filter::Files, Filter::Inclusive)
+        << SerializedFilter(QStringLiteral(".pre-commit-config.yaml"), Filter::Files, Filter::Inclusive)
+        // CI config files
+        << SerializedFilter(QStringLiteral(".gitlab-ci.yml"), Filter::Files, Filter::Inclusive)
+        << SerializedFilter(QStringLiteral(".travis.yml"), Filter::Files, Filter::Inclusive)
+        << SerializedFilter(QStringLiteral(".circleci"), Filter::Folders, Filter::Inclusive)
+        // Linting configs
+        << SerializedFilter(QStringLiteral(".editorconfig"), Filter::Files, Filter::Inclusive)
+        << SerializedFilter(QStringLiteral(".pep8"), Filter::Files, Filter::Inclusive)
+        << SerializedFilter(QStringLiteral(".prettierignore"), Filter::Files, Filter::Inclusive)
+        << SerializedFilter(QStringLiteral(".prettierrc*"), Filter::Files, Filter::Inclusive)
         << SerializedFilter(QStringLiteral(".clang-format"), Filter::Files, Filter::Inclusive);
 
     // common vcs folders which we want to hide
