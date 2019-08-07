@@ -54,12 +54,12 @@ if DEFINED script (
     call %script%
 )
 
-for /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\KDE\KDevelop" /v Install_Dir 2^>nul`) DO (
+for /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\KDE e.V.\KDevelop" /v Install_Dir 2^>nul`) DO (
     set appdir=%%A %%B
 )
 
 if NOT DEFINED appdir (
-    for /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\Wow6432Node\KDE\KDevelop" /v Install_Dir 2^>nul`) DO (
+    for /F "usebackq tokens=3*" %%A IN (`REG QUERY "HKEY_LOCAL_MACHINE\Software\Wow6432Node\KDE e.V.\KDevelop" /v Install_Dir 2^>nul`) DO (
         set appdir=%%A %%B
     )
 )
