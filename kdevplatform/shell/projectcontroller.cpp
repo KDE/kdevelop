@@ -911,7 +911,7 @@ void ProjectController::openProject( const QUrl &projectFile )
     }
 }
 
-bool ProjectController::fetchProjectFromUrl(const QUrl& repoUrl)
+bool ProjectController::fetchProjectFromUrl(const QUrl& repoUrl, FetchFlags fetchFlags)
 {
     Q_D(ProjectController);
 
@@ -930,8 +930,10 @@ bool ProjectController::fetchProjectFromUrl(const QUrl& repoUrl)
         }
     }
     if (!vcsOrProviderPlugin) {
-        KMessageBox::error(Core::self()->uiController()->activeMainWindow(),
-                            i18n("No enabled plugin supports this repository URL: %1", repoUrl.toDisplayString()));
+        if (fetchFlags.testFlag(FetchShowErrorIfNotSupported)) {
+            KMessageBox::error(Core::self()->uiController()->activeMainWindow(),
+                               i18n("No enabled plugin supports this repository URL: %1", repoUrl.toDisplayString()));
+        }
         return false;
     }
 
