@@ -71,10 +71,10 @@ public:
     }
 
 private:
-    QAction* m_action;
+    QAction* const m_action;
 
     ///needed because it won't have the "E&xit" ampersand
-    QString m_display;
+    const QString m_display;
 };
 
 ActionsQuickOpenProvider::ActionsQuickOpenProvider()

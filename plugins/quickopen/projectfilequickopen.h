@@ -82,8 +82,9 @@ public:
     QString project() const;
 
     KDevelop::Path projectPath() const;
+
 private:
-    ProjectFile m_file;
+    const ProjectFile m_file;
 };
 
 class BaseFileDataProvider

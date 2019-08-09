@@ -58,9 +58,10 @@ public:
 
     QIcon icon() const override;
     KDevelop::Path projectPath() const;
+
 private:
-    DUChainItem m_item;
-    bool m_openDefinition;
+    const DUChainItem m_item;
+    const bool m_openDefinition;
 };
 
 /**

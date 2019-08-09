@@ -59,9 +59,10 @@ public:
     {
         return m_provider->icon();
     }
+
 private:
-    QModelIndex m_data;
-    IDocumentationProvider* m_provider;
+    const QModelIndex m_data;
+    IDocumentationProvider* const m_provider;
 };
 
 namespace {
