@@ -33,9 +33,6 @@
 #include "expandingdelegate.h"
 #include <debug.h>
 
-QIcon ExpandingWidgetModel::m_expandedIcon;
-QIcon ExpandingWidgetModel::m_collapsedIcon;
-
 using namespace KTextEditor;
 
 inline QModelIndex firstColumn(const QModelIndex& index)
@@ -499,17 +496,6 @@ QWidget* ExpandingWidgetModel::expandingWidget(const QModelIndex& idx_) const
         return *widgetIt;
     } else {
         return nullptr;
-    }
-}
-
-void ExpandingWidgetModel::cacheIcons() const
-{
-    if (m_expandedIcon.isNull()) {
-        m_expandedIcon = QIcon::fromTheme(QStringLiteral("arrow-down"));
-    }
-
-    if (m_collapsedIcon.isNull()) {
-        m_collapsedIcon = QIcon::fromTheme(QStringLiteral("arrow-right"));
     }
 }
 

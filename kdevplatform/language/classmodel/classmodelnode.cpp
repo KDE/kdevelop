@@ -85,20 +85,16 @@ bool EnumNode::getIcon(QIcon& a_resultIcon)
 
     auto* decl = dynamic_cast<ClassMemberDeclaration*>(declaration());
     if (decl == nullptr) {
-        static QIcon Icon = QIcon::fromTheme(QStringLiteral("enum"));
-        a_resultIcon = Icon;
+        a_resultIcon = QIcon::fromTheme(QStringLiteral("enum"));
     } else
     {
         if (decl->accessPolicy() == Declaration::Protected) {
-            static QIcon Icon = QIcon::fromTheme(QStringLiteral("protected_enum"));
-            a_resultIcon = Icon;
+            a_resultIcon = QIcon::fromTheme(QStringLiteral("protected_enum"));
         } else if (decl->accessPolicy() == Declaration::Private) {
-            static QIcon Icon = QIcon::fromTheme(QStringLiteral("private_enum"));
-            a_resultIcon = Icon;
+            a_resultIcon = QIcon::fromTheme(QStringLiteral("private_enum"));
         } else
         {
-            static QIcon Icon = QIcon::fromTheme(QStringLiteral("enum"));
-            a_resultIcon = Icon;
+            a_resultIcon = QIcon::fromTheme(QStringLiteral("enum"));
         }
     }
 
@@ -314,18 +310,14 @@ bool ClassMemberNode::getIcon(QIcon& a_resultIcon)
         return false;
 
     if (decl->isTypeAlias()) {
-        static QIcon Icon = QIcon::fromTheme(QStringLiteral("typedef"));
-        a_resultIcon = Icon;
+        a_resultIcon = QIcon::fromTheme(QStringLiteral("typedef"));
     } else if (decl->accessPolicy() == Declaration::Protected) {
-        static QIcon Icon = QIcon::fromTheme(QStringLiteral("protected_field"));
-        a_resultIcon = Icon;
+        a_resultIcon = QIcon::fromTheme(QStringLiteral("protected_field"));
     } else if (decl->accessPolicy() == Declaration::Private) {
-        static QIcon Icon = QIcon::fromTheme(QStringLiteral("private_field"));
-        a_resultIcon = Icon;
+        a_resultIcon = QIcon::fromTheme(QStringLiteral("private_field"));
     } else
     {
-        static QIcon Icon = QIcon::fromTheme(QStringLiteral("field"));
-        a_resultIcon = Icon;
+        a_resultIcon = QIcon::fromTheme(QStringLiteral("field"));
     }
 
     return true;
@@ -341,8 +333,7 @@ DynamicFolderNode::DynamicFolderNode(const QString& a_displayName, NodesModelInt
 
 bool DynamicFolderNode::getIcon(QIcon& a_resultIcon)
 {
-    static QIcon folderIcon = QIcon::fromTheme(QStringLiteral("folder"));
-    a_resultIcon = folderIcon;
+    a_resultIcon = QIcon::fromTheme(QStringLiteral("folder"));
     return true;
 }
 
@@ -356,8 +347,7 @@ FolderNode::FolderNode(const QString& a_displayName, NodesModelInterface* a_mode
 
 bool FolderNode::getIcon(QIcon& a_resultIcon)
 {
-    static QIcon folderIcon = QIcon::fromTheme(QStringLiteral("folder"));
-    a_resultIcon = folderIcon;
+    a_resultIcon = QIcon::fromTheme(QStringLiteral("folder"));
     return true;
 }
 

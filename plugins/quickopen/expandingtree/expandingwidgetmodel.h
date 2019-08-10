@@ -22,13 +22,11 @@
 #define KDEVPLATFORM_PLUGIN_EXPANDING_WIDGET_MODEL_H
 
 #include <QAbstractTableModel>
-#include <QIcon>
 #include <QPointer>
 
 class ExpandingDelegate;
 class ExpandingTree;
 
-class KWidget;
 class QTreeView;
 
 /**
@@ -134,12 +132,6 @@ protected:
 
     QModelIndex mapFromSource(const QModelIndex& index) const;
     QModelIndex mapToSource(const QModelIndex& index) const;
-
-    //Makes sure m_expandedIcon and m_collapsedIcon are loaded
-    void cacheIcons() const;
-
-    static QIcon m_expandedIcon;
-    static QIcon m_collapsedIcon;
 
     //Does not update the view
     void partiallyUnExpand(const QModelIndex& index);

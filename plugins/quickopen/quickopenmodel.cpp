@@ -353,11 +353,10 @@ QVariant QuickOpenModel::data(const QModelIndex& index, int role) const
         {
             if (isExpandable(index)) {
                 //Show the expanded/unexpanded handles
-                cacheIcons();
                 if (isExpanded(index)) {
-                    return m_expandedIcon;
+                    return QIcon::fromTheme(QStringLiteral("arrow-down"));
                 } else {
-                    return m_collapsedIcon;
+                    return QIcon::fromTheme(QStringLiteral("arrow-right"));
                 }
             }
         }
