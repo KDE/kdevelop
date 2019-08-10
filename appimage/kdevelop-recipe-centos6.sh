@@ -155,7 +155,7 @@ function build_framework
 if [ -z "$SKIP_FRAMEWORKS" ]; then
 build_framework extra-cmake-modules -DBUILD_HTML_DOCS=OFF -DBUILD_MAN_DOCS=OFF
 
-build_framework kconfig
+(PATCH_FILE=$SCRIPT_DIR/kconfig_no_execution_of_values.patch build_framework kconfig)
 build_framework kguiaddons
 build_framework ki18n
 build_framework kitemviews

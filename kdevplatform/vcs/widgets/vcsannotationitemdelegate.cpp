@@ -69,6 +69,9 @@ static QString ageOfDate(const QDate& date)
         return i18ncp("age", "%1 year", "%1 years", ageInYears);
     }
     int ageInMonths = now.month() - date.month();
+    if (now.day() < date.day()) {
+        --ageInMonths;
+    }
     if (ageInMonths < 0) {
         ageInMonths += 12;
     }
