@@ -167,8 +167,7 @@ public:
     {
         if (role == Qt::DecorationRole) {
             if (index.column() == KTextEditor::CodeCompletionModel::Icon) {
-                static const QIcon icon = QIcon::fromTheme(QStringLiteral("CTparents"));
-                return icon;
+                return QIcon::fromTheme(QStringLiteral("CTparents"));
             }
         }
         return CompletionItem<CompletionTreeItem>::data(index, role, model);

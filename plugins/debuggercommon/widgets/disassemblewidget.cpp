@@ -298,8 +298,7 @@ bool DisassembleWidget::displayCurrent()
         {
             // put cursor at start of line and highlight the line
             m_disassembleWindow->setCurrentItem(item);
-            static const QIcon icon = QIcon::fromTheme(QStringLiteral("go-next"));
-            item->setIcon(Icon, icon);
+            item->setIcon(Icon, QIcon::fromTheme(QStringLiteral("go-next")));
             bFound = true;  // need to process all items to clear icons
         }
         else if(!item->icon(Icon).isNull()) item->setIcon(Icon, QIcon());
