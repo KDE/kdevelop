@@ -73,18 +73,33 @@ SerializedFilters defaultFilters()
     // filter hidden files
     ret << SerializedFilter(QStringLiteral(".*"), Filter::Targets(Filter::Files | Filter::Folders));
     // but do show some with special meaning
+
+        // Version control
+
     ret << SerializedFilter(QStringLiteral(".gitignore"), Filter::Files, Filter::Inclusive)
         << SerializedFilter(QStringLiteral(".gitmodules"), Filter::Files, Filter::Inclusive)
+        // https://pre-commit.com/
         << SerializedFilter(QStringLiteral(".pre-commit-config.yaml"), Filter::Files, Filter::Inclusive)
+
         // CI config files
+
+        // https://docs.gitlab.com/ee/ci/yaml/
         << SerializedFilter(QStringLiteral(".gitlab-ci.yml"), Filter::Files, Filter::Inclusive)
+        // https://travis-ci.org/
         << SerializedFilter(QStringLiteral(".travis.yml"), Filter::Files, Filter::Inclusive)
+        // https://circleci.com/docs/
         << SerializedFilter(QStringLiteral(".circleci"), Filter::Folders, Filter::Inclusive)
+
         // Linting configs
+
+        //   https://editorconfig.org/
         << SerializedFilter(QStringLiteral(".editorconfig"), Filter::Files, Filter::Inclusive)
+        //   https://pep8.readthedocs.io
         << SerializedFilter(QStringLiteral(".pep8"), Filter::Files, Filter::Inclusive)
+        //   https://prettier.io/
         << SerializedFilter(QStringLiteral(".prettierignore"), Filter::Files, Filter::Inclusive)
         << SerializedFilter(QStringLiteral(".prettierrc*"), Filter::Files, Filter::Inclusive)
+        //   https://clang.llvm.org/docs/ClangFormat.html
         << SerializedFilter(QStringLiteral(".clang-format"), Filter::Files, Filter::Inclusive);
 
     // common vcs folders which we want to hide
