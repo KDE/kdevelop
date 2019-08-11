@@ -77,8 +77,13 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
 
     m_prev = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("&Previous Item"), this);
     m_next = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("&Next Item"), this);
-    m_collapseAll = new QAction(QIcon::fromTheme(QStringLiteral("arrow-left-double")), i18n("C&ollapse All"), this); // TODO change icon
-    m_expandAll = new QAction(QIcon::fromTheme(QStringLiteral("arrow-right-double")), i18n("&Expand All"), this); // TODO change icon
+    /* Expand-all and collapse-all icons were added to breeze with version 5.57. We use a fallback
+     * icon here because we support older frameworks versions and oxygen doesn't have such an icon
+     */
+    m_collapseAll = new QAction(QIcon::fromTheme(QStringLiteral("collapse-all"),
+                        QIcon::fromTheme(QStringLiteral("arrow-right-double"))), i18n("C&ollapse All"), this);
+    m_expandAll = new QAction(QIcon::fromTheme(QStringLiteral("expand-all"),
+                        QIcon::fromTheme(QStringLiteral("arrow-right-double"))), i18n("&Expand All"), this);
     updateButtonState(false);
     auto *separator = new QAction(this);
     separator->setSeparator(true);
