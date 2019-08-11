@@ -43,6 +43,7 @@ class OktetaPlugin;
 class OktetaDocument : public Sublime::UrlDocument, public IDocument
 {
     Q_OBJECT
+    Q_INTERFACES(KDevelop::IDocument)
 
   public:
     OktetaDocument( const QUrl &url, ICore* core );
