@@ -97,11 +97,17 @@ public:
 
     ContextMenuExtension contextMenuExtension(KDevelop::Context* ctx, QWidget* parent);
 
+    enum FetchFlag {
+        NoFetchFlags = 0,
+        FetchShowErrorIfNotSupported = 1,
+    };
+    Q_DECLARE_FLAGS(FetchFlags, FetchFlag)
+
     /**
      * @param repoUrl url identifying the repo
      * @returns @c true if a plugin was found to handle the repo (also if user cancelled), @c false otherwise
      */
-    bool fetchProjectFromUrl(const QUrl& repoUrl);
+    bool fetchProjectFromUrl(const QUrl& repoUrl, FetchFlags fetchFlags = FetchShowErrorIfNotSupported);
 
 public Q_SLOTS:
     Q_SCRIPTABLE void openProjectForUrl( const QString &sourceUrl ) { openProjectForUrl(QUrl(sourceUrl)); }

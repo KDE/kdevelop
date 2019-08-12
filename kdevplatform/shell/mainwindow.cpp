@@ -253,7 +253,7 @@ void MainWindow::dropEvent( QDropEvent* ev )
 
     bool eventUsed = false;
     if (urls.size() == 1) {
-        eventUsed = Core::self()->projectControllerInternal()->fetchProjectFromUrl(urls.at(0));
+        eventUsed = Core::self()->projectControllerInternal()->fetchProjectFromUrl(urls.at(0), ProjectController::NoFetchFlags);
     }
 
     if (!eventUsed) {
