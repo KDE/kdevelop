@@ -17,7 +17,8 @@
                 "Name[pt_BR]": "Carlos Nihelton",
                 "Name[sv]": "Carlos Nihelton",
                 "Name[uk]": "Carlos Nihelton",
-                "Name[x-test]": "xxCarlos Niheltonxx"
+                "Name[x-test]": "xxCarlos Niheltonxx",
+                "Name[zh_CN]": "Carlos Nihelton"
             },
             {
                 "Name": "Friedrich W. H. Kossebau",
@@ -81,6 +82,7 @@
         "Name[sv]": "Stöd för Clang-Tidy",
         "Name[uk]": "Підтримка Clang-Tidy",
         "Name[x-test]": "xxClang-Tidy Supportxx",
+        "Name[zh_CN]": "Clang-Tidy 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
         ],
