@@ -23,6 +23,8 @@
 
 #include <KConfigGroup>
 
+#include <array>
+
 using namespace KDevelop;
 
 Filter::Filter()
@@ -68,17 +70,54 @@ namespace KDevelop {
 SerializedFilters defaultFilters()
 {
     SerializedFilters ret;
-    ret.reserve(20);
+    ret.reserve(41);
 
     // filter hidden files
     ret << SerializedFilter(QStringLiteral(".*"), Filter::Targets(Filter::Files | Filter::Folders));
     // but do show some with special meaning
-    ret << SerializedFilter(QStringLiteral(".gitignore"), Filter::Files, Filter::Inclusive)
-        << SerializedFilter(QStringLiteral(".gitmodules"), Filter::Files, Filter::Inclusive)
-        << SerializedFilter(QStringLiteral(".clang-format"), Filter::Files, Filter::Inclusive);
+
+    static const std::array<QString, 10> configFiles = {
+        // Version control
+        QStringLiteral(".gitignore"),
+        QStringLiteral(".gitmodules"),
+        // https://pre-commit.com/
+        QStringLiteral(".pre-commit-config.yaml"),
+
+        // CI config files
+
+        // https://docs.gitlab.com/ee/ci/yaml/
+        QStringLiteral(".gitlab-ci.yml"),
+        // https://travis-ci.org/
+        QStringLiteral(".travis.yml"),
+
+        // Linting configs
+
+        //   https://editorconfig.org/
+        QStringLiteral(".editorconfig"),
+        //   https://pep8.readthedocs.io
+        QStringLiteral(".pep8"),
+        //   https://prettier.io/
+        QStringLiteral(".prettierignore"),
+        QStringLiteral(".prettierrc*"),
+        //   https://clang.llvm.org/docs/ClangFormat.html
+        QStringLiteral(".clang-format"),
+    };
+    for (const QString& file : configFiles) {
+        ret << SerializedFilter(file, Filter::Files, Filter::Inclusive);
+    }
+
+    static const std::array<QString, 1> configFolders = {
+        // CI config folders
+
+        // https://circleci.com/docs/
+        QStringLiteral(".circleci"),
+    };
+    for (const QString& folder : configFolders) {
+        ret << SerializedFilter(folder, Filter::Folders, Filter::Inclusive);
+    }
 
     // common vcs folders which we want to hide
-    static const QVector<QString> invalidFolders = {
+    static const std::array<QString, 9> invalidFolders = {
         QStringLiteral(".git"), QStringLiteral("CVS"), QStringLiteral(".svn"), QStringLiteral("_svn"),
         QStringLiteral("SCCS"), QStringLiteral("_darcs"), QStringLiteral(".hg"), QStringLiteral(".bzr"), QStringLiteral("__pycache__")
     };
@@ -87,7 +126,7 @@ SerializedFilters defaultFilters()
     }
 
     // common files which we want to hide
-    static const QVector<QString> filePatterns = {
+    static const std::array<QString, 20> filePatterns = {
         // binary files (Unix)
         QStringLiteral("*.o"), QStringLiteral("*.a"), QStringLiteral("*.so"), QStringLiteral("*.so.*"),
         // binary files (Windows)
