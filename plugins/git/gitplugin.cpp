@@ -1271,8 +1271,8 @@ void GitPlugin::parseGitVersionOutput(DVcsJob* job)
 {
     const auto output = job->output().trimmed();
     auto versionString = output.midRef(output.lastIndexOf(QLatin1Char(' '))).split(QLatin1Char('.'));
-    static const QList<int> minimumVersion = QList<int>{1, 7};
-    qCDebug(PLUGIN_GIT) << "checking git version" << versionString << "against" << minimumVersion;
+    static const std::array<int, 2> minimumVersion = {1, 7};
+    qCDebug(PLUGIN_GIT) << "checking git version" << versionString << "against" << minimumVersion[0] << minimumVersion[1];
     m_oldVersion = false;
     if (versionString.size() < minimumVersion.size()) {
         m_oldVersion = true;

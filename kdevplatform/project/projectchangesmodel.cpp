@@ -247,7 +247,7 @@ void ProjectChangesModel::reloadAll()
 
 void ProjectChangesModel::jobUnregistered(KJob* job)
 {
-    static const QList<VcsJob::JobType> readOnly = QList<VcsJob::JobType>{
+    static const std::array<VcsJob::JobType, 7> readOnly = {
         KDevelop::VcsJob::Add,
         KDevelop::VcsJob::Remove,
         KDevelop::VcsJob::Pull,
@@ -258,7 +258,7 @@ void ProjectChangesModel::jobUnregistered(KJob* job)
     };
 
     auto* vcsjob = qobject_cast<VcsJob*>(job);
-    if(vcsjob && readOnly.contains(vcsjob->type())) {
+    if (vcsjob && std::find(readOnly.begin(), readOnly.end(), vcsjob->type()) != readOnly.end()) {
         reloadAll();
     }
 }

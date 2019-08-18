@@ -29,11 +29,22 @@
 #include <QProcess>
 #include <KLocalizedString>
 
-static const QVector<QString> args = {
-    QLatin1String("--help-command"), QLatin1String("--help-variable"), QLatin1String("--help-module"), QLatin1String("--help-property"), QLatin1String("--help-policy"), QString()
+#include <array>
+
+static const std::array<QString, 6> args = {
+    QStringLiteral("--help-command"),
+    QStringLiteral("--help-variable"),
+    QStringLiteral("--help-module"),
+    QStringLiteral("--help-property"),
+    QStringLiteral("--help-policy"),
+    QString(),
 };
-static QString modules [] = {
-    i18n("Commands"), i18n("Variables"), i18n("Modules"), i18n("Properties"), i18n("Policies")
+static const std::array<QString, 5> modules = {
+    i18n("Commands"),
+    i18n("Variables"),
+    i18n("Modules"),
+    i18n("Properties"),
+    i18n("Policies"),
 };
 
 CMakeCommandsContents::CMakeCommandsContents(QObject* parent)
