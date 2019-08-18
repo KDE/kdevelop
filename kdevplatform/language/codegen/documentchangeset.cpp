@@ -392,17 +392,16 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
                                                                           const CodeRepresentation* repr,
                                                                           QString& output)
 {
-    ISourceFormatter* formatter = nullptr;
-    if (ICore::self()) {
-        formatter = ICore::self()->sourceFormatterController()->formatterForUrl(file.toUrl());
-    }
-
     //Create the actual new modified file
     QStringList textLines = repr->text().split(QLatin1Char('\n'));
 
     QUrl url = file.toUrl();
 
     QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
+
+    auto core = ICore::self();
+    ISourceFormatter* formatter = core ? core->sourceFormatterController()->formatterForUrl(file.toUrl(), mime) : nullptr;
+
     QVector<int> removedLines;
 
     for (int pos = sortedChanges.size() - 1; pos >= 0; --pos) {
