@@ -5,22 +5,10 @@ RUN cd /tmp && wget http://opensource.wandisco.com/rhel/6/svn-1.9/RPMS/x86_64/su
 
 RUN echo ". /opt/rh/devtoolset-6/enable && chmod +x /opt/rh/python27/enable && . /opt/rh/python27/enable" >> /root/.bashrc
 
-ENV LANG=en_US.UTF-8 PYTHON_VERSION=3.6.7 QTVERSION=5.12.0 QTVERSION_SHORT=5.12 LLVM_VERSION=8.0.1 LLVM_ROOT=/opt/llvm/ RUBY_VERSION=1.9.3-p484 GLIB_VERSION_SHORT=2.61 GLIB_VERSION=2.61.2 LD_LIBRARY_PATH=$QTDIR/lib/
+ENV LANG=en_US.UTF-8 PYTHON_VERSION=3.6.7 QTVERSION=5.12.4 QTVERSION_SHORT=5.12 LLVM_VERSION=8.0.1 LLVM_ROOT=/opt/llvm/ RUBY_VERSION=1.9.3-p484 GLIB_VERSION_SHORT=2.61 GLIB_VERSION=2.61.2 LD_LIBRARY_PATH=$QTDIR/lib/
 ENV QTDIR=/opt/qt5
 
 RUN bash -c "ln -sf /opt/rh/devtoolset-6/root/usr/bin/g++ /usr/bin/g++ && ln -sf /opt/rh/devtoolset-6/root/usr/bin/c++ /usr/bin/c++"
-
-# Build Qt5. Version 5.12.0 seems to be the latest that comes with xkbcommon, which is not available on CentOS 6: https://forum.qt.io/topic/104664/building-qt-5-12-on-centos-6
-RUN bash -c "mkdir -p /qt && cd /qt && wget https://download.qt.io/archive/qt/${QTVERSION_SHORT}/${QTVERSION}/single/qt-everywhere-src-${QTVERSION}.tar.xz"
-RUN bash -c "cd /qt && tar xvf qt-everywhere-src-${QTVERSION}.tar.xz"
-RUN bash -c "export MAKEFLAGS=-j$(nproc) && cd /qt/qt-everywhere-src-${QTVERSION} && ./configure -v -skip qt3d -skip qtconnectivity -skip qtgamepad -skip qtlocation -skip qtcharts -skip qtremoteobjects -skip qtscxml -skip qtsensors -skip qtpurchasing -platform linux-g++ -qt-pcre -qt-xcb -qt-xkbcommon-x11 -no-pch -nomake tests -nomake examples -confirm-license -opensource -prefix $QTDIR && make -j$(nproc) || make -j 1 install; make -j$(nproc) install && rm -Rf /qt"
-
-RUN ln -sf $QTDIR/bin/qmake /usr/bin/qmake-qt5
-
-# Build Ruby >= 1.9, required for qtwebkit
-RUN bash -c "mkdir -p /ruby && cd /ruby && wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-${RUBY_VERSION}.tar.gz"
-RUN bash -c "cd /ruby/ && tar zxvf ruby-${RUBY_VERSION}.tar.gz"
-RUN bash -c "cd /ruby/ruby-${RUBY_VERSION} && ./configure && make -j$(nproc) && make -j$(nproc) install && rm -Rf /ruby"
 
 # Build Python
 RUN bash -c "mkdir -p /python && cd /python && wget https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tar.xz && tar xvf Python-$PYTHON_VERSION.tar.xz && cd /python/Python-$PYTHON_VERSION && mkdir -p /usr/lib/pkgconfig && ./configure --prefix=/usr --enable-shared && make -j$(nproc) install && rm -Rf /python"
@@ -28,8 +16,25 @@ RUN bash -c "mkdir -p /python && cd /python && wget https://www.python.org/ftp/p
 # Install ninja (1.8.2 latest working with libc of centos:6.10)
 RUN bash -c "yum install unzip && mkdir -p /tmp/deploy && cd /tmp/deploy && wget https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-linux.zip && unzip ninja-linux.zip && mv -f ninja /usr/local/bin && cd .. && rm -Rf deploy"
 
-# Install meson, required to build recent versions of glib
+# Install meson, required to build xkbcommon and recent versions of glib
 RUN bash -c "ldconfig && pip3 install meson"
+
+# Build xkbcommon, required for Qt >= 5.12.1
+RUN bash -c "mkdir -p /xkbcommon && cd /xkbcommon && wget https://github.com/xkbcommon/libxkbcommon/archive/xkbcommon-0.8.4.tar.gz"
+RUN bash -c "cd /xkbcommon/ && tar xvf xkbcommon-0.8.4.tar.gz"
+RUN bash -c ". /opt/rh/devtoolset-6/enable && cd /xkbcommon/libxkbcommon-xkbcommon-0.8.4 && meson setup -Denable-wayland=false -Denable-docs=false -Dprefix=/usr build && ninja -C build && ninja -C build install && rm -Rf /xkbcommon"
+
+# Build Qt5
+RUN bash -c "mkdir -p /qt && cd /qt && wget https://download.qt.io/archive/qt/${QTVERSION_SHORT}/${QTVERSION}/single/qt-everywhere-src-${QTVERSION}.tar.xz"
+RUN bash -c "cd /qt && tar xvf qt-everywhere-src-${QTVERSION}.tar.xz"
+RUN bash -c "export MAKEFLAGS=-j$(nproc) && cd /qt/qt-everywhere-src-${QTVERSION} && ./configure -v -skip qt3d -skip qtconnectivity -skip qtgamepad -skip qtlocation -skip qtcharts -skip qtremoteobjects -skip qtscxml -skip qtsensors -skip qtpurchasing -platform linux-g++ -qt-pcre -qt-xcb -no-pch -nomake tests -nomake examples -confirm-license -opensource -prefix $QTDIR && make -j$(nproc) || make -j 1 install; make -j$(nproc) install && rm -Rf /qt"
+
+RUN ln -sf $QTDIR/bin/qmake /usr/bin/qmake-qt5
+
+# Build Ruby >= 1.9, required for qtwebkit
+RUN bash -c "mkdir -p /ruby && cd /ruby && wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-${RUBY_VERSION}.tar.gz"
+RUN bash -c "cd /ruby/ && tar zxvf ruby-${RUBY_VERSION}.tar.gz"
+RUN bash -c "cd /ruby/ruby-${RUBY_VERSION} && ./configure && make -j$(nproc) && make -j$(nproc) install && rm -Rf /ruby"
 
 # Build glib >= 2.36, required for qtwebkit
 RUN bash -c "mkdir -p /glib && cd /glib && wget http://ftp.gnome.org/pub/GNOME/sources/glib/${GLIB_VERSION_SHORT}/glib-${GLIB_VERSION}.tar.xz"
