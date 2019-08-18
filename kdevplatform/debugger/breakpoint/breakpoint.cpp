@@ -28,19 +28,21 @@
 
 #include "breakpointmodel.h"
 
+#include <array>
+
 using namespace KDevelop;
 
-static const char* const BREAKPOINT_KINDS[Breakpoint::LastBreakpointKind] = {
-    "Code",
-    "Write",
-    "Read",
-    "Access"
+static const std::array<QString, Breakpoint::LastBreakpointKind> BREAKPOINT_KINDS = {
+    QStringLiteral("Code"),
+    QStringLiteral("Write"),
+    QStringLiteral("Read"),
+    QStringLiteral("Access"),
 };
 
 static Breakpoint::BreakpointKind stringToKind(const QString& kindString)
 {
     for (int i = 0; i < Breakpoint::LastBreakpointKind; ++i) {
-        if (kindString == QLatin1String(BREAKPOINT_KINDS[i])) {
+        if (kindString == BREAKPOINT_KINDS[i]) {
             return (Breakpoint::BreakpointKind)i;
         }
     }
@@ -171,7 +173,7 @@ QVariant Breakpoint::data(int column, int role) const
 
     if (column == TypeColumn && role == Qt::DisplayRole)
     {
-        return QLatin1String(BREAKPOINT_KINDS[m_kind]);
+        return BREAKPOINT_KINDS[m_kind];
     }
 
     if (column == ConditionColumn && (role == Qt::DisplayRole || role == Qt::EditRole)) {
