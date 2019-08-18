@@ -108,7 +108,7 @@ QString CMakeCommandsContents::descriptionForIdentifier(const QString& id, CMake
     QString desc;
     if(args[t].size() != 0) {
         desc = CMake::executeProcess(CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile(), { args[t], id.simplified() });
-        desc = desc.remove(QStringLiteral(":ref:"));
+        desc.remove(QLatin1String(":ref:"));
 
         const QString rst2html = QStandardPaths::findExecutable(QStringLiteral("rst2html"));
         if (rst2html.isEmpty()) {
