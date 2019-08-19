@@ -97,6 +97,7 @@ void EditStyleDialog::init()
     if (iface) {
         iface->setConfigValue(QStringLiteral("dynamic-word-wrap"), false);
         iface->setConfigValue(QStringLiteral("icon-bar"), false);
+        iface->setConfigValue(QStringLiteral("scrollbar-minimap"), false);
     }
 
     if (m_sourceFormatter) {
