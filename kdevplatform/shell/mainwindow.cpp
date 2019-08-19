@@ -451,9 +451,10 @@ void MainWindow::updateCaption()
         else
             title += doc->title();
 
-        auto activeDocument = Core::self()->documentController()->activeDocument();
-        if (activeDocument && activeDocument->textDocument() && !activeDocument->textDocument()->isReadWrite())
+        auto iDoc = qobject_cast<IDocument*>(doc);
+        if (iDoc && iDoc->textDocument() && !iDoc->textDocument()->isReadWrite()) {
             title += i18n(" (read only)");
+        }
 
         title += QLatin1String(" ]");
     }
