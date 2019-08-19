@@ -386,6 +386,7 @@ void MainWindow::initialize()
 
     connect(Core::self()->documentController(), &IDocumentController::documentClosed, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
+    connect(Core::self()->documentController(), &IDocumentController::documentStateChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->sessionController()->activeSession(), &ISession::sessionUpdated, this, &MainWindow::updateCaption);
 
     connect(Core::self()->documentController(), &IDocumentController::documentOpened, this, &MainWindow::updateTabColor);
@@ -433,6 +434,7 @@ void MainWindow::updateCaption()
     const auto activeSession = Core::self()->sessionController()->activeSession();
     QString title = activeSession ? activeSession->description() : QString();
     QString localFilePath;
+    bool isDocumentModified = false;
 
     if(area()->activeView())
     {
@@ -456,9 +458,12 @@ void MainWindow::updateCaption()
             title += i18n(" (read only)");
         }
 
-        title += QLatin1String(" ]");
+        title += QLatin1String(" [*]]"); // [*] is placeholder for modifed state, cmp. QWidget::windowModified
+
+        isDocumentModified = iDoc && (iDoc->state() != IDocument::Clean);
     }
 
+    setWindowModified(isDocumentModified);
     setWindowFilePath(localFilePath);
     setCaption(title);
 }
