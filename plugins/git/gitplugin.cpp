@@ -60,6 +60,8 @@
 #include "gitnameemaildialog.h"
 #include "debug.h"
 
+#include <array>
+
 using namespace KDevelop;
 
 QVariant runSynchronously(KDevelop::VcsJob* job)

@@ -40,6 +40,8 @@
 #include <QDir>
 #include <QIcon>
 
+#include <array>
+
 Q_DECLARE_METATYPE(KDevelop::IProject*)
 
 using namespace KDevelop;
