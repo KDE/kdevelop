@@ -39,7 +39,7 @@ public:
     virtual ~IAstContainer();
     using Ptr = QExplicitlySharedDataPointer<IAstContainer>;
 
-    /// Derived classes must redifine this typedef for CodeGenerator to work
+    /// Derived classes must redefine this typedef for CodeGenerator to work
     /// with this AST
     using TopAstNode = COMPILE_ERROR_Ast_Top_Node_Was_Not_Defined;
 };
