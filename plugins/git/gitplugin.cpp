@@ -1276,7 +1276,7 @@ void GitPlugin::parseGitVersionOutput(DVcsJob* job)
     static const std::array<int, 2> minimumVersion = {1, 7};
     qCDebug(PLUGIN_GIT) << "checking git version" << versionString << "against" << minimumVersion[0] << minimumVersion[1];
     m_oldVersion = false;
-    if (versionString.size() < minimumVersion.size()) {
+    if (static_cast<uint>(versionString.size()) < minimumVersion.size()) {
         m_oldVersion = true;
         qCWarning(PLUGIN_GIT) << "invalid git version string:" << job->output().trimmed();
         return;
