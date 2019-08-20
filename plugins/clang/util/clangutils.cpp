@@ -187,7 +187,11 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor, DefaultArgumen
             info.stringParts.removeFirst();
         }
         //Clang seems to include the , or ) at the end of the param, so delete that
-        if (!info.stringParts.isEmpty() && (info.stringParts.last() == QLatin1String(",") || info.stringParts.last() == QLatin1String(")"))) {
+        if (!info.stringParts.isEmpty() &&
+            ((info.stringParts.last() == QLatin1String(",")) ||
+             (info.stringParts.last() == QLatin1String(")") &&
+              // assuming otherwise matching "(" & ")" tokens
+              info.stringParts.count(QStringLiteral("(")) != info.stringParts.count(QStringLiteral(")"))))) {
             info.stringParts.removeLast();
         }
 
