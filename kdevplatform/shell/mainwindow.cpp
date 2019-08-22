@@ -38,7 +38,6 @@ Boston, MA 02110-1301, USA.
 #include <KTextEditor/View>
 #include <KWindowSystem>
 #include <KXMLGUIFactory>
-#include <kparts_version.h>
 
 #include <sublime/area.h>
 #include "shellextension.h"
@@ -95,18 +94,8 @@ void MainWindow::applyMainWindowSettings(const KConfigGroup& config)
 
 void MainWindow::createGUI(KParts::Part* part)
 {
-    //TODO remove if-clause once KF5 >= 5.24 is required
-#if KPARTS_VERSION_MINOR >= 24
     Sublime::MainWindow::setWindowTitleHandling(false);
     Sublime::MainWindow::createGUI(part);
-#else
-    Sublime::MainWindow::createGUI(part);
-    if (part) {
-        // Don't let the Part control the main window caption -- we take care of that
-        disconnect(part, SIGNAL(setWindowCaption(QString)),
-                   this, SLOT(setCaption(QString)));
-    }
-#endif
 }
 
 void MainWindow::initializeCorners()
@@ -397,6 +386,7 @@ void MainWindow::initialize()
 
     connect(Core::self()->documentController(), &IDocumentController::documentClosed, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
+    connect(Core::self()->documentController(), &IDocumentController::documentStateChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->sessionController()->activeSession(), &ISession::sessionUpdated, this, &MainWindow::updateCaption);
 
     connect(Core::self()->documentController(), &IDocumentController::documentOpened, this, &MainWindow::updateTabColor);
@@ -444,6 +434,7 @@ void MainWindow::updateCaption()
     const auto activeSession = Core::self()->sessionController()->activeSession();
     QString title = activeSession ? activeSession->description() : QString();
     QString localFilePath;
+    bool isDocumentModified = false;
 
     if(area()->activeView())
     {
@@ -462,15 +453,26 @@ void MainWindow::updateCaption()
         else
             title += doc->title();
 
-        auto activeDocument = Core::self()->documentController()->activeDocument();
-        if (activeDocument && activeDocument->textDocument() && !activeDocument->textDocument()->isReadWrite())
+        auto iDoc = qobject_cast<IDocument*>(doc);
+        if (iDoc && iDoc->textDocument() && !iDoc->textDocument()->isReadWrite()) {
             title += i18n(" (read only)");
+        }
 
-        title += QLatin1String(" ]");
+        title += QLatin1String(" [*]]"); // [*] is placeholder for modifed state, cmp. QWidget::windowModified
+
+        isDocumentModified = iDoc && (iDoc->state() != IDocument::Clean);
     }
 
-    setWindowFilePath(localFilePath);
+    // Workaround for a bug observed on macOS with Qt 5.9.8 (TODO: test with newer Qt, report bug):
+    // Ensure to call setCaption() (thus implicitly setWindowTitle()) before
+    // setWindowModified() & setWindowFilePath().
+    // Otherwise, if the state will change "modifed" from true to false as well change the title string,
+    // calling setWindowTitle() last results in the "modified" indicator==asterisk becoming part of the
+    // displayed window title somehow.
+    // Other platforms so far not known to be affected, any order of calls seems fine.
     setCaption(title);
+    setWindowModified(isDocumentModified);
+    setWindowFilePath(localFilePath);
 }
 
 void MainWindow::updateAllTabColors()

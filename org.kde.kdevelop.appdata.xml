@@ -140,7 +140,7 @@
   <provides>
     <binary>kdevelop</binary>
   </provides>
-  <launchable type="desktop-id">org.kde.kdevelop_ps.desktop</launchable>
+  <launchable type="desktop-id">org.kde.kdevelop.desktop</launchable>
   <icon type="stock">kdevelop</icon>
   <categories>
     <category>Development</category>
