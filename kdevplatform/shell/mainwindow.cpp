@@ -388,6 +388,8 @@ void MainWindow::initialize()
     connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->documentController(), &IDocumentController::documentStateChanged, this, &MainWindow::updateCaption, Qt::QueuedConnection);
     connect(Core::self()->sessionController()->activeSession(), &ISession::sessionUpdated, this, &MainWindow::updateCaption);
+    // if currently viewed document is part of project, trigger update of full path to project prefixed one
+    connect(Core::self()->projectController(), &ProjectController::projectOpened, this, &MainWindow::updateCaption, Qt::QueuedConnection);
 
     connect(Core::self()->documentController(), &IDocumentController::documentOpened, this, &MainWindow::updateTabColor);
     connect(Core::self()->documentController(), &IDocumentController::documentUrlChanged, this, &MainWindow::updateTabColor);
