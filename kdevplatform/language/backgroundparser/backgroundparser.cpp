@@ -68,7 +68,6 @@ const bool separateThreadForHighPriority = true;
  */
 QString elidedPathLeft(const QString& path, int width)
 {
-    static const QChar separator = QDir::separator();
     static const QString placeholder = QStringLiteral("...");
 
     if (path.size() <= width) {
@@ -76,7 +75,7 @@ QString elidedPathLeft(const QString& path, int width)
     }
 
     int start = (path.size() - width) + placeholder.size();
-    int pos = path.indexOf(separator, start);
+    int pos = path.indexOf(QDir::separator(), start);
     if (pos == -1) {
         pos = start; // no separator => just cut off the path at the beginning
     }
