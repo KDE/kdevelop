@@ -107,7 +107,7 @@ ClangSettingsManager::ClangSettingsManager()
 
 bool ParserSettings::isCpp() const
 {
-    return parserOptions.contains(QStringLiteral("-std=c++")) || parserOptions.contains(QStringLiteral("-std=gnu++"));
+    return parserOptions.contains(QLatin1String("-std=c++")) || parserOptions.contains(QLatin1String("-std=gnu++"));
 }
 
 QVector<QByteArray> ParserSettings::toClangAPI() const

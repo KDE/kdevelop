@@ -801,11 +801,11 @@ void GitPlugin::parseGitBranchOutput(DVcsJob* job)
     for (const auto& branch : branchListDirty) {
         // Skip pointers to another branches (one example of this is "origin/HEAD -> origin/master");
         // "git rev-list" chokes on these entries and we do not need duplicate branches altogether.
-        if (branch.contains(QStringLiteral("->")))
+        if (branch.contains(QLatin1String("->")))
             continue;
 
         // Skip entries such as '(no branch)'
-        if (branch.contains(QStringLiteral("(no branch)")))
+        if (branch.contains(QLatin1String("(no branch)")))
             continue;
 
         QStringRef name = branch;
@@ -886,7 +886,7 @@ QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
             item.setParents(parents);
 
             //Avoid Merge string
-            while (!commits[i].contains(QStringLiteral("Author: ")))
+            while (!commits[i].contains(QLatin1String("Author: ")))
                     ++i;
 
             item.setAuthor(commits[i].section(QStringLiteral("Author: "), 1).trimmed());

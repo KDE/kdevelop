@@ -227,7 +227,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension(KDevel
             if (context->type() != KDevelop::Context::EditorContext) {
                 // filter scripts that depend on an opened document
                 // if the context menu was not requested inside the editor
-                if (item->performParameterReplacement() && item->command().contains(QStringLiteral("%s"))) {
+                if (item->performParameterReplacement() && item->command().contains(QLatin1String("%s"))) {
                     continue;
                 } else if (item->inputMode() == ExternalScriptItem::InputSelectionOrNone) {
                     continue;
@@ -237,12 +237,12 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension(KDevel
             if (folderCount == m_urls.count()) {
                 // when only folders filter items that don't have %d parameter (or another parameter)
                 if (item->performParameterReplacement() &&
-                    (!item->command().contains(QStringLiteral("%d")) ||
-                     item->command().contains(QStringLiteral("%s")) ||
-                     item->command().contains(QStringLiteral("%u")) ||
-                     item->command().contains(QStringLiteral("%f")) ||
-                     item->command().contains(QStringLiteral("%b")) ||
-                     item->command().contains(QStringLiteral("%n"))
+                    (!item->command().contains(QLatin1String("%d")) ||
+                     item->command().contains(QLatin1String("%s")) ||
+                     item->command().contains(QLatin1String("%u")) ||
+                     item->command().contains(QLatin1String("%f")) ||
+                     item->command().contains(QLatin1String("%b")) ||
+                     item->command().contains(QLatin1String("%n"))
                     )
                 ) {
                     continue;
