@@ -209,7 +209,7 @@ QString DumpDotGraphPrivate::dotGraphInternal(KDevelop::DUContext* context, bool
     }
 
     stream << shortLabel(context) << "[shape=" << shape << ",label=\"" << label << "\"" <<
-    (isMaster ? QStringLiteral("color=red") : QStringLiteral("color=blue")) << "];\n";
+    (isMaster ? QLatin1String("color=red") : QLatin1String("color=blue")) << "];\n";
 
     if (isMaster)
         stream << "}\n";
