@@ -106,8 +106,8 @@ QString ProblemNavigationContext::name() const
 
 QString ProblemNavigationContext::escapedHtml(const QString& text) const
 {
-    static const QString htmlStart = QStringLiteral("<html>");
-    static const QString htmlEnd = QStringLiteral("</html>");
+    const QString htmlStart = QStringLiteral("<html>");
+    const QString htmlEnd = QStringLiteral("</html>");
 
     QString result = text.trimmed();
 

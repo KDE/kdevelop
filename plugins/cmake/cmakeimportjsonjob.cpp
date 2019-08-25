@@ -71,9 +71,9 @@ CMakeFilesCompilationData importCommands(const Path& commandsFile)
     }
 
     MakeFileResolver resolver;
-    static const QString KEY_COMMAND = QStringLiteral("command");
-    static const QString KEY_DIRECTORY = QStringLiteral("directory");
-    static const QString KEY_FILE = QStringLiteral("file");
+    const QString KEY_COMMAND = QStringLiteral("command");
+    const QString KEY_DIRECTORY = QStringLiteral("directory");
+    const QString KEY_FILE = QStringLiteral("file");
     auto rt = ICore::self()->runtimeController()->currentRuntime();
     const auto values = document.array();
     for (const QJsonValue& value : values) {

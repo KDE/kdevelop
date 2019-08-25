@@ -116,7 +116,7 @@ void VcsOverlayProxyModel::repositoryBranchChanged(const QUrl& url)
 
 void VcsOverlayProxyModel::branchNameReady(KDevelop::VcsJob* job)
 {
-    static const QString noBranchStr = i18nc("Version control: Currently not on a branch", "(no branch)");
+    const QString noBranchStr = i18nc("Version control: Currently not on a branch", "(no branch)");
 
     if(job->status()==VcsJob::JobSucceeded) {
         SafeProjectPointer p = job->property("project").value<SafeProjectPointer>();

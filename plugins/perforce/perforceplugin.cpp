@@ -188,7 +188,7 @@ bool PerforcePlugin::parseP4fstat(const QFileInfo& curFile, OutputJob::OutputJob
 
 QString PerforcePlugin::getRepositoryName(const QFileInfo& curFile)
 {
-    static const QString DEPOT_FILE_STR(QStringLiteral("... depotFile "));
+    const QString DEPOT_FILE_STR(QStringLiteral("... depotFile "));
     QString ret;
     QScopedPointer<DVcsJob> job(p4fstatJob(curFile, KDevelop::OutputJob::Silent));
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
@@ -500,8 +500,8 @@ void PerforcePlugin::setEnvironmentForJob(DVcsJob* job, const QFileInfo& curFile
 
 QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outputLines)
 {
-    static const QString LOGENTRY_START(QStringLiteral("... #"));
-    static const QString DEPOTMESSAGE_START(QStringLiteral("... ."));
+    const QString LOGENTRY_START(QStringLiteral("... #"));
+    const QString DEPOTMESSAGE_START(QStringLiteral("... ."));
     QMap<int, VcsEvent> changes;
     QList<QVariant> commits;
     QString currentFileName;
@@ -553,8 +553,8 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
 {
     const QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
     QVariantList statuses;
-    static const QString ACTION_STR(QStringLiteral("... action "));
-    static const QString CLIENT_FILE_STR(QStringLiteral("... clientFile "));
+    const QString ACTION_STR(QStringLiteral("... action "));
+    const QString CLIENT_FILE_STR(QStringLiteral("... clientFile "));
 
 
 

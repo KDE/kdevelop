@@ -392,7 +392,7 @@ void ProblemsView::addModel(const ModelData& newData)
     //
     // 2) Other tabs are alphabetically ordered.
 
-    static const QString parserId = QStringLiteral("Parser");
+    const QString parserId = QStringLiteral("Parser");
 
     auto model = newData.model;
     auto view = new ProblemTreeView(nullptr, model);

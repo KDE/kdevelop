@@ -62,7 +62,7 @@ bool isPathChar(QChar c)
 QString escapePath(QString path)
 {
     // see https://cmake.org/Wiki/CMake/Language_Syntax#Escapes
-    static const QString toBeEscaped = QStringLiteral("\"()#$^");
+    const QString toBeEscaped = QStringLiteral("\"()#$^");
 
     for(const QChar &ch : toBeEscaped) {
         path.replace(ch, QLatin1Char('\\') + ch);

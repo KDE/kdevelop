@@ -82,7 +82,7 @@ QDir dotGitDirectory(const QUrl& dirPath)
     const QFileInfo finfo(dirPath.toLocalFile());
     QDir dir = finfo.isDir() ? QDir(finfo.filePath()): finfo.absoluteDir();
 
-    static const QString gitDir = QStringLiteral(".git");
+    const QString gitDir = QStringLiteral(".git");
     while (!dir.exists(gitDir) && dir.cdUp()) {} // cdUp, until there is a sub-directory called .git
 
     if (dir.isRoot()) {
