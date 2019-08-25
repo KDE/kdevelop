@@ -222,7 +222,7 @@ Path KDevelop::proposedBuildFolder(const Path& sourceFolder)
 {
     Path proposedBuildFolder;
     if (sourceFolder.path().contains(QLatin1String("/src/"))) {
-        const QString srcBuildPath = sourceFolder.path().replace(QStringLiteral("/src/"), QStringLiteral("/build/"));
+        const QString srcBuildPath = sourceFolder.path().replace(QLatin1String("/src/"), QLatin1String("/build/"));
         Q_ASSERT(!srcBuildPath.isEmpty());
         if (QDir(srcBuildPath).exists()) {
             proposedBuildFolder = Path(srcBuildPath);

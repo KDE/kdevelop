@@ -52,7 +52,7 @@ QString verboseMessageToHtml(const QString& input)
 {
     QString output(QStringLiteral("<html>%1</html>").arg(input.toHtmlEscaped()));
 
-    output.replace(QStringLiteral("\\012"), QStringLiteral("\n"));
+    output.replace(QLatin1String("\\012"), QLatin1String("\n"));
 
     if (output.count(QLatin1Char('\n')) >= 2) {
         output.replace(output.indexOf(QLatin1Char('\n')), 1, QStringLiteral("<pre>"));

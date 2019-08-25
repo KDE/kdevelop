@@ -127,8 +127,8 @@ bool KDevFormatFile::executeCommand(QString command)
 {
     qStdOut() << ", using command \"" << command << "\"\n";
 
-    command.replace(QStringLiteral("$ORIGFILE"), m_origFilePath);
-    command.replace(QStringLiteral("$TMPFILE"), m_tempFilePath);
+    command.replace(QLatin1String("$ORIGFILE"), m_origFilePath);
+    command.replace(QLatin1String("$TMPFILE"), m_tempFilePath);
 
 #ifdef Q_OS_WIN
     int execResult = QProcess::execute(QStringLiteral("cmd"), {QStringLiteral("/c"), command});
