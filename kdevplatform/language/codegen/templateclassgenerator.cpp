@@ -34,6 +34,8 @@
 
 #include <QFileInfo>
 
+#include <array>
+
 using namespace KDevelop;
 
 /// @param base String such as 'public QObject' or 'QObject'
@@ -247,7 +249,7 @@ void TemplateClassGenerator::setIdentifier(const QString& identifier)
     Q_D(TemplateClassGenerator);
 
     d->renderer.addVariable(QStringLiteral("identifier"), identifier);
-    const QStringList separators{
+    const std::array<QString,5> separators {
         QStringLiteral("::"),
         QStringLiteral("."),
         QStringLiteral(":"),
