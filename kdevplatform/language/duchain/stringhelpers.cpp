@@ -280,19 +280,19 @@ QString reverse(const QString& str)
 ///@todo this hackery sucks
 QString escapeForBracketMatching(QString str)
 {
-    str.replace(QStringLiteral("<<"), QStringLiteral("$&"));
-    str.replace(QStringLiteral(">>"), QStringLiteral("$$"));
-    str.replace(QStringLiteral("\\\""), QStringLiteral("$!"));
-    str.replace(QStringLiteral("->"), QStringLiteral("$?"));
+    str.replace(QLatin1String("<<"),   QLatin1String("$&"));
+    str.replace(QLatin1String(">>"),   QLatin1String("$$"));
+    str.replace(QLatin1String("\\\""), QLatin1String("$!"));
+    str.replace(QLatin1String("->"),   QLatin1String("$?"));
     return str;
 }
 
 QString escapeFromBracketMatching(QString str)
 {
-    str.replace(QStringLiteral("$&"), QStringLiteral("<<"));
-    str.replace(QStringLiteral("$$"), QStringLiteral(">>"));
-    str.replace(QStringLiteral("$!"), QStringLiteral("\\\""));
-    str.replace(QStringLiteral("$?"), QStringLiteral("->"));
+    str.replace(QLatin1String("$&"), QLatin1String("<<"));
+    str.replace(QLatin1String("$$"), QLatin1String(">>"));
+    str.replace(QLatin1String("$!"), QLatin1String("\\\""));
+    str.replace(QLatin1String("$?"), QLatin1String("->"));
     return str;
 }
 
