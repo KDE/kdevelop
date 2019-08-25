@@ -1231,7 +1231,7 @@ extern void initInstantiationInformationRepository();
 QString DUChain::repositoryPathForSession(const KDevelop::ISessionLock::Ptr& session)
 {
     QString cacheDir = QStandardPaths::writableLocation(QStandardPaths::GenericCacheLocation);
-    cacheDir += QStringLiteral("/kdevduchain");
+    cacheDir += QLatin1String("/kdevduchain");
     QString baseDir = QProcessEnvironment::systemEnvironment().value(QStringLiteral("KDEV_DUCHAIN_DIR"), cacheDir);
     baseDir += QStringLiteral("/%1-%2").arg(qApp->applicationName(), session->id());
     return baseDir;

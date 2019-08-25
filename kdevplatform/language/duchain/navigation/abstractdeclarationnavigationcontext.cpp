@@ -747,7 +747,7 @@ QString AbstractDeclarationNavigationContext::identifierHighlight(const QString&
     }
 
     if (decl->isDeprecated()) {
-        ret = QStringLiteral("<i>") + ret + QStringLiteral("</i>");
+        ret = QLatin1String("<i>") + ret + QLatin1String("</i>");
     }
     return ret;
 }
@@ -896,7 +896,7 @@ QString AbstractDeclarationNavigationContext::declarationSizeInformation(const D
             sizeInfo += i18n("aligned to: %1 Bytes", memberDecl->alignOf());
         }
 
-        sizeInfo += QStringLiteral("</p>");
+        sizeInfo += QLatin1String("</p>");
 
         return sizeInfo;
     }

@@ -139,7 +139,7 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, const IndexedString& 
 
     DUChainReadLocker lock(DUChain::lock());
     QString text = QLatin1String("<a>") + i18nc("refers to a line in source code", "Line <b>%1</b>:",
-                                                range.start().line()) + QStringLiteral("</a>");
+                                                range.start().line()) + QLatin1String("</a>");
     if (!m_sourceLine.isEmpty() && m_sourceLine.length() > m_range->range().end().column()) {
         text += QLatin1String("&nbsp;&nbsp;") + highlightAndEscapeUseText(m_sourceLine, 0, m_range->range());
 
@@ -151,15 +151,15 @@ OneUseWidget::OneUseWidget(IndexedDeclaration declaration, const IndexedString& 
         for (int a = start; a < end; ++a) {
             QString lineText = code.line(a).toHtmlEscaped();
             if (m_range->range().start().line() <= a && m_range->range().end().line() >= a) {
-                lineText = QStringLiteral("<b>") + lineText + QStringLiteral("</b>");
+                lineText = QLatin1String("<b>") + lineText + QLatin1String("</b>");
             }
             if (!lineText.trimmed().isEmpty()) {
                 toolTipLines.append(lineText);
             }
         }
 
-        setToolTip(QStringLiteral("<html><body><pre>") + toolTipLines.join(QLatin1String("<br>")) +
-                   QStringLiteral("</pre></body></html>"));
+        setToolTip(QLatin1String("<html><body><pre>") + toolTipLines.join(QLatin1String("<br>")) +
+                   QLatin1String("</pre></body></html>"));
     }
     m_label->setText(text);
 
@@ -218,16 +218,16 @@ void OneUseWidget::resizeEvent(QResizeEvent* event)
     int maxCutOff = m_sourceLine.length() - (range.end().column() - range.start().column());
 
     //Reset so we also get more context while up-sizing
-    m_label->setText(QStringLiteral("<a>") +
+    m_label->setText(QLatin1String("<a>") +
                      i18nc("Refers to a line in source code", "Line <b>%1</b>:", range.start().line() + 1)
-                     + QStringLiteral("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
+                     + QLatin1String("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
 
     /// FIXME: this is incredibly ugly and slow... we could simply paint the text ourselves and elide it properly
     while (sizeHint().width() > size.width() && cutOff < maxCutOff) {
         //We've got to save space
-        m_label->setText(QStringLiteral("<a>") +
+        m_label->setText(QLatin1String("<a>") +
                          i18nc("Refers to a line in source code", "Line <b>%1</b>:", range.start().line() + 1)
-                         + QStringLiteral("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
+                         + QLatin1String("</a> ") + highlightAndEscapeUseText(m_sourceLine, cutOff, range));
         cutOff += 5;
     }
 

@@ -602,7 +602,7 @@ QString Identifier::toString(IdentifierStringFormattingOptions options) const
             templateIds.append(templateIdentifier(i).toString(options));
         }
 
-        ret += QStringLiteral("< ") + templateIds.join(QStringLiteral(", ")) + QStringLiteral(" >");
+        ret += QLatin1String("< ") + templateIds.join(QLatin1String(", ")) + QLatin1String(" >");
     }
 
     return ret;

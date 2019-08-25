@@ -579,7 +579,7 @@ void AbstractNavigationContext::addHtml(const QString& html)
         if (line.indexOf(newLineRegExp) != -1) {
             ++d->m_currentLine;
             if (d->m_currentLine == d->m_currentPositionLine) {
-                d->m_currentText += QStringLiteral(
+                d->m_currentText += QLatin1String(
                     "<font color=\"#880088\"> <a name = \"currentPosition\" >&lt;-&gt;</a> </font>");                        // >&lt;-&gt; is <->
             }
         }

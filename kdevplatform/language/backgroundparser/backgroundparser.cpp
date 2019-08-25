@@ -68,7 +68,7 @@ const bool separateThreadForHighPriority = true;
  */
 QString elidedPathLeft(const QString& path, int width)
 {
-    static const QString placeholder = QStringLiteral("...");
+    const QLatin1String placeholder("...");
 
     if (path.size() <= width) {
         return path;
@@ -82,8 +82,7 @@ QString elidedPathLeft(const QString& path, int width)
     Q_ASSERT(path.size() - pos >= 0 && path.size() - pos <= width);
 
     QStringRef elidedText = path.rightRef(path.size() - pos);
-    QString result = placeholder;
-    result.append(elidedText);
+    const QString result = placeholder + elidedText;
     return result;
 }
 

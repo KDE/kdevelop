@@ -104,7 +104,7 @@ QString ReferenceType::toString() const
 {
     AbstractType::Ptr base = baseType();
     QString baseString = (base ? base->toString() : QStringLiteral("<notype>"));
-    const QString ampersands = d_func()->m_isRValue ? QStringLiteral("&&") : QStringLiteral("&");
+    const QLatin1String ampersands = d_func()->m_isRValue ? QLatin1String("&&") : QLatin1String("&");
     if (base.cast<IntegralType>() || base.cast<StructureType>())
         return AbstractType::toString(false) + baseString + ampersands;
     else
