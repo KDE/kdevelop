@@ -76,37 +76,37 @@ QString ConstantIntegralType::toString() const
 
     switch (dataType()) {
     case TypeNone:
-        ret += QStringLiteral("none");
+        ret = QStringLiteral("none");
         break;
     case TypeChar:
-        ret += QStringLiteral("char");
+        ret = QStringLiteral("char");
         break;
     case TypeWchar_t:
-        ret += QStringLiteral("wchar_t");
+        ret = QStringLiteral("wchar_t");
         break;
     case TypeChar16_t:
-        ret += QStringLiteral("char16_t");
+        ret = QStringLiteral("char16_t");
         break;
     case TypeChar32_t:
-        ret += QStringLiteral("char32_t");
+        ret = QStringLiteral("char32_t");
         break;
     case TypeBoolean:
-        ret += d_func()->m_value ? QStringLiteral("true") : QStringLiteral("false");
+        ret = d_func()->m_value ? QStringLiteral("true") : QStringLiteral("false");
         break;
     case TypeInt:
-        ret += (modifiers() & UnsignedModifier) ? QStringLiteral("unsigned") : QStringLiteral("int");
+        ret = (modifiers() & UnsignedModifier) ? QStringLiteral("unsigned") : QStringLiteral("int");
         break;
     case TypeFloat:
-        ret += QStringLiteral("float");
+        ret = QStringLiteral("float");
         break;
     case TypeDouble:
-        ret += QStringLiteral("double");
+        ret = QStringLiteral("double");
         break;
     case TypeVoid:
-        ret += QStringLiteral("void");
+        ret = QStringLiteral("void");
         break;
     default:
-        ret += QStringLiteral("<unknown_value>");
+        ret = QStringLiteral("<unknown_value>");
         break;
     }
 
