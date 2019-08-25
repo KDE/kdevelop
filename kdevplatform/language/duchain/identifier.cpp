@@ -683,7 +683,7 @@ QualifiedIdentifier::QualifiedIdentifier(const QString& id, bool isExpression)
             push(finishedId);
         }
     } else {
-        if (id.startsWith(QStringLiteral("::"))) {
+        if (id.startsWith(QLatin1String("::"))) {
             dd->m_explicitlyGlobal = true;
             dd->splitIdentifiers(id, 2);
         } else {

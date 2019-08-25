@@ -145,18 +145,18 @@ public:
                 continue;
             }
 
-            if (line.startsWith(QStringLiteral("```"))) {
+            if (line.startsWith(QLatin1String("```"))) {
                 setState((state == PREFORMATTED) ? EMPTY : PREFORMATTED);
                 continue;
             }
 
-            if (line.startsWith(QStringLiteral("    "))) {
+            if (line.startsWith(QLatin1String("    "))) {
                 if (state == EMPTY) {
                     setState(PREFORMATTED);
                 }
             } else if (
-                line.startsWith(QStringLiteral("- ")) ||
-                line.startsWith(QStringLiteral("* "))) {
+                line.startsWith(QLatin1String("- ")) ||
+                line.startsWith(QLatin1String("* "))) {
                 // force close and reopen list - this fixes cases when we don't have
                 // separator line between items
                 setState(EMPTY);

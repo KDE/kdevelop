@@ -665,7 +665,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
             annotation->setDate(QDateTime::fromTime_t(value.toUInt()));
         else if(name==QLatin1String("summary"))
             annotation->setCommitMessage(value.toString());
-        else if(name.startsWith(QStringLiteral("committer"))) {} //We will just store the authors
+        else if(name.startsWith(QLatin1String("committer"))) {} //We will just store the authors
         else if(name==QLatin1String("previous")) {} //We don't need that either
         else if(name==QLatin1String("filename")) { skipNext=true; }
         else if(name==QLatin1String("boundary")) {

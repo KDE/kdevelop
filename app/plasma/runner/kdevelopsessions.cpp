@@ -119,7 +119,7 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
 
     bool listAll = false;
 
-    if (term.startsWith(QStringLiteral("kdevelop"), Qt::CaseInsensitive)) {
+    if (term.startsWith(QLatin1String("kdevelop"), Qt::CaseInsensitive)) {
         if (term.trimmed().compare(QLatin1String("kdevelop"), Qt::CaseInsensitive) == 0) {
             listAll = true;
             term.clear();
