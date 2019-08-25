@@ -50,9 +50,9 @@ bool askUser(const QString& mainText,
         QString input;
         forever {
             if (ttyDefaultToYes) {
-                out << QStringLiteral("%1: [Y/n] ").arg(ttyPrompt) << flush;
+                out << ttyPrompt << QLatin1String(": [Y/n] ") << flush;
             } else {
-                out << QStringLiteral("%1: [y/N] ").arg(ttyPrompt) << flush;
+                out << ttyPrompt << QLatin1String(": [y/N] ") << flush;
             }
             input = in.readLine().trimmed();
             if (input.isEmpty()) {

@@ -358,7 +358,7 @@ QByteArray ParseSessionData::writeDefinesFile(const QMap<QString, QString>& defi
             {
                 continue;
             }
-            definesStream << QStringLiteral("#define ") << it.key() << ' ' << it.value() << '\n';
+            definesStream << QLatin1String("#define ") << it.key() << ' ' << it.value() << '\n';
         }
     }
     m_definesFile.close();

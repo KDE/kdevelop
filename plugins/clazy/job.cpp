@@ -100,30 +100,30 @@ QString Job::buildMakefile(const JobParameters& params)
     // Since GNU make (and maybe other make versions) fails on files/paths with whitespaces
     // we should perform space-escaping procedure for all potential strings.
 
-    scriptStream << QStringLiteral("SOURCES =");
+    scriptStream << QLatin1String("SOURCES =");
     for (const QString& source : params.sources()) {
-        scriptStream << QStringLiteral(" %1").arg(spaceEscapedString(source));
+        scriptStream << QLatin1Char(' ') << spaceEscapedString(source);
     }
     scriptStream << QLatin1Char('\n');
 
-    scriptStream << QStringLiteral("COMMAND =");
+    scriptStream << QLatin1String("COMMAND =");
     if (!GlobalSettings::verboseOutput()) {
         scriptStream << QLatin1Char('@');
     }
     const auto commandLine = params.commandLine();
     for (const QString& commandPart : commandLine) {
-        scriptStream << QStringLiteral(" %1").arg(spaceEscapedString(commandPart));
+        scriptStream << QLatin1Char(' ') << spaceEscapedString(commandPart);
     }
     scriptStream << QLatin1Char('\n');
 
-    scriptStream << QStringLiteral(".PHONY: all $(SOURCES)\n");
-    scriptStream << QStringLiteral("all: $(SOURCES)\n");
-    scriptStream << QStringLiteral("$(SOURCES):\n");
+    scriptStream << QLatin1String(".PHONY: all $(SOURCES)\n");
+    scriptStream << QLatin1String("all: $(SOURCES)\n");
+    scriptStream << QLatin1String("$(SOURCES):\n");
 
-    scriptStream << QStringLiteral("\t@echo 'Clazy check started  for $@'\n");
+    scriptStream << QLatin1String("\t@echo 'Clazy check started  for $@'\n");
     // Wrap filename ($@) with quotas to handle "whitespaced" file names.
-    scriptStream << QStringLiteral("\t$(COMMAND) '$@'\n");
-    scriptStream << QStringLiteral("\t@echo 'Clazy check finished for $@'\n");
+    scriptStream << QLatin1String("\t$(COMMAND) '$@'\n");
+    scriptStream << QLatin1String("\t@echo 'Clazy check finished for $@'\n");
 
     makefile.close();
 
