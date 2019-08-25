@@ -91,7 +91,7 @@ void sanitizeArguments(QVector<QByteArray>& arguments)
 QVector<QByteArray> argsForSession(const QString& path, ParseSessionData::Options options, const ParserSettings& parserSettings)
 {
     QMimeDatabase db;
-    if(db.mimeTypeForFile(path).name() == QStringLiteral("text/x-objcsrc")) {
+    if (db.mimeTypeForFile(path).name() == QLatin1String("text/x-objcsrc")) {
         return {QByteArrayLiteral("-xobjective-c++")};
     }
 

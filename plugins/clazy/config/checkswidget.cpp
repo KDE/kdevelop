@@ -121,7 +121,7 @@ void ChecksWidget::setChecks(const QString& checks)
     const QStringList checksList = checks.split(QLatin1Char(','), QString::SkipEmptyParts);
     for (auto checkName : checksList) {
         checkName = checkName.trimmed();
-        if (checkName == QStringLiteral("manual")) {
+        if (checkName == QLatin1String("manual")) {
             continue;
         }
 
@@ -184,7 +184,7 @@ void ChecksWidget::updateChecks()
         auto levelItem = m_ui->checksTree->topLevelItem(i);
         auto levelName = levelItem->data(0, CheckRole).toString();
 
-        if (levelName == QStringLiteral("manual")) {
+        if (levelName == QLatin1String("manual")) {
             // Manual level is "fake level" so we clear the name and will store only
             // selected checks.
             levelItems.clear();

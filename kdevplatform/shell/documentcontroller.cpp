@@ -996,7 +996,7 @@ QString DocumentController::activeDocumentPath( const QString& target ) const
         }
     }
     IDocument* doc = activeDocument();
-    if(!doc || target == QStringLiteral("[selection]"))
+    if(!doc || target == QLatin1String("[selection]"))
     {
         Context* selection = ICore::self()->selectionController()->currentSelection();
         if(selection && selection->type() == Context::ProjectItemContext && !static_cast<ProjectItemContext*>(selection)->items().isEmpty())

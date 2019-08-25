@@ -242,7 +242,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
     }
 
     if (m_project && m_project->managerPlugin()) {
-        if (m_project->managerPlugin()->componentName() == QStringLiteral("kdevcmakemanager")) {
+        if (m_project->managerPlugin()->componentName() == QLatin1String("kdevcmakemanager")) {
             result << QStringLiteral("-i")
                    << m_projectBuildPath.toLocalFile() + QStringLiteral("/CMakeFiles");
         }

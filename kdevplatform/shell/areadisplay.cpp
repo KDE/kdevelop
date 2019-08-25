@@ -75,7 +75,7 @@ void AreaDisplay::newArea(Sublime::Area* area)
 
     auto* m = new QMenu(m_button);
     m->addActions(area->actions());
-    if(currentArea->objectName() != QStringLiteral("code")) {
+    if (currentArea->objectName() != QLatin1String("code")) {
         if(!m->actions().isEmpty())
             m->addSeparator();
         m->addAction(QIcon::fromTheme(QStringLiteral("document-edit")), i18n("Back to code"), this, SLOT(backToCode()), QKeySequence(Qt::AltModifier | Qt::Key_Backspace));

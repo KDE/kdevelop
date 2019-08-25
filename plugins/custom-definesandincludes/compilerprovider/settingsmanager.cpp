@@ -421,8 +421,8 @@ LanguageType languageType(const QString& path, bool treatAmbiguousAsCPP)
 {
     QMimeDatabase db;
     const auto mimeType = db.mimeTypeForFile(path).name();
-    if (mimeType == QStringLiteral("text/x-csrc") ||
-        mimeType == QStringLiteral("text/x-chdr") ) {
+    if (mimeType == QLatin1String("text/x-csrc") ||
+        mimeType == QLatin1String("text/x-chdr") ) {
         if (treatAmbiguousAsCPP) {
             if (path.endsWith(QLatin1String(".h"), Qt::CaseInsensitive)) {
                 return Cpp;
@@ -444,20 +444,20 @@ LanguageType languageType(const QString& path, bool treatAmbiguousAsCPP)
         return C;
     }
 
-    if (mimeType == QStringLiteral("text/x-c++src") ||
-        mimeType == QStringLiteral("text/x-c++hdr") ) {
+    if (mimeType == QLatin1String("text/x-c++src") ||
+        mimeType == QLatin1String("text/x-c++hdr") ) {
         return Cpp;
     }
 
-    if (mimeType == QStringLiteral("text/x-objc++src")) {
+    if (mimeType == QLatin1String("text/x-objc++src")) {
         return ObjCpp;
     }
 
-    if (mimeType == QStringLiteral("text/x-objcsrc")) {
+    if (mimeType == QLatin1String("text/x-objcsrc")) {
         return ObjC;
     }
 
-    if (mimeType == QStringLiteral("text/x-opencl-src")) {
+    if (mimeType == QLatin1String("text/x-opencl-src")) {
         return OpenCl;
     }
 
