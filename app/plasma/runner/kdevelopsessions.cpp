@@ -120,7 +120,7 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
     bool listAll = false;
 
     if (term.startsWith(QStringLiteral("kdevelop"), Qt::CaseInsensitive)) {
-        if (term.trimmed().compare(QStringLiteral("kdevelop"), Qt::CaseInsensitive) == 0) {
+        if (term.trimmed().compare(QLatin1String("kdevelop"), Qt::CaseInsensitive) == 0) {
             listAll = true;
             term.clear();
         } else if (term.at(8) == QLatin1Char(' ') ) {
