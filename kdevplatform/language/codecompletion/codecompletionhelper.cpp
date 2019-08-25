@@ -61,7 +61,7 @@ void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor&
         if (spaceBeforeParen)
             openingParen = QStringLiteral(" (");
         else
-            openingParen = QLatin1Char('(');
+            openingParen = QStringLiteral("(");
 
         if (spaceBetweenParens && (haveArguments || spaceBetweenEmptyParens))
             openingParen += QLatin1Char(' ');
@@ -70,7 +70,7 @@ void insertFunctionParenText(KTextEditor::View* view, const KTextEditor::Cursor&
         if (spaceBetweenParens && (haveArguments)) {
             closingParen = QStringLiteral(" )");
         } else
-            closingParen = QLatin1Char(')');
+            closingParen = QStringLiteral(")");
 
         KTextEditor::Cursor jumpPos = pos + KTextEditor::Cursor(0, openingParen.length());
 
