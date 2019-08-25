@@ -309,7 +309,7 @@ void OutputExecuteJob::start()
         } else {
             KDevelop::ICore::self()->runtimeController()->currentRuntime()->startProcess(d->m_process);
         }
-        model()->appendLine(d->m_process->workingDirectory() + QStringLiteral("> ") + KShell::joinArgs(d->m_process->program()));
+        model()->appendLine(d->m_process->workingDirectory() + QLatin1String("> ") + KShell::joinArgs(d->m_process->program()));
     } else {
         QString errorMessage = i18n("Failed to specify program to start: %1", d->joinCommandLine());
         model()->appendLine( i18n( "*** %1 ***", errorMessage) );

@@ -118,18 +118,18 @@ void CodeUtilsPlugin::documentDeclaration()
     lock.unlock();
 
     // TODO: Choose the template based on the language
-    QString templateName = QStringLiteral("doxygen_cpp");
+    QLatin1String templateName = QLatin1String("doxygen_cpp");
     auto languages = core()->languageController()->languagesForUrl(view->document()->url());
     if (!languages.isEmpty())
     {
         QString languageName = languages.first()->name();
         if (languageName == QLatin1String("Php"))
         {
-            templateName = QStringLiteral("phpdoc_php");
+            templateName = QLatin1String("phpdoc_php");
         }
         else if (languageName == QLatin1String("Python"))
         {
-            templateName = QStringLiteral("rest_python");
+            templateName = QLatin1String("rest_python");
             // Python docstrings appear inside functions and classes, not above them
             insertPos = Cursor(line+1, 0);
         }

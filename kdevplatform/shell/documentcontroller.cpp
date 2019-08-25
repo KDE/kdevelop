@@ -1003,7 +1003,7 @@ QString DocumentController::activeDocumentPath( const QString& target ) const
         {
             QString ret = static_cast<ProjectItemContext*>(selection)->items().at(0)->path().pathOrUrl();
             if(static_cast<ProjectItemContext*>(selection)->items().at(0)->folder())
-                ret += QStringLiteral("/.");
+                ret += QLatin1String("/.");
             return  ret;
         }
         return QString();

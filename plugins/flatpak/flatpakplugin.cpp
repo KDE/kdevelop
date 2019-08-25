@@ -109,7 +109,7 @@ void FlatpakPlugin::exportCurrent()
 
 void FlatpakPlugin::createRuntime(const KDevelop::Path &file, const QString &arch)
 {
-    QTemporaryDir* dir = new QTemporaryDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/kdevelop-flatpak-"));
+    QTemporaryDir* dir = new QTemporaryDir(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QLatin1String("/kdevelop-flatpak-"));
     const KDevelop::Path path(dir->path());
 
     auto process = FlatpakRuntime::createBuildDirectory(path, file, arch);

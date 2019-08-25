@@ -437,14 +437,15 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
 
 
     QString modeline(QStringLiteral("// kate: ")
-                   + QStringLiteral("indent-mode ") + indentationMode(mime) + QStringLiteral("; "));
+                   + QLatin1String("indent-mode ") + indentationMode(mime) + QLatin1String("; "));
 
     if(indentation.indentWidth) // We know something about indentation-width
         modeline.append(QStringLiteral("indent-width %1; ").arg(indentation.indentWidth));
 
     if(indentation.indentationTabWidth != 0) // We know something about tab-usage
     {
-        modeline.append(QStringLiteral("replace-tabs %1; ").arg(QLatin1String((indentation.indentationTabWidth == -1) ? "on" : "off")));
+        const auto state = (indentation.indentationTabWidth == -1) ? QLatin1String("on") : QLatin1String("off");
+        modeline += QLatin1String("replace-tabs ") + state + QLatin1String("; ");
         if(indentation.indentationTabWidth > 0)
             modeline.append(QStringLiteral("tab-width %1; ").arg(indentation.indentationTabWidth));
     }

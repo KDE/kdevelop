@@ -738,8 +738,8 @@ public:
             auto decl = pair.first;
             if (matchedTypes.contains(decl->indexedType())) {
                 auto parent = pair.second;
-                const QString access = parent->abstractType()->whichType() == AbstractType::TypePointer
-                                 ? QStringLiteral("->") : QStringLiteral(".");
+                const QLatin1String access = (parent->abstractType()->whichType() == AbstractType::TypePointer)
+                                 ? QLatin1String("->") : QLatin1String(".");
                 const QString text = parent->identifier().toString() + access + decl->identifier().toString();
                 auto item = new DeclarationItem(decl, text, {}, text);
                 item->setMatchQuality(8);
@@ -943,7 +943,7 @@ ClangCodeCompletionContext::ClangCodeCompletionContext(const DUContextPointer& c
         if (trimmedText.endsWith(QLatin1Char('.'))) {
             // TODO: This shouldn't be needed if Clang provided diagnostic.
             // But it doesn't always do it, so let's try to manually determine whether '.' is used instead of '->'
-            m_text = trimmedText.leftRef(trimmedText.size() - 1) + QStringLiteral("->");
+            m_text = trimmedText.leftRef(trimmedText.size() - 1) + QLatin1String("->");
 
             CXUnsavedFile unsaved;
             unsaved.Filename = file.constData();

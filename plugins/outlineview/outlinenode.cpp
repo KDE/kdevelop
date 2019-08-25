@@ -107,7 +107,7 @@ OutlineNode::OutlineNode(Declaration* decl, OutlineNode* parent)
                     if (first) {
                         first = false;
                     } else {
-                        m_cachedText += QStringLiteral(", ");
+                        m_cachedText += QLatin1String(", ");
                     }
 
                     if (childDecl->abstractType()) {

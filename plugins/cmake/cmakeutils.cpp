@@ -228,7 +228,7 @@ bool checkForNeedingConfigure( KDevelop::IProject* project )
         };
 
         if (!currentRuntime->buildPath().isEmpty()) {
-            const Path newBuilddir(currentRuntime->buildPath(), QStringLiteral("build-") + currentRuntimeName + project->name());
+            const Path newBuilddir(currentRuntime->buildPath(), QLatin1String("build-") + currentRuntimeName + project->name());
             const Path installPath(QString::fromUtf8(currentRuntime->getenv("KDEV_DEFAULT_INSTALL_PREFIX")));
 
             addBuildDir(newBuilddir, installPath, {}, QStringLiteral("Debug"), {});

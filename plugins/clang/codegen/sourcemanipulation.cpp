@@ -153,22 +153,18 @@ QString SourceCodeInsertion::applySubScope(const QString& decl) const
         return decl;
     }
 
-    QString scopeType = QStringLiteral("namespace");
-    QString scopeClose;
-
-    if (m_context && m_context->type() == DUContext::Class) {
-        scopeType = QStringLiteral("struct");
-        scopeClose = QStringLiteral(";");
-    }
+    const bool isClassContext = (m_context && m_context->type() == DUContext::Class);
+    const QLatin1String scopeType = isClassContext ? QLatin1String("struct ") : QLatin1String("namespace ");
+    const QLatin1String scopeClose = isClassContext ? QLatin1String(";") : QLatin1String("");
 
     QString ret;
     const auto scopes = m_scope.toStringList();
     for (const QString& scope : scopes) {
-        ret += scopeType + QLatin1Char(' ') + scope + QStringLiteral(" {\n");
+        ret += scopeType + scope + QLatin1String(" {\n");
     }
 
     ret += decl;
-    ret += QLatin1Char('}') + scopeClose + QStringLiteral("\n").repeated(m_scope.count());
+    ret += QString(QLatin1Char('}') + scopeClose + QLatin1Char('\n')).repeated(m_scope.count());
 
     return ret;
 }
@@ -252,7 +248,7 @@ bool SourceCodeInsertion::insertFunctionDeclaration(KDevelop::Declaration* decla
 
     int line = findInsertionPoint();
 
-    decl = QStringLiteral("\n\n") + applySubScope(decl);
+    decl = QLatin1String("\n\n") + applySubScope(decl);
     const auto url = declaration->url().toUrl();
     QMimeDatabase db;
     QMimeType mime = db.mimeTypeForUrl(url);

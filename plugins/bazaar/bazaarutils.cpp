@@ -54,7 +54,7 @@ QString BazaarUtils::getRevisionSpec(const KDevelop::VcsRevision& revision)
         else
             return QString(); // Don't know how to handle this situation
     } else if (revision.revisionType() == KDevelop::VcsRevision::GlobalNumber)
-        return QStringLiteral("-r") + QString::number(revision.revisionValue().toLongLong());
+        return QLatin1String("-r") + QString::number(revision.revisionValue().toLongLong());
     else
         return QString(); // Don't know how to handle this situation
 }
@@ -107,9 +107,9 @@ QString BazaarUtils::getRevisionSpecRange(const KDevelop::VcsRevision& begin,
     } else if (begin.revisionType() == KDevelop::VcsRevision::GlobalNumber) {
         if (end.revisionType() == KDevelop::VcsRevision::Special) {
             // Assuming working copy
-            return QStringLiteral("-r") + QString::number(begin.revisionValue().toLongLong());
+            return QLatin1String("-r") + QString::number(begin.revisionValue().toLongLong());
         } else {
-            return QStringLiteral("-r") + QString::number(begin.revisionValue().toLongLong())
+            return QLatin1String("-r") + QString::number(begin.revisionValue().toLongLong())
                    + QLatin1String("..") + QString::number(end.revisionValue().toLongLong());
         }
     }

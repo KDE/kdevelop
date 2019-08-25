@@ -65,7 +65,7 @@ QString descriptionFromProblem(IProblem::Ptr problem)
                 text += QLatin1Char(':') + QString::number(location.start().column() + 1);
             }
         }
-        text += QStringLiteral(": ");
+        text += QLatin1String(": ");
     }
     text += problem->description();
     if (!problem->explanation().isEmpty()) {

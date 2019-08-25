@@ -90,7 +90,7 @@ void QmlJS::ModuleCompletionItem::execute(KTextEditor::View* view, const KTextEd
         // Replace the whole line with an import statement
         view->document()->replaceText(
             KTextEditor::Range(word.start().line(), 0, word.start().line(), INT_MAX),
-            QStringLiteral("import %1").arg(m_name)
+            QLatin1String("import ") + m_name
         );
         break;
     case Quotes:
