@@ -63,7 +63,7 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
     }
 
     ReferencedTopDUContext parentCtx;
-    if (document().str().endsWith(QStringLiteral("CMakeLists.txt"))) {
+    if (document().str().endsWith(QLatin1String("CMakeLists.txt"))) {
         IndexedString parentFile = parentCMakeFile(document());
         if (QFile::exists(parentFile.toUrl().toLocalFile())) {
 

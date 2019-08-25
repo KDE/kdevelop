@@ -203,7 +203,7 @@ bool ClangCodeCompletionModel::shouldStartCompletion(KTextEditor::View* view, co
     if (userInsertion && lastChar == QLatin1Char('-') && includePathCompletionRequired(view->document()->line(position.line()))) {
         return true;
     }
-    if (userInsertion && inserted.endsWith(QStringLiteral("::"))) {
+    if (userInsertion && inserted.endsWith(QLatin1String("::"))) {
         return true;
     }
 

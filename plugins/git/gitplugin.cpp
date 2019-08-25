@@ -1515,7 +1515,7 @@ void GitPlugin::registerRepositoryForCurrentBranchChanges(const QUrl& repository
 
 void GitPlugin::fileChanged(const QString& file)
 {
-    Q_ASSERT(file.endsWith(QStringLiteral("HEAD")));
+    Q_ASSERT(file.endsWith(QLatin1String("HEAD")));
     //SMTH/.git/HEAD -> SMTH/
     const QUrl fileUrl = Path(file).parent().parent().toUrl();
 
