@@ -55,7 +55,7 @@ bool KDevFormatFile::find()
 
 bool KDevFormatFile::read()
 {
-    static const QChar delimiter = QLatin1Char(':');
+    constexpr QChar delimiter = QLatin1Char(':');
 
     QFile formatFile(formatFileName);
     if (!formatFile.open(QIODevice::ReadOnly | QIODevice::Text)) {

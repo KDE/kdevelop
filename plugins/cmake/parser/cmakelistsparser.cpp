@@ -38,7 +38,8 @@ QMap<QChar, QChar> whatToScape()
 
 const QMap<QChar, QChar> CMakeFunctionArgument::scapings=whatToScape();
 
-static const QChar scapingChar = QLatin1Char('\\');
+constexpr QChar scapingChar = QLatin1Char('\\');
+
 QString CMakeFunctionArgument::unescapeValue(const QString& value)
 {
     int firstScape=value.indexOf(scapingChar);

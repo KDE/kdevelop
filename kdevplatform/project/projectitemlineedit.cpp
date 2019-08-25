@@ -40,8 +40,8 @@
 #include <interfaces/iproject.h>
 #include "projectproxymodel.h"
 
-static const QChar sep = QLatin1Char('/');
-static const QChar escape = QLatin1Char('\\');
+constexpr QChar sep = QLatin1Char('/');
+constexpr QChar escape = QLatin1Char('\\');
 
 
 class ProjectItemCompleter : public QCompleter
