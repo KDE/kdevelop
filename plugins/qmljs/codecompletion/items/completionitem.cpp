@@ -109,7 +109,7 @@ QVariant CompletionItem::data(const QModelIndex& index, int role, const CodeComp
                     args.append(arg->toString());
                 }
 
-                return QStringLiteral("(%1)").arg(args.join(QStringLiteral(", ")));
+                return QVariant(QLatin1Char('(') + args.join(QLatin1String(", ")) +QLatin1Char(')'));
             }
             }
         }

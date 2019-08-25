@@ -224,7 +224,7 @@ QString ClangUtils::getScope(CXCursor cursor, CXCursor context)
         scope.prepend(ClangString(clang_getCursorDisplayName(search)).toString());
         search = clang_getCursorSemanticParent(search);
     }
-    return scope.join(QStringLiteral("::"));
+    return scope.join(QLatin1String("::"));
 }
 
 QString ClangUtils::getCursorSignature(CXCursor cursor, const QString& scope, const QVector<QString>& defaultArgs)

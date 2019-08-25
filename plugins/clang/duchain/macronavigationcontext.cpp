@@ -55,7 +55,7 @@ QString MacroNavigationContext::html(bool shorten)
         parameterList << parameter.str();
     }
     const QString parameters = (!parameterList.isEmpty() ?
-        QStringLiteral("(%1)").arg(parameterList.join(QStringLiteral(", "))) :
+        QLatin1Char('(') + parameterList.join(QLatin1String(", ")) + QLatin1Char(')') :
         QString());
 
     const QUrl url = m_macro->url().toUrl();

@@ -162,7 +162,7 @@ QString QtHelpDocumentation::description() const
         return thisFragment;
     }
 
-    return QStringList(m_info.keys()).join(QStringLiteral(", "));
+    return QStringList(m_info.keys()).join(QLatin1String(", "));
 }
 
 void QtHelpDocumentation::setUserStyleSheet(StandardDocumentationView* view, const QUrl& url)

@@ -126,7 +126,7 @@ void OutputPagePrivate::validate()
         std::sort(invalidFiles.begin(), invalidFiles.end());
         output->messageWidget->setMessageType(KMessageWidget::Error);
         output->messageWidget->setCloseButtonVisible(false);
-        output->messageWidget->setText(i18np("Invalid output file: %2", "Invalid output files: %2", invalidFiles.count(), invalidFiles.join(QStringLiteral(", "))));
+        output->messageWidget->setText(i18np("Invalid output file: %2", "Invalid output files: %2", invalidFiles.count(), invalidFiles.join(QLatin1String(", "))));
         output->messageWidget->animatedShow();
     }
     emit page->isValid(valid);

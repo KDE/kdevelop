@@ -1333,7 +1333,7 @@ void ClangCodeCompletionContext::addOverwritableItems()
         for (const auto& param : info.params) {
             params << param.type + QLatin1Char(' ') + param.id;
         }
-        QString nameAndParams = info.name + QLatin1Char('(') + params.join(QStringLiteral(", ")) + QLatin1Char(')');
+        QString nameAndParams = info.name + QLatin1Char('(') + params.join(QLatin1String(", ")) + QLatin1Char(')');
         if(info.isConst)
             nameAndParams = nameAndParams + QLatin1String(" const");
         if(info.isPureVirtual)

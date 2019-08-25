@@ -70,7 +70,7 @@ static QString functionPropertiesToString(ClassFunctionDeclaration* decl)
     } else if (decl->isAbstract()) {
         properties << i18n("Abstract function");
     }
-    return properties.join(QStringLiteral(", "));
+    return properties.join(QLatin1String(", "));
 }
 
 struct KDevelop::OverridesPagePrivate

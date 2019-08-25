@@ -282,7 +282,7 @@ KDevelop::IProblem::Ptr CppcheckParser::getProblem(int locationIdx) const
     }
 
     if (!messagePrefix.isEmpty()) {
-        errorMessage = QStringLiteral("(%1) %2").arg(messagePrefix.join(QStringLiteral(", ")), m_errorMessage);
+        errorMessage = QStringLiteral("(%1) %2").arg(messagePrefix.join(QLatin1String(", ")), m_errorMessage);
     }
 
     problem->setDescription(errorMessage);

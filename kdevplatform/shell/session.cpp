@@ -190,7 +190,7 @@ QString SessionPrivate::generatePrettyContents( const SessionInfo& info )
     if( projectNames.isEmpty() ) {
         return i18n("(no projects)");
     } else {
-        return projectNames.join( QStringLiteral(", ") );
+        return projectNames.join(QLatin1String(", "));
     }
 }
 

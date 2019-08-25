@@ -144,7 +144,7 @@ void SourceCodeInsertion::setSubScope(const QualifiedIdentifier& scope)
         }
     }
 
-    m_scope = stripPrefixes(m_context, QualifiedIdentifier(needNamespace.join(QStringLiteral("::"))));
+    m_scope = stripPrefixes(m_context, QualifiedIdentifier(needNamespace.join(QLatin1String("::"))));
 }
 
 QString SourceCodeInsertion::applySubScope(const QString& decl) const

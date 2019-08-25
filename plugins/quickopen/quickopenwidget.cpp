@@ -306,7 +306,7 @@ void QuickOpenWidget::updateProviders()
             }
         }
 
-        ui.itemsButton->setText(checkedItems.join(QStringLiteral(", ")));
+        ui.itemsButton->setText(checkedItems.join(QLatin1String(", ")));
     }
 
     QStringList checkedScopes;
@@ -321,7 +321,7 @@ void QuickOpenWidget::updateProviders()
             }
         }
 
-        ui.scopesButton->setText(checkedScopes.join(QStringLiteral(", ")));
+        ui.scopesButton->setText(checkedScopes.join(QLatin1String(", ")));
     }
 
     emit itemsChanged(checkedItems);

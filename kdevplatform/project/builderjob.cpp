@@ -243,7 +243,7 @@ void BuilderJob::updateJobName()
         for (ProjectBaseItem* item : qAsConst(registeredItems)) {
             itemNamesList << item->text();
         }
-        itemNames = itemNamesList.join(QStringLiteral(", "));
+        itemNames = itemNamesList.join(QLatin1String(", "));
     } else {
         itemNames = i18nc( "Unspecified set of build items (e. g. projects, targets)", "Various items" );
     }
@@ -254,7 +254,7 @@ void BuilderJob::updateJobName()
     for (BuildType type : qAsConst(buildTypes)) {
         methodNamesList << d->buildTypeToString( type );
     }
-    methodNames = methodNamesList.join( QStringLiteral( ", " ) );
+    methodNames = methodNamesList.join(QLatin1String(", "));
 
     QString jobName = QStringLiteral( "%1: %2" ).arg( itemNames, methodNames );
     setObjectName( jobName );
