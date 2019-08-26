@@ -1222,7 +1222,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
         QStringRef curr=line.mid(3);
         QStringRef state = line.left(2);
 
-        int arrow = curr.indexOf(QStringLiteral(" -> "));
+        int arrow = curr.indexOf(QLatin1String(" -> "));
         if(arrow>=0) {
             VcsStatusInfo status;
             status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.toString().left(arrow))));

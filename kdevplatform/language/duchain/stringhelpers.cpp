@@ -389,7 +389,7 @@ QString clearComments(const QString& str_, QChar replacement)
             pos = dest;
         } else if (withoutStrings[pos + 1] == QLatin1Char('*')) {
             //CPP style comment
-            endCommentPos = withoutStrings.indexOf(QStringLiteral("*/"), pos + 2);
+            endCommentPos = withoutStrings.indexOf(QLatin1String("*/"), pos + 2);
             if (endCommentPos != -1)
                 endCommentPos += 2;
 
