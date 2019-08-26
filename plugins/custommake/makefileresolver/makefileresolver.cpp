@@ -457,7 +457,7 @@ PathResolutionResult MakeFileResolver::resolveIncludePathInternal(const QString&
     QRegExp makeRx(QStringLiteral("\\bmake\\s"));
     int offset = 0;
     while ((offset = makeRx.indexIn(firstLine, offset)) != -1) {
-      QString prefix = firstLine.left(offset).trimmed();
+      QString prefix = firstLine.leftRef(offset).trimmed().toString();
       if (prefix.endsWith(QLatin1String("&&")) || prefix.endsWith(QLatin1Char(';')) || prefix.isEmpty()) {
         QString newWorkingDirectory = workingDirectory;
         ///Extract the new working-directory
