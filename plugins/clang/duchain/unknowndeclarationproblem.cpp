@@ -141,7 +141,7 @@ QStringList scanIncludePaths( const QualifiedIdentifier& identifier, const KDeve
 int sharedPathLevel(const QString& a, const QString& b)
 {
     int shared = -1;
-    for(auto x = a.begin(), y = b.begin(); *x == *y && x != a.end() && y != b.end() ; ++x, ++y ) {
+    for (auto x = a.begin(), y = b.begin(); x != a.end() && y != b.end() && *x == *y; ++x, ++y) {
         if( *x == QDir::separator() ) {
             ++shared;
         }
