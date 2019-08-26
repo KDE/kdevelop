@@ -27,10 +27,10 @@ fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
 fi
-KF5_VERSION=v5.54.0
-KDE_PLASMA_BREEZE_VERSION=v5.13.5 # latest version still supporting Qt 5.9
-LIBKSYSGUARD_VERSION=v5.15.5 # latest version still supporting Qt 5.9
-KDE_APPLICATION_VERSION=v19.04.3
+KF5_VERSION=v5.61.0
+KDE_PLASMA_BREEZE_VERSION=v5.16.4
+LIBKSYSGUARD_VERSION=v5.16.4
+KDE_APPLICATION_VERSION=v19.08.0
 GRANTLEE_VERSION=v5.1.0
 OKTETA_VERSION=v0.26.2
 
@@ -155,7 +155,7 @@ function build_framework
 if [ -z "$SKIP_FRAMEWORKS" ]; then
 build_framework extra-cmake-modules -DBUILD_HTML_DOCS=OFF -DBUILD_MAN_DOCS=OFF
 
-(PATCH_FILE=$SCRIPT_DIR/kconfig_no_execution_of_values.patch build_framework kconfig)
+build_framework kconfig
 build_framework kguiaddons
 build_framework ki18n
 build_framework kitemviews
@@ -427,7 +427,7 @@ export APPIMAGE_STARTUP_XDG_DATA_DIRS=\$XDG_DATA_DIRS
 export APPIMAGE_STARTUP_PATH=\$PATH
 export APPIMAGE_STARTUP_PYTHONHOME=\$PYTHONHOME
 
-export KDEV_CLANG_BUILTIN_DIR=\$DIR/opt/llvm/lib/clang/8.0.0/include
+export KDEV_CLANG_BUILTIN_DIR=\$DIR/opt/llvm/lib/clang/${LLVM_VERSION}/include
 export KDEV_DISABLE_PLUGINS="KDevWelcomePage;KDevManPage"
 
 cd \$HOME

@@ -4,7 +4,7 @@ To build the AppImage, you basically just have to:
 
 ```
 docker pull centos:6.10
-docker build <path/to/this/folder/where/Dockerfile>
+docker build <path/to/this_directory_containing_the_Dockerfile>
 ```
 Building the image will take several hours at least.
 
