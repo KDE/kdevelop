@@ -36,12 +36,12 @@
 
 namespace
 {
-const QString includePathsFile = QStringLiteral(".kdev_include_paths");
+inline QString includePathsFile() { return QStringLiteral(".kdev_include_paths"); }
 
 
 bool removeSettings(const QString& storageDirectory)
 {
-    QString file = storageDirectory + QDir::separator() + includePathsFile;
+    const QString file = storageDirectory + QDir::separator() + includePathsFile();
     return QFile::remove(file);
 }
 
@@ -60,7 +60,7 @@ QString NoProjectIncludePathsManager::findConfigurationFile(const QString& path)
 {
     QDir dir(path);
     while (dir.exists()) {
-        QFileInfo customIncludePathsFile(dir, includePathsFile);
+        QFileInfo customIncludePathsFile(dir, includePathsFile());
         if (customIncludePathsFile.exists()) {
             return customIncludePathsFile.absoluteFilePath();
         }
@@ -117,7 +117,7 @@ std::pair<Path::List, QHash<QString, QString>>
 bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirectory, const QStringList& includePaths)
 {
     QDir dir(storageDirectory);
-    QFileInfo customIncludePaths(dir, includePathsFile);
+    QFileInfo customIncludePaths(dir, includePathsFile());
     QFile f(customIncludePaths.filePath());
     if (f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         QTextStream out(&f);
