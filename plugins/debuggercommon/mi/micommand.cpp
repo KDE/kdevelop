@@ -70,9 +70,9 @@ QString MICommand::initialString() const
         result += miCommand();
 
         if (m_thread != -1)
-            result = result + QStringLiteral(" --thread %1").arg(m_thread);
+            result += QStringLiteral(" --thread %1").arg(m_thread);
         if (m_frame != -1)
-            result = result + QStringLiteral(" --frame %1").arg(m_frame);
+            result += QStringLiteral(" --frame %1").arg(m_frame);
 
         if (!command_.isEmpty())
             result += QLatin1Char(' ') + command_;
