@@ -12,7 +12,10 @@ set(KDEV_PLUGIN_VERSION 32)
 find_package (ECM 5.28.0 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${KDevelop_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
 
+include(KDEInstallDirs)
+include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE) # needs to be first, as set policies influence following macros
+
 include(ECMOptionalAddSubdirectory)
 include(ECMInstallIcons)
 include(ECMAddAppIcon)
@@ -27,9 +30,6 @@ include(CMakePackageConfigHelpers)
 include(FeatureSummary)
 include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
-
-include(KDEInstallDirs)
-include(KDECMakeSettings)
 
 include(KDevelopMacrosInternal)
 
