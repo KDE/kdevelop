@@ -88,6 +88,7 @@ std::pair<Path::List, QHash<QString, QString>>
     if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
         auto lines = QString::fromLocal8Bit(f.readAll()).split(QLatin1Char('\n'), QString::SkipEmptyParts);
         QFileInfo dir(pathToFile);
+        const QChar dirSeparator = QDir::separator();
         for (const auto& line : lines) {
             auto textLine = line.trimmed();
             if (textLine.startsWith(QLatin1String("#define "))) {
@@ -103,7 +104,7 @@ std::pair<Path::List, QHash<QString, QString>>
             if (!textLine.isEmpty()) {
                 QFileInfo pathInfo(textLine);
                 if (pathInfo.isRelative()) {
-                    includes << Path(dir.canonicalPath() + QDir::separator() + textLine);
+                    includes << Path(dir.canonicalPath() + dirSeparator + textLine);
                 } else {
                     includes << Path(textLine);
                 }

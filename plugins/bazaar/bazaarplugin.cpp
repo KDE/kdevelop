@@ -148,8 +148,9 @@ bool BazaarPlugin::isVersionControlled(const QUrl& localLocation)
         QList<QFileInfo> filesAndDirectoriesList;
         const auto output = job->output().split(QLatin1Char('\n'));
         filesAndDirectoriesList.reserve(output.size());
+        const QChar dirSeparator = QDir::separator();
         for (const auto& fod : output) {
-            filesAndDirectoriesList.append(QFileInfo(workCopy.absolutePath() + QDir::separator() + fod));
+            filesAndDirectoriesList.append(QFileInfo(workCopy.absolutePath() + dirSeparator + fod));
         }
         QFileInfo fi(localLocation.toLocalFile());
         if (fi.isDir() || fi.isFile()) {
