@@ -193,11 +193,24 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="KDevelop::EnvironmentSelectionWidget" name="environment">
-        <property name="toolTip">
-         <string>Select an environment to be used</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="KDevelop::EnvironmentSelectionWidget" name="environment">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Select an environment to be used</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KDevelop::EnvironmentConfigureButton" name="configureEnvironment"/>
+        </item>
+       </layout>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_6">
@@ -316,6 +329,11 @@
    <class>KDevelop::EnvironmentSelectionWidget</class>
    <extends>KComboBox</extends>
    <header>util/environmentselectionwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KDevelop::EnvironmentConfigureButton</class>
+   <extends>QToolButton</extends>
+   <header>shell/environmentconfigurebutton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

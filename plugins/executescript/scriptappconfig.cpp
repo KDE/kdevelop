@@ -98,6 +98,8 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
+    configureEnvironment->setSelectionWidget(environment);
+
     //connect signals to changed signal
     connect( interpreter->lineEdit(), &QLineEdit::textEdited, this, &ScriptAppConfigPage::changed );
     connect( executablePath->lineEdit(), &KLineEdit::textEdited, this, &ScriptAppConfigPage::changed );

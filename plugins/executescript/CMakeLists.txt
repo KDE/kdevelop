@@ -18,6 +18,8 @@ target_link_libraries(kdevexecutescript
     KDev::Interfaces
     KDev::Util
     KDev::Project
-    KDev::OutputView)
+    KDev::OutputView
+    KDev::Shell
+)
 
 install(FILES iexecutescriptplugin.h DESTINATION ${KDE_INSTALL_INCLUDEDIR}/kdevplatform/executescript COMPONENT Devel)
