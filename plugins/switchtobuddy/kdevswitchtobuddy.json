@@ -5,6 +5,7 @@
         "Description[ca@valencia]": "Permet commutar entre documents associats com fitxers d'implementacions i de capçaleres.",
         "Description[ca]": "Permet commutar entre documents associats com fitxers d'implementacions i de capçaleres.",
         "Description[de]": "Ermöglicht das Umschalten zwischen verwandten Dokumenten wie Implementations- und Header-Dateien.",
+        "Description[el]": "Επιτρέπει την εναλλαγή ανάμεσα σε συμπληρωματικά έγγραφα όπως αρχεία implementation και header",
         "Description[en_GB]": "Allows switching between buddy documents like implementation and header file.",
         "Description[es]": "Permite cambiar entre documentos asociados, como la implementación y el archivo de cabecera.",
         "Description[fr]": "Permet de basculer entre des documents amis comme l'implémentation et le fichier d'en-tête.",
