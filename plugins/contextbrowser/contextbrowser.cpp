@@ -329,6 +329,11 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject* parent, const QVariantList&)
 
 ContextBrowserPlugin::~ContextBrowserPlugin()
 {
+    for (auto* view : qAsConst(m_textHintProvidedViews)) {
+        auto* iface = qobject_cast<KTextEditor::TextHintInterface*>(view);
+        iface->unregisterTextHintProvider(&m_textHintProvider);
+    }
+
     ///TODO: QObject inheritance should suffice?
     delete m_nextMenu;
     delete m_previousMenu;
@@ -976,6 +981,7 @@ void ContextBrowserPlugin::viewDestroyed(QObject* obj)
 {
     m_highlightedRanges.remove(static_cast<KTextEditor::View*>(obj));
     m_updateViews.remove(static_cast<View*>(obj));
+    m_textHintProvidedViews.removeOne(static_cast<KTextEditor::View*>(obj));
 }
 
 void ContextBrowserPlugin::selectionChanged(View* view)
@@ -1024,8 +1030,12 @@ void ContextBrowserPlugin::viewCreated(KTextEditor::Document*, View* v)
     if (!iface)
         return;
 
+    if (m_textHintProvidedViews.contains(v)) {
+        return;
+    }
     iface->setTextHintDelay(highlightingTimeout);
     iface->registerTextHintProvider(&m_textHintProvider);
+    m_textHintProvidedViews.append(v);
 }
 
 void ContextBrowserPlugin::registerToolView(ContextBrowserView* view)
