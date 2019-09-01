@@ -325,6 +325,11 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject* parent, const QVariantList&)
     //Needed global action for the context-menu extensions
     m_findUses = new QAction(i18n("Find Uses"), this);
     connect(m_findUses, &QAction::triggered, this, &ContextBrowserPlugin::findUses);
+
+    const auto documents = core()->documentController()->openDocuments();
+    for (KDevelop::IDocument* document : documents) {
+        textDocumentCreated(document);
+    }
 }
 
 ContextBrowserPlugin::~ContextBrowserPlugin()
