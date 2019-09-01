@@ -476,6 +476,10 @@ void VariableCollection::updateAutoUpdate(IDebugSession* session)
 
 VariableCollection::~ VariableCollection()
 {
+    for (auto* view : qAsConst(m_textHintProvidedViews)) {
+        auto* iface = qobject_cast<KTextEditor::TextHintInterface*>(view);
+        iface->unregisterTextHintProvider(&m_textHintProvider);
+    }
 }
 
 void VariableCollection::textDocumentCreated(IDocument* doc)
@@ -499,7 +503,18 @@ void VariableCollection::viewCreated(KTextEditor::Document* doc,
     if( !iface )
         return;
 
+    if (m_textHintProvidedViews.contains(view)) {
+        return;
+    }
+    connect(view, &View::destroyed, this, &VariableCollection::viewDestroyed);
+
     iface->registerTextHintProvider(&m_textHintProvider);
+    m_textHintProvidedViews.append(view);
+}
+
+void VariableCollection::viewDestroyed(QObject* obj)
+{
+    m_textHintProvidedViews.removeOne(static_cast<KTextEditor::View*>(obj));
 }
 
 Locals* VariableCollection::locals(const QString &name) const

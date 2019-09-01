@@ -228,6 +228,8 @@ private:
     //Holds a list of all active context browser tool views
     QList<ContextBrowserView*> m_views;
 
+    QVector<KTextEditor::View*> m_textHintProvidedViews;
+
     //Used to override the next declaration that will be highlighted
     KDevelop::IndexedDeclaration m_useDeclaration;
     KDevelop::IndexedDeclaration m_lastHighlightedDeclaration;
