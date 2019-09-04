@@ -177,10 +177,11 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
                 makeLink(declaration->toString(), DeclarationPointer(declaration),
                          NavigationAction::NavigateDeclaration);
                 modifyHtml() += i18n(" in ");
+                const auto url = declaration->url().toUrl();
                 makeLink(QStringLiteral("%1 :%2")
-                         .arg(declaration->url().toUrl().fileName())
+                         .arg(url.fileName())
                          .arg(declaration->rangeInCurrentRevision().start().line() + 1),
-                         DeclarationPointer(declaration), NavigationAction::NavigateDeclaration);
+                         url.toDisplayString(QUrl::PreferLocalFile), NavigationAction(url, declaration->rangeInCurrentRevision().start()));
             } else if (range.start().isValid()) {
                 modifyHtml() += i18n("<br>See: ");
                 const auto url = range.document.toUrl();
