@@ -427,6 +427,11 @@ void Core::cleanup()
 
         // before unloading language plugins, we need to make sure all parse jobs are done
         d->languageController->backgroundParser()->waitForIdle();
+
+        DUChain::self()->shutdown();
+
+        // Only unload plugins after the DUChain shutdown to prevent issues with non-loaded factories for types
+        // See: https://bugs.kde.org/show_bug.cgi?id=379669
         d->pluginController->cleanup();
 
         d->sessionController->cleanup();
@@ -435,8 +440,6 @@ void Core::cleanup()
 
         //Disable the functionality of the language controller
         d->languageController->cleanup();
-
-        DUChain::self()->shutdown();
     }
 
     d->m_cleanedUp = true;
