@@ -351,8 +351,10 @@ void MainWindow::loadSettings()
     }
 
     const bool tabBarHidden = !Container::configTabBarVisible();
+    const bool closeButtonsOnTabs = Container::configCloseButtonsOnTabs();
     for (Container *container : qAsConst(d->viewContainers)) {
         container->setTabBarHidden(tabBarHidden);
+        container->setCloseButtonsOnTabs(closeButtonsOnTabs);
     }
 
     hu.stop();

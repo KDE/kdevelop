@@ -365,7 +365,7 @@ Container::Container(QWidget *parent)
 
 
     setTabBarHidden(!configTabBarVisible());
-    d->tabBar->setTabsClosable(true);
+    d->tabBar->setTabsClosable(configCloseButtonsOnTabs());
     d->tabBar->setMovable(true);
     d->tabBar->setExpanding(false);
     d->tabBar->setSelectionBehaviorOnRemove(QTabBar::SelectPreviousTab);
@@ -377,6 +377,12 @@ bool Container::configTabBarVisible()
 {
     KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
     return group.readEntry("TabBarVisibility", 1);
+}
+
+bool Container::configCloseButtonsOnTabs()
+{
+    KConfigGroup group = KSharedConfig::openConfig()->group("UiSettings");
+    return group.readEntry("CloseButtonsOnTabs", 1);
 }
 
 void Container::setLeftCornerWidget(QWidget* widget)
@@ -630,6 +636,13 @@ void Container::setTabBarHidden(bool hide)
     if (v) {
         documentTitleChanged(v->document());
     }
+}
+
+void Container::setCloseButtonsOnTabs(bool show)
+{
+    Q_D(Container);
+
+    d->tabBar->setTabsClosable(show);
 }
 
 void Container::resetTabColors(const QColor& color)

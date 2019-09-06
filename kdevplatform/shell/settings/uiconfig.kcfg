@@ -12,6 +12,9 @@
         <entry name="TabBarVisibility" key="TabBarVisibility" type="Int">
             <default>1</default>
         </entry>
+        <entry name="CloseButtonsOnTabs" key="CloseButtonsOnTabs" type="Int">
+            <default>1</default>
+        </entry>
         <entry name="TabBarOpenAfterCurrent" key="TabBarOpenAfterCurrent" type="Int">
             <default>1</default>
         </entry>

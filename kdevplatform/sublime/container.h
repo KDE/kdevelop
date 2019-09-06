@@ -61,6 +61,7 @@ public:
     View *viewForWidget(QWidget *w) const;
 
     void setTabBarHidden(bool hide);
+    void setCloseButtonsOnTabs(bool show);
 
     void setTabColor(const View* view, const QColor& color);
     void setTabColors(const QHash<const View*, QColor>& colors);
@@ -76,6 +77,7 @@ public:
     QRect tabRect(int tab) const;
 
     static bool configTabBarVisible();
+    static bool configCloseButtonsOnTabs();
 
 Q_SIGNALS:
     void activateView(Sublime::View* view);

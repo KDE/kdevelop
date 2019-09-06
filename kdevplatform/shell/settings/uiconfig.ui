@@ -86,7 +86,7 @@
       <string>Tabbed Browsing</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_1">
-      <item row="1" column="0">
+      <item row="2" column="0">
        <widget class="QCheckBox" name="kcfg_TabBarOpenAfterCurrent">
         <property name="toolTip">
          <string>Controls whether to open new tabs next to the active one.</string>
@@ -99,7 +99,7 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QCheckBox" name="kcfg_TabBarArrangeBuddies">
         <property name="toolTip">
          <string>When enabled, plugins can group related files side by side.
@@ -117,6 +117,19 @@ For example, a header file will be opened next to the implementation file.</stri
         </property>
         <property name="text">
          <string>Show tabs</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="kcfg_CloseButtonsOnTabs">
+        <property name="toolTip">
+         <string>Enables or disables the display of a close button in each tab in the tab bar at the top of the editor window.</string>
+        </property>
+        <property name="text">
+         <string>Show close buttons on tabs</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -188,6 +201,22 @@ For example, a header file will be opened next to the implementation file.</stri
     <hint type="destinationlabel">
      <x>260</x>
      <y>183</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kcfg_TabBarVisibility</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>kcfg_CloseButtonsOnTabs</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>133</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>158</y>
     </hint>
    </hints>
   </connection>
