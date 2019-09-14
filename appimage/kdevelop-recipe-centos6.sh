@@ -27,7 +27,7 @@ fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
 fi
-KF5_VERSION=v5.61.0
+KF5_VERSION=v5.62.0
 KDE_PLASMA_BREEZE_VERSION=v5.16.4
 LIBKSYSGUARD_VERSION=v5.16.4
 KDE_APPLICATION_VERSION=v19.08.0
@@ -158,11 +158,11 @@ build_framework extra-cmake-modules -DBUILD_HTML_DOCS=OFF -DBUILD_MAN_DOCS=OFF
 build_framework kconfig
 build_framework kguiaddons
 build_framework ki18n
-build_framework kitemviews
-build_framework sonnet
+build_framework kitemviews -DBUILD_DESIGNERPLUGIN=OFF
+build_framework sonnet -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kwindowsystem
-build_framework kwidgetsaddons
-build_framework kcompletion
+build_framework kwidgetsaddons -DBUILD_DESIGNERPLUGIN=OFF
+build_framework kcompletion -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kdbusaddons
 build_framework karchive
 build_framework kcoreaddons
@@ -171,14 +171,14 @@ build_framework kcrash
 build_framework kservice
 build_framework kcodecs
 build_framework kauth
-build_framework kconfigwidgets
-build_framework kiconthemes
-build_framework ktextwidgets
+build_framework kconfigwidgets -DBUILD_DESIGNERPLUGIN=OFF
+build_framework kiconthemes -DBUILD_DESIGNERPLUGIN=OFF
+build_framework ktextwidgets -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kglobalaccel
-build_framework kxmlgui
+build_framework kxmlgui -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kbookmarks
 build_framework solid
-build_framework kio
+build_framework kio -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kparts
 build_framework kitemmodels
 build_framework threadweaver
