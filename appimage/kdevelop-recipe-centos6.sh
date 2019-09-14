@@ -28,9 +28,8 @@ if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
 fi
 KF5_VERSION=v5.62.0
-KDE_PLASMA_BREEZE_VERSION=v5.16.4
-LIBKSYSGUARD_VERSION=v5.16.4
-KDE_APPLICATION_VERSION=v19.08.0
+PLASMA_VERSION=v5.16.5
+KDE_APPLICATIONS_VERSION=v19.08.1
 GRANTLEE_VERSION=v5.1.0
 OKTETA_VERSION=v0.26.2
 
@@ -198,14 +197,14 @@ build_framework kinit
 fi
 
 # KDE Plasma
-build_project libksysguard $LIBKSYSGUARD_VERSION
-build_project kdecoration $KDE_PLASMA_BREEZE_VERSION # needed by breeze
-build_project breeze $KDE_PLASMA_BREEZE_VERSION
+build_project libksysguard $PLASMA_VERSION
+build_project kdecoration $PLASMA_VERSION # needed by breeze
+build_project breeze $PLASMA_VERSION
 
 # KDE Applications
-build_project libkomparediff2 $KDE_APPLICATION_VERSION
-build_project kate $KDE_APPLICATION_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE # for snippet plugin, see T3826
-build_project konsole $KDE_APPLICATION_VERSION
+build_project libkomparediff2 $KDE_APPLICATIONS_VERSION
+build_project kate $KDE_APPLICATIONS_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE # for snippet plugin, see T3826
+build_project konsole $KDE_APPLICATIONS_VERSION
 build_project okteta $OKTETA_VERSION -DBUILD_DESIGNERPLUGIN=OFF -DBUILD_OKTETAKASTENLIBS=OFF
 
 # Extra
