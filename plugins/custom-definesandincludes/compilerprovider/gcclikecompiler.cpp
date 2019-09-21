@@ -84,7 +84,7 @@ QString languageStandard(const QString& arguments, Utils::LanguageType type)
 
 Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& arguments) const
 {
-    auto& data = m_definesIncludes[arguments];
+    auto& data = m_definesIncludes[type][arguments];
     if (!data.definedMacros.isEmpty() ) {
         return data.definedMacros;
     }
@@ -133,7 +133,7 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
 
 Path::List GccLikeCompiler::includes(Utils::LanguageType type, const QString& arguments) const
 {
-    auto& data = m_definesIncludes[arguments];
+    auto& data = m_definesIncludes[type][arguments];
     if ( !data.includePaths.isEmpty() ) {
         return data.includePaths;
     }

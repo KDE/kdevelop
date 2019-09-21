@@ -45,7 +45,7 @@ private:
     };
 
     /// List of defines/includes per arguments
-    mutable QHash<QString, DefinesIncludes> m_definesIncludes;
+    mutable QHash<Utils::LanguageType, QHash<QString, DefinesIncludes>> m_definesIncludes;
 };
 
 #endif // GCCLIKECOMPILER_H
