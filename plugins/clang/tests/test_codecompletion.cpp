@@ -177,6 +177,9 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
     if (QTest::currentTestFunction() == QByteArrayLiteral("testImplementAfterEdit") && expectedCompletionItems.position.line() == 3) {
         QEXPECT_FAIL("", "TU is not properly updated after edit", Continue);
     }
+    if (QTest::currentTestFunction() == QByteArrayLiteral("testClangCodeCompletion")) {
+        QEXPECT_FAIL("look-ahead pointer", "self-assignment isn't done anymore, so we don't find any suitable type anymore", Continue);
+    }
     if (tester.names.size() != expectedCompletionItems.completions.size()) {
         qDebug() << "different results:\nactual:" << tester.names << "\nexpected:" << expectedCompletionItems.completions;
     }

@@ -727,7 +727,9 @@ public:
     /// Only items with @p type will be returned through @sa matchedItems
     void addMatchedType(const IndexedType& type)
     {
-        matchedTypes.insert(type);
+        if (type.isValid()) {
+            matchedTypes.insert(type);
+        }
     }
 
     /// @return look-ahead items that math given types. @sa addMatchedType
@@ -777,11 +779,11 @@ private:
                         }
                     }
 
-                    if(!declaration->abstractType()){
+                    if (!localDecl->abstractType()) {
                         continue;
                     }
 
-                    if (declaration->abstractType()->whichType() == AbstractType::TypeIntegral) {
+                    if (localDecl->abstractType()->whichType() == AbstractType::TypeIntegral) {
                         if (auto integralType = declaration->abstractType().cast<IntegralType>()) {
                             if (integralType->dataType() == IntegralType::TypeVoid) {
                                 continue;
@@ -1235,11 +1237,14 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
                 //don't set best match property for internal identifiers, also prefer declarations from current file
                 const auto isInternal = found->indexedIdentifier().identifier().toString().startsWith(QLatin1String("__"));
-                if (bestMatch && !isInternal ) {
+                if (bestMatch && !isInternal) {
                     const int matchQuality = codeCompletionPriorityToMatchQuality(completionPriority);
                     declarationItem->setMatchQuality(matchQuality);
 
                     // TODO: LibClang missing API to determine expected code completion type.
+                    if (auto functionType = found->type<FunctionType>()) {
+                        lookAheadMatcher.addMatchedType(IndexedType(functionType->returnType()));
+                    }
                     lookAheadMatcher.addMatchedType(found->indexedType());
                 } else {
                     declarationItem->setInheritanceDepth(completionPriority);
