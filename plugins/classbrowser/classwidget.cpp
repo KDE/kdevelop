@@ -68,6 +68,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
     m_filterTimer->setSingleShot(true);
     m_filterTimer->setInterval(500);
     connect(m_filterTimer, &QTimer::timeout, this, [this]() {
+        m_tree->setCurrentIndex(QModelIndex());
         m_model->updateFilterString(m_filterText);
 
         if (m_filterText.isEmpty())

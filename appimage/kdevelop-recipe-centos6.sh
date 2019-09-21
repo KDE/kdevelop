@@ -27,10 +27,9 @@ fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
 fi
-KF5_VERSION=v5.61.0
-KDE_PLASMA_BREEZE_VERSION=v5.16.4
-LIBKSYSGUARD_VERSION=v5.16.4
-KDE_APPLICATION_VERSION=v19.08.0
+KF5_VERSION=v5.62.0
+PLASMA_VERSION=v5.16.5
+KDE_APPLICATIONS_VERSION=v19.08.1
 GRANTLEE_VERSION=v5.1.0
 OKTETA_VERSION=v0.26.2
 
@@ -158,11 +157,11 @@ build_framework extra-cmake-modules -DBUILD_HTML_DOCS=OFF -DBUILD_MAN_DOCS=OFF
 build_framework kconfig
 build_framework kguiaddons
 build_framework ki18n
-build_framework kitemviews
-build_framework sonnet
+build_framework kitemviews -DBUILD_DESIGNERPLUGIN=OFF
+build_framework sonnet -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kwindowsystem
-build_framework kwidgetsaddons
-build_framework kcompletion
+build_framework kwidgetsaddons -DBUILD_DESIGNERPLUGIN=OFF
+build_framework kcompletion -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kdbusaddons
 build_framework karchive
 build_framework kcoreaddons
@@ -171,14 +170,14 @@ build_framework kcrash
 build_framework kservice
 build_framework kcodecs
 build_framework kauth
-build_framework kconfigwidgets
-build_framework kiconthemes
-build_framework ktextwidgets
+build_framework kconfigwidgets -DBUILD_DESIGNERPLUGIN=OFF
+build_framework kiconthemes -DBUILD_DESIGNERPLUGIN=OFF
+build_framework ktextwidgets -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kglobalaccel
-build_framework kxmlgui
+build_framework kxmlgui -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kbookmarks
 build_framework solid
-build_framework kio
+build_framework kio -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kparts
 build_framework kitemmodels
 build_framework threadweaver
@@ -198,14 +197,14 @@ build_framework kinit
 fi
 
 # KDE Plasma
-build_project libksysguard $LIBKSYSGUARD_VERSION
-build_project kdecoration $KDE_PLASMA_BREEZE_VERSION # needed by breeze
-build_project breeze $KDE_PLASMA_BREEZE_VERSION
+build_project libksysguard $PLASMA_VERSION
+build_project kdecoration $PLASMA_VERSION # needed by breeze
+build_project breeze $PLASMA_VERSION
 
 # KDE Applications
-build_project libkomparediff2 $KDE_APPLICATION_VERSION
-build_project kate $KDE_APPLICATION_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE # for snippet plugin, see T3826
-build_project konsole $KDE_APPLICATION_VERSION
+build_project libkomparediff2 $KDE_APPLICATIONS_VERSION
+build_project kate $KDE_APPLICATIONS_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE # for snippet plugin, see T3826
+build_project konsole $KDE_APPLICATIONS_VERSION
 build_project okteta $OKTETA_VERSION -DBUILD_DESIGNERPLUGIN=OFF -DBUILD_OKTETAKASTENLIBS=OFF
 
 # Extra
