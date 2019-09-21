@@ -128,14 +128,7 @@ Identifier makeId(CXCursor cursor)
         // NOTE: using the QString overload of the Identifier ctor here, so that the template name gets parsed
         return Identifier(ClangString(clang_getCursorDisplayName(cursor)).toString());
     }
-
-    auto name = ClangString(clang_getCursorSpelling(cursor)).toIndexed();
-    if (name.isEmpty() && CursorKindTraits::isClass(cursor.kind)) {
-        // try to use the type name for typedef'ed anon structs etc. as a fallback
-        name = ClangString(clang_getTypeSpelling(clang_getCursorType(cursor))).toIndexed();
-    }
-
-    return Identifier(name);
+    return Identifier(ClangString(clang_getCursorSpelling(cursor)).toIndexed());
 }
 
 #if CINDEX_VERSION_MINOR >= 100 // FIXME https://bugs.llvm.org/show_bug.cgi?id=35333
