@@ -280,8 +280,10 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     smartArgs << ClangHelpers::clangBuiltinIncludePath().toUtf8();
     clangArguments << "-isystem" << smartArgs.last().constData();
 
-    smartArgs << writeDefinesFile(environment.defines());
-    clangArguments << "-imacros" << smartArgs.last().constData();
+    if (!environment.defines().isEmpty()) {
+        smartArgs << writeDefinesFile(environment.defines());
+        clangArguments << "-imacros" << smartArgs.last().constData();
+    }
 
     if (!environment.workingDirectory().isEmpty()) {
         QByteArray workingDirectory = environment.workingDirectory().toLocalFile().toUtf8();

@@ -39,10 +39,18 @@
 
 #include <QTest>
 #include <QLoggingCategory>
+#include <QProcess>
 
 using namespace KDevelop;
 
 QTEST_MAIN(TestFiles)
+
+namespace {
+bool isCudaAvailable()
+{
+    return QProcess::execute(QStringLiteral("clang"), {QStringLiteral("-xcuda"), QStringLiteral("-fsyntax-only"), QProcess::nullDevice()}) == 0;
+}
+}
 
 void TestFiles::initTestCase()
 {
@@ -76,7 +84,11 @@ void TestFiles::testFiles_data()
 {
     QTest::addColumn<QString>("fileName");
     const QString testDirPath = TEST_FILES_DIR;
-    const QStringList files = QDir(testDirPath).entryList({"*.h", "*.cpp", "*.c", "*.cl", "*.cu"}, QDir::Files);
+    auto patterns = QStringList{"*.h", "*.cpp", "*.c", "*.cl"};
+    if (isCudaAvailable()) {
+        patterns.append("*.cu");
+    }
+    const QStringList files = QDir(testDirPath).entryList(patterns, QDir::Files);
     for (const QString& file : files) {
         QTest::newRow(file.toUtf8().constData()) << QString(testDirPath + '/' + file);
     }
