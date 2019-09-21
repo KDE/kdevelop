@@ -132,7 +132,11 @@ Identifier makeId(CXCursor cursor)
     auto name = ClangString(clang_getCursorSpelling(cursor)).toIndexed();
     if (name.isEmpty() && CursorKindTraits::isClass(cursor.kind)) {
         // try to use the type name for typedef'ed anon structs etc. as a fallback
-        name = ClangString(clang_getTypeSpelling(clang_getCursorType(cursor))).toIndexed();
+        auto type = ClangString(clang_getTypeSpelling(clang_getCursorType(cursor))).toString();
+        // but don't associate a super long name for anon structs without a typedef
+        if (!type.startsWith(QLatin1String("(anonymous "))) {
+            name = IndexedString(type);
+        }
     }
 
     return Identifier(name);
