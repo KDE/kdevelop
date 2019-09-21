@@ -1018,6 +1018,18 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
     // If ctx is/inside the Class context, this represents that context.
     const auto currentClassContext = classDeclarationForContext(ctx, m_position);
 
+    // HACK: try to build a fallback parent ID from the USR
+    //       otherwise we won't identify typedefed anon structs correctly :(
+    auto parentFromUSR = [this]() -> QString {
+        const auto containerUSR = ClangString(clang_codeCompleteGetContainerUSR(m_results.get())).toString();
+        const auto lastAt = containerUSR.lastIndexOf(QLatin1Char('@'));
+        if (lastAt <= 0 || containerUSR[lastAt - 1] != QLatin1Char('A')) // we use this hack only for _A_non stuff
+            return {};
+
+        return containerUSR.mid(lastAt + 1);
+    };
+    const auto fallbackParentFromUSR = parentFromUSR();
+
     clangDebug() << "Clang found" << m_results->NumResults << "completion results";
 
     for (uint i = 0; i < m_results->NumResults; ++i) {
@@ -1168,9 +1180,12 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
         if (isDeclaration) {
             const Identifier id(typed);
             QualifiedIdentifier qid;
-            ClangString parent(clang_getCompletionParent(result.CompletionString, nullptr));
-            if (parent.c_str() != nullptr) {
-                qid = QualifiedIdentifier(parent.toString());
+            auto parent = ClangString(clang_getCompletionParent(result.CompletionString, nullptr)).toString();
+            if (parent.isEmpty() && !fallbackParentFromUSR.isEmpty()) {
+                parent = fallbackParentFromUSR;
+            }
+            if (!parent.isEmpty()) {
+                qid = QualifiedIdentifier(parent);
             }
             qid.push(id);
 
@@ -1185,19 +1200,6 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
             }
 
             auto found = findDeclaration(qid, ctx, m_position, isOverloadCandidate ? overloadsHandled : handled);
-
-            if (found && found->type<FunctionType>() == nullptr && parent.isEmpty() && !resultType.isEmpty()) {
-                // workaround: for multiple nameless structs with the same member.
-                // Check the type of the member to have at least a higher probability.
-                auto typeCheckedDeclaration = found;
-                while (typeCheckedDeclaration != nullptr && typeCheckedDeclaration->abstractType() != nullptr) {
-                    if (typeCheckedDeclaration->abstractType()->toString() == resultType) {
-                        found = typeCheckedDeclaration;
-                        break;
-                    }
-                    typeCheckedDeclaration = findDeclaration(qid, ctx, m_position, isOverloadCandidate ? overloadsHandled : handled);
-                }
-            }
 
             CompletionTreeItemPointer item;
             if (found) {
