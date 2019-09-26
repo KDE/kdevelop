@@ -227,17 +227,17 @@ void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcess
 {
     QRegularExpression rVar(QStringLiteral("(?<!\\\\)(\\$\\w+)"));
     QRegularExpression rNotVar(QStringLiteral("\\\\\\$"));
-    for (auto it = variables.begin(); it != variables.end(); ++it) {
+    for (auto& value : variables) {
         QRegularExpressionMatch m;
-        while ((m = rVar.match(it.value())).hasMatch()) {
+        while ((m = rVar.match(value)).hasMatch()) {
             if (environment.contains(m.captured(1).midRef(1).toString())) {
-                it.value().replace(m.capturedStart(0), m.capturedLength(0),
+                value.replace(m.capturedStart(0), m.capturedLength(0),
                                    environment.value(m.captured(0).midRef(1).toString()));
             } else {
                 //TODO: an warning
-                it.value().remove(m.capturedStart(0), m.capturedLength(0));
+                value.remove(m.capturedStart(0), m.capturedLength(0));
             }
         }
-        it.value().replace(rNotVar, QStringLiteral("$"));
+        value.replace(rNotVar, QStringLiteral("$"));
     }
 }

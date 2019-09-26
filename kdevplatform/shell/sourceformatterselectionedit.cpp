@@ -217,9 +217,8 @@ void SourceFormatterSelectionEdit::loadSettings(const KConfigGroup& config)
 {
     Q_D(SourceFormatterSelectionEdit);
 
-    for (auto languageIter = d->languages.begin(); languageIter != d->languages.end(); ++languageIter) {
+    for (auto& l : d->languages) {
         // Pick the first appropriate mimetype for this language
-        LanguageSettings& l = languageIter.value();
         const QList<QMimeType> mimetypes = l.mimetypes;
         for (const QMimeType& mimetype : mimetypes) {
             QStringList formatterAndStyleName = config.readEntry(mimetype.name(), QString()).split(QStringLiteral("||"), QString::KeepEmptyParts);

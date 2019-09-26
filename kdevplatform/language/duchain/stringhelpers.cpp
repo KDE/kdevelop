@@ -333,23 +333,21 @@ void skipFunctionArguments(const QString& str_, QStringList& skippedArguments, i
 
 QString reduceWhiteSpace(const QString& str_)
 {
-    const QString str = str_.trimmed();
+    const QStringRef str = QStringRef(&str_).trimmed();
     QString ret;
     const int len = str.length();
     ret.reserve(len);
 
-    QChar spaceChar = QLatin1Char(' ');
-
     bool hadSpace = false;
-    for (int a = 0; a < len; ++a) {
-        if (str[a].isSpace()) {
+    for (const QChar c : str) {
+        if (c.isSpace()) {
             hadSpace = true;
         } else {
             if (hadSpace) {
                 hadSpace = false;
-                ret += spaceChar;
+                ret += QLatin1Char(' ');
             }
-            ret += str[a];
+            ret += c;
         }
     }
 

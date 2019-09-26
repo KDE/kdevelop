@@ -686,10 +686,10 @@ bool DUContext::findDeclarationsInternal(const SearchItem::PtrList& baseIdentifi
     DUCHAIN_D(DUContext);
     if (d->m_contextType != Namespace) {
         // If we're in a namespace, delay all the searching into the top-context, because only that has the overview to pick the correct declarations.
-        for (int a = 0; a < baseIdentifiers.size(); ++a) {
-            if (!baseIdentifiers[a]->isExplicitlyGlobal && baseIdentifiers[a]->next.isEmpty()) {
+        for (auto& baseIdentifier : baseIdentifiers) {
+            if (!baseIdentifier->isExplicitlyGlobal && baseIdentifier->next.isEmpty()) {
                 // It makes no sense searching locally for qualified identifiers
-                findLocalDeclarationsInternal(baseIdentifiers[a]->identifier, position, dataType, ret, source, flags);
+                findLocalDeclarationsInternal(baseIdentifier->identifier, position, dataType, ret, source, flags);
             }
         }
 

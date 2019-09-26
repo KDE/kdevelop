@@ -69,7 +69,7 @@ struct Source
 
 void TestDetectedProblem::testSource()
 {
-    static Source sources[] =
+    static const Source sources[] =
     {
         { IProblem::Unknown, i18n("Unknown") },
         { IProblem::Disk, i18n("Disk") },
@@ -82,12 +82,11 @@ void TestDetectedProblem::testSource()
         { IProblem::Plugin, i18n("Plugin") }
     };
 
-    int c = sizeof(sources) / sizeof(Source);
-    for (int i = 0; i < c; i++) {
-        m_problem->setSource(sources[i].source);
+    for (auto& source : sources) {
+        m_problem->setSource(source.source);
 
-        QCOMPARE(sources[i].source, m_problem->source());
-        QCOMPARE(sources[i].sourceString, m_problem->sourceString());
+        QCOMPARE(source.source, m_problem->source());
+        QCOMPARE(source.sourceString, m_problem->sourceString());
     }
 
 }
@@ -100,19 +99,18 @@ struct Severity
 
 void TestDetectedProblem::testSeverity()
 {
-    static Severity severities[] =
+    static const Severity severities[] =
     {
         { IProblem::Error, i18n("Error") },
         { IProblem::Warning, i18n("Warning") },
         { IProblem::Hint, i18n("Hint") },
     };
 
-    int c = sizeof(severities) / sizeof(Severity);
-    for (int i = 0; i < c; i++) {
-        m_problem->setSeverity(severities[i].severity);
+    for (auto& severity : severities) {
+        m_problem->setSeverity(severity.severity);
 
-        QCOMPARE(severities[i].severity, m_problem->severity());
-        QCOMPARE(severities[i].severityString, m_problem->severityString());
+        QCOMPARE(severity.severity, m_problem->severity());
+        QCOMPARE(severity.severityString, m_problem->severityString());
     }
 }
 

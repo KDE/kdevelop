@@ -114,15 +114,13 @@ void ProjectFilterManagerPrivate::filterChanged(IProjectFilterProvider* provider
     }
 
     QVector< Filter >& filters = m_filters[project];
-    QVector<Filter>::iterator it = filters.begin();
-    while(it != filters.end()) {
-        if (it->provider == provider) {
-            it->filter = provider->createFilter(project);
+    for (auto& filter : filters) {
+        if (filter.provider == provider) {
+            filter.filter = provider->createFilter(project);
             qCDebug(PROJECT) << "project filter changed, reloading" << project->name();
             project->projectFileManager()->reload(project->projectItem());
             return;
         }
-        ++it;
     }
     Q_ASSERT_X(false, Q_FUNC_INFO, "Unknown provider changed its filter");
 }

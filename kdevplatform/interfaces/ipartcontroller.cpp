@@ -45,12 +45,9 @@ KPluginFactory* IPartController::findPartFactory ( const QString& mimetype, cons
         // if there is a preferred plugin we'll take it
         if ( !preferredName.isEmpty() )
         {
-            KService::List::ConstIterator it;
-            for ( it = offers.constBegin(); it != offers.constEnd(); ++it )
-            {
-                if ( ( *it ) ->desktopEntryName() == preferredName )
-                {
-                    ptr = ( *it );
+            for (auto& offer : offers) {
+                if (offer->desktopEntryName() == preferredName) {
+                    ptr = offer;
                     break;
                 }
             }

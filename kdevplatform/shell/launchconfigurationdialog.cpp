@@ -298,13 +298,12 @@ void LaunchConfigurationDialog::selectionChanged(const QItemSelection& selected,
                 QVariant currentLaunchMode = idx.sibling(idx.row(), 1).data(Qt::EditRole);
                 {
                     QSignalBlocker blocker(debugger);
-                    QList<ILauncher*> launchers = l->type()->launchers();
+                    const QList<ILauncher*> launchers = l->type()->launchers();
 
                     debugger->clear();
-                    for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); ++it )
-                    {
-                        if( ((*it)->supportedModes().contains( lm->id() ) ) ) {
-                            debugger->addItem( (*it)->name(), (*it)->id() );
+                    for (ILauncher* launcher : launchers) {
+                        if (launcher->supportedModes().contains(lm->id())) {
+                            debugger->addItem(launcher->name(), launcher->id());
                         }
                     }
 
@@ -959,12 +958,10 @@ QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const
     if( index.column() == 1 && mode && config )
     {
         auto* box = new KComboBox( parent );
-        QList<ILauncher*> launchers = config->type()->launchers();
-        for( QList<ILauncher*>::const_iterator it = launchers.constBegin(); it != launchers.constEnd(); ++it )
-        {
-            if( ((*it)->supportedModes().contains( mode->id() ) ) )
-            {
-                box->addItem( (*it)->name(), (*it)->id() );
+        const QList<ILauncher*> launchers = config->type()->launchers();
+        for (auto* launcher : launchers) {
+            if (launcher->supportedModes().contains(mode->id())) {
+                box->addItem(launcher->name(), launcher->id());
             }
         }
         return box;
@@ -972,9 +969,8 @@ QWidget* LaunchConfigurationModelDelegate::createEditor ( QWidget* parent, const
     {
         auto* box = new KComboBox( parent );
         const QList<LaunchConfigurationType*> types = Core::self()->runController()->launchConfigurationTypes();
-        for( QList<LaunchConfigurationType*>::const_iterator it = types.begin(); it != types.end(); ++it )
-        {
-            box->addItem( (*it)->name(), (*it)->id() );
+        for (auto* type : types) {
+            box->addItem(type->name(), type->id());
         }
         return box;
     }

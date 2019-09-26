@@ -136,10 +136,11 @@ void validateItem(const DUChainBaseData* const data, const uchar* const mappedDa
 
 const char* pointerInData(const QVector<TopDUContextDynamicData::ArrayWithPosition>& data, uint totalOffset)
 {
-    for (int a = 0; a < data.size(); ++a) {
-        if (totalOffset < data[a].position)
-            return data[a].array.constData() + totalOffset;
-        totalOffset -= data[a].position;
+    for (auto& awp : data) {
+        if (totalOffset < awp.position) {
+            return awp.array.constData() + totalOffset;
+        }
+        totalOffset -= awp.position;
     }
 
     Q_ASSERT_X(false, Q_FUNC_INFO, "Offset doesn't exist in the data.");

@@ -492,11 +492,11 @@ void ParseJob::translateDUChainToRevision(TopDUContext* context)
         MovingRangeTranslator translator(sourceRevision, targetRevision, moving);
         context->visit(translator);
 
-        QList<ProblemPointer> problems = context->problems();
-        for (QList<ProblemPointer>::iterator problem = problems.begin(); problem != problems.end(); ++problem) {
-            RangeInRevision r = (*problem)->range();
+        const QList<ProblemPointer> problems = context->problems();
+        for (auto& problem : problems) {
+            RangeInRevision r = problem->range();
             translator.translateRange(r);
-            (*problem)->setRange(r);
+            problem->setRange(r);
         }
 
         // Update the modification revision in the meta-data

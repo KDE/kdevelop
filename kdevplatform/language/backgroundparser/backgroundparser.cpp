@@ -797,8 +797,8 @@ void BackgroundParser::updateProgressData()
         d->m_maxParseJobs = 0;
     } else {
         float additionalProgress = 0;
-        for (auto it = d->m_jobProgress.constBegin(); it != d->m_jobProgress.constEnd(); ++it) {
-            additionalProgress += *it;
+        for (float progress : qAsConst(d->m_jobProgress)) {
+            additionalProgress += progress;
         }
 
         d->m_progressMax = d->m_maxParseJobs * 1000;

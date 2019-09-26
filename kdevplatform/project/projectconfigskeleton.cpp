@@ -174,11 +174,9 @@ bool ProjectConfigSkeleton::writeConfig()
 {
     Q_D(ProjectConfigSkeleton);
 
-    KConfigSkeletonItem::List myitems = items();
-    KConfigSkeletonItem::List::ConstIterator it;
-    for( it = myitems.constBegin(); it != myitems.constEnd(); ++it )
-    {
-        (*it)->writeConfig( config() );
+    const KConfigSkeletonItem::List myitems = items();
+    for (auto* item : myitems) {
+        item->writeConfig(config());
     }
 
     config()->sync();

@@ -1105,18 +1105,17 @@ private:
 
         if (info) {
             //Check whether importers need to be removed as well
-            QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> importers = info->importers();
+            const QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> importers = info->importers();
 
             QSet<QExplicitlySharedDataPointer<ParsingEnvironmentFile>> checkNext;
 
             //Do breadth first search, so less imports/importers have to be loaded, and a lower depth is reached
 
-            for (QList<QExplicitlySharedDataPointer<ParsingEnvironmentFile>>::iterator it = importers.begin();
-                 it != importers.end(); ++it) {
-                IndexedTopDUContext c = (*it)->indexedTopContext();
+            for (auto& importer : importers) {
+                IndexedTopDUContext c = importer->indexedTopContext();
                 if (!topContexts.contains(c.index())) {
                     topContexts.insert(c.index()); //Prevent useless recursion
-                    checkNext.insert(*it);
+                    checkNext.insert(importer);
                 }
             }
 
@@ -1486,20 +1485,18 @@ ParsingEnvironmentFilePointer DUChain::environmentFileForDocument(const IndexedS
 
     if (sdDUChainPrivate->m_destroyed)
         return ParsingEnvironmentFilePointer();
-    QList<ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
+    const QList<ParsingEnvironmentFilePointer> list = sdDUChainPrivate->getEnvironmentInformation(document);
 
 //    qCDebug(LANGUAGE) << document.str() << ": matching" << list.size() << (onlyProxyContexts ? "proxy-contexts" : (noProxyContexts ? "content-contexts" : "contexts"));
 
-    auto it = list.constBegin();
-    while (it != list.constEnd()) {
-        if (*it && ((*it)->isProxyContext() == proxyContext) && (*it)->matchEnvironment(environment) &&
+    for (auto& envFilePtr : list) {
+        if (envFilePtr && (envFilePtr->isProxyContext() == proxyContext) && envFilePtr->matchEnvironment(environment) &&
             // Verify that the environment-file and its top-context are "good": The top-context must exist,
             // and there must be a content-context associated to the proxy-context.
-            (*it)->topContext() &&
-            (!proxyContext || DUChainUtils::contentContextFromProxyContext((*it)->topContext()))) {
-            return *it;
+            envFilePtr->topContext() &&
+            (!proxyContext || DUChainUtils::contentContextFromProxyContext(envFilePtr->topContext()))) {
+            return envFilePtr;
         }
-        ++it;
     }
     return ParsingEnvironmentFilePointer();
 }

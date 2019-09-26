@@ -86,8 +86,7 @@ public:
         if (cnt) //Don't use qDebug, because that may not work during destruction
             std::cout << m_id.constData() << " There were items left on destruction: " << usedItemCount() << "\n";
 
-        for (int a = 0; a < m_items.size(); ++a)
-            delete m_items.at(a);
+        qDeleteAll(m_items);
     }
 
     inline T& item(int index)
@@ -181,9 +180,11 @@ public:
     int usedItemCount() const
     {
         int ret = 0;
-        for (int a = 0; a < m_items.size(); ++a)
-            if (m_items.at(a))
+        for (auto* item : m_items) {
+            if (item) {
                 ++ret;
+            }
+        }
 
         return ret - m_freeIndicesWithData.size();
     }

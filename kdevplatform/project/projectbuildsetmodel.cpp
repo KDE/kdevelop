@@ -169,24 +169,20 @@ int ProjectBuildSetModel::findInsertionPlace( const QStringList& itemPath )
 
     int insertionIndex = 0;
     bool found = false;
-    QList<QStringList>::iterator orderingCacheIterator = d->orderingCache.begin();
     // Points to the item which is next to last synchronization point.
     QList<BuildItem>::iterator nextItemIterator = d->items.begin();
 
-    while (orderingCacheIterator != d->orderingCache.end()) {
-
-        if( itemPath == *orderingCacheIterator ) {
+    for (auto& orderedItemPath : qAsConst(d->orderingCache)) {
+        if (itemPath == orderedItemPath) {
             found = true;
             break;
         }
         if (nextItemIterator != d->items.end() &&
-            nextItemIterator->itemPath() == *orderingCacheIterator ) {
+            nextItemIterator->itemPath() == orderedItemPath) {
             ++insertionIndex;
             ++nextItemIterator;
         }
-        ++orderingCacheIterator;
-
-    } // while
+    }
 
     if( !found ) {
         d->orderingCache.append(itemPath);

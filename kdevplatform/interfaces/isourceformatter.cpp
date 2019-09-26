@@ -176,10 +176,9 @@ QString ISourceFormatter::optionMapToString(const QMap<QString, QVariant> &map)
 QMap<QString, QVariant> ISourceFormatter::stringToOptionMap(const QString &options)
 {
 	QMap<QString, QVariant> map;
-	QStringList pairs = options.split(QLatin1Char(','), QString::SkipEmptyParts);
-	QStringList::const_iterator it;
-	for (it = pairs.constBegin(); it != pairs.constEnd(); ++it) {
-		const QStringList bits = (*it).split(QLatin1Char('='));
+	const QStringList pairs = options.split(QLatin1Char(','), QString::SkipEmptyParts);
+	for (auto& pair : pairs) {
+		const QStringList bits = pair.split(QLatin1Char('='));
 		map[bits[0]] = bits[1];
 	}
 	return map;

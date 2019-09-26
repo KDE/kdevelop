@@ -1642,9 +1642,11 @@ public:
     {
         Statistics ret;
         uint loadedBuckets = 0;
-        for (int a = 0; a < m_buckets.size(); ++a)
-            if (m_buckets[a])
+        for (auto* bucket : m_buckets) {
+            if (bucket) {
                 ++loadedBuckets;
+            }
+        }
 
 #ifdef DEBUG_MONSTERBUCKETS
         for (int a = 0; a < m_freeSpaceBuckets.size(); ++a) {
@@ -1667,9 +1669,11 @@ public:
         ret.emptyBuckets = 0;
 
         uint loadedMonsterBuckets = 0;
-        for (int a = 0; a < m_buckets.size(); ++a)
-            if (m_buckets[a] && m_buckets[a]->monsterBucketExtent())
-                loadedMonsterBuckets += m_buckets[a]->monsterBucketExtent() + 1;
+        for (auto* bucket : m_buckets) {
+            if (bucket && bucket->monsterBucketExtent()) {
+                loadedMonsterBuckets += bucket->monsterBucketExtent() + 1;
+            }
+        }
 
         uint usedBucketSpace = MyBucket::DataSize* m_currentBucket;
         uint freeBucketSpace = 0, freeUnreachableSpace = 0;
@@ -1751,9 +1755,9 @@ public:
     uint usedMemory() const
     {
         uint used = 0;
-        for (int a = 0; a < m_buckets.size(); ++a) {
-            if (m_buckets[a]) {
-                used += m_buckets[a]->usedMemory();
+        for (auto* bucket : m_buckets) {
+            if (bucket) {
+                used += bucket->usedMemory();
             }
         }
 

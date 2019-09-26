@@ -321,9 +321,8 @@ private:
         if (temporary)
             return;
 
-        for (QSet<DUContext*>::const_iterator it = m_directImporters.constBegin(); it != m_directImporters.constEnd();
-             ++it) {
-            auto* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(*it)); //Avoid detaching, so use const_cast
+        for (auto* context : qAsConst(m_directImporters)) {
+            auto* top = dynamic_cast<TopDUContext*>(context);
             if (top) ///@todo also record this for local imports
                 top->m_local->addImportedContextRecursion(m_ctxt, imported, depth + 1);
         }
@@ -374,11 +373,10 @@ private:
 
     void rebuildImportStructureRecursion(const QSet<QPair<TopDUContext*, const TopDUContext*>>& rebuild)
     {
-        for (QSet<QPair<TopDUContext*, const TopDUContext*>>::const_iterator it = rebuild.constBegin();
-             it != rebuild.constEnd(); ++it) {
+        for (auto& rebuildPair : rebuild) {
             //for(int a = rebuild.size()-1; a >= 0; --a) {
             //Find the best imported parent
-            it->first->m_local->rebuildStructure(it->second);
+            rebuildPair.first->m_local->rebuildStructure(rebuildPair.second);
         }
     }
 };
@@ -486,9 +484,8 @@ void TopDUContextLocalPrivate::rebuildStructure(const TopDUContext* imported)
     if (m_ctxt == imported)
         return;
 
-    for (QVector<DUContext::Import>::const_iterator parentIt = m_importedContexts.constBegin();
-         parentIt != m_importedContexts.constEnd(); ++parentIt) {
-        auto* top = dynamic_cast<TopDUContext*>(const_cast<DUContext*>(parentIt->context(nullptr))); //To avoid detaching, use const iterator
+    for (auto& importedContext : qAsConst(m_importedContexts)) {
+        auto* top = dynamic_cast<TopDUContext*>(importedContext.context(nullptr));
         if (top) {
 //       top->m_local->needImportStructure();
             if (top == imported) {

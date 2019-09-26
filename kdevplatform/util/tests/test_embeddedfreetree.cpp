@@ -77,8 +77,8 @@ clock_t std_insertion = 0, std_removal = 0, std_contains = 0, std_iteration = 0,
 QString toString(const std::set<uint>& set)
 {
     QString ret;
-    for (auto it = set.begin(); it != set.end(); ++it)
-        ret += QStringLiteral("%1 ").arg(*it);
+    for (unsigned int i : set)
+        ret += QStringLiteral("%1 ").arg(i);
 
     return ret;
 }
@@ -188,9 +188,9 @@ public:
     {
         std::set<uint> ret;
 
-        for (int a = 0; a < data.size(); ++a)
-            if (data[a].value)
-                ret.insert(data[a].value);
+        for (auto& d : data)
+            if (d.value)
+                ret.insert(d.value);
 
         return ret;
     }
@@ -200,10 +200,10 @@ public:
         //1. verify order
         uint last = 0;
         uint freeCount = 0;
-        for (int a = 0; a < data.size(); ++a) {
-            if (data[a].value) {
-                QVERIFY(last < data[a].value);
-                last = data[a].value;
+        for (auto& d : qAsConst(data)) {
+            if (d.value) {
+                QVERIFY(last < d.value);
+                last = d.value;
             } else {
                 ++freeCount;
             }
@@ -219,13 +219,12 @@ public:
     {
         Q_ASSERT(number < ( uint )data.size());
         uint ret = 0;
-        uint size = ( uint )data.size();
         uint current = 0;
-        for (uint a = 0; a < size; ++a) {
-            if (data[a].value) {
+        for (auto& d : data) {
+            if (d.value) {
                 //Only count the non-free items
                 if (current == number)
-                    ret = data[a].value;
+                    ret = d.value;
                 ++current;
             } else {
                 //This is a free item
@@ -303,9 +302,9 @@ public:
         uint ret = 0;
 
         clock_t start = clock();
-        for (auto it = realSet.begin(); it != realSet.end(); ++it) {
+        for (unsigned int i : realSet) {
             if (current == number) {
-                ret = *it;
+                ret = i;
             }
             ++current;
         }
@@ -613,8 +612,8 @@ private Q_SLOTS:
 
                 start = clock();
 
-                for (auto it = testSet1.begin(); it != testSet1.end(); ++it) {
-                    if (testSet2.count((*it) / extractor_div_with) == 1) {
+                for (unsigned int i : testSet1) {
+                    if (testSet2.count(i / extractor_div_with) == 1) {
                     }
                 }
 
@@ -648,9 +647,9 @@ private Q_SLOTS:
 
             std::set<uint> stdFiltered;
 
-            for (auto it = testSet1.begin(); it != testSet1.end(); ++it) {
-                if (testSet2.count((*it) / extractor_div_with) == 1) {
-                    stdFiltered.insert(*it);
+            for (unsigned int i : testSet1) {
+                if (testSet2.count(i / extractor_div_with) == 1) {
+                    stdFiltered.insert(i);
                 }
             }
 

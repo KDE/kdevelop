@@ -95,11 +95,8 @@ void ProgressItem::cancel()
     qCDebug(SHELL) << label();
     mCanceled = true;
     // Cancel all children.
-    QList<ProgressItem* > kids = mChildren.keys();
-    QList<ProgressItem* >::Iterator it( kids.begin() );
-    QList<ProgressItem* >::Iterator end( kids.end() );
-    for ( ; it != end; it++ ) {
-        ProgressItem *kid = *it;
+    const QList<ProgressItem*> kids = mChildren.keys();
+    for (ProgressItem* kid : kids) {
         if ( kid->canBeCanceled() ) {
             kid->cancel();
         }
@@ -235,22 +232,18 @@ void ProgressManager::slotStandardCancelHandler( ProgressItem *item )
 ProgressItem *ProgressManager::singleItem() const
 {
     ProgressItem *item = nullptr;
-    QHash< QString, ProgressItem* >::const_iterator it = mTransactions.constBegin();
-    QHash< QString, ProgressItem* >::const_iterator end = mTransactions.constEnd();
-    while ( it != end ) {
-
+    for (ProgressItem* transactionItem : mTransactions) {
         // No single item for progress possible, as one of them is a busy indicator one.
-        if ( (*it)->usesBusyIndicator() )
+        if (transactionItem->usesBusyIndicator())
             return nullptr;
 
-        if ( !(*it)->parent() ) {             // if it's a top level one, only those count
+        if (!transactionItem->parent()) {             // if it's a top level one, only those count
             if ( item ) {
                 return nullptr; // we found more than one
             } else {
-                item = (*it);
+                item = transactionItem;
             }
         }
-        ++it;
     }
     return item;
 }

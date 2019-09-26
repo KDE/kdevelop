@@ -48,16 +48,14 @@ QList<ProjectFileItem*> allFiles(ProjectBaseItem* projectItem)
     QList<ProjectFileItem*> files;
     if ( ProjectFolderItem * folder = projectItem->folder() )
     {
-        QList<ProjectFolderItem*> folder_list = folder->folderList();
-        for ( QList<ProjectFolderItem*>::Iterator it = folder_list.begin(); it != folder_list.end(); ++it )
-        {
-            files += allFiles( ( *it ) );
+        const QList<ProjectFolderItem*> subFolders = folder->folderList();
+        for (auto* subFolder : subFolders) {
+            files += allFiles(subFolder);
         }
 
-        QList<ProjectTargetItem*> target_list = folder->targetList();
-        for ( QList<ProjectTargetItem*>::Iterator it = target_list.begin(); it != target_list.end(); ++it )
-        {
-            files += allFiles( ( *it ) );
+        const QList<ProjectTargetItem*> targets = folder->targetList();
+        for (auto* target : targets) {
+            files += allFiles(target);
         }
 
         files += folder->fileList();

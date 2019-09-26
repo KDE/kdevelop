@@ -85,8 +85,8 @@ void TestProblemModelSet::initTestCase()
 
 void TestProblemModelSet::cleanupTestCase()
 {
-    for (int i = 0; i < m_testData.size(); i++) {
-        delete m_testData[i].model;
+    for (auto& d : qAsConst(m_testData)) {
+        delete d.model;
     }
 
     m_testData.clear();

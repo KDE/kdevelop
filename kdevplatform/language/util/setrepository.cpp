@@ -941,8 +941,9 @@ Set BasicSetRepository::createSet(const std::set<Index>& indices)
     std::vector<Index> indicesVector;
     indicesVector.reserve(indices.size());
 
-    for (auto it = indices.begin(); it != indices.end(); ++it)
-        indicesVector.push_back(*it);
+    for (unsigned int index : indices) {
+        indicesVector.push_back(index);
+    }
 
     return createSetFromIndices(indicesVector);
 }

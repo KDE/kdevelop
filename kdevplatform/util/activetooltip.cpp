@@ -129,10 +129,12 @@ void ActiveToolTipManager::doVisibility()
 
         QPoint offset = fullGeometry.topLeft() - oldFullGeometry.topLeft();
         if (!offset.isNull()) {
-            for (auto it = registeredToolTips.constBegin(); it != registeredToolTips.constEnd(); ++it)
-                if (it->first) {
-                    it->first.data()->move(it->first.data()->pos() + offset);
+            for (auto& toolTipData : qAsConst(registeredToolTips)) {
+                auto& toolTip = toolTipData.first;
+                if (toolTip) {
+                    toolTip->move(toolTip->pos() + offset);
                 }
+            }
         }
     }
 

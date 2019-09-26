@@ -201,9 +201,9 @@ protected:
             this->currentContext()->deleteUses();
 
             ContextUseTracker& tracker(currentUseTracker());
-            for (int a = 0; a < tracker.createUses.size(); ++a) {
-                this->currentContext()->createUse(tracker.createUses[a].m_declarationIndex,
-                                                  tracker.createUses[a].m_range);
+            for (auto& createUse : tracker.createUses) {
+                this->currentContext()->createUse(createUse.m_declarationIndex,
+                                                  createUse.m_range);
             }
         }
 

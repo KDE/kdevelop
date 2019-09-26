@@ -254,10 +254,8 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
                         // remove old entry
                         d->changes.erase(iter);
                         // adapt to new url
-                        ChangesList::iterator itChange = value.begin();
-                        ChangesList::iterator itEnd = value.end();
-                        for (; itChange != itEnd; ++itChange) {
-                            (*itChange)->m_document = idxNewDoc;
+                        for (auto& change : value) {
+                            change->m_document = idxNewDoc;
                         }
 
                         d->changes[idxNewDoc] = value;
@@ -424,16 +422,16 @@ DocumentChangeSet::ChangeResult DocumentChangeSetPrivate::generateNewText(const 
 
                 if (formatPolicy == DocumentChangeSet::AutoFormatChangesKeepIndentation) {
                     // Reproduce the previous indentation
-                    QStringList oldLines = oldNewText.split(QLatin1Char('\n'));
+                    const QStringList oldLines = oldNewText.split(QLatin1Char('\n'));
                     QStringList newLines = change.m_newText.split(QLatin1Char('\n'));
 
                     if (oldLines.size() == newLines.size()) {
                         for (int line = 0; line < newLines.size(); ++line) {
                             // Keep the previous indentation
                             QString oldIndentation;
-                            for (int a = 0; a < oldLines[line].size(); ++a) {
-                                if (oldLines[line][a].isSpace()) {
-                                    oldIndentation.append(oldLines[line][a]);
+                            for (const QChar a : oldLines[line]) {
+                                if (a.isSpace()) {
+                                    oldIndentation.append(a);
                                 } else {
                                     break;
                                 }

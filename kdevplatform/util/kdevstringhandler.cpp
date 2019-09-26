@@ -87,20 +87,20 @@ QStringList splitWithEscaping(const QString& input, QChar splitchar, QChar escap
 
     QStringList result;
     QString currentstring;
-    for (int i = 0; i < input.size(); i++) {
+    for (const QChar c : input) {
         switch (state) {
         case Normal:
-            if (input[i] == escapechar) {
+            if (c == escapechar) {
                 state = SeenEscape;
-            } else if (input[i] == splitchar) {
+            } else if (c == splitchar) {
                 result << currentstring;
                 currentstring.clear();
             } else {
-                currentstring += input[i];
+                currentstring += c;
             }
             break;
         case SeenEscape:
-            currentstring += input[i];
+            currentstring += c;
             state = Normal;
             break;
         }
