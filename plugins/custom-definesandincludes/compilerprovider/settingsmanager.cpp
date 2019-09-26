@@ -162,8 +162,8 @@ void doWriteSettings( KConfigGroup grp, const QVector<ConfigEntry>& paths )
         {
             int index = 0;
             KConfigGroup includes(pathgrp.group(ConfigConstants::includesKey()));
-            for( auto it = path.includes.begin() ; it != path.includes.end(); ++it){
-                includes.writeEntry(QString::number(++index), *it);
+            for (auto& include : path.includes) {
+                includes.writeEntry(QString::number(++index), include);
             }
 
         }
@@ -237,9 +237,8 @@ QVector<ConfigEntry> doReadSettings( KConfigGroup grp, bool remove = false )
                 s >> path.includes;
             } else {
                 KConfigGroup includes(pathgrp.group(ConfigConstants::includesKey()));
-                QMap<QString, QString> incMap = includes.entryMap();
-                for(auto it = incMap.begin(); it != incMap.end(); ++it){
-                    QString value = it.value();
+                const QMap<QString, QString> incMap = includes.entryMap();
+                for (auto& value :incMap) {
                     if(value.isEmpty()){
                         continue;
                     }

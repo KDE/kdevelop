@@ -270,9 +270,8 @@ QStringList MakeJob::commandLine() const
         }
     }
 
-    for (MakeVariables::const_iterator it = m_variables.constBegin(); it != m_variables.constEnd(); ++it)
-    {
-        cmdline += QStringLiteral("%1=%2").arg(it->first, it->second);
+    for (auto& variable : m_variables) {
+        cmdline += variable.first + QLatin1Char('=') + variable.second;
     }
 
     if( m_overrideTargets.isEmpty() )

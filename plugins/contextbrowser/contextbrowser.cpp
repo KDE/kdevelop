@@ -774,8 +774,10 @@ void ContextBrowserPlugin::addHighlight(View* view, KDevelop::Declaration* decl)
     {
         const auto currentRevisionUses = decl->usesCurrentRevision();
         for (auto fileIt = currentRevisionUses.constBegin(); fileIt != currentRevisionUses.constEnd(); ++fileIt) {
-            for (auto useIt = (*fileIt).constBegin(); useIt != (*fileIt).constEnd(); ++useIt) {
-                highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(*useIt, fileIt.key()));
+            const auto& document = fileIt.key();
+            const auto& documentUses = fileIt.value();
+            for (auto& use : documentUses) {
+                highlights.highlights << PersistentMovingRange::Ptr(new PersistentMovingRange(use, document));
                 highlights.highlights.back()->setAttribute(highlightedUseAttribute(view));
                 highlights.highlights.back()->setZDepth(highlightingZDepth);
             }

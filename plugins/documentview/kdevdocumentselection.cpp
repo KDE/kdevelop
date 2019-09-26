@@ -38,13 +38,13 @@ void KDevDocumentSelection::select( const QModelIndex & index,
 void KDevDocumentSelection::select( const QItemSelection & selection,
                                     QItemSelectionModel::SelectionFlags command )
 {
-    QList<QModelIndex> selections = selection.indexes();
-    QList<QModelIndex>::ConstIterator it = selections.constBegin();
-    for ( ; it != selections.constEnd(); ++it )
-        if (!(*it).parent().isValid()) {
+    const QList<QModelIndex> selections = selection.indexes();
+    for (auto& selection : selections) {
+        if (!selection.parent().isValid()) {
             QItemSelectionModel::select(selection, NoUpdate);
             return;
         }
+    }
 
     QItemSelectionModel::select( selection, command );
 }

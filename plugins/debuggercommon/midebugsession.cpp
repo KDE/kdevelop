@@ -121,9 +121,8 @@ MIVariable* MIDebugSession::findVariableByVarobjName(const QString &varobjName) 
 
 void MIDebugSession::markAllVariableDead()
 {
-    for (auto i = m_allVariables.begin(), e = m_allVariables.end(); i != e; ++i)
-    {
-        i.value()->markAsDead();
+    for (auto* variable : qAsConst(m_allVariables)) {
+        variable->markAsDead();
     }
     m_allVariables.clear();
 }

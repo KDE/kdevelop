@@ -149,10 +149,9 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
         QCOMPARE(outputWidget->data->outputdata.value(outputId[i])->title, QStringLiteral("output%1").arg(i));
         QCOMPARE(outputWidget->m_tabwidget->tabText(i), QStringLiteral("output%1").arg(i));
     }
-    for(int i = 0; i < 5; i++)
-    {
-        m_stdOutputView->removeOutput(outputId[i]);
-        QVERIFY(!outputWidget->data->outputdata.contains(outputId[i]));
+    for (int id : outputId) {
+        m_stdOutputView->removeOutput(id);
+        QVERIFY(!outputWidget->data->outputdata.contains(id));
     }
     QCOMPARE(outputWidget->m_tabwidget->count(), 0);
 
@@ -172,10 +171,9 @@ void StandardOutputViewTest::testRegisterAndRemoveOutput()
     {
         QCOMPARE(outputWidget->data->outputdata.value(outputId[i])->title, QStringLiteral("output%1").arg(i));
     }
-    for(int i = 0; i < 5; i++)
-    {
-        m_stdOutputView->removeOutput(outputId[i]);
-        QVERIFY(!outputWidget->data->outputdata.contains(outputId[i]));
+    for (int id : outputId) {
+        m_stdOutputView->removeOutput(id);
+        QVERIFY(!outputWidget->data->outputdata.contains(id));
     }
     QCOMPARE(outputWidget->m_stackwidget->count(), 0);
 

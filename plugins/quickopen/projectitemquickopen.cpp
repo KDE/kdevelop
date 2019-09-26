@@ -122,8 +122,8 @@ Path findProjectForForPath(const IndexedString& path)
 uint addedItems(const AddedItems& items)
 {
     uint add = 0;
-    for(auto it = items.constBegin(); it != items.constEnd(); ++it) {
-        add += it.value().count();
+    for (auto& item : items) {
+        add += item.count();
     }
     return add;
 }
@@ -143,9 +143,9 @@ void ProjectItemDataProvider::setFilterText(const QString& text)
     m_addedItemsCountCache.markDirty();
 
     QStringList search(text.split(QStringLiteral("::"), QString::SkipEmptyParts));
-    for (int a = 0; a < search.count(); ++a) {
-        if (search[a].endsWith(QLatin1Char(':'))) { //Don't get confused while the :: is being typed
-            search[a].chop(1);
+    for (auto& s : search) {
+        if (s.endsWith(QLatin1Char(':'))) { //Don't get confused while the :: is being typed
+            s.chop(1);
         }
     }
 

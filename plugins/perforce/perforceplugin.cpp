@@ -631,29 +631,26 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
     VcsEvent item;
     QMap<qlonglong, VcsEvent> globalCommits;
     /// Move the VcsEvents to a more suitable data structure
-    for (QList<QVariant>::const_iterator commitsIt = commits.constBegin(), commitsEnd = commits.constEnd(); 
-           commitsIt != commitsEnd; ++commitsIt) {
-        if(commitsIt->canConvert<VcsEvent>())
-        {
-            item = commitsIt->value<VcsEvent>();
+    for (auto& commit : qAsConst(commits)) {
+        if (commit.canConvert<VcsEvent>()) {
+            item = commit.value<VcsEvent>();
         }
         globalCommits.insert(item.revision().revisionValue().toLongLong(), item);
     }
 
-    QStringList lines = job->output().split('\n');
+    const QStringList lines = job->output().split('\n');
 
     int lineNumber = 0;
     QMap<qlonglong, VcsEvent>::iterator currentEvent;
     bool convertToIntOk(false);
     int globalRevisionInt(0);
     QString globalRevision;
-    for (QStringList::const_iterator it = lines.constBegin(), itEnd = lines.constEnd();
-            it != itEnd; ++it) {
-        if (it->isEmpty()) {
+    for (auto& line : lines) {
+        if (line.isEmpty()) {
             continue;
         }
 
-        globalRevision = it->left(it->indexOf(':'));
+        globalRevision = line.left(line.indexOf(':'));
 
         VcsAnnotationLine annotation;
         annotation.setLineNumber(lineNumber);

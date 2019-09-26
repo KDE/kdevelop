@@ -193,9 +193,8 @@ void TestCompilerProvider::testStorageNewSystem()
     includeMap[QStringLiteral("2")] = QStringLiteral("/usr/local/include/mydir");
 
     int i = 0;
-    for(auto it = includeMap.begin(); it != includeMap.end(); it++)
-    {
-        QCOMPARE(entry.includes.at(i++), it.value());
+    for (auto& include : qAsConst(includeMap)) {
+        QCOMPARE(entry.includes.at(i++), include);
     }
 
     testCompilerEntry(settings, &config);

@@ -100,8 +100,8 @@ void PatchReviewPlugin::seekHunk( bool forwards, const QUrl& fileName ) {
                     if ( v ) {
                         int bestLine = -1;
                         KTextEditor::Cursor c = v->cursorPosition();
-                        for ( QList<KTextEditor::MovingRange*>::const_iterator it = ranges.begin(); it != ranges.end(); ++it ) {
-                            int line = ( *it )->start().line();
+                        for (auto* range : ranges) {
+                            const int line = range->start().line();
 
                             if ( forwards ) {
                                 if ( line > c.line() && ( bestLine == -1 || line < bestLine ) )
@@ -291,8 +291,8 @@ void PatchReviewPlugin::updateKompareModel() {
 
         for( int i = 0; i < m_modelList->modelCount(); i++ ) {
             const Diff2::DiffModel* model = m_modelList->modelAt( i );
-            for( int j = 0; j < model->differences()->count(); j++ ) {
-                model->differences()->at( j )->apply( m_patch->isAlreadyApplied() );
+            for (auto* difference : *model->differences()) {
+                difference->apply(m_patch->isAlreadyApplied());
             }
         }
 

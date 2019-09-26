@@ -486,14 +486,13 @@ void PatchReviewToolView::kompareModelChanged() {
     const Diff2::DiffModelList* models = m_plugin->modelList()->models();
     if( models )
     {
-        Diff2::DiffModelList::const_iterator it = models->constBegin();
-        for(; it != models->constEnd(); ++it ) {
-            Diff2::DifferenceList * diffs = ( *it )->differences();
+        for (auto* model : *models) {
+            const Diff2::DifferenceList* diffs = model->differences();
             int cnt = 0;
             if ( diffs )
                 cnt = diffs->count();
 
-            const QUrl file = m_plugin->urlForFileModel( *it );
+            const QUrl file = m_plugin->urlForFileModel(model);
             if( file.isLocalFile() && !QFileInfo( file.toLocalFile() ).isReadable() )
                 continue;
 

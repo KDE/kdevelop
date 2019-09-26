@@ -117,36 +117,36 @@ void QuickOpenModel::enableProviders(const QStringList& _items, const QStringLis
 
     //We use 2 iterations here: In the first iteration, all providers that implement QuickOpenFileSetInterface are initialized, then the other ones.
     //The reason is that the second group can refer to the first one.
-    for (ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it) {
-        if (!qobject_cast<QuickOpenFileSetInterface*>((*it).provider)) {
+    for (auto& provider : m_providers) {
+        if (!qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
             continue;
         }
-        qCDebug(PLUGIN_QUICKOPEN) << "comparing" << (*it).scopes << (*it).types;
-        if ((scopes.isEmpty() || !(scopes & (*it).scopes).isEmpty()) && (!(items & (*it).types).isEmpty() || items.isEmpty())) {
-            qCDebug(PLUGIN_QUICKOPEN) << "enabling " << (*it).types << " " << (*it).scopes;
-            (*it).enabled = true;
-            (*it).provider->enableData(_items, _scopes);
+        qCDebug(PLUGIN_QUICKOPEN) << "comparing" << provider.scopes << provider.types;
+        if ((scopes.isEmpty() || !(scopes & provider.scopes).isEmpty()) && (!(items & provider.types).isEmpty() || items.isEmpty())) {
+            qCDebug(PLUGIN_QUICKOPEN) << "enabling " << provider.types << " " << provider.scopes;
+            provider.enabled = true;
+            provider.provider->enableData(_items, _scopes);
         } else {
-            qCDebug(PLUGIN_QUICKOPEN) << "disabling " << (*it).types << " " << (*it).scopes;
-            (*it).enabled = false;
-            if ((scopes.isEmpty() || !(scopes & (*it).scopes).isEmpty())) {
-                (*it).provider->enableData(_items, _scopes); //The provider may still provide files
+            qCDebug(PLUGIN_QUICKOPEN) << "disabling " << provider.types << " " << provider.scopes;
+            provider.enabled = false;
+            if ((scopes.isEmpty() || !(scopes & provider.scopes).isEmpty())) {
+                provider.provider->enableData(_items, _scopes); //The provider may still provide files
             }
         }
     }
 
-    for (ProviderList::iterator it = m_providers.begin(); it != m_providers.end(); ++it) {
-        if (qobject_cast<QuickOpenFileSetInterface*>((*it).provider)) {
+    for (auto & provider : m_providers) {
+        if (qobject_cast<QuickOpenFileSetInterface*>(provider.provider)) {
             continue;
         }
-        qCDebug(PLUGIN_QUICKOPEN) << "comparing" << (*it).scopes << (*it).types;
-        if ((scopes.isEmpty() || !(scopes & (*it).scopes).isEmpty()) && (!(items & (*it).types).isEmpty() || items.isEmpty())) {
-            qCDebug(PLUGIN_QUICKOPEN) << "enabling " << (*it).types << " " << (*it).scopes;
-            (*it).enabled = true;
-            (*it).provider->enableData(_items, _scopes);
+        qCDebug(PLUGIN_QUICKOPEN) << "comparing" << provider.scopes << provider.types;
+        if ((scopes.isEmpty() || !(scopes & provider.scopes).isEmpty()) && (!(items & provider.types).isEmpty() || items.isEmpty())) {
+            qCDebug(PLUGIN_QUICKOPEN) << "enabling " << provider.types << " " << provider.scopes;
+            provider.enabled = true;
+            provider.provider->enableData(_items, _scopes);
         } else {
-            qCDebug(PLUGIN_QUICKOPEN) << "disabling " << (*it).types << " " << (*it).scopes;
-            (*it).enabled = false;
+            qCDebug(PLUGIN_QUICKOPEN) << "disabling " << provider.types << " " << provider.scopes;
+            provider.enabled = false;
         }
     }
 

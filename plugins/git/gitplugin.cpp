@@ -641,9 +641,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
 
     bool skipNext=false;
     QMap<QString, VcsAnnotationLine> definedRevisions;
-    for(QVector<QStringRef>::const_iterator it=lines.constBegin(), itEnd=lines.constEnd();
-        it!=itEnd; ++it)
-    {
+    for (auto& line : lines) {
         if(skipNext) {
             skipNext=false;
             results += qVariantFromValue(*annotation);
@@ -651,11 +649,11 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
             continue;
         }
 
-        if(it->isEmpty())
+        if (line.isEmpty())
             continue;
 
-        QStringRef name = it->left(it->indexOf(QLatin1Char(' ')));
-        QStringRef value = it->mid(name.size()+1);
+        QStringRef name = line.left(line.indexOf(QLatin1Char(' ')));
+        QStringRef value = line.mid(name.size()+1);
 
         if(name==QLatin1String("author"))
             annotation->setAuthor(value.toString());

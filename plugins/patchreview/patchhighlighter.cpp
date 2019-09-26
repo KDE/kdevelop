@@ -123,22 +123,20 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
     }
     html += QLatin1String("</b>");
 
-    for( int a = 0; a < lines.size(); ++a ) {
-        Diff2::DifferenceString* line = lines[a];
+    for (auto* line : qAsConst(lines)) {
         uint currentPos = 0;
-        QString string = line->string();
+        const QString& string = line->string();
 
-        Diff2::MarkerList markers = line->markerList();
+        const Diff2::MarkerList& markers = line->markerList();
 
-        for( int b = 0; b < markers.size(); ++b ) {
-            QString spanText = string.mid( currentPos, markers[b]->offset() - currentPos ).toHtmlEscaped();
-            if( markers[b]->type() == Diff2::Marker::End && ( currentPos != 0 || markers[b]->offset() != static_cast<uint>( string.size() ) ) )
-            {
+        for (auto* marker : markers) {
+            const QString spanText = string.mid( currentPos, marker->offset() - currentPos ).toHtmlEscaped();
+            if (marker->type() == Diff2::Marker::End && (currentPos != 0 || marker->offset() != static_cast<uint>( string.size()))) {
                 html += QLatin1String("<b><span style=\"background:#FFBBBB\">") + spanText + QLatin1String("</span></b>");
             }else{
                 html += spanText;
             }
-            currentPos = markers[b]->offset();
+            currentPos = marker->offset();
         }
 
         html += string.mid(currentPos, string.length()-currentPos).toHtmlEscaped() + QLatin1String("<br/>");
@@ -434,8 +432,7 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
     markIface->setMarkDescription( KTextEditor::MarkInterface::markType27, i18n( "Change" ) );
     markIface->setMarkPixmap(KTextEditor::MarkInterface::markType27, QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize));
 
-    for ( Diff2::DifferenceList::const_iterator it = m_model->differences()->constBegin(); it != m_model->differences()->constEnd(); ++it ) {
-        Diff2::Difference* diff = *it;
+    for (Diff2::Difference* diff : qAsConst(*m_model->differences())) {
         int line, lineCount;
         Diff2::DifferenceStringList lines;
 
@@ -632,16 +629,14 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
     for( int a = 0; a < lines.size(); ++a ) {
         Diff2::DifferenceString* line = lines[a];
         int currentPos = 0;
-        QString string = line->string();
+        const uint lineLength = static_cast<uint>(line->string().size());
 
-        Diff2::MarkerList markers = line->markerList();
+        const Diff2::MarkerList& markers = line->markerList();
 
-        for( int b = 0; b < markers.size(); ++b ) {
-            if( markers[b]->type() == Diff2::Marker::End )
-            {
-                if( currentPos != 0 || markers[b]->offset() != static_cast<uint>( string.size() ) )
-                {
-                    KTextEditor::MovingRange * r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor( a + range->start().line(), currentPos ), KTextEditor::Cursor( a + range->start().line(), markers[b]->offset() ) ) );
+        for (auto* marker : markers) {
+            if (marker->type() == Diff2::Marker::End) {
+                if (currentPos != 0 || marker->offset() != lineLength) {
+                    KTextEditor::MovingRange* r2 = moving->newMovingRange( KTextEditor::Range( KTextEditor::Cursor( a + range->start().line(), currentPos ), KTextEditor::Cursor( a + range->start().line(), marker->offset() ) ) );
                     m_ranges[r2] = nullptr;
 
                     KTextEditor::Attribute::Ptr t( new KTextEditor::Attribute() );
@@ -651,7 +646,7 @@ void PatchHighlighter::addLineMarker( KTextEditor::MovingRange* range, Diff2::Di
                     r2->setZDepth( -600 );
                 }
             }
-            currentPos = markers[b]->offset();
+            currentPos = marker->offset();
         }
     }
 }

@@ -258,14 +258,12 @@ void GDBOutputWidget::setShowInternalCommands(bool show)
         // Set of strings to show changes, text edit still has old
         // set. Refresh.
         m_gdbView->clear();
-        QStringList& newList =
+        const QStringList& newList =
             m_showInternalCommands ? m_allCommands : m_userCommands_;
 
-        QStringList::iterator i = newList.begin(), e = newList.end();
-        for(; i != e; ++i)
-        {
-            // Note that color formatting is already applied to '*i'.
-            showLine(*i);
+        for (auto& line : newList) {
+            // Note that color formatting is already applied to 'line'.
+            showLine(line);
         }
     }
 }

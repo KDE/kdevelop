@@ -752,8 +752,8 @@ void QuickOpenPlugin::jumpToNearestFunction(QuickOpenPlugin::FunctionJumpDirecti
     Declaration* nearestDeclAfter = nullptr;
     int distanceAfter = INT_MAX;
 
-    for (int i = 0; i < items.count(); ++i) {
-        Declaration* decl = items[i].m_item.data();
+    for (auto& item : qAsConst(items)) {
+        Declaration* decl = item.m_item.data();
 
         int distance = decl->range().start.line - cursor.line;
         if (distance < 0 && distance >= distanceBefore) {
@@ -821,8 +821,8 @@ struct CreateOutlineDialog
         DUChainUtils::collectItems(context, filter);
 
         if (noHtmlDestriptionInOutline) {
-            for (int a = 0; a < items.size(); ++a) {
-                items[a].m_noHtmlDestription = true;
+            for (auto& item : items) {
+                item.m_noHtmlDestription = true;
             }
         }
 

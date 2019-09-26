@@ -214,8 +214,7 @@ void IRegisterController::updateValuesForRegisters(RegistersGroup* registers) co
 {
     Q_ASSERT(!m_registers.isEmpty());
 
-    for (int i = 0; i < registers->registers.size(); i++) {
-        auto& reg = registers->registers[i];
+    for (auto& reg : registers->registers) {
         const auto registerIt = m_registers.find(reg.name);
         if (registerIt != m_registers.end()) {
             reg.value = *registerIt;

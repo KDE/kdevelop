@@ -472,8 +472,8 @@ void DebugSession::updateAllVariables()
     // we have to pick out top level variables first, as refetching will delete child
     // variables.
     QList<LldbVariable*> toplevels;
-    for (auto it = m_allVariables.begin(), ite = m_allVariables.end(); it != ite; ++it) {
-        auto *var = qobject_cast<LldbVariable*>(it.value());
+    for (auto* variable : qAsConst(m_allVariables)) {
+        auto *var = qobject_cast<LldbVariable*>(variable);
         if (var->topLevel()) {
             toplevels << var;
         }

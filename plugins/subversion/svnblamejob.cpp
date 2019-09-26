@@ -61,24 +61,21 @@ void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::T
         return;
     }
     svn_revnum_t minrev = -1, maxrev = -1;
-    for( svn::AnnotatedFile::const_iterator it = file->begin(); it != file->end(); ++it )
-    {
-        if( (*it).revision() < minrev || minrev == -1 )
-        {
-            minrev = (*it).revision();
+    for (const auto& line : *file) {
+        const svn_revnum_t lineRevision = line.revision();
+        if (lineRevision < minrev || minrev == -1) {
+            minrev = lineRevision;
         }
-        if( (*it).revision() > maxrev || maxrev == -1 )
-        {
-            maxrev = (*it).revision();
+        if (lineRevision > maxrev || maxrev == -1 ) {
+            maxrev = lineRevision;
         }
     }
     QHash<svn_revnum_t,QString> commitMessages;
     try
     {
         const svn::LogEntries* entries = cli.log( ba.data(), svn::Revision(minrev), svn::Revision(maxrev), false, false );
-        for( auto it = entries->begin(); it != entries->end(); ++it )
-        {
-            commitMessages[(*it).revision] = QString::fromUtf8( (*it).message.c_str() );
+        for (const auto& entry : *entries) {
+            commitMessages[entry.revision] = QString::fromUtf8(entry.message.c_str() );
         }
     }catch( const svn::ClientException& ce )
     {
@@ -88,17 +85,16 @@ void SvnInternalBlameJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::T
         setErrorMessage( QString::fromUtf8( ce.message() ) );
         m_success = false;
     }
-    for( svn::AnnotatedFile::const_iterator it = file->begin(); it != file->end(); ++it )
-    {
+    for (const auto& svnLine : *file) {
         KDevelop::VcsAnnotationLine line;
-        line.setAuthor( QString::fromUtf8( it->author().c_str() ) );
-        line.setDate( QDateTime::fromString( QString::fromUtf8( it->date().c_str() ), Qt::ISODate ) );
-        line.setText( QString::fromUtf8( it->line().c_str() ) );
+        line.setAuthor(QString::fromUtf8(svnLine.author().c_str()));
+        line.setDate(QDateTime::fromString(QString::fromUtf8(svnLine.date().c_str()), Qt::ISODate));
+        line.setText(QString::fromUtf8(svnLine.line().c_str()));
         KDevelop::VcsRevision rev;
-        rev.setRevisionValue( QVariant( qlonglong( it->revision() ) ), KDevelop::VcsRevision::GlobalNumber );
+        rev.setRevisionValue(QVariant(qlonglong(svnLine.revision())), KDevelop::VcsRevision::GlobalNumber);
         line.setRevision( rev );
-        line.setLineNumber( it->lineNumber() );
-        line.setCommitMessage( commitMessages[it->revision()] );
+        line.setLineNumber(svnLine.lineNumber());
+        line.setCommitMessage(commitMessages[svnLine.revision()]);
         emit blameLine( line );
     }
 }

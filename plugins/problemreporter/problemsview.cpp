@@ -132,11 +132,11 @@ void ProblemsView::setupActions()
         m_hintSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
         m_hintSeverityAction->setIconText(i18n("Show Hints"));
 
-        QAction* severityActionArray[] = { m_errorSeverityAction, m_warningSeverityAction, m_hintSeverityAction };
-        for (int i = 0; i < 3; ++i) {
-            severityActionArray[i]->setCheckable(true);
-            m_severityActions->addAction(severityActionArray[i]);
-            addAction(severityActionArray[i]);
+        QAction* const severityActionArray[] = { m_errorSeverityAction, m_warningSeverityAction, m_hintSeverityAction };
+        for (auto* action : severityActionArray) {
+            action->setCheckable(true);
+            m_severityActions->addAction(action);
+            addAction(action);
         }
         m_severityActions->setExclusive(false);
 
@@ -159,9 +159,8 @@ void ProblemsView::setupActions()
         QAction* pathGroupingAction = new QAction(i18n("Path"), this);
         QAction* severityGroupingAction = new QAction(i18n("Severity"), this);
 
-        QAction* groupingActionArray[] = { noGroupingAction, pathGroupingAction, severityGroupingAction };
-        for (unsigned i = 0; i < sizeof(groupingActionArray) / sizeof(QAction*); ++i) {
-            QAction* action = groupingActionArray[i];
+        QAction* const groupingActionArray[] = { noGroupingAction, pathGroupingAction, severityGroupingAction };
+        for (auto* action : groupingActionArray) {
             action->setCheckable(true);
             groupingActions->addAction(action);
             m_groupingMenu->addAction(action);

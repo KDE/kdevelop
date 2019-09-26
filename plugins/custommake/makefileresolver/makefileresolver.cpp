@@ -542,8 +542,7 @@ static QString unescape(const QStringRef& input)
   QString output;
   output.reserve(input.length());
   bool isEscaped = false;
-  for (auto it = input.data(), end = it + input.length(); it != end; ++it) {
-    QChar c = *it;
+  for (const QChar c : input) {
     if (!isEscaped && c == QLatin1Char('\\')) {
       isEscaped = true;
     } else {

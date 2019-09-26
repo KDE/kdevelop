@@ -220,25 +220,25 @@ void ExpandingDelegate::drawDisplay(QPainter* painter, const QStyleOptionViewIte
         QColor background = m_backgroundColor;
 //     qCDebug(PLUGIN_QUICKOPEN) << text << "background:" << background.name();
         //Now go through the formats, and make sure the contrast background/foreground is readable
-        for (int a = 0; a < additionalFormats.size(); ++a) {
+        for (auto& additionalFormat : additionalFormats) {
             QColor currentBackground = background;
-            if (additionalFormats[a].format.hasProperty(QTextFormat::BackgroundBrush)) {
-                currentBackground = additionalFormats[a].format.background().color();
+            if (additionalFormat.format.hasProperty(QTextFormat::BackgroundBrush)) {
+                currentBackground = additionalFormat.format.background().color();
             }
 
-            QColor currentColor = additionalFormats[a].format.foreground().color();
+            QColor currentColor = additionalFormat.format.foreground().color();
 
             double currentContrast = readabilityContrast(currentColor, currentBackground);
-            QColor invertedColor(0xffffffff - additionalFormats[a].format.foreground().color().rgb());
+            QColor invertedColor(0xffffffff - additionalFormat.format.foreground().color().rgb());
             double invertedContrast = readabilityContrast(invertedColor, currentBackground);
 
 //       qCDebug(PLUGIN_QUICKOPEN) << "values:" << invertedContrast << currentContrast << invertedColor.name() << currentColor.name();
 
             if (invertedContrast > currentContrast) {
 //         qCDebug(PLUGIN_QUICKOPEN) << text << additionalFormats[a].length << "switching from" << currentColor.name() << "to" << invertedColor.name();
-                QBrush b(additionalFormats[a].format.foreground());
+                QBrush b(additionalFormat.format.foreground());
                 b.setColor(invertedColor);
-                additionalFormats[a].format.setForeground(b);
+                additionalFormat.format.setForeground(b);
             }
         }
     }

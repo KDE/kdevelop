@@ -438,12 +438,12 @@ void GitInitTest::revHistory()
     addFiles();
     commitFiles();
 
-    QVector<KDevelop::DVcsEvent> commits = m_plugin->allCommits(gitTest_BaseDir());
+    const QVector<KDevelop::DVcsEvent> commits = m_plugin->allCommits(gitTest_BaseDir());
     QVERIFY(!commits.isEmpty());
     QStringList logMessages;
 
-    for (int i = 0; i < commits.count(); ++i)
-        logMessages << commits[i].log();
+    for (auto& commit : commits)
+        logMessages << commit.log();
 
     QCOMPARE(commits.count(), 2);
 
