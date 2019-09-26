@@ -168,7 +168,7 @@ bool MesonManager::reload(KDevelop::ProjectFolderItem* item)
                 return;
             }
 
-            KDevelop::ICore::self()->projectController()->projectConfigurationChanged(project);
+            emit KDevelop::ICore::self()->projectController()->projectConfigurationChanged(project);
             KDevelop::ICore::self()->projectController()->reparseProject(project);
         });
     }
@@ -243,7 +243,7 @@ void MesonManager::onMesonInfoChanged(QString path, QString projectName)
             return;
         }
 
-        KDevelop::ICore::self()->projectController()->projectConfigurationChanged(foundProject);
+        emit KDevelop::ICore::self()->projectController()->projectConfigurationChanged(foundProject);
         KDevelop::ICore::self()->projectController()->reparseProject(foundProject);
     });
 }

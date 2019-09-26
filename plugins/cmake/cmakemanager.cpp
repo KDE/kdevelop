@@ -316,7 +316,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
             if (job->error())
                 return;
 
-            KDevelop::ICore::self()->projectController()->projectConfigurationChanged(project);
+            emit KDevelop::ICore::self()->projectController()->projectConfigurationChanged(project);
             KDevelop::ICore::self()->projectController()->reparseProject(project, true);
         });
     }
