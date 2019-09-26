@@ -42,8 +42,7 @@ void KDevelop::PersistentMovingRangePrivate::connectTracker()
         // can't use new connect syntax here, MovingInterface is not a QObject
         connect(m_tracker->document(), SIGNAL(aboutToDeleteMovingInterfaceContent(KTextEditor::Document*)), this,
                 SLOT(aboutToDeleteMovingInterfaceContent()));
-        connect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(
-                                                  KTextEditor::Document*)), this,
+        connect(m_tracker->document(), SIGNAL(aboutToInvalidateMovingInterfaceContent(KTextEditor::Document*)), this,
                 SLOT(aboutToInvalidateMovingInterfaceContent()));
         m_movingRange->setAttribute(m_attribte);
         m_movingRange->setZDepth(m_zDepth);
