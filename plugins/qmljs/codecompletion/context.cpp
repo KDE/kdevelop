@@ -496,13 +496,9 @@ DeclarationPointer CodeCompletionContext::declarationAtEndOfString(const QString
 
 bool CodeCompletionContext::containsOnlySpaces(const QString& str)
 {
-    for (int i=0; i<str.size(); ++i) {
-        if (!str.at(i).isSpace()) {
-            return false;
-        }
-    }
-
-    return true;
+    return std::all_of(str.begin(), str.end(), [](const QChar c) {
+        return c.isSpace();
+    });
 }
 
 }

@@ -728,13 +728,13 @@ static const int maximumCacheExtensionLength = 3;
 
 bool isNumeric(const QStringRef& str)
 {
-    int len = str.length();
-    if(len == 0)
+    if (str.isEmpty()) {
         return false;
-    for(int a = 0; a < len; ++a)
-        if(!str.at(a).isNumber())
-            return false;
-    return true;
+    }
+
+    return std::all_of(str.begin(), str.end(), [](const QChar c) {
+        return c.isNumber();
+    });
 }
 
 class IconNameCache
