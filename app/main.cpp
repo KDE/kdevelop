@@ -208,9 +208,9 @@ static const KDevelop::SessionInfos findSessionsWithProject(const SessionInfos& 
         return {};
 
     KDevelop::SessionInfos infos;
-    for (auto it = sessions.constBegin(); it != sessions.constEnd(); ++it) {
-        if (it->projects.contains(projectUrl)) {
-            infos << *it;
+    for (auto& session : sessions) {
+        if (session.projects.contains(projectUrl)) {
+            infos << session;
         }
     }
     return infos;

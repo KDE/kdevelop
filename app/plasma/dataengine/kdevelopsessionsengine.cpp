@@ -43,8 +43,9 @@ void KDevelopSessionsEngine::init()
 
     const QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory );
 
-    for ( int i = 0; i < sessionDirs.count(); ++i )
-        m_dirWatch->addDir( sessionDirs[i], KDirWatch::WatchSubDirs );
+    for (auto& sessionDir : sessionDirs) {
+        m_dirWatch->addDir(sessionDir, KDirWatch::WatchSubDirs);
+    }
 
     connect(m_dirWatch, &KDirWatch::dirty, this, &KDevelopSessionsEngine::updateSessions);
 
@@ -76,21 +77,18 @@ QStringList findSessions()
 
 void KDevelopSessionsEngine::updateSessions()
 {
-    QStringList sessionrcs = findSessions();
+    const QStringList sessionrcs = findSessions();
 
     QHash<QString, Session> sessions;
 
-    QStringList::const_iterator it;
-
-    for (it = sessionrcs.constBegin(); it != sessionrcs.constEnd(); ++it)
-    {
-        KConfig cfg( *it, KConfig::SimpleConfig );
+    for (auto& sessionrc : sessionrcs) {
+        KConfig cfg(sessionrc, KConfig::SimpleConfig);
 
         // Only consider sessions that have open projects.
         if ( cfg.hasGroup( "General Options" ) && !cfg.group( "General Options" ).readEntry( "Open Projects", "" ).isEmpty() )
         {
             Session session;
-            session.hash = QFileInfo( *it ).dir().dirName();
+            session.hash = QFileInfo(sessionrc).dir().dirName();
             session.name = cfg.group( "" ).readEntry( "SessionName", "" );
             session.description = cfg.group( "" ).readEntry( "SessionPrettyContents", "" );
 
@@ -98,12 +96,7 @@ void KDevelopSessionsEngine::updateSessions()
         }
     }
 
-    QHash<QString, Session>::const_iterator it2;
-
-    for (it2 = sessions.constBegin(); it2 != sessions.constEnd(); ++it2)
-    {
-        const Session& session = it2.value();
-
+    for (const Session& session : qAsConst(sessions)) {
         auto sessionIt = m_currentSessions.constFind(session.hash);
         if (sessionIt == m_currentSessions.constEnd()) {
             // Publish new session.
