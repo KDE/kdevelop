@@ -251,17 +251,6 @@ ILanguageSupport* LanguageController::language(const QString &name) const
     return nullptr;
 }
 
-bool isNumeric(const QString& str)
-{
-    int len = str.length();
-    if(len == 0)
-        return false;
-    for(int a = 0; a < len; ++a)
-        if(!str[a].isNumber())
-            return false;
-    return true;
-}
-
 QList<ILanguageSupport*> LanguageController::languagesForUrl(const QUrl &url)
 {
     Q_D(LanguageController);
