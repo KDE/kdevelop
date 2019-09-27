@@ -885,7 +885,7 @@ QModelIndex ProjectModel::pathToIndex(const QStringList& tofetch_) const
         return QModelIndex();
     QStringList tofetch(tofetch_);
     if(tofetch.last().isEmpty())
-        tofetch.takeLast();
+        tofetch.removeLast();
 
     QModelIndex current=index(0,0, QModelIndex());
 

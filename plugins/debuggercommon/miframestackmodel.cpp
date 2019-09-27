@@ -129,7 +129,7 @@ struct FrameListHandler : public MICommandHandler
         bool hasMore = false;
         if (!frames.isEmpty()) {
             if (frames.last().nr == m_to+1) {
-                frames.takeLast();
+                frames.removeLast();
                 hasMore = true;
             }
         }
