@@ -51,10 +51,7 @@ QStringList removeProjectBasePath( const QStringList& fullpath, KDevelop::Projec
         {
             return QStringList();
         }
-        for( int i = 0; i < basePath.count(); i++ )
-        {
-            result.takeFirst();
-        }
+        return result.mid(basePath.count());
     }
     return result;
 }
