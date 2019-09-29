@@ -63,9 +63,17 @@ ConfigOption SourceFileTemplatePrivate::readEntry(const QDomElement& element,
         if (tag == QLatin1String("label")) {
             entry.label = e.text();
         } else if (tag == QLatin1String("tooltip")) {
-            entry.label = e.text();
+            if (entry.label.isEmpty()) {
+                entry.label = e.text();
+            }
+            entry.context = e.text();
         } else if (tag == QLatin1String("whatsthis")) {
-            entry.label = e.text();
+            if (entry.label.isEmpty()) {
+                entry.label = e.text();
+            }
+            if (entry.context.isEmpty()) {
+                entry.context = e.text();
+            }
         } else if (tag == QLatin1String("min")) {
             entry.minValue = e.text();
         } else if (tag == QLatin1String("max")) {

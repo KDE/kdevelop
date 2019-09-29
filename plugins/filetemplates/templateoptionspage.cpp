@@ -136,6 +136,10 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             {
                 const QString entryLabelText = i18n("%1:", entry.label);
                 QLabel* label = new QLabel(entryLabelText, box);
+                if (!entry.context.isEmpty()) {
+                    label->setToolTip(entry.context);
+                    control->setToolTip(entry.context);
+                }
                 formLayout->addRow(label, control);
                 d->controls.insert(entry.name, control);
                 if (d->firstEditWidget == nullptr) {
