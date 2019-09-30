@@ -168,7 +168,7 @@ void CompilerProvider::projectChanged(KDevelop::IProject* p)
     Q_ASSERT(QDir::isAbsolutePath(path.toLocalFile()));
     const auto pathString = path.toLocalFile();
     auto it = std::find_if(m_compilers.begin(), m_compilers.end(),
-        [pathString](const CompilerPointer& compiler) { return compiler->path() == pathString; });
+        [&pathString](const CompilerPointer& compiler) { return compiler->path() == pathString; });
     if (it != m_compilers.end()) {
         m_defaultProvider = *it;
         return;

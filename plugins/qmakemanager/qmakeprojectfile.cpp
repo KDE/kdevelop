@@ -296,7 +296,7 @@ QStringList QMakeProjectFile::extraArguments() const
     QStringList args;
     for (const auto& var : variablesToCheck) {
         foreach (const auto& arg, variableValues(var)) {
-            auto argHasPrefix = [arg](const char* prefix) {
+            auto argHasPrefix = [&arg](const char* prefix) {
                 return arg.startsWith(QLatin1String(prefix));
             };
             if ( !std::any_of(prefixes.begin(), prefixes.end(), argHasPrefix)) {
