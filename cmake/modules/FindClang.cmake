@@ -128,8 +128,17 @@ if(CLANG_FOUND)
     message(STATUS "Detected that llvm-config comes from a build-tree, adding more include directories for Clang")
     list(APPEND CLANG_INCLUDE_DIRS
          "${LLVM_INSTALL_PREFIX}/tools/clang/include" # build dir
-         "${_llvmSourceRoot}/tools/clang/include"     # source dir
     )
+
+    # check whether the source is from llvm-project.git (currently recommended way to clone the LLVM projects)
+    # contains all LLVM projects in the top-level directory
+    get_filename_component(_llvmProjectClangIncludeDir ${_llvmSourceRoot}/../clang/include REALPATH)
+    if (EXISTS ${_llvmProjectClangIncludeDir})
+        message(STATUS "  Note: llvm-project.git structure detected, using different include path pointing into source dir")
+        list(APPEND CLANG_INCLUDE_DIRS "${_llvmProjectClangIncludeDir}") # source dir
+    else()
+        list(APPEND CLANG_INCLUDE_DIRS "${_llvmSourceRoot}/tools/clang/include") # source dir
+    endif()
   endif()
 
   message(STATUS "Found Clang (LLVM version: ${CLANG_VERSION})")
