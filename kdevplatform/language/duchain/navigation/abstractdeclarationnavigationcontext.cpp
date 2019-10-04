@@ -868,7 +868,10 @@ QString AbstractDeclarationNavigationContext::declarationSizeInformation(const D
         // show size information for underlying type of aliases / typedefs etc.
         const auto type = TypeUtils::targetType(decl->abstractType(), topContext);
         if (const auto* idType = dynamic_cast<const IdentifiedType*>(type.data())) {
-            return declarationSizeInformation(DeclarationPointer(idType->declaration(topContext)), topContext);
+            DeclarationPointer ptr(idType->declaration(topContext));
+            if (ptr != decl) {
+                return declarationSizeInformation(ptr, topContext);
+            }
         }
         return {};
     }
