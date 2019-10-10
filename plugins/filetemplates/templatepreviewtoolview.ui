@@ -15,7 +15,11 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="KMessageWidget" name="messageWidget" native="true"/>
+    <widget class="KMessageWidget" name="messageWidget" native="true">
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="TemplatePreview" name="preview" native="true"/>
@@ -49,28 +53,15 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Maximum</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
          <widget class="QLabel" name="emptyLinesPolicyLabel">
           <property name="enabled">
            <bool>false</bool>
           </property>
           <property name="text">
            <string>&amp;Empty lines policy</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
           <property name="buddy">
            <cstring>emptyLinesPolicyComboBox</cstring>
@@ -100,7 +91,7 @@
          </widget>
         </item>
         <item>
-         <spacer name="horizontalSpacer_2">
+         <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
