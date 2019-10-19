@@ -81,7 +81,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
      * icon here because we support older frameworks versions and oxygen doesn't have such an icon
      */
     m_collapseAll = new QAction(QIcon::fromTheme(QStringLiteral("collapse-all"),
-                        QIcon::fromTheme(QStringLiteral("arrow-right-double"))), i18n("C&ollapse All"), this);
+                        QIcon::fromTheme(QStringLiteral("arrow-left-double"))), i18n("C&ollapse All"), this);
     m_expandAll = new QAction(QIcon::fromTheme(QStringLiteral("expand-all"),
                         QIcon::fromTheme(QStringLiteral("arrow-right-double"))), i18n("&Expand All"), this);
     updateButtonState(false);
