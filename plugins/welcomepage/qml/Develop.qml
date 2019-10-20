@@ -20,7 +20,7 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Layouts 1.6
+import QtQuick.Layouts 1.2
 import QtQuick.Controls 2.0
 import QtQuick.Controls 1.4 as QQC1
 
