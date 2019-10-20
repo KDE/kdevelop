@@ -45,8 +45,24 @@ bool isChildItem(ProjectBaseItem* parent, ProjectBaseItem* child)
 }
 }
 
+class SemaReleaser
+{
+public:
+    SemaReleaser(QSemaphore* sem)
+        : m_sem(sem)
+    {}
+
+    ~SemaReleaser()
+    {
+        m_sem->release();
+    }
+
+private:
+    QSemaphore* m_sem;
+};
+
 FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
-    : KIO::Job(), m_item(item), m_aborted(false)
+    : KIO::Job(), m_item(item), m_aborted(false), m_listing(1)
 {
     qRegisterMetaType<KIO::UDSEntryList>("KIO::UDSEntryList");
     qRegisterMetaType<KIO::Job*>();
@@ -66,9 +82,10 @@ FileManagerListJob::FileManagerListJob(ProjectFolderItem* item)
 
 FileManagerListJob::~FileManagerListJob()
 {
-    // lock and abort to ensure our background list job is stopped
-    std::lock_guard<std::recursive_mutex> lock(m_listing);
+    // abort and lock to ensure our background list job is stopped
     m_aborted = true;
+    m_listing.acquire();
+    Q_ASSERT(m_listing.available() == 0);
 }
 
 void FileManagerListJob::addSubDir( ProjectFolderItem* item )
@@ -111,9 +128,9 @@ void FileManagerListJob::startNextJob()
     if (m_item->path().isLocalFile()) {
         // optimized version for local projects using QDir directly
         // start locking to ensure we don't get destroyed while waiting for the list to finish
-        m_listing.lock();
+        m_listing.acquire();
         QtConcurrent::run([this] (const Path& path) {
-            std::lock_guard<std::recursive_mutex> lock(m_listing, std::adopt_lock);
+            SemaReleaser lock(&m_listing);
             if (m_aborted) {
                 return;
             }

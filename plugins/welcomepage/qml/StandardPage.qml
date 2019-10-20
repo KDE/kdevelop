@@ -19,7 +19,7 @@
  */
 
 import QtQuick 2.7
-import QtQuick.Layouts 1.6
+import QtQuick.Layouts 1.2
 
 Rectangle {
     id: root

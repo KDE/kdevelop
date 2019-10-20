@@ -20,8 +20,8 @@
 
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.6
-import QtQuick.XmlListModel 2.7
+import QtQuick.Layouts 1.2
+import QtQuick.XmlListModel 2.0
 
 import org.kde.kdevplatform 1.0
 
