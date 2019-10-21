@@ -27,9 +27,9 @@ fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
 fi
-KF5_VERSION=v5.62.0
-PLASMA_VERSION=v5.16.5
-KDE_APPLICATIONS_VERSION=v19.08.1
+KF5_VERSION=v5.63.0
+PLASMA_VERSION=v5.17.0
+KDE_APPLICATIONS_VERSION=v19.08.2
 GRANTLEE_VERSION=v5.1.0
 OKTETA_VERSION=v0.26.2
 
@@ -177,7 +177,7 @@ build_framework kglobalaccel
 build_framework kxmlgui -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kbookmarks
 build_framework solid
-build_framework kio -DBUILD_DESIGNERPLUGIN=OFF
+(PATCH_FILE=$SCRIPT_DIR/kio_cmake_no_greaterless.patch build_framework kio -DBUILD_DESIGNERPLUGIN=OFF)
 build_framework kparts
 build_framework kitemmodels
 build_framework threadweaver
@@ -197,7 +197,7 @@ build_framework kinit
 fi
 
 # KDE Plasma
-build_project libksysguard $PLASMA_VERSION
+(PATCH_FILE=$SCRIPT_DIR/libksysguard_link_rt.patch build_project libksysguard $PLASMA_VERSION)
 build_project kdecoration $PLASMA_VERSION # needed by breeze
 build_project breeze $PLASMA_VERSION
 

@@ -78,6 +78,10 @@ void ProjectModelItemDelegate::paint(QPainter* painter, const QStyleOptionViewIt
                 mode = IconMode(opt.state);
                 state = IconState(opt.state);
                 QSize size = icon.actualSize( opt.decorationSize, mode, state );
+                if (size.isEmpty()) {
+                    // For items with an empty icon, set size to opt.decorationSize to make them have the same indent as items with a valid icon
+                    size = opt.decorationSize;
+                }
                 decorationRect = QRect(QPoint(0, 0), size);
             } else {
                 decorationRect = QRect(QPoint(0, 0), decoData.size());
