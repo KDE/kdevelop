@@ -148,7 +148,8 @@ public:
 
 bool KDevelop::ForegroundLock::isLockedForThread()
 {
-    return QThread::currentThread() == holderThread;
+    return QThread::currentThread() == holderThread ||
+           QThread::currentThread() == QApplication::instance()->thread();
 }
 
 bool KDevelop::ForegroundLock::tryLock()
