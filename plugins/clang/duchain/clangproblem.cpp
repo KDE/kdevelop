@@ -139,7 +139,9 @@ ClangProblem::ClangProblem(CXDiagnostic diagnostic, CXTranslationUnit unit)
     const uint numRanges = clang_getDiagnosticNumRanges(diagnostic);
     for (uint i = 0; i < numRanges; ++i) {
         auto range = ClangRange(clang_getDiagnosticRange(diagnostic, i)).toRange();
-        if(!range.isValid()){
+        // Note that the second condition is a workaround for seemingly wrong ranges that
+        // were observed sometimes. In principle, such a range should be valid.
+        if(!range.isValid() || (range.isEmpty() && range.start().line() == 0 && range.start().column() == 0)){
             continue;
         }
 
