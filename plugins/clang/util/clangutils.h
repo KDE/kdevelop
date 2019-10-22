@@ -116,13 +116,9 @@ namespace ClangUtils
      * @note This will return the exact textual representation of the code,
      *   no whitespace stripped, etc.
      *
-     * TODO: It would better if we'd be able to just memcpy parts of the file buffer
-     * that's stored inside Clang (cf. llvm::MemoryBuffer for files), but libclang
-     * doesn't offer API for that. This implementation here is a lot more expensive.
-     *
      * @param unit Translation unit this range is part of
      */
-    KDEVCLANGPRIVATE_EXPORT QByteArray getRawContents(CXTranslationUnit unit, CXSourceRange range);
+    KDEVCLANGPRIVATE_EXPORT QString getRawContents(CXTranslationUnit unit, CXSourceRange range);
 
     /**
      * @brief Return true if file @p file1 and file @p file2 are equal
@@ -131,14 +127,7 @@ namespace ClangUtils
      */
     inline bool isFileEqual(CXFile file1, CXFile file2)
     {
-#if CINDEX_VERSION_MINOR >= 28
         return clang_File_isEqual(file1, file2);
-#else
-        // note: according to the implementation of clang_File_isEqual, file1 and file2 can still be equal,
-        // regardless of whether file1 == file2 is true or not
-        // however, we didn't see any problems with pure pointer comparisons until now, so fall back to that
-        return file1 == file2;
-#endif
     }
 
     /**
@@ -147,8 +136,7 @@ namespace ClangUtils
      *
      * TODO: do we need isExplicitlyDefaulted() + isExplicitlyDeleted()?
      * Currently this is only used by the implements completion to hide deleted+defaulted functions so
-     * we don't need to know the difference. We need to tokenize the source code because there is no
-     * such API in libclang so having one function to check both cases is more efficient (only tokenize once)
+     * we don't need to know the difference.
      */
     bool isExplicitlyDefaultedOrDeleted(CXCursor cursor);
 

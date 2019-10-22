@@ -236,7 +236,7 @@ void TestClangUtils::testGetRawContents()
 
     DocumentRange documentRange{IndexedString(fileName), range};
     auto cxRange = toCXRange(unit, documentRange);
-    const QString contents = QString::fromLatin1(ClangUtils::getRawContents(unit, cxRange));
+    const QString contents = ClangUtils::getRawContents(unit, cxRange);
     QCOMPARE(contents, expectedContents);
 }
 

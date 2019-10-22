@@ -334,38 +334,21 @@ QStringList ClangUtils::templateArgumentTypes(CXCursor cursor)
     return types;
 }
 
-QByteArray ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange range)
+QString ClangUtils::getRawContents(CXTranslationUnit unit, CXSourceRange range)
 {
     const auto rangeStart = clang_getRangeStart(range);
     const auto rangeEnd = clang_getRangeEnd(range);
+    CXFile rangeFile;
     unsigned int start, end;
-    clang_getFileLocation(rangeStart, nullptr, nullptr, nullptr, &start);
+    clang_getFileLocation(rangeStart, &rangeFile, nullptr, nullptr, &start);
     clang_getFileLocation(rangeEnd, nullptr, nullptr, nullptr, &end);
 
-    QByteArray result;
-    const ClangTokens tokens(unit, range);
-    for (CXToken token : tokens) {
-        const auto location = ClangLocation(clang_getTokenLocation(unit, token));
-        unsigned int offset;
-        clang_getFileLocation(location, nullptr, nullptr, nullptr, &offset);
-        if (offset < start) // TODO: Sometimes hit, see bug 357585
-            return {};
-
-        const int fillCharacters = offset - start - result.size();
-        Q_ASSERT(fillCharacters >= 0);
-        if (fillCharacters < 0)
-            return {};
-
-        result.append(QByteArray(fillCharacters, ' '));
-        const auto spelling = clang_getTokenSpelling(unit, token);
-        result.append(clang_getCString(spelling));
-        clang_disposeString(spelling);
+    std::size_t fileSize;
+    const char* fileBuffer = clang_getFileContents(unit, rangeFile, &fileSize);
+    if (fileBuffer && start < fileSize && end <= fileSize && start < end) {
+        return QString::fromUtf8(fileBuffer + start, end - start);
     }
-    // Clang always appends the full range of the last token, even if this exceeds the end of the requested range.
-    // Fix this.
-    result.chop(result.size() - (end - start));
-
-    return result;
+    return QString();
 }
 
 bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
@@ -374,65 +357,9 @@ bool ClangUtils::isExplicitlyDefaultedOrDeleted(CXCursor cursor)
         return true;
     }
 
-#if CINDEX_VERSION_MINOR >= 34
     if (clang_CXXMethod_isDefaulted(cursor)) {
         return true;
     }
-#else
-    auto declCursor = clang_getCanonicalCursor(cursor);
-    CXTranslationUnit tu = clang_Cursor_getTranslationUnit(declCursor);
-    ClangTokens tokens(tu, clang_getCursorExtent(declCursor));
-    bool lastTokenWasDeleteOrDefault = false;
-    for (auto it = tokens.rbegin(), end = tokens.rend(); it != end; ++it) {
-        CXToken token = *it;
-        auto kind = clang_getTokenKind(token);
-        switch (kind) {
-            case CXToken_Comment:
-                break;
-            case CXToken_Identifier:
-            case CXToken_Literal:
-                lastTokenWasDeleteOrDefault = false;
-                break;
-            case CXToken_Punctuation: {
-                ClangString spelling(clang_getTokenSpelling(tu, token));
-                const char* spellingCStr = spelling.c_str();
-                if (strcmp(spellingCStr, ")") == 0) {
-                    // a closing parent means we have reached the end of the function parameter list
-                    // therefore this function can't be explicitly deleted/defaulted
-                    return false;
-                } else if (strcmp(spellingCStr, "=") == 0) {
-                    if (lastTokenWasDeleteOrDefault) {
-                        return true;
-                    }
-#if CINDEX_VERSION_MINOR < 31
-                    // HACK: on old clang versions, we don't get the default/delete
-                    //       so there, assume the function is defaulted or deleted
-                    //       when the last token is an equal sign
-                    if (it == tokens.rbegin()) {
-                        return true;
-                    }
-#endif
-                }
-                lastTokenWasDeleteOrDefault = false;
-                break;
-            }
-            case CXToken_Keyword: {
-                ClangString spelling(clang_getTokenSpelling(tu, token));
-                const char* spellingCStr = spelling.c_str();
-                if (strcmp(spellingCStr, "default") == 0
-#if CINDEX_VERSION_MINOR < 31
-                    || strcmp(spellingCStr, "delete") == 0
-#endif
-                ) {
-                    lastTokenWasDeleteOrDefault = true;
-                } else {
-                    lastTokenWasDeleteOrDefault = false;
-                }
-                break;
-            }
-        }
-    }
-#endif
     return false;
 }
 

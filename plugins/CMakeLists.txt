@@ -40,7 +40,7 @@ else()
     message(WARNING "Will not build QML/JS plugin, needs Qt >= 5.8.0")
 endif()
 
-find_package(Clang 3.8)
+find_package(Clang 6.0)
 set(clangSearchHint "")
 if (NOT CLANG_FOUND)
     set(clangSearchHint "Please install a package providing libclang. Either pass -DLLVM_ROOT=/path/to/llvm-prefix or install the 'llvm-config' command-line utility for auto-detection.")

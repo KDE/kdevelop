@@ -1004,7 +1004,7 @@ void Visitor::setDeclData(CXCursor cursor, MacroDefinition* decl) const
     // And no way to get the actual definition text range
     // Should be quite easy to expose that in libclang, though
     // Let' still get some basic support for this and parse on our own, it's not that difficult
-    const QString contents = QString::fromUtf8(ClangUtils::getRawContents(unit, range));
+    const QString contents = ClangUtils::getRawContents(unit, range);
     const int firstOpeningParen = contents.indexOf(QLatin1Char('('));
     const int firstWhitespace = contents.indexOf(QLatin1Char(' '));
     const bool isFunctionLike = (firstOpeningParen != -1) && (firstOpeningParen < firstWhitespace);
@@ -1417,7 +1417,7 @@ RangeInRevision rangeInRevisionForUse(CXCursor cursor, CXCursorKind referencedCu
     } else {
         // Workaround for wrong use range returned by clang for macro expansions
         const auto contents = ClangUtils::getRawContents(clang_Cursor_getTranslationUnit(cursor), useRange);
-        const int firstOpeningParen = contents.indexOf('(');
+        const int firstOpeningParen = contents.indexOf(QChar::fromLatin1('('));
         if (firstOpeningParen != -1) {
             range.end.column = range.start.column + firstOpeningParen;
             range.end.line = range.start.line;

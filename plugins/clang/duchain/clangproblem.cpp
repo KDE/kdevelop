@@ -75,8 +75,8 @@ ClangFixits fixitsForDiagnostic(CXDiagnostic diagnostic, CXTranslationUnit unit)
     for (uint i = 0; i < numFixits; ++i) {
         CXSourceRange range;
         const QString replacementText = ClangString(clang_getDiagnosticFixIt(diagnostic, i, &range)).toString();
-        QByteArray original = ClangUtils::getRawContents(unit, range);
-        fixits << ClangFixit{replacementText, ClangRange(range).toDocumentRange(), QString(), QString::fromLocal8Bit(original)};
+        const auto original = ClangUtils::getRawContents(unit, range);
+        fixits << ClangFixit{replacementText, ClangRange(range).toDocumentRange(), QString(), original};
     }
     return fixits;
 }
