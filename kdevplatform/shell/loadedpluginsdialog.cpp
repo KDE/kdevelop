@@ -33,6 +33,7 @@
 #include <KLocalizedString>
 #include <KTitleWidget>
 #include <KWidgetItemDelegate>
+#include <kwidgetsaddons_version.h>
 
 #include <util/scopeddialog.h>
 
@@ -290,8 +291,11 @@ LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     auto* vbox = new QVBoxLayout(this);
 
     auto* title = new KTitleWidget(this);
-    title->setPixmap(QIcon::fromTheme(KAboutData::applicationData().programIconName()),
-                     KTitleWidget::ImageLeft);
+#if KWIDGETSADDONS_VERSION >= QT_VERSION_CHECK(5,63,0)
+    title->setIcon(qApp->windowIcon(), KTitleWidget::ImageLeft);
+#else
+    title->setPixmap(qApp->windowIcon(), KTitleWidget::ImageLeft);
+#endif
     title->setText(i18n("<html><font size=\"4\">Plugins loaded for <b>%1</b></font></html>",
                         KAboutData::applicationData().displayName()));
     vbox->addWidget(title);
