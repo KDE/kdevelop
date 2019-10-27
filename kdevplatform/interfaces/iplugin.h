@@ -33,13 +33,6 @@ namespace Sublime {
 class MainWindow;
 }
 
-/**
- * This macro adds an extension interface to register with the extension manager
- * Call this macro for all interfaces your plugin implements in its constructor
- */
-#define KDEV_USE_EXTENSION_INTERFACE(Extension) \
-    _Pragma("message(\"Using deprecated function: KDEV_USE_EXTENSION_INTERFACE. Just remove the use of it.\")")
-
 namespace KDevelop
 {
 
