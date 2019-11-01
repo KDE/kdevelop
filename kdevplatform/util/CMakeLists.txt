@@ -29,10 +29,6 @@ set(KDevPlatformUtil_LIB_SRCS
     expandablelineedit.cpp
 )
 
-set (KDevPlatformUtil_LIB_UI
-    runoptions.ui
-)
-
 if(NOT WIN32)
     add_subdirectory(dbus_socket_transformer)
 endif()
@@ -50,7 +46,6 @@ declare_qt_logging_category(KDevPlatformUtil_LIB_SRCS
     CATEGORY_BASENAME "util"
 )
 
-ki18n_wrap_ui(KDevPlatformUtil_LIB_SRCS ${KDevPlatformUtil_LIB_US})
 kdevplatform_add_library(KDevPlatformUtil SOURCES ${KDevPlatformUtil_LIB_SRCS})
 target_link_libraries(KDevPlatformUtil
 PUBLIC
