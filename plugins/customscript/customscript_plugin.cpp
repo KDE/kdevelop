@@ -40,7 +40,7 @@
 #include <KParts/MainWindow>
 #include <KLocalizedString>
 #include <interfaces/ilanguagecontroller.h>
-#include <language/interfaces/ilanguagesupport.h>
+#include <interfaces/ilanguagesupport.h>
 #include <util/path.h>
 #include <debug.h>
 

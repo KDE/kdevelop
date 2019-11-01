@@ -11,4 +11,5 @@ declare_qt_logging_category(kdevcustomscript_PART_SRCS
 kdevplatform_add_plugin(kdevcustomscript JSON kdevcustomscript.json SOURCES ${kdevcustomscript_PART_SRCS})
 target_link_libraries(kdevcustomscript
     KDev::Interfaces
+    KDev::Language
     KDev::Util)
