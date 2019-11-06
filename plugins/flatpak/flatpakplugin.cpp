@@ -134,7 +134,7 @@ static QStringList availableArches(const KDevelop::Path& url)
     const auto doc = FlatpakRuntime::config(url);
     const QString sdkName = doc[QLatin1String("sdk")].toString();
     const QString runtimeVersion = doc[QLatin1String("runtime-version")].toString();
-    const QString match = sdkName + QLatin1String("/(.+)/") + runtimeVersion + QLatin1Char('$');
+    const QString match = sdkName + QLatin1String("/(.+)/") + runtimeVersion;
     QObject::connect(&supportedArchesProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
                      &supportedArchesProcess, [&supportedArchesProcess, &match, &ret]() {
         QTextStream stream(&supportedArchesProcess);
@@ -148,7 +148,7 @@ static QStringList availableArches(const KDevelop::Path& url)
         }
     });
 
-    supportedArchesProcess.start(QStringLiteral("flatpak"), {QStringLiteral("list"), QStringLiteral("--runtime"), QStringLiteral("--columns=ref") });
+    supportedArchesProcess.start(QStringLiteral("flatpak"), {QStringLiteral("list"), QStringLiteral("--runtime") });
     supportedArchesProcess.waitForFinished();
     return ret;
 }
