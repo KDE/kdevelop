@@ -215,7 +215,7 @@
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
-   <header>kurlrequester.h</header>
+   <header>KUrlRequester</header>
   </customwidget>
  </customwidgets>
  <resources/>

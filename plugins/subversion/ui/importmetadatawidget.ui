@@ -67,12 +67,12 @@
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
-   <header>kurlrequester.h</header>
+   <header>KUrlRequester</header>
   </customwidget>
   <customwidget>
    <class>KTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>ktextedit.h</header>
+   <header>KTextEdit</header>
   </customwidget>
  </customwidgets>
  <resources/>

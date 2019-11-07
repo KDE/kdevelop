@@ -355,7 +355,7 @@
   <customwidget>
    <class>KMessageWidget</class>
    <extends>QFrame</extends>
-   <header>kmessagewidget.h</header>
+   <header>KMessageWidget</header>
   </customwidget>
  </customwidgets>
  <tabstops>

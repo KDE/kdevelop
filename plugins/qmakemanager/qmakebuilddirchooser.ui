@@ -136,18 +136,18 @@
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
-   <header>kurlrequester.h</header>
+   <header>KUrlRequester</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
+   <header>KLineEdit</header>
   </customwidget>
   <customwidget>
    <class>KMessageWidget</class>
    <extends>QFrame</extends>
-   <header location="global">kmessagewidget.h</header>
+   <header>KMessageWidget</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

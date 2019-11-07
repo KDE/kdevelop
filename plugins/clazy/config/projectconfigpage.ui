@@ -267,7 +267,7 @@ parallel checking, which can lead to multiple fixit applying for header files.</
   <customwidget>
    <class>KMessageWidget</class>
    <extends>QFrame</extends>
-   <header>kmessagewidget.h</header>
+   <header>KMessageWidget</header>
   </customwidget>
   <customwidget>
    <class>CommandLineWidget</class>

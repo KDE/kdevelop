@@ -212,7 +212,7 @@
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <header>KComboBox</header>
   </customwidget>
   <customwidget>
    <class>DefinesWidget</class>

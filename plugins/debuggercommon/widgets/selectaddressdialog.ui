@@ -60,12 +60,12 @@
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <header>KComboBox</header>
   </customwidget>
   <customwidget>
    <class>KHistoryComboBox</class>
    <extends>KComboBox</extends>
-   <header>khistorycombobox.h</header>
+   <header>KHistoryComboBox</header>
   </customwidget>
  </customwidgets>
  <resources/>

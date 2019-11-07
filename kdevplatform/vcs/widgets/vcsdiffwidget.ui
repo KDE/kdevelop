@@ -38,7 +38,7 @@
   <customwidget>
    <class>KTextEdit</class>
    <extends>QTextEdit</extends>
-   <header>ktextedit.h</header>
+   <header>KTextEdit</header>
   </customwidget>
  </customwidgets>
  <resources/>

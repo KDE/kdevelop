@@ -93,12 +93,12 @@
   <customwidget>
    <class>KIconButton</class>
    <extends>QPushButton</extends>
-   <header>kiconbutton.h</header>
+   <header>KIconButton</header>
   </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
-   <header>kurlrequester.h</header>
+   <header>KUrlRequester</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -56,7 +56,7 @@
   <customwidget>
    <class>KEditListWidget</class>
    <extends>QWidget</extends>
-   <header>keditlistwidget.h</header>
+   <header>KEditListWidget</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -275,7 +275,7 @@ However, non-mangled names are easier to read.</string>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
-   <header>kurlrequester.h</header>
+   <header>KUrlRequester</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -289,9 +289,6 @@ However, non-mangled names are easier to read.</string>
   <tabstop>kcfg_runShellScript</tabstop>
   <tabstop>kcfg_runGdbScript</tabstop>
  </tabstops>
- <includes>
-  <include location="local">kurlrequester.h</include>
- </includes>
  <resources/>
  <connections/>
 </ui>

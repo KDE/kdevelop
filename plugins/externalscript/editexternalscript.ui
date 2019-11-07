@@ -295,7 +295,7 @@
   <customwidget>
    <class>KShortcutWidget</class>
    <extends>QWidget</extends>
-   <header>kshortcutwidget.h</header>
+   <header>KShortcutWidget</header>
   </customwidget>
  </customwidgets>
  <resources/>

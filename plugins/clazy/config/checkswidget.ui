@@ -84,12 +84,12 @@
   <customwidget>
    <class>KMessageWidget</class>
    <extends>QFrame</extends>
-   <header>kmessagewidget.h</header>
+   <header>KMessageWidget</header>
   </customwidget>
   <customwidget>
    <class>KTreeWidgetSearchLine</class>
    <extends>QLineEdit</extends>
-   <header>ktreewidgetsearchline.h</header>
+   <header>KTreeWidgetSearchLine</header>
   </customwidget>
  </customwidgets>
  <resources/>

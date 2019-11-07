@@ -185,12 +185,12 @@
   <customwidget>
    <class>KMessageWidget</class>
    <extends>QFrame</extends>
-   <header>kmessagewidget.h</header>
+   <header>KMessageWidget</header>
   </customwidget>
   <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
-   <header>kurlrequester.h</header>
+   <header>KUrlRequester</header>
   </customwidget>
  </customwidgets>
  <resources/>

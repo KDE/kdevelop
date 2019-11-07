@@ -599,7 +599,7 @@ multiple single-statement lines.</string>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <header>KComboBox</header>
   </customwidget>
  </customwidgets>
  <resources/>

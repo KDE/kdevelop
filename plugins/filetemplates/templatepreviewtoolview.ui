@@ -123,7 +123,7 @@
   <customwidget>
    <class>KMessageWidget</class>
    <extends>QFrame</extends>
-   <header>kmessagewidget.h</header>
+   <header>KMessageWidget</header>
    <container>1</container>
   </customwidget>
   <customwidget>

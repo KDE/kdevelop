@@ -84,12 +84,9 @@ If custom format string is not enabled, names and values of all expressions will
   <customwidget>
    <class>KEditListBox</class>
    <extends>QGroupBox</extends>
-   <header>keditlistbox.h</header>
+   <header>KEditListBox</header>
   </customwidget>
  </customwidgets>
- <includes>
-  <include location="local">keditlistbox.h</include>
- </includes>
  <resources/>
  <connections>
   <connection>
