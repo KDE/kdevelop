@@ -160,12 +160,27 @@ bool initializeDVCS(IDistributedVersionControl* dvcs, const ApplicationInfo& inf
     }
     qCDebug(PLUGIN_APPWIZARD) << "Initializing DVCS repository:" << dest;
 
+    qCDebug(PLUGIN_APPWIZARD) << "Checking for valid files in the DVCS repository:" << dest;
+    job = dvcs->status({dest}, KDevelop::IBasicVersionControl::Recursive);
+    if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
+    {
+        vcsError(i18n("Could not check status of the DVCS repository"), scratchArea, dest);
+        return false;
+    }
+
+    if (job->fetchResults().toList().isEmpty())
+    {
+        qCDebug(PLUGIN_APPWIZARD) << "No files to add, skipping commit in the DVCS repository:" << dest;
+        return true;
+    }
+
     job = dvcs->add({dest}, KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
     {
         vcsError(i18n("Could not add files to the DVCS repository"), scratchArea, dest);
         return false;
     }
+
     job = dvcs->commit(info.importCommitMessage, {dest},
                             KDevelop::IBasicVersionControl::Recursive);
     if (!job || !job->exec() || job->status() != VcsJob::JobSucceeded)
