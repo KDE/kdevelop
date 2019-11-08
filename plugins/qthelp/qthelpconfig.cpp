@@ -274,7 +274,8 @@ void QtHelpConfig::knsUpdate(const KNS3::Entry::List& list)
 
     for (const KNS3::Entry& e : list) {
         if(e.status() == KNS3::Entry::Installed) {
-            if(e.installedFiles().size() == 1) {
+            // For zipped/tarred QCH fules KNewStuff also adds the directory as installed file, first file entry is assumed to be QCH file though
+            if (e.installedFiles().size() >= 1) {
                 QString filename = e.installedFiles().at(0);
                 if(checkNamespace(filename, nullptr)){
                     QTreeWidgetItem* item = addTableItem(QStringLiteral("documentation"), e.name(), filename, QStringLiteral("1"));
@@ -284,7 +285,8 @@ void QtHelpConfig::knsUpdate(const KNS3::Entry::List& list)
                 }
             }
         } else if(e.status() ==  KNS3::Entry::Deleted) {
-            if(e.uninstalledFiles().size() == 1) {
+            // cmp. note above for installed files
+            if (e.uninstalledFiles().size() >= 1) {
                 for(int i=0; i < m_configWidget->qchTable->topLevelItemCount(); i++) {
                     QTreeWidgetItem* item = m_configWidget->qchTable->topLevelItem(i);
                     if (e.uninstalledFiles().at(0) == item->text(PathColumn)) {
