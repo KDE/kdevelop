@@ -21,7 +21,7 @@ Name[uk]=Документація з програмного інтерфейсу
 Name[x-test]=xxAPI Documentation (QtHelp)xx
 Name[zh_CN]=API 文档 (QtHelp)
 
-ProvidersUrl=https://collect.kde.org/kdevelop-qthelp/providers.xml
+ProvidersUrl=https://download.kde.org/ocs/providers.xml
+Categories=QCH Documentation Files
 TargetDir=kdevelop-qthelp
 Uncompress=archive
-Categories=Miscelaneous
