@@ -78,19 +78,7 @@ public:
                               const QString &className,
                               const QString &preferredName = QString() );
 
-    KParts::ReadOnlyPart* activeReadOnly() const;
-    KParts::ReadWritePart* activeReadWrite() const;
-    KParts::ReadOnlyPart* readOnly( KParts::Part *part ) const;
-    KParts::ReadWritePart* readWrite( KParts::Part *part ) const;
-
     bool isTextType(const QMimeType& mimeType);
-
-    virtual void setActiveView( KTextEditor::View * view );
-    virtual KTextEditor::View * activeView();
-    virtual KTextEditor::Document * createDocument();
-    virtual bool closeDocument( KTextEditor::Document * doc );
-    virtual KTextEditor::View * createView( KTextEditor::Document * doc );
-    virtual bool closeView( KTextEditor::View * view );
 
 public Q_SLOTS:
     void setShowTextEditorStatusBar(bool show);

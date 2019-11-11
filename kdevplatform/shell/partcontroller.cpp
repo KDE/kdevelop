@@ -207,31 +207,12 @@ KParts::Part* PartController::createPart( const QUrl & url, const QString& prefe
     KParts::Part* part = createPart( mimeType, preferredPart );
     if( part )
     {
-        readOnly( part ) ->openUrl( url );
+        // only ReadOnlyParts are supported by PartController
+        static_cast<KParts::ReadOnlyPart*>(part)->openUrl(url);
         return part;
     }
 
     return nullptr;
-}
-
-KParts::ReadOnlyPart* PartController::activeReadOnly() const
-{
-    return readOnly( activePart() );
-}
-
-KParts::ReadWritePart* PartController::activeReadWrite() const
-{
-    return readWrite( activePart() );
-}
-
-KParts::ReadOnlyPart* PartController::readOnly( KParts::Part * part ) const
-{
-    return qobject_cast<KParts::ReadOnlyPart*>( part );
-}
-
-KParts::ReadWritePart* PartController::readWrite( KParts::Part * part ) const
-{
-    return qobject_cast<KParts::ReadWritePart*>( part );
 }
 
 void PartController::loadSettings( bool projectIsLoaded )
@@ -276,55 +257,6 @@ void PartController::setupActions()
     action->setWhatsThis(i18n("Use this command to show or hide the view's statusbar"));
     action->setChecked(showTextEditorStatusBar());
 }
-
-//BEGIN KTextEditor::MdiContainer
-void PartController::setActiveView(KTextEditor::View *view)
-{
-  Q_UNUSED(view)
-  // NOTE: not implemented
-}
-
-KTextEditor::View *PartController::activeView()
-{
-    auto* textView = qobject_cast<TextView*>(Core::self()->uiController()->activeArea()->activeView());
-    if (textView) {
-        return textView->textView();
-    }
-    return nullptr;
-}
-
-KTextEditor::Document *PartController::createDocument()
-{
-  // NOTE: not implemented
-  qCWarning(SHELL) << "WARNING: interface call not implemented";
-  return nullptr;
-}
-
-bool PartController::closeDocument(KTextEditor::Document *doc)
-{
-  Q_UNUSED(doc)
-  // NOTE: not implemented
-  qCWarning(SHELL) << "WARNING: interface call not implemented";
-  return false;
-}
-
-KTextEditor::View *PartController::createView(KTextEditor::Document *doc)
-{
-  Q_UNUSED(doc)
-  // NOTE: not implemented
-  qCWarning(SHELL) << "WARNING: interface call not implemented";
-  return nullptr;
-}
-
-bool PartController::closeView(KTextEditor::View *view)
-{
-  Q_UNUSED(view)
-  // NOTE: not implemented
-  qCWarning(SHELL) << "WARNING: interface call not implemented";
-  return false;
-}
-//END KTextEditor::MdiContainer
-
 
 }
 
