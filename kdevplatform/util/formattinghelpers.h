@@ -41,7 +41,7 @@ namespace KDevelop {
 KDEVPLATFORMUTIL_EXPORT QString extractFormattedTextFromContext(const QString& formattedMergedText, const QString& text,
                                                                 const QString& leftContext, const QString& rightContext,
                                                                 int tabWidth = 4,
-                                                                const QString& fuzzyCharacters = QStringLiteral( "{}()/*/" ));
+                                                                const QString& fuzzyCharacters = QStringLiteral( "{}()/*\\" ));
 }
 
 #endif // KDEVPLATFORM_FORMATTINGHELPERS_H
