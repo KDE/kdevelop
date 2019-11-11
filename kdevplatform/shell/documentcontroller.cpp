@@ -85,7 +85,6 @@ public:
     explicit DocumentControllerPrivate(DocumentController* c)
         : controller(c)
         , fileOpenRecent(nullptr)
-        , globalTextEditorInstance(nullptr)
     {
     }
 
@@ -547,7 +546,6 @@ public:
     QPointer<QAction> closeAll;
     QPointer<QAction> closeAllOthers;
     KRecentFilesAction* fileOpenRecent;
-    KTextEditor::Document* globalTextEditorInstance;
 };
 Q_DECLARE_TYPEINFO(KDevelop::DocumentControllerPrivate::HistoryEntry, Q_MOVABLE_TYPE);
 
@@ -1080,15 +1078,6 @@ IDocumentFactory* DocumentController::factory(const QString& mime) const
     Q_D(const DocumentController);
 
     return d->factories.value(mime);
-}
-
-KTextEditor::Document* DocumentController::globalTextEditorInstance()
-{
-    Q_D(DocumentController);
-
-    if(!d->globalTextEditorInstance)
-        d->globalTextEditorInstance = Core::self()->partControllerInternal()->createTextPart();
-    return d->globalTextEditorInstance;
 }
 
 bool DocumentController::openDocumentsSimple( QStringList urls )

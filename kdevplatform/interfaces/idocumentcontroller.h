@@ -94,8 +94,6 @@ public:
     virtual KDevelop::IDocument* openDocumentFromText( const QString& data ) = 0;
 
     virtual IDocumentFactory* factory(const QString& mime) const = 0;
-    
-    virtual KTextEditor::Document* globalTextEditorInstance()=0;
 
     /**
      * @returns the KTextEditor::View of the current document, in case it is a text document

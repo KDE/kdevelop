@@ -112,8 +112,6 @@ public:
                               const KTextEditor::Range& range = KTextEditor::Range::invalid(),
                               DocumentActivationParams activationParams = {},
                               IDocument* buddy = nullptr) override;
-
-    KTextEditor::Document* globalTextEditorInstance() override;
     
 public Q_SLOTS:
     /**Opens a new or existing document.
