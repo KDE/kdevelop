@@ -22,6 +22,7 @@
 #include "qttestdelegate.h"
 #include <debug.h>
 
+#include <algorithm>
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/icore.h>
 #include <interfaces/itestcontroller.h>
@@ -72,14 +73,15 @@ static KJob* createTestJob(const QString& launchModeId, const QStringList& argum
     }
     Q_ASSERT(launcher);
 
-    ILaunchConfiguration* ilaunch = nullptr;
-    const QList<ILaunchConfiguration*> launchConfigurations = ICore::self()->runController()->launchConfigurations();
-    for (ILaunchConfiguration* l : launchConfigurations) {
-        if (l->type() == type && l->config().readEntry("ConfiguredByCTest", false)) {
-            ilaunch = l;
-            break;
-        }
-    }
+    auto ilaunch = [type]() {
+        const auto launchConfigurations = ICore::self()->runController()->launchConfigurations();
+        auto it = std::find_if(launchConfigurations.begin(), launchConfigurations.end(),
+                            [type](ILaunchConfiguration* l) {
+                                return (l->type() == type && l->config().readEntry("ConfiguredByCTest", false));
+                            });
+        return it == launchConfigurations.end() ? nullptr : *it;
+    }();
+
     if (!ilaunch) {
         ilaunch = ICore::self()->runController()->createLaunchConfiguration( type,
                                                 qMakePair( mode->id(), launcher->id() ),
