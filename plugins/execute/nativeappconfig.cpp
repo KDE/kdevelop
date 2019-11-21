@@ -275,7 +275,6 @@ void NativeAppConfigType::configureLaunchFromItem ( KConfigGroup cfg, KDevelop::
 void NativeAppConfigType::configureLaunchFromCmdLineArguments ( KConfigGroup cfg, const QStringList& args ) const
 {
     cfg.writeEntry( ExecutePlugin::isExecutableEntry, true );
-    Q_ASSERT(QFile::exists(args.first()));
 //  TODO: we probably want to flexibilize, but at least we won't be accepting wrong values anymore
     cfg.writeEntry( ExecutePlugin::executableEntry, QUrl::fromLocalFile(args.first()) );
     QStringList a(args);
