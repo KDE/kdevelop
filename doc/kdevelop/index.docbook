@@ -82,13 +82,13 @@ double bar ()
 <sect2 id="option-1--importing-a-project-from-a-version-control-system-server"><title>Option 1: Importing a project from a version control system server</title>
 <para>Let's first assume that the project we want to set up &mdash; the &Linux; kernel &mdash; resides in some version control system on a server, but that you haven't checked it out to your local hard drive yet. In this case, go to the <guilabel>Project</guilabel> menu to create the &Linux; kernel as a project inside the current session and then follow these steps:</para>
 <itemizedlist>
-<listitem><para>Go to <menuchoice><guimenu>Projects</guimenu><guimenuitem>Fetch project</guimenuitem></menuchoice> to import a project
+<listitem><para>Go to <menuchoice><guimenu>Project</guimenu><guimenuitem>Fetch Project</guimenuitem></menuchoice> to import a project
 </para></listitem>
 <listitem><para>You then have multiple options to start a new project in the current session, depending on where the source files should come from: You can just point &kdevelop; at an existing directory (see option 2 below), or you can ask &kdevelop; to get the sources from a repository.
 </para></listitem>
 <listitem><para>Assuming you don't already have a version checked out:
 <itemizedlist>
-<listitem><para>In the dialog box, under <guilabel>Select the source</guilabel>, choose to use <guilabel>Subversion</guilabel>, <guilabel>Git</guilabel>, or one of the other choices
+<listitem><para>In the dialog box, under <guilabel>Select Source</guilabel>, choose to use <guilabel>From File System</guilabel>, <guilabel>Subversion</guilabel>, <guilabel>Git</guilabel>, <guilabel>GitHub</guilabel>, or <guilabel>KDE</guilabel>
 </para></listitem>
 <listitem><para>Choose a working directory as destination into which the sources should be checked out
 </para></listitem>
