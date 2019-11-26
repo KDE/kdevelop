@@ -40,7 +40,9 @@
 #include <KActionCollection>
 #include <KJob>
 #include <KLocalizedString>
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 #include <KRecursiveFilterProxyModel>
+#endif
 
 #include <QAction>
 #include <QHeaderView>
@@ -50,6 +52,9 @@
 #include <QStandardItemModel>
 #include <QVBoxLayout>
 #include <QWidgetAction>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+#include <QSortFilterProxyModel>
+#endif
 
 using namespace KDevelop;
 
@@ -63,7 +68,11 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 : QWidget(parent)
 , m_plugin(plugin)
 , m_tree(new QTreeView(this))
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+, m_filter(new QSortFilterProxyModel(this))
+#else
 , m_filter(new KRecursiveFilterProxyModel(this))
+#endif
 {
     setWindowIcon(QIcon::fromTheme(QStringLiteral("preflight-verifier"), windowIcon()));
     setWindowTitle(i18n("Unit Tests"));
@@ -84,6 +93,9 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     connect(m_tree, &QTreeView::activated, this, &TestView::doubleClicked);
 
     m_model = new QStandardItemModel(this);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    m_filter->setRecursiveFilteringEnabled(true);
+#endif
     m_filter->setSourceModel(m_model);
     m_tree->setModel(m_filter);
 

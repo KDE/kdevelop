@@ -20,8 +20,7 @@
 
 #include <QWidget>
 
-class KRecursiveFilterProxyModel;
-
+class QSortFilterProxyModel;
 class QModelIndex;
 class QAction;
 class QTreeView;
@@ -41,7 +40,7 @@ private:
     OutlineViewPlugin* m_plugin;
     OutlineModel* m_model;
     QTreeView* m_tree;
-    KRecursiveFilterProxyModel* m_proxy;
+    QSortFilterProxyModel* m_proxy;
     QLineEdit* m_filter;
     QAction* m_sortAlphabeticallyAction;
 
