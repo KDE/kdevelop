@@ -25,6 +25,7 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QScreen>
 #include <QSortFilterProxyModel>
 
 using namespace KDevelop;
@@ -69,7 +70,7 @@ QSize AsyncTreeView::sizeHint() const
     for (int i = 0; i < model()->columnCount(); ++i) {
         horizontalSize += columnWidth(i);
     }
-    horizontalSize = qMin(horizontalSize, QApplication::desktop()->screenGeometry().width()*3/4);
+    horizontalSize = qMin(horizontalSize, QGuiApplication::primaryScreen()->geometry().width()*3/4);
     return QSize(horizontalSize, margins.top() + margins.bottom() + sizeHintForRow(0));
 }
 

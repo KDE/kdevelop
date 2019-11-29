@@ -29,6 +29,7 @@
 #include <QPalette>
 #include <QPoint>
 #include <QPointer>
+#include <QScreen>
 #include <QStyleOption>
 #include <QStylePainter>
 
@@ -104,7 +105,7 @@ void ActiveToolTipManager::doVisibility()
 
     if (!fullGeometry.isEmpty()) {
         QRect oldFullGeometry = fullGeometry;
-        QRect screenGeometry = QApplication::desktop()->screenGeometry(fullGeometry.topLeft());
+        QRect screenGeometry = QGuiApplication::screenAt(fullGeometry.topLeft())->geometry();
         if (fullGeometry.bottom() > screenGeometry.bottom()) {
             //Move up, avoiding the mouse-cursor
             fullGeometry.moveBottom(fullGeometry.top() - 10);

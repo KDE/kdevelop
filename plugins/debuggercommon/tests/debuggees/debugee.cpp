@@ -23,6 +23,7 @@ void foo() {
     ++i; int j = i;
     noop();
     noop();
+    (void)j; // Supress unused j warning
 }
 int main(int argc, char **argv) {
     std::cout << "Hello, world!" << std::endl;
@@ -31,7 +32,7 @@ int main(int argc, char **argv) {
     (void)argc;(void)argv;
     const char *x = "Hello";
     std::cout << x << std::endl;
-    
+
     testStruct ts;
     ts.a = 0;
     ts.b = 1;
