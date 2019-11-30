@@ -745,7 +745,7 @@ void LldbFormattersTest::testQHashInt()
     variableCollection()->expanded(localVariableIndexAt(0));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=2>"), {"(10, 100)", "(20, 200)"},
+    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=2>"), QStringList{"(10, 100)", "(20, 200)"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -754,7 +754,7 @@ void LldbFormattersTest::testQHashInt()
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
     QCOMPARE(m_session->currentLine(), 7);
 
-    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=3>"), {"(10, 100)", "(20, 200)", "(30, 300)"},
+    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=3>"), QStringList{"(10, 100)", "(20, 200)", "(30, 300)"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -774,7 +774,7 @@ void LldbFormattersTest::testQHashString()
     variableCollection()->expanded(localVariableIndexAt(0));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=2>"), {"(\"10\", \"100\")", "(\"20\", \"200\")"},
+    if (!verifyVariable(0, QStringLiteral("h"), QStringLiteral("<size=2>"), QStringList{"(\"10\", \"100\")", "(\"20\", \"200\")"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -804,7 +804,7 @@ void LldbFormattersTest::testQSetInt()
     variableCollection()->expanded(localVariableIndexAt(0));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=2>"), {"10", "20"},
+    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=2>"), QStringList{"10", "20"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -813,7 +813,7 @@ void LldbFormattersTest::testQSetInt()
     WAIT_FOR_STATE_AND_IDLE(m_session, DebugSession::PausedState);
     QCOMPARE(m_session->currentLine(), 7);
 
-    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=3>"), {"10", "20", "30"},
+    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=3>"), QStringList{"10", "20", "30"},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
@@ -833,7 +833,7 @@ void LldbFormattersTest::testQSetString()
     variableCollection()->expanded(localVariableIndexAt(0));
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
-    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=2>"), {"\"10\"", "\"20\""},
+    if (!verifyVariable(0, QStringLiteral("s"), QStringLiteral("<size=2>"), QStringList{"\"10\"", "\"20\""},
                         __FILE__, __LINE__, true, false, true)) {
         return;
     }
