@@ -43,7 +43,7 @@ public:
     {
         return new KDevKonsoleView(mplugin, parent);
     }
-    Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() const override
     {
         return Qt::BottomDockWidgetArea;
     }

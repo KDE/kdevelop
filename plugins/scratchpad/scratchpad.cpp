@@ -58,7 +58,7 @@ public:
         return new ScratchpadView(parent, m_plugin);
     }
 
-    Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() const override
     {
         return Qt::LeftDockWidgetArea;
     }

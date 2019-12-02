@@ -325,7 +325,8 @@ public:
         return new PatchReviewToolView( parent, m_plugin );
     }
 
-    Qt::DockWidgetArea defaultPosition() override {
+    Qt::DockWidgetArea defaultPosition() const override
+    {
         return Qt::BottomDockWidgetArea;
     }
 

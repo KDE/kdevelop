@@ -72,7 +72,10 @@ public:
         return v;
     }
 
-    Qt::DockWidgetArea defaultPosition() override { return Qt::BottomDockWidgetArea; }
+    Qt::DockWidgetArea defaultPosition() const override
+    {
+        return Qt::BottomDockWidgetArea;
+    }
 
     QString id() const override { return QStringLiteral("org.kdevelop.ProblemReporterView"); }
 };

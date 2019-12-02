@@ -46,7 +46,7 @@ public:
     {
         return new OutputWidget( parent, m_data );
     }
-    Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() const override
     {
         return Qt::BottomDockWidgetArea;
     }

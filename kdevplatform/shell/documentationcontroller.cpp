@@ -100,7 +100,10 @@ public:
         return new DocumentationView(parent, m_providersModel.data());
     }
 
-    Qt::DockWidgetArea defaultPosition() override { return Qt::RightDockWidgetArea; }
+    Qt::DockWidgetArea defaultPosition() const override
+    {
+        return Qt::RightDockWidgetArea;
+    }
     QString id() const override { return QStringLiteral("org.kdevelop.DocumentationView"); }
     QList<QAction*> contextMenuActions(QWidget* viewWidget) const override
     {

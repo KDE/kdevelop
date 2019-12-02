@@ -44,7 +44,7 @@ class OktetaToolViewFactory : public IToolViewFactory
 
   public: // KDevelop::IToolViewFactory API
     QWidget* create( QWidget* parent ) override;
-    Qt::DockWidgetArea defaultPosition() override;
+    Qt::DockWidgetArea defaultPosition() const override;
 
     QString id() const override;
 

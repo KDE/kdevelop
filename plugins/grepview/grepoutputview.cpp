@@ -42,7 +42,7 @@ QWidget* GrepOutputViewFactory::create(QWidget* parent)
     return new GrepOutputView(parent, m_plugin);
 }
 
-Qt::DockWidgetArea GrepOutputViewFactory::defaultPosition()
+Qt::DockWidgetArea GrepOutputViewFactory::defaultPosition() const
 {
     return Qt::BottomDockWidgetArea;
 }

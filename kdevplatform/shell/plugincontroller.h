@@ -120,7 +120,7 @@ public:
 
     QList<IPlugin*> allPluginsForExtension(const QString &extension, const QVariantMap& constraints = QVariantMap()) override;
 
-    QStringList allPluginNames();
+    QStringList allPluginNames() const;
 
     QVector<KPluginMetaData> queryExtensionPlugins(const QString& extension, const QVariantMap& constraints = QVariantMap()) const override;
 

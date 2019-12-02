@@ -123,7 +123,7 @@ public:
         return widget;
     }
 
-    Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() const override
     {
         switch (m_pos) {
             case KTextEditor::MainWindow::Left:

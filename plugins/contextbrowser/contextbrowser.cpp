@@ -149,7 +149,7 @@ public:
         return ret;
     }
 
-    Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() const override
     {
         return Qt::BottomDockWidgetArea;
     }

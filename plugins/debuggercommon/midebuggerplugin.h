@@ -131,7 +131,7 @@ public:
         return m_id;
     }
 
-    Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() const override
     {
         return m_defaultArea;
     }

@@ -109,7 +109,7 @@ class KDevProjectManagerViewFactory: public KDevelop::IToolViewFactory
         {
             return new ProjectManagerView( mplugin, parent );
         }
-        Qt::DockWidgetArea defaultPosition() override
+        Qt::DockWidgetArea defaultPosition() const override
         {
             return Qt::LeftDockWidgetArea;
         }

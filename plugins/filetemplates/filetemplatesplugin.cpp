@@ -50,7 +50,7 @@ public:
         return QStringLiteral("org.kdevelop.TemplateFilePreview");
     }
 
-    Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() const override
     {
         return Qt::RightDockWidgetArea;
     }

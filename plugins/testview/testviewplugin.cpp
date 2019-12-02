@@ -48,7 +48,7 @@ class TestToolViewFactory: public KDevelop::IToolViewFactory
         {
             return new TestView( mplugin, parent );
         }
-        Qt::DockWidgetArea defaultPosition() override
+        Qt::DockWidgetArea defaultPosition() const override
         {
             return Qt::LeftDockWidgetArea;
         }

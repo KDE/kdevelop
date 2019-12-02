@@ -46,7 +46,7 @@ QString OktetaToolViewFactory::id() const
 {
     return mToolViewFactory->id();
 }
-Qt::DockWidgetArea OktetaToolViewFactory::defaultPosition()
+Qt::DockWidgetArea OktetaToolViewFactory::defaultPosition() const
 {
     return (Qt::DockWidgetArea)mToolViewFactory->defaultPosition();
 }

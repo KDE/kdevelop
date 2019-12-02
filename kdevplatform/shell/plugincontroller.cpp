@@ -732,9 +732,9 @@ QVector<KPluginMetaData> PluginController::queryExtensionPlugins(const QString& 
     return plugins;
 }
 
-QStringList PluginController::allPluginNames()
+QStringList PluginController::allPluginNames() const
 {
-    Q_D(PluginController);
+    Q_D(const PluginController);
 
     QStringList names;
     names.reserve(d->plugins.size());

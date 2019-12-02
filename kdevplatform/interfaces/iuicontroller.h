@@ -57,7 +57,7 @@ public:
     /**
      * @returns the default position where this tool view should appear
      */
-    virtual Qt::DockWidgetArea defaultPosition() = 0;
+    virtual Qt::DockWidgetArea defaultPosition() const = 0;
     /**
      * Fetch a list of actions to add to the toolbar of the tool view @p view
      * @param viewWidget the view to which the actions should be added

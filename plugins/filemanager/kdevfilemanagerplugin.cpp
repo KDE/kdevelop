@@ -46,7 +46,7 @@ public:
         return KDevelop::IToolViewFactory::toolBarActions( w );
     }
 
-    Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() const override
     {
         return Qt::LeftDockWidgetArea;
     }

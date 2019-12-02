@@ -63,7 +63,7 @@ public:
         return new ExternalScriptView(m_plugin, parent);
     }
 
-    Qt::DockWidgetArea defaultPosition() override
+    Qt::DockWidgetArea defaultPosition() const override
     {
         return Qt::RightDockWidgetArea;
     }

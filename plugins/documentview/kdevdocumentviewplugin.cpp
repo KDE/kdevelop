@@ -67,7 +67,7 @@ class KDevDocumentViewPluginFactory: public KDevelop::IToolViewFactory
                     view, &KDevDocumentView::documentUrlChanged );
             return view;
         }
-        Qt::DockWidgetArea defaultPosition() override
+        Qt::DockWidgetArea defaultPosition() const override
         {
             return Qt::LeftDockWidgetArea;
         }
