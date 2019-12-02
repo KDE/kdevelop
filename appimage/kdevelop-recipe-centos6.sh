@@ -27,10 +27,9 @@ fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
 fi
-KF5_VERSION=v5.63.0
-# remove kio_cmake_no_greaterless.patch with KF > 5.63.0
-PLASMA_VERSION=v5.17.1
-KDE_APPLICATIONS_VERSION=v19.08.2
+KF5_VERSION=v5.64.0
+PLASMA_VERSION=v5.17.3
+KDE_APPLICATIONS_VERSION=v19.08.3
 GRANTLEE_VERSION=v5.1.0
 OKTETA_VERSION=v0.26.2
 
@@ -178,7 +177,7 @@ build_framework kglobalaccel
 build_framework kxmlgui -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kbookmarks
 build_framework solid
-(PATCH_FILE=$SCRIPT_DIR/kio_cmake_no_greaterless.patch build_framework kio -DBUILD_DESIGNERPLUGIN=OFF)
+build_framework kio -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kparts
 build_framework kitemmodels
 build_framework threadweaver
@@ -192,7 +191,7 @@ build_framework kcmutils
 (PATCH_FILE=$SCRIPT_DIR/knotifications_no_phonon.patch build_framework knotifications)
 build_framework knotifyconfig
 build_framework kdoctools
-build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
+(PATCH_FILE=$SCRIPT_DIR/breeze-icons_revert_qrcAlias_breakage_cmake_3.5.patch build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1)
 build_framework kpty
 build_framework kinit 
 fi
