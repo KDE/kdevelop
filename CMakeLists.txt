@@ -119,6 +119,11 @@ add_definitions(
     -DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x051C00
     -DKF_DEPRECATED_WARNINGS_SINCE=0x060000
 )
+if(NOT Qt5_VERSION VERSION_LESS "5.12.0" AND NOT KF5_VERSION VERSION_LESS "5.56.0")
+    add_definitions(
+        -DQT_NO_FOREACH
+    )
+endif()
 
 # Turn off missing-field-initializers warning for GCC to avoid noise from false positives with empty {}
 # See discussion: https://mail.kde.org/pipermail/kdevelop-devel/2014-February/046910.html

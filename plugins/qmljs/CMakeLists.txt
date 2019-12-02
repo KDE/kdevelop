@@ -1,4 +1,8 @@
 add_subdirectory(3rdparty/qtcreator-libs)
+
+remove_definitions(
+    -DQT_NO_FOREACH
+)
 add_subdirectory(duchain)
 add_subdirectory(nodejsmodules)
 if(BUILD_TESTING)
