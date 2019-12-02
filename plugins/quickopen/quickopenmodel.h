@@ -27,7 +27,7 @@
 
 #include <language/interfaces/quickopendataprovider.h>
 #include "expandingtree/expandingwidgetmodel.h"
-
+class QTimer;
 class QuickOpenModel
     : public ExpandingWidgetModel
 {
