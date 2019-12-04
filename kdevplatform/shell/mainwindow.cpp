@@ -339,7 +339,8 @@ void MainWindow::initialize()
     Q_D(MainWindow);
 
     KStandardAction::keyBindings(this, SLOT(configureShortcuts()), actionCollection());
-    setupGUI( KXmlGuiWindow::ToolBar | KXmlGuiWindow::Create | KXmlGuiWindow::Save );
+    setupGUI(ToolBar | Save);
+    createGUI(nullptr);
 
     Core::self()->partController()->addManagedTopLevelWidget(this);
     qCDebug(SHELL) << "Adding plugin-added connection";
