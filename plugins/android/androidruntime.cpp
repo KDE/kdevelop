@@ -22,6 +22,7 @@
 
 #include <KProcess>
 #include <QProcess>
+#include <QUrl>
 
 using namespace KDevelop;
 
@@ -43,8 +44,8 @@ void AndroidRuntime::setEnabled(bool /*enable*/)
 static void setEnvironmentVariables(QProcess* process)
 {
     auto env = process->processEnvironment();
-    env.insert(QStringLiteral("ANDROID_NDK"),      AndroidRuntime::s_settings->ndk());
-    env.insert(QStringLiteral("ANDROID_SDK_ROOT"), AndroidRuntime::s_settings->sdk());
+    env.insert(QStringLiteral("ANDROID_NDK"),      QUrl(AndroidRuntime::s_settings->ndk()).toLocalFile());
+    env.insert(QStringLiteral("ANDROID_SDK_ROOT"), QUrl(AndroidRuntime::s_settings->sdk()).toLocalFile());
     process->setProcessEnvironment(env);
 }
 
@@ -52,10 +53,9 @@ static void setEnvironmentVariables(QProcess* process)
 static QStringList args()
 {
     return {
-        QLatin1String("-DCMAKE_TOOLCHAIN_FILE=") + AndroidRuntime::s_settings->cmakeToolchain(),
-
+        QLatin1String("-DCMAKE_TOOLCHAIN_FILE=") + QUrl(AndroidRuntime::s_settings->cmakeToolchain()).toLocalFile(),
         QLatin1String("-DANDROID_ABI=") + AndroidRuntime::s_settings->abi(),
-        QLatin1String("-DANDROID_NDK=") + AndroidRuntime::s_settings->ndk(),
+        QLatin1String("-DANDROID_NDK=") + QUrl(AndroidRuntime::s_settings->ndk()).toLocalFile(),
         QLatin1String("-DANDROID_TOOLCHAIN=") + AndroidRuntime::s_settings->toolchain(),
         QLatin1String("-DANDROID_API_LEVEL=") + AndroidRuntime::s_settings->api(),
         QLatin1String("-DANDROID_ARCHITECTURE=") + AndroidRuntime::s_settings->arch(),

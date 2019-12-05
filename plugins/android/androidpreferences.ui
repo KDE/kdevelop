@@ -22,7 +22,11 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="KUrlRequester" name="kcfg_cmakeToolchain"/>
+    <widget class="KUrlRequester" name="kcfg_cmakeToolchain">
+    <property name="mode">
+    <set>KFile::File|KFile::ExistingOnly|KFile::LocalOnly</set>
+    </property>
+    </widget>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_2">
@@ -32,7 +36,11 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="KUrlRequester" name="kcfg_ndk"/>
+    <widget class="KUrlRequester" name="kcfg_ndk">
+    <property name="mode">
+     <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
+    </property>
+    </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_3">
@@ -42,7 +50,11 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="KUrlRequester" name="kcfg_sdk"/>
+    <widget class="KUrlRequester" name="kcfg_sdk">
+    <property name="mode">
+     <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
+    </property>
+    </widget>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="label_4">
