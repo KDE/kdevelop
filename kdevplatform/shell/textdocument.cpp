@@ -47,6 +47,8 @@
 #include <language/interfaces/editorcontext.h>
 #include <language/backgroundparser/backgroundparser.h>
 
+#include <util/foregroundlock.h>
+
 #include "core.h"
 #include "mainwindow.h"
 #include "uicontroller.h"
@@ -527,6 +529,7 @@ KTextEditor::Range TextDocument::textSelection() const
 
 QString TextDocument::text(const KTextEditor::Range &range) const
 {
+    VERIFY_FOREGROUND_LOCKED
     Q_D(const TextDocument);
 
     if (!d->document) {
@@ -538,6 +541,7 @@ QString TextDocument::text(const KTextEditor::Range &range) const
 
 QString TextDocument::textLine() const
 {
+    VERIFY_FOREGROUND_LOCKED
     Q_D(const TextDocument);
 
     if (!d->document) {
@@ -555,6 +559,7 @@ QString TextDocument::textLine() const
 
 QString TextDocument::textWord() const
 {
+    VERIFY_FOREGROUND_LOCKED
     Q_D(const TextDocument);
 
     if (!d->document) {
