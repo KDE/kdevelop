@@ -41,7 +41,7 @@
         "Description[gl]": "Este complemento permite executar programas sen instrumentador, i.e. de xeito nativo na máquina actual.",
         "Description[it]": "Questa estensione permette l'esecuzione dei programmi senza instrumentor, vale a dire nativamente da parte dell'host attuale.",
         "Description[nl]": "Deze plugin staat het uitvoeren van programma's toe zonder hulpprogramma, dwz. van nature op de huidige host.",
-        "Description[pl]": "Wtyczka ta pozwala na uruchamianie programów bez instrumentora, np. natywnie przez obecnego hosta.",
+        "Description[pl]": "Uruchamia program bez instrumentora, np. macierzyście przez bieżącego gospodarza.",
         "Description[pt]": "Este 'plugin' permite a execução de programas sem instrumentação, i.e. nativamente na máquina-anfitriã actual.",
         "Description[pt_BR]": "Este plugin permite executar programas sem orquestrador, ou seja, nativamente pelo computador hospedeiro.",
         "Description[sk]": "Tento plugin umožňuje spustenie programov bez inštrumentora, teda natívne aktuálnym hostiteľom.",
