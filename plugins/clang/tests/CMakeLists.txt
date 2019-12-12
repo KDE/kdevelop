@@ -100,6 +100,7 @@ LINK_LIBRARIES
     KDev::Language
     KDev::Tests
     KDev::DefinesAndIncludesManager
+    KDevClangPrivate
 )
 
 if(NOT COMPILER_OPTIMIZATIONS_DISABLED)

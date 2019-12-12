@@ -30,6 +30,7 @@
 
 #include "testfilepaths.h"
 #include "testprovider.h"
+#include "duchain/clanghelpers.h"
 
 //Include all used json tests, otherwise "Test not found"
 #include <tests/json/jsondeclarationtests.h>
@@ -40,6 +41,7 @@
 #include <QTest>
 #include <QLoggingCategory>
 #include <QProcess>
+#include <QVersionNumber>
 
 using namespace KDevelop;
 
@@ -121,7 +123,8 @@ void TestFiles::testFiles()
         qDebug() << problem;
     }
 
-    QEXPECT_FAIL("lambdas.cpp", "capture with identifier and initializer aren't visited apparently", Abort);
+    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) < QVersionNumber(9, 0, 0))
+        QEXPECT_FAIL("lambdas.cpp", "capture with identifier and initializer aren't visited apparently", Abort);
     QVERIFY(validator.testsPassed());
 
     if (!QTest::currentDataTag() || strcmp("invalid.cpp", QTest::currentDataTag()) != 0) {
