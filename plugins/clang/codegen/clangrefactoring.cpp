@@ -122,7 +122,7 @@ bool ClangRefactoring::validCandidateToMoveIntoSource(Declaration* decl)
         return false;
     }
 
-    if (dynamic_cast<FunctionDefinition*>(decl)) {
+    if (!decl->isDefinition()) {
         return false;
     }
 

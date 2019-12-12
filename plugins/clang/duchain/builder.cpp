@@ -1064,6 +1064,10 @@ void Visitor::setDeclData(CXCursor cursor, ClassMemberDeclaration *decl) const
             decl->setAlignOf(alignOf);
     }
 #endif
+
+    if (clang_isCursorDefinition(cursor)) {
+        decl->setDeclarationIsDefinition(true);
+    }
 }
 
 template<CXCursorKind CK, EnableIf<CursorKindTraits::isClassTemplate(CK)>>
