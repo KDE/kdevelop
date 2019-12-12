@@ -30,6 +30,7 @@
 #include <tests/testproject.h>
 
 #include "duchain/parsesession.h"
+#include "duchain/clanghelpers.h"
 #include "util/clangtypes.h"
 
 #include <interfaces/idocumentcontroller.h>
@@ -48,6 +49,8 @@
 #include <KTextEditor/View>
 
 #include <KConfigGroup>
+
+#include <QVersionNumber>
 
 QTEST_MAIN(TestCodeCompletion)
 
@@ -179,6 +182,10 @@ void executeCompletionTest(const ReferencedTopDUContext& top, const CompletionIt
     }
     if (QTest::currentTestFunction() == QByteArrayLiteral("testClangCodeCompletion")) {
         QEXPECT_FAIL("look-ahead pointer", "self-assignment isn't done anymore, so we don't find any suitable type anymore", Continue);
+
+        if (QVersionNumber::fromString(ClangHelpers::clangVersion()) >= QVersionNumber(9, 0, 0)) {
+            QEXPECT_FAIL("enum-case", "quite a lot of unrelated cruft is suggested, needs to be fixed upstream", Continue);
+        }
     }
     if (tester.names.size() != expectedCompletionItems.completions.size()) {
         qDebug() << "different results:\nactual:" << tester.names << "\nexpected:" << expectedCompletionItems.completions;
