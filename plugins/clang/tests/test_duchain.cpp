@@ -51,6 +51,7 @@
 #include "duchain/clangparsingenvironmentfile.h"
 #include "duchain/clangparsingenvironment.h"
 #include "duchain/parsesession.h"
+#include "duchain/clanghelpers.h"
 
 #include "testprovider.h"
 
@@ -60,6 +61,7 @@
 #include <QSignalSpy>
 #include <QLoggingCategory>
 #include <QThread>
+#include <QVersionNumber>
 
 QTEST_MAIN(TestDUChain)
 
@@ -301,7 +303,8 @@ class B : public A<int>
     //       clang stops processing when it encounters the second missing
     //       header, or similar.
     // XFAIL this check until https://bugs.llvm.org/show_bug.cgi?id=38155 is fixed
-    QEXPECT_FAIL("", "Base class isn't assigned correctly", Continue);
+    if (QVersionNumber::fromString(ClangHelpers::clangVersion()) < QVersionNumber(9, 0, 0))
+        QEXPECT_FAIL("", "Base class isn't assigned correctly", Continue);
     QCOMPARE(b->baseClassesSize(), 1u);
 
 #if CINDEX_VERSION_MINOR < 34
