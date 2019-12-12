@@ -22,6 +22,7 @@
 #include "../duchain/clangproblem.h"
 #include "../duchain/parsesession.h"
 #include "../duchain/unknowndeclarationproblem.h"
+#include "../duchain/clanghelpers.h"
 #include "../util/clangtypes.h"
 
 #include <language/duchain/duchain.h>
@@ -39,6 +40,7 @@
 
 #include <QTest>
 #include <QLoggingCategory>
+#include <QVersionNumber>
 
 Q_DECLARE_METATYPE(KDevelop::IProblem::Severity)
 
@@ -208,11 +210,12 @@ void TestProblems::testFixits_data()
     // #endif FOO
     //        ^
     //        //
-    QTest::newRow("extra-tokens test")
+    QTest::newRow("extra-tokens")
         << "#ifdef FOO\n#endif FOO\n"
         << 1
         << QVector<ClangFixit>{ ClangFixit{"//", DocumentRange(IndexedString(FileName), KTextEditor::Range(1, 7, 1, 7)), QString()} };
 
+    const auto clangVersion9OrHigher = QVersionNumber::fromString(ClangHelpers::clangVersion()) >= QVersionNumber(9, 0, 0);
     // expected:
     // test.cpp:1:19: warning: empty parentheses interpreted as a function declaration [-Wvexing-parse]
     //     int a();
@@ -221,21 +224,24 @@ void TestProblems::testFixits_data()
     //     int a();
     //          ^~
     //           = 0
-    QTest::newRow("vexing-parse test")
+    QTest::newRow("vexing-parse")
         << "int main() { int a(); }\n"
         << 1
-        << QVector<ClangFixit>{ ClangFixit{" = 0", DocumentRange(IndexedString(FileName), KTextEditor::Range(0, 18, 0, 20)), QString()} };
+        << QVector<ClangFixit>{ ClangFixit{" = 0", DocumentRange(IndexedString(FileName),
+            KTextEditor::Range(0, 18, 0, 20)), QString(),
+            clangVersion9OrHigher ? QStringLiteral("()") : QString()} };
 
     // expected:
     // test.cpp:2:21: error: no member named 'someVariablf' in 'C'; did you mean 'someVariable'?
     // int main() { C c; c.someVariablf = 1; }
     //                     ^~~~~~~~~~~~
     //                     someVariable
-    QTest::newRow("spell-check test")
+    QTest::newRow("spell-check")
         << "class C{ int someVariable; };\n"
            "int main() { C c; c.someVariablf = 1; }\n"
         << 1
-        << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), KTextEditor::Range(1, 20, 1, 32)), QString()} };
+        << QVector<ClangFixit>{ ClangFixit{"someVariable", DocumentRange(IndexedString(FileName), KTextEditor::Range(1, 20, 1, 32)),
+            QString(), clangVersion9OrHigher ? QStringLiteral("someVariablf") : QString()} };
 }
 
 struct Replacement

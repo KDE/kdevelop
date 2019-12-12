@@ -89,6 +89,7 @@ QDebug operator<<(QDebug debug, const ClangFixit& fixit)
         << "replacementText=" << fixit.replacementText
         << ", range=" << fixit.range
         << ", description=" << fixit.description
+        << ", currentText=" << fixit.currentText
         << "]";
     return debug;
 }
