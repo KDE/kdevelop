@@ -1169,6 +1169,11 @@ QList<CompletionTreeItemPointer> ClangCodeCompletionContext::completionItems(boo
 
         processChunks(result.CompletionString);
 
+        // we have our own implementation of an override helper
+        // TODO: use the clang-provided one, if available
+        if (typed.endsWith(QLatin1String(" override")))
+            continue;
+
         // TODO: No closing paren if default parameters present
         if (isOverloadCandidate && !arguments.endsWith(QLatin1Char(')'))) {
             arguments += QLatin1Char(')');
