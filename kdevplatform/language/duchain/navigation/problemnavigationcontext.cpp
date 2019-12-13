@@ -247,7 +247,7 @@ QString ProblemNavigationContext::html(bool shorten)
 NavigationContextPointer ProblemNavigationContext::executeKeyAction(const QString& key)
 {
     if (key.startsWith(QLatin1String("invoke_action_"))) {
-        const int index = QString(key).remove(QLatin1String("invoke_action_")).toInt();
+        const int index = key.midRef(strlen("invoke_action_")).toInt();
         executeAction(index);
     }
 
