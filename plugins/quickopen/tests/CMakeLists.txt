@@ -9,7 +9,11 @@ add_library(quickopentestbase STATIC
     ../projectfilequickopen.cpp)
 
 target_link_libraries(quickopentestbase PUBLIC
-    Qt5::Test KF5::IconThemes KDev::Tests KDev::Project KDev::Language)
+    KDev::Tests
+    KDev::Project
+    KDev::Language
+    Qt5::Test
+)
 
 ecm_add_test(test_quickopen.cpp LINK_LIBRARIES quickopentestbase)
 

@@ -22,7 +22,6 @@
 #include <QIcon>
 #include <QTextBrowser>
 
-#include <KIconLoader>
 #include <KLocalizedString>
 
 #include <interfaces/iprojectcontroller.h>
@@ -164,24 +163,7 @@ QWidget* ProjectFileData::expandingWidget() const
 
 QIcon ProjectFileData::icon() const
 {
-    const QString& iconName = iconNameForUrl(m_file.indexedPath);
-
-    /**
-     * FIXME: Move this cache into a more central place and reuse it elsewhere.
-     *        The project model e.g. could reuse this as well.
-     *
-     * Note: We cache here since otherwise displaying and esp. scrolling
-     *       in a large list of quickopen items becomes very slow.
-     */
-    static QHash<QString, QPixmap> iconCache;
-    QHash<QString, QPixmap>::const_iterator it = iconCache.constFind(iconName);
-    if (it != iconCache.constEnd()) {
-        return it.value();
-    }
-
-    const QPixmap& pixmap = KIconLoader::global()->loadIcon(iconName, KIconLoader::Small);
-    iconCache.insert(iconName, pixmap);
-    return pixmap;
+    return QIcon::fromTheme(iconNameForUrl(m_file.indexedPath));
 }
 
 QString ProjectFileData::project() const
