@@ -50,7 +50,6 @@ target_link_libraries(kdevelop
     KDev::Util
 
     KF5::Declarative
-    KF5::IconThemes
     KF5::Crash
 
     Qt5::Quick
