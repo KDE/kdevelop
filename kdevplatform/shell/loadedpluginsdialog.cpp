@@ -100,8 +100,13 @@ public:
             return displayName(plugin);
         case DescriptionRole:
             return pluginInfo(plugin).description();
-        case Qt::DecorationRole:
-            return pluginInfo(plugin).iconName();
+        case Qt::DecorationRole: {
+                const QString iconName = pluginInfo(plugin).iconName();
+                if (iconName.isEmpty()) {
+                    return QStringLiteral("kdevelop");
+                }
+                return iconName;
+            }
         default:
             return QVariant();
         };
