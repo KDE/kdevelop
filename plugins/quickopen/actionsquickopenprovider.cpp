@@ -97,7 +97,7 @@ void ActionsQuickOpenProvider::setFilterText(const QString& text)
             QString display = action->text();
             QRegularExpressionMatch match = mnemonicRx.match(display);
             if (match.hasMatch()) {
-                display = match.captured(1) + match.captured(2);
+                display = match.capturedRef(1) + match.capturedRef(2);
             }
 
             if (display.contains(text, Qt::CaseInsensitive)) {

@@ -186,7 +186,7 @@ public:
 
             appendSpecifer = match.hasMatch(); // assume non-modern if no standard is specified
             if (appendSpecifer) {
-                const auto standard = match.captured(1);
+                const auto standard = match.capturedRef(1);
                 appendSpecifer = (standard != QLatin1String("98") && standard != QLatin1String("03"));
             }
         }

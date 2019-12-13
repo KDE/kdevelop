@@ -575,7 +575,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
       if (QDir::isRelativePath(path))
         path = workingDirectory + QLatin1Char('/') + path;
       const auto& internedPath = internPath(path);
-      const auto& type = match.captured(1);
+      const auto type = match.capturedRef(1);
       const auto isFramework = type.startsWith(QLatin1String("-iframework"))
         || type.startsWith(QLatin1String("-F"));
       if (isFramework) {

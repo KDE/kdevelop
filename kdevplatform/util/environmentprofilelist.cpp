@@ -230,9 +230,9 @@ void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcess
     for (auto& value : variables) {
         QRegularExpressionMatch m;
         while ((m = rVar.match(value)).hasMatch()) {
-            if (environment.contains(m.captured(1).midRef(1).toString())) {
+            if (environment.contains(m.capturedRef(1).mid(1).toString())) {
                 value.replace(m.capturedStart(0), m.capturedLength(0),
-                                   environment.value(m.captured(0).midRef(1).toString()));
+                                   environment.value(m.capturedRef(0).mid(1).toString()));
             } else {
                 //TODO: an warning
                 value.remove(m.capturedStart(0), m.capturedLength(0));

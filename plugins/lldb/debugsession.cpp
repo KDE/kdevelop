@@ -432,7 +432,7 @@ void DebugSession::handleVersion(const QStringList& s)
     int version[] = {0, 0, 0};
     if (match.hasMatch()) {
         for (int i = 0; i != 3; ++i) {
-            version[i] = match.captured(i+1).toInt();
+            version[i] = match.capturedRef(i+1).toInt();
         }
     }
 

@@ -31,7 +31,7 @@ namespace KDevelop
 {
 void initializeFilteredItem(FilteredItem& item, const ErrorFormat& filter, const QRegularExpressionMatch& match)
 {
-    item.lineNo = match.captured( filter.lineGroup ).toInt() - 1;
+    item.lineNo = match.capturedRef(filter.lineGroup).toInt() - 1;
     item.columnNo = filter.columnNumber(match);
 }
 
@@ -322,7 +322,7 @@ FilteredItem CompilerFilterStrategy::errorInLine(const QString& line)
             }
             initializeFilteredItem(item, curErrFilter, match);
 
-            const QString txt = match.captured(curErrFilter.textGroup);
+            const QStringRef txt = match.capturedRef(curErrFilter.textGroup);
 
             // Find the indicator which happens most early.
             int earliestIndicatorIdx = txt.length();

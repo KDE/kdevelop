@@ -199,7 +199,7 @@ QStringList Parameters::commandLine(QString& infoMessage) const
                     auto match = mocHeaderRegex.match(QString::fromUtf8(qtHeader.readLine()));
                     if (match.hasMatch()) {
                         mocDefineFound = true;
-                        result << QLatin1String("-DQ_MOC_OUTPUT_REVISION=") + match.captured(1);
+                        result << QLatin1String("-DQ_MOC_OUTPUT_REVISION=") + match.capturedRef(1);
                         break;
                     }
                 }

@@ -1057,7 +1057,7 @@ QUrl DocumentController::nextEmptyDocumentUrl()
         if (DocumentController::isEmptyDocumentUrl(doc->url())) {
             const auto match = pattern.match(doc->url().toDisplayString(QUrl::PreferLocalFile));
             if (match.hasMatch()) {
-                const int num = match.captured(1).toInt();
+                const int num = match.capturedRef(1).toInt();
                 nextEmptyDocNumber = qMax(nextEmptyDocNumber, num + 1);
             } else {
                 nextEmptyDocNumber = qMax(nextEmptyDocNumber, 1);
