@@ -34,7 +34,6 @@
 #else
 #include <KAboutApplicationDialog>
 #endif
-#include <KIconLoader>
 #include <KLocalizedString>
 #include <KTitleWidget>
 #include <KWidgetItemDelegate>
@@ -145,12 +144,13 @@ public:
         int i = 5;
         int j = 1;
 
+        const int iconSize = QApplication::style()->pixelMetric(QStyle::PM_LargeIconSize);
         QFont font = titleFont(option.font);
         QFontMetrics fmTitle(font);
 
         return QSize(
-            KIconLoader::SizeMedium + MARGIN * i + pushButton->sizeHint().width() * j,
-            qMax(KIconLoader::SizeMedium + MARGIN * 2, fmTitle.height() + option.fontMetrics.height() + MARGIN * 2)
+            iconSize + MARGIN * i + pushButton->sizeHint().width() * j,
+            qMax(iconSize + MARGIN * 2, fmTitle.height() + option.fontMetrics.height() + MARGIN * 2)
         );
 
     }

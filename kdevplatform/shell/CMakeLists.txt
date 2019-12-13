@@ -141,7 +141,6 @@ PRIVATE
     KDev::Documentation
     KF5::GuiAddons
     KF5::ConfigWidgets
-    KF5::IconThemes
     KF5::KIOFileWidgets
     KF5::KIOWidgets
     KF5::Parts
