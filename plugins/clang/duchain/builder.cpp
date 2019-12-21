@@ -1417,7 +1417,7 @@ RangeInRevision rangeInRevisionForUse(CXCursor cursor, CXCursorKind referencedCu
     } else {
         // Workaround for wrong use range returned by clang for macro expansions
         const auto contents = ClangUtils::getRawContents(clang_Cursor_getTranslationUnit(cursor), useRange);
-        const int firstOpeningParen = contents.indexOf(QChar::fromLatin1('('));
+        const int firstOpeningParen = contents.indexOf(QLatin1Char('('));
         if (firstOpeningParen != -1) {
             range.end.column = range.start.column + firstOpeningParen;
             range.end.line = range.start.line;
