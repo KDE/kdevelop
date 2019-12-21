@@ -123,7 +123,9 @@ public:
 
     void newSession()
     {
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
         qsrand(QDateTime::currentDateTimeUtc().toTime_t());
+#endif
         Session* session = new Session( QUuid::createUuid().toString() );
 
         KProcess::startDetached(ShellExtension::getInstance()->executableFilePath(), QStringList() << QStringLiteral("-s") << session->id().toString() << standardArguments());
@@ -415,7 +417,9 @@ Session* SessionController::createSession( const QString& name )
     if(name.startsWith(QLatin1Char('{'))) {
         s = new Session( QUuid(name).toString(), this );
     }else{
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
         qsrand(QDateTime::currentDateTimeUtc().toTime_t());
+#endif
         s = new Session( QUuid::createUuid().toString(), this );
         s->setName( name );
     }
@@ -502,7 +506,9 @@ QString SessionController::cloneSession( const QString& nameOrid )
     Q_D(SessionController);
 
     Session* origSession = session( nameOrid );
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
     qsrand(QDateTime::currentDateTimeUtc().toTime_t());
+#endif
     QUuid id = QUuid::createUuid();
     auto copyJob = KIO::copy(QUrl::fromLocalFile(sessionDirectory(origSession->id().toString())),
                              QUrl::fromLocalFile(sessionDirectory( id.toString())));
@@ -665,7 +671,9 @@ QString SessionController::showSessionChooserDialog(const QString& headerText, b
     const QString selectedSessionId = selected.sibling(selected.row(), 0).data().toString();
     if (selectedSessionId.isEmpty()) {
         // "Create New Session" item selected, return a fresh UUID
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
         qsrand(QDateTime::currentDateTimeUtc().toTime_t());
+#endif
         return QUuid::createUuid().toString();
     }
     return selectedSessionId;

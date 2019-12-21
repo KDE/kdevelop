@@ -30,6 +30,9 @@
 #include <QStandardPaths>
 #include <QMutex>
 #include <QTimer>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+#include <QRandomGenerator>
+#endif
 
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/icore.h>
@@ -1064,7 +1067,11 @@ unloadContexts:
             checkContextsCount = percentageOfContexts;
 
         if (visitor.checkContexts.size() > ( int )checkContextsCount)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+            startPos = QRandomGenerator::global()->bounded(visitor.checkContexts.size() - checkContextsCount);
+#else
             startPos = qrand() % (visitor.checkContexts.size() - checkContextsCount);
+#endif
 
         int endPos = startPos + maxFinalCleanupCheckContexts;
         if (endPos > visitor.checkContexts.size())

@@ -20,6 +20,9 @@
 
 #include <QTimer>
 #include <QVBoxLayout>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+#include <QRandomGenerator>
+#endif
 
 #include "mainwindow.h"
 #include "partdocument.h"
@@ -105,8 +108,16 @@ const QString WorkingSetController::makeSetId(const QString& prefix) const
 {
     QString newId;
     const uint maxRetries = 10;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+    auto* randomGenerator = QRandomGenerator::global();
+#endif
     for(uint retry = 2; retry <= maxRetries; retry++) {
-        newId = QStringLiteral("%1_%2").arg(prefix).arg(qrand() % 10000000);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+        const auto random = randomGenerator->bounded(10000000);
+#else
+        const auto random = qrand() % 10000000;
+#endif
+        newId = QStringLiteral("%1_%2").arg(prefix).arg(random);
         WorkingSetIconParameters params(newId);
         for (WorkingSet* set : m_workingSets) {
             if(set->isEmpty()) {
