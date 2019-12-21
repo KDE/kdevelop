@@ -97,7 +97,6 @@ VcsAnnotationModel::VcsAnnotationModel(VcsJob *job, const QUrl& url, QObject* pa
     d->job = job;
     d->foreground = foreground;
     d->background = background;
-    qsrand( QDateTime().toTime_t() );
     connect( d->job, &VcsJob::resultsReady,this, [this] (VcsJob* job) { Q_D(VcsAnnotationModel); d->addLines(job); } );
     ICore::self()->runController()->registerJob( d->job );
 }
