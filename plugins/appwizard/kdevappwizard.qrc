@@ -3,7 +3,4 @@
     <qresource prefix="/kxmlgui5/kdevappwizard">
         <file>kdevappwizard.rc</file>
     </qresource>
-    <qresource prefix="/kconfig">
-        <file>kdevappwizard.knsrc</file>
-    </qresource>
 </RCC>
