@@ -69,7 +69,7 @@ void TestFormattingHelpers::testFuzzyMatching_data()
         << expectedOutput;
 
     // clang-format can break long comments into multiple lines, adding new "//".
-    // For the same of readability, the comments in the test are actually not very long.
+    // For the sake of readability, the comments in the test are actually not very long.
     QTest::newRow("left-comment-break-fixed")
         << QStringLiteral("void foo() {\n    // very\n    // long\n}\n\nvoid bar() {\n    int x;\n}")
         << selectedText
@@ -125,5 +125,21 @@ void TestFormattingHelpers::testFuzzyMatching_data()
         << selectedText
         << QStringLiteral("")
         << QStringLiteral("\n\n#define foo(a,b) a = b")
+        << expectedOutput;
+
+    // clang-format can break long strings into multiple small strings, adding new quotation mark.
+    // For the sake of readability, the strings in the test are actually not very long.
+    QTest::newRow("left-string-break-fixed")
+        << QStringLiteral("void foo() {\n    string a = \"very \"\n    \"long\";\n}\n\nvoid bar() {\n    int x;\n}")
+        << selectedText
+        << QStringLiteral("void foo() {\nstring a = \"very long\";\n}\n\n")
+        << QStringLiteral("")
+        << expectedOutput;
+
+    QTest::newRow("right-string-break-fixed")
+        << QStringLiteral("void bar() {\n    int x;\n}\n\nvoid foo() {\n    string a = \"very \"\n    \"long\";\n}")
+        << selectedText
+        << QStringLiteral("")
+        << QStringLiteral("\n\nvoid foo() {\nstring a = \"very long\";\n}")
         << expectedOutput;
 }
