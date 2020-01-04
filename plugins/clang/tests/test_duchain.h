@@ -87,6 +87,9 @@ private Q_SLOTS:
     void testActiveDocumentsGetBestPriority();
     void testUsesCreatedForDeclarations();
     void testReparseIncludeGuard();
+    void testIncludeGuardHeaderHeaderOnly();
+    void testIncludeGuardHeaderHeaderOnly_data();
+    void testIncludeGuardHeaderWarning();
     void testExternC();
     void testLambda();
     void testReparseUnchanged_data();

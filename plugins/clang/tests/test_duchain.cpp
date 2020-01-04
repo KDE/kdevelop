@@ -1616,6 +1616,58 @@ void TestDUChain::testReparseIncludeGuard()
     }
 }
 
+void TestDUChain::testIncludeGuardHeaderHeaderOnly()
+{
+    QFETCH(QString, code);
+
+    // test that we do NOT get a warning for single standalone header file with include guards
+    TestFile header(code, QStringLiteral("h"));
+
+    QVERIFY(header.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST)));
+    {
+        DUChainReadLocker lock;
+        QCOMPARE(header.topContext()->problems().size(), 0);
+    }
+}
+
+void TestDUChain::testIncludeGuardHeaderHeaderOnly_data()
+{
+    QTest::addColumn<QString>("code");
+
+    QTest::newRow("guard-ifdef") << QStringLiteral(
+        "#ifndef GUARD\n"
+        "#define GUARD\n"
+        "int something;\n"
+        "#endif\n"
+    );
+
+    QTest::newRow("guard-pragma") << QStringLiteral(
+        "#pragma once\n"
+        "int something;\n"
+    );
+}
+
+void TestDUChain::testIncludeGuardHeaderWarning()
+{
+    // test that we do get a warning for a header file without include guards
+    TestFile header(QStringLiteral("int something;\n"), QStringLiteral("h"));
+    TestFile impl("#include \"" + header.url().str() + "\"\n", QStringLiteral("cpp"));
+
+    QVERIFY(impl.parseAndWait(TopDUContext::Features(TopDUContext::AllDeclarationsContextsAndUses | TopDUContext::AST | TopDUContext::ForceUpdate)));
+    {
+        DUChainReadLocker lock;
+        QVERIFY(impl.topContext());
+
+        auto context = DUChain::self()->chainForDocument(impl.url());
+        QVERIFY(context);
+        QCOMPARE(context->problems().size(), 0);
+
+        context = DUChain::self()->chainForDocument(header.url());
+        QVERIFY(context);
+        QCOMPARE(context->problems().size(), 1);
+    }
+}
+
 void TestDUChain::testExternC()
 {
     auto code = R"(extern "C" { void foo(); })";
