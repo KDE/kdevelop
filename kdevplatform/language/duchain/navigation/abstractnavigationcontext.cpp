@@ -185,7 +185,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
         return executeKeyAction(action.key);
 
     if (!action.decl && (action.type != NavigationAction::JumpToSource || action.document.isEmpty())) {
-        qCDebug(LANGUAGE) << "Navigation-action has invalid declaration" << endl;
+        qCDebug(LANGUAGE) << "Navigation-action has invalid declaration";
         return NavigationContextPointer(this);
     }
 
@@ -193,7 +193,7 @@ NavigationContextPointer AbstractNavigationContext::execute(const NavigationActi
     case NavigationAction::ExecuteKey:
         break;
     case NavigationAction::None:
-        qCDebug(LANGUAGE) << "Tried to execute an invalid action in navigation-widget" << endl;
+        qCDebug(LANGUAGE) << "Tried to execute an invalid action in navigation-widget";
         break;
     case NavigationAction::NavigateDeclaration:
     {
@@ -482,7 +482,7 @@ NavigationContextPointer AbstractNavigationContext::acceptLink(const QString& li
 
     const auto actionIt = d->m_links.constFind(link);
     if (actionIt == d->m_links.constEnd()) {
-        qCDebug(LANGUAGE) << "Executed unregistered link " << link << endl;
+        qCDebug(LANGUAGE) << "Executed unregistered link " << link;
         return NavigationContextPointer(this);
     }
 

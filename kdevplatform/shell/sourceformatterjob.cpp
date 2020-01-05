@@ -121,7 +121,7 @@ void SourceFormatterJob::formatFile(const QUrl& url)
 {
     // check mimetype
     QMimeType mime = QMimeDatabase().mimeTypeForUrl(url);
-    qCDebug(SHELL) << "Checking file " << url << " of mime type " << mime.name() << endl;
+    qCDebug(SHELL) << "Checking file " << url << " of mime type " << mime.name();
     auto formatter = m_sourceFormatterController->formatterForUrl(url, mime);
     if (!formatter) // unsupported mime type
         return;
@@ -129,12 +129,12 @@ void SourceFormatterJob::formatFile(const QUrl& url)
     // if the file is opened in the editor, format the text in the editor without saving it
     auto doc = ICore::self()->documentController()->documentForUrl(url);
     if (doc) {
-        qCDebug(SHELL) << "Processing file " << url << "opened in editor" << endl;
+        qCDebug(SHELL) << "Processing file " << url << "opened in editor";
         m_sourceFormatterController->formatDocument(doc, formatter, mime);
         return;
     }
 
-    qCDebug(SHELL) << "Processing file " << url << endl;
+    qCDebug(SHELL) << "Processing file " << url;
     auto getJob = KIO::storedGet(url);
     // TODO: make also async and use start() and integrate using setError and setErrorString.
     if (getJob->exec()) {

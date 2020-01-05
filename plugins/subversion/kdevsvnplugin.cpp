@@ -213,7 +213,7 @@ KDevelop::VcsJob* KDevSvnPlugin::commit(const QString& message, const QList<QUrl
                                         KDevelop::IBasicVersionControl::RecursionMode recursion)
 {
     auto* job = new SvnCommitJob(this);
-    qCDebug(PLUGIN_SVN) << "Committing locations:" << localLocations << endl;
+    qCDebug(PLUGIN_SVN) << "Committing locations:" << localLocations;
     job->setUrls(localLocations);
     job->setCommitMessage(message) ;
     job->setRecursive((recursion == KDevelop::IBasicVersionControl::Recursive));

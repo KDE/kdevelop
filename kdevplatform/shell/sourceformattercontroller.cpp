@@ -450,7 +450,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
             modeline.append(QStringLiteral("tab-width %1; ").arg(indentation.indentationTabWidth));
     }
 
-    qCDebug(SHELL) << "created modeline: " << modeline << endl;
+    qCDebug(SHELL) << "created modeline: " << modeline;
 
     QRegExp kateModeline(QStringLiteral("^\\s*//\\s*kate:(.*)$"));
 
@@ -460,7 +460,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
         QString line = is.readLine();
         // replace only the options we care about
         if (kateModeline.indexIn(line) >= 0) { // match
-            qCDebug(SHELL) << "Found a kate modeline: " << line << endl;
+            qCDebug(SHELL) << "Found a kate modeline: " << line;
             modelinefound = true;
             QString options = kateModeline.cap(1);
             const QStringList optionList = options.split(QLatin1Char(';'), QString::SkipEmptyParts);
@@ -471,7 +471,7 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
                     if(s.startsWith(QLatin1Char(' ')))
                         s.remove(0, 1);
                     os << s << ";";
-                    qCDebug(SHELL) << "Found unknown option: " << s << endl;
+                    qCDebug(SHELL) << "Found unknown option: " << s;
                 }
             }
             os << endl;

@@ -159,7 +159,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 
     proc.start();
     if (!proc.waitForStarted()) {
-        qCDebug(CUSTOMSCRIPT) << "Unable to start indent" << endl;
+        qCDebug(CUSTOMSCRIPT) << "Unable to start indent";
         return text;
     }
 
@@ -169,7 +169,7 @@ QString CustomScriptPlugin::formatSourceWithStyle(SourceFormatterStyle style, co
 
     proc.closeWriteChannel();
     if (!proc.waitForFinished()) {
-        qCDebug(CUSTOMSCRIPT) << "Process doesn't finish" << endl;
+        qCDebug(CUSTOMSCRIPT) << "Process doesn't finish";
         return text;
     }
 
