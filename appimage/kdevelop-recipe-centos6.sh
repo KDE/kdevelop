@@ -27,9 +27,9 @@ fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
 fi
-KF5_VERSION=v5.64.0
-PLASMA_VERSION=v5.17.3
-KDE_APPLICATIONS_VERSION=v19.08.3
+KF5_VERSION=v5.65.0
+PLASMA_VERSION=v5.17.4
+KDE_RELEASESERVICE_VERSION=v19.12.0
 GRANTLEE_VERSION=v5.1.0
 OKTETA_VERSION=v0.26.2
 
@@ -191,7 +191,7 @@ build_framework kcmutils
 (PATCH_FILE=$SCRIPT_DIR/knotifications_no_phonon.patch build_framework knotifications)
 build_framework knotifyconfig
 build_framework kdoctools
-(PATCH_FILE=$SCRIPT_DIR/breeze-icons_revert_qrcAlias_breakage_cmake_3.5.patch build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1)
+build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
 build_framework kpty
 build_framework kinit 
 fi
@@ -202,9 +202,9 @@ build_project kdecoration $PLASMA_VERSION # needed by breeze
 build_project breeze $PLASMA_VERSION
 
 # KDE Applications
-build_project libkomparediff2 $KDE_APPLICATIONS_VERSION
-build_project kate $KDE_APPLICATIONS_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE # for snippet plugin, see T3826
-build_project konsole $KDE_APPLICATIONS_VERSION
+build_project libkomparediff2 $KDE_RELEASESERVICE_VERSION
+(PATCH_FILE=$SCRIPT_DIR/kate-unbreak-cmake3.5.patch build_project kate $KDE_RELEASESERVICE_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE)
+build_project konsole $KDE_RELEASESERVICE_VERSION
 build_project okteta $OKTETA_VERSION -DBUILD_DESIGNERPLUGIN=OFF -DBUILD_OKTETAKASTENLIBS=OFF
 
 # Extra
