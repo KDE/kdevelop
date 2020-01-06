@@ -140,5 +140,8 @@
     <category>Development</category>
     <category>IDE</category>
   </categories>
+  <releases>
+    <release version="5.4.6" date="2020-01-06"/>
+  </releases>
   <update_contact>kfunk@kde.org</update_contact>
 </component>
