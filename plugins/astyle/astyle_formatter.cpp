@@ -46,7 +46,7 @@ QString AStyleFormatter::formatSource(const QString &text, const QString& leftCo
     init(&is);
 
     while(hasMoreLines())
-        os << QString::fromUtf8(nextLine().c_str()) << endl;
+        os << QString::fromUtf8(nextLine().c_str()) << QLatin1Char('\n');
 
     init(nullptr);
 

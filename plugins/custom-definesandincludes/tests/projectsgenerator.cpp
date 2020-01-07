@@ -175,7 +175,7 @@ IProject* ProjectsGenerator::GenerateSimpleProjectWithOutOfProjectFiles()
     QFile file(rootFolder.filePath(includePaths));
     createFile(file);
     QTextStream stream( &file );
-    stream << "." + QDir::separator() + "include1.h" << endl << rootFolder.canonicalPath() + QDir::separator() + "include2.h";
+    stream << "." + QDir::separator() + "include1.h\n" << rootFolder.canonicalPath() + QDir::separator() + "include2.h";
 
     return project;
 }

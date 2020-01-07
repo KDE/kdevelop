@@ -310,8 +310,8 @@ static QString findSessionId(const SessionInfos& availableSessionInfos, const QS
 
     if (projectAsSession.isEmpty())  {
         QTextStream qerr(stderr);
-        qerr << endl << i18n("Cannot open unknown session %1. See `--list-sessions` switch for available sessions or use `-n` to create a new one.",
-                             session) << endl;
+        qerr << QLatin1Char('\n') << i18n("Cannot open unknown session %1. See `--list-sessions` switch for available sessions or use `-n` to create a new one.",
+                             session) << QLatin1Char('\n');
     }
     return projectAsSession;
 }
@@ -525,8 +525,8 @@ int main( int argc, char *argv[] )
     if(parser.isSet(QStringLiteral("list-sessions")))
     {
         QTextStream qout(stdout);
-        qout << endl << ki18n("Available sessions (use '-s HASH' or '-s NAME' to open a specific one):").toString() << endl << endl;
-        qout << QStringLiteral("%1").arg(ki18n("Hash").toString(), -38) << '\t' << ki18n("Name: Opened Projects").toString() << endl;
+        qout << QLatin1Char('\n') << ki18n("Available sessions (use '-s HASH' or '-s NAME' to open a specific one):").toString() << QLatin1String("\n\n");
+        qout << QStringLiteral("%1").arg(ki18n("Hash").toString(), -38) << '\t' << ki18n("Name: Opened Projects").toString() << QLatin1Char('\n');
         const auto availableSessionInfos = KDevelop::SessionController::availableSessionInfos();
         for (const KDevelop::SessionInfo& si : availableSessionInfos) {
             if ( si.name.isEmpty() && si.projects.isEmpty() ) {
@@ -537,7 +537,7 @@ int main( int argc, char *argv[] )
             if(KDevelop::SessionController::isSessionRunning(si.uuid.toString()))
                 qout << "     " << i18n("[running]");
 
-            qout << endl;
+            qout << QLatin1Char('\n');
         }
         return 0;
     }
@@ -608,7 +608,7 @@ int main( int argc, char *argv[] )
 
         if(candidates.size() == 0)
         {
-            qerr << "no session available" << endl;
+            qerr << "no session available" << QLatin1Char('\n');
             return 1;
         }
 
@@ -617,7 +617,7 @@ int main( int argc, char *argv[] )
             session = candidates[0].uuid.toString();
         }else{
             for(int i = 0; i < candidates.size(); ++i)
-                qerr << "[" << i << "]: " << candidates[i].description << endl;
+                qerr << "[" << i << "]: " << candidates[i].description << QLatin1Char('\n');
 
             int chosen;
             std::cin >> chosen;
@@ -625,7 +625,7 @@ int main( int argc, char *argv[] )
             {
                 session = candidates[chosen].uuid.toString();
             }else{
-                qerr << "invalid selection" << endl;
+                qerr << "invalid selection" << QLatin1Char('\n');
                 return 1;
             }
         }
@@ -642,7 +642,7 @@ int main( int argc, char *argv[] )
     if ( parser.isSet(QStringLiteral("debug")) ) {
         if ( debugArgs.isEmpty() ) {
             QTextStream qerr(stderr);
-            qerr << endl << i18nc("@info:shell", "Specify the executable you want to debug.") << endl;
+            qerr << QLatin1Char('\n') << i18nc("@info:shell", "Specify the executable you want to debug.") << QLatin1Char('\n');
             return 1;
         }
 
@@ -651,7 +651,7 @@ int main( int argc, char *argv[] )
             executableFileInfo = QStandardPaths::findExecutable(debugArgs.first());
             if (!executableFileInfo.exists()) {
                 QTextStream qerr(stderr);
-                qerr << endl << i18nc("@info:shell", "Specified executable does not exist.") << endl;
+                qerr << QLatin1Char('\n') << i18nc("@info:shell", "Specified executable does not exist.") << QLatin1Char('\n');
                 return 1;
             }
         }
@@ -665,7 +665,7 @@ int main( int argc, char *argv[] )
         for (const KDevelop::SessionInfo& si : availableSessionInfos) {
             if ( session == si.name ) {
                 QTextStream qerr(stderr);
-                qerr << endl << i18n("A session with the name %1 exists already. Use the -s switch to open it.", session) << endl;
+                qerr << QLatin1Char('\n') << i18n("A session with the name %1 exists already. Use the -s switch to open it.", session) << QLatin1Char('\n');
                 return 1;
             }
         }
@@ -681,19 +681,19 @@ int main( int argc, char *argv[] )
         auto si = findSessionInList(availableSessionInfos, session);
         if (!si) {
             QTextStream qerr(stderr);
-            qerr << endl << i18n("No session with the name %1 exists.", session) << endl;
+            qerr << QLatin1Char('\n') << i18n("No session with the name %1 exists.", session) << QLatin1Char('\n');
             return 1;
         }
 
         auto sessionLock = KDevelop::SessionController::tryLockSession(si->uuid.toString());
         if (!sessionLock.lock) {
             QTextStream qerr(stderr);
-            qerr << endl << i18n("Could not lock session %1 for deletion.", session) << endl;
+            qerr << QLatin1Char('\n') << i18n("Could not lock session %1 for deletion.", session) << QLatin1Char('\n');
             return 1;
         }
         KDevelop::SessionController::deleteSessionFromDisk(sessionLock.lock);
         QTextStream qout(stdout);
-        qout << endl << i18n("Session with name %1 was successfully removed.", session) << endl;
+        qout << QLatin1Char('\n') << i18n("Session with name %1 was successfully removed.", session) << QLatin1Char('\n');
         return 0;
     }
 
@@ -797,7 +797,7 @@ int main( int argc, char *argv[] )
         }
         if (!type) {
             QTextStream qerr(stderr);
-            qerr << endl << i18n("Cannot find native launch configuration type") << endl;
+            qerr << QLatin1Char('\n') << i18n("Cannot find native launch configuration type") << QLatin1Char('\n');
             return 1;
         }
 
@@ -817,7 +817,7 @@ int main( int argc, char *argv[] )
             }
             if (launcher.second.isEmpty()) {
                 QTextStream qerr(stderr);
-                qerr << endl << i18n("Cannot find launcher %1", parser.value(debugStr)) << endl;
+                qerr << QLatin1Char('\n') << i18n("Cannot find launcher %1", parser.value(debugStr)) << QLatin1Char('\n');
                 return 1;
             }
             KDevelop::ILaunchConfiguration* ilaunch = core->runController()->createLaunchConfiguration(type, launcher, nullptr, launchName);

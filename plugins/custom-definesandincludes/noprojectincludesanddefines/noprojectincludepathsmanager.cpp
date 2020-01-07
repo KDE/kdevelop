@@ -123,7 +123,7 @@ bool NoProjectIncludePathsManager::writeIncludePaths(const QString& storageDirec
     if (f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         QTextStream out(&f);
         for (const auto& customPath : includePaths) {
-            out << customPath << endl;
+            out << customPath << QLatin1Char('\n');
         }
         if (includePaths.isEmpty()) {
             removeSettings(storageDirectory);
