@@ -31,9 +31,7 @@
 #include <QFile>
 #include <QDir>
 
-using namespace KDevelop;
-
-namespace {
+namespace KDevelop {
 
 QString lockFileForSession( const QString& id )
 {
@@ -53,8 +51,6 @@ void forceRemoveLockfile(const QString& lockFilename)
     if( QFile::exists( lockFilename ) ) {
         QFile::remove( lockFilename );
     }
-}
-
 }
 
 TryLockSessionResult SessionLock::tryLockSession(const QString& sessionId, bool doLocking)
@@ -221,4 +217,6 @@ QString SessionLock::handleLockedSession(const QString& sessionName, const QStri
     }
 
     return QString();
+}
+
 }

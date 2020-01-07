@@ -68,6 +68,13 @@ template <class SessionT, class TokenStreamT, class TokenT, class LexerT,
     class StartAstT, class DebugVisitorT, TokenTextFunc TokenTextT>
 class DebugLanguageParserHelper
 {
+    using TextStreamFunction = QTextStream& (*)(QTextStream&);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    static constexpr TextStreamFunction endl = Qt::endl;
+#else
+    static constexpr TextStreamFunction endl = ::endl;
+#endif
+
 public:
     DebugLanguageParserHelper(const bool printAst, const bool printTokens)
         : m_printAst(printAst)
@@ -227,7 +234,11 @@ int initAndRunParser(KAboutData& aboutData, int argc, char* argv[])
         if (fileName == "-") {
 #ifndef Q_OS_WIN
             if (isatty(STDIN_FILENO)) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+                qerr << "no STDIN given" << Qt::endl;
+#else
                 qerr << "no STDIN given" << endl;
+#endif
                 return 255;
             }
 #endif

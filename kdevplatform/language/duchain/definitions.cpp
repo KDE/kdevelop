@@ -27,6 +27,16 @@
 #include "serialization/itemrepository.h"
 
 namespace KDevelop {
+
+using TextStreamFunction = QTextStream& (*)(QTextStream&);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+constexpr TextStreamFunction endl = Qt::endl;
+#else
+constexpr TextStreamFunction endl = ::endl;
+#endif
+
+
+
 DEFINE_LIST_MEMBER_HASH(DefinitionsItem, definitions, IndexedDeclaration)
 
 class DefinitionsItem

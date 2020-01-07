@@ -38,8 +38,6 @@
 #include <editor/rangeinrevision.h>
 #include <editor/documentrange.h>
 
-using namespace KDevelop;
-
 namespace {
 QDebug fromTextStream(const QTextStream& out)
 {
@@ -50,6 +48,18 @@ QDebug fromTextStream(const QTextStream& out)
                out.string()
     };
 }
+
+}
+
+namespace KDevelop {
+
+using TextStreamFunction = QTextStream& (*)(QTextStream&);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+constexpr TextStreamFunction endl = Qt::endl;
+#else
+constexpr TextStreamFunction endl = ::endl;
+#endif
+
 
 QString typeToString(DUContext::ContextType type)
 {
@@ -66,9 +76,8 @@ QString typeToString(DUContext::ContextType type)
     Q_ASSERT(false);
     return QString();
 }
-}
 
-class KDevelop::DUChainDumperPrivate
+class DUChainDumperPrivate
 {
 public:
     DUChainDumperPrivate()
@@ -223,4 +232,6 @@ void DUChainDumper::dump(DUContext* context, int allowedDepth)
 {
     QTextStream out(stdout);
     dump(context, allowedDepth, out);
+}
+
 }

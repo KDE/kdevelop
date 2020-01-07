@@ -29,6 +29,13 @@ using namespace KDevelop;
 using namespace KDevelopUtils;
 
 class QmlParser {
+    using TextStreamFunction = QTextStream& (*)(QTextStream&);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    static constexpr TextStreamFunction endl = Qt::endl;
+#else
+    static constexpr TextStreamFunction endl = ::endl;
+#endif
+
 public:
     QmlParser(const bool printAst, const bool printTokens)
       : m_printAst(printAst), m_printTokens(printTokens)

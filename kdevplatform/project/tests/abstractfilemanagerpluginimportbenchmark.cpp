@@ -48,6 +48,13 @@ using namespace KDevelop;
 
 namespace KDevelop {
 
+using TextStreamFunction = QTextStream& (*)(QTextStream&);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+constexpr TextStreamFunction endl = Qt::endl;
+#else
+constexpr TextStreamFunction endl = ::endl;
+#endif
+
 // wrap the ProjectController to make its addProject() method public
 class ProjectControllerWrapper : public ProjectController
 {
@@ -150,7 +157,7 @@ int main(int argc, char** argv)
     auto manager = new AbstractFileManagerPlugin({}, core);
 
     const char *kdwMethod[] = {"FAM", "Inotify", "Stat", "QFSWatch"};
-    qout << "KDirWatch backend: " << kdwMethod[KDirWatch().internalMethod()] << endl;
+    qout << "KDirWatch backend: " << kdwMethod[KDirWatch().internalMethod()] << KDevelop::endl;
 
     QList<AbstractFileManagerPluginImportBenchmark*> benchmarks;
 

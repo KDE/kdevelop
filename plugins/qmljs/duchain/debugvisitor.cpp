@@ -169,6 +169,11 @@ void DebugVisitor::printNode(QmlJS::AST::Node* node, Position position)
     qout << indent() << stringForAstKind(node->kind)
          << " [(" << start.startLine << ", " << start.startColumn << "), "
          << "(" << end.startLine << ", " << (end.startColumn + end.length) << ")]"
-         << " \"" << m_session->symbolAt(location) << "\"" << endl;
+         << " \"" << m_session->symbolAt(location) << "\""
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+         << Qt::endl;
+#else
+         << endl;
+#endif
 }
 

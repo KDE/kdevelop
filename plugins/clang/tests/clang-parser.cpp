@@ -32,6 +32,13 @@ using namespace KDevelop;
 using namespace KDevelopUtils;
 
 class ClangParser {
+    using TextStreamFunction = QTextStream& (*)(QTextStream&);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    static constexpr TextStreamFunction endl = Qt::endl;
+#else
+    static constexpr TextStreamFunction endl = ::endl;
+#endif
+
 public:
     ClangParser(const bool printAst, const bool printTokens)
       : m_session({})
