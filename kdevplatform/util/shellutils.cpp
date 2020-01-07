@@ -36,8 +36,10 @@ namespace KDevelop {
 
 using TextStreamFunction = QTextStream& (*)(QTextStream&);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+constexpr TextStreamFunction flush = Qt::flush;
 constexpr TextStreamFunction endl = Qt::endl;
 #else
+constexpr TextStreamFunction flush = ::flush;
 constexpr TextStreamFunction endl = ::endl;
 #endif
 

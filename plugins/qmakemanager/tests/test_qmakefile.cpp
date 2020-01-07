@@ -104,7 +104,7 @@ void TestQMakeFile::varResolution()
     tmpfile.open();
     QTextStream stream(&tmpfile);
     stream << fileContents;
-    stream << flush;
+    stream.flush();
     tmpfile.close();
 
     QMakeFile file(tmpfile.fileName());
@@ -184,7 +184,7 @@ void TestQMakeFile::libTarget()
     tmpfile.open();
     QTextStream stream(&tmpfile);
     stream << "TARGET = " << target << "\nTEMPLATE = lib\n";
-    stream << flush;
+    stream.flush();
     tmpfile.close();
 
     QMakeProjectFile file(tmpfile.fileName());
@@ -220,7 +220,7 @@ void TestQMakeFile::defines()
     tmpfile.open();
     QTextStream stream(&tmpfile);
     stream << fileContents;
-    stream << flush;
+    stream.flush();
     tmpfile.close();
 
     QMakeProjectFile file(tmpfile.fileName());
