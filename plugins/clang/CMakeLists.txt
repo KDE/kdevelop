@@ -99,7 +99,7 @@ PRIVATE
 )
 
 if (HAVE_DLFCN)
-    target_link_libraries(KDevClangPrivate LINK_PRIVATE ${CMAKE_DL_LIBS})
+    target_link_libraries(KDevClangPrivate PRIVATE ${CMAKE_DL_LIBS})
 endif()
 
 install(DIRECTORY duchain/wrappedQtHeaders DESTINATION ${KDE_INSTALL_DATADIR}/kdevclangsupport

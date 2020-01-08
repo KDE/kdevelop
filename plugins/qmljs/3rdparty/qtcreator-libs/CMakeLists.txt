@@ -56,7 +56,7 @@ add_library(kdevqtc-qmlsupport STATIC
 
 if (APPLE) 
     target_sources(kdevqtc-qmlsupport PRIVATE utils/fileutils_mac.mm)
-    target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE "-framework Foundation" )
+    target_link_libraries(kdevqtc-qmlsupport PRIVATE "-framework Foundation" )
 endif()
 
 # silence warnings which won't be fixed in this 3rd-party code copy, to keep diff small
@@ -82,12 +82,11 @@ target_include_directories(kdevqtc-qmlsupport SYSTEM PUBLIC ${CMAKE_CURRENT_SOUR
 # optional.hpp needs -fexceptions
 # (otherwise: plugins/qmljs/3rdparty/qtcreator-libs/3rdparty/optional/optional.hpp:561:94: error: exception handling disabled, use -fexceptions to enable)
 kde_target_enable_exceptions(kdevqtc-qmlsupport PRIVATE)
-target_link_libraries(kdevqtc-qmlsupport LINK_PRIVATE
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
-    Qt5::Network
-    Qt5::Xml
+target_link_libraries(kdevqtc-qmlsupport
+    PRIVATE
+        Qt5::Widgets
+        Qt5::Network
+        Qt5::Xml
 )
 set_target_properties(kdevqtc-qmlsupport PROPERTIES
     CXX_STANDARD 14

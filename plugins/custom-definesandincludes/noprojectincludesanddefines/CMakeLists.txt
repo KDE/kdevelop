@@ -11,9 +11,9 @@ add_library(kdevnoprojectincludesanddefines STATIC
     )
 
 target_link_libraries( kdevnoprojectincludesanddefines
-LINK_PRIVATE
-    KDev::Util
-    KDev::Language
+    PRIVATE
+        KDev::Util
+        KDev::Language
 )
 
 set_target_properties(kdevnoprojectincludesanddefines PROPERTIES POSITION_INDEPENDENT_CODE ON)

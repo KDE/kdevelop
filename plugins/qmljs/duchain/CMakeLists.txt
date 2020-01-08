@@ -27,14 +27,13 @@ add_library(kdevqmljsduchain STATIC
 generate_export_header(kdevqmljsduchain EXPORT_MACRO_NAME KDEVQMLJSDUCHAIN_EXPORT
                                         EXPORT_FILE_NAME duchainexport.h)
 target_link_libraries(kdevqmljsduchain
-    LINK_PRIVATE
-        Qt5::Core
-        KF5::I18n
-    LINK_PUBLIC
+    PUBLIC
+        kdevqtc-qmlsupport
         KDev::Language
         KDev::Util
         KDev::Project
-        kdevqtc-qmlsupport
+    PRIVATE
+        KF5::I18n
 )
 
 if(BUILD_TESTING)

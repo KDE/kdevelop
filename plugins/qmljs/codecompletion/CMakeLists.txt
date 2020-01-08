@@ -14,12 +14,13 @@ add_library(kdevqmljscompletion STATIC ${completion_SRCS})
 generate_export_header(kdevqmljscompletion EXPORT_MACRO_NAME KDEVQMLJSCOMPLETION_EXPORT
                                            EXPORT_FILE_NAME codecompletionexport.h)
 
-target_link_libraries(kdevqmljscompletion LINK_PRIVATE
-    KDev::Language
-    KDev::Interfaces
-    KDev::Project
-    kdevqmljsduchain
-    kdevqtc-qmlsupport
+target_link_libraries(kdevqmljscompletion
+    PRIVATE
+        kdevqmljsduchain
+        kdevqtc-qmlsupport
+        KDev::Language
+        KDev::Interfaces
+        KDev::Project
 )
 
 if(BUILD_TESTING)

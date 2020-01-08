@@ -30,10 +30,10 @@ endif()
 add_library(kdevqmakeparser STATIC ${kdevqmakeparser_SRCS} ${parser_GEN_SRCS})
 generate_export_header(kdevqmakeparser BASE_NAME parser EXPORT_MACRO_NAME KDEVQMAKEPARSER_EXPORT)
 target_link_libraries(kdevqmakeparser
-LINK_PUBLIC
-    KDev::Util
-LINK_PRIVATE
-    KF5::CoreAddons
-    KF5::KIOCore
+    PUBLIC
+        KDev::Util
+    PRIVATE
+        KF5::CoreAddons
+        KF5::KIOCore
 )
 target_include_directories(kdevqmakeparser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

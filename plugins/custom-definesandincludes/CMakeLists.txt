@@ -35,20 +35,23 @@ ki18n_wrap_ui(kdevdefinesandincludesmanager_SRCS
 kconfig_add_kcfg_files( kdevdefinesandincludesmanager_SRCS kcm_widget/customdefinesandincludes.kcfgc)
 
 kdevplatform_add_plugin(kdevdefinesandincludesmanager JSON kdevdefinesandincludesmanager.json SOURCES ${kdevdefinesandincludesmanager_SRCS})
-target_link_libraries( kdevdefinesandincludesmanager LINK_PRIVATE
+target_link_libraries( kdevdefinesandincludesmanager
+    PRIVATE
+        kdevnoprojectincludesanddefines
+        kdevcompilerprovider
         KDev::Project
         KDev::Util
         KDev::Language
-        kdevnoprojectincludesanddefines
-        kdevcompilerprovider)
+)
 
 option(BUILD_kdev_includepathsconverter "Build utility to modify include paths of a project from command line." ON)
 if(BUILD_kdev_includepathsconverter)
     add_executable(kdev_includepathsconverter includepathsconverter.cpp)
     ecm_mark_nongui_executable(kdev_includepathsconverter)
-    target_link_libraries(kdev_includepathsconverter LINK_PRIVATE
-        KDev::Project
-        kdevcompilerprovider
+    target_link_libraries(kdev_includepathsconverter
+        PRIVATE
+            kdevcompilerprovider
+            KDev::Project
     )
     install(TARGETS kdev_includepathsconverter ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 endif()
