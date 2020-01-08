@@ -17,29 +17,6 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-# TODO: Move to kdevplatform
-function(add_private_library target)
-    set(options)
-    set(oneValueArgs)
-    set(multiValueArgs SOURCES)
-    cmake_parse_arguments(KDEV_ADD_PRIVATE "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-
-    string(REPLACE "KDev" "" shortTargetName ${target})
-    if (${shortTargetName} STREQUAL ${target})
-        message(FATAL_ERROR "Target passed to add_private_library needs to start with \"KDev\", was \"${target}\"")
-    endif()
-
-    string(TOLOWER ${shortTargetName} shortTargetNameToLower)
-
-    add_library(${target} SHARED ${KDEV_ADD_PRIVATE_SOURCES})
-    generate_export_header(${target} EXPORT_FILE_NAME ${shortTargetNameToLower}export.h)
-    set_target_properties(${target} PROPERTIES
-        VERSION ${KDEV_PLUGIN_VERSION}
-        SOVERSION ${KDEV_PLUGIN_VERSION}
-    )
-    install(TARGETS ${target} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} LIBRARY NAMELINK_SKIP)
-endfunction()
-
 set(kdevclangprivate_SRCS
     clangsettings/clangsettingsmanager.cpp
     clangsettings/sessionsettings/sessionsettings.cpp
@@ -106,19 +83,19 @@ ki18n_wrap_ui(kdevclangprivate_SRCS
 
 kconfig_add_kcfg_files(kdevclangprivate_SRCS clangsettings/sessionsettings/sessionconfig.kcfgc)
 
-add_private_library(KDevClangPrivate SOURCES ${kdevclangprivate_SRCS})
+kdevelop_add_private_library(KDevClangPrivate SOURCES ${kdevclangprivate_SRCS})
 target_link_libraries(KDevClangPrivate
-LINK_PRIVATE
+PUBLIC
+    KDev::Language
+    KDev::Project
+    KDev::Util
+    Clang::clang
+PRIVATE
     Qt5::Core
     KF5::TextEditor
     KF5::ThreadWeaver
     KDev::DefinesAndIncludesManager
     KDev::Util
-LINK_PUBLIC
-    KDev::Language
-    KDev::Project
-    KDev::Util
-    Clang::clang
 )
 
 if (HAVE_DLFCN)

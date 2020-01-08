@@ -83,32 +83,53 @@ endif()
 
 kconfig_add_kcfg_files( cmakecommon_SRCS cmakebuilderconfig.kcfgc )
 ki18n_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
-add_library( kdevcmakecommon SHARED ${cmakecommon_SRCS} )
-target_link_libraries( kdevcmakecommon
-                        KF5::TextEditor KDev::Interfaces KDev::Project KDev::Util
-                        KDev::Language
-                        )
-generate_export_header(kdevcmakecommon EXPORT_FILE_NAME cmakecommonexport.h)
+kdevelop_add_private_library(KDevCMakeCommon SOURCES ${cmakecommon_SRCS})
+target_link_libraries(KDevCMakeCommon
+    PUBLIC
+        KDev::Interfaces
+        KDev::Project
+        KDev::Util
+        KDev::Language
+        KF5::TextEditor
+)
 
 ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
 add_library( kdevcmakemanagernosettings STATIC ${cmakemanager_SRCS})
-target_link_libraries( kdevcmakemanagernosettings KF5::KIOWidgets KDev::Util
-                        KDev::Interfaces kdevcmakecommon kdevmakefileresolver
-                        KDev::Project KDev::Language
-                        KDev::OutputView KF5::TextEditor Qt5::Concurrent)
+target_link_libraries(kdevcmakemanagernosettings
+    KDevCMakeCommon
+    kdevmakefileresolver
+    KDev::Util
+    KDev::Interfaces
+    KDev::Project
+    KDev::Language
+    KDev::OutputView
+    KF5::KIOWidgets
+    KF5::TextEditor
+    Qt5::Concurrent
+)
 
 kdevplatform_add_plugin(kdevcmakemanager JSON kdevcmakemanager.json SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
-target_link_libraries( kdevcmakemanager  KF5::KIOWidgets KDev::Util
-                        KDev::Interfaces kdevcmakecommon kdevmakefileresolver
-                        KDev::Project KDev::Language KDev::Shell
-                        KDev::OutputView KF5::TextEditor Qt5::Concurrent)
+target_link_libraries(kdevcmakemanager
+    KDevCMakeCommon
+    kdevmakefileresolver
+    KDev::Util
+    KDev::Interfaces
+    KDev::Project
+    KDev::Language
+    KDev::Shell
+    KDev::OutputView
+    KF5::KIOWidgets
+    KF5::TextEditor
+    Qt5::Concurrent
+)
 
 kdevplatform_add_plugin(kdevcmakedocumentation JSON kdevcmakedocumentation.json SOURCES ${cmakedoc_SRCS})
 target_link_libraries( kdevcmakedocumentation
-                        KDev::Interfaces kdevcmakecommon
-                        KDev::Project KDev::Language
-                        KDev::Documentation
-                        KF5::ItemModels
-                        KF5::TextEditor)
-
-install(TARGETS kdevcmakecommon ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
+    KDevCMakeCommon
+    KDev::Interfaces
+    KDev::Project
+    KDev::Language
+    KDev::Documentation
+    KF5::ItemModels
+    KF5::TextEditor
+)

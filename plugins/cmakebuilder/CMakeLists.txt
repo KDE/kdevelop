@@ -16,16 +16,13 @@ declare_qt_logging_category(cmakebuilder_SRCS
 )
 ki18n_wrap_ui(cmakebuilder_SRCS cmakebuilderpreferences.ui)
 kdevplatform_add_plugin(kdevcmakebuilder JSON kdevcmakebuilder.json SOURCES ${cmakebuilder_SRCS})
-target_link_libraries(
-    kdevcmakebuilder
-    kdevcmakecommon
-
-    KF5::KIOWidgets
-
+target_link_libraries(kdevcmakebuilder
+    KDevCMakeCommon
     KDev::Interfaces
     KDev::OutputView
     KDev::Util
     KDev::Shell
     KDev::Project
     KDev::IMakeBuilder
+    KF5::KIOWidgets
 )

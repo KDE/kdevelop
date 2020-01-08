@@ -9,9 +9,11 @@
 #                               TYPE LIBRARY|PLUGIN|APP [IDENTIFIER <id>] [CATEGORY_BASENAME <name>]
 #                               [HEADER <filename>] [DESCRIPTION <desc>])
 #   install_qt_logging_categories(TYPE LIBRARY|APP_PLUGIN)
+#   kdevelop_add_private_library(<target> SOURCES <source1> [<source2> [...]])
 #
 #=============================================================================
-# Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
+# Copyright 2018, 2020 Friedrich W. H. Kossebau <kossebau@kde.org>
+#           2007 Andreas Pakulat <apaku@gmx.de>
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.
@@ -21,6 +23,7 @@
 # See the License for more information.
 #=============================================================================
 
+include(CMakeParseArguments)
 
 # helper method to ensure consistent cache var names
 function(_varname_for_compile_flag_check_result _varname _flag )
@@ -312,4 +315,35 @@ function(install_qt_logging_categories)
     else()
         message(FATAL_ERROR "Unknown \"${ARGS_TYPE}\" with TYPE when calling declare_qt_logging_category().")
     endif()
+endfunction()
+
+# kdevelop_add_private_library(<target> SOURCES <source1> [<source2> [...]])
+function(kdevelop_add_private_library target)
+    set(options)
+    set(oneValueArgs)
+    set(multiValueArgs SOURCES)
+
+    cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    string(REPLACE "KDev" "" shortTargetName ${target})
+    if (${shortTargetName} STREQUAL ${target})
+        message(FATAL_ERROR "Target passed to kdevelop_add_private_library needs to start with \"KDev\", was \"${target}\"")
+    endif()
+
+    string(TOLOWER ${shortTargetName} shortTargetNameToLower)
+
+    add_library(${target} SHARED ${ARGS_SOURCES})
+    add_library(KDev::${shortTargetName} ALIAS ${target})
+
+    generate_export_header(${target} EXPORT_FILE_NAME ${shortTargetNameToLower}export.h)
+
+    target_include_directories(${target}
+        INTERFACE "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>" # useful for the "something.export.h" includes
+    )
+    set_target_properties(${target} PROPERTIES
+        VERSION ${KDEV_PLUGIN_VERSION}
+        SOVERSION ${KDEV_PLUGIN_VERSION}
+    )
+
+    install(TARGETS ${target} ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} LIBRARY NAMELINK_SKIP)
 endfunction()
