@@ -26,8 +26,6 @@ Boston, MA 02110-1301, USA.
 
 #include "isessionlock.h"
 
-class KAboutData;
-
 /**
  * The KDevelop namespace contains all classes provided by the KDevelop
  * platform libraries.
@@ -124,9 +122,6 @@ public:
 
     /** @return the runtime controller */
     Q_SCRIPTABLE virtual KDevelop::IRuntimeController* runtimeController() = 0;
-
-    /** @return the about data of the framework, different from the main about data which is created by the application */
-    virtual KAboutData aboutData() const = 0;
 
     /** @return true if the application is currently being shut down */
     virtual bool shuttingDown() const = 0;

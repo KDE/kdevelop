@@ -116,7 +116,6 @@ public Q_SLOTS:
     bool changingActiveView() const ;
 
     void configureNotifications();
-    void showAboutPlatform();
     void showLoadedPlugins();
 
     void toggleArea(bool b);

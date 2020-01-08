@@ -395,9 +395,9 @@ int main( int argc, char *argv[] )
                           i18n("Copyright 1999-%1, The KDevelop developers", QStringLiteral("2020")),
                           QString(), QStringLiteral("https://www.kdevelop.org/"));
     aboutData.setDesktopFileName(QStringLiteral("org.kde.kdevelop"));
-    aboutData.addAuthor( i18n("Kevin Funk"), i18n( "Co-maintainer, C++/Clang, QA, Windows Support" ), QStringLiteral("kfunk@kde.org") );
+    aboutData.addAuthor( i18n("Kevin Funk"), i18n( "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website" ), QStringLiteral("kfunk@kde.org") );
     aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Co-maintainer, AppImage, Python Support, User Interface improvements" ), QStringLiteral("svenbrauch@gmail.com") );
-    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "CMake Support, Run Support, Kross Support" ), QStringLiteral("aleixpol@gmail.com") );
+    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "CMake Support, Run Support, Kross Support" ), QStringLiteral("aleixpol@kde.org") );
     aboutData.addAuthor( i18n("Milian Wolff"), i18n( "C++/Clang, Generic manager, Webdevelopment Plugins, Snippets, Performance" ), QStringLiteral("mail@milianw.de") );
     aboutData.addAuthor( i18n("Olivier JG"), i18n( "C++/Clang, DUChain, Bug Fixes" ), QStringLiteral("olivier.jg@gmail.com") );
     aboutData.addAuthor( i18n("Andreas Pakulat"), i18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), QStringLiteral("apaku@gmx.de") );

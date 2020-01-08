@@ -89,40 +89,10 @@ namespace KDevelop {
 
 Core *Core::m_self = nullptr;
 
-KAboutData createAboutData()
-{
-    KAboutData aboutData( QStringLiteral("kdevplatform"),
-                          i18n("KDevelop Platform"), QStringLiteral(KDEVPLATFORM_VERSION_STRING),
-                          i18n("Development Platform for IDE-like Applications"),
-                          KAboutLicense::LGPL_V2,
-                          i18n("Copyright 2004-%1, The KDevelop developers", QStringLiteral("2020")),
-                          QString(), QStringLiteral("https://www.kdevelop.org/"));
-
-    aboutData.addAuthor( i18n("Andreas Pakulat"), i18n( "Architecture, VCS Support, Project Management Support, QMake Projectmanager" ), QStringLiteral("apaku@gmx.de") );
-    aboutData.addAuthor( i18n("Alexander Dymo"), i18n( "Architecture, Sublime UI, Ruby support" ), QStringLiteral("adymo@kdevelop.org") );
-    aboutData.addAuthor( i18n("David Nolden"), i18n( "Definition-Use Chain, C++ Support" ), QStringLiteral("david.nolden.kdevelop@art-master.de") );
-    aboutData.addAuthor( i18n("Aleix Pol Gonzalez"), i18n( "CMake Support, Run Support, Kross Support" ), QStringLiteral("aleixpol@kde.org") );
-    aboutData.addAuthor( i18n("Vladimir Prus"), i18n( "GDB integration" ), QStringLiteral("ghost@cs.msu.su") );
-    aboutData.addAuthor( i18n("Hamish Rodda"), i18n( "Text editor integration, definition-use chain" ), QStringLiteral("rodda@kde.org") );
-
-    aboutData.addCredit( i18n("Matt Rogers"), QString(), QStringLiteral("mattr@kde.org"));
-    aboutData.addCredit( i18n("Cédric Pasteur"), i18n("astyle and indent support"), QStringLiteral("cedric.pasteur@free.fr") );
-    aboutData.addCredit( i18n("Evgeniy Ivanov"), i18n("Distributed VCS, Git, Mercurial"), QStringLiteral("powerfox@kde.ru") );
-    //Veritas is outside in playground currently.
-    //aboutData.addCredit( i18n("Manuel Breugelmanns"), i18n( "Veritas, QTest integration"), "mbr.nxi@gmail.com" );
-    aboutData.addCredit( i18n("Robert Gruber") , i18n( "SnippetPart, debugger and usability patches" ), QStringLiteral("rgruber@users.sourceforge.net") );
-    aboutData.addCredit( i18n("Dukju Ahn"), i18n( "Subversion plugin, Custom Make Manager, Overall improvements" ), QStringLiteral("dukjuahn@gmail.com") );
-    aboutData.addAuthor( i18n("Niko Sams"), i18n( "GDB integration, Webdevelopment Plugins" ), QStringLiteral("niko.sams@gmail.com") );
-    aboutData.addAuthor( i18n("Milian Wolff"), i18n( "Generic manager, Webdevelopment Plugins, Snippets, Performance" ), QStringLiteral("mail@milianw.de") );
-    aboutData.addAuthor( i18n("Kevin Funk"), i18n( "Co-maintainer, C++/Clang, QA, Windows Support, Performance, Website" ), QStringLiteral("kfunk@kde.org") );
-    aboutData.addAuthor( i18n("Sven Brauch"), i18n( "Co-maintainer, AppImage, Python Support, User Interface improvements" ), QStringLiteral("svenbrauch@gmx.de") );
-    aboutData.addAuthor( i18n("Friedrich W. H. Kossebau"), QString(), QStringLiteral("kossebau@kde.org") );
-
-    return aboutData;
-}
-
-CorePrivate::CorePrivate(Core *core):
-    m_aboutData( createAboutData() ), m_core(core), m_cleanedUp(false), m_shuttingDown(false)
+CorePrivate::CorePrivate(Core *core)
+    : m_core(core)
+    , m_cleanedUp(false)
+    , m_shuttingDown(false)
 {
 }
 
@@ -444,11 +414,6 @@ void Core::cleanup()
 
     d->m_cleanedUp = true;
     emit shutdownCompleted();
-}
-
-KAboutData Core::aboutData() const
-{
-    return d->m_aboutData;
 }
 
 IUiController *Core::uiController()

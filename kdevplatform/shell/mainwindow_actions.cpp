@@ -22,8 +22,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QApplication>
 
-#include <KAboutData>
-#include <KAboutApplicationDialog>
 #include <KConfigGroup>
 #include <KNotifyConfigWidget>
 #include <KToggleFullScreenAction>
@@ -203,12 +201,6 @@ void MainWindowPrivate::quitAll()
 void MainWindowPrivate::configureNotifications()
 {
     KNotifyConfigWidget::configure(m_mainWindow);
-}
-
-void MainWindowPrivate::showAboutPlatform()
-{
-    ScopedDialog<KAboutApplicationDialog> dlg(Core::self()->aboutData(), m_mainWindow );
-    dlg->exec();
 }
 
 void MainWindowPrivate::showLoadedPlugins()

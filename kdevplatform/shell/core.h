@@ -24,8 +24,6 @@
 #include "shellexport.h"
 #include <interfaces/icore.h>
 
-class KAboutData;
-
 namespace KDevelop {
 
 class UiController;
@@ -87,8 +85,6 @@ public:
     IRuntimeController* runtimeController() override;
     ISession *activeSession() override;
     ISessionLock::Ptr activeSessionLock() override;
-
-    KAboutData aboutData() const override;
 
     /// The following methods may only be used within the shell.
 
