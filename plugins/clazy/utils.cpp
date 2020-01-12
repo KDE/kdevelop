@@ -20,14 +20,16 @@
 
 #include "utils.h"
 
+// KDevPlatform
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
-
+// KF
 #include <KLocalizedString>
-
+// Qt
 #include <QFile>
 #include <QRegularExpression>
+#include <QVector>
 
 namespace Clazy
 {
