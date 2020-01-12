@@ -23,69 +23,18 @@
 #include <interfaces/icore.h>
 #include <interfaces/iproject.h>
 #include <interfaces/iprojectcontroller.h>
-#include <project/interfaces/ibuildsystemmanager.h>
-#include <project/projectmodel.h>
 
 #include <KLocalizedString>
 
 #include <QFile>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QJsonObject>
 #include <QRegularExpression>
 
 namespace Clazy
 {
 
-QString prettyPathName(const QString& path)
+QString prettyPathName(const QUrl& path)
 {
-    return KDevelop::ICore::self()->projectController()->prettyFileName(
-        QUrl::fromLocalFile(path),
-        KDevelop::IProjectController::FormatPlain);
-}
-
-QStringList compileCommandsFiles(const QString& jsonFilePath, QString& error)
-{
-    QStringList paths;
-
-    QFile jsonFile(jsonFilePath);
-    if (!jsonFile.open(QFile::ReadOnly | QFile::Text)) {
-        error = i18n("Unable to open compile commands file '%1' for reading", jsonFilePath);
-        return paths;
-    }
-
-    QJsonParseError jsonError;
-    auto document = QJsonDocument::fromJson(jsonFile.readAll(), &jsonError);
-
-    if (jsonError.error) {
-        error = i18n("JSON error during parsing compile commands file '%1': %2", jsonFilePath, jsonError.errorString());
-        return paths;
-    }
-
-    if (!document.isArray()) {
-        error = i18n("JSON error during parsing compile commands file '%1': document is not an array", jsonFilePath);
-        return paths;
-    }
-
-    const QString KEY_FILE = QStringLiteral("file");
-
-    const auto array = document.array();
-    for (const auto& value : array) {
-        if (!value.isObject()) {
-            continue;
-        }
-
-        const QJsonObject entry = value.toObject();
-        if (entry.contains(KEY_FILE)) {
-            auto path = entry[KEY_FILE].toString();
-            if (QFile::exists(path))
-            {
-                paths += path;
-            }
-        }
-    }
-
-    return paths;
+    return KDevelop::ICore::self()->projectController()->prettyFileName(path, KDevelop::IProjectController::FormatPlain);
 }
 
 // Very simple Markdown parser/converter. Does not provide full Markdown language support and

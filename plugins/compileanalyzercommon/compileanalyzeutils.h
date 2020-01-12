@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
+ * Copyright 2018,2020 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,22 +19,27 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLANGTIDY_UTILS_H
-#define CLANGTIDY_UTILS_H
+#ifndef COMPILEANALYZER_COMPILEANALYZEUTILS_H
+#define COMPILEANALYZER_COMPILEANALYZEUTILS_H
 
-namespace KDevelop { class Path; }
+// lib
+#include <compileanalyzercommonexport.h>
+
 class QUrl;
 class QString;
 class QStringList;
 
-namespace ClangTidy
+namespace KDevelop
 {
+class Path;
 
 namespace Utils
 {
 
-QString prettyPathName(const QString& path);
+KDEVCOMPILEANALYZERCOMMON_EXPORT
 QString findExecutable(const QString& fallbackExecutablePath);
+
+KDEVCOMPILEANALYZERCOMMON_EXPORT
 QStringList filesFromCompilationDatabase(const KDevelop::Path& buildPath,
                                          const QUrl& urlToCheck, bool allFiles,
                                          QString& error);
@@ -42,4 +47,5 @@ QStringList filesFromCompilationDatabase(const KDevelop::Path& buildPath,
 }
 
 }
+
 #endif

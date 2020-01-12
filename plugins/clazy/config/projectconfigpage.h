@@ -21,6 +21,9 @@
 #ifndef KDEVCLAZY_PROJECT_CONFIG_PAGE_H
 #define KDEVCLAZY_PROJECT_CONFIG_PAGE_H
 
+// plugin
+#include "ui_projectconfigpage.h"
+// KDevPlatform
 #include <interfaces/configpage.h>
 
 namespace KDevelop { class IProject; }
@@ -28,8 +31,8 @@ namespace KDevelop { class IProject; }
 namespace Clazy
 {
 
-class JobParameters;
 class Plugin;
+class ChecksWidget;
 
 class ProjectConfigPage : public KDevelop::ConfigPage
 {
@@ -42,8 +45,12 @@ public:
     QIcon icon() const override;
     QString name() const override;
 
+private Q_SLOTS:
+    void updateCommandLine();
+
 private:
-    QScopedPointer<JobParameters> m_parameters;
+    Ui::ProjectConfigPage m_ui;
+    ChecksWidget* m_checksWidget;
 };
 
 }

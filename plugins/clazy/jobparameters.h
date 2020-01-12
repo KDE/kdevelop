@@ -22,7 +22,7 @@
 #define KDEVCLAZY_JOB_PARAMETERS_H
 
 #include <QObject>
-#include <QStringList>
+#include <QString>
 #include <QUrl>
 
 namespace KDevelop { class IProject; }
@@ -56,68 +56,6 @@ protected:
     QString m_error;
 };
 
-class JobParameters : public JobGlobalParameters
-{
-    Q_OBJECT
-
-public:
-    explicit JobParameters(KDevelop::IProject* project);
-    JobParameters(KDevelop::IProject* project, const QString& checkPath);
-    ~JobParameters() override = default;
-
-    static QString defaultChecks();
-
-    QString checkPath() const;
-    const QStringList& sources() const;
-
-    QString projectBuildPath() const;
-
-    QStringList commandLine() const;
-
-    void setChecks(const QString& checks);
-
-    void setOnlyQt(bool onlyQt);
-    void setQtDeveloper(bool qtDeveloper);
-    void setQt4Compat(bool qt4Compat);
-    void setVisitImplicitCode(bool visitImplicitCode);
-
-    void setIgnoreIncludedFiles(bool ignoreIncludedFiles);
-    void setHeaderFilter(const QString& headerFilter);
-
-    void setEnableAllFixits(bool enableAllFixits);
-    void setNoInplaceFixits(bool noInplaceFixits);
-
-    void setExtraAppend(const QString& extraAppend);
-    void setExtraPrepend(const QString& extraPrepend);
-    void setExtraClazy(const QString& extraClazy);
-
-private:
-    template<typename T>
-    void setValue(T& currentValue, const T& newValue);
-
-private:
-    QString m_checkPath;
-    QStringList m_sources;
-
-    QString m_projectBuildPath;
-
-    QString m_checks;
-
-    bool m_onlyQt;
-    bool m_qtDeveloper;
-    bool m_qt4Compat;
-    bool m_visitImplicitCode;
-
-    bool m_ignoreIncludedFiles;
-    QString m_headerFilter;
-
-    bool m_enableAllFixits;
-    bool m_noInplaceFixits;
-
-    QString m_extraAppend;
-    QString m_extraPrepend;
-    QString m_extraClazy;
-};
-
 }
+
 #endif

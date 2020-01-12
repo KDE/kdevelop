@@ -21,6 +21,9 @@
 #ifndef KDEVCLAZY_JOB_H
 #define KDEVCLAZY_JOB_H
 
+// CompileAnalyzer
+#include <compileanalyzejob.h>
+// KDevPlatform
 #include <interfaces/iproblem.h>
 #include <outputview/outputexecutejob.h>
 
@@ -30,20 +33,50 @@ namespace Clazy
 {
 
 class ChecksDB;
-class JobParameters;
 
-class Job : public KDevelop::OutputExecuteJob
+class JobParameters
+{
+public:
+    QString executablePath;
+    QUrl url;
+    QStringList filePaths;
+    QString buildDir;
+
+    QString checks;
+
+    bool onlyQt = false;
+    bool qtDeveloper = false;
+    bool qt4Compat = false;
+    bool visitImplicitCode = false;
+    bool ignoreIncludedFiles = false;
+
+    QString headerFilter;
+
+    bool enableAllFixits = false;
+    bool noInplaceFixits = false;
+
+    QString extraAppend;
+    QString extraPrepend;
+    QString extraClazy;
+
+    bool verboseOutput = false;
+    int parallelJobCount = 1;
+};
+
+class Job : public KDevelop::CompileAnalyzeJob
 {
     Q_OBJECT
+
+protected:
+    /// Empty constructor which creates invalid Job instance. Used only for testing
+    Job();
 
 public:
     Job(const JobParameters& params, QSharedPointer<const ChecksDB> db);
     ~Job() override;
 
+public: // KJob API
     void start() override;
-
-Q_SIGNALS:
-    void problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems);
 
 protected Q_SLOTS:
     void postProcessStdout(const QStringList& lines) override;
@@ -53,14 +86,8 @@ protected Q_SLOTS:
     void childProcessError(QProcess::ProcessError processError) override;
 
 protected:
-    /// Empty constructor which creates invalid Job instance. Used only for testing
-    Job();
-
-    int m_totalCount = 0;
-    int m_finishedCount = 0;
-
-private:
-    QString buildMakefile(const JobParameters& params);
+    void processStdoutLines(const QStringList& lines);
+    void processStderrLines(const QStringList& lines);
 
 private:
     QSharedPointer<const ChecksDB> m_db;

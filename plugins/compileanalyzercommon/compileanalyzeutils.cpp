@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
+ * Copyright 2018,2020 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,13 +19,11 @@
  * 02110-1301, USA.
  */
 
-#include "utils.h"
+#include "compileanalyzeutils.h"
 
-// plugin
+// lib
 #include <debug.h>
 // KDevPlatform
-#include <interfaces/icore.h>
-#include <interfaces/iprojectcontroller.h>
 #include <util/path.h>
 // KF
 #include <KLocalizedString>
@@ -33,23 +31,16 @@
 #include <QStandardPaths>
 #include <QUrl>
 #include <QFile>
+#include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
 
-namespace ClangTidy
+namespace KDevelop
 {
 
 namespace Utils
 {
-
-QString prettyPathName(const QString& path)
-{
-    auto* projectController = KDevelop::ICore::self()->projectController();
-    return projectController->prettyFileName(QUrl::fromLocalFile(path),
-                                             KDevelop::IProjectController::FormatPlain);
-}
-
 
 QString findExecutable(const QString& fallbackExecutablePath)
 {
@@ -72,6 +63,7 @@ QStringList filesFromCompilationDatabase(const KDevelop::Path& buildPath,
 
     const auto pathToCheck = urlToCheck.toLocalFile();
     if (pathToCheck.isEmpty()) {
+        error = i18n("Nothing to check: compilation database file '%1' contains no matching items.", commandsFilePath);
         return result;
     }
 
@@ -94,6 +86,10 @@ QStringList filesFromCompilationDatabase(const KDevelop::Path& buildPath,
         return result;
     }
 
+    const auto pathToCheckInfo = QFileInfo(pathToCheck);
+    const bool isPathToCheckAFile = pathToCheckInfo.isFile();
+    const auto canonicalPathToCheck = pathToCheckInfo.canonicalFilePath();
+
     const auto fileDataArray = commandsDocument.array();
     for (const auto& value : fileDataArray) {
         if (!value.isObject()) {
@@ -103,20 +99,30 @@ QStringList filesFromCompilationDatabase(const KDevelop::Path& buildPath,
         const auto entry = value.toObject();
         const auto it = entry.find(QLatin1String("file"));
         if (it != entry.end()) {
-            auto path = it->toString();
-            if (QFile::exists(path)) {
+            // using the original path from the commands file
+            // but matching the canonical ones
+            const auto path = it->toString();
+            const auto pathInfo = QFileInfo(path);
+            if (pathInfo.exists()) {
                 if (allFiles) {
                     result += path;
                 } else {
-                    if (path == pathToCheck) {
-                        result = QStringList{path};
-                        break;
-                    } else if (path.startsWith(pathToCheck)) {
+                    const auto canonicalPath = pathInfo.canonicalFilePath();
+                    if (isPathToCheckAFile) {
+                        if (canonicalPath == canonicalPathToCheck) {
+                            result = QStringList{path};
+                            break;
+                        }
+                    } else if (canonicalPath.startsWith(canonicalPathToCheck)) {
                         result.append(path);
                     }
                 }
             }
         }
+    }
+
+    if (result.isEmpty()) {
+        error = i18n("Nothing to check: compilation database file '%1' contains no matching items.", commandsFilePath);
     }
 
     return result;

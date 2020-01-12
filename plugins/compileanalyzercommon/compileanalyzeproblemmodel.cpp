@@ -2,7 +2,7 @@
  * This file is part of KDevelop
  *
  * Copyright 2018 Anton Anikin <anton@anikin.xyz>
- * Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
+ * Copyright 2018, 2020 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,70 +20,41 @@
  * 02110-1301, USA.
  */
 
-#include "problemmodel.h"
+#include "compileanalyzeproblemmodel.h"
 
-// plugin
-#include "utils.h"
-#include "plugin.h"
 // KDevPlatform
+#include <interfaces/icore.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iprojectcontroller.h>
 #include <language/editor/documentrange.h>
 // KF
 #include <KLocalizedString>
 
-namespace ClangTidy
+namespace KDevelop
 {
 
-ProblemModel::ProblemModel(Plugin* plugin, QObject* parent)
+CompileAnalyzeProblemModel::CompileAnalyzeProblemModel(const QString& toolName, QObject* parent)
     : KDevelop::ProblemModel(parent)
-    , m_plugin(plugin)
+    , m_toolName(toolName)
+    , m_pathLocation(KDevelop::DocumentRange::invalid())
 {
-    setFeatures(CanDoFullUpdate |
-                ScopeFilter |
-                SeverityFilter |
-                Grouping |
-                CanByPassScopeFilter);
 }
 
-ProblemModel::~ProblemModel() = default;
+CompileAnalyzeProblemModel::~CompileAnalyzeProblemModel() = default;
 
-void ProblemModel::forceFullUpdate()
+KDevelop::IProject* CompileAnalyzeProblemModel::project() const
 {
-    if (m_url.isValid() && !m_plugin->isRunning()) {
-        m_plugin->runClangTidy(m_url, m_allFiles);
-    }
+    return m_project;
 }
 
-void ProblemModel::reset(KDevelop::IProject* project, const QUrl& url, bool allFiles)
+void CompileAnalyzeProblemModel::setMessage(const QString& message)
 {
-    m_url = url;
-    m_allFiles = allFiles;
-    const auto path = url.toLocalFile();
-
-    clearProblems();
-    m_problems.clear();
-
-    QString tooltip;
-    if (project) {
-        setMessage(i18n("Analysis started..."));
-        tooltip = i18nc("@info:tooltip %1 is the path of the file", "Re-run last Clang-Tidy analysis (%1)", Utils::prettyPathName(path));
-    } else {
-        tooltip = i18nc("@info:tooltip", "Re-run last Clang-Tidy analysis");
-    }
-
-    setFullUpdateTooltip(tooltip);
-}
-
-void ProblemModel::setMessage(const QString& message)
-{
-    KDevelop::DocumentRange pathLocation(KDevelop::DocumentRange::invalid());
-    pathLocation.document = KDevelop::IndexedString(m_url.toLocalFile());
-    setPlaceholderText(message, pathLocation, i18n("Clang-Tidy"));
+    setPlaceholderText(message, m_pathLocation, m_toolName);
 }
 
 // The code is adapted version of cppcheck::ProblemModel::problemExists()
 // TODO Add into KDevelop::ProblemModel class ?
-bool ProblemModel::problemExists(KDevelop::IProblem::Ptr newProblem)
+bool CompileAnalyzeProblemModel::problemExists(KDevelop::IProblem::Ptr newProblem)
 {
     for (const auto& problem : qAsConst(m_problems)) {
         if (newProblem->source() == problem->source() &&
@@ -100,7 +71,7 @@ bool ProblemModel::problemExists(KDevelop::IProblem::Ptr newProblem)
 
 // The code is adapted version of cppcheck::ProblemModel::addProblems()
 // TODO Add into KDevelop::ProblemModel class ?
-void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
+void CompileAnalyzeProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
 {
     if (m_problems.isEmpty()) {
         m_maxProblemDescriptionLength = 0;
@@ -122,12 +93,47 @@ void ProblemModel::addProblems(const QVector<KDevelop::IProblem::Ptr>& problems)
     }
 }
 
-void ProblemModel::finishAddProblems()
+void CompileAnalyzeProblemModel::finishAddProblems()
 {
     if (m_problems.isEmpty()) {
         setMessage(i18n("Analysis completed, no problems detected."));
     } else {
         setProblems(m_problems);
+    }
+}
+
+void CompileAnalyzeProblemModel::reset()
+{
+    reset(nullptr, QUrl(), false);
+}
+
+void CompileAnalyzeProblemModel::reset(KDevelop::IProject* project, const QUrl& path, bool allFiles)
+{
+    m_project = project;
+    m_path = path;
+    m_allFiles = allFiles;
+    m_pathLocation.document = KDevelop::IndexedString(path.toLocalFile());
+
+    clearProblems();
+    m_problems.clear();
+
+    QString tooltip;
+    if (m_project) {
+        setMessage(i18n("Analysis started..."));
+
+        const QString prettyPathName = KDevelop::ICore::self()->projectController()->prettyFileName(        path, KDevelop::IProjectController::FormatPlain);
+        tooltip = i18nc("@info:tooltip %2 is the path of the file", "Re-run last %1 analysis (%2)", m_toolName, prettyPathName);
+    } else {
+        tooltip = i18nc("@info:tooltip", "Re-run last %1 analysis", m_toolName);
+    }
+
+    setFullUpdateTooltip(tooltip);
+}
+
+void CompileAnalyzeProblemModel::forceFullUpdate()
+{
+    if (m_path.isValid()) {
+        emit rerunRequested(m_path, m_allFiles);
     }
 }
 

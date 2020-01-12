@@ -1,6 +1,7 @@
 /* This file is part of KDevelop
 
    Copyright 2018 Anton Anikin <anton@anikin.xyz>
+   Copyright 2020 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -18,19 +19,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KDEVCLAZY_UTILS_H
-#define KDEVCLAZY_UTILS_H
+#ifndef COMPILEANALYZER_COMPILEANALYZEJOB_TEST_H
+#define COMPILEANALYZER_COMPILEANALYZEJOB_TEST_H
 
-#include <QString>
-class QUrl;
+// Qt
+#include <QObject>
 
-namespace Clazy
+class TestCompileAnalyzeJob : public QObject
 {
+    Q_OBJECT
 
-QString prettyPathName(const QUrl& path);
+private Q_SLOTS:
+    void initTestCase();
+    void cleanupTestCase();
 
-QString markdown2html(const QByteArray& markdown);
-
-}
+    void testJob();
+};
 
 #endif

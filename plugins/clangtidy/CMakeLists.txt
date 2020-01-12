@@ -20,11 +20,10 @@ declare_qt_logging_category(kdevclangtidy_LOG_SRCS
 set(kdevclangtidy_PART_SRCS
     ${kdevclangtidy_LOG_SRCS}
 
+    analyzer.cpp
     job.cpp
     plugin.cpp
     checkset.cpp
-    problemmodel.cpp
-    utils.cpp
 
     config/clangtidyprojectconfigpage.cpp
     config/clangtidypreferences.cpp
@@ -60,6 +59,7 @@ kdevplatform_add_plugin(kdevclangtidy
 )
 
 target_link_libraries(kdevclangtidy
+    KDevCompileAnalyzerCommon
     KDev::Interfaces
     KDev::Project
     KDev::Language

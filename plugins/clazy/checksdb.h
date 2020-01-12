@@ -51,12 +51,15 @@ public:
     explicit ChecksDB(const QUrl& docsPath);
     ~ChecksDB();
 
+public:
     bool isValid() const;
     QString error() const;
 
     const QMap<QString, Level*>& levels() const;
 
     const QMap<QString, Check*>& checks() const;
+
+    static QString defaultChecks();
 
 private:
     Q_DISABLE_COPY(ChecksDB)

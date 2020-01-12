@@ -21,19 +21,16 @@
 #ifndef KDEVCLAZY_PLUGIN_H
 #define KDEVCLAZY_PLUGIN_H
 
-#include "job.h"
-
+// KDevPlatform
 #include <interfaces/iplugin.h>
-
-class KJob;
-
-namespace KDevelop { class IProject; }
+// Qt
+#include <QSharedPointer>
 
 namespace Clazy
 {
 
 class ChecksDB;
-class ProblemModel;
+class Analyzer;
 
 class Plugin : public KDevelop::IPlugin
 {
@@ -43,6 +40,8 @@ public:
     explicit Plugin(QObject* parent, const QVariantList& = QVariantList());
     ~Plugin() override;
 
+public: // KDevelop::IPlugin API
+    void unload() override;
     int configPages() const override { return 1; }
     KDevelop::ConfigPage* configPage(int number, QWidget* parent) override;
 
@@ -51,38 +50,15 @@ public:
 
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
-    void runClazy(KDevelop::IProject* project, const QString& path);
-    bool isRunning() const;
-
+public:
     QSharedPointer<const ChecksDB> checksDB() const;
+    QSharedPointer<const ChecksDB> loadedChecksDB();
 
 private:
-    void killClazy();
-
-    void raiseProblemsView();
-    void raiseOutputView();
-
-    void updateActions();
-    void projectClosed(KDevelop::IProject* project);
-
-    void runClazy(bool checkProject);
-
-    void result(KJob* job);
-
     void reloadDB();
 
 private:
-    Job* m_job;
-
-    KDevelop::IProject* m_project;
-    ProblemModel* m_model;
-
-    QAction* m_menuActionFile;
-    QAction* m_menuActionProject;
-    QAction* m_contextActionFile;
-    QAction* m_contextActionProject;
-    QAction* m_contextActionProjectItem;
-
+    Analyzer* m_analyzer;
     QSharedPointer<ChecksDB> m_db;
 };
 

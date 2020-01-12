@@ -3,10 +3,10 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
-  <include>"utils.h"</include>
+  <include>compileanalyzeutils.h</include>
   <group name="ClangTidy">
     <entry name="clangtidyPath" key="ExecutablePath" type="Path">
-        <default code="true">ClangTidy::Utils::findExecutable(QStringLiteral("clang-tidy"))</default>
+        <default code="true">KDevelop::Utils::findExecutable(QStringLiteral("clang-tidy"))</default>
     </entry>
     <entry name="parallelJobsEnabled" key="parallelJobsEnabled" type="Bool">
         <default>true</default>

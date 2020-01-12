@@ -25,9 +25,10 @@
 // plugin
 #include "parsers/clangtidyparser.h"
 #include <debug.h>
+// CompileAnalyzer
+#include <compileanalyzejob.h>
 // KDevPlatform
 #include <interfaces/iproblem.h>
-#include <outputview/outputexecutejob.h>
 
 namespace ClangTidy
 {
@@ -35,7 +36,7 @@ namespace ClangTidy
  * \class
  * \brief specializes a KJob for running clang-tidy.
  */
-class Job : public KDevelop::OutputExecuteJob
+class Job : public KDevelop::CompileAnalyzeJob
 {
     Q_OBJECT
 
@@ -63,9 +64,6 @@ public:
 public: // KJob API
     void start() override;
 
-Q_SIGNALS:
-    void problemsDetected(const QVector<KDevelop::IProblem::Ptr>& problems);
-
 protected Q_SLOTS:
     void postProcessStdout(const QStringList& lines) override;
     void postProcessStderr(const QStringList& lines) override;
@@ -77,17 +75,11 @@ protected:
     void processStdoutLines(const QStringList& lines);
     void processStderrLines(const QStringList& lines);
 
-private:
-    void generateMakefile();
-
 protected:
     ClangTidyParser m_parser;
     QStringList m_standardOutput;
     QStringList m_xmlOutput;
     const Job::Parameters m_parameters;
-    QString m_makeFilePath;
-    int m_finishedCount = 0;
-    int m_totalCount = 0;
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
 };

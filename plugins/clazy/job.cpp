@@ -28,137 +28,113 @@
 
 #include <language/editor/documentrange.h>
 #include <shell/problem.h>
-
+// KF
 #include <KLocalizedString>
-#include <KMessageBox>
-
-#include <QApplication>
+#include <KShell>
+// Qt
+#include <QMessageBox>
 #include <QElapsedTimer>
 #include <QFileInfo>
 #include <QRegularExpression>
-#include <QThread>
 
 namespace Clazy
 {
 
 Job::Job()
-    : KDevelop::OutputExecuteJob(nullptr)
+    : KDevelop::CompileAnalyzeJob(nullptr)
     , m_db(nullptr)
     , m_timer(nullptr)
 {
 }
 
+QString commandLineString(const JobParameters& params)
+{
+    QStringList args;
+
+    args << params.executablePath;
+
+    if (!params.checks.isEmpty()) {
+        args << QLatin1String("-checks=") + params.checks;
+    }
+
+    if (params.onlyQt) {
+        args << QStringLiteral("-only-qt");
+    }
+
+    if (params.qtDeveloper) {
+        args << QStringLiteral("-qt-developer");
+    }
+
+    if (params.qt4Compat) {
+        args << QStringLiteral("-qt4-compat");
+    }
+
+    if (params.visitImplicitCode) {
+        args << QStringLiteral("-visit-implicit-code");
+    }
+
+    if (params.ignoreIncludedFiles) {
+        args << QStringLiteral("-ignore-included-files");
+    }
+
+    if (!params.headerFilter.isEmpty()) {
+        args << QLatin1String("-header-filter=") + params.headerFilter;
+    }
+
+    if (params.enableAllFixits) {
+        args << QStringLiteral("-enable-all-fixits");
+    }
+
+    if (params.noInplaceFixits) {
+        args << QStringLiteral("-no-inplace-fixits");
+    }
+
+    if (!params.extraAppend.isEmpty()) {
+        args << QLatin1String("-extra-arg=") + params.extraAppend;
+    }
+
+    if (!params.extraPrepend.isEmpty()) {
+        args << QLatin1String("-extra-arg-before=%1") + params.extraPrepend;
+    }
+
+    if (!params.extraClazy.isEmpty()) {
+        args << KShell::splitArgs(params.extraClazy);
+    }
+
+    args << QLatin1String("-p=\"") + params.buildDir + QLatin1Char('\"');
+
+//     for (auto it = args.begin(), end = args.end(); it != end; ++it) {
+//         QString& commandPart = *it;
+//         commandPart = spaceEscapedString(commandPart);
+//     }
+
+    return args.join(QLatin1Char(' '));
+}
+
 Job::Job(const JobParameters& params, QSharedPointer<const ChecksDB> db)
-    : KDevelop::OutputExecuteJob(nullptr)
+    : KDevelop::CompileAnalyzeJob(nullptr)
     , m_db(db)
     , m_timer(new QElapsedTimer)
 {
-    setJobName(i18n("Clazy Analysis (%1)", prettyPathName(params.checkPath())));
+    setJobName(i18n("Clazy Analysis (%1)", prettyPathName(params.url)));
 
-    setCapabilities(KJob::Killable);
-    setStandardToolView(KDevelop::IOutputView::TestView);
-    setBehaviours(KDevelop::IOutputView::AutoScroll);
-
-    setProperties(OutputExecuteJob::JobProperty::DisplayStdout);
-    setProperties(OutputExecuteJob::JobProperty::DisplayStderr);
-    setProperties(OutputExecuteJob::JobProperty::PostProcessOutput);
-
-    *this << QStringLiteral("make");
-
-    if (GlobalSettings::parallelJobsEnabled()) {
-        const int threadsCount =
-            GlobalSettings::parallelJobsAutoCount() ?
-            QThread::idealThreadCount() :
-            GlobalSettings::parallelJobsFixedCount();
-
-        *this << QStringLiteral("-j%1").arg(threadsCount);
-    }
-
-    *this << QStringLiteral("-f");
-    *this << buildMakefile(params);
+    setParallelJobCount(params.parallelJobCount);
+    setBuildDirectoryRoot(params.buildDir);
+    setCommand(commandLineString(params), params.verboseOutput);
+    setToolDisplayName(QStringLiteral("Clazy"));
+    setSources(params.filePaths);
 }
 
 Job::~Job()
 {
-    doKill();
 }
 
-inline QString spaceEscapedString(const QString& s)
+void Job::processStdoutLines(const QStringList& lines)
 {
-    return QString(s).replace(QLatin1Char(' '), QLatin1String("\\ "));
-}
-
-QString Job::buildMakefile(const JobParameters& params)
-{
-    const auto makefilePath = QStringLiteral("%1/kdevclazy.makefile").arg(params.projectBuildPath());
-
-    QFile makefile(makefilePath);
-    makefile.open(QIODevice::WriteOnly);
-
-    QTextStream scriptStream(&makefile);
-
-    // Since GNU make (and maybe other make versions) fails on files/paths with whitespaces
-    // we should perform space-escaping procedure for all potential strings.
-
-    scriptStream << QLatin1String("SOURCES =");
-    for (const QString& source : params.sources()) {
-        scriptStream << QLatin1Char(' ') << spaceEscapedString(source);
-    }
-    scriptStream << QLatin1Char('\n');
-
-    scriptStream << QLatin1String("COMMAND =");
-    if (!GlobalSettings::verboseOutput()) {
-        scriptStream << QLatin1Char('@');
-    }
-    const auto commandLine = params.commandLine();
-    for (const QString& commandPart : commandLine) {
-        scriptStream << QLatin1Char(' ') << spaceEscapedString(commandPart);
-    }
-    scriptStream << QLatin1Char('\n');
-
-    scriptStream << QLatin1String(".PHONY: all $(SOURCES)\n");
-    scriptStream << QLatin1String("all: $(SOURCES)\n");
-    scriptStream << QLatin1String("$(SOURCES):\n");
-
-    scriptStream << QLatin1String("\t@echo 'Clazy check started  for $@'\n");
-    // Wrap filename ($@) with quotas to handle "whitespaced" file names.
-    scriptStream << QLatin1String("\t$(COMMAND) '$@'\n");
-    scriptStream << QLatin1String("\t@echo 'Clazy check finished for $@'\n");
-
-    makefile.close();
-
-    m_totalCount = params.sources().size();
-
-    return makefilePath;
-}
-
-void Job::postProcessStdout(const QStringList& lines)
-{
-    static const auto startedRegex  = QRegularExpression(QStringLiteral("Clazy check started  for (.+)$"));
-    static const auto finishedRegex = QRegularExpression(QStringLiteral("Clazy check finished for (.+)$"));
-
-    for (const QString & line : lines) {
-        auto match = startedRegex.match(line);
-        if (match.hasMatch()) {
-            emit infoMessage(this, match.captured(1));
-            continue;
-        }
-
-        match = finishedRegex.match(line);
-        if (match.hasMatch()) {
-            setPercent(++m_finishedCount/(double)m_totalCount * 100);
-            continue;
-        }
-    }
-
     m_standardOutput << lines;
-
-    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning) {
-        OutputExecuteJob::postProcessStdout(lines);
-    }
 }
 
-void Job::postProcessStderr(const QStringList& lines)
+void Job::processStderrLines(const QStringList& lines)
 {
     static const auto errorRegex = QRegularExpression(
         QStringLiteral("(.+):(\\d+):(\\d+):\\s+warning:\\s+(.+)\\s+\\[-Wclazy-(.+)\\]$"));
@@ -204,10 +180,20 @@ void Job::postProcessStderr(const QStringList& lines)
     if (problems.size()) {
         emit problemsDetected(problems);
     }
+}
 
-    if (status() == KDevelop::OutputExecuteJob::JobStatus::JobRunning) {
-        OutputExecuteJob::postProcessStderr(lines);
-    }
+void Job::postProcessStdout(const QStringList& lines)
+{
+    processStdoutLines(lines);
+
+    KDevelop::CompileAnalyzeJob::postProcessStdout(lines);
+}
+
+void Job::postProcessStderr(const QStringList& lines)
+{
+    processStderrLines(lines);
+
+    KDevelop::CompileAnalyzeJob::postProcessStderr(lines);
 }
 
 void Job::start()
@@ -215,13 +201,9 @@ void Job::start()
     m_standardOutput.clear();
     m_stderrOutput.clear();
 
-    qCDebug(KDEV_CLAZY) << "executing:" << commandLine().join(QLatin1Char(' '));
-
     m_timer->restart();
-    setPercent(0);
-    m_finishedCount = 0;
 
-    OutputExecuteJob::start();
+    KDevelop::CompileAnalyzeJob::start();
 }
 
 void Job::childProcessError(QProcess::ProcessError e)
@@ -258,10 +240,10 @@ void Job::childProcessError(QProcess::ProcessError e)
     }
 
     if (!message.isEmpty()) {
-        KMessageBox::error(qApp->activeWindow(), message, i18n("Clazy Error"));
+        QMessageBox::critical(nullptr, i18n("Clazy Error"), message);
     }
 
-    KDevelop::OutputExecuteJob::childProcessError(e);
+    KDevelop::CompileAnalyzeJob::childProcessError(e);
 }
 
 void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
@@ -279,7 +261,7 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
         qCDebug(KDEV_CLAZY) << m_stderrOutput.join(QLatin1Char('\n'));
     }
 
-    KDevelop::OutputExecuteJob::childProcessExited(exitCode, exitStatus);
+    KDevelop::CompileAnalyzeJob::childProcessExited(exitCode, exitStatus);
 }
 
 }

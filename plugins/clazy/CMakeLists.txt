@@ -29,13 +29,14 @@ add_library(kdevclazy_core STATIC
     ${kdevclazy_core_SRCS}
 )
 target_link_libraries(kdevclazy_core
+    KDevCompileAnalyzerCommon
     KDev::Project
     KDev::Shell
 )
 
 set(kdevclazy_SRCS
+    analyzer.cpp
     plugin.cpp
-    problemmodel.cpp
 
     config/checkswidget.cpp
     config/commandlinewidget.cpp

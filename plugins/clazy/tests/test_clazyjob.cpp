@@ -42,28 +42,20 @@ public:
                 this, [this](const QVector<KDevelop::IProblem::Ptr>& problems) {
                     m_problems += problems;
                 });
-
-        connect(this, &JobTester::infoMessage,
-                this, [this](KJob*, const QString& name) {
-                    m_started += name;
-                });
     }
 
     ~JobTester() override = default;
 
-    using Job::postProcessStdout;
-    using Job::postProcessStderr;
+    using Job::processStdoutLines;
+    using Job::processStderrLines;
 
     const QVector<KDevelop::IProblem::Ptr>& problems() const
     {
         return m_problems;
     }
 
-    const QList<QString>& started() const
-    {
-        return m_started;
-    }
-
+// implementation detail not accessible
+#if 0
     void setTotalCount(int totalCount)
     {
         m_totalCount = totalCount;
@@ -73,10 +65,10 @@ public:
     {
         return m_finishedCount;
     }
+#endif
 
 private:
     QVector<KDevelop::IProblem::Ptr> m_problems;
-    QList<QString> m_started;
 };
 
 void TestClazyJob::initTestCase()
@@ -93,59 +85,6 @@ void TestClazyJob::cleanupTestCase()
 void TestClazyJob::testJob()
 {
     JobTester jobTester;
-
-    // test progress parsing =======================================================================
-
-    static const QStringList stdoutOutput1 = {
-        QStringLiteral("Clazy check started  for source2.cpp"),
-        QStringLiteral("Clazy check started  for source1.cpp")
-    };
-
-    static const QStringList stdoutOutput2 = {
-        QStringLiteral("Clazy check finished for source2.cpp"),
-        QStringLiteral("Clazy check started  for source3.cpp"),
-        QStringLiteral("Clazy check started  for source4.cpp")
-    };
-
-    static const QStringList stdoutOutput3 = {
-        QStringLiteral("Clazy check finished for source1.cpp"),
-        QStringLiteral("Clazy check finished for source4.cpp")
-    };
-
-    static const QStringList stdoutOutput4 = {
-        QStringLiteral("Clazy check finished for source3.cpp"),
-    };
-
-    jobTester.setTotalCount(4);
-
-    jobTester.postProcessStdout(stdoutOutput1);
-    QCOMPARE(jobTester.started().size(), 2);
-    QCOMPARE(jobTester.started().at(0), QStringLiteral("source2.cpp"));
-    QCOMPARE(jobTester.started().at(1), QStringLiteral("source1.cpp"));
-    QCOMPARE(jobTester.finishedCount(), 0);
-    QCOMPARE(jobTester.percent(), (unsigned long)0);
-
-    jobTester.postProcessStdout(stdoutOutput2);
-    QCOMPARE(jobTester.started().size(), 4);
-    QCOMPARE(jobTester.started().at(2), QStringLiteral("source3.cpp"));
-    QCOMPARE(jobTester.started().at(3), QStringLiteral("source4.cpp"));
-    QCOMPARE(jobTester.finishedCount(), 1);
-    QCOMPARE(jobTester.percent(), (unsigned long)25);
-
-    jobTester.postProcessStdout(stdoutOutput3);
-    QCOMPARE(jobTester.started().size(), 4);
-    QCOMPARE(jobTester.finishedCount(), 3);
-    QCOMPARE(jobTester.percent(), (unsigned long)75);
-
-    jobTester.postProcessStdout(stdoutOutput4);
-    QCOMPARE(jobTester.started().size(), 4);
-    QCOMPARE(jobTester.finishedCount(), 4);
-    QCOMPARE(jobTester.percent(), (unsigned long)100);
-
-    QCOMPARE(jobTester.started().at(0), QStringLiteral("source2.cpp"));
-    QCOMPARE(jobTester.started().at(1), QStringLiteral("source1.cpp"));
-    QCOMPARE(jobTester.started().at(2), QStringLiteral("source3.cpp"));
-    QCOMPARE(jobTester.started().at(3), QStringLiteral("source4.cpp"));
 
     // test errors parsing =========================================================================
 
@@ -171,13 +110,13 @@ void TestClazyJob::testJob()
         QStringLiteral("2 warnings generated.")
     };
 
-    jobTester.postProcessStderr(stderrOutput1);
+    jobTester.processStderrLines(stderrOutput1);
     QCOMPARE(jobTester.problems().size(), 0);
 
-    jobTester.postProcessStderr(stderrOutput2);
+    jobTester.processStderrLines(stderrOutput2);
     QCOMPARE(jobTester.problems().size(), 1);
 
-    jobTester.postProcessStderr(stderrOutput3);
+    jobTester.processStderrLines(stderrOutput3);
     QCOMPARE(jobTester.problems().size(), 3);
 
     // test common values

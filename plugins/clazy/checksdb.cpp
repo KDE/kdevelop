@@ -153,4 +153,9 @@ const QMap<QString, Check*>& ChecksDB::checks() const
     return m_checks;
 }
 
+QString ChecksDB::defaultChecks()
+{
+    return QStringLiteral("level1");
+}
+
 }

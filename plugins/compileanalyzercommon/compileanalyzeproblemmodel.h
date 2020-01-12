@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2018 Friedrich W. H. Kossebau <kossebau@kde.org>
+ * Copyright 2018,2020 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLANGTIDY_PROBLEMMODEL_H
-#define CLANGTIDY_PROBLEMMODEL_H
+#ifndef COMPILEANALYZER_PROBLEMMODEL_H
+#define COMPILEANALYZER_PROBLEMMODEL_H
 
 // KDevPlatfrom
 #include <shell/problemmodel.h>
@@ -29,18 +29,16 @@
 
 namespace KDevelop { class IProject; }
 
-namespace ClangTidy
+namespace KDevelop
 {
 
-class Plugin;
-
-class ProblemModel : public KDevelop::ProblemModel
+class CompileAnalyzeProblemModel : public KDevelop::ProblemModel
 {
     Q_OBJECT
 
 public:
-    explicit ProblemModel(Plugin* plugin, QObject* parent);
-    ~ProblemModel() override;
+    explicit CompileAnalyzeProblemModel(const QString& toolName, QObject* parent);
+    ~CompileAnalyzeProblemModel() override;
 
 public: // KDevelop::ProblemModel API
     void forceFullUpdate() override;
@@ -50,16 +48,24 @@ public:
 
     void finishAddProblems();
 
-    void reset(KDevelop::IProject* project, const QUrl& url, bool allFiles);
+    void reset();
+    void reset(KDevelop::IProject* project, const QUrl& path, bool allFiles);
+
+    KDevelop::IProject* project() const;
+
+Q_SIGNALS:
+    void rerunRequested(const QUrl& path, bool allFiles);
 
 private:
     void setMessage(const QString& message);
     bool problemExists(KDevelop::IProblem::Ptr newProblem);
 
 private:
-    Plugin* const m_plugin;
-    QUrl m_url;
+    const QString m_toolName;
+    KDevelop::IProject* m_project = nullptr;
+    QUrl m_path;
     bool m_allFiles = false;
+    KDevelop::DocumentRange m_pathLocation;
 
     QVector<KDevelop::IProblem::Ptr> m_problems;
     int m_maxProblemDescriptionLength = 0;

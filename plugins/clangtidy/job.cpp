@@ -74,100 +74,30 @@ QStringList commandLineArgs(const Job::Parameters& parameters)
 
 
 Job::Job(const Parameters& params, QObject* parent)
-    : KDevelop::OutputExecuteJob(parent)
+    : KDevelop::CompileAnalyzeJob(parent)
     , m_parameters(params)
 {
     setJobName(i18n("Clang-Tidy Analysis"));
 
-    setCapabilities(KJob::Killable);
-    setStandardToolView(KDevelop::IOutputView::TestView);
-    setBehaviours(KDevelop::IOutputView::AutoScroll);
-    setProperties(KDevelop::OutputExecuteJob::JobProperty::DisplayStdout |
-                  KDevelop::OutputExecuteJob::JobProperty::DisplayStderr |
-                  KDevelop::OutputExecuteJob::JobProperty::PostProcessOutput);
-
-    m_totalCount = params.filePaths.size();
+    setParallelJobCount(m_parameters.parallelJobCount);
+    setBuildDirectoryRoot(m_parameters.buildDir);
+    const auto commandLine = commandLineArgs(m_parameters);
+    setCommand(commandLine.join(QLatin1Char(' ')), false);
+    setToolDisplayName(QStringLiteral("Clang-Tidy"));
+    setSources(m_parameters.filePaths);
 
     connect(&m_parser, &ClangTidyParser::problemsDetected,
             this, &Job::problemsDetected);
-
-    // TODO: check success of creation
-    generateMakefile();
-
-    *this << QStringList{
-        QStringLiteral("make"),
-        QStringLiteral("-j"),
-        QString::number(m_parameters.parallelJobCount),
-        QStringLiteral("-f"),
-        m_makeFilePath,
-    };
 
     qCDebug(KDEV_CLANGTIDY) << "checking files" << params.filePaths;
 }
 
 Job::~Job()
 {
-    doKill();
-
-    if (!m_makeFilePath.isEmpty()) {
-        QFile::remove(m_makeFilePath);
-    }
-}
-
-void Job::generateMakefile()
-{
-    m_makeFilePath = m_parameters.buildDir + QLatin1String("/kdevclangtidy.makefile");
-
-    QFile makefile(m_makeFilePath);
-    makefile.open(QIODevice::WriteOnly);
-
-    QTextStream scriptStream(&makefile);
-
-    scriptStream << QStringLiteral("SOURCES =");
-    for (const auto& source : qAsConst(m_parameters.filePaths)) {
-        // TODO: how to escape " in a filename, for those people who like to go extreme?
-        scriptStream << QLatin1String(" \\\n\t\"") + source + QLatin1Char('\"');
-    }
-    scriptStream << QLatin1Char('\n');
-
-    scriptStream << QStringLiteral("COMMAND =");
-    const auto commandLine = commandLineArgs(m_parameters);
-    for (const auto& commandPart : commandLine) {
-        scriptStream << QLatin1Char(' ') << commandPart;
-    }
-    scriptStream << QLatin1Char('\n');
-
-    scriptStream << QStringLiteral(".PHONY: all $(SOURCES)\n");
-    scriptStream << QStringLiteral("all: $(SOURCES)\n");
-    scriptStream << QStringLiteral("$(SOURCES):\n");
-
-    scriptStream << QStringLiteral("\t@echo 'Clang-Tidy check started  for $@'\n");
-    scriptStream << QStringLiteral("\t$(COMMAND) $@\n");
-    scriptStream << QStringLiteral("\t@echo 'Clang-Tidy check finished for $@'\n");
-
-    makefile.close();
 }
 
 void Job::processStdoutLines(const QStringList& lines)
 {
-    static const auto startedRegex  = QRegularExpression(QStringLiteral("Clang-Tidy check started  for (.+)$"));
-    static const auto finishedRegex = QRegularExpression(QStringLiteral("Clang-Tidy check finished for (.+)$"));
-
-    for (const auto& line : lines) {
-        auto match = startedRegex.match(line);
-        if (match.hasMatch()) {
-            emit infoMessage(this, match.captured(1));
-            continue;
-        }
-
-        match = finishedRegex.match(line);
-        if (match.hasMatch()) {
-            ++m_finishedCount;
-            setPercent(static_cast<double>(m_finishedCount)/m_totalCount * 100);
-            continue;
-        }
-    }
-
     m_parser.addData(lines);
     m_standardOutput << lines;
 }
@@ -197,14 +127,14 @@ void Job::postProcessStdout(const QStringList& lines)
 {
     processStdoutLines(lines);
 
-    KDevelop::OutputExecuteJob::postProcessStdout(lines);
+    KDevelop::CompileAnalyzeJob::postProcessStdout(lines);
 }
 
 void Job::postProcessStderr(const QStringList& lines)
 {
     processStderrLines(lines);
 
-    KDevelop::OutputExecuteJob::postProcessStderr(lines);
+    KDevelop::CompileAnalyzeJob::postProcessStderr(lines);
 }
 
 void Job::start()
@@ -212,12 +142,7 @@ void Job::start()
     m_standardOutput.clear();
     m_xmlOutput.clear();
 
-    qCDebug(KDEV_CLANGTIDY) << "executing:" << commandLine().join(QLatin1Char(' '));
-
-    setPercent(0);
-    m_finishedCount = 0;
-
-    KDevelop::OutputExecuteJob::start();
+    KDevelop::CompileAnalyzeJob::start();
 }
 
 void Job::childProcessError(QProcess::ProcessError processError)
@@ -256,15 +181,11 @@ void Job::childProcessError(QProcess::ProcessError processError)
         KMessageBox::error(qApp->activeWindow(), message, i18n("Clang-tidy Error"));
     }
 
-    KDevelop::OutputExecuteJob::childProcessError(processError);
+    KDevelop::CompileAnalyzeJob::childProcessError(processError);
 }
 
 void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qCDebug(KDEV_CLANGTIDY) << "Process Finished, exitCode" << exitCode << "process exit status" << exitStatus;
-
-    setPercent(100);
-
     if (exitCode != 0) {
         qCDebug(KDEV_CLANGTIDY) << "clang-tidy failed, standard output: ";
         qCDebug(KDEV_CLANGTIDY) << m_standardOutput.join(QLatin1Char('\n'));
@@ -272,7 +193,7 @@ void Job::childProcessExited(int exitCode, QProcess::ExitStatus exitStatus)
         qCDebug(KDEV_CLANGTIDY) << m_xmlOutput.join(QLatin1Char('\n'));
     }
 
-    KDevelop::OutputExecuteJob::childProcessExited(exitCode, exitStatus);
+    KDevelop::CompileAnalyzeJob::childProcessExited(exitCode, exitStatus);
 }
 
 } // namespace ClangTidy
