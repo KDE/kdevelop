@@ -15,6 +15,7 @@
         <comment xml:lang="el">OpenCL C πηγαίος κώδικας</comment>
         <comment xml:lang="en_GB">OpenCL C source code</comment>
         <comment xml:lang="es">Código fuente de OpenCL C</comment>
+        <comment xml:lang="et">OpenCL C lähtekood</comment>
         <comment xml:lang="fr">Code source C OpenCL</comment>
         <comment xml:lang="gl">Código fonte en C de OpenCL</comment>
         <comment xml:lang="it">Codice sorgente OpenCL C</comment>
@@ -47,6 +48,7 @@
         <comment xml:lang="el">NVIDIA CUDA C πηγαίος κώδικας</comment>
         <comment xml:lang="en_GB">NVIDIA CUDA C source code</comment>
         <comment xml:lang="es">Código fuente de NVIDIA CUDA C</comment>
+        <comment xml:lang="et">NVIDIA CUDA C lähtekood</comment>
         <comment xml:lang="fr">Code source C CUDA NVIDIA</comment>
         <comment xml:lang="gl">Código fonte en C de NVIDIA CUDA</comment>
         <comment xml:lang="it">Codice sorgente CUDA C di NVIDIA</comment>
@@ -75,6 +77,7 @@
         <comment xml:lang="el">NVIDIA CUDA C κεφαλίδα</comment>
         <comment xml:lang="en_GB">NVIDIA CUDA C header</comment>
         <comment xml:lang="es">Cabecera de NVIDIA CUDA C</comment>
+        <comment xml:lang="et">NVIDIA CUDA C päis</comment>
         <comment xml:lang="fr">En-tête C CUDA NVIDIA</comment>
         <comment xml:lang="gl">Cabeceira en C de NVIDIA CUDA</comment>
         <comment xml:lang="it">Intestazione CUDA C di NVIDIA</comment>
