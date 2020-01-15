@@ -32,12 +32,12 @@
 
 #include <KIO/StoredTransferJob>
 #include <KLocalizedString>
-#include <KMessageBox>
 
 #include <interfaces/icore.h>
 #include <interfaces/iuicontroller.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/isourceformatter.h>
+#include <sublime/message.h>
 
 using namespace KDevelop;
 
@@ -145,9 +145,12 @@ void SourceFormatterJob::formatFile(const QUrl& url)
 
         auto putJob = KIO::storedPut(text.toLocal8Bit(), url, -1, KIO::Overwrite);
         // see getJob
-        if (!putJob->exec())
-            // TODO: integrate with job error reporting, use showErrorMessage?
-            KMessageBox::error(nullptr, putJob->errorString());
-    } else
-        KMessageBox::error(nullptr, getJob->errorString());
+        if (!putJob->exec()) {
+            auto* message = new Sublime::Message(putJob->errorString(), Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
+        }
+    } else {
+        auto* message = new Sublime::Message(getJob->errorString(), Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
+    }
 }

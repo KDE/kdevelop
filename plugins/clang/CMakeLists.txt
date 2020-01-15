@@ -96,6 +96,7 @@ PRIVATE
     KF5::ThreadWeaver
     KDev::DefinesAndIncludesManager
     KDev::Util
+    KDev::Sublime
 )
 
 if (HAVE_DLFCN)

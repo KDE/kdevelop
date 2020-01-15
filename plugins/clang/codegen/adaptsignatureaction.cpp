@@ -30,8 +30,11 @@
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/functiondefinition.h>
 
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
+// KF
 #include <KLocalizedString>
-#include <KMessageBox>
 
 using namespace KDevelop;
 
@@ -119,7 +122,9 @@ void AdaptSignatureAction::execute()
     changes.setReplacementPolicy(DocumentChangeSet::WarnOnFailedChange);
     DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
     if (!result) {
-        KMessageBox::error(nullptr, i18n("Failed to apply changes: %1", result.m_failureReason));
+        const QString messageText = i18n("Failed to apply changes: %1", result.m_failureReason);
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
     }
     emit executed(this);
 

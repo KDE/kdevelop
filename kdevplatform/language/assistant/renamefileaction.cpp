@@ -25,10 +25,11 @@
 #include <language/codegen/basicrefactoring.h>
 
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/icore.h>
-
+#include <sublime/message.h>
+// KF
 #include <KLocalizedString>
-#include <KMessageBox>
 
 using namespace KDevelop;
 
@@ -84,7 +85,8 @@ void RenameFileAction::execute()
         result = changes.applyAllChanges();
     }
     if (!result) {
-        KMessageBox::error(nullptr, i18n("Failed to apply changes: %1", result.m_failureReason));
+        auto* message = new Sublime::Message(i18n("Failed to apply changes: %1", result.m_failureReason), Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
     }
     emit executed(this);
 }

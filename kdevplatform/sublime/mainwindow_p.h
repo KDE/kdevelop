@@ -42,6 +42,8 @@ class Controller;
 class AreaIndex;
 class IdealMainWidget;
 class IdealController;
+class MessageWidget;
+class Message;
 
 class MainWindowPrivate: public QObject {
     Q_OBJECT
@@ -91,6 +93,7 @@ public:
 
     QWidget *centralWidget;
     QWidget* bgCentralWidget;
+    MessageWidget* messageWidget;
     ViewBarContainer* viewBarContainer;
     QSplitter* splitterCentralWidget;
 
@@ -100,6 +103,8 @@ public:
 
     bool eventFilter(QObject* obj, QEvent* event) override;
     void disableConcentrationMode();
+
+    void postMessage(Message* message);
 
 public Q_SLOTS:
     void toggleDocksShown();
@@ -126,6 +131,8 @@ private Q_SLOTS:
     void selectNextDock();
     void selectPreviousDock();
 
+    void messageDestroyed(Message* message);
+
 private:
     void restoreConcentrationMode();
 
@@ -145,6 +152,8 @@ private:
     IdealToolBar* m_leftToolBar;
 
     QAction* m_concentrationModeAction;
+
+    QHash<Message*, QVector<QSharedPointer<QAction>>> m_messageHash;
 };
 
 }

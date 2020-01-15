@@ -42,11 +42,12 @@
 #include <interfaces/idocument.h>
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
 #include <util/processlinemaker.h>
 
 #include <KConfigGroup>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KSharedConfig>
 #include <KShell>
 
@@ -249,7 +250,8 @@ bool MIDebugSession::startDebugging(ILaunchConfiguration* cfg, IExecutePlugin* i
     QString tty(m_tty->getSlave());
 #ifndef Q_OS_WIN
     if (tty.isEmpty()) {
-        KMessageBox::information(qApp->activeWindow(), m_tty->lastError(), i18n("warning"));
+        auto* message = new Sublime::Message(m_tty->lastError(), Sublime::Message::Information);
+        ICore::self()->uiController()->postMessage(message);
 
         m_tty.reset(nullptr);
         return false;
@@ -322,11 +324,11 @@ bool MIDebugSession::attachToProcess(int pid)
 void MIDebugSession::handleTargetAttach(const MI::ResultRecord& r)
 {
     if (r.reason == QLatin1String("error")) {
-        KMessageBox::error(
-            qApp->activeWindow(),
+        const QString messageText =
             i18n("<b>Could not attach debugger:</b><br />")+
-            r[QStringLiteral("msg")].literal(),
-            i18n("Startup error"));
+                 r[QStringLiteral("msg")].literal();
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
         stopDebugger();
     }
 }
@@ -764,11 +766,11 @@ void MIDebugSession::addCommand(MI::CommandType type, const QString& arguments,
 void MIDebugSession::queueCmd(MICommand *cmd)
 {
     if (debuggerStateIsOn(s_dbgNotStarted)) {
-        KMessageBox::information(
-            qApp->activeWindow(),
+        const QString messageText =
             i18n("<b>Gdb command sent when debugger is not running</b><br>"
-                 "The command was:<br> %1", cmd->initialString()),
-            i18n("Internal error"));
+                 "The command was:<br> %1", cmd->initialString());
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Information);
+        ICore::self()->uiController()->postMessage(message);
         return;
     }
 
@@ -881,9 +883,9 @@ void MIDebugSession::executeCmd()
     }
 
     if (bad_command) {
-        KMessageBox::information(qApp->activeWindow(),
-                                 i18n("<b>Invalid debugger command</b><br>%1", message),
-                                 i18n("Invalid debugger command"));
+        const QString messageText = i18n("<b>Invalid debugger command</b><br>%1", message);
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Information);
+        ICore::self()->uiController()->postMessage(message);
         executeCmd();
         return;
     }
@@ -1208,8 +1210,8 @@ void MIDebugSession::explainDebuggerStatus()
         information += extra;
     }
 
-    KMessageBox::information(qApp->activeWindow(), information,
-                             i18n("Debugger status"));
+    auto* message = new Sublime::Message(information, Sublime::Message::Information);
+    ICore::self()->uiController()->postMessage(message);
 }
 
 // There is no app anymore. This can be caused by program exiting
@@ -1273,12 +1275,12 @@ void MIDebugSession::defaultErrorHandler(const MI::ResultRecord& result)
         return;
     }
 
-    KMessageBox::information(
-        qApp->activeWindow(),
+    const QString messageText =
         i18n("<b>Debugger error</b>"
              "<p>Debugger reported the following error:"
-             "<p><tt>%1", result[QStringLiteral("msg")].literal()),
-        i18n("Debugger error"));
+             "<p><tt>%1", result[QStringLiteral("msg")].literal());
+    auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+    ICore::self()->uiController()->postMessage(message);
 
     // Error most likely means that some change made in GUI
     // was not communicated to the gdb, so GUI is now not

@@ -33,16 +33,17 @@
 
 #include <execute/iexecuteplugin.h>
 #include <interfaces/iplugincontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/launchconfigurationtype.h>
 #include <shell/core.h>
 #include <shell/launchconfiguration.h>
 #include <shell/runcontroller.h>
+#include <sublime/message.h>
 #include <util/executecompositejob.h>
-
+// KF
 #include <KActionCollection>
-#include <KMessageBox>
 #include <KPluginFactory>
-
+// Qt
 #include <QAction>
 #include <QApplication>
 #include <QFile>
@@ -95,9 +96,9 @@ void Plugin::launchHeaptrack()
         executePlugin = plugin->extension<IExecutePlugin>();
     } else {
         auto pluginInfo = pluginController->infoForPluginId(QStringLiteral("kdevexecute"));
-        KMessageBox::error(
-            qApp->activeWindow(),
-            i18n("Unable to start Heaptrack analysis - \"%1\" plugin is not loaded.", pluginInfo.name()));
+        const QString messageText = i18n("Unable to start Heaptrack analysis - \"%1\" plugin is not loaded.", pluginInfo.name());
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        KDevelop::ICore::self()->uiController()->postMessage(message);
         return;
     }
 
@@ -107,10 +108,11 @@ void Plugin::launchHeaptrack()
         runController->showConfigurationDialog();
     }
 
+    // TODO: catch if still no defaultLaunch
     if (!defaultLaunch->type()->launcherForId(QStringLiteral("nativeAppLauncher"))) {
-        KMessageBox::error(
-            qApp->activeWindow(),
-            i18n("Heaptrack analysis can be started only for native applications."));
+        const QString messageText = i18n("Heaptrack analysis can be started only for native applications.");
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        KDevelop::ICore::self()->uiController()->postMessage(message);
         return;
     }
 

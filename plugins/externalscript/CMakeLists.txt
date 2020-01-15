@@ -26,7 +26,14 @@ qt5_add_resources(kdevexternalscript_PART_SRCS kdevexternalscript.qrc)
 kdevplatform_add_plugin(kdevexternalscript JSON kdevexternalscript.json SOURCES ${kdevexternalscript_PART_SRCS})
 
 target_link_libraries(kdevexternalscript
-    KF5::TextEditor KF5::KIOWidgets KF5::Parts KF5::NewStuff
-    KDev::Language KDev::Interfaces KDev::Project
-    KDev::Util KDev::OutputView
+    KDev::Language
+    KDev::Interfaces
+    KDev::Project
+    KDev::Sublime
+    KDev::Util
+    KDev::OutputView
+    KF5::TextEditor
+    KF5::KIOWidgets
+    KF5::Parts
+    KF5::NewStuff
 )

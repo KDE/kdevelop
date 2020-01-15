@@ -26,8 +26,9 @@
 #include <language/backgroundparser/backgroundparser.h>
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
-
-#include <KMessageBox>
+#include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
+// KF
 #include <KLocalizedString>
 
 using namespace KDevelop;
@@ -117,7 +118,8 @@ void RenameAction::execute()
 
     DocumentChangeSet::ChangeResult result = changes.applyAllChanges();
     if (!result) {
-        KMessageBox::error(nullptr, i18n("Failed to apply changes: %1", result.m_failureReason));
+        auto* message = new Sublime::Message(i18n("Failed to apply changes: %1", result.m_failureReason), Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
     }
 
     emit executed(this);

@@ -52,6 +52,7 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/iselectioncontroller.h>
+#include <sublime/message.h>
 #include <serialization/indexedstring.h>
 
 #include "projectmanagerview.h"
@@ -666,18 +667,23 @@ void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& item
         if (!name.isEmpty() && name != src) {
             ProjectBaseItem::RenameStatus status = item->rename( name );
 
+            QString errorMessageText;
             switch(status) {
                 case ProjectBaseItem::RenameOk:
                     break;
                 case ProjectBaseItem::ExistingItemSameName:
-                    KMessageBox::error(window, i18n("There is already a file named '%1'", name));
+                    errorMessageText = i18n("There is already a file named '%1'", name);
                     break;
                 case ProjectBaseItem::ProjectManagerRenameFailed:
-                    KMessageBox::error(window, i18n("Could not rename '%1'", name));
+                    errorMessageText = i18n("Could not rename '%1'", name);
                     break;
                 case ProjectBaseItem::InvalidNewName:
-                    KMessageBox::error(window, i18n("'%1' is not a valid file name", name));
+                    errorMessageText = i18n("'%1' is not a valid file name", name);
                     break;
+            }
+            if (!errorMessageText.isEmpty()) {
+                auto* message = new Sublime::Message(errorMessageText, Sublime::Message::Error);
+                ICore::self()->uiController()->postMessage(message);
             }
         }
     }

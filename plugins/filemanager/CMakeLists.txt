@@ -12,4 +12,12 @@ declare_qt_logging_category(kdevfilemanager_PART_SRCS
 )
 qt5_add_resources(kdevfilemanager_PART_SRCS kdevfilemanager.qrc)
 kdevplatform_add_plugin(kdevfilemanager JSON kdevfilemanager.json SOURCES ${kdevfilemanager_PART_SRCS})
-target_link_libraries(kdevfilemanager KF5::Bookmarks KF5::KIOCore KF5::KIOFileWidgets KF5::KIOWidgets KF5::TextEditor KDev::Interfaces)
+target_link_libraries(kdevfilemanager
+    KDev::Interfaces
+    KDev::Sublime
+    KF5::Bookmarks
+    KF5::KIOCore
+    KF5::KIOFileWidgets
+    KF5::KIOWidgets
+    KF5::TextEditor
+)

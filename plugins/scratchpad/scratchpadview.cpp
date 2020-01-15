@@ -25,10 +25,11 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/idocument.h>
+#include <sublime/message.h>
 
 #include <KLocalizedString>
-#include <KMessageBox>
 
 #include <QAction>
 #include <QStandardItemModel>
@@ -114,8 +115,10 @@ ScratchpadView::ScratchpadView(QWidget* parent, Scratchpad* scratchpad)
 
     connect(scratchView, &QListView::activated, this, &ScratchpadView::scratchActivated);
 
-    connect(m_scratchpad, &Scratchpad::actionFailed, this, [this](const QString& message) {
-        KMessageBox::sorry(this, message);
+    connect(m_scratchpad, &Scratchpad::actionFailed, this, [this](const QString& messageText) {
+        // TODO: could be also messagewidget inside toolview?
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        KDevelop::ICore::self()->uiController()->postMessage(message);
     });
 
     connect(commandWidget, &QLineEdit::returnPressed, this, &ScratchpadView::runSelectedScratch);

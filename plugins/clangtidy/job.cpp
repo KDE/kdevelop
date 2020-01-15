@@ -22,9 +22,12 @@
 
 #include "job.h"
 
+// KDevPlatform
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
 // KF
 #include <KLocalizedString>
-#include <KMessageBox>
 // Qt
 #include <QApplication>
 #include <QFile>
@@ -147,28 +150,28 @@ void Job::start()
 
 void Job::childProcessError(QProcess::ProcessError processError)
 {
-    QString message;
+    QString messageText;
 
     switch (processError) {
     case QProcess::FailedToStart: {
-        message = i18n("Failed to start Clang-Tidy process.");
+        messageText = i18n("Failed to start Clang-Tidy process.");
         break;
     }
 
     case QProcess::Crashed:
-        message = i18n("Clang-tidy crashed.");
+        messageText = i18n("Clang-tidy crashed.");
         break;
 
     case QProcess::Timedout:
-        message = i18n("Clang-tidy process timed out.");
+        messageText = i18n("Clang-tidy process timed out.");
         break;
 
     case QProcess::WriteError:
-        message = i18n("Write to Clang-tidy process failed.");
+        messageText = i18n("Write to Clang-tidy process failed.");
         break;
 
     case QProcess::ReadError:
-        message = i18n("Read from Clang-tidy process failed.");
+        messageText = i18n("Read from Clang-tidy process failed.");
         break;
 
     case QProcess::UnknownError:
@@ -177,8 +180,9 @@ void Job::childProcessError(QProcess::ProcessError processError)
         break;
     }
 
-    if (!message.isEmpty()) {
-        KMessageBox::error(qApp->activeWindow(), message, i18n("Clang-tidy Error"));
+    if (!messageText.isEmpty()) {
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        KDevelop::ICore::self()->uiController()->postMessage(message);
     }
 
     KDevelop::CompileAnalyzeJob::childProcessError(processError);

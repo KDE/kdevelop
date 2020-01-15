@@ -22,7 +22,6 @@
 #include <KColorScheme>
 #include <KIconEffect>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KTextEditor/View>
 #include <KTextEditor/Cursor>
@@ -36,6 +35,7 @@
 #include <interfaces/iuicontroller.h>
 #include <language/highlighting/colorcache.h>
 #include <util/activetooltip.h>
+#include <sublime/message.h>
 
 #include <QApplication>
 #include <QPointer>
@@ -206,7 +206,9 @@ void PatchHighlighter::markClicked( KTextEditor::Document* doc, const KTextEdito
         QString &replaceWith(applied ? sourceText : targetText);
 
         if( currentText.simplified() != replace.simplified() ) {
-            KMessageBox::error( ICore::self()->uiController()->activeMainWindow(), i18n( "Could not apply the change: Text should be \"%1\", but is \"%2\".", replace, currentText ) );
+            const QString messageText = i18n("Could not apply the change: Text should be \"%1\", but is \"%2\".", replace, currentText);
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
 
             m_applying = false;
             return;

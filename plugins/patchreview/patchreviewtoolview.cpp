@@ -34,13 +34,13 @@
 #include <sublime/view.h>
 #include <sublime/document.h>
 #include <sublime/mainwindow.h>
+#include <sublime/message.h>
 
 #include <QFileInfo>
 #include <QMenu>
 #include <QJsonObject>
 #include <QJsonArray>
 
-#include <KMessageBox>
 #include <KLocalizedString>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -221,13 +221,16 @@ void PatchReviewToolView::showEditDialog() {
 
 #ifdef WITH_PURPOSE
     m_exportMenu = new Purpose::Menu(this);
-    connect(m_exportMenu, &Purpose::Menu::finished, this, [](const QJsonObject &output, int error, const QString &message) {
+    connect(m_exportMenu, &Purpose::Menu::finished, this, [](const QJsonObject &output, int error, const QString &errorMessage) {
+        Sublime::Message* message;
         if (error==0) {
-            KMessageBox::information(nullptr, i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", output[QLatin1String("url")].toString()),
-                                    QString(), QString(), KMessageBox::AllowLink);
+            const QString messageText = i18n("<qt>You can find the new request at:<br /><a href='%1'>%1</a> </qt>", output[QLatin1String("url")].toString());
+            message = new Sublime::Message(messageText, Sublime::Message::Information);
         } else {
-            QMessageBox::warning(nullptr, i18n("Error exporting"), i18n("Couldn't export the patch.\n%1", message));
+            const QString messageText = i18n("Couldn't export the patch.\n%1", errorMessage);
+            message = new Sublime::Message(messageText, Sublime::Message::Error);
         }
+        ICore::self()->uiController()->postMessage(message);
     });
     // set the model input parameters to avoid terminal warnings
     m_exportMenu->model()->setInputData(QJsonObject {

@@ -26,6 +26,10 @@
 #include "debuglog.h"
 #include "mi/micommand.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
+
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -343,13 +347,13 @@ void MIDebugger::processErrored(QProcess::ProcessError error)
     qCWarning(DEBUGGERCOMMON) << "Debugger ERRORED" << error << m_process->errorString();
     if(error == QProcess::FailedToStart)
     {
-        KMessageBox::information(
-            qApp->activeWindow(),
+        const QString messageText =
             i18n("<b>Could not start debugger.</b>"
                  "<p>Could not run '%1'. "
                  "Make sure that the path name is specified correctly.",
-                 m_debuggerExecutable),
-            i18n("Could not start debugger"));
+                 m_debuggerExecutable);
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        KDevelop::ICore::self()->uiController()->postMessage(message);
 
         emit userCommandOutput(QStringLiteral("Process failed to start\n"));
         emit exited(true, i18n("Process failed to start"));

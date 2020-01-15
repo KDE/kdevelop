@@ -43,8 +43,8 @@ PUBLIC
     KDev::Util # util/path.h
     KDev::Vcs
 PRIVATE
-    KDev::Interfaces
     KDev::Serialization
+    KDev::Sublime
     KF5::KIOWidgets
     Qt5::Concurrent
 )

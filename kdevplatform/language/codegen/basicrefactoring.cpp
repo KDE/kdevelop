@@ -21,7 +21,6 @@
 // Qt
 #include <QAction>
 // KF
-#include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -40,6 +39,7 @@
 #include <duchain/classdeclaration.h>
 #include <duchain/classfunctiondeclaration.h>
 #include <duchain/use.h>
+#include <sublime/message.h>
 
 #include "progressdialogs/refactoringdialog.h"
 #include <debug.h>
@@ -231,14 +231,16 @@ void BasicRefactoring::startInteractiveRename(const KDevelop::IndexedDeclaration
 
     Declaration* declaration = decl.data();
     if (!declaration) {
-        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), i18n("No declaration under cursor"));
+        auto* message = new Sublime::Message(i18n("No declaration under cursor"), Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
         return;
     }
     QFileInfo info(declaration->topContext()->url().str());
     if (!info.isWritable()) {
-        KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
-                           i18n("Declaration is located in non-writable file %1.",
-                                declaration->topContext()->url().str()));
+        const QString messageText = i18n("Declaration is located in non-writable file %1.",
+                                declaration->topContext()->url().str());
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
         return;
     }
 
@@ -345,7 +347,8 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
             DocumentChangeSet::ChangeResult result = applyChanges(originalName, replacementName, changes,
                                                                   collected.data(), usedDeclarationIndex);
             if (!result) {
-                KMessageBox::error(nullptr, i18n("Applying changes failed: %1", result.m_failureReason));
+                auto* message = new Sublime::Message(i18n("Failed to apply changes: %1", result.m_failureReason), Sublime::Message::Error);
+                ICore::self()->uiController()->postMessage(message);
                 return {};
             }
         }
@@ -354,7 +357,8 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
     DocumentChangeSet::ChangeResult result = applyChangesToDeclarations(originalName, replacementName, changes,
                                                                         collector->declarations());
     if (!result) {
-        KMessageBox::error(nullptr, i18n("Applying changes failed: %1", result.m_failureReason));
+        auto* message = new Sublime::Message(i18n("Failed to apply changes: %1", result.m_failureReason), Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
         return {};
     }
 
@@ -367,7 +371,8 @@ DocumentChangeSet BasicRefactoring::renameCollectedDeclarations(KDevelop::BasicR
 
     result = changes.applyAllChanges();
     if (!result) {
-        KMessageBox::error(nullptr, i18n("Applying changes failed: %1", result.m_failureReason));
+        auto* message = new Sublime::Message(i18n("Failed to apply changes: %1", result.m_failureReason), Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
     }
 
     return {};

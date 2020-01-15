@@ -378,6 +378,13 @@ bool MainWindow::queryClose()
     return KParts::MainWindow::queryClose();
 }
 
+void MainWindow::postMessage(Message* message)
+{
+    Q_D(MainWindow);
+
+    d->postMessage(message);
+}
+
 QString MainWindow::screenKey() const
 {
     const int scnum = QApplication::desktop()->screenNumber(parentWidget());

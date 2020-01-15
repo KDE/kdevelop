@@ -86,6 +86,7 @@ public:
     void registerStatus(QObject* status) override;
 
     void showErrorMessage(const QString& message, int timeout) override;
+    void postMessage(Sublime::Message* message) override;
 
     /// Returns list of available view factories together with their ToolDocuments.
     /// @see addToolView(), removeToolView(), findToolView()

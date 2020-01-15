@@ -27,7 +27,6 @@ Boston, MA 02110-1301, USA.
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KDialogJobUiDelegate>
-#include <KMessageBox>
 #include <KLocalizedString>
 #include <KSelectAction>
 
@@ -38,6 +37,7 @@ Boston, MA 02110-1301, USA.
 #include <interfaces/launchconfigurationtype.h>
 #include <outputview/outputjob.h>
 #include <project/projectmodel.h>
+#include <sublime/message.h>
 
 #include "core.h"
 #include "uicontroller.h"
@@ -417,10 +417,9 @@ KJob* RunController::execute(const QString& runMode, ILaunchConfiguration* launc
     ILauncher* launcher = run->type()->launcherForId( launcherId );
 
     if( !launcher ) {
-        KMessageBox::error(
-            qApp->activeWindow(),
-            i18n("The current launch configuration does not support the '%1' mode.", runMode),
-            QString());
+        const QString messageText = i18n("The current launch configuration does not support the '%1' mode.", runMode);
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
         return nullptr;
     }
 
@@ -733,17 +732,8 @@ void KDevelop::RunController::finished(KJob * job)
 
         default:
         {
-            ///WARNING: do *not* use a nested event loop here, it might cause
-            ///         random crashes later on, see e.g.:
-            ///         https://bugs.kde.org/show_bug.cgi?id=309811
-            auto dialog = new QDialog(qApp->activeWindow());
-            dialog->setAttribute(Qt::WA_DeleteOnClose);
-            dialog->setWindowTitle(i18n("Process Error"));
-            auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Close, dialog);
-            KMessageBox::createKMessageBox(dialog, buttonBox, QMessageBox::Warning,
-                                           job->errorString(), QStringList(),
-                                           QString(), nullptr, KMessageBox::NoExec);
-            dialog->show();
+            auto* message = new Sublime::Message(job->errorString(), Sublime::Message::Error);
+            Core::self()->uiController()->postMessage(message);
         }
     }
 }

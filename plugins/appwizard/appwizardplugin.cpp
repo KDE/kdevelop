@@ -47,6 +47,7 @@
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
 #include <util/scopeddialog.h>
+#include <sublime/message.h>
 #include <vcs/vcsjob.h>
 #include <vcs/interfaces/icentralizedversioncontrol.h>
 #include <vcs/interfaces/idistributedversioncontrol.h>
@@ -105,8 +106,10 @@ void AppWizardPlugin::slotNewProject()
                 core()->documentController()->openDocument(QUrl::fromUserInput(file));
             }
         } else {
-            KMessageBox::error( ICore::self()->uiController()->activeMainWindow(), i18n("Could not create project from template\n"), i18n("Failed to create project") );
-        }
+            const QString messageText = i18n("Could not create project from template.");
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
+       }
     }
 }
 

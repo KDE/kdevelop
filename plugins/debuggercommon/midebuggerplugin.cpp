@@ -37,6 +37,7 @@
 #include <interfaces/iruncontroller.h>
 #include <interfaces/iuicontroller.h>
 #include <language/interfaces/editorcontext.h>
+#include <sublime/message.h>
 #include <isession.h>
 #include <qtcompat_p.h>
 
@@ -282,9 +283,12 @@ void MIDebuggerPlugin::slotAttachProcess()
     // TODO: move check into process selection dialog
     int pid = dlg->pidSelected();
     delete dlg;
-    if (QApplication::applicationPid() == pid)
-        KMessageBox::error(core()->uiController()->activeMainWindow(),
-                           i18n("Not attaching to process %1: cannot attach the debugger to itself.", pid));
+    if (QApplication::applicationPid() == pid) {
+        const QString messageText =
+            i18n("Not attaching to process %1: cannot attach the debugger to itself.", pid);
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
+    }
     else
         attachProcess(pid);
 }

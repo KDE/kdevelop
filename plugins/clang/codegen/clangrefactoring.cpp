@@ -38,7 +38,9 @@
 
 #include <interfaces/icore.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <language/backgroundparser/backgroundparser.h>
+#include <sublime/message.h>
 
 #include "duchain/clanghelpers.h"
 #include "duchain/documentfinderhelpers.h"
@@ -252,7 +254,8 @@ void ClangRefactoring::executeMoveIntoSourceAction()
 
     const auto error = moveIntoSource(iDecl);
     if (!error.isEmpty()) {
-        KMessageBox::error(nullptr, error);
+        auto* message = new Sublime::Message(error, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
     }
 }
 

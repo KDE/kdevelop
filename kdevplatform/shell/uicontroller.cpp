@@ -37,6 +37,7 @@
 #include <sublime/holdupdates.h>
 
 #include <interfaces/itoolviewactionlistener.h>
+#include <sublime/message.h>
 #include <util/scopeddialog.h>
 
 #include "core.h"
@@ -764,6 +765,17 @@ void UiController::showErrorMessage(const QString& message, int timeout)
     auto* mw = qobject_cast<KDevelop::MainWindow*>(w);
     if (!mw) return;
     QMetaObject::invokeMethod(mw, "showErrorMessage", Q_ARG(QString, message), Q_ARG(int, timeout));
+}
+
+void UiController::postMessage(Sublime::Message* message)
+{
+    // if Core has flag Core::NoUi there also is no window, so catched as well here
+    Sublime::MainWindow* window = activeSublimeWindow();
+    if (!window) {
+        delete message;
+        return;
+    }
+    QMetaObject::invokeMethod(window, "postMessage", Q_ARG(Sublime::Message*, message));
 }
 
 const QHash< IToolViewFactory*, Sublime::ToolDocument* >& UiController::factoryDocuments() const

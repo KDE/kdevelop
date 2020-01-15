@@ -1,5 +1,7 @@
 /***************************************************************************
  *   Copyright 2006-2009 Alexander Dymo  <adymo@kdevelop.org>              *
+ *   Copyright 2012 Dominik Haumann <dhaumann@kde.org>                     *
+ *   Copyright 2020 Friedrich W. H. Kossebau <kossebau@kde.org>            *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU Library General Public License as       *
@@ -40,6 +42,8 @@
 #include "idealcontroller.h"
 #include "holdupdates.h"
 #include "idealbuttonbarwidget.h"
+#include "message.h"
+#include "messagewidget.h"
 #include <debug.h>
 
 class IdealToolBar : public QToolBar
@@ -156,6 +160,9 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     layout->setMargin(0);
     centralWidget->setLayout(layout);
 
+    messageWidget = new MessageWidget();
+    layout->addWidget(messageWidget);
+
     splitterCentralWidget = new QSplitter(centralWidget);
     // take as much space as possible
     splitterCentralWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -185,6 +192,10 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 
 MainWindowPrivate::~MainWindowPrivate()
 {
+    // create working copy as messages are auto-removing themselves from the hash on destruction
+    const auto messages = m_messageHash.keys();
+    qDeleteAll(messages);
+
     delete m_leftTabbarCornerWidget.data();
     m_leftTabbarCornerWidget.clear();
 }
@@ -792,6 +803,45 @@ void MainWindowPrivate::setTabBarLeftCornerWidget(QWidget* widget)
     Q_ASSERT(c);
 
     c->setLeftCornerWidget(widget);
+}
+
+void MainWindowPrivate::postMessage(Message* message)
+{
+    if (!message) {
+        return;
+    }
+
+    message->setParent(this);
+
+    // if there are no actions, add a close action by default if widget does not auto-hide
+    if (message->actions().isEmpty() && message->autoHide() < 0) {
+        auto* closeAction = new QAction(QIcon::fromTheme(QStringLiteral("window-close")),
+                                        i18nc("@action", "Close"));
+        closeAction->setToolTip(i18nc("@info:tooltip", "Close message"));
+        message->addAction(closeAction);
+    }
+
+    // reparent actions, as we want full control over when they are deleted
+    QVector<QSharedPointer<QAction>> managedMessageActions;
+    const auto messageActions = message->actions();
+    managedMessageActions.reserve(messageActions.size());
+    for (QAction* action : messageActions) {
+        action->setParent(nullptr);
+        managedMessageActions.append(QSharedPointer<QAction>(action));
+    }
+    m_messageHash.insert(message, managedMessageActions);
+
+    // also catch if the user manually calls delete message
+    connect(message, &Message::closed, this, &MainWindowPrivate::messageDestroyed);
+
+    messageWidget->postMessage(message, managedMessageActions);
+}
+
+void MainWindowPrivate::messageDestroyed(Message* message)
+{
+    // Message is already in destructor
+    Q_ASSERT(m_messageHash.contains(message));
+    m_messageHash.remove(message);
 }
 
 }

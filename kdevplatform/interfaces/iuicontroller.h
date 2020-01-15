@@ -32,6 +32,7 @@ namespace Sublime{
     class Controller;
     class View;
     class Area;
+    class Message;
 }
 
 namespace KDevelop {
@@ -139,6 +140,19 @@ public:
       * @p message The message
       * @p timeout The timeout in seconds how long to show the message */
     virtual void showErrorMessage(const QString& message, int timeout = 1) = 0;
+    // TODO: convert all these calls into postMessage
+
+    /**
+     * Shows a message in the message area.
+     *
+     * If running in NoGui mode, the message will be discarded.
+     *
+     * Unlike all other functions in this class, this function is thread-safe.
+     * You can call it from the background.
+     *
+     * @p message the message, ownership is transferred
+     */
+    virtual void postMessage(Sublime::Message* message) = 0;
 
     /** @return area for currently active sublime mainwindow or 0 if
     no sublime mainwindow is active.*/

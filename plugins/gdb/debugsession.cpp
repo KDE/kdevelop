@@ -40,10 +40,11 @@
 #include <interfaces/icore.h>
 #include <interfaces/idebugcontroller.h>
 #include <interfaces/ilaunchconfiguration.h>
+#include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
 #include <util/environmentprofilelist.h>
 
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KShell>
 
 #include <QApplication>
@@ -288,11 +289,11 @@ void DebugSession::handleVersion(const QStringList& s)
             qFatal("You need a graphical application.");
         }
 
-        KMessageBox::error(
-            qApp->activeWindow(),
+        const QString messageText =
             i18n("<b>You need gdb 7.0.0 or higher.</b><br />"
-            "You are using: %1", s.first()),
-            i18n("gdb error"));
+                 "You are using: %1", s.first());
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
         stopDebugger();
     }
 }
@@ -300,11 +301,11 @@ void DebugSession::handleVersion(const QStringList& s)
 void DebugSession::handleFileExecAndSymbols(const ResultRecord& r)
 {
     if (r.reason == QLatin1String("error")) {
-        KMessageBox::error(
-            qApp->activeWindow(),
+        const QString messageText =
             i18n("<b>Could not start debugger:</b><br />")+
-            r[QStringLiteral("msg")].literal(),
-            i18n("Startup error"));
+                 r[QStringLiteral("msg")].literal();
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
         stopDebugger();
     }
 }
@@ -314,13 +315,13 @@ void DebugSession::handleCoreFile(const ResultRecord& r)
     if (r.reason != QLatin1String("error")) {
         setDebuggerStateOn(s_programExited | s_core);
     } else {
-        KMessageBox::error(
-            qApp->activeWindow(),
+        const QString messageText =
             i18n("<b>Failed to load core file</b>"
                  "<p>Debugger reported the following error:"
                  "<p><tt>%1",
-            r[QStringLiteral("msg")].literal()),
-            i18n("Startup error"));
+                 r[QStringLiteral("msg")].literal());
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
         stopDebugger();
     }
 }

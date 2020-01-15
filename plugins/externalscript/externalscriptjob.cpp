@@ -29,7 +29,6 @@
 
 #include <KProcess>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KShell>
 
 #include <KTextEditor/Document>
@@ -43,8 +42,10 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iproject.h>
+#include <interfaces/iuicontroller.h>
 #include <project/projectmodel.h>
 #include <serialization/indexedstring.h>
+#include <sublime/message.h>
 #include <util/path.h>
 
 using namespace KDevelop;
@@ -96,11 +97,11 @@ ExternalScriptJob::ExternalScriptJob(ExternalScriptItem* item, const QUrl& url, 
     if (m_outputMode != ExternalScriptItem::OutputNone || m_inputMode != ExternalScriptItem::InputNone
         || m_errorMode != ExternalScriptItem::ErrorNone) {
         if (!view) {
-            KMessageBox::error(QApplication::activeWindow(),
-                               i18n("Cannot run script '%1' since it tries to access "
-                                    "the editor contents but no document is open.", item->text()),
-                               i18n("No Document Open")
-            );
+            const QString messageText =
+                i18n("Cannot run script '%1' since it tries to access "
+                     "the editor contents but no document is open.", item->text());
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
             return;
         }
 

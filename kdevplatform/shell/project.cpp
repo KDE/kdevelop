@@ -44,8 +44,10 @@
 #include <interfaces/iplugin.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/isession.h>
 #include <project/projectmodel.h>
+#include <sublime/message.h>
 #include <util/path.h>
 #include <serialization/indexedstring.h>
 #include <vcs/interfaces/ibasicversioncontrol.h>
@@ -233,10 +235,12 @@ public:
         KIO::StatJob* statJob = KIO::stat( projectFile.toUrl(), KIO::HideProgressInfo );
         if ( !statJob->exec() ) //be sync for right now
         {
-            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "Unable to load the project file %1.<br>"
-                                  "The project has been removed from the session.",
-                                  projectFile.pathOrUrl() ) );
+            const QString messageText =
+                i18n("Unable to load the project file %1.<br>"
+                     "The project has been removed from the session.",
+                     projectFile.pathOrUrl());
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
             return false;
         }
 
@@ -257,11 +261,11 @@ public:
                 KIO::SimpleJob* mkdirJob = KIO::mkdir( dir );
                 if( !mkdirJob->exec() )
                 {
-                    KMessageBox::sorry(
-                        Core::self()->uiController()->activeMainWindow(),
+                    const QString messageText =
                         i18n("Unable to create hidden dir (%1) for developer file",
-                        dir.toDisplayString(QUrl::PreferLocalFile) )
-                        );
+                             dir.toDisplayString(QUrl::PreferLocalFile));
+                    auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+                    ICore::self()->uiController()->postMessage(message);
                     return false;
                 }
             }
@@ -274,9 +278,9 @@ public:
         {
             qCDebug(SHELL) << "Job failed:" << copyJob->errorString();
 
-            KMessageBox::sorry( Core::self()->uiController()->activeMainWindow(),
-                            i18n("Unable to get project file: %1",
-                            projectFile.pathOrUrl() ) );
+            const QString messageText = i18n("Unable to get project file: %1", projectFile.pathOrUrl());
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
             return false;
         }
 
@@ -313,9 +317,10 @@ public:
         progress->projectName = name;
         if( Core::self()->projectController()->isProjectNameUsed( name ) )
         {
-            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                                i18n( "Could not load %1, a project with the same name '%2' is already open.",
-                                projectFile.pathOrUrl(), name ) );
+            const QString messageText =
+                i18n("Could not load %1, a project with the same name '%2' is already open.", projectFile.pathOrUrl(), name);
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
 
             qCWarning(SHELL) << "Trying to open a project with a name that is already used by another open project";
             return true;
@@ -343,17 +348,20 @@ public:
             iface = manager->extension<IProjectFileManager>();
         else
         {
-            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "Could not load project management plugin <b>%1</b>.<br> Check that the required programs are installed,"
-                                  " or see console output for more information.",
-                                  managerSetting ) );
+            const QString messageText =
+                i18n("Could not load project management plugin <b>%1</b>.<br>Check that the required programs are installed,"
+                     " or see console output for more information.", managerSetting);
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
             manager = nullptr;
             return nullptr;
         }
         if (iface == nullptr)
         {
-            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                            i18n( "project importing plugin (%1) does not support the IProjectFileManager interface.", managerSetting ) );
+            const QString messageText =
+                i18n("The project importing plugin (%1) does not support the IProjectFileManager interface.", managerSetting);
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
             delete manager;
             manager = nullptr;
         }
@@ -404,8 +412,8 @@ public:
         topItem = fileManager->import( project );
         if( !topItem )
         {
-            KMessageBox::sorry( Core::self()->uiControllerInternal()->defaultMainWindow(),
-                                i18n("Could not open project") );
+            auto* message = new Sublime::Message(i18n("Could not open project."), Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
             return false;
         }
 

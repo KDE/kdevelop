@@ -22,12 +22,14 @@
 #include "debug.h"
 #include "globalsettings.h"
 #include "utils.h"
-
+// KDevPlatform
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
 #include <util/path.h>
-
+// KF
 #include <KLocalizedString>
-#include <KMessageBox>
-
+// Qt
 #include <QFile>
 
 namespace Heaptrack
@@ -41,15 +43,16 @@ Visualizer::Visualizer(const QString& resultsFile, QObject* parent)
             this, [this](QProcess::ProcessError error) {
         QString errorMessage;
         if (error == QProcess::FailedToStart) {
-            errorMessage = i18n("Failed to start visualizer from \"%1\".", program())
+            errorMessage = i18n("Failed to start Heaptrack visualizer from \"%1\".", program())
                            + QLatin1String("\n\n")
                            + i18n("Check your settings and install the visualizer if necessary.");
         } else {
-            errorMessage = i18n("Error during visualizer execution:")
+            errorMessage = i18n("Error during Heaptrack visualizer execution:")
                            + QLatin1String("\n\n")
                            + errorString();
         }
-        KMessageBox::error(activeMainWindow(), errorMessage, i18n("Heaptrack Error"));
+        auto* message = new Sublime::Message(errorMessage, Sublime::Message::Error);
+        KDevelop::ICore::self()->uiController()->postMessage(message);
     });
 
     connect(this, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),

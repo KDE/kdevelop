@@ -24,7 +24,6 @@
 #include <KConfigGroup>
 #include <KJob>
 #include <KLocalizedString>
-#include <KMessageBox>
 #include <KParts/MainWindow>
 #include <KPluginFactory>
 #include <KShell>
@@ -34,6 +33,7 @@
 #include <interfaces/ilaunchconfiguration.h>
 #include <interfaces/iprojectcontroller.h>
 #include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
 
 #include "nativeappconfig.h"
 #include "debug.h"
@@ -125,8 +125,9 @@ KJob* ExecutePlugin::dependencyJob( KDevelop::ILaunchConfiguration* cfg ) const
             }
             else
             {
-                KMessageBox::error(core()->uiController()->activeMainWindow(),
-                                   i18n("Couldn't resolve the dependency: %1", dep.toString()));
+                const QString messageText = i18n("Couldn't resolve the dependency: %1", dep.toString());
+                auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+                ICore::self()->uiController()->postMessage(message);
             }
         }
         auto* job = new KDevelop::BuilderJob();

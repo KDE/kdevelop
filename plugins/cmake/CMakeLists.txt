@@ -102,6 +102,7 @@ target_link_libraries(kdevcmakemanagernosettings
     KDev::Interfaces
     KDev::Project
     KDev::Language
+    KDev::Sublime
     KDev::OutputView
     KF5::KIOWidgets
     KF5::TextEditor
@@ -130,6 +131,7 @@ target_link_libraries( kdevcmakedocumentation
     KDev::Project
     KDev::Language
     KDev::Documentation
+    KDev::Sublime
     KF5::ItemModels
     KF5::TextEditor
 )

@@ -56,6 +56,7 @@
 #include <interfaces/iruntimecontroller.h>
 #include <interfaces/iruntime.h>
 #include <interfaces/iruncontroller.h>
+#include <interfaces/iuicontroller.h>
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
 #include <interfaces/idocumentation.h>
@@ -70,6 +71,7 @@
 #include <language/duchain/use.h>
 #include <language/duchain/duchain.h>
 #include <makefileresolver/makefileresolver.h>
+#include <sublime/message.h>
 
 Q_DECLARE_METATYPE(KDevelop::IProject*)
 
@@ -866,14 +868,16 @@ void CMakeManager::showConfigureErrorMessage(const QString& projectName, const Q
         // Do not show a message box if there is no active window in order not to block unit tests.
         return;
     }
-    KMessageBox::error(QApplication::activeWindow(), i18n(
+    const QString messageText = i18n(
         "Failed to configure project '%1' (error message: %2)."
         " As a result, KDevelop's code understanding will likely be broken.\n"
         "\n"
         "To fix this issue, please ensure that the project's CMakeLists.txt files"
         " are correct, and KDevelop is configured to use the correct CMake version and settings."
         " Then right-click the project item in the projects tool view and click 'Reload'.",
-        projectName, errorMessage));
+        projectName, errorMessage);
+    auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+    ICore::self()->uiController()->postMessage(message);
 }
 
 QPair<QWidget*, KTextEditor::Range> CMakeManager::specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position)

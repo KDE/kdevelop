@@ -46,6 +46,7 @@ Boston, MA 02110-1301, USA.
 #include <KTextEditor/AnnotationInterface>
 
 #include <sublime/area.h>
+#include <sublime/message.h>
 #include <sublime/view.h>
 #include <interfaces/iplugincontroller.h>
 #include <interfaces/iprojectcontroller.h>
@@ -1256,8 +1257,10 @@ void DocumentController::vcsAnnotateCurrentDocument()
         helper->annotation();
     }
     else {
-        KMessageBox::error(nullptr, i18n("Could not annotate the document because it is not "
-                                   "part of a version-controlled project."));
+        const QString messageText =
+            i18n("Could not annotate the document because it is not part of a version-controlled project.");
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        ICore::self()->uiController()->postMessage(message);
     }
 }
 

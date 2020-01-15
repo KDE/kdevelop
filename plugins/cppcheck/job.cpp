@@ -31,11 +31,13 @@
 #include "parser.h"
 #include "utils.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
+#include <sublime/message.h>
 #include <shell/problem.h>
-
+// KF
 #include <KLocalizedString>
-#include <KMessageBox>
-
+// Qt
 #include <QApplication>
 #include <QElapsedTimer>
 #include <QRegularExpression>
@@ -154,29 +156,29 @@ void Job::start()
 
 void Job::childProcessError(QProcess::ProcessError e)
 {
-    QString message;
+    QString messageText;
 
     switch (e) {
     case QProcess::FailedToStart:
-        message = i18n("Failed to start Cppcheck from \"%1\".", commandLine()[0]);
+        messageText = i18n("Failed to start Cppcheck from \"%1\".", commandLine()[0]);
         break;
 
     case QProcess::Crashed:
         if (status() != KDevelop::OutputExecuteJob::JobStatus::JobCanceled) {
-            message = i18n("Cppcheck crashed.");
+            messageText = i18n("Cppcheck crashed.");
         }
         break;
 
     case QProcess::Timedout:
-        message = i18n("Cppcheck process timed out.");
+        messageText = i18n("Cppcheck process timed out.");
         break;
 
     case QProcess::WriteError:
-        message = i18n("Write to Cppcheck process failed.");
+        messageText = i18n("Write to Cppcheck process failed.");
         break;
 
     case QProcess::ReadError:
-        message = i18n("Read from Cppcheck process failed.");
+        messageText = i18n("Read from Cppcheck process failed.");
         break;
 
     case QProcess::UnknownError:
@@ -185,8 +187,9 @@ void Job::childProcessError(QProcess::ProcessError e)
         break;
     }
 
-    if (!message.isEmpty()) {
-        KMessageBox::error(qApp->activeWindow(), message, i18n("Cppcheck Error"));
+    if (!messageText.isEmpty()) {
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        KDevelop::ICore::self()->uiController()->postMessage(message);
     }
 
     KDevelop::OutputExecuteJob::childProcessError(e);

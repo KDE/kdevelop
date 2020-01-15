@@ -27,6 +27,9 @@ set(sublime_LIB_SRCS
     idealtoolbutton.cpp
     idealdockwidget.cpp
     idealbuttonbarwidget.cpp
+
+    message.cpp
+    messagewidget.cpp
 )
 declare_qt_logging_category(sublime_LIB_SRCS
     TYPE LIBRARY
@@ -49,6 +52,7 @@ install(FILES
     document.h
     mainwindow.h
     mainwindowoperator.h
+    message.h
     urldocument.h
     sublimedefs.h
     tooldocument.h

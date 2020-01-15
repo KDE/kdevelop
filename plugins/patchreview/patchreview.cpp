@@ -35,6 +35,7 @@
 
 #include <project/projectmodel.h>
 
+#include <sublime/message.h>
 #include <util/path.h>
 
 #include <libkomparediff2/komparemodellist.h>
@@ -473,7 +474,9 @@ void PatchReviewPlugin::updateReview()
     for( int a = 0; a < m_modelList->modelCount() && a < maximumFilesToOpenDirectly; ++a ) {
         QUrl absoluteUrl = urlForFileModel( m_modelList->modelAt( a ) );
         if (absoluteUrl.isRelative()) {
-            KMessageBox::error( nullptr, i18n("The base directory of the patch must be an absolute directory"), i18n( "Patch Review" ) );
+            const QString messageText = i18n("The base directory of the patch must be an absolute directory.");
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
             break;
         }
 

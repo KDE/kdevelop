@@ -190,6 +190,7 @@ PUBLIC
     KF5::ThreadWeaver
 PRIVATE
     KDev::Project
+    KDev::Sublime
     KF5::GuiAddons
     KF5::TextEditor
     KF5::Parts

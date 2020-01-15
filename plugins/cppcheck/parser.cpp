@@ -23,12 +23,14 @@
 
 #include "debug.h"
 
+#include <interfaces/icore.h>
+#include <interfaces/iuicontroller.h>
 #include <shell/problem.h>
+#include <sublime/message.h>
 #include <language/editor/documentrange.h>
-
+// KF
 #include <KLocalizedString>
-#include <KMessageBox>
-
+// Qt
 #include <QApplication>
 #include <QFile>
 
@@ -227,13 +229,13 @@ QVector<KDevelop::IProblem::Ptr> CppcheckParser::parse()
         switch (error()) {
         case CustomError:
         case UnexpectedElementError:
-        case NotWellFormedError:
-            KMessageBox::error(
-                qApp->activeWindow(),
-                i18n("Cppcheck XML Parsing: error at line %1, column %2: %3", lineNumber(), columnNumber(), errorString()),
-                i18n("Cppcheck Error"));
+        case NotWellFormedError: {
+            const QString messageText =
+                i18n("Cppcheck XML Parsing: error at line %1, column %2: %3", lineNumber(), columnNumber(), errorString());
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            KDevelop::ICore::self()->uiController()->postMessage(message);
             break;
-
+        }
         case NoError:
         case PrematureEndOfDocumentError:
             break;

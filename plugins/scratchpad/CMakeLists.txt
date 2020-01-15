@@ -22,6 +22,7 @@ kdevplatform_add_plugin(kdevscratchpad
 
 target_link_libraries(kdevscratchpad
     KDev::Interfaces
+    KDev::Sublime
     KDev::Util
     KDev::OutputView
 )

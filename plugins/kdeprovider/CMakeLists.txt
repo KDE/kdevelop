@@ -16,5 +16,6 @@ ki18n_wrap_ui(kdevkdeprovider_PART_SRCS kdeconfig.ui)
 kdevplatform_add_plugin(kdevkdeprovider JSON kdevkdeprovider.json SOURCES ${kdevkdeprovider_PART_SRCS})
 target_link_libraries(kdevkdeprovider
     KDev::Interfaces
+    KDev::Sublime
     KDev::Vcs
 )

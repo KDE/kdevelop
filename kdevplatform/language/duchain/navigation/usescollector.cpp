@@ -35,6 +35,7 @@
 #include <debug.h>
 #include <interfaces/iuicontroller.h>
 #include <codegen/coderepresentation.h>
+#include <sublime/message.h>
 #include <KLocalizedString>
 
 using namespace KDevelop;
@@ -410,24 +411,22 @@ void UsesCollector::updateReady(const KDevelop::IndexedString& url, KDevelop::Re
         ///or whether we work on with it.
         ///@todo We will lose files that were edited right after their update here.
         qCWarning(LANGUAGE) << "WARNING: context" << topContext->url().str() << "does not have the required features!!";
-        ICore::self()->uiController()->showErrorMessage(QLatin1String(
-                                                            "Updating ") +
-                                                        ICore::self()->projectController()->prettyFileName(topContext->
-                                                                                                           url().toUrl(),
-                                                                                                           KDevelop::
-                                                                                                           IProjectController
-                                                                                                           ::FormatPlain) +
-                                                        QLatin1String(" failed!"), 5);
+        // TODO no i18n?
+        const QString messageText = QLatin1String("Updating ") +
+            ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain) + QLatin1String(" failed!");
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Warning);
+        message->setAutoHide(0);
+        ICore::self()->uiController()->postMessage(message);
         return;
     }
 
     if (topContext->parsingEnvironmentFile()->needsUpdate()) {
         qCWarning(LANGUAGE) << "WARNING: context" << topContext->url().str() << "is not up to date!";
-        ICore::self()->uiController()->showErrorMessage(i18n("%1 still needs an update!",
-                                                             ICore::self()->projectController()->prettyFileName(
-                                                                 topContext->url().toUrl(),
-                                                                 KDevelop
-                                                                 ::IProjectController::FormatPlain)), 5);
+        const auto prettyFileName = ICore::self()->projectController()->prettyFileName(topContext->url().toUrl(), KDevelop::IProjectController::FormatPlain);
+        const auto messageText = i18n("%1 still needs an update!", prettyFileName);
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Warning);
+        message->setAutoHide(0);
+        ICore::self()->uiController()->postMessage(message);
 //       return;
     }
 

@@ -46,12 +46,12 @@ Boston, MA 02110-1301, USA.
 #include <KJobWidgets>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <KPassivePopup>
 #include <KRecentFilesAction>
 #include <KSharedConfig>
 #include <KStandardAction>
 
 #include <sublime/area.h>
+#include <sublime/message.h>
 #include <interfaces/iplugin.h>
 #include <interfaces/isession.h>
 #include <interfaces/context.h>
@@ -66,6 +66,7 @@ Boston, MA 02110-1301, USA.
 #include <projectconfigpage.h>
 #include <language/backgroundparser/parseprojectjob.h>
 #include <interfaces/iruncontroller.h>
+#include <sublime/message.h>
 #include <util/scopeddialog.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
@@ -313,18 +314,20 @@ public:
 
         if ( !url.isValid() )
         {
-            KMessageBox::error(Core::self()->uiControllerInternal()->activeMainWindow(),
-                            i18n("Invalid Location: %1", url.toDisplayString(QUrl::PreferLocalFile)));
+            const QString messageText =  i18n("Invalid Location: %1", url.toDisplayString(QUrl::PreferLocalFile));
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
             return;
         }
 
         if ( m_currentlyOpening.contains(url))
         {
             qCDebug(SHELL) << "Already opening " << url << ". Aborting.";
-            KPassivePopup::message( i18n( "Project already being opened"),
-                                    i18n( "Already opening %1, not opening again",
-                                        url.toDisplayString(QUrl::PreferLocalFile) ),
-                                    m_core->uiController()->activeMainWindow() );
+            const QString messageText =
+                i18n("Already opening %1, not opening again", url.toDisplayString(QUrl::PreferLocalFile));
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Information);
+            message->setAutoHide(0);
+            ICore::self()->uiController()->postMessage(message);
             return;
         }
 
@@ -511,8 +514,9 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
         delJob->exec();
 
         if (!writeProjectSettingsToConfigFile(projectFileUrl, dlg)) {
-            KMessageBox::error(d->m_core->uiControllerInternal()->defaultMainWindow(),
-                i18n("Unable to create configuration file %1", projectFileUrl.url()));
+            const QString messageText = i18n("Unable to create configuration file %1", projectFileUrl.url());
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
             return QUrl();
         }
     }
@@ -777,10 +781,12 @@ void ProjectController::openProjectForUrlSlot(bool) {
         if(!project) {
             openProjectForUrl(url);
         }else{
-            KMessageBox::error(Core::self()->uiController()->activeMainWindow(), i18n("Project already open: %1", project->name()));
+            auto* message = new Sublime::Message(i18n("Project already open: %1", project->name()), Sublime::Message::Error);
+            Core::self()->uiController()->postMessage(message);
         }
     }else{
-        KMessageBox::error(Core::self()->uiController()->activeMainWindow(), i18n("No active document"));
+        auto* message = new Sublime::Message(i18n("No active document"), Sublime::Message::Error);
+        Core::self()->uiController()->postMessage(message);
     }
 }
 
@@ -931,8 +937,10 @@ bool ProjectController::fetchProjectFromUrl(const QUrl& repoUrl, FetchFlags fetc
     }
     if (!vcsOrProviderPlugin) {
         if (fetchFlags.testFlag(FetchShowErrorIfNotSupported)) {
-            KMessageBox::error(Core::self()->uiController()->activeMainWindow(),
-                               i18n("No enabled plugin supports this repository URL: %1", repoUrl.toDisplayString()));
+            const QString messageText =
+                i18n("No enabled plugin supports this repository URL: %1", repoUrl.toDisplayString());
+            auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+            ICore::self()->uiController()->postMessage(message);
         }
         return false;
     }

@@ -33,9 +33,14 @@ qt5_add_resources(kdevappwizard_PART_SRCS kdevappwizard.qrc)
 kdevplatform_add_plugin(kdevappwizard JSON kdevappwizard.json SOURCES ${kdevappwizard_PART_SRCS})
 
 target_link_libraries(kdevappwizard
+    KDev::Interfaces
+    KDev::Vcs
+    KDev::Language
+    KDev::Sublime
+    KDev::Util
     KF5::KIOWidgets
     KF5::NewStuff
     KF5::Archive
-    KDev::Interfaces KDev::Vcs KDev::Language KDev::Util)
+)
 
 

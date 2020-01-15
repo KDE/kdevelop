@@ -31,7 +31,6 @@
 #include <KFilePlacesModel>
 #include <KParts/MainWindow>
 #include <KActionCollection>
-#include <KMessageBox>
 #include <KActionMenu>
 #include <KJobWidgets>
 #include <KConfigGroup>
@@ -43,6 +42,7 @@
 #include <interfaces/idocumentcontroller.h>
 #include <interfaces/context.h>
 #include <interfaces/contextmenuextension.h>
+#include <sublime/message.h>
 
 #include "../openwith/iopenwith.h"
 
@@ -182,7 +182,9 @@ void FileManager::fileCreated(KJob* job)
     if (!transferJob->error()) {
         KDevelop::ICore::self()->documentController()->openDocument( transferJob->url() );
     } else {
-        KMessageBox::error(KDevelop::ICore::self()->uiController()->activeMainWindow(), i18n("Unable to create file '%1'", transferJob->url().toDisplayString(QUrl::PreferLocalFile)));
+        const QString messageText = i18n("Unable to create file '%1'", transferJob->url().toDisplayString(QUrl::PreferLocalFile));
+        auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
+        KDevelop::ICore::self()->uiController()->postMessage(message);
     }
 }
 
