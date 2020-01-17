@@ -39,6 +39,7 @@
         "Description[el]": "Διαχειρίζεται templates για πηγαία αρχεία",
         "Description[en_GB]": "Manages templates for source files",
         "Description[es]": "Gestiona plantillas para archivos de código fuente",
+        "Description[et]": "Lähtekoodi failide mallide haldamine",
         "Description[fr]": "Gère les modèles de fichiers sources",
         "Description[gl]": "Xestiona modelos para os ficheiros de fonte",
         "Description[it]": "Gestisce i modelli per i file sorgente",

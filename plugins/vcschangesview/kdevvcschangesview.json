@@ -40,6 +40,7 @@
         "Description[el]": "Το πρόσθετο αυτό παρέχει ολοκλήρωση ανάμεσα στα έργα και της VCS υποδομής τους",
         "Description[en_GB]": "This plugin provides integration between the projects and their VCS infrastructure",
         "Description[es]": "Este complemento proporciona integración entre los proyectos y su infraestructura VCS",
+        "Description[et]": "See plugin võimaldab lõimida projektid ja nende versioonihalduse infrastruktuuri",
         "Description[fr]": "Ce module fournit une intégration entre les projets et leur infrastructure de contrôle de version",
         "Description[gl]": "Este complemento fornece integración entre os proxectos e a súa infraestrutura VCS",
         "Description[it]": "Questa estensione fornisce integrazione tra i progetti e la loro infrastruttura VCS",
