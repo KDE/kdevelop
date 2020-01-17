@@ -37,6 +37,7 @@
         "Description[de]": "Stellt Android-Laufzeitumgebungen bereit",
         "Description[en_GB]": "Exposes Android runtimes",
         "Description[es]": "Expone bibliotecas en tiempo de ejecución de Android",
+        "Description[et]": "Androidi käitusaegade näitamine",
         "Description[fr]": "Expose les exécutifs Android",
         "Description[gl]": "Expón execucións de Android.",
         "Description[it]": "Espone i runtime di Android",

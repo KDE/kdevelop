@@ -37,6 +37,7 @@
         "Description[de]": "Stellt Docker-Laufzeitumgebungen bereit",
         "Description[en_GB]": "Exposes Docker runtimes",
         "Description[es]": "Expone bibliotecas en tiempo de ejecución de Docker",
+        "Description[et]": "Dockeri käitusaegade näitamine",
         "Description[fr]": "Expose les exécutifs Docker",
         "Description[gl]": "Expón os executábeis de Docker.",
         "Description[it]": "Espone i runtime di Docker",

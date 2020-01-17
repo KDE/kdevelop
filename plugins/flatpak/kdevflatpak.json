@@ -37,6 +37,7 @@
         "Description[de]": "Stellt Flatpak-Laufzeitumgebungen bereit",
         "Description[en_GB]": "Exposes Flatpak runtimes",
         "Description[es]": "Expone bibliotecas en tiempo de ejecución de Flatpak",
+        "Description[et]": "Flatpaki käitusaegade näitamine",
         "Description[fr]": "Expose les exécutifs Flatpak",
         "Description[gl]": "Expón os executábeis de Flatpak.",
         "Description[it]": "Espone i runtime di Flatpak",

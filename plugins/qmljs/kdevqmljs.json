@@ -6,6 +6,7 @@
         "Description[de]": "Sprachunterstützung für QML/JS auf der Grundlage von qmljs von QtCreator",
         "Description[en_GB]": "QML/JS language support (based on qmljs from QtCreator)",
         "Description[es]": "Implementación del lenguaje QML/JS (basado en qmljs de QtCreator)",
+        "Description[et]": "QML/JS keele toetus (põhineb QtCreatori qmljs'il)",
         "Description[fr]": "Prise en charge du langage QML/JS (utilisant qmljs de QtCreator)",
         "Description[gl]": "Compatibilidade con QML/JS (baseada en qmljs de QtCreator)",
         "Description[it]": "Supporto al linguaggio QML/JS (basato su qmljs di QtCreator)",

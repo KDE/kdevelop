@@ -7,6 +7,7 @@
         "Description[de]": "Einstellung des Formatierungsstils für den Quelltext in einem Projekt.",
         "Description[en_GB]": "Configure which style should be used for formatting of the sourcecode in a project.",
         "Description[es]": "Configurar el estilo que se debe usar para formatear el código fuente de un proyecto.",
+        "Description[et]": "Seadistamine, millist stiili kasutada projekti lähtekoodi vormindamisel.",
         "Description[fr]": "Configurer le style de formatage du code source dans les projets.",
         "Description[gl]": "Configurar o estilo para usar para formatar o código fonte nun proxecto.",
         "Description[it]": "Configura lo stile che sarà usato per formattare il codice sorgente in un progetto.",
