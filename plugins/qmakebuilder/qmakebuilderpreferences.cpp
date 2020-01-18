@@ -32,7 +32,6 @@
 #include "qmakebuilddirchooser.h"
 #include "qmakebuilddirchooserdialog.h"
 #include "qmakeconfig.h"
-#include "qmakebuilderconfig.h"
 #include <debug.h>
 
 #include <interfaces/iproject.h>
