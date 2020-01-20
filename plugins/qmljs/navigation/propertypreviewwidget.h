@@ -20,6 +20,7 @@
 #define PROPERTYPREVIEWWIDGET_H
 
 #include <QWidget>
+#include <QMultiHash>
 
 #include <language/duchain/declaration.h>
 #include <interfaces/idocument.h>
@@ -83,7 +84,7 @@ private:
     explicit PropertyPreviewWidget(KTextEditor::Document* doc,
                                    const KTextEditor::Range& keyRange, const KTextEditor::Range& valueRange,
                                    const SupportedProperty& property, const QString& value);
-    static QHash<QString, SupportedProperty> supportedProperties;
+    static QMultiHash<QString, SupportedProperty> supportedProperties;
 
     QQuickWidget* view;
 

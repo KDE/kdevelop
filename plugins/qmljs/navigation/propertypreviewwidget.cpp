@@ -35,7 +35,7 @@
 
 // List of supported properties. The string must be the name of the property,
 // which can contain dots if necessary
-QHash<QString, SupportedProperty> PropertyPreviewWidget::supportedProperties;
+QMultiHash<QString, SupportedProperty> PropertyPreviewWidget::supportedProperties;
 
 QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
                                                     const KTextEditor::Range& keyRange,
@@ -45,7 +45,7 @@ QWidget* PropertyPreviewWidget::constructIfPossible(KTextEditor::Document* doc,
                                                     const QString& value)
 {
 #define PROP(key, filename, type, class) \
-    supportedProperties.insertMulti(key, SupportedProperty(QUrl(base + filename), type, class));
+    supportedProperties.insert(key, SupportedProperty(QUrl(base + filename), type, class));
 
     if ( supportedProperties.isEmpty() ) {
         QString base = QStandardPaths::locate(
