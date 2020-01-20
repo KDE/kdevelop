@@ -25,3 +25,12 @@ namespace dr373 { // dr373: no
     }
   };
 }
+
+#define BAR 2
+/// "internalContext" : { "localDeclarationCount" : 4, "findDeclarations" : {
+///    "sure" : { "defaultParameter" : "nullptr" },
+///    "a" : { "defaultParameter" : "<parse error>" },
+///    "b" : { "defaultParameter" : "BAR" },
+///    "c" : { "defaultParameter" : "3" }
+/// } }
+int asdf(int *sure = nullptr, int a = NOT_DEFINED, int b = BAR, int c = 3);

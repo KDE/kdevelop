@@ -178,6 +178,8 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor, DefaultArgumen
         info.stringParts.clear();
         clang_visitChildren(arg, paramVisitor, &info);
 
+        const auto hasDefault = !info.stringParts.isEmpty();
+
         //Clang includes the equal sign sometimes, but not other times.
         if (!info.stringParts.isEmpty() && info.stringParts.first() == QLatin1String("=")) {
             info.stringParts.removeFirst();
@@ -196,6 +198,12 @@ QVector<QString> ClangUtils::getDefaultArguments(CXCursor cursor, DefaultArgumen
             arguments.replace(i, result);
         } else if (!result.isEmpty()) {
             arguments << result;
+        } else if (hasDefault) {
+            // no string obtained, probably due to a parse error...
+            // we have to include some argument, otherwise it's even more confusing to our users
+            // furthermore, we cannot even do getRawContents on the arg's cursor, as it's cursor
+            // extent stops at the first error...
+            arguments << i18n("<parse error>");
         }
     }
     return arguments;
