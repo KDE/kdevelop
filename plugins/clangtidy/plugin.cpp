@@ -28,6 +28,7 @@
 #include "config/clangtidypreferences.h"
 #include "config/clangtidyprojectconfigpage.h"
 #include "analyzer.h"
+#include "checksetselectionmanager.h"
 // KDevPlatform
 #include <interfaces/contextmenuextension.h>
 #include <project/projectconfigpage.h>
@@ -46,11 +47,12 @@ namespace ClangTidy
 
 Plugin::Plugin(QObject* parent, const QVariantList& /*unused*/)
     : IPlugin(QStringLiteral("kdevclangtidy"), parent)
+    , m_checkSetSelectionManager(new CheckSetSelectionManager)
 {
     setXMLFile(QStringLiteral("kdevclangtidy.rc"));
 
     // create after ui.rc file is set with action ids
-    m_analyzer = new Analyzer(this, this);
+    m_analyzer = new Analyzer(this, m_checkSetSelectionManager, this);
 
     auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
 
@@ -65,6 +67,8 @@ Plugin::~Plugin() = default;
 
 void Plugin::unload()
 {
+    delete m_checkSetSelectionManager;
+    m_checkSetSelectionManager = nullptr;
     delete m_analyzer;
     m_analyzer = nullptr;
 }
@@ -88,7 +92,7 @@ KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const ProjectConf
     auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
     m_checkSet.setClangTidyPath(clangTidyPath);
 
-    return new ProjectConfigPage(this, options.project, &m_checkSet, parent);
+    return new ProjectConfigPage(this, options.project, m_checkSetSelectionManager, &m_checkSet, parent);
 }
 
 KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
@@ -96,7 +100,12 @@ KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
     if (number != 0) {
         return nullptr;
     }
-    return new ClangTidyPreferences(this, parent);
+
+    // ensure checkset is up-to-date TODO: async
+    auto clangTidyPath = KDevelop::Path(ClangTidySettings::clangtidyPath()).toLocalFile();
+    m_checkSet.setClangTidyPath(clangTidyPath);
+
+    return new ClangTidyPreferences(m_checkSetSelectionManager, &m_checkSet, this, parent);
 }
 
 } // namespace ClangTidy

@@ -19,33 +19,40 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLANGTIDY_ANALYZER_H
-#define CLANGTIDY_ANALYZER_H
+#ifndef CLANGTIDY_CHECKSETSELECTIONCOMBOBOX_H
+#define CLANGTIDY_CHECKSETSELECTIONCOMBOBOX_H
 
-// CompileAnalyzer
-#include <compileanalyzer.h>
+// plugin
+#include "checksetselection.h"
+// KF
+#include <KComboBox>
+// Qt
+#include <QVector>
 
-namespace ClangTidy
-{
 
-class Plugin;
-class CheckSetSelectionManager;
+namespace ClangTidy {
 
-class Analyzer : public KDevelop::CompileAnalyzer
+class CheckSetSelectionComboBox : public KComboBox
 {
     Q_OBJECT
+    Q_PROPERTY(QString selection READ selection WRITE setSelection NOTIFY selectionChanged USER true)
 
 public:
-    Analyzer(Plugin* plugin, CheckSetSelectionManager* checkSetSelectionManager, QObject* parent);
-    ~Analyzer();
+    explicit CheckSetSelectionComboBox(QWidget* parent = nullptr);
 
-protected:
-    KDevelop::CompileAnalyzeJob* createJob(KDevelop::IProject* project, const KDevelop::Path& buildDirectory,
-                                           const QUrl& url, const QStringList& filePaths) override;
+public:
+    void setCheckSetSelections(const QVector<CheckSetSelection>& checkSetSelections,
+                               const QString& defaultCheckSetSelectionId);
 
-private:
-    Plugin* const m_plugin;
-    CheckSetSelectionManager* const m_checkSetSelectionManager;
+public:
+    QString selection() const;
+    void setSelection(const QString& selection);
+
+Q_SIGNALS:
+    void selectionChanged(const QString& selection);
+
+private Q_SLOTS:
+    void onCurrentIndexChanged();
 };
 
 }

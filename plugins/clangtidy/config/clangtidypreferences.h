@@ -29,7 +29,11 @@ namespace Ui
 {
 class ClangTidyPreferences;
 }
-
+namespace ClangTidy
+{
+class CheckSetSelectionManager;
+class CheckSet;
+}
 /**
  * \class
  * \brief Implements the session configuration page for clang-tidy.
@@ -39,7 +43,9 @@ class ClangTidyPreferences : public KDevelop::ConfigPage
     Q_OBJECT
 
 public:
-    explicit ClangTidyPreferences(KDevelop::IPlugin* plugin = nullptr, QWidget* parent = nullptr);
+    explicit ClangTidyPreferences(ClangTidy::CheckSetSelectionManager* checkSetSelectionManager,
+                                  const ClangTidy::CheckSet* checkSet,
+                                  KDevelop::IPlugin* plugin = nullptr, QWidget* parent = nullptr);
     ~ClangTidyPreferences() override;
 
 public: // KDevelop::ConfigPage API
@@ -48,11 +54,16 @@ public: // KDevelop::ConfigPage API
     QString fullName() const override;
     QIcon icon() const override;
 
+    void apply() override;
+    void defaults() override;
+    void reset() override;
+
 private:
     void updateJobCountEnabledState();
 
 private:
     Ui::ClangTidyPreferences* ui;
+    ClangTidy::CheckSetSelectionManager* const m_checkSetSelectionManager;
 };
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * This file is part of KDevelop
  *
- * Copyright 2020 Friedrich W. H. Kossebau <kossebau@kde.org>
+ * Copyright 2010-2012,2020 Friedrich W. H. Kossebau <kossebau@kde.org>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,33 +19,41 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLANGTIDY_ANALYZER_H
-#define CLANGTIDY_ANALYZER_H
+#ifndef CLANGTIDY_CHECKSETSELECTIONLOCK_H
+#define CLANGTIDY_CHECKSETSELECTIONLOCK_H
 
-// CompileAnalyzer
-#include <compileanalyzer.h>
+// Qt
+#include <QSharedDataPointer>
 
-namespace ClangTidy
+class QString;
+
+namespace ClangTidy {
+
+class CheckSetSelectionLockPrivate;
+
+class CheckSetSelectionLock
 {
-
-class Plugin;
-class CheckSetSelectionManager;
-
-class Analyzer : public KDevelop::CompileAnalyzer
-{
-    Q_OBJECT
-
-public:
-    Analyzer(Plugin* plugin, CheckSetSelectionManager* checkSetSelectionManager, QObject* parent);
-    ~Analyzer();
+    friend class CheckSetSelectionManager;
 
 protected:
-    KDevelop::CompileAnalyzeJob* createJob(KDevelop::IProject* project, const KDevelop::Path& buildDirectory,
-                                           const QUrl& url, const QStringList& filePaths) override;
+    CheckSetSelectionLock(const QString& fileName,
+                          const QString& checkSetSelectionId);
+
+public:
+    CheckSetSelectionLock(const CheckSetSelectionLock& other);
+
+    ~CheckSetSelectionLock();
+
+public:
+    CheckSetSelectionLock& operator=(const CheckSetSelectionLock& other);
+
+public:
+    void unlock();
+    bool isLocked() const;
+    QString checkSetSelectionId() const;
 
 private:
-    Plugin* const m_plugin;
-    CheckSetSelectionManager* const m_checkSetSelectionManager;
+    QSharedDataPointer<CheckSetSelectionLockPrivate> d;
 };
 
 }

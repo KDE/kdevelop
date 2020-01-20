@@ -24,8 +24,11 @@
 
 // plugin
 #include "ui_clangtidyprojectconfigpage.h"
+#include "checksetselection.h"
 // KDevPlatform
 #include <interfaces/configpage.h>
+// Qt
+#include <QVector>
 
 
 namespace KDevelop
@@ -33,8 +36,11 @@ namespace KDevelop
 class IProject;
 }
 
+class ClangTidyProjectSettings;
+
 namespace ClangTidy
 {
+class CheckSetSelectionManager;
 class CheckSet;
 
 /**
@@ -48,7 +54,10 @@ class ProjectConfigPage : public KDevelop::ConfigPage
 
 public:
     ProjectConfigPage(KDevelop::IPlugin* plugin,
-                      KDevelop::IProject* project, const CheckSet* checkSet, QWidget* parent);
+                      KDevelop::IProject* project,
+                      CheckSetSelectionManager* checkSetSelectionManager,
+                      const CheckSet* checkSet,
+                      QWidget* parent);
     ~ProjectConfigPage() override;
 
 public: // KDevelop::ConfigPage API
@@ -56,10 +65,23 @@ public: // KDevelop::ConfigPage API
     QString name() const override;
     QIcon icon() const override;
 
+    void apply() override;
+    void defaults() override;
+    void reset() override;
+
+private Q_SLOTS:
+    void onSelectionChanged(const QString& selection);
+    void onChecksChanged(const QString& checks);
+
 private:
     Ui::ProjectConfigPage m_ui;
 
+    QString m_customChecks;
+
+    ClangTidyProjectSettings* m_settings;
     KDevelop::IProject* m_project;
+    const QVector<CheckSetSelection> m_checkSetSelections;
+    const QString m_defaultCheckSetSelectionId;
 };
 
 }

@@ -35,7 +35,17 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="ClangTidy::CheckSelection" name="kcfg_enabledChecks" native="true"/>
+        <widget class="ClangTidy::CheckSetSelectionComboBox" name="kcfg_checkSetSelection">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="ClangTidy::CheckSelection" name="enabledChecks" native="true"/>
        </item>
       </layout>
      </widget>
@@ -117,6 +127,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>ClangTidy::CheckSetSelectionComboBox</class>
+   <extends>QComboBox</extends>
+   <header>config/checksetselectioncombobox.h</header>
+  </customwidget>
   <customwidget>
    <class>ClangTidy::CheckSelection</class>
    <extends>QWidget</extends>

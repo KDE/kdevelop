@@ -25,6 +25,7 @@
 // plugin
 #include "plugin.h"
 #include "job.h"
+#include "checksetselectionmanager.h"
 #include <clangtidyconfig.h>
 #include <clangtidyprojectconfig.h>
 // KDevPlatform
@@ -38,7 +39,7 @@
 namespace ClangTidy
 {
 
-Analyzer::Analyzer(Plugin* plugin, QObject* parent)
+Analyzer::Analyzer(Plugin* plugin, CheckSetSelectionManager* checkSetSelectionManager, QObject* parent)
     : KDevelop::CompileAnalyzer(plugin,
                                 i18n("Clang-Tidy"), QStringLiteral("dialog-ok"),
                                 QStringLiteral("clangtidy_file"), QStringLiteral("clangtidy_project"),
@@ -50,6 +51,7 @@ Analyzer::Analyzer(Plugin* plugin, QObject* parent)
                                 KDevelop::ProblemModel::CanByPassScopeFilter,
                                 parent)
     , m_plugin(plugin)
+    , m_checkSetSelectionManager(checkSetSelectionManager)
 {
 }
 
@@ -77,7 +79,11 @@ KDevelop::CompileAnalyzeJob * Analyzer::createJob(KDevelop::IProject* project,
 
     params.additionalParameters = projectSettings.additionalParameters();
 
-    const auto enabledChecks = projectSettings.enabledChecks();
+    QString checkSetSelectionId = projectSettings.checkSetSelection();
+    if (checkSetSelectionId == QLatin1String("Default")) {
+        checkSetSelectionId = m_checkSetSelectionManager->defaultCheckSetSelectionId();
+    }
+    const auto enabledChecks = checkSetSelectionId.isEmpty() ? projectSettings.enabledChecks() : m_checkSetSelectionManager->checkSetSelection(checkSetSelectionId).selectionAsString();
     if (!enabledChecks.isEmpty()) {
         params.enabledChecks = enabledChecks;
     } else {

@@ -10,7 +10,7 @@
     <height>300</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="settingsLayout" stretch="0,0">
+  <layout class="QVBoxLayout" name="settingsLayout" stretch="0,0,1">
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -115,26 +115,20 @@
     </widget>
    </item>
    <item>
-    <spacer name="settingsSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>186</height>
-      </size>
-     </property>
-    </spacer>
+    <widget class="ClangTidy::CheckSetManageWidget" name="checksets"/>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ClangTidy::CheckSetManageWidget</class>
+   <extends>QWidget</extends>
+   <header>config/checksetmanagewidget.h</header>
+  </customwidget>
+  <customwidget>
    <class>KUrlRequester</class>
    <extends>QWidget</extends>
    <header>KUrlRequester</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -50,15 +50,20 @@ public:
     void setChecks(const QString& checks);
     QString checks() const;
 
+    void setEditable(bool editable);
+
 protected: // QObject API
     bool event(QEvent *event) override;
 
 Q_SIGNALS:
-    void checksChanged();
+    void checksChanged(const QString& checks);
 
 private:
     void expandSubGroupsWithExplicitlyEnabledStates();
     void expandSubGroupsWithExplicitlyEnabledStates(const QModelIndex& groupIndex);
+
+private Q_SLOTS:
+    void onEnabledChecksChanged();
 
 private:
     const CheckSet* m_checkSet = nullptr;

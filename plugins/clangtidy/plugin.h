@@ -30,6 +30,7 @@
 namespace ClangTidy
 {
 class Analyzer;
+class CheckSetSelectionManager;
 
 /**
  * \class
@@ -72,6 +73,7 @@ public:
 private:
     Analyzer* m_analyzer;
     CheckSet m_checkSet;
+    CheckSetSelectionManager* m_checkSetSelectionManager;
 };
 
 } // namespace ClangTidy

@@ -18,6 +18,9 @@
     <entry name="headerFilter" key="HeaderFilter" type="String">
         <default>.*</default>
     </entry>
+    <entry name="checkSetSelection" key="CheckSetSelection" type="String">
+        <default></default>
+    </entry>
     <entry name="enabledChecks" key="EnabledChecks" type="String">
         <default></default>
     </entry>

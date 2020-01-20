@@ -22,6 +22,7 @@
 #include "config/clangtidyprojectconfigpage.h"
 
 // plugin
+#include "checksetselectionmanager.h"
 #include <debug.h>
 #include <checkset.h>
 #include <clangtidyprojectconfig.h>
@@ -32,19 +33,29 @@ namespace ClangTidy
 {
 
 ProjectConfigPage::ProjectConfigPage(KDevelop::IPlugin* plugin,
-                                     KDevelop::IProject* project, const CheckSet* checkSet,
+                                     KDevelop::IProject* project,
+                                     CheckSetSelectionManager* checkSetSelectionManager,
+                                     const CheckSet* checkSet,
                                      QWidget* parent)
     : KDevelop::ConfigPage(plugin, nullptr, parent)
     , m_project(project)
+    , m_checkSetSelections(checkSetSelectionManager->checkSetSelections())
+    , m_defaultCheckSetSelectionId(checkSetSelectionManager->defaultCheckSetSelectionId())
 {
-    auto* config = new ClangTidyProjectSettings;
-    config->setSharedConfig(project->projectConfiguration());
-    config->load();
-    setConfigSkeleton(config);
+    m_settings = new ClangTidyProjectSettings;
+    m_settings->setSharedConfig(project->projectConfiguration());
+    m_settings->load();
+    setConfigSkeleton(m_settings);
 
     m_ui.setupUi(this);
 
-    m_ui.kcfg_enabledChecks->setCheckSet(checkSet);
+    m_ui.kcfg_checkSetSelection->setCheckSetSelections(m_checkSetSelections, m_defaultCheckSetSelectionId);
+    m_ui.enabledChecks->setCheckSet(checkSet);
+
+    connect(m_ui.kcfg_checkSetSelection, &CheckSetSelectionComboBox::selectionChanged,
+            this, &ProjectConfigPage::onSelectionChanged);
+    connect(m_ui.enabledChecks, &CheckSelection::checksChanged,
+            this, &ProjectConfigPage::onChecksChanged);
 }
 
 ProjectConfigPage::~ProjectConfigPage() = default;
@@ -62,6 +73,60 @@ QString ProjectConfigPage::name() const
 QIcon ProjectConfigPage::icon() const
 {
     return QIcon::fromTheme(QStringLiteral("dialog-ok"));
+}
+
+void ProjectConfigPage::defaults()
+{
+    // TODO: can we read this from m_settings somwhow?
+    m_customChecks.clear();
+
+    ConfigPage::defaults();
+    onSelectionChanged(m_ui.kcfg_checkSetSelection->selection());
+}
+
+void ProjectConfigPage::reset()
+{
+    m_customChecks = m_settings->enabledChecks();
+
+    ConfigPage::reset();
+
+    onSelectionChanged(m_ui.kcfg_checkSetSelection->selection());
+}
+
+void ProjectConfigPage::apply()
+{
+    m_settings->setEnabledChecks(m_customChecks);
+
+    ConfigPage::apply();
+}
+
+void ProjectConfigPage::onSelectionChanged(const QString& selectionId)
+{
+    QString checks;
+    bool editable = false;
+    if (selectionId.isEmpty()) {
+        checks = m_customChecks;
+        editable = true;
+    } else {
+        const  QString effectiveSelectionId = (selectionId == QLatin1String("Default")) ? m_defaultCheckSetSelectionId : selectionId;
+        for (auto& selection : m_checkSetSelections) {
+            if (selection.id() == effectiveSelectionId) {
+                checks = selection.selectionAsString();
+                break;
+            }
+        }
+    }
+
+    m_ui.enabledChecks->blockSignals(true);
+    m_ui.enabledChecks->setEditable(editable);
+    m_ui.enabledChecks->setChecks(checks);
+    m_ui.enabledChecks->blockSignals(false);
+}
+
+void ProjectConfigPage::onChecksChanged(const QString& checks)
+{
+    m_customChecks = checks;
+    emit changed();
 }
 
 } // namespace ClangTidy

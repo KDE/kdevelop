@@ -24,6 +24,9 @@ set(kdevclangtidy_PART_SRCS
     job.cpp
     plugin.cpp
     checkset.cpp
+    checksetselection.cpp
+    checksetselectionlock.cpp
+    checksetselectionmanager.cpp
 
     config/clangtidyprojectconfigpage.cpp
     config/clangtidypreferences.cpp
@@ -32,6 +35,9 @@ set(kdevclangtidy_PART_SRCS
     config/checklistitemproxystyle.cpp
     config/checklistmodel.cpp
     config/checkgroup.cpp
+    config/checksetselectioncombobox.cpp
+    config/checksetselectionlistmodel.cpp
+    config/checksetmanagewidget.cpp
 
     parsers/clangtidyparser.cpp
 # disable for now:
@@ -40,6 +46,7 @@ set(kdevclangtidy_PART_SRCS
 )
 
 ki18n_wrap_ui(kdevclangtidy_PART_SRCS
+    config/checksetmanagewidget.ui
     config/clangtidypreferences.ui
     config/clangtidyprojectconfigpage.ui
 )

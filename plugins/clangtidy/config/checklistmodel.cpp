@@ -290,6 +290,10 @@ Qt::ItemFlags CheckListModel::flags(const QModelIndex& index) const
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     }
 
+    if (!m_isEditable) {
+        return  Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    }
+
     auto* checkGroup = static_cast<const CheckGroup*>(index.internalPointer());
 
     // root?
@@ -356,6 +360,17 @@ void CheckListModel::setEnabledChecks(const QStringList& enabledChecks)
         m_isDefault = false;
     }
 
+    endResetModel();
+}
+
+void CheckListModel::setEditable(bool editable)
+{
+    if (m_isEditable == editable) {
+        return;
+    }
+
+    beginResetModel();
+    m_isEditable = editable;
     endResetModel();
 }
 

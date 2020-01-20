@@ -64,6 +64,7 @@ public:
     void setCheckSet(const CheckSet* checkSet);
     void setEnabledChecks(const QStringList& enabledChecks);
     QStringList enabledChecks() const;
+    void setEditable(bool editable);
 
 Q_SIGNALS:
     void enabledChecksChanged();
@@ -78,6 +79,7 @@ private:
 
     QScopedPointer<CheckGroup> m_rootCheckGroup;
     bool m_isDefault = true;
+    bool m_isEditable = true;
 };
 
 }
