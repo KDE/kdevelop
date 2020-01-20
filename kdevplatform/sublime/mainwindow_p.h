@@ -98,7 +98,7 @@ public:
     QSplitter* splitterCentralWidget;
 
     IdealController *idealController;
-    int ignoreDockShown;
+    bool ignoreDockShown;
     bool autoAreaSettingsSave;
 
     bool eventFilter(QObject* obj, QEvent* event) override;
