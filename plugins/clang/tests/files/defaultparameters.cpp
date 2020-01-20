@@ -33,3 +33,12 @@ int foodef(int a = 1);
 ///    "b" : { "defaultParameter" : "3" }
 /// } }
 int foo(int sure, int a = 4, int b = 3);
+
+#define FOO 1
+#define BAR 2
+/// "internalContext" : { "localDeclarationCount" : 4, "findDeclarations" : {
+///    "a" : { "defaultParameter" : "FOO" },
+///    "b" : { "defaultParameter" : "BAR" },
+///    "c" : { "defaultParameter" : "3" }
+/// } }
+int foobar(int sure, int a = FOO, int b = BAR, int c = 3);

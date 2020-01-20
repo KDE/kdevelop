@@ -144,11 +144,7 @@ CXChildVisitResult paramVisitor(CXCursor cursor, CXCursor /*parent*/, CXClientDa
     //the declaration or definition, and the default arguments don't have lexical
     //parents. So this range check is the only thing that really works.
     if ((info->fileName.isEmpty() || fileName == info->fileName) && info->range.contains(range.toRange())) {
-        const ClangTokens tokens(info->unit, range.range());
-        info->stringParts.reserve(info->stringParts.size() + tokens.size());
-        for (CXToken token : tokens) {
-            info->stringParts.append(ClangString(clang_getTokenSpelling(info->unit, token)).toString());
-        }
+        info->stringParts.append(ClangUtils::getRawContents(info->unit, range.range()));
     }
     return CXChildVisit_Continue;
 }
