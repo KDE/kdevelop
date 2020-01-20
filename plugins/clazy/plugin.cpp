@@ -33,7 +33,6 @@
 #include <project/projectconfigpage.h>
 // KF
 #include <KPluginFactory>
-#include <KMessageBox>
 // Qt
 #include <QApplication>
 
