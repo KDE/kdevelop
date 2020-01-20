@@ -32,7 +32,6 @@ public:
     int autoHideDelay = -1;
     int priority = 0;
     Message::MessageType messageType;
-    Message::AutoHideMode autoHideMode = Message::AfterUserInteraction;
     bool wordWrap = true;
 };
 
@@ -106,16 +105,6 @@ void Message::setAutoHide(int delay)
 int Message::autoHide() const
 {
     return d->autoHideDelay;
-}
-
-void Message::setAutoHideMode(Message::AutoHideMode mode)
-{
-    d->autoHideMode = mode;
-}
-
-Message::AutoHideMode Message::autoHideMode() const
-{
-    return d->autoHideMode;
 }
 
 void Message::setWordWrap(bool wordWrap)

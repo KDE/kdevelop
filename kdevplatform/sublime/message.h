@@ -20,9 +20,10 @@
 */
 
 // Forked from KTextEditor::Message at v5.66.0
-// Dropped Document/View properties, made wordWrap true by default, dropped position
+// Dropped Document/View properties, made wordWrap true by default, dropped position & autoHideMode
 // Should be investigated later to turn this and the messagewidget class
 // into some reusable generic in-shell-message code, e.g. as KF module
+// TODO: re-add autoHideMode once there is an idea how to determine user interaction with the shell
 
 #ifndef KDEVPLATFORM_SUBLIME_MESSAGE_H
 #define KDEVPLATFORM_SUBLIME_MESSAGE_H
@@ -86,12 +87,7 @@ namespace Sublime
  *
  * Message%s can be shown for only a short amount of time by using the autohide
  * feature. With setAutoHide() a timeout in milliseconds can be set after which
- * the Message is automatically hidden. Further, use setAutoHideMode() to either
- * trigger the autohide timer as soon as the widget is shown (AutoHideMode::Immediate),
- * or only after user interaction with the view (AutoHideMode::AfterUserInteraction).
- *
- * The default autohide mode is set to AutoHideMode::AfterUserInteraction.
- * This way, it is unlikely the user misses a notification.
+ * the Message is automatically hidden.
  */
 class KDEVPLATFORMSUBLIME_EXPORT Message : public QObject
 {
@@ -111,15 +107,6 @@ public:
         Information,  ///< information message type
         Warning,      ///< warning message type
         Error         ///< error message type
-    };
-
-    /**
-     * The AutoHideMode determines when to trigger the autoHide timer.
-     * @see setAutoHide(), autoHide()
-     */
-    enum AutoHideMode {
-        Immediate = 0,       ///< auto-hide is triggered as soon as the message is shown
-        AfterUserInteraction ///< auto-hide is triggered only after the user interacted with the view
     };
 
 public:
@@ -189,7 +176,7 @@ public:
      *
      * By default, auto hide is disabled.
      *
-     * @see autoHide(), setAutoHideMode()
+     * @see autoHide()
      */
     void setAutoHide(int delay = 0);
 
@@ -197,24 +184,9 @@ public:
      * Returns the auto hide time in milliseconds.
      * Please refer to setAutoHide() for an explanation of the return value.
      *
-     * @see setAutoHide(), autoHideMode()
+     * @see setAutoHide()
      */
     int autoHide() const;
-
-    /**
-     * Sets the auto hide mode to @p mode.
-     * The default mode is set to AutoHideMode::AfterUserInteraction.
-     * @param mode auto hide mode
-     * @see autoHideMode(), setAutoHide()
-     */
-    void setAutoHideMode(Message::AutoHideMode mode);
-
-    /**
-     * Get the Message's auto hide mode.
-     * The default mode is set to AutoHideMode::AfterUserInteraction.
-     * @see setAutoHideMode(), autoHide()
-     */
-    Message::AutoHideMode autoHideMode() const;
 
     /**
      * Enabled word wrap according to @p wordWrap.

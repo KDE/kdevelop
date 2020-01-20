@@ -121,9 +121,7 @@ void MessageWidget::showNextMessage()
     if (m_autoHideTime >= 0) {
         connect(m_autoHideTimer, &QTimer::timeout,
                 m_currentMessage, &Message::deleteLater, Qt::UniqueConnection);
-        if (m_currentMessage->autoHideMode() == Message::Immediate) {
-            m_autoHideTimer->start(m_autoHideTime == 0 ? s_defaultAutoHideTime : m_autoHideTime);
-        }
+        m_autoHideTimer->start(m_autoHideTime == 0 ? s_defaultAutoHideTime : m_autoHideTime);
     }
 
     // finally show
