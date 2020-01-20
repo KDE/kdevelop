@@ -94,7 +94,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
     clear();
     AbstractNavigationContext::html(shorten);
 
-    modifyHtml()  += QLatin1String("<html><body>");
+    modifyHtml()  += QStringLiteral("<html><body>");
 
     if (!d->m_declaration.data()) {
         modifyHtml() += QLatin1String("<p>") + i18n("lost declaration") + QLatin1String("</p></body></html>");
@@ -368,7 +368,7 @@ QString AbstractDeclarationNavigationContext::html(bool shorten)
         modifyHtml() += QStringLiteral("</p>");
     }
 
-    modifyHtml() += QLatin1String("</body></html>");
+    modifyHtml() += QStringLiteral("</body></html>");
 
     return currentHtml();
 }

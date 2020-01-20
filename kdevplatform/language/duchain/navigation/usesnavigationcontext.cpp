@@ -47,7 +47,7 @@ QString UsesNavigationContext::html(bool shorten)
 {
     Q_UNUSED(shorten);
     clear();
-    modifyHtml()  += QLatin1String("<html><body><p>");
+    modifyHtml()  += QStringLiteral("<html><body><p>");
 
     if (auto context = previousContext()) {
         modifyHtml() += navigationHighlight(i18n("Uses of "));
@@ -60,7 +60,7 @@ QString UsesNavigationContext::html(bool shorten)
         }
     }
 
-    modifyHtml() += QLatin1String("</p></body></html>");
+    modifyHtml() += QStringLiteral("</p></body></html>");
 
     return currentHtml();
 }

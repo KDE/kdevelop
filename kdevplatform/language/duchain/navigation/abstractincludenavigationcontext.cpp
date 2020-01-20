@@ -80,7 +80,7 @@ TopDUContext* pickContextWithData(const QList<TopDUContext*>& duchains, uint max
 QString AbstractIncludeNavigationContext::html(bool shorten)
 {
     clear();
-    modifyHtml()  += QLatin1String("<html><body><p>");
+    modifyHtml()  += QStringLiteral("<html><body><p>");
 
     QUrl u = m_item.url();
     NavigationAction action(u, KTextEditor::Cursor(0, 0));
@@ -105,7 +105,7 @@ QString AbstractIncludeNavigationContext::html(bool shorten)
         modifyHtml() += i18n("not parsed yet");
     }
 
-    modifyHtml() += QLatin1String("</p></body></html>");
+    modifyHtml() += QStringLiteral("</p></body></html>");
     return currentHtml();
 }
 
