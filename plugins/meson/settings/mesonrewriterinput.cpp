@@ -83,7 +83,7 @@ void MesonRewriterInputBase::updateUi()
     role = m_enabled ? role : KColorScheme::InactiveText;
 
     QPalette pal = m_ui->l_name->palette();
-    pal.setColor(QPalette::Foreground, scheme.foreground(role).color());
+    pal.setColor(QPalette::WindowText, scheme.foreground(role).color());
     m_ui->l_name->setPalette(pal);
 
     m_ui->l_name->setDisabled(!m_enabled);

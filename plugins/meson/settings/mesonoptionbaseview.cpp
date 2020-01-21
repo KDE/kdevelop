@@ -128,7 +128,7 @@ void MesonOptionBaseView::setChanged(bool changed)
     }
 
     QPalette pal = m_ui->l_name->palette();
-    pal.setColor(QPalette::Foreground, scheme.foreground(role).color());
+    pal.setColor(QPalette::WindowText, scheme.foreground(role).color());
     m_ui->l_name->setPalette(pal);
     emit configChanged();
 }

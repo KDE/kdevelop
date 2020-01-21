@@ -132,7 +132,7 @@ void MesonNewBuildDir::setStatus(const QString& str, bool validConfig)
     }
 
     QPalette pal = m_ui->l_statusMessage->palette();
-    pal.setColor(QPalette::Foreground, scheme.foreground(role).color());
+    pal.setColor(QPalette::WindowText, scheme.foreground(role).color());
     m_ui->l_statusMessage->setPalette(pal);
     m_ui->l_statusMessage->setText(str);
 

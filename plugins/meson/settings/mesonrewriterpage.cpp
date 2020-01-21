@@ -182,7 +182,7 @@ void MesonRewriterPage::checkStatus()
         }
 
         QPalette pal = m_ui->l_status->palette();
-        pal.setColor(QPalette::Foreground, scheme.foreground(role).color());
+        pal.setColor(QPalette::WindowText, scheme.foreground(role).color());
         m_ui->l_status->setPalette(pal);
         m_ui->l_status->setText(i18n("Status: %1", msg));
     };
@@ -225,7 +225,7 @@ void MesonRewriterPage::checkStatus()
     }
 
     QPalette pal = m_ui->l_changed->palette();
-    pal.setColor(QPalette::Foreground, scheme.foreground(role).color());
+    pal.setColor(QPalette::WindowText, scheme.foreground(role).color());
     m_ui->l_changed->setPalette(pal);
 }
 
