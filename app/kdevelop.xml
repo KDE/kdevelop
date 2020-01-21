@@ -2,14 +2,13 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="application/x-kdevelop">
     <comment>KDevelop Project File</comment>
+    <comment xml:lang="ast">Ficheru de proyeutu de KDevelop</comment>
     <comment xml:lang="ca">Fitxer de projecte del KDevelop</comment>
     <comment xml:lang="ca@valencia">Fitxer de projecte del KDevelop</comment>
     <comment xml:lang="cs">Soubor projektu KDevelop</comment>
     <comment xml:lang="de">KDevelop-Projektdatei</comment>
-    <comment xml:lang="el">Αρχείο έργου KDevelop</comment>
     <comment xml:lang="en_GB">KDevelop Project File</comment>
     <comment xml:lang="es">Archivo de proyecto de KDevelop</comment>
-    <comment xml:lang="et">KDevelopi projektifail</comment>
     <comment xml:lang="fr">Fichiers de projet KDevelop</comment>
     <comment xml:lang="gl">Ficheiro de proxecto de KDevelop</comment>
     <comment xml:lang="it">File di progetto di KDevelop</comment>
@@ -17,7 +16,7 @@
     <comment xml:lang="nl">Projectbestand van KDevelop</comment>
     <comment xml:lang="pl">Pliki projektu KDevelopa</comment>
     <comment xml:lang="pt">Ficheiro de Projecto do KDevelop</comment>
-    <comment xml:lang="pt_BR">Arquivo de projeto do KDevelop</comment>
+    <comment xml:lang="pt_BR">Arquivo de projeto KDevelop</comment>
     <comment xml:lang="ru">Файл проекта KDevelop</comment>
     <comment xml:lang="sk">Súbor projektu KDevelop</comment>
     <comment xml:lang="sv">KDevelop-projektfil</comment>
