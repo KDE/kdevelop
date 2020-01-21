@@ -193,7 +193,7 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
                 } else {
                     return i18nc("#thread-id at function-name or address", "#%1 at %2", thread.nr, thread.name);
                 }
-            } else if (role == Qt::TextColorRole) {
+            } else if (role == Qt::ForegroundRole) {
                 if (thread.nr == d->m_crashedThreadIndex) {
                     KColorScheme scheme(QPalette::Active);
                     return scheme.foreground(KColorScheme::NegativeText).color();
@@ -225,7 +225,7 @@ QVariant FrameStackModel::data(const QModelIndex& index, int role) const
             } else if (role == Qt::DecorationRole) {
                 QMimeType mime = QMimeDatabase().mimeTypeForUrl(frame.file);
                 return QIcon::fromTheme(mime.iconName());
-            } else if (role == Qt::TextColorRole) {
+            } else if (role == Qt::ForegroundRole) {
                 const auto fileName = frame.file.toLocalFile();
                 auto cacheIt = d->m_fileExistsCache.find(fileName);
                 if (cacheIt == d->m_fileExistsCache.end()) {

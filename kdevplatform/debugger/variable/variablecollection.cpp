@@ -224,7 +224,7 @@ QVariant Variable::data(int column, int role) const
             return i18n("Error");
         }
     }
-    if (column == 1 && role == Qt::TextColorRole)
+    if (column == 1 && role == Qt::ForegroundRole)
     {
         KColorScheme scheme(QPalette::Active);
         if (!m_inScope) {
