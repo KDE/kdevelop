@@ -581,7 +581,7 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
             status.setUrl(fileUrl);
         }
     }
-    statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+    statuses.append(QVariant::fromValue<VcsStatusInfo>(status));
     job->setResults(statuses);
 }
 
@@ -606,7 +606,7 @@ void PerforcePlugin::parseP4DiffOutput(DVcsJob* job)
 
     diff.setBaseDiff(QUrl::fromLocalFile(dir.absolutePath()));
 
-    job->setResults(qVariantFromValue(diff));
+    job->setResults(QVariant::fromValue(diff));
 }
 
 void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
@@ -667,7 +667,7 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
             annotation.setDate(currentEvent->date());
         }
 
-        results += qVariantFromValue(annotation);
+        results += QVariant::fromValue(annotation);
         ++lineNumber;
     }
     

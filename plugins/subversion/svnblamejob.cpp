@@ -32,9 +32,9 @@
 SvnInternalBlameJob::SvnInternalBlameJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
 {
-    m_startRevision.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Start ),
+    m_startRevision.setRevisionValue(QVariant::fromValue(KDevelop::VcsRevision::Start),
                                     KDevelop::VcsRevision::Special );
-    m_endRevision.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Head ),
+    m_endRevision.setRevisionValue(QVariant::fromValue(KDevelop::VcsRevision::Head),
                                     KDevelop::VcsRevision::Special );
 }
 
@@ -182,6 +182,6 @@ void SvnBlameJob::setEndRevision( const KDevelop::VcsRevision& rev )
 
 void SvnBlameJob::blameLineReceived( const KDevelop::VcsAnnotationLine& line )
 {
-    m_annotations.append( qVariantFromValue( line ) );
+    m_annotations.append(QVariant::fromValue(line));
     emit resultsReady( this );
 }

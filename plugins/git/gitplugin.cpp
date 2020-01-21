@@ -654,7 +654,7 @@ void GitPlugin::parseGitBlameOutput(DVcsJob *job)
     for (auto& line : lines) {
         if(skipNext) {
             skipNext=false;
-            results += qVariantFromValue(*annotation);
+            results += QVariant::fromValue(*annotation);
 
             continue;
         }
@@ -1176,7 +1176,7 @@ void GitPlugin::parseGitDiffOutput(DVcsJob* job)
     diff.setBaseDiff(repositoryRoot(QUrl::fromLocalFile(job->directory().absolutePath())));
     diff.setDepth(usePrefix()? 1 : 0);
 
-    job->setResults(qVariantFromValue(diff));
+    job->setResults(QVariant::fromValue(diff));
 }
 
 static VcsStatusInfo::State lsfilesToState(char id)
@@ -1217,7 +1217,7 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
         status.setUrl(it.key());
         status.setState(it.value());
 
-        statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+        statuses.append(QVariant::fromValue<VcsStatusInfo>(status));
     }
 
     job->setResults(statuses);
@@ -1243,7 +1243,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
             VcsStatusInfo status;
             status.setUrl(QUrl::fromLocalFile(dotGit.absoluteFilePath(curr.toString().left(arrow))));
             status.setState(VcsStatusInfo::ItemDeleted);
-            statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+            statuses.append(QVariant::fromValue<VcsStatusInfo>(status));
             processedFiles += status.url();
 
             curr = curr.mid(arrow+4);
@@ -1260,7 +1260,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 
         qCDebug(PLUGIN_GIT) << "Checking git status for " << line << curr << status.state();
 
-        statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+        statuses.append(QVariant::fromValue<VcsStatusInfo>(status));
     }
     QStringList paths;
     QStringList oldcmd=job->dvcsCommand();
@@ -1279,7 +1279,7 @@ void GitPlugin::parseGitStatusOutput(DVcsJob* job)
             status.setUrl(fileUrl);
             status.setState(VcsStatusInfo::ItemUpToDate);
 
-            statuses.append(qVariantFromValue<VcsStatusInfo>(status));
+            statuses.append(QVariant::fromValue<VcsStatusInfo>(status));
         }
     }
     job->setResults(statuses);

@@ -269,7 +269,7 @@ public:
         if (!currentTargetAction) return;
 
         QAction* action = currentTargetAction->addAction(launchActionText( l ));
-        action->setData(qVariantFromValue<void*>(l));
+        action->setData(QVariant::fromValue<void*>(l));
     }
     void readLaunchConfigs( const KSharedConfigPtr& cfg, IProject* prj )
     {

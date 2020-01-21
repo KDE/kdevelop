@@ -51,11 +51,11 @@ namespace KDevelop
  *
  * Also Users of this class should set RevisionSpecialType QVariant values via
  * @code
- * setRevisionValue( qVariantFromValue<KDevelop::VcsRevision::RevisionSpecialType>( val ), KDevelop::VcsRevision::Special);
+ * setRevisionValue(QVariant::fromValue<KDevelop::VcsRevision::RevisionSpecialType>(val), KDevelop::VcsRevision::Special);
  * @endcode
  * instead of
  * @code
- * setRevisionValue( qVariantFromValue( val ), KDevelop::VcsRevision::Special);
+ * setRevisionValue(QVariant::fromValue(val), KDevelop::VcsRevision::Special);
  * @endcode
  *
  * If the latter method is used the QVariant will be an Integer, which might not

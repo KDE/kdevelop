@@ -267,7 +267,7 @@ SvnDiffJob::SvnDiffJob( KDevSvnPlugin* parent )
 
 QVariant SvnDiffJob::fetchResults()
 {
-    return qVariantFromValue( m_diff );
+    return QVariant::fromValue(m_diff);
 }
 
 void SvnDiffJob::start()

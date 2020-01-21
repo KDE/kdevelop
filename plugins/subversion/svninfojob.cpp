@@ -115,9 +115,9 @@ QVariant SvnInfoJob::fetchResults()
                                       KDevelop::VcsRevision::GlobalNumber );
                 break;
         }
-        return qVariantFromValue<KDevelop::VcsRevision>( rev );
+        return QVariant::fromValue<KDevelop::VcsRevision>(rev);
     }
-    return qVariantFromValue<SvnInfoHolder>( m_info );
+    return QVariant::fromValue<SvnInfoHolder>(m_info);
 }
 
 void SvnInfoJob::start()

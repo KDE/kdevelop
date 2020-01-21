@@ -170,7 +170,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
 
     for (LaunchConfigurationType* type : qAsConst(types)) {
         QAction* action = new QAction(type->icon(), type->name(), m);
-        action->setProperty("configtype", qVariantFromValue<QObject*>(type));
+        action->setProperty("configtype", QVariant::fromValue<QObject*>(type));
         connect(action, &QAction::triggered, this, &LaunchConfigurationDialog::createEmptyLauncher);
 
         if(!m->actions().isEmpty())

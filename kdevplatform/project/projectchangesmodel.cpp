@@ -141,9 +141,9 @@ void ProjectChangesModel::changes(IProject* project, const QList<QUrl>& urls, IB
     
     if(vcs && vcs->isVersionControlled(urls.first())) { //TODO: filter?
         VcsJob* job=vcs->status(urls, mode);
-        job->setProperty("urls", qVariantFromValue<QList<QUrl>>(urls));
-        job->setProperty("mode", qVariantFromValue<int>(mode));
-        job->setProperty("project", qVariantFromValue(project));
+        job->setProperty("urls", QVariant::fromValue<QList<QUrl>>(urls));
+        job->setProperty("mode", QVariant::fromValue<int>(mode));
+        job->setProperty("project", QVariant::fromValue(project));
         connect(job, &VcsJob::finished, this, &ProjectChangesModel::statusReady);
         
         ICore::self()->runController()->registerJob(job);

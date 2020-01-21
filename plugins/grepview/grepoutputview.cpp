@@ -238,7 +238,7 @@ GrepOutputModel* GrepOutputView::renewModel(const GrepJobSettings& settings, con
     connect(m_plugin, &GrepViewPlugin::grepJobFinished, this, &GrepOutputView::updateScrollArea);
 
     // appends new model to history
-    modelSelector->insertItem(0, description, qVariantFromValue<QObject*>(newModel));
+    modelSelector->insertItem(0, description, QVariant::fromValue<QObject*>(newModel));
     modelSelector->setCurrentIndex(0);
 
     m_settingsHistory.append(settings);

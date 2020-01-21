@@ -299,7 +299,7 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
                 QString relUrl = p->path().relativePath(path);
                 auto* action = new QAction(relUrl, this);
                 action->setProperty("url", relUrl);
-                action->setProperty("project", qVariantFromValue<KDevelop::IProject*>(p));
+                action->setProperty("project", QVariant::fromValue<KDevelop::IProject*>(p));
                 connect(action, &QAction::triggered, this, &PlasmoidExecutionConfigType::suggestionTriggered);
                 found.append(action);
             }

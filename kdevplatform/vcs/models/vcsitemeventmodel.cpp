@@ -84,7 +84,7 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
             copySource = true;
         }
 
-        rowItems.first()->setData(qVariantFromValue(ev));
+        rowItems.first()->setData(QVariant::fromValue(ev));
         appendRow(rowItems);
     }
     if(copySource)

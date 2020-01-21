@@ -30,9 +30,9 @@
 SvnInternalLogJob::SvnInternalLogJob( SvnJobBase* parent )
     : SvnInternalJobBase( parent )
 {
-    m_endRevision.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Start ),
+    m_endRevision.setRevisionValue(QVariant::fromValue(KDevelop::VcsRevision::Start),
                                     KDevelop::VcsRevision::Special );
-    m_startRevision.setRevisionValue( qVariantFromValue( KDevelop::VcsRevision::Head ),
+    m_startRevision.setRevisionValue(QVariant::fromValue(KDevelop::VcsRevision::Head),
                                     KDevelop::VcsRevision::Special );
     m_limit = 0;
 }
@@ -165,6 +165,6 @@ void SvnLogJob::setLimit( int limit )
 
 void SvnLogJob::logEventReceived( const KDevelop::VcsEvent& ev )
 {
-    m_eventList << qVariantFromValue( ev );
+    m_eventList << QVariant::fromValue(ev);
     emit resultsReady( this );
 }

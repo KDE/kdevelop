@@ -164,9 +164,8 @@ void SvnStatusJob::setRecursive( bool recursive )
 void SvnStatusJob::addToStats( const KDevelop::VcsStatusInfo& info )
 {
     //qCDebug(PLUGIN_SVN) << "new status info:" << info.url() << info.state();
-    if( !m_stats.contains( qVariantFromValue( info ) ) )
-    {
-        m_stats << qVariantFromValue( info );
+    if (!m_stats.contains(QVariant::fromValue(info))) {
+        m_stats << QVariant::fromValue(info);
         emit resultsReady( this );
     }else
     {
