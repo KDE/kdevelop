@@ -36,7 +36,7 @@ void CheckListItemProxyStyle::drawPrimitive(QStyle::PrimitiveElement element,
                                             const QWidget* widget) const
 {
     Q_UNUSED(widget);
-    if (element == QStyle::PE_IndicatorViewItemCheck) {
+    if (element == QStyle::PE_IndicatorItemViewItemCheck) {
         auto* optionViewItem = static_cast<const QStyleOptionViewItem*>(option);
         drawCheckBox(painter, optionViewItem);
         return;
