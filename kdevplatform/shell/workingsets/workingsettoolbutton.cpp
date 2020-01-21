@@ -70,7 +70,7 @@ void WorkingSetToolButton::intersectSet()
 
     m_set->setPersistent(true);
 
-    filterViews(Core::self()->workingSetControllerInternal()->workingSet(mainWindow()->area()->workingSet())->fileList().toSet() & m_set->fileList().toSet());
+    filterViews(Core::self()->workingSetControllerInternal()->workingSet(mainWindow()->area()->workingSet())->fileSet() & m_set->fileSet());
 }
 
 void WorkingSetToolButton::subtractSet()
@@ -79,14 +79,14 @@ void WorkingSetToolButton::subtractSet()
 
     m_set->setPersistent(true);
 
-    filterViews(Core::self()->workingSetControllerInternal()->workingSet(mainWindow()->area()->workingSet())->fileList().toSet() - m_set->fileList().toSet());
+    filterViews(Core::self()->workingSetControllerInternal()->workingSet(mainWindow()->area()->workingSet())->fileSet() - m_set->fileSet());
 }
 
 void WorkingSetToolButton::mergeSet()
 {
     Q_ASSERT(m_set);
 
-    const QSet<QString> loadFiles = m_set->fileList().toSet() - Core::self()->workingSetControllerInternal()->workingSet(mainWindow()->area()->workingSet())->fileList().toSet();
+    const QSet<QString> loadFiles = m_set->fileSet() - Core::self()->workingSetControllerInternal()->workingSet(mainWindow()->area()->workingSet())->fileSet();
     for (const QString& file : loadFiles) {
         Core::self()->documentController()->openDocument(QUrl::fromUserInput(file));
     }

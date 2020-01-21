@@ -23,6 +23,7 @@
 #include <QIcon>
 #include <KConfigGroup>
 #include <QPointer>
+#include <QSet>
 
 namespace Sublime {
 class Area;
@@ -83,6 +84,8 @@ public:
     QString id() const;
 
     QStringList fileList() const;
+
+    QSet<QString> fileSet() const;
 
     bool isEmpty() const;
 

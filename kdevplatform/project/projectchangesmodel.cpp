@@ -175,7 +175,12 @@ void ProjectChangesModel::statusReady(KJob* job)
     }
 
     IBasicVersionControl::RecursionMode mode = IBasicVersionControl::RecursionMode(job->property("mode").toInt());
-    const QSet<QUrl> uncertainUrls = urls(itProject).toSet().subtract(foundUrls);
+    const QList<QUrl> projectUrls = urls(itProject);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    const QSet<QUrl> uncertainUrls = QSet<QUrl>(projectUrls.begin(), projectUrls.end()).subtract(foundUrls);
+#else
+    const QSet<QUrl> uncertainUrls = projectUrls.toSet().subtract(foundUrls);
+#endif
     const QList<QUrl> sourceUrls = job->property("urls").value<QList<QUrl>>();
     for (const QUrl& url : sourceUrls) {
         if(url.isLocalFile() && QDir(url.toLocalFile()).exists()) {

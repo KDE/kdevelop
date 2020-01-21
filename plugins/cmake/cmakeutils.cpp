@@ -540,7 +540,12 @@ void updateConfig( KDevelop::IProject* project, int buildDirIndex)
         { QStringLiteral("CMAKE_BUILD_TYPE"), Config::Specific::cmakeBuildTypeKey }
     };
 
-    const QHash<QString, QString> cacheValues = readCacheValues(cacheFilePath, keys.keys().toSet());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    const QSet<QString> variables(keys.constKeyValueBegin(), keys.constKeyValueEnd());
+#else
+    const QSet<QString> variables = keys.keys().toSet();
+#endif
+    const QHash<QString, QString> cacheValues = readCacheValues(cacheFilePath, variables);
     for(auto it = cacheValues.constBegin(), itEnd = cacheValues.constEnd(); it!=itEnd; ++it) {
         const QString key = keys.value(it.key());
         Q_ASSERT(!key.isEmpty());

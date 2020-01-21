@@ -11,6 +11,7 @@
 
 #include <serialization/indexedstring.h>
 
+#include <algorithm>
 
 using KDevelop::IndexedString;
 
@@ -152,8 +153,9 @@ void GrepFindFilesThread::run()
 }
 
 QList<QUrl> GrepFindFilesThread::files() const {
-    auto tmpList = QList<QUrl>::fromSet(m_files.toSet());
+    auto tmpList = m_files;
     std::sort(tmpList.begin(), tmpList.end());
+    tmpList.erase(std::unique(tmpList.begin(), tmpList.end()), tmpList.end());
     return tmpList;
 }
 

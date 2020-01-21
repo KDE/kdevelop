@@ -23,15 +23,23 @@
 #include <QGlobalStatic>
 #include <language/duchain/declaration.h>
 
-static QStringList initCommands()
+static QSet<QString> initCommands()
 {
     QStringList ids = CMake::executeProcess(QStringLiteral("cmake"), QStringList(QStringLiteral("--help-command-list"))).split(QLatin1Char('\n'));
+    if (ids.isEmpty()) {
+        return {};
+    }
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    const auto secondIt = ids.constBegin() + 1;
+    return QSet<QString>(secondIt, ids.constEnd());
+#else
     ids.removeFirst();
-    return ids;
+    return ids.toSet();
+#endif
 }
 
 // TODO: maybe share this again with codecompletionmodel and documentation
-Q_GLOBAL_STATIC_WITH_ARGS(QSet<QString>, s_commands, (initCommands().toSet()))
+Q_GLOBAL_STATIC_WITH_ARGS(QSet<QString>, s_commands, (initCommands()))
 
 UseBuilder::UseBuilder(const KDevelop::ReferencedTopDUContext& ctx)
     : m_ctx(ctx)
