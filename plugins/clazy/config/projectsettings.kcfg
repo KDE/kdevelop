@@ -8,6 +8,10 @@
 
   <group name="Clazy">
 
+    <entry name="checkSetSelection" key="CheckSetSelection" type="String">
+        <default></default>
+    </entry>
+
     <entry name="checks" key="checks" type="String">
       <default code="true">ChecksDB::defaultChecks()</default>
     </entry>

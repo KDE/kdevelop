@@ -25,6 +25,7 @@
 #include "checksdb.h"
 #include "globalsettings.h"
 #include "analyzer.h"
+#include "checksetselectionmanager.h"
 #include "debug.h"
 #include "config/globalconfigpage.h"
 #include "config/projectconfigpage.h"
@@ -46,17 +47,20 @@ namespace Clazy
 Plugin::Plugin(QObject* parent, const QVariantList&)
     : IPlugin(QStringLiteral("kdevclazy"), parent)
     , m_db(nullptr)
+    , m_checkSetSelectionManager(new CheckSetSelectionManager)
 {
     setXMLFile(QStringLiteral("kdevclazy.rc"));
 
     // create after ui.rc file is set with action ids
-    m_analyzer = new Analyzer(this, this);
+    m_analyzer = new Analyzer(this, m_checkSetSelectionManager, this);
 }
 
 Plugin::~Plugin() = default;
 
 void Plugin::unload()
 {
+    delete m_checkSetSelectionManager;
+    m_checkSetSelectionManager = nullptr;
     delete m_analyzer;
     m_analyzer = nullptr;
 }
@@ -76,12 +80,16 @@ KDevelop::ConfigPage* Plugin::perProjectConfigPage(int number, const KDevelop::P
         reloadDB();
     }
 
-    return number ? nullptr : new ProjectConfigPage(this, options.project, parent);
+    return number ? nullptr : new ProjectConfigPage(this, options.project, m_checkSetSelectionManager, parent);
 }
 
 KDevelop::ConfigPage* Plugin::configPage(int number, QWidget* parent)
 {
-    return number ? nullptr : new GlobalConfigPage(this, parent);
+    if (m_db.isNull()) {
+        reloadDB();
+    }
+
+    return number ? nullptr : new GlobalConfigPage(m_checkSetSelectionManager, m_db, this, parent);
 }
 
 QSharedPointer<const ChecksDB> Plugin::checksDB() const

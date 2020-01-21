@@ -41,7 +41,7 @@ enum ItemType {
     CheckType
 };
 
-ChecksWidget::ChecksWidget(QSharedPointer<const ChecksDB> db, QWidget* parent)
+ChecksWidget::ChecksWidget(QWidget* parent)
     : QWidget(parent)
     , m_ui(new Ui::ChecksWidget)
 {
@@ -50,7 +50,10 @@ ChecksWidget::ChecksWidget(QSharedPointer<const ChecksDB> db, QWidget* parent)
     m_ui->filterEdit->addTreeWidget(m_ui->checksTree);
     m_ui->filterEdit->setPlaceholderText(i18n("Search checks..."));
     connect(m_ui->filterEdit, &KTreeWidgetSearchLine::searchUpdated, this, &ChecksWidget::searchUpdated);
+}
 
+void ChecksWidget::setChecksDb(const QSharedPointer<const ChecksDB>& db)
+{
     auto resetMenu = new QMenu(this);
     m_ui->resetButton->setMenu(resetMenu);
 
@@ -293,6 +296,22 @@ void ChecksWidget::searchUpdated(const QString& searchString)
     }
 
     m_ui->checksTree->setCurrentItem(firstVisibleLevel);
+}
+
+void ChecksWidget::setEditable(bool editable)
+{
+    if (m_isEditable == editable) {
+        return;
+    }
+
+    m_isEditable = editable;
+
+    m_ui->resetButton->setEnabled(editable);
+    for (auto* item : qAsConst(m_items)) {
+        auto flags = item->flags();
+        flags.setFlag(Qt::ItemIsUserCheckable, m_isEditable);
+        item->setFlags(flags);
+    }
 }
 
 }

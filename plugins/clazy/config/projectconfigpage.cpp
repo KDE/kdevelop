@@ -23,10 +23,10 @@
 
 // plugin
 #include "checksdb.h"
-#include "checkswidget.h"
 #include "plugin.h"
 #include "globalsettings.h"
 #include "projectsettings.h"
+#include "checksetselectionmanager.h"
 // KDevPlatform
 #include <interfaces/iproject.h>
 // KF
@@ -36,10 +36,19 @@
 namespace Clazy
 {
 
-ProjectConfigPage::ProjectConfigPage(Plugin* plugin, KDevelop::IProject* project, QWidget* parent)
-    : ConfigPage(plugin, new ProjectSettings, parent)
+ProjectConfigPage::ProjectConfigPage(Plugin* plugin, KDevelop::IProject* project,
+                                     CheckSetSelectionManager* checkSetSelectionManager,
+                                     QWidget* parent)
+    : ConfigPage(plugin, nullptr, parent)
+    , m_checkSetSelections(checkSetSelectionManager->checkSetSelections())
+    , m_defaultCheckSetSelectionId(checkSetSelectionManager->defaultCheckSetSelectionId())
 {
     Q_ASSERT(plugin);
+
+    m_settings = new ProjectSettings;
+    m_settings->setSharedConfig(project->projectConfiguration());
+    m_settings->load();
+    setConfigSkeleton(m_settings);
 
     m_ui.setupUi(this);
 
@@ -59,13 +68,16 @@ ProjectConfigPage::ProjectConfigPage(Plugin* plugin, KDevelop::IProject* project
 
     // =============================================================================================
 
-    m_checksWidget = new ChecksWidget(plugin->checksDB());
-    m_checksWidget->setObjectName(QStringLiteral("kcfg_checks"));
-    connect(m_checksWidget, &ChecksWidget::checksChanged,
+    m_ui.kcfg_checkSetSelection->setCheckSetSelections(m_checkSetSelections, m_defaultCheckSetSelectionId);
+    m_ui.checks->setChecksDb(plugin->checksDB());
+//     m_checksWidget->setObjectName(QStringLiteral("kcfg_checks"));
+    connect(m_ui.checks, &ChecksWidget::checksChanged,
             this, &ProjectConfigPage::updateCommandLine);
 
-    auto checksLayout = new QVBoxLayout(m_ui.checksTab);
-    checksLayout->addWidget(m_checksWidget);
+    connect(m_ui.kcfg_checkSetSelection, &CheckSetSelectionComboBox::selectionChanged,
+            this, &ProjectConfigPage::onSelectionChanged);
+    connect(m_ui.checks, &ChecksWidget::checksChanged,
+            this, &ProjectConfigPage::onChecksChanged);
 
     // =============================================================================================
 
@@ -115,7 +127,7 @@ void ProjectConfigPage::updateCommandLine()
 
     arguments << GlobalSettings::executablePath().toLocalFile();
 
-    const auto checks = m_checksWidget->checks();
+    const auto checks = m_ui.checks->checks();
     if (!checks.isEmpty()) {
         arguments << QLatin1String("-checks=") + checks;
     }
@@ -171,6 +183,60 @@ void ProjectConfigPage::updateCommandLine()
     arguments << QStringLiteral("-p <build directory>");
 
     m_ui.commandLineWidget->setText(arguments.join(QLatin1Char(' ')));
+}
+
+void ProjectConfigPage::defaults()
+{
+    // TODO: can we read this from m_settings somwhow?
+    m_customChecks.clear();
+
+    ConfigPage::defaults();
+    onSelectionChanged(m_ui.kcfg_checkSetSelection->selection());
+}
+
+void ProjectConfigPage::reset()
+{
+    m_customChecks = m_settings->checks();
+
+    ConfigPage::reset();
+
+    onSelectionChanged(m_ui.kcfg_checkSetSelection->selection());
+}
+
+void ProjectConfigPage::apply()
+{
+    m_settings->setChecks(m_customChecks);
+
+    ConfigPage::apply();
+}
+
+void ProjectConfigPage::onSelectionChanged(const QString& selectionId)
+{
+    QString checks;
+    bool editable = false;
+    if (selectionId.isEmpty()) {
+        checks = m_customChecks;
+        editable = true;
+    } else {
+        const  QString effectiveSelectionId = (selectionId == QLatin1String("Default")) ? m_defaultCheckSetSelectionId : selectionId;
+        for (auto& selection : m_checkSetSelections) {
+            if (selection.id() == effectiveSelectionId) {
+                checks = selection.selectionAsString();
+                break;
+            }
+        }
+    }
+
+    m_ui.checks->blockSignals(true);
+    m_ui.checks->setEditable(editable);
+    m_ui.checks->setChecks(checks);
+    m_ui.checks->blockSignals(false);
+}
+
+void ProjectConfigPage::onChecksChanged(const QString& checks)
+{
+    m_customChecks = checks;
+    emit changed();
 }
 
 }

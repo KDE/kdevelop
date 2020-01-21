@@ -23,15 +23,25 @@
 
 #include <interfaces/configpage.h>
 
+// plugin
+#include "checksdb.h"
+
+
 namespace Clazy
 {
+namespace Ui {
+class GlobalConfigPage;
+}
+class CheckSetSelectionManager;
 
 class GlobalConfigPage: public KDevelop::ConfigPage
 {
     Q_OBJECT
 
 public:
-    GlobalConfigPage(KDevelop::IPlugin* plugin, QWidget* parent);
+    GlobalConfigPage(CheckSetSelectionManager* checkSetSelectionManager,
+                     const QSharedPointer<const ChecksDB>& db,
+                     KDevelop::IPlugin* plugin, QWidget* parent);
     ~GlobalConfigPage() override = default;
 
     KDevelop::ConfigPage::ConfigPageType configPageType() const override;
@@ -39,6 +49,14 @@ public:
     QString name() const override;
     QString fullName() const override;
     QIcon icon() const override;
+
+    void apply() override;
+    void defaults() override;
+    void reset() override;
+
+private:
+    Ui::GlobalConfigPage* ui;
+    CheckSetSelectionManager* const m_checkSetSelectionManager;
 };
 
 }

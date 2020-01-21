@@ -46,12 +46,16 @@ class ChecksWidget : public QWidget
         USER true)
 
 public:
-    explicit ChecksWidget(QSharedPointer<const ChecksDB> db, QWidget* parent = nullptr);
+    explicit ChecksWidget(QWidget* parent = nullptr);
     ~ChecksWidget() override;
 
+public:
+    void setChecksDb(const QSharedPointer<const ChecksDB>& db);
     QString checks() const;
 
     void setChecks(const QString& checks);
+
+    void setEditable(bool editable);
 
 Q_SIGNALS:
     void checksChanged(const QString& checks);
@@ -66,6 +70,7 @@ private:
 
     QString m_checks;
     QHash<QString, QTreeWidgetItem*> m_items;
+    bool m_isEditable = true;
 };
 
 }

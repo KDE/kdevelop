@@ -31,6 +31,7 @@ namespace Clazy
 
 class ChecksDB;
 class Analyzer;
+class CheckSetSelectionManager;
 
 class Plugin : public KDevelop::IPlugin
 {
@@ -60,6 +61,7 @@ private:
 private:
     Analyzer* m_analyzer;
     QSharedPointer<ChecksDB> m_db;
+    CheckSetSelectionManager* m_checkSetSelectionManager;
 };
 
 }

@@ -19,34 +19,44 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLAZY_ANALYZER_H
-#define CLAZY_ANALYZER_H
+#ifndef KDEVCLAZY_CHECKSETSELECTION_H
+#define KDEVCLAZY_CHECKSETSELECTION_H
 
-// CompileAnalyzer
-#include <compileanalyzer.h>
+// Qt
+#include <QSharedDataPointer>
+
+class QString;
 
 namespace Clazy
 {
 
-class Plugin;
-class CheckSetSelectionManager;
+class CheckSetSelectionPrivate;
 
-class Analyzer : public KDevelop::CompileAnalyzer
+class CheckSetSelection
 {
-    Q_OBJECT
+public:
+    CheckSetSelection();
+    CheckSetSelection(const CheckSetSelection& other);
+    ~CheckSetSelection();
 
 public:
-    Analyzer(Plugin* plugin, CheckSetSelectionManager* checkSetSelectionManager, QObject* parent);
-    ~Analyzer();
+    CheckSetSelection& operator=(const CheckSetSelection& other);
 
-protected:
-    KDevelop::CompileAnalyzeJob* createJob(KDevelop::IProject* project, const KDevelop::Path& buildDirectory,
-                                           const QUrl& url, const QStringList& filePaths) override;
-    bool isOutputToolViewPreferred() const override;
+public:
+    void setId(const QString& id);
+    QString id() const;
+
+public:
+    void setName(const QString& name);
+    QString name() const;
+
+public:
+    QString selectionAsString() const;
+
+    void setSelection(const QString& selection);
 
 private:
-    Plugin* const m_plugin;
-    CheckSetSelectionManager* const m_checkSetSelectionManager;
+    QSharedDataPointer<CheckSetSelectionPrivate> d;
 };
 
 }

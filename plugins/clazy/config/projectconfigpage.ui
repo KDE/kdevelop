@@ -38,6 +38,21 @@
       <attribute name="title">
        <string>Checks</string>
       </attribute>
+      <layout class="QVBoxLayout">
+       <item>
+        <widget class="Clazy::CheckSetSelectionComboBox" name="kcfg_checkSetSelection">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Clazy::ChecksWidget" name="checks" native="true"/>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="optionsTab">
       <attribute name="title">
@@ -264,6 +279,16 @@ parallel checking, which can lead to multiple fixit applying for header files.</
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>Clazy::CheckSetSelectionComboBox</class>
+   <extends>QComboBox</extends>
+   <header>config/checksetselectioncombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Clazy::ChecksWidget</class>
+   <extends>QWidget</extends>
+   <header>config/checkswidget.h</header>
+  </customwidget>
   <customwidget>
    <class>KMessageWidget</class>
    <extends>QFrame</extends>

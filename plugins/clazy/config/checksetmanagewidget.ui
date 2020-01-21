@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Clazy::CheckSetManageWidget</class>
+ <widget class="QWidget" name="Clazy::CheckSetManageWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>704</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Check set:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KComboBox" name="checkSetSelect">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="addCheckSetSelectionButton">
+       <property name="toolTip">
+        <string>Add check set...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="list-add"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cloneCheckSetSelectionButton">
+       <property name="toolTip">
+        <string>Clone check set...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-clone"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="removeCheckSetSelectionButton">
+       <property name="toolTip">
+        <string>Remove check set</string>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-delete"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="setAsDefaultCheckSetSelectionButton">
+       <property name="toolTip">
+        <string>Set as default</string>
+       </property>
+       <property name="icon">
+        <iconset theme="starred-symbolic"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="editCheckSetSelectionNameButton">
+       <property name="toolTip">
+        <string>Edit name of check set</string>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-rename"/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="Clazy::ChecksWidget" name="enabledChecks" native="true">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>KComboBox</header>
+  </customwidget>
+  <customwidget>
+   <class>Clazy::ChecksWidget</class>
+   <extends>QWidget</extends>
+   <header>config/checkswidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

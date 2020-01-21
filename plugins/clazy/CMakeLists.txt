@@ -13,6 +13,9 @@ set(kdevclazy_core_SRCS
     job.cpp
     jobparameters.cpp
     utils.cpp
+    checksetselection.cpp
+    checksetselectionlock.cpp
+    checksetselectionmanager.cpp
 )
 declare_qt_logging_category(kdevclazy_core_SRCS
     TYPE PLUGIN
@@ -38,12 +41,16 @@ set(kdevclazy_SRCS
     analyzer.cpp
     plugin.cpp
 
+    config/checksetselectioncombobox.cpp
+    config/checksetselectionlistmodel.cpp
+    config/checksetmanagewidget.cpp
     config/checkswidget.cpp
     config/commandlinewidget.cpp
     config/globalconfigpage.cpp
     config/projectconfigpage.cpp
 )
 ki18n_wrap_ui(kdevclazy_SRCS
+    config/checksetmanagewidget.ui
     config/checkswidget.ui
     config/commandlinewidget.ui
     config/globalconfigpage.ui

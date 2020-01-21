@@ -25,6 +25,7 @@
 // plugin
 #include "plugin.h"
 #include "job.h"
+#include "checksetselectionmanager.h"
 #include "globalsettings.h"
 #include "projectsettings.h"
 #include "checksdb.h"
@@ -39,7 +40,7 @@
 namespace Clazy
 {
 
-Analyzer::Analyzer(Plugin* plugin, QObject* parent)
+Analyzer::Analyzer(Plugin* plugin, CheckSetSelectionManager* checkSetSelectionManager, QObject* parent)
     : KDevelop::CompileAnalyzer(plugin,
                                 i18n("Clazy"), QStringLiteral("clazy"),
                                 QStringLiteral("clazy_file"), QStringLiteral("clazy_project"),
@@ -52,6 +53,7 @@ Analyzer::Analyzer(Plugin* plugin, QObject* parent)
                                 KDevelop::ProblemModel::ShowSource,
                                 parent)
     , m_plugin(plugin)
+    , m_checkSetSelectionManager(checkSetSelectionManager)
 {
 }
 
@@ -77,7 +79,11 @@ KDevelop::CompileAnalyzeJob * Analyzer::createJob(KDevelop::IProject* project,
     params.url = url;
     params.filePaths = filePaths;
     params.buildDir = buildDirectory.toLocalFile();
-    const auto checks = projectSettings.checks();
+    QString checkSetSelectionId = projectSettings.checkSetSelection();
+    if (checkSetSelectionId == QLatin1String("Default")) {
+        checkSetSelectionId = m_checkSetSelectionManager->defaultCheckSetSelectionId();
+    }
+    const auto checks = checkSetSelectionId.isEmpty() ? projectSettings.checks() : m_checkSetSelectionManager->checkSetSelection(checkSetSelectionId).selectionAsString();
     if (!checks.isEmpty()) {
         params.checks = checks;
     } else {

@@ -23,8 +23,11 @@
 
 // plugin
 #include "ui_projectconfigpage.h"
+#include "checksetselection.h"
 // KDevPlatform
 #include <interfaces/configpage.h>
+// Qt
+#include <QVector>
 
 namespace KDevelop { class IProject; }
 
@@ -32,25 +35,41 @@ namespace Clazy
 {
 
 class Plugin;
-class ChecksWidget;
+class CheckSetSelectionManager;
+class ProjectSettings;
 
 class ProjectConfigPage : public KDevelop::ConfigPage
 {
     Q_OBJECT
 
 public:
-    ProjectConfigPage(Plugin* plugin, KDevelop::IProject* project, QWidget* parent);
+    ProjectConfigPage(Plugin* plugin, KDevelop::IProject* project,
+                      CheckSetSelectionManager* checkSetSelectionManager,
+                      QWidget* parent);
     ~ProjectConfigPage() override;
 
     QIcon icon() const override;
     QString name() const override;
 
+    void apply() override;
+    void defaults() override;
+    void reset() override;
+
 private Q_SLOTS:
+    void onSelectionChanged(const QString& selection);
+    void onChecksChanged(const QString& checks);
+
     void updateCommandLine();
 
 private:
     Ui::ProjectConfigPage m_ui;
-    ChecksWidget* m_checksWidget;
+
+    QString m_customChecks;
+
+    ProjectSettings* m_settings;
+
+    const QVector<CheckSetSelection> m_checkSetSelections;
+    const QString m_defaultCheckSetSelectionId;
 };
 
 }
