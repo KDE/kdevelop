@@ -88,7 +88,7 @@
           <item row="1" column="0">
            <widget class="QCheckBox" name="kcfg_qtDeveloper">
             <property name="toolTip">
-             <string>For running clazy on Qt itself, optional, but honours specific guidelines.</string>
+             <string>For running clazy on Qt itself, optional, but honors specific guidelines.</string>
             </property>
             <property name="text">
              <string>Qt developer</string>
