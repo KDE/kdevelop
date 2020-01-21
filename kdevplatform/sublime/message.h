@@ -115,7 +115,7 @@ public:
      * @param type the message type, e.g. MessageType::Information
      * @param richtext text to be displayed
      */
-    Message(const QString &richtext, MessageType type = Message::Information);
+    explicit Message(const QString& richtext, MessageType type = Message::Information);
 
     /**
      * Destructor.
