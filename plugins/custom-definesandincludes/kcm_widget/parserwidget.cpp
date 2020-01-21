@@ -95,13 +95,29 @@ ParserWidget::ParserWidget(QWidget* parent)
     connect(m_ui->parserOptionsOpenCl, &QLineEdit::textEdited, this, &ParserWidget::textEdited);
     connect(m_ui->parserOptionsCuda, &QLineEdit::textEdited, this, &ParserWidget::textEdited);
     connect(m_ui->parseHeadersInPlainC, &QCheckBox::stateChanged, this, &ParserWidget::textEdited);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    connect(m_ui->languageStandardsC, &QComboBox::textActivated,
+#else
     connect(m_ui->languageStandardsC, QOverload<const QString&>::of(&QComboBox::activated),
+#endif
             this, &ParserWidget::languageStandardChangedC);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    connect(m_ui->languageStandardsCpp, &QComboBox::textActivated,
+#else
     connect(m_ui->languageStandardsCpp, QOverload<const QString&>::of(&QComboBox::activated),
+#endif
             this, &ParserWidget::languageStandardChangedCpp);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    connect(m_ui->languageStandardsOpenCl, &QComboBox::textActivated,
+#else
     connect(m_ui->languageStandardsOpenCl, QOverload<const QString&>::of(&QComboBox::activated),
+#endif
             this, &ParserWidget::languageStandardChangedOpenCl);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    connect(m_ui->languageStandardsCuda, &QComboBox::textActivated,
+#else
     connect(m_ui->languageStandardsCuda, QOverload<const QString&>::of(&QComboBox::activated),
+#endif
             this, &ParserWidget::languageStandardChangedCuda);
 
     updateEnablements();
