@@ -259,7 +259,7 @@ void IdealController::raiseView(View* view, RaiseMode mode)
 
 QList< IdealDockWidget* > IdealController::allDockWidgets() const
 {
-    return docks.toList();
+    return docks.values();
 }
 
 void IdealController::showDockWidget(IdealDockWidget* dock, bool show)

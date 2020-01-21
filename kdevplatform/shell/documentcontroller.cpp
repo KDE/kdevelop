@@ -1021,7 +1021,7 @@ QStringList DocumentController::activeDocumentPaths() const
         documents.insert(view->document()->documentSpecifier());
     }
 
-    return documents.toList();
+    return documents.values();
 }
 
 void DocumentController::registerDocumentForMimetype( const QString& mimetype,

@@ -539,8 +539,8 @@ void TestProjectModel::testProjectFileSet()
     Path path(QUrl::fromLocalFile(QDir::tempPath() + "/a"));
     auto* item = new ProjectFileItem(project.data(), path, project->projectItem());
     QCOMPARE(project->fileSet().size(), 1);
-    qDebug() << path << project->fileSet().toList().at(0).toUrl();
-    QCOMPARE(Path(project->fileSet().toList().at(0).toUrl()), path);
+    qDebug() << path << project->fileSet().values().at(0).toUrl();
+    QCOMPARE(Path(project->fileSet().values().at(0).toUrl()), path);
     delete item;
     QVERIFY(project->fileSet().isEmpty());
 }

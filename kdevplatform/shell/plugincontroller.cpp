@@ -651,7 +651,7 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
     }
     // if we found all dependencies required should be empty now
     if (!required.isEmpty()) {
-        missing = required.toList();
+        missing = required.values();
         return false;
     }
     return true;

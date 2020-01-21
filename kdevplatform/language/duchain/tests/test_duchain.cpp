@@ -622,7 +622,7 @@ void TestDUChain::testImportStructure()
                     if (!allContexts[a]->imports.isEmpty())
                         removeImports.insert(allContexts[a]->imports[rand() % allContexts[a]->imports.count()]);
 
-                allContexts[a]->unImport(removeImports.toList());
+                allContexts[a]->unImport(removeImports.values());
 
                 for (int b = 0; b < contextCount; b++)
                     if (rand() % verifyOnceIn == 0)

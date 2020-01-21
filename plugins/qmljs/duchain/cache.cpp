@@ -241,14 +241,14 @@ QList<KDevelop::IndexedString> QmlJS::Cache::filesThatDependOn(const KDevelop::I
 {
     QMutexLocker lock(&m_mutex);
 
-    return m_dependees[file].toList();
+    return m_dependees[file].values();
 }
 
 QList<KDevelop::IndexedString> QmlJS::Cache::dependencies(const KDevelop::IndexedString& file)
 {
     QMutexLocker lock(&m_mutex);
 
-    return m_dependencies[file].toList();
+    return m_dependencies[file].values();
 }
 
 bool QmlJS::Cache::isUpToDate(const KDevelop::IndexedString& file)

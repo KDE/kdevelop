@@ -66,7 +66,7 @@ QList<KDevelop::Path> includesForProject(KDevelop::IProject* project)
     QSet<KDevelop::Path> includesSet;
     includesForItem(project->projectItem(), includesSet);
 
-    return includesSet.toList();
+    return includesSet.values();
 }
 
 Parameters::Parameters(KDevelop::IProject* project)

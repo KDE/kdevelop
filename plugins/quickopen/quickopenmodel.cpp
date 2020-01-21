@@ -70,7 +70,7 @@ QStringList QuickOpenModel::allTypes() const
         types += provider.types;
     }
 
-    return types.toList();
+    return types.values();
 }
 
 void QuickOpenModel::registerProvider(const QStringList& scopes, const QStringList& types, KDevelop::QuickOpenDataProviderBase* provider)
