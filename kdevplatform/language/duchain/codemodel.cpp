@@ -149,7 +149,7 @@ public:
     void createItem(CodeModelRepositoryItem* item) const
     {
         Q_ASSERT(shouldDoDUChainReferenceCounting(item));
-        Q_ASSERT(shouldDoDUChainReferenceCounting((( char* )item) + (itemSize() - 1)));
+        Q_ASSERT(shouldDoDUChainReferenceCounting(reinterpret_cast<char*>(item) + (itemSize() - 1)));
         new (item) CodeModelRepositoryItem(m_item, false);
     }
 

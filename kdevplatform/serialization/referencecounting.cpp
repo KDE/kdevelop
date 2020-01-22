@@ -44,8 +44,9 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
 {
     QMutexLocker lock(&refCountingLock);
 
-    if (refCountingFirstRangeStart && (( char* )refCountingFirstRangeStart) <= ( char* )start &&
-        ( char* )start < (( char* )refCountingFirstRangeStart) + refCountingFirstRangeExtent.first) {
+    if (refCountingFirstRangeStart &&
+        reinterpret_cast<char*>(refCountingFirstRangeStart) <= reinterpret_cast<char*>(start) &&
+        reinterpret_cast<char*>(start) < reinterpret_cast<char*>(refCountingFirstRangeStart) + refCountingFirstRangeExtent.first) {
         Q_ASSERT(refCountingFirstRangeExtent.second > 0);
         --refCountingFirstRangeExtent.second;
         if (refCountingFirstRangeExtent.second == 0) {
@@ -56,7 +57,8 @@ void KDevelop::disableDUChainReferenceCounting(void* start)
         QMap<void*, QPair<uint, uint>>::iterator it = refCountingRanges->upperBound(start);
         if (it != refCountingRanges->begin()) {
             --it;
-            if ((( char* )it.key()) <= ( char* )start && ( char* )start < (( char* )it.key()) + it.value().first) {
+            if (reinterpret_cast<char*>(it.key()) <= reinterpret_cast<char*>(start) &&
+                reinterpret_cast<char*>(start) < reinterpret_cast<char*>(it.key()) + it.value().first) {
                 //Contained
             } else {
                 Q_ASSERT(0);
@@ -81,8 +83,9 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
 
     doReferenceCounting = true;
 
-    if (refCountingFirstRangeStart && (( char* )refCountingFirstRangeStart) <= ( char* )start &&
-        ( char* )start < (( char* )refCountingFirstRangeStart) + refCountingFirstRangeExtent.first) {
+    if (refCountingFirstRangeStart &&
+        reinterpret_cast<char*>(refCountingFirstRangeStart) <= reinterpret_cast<char*>(start) &&
+        reinterpret_cast<char*>(start) < reinterpret_cast<char*>(refCountingFirstRangeStart) + refCountingFirstRangeExtent.first) {
         //Increase the count for the first range
         ++refCountingFirstRangeExtent.second;
     } else if (refCountingHasAdditionalRanges || refCountingFirstRangeStart) {
@@ -90,7 +93,8 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
         QMap<void*, QPair<uint, uint>>::iterator it = refCountingRanges->upperBound(start);
         if (it != refCountingRanges->begin()) {
             --it;
-            if ((( char* )it.key()) <= ( char* )start && ( char* )start < (( char* )it.key()) + it.value().first) {
+            if (reinterpret_cast<char*>(it.key()) <= reinterpret_cast<char*>(start) &&
+                reinterpret_cast<char*>(start) < reinterpret_cast<char*>(it.key()) + it.value().first) {
                 //Contained, count up
             } else {
                 it = refCountingRanges->end(); //Insert own item
@@ -105,11 +109,11 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
             //Merge following ranges
             QMap<void*, QPair<uint, uint>>::iterator it = inserted;
             ++it;
-            while (it != refCountingRanges->end() && it.key() < (( char* )start) + size) {
+            while (it != refCountingRanges->end() && it.key() < reinterpret_cast<char*>(start) + size) {
                 inserted.value().second += it.value().second; //Accumulate count
-                if ((( char* )start) + size < (( char* )inserted.key()) + it.value().first) {
+                if (reinterpret_cast<char*>(start) + size < reinterpret_cast<char*>(inserted.key()) + it.value().first) {
                     //Update end position
-                    inserted.value().first = ((( char* )inserted.key()) + it.value().first) - (( char* )start);
+                    inserted.value().first = (reinterpret_cast<char*>(inserted.key()) + it.value().first) - reinterpret_cast<char*>(start);
                 }
 
                 it = refCountingRanges->erase(it);
@@ -130,7 +134,7 @@ void KDevelop::enableDUChainReferenceCounting(void* start, unsigned int size)
     Q_ASSERT(refCountingHasAdditionalRanges == (refCountingRanges && !refCountingRanges->isEmpty()));
 #ifdef TEST_REFERENCE_COUNTING
     Q_ASSERT(shouldDoDUChainReferenceCounting(start));
-    Q_ASSERT(shouldDoDUChainReferenceCounting((( char* )start + (size - 1))));
+    Q_ASSERT(shouldDoDUChainReferenceCounting(reinterpret_cast<char*>(start) + (size - 1)));
 #endif
 }
 

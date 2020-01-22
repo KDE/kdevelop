@@ -373,7 +373,7 @@ public:
             if (opened) {
                 qCDebug(LANGUAGE) << "reading parsing-environment static data";
                 //Read
-                f.read(( char* )ParsingEnvironmentFile::m_staticData, sizeof(StaticParsingEnvironmentData));
+                f.read(reinterpret_cast<char*>(ParsingEnvironmentFile::m_staticData), sizeof(StaticParsingEnvironmentData));
             } else {
                 qCDebug(LANGUAGE) << "creating new parsing-environment static data";
                 //Initialize
@@ -388,7 +388,7 @@ public:
             if (opened) {
                 Q_ASSERT((f.size() % sizeof(uint)) == 0);
                 m_availableTopContextIndices.resize(f.size() / ( int )sizeof(uint));
-                f.read(( char* )m_availableTopContextIndices.data(), f.size());
+                f.read(reinterpret_cast<char*>(m_availableTopContextIndices.data()), f.size());
             }
         }
     }
@@ -942,7 +942,7 @@ unloadContexts:
             bool opened = f.open(QIODevice::WriteOnly);
             Q_ASSERT(opened);
             Q_UNUSED(opened);
-            f.write(( char* )ParsingEnvironmentFile::m_staticData, sizeof(StaticParsingEnvironmentData));
+            f.write(reinterpret_cast<const char*>(ParsingEnvironmentFile::m_staticData), sizeof(StaticParsingEnvironmentData));
         }
 
         ///Write out the list of available top-context indices
@@ -954,7 +954,7 @@ unloadContexts:
             Q_ASSERT(opened);
             Q_UNUSED(opened);
 
-            f.write(( char* )m_availableTopContextIndices.data(), m_availableTopContextIndices.size() * sizeof(uint));
+            f.write(reinterpret_cast<const char*>(m_availableTopContextIndices.data()), m_availableTopContextIndices.size() * sizeof(uint));
         }
 
         if (retries) {

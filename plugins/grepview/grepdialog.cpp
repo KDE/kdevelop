@@ -523,9 +523,9 @@ void GrepDialog::startSearch()
     }
 
     GrepOutputView *toolView =
-        (GrepOutputView*)ICore::self()->uiController()->findToolView(
+        static_cast<GrepOutputView*>(ICore::self()->uiController()->findToolView(
             i18n("Find/Replace in Files"), m_plugin->toolViewFactory(),
-            m_settings.fromHistory ? IUiController::Create : IUiController::CreateAndRaise);
+            m_settings.fromHistory ? IUiController::Create : IUiController::CreateAndRaise));
 
     if (m_settings.fromHistory) {
         // when restored from history, only display the parameters

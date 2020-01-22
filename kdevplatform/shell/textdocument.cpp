@@ -397,7 +397,7 @@ KParts::Part *TextDocument::partForView(QWidget *view) const
 {
     Q_D(const TextDocument);
 
-    if (d->document && d->document->views().contains((KTextEditor::View*)view))
+    if (d->document && d->document->views().contains(qobject_cast<KTextEditor::View*>(view)))
         return d->document;
     return nullptr;
 }

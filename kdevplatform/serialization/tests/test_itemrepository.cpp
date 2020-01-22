@@ -34,7 +34,7 @@ struct TestItem
     {
         return rhs->m_hash == m_hash
                && itemSize() == rhs->itemSize()
-               && memcmp(( char* )this, rhs, itemSize()) == 0;
+               && memcmp(reinterpret_cast<const char*>(this), rhs, itemSize()) == 0;
     }
 
     uint m_hash;
