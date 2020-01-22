@@ -68,8 +68,18 @@ ProjectPathsWidget::ProjectPathsWidget( QWidget* parent )
     connect( pathsModel, &ProjectPathsModel::dataChanged, this, &ProjectPathsWidget::changed );
     connect( pathsModel, &ProjectPathsModel::rowsInserted, this, &ProjectPathsWidget::changed );
     connect( pathsModel, &ProjectPathsModel::rowsRemoved, this, &ProjectPathsWidget::changed );
-    connect( ui->compiler, QOverload<const QString&>::of(&QComboBox::activated), this, &ProjectPathsWidget::changed );
-    connect( ui->compiler, QOverload<const QString&>::of(&QComboBox::activated), this, &ProjectPathsWidget::changeCompilerForPath );
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    connect( ui->compiler, &QComboBox::textActivated,
+#else
+    connect( ui->compiler, QOverload<const QString&>::of(&QComboBox::activated),
+#endif
+             this, &ProjectPathsWidget::changed );
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    connect( ui->compiler, &QComboBox::textActivated,
+#else
+    connect( ui->compiler, QOverload<const QString&>::of(&QComboBox::activated),
+#endif
+             this, &ProjectPathsWidget::changeCompilerForPath );
 
     connect( ui->includesWidget, QOverload<const QStringList&>::of(&IncludesWidget::includesChanged), this, &ProjectPathsWidget::includesChanged );
     connect( ui->definesWidget, QOverload<const KDevelop::Defines&>::of(&DefinesWidget::definesChanged), this, &ProjectPathsWidget::definesChanged );

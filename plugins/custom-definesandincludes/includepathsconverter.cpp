@@ -133,7 +133,7 @@ QStringList IncludePathsConverter::readIncludePaths(const QString& projectConfig
     }
 
     QString path = subdirectory.isEmpty() ? QStringLiteral(".") : subdirectory;
-    auto configEntries = SettingsManager::globalInstance()->readPaths(configFile.data());
+    const auto configEntries = SettingsManager::globalInstance()->readPaths(configFile.data());
     for (const auto& entry: configEntries) {
         if (path == entry.path) {
             return entry.includes;

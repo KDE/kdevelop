@@ -101,6 +101,16 @@ bool hasMandatoryProperties( const KPluginMetaData& info )
     return false;
 }
 
+inline QSet<QString> stringSet(const QVariant& variant)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    const QStringList list = variant.toStringList();
+    return QSet<QString>(list.begin(), list.end());
+#else
+    return variant.toStringList().toSet();
+#endif
+}
+
 bool constraintsMatch( const KPluginMetaData& info, const QVariantMap& constraints)
 {
     for (auto it = constraints.begin(); it != constraints.end(); ++it) {
@@ -109,8 +119,8 @@ bool constraintsMatch( const KPluginMetaData& info, const QVariantMap& constrain
         if (!property.isValid()) {
             return false;
         } else if (property.canConvert<QStringList>()) {
-            QSet<QString> values = property.toStringList().toSet();
-            QSet<QString> expected = it.value().toStringList().toSet();
+            const QSet<QString> values = stringSet(property);
+            const QSet<QString> expected = stringSet(it.value());
             if (!values.contains(expected)) {
                 return false;
             }
@@ -638,7 +648,12 @@ bool PluginController::hasUnresolvedDependencies( const KPluginMetaData& info, Q
 {
     Q_D(const PluginController);
 
-    QSet<QString> required = KPluginMetaData::readStringList(info.rawData(), KEY_Required()).toSet();
+    const QStringList requiredList = KPluginMetaData::readStringList(info.rawData(), KEY_Required());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QSet<QString> required(requiredList.begin(), requiredList.end());
+#else
+    QSet<QString> required = requiredList.toSet();
+#endif
     if (!required.isEmpty()) {
         d->foreachEnabledPlugin([&required] (const KPluginMetaData& plugin) -> bool {
             const auto interfaces = KPluginMetaData::readStringList(plugin.rawData(), KEY_Interfaces());

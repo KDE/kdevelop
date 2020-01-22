@@ -301,7 +301,7 @@ QList<ProjectBaseItem*> ProjectTreeView::selectedProjects()
 {
     QList<ProjectBaseItem*> itemlist;
     if ( selectionModel()->hasSelection() ) {
-        QModelIndexList indexes = selectionModel()->selectedRows();
+        const QModelIndexList indexes = selectionModel()->selectedRows();
         for ( const QModelIndex& index: indexes ) {
             auto* item = index.data( ProjectModel::ProjectItemRole ).value<ProjectBaseItem*>();
             if ( item ) {

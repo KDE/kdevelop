@@ -86,7 +86,7 @@ std::pair<Path::List, QHash<QString, QString>>
 
     QFile f(pathToFile);
     if (f.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        auto lines = QString::fromLocal8Bit(f.readAll()).split(QLatin1Char('\n'), QString::SkipEmptyParts);
+        const auto lines = QString::fromLocal8Bit(f.readAll()).split(QLatin1Char('\n'), QString::SkipEmptyParts);
         QFileInfo dir(pathToFile);
         const QChar dirSeparator = QDir::separator();
         for (const auto& line : lines) {

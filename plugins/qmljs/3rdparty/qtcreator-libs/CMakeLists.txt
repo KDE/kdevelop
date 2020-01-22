@@ -3,6 +3,7 @@ remove_definitions(
     -DQT_NO_CAST_TO_ASCII
     -DQT_NO_CAST_FROM_BYTEARRAY
     -DQT_NO_FOREACH
+    -DQT_DEPRECATED_WARNINGS_SINCE=0x060000
 )
 
 qt5_wrap_ui(uifiles_SRCS

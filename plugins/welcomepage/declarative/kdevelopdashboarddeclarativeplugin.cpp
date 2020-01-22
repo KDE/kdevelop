@@ -56,7 +56,11 @@ void KDevplatformDeclarativePlugin::registerTypes(const char* uri)
     });
     qmlRegisterType<KDevelop::BranchesListModel>(uri, 1, 0, "BranchesListModel");
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    qmlRegisterAnonymousType<KDevelop::IProject>(uri, 1);
+#else
     qmlRegisterType<KDevelop::IProject>();
+#endif
 }
 
 #include "kdevelopdashboarddeclarativeplugin.moc"

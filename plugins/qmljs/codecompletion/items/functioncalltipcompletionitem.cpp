@@ -57,7 +57,7 @@ FunctionCalltipCompletionItem::FunctionCalltipCompletionItem(const DeclarationPo
     QStringList arguments;
 
     if (argsContext) {
-        auto args = argsContext->allDeclarations(CursorInRevision::invalid(), decl->topContext(), false);
+        const auto args = argsContext->allDeclarations(CursorInRevision::invalid(), decl->topContext(), false);
 
         arguments.reserve(args.size());
         for (auto pair : args) {

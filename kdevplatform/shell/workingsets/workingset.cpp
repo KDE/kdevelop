@@ -240,6 +240,16 @@ QStringList WorkingSet::fileList() const
     return ret;
 }
 
+QSet<QString> WorkingSet::fileSet() const
+{
+    const QStringList fileList = this->fileList();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    return QSet<QString>(fileList.begin(), fileList.end());
+#else
+    return fileList.toSet();
+#endif
+}
+
 void WorkingSet::loadToArea(Sublime::Area* area, Sublime::AreaIndex* areaIndex) {
     PushValue<bool> enableLoading(m_loading, true);
 

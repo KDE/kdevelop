@@ -37,8 +37,13 @@ EnvironmentSelectionModel::EnvironmentSelectionModel(QObject* parent) :
     QStringListModel(parent)
     , m_env(KSharedConfig::openConfig())
 {
-    setStringList(entriesFromEnv(m_env));
-    m_profilesLookupTable = stringList().toSet();
+    const QStringList entries = entriesFromEnv(m_env);
+    setStringList(entries);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    m_profilesLookupTable = QSet<QString>(entries.begin(), entries.end());
+#else
+    m_profilesLookupTable = entries.toSet();
+#endif
 }
 
 QVariant EnvironmentSelectionModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -95,8 +100,13 @@ void EnvironmentSelectionModel::reload()
 {
     m_env = EnvironmentProfileList(KSharedConfig::openConfig());
 
-    setStringList(entriesFromEnv(m_env));
-    m_profilesLookupTable = stringList().toSet();
+    const QStringList entries = entriesFromEnv(m_env);
+    setStringList(entries);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    m_profilesLookupTable = QSet<QString>(entries.begin(), entries.end());
+#else
+    m_profilesLookupTable = entries.toSet();
+#endif
 }
 
 QString EnvironmentSelectionModel::reloadSelectedItem(const QString& currentProfile)

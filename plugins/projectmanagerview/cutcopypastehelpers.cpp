@@ -199,7 +199,7 @@ static ClassifiedPaths classifyPaths(const Path::List& paths, KDevelop::ProjectM
 {
     ClassifiedPaths result;
     for (const Path& path : paths) {
-        QList<ProjectBaseItem*> items = projectModel->itemsForPath(IndexedString(path.path()));
+        const QList<ProjectBaseItem*> items = projectModel->itemsForPath(IndexedString(path.path()));
         if (!items.empty()) {
             for (ProjectBaseItem* item : items) {
                 IProject* project = item->project();

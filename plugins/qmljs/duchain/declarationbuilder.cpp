@@ -1024,7 +1024,7 @@ void DeclarationBuilder::importDirectory(const QString& directory, QmlJS::AST::U
     // Translate the QFileInfos into QStrings (and replace .so files with
     // qmlplugindump dumps)
     lock.unlock();
-    QStringList filePaths = QmlJS::Cache::instance().getFileNames(entries);
+    const QStringList filePaths = QmlJS::Cache::instance().getFileNames(entries);
     lock.lock();
 
     if (node && !node->importId.isEmpty()) {

@@ -311,7 +311,7 @@ void PatchReviewToolView::seekFile(bool forwards)
 {
     if(!m_plugin->patch())
         return;
-    QList<QUrl> checkedUrls = m_fileModel->checkedUrls();
+    const QList<QUrl> checkedUrls = m_fileModel->checkedUrls();
     QList<QUrl> allUrls = m_fileModel->urls();
     IDocument* current = ICore::self()->documentController()->activeDocument();
     if(!current || checkedUrls.empty())
@@ -335,7 +335,11 @@ void PatchReviewToolView::seekFile(bool forwards)
     }
     else
     {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        QSet<QUrl> checkedUrlsSet(checkedUrls.begin(), checkedUrls.end());
+#else
         QSet<QUrl> checkedUrlsSet( checkedUrls.toSet() );
+#endif
         for(int offset = 1; offset < allUrls.size(); ++offset)
         {
             int pos;

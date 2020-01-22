@@ -531,7 +531,7 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
         CXFile diagnosticFile;
         clang_getFileLocation(location, &diagnosticFile, nullptr, nullptr, nullptr);
 
-        auto requestedHereProblems = createRequestedHereProblems(i, diagnostic, file);
+        const auto requestedHereProblems = createRequestedHereProblems(i, diagnostic, file);
         for (const auto& ptr : requestedHereProblems) {
             problems.append(static_cast<const ProblemPointer&>(ptr));
         }

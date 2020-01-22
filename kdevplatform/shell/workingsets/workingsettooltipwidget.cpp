@@ -277,7 +277,7 @@ void WorkingSetToolTipWidget::updateFileButtons()
     if(!mainWindow->area()->workingSet().isEmpty())
     {
         currentWorkingSet = controller->workingSet(mainWindow->area()->workingSet());
-        openFiles = currentWorkingSet->fileList().toSet();
+        openFiles = currentWorkingSet->fileSet();
     }
 
     bool allOpen = true;
@@ -349,7 +349,7 @@ void WorkingSetToolTipWidget::buttonClicked(bool)
 
     auto* mainWindow = qobject_cast<MainWindow*>(Core::self()->uiController()->activeMainWindow());
     Q_ASSERT(mainWindow);
-    QSet<QString> openFiles = Core::self()->workingSetControllerInternal()->workingSet(mainWindow->area()->workingSet())->fileList().toSet();
+    QSet<QString> openFiles = Core::self()->workingSetControllerInternal()->workingSet(mainWindow->area()->workingSet())->fileSet();
 
     if(!openFiles.contains(s->objectName())) {
         Core::self()->documentControllerInternal()->openDocument(QUrl::fromUserInput(s->objectName()));

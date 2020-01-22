@@ -766,7 +766,7 @@ void ProjectManagerViewPlugin::pasteFromContextMenu()
 
     const CutCopyPasteHelpers::SourceToDestinationMap map = CutCopyPasteHelpers::mapSourceToDestination(origPaths, destItem->folder()->path());
 
-    QVector<CutCopyPasteHelpers::TaskInfo> tasks = CutCopyPasteHelpers::copyMoveItems(
+    const QVector<CutCopyPasteHelpers::TaskInfo> tasks = CutCopyPasteHelpers::copyMoveItems(
         map.filteredPaths, destItem,
         isCut ? CutCopyPasteHelpers::Operation::CUT : CutCopyPasteHelpers::Operation::COPY);
 

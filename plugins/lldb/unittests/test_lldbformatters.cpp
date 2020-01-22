@@ -337,7 +337,7 @@ void LldbFormattersTest::testQString()
 
     QString expected = QStringLiteral("test最后一个不是特殊字符'\"\\u6211");
     QStringList children;
-    for (auto ch : expected) {
+    for (auto ch : qAsConst(expected)) {
         children << Utils::quote(ch, '\'');
     }
 

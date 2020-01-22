@@ -1332,7 +1332,7 @@ void ClangCodeCompletionContext::eventuallyAddGroup(const QString& name, int pri
 
 void ClangCodeCompletionContext::addOverwritableItems()
 {
-    auto overrideList = m_completionHelper.overrides();
+    const auto overrideList = m_completionHelper.overrides();
     if (overrideList.isEmpty()) {
         return;
     }

@@ -29,7 +29,7 @@ class EmptyMessageListView
     Q_OBJECT
 
 public:
-    EmptyMessageListView(QWidget* parent);
+    explicit EmptyMessageListView(QWidget* parent);
     void setEmptyMessage(const QString& message);
 protected:
     void paintEvent(QPaintEvent* event) override;

@@ -4,9 +4,9 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
 
-  <signal name="docsPathChanged"/>
-
   <include>"jobparameters.h"</include>
+
+  <signal name="docsPathChanged"/>
 
   <group name="Clazy">
 

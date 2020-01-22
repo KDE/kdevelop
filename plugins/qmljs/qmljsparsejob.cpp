@@ -55,7 +55,7 @@ ProjectFileItem* findProjectFileItem(const IndexedString& url)
 
     const auto& projects = ICore::self()->projectController()->projects();
     for (auto project: projects) {
-        auto files = project->filesForPath(url);
+        const auto files = project->filesForPath(url);
         if (files.isEmpty()) {
             continue;
         }
