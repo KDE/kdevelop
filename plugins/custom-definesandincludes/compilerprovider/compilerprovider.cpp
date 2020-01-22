@@ -75,7 +75,7 @@ ConfigEntry configForItem(KDevelop::ProjectBaseItem* item)
     const Path itemPath = item->path();
     const Path rootDirectory = item->project()->path();
 
-    auto paths = SettingsManager::globalInstance()->readPaths(item->project()->projectConfiguration().data());
+    const auto paths = SettingsManager::globalInstance()->readPaths(item->project()->projectConfiguration().data());
     ConfigEntry config;
     Path closestPath;
 

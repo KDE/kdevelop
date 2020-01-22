@@ -269,7 +269,7 @@ QString sourceForHeader(const QString& headerPath)
     }
 
     QString targetUrl;
-    auto buddies = DocumentFinderHelpers::potentialBuddies(QUrl::fromLocalFile(headerPath));
+    const auto buddies = DocumentFinderHelpers::potentialBuddies(QUrl::fromLocalFile(headerPath));
     for (const auto& buddy : buddies) {
         const auto local = buddy.toLocalFile();
         if (QFileInfo::exists(local)) {

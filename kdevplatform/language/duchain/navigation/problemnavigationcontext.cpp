@@ -162,7 +162,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
 
     modifyHtml() += QStringLiteral("</tr></table>");
 
-    auto diagnostics = problem->diagnostics();
+    const auto diagnostics = problem->diagnostics();
     if (!diagnostics.isEmpty()) {
         DUChainReadLocker lock;
         for (auto diagnostic : diagnostics) {

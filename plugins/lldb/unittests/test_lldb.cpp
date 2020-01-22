@@ -255,7 +255,7 @@ void LldbTest::testStdout()
 
     QStringList outputLines;
     while (outputSpy.count() > 0) {
-        QList<QVariant> arguments = outputSpy.takeFirst();
+        const QList<QVariant> arguments = outputSpy.takeFirst();
         for (const auto &item : arguments) {
             outputLines.append(item.toStringList());
         }
@@ -287,7 +287,7 @@ void LldbTest::testEnvironmentSet()
 
     QStringList outputLines;
     while (outputSpy.count() > 0) {
-        QList<QVariant> arguments = outputSpy.takeFirst();
+        const QList<QVariant> arguments = outputSpy.takeFirst();
         for (const auto &item : arguments) {
             outputLines.append(item.toStringList());
         }
@@ -1893,7 +1893,7 @@ void KDevMI::LLDB::LldbTest::testEnvironmentCd()
 
     QStringList outputLines;
     while (outputSpy.count() > 0) {
-        QList<QVariant> arguments = outputSpy.takeFirst();
+        const QList<QVariant> arguments = outputSpy.takeFirst();
         for (const auto &item : arguments) {
             outputLines.append(item.toStringList());
         }

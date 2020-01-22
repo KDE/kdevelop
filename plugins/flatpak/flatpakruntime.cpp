@@ -100,7 +100,8 @@ void FlatpakRuntime::startProcess(QProcess* process) const
 {
     //Take any environment variables specified in process and pass through to flatpak.
     QStringList env_args;
-    for(QString env_var: process->processEnvironment().toStringList()) {
+    const QStringList env_vars = process->processEnvironment().toStringList();
+    for (const QString& env_var : env_vars) {
         env_args << QLatin1String("--env=") + env_var;
     }
     const QStringList args = m_finishArgs + env_args + QStringList{QStringLiteral("build"), QStringLiteral("--talk-name=org.freedesktop.DBus"), m_buildDirectory.toLocalFile(), process->program()} << process->arguments();
@@ -115,7 +116,8 @@ void FlatpakRuntime::startProcess(KProcess* process) const
 {
     //Take any environment variables specified in process and pass through to flatpak.
     QStringList env_args;
-    for(QString env_var: process->processEnvironment().toStringList()) {
+    const QStringList env_vars = process->processEnvironment().toStringList();
+    for (const QString& env_var : env_vars) {
         env_args << QLatin1String("--env=") + env_var;
     }
     process->setProgram(QStringList{QStringLiteral("flatpak")} << m_finishArgs << env_args << QStringList{QStringLiteral("build"), QStringLiteral("--talk-name=org.freedesktop.DBus"), m_buildDirectory.toLocalFile() } << process->program());

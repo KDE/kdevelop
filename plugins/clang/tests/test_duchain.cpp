@@ -1788,7 +1788,7 @@ void TestDUChain::testTemplateFunctionParameterName()
     DUChainDumper dumper(DUChainDumper::Features(DUChainDumper::DumpContext | DUChainDumper::DumpProblems));
     dumper.dump(top);
 
-    auto declarations = top->localDeclarations();
+    const auto declarations = top->localDeclarations();
     QCOMPARE(declarations.size(), 2);
 
     for (auto decl : declarations) {

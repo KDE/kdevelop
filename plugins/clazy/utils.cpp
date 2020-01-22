@@ -76,7 +76,7 @@ public:
         html.clear();
         html += QStringLiteral("<html>");
 
-        auto lines = markdown.split(QLatin1Char('\n'));
+        const auto lines = markdown.split(QLatin1Char('\n'));
         for (auto line : lines) {
             if (line.isEmpty()) {
                 setState(EMPTY);
