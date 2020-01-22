@@ -99,6 +99,8 @@ if(CLANG_FOUND)
 
   # svn version of clang has a svn suffix "8.0.0svn" but installs the header in "8.0.0", without the suffix
   string(REPLACE "svn" "" CLANG_VERSION_CLEAN "${CLANG_VERSION}")
+  # dito for git
+  string(REPLACE "git" "" CLANG_VERSION_CLEAN "${CLANG_VERSION}")
 
   find_path(CLANG_BUILTIN_DIR
             # cpuid.h because it is defined in ClangSupport constructor as valid clang builtin dir indicator
