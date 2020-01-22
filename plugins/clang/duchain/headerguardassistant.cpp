@@ -77,7 +77,7 @@ public:
             {
                 const QString macro = m_path.toUrl()
                         .fileName(QUrl::PrettyDecoded)
-                        .replace(QRegularExpression(QStringLiteral("[^a-zA-Z0-9]")), QLatin1String(" "))
+                        .replace(QRegularExpression(QStringLiteral("[^a-zA-Z0-9]")), QStringLiteral(" "))
                         .simplified()
                         .toUpper()
                         .replace(QLatin1Char(' '), QLatin1Char('_'))
