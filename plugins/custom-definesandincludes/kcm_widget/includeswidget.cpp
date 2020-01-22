@@ -58,7 +58,7 @@ IncludesWidget::IncludesWidget( QWidget* parent )
     connect(includesModel, &IncludesModel::rowsInserted, this, QOverload<>::of(&IncludesWidget::includesChanged));
     connect(includesModel, &IncludesModel::rowsRemoved, this, QOverload<>::of(&IncludesWidget::includesChanged));
 
-    QAction* delIncAction = new QAction( i18n("Delete Include Path"), this );
+    auto* delIncAction = new QAction( i18n("Delete Include Path"), this );
     delIncAction->setShortcut( QKeySequence( Qt::Key_Delete ) );
     delIncAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     ui->includePaths->addAction( delIncAction );

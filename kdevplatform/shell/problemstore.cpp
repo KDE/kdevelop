@@ -74,7 +74,7 @@ void ProblemStore::addProblem(const IProblem::Ptr &problem)
 {
     Q_D(ProblemStore);
 
-    ProblemNode *node = new ProblemNode(d->m_rootNode);
+    auto* node = new ProblemNode(d->m_rootNode);
     node->setProblem(problem);
     d->m_rootNode->addChild(node);
 

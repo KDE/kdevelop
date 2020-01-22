@@ -96,7 +96,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(m_concentrationModeAction, &QAction::toggled, this, &MainWindowPrivate::restoreConcentrationMode);
     ac->addAction(QStringLiteral("toggle_concentration_mode"), m_concentrationModeAction);
 
-    QAction* action = new QAction(i18n("Show Left Dock"), this);
+    auto* action = new QAction(i18n("Show Left Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Left);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showLeftDock);

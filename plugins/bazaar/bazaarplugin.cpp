@@ -76,7 +76,7 @@ bool BazaarPlugin::isValidRemoteRepositoryUrl(const QUrl& remoteLocation)
 
 VcsJob* BazaarPlugin::add(const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
     job->setType(VcsJob::Add);
     *job << "bzr" << "add";
     if(recursion == NonRecursive)
@@ -115,7 +115,7 @@ VcsJob* BazaarPlugin::createWorkingCopy(const VcsLocation& sourceRepository, con
 {
     Q_UNUSED(recursion);
     // What is the purpose of recursion parameter?
-    DVcsJob* job = new DVcsJob(BazaarUtils::toQDir(sourceRepository.localUrl()), this);
+    auto* job = new DVcsJob(BazaarUtils::toQDir(sourceRepository.localUrl()), this);
     job->setType(VcsJob::Import);
     *job << "bzr" << "branch" << sourceRepository.localUrl().url() << destinationDirectory;
     return job;
@@ -130,7 +130,7 @@ VcsJob* BazaarPlugin::diff(const QUrl& fileOrDirectory, const VcsRevision& srcRe
 
 VcsJob* BazaarPlugin::init(const QUrl& localRepositoryRoot)
 {
-    DVcsJob* job = new DVcsJob(BazaarUtils::toQDir(localRepositoryRoot), this);
+    auto* job = new DVcsJob(BazaarUtils::toQDir(localRepositoryRoot), this);
     job->setType(VcsJob::Import);
     *job << "bzr" << "init";
     return job;
@@ -163,7 +163,7 @@ bool BazaarPlugin::isVersionControlled(const QUrl& localLocation)
 
 VcsJob* BazaarPlugin::log(const QUrl& localLocation, const VcsRevision& rev, long unsigned int limit)
 {
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocation), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localLocation), this);
     job->setType(VcsJob::Log);
     *job << "bzr" << "log" << "--long" << "-v" << localLocation << BazaarUtils::getRevisionSpecRange(rev) << "-l" << QString::number(limit);
     connect(job, &DVcsJob::readyForParsing, this, &BazaarPlugin::parseBzrLog);
@@ -172,7 +172,7 @@ VcsJob* BazaarPlugin::log(const QUrl& localLocation, const VcsRevision& rev, lon
 
 VcsJob* BazaarPlugin::log(const QUrl& localLocation, const VcsRevision& rev, const VcsRevision& limit)
 {
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocation), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localLocation), this);
     job->setType(VcsJob::Log);
     *job << "bzr" << "log" << "--long" << "-v" << localLocation << BazaarUtils::getRevisionSpecRange(limit, rev);
     connect(job, &DVcsJob::readyForParsing, this, &BazaarPlugin::parseBzrLog);
@@ -193,7 +193,7 @@ void BazaarPlugin::parseBzrLog(DVcsJob* job)
 
 VcsJob* BazaarPlugin::move(const QUrl& localLocationSrc, const QUrl& localLocationDst)
 {
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocationSrc), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localLocationSrc), this);
     job->setType(VcsJob::JobType::Move);
     *job << "bzr" << "move" << localLocationSrc << localLocationDst;
     return job;
@@ -205,7 +205,7 @@ VcsJob* BazaarPlugin::pull(const VcsLocation& localOrRepoLocationSrc, const QUrl
     // bzr has pull, but it succeeds only if fast-forward is possible
     // in other cases bzr merge should be used instead (bzr pull would fail)
     // Information about repository must be provided at least once.
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localRepositoryLocation), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localRepositoryLocation), this);
     job->setType(VcsJob::JobType::Pull);
     *job << "bzr" << "pull";
     if (!localOrRepoLocationSrc.localUrl().isEmpty()) {
@@ -218,7 +218,7 @@ VcsJob* BazaarPlugin::pull(const VcsLocation& localOrRepoLocationSrc, const QUrl
 
 VcsJob* BazaarPlugin::push(const QUrl& localRepositoryLocation, const VcsLocation& localOrRepoLocationDst)
 {
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localRepositoryLocation), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localRepositoryLocation), this);
     job->setType(VcsJob::JobType::Push);
     *job << "bzr" << "push" << localOrRepoLocationDst.localUrl();
     // localUrl always makes sense. Even on remote repositories which are handled
@@ -228,7 +228,7 @@ VcsJob* BazaarPlugin::push(const QUrl& localRepositoryLocation, const VcsLocatio
 
 VcsJob* BazaarPlugin::remove(const QList<QUrl>& localLocations)
 {
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
     job->setType(VcsJob::JobType::Remove);
     *job << "bzr" << "remove" << localLocations;
     return job;
@@ -236,7 +236,7 @@ VcsJob* BazaarPlugin::remove(const QList<QUrl>& localLocations)
 
 VcsJob* BazaarPlugin::repositoryLocation(const QUrl& localLocation)
 {
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocation), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localLocation), this);
     job->setType(VcsJob::JobType::Unknown);
     *job << "bzr" << "root" << localLocation;   // It is only to make sure
     connect(job, &DVcsJob::readyForParsing, this, &BazaarPlugin::parseBzrRoot);
@@ -261,7 +261,7 @@ VcsJob* BazaarPlugin::resolve(const QList<QUrl>& localLocations, IBasicVersionCo
 
 VcsJob* BazaarPlugin::revert(const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
     job->setType(VcsJob::JobType::Revert);
     *job << "bzr" << "revert" << BazaarUtils::handleRecursion(localLocations, recursion);
     return job;
@@ -270,7 +270,7 @@ VcsJob* BazaarPlugin::revert(const QList<QUrl>& localLocations, IBasicVersionCon
 VcsJob* BazaarPlugin::status(const QList<QUrl>& localLocations, IBasicVersionControl::RecursionMode recursion)
 {
     Q_UNUSED(recursion);
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
     job->setType(VcsJob::Status);
     *job << "bzr" << "status" << "--short" << "--no-pending" << "--no-classify" << localLocations;
     connect(job, &DVcsJob::readyForParsing, this, &BazaarPlugin::parseBzrStatus);
@@ -309,7 +309,7 @@ VcsJob* BazaarPlugin::update(const QList<QUrl>& localLocations, const VcsRevisio
 {
     // bzr update is stronger than API (it's effectively merge)
     // the best approximation is bzr pull
-    DVcsJob* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
+    auto* job = new DVcsJob(BazaarUtils::workingCopy(localLocations[0]), this);
     Q_UNUSED(recursion);
     // recursion and file locations are ignored - we can update only whole
     // working copy

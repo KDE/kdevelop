@@ -44,7 +44,7 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     auto* mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(m_processList);
-    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     mainLayout->addWidget(buttonBox);
 
     connect(m_processList->treeView()->selectionModel(), &QItemSelectionModel::selectionChanged,

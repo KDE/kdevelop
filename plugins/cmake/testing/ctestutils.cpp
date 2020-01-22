@@ -79,7 +79,7 @@ void CTestUtils::createTestSuites(const QVector<Test>& testSuites, const QHash< 
 
         qCDebug(CMAKE) << "looking for tests in test" << test.name << "target" << target.name << "with sources" << target.sources;
 
-        CTestSuite* suite = new CTestSuite(test.name, executablePath, target.sources.toList(), project, test.arguments, test.properties);
+        auto* suite = new CTestSuite(test.name, executablePath, target.sources.toList(), project, test.arguments, test.properties);
         ICore::self()->runController()->registerJob(new CTestFindJob(suite));
     }
 }

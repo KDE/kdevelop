@@ -188,7 +188,7 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
         d->fileIdentifiers << id;
 
         const QString fileLabelText = i18n("%1:", file.label);
-        QLabel* label = new QLabel(fileLabelText, this);
+        auto* label = new QLabel(fileLabelText, this);
         d->labels << label;
         auto* requester = new KUrlRequester(this);
         requester->setMode( KFile::File | KFile::LocalOnly );

@@ -162,7 +162,7 @@ public:
     {
         new (item) EnvironmentInformationItem(m_index, DUChainItemSystem::self().dynamicSize(*m_file->d_func()));
         Q_ASSERT(m_file->d_func()->m_dynamic);
-        DUChainBaseData* data =
+        auto* data =
             reinterpret_cast<DUChainBaseData*>(reinterpret_cast<char*>(item) + sizeof(EnvironmentInformationItem));
         DUChainItemSystem::self().copy(*m_file->d_func(), *data, true);
         Q_ASSERT(data->m_range == m_file->d_func()->m_range);
@@ -691,9 +691,9 @@ public:
                     index = m_environmentInfo.index(req);
                     Q_ASSERT(index);
 
-                    EnvironmentInformationItem* item =
+                    auto* item =
                         const_cast<EnvironmentInformationItem*>(m_environmentInfo.itemFromIndex(index));
-                    DUChainBaseData* theData =
+                    auto* theData =
                         reinterpret_cast<DUChainBaseData*>(reinterpret_cast<char*>(item) +
                                                            sizeof(EnvironmentInformationItem));
 
@@ -1018,7 +1018,7 @@ unloadContexts:
             return alreadyLoaded;
 
         ///FIXME: ugly, and remove const_cast
-        ParsingEnvironmentFile* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create(
+        auto* ret = dynamic_cast<ParsingEnvironmentFile*>(DUChainItemSystem::self().create(
                                                                                 const_cast<DUChainBaseData*>(
                                                                                     reinterpret_cast<const
                                                                                                      DUChainBaseData*>(

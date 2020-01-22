@@ -87,10 +87,10 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
         return ret;
     }
 
-    QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("view-filter")),
-                                  i18np("Exclude Item From Project",
-                                        "Exclude Items From Project",
-                                        items.size()), parent);
+    auto* action = new QAction(QIcon::fromTheme(QStringLiteral("view-filter")),
+                               i18np("Exclude Item From Project",
+                                     "Exclude Items From Project",
+                                     items.size()), parent);
     action->setData(QVariant::fromValue(items));
     connect(action, &QAction::triggered, this, &ProjectFilterProvider::addFilterFromContextMenu);
     ret.addAction(ContextMenuExtension::FileGroup, action);

@@ -153,7 +153,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     }
 
     // Now setup a menu with actions for each part and app
-    QMenu* menu = new QMenu(i18n("Open With"), parent);
+    auto* menu = new QMenu(i18n("Open With"), parent);
     auto documentOpenIcon = QIcon::fromTheme( QStringLiteral("document-open") );
     menu->setIcon( documentOpenIcon );
 
@@ -169,7 +169,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     KDevelop::ContextMenuExtension ext;
 
     if (canOpenDefault(m_mimeType)) {
-        QAction* openAction = new QAction(i18n("Open"), parent);
+        auto* openAction = new QAction(i18n("Open"), parent);
         openAction->setIcon( documentOpenIcon );
         connect( openAction, &QAction::triggered, this, &OpenWithPlugin::openDefault );
         ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
@@ -189,7 +189,7 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType(const QString& serviceType
     QAction* standardAction = nullptr;
     const QString defaultId = defaultForMimeType(m_mimeType);
     for (auto& svc : list) {
-        QAction* act = new QAction(isTextEditor(svc) ? i18n("Default Editor") : svc->name(), parent);
+        auto* act = new QAction(isTextEditor(svc) ? i18n("Default Editor") : svc->name(), parent);
         act->setIcon( QIcon::fromTheme( svc->icon() ) );
         if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
             QFont font = act->font();

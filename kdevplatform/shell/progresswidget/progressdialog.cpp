@@ -145,7 +145,7 @@ TransactionItem::TransactionItem( QWidget *parent,
     vbox->setStretchFactor( mFrame, 3 );
     vbox->addWidget( mFrame );
 
-    QWidget *h = new QWidget( this );
+    auto* h = new QWidget( this );
     auto hboxLayout = new QHBoxLayout(h);
     hboxLayout->setMargin(0);
     hboxLayout->setSpacing( 5 );

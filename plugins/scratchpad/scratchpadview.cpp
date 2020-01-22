@@ -148,7 +148,7 @@ ScratchpadView::ScratchpadView(QWidget* parent, Scratchpad* scratchpad)
 
 void ScratchpadView::setupActions()
 {
-    QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18n("New Scratch"), this);
+    auto* action = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18n("New Scratch"), this);
     connect(action, &QAction::triggered, this, &ScratchpadView::createScratch);
     addAction(action);
 

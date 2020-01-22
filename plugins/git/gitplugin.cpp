@@ -189,7 +189,7 @@ GitPlugin::GitPlugin( QObject *parent, const QVariantList & )
 
     setObjectName(QStringLiteral("Git"));
 
-    DVcsJob* versionJob = new DVcsJob(QDir::tempPath(), this, KDevelop::OutputJob::Silent);
+    auto* versionJob = new DVcsJob(QDir::tempPath(), this, KDevelop::OutputJob::Silent);
     *versionJob << "git" << "--version";
     connect(versionJob, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitVersionOutput);
     ICore::self()->runController()->registerJob(versionJob);
@@ -242,7 +242,7 @@ void GitPlugin::additionalMenuEntries(QMenu* menu, const QList<QUrl>& urls)
 
 void GitPlugin::ctxRebase()
 {
-    RebaseDialog *dialog = new RebaseDialog(this, m_urls.first(), nullptr);
+    auto* dialog = new RebaseDialog(this, m_urls.first(), nullptr);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->open();
 }
@@ -269,7 +269,7 @@ void GitPlugin::ctxStashManager()
 
 DVcsJob* GitPlugin::errorsFound(const QString& error, KDevelop::OutputJob::OutputJobVerbosity verbosity=OutputJob::Verbose)
 {
-    DVcsJob* j = new DVcsJob(QDir::temp(), this, verbosity);
+    auto* j = new DVcsJob(QDir::temp(), this, verbosity);
     *j << "echo" << i18n("error: %1", error) << "-n";
     return j;
 }
@@ -352,7 +352,7 @@ bool GitPlugin::isVersionControlled(const QUrl &path)
 
 VcsJob* GitPlugin::init(const QUrl &directory)
 {
-    DVcsJob* job = new DVcsJob(urlDir(directory), this);
+    auto* job = new DVcsJob(urlDir(directory), this);
     job->setType(VcsJob::Import);
     *job << "git" << "init";
     return job;
@@ -717,7 +717,7 @@ DVcsJob* GitPlugin::gitStash(const QDir& repository, const QStringList& args, Ou
 
 VcsJob* GitPlugin::tag(const QUrl& repository, const QString& commitMessage, const VcsRevision& rev, const QString& tagName)
 {
-    DVcsJob* job = new DVcsJob(urlDir(repository), this);
+    auto* job = new DVcsJob(urlDir(repository), this);
     *job << "git" << "tag" << "-m" << commitMessage << tagName;
     if(rev.revisionValue().isValid())
         *job << rev.revisionValue().toString();
@@ -742,7 +742,7 @@ VcsJob* GitPlugin::branch(const QUrl& repository, const KDevelop::VcsRevision& r
 {
     Q_ASSERT(!branchName.isEmpty());
 
-    DVcsJob* job = new DVcsJob(urlDir(repository), this);
+    auto* job = new DVcsJob(urlDir(repository), this);
     *job << "git" << "branch" << "--" << branchName;
 
     if(!rev.prettyValue().isEmpty())
@@ -752,7 +752,7 @@ VcsJob* GitPlugin::branch(const QUrl& repository, const KDevelop::VcsRevision& r
 
 VcsJob* GitPlugin::deleteBranch(const QUrl& repository, const QString& branchName)
 {
-    DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
+    auto* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
     *job << "git" << "branch" << "-D" << branchName;
     connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitCurrentBranch);
     return job;
@@ -760,7 +760,7 @@ VcsJob* GitPlugin::deleteBranch(const QUrl& repository, const QString& branchNam
 
 VcsJob* GitPlugin::renameBranch(const QUrl& repository, const QString& oldBranchName, const QString& newBranchName)
 {
-    DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
+    auto* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
     *job << "git" << "branch" << "-m" << newBranchName << oldBranchName;
     connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitCurrentBranch);
     return job;
@@ -770,7 +770,7 @@ VcsJob* GitPlugin::mergeBranch(const QUrl& repository, const QString& branchName
 {
     Q_ASSERT(!branchName.isEmpty());
 
-    DVcsJob* job = new DVcsJob(urlDir(repository), this);
+    auto* job = new DVcsJob(urlDir(repository), this);
     *job << "git" << "merge" << branchName;
 
     return job;
@@ -778,7 +778,7 @@ VcsJob* GitPlugin::mergeBranch(const QUrl& repository, const QString& branchName
 
 VcsJob* GitPlugin::rebase(const QUrl& repository, const QString& branchName)
 {
-    DVcsJob* job = new DVcsJob(urlDir(repository), this);
+    auto* job = new DVcsJob(urlDir(repository), this);
     *job << "git" << "rebase" << branchName;
 
     return job;
@@ -786,7 +786,7 @@ VcsJob* GitPlugin::rebase(const QUrl& repository, const QString& branchName)
 
 VcsJob* GitPlugin::currentBranch(const QUrl& repository)
 {
-    DVcsJob* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
+    auto* job = new DVcsJob(urlDir(repository), this, OutputJob::Silent);
     job->setIgnoreError(true);
     *job << "git" << "symbolic-ref" << "-q" << "--short" << "HEAD";
     connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitCurrentBranch);
@@ -802,7 +802,7 @@ void GitPlugin::parseGitCurrentBranch(DVcsJob* job)
 
 VcsJob* GitPlugin::branches(const QUrl &repository)
 {
-    DVcsJob* job=new DVcsJob(urlDir(repository));
+    auto* job=new DVcsJob(urlDir(repository));
     *job << "git" << "branch" << "-a";
     connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitBranchOutput);
     return job;
@@ -1325,7 +1325,7 @@ QStringList GitPlugin::getLsFiles(const QDir &directory, const QStringList &args
 DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &args,
     KDevelop::OutputJob::OutputJobVerbosity verbosity)
 {
-    DVcsJob* job = new DVcsJob(QDir(repository), this, verbosity);
+    auto* job = new DVcsJob(QDir(repository), this, verbosity);
     *job << "git" << "rev-parse" << args;
 
     return job;
@@ -1333,7 +1333,7 @@ DVcsJob* GitPlugin::gitRevParse(const QString &repository, const QStringList &ar
 
 DVcsJob* GitPlugin::gitRevList(const QString& directory, const QStringList& args)
 {
-    DVcsJob* job = new DVcsJob(urlDir(QUrl::fromLocalFile(directory)), this, KDevelop::OutputJob::Silent);
+    auto* job = new DVcsJob(urlDir(QUrl::fromLocalFile(directory)), this, KDevelop::OutputJob::Silent);
     {
         *job << "git" << "rev-list" << args;
         return job;
@@ -1441,7 +1441,7 @@ void GitPlugin::parseGitRepoLocationOutput(DVcsJob* job)
 
 VcsJob* GitPlugin::repositoryLocation(const QUrl& localLocation)
 {
-    DVcsJob* job = new DVcsJob(urlDir(localLocation), this);
+    auto* job = new DVcsJob(urlDir(localLocation), this);
     //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
     *job << "git" << "config" << "remote.origin.url";
     connect(job, &DVcsJob::readyForParsing, this, &GitPlugin::parseGitRepoLocationOutput);
@@ -1450,7 +1450,7 @@ VcsJob* GitPlugin::repositoryLocation(const QUrl& localLocation)
 
 VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, const QUrl& localRepositoryLocation)
 {
-    DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
+    auto* job = new DVcsJob(urlDir(localRepositoryLocation), this);
     job->setCommunicationMode(KProcess::MergedChannels);
     *job << "git" << "pull";
     if(!localOrRepoLocationSrc.localUrl().isEmpty())
@@ -1460,7 +1460,7 @@ VcsJob* GitPlugin::pull(const KDevelop::VcsLocation& localOrRepoLocationSrc, con
 
 VcsJob* GitPlugin::push(const QUrl& localRepositoryLocation, const KDevelop::VcsLocation& localOrRepoLocationDst)
 {
-    DVcsJob* job = new DVcsJob(urlDir(localRepositoryLocation), this);
+    auto* job = new DVcsJob(urlDir(localRepositoryLocation), this);
     job->setCommunicationMode(KProcess::MergedChannels);
     *job << "git" << "push";
     if(!localOrRepoLocationDst.localUrl().isEmpty())
@@ -1478,7 +1478,7 @@ VcsJob* GitPlugin::update(const QList<QUrl>& localLocations, const KDevelop::Vcs
     if(rev.revisionType()==VcsRevision::Special && rev.revisionValue().value<VcsRevision::RevisionSpecialType>()==VcsRevision::Head) {
         return pull(VcsLocation(), localLocations.first());
     } else {
-        DVcsJob* job = new DVcsJob(urlDir(localLocations.first()), this);
+        auto* job = new DVcsJob(urlDir(localLocations.first()), this);
         {
             //Probably we should check first if origin is the proper remote we have to use but as a first attempt it works
             *job << "git" << "checkout" << rev.revisionValue().toString() << "--";

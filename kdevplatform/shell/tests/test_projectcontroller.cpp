@@ -121,7 +121,7 @@ public:
 
     ProjectFolderItem *import(IProject *project) override
     {
-        ProjectFolderItem* it = new ProjectFolderItem(project, project->path());
+        auto* it = new ProjectFolderItem(project, project->path());
         return it;
     }
 

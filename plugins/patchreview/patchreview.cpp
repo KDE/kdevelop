@@ -610,8 +610,8 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension(KDevelop:
     }
 
     if (urls.size() == 1) {
-        QAction* reviewAction = new QAction( QIcon::fromTheme(QStringLiteral("text-x-patch")),
-                                             i18n("Review Patch"), parent);
+        auto* reviewAction = new QAction(QIcon::fromTheme(QStringLiteral("text-x-patch")),
+                                         i18n("Review Patch"), parent);
         reviewAction->setData(QVariant(urls[0]));
         connect( reviewAction, &QAction::triggered, this, &PatchReviewPlugin::executeFileReviewAction );
         ContextMenuExtension cm;

@@ -181,7 +181,7 @@ void GitInitTest::commitFiles()
     QVERIFY(QFileInfo::exists(headRefName));
 
     //Test the results of the "git add"
-    DVcsJob* jobLs = new DVcsJob(gitTest_BaseDir(), m_plugin);
+    auto* jobLs = new DVcsJob(gitTest_BaseDir(), m_plugin);
     *jobLs << "git" << "ls-tree" << "--name-only" << "-r" << "HEAD";
 
     if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {

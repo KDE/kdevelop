@@ -138,7 +138,7 @@ QList<KJob*> FlatpakRuntime::exportBundle(const QString &path) const
 {
     const auto doc = config();
 
-    QTemporaryDir* dir = new QTemporaryDir(QDir::tempPath()+QLatin1String("/flatpak-tmp-repo"));
+    auto* dir = new QTemporaryDir(QDir::tempPath()+QLatin1String("/flatpak-tmp-repo"));
     if (!dir->isValid() || doc.isEmpty()) {
         qCWarning(FLATPAK) << "Couldn't export:" << path << dir->isValid() << dir->path() << doc.isEmpty();
         return {};

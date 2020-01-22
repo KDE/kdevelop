@@ -135,7 +135,7 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
             if (control)
             {
                 const QString entryLabelText = i18n("%1:", entry.label);
-                QLabel* label = new QLabel(entryLabelText, box);
+                auto* label = new QLabel(entryLabelText, box);
                 if (!entry.context.isEmpty()) {
                     label->setToolTip(entry.context);
                     control->setToolTip(entry.context);

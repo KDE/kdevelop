@@ -80,7 +80,7 @@ void TemplateEngine::addTemplateDirectories(const QStringList& directories)
 {
     Q_D(TemplateEngine);
 
-    FileSystemTemplateLoader* loader = new FileSystemTemplateLoader;
+    auto* loader = new FileSystemTemplateLoader;
     loader->setTemplateDirs(directories);
     d->engine.addTemplateLoader(QSharedPointer<AbstractTemplateLoader>(loader));
 }

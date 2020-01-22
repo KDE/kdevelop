@@ -89,8 +89,7 @@ public:
         desired[QStringLiteral("org.kdevelop.SnippetView")] = Sublime::Right;
         desired[QStringLiteral("org.kdevelop.ExternalScriptView")] = Sublime::Right;
         desired[QStringLiteral("org.kdevelop.ScratchpadView")] = Sublime::Left;
-        Sublime::Area* a =
-            new Sublime::Area(m_controller, QStringLiteral("code"), i18n("Code"));
+        auto* a = new Sublime::Area(m_controller, QStringLiteral("code"), i18n("Code"));
         a->setDesiredToolViews(desired);
         a->setIconName(QStringLiteral("document-edit"));
         m_controller->addDefaultArea(a);
@@ -474,7 +473,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
     for (QHash<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = d->factoryDocuments.constBegin();
         it != d->factoryDocuments.constEnd(); ++it)
     {
-        ViewSelectorItem *item = new ViewSelectorItem(it.value()->title(), it.key(), list);
+        auto* item = new ViewSelectorItem(it.value()->title(), it.key(), list);
         if (!item->factory->allowMultiple() && toolViewPresent(it.value(), mw->area())) {
             // Disable item if the tool view is already present.
             item->setFlags(item->flags() & ~Qt::ItemIsEnabled);

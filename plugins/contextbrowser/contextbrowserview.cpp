@@ -167,7 +167,7 @@ void ContextBrowserView::declarationMenu()
     if (navigationWidget) {
         auto* navigationContext = qobject_cast<AbstractDeclarationNavigationContext*>(navigationWidget->context().data());
         if (navigationContext && navigationContext->declaration().data()) {
-            KDevelop::DeclarationContext* c = new KDevelop::DeclarationContext(navigationContext->declaration().data());
+            auto* c = new KDevelop::DeclarationContext(navigationContext->declaration().data());
             lock.unlock();
             QMenu menu(this);
             QList<ContextMenuExtension> extensions =

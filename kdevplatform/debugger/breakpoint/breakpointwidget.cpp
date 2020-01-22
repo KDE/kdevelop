@@ -326,7 +326,7 @@ void BreakpointWidget::breakpointError(int row, const QString& msg)
     QPoint p = d->breakpointsView->visualRect(index).topLeft();
     p = d->breakpointsView->mapToGlobal(p);
 
-    KPassivePopup *pop = new KPassivePopup(d->breakpointsView);
+    auto* pop = new KPassivePopup(d->breakpointsView);
     pop->setPopupStyle(KPassivePopup::Boxed);
     pop->setAutoDelete(true);
     // FIXME: the icon, too.

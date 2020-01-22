@@ -555,7 +555,7 @@ void TopDUContextDynamicData::loadData() const
     Q_ASSERT(!m_dataLoaded);
     Q_ASSERT(m_data.isEmpty());
 
-    QFile* file = new QFile(pathForTopContext(m_topContext->ownIndex()));
+    auto* file = new QFile(pathForTopContext(m_topContext->ownIndex()));
     bool open = file->open(QIODevice::ReadOnly);
     Q_UNUSED(open);
     Q_ASSERT(open);

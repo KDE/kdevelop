@@ -165,7 +165,7 @@ void TestBazaar::addFiles()
 
 void TestBazaar::prepareWhoamiInformations()
 {
-    DVcsJob *whoamiJob = new DVcsJob(bazaarTest_BaseDir, m_plugin);
+    auto* whoamiJob = new DVcsJob(bazaarTest_BaseDir, m_plugin);
     *whoamiJob<<"bzr"<<"whoami"<<"--branch"<<"kdevbazaar-test identity <>";
     VERIFYJOB(whoamiJob);
 }
@@ -188,7 +188,7 @@ void TestBazaar::commitFiles()
     QVERIFY(QFileInfo::exists(headRefName));
 
     //Test the results of the "bzr add"
-    DVcsJob* jobLs = new DVcsJob(bazaarTest_BaseDir, m_plugin);
+    auto* jobLs = new DVcsJob(bazaarTest_BaseDir, m_plugin);
     *jobLs << "bzr" << "ls" << "-R";
 
     if (jobLs->exec() && jobLs->status() == KDevelop::VcsJob::JobSucceeded) {

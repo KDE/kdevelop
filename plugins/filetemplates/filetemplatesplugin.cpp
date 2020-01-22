@@ -113,7 +113,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension(Context* context,
         }
         if (url.isValid())
         {
-            QAction* action = new QAction(i18n("Create From Template..."), parent);
+            auto* action = new QAction(i18n("Create From Template..."), parent);
             action->setIcon(QIcon::fromTheme(QStringLiteral("code-class")));
             action->setData(url);
             connect(action, &QAction::triggered, this, &FileTemplatesPlugin::createFromTemplate);
@@ -133,7 +133,7 @@ ContextMenuExtension FileTemplatesPlugin::contextMenuExtension(Context* context,
 
     if (fileUrl.isValid() && determineTemplateType(fileUrl) != NoTemplate)
     {
-        QAction* action = new QAction(i18n("Show Template Preview"), parent);
+        auto* action = new QAction(i18n("Show Template Preview"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("document-preview")));
         action->setData(fileUrl);
         connect(action, &QAction::triggered, this, &FileTemplatesPlugin::previewTemplate);
@@ -264,7 +264,7 @@ FileTemplatesPlugin::TemplateType FileTemplatesPlugin::determineTemplateType(con
                 return ProjectTemplate;
             }
 
-            KConfig* config = new KConfig(dir.absoluteFilePath(entry), KConfig::SimpleConfig);
+            auto* config = new KConfig(dir.absoluteFilePath(entry), KConfig::SimpleConfig);
             KConfigGroup group = config->group("General");
 
             qCDebug(PLUGIN_FILETEMPLATES) << "General group keys:" << group.keyList();

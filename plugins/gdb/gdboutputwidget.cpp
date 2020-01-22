@@ -70,7 +70,7 @@ GDBOutputWidget::GDBOutputWidget(CppDebuggerPlugin* plugin, QWidget *parent) :
 
     m_userGDBCmdEditor = new KHistoryComboBox (this);
 
-    QLabel *label = new QLabel(i18n("&GDB cmd:"), this);
+    auto* label = new QLabel(i18n("&GDB cmd:"), this);
     label->setBuddy(m_userGDBCmdEditor);
 
     m_Interrupt = new QToolButton( this );

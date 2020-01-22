@@ -64,7 +64,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     d->hits->setWordWrap(true);
     hitsLayout->addWidget(d->hits, 0, 0, 1, 3);
 
-    QLabel *l2 = new QLabel(i18n("Ignore"), this);
+    auto* l2 = new QLabel(i18n("Ignore"), this);
     hitsLayout->addWidget(l2, 2, 0);
 
     d->ignore = new QSpinBox(this);
@@ -72,7 +72,7 @@ BreakpointDetails::BreakpointDetails(QWidget *parent)
     d->ignore->setRange(0, 99999);
     connect(d->ignore, QOverload<int>::of(&QSpinBox::valueChanged), this, &BreakpointDetails::setIgnoreHits);
 
-    QLabel *l3 = new QLabel(i18n("next hits"), this);
+    auto* l3 = new QLabel(i18n("next hits"), this);
     hitsLayout->addWidget(l3, 2, 2);
 
     layout->addStretch();

@@ -494,7 +494,7 @@ void QuickOpenPlugin::showQuickOpen(ModelTypes modes)
 
 void QuickOpenPlugin::showQuickOpenWidget(const QStringList& items, const QStringList& scopes, bool preselectText)
 {
-    QuickOpenWidgetDialog* dialog = new QuickOpenWidgetDialog(i18n("Quick Open"), m_model, items, scopes);
+    auto* dialog = new QuickOpenWidgetDialog(i18n("Quick Open"), m_model, items, scopes);
     m_currentWidgetHandler = dialog;
     if (preselectText) {
         KDevelop::IDocument* currentDoc = core()->documentController()->activeDocument();

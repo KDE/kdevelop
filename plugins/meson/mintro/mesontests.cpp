@@ -67,7 +67,7 @@ KJob* MesonTest::job(ITestSuite::TestJobVerbosity verbosity)
         break;
     }
 
-    OutputExecuteJob* job = new OutputExecuteJob(m_project, convVerbosity);
+    auto* job = new OutputExecuteJob(m_project, convVerbosity);
     *job << m_command;
     if (!m_workDir.isEmpty()) {
         job->setWorkingDirectory(m_workDir.toUrl());

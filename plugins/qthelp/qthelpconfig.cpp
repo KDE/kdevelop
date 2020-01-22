@@ -112,7 +112,7 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     m_configWidget->qchTable->header()->setSectionResizeMode(ConfigColumn, QHeaderView::Fixed);
 
     // Add GHNS button
-    KNS3::Button *knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), QStringLiteral("kdevelop-qthelp.knsrc"), m_configWidget->boxQchManage);
+    auto* knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), QStringLiteral("kdevelop-qthelp.knsrc"), m_configWidget->boxQchManage);
     m_configWidget->tableCtrlLayout->insertWidget(1, knsButton);
     connect(knsButton, &KNS3::Button::dialogFinished, this, &QtHelpConfig::knsUpdate);
     connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled,
@@ -327,7 +327,7 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
     item->setText(IconColumn, icon);
     item->setText(GhnsColumn, ghnsStatus);
 
-    QWidget *ctrlWidget = new QWidget(item->treeWidget());
+    auto* ctrlWidget = new QWidget(item->treeWidget());
     ctrlWidget->setLayout(new QHBoxLayout(ctrlWidget));
 
     auto *modifyBtn = new QToolButton(item->treeWidget());

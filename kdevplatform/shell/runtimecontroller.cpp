@@ -138,7 +138,7 @@ void KDevelop::RuntimeController::addRuntimes(KDevelop::IRuntime * runtime)
         runtime->setParent(this);
 
     if (m_core->setupFlags() != Core::NoUi) {
-        QAction* runtimeAction = new QAction(runtime->name(), m_runtimesMenu.data());
+        auto* runtimeAction = new QAction(runtime->name(), m_runtimesMenu.data());
         runtimeAction->setCheckable(true);
         connect(runtimeAction, &QAction::triggered, runtime, [this, runtime]() {
             setCurrentRuntime(runtime);

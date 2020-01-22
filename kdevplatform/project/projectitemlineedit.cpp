@@ -168,7 +168,7 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
     setValidator(d->validator);
     setPlaceholderText( i18n("Enter the path to an item from the projects tree" ) );
 
-    QAction* selectItemAction = new QAction(QIcon::fromTheme(QStringLiteral("folder-document")), i18n("Select..."), this);
+    auto* selectItemAction = new QAction(QIcon::fromTheme(QStringLiteral("folder-document")), i18n("Select..."), this);
     connect(selectItemAction, &QAction::triggered, this, &ProjectItemLineEdit::selectItemDialog);
     addAction(selectItemAction);
 
@@ -205,7 +205,7 @@ bool ProjectItemLineEdit::selectItemDialog()
     mainLayout->addWidget(new QLabel(i18n("Select the item you want to get the path from.")));
     mainLayout->addWidget(view);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);

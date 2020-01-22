@@ -143,7 +143,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
 
-    QAction *clearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear"), this);
+    auto* clearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear"), this);
     connect(clearAction, &QAction::triggered, this, &OutputWidget::clearModel);
     addAction(clearAction);
 

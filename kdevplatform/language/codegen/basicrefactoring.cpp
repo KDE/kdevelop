@@ -101,8 +101,8 @@ void BasicRefactoring::fillContextMenu(ContextMenuExtension& extension, Context*
     if (declaration && acceptForContextMenu(declaration)) {
         QFileInfo finfo(declaration->topContext()->url().str());
         if (finfo.isWritable()) {
-            QAction* action = new QAction(i18n("Rename \"%1\"...",
-                                               declaration->qualifiedIdentifier().toString()), parent);
+            auto* action = new QAction(i18n("Rename \"%1\"...",
+                                            declaration->qualifiedIdentifier().toString()), parent);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
             connect(action, &QAction::triggered, this, &BasicRefactoring::executeRenameAction);

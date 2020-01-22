@@ -206,7 +206,7 @@ KJob* MesonBuilder::configure(KDevelop::IProject* project)
     auto buildDir = Meson::currentBuildDir(project);
     if (!buildDir.isValid()) {
         auto* bsm = project->buildSystemManager();
-        MesonManager* manager = dynamic_cast<MesonManager*>(bsm);
+        auto* manager = dynamic_cast<MesonManager*>(bsm);
         if (!manager) {
             return new ErrorJob(this, i18n("Internal error: The buildsystem manager is not the MesonManager"));
         }
@@ -236,7 +236,7 @@ KJob* MesonBuilder::configureIfRequired(KDevelop::IProject* project, KJob* realJ
     } else {
         // Create a new build directory
         auto* bsm = project->buildSystemManager();
-        MesonManager* manager = dynamic_cast<MesonManager*>(bsm);
+        auto* manager = dynamic_cast<MesonManager*>(bsm);
         if (!manager) {
             return new ErrorJob(this, i18n("Internal error: The buildsystem manager is not the MesonManager"));
         }

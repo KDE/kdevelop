@@ -77,7 +77,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         m_setButton->hide();
 
         topLayout->addSpacing(5);
-        QLabel* icon = new QLabel;
+        auto* icon = new QLabel;
         topLayout->addWidget(icon);
         topLayout->addSpacing(5);
 
@@ -87,7 +87,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         } else {
             label = i18n("<b>Working Set</b>");
         }
-        QLabel* name = new QLabel(label);
+        auto* name = new QLabel(label);
         name->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
         topLayout->addWidget(name);
          topLayout->addSpacing(10);
@@ -110,7 +110,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         topLayout->addWidget(m_deleteButton);
         layout->addLayout(topLayout);
         // horizontal line
-        QFrame* line = new QFrame();
+        auto* line = new QFrame();
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Raised);
         layout->addWidget(line);
@@ -119,7 +119,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     // everything else is added to the following widget which just has a different background color
     auto* bodyLayout = new QVBoxLayout;
     {
-        QWidget* body = new QWidget();
+        auto* body = new QWidget();
         body->setLayout(bodyLayout);
         layout->addWidget(body);
         body->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);

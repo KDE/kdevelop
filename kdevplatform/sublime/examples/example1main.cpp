@@ -72,16 +72,16 @@ Example1Main::Example1Main()
     m_area2->addToolView(tool2->createView(), Sublime::Right);
 
     //example main window stuff
-    QWidget *w = new QWidget(this);
+    auto* w = new QWidget(this);
     setCentralWidget(w);
     auto *l = new QVBoxLayout(w);
     QMenu *areaMenu = menuBar()->addMenu(QStringLiteral("Areas"));
     areaMenu->addAction(QStringLiteral("Area 1"), this, SLOT(selectArea1()));
     areaMenu->addAction(QStringLiteral("Area 2"), this, SLOT(selectArea2()));
-    QPushButton *b1 = new QPushButton(QStringLiteral("Area 1"), this);
+    auto* b1 = new QPushButton(QStringLiteral("Area 1"), this);
     connect(b1, &QPushButton::clicked, this, &Example1Main::selectArea1);
     l->addWidget(b1);
-    QPushButton *b2 = new QPushButton(QStringLiteral("Area 2"), this);
+    auto* b2 = new QPushButton(QStringLiteral("Area 2"), this);
     connect(b2, &QPushButton::clicked, this, &Example1Main::selectArea2);
     l->addWidget(b2);
 }

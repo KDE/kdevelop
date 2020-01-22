@@ -99,14 +99,14 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_filter->setSourceModel(m_model);
     m_tree->setModel(m_filter);
 
-    QAction* showSource = new QAction( QIcon::fromTheme(QStringLiteral("code-context")), i18n("Show Source"), this );
+    auto* showSource = new QAction( QIcon::fromTheme(QStringLiteral("code-context")), i18n("Show Source"), this );
     connect (showSource, &QAction::triggered, this, &TestView::showSource);
     m_contextMenuActions << showSource;
 
     addAction(plugin->actionCollection()->action(QStringLiteral("run_all_tests")));
     addAction(plugin->actionCollection()->action(QStringLiteral("stop_running_tests")));
 
-    QAction* runSelected = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18n("Run Selected Tests"), this );
+    auto* runSelected = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18n("Run Selected Tests"), this );
     connect (runSelected, &QAction::triggered, this, &TestView::runSelectedTests);
     addAction(runSelected);
 
@@ -371,12 +371,12 @@ void TestView::addTestSuite(ITestSuite* suite)
     QStandardItem* projectItem = itemForProject(suite->project());
     Q_ASSERT(projectItem);
 
-    QStandardItem* suiteItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("view-list-tree")), suite->name());
+    auto* suiteItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("view-list-tree")), suite->name());
 
     suiteItem->setData(suite->name(), SuiteRole);
     const auto caseNames = suite->cases();
     for (const QString& caseName : caseNames) {
-        QStandardItem* caseItem = new QStandardItem(iconForTestResult(TestResult::NotRun), caseName);
+        auto* caseItem = new QStandardItem(iconForTestResult(TestResult::NotRun), caseName);
         caseItem->setData(caseName, CaseRole);
         suiteItem->appendRow(caseItem);
     }
@@ -391,7 +391,7 @@ void TestView::removeTestSuite(ITestSuite* suite)
 
 QStandardItem* TestView::addProject(IProject* project)
 {
-    QStandardItem* projectItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("project-development")), project->name());
+    auto* projectItem = new QStandardItem(QIcon::fromTheme(QStringLiteral("project-development")), project->name());
     projectItem->setData(project->name(), ProjectRole);
     m_model->appendRow(projectItem);
     return projectItem;

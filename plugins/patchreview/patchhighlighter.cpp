@@ -157,7 +157,7 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
     layout->setMargin( 0 );
     layout->addWidget( browser );
 
-    KDevelop::ActiveToolTip* tooltip = new KDevelop::ActiveToolTip( ICore::self()->uiController()->activeMainWindow(), pos + QPoint( 5, -browser->sizeHint().height() - 30 ) );
+    auto* tooltip = new KDevelop::ActiveToolTip( ICore::self()->uiController()->activeMainWindow(), pos + QPoint( 5, -browser->sizeHint().height() - 30 ) );
     tooltip->setLayout( layout );
     tooltip->resize( tooltip->sizeHint() + QSize( 10, 10 ) );
     tooltip->move( pos - QPoint( 0, 20 + tooltip->height() ) );

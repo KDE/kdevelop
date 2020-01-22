@@ -253,7 +253,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension(KDevel
                 menu = new QMenu(i18n("External Scripts"), parent);
             }
 
-            QAction* scriptAction = new QAction(item->text(), menu);
+            auto* scriptAction = new QAction(item->text(), menu);
             scriptAction->setData(QVariant::fromValue<ExternalScriptItem*>(item));
             connect(scriptAction, &QAction::triggered, this, &ExternalScriptPlugin::executeScriptFromContextMenu);
             menu->addAction(scriptAction);
@@ -306,7 +306,7 @@ bool ExternalScriptPlugin::executeCommand(const QString& command, const QString&
     item->setPerformParameterReplacement(false);
     qCDebug(PLUGIN_EXTERNALSCRIPT) << "executing command " << command << " in dir " << workingDirectory <<
         " as external script";
-    ExternalScriptJobOwningItem* job =
+    auto* job =
         new ExternalScriptJobOwningItem(item, QUrl(), const_cast<ExternalScriptPlugin*>(this));
     // When a command is executed, for example through the terminal, we don't want the command output to be risen
     job->setVerbosity(KDevelop::OutputJob::Silent);

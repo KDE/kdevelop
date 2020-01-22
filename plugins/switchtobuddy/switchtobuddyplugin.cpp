@@ -125,7 +125,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context,
             continue;
         }
 
-        QAction* action = new QAction(i18n("Switch to '%1'", url.fileName()), parent);
+        auto* action = new QAction(i18n("Switch to '%1'", url.fileName()), parent);
         const QString surl = url.toLocalFile();
         connect(action, &QAction::triggered, this, [this, surl](){ switchToBuddy(surl); }, Qt::QueuedConnection);
         extension.addAction(ContextMenuExtension::NavigationGroup, action);

@@ -126,7 +126,7 @@ public:
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
         qsrand(QDateTime::currentDateTimeUtc().toTime_t());
 #endif
-        Session* session = new Session( QUuid::createUuid().toString() );
+        auto* session = new Session(QUuid::createUuid().toString());
 
         KProcess::startDetached(ShellExtension::getInstance()->executableFilePath(), QStringList() << QStringLiteral("-s") << session->id().toString() << standardArguments());
         delete session;
@@ -339,7 +339,7 @@ void SessionController::initialize( const QString& session )
         if( id.isNull() )
             continue;
         // Only create sessions for directories that represent proper uuid's
-        Session* ses = new Session( id.toString(), this );
+        auto* ses = new Session(id.toString(), this);
 
         //Delete sessions that have no name and are empty
         if( ses->containedProjects().isEmpty() && ses->name().isEmpty()
@@ -515,7 +515,7 @@ QString SessionController::cloneSession( const QString& nameOrid )
     KJobWidgets::setWindow(copyJob, Core::self()->uiController()->activeMainWindow());
     copyJob->exec();
 
-    Session* newSession = new Session( id.toString() );
+    auto* newSession = new Session(id.toString());
     newSession->setName( i18n( "Copy of %1", origSession->name() ) );
     d->addSession(newSession);
     updateXmlGuiActionList();
@@ -598,7 +598,7 @@ QString SessionController::showSessionChooserDialog(const QString& headerText, b
 
     QVBoxLayout layout(dialog.mainWidget());
     if(!headerText.isEmpty()) {
-        QLabel* heading = new QLabel(headerText);
+        auto* heading = new QLabel(headerText);
         QFont font = heading->font();
         font.setBold(true);
         heading->setFont(font);

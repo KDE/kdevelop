@@ -72,7 +72,7 @@ ProjectChangesModel::~ProjectChangesModel()
 
 void ProjectChangesModel::addProject(IProject* p)
 {
-    QStandardItem* it = new QStandardItem(p->name());
+    auto* it = new QStandardItem(p->name());
     it->setData(p->name(), ProjectChangesModel::ProjectNameRole);
     IPlugin* plugin = p->versionControlPlugin();
     if(plugin) {

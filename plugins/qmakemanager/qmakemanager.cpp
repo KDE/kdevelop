@@ -154,7 +154,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem(IProject* project, const
     QHash<QString, QString> qmvars = QMakeUtils::queryQMake(project);
     const QString mkSpecFile = QMakeConfig::findBasicMkSpec(qmvars);
     Q_ASSERT(!mkSpecFile.isEmpty());
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs(mkSpecFile, qmvars);
+    auto* mkspecs = new QMakeMkSpecs(mkSpecFile, qmvars);
     mkspecs->setProject(project);
     mkspecs->read();
     QMakeCache* cache = findQMakeCache(project);
@@ -167,7 +167,7 @@ ProjectFolderItem* QMakeProjectManager::projectRootItem(IProject* project, const
     for (const auto& projectfile : projectfiles) {
         Path proPath(path, projectfile);
         /// TODO: use Path in QMakeProjectFile
-        QMakeProjectFile* scope = new QMakeProjectFile(proPath.toLocalFile());
+        auto* scope = new QMakeProjectFile(proPath.toLocalFile());
         scope->setProject(project);
         scope->setMkSpecs(mkspecs);
         if (cache) {
@@ -496,7 +496,7 @@ void QMakeProjectManager::slotRunQMake()
 
     Path srcDir = m_actionItem->path();
     Path buildDir = QMakeConfig::buildDirFromSrc(m_actionItem->project(), srcDir);
-    QMakeJob* job = new QMakeJob(srcDir.toLocalFile(), buildDir.toLocalFile(), this);
+    auto* job = new QMakeJob(srcDir.toLocalFile(), buildDir.toLocalFile(), this);
 
     job->setQMakePath(QMakeConfig::qmakeExecutable(m_actionItem->project()));
 

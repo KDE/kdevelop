@@ -37,7 +37,7 @@ QAction* IAssistantAction::toQAction(QObject* parent) const
     Q_ASSERT(QThread::currentThread() == ICore::self()->thread() && "Actions must be created in the application main thread"
                                                     "(implement createActions() to create your actions)");
 
-    QAction* ret = new QAction(icon(), description(), parent);
+    auto* ret = new QAction(icon(), description(), parent);
     ret->setToolTip(toolTip());
 
     //Add the data as a QExplicitlySharedDataPointer to the action, so this assistant stays alive at least as long as the QAction

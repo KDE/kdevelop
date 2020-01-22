@@ -138,7 +138,7 @@ void OverridesPage::addBaseClasses(const QList<DeclarationPointer>& directBases,
     DUChainReadLocker lock;
 
     for (const DeclarationPointer& baseClass : allBases) {
-        QTreeWidgetItem* classItem = new QTreeWidgetItem(overrideTree(), QStringList() << baseClass->qualifiedIdentifier().toString());
+        auto* classItem = new QTreeWidgetItem(overrideTree(), QStringList() << baseClass->qualifiedIdentifier().toString());
         classItem->setIcon(ClassOrFunctionColumn, DUChainUtils::iconForDeclaration(baseClass.data()));
 
         DUContext* context = baseClass->internalContext();
@@ -205,7 +205,7 @@ void OverridesPage::addPotentialOverride(QTreeWidgetItem* classItem, const Decla
 
     d->overriddenFunctions.insert(childDeclaration->identifier(), childDeclaration);
 
-    QTreeWidgetItem* overrideItem = new QTreeWidgetItem(classItem, QStringList() << childDeclaration->toString());
+    auto* overrideItem = new QTreeWidgetItem(classItem, QStringList() << childDeclaration->toString());
     overrideItem->setFlags( Qt::ItemFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable) );
     overrideItem->setCheckState(ClassOrFunctionColumn, d->chosenOverrides.contains(childDeclaration) ? Qt::Checked : Qt::Unchecked);
     overrideItem->setIcon(ClassOrFunctionColumn, DUChainUtils::iconForDeclaration(childDeclaration.data()));
@@ -256,7 +256,7 @@ void OverridesPage::addCustomDeclarations (const QString& category, const QList<
     qCDebug(PLUGIN_FILETEMPLATES) << category << declarations.size();
     DUChainReadLocker lock(DUChain::lock());
 
-    QTreeWidgetItem* item = new QTreeWidgetItem(overrideTree(), QStringList() << category);
+    auto* item = new QTreeWidgetItem(overrideTree(), QStringList() << category);
     for (const DeclarationPointer& declaration : declarations)
     {
         addPotentialOverride(item, declaration);
