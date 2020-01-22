@@ -25,8 +25,8 @@
 #include <util/kdevvarlengtharray.h>
 #include <util/stack.h>
 
+#include <ctime>
 #include <iostream>
-#include <time.h>
 
 namespace KDevelop {
 class AbstractItemRepository;

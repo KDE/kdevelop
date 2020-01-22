@@ -2,8 +2,8 @@
 #include <QTest>
 #include <serialization/itemrepository.h>
 #include <serialization/indexedstring.h>
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 
 using namespace KDevelop;
 

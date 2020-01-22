@@ -23,8 +23,8 @@
 
 #include <QPair>
 
+#include <cstdlib>
 #include <iostream>
-#include <stdlib.h>
 #include <limits>
 
 //Uncomment this to search for tree-inconsistencies, however it's very expensive

@@ -37,7 +37,7 @@
 #include <QString>
 #include <QStringList>
 
-#include <signal.h>
+#include <csignal>
 
 #include <memory>
 #include <stdexcept>
