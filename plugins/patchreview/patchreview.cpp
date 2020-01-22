@@ -349,16 +349,6 @@ PatchReviewPlugin::~PatchReviewPlugin()
     setPatch(nullptr);
 }
 
-void PatchReviewPlugin::clearPatch( QObject* _patch ) {
-    qCDebug(PLUGIN_PATCHREVIEW) << "clearing patch" << _patch << "current:" << ( QObject* )m_patch;
-    IPatchSource::Ptr patch( ( IPatchSource* )_patch );
-
-    if( patch == m_patch ) {
-        qCDebug(PLUGIN_PATCHREVIEW) << "is current patch";
-        setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
-    }
-}
-
 void PatchReviewPlugin::closeReview()
 {
     if( m_patch ) {
