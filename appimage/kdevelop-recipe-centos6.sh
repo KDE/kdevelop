@@ -22,15 +22,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 QTDIR=/opt/qt5
 
 if [ -z "$KDEVELOP_VERSION" ]; then
-    KDEVELOP_VERSION=5.4
+    KDEVELOP_VERSION=5.5
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
 fi
-KF5_VERSION=v5.65.0
-PLASMA_VERSION=v5.17.4
-KDE_RELEASESERVICE_VERSION=v19.12.0
-GRANTLEE_VERSION=v5.1.0
+# remove kxmlgui_fixdockvisibilitystatestoring.patch for >5.66.0
+KF5_VERSION=v5.66.0
+PLASMA_VERSION=v5.17.5
+KDE_RELEASESERVICE_VERSION=v19.12.1
+GRANTLEE_VERSION=v5.2.0
 OKTETA_VERSION=v0.26.2
 
 export LLVM_ROOT=/opt/llvm/
@@ -174,7 +175,7 @@ build_framework kconfigwidgets -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kiconthemes -DBUILD_DESIGNERPLUGIN=OFF
 build_framework ktextwidgets -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kglobalaccel
-build_framework kxmlgui -DBUILD_DESIGNERPLUGIN=OFF
+(PATCH_FILE=$SCRIPT_DIR/kxmlgui_fixdockvisibilitystatestoring.patch build_framework kxmlgui -DBUILD_DESIGNERPLUGIN=OFF)
 build_framework kbookmarks
 build_framework solid
 build_framework kio -DBUILD_DESIGNERPLUGIN=OFF
@@ -203,12 +204,12 @@ build_project breeze $PLASMA_VERSION
 
 # KDE Applications
 build_project libkomparediff2 $KDE_RELEASESERVICE_VERSION
-(PATCH_FILE=$SCRIPT_DIR/kate-unbreak-cmake3.5.patch build_project kate $KDE_RELEASESERVICE_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE)
+build_project kate $KDE_RELEASESERVICE_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE
 build_project konsole $KDE_RELEASESERVICE_VERSION
 build_project okteta $OKTETA_VERSION -DBUILD_DESIGNERPLUGIN=OFF -DBUILD_OKTETAKASTENLIBS=OFF
 
 # Extra
-(CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git PATCH_FILE=$SCRIPT_DIR/grantlee_avoid_recompilation.patch build_project grantlee $GRANTLEE_VERSION)
+(CUSTOM_GIT_URL=https://github.com/steveire/grantlee.git build_project grantlee $GRANTLEE_VERSION -DBUILD_TESTS=OFF)
 
 # KDevelop
 build_project kdevelop-pg-qt $KDEV_PG_QT_VERSION
