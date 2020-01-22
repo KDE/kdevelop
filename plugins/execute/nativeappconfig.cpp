@@ -307,7 +307,7 @@ bool menuLess(QMenu* a, QMenu* b)
 
 QMenu* NativeAppConfigType::launcherSuggestions()
 {
-    QMenu* ret = new QMenu(i18n("Project Executables"));
+    auto* ret = new QMenu(i18n("Project Executables"));
 
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     const QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();
@@ -346,7 +346,7 @@ QMenu* NativeAppConfigType::launcherSuggestions()
                     }
                     QStringList path = model->pathFromIndex(folder->index());
                     path.removeFirst();
-                    QMenu* submenu = new QMenu(path.join(QLatin1Char('/')), projectMenu);
+                    auto* submenu = new QMenu(path.join(QLatin1Char('/')), projectMenu);
                     std::sort(actions.begin(), actions.end(), actionLess);
                     submenu->addActions(actions);
                     submenus += submenu;

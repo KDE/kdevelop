@@ -29,7 +29,7 @@
 Example2Main::Example2Main(Sublime::Controller *controller, Qt::WindowFlags flags)
     :Sublime::MainWindow(controller, flags)
 {
-    QMenu *windowMenu = new QMenu(QStringLiteral("Window"), this);
+    auto* windowMenu = new QMenu(QStringLiteral("Window"), this);
     windowMenu->addAction(QStringLiteral("Split Top/Bottom"), this, SLOT(splitVertical()), Qt::CTRL + Qt::Key_T);
     windowMenu->addAction(QStringLiteral("Split Left/Right"), this, SLOT(splitHorizontal()), Qt::CTRL + Qt::Key_L);
     windowMenu->addSeparator();

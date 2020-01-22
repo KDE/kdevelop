@@ -155,9 +155,9 @@ void ProblemsView::setupActions()
 
         auto* groupingActions = new QActionGroup(this);
 
-        QAction* noGroupingAction = new QAction(i18n("None"), this);
-        QAction* pathGroupingAction = new QAction(i18n("Path"), this);
-        QAction* severityGroupingAction = new QAction(i18n("Severity"), this);
+        auto* noGroupingAction = new QAction(i18n("None"), this);
+        auto* pathGroupingAction = new QAction(i18n("Path"), this);
+        auto* severityGroupingAction = new QAction(i18n("Severity"), this);
 
         QAction* const groupingActionArray[] = { noGroupingAction, pathGroupingAction, severityGroupingAction };
         for (auto* action : groupingActionArray) {

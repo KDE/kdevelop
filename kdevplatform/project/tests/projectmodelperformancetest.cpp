@@ -51,7 +51,7 @@ void generateChilds( ProjectBaseItem* parent, int count, int depth )
 {
     for( int i = 0; i < 10; i++ ) {
         if( depth > 0 ) {
-            ProjectFolderItem* item = new ProjectFolderItem( QStringLiteral( "f%1" ).arg( i ), parent );
+            auto* item = new ProjectFolderItem( QStringLiteral( "f%1" ).arg( i ), parent );
             generateChilds( item, count, depth - 1 );
         } else {
             new ProjectFileItem( QStringLiteral( "f%1" ).arg( i ), parent );
@@ -68,7 +68,7 @@ ProjectModelPerformanceTest::ProjectModelPerformanceTest(QWidget* parent )
     // This is used so the treeview layout performance is not influencing the test
     view->setUniformRowHeights( true );
 
-    QPushButton* b = new QPushButton( QStringLiteral("Expand All"), this );
+    auto* b = new QPushButton(QStringLiteral("Expand All"), this);
     connect( b, &QPushButton::clicked, view, &QTreeView::expandAll );
     l->addWidget( b, 0, 0 );
     b = new QPushButton( QStringLiteral("Collapse All"), this );
@@ -105,7 +105,7 @@ void ProjectModelPerformanceTest::init()
     timer.start();
 
     for( int i = 0; i < INIT_WIDTH; i++ ) {
-        ProjectFolderItem* item = new ProjectFolderItem( nullptr, Path( QUrl::fromLocalFile( QStringLiteral( "/f%1" ).arg( i ) ) ) );
+        auto* item = new ProjectFolderItem( nullptr, Path( QUrl::fromLocalFile( QStringLiteral( "/f%1" ).arg( i ) ) ) );
         generateChilds( item, INIT_WIDTH, INIT_DEPTH );
         model->appendRow( item );
     }
@@ -130,7 +130,7 @@ void ProjectModelPerformanceTest::addBigTree()
     QElapsedTimer timer;
     timer.start();
     for( int i = 0; i < BIG_WIDTH; i++ ) {
-        ProjectFolderItem* item = new ProjectFolderItem( nullptr, Path( QUrl::fromLocalFile( QStringLiteral( "/f%1" ).arg( i ) ) ) );
+        auto* item = new ProjectFolderItem( nullptr, Path( QUrl::fromLocalFile( QStringLiteral( "/f%1" ).arg( i ) ) ) );
         generateChilds( item, BIG_WIDTH, BIG_DEPTH );
         model->appendRow( item );
     }
@@ -185,7 +185,7 @@ void ProjectModelPerformanceTest::addSmallTree()
     QElapsedTimer timer;
     timer.start();
     for( int i = 0; i < SMALL_WIDTH; i++ ) {
-        ProjectFolderItem* item = new ProjectFolderItem( nullptr, Path(QUrl::fromLocalFile( QStringLiteral( "/f%1" ).arg( i ) )) );
+        auto* item = new ProjectFolderItem( nullptr, Path(QUrl::fromLocalFile( QStringLiteral( "/f%1" ).arg( i ) )) );
         generateChilds( item, SMALL_WIDTH, SMALL_DEPTH );
         model->appendRow( item );
     }

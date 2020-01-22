@@ -131,9 +131,9 @@ VariableToolTip::VariableToolTip(QWidget* parent, const QPoint& position,
 
     auto* buttonBox = new QHBoxLayout();
     buttonBox->setContentsMargins(11, 0, 11, 6);
-    QPushButton* watchThisButton = new QPushButton(i18n("Watch This"));
+    auto* watchThisButton = new QPushButton(i18n("Watch This"));
     buttonBox->addWidget(watchThisButton);
-    QPushButton* stopOnChangeButton = new QPushButton(i18n("Stop on Change"));
+    auto* stopOnChangeButton = new QPushButton(i18n("Stop on Change"));
     buttonBox->addWidget(stopOnChangeButton);
 
     connect(watchThisButton, &QPushButton::clicked,

@@ -149,7 +149,7 @@ public:
     void createItem(CodeModelRepositoryItem* item) const
     {
         Q_ASSERT(shouldDoDUChainReferenceCounting(item));
-        Q_ASSERT(shouldDoDUChainReferenceCounting((( char* )item) + (itemSize() - 1)));
+        Q_ASSERT(shouldDoDUChainReferenceCounting(reinterpret_cast<char*>(item) + (itemSize() - 1)));
         new (item) CodeModelRepositoryItem(m_item, false);
     }
 
@@ -222,7 +222,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
         QMutexLocker lock(d->m_repository.mutex());
 
         DynamicItem<CodeModelRepositoryItem, true> editableItem = d->m_repository.dynamicItemFromIndex(index);
-        CodeModelItem* items = const_cast<CodeModelItem*>(editableItem->items());
+        auto* items = const_cast<CodeModelItem*>(editableItem->items());
 
         if (listIndex != -1) {
             //Only update the reference-count
@@ -291,7 +291,7 @@ void CodeModel::updateItem(const IndexedString& file, const IndexedQualifiedIden
         int listIndex = alg.indexOf(newItem);
         Q_ASSERT(listIndex != -1);
 
-        CodeModelItem* items = const_cast<CodeModelItem*>(oldItem->items());
+        auto* items = const_cast<CodeModelItem*>(oldItem->items());
 
         Q_ASSERT(items[listIndex].id == id);
         items[listIndex].kind = kind;
@@ -331,7 +331,7 @@ void CodeModel::removeItem(const IndexedString& file, const IndexedQualifiedIden
         if (listIndex == -1)
             return;
 
-        CodeModelItem* items = const_cast<CodeModelItem*>(oldItem->items());
+        auto* items = const_cast<CodeModelItem*>(oldItem->items());
 
         --items[listIndex].referenceCount;
 

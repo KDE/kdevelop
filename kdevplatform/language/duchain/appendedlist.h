@@ -25,8 +25,8 @@
 #include <util/kdevvarlengtharray.h>
 #include <util/stack.h>
 
+#include <ctime>
 #include <iostream>
-#include <time.h>
 
 namespace KDevelop {
 class AbstractItemRepository;
@@ -287,7 +287,8 @@ private:
         } else { \
             Q_ASSERT(name ## Data == 0); /* It is dangerous to overwrite the contents of non-dynamic lists(Most probably a mistake) */ \
             name ## Data = rhs.name ## Size(); \
-            type* curr = const_cast<type*>(name());  type* end = curr + name ## Size(); \
+            auto* curr = const_cast<type*>(name()); \
+            type* end = curr + name ## Size(); \
             const type* otherCurr = rhs.name(); \
             for (; curr < end; ++curr, ++otherCurr) \
                 new (curr) type(*otherCurr); /* Call the copy constructors */ \
@@ -306,7 +307,7 @@ private:
             if (name ## Data & KDevelop::DynamicAppendedListRevertMask) \
                 temporaryHash ## container ## name().free(name ## Data); \
         } else { \
-            type* curr = const_cast<type*>(name()); \
+            auto* curr = const_cast<type*>(name()); \
             type* end = curr + name ## Size(); \
             for (; curr < end; ++curr) \
                 curr->~type();                     /*call destructors*/ \

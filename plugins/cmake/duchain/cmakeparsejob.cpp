@@ -128,7 +128,7 @@ void CMakeParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
 
     if (!context) {
         DUChainWriteLocker lock;
-        ParsingEnvironmentFile *file = new ParsingEnvironmentFile(document());
+        auto* file = new ParsingEnvironmentFile(document());
         file->setLanguage(languageName);
         context = new TopDUContext(document(), RangeInRevision(0, 0, INT_MAX, INT_MAX), file);
         DUChain::self()->addDocumentChain(context);

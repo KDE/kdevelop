@@ -79,7 +79,7 @@ ApplyChangesWidget::ApplyChangesWidget(QWidget* parent)
     connect(buttonBox, &QDialogButtonBox::accepted, this, &ApplyChangesWidget::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &ApplyChangesWidget::reject);
 
-    QWidget* w = new QWidget(this);
+    auto* w = new QWidget(this);
     d->m_info = new QLabel(w);
     d->m_documentTabs = new QTabWidget(w);
     connect(d->m_documentTabs, &QTabWidget::currentChanged,
@@ -124,7 +124,7 @@ void ApplyChangesWidget::addDocuments(const IndexedString& original)
 
     int idx = d->m_files.indexOf(original);
     if (idx < 0) {
-        QWidget* w = new QWidget;
+        auto* w = new QWidget;
         d->m_documentTabs->addTab(w, original.str());
         d->m_documentTabs->setCurrentWidget(w);
 

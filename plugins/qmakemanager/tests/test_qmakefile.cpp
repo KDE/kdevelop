@@ -88,7 +88,7 @@ QHash<QString, QString> setDefaultMKSpec(QMakeProjectFile& file)
         return {};
     }
 
-    QMakeMkSpecs* mkspecs = new QMakeMkSpecs(specFile, qmvars);
+    auto* mkspecs = new QMakeMkSpecs(specFile, qmvars);
     mkspecs->read();
     file.setMkSpecs(mkspecs);
 

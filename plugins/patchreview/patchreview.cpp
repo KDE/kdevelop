@@ -349,16 +349,6 @@ PatchReviewPlugin::~PatchReviewPlugin()
     setPatch(nullptr);
 }
 
-void PatchReviewPlugin::clearPatch( QObject* _patch ) {
-    qCDebug(PLUGIN_PATCHREVIEW) << "clearing patch" << _patch << "current:" << ( QObject* )m_patch;
-    IPatchSource::Ptr patch( ( IPatchSource* )_patch );
-
-    if( patch == m_patch ) {
-        qCDebug(PLUGIN_PATCHREVIEW) << "is current patch";
-        setPatch( IPatchSource::Ptr( new LocalPatchSource ) );
-    }
-}
-
 void PatchReviewPlugin::closeReview()
 {
     if( m_patch ) {
@@ -610,8 +600,8 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension(KDevelop:
     }
 
     if (urls.size() == 1) {
-        QAction* reviewAction = new QAction( QIcon::fromTheme(QStringLiteral("text-x-patch")),
-                                             i18n("Review Patch"), parent);
+        auto* reviewAction = new QAction(QIcon::fromTheme(QStringLiteral("text-x-patch")),
+                                         i18n("Review Patch"), parent);
         reviewAction->setData(QVariant(urls[0]));
         connect( reviewAction, &QAction::triggered, this, &PatchReviewPlugin::executeFileReviewAction );
         ContextMenuExtension cm;

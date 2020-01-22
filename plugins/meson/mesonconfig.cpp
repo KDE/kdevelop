@@ -111,7 +111,7 @@ MesonConfig Meson::getMesonConfig(IProject* project)
         if (currBD.mesonExecutable.isEmpty()) {
             Q_ASSERT(project);
             IBuildSystemManager* ibsm = project->buildSystemManager();
-            MesonManager* bsm = dynamic_cast<MesonManager*>(ibsm);
+            auto* bsm = dynamic_cast<MesonManager*>(ibsm);
             if (bsm) {
                 currBD.mesonExecutable = bsm->findMeson();
             }

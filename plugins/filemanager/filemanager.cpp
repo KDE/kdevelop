@@ -135,7 +135,7 @@ void FileManager::updateNav( const QUrl& url )
 
 void FileManager::setupActions()
 {
-    KActionMenu *acmBookmarks = new KActionMenu(QIcon::fromTheme(QStringLiteral("bookmarks")), i18n("Bookmarks"), this);
+    auto* acmBookmarks = new KActionMenu(QIcon::fromTheme(QStringLiteral("bookmarks")), i18n("Bookmarks"), this);
     acmBookmarks->setDelayed(false);
     m_bookmarkHandler = new BookmarkHandler(this, acmBookmarks->menu());
     acmBookmarks->setShortcutContext(Qt::WidgetWithChildrenShortcut);

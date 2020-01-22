@@ -251,7 +251,7 @@ void VcsAnnotationItemDelegate::paint(QPainter* painter, const KTextEditor::Styl
 {
     Q_ASSERT(painter);
     // we cannot use custom roles and data() API (cmp. VcsAnnotationModel dox), so accessing custom API instead
-    VcsAnnotationModel* vcsModel = qobject_cast<VcsAnnotationModel*>(model);
+    auto* vcsModel = qobject_cast<VcsAnnotationModel*>(model);
     Q_ASSERT(vcsModel);
     if (!painter || !vcsModel) {
         return;

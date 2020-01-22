@@ -43,7 +43,7 @@ struct TestData
     }
     uint hash() const
     {
-        const char* str = (( const char* )this) + sizeof(TestData);
+        const char* str = reinterpret_cast<const char*>(this) + sizeof(TestData);
         return IndexedString::hashString(str, length);
     }
 };

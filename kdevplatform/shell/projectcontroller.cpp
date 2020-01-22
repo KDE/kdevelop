@@ -873,11 +873,11 @@ void ProjectController::openProject( const QUrl &projectFile )
                                                      "other session.<br>What do you want to do?")));
         QGroupBox sessions;
         sessions.setLayout(new QVBoxLayout);
-        QRadioButton* newSession = new QRadioButton(i18n("Add project to current session"));
+        auto* newSession = new QRadioButton(i18n("Add project to current session"));
         sessions.layout()->addWidget(newSession);
         newSession->setChecked(true);
         for (const Session* session : qAsConst(existingSessions)) {
-            QRadioButton* button = new QRadioButton(i18n("Open session %1", session->description()));
+            auto* button = new QRadioButton(i18n("Open session %1", session->description()));
             button->setProperty("sessionid", session->id().toString());
             sessions.layout()->addWidget(button);
         }
@@ -1295,7 +1295,7 @@ void ProjectController::commitCurrentProject()
             ICore::self()->documentController()->saveAllDocuments(KDevelop::IDocument::Silent);
 
             const Path basePath = project->path();
-            VCSCommitDiffPatchSource* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, basePath.toUrl()));
+            auto* patchSource = new VCSCommitDiffPatchSource(new VCSStandardDiffUpdater(vcs, basePath.toUrl()));
 
             bool ret = showVcsDiff(patchSource);
 

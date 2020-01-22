@@ -10,7 +10,7 @@ int main(int argc, char** argv)
     AutoTestShell::init();
     TestCore::initialize(Core::NoUi);
 
-    TemplateClassAssistant* assistant = new TemplateClassAssistant(QApplication::activeWindow(), QUrl::fromLocalFile(QStringLiteral("/tmp/")));
+    auto* assistant = new TemplateClassAssistant(QApplication::activeWindow(), QUrl::fromLocalFile(QStringLiteral("/tmp/")));
     assistant->setAttribute(Qt::WA_DeleteOnClose);
     assistant->show();
     return app.exec();

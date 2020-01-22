@@ -100,7 +100,7 @@ void IdealController::addView(Qt::DockWidgetArea area, View* view)
     if (toolBarActions.isEmpty()) {
       dock->setWidget(w);
     } else {
-      QMainWindow *toolView = new QMainWindow();
+      auto* toolView = new QMainWindow();
       auto *toolBar = new QToolBar(toolView);
       int iconSize = m_mainWindow->style()->pixelMetric(QStyle::PM_SmallIconSize);
       toolBar->setIconSize(QSize(iconSize, iconSize));

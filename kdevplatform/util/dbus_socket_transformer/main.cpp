@@ -17,19 +17,19 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.         *
  ***************************************************************************/
 
-#include <stdlib.h>
-#include <iostream>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <fcntl.h>
+#include <cassert>
 #include <cerrno>
-#include <assert.h>
+#include <cstdlib>
+#include <cstring>
+#include <fcntl.h>
+#include <iostream>
+#include <netdb.h>
+#include <netinet/in.h>
 #include <sstream>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/un.h>
 #include <unistd.h>
-#include <string.h>
 
 #ifndef HAVE_MSG_NOSIGNAL
 #define MSG_NOSIGNAL 0

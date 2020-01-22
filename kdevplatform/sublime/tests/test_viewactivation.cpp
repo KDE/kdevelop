@@ -41,7 +41,7 @@ public:
     explicit SpecialWidgetFactory(const QString &id): SimpleToolWidgetFactory<Widget>(id) {}
     QWidget* create(ToolDocument *doc, QWidget *parent = nullptr) override
     {
-        QWidget *w = new QWidget(parent);
+        auto* w = new QWidget(parent);
         auto *inner = new Widget(w);
         inner->setObjectName(doc->title()+"_inner");
         w->setObjectName(doc->title()+"_outer");
@@ -99,7 +99,7 @@ void TestViewActivation::cleanup()
 void TestViewActivation::signalsOnViewCreationAndDeletion()
 {
     auto *controller = new Controller(this);
-    ToolDocument *doc1 = new ToolDocument(QStringLiteral("doc1"), controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("doc1")));
+    auto* doc1 = new ToolDocument(QStringLiteral("doc1"), controller, new SimpleToolWidgetFactory<QListView>(QStringLiteral("doc1")));
     Area *area = new Area(controller, QStringLiteral("Area"));
 
     QSignalSpy spy(controller, SIGNAL(viewAdded(Sublime::View*)));
@@ -139,7 +139,7 @@ void TestViewActivation::viewActivation()
     auto *toolBreaker = new QTextEdit(mw);
     toolBreaker->setObjectName(QStringLiteral("toolBreaker"));
 
-    QDockWidget *dock = new QDockWidget(mw);
+    auto* dock = new QDockWidget(mw);
     dock->setWidget(toolBreaker);
     mw->addDockWidget(Qt::LeftDockWidgetArea, dock);
 

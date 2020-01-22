@@ -1500,10 +1500,8 @@ AbstractNavigationWidget* DUContext::createNavigationWidget(Declaration* decl, T
     if (decl) {
         auto* widget = new AbstractNavigationWidget;
         widget->setDisplayHints(hints);
-        AbstractDeclarationNavigationContext* context = new AbstractDeclarationNavigationContext(DeclarationPointer(
-                                                                                                     decl),
-                                                                                                 TopDUContextPointer(
-                                                                                                     topContext));
+        auto* context = new AbstractDeclarationNavigationContext(DeclarationPointer(decl),
+                                                                 TopDUContextPointer(topContext));
         widget->setContext(NavigationContextPointer(context));
         return widget;
     } else {

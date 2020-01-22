@@ -56,7 +56,7 @@ PlasmoidExecutionJob::PlasmoidExecutionJob(ExecutePlasmoidPlugin* iface, ILaunch
     m_process->setArguments( arguments(cfg) );
     m_process->setWorkingDirectory(workingDirectory(cfg));
 
-    OutputModel* model = new OutputModel(QUrl::fromLocalFile(m_process->workingDirectory()), this);
+    auto* model = new OutputModel(QUrl::fromLocalFile(m_process->workingDirectory()), this);
     model->setFilteringStrategy(OutputModel::CompilerFilter);
     setModel( model );
 

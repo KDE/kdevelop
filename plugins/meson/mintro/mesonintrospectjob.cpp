@@ -50,7 +50,7 @@ MesonIntrospectJob::MesonIntrospectJob(KDevelop::IProject* project, QVector<Meso
         // is required and we have to fake a build directory
         m_buildDir.buildDir = project->path();
         auto* bsm = project->buildSystemManager();
-        MesonManager* manager = dynamic_cast<MesonManager*>(bsm);
+        auto* manager = dynamic_cast<MesonManager*>(bsm);
         if (manager) {
             m_buildDir.mesonExecutable = manager->findMeson();
         }

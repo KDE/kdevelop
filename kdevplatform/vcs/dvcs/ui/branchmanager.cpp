@@ -50,16 +50,16 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
 {
     setWindowTitle(i18n("Branch Manager"));
 
-    QWidget *mainWidget = new QWidget(this);
+    auto* mainWidget = new QWidget(this);
     auto *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(mainWidget);
 
     m_ui = new Ui::BranchDialogBase;
-    QWidget* w = new QWidget(this);
+    auto* w = new QWidget(this);
     m_ui->setupUi(w);
     mainLayout->addWidget(w);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &BranchManager::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &BranchManager::reject);
     mainLayout->addWidget(buttonBox);

@@ -1025,7 +1025,7 @@ ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* 
             ProjectBaseItem* itm = prjctx->items().at( 0 );
             int i = 0;
             for (ILaunchMode* mode : qAsConst(d->launchModes)) {
-                KActionMenu* menu = new KActionMenu(i18n("%1 As...", mode->name() ), parent);
+                auto* menu = new KActionMenu(i18n("%1 As...", mode->name() ), parent);
                 const auto types = launchConfigurationTypes();
                 for (LaunchConfigurationType* type : types) {
                     bool hasLauncher = false;

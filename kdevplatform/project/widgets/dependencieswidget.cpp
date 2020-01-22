@@ -124,7 +124,7 @@ void DependenciesWidget::addDep()
     if(pitem)
         icon = QIcon::fromTheme(pitem->iconName());
 
-    QListWidgetItem* item = new QListWidgetItem(icon, m_ui->targetDependency->text(), m_ui->dependencies);
+    auto* item = new QListWidgetItem(icon, m_ui->targetDependency->text(), m_ui->dependencies);
     item->setData( Qt::UserRole, m_ui->targetDependency->itemPath() );
     m_ui->targetDependency->clear();
     m_ui->addDependency->setEnabled( false );
@@ -163,7 +163,7 @@ void DependenciesWidget::setDependencies(const QVariantList &deps)
         if(pitem)
             icon=QIcon::fromTheme(pitem->iconName());
 
-        QListWidgetItem* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping(deplist, QLatin1Char('/'), QLatin1Char('\\')), m_ui->dependencies);
+        auto* item = new QListWidgetItem(icon, KDevelop::joinWithEscaping(deplist, QLatin1Char('/'), QLatin1Char('\\')), m_ui->dependencies);
         item->setData( Qt::UserRole, dep );
     }
 }

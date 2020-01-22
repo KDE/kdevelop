@@ -145,13 +145,13 @@ void VcsEventWidgetPrivate::diffToPrevious()
 
     auto* widget = new VcsDiffWidget( job );
     widget->setRevisions( prev, ev.revision() );
-    QDialog* dlg = new QDialog( q );
+    auto* dlg = new QDialog( q );
 
     widget->connect(widget, &VcsDiffWidget::destroyed, dlg, &QDialog::deleteLater);
 
     dlg->setWindowTitle( i18n("Difference To Previous") );
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    auto *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     auto mainWidget = new QWidget;
     auto *mainLayout = new QVBoxLayout;
     dlg->setLayout(mainLayout);

@@ -26,7 +26,7 @@
 
 #include <vcs/vcsjob.h>
 
-#include <time.h>
+#include <ctime>
 
 namespace KIO
 {

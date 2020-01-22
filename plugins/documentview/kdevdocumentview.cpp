@@ -299,7 +299,7 @@ void KDevDocumentView::opened( KDevelop::IDocument* document )
 
     if ( !categoryItem->file( document->url() ) )
     {
-        KDevFileItem * fileItem = new KDevFileItem( document->url() );
+        auto* fileItem = new KDevFileItem( document->url() );
         categoryItem->setChild( categoryItem->rowCount(), fileItem );
         setCurrentIndex( m_proxy->mapFromSource( m_documentModel->indexFromItem( fileItem ) ) );
         m_doc2index[ document ] = fileItem;

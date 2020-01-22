@@ -300,7 +300,7 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
         setMaximumHeight(maxHeight);
 
     if (m_allowScrolling) {
-        QWidget* contentsWidget = new QWidget;
+        auto* contentsWidget = new QWidget;
         contentsWidget->setLayout(m_layout);
         setWidget(contentsWidget);
     } else {
@@ -438,7 +438,7 @@ ContextUsesWidget::ContextUsesWidget(const CodeRepresentation& code, const QList
         }
     }
 
-    QLabel* headerLabel = new QLabel(i18nc("%1: source file", "In %1", QLatin1String("<a href='navigateToFunction'>")
+    auto* headerLabel = new QLabel(i18nc("%1: source file", "In %1", QLatin1String("<a href='navigateToFunction'>")
                                            + headerText.toHtmlEscaped() + QLatin1String("</a>: ")));
     addHeaderItem(headerLabel);
     setUpdatesEnabled(true);
@@ -468,7 +468,7 @@ DeclarationWidget::DeclarationWidget(const CodeRepresentation& code, const Index
 
     setUpdatesEnabled(false);
     if (Declaration* dec = decl.data()) {
-        QLabel* headerLabel = new QLabel(dec->isDefinition() ? i18n("Definition") : i18n("Declaration"));
+        auto* headerLabel = new QLabel(dec->isDefinition() ? i18n("Definition") : i18n("Declaration"));
         addHeaderItem(headerLabel);
         addItem(new OneUseWidget(decl, dec->url(), dec->rangeInCurrentRevision(), code));
     }
@@ -490,11 +490,11 @@ TopContextUsesWidget::TopContextUsesWidget(IndexedDeclaration declaration,
     DUChainReadLocker lock(DUChain::lock());
     auto* labelLayout = new QHBoxLayout;
     labelLayout->setContentsMargins(0, -1, 0, 0); // let's keep the spacing *above* the line
-    QWidget* headerWidget = new QWidget;
+    auto* headerWidget = new QWidget;
     headerWidget->setLayout(labelLayout);
     headerWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
 
-    QLabel* label = new QLabel(this);
+    auto* label = new QLabel(this);
     m_icon = new QLabel(this);
     m_toggleButton = new QLabel(this);
     m_icon->setPixmap(QIcon::fromTheme(QStringLiteral("code-class")).pixmap(16));
@@ -530,7 +530,7 @@ QList<ContextUsesWidget*> buildContextUses(const CodeRepresentation& code,
     QList<ContextUsesWidget*> ret;
 
     if (!context->parentContext() || isNewGroup(context->parentContext(), context)) {
-        ContextUsesWidget* created = new ContextUsesWidget(code, declarations, context);
+        auto* created = new ContextUsesWidget(code, declarations, context);
         if (created->hasItems())
             ret << created;
         else
@@ -730,7 +730,7 @@ void UsesWidget::UsesWidgetCollector::processUses(KDevelop::ReferencedTopDUConte
     DUChainReadLocker lock;
 
     qCDebug(LANGUAGE) << "processing" << topContext->url().str();
-    TopContextUsesWidget* widget = new TopContextUsesWidget(declaration(), declarations(), topContext.data());
+    auto* widget = new TopContextUsesWidget(declaration(), declarations(), topContext.data());
 
     // move to back if it's just the declaration/definition
     bool toBack = widget->usesCount() == 0;

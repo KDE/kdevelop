@@ -303,7 +303,7 @@ void TestQuickOpen::testStableSort()
 void TestQuickOpen::testProjectFileFilter()
 {
     QTemporaryDir dir;
-    TestProject* project = new TestProject(Path(dir.path()));
+    auto* project = new TestProject(Path(dir.path()));
     auto* foo = createChild<ProjectFolderItem>(project->projectItem(), QStringLiteral("foo"));
     createChild<ProjectFileItem>(foo, QStringLiteral("bar"));
     createChild<ProjectFileItem>(foo, QStringLiteral("asdf"));
@@ -314,7 +314,7 @@ void TestQuickOpen::testProjectFileFilter()
     QTemporaryFile tmpFile;
     tmpFile.setFileName(dir.path() + "/aaaa");
     QVERIFY(tmpFile.open());
-    ProjectFileItem* aaaa = new ProjectFileItem(QStringLiteral("aaaa"), project->projectItem());
+    auto* aaaa = new ProjectFileItem(QStringLiteral("aaaa"), project->projectItem());
     QCOMPARE(project->fileSet().size(), 5);
 
     ProjectFileDataProvider provider;

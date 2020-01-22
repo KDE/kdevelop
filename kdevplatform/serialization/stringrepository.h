@@ -40,7 +40,7 @@ struct StringData
     unsigned int hash() const
     {
         IndexedString::RunningHash running;
-        const char* str = (( const char* )this) + sizeof(StringData);
+        const char* str = reinterpret_cast<const char*>(this) + sizeof(StringData);
         for (int a = length - 1; a >= 0; --a) {
             running.append(*str);
             ++str;
@@ -111,13 +111,13 @@ using StringRepository = ItemRepository<StringData, StringRepositoryItemRequest,
 inline QString stringFromItem(const StringData* item)
 {
     const unsigned short* textPos = ( unsigned short* )(item + 1);
-    return QString::fromUtf8(( char* )textPos, item->length);
+    return QString::fromUtf8(reinterpret_cast<const char*>(textPos), item->length);
 }
 
 inline QByteArray arrayFromItem(const StringData* item)
 {
     const unsigned short* textPos = ( unsigned short* )(item + 1);
-    return QByteArray(( char* )textPos, item->length);
+    return QByteArray(reinterpret_cast<const char*>(textPos), item->length);
 }
 }
 #endif

@@ -691,7 +691,7 @@ void ContextBrowserPlugin::showToolTip(KTextEditor::View* view, KTextEditor::Cur
             m_currentNavigationWidget = nullptr;
         }
 
-        KDevelop::NavigationToolTip* tooltip =
+        auto* tooltip =
             new KDevelop::NavigationToolTip(view, view->mapToGlobal(view->cursorToCoordinate(position)) + QPoint(20,
                                                                                                                  40),
                                             navigationWidget);
@@ -1410,7 +1410,7 @@ void ContextBrowserPlugin::fillHistoryPopup(QMenu* menu, const QList<int>& histo
     menu->clear();
     KDevelop::DUChainReadLocker lock(KDevelop::DUChain::lock());
     for (int index : historyIndices) {
-        QAction* action = new QAction(actionTextFor(index), menu);
+        auto* action = new QAction(actionTextFor(index), menu);
         action->setData(index);
         menu->addAction(action);
         connect(action, &QAction::triggered, this, &ContextBrowserPlugin::actionTriggered);

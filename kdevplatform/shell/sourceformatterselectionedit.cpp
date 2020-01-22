@@ -518,7 +518,7 @@ void SourceFormatterSelectionEdit::newStyle()
     }
     // Increase number for next style
     idx++;
-    SourceFormatterStyle* s = new SourceFormatterStyle( QStringLiteral( "%1%2" ).arg( Strings::userStylePrefix() ).arg( idx ) );
+    auto* s = new SourceFormatterStyle(QStringLiteral("%1%2").arg(Strings::userStylePrefix()).arg(idx));
     if( item ) {
         SourceFormatterStyle* existstyle = fmt->styles[ item->data( STYLE_ROLE ).toString() ];
         s->setCaption( i18n( "New %1", existstyle->caption() ) );

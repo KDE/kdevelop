@@ -69,7 +69,7 @@ KSaveSelectDialog::KSaveSelectDialog( const QList<IDocument*>& files, QWidget * 
         new DocumentItem( doc, m_listWidget );
     }
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Save|QDialogButtonBox::Cancel);
+    auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Save|QDialogButtonBox::Cancel);
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Save);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);

@@ -84,7 +84,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
         m_filterTimer->start();
     });
 
-    QLabel* searchLabel = new QLabel(i18n("S&earch:"), this);
+    auto* searchLabel = new QLabel(i18n("S&earch:"), this);
     searchLabel->setBuddy(m_searchLine);
 
     auto* layout = new QHBoxLayout();

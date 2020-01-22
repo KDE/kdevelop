@@ -247,12 +247,12 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
 
     d->ui->view->setCurrentIndex(templateIndex);
 
-    QPushButton* getMoreButton = new QPushButton(i18n("Get More Templates..."), d->ui->view);
+    auto* getMoreButton = new QPushButton(i18n("Get More Templates..."), d->ui->view);
     getMoreButton->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
     connect (getMoreButton, &QPushButton::clicked, this, [&] { d->getMoreClicked(); });
     d->ui->view->addWidget(0, getMoreButton);
 
-    QPushButton* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18n("Load Template From File"), d->ui->view);
+    auto* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18n("Load Template From File"), d->ui->view);
     connect (loadButton, &QPushButton::clicked, this, [&] { d->loadFileClicked(); });
     d->ui->view->addWidget(0, loadButton);
 

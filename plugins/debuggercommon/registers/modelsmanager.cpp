@@ -141,7 +141,7 @@ void ModelsManager::updateModelForGroup(const RegistersGroup& group)
         }
 
         for (int column = 0; column  < values.count(); column ++) {
-            QStandardItem* v = new QStandardItem(prefix + values[column]);
+            auto* v = new QStandardItem(prefix + values[column]);
             if (group.groupName.type() == flag) {
                 v->setFlags(Qt::ItemIsEnabled);
             }

@@ -41,7 +41,7 @@ void TestDVcsJob::cleanupTestCase()
 
 void TestDVcsJob::testJob()
 {
-    KDevelop::DVcsJob* job = new KDevelop::DVcsJob(QDir::temp());
+    auto* job = new KDevelop::DVcsJob(QDir::temp());
     QVERIFY(job);
     QVERIFY(job->status() == KDevelop::VcsJob::JobNotStarted);
 

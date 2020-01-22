@@ -191,7 +191,7 @@ QAction* MainWindow::createCustomElement(QWidget* parent, int index, const QDomE
     if (element.tagName().toLower() == QLatin1String("separator")
             && element.attribute(QStringLiteral("style")) == QLatin1String("visible")) {
         if ( auto* bar = qobject_cast<QMenuBar*>( parent ) ) {
-            QAction *separatorAction = new QAction(QStringLiteral("|"), this);
+            auto* separatorAction = new QAction(QStringLiteral("|"), this);
             bar->insertAction( before, separatorAction );
             separatorAction->setDisabled(true);
             return separatorAction;

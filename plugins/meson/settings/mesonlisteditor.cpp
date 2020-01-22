@@ -23,7 +23,7 @@
 
 QListWidgetItem* genItem(const QString& label)
 {
-    QListWidgetItem* item = new QListWidgetItem(label);
+    auto* item = new QListWidgetItem(label);
     item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
     return item;
 }

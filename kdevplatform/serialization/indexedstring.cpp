@@ -40,7 +40,7 @@ struct IndexedStringData
     uint hash() const
     {
         IndexedString::RunningHash running;
-        const char* str = (( const char* )this) + sizeof(IndexedStringData);
+        const char* str = reinterpret_cast<const char*>(this) + sizeof(IndexedStringData);
         for (int a = length - 1; a >= 0; --a) {
             running.append(*str);
             ++str;

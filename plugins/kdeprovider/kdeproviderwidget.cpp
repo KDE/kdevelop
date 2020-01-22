@@ -55,7 +55,7 @@ KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     topLayout->addWidget(filterLine);
 
     
-    QPushButton* settings=new QPushButton(QIcon::fromTheme(QStringLiteral("configure")), i18n("Settings"), this);
+    auto* settings=new QPushButton(QIcon::fromTheme(QStringLiteral("configure")), i18n("Settings"), this);
     settings->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
     connect(settings, &QPushButton::clicked, this, &KDEProviderWidget::showSettings);
 
@@ -111,9 +111,9 @@ bool KDEProviderWidget::isCorrect() const
 
 void KDEProviderWidget::showSettings()
 {
-    KConfigDialog* dialog = new KConfigDialog(this, QStringLiteral("settings"), KDEProviderSettings::self());
+    auto* dialog = new KConfigDialog(this, QStringLiteral("settings"), KDEProviderSettings::self());
     dialog->setFaceType(KPageDialog::Auto);
-    QWidget* page = new QWidget(dialog);
+    auto* page = new QWidget(dialog);
 
     Ui::KDEConfig configUi;
     configUi.setupUi(page);

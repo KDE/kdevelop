@@ -54,7 +54,7 @@ public:
         case CodeCompletionModel::IsExpandable:
             return QVariant(true);
         case CodeCompletionModel::ExpandingWidget: {
-            NavigationWidget* nav = new NavigationWidget(item, model->currentTopContext());
+            auto* nav = new NavigationWidget(item, model->currentTopContext());
 
             QVariant v;
             v.setValue<QWidget*>(( QWidget* )nav);

@@ -227,7 +227,7 @@ PathMappingsWidget::PathMappingsWidget(QWidget* parent): QWidget(parent)
     connect(m_pathMappingTable->model(), &QAbstractItemModel::rowsRemoved, this, &PathMappingsWidget::changed);
     connect(m_pathMappingTable->model(), &QAbstractItemModel::rowsInserted, this, &PathMappingsWidget::changed);
 
-    QAction* deletePath = new QAction(
+    auto* deletePath = new QAction(
         QIcon::fromTheme(QStringLiteral("edit-delete")),
         i18n( "Delete" ),
         this

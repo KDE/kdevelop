@@ -59,7 +59,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
 {
     setWindowTitle( i18n( "Launch Configurations" ) );
 
-    QWidget *mainWidget = new QWidget(this);
+    auto* mainWidget = new QWidget(this);
     auto *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(mainWidget);
 
@@ -169,7 +169,7 @@ LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     }
 
     for (LaunchConfigurationType* type : qAsConst(types)) {
-        QAction* action = new QAction(type->icon(), type->name(), m);
+        auto* action = new QAction(type->icon(), type->name(), m);
         action->setProperty("configtype", QVariant::fromValue<QObject*>(type));
         connect(action, &QAction::triggered, this, &LaunchConfigurationDialog::createEmptyLauncher);
 
@@ -206,8 +206,8 @@ void LaunchConfigurationDialog::doTreeContextMenu(const QPoint& point)
         if ( selected.parent().isValid() && ! selected.parent().parent().isValid() ) {
             // only display the menu if a launch config is clicked
             QMenu menu(tree);
-            QAction* rename = new QAction(QIcon::fromTheme(QStringLiteral("edit-rename")), i18n("Rename configuration"), &menu);
-            QAction* delete_ = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("Delete configuration"), &menu);
+            auto* rename = new QAction(QIcon::fromTheme(QStringLiteral("edit-rename")), i18n("Rename configuration"), &menu);
+            auto* delete_ = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("Delete configuration"), &menu);
             connect(rename, &QAction::triggered, this, &LaunchConfigurationDialog::renameSelected);
             connect(delete_, &QAction::triggered, this, &LaunchConfigurationDialog::deleteConfiguration);
             menu.addAction(rename);
@@ -331,9 +331,9 @@ void LaunchConfigurationDialog::selectionChanged(const QItemSelection& selected,
                         tab->setLaunchConfiguration( l );
                         stack->setCurrentWidget( tab );
                     } else {
-                        QLabel* label = new QLabel(i18nc("%1 is a launcher name",
-                                                         "No configuration is needed for '%1'",
-                                                         launcher->name()), stack);
+                        auto* label = new QLabel(i18nc("%1 is a launcher name",
+                                                       "No configuration is needed for '%1'",
+                                                       launcher->name()), stack);
                         label->setAlignment(Qt::AlignCenter);
                         QFont font = label->font();
                         font.setItalic(true);
@@ -376,8 +376,8 @@ void LaunchConfigurationDialog::selectionChanged(const QItemSelection& selected,
             addConfig->setEnabled( addConfig->menu() && !addConfig->menu()->isEmpty() );
             deleteConfig->setEnabled( false );
             stack->setCurrentIndex( 0 );
-            QLabel* l = new QLabel(i18n("<i>Select a configuration to edit from the left,<br>"
-                                        "or click the \"Add\" button to add a new one.</i>"), stack);
+            auto* l = new QLabel(i18n("<i>Select a configuration to edit from the left,<br>"
+                                      "or click the \"Add\" button to add a new one.</i>"), stack);
             l->setAlignment(Qt::AlignCenter);
             stack->addWidget(l);
             stack->setCurrentWidget(l);

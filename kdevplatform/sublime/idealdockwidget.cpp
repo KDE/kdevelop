@@ -122,10 +122,10 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
     auto* g = new QActionGroup(positionMenu);
 
-    QAction *left = new QAction(i18nc("tool view position", "Left"), g);
-    QAction *bottom = new QAction(i18nc("tool view position", "Bottom"), g);
-    QAction *right = new QAction(i18nc("tool view position", "Right"), g);
-    QAction *detach = new QAction(i18nc("tool view position", "Detached"), g);
+    auto* left = new QAction(i18nc("tool view position", "Left"), g);
+    auto* bottom = new QAction(i18nc("tool view position", "Bottom"), g);
+    auto* right = new QAction(i18nc("tool view position", "Right"), g);
+    auto* detach = new QAction(i18nc("tool view position", "Detached"), g);
 
     for (auto action : {left, bottom, right, detach}) {
         positionMenu->addAction(action);
@@ -157,13 +157,13 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             slotRemove();
             return;
         } else if ( triggered == setShortcut ) {
-            QDialog* dialog(new QDialog(this));
+            auto* dialog = new QDialog(this);
             dialog->setWindowTitle(i18n("Assign Shortcut For '%1' Tool View", m_view->document()->title()));
             auto *w = new KShortcutWidget(dialog);
             w->setShortcut(m_controller->actionForView(m_view)->shortcuts());
             auto* dialogLayout = new QVBoxLayout(dialog);
             dialogLayout->addWidget(w);
-            QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+            auto* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
             dialogLayout->addWidget(buttonBox);
             connect(buttonBox, &QDialogButtonBox::accepted, dialog, &QDialog::accept);
             connect(buttonBox, &QDialogButtonBox::rejected, dialog, &QDialog::reject);

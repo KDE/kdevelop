@@ -46,7 +46,7 @@ MesonNewBuildDir::MesonNewBuildDir(IProject* project, QWidget* parent)
     , m_project(project)
 {
     Q_ASSERT(project); // Just in case
-    MesonManager* mgr = dynamic_cast<MesonManager*>(m_project->buildSystemManager());
+    auto* mgr = dynamic_cast<MesonManager*>(m_project->buildSystemManager());
     Q_ASSERT(mgr); // This dialog only works with the MesonManager
 
     setWindowTitle(
@@ -81,7 +81,7 @@ void MesonNewBuildDir::resetFields()
 {
     Meson::MesonConfig cfg = Meson::getMesonConfig(m_project);
     Path projectPath = m_project->path();
-    MesonManager* mgr = dynamic_cast<MesonManager*>(m_project->buildSystemManager());
+    auto* mgr = dynamic_cast<MesonManager*>(m_project->buildSystemManager());
     Q_ASSERT(mgr); // This dialog only works with the MesonManager
 
     auto aConf = m_ui->advanced->getConfig();

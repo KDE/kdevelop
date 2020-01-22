@@ -295,7 +295,7 @@ QVector<TaskInfo> copyMoveItems(const Path::List& paths, ProjectBaseItem* destIt
 
 void showWarningDialogForFailedPaste(QWidget* parent, const QVector<TaskInfo>& tasks)
 {
-    QDialog* dialog = new QDialog(parent);
+    auto* dialog = new QDialog(parent);
 
     dialog->setWindowTitle(i18nc("@title:window", "Paste Failed"));
 
@@ -306,7 +306,7 @@ void showWarningDialogForFailedPaste(QWidget* parent, const QVector<TaskInfo>& t
     dialog->setWindowModality(Qt::WindowModal);
     dialog->setModal(true);
 
-    QWidget* mainWidget = new QWidget(dialog);
+    auto* mainWidget = new QWidget(dialog);
     auto* mainLayout = new QVBoxLayout(mainWidget);
     const int spacingHint = mainWidget->style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     mainLayout->setSpacing(spacingHint * 2); // provide extra spacing
@@ -317,7 +317,7 @@ void showWarningDialogForFailedPaste(QWidget* parent, const QVector<TaskInfo>& t
     hLayout->setSpacing(-1); // use default spacing
     mainLayout->addLayout(hLayout, 0);
 
-    QLabel* iconLabel = new QLabel(mainWidget);
+    auto* iconLabel = new QLabel(mainWidget);
 
     // Icon
     QStyleOption option;
@@ -334,7 +334,7 @@ void showWarningDialogForFailedPaste(QWidget* parent, const QVector<TaskInfo>& t
     hLayout->addSpacing(spacingHint);
 
     const QString text = i18n("Failed to paste. Below is a list of suboperations that have been attempted.");
-    QLabel* messageLabel = new QLabel(text, mainWidget);
+    auto* messageLabel = new QLabel(text, mainWidget);
     messageLabel->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
     hLayout->addWidget(messageLabel, 5);
 

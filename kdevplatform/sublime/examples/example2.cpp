@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
 
     auto *controller = new Sublime::Controller(&app);
-    Sublime::Area *area = new Sublime::Area(controller, QStringLiteral("Area"));
+    auto* area = new Sublime::Area(controller, QStringLiteral("Area"));
     controller->addDefaultArea(area);
     Sublime::Document *doc = new Sublime::UrlDocument(controller, QUrl::fromLocalFile(QStringLiteral("~/foo.cpp")));
     area->addView(doc->createView());

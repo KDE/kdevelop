@@ -87,7 +87,7 @@ GrepOutputView::GrepOutputView(QWidget* parent, GrepViewPlugin* plugin)
     updateButtonState(false);
     auto *separator = new QAction(this);
     separator->setSeparator(true);
-    QAction *newSearchAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("New &Search"), this);
+    auto* newSearchAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("New &Search"), this);
     m_refresh = new QAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Refresh"), this);
     m_refresh->setEnabled(false);
     m_clearSearchHistory = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear Search History"), this);

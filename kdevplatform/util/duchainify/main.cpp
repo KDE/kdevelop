@@ -43,7 +43,7 @@
 #include <QStringList>
 #include <QTimer>
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <KAboutData>
 #include <KLocalizedString>

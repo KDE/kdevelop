@@ -320,7 +320,7 @@ LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     vbox->addWidget(title);
     vbox->addWidget(new PluginsView());
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &LoadedPluginsDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &LoadedPluginsDialog::reject);
     buttonBox->button(QDialogButtonBox::Close)->setDefault(true);

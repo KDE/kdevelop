@@ -65,7 +65,7 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->templateType, QOverload<int>::of(&QComboBox::currentIndexChanged),
              this, &ProjectSelectionPage::templateChanged );
 
-    QPushButton* getMoreButton = new QPushButton(i18n("Get More Templates"), ui->listView);
+    auto* getMoreButton = new QPushButton(i18n("Get More Templates"), ui->listView);
     getMoreButton->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
     connect (getMoreButton, &QPushButton::clicked,
              this, &ProjectSelectionPage::moreTemplatesClicked);

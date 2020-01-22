@@ -151,13 +151,13 @@ void TestTestController::removeSuite()
 
 void TestTestController::replaceSuite()
 {
-    FakeTestSuite* suiteOne = new FakeTestSuite(TestSuiteName, m_project, QStringList() << TestCaseNameOne);
+    auto* suiteOne = new FakeTestSuite(TestSuiteName, m_project, QStringList() << TestCaseNameOne);
     m_testController->addTestSuite(suiteOne);
 
     QCOMPARE(m_testController->findTestSuite(m_project, TestSuiteName)->name(), QString(TestSuiteName));
     QCOMPARE(m_testController->findTestSuite(m_project, TestSuiteName)->cases().size(), 1);
 
-    FakeTestSuite* suiteTwo = new FakeTestSuite(TestSuiteName, m_project, QStringList() << TestCaseNameOne << TestCaseNameTwo);
+    auto* suiteTwo = new FakeTestSuite(TestSuiteName, m_project, QStringList() << TestCaseNameOne << TestCaseNameTwo);
     m_testController->addTestSuite(suiteTwo);
 
     QCOMPARE(m_testController->testSuites().size(), 1);

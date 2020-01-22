@@ -94,7 +94,6 @@ public Q_SLOTS :
     void updateReview();
 
     void cancelReview();
-    void clearPatch( QObject* patch );
     void notifyPatchChanged();
     void highlightPatch();
     void updateKompareModel();

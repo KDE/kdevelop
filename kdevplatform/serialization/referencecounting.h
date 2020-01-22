@@ -56,7 +56,8 @@ inline bool shouldDoDUChainReferenceCountingInternal(void* item)
     auto it = make_const(refCountingRanges)->upperBound(item);
     if (it != refCountingRanges->constBegin()) {
         --it;
-        return (( char* )it.key()) <= ( char* )item && ( char* )item < (( char* )it.key()) + it.value().first;
+        return reinterpret_cast<char*>(it.key()) <= reinterpret_cast<char*>(item) &&
+               reinterpret_cast<char*>(item) < reinterpret_cast<char*>(it.key()) + it.value().first;
     }
 
     return false;
@@ -71,8 +72,8 @@ inline bool shouldDoDUChainReferenceCounting(void* item)
     QMutexLocker lock(&refCountingLock);
 
     if (refCountingFirstRangeStart &&
-        ((( char* )refCountingFirstRangeStart) <= ( char* )item) &&
-        (( char* )item < (( char* )refCountingFirstRangeStart) + refCountingFirstRangeExtent.first))
+        (reinterpret_cast<char*>(refCountingFirstRangeStart) <= reinterpret_cast<char*>(item)) &&
+        (reinterpret_cast<char*>(item) < reinterpret_cast<char*>(refCountingFirstRangeStart) + refCountingFirstRangeExtent.first))
         return true;
 
     if (refCountingHasAdditionalRanges)

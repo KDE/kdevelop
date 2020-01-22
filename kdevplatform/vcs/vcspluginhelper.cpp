@@ -130,7 +130,7 @@ public:
                 break;
         }
 
-        QMenu* menu = new QMenu(vcs->name(), parent);
+        auto* menu = new QMenu(vcs->name(), parent);
         menu->setIcon(QIcon::fromTheme(ICore::self()->pluginController()->pluginInfo(plugin).iconName()));
         menu->addAction(commitAction);
         if(plugin->extension<IDistributedVersionControl>()) {
@@ -363,7 +363,7 @@ void VcsPluginHelper::history(const VcsRevision& rev)
     Q_D(VcsPluginHelper);
 
     SINGLEURL_SETUP_VARS
-    QDialog* dlg = new QDialog(ICore::self()->uiController()->activeMainWindow());
+    auto* dlg = new QDialog(ICore::self()->uiController()->activeMainWindow());
     dlg->setAttribute(Qt::WA_DeleteOnClose);
     dlg->setWindowTitle(i18nc("%1: path or URL, %2: name of a version control system",
                           "%2 History (%1)", url.toDisplayString(QUrl::PreferLocalFile), iface->name()));

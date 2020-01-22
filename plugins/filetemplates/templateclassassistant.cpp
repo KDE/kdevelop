@@ -210,7 +210,7 @@ void TemplateClassAssistantPrivate::addFilesToTarget (const QHash< QString, QUrl
         targetsWidget->setCurrentRow(0);
         mainLayout->addWidget(targetsWidget);
 
-        QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+        auto* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
         QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
         okButton->setDefault(true);
         okButton->setShortcut(Qt::CTRL | Qt::Key_Return);

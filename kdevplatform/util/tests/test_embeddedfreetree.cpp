@@ -23,14 +23,15 @@ unsigned int extractor_div_with = 0;
 #include <QVector>
 #include <QDebug>
 
-#include <stdlib.h>
-#include <set>
 #include <util/embeddedfreetree.h>
 #include <util/convenientfreelist.h>
 #include <language/util/setrepository.h>
-#include <time.h>
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
+
+#include <cstdlib>
+#include <ctime>
+#include <set>
 
 struct TestItem
 {

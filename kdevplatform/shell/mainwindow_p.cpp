@@ -398,7 +398,7 @@ void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Contai
 
         if (top) {
             if (auto* navigationWidget = top->createNavigationWidget()) {
-                NavigationToolTip* tooltip = new KDevelop::NavigationToolTip(m_mainWindow, QCursor::pos() + QPoint(20, 20), navigationWidget);
+                auto* tooltip = new KDevelop::NavigationToolTip(m_mainWindow, QCursor::pos() + QPoint(20, 20), navigationWidget);
                 tooltip->resize(navigationWidget->sizeHint() + QSize(10, 10));
                 tooltip->setHandleRect(container->tabRect(tab));
 
@@ -423,7 +423,7 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
         for (QHash<IToolViewFactory*, Sublime::ToolDocument*>::const_iterator it = factories.constBegin();
                 it != factories.constEnd(); ++it)
         {
-            QAction* action = new QAction(it.value()->statusIcon(), it.value()->title(), &menu);
+            auto* action = new QAction(it.value()->statusIcon(), it.value()->title(), &menu);
             action->setIcon(it.value()->statusIcon());
             if (!it.key()->allowMultiple() && Core::self()->uiControllerInternal()->toolViewPresent(it.value(), m_mainWindow->area())) {
                 action->setDisabled(true);

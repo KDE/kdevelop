@@ -44,18 +44,18 @@
 #define _NEW_TTY_CTRL
 #endif
 
-#include <assert.h>
+#include <cassert>
 #include <fcntl.h>
 #ifndef _MSC_VER
 #include <grp.h>
 #include <termios.h>
 #include <unistd.h>
 #endif
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <time.h>
-#include <errno.h>
+#include <cerrno>
+#include <csignal>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
 #if defined (_HPUX_SOURCE)
 #define _TERMIOS_INCLUDED
