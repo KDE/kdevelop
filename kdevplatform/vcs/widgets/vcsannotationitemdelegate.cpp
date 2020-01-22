@@ -334,8 +334,6 @@ bool VcsAnnotationItemDelegate::helpEvent(QHelpEvent* event, KTextEditor::View* 
         return false;
     }
 
-    const QString annotationGroupId = model->data(line, (Qt::ItemDataRole)KTextEditor::AnnotationModel::GroupIdentifierRole).toString();
-
     const QVariant data = model->data(line, Qt::ToolTipRole);
     if (!data.isValid()) {
         return false;
