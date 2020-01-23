@@ -105,7 +105,11 @@ void ActiveToolTipManager::doVisibility()
 
     if (!fullGeometry.isEmpty()) {
         QRect oldFullGeometry = fullGeometry;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         QRect screenGeometry = QGuiApplication::screenAt(fullGeometry.topLeft())->geometry();
+#else
+        QRect screenGeometry = QApplication::desktop()->screenGeometry(fullGeometry.topLeft());
+#endif
         if (fullGeometry.bottom() > screenGeometry.bottom()) {
             //Move up, avoiding the mouse-cursor
             fullGeometry.moveBottom(fullGeometry.top() - 10);
