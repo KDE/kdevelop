@@ -98,17 +98,39 @@ T formatComment_impl(const T& comment)
 
     QList<T> lines = comment.split('\n');
 
-    // remove common leading chars from the beginning of lines
+    // remove common leading & trailing chars from the lines
     for (T &l : lines) {
         // don't trigger repeated temporary allocations here
-        static const T tripleSlash("///");
-        static const T doubleSlash("//");
-        static const T doubleStar("**");
-        static const T slashDoubleStar("/**");
-        strip_impl(tripleSlash, l);
-        strip_impl(doubleSlash, l);
-        strip_impl(doubleStar, l);
-        rStrip_impl(slashDoubleStar, l);
+
+        // possible comment starts, sorted from longest to shortest
+        static const T startMatches[] = {
+            "//!<", "/*!<", "/**<", "///<",
+            "///", "//!", "/**", "/*!",
+            "//", "/*",
+            "*"
+        };
+
+        // possible comment ends, sorted from longest to shortest
+        static const T endMatches[] = {
+           "**/", "*/"
+        };
+
+        l = l.trimmed();
+
+        // check for ends first, as the starting pattern "*" might interfere with the ending pattern
+        for (T const & m : endMatches) {
+            if (l.endsWith(m)) {
+                l.chop(m.length());
+                break;
+            }
+        }
+
+        for (T const & m : startMatches) {
+            if (l.startsWith(m)) {
+                l.remove(0, m.length());
+                break;
+            }
+        }
     }
 
     // TODO add method with QStringList specialisation
