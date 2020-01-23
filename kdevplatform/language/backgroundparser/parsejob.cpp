@@ -238,8 +238,11 @@ ReferencedTopDUContext ParseJob::duChain() const
 bool ParseJob::abortRequested() const
 {
     Q_D(const ParseJob);
-
-    return d->abortRequested.load();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    return d->abortRequested.loadRelaxed() != 0;
+#else
+    return d->abortRequested.load() != 0;
+#endif
 }
 
 void ParseJob::requestAbort()

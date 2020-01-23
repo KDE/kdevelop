@@ -140,10 +140,19 @@ bool DUChainLock::lockForWrite(uint timeout)
 
     while (1) {
         //Try acquiring the write-lcok
-        if (d->m_totalReaderRecursion.load() == 0 && d->m_writerRecursion.testAndSetOrdered(0, 1)) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        if (d->m_totalReaderRecursion.loadRelaxed() == 0 &&
+#else
+        if (d->m_totalReaderRecursion.load() == 0 &&
+#endif
+            d->m_writerRecursion.testAndSetOrdered(0, 1)) {
             //Now we can be sure that there is no other writer, as we have increased m_writerRecursion from 0 to 1
             d->m_writer = QThread::currentThread();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+            if (d->m_totalReaderRecursion.loadRelaxed() == 0) {
+#else
             if (d->m_totalReaderRecursion.load() == 0) {
+#endif
                 //There is still no readers, we have successfully acquired a write-lock
                 return true;
             } else {
@@ -173,7 +182,11 @@ void DUChainLock::releaseWriteLock()
     //The order is important here, m_writerRecursion protects m_writer
 
     //TODO: could testAndSet here
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    if (d->m_writerRecursion.loadRelaxed() == 1) {
+#else
     if (d->m_writerRecursion.load() == 1) {
+#endif
         d->m_writer = nullptr;
         d->m_writerRecursion = 0;
     } else {
