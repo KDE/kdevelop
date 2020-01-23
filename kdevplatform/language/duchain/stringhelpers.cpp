@@ -107,7 +107,7 @@ T formatComment_impl(const T& comment)
             "//!<", "/*!<", "/**<", "///<",
             "///", "//!", "/**", "/*!",
             "//", "/*",
-            "*"
+            "/", "*"
         };
 
         // possible comment ends, sorted from longest to shortest
