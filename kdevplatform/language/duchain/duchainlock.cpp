@@ -127,7 +127,11 @@ bool DUChainLock::lockForWrite(uint timeout)
 
     Q_ASSERT(d->ownReaderRecursion() == 0);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    if (d->m_writer.loadRelaxed() == QThread::currentThread()) {
+#else
     if (d->m_writer.load() == QThread::currentThread()) {
+#endif
         //We already hold the write lock, just increase the recursion count and return
         d->m_writerRecursion.fetchAndAddRelaxed(1);
         return true;
@@ -198,7 +202,11 @@ bool DUChainLock::currentThreadHasWriteLock() const
 {
     Q_D(const DUChainLock);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    return d->m_writer.loadRelaxed() == QThread::currentThread();
+#else
     return d->m_writer.load() == QThread::currentThread();
+#endif
 }
 
 DUChainReadLocker::DUChainReadLocker(DUChainLock* duChainLock, uint timeout)
