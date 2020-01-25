@@ -153,11 +153,8 @@ void TestDUChain::testComments_data()
 #define PARSE_COMMENTS 0
     QTest::newRow("enumerator")
         << "enum Foo { bar1, ///<this is bar1\nbar2 ///<this is bar2\n };"
-#if PARSE_COMMENTS
         << ExpectedComment{"Foo::bar1", "this is bar1"};
-#else
-        << ExpectedComment{"Foo::bar1", "<this is bar1"};
-#endif
+
     QTest::newRow("comment-formatting")
         << "/** a\n * multiline\n *\n * comment\n */ int foo;"
 #if PARSE_COMMENTS
