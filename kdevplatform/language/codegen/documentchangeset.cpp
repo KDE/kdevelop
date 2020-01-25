@@ -220,7 +220,13 @@ DocumentChangeSet::ChangeResult DocumentChangeSet::applyAllChanges()
     }
 
     QList<QUrl> allFiles;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    const auto changedFiles =
+        QSet<KDevelop::IndexedString>(d->documentsRename.keyBegin(), d->documentsRename.keyEnd()) +
+        QSet<KDevelop::IndexedString>(d->changes.keyBegin(), d->changes.keyEnd());
+#else
     const auto changedFiles = d->documentsRename.keys().toSet() + d->changes.keys().toSet();
+#endif
     allFiles.reserve(changedFiles.size());
     for (const IndexedString& file : changedFiles) {
         allFiles << file.toUrl();
