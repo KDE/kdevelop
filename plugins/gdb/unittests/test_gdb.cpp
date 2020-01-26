@@ -54,6 +54,7 @@
 #include <QSignalSpy>
 #include <QTest>
 #include <QTemporaryFile>
+#include <QElapsedTimer>
 
 #define SKIP_IF_ATTACH_FORBIDDEN() \
     do { \
@@ -219,7 +220,7 @@ public:
     }
 
 private:
-    QTime stopWatch;
+    QElapsedTimer stopWatch;
     QPointer<DebugSession> session;
     const char * condition;
     const char * file;
@@ -2082,7 +2083,7 @@ bool GdbTest::waitForState(DebugSession *session, DebugSession::DebuggerState st
                             const char *file, int line, bool waitForIdle)
 {
     QPointer<MIDebugSession> s(session); //session can get deleted in DebugController
-    QTime stopWatch;
+    QElapsedTimer stopWatch;
     stopWatch.start();
 
     // legacy behavior for tests that implicitly may require waiting for idle,

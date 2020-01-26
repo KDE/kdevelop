@@ -20,7 +20,7 @@
 #ifndef KDEVPLATFORM_STATUSBAR_H
 #define KDEVPLATFORM_STATUSBAR_H
 
-#include <QTime>
+#include <QElapsedTimer>
 #include <QHash>
 #include <QStatusBar>
 
@@ -84,7 +84,7 @@ private:
 
     QHash<IStatus*, Message> m_messages;
     QTimer* const m_timer;
-    QTime m_time;
+    QElapsedTimer m_time;
     Sublime::View* m_currentView;
     QHash<IStatus*,ProgressItem*> m_progressItems;
     StatusbarProgressWidget* m_progressWidget; // embedded in the statusbar, shows a single progressbar & button to expand the overlay widget
