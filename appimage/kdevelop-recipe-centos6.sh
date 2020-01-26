@@ -28,6 +28,7 @@ if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.0
 fi
 # remove kxmlgui_fixdockvisibilitystatestoring.patch for >5.66.0
+# remove ktexteditor_fixdragncopy.patch for >5.66.0
 KF5_VERSION=v5.66.0
 PLASMA_VERSION=v5.17.5
 KDE_RELEASESERVICE_VERSION=v19.12.1
@@ -185,7 +186,7 @@ build_framework threadweaver
 build_framework attica
 build_framework knewstuff
 build_framework syntax-highlighting
-build_framework ktexteditor
+(PATCH_FILE=$SCRIPT_DIR/ktexteditor_fixdragncopy.patch build_framework ktexteditor)
 build_framework kpackage
 build_framework kdeclarative
 build_framework kcmutils
