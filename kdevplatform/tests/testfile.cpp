@@ -23,7 +23,7 @@
 #include "testproject.h"
 
 #include <QTemporaryFile>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QTest>
 
 #include <language/duchain/duchainlock.h>
@@ -176,7 +176,7 @@ bool TestFile::waitForParsed(int timeout)
         // optimize: we don't want to wait the usual timeout before parsing documents here
         ICore::self()->languageController()->backgroundParser()->parseDocuments();
     }
-    QTime t;
+    QElapsedTimer t;
     t.start();
     while (!d->ready && t.elapsed() < timeout) {
         QTest::qWait(10);

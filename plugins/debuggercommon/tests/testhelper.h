@@ -29,7 +29,7 @@
 
 #include <QPointer>
 #include <QString>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QUrl>
 
 namespace KDevMI
@@ -57,7 +57,7 @@ public:
     bool waitUnless(bool ok);
 
 private:
-    QTime stopWatch;
+    QElapsedTimer stopWatch;
     QPointer<MIDebugSession> session;
     const char* condition;
     const char* file;

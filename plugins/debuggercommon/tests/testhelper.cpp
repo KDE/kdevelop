@@ -107,7 +107,7 @@ bool waitForState(MIDebugSession *session, KDevelop::IDebugSession::DebuggerStat
                   const char *file, int line, bool waitForIdle)
 {
     QPointer<MIDebugSession> s(session); //session can get deleted in DebugController
-    QTime stopWatch;
+    QElapsedTimer stopWatch;
     stopWatch.start();
 
     // legacy behavior for tests that implicitly may require waiting for idle,
