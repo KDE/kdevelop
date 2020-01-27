@@ -56,7 +56,7 @@ ColorSchemeChooser::ColorSchemeChooser(QObject* parent)
 
     setMenu(selectionMenu->menu());
     menu()->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
-    menu()->setTitle(i18n("&Color Theme"));
+    menu()->setTitle(i18n("&Color Scheme"));
 }
 
 QString ColorSchemeChooser::loadCurrentScheme() const
