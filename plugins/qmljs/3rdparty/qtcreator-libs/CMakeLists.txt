@@ -76,7 +76,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
    add_target_compile_flag_if_supported(kdevqtc-qmlsupport PRIVATE "-Wno-class-memaccess")
    add_target_compile_flag_if_supported(kdevqtc-qmlsupport PRIVATE "-Wno-deprecated-copy")
 endif()
-if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+if (MSVC)
     target_compile_options(kdevqtc-qmlsupport PRIVATE "/wd4996") # C4996: warns about deprecated declarations
 endif()
 
