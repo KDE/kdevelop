@@ -63,7 +63,14 @@ QString ColorSchemeChooser::loadCurrentScheme() const
 {
     KSharedConfigPtr config = KSharedConfig::openConfig();
     KConfigGroup cg(config, "UiSettings");
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0)
+    // Since 5.67 KColorSchemeManager includes a system color scheme option that reacts to system
+    // scheme changes. This scheme will be activated if we pass an empty string to KColorSchemeManager
+    // So no need anymore to read the the current global scheme ourselves if no custom one is configured.
+    return cg.readEntry("ColorScheme");
+#else
     return cg.readEntry("ColorScheme", currentDesktopDefaultScheme());
+#endif
 }
 
 void ColorSchemeChooser::saveCurrentScheme(const QString &name)
@@ -74,6 +81,7 @@ void ColorSchemeChooser::saveCurrentScheme(const QString &name)
     cg.sync();
 }
 
+#if KCONFIGWIDGETS_VERSION < QT_VERSION_CHECK(5, 67, 0)
 QString ColorSchemeChooser::currentDesktopDefaultScheme() const
 {
     KSharedConfigPtr config = KSharedConfig::openConfig(QStringLiteral("kdeglobals"));
@@ -85,6 +93,7 @@ QString ColorSchemeChooser::currentDesktopDefaultScheme() const
     const QString name = KConfigGroup(schemeFile, "General").readEntry("Name", scheme);
     return name;
 }
+#endif
 
 QString ColorSchemeChooser::currentSchemeName() const
 {
@@ -93,7 +102,12 @@ QString ColorSchemeChooser::currentSchemeName() const
     QAction* const action = menu()->activeAction();
 
     if(action) return KLocalizedString::removeAcceleratorMarker(action->text());
+#if KCONFIGWIDGETS_VERSION >= QT_VERSION_CHECK(5, 67, 0)
+    // See above
+    return QString();
+#else
     return currentDesktopDefaultScheme();
+#endif
 }
 
 void ColorSchemeChooser::slotSchemeChanged(QAction* triggeredAction)

@@ -23,6 +23,9 @@
 #define COLORSCHEMECHOOSER_H
 
 #include <QAction>
+#include <QtGlobal>
+
+#include <kconfigwidgets_version.h>
 
 #include "mainwindow.h"
 
@@ -47,7 +50,9 @@ private Q_SLOTS:
 private:
     QString loadCurrentScheme() const;
     void    saveCurrentScheme(const QString &name);
+#if KCONFIGWIDGETS_VERSION < QT_VERSION_CHECK(5, 67, 0)
     QString currentDesktopDefaultScheme() const;
+#endif
 };
 
 }  // namespace KDevelop
