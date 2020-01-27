@@ -197,6 +197,7 @@ void ProjectSelectionPage::validateData()
         if( validator.validate(projectName, pos) == QValidator::Invalid )
         {
             ui->locationValidWidget->setText( i18n("Invalid project name") );
+            ui->locationValidWidget->animatedShow();
             emit invalid();
             return;
         }
