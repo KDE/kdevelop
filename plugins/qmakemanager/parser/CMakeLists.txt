@@ -12,7 +12,10 @@ set(kdevqmakeparser_SRCS
     qmakeastdefaultvisitor.cpp
     )
 
-kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO
+if(NOT KDevelop-PG-Qt_VERSION VERSION_LESS "2.2.1")
+    set(_kdevpgqt_generate_extra_args ENFORCE_COMPATIBLE_ERROR_AWARE_CODE)
+endif()
+kdevpgqt_generate(parser_GEN_SRCS qmake NAMESPACE QMake DUMP_INFO ${_kdevpgqt_generate_extra_args}
     "${CMAKE_CURRENT_SOURCE_DIR}/qmake.g"
     "${CMAKE_CURRENT_SOURCE_DIR}/qmakelexer.h")
 
@@ -37,3 +40,7 @@ target_link_libraries(kdevqmakeparser
         KF5::KIOCore
 )
 target_include_directories(kdevqmakeparser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+# for proper include stack reports with gcc when working on the parser:
+# remove ENFORCE_COMPATIBLE_ERROR_AWARE_CODE from kdevpgqt_generate
+# uncomment next line:
+# add_target_compile_flag_if_supported(kdevqmakeparser PRIVATE "-Wno-pedantic")
