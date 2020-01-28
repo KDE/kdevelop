@@ -68,6 +68,8 @@ MessageWidget::MessageWidget(QWidget* parent)
     // setup autoHide timer details
     m_autoHideTimer->setSingleShot(true);
 
+    connect(m_messageWidget, &KMessageWidget::hideAnimationFinished,
+            this, &MessageWidget::showNextMessage);
     connect(m_messageWidget, &KMessageWidget::linkHovered,
             this, &MessageWidget::linkHovered);
 }
