@@ -16,8 +16,8 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>. *
  ************************************************************************/
 
-#ifndef KCM_CUSTOMBUILDSYSTEM_H
-#define KCM_CUSTOMBUILDSYSTEM_H
+#ifndef KCM_DEFINESANDINCLUDESCONFIGPAGE_H
+#define KCM_DEFINESANDINCLUDESCONFIGPAGE_H
 
 #include <project/projectconfigpage.h>
 

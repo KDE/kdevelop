@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef COMPILERSPROVIDER_H
-#define COMPILERSPROVIDER_H
+#ifndef COMPILERPROVIDER_H
+#define COMPILERPROVIDER_H
 
 #include "icompilerfactory.h"
 

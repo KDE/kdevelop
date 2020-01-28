@@ -20,8 +20,8 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#ifndef INCLUDEPATHRESOLVER_H
-#define INCLUDEPATHRESOLVER_H
+#ifndef MAKEFILERESOLVER_H
+#define MAKEFILERESOLVER_H
 
 #include <QString>
 

@@ -19,8 +19,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef CLANGTIDY_REPLACEMENT_H
-#define CLANGTIDY_REPLACEMENT_H
+#ifndef CLANGTIDY_REPLACEMENTPARSER_H
+#define CLANGTIDY_REPLACEMENTPARSER_H
 
 // KDevPlatform
 #include <language/editor/documentrange.h>

@@ -18,8 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef SCRIPTAPPCONFIGTYPE_H
-#define SCRIPTAPPCONFIGTYPE_H
+#ifndef PLASMOIDEXECUTIONCONFIG_H
+#define PLASMOIDEXECUTIONCONFIG_H
 
 #include <interfaces/launchconfigurationtype.h>
 #include <interfaces/launchconfigurationpage.h>

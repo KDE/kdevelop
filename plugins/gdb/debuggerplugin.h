@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef _DEBUGGERPART_H_
-#define _DEBUGGERPART_H_
+#ifndef GDBDEBUGGERPLUGIN_H
+#define GDBDEBUGGERPLUGIN_H
 
 #include <config-kdevelop.h>
 

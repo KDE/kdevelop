@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef COMPILERMODEL_H
-#define COMPILERMODEL_H
+#ifndef COMPILERSMODEL_H
+#define COMPILERSMODEL_H
 
 #include <QAbstractItemModel>
 #include <QItemSelection>

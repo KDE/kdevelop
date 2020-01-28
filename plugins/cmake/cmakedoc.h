@@ -18,8 +18,8 @@
  * 02110-1301, USA.
  */
 
-#ifndef CMAKEHELPDOC_H
-#define CMAKEHELPDOC_H
+#ifndef CMAKEDOC_H
+#define CMAKEDOC_H
 
 #include <interfaces/idocumentation.h>
 class CMakeDocumentation;
