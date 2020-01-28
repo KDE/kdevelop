@@ -284,8 +284,8 @@ void MainWindowPrivate::showRightDock(bool b)
 void MainWindowPrivate::setBackgroundCentralWidget(QWidget* w)
 {
     delete bgCentralWidget;
-    QLayout* l=m_mainWindow->centralWidget()->layout();
-    l->addWidget(w);
+    auto* l = static_cast<QVBoxLayout*>(centralWidget->layout());
+    l->addWidget(w, 2);
     bgCentralWidget=w;
     setBackgroundVisible(area->views().isEmpty());
 }
