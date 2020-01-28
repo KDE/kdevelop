@@ -12,6 +12,15 @@ set(test_manpagemodel_SRCS
     ../manpageplugin.cpp
 )
 
+if(Qt5_VERSION VERSION_LESS "5.11.0")
+    set(test_manpagemodel_extra_link_libs KDev::Tests)
+endif()
 ecm_add_test(${test_manpagemodel_SRCS}
     TEST_NAME test_manpagemodel
-    LINK_LIBRARIES Qt5::Test KDev::Documentation KDev::Interfaces KDev::Tests)
+    LINK_LIBRARIES
+        Qt5::Test
+        KDev::Documentation
+        KDev::Interfaces
+        KDev::Language
+        ${test_manpagemodel_extra_link_libs}
+)

@@ -46,8 +46,6 @@
 #include <shell/problem.h>
 #include <shell/problemconstants.h>
 
-//#include "modeltest.h"
-
 using namespace KDevelop;
 
 namespace {
