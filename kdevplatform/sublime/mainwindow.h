@@ -104,6 +104,7 @@ public:
 
     /** Sets a @p w widget that will be shown when there are no opened documents.
      * This method takes the ownership of @p w.
+     * Pass @c nullptr for @p w for a blank background (default).
      */
     void setBackgroundCentralWidget(QWidget* w);
 

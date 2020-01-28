@@ -21,12 +21,20 @@
 #define KDEVPLATFORM_PLUGIN_KDEVWELCOMEPAGEPLUGIN_H
 
 #include <interfaces/iplugin.h>
+// Qt
+#include <QPointer>
 
 class KDevWelcomePagePlugin : public KDevelop::IPlugin
 {
     Q_OBJECT
 public:
     KDevWelcomePagePlugin( QObject* parent, const QList<QVariant>& );
+
+public:
+    void unload() override;
+
+private:
+    QPointer<QWidget> m_welcomePageWidget;
 };
 
 #endif
