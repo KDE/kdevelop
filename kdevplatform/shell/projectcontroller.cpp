@@ -66,7 +66,6 @@ Boston, MA 02110-1301, USA.
 #include <projectconfigpage.h>
 #include <language/backgroundparser/parseprojectjob.h>
 #include <interfaces/iruncontroller.h>
-#include <sublime/message.h>
 #include <util/scopeddialog.h>
 #include <vcs/widgets/vcsdiffpatchsources.h>
 #include <vcs/widgets/vcscommitdialog.h>
