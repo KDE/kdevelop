@@ -17,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA   *
  *************************************************************************************/
 
-#ifndef PARSEQMLJSJOB_H
-#define PARSEQMLJSJOB_H
+#ifndef QMLJSPARSEJOB_H
+#define QMLJSPARSEJOB_H
 
 #include <language/backgroundparser/parsejob.h>
 

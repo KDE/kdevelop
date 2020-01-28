@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef COMPILERWIDGET_H
-#define COMPILERWIDGET_H
+#ifndef COMPILERSWIDGET_H
+#define COMPILERSWIDGET_H
 
 #include <QVector>
 #include <QWidget>

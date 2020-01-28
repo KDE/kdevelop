@@ -559,8 +559,11 @@ QList<ProblemPointer> ParseSession::problemsForFile(CXFile file) const
     // see also TestDUChain::testReparseIncludeGuard
     const QString path = QDir(ClangString(clang_getFileName(file)).toString()).canonicalPath();
     const IndexedString indexedPath(path);
+    const auto location = clang_getLocationForOffset(d->m_unit, file, 0);
     if (ClangHelpers::isHeader(path) && !clang_isFileMultipleIncludeGuarded(unit(), file)
-        && !clang_Location_isInSystemHeader(clang_getLocationForOffset(d->m_unit, file, 0)))
+        && !clang_Location_isInSystemHeader(location)
+        // clang_isFileMultipleIncludeGuarded always returns 0 in case our only file is the header
+        && !clang_Location_isFromMainFile(location))
     {
         QExplicitlySharedDataPointer<StaticAssistantProblem> problem(new StaticAssistantProblem);
         problem->setSeverity(IProblem::Warning);

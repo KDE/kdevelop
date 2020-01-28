@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SIMPLEREFACTORING_H
-#define SIMPLEREFACTORING_H
+#ifndef CLANGREFACTORING_H
+#define CLANGREFACTORING_H
 
 #include "clangprivateexport.h"
 
