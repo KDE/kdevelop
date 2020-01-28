@@ -32,7 +32,6 @@ PRIVATE
 install(FILES
     autotestshell.h
     kdevsignalspy.h
-    modeltest.h
     testcore.h
     testproject.h
     testfile.h
