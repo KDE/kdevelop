@@ -270,7 +270,7 @@ void PatchReviewPlugin::updateKompareModel() {
 
         try {
             m_modelList->openDirAndDiff();
-        } catch ( const QString & str ) {
+        } catch ( const QString & /*str*/ ) {
             throw;
         } catch ( ... ) {
             throw QStringLiteral( "lib/libdiff2 crashed, memory may be corrupted. Please restart kdevelop." );

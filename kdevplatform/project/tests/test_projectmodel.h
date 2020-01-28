@@ -29,8 +29,6 @@ namespace KDevelop
 class ProjectModel;
 }
 
-class ModelTest;
-
 class TestProjectModel : public QObject
 {
 Q_OBJECT

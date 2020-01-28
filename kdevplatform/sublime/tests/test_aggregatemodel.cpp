@@ -18,12 +18,18 @@
  ***************************************************************************/
 #include "test_aggregatemodel.h"
 
+// KDevPlatform
+#include <sublime/aggregatemodel.h>
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+#include <tests/modeltest.h>
+#endif
+// Qt
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+#include <QAbstractItemModelTester>
+#endif
 #include <QTest>
 #include <QStandardItem>
 #include <QStandardItemModel>
-
-#include <sublime/aggregatemodel.h>
-#include <tests/modeltest.h>
 
 using namespace Sublime;
 
@@ -33,9 +39,11 @@ void TestAggregateModel::modelAggregationInASingleView()
     model->addModel(QStringLiteral("First Model"), newModel());
     model->addModel(QStringLiteral("Second Model"), newModel());
 
-    //this will assert in case of model problems and the test will fail
-    //for detailed explanation why the test failed refer to test/modeltest.cpp
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    new QAbstractItemModelTester(model, this);
+#else
     new ModelTest(model, this);
+#endif
 }
 
 QStandardItemModel * TestAggregateModel::newModel()
