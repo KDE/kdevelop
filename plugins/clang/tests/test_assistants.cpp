@@ -819,18 +819,19 @@ void TestAssistants::testHeaderGuardAssistant()
     QFETCH(QString, pragmaExpected);
     QFETCH(QString, macroExpected);
 
-    TestFile pragmaFile (code, QStringLiteral("h"));
-    TestFile macroFile (code, QStringLiteral("h"), filename);
+    TestFile pragmaFile(code, QStringLiteral("h"));
+    TestFile macroFile(code, QStringLiteral("h"), filename);
+    TestFile impl("#include \"" + pragmaFile.url().str() + "\"\n"
+                  "#include \"" + macroFile.url().str() + "\"\n", QStringLiteral("cpp"));
 
     QExplicitlySharedDataPointer<IAssistant> pragmaAssistant;
     QExplicitlySharedDataPointer<IAssistant> macroAssistant;
 
-    pragmaFile.parse(TopDUContext::Empty);
-    macroFile.parse(TopDUContext::Empty);
-    QVERIFY(pragmaFile.waitForParsed());
-    QVERIFY(macroFile.waitForParsed());
+    QVERIFY(impl.parseAndWait(TopDUContext::Empty));
 
     DUChainReadLocker lock;
+    QVERIFY(impl.topContext());
+
     const auto pragmaTopContext = DUChain::self()->chainForDocument(pragmaFile.url());
     const auto macroTopContext = DUChain::self()->chainForDocument(macroFile.url());
     QVERIFY(pragmaTopContext);
