@@ -768,7 +768,7 @@ void UiController::showErrorMessage(const QString& message, int timeout)
 
 void UiController::postMessage(Sublime::Message* message)
 {
-    // if Core has flag Core::NoUi there also is no window, so catched as well here
+    // if Core has flag Core::NoUi there also is no window, so caught as well here
     Sublime::MainWindow* window = activeSublimeWindow();
     if (!window) {
         delete message;
