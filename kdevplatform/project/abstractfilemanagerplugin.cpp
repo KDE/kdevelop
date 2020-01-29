@@ -484,7 +484,7 @@ ProjectFolderItem *AbstractFileManagerPlugin::import( IProject *project )
 
         // set up the signal handling
         // NOTE: We delay handling of the creation/deletion events here by one second to prevent
-        //       useless or even outright wrong handling of events during comming git workflows.
+        //       useless or even outright wrong handling of events during common git workflows.
         //       I.e. sometimes we used to get a 'delete' event during a rebase which was never
         //       followed up by a 'created' signal, even though the file actually exists after
         //       the rebase.

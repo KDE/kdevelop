@@ -119,8 +119,7 @@ QSize IdealToolButton::minimumSizeHint() const
         minimumSize = fm.size(Qt::TextShowMnemonic, opt.text.left(4));
     }
 
-    minimumSize = style()->sizeFromContents(QStyle::CT_ToolButton, &opt, minimumSize, this).
-                  expandedTo(QApplication::globalStrut());
+    minimumSize = style()->sizeFromContents(QStyle::CT_ToolButton, &opt, minimumSize, this);
 
     if (_area == Qt::TopDockWidgetArea || _area == Qt::BottomDockWidgetArea) {
         return minimumSize;

@@ -396,7 +396,7 @@ public:
         changes.applyAllChanges();
 
         // Place cursor after the opening brace
-        // arbitrarily chose 4, as it would accomodate the template and return types on their own line
+        // arbitrarily chose 4, as it would accommodate the template and return types on their own line
         const auto searchRange = KTextEditor::Range(rangeStart, rangeStart.line() + 4, 0);
         const auto results = view->document()->searchText(searchRange, QStringLiteral("{"));
         if (!results.isEmpty()) {
