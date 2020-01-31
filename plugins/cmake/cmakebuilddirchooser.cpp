@@ -29,7 +29,6 @@
 #include <interfaces/iruntime.h>
 #include <interfaces/iruntimecontroller.h>
 
-#include <KColorScheme>
 #include <KLocalizedString>
 
 #include <QDir>
@@ -283,14 +282,8 @@ void CMakeBuildDirChooser::setExtraArguments(const QString& args)
 
 void CMakeBuildDirChooser::setStatus(const QString& message, bool canApply)
 {
-    KColorScheme scheme(QPalette::Normal);
-    KColorScheme::ForegroundRole role;
-    if (canApply) {
-        role = KColorScheme::PositiveText;
-    } else {
-        role = KColorScheme::NegativeText;
-    }
-    m_chooserUi->status->setText(QStringLiteral("<i><font color='%1'>%2</font></i>").arg(scheme.foreground(role).color().name(), message));
+    m_chooserUi->status->setMessageType(canApply ? KMessageWidget::Positive : KMessageWidget::Warning);
+    m_chooserUi->status->setText(message);
 
     auto okButton = m_buttonBox->button(QDialogButtonBox::Ok);
     okButton->setEnabled(canApply);
