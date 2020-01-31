@@ -105,21 +105,10 @@ macro(_declare_qt_logging_category sources)
         CATEGORY_NAME ${ARGS_CATEGORY_NAME}
     )
 
-    # Nasty hack: we create a target just to store all the category data in some build-system global object
-    # which then can be accessed from other places like _install_qt_logging_categories().
-    # we also create it here on first usage, to spare some additional call.
-    # Better idea how to solve that welcome
-    set(_targetname "qt_logging_category_${ARGS_EXPORT}")
-    if (NOT TARGET ${_targetname})
-        add_custom_target(${_targetname})
-        set(_categories ${ARGS_CATEGORY_NAME})
-    else()
-        get_target_property(_value ${_targetname} CATEGORIES)
-        set(_categories "${_value};${ARGS_CATEGORY_NAME}")
-    endif()
-    set_property(TARGET ${_targetname} PROPERTY CATEGORIES "${_categories}")
-    set_property(TARGET ${_targetname} PROPERTY "IDENTIFIER_${ARGS_CATEGORY_NAME}" "${ARGS_IDENTIFIER}")
-    set_property(TARGET ${_targetname} PROPERTY "DESCRIPTION_${ARGS_CATEGORY_NAME}" "${ARGS_DESCRIPTION}")
+    set(_propertyprefix "KDEV_QT_LOGGING_CATEGORY_${ARGS_EXPORT}")
+    set_property(GLOBAL APPEND PROPERTY "${_propertyprefix}_CATEGORIES" ${ARGS_CATEGORY_NAME})
+    set_property(GLOBAL PROPERTY "${_propertyprefix}_IDENTIFIER_${ARGS_CATEGORY_NAME}" "${ARGS_IDENTIFIER}")
+    set_property(GLOBAL PROPERTY "${_propertyprefix}_DESCRIPTION_${ARGS_CATEGORY_NAME}" "${ARGS_DESCRIPTION}")
 endmacro()
 
 
@@ -231,12 +220,14 @@ function(_install_qt_logging_categories)
         message(FATAL_ERROR "MACRONAME needs to be defined when calling _install_qt_logging_categories().")
     endif()
 
-    set(_targetname "qt_logging_category_${ARGS_EXPORT}")
-    if (NOT TARGET ${_targetname})
+    set(_propertyprefix "KDEV_QT_LOGGING_CATEGORY_${ARGS_EXPORT}")
+    get_property(has_category GLOBAL PROPERTY "${_propertyprefix}_CATEGORIES" SET)
+
+    if (NOT has_category)
         message(FATAL_ERROR "${ARGS_EXPORT} is an unknown qt logging category export name.")
     endif()
 
-    get_target_property(_categories ${_targetname} CATEGORIES)
+    get_property(_categories GLOBAL PROPERTY "${_propertyprefix}_CATEGORIES")
     list(SORT _categories)
 
     set(_content
@@ -246,8 +237,8 @@ function(_install_qt_logging_categories)
 ")
 
     foreach(_category IN LISTS _categories)
-        get_target_property(_description ${_targetname} "DESCRIPTION_${_category}")
-        get_target_property(_identifier ${_targetname} "IDENTIFIER_${_category}")
+        get_property(_description GLOBAL PROPERTY "${_propertyprefix}_DESCRIPTION_${_category}")
+        get_property(_identifier GLOBAL PROPERTY "${_propertyprefix}_IDENTIFIER_${_category}")
 
         # kdebugsettings >= 18.12 supports/pushes for some newer, not backward-compatible format.
         # In case of no presence of kdebugsettings at build time, we have to make a guess anyway,
