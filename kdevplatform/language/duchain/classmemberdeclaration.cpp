@@ -179,7 +179,7 @@ int64_t ClassMemberDeclaration::alignOf() const
     if (d_func()->m_alignOfExponent == ClassMemberDeclarationData::MaxAlignOfExponent) {
         return -1;
     } else {
-        return 1 << d_func()->m_alignOfExponent;
+        return Q_INT64_C(1) << d_func()->m_alignOfExponent;
     }
 }
 
