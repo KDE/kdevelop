@@ -61,7 +61,7 @@ struct TestItemRequest
     }
 
     //Should return the size of an item created with createItem
-    size_t itemSize() const
+    uint itemSize() const
     {
         return m_item.itemSize();
     }
