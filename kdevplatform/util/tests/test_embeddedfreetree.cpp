@@ -293,7 +293,7 @@ public:
 
     uint size() const
     {
-        return realSet.size();
+        return static_cast<uint>(realSet.size());
     }
 
     uint getItem(uint number) const
