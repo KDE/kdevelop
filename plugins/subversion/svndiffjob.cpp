@@ -46,8 +46,9 @@ QString repairDiff(const QString& diff) {
     QStringList lines = diff.split(QLatin1Char('\n'));
     QMap<QString, QString> headers;
     for(int a = 0; a < lines.size()-1; ++a) {
-        if(lines[a].startsWith(QLatin1String("Index: ")) && lines[a+1].startsWith(QLatin1String("====="))) {
-            const QString fileName = lines[a].midRef(strlen("Index: ")).trimmed().toString();
+        const QLatin1String indexLineBegin("Index: ");
+        if(lines[a].startsWith(indexLineBegin) && lines[a+1].startsWith(QLatin1String("====="))) {
+            const QString fileName = lines[a].midRef(indexLineBegin.size()).trimmed().toString();
             headers[fileName] = lines[a];
             qCDebug(PLUGIN_SVN) << "found header for" << fileName;
             lines[a] = QString();
@@ -61,8 +62,9 @@ QString repairDiff(const QString& diff) {
     QRegExp spaceRegExp(QStringLiteral("\\s"));
 
     for(int a = 0; a < lines.size()-1; ++a) {
-        if(lines[a].startsWith(QLatin1String("--- "))) {
-            QString tail = lines[a].mid(strlen("--- "));
+        const QLatin1String threeDashLineBegin("--- ");
+        if(lines[a].startsWith(threeDashLineBegin)) {
+            QString tail = lines[a].mid(threeDashLineBegin.size());
             if(tail.indexOf(spaceRegExp) != -1) {
                 QString file = tail.left(tail.indexOf(spaceRegExp));
                 qCDebug(PLUGIN_SVN) << "checking for" << file;

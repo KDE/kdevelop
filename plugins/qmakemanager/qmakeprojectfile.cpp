@@ -202,12 +202,14 @@ QStringList QMakeProjectFile::includeDirectories() const
             QString pattern = module;
 
             bool isPrivate = false;
-            if (module.endsWith(QLatin1String("-private"))) {
-                pattern.chop(qstrlen("-private"));
+            const QLatin1String dashPrivateLineEnd("-private");
+            const QLatin1String underscorePrivateLineEnd("_private");
+            if (module.endsWith(dashPrivateLineEnd)) {
+                pattern.chop(dashPrivateLineEnd.size());
                 isPrivate = true;
-            } else if (module.endsWith(QLatin1String("_private"))) {
+            } else if (module.endsWith(underscorePrivateLineEnd)) {
                 // _private is less common, but still a valid suffix
-                pattern.chop(qstrlen("_private"));
+                pattern.chop(underscorePrivateLineEnd.size());
                 isPrivate = true;
             }
 
