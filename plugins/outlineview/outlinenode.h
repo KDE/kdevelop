@@ -66,7 +66,7 @@ private:
 
 inline int OutlineNode::childCount() const
 {
-    return m_children.size();
+    return static_cast<int>(m_children.size());
 }
 
 inline const std::vector<OutlineNode>& OutlineNode::children() const
@@ -90,7 +90,7 @@ inline int OutlineNode::indexOf(const OutlineNode* child) const
     // Comparing the address here is only fine since we never modify the vector after initial creation
     for (size_t i = 0; i < max; i++) {
         if (child == &m_children[i]) {
-            return i;
+            return static_cast<int>(i);
         }
     }
     return -1;

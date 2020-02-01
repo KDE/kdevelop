@@ -643,8 +643,8 @@ private Q_SLOTS:
                     Extractor, UintSetVisitor> visit(v, set1.iterator(), repSet2);
             }
 
-            totalItems += testSet1.size();
-            totalFilteredItems += algoFiltered.size();
+            totalItems += static_cast<uint>(testSet1.size());
+            totalFilteredItems += static_cast<uint>(algoFiltered.size());
 
             std::set<uint> stdFiltered;
 
