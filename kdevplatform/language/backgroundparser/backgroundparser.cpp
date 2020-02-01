@@ -122,7 +122,7 @@ struct DocumentParseTarget
 inline uint qHash(const DocumentParseTarget& target)
 {
     return target.features * 7 + target.priority * 13 + target.sequentialProcessingFlags * 17
-           + reinterpret_cast<size_t>(target.notifyWhenReady.data());
+           + static_cast<uint>(reinterpret_cast<quintptr>(target.notifyWhenReady.data()));
 }
 
 struct DocumentParsePlan
