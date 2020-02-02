@@ -18,6 +18,7 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "environmentprofilelist.h"
+#include "debug.h"
 
 #include <QMap>
 #include <QStringList>
@@ -233,8 +234,11 @@ void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcess
             if (environment.contains(m.capturedRef(1).mid(1).toString())) {
                 value.replace(m.capturedStart(0), m.capturedLength(0),
                                    environment.value(m.capturedRef(0).mid(1).toString()));
+            } else if (variables.contains(m.capturedRef(1).mid(1).toString())){
+                value.replace(m.capturedStart(0), m.capturedLength(0),
+                                   variables.value(m.capturedRef(0).mid(1).toString()));
             } else {
-                //TODO: an warning
+                qCWarning(UTIL) << "Couldn't find replacement for" << m.captured();
                 value.remove(m.capturedStart(0), m.capturedLength(0));
             }
         }

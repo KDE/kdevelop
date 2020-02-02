@@ -61,7 +61,12 @@ void TestEnvironment::testExpandVariables_data()
     QTest::newRow("VAR2=$VAR1") << ProcEnv({
         {"VAR1", "/some/path"}, {"VAR2", "$VAR1"}
     }) << ProcEnv({
-        {"VAR1", "/some/path"}, {"VAR2", ""}
+        {"VAR1", "/some/path"}, {"VAR2", "/some/path"}
+    });
+     QTest::newRow("expanding with not yet expanded variable") << ProcEnv({
+        {"VAR1", "$VAR2"}, {"VAR2", "$PATH"}
+    }) << ProcEnv({
+        {"VAR1", "/bin:/usr/bin"}, {"VAR2", "/bin:/usr/bin"}
     });
 }
 
