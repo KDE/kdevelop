@@ -25,7 +25,7 @@ if [ -z "$KDEVELOP_VERSION" ]; then
     KDEVELOP_VERSION=5.5
 fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
-    KDEV_PG_QT_VERSION=v2.2.0
+    KDEV_PG_QT_VERSION=v2.2.1
 fi
 # remove kxmlgui_fixdockvisibilitystatestoring.patch for >5.66.0
 # remove ktexteditor_fixdragncopy.patch for >5.66.0
@@ -33,7 +33,7 @@ KF5_VERSION=v5.66.0
 PLASMA_VERSION=v5.17.5
 KDE_RELEASESERVICE_VERSION=v19.12.1
 GRANTLEE_VERSION=v5.2.0
-OKTETA_VERSION=v0.26.2
+OKTETA_VERSION=v0.26.3
 
 export LLVM_ROOT=/opt/llvm/
 export PATH=/opt/rh/python27/root/usr/bin/:$PATH
