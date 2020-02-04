@@ -3,6 +3,7 @@
         "Authors": [
             {
                 "Name": "Carlos Nihelton",
+                "Name[ca@valencia]": "Carlos Nihelton",
                 "Name[ca]": "Carlos Nihelton",
                 "Name[cs]": "Carlos Nihelton",
                 "Name[de]": "Carlos Nihelton",
@@ -52,6 +53,7 @@
         ],
         "Category": "Analyzers",
         "Description": "clang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. https://clang.llvm.org/extra/clang-tidy/",
+        "Description[ca@valencia]": "El clang-tidy proporciona un marc de treball extensible per al diagnòstic i esmena d'errors de programació típics, com ara infraccions de l'estil, mal ús de la interfície o errors que es poden deduir mitjançant anàlisi estàtica. https://clang.llvm.org/extra/clang-tidy/",
         "Description[ca]": "El clang-tidy proporciona un marc de treball extensible per al diagnòstic i esmena d'errors de programació típics, com ara infraccions de l'estil, mal ús de la interfície o errors que es poden deduir mitjançant anàlisi estàtica. https://clang.llvm.org/extra/clang-tidy/",
         "Description[en_GB]": "clang-tidy provides an extensible framework for diagnosing and fixing typical programming errors, like style violations, interface misuse, or bugs that can be deduced via static analysis. https://clang.llvm.org/extra/clang-tidy/",
         "Description[es]": "Clang-Tidy proporciona una infraestructura extensible para diagnosticar y corregir errores típicos de programación, como violaciones de estilo, mal uso de la interfaz o fallos que se pueden deducir mediante análisis estáticos. https://clang.llvm.org/extra/clang-tidy/",
@@ -72,6 +74,7 @@
         "Id": "kdevclangtidy",
         "License": "GPL",
         "Name": "Clang-Tidy Support",
+        "Name[ca@valencia]": "Implementació del Clang-Tidy",
         "Name[ca]": "Implementació del Clang-Tidy",
         "Name[cs]": "Podpora Clang-Tidy",
         "Name[de]": "Unterstützung für Clang-Tidy",

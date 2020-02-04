@@ -1,6 +1,7 @@
 {
     "KPlugin": {
         "Description": "Scratchpad lets you quickly run and experiment with code without a full project, and even store todos.",
+        "Description[ca@valencia]": "L'Scratchpad permet executar i experimentar ràpidament amb el codi sense un projecte complet, i inclús emmagatzemar tasques pendents.",
         "Description[ca]": "L'Scratchpad permet executar i experimentar ràpidament amb el codi sense un projecte complet, i inclús emmagatzemar tasques pendents.",
         "Description[en_GB]": "Scratchpad lets you quickly run and experiment with code without a full project, and even store to-dos.",
         "Description[es]": "Scratchpad le permite ejecutar y experimentar con código rápidamente con código sin un proyecto completo, e incluso guardar listas de cosas por hacer.",
@@ -20,6 +21,7 @@
         "Icon": "note",
         "Id": "scratchpad",
         "Name": "Scratchpad",
+        "Name[ca@valencia]": "Scratchpad",
         "Name[ca]": "Scratchpad",
         "Name[en_GB]": "Scratchpad",
         "Name[es]": "Scratchpad",
