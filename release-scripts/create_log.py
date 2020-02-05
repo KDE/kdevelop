@@ -121,9 +121,11 @@ def createLog(workingDir, fromVersion, toVersion, excludeBranch=None, repository
             commitHash = commit[0]
             if not changelog.endswith("."):
                 changelog = changelog + "."
+            if extra:
+                extra = ". " + extra
 
             capitalizedChangelog = changelog[0].capitalize() + changelog[1:]
-            commitLogEntries.append("<li>" + capitalizedChangelog + " (<a href='https://commits.kde.org/" + repositoryName + "/" + commitHash + "'>commit.</a> " + extra + ")</li>")
+            commitLogEntries.append("<li>" + capitalizedChangelog + " (<a href='https://commits.kde.org/" + repositoryName + "/" + commitHash + "'>commit</a>" + extra + ")</li>")
 
     # Print result to stdout
     print("<h3><a name='" + repositoryName + "' href='https://commits.kde.org/" + repositoryName + "'>" + repositoryName + "</a></h3>")
