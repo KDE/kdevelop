@@ -12,7 +12,7 @@ import sys
 import cgi
 
 
-def createLog(workingDir, fromVersion, toVersion, repositoryName=None, showInterestingChangesOnly=True):
+def createLog(workingDir, fromVersion, toVersion, excludeBranch=None, repositoryName=None, showInterestingChangesOnly=True):
     if not repositoryName:
         # use cwd name as repository name
         repositoryName = os.path.split(workingDir)[1]
@@ -27,7 +27,8 @@ def createLog(workingDir, fromVersion, toVersion, repositoryName=None, showInter
     if p.wait() != 0:
         raise NameError("git rev-parse failed -- correct to/from version?")
 
-    p = subprocess.Popen('git log ' + fromVersion + '...' + toVersion, shell=True, cwd=workingDir,
+    branchToExclude = ("^" + excludeBranch + " ") if excludeBranch else ""
+    p = subprocess.Popen('git log ' + branchToExclude + fromVersion + '...' + toVersion, shell=True, cwd=workingDir,
                          stdout=subprocess.PIPE, universal_newlines=True)
     commit = []
     commits = []
@@ -142,8 +143,9 @@ def createLog(workingDir, fromVersion, toVersion, repositoryName=None, showInter
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create HTML log based on Git history in the current working directory')
     parser.add_argument('--repositoryName', type=str, help='The path to the Git repositoryNamesitory (default: name of current working dir', default=None)
-    parser.add_argument('from_version', type=str, help='The start of the revision range (e.g. "v5.0.0")')
-    parser.add_argument('to_version', type=str, help='The end of the revision range (e.g. "v5.0.1"')
+    parser.add_argument('from_version', type=str, help='The start of the revision range (e.g. "v5.5.0")')
+    parser.add_argument('to_version', type=str, help='The end of the revision range (e.g. "v5.5.1")')
+    parser.add_argument('--excludeBranch', type=str, help='The old branch to ignore (e.g. "5.4")', default=None)
     args = parser.parse_args()
 
-    createLog(os.getcwd(), args.from_version, args.to_version, args.repositoryName)
+    createLog(os.getcwd(), args.from_version, args.to_version, args.excludeBranch)
