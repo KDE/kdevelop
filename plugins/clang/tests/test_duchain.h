@@ -91,6 +91,7 @@ private Q_SLOTS:
     void testIncludeGuardHeaderHeaderOnly_data();
     void testIncludeGuardHeaderWarning();
     void testExternC();
+    void testIncludeExternC();
     void testLambda();
     void testReparseUnchanged_data();
     void testReparseUnchanged();

@@ -1681,6 +1681,37 @@ void TestDUChain::testExternC()
     QVERIFY(!top->findDeclarations(QualifiedIdentifier("foo")).isEmpty());
 }
 
+void TestDUChain::testIncludeExternC()
+{
+    TestFile header(QStringLiteral("int foo() { return 42; }\n"), QStringLiteral("h"));
+    // NOTE: header is _not_ explicitly being parsed, instead the impl job does that
+
+    const auto code = R"(
+        extern "C" {
+            #include "%1"
+        }
+        int main() { return foo(); }
+    )";
+    TestFile impl(QString::fromUtf8(code).arg(header.url().str()), QStringLiteral("cpp"), &header);
+    impl.parse(TopDUContext::AllDeclarationsContextsAndUses);
+    QVERIFY(impl.waitForParsed());
+
+    DUChainReadLocker lock;
+
+    auto implCtx = impl.topContext();
+    QVERIFY(implCtx);
+    QCOMPARE(implCtx->localDeclarations().size(), 1);
+
+    auto headerCtx = DUChain::self()->chainForDocument(header.url());
+    QVERIFY(headerCtx);
+    QCOMPARE(headerCtx->localDeclarations().size(), 1);
+    Declaration* foo = headerCtx->localDeclarations().first();
+    QCOMPARE(foo->uses().size(), 1);
+    QCOMPARE(foo->uses().begin().key(), impl.url());
+    QCOMPARE(foo->uses().begin()->size(), 1);
+    QCOMPARE(foo->uses().begin()->first(), RangeInRevision(4, 28, 4, 31));
+}
+
 void TestDUChain::testReparseUnchanged_data()
 {
     QTest::addColumn<QString>("headerCode");

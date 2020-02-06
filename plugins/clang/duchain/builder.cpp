@@ -1525,10 +1525,15 @@ CXChildVisitResult visitCursor(CXCursor cursor, CXCursor parent, CXClientData da
     auto location = clang_getCursorLocation(cursor);
     CXFile file;
     clang_getFileLocation(location, &file, nullptr, nullptr, nullptr);
-    // don't skip MemberRefExpr with invalid location, see also:
-    // http://lists.cs.uiuc.edu/pipermail/cfe-dev/2015-May/043114.html
-    if (!ClangUtils::isFileEqual(file, visitor->m_file) && (file || kind != CXCursor_MemberRefExpr)) {
-        return CXChildVisit_Continue;
+    if (!ClangUtils::isFileEqual(file, visitor->m_file)) {
+        // don't skip MemberRefExpr with invalid location, see also:
+        // http://lists.cs.uiuc.edu/pipermail/cfe-dev/2015-May/043114.html
+        const auto invalidMemberRefExpr = !file && kind == CXCursor_MemberRefExpr;
+        // also don't skip unexposed declarations, which may e.g. be an `extern "C"` directive
+        const auto unexposedDecl = file && kind == CXCursor_UnexposedDecl;
+        if (!invalidMemberRefExpr && !unexposedDecl) {
+            return CXChildVisit_Continue;
+        }
     }
 
 #define UseCursorKind(CursorKind, ...) case CursorKind: return visitor->dispatchCursor<CursorKind>(__VA_ARGS__);
