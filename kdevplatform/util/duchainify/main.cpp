@@ -132,7 +132,10 @@ void Manager::init()
     // and quit when it's emitted
     connect(
         ICore::self()->languageController()->backgroundParser(), &BackgroundParser::hideProgress, this,
-        &Manager::finish);
+        [this]() {
+            if (ICore::self()->languageController()->backgroundParser()->isIdle())
+                QTimer::singleShot(0, this, &Manager::finish);
+        });
 
     const auto files = m_args->positionalArguments();
     for (const auto& file : files) {
