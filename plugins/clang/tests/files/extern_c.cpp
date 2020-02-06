@@ -1,5 +1,7 @@
-#include "includes/foo.h"
+extern "C" {
 #include "includes/asdf.h"
+#include "includes/foo.h"
+}
 
 /**
  * "toString": "foo myFoo"
