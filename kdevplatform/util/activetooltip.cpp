@@ -106,7 +106,12 @@ void ActiveToolTipManager::doVisibility()
     if (!fullGeometry.isEmpty()) {
         QRect oldFullGeometry = fullGeometry;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-        QRect screenGeometry = QGuiApplication::screenAt(fullGeometry.topLeft())->geometry();
+        const auto *screen = QGuiApplication::screenAt(fullGeometry.topLeft());
+        if (!screen) {
+            screen = qApp->primaryScreen();
+            qWarning() << "failed to find screen:" << fullGeometry << "fallback primary geometry:" << screen->geometry();
+        }
+        QRect screenGeometry = screen->geometry();
 #else
         QRect screenGeometry = QApplication::desktop()->screenGeometry(fullGeometry.topLeft());
 #endif
