@@ -12,6 +12,7 @@ ecm_add_test(cmakeparsertest.cpp ../parser/cmListFileLexer.c TEST_NAME test_cmak
 ecm_add_test(test_cmakemanager.cpp    LINK_LIBRARIES ${commonlibs} KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
 ecm_add_test(test_ctestfindsuites.cpp LINK_LIBRARIES ${commonlibs} KDev::Language KDev::Tests)
 ecm_add_test(test_cmakeserver.cpp     LINK_LIBRARIES ${commonlibs} KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
+ecm_add_test(test_cmakefileapi.cpp    LINK_LIBRARIES ${commonlibs} KDev::Language KDev::Tests KDev::Project kdevcmakemanagernosettings)
 
 # this is not a unit test but a testing tool, kept here for convenience
 add_executable(kdevprojectopen kdevprojectopen.cpp)

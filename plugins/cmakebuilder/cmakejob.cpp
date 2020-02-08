@@ -34,7 +34,8 @@
 #include <interfaces/iruntime.h>
 #include <interfaces/iruntimecontroller.h>
 
-#include "cmakeutils.h"
+#include <cmakeutils.h>
+#include <cmakefileapi.h>
 #include "debug.h"
 
 #include <KShell>
@@ -75,6 +76,7 @@ void CMakeJob::start()
         error(FailedError, i18n("Failed to create build directory %1.", workingDir));
         return;
     }
+    CMake::FileApi::writeClientQueryFile(workingDir);
     CMake::updateConfig( m_project, CMake::currentBuildDirIndex(m_project) );
 
     OutputExecuteJob::start();
