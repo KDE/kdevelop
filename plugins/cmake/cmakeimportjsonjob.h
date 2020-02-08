@@ -33,7 +33,7 @@ class CMakeFolderItem;
 struct ImportData {
     CMakeFilesCompilationData compilationData;
     QHash<KDevelop::Path, QVector<CMakeTarget>> targets;
-    QVector<Test> testSuites;
+    QVector<CMakeTest> testSuites;
 };
 
 namespace KDevelop

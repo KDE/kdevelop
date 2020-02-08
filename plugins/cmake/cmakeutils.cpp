@@ -719,16 +719,16 @@ QString defaultGenerator()
     return defGen;
 }
 
-QVector<Test> importTestSuites(const Path &buildDir, const QString &cmakeTestFileName)
+QVector<CMakeTest> importTestSuites(const Path &buildDir, const QString &cmakeTestFileName)
 {
     const auto cmakeTestFile = Path(buildDir, cmakeTestFileName).toLocalFile()  ;
     const auto contents = CMakeListsParser::readCMakeFile(cmakeTestFile);
     
-    QVector<Test> tests;
+    QVector<CMakeTest> tests;
     for (const auto& entry: contents) {
         if (entry.name == QLatin1String("add_test")) {
             auto args = entry.arguments;
-            Test test;
+            CMakeTest test;
             test.name = args.takeFirst().value;
             test.executable = args.takeFirst().value;
             test.arguments = kTransform<QStringList>(args, [](const CMakeFunctionArgument& arg) { return arg.value; });
@@ -754,7 +754,7 @@ QVector<Test> importTestSuites(const Path &buildDir, const QString &cmakeTestFil
                                  << entry.arguments.at(1).value << "...), but expected PROPERTIES as second argument";
                 continue;
             }
-            Test &test = tests.last();
+            CMakeTest &test = tests.last();
             for (int i = 2; i < entry.arguments.count(); i += 2)
                 test.properties[entry.arguments[i].value] = entry.arguments[i + 1].value;
         }
@@ -763,7 +763,7 @@ QVector<Test> importTestSuites(const Path &buildDir, const QString &cmakeTestFil
     return tests;
 }
 
-QVector<Test> importTestSuites(const Path &buildDir) {
+QVector<CMakeTest> importTestSuites(const Path &buildDir) {
     return importTestSuites(buildDir, QStringLiteral("CTestTestfile.cmake"));
 }
 

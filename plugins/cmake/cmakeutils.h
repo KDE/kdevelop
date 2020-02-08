@@ -34,7 +34,7 @@ namespace KDevelop
     class Path;
 }
 
-struct Test;
+struct CMakeTest;
 class ICMakeDocumentation;
 class CMakeCacheModel;
 
@@ -267,7 +267,7 @@ namespace CMake
 
     KDEVCMAKECOMMON_EXPORT QString defaultGenerator();
 
-    KDEVCMAKECOMMON_EXPORT QVector<Test> importTestSuites(const KDevelop::Path &buildDir);
+    KDEVCMAKECOMMON_EXPORT QVector<CMakeTest> importTestSuites(const KDevelop::Path &buildDir);
 }
 
 #endif

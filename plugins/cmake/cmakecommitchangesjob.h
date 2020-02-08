@@ -71,7 +71,7 @@ private:
     KDevelop::Path m_path;
     QVector<Subdirectory> m_subdirectories;
     QVector<ProcessedTarget> m_targets;
-    QVector<Test> m_tests;
+    QVector<CMakeTest> m_tests;
     KDevelop::IProject* m_project;
     CMakeManager* m_manager;
 

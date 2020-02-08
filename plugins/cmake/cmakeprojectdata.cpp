@@ -21,7 +21,8 @@
 #include "cmakeprojectdata.h"
 #include "cmakeutils.h"
 
-CMakeProjectData::CMakeProjectData(const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets, const CMakeFilesCompilationData& data, const QVector<Test>& tests)
+CMakeProjectData::CMakeProjectData(const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets,
+                                   const CMakeFilesCompilationData& data, const QVector<CMakeTest>& tests)
     : compilationData(data)
     , targets(targets)
     , watcher(new QFileSystemWatcher)
