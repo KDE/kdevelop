@@ -347,6 +347,29 @@ QString findExecutable()
     return cmake;
 }
 
+QString cmakeExecutableVersion(const QString& cmakeExecutable)
+{
+    QProcess p;
+    p.setProcessChannelMode(QProcess::ForwardedErrorChannel);
+    p.start(cmakeExecutable, {QStringLiteral("--version")});
+    if (!p.waitForFinished()) {
+        qCWarning(CMAKE) << "failed to read cmake version for executable" << cmakeExecutable << p.errorString();
+        return {};
+    }
+
+    static const QRegularExpression pattern(QStringLiteral("cmake version (\\d\\.\\d+(?:\\.\\d+)?).*"));
+    const auto output = QString::fromLocal8Bit(p.readAll());
+    const auto match = pattern.match(output);
+    if (!match.hasMatch()) {
+        qCWarning(CMAKE) << "failed to read cmake version for executable" << cmakeExecutable << output;
+        return {};
+    }
+
+    const auto version = match.captured(1);
+    qCDebug(CMAKE) << "cmake version for executable" << cmakeExecutable << version;
+    return version;
+}
+
 KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project, int builddir)
 {
     auto defaultCMakeExecutable = CMakeBuilderSettings::self()->cmakeExecutable().toLocalFile();

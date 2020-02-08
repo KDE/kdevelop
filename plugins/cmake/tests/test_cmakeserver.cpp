@@ -23,10 +23,12 @@
 #include <tests/testproject.h>
 #include <tests/testcore.h>
 #include "testhelpers.h"
+#include <cmakeutils.h>
 
 #include <QTest>
 #include <QJsonObject>
 #include <QLoggingCategory>
+#include <QVersionNumber>
 
 using namespace KDevelop;
 
@@ -45,18 +47,13 @@ public:
 private Q_SLOTS:
     void initTestCase()
     {
-        QProcess p;
-        p.start("cmake", {"--version"});
-        QVERIFY(p.waitForFinished());
-        auto output = p.readAll();
-
-        QRegularExpression rx("cmake version (\\d\\.\\d+).*");
-        const auto match = rx.match(output);
-        QVERIFY(match.isValid());
-        const auto capture = match.capturedRef(1);
-
-        const auto version = capture.split('.');
-        const bool versionWithServer = version[0] == "3" && version[1].toInt()>=8;
+        const auto exe = CMake::findExecutable();
+        QVERIFY(!exe.isEmpty());
+        const auto versionStr = CMake::cmakeExecutableVersion(exe);
+        QVERIFY(!versionStr.isEmpty());
+        const auto version = QVersionNumber::fromString(versionStr);
+        QVERIFY(!version.isNull());
+        const bool versionWithServer = version >= QVersionNumber(3, 8);
         if (!versionWithServer)
             QSKIP("cmake server not supported");
     }

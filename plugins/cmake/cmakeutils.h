@@ -116,6 +116,11 @@ namespace CMake
     KDEVCMAKECOMMON_EXPORT KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project, int builddir = -1);
 
     /**
+     * @returns the version string reported by the given CMake executable
+     */
+    KDEVCMAKECOMMON_EXPORT QString cmakeExecutableVersion(const QString& cmakeExecutable);
+
+    /**
      * @returns the current install dir for the given project or an empty string if none has been defined
      * (in that case, whatever default CMake sets for the platform will be used.)
      */
