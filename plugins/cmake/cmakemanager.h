@@ -148,7 +148,6 @@ private Q_SLOTS:
 
 //     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
-    void dirtyFile(const QString& file);
 //
 //     void directoryChanged(const QString& dir);
 //     void filesystemBuffererTimeout();

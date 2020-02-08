@@ -25,7 +25,6 @@ CMakeProjectData::CMakeProjectData(const QHash<KDevelop::Path, QVector<CMakeTarg
                                    const CMakeFilesCompilationData& data, const QVector<CMakeTest>& tests)
     : compilationData(data)
     , targets(targets)
-    , watcher(new QFileSystemWatcher)
     , m_testSuites(tests)
 {
 }

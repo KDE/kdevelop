@@ -23,7 +23,7 @@
 
 #include <QSharedPointer>
 #include <QStringList>
-#include <QFileSystemWatcher>
+#include <QHash>
 #include <util/path.h>
 #include <QDebug>
 
@@ -101,14 +101,13 @@ Q_DECLARE_TYPEINFO(CMakeTest, Q_MOVABLE_TYPE);
 
 struct KDEVCMAKECOMMON_EXPORT CMakeProjectData
 {
-    CMakeProjectData() : watcher(new QFileSystemWatcher) {}
+    CMakeProjectData() = default;
     CMakeProjectData(const QHash<KDevelop::Path, QVector<CMakeTarget>> &targets,
                      const CMakeFilesCompilationData &data,
                      const QVector<CMakeTest> &tests);
 
     CMakeFilesCompilationData compilationData;
     QHash<KDevelop::Path, QVector<CMakeTarget>> targets;
-    QSharedPointer<QFileSystemWatcher> watcher;
     QSharedPointer<CMakeServer> m_server;
 
     QVector<CMakeTest> m_testSuites;

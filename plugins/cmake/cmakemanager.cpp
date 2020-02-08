@@ -362,9 +362,6 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
         connect(data.m_server.data(), &CMakeServer::response, project, [this, project](const QJsonObject& response) {
             serverResponse(project, response);
         });
-    } else {
-        connect(data.watcher.data(), &QFileSystemWatcher::fileChanged, this, &CMakeManager::dirtyFile);
-        connect(data.watcher.data(), &QFileSystemWatcher::directoryChanged, this, &CMakeManager::dirtyFile);
     }
     m_projects[project] = data;
 
@@ -549,19 +546,6 @@ void CMakeManager::projectClosing(IProject* p)
 ProjectFilterManager* CMakeManager::filterManager() const
 {
     return m_filter;
-}
-
-void CMakeManager::dirtyFile(const QString& path)
-{
-    qCDebug(CMAKE) << "dirty!" << path;
-
-    //we initialize again hte project that sent the signal
-    for(QHash<IProject*, CMakeProjectData>::const_iterator it = m_projects.constBegin(), itEnd = m_projects.constEnd(); it!=itEnd; ++it) {
-        if(it->watcher == sender()) {
-            reload(it.key()->projectItem());
-            break;
-        }
-    }
 }
 
 void CMakeManager::folderAdded(KDevelop::ProjectFolderItem* folder)
