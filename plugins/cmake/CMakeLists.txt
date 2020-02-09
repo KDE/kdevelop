@@ -43,6 +43,7 @@ set( cmakemanager_SRCS
   testing/qttestdelegate.cpp
   cmakeimportjsonjob.cpp
   cmakeserverimportjob.cpp
+  cmakefileapiimportjob.cpp
   cmakenavigationwidget.cpp
   cmakemanager.cpp
   cmakemodelitems.cpp

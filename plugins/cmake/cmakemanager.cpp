@@ -34,6 +34,8 @@
 #include "testing/ctestutils.h"
 #include "cmakeserverimportjob.h"
 #include "cmakeserver.h"
+#include "cmakefileapi.h"
+#include "cmakefileapiimportjob.h"
 
 #include <QApplication>
 #include <QDir>
@@ -136,9 +138,28 @@ public:
     }
 
     void start() override {
-        server.reset(new CMakeServer(project));
-        connect(server.data(), &CMakeServer::connected, this, &ChooseCMakeInterfaceJob::successfulConnection);
-        connect(server.data(), &CMakeServer::finished, this, &ChooseCMakeInterfaceJob::failedConnection);
+        auto tryCMakeServer = [this]() {
+            qCDebug(CMAKE) << "try cmake server for import";
+            server.reset(new CMakeServer(project));
+            connect(server.data(), &CMakeServer::connected, this, &ChooseCMakeInterfaceJob::successfulConnection);
+            connect(server.data(), &CMakeServer::finished, this, &ChooseCMakeInterfaceJob::failedConnection);
+        };
+        if (CMake::FileApi::supported(CMake::currentCMakeExecutable(project).toLocalFile())) {
+            qCDebug(CMAKE) << "Using cmake-file-api for import of" << project->path();
+            addSubjob(manager->builder()->configure(project));
+            auto* importJob = new CMake::FileApi::ImportJob(project, this);
+            connect(importJob, &CMake::FileApi::ImportJob::dataAvailable, this, [this, tryCMakeServer](const CMakeProjectData& data) {
+                if (!data.compilationData.isValid) {
+                    tryCMakeServer();
+                } else {
+                    manager->integrateData(data, project);
+                }
+            });
+            addSubjob(importJob);
+            ExecuteCompositeJob::start();
+        } else {
+            tryCMakeServer();
+        }
     }
 
 private:

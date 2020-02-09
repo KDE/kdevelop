@@ -222,7 +222,7 @@ static CMakeProjectData parseCodeModel(const QJsonObject& codeModel, const QDir&
             dirTargets.append(target);
         }
     }
-    ret.compilationData.isValid = !ret.compilationData.files.isEmpty();
+    ret.compilationData.isValid = !codeModel.isEmpty();
     if (!ret.compilationData.isValid) {
         qCWarning(CMAKE) << "failed to parse code model" << sourceDirectory << buildDirectory << codeModel;
     }
