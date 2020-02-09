@@ -42,7 +42,8 @@ using namespace KDevelop;
 
 void TestCMakeManager::initTestCase()
 {
-    QLoggingCategory::setFilterRules(QStringLiteral("*.debug=false\ndefault.debug=true\n"));
+    QLoggingCategory::setFilterRules("*.debug=false\nkdevplatform.outputview.debug=true\n"
+                                     "kdevelop.plugins.cmake.debug=true\ndefault.debug=true\n");
 
     AutoTestShell::init({"KDevCMakeManager", "KDevCMakeBuilder", "KDevMakeBuilder", "KDevStandardOutputView"});
     TestCore::initialize();

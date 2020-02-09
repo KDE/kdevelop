@@ -60,6 +60,7 @@ void CMakeJob::start()
 
     auto error = [this](ErrorTypes error, const QString &message)
     {
+        qCWarning(KDEV_CMAKEBUILDER) << "failed" << error << message;
         setError(error);
         setErrorText(message);
         emitResult();

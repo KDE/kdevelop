@@ -358,6 +358,8 @@ void OutputExecuteJob::childProcessError( QProcess::ProcessError processError )
         return;
     d->m_status = OutputExecuteJob::JobFailed;
 
+    qCWarning(OUTPUTVIEW) << processError << d->m_process->errorString();
+
     QString errorValue;
     switch( processError ) {
         case QProcess::FailedToStart:
@@ -420,6 +422,7 @@ void OutputExecuteJob::childProcessExited( int exitCode, QProcess::ExitStatus ex
 void OutputExecuteJobPrivate::childProcessStdout()
 {
     QByteArray out = m_process->readAllStandardOutput();
+    qCDebug(OUTPUTVIEW) << out;
     if( m_properties.testFlag( OutputExecuteJob::DisplayStdout ) ) {
         m_lineMaker->slotReceivedStdout( out );
     }
@@ -428,6 +431,7 @@ void OutputExecuteJobPrivate::childProcessStdout()
 void OutputExecuteJobPrivate::childProcessStderr()
 {
     QByteArray err = m_process->readAllStandardError();
+    qCDebug(OUTPUTVIEW) << err;
     if( m_properties.testFlag( OutputExecuteJob::DisplayStderr ) ) {
         m_lineMaker->slotReceivedStderr( err );
     }
