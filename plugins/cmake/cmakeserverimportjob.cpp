@@ -83,7 +83,8 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
                         //       leading to lookup failures
                         const auto localFile = rt->pathInHost(source);
                         const auto canonicalFile = QFileInfo(source.toLocalFile()).canonicalFilePath();
-                        const auto sourcePath = localFile.toLocalFile() == canonicalFile ? localFile : KDevelop::Path(canonicalFile);
+                        const auto sourcePath = (canonicalFile.isEmpty() || localFile.toLocalFile() == canonicalFile)
+                                              ? localFile : KDevelop::Path(canonicalFile);
                         data.compilationData.files[sourcePath] = file;
                         targetSources << sourcePath;
                     }
