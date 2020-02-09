@@ -358,16 +358,20 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     }
 
     for (const auto& target : qAsConst(dirTargets)) {
-        switch(target.type) {
-            case CMakeTarget::Executable:
-                new CMakeTargetItem(folder, target.name, target.artifacts.value(0));
-                break;
-            case CMakeTarget::Library:
-                new ProjectLibraryTargetItem(folder->project(), target.name, folder);
-                break;
-            case CMakeTarget::Custom:
-                new ProjectTargetItem(folder->project(), target.name, folder);
-                break;
+        auto createTarget = [&]() -> ProjectBaseItem* {
+            switch(target.type) {
+                case CMakeTarget::Executable:
+                    return new CMakeTargetItem(folder, target.name, target.artifacts.value(0));
+                case CMakeTarget::Library:
+                    return new ProjectLibraryTargetItem(folder->project(), target.name, folder);
+                case CMakeTarget::Custom:
+                    return new ProjectTargetItem(folder->project(), target.name, folder);
+            }
+            Q_UNREACHABLE();
+        };
+        auto* targetItem = createTarget();
+        for (const auto& source : target.sources) {
+            new ProjectFileItem(folder->project(), source, targetItem);
         }
     }
 

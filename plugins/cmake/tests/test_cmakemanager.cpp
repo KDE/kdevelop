@@ -78,8 +78,6 @@ void TestCMakeManager::testIncludePaths()
     Path fooCpp(sourceDir, QStringLiteral("subdir/foo.cpp"));
     QVERIFY(QFile::exists(fooCpp.toLocalFile()));
     QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(fooCpp.pathOrUrl()));
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
-    QCOMPARE(items.size(), 2); // once the target, once the plain file
     ProjectBaseItem* fooCppItem = items.first();
 
     Path::List includeDirs = project->buildSystemManager()->includeDirectories(fooCppItem);
@@ -102,7 +100,6 @@ void TestCMakeManager::testRelativePaths()
     Path codeCpp(project->path(), QStringLiteral("../src/code.cpp"));
     QVERIFY(QFile::exists( codeCpp.toLocalFile()));
     QList< ProjectBaseItem* > items = project->itemsForPath(IndexedString(codeCpp.pathOrUrl()));
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Abort);
     QCOMPARE(items.size(), 1); // once in the target
     ProjectBaseItem* fooCppItem = items.first();
 
@@ -119,7 +116,6 @@ void TestCMakeManager::testTargetIncludePaths()
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
     const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundInTarget = false;
@@ -134,7 +130,6 @@ void TestCMakeManager::testTargetIncludePaths()
             QVERIFY(includeDirs.contains(targetIncludesDir));
         }
     }
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QVERIFY(foundInTarget);
 }
 
@@ -145,7 +140,6 @@ void TestCMakeManager::testTargetIncludeDirectories()
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
     const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundInTarget = false;
@@ -160,7 +154,6 @@ void TestCMakeManager::testTargetIncludeDirectories()
             QVERIFY(includeDirs.contains(Path(project->path(), "libincludes/")));
         }
     }
-    QEXPECT_FAIL("", "files aren't being added to the target", Continue);
     QVERIFY(foundInTarget);
 }
 
@@ -171,7 +164,6 @@ void TestCMakeManager::testQt5App()
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
     const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundCore = false, foundGui = false, foundWidgets = false;
@@ -196,7 +188,6 @@ void TestCMakeManager::testQt5AppOld()
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
     const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundCore = false, foundGui = false, foundWidgets = false;
@@ -221,7 +212,6 @@ void TestCMakeManager::testKF5App()
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
     const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundCore = false, foundGui = false, foundWidgets = false, foundWidgetsAddons = false;
@@ -249,7 +239,6 @@ void TestCMakeManager::testDefines()
     Path mainCpp(project->path(), QStringLiteral("main.cpp"));
     QVERIFY(QFile::exists(mainCpp.toLocalFile()));
     const QList<ProjectBaseItem*> items = project->itemsForPath(IndexedString(mainCpp.pathOrUrl()));
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Continue);
     QCOMPARE(items.size(), 2); // once the plain file, once the target
 
     bool foundInTarget = false;
@@ -284,7 +273,6 @@ void TestCMakeManager::testCustomTargetSources()
     QList<ProjectTargetItem*> targets = project->buildSystemManager()->targets(project->projectItem());
     QVERIFY(targets.size() == 1);
 
-    QEXPECT_FAIL("", "Will fix soon, hopefully", Abort);
     ProjectTargetItem *target = targets.first();
     QCOMPARE(target->fileList().size(), 1);
     QCOMPARE(target->fileList().first()->baseName(), QStringLiteral("foo.cpp"));
@@ -297,14 +285,12 @@ void TestCMakeManager::testConditionsInSubdirectoryBasedOnRootVariables()
     Path rootFooCpp(project->path(), QStringLiteral("foo.cpp"));
     QVERIFY(QFile::exists(rootFooCpp.toLocalFile()));
     QList< ProjectBaseItem* > rootFooItems = project->itemsForPath(IndexedString(rootFooCpp.pathOrUrl()));
-    QEXPECT_FAIL("", "files aren't being added to the target", Continue);
     QCOMPARE(rootFooItems.size(), 4); // three items for the targets, one item for the plain file
 
     Path subdirectoryFooCpp(project->path(), QStringLiteral("subdirectory/foo.cpp"));
     QVERIFY(QFile::exists(subdirectoryFooCpp.toLocalFile()));
     QList< ProjectBaseItem* > subdirectoryFooItems = project->itemsForPath(IndexedString(subdirectoryFooCpp.pathOrUrl()));
 
-    QEXPECT_FAIL("", "files aren't being added to the target", Continue);
     QCOMPARE(subdirectoryFooItems.size(), 4); // three items for the targets, one item for the plain file
 }
 
