@@ -22,16 +22,35 @@
 
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QVersionNumber>
 
+#include <makefileresolver/makefileresolver.h>
+
 #include "cmakeutils.h"
+#include "cmakeprojectdata.h"
 
 #include <debug.h>
 
+using namespace KDevelop;
+
 namespace {
+Path toCanonical(const Path& path)
+{
+    QFileInfo info(path.toLocalFile());
+    if (!info.exists())
+        return path;
+    const auto canonical = info.canonicalFilePath();
+    if (info.filePath() != canonical) {
+        return Path(canonical);
+    } else {
+        return path;
+    }
+}
+
 QJsonObject parseFile(const QString& path)
 {
     QFile file(path);
@@ -78,12 +97,18 @@ void writeClientQueryFile(const QString& buildDirectory)
     queryFile.write(R"({"requests": [{"kind": "codemodel", "version": 2}]})");
 }
 
-QJsonObject findReplyIndexFile(const QString& buildDirectory)
+static QDir toReplyDir(const QString& buildDirectory)
 {
-    const QDir replyDir(buildDirectory + QLatin1String("/.cmake/api/v1/reply/"));
+    QDir replyDir(buildDirectory + QLatin1String("/.cmake/api/v1/reply/"));
     if (!replyDir.exists()) {
         qCWarning(CMAKE) << "cmake-file-api reply directory does not exist:" << replyDir.path();
     }
+    return replyDir;
+}
+
+QJsonObject findReplyIndexFile(const QString& buildDirectory)
+{
+    const auto replyDir = toReplyDir(buildDirectory);
     for (const auto& entry : replyDir.entryInfoList({QStringLiteral("index-*.json")}, QDir::Files, QDir::Name | QDir::Reversed)) {
         const auto object = parseFile(entry.absoluteFilePath());
         if (isKDevelopClientResponse(object)) {
@@ -91,6 +116,137 @@ QJsonObject findReplyIndexFile(const QString& buildDirectory)
         }
     }
     qCWarning(CMAKE) << "no cmake-file-api reply index file found in" << replyDir.absolutePath();
+    return {};
+}
+
+static CMakeTarget parseTarget(const QJsonObject& target, StringInterner& stringInterner,
+                               PathInterner& sourcePathInterner, PathInterner& buildPathInterner,
+                               CMakeFilesCompilationData& compilationData)
+{
+    CMakeTarget ret;
+    ret.name = target.value(QLatin1String("name")).toString();
+    ret.type = CMakeTarget::typeToEnum(target.value(QLatin1String("type")).toString());
+
+    for (const auto& jsonArtifact : target.value(QLatin1String("artifacts")).toArray()) {
+        const auto artifact = jsonArtifact.toObject();
+        const auto buildPath = buildPathInterner.internPath(artifact.value(QLatin1String("path")).toString());
+        if (buildPath.isValid()) {
+            ret.artifacts.append(buildPath);
+        }
+    }
+
+    for (const auto& jsonSource : target.value(QLatin1String("sources")).toArray()) {
+        const auto source = jsonSource.toObject();
+        const auto sourcePath = sourcePathInterner.internPath(source.value(QLatin1String("path")).toString());
+        if (sourcePath.isValid()) {
+            ret.sources.append(sourcePath);
+        }
+    }
+
+    QVector<CMakeFile> compileGroups;
+    for (const auto& jsonCompileGroup : target.value(QLatin1String("compileGroups")).toArray()) {
+        CMakeFile cmakeFile;
+        const auto compileGroup = jsonCompileGroup.toObject();
+
+        cmakeFile.language = compileGroup.value(QLatin1String("language")).toString();
+
+        for (const auto& jsonFragment : compileGroup.value(QLatin1String("compileCommandFragments")).toArray()) {
+            const auto fragment = jsonFragment.toObject();
+            cmakeFile.compileFlags += fragment.value(QLatin1String("fragment")).toString();
+            cmakeFile.compileFlags += QLatin1Char(' ');
+        }
+        cmakeFile.compileFlags = stringInterner.internString(cmakeFile.compileFlags);
+
+        cmakeFile.defines = MakeFileResolver::extractDefinesFromCompileFlags(cmakeFile.compileFlags, stringInterner);
+        for (const auto& jsonDefine : compileGroup.value(QLatin1String("defines")).toArray()) {
+            const auto define = jsonDefine.toObject();
+            cmakeFile.addDefine(define.value(QLatin1String("define")).toString());
+        }
+
+        for (const auto& jsonInclude : compileGroup.value(QLatin1String("includes")).toArray()) {
+            const auto include = jsonInclude.toObject();
+            const auto path = sourcePathInterner.internPath(include.value(QLatin1String("path")).toString());
+            if (path.isValid()) {
+                cmakeFile.includes.append(path);
+            }
+        }
+
+        compileGroups.append(cmakeFile);
+    }
+
+    for (const auto& jsonSource : target.value(QLatin1String("sources")).toArray()) {
+        const auto source = jsonSource.toObject();
+        const auto compileGroupIndex = source.value(QLatin1String("compileGroupIndex")).toInt(-1);
+        if (compileGroupIndex < 0 || compileGroupIndex > compileGroups.size()) {
+            continue;
+        }
+        const auto compileGroup = compileGroups.value(compileGroupIndex);
+        const auto path = sourcePathInterner.internPath(source.value(QLatin1String("path")).toString());
+        if (path.isValid()) {
+            compilationData.files[toCanonical(path)] = compileGroup;
+        }
+    }
+    return ret;
+}
+
+static CMakeProjectData parseCodeModel(const QJsonObject& codeModel, const QDir& replyDir,
+                                       const Path& sourceDirectory, const Path& buildDirectory)
+{
+    CMakeProjectData ret;
+    // for now, we only use the first available configuration and don't support multi configurations
+    const auto configuration = codeModel.value(QLatin1String("configurations")).toArray().at(0).toObject();
+    const auto targets = configuration.value(QLatin1String("targets")).toArray();
+    const auto directories = configuration.value(QLatin1String("directories")).toArray();
+    StringInterner stringInterner;
+    PathInterner sourcePathInterner(toCanonical(sourceDirectory));
+    PathInterner buildPathInterner(buildDirectory);
+    for (const auto& directoryValue : directories) {
+        const auto directory = directoryValue.toObject();
+        if (!directory.contains(QLatin1String("targetIndexes"))) {
+            continue;
+        }
+        const auto dirSourcePath = sourcePathInterner.internPath(directory.value(QLatin1String("source")).toString());
+        auto& dirTargets = ret.targets[dirSourcePath];
+        for (const auto& targetIndex : directory.value(QLatin1String("targetIndexes")).toArray()) {
+            const auto jsonTarget = targets.at(targetIndex.toInt(-1)).toObject();
+            if (jsonTarget.isEmpty()) {
+                continue;
+            }
+            const auto targetFile = jsonTarget.value(QLatin1String("jsonFile")).toString();
+            const auto target = parseTarget(parseFile(replyDir.absoluteFilePath(targetFile)),
+                                            stringInterner, sourcePathInterner, buildPathInterner,
+                                            ret.compilationData);
+            if (target.name.isEmpty()) {
+                continue;
+            }
+            dirTargets.append(target);
+        }
+    }
+    ret.compilationData.isValid = !ret.compilationData.files.isEmpty();
+    if (!ret.compilationData.isValid) {
+        qCWarning(CMAKE) << "failed to parse code model" << sourceDirectory << buildDirectory << codeModel;
+    }
+    return ret;
+}
+
+CMakeProjectData parseReplyIndexFile(const QJsonObject& replyIndex,
+                                     const Path& sourceDirectory,
+                                     const Path& buildDirectory)
+{
+    const auto reply = replyIndex.value(QLatin1String("reply")).toObject();
+    const auto clientKDevelop = reply.value(QLatin1String("client-kdevelop")).toObject();
+    const auto query = clientKDevelop.value(QLatin1String("query.json")).toObject();
+    const auto responses = query.value(QLatin1String("responses")).toArray();
+    for (const auto& responseValue : responses) {
+        const auto response = responseValue.toObject();
+        if (response.value(QLatin1String("kind")) == QLatin1String("codemodel")) {
+            const auto replyDir = toReplyDir(buildDirectory.toLocalFile());
+            const auto jsonFile = response.value(QLatin1String("jsonFile")).toString();
+            return parseCodeModel(parseFile(replyDir.absoluteFilePath(jsonFile)), replyDir,
+                                  sourceDirectory, buildDirectory);
+        }
+    }
+    qCWarning(CMAKE) << "failed to find code model in reply index" << sourceDirectory << buildDirectory << replyIndex;
     return {};
 }
 }

@@ -25,6 +25,13 @@ class QString;
 
 #include <cmakecommonexport.h>
 
+struct CMakeProjectData;
+
+namespace KDevelop
+{
+class Path;
+}
+
 /// see: https://cmake.org/cmake/help/latest/manual/cmake-file-api.7.html
 namespace CMake {
 namespace FileApi {
@@ -46,5 +53,14 @@ KDEVCMAKECOMMON_EXPORT void writeClientQueryFile(const QString &buildDirectory);
  * See also: https://cmake.org/cmake/help/latest/manual/cmake-file-api.7.html#v1-reply-index-file
  */
 KDEVCMAKECOMMON_EXPORT QJsonObject findReplyIndexFile(const QString &buildDirectory);
+
+/**
+ * Read and parse the code model referenced by the given @p replyIndex
+ *
+ * See also: https://cmake.org/cmake/help/latest/manual/cmake-file-api.7.html#id11
+ */
+KDEVCMAKECOMMON_EXPORT CMakeProjectData parseReplyIndexFile(const QJsonObject& replyIndex,
+                                                            const KDevelop::Path& sourceDirectory,
+                                                            const KDevelop::Path& buildDirectory);
 }
 }

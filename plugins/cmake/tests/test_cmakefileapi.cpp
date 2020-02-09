@@ -39,6 +39,7 @@
 
 #include <cmakefileapi.h>
 #include <cmakeutils.h>
+#include <cmakeprojectdata.h>
 #include <testhelpers.h>
 
 using namespace KDevelop;
@@ -71,7 +72,8 @@ private Q_SLOTS:
         QVERIFY(project);
 
         auto bsm = project->buildSystemManager();
-        const auto buildDir = bsm->buildDirectory(project->projectItem()).toLocalFile();
+        const auto buildPath = bsm->buildDirectory(project->projectItem());
+        const auto buildDir = buildPath.toLocalFile();
         QVERIFY(!buildDir.isEmpty());
         QVERIFY(QDir(buildDir).removeRecursively());
 
@@ -82,6 +84,30 @@ private Q_SLOTS:
 
         const auto index = CMake::FileApi::findReplyIndexFile(buildDir);
         QVERIFY(!index.isEmpty());
+
+        const auto projectData = CMake::FileApi::parseReplyIndexFile(index, project->path(), buildPath);
+        QVERIFY(projectData.compilationData.isValid);
+        QCOMPARE(projectData.targets.size(), 1);
+        const auto subDirPath = Path(project->path(), "subdir");
+        QVERIFY(projectData.targets.contains(subDirPath));
+        const auto targets = projectData.targets[subDirPath];
+        QCOMPARE(targets.size(), 1);
+        const auto target = targets.first();
+        QCOMPARE(target.name, "foo");
+        QCOMPARE(target.type, CMakeTarget::Executable);
+        const auto buildSubDirPath = Path(buildPath, "subdir");
+        QCOMPARE(target.artifacts, {Path(buildSubDirPath, "foo")});
+        const auto fooSrcPath = Path(subDirPath, "foo.cpp");
+        QCOMPARE(target.sources, {fooSrcPath});
+
+        QCOMPARE(projectData.compilationData.files.size(), 1);
+        QVERIFY(projectData.compilationData.files.contains(fooSrcPath));
+        const auto srcInfo = projectData.compilationData.files[fooSrcPath];
+        QCOMPARE(srcInfo.language, "CXX");
+        QCOMPARE(srcInfo.includes.size(), 3);
+        QVERIFY(srcInfo.includes.contains(buildPath));
+        QVERIFY(srcInfo.includes.contains(buildSubDirPath));
+        QVERIFY(srcInfo.includes.contains(subDirPath));
     }
 };
 
