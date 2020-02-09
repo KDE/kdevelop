@@ -45,6 +45,8 @@ struct KDEVCMAKECOMMON_EXPORT CMakeFile
     QString language;
     QHash<QString, QString> defines;
 
+    void addDefine(const QString& define);
+
     bool isEmpty() const
     {
         return includes.isEmpty() && frameworkDirectories.isEmpty()
@@ -71,6 +73,8 @@ struct KDEVCMAKECOMMON_EXPORT CMakeTarget
 public:
     enum Type { Library, Executable, Custom };
     Q_ENUM(Type)
+
+    static Type typeToEnum(const QString& target);
 
     Type type;
     QString name;

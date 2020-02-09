@@ -87,6 +87,7 @@ ki18n_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 kdevelop_add_private_library(KDevCMakeCommon SOURCES ${cmakecommon_SRCS})
 target_link_libraries(KDevCMakeCommon
     PUBLIC
+        kdevmakefileresolver
         KDev::Interfaces
         KDev::Project
         KDev::Util
@@ -98,7 +99,6 @@ ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
 add_library( kdevcmakemanagernosettings STATIC ${cmakemanager_SRCS})
 target_link_libraries(kdevcmakemanagernosettings
     KDevCMakeCommon
-    kdevmakefileresolver
     KDev::Util
     KDev::Interfaces
     KDev::Project
@@ -113,7 +113,6 @@ target_link_libraries(kdevcmakemanagernosettings
 kdevplatform_add_plugin(kdevcmakemanager JSON kdevcmakemanager.json SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
 target_link_libraries(kdevcmakemanager
     KDevCMakeCommon
-    kdevmakefileresolver
     KDev::Util
     KDev::Interfaces
     KDev::Project

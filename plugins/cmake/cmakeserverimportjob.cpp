@@ -35,63 +35,6 @@
 
 #include "debug.h"
 
-static QString unescape(const QStringRef& input)
-{
-  QString output;
-  output.reserve(input.length());
-  bool isEscaped = false;
-  for (auto it = input.data(), end = it + input.length(); it != end; ++it) {
-    QChar c = *it;
-    if (!isEscaped && c == QLatin1Char('\\')) {
-      isEscaped = true;
-    } else {
-      output.append(c);
-      isEscaped = false;
-    }
-  }
-  return output;
-}
-
-static QHash<QString, QString> processDefines(const QString &compileFlags, const QJsonArray &defines)
-{
-    QHash<QString, QString> ret;
-    const auto& defineRx = MakeFileResolver::defineRegularExpression();
-    auto it = defineRx.globalMatch(compileFlags);
-    while (it.hasNext()) {
-      const auto match = it.next();
-      QString value;
-      if (match.lastCapturedIndex() > 1) {
-        value = unescape(match.capturedRef(match.lastCapturedIndex()));
-      }
-      ret[match.captured(1)] = value;
-    }
-
-    for (const QJsonValue& defineValue: defines) {
-        const QString define = defineValue.toString();
-        const int eqIdx = define.indexOf(QLatin1Char('='));
-        if (eqIdx<0) {
-            ret[define] = QString();
-        } else {
-            ret[define.left(eqIdx)] = define.mid(eqIdx+1);
-        }
-    }
-    return ret;
-}
-
-CMakeTarget::Type typeToEnum(const QJsonObject& target)
-{
-    static const QHash<QString, CMakeTarget::Type> s_types = {
-        {QStringLiteral("EXECUTABLE"), CMakeTarget::Executable},
-        {QStringLiteral("STATIC_LIBRARY"), CMakeTarget::Library},
-        {QStringLiteral("MODULE_LIBRARY"), CMakeTarget::Library},
-        {QStringLiteral("SHARED_LIBRARY"), CMakeTarget::Library},
-        {QStringLiteral("OBJECT_LIBRARY"), CMakeTarget::Library},
-        {QStringLiteral("INTERFACE_LIBRARY"), CMakeTarget::Library}
-    };
-    const auto value = target.value(QLatin1String("type")).toString();
-    return s_types.value(value, CMakeTarget::Custom);
-}
-
 void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakeProjectData &data)
 {
     const auto configs = response.value(QStringLiteral("configurations")).toArray();
@@ -99,6 +42,9 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
 
     data.targets.clear();
     data.compilationData.files.clear();
+
+    StringInterner stringInterner;
+
     const auto rt = KDevelop::ICore::self()->runtimeController()->currentRuntime();
     for (const auto &config: configs) {
         const auto projects = config.toObject().value(QStringLiteral("projects")).toArray();
@@ -117,7 +63,10 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
 
                     file.language = fileGroup.value(QStringLiteral("language")).toString(),
                     file.compileFlags = fileGroup.value(QStringLiteral("compileFlags")).toString();
-                    file.defines = processDefines(file.compileFlags, fileGroup.value(QStringLiteral("defines")).toArray());
+                    file.defines = MakeFileResolver::extractDefinesFromCompileFlags(file.compileFlags, stringInterner);
+                    for (const auto& jsonDefine : fileGroup.value(QStringLiteral("defines")).toArray()) {
+                        file.addDefine(jsonDefine.toString());
+                    }
 
                     // apparently some file groups do not contain build system information
                     // skip these, as they would produce bogus results for us and break the fallback
@@ -142,7 +91,7 @@ void CMakeServerImportJob::processCodeModel(const QJsonObject &response, CMakePr
                 }
 
                 CMakeTarget cmakeTarget{
-                    typeToEnum(target),
+                    CMakeTarget::typeToEnum(target.value(QLatin1String("type")).toString()),
                     target.value(QStringLiteral("name")).toString(),
                     kTransform<KDevelop::Path::List>(target[QLatin1String("artifacts")].toArray(), [](const QJsonValue& val) { return KDevelop::Path(val.toString()); }),
                     targetSources,

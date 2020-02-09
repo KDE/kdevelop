@@ -21,6 +21,31 @@
 #include "cmakeprojectdata.h"
 #include "cmakeutils.h"
 
+void CMakeFile::addDefine(const QString& define)
+{
+    if (define.isEmpty())
+        return;
+    const int eqIdx = define.indexOf(QLatin1Char('='));
+    if (eqIdx < 0) {
+        defines[define] = QString();
+    } else {
+        defines[define.left(eqIdx)] = define.mid(eqIdx + 1);
+    }
+}
+
+CMakeTarget::Type CMakeTarget::typeToEnum(const QString& value)
+{
+    static const QHash<QString, CMakeTarget::Type> s_types = {
+        {QStringLiteral("EXECUTABLE"), CMakeTarget::Executable},
+        {QStringLiteral("STATIC_LIBRARY"), CMakeTarget::Library},
+        {QStringLiteral("MODULE_LIBRARY"), CMakeTarget::Library},
+        {QStringLiteral("SHARED_LIBRARY"), CMakeTarget::Library},
+        {QStringLiteral("OBJECT_LIBRARY"), CMakeTarget::Library},
+        {QStringLiteral("INTERFACE_LIBRARY"), CMakeTarget::Library}
+    };
+    return s_types.value(value, CMakeTarget::Custom);
+}
+
 CMakeProjectData::CMakeProjectData(const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets,
                                    const CMakeFilesCompilationData& data, const QVector<CMakeTest>& tests)
     : compilationData(data)
