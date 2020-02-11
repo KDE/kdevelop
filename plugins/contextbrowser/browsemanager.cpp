@@ -31,6 +31,7 @@
 #include "contextbrowserview.h"
 #include <interfaces/iuicontroller.h>
 #include <interfaces/ilanguagecontroller.h>
+#include <interfaces/iprojectcontroller.h>
 #include <language/interfaces/ilanguagesupport.h>
 #include <language/duchain/duchainutils.h>
 #include <language/duchain/duchainlock.h>
@@ -163,6 +164,9 @@ BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor 
     DUChainReadLocker lock;
     // Jump to definition by default, unless a definition itself was selected,
     // in which case jump to declaration.
+    // Also, when the definition is in a file for which we don't know the project,
+    // that usually means it's a generated file and we rather want to open the declaration
+    // after all. Unless the viewUrl and textCursor points at the declaration already.
     if (auto selectedDeclaration = DUChainUtils::itemUnderCursor(viewUrl, textCursor).declaration) {
         auto jumpDestination = selectedDeclaration;
         if (selectedDeclaration->isDefinition()) {
@@ -172,8 +176,24 @@ BrowseManager::JumpLocation BrowseManager::determineJumpLoc(KTextEditor::Cursor 
             }
         } else if (selectedDeclaration == DUChainUtils::declarationForDefinition(selectedDeclaration)) {
             // Clicked the declaration - jump to definition
+            // unless that isn't in a project
             if (auto definition = FunctionDefinition::definition(selectedDeclaration)) {
-                jumpDestination = definition;
+                const auto preferDefinition = [&]() -> bool {
+                    // when we are jumping from declaration, we definitely want to go to the definition
+                    if (viewUrl == selectedDeclaration->url().toUrl()
+                        && selectedDeclaration->rangeInCurrentRevision().contains(textCursor))
+                    {
+                        return true;
+                    }
+                    // otherwise only jump to the definition when we know the project
+                    // for the file in which the definition lives
+                    // this won't be the case for generated files which are usually not interesting
+                    // like e.g. Qt moc files - there, we want to jump to the header first
+                    return ICore::self()->projectController()->findProjectForUrl(definition->url().toUrl());
+                }();
+                if (preferDefinition) {
+                    jumpDestination = definition;
+                }
             }
         }
         return {
