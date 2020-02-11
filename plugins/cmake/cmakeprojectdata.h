@@ -114,7 +114,7 @@ struct KDEVCMAKECOMMON_EXPORT CMakeProjectData
     QHash<KDevelop::Path, QVector<CMakeTarget>> targets;
     QSharedPointer<CMakeServer> m_server;
 
-    QVector<CMakeTest> m_testSuites;
+    QVector<CMakeTest> testSuites;
 };
 
 #endif

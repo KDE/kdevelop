@@ -63,7 +63,7 @@ void ImportJob::start()
         if (!ret.compilationData.isValid) {
             return ret;
         }
-        ret.m_testSuites = CMake::importTestSuites(buildDirectory);
+        ret.testSuites = CMake::importTestSuites(buildDirectory);
         return ret;
     });
     m_futureWatcher.setFuture(future);

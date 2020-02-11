@@ -151,7 +151,7 @@ void CMakeServerImportJob::processResponse(const QJsonObject& response)
             m_server->codemodel();
         } else if(inReplyTo == QLatin1String("codemodel")) {
             processCodeModel(response, m_data);
-            m_data.m_testSuites = CMake::importTestSuites(CMake::currentBuildDir(m_project));
+            m_data.testSuites = CMake::importTestSuites(CMake::currentBuildDir(m_project));
             m_data.m_server = m_server;
             emitResult();
         } else {
