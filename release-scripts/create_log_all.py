@@ -9,19 +9,20 @@ import create_log
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
-def run(fromVersion, toVersion):
+def run(fromVersion, toVersion, excludeBranch):
     repositories = []
     with open(os.path.join(DIR_PATH, "REPOSITORIES.inc"), 'r') as f:
         repositories = f.read().split()
 
     for repository in repositories:
         workingDir = os.path.join("..", repository)
-        create_log.createLog(workingDir, fromVersion, toVersion)
+        create_log.createLog(workingDir, fromVersion, toVersion, excludeBranch)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create HTML log based on Git history for released KDevelop projects')
-    parser.add_argument('from_version', type=str, help='The start of the revision range (e.g. "v5.0.0")')
-    parser.add_argument('to_version', type=str, help='The end of the revision range (e.g. "v5.0.1"')
+    parser.add_argument('from_version', type=str, help='The start of the revision range (e.g. "v5.5.0")')
+    parser.add_argument('to_version', type=str, help='The end of the revision range (e.g. "v5.5.1")')
+    parser.add_argument('--excludeBranch', type=str, help='The old branch to ignore (e.g. "5.4")', default=None)
     args = parser.parse_args()
 
-    run(args.from_version, args.to_version)
+    run(args.from_version, args.to_version, args.excludeBranch)

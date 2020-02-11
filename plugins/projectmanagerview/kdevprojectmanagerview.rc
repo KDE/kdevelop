@@ -1,5 +1,5 @@
 <!DOCTYPE gui SYSTEM "kpartgui.dtd">
-<gui name="kdevprojectmanagerview" version="8" translationDomain="kdevprojectmanagerview">
+<gui name="kdevprojectmanagerview" version="9" translationDomain="kdevprojectmanagerview">
 <MenuBar>
  <Menu name="project">
   <Action name="project_configure"
@@ -23,6 +23,7 @@
 </MenuBar>
 
 <ToolBar name="mainToolBar" position="Top">
+  <text>Main Toolbar</text>
   <Action name="project_build" group="build_operations" />
 </ToolBar>
 </gui>
