@@ -111,7 +111,7 @@ CMakeManager::~CMakeManager()
 
 bool CMakeManager::hasBuildInfo(ProjectBaseItem* item) const
 {
-    return m_projects[item->project()].compilationData.files.contains(item->path());
+    return m_projects[item->project()].data.compilationData.files.contains(item->path());
 }
 
 Path CMakeManager::buildDirectory(KDevelop::ProjectBaseItem *item) const
@@ -167,7 +167,7 @@ private:
         auto job = new CMakeServerImportJob(project, server, this);
         connect(job, &CMakeServerImportJob::result, this, [this, job](){
             if (job->error() == 0) {
-                manager->integrateData(job->projectData(), job->project());
+                manager->integrateData(job->projectData(), job->project(), server);
             }
         });
         addSubjob(job);
@@ -241,7 +241,7 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 
 CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
 {
-    const auto & data = m_projects[item->project()].compilationData;
+    const auto & data = m_projects[item->project()].data.compilationData;
     QHash<KDevelop::Path, CMakeFile>::const_iterator it = data.files.constFind(item->path());
 
     if (it == data.files.constEnd()) {
@@ -381,44 +381,39 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
     }
 }
 
-void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProject* project)
+void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProject* project, const QSharedPointer<CMakeServer>& server)
 {
-    if (data.m_server) {
-        connect(data.m_server.data(), &CMakeServer::response, project, [this, project](const QJsonObject& response) {
-            serverResponse(project, response);
+    if (server) {
+        connect(server.data(), &CMakeServer::response, project, [this, project](const QJsonObject& response) {
+            if (response[QStringLiteral("type")] == QLatin1String("signal")) {
+                if (response[QStringLiteral("name")] == QLatin1String("dirty")) {
+                    m_projects[project].server->configure({});
+                } else
+                    qCDebug(CMAKE) << "unhandled signal response..." << project << response;
+            } else if (response[QStringLiteral("type")] == QLatin1String("error")) {
+                showConfigureErrorMessage(project->name(), response[QStringLiteral("errorMessage")].toString());
+            } else if (response[QStringLiteral("type")] == QLatin1String("reply")) {
+                const auto inReplyTo = response[QStringLiteral("inReplyTo")];
+                if (inReplyTo == QLatin1String("configure")) {
+                    m_projects[project].server->compute();
+                } else if (inReplyTo == QLatin1String("compute")) {
+                    m_projects[project].server->codemodel();
+                } else if(inReplyTo == QLatin1String("codemodel")) {
+                    auto &data = m_projects[project].data;
+                    CMakeServerImportJob::processCodeModel(response, data);
+                    populateTargets(project->projectItem(), data.targets);
+                } else {
+                    qCDebug(CMAKE) << "unhandled reply response..." << project << response;
+                }
+            } else {
+                qCDebug(CMAKE) << "unhandled response..." << project << response;
+            }
         });
     }
-    m_projects[project] = data;
+    m_projects[project] = {data, server};
 
     populateTargets(project->projectItem(), data.targets);
     CTestUtils::createTestSuites(data.testSuites, data.targets, project);
-}
-
-void CMakeManager::serverResponse(KDevelop::IProject* project, const QJsonObject& response)
-{
-    if (response[QStringLiteral("type")] == QLatin1String("signal")) {
-        if (response[QStringLiteral("name")] == QLatin1String("dirty")) {
-            m_projects[project].m_server->configure({});
-        } else
-            qCDebug(CMAKE) << "unhandled signal response..." << project << response;
-    } else if (response[QStringLiteral("type")] == QLatin1String("error")) {
-        showConfigureErrorMessage(project->name(), response[QStringLiteral("errorMessage")].toString());
-    } else if (response[QStringLiteral("type")] == QLatin1String("reply")) {
-        const auto inReplyTo = response[QStringLiteral("inReplyTo")];
-        if (inReplyTo == QLatin1String("configure")) {
-            m_projects[project].m_server->compute();
-        } else if (inReplyTo == QLatin1String("compute")) {
-            m_projects[project].m_server->codemodel();
-        } else if(inReplyTo == QLatin1String("codemodel")) {
-            auto &data = m_projects[project];
-            CMakeServerImportJob::processCodeModel(response, data);
-            populateTargets(project->projectItem(), data.targets);
-        } else {
-            qCDebug(CMAKE) << "unhandled reply response..." << project << response;
-        }
-    } else {
-        qCDebug(CMAKE) << "unhandled response..." << project << response;
-    }
 }
 
 QList< KDevelop::ProjectTargetItem * > CMakeManager::targets(KDevelop::ProjectFolderItem * folder) const
@@ -575,7 +570,7 @@ ProjectFilterManager* CMakeManager::filterManager() const
 
 void CMakeManager::folderAdded(KDevelop::ProjectFolderItem* folder)
 {
-    populateTargets(folder, m_projects[folder->project()].targets);
+    populateTargets(folder, m_projects[folder->project()].data.targets);
 }
 
 ProjectFolderItem* CMakeManager::createFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)
@@ -611,7 +606,7 @@ void CMakeManager::reloadProjects()
 
 CMakeTarget CMakeManager::targetInformation(KDevelop::ProjectTargetItem* item) const
 {
-    const auto targets = m_projects[item->project()].targets[item->parent()->path()];
+    const auto targets = m_projects[item->project()].data.targets[item->parent()->path()];
     for (auto target: targets) {
         if (item->text() == target.name) {
             return target;
@@ -628,7 +623,7 @@ KDevelop::Path CMakeManager::compiler(KDevelop::ProjectTargetItem* item) const
         return {};
     }
 
-    const auto info = m_projects[item->project()].compilationData.files[targetInfo.sources.constFirst()];
+    const auto info = m_projects[item->project()].data.compilationData.files[targetInfo.sources.constFirst()];
     const auto lang = info.language;
     if (lang.isEmpty()) {
         qCDebug(CMAKE) << "no language for" << item << item->text() << info.defines << targetInfo.sources.constFirst();

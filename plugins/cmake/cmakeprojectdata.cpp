@@ -45,11 +45,3 @@ CMakeTarget::Type CMakeTarget::typeToEnum(const QString& value)
     };
     return s_types.value(value, CMakeTarget::Custom);
 }
-
-CMakeProjectData::CMakeProjectData(const QHash<KDevelop::Path, QVector<CMakeTarget>>& targets,
-                                   const CMakeFilesCompilationData& data, const QVector<CMakeTest>& tests)
-    : compilationData(data)
-    , targets(targets)
-    , testSuites(tests)
-{
-}

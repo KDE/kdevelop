@@ -105,15 +105,8 @@ Q_DECLARE_TYPEINFO(CMakeTest, Q_MOVABLE_TYPE);
 
 struct KDEVCMAKECOMMON_EXPORT CMakeProjectData
 {
-    CMakeProjectData() = default;
-    CMakeProjectData(const QHash<KDevelop::Path, QVector<CMakeTarget>> &targets,
-                     const CMakeFilesCompilationData &data,
-                     const QVector<CMakeTest> &tests);
-
     CMakeFilesCompilationData compilationData;
     QHash<KDevelop::Path, QVector<CMakeTarget>> targets;
-    QSharedPointer<CMakeServer> m_server;
-
     QVector<CMakeTest> testSuites;
 };
 

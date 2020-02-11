@@ -116,7 +116,8 @@ public:
     int perProjectConfigPages() const override;
     KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 
-    void integrateData(const CMakeProjectData &data, KDevelop::IProject* project);
+    void integrateData(const CMakeProjectData &data, KDevelop::IProject* project,
+                       const QSharedPointer<CMakeServer>& server = {});
 
     KDevelop::Path compiler(KDevelop::ProjectTargetItem * p) const override;
 
@@ -125,8 +126,6 @@ Q_SIGNALS:
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 
 private Q_SLOTS:
-    void serverResponse(KDevelop::IProject* project, const QJsonObject &value);
-
     void projectClosing(KDevelop::IProject*);
 
 private:
@@ -141,7 +140,12 @@ private:
     void showConfigureErrorMessage(const QString& projectName, const QString& errorMessage) const;
 
 private:
-    QHash<KDevelop::IProject*, CMakeProjectData> m_projects;
+    struct PerProjectData
+    {
+        CMakeProjectData data;
+        QSharedPointer<CMakeServer> server;
+    };
+    QHash<KDevelop::IProject*, PerProjectData> m_projects;
     KDevelop::ProjectFilterManager* m_filter;
     KDevelop::ICodeHighlighting* m_highlight;
 };
