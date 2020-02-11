@@ -437,7 +437,7 @@ void RunController::setupActions()
     // TODO not multi-window friendly, FIXME
     KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    action = new QAction(i18n("Configure Launches..."), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("configure")), i18n("Configure Launches..."), this);
     ac->addAction(QStringLiteral("configure_launches"), action);
     action->setMenuRole(QAction::NoRole); // OSX: Be explicit about role, prevent hiding due to conflict with "Preferences..." menu item
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
