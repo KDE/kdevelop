@@ -22,7 +22,7 @@
 #include "cmakemodelitems.h"
 #include "cmakeutils.h"
 
-CMakeTargetItem::CMakeTargetItem(KDevelop::ProjectFolderItem* parent, const QString& name, const KDevelop::Path &builtUrl)
+CMakeTargetItem::CMakeTargetItem(KDevelop::ProjectBaseItem* parent, const QString& name, const KDevelop::Path &builtUrl)
     : KDevelop::ProjectExecutableTargetItem(parent->project(), name, parent)
     , m_builtUrl(builtUrl)
 {}

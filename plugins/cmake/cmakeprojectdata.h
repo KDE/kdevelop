@@ -80,6 +80,8 @@ public:
     QString name;
     KDevelop::Path::List artifacts;
     KDevelop::Path::List sources;
+    // see https://cmake.org/cmake/help/latest/prop_tgt/FOLDER.html
+    QString folder;
 };
 Q_DECLARE_TYPEINFO(CMakeTarget, Q_MOVABLE_TYPE);
 

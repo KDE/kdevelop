@@ -335,49 +335,56 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
         QStringLiteral("install")
 
     };
-    QList<CMakeTarget> dirTargets = kFilter<QList<CMakeTarget>>(targets[folder->path()], [](const CMakeTarget& target) -> bool {
+    auto isValidTarget = [](const CMakeTarget& target) -> bool {
         return target.type != CMakeTarget::Custom ||
               (!target.name.endsWith(QLatin1String("_automoc"))
             && !target.name.endsWith(QLatin1String("_autogen"))
             && !standardTargets.contains(target.name)
             && !target.name.startsWith(QLatin1String("install/"))
               );
-    });
+    };
 
+    // start by deleting all targets, the type may have changed anyways
     const auto tl = folder->targetList();
     for (ProjectTargetItem* item : tl) {
-        const auto idx = kIndexOf(dirTargets, [item](const CMakeTarget& target) { return target.name == item->text(); });
-        if (idx < 0) {
-            delete item;
-        } else {
-            auto cmakeItem = dynamic_cast<CMakeTargetItem*>(item);
-            if (cmakeItem)
-                cmakeItem->setBuiltUrl(dirTargets[idx].artifacts.value(0));
-            dirTargets.removeAt(idx);
-        }
+        delete item;
     }
 
-    for (const auto& target : qAsConst(dirTargets)) {
-        auto createTarget = [&]() -> ProjectBaseItem* {
+    QHash<QString, ProjectBaseItem*> folderItems;
+    folderItems[{}] = folder;
+    auto findOrCreateFolderItem = [&folderItems, folder](const QString& targetFolder)
+    {
+        auto& item = folderItems[targetFolder];
+        if (!item) {
+            item = new ProjectTargetItem(folder->project(), targetFolder, folder);
+            // these are "virtual" folders, they keep the original path
+            item->setPath(folder->path());
+        }
+        return item;
+    };
+
+    // target folder name (or empty) to list of targets
+    for (const auto &target : targets[folder->path()]) {
+        if (!isValidTarget(target)) {
+            continue;
+        }
+
+        auto* targetFolder = findOrCreateFolderItem(target.folder);
+        auto* targetItem = [&]() -> ProjectBaseItem* {
             switch(target.type) {
                 case CMakeTarget::Executable:
-                    return new CMakeTargetItem(folder, target.name, target.artifacts.value(0));
+                    return new CMakeTargetItem(targetFolder, target.name, target.artifacts.value(0));
                 case CMakeTarget::Library:
-                    return new ProjectLibraryTargetItem(folder->project(), target.name, folder);
+                    return new ProjectLibraryTargetItem(folder->project(), target.name, targetFolder);
                 case CMakeTarget::Custom:
-                    return new ProjectTargetItem(folder->project(), target.name, folder);
+                    return new ProjectTargetItem(folder->project(), target.name, targetFolder);
             }
             Q_UNREACHABLE();
-        };
-        auto* targetItem = createTarget();
+        }();
+
         for (const auto& source : target.sources) {
             new ProjectFileItem(folder->project(), source, targetItem);
         }
-    }
-
-    const auto folderItems = folder->folderList();
-    for (ProjectFolderItem* children : folderItems) {
-        populateTargets(children, targets);
     }
 }
 

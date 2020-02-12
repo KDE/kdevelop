@@ -126,6 +126,7 @@ static CMakeTarget parseTarget(const QJsonObject& target, StringInterner& string
     CMakeTarget ret;
     ret.name = target.value(QLatin1String("name")).toString();
     ret.type = CMakeTarget::typeToEnum(target.value(QLatin1String("type")).toString());
+    ret.folder = target.value(QLatin1String("folder")).toObject().value(QLatin1String("name")).toString();
 
     for (const auto& jsonArtifact : target.value(QLatin1String("artifacts")).toArray()) {
         const auto artifact = jsonArtifact.toObject();
