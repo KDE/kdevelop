@@ -49,6 +49,7 @@
 #include <QAction>
 #include <KMessageBox>
 #include <KTextEditor/Document>
+#include <KDirWatch>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocumentcontroller.h>
@@ -416,7 +417,25 @@ void CMakeManager::integrateData(const CMakeProjectData &data, KDevelop::IProjec
                 qCDebug(CMAKE) << "unhandled response..." << project << response;
             }
         });
+    } else if (!m_projects.contains(project)) {
+        auto* reloadTimer = new QTimer(project);
+        reloadTimer->setSingleShot(true);
+        reloadTimer->setInterval(1000);
+        connect(reloadTimer, &QTimer::timeout, this, [project, this]() {
+            reload(project->projectItem());
+        });
+        connect(projectWatcher(project), &KDirWatch::dirty, reloadTimer, [this, project, reloadTimer](const QString &strPath) {
+            const auto& cmakeFiles = m_projects[project].data.cmakeFiles;
+            KDevelop::Path path(strPath);
+            auto it = cmakeFiles.find(path);
+            if (it == cmakeFiles.end() || it->isGenerated || it->isExternal) {
+                return;
+            }
+            qCDebug(CMAKE) << "eventually starting reload due to change of" << strPath;
+            reloadTimer->start();
+        });
     }
+
     m_projects[project] = {data, server};
 
     populateTargets(project->projectItem(), data.targets);
