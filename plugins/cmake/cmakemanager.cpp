@@ -342,6 +342,8 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
             && !target.name.endsWith(QLatin1String("_autogen"))
             && !standardTargets.contains(target.name)
             && !target.name.startsWith(QLatin1String("install/"))
+            // utility targets with empty sources are strange (e.g. _QCH) -> skip them
+            && !target.sources.isEmpty()
               );
     };
 
