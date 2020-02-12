@@ -577,7 +577,7 @@ ProjectFilterManager* CMakeManager::filterManager() const
 
 void CMakeManager::folderAdded(KDevelop::ProjectFolderItem* folder)
 {
-    populateTargets(folder, m_projects[folder->project()].data.targets);
+    populateTargets(folder, m_projects.value(folder->project()).data.targets);
 }
 
 ProjectFolderItem* CMakeManager::createFolderItem(IProject* project, const Path& path, ProjectBaseItem* parent)
