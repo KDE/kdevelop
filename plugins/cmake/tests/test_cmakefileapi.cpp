@@ -108,6 +108,9 @@ private Q_SLOTS:
         QVERIFY(srcInfo.includes.contains(buildPath));
         QVERIFY(srcInfo.includes.contains(buildSubDirPath));
         QVERIFY(srcInfo.includes.contains(subDirPath));
+
+        QVERIFY(projectData.cmakeFiles.contains(Path(project->path(), "CMakeLists.txt")));
+        QVERIFY(projectData.cmakeFiles.contains(Path(subDirPath, "CMakeLists.txt")));
     }
 };
 

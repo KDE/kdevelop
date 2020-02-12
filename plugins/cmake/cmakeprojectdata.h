@@ -110,6 +110,13 @@ struct KDEVCMAKECOMMON_EXPORT CMakeProjectData
     CMakeFilesCompilationData compilationData;
     QHash<KDevelop::Path, QVector<CMakeTarget>> targets;
     QVector<CMakeTest> testSuites;
+    struct CMakeFileFlags
+    {
+        bool isGenerated = false;
+        bool isExternal = false;
+        bool isCMake = false;
+    };
+    QHash<KDevelop::Path, CMakeFileFlags> cmakeFiles;
 };
 
 #endif
