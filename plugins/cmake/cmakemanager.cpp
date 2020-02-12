@@ -386,6 +386,10 @@ static void populateTargets(ProjectFolderItem* folder, const QHash<KDevelop::Pat
         }();
 
         for (const auto& source : target.sources) {
+            // skip non-existent cmake internal rule files
+            if (source.lastPathSegment().endsWith(QLatin1String(".rule"))) {
+                continue;
+            }
             new ProjectFileItem(folder->project(), source, targetItem);
         }
     }
