@@ -72,9 +72,7 @@ static void selectAndReveal( KTextEditor::View* view, const KTextEditor::Range& 
     Q_ASSERT(view);
     if (range.isValid()) {
         view->setCursorPosition(range.start());
-        if (!range.isEmpty()) {
-            view->setSelection(range);
-        }
+        view->setSelection(range);
     }
 }
 
@@ -507,7 +505,7 @@ void TextDocument::setCursorPosition(const KTextEditor::Cursor &cursor)
     // ie, starting from 0,0
 
     if (view)
-        view->setCursorPosition(cursor);
+        selectAndReveal(view, {cursor, cursor});
 }
 
 KTextEditor::Range TextDocument::textSelection() const
