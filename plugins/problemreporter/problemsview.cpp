@@ -119,17 +119,17 @@ void ProblemsView::setupActions()
 
         m_errorSeverityAction = new QAction(this);
         m_errorSeverityAction->setToolTip(i18nc("@info:tooltip", "Display errors"));
-        m_errorSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-error")));
+        m_errorSeverityAction->setIcon(IProblem::iconForSeverity(IProblem::Error));
         m_errorSeverityAction->setIconText(i18n("Show Errors"));
 
         m_warningSeverityAction = new QAction(this);
         m_warningSeverityAction->setToolTip(i18nc("@info:tooltip", "Display warnings"));
-        m_warningSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-warning")));
+        m_warningSeverityAction->setIcon(IProblem::iconForSeverity(IProblem::Warning));
         m_warningSeverityAction->setIconText(i18n("Show Warnings"));
 
         m_hintSeverityAction = new QAction(this);
         m_hintSeverityAction->setToolTip(i18nc("@info:tooltip", "Display hints"));
-        m_hintSeverityAction->setIcon(QIcon::fromTheme(QStringLiteral("dialog-information")));
+        m_hintSeverityAction->setIcon(IProblem::iconForSeverity(IProblem::Hint));
         m_hintSeverityAction->setIconText(i18n("Show Hints"));
 
         QAction* const severityActionArray[] = { m_errorSeverityAction, m_warningSeverityAction, m_hintSeverityAction };

@@ -39,25 +39,6 @@
 #include <shell/problemconstants.h>
 #include <shell/watcheddocumentset.h>
 
-namespace {
-QIcon iconForSeverity(KDevelop::IProblem::Severity severity)
-{
-    switch (severity) {
-    case KDevelop::IProblem::Hint:
-        return QIcon::fromTheme(QStringLiteral("dialog-information"));
-    case KDevelop::IProblem::Warning:
-        return QIcon::fromTheme(QStringLiteral("dialog-warning"));
-    case KDevelop::IProblem::Error:
-        return QIcon::fromTheme(QStringLiteral("dialog-error"));
-    case KDevelop::IProblem::NoSeverity:
-        return {};
-    }
-    return {};
-}
-
-}
-
-
 namespace KDevelop
 {
 
@@ -195,7 +176,7 @@ QVariant ProblemModel::data(const QModelIndex& index, int role) const
 
     case Qt::DecorationRole:
         if (index.column() == Error) {
-            return iconForSeverity(p->severity());
+            return IProblem::iconForSeverity(p->severity());
         }
         break;
     case Qt::ToolTipRole:

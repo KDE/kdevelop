@@ -39,22 +39,6 @@ using namespace KDevelop;
 namespace {
 QString KEY_INVOKE_ACTION(int num) { return QStringLiteral("invoke_action_%1").arg(num); }
 
-QIcon iconForSeverity(IProblem::Severity severity)
-{
-    switch (severity) {
-    case IProblem::Hint:
-        return QIcon::fromTheme(QStringLiteral("dialog-information"));
-    case IProblem::Warning:
-        return QIcon::fromTheme(QStringLiteral("dialog-warning"));
-    case IProblem::Error:
-        return QIcon::fromTheme(QStringLiteral("dialog-error"));
-    case IProblem::NoSeverity:
-        return {};
-    }
-    Q_UNREACHABLE();
-    return {};
-}
-
 QString htmlImg(const QIcon& icon, QStyle::PixelMetric metric)
 {
     const int size = qApp->style()->pixelMetric(metric, nullptr, nullptr);
@@ -134,7 +118,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
     modifyHtml() += QStringLiteral("<table><tr>");
 
     modifyHtml() += QStringLiteral("<td valign=\"middle\">%1</td>")
-                    .arg(htmlImg(iconForSeverity(problem->severity()), QStyle::PM_LargeIconSize));
+                    .arg(htmlImg(IProblem::iconForSeverity(problem->severity()), QStyle::PM_LargeIconSize));
 
     // BEGIN: right column
     modifyHtml() += QStringLiteral("<td>");

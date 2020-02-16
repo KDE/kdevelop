@@ -27,6 +27,8 @@
 
 #include "interfacesexport.h"
 
+class QIcon;
+
 namespace KDevelop
 {
 class IAssistant;
@@ -78,6 +80,8 @@ public:
         /// Mode applied only if location range is wholly contained within one line
         TrimmedLine
     };
+
+    static QIcon iconForSeverity(IProblem::Severity severity);
 
     IProblem();
     virtual ~IProblem();
