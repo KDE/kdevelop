@@ -20,6 +20,8 @@
 
 #include <debug.h>
 
+#include <QBuffer>
+
 #include <KIconLoader>
 #include <KLocalizedString>
 
@@ -36,15 +38,15 @@ using namespace KDevelop;
 namespace {
 QString KEY_INVOKE_ACTION(int num) { return QStringLiteral("invoke_action_%1").arg(num); }
 
-QString iconForSeverity(IProblem::Severity severity)
+QIcon iconForSeverity(IProblem::Severity severity)
 {
     switch (severity) {
     case IProblem::Hint:
-        return QStringLiteral("dialog-information");
+        return QIcon::fromTheme(QStringLiteral("dialog-information"));
     case IProblem::Warning:
-        return QStringLiteral("dialog-warning");
+        return QIcon::fromTheme(QStringLiteral("dialog-warning"));
     case IProblem::Error:
-        return QStringLiteral("dialog-error");
+        return QIcon::fromTheme(QStringLiteral("dialog-error"));
     case IProblem::NoSeverity:
         return {};
     }
@@ -52,13 +54,20 @@ QString iconForSeverity(IProblem::Severity severity)
     return {};
 }
 
-QString htmlImg(const QString& iconName, KIconLoader::Group group)
+QString htmlImg(const QIcon& icon, KIconLoader::Group group)
 {
     auto* loader = KIconLoader::global();
     const int size = loader->currentSize(group);
-    return QStringLiteral("<img width='%1' height='%1' src='%2'/>")
+    const QPixmap pixmap = icon.pixmap(size, size);
+    QByteArray pngBytes;
+    QBuffer buffer(&pngBytes);
+    buffer.open(QIODevice::WriteOnly);
+    pixmap.save(&buffer, "PNG", 100);
+
+    const QString imgTag = QStringLiteral("<img width='%1' height='%1' src='data:image/png;base64, %2'/>")
            .arg(size)
-           .arg(loader->iconPath(iconName, group));
+           .arg(QString::fromLatin1(pngBytes.toBase64()));
+    return imgTag;
 }
 }
 
@@ -122,11 +131,10 @@ QString ProblemNavigationContext::escapedHtml(const QString& text) const
 
 void ProblemNavigationContext::html(IProblem::Ptr problem)
 {
-    auto iconPath = iconForSeverity(problem->severity());
-
     modifyHtml() += QStringLiteral("<table><tr>");
 
-    modifyHtml() += QStringLiteral("<td valign=\"middle\">%1</td>").arg(htmlImg(iconPath, KIconLoader::Panel));
+    modifyHtml() += QStringLiteral("<td valign=\"middle\">%1</td>")
+                    .arg(htmlImg(iconForSeverity(problem->severity()), KIconLoader::Panel));
 
     // BEGIN: right column
     modifyHtml() += QStringLiteral("<td>");
@@ -201,9 +209,8 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
             QStringLiteral("<table width='100%' style='border: 1px solid black; background-color: %1;'>").arg(QStringLiteral(
                                                                                                                   "#b3d4ff"));
         modifyHtml() +=
-            QStringLiteral("<tr><td valign='middle'>%1</td><td width='100%'>").arg(htmlImg(QStringLiteral(
-                                                                                               "dialog-ok-apply"),
-                                                                                           KIconLoader::Panel));
+            QStringLiteral("<tr><td valign='middle'>%1</td><td width='100%'>")
+            .arg(htmlImg(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")), KIconLoader::Panel));
 
         const int startIndex = m_assistantsActions.size();
         int currentIndex = startIndex;
