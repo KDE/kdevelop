@@ -21,8 +21,9 @@
 #include <debug.h>
 
 #include <QBuffer>
+#include <QStyle>
+#include <QApplication>
 
-#include <KIconLoader>
 #include <KLocalizedString>
 
 #include <language/duchain/declaration.h>
@@ -54,10 +55,9 @@ QIcon iconForSeverity(IProblem::Severity severity)
     return {};
 }
 
-QString htmlImg(const QIcon& icon, KIconLoader::Group group)
+QString htmlImg(const QIcon& icon, QStyle::PixelMetric metric)
 {
-    auto* loader = KIconLoader::global();
-    const int size = loader->currentSize(group);
+    const int size = qApp->style()->pixelMetric(metric, nullptr, nullptr);
     const QPixmap pixmap = icon.pixmap(size, size);
     QByteArray pngBytes;
     QBuffer buffer(&pngBytes);
@@ -134,7 +134,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
     modifyHtml() += QStringLiteral("<table><tr>");
 
     modifyHtml() += QStringLiteral("<td valign=\"middle\">%1</td>")
-                    .arg(htmlImg(iconForSeverity(problem->severity()), KIconLoader::Panel));
+                    .arg(htmlImg(iconForSeverity(problem->severity()), QStyle::PM_LargeIconSize));
 
     // BEGIN: right column
     modifyHtml() += QStringLiteral("<td>");
@@ -210,7 +210,7 @@ void ProblemNavigationContext::html(IProblem::Ptr problem)
                                                                                                                   "#b3d4ff"));
         modifyHtml() +=
             QStringLiteral("<tr><td valign='middle'>%1</td><td width='100%'>")
-            .arg(htmlImg(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")), KIconLoader::Panel));
+            .arg(htmlImg(QIcon::fromTheme(QStringLiteral("dialog-ok-apply")), QStyle::PM_LargeIconSize));
 
         const int startIndex = m_assistantsActions.size();
         int currentIndex = startIndex;
