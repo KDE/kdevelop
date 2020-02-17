@@ -120,9 +120,8 @@ bool buildDirGroupExists( KDevelop::IProject* project, int buildDirIndex )
 QString readBuildDirParameter( KDevelop::IProject* project, const QString& key, const QString& aDefault, int buildDirectory )
 {
     const int buildDirIndex = buildDirectory<0 ? CMake::currentBuildDirIndex(project) : buildDirectory;
-    if (buildDirIndex >= 0)
-        return buildDirGroup( project, buildDirIndex ).readEntry( key, aDefault );
-
+    if (buildDirIndex >= 0) // NOTE: we return trimmed since we may have written bogus trailing newlines in the past...
+        return buildDirGroup( project, buildDirIndex ).readEntry( key, aDefault ).trimmed();
     else
         return aDefault;
 }
