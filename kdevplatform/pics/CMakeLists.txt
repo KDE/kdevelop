@@ -1,3 +1,8 @@
-install(DIRECTORY 22x22 DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor)
-install(DIRECTORY 16x16 DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor)
-install(DIRECTORY scalable DESTINATION ${KDE_INSTALL_ICONDIR}/hicolor)
+ecm_install_icons(
+    ICONS
+        16-actions-breakpoint.png
+        22-actions-breakpoint.png
+        sc-actions-breakpoint.svg
+    DESTINATION ${KDE_INSTALL_ICONDIR}
+    THEME hicolor
+)
