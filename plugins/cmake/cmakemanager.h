@@ -90,27 +90,14 @@ public:
 
     virtual QList<KDevelop::ProjectTargetItem*> targets() const;
     QList<KDevelop::ProjectTargetItem*> targets(KDevelop::ProjectFolderItem* folder) const override;
-//     virtual KDevelop::ProjectFolderItem* addFolder( const KDevelop::Path& folder, KDevelop::ProjectFolderItem* parent );
-//     virtual KDevelop::ProjectFileItem* addFile( const KDevelop::Path&, KDevelop::ProjectFolderItem* );
     bool addFilesToTarget( const QList<KDevelop::ProjectFileItem*> &files, KDevelop::ProjectTargetItem* target) override;
 
     bool removeTarget( KDevelop::ProjectTargetItem* ) override { return false; }
     bool removeFilesFromTargets( const QList<KDevelop::ProjectFileItem*> &files ) override;
-//     virtual bool removeFilesAndFolders( const QList<KDevelop::ProjectBaseItem*> &items);
-//
-//     virtual bool renameFile(KDevelop::ProjectFileItem*, const KDevelop::Path&);
-//     virtual bool renameFolder(KDevelop::ProjectFolderItem*, const KDevelop::Path&);
-//     virtual bool moveFilesAndFolders(const QList< KDevelop::ProjectBaseItem* > &items, KDevelop::ProjectFolderItem *newParent);
-//     virtual bool copyFilesAndFolders(const KDevelop::Path::List &items, KDevelop::ProjectFolderItem* newParent);
-//
-//     virtual QList<KDevelop::ProjectFolderItem*> parse( KDevelop::ProjectFolderItem* dom );
-    KDevelop::ProjectFolderItem* import( KDevelop::IProject *project ) override;
 
+    KDevelop::ProjectFolderItem* import( KDevelop::IProject *project ) override;
     KJob* createImportJob(KDevelop::ProjectFolderItem* item) override;
-//
     bool reload(KDevelop::ProjectFolderItem*) override;
-//
-//     virtual KDevelop::ContextMenuExtension contextMenuExtension( KDevelop::Context* context );
 
 
     KDevelop::ProjectFolderItem* createFolderItem(KDevelop::IProject* project, const KDevelop::Path& path, KDevelop::ProjectBaseItem* parent = nullptr) override;
@@ -122,12 +109,6 @@ public:
     KDevelop::ICodeHighlighting* codeHighlighting() const override;
     QPair<QWidget*, KTextEditor::Range> specialLanguageObjectNavigationWidget(const QUrl& url, const KTextEditor::Cursor& position) override;
 
-//     void addPending(const KDevelop::Path& path, CMakeFolderItem* folder);
-//     CMakeFolderItem* takePending(const KDevelop::Path& path);
-//     void addWatcher(KDevelop::IProject* p, const QString& path);
-    
-//     CMakeProjectData projectData(KDevelop::IProject* project);
-
     KDevelop::ProjectFilterManager* filterManager() const;
 
     static KDevelop::IndexedString languageName();
@@ -135,7 +116,8 @@ public:
     int perProjectConfigPages() const override;
     KDevelop::ConfigPage* perProjectConfigPage(int number, const KDevelop::ProjectConfigOptions& options, QWidget* parent) override;
 
-    void integrateData(const CMakeProjectData &data, KDevelop::IProject* project);
+    void integrateData(const CMakeProjectData &data, KDevelop::IProject* project,
+                       const QSharedPointer<CMakeServer>& server = {});
 
     KDevelop::Path compiler(KDevelop::ProjectTargetItem * p) const override;
 
@@ -144,14 +126,7 @@ Q_SIGNALS:
     void fileRenamed(const KDevelop::Path& oldFile, KDevelop::ProjectFileItem* newFile);
 
 private Q_SLOTS:
-    void serverResponse(KDevelop::IProject* project, const QJsonObject &value);
-
-//     void jumpToDeclaration();
     void projectClosing(KDevelop::IProject*);
-    void dirtyFile(const QString& file);
-//
-//     void directoryChanged(const QString& dir);
-//     void filesystemBuffererTimeout();
 
 private:
     void reloadProjects();
@@ -165,7 +140,12 @@ private:
     void showConfigureErrorMessage(const QString& projectName, const QString& errorMessage) const;
 
 private:
-    QHash<KDevelop::IProject*, CMakeProjectData> m_projects;
+    struct PerProjectData
+    {
+        CMakeProjectData data;
+        QSharedPointer<CMakeServer> server;
+    };
+    QHash<KDevelop::IProject*, PerProjectData> m_projects;
     KDevelop::ProjectFilterManager* m_filter;
     KDevelop::ICodeHighlighting* m_highlight;
 };

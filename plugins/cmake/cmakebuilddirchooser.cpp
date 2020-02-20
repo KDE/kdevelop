@@ -128,7 +128,12 @@ void CMakeBuildDirChooser::buildDirSettings(
     int cnt = 0;
     while (cnt != 3 && !file.atEnd())
     {
-        const auto rawLine = file.readLine();
+        auto rawLine = file.readLine();
+
+        if (rawLine.endsWith('\n'))
+            rawLine.chop(1);
+        if (rawLine.endsWith('\r'))
+            rawLine.chop(1);
 
         auto match = [&rawLine](const QByteArray& prefix, QString* target) -> bool
         {

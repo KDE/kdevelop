@@ -25,6 +25,8 @@ set( cmakecommon_SRCS
   cmakeextraargumentshistory.cpp
   cmakebuilddirchooser.cpp
   cmakeserver.cpp
+  cmakefileapi.cpp
+  cmakeprojectdata.cpp
   ${cmake_LOG_SRCS}
 )
 set_source_files_properties(parser/cmListFileLexer.c PROPERTIES COMPILE_FLAGS "-DYY_NO_INPUT -DYY_NO_UNPUT")
@@ -41,9 +43,9 @@ set( cmakemanager_SRCS
   testing/qttestdelegate.cpp
   cmakeimportjsonjob.cpp
   cmakeserverimportjob.cpp
+  cmakefileapiimportjob.cpp
   cmakenavigationwidget.cpp
   cmakemanager.cpp
-  cmakeprojectdata.cpp
   cmakemodelitems.cpp
   duchain/cmakeparsejob.cpp
   duchain/usebuilder.cpp
@@ -86,6 +88,7 @@ ki18n_wrap_ui( cmakecommon_SRCS ${cmakecommon_UI} )
 kdevelop_add_private_library(KDevCMakeCommon SOURCES ${cmakecommon_SRCS})
 target_link_libraries(KDevCMakeCommon
     PUBLIC
+        kdevmakefileresolver
         KDev::Interfaces
         KDev::Project
         KDev::Util
@@ -97,7 +100,6 @@ ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
 add_library( kdevcmakemanagernosettings STATIC ${cmakemanager_SRCS})
 target_link_libraries(kdevcmakemanagernosettings
     KDevCMakeCommon
-    kdevmakefileresolver
     KDev::Util
     KDev::Interfaces
     KDev::Project
@@ -112,7 +114,6 @@ target_link_libraries(kdevcmakemanagernosettings
 kdevplatform_add_plugin(kdevcmakemanager JSON kdevcmakemanager.json SOURCES ${cmakemanager_SRCS} ${cmakesettings_SRCS})
 target_link_libraries(kdevcmakemanager
     KDevCMakeCommon
-    kdevmakefileresolver
     KDev::Util
     KDev::Interfaces
     KDev::Project

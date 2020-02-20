@@ -553,6 +553,22 @@ static QString unescape(const QStringRef& input)
   return output;
 }
 
+QHash<QString, QString> MakeFileResolver::extractDefinesFromCompileFlags(const QString& compileFlags, StringInterner& stringInterner)
+{
+  QHash<QString, QString> defines;
+  const auto& defineRx = defineRegularExpression();
+  auto it = defineRx.globalMatch(compileFlags);
+  while (it.hasNext()) {
+    const auto match = it.next();
+    QString value;
+    if (match.lastCapturedIndex() > 1) {
+      value = unescape(match.capturedRef(match.lastCapturedIndex()));
+    }
+    defines[stringInterner.internString(match.captured(1))] = stringInterner.internString(value);
+  }
+  return defines;
+}
+
 PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, const QString& workingDirectory) const
 {
   PathResolutionResult ret(true);
@@ -574,7 +590,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
       }
       if (QDir::isRelativePath(path))
         path = workingDirectory + QLatin1Char('/') + path;
-      const auto& internedPath = internPath(path);
+      const auto& internedPath = m_pathInterner.internPath(path);
       const auto type = match.capturedRef(1);
       const auto isFramework = type.startsWith(QLatin1String("-iframework"))
         || type.startsWith(QLatin1String("-F"));
@@ -586,18 +602,7 @@ PathResolutionResult MakeFileResolver::processOutput(const QString& fullOutput, 
     }
   }
 
-  {
-    const auto& defineRx = defineRegularExpression();
-    auto it = defineRx.globalMatch(fullOutput);
-    while (it.hasNext()) {
-      const auto match = it.next();
-      QString value;
-      if (match.lastCapturedIndex() > 1) {
-        value = unescape(match.capturedRef(match.lastCapturedIndex()));
-      }
-      ret.defines[internString(match.captured(1))] = internString(value);
-    }
-  }
+  ret.defines = extractDefinesFromCompileFlags(fullOutput, m_stringInterner);
 
   return ret;
 }
@@ -618,16 +623,21 @@ void MakeFileResolver::setOutOfSourceBuildSystem(const QString& source, const QS
   m_build = QDir::cleanPath(m_build);
 }
 
-Path MakeFileResolver::internPath(const QString& path) const
+PathInterner::PathInterner(const Path& base)
+  : m_base(base)
+{
+}
+
+Path PathInterner::internPath(const QString& path)
 {
     Path& ret = m_pathCache[path];
     if (ret.isEmpty() != path.isEmpty()) {
-        ret = Path(path);
+        ret = Path(m_base, path);
     }
     return ret;
 }
 
-QString MakeFileResolver::internString(const QString& path) const
+QString StringInterner::internString(const QString& path)
 {
     auto it = m_stringCache.constFind(path);
     if (it != m_stringCache.constEnd()) {

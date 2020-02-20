@@ -34,7 +34,7 @@ namespace KDevelop
     class Path;
 }
 
-struct Test;
+struct CMakeTest;
 class ICMakeDocumentation;
 class CMakeCacheModel;
 
@@ -114,6 +114,11 @@ namespace CMake
      * CMakeBuilderSettings::self()->cmakeExecutable() as the user-specified KDevelop-wide default value. 
      */
     KDEVCMAKECOMMON_EXPORT KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project, int builddir = -1);
+
+    /**
+     * @returns the version string reported by the given CMake executable
+     */
+    KDEVCMAKECOMMON_EXPORT QString cmakeExecutableVersion(const QString& cmakeExecutable);
 
     /**
      * @returns the current install dir for the given project or an empty string if none has been defined
@@ -262,7 +267,7 @@ namespace CMake
 
     KDEVCMAKECOMMON_EXPORT QString defaultGenerator();
 
-    KDEVCMAKECOMMON_EXPORT QVector<Test> importTestSuites(const KDevelop::Path &buildDir);
+    KDEVCMAKECOMMON_EXPORT QVector<CMakeTest> importTestSuites(const KDevelop::Path &buildDir);
 }
 
 #endif

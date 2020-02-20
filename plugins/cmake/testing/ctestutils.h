@@ -29,7 +29,7 @@ class IProject;
 
 namespace CTestUtils
 {
-    void createTestSuites(const QVector<Test>& testSuites, const QHash<KDevelop::Path, QVector<CMakeTarget>> &targets, KDevelop::IProject* project);
+    void createTestSuites(const QVector<CMakeTest>& testSuites, const QHash<KDevelop::Path, QVector<CMakeTarget>> &targets, KDevelop::IProject* project);
 }
 
 #endif // CTESTUTILS_H

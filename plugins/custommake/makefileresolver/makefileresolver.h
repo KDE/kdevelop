@@ -53,6 +53,29 @@ struct PathResolutionResult
 
 class SourcePathInformation;
 
+// reuse cached instances of strings, to share memory where possible
+class StringInterner
+{
+public:
+    QString internString(const QString& string);
+
+private:
+    QSet<QString> m_stringCache;
+};
+
+// reuse cached instances of paths, to share memory where possible
+class PathInterner
+{
+public:
+    PathInterner(const KDevelop::Path& base = {});
+
+    KDevelop::Path internPath(const QString& path);
+
+private:
+    const KDevelop::Path m_base;
+    QHash<QString, KDevelop::Path> m_pathCache;
+};
+
 ///One resolution-try can issue up to 4 make-calls in worst case
 class MakeFileResolver
 {
@@ -74,6 +97,7 @@ class MakeFileResolver
     PathResolutionResult processOutput(const QString& fullOutput, const QString& workingDirectory) const;
 
     static QRegularExpression defineRegularExpression();
+    static QHash<QString, QString> extractDefinesFromCompileFlags(const QString& compileFlags, StringInterner& stringInterner);
 
   private:
     PathResolutionResult resolveIncludePath( const QString& file, const QString& workingDirectory, int maxStepsUp = 20 );
@@ -91,12 +115,8 @@ class MakeFileResolver
     QString m_source;
     QString m_build;
 
-    // reuse cached instances of Paths and strings, to share memory where possible
-    mutable QHash<QString, KDevelop::Path> m_pathCache;
-    mutable QSet<QString> m_stringCache;
-
-    KDevelop::Path internPath(const QString& path) const;
-    QString internString(const QString& string) const;
+    mutable StringInterner m_stringInterner;
+    mutable PathInterner m_pathInterner;
 };
 
 #endif

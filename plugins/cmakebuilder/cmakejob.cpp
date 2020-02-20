@@ -34,7 +34,8 @@
 #include <interfaces/iruntime.h>
 #include <interfaces/iruntimecontroller.h>
 
-#include "cmakeutils.h"
+#include <cmakeutils.h>
+#include <cmakefileapi.h>
 #include "debug.h"
 
 #include <KShell>
@@ -57,14 +58,26 @@ void CMakeJob::start()
 {
     qCDebug(KDEV_CMAKEBUILDER) << "Configuring cmake" << workingDirectory();
 
-    if( !m_project ) {
-        setError(NoProjectError);
-        setErrorText(QStringLiteral("Internal error: no project specified to configure."));
+    auto error = [this](ErrorTypes error, const QString &message)
+    {
+        qCWarning(KDEV_CMAKEBUILDER) << "failed" << error << message;
+        setError(error);
+        setErrorText(message);
         emitResult();
+    };
+
+    if( !m_project ) {
+        error(NoProjectError, i18n("Internal error: no project specified to configure."));
         return;
     }
 
-    QDir::temp().mkpath(workingDirectory().toLocalFile());
+    const auto workingDir = workingDirectory().toLocalFile();
+    QDir dir;
+    if (!dir.mkpath(workingDir)) {
+        error(FailedError, i18n("Failed to create build directory %1.", workingDir));
+        return;
+    }
+    CMake::FileApi::writeClientQueryFile(workingDir);
     CMake::updateConfig( m_project, CMake::currentBuildDirIndex(m_project) );
 
     OutputExecuteJob::start();

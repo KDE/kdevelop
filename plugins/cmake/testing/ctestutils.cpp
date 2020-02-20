@@ -60,9 +60,9 @@ static CMakeTarget targetByExe(const QHash< KDevelop::Path, QVector<CMakeTarget>
     return {};
 }
 
-void CTestUtils::createTestSuites(const QVector<Test>& testSuites, const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, KDevelop::IProject* project)
+void CTestUtils::createTestSuites(const QVector<CMakeTest>& testSuites, const QHash< KDevelop::Path, QVector<CMakeTarget>>& targets, KDevelop::IProject* project)
 {
-    for (const Test& test : testSuites) {
+    for (const CMakeTest& test : testSuites) {
         KDevelop::Path executablePath;
         CMakeTarget target;
 

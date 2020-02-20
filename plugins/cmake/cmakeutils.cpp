@@ -120,9 +120,8 @@ bool buildDirGroupExists( KDevelop::IProject* project, int buildDirIndex )
 QString readBuildDirParameter( KDevelop::IProject* project, const QString& key, const QString& aDefault, int buildDirectory )
 {
     const int buildDirIndex = buildDirectory<0 ? CMake::currentBuildDirIndex(project) : buildDirectory;
-    if (buildDirIndex >= 0)
-        return buildDirGroup( project, buildDirIndex ).readEntry( key, aDefault );
-
+    if (buildDirIndex >= 0) // NOTE: we return trimmed since we may have written bogus trailing newlines in the past...
+        return buildDirGroup( project, buildDirIndex ).readEntry( key, aDefault ).trimmed();
     else
         return aDefault;
 }
@@ -345,6 +344,29 @@ QString findExecutable()
             QStringLiteral("C:\\Program Files\\CMake 2.8\\bin")});
 #endif
     return cmake;
+}
+
+QString cmakeExecutableVersion(const QString& cmakeExecutable)
+{
+    QProcess p;
+    p.setProcessChannelMode(QProcess::ForwardedErrorChannel);
+    p.start(cmakeExecutable, {QStringLiteral("--version")});
+    if (!p.waitForFinished()) {
+        qCWarning(CMAKE) << "failed to read cmake version for executable" << cmakeExecutable << p.errorString();
+        return {};
+    }
+
+    static const QRegularExpression pattern(QStringLiteral("cmake version (\\d\\.\\d+(?:\\.\\d+)?).*"));
+    const auto output = QString::fromLocal8Bit(p.readAll());
+    const auto match = pattern.match(output);
+    if (!match.hasMatch()) {
+        qCWarning(CMAKE) << "failed to read cmake version for executable" << cmakeExecutable << output;
+        return {};
+    }
+
+    const auto version = match.captured(1);
+    qCDebug(CMAKE) << "cmake version for executable" << cmakeExecutable << version;
+    return version;
 }
 
 KDevelop::Path currentCMakeExecutable(KDevelop::IProject* project, int builddir)
@@ -696,16 +718,16 @@ QString defaultGenerator()
     return defGen;
 }
 
-QVector<Test> importTestSuites(const Path &buildDir, const QString &cmakeTestFileName)
+QVector<CMakeTest> importTestSuites(const Path &buildDir, const QString &cmakeTestFileName)
 {
     const auto cmakeTestFile = Path(buildDir, cmakeTestFileName).toLocalFile()  ;
     const auto contents = CMakeListsParser::readCMakeFile(cmakeTestFile);
     
-    QVector<Test> tests;
+    QVector<CMakeTest> tests;
     for (const auto& entry: contents) {
         if (entry.name == QLatin1String("add_test")) {
             auto args = entry.arguments;
-            Test test;
+            CMakeTest test;
             test.name = args.takeFirst().value;
             test.executable = args.takeFirst().value;
             test.arguments = kTransform<QStringList>(args, [](const CMakeFunctionArgument& arg) { return arg.value; });
@@ -731,7 +753,7 @@ QVector<Test> importTestSuites(const Path &buildDir, const QString &cmakeTestFil
                                  << entry.arguments.at(1).value << "...), but expected PROPERTIES as second argument";
                 continue;
             }
-            Test &test = tests.last();
+            CMakeTest &test = tests.last();
             for (int i = 2; i < entry.arguments.count(); i += 2)
                 test.properties[entry.arguments[i].value] = entry.arguments[i + 1].value;
         }
@@ -740,7 +762,7 @@ QVector<Test> importTestSuites(const Path &buildDir, const QString &cmakeTestFil
     return tests;
 }
 
-QVector<Test> importTestSuites(const Path &buildDir) {
+QVector<CMakeTest> importTestSuites(const Path &buildDir) {
     return importTestSuites(buildDir, QStringLiteral("CTestTestfile.cmake"));
 }
 

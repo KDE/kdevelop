@@ -23,9 +23,11 @@
 
 #include <QSharedPointer>
 #include <QStringList>
-#include <QFileSystemWatcher>
+#include <QHash>
 #include <util/path.h>
 #include <QDebug>
+
+#include <cmakecommonexport.h>
 
 class CMakeServer;
 
@@ -35,7 +37,7 @@ class CMakeServer;
  *
  * Contains the required information to compile it properly
  */
-struct CMakeFile
+struct KDEVCMAKECOMMON_EXPORT CMakeFile
 {
     KDevelop::Path::List includes;
     KDevelop::Path::List frameworkDirectories;
@@ -43,37 +45,46 @@ struct CMakeFile
     QString language;
     QHash<QString, QString> defines;
 
+    void addDefine(const QString& define);
+
     bool isEmpty() const
     {
         return includes.isEmpty() && frameworkDirectories.isEmpty()
             && compileFlags.isEmpty() && defines.isEmpty();
     }
 };
+Q_DECLARE_TYPEINFO(CMakeFile, Q_MOVABLE_TYPE);
+
 inline QDebug &operator<<(QDebug debug, const CMakeFile& file)
 {
     debug << "CMakeFile(-I" << file.includes << ", -F" << file.frameworkDirectories << ", -D" << file.defines << ", " << file.language << ")";
     return debug.maybeSpace();
 }
 
-struct CMakeFilesCompilationData
+struct KDEVCMAKECOMMON_EXPORT CMakeFilesCompilationData
 {
     QHash<KDevelop::Path, CMakeFile> files;
     bool isValid = false;
 };
 
-struct CMakeTarget
+struct KDEVCMAKECOMMON_EXPORT CMakeTarget
 {
     Q_GADGET
 public:
     enum Type { Library, Executable, Custom };
     Q_ENUM(Type)
 
+    static Type typeToEnum(const QString& target);
+
     Type type;
     QString name;
     KDevelop::Path::List artifacts;
     KDevelop::Path::List sources;
+    // see https://cmake.org/cmake/help/latest/prop_tgt/FOLDER.html
+    QString folder;
 };
 Q_DECLARE_TYPEINFO(CMakeTarget, Q_MOVABLE_TYPE);
+
 inline QDebug &operator<<(QDebug debug, const CMakeTarget& target) {
     debug << target.type << ':' << target.name; return debug.maybeSpace();
 }
@@ -85,30 +96,27 @@ inline bool operator==(const CMakeTarget& lhs, const CMakeTarget& rhs)
         && lhs.artifacts == rhs.artifacts;
 }
 
-struct Test
+struct KDEVCMAKECOMMON_EXPORT CMakeTest
 {
-    Test() {}
     QString name;
     QString executable;
     QStringList arguments;
     QHash<QString, QString> properties;
 };
+Q_DECLARE_TYPEINFO(CMakeTest, Q_MOVABLE_TYPE);
 
-Q_DECLARE_TYPEINFO(Test, Q_MOVABLE_TYPE);
-
-struct CMakeProjectData
+struct KDEVCMAKECOMMON_EXPORT CMakeProjectData
 {
-    CMakeProjectData(const QHash<KDevelop::Path, QVector<CMakeTarget>> &targets, const CMakeFilesCompilationData &data, const QVector<Test> &tests);
-
-    CMakeProjectData() : watcher(new QFileSystemWatcher) {}
-    ~CMakeProjectData() {}
-
     CMakeFilesCompilationData compilationData;
     QHash<KDevelop::Path, QVector<CMakeTarget>> targets;
-    QSharedPointer<QFileSystemWatcher> watcher;
-    QSharedPointer<CMakeServer> m_server;
-
-    QVector<Test> m_testSuites;
+    QVector<CMakeTest> testSuites;
+    struct CMakeFileFlags
+    {
+        bool isGenerated = false;
+        bool isExternal = false;
+        bool isCMake = false;
+    };
+    QHash<KDevelop::Path, CMakeFileFlags> cmakeFiles;
 };
 
 #endif

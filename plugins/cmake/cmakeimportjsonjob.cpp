@@ -167,7 +167,7 @@ void CMakeImportJsonJob::importCompileCommandsJsonFinished()
         return;
     }
 
-    m_data = CMakeProjectData {data.targets, data.compilationData, data.testSuites};
+    m_data = {data.compilationData, data.targets, data.testSuites};
     qCDebug(CMAKE) << "Done importing, found" << data.compilationData.files.count() << "entries for" << project()->path();
 
     emitResult();
