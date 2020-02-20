@@ -60,10 +60,12 @@ QString languageOption(Utils::LanguageType type)
 QString languageStandard(const QString& arguments, Utils::LanguageType type)
 {
     // TODO: handle -ansi flag: In C mode, this is equivalent to -std=c90. In C++ mode, it is equivalent to -std=c++98.
-    const QRegularExpression regexp(QStringLiteral("-std=(\\S+)"));
+    // NOTE: we put the greedy .* in front to find the last occurrence
+    const QRegularExpression regexp(QStringLiteral(".*(-std=\\S+)"));
     auto result = regexp.match(arguments);
-    if (result.hasMatch())
-        return result.captured(0);
+    if (result.hasMatch()) {
+        return result.captured(1);
+    }
 
     switch (type) {
         case Utils::C:
@@ -111,12 +113,12 @@ Defines GccLikeCompiler::defines(Utils::LanguageType type, const QString& argume
     rt->startProcess(&proc);
 
     if ( !proc.waitForStarted( 2000 ) || !proc.waitForFinished( 2000 ) ) {
-        qCDebug(DEFINESANDINCLUDES) <<  "Unable to read standard macro definitions from "<< path();
+        qCDebug(DEFINESANDINCLUDES) <<  "Unable to read standard macro definitions from "<< path() << compilerArguments;
         return {};
     }
 
     if (proc.exitCode() != 0) {
-        qCWarning(DEFINESANDINCLUDES) <<  "error while fetching defines for the compiler:" << path() << proc.readAll();
+        qCWarning(DEFINESANDINCLUDES) <<  "error while fetching defines for the compiler:" << path() << compilerArguments << proc.readAll();
         return {};
     }
 
