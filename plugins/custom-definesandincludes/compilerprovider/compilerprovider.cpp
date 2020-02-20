@@ -100,6 +100,16 @@ ConfigEntry configForItem(KDevelop::ProjectBaseItem* item)
 
     return config;
 }
+
+QString parserArguments( const ConfigEntry& config, Utils::LanguageType languageType, ProjectBaseItem* item )
+{
+    auto args = config.parserArguments[languageType];
+    if (item) {
+        args += QLatin1Char(' ');
+        args += item->project()->buildSystemManager()->extraArguments(item);
+    }
+    return args;
+}
 }
 
 ProjectTargetItem* findCompiledTarget(ProjectBaseItem* item)
@@ -195,7 +205,7 @@ QHash<QString, QString> CompilerProvider::defines( const QString& path ) const
         return {};
     }
 
-    return config.compiler->defines(languageType, config.parserArguments[languageType]);
+    return config.compiler->defines(languageType, parserArguments(config, languageType, nullptr));
 }
 
 QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
@@ -210,7 +220,7 @@ QHash<QString, QString> CompilerProvider::defines( ProjectBaseItem* item ) const
         return {};
     }
 
-    return config.compiler->defines(languageType, config.parserArguments[languageType]);
+    return config.compiler->defines(languageType, parserArguments(config, languageType, item));
 }
 
 Path::List CompilerProvider::includes( const QString& path ) const
@@ -222,7 +232,7 @@ Path::List CompilerProvider::includes( const QString& path ) const
         return {};
     }
 
-    return config.compiler->includes(languageType, config.parserArguments[languageType]);
+    return config.compiler->includes(languageType, parserArguments(config, languageType, nullptr));
 }
 
 Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
@@ -237,7 +247,7 @@ Path::List CompilerProvider::includes( ProjectBaseItem* item ) const
         return {};
     }
 
-    return config.compiler->includes(languageType, config.parserArguments[languageType]);
+    return config.compiler->includes(languageType, parserArguments(config, languageType, item));
 }
 
 Path::List CompilerProvider::frameworkDirectories( const QString& /* path */ ) const
