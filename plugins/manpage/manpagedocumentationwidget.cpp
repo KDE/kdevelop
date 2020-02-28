@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <KLocalizedString>
+#include <QEvent>
 #include <QHeaderView>
 #include <QTreeView>
 
@@ -34,6 +35,7 @@ ManPageDocumentationWidget::ManPageDocumentationWidget(QWidget *parent)
 {
     ManPageModel* model = ManPageDocumentation::s_provider->model();
     m_treeView = new QTreeView(this);
+    m_treeView->viewport()->installEventFilter(this);
     m_treeView->header()->setVisible(false);
     connect(m_treeView, &QTreeView::clicked, model, &ManPageModel::showItem);
     addWidget(m_treeView);
@@ -95,4 +97,11 @@ void ManPageDocumentationWidget::handleError(const QString& errorString)
     m_progressBar = nullptr;
     m_statusLabel->setWordWrap(true);
     m_statusLabel->setText(i18n("Error while loading man pages:\n%1", errorString));
+}
+
+bool ManPageDocumentationWidget::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() == QEvent::MouseButtonPress)
+        event->ignore(); // Propagate to DocumentationView
+    return QStackedWidget::eventFilter(watched, event);
 }

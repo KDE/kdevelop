@@ -32,6 +32,9 @@ class CMakeHomeDocumentation : public KDevelop::IDocumentation
         QString description() const override { return name(); }
 
         QWidget* documentationWidget ( KDevelop::DocumentationFindWidget* findWidget, QWidget* parent = nullptr ) override;
+
+    private:
+        bool eventFilter(QObject* watched, QEvent* event) override;
 };
 
 #endif

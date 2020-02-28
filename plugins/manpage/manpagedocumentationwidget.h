@@ -39,6 +39,8 @@ public Q_SLOTS:
     void sectionParsed();
     void handleError(const QString& errorString);
 private:
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
     QWidget* m_loadingWidget;
     QTreeView* m_treeView;
     QLabel* m_statusLabel;
