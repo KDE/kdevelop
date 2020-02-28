@@ -38,6 +38,7 @@
 #include <interfaces/idocumentationcontroller.h>
 #include <interfaces/iplugincontroller.h>
 #include "documentationfindwidget.h"
+#include "standarddocumentationview.h"
 #include "debug.h"
 
 using namespace KDevelop;
@@ -142,6 +143,18 @@ void DocumentationView::initialize()
     if (hasProviders) {
         changedProvider(0);
     }
+}
+
+void DocumentationView::tryBrowseForward()
+{
+    if (mForward->isEnabled())
+        browseForward();
+}
+
+void DocumentationView::tryBrowseBack()
+{
+    if (mBack->isEnabled())
+        browseBack();
 }
 
 void DocumentationView::browseBack()
@@ -274,6 +287,11 @@ void DocumentationView::updateView()
         w = (*mCurrent)->documentationWidget(mFindDoc, this);
         Q_ASSERT(w);
         QWidget::setTabOrder(mIdentifiers, w);
+
+        if (auto* const standardView = qobject_cast<StandardDocumentationView*>(w)) {
+            connect(standardView, &StandardDocumentationView::browseForward, this, &DocumentationView::tryBrowseForward);
+            connect(standardView, &StandardDocumentationView::browseBack, this, &DocumentationView::tryBrowseBack);
+        }
     } else {
         // placeholder widget at location of doc view
         w = new QWidget(this);
@@ -299,10 +317,18 @@ void DocumentationView::changedProvider(int row)
 
 void DocumentationView::mousePressEvent(QMouseEvent* event)
 {
-    if (event->button() == Qt::MouseButton::ForwardButton) {
-        mForward->trigger();
-    } else if (event->button() == Qt::MouseButton::BackButton) {
-        mBack->trigger();
+    switch (event->button()) {
+    case Qt::MouseButton::ForwardButton:
+        tryBrowseForward();
+        event->accept();
+        break;
+    case Qt::MouseButton::BackButton:
+        tryBrowseBack();
+        event->accept();
+        break;
+    default:
+        QWidget::mousePressEvent(event);
+        break;
     }
 }
 

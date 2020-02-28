@@ -72,6 +72,8 @@ public:
 
 Q_SIGNALS:
     void linkClicked(const QUrl &link);
+    void browseForward();
+    void browseBack();
 
 public Q_SLOTS:
     /**

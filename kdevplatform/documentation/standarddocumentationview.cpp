@@ -30,6 +30,7 @@
 
 #include <QVBoxLayout>
 #include <QContextMenuEvent>
+#include <QMouseEvent>
 #include <QMenu>
 
 #ifdef USE_QTWEBKIT
@@ -415,7 +416,19 @@ bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
     }
 #endif
     if (event->type() == QEvent::MouseButtonPress) {
-        event->setAccepted(false);
+        const auto button = static_cast<QMouseEvent*>(event)->button();
+        switch (button) {
+        case Qt::MouseButton::ForwardButton:
+            emit browseForward();
+            event->accept();
+            return true;
+        case Qt::MouseButton::BackButton:
+            emit browseBack();
+            event->accept();
+            return true;
+        default:
+            break;
+        }
     }
     return QWidget::eventFilter(object, event);
 }
