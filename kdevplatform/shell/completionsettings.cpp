@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include "completionsettings.h"
-
+#include "languageconfig.h"
 #include <KShell>
 #include <KSharedConfig>
 
@@ -66,6 +66,11 @@ bool CompletionSettings::highlightProblematicLines() const
 bool CompletionSettings::highlightSemanticProblems() const
 {
     return m_languageGroup.readEntry("highlightSemanticProblems", m_highlightSemanticProblems);
+}
+
+ICompletionSettings::ProblemInlineNotesLevel CompletionSettings::problemInlineNotesLevel() const
+{
+    return LanguageConfig::problemInlineNotesLevel();
 }
 
 bool CompletionSettings::boldDeclarations() const

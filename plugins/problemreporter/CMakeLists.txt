@@ -9,6 +9,7 @@ set(kdevproblemreporter_PART_SRCS
     problemsview.cpp
     #problemnavigationcontext.cpp
     problemreportermodel.cpp
+    probleminlinenoteprovider.cpp
 )
 
 declare_qt_logging_category(kdevproblemreporter_PART_SRCS

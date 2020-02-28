@@ -40,6 +40,7 @@ class IDocument;
 }
 
 class ProblemHighlighter;
+class ProblemInlineNoteProvider;
 class ProblemReporterModel;
 
 class ProblemReporterPlugin : public KDevelop::IPlugin
@@ -70,6 +71,7 @@ private:
     ProblemReporterModel* m_model;
 
     QHash<KDevelop::IndexedString, ProblemHighlighter*> m_highlighters;
+    QHash<KDevelop::IndexedString, ProblemInlineNoteProvider*> m_inlineNoteProviders;
     QSet<KDevelop::IndexedString> m_reHighlightNeeded;
 public Q_SLOTS:
     void documentClosed(KDevelop::IDocument*);

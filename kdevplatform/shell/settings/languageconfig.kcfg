@@ -4,6 +4,7 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
   <kcfgfile name="kdeveloprc"/>
+  <include>"interfaces/icompletionsettings.h"</include>
   <group name="Language Support">
     <entry name="automaticInvocation" key="Automatic Invocation" type="Bool">
     <default>true</default>
@@ -38,7 +39,11 @@
     <choice name="MinimalWhenAutomatic" />
     <choice name="AlwaysFull" />
     </choices>
+    </entry>
     <default>MinimalWhenAutomatic</default>
+    <entry name="problemInlineNotesLevel" key="problemInlineNotesLevel" type ="Enum">
+    <choices name="KDevelop::ICompletionSettings::ProblemInlineNotesLevel" />
+    <default>KDevelop::ICompletionSettings::WarningsAndErrorsProblemInlineNotesLevel</default>
     </entry>
   </group>
 </kcfg>

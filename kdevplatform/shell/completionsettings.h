@@ -44,6 +44,8 @@ public:
 
     bool highlightProblematicLines() const override;
 
+    ProblemInlineNotesLevel problemInlineNotesLevel() const override;
+
     bool boldDeclarations() const override;
 
     bool showMultiLineSelectionInformation() const override;

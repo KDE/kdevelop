@@ -40,6 +40,7 @@
 #include <util/kdevstringhandler.h>
 
 #include "problemhighlighter.h"
+#include "probleminlinenoteprovider.h"
 #include "problemreportermodel.h"
 #include "language/assistant/staticassistantsmanager.h"
 #include <interfaces/context.h>
@@ -107,6 +108,7 @@ ProblemReporterPlugin::ProblemReporterPlugin(QObject* parent, const QVariantList
 ProblemReporterPlugin::~ProblemReporterPlugin()
 {
     qDeleteAll(m_highlighters);
+    qDeleteAll(m_inlineNoteProviders);
 }
 
 ProblemReporterModel* ProblemReporterPlugin::model() const
@@ -129,14 +131,17 @@ void ProblemReporterPlugin::documentClosed(IDocument* doc)
 
     IndexedString url(doc->url());
     delete m_highlighters.take(url);
+    delete m_inlineNoteProviders.take(url);
     m_reHighlightNeeded.remove(url);
 }
 
 void ProblemReporterPlugin::textDocumentCreated(KDevelop::IDocument* document)
 {
     Q_ASSERT(document->textDocument());
-    m_highlighters.insert(IndexedString(document->url()), new ProblemHighlighter(document->textDocument()));
-    DUChain::self()->updateContextForUrl(IndexedString(document->url()),
+    IndexedString documentUrl(document->url());
+    m_highlighters.insert(documentUrl, new ProblemHighlighter(document->textDocument()));
+    m_inlineNoteProviders.insert(documentUrl, new ProblemInlineNoteProvider(document->textDocument()));
+    DUChain::self()->updateContextForUrl(documentUrl,
                                          KDevelop::TopDUContext::AllDeclarationsContextsAndUses, this);
 }
 
@@ -172,6 +177,7 @@ void ProblemReporterPlugin::updateHighlight(const KDevelop::IndexedString& url)
     }
 
     ph->setProblems(documentProblems);
+    m_inlineNoteProviders.value(url)->setProblems(documentProblems);
 }
 
 void ProblemReporterPlugin::showModel(const QString& id)

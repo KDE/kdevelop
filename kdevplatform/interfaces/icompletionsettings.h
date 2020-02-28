@@ -39,6 +39,13 @@ public:
         LAST_LEVEL
     };
 
+    enum ProblemInlineNotesLevel {
+        NoProblemsInlineNotesLevel,
+        ErrorsProblemInlineNotesLevel,
+        WarningsAndErrorsProblemInlineNotesLevel,
+        AllProblemsInlineNotesLevel
+    };
+
     virtual int minFilesForSimplifiedParsing() const = 0;
 
     virtual CompletionLevel completionLevel() const = 0;
@@ -50,6 +57,7 @@ public:
 
     virtual bool highlightSemanticProblems() const = 0;
     virtual bool highlightProblematicLines() const = 0;
+    virtual ProblemInlineNotesLevel problemInlineNotesLevel() const = 0;
     virtual bool boldDeclarations() const = 0;
 
     virtual bool showMultiLineSelectionInformation() const = 0;
