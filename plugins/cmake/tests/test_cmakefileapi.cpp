@@ -93,7 +93,7 @@ private Q_SLOTS:
         const auto targets = projectData.targets[subDirPath];
         QCOMPARE(targets.size(), 1);
         const auto target = targets.first();
-        QCOMPARE(target.name, "foo");
+        QCOMPARE(target.name, QLatin1String("foo"));
         QCOMPARE(target.type, CMakeTarget::Executable);
         const auto buildSubDirPath = Path(buildPath, "subdir");
         QCOMPARE(target.artifacts, {Path(buildSubDirPath, "foo")});
@@ -103,7 +103,7 @@ private Q_SLOTS:
         QCOMPARE(projectData.compilationData.files.size(), 1);
         QVERIFY(projectData.compilationData.files.contains(fooSrcPath));
         const auto srcInfo = projectData.compilationData.files[fooSrcPath];
-        QCOMPARE(srcInfo.language, "CXX");
+        QCOMPARE(srcInfo.language, QLatin1String("CXX"));
         QCOMPARE(srcInfo.includes.size(), 3);
         QVERIFY(srcInfo.includes.contains(buildPath));
         QVERIFY(srcInfo.includes.contains(buildSubDirPath));
