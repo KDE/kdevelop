@@ -39,7 +39,6 @@
 #include <language/interfaces/editorcontext.h>
 #include <sublime/message.h>
 #include <isession.h>
-#include <qtcompat_p.h>
 
 #include <KActionCollection>
 #include <KLocalizedString>

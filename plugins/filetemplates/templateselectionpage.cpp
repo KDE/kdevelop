@@ -21,7 +21,6 @@
 
 #include "templateclassassistant.h"
 #include "templatepreview.h"
-#include "qtcompat_p.h"
 
 #include <language/codegen/templatesmodel.h>
 #include <language/codegen/sourcefiletemplate.h>

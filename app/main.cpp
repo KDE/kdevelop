@@ -327,12 +327,10 @@ int main( int argc, char *argv[] )
     QElapsedTimer timer;
     timer.start();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 8, 0)
     // If possible, use the Software backend for QQuickWidget (currently used in the
     // welcome page plugin). This means we don't need OpenGL at all, avoiding issues
     // like https://bugs.kde.org/show_bug.cgi?id=386527.
     QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
-#endif
 
     // TODO: Maybe generalize, add KDEVELOP_STANDALONE build option
 #if defined(Q_OS_WIN) || defined(Q_OS_MAC)

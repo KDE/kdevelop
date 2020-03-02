@@ -20,8 +20,6 @@
 
 #include <KLocalizedString>
 
-#include <qtcompat_p.h>
-
 #include "abstractdeclarationnavigationcontext.h"
 #include "abstractnavigationwidget.h"
 #include "usesnavigationcontext.h"

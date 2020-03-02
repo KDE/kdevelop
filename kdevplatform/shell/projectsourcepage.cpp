@@ -25,7 +25,6 @@
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KMessageBox>
-#include <kwidgetsaddons_version.h>
 
 #include <interfaces/iprojectprovider.h>
 
@@ -295,19 +294,6 @@ void ProjectSourcePage::setStatus(const QString& message)
 
 void ProjectSourcePage::clearStatus()
 {
-#if KWIDGETSADDONS_VERSION < QT_VERSION_CHECK(5,32,0)
-    // workaround for KMessageWidget bug:
-    // animatedHide() will not explicitly hide the widget if it is not yet shown.
-    // So if it has never been explicitly hidden otherwise,
-    // if show() is called on the parent later the KMessageWidget will be shown as well.
-    // As this method is sometimes called when the page is created and thus not yet shown,
-    // we have to ensure the hidden state ourselves here.
-    if (!m_ui->status->isVisible()) {
-        m_ui->status->hide();
-        return;
-    }
-#endif
-
     m_ui->status->animatedHide();
 }
 

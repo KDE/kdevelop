@@ -40,8 +40,6 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 
-#include <qtcompat_p.h>
-
 using namespace KDevelop;
 namespace gh
 {

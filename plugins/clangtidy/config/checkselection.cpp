@@ -28,10 +28,6 @@
 #include <checkset.h>
 #include <debug.h>
 // KF
-#include <kconfigwidgets_version.h>
-#if KCONFIGWIDGETS_VERSION < QT_VERSION_CHECK(5,32,0)
-#include <KConfigDialogManager>
-#endif
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 #include <KRecursiveFilterProxyModel>
 #endif
@@ -51,11 +47,6 @@ CheckSelection::CheckSelection(QWidget* parent)
     : QWidget(parent)
     , m_checkListModel(new CheckListModel(this))
 {
-    // since 5.32 the signal is by default taken as set for the used property
-#if KCONFIGWIDGETS_VERSION < QT_VERSION_CHECK(5,32,0)
-    KConfigDialogManager::changedMap()->insert(QStringLiteral("ClangTidy::CheckSelection"), SIGNAL(checksChanged(QString)));
-#endif
-
     auto* layout = new QVBoxLayout;
     layout->setMargin(0);
 

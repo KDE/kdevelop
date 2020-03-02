@@ -29,8 +29,6 @@
 #include <icore.h>
 #include <iuicontroller.h>
 
-#include <qtcompat_p.h>
-
 #include <QDialog>
 #include <QSortFilterProxyModel>
 #include <QIdentityProxyModel>

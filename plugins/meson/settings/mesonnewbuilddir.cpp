@@ -32,7 +32,6 @@
 #include <project/helper.h>
 
 #include <KColorScheme>
-#include <kio_version.h>
 
 #include <QDialogButtonBox>
 #include <QFileInfo>
@@ -63,11 +62,7 @@ MesonNewBuildDir::MesonNewBuildDir(IProject* project, QWidget* parent)
         }
     });
 
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 33, 0)
     m_ui->i_buildDir->setAcceptMode(QFileDialog::AcceptSave);
-#else
-    m_ui->i_buildDir->fileDialog()->setAcceptMode(QFileDialog::AcceptSave);
-#endif
 
     resetFields();
 }

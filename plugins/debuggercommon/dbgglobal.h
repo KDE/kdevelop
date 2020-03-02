@@ -23,9 +23,7 @@
 
 namespace KDevMI
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
 Q_NAMESPACE
-#endif
 
 enum DBGStateFlag
 {
@@ -50,9 +48,7 @@ enum DBGStateFlag
     /// Set when the debugger failed to start
     s_dbgFailedStart    = 1 << 13,
 };
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
 Q_ENUM_NS(DBGStateFlag)
-#endif
 Q_DECLARE_FLAGS(DBGStateFlags, DBGStateFlag)
 
 enum DataType { typeUnknown, typeValue, typePointer, typeReference,

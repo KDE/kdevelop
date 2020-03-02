@@ -23,7 +23,6 @@
 #include <KEditListWidget>
 #include <QLineEdit>
 #include <KLocalizedString>
-#include <kwidgetsaddons_version.h>
 
 #include <QVBoxLayout>
 
@@ -44,16 +43,6 @@ ClassMembersPage::ClassMembersPage(QWidget* parent)
 
     auto* layout = new QVBoxLayout(this);
     layout->addWidget(d->editListWidget);
-
-#if KWIDGETSADDONS_VERSION < QT_VERSION_CHECK(5,32,0)
-    // workaround for KEditListWidget bug:
-    // ensure keyboard focus is returned to edit line
-    connect(d->editListWidget, &KEditListWidget::added,
-            d->editListWidget->lineEdit(), QOverload<>::of(&QWidget::setFocus));
-    connect(d->editListWidget, &KEditListWidget::removed,
-            d->editListWidget->lineEdit(), QOverload<>::of(&QWidget::setFocus));
-#endif
-
     setLayout(layout);
 }
 

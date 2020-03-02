@@ -28,7 +28,6 @@
 
 #include <KTextEditor/MovingInterface>
 #include <KTextEditor/MarkInterface>
-#include <ktexteditor_version.h>
 
 #include <interfaces/icore.h>
 #include <interfaces/idocument.h>
@@ -406,11 +405,7 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
 
     clear();
 
-#if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,50,0)
     constexpr int markPixmapSize = 32;
-#else
-    constexpr int markPixmapSize = 16;
-#endif
     KColorScheme scheme( QPalette::Active );
 
     QImage tintedInsertion = QIcon::fromTheme(QStringLiteral("insert-text")).pixmap(markPixmapSize, markPixmapSize).toImage();

@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 
 #include <QHBoxLayout>
 
-#include <kconfigwidgets_version.h>
 #include <KConfigDialogManager>
 #include <KComboBox>
 
@@ -52,12 +51,6 @@ EnvironmentSelectionWidget::EnvironmentSelectionWidget(QWidget* parent)
     , d_ptr(new EnvironmentSelectionWidgetPrivate(this))
 {
     Q_D(EnvironmentSelectionWidget);
-
-    // since 5.32 the signal is by default taken as set for the used property
-#if KCONFIGWIDGETS_VERSION < QT_VERSION_CHECK(5, 32, 0)
-    KConfigDialogManager::changedMap()->insert(QStringLiteral("KDevelop::EnvironmentSelectionWidget"),
-                                               SIGNAL(currentProfileChanged(QString)));
-#endif
 
     setLayout(new QHBoxLayout(this));
     layout()->addWidget(d->comboBox);

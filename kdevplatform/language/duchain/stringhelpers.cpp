@@ -20,8 +20,6 @@
 #include "safetycounter.h"
 #include <debug.h>
 
-#include <qtcompat_p.h>
-
 #include <QString>
 #include <QStringList>
 

@@ -24,8 +24,6 @@
 
 #include "path.h"
 #include "debug.h"
-// KF
-#include <kio_version.h>
 // Qt
 #include <QtConcurrentRun>
 #include <QDir>
@@ -142,24 +140,12 @@ void FileManagerListJob::startNextJob()
             KIO::UDSEntryList results;
             std::transform(entries.begin(), entries.end(), std::back_inserter(results), [] (const QFileInfo& info) -> KIO::UDSEntry {
                 KIO::UDSEntry entry;
-#if KIO_VERSION < QT_VERSION_CHECK(5,48,0)
-                entry.insert(KIO::UDSEntry::UDS_NAME, info.fileName());
-#else
                 entry.fastInsert(KIO::UDSEntry::UDS_NAME, info.fileName());
-#endif
                 if (info.isDir()) {
-#if KIO_VERSION < QT_VERSION_CHECK(5,48,0)
-                    entry.insert(KIO::UDSEntry::UDS_FILE_TYPE, QT_STAT_DIR);
-#else
                     entry.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, QT_STAT_DIR);
-#endif
                 }
                 if (info.isSymLink()) {
-#if KIO_VERSION < QT_VERSION_CHECK(5,48,0)
-                    entry.insert(KIO::UDSEntry::UDS_LINK_DEST, info.symLinkTarget());
-#else
                     entry.fastInsert(KIO::UDSEntry::UDS_LINK_DEST, info.symLinkTarget());
-#endif
                 }
                 return entry;
             });

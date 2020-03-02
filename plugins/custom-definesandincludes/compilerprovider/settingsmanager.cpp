@@ -30,7 +30,6 @@
 #include <KConfig>
 #include <KConfigGroup>
 
-#include <qtcompat_p.h>
 #include <interfaces/iproject.h>
 #include <interfaces/icore.h>
 #include <project/projectmodel.h>

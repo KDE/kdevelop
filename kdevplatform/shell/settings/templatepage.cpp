@@ -21,7 +21,6 @@
 #include "templatepage.h"
 #include "ui_templatepage.h"
 
-#include "qtcompat_p.h"
 #include <QFileDialog>
 
 #include <interfaces/itemplateprovider.h>
