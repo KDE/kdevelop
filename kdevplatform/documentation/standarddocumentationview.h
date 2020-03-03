@@ -99,7 +99,7 @@ private Q_SLOTS:
     void updateZoomFactor(double zoomFactor);
 
 private:
-    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
     void wheelEvent(QWheelEvent* event) override;
 
 private:

@@ -452,14 +452,25 @@ void StandardDocumentationView::updateZoomFactor(double zoomFactor)
     d->m_view->setZoomFactor(zoomFactor);
 }
 
-void StandardDocumentationView::keyPressEvent(QKeyEvent* event)
+void StandardDocumentationView::keyReleaseEvent(QKeyEvent* event)
 {
+    // Handle keyReleaseEvent instead of the usual keyPressEvent as a workaround
+    // for the conflicting reset font size Ctrl+0 shortcut added into KTextEditor
+    // in version 5.60. This new global shortcut prevents the Qt::Key_0 part of the
+    // shortcut from reaching KeyPress events, but it doesn't affect KeyRelease events.
+    // The end result is that Ctrl+0 always resets font size in the text editor
+    // because its shortcut is global. In addition, Ctrl+0 resets zoom factor in
+    // the current documentation provider if Documentation tool view has focus.
+    // Unfortunately there is no way to reset documentation zoom factor without
+    // simultaneously resetting font size in the text editor.
+    // An alternative workaround - creating one more Ctrl+0 shortcut -
+    // inevitably leads to conflicts with the KTextEditor's global shortcut.
     Q_D(StandardDocumentationView);
 
     if (d->m_zoomController && d->m_zoomController->handleKeyPressEvent(event)) {
         return;
     }
-    QWidget::keyPressEvent(event);
+    QWidget::keyReleaseEvent(event);
 }
 
 void StandardDocumentationView::wheelEvent(QWheelEvent* event)
