@@ -124,7 +124,7 @@ public:
         // workaround for Qt::NoContextMenu broken with QWebEngineView, contextmenu event is always eaten
         // see https://bugreports.qt.io/browse/QTBUG-62345
         // we have to enforce deferring of event ourselves
-        // also for handling mouse forwards and backwards buttons since they are swallowed by both views
+        // also for handling mouse events since they are swallowed by both views
         m_view->installEventFilter(parent);
     }
 };
@@ -400,7 +400,7 @@ bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
         }
         /* HACK / Workaround for QTBUG-43602
          * Need to set an eventFilter on the child of WebengineView because it swallows
-         * MousePressEvents.
+         * mouse events.
          */
         else if (event->type() == QEvent::ChildAdded) {
             QObject* child = static_cast<QChildEvent*>(event)->child();
@@ -415,7 +415,11 @@ bool StandardDocumentationView::eventFilter(QObject* object, QEvent* event)
         }
     }
 #endif
-    if (event->type() == QEvent::MouseButtonPress) {
+    if (event->type() == QEvent::Wheel) {
+        auto* const wheelEvent = static_cast<QWheelEvent*>(event);
+        if (d->m_zoomController && d->m_zoomController->handleWheelEvent(wheelEvent))
+            return true;
+    } else if (event->type() == QEvent::MouseButtonPress) {
         const auto button = static_cast<QMouseEvent*>(event)->button();
         switch (button) {
         case Qt::MouseButton::ForwardButton:
@@ -471,16 +475,6 @@ void StandardDocumentationView::keyReleaseEvent(QKeyEvent* event)
         return;
     }
     QWidget::keyReleaseEvent(event);
-}
-
-void StandardDocumentationView::wheelEvent(QWheelEvent* event)
-{
-    Q_D(StandardDocumentationView);
-
-    if (d->m_zoomController && d->m_zoomController->handleWheelEvent(event)) {
-        return;
-    }
-    QWidget::wheelEvent(event);
 }
 
 #ifndef USE_QTWEBKIT

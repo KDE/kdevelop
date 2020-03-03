@@ -100,7 +100,6 @@ private Q_SLOTS:
 
 private:
     void keyReleaseEvent(QKeyEvent* event) override;
-    void wheelEvent(QWheelEvent* event) override;
 
 private:
     const QScopedPointer<class StandardDocumentationViewPrivate> d_ptr;
