@@ -406,7 +406,7 @@ void BreakpointModel::markChanged(
 #endif
 }
 
-constexpr int breakpointMarkPixmapSize = 22; // TODO: add "breakpoint" pixmap icon of size 32 and change here to 32
+static constexpr int breakpointMarkPixmapSize = 32;
 
 const QPixmap* BreakpointModel::breakpointPixmap()
 {
