@@ -9,87 +9,61 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="25.58143mm"
-   height="25.58143mm"
-   viewBox="0 0 90.642864 90.642863"
+   width="96"
+   height="96"
+   viewBox="0 0 96 96"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
-   inkscape:export-filename="/home/sven/test.png"
-   inkscape:export-xdpi="16.063744"
-   inkscape:export-ydpi="16.063744"
-   sodipodi:docname="breakpoint.svg">
-  <defs
-     id="defs4" />
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:export-xdpi="22"
+   inkscape:export-ydpi="22">
   <sodipodi:namedview
-     id="base"
      pagecolor="#ffffff"
      bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="109.7103"
-     inkscape:cy="34.294759"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:window-width="1366"
+     inkscape:window-height="721"
+     id="base"
      showgrid="false"
-     fit-margin-top="0"
-     fit-margin-left="0"
-     fit-margin-right="0"
-     fit-margin-bottom="0"
-     inkscape:window-width="1918"
-     inkscape:window-height="1179"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="5.6568543"
+     inkscape:cx="56.91722"
+     inkscape:cy="42.783148"
      inkscape:window-x="0"
-     inkscape:window-y="19"
-     inkscape:window-maximized="1" />
-  <metadata
-     id="metadata7">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
+     inkscape:window-y="18"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     units="px">
+  </sodipodi:namedview>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-287.71429,-505.07648)">
-    <rect
-       style="fill:none;stroke:none;stroke-opacity:1"
-       id="rect4140"
-       width="89.64286"
-       height="89.64286"
-       x="288.21429"
-       y="505.57648" />
+     transform="translate(0,-0.68086003)">
     <path
        sodipodi:type="star"
-       style="fill:#ff0000;stroke:#380000;stroke-width:5.42921591;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4148"
+       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#380000;stroke-width:5.9574461;stroke-linejoin:miter;stroke-miterlimit:6.4000001;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path825"
        sodipodi:sides="6"
-       sodipodi:cx="334.66068"
-       sodipodi:cy="550.33852"
-       sodipodi:r1="32.315025"
-       sodipodi:r2="17.294155"
-       sodipodi:arg1="0.53407038"
-       sodipodi:arg2="1.0576691"
+       sodipodi:cx="47.659573"
+       sodipodi:cy="48"
+       sodipodi:r1="30.955511"
+       sodipodi:r2="29.680443"
+       sodipodi:arg1="-1.5707964"
+       sodipodi:arg2="-1.0471977"
        inkscape:flatsided="true"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="m 362.47558,566.78818 -28.15329,15.86357 -27.81491,-16.44967 0.33839,-32.31325 28.15329,-15.86358 27.81491,16.44967 z"
-       inkscape:export-filename="/home/sven/path4148.png"
-       inkscape:export-xdpi="16.063744"
-       inkscape:export-ydpi="16.063744" />
-    <path
-       style="fill:#ffffff;fill-opacity:0;stroke:none;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 309.41074,535.36218 25.53571,-14.19643 25.16652,14.90655 -50.91779,28.6827 z"
-       id="rect4172"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       d="m 47.65957,17.044489 26.80826,15.477753 3e-6,30.955512 -26.808258,15.477757 -26.80826,-15.477753 -3e-6,-30.955512 z"
+       inkscape:transform-center-x="-0.025270465"
+       inkscape:transform-center-y="-0.026890772"
+       inkscape:export-xdpi="25.600212"
+       inkscape:export-ydpi="25.600212" />
   </g>
 </svg>

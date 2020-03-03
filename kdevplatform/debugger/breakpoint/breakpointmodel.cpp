@@ -409,7 +409,7 @@ void BreakpointModel::markChanged(
 
 
 #if KTEXTEDITOR_VERSION >= QT_VERSION_CHECK(5,50,0)
-constexpr int breakpointMarkPixmapSize = 22; // TODO: add "breakpoint" pixmap icon of size 32 and change here to 32
+constexpr int breakpointMarkPixmapSize = 32;
 #else
 constexpr int breakpointMarkPixmapSize = 16;
 #endif
