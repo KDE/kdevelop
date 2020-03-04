@@ -60,7 +60,7 @@ void DefinesAndIncludesConfigPage::saveTo(KConfig* cfg, KDevelop::IProject*)
     settings->writePaths( cfg, configWidget->paths() );
 
     if ( settings->needToReparseCurrentProject( cfg ) ) {
-        KDevelop::ICore::self()->projectController()->reparseProject(project(), true);
+        KDevelop::ICore::self()->projectController()->reparseProject(project());
     }
 }
 

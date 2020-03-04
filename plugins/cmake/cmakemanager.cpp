@@ -320,7 +320,7 @@ bool CMakeManager::reload(KDevelop::ProjectFolderItem* folder)
                 return;
 
             emit KDevelop::ICore::self()->projectController()->projectConfigurationChanged(project);
-            KDevelop::ICore::self()->projectController()->reparseProject(project, true);
+            KDevelop::ICore::self()->projectController()->reparseProject(project);
         });
     }
 
