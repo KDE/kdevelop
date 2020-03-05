@@ -175,8 +175,11 @@ void MIVariableController::updateLocals()
 
 Range MIVariableController::expressionRangeUnderCursor(Document* doc, const Cursor& cursor)
 {
-    QString line = doc->line(cursor.line());
+    const QString line = doc->line(cursor.line());
     int index = cursor.column();
+    if (index >= line.size()) {
+        return {};
+    }
     QChar c = line[index];
     if (!c.isLetterOrNumber() && c != QLatin1Char('_')) {
         return {};
