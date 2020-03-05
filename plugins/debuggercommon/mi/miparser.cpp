@@ -330,7 +330,6 @@ QString MIParser::parseStringLiteral()
     message2.reserve(length);
     // The [1,length-1] range removes quotes without extra
     // call to 'mid'
-    int target_index = 0;
     for(int i = 1, e = length-1; i != e; ++i)
     {
         int translated = -1;
@@ -358,12 +357,12 @@ QString MIParser::parseStringLiteral()
 
         if (translated != -1)
         {
-            message2[target_index++] = translated;
+            message2.append(translated);
             ++i;
         }
         else
         {
-            message2[target_index++] = message[i];
+            message2.append(message[i]);
         }
     }
 
