@@ -242,35 +242,55 @@ QList<KDevelop::ProjectTargetItem*> CMakeManager::targets() const
 
 CMakeFile CMakeManager::fileInformation(KDevelop::ProjectBaseItem* item) const
 {
-    const auto & data = m_projects[item->project()].data.compilationData;
-    QHash<KDevelop::Path, CMakeFile>::const_iterator it = data.files.constFind(item->path());
+    const auto& data = m_projects[item->project()].data.compilationData;
 
-    if (it == data.files.constEnd()) {
-        // if the item path contains a symlink, then we will not find it in the lookup table
+    auto toCanonicalPath = [](const Path &path) -> Path {
+        // if the path contains a symlink, then we will not find it in the lookup table
         // as that only only stores canonicalized paths. Thus, we fallback to
         // to the canonicalized path and see if that brings up any matches
-        const auto canonicalized = Path(QFileInfo(item->path().toLocalFile()).canonicalFilePath());
-        it = data.files.constFind(canonicalized);
-    }
+        const auto localPath = path.toLocalFile();
+        const auto canonicalPath = QFileInfo(localPath).canonicalFilePath();
+        return (localPath == canonicalPath) ? path : Path(canonicalPath);
+    };
 
-    if (it != data.files.constEnd()) {
-        return *it;
-    } else {
-        // otherwise look for siblings and use the include paths of any we find
-        const Path folder = item->folder() ? item->path() : item->path().parent();
-
-        for( it = data.files.constBegin(); it != data.files.constEnd(); ++it) {
-            if (folder.isDirectParentOf(it.key())) {
-                return *it;
+    auto path = item->path();
+    if (!item->folder()) {
+        // try to look for file meta data directly
+        auto it = data.files.find(path);
+        if (it == data.files.end()) {
+            // fallback to canonical path lookup
+            auto canonical = toCanonicalPath(path);
+            if (canonical != path) {
+                it = data.files.find(canonical);
             }
         }
+        if (it != data.files.end()) {
+            return *it;
+        }
+        // else look for a file in the parent folder
+        path = path.parent();
     }
 
-    // last-resort fallback: bubble up the parent chain, and keep looking for include paths
-    if (auto parent = item->parent()) {
-        return fileInformation(parent);
+    while (true) {
+        // try to look for a file in the current folder path
+        auto it = data.fileForFolder.find(path);
+        if (it == data.fileForFolder.end()) {
+            // fallback to canonical path lookup
+            auto canonical = toCanonicalPath(path);
+            if (canonical != path) {
+                it = data.fileForFolder.find(canonical);
+            }
+        }
+        if (it != data.fileForFolder.end()) {
+            return data.files[it.value()];
+        }
+        if (!path.hasParent()) {
+            break;
+        }
+        path = path.parent();
     }
 
+    qCDebug(CMAKE) << "no information found for" << item->path();
     return {};
 }
 

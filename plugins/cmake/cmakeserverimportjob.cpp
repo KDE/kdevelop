@@ -152,6 +152,7 @@ void CMakeServerImportJob::processResponse(const QJsonObject& response)
         } else if(inReplyTo == QLatin1String("codemodel")) {
             processCodeModel(response, m_data);
             m_data.testSuites = CMake::importTestSuites(CMake::currentBuildDir(m_project));
+            m_data.compilationData.rebuildFileForFolderMapping();
             emitResult();
         } else {
             qCDebug(CMAKE) << "unhandled reply" << response;

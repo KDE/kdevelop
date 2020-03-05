@@ -65,6 +65,11 @@ struct KDEVCMAKECOMMON_EXPORT CMakeFilesCompilationData
 {
     QHash<KDevelop::Path, CMakeFile> files;
     bool isValid = false;
+    /// lookup table to quickly find a file path for a given folder path
+    /// this greatly speeds up fallback searching for information on untracked files
+    /// based on their folder path
+    QHash<KDevelop::Path, KDevelop::Path> fileForFolder;
+    void rebuildFileForFolderMapping();
 };
 
 struct KDEVCMAKECOMMON_EXPORT CMakeTarget

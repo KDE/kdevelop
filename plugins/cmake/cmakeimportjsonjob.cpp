@@ -101,6 +101,7 @@ CMakeFilesCompilationData importCommands(const Path& commandsFile)
     }
 
     data.isValid = true;
+    data.rebuildFileForFolderMapping();
     return data;
 }
 
