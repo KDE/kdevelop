@@ -104,7 +104,7 @@ ConfigEntry configForItem(KDevelop::ProjectBaseItem* item)
 QString parserArguments( const ConfigEntry& config, Utils::LanguageType languageType, ProjectBaseItem* item )
 {
     auto args = config.parserArguments[languageType];
-    if (item) {
+    if (item && item->project()->buildSystemManager()) {
         args += QLatin1Char(' ');
         args += item->project()->buildSystemManager()->extraArguments(item);
     }
