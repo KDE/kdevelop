@@ -44,6 +44,12 @@ HelpNetworkReply::HelpNetworkReply(const QNetworkRequest &request, const QByteAr
     if (request.url().fileName() == QLatin1String("offline.css")) {
         data.replace("../images", "images");
     }
+    // Fix flickering when loading, the page has the offline-simple.css stylesheet which is replaced
+    // later by offline.css  by javascript which causes flickering so we force the full stylesheet
+    // from the beginning
+    if (request.url().fileName().endsWith(QLatin1String(".html"))) {
+        data.replace("offline-simple.css", "offline.css");
+    }
 
     setHeader(QNetworkRequest::ContentTypeHeader, mimeType);
     setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(origLen));
