@@ -218,15 +218,15 @@ ParseSessionData::ParseSessionData(const QVector<UnsavedFile>& unsavedFiles, Cla
     }
     if (options.testFlag(PrecompiledHeader)) {
         flags |= CXTranslationUnit_ForSerialization;
-    } else {
+    } else if (environment.quality() == ClangParsingEnvironment::Unknown) {
+        flags |= CXTranslationUnit_Incomplete;
+    }
+    if (options.testFlag(OpenedInEditor)) {
         flags |= CXTranslationUnit_CacheCompletionResults
 #if CINDEX_VERSION_MINOR >= 32
               |  CXTranslationUnit_CreatePreambleOnFirstParse
 #endif
               |  CXTranslationUnit_PrecompiledPreamble;
-        if (environment.quality() == ClangParsingEnvironment::Unknown) {
-            flags |= CXTranslationUnit_Incomplete;
-        }
     }
 
     const auto tuUrl = environment.translationUnitUrl();

@@ -164,6 +164,7 @@ DocumentChangeTracker* trackerForUrl(const IndexedString& url)
 
 ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languageSupport)
     : ParseJob(url, languageSupport)
+    , m_options(ParseSessionData::NoOption)
 {
     const auto tuUrl = clang()->index()->translationUnitForUrl(url);
     bool hasBuildSystemInfo;
@@ -214,6 +215,9 @@ ClangParseJob::ClangParseJob(const IndexedString& url, ILanguageSupport* languag
 
     if (auto tracker = trackerForUrl(url)) {
         tracker->reset();
+        m_options |= ParseSessionData::OpenedInEditor;
+    } else if (tuUrl != url && trackerForUrl(tuUrl)) {
+        m_options |= ParseSessionData::OpenedInEditor;
     }
 }
 
@@ -383,7 +387,7 @@ void ClangParseJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Thread*
 
 ParseSessionData::Ptr ClangParseJob::createSessionData() const
 {
-    return ParseSessionData::Ptr(new ParseSessionData(m_unsavedFiles, clang()->index(), m_environment, ParseSessionData::NoOption));
+    return ParseSessionData::Ptr(new ParseSessionData(m_unsavedFiles, clang()->index(), m_environment, m_options));
 }
 
 const ParsingEnvironment* ClangParseJob::environment() const

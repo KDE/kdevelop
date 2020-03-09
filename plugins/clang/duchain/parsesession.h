@@ -48,9 +48,10 @@ public:
     using Ptr = QExplicitlySharedDataPointer<ParseSessionData>;
 
     enum Option {
-        NoOption,                     ///< No special options
-        SkipFunctionBodies,           ///< Pass CXTranslationUnit_SkipFunctionBodies (likely unwanted)
-        PrecompiledHeader             ///< Pass CXTranslationUnit_PrecompiledPreamble and others to cache precompiled headers
+        NoOption = 0,                     ///< No special options
+        SkipFunctionBodies = 1 << 0,      ///< Pass CXTranslationUnit_SkipFunctionBodies (likely unwanted)
+        PrecompiledHeader = 1 << 1,       ///< Pass CXTranslationUnit_PrecompiledPreamble and others to cache precompiled headers
+        OpenedInEditor = 1 << 2,          ///< File is currently opened in the editor
     };
     Q_DECLARE_FLAGS(Options, Option)
 

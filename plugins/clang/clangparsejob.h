@@ -28,9 +28,9 @@
 #include <language/backgroundparser/parsejob.h>
 #include "duchain/clangparsingenvironment.h"
 #include "duchain/unsavedfile.h"
+#include "duchain/parsesession.h"
 
 class ClangSupport;
-class ParseSessionData;
 
 class ClangParseJob : public KDevelop::ParseJob
 {
@@ -57,6 +57,7 @@ private:
 
     ClangParsingEnvironment m_environment;
     QVector<UnsavedFile> m_unsavedFiles;
+    ParseSessionData::Options m_options;
     bool m_tuDocumentIsUnsaved = false;
     QHash<KDevelop::IndexedString, KDevelop::ModificationRevision> m_unsavedRevisions;
 };
