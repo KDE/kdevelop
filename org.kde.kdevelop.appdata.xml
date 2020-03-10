@@ -123,11 +123,11 @@
   </description>
   <url type="homepage">https://kdevelop.org</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=kdevelop</url>
-  <url type="help">https://docs.kde.org/index.php?application=kdevelop</url>
+  <url type="help">https://docs.kde.org/?application=kdevelop</url>
   <url type="donation">https://www.kde.org/community/donations/?app=kdevelop</url>
   <screenshots>
     <screenshot type="default">
-      <image>https://kde.org/images/screenshots/kdevelop.png</image>
+      <image>https://cdn.kde.org/screenshots/kdevelop/kdevelop.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
