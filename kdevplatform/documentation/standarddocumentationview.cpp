@@ -340,7 +340,7 @@ public:
         const QUrl url = job->requestUrl();
 
         auto reply = m_nam->get(QNetworkRequest(url));
-        job->reply("text/html", reply);
+        job->reply(reply->header(QNetworkRequest::ContentTypeHeader).toByteArray(), reply);
     }
 
 private:
