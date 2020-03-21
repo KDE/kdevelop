@@ -158,6 +158,7 @@ QString SourceFormatterStyle::modeForMimetype(const QMimeType& mime) const
 
 void SourceFormatterStyle::copyDataFrom(SourceFormatterStyle *other)
 {
+	m_usePreview = other->usePreview();
 	m_content = other->content();
 	m_mimeTypes = other->mimeTypes();
 	m_overrideSample = other->overrideSample();

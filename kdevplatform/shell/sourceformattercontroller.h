@@ -92,6 +92,7 @@ public:
     static QString kateModeLineConfigKey();
     static QString kateOverrideIndentationConfigKey();
     static QString styleCaptionKey();
+    static QString styleShowPreviewKey();
     static QString styleContentKey();
     static QString styleMimeTypesKey();
     static QString styleSampleKey();

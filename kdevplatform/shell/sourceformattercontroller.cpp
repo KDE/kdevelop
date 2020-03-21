@@ -127,6 +127,11 @@ QString SourceFormatterController::styleCaptionKey()
     return QStringLiteral("Caption");
 }
 
+QString SourceFormatterController::styleShowPreviewKey()
+{
+    return QStringLiteral("ShowPreview");
+}
+
 QString SourceFormatterController::styleContentKey()
 {
     return QStringLiteral("Content");
@@ -353,6 +358,7 @@ ISourceFormatter* SourceFormatterController::findFirstFormatterForMimeType(const
 static void populateStyleFromConfigGroup(SourceFormatterStyle* s, const KConfigGroup& stylegrp)
 {
     s->setCaption( stylegrp.readEntry( SourceFormatterController::styleCaptionKey(), QString() ) );
+    s->setUsePreview( stylegrp.readEntry( SourceFormatterController::styleShowPreviewKey(), false ) );
     s->setContent( stylegrp.readEntry( SourceFormatterController::styleContentKey(), QString() ) );
     s->setMimeTypes( stylegrp.readEntry<QStringList>( SourceFormatterController::styleMimeTypesKey(), QStringList() ) );
     s->setOverrideSample( stylegrp.readEntry( SourceFormatterController::styleSampleKey(), QString() ) );

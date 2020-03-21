@@ -326,6 +326,7 @@ void SourceFormatterSelectionEdit::saveSettings(KConfigGroup& config) const
             {
                 KConfigGroup stylegrp = fmtgrp.group( style->name() );
                 stylegrp.writeEntry( SourceFormatterController::styleCaptionKey(), style->caption() );
+                stylegrp.writeEntry( SourceFormatterController::styleShowPreviewKey(), style->usePreview() );
                 stylegrp.writeEntry( SourceFormatterController::styleContentKey(), style->content() );
                 stylegrp.writeEntry( SourceFormatterController::styleMimeTypesKey(), style->mimeTypesVariant() );
                 stylegrp.writeEntry( SourceFormatterController::styleSampleKey(), style->overrideSample() );
