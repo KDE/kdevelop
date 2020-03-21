@@ -221,7 +221,6 @@ AStylePlugin::AStylePlugin(QObject *parent, const QVariantList&)
     : IPlugin(QStringLiteral("kdevastyle"), parent)
     , m_formatter(new AStyleFormatter())
 {
-    currentStyle = predefinedStyles().at(0);
 }
 
 AStylePlugin::~AStylePlugin()

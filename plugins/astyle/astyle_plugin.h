@@ -73,7 +73,6 @@ public:
 
 private:
     QScopedPointer<AStyleFormatter> m_formatter;
-    KDevelop::SourceFormatterStyle currentStyle;
 };
 
 #endif // ASTYLEPLUGIN_H
