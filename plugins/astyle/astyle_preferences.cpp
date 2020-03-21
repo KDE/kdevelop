@@ -150,7 +150,7 @@ void AStylePreferences::updateWidgets()
         chkConvertTabs->setChecked(m_formatter->option(QStringLiteral("FillForce")).toBool());
     }
     inpNuberSpaces->setValue(m_formatter->option(QStringLiteral("FillCount")).toInt());
-    chkFillEmptyLines->setChecked(m_formatter->option(QStringLiteral("FillEmptyLines")).toBool());
+    chkFillEmptyLines->setChecked(m_formatter->option(AStyleOptionKey::fillEmptyLines()).toBool());
 
     // indent objects
     setItemChecked(INDENT_BLOCK, m_formatter->option(QStringLiteral("IndentBlocks")).toBool());
@@ -280,7 +280,7 @@ void AStylePreferences::indentChanged()
             break;
     }
 
-    m_formatter->setFillEmptyLines( chkFillEmptyLines->isChecked() );
+    m_formatter->setEmptyLineFill(chkFillEmptyLines->isChecked());
 
     updatePreviewText();
 }

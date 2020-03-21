@@ -13,6 +13,10 @@
 
 #include "astyle.h"
 
+namespace AStyleOptionKey {
+QString fillEmptyLines();
+}
+
 class AStyleFormatter : public astyle::ASFormatter
 {
 public:
@@ -32,7 +36,7 @@ public:
     void setTabIndentation(int length, bool forceTabs);
     void setSpaceIndentation(int length);
     void setTabSpaceConversionMode(bool mode);
-    void setFillEmptyLines(bool on);
+    void setEmptyLineFill(bool on);
     void setBlockIndent(bool on);
     void setBracketIndent(bool on);
     void setCaseIndent(bool on);

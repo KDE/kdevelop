@@ -17,6 +17,13 @@
 
 using namespace KDevelop;
 
+namespace AStyleOptionKey {
+QString fillEmptyLines()
+{
+    return QStringLiteral("FillEmptyLines");
+}
+}
+
 AStyleFormatter::AStyleFormatter()
 : ASFormatter()
 {
@@ -55,7 +62,7 @@ void AStyleFormatter::updateFormatter()
         AStyleFormatter::setTabSpaceConversionMode(m_options[QStringLiteral("FillForce")].toBool());
     }
 
-    AStyleFormatter::setEmptyLineFill(m_options[QStringLiteral("Fill_EmptyLines")].toBool());
+    AStyleFormatter::setEmptyLineFill(m_options[AStyleOptionKey::fillEmptyLines()].toBool());
 
     // indent
     AStyleFormatter::setSwitchIndent(m_options[QStringLiteral("IndentSwitches")].toBool());
@@ -327,9 +334,9 @@ void AStyleFormatter::setTabSpaceConversionMode(bool mode)
     ASFormatter::setTabSpaceConversionMode(mode);
 }
 
-void AStyleFormatter::setFillEmptyLines(bool on)
+void AStyleFormatter::setEmptyLineFill(bool on)
 {
-    m_options[QStringLiteral("FillEmptyLines")] = on;
+    m_options[AStyleOptionKey::fillEmptyLines()] = on;
     ASFormatter::setEmptyLineFill(on);
 }
 
