@@ -33,11 +33,12 @@ public:
     void loadStyle(const QString &content);
     QString saveStyle() const;
 
-    // indent
+    // fill
     void setTabIndentation(int length, bool forceTabs);
     void setSpaceIndentation(int length);
     void setTabSpaceConversionMode(bool mode);
     void setEmptyLineFill(bool on);
+    // indent+continuation
     void setBlockIndent(bool on);
     void setBracketIndent(bool on);
     void setCaseIndent(bool on);

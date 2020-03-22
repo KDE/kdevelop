@@ -135,7 +135,10 @@ void AStyleFormatter::updateFormatter()
 
 void AStyleFormatter::resetStyle()
 {
+    // fill
     setSpaceIndentation(4);
+    setTabSpaceConversionMode(false);
+    setEmptyLineFill(false);
     // brackets
     setBracketFormatMode(astyle::NONE_MODE);
     setBreakClosingHeaderBracketsMode(false);
@@ -147,11 +150,10 @@ void AStyleFormatter::resetStyle()
     setBreakBlocksMode(false);
     setBreakClosingHeaderBlocksMode(false);
     setBreakElseIfsMode(false);
-    //indent
-    setTabIndentation(4, false);
-    setEmptyLineFill(false);
+    // continuation
     setMaxInStatementIndentLength(40);
     setMinConditionalIndentLength(-1);
+    // indent
     setSwitchIndent(true);
     setClassIndent(true);
     setCaseIndent(false);
@@ -162,12 +164,14 @@ void AStyleFormatter::resetStyle()
     setPreprocessorIndent(false);
     setAfterParens(false);
     setContinuation(1);
-    //padding
+    // padding
     setOperatorPaddingMode(false);
     setParensInsidePaddingMode(true);
     setParensOutsidePaddingMode(true);
     setParensHeaderPaddingMode(true);
     setParensUnPaddingMode(true);
+    // pointer
+    setPointerAlignment(astyle::PTR_ALIGN_NONE);
 }
 
 bool AStyleFormatter::predefinedStyle( const QString & style )
@@ -333,6 +337,9 @@ void AStyleFormatter::setTabIndentation(int length, bool forceTabs)
 
 void AStyleFormatter::setSpaceIndentation(int length)
 {
+    // set ASBeautifier::shouldForceTabIndentation to false
+    ASFormatter::setTabIndentation(length, false);
+
     ASFormatter::setSpaceIndentation(length);
     m_options[QStringLiteral("Fill")] = QStringLiteral("Spaces");
     m_options[QStringLiteral("FillCount")] = length;
