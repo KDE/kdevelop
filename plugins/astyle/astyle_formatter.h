@@ -14,6 +14,8 @@
 #include "astyle.h"
 
 namespace AStyleOptionKey {
+QString forceTabs();
+QString tabSpaceConversion();
 QString fillEmptyLines();
 QString bracesAdd();
 }
@@ -34,9 +36,12 @@ public:
     QString saveStyle() const;
 
     // fill
+    /// Indents using one tab per indentation and disables tab-space conversion.
     void setTabIndentation(int length, bool forceTabs);
-    void setSpaceIndentation(int length);
-    void setTabSpaceConversionMode(bool mode);
+    /// Indents using {@p length per indentation} spaces and sets tab-space conversion to @p tabSpaceConversion.
+    void setSpaceIndentationAndTabSpaceConversion(int length, bool tabSpaceConversion);
+    /// Indents using {@p length per indentation} spaces and disables tab-space conversion.
+    void setSpaceIndentationNoConversion(int length);
     void setEmptyLineFill(bool on);
     // indent+continuation
     void setBlockIndent(bool on);

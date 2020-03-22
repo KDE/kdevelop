@@ -18,6 +18,19 @@
 using namespace KDevelop;
 
 namespace AStyleOptionKey {
+QString forceTabs()
+{
+    return QStringLiteral("FillForce");
+}
+
+QString tabSpaceConversion()
+{
+    // The meaning of the "FillForce" key depends on whether tab or space indentation is used:
+    //     * for tabs: the forceTabs argument to ASBeautifier::setTabIndentation();
+    //     * for spaces: the state argument to ASFormatter::setTabSpaceConversionMode().
+    return forceTabs();
+}
+
 QString fillEmptyLines()
 {
     return QStringLiteral("FillEmptyLines");
@@ -58,13 +71,11 @@ void AStyleFormatter::updateFormatter()
     // fill
     int wsCount = m_options[QStringLiteral("FillCount")].toInt();
     if(m_options[QStringLiteral("Fill")].toString() == QLatin1String("Tabs")) {
-        ///TODO: rename FillForce somehow...
-        bool force = m_options[QStringLiteral("FillForce")].toBool();
-        AStyleFormatter::setTabSpaceConversionMode(false);
-        AStyleFormatter::setTabIndentation(wsCount, force );
+        const bool forceTabs = m_options[AStyleOptionKey::forceTabs()].toBool();
+        AStyleFormatter::setTabIndentation(wsCount, forceTabs);
     } else {
-        AStyleFormatter::setSpaceIndentation(wsCount);
-        AStyleFormatter::setTabSpaceConversionMode(m_options[QStringLiteral("FillForce")].toBool());
+        const bool tabSpaceConversion = m_options[AStyleOptionKey::tabSpaceConversion()].toBool();
+        AStyleFormatter::setSpaceIndentationAndTabSpaceConversion(wsCount, tabSpaceConversion);
     }
 
     AStyleFormatter::setEmptyLineFill(m_options[AStyleOptionKey::fillEmptyLines()].toBool());
@@ -136,8 +147,7 @@ void AStyleFormatter::updateFormatter()
 void AStyleFormatter::resetStyle()
 {
     // fill
-    setSpaceIndentation(4);
-    setTabSpaceConversionMode(false);
+    setSpaceIndentationAndTabSpaceConversion(4, false);
     setEmptyLineFill(false);
     // brackets
     setBracketFormatMode(astyle::NONE_MODE);
@@ -179,7 +189,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
     if(style == QLatin1String("ANSI")) {
         resetStyle();
         setBracketIndent(false);
-        setSpaceIndentation(4);
+        setSpaceIndentationNoConversion(4);
         setBracketFormatMode(astyle::BREAK_MODE);
         setClassIndent(false);
         setSwitchIndent(false);
@@ -188,7 +198,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
     } else if(style == QLatin1String("K&R")) {
         resetStyle();
         setBracketIndent(false);
-        setSpaceIndentation(4);
+        setSpaceIndentationNoConversion(4);
         setBracketFormatMode(astyle::ATTACH_MODE);
         setClassIndent(false);
         setSwitchIndent(false);
@@ -197,7 +207,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
     } else if(style == QLatin1String("Linux")) {
         resetStyle();
         setBracketIndent(false);
-        setSpaceIndentation(8);
+        setSpaceIndentationNoConversion(8);
         setBracketFormatMode(astyle::LINUX_MODE);
         setClassIndent(false);
         setSwitchIndent(false);
@@ -206,7 +216,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
     } else if(style == QLatin1String("GNU")) {
         resetStyle();
         setBlockIndent(true);
-        setSpaceIndentation(2);
+        setSpaceIndentationNoConversion(2);
         setBracketFormatMode(astyle::BREAK_MODE);
         setClassIndent(false);
         setSwitchIndent(false);
@@ -215,7 +225,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
     } else if(style == QLatin1String("Java")) {
         resetStyle();
         setBracketIndent(false);
-        setSpaceIndentation(4);
+        setSpaceIndentationNoConversion(4);
         setBracketFormatMode(astyle::ATTACH_MODE);
         setSwitchIndent(false);
         return true;
@@ -224,7 +234,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setBracketFormatMode(astyle::LINUX_MODE);
         setBlockIndent(false);
         setBracketIndent(false);
-        setSpaceIndentation(5);
+        setSpaceIndentationNoConversion(5);
         setClassIndent(false);
         setSwitchIndent(false);
         setNamespaceIndent(false);
@@ -235,13 +245,13 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setBlockIndent(false);
         setBracketIndent(false);
         setSwitchIndent(true);
-        setSpaceIndentation(3);
+        setSpaceIndentationNoConversion(3);
         setClassIndent(false);
         setNamespaceIndent(false);
         return true;
     } else if (style == QLatin1String("Whitesmith")) {
         resetStyle();
-        setSpaceIndentation(4);
+        setSpaceIndentationNoConversion(4);
         setBracketFormatMode(astyle::BREAK_MODE);
         setBlockIndent(false);
         setBracketIndent(true);
@@ -251,7 +261,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         return true;
     } else if (style == QLatin1String("Banner")) {
         resetStyle();
-        setSpaceIndentation(4);
+        setSpaceIndentationNoConversion(4);
         setBracketFormatMode(astyle::ATTACH_MODE);
         setBlockIndent(false);
         setBracketIndent(true);
@@ -261,7 +271,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         return true;
     } else if (style == QLatin1String("1TBS")) {
         resetStyle();
-        setSpaceIndentation(4);
+        setSpaceIndentationNoConversion(4);
         setBracketFormatMode(astyle::LINUX_MODE);
         setAddBracesMode(true);
         setBlockIndent(false);
@@ -273,7 +283,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
     } else if (style == QLatin1String("KDELibs")) {
         // https://community.kde.org/Policies/Frameworks_Coding_Style
         resetStyle();
-        setSpaceIndentation(4);
+        setSpaceIndentationAndTabSpaceConversion(4, true);
         setBracketFormatMode(astyle::LINUX_MODE);
         setPointerAlignment(astyle::PTR_ALIGN_NAME);
         setLabelIndent(true);
@@ -283,7 +293,6 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setParensHeaderPaddingMode(true);
         setParensUnPaddingMode(true);
         setBreakOneLineStatementsMode(false);
-        setTabSpaceConversionMode(true);
         setPreprocessorIndent(true);
         setSwitchIndent(false);
         setClassIndent(false);
@@ -292,6 +301,7 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
     } else if (style == QLatin1String("Qt")) {
         // https://wiki.qt.io/Qt_Coding_Style
         resetStyle();
+        setSpaceIndentationNoConversion(4);
         setPointerAlignment(astyle::PTR_ALIGN_NAME);
         setOperatorPaddingMode(true);
         setBracketFormatMode(astyle::LINUX_MODE);
@@ -300,7 +310,6 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         setParensOutsidePaddingMode(false);
         setParensHeaderPaddingMode(true);
         setParensUnPaddingMode(true);
-        setSpaceIndentation(4);
         setClassIndent(false);
         setNamespaceIndent(false);
         return true;
@@ -331,11 +340,13 @@ void AStyleFormatter::setTabIndentation(int length, bool forceTabs)
 {
     ASFormatter::setTabIndentation(length, forceTabs);
     m_options[QStringLiteral("Fill")] = QStringLiteral("Tabs");
-    m_options[QStringLiteral("FillForce")] = forceTabs;
     m_options[QStringLiteral("FillCount")] = length;
+    m_options[AStyleOptionKey::forceTabs()] = forceTabs;
+
+    ASFormatter::setTabSpaceConversionMode(false);
 }
 
-void AStyleFormatter::setSpaceIndentation(int length)
+void AStyleFormatter::setSpaceIndentationAndTabSpaceConversion(int length, bool tabSpaceConversion)
 {
     // set ASBeautifier::shouldForceTabIndentation to false
     ASFormatter::setTabIndentation(length, false);
@@ -343,12 +354,14 @@ void AStyleFormatter::setSpaceIndentation(int length)
     ASFormatter::setSpaceIndentation(length);
     m_options[QStringLiteral("Fill")] = QStringLiteral("Spaces");
     m_options[QStringLiteral("FillCount")] = length;
+
+    m_options[AStyleOptionKey::tabSpaceConversion()] = tabSpaceConversion;
+    ASFormatter::setTabSpaceConversionMode(tabSpaceConversion);
 }
 
-void AStyleFormatter::setTabSpaceConversionMode(bool mode)
+void AStyleFormatter::setSpaceIndentationNoConversion(int length)
 {
-    m_options[QStringLiteral("FillForce")] = mode;
-    ASFormatter::setTabSpaceConversionMode(mode);
+    setSpaceIndentationAndTabSpaceConversion(length, false);
 }
 
 void AStyleFormatter::setEmptyLineFill(bool on)

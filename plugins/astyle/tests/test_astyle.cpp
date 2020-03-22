@@ -22,7 +22,7 @@ void TestAstyle::initTestCase()
     ///TODO: probably all settings should be covered by tests
     ///      or at least set so we can be sure about what we
     ///      actually test...
-    m_formatter->setSpaceIndentation(4);
+    m_formatter->setSpaceIndentationNoConversion(4);
 }
 
 void TestAstyle::renameVariable()
@@ -187,7 +187,7 @@ void TestAstyle::testMultipleFormatters()
 void TestAstyle::testMacroFormatting()
 {
     AStyleFormatter fmt;
-    fmt.setSpaceIndentation(2);
+    fmt.setSpaceIndentationNoConversion(2);
     fmt.setPreprocessorIndent(true);
     QString formatted = fmt.formatSource(QStringLiteral("#define asdf\\\nfoobar\n"));
     QCOMPARE(formatted, QString("#define asdf\\\n  foobar\n"));
@@ -298,7 +298,6 @@ void TestAstyle::testContext()
 void TestAstyle::testTabIndentation()
 {
     AStyleFormatter formatter;
-    formatter.setTabSpaceConversionMode(false);
     formatter.setTabIndentation(2, false);
 
     const QString initial(QStringLiteral("int a() {\n  return 0;\n}\n"));

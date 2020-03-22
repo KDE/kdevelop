@@ -140,7 +140,7 @@ void AStylePreferences::updateWidgets()
     if(m_formatter->option(QStringLiteral("Fill")).toString() == QLatin1String("Tabs")) {
         chkConvertTabs->setEnabled(false);
         chkConvertTabs->setChecked(false);
-        if(m_formatter->option(QStringLiteral("FillForce")).toBool()) {
+        if (m_formatter->option(AStyleOptionKey::forceTabs()).toBool()) {
             cbIndentType->setCurrentIndex(INDENT_TABSFORCE);
         } else {
             cbIndentType->setCurrentIndex(INDENT_TABS);
@@ -148,7 +148,7 @@ void AStylePreferences::updateWidgets()
     } else {
         cbIndentType->setCurrentIndex(INDENT_SPACES);
         chkConvertTabs->setEnabled(true);
-        chkConvertTabs->setChecked(m_formatter->option(QStringLiteral("FillForce")).toBool());
+        chkConvertTabs->setChecked(m_formatter->option(AStyleOptionKey::tabSpaceConversion()).toBool());
     }
     inpNuberSpaces->setValue(m_formatter->option(QStringLiteral("FillCount")).toInt());
     chkFillEmptyLines->setChecked(m_formatter->option(AStyleOptionKey::fillEmptyLines()).toBool());
@@ -266,19 +266,16 @@ void AStylePreferences::indentChanged()
 
     switch(cbIndentType->currentIndex()) {
         case INDENT_TABS:
-            m_formatter->setTabSpaceConversionMode( false );
             m_formatter->setTabIndentation(inpNuberSpaces->value(), false);
             chkConvertTabs->setEnabled(false);
             break;
         case INDENT_TABSFORCE:
-            m_formatter->setTabSpaceConversionMode( false );
             m_formatter->setTabIndentation(inpNuberSpaces->value(), true);
             chkConvertTabs->setEnabled(false);
             break;
         case INDENT_SPACES:
-            m_formatter->setSpaceIndentation(inpNuberSpaces->value());
+            m_formatter->setSpaceIndentationAndTabSpaceConversion(inpNuberSpaces->value(), chkConvertTabs->isChecked());
             chkConvertTabs->setEnabled(true);
-            m_formatter->setTabSpaceConversionMode( chkConvertTabs->isEnabled() & chkConvertTabs->isChecked() );
             break;
     }
 
