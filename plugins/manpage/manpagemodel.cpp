@@ -188,10 +188,11 @@ void ManPageModel::showItem(const QModelIndex& idx)
 
 void ManPageModel::showItemFromUrl(const QUrl& url)
 {
-    if (url.toString().startsWith(QLatin1String("man"))) {
-        IDocumentation::Ptr newDoc(new ManPageDocumentation(url.path(), QUrl(url)));
-        ICore::self()->documentationController()->showDocumentation(newDoc);
+    auto doc = ManPageDocumentation::s_provider->documentation(url);
+    if (!doc) {
+        doc = ICore::self()->documentationController()->documentation(url);
     }
+    ICore::self()->documentationController()->showDocumentation(doc);
 }
 
 QStringListModel* ManPageModel::indexList()

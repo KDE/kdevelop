@@ -108,6 +108,11 @@ KDevelop::IDocumentation::Ptr CMakeDocumentation::documentationForDeclaration(KD
 {
     return description(decl->identifier().toString(), decl->url().toUrl());
 }
+KDevelop::IDocumentation::Ptr CMakeDocumentation::documentation(const QUrl& url) const
+{
+    //TODO
+    return{};
+}
 
 KDevelop::IDocumentation::Ptr CMakeDocumentation::documentationForIndex(const QModelIndex& idx) const
 {

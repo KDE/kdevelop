@@ -23,6 +23,8 @@
 #ifndef MANPAGEMODEL_H
 #define MANPAGEMODEL_H
 
+#include <interfaces/idocumentation.h>
+
 #include <QAbstractItemModel>
 
 #include <KIO/Job>

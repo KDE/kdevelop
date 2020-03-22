@@ -37,6 +37,7 @@ public:
     QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList & args);
     ~QtHelpProviderAbstract() override;
     KDevelop::IDocumentation::Ptr documentationForDeclaration (KDevelop::Declaration*) const override;
+    KDevelop::IDocumentation::Ptr documentation(const QUrl& url) const override;
 
     KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& idx) const override;
     QAbstractItemModel* indexModel() const override;

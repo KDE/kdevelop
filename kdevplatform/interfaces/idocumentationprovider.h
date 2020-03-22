@@ -25,6 +25,7 @@
 
 class QIcon;
 class QModelIndex;
+class QUrl;
 class QAbstractItemModel;
 namespace KDevelop
 {
@@ -37,6 +38,11 @@ public:
     
     /** @returns an IDocument instance for the specified declaration or a null pointer if none could be found.*/
     virtual IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const = 0;
+
+    /** @returns an IDocumentation instance for the specified URL if the provider has a concept of
+     *  mappping URLS to Documentations and has a Documentation related to the queried URL. Otherwise
+     *  returns a null pointer. */
+    virtual IDocumentation::Ptr documentation(const QUrl& url) const = 0;
 
     /** @returns an instance of an interface to create an index for all the items provided by this class.
      *  Should have all items at the same level */

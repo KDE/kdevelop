@@ -194,6 +194,17 @@ IDocumentation::Ptr DocumentationController::documentationForDeclaration(Declara
     return {};
 }
 
+IDocumentation::Ptr DocumentationController::documentation(const QUrl& url) const
+{
+    const auto providers = this->documentationProviders();
+    for (const IDocumentationProvider* provider : providers) {
+        IDocumentation::Ptr doc = provider->documentation(url);
+        if (doc) {
+            return doc;
+        }
+    }
+    return {};
+}
 
 QList< IDocumentationProvider* > DocumentationController::documentationProviders() const
 {

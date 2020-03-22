@@ -81,6 +81,18 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForDeclaration(Declarat
     return {};
 }
 
+KDevelop::IDocumentation::Ptr QtHelpProviderAbstract::documentation(const QUrl& url) const
+{
+    QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
+    //findFile returns a valid url even if we don't have a page for that documentationForURL
+    auto data = m_engine.fileData(url);
+    if (!data.isEmpty()) {
+        const QMap<QString, QUrl> info{{url.toString(), url}};
+        return IDocumentation::Ptr(new QtHelpDocumentation(url.toString(), info));
+    }
+    return {};
+}
+
 QAbstractItemModel* QtHelpProviderAbstract::indexModel() const
 {
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
@@ -96,11 +108,12 @@ IDocumentation::Ptr QtHelpProviderAbstract::documentationForIndex(const QModelIn
 
 void QtHelpProviderAbstract::jumpedTo(const QUrl& newUrl)
 {
-    QtHelpDocumentation::s_provider = this;
-    QMap<QString, QUrl> info;
-    info.insert(newUrl.toString(), newUrl);
-    IDocumentation::Ptr doc(new QtHelpDocumentation(newUrl.toString(), info));
-    ICore::self()->documentationController()->showDocumentation(doc);
+    auto doc = documentation(newUrl);
+    IDocumentationController* controller = ICore::self()->documentationController();
+    if (!doc) {
+        doc = controller->documentation(newUrl);
+    }
+    controller->showDocumentation(doc);
 }
 
 IDocumentation::Ptr QtHelpProviderAbstract::homePage() const

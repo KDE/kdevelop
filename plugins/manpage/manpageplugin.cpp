@@ -138,6 +138,15 @@ KDevelop::IDocumentation::Ptr ManPagePlugin::documentationForIdentifier(const QS
     return IDocumentation::Ptr(new ManPageDocumentation(identifier, QUrl(QLatin1String("man:/") + identifier)));
 }
 
+KDevelop::IDocumentation::Ptr ManPagePlugin::documentation(const QUrl& url) const
+{
+    if (url.toString().startsWith(QLatin1String("man"))) {
+        IDocumentation::Ptr newDoc(new ManPageDocumentation(url.path(), url));
+        return newDoc;
+    }
+    return {};
+}
+
 QAbstractItemModel* ManPagePlugin::indexModel() const
 {
     return m_model->indexList();

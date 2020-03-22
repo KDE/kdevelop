@@ -43,6 +43,7 @@ class CMakeDocumentation : public KDevelop::IPlugin, public ICMakeDocumentation
 
         KDevelop::IDocumentation::Ptr description(const QString& identifier, const QUrl &file) const override;
         KDevelop::IDocumentation::Ptr documentationForDeclaration(KDevelop::Declaration* declaration) const override;
+        KDevelop::IDocumentation::Ptr documentation(const QUrl& url) const override;
         
         QVector<QString> names(Type t) const override;
         

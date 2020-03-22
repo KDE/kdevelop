@@ -39,6 +39,7 @@ public:
     explicit ManPagePlugin(QObject *parent, const QVariantList & args= QVariantList());
     ~ManPagePlugin() override;
     KDevelop::IDocumentation::Ptr documentationForDeclaration (KDevelop::Declaration* dec) const override;
+    KDevelop::IDocumentation::Ptr documentation(const QUrl& url) const override;
     QAbstractItemModel* indexModel() const override;
     KDevelop::IDocumentation::Ptr documentationForIndex(const QModelIndex& index) const override;
     QIcon icon() const override;

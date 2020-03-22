@@ -23,6 +23,8 @@
 #include <interfaces/idocumentation.h>
 #include <QObject>
 
+class QUrl;
+
 namespace KDevelop {
 class IDocumentationProvider;
 class Declaration;
@@ -44,7 +46,8 @@ public:
 
     /** Return the corresponding documentation instance for a determinate declaration. */
     virtual IDocumentation::Ptr documentationForDeclaration(Declaration* declaration) = 0;
-
+    /** Returns a corresponding documentation if a provider has one for the given URL*/
+    virtual IDocumentation::Ptr documentation(const QUrl& url) const = 0;
 public Q_SLOTS:
     /** Show the documentation specified by @p doc. */
     virtual void showDocumentation(const IDocumentation::Ptr& doc) = 0;
