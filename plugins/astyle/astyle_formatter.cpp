@@ -193,7 +193,6 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         return true;
     } else if(style == QLatin1String("Java")) {
         resetStyle();
-        setJavaStyle();
         setBracketIndent(false);
         setSpaceIndentation(4);
         setBracketFormatMode(astyle::ATTACH_MODE);
