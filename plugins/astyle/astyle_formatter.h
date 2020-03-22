@@ -36,13 +36,11 @@ public:
 
     QString formatSource(const QString& text, const QString& leftContext = QString(), const QString& rightContext = QString());
 
-    QVariant option(const QString &name);
-    void setOption(const QString &key, const QVariant &value);
-    QString indentString();
+    QVariant option(const QString &name) const;
 
     bool predefinedStyle(const QString &name);
     void loadStyle(const QString &content);
-    QString saveStyle();
+    QString saveStyle() const;
 
     // indent
     void setTabIndentation(int length, bool forceTabs);
@@ -80,12 +78,10 @@ public:
     //pointer
     void setPointerAlignment(astyle::PointerAlign alignment);
 
-protected:
+private:
     void updateFormatter();
     void resetStyle();
 
-private:
-    QString m_indentString;
     QVariantMap m_options;
 };
 

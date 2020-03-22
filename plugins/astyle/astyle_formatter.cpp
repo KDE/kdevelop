@@ -53,11 +53,6 @@ QString AStyleFormatter::formatSource(const QString &text, const QString& leftCo
     return extractFormattedTextFromContext(output, text, leftContext, rightContext, m_options[QStringLiteral("FillCount")].toInt());
 }
 
-void AStyleFormatter::setOption(const QString &key, const QVariant &value)
-{
-    m_options[key] = value;
-}
-
 void AStyleFormatter::updateFormatter()
 {
     qCDebug(KDEV_ASTYLE) << "Updating option with: " << ISourceFormatter::optionMapToString(m_options);
@@ -68,11 +63,8 @@ void AStyleFormatter::updateFormatter()
         bool force = m_options[QStringLiteral("FillForce")].toBool();
         AStyleFormatter::setTabSpaceConversionMode(false);
         AStyleFormatter::setTabIndentation(wsCount, force );
-        m_indentString = QStringLiteral("\t");
     } else {
         AStyleFormatter::setSpaceIndentation(wsCount);
-        m_indentString.fill(QLatin1Char(' '), wsCount);
-
         AStyleFormatter::setTabSpaceConversionMode(m_options[QStringLiteral("FillForce")].toBool());
     }
 
@@ -310,16 +302,11 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
     return false;
 }
 
-QVariant AStyleFormatter::option(const QString &key)
+QVariant AStyleFormatter::option(const QString &key) const
 {
     if(!m_options.contains(key))
         qCDebug(KDEV_ASTYLE) << "Missing option name " << key;
     return m_options[key];
-}
-
-QString AStyleFormatter::indentString()
-{
-    return QString::fromUtf8(getIndentString().c_str());
 }
 
 void AStyleFormatter::loadStyle(const QString &content)
@@ -328,7 +315,7 @@ void AStyleFormatter::loadStyle(const QString &content)
     updateFormatter();
 }
 
-QString AStyleFormatter::saveStyle()
+QString AStyleFormatter::saveStyle() const
 {
     return ISourceFormatter::optionMapToString(m_options);
 }
