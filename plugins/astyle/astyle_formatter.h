@@ -15,6 +15,7 @@
 
 namespace AStyleOptionKey {
 QString fillEmptyLines();
+QString bracesAdd();
 }
 
 class AStyleFormatter : public astyle::ASFormatter
@@ -52,6 +53,7 @@ public:
     //brackets
     void setBracketFormatMode(astyle::BraceMode mode);
     void setBreakClosingHeaderBracketsMode(bool state);
+    void setAddBracesMode(bool state);
     //blocks
     void setBreakBlocksMode(bool state);
     void setBreakElseIfsMode(bool state);

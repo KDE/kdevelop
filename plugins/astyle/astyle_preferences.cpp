@@ -96,6 +96,7 @@ void AStylePreferences::init()
 
     connect(cbBrackets, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &AStylePreferences::bracketsChanged);
     connect(chkBracketsCloseHeaders, &QCheckBox::stateChanged, this, &AStylePreferences::bracketsChanged);
+    connect(chkBracesAdd, &QCheckBox::stateChanged, this, &AStylePreferences::bracketsChanged);
 
     connect(chkBlockBreak, &QCheckBox::stateChanged, this, &AStylePreferences::blocksChanged);
     connect(chkBlockBreakAll, &QCheckBox::stateChanged, this, &AStylePreferences::blocksChanged);
@@ -181,6 +182,7 @@ void AStylePreferences::updateWidgets()
         cbBrackets->setCurrentIndex(BRACKET_NOCHANGE);
     chkBracketsCloseHeaders->setChecked(
         m_formatter->option(QStringLiteral("BracketsCloseHeaders")).toBool());
+    chkBracesAdd->setChecked(m_formatter->option(AStyleOptionKey::bracesAdd()).toBool());
 
     // blocks
     chkBlockBreak->setChecked(m_formatter->option(QStringLiteral("BlockBreak")).toBool());
@@ -330,6 +332,7 @@ void AStylePreferences::bracketsChanged()
     }
 
     m_formatter->setBreakClosingHeaderBracketsMode(chkBracketsCloseHeaders->isChecked());
+    m_formatter->setAddBracesMode(chkBracesAdd->isChecked());
 
     updatePreviewText();
 }

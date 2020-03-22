@@ -22,6 +22,11 @@ QString fillEmptyLines()
 {
     return QStringLiteral("FillEmptyLines");
 }
+
+QString bracesAdd()
+{
+    return QStringLiteral("BracesAdd");
+}
 }
 
 AStyleFormatter::AStyleFormatter()
@@ -98,6 +103,8 @@ void AStyleFormatter::updateFormatter()
         AStyleFormatter::setBracketFormatMode(astyle::NONE_MODE);
 
     AStyleFormatter::setBreakClosingHeaderBracketsMode(m_options[QStringLiteral("BracketsCloseHeaders")].toBool());
+    AStyleFormatter::setAddBracesMode(m_options[AStyleOptionKey::bracesAdd()].toBool());
+
     // blocks
     AStyleFormatter::setBreakBlocksMode(m_options[QStringLiteral("BlockBreak")].toBool());
     AStyleFormatter::setBreakClosingHeaderBlocksMode(m_options[QStringLiteral("BlockBreakAll")].toBool());
@@ -129,14 +136,17 @@ void AStyleFormatter::updateFormatter()
 void AStyleFormatter::resetStyle()
 {
     setSpaceIndentation(4);
+    // brackets
     setBracketFormatMode(astyle::NONE_MODE);
+    setBreakClosingHeaderBracketsMode(false);
+    setAddBracesMode(false);
+    // oneliner
     setBreakOneLineBlocksMode(true);
     setBreakOneLineStatementsMode(true);
     // blocks
     setBreakBlocksMode(false);
     setBreakClosingHeaderBlocksMode(false);
     setBreakElseIfsMode(false);
-    setBreakClosingHeaderBracketsMode(false);
     //indent
     setTabIndentation(4, false);
     setEmptyLineFill(false);
@@ -249,9 +259,9 @@ bool AStyleFormatter::predefinedStyle( const QString & style )
         resetStyle();
         setSpaceIndentation(4);
         setBracketFormatMode(astyle::LINUX_MODE);
+        setAddBracesMode(true);
         setBlockIndent(false);
         setBracketIndent(false);
-        setAddBracketsMode(true);
         setClassIndent(false);
         setSwitchIndent(false);
         setNamespaceIndent(false);
@@ -439,6 +449,12 @@ void AStyleFormatter::setBreakClosingHeaderBracketsMode(bool state)
 {
     m_options[QStringLiteral("BracketsCloseHeaders")] = state;
     ASFormatter::setBreakClosingHeaderBracketsMode(state);
+}
+
+void AStyleFormatter::setAddBracesMode(bool state)
+{
+    m_options[AStyleOptionKey::bracesAdd()] = state;
+    ASFormatter::setAddBracesMode(state);
 }
 
 void AStyleFormatter::setBreakBlocksMode(bool state)

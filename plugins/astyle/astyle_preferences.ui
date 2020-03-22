@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>332</width>
-    <height>600</height>
+    <height>648</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
@@ -363,6 +363,16 @@ from their immediately preceding closing brackets.</string>
                 <string comment="@item:inlistbox brackets style">Run-In</string>
                </property>
               </item>
+             </widget>
+            </item>
+            <item row="2" column="0" colspan="2">
+             <widget class="QCheckBox" name="chkBracesAdd">
+              <property name="toolTip">
+               <string comment="@info:tooltip">Add braces to unbraced one-line conditional statements (e.g. 'if', 'for', 'while')</string>
+              </property>
+              <property name="text">
+               <string comment="@option:check add braces to unbraced one-line conditional statements">Add b&amp;races</string>
+              </property>
              </widget>
             </item>
            </layout>
