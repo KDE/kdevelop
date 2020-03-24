@@ -61,6 +61,10 @@ void TestAstyle::testFuzzyMatching()
     extracted = KDevelop::extractFormattedTextFromContext( formatted, center, leftContext, rightContext );
     qDebug() << "extracted" << extracted << "formatted" << formatted;
     QCOMPARE( extracted, QString("a[0]") );
+
+    rightContext = QStringLiteral("\nvoid g() {}");
+    extracted = KDevelop::extractFormattedTextFromContext(formatted + rightContext, text, QString(), rightContext);
+    QCOMPARE(extracted, formatted);
 }
 
 void TestAstyle::testTabMatching()
