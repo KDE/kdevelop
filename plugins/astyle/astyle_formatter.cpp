@@ -43,7 +43,6 @@ QString bracesAdd()
 }
 
 AStyleFormatter::AStyleFormatter()
-: ASFormatter()
 {
 }
 
@@ -55,12 +54,12 @@ QString AStyleFormatter::formatSource(const QString &text, const QString& leftCo
     QString output;
     QTextStream os(&output, QIODevice::WriteOnly);
 
-    init(&is);
+    m_engine.init(&is);
 
-    while(hasMoreLines())
-        os << QString::fromUtf8(nextLine().c_str()) << QLatin1Char('\n');
+    while (m_engine.hasMoreLines())
+        os << QString::fromUtf8(m_engine.nextLine().c_str()) << QLatin1Char('\n');
 
-    init(nullptr);
+    m_engine.init(nullptr);
 
     return extractFormattedTextFromContext(output, text, leftContext, rightContext, m_options[QStringLiteral("FillCount")].toInt());
 }
@@ -336,27 +335,40 @@ QString AStyleFormatter::saveStyle() const
     return ISourceFormatter::optionMapToString(m_options);
 }
 
+void AStyleFormatter::setCStyle()
+{
+    m_engine.setCStyle();
+}
+void AStyleFormatter::setJavaStyle()
+{
+    m_engine.setJavaStyle();
+}
+void AStyleFormatter::setSharpStyle()
+{
+    m_engine.setSharpStyle();
+}
+
 void AStyleFormatter::setTabIndentation(int length, bool forceTabs)
 {
-    ASFormatter::setTabIndentation(length, forceTabs);
+    m_engine.setTabIndentation(length, forceTabs);
     m_options[QStringLiteral("Fill")] = QStringLiteral("Tabs");
     m_options[QStringLiteral("FillCount")] = length;
     m_options[AStyleOptionKey::forceTabs()] = forceTabs;
 
-    ASFormatter::setTabSpaceConversionMode(false);
+    m_engine.setTabSpaceConversionMode(false);
 }
 
 void AStyleFormatter::setSpaceIndentationAndTabSpaceConversion(int length, bool tabSpaceConversion)
 {
     // set ASBeautifier::shouldForceTabIndentation to false
-    ASFormatter::setTabIndentation(length, false);
+    m_engine.setTabIndentation(length, false);
 
-    ASFormatter::setSpaceIndentation(length);
+    m_engine.setSpaceIndentation(length);
     m_options[QStringLiteral("Fill")] = QStringLiteral("Spaces");
     m_options[QStringLiteral("FillCount")] = length;
 
     m_options[AStyleOptionKey::tabSpaceConversion()] = tabSpaceConversion;
-    ASFormatter::setTabSpaceConversionMode(tabSpaceConversion);
+    m_engine.setTabSpaceConversionMode(tabSpaceConversion);
 }
 
 void AStyleFormatter::setSpaceIndentationNoConversion(int length)
@@ -367,80 +379,80 @@ void AStyleFormatter::setSpaceIndentationNoConversion(int length)
 void AStyleFormatter::setEmptyLineFill(bool on)
 {
     m_options[AStyleOptionKey::fillEmptyLines()] = on;
-    ASFormatter::setEmptyLineFill(on);
+    m_engine.setEmptyLineFill(on);
 }
 
 void AStyleFormatter::setBlockIndent(bool on)
 {
     m_options[QStringLiteral("IndentBlocks")] = on;
-    ASFormatter::setBlockIndent(on);
+    m_engine.setBlockIndent(on);
 }
 
 void AStyleFormatter::setBracketIndent(bool on)
 {
     m_options[QStringLiteral("IndentBrackets")] = on;
-    ASFormatter::setBraceIndent(on);
+    m_engine.setBraceIndent(on);
 }
 
 void AStyleFormatter::setCaseIndent(bool on)
 {
     m_options[QStringLiteral("IndentCases")] = on;
-    ASFormatter::setCaseIndent(on);
+    m_engine.setCaseIndent(on);
 }
 
 void AStyleFormatter::setClassIndent(bool on)
 {
     m_options[QStringLiteral("IndentClasses")] = on;
-    ASFormatter::setClassIndent(on);
+    m_engine.setClassIndent(on);
 }
 
 void AStyleFormatter::setLabelIndent(bool on)
 {
     m_options[QStringLiteral("IndentLabels")] = on;
-    ASFormatter::setLabelIndent(on);
+    m_engine.setLabelIndent(on);
 }
 
 void AStyleFormatter::setNamespaceIndent(bool on)
 {
     m_options[QStringLiteral("IndentNamespaces")] = on;
-    ASFormatter::setNamespaceIndent(on);
+    m_engine.setNamespaceIndent(on);
 }
 
 void AStyleFormatter::setPreprocessorIndent(bool on)
 {
     m_options[QStringLiteral("IndentPreprocessors")] = on;
-    ASFormatter::setPreprocDefineIndent(on);
+    m_engine.setPreprocDefineIndent(on);
 }
 
 void AStyleFormatter::setSwitchIndent(bool on)
 {
     m_options[QStringLiteral("IndentSwitches")] = on;
-    ASFormatter::setSwitchIndent(on);
+    m_engine.setSwitchIndent(on);
 }
 
 void AStyleFormatter::setMaxInStatementIndentLength(int max)
 {
     m_options[QStringLiteral("MaxStatement")] = max;
-    ASFormatter::setMaxInStatementIndentLength(max);
+    m_engine.setMaxInStatementIndentLength(max);
 }
 
 void AStyleFormatter::setMinConditionalIndentLength(int min)
 {
     m_options[QStringLiteral("MinConditional")] = min;
-    ASFormatter::setMinConditionalIndentOption(min);
-    ASFormatter::setMinConditionalIndentLength();
+    m_engine.setMinConditionalIndentOption(min);
+    m_engine.setMinConditionalIndentLength();
 }
 
 void AStyleFormatter::setAfterParens(bool on)
 {
     m_options[QStringLiteral("AfterParens")] = on;
-    ASFormatter::setAfterParenIndent(on);
+    m_engine.setAfterParenIndent(on);
 }
 
 void AStyleFormatter::setContinuation(int n)
 {
     m_options[QStringLiteral("Continuation")] = n;
-    ASFormatter::setContinuationIndentation(n);
+    m_engine.setContinuationIndentation(n);
 }
 
 void AStyleFormatter::setBracketFormatMode(astyle::BraceMode mode)
@@ -462,78 +474,78 @@ void AStyleFormatter::setBracketFormatMode(astyle::BraceMode mode)
         m_options[QStringLiteral("Brackets")] = QStringLiteral("RunInMode");
         break;
     }
-    ASFormatter::setBraceFormatMode(mode);
+    m_engine.setBraceFormatMode(mode);
 }
 
 void AStyleFormatter::setBreakClosingHeaderBracketsMode(bool state)
 {
     m_options[QStringLiteral("BracketsCloseHeaders")] = state;
-    ASFormatter::setBreakClosingHeaderBracketsMode(state);
+    m_engine.setBreakClosingHeaderBracketsMode(state);
 }
 
 void AStyleFormatter::setAddBracesMode(bool state)
 {
     m_options[AStyleOptionKey::bracesAdd()] = state;
-    ASFormatter::setAddBracesMode(state);
+    m_engine.setAddBracesMode(state);
 }
 
 void AStyleFormatter::setBreakBlocksMode(bool state)
 {
     m_options[QStringLiteral("BlockBreak")] = state;
-    ASFormatter::setBreakBlocksMode(state);
+    m_engine.setBreakBlocksMode(state);
 }
 
 void AStyleFormatter::setBreakElseIfsMode(bool state)
 {
     m_options[QStringLiteral("BlockIfElse")] = state;
-    ASFormatter::setBreakElseIfsMode(state);
+    m_engine.setBreakElseIfsMode(state);
 }
 
 void AStyleFormatter::setBreakClosingHeaderBlocksMode(bool state)
 {
     m_options[QStringLiteral("BlockBreakAll")] = state;
-    ASFormatter::setBreakClosingHeaderBlocksMode(state);
+    m_engine.setBreakClosingHeaderBlocksMode(state);
 }
 
 void AStyleFormatter::setOperatorPaddingMode(bool mode)
 {
     m_options[QStringLiteral("PadOperators")] = mode;
-    ASFormatter::setOperatorPaddingMode(mode);
+    m_engine.setOperatorPaddingMode(mode);
 }
 
 void AStyleFormatter::setParensOutsidePaddingMode(bool mode)
 {
     m_options[QStringLiteral("PadParenthesesOut")] = mode;
-    ASFormatter::setParensOutsidePaddingMode(mode);
+    m_engine.setParensOutsidePaddingMode(mode);
 }
 
 void AStyleFormatter::setParensInsidePaddingMode(bool mode)
 {
     m_options[QStringLiteral("PadParenthesesIn")] = mode;
-    ASFormatter::setParensInsidePaddingMode(mode);
+    m_engine.setParensInsidePaddingMode(mode);
 }
 
 void AStyleFormatter::setParensHeaderPaddingMode(bool mode) {
     m_options[QStringLiteral("PadParenthesesHeader")] = mode;
-    ASFormatter::setParensHeaderPaddingMode(mode);
+    m_engine.setParensHeaderPaddingMode(mode);
 }
 
 void AStyleFormatter::setParensUnPaddingMode(bool state)
 {
     m_options[QStringLiteral("PadParenthesesUn")] = state;
-    ASFormatter::setParensUnPaddingMode(state);
+    m_engine.setParensUnPaddingMode(state);
 }
 
 void AStyleFormatter::setBreakOneLineBlocksMode(bool state)
 {
     m_options[QStringLiteral("KeepBlocks")] = !state;
-    ASFormatter::setBreakOneLineBlocksMode(state);
+    m_engine.setBreakOneLineBlocksMode(state);
 }
 
 void AStyleFormatter::setBreakOneLineStatementsMode(bool state)
 {
     m_options[QStringLiteral("KeepStatements")] = !state;
-    ASFormatter::setBreakOneLineStatementsMode(state);
+    m_engine.setBreakOneLineStatementsMode(state);
 }
 
 void AStyleFormatter::setPointerAlignment(astyle::PointerAlign alignment)
@@ -552,5 +564,5 @@ void AStyleFormatter::setPointerAlignment(astyle::PointerAlign alignment)
             m_options[QStringLiteral("PointerAlign")] = QStringLiteral("Type");
             break;
     }
-    ASFormatter::setPointerAlignment(alignment);
+    m_engine.setPointerAlignment(alignment);
 }

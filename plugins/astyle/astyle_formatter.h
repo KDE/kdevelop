@@ -20,7 +20,7 @@ QString fillEmptyLines();
 QString bracesAdd();
 }
 
-class AStyleFormatter : public astyle::ASFormatter
+class AStyleFormatter
 {
 public:
     /** Creates an empty AStyleFormatter with C style by default.
@@ -34,6 +34,13 @@ public:
     bool predefinedStyle(const QString &name);
     void loadStyle(const QString &content);
     QString saveStyle() const;
+
+    // The following 3 setters specify the programming language of the code that is being formatted.
+    // A source file's MIME type should be used to autodetect the language. Knowing the programming language
+    // allows the formatter to identify language-specific syntax, such as classes, templates and keywords.
+    void setCStyle();
+    void setJavaStyle();
+    void setSharpStyle();
 
     // fill
     /// Indents using one tab per indentation and disables tab-space conversion.
@@ -77,10 +84,27 @@ public:
     void setPointerAlignment(astyle::PointerAlign alignment);
 
 private:
+    class Engine : public astyle::ASFormatter
+    {
+    public:
+        // ASBeautifier::setBlockIndent() and ASBeautifier::setBraceIndent() became protected in 2011.
+        // The upstream commit https://sourceforge.net/p/astyle/code/285 "removes" them
+        // ("Remove indent-brackets and indent-blocks options.") with the following suggestions:
+        // --indent-brackets: THIS IS NO LONGER A VALID OPTION. Instead use style=whitesmith or style=banner.
+        // --indent-blocks: THIS IS NO LONGER A VALID OPTION. Instead use style=gnu.
+        // Still, the now-protected functions work just fine. They are called internally by ASFormatter
+        // for STYLE_WHITESMITH and STYLE_GNU. In order to make our predefined styles match the
+        // upstream built-in styles, we need to call these protected functions, and so inherit
+        // this class Engine from ASFormatter to make them public.
+        using astyle::ASFormatter::setBlockIndent;
+        using astyle::ASFormatter::setBraceIndent;
+    };
+
     void updateFormatter();
     void resetStyle();
 
     QVariantMap m_options;
+    Engine m_engine;
 };
 
 #endif // ASTYLEFORMATTER_H
