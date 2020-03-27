@@ -44,6 +44,7 @@ Boston, MA 02110-1301, USA.
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
 #include <KTextEditor/AnnotationInterface>
+#include <kio_version.h>
 
 #include <sublime/area.h>
 #include <sublime/message.h>
@@ -204,7 +205,11 @@ public:
         if (url.isLocalFile()) {
             return QFile::exists(url.toLocalFile());
         } else {
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
+            auto job = KIO::statDetails(url, KIO::StatJob::SourceSide, KIO::StatNoDetails, KIO::HideProgressInfo);
+#else
             auto job = KIO::stat(url, KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
+#endif
             KJobWidgets::setWindow(job, ICore::self()->uiController()->activeMainWindow());
             return job->exec();
         }

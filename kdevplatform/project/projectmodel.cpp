@@ -25,6 +25,7 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
+#include <kio_version.h>
 #include <KIO/StatJob>
 #include <KLocalizedString>
 
@@ -140,7 +141,11 @@ public:
         Path newPath = item->path();
         newPath.setLastPathSegment(newName);
 
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 69, 0)
+        auto job = KIO::statDetails(newPath.toUrl(), KIO::StatJob::SourceSide, KIO::StatNoDetails, KIO::HideProgressInfo);
+#else
         auto job = KIO::stat(newPath.toUrl(), KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
+#endif
         if (job->exec()) {
             // file/folder exists already
             return ProjectBaseItem::ExistingItemSameName;
