@@ -93,7 +93,6 @@ public:
     void init(StandardDocumentationView* parent)
     {
         m_view = new QWebView(parent);
-        m_view->setContextMenuPolicy(Qt::NoContextMenu);
         QObject::connect(m_view, &QWebView::linkClicked, parent, &StandardDocumentationView::linkClicked);
 #else
     QWebEngineView* m_view = nullptr;
@@ -121,10 +120,16 @@ public:
         m_view = new QWebEngineView(parent);
         m_view->setPage(m_page);
 #endif
+        m_view->setContextMenuPolicy(Qt::NoContextMenu);
+
         // workaround for Qt::NoContextMenu broken with QWebEngineView, contextmenu event is always eaten
         // see https://bugreports.qt.io/browse/QTBUG-62345
-        // we have to enforce deferring of event ourselves
-        // also for handling mouse events since they are swallowed by both views
+        // we have to enforce deferring of event ourselves in the event filter.
+        // TODO: remove the context menu workaround (most of this comment and ContextMenu-related code in
+        // StandardDocumentationView::eventFilter()) once we require Qt 5.10 or later, because
+        // QTBUG-62345 was fixed in Qt 5.10.0 Beta 4.
+        // The event filter is necessary for handling mouse events since they are swallowed by
+        // QWebView and QWebEngineView.
         m_view->installEventFilter(parent);
     }
 };
