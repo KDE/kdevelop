@@ -235,6 +235,7 @@ QList< IDocumentationProvider* > DocumentationController::documentationProviders
 
 void KDevelop::DocumentationController::showDocumentation(const IDocumentation::Ptr& doc)
 {
+    Q_ASSERT_X(doc, Q_FUNC_INFO, "Null documentation pointer is unsupported.");
     QWidget* w = ICore::self()->uiController()->findToolView(i18n("Documentation"), m_factory, KDevelop::IUiController::CreateAndRaise);
     if(!w) {
         qCWarning(SHELL) << "Could not add documentation tool view";

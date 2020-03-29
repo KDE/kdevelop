@@ -189,10 +189,17 @@ void ManPageModel::showItem(const QModelIndex& idx)
 void ManPageModel::showItemFromUrl(const QUrl& url)
 {
     auto doc = ManPageDocumentation::s_provider->documentation(url);
+    IDocumentationController* const controller = ICore::self()->documentationController();
     if (!doc) {
-        doc = ICore::self()->documentationController()->documentation(url);
+        doc = controller->documentation(url);
+        if (!doc) {
+            // Ignore the unsupported link and stay on the current documentation page
+            // instead of displaying a blank page. Even if this is an external link we can
+            // download the contents of, our support for website navigation is very poor.
+            return;
+        }
     }
-    ICore::self()->documentationController()->showDocumentation(doc);
+    controller->showDocumentation(doc);
 }
 
 QStringListModel* ManPageModel::indexList()

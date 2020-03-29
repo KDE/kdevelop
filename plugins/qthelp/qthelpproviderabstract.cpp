@@ -40,6 +40,15 @@
 
 using namespace KDevelop;
 
+namespace {
+IDocumentation::Ptr documentationPtrFromUrl(const QUrl& url)
+{
+    QMap<QString, QUrl> info;
+    info.insert(url.toString(), url);
+    return IDocumentation::Ptr(new QtHelpDocumentation(url.toString(), info));
+}
+}
+
 QtHelpProviderAbstract::QtHelpProviderAbstract(QObject *parent, const QString &collectionFileName, const QVariantList &args)
     : QObject(parent)
     , m_engine(QStandardPaths::writableLocation(QStandardPaths::DataLocation)+QLatin1Char('/')+collectionFileName)
@@ -86,11 +95,7 @@ KDevelop::IDocumentation::Ptr QtHelpProviderAbstract::documentation(const QUrl& 
     QtHelpDocumentation::s_provider = const_cast<QtHelpProviderAbstract*>(this);
     //findFile returns a valid url even if we don't have a page for that documentationForURL
     auto data = m_engine.fileData(url);
-    if (!data.isEmpty()) {
-        const QMap<QString, QUrl> info{{url.toString(), url}};
-        return IDocumentation::Ptr(new QtHelpDocumentation(url.toString(), info));
-    }
-    return {};
+    return data.isEmpty() ? IDocumentation::Ptr{} : documentationPtrFromUrl(url);
 }
 
 QAbstractItemModel* QtHelpProviderAbstract::indexModel() const
@@ -112,6 +117,12 @@ void QtHelpProviderAbstract::jumpedTo(const QUrl& newUrl)
     IDocumentationController* controller = ICore::self()->documentationController();
     if (!doc) {
         doc = controller->documentation(newUrl);
+        if (!doc) {
+            // Follow the unsupported link and run the risk of displaying a blank page
+            // if this is a broken local link. If this is an external link, we can follow it
+            // and show the webpage. Our support for website navigation is pretty good.
+            doc = documentationPtrFromUrl(newUrl);
+        }
     }
     controller->showDocumentation(doc);
 }
