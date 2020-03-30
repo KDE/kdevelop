@@ -38,7 +38,7 @@ PRIVATE
 
 if(USE_QTWEBKIT)
     target_link_libraries(KDevPlatformDocumentation PRIVATE Qt5::WebKitWidgets)
-    target_compile_definitions(KDevPlatformDocumentation PRIVATE -DUSE_QTWEBKIT)
+    target_compile_definitions(KDevPlatformDocumentation PUBLIC -DUSE_QTWEBKIT)
 else()
     target_link_libraries(KDevPlatformDocumentation PRIVATE Qt5::WebEngineWidgets)
 endif()
