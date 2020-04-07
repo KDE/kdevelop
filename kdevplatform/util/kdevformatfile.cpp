@@ -126,25 +126,35 @@ bool KDevFormatFile::apply()
 
 bool KDevFormatFile::executeCommand(QString command)
 {
+    if (command.isEmpty()) {
+        qStdOut() << ", empty command => nothing to do\n";
+        return true;
+    }
     qStdOut() << ", using command \"" << command << "\"\n";
 
     command.replace(QLatin1String("$ORIGFILE"), m_origFilePath);
     command.replace(QLatin1String("$TMPFILE"), m_tempFilePath);
 
 #ifdef Q_OS_WIN
-    int execResult = QProcess::execute(QStringLiteral("cmd"), {QStringLiteral("/c"), command});
+    const QString interpreter = QStringLiteral("cmd");
+    const QStringList arguments{QStringLiteral("/c"), command};
 #else
-    int execResult = QProcess::execute(QStringLiteral("sh"), {QStringLiteral("-c"), command});
+    const QString interpreter = QStringLiteral("sh");
+    const QStringList arguments{QStringLiteral("-c"), command};
 #endif
+    const int execResult = QProcess::execute(interpreter, arguments);
 
-    if (execResult == -2) {
-        qStdOut() << "command \"" << command << "\" failed to start\n";
-        return false;
-    }
-
-    if (execResult == -1) {
-        qStdOut() << "command \"" << command << "\" crashed\n";
-        return false;
+    if (execResult != 0) {
+        const QString interpreterDescription = QLatin1String("interpreter ") + interpreter;
+        if (execResult == -2) {
+            qStdOut() << "error: " << interpreterDescription << " failed to start\n";
+            return false;
+        }
+        if (execResult == -1) {
+            qStdOut() << "error: " << interpreterDescription << " crashed\n";
+            return false;
+        }
+        qStdOut() << "warning: " << interpreterDescription << " exited with code " << execResult << '\n';
     }
 
     return true;
