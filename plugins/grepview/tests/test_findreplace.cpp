@@ -12,6 +12,9 @@
 
 #include "test_findreplace.h"
 
+#include <QByteArray>
+#include <QString>
+#include <QStringList>
 #include <QTest>
 #include <QRegExp>
 
@@ -20,10 +23,13 @@
 
 #include <tests/testcore.h>
 #include <tests/autotestshell.h>
+#include <util/filesystemhelpers.h>
 
 #include "../grepjob.h"
 #include "../grepviewplugin.h"
 #include "../grepoutputmodel.h"
+
+#include <vector>
 
 void FindReplaceTest::initTestCase()
 {
@@ -94,6 +100,122 @@ void FindReplaceTest::testFind()
     QCOMPARE(QString(file.readAll()), subject);
 }
 
+void FindReplaceTest::testIncludeExcludeFilters_data()
+{
+    struct Row{
+        const char* dataTag;
+        const char* files;
+        const char* exclude;
+        std::vector<const char*> unmatchedPaths;
+        std::vector<const char*> matchedPaths;
+    };
+
+    const std::vector<Row> dataRows{
+        Row{"Files filter",
+        "*.cpp,*.cc,*.h,INSTALL",
+        "",
+        {"A", "cpp", ".cp", "a.c", "INSTAL", "oINSTALL", "d./h", "d.h/c", "u/INSTALL/v", "a.cpp/b.cp", "INSTALL/h", "a.h.c"},
+        {"x/INSTALL", "x/.cpp", ".cc", "x.h", "t/s/r/.h/.cc", "INSTALL.cpp", "x/y/z/a/b/c.h", "y/b.cc", "a.hh.cc", "t.h.cc"}
+    }, Row{"Exclude filter",
+        "*",
+        "/build/,/.git/,~",
+        {"build/C", ".git/config", "~", "a/b/c/build/t/n", "build/me", "a/~/x", "a~b/c", "temp~", "a/p/test~", "a/build/b/c", "d/c/.git/t"},
+        {"d/build", "a/b/.git", "x", "a.h", "a.git", "a/.gitignore/b", ".gitignore", "buildme/now", "to build/.git"}
+    }, Row{"Files and Exclude filters",
+        "*.a,*-b,*se",
+        "/release/,/.*/,bak",
+        {"release/x.a", ".git/q-b", "a-b.c", "bak.a", "abakse", "a/bak-b", "a/x.bak", "u/v/wbakxyz", "a/.g/se", "-/b"},
+        {"a.a", "b-b", "a/release", ".a", "git/q-b", "se", "a/.se", "a/b.c/d-b", "Bse", "u/v/.a-b", "a/b/.ignorse", "ba.k/.a"}
+    }, Row{"Matching case-insensitive",
+        "A*b,*.Cd,*.AUX",
+        "GiT,garble,B.CD",
+        {"acbGArblE.cD", "git/a.b", ".git/x.cd", "b.Cd", "u/v/q", "u/v/bcd", "u/v/b.Cd", "garble.AUX"},
+        {"Ab", "a.b", "u/v/ADB", "gi.cd", ".CD", "az.cd", "u/v/w/agb", "p.AuX", "u/q.aux"}
+    }};
+
+    QTest::addColumn<QString>("files");
+    QTest::addColumn<QString>("exclude");
+    QTest::addColumn<QStringList>("unmatchedPaths");
+    QTest::addColumn<QStringList>("matchedPaths");
+
+    for (const Row& row : dataRows) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        const QStringList unmatchedPaths(row.unmatchedPaths.cbegin(), row.unmatchedPaths.cend());
+        const QStringList matchedPaths(row.matchedPaths.cbegin(), row.matchedPaths.cend());
+#else
+        const auto vectorToList = [](const std::vector<const char*>& vec) {
+            QStringList result;
+            for (const char* s : vec)
+                result.push_back(s);
+            return result;
+        };
+        const QStringList unmatchedPaths = vectorToList(row.unmatchedPaths);
+        const QStringList matchedPaths = vectorToList(row.matchedPaths);
+#endif
+        QTest::newRow(row.dataTag) << QString{row.files} << QString{row.exclude} << unmatchedPaths << matchedPaths;
+    }
+}
+
+void FindReplaceTest::testIncludeExcludeFilters()
+{
+    QFETCH(QString, files);
+    QFETCH(QString, exclude);
+    QFETCH(QStringList, unmatchedPaths);
+    QFETCH(QStringList, matchedPaths);
+
+    QTemporaryDir tmpDir;
+    QVERIFY2(tmpDir.isValid(), qPrintable("couldn't create temporary directory: " + tmpDir.errorString()));
+
+    const QByteArray commonFileContents = "x";
+
+    using FilesystemHelpers::makeAbsoluteCreateAndWrite;
+    QString errorPath = makeAbsoluteCreateAndWrite(tmpDir.path(), unmatchedPaths, commonFileContents);
+    if (errorPath.isEmpty()) {
+        errorPath = makeAbsoluteCreateAndWrite(tmpDir.path(), matchedPaths, commonFileContents);
+    }
+    QVERIFY2(errorPath.isEmpty(), qPrintable("couldn't create or write to temporary file or directory " + errorPath));
+
+    GrepJob job;
+    GrepOutputModel model;
+    job.setOutputModel(&model);
+    job.setDirectoryChoice({QUrl::fromLocalFile(tmpDir.path())});
+
+    GrepJobSettings settings;
+    settings.projectFilesOnly = false;
+    settings.caseSensitive = true;
+    settings.regexp = false;
+    settings.depth = -1; // fully recursive
+    settings.pattern = commonFileContents;
+    const QString verbatimTemplate = "%s";
+    settings.searchTemplate = verbatimTemplate;
+    settings.replacementTemplate = verbatimTemplate;
+    settings.files = files;
+    settings.exclude = exclude;
+    job.setSettings(settings);
+
+    QVERIFY(job.exec());
+
+    QModelIndex index;
+    const GrepOutputItem* previousItem = nullptr;
+    while (true) {
+        index = model.nextItemIndex(index);
+        if (!index.isValid()) {
+            break;
+        }
+        auto* const item = dynamic_cast<const GrepOutputItem*>(model.itemFromIndex(index));
+        QVERIFY(item);
+        QVERIFY(item->isText());
+        if (item == previousItem) {
+            break; // This must be the last match.
+        }
+        previousItem = item;
+
+        const QString filename = item->filename();
+        QVERIFY2(matchedPaths.contains(filename), qPrintable("unexpected matched file " + filename));
+        QVERIFY2(matchedPaths.removeOne(filename), qPrintable("there must be exactly one text match for " + filename));
+    }
+    QVERIFY2(matchedPaths.empty(), qPrintable("these files should have been matched, but weren't: " + matchedPaths.join("; ")));
+}
 
 void FindReplaceTest::testReplace_data()
 {

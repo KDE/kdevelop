@@ -56,6 +56,9 @@ private Q_SLOTS:
     void testMatch2();
     void testMatch2_data();
 
+    void testWildcardPathMatching();
+    void testWildcardPathMatching_data();
+
 private:
     bool initTest(const QStringList& formatFileData);
     void runTest() const;
