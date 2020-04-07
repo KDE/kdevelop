@@ -77,7 +77,7 @@ static QList<QUrl> thread_getProjectFiles(const QUrl& dir, int depth, const QStr
 static QList<QUrl> thread_findFiles(const QDir& dir, int depth, const QStringList& include,
                                    const QStringList& exclude, volatile bool &abort)
 {
-    QFileInfoList infos = dir.entryInfoList(include, QDir::NoDotAndDotDot|QDir::Files|QDir::Readable);
+    QFileInfoList infos = dir.entryInfoList(include, QDir::NoDotAndDotDot|QDir::Files|QDir::Readable|QDir::Hidden);
 
     if(!QFileInfo(dir.path()).isDir())
         infos << QFileInfo(dir.path());
@@ -90,7 +90,7 @@ static QList<QUrl> thread_findFiles(const QDir& dir, int depth, const QStringLis
     }
     if(depth != 0)
     {
-        static const QDir::Filters dirFilter = QDir::NoDotAndDotDot|QDir::AllDirs|QDir::Readable|QDir::NoSymLinks;
+        constexpr QDir::Filters dirFilter = QDir::NoDotAndDotDot|QDir::AllDirs|QDir::Readable|QDir::NoSymLinks|QDir::Hidden;
         const auto dirs = dir.entryInfoList(QStringList(), dirFilter);
         for (const QFileInfo& currDir : dirs) {
             if(abort)
