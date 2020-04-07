@@ -17,6 +17,7 @@
 */
 
 #include "kdevformatfile.h"
+#include "wildcardhelpers.h"
 
 #include <QDir>
 #include <QFile>
@@ -113,7 +114,8 @@ bool KDevFormatFile::apply()
 
         const QChar dirSeparator = QDir::separator();
         for (const QString& wildcard : formatLine.wildcards) {
-            if (QDir::match(QDir::current().canonicalPath() + dirSeparator + wildcard.trimmed(), m_origFilePath)) {
+            const QString pattern = QDir::current().canonicalPath() + dirSeparator + wildcard.trimmed();
+            if (WildcardHelpers::matchSinglePattern(pattern, m_origFilePath)) {
                 qStdOut() << "matched \"" << m_origFilePath << "\" with wildcard \"" << wildcard << '\"';
                 return executeCommand(formatLine.command);
             }

@@ -73,6 +73,7 @@ install( FILES
     foregroundlock.h
     formattinghelpers.h
     zoomcontroller.h
+    wildcardhelpers.h
     kdevstringhandler.h
     ksharedobject.h
     focusedtreeview.h
