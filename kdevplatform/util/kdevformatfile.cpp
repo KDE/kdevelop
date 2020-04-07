@@ -38,7 +38,7 @@ bool KDevFormatFile::find()
 {
     QDir srcDir(QFileInfo(m_origFilePath).canonicalPath());
 
-    while (!srcDir.isRoot()) {
+    do {
         if (srcDir.exists(formatFileName)) {
             QDir::setCurrent(srcDir.canonicalPath());
 
@@ -47,9 +47,7 @@ bool KDevFormatFile::find()
                       << "\"\n";
             return true;
         }
-
-        srcDir.cdUp();
-    }
+    } while (!srcDir.isRoot() && srcDir.cdUp());
 
     return false;
 }
