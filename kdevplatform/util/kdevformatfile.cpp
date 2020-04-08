@@ -28,10 +28,9 @@
 
 namespace KDevelop {
 
-static const QString formatFileName = QStringLiteral("format_sources");
-
 KDevFormatFile::KDevFormatFile(const QString& origFilePath, const QString& tempFilePath)
-    : m_origFilePath(origFilePath)
+    : formatFileName{QStringLiteral("format_sources")}
+    , m_origFilePath(origFilePath)
     , m_tempFilePath(tempFilePath)
 {
 }
