@@ -24,6 +24,8 @@
 #include <QFileInfo>
 #include <QProcess>
 
+#include <utility>
+
 namespace KDevelop {
 
 static const QString formatFileName = QStringLiteral("format_sources");
@@ -63,34 +65,28 @@ bool KDevFormatFile::read()
     }
 
     int lineNumber = 0;
-    QString line;
-    QStringList wildcards;
-    QString command;
-
     while (!formatFile.atEnd()) {
         ++lineNumber;
 
-        line =  QString::fromUtf8(formatFile.readLine().trimmed());
+        QString line = QString::fromUtf8(formatFile.readLine().trimmed());
         if (line.isEmpty() || line.startsWith(QLatin1Char('#')))
             continue;
 
         if (line.indexOf(delimiter) < 0) {
             // We found the simple syntax without wildcards, and only with the command
-
-            wildcards.clear();
-            m_formatLines.append({wildcards, line});
+            m_formatLines.append({QStringList{}, std::move(line)});
         } else {
             // We found the correct syntax with "wildcards : command"
 
-            wildcards = line.section(delimiter, 0, 0).split(QLatin1Char(' '), QString::SkipEmptyParts);
-            command = line.section(delimiter, 1).trimmed();
+            QStringList wildcards = line.section(delimiter, 0, 0).split(QLatin1Char(' '), QString::SkipEmptyParts);
+            QString command = line.section(delimiter, 1).trimmed();
 
             if (wildcards.isEmpty()) {
                 qStdOut() << formatFileName << ":" << lineNumber
                           << ": error: empty wildcard, skip the line\n";
                 continue;
             }
-            m_formatLines.append({wildcards, command});
+            m_formatLines.append({std::move(wildcards), std::move(command)});
         }
     }
 
