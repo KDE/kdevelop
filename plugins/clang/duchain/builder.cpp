@@ -129,7 +129,13 @@ Identifier makeId(CXCursor cursor)
         return Identifier(ClangString(clang_getCursorDisplayName(cursor)).toString());
     }
 
-    auto name = ClangString(clang_getCursorSpelling(cursor)).toIndexed();
+    const ClangString spelling(clang_getCursorSpelling(cursor));
+    if (!spelling.isEmpty() && spelling.c_str()[0] == '[') {
+        // skip unexposed DecompositionDecl, we want to get hold of the BindingsDecl inside instead
+        return Identifier();
+    }
+
+    auto name = spelling.toIndexed();
     if (name.isEmpty() && CursorKindTraits::isClass(cursor.kind)) {
         // try to use the type name for typedef'ed anon structs etc. as a fallback
         auto type = ClangString(clang_getTypeSpelling(clang_getCursorType(cursor))).toString();
