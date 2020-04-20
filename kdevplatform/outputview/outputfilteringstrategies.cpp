@@ -184,7 +184,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         ActionFormat( 1, QStringLiteral("\\[.+%\\] Generating (.*)") ),
         ActionFormat( 1, QStringLiteral("^Linking (.*)") ),
         ActionFormat( QStringLiteral("cmake"),
-                      QStringLiteral("(-- Configuring (done|incomplete)|-- Found|-- Adding|-- Enabling)"), -1 ),
+                      QStringLiteral("(-- (?:Configuring|Generating) (?:done|incomplete)|-- Found|-- Adding|-- Enabling)"), -1 ),
         ActionFormat( 1, QStringLiteral("-- Installing (.*)") ),
         //cmake - cd - filter for project directory
         ActionFormat( QStringLiteral("cd"),
