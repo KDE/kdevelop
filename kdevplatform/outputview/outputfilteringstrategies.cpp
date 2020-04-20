@@ -188,7 +188,7 @@ FilteredItem CompilerFilterStrategy::actionInLine(const QString& line)
         ActionFormat( 1, QStringLiteral("-- Installing (.*)") ),
         //cmake - cd - filter for project directory
         ActionFormat( QStringLiteral("cd"),
-                      QStringLiteral("(?:)cmake(?:\\.exe|\\.bat)? (?:.*?) ((?:[A-Za-z]:|/).*$)"), 1),
+                      QStringLiteral("cmake(?:\\.exe|\\.bat)? (?:.*?) ((?:[A-Za-z]:|/).*$)"), 1),
         //libtool install
         ActionFormat( {},
                       QStringLiteral("/(?:bin/sh\\s.*mkinstalldirs).*\\s([^\\s;]+)"), 1 ),
