@@ -51,13 +51,13 @@ void SvnInternalInfoJob::run(ThreadWeaver::JobPointer /*self*/, ThreadWeaver::Th
         h.repoUrl = QUrl::fromUserInput( QString::fromUtf8( i.repos() ) );
         h.repouuid = QString::fromUtf8( i.uuid() );
         h.lastChangedRev = qlonglong( i.lastChangedRevision() );
-        h.lastChangedDate = QDateTime::fromTime_t( i.lastChangedDate() );
+        h.lastChangedDate = QDateTime::fromSecsSinceEpoch(i.lastChangedDate(), Qt::LocalTime);
         h.lastChangedAuthor = QString::fromUtf8( i.lastChangedAuthor() );
         h.scheduled = i.schedule();
         h.copyFromUrl = QUrl::fromUserInput( QString::fromUtf8( i.copyFromUrl() ) );
         h.copyFromRevision = qlonglong( i.copyFromRevision() );
-        h.textTime = QDateTime::fromTime_t( i.textTime() );
-        h.propertyTime = QDateTime::fromTime_t( i.propertyTime() );
+        h.textTime = QDateTime::fromSecsSinceEpoch(i.textTime(), Qt::LocalTime);
+        h.propertyTime = QDateTime::fromSecsSinceEpoch(i.propertyTime(), Qt::LocalTime);
         h.oldFileConflict = QString::fromUtf8( i.oldConflictFile() );
         h.newFileConflict = QString::fromUtf8( i.newConflictFile() );
         h.workingCopyFileConflict = QString::fromUtf8( i.workingConflictFile() );
@@ -107,7 +107,7 @@ QVariant SvnInfoJob::fetchResults()
         switch( m_provideRevisionType )
         {
             case KDevelop::VcsRevision::Date:
-                rev.setRevisionValue( QVariant( QDateTime::fromTime_t(  svnRev.date() ) ),
+                rev.setRevisionValue( QVariant( QDateTime::fromSecsSinceEpoch(svnRev.date(), Qt::LocalTime) ),
                                       KDevelop::VcsRevision::Date );
                 break;
             default:

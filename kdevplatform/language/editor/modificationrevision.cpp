@@ -141,5 +141,5 @@ bool ModificationRevision::operator !=(const ModificationRevision& rhs) const
 
 QString ModificationRevision::toString() const
 {
-    return QStringLiteral("%1 (rev %2)").arg(QDateTime::fromTime_t(modificationTime).time().toString()).arg(revision);
+    return QStringLiteral("%1 (rev %2)").arg(QDateTime::fromSecsSinceEpoch(modificationTime, Qt::LocalTime).time().toString()).arg(revision);
 }
