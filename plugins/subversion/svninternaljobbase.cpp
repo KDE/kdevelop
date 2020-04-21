@@ -349,7 +349,7 @@ svn::Revision SvnInternalJobBase::createSvnCppRevisionFromVcsRevision( const KDe
             QDateTime dt = value.toDateTime();
             if( dt.isValid() )
             {
-                rev = svn::Revision( dt.toTime_t() );
+                rev = svn::Revision( dt.toSecsSinceEpoch() );
             }
             break;
         }

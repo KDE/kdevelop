@@ -1016,7 +1016,7 @@ class QDateTimeFormatter(HiddenMemberProvider):
         # FIXME: data member is in private structure, which has no complete type when no debug info
         # available for Qt.So we can only rely on function call.
         # The comments in Qt source code says data member will be inlined in Qt6,
-        res = invoke(var, 'toTime_t')
+        res = invoke(var, 'toSecsSinceEpoch')
         return res
 
     def _update(self):

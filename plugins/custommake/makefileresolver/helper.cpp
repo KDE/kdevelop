@@ -101,8 +101,8 @@ int Helper::changeAccessAndModificationTime(const QString& filename,
 {
     struct timeval times[2];
     times[0].tv_usec = 0;
-    times[0].tv_sec = accessTime.toTime_t();
+    times[0].tv_sec = accessTime.toSecsSinceEpoch();
     times[1].tv_usec = 0;
-    times[1].tv_sec = modificationTime.toTime_t();
+    times[1].tv_sec = modificationTime.toSecsSinceEpoch();
     return utimes(filename.toLocal8Bit().constData(), times);
 }

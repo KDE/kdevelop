@@ -912,7 +912,7 @@ void LldbFormattersTest::testQDateTime()
     WAIT_FOR_A_WHILE_AND_IDLE(m_session, 50);
 
     QList<QPair<QString, QString>> children;
-    children.append({QStringLiteral("toTime_t"), QStringLiteral("1264019473")});
+    children.append({QStringLiteral("toSecsSinceEpoch"), QStringLiteral("1264019473")});
     children.append({QStringLiteral("(ISO)"), QStringLiteral("\"2010-01-20 20:31:13\"")});
     children.append({QStringLiteral("(Locale)"), QStringLiteral("\".+\"")}); // (Locale), (UTC) and summary are locale dependent
     children.append({QStringLiteral("(UTC)"), QStringLiteral("\".+\"")});

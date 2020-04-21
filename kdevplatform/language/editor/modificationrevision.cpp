@@ -118,7 +118,7 @@ void ModificationRevision::setEditorRevisionForFile(const KDevelop::IndexedStrin
 }
 
 ModificationRevision::ModificationRevision(const QDateTime& modTime, int revision_)
-    : modificationTime(modTime.toTime_t())
+    : modificationTime(modTime.toSecsSinceEpoch())
     , revision(revision_)
 {
 }
