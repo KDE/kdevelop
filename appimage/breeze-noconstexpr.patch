@@ -1,0 +1,18 @@
+diff --git a/kstyle/breezehelper.h b/kstyle/breezehelper.h
+index 3b6320dc..ab42981c 100644
+--- a/kstyle/breezehelper.h
++++ b/kstyle/breezehelper.h
+@@ -314,11 +314,11 @@ namespace Breeze
+         //@}
+ 
+         //* frame radius
+-        constexpr qreal frameRadius( const int penWidth = PenWidth::NoPen, const qreal bias = 0 ) const
++        qreal frameRadius( const int penWidth = PenWidth::NoPen, const qreal bias = 0 ) const
+         { return qMax( Metrics::Frame_FrameRadius - (0.5 * penWidth) + bias, 0.0 ); }
+         
+         //* frame radius with new pen width
+-        constexpr qreal frameRadiusForNewPenWidth( const qreal oldRadius, const int penWidth ) const
++        qreal frameRadiusForNewPenWidth( const qreal oldRadius, const int penWidth ) const
+         { return qMax( oldRadius - (0.5 * penWidth), 0.0 ); }
+         
+         //* return a QRectF with the appropriate size for a rectangle with a pen stroke

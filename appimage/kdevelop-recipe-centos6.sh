@@ -27,11 +27,11 @@ fi
 if [ -z "$KDEV_PG_QT_VERSION" ]; then
     KDEV_PG_QT_VERSION=v2.2.1
 fi
-# remove kxmlgui_fixdockvisibilitystatestoring.patch for >5.66.0
-# remove ktexteditor_fixdragncopy.patch for >5.66.0
-KF5_VERSION=v5.66.0
-PLASMA_VERSION=v5.17.5
-KDE_RELEASESERVICE_VERSION=v19.12.1
+# remove breezeicons-compatcmake3.6.patch for >5.69.0
+KF5_VERSION=v5.69.0
+PLASMA_VERSION=v5.18.4
+# remove konsole-nooptionalinclude.patch for >20.04.0 (check https://invent.kde.org/kde/konsole/-/merge_requests/85)
+KDE_RELEASESERVICE_VERSION=v20.04.0
 GRANTLEE_VERSION=v5.2.0
 OKTETA_VERSION=v0.26.3
 
@@ -176,7 +176,7 @@ build_framework kconfigwidgets -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kiconthemes -DBUILD_DESIGNERPLUGIN=OFF
 build_framework ktextwidgets -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kglobalaccel
-(PATCH_FILE=$SCRIPT_DIR/kxmlgui_fixdockvisibilitystatestoring.patch build_framework kxmlgui -DBUILD_DESIGNERPLUGIN=OFF)
+build_framework kxmlgui -DBUILD_DESIGNERPLUGIN=OFF
 build_framework kbookmarks
 build_framework solid
 build_framework kio -DBUILD_DESIGNERPLUGIN=OFF
@@ -186,14 +186,14 @@ build_framework threadweaver
 build_framework attica
 build_framework knewstuff
 build_framework syntax-highlighting
-(PATCH_FILE=$SCRIPT_DIR/ktexteditor_fixdragncopy.patch build_framework ktexteditor)
+build_framework ktexteditor
 build_framework kpackage
 build_framework kdeclarative
 build_framework kcmutils
 (PATCH_FILE=$SCRIPT_DIR/knotifications_no_phonon.patch build_framework knotifications)
-build_framework knotifyconfig
+(PATCH_FILE=$SCRIPT_DIR/knotifyconfig_no_phonon.patch build_framework knotifyconfig)
 build_framework kdoctools
-build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1
+(PATCH_FILE=$SCRIPT_DIR/breezeicons-compatcmake3.6.patch build_framework breeze-icons -DBINARY_ICONS_RESOURCE=1)
 build_framework kpty
 build_framework kinit 
 fi
@@ -201,12 +201,12 @@ fi
 # KDE Plasma
 build_project libksysguard $PLASMA_VERSION
 build_project kdecoration $PLASMA_VERSION # needed by breeze
-build_project breeze $PLASMA_VERSION
+(PATCH_FILE=$SCRIPT_DIR/breeze-noconstexpr.patch build_project breeze $PLASMA_VERSION)
 
 # KDE Applications
 build_project libkomparediff2 $KDE_RELEASESERVICE_VERSION
 build_project kate $KDE_RELEASESERVICE_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE
-build_project konsole $KDE_RELEASESERVICE_VERSION
+(PATCH_FILE=$SCRIPT_DIR/konsole-nooptionalinclude.patch build_project konsole $KDE_RELEASESERVICE_VERSION)
 build_project okteta $OKTETA_VERSION -DBUILD_DESIGNERPLUGIN=OFF -DBUILD_OKTETAKASTENLIBS=OFF
 
 # Extra
