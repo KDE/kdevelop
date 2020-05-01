@@ -395,19 +395,41 @@ ClangParsingEnvironment ParseSessionData::environment() const
     return m_environment;
 }
 
+void ParseSessionData::lock()
+{
+    ENSURE_CHAIN_NOT_LOCKED
+#if CINDEX_VERSION_MINOR >= 41
+    m_waitingSessions.ref();
+#endif
+    m_mutex.lock();
+}
+
+void ParseSessionData::unlock()
+{
+    m_mutex.unlock();
+#if CINDEX_VERSION_MINOR >= 41
+    if (!m_waitingSessions.deref() && m_unit) {
+        // noone is waiting anymore, suspend
+        qCDebug(KDEV_CLANG) << "suspending translation unit" << ClangString(clang_getFileName(m_file));
+        if (!clang_suspendTranslationUnit(m_unit)) {
+            qCWarning(KDEV_CLANG) << "could not suspend translation unit" << ClangString(clang_getFileName(m_file));
+        }
+    }
+#endif
+}
+
 ParseSession::ParseSession(const ParseSessionData::Ptr& data)
     : d(data)
 {
     if (d) {
-        ENSURE_CHAIN_NOT_LOCKED
-        d->m_mutex.lock();
+        d->lock();
     }
 }
 
 ParseSession::~ParseSession()
 {
     if (d) {
-        d->m_mutex.unlock();
+        d->unlock();
     }
 }
 
@@ -418,14 +440,13 @@ void ParseSession::setData(const ParseSessionData::Ptr& data)
     }
 
     if (d) {
-        d->m_mutex.unlock();
+        d->unlock();
     }
 
     d = data;
 
     if (d) {
-        ENSURE_CHAIN_NOT_LOCKED
-        d->m_mutex.lock();
+        d->lock();
     }
 }
 

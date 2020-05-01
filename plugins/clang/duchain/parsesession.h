@@ -68,10 +68,16 @@ public:
     ClangParsingEnvironment environment() const;
 
 private:
+    void lock();
+    void unlock();
+
     friend class ParseSession;
     void setUnit(CXTranslationUnit unit);
     QByteArray writeDefinesFile(const QMap<QString, QString>& defines);
 
+    // ref count of ParseSessions that are waiting to get access to this data
+    // only when this drops to zero after unlocking should we suspend a TU
+    QAtomicInt m_waitingSessions;
     QMutex m_mutex;
 
     CXFile m_file = nullptr;
