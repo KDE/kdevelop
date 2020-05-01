@@ -1,0 +1,27 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7f649eb5..19661a2f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -39,6 +39,13 @@ function(generate_binary_resource target outfile)
+     set(RESOURCE_FILE ${RESOURCES_WORKING_DIR}/breeze-${target}.qrc)
+     set(BINARY_RESOURCE_FILE ${CMAKE_CURRENT_BINARY_DIR}/breeze-${target}.rcc)
+ 
++    # Use $<IF:$<BOOL:${MSVC}>,PATH,LD_LIBRARY_PATH> instead of ${pathVarName} once CMake 3.8 is minimum
++    if(MSVC)
++        set(pathVarName PATH)
++    else()
++        set(pathVarName LD_LIBRARY_PATH)
++    endif()
++
+     get_target_property(QT_RCC_EXECUTABLE Qt5::rcc LOCATION)
+ 
+     add_custom_target(breeze-${target}-mkdir
+@@ -53,7 +60,7 @@ function(generate_binary_resource target outfile)
+             ${RESOURCES_WORKING_DIR}/CMakeLists.txt
+         COMMAND ${QT_RCC_EXECUTABLE} --project -o ${CMAKE_CURRENT_BINARY_DIR}/tmp.qrc
+         COMMAND ${CMAKE_COMMAND} -E env
+-            $<IF:$<BOOL:${MSVC}>,PATH,LD_LIBRARY_PATH>=$<TARGET_FILE_DIR:Qt5::Core>
++            ${pathVarName}=$<TARGET_FILE_DIR:Qt5::Core>
+             $<TARGET_FILE:qrcAlias> -i ${CMAKE_CURRENT_BINARY_DIR}/tmp.qrc -o ${RESOURCE_FILE}
+ 
+         WORKING_DIRECTORY ${RESOURCES_WORKING_DIR}

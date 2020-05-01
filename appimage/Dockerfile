@@ -5,7 +5,7 @@ RUN cd /tmp && wget http://opensource.wandisco.com/rhel/6/svn-1.9/RPMS/x86_64/su
 
 RUN echo ". /opt/rh/devtoolset-6/enable && chmod +x /opt/rh/python27/enable && . /opt/rh/python27/enable" >> /root/.bashrc
 
-ENV LANG=en_US.UTF-8 PYTHON_VERSION=3.6.7 QTVERSION=5.12.6 QTVERSION_SHORT=5.12 LLVM_VERSION=9.0.0 LLVM_ROOT=/opt/llvm/ RUBY_VERSION=1.9.3-p484 GLIB_VERSION_SHORT=2.61 GLIB_VERSION=2.61.2 LD_LIBRARY_PATH=$QTDIR/lib/
+ENV LANG=en_US.UTF-8 PYTHON_VERSION=3.6.7 QTVERSION=5.12.8 QTVERSION_SHORT=5.12 LLVM_VERSION=10.0.0 LLVM_ROOT=/opt/llvm/ RUBY_VERSION=1.9.3-p484 GLIB_VERSION_SHORT=2.61 GLIB_VERSION=2.61.2 LD_LIBRARY_PATH=$QTDIR/lib/
 ENV QTDIR=/opt/qt5
 
 RUN bash -c "ln -sf /opt/rh/devtoolset-6/root/usr/bin/g++ /usr/bin/g++ && ln -sf /opt/rh/devtoolset-6/root/usr/bin/c++ /usr/bin/c++"
@@ -47,16 +47,16 @@ RUN bash -c "cd /icu/ && tar xvf icu4c-52_2-src.tgz"
 RUN bash -c ". /opt/rh/devtoolset-6/enable && cd /icu/icu/source && ./configure --prefix /opt/icu4c-52_2 && make -j$(nproc) && make -j$(nproc) install && rm -Rf /icu && echo "/opt/icu4c-52_2/lib/" > /etc/ld.so.conf.d/icu4c-52_2.conf && ldconfig"
 
 # Build qtwebkit
-RUN bash -c "mkdir -p /qtwk && cd /qtwk && wget https://github.com/qt/qtwebkit/archive/v5.212.0-alpha3.tar.gz"
-RUN bash -c "cd /qtwk/ && tar xvf v5.212.0-alpha3.tar.gz"
+RUN bash -c "mkdir -p /qtwk && cd /qtwk && wget https://github.com/qt/qtwebkit/archive/v5.212.0-alpha4.tar.gz"
+RUN bash -c "cd /qtwk/ && tar xvf v5.212.0-alpha4.tar.gz"
 # libxml2 2.6.0 "will probably work" according to https://github.com/qtwebkit/qtwebkit/wiki/Building-QtWebKit-on-Linux
-RUN bash -c ". /opt/rh/python27/enable && . /opt/rh/devtoolset-6/enable && sed -i 's/find_package(LibXml2 2.8.0 REQUIRED)/find_package(LibXml2 2.6.0 REQUIRED)/g' /qtwk/qtwebkit-5.212.0-alpha3/Source/cmake/OptionsQt.cmake && mkdir -p /qtwk/qtwebkit-5.212.0-alpha3/WebKitBuild/Release && cd /qtwk/qtwebkit-5.212.0-alpha3/WebKitBuild/Release && PKG_CONFIG_PATH=/opt/icu4c-52_2/lib/pkgconfig/:${PKG_CONFIG_PATH} cmake3 -DPORT=Qt -DCMAKE_BUILD_TYPE=Release -DQt5_DIR=${QTDIR}/lib/cmake/Qt5 -DENABLE_GEOLOCATION=0 -DENABLE_DEVICE_ORIENTATION=0 -DENABLE_WEB_AUDIO=0 -DENABLE_VIDEO=0 ../.. && make -j$(nproc) && make -j$(nproc) install && rm -Rf /qtwk"
+RUN bash -c ". /opt/rh/python27/enable && . /opt/rh/devtoolset-6/enable && sed -i 's/find_package(LibXml2 2.8.0 REQUIRED)/find_package(LibXml2 2.6.0 REQUIRED)/g' /qtwk/qtwebkit-5.212.0-alpha4/Source/cmake/OptionsQt.cmake && mkdir -p /qtwk/qtwebkit-5.212.0-alpha4/WebKitBuild/Release && cd /qtwk/qtwebkit-5.212.0-alpha4/WebKitBuild/Release && PKG_CONFIG_PATH=/opt/icu4c-52_2/lib/pkgconfig/:${PKG_CONFIG_PATH} cmake3 -DPORT=Qt -DCMAKE_BUILD_TYPE=Release -DQt5_DIR=${QTDIR}/lib/cmake/Qt5 -DENABLE_GEOLOCATION=0 -DENABLE_DEVICE_ORIENTATION=0 -DENABLE_WEB_AUDIO=0 -DENABLE_VIDEO=0 ../.. && make -j$(nproc) && make -j$(nproc) install && rm -Rf /qtwk"
 
 # Build Clang/LLVM
-RUN bash -c "mkdir -p /llvm && cd /llvm && wget https://releases.llvm.org/${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz"
+RUN bash -c "mkdir -p /llvm && cd /llvm && wget https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/llvm-${LLVM_VERSION}.src.tar.xz"
 RUN bash -c "cd /llvm && tar xvf llvm-${LLVM_VERSION}.src.tar.xz && cd llvm-${LLVM_VERSION}.src"
-RUN bash -c "cd /llvm/llvm-${LLVM_VERSION}.src/tools && wget https://releases.llvm.org/${LLVM_VERSION}/cfe-${LLVM_VERSION}.src.tar.xz"
-RUN bash -c "cd /llvm/llvm-${LLVM_VERSION}.src/tools && tar xvf cfe-${LLVM_VERSION}.src.tar.xz"
+RUN bash -c "cd /llvm/llvm-${LLVM_VERSION}.src/tools && wget https://github.com/llvm/llvm-project/releases/download/llvmorg-${LLVM_VERSION}/clang-${LLVM_VERSION}.src.tar.xz"
+RUN bash -c "cd /llvm/llvm-${LLVM_VERSION}.src/tools && tar xvf clang-${LLVM_VERSION}.src.tar.xz"
 RUN bash -c ". /opt/rh/python27/enable && . /opt/rh/devtoolset-6/enable && python --version && cd /llvm/llvm-${LLVM_VERSION}.src && mkdir -p build && cd build && cmake3 -G Ninja .. -DCMAKE_INSTALL_PREFIX=/opt/llvm/ -DCMAKE_BUILD_TYPE=Release -DLLVM_INCLUDE_TESTS=OFF -DLLVM_TARGETS_TO_BUILD=X86 && ninja install && rm -Rf /llvm"
 
 
