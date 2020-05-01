@@ -442,6 +442,10 @@ IndexedString ParseSession::languageString()
 
 ClangProblem::Ptr ParseSession::getOrCreateProblem(int indexInTU, CXDiagnostic diagnostic) const
 {
+    if (!d) {
+        return {};
+    }
+
     auto& problem = d->m_diagnosticsCache[indexInTU];
     if (!problem) {
         problem = ClangDiagnosticEvaluator::createProblem(diagnostic, d->m_unit);
@@ -621,5 +625,8 @@ bool ParseSession::reparse(const QVector<UnsavedFile>& unsavedFiles, const Clang
 
 ClangParsingEnvironment ParseSession::environment() const
 {
+    if (!d) {
+        return {};
+    }
     return d->m_environment;
 }
