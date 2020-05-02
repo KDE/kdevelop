@@ -111,6 +111,7 @@ class ItemRepositoryRegistryPrivate
 public:
     ItemRepositoryRegistry* m_owner;
     bool m_shallDelete;
+    bool m_wasShutdown;
     QString m_path;
     QMap<AbstractItemRepository*, AbstractRepositoryManager*> m_repositories;
     QMap<QString, QAtomicInt*> m_customCounters;
@@ -119,6 +120,7 @@ public:
     explicit ItemRepositoryRegistryPrivate(ItemRepositoryRegistry* owner)
         : m_owner(owner)
         , m_shallDelete(false)
+        , m_wasShutdown(false)
         , m_mutex(QMutex::Recursive)
     {
     }
@@ -158,6 +160,8 @@ void ItemRepositoryRegistry::initialize(const QString& repositoryPath)
         ///the actual repositories might get deleted later than the repository registry.
         m_self = new ItemRepositoryRegistry(repositoryPath);
     }
+    m_self->d_func()->m_wasShutdown = false;
+    m_self->d_func()->m_shallDelete = false;
 }
 
 ItemRepositoryRegistry* ItemRepositoryRegistry::self()
@@ -170,7 +174,7 @@ void ItemRepositoryRegistry::deleteRepositoryFromDisk(const QString& repositoryP
 {
     // Now, as we have only the global item-repository registry, assume that if and only if
     // the given session is ours, its cache path is used by the said global item-repository registry.
-    if (m_self && m_self->d_func()->m_path == repositoryPath) {
+    if (m_self && !m_self->d_func()->m_wasShutdown && m_self->d_func()->m_path == repositoryPath) {
         // remove later
         m_self->d_func()->m_shallDelete = true;
     } else {
@@ -426,5 +430,7 @@ void ItemRepositoryRegistry::shutdown()
     } else {
         QFile::remove(path + QLatin1String("/crash_counter"));
     }
+
+    d->m_wasShutdown = true;
 }
 }
