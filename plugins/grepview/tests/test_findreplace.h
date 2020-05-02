@@ -51,6 +51,9 @@ private Q_SLOTS:
     void testFind();
     void testFind_data();
 
+    void testIncludeExcludeFilters();
+    void testIncludeExcludeFilters_data();
+
     void testReplace();
     void testReplace_data();
 };

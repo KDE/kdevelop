@@ -41,6 +41,7 @@
 #include <interfaces/isession.h>
 
 #include <util/path.h>
+#include <util/wildcardhelpers.h>
 
 #include "grepviewplugin.h"
 #include "grepoutputview.h"
@@ -494,7 +495,7 @@ void GrepDialog::startSearch()
         if (doc->state() != IDocument::Clean &&
             isPartOfChoice(docUrl) &&
             QDir::match(include, docUrl.fileName()) &&
-            !QDir::match(exclude, docUrl.toLocalFile())
+            !WildcardHelpers::match(exclude, docUrl.toLocalFile())
         ) {
             unsavedFiles << doc;
         }

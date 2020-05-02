@@ -25,7 +25,7 @@ int main(int argc, char** argv)
     using namespace KDevelop;
 
     if (argc == 1) {
-        qStdOut() << "Usage:" << argv[0] << "ORIGFILE [TMPFILE]\n\n";
+        qStdOut() << "Usage: " << argv[0] << " ORIGFILE [TMPFILE]\n\n";
         qStdOut() << "Where ORIGFILE represents the original location of the formatted contents,\n";
         qStdOut() << "and TMPFILE is used as the actual, potentially different,\n";
         qStdOut() << "contents of the file.\n";
@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 
     QFileInfo origFileInfo(QString::fromLocal8Bit(argv[1]));
     if (!origFileInfo.exists()) {
-        qStdOut() << "orig file \"" << origFileInfo.absoluteFilePath() << "\" does not exits\n";
+        qStdOut() << "orig file \"" << origFileInfo.absoluteFilePath() << "\" does not exist\n";
         return EXIT_FAILURE;
     }
 

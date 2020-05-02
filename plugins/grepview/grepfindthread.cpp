@@ -11,6 +11,8 @@
 
 #include <serialization/indexedstring.h>
 
+#include <util/wildcardhelpers.h>
+
 #include <algorithm>
 
 using KDevelop::IndexedString;
@@ -67,7 +69,7 @@ static QList<QUrl> thread_getProjectFiles(const QUrl& dir, int depth, const QStr
                     continue;
             }
         }
-        if( QDir::match(include, url.fileName()) && !QDir::match(exlude, url.toLocalFile()) )
+        if( QDir::match(include, url.fileName()) && !WildcardHelpers::match(exlude, url.toLocalFile()) )
             res << url;
     }
 
@@ -77,7 +79,7 @@ static QList<QUrl> thread_getProjectFiles(const QUrl& dir, int depth, const QStr
 static QList<QUrl> thread_findFiles(const QDir& dir, int depth, const QStringList& include,
                                    const QStringList& exclude, volatile bool &abort)
 {
-    QFileInfoList infos = dir.entryInfoList(include, QDir::NoDotAndDotDot|QDir::Files|QDir::Readable);
+    QFileInfoList infos = dir.entryInfoList(include, QDir::NoDotAndDotDot|QDir::Files|QDir::Readable|QDir::Hidden);
 
     if(!QFileInfo(dir.path()).isDir())
         infos << QFileInfo(dir.path());
@@ -85,12 +87,12 @@ static QList<QUrl> thread_findFiles(const QDir& dir, int depth, const QStringLis
     QList<QUrl> dirFiles;
     for (const QFileInfo& currFile : qAsConst(infos)) {
         QString currName = currFile.canonicalFilePath();
-        if(!QDir::match(exclude, currName))
+        if(!WildcardHelpers::match(exclude, currName))
             dirFiles << QUrl::fromLocalFile(currName);
     }
     if(depth != 0)
     {
-        static const QDir::Filters dirFilter = QDir::NoDotAndDotDot|QDir::AllDirs|QDir::Readable|QDir::NoSymLinks;
+        constexpr QDir::Filters dirFilter = QDir::NoDotAndDotDot|QDir::AllDirs|QDir::Readable|QDir::NoSymLinks|QDir::Hidden;
         const auto dirs = dir.entryInfoList(QStringList(), dirFilter);
         for (const QFileInfo& currDir : dirs) {
             if(abort)

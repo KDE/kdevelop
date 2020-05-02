@@ -42,8 +42,12 @@ public:
 private:
     bool executeCommand(QString command);
 
-    QString m_origFilePath;
-    QString m_tempFilePath;
+    /// This is logically a static constant, but since this class is instantiated
+    /// once in non-test code, making it a non-static member is safe and efficient.
+    const QString formatFileName;
+
+    const QString m_origFilePath;
+    const QString m_tempFilePath;
 
     QVector<KDevFormatLine> m_formatLines;
 };

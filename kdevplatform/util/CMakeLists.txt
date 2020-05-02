@@ -4,6 +4,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevplatform\")
 
 set(KDevPlatformUtil_LIB_SRCS
     autoorientedsplitter.cpp
+    filesystemhelpers.cpp
     foregroundlock.cpp
     formattinghelpers.cpp
     zoomcontroller.cpp
@@ -68,9 +69,11 @@ install(FILES .zshrc PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXEC
 
 install( FILES
     autoorientedsplitter.h
+    filesystemhelpers.h
     foregroundlock.h
     formattinghelpers.h
     zoomcontroller.h
+    wildcardhelpers.h
     kdevstringhandler.h
     ksharedobject.h
     focusedtreeview.h

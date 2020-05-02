@@ -1,5 +1,5 @@
-# Disable
-kdevplatform/language/codegen/tests/* : # (otherwise this breaks unit tests)
+# Disable (otherwise this breaks unit tests)
+kdevplatform/language/codegen/tests/* :
 
 # Default: 4-space indentation
 * : uncrustify -l CPP -f $TMPFILE -c format.config.uncrustify -o $TMPFILE
