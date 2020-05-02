@@ -433,6 +433,12 @@ void TestPath::testPathAddData()
         }
 
         baseUrl = baseUrl.adjusted(QUrl::NormalizePathSegments);
+        if (baseUrl.path().contains(QLatin1String("//"))) {
+            // odd, this should have been normalized, no?
+            auto path = baseUrl.path();
+            path.replace(QLatin1String("//"), QLatin1String("/"));
+            baseUrl.setPath(path);
+        }
         // QUrl::StripTrailingSlash converts file:/// to file: which is not what we want
         if (baseUrl.path() != QLatin1String("/")) {
             baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
