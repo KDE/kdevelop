@@ -224,24 +224,64 @@ QStringList EnvironmentProfileList::createEnvironment(const QString& profileName
     return env;
 }
 
+static QString expandVariable(const QString &key, const QString &value,
+                              QMap<QString, QString> &output,
+                              const QMap<QString, QString> &input,
+                              const QProcessEnvironment &environment)
+{
+    if (value.isEmpty())
+        return QString();
+
+    auto it = output.constFind(key);
+    if (it != output.constEnd()) {
+        // nothing to do, value was expanded already
+        return *it;
+    }
+
+    // not yet expanded, do that now
+
+    auto lastNonVarChunk = [&value](int from, int until) {
+        if (until == from)
+            return QString();
+        auto chunk = value.mid(from, until - from);
+        // un-escape
+        chunk.replace(QLatin1String("\\\\"), QLatin1String("\\"));
+        chunk.replace(QLatin1String("\\$"), QLatin1String("$"));
+        return chunk;
+    };
+
+    auto variableValue = [&](const QString &variable) {
+        if (environment.contains(variable)) {
+            return environment.value(variable);
+        } else if (variable == key) {
+            qCWarning(UTIL) << "recursive variable expansion" << variable;
+            return QString();
+        } else if (input.contains(variable)) {
+            return expandVariable(variable, input.value(variable), output, input, environment);
+        } else {
+            qCWarning(UTIL) << "Couldn't find replacement for" << variable;
+            return QString();
+        }
+    };
+
+    static const QRegularExpression rVar(QStringLiteral("(?<!\\\\)\\$\\w+"));
+    QRegularExpressionMatch m;
+    int offset = 0;
+    auto& expanded = output[key];
+    while ((m = rVar.match(value, offset)).hasMatch()) {
+        expanded += lastNonVarChunk(offset, m.capturedStart(0));
+        expanded += variableValue(m.capturedRef(0).mid(1).toString());
+        offset = m.capturedEnd(0);
+    }
+    expanded += lastNonVarChunk(offset, value.size());
+    return expanded;
+}
+
 void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcessEnvironment& environment)
 {
-    QRegularExpression rVar(QStringLiteral("(?<!\\\\)(\\$\\w+)"));
-    QRegularExpression rNotVar(QStringLiteral("\\\\\\$"));
-    for (auto& value : variables) {
-        QRegularExpressionMatch m;
-        while ((m = rVar.match(value)).hasMatch()) {
-            if (environment.contains(m.capturedRef(1).mid(1).toString())) {
-                value.replace(m.capturedStart(0), m.capturedLength(0),
-                                   environment.value(m.capturedRef(0).mid(1).toString()));
-            } else if (variables.contains(m.capturedRef(1).mid(1).toString())){
-                value.replace(m.capturedStart(0), m.capturedLength(0),
-                                   variables.value(m.capturedRef(0).mid(1).toString()));
-            } else {
-                qCWarning(UTIL) << "Couldn't find replacement for" << m.captured();
-                value.remove(m.capturedStart(0), m.capturedLength(0));
-            }
-        }
-        value.replace(rNotVar, QStringLiteral("$"));
+    QMap<QString, QString> expanded;
+    for (auto it = variables.begin(), end = variables.end(); it != end; ++it) {
+        expandVariable(it.key(), it.value(), expanded, variables, environment);
     }
+    variables = expanded;
 }

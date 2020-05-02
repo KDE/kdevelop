@@ -68,6 +68,27 @@ void TestEnvironment::testExpandVariables_data()
     }) << ProcEnv({
         {"VAR1", "/bin:/usr/bin"}, {"VAR2", "/bin:/usr/bin"}
     });
+    QTest::newRow("adding to a variable not in the environment") << ProcEnv({
+        {"VAR1", "data:$VAR1"}
+    }) << ProcEnv({
+        {"VAR1", "data:"}
+    });
+    QTest::newRow("cycle") << ProcEnv({
+        {"VAR1", "$VAR2"},
+        {"VAR2", "/usr/$VAR2"}
+    }) << ProcEnv({
+        {"VAR1", "/usr/"},
+        {"VAR2", "/usr/"}
+    });
+    QTest::newRow("order") << ProcEnv({
+        {"VAR1", "$VAR3"},
+        {"VAR2", "foo"},
+        {"VAR3", "$VAR2"},
+    }) << ProcEnv({
+        {"VAR1", "foo"},
+        {"VAR2", "foo"},
+        {"VAR3", "foo"},
+    });
 }
 
 void TestEnvironment::testExpandVariables()
