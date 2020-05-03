@@ -248,24 +248,24 @@ void QtPrintersTest::testQListContainer()
     out = gdb.execute("print pairList");
     QVERIFY(out.contains(QString("%1<QPair<int, int>> (size = 2)").arg(container).toLocal8Bit()));
     if (container != QLatin1String("QSet")) {
-        QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
-        QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
+        QVERIFY(out.contains("[0] = {\n    first = 1,\n    second = 2\n  }"));
+        QVERIFY(out.contains("[1] = {\n    first = 2,\n    second = 3\n  }"));
     } else { // order is undefined in QSet
-        QVERIFY(out.contains("] = {\n    first = 1, \n    second = 2\n  }"));
-        QVERIFY(out.contains("] = {\n    first = 2, \n    second = 3\n  }"));
+        QVERIFY(out.contains("] = {\n    first = 1,\n    second = 2\n  }"));
+        QVERIFY(out.contains("] = {\n    first = 2,\n    second = 3\n  }"));
     }
     QVERIFY(!out.contains("[2] = "));
     gdb.execute("next");
     out = gdb.execute("print pairList");
     QVERIFY(out.contains(QString("%1<QPair<int, int>> (size = 3)").arg(container).toLocal8Bit()));
     if (container != QLatin1String("QSet")) {
-        QVERIFY(out.contains("[0] = {\n    first = 1, \n    second = 2\n  }"));
-        QVERIFY(out.contains("[1] = {\n    first = 2, \n    second = 3\n  }"));
-        QVERIFY(out.contains("[2] = {\n    first = 4, \n    second = 5\n  }"));
+        QVERIFY(out.contains("[0] = {\n    first = 1,\n    second = 2\n  }"));
+        QVERIFY(out.contains("[1] = {\n    first = 2,\n    second = 3\n  }"));
+        QVERIFY(out.contains("[2] = {\n    first = 4,\n    second = 5\n  }"));
     } else { // order is undefined in QSet
-        QVERIFY(out.contains("] = {\n    first = 1, \n    second = 2\n  }"));
-        QVERIFY(out.contains("] = {\n    first = 2, \n    second = 3\n  }"));
-        QVERIFY(out.contains("] = {\n    first = 4, \n    second = 5\n  }"));
+        QVERIFY(out.contains("] = {\n    first = 1,\n    second = 2\n  }"));
+        QVERIFY(out.contains("] = {\n    first = 2,\n    second = 3\n  }"));
+        QVERIFY(out.contains("] = {\n    first = 4,\n    second = 5\n  }"));
     }
     }
 }
