@@ -478,7 +478,7 @@ DeclarationPointer CodeCompletionContext::declarationAtEndOfString(const QString
     QmlJS::Document::MutablePtr doc = QmlJS::Document::create(QStringLiteral("inline"), Dialect::JavaScript);
     ExpressionStackEntry topEntry = expressionStack(expression).top();
 
-    doc->setSource(expression.mid(topEntry.operatorEnd));
+    doc->setSource(expression.mid(topEntry.operatorEnd + topEntry.commas));
     doc->parseExpression();
 
     if (!doc || !doc->isParsedCorrectly()) {
