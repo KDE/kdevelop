@@ -89,6 +89,77 @@ void TestEnvironment::testExpandVariables_data()
         {"VAR2", "foo"},
         {"VAR3", "foo"},
     });
+    QTest::newRow("escaped backslash before dollar") << ProcEnv({
+        {"var1", "\\\\$var2"},
+        {"var2", "x"},
+    }) << ProcEnv({
+        {"var1", "\\x"},
+        {"var2", "x"},
+    });
+    QTest::newRow("non-escaping backslashes") << ProcEnv({
+        {"var1", "\\abc\\def\\"},
+    }) << ProcEnv({
+        {"var1", "\\abc\\def\\"},
+    });
+    QTest::newRow("verbatim dollars") << ProcEnv({
+        {"var1", "a\\$b$.$\\c$"},
+    }) << ProcEnv({
+        {"var1", "a$b$.$\\c$"},
+    });
+    QTest::newRow("expansion priority") << ProcEnv({
+        {"A", "$PATH"},
+        {"HOME", "my$HOME"},
+        {"PATH", "."},
+        {"X", "$A$HOME$Z"},
+        {"Z", "-$PATH+"},
+    }) << ProcEnv({
+        {"A", "/bin:/usr/bin"},
+        {"HOME", "my/home/tom"},
+        {"PATH", "."},
+        {"X", "/bin:/usr/bin/home/tom-/bin:/usr/bin+"},
+        {"Z", "-/bin:/usr/bin+"},
+    });
+
+    // The mutual recursion tests below process unreasonable input. The purpose
+    // of these tests is to verify that KDevelop does not crash or hang with
+    // such input. The actual results are unimportant.
+    QTest::newRow("mutual recursion") << ProcEnv({
+        {"VAR1", "$VAR2"},
+        {"VAR2", "$VAR1"},
+    }) << ProcEnv({
+        {"VAR1", ""},
+        {"VAR2", ""},
+    });
+    QTest::newRow("mutual recursion - prefix") << ProcEnv({
+        {"VAR1", "/bin/$VAR2"},
+        {"VAR2", "/usr/$VAR1"},
+    }) << ProcEnv({
+        {"VAR1", "/bin//usr//bin/"},
+        {"VAR2", "/usr//bin/"},
+    });
+    QTest::newRow("mutual recursion - suffix") << ProcEnv({
+        {"VAR1", "$VAR2/"},
+        {"VAR2", "$VAR1."},
+    }) << ProcEnv({
+        {"VAR1", "./"},
+        {"VAR2", "."},
+    });
+    QTest::newRow("mutual recursion - middle") << ProcEnv({
+        {"VAR1", "a$VAR2."},
+        {"VAR2", "b$VAR1,"},
+    }) << ProcEnv({
+        {"VAR1", "aba,."},
+        {"VAR2", "ba,"},
+    });
+    QTest::newRow("3-way recursion") << ProcEnv({
+        {"a", "1$b-2"},
+        {"b", "3$c-4"},
+        {"c", "5$a-6"},
+    }) << ProcEnv({
+        {"a", "1351-6-4-2"},
+        {"b", "351-6-4"},
+        {"c", "51-6"},
+    });
 }
 
 void TestEnvironment::testExpandVariables()

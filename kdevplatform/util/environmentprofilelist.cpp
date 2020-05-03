@@ -240,16 +240,6 @@ static QString expandVariable(const QString &key, const QString &value,
 
     // not yet expanded, do that now
 
-    auto lastNonVarChunk = [&value](int from, int until) {
-        if (until == from)
-            return QString();
-        auto chunk = value.mid(from, until - from);
-        // un-escape
-        chunk.replace(QLatin1String("\\\\"), QLatin1String("\\"));
-        chunk.replace(QLatin1String("\\$"), QLatin1String("$"));
-        return chunk;
-    };
-
     auto variableValue = [&](const QString &variable) {
         if (environment.contains(variable)) {
             return environment.value(variable);
@@ -264,16 +254,49 @@ static QString expandVariable(const QString &key, const QString &value,
         }
     };
 
-    static const QRegularExpression rVar(QStringLiteral("(?<!\\\\)\\$\\w+"));
-    QRegularExpressionMatch m;
-    int offset = 0;
+    constexpr ushort escapeChar{'\\'};
+    constexpr ushort variableStartChar{'$'};
+    const auto isSpecialSymbol = [](QChar c) {
+        return c.unicode() == escapeChar || c.unicode() == variableStartChar;
+    };
+
+    static const QRegularExpression variableNameRegexp(QStringLiteral("\\A\\w+"));
     auto& expanded = output[key];
-    while ((m = rVar.match(value, offset)).hasMatch()) {
-        expanded += lastNonVarChunk(offset, m.capturedStart(0));
-        expanded += variableValue(m.capturedRef(0).mid(1).toString());
-        offset = m.capturedEnd(0);
+    expanded.reserve(value.size());
+    const int lastIndex = value.size() - 1;
+    int i = 0;
+    // Never treat value.back() as a special symbol (nothing to escape or start).
+    while (i < lastIndex) {
+        const auto currentChar = value[i];
+        switch (currentChar.unicode()) {
+        case escapeChar: {
+            const auto nextChar = value[i+1];
+            if (!isSpecialSymbol(nextChar)) {
+                expanded += currentChar; // Nothing to escape => keep the escapeChar.
+            }
+            expanded += nextChar;
+            i += 2;
+            break;
+        }
+        case variableStartChar: {
+            ++i;
+            const auto m = variableNameRegexp.match(value.midRef(i));
+            if (m.hasMatch()) {
+                expanded += variableValue(m.captured());
+                i += m.capturedEnd();
+            } else {
+                expanded += currentChar; // Not a variable start.
+            }
+            break;
+        }
+        default:
+            expanded += currentChar;
+            ++i;
+        }
     }
-    expanded += lastNonVarChunk(offset, value.size());
+    if (i == lastIndex) {
+        expanded += value[i];
+    }
     return expanded;
 }
 
