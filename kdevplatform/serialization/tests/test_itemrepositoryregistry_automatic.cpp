@@ -25,7 +25,7 @@ class TestItemRepositoryRegistryAutomaticDeletion
 private Q_SLOTS:
     void initTestCase()
     {
-        AutoTestShell::init();
+        AutoTestShell::init({QString()});
     }
 
     void testTemporarySessionDeletion()
