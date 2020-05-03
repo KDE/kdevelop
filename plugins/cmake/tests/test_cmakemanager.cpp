@@ -330,7 +330,12 @@ void TestCMakeManager::testReload()
     QVERIFY(fmp);
 
     auto projectItem = project->projectItem();
+
     auto targets = projectItem->targetList();
+    QCOMPARE(targets.size(), 1);
+    auto target = dynamic_cast<CMakeTargetItem*>(targets.first());
+    QVERIFY(target);
+    QCOMPARE(target->text(), QStringLiteral("foo"));
 
     auto job = fmp->createImportJob(project->projectItem());
     project->setReloadJob(job);
@@ -341,7 +346,11 @@ void TestCMakeManager::testReload()
     QCOMPARE(spy.count(), 1);
 
     QCOMPARE(projectItem, project->projectItem());
-    QCOMPARE(targets, projectItem->targetList());
+    targets = projectItem->targetList();
+    QCOMPARE(targets.size(), 1);
+    target = dynamic_cast<CMakeTargetItem*>(targets.first());
+    QVERIFY(target);
+    QCOMPARE(target->text(), QStringLiteral("foo"));
 }
 
 void TestCMakeManager::testFaultyTarget()
