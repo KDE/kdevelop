@@ -11,6 +11,7 @@ function(add_debuggable_executable target)
     else()
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -O0")
     endif()
+    set_target_properties(${target} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
 endfunction()
 
 add_debuggable_executable(debuggee_debugee SRCS debugee.cpp)
