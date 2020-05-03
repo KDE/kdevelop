@@ -280,7 +280,7 @@ static QString expandVariable(const QString &key, const QString &value,
 void KDevelop::expandVariables(QMap<QString, QString>& variables, const QProcessEnvironment& environment)
 {
     QMap<QString, QString> expanded;
-    for (auto it = variables.begin(), end = variables.end(); it != end; ++it) {
+    for (auto it = variables.cbegin(), end = variables.cend(); it != end; ++it) {
         expandVariable(it.key(), it.value(), expanded, variables, environment);
     }
     variables = expanded;
