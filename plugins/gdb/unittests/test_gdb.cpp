@@ -390,25 +390,25 @@ void GdbTest::testChangeLocationBreakpoint()
 
     session->startDebugging(&cfg, m_iface);
     WAIT_FOR_STATE_AND_IDLE(session, DebugSession::PausedState);
-    QCOMPARE(session->line(), 27);
-
-    QTest::qWait(100);
-    b->setLine(28);
-    QTest::qWait(100);
-    session->run();
-
-    QTest::qWait(100);
-    WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 28);
-    QTest::qWait(500);
-    breakpoints()->setData(breakpoints()->index(0, KDevelop::Breakpoint::LocationColumn), QString(debugeeFileName+":30"));
-    QCOMPARE(b->line(), 29);
+
     QTest::qWait(100);
-    QCOMPARE(b->line(), 29);
+    b->setLine(29);
+    QTest::qWait(100);
     session->run();
+
     QTest::qWait(100);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QCOMPARE(session->line(), 29);
+    QTest::qWait(500);
+    breakpoints()->setData(breakpoints()->index(0, KDevelop::Breakpoint::LocationColumn), QString(debugeeFileName+":31"));
+    QCOMPARE(b->line(), 30);
+    QTest::qWait(100);
+    QCOMPARE(b->line(), 30);
+    session->run();
+    QTest::qWait(100);
+    WAIT_FOR_STATE(session, DebugSession::PausedState);
+    QCOMPARE(session->line(), 30);
     session->run();
 
     WAIT_FOR_STATE(session, DebugSession::EndedState);
@@ -476,11 +476,11 @@ void GdbTest::testUpdateBreakpoint()
     QCOMPARE(breakpoints()->rowCount(), 2);
     b = breakpoints()->breakpoint(1);
     QCOMPARE(b->url(), QUrl::fromLocalFile(debugeeFileName));
-    QCOMPARE(b->line(), 31);
+    QCOMPARE(b->line(), 32);
 
     session->run();
     WAIT_FOR_STATE(session, DebugSession::PausedState); // stop at breakpoint 2
-    QCOMPARE(session->currentLine(), 31);
+    QCOMPARE(session->currentLine(), 32);
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);
 }
@@ -684,11 +684,11 @@ void GdbTest::testInsertBreakpointWhileRunning()
     WAIT_FOR_STATE(session, DebugSession::ActiveState);
     QTest::qWait(2000);
     qDebug() << "adding breakpoint";
-    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 30); // ++i;
+    KDevelop::Breakpoint *b = breakpoints()->addCodeBreakpoint(QUrl::fromLocalFile(fileName), 29); // ++i;
     QTest::qWait(500);
     WAIT_FOR_STATE(session, DebugSession::PausedState);
     QTest::qWait(500);
-    QCOMPARE(session->line(), 30); // ++i;
+    QCOMPARE(session->line(), 29); // ++i;
     b->setDeleted();
     session->run();
     WAIT_FOR_STATE(session, DebugSession::EndedState);

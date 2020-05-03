@@ -507,7 +507,7 @@ void MIBreakpointController::createFromDebugger(const Value& miBkpt)
 {
     const QString type = miBkpt[QStringLiteral("type")].literal();
     Breakpoint::BreakpointKind gdbKind;
-    if (type == QLatin1String("breakpoint")) {
+    if (type == QLatin1String("breakpoint") || type == QLatin1String("catchpoint")) {
         gdbKind = Breakpoint::CodeBreakpoint;
     } else if (type == QLatin1String("watchpoint") || type == QLatin1String("hw watchpoint")) {
         gdbKind = Breakpoint::WriteBreakpoint;
