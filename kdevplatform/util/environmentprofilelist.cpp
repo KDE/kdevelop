@@ -18,6 +18,7 @@ Boston, MA 02110-1301, USA.
 */
 
 #include "environmentprofilelist.h"
+#include "kdevstringhandler.h"
 #include "debug.h"
 
 #include <QMap>
@@ -26,7 +27,6 @@ Boston, MA 02110-1301, USA.
 
 #include <KConfigGroup>
 
-#include <QRegularExpression>
 #include <QProcessEnvironment>
 
 namespace KDevelop {
@@ -260,7 +260,6 @@ static QString expandVariable(const QString &key, const QString &value,
         return c.unicode() == escapeChar || c.unicode() == variableStartChar;
     };
 
-    static const QRegularExpression variableNameRegexp(QStringLiteral("\\A\\w+"));
     auto& expanded = output[key];
     expanded.reserve(value.size());
     const int lastIndex = value.size() - 1;
@@ -280,12 +279,12 @@ static QString expandVariable(const QString &key, const QString &value,
         }
         case variableStartChar: {
             ++i;
-            const auto m = variableNameRegexp.match(value.midRef(i));
-            if (m.hasMatch()) {
-                expanded += variableValue(m.captured());
-                i += m.capturedEnd();
+            const auto match = matchPossiblyBracedAsciiVariable(value.midRef(i));
+            if (match.length == 0) {
+                expanded += currentChar; // Not a variable name start.
             } else {
-                expanded += currentChar; // Not a variable start.
+                expanded += variableValue(match.name);
+                i += match.length;
             }
             break;
         }

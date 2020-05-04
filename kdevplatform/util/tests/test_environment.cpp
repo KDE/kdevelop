@@ -120,6 +120,26 @@ void TestEnvironment::testExpandVariables_data()
         {"Z", "-/bin:/usr/bin+"},
     });
 
+    QTest::newRow("braced variable") << ProcEnv({
+        {"u", "${PATH}"},
+    }) << ProcEnv({
+        {"u", "/bin:/usr/bin"},
+    });
+    QTest::newRow("braced variables") << ProcEnv({
+        {"u", "${PATH}${vw}"},
+        {"vw", "${MISSING_VAR}/w"},
+    }) << ProcEnv({
+        {"u", "/bin:/usr/bin/w"},
+        {"vw", "/w"},
+    });
+    QTest::newRow("braced non-variables") << ProcEnv({
+        {"u", "\\${PATH}${v.w}{u}"},
+        {"w", "$ {PATH}/${:} {}-${} ${2}"},
+    }) << ProcEnv({
+        {"u", "${PATH}${v.w}{u}"},
+        {"w", "$ {PATH}/${:} {}-${} ${2}"},
+    });
+
     // The mutual recursion tests below process unreasonable input. The purpose
     // of these tests is to verify that KDevelop does not crash or hang with
     // such input. The actual results are unimportant.

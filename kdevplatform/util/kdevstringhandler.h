@@ -22,7 +22,9 @@
 
 #include "utilexport.h"
 
-class QString;
+#include <QString>
+
+class QStringRef;
 class QByteArray;
 class QChar;
 class QStringList;
@@ -62,6 +64,25 @@ enum HtmlToPlainTextMode {
  * @return String no longer containing any HTML tags
  */
 KDEVPLATFORMUTIL_EXPORT QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode = FastMode);
+
+/**
+ * Match a prefix of @p str to an ASCII-only identifier, i.e. [a-zA-Z_][a-zA-Z0-9_]*
+ *
+ * @return The length of the matched prefix or 0 if there is no match
+ */
+KDEVPLATFORMUTIL_EXPORT int findAsciiIdentifierLength(const QStringRef& str);
+
+struct KDEVPLATFORMUTIL_EXPORT VariableMatch {
+    int length;     ///< The length of the matched substring in the source string
+    QString name;   ///< The name of the matched variable
+};
+
+/**
+ * Match a prefix of @p str to an ASCII-only identifier or {identifier}
+ *
+ * @return The matching result or {} if there is no match
+ */
+KDEVPLATFORMUTIL_EXPORT VariableMatch matchPossiblyBracedAsciiVariable(const QStringRef& str);
 
 /**
  * Strip ANSI sequences from string @p str

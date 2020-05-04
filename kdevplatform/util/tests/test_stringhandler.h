@@ -32,6 +32,18 @@ private Q_SLOTS:
     void testHtmlToPlainText();
     void testHtmlToPlainText_data();
 
+    void testFindAsciiIdentifierLength();
+    void testFindAsciiIdentifierLength_data();
+    void testFindAsciiIdentifierLengthNoMatch();
+    void testFindAsciiIdentifierLengthNoMatch_data();
+
+    void testMatchUnbracedAsciiVariable();
+    void testMatchUnbracedAsciiVariable_data();
+    void testUnmatchedAsciiVariable();
+    void testUnmatchedAsciiVariable_data();
+    void testMatchBracedAsciiVariable();
+    void testMatchBracedAsciiVariable_data();
+
     void testStripAnsiSequences();
     void testStripAnsiSequences_data();
 

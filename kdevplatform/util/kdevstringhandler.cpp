@@ -65,12 +65,16 @@
 
 #include <QStringList>
 #include <QString>
+#include <QStringRef>
 #include <QByteArray>
 #include <QChar>
 #include <QDataStream>
 #include <QVariant>
 #include <QRegExp>
 #include <QTextDocument>
+
+#include <algorithm>
+#include <cctype>
 
 namespace KDevelop {
 QString joinWithEscaping(const QStringList& input, QChar joinchar, QChar escapechar)
@@ -162,6 +166,52 @@ QString htmlToPlainText(const QString& s, HtmlToPlainTextMode mode)
     }
     return QString();     // never reached
 }
+}
+
+int KDevelop::findAsciiIdentifierLength(const QStringRef& str)
+{
+    if (str.isEmpty()) {
+        return 0;
+    }
+
+    constexpr ushort maxAscii{127};
+    const auto firstChar = str[0].unicode();
+    const bool isIdentifier = firstChar <= maxAscii
+                                && (std::isalpha(firstChar) || firstChar == '_');
+    if (!isIdentifier) {
+        return 0;
+    }
+
+    const auto partOfIdentifier = [](QChar character) {
+        const auto u = character.unicode();
+        return u <= maxAscii && (std::isalnum(u) || u == '_');
+    };
+    return std::find_if_not(str.cbegin() + 1, str.cend(), partOfIdentifier) - str.cbegin();
+}
+
+KDevelop::VariableMatch KDevelop::matchPossiblyBracedAsciiVariable(const QStringRef& str)
+{
+    if (str.isEmpty()) {
+        return {};
+    }
+
+    if (str[0].unicode() == '{') {
+        const auto nameLength = findAsciiIdentifierLength(str.mid(1));
+        if (nameLength == 0) {
+            return {};
+        }
+        const auto closingBraceIndex = 1 + nameLength;
+        if (closingBraceIndex < str.size() && str[closingBraceIndex].unicode() == '}') {
+            return {nameLength + 2, str.mid(1, nameLength).toString()};
+        }
+    } else {
+        const auto nameLength = findAsciiIdentifierLength(str);
+        if (nameLength != 0) {
+            return {nameLength, str.left(nameLength).toString()};
+        }
+    }
+
+    return {};
 }
 
 QString KDevelop::stripAnsiSequences(const QString& str)
