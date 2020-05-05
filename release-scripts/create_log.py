@@ -9,7 +9,7 @@ import argparse
 import os
 import subprocess
 import sys
-import cgi
+import html
 
 
 def createLog(workingDir, fromVersion, toVersion, excludeBranch=None, repositoryName=None, showInterestingChangesOnly=True):
@@ -70,7 +70,7 @@ def createLog(workingDir, fromVersion, toVersion, excludeBranch=None, repository
             changelog = commit[1]
 
             for line in commit:
-                line = cgi.escape(line)
+                line = html.escape(line)
                 if line.startswith("BUGS:"):
                     bugNumbers = line[line.find(":") + 1:].strip()
                     for bugNumber in bugNumbers.split(","):

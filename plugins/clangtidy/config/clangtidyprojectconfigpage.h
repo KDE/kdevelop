@@ -76,8 +76,6 @@ private Q_SLOTS:
 private:
     Ui::ProjectConfigPage m_ui;
 
-    QString m_customChecks;
-
     ClangTidyProjectSettings* m_settings;
     KDevelop::IProject* m_project;
     const QVector<CheckSetSelection> m_checkSetSelections;

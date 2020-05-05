@@ -41,6 +41,7 @@ set(kdevclazy_SRCS
     analyzer.cpp
     plugin.cpp
 
+    config/customchecksetconfigproxywidget.cpp
     config/checksetselectioncombobox.cpp
     config/checksetselectionlistmodel.cpp
     config/checksetmanagewidget.cpp
