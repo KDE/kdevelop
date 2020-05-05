@@ -52,6 +52,13 @@
        <item>
         <widget class="Clazy::ChecksWidget" name="checks" native="true"/>
        </item>
+       <item>
+        <widget class="Clazy::CustomCheckSetConfigProxyWidget" name="kcfg_checks" native="true">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="optionsTab">
@@ -288,6 +295,11 @@ parallel checking, which can lead to multiple fixit applying for header files.</
    <class>Clazy::ChecksWidget</class>
    <extends>QWidget</extends>
    <header>config/checkswidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Clazy::CustomCheckSetConfigProxyWidget</class>
+   <extends>QWidget</extends>
+   <header>config/customchecksetconfigproxywidget.h</header>
   </customwidget>
   <customwidget>
    <class>KMessageWidget</class>

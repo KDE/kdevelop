@@ -70,7 +70,6 @@ ProjectConfigPage::ProjectConfigPage(Plugin* plugin, KDevelop::IProject* project
 
     m_ui.kcfg_checkSetSelection->setCheckSetSelections(m_checkSetSelections, m_defaultCheckSetSelectionId);
     m_ui.checks->setChecksDb(plugin->checksDB());
-//     m_checksWidget->setObjectName(QStringLiteral("kcfg_checks"));
     connect(m_ui.checks, &ChecksWidget::checksChanged,
             this, &ProjectConfigPage::updateCommandLine);
 
@@ -187,17 +186,12 @@ void ProjectConfigPage::updateCommandLine()
 
 void ProjectConfigPage::defaults()
 {
-    // TODO: can we read this from m_settings somwhow?
-    m_customChecks.clear();
-
     ConfigPage::defaults();
     onSelectionChanged(m_ui.kcfg_checkSetSelection->selection());
 }
 
 void ProjectConfigPage::reset()
 {
-    m_customChecks = m_settings->checks();
-
     ConfigPage::reset();
 
     onSelectionChanged(m_ui.kcfg_checkSetSelection->selection());
@@ -205,8 +199,6 @@ void ProjectConfigPage::reset()
 
 void ProjectConfigPage::apply()
 {
-    m_settings->setChecks(m_customChecks);
-
     ConfigPage::apply();
 }
 
@@ -215,7 +207,7 @@ void ProjectConfigPage::onSelectionChanged(const QString& selectionId)
     QString checks;
     bool editable = false;
     if (selectionId.isEmpty()) {
-        checks = m_customChecks;
+        checks = m_ui.kcfg_checks->checks();
         editable = true;
     } else {
         const  QString effectiveSelectionId = (selectionId == QLatin1String("Default")) ? m_defaultCheckSetSelectionId : selectionId;
@@ -227,16 +219,18 @@ void ProjectConfigPage::onSelectionChanged(const QString& selectionId)
         }
     }
 
-    m_ui.checks->blockSignals(true);
     m_ui.checks->setEditable(editable);
     m_ui.checks->setChecks(checks);
-    m_ui.checks->blockSignals(false);
 }
 
 void ProjectConfigPage::onChecksChanged(const QString& checks)
 {
-    m_customChecks = checks;
-    emit changed();
+    const bool isCustomSelected =  m_ui.kcfg_checkSetSelection->selection().isEmpty();
+    if (!isCustomSelected) {
+        return;
+    }
+
+    m_ui.kcfg_checks->setChecks(checks);
 }
 
 }

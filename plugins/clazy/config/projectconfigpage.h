@@ -64,8 +64,6 @@ private Q_SLOTS:
 private:
     Ui::ProjectConfigPage m_ui;
 
-    QString m_customChecks;
-
     ProjectSettings* m_settings;
 
     const QVector<CheckSetSelection> m_checkSetSelections;
