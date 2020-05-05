@@ -77,17 +77,13 @@ QIcon ProjectConfigPage::icon() const
 
 void ProjectConfigPage::defaults()
 {
-    // TODO: can we read this from m_settings somwhow?
-    m_customChecks.clear();
-
     ConfigPage::defaults();
+
     onSelectionChanged(m_ui.kcfg_checkSetSelection->selection());
 }
 
 void ProjectConfigPage::reset()
 {
-    m_customChecks = m_settings->enabledChecks();
-
     ConfigPage::reset();
 
     onSelectionChanged(m_ui.kcfg_checkSetSelection->selection());
@@ -95,8 +91,6 @@ void ProjectConfigPage::reset()
 
 void ProjectConfigPage::apply()
 {
-    m_settings->setEnabledChecks(m_customChecks);
-
     ConfigPage::apply();
 }
 
@@ -105,7 +99,7 @@ void ProjectConfigPage::onSelectionChanged(const QString& selectionId)
     QString checks;
     bool editable = false;
     if (selectionId.isEmpty()) {
-        checks = m_customChecks;
+        checks = m_ui.kcfg_enabledChecks->checks();
         editable = true;
     } else {
         const  QString effectiveSelectionId = (selectionId == QLatin1String("Default")) ? m_defaultCheckSetSelectionId : selectionId;
@@ -117,16 +111,18 @@ void ProjectConfigPage::onSelectionChanged(const QString& selectionId)
         }
     }
 
-    m_ui.enabledChecks->blockSignals(true);
     m_ui.enabledChecks->setEditable(editable);
     m_ui.enabledChecks->setChecks(checks);
-    m_ui.enabledChecks->blockSignals(false);
 }
 
 void ProjectConfigPage::onChecksChanged(const QString& checks)
 {
-    m_customChecks = checks;
-    emit changed();
+    const bool isCustomSelected =  m_ui.kcfg_checkSetSelection->selection().isEmpty();
+    if (!isCustomSelected) {
+        return;
+    }
+
+    m_ui.kcfg_enabledChecks->setChecks(checks);
 }
 
 } // namespace ClangTidy

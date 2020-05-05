@@ -47,6 +47,13 @@
        <item>
         <widget class="ClangTidy::CheckSelection" name="enabledChecks" native="true"/>
        </item>
+       <item>
+        <widget class="ClangTidy::CustomCheckSetConfigProxyWidget" name="kcfg_enabledChecks" native="true">
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_3">
@@ -136,6 +143,11 @@
    <class>ClangTidy::CheckSelection</class>
    <extends>QWidget</extends>
    <header>config/checkselection.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ClangTidy::CustomCheckSetConfigProxyWidget</class>
+   <extends>QWidget</extends>
+   <header>config/customchecksetconfigproxywidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -38,6 +38,7 @@ set(kdevclangtidy_PART_SRCS
     config/checksetselectioncombobox.cpp
     config/checksetselectionlistmodel.cpp
     config/checksetmanagewidget.cpp
+    config/customchecksetconfigproxywidget.cpp
 
     parsers/clangtidyparser.cpp
 # disable for now:
