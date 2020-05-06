@@ -42,20 +42,20 @@ static QString stateToString(KDevelop::VcsStatusInfo::State state)
     switch(state)
     {
         case KDevelop::VcsStatusInfo::ItemAdded:
-            return i18nc("file was added to versioncontrolsystem", "Added");
+            return i18nc("@item file was added to versioncontrolsystem", "Added");
         case KDevelop::VcsStatusInfo::ItemDeleted:
-            return i18nc("file was deleted from versioncontrolsystem", "Deleted");
+            return i18nc("@item file was deleted from versioncontrolsystem", "Deleted");
         case KDevelop::VcsStatusInfo::ItemHasConflicts:
-            return i18nc("file is conflicting (versioncontrolsystem)", "Has Conflicts");
+            return i18nc("@item file is conflicting (versioncontrolsystem)", "Has Conflicts");
         case KDevelop::VcsStatusInfo::ItemModified:
-            return i18nc("version controlled file was modified", "Modified");
+            return i18nc("@item version controlled file was modified", "Modified");
         case KDevelop::VcsStatusInfo::ItemUpToDate:
-            return i18nc("file is up to date in versioncontrolsystem", "Up To Date");
+            return i18nc("@item file is up to date in versioncontrolsystem", "Up To Date");
         case KDevelop::VcsStatusInfo::ItemUnknown:
         case KDevelop::VcsStatusInfo::ItemUserState:
-            return i18nc("file is not known to versioncontrolsystem", "Unknown");
+            return i18nc("@item file is not known to versioncontrolsystem", "Unknown");
     }
-    return i18nc("Unknown VCS file status, probably a backend error", "?");
+    return i18nc("@item Unknown VCS file status, probably a backend error", "?");
 }
 
 static QIcon stateToIcon(KDevelop::VcsStatusInfo::State state)
@@ -141,8 +141,8 @@ VcsFileChangesModel::VcsFileChangesModel(QObject *parent, bool allowSelection)
     , d_ptr(new VcsFileChangesModelPrivate{allowSelection})
 {
     setColumnCount(2);
-    setHeaderData(0, Qt::Horizontal, i18n("Filename"));
-    setHeaderData(1, Qt::Horizontal, i18n("Status"));
+    setHeaderData(0, Qt::Horizontal, i18nc("@title:column", "Filename"));
+    setHeaderData(1, Qt::Horizontal, i18nc("@title:column", "Status"));
 }
 
 VcsFileChangesModel::~VcsFileChangesModel()

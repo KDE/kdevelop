@@ -106,7 +106,7 @@ DistributedVersionControlPlugin::contextMenuExtension(Context* context, QWidget*
 
     QMenu * menu = d->m_common->commonActions(parent);
     menu->addSeparator();
-    menu->addAction(i18n("Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
+    menu->addAction(i18nc("@action:inmenu", "Branches..."), this, SLOT(ctxBranchManager()))->setEnabled(ctxUrlList.count()==1);
     additionalMenuEntries(menu, ctxUrlList);
 
     ContextMenuExtension menuExt;

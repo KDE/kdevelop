@@ -25,7 +25,7 @@
    <item>
     <widget class="QLabel" name="revLabel" >
      <property name="text" >
-      <string>Difference between revisions</string>
+      <string comment="@label">Difference between revisions:</string>
      </property>
     </widget>
    </item>

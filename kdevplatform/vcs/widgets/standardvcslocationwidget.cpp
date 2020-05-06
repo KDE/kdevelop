@@ -31,7 +31,7 @@ StandardVcsLocationWidget::StandardVcsLocationWidget(QWidget* parent, Qt::Window
 {
     setLayout(new QVBoxLayout(this));
     m_urlWidget = new KUrlRequester(this);
-    m_urlWidget->setPlaceholderText(i18n("Enter the repository URL..."));
+    m_urlWidget->setPlaceholderText(i18nc("@info:placeholder", "Enter the repository URL..."));
     layout()->addWidget(m_urlWidget);
     
     connect(m_urlWidget, &KUrlRequester::textChanged, this, &StandardVcsLocationWidget::textChanged);

@@ -48,7 +48,7 @@ BranchManager::BranchManager(const QString& repository, KDevelop::DistributedVer
     , m_repository(repository)
     , m_dvcPlugin(executor)
 {
-    setWindowTitle(i18n("Branch Manager"));
+    setWindowTitle(i18nc("@title:window", "Branch Manager"));
 
     auto* mainWidget = new QWidget(this);
     auto *mainLayout = new QVBoxLayout(this);
@@ -115,7 +115,7 @@ void BranchManager::createBranch()
     }
     QString baseBranch = currentBranchIdx.data().toString();
     bool branchNameEntered = false;
-    QString newBranch = QInputDialog::getText(this, i18n("New branch"), i18n("Name of the new branch:"),
+    QString newBranch = QInputDialog::getText(this, i18nc("@title:window", "New Branch"), i18nc("@label:textbox", "Name of the new branch:"),
             QLineEdit::Normal, QString(), &branchNameEntered);
     if (!branchNameEntered)
         return;
@@ -269,7 +269,7 @@ void BranchManager::diffJobFinished(KJob* job)
 
     if (vcsjob->status() != KDevelop::VcsJob::JobSucceeded) {
         KMessageBox::error(ICore::self()->uiController()->activeMainWindow(), vcsjob->errorString(),
-                           i18n("Unable to retrieve diff."));
+                           i18nc("@titlew:indow", "Unable to Retrieve Diff"));
         return;
     }
 
@@ -277,7 +277,7 @@ void BranchManager::diffJobFinished(KJob* job)
     if(diff.isEmpty()){
         KMessageBox::information(ICore::self()->uiController()->activeMainWindow(),
                                     i18n("There are no committed differences."),
-                                    i18n("VCS support"));
+                                    i18nc("@title:window", "VCS Support"));
         return;
     }
 

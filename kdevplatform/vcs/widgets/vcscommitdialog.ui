@@ -14,13 +14,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Select Files to commit</string>
+   <string comment="@title:window">Select Files to Commit</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Commit files:</string>
+      <string comment="@label:listbox">Commit files:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -30,7 +30,7 @@
    <item row="1" column="1">
     <widget class="QCheckBox" name="recursiveChk">
      <property name="text">
-      <string>Recursive</string>
+      <string comment="@option:check">Recursive</string>
      </property>
      <property name="shortcut">
       <string/>

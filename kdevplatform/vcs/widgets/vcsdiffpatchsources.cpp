@@ -58,7 +58,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
     m_vcs->setupCommitMessageEditor(updater->url(), m_commitMessageEdit.data());
 
     auto* titleLayout = new QHBoxLayout;
-    titleLayout->addWidget(new QLabel(i18n("Commit Message:")));
+    titleLayout->addWidget(new QLabel(i18nc("@label:textbox", "Commit message:")));
 
     m_oldMessages = new KComboBox(m_commitMessageWidget.data());
 
@@ -120,7 +120,7 @@ void VCSCommitDiffPatchSource::jobFinished(KJob *job)
         if (details.isEmpty()) {    //errorText may be empty
             details = i18n("For more detailed information please see the Version Control tool view.");
         }
-        KMessageBox::detailedError(nullptr, i18n("Unable to commit"), details, i18n("Commit unsuccessful"));
+        KMessageBox::detailedError(nullptr, i18n("Unable to commit"), details, i18nc("@title:window", "Commit Unsuccessful"));
     }
 
     deleteLater();
@@ -268,7 +268,7 @@ bool VCSCommitDiffPatchSource::finishReview(const QList<QUrl>& selection)
 
     QString text = i18n("<qt>Files will be committed:\n<ul>%1</ul>\nWith message:\n <pre>%2</pre></qt>", files, message);
 
-    int res = KMessageBox::warningContinueCancel(nullptr, text, i18n("About to commit to repository"),
+    int res = KMessageBox::warningContinueCancel(nullptr, text, i18nc("@title:window", "About to Commit to Repository"),
                                                  KStandardGuiItem::cont(), KStandardGuiItem::cancel(),
                                                  QStringLiteral("ShouldAskConfirmCommit"));
     if (res != KMessageBox::Continue) {

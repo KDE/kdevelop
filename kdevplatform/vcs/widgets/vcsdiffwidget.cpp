@@ -97,7 +97,7 @@ void VcsDiffWidget::setRevisions( const KDevelop::VcsRevision& first,
 {
     Q_D(VcsDiffWidget);
 
-    d->m_ui->revLabel->setText( i18n("Difference between revision %1 and %2:",
+    d->m_ui->revLabel->setText( i18nc("@label", "Difference between revision %1 and %2:",
                        first.prettyValue(),
                        second.prettyValue() ) );
 }

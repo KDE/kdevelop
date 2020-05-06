@@ -99,13 +99,13 @@ QVariant VcsBasicEventModel::headerData(int section, Qt::Orientation orientation
     switch( section )
     {
         case RevisionColumn:
-            return QVariant( i18n("Revision") );
+            return QVariant( i18nc("@title:column", "Revision") );
         case SummaryColumn:
-            return QVariant( i18n("Message") );
+            return QVariant( i18nc("@title:column", "Message") );
         case AuthorColumn:
-            return QVariant( i18n("Author") );
+            return QVariant( i18nc("@title:column", "Author") );
         case DateColumn:
-            return QVariant( i18n("Date") );
+            return QVariant( i18nc("@title:column", "Date") );
         default:
             break;
     }

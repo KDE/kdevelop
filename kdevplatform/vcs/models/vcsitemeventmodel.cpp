@@ -57,15 +57,15 @@ void VcsItemEventModel::addItemEvents( const QList<KDevelop::VcsItemEvent>& list
         KDevelop::VcsItemEvent::Actions act = ev.actions();
         QStringList actionStrings;
         if( act & KDevelop::VcsItemEvent::Added )
-            actionStrings << i18n("Added");
+            actionStrings << i18nc("@item", "Added");
         else if( act & KDevelop::VcsItemEvent::Deleted )
-            actionStrings << i18n("Deleted");
+            actionStrings << i18nc("@item", "Deleted");
         else if( act & KDevelop::VcsItemEvent::Modified )
-            actionStrings << i18n("Modified");
+            actionStrings << i18nc("@item", "Modified");
         else if( act & KDevelop::VcsItemEvent::Copied )
-            actionStrings << i18n("Copied");
+            actionStrings << i18nc("@item", "Copied");
         else if( act & KDevelop::VcsItemEvent::Replaced )
-            actionStrings << i18n("Replaced");
+            actionStrings << i18nc("@item", "Replaced");
         QUrl repoUrl = QUrl::fromLocalFile(ev.repositoryLocation());
         QMimeType mime = repoUrl.isLocalFile()
                 ? mimeDataBase.mimeTypeForFile(repoUrl.toLocalFile(), QMimeDatabase::MatchExtension)
@@ -96,10 +96,10 @@ QVariant VcsItemEventModel::headerData(int section, Qt::Orientation orientation,
     if(orientation == Qt::Horizontal && role==Qt::DisplayRole) {
         switch(section)
         {
-            case 0: return i18n("Location");
-            case 1: return i18n("Actions");
-            case 2: return i18n("Source Location");
-            case 3: return i18n("Source Revision");
+            case 0: return i18nc("@title:column", "Location");
+            case 1: return i18nc("@title:column", "Actions");
+            case 2: return i18nc("@title:column", "Source Location");
+            case 3: return i18nc("@title:column", "Source Revision");
         }
     }
     return QStandardItemModel::headerData(section, orientation, role);

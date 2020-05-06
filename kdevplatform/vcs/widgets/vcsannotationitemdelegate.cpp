@@ -66,7 +66,7 @@ static QString ageOfDate(const QDate& date)
         --ageInYears;
     }
     if (ageInYears > 0) {
-        return i18ncp("age", "%1 year", "%1 years", ageInYears);
+        return i18ncp("@item age", "%1 year", "%1 years", ageInYears);
     }
     int ageInMonths = now.month() - date.month();
     if (now.day() < date.day()) {
@@ -76,13 +76,13 @@ static QString ageOfDate(const QDate& date)
         ageInMonths += 12;
     }
     if (ageInMonths > 0) {
-        return i18ncp("age", "%1 month", "%1 months", ageInMonths);
+        return i18ncp("@item age", "%1 month", "%1 months", ageInMonths);
     }
     const int ageInDays = date.daysTo(now);
     if (ageInDays > 0) {
-        return i18ncp("age", "%1 day", "%1 days", ageInDays);
+        return i18ncp("@item age", "%1 day", "%1 days", ageInDays);
     }
-    return i18n("Today");
+    return i18n("@item Today");
 }
 
 void VcsAnnotationItemDelegate::doMessageLineLayout(const KTextEditor::StyleOptionAnnotationItem& option,
