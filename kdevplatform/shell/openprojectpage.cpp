@@ -10,7 +10,7 @@
 
 #include "openprojectpage.h"
 
-#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include <KDirOperator>
 #include <KFileItem>
@@ -28,7 +28,8 @@ OpenProjectPage::OpenProjectPage( const QUrl& startUrl, const QStringList& filte
     QWidget* parent )
         : QWidget( parent )
 {
-    auto* layout = new QHBoxLayout( this );
+    auto* layout = new QVBoxLayout( this );
+    layout->setContentsMargins(0, 0, 0, 0);
 
     fileWidget = new KFileWidget( startUrl, this);
 
