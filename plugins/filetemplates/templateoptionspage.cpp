@@ -80,6 +80,7 @@ void TemplateOptionsPage::load(const SourceFileTemplate& fileTemplate, TemplateR
     delete layout();
 
     auto* layout = new QVBoxLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
 
     const auto customOptions = fileTemplate.customOptions(renderer);
     d->groupBoxes.reserve(customOptions.size());

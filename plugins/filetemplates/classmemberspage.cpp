@@ -43,6 +43,7 @@ ClassMembersPage::ClassMembersPage(QWidget* parent)
     d->editListWidget->lineEdit()->setPlaceholderText(i18n("Variable type and identifier"));
 
     auto* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(d->editListWidget);
 
 #if KWIDGETSADDONS_VERSION < QT_VERSION_CHECK(5,32,0)
