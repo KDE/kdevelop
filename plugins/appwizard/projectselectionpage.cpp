@@ -37,7 +37,6 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
 {
     ui = new Ui::ProjectSelectionPage();
     ui->setupUi(this);
-    setContentsMargins(0,0,0,0);
     ui->descriptionContent->setBackgroundRole(QPalette::Base);
     ui->descriptionContent->setForegroundRole(QPalette::Text);
 
