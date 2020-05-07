@@ -49,7 +49,10 @@ namespace gh
 ProviderWidget::ProviderWidget(QWidget *parent)
     : IProjectProviderWidget(parent)
 {
-    setLayout(new QVBoxLayout());
+    auto* widgetLayout = new QVBoxLayout;
+    widgetLayout->setContentsMargins(0, 0, 0, 0);
+    setLayout(widgetLayout);
+
     m_projects = new QListView(this);
     connect(m_projects, &QListView::clicked, this, &ProviderWidget::projectIndexChanged);
 

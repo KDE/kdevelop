@@ -45,7 +45,6 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
 
     m_ui->workingDir->setUrl(initial);
     m_ui->workingDir->setMode(KFile::Directory);
-    m_ui->remoteWidget->setLayout(new QVBoxLayout(m_ui->remoteWidget));
 
     m_ui->sources->addItem(QIcon::fromTheme(QStringLiteral("folder")), i18n("From File System"));
     m_plugins.append(nullptr);
@@ -108,9 +107,8 @@ void ProjectSourcePage::setSourceWidget(int index, const QUrl& repoUrl)
 {
     m_locationWidget = nullptr;
     m_providerWidget = nullptr;
-    QLayout* remoteWidgetLayout = m_ui->remoteWidget->layout();
     QLayoutItem *child;
-    while ((child = remoteWidgetLayout->takeAt(0)) != nullptr) {
+    while ((child = m_ui->remoteWidgetLayout->takeAt(0)) != nullptr) {
         delete child->widget();
         delete child;
     }
@@ -127,7 +125,7 @@ void ProjectSourcePage::setSourceWidget(int index, const QUrl& repoUrl)
         if (!repoUrl.isEmpty()) {
             m_locationWidget->setLocation(repoUrl);
         }
-        remoteWidgetLayout->addWidget(m_locationWidget);
+        m_ui->remoteWidgetLayout->addWidget(m_locationWidget);
     } else {
         providerIface = providerPerIndex(index);
         if(providerIface) {
@@ -135,7 +133,7 @@ void ProjectSourcePage::setSourceWidget(int index, const QUrl& repoUrl)
             m_providerWidget=providerIface->providerWidget(m_ui->sourceBox);
             connect(m_providerWidget, &IProjectProviderWidget::changed, this, &ProjectSourcePage::projectChanged);
 
-            remoteWidgetLayout->addWidget(m_providerWidget);
+            m_ui->remoteWidgetLayout->addWidget(m_providerWidget);
         }
     }
     reevaluateCorrection();

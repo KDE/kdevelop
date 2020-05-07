@@ -43,7 +43,10 @@ using namespace KDevelop;
 KDEProviderWidget::KDEProviderWidget(QWidget* parent)
     : IProjectProviderWidget(parent)
 {
-    setLayout(new QVBoxLayout);
+    auto* widgetLayout = new QVBoxLayout;
+    widgetLayout->setContentsMargins(0, 0, 0, 0);
+    setLayout(widgetLayout);
+
     m_projects = new QListView(this);
     auto* topLayout = new QHBoxLayout;
     auto filterLine = new FilterProxySearchLine(this);
