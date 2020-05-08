@@ -30,6 +30,7 @@ CustomBuildSystemKCModule::CustomBuildSystemKCModule(KDevelop::IPlugin* plugin, 
     : ProjectConfigPage<CustomBuildSystemSettings>(plugin, options, parent)
 {
     auto* layout = new QVBoxLayout( this );
+    layout->setContentsMargins(0, 0, 0, 0);
     configWidget = new CustomBuildSystemConfigWidget( this );
     connect(configWidget, &CustomBuildSystemConfigWidget::changed, this, &ConfigPage::changed);
     layout->addWidget( configWidget );
