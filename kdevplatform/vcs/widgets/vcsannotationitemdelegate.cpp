@@ -82,7 +82,7 @@ static QString ageOfDate(const QDate& date)
     if (ageInDays > 0) {
         return i18ncp("@item age", "%1 day", "%1 days", ageInDays);
     }
-    return i18n("@item Today");
+    return i18nc("@item age", "Today");
 }
 
 void VcsAnnotationItemDelegate::doMessageLineLayout(const KTextEditor::StyleOptionAnnotationItem& option,
