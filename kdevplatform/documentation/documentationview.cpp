@@ -78,17 +78,17 @@ QList<QAction*> DocumentationView::contextMenuActions() const
 void DocumentationView::setupActions()
 {
     // use custom QAction's with createWidget for mProviders and mIdentifiers
-    mBack = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("Back"), this);
+    mBack = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18nc("@action go back", "Back"), this);
     mBack->setEnabled(false);
     connect(mBack, &QAction::triggered, this, &DocumentationView::browseBack);
     addAction(mBack);
 
-    mForward = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("Forward"), this);
+    mForward = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18nc("@action go forward", "Forward"), this);
     mForward->setEnabled(false);
     connect(mForward, &QAction::triggered, this, &DocumentationView::browseForward);
     addAction(mForward);
 
-    mHomeAction = new QAction(QIcon::fromTheme(QStringLiteral("go-home")), i18n("Home"), this);
+    mHomeAction = new QAction(QIcon::fromTheme(QStringLiteral("go-home")), i18nc("@action go to start page", "Home"), this);
     mHomeAction->setEnabled(false);
     connect(mHomeAction, &QAction::triggered, this, &DocumentationView::showHome);
     addAction(mHomeAction);
@@ -102,7 +102,7 @@ void DocumentationView::setupActions()
     mIdentifiers = new QLineEdit(this);
     mIdentifiers->setEnabled(false);
     mIdentifiers->setClearButtonEnabled(true);
-    mIdentifiers->setPlaceholderText(i18n("Search..."));
+    mIdentifiers->setPlaceholderText(i18nc("@info:placeholder", "Search..."));
     mIdentifiers->setCompleter(new QCompleter(mIdentifiers));
 //     mIdentifiers->completer()->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     mIdentifiers->completer()->setCaseSensitivity(Qt::CaseInsensitive);
@@ -120,8 +120,8 @@ void DocumentationView::setupActions()
     mSeparatorBeforeFind->setSeparator(true);
     addAction(mSeparatorBeforeFind);
 
-    mFind = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("Find in Text..."), this);
-    mFind->setToolTip(i18n("Find in text of current documentation page."));
+    mFind = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18nc("@action", "Find in Text..."), this);
+    mFind->setToolTip(i18nc("@info:tooltip", "Find in text of current documentation page"));
     mFind->setEnabled(false);
     connect(mFind, &QAction::triggered, mFindDoc, &DocumentationFindWidget::startSearch);
     addAction(mFind);

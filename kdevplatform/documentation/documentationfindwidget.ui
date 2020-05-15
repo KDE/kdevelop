@@ -40,7 +40,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Find:</string>
+      <string comment="@label:textbox">Find:</string>
      </property>
     </widget>
    </item>
@@ -54,7 +54,7 @@
    <item>
     <widget class="QToolButton" name="nextButton">
      <property name="toolTip">
-      <string>Jump to next match</string>
+      <string comment="@info:tooltip">Jump to next match</string>
      </property>
      <property name="icon">
       <iconset theme="go-down-search">
@@ -68,7 +68,7 @@
    <item>
     <widget class="QToolButton" name="previousButton">
      <property name="toolTip">
-      <string>Jump to previous match</string>
+      <string comment="@info:tooltip">Jump to previous match</string>
      </property>
      <property name="icon">
       <iconset theme="go-up-search">
@@ -82,7 +82,7 @@
    <item>
     <widget class="QToolButton" name="matchCase">
      <property name="toolTip">
-      <string>Match case sensitive</string>
+      <string comment="@info:tooltip">Match case sensitive</string>
      </property>
      <property name="icon">
       <iconset theme="format-text-superscript">
