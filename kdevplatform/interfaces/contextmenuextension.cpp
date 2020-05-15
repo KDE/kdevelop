@@ -143,11 +143,11 @@ void ContextMenuExtension::populateMenu(QMenu* menu, const QList<ContextMenuExte
     populateMenuWithGroup(menu, extensions, BuildGroup);
     populateMenuWithGroup(menu, extensions, FileGroup);
     populateMenuWithGroup(menu, extensions, EditGroup);
-    populateMenuWithGroup(menu, extensions, DebugGroup, i18n("Debug"));
-    populateMenuWithGroup(menu, extensions, RefactorGroup, i18n("Refactor"));
+    populateMenuWithGroup(menu, extensions, DebugGroup, i18nc("@title:menu", "Debug"));
+    populateMenuWithGroup(menu, extensions, RefactorGroup, i18nc("@title:menu", "Refactor"));
     populateMenuWithGroup(menu, extensions, NavigationGroup);
-    populateMenuWithGroup(menu, extensions, AnalyzeFileGroup, i18n("Analyze Current File With"), QStringLiteral("dialog-ok"), true, false);
-    populateMenuWithGroup(menu, extensions, AnalyzeProjectGroup, i18n("Analyze Current Project With"), QStringLiteral("dialog-ok"), true);
+    populateMenuWithGroup(menu, extensions, AnalyzeFileGroup, i18nc("@title:menu", "Analyze Current File With"), QStringLiteral("dialog-ok"), true, false);
+    populateMenuWithGroup(menu, extensions, AnalyzeProjectGroup, i18nc("@title:menu", "Analyze Current Project With"), QStringLiteral("dialog-ok"), true);
     populateMenuWithGroup(menu, extensions, VcsGroup);
     populateMenuWithGroup(menu, extensions, ExtensionGroup);
 }
