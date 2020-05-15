@@ -101,7 +101,7 @@ void BasicRefactoring::fillContextMenu(ContextMenuExtension& extension, Context*
     if (declaration && acceptForContextMenu(declaration)) {
         QFileInfo finfo(declaration->topContext()->url().str());
         if (finfo.isWritable()) {
-            auto* action = new QAction(i18n("Rename \"%1\"...",
+            auto* action = new QAction(i18nc("@action", "Rename \"%1\"...",
                                             declaration->qualifiedIdentifier().toString()), parent);
             action->setData(QVariant::fromValue(IndexedDeclaration(declaration)));
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
@@ -301,13 +301,13 @@ BasicRefactoring::NameAndCollector BasicRefactoring::newNameForDeclaration(
                 &AbstractNavigationWidget::navigateDeclaration);
 
     QString declarationName = declaration->toString();
-    dialog.setWindowTitle(i18nc("Renaming some declaration", "Rename \"%1\"", declarationName));
+    dialog.setWindowTitle(i18nc("@title:window Renaming some declaration", "Rename \"%1\"", declarationName));
     renameDialog.edit->setText(declaration->identifier().identifier().str());
     renameDialog.edit->selectAll();
 
-    renameDialog.tabWidget->addTab(&uses, i18n("Uses"));
+    renameDialog.tabWidget->addTab(&uses, i18nc("@title:tab", "Uses"));
     if (navigationWidget)
-        renameDialog.tabWidget->addTab(navigationWidget, i18n("Declaration Info"));
+        renameDialog.tabWidget->addTab(navigationWidget, i18nc("@title:tab", "Declaration Info"));
     lock.unlock();
 
     if (dialog.exec() != QDialog::Accepted)

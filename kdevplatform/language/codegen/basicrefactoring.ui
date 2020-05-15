@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Rename</string>
+   <string comment="@title:window">Rename</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="newNameLabel">
        <property name="text">
-        <string>&amp;New name:</string>
+        <string comment="@label:textbox">&amp;New name:</string>
        </property>
        <property name="buddy">
         <cstring>edit</cstring>
@@ -35,14 +35,14 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;quot;Note: All overloaded functions, overloads, forward-declarations, etc. will be renamed too&amp;quot;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
-        <string>&amp;Rename</string>
+        <string comment="@action:button">&amp;Rename</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="cancelButton">
        <property name="text">
-        <string>&amp;Cancel</string>
+        <string comment="@action:button">&amp;Cancel</string>
        </property>
       </widget>
      </item>

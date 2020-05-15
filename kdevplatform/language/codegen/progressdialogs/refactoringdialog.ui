@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Refactoring</string>
+   <string comment="@title:window">Refactoring</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">
@@ -24,7 +24,7 @@
    <item row="2" column="1">
     <widget class="QPushButton" name="abortButton">
      <property name="text">
-      <string>&amp;Abort</string>
+      <string comment="@action:button">&amp;Abort</string>
      </property>
     </widget>
    </item>
