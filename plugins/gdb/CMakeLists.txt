@@ -14,7 +14,6 @@ set(kdevgdb_SRCS
     variablecontroller.cpp
     gdbframestackmodel.cpp
     gdbvariable.cpp
-    gdbconfigpage.cpp
 )
 
 if (OktetaGui_FOUND)
@@ -34,7 +33,6 @@ declare_qt_logging_category(kdevgdb_SRCS
 )
 set(kdevgdb_UI
     debuggertracingdialog.ui
-    gdbconfigpage.ui
 )
 
 kde_enable_exceptions()
@@ -59,7 +57,15 @@ endif()
 set_property(TARGET kdevgdb_static PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 # The actual plugin
-kdevplatform_add_plugin(kdevgdb JSON kdevgdb.json SOURCES debuggerplugin.cpp )
+set(kdevgdbplugin_SRCS
+    debuggerplugin.cpp
+    gdbconfigpage.cpp
+)
+set(kdevgdbplugin_UI
+    gdbconfigpage.ui
+)
+ki18n_wrap_ui(kdevgdbplugin_SRCS ${kdevgdbplugin_UI})
+kdevplatform_add_plugin(kdevgdb JSON kdevgdb.json SOURCES ${kdevgdbplugin_SRCS})
 target_link_libraries(kdevgdb kdevgdb_static)
 
 if(BUILD_TESTING)
