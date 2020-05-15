@@ -27,6 +27,7 @@
 #include <QMimeType>
 #include <QVariantList>
 
+#include <kio_version.h>
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -34,9 +35,14 @@
 #include <KMimeTypeTrader>
 #include <KParts/MainWindow>
 #include <KPluginFactory>
-#include <KRun>
 #include <KService>
 #include <KOpenWithDialog>
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
+#include <KIO/ApplicationLauncherJob>
+#include <KIO/JobUiDelegate>
+#else
+#include <KRun>
+#endif
 
 #include <interfaces/contextmenuextension.h>
 #include <interfaces/context.h>
@@ -225,7 +231,15 @@ void OpenWithPlugin::openDefault()
     // default handlers
     if (m_mimeType == QLatin1String("inode/directory")) {
         KService::Ptr service = KMimeTypeTrader::self()->preferredService(m_mimeType);
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
+        auto* job = new KIO::ApplicationLauncherJob(service);
+        job->setUrls(m_urls);
+        job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
+                                                  ICore::self()->uiController()->activeMainWindow()));
+        job->start();
+#else
         KRun::runService(*service, m_urls, ICore::self()->uiController()->activeMainWindow());
+#endif
     } else {
         for (const QUrl& u : qAsConst(m_urls)) {
             ICore::self()->documentController()->openDocument( u );
@@ -241,7 +255,15 @@ void OpenWithPlugin::open( const QString& storageid )
 void OpenWithPlugin::openService(const KService::Ptr& service)
 {
     if (service->isApplication()) {
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 71, 0)
+        auto* job = new KIO::ApplicationLauncherJob(service);
+        job->setUrls(m_urls);
+        job->setUiDelegate(new KIO::JobUiDelegate(KJobUiDelegate::AutoHandlingEnabled,
+                                                  ICore::self()->uiController()->activeMainWindow()));
+        job->start();
+#else
         KRun::runService( *service, m_urls, ICore::self()->uiController()->activeMainWindow() );
+#endif
     } else {
         QString prefName = service->desktopEntryName();
         if (isTextEditor(service)) {
