@@ -166,9 +166,9 @@ ProjectItemLineEdit::ProjectItemLineEdit(QWidget* parent)
 
     setCompleter(d->completer);
     setValidator(d->validator);
-    setPlaceholderText( i18n("Enter the path to an item from the projects tree" ) );
+    setPlaceholderText( i18nc("@info:placeholder", "Enter the path to an item from the projects tree..." ) );
 
-    auto* selectItemAction = new QAction(QIcon::fromTheme(QStringLiteral("folder-document")), i18n("Select..."), this);
+    auto* selectItemAction = new QAction(QIcon::fromTheme(QStringLiteral("folder-document")), i18nc("@action", "Select..."), this);
     connect(selectItemAction, &QAction::triggered, this, &ProjectItemLineEdit::selectItemDialog);
     addAction(selectItemAction);
 
@@ -192,7 +192,7 @@ bool ProjectItemLineEdit::selectItemDialog()
     KDevelop::ProjectModel* model=KDevelop::ICore::self()->projectController()->projectModel();
 
     QDialog dialog;
-    dialog.setWindowTitle(i18n("Select an item..."));
+    dialog.setWindowTitle(i18nc("@title:window", "Select an Item"));
 
     auto mainLayout = new QVBoxLayout(&dialog);
 

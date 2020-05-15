@@ -29,10 +29,10 @@
    <item row="0" column="0">
     <widget class="ProjectItemLineEdit" name="targetDependency">
      <property name="toolTip">
-      <string>Enter a dependency to add to the list</string>
+      <string comment="@info:tooltip">Enter a dependency to add to the list</string>
      </property>
      <property name="placeholderText">
-      <string>Enter a dependency to add to the list</string>
+      <string comment="@info:placedholder">Enter a dependency to add to the list...</string>
      </property>
      <property name="clearButtonEnabled">
       <bool>true</bool>
@@ -52,7 +52,7 @@
       <bool>false</bool>
      </property>
      <property name="toolTip">
-      <string>Adds the listed target to the dependency list.</string>
+      <string comment="@info:tooltip">Add the listed target to the dependency list</string>
      </property>
      <property name="text">
       <string/>
@@ -65,10 +65,10 @@
    <item row="1" column="0" rowspan="4" colspan="2">
     <widget class="QListWidget" name="dependencies">
      <property name="toolTip">
-      <string>List of indirect dependent targets.</string>
+      <string comment="@info:tooltip">List of indirect dependent targets.</string>
      </property>
      <property name="whatsThis">
-      <string>This list should contain targets that the application does not directly depend on, but for which an action needs to be taken before running the application.</string>
+      <string comment="@info:whatsthis">This list should contain targets that the application does not directly depend on, but for which an action needs to be taken before running the application.</string>
      </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
@@ -84,7 +84,7 @@
       <bool>false</bool>
      </property>
      <property name="toolTip">
-      <string>Removes the selected dependencies from the list.</string>
+      <string comment="@info:tooltip">Remove the selected dependencies from the list</string>
      </property>
      <property name="text">
       <string/>
@@ -100,7 +100,7 @@
       <bool>false</bool>
      </property>
      <property name="toolTip">
-      <string>Moves the selected dependency up in the list.</string>
+      <string comment="@info:tooltip">Move the selected dependency up in the list</string>
      </property>
      <property name="text">
       <string/>
@@ -116,7 +116,7 @@
       <bool>false</bool>
      </property>
      <property name="toolTip">
-      <string>Moves the selected dependency down in the list.</string>
+      <string comment="@info:tooltip">Move the selected dependency down in the list</string>
      </property>
      <property name="text">
       <string/>

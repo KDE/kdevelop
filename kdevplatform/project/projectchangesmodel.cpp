@@ -290,7 +290,7 @@ void ProjectChangesModel::branchNameReady(VcsJob* job)
     auto* project = qobject_cast<IProject*>(job->property("project").value<QObject*>());
     if(job->status()==VcsJob::JobSucceeded) {
         QString name = job->fetchResults().toString();
-        QString branchName = name.isEmpty() ? i18n("no branch") : name;
+        const QString branchName = name.isEmpty() ? i18nc("@item:intext", "no branch") : name;
         projectItem(project)->setText(i18nc("project name (branch name)", "%1 (%2)", project->name(), branchName));
     } else {
         projectItem(project)->setText(project->name());
