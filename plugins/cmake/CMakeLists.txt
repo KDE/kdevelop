@@ -98,6 +98,7 @@ target_link_libraries(KDevCMakeCommon
 
 ki18n_wrap_ui( cmakemanager_SRCS ${cmakemanager_UI} )
 add_library( kdevcmakemanagernosettings STATIC ${cmakemanager_SRCS})
+target_compile_definitions(kdevcmakemanagernosettings PRIVATE CMAKEMANAGER_NO_SETTINGS)
 target_link_libraries(kdevcmakemanagernosettings
     KDevCMakeCommon
     KDev::Util

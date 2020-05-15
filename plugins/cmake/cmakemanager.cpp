@@ -26,7 +26,6 @@
 #include "duchain/cmakeparsejob.h"
 #include "cmakeimportjsonjob.h"
 #include "debug.h"
-#include "settings/cmakepreferences.h"
 #include "cmakecodecompletionmodel.h"
 #include "cmakenavigationwidget.h"
 #include "icmakedocumentation.h"
@@ -36,6 +35,10 @@
 #include "cmakeserver.h"
 #include "cmakefileapi.h"
 #include "cmakefileapiimportjob.h"
+
+#ifndef CMAKEMANAGER_NO_SETTINGS
+#include "settings/cmakepreferences.h"
+#endif
 
 #include <QApplication>
 #include <QDir>
@@ -640,10 +643,17 @@ int CMakeManager::perProjectConfigPages() const
 
 ConfigPage* CMakeManager::perProjectConfigPage(int number, const ProjectConfigOptions& options, QWidget* parent)
 {
+#ifdef CMAKEMANAGER_NO_SETTINGS
+    Q_UNUSED(number);
+    Q_UNUSED(options);
+    Q_UNUSED(parent);
+    return nullptr;
+#else
     if (number == 0) {
         return new CMakePreferences(this, options, parent);
     }
     return nullptr;
+#endif
 }
 
 void CMakeManager::reloadProjects()
