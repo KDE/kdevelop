@@ -305,7 +305,7 @@ public:
 LoadedPluginsDialog::LoadedPluginsDialog( QWidget* parent )
     : QDialog( parent )
 {
-    setWindowTitle(i18n("Loaded Plugins"));
+    setWindowTitle(i18nc("@title:window", "Loaded Plugins"));
 
     auto* vbox = new QVBoxLayout(this);
 

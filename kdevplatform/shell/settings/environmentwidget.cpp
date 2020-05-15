@@ -91,7 +91,7 @@ EnvironmentWidget::EnvironmentWidget( QWidget *parent )
 
     auto* topProxyModel  = new PlaceholderItemProxyModel(this);
     topProxyModel->setSourceModel(m_proxyModel);
-    topProxyModel->setColumnHint(0, i18n("Enter variable..."));
+    topProxyModel->setColumnHint(0, i18nc("@info:placeholder", "Enter variable..."));
     connect(topProxyModel, &PlaceholderItemProxyModel::dataInserted, this, &EnvironmentWidget::onVariableInserted);
 
     ui.variableTable->setModel( topProxyModel );
@@ -179,13 +179,13 @@ void EnvironmentWidget::defaults( KConfig* config )
 QString EnvironmentWidget::askNewProfileName(const QString& defaultName)
 {
     ScopedDialog<QDialog> dialog(this);
-    dialog->setWindowTitle(i18n("Enter Name of New Environment Profile"));
+    dialog->setWindowTitle(i18nc("@title:window", "Enter Name of New Environment Profile"));
 
     auto *layout = new QVBoxLayout(dialog);
 
     auto editLayout = new QHBoxLayout;
 
-    auto label = new QLabel(i18n("Name:"));
+    auto label = new QLabel(i18nc("@label:textbox", "Name:"));
     editLayout->addWidget(label);
     auto edit = new QLineEdit;
     editLayout->addWidget(edit);
@@ -243,7 +243,7 @@ void EnvironmentWidget::onVariableInserted(int column, const QVariant& value)
 void EnvironmentWidget::batchModeEditButtonClicked()
 {
     ScopedDialog<QDialog> dialog(this);
-    dialog->setWindowTitle( i18n( "Batch Edit Mode" ) );
+    dialog->setWindowTitle( i18nc("@title:window", "Batch Edit Mode" ) );
 
     auto *layout = new QVBoxLayout(dialog);
 

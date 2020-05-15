@@ -126,7 +126,7 @@ public:
             dir = cfg.readEntry( "Last Open File Directory", Core::self()->projectController()->projectsBaseDirectory() );
         }
 
-        const auto caption = i18n("Open File");
+        const auto caption = i18nc("@title:window", "Open File");
         const auto filter = i18n("*|Text File\n");
         auto parent = Core::self()->uiControllerInternal()->defaultMainWindow();
 
@@ -601,64 +601,64 @@ void DocumentController::setupActions()
     action = ac->addAction( QStringLiteral("file_open") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_O );
-    action->setText(i18n( "&Open..." ) );
+    action->setText(i18nc("@action",  "&Open..." ) );
     connect(action, &QAction::triggered,
             this, [this] { Q_D(DocumentController); d->chooseDocument(); } );
-    action->setToolTip( i18n( "Open file" ) );
-    action->setWhatsThis( i18n( "Opens a file for editing." ) );
+    action->setToolTip( i18nc("@info:tooltip", "Open file" ) );
+    action->setWhatsThis( i18nc("@info:whatsthis", "Opens a file for editing." ) );
 
     d->fileOpenRecent = KStandardAction::openRecent(this,
                     SLOT(slotOpenDocument(QUrl)), ac);
-    d->fileOpenRecent->setWhatsThis(i18n("This lists files which you have opened recently, and allows you to easily open them again."));
+    d->fileOpenRecent->setWhatsThis(i18nc("@info:whatsthis", "This lists files which you have opened recently, and allows you to easily open them again."));
     d->fileOpenRecent->loadEntries( KConfigGroup(KSharedConfig::openConfig(), "Recent Files" ) );
 
     action = d->saveAll = ac->addAction( QStringLiteral("file_save_all") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
-    action->setText(i18n( "Save Al&l" ) );
+    action->setText(i18nc("@action", "Save Al&l" ) );
     connect( action, &QAction::triggered, this, &DocumentController::slotSaveAllDocuments );
-    action->setToolTip( i18n( "Save all open documents" ) );
-    action->setWhatsThis( i18n( "Save all open documents, prompting for additional information when necessary." ) );
+    action->setToolTip( i18nc("@info:tooltip", "Save all open documents" ) );
+    action->setWhatsThis( i18nc("@info:whatsthis", "Save all open documents, prompting for additional information when necessary." ) );
     ac->setDefaultShortcut(action, QKeySequence(Qt::CTRL + Qt::Key_L) );
     action->setEnabled(false);
 
     action = d->revertAll = ac->addAction( QStringLiteral("file_revert_all") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-revert")));
-    action->setText(i18n( "Reload All" ) );
+    action->setText(i18nc("@action", "Reload All" ) );
     connect( action, &QAction::triggered, this, &DocumentController::reloadAllDocuments );
-    action->setToolTip( i18n( "Revert all open documents" ) );
-    action->setWhatsThis( i18n( "Revert all open documents, returning to the previously saved state." ) );
+    action->setToolTip( i18nc("@info:tooltip", "Revert all open documents" ) );
+    action->setWhatsThis( i18nc("@info:whatsthis", "Revert all open documents, returning to the previously saved state." ) );
     action->setEnabled(false);
 
     action = d->close = ac->addAction( QStringLiteral("file_close") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::Key_W );
-    action->setText( i18n( "&Close" ) );
+    action->setText( i18nc("@action", "&Close" ) );
     connect( action, &QAction::triggered, this, &DocumentController::fileClose );
-    action->setToolTip( i18n( "Close file" ) );
-    action->setWhatsThis( i18n( "Closes current file." ) );
+    action->setToolTip( i18nc("@info:tooltip", "Close file" ) );
+    action->setWhatsThis( i18nc("@info:whatsthis", "Closes current file." ) );
     action->setEnabled(false);
 
     action = d->closeAll = ac->addAction( QStringLiteral("file_close_all") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
-    action->setText(i18n( "Clos&e All" ) );
+    action->setText(i18nc("@action", "Clos&e All" ) );
     connect( action, &QAction::triggered, this, &DocumentController::closeAllDocuments );
-    action->setToolTip( i18n( "Close all open documents" ) );
-    action->setWhatsThis( i18n( "Close all open documents, prompting for additional information when necessary." ) );
+    action->setToolTip( i18nc("@info:tooltip", "Close all open documents" ) );
+    action->setWhatsThis( i18nc("@info:whatsthis", "Close all open documents, prompting for additional information when necessary." ) );
     action->setEnabled(false);
 
     action = d->closeAllOthers = ac->addAction( QStringLiteral("file_closeother") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-close")));
     ac->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_W );
-    action->setText(i18n( "Close All Ot&hers" ) );
+    action->setText(i18nc("@action", "Close All Ot&hers" ) );
     connect( action, &QAction::triggered, this, &DocumentController::closeAllOtherDocuments );
-    action->setToolTip( i18n( "Close all other documents" ) );
-    action->setWhatsThis( i18n( "Close all open documents, with the exception of the currently active document." ) );
+    action->setToolTip( i18nc("@info:tooltip", "Close all other documents" ) );
+    action->setWhatsThis( i18nc("@info:whatsthis", "Close all open documents, with the exception of the currently active document." ) );
     action->setEnabled(false);
 
     action = ac->addAction( QStringLiteral("vcsannotate_current_document") );
     connect( action, &QAction::triggered, this, &DocumentController::vcsAnnotateCurrentDocument );
-    action->setText( i18n( "Show Annotate on current document") );
-    action->setIconText( i18n( "Annotate" ) );
+    action->setText( i18nc("@action", "Show Annotate on Current Document") );
+    action->setIconText( i18nc("@action", "Annotate" ) );
     action->setIcon( QIcon::fromTheme(QStringLiteral("user-properties")) );
 }
 

@@ -160,23 +160,23 @@ SourceFormatterController::SourceFormatterController(QObject *parent)
     if (Core::self()->setupFlags() & Core::NoUi) return;
 
     d->formatTextAction = actionCollection()->addAction(QStringLiteral("edit_reformat_source"));
-    d->formatTextAction->setText(i18n("&Reformat Source"));
-    d->formatTextAction->setToolTip(i18n("Reformat source using AStyle"));
-    d->formatTextAction->setWhatsThis(i18n("Source reformatting functionality using <b>astyle</b> library."));
+    d->formatTextAction->setText(i18nc("@action", "&Reformat Source"));
+    d->formatTextAction->setToolTip(i18nc("@info:tooltip", "Reformat source using AStyle"));
+    d->formatTextAction->setWhatsThis(i18nc("@info:whatsthis", "Source reformatting functionality using <b>astyle</b> library."));
     d->formatTextAction->setEnabled(false);
     connect(d->formatTextAction, &QAction::triggered, this, &SourceFormatterController::beautifySource);
 
     d->formatLine = actionCollection()->addAction(QStringLiteral("edit_reformat_line"));
-    d->formatLine->setText(i18n("Reformat Line"));
-    d->formatLine->setToolTip(i18n("Reformat current line using AStyle"));
-    d->formatLine->setWhatsThis(i18n("Source reformatting of line under cursor using <b>astyle</b> library."));
+    d->formatLine->setText(i18nc("@action", "Reformat Line"));
+    d->formatLine->setToolTip(i18nc("@info:tooltip", "Reformat current line using AStyle"));
+    d->formatLine->setWhatsThis(i18nc("@info:whatsthis", "Source reformatting of line under cursor using <b>astyle</b> library."));
     d->formatLine->setEnabled(false);
     connect(d->formatLine, &QAction::triggered, this, &SourceFormatterController::beautifyLine);
 
     d->formatFilesAction = actionCollection()->addAction(QStringLiteral("tools_astyle"));
-    d->formatFilesAction->setText(i18n("Reformat Files..."));
-    d->formatFilesAction->setToolTip(i18n("Format file(s) using the current theme"));
-    d->formatFilesAction->setWhatsThis(i18n("Formatting functionality using <b>astyle</b> library."));
+    d->formatFilesAction->setText(i18nc("@action", "Reformat Files..."));
+    d->formatFilesAction->setToolTip(i18nc("@info:tooltip", "Format file(s) using the current theme"));
+    d->formatFilesAction->setWhatsThis(i18nc("@info:whatsthis", "Formatting functionality using <b>astyle</b> library."));
     d->formatFilesAction->setEnabled(false);
     connect(d->formatFilesAction, &QAction::triggered,
             this, QOverload<>::of(&SourceFormatterController::formatFiles));
@@ -740,12 +740,12 @@ void SourceFormatterController::formatFiles()
 
     auto win = ICore::self()->uiController()->activeMainWindow()->window();
 
-    QMessageBox msgBox(QMessageBox::Question, i18n("Reformat files?"),
+    QMessageBox msgBox(QMessageBox::Question, i18nc("@title:window", "Reformat Files?"),
                        i18n("Reformat all files in the selected folder?"),
                        QMessageBox::Ok|QMessageBox::Cancel, win);
     msgBox.setDefaultButton(QMessageBox::Cancel);
     auto okButton = msgBox.button(QMessageBox::Ok);
-    okButton->setText(i18n("Reformat"));
+    okButton->setText(i18nc("@action:button", "Reformat"));
     msgBox.exec();
 
     if (msgBox.clickedButton() == okButton) {

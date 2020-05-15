@@ -114,7 +114,7 @@ bool PartDocument::askForCloseFeedback()
         code = KMessageBox::warningYesNoCancel(
             Core::self()->uiController()->activeMainWindow(),
             i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
-            i18n("Close Document"));
+            i18nc("@title:window", "Close Document"));
 
     /// @todo Is this behavior right?
     } else if (state() == IDocument::DirtyAndModified) {
@@ -122,7 +122,7 @@ bool PartDocument::askForCloseFeedback()
             Core::self()->uiController()->activeMainWindow(),
             i18n("The document \"%1\" has unsaved changes and was modified by an external process.\n"
                  "Do you want to override the external changes?", url().toLocalFile()),
-            i18n("Close Document"));
+            i18nc("@title:window", "Close Document"));
     }
 
     if (code >= 0) {

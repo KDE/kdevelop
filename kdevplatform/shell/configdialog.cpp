@@ -41,7 +41,7 @@ using namespace KDevelop;
 ConfigDialog::ConfigDialog(QWidget* parent)
     : KPageDialog(parent)
 {
-    setWindowTitle(i18n("Configure"));
+    setWindowTitle(i18nc("@title:window", "Configure"));
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults);
     button(QDialogButtonBox::Apply)->setEnabled(false);
     setObjectName(QStringLiteral("configdialog"));
@@ -90,7 +90,7 @@ int ConfigDialog::checkForUnsavedChanges(KPageWidgetItem* current, KPageWidgetIt
     auto oldPage = qobject_cast<ConfigPage*>(before->widget());
     Q_ASSERT(oldPage);
     auto dialogResult = KMessageBox::warningYesNoCancel(this, i18n("The settings of the current module have changed.\n"
-            "Do you want to apply the changes or discard them?"), i18n("Apply Settings"), KStandardGuiItem::apply(),
+            "Do you want to apply the changes or discard them?"), i18nc("@title:window", "Apply Settings"), KStandardGuiItem::apply(),
             KStandardGuiItem::discard(), KStandardGuiItem::cancel());
     if (dialogResult == KMessageBox::No) {
         oldPage->reset();

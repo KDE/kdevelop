@@ -467,7 +467,7 @@ void SourceFormatterSelectionEdit::deleteStyle()
     if (!otherLanguageNames.empty() &&
         KMessageBox::warningContinueCancel(this,
         i18n("The style %1 is also used for the following languages:\n%2.\nAre you sure you want to delete it?",
-        styleIter.value()->caption(), otherLanguageNames.join(QLatin1Char('\n'))), i18n("Style being deleted")) != KMessageBox::Continue) {
+        styleIter.value()->caption(), otherLanguageNames.join(QLatin1Char('\n'))), i18nc("@title:window", "Deleting Style")) != KMessageBox::Continue) {
         return;
     }
     d->ui.styleList->takeItem(d->ui.styleList->currentRow());

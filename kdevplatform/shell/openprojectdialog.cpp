@@ -122,7 +122,7 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
     if( fetch ) {
         sourcePageWidget = new ProjectSourcePage(start, repoUrl, vcsOrProviderPlugin, this);
         connect( sourcePageWidget, &ProjectSourcePage::isCorrect, this, &OpenProjectDialog::validateSourcePage );
-        sourcePage = addPage( sourcePageWidget, i18n("Select Source") );
+        sourcePage = addPage( sourcePageWidget, i18nc("@title:tab", "Select Source") );
         currentPage = sourcePage;
     }
 
@@ -137,7 +137,7 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
             currentPage = openPage;
         }
     } else {
-        nativeDialog = new QFileDialog(this, i18n("Open Project"));
+        nativeDialog = new QFileDialog(this, i18nc("@title:window", "Open Project"));
         nativeDialog->setDirectoryUrl(start);
         nativeDialog->setFileMode(QFileDialog::Directory);
     }
@@ -145,7 +145,7 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
     auto* page = new ProjectInfoPage( this );
     connect( page, &ProjectInfoPage::projectNameChanged, this, &OpenProjectDialog::validateProjectName );
     connect( page, &ProjectInfoPage::projectManagerChanged, this, &OpenProjectDialog::validateProjectManager );
-    projectInfoPage = addPage( page, i18n("Project Information") );
+    projectInfoPage = addPage( page, i18nc("@title:tab", "Project Information") );
 
     if (!currentPage) {
         currentPage = projectInfoPage;
@@ -157,7 +157,7 @@ OpenProjectDialog::OpenProjectDialog(bool fetch, const QUrl& startUrl,
     setAppropriate( projectInfoPage, false );
 
     setCurrentPage( currentPage );
-    setWindowTitle(i18n("Open Project"));
+    setWindowTitle(i18nc("@title:window", "Open Project"));
 }
 
 bool OpenProjectDialog::execNativeDialog()
@@ -255,7 +255,7 @@ void OpenProjectDialog::validateOpenUrl( const QUrl& url_ )
                 auto plugins = projectManagerForFile(file);
                 if ( plugins.contains(QStringLiteral("<built-in>")) ) {
                     plugins.removeAll(QStringLiteral("<built-in>"));
-                    choices.append({i18n("Open existing file \"%1\"", file), QStringLiteral("<built-in>"), QString()});
+                    choices.append({i18nc("@item:inlistbox", "Open existing file \"%1\"", file), QStringLiteral("<built-in>"), QString()});
                 }
                 choices.reserve(choices.size() + plugins.size());
                 for (const auto& plugin : qAsConst(plugins)) {

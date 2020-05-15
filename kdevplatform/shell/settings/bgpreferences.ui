@@ -17,10 +17,10 @@
    <item>
     <widget class="QGroupBox" name="kcfg_enable">
      <property name="toolTip">
-      <string>&lt;p&gt;Enables or disables the background parser.&lt;br&gt;If unsure, leave it enabled. Disabling the background parser will disable large parts of KDevelop's functionality.&lt;/p&gt;</string>
+      <string comment="@info:tooltip">&lt;p&gt;Enables or disables the background parser.&lt;br&gt;If unsure, leave it enabled. Disabling the background parser will disable large parts of KDevelop's functionality.&lt;/p&gt;</string>
      </property>
      <property name="title">
-      <string>Enable Background Parser</string>
+      <string comment="@title:group">Enable Background Parser</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -32,20 +32,20 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label">
         <property name="toolTip">
-         <string>The time to wait before the document is re-analyzed when you edit it.</string>
+         <string comment="@info:tooltip">The time to wait before the document is re-analyzed when you edit it.</string>
         </property>
         <property name="text">
-         <string>Delay:</string>
+         <string comment="@label:spinbox">Delay:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QSpinBox" name="kcfg_delay">
         <property name="toolTip">
-         <string>The time to wait before the document is re-analyzed when you edit it.</string>
+         <string comment="@info:tooltip">The time to wait before the document is re-analyzed when you edit it.</string>
         </property>
         <property name="suffix">
-         <string> ms</string>
+         <string comment="@item:valuesuffix"> ms</string>
         </property>
         <property name="maximum">
          <number>5000</number>
@@ -58,20 +58,20 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="toolTip">
-         <string>The maximum number of parallel instances the background parser uses. If unsure, select 1 or 2.</string>
+         <string comment="@info:tooltip">The maximum number of parallel instances the background parser uses. If unsure, select 1 or 2.</string>
         </property>
         <property name="text">
-         <string>Maximum number of threads:</string>
+         <string comment="@label:spinbox">Maximum number of threads:</string>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
        <widget class="QSpinBox" name="kcfg_threads">
         <property name="toolTip">
-         <string>The maximum number of parallel instances the background parser uses. If unsure, select 1 or 2.</string>
+         <string comment="@info:tooltip">The maximum number of parallel instances the background parser uses. If unsure, select 1 or 2.</string>
         </property>
         <property name="suffix">
-         <string> threads</string>
+         <string comment="@item:valuesuffix"> threads</string>
         </property>
         <property name="minimum">
          <number>1</number>

@@ -89,7 +89,7 @@ public:
         desired[QStringLiteral("org.kdevelop.SnippetView")] = Sublime::Right;
         desired[QStringLiteral("org.kdevelop.ExternalScriptView")] = Sublime::Right;
         desired[QStringLiteral("org.kdevelop.ScratchpadView")] = Sublime::Left;
-        auto* a = new Sublime::Area(m_controller, QStringLiteral("code"), i18n("Code"));
+        auto* a = new Sublime::Area(m_controller, QStringLiteral("code"), i18nc("area", "Code"));
         a->setDesiredToolViews(desired);
         a->setIconName(QStringLiteral("document-edit"));
         m_controller->addDefaultArea(a);
@@ -100,7 +100,7 @@ public:
         desired[QStringLiteral("org.kdevelop.debugger.StackView")] = Sublime::Bottom;
         desired[QStringLiteral("org.kdevelop.debugger.ConsoleView")] = Sublime::Bottom;
         desired[QStringLiteral("org.kdevelop.KonsoleView")] = Sublime::Bottom;
-        a = new Sublime::Area(m_controller, QStringLiteral("debug"), i18n("Debug"));
+        a = new Sublime::Area(m_controller, QStringLiteral("debug"), i18nc("area", "Debug"));
         a->setDesiredToolViews(desired);
         a->setIconName(QStringLiteral("debug-run"));
         m_controller->addDefaultArea(a);
@@ -109,7 +109,7 @@ public:
         desired[QStringLiteral("org.kdevelop.ProjectsView")] = Sublime::Left;
         desired[QStringLiteral("org.kdevelop.PatchReview")] = Sublime::Bottom;
 
-        a = new Sublime::Area(m_controller, QStringLiteral("review"), i18n("Review"));
+        a = new Sublime::Area(m_controller, QStringLiteral("review"), i18nc("area", "Review"));
         a->setDesiredToolViews(desired);
         a->setIconName(QStringLiteral("text-x-patch"));
         m_controller->addDefaultArea(a);
@@ -462,7 +462,7 @@ void UiController::selectNewToolViewToAdd(MainWindow *mw)
         return;
 
     ScopedDialog<QDialog> dia(mw);
-    dia->setWindowTitle(i18n("Select Tool View to Add"));
+    dia->setWindowTitle(i18nc("@title:window", "Select Tool View to Add"));
 
     auto mainLayout = new QVBoxLayout(dia);
 

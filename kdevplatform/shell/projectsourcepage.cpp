@@ -45,7 +45,7 @@ ProjectSourcePage::ProjectSourcePage(const QUrl& initial, const QUrl& repoUrl, I
     m_ui->workingDir->setUrl(initial);
     m_ui->workingDir->setMode(KFile::Directory);
 
-    m_ui->sources->addItem(QIcon::fromTheme(QStringLiteral("folder")), i18n("From File System"));
+    m_ui->sources->addItem(QIcon::fromTheme(QStringLiteral("folder")), i18nc("@item:inlistbox", "From File System"));
     m_plugins.append(nullptr);
 
     int preselectIndex = -1;

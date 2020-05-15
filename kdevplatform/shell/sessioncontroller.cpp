@@ -154,7 +154,7 @@ public:
     {
         bool ok;
         auto newSessionName = QInputDialog::getText(Core::self()->uiController()->activeMainWindow(),
-                                                    i18n("Rename Session"), i18n("New Session Name:"),
+                                                    i18nc("@title:window", "Rename Session"), i18nc("@label:textbox", "New session name:"),
                                                     QLineEdit::Normal, q->activeSession()->name(), &ok);
         if (ok) {
             static_cast<Session*>(q->activeSession())->setName(newSessionName);
@@ -280,17 +280,17 @@ SessionController::SessionController( QObject *parent )
     action = actionCollection()->addAction(QStringLiteral("rename_session"));
     connect(action, &QAction::triggered,
             this, [this] { Q_D(SessionController); d->renameSession(); });
-    action->setText( i18n("Rename Current Session...") );
+    action->setText( i18nc("@action", "Rename Current Session...") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
 
     action = actionCollection()->addAction(QStringLiteral("delete_session"));
     connect(action, &QAction::triggered,
             this, [this] { Q_D(SessionController); d->deleteCurrentSession(); });
-    action->setText( i18n("Delete Current Session...") );
+    action->setText( i18nc("@action", "Delete Current Session...") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
 
     action = actionCollection()->addAction( QStringLiteral("quit"), this, SIGNAL(quitSession()) );
-    action->setText( i18n("Quit") );
+    action->setText( i18nc("@action", "Quit") );
     action->setMenuRole( QAction::NoRole ); // OSX: prevent QT from hiding this due to conflict with 'Quit KDevelop...'
     actionCollection()->setDefaultShortcut( action, Qt::CTRL | Qt::Key_Q );
     action->setIcon(QIcon::fromTheme(QStringLiteral("application-exit")));
@@ -583,7 +583,7 @@ QString SessionController::showSessionChooserDialog(const QString& headerText, b
     auto* view = new QListView;
     auto* filter = new QLineEdit;
     filter->setClearButtonEnabled( true );
-    filter->setPlaceholderText(i18n("Search"));
+    filter->setPlaceholderText(i18nc("@info:placeholder", "Search..."));
 
     auto* model = new QStandardItemModel(view);
 
@@ -606,16 +606,16 @@ QString SessionController::showSessionChooserDialog(const QString& headerText, b
     }
 
     model->setColumnCount(4);
-    model->setHeaderData(0, Qt::Horizontal,i18n("Identity"));
-    model->setHeaderData(1, Qt::Horizontal,i18n("Contents"));
-    model->setHeaderData(2, Qt::Horizontal,i18n("State"));
-    model->setHeaderData(3, Qt::Horizontal,i18n("Name"));
+    model->setHeaderData(0, Qt::Horizontal,i18nc("@title:column", "Identity"));
+    model->setHeaderData(1, Qt::Horizontal,i18nc("@title:column", "Contents"));
+    model->setHeaderData(2, Qt::Horizontal,i18nc("@title:column", "State"));
+    model->setHeaderData(3, Qt::Horizontal,i18nc("@title:column", "Name"));
 
     view->setModel(proxy);
     view->setModelColumn(1);
 
     auto* filterLayout = new QHBoxLayout();
-    filterLayout->addWidget(new QLabel(i18n("Filter:")));
+    filterLayout->addWidget(new QLabel(i18nc("@label:textbox", "Filter:")));
     filterLayout->addWidget(filter);
     layout.addLayout(filterLayout);
     layout.addWidget(view);

@@ -254,7 +254,7 @@ void PartController::setupActions()
     QAction* action;
 
     action = KStandardAction::showStatusbar(this, SLOT(setShowTextEditorStatusBar(bool)), actionCollection);
-    action->setWhatsThis(i18n("Use this command to show or hide the view's statusbar"));
+    action->setWhatsThis(i18nc("@info:whatsthis", "Use this command to show or hide the view's statusbar."));
     action->setChecked(showTextEditorStatusBar());
 }
 

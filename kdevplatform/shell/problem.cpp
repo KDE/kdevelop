@@ -177,9 +177,9 @@ QString DetectedProblem::severityString() const
 
     switch(d->m_severity)
     {
-    case Hint: s = i18n("Hint"); break;
-    case Warning: s = i18n("Warning"); break;
-    case Error: s = i18n("Error"); break;
+    case Hint: s = i18nc("@item problem severity", "Hint"); break;
+    case Warning: s = i18nc("@item problem severity", "Warning"); break;
+    case Error: s = i18nc("@item problem severity", "Error"); break;
     default: break;
     }
 

@@ -46,7 +46,7 @@ LanguagePreferences::LanguagePreferences(QWidget* parent)
 {
     preferencesDialog = new Ui::LanguagePreferences;
     preferencesDialog->setupUi(this);
-    preferencesDialog->kcfg_minFilesForSimplifiedParsing->setSuffix(ki18np(" file", " files"));
+    preferencesDialog->kcfg_minFilesForSimplifiedParsing->setSuffix(ki18ncp("@item:valuesuffix", " file", " files"));
 }
 
 void LanguagePreferences::notifySettingsChanged()

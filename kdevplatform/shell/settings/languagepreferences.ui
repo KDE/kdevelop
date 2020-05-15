@@ -26,13 +26,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Code Completion</string>
+      <string comment="@title:group">Code Completion</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="1">
        <widget class="QCheckBox" name="kcfg_automaticInvocation">
         <property name="toolTip">
-         <string>If disabled, the code completion widget will never show automatically.</string>
+         <string comment="@info:tooltip">If disabled, the code completion widget will never show automatically.</string>
         </property>
         <property name="text">
          <string/>
@@ -42,7 +42,7 @@
       <item row="1" column="1">
        <widget class="QCheckBox" name="kcfg_showMultiLineSelectionInformation">
         <property name="toolTip">
-         <string>Choose whether to display additional information for the currently selected code completion item.</string>
+         <string comment="info:tooltip">Choose whether to display additional information for the currently selected code completion item.</string>
         </property>
         <property name="text">
          <string/>
@@ -59,17 +59,17 @@
         </property>
         <item>
          <property name="text">
-          <string>Never</string>
+          <string comment="@item:inlistbox">Never</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>When Invoked Manually</string>
+          <string comment="@item:inlistbox">When Invoked Manually</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Always</string>
+          <string comment="@item:inlistbox">Always</string>
          </property>
         </item>
        </widget>
@@ -80,27 +80,27 @@
          <string>&lt;p&gt;The code completion UI has a minimal mode and a detailed mode.&lt;br&gt;Choose in what cases full code completion will be displayed.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Detailed completion:</string>
+         <string comment="@label">Detailed completion:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_6">
         <property name="toolTip">
-         <string>If disabled, the code completion widget will never show automatically.</string>
+         <string comment="@info:tooltip">If disabled, the code completion widget will never show automatically.</string>
         </property>
         <property name="text">
-         <string>Enable automatic invocation:</string>
+         <string comment="@label">Enable automatic invocation:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_7">
         <property name="toolTip">
-         <string>Choose whether to display additional information for the currently selected codecompletion item.</string>
+         <string comment="@info:tooltip">Choose whether to display additional information for the currently selected codecompletion item.</string>
         </property>
         <property name="text">
-         <string>Additional information for current item:</string>
+         <string comment="@label">Additional information for current item:</string>
         </property>
        </widget>
       </item>
@@ -110,7 +110,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Semantic Code Highlighting</string>
+      <string comment="@title:group">Semantic Code Highlighting</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
@@ -122,7 +122,7 @@
          <string>&lt;p&gt;This setting decides about the intensity of colors for local variables, for example function arguments, variables and the like.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Local colorization intensity:</string>
+         <string comment="@label:slider">Local colorization intensity:</string>
         </property>
         <property name="buddy">
          <cstring>kcfg_localColorization</cstring>
@@ -157,7 +157,7 @@
          <string>&lt;p&gt;This settings lets you change the intensity of globally accessible types, for example classes, methods, functions etc.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Global colorization intensity:</string>
+         <string comment="@label:slider">Global colorization intensity:</string>
         </property>
         <property name="buddy">
          <cstring>kcfg_localColorization</cstring>
@@ -192,7 +192,7 @@
          <string>&lt;p&gt;Highlight semantic problems, such as non-existent or inaccessible declarations.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Highlight semantic problems:</string>
+         <string comment="@label">Highlight semantic problems:</string>
         </property>
        </widget>
       </item>
@@ -212,7 +212,7 @@
          <string>&lt;p&gt;When enabled, lines with errors will get additionally highlighted and their positions get marked in the scrollbar.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Highlight problematic lines:</string>
+         <string comment="@label">Highlight problematic lines:</string>
         </property>
        </widget>
       </item>
@@ -229,17 +229,17 @@
       <item row="14" column="0">
        <widget class="QLabel" name="label_3">
         <property name="toolTip">
-         <string>Space-separated list of words that make a comment represent a TODO item</string>
+         <string comment="@info:tooltip">Space-separated list of words that make a comment represent a TODO item</string>
         </property>
         <property name="text">
-         <string>TODO marker words:</string>
+         <string comment="@label:textbox">TODO marker words:</string>
         </property>
        </widget>
       </item>
       <item row="14" column="1">
        <widget class="QLineEdit" name="kcfg_todoMarkerWords">
         <property name="toolTip">
-         <string>Space-separated list of words that make a comment represent a TODO item.</string>
+         <string comment="@info:tooltip">Space-separated list of words that make a comment represent a TODO item.</string>
         </property>
         <property name="placeholderText">
          <string/>
@@ -252,7 +252,7 @@
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use bold font for declarations such as classes, functions, local variables, etc.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
-         <string>Bold font for declarations:</string>
+         <string comment="@label">Bold font for declarations:</string>
         </property>
        </widget>
       </item>
@@ -263,22 +263,22 @@
        <widget class="QComboBox" name="kcfg_problemInlineNotesLevel">
         <item>
          <property name="text">
-          <string>None</string>
+          <string comment="@item:inlistbox inline problems shown">None</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Errors</string>
+          <string comment="@item:inlistbox inline problems shown">Errors</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Warnings and Errors</string>
+          <string comment="@item:inlistbox inline problems shown">Warnings and Errors</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Hints, Warnings and Errors</string>
+          <string comment="@item:inlistbox inline problems shown">Hints, Warnings and Errors</string>
          </property>
         </item>
        </widget>
@@ -286,7 +286,7 @@
       <item row="13" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Problems shown as inline notes:</string>
+         <string comment="@label:listbox">Problems shown as inline notes:</string>
         </property>
        </widget>
       </item>
@@ -310,7 +310,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Project Parsing</string>
+      <string comment="@title:group">Project Parsing</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <property name="fieldGrowthPolicy">
@@ -323,7 +323,7 @@
 parsed in simplified mode, increasing the efficiency by gathering less information. Global code navigation and quickopen capabilities will be reduced.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Minimum project size for simplified parsing:</string>
+         <string comment="@label:spinbox">Minimum project size for simplified parsing:</string>
         </property>
        </widget>
       </item>

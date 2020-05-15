@@ -101,7 +101,7 @@ void ProgressItem::cancel()
             kid->cancel();
         }
     }
-    setStatus( i18n( "Aborting..." ) );
+    setStatus( i18nc("@info", "Aborting..." ) );
     emit progressItemCanceled( this );
 }
 

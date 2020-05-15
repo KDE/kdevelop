@@ -57,7 +57,7 @@ bool launchConfigGreaterThan(KDevelop::LaunchConfigurationType* a, KDevelop::Lau
 LaunchConfigurationDialog::LaunchConfigurationDialog(QWidget* parent)
     : QDialog(parent)
 {
-    setWindowTitle( i18n( "Launch Configurations" ) );
+    setWindowTitle( i18nc("@title:window", "Launch Configurations" ) );
 
     auto* mainWidget = new QWidget(this);
     auto *mainLayout = new QVBoxLayout(this);
@@ -206,8 +206,8 @@ void LaunchConfigurationDialog::doTreeContextMenu(const QPoint& point)
         if ( selected.parent().isValid() && ! selected.parent().parent().isValid() ) {
             // only display the menu if a launch config is clicked
             QMenu menu(tree);
-            auto* rename = new QAction(QIcon::fromTheme(QStringLiteral("edit-rename")), i18n("Rename configuration"), &menu);
-            auto* delete_ = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("Delete configuration"), &menu);
+            auto* rename = new QAction(QIcon::fromTheme(QStringLiteral("edit-rename")), i18nc("@action:inmenu", "Rename Configuration"), &menu);
+            auto* delete_ = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18nc("@action:inmenu", "Delete Configuration"), &menu);
             connect(rename, &QAction::triggered, this, &LaunchConfigurationDialog::renameSelected);
             connect(delete_, &QAction::triggered, this, &LaunchConfigurationDialog::deleteConfiguration);
             menu.addAction(rename);
@@ -261,7 +261,7 @@ void LaunchConfigurationDialog::selectionChanged(const QItemSelection& selected,
             disconnect(l, &LaunchConfiguration::nameChanged, this,  &LaunchConfigurationDialog::updateNameLabel);
             if( currentPageChanged )
             {
-                if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18n("Unsaved Changes") ) == KMessageBox::Yes )
+                if( KMessageBox::questionYesNo( this, i18n("Selected Launch Configuration has unsaved changes. Do you want to save it?"), i18nc("@title:window", "Unsaved Changes") ) == KMessageBox::Yes )
                 {
                     saveConfig( deselected.indexes().first() );
                 } else {
@@ -717,10 +717,10 @@ QVariant LaunchConfigurationsModel::headerData(int section, Qt::Orientation orie
     {
         if( section == 0 )
         {
-            return i18nc("Name of the Launch Configurations", "Name");
+            return i18nc("@title:column Name of the Launch Configurations", "Name");
         } else if( section == 1 )
         {
-            return i18nc("The type of the Launch Configurations (i.e. Python Application, C++ Application)", "Type");
+            return i18nc("@title:column Type of the Launch Configurations (i.e. Python Application, C++ Application)", "Type");
         }
     }
     return QVariant();

@@ -34,7 +34,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Source:</string>
+        <string comment="@label:listbox">Source:</string>
        </property>
       </widget>
      </item>
@@ -46,20 +46,20 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Destination</string>
+      <string comment="@title:group">Destination</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Directory:</string>
+         <string comment="@label:textbox">Directory:</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="KUrlRequester" name="workingDir">
         <property name="placeholderText" stdset="0">
-         <string>Select the directory to use...</string>
+         <string comment="@info:placeholder">Select the directory to use...</string>
         </property>
        </widget>
       </item>
@@ -75,7 +75,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Source</string>
+      <string comment="@title:group">Source</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -102,7 +102,7 @@
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Get</string>
+           <string comment="@action:button">Get</string>
           </property>
          </widget>
         </item>

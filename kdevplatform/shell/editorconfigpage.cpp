@@ -98,7 +98,7 @@ EditorConfigPage::~EditorConfigPage() {}
 
 QString EditorConfigPage::name() const
 {
-    return i18n("Editor");
+    return i18nc("@title:tab", "Editor");
 }
 
 QIcon EditorConfigPage::icon() const

@@ -48,7 +48,7 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
 
     m_deleteButton = new QPushButton(view->viewport());
     m_deleteButton->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
-    m_deleteButton->setToolTip(i18nc("@info", "Delete session"));
+    m_deleteButton->setToolTip(i18nc("@info:tooltip", "Delete session"));
     m_deleteButton->hide();
     connect(m_deleteButton, &QPushButton::clicked, this, &SessionChooserDialog::deleteButtonPressed);
 
@@ -61,7 +61,7 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     filter->installEventFilter(this);
     connect(filter, &QLineEdit::textChanged, this, &SessionChooserDialog::filterTextChanged);
 
-    setWindowTitle(i18n("Pick a Session"));
+    setWindowTitle(i18nc("@title:window", "Pick a Session"));
 
     m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Close);
     auto mainLayout = new QVBoxLayout(this);
@@ -74,7 +74,7 @@ SessionChooserDialog::SessionChooserDialog(QListView* view, QAbstractItemModel* 
     connect(m_buttonBox, &QDialogButtonBox::accepted, this, &SessionChooserDialog::accept);
     connect(m_buttonBox, &QDialogButtonBox::rejected, this, &SessionChooserDialog::reject);
     mainLayout->addWidget(m_buttonBox);
-    okButton->setText(i18n("Run"));
+    okButton->setText(i18nc("@action:button", "Run"));
     okButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
 }
 
@@ -106,7 +106,7 @@ void SessionChooserDialog::updateState() {
         SessionRunInfo info = SessionController::sessionRunInfo(session);
         if(info.isRunning)
         {
-            tooltip = i18n("Active session.\npid %1, app %2, host %3",
+            tooltip = i18nc("@info:tooltip", "Active session.\npid %1, app %2, host %3",
                            info.holderPid, info.holderApp, info.holderHostname);
             state = i18n("Running");
         }
@@ -203,7 +203,7 @@ void SessionChooserDialog::deleteButtonPressed()
 
     TryLockSessionResult result = SessionController::tryLockSession( uuid );
     if( !result.lock ) {
-        const QString errCaption = i18nc("@title", "Cannot Delete Session");
+        const QString errCaption = i18nc("@title:window", "Cannot Delete Session");
         QString errText = i18nc("@info", "<p>Cannot delete a locked session.");
 
         if( result.runInfo.holderPid != -1 ) {
@@ -216,7 +216,7 @@ void SessionChooserDialog::deleteButtonPressed()
     }
 
     const QString text = i18nc("@info", "The session <b>%1</b> and all contained settings will be deleted. The projects will stay unaffected. Do you really want to continue?", sessionName);
-    const QString caption = i18nc("@title", "Delete Session");
+    const QString caption = i18nc("@title:window", "Delete Session");
     const KGuiItem deleteItem = KStandardGuiItem::del();
     const KGuiItem cancelItem = KStandardGuiItem::cancel();
 

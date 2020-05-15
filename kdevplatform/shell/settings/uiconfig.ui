@@ -20,7 +20,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Dock Window Behavior</string>
+      <string comment="@title:group">Dock Window Behavior</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
@@ -29,7 +29,7 @@
          <string>&lt;p&gt;Controls whether the bottom left corner is occupied by the dock at the left, or by the dock at the bottom.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Bottom left corner occupied by:</string>
+         <string comment="@label:listbox">Bottom left corner occupied by:</string>
         </property>
        </widget>
       </item>
@@ -39,7 +39,7 @@
          <string>&lt;p&gt;Controls whether the bottom right corner is occupied by the dock at the right, or by the dock at the bottom.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Bottom right corner occupied by:</string>
+         <string comment="@label:listbox">Bottom right corner occupied by:</string>
         </property>
        </widget>
       </item>
@@ -50,12 +50,12 @@
         </property>
         <item>
          <property name="text">
-          <string>Left Dock</string>
+          <string comment="@item:inlistbox">Left Dock</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Bottom Dock</string>
+          <string comment="@item:inlistbox">Bottom Dock</string>
          </property>
         </item>
        </widget>
@@ -67,12 +67,12 @@
         </property>
         <item>
          <property name="text">
-          <string>Right Dock</string>
+          <string comment="@item:inlistbox">Right Dock</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Bottom Dock</string>
+          <string comment="@item:inlistbox">Bottom Dock</string>
          </property>
         </item>
        </widget>
@@ -83,16 +83,16 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Tabbed Browsing</string>
+      <string comment="@title:group">Tabbed Browsing</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_1">
       <item row="2" column="0">
        <widget class="QCheckBox" name="kcfg_TabBarOpenAfterCurrent">
         <property name="toolTip">
-         <string>Controls whether to open new tabs next to the active one.</string>
+         <string comment="@info:tooltip">Controls whether to open new tabs next to the active one.</string>
         </property>
         <property name="text">
-         <string>Open new tab after current</string>
+         <string comment="@option:check">Open new tab after current</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -102,21 +102,21 @@
       <item row="3" column="0">
        <widget class="QCheckBox" name="kcfg_TabBarArrangeBuddies">
         <property name="toolTip">
-         <string>When enabled, plugins can group related files side by side.
+         <string comment="@info:tooltip">When enabled, plugins can group related files side by side.
 For example, a header file will be opened next to the implementation file.</string>
         </property>
         <property name="text">
-         <string>Arrange related documents side by side</string>
+         <string comment="@option:check">Arrange related documents side by side</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
        <widget class="QCheckBox" name="kcfg_TabBarVisibility">
         <property name="toolTip">
-         <string>Enables or disables the display of the tab bar at the top of the editor window.</string>
+         <string comment="@info:tooltip">Enables or disables the display of the tab bar at the top of the editor window.</string>
         </property>
         <property name="text">
-         <string>Show tabs</string>
+         <string comment="@option:check">Show tabs</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -126,10 +126,10 @@ For example, a header file will be opened next to the implementation file.</stri
       <item row="1" column="0">
        <widget class="QCheckBox" name="kcfg_CloseButtonsOnTabs">
         <property name="toolTip">
-         <string>Enables or disables the display of a close button in each tab in the tab bar at the top of the editor window.</string>
+         <string comment="@info:tooltip">Enables or disables the display of a close button in each tab in the tab bar at the top of the editor window.</string>
         </property>
         <property name="text">
-         <string>Show close buttons on tabs</string>
+         <string comment="@option:check">Show close buttons on tabs</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -142,16 +142,16 @@ For example, a header file will be opened next to the implementation file.</stri
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Coloring</string>
+      <string comment="@title:group">Coloring</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <widget class="QCheckBox" name="kcfg_ColorizeByProject">
         <property name="toolTip">
-         <string>When enabled, tabs and other widgets are colored based on the project affiliation</string>
+         <string comment="@info:tooltip">When enabled, tabs and other widgets are colored based on the project affiliation</string>
         </property>
         <property name="text">
-         <string>Color widgets based on the project affiliation</string>
+         <string comment="@option:check">Color widgets based on the project affiliation</string>
         </property>
         <property name="checked">
          <bool>true</bool>

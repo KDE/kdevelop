@@ -165,7 +165,7 @@ TransactionItem::TransactionItem( QWidget *parent,
     if ( item->canBeCanceled() ) {
         mCancelButton = new QPushButton( QIcon::fromTheme( QStringLiteral("dialog-cancel") ), QString(), h );
         hboxLayout->addWidget(mCancelButton);
-        mCancelButton->setToolTip( i18n( "Cancel this operation." ) );
+        mCancelButton->setToolTip( i18nc("@info:tooltip", "Cancel this operation" ) );
         connect ( mCancelButton, &QPushButton::clicked,
                   this, &TransactionItem::slotItemCanceled);
         h->layout()->addWidget( mCancelButton );

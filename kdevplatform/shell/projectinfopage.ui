@@ -26,34 +26,34 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="toolTip">
-      <string>Select the Management Plugin to use for this project</string>
+      <string comment="@info:tooltip">Select the Management Plugin to use for this project</string>
      </property>
      <property name="text">
-      <string>Project manager:</string>
+      <string comment="@label:listbox">Project manager:</string>
      </property>
     </widget>
    </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="toolTip">
-      <string>Provide a name for the project</string>
+      <string comment="@info:tooltip">Provide a name for the project</string>
      </property>
      <property name="text">
-      <string>Name:</string>
+      <string comment="@label:textbox">Name:</string>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
     <widget class="QLineEdit" name="nameEdit">
      <property name="toolTip">
-      <string>Provide a name for the project</string>
+      <string comment="@info:tooltip">Provide a name for the project</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
     <widget class="QComboBox" name="managerCombo">
      <property name="toolTip">
-      <string>Select the Management Plugin to use for this project</string>
+      <string comment="@info:tooltip">Select the Management Plugin to use for this project</string>
      </property>
     </widget>
    </item>

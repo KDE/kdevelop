@@ -230,22 +230,22 @@ void MainWindowPrivate::setupActions()
     const QString app = qApp->applicationName();
     action = KStandardAction::preferences( this, SLOT(settingsDialog()),
                                       actionCollection());
-    action->setToolTip( i18nc( "%1 = application name", "Configure %1", app ) );
-    action->setWhatsThis( i18n( "Lets you customize %1.", app ) );
+    action->setToolTip( i18nc( "@info:tooltip %1 = application name", "Configure %1", app ) );
+    action->setWhatsThis( i18nc("@info:whatsthis", "Lets you customize %1.", app ) );
 
     action =  KStandardAction::configureNotifications(this, SLOT(configureNotifications()), actionCollection());
-    action->setText( i18n("Configure Notifications...") );
+    action->setText( i18nc("@action", "Configure Notifications...") );
     action->setToolTip( i18nc("@info:tooltip", "Configure notifications") );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog that lets you configure notifications." ) );
 
     action = actionCollection()->addAction( QStringLiteral("loaded_plugins"), this, SLOT(showLoadedPlugins()) );
     action->setIcon(QIcon::fromTheme(QStringLiteral("plugins")));
-    action->setText( i18n("Loaded Plugins") );
-    action->setStatusTip( i18n("Show a list of all loaded plugins") );
+    action->setText( i18nc("@action", "Loaded Plugins") );
+    action->setStatusTip( i18nc("@info:tooltip", "Show a list of all loaded plugins") );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog with information about all loaded plugins." ) );
 
     action = actionCollection()->addAction( QStringLiteral("view_next_window") );
-    action->setText( i18n( "&Next Window" ) );
+    action->setText( i18nc("@action", "&Next Window" ) );
     connect( action, &QAction::triggered, this, &MainWindowPrivate::gotoNextWindow );
     actionCollection()->setDefaultShortcut(action, Qt::ALT + Qt::SHIFT + Qt::Key_Right );
     action->setToolTip( i18nc( "@info:tooltip", "Next window" ) );
@@ -253,7 +253,7 @@ void MainWindowPrivate::setupActions()
     action->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
 
     action = actionCollection()->addAction( QStringLiteral("view_previous_window") );
-    action->setText( i18n( "&Previous Window" ) );
+    action->setText( i18nc("@action", "&Previous Window" ) );
     connect( action, &QAction::triggered, this, &MainWindowPrivate::gotoPreviousWindow );
     actionCollection()->setDefaultShortcut(action, Qt::ALT + Qt::SHIFT + Qt::Key_Left );
     action->setToolTip( i18nc( "@info:tooltip", "Previous window" ) );
@@ -261,20 +261,20 @@ void MainWindowPrivate::setupActions()
     action->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
 
     action = actionCollection()->addAction(QStringLiteral("next_error"));
-    action->setText(i18n("Jump to Next Outputmark"));
+    action->setText(i18nc("@action", "Jump to Next Outputmark"));
     actionCollection()->setDefaultShortcut( action, QKeySequence(Qt::Key_F4) );
     action->setIcon(QIcon::fromTheme(QStringLiteral("arrow-right")));
     connect(action, &QAction::triggered, this, &MainWindowPrivate::selectNextItem);
 
     action = actionCollection()->addAction(QStringLiteral("prev_error"));
-    action->setText(i18n("Jump to Previous Outputmark"));
+    action->setText(i18nc("@action", "Jump to Previous Outputmark"));
     actionCollection()->setDefaultShortcut( action, QKeySequence(Qt::SHIFT | Qt::Key_F4) );
     action->setIcon(QIcon::fromTheme(QStringLiteral("arrow-left")));
     connect(action, &QAction::triggered, this, &MainWindowPrivate::selectPrevItem);
 
     action = actionCollection()->addAction( QStringLiteral("split_horizontal") );
     action->setIcon(QIcon::fromTheme( QStringLiteral("view-split-top-bottom") ));
-    action->setText( i18n( "Split View &Top/Bottom" ) );
+    action->setText( i18nc("@action", "Split View &Top/Bottom" ) );
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_T );
     connect( action, &QAction::triggered, this, &MainWindowPrivate::splitHorizontal );
     action->setToolTip( i18nc( "@info:tooltip", "Split horizontal" ) );
@@ -282,14 +282,14 @@ void MainWindowPrivate::setupActions()
 
     action = actionCollection()->addAction( QStringLiteral("split_vertical") );
     action->setIcon(QIcon::fromTheme( QStringLiteral("view-split-left-right") ));
-    action->setText( i18n( "Split View &Left/Right" ) );
+    action->setText( i18nc("@action", "Split View &Left/Right" ) );
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_L );
     connect( action, &QAction::triggered, this, &MainWindowPrivate::splitVertical );
     action->setToolTip( i18nc( "@info:tooltip", "Split vertical" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Splits the current view vertically." ) );
 
     action = actionCollection()->addAction( QStringLiteral("view_next_split") );
-    action->setText( i18n( "&Next Split View" ) );
+    action->setText( i18nc("@action", "&Next Split View" ) );
     connect( action, &QAction::triggered, this, &MainWindowPrivate::gotoNextSplit );
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_N );
     action->setToolTip( i18nc( "@info:tooltip", "Next split view" ) );
@@ -297,7 +297,7 @@ void MainWindowPrivate::setupActions()
     action->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
 
     action = actionCollection()->addAction( QStringLiteral("view_previous_split") );
-    action->setText( i18n( "&Previous Split View" ) );
+    action->setText( i18nc("@action", "&Previous Split View" ) );
     connect( action, &QAction::triggered, this, &MainWindowPrivate::gotoPreviousSplit );
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_P );
     action->setToolTip( i18nc( "@info:tooltip", "Previous split view" ) );
@@ -309,8 +309,8 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( QStringLiteral("file_new") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("document-new")));
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::Key_N );
-    action->setText( i18n( "&New" ) );
-    action->setIconText( i18nc( "Shorter Text for 'New File' shown in the toolbar", "New") );
+    action->setText( i18nc("@action new file", "&New" ) );
+    action->setIconText( i18nc( "@action Shorter Text for 'New File' shown in the toolbar", "New") );
     connect( action, &QAction::triggered, this, &MainWindowPrivate::fileNew );
     action->setToolTip( i18nc( "@info:tooltip", "New file" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Creates an empty file." ) );
@@ -318,7 +318,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( QStringLiteral("add_toolview") );
     action->setIcon(QIcon::fromTheme(QStringLiteral("window-new")));
     actionCollection()->setDefaultShortcut(action, Qt::CTRL + Qt::SHIFT + Qt::Key_V );
-    action->setText( i18n( "&Add Tool View..." ) );
+    action->setText( i18nc("@action", "&Add Tool View..." ) );
     connect( action, &QAction::triggered,  this, &MainWindowPrivate::viewAddNewToolView );
     action->setToolTip( i18nc( "@info:tooltip", "Add tool view" ) );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Adds a new tool view to this window." ) );
@@ -357,23 +357,23 @@ void MainWindowPrivate::tabContextMenuRequested(Sublime::View* view, QMenu* menu
 
     QAction* action;
 
-    action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-split-top-bottom")), i18n("Split View Top/Bottom"));
+    action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-split-top-bottom")), i18nc("@action:inmenu", "Split View Top/Bottom"));
     connect(action, &QAction::triggered, this, &MainWindowPrivate::contextMenuSplitHorizontal);
 
-    action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-split-left-right")), i18n("Split View Left/Right"));
+    action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-split-left-right")), i18nc("@action:inmenu", "Split View Left/Right"));
     connect(action, &QAction::triggered, this, &MainWindowPrivate::contextMenuSplitVertical);
     menu->addSeparator();
 
-    action = menu->addAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("New File"));
+    action = menu->addAction(QIcon::fromTheme(QStringLiteral("document-new")), i18nc("@action:inmenu", "New File"));
 
     connect(action, &QAction::triggered, this, &MainWindowPrivate::contextMenuFileNew);
 
     if (view) {
         if (auto* doc = qobject_cast<TextDocument*>(view->document())) {
-            action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Reload"));
+            action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18nc("@action:inmenu", "Reload"));
             connect(action, &QAction::triggered, doc, &TextDocument::reload);
 
-            action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Reload All"));
+            action = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18nc("@action:inmenu", "Reload All"));
             connect(action, &QAction::triggered, this, &MainWindowPrivate::reloadAll);
         }
     }
@@ -413,7 +413,7 @@ void MainWindowPrivate::tabToolTipRequested(Sublime::View* view, Sublime::Contai
 void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, const QPoint& position)
 {
     QMenu menu(m_mainWindow);
-    menu.addSection(QIcon::fromTheme(QStringLiteral("window-new")), i18n("Add Tool View"));
+    menu.addSection(QIcon::fromTheme(QStringLiteral("window-new")), i18nc("@action:inmenu", "Add Tool View"));
     QHash<IToolViewFactory*, Sublime::ToolDocument*> factories =
         Core::self()->uiControllerInternal()->factoryDocuments();
     QHash<QAction*, IToolViewFactory*> actionToFactory;
@@ -436,7 +436,7 @@ void MainWindowPrivate::dockBarContextMenuRequested(Qt::DockWidgetArea area, con
 
     auto* lockAction = new QAction(this);
     lockAction->setCheckable(true);
-    lockAction->setText(i18n("Lock the Panel from Hiding"));
+    lockAction->setText(i18nc("@action:inmenu", "Lock the Panel from Hiding"));
 
     KConfigGroup config = KSharedConfig::openConfig()->group("UI");
     lockAction->setChecked(config.readEntry(QStringLiteral("Toolview Bar (%1) Is Locked").arg(area), false));

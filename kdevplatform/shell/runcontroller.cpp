@@ -97,7 +97,7 @@ public:
     DebugMode() {}
     QIcon icon() const override { return QIcon::fromTheme(QStringLiteral("debug-run")); }
     QString id() const override { return QStringLiteral("debug"); }
-    QString name() const override { return i18n("Debug"); }
+    QString name() const override { return i18nc("launch mode", "Debug"); }
 };
 
 class ProfileMode : public ILaunchMode
@@ -106,7 +106,7 @@ public:
     ProfileMode() {}
     QIcon icon() const override { return QIcon::fromTheme(QStringLiteral("office-chart-area")); }
     QString id() const override { return QStringLiteral("profile"); }
-    QString name() const override { return i18n("Profile"); }
+    QString name() const override { return i18nc("launch mode", "Profile"); }
 };
 
 class ExecuteMode : public ILaunchMode
@@ -115,7 +115,7 @@ public:
     ExecuteMode() {}
     QIcon icon() const override { return QIcon::fromTheme(QStringLiteral("system-run")); }
     QString id() const override { return QStringLiteral("execute"); }
-    QString name() const override { return i18n("Execute"); }
+    QString name() const override { return i18nc("launch mode", "Execute"); }
 };
 
 class KDevelop::RunControllerPrivate
@@ -437,7 +437,7 @@ void RunController::setupActions()
     // TODO not multi-window friendly, FIXME
     KActionCollection* ac = Core::self()->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("configure")), i18n("Configure Launches..."), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("configure")), i18nc("@action", "Configure Launches..."), this);
     ac->addAction(QStringLiteral("configure_launches"), action);
     action->setMenuRole(QAction::NoRole); // OSX: Be explicit about role, prevent hiding due to conflict with "Preferences..." menu item
     action->setStatusTip(i18n("Open Launch Configuration Dialog"));
@@ -445,8 +445,8 @@ void RunController::setupActions()
     action->setWhatsThis(i18nc("@info:whatsthis", "Opens a dialog to setup new launch configurations, or to change the existing ones."));
     connect(action, &QAction::triggered, this, &RunController::showConfigurationDialog);
 
-    d->runAction = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18n("Execute Launch"), this);
-    d->runAction->setIconText( i18nc("Short text for 'Execute launch' used in the toolbar", "Execute") );
+    d->runAction = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18nc("@action", "Execute Launch"), this);
+    d->runAction->setIconText( i18nc("@action Short text for 'Execute Launch' used in the toolbar", "Execute") );
     ac->setDefaultShortcut( d->runAction, Qt::SHIFT + Qt::Key_F9);
     d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current launch"));
     d->runAction->setStatusTip(i18n("Execute current launch"));
@@ -454,9 +454,9 @@ void RunController::setupActions()
     ac->addAction(QStringLiteral("run_execute"), d->runAction);
     connect(d->runAction, &QAction::triggered, this, &RunController::slotExecute);
 
-    d->dbgAction = new QAction( QIcon::fromTheme(QStringLiteral("debug-run")), i18n("Debug Launch"), this);
+    d->dbgAction = new QAction( QIcon::fromTheme(QStringLiteral("debug-run")), i18nc("@action", "Debug Launch"), this);
     ac->setDefaultShortcut( d->dbgAction, Qt::ALT + Qt::Key_F9);
-    d->dbgAction->setIconText( i18nc("Short text for 'Debug launch' used in the toolbar", "Debug") );
+    d->dbgAction->setIconText( i18nc("@action Short text for 'Debug Launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
     d->dbgAction->setStatusTip(i18n("Debug current launch"));
     d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Debugger."));
@@ -472,8 +472,8 @@ void RunController::setupActions()
 //     ac->addAction("run_profile", profileAction);
 //     connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));
 
-    action = d->stopAction = new QAction( QIcon::fromTheme(QStringLiteral("process-stop")), i18n("Stop All Jobs"), this);
-    action->setIconText(i18nc("Short text for 'Stop All Jobs' used in the toolbar", "Stop All"));
+    action = d->stopAction = new QAction( QIcon::fromTheme(QStringLiteral("process-stop")), i18nc("@action", "Stop All Jobs"), this);
+    action->setIconText(i18nc("@action Short text for 'Stop All Jobs' used in the toolbar", "Stop All"));
     // Ctrl+Escape would be nicer, but that is taken by the ksysguard desktop shortcut
     ac->setDefaultShortcut( action, QKeySequence(QStringLiteral("Ctrl+Shift+Escape")));
     action->setToolTip(i18nc("@info:tooltip", "Stop all currently running jobs"));
@@ -483,14 +483,14 @@ void RunController::setupActions()
     connect(action, &QAction::triggered, this, &RunController::stopAllProcesses);
     Core::self()->uiControllerInternal()->area(0, QStringLiteral("debug"))->addAction(action);
 
-    action = d->stopJobsMenu = new KActionMenu( QIcon::fromTheme(QStringLiteral("process-stop")), i18n("Stop"), this);
-    action->setIconText(i18nc("Short text for 'Stop' used in the toolbar", "Stop"));
+    action = d->stopJobsMenu = new KActionMenu( QIcon::fromTheme(QStringLiteral("process-stop")), i18nc("@action", "Stop"), this);
+    action->setIconText(i18nc("@action Short text for 'Stop' used in the toolbar", "Stop"));
     action->setToolTip(i18nc("@info:tooltip", "Menu allowing to stop individual jobs"));
     action->setWhatsThis(i18nc("@info:whatsthis", "List of jobs that can be stopped individually."));
     action->setEnabled(false);
     ac->addAction(QStringLiteral("run_stop_menu"), action);
 
-    d->currentTargetAction = new KSelectAction( i18n("Current Launch Configuration"), this);
+    d->currentTargetAction = new KSelectAction( i18nc("@title:menu", "Current Launch Configuration"), this);
     d->currentTargetAction->setToolTip(i18nc("@info:tooltip", "Current launch configuration"));
     d->currentTargetAction->setStatusTip(i18n("Current launch Configuration"));
     d->currentTargetAction->setWhatsThis(i18nc("@info:whatsthis", "Select which launch configuration to run when run is invoked."));
@@ -609,7 +609,7 @@ void KDevelop::RunController::registerJob(KJob * job)
     if (!d->jobs.contains(job)) {
         QAction* stopJobAction = nullptr;
         if (Core::self()->setupFlags() != Core::NoUi) {
-            stopJobAction = new QAction(job->objectName().isEmpty() ? i18n("<%1> Unnamed job", QString::fromUtf8(job->staticMetaObject.className())) : job->objectName(), this);
+            stopJobAction = new QAction(job->objectName().isEmpty() ? i18nc("@item:inmenu", "<%1> Unnamed job", QString::fromUtf8(job->staticMetaObject.className())) : job->objectName(), this);
             stopJobAction->setData(QVariant::fromValue(static_cast<void*>(job)));
             d->stopJobsMenu->addAction(stopJobAction);
             connect (stopJobAction, &QAction::triggered, this, &RunController::slotKillJob);
@@ -1025,7 +1025,7 @@ ContextMenuExtension RunController::contextMenuExtension(Context* ctx, QWidget* 
             ProjectBaseItem* itm = prjctx->items().at( 0 );
             int i = 0;
             for (ILaunchMode* mode : qAsConst(d->launchModes)) {
-                auto* menu = new KActionMenu(i18n("%1 As...", mode->name() ), parent);
+                auto* menu = new KActionMenu(i18nc("@title:menu", "%1 As...", mode->name() ), parent);
                 const auto types = launchConfigurationTypes();
                 for (LaunchConfigurationType* type : types) {
                     bool hasLauncher = false;

@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Environment profile:</string>
+        <string comment="@label:listbox">Environment profile:</string>
        </property>
       </widget>
      </item>
@@ -36,7 +36,7 @@
      <item>
       <widget class="QPushButton" name="addProfileButton">
        <property name="toolTip">
-        <string>Add profile...</string>
+        <string comment="@info:tooltip">Add profile...</string>
        </property>
        <property name="icon">
         <iconset theme="list-add"/>
@@ -46,7 +46,7 @@
      <item>
       <widget class="QPushButton" name="cloneProfileButton">
        <property name="toolTip">
-        <string>Clone profile...</string>
+        <string comment="@info:tooltip">Clone profile...</string>
        </property>
        <property name="icon">
         <iconset theme="edit-clone"/>
@@ -56,7 +56,7 @@
      <item>
       <widget class="QPushButton" name="removeProfileButton">
        <property name="toolTip">
-        <string>Remove profile</string>
+        <string comment="@info:tooltip">Remove profile</string>
        </property>
        <property name="icon">
         <iconset theme="edit-delete"/>
@@ -66,7 +66,7 @@
      <item>
       <widget class="QPushButton" name="setAsDefaultProfileButton">
        <property name="toolTip">
-        <string>Set as default</string>
+        <string comment="@info:tooltip">Set as default</string>
        </property>
        <property name="icon">
         <iconset theme="starred-symbolic"/>
@@ -111,7 +111,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Remove variable</string>
+        <string comment="@info:tooltip">Remove variable</string>
        </property>
        <property name="icon">
         <iconset theme="edit-delete"/>
@@ -127,7 +127,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Batch Edit Mode</string>
+        <string comment="@info:tooltip">Batch edit mode</string>
        </property>
        <property name="icon">
         <iconset theme="format-list-unordered"/>

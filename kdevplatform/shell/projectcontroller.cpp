@@ -171,7 +171,7 @@ public:
                     "ConfigDialog signalled project config change, but no project set for configuring!");
             emit q->projectConfigurationChanged(proj);
         });
-        cfgDlg->setWindowTitle(i18n("Configure Project %1", proj->name()));
+        cfgDlg->setWindowTitle(i18nc("@title:window", "Configure Project %1", proj->name()));
         QObject::connect(cfgDlg, &KDevelop::ConfigDialog::finished, proj, [proj]() {
             proj->projectConfiguration()->sync();
         });
@@ -486,19 +486,19 @@ QUrl ProjectDialogProvider::askProjectConfigLocation(bool fetch, const QUrl& sta
         if ( shouldAsk )
         {
             KGuiItem yes = KStandardGuiItem::yes();
-            yes.setText(i18n("Override"));
-            yes.setToolTip(i18nc("@info:tooltip", "Continue to open the project and use the just provided project configuration."));
+            yes.setText(i18nc("@action:button", "Override"));
+            yes.setToolTip(i18nc("@info:tooltip", "Continue to open the project and use the just provided project configuration"));
             yes.setIcon(QIcon());
             KGuiItem no = KStandardGuiItem::no();
-            no.setText(i18n("Open Existing File"));
-            no.setToolTip(i18nc("@info:tooltip", "Continue to open the project but use the existing project configuration."));
+            no.setText(i18nc("@action:button", "Open Existing File"));
+            no.setToolTip(i18nc("@info:tooltip", "Continue to open the project but use the existing project configuration"));
             no.setIcon(QIcon());
             KGuiItem cancel = KStandardGuiItem::cancel();
-            cancel.setToolTip(i18nc("@info:tooltip", "Cancel and do not open the project."));
+            cancel.setToolTip(i18nc("@info:tooltip", "Cancel and do not open the project"));
             int ret = KMessageBox::questionYesNoCancel(qApp->activeWindow(),
                 i18n("There already exists a project configuration file at %1.\n"
                      "Do you want to override it or open the existing file?", projectFileUrl.toDisplayString(QUrl::PreferLocalFile)),
-                i18n("Override existing project configuration"), yes, no, cancel );
+                i18nc("@title:window", "Override Existing Project Configuration"), yes, no, cancel );
             if ( ret == KMessageBox::No )
             {
                 writeProjectConfigToFile = false;
@@ -610,14 +610,14 @@ void ProjectController::setupActions()
     d->m_openConfig = action = ac->addAction( QStringLiteral("project_open_config") );
     connect(action, &QAction::triggered,
             this, [this] { Q_D(ProjectController); d->openProjectConfig(); } );
-    action->setText( i18n( "Open Configuration..." ) );
+    action->setText( i18nc("@action", "Open Configuration..." ) );
     action->setIcon( QIcon::fromTheme(QStringLiteral("configure")) );
     action->setEnabled( false );
 
     action = ac->addAction( QStringLiteral("commit_current_project") );
     connect( action, &QAction::triggered, this, &ProjectController::commitCurrentProject );
-    action->setText( i18n( "Commit Current Project..." ) );
-    action->setIconText( i18n( "Commit..." ) );
+    action->setText( i18nc("@action", "Commit Current Project..." ) );
+    action->setIconText( i18nc("@action", "Commit..." ) );
     action->setIcon( QIcon::fromTheme(QStringLiteral("svn-commit")) );
     connect(d->m_core->uiControllerInternal()->defaultMainWindow(), &MainWindow::areaChanged,
             this, [this] (Sublime::Area* area) { Q_D(ProjectController); d->areaChanged(area); });
@@ -628,13 +628,13 @@ void ProjectController::setupActions()
 
     d->m_recentProjectsAction = KStandardAction::openRecent(this, SLOT(openProject(QUrl)), this);
     ac->addAction( QStringLiteral("project_open_recent"), d->m_recentProjectsAction );
-    d->m_recentProjectsAction->setText( i18n( "Open Recent Project" ) );
+    d->m_recentProjectsAction->setText( i18nc("@action", "Open Recent Project" ) );
     d->m_recentProjectsAction->setWhatsThis( i18nc( "@info:whatsthis", "Opens recently opened project." ) );
     d->m_recentProjectsAction->loadEntries( KConfigGroup(config, "RecentProjects") );
 
     auto* openProjectForFileAction = new QAction( this );
     ac->addAction(QStringLiteral("project_open_for_file"), openProjectForFileAction);
-    openProjectForFileAction->setText(i18n("Open Project for Current File"));
+    openProjectForFileAction->setText(i18nc("@action", "Open Project for Current File"));
     openProjectForFileAction->setIcon(QIcon::fromTheme(QStringLiteral("project-open")));
     connect( openProjectForFileAction, &QAction::triggered, this, &ProjectController::openProjectForUrlSlot);
 }
@@ -870,18 +870,18 @@ void ProjectController::openProject( const QUrl &projectFile )
 
     if ( ! existingSessions.isEmpty() ) {
         ScopedDialog<QDialog> dialog(Core::self()->uiControllerInternal()->activeMainWindow());
-        dialog->setWindowTitle(i18n("Project Already Open"));
+        dialog->setWindowTitle(i18nc("@title:window", "Project Already Open"));
 
         auto mainLayout = new QVBoxLayout(dialog);
         mainLayout->addWidget(new QLabel(i18n("The project you're trying to open is already open in at least one "
                                                      "other session.<br>What do you want to do?")));
         QGroupBox sessions;
         sessions.setLayout(new QVBoxLayout);
-        auto* newSession = new QRadioButton(i18n("Add project to current session"));
+        auto* newSession = new QRadioButton(i18nc("@option:radio", "Add project to current session"));
         sessions.layout()->addWidget(newSession);
         newSession->setChecked(true);
         for (const Session* session : qAsConst(existingSessions)) {
-            auto* button = new QRadioButton(i18n("Open session %1", session->description()));
+            auto* button = new QRadioButton(i18nc("@option:radio", "Open session %1", session->description()));
             button->setProperty("sessionid", session->id().toString());
             sessions.layout()->addWidget(button);
         }
@@ -1248,7 +1248,7 @@ ContextMenuExtension ProjectController::contextMenuExtension(Context* ctx, QWidg
     }
     if (!static_cast<ProjectItemContext*>(ctx)->items().isEmpty() ) {
 
-        auto* action = new QAction(i18n("Reparse the Entire Project"), this);
+        auto* action = new QAction(i18nc("@action", "Reparse the Entire Project"), this);
         connect(action, &QAction::triggered, this, [this] {
             Q_D(ProjectController);
             const auto projects = d->selectedProjects();

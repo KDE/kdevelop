@@ -125,7 +125,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     m_pButton->setIconSize( iconSize );
     box->addWidget( m_pButton  );
 
-    m_pButton->setToolTip( i18n("Open detailed progress dialog") );
+    m_pButton->setToolTip( i18nc("@info:tooltip", "Open detailed progress dialog") );
 
     box->addWidget( stack );
 
@@ -362,11 +362,11 @@ void StatusbarProgressWidget::slotProgressDialogVisible( bool b )
     // Update the hide/show button when the detailed one is shown/hidden
     if ( b ) {
         m_pButton->setIcon( QIcon::fromTheme( QStringLiteral("go-down") ) );
-        m_pButton->setToolTip( i18n("Hide detailed progress window") );
+        m_pButton->setToolTip( i18nc("@info:tooltip", "Hide detailed progress window") );
         setMode();
     } else {
         m_pButton->setIcon( QIcon::fromTheme( QStringLiteral("go-up") ) );
-        m_pButton->setToolTip( i18n("Show detailed progress window") );
+        m_pButton->setToolTip( i18nc("@info:tooltip", "Show detailed progress window") );
     }
 }
 

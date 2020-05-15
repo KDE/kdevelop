@@ -85,7 +85,7 @@ EnvironmentConfigureButton::EnvironmentConfigureButton(QWidget* parent)
     setText(QString());
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     setIcon(QIcon::fromTheme(QStringLiteral("configure")));
-    setToolTip(i18n("Configure environment variables"));
+    setToolTip(i18nc("@info:tooltip", "Configure environment variables"));
 
     connect(this, &EnvironmentConfigureButton::clicked,
             this, [this] { Q_D(EnvironmentConfigureButton); d->showDialog(); });

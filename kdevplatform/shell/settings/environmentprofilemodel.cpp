@@ -101,9 +101,9 @@ QVariant EnvironmentProfileModel::headerData(int section, Qt::Orientation orient
     }
 
     if (section == VariableColumn) {
-        return i18n("Variable");
+        return i18nc("@title:column", "Variable");
     }
-    return i18n("Value");
+    return i18nc("@title:column", "Value");
 }
 
 bool EnvironmentProfileModel::setData(const QModelIndex& index, const QVariant& data, int role)
