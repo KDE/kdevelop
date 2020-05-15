@@ -48,7 +48,7 @@ public:
 
         const QString title = dock->view()->document()->title();
         setIcon(dock->windowIcon());
-        setToolTip(i18n("Toggle '%1' tool view.", title));
+        setToolTip(i18nc("@info:tooltip", "Toggle '%1' tool view", title));
         setText(title);
 
         //restore tool view shortcut config

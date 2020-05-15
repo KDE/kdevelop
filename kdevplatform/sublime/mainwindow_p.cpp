@@ -87,29 +87,29 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
 {
     KActionCollection *ac = m_mainWindow->actionCollection();
 
-    m_concentrationModeAction = new QAction(i18n("Concentration Mode"), this);
+    m_concentrationModeAction = new QAction(i18nc("@option:check", "Concentration Mode"), this);
     m_concentrationModeAction->setIcon(QIcon::fromTheme(QStringLiteral("page-zoom")));
-    m_concentrationModeAction->setToolTip(i18n("Removes most of the controls so you can focus on what matters."));
+    m_concentrationModeAction->setToolTip(i18nc("@info:tooltip", "Remove most of the controls so you can focus on what matters"));
     m_concentrationModeAction->setCheckable(true);
     m_concentrationModeAction->setChecked(false);
     ac->setDefaultShortcut(m_concentrationModeAction, Qt::META | Qt::Key_C);
     connect(m_concentrationModeAction, &QAction::toggled, this, &MainWindowPrivate::restoreConcentrationMode);
     ac->addAction(QStringLiteral("toggle_concentration_mode"), m_concentrationModeAction);
 
-    auto* action = new QAction(i18n("Show Left Dock"), this);
+    auto* action = new QAction(i18nc("@option:check", "Show Left Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Left);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showLeftDock);
 
     ac->addAction(QStringLiteral("show_left_dock"), action);
 
-    action = new QAction(i18n("Show Right Dock"), this);
+    action = new QAction(i18nc("@option:check", "Show Right Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Right);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showRightDock);
     ac->addAction(QStringLiteral("show_right_dock"), action);
 
-    action = new QAction(i18n("Show Bottom Dock"), this);
+    action = new QAction(i18nc("@option:check", "Show Bottom Dock"), this);
     action->setCheckable(true);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Down);
     connect(action, &QAction::toggled, this, &MainWindowPrivate::showBottomDock);
@@ -120,24 +120,24 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     connect(action, &QAction::triggered, this, &MainWindowPrivate::focusEditor);
     ac->addAction(QStringLiteral("focus_editor"), action);
 
-    action = new QAction(i18n("Hide/Restore Docks"), this);
+    action = new QAction(i18nc("@action", "Hide/Restore Docks"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_Up);
     connect(action, &QAction::triggered, this, &MainWindowPrivate::toggleDocksShown);
     ac->addAction(QStringLiteral("hide_all_docks"), action);
 
-    action = new QAction(i18n("Next Tool View"), this);
+    action = new QAction(i18nc("@action", "Next Tool View"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_N);
     action->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
     connect(action, &QAction::triggered, this, &MainWindowPrivate::selectNextDock);
     ac->addAction(QStringLiteral("select_next_dock"), action);
 
-    action = new QAction(i18n("Previous Tool View"), this);
+    action = new QAction(i18nc("@action", "Previous Tool View"), this);
     ac->setDefaultShortcut(action, Qt::META | Qt::CTRL | Qt::Key_P);
     action->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
     connect(action, &QAction::triggered, this, &MainWindowPrivate::selectPreviousDock);
     ac->addAction(QStringLiteral("select_previous_dock"), action);
 
-    action = new KActionMenu(i18n("Tool Views"), this);
+    action = new KActionMenu(i18nc("@title:menu", "Tool Views"), this);
     ac->addAction(QStringLiteral("docks_submenu"), action);
 
     idealController = new IdealController(m_mainWindow);

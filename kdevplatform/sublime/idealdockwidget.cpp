@@ -118,14 +118,14 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
     }
 
     /// start position menu
-    QMenu* positionMenu = menu.addMenu(i18n("Tool View Position"));
+    QMenu* positionMenu = menu.addMenu(i18nc("@title:menu", "Tool View Position"));
 
     auto* g = new QActionGroup(positionMenu);
 
-    auto* left = new QAction(i18nc("tool view position", "Left"), g);
-    auto* bottom = new QAction(i18nc("tool view position", "Bottom"), g);
-    auto* right = new QAction(i18nc("tool view position", "Right"), g);
-    auto* detach = new QAction(i18nc("tool view position", "Detached"), g);
+    auto* left = new QAction(i18nc("@option:radio tool view position", "Left"), g);
+    auto* bottom = new QAction(i18nc("@option:radio tool view position", "Bottom"), g);
+    auto* right = new QAction(i18nc("@option:radio tool view position", "Right"), g);
+    auto* detach = new QAction(i18nc("@option:radio tool view position", "Detached"), g);
 
     for (auto action : {left, bottom, right, detach}) {
         positionMenu->addAction(action);
@@ -143,11 +143,11 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
 
     menu.addSeparator();
 
-    QAction *setShortcut = menu.addAction(QIcon::fromTheme(QStringLiteral("configure-shortcuts")), i18n("Assign Shortcut..."));
-    setShortcut->setToolTip(i18n("Use this shortcut to trigger visibility of the tool view."));
+    QAction *setShortcut = menu.addAction(QIcon::fromTheme(QStringLiteral("configure-shortcuts")), i18nc("@action:inmenu", "Assign Shortcut..."));
+    setShortcut->setToolTip(i18nc("@info:tooltip", "Use this shortcut to trigger visibility of the tool view."));
 
     menu.addSeparator();
-    QAction* remove = menu.addAction(QIcon::fromTheme(QStringLiteral("dialog-close")), i18n("Remove Tool View"));
+    QAction* remove = menu.addAction(QIcon::fromTheme(QStringLiteral("dialog-close")), i18nc("@action:inmenu", "Remove Tool View"));
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(point));
 
@@ -158,7 +158,7 @@ void IdealDockWidget::contextMenuRequested(const QPoint &point)
             return;
         } else if ( triggered == setShortcut ) {
             auto* dialog = new QDialog(this);
-            dialog->setWindowTitle(i18n("Assign Shortcut For '%1' Tool View", m_view->document()->title()));
+            dialog->setWindowTitle(i18nc("@title:window", "Assign Shortcut For '%1' Tool View", m_view->document()->title()));
             auto *w = new KShortcutWidget(dialog);
             w->setShortcut(m_controller->actionForView(m_view)->shortcuts());
             auto* dialogLayout = new QVBoxLayout(dialog);

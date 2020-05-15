@@ -326,7 +326,7 @@ Container::Container(QWidget *parent)
 #endif
     d->documentListButton->setPopupMode(QToolButton::InstantPopup);
     d->documentListButton->setAutoRaise(true);
-    d->documentListButton->setToolTip(i18n("Show sorted list of opened documents"));
+    d->documentListButton->setToolTip(i18nc("@info:tooltip", "Show sorted list of opened documents"));
     d->documentListButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     d->layout->addWidget(d->documentListButton);
     d->tabBar = new ContainerTabBar(this);
@@ -338,7 +338,7 @@ Container::Container(QWidget *parent)
     d->fileNameCorner = new UnderlinedLabel(d->tabBar, this);
     d->fileNameCorner->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     d->layout->addWidget(d->fileNameCorner);
-    d->shortcutHelpLabel = new QLabel(i18n("(Press Ctrl+Tab to switch)"), this);
+    d->shortcutHelpLabel = new QLabel(i18nc("@info", "(Press Ctrl+Tab to switch)"), this);
     auto font = d->shortcutHelpLabel->font();
     font.setPointSize(font.pointSize() - 2);
     font.setItalic(true);
@@ -719,14 +719,14 @@ void Container::contextMenu( const QPoint& pos )
     QAction* closeOtherTabsAction = nullptr;
     if (view) {
         copyPathAction = menu.addAction(QIcon::fromTheme(QStringLiteral("edit-copy")),
-                                        i18n("Copy Filename"));
+                                        i18nc("@action:inmenu", "Copy Filename"));
         menu.addSeparator();
         closeTabAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
-                                        i18n("Close"));
+                                        i18nc("@action:inmenu", "Close"));
         closeOtherTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")),
-                                              i18n("Close All Other"));
+                                              i18nc("@action:inmenu", "Close All Other"));
     }
-    QAction* closeAllTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n("Close All"));
+    QAction* closeAllTabsAction = menu.addAction(QIcon::fromTheme(QStringLiteral("document-close")), i18nc("@action:inmenu", "Close All"));
 
     QAction* triggered = menu.exec(senderWidget->mapToGlobal(pos));
 
