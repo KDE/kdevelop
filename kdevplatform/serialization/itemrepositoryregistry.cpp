@@ -80,12 +80,12 @@ bool shouldClear(const QString& path)
         if (count >= crashesBeforeCleanup && !getenv("DONT_CLEAR_DUCHAIN_DIR")) {
             bool userAnswer = askUser(i18np("The previous session crashed.", "Session crashed %1 times in a row.",
                                             count),
-                                      i18nc("@action", "Clear cache"),
-                                      i18nc("@title", "Session crashed"),
+                                      i18nc("tty action", "Clear cache"),
+                                      i18nc("@title", "Session Crashed"),
                                       i18n("The crash may be caused by a corruption of cached data.\n\n"
                                            "Press Clear if you want KDevelop to clear the cache, otherwise press Continue if you are sure the crash has another origin."),
-                                      i18nc("@action", "Clear Cache"),
-                                      i18n("Continue"));
+                                      i18nc("@action:button", "Clear Cache"),
+                                      i18nc("@action:button", "Continue"));
             if (userAnswer) {
                 qCDebug(SERIALIZATION) << "User chose to clean repository";
                 return true;
