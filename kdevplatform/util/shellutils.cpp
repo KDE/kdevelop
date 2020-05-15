@@ -105,7 +105,7 @@ bool ensureWritable(const QList<QUrl>& urls)
                                                       i18n(
                                                           "You don't have write permissions for the following files; add write permissions for owner before saving?") +
                                                       QLatin1String("\n\n") + notWritable.join(QLatin1Char('\n')),
-                                                      i18n("Some files are write-protected"),
+                                                      i18nc("@title:window", "Some Files are Write-Protected"),
                                                       KStandardGuiItem::yes(),
                                                       KStandardGuiItem::no(), KStandardGuiItem::cancel());
         if (answer == KMessageBox::Yes) {
@@ -120,7 +120,7 @@ bool ensureWritable(const QList<QUrl>& urls)
             if (!success) {
                 KMessageBox::error(ICore::self()->uiController()->activeMainWindow(),
                                    i18n("Failed adding write permissions for some files."),
-                                   i18n("Failed setting permissions"));
+                                   i18nc("@title:window", "Failed Setting Permissions"));
                 return false;
             }
         }
