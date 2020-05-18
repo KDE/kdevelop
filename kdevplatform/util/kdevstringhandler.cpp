@@ -182,7 +182,7 @@ int KDevelop::findAsciiIdentifierLength(const QStringRef& str)
         return 0;
     }
 
-    const auto partOfIdentifier = [](QChar character) {
+    const auto partOfIdentifier = [=](QChar character) {
         const auto u = character.unicode();
         return u <= maxAscii && (std::isalnum(u) || u == '_');
     };

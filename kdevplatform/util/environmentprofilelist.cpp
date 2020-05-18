@@ -256,7 +256,7 @@ static QString expandVariable(const QString &key, const QString &value,
 
     constexpr ushort escapeChar{'\\'};
     constexpr ushort variableStartChar{'$'};
-    const auto isSpecialSymbol = [](QChar c) {
+    const auto isSpecialSymbol = [=](QChar c) {
         return c.unicode() == escapeChar || c.unicode() == variableStartChar;
     };
 
