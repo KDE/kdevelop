@@ -168,8 +168,39 @@ void ProblemTreeView::itemActivated(const QModelIndex& index)
 
 void ProblemTreeView::resizeColumns()
 {
-    for (int i = 0; i < model()->columnCount(); ++i)
-        resizeColumnToContents(i);
+    // Returns the approximate amount of characters in a column and
+    // a stretch factor.
+    auto sizeHint = [](int column) -> std::pair<int, int> {
+        switch (column) {
+            case ProblemModel::Error:   return {40, 20};
+            case ProblemModel::Source:  return {30,  1};
+            case ProblemModel::File:    return {30, 10};
+            case ProblemModel::Line:    return {15,  1};
+            case ProblemModel::Column:  return {15,  1};
+            default: return {20, 0};
+        }
+    };
+
+    auto charWidth = fontMetrics().averageCharWidth();
+
+    // Set each column to its minimum needed width, and figure out how much space is left.
+    int widths[ProblemModel::LastColumn];
+    int remainPixels = header()->size().width();
+    int totalWeight = 0;
+    for (int i = 0; i < ProblemModel::LastColumn; ++i) {
+        auto const [minWidth, weight] = sizeHint(i);
+        widths[i] = minWidth * charWidth;
+        remainPixels -= minWidth * charWidth;
+        totalWeight += weight;
+    }
+
+    // Distribute according to stretch factor if there is any unoccupied space.
+    remainPixels = std::max(0, remainPixels);
+    for (int i = 0; i < ProblemModel::LastColumn; ++i) {
+        auto const [minWidth, weight] = sizeHint(i);
+        widths[i] += (remainPixels * weight) / totalWeight;
+        setColumnWidth(i, widths[i]);
+    }
 }
 
 void ProblemTreeView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>& roles)
