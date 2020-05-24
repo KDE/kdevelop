@@ -36,8 +36,11 @@ public:
 
     void start() override;
 
+Q_SIGNALS:
+    void killBeforeExecutingAgainChanged(int killBeforeExecutingAgainChanged);
 private:
     QString m_name;
+    int m_killBeforeExecutingAgain = -1;
 };
 
 #endif

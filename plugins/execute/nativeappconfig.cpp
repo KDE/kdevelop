@@ -40,6 +40,7 @@
 
 #include <QIcon>
 #include <QMenu>
+#include <QMessageBox>
 
 #include <KConfigGroup>
 #include <KLineEdit>
@@ -94,6 +95,8 @@ void NativeAppConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelo
     dependencies->setDependencies(KDevelop::stringToQVariant( cfg.readEntry( ExecutePlugin::dependencyEntry, QString() ) ).toList());
 
     dependencyAction->setCurrentIndex( dependencyAction->findData( cfg.readEntry( ExecutePlugin::dependencyActionEntry, "Nothing" ) ) );
+
+    killBeforeStartingAgain->setCurrentIndex(killBeforeStartingAgain->findData( cfg.readEntry<int>( ExecutePlugin::killBeforeExecutingAgain, QMessageBox::Cancel ) ));
 }
 
 NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
@@ -105,6 +108,10 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     dependencyAction->setItemData(1, QStringLiteral("Build"));
     dependencyAction->setItemData(2, QStringLiteral("Install"));
     dependencyAction->setItemData(3, QStringLiteral("SudoInstall"));
+
+    killBeforeStartingAgain->addItem(i18n("Ask If Running"), QMessageBox::Cancel);
+    killBeforeStartingAgain->addItem(i18n("Kill All Instances"), QMessageBox::No);
+    killBeforeStartingAgain->addItem(i18n("Start Another"), QMessageBox::Yes);
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -126,6 +133,7 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     connect( terminal, &KComboBox::editTextChanged, this, &NativeAppConfigPage::changed );
     connect( terminal, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
     connect( dependencyAction, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::activateDeps );
+    connect( killBeforeStartingAgain, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &NativeAppConfigPage::changed );
     connect( dependencies, &DependenciesWidget::changed, this, &NativeAppConfigPage::changed );
 }
 
@@ -146,6 +154,7 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
     cfg.writeEntry( ExecutePlugin::useTerminalEntry, runInTerminal->isChecked() );
     cfg.writeEntry( ExecutePlugin::terminalEntry, terminal->currentText() );
     cfg.writeEntry( ExecutePlugin::dependencyActionEntry, dependencyAction->itemData( dependencyAction->currentIndex() ).toString() );
+    cfg.writeEntry( ExecutePlugin::killBeforeExecutingAgain, killBeforeStartingAgain->itemData( killBeforeStartingAgain->currentIndex() ).toInt() );
     QVariantList deps = dependencies->dependencies();
     cfg.writeEntry( ExecutePlugin::dependencyEntry, KDevelop::qvariantToString( QVariant( deps ) ) );
 }
@@ -196,7 +205,13 @@ KJob* NativeAppLauncher::start(const QString& launchMode, KDevelop::ILaunchConfi
         {
             l << depjob;
         }
-        l << new NativeAppJob( KDevelop::ICore::self()->runController(), cfg );
+        auto nativeAppJob = new NativeAppJob( KDevelop::ICore::self()->runController(), cfg );
+        QObject::connect(nativeAppJob, &NativeAppJob::killBeforeExecutingAgainChanged, KDevelop::ICore::self()->runController(), [cfg] (int newValue) {
+            auto cfgGroup = cfg->config();
+            cfgGroup.writeEntry(ExecutePlugin::killBeforeExecutingAgain, newValue);
+        });
+        l << nativeAppJob;
+
         return new KDevelop::ExecuteCompositeJob( KDevelop::ICore::self()->runController(), l );
 
     }
