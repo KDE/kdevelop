@@ -3,7 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"kdevclazy\")
 find_package(ClazyStandalone QUIET)
 set_package_properties(ClazyStandalone PROPERTIES
     DESCRIPTION "Qt oriented code checker based on clang framework. Krazy's little brother"
-    URL "https://cgit.kde.org/clazy.git/about/"
+    URL "https://commits.kde.org/clazy"
     PURPOSE "Recommended: required by the non-essential Clazy plugin"
     TYPE RUNTIME
 )
