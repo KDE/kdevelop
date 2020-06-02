@@ -29,9 +29,8 @@ if [ -z "$KDEV_PG_QT_VERSION" ]; then
 fi
 # remove breezeicons-compatcmake3.6.patch for >5.69.0
 KF5_VERSION=v5.69.0
-PLASMA_VERSION=v5.18.4
-# remove konsole-nooptionalinclude.patch ? libkomparediff2_dontcrash.patch for >20.04.0
-KDE_RELEASESERVICE_VERSION=v20.04.0
+PLASMA_VERSION=v5.18.5
+KDE_RELEASESERVICE_VERSION=v20.04.1
 GRANTLEE_VERSION=v5.2.0
 OKTETA_VERSION=v0.26.3
 
@@ -204,9 +203,9 @@ build_project kdecoration $PLASMA_VERSION # needed by breeze
 (PATCH_FILE=$SCRIPT_DIR/breeze-noconstexpr.patch build_project breeze $PLASMA_VERSION)
 
 # KDE Applications
-(PATCH_FILE=$SCRIPT_DIR/libkomparediff2_dontcrash.patch build_project libkomparediff2 $KDE_RELEASESERVICE_VERSION)
+build_project libkomparediff2 $KDE_RELEASESERVICE_VERSION
 build_project kate $KDE_RELEASESERVICE_VERSION -DDISABLE_ALL_OPTIONAL_SUBDIRECTORIES=TRUE -DBUILD_addons=TRUE -DBUILD_snippets=TRUE -DBUILD_kate-ctags=TRUE
-(PATCH_FILE=$SCRIPT_DIR/konsole-nooptionalinclude.patch build_project konsole $KDE_RELEASESERVICE_VERSION)
+build_project konsole $KDE_RELEASESERVICE_VERSION
 build_project okteta $OKTETA_VERSION -DBUILD_DESIGNERPLUGIN=OFF -DBUILD_OKTETAKASTENLIBS=OFF
 
 # Extra
