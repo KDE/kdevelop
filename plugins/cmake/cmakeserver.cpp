@@ -63,7 +63,12 @@ CMakeServer::CMakeServer(KDevelop::IProject* project)
     connect(&m_process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &CMakeServer::finished);
 
     connect(m_localSocket, &QIODevice::readyRead, this, &CMakeServer::processOutput);
-    connect(m_localSocket, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error), this, [this, path](QLocalSocket::LocalSocketError socketError) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(m_localSocket, &QLocalSocket::errorOccurred,
+#else
+    connect(m_localSocket, QOverload<QLocalSocket::LocalSocketError>::of(&QLocalSocket::error),
+#endif
+            this, [this, path](QLocalSocket::LocalSocketError socketError) {
         qCWarning(CMAKE) << "cmake server socket error:" << socketError << path;
         setConnected(false);
     });
