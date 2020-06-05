@@ -811,7 +811,11 @@ VcsJob* GitPlugin::branches(const QUrl &repository)
 void GitPlugin::parseGitBranchOutput(DVcsJob* job)
 {
     const auto output = job->output();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const auto branchListDirty = output.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
     const auto branchListDirty = output.splitRef(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
 
     QStringList branchList;
     for (const auto& branch : branchListDirty) {
@@ -868,7 +872,11 @@ QVector<DVcsEvent> GitPlugin::allCommits(const QString& repo)
     bool ret = job->exec();
     Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
     Q_UNUSED(ret);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const QStringList commits = job->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
     QStringList commits = job->output().split(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
 
     static QRegExp rx_com(QStringLiteral("commit \\w{40,40}"));
 
@@ -1035,7 +1043,11 @@ void GitPlugin::initBranchHash(const QString &repo)
     bool ret = job->exec();
     Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
     Q_UNUSED(ret);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const QStringList commits = job->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
     const QStringList commits = job->output().split(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
 //     qCDebug(PLUGIN_GIT) << "\n\n\n commits" << commits << "\n\n\n";
     branchesShas.append(commits);
     for (const QString& branch : gitBranches) {
@@ -1051,7 +1063,11 @@ void GitPlugin::initBranchHash(const QString &repo)
         bool ret = job->exec();
         Q_ASSERT(ret && job->status()==VcsJob::JobSucceeded && "TODO: provide a fall back in case of failing");
         Q_UNUSED(ret);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        const QStringList commits = job->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
         const QStringList commits = job->output().split(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
 //         qCDebug(PLUGIN_GIT) << "\n\n\n commits" << commits << "\n\n\n";
         branchesShas.append(commits);
     }
@@ -1066,7 +1082,11 @@ void GitPlugin::parseLogOutput(const DVcsJob* job, QVector<DVcsEvent>& commits) 
     static QRegularExpression rx_com( QStringLiteral("commit \\w{1,40}") );
 
     const auto output = job->output();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const auto lines = output.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
     const auto lines = output.splitRef(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
 
     DVcsEvent item;
     QString commitLog;
@@ -1196,14 +1216,19 @@ static VcsStatusInfo::State lsfilesToState(char id)
 
 void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 {
-    const QStringList outputLines = job->output().split(QLatin1Char('\n'), QString::SkipEmptyParts);
+    const QString output = job->output();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const auto outputLines = output.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
+    const auto outputLines = output.splitRef(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
 
     QDir dir = job->directory();
     QMap<QUrl, VcsStatusInfo::State> allStatus;
-    for (const QString& line : outputLines) {
+    for (const auto& line : outputLines) {
         VcsStatusInfo::State status = lsfilesToState(line[0].toLatin1());
 
-        QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(line.mid(2)));
+        QUrl url = QUrl::fromLocalFile(dir.absoluteFilePath(line.mid(2).toString()));
 
         allStatus[url] = status;
     }
@@ -1226,7 +1251,11 @@ void GitPlugin::parseGitStatusOutput_old(DVcsJob* job)
 void GitPlugin::parseGitStatusOutput(DVcsJob* job)
 {
     const auto output = job->output();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const auto outputLines = output.splitRef(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
     const auto outputLines = output.splitRef(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
     QDir workingDir = job->directory();
     QDir dotGit = dotGitDirectory(QUrl::fromLocalFile(workingDir.absolutePath()));
 
@@ -1317,7 +1346,11 @@ QStringList GitPlugin::getLsFiles(const QDir &directory, const QStringList &args
 {
     QScopedPointer<DVcsJob> job(lsFiles(directory, args, verbosity));
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        return job->output().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
         return job->output().split(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
 
     return QStringList();
 }

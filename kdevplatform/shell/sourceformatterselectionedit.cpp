@@ -222,18 +222,21 @@ void SourceFormatterSelectionEdit::loadSettings(const KConfigGroup& config)
         // Pick the first appropriate mimetype for this language
         const QList<QMimeType> mimetypes = l.mimetypes;
         for (const QMimeType& mimetype : mimetypes) {
-            QStringList formatterAndStyleName = config.readEntry(mimetype.name(), QString()).split(QStringLiteral("||"), QString::KeepEmptyParts);
-            FormatterMap::const_iterator formatterIter = d->formatters.constFind(formatterAndStyleName.first());
+            const QString formatter = config.readEntry(mimetype.name(), QString());
+            const int pos = formatter.indexOf(QLatin1String("||"));
+            const QString formatterName = formatter.left(pos);
+            FormatterMap::const_iterator formatterIter = d->formatters.constFind(formatterName);
             if (formatterIter == d->formatters.constEnd()) {
-                qCDebug(SHELL) << "Reference to unknown formatter" << formatterAndStyleName.first();
+                qCDebug(SHELL) << "Reference to unknown formatter" << formatterName;
                 Q_ASSERT(!l.formatters.empty());        // otherwise there should be no entry for 'name'
                 l.selectedFormatter = *l.formatters.begin();
                 selectAvailableStyle(l);
             } else {
                 l.selectedFormatter = formatterIter.value();
-                SourceFormatter::StyleMap::const_iterator styleIter = l.selectedFormatter->styles.constFind(formatterAndStyleName.at( 1 ));
+                const QString styleName = formatter.mid(pos + 2);
+                SourceFormatter::StyleMap::const_iterator styleIter = l.selectedFormatter->styles.constFind(styleName);
                 if (styleIter == l.selectedFormatter->styles.constEnd()) {
-                    qCDebug(SHELL) << "No style" << formatterAndStyleName.at( 1 ) << "found for formatter" << formatterAndStyleName.first();
+                    qCDebug(SHELL) << "No style" << styleName << "found for formatter" << formatterName;
                     selectAvailableStyle(l);
                 } else {
                     l.selectedStyle = styleIter.value();

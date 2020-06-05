@@ -99,14 +99,15 @@ public:
 
 ISourceFormatter* SourceFormatterControllerPrivate::formatterForConfigEntry(const QString& entry, const QString& mimename) const
 {
-    QStringList formatterinfo = entry.split( QStringLiteral("||"), QString::SkipEmptyParts );
+    const int pos = entry.indexOf(QLatin1String("||"));
 
-    if( formatterinfo.size() != 2 ) {
+    if ((pos <= 0) || (pos + 2 >= entry.size())) {
         qCDebug(SHELL) << "Broken formatting entry for mime:" << mimename << "current value:" << entry;
     }
 
+    const auto formatterName = entry.leftRef(pos);
     auto it = std::find_if(sourceFormatters.begin(), sourceFormatters.end(), [&](ISourceFormatter* iformatter) {
-        return (iformatter->name() == formatterinfo.first());
+        return (iformatter->name() == formatterName);
     });
 
     return (it != sourceFormatters.end()) ? *it : nullptr;
@@ -477,7 +478,11 @@ QString SourceFormatterController::addModelineForCurrentLang(QString input, cons
             qCDebug(SHELL) << "Found a kate modeline: " << line;
             modelinefound = true;
             QString options = kateModeline.cap(1);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            const QStringList optionList = options.split(QLatin1Char(';'), Qt::SkipEmptyParts);
+#else
             const QStringList optionList = options.split(QLatin1Char(';'), QString::SkipEmptyParts);
+#endif
 
             os <<  modeline;
             for (QString s : optionList) {
@@ -790,18 +795,22 @@ KDevelop::ContextMenuExtension SourceFormatterController::contextMenuExtension(K
 
 SourceFormatterStyle SourceFormatterController::styleForUrl(const QUrl& url, const QMimeType& mime)
 {
-    const auto formatter = configForUrl(url).readEntry(mime.name(), QString()).split(QStringLiteral("||"), QString::SkipEmptyParts);
-    if( formatter.count() == 2 )
-    {
-        SourceFormatterStyle s( formatter.at( 1 ) );
-        KConfigGroup fmtgrp = globalConfig().group( formatter.at(0) );
-        if( fmtgrp.hasGroup( formatter.at(1) ) ) {
-            KConfigGroup stylegrp = fmtgrp.group( formatter.at(1) );
-            populateStyleFromConfigGroup(&s, stylegrp);
-        }
-        return s;
+    const QString formatter = configForUrl(url).readEntry(mime.name(), QString());
+    const int pos = formatter.indexOf(QLatin1String("||"));
+    if ((pos <= 0) || (pos + 2 >= formatter.size())) {
+        return SourceFormatterStyle();
     }
-    return SourceFormatterStyle();
+
+    const QString formatterName = formatter.left(pos);
+    const QString styleName = formatter.mid(pos + 2);
+
+    SourceFormatterStyle s(styleName);
+    KConfigGroup fmtgrp = globalConfig().group(formatterName);
+    if (fmtgrp.hasGroup(styleName)) {
+        KConfigGroup stylegrp = fmtgrp.group(styleName);
+        populateStyleFromConfigGroup(&s, stylegrp);
+    }
+    return s;
 }
 
 void SourceFormatterController::disableSourceFormatting(bool disable)

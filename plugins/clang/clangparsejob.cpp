@@ -96,7 +96,11 @@ Path::List readPathListFile(const QString& filepath)
     }
 
     const QString text = QString::fromLocal8Bit(f.readAll());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const QStringList lines = text.split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
     const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
     Path::List paths;
     paths.reserve(lines.length());
     for (const auto& line : lines) {

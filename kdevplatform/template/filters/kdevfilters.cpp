@@ -120,7 +120,12 @@ QVariant SplitLinesFilter::doFilter(const QVariant& input, const QVariant& argum
 {
     QStringList retLines;
     QString start = safeString(argument);
-    const auto lines = safeString(input).split(QLatin1Char('\n'), QString::KeepEmptyParts);
+    const QString inputString = safeString(input);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const auto lines = inputString.splitRef(QLatin1Char('\n'), Qt::KeepEmptyParts);
+#else
+    const auto lines = inputString.splitRef(QLatin1Char('\n'), QString::KeepEmptyParts);
+#endif
     retLines.reserve(lines.size());
     for (const auto& line : lines) {
         retLines << start + line;

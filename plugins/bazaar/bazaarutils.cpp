@@ -125,7 +125,11 @@ bool BazaarUtils::isValidDirectory(const QUrl& dirPath)
 
 KDevelop::VcsStatusInfo BazaarUtils::parseVcsStatusInfoLine(const QString& line)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const QStringList tokens = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
+#else
     QStringList tokens = line.split(QLatin1Char(' '), QString::SkipEmptyParts);
+#endif
     KDevelop::VcsStatusInfo result;
     if (tokens.size() < 2) // Don't know how to handle this situation (it is an error)
         return result;

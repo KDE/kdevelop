@@ -193,7 +193,11 @@ QString PerforcePlugin::getRepositoryName(const QFileInfo& curFile)
     QScopedPointer<DVcsJob> job(p4fstatJob(curFile, KDevelop::OutputJob::Silent));
     if (job->exec() && job->status() == KDevelop::VcsJob::JobSucceeded) {
         if (!job->output().isEmpty()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            const QStringList outputLines = job->output().split('\n', Qt::SkipEmptyParts);
+#else
             const QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
+#endif
             for (const QString& line : outputLines) {
                 int idx(line.indexOf(DEPOT_FILE_STR));
                 if (idx != -1) {
@@ -551,7 +555,11 @@ QList<QVariant> PerforcePlugin::getQvariantFromLogOutput(QStringList const& outp
 
 void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const QStringList outputLines = job->output().split('\n', Qt::SkipEmptyParts);
+#else
     const QStringList outputLines = job->output().split('\n', QString::SkipEmptyParts);
+#endif
     QVariantList statuses;
     const QString ACTION_STR(QStringLiteral("... action "));
     const QString CLIENT_FILE_STR(QStringLiteral("... clientFile "));
@@ -587,7 +595,11 @@ void PerforcePlugin::parseP4StatusOutput(DVcsJob* job)
 
 void PerforcePlugin::parseP4LogOutput(KDevelop::DVcsJob* job)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    QList<QVariant> commits(getQvariantFromLogOutput(job->output().split('\n', Qt::SkipEmptyParts)));
+#else
     QList<QVariant> commits(getQvariantFromLogOutput(job->output().split('\n', QString::SkipEmptyParts)));
+#endif
 
     job->setResults(commits);
 }
@@ -624,7 +636,11 @@ void PerforcePlugin::parseP4AnnotateOutput(DVcsJob *job)
     QList<QVariant> commits;
     if (logJob->exec() && logJob->status() == KDevelop::VcsJob::JobSucceeded) {
         if (!job->output().isEmpty()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            commits = getQvariantFromLogOutput(logJob->output().split('\n', Qt::SkipEmptyParts));
+#else
             commits = getQvariantFromLogOutput(logJob->output().split('\n', QString::SkipEmptyParts));
+#endif
         }
     }
     

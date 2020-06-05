@@ -98,7 +98,11 @@ void TestQuickOpen::testAbbreviations()
 
     PathTestFilter filterItems;
     filterItems.setItems(items);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    filterItems.setFilter(filter.split('/', Qt::SkipEmptyParts));
+#else
     filterItems.setFilter(filter.split('/', QString::SkipEmptyParts));
+#endif
     QCOMPARE(filterItems.filteredItems(), filtered);
 }
 
@@ -125,7 +129,11 @@ void TestQuickOpen::testSorting()
     QFETCH(QString, filter);
     QFETCH(StringList, filtered);
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const auto filterList = filter.split('/', Qt::SkipEmptyParts);
+#else
     const auto filterList = filter.split('/', QString::SkipEmptyParts);
+#endif
     PathTestFilter filterItems;
     filterItems.setItems(items);
     filterItems.setFilter(filterList);

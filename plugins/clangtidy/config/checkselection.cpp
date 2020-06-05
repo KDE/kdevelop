@@ -121,7 +121,11 @@ void CheckSelection::expandSubGroupsWithExplicitlyEnabledStates(const QModelInde
 
 void CheckSelection::setChecks(const QString& checks)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    m_checkListModel->setEnabledChecks(checks.split(QLatin1Char(','), Qt::SkipEmptyParts));
+#else
     m_checkListModel->setEnabledChecks(checks.split(QLatin1Char(','), QString::SkipEmptyParts));
+#endif
     expandSubGroupsWithExplicitlyEnabledStates();
 }
 

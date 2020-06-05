@@ -254,14 +254,22 @@ void ProjectPathsWidget::batchEdit()
     }
 
     if (includesTab) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        auto includes = be.textEdit->toPlainText().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
         auto includes = be.textEdit->toPlainText().split(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
         for (auto& s : includes) {
             s = s.trimmed();
         }
 
         pathsModel->setData(midx, includes, ProjectPathsModel::IncludesDataRole);
     } else {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        auto list = be.textEdit->toPlainText().split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+#else
         auto list = be.textEdit->toPlainText().split(QLatin1Char('\n'), QString::SkipEmptyParts);
+#endif
         Defines defines;
 
         for (auto& d : list) {

@@ -113,7 +113,11 @@ bool ParserSettings::isCpp() const
 QVector<QByteArray> ParserSettings::toClangAPI() const
 {
     // TODO: This is not efficient.
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const auto list = parserOptions.splitRef(QLatin1Char(' '), Qt::SkipEmptyParts);
+#else
     auto list = parserOptions.splitRef(QLatin1Char(' '), QString::SkipEmptyParts);
+#endif
     QVector<QByteArray> result;
     result.reserve(list.size());
 

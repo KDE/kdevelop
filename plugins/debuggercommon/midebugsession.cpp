@@ -151,7 +151,11 @@ bool MIDebugSession::startDebugger(ILaunchConfiguration *cfg)
     // output signals
     connect(m_debugger, &MIDebugger::applicationOutput,
             this, [this](const QString &output) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+                auto lines = output.split(QRegularExpression(QStringLiteral("[\r\n]")), Qt::SkipEmptyParts);
+#else
                 auto lines = output.split(QRegularExpression(QStringLiteral("[\r\n]")), QString::SkipEmptyParts);
+#endif
                 for (auto &line : lines) {
                     int p = line.length();
                     while (p >= 1 && (line[p-1] == QLatin1Char('\r') || line[p-1] == QLatin1Char('\n'))) {

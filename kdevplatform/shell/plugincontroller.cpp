@@ -134,14 +134,13 @@ bool constraintsMatch( const KPluginMetaData& info, const QVariantMap& constrain
 struct Dependency
 {
     explicit Dependency(const QString &dependency)
-        : interface(dependency)
     {
-        if (dependency.contains(QLatin1Char('@'))) {
-            const auto list = dependency.split(QLatin1Char('@'), QString::SkipEmptyParts);
-            if (list.size() == 2) {
-                interface = list.at(0);
-                pluginName = list.at(1);
-            }
+        const int pos = dependency.indexOf(QLatin1Char('@'));
+        if (pos != -1) {
+            interface = dependency.left(pos);
+            pluginName = dependency.mid(pos + 1);
+        } else {
+            interface = dependency;
         }
     }
 
