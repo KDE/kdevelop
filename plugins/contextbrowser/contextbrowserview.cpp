@@ -207,7 +207,7 @@ ContextBrowserView::ContextBrowserView(ContextBrowserPlugin* plugin, QWidget* pa
 
     m_layout = new QVBoxLayout;
     m_layout->setSpacing(0);
-    m_layout->setMargin(0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->addWidget(m_navigationWidget);
     //m_layout->addStretch();
     setLayout(m_layout);

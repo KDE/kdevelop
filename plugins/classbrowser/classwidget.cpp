@@ -89,14 +89,14 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
 
     auto* layout = new QHBoxLayout();
     layout->setSpacing(5);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(searchLabel);
     layout->addWidget(m_searchLine);
 
     setFocusProxy(m_searchLine);
 
     auto* vbox = new QVBoxLayout(this);
-    vbox->setMargin(0);
+    vbox->setContentsMargins(0, 0, 0, 0);
     vbox->addLayout(layout);
     vbox->addWidget(m_tree);
     setLayout(vbox);

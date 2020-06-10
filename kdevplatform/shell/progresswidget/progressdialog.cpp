@@ -59,7 +59,7 @@ TransactionItemView::TransactionItemView( QWidget *parent, const char *name )
     setFrameStyle( NoFrame );
     mBigBox = new QWidget( this );
     auto layout = new QVBoxLayout(mBigBox);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     setWidget( mBigBox );
     setWidgetResizable( true );
     setSizePolicy( QSizePolicy::Maximum, QSizePolicy::Maximum );
@@ -135,7 +135,7 @@ TransactionItem::TransactionItem( QWidget *parent,
 {
     auto vbox = new QVBoxLayout(this);
     vbox->setSpacing( 2 );
-    vbox->setMargin( 2 );
+    vbox->setContentsMargins(2, 2, 2, 2);
     setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
 
     mFrame = new QFrame( this );
@@ -147,7 +147,7 @@ TransactionItem::TransactionItem( QWidget *parent,
 
     auto* h = new QWidget( this );
     auto hboxLayout = new QHBoxLayout(h);
-    hboxLayout->setMargin(0);
+    hboxLayout->setContentsMargins(0, 0, 0, 0);
     hboxLayout->setSpacing( 5 );
     vbox->addWidget( h );
 
@@ -173,7 +173,7 @@ TransactionItem::TransactionItem( QWidget *parent,
 
     h = new QWidget( this );
     hboxLayout = new QHBoxLayout(h);
-    hboxLayout->setMargin(0);
+    hboxLayout->setContentsMargins(0, 0, 0, 0);
     hboxLayout->setSpacing( 5 );
     h->setSizePolicy( QSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed ) );
     vbox->addWidget( h );

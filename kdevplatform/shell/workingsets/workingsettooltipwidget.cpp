@@ -58,7 +58,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     auto* layout = new QVBoxLayout(this);
     layout->setSpacing(0);
 
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     connect(mainwindow->area(),
             &Sublime::Area::viewAdded, this, &WorkingSetToolTipWidget::updateFileButtons,
@@ -156,7 +156,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
     QSet<QString> hadFiles;
 
     auto* filesLayout = new QVBoxLayout;
-    filesLayout->setMargin(0);
+    filesLayout->setContentsMargins(0, 0, 0, 0);
 
     const auto setFiles = m_set->fileList();
     for (const QString& file : setFiles) {
@@ -182,7 +182,7 @@ WorkingSetToolTipWidget::WorkingSetToolTipWidget(QWidget* parent, WorkingSet* se
         fileLabel->setToolTip(i18nc("@info:tooltip", "Click to open and activate this document."));
         fileLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         fileLayout->addWidget(fileLabel);
-        fileLayout->setMargin(0);
+        fileLayout->setContentsMargins(0, 0, 0, 0);
 
         plusButton->setMaximumHeight(fileLabel->sizeHint().height() + 4);
         plusButton->setMaximumWidth(plusButton->maximumHeight());

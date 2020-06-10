@@ -183,7 +183,7 @@ void WorkingSetController::showToolTip(WorkingSet* set, const QPoint& pos)
 
     m_tooltip = new KDevelop::ActiveToolTip(window, pos);
     auto* layout = new QVBoxLayout(m_tooltip);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     auto* widget = new WorkingSetToolTipWidget(m_tooltip, set, window);
     layout->addWidget(widget);
     m_tooltip->resize( m_tooltip->sizeHint() );

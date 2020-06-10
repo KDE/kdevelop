@@ -50,7 +50,7 @@ VCSCommitDiffPatchSource::VCSCommitDiffPatchSource(VCSDiffUpdater* updater)
     Q_ASSERT(m_vcs);
     m_commitMessageWidget = new QWidget;
     auto* layout = new QVBoxLayout(m_commitMessageWidget.data());
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     m_commitMessageEdit = new KTextEdit;
     m_commitMessageEdit.data()->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));

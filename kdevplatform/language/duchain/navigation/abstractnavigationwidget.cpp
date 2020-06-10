@@ -109,7 +109,7 @@ void AbstractNavigationWidget::initBrowser(int height)
 
     auto* layout = new QVBoxLayout;
     layout->addWidget(d->m_browser);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     setLayout(layout);
 
     connect(d->m_browser.data(), &QTextEdit::selectionChanged, this, [this]() {

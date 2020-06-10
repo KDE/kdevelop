@@ -141,7 +141,7 @@ StandardDocumentationView::StandardDocumentationView(DocumentationFindWidget* fi
     Q_D(StandardDocumentationView);
 
     auto mainLayout = new QVBoxLayout(this);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     setLayout(mainLayout);
 
     d->init(this);

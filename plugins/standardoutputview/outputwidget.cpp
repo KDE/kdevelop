@@ -69,7 +69,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     setWindowTitle(i18n("Output View"));
     setWindowIcon(tvdata->icon);
     auto* layout = new QVBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     if( data->type & KDevelop::IOutputView::MultipleView )
     {
         m_tabwidget = new QTabWidget(this);

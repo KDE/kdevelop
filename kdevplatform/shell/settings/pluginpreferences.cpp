@@ -39,7 +39,7 @@ PluginPreferences::PluginPreferences(QWidget* parent)
     : ConfigPage(nullptr, nullptr, parent)
 {
     auto* lay = new QVBoxLayout(this );
-    lay->setMargin(0);
+    lay->setContentsMargins(0, 0, 0, 0);
     selector = new KPluginSelector( this );
     lay->addWidget( selector );
     QMap<QString, QList<KPluginInfo>> plugins;

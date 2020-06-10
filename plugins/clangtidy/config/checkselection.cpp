@@ -48,7 +48,7 @@ CheckSelection::CheckSelection(QWidget* parent)
     , m_checkListModel(new CheckListModel(this))
 {
     auto* layout = new QVBoxLayout;
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     auto* checkFilterEdit = new CheckListFilterProxySearchLine(this);
     layout->addWidget(checkFilterEdit);

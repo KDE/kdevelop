@@ -46,7 +46,7 @@ ClosedWorkingSetsWidget::ClosedWorkingSetsWidget( MainWindow* window )
             this, &ClosedWorkingSetsWidget::areaChanged);
 
     m_layout = new QHBoxLayout(this);
-    m_layout->setMargin(0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
 
     if (window->area()) {
         areaChanged(window->area());

@@ -60,7 +60,7 @@ FileManager::FileManager(KDevFileManagerPlugin *plugin, QWidget* parent)
     KConfigGroup cg = KDevelop::ICore::self()->activeSession()->config()->group( "Filesystem" );
 
     auto *l = new QVBoxLayout(this);
-    l->setMargin(0);
+    l->setContentsMargins(0, 0, 0, 0);
     l->setSpacing(0);
     auto* model = new KFilePlacesModel( this );
     urlnav = new KUrlNavigator(model, QUrl(cg.readEntry( "LastLocation", QUrl::fromLocalFile( QDir::homePath() ) )), this );

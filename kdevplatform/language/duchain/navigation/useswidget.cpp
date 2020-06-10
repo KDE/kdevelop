@@ -253,7 +253,7 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
     :  m_allowScrolling(allowScrolling)
 {
     m_layout = new QVBoxLayout;
-    m_layout->setMargin(0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     m_layout->setSpacing(0);
     setBackgroundRole(QPalette::Base);
@@ -265,14 +265,14 @@ NavigatableWidgetList::NavigatableWidgetList(bool allowScrolling, uint maxHeight
         m_itemLayout = new QHBoxLayout;
     m_itemLayout->setContentsMargins(0, 0, 0, 0);
 
-    m_itemLayout->setMargin(0);
+    m_itemLayout->setContentsMargins(0, 0, 0, 0);
     m_itemLayout->setSpacing(0);
 //   m_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
 //   setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Maximum);
     setWidgetResizable(true);
 
     m_headerLayout = new QHBoxLayout;
-    m_headerLayout->setMargin(0);
+    m_headerLayout->setContentsMargins(0, 0, 0, 0);
     m_headerLayout->setSpacing(0);
 
     if (m_useArrows) {

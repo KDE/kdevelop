@@ -72,7 +72,7 @@ ProjectBuildSetWidget::ProjectBuildSetWidget( QWidget* parent )
     m_ui->itemView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( m_ui->itemView, &QTreeView::customContextMenuRequested,
              this, &ProjectBuildSetWidget::showContextMenu );
-    layout()->setMargin(0);
+    layout()->setContentsMargins(0, 0, 0, 0);
 }
 
 void ProjectBuildSetWidget::setProjectView( ProjectManagerView* view )

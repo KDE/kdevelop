@@ -309,11 +309,11 @@ Container::Container(QWidget *parent)
     KAcceleratorManager::setNoAccel(this);
 
     auto *l = new QBoxLayout(QBoxLayout::TopToBottom, this);
-    l->setMargin(0);
+    l->setContentsMargins(0, 0, 0, 0);
     l->setSpacing(0);
 
     d->layout = new QBoxLayout(QBoxLayout::LeftToRight);
-    d->layout->setMargin(0);
+    d->layout->setContentsMargins(0, 0, 0, 0);
     d->layout->setSpacing(0);
 
     d->documentListMenu = new QMenu(this);

@@ -103,7 +103,7 @@ SourceFormatterSelectionEdit::SourceFormatterSelectionEdit(QWidget* parent)
     d->view->setStatusBarEnabled(false);
 
     auto *layout2 = new QVBoxLayout(d->ui.textEditor);
-    layout2->setMargin(0);
+    layout2->setContentsMargins(0, 0, 0, 0);
     layout2->addWidget(d->view);
     d->ui.textEditor->setLayout(layout2);
     d->view->show();

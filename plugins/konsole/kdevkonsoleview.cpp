@@ -114,7 +114,7 @@ KDevKonsoleView::KDevKonsoleView( KDevKonsoleViewPlugin *plugin, QWidget* parent
     setWindowTitle( i18n( "Konsole" ) );
 
     d->m_vbox = new QVBoxLayout( this );
-    d->m_vbox->setMargin( 0 );
+    d->m_vbox->setContentsMargins(0, 0, 0, 0);
     d->m_vbox->setSpacing( 0 );
 
     d->init( d->mplugin->konsoleFactory() );

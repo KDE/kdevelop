@@ -89,7 +89,7 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     setFocusProxy(m_filter);
 
     auto* vbox = new QVBoxLayout(this);
-    vbox->setMargin(0);
+    vbox->setContentsMargins(0, 0, 0, 0);
     vbox->addWidget(m_tree);
     setLayout(vbox);
     expandFirstLevel();

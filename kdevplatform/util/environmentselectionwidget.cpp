@@ -54,7 +54,7 @@ EnvironmentSelectionWidget::EnvironmentSelectionWidget(QWidget* parent)
 
     setLayout(new QHBoxLayout(this));
     layout()->addWidget(d->comboBox);
-    layout()->setMargin(0);
+    layout()->setContentsMargins(0, 0, 0, 0);
 
     setCurrentProfile(QString());   // select the default profile
 

@@ -153,7 +153,7 @@ void PatchHighlighter::showToolTipForMark(const QPoint& pos, KTextEditor::Moving
         browser->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
     auto* layout = new QVBoxLayout;
-    layout->setMargin( 0 );
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget( browser );
 
     auto* tooltip = new KDevelop::ActiveToolTip( ICore::self()->uiController()->activeMainWindow(), pos + QPoint( 5, -browser->sizeHint().height() - 30 ) );

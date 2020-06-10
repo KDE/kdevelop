@@ -172,7 +172,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
         m_splitter(new KDevelop::AutoOrientedSplitter(this))
 {
         auto* topLayout = new QVBoxLayout(this);
-        topLayout->setMargin(0);
+        topLayout->setContentsMargins(0, 0, 0, 0);
 
         auto* controlsLayout = new QHBoxLayout;
 
@@ -182,7 +182,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
     {   // initialize disasm/registers views
         topLayout->addWidget(m_splitter);
 
-        //topLayout->setMargin(0);
+        //topLayout->setContentsMargins(0, 0, 0, 0);
 
         m_disassembleWindow = new DisassembleWindow(m_splitter, this);
 

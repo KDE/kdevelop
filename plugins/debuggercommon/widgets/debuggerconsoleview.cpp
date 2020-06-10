@@ -137,7 +137,7 @@ void DebuggerConsoleView::setupUi()
             this, &DebuggerConsoleView::showContextMenu);
 
     auto vbox = new QVBoxLayout;
-    vbox->setMargin(0);
+    vbox->setContentsMargins(0, 0, 0, 0);
     vbox->addWidget(m_textView);
     vbox->addWidget(m_toolBar);
 

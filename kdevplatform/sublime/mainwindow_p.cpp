@@ -58,7 +58,7 @@ class IdealToolBar : public QToolBar
             setMovable(false);
             setFloatable(false);
             setObjectName(title);
-            layout()->setMargin(0);
+            layout()->setContentsMargins(0, 0, 0, 0);
 
             addWidget(m_buttons);
 
@@ -157,7 +157,7 @@ MainWindowPrivate::MainWindowPrivate(MainWindow *w, Controller* controller)
     centralWidget = new QWidget;
     centralWidget->setObjectName(QStringLiteral("centralWidget"));
     auto* layout = new QVBoxLayout(centralWidget);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     centralWidget->setLayout(layout);
 
     messageWidget = new MessageWidget();

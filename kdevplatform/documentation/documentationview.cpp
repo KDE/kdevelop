@@ -50,7 +50,7 @@ DocumentationView::DocumentationView(QWidget* parent, ProvidersModel* model)
     setWindowTitle(i18n("Documentation"));
 
     setLayout(new QVBoxLayout(this));
-    layout()->setMargin(0);
+    layout()->setContentsMargins(0, 0, 0, 0);
     layout()->setSpacing(0);
 
     mFindDoc = new DocumentationFindWidget;

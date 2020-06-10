@@ -41,7 +41,7 @@ OverlayWidget::OverlayWidget( QWidget* alignWidget, QWidget* parent, const char*
     : QWidget( parent, Qt::Window | Qt::FramelessWindowHint | Qt::ToolTip ), mAlignWidget( nullptr )
 {
     auto hboxHBoxLayout = new QHBoxLayout(this);
-    hboxHBoxLayout->setMargin(0);
+    hboxHBoxLayout->setContentsMargins(0, 0, 0, 0);
 
     setObjectName(QString::fromUtf8(name));
     setAlignWidget( alignWidget );

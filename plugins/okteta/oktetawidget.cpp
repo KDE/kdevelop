@@ -106,7 +106,7 @@ OktetaWidget::OktetaWidget( QWidget* parent, Kasten::ByteArrayView* byteArrayVie
     setupActions(plugin);
 
     auto* layout = new QVBoxLayout( this );
-    layout->setMargin( 0 );
+    layout->setContentsMargins(0, 0, 0, 0);
     QWidget* widget = mByteArrayView->widget();
     layout->addWidget( widget );
     setFocusProxy( widget );

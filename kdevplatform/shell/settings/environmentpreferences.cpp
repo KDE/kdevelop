@@ -44,7 +44,7 @@ EnvironmentPreferences::EnvironmentPreferences(const QString& preselectedProfile
     Q_D(EnvironmentPreferences);
 
     auto * l = new QVBoxLayout( this );
-    l->setMargin(0);
+    l->setContentsMargins(0, 0, 0, 0);
     d->preferencesDialog = new EnvironmentWidget( this );
     l->addWidget( d->preferencesDialog );
 

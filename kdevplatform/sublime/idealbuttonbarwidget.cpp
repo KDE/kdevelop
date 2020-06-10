@@ -116,7 +116,7 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
     if (area == Qt::BottomDockWidgetArea)
     {
         auto *statusLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
-        statusLayout->setMargin(0);
+        statusLayout->setContentsMargins(0, 0, 0, 0);
 
         statusLayout->addLayout(m_buttonsLayout);
 
@@ -124,12 +124,12 @@ IdealButtonBarWidget::IdealButtonBarWidget(Qt::DockWidgetArea area,
 
         m_corner = new QWidget(this);
         auto *cornerLayout = new QBoxLayout(QBoxLayout::LeftToRight, m_corner);
-        cornerLayout->setMargin(0);
+        cornerLayout->setContentsMargins(0, 0, 0, 0);
         cornerLayout->setSpacing(0);
         statusLayout->addWidget(m_corner);
     } else {
         auto *superLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
-        superLayout->setMargin(0);
+        superLayout->setContentsMargins(0, 0, 0, 0);
 
         superLayout->addLayout(m_buttonsLayout);
         superLayout->addStretch(1);

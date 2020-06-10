@@ -53,7 +53,7 @@ void NavigationToolTip::setNavigationWidget(QWidget* widget)
     }
     auto* layout = new QVBoxLayout;
     setLayout(layout);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     if (m_navigationWidget) {
         layout->addWidget(m_navigationWidget);
     }

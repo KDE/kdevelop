@@ -220,7 +220,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow(Sublime::MainWindow*
     m_toolbarWidgetLayout->setSizeConstraint(QLayout::SetMaximumSize);
     m_previousButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_nextButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    m_toolbarWidgetLayout->setMargin(0);
+    m_toolbarWidgetLayout->setContentsMargins(0, 0, 0, 0);
 
     m_toolbarWidgetLayout->addWidget(m_previousButton);
     if (m_outlineLine) {

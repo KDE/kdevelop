@@ -38,7 +38,7 @@ EditExternalScript::EditExternalScript(ExternalScriptItem* item, QWidget* parent
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &EditExternalScript::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &EditExternalScript::reject);
-    shortcutWidget->layout()->setMargin(0);
+    shortcutWidget->layout()->setContentsMargins(0, 0, 0, 0);
 
     //BEGIN setup tooltips
     QString tooltip = i18n(

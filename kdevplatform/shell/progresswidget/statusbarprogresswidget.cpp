@@ -70,7 +70,7 @@ StatusbarProgressWidget::StatusbarProgressWidget( ProgressDialog* progressDialog
     int w = fontMetrics().width( QStringLiteral(" 999.9 kB/s 00:00:01 ") ) + 8;
 #endif
     box = new QHBoxLayout( this );
-    box->setMargin(0);
+    box->setContentsMargins(0, 0, 0, 0);
     box->setSpacing(0);
     stack = new QStackedWidget( this );
 

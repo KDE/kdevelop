@@ -54,7 +54,7 @@ KastenToolViewWidget::KastenToolViewWidget( Kasten::AbstractToolView* toolView, 
     }
 
     auto* layout = new QVBoxLayout( this );
-    layout->setMargin( 0 );
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget( mToolView->widget() );
 }
 
