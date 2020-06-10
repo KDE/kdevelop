@@ -140,7 +140,9 @@ void PathResolutionResult::mergeWith(const PathResolutionResult& rhs)
     mergePaths(paths, rhs.paths);
     mergePaths(frameworkDirectories, rhs.frameworkDirectories);
     includePathDependency += rhs.includePathDependency;
-    defines.unite(rhs.defines);
+    for (auto it = rhs.defines.begin(), end = rhs.defines.end(); it != end; ++it) {
+        defines.insert(it.key(), it.value());
+    }
 }
 
 PathResolutionResult::PathResolutionResult(bool success, const QString& errorMessage, const QString& longErrorMessage)

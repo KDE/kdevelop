@@ -77,15 +77,15 @@ void CMakeCommandsContents::processOutput(int code)
 
     QTextStream stream(process);
     QString line = stream.readLine(); //discard first line
-    QMap<QString, CMakeDocumentation::Type> newEntries;
     QVector<QString> names;
     while(stream.readLineInto(&line)) {
-        newEntries[line]=type;
         names += line;
     }
 
     beginInsertRows(index(type, 0, {}), 0, names.count()-1);
-    m_typeForName.unite(newEntries);
+    for (auto& name : qAsConst(names)) {
+        m_typeForName.insert(name, type);
+    }
     m_namesForType[type] = names;
     endInsertRows();
 }
