@@ -62,7 +62,11 @@ int main()
     doStuff<QVector>();
     doStuff<QQueue>();
     doStuff<QStack>();
+QT_WARNING_PUSH
+QT_WARNING_DISABLE_CLANG("-Wdeprecated-declarations")
+QT_WARNING_DISABLE_GCC("-Wdeprecated-declarations")
     doStuff<QLinkedList>();
+QT_WARNING_POP
     doStuff<QSet>();
     return 0;
 }
