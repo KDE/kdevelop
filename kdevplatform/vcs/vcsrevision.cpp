@@ -24,6 +24,7 @@
 #include <QStringList>
 #include <QMap>
 #include <QDateTime>
+#include <QLocale>
 
 
 namespace KDevelop
@@ -148,7 +149,7 @@ QString VcsRevision::prettyValue() const
                     return QStringLiteral("User");
             }
         case Date:
-            return revisionValue().toDateTime().toString( Qt::LocalDate );
+            return  QLocale().toString(revisionValue().toDateTime(), QLocale::ShortFormat);
         default:
             return revisionValue().toString();
     }
