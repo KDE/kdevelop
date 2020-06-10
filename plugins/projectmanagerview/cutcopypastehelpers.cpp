@@ -308,7 +308,7 @@ void showWarningDialogForFailedPaste(QWidget* parent, const QVector<TaskInfo>& t
 
     auto* mainWidget = new QWidget(dialog);
     auto* mainLayout = new QVBoxLayout(mainWidget);
-    const int spacingHint = mainWidget->style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    const int spacingHint = mainWidget->style()->pixelMetric(QStyle::PM_LayoutVerticalSpacing);
     mainLayout->setSpacing(spacingHint * 2); // provide extra spacing
     mainLayout->setContentsMargins(0, 0, 0, 0);
 
