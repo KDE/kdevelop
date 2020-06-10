@@ -83,17 +83,12 @@ void KDevelopSessionsEngine::updateSessions()
 
     for (auto& sessionrc : sessionrcs) {
         KConfig cfg(sessionrc, KConfig::SimpleConfig);
+        Session session;
+        session.hash = QFileInfo(sessionrc).dir().dirName();
+        session.name = cfg.group( "" ).readEntry( "SessionName", "" );
+        session.description = cfg.group( "" ).readEntry( "SessionPrettyContents", "" );
 
-        // Only consider sessions that have open projects.
-        if ( cfg.hasGroup( "General Options" ) && !cfg.group( "General Options" ).readEntry( "Open Projects", "" ).isEmpty() )
-        {
-            Session session;
-            session.hash = QFileInfo(sessionrc).dir().dirName();
-            session.name = cfg.group( "" ).readEntry( "SessionName", "" );
-            session.description = cfg.group( "" ).readEntry( "SessionPrettyContents", "" );
-
-            sessions.insert(session.hash, session);
-        }
+        sessions.insert(session.hash, session);
     }
 
     for (const Session& session : qAsConst(sessions)) {
