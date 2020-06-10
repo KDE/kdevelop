@@ -39,10 +39,41 @@
 #include "qthelpnetwork.h"
 #include "qthelpproviderabstract.h"
 
+#include <algorithm>
+
 using namespace KDevelop;
 
 QtHelpProviderAbstract* QtHelpDocumentation::s_provider=nullptr;
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info)
+    : m_provider(s_provider)
+    , m_name(name)
+    , m_info(info)
+    , m_current(info.constBegin())
+    , lastView(nullptr)
+{
+}
+
+namespace {
+QList<QHelpLink>::const_iterator findTitle(const QList<QHelpLink>& links, const QString& title)
+{
+    return std::find_if(links.begin(), links.end(), [title](const QHelpLink& helpLink) {
+        return helpLink.title == title;
+    });
+}
+}
+
+QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info, const QString& key)
+    : m_provider(s_provider)
+    , m_name(name)
+    , m_info(info)
+    , m_current(::findTitle(m_info, key))
+    , lastView(nullptr)
+{
+    Q_ASSERT(m_current!=m_info.constEnd());
+}
+#else
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info)
     : m_provider(s_provider), m_name(name), m_info(info), m_current(info.constBegin()), lastView(nullptr)
 {}
@@ -50,6 +81,7 @@ QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString
 QtHelpDocumentation::QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key)
     : m_provider(s_provider), m_name(name), m_info(info), m_current(m_info.find(key)), lastView(nullptr)
 { Q_ASSERT(m_current!=m_info.constEnd()); }
+#endif
 
 QtHelpDocumentation::~QtHelpDocumentation()
 {
@@ -58,7 +90,7 @@ QtHelpDocumentation::~QtHelpDocumentation()
 
 QString QtHelpDocumentation::description() const
 {
-    const QUrl url(m_current.value());
+    const QUrl url = currentUrl();
     //Extract a short description from the html data
     const QString dataString = QString::fromLatin1(m_provider->engine()->fileData(url)); ///@todo encoding
 
@@ -163,7 +195,16 @@ QString QtHelpDocumentation::description() const
         return thisFragment;
     }
 
-    return QStringList(m_info.keys()).join(QLatin1String(", "));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    QStringList titles;
+    titles.reserve(m_info.size());
+    for (auto& link : qAsConst(m_info)) {
+        titles.append(link.title);
+    }
+#else
+    const QStringList titles = m_info.keys();
+#endif
+    return titles.join(QLatin1String(", "));
 }
 
 void QtHelpDocumentation::setUserStyleSheet(StandardDocumentationView* view, const QUrl& url)
@@ -197,8 +238,8 @@ QWidget* QtHelpDocumentation::documentationWidget(DocumentationFindWidget* findW
         QObject::connect(view, &StandardDocumentationView::linkClicked, this, &QtHelpDocumentation::jumpedTo);
         connect(view, &StandardDocumentationView::customContextMenuRequested, this, &QtHelpDocumentation::viewContextMenuRequested);
 
-        setUserStyleSheet(view, m_current.value());
-        view->load(m_current.value());
+        setUserStyleSheet(view, currentUrl());
+        view->load(currentUrl());
         lastView = view;
         return view;
     }
@@ -219,10 +260,14 @@ void QtHelpDocumentation::viewContextMenuRequested(const QPoint& pos)
 
         auto* actionGroup = new QActionGroup(menu);
         for (auto it = m_info.constBegin(), end = m_info.constEnd(); it != end; ++it) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+            const QString& name = it->title;
+#else
             const QString& name = it.key();
+#endif
             auto* act=new QtHelpAlternativeLink(name, this, actionGroup);
             act->setCheckable(true);
-            act->setChecked(name==m_current.key());
+            act->setChecked(name==currentTitle());
             menu->addAction(act);
         }
     }
@@ -275,9 +320,13 @@ void HomeDocumentation::clicked(const QModelIndex& idx)
 {
     QHelpContentModel* model = m_provider->engine()->contentModel();
     QHelpContentItem* it=model->contentItemAt(idx);
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const QList<QHelpLink> info {{it->url(), it->title()}};
+#else
     QMap<QString, QUrl> info;
     info.insert(it->title(), it->url());
-
+#endif
     IDocumentation::Ptr newDoc(new QtHelpDocumentation(it->title(), info));
     ICore::self()->documentationController()->showDocumentation(newDoc);
 }

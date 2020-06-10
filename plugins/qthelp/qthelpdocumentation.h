@@ -22,10 +22,15 @@
 #ifndef QTHELPDOCUMENTATION_H
 #define QTHELPDOCUMENTATION_H
 
+#include <QList>
 #include <QMap>
 #include <QUrl>
 #include <QPointer>
 #include <QAction>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#include <QHelpLink>
+#endif
+
 #include <interfaces/idocumentation.h>
 
 namespace KDevelop { class StandardDocumentationView; }
@@ -38,9 +43,14 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 {
     Q_OBJECT
     public:
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info);
+        QtHelpDocumentation(const QString& name, const QList<QHelpLink>& info, const QString& key);
+#else
         QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info);
-
         QtHelpDocumentation(const QString& name, const QMap<QString, QUrl>& info, const QString& key);
+#endif
+
         ~QtHelpDocumentation() override;
 
         QString name() const override { return m_name; }
@@ -50,7 +60,12 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
         QWidget* documentationWidget(KDevelop::DocumentationFindWidget* findWidget, QWidget* parent) override;
 
         KDevelop::IDocumentationProvider* provider() const override;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        QList<QHelpLink> info() const { return m_info; }
+#else
         QMap<QString, QUrl> info() const { return m_info; }
+#endif
 
         static QtHelpProviderAbstract* s_provider;
 
@@ -62,12 +77,24 @@ class QtHelpDocumentation : public KDevelop::IDocumentation
 
     private:
         void setUserStyleSheet(KDevelop::StandardDocumentationView* view, const QUrl& url);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        const QUrl& currentUrl() const { return m_current->url; }
+        const QString& currentTitle() const { return m_current->title; }
+#else
+        const QUrl& currentUrl() const { return m_current.value(); }
+        const QString& currentTitle() const { return m_current.key(); }
+#endif
 
     private:
         QtHelpProviderAbstract *m_provider;
         const QString m_name;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        const QList<QHelpLink> m_info;
+        const QList<QHelpLink>::const_iterator m_current;
+#else
         const QMap<QString, QUrl> m_info;
         const QMap<QString, QUrl>::const_iterator m_current;
+#endif
 
         KDevelop::StandardDocumentationView* lastView;
         QPointer<QTemporaryFile> m_lastStyleSheet;
