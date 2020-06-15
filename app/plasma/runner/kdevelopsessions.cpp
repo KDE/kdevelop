@@ -25,12 +25,17 @@
 #include <QFile>
 #include <QStandardPaths>
 #include <KLocalizedString>
+#include <krunner_version.h>
 #include <KDirWatch>
 #include <KToolInvocation>
 #include <DataEngine>
 #include <DataContainer>
 
+#if KRUNNER_VERSION >= QT_VERSION_CHECK(5, 72, 0)
+K_EXPORT_PLASMA_RUNNER_WITH_JSON(KDevelopSessions, "kdevelopsessions.json")
+#else
 K_EXPORT_PLASMA_RUNNER(kdevelopsessions, KDevelopSessions)
+#endif
 
 KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     : Plasma::AbstractRunner(parent, args)
