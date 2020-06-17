@@ -25,7 +25,6 @@
                 "Name[sv]": "Hamish Rodda",
                 "Name[tr]": "Hamish Rodda",
                 "Name[uk]": "Hamish Rodda",
-                "Name[x-test]": "xxHamish Roddaxx",
                 "Name[zh_CN]": "Hamish Rodda"
             }
         ],
@@ -50,7 +49,6 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller en bläddringsbar modell av klasser och andra objekt som för närvarande har tolkats.",
         "Description[tr]": "Bu eklenti mevcut ayrıştırılmış sınıfların ve diğer öğelerin taranabilir bir modelini sağlar.",
         "Description[uk]": "За допомогою цього додатка можна створити придатну для перегляду модель класів та інших елементів, над якими ви працюєте.",
-        "Description[x-test]": "xxThis plugin provides a browsable model of the currently parsed classes and other items.xx",
         "Description[zh_CN]": "此插件提供了一个当前已分析类和其它项目的可浏览化视窗模型。",
         "Icon": "code-class",
         "Id": "kdevclassbrowser",
@@ -78,7 +76,6 @@
         "Name[sv]": "Klassbläddrare",
         "Name[tr]": "Sınıf Tarayıcı",
         "Name[uk]": "Переглядач класів",
-        "Name[x-test]": "xxClass Browserxx",
         "Name[zh_CN]": "类浏览器",
         "ServiceTypes": [
             "KDevelop/Plugin"

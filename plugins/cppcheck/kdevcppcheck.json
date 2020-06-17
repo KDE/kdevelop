@@ -26,7 +26,6 @@
                 "Name[sv]": "Christoph Thielecke",
                 "Name[tr]": "Christoph Thielecke",
                 "Name[uk]": "Christoph Thielecke",
-                "Name[x-test]": "xxChristoph Thieleckexx",
                 "Name[zh_CN]": "Christoph Thielecke"
             }
         ],
@@ -51,7 +50,6 @@
         "Description[sv]": "Insticksprogrammet integrerar Cppcheck (statiskt analysverktyg) i KDevelop",
         "Description[tr]": "Bu eklenti Cppcheck uygulamasını (istatistik analiz aracı) KDevelop ile bütünleştirir",
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Cppcheck (засіб статичного аналізу) до KDevelop",
-        "Description[x-test]": "xxThis plugin integrates Cppcheck (static analysis tool) to KDevelopxx",
         "Description[zh_CN]": "此插件集成了 Cppcheck (静态分析工具) 到 KDevelop",
         "Icon": "cppcheck",
         "Id": "kdevcppcheck",
@@ -77,7 +75,6 @@
         "Name[sv]": "Cppcheck-stöd",
         "Name[tr]": "Cppcheck Desteği",
         "Name[uk]": "Підтримка Cppcheck",
-        "Name[x-test]": "xxCppcheck Supportxx",
         "Name[zh_CN]": "Cppcheck 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"

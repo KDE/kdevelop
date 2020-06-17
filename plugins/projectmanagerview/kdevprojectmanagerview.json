@@ -25,7 +25,6 @@
                 "Name[sv]": "Roberto Raggi",
                 "Name[tr]": "Roberto Raggi",
                 "Name[uk]": "Roberto Raggi",
-                "Name[x-test]": "xxRoberto Raggixx",
                 "Name[zh_CN]": "Roberto Raggi"
             }
         ],
@@ -51,7 +50,6 @@
         "Description[sv]": "Låter dig hantera projektets innehåll.",
         "Description[tr]": "Proje içeriğini yönetmenizi sağlar.",
         "Description[uk]": "Надає вам змогу керувати вмістом проєктів.",
-        "Description[x-test]": "xxLets you manage the project contents.xx",
         "Description[zh_CN]": "让您管理工程内容。",
         "Icon": "kdevelop",
         "Id": "KDevProjectManagerView",
@@ -78,7 +76,6 @@
         "Name[sv]": "Projekthanteringsvisning",
         "Name[tr]": "Proje Yöneticisi Görünümü",
         "Name[uk]": "Перегляд керування проєктами",
-        "Name[x-test]": "xxProject Manager Viewxx",
         "Name[zh_CN]": "工程管理器视图",
         "ServiceTypes": [
             "KDevelop/Plugin"

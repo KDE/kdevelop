@@ -27,7 +27,6 @@
                 "Name[sv]": "Aleix Pol",
                 "Name[tr]": "Aleix Pol",
                 "Name[uk]": "Aleix Pol",
-                "Name[x-test]": "xxAleix Polxx",
                 "Name[zh_CN]": "Aleix Pol"
             }
         ],
@@ -51,7 +50,6 @@
         "Description[sv]": "Exponerar Flatpak-körtidsprogram",
         "Description[tr]": "Flatpak çalışma zamanlarını gösterir",
         "Description[uk]": "Надає доступ до середовищ виконання Flatpak",
-        "Description[x-test]": "xxExposes Flatpak runtimesxx",
         "Description[zh_CN]": "暴露 Flatpak 运行时",
         "Icon": "kdevelop",
         "Id": "kdevflatpak",
@@ -76,7 +74,6 @@
         "Name[sv]": "Flatpak-stöd",
         "Name[tr]": "Flatpak Desteği",
         "Name[uk]": "Підтримка Flatpak",
-        "Name[x-test]": "xxFlatpak Supportxx",
         "Name[zh_CN]": "Flatpak 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
