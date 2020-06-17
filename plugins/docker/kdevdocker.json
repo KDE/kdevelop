@@ -28,7 +28,6 @@
                 "Name[sv]": "Aleix Pol",
                 "Name[tr]": "Aleix Pol",
                 "Name[uk]": "Aleix Pol",
-                "Name[x-test]": "xxAleix Polxx",
                 "Name[zh_CN]": "Aleix Pol"
             }
         ],
@@ -54,7 +53,6 @@
         "Description[sv]": "Exponerar Docker-körtidsprogram",
         "Description[tr]": "Docker çalışma zamanlarını gösterir",
         "Description[uk]": "Надає доступ до середовищ виконання Docker",
-        "Description[x-test]": "xxExposes Docker runtimesxx",
         "Description[zh_CN]": "暴露 Docker 运行时",
         "Icon": "kdevelop",
         "Id": "kdevdocker",
@@ -81,7 +79,6 @@
         "Name[sv]": "Docker-stöd",
         "Name[tr]": "Docker Desteği",
         "Name[uk]": "Підтримка Docker",
-        "Name[x-test]": "xxDocker Supportxx",
         "Name[zh_CN]": "Docker 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"

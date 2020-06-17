@@ -26,7 +26,6 @@
                 "Name[sv]": "Dukju Ahn",
                 "Name[tr]": "Dukju Ahn",
                 "Name[uk]": "Dukju Ahn",
-                "Name[x-test]": "xxDukju Ahnxx",
                 "Name[zh_CN]": "Dukju Ahn"
             }
         ],
@@ -53,7 +52,6 @@
         "Description[sv]": "Insticksprogrammet integrerar Subversion i KDevelop.",
         "Description[tr]": "Bu eklenti Subversion ile KDevelop uygulamasını bütünleştirir.",
         "Description[uk]": "Цей додаток інтегрує Subversion із KDevelop.",
-        "Description[x-test]": "xxThis plugin integrates Subversion to KDevelop.xx",
         "Description[zh_CN]": "此插件将 Subversion 整合到 KDevelop。",
         "Icon": "subversion",
         "Id": "kdevsubversion",
@@ -88,7 +86,6 @@
         "Name[tr]": "Suversion Desteği",
         "Name[ug]": "Subversion قوللىشى",
         "Name[uk]": "Підтримка Subversion",
-        "Name[x-test]": "xxSubversion Supportxx",
         "Name[zh_CN]": "Subversion 支持",
         "Name[zh_TW]": "Subversion 支援",
         "ServiceTypes": [

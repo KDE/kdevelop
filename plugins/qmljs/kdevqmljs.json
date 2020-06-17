@@ -20,7 +20,6 @@
         "Description[sk]": "Podpora jazyka QML/JS (založená na qmljs z QtCreator-a)",
         "Description[sv]": "QML/JS språkstöd (baserat på qmljs från QtCreator)",
         "Description[uk]": "Підтримка мови QML/JS (на основі qmljs з QtCreator)",
-        "Description[x-test]": "xxQML/JS language support (based on qmljs from QtCreator)xx",
         "Description[zh_CN]": "QML/JS 语言支持 (基于 QtCreator 的 qmljs)",
         "Icon": "text-x-qml",
         "Id": "kdevqmljs",
@@ -50,7 +49,6 @@
         "Name[sv]": "QML-stöd",
         "Name[tr]": "QML Desteği",
         "Name[uk]": "Підтримка QML",
-        "Name[x-test]": "xxQML Supportxx",
         "Name[zh_CN]": "QML 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
