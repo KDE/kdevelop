@@ -41,14 +41,10 @@ void KDevelopSessionsEngine::init()
 {
     m_dirWatch = new KDirWatch( this );
 
-    const QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory );
+    m_sessionDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + QLatin1String("/kdevelop/sessions/");
+    m_dirWatch->addDir(m_sessionDir, KDirWatch::WatchSubDirs);
 
-    for (auto& sessionDir : sessionDirs) {
-        m_dirWatch->addDir(sessionDir, KDirWatch::WatchSubDirs);
-    }
-
-    connect(m_dirWatch, &KDirWatch::dirty, this, &KDevelopSessionsEngine::updateSessions);
-
+    connect(m_dirWatch, &KDirWatch::dirty, this, &KDevelopSessionsEngine::sessionSourceChanged);
     updateSessions();
 }
 
@@ -57,22 +53,33 @@ Plasma::Service *KDevelopSessionsEngine::serviceForSource(const QString &source)
     return new KDevelopSessionsService( this, source );
 }
 
-QStringList findSessions()
+QStringList KDevelopSessionsEngine::findSessions()
 {
-    const QStringList sessionDirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, QStringLiteral("kdevelop/sessions"), QStandardPaths::LocateDirectory);
     QStringList sessionrcs;
-    for (const QString& dir : sessionDirs) {
-        QDir d(dir);
-        const auto dirEntries = d.entryList(QDir::Dirs);
-        for (const QString& sessionDir : dirEntries) {
-            QDir sd(d.absoluteFilePath(sessionDir));
-            QString path(sd.filePath(QStringLiteral("sessionrc")));
-            if(QFile::exists(path)) {
-                sessionrcs += path;
-            }
+    QDir d(m_sessionDir);
+    const auto dirEntries = d.entryList(QDir::Dirs);
+    for (const QString& sessionDir : dirEntries) {
+        QDir sd(d.absoluteFilePath(sessionDir));
+        QString path(sd.filePath(QStringLiteral("sessionrc")));
+        if(QFile::exists(path)) {
+            sessionrcs += path;
         }
     }
     return sessionrcs;
+}
+
+void KDevelopSessionsEngine::sessionSourceChanged(const QString& path)
+{
+    // This is the case if a session gets added/deleted
+    if (m_sessionDir == path) {
+        updateSessions();
+    } else {
+        // If a sessionrc file got changed we reload the config too
+        QFileInfo info(path);
+        if (info.isFile() && info.fileName() == QLatin1String("sessionrc")) {
+            updateSessions();
+        }
+    }
 }
 
 void KDevelopSessionsEngine::updateSessions()

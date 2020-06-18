@@ -43,10 +43,13 @@ public:
     Plasma::Service *serviceForSource(const QString &source) override;
 
     private Q_SLOTS:
+        void sessionSourceChanged(const QString& path);
+        QStringList findSessions();
         void updateSessions();
 
 private:
     QHash<QString, Session> m_currentSessions;
+    QString m_sessionDir;
 
     KDirWatch *m_dirWatch;
 };
