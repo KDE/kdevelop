@@ -132,7 +132,7 @@ void MIDebuggerPlugin::setupActions()
     connect(action, &QAction::triggered, this, &MIDebuggerPlugin::slotExamineCore);
     ac->addAction(QStringLiteral("debug_core"), action);
 
-#if KF5SysGuard_FOUND
+#if HAVE_KSYSGUARD
     action = new QAction(this);
     action->setIcon(QIcon::fromTheme(QStringLiteral("connect_creating")));
     action->setText(i18n("Attach to Process with %1", m_displayName));
@@ -259,7 +259,7 @@ void MIDebuggerPlugin::slotExamineCore()
     // job->start() is called in registerJob
 }
 
-#if KF5SysGuard_FOUND
+#if HAVE_KSYSGUARD
 void MIDebuggerPlugin::slotAttachProcess()
 {
     showStatusMessage(i18n("Choose a process to attach to..."), 1000);

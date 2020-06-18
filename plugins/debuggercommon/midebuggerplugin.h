@@ -95,7 +95,7 @@ protected Q_SLOTS:
     void slotDebugExternalProcess(DBusProxy* proxy);
     void slotExamineCore();
 
-#if KF5SysGuard_FOUND
+#if HAVE_KSYSGUARD
     void slotAttachProcess();
 #endif
 

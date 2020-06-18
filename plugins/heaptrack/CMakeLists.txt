@@ -52,7 +52,12 @@ target_link_libraries(kdevheaptrack
     KDev::Project
     KDev::IExecute
 )
-if(KF5SysGuard_FOUND)
+if(KSysGuard_FOUND)
+    target_link_libraries(kdevheaptrack
+        kdevdebuggercommon
+        KSysGuard::ProcessUi
+    )
+elseif(KF5SysGuard_FOUND)
     target_link_libraries(kdevheaptrack
         kdevdebuggercommon
         KF5::ProcessUi

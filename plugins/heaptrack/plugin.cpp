@@ -26,7 +26,7 @@
 #include "visualizer.h"
 
 #include <config-kdevelop.h>
-#if KF5SysGuard_FOUND
+#if HAVE_KSYSGUARD
 #include "dialogs/processselection.h"
 #include <QPointer>
 #endif
@@ -66,7 +66,7 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
     connect(m_launchAction, &QAction::triggered, this, &Plugin::launchHeaptrack);
     actionCollection()->addAction(QStringLiteral("heaptrack_launch"), m_launchAction);
 
-#if KF5SysGuard_FOUND
+#if HAVE_KSYSGUARD
     m_attachAction = new QAction(
         QIcon::fromTheme(QStringLiteral("office-chart-area")),
         i18n("Attach to Process with Heaptrack"),
@@ -134,7 +134,7 @@ void Plugin::launchHeaptrack()
 
 void Plugin::attachHeaptrack()
 {
-#if KF5SysGuard_FOUND
+#if HAVE_KSYSGUARD
     QPointer<KDevMI::ProcessSelectionDialog> dlg = new KDevMI::ProcessSelectionDialog(activeMainWindow());
     if (!dlg->exec() || !dlg->pidSelected()) {
         delete dlg;

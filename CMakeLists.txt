@@ -70,11 +70,25 @@ find_package(KF5 ${KF5_DEP_VERSION} REQUIRED COMPONENTS
   Archive
   Notifications
 )
-find_package(KF5SysGuard CONFIG)
-set_package_properties(KF5SysGuard PROPERTIES
+
+set(HAVE_KSYSGUARD FALSE)
+find_package(KSysGuard CONFIG QUIET)
+set_package_properties(KSysGuard PROPERTIES
     PURPOSE "Framework for process listing. Required for the 'Attach to Process' feature"
     TYPE RECOMMENDED
 )
+if(NOT KSysGuard_FOUND)
+    # try old pre-Plasma 5.19 name
+    find_package(KF5SysGuard CONFIG)
+    set_package_properties(KF5SysGuard PROPERTIES
+        PURPOSE "Framework for process listing (older name of KSysGuard). Required for the 'Attach to Process' feature"
+        TYPE RECOMMENDED
+    )
+endif()
+if(KSysGuard_FOUND OR KF5SysGuard_FOUND)
+    set(HAVE_KSYSGUARD TRUE)
+endif()
+
 find_package(KDevelop-PG-Qt 1.90.90 CONFIG)
 set_package_properties(KDevelop-PG-Qt PROPERTIES
     PURPOSE "KDevelop parser generator library. Required for the QMake Builder/Manager plugin."
