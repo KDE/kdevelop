@@ -25,6 +25,7 @@
                 "Name[sv]": "Niko Sams",
                 "Name[tr]": "Niko Sams",
                 "Name[uk]": "Niko Sams",
+                "Name[x-test]": "xxNiko Samsxx",
                 "Name[zh_CN]": "Niko Sams"
             }
         ],
@@ -49,6 +50,7 @@
         "Description[sv]": "Insticksprogrammet gör det möjligt att köra skript.",
         "Description[tr]": "Bu eklenti betiklerin çalıştırılmasını sağlar.",
         "Description[uk]": "За допомогою цього додатка можна запускати скрипти.",
+        "Description[x-test]": "xxThis plugin allows running of scripts.xx",
         "Description[zh_CN]": "此插件可以执行脚本.",
         "Icon": "system-run",
         "Id": "kdevexecutescript",
@@ -76,6 +78,7 @@
         "Name[sv]": "Kör skript",
         "Name[tr]": "Betikleri Çalıştır",
         "Name[uk]": "Виконання скриптів",
+        "Name[x-test]": "xxExecute Scriptsxx",
         "Name[zh_CN]": "执行脚本",
         "ServiceTypes": [
             "KDevelop/Plugin"

@@ -25,6 +25,7 @@
                 "Name[sv]": "Alexander Dymo",
                 "Name[tr]": "Alexander Dymo",
                 "Name[uk]": "Олександр Димо",
+                "Name[x-test]": "xxAlexander Dymoxx",
                 "Name[zh_CN]": "Alexander Dymo"
             }
         ],
@@ -50,6 +51,7 @@
         "Description[sv]": "Programguide",
         "Description[tr]": "Uygulama Sihirbazı",
         "Description[uk]": "Майстер створення програм",
+        "Description[x-test]": "xxApplication Wizardxx",
         "Description[zh_CN]": "应用程序向导",
         "Icon": "project-development-new-template",
         "Id": "kdevappwizard",
@@ -76,6 +78,7 @@
         "Name[sv]": "Ny projektguide",
         "Name[tr]": "Yeni Proje Sihirbazı",
         "Name[uk]": "Майстер створення проєкту",
+        "Name[x-test]": "xxNew Project Wizardxx",
         "Name[zh_CN]": "新工程向导",
         "ServiceTypes": [
             "KDevelop/Plugin"

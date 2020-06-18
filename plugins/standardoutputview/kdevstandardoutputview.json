@@ -20,6 +20,7 @@
         "Description[sk]": "Poskytuje nástroj pohľadu na textový výstup pre iné pluginy na použitie, na zobrazenie informácií ako napríklad správy z prekladača.",
         "Description[sv]": "Tillhandahåller en verktygsvy för textutmatning som andra insticksprogram kan använda för att visa saker som kompilatormeddelanden.",
         "Description[uk]": "Забезпечує роботу панелі показу текстових даних інших додатків, зокрема попереджень компілятора.",
+        "Description[x-test]": "xxProvides a text output tool view for other plugins to use, to show things like compiler messages.xx",
         "Description[zh_CN]": "提供让其它插件使用的文本输出工具视图，以便显示诸如编译器消息的信息。",
         "Icon": "kdevelop",
         "Id": "KDevStandardOutputView",
@@ -46,6 +47,7 @@
         "Name[sv]": "Utmatningsvisning",
         "Name[tr]": "Çıktı Görünümü",
         "Name[uk]": "Перегляд виводу",
+        "Name[x-test]": "xxOutput Viewxx",
         "Name[zh_CN]": "输出视图",
         "ServiceTypes": [
             "KDevelop/Plugin"

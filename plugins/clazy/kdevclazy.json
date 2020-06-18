@@ -25,6 +25,7 @@
                 "Name[sv]": "Anton Anikin",
                 "Name[tr]": "Anton Anikin",
                 "Name[uk]": "Anton Anikin",
+                "Name[x-test]": "xxAnton Anikinxx",
                 "Name[zh_CN]": "Anton Anikin"
             }
         ],
@@ -47,6 +48,7 @@
         "Description[sk]": "Tento plugin integruje Clazy do KDevelop.",
         "Description[sv]": "Insticksprogrammet integrerar Clazy i KDevelop",
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Clazy до KDevelop",
+        "Description[x-test]": "xxThis plugin integrates Clazy to KDevelopxx",
         "Description[zh_CN]": "此插件整合 Clazy 到 KDevelop",
         "Icon": "clazy",
         "Id": "kdevclazy",
@@ -69,6 +71,7 @@
         "Name[sk]": "Podpora Clazy",
         "Name[sv]": "Clazy-stöd",
         "Name[uk]": "Підтримка Clazy",
+        "Name[x-test]": "xxClazy Supportxx",
         "Name[zh_CN]": "Clazy 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"

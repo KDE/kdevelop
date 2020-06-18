@@ -26,6 +26,7 @@
                 "Name[sv]": "Alex Richardson",
                 "Name[tr]": "Alex Richardson",
                 "Name[uk]": "Alex Richardson",
+                "Name[x-test]": "xxAlex Richardsonxx",
                 "Name[zh_CN]": "Alex Richardson"
             }
         ],
@@ -50,6 +51,7 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller en vy för att visa dispositionen av dokumentet som för närvarande är öppet.",
         "Description[tr]": "Bu eklenti mevcut açık dosyanın çerçevesini görüntülemeyi sağlar.",
         "Description[uk]": "За допомогою цього додатка можна переглянути схему поточного відкритого документа.",
+        "Description[x-test]": "xxThis plugin provides a view to show the outline of the currently open document.xx",
         "Description[zh_CN]": "此插件提供了一个当前显示当前打开文档的概要的视图。",
         "Icon": "code-class",
         "Id": "KDevOutlineView",
@@ -75,6 +77,7 @@
         "Name[sv]": "Disposition",
         "Name[tr]": "Çerçeve",
         "Name[uk]": "Схема",
+        "Name[x-test]": "xxOutlinexx",
         "Name[zh_CN]": "轮廓",
         "ServiceTypes": [
             "KDevelop/Plugin"

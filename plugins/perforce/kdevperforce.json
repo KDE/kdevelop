@@ -25,6 +25,7 @@
                 "Name[sv]": "Morten Danielsen Volden",
                 "Name[tr]": "Morten Danielsen Volden",
                 "Name[uk]": "Morten Danielsen Volden",
+                "Name[x-test]": "xxMorten Danielsen Voldenxx",
                 "Name[zh_CN]": "Morten Danielsen Volden"
             }
         ],
@@ -50,6 +51,7 @@
         "Description[sv]": "Tillhandahåller integrering med Perforce versionskontrollsystem",
         "Description[tr]": "Perforce Sürüm Denetim Sistemi ile Bütünleşme Sağlar",
         "Description[uk]": "Забезпечує інтеграцію з системою керування версіями Perforce",
+        "Description[x-test]": "xxProvides Integration with Perforce Version Control Systemxx",
         "Description[zh_CN]": "提供与 Perforce 版本控制系统的整合",
         "Icon": "kdevelop",
         "Id": "kdevperforce",
@@ -74,6 +76,7 @@
         "Name[sv]": "Perforce-stöd",
         "Name[tr]": "Perforce Desteği",
         "Name[uk]": "Підтримка Perforce",
+        "Name[x-test]": "xxPerforce Supportxx",
         "Name[zh_CN]": "Perforce 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"

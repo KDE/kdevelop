@@ -26,6 +26,7 @@
                 "Name[sv]": "David Nolden",
                 "Name[tr]": "David Nolden",
                 "Name[uk]": "David Nolden",
+                "Name[x-test]": "xxDavid Noldenxx",
                 "Name[zh_CN]": "David Nolden"
             }
         ],
@@ -51,6 +52,7 @@
         "Description[sv]": "Insticksprogrammet gör det möjligt att direkt granska programfixar i editorn.",
         "Description[tr]": "Bu eklenti yamaların doğrudan düzenleyici içerisinde gözden geçirilmesini sağlar.",
         "Description[uk]": "За допомогою цього додатка ви зможете рецензувати латки безпосередньо у редакторі.",
+        "Description[x-test]": "xxThis plugin allows reviewing patches directly in the editor.xx",
         "Description[zh_CN]": "此插件允许在编辑器中直接审阅补丁。",
         "Icon": "text-x-patch",
         "Id": "kdevpatchreview",
@@ -78,6 +80,7 @@
         "Name[sv]": "Granska programfixar",
         "Name[tr]": "Yama Gözden Geçirmesi",
         "Name[uk]": "Рецензування латки",
+        "Name[x-test]": "xxPatch Reviewxx",
         "Name[zh_CN]": "补丁审阅",
         "ServiceTypes": [
             "KDevelop/Plugin"

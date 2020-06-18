@@ -25,6 +25,7 @@
                 "Name[sv]": "Miha Čančula",
                 "Name[tr]": "Miha Čančula",
                 "Name[uk]": "Miha Čančula",
+                "Name[x-test]": "xxMiha Čančulaxx",
                 "Name[zh_CN]": "Miha Čančula"
             }
         ],
@@ -50,6 +51,7 @@
         "Description[sv]": "Låter dig titta på och köra enhetstester.",
         "Description[tr]": "Birim testlerini görmenizi ve çalıştırmanızı sağlar.",
         "Description[uk]": "Надає вам змогу переглядати і виконувати перевірки модулів.",
+        "Description[x-test]": "xxLets you see and run unit tests.xx",
         "Description[zh_CN]": "让您查看并运行单元测试。",
         "Icon": "preflight-verifier",
         "Id": "kdevtestview",
@@ -77,6 +79,7 @@
         "Name[sv]": "Visning av enhetstester",
         "Name[tr]": "Birim Test Görünümü",
         "Name[uk]": "Перегляд перевірок модулів",
+        "Name[x-test]": "xxUnit Test Viewxx",
         "Name[zh_CN]": "单元测试视图",
         "ServiceTypes": [
             "KDevelop/Plugin"

@@ -26,6 +26,7 @@
                 "Name[sv]": "David Nolden",
                 "Name[tr]": "David Nolden",
                 "Name[uk]": "David Nolden",
+                "Name[x-test]": "xxDavid Noldenxx",
                 "Name[zh_CN]": "David Nolden"
             }
         ],
@@ -51,6 +52,7 @@
         "Description[sv]": "Insticksprogrammet ger snabb åtkomst av projektfiler och språkobjekt som klasser och funktioner.",
         "Description[tr]": "Bu eklenti proje dosyalarına ve sınıflar/fonksiyonlar gibi dil öğelerine hızlı erişim sağlar.",
         "Description[uk]": "За допомогою цього додатка можна пришвидшити доступ до файлів проєктів і елементів мови на зразок класів або функцій.",
+        "Description[x-test]": "xxThis plugin allows quick access to project files and language-items like classes/functions.xx",
         "Description[zh_CN]": "此插件允许快速访问工程文件和诸如类/函数的语言工程。",
         "Icon": "quickopen",
         "Id": "kdevquickopen",
@@ -78,6 +80,7 @@
         "Name[sv]": "Snabböppna",
         "Name[tr]": "Hızlı Aç",
         "Name[uk]": "Швидке відкриття",
+        "Name[x-test]": "xxQuick Openxx",
         "Name[zh_CN]": "快速打开",
         "ServiceTypes": [
             "KDevelop/Plugin"

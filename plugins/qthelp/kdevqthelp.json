@@ -26,6 +26,7 @@
                 "Name[sv]": "Aleix Pol",
                 "Name[tr]": "Aleix Pol",
                 "Name[uk]": "Aleix Pol",
+                "Name[x-test]": "xxAleix Polxx",
                 "Name[zh_CN]": "Aleix Pol"
             }
         ],
@@ -51,6 +52,7 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller integrering av QtHelp",
         "Description[tr]": "Bu ekleneti QtHelp tümleştirmesi sağlar",
         "Description[uk]": "За допомогою цього додатка здійснюється інтеграція з QtHelp",
+        "Description[x-test]": "xxThis plugin provides QtHelp integrationxx",
         "Description[zh_CN]": "此插件提供了 QtHelp 整合",
         "Icon": "qtlogo",
         "Id": "kdevqthelp",
@@ -77,6 +79,7 @@
         "Name[sv]": "Qt-dokumentation",
         "Name[tr]": "Qt Belgelendirmesi",
         "Name[uk]": "Документація з Qt",
+        "Name[x-test]": "xxQt Documentationxx",
         "Name[zh_CN]": "Qt 文档",
         "ServiceTypes": [
             "KDevelop/Plugin"
