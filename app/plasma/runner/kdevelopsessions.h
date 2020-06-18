@@ -45,6 +45,7 @@ class KDevelopSessions : public Plasma::AbstractRunner {
 
     private:
         QVector<Session> m_sessions;
+        Plasma::DataEngine* m_engine;
 };
 
 #endif
