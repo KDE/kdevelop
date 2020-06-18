@@ -26,6 +26,7 @@
                 "Name[sv]": "Anton Anikin",
                 "Name[tr]": "Anton Anikin",
                 "Name[uk]": "Anton Anikin",
+                "Name[x-test]": "xxAnton Anikinxx",
                 "Name[zh_CN]": "Anton Anikin"
             }
         ],
@@ -52,6 +53,7 @@
         "Description[sv]": "Insticksprogrammet integrerar Heaptrack i KDevelop",
         "Description[tr]": "Bu eklenti Heaptrack uygulamasını KDevelop ile bütünleştirir",
         "Description[uk]": "За допомогою цього додатка можна інтегрувати Heaptrack до KDevelop",
+        "Description[x-test]": "xxThis plugin integrates Heaptrack to KDevelopxx",
         "Description[zh_CN]": "此插件将 Heaptrack 整合到 KDevelop",
         "Icon": "office-chart-area",
         "Id": "kdevheaptrack",
@@ -78,6 +80,7 @@
         "Name[sv]": "Heaptrack-stöd",
         "Name[tr]": "Heaptrack Desteği",
         "Name[uk]": "Підтримка Heaptrack",
+        "Name[x-test]": "xxHeaptrack Supportxx",
         "Name[zh_CN]": "Heaptrack 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"

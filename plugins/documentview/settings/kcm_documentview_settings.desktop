@@ -40,6 +40,7 @@ Name[sv]=Dokumentvisning
 Name[tr]=Belge Görünümü
 Name[ug]=پۈتۈك كۆرۈنۈشى
 Name[uk]=Перегляд документів
+Name[x-test]=xxDocument Viewxx
 Name[zh_CN]=文档视图
 Name[zh_TW]=文件檢視
 Comment=Configure Document View settings
@@ -73,6 +74,7 @@ Comment[sl]=Nastavite možnosti za Prikaz dokumentov
 Comment[sv]=Anpassa inställningar av dokumentvisning
 Comment[tr]=Belge Görünümü Ayarlarını Yapılandır
 Comment[uk]=Налаштувати параметри перегляду документа
+Comment[x-test]=xxConfigure Document View settingsxx
 Comment[zh_CN]=配置文档视图设置
 Comment[zh_TW]=設定文件檢視
 

@@ -34,6 +34,7 @@ Name[sv]=KDevelop-sessioner
 Name[tr]=KDevelop Oturumları
 Name[ug]=KDevelop ئەڭگىمەلىرى
 Name[uk]=Сеанси KDevelop
+Name[x-test]=xxKDevelop Sessionsxx
 Name[zh_CN]=KDevelop 会话
 Name[zh_TW]=KDevelop 工作階段
 Comment=List and launch KDevelop sessions
@@ -68,6 +69,7 @@ Comment[sl]=Seznam in zagon sej za KDevelop
 Comment[sv]=Lista och starta KDevelop-sessioner
 Comment[tr]=KDevelop oturumlarını listele ve başlat
 Comment[uk]=Показ списку і запуск сеансів KDevelop
+Comment[x-test]=xxList and launch KDevelop sessionsxx
 Comment[zh_CN]=列出并启动 KDevelop 会话
 Comment[zh_TW]=列出並啟動 KDevelop 工作階段
 

@@ -21,6 +21,7 @@ Name[sl]=Predloge programov (SDK)
 Name[sv]=Programmallar (SDK)
 Name[tr]=Uygulama Şablonları (SDK)
 Name[uk]=Шаблони програм (SDK)
+Name[x-test]=xxApplication Templates (SDK)xx
 Name[zh_CN]=应用程序模板 (SDK)
 
 ProvidersUrl=https://autoconfig.kde.org/ocs/providers.xml

@@ -21,6 +21,7 @@ Name[sl]=Predloge datotek (SDK)
 Name[sv]=Filmallar (SDK)
 Name[tr]=Dosya Şablonları (SDK)
 Name[uk]=Шаблони файлів (SDK)
+Name[x-test]=xxFile Templates (SDK)xx
 Name[zh_CN]=文件模板 (SDK)
 
 ProvidersUrl=https://autoconfig.kde.org/ocs/providers.xml

@@ -23,6 +23,7 @@
         "Description[sv]": "Insticksprogrammet tillhandahåller ett gränssnitt till LLDB, nästa generations avlusare för C, Obj-C, C++ med hög prestanda.",
         "Description[tr]": "Bu eklenti gelecek nesil, yüksek performanslı C/Obj-C/C++ hata ayıklayıcı olan LLDB için ön yüz sağlar.",
         "Description[uk]": "Цей додаток є обгорткою до LLDB, високошвидкісного засобу діагностики коду мовами C/Obj-C/C++.",
+        "Description[x-test]": "xxThis plugin provides a frontend for LLDB, a next generation, high-performance C/Obj-C/C++ debugger.xx",
         "Description[zh_CN]": "此插件提供了 GDB 前端，GDB 是一个源码级的 C、C++ 等多语言的调试器。",
         "Icon": "kdevelop",
         "Id": "kdevlldb",
@@ -49,6 +50,7 @@
         "Name[sv]": "LLDB-stöd",
         "Name[tr]": "LLDB Desteği",
         "Name[uk]": "Підтримка LLDB",
+        "Name[x-test]": "xxLLDB Supportxx",
         "Name[zh_CN]": "LLDB 支持",
         "ServiceTypes": [
             "KDevelop/Plugin"
