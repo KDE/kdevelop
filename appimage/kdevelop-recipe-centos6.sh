@@ -389,7 +389,7 @@ cp /kdevelop.appdir/usr/lib/libexec/kf5/* /kdevelop.appdir/usr/bin/
 
 cd /
 if [ ! -d appimage-exec-wrapper ]; then
-    git clone git://anongit.kde.org/scratch/brauch/appimage-exec-wrapper
+    git clone https://invent.kde.org/brauch/appimage-exec-wrapper.git
 fi;
 cd /appimage-exec-wrapper/
 make clean
