@@ -207,7 +207,7 @@ fi
 # KDE Plasma
 build_kde_project plasma/libksysguard $PLASMA_VERSION
 build_kde_project plasma/kdecoration $PLASMA_VERSION # needed by breeze
-(PATCH_FILE=$SCRIPT_DIR/breeze-noconstexpr.patch build_kde_project breeze $PLASMA_VERSION)
+(PATCH_FILE=$SCRIPT_DIR/breeze-noconstexpr.patch build_kde_project plasma/breeze $PLASMA_VERSION)
 
 # KDE Applications
 build_kde_project sdk/libkomparediff2 $KDE_RELEASESERVICE_VERSION
@@ -225,7 +225,7 @@ build_kde_project kdevelop/kdev-php $KDEVELOP_VERSION
 
 # Build kdev-python
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH/kdevelop.appdir/usr/lib/
-build_kde_project kdev-python $KDEVELOP_VERSION
+build_kde_project kdevelop/kdev-python $KDEVELOP_VERSION
 
 # Install some colorschemes
 cd $BUILD
