@@ -242,7 +242,7 @@ class QMapPrinter:
             if gdb.parse_and_eval:
                 ret = int(gdb.parse_and_eval('QMap<%s, %s>::payload()' % (self.ktype, self.vtype)))
                 if (ret): return ret;
-            
+
             #if the inferior function call didn't work, let's try to calculate ourselves
 
             #we can't use QMapPayloadNode as it's inlined
@@ -261,7 +261,7 @@ class QMapPrinter:
                 ret += 2
 
             ret -= gdb.lookup_type('void').pointer().sizeof
-            
+
             return ret
 
         def concrete (self, data_node):
@@ -681,6 +681,113 @@ class QUuidPrinter:
     def display_hint (self):
         return 'string'
 
+class QVariantPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        d = self.val['d']
+
+        if d['is_null']:
+            return "QVariant(NULL)"
+
+        data = d['data']
+        data_type = d['type']
+        is_shared = d['is_shared']        
+
+        data_type_names = {
+            # 0: "Invalid", not a type name 
+            1: "bool",
+            2: "int",
+            3: "uint",
+            4: "qlonglong",
+            5: "qulonglong",
+            6: "double",
+            7: "QChar",
+            8: "QVariantMap",
+            9: "QVariantList",
+            10: "QString",
+            11: "QStringList",
+            12: "QByteArray",
+            13: "QBitArray",
+            14: "QDate",
+            15: "QTime",
+            16: "QDateTime",
+            17: "QUrl",
+            18: "QLocale",
+            19: "QRect",
+            20: "QRectF",
+            21: "QSize",
+            22: "QSizeF",
+            23: "QLine",
+            24: "QLineF",
+            25: "QPoint",
+            26: "QPointF",
+            27: "QRegExp",
+            28: "QVariantHash",
+            29: "QEasingCurve",
+            30: "QUuid",
+            # 31: "VoidStar", not a type name
+            32: "long",
+            33: "short",
+            34: "char",
+            35: "ulong",
+            36: "ushort",
+            37: "uchar",
+            38: "float",
+            40: "signed char",
+            42: "QModelIndex",
+            43: "void",
+            44: "QRegularExpression",
+            50: "QPersistentModelIndex",
+            51: "std::nullptr_t",
+            64: "QFont",
+            65: "QPixmap",
+            66: "QBrush",
+            67: "QColor",
+            68: "QPalette",
+            69: "QIcon",
+            70: "QImage",
+            71: "QPolygon",
+            72: "QRegion",
+            73: "QBitmap",
+            74: "QCursor",
+            75: "QKeySequence",
+            76: "QPen",
+            77: "QTextLength",
+            78: "QTextFormat",
+            79: "QMatrix",
+            80: "QTransform2",
+            81: "QMatrix4x4",
+            82: "QVector2D",
+            83: "QVector3D2",
+            84: "QVector4D",
+            85: "QQuaternion",
+            86: "QPolygonF",
+            121: "QSizePolicy"
+            # 1024: "QUserType" not a type name
+        }
+
+        type_str = data_type_names.get(int(data_type), "type = %d" % data_type)
+        value_str = ""
+
+        if is_shared:
+            private_shared = data['shared'].dereference()
+            value_str = "PrivateShared(%s)" % hex(private_shared['ptr'])
+        elif type_str.startswith("type = "):
+            value_str = str(data['ptr']);
+        else:
+            type_obj = gdb.lookup_type(type_str);
+            if type_obj.sizeof > type_obj.pointer().sizeof:
+                value_ptr = data['ptr'].reinterpret_cast(gdb.lookup_type(type_str).const().pointer())
+                value_str = str(value_ptr.dereference());
+            else: 
+                value_ptr = data['c'].address.reinterpret_cast(gdb.lookup_type(type_str).const().pointer())
+                value_str = str(value_ptr.dereference());
+
+        return "QVariant(%s, %s)" % (type_str, value_str)
+
 pretty_printers_dict = {}
 
 def register_qt_printers (obj):
@@ -709,6 +816,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QSet<.*>$')] = lambda val: QSetPrinter(val)
     pretty_printers_dict[re.compile('^QChar$')] = lambda val: QCharPrinter(val)
     pretty_printers_dict[re.compile('^QUuid')] = lambda val: QUuidPrinter(val)
+    pretty_printers_dict[re.compile('^QVariant')] = lambda val: QVariantPrinter(val)
 
 
 build_dictionary ()
