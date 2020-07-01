@@ -453,6 +453,15 @@ void QtPrintersTest::testQUuid()
     QVERIFY(data.contains("{9ec3b70b-d105-42bf-b3b4-656e44d2e223}"));
 }
 
+void QtPrintersTest::testQVariant()
+{
+    GdbProcess gdb(QStringLiteral("debuggee_qvariant"));
+    gdb.execute("break qvariant.cpp:5");
+    gdb.execute("run");
+    QByteArray data = gdb.execute("print v");
+    QVERIFY(data.contains("QVariant(QString, \"KDevelop\")"));
+}
+
 void QtPrintersTest::testKTextEditorTypes()
 {
     GdbProcess gdb(QStringLiteral("debuggee_ktexteditortypes"));

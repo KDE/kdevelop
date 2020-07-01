@@ -83,6 +83,9 @@ target_link_libraries(debuggee_qchar Qt5::Core)
 add_debuggable_executable(debuggee_quuid SRCS quuid.cpp)
 target_link_libraries(debuggee_quuid Qt5::Core)
 
+add_debuggable_executable(debuggee_qvariant SRCS qvariant.cpp)
+target_link_libraries(debuggee_qvariant Qt5::Core)
+
 add_debuggable_executable(debuggee_qlistpod SRCS qlistpod.cpp)
 target_link_libraries(debuggee_qlistpod Qt5::Core)
 

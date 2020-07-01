@@ -242,7 +242,7 @@ class QMapPrinter:
             if gdb.parse_and_eval:
                 ret = int(gdb.parse_and_eval('QMap<%s, %s>::payload()' % (self.ktype, self.vtype)))
                 if (ret): return ret;
-            
+
             #if the inferior function call didn't work, let's try to calculate ourselves
 
             #we can't use QMapPayloadNode as it's inlined
@@ -261,7 +261,7 @@ class QMapPrinter:
                 ret += 2
 
             ret -= gdb.lookup_type('void').pointer().sizeof
-            
+
             return ret
 
         def concrete (self, data_node):
@@ -681,6 +681,50 @@ class QUuidPrinter:
     def display_hint (self):
         return 'string'
 
+class QVariantPrinter:
+
+    def __init__(self, val):
+        self.val = val
+
+    def to_string(self):
+        d = self.val['d']
+
+        if d['is_null']:
+            return "QVariant(NULL)"
+
+        data_type = d['type']
+        type_str = ("type = %d" % data_type)
+        try:
+            typeAsCharPointer = (gdb.parse_and_eval("QVariant::typeToName(%d)" % data_type).cast(gdb.lookup_type("char").pointer()))
+            if typeAsCharPointer:
+                type_str = typeAsCharPointer.string(encoding = 'UTF-8')
+        except Exception as e:
+            pass
+
+        data = d['data']
+        is_shared = d['is_shared']
+        value_str = ""
+        if is_shared:
+            private_shared = data['shared'].dereference()
+            value_str = "PrivateShared(%s)" % hex(private_shared['ptr'])
+        elif type_str.startswith("type = "):
+            value_str = str(data['ptr'])
+        else:
+            type_obj = None
+            try:
+                type_obj = gdb.lookup_type(type_str)
+            except Exception as e:
+                value_str = str(data['ptr'])
+            if type_obj:
+                if type_obj.sizeof > type_obj.pointer().sizeof:
+                    value_ptr = data['ptr'].reinterpret_cast(type_obj.const().pointer())
+                    value_str = str(value_ptr.dereference())
+                else: 
+                    value_ptr = data['c'].address.reinterpret_cast(type_obj.const().pointer())
+                    value_str = str(value_ptr.dereference())
+
+        return "QVariant(%s, %s)" % (type_str, value_str)
+
 pretty_printers_dict = {}
 
 def register_qt_printers (obj):
@@ -709,6 +753,7 @@ def build_dictionary ():
     pretty_printers_dict[re.compile('^QSet<.*>$')] = lambda val: QSetPrinter(val)
     pretty_printers_dict[re.compile('^QChar$')] = lambda val: QCharPrinter(val)
     pretty_printers_dict[re.compile('^QUuid')] = lambda val: QUuidPrinter(val)
+    pretty_printers_dict[re.compile('^QVariant')] = lambda val: QVariantPrinter(val)
 
 
 build_dictionary ()
