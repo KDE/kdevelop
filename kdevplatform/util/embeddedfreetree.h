@@ -310,7 +310,7 @@ public:
         //Create a new list where the items from m_items are put into newItems, with the free items evenly
         //distributed, and a clean balanced free-tree.
         uint newFreeCount = newCount - currentRealCount;
-        volatile uint freeItemRaster;
+        uint freeItemRaster;
         if (newFreeCount)
             freeItemRaster = newCount / newFreeCount;
         else {

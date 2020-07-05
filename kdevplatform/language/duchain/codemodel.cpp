@@ -254,7 +254,7 @@ void CodeModel::addItem(const IndexedString& file, const IndexedQualifiedIdentif
     Q_ASSERT(!d->m_repository.findIndex(request));
 
     //This inserts the changed item
-    volatile uint newIndex = d->m_repository.index(request);
+    const uint newIndex = d->m_repository.index(request);
     Q_UNUSED(newIndex);
     ifDebug(qCDebug(LANGUAGE) << "new index" << newIndex; )
 
