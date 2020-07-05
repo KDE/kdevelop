@@ -4,6 +4,8 @@
 #include <QThread>
 #include <QUrl>
 
+#include <atomic>
+
 class GrepFindFilesThread : public QThread
 {
     Q_OBJECT
@@ -58,8 +60,8 @@ private:
     QString m_exclString;
     int m_depth;
     bool m_project;
+    std::atomic<bool> m_tryAbort;
     QList<QUrl> m_files;
-    volatile bool m_tryAbort;
     // creating with no parameters would be bad
     GrepFindFilesThread();
 };
