@@ -154,8 +154,13 @@ void GrepFindFilesThread::run()
     }
 }
 
-QList<QUrl> GrepFindFilesThread::files() const {
-    auto tmpList = m_files;
+QList<QUrl> GrepFindFilesThread::takeFiles()
+{
+    Q_ASSERT(isFinished());
+
+    QList<QUrl> tmpList;
+    m_files.swap(tmpList);
+
     std::sort(tmpList.begin(), tmpList.end());
     tmpList.erase(std::unique(tmpList.begin(), tmpList.end()), tmpList.end());
     return tmpList;

@@ -107,7 +107,8 @@ void GrepJob::slotFindFinished()
 {
     if(m_findThread && !m_findThread->triesToAbort())
     {
-        m_fileList = m_findThread->files();
+        Q_ASSERT(m_findThread->isFinished());
+        m_fileList = m_findThread->takeFiles();
         delete m_findThread;
     }
     else

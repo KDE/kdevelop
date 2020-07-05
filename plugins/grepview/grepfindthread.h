@@ -22,10 +22,12 @@ public:
                     const QString &patterns, const QString &exclusions,
                     bool onlyProject);
     /**
-     * @brief Returns the list of found files
-     * @return List of found files
+     * @note This function may be called only after run() returns, e.g. in a slot
+     *       connected to QThread::finished().
+     * @return The list of found files when called for the first time;
+     *         an empty list on subsequent calls.
      */
-    QList<QUrl> files() const;
+    QList<QUrl> takeFiles();
     /**
      * @brief Sets the internal m_tryAbort flag to @c true
      * @note It is not guaranteed that the thread stops its work immediately.
