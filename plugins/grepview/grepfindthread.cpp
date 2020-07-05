@@ -164,7 +164,7 @@ void GrepFindFilesThread::run()
     qCDebug(PLUGIN_GREPVIEW) << "running with start dir" << m_startDirs;
 
     FileFinder finder(include, exclude, m_tryAbort);
-    for (const QUrl& directory : qAsConst(m_startDirs)) {
+    for (const QUrl& directory : m_startDirs) {
         if (m_project) {
             finder.getProjectFiles(directory, m_depth, m_files);
         } else {

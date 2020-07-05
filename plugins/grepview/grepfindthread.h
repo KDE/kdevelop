@@ -55,11 +55,11 @@ public:
 protected:
     void run() override;
 private:
-    QList<QUrl> m_startDirs;
-    QString m_patString;
-    QString m_exclString;
-    int m_depth;
-    bool m_project;
+    const QList<QUrl> m_startDirs;
+    const QString m_patString;
+    const QString m_exclString;
+    const int m_depth;
+    const bool m_project;
     std::atomic<bool> m_tryAbort;
     QList<QUrl> m_files;
     // creating with no parameters would be bad
