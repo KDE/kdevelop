@@ -1,0 +1,2 @@
+module org.kde.plasma.private.kdevelopsessions
+plugin kdevelopsessionsplugin

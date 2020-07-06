@@ -1,4 +1,5 @@
-add_subdirectory(dataengine)
+add_subdirectory(kdevelopsessionswatch)
+
 add_subdirectory(applet)
 
 find_package(KF5Runner CONFIG)

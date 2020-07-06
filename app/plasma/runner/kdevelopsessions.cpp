@@ -19,17 +19,14 @@
 
 #include "kdevelopsessions.h"
 
-#include <QCollator>
-#include <QDir>
-#include <QDebug>
-#include <QFile>
-#include <QStandardPaths>
+// KDevelopSessionsWatch
+#include <kdevelopsessionswatch.h>
+// KF
 #include <KLocalizedString>
 #include <krunner_version.h>
-#include <KDirWatch>
-#include <KToolInvocation>
-#include <DataEngine>
-#include <DataContainer>
+// Qt
+#include <QDebug>
+#include <QCollator>
 
 #if KRUNNER_VERSION >= QT_VERSION_CHECK(5, 72, 0)
 K_EXPORT_PLASMA_RUNNER_WITH_JSON(KDevelopSessions, "kdevelopsessions.json")
@@ -42,9 +39,7 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
 {
     setObjectName(QStringLiteral("KDevelop Sessions"));
     setIgnoredTypes(Plasma::RunnerContext::File | Plasma::RunnerContext::Directory | Plasma::RunnerContext::NetworkLocation);
-    m_engine = dataEngine(QStringLiteral("org.kde.kdevelopsessions"));
 
-    connect(this, &KDevelopSessions::prepare, this, &KDevelopSessions::loadSessions);
     Plasma::RunnerSyntax s(QStringLiteral(":q:"), i18n("Finds KDevelop sessions matching :q:."));
     s.addExampleQuery(QStringLiteral("kdevelop :q:"));
     addSyntax(s);
@@ -52,23 +47,21 @@ KDevelopSessions::KDevelopSessions(QObject *parent, const QVariantList& args)
     setDefaultSyntax(Plasma::RunnerSyntax(QStringLiteral("kdevelop"), i18n("Lists all the KDevelop editor sessions in your account.")));
 }
 
-KDevelopSessions::~KDevelopSessions() = default;
-
-void KDevelopSessions::loadSessions()
+KDevelopSessions::~KDevelopSessions()
 {
-    m_sessions.clear();
-    // Switch kdevelop session: -u
-    // Should we add a match for this option or would that clutter the matches too much?
-    const QStringList list = m_engine->sources();
-    m_sessions.reserve(list.size());
-    for (const QString& sessionFile : list) {
-        const Plasma::DataEngine::Data data = m_engine->containerForSource(sessionFile)->data();
-        Session session;
-        session.id = sessionFile;
-        session.name = data.value(QStringLiteral("sessionString")).toString();
-        m_sessions << session;
-    }
-    suspendMatching(m_sessions.isEmpty());
+    KDevelopSessionsWatch::unregisterObserver(this);
+}
+
+void KDevelopSessions::init()
+{
+    KDevelopSessionsWatch::registerObserver(this);
+
+    Plasma::AbstractRunner::init();
+}
+
+void KDevelopSessions::setSessionDataList(const QVector<KDevelopSessionData>& sessionDataList)
+{
+    m_sessionDataList = sessionDataList;
 }
 
 void KDevelopSessions::match(Plasma::RunnerContext &context)
@@ -89,19 +82,19 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
         return;
     }
 
-    for (const Session& session : qAsConst(m_sessions)) {
+    for (const auto& session : qAsConst(m_sessionDataList)) {
         if (!context.isValid()) {
             return;
         }
 
-        if (listAll || (!term.isEmpty() && session.name.contains(term, Qt::CaseInsensitive))) {
+        if (listAll || (!term.isEmpty() && session.description.contains(term, Qt::CaseInsensitive))) {
             Plasma::QueryMatch match(this);
             if (listAll) {
                 // All sessions listed, but with a low priority
                 match.setType(Plasma::QueryMatch::ExactMatch);
                 match.setRelevance(0.8);
             } else {
-                if (session.name.compare(term, Qt::CaseInsensitive) == 0) {
+                if (session.description.compare(term, Qt::CaseInsensitive) == 0) {
                     // parameter to kdevelop matches session exactly, bump it up!
                     match.setType(Plasma::QueryMatch::ExactMatch);
                     match.setRelevance(1.0);
@@ -113,7 +106,7 @@ void KDevelopSessions::match(Plasma::RunnerContext &context)
             }
             match.setIconName(QStringLiteral("kdevelop"));
             match.setData(session.id);
-            match.setText(session.name);
+            match.setText(session.description);
             match.setSubtext(i18n("Open KDevelop Session"));
             context.addMatch(match);
         }
@@ -125,8 +118,7 @@ void KDevelopSessions::run(const Plasma::RunnerContext &context, const Plasma::Q
     Q_UNUSED(context)
     const QString sessionId = match.data().toString();
     qDebug() << "Open KDevelop session" << sessionId;
-    const QStringList args = {QStringLiteral("--open-session"), sessionId};
-    KToolInvocation::kdeinitExec(QStringLiteral("kdevelop"), args);
+    KDevelopSessionsWatch::openSession(sessionId);
 }
 
 #include "kdevelopsessions.moc"

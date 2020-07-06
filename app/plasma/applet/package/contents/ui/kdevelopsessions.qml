@@ -22,6 +22,8 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.plasmoid 2.0
 
+import org.kde.plasma.private.kdevelopsessions 1.0 as KDevelopSessions
+
 Item {
    id: kdevelopSessions
 
@@ -33,19 +35,10 @@ Item {
             view.forceActiveFocus();
     }
 
-    PlasmaCore.DataSource {
-        id: sessionsSource
-        engine: "org.kde.kdevelopsessions"
-        onSourceAdded: connectSource(source)
-        onSourceRemoved: disconnectSource(source)
-
-        Component.onCompleted: connectedSources = sources
-    }
-
-    PlasmaCore.DataModel {
+    KDevelopSessions.SessionListModel {
         id: sessionsModel
-        dataSource: sessionsSource
     }
+
 
     Component.onCompleted: {
         plasmoid.popupIcon = "kdevelop";
@@ -102,7 +95,6 @@ Item {
         model: PlasmaCore.SortFilterModel {
             id: filterModel
             sourceModel: sessionsModel
-            sortRole: "sessionString"
         }
         clip: true
         focus: true
@@ -117,9 +109,7 @@ Item {
             }
 
             function openSession() {
-                var service = sessionsSource.serviceForSource(model["DataEngineSource"])
-                var operation = service.operationDescription("open")
-                var job = service.startOperationCall(operation)
+                sessionsModel.openSession(sessionId);
                 plasmoid.expanded = false
             }
 
@@ -135,7 +125,7 @@ Item {
                 }
 
                 verticalAlignment: Text.AlignVCenter
-                text: model.sessionString
+                text: model.display
                 elide: Text.ElideRight
             }
 
