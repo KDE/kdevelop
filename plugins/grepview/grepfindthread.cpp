@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <queue>
 #include <utility>
 
 using KDevelop::IndexedString;
@@ -48,7 +49,8 @@ public:
         , m_abort{abort}
     {}
 
-    void getProjectFiles(const QUrl& dir, int depth, QList<QUrl>& results);
+    void getProjectFiles(const QSet<IndexedString>& projectFileSet,
+                         const QUrl& dir, int depth, QList<QUrl>& results);
     void findFiles(const QDir& dir, int depth, QList<QUrl>& results);
 
 private:
@@ -59,15 +61,10 @@ private:
     const std::atomic<bool>& m_abort;
 };
 
-void FileFinder::getProjectFiles(const QUrl& dir, int depth, QList<QUrl>& results)
+void FileFinder::getProjectFiles(const QSet<IndexedString>& projectFileSet,
+                                 const QUrl& dir, int depth, QList<QUrl>& results)
 {
-    ///@todo This is not thread-safe!
-    KDevelop::IProject *project = KDevelop::ICore::self()->projectController()->findProjectForUrl( dir );
-    if(!project)
-        return;
-
-    const QSet<IndexedString> fileSet = project->fileSet();
-    for (const IndexedString& item : fileSet) {
+    for (const IndexedString& item : projectFileSet) {
         if (shouldAbort()) {
             break;
         }
@@ -129,16 +126,30 @@ void FileFinder::findFiles(const QDir& dir, int depth, QList<QUrl>& results)
     }
 }
 
+using FileSetCollection = std::queue<QSet<IndexedString>>;
+
+FileSetCollection getProjectFileSets(const QList<QUrl>& dirs)
+{
+    FileSetCollection fileSets;
+    for (const QUrl& dir : dirs) {
+        const auto* const project = KDevelop::ICore::self()->projectController()->findProjectForUrl(dir);
+        // Store an empty file set when project==nullptr because each element
+        // of fileSets must correspond to an element of dirs at the same index.
+        fileSets.push(project ? project->fileSet() : FileSetCollection::value_type{});
+    }
+    return fileSets;
+}
+
 } // namespace
 
 class GrepFindFilesThreadPrivate
 {
 public:
     const QList<QUrl> m_startDirs;
+    FileSetCollection m_projectFileSets;
     const QString m_patString;
     const QString m_exclString;
     const int m_depth;
-    const bool m_project;
     std::atomic<bool> m_tryAbort;
     QList<QUrl> m_files;
 };
@@ -149,8 +160,10 @@ GrepFindFilesThread::GrepFindFilesThread(QObject* parent,
                                          const QString& excl,
                                          bool onlyProject)
     : QThread(parent)
-    , d_ptr(new GrepFindFilesThreadPrivate{startDirs, pats, excl, depth,
-                                           onlyProject, {false}, {}})
+    , d_ptr(new GrepFindFilesThreadPrivate{
+                startDirs,
+                onlyProject ? getProjectFileSets(startDirs) : FileSetCollection{},
+                pats, excl, depth, {false}, {}})
 {
     setTerminationEnabled(false);
 }
@@ -181,11 +194,19 @@ void GrepFindFilesThread::run()
     qCDebug(PLUGIN_GREPVIEW) << "running with start dir" << d->m_startDirs;
 
     FileFinder finder(include, exclude, d->m_tryAbort);
+    // m_projectFileSets contains a project file set for each element of m_startDirs at a
+    // corresponding index if this search is limited to project files; is empty otherwise.
+    Q_ASSERT(d->m_projectFileSets.empty() ||
+                d->m_projectFileSets.size() == static_cast<std::size_t>(d->m_startDirs.size()));
     for (const QUrl& directory : d->m_startDirs) {
-        if (d->m_project) {
-            finder.getProjectFiles(directory, d->m_depth, d->m_files);
-        } else {
+        if (d->m_projectFileSets.empty()) {
             finder.findFiles(directory.toLocalFile(), d->m_depth, d->m_files);
+        } else {
+            finder.getProjectFiles(d->m_projectFileSets.front(), directory, d->m_depth, d->m_files);
+            // Removing the no longer needed file set from the collection as
+            // soon as possible may save some memory or prevent a copy on write
+            // if the project's file set is changed during the search.
+            d->m_projectFileSets.pop();
         }
     }
 }
