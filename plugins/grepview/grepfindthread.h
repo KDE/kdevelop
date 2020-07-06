@@ -1,10 +1,11 @@
 #ifndef KDEVPLATFORM_PLUGIN_GREPFINDTHREAD_H
 #define KDEVPLATFORM_PLUGIN_GREPFINDTHREAD_H
 
+#include <QScopedPointer>
 #include <QThread>
 #include <QUrl>
 
-#include <atomic>
+class GrepFindFilesThreadPrivate;
 
 class GrepFindFilesThread : public QThread
 {
@@ -23,6 +24,9 @@ public:
     GrepFindFilesThread(QObject *parent, const QList<QUrl> &startDirs, int depth,
                     const QString &patterns, const QString &exclusions,
                     bool onlyProject);
+
+    ~GrepFindFilesThread() override;
+
     /**
      * @note This function may be called only after run() returns, e.g. in a slot
      *       connected to QThread::finished().
@@ -54,16 +58,10 @@ public:
     
 protected:
     void run() override;
+
 private:
-    const QList<QUrl> m_startDirs;
-    const QString m_patString;
-    const QString m_exclString;
-    const int m_depth;
-    const bool m_project;
-    std::atomic<bool> m_tryAbort;
-    QList<QUrl> m_files;
-    // creating with no parameters would be bad
-    GrepFindFilesThread();
+    const QScopedPointer<class GrepFindFilesThreadPrivate> d_ptr;
+    Q_DECLARE_PRIVATE(GrepFindFilesThread)
 };
 
 #endif

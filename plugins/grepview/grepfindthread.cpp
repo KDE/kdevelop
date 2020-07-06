@@ -14,6 +14,7 @@
 #include <util/wildcardhelpers.h>
 
 #include <algorithm>
+#include <atomic>
 #include <utility>
 
 using KDevelop::IndexedString;
@@ -130,55 +131,72 @@ void FileFinder::findFiles(const QDir& dir, int depth, QList<QUrl>& results)
 
 } // namespace
 
+class GrepFindFilesThreadPrivate
+{
+public:
+    const QList<QUrl> m_startDirs;
+    const QString m_patString;
+    const QString m_exclString;
+    const int m_depth;
+    const bool m_project;
+    std::atomic<bool> m_tryAbort;
+    QList<QUrl> m_files;
+};
+
 GrepFindFilesThread::GrepFindFilesThread(QObject* parent,
                                          const QList<QUrl>& startDirs,
                                          int depth, const QString& pats,
                                          const QString& excl,
                                          bool onlyProject)
-: QThread(parent)
-, m_startDirs(startDirs)
-, m_patString(pats)
-, m_exclString(excl)
-, m_depth(depth)
-, m_project(onlyProject)
-, m_tryAbort(false)
+    : QThread(parent)
+    , d_ptr(new GrepFindFilesThreadPrivate{startDirs, pats, excl, depth,
+                                           onlyProject, {false}, {}})
 {
     setTerminationEnabled(false);
 }
 
+GrepFindFilesThread::~GrepFindFilesThread() = default;
+
 void GrepFindFilesThread::tryAbort()
 {
-    m_tryAbort.store(true, std::memory_order_relaxed);
+    Q_D(GrepFindFilesThread);
+
+    d->m_tryAbort.store(true, std::memory_order_relaxed);
 }
 
 bool GrepFindFilesThread::triesToAbort() const
 {
-    return m_tryAbort.load(std::memory_order_relaxed);
+    Q_D(const GrepFindFilesThread);
+
+    return d->m_tryAbort.load(std::memory_order_relaxed);
 }
 
 void GrepFindFilesThread::run()
 {
-    QStringList include = GrepFindFilesThread::parseInclude(m_patString);
-    QStringList exclude = GrepFindFilesThread::parseExclude(m_exclString);
+    Q_D(GrepFindFilesThread);
 
-    qCDebug(PLUGIN_GREPVIEW) << "running with start dir" << m_startDirs;
+    const QStringList include = GrepFindFilesThread::parseInclude(d->m_patString);
+    const QStringList exclude = GrepFindFilesThread::parseExclude(d->m_exclString);
 
-    FileFinder finder(include, exclude, m_tryAbort);
-    for (const QUrl& directory : m_startDirs) {
-        if (m_project) {
-            finder.getProjectFiles(directory, m_depth, m_files);
+    qCDebug(PLUGIN_GREPVIEW) << "running with start dir" << d->m_startDirs;
+
+    FileFinder finder(include, exclude, d->m_tryAbort);
+    for (const QUrl& directory : d->m_startDirs) {
+        if (d->m_project) {
+            finder.getProjectFiles(directory, d->m_depth, d->m_files);
         } else {
-            finder.findFiles(directory.toLocalFile(), m_depth, m_files);
+            finder.findFiles(directory.toLocalFile(), d->m_depth, d->m_files);
         }
     }
 }
 
 QList<QUrl> GrepFindFilesThread::takeFiles()
 {
+    Q_D(GrepFindFilesThread);
     Q_ASSERT(isFinished());
 
     QList<QUrl> tmpList;
-    m_files.swap(tmpList);
+    d->m_files.swap(tmpList);
 
     std::sort(tmpList.begin(), tmpList.end());
     tmpList.erase(std::unique(tmpList.begin(), tmpList.end()), tmpList.end());
