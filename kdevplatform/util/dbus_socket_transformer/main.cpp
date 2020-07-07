@@ -250,8 +250,6 @@ int main(int argc, char** argv)
             path = path.substr(0, path.find(",guid="));
 
         // Mark it as an abstract unix domain socket
-        path = path;
-
         serverfd = socket(AF_INET, SOCK_STREAM, 0);
 
         if (serverfd < 0) {
