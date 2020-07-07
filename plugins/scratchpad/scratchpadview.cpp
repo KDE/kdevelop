@@ -115,7 +115,7 @@ ScratchpadView::ScratchpadView(QWidget* parent, Scratchpad* scratchpad)
 
     connect(scratchView, &QListView::activated, this, &ScratchpadView::scratchActivated);
 
-    connect(m_scratchpad, &Scratchpad::actionFailed, this, [this](const QString& messageText) {
+    connect(m_scratchpad, &Scratchpad::actionFailed, this, [](const QString& messageText) {
         // TODO: could be also messagewidget inside toolview?
         auto* message = new Sublime::Message(messageText, Sublime::Message::Error);
         KDevelop::ICore::self()->uiController()->postMessage(message);
