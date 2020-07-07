@@ -16,7 +16,7 @@ install(TARGETS KDevelopSessionsWatch ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} LIBRAR
 
 target_link_libraries(KDevelopSessionsWatch
     PUBLIC
-        Qt::Core
+        Qt5::Core
     PRIVATE
         KF5::Service
 )
