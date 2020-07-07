@@ -67,18 +67,29 @@ void KDevelopSessions::setSessionDataList(const QVector<KDevelopSessionData>& se
 void KDevelopSessions::match(Plasma::RunnerContext &context)
 {
     QString term = context.query();
-    if (!term.startsWith(QLatin1String("kdevelop"), Qt::CaseInsensitive)) {
+    if (term.size() < 3) {
         return;
     }
 
     bool listAll = false;
-    if (term.trimmed().compare(QLatin1String("kdevelop"), Qt::CaseInsensitive) == 0) {
-        listAll = true;
-        term.clear();
-    } else if (term.at(8) == QLatin1Char(' ') ) {
-        term.remove(0, 8);
-        term = term.trimmed();
-    } else {
+    if (term.startsWith(QLatin1String("kdevelop"), Qt::CaseInsensitive)) {
+        const QStringRef trimmedStrippedTerm = term.midRef(8).trimmed();
+        // "kdevelop" -> list all sessions
+        if (trimmedStrippedTerm.isEmpty()) {
+            listAll = true;
+            term.clear();
+        }
+        // "kdevelop X" -> list all sessions with "X"
+        else if (term.at(8) == QLatin1Char(' ') ) {
+            term = trimmedStrippedTerm.toString();
+        }
+        // "kdevelopX" -> list all sessions with "kdevelopX"
+        else {
+            term = term.trimmed();
+        }
+    }
+
+    if (term.isEmpty() && !listAll) {
         return;
     }
 
