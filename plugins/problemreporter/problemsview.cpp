@@ -77,18 +77,19 @@ void ProblemsView::setupActions()
         allProjectAction->setText(i18n("All Projects"));
         allProjectAction->setToolTip(i18nc("@info:tooltip", "Display problems in all projects"));
 
-        QVector<QAction*> actions;
-        actions.push_back(m_currentDocumentAction);
-        actions.push_back(openDocumentsAction);
-        actions.push_back(currentProjectAction);
-        actions.push_back(allProjectAction);
-
         m_showAllAction = new QAction(this);
         m_showAllAction->setText(i18n("Show All"));
         m_showAllAction->setToolTip(i18nc("@info:tooltip", "Display ALL problems"));
-        actions.push_back(m_showAllAction);
 
-        for (QAction* action : qAsConst(actions)) {
+        QAction* const actions[] = {
+            m_currentDocumentAction,
+            openDocumentsAction,
+            currentProjectAction,
+            allProjectAction,
+            m_showAllAction,
+        };
+
+        for (QAction* action : actions) {
             action->setCheckable(true);
             scopeActions->addAction(action);
             m_scopeMenu->addAction(action);
@@ -99,7 +100,7 @@ void ProblemsView::setupActions()
         connect(openDocumentsAction, &QAction::triggered, this, [this](){ setScope(OpenDocuments); });
         connect(currentProjectAction, &QAction::triggered, this, [this](){ setScope(CurrentProject); });
         connect(allProjectAction, &QAction::triggered, this, [this](){ setScope(AllProjects); });
-        connect(actions.last(), &QAction::triggered, this, [this](){ setScope(BypassScopeFilter); });
+        connect(m_showAllAction, &QAction::triggered, this, [this](){ setScope(BypassScopeFilter); });
     }
 
     {
