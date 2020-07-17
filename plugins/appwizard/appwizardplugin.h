@@ -32,7 +32,7 @@ public:
     ~AppWizardPlugin() override;
     KDevelop::ContextMenuExtension contextMenuExtension(KDevelop::Context* context, QWidget* parent) override;
 
-    QAbstractItemModel* templatesModel() override;
+    QAbstractItemModel* templatesModel() const override;
     QString knsConfigurationFile() const override;
     QStringList supportedMimeTypes() const override;
     QString name() const override;
@@ -44,13 +44,14 @@ private Q_SLOTS:
     void slotNewProject();
 
 private:
-    ProjectTemplatesModel* model();
+    ProjectTemplatesModel* model() const;
 
     QString createProject(const ApplicationInfo& );
     bool unpackArchive(const KArchiveDirectory* dir, const QString& dest, const QStringList& skipList = {});
     bool copyFileAndExpandMacros(const QString &source, const QString &dest);
 
-    ProjectTemplatesModel* m_templatesModel;
+    // created lazily
+    mutable ProjectTemplatesModel* m_templatesModel = nullptr;
     QAction* m_newFromTemplate;
     QHash<QString, QString> m_variables;
 };

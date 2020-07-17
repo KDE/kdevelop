@@ -61,7 +61,6 @@ private:
 
 FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& args)
     : IPlugin(QStringLiteral("kdevfiletemplates"), parent)
-    , m_model(nullptr)
 {
     Q_UNUSED(args);
 
@@ -153,10 +152,11 @@ QIcon FileTemplatesPlugin::icon() const
     return QIcon::fromTheme(QStringLiteral("code-class"));
 }
 
-QAbstractItemModel* FileTemplatesPlugin::templatesModel()
+QAbstractItemModel* FileTemplatesPlugin::templatesModel() const
 {
     if(!m_model) {
-        m_model = new TemplatesModel(QStringLiteral("kdevfiletemplates"), this);
+        auto* self = const_cast<FileTemplatesPlugin*>(this);
+        m_model = new TemplatesModel(QStringLiteral("kdevfiletemplates"), self);
     }
     return m_model;
 }

@@ -34,7 +34,7 @@ public:
 
     QString name() const override;
     QIcon icon() const override;
-    QAbstractItemModel* templatesModel() override;
+    QAbstractItemModel* templatesModel() const override;
     QString knsConfigurationFile() const override;
     QStringList supportedMimeTypes() const override;
 
@@ -44,7 +44,8 @@ public:
     TemplateType determineTemplateType(const QUrl& url);
 
 private:
-    KDevelop::TemplatesModel* m_model;
+    // created lazily
+    mutable KDevelop::TemplatesModel* m_model = nullptr;
     KDevelop::IToolViewFactory* m_toolView;
 
 public Q_SLOTS:

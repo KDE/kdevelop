@@ -64,7 +64,6 @@ K_PLUGIN_FACTORY_WITH_JSON(AppWizardFactory, "kdevappwizard.json", registerPlugi
 
 AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
     : KDevelop::IPlugin(QStringLiteral("kdevappwizard"), parent)
-    , m_templatesModel(nullptr)
 {
     setXMLFile(QStringLiteral("kdevappwizard.rc"));
 
@@ -523,14 +522,16 @@ KDevelop::ContextMenuExtension AppWizardPlugin::contextMenuExtension(KDevelop::C
     return ext;
 }
 
-ProjectTemplatesModel* AppWizardPlugin::model()
+ProjectTemplatesModel* AppWizardPlugin::model() const
 {
-    if(!m_templatesModel)
-        m_templatesModel = new ProjectTemplatesModel(this);
+    if(!m_templatesModel) {
+        auto* self = const_cast<AppWizardPlugin*>(this);
+        m_templatesModel = new ProjectTemplatesModel(self);
+    }
     return m_templatesModel;
 }
 
-QAbstractItemModel* AppWizardPlugin::templatesModel()
+QAbstractItemModel* AppWizardPlugin::templatesModel() const
 {
     return model();
 }
