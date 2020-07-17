@@ -247,7 +247,7 @@ private:
     KTextEditor::Cursor m_lastInsertionPos;
 
     // outline toolbar
-    QPointer<KDevelop::IQuickOpenLine> m_outlineLine;
+    QPointer<QLineEdit> m_outlineLine;
     QPointer<QHBoxLayout> m_toolbarWidgetLayout;
     QPointer<QWidget> m_toolbarWidget;
 

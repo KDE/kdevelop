@@ -85,7 +85,8 @@ public:
 
     QuickOpenLineEdit* createQuickOpenLineWidget();
 
-    KDevelop::IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind) override;
+    QLineEdit* createQuickOpenLine(const QStringList& scopes, const QStringList& type, QuickOpenType kind) override;
+
 public Q_SLOTS:
     void quickOpen();
     void quickOpenFile();
@@ -133,8 +134,7 @@ private:
 
 class QuickOpenWidgetCreator;
 
-class QuickOpenLineEdit
-    : public KDevelop::IQuickOpenLine
+class QuickOpenLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:

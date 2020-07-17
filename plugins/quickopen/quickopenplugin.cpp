@@ -1056,7 +1056,7 @@ void QuickOpenLineEdit::hideEvent(QHideEvent* ev)
 bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
 {
     if (!m_widget) {
-        return IQuickOpenLine::eventFilter(obj, e);
+        return QLineEdit::eventFilter(obj, e);
     }
 
     switch (e->type()) {
@@ -1109,7 +1109,7 @@ bool QuickOpenLineEdit::eventFilter(QObject* obj, QEvent* e)
         break;
     }
 
-    return IQuickOpenLine::eventFilter(obj, e);
+    return QLineEdit::eventFilter(obj, e);
 }
 void QuickOpenLineEdit::activate()
 {
@@ -1161,7 +1161,7 @@ void QuickOpenLineEdit::checkFocus()
     }
 }
 
-IQuickOpenLine* QuickOpenPlugin::createQuickOpenLine(const QStringList& scopes, const QStringList& type, IQuickOpen::QuickOpenType kind)
+QLineEdit* QuickOpenPlugin::createQuickOpenLine(const QStringList& scopes, const QStringList& type, IQuickOpen::QuickOpenType kind)
 {
     if (kind == Outline) {
         return new QuickOpenLineEdit(new OutlineQuickopenWidgetCreator(scopes, type));

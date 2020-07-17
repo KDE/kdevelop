@@ -227,7 +227,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow(Sublime::MainWindow*
         m_toolbarWidgetLayout->addWidget(m_outlineLine);
         m_outlineLine->setMaximumWidth(600);
         connect(ICore::self()->documentController(), &IDocumentController::documentClosed,
-                m_outlineLine.data(), &IQuickOpenLine::clear);
+                m_outlineLine.data(), &QLineEdit::clear);
     }
     m_toolbarWidgetLayout->addWidget(m_nextButton);
 

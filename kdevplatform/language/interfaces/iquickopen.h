@@ -31,15 +31,6 @@ namespace KDevelop {
 class QuickOpenDataProviderBase;
 class IndexedString;
 
-class KDEVPLATFORMLANGUAGE_EXPORT IQuickOpenLine
-    : public QLineEdit
-{
-    Q_OBJECT
-
-Q_SIGNALS:
-    void itemSelected();
-};
-
 /**
  * Interface to quickopen
  */
@@ -86,8 +77,8 @@ public:
         Outline
     };
 
-    virtual IQuickOpenLine* createQuickOpenLine(const QStringList& scopes, const QStringList& types,
-                                                QuickOpenType type = Standard) = 0;
+    virtual QLineEdit* createQuickOpenLine(const QStringList& scopes, const QStringList& types,
+                                           QuickOpenType type = Standard) = 0;
 };
 }
 
