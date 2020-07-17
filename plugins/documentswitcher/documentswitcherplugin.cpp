@@ -75,7 +75,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     forwardAction->setIcon( QIcon::fromTheme( QStringLiteral( "go-next-view-page") ) );
     actionCollection()->setDefaultShortcut( forwardAction, shortcutAccelerator | Qt::Key_Tab );
     forwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views." ) );
-    forwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
+    forwardAction->setToolTip( i18n( "Walk through the list of last used views" ) );
     connect( forwardAction, &QAction::triggered, this, &DocumentSwitcherPlugin::walkForward );
 
     backwardAction = actionCollection()->addAction ( QStringLiteral( "last_used_views_backward" ) );
@@ -83,7 +83,7 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
     backwardAction->setIcon( QIcon::fromTheme( QStringLiteral( "go-previous-view-page") ) );
     actionCollection()->setDefaultShortcut( backwardAction, shortcutAccelerator | Qt::SHIFT | Qt::Key_Tab );
     backwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views in reverse." ) );
-    backwardAction->setStatusTip( i18n( "Walk through the list of last used views" ) );
+    backwardAction->setToolTip( i18n( "Walk through the list of last used views" ) );
     connect( backwardAction, &QAction::triggered, this, &DocumentSwitcherPlugin::walkBackward );
 
     view = new DocumentSwitcherTreeView( this );

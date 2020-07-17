@@ -89,7 +89,7 @@ void RuntimeController::setupActions()
     KActionCollection* ac = m_core->uiControllerInternal()->defaultMainWindow()->actionCollection();
 
     auto action = new QAction(this);
-    action->setStatusTip(i18n("Allows to select a runtime"));
+    action->setToolTip(i18n("Allows to select a runtime"));
     action->setMenu(m_runtimesMenu.data());
     action->setIcon(QIcon::fromTheme(QStringLiteral("file-library-symbolic")));
     auto updateActionText = [action](IRuntime* currentRuntime){

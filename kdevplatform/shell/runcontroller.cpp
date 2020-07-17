@@ -440,7 +440,6 @@ void RunController::setupActions()
     action = new QAction(QIcon::fromTheme(QStringLiteral("configure")), i18nc("@action", "Configure Launches..."), this);
     ac->addAction(QStringLiteral("configure_launches"), action);
     action->setMenuRole(QAction::NoRole); // OSX: Be explicit about role, prevent hiding due to conflict with "Preferences..." menu item
-    action->setStatusTip(i18n("Open Launch Configuration Dialog"));
     action->setToolTip(i18nc("@info:tooltip", "Open Launch Configuration Dialog"));
     action->setWhatsThis(i18nc("@info:whatsthis", "Opens a dialog to setup new launch configurations, or to change the existing ones."));
     connect(action, &QAction::triggered, this, &RunController::showConfigurationDialog);
@@ -449,7 +448,6 @@ void RunController::setupActions()
     d->runAction->setIconText( i18nc("@action Short text for 'Execute Launch' used in the toolbar", "Execute") );
     ac->setDefaultShortcut( d->runAction, Qt::SHIFT + Qt::Key_F9);
     d->runAction->setToolTip(i18nc("@info:tooltip", "Execute current launch"));
-    d->runAction->setStatusTip(i18n("Execute current launch"));
     d->runAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration."));
     ac->addAction(QStringLiteral("run_execute"), d->runAction);
     connect(d->runAction, &QAction::triggered, this, &RunController::slotExecute);
@@ -458,7 +456,6 @@ void RunController::setupActions()
     ac->setDefaultShortcut( d->dbgAction, Qt::ALT + Qt::Key_F9);
     d->dbgAction->setIconText( i18nc("@action Short text for 'Debug Launch' used in the toolbar", "Debug") );
     d->dbgAction->setToolTip(i18nc("@info:tooltip", "Debug current launch"));
-    d->dbgAction->setStatusTip(i18n("Debug current launch"));
     d->dbgAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Debugger."));
     ac->addAction(QStringLiteral("run_debug"), d->dbgAction);
     connect(d->dbgAction, &QAction::triggered, this, &RunController::slotDebug);
@@ -467,7 +464,6 @@ void RunController::setupActions()
 //     TODO: at least get a profile target, it's sad to have the menu entry without a profiler
 //     QAction* profileAction = new QAction( QIcon::fromTheme(""), i18n("Profile Launch"), this);
 //     profileAction->setToolTip(i18nc("@info:tooltip", "Profile current launch"));
-//     profileAction->setStatusTip(i18n("Profile current launch"));
 //     profileAction->setWhatsThis(i18nc("@info:whatsthis", "Executes the target or the program specified in currently active launch configuration inside a Profiler."));
 //     ac->addAction("run_profile", profileAction);
 //     connect(profileAction, SIGNAL(triggered(bool)), this, SLOT(slotProfile()));

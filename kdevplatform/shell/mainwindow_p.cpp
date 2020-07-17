@@ -241,7 +241,7 @@ void MainWindowPrivate::setupActions()
     action = actionCollection()->addAction( QStringLiteral("loaded_plugins"), this, SLOT(showLoadedPlugins()) );
     action->setIcon(QIcon::fromTheme(QStringLiteral("plugins")));
     action->setText( i18nc("@action", "Loaded Plugins") );
-    action->setStatusTip( i18nc("@info:tooltip", "Show a list of all loaded plugins") );
+    action->setToolTip( i18nc("@info:tooltip", "Show a list of all loaded plugins") );
     action->setWhatsThis( i18nc( "@info:whatsthis", "Shows a dialog with information about all loaded plugins." ) );
 
     action = actionCollection()->addAction( QStringLiteral("view_next_window") );

@@ -70,7 +70,7 @@ FileTemplatesPlugin::FileTemplatesPlugin(QObject* parent, const QVariantList& ar
     action->setText(i18n("New From Template..."));
     action->setIcon( QIcon::fromTheme( QStringLiteral("code-class") ) );
     action->setWhatsThis( i18n( "Allows you to create new source code files, such as classes or unit tests, using templates." ) );
-    action->setStatusTip( i18n( "Create new files from a template" ) );
+    action->setToolTip( i18n( "Create new files from a template" ) );
     connect (action, &QAction::triggered, this, &FileTemplatesPlugin::createFromTemplate);
 
     m_toolView = new TemplatePreviewFactory(this);
