@@ -144,11 +144,6 @@ public:
     bool insideThis(QObject* object);
     void showWithWidget(QuickOpenWidget* widget);
 
-    void setDefaultText(const QString& text) override
-    {
-        m_defaultText = text;
-        setPlaceholderText(m_defaultText);
-    }
 private Q_SLOTS:
     void activate();
     void deactivate();
@@ -161,7 +156,6 @@ private:
 
     QPointer<QuickOpenWidget> m_widget;
     bool m_forceUpdate;
-    QString m_defaultText;
     QuickOpenWidgetCreator* m_widgetCreator;
 };
 

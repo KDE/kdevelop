@@ -939,7 +939,7 @@ QuickOpenLineEdit::QuickOpenLineEdit(QuickOpenWidgetCreator* creator) : m_widget
     setMaximumWidth(400);
 
     deactivate();
-    setDefaultText(i18n("Quick Open..."));
+    setPlaceholderText(i18n("Quick Open..."));
     setToolTip(i18n("Search for files, classes, functions and more,"
                     " allowing you to quickly navigate in your source code."));
     setObjectName(m_widgetCreator->objectNameForLine());
