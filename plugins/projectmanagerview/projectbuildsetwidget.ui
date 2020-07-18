@@ -32,7 +32,7 @@
      <item>
       <widget class="QToolButton" name="topButton">
        <property name="toolTip">
-        <string>Move the selected items to the top</string>
+        <string comment="@info:tooltip">Move the selected items to the top</string>
        </property>
        <property name="text">
         <string/>
@@ -64,7 +64,7 @@
      <item>
       <widget class="QToolButton" name="upButton">
        <property name="toolTip">
-        <string>Move the selected items up</string>
+        <string comment="@info:tooltip">Move the selected items up</string>
        </property>
        <property name="text">
         <string/>
@@ -80,7 +80,7 @@
      <item>
       <widget class="QToolButton" name="downButton">
        <property name="toolTip">
-        <string>Move the selected item down</string>
+        <string comment="@info:tooltip">Move the selected item down</string>
        </property>
        <property name="text">
         <string/>
@@ -112,7 +112,7 @@
      <item>
       <widget class="QToolButton" name="bottomButton">
        <property name="toolTip">
-        <string>Move the selected items to the bottom</string>
+        <string comment="@info:tooltip">Move the selected items to the bottom</string>
        </property>
        <property name="text">
         <string/>
@@ -174,10 +174,10 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="toolTip">
-        <string>These items will be built in the order they are listed.</string>
+        <string comment="@info:tooltip">These items will be built in the order they are listed.</string>
        </property>
        <property name="text">
-        <string>Build Sequence</string>
+        <string comment="@title">Build Sequence</string>
        </property>
       </widget>
      </item>
@@ -197,7 +197,7 @@
      <item>
       <widget class="QToolButton" name="addItemButton">
        <property name="toolTip">
-        <string>Add currently selected items from project tree view to buildset.</string>
+        <string comment="@info:tooltip">Add currently selected items from project tree view to the build set.</string>
        </property>
        <property name="text">
         <string/>
@@ -213,7 +213,7 @@
      <item>
       <widget class="QToolButton" name="removeItemButton">
        <property name="toolTip">
-        <string>Remove currently selected item from buildset.</string>
+        <string comment="@info:tooltip">Remove currently selected item from the build set.</string>
        </property>
        <property name="text">
         <string/>

@@ -151,40 +151,40 @@ static QList<ProjectBaseItem*> itemsFromIndexes(const QList<QPersistentModelInde
 ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVariantList& )
         : IPlugin( QStringLiteral("kdevprojectmanagerview"), parent ), d(new ProjectManagerViewPluginPrivate)
 {
-    d->m_buildAll = new QAction( i18n("Build all Projects"), this );
+    d->m_buildAll = new QAction(i18nc("@action", "Build All Projects"), this);
     d->m_buildAll->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
     connect( d->m_buildAll, &QAction::triggered, this, &ProjectManagerViewPlugin::buildAllProjects );
     actionCollection()->addAction( QStringLiteral("project_buildall"), d->m_buildAll );
 
-    d->m_build = new QAction( i18n("Build Selection"), this );
-    d->m_build->setIconText( i18n("Build") );
+    d->m_build = new QAction(i18nc("@action", "Build Selection"), this);
+    d->m_build->setIconText(i18nc("@action:intoolbar", "Build"));
     actionCollection()->setDefaultShortcut( d->m_build, Qt::Key_F8 );
     d->m_build->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
     d->m_build->setEnabled( false );
     connect( d->m_build, &QAction::triggered, this, &ProjectManagerViewPlugin::buildProjectItems );
     actionCollection()->addAction( QStringLiteral("project_build"), d->m_build );
-    d->m_install = new QAction( i18n("Install Selection"), this );
-    d->m_install->setIconText( i18n("Install") );
+    d->m_install = new QAction(i18nc("@action", "Install Selection"), this);
+    d->m_install->setIconText(i18nc("@action:intoolbar", "Install"));
     d->m_install->setIcon(QIcon::fromTheme(QStringLiteral("run-build-install")));
     actionCollection()->setDefaultShortcut( d->m_install, Qt::SHIFT + Qt::Key_F8 );
     d->m_install->setEnabled( false );
     connect( d->m_install, &QAction::triggered, this, &ProjectManagerViewPlugin::installProjectItems );
     actionCollection()->addAction( QStringLiteral("project_install"), d->m_install );
-    d->m_clean = new QAction( i18n("Clean Selection"), this );
-    d->m_clean->setIconText( i18n("Clean") );
+    d->m_clean = new QAction(i18nc("@action", "Clean Selection"), this);
+    d->m_clean->setIconText(i18nc("@action:intoolbar", "Clean"));
     d->m_clean->setIcon(QIcon::fromTheme(QStringLiteral("run-build-clean")));
     d->m_clean->setEnabled( false );
     connect( d->m_clean, &QAction::triggered, this, &ProjectManagerViewPlugin::cleanProjectItems );
     actionCollection()->addAction( QStringLiteral("project_clean"), d->m_clean );
-    d->m_configure = new QAction( i18n("Configure Selection"), this );
+    d->m_configure = new QAction(i18nc("@action", "Configure Selection"), this);
     d->m_configure->setMenuRole( QAction::NoRole ); // OSX: Be explicit about role, prevent hiding due to conflict with "Preferences..." menu item 
-    d->m_configure->setIconText( i18n("Configure") );
+    d->m_configure->setIconText(i18nc("@action:intoolbar", "Configure"));
     d->m_configure->setIcon(QIcon::fromTheme(QStringLiteral("run-build-configure")));
     d->m_configure->setEnabled( false );
     connect( d->m_configure, &QAction::triggered, this, &ProjectManagerViewPlugin::configureProjectItems );
     actionCollection()->addAction( QStringLiteral("project_configure"), d->m_configure );
-    d->m_prune = new QAction( i18n("Prune Selection"), this );
-    d->m_prune->setIconText( i18n("Prune") );
+    d->m_prune = new QAction(i18nc("@action", "Prune Selection"), this);
+    d->m_prune->setIconText(i18nc("@action:intoolbar", "Prune"));
     d->m_prune->setIcon(QIcon::fromTheme(QStringLiteral("run-build-prune")));
     d->m_prune->setEnabled( false );
     connect( d->m_prune, &QAction::triggered, this, &ProjectManagerViewPlugin::pruneProjectItems );
@@ -195,7 +195,7 @@ ProjectManagerViewPlugin::ProjectManagerViewPlugin( QObject *parent, const QVari
     actionCollection()->addAction( QStringLiteral("locate_document") );
     setXMLFile( QStringLiteral("kdevprojectmanagerview.rc") );
     d->factory = new KDevProjectManagerViewFactory( this );
-    core()->uiController()->addToolView( i18n("Projects"), d->factory );
+    core()->uiController()->addToolView(i18nc("@title:window", "Projects"), d->factory);
     connect(core()->selectionController(), &ISelectionController::selectionChanged,
              this, &ProjectManagerViewPlugin::updateActionState);
     connect(ICore::self()->projectController()->buildSetModel(), &KDevelop::ProjectBuildSetModel::rowsInserted,
@@ -286,45 +286,45 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
     }
 
     if ( needsCreateFile ) {
-        auto* action = new QAction(i18n("Create &File..."), parent);
+        auto* action = new QAction(i18nc("@action:inmenu", "Create &File..."), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("document-new")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::createFileFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
     if ( needsCreateFolder ) {
-        auto* action = new QAction(i18n("Create F&older..."), parent);
+        auto* action = new QAction(i18nc("@action:inmenu", "Create F&older..."), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("folder-new")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::createFolderFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
     }
 
     if ( needsBuildItems ) {
-        auto* action = new QAction(i18nc("@action", "&Build"), parent);
+        auto* action = new QAction(i18nc("@action:inmenu", "&Build"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("run-build")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::buildItemsFromContextMenu );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new QAction(i18nc("@action", "&Install"), parent);
+        action = new QAction(i18nc("@action:inmenu", "&Install"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("run-build-install")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::installItemsFromContextMenu );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new QAction(i18nc("@action", "&Clean"), parent);
+        action = new QAction(i18nc("@action:inmenu", "&Clean"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("run-build-clean")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::cleanItemsFromContextMenu );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
-        action = new QAction(i18n("&Add to Build Set"), parent);
+        action = new QAction(i18nc("@action:inmenu", "&Add to Build Set"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::addItemsFromContextMenuToBuildset );
         menuExt.addAction( ContextMenuExtension::BuildGroup, action );
     }
 
     if ( needsCloseProjects ) {
-        auto* close = new QAction(i18np("C&lose Project", "Close Projects", items.count()), parent);
+        auto* close = new QAction(i18ncp("@action:inmenu", "C&lose Project", "Close Projects", items.count()), parent);
         close->setIcon(QIcon::fromTheme(QStringLiteral("project-development-close")));
         connect( close, &QAction::triggered, this, &ProjectManagerViewPlugin::closeProjects );
         menuExt.addAction( ContextMenuExtension::ProjectGroup, close );
     }
     if ( needsFolderItems ) {
-        auto* action = new QAction(i18n("&Reload"), parent);
+        auto* action = new QAction(i18nc("@action:inmenu", "&Reload"), parent);
         action->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         connect( action, &QAction::triggered, this, &ProjectManagerViewPlugin::reloadFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, action );
@@ -355,17 +355,17 @@ ContextMenuExtension ProjectManagerViewPlugin::contextMenuExtension(KDevelop::Co
         menuExt.addAction( ContextMenuExtension::FileGroup, createSeparatorAction() );
     }
     if ( needsCutRenameRemove ) {
-        auto* remove = new QAction(i18n("Remo&ve"), parent);
+        auto* remove = new QAction(i18nc("@action:inmenu", "Remo&ve"), parent);
         remove->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
         connect( remove, &QAction::triggered, this, &ProjectManagerViewPlugin::removeFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
-        auto* rename = new QAction(i18n("Re&name..."), parent);
+        auto* rename = new QAction(i18nc("@action:inmenu", "Re&name..."), parent);
         rename->setIcon(QIcon::fromTheme(QStringLiteral("edit-rename")));
         connect( rename, &QAction::triggered, this, &ProjectManagerViewPlugin::renameItemFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, rename );
     }
     if ( needsRemoveTargetFiles ) {
-        auto* remove = new QAction(i18n("Remove From &Target"), parent);
+        auto* remove = new QAction(i18nc("@action:inmenu", "Remove from &Target"), parent);
         remove->setIcon(QIcon::fromTheme(QStringLiteral("user-trash")));
         connect( remove, &QAction::triggered, this, &ProjectManagerViewPlugin::removeTargetFilesFromContextMenu );
         menuExt.addAction( ContextMenuExtension::FileGroup, remove );
@@ -552,7 +552,9 @@ void ProjectManagerViewPlugin::createFolderFromContextMenu( )
         if ( item->folder() ) {
             QWidget* window(ICore::self()->uiController()->activeMainWindow()->window());
             QString name = QInputDialog::getText ( window,
-                                i18n ( "Create Folder in %1", item->folder()->path().pathOrUrl() ), i18n ( "Folder name:" ) );
+                i18nc("@title:window", "Create Folder in %1", item->folder()->path().pathOrUrl() ),
+                i18nc("@label:textbox", "Folder name:")
+            );
             if (!name.isEmpty()) {
                 item->project()->projectFileManager()->addFolder( Path(item->path(), name), item->folder() );
             }
@@ -606,7 +608,7 @@ void ProjectManagerViewPlugin::removeItems(const QList< ProjectBaseItem* >& item
             i18np("Do you really want to delete this item?",
                   "Do you really want to delete these %1 items?",
                   itemPaths.size()),
-            itemPaths, i18n("Delete Files"),
+            itemPaths, i18nc("@title:window", "Delete Files"),
             KStandardGuiItem::del(), KStandardGuiItem::cancel()
         ) == KMessageBox::No) {
         return;
@@ -659,8 +661,8 @@ void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& item
 
         //Change QInputDialog->KFileSaveDialog?
         QString name = QInputDialog::getText(
-            window, i18n("Rename..."),
-            i18n("New name for '%1':", item->text()),
+            window, i18nc("@window:title", "Rename"),
+            i18nc("@label:textbox", "New name for '%1':", item->text()),
             QLineEdit::Normal, item->text()
         );
 
@@ -692,7 +694,7 @@ void ProjectManagerViewPlugin::renameItems(const QList< ProjectBaseItem* >& item
 ProjectFileItem* createFile(const ProjectFolderItem* item)
 {
     QWidget* window = ICore::self()->uiController()->activeMainWindow()->window();
-    QString name = QInputDialog::getText(window, i18n("Create File in %1", item->path().pathOrUrl()), i18n("File name:"));
+    QString name = QInputDialog::getText(window, i18nc("@title:window", "Create File in %1", item->path().pathOrUrl()), i18nc("@label:textbox", "File name:"));
 
     if(name.isEmpty())
         return nullptr;

@@ -30,7 +30,7 @@
           </sizepolicy>
          </property>
          <property name="whatsThis">
-          <string>Project Overview</string>
+          <string comment="@info:whatsthis">Project Overview</string>
          </property>
          <attribute name="headerVisible">
           <bool>false</bool>
@@ -50,7 +50,7 @@
           </sizepolicy>
          </property>
          <property name="whatsThis">
-          <string>Build Items:</string>
+          <string comment="@info:whatsthis">Build Items:</string>
          </property>
         </widget>
        </item>

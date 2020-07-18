@@ -118,15 +118,15 @@ static QWidget* createPasteStatsWidget(QWidget *parent, const QVector<TaskInfo>&
         QString iconName;
         switch (task.m_status) {
             case TaskStatus::SUCCESS:
-                tooltip = i18n("Suboperation succeeded");
+                tooltip = i18nc("@info:tooltip", "Suboperation succeeded");
                 iconName = QStringLiteral("dialog-ok");
                 break;
             case TaskStatus::FAILURE:
-                tooltip = i18n("Suboperation failed");
+                tooltip = i18nc("@info:tooltip", "Suboperation failed");
                 iconName = QStringLiteral("dialog-error");
                 break;
             case TaskStatus::SKIPPED:
-                tooltip = i18n("Suboperation skipped to prevent data loss");
+                tooltip = i18nc("@info:tooltip", "Suboperation skipped to prevent data loss");
                 iconName = QStringLiteral("dialog-warning");
                 break;
         }

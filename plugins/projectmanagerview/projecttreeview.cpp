@@ -161,19 +161,19 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
             QString seq = QKeySequence( Qt::ShiftModifier ).toString();
             seq.chop(1); // chop superfluous '+'
-            auto* move = new QAction(i18n("&Move Here") + QLatin1Char('\t') + seq, &dropMenu);
+            auto* move = new QAction(i18nc("@action:inmenu", "&Move Here") + QLatin1Char('\t') + seq, &dropMenu);
             move->setIcon(QIcon::fromTheme(QStringLiteral("go-jump")));
             dropMenu.addAction(move);
 
             seq = QKeySequence( Qt::ControlModifier ).toString();
             seq.chop(1);
-            auto* copy = new QAction(i18n("&Copy Here") + QLatin1Char('\t') + seq, &dropMenu);
+            auto* copy = new QAction(i18nc("@action:inmenu", "&Copy Here") + QLatin1Char('\t') + seq, &dropMenu);
             copy->setIcon(QIcon::fromTheme(QStringLiteral("edit-copy")));
             dropMenu.addAction(copy);
 
             dropMenu.addSeparator();
 
-            auto* cancel = new QAction(i18n("C&ancel") + QLatin1Char('\t') + QKeySequence(Qt::Key_Escape).toString(), &dropMenu);
+            auto* cancel = new QAction(i18nc("@action:inmenu", "C&ancel") + QLatin1Char('\t') + QKeySequence(Qt::Key_Escape).toString(), &dropMenu);
             cancel->setIcon(QIcon::fromTheme(QStringLiteral("process-stop")));
             dropMenu.addAction(cancel);
 
@@ -228,13 +228,13 @@ void ProjectTreeView::dropEvent(QDropEvent* event)
 
             QString seq = QKeySequence( Qt::ControlModifier ).toString();
             seq.chop(1);
-            auto* addToTarget = new QAction(i18n("&Add to Target") + QLatin1Char('\t') + seq, &dropMenu);
+            auto* addToTarget = new QAction(i18nc("@action:inmenu", "&Add to Build Target") + QLatin1Char('\t') + seq, &dropMenu);
             addToTarget->setIcon(QIcon::fromTheme(QStringLiteral("edit-link")));
             dropMenu.addAction(addToTarget);
 
             dropMenu.addSeparator();
 
-            auto* cancel = new QAction(i18n("C&ancel") + QLatin1Char('\t') + QKeySequence(Qt::Key_Escape).toString(), &dropMenu);
+            auto* cancel = new QAction(i18nc("@action:inmenu", "C&ancel") + QLatin1Char('\t') + QKeySequence(Qt::Key_Escape).toString(), &dropMenu);
             cancel->setIcon(QIcon::fromTheme(QStringLiteral("process-stop")));
             dropMenu.addAction(cancel);
 
@@ -358,7 +358,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
 
     if ( analyzeActions.count() )
     {
-        auto* analyzeMenu = new QMenu(i18n("Analyze With"), &menu);
+        auto* analyzeMenu = new QMenu(i18nc("@title:menu", "Analyze with"), &menu);
         analyzeMenu->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
         for (QAction* act : qAsConst(analyzeActions)) {
             analyzeMenu->addAction( act );
@@ -374,7 +374,7 @@ void ProjectTreeView::popupContextMenu( const QPoint &pos )
     popupContextMenu_appendActions(menu, extActions);
 
     if (itemlist.size() == 1 && itemlist.first()->folder() && !itemlist.first()->folder()->parent()) {
-        auto* projectConfig = new QAction(i18n("Open Configuration..."), &menu);
+        auto* projectConfig = new QAction(i18nc("@action:inmenu", "Open Configuration..."), &menu);
         projectConfig->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
         connect( projectConfig, &QAction::triggered, this, &ProjectTreeView::openProjectConfig );
         projectActions << projectConfig;
