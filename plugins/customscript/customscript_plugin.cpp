@@ -518,10 +518,10 @@ CustomScriptPreferences::CustomScriptPreferences()
     m_hLayout = new QHBoxLayout;
     m_vLayout->addLayout(m_hLayout);
     m_commandLabel = new QLabel;
+    m_commandLabel->setText(i18nc("@label:textbox", "Command:"));
     m_hLayout->addWidget(m_commandLabel);
     m_commandEdit = new QLineEdit;
     m_hLayout->addWidget(m_commandEdit);
-    m_commandLabel->setText(i18n("Command:"));
     m_vLayout->addSpacing(10);
     m_bottomLabel = new QLabel;
     m_vLayout->addWidget(m_bottomLabel);
@@ -539,7 +539,7 @@ CustomScriptPreferences::CustomScriptPreferences()
 
     m_vLayout->addSpacing(10);
 
-    m_moreVariablesButton = new QPushButton(i18n("More Variables"));
+    m_moreVariablesButton = new QPushButton(i18nc("@action:button", "More Variables"));
     connect(m_moreVariablesButton, &QPushButton::clicked, this, &CustomScriptPreferences::moreVariablesClicked);
     m_vLayout->addWidget(m_moreVariablesButton);
     m_vLayout->addStretch();
@@ -574,7 +574,7 @@ void CustomScriptPreferences::moreVariablesClicked(bool)
                                   "<b>${PROJECT_NAME}</b> will be replaced by the path of <br />"
                                   "the currently open project with the matching name."
 
-                                  ), i18n("Variable Replacements"));
+                                  ), i18nc("@title:window", "Variable Replacements"));
 }
 
 #include "customscript_plugin.moc"
