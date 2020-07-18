@@ -39,7 +39,7 @@ ClassMembersPage::ClassMembersPage(QWidget* parent)
 , d(new ClassMembersPagePrivate)
 {
     d->editListWidget = new KEditListWidget(this);
-    d->editListWidget->lineEdit()->setPlaceholderText(i18n("Variable type and identifier"));
+    d->editListWidget->lineEdit()->setPlaceholderText(i18nc("@info:placeholder", "Variable type and identifier"));
 
     auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);

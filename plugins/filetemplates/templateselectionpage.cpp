@@ -212,7 +212,11 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
     d->model->refresh();
 
     d->ui->view->setLevels(3);
-    d->ui->view->setHeaderLabels(QStringList{i18n("Language"), i18n("Framework"), i18n("Template")});
+    d->ui->view->setHeaderLabels(QStringList{
+        i18nc("@title:column", "Language"),
+        i18nc("@title:column", "Framework"),
+        i18nc("@title:column", "Template")
+    });
     d->ui->view->setModel(d->model);
 
     connect(d->ui->view, &MultiLevelListView::currentIndexChanged,
@@ -246,12 +250,12 @@ TemplateSelectionPage::TemplateSelectionPage(TemplateClassAssistant* parent)
 
     d->ui->view->setCurrentIndex(templateIndex);
 
-    auto* getMoreButton = new QPushButton(i18n("Get More Templates..."), d->ui->view);
+    auto* getMoreButton = new QPushButton(i18nc("@action:button", "Get More Templates..."), d->ui->view);
     getMoreButton->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
     connect (getMoreButton, &QPushButton::clicked, this, [&] { d->getMoreClicked(); });
     d->ui->view->addWidget(0, getMoreButton);
 
-    auto* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18n("Load Template From File"), d->ui->view);
+    auto* loadButton = new QPushButton(QIcon::fromTheme(QStringLiteral("application-x-archive")), i18nc("@action:button", "Load Template from File"), d->ui->view);
     connect (loadButton, &QPushButton::clicked, this, [&] { d->loadFileClicked(); });
     d->ui->view->addWidget(0, loadButton);
 

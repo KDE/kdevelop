@@ -180,14 +180,14 @@ void OutputPage::prepareForm(const SourceFileTemplate& fileTemplate)
     const auto outputFiles = fileTemplate.outputFiles();
 
     const int outputFilesCount = outputFiles.count();
-    d->output->urlGroupBox->setTitle(i18np("Output file", "Output files", outputFilesCount));
-    d->output->positionGroupBox->setTitle(i18np("Location within existing file", "Location within existing files", outputFilesCount));
+    d->output->urlGroupBox->setTitle(i18ncp("@title:group", "Output File", "Output Files", outputFilesCount));
+    d->output->positionGroupBox->setTitle(i18ncp("@title:group", "Location within Existing File", "Location within Existing Files", outputFilesCount));
 
     for (const SourceFileTemplate::OutputFile& file : outputFiles) {
         const QString id = file.identifier;
         d->fileIdentifiers << id;
 
-        const QString fileLabelText = i18n("%1:", file.label);
+        const QString fileLabelText = i18nc("@label:chooser file name arg", "%1:", file.label);
         auto* label = new QLabel(fileLabelText, this);
         d->labels << label;
         auto* requester = new KUrlRequester(this);

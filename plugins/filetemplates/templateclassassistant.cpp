@@ -290,16 +290,16 @@ void TemplateClassAssistant::setup()
 {
     if (d->baseUrl.isValid())
     {
-        setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString(QUrl::PreferLocalFile)));
+        setWindowTitle(xi18nc("@title:window", "Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString(QUrl::PreferLocalFile)));
     }
     else
     {
-        setWindowTitle(i18n("Create Files from Template"));
+        setWindowTitle(i18nc("@title:window", "Create Files from Template"));
     }
 
     d->templateSelectionPageWidget = new TemplateSelectionPage(this);
     connect(this, &TemplateClassAssistant::accepted, d->templateSelectionPageWidget, &TemplateSelectionPage::saveConfig);
-    d->templateSelectionPage = addPage(d->templateSelectionPageWidget, i18n("Language and Template"));
+    d->templateSelectionPage = addPage(d->templateSelectionPageWidget, i18nc("@title:tab", "Language and Template"));
     d->templateSelectionPage->setIcon(QIcon::fromTheme(QStringLiteral("project-development-new-template")));
 
     d->dummyPage = addPage(new QWidget(this), QStringLiteral("Dummy Page"));
@@ -329,30 +329,30 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
 
     if (d->baseUrl.isValid())
     {
-        setWindowTitle(xi18n("Create Files from Template <filename>%1</filename> in <filename>%2</filename>",
+        setWindowTitle(xi18nc("@title:window", "Create Files from Template <filename>%1</filename> in <filename>%2</filename>",
                             d->fileTemplate.name(),
                             d->baseUrl.toDisplayString(QUrl::PreferLocalFile)));
     }
     else
     {
-        setWindowTitle(xi18n("Create Files from Template <filename>%1</filename>", d->fileTemplate.name()));
+        setWindowTitle(xi18nc("@title:window", "Create Files from Template <filename>%1</filename>", d->fileTemplate.name()));
     }
 
     if (type == QLatin1String("Class"))
     {
         d->classIdentifierPageWidget = new ClassIdentifierPage(this);
-        d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18n("Class Basics"));
+        d->classIdentifierPage = addPage(d->classIdentifierPageWidget, i18nc("@title:tab", "Class Basics"));
         d->classIdentifierPage->setIcon(QIcon::fromTheme(QStringLiteral("classnew")));
         connect(d->classIdentifierPageWidget, &ClassIdentifierPage::isValid, this, &TemplateClassAssistant::setCurrentPageValid);
         setValid(d->classIdentifierPage, false);
 
         d->overridesPageWidget = new OverridesPage(this);
-        d->overridesPage = addPage(d->overridesPageWidget, i18n("Override Methods"));
+        d->overridesPage = addPage(d->overridesPageWidget, i18nc("@title:tab", "Override Methods"));
         d->overridesPage->setIcon(QIcon::fromTheme(QStringLiteral("code-class")));
         setValid(d->overridesPage, true);
 
         d->membersPageWidget = new ClassMembersPage(this);
-        d->membersPage = addPage(d->membersPageWidget, i18n("Class Members"));
+        d->membersPage = addPage(d->membersPageWidget, i18nc("@title:tab", "Class Members"));
         d->membersPage->setIcon(QIcon::fromTheme(QStringLiteral("field")));
         setValid(d->membersPage, true);
 
@@ -380,7 +380,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         if (type == QLatin1String("Test"))
         {
             d->testCasesPageWidget = new TestCasesPage(this);
-            d->testCasesPage = addPage(d->testCasesPageWidget, i18n("Test Cases"));
+            d->testCasesPage = addPage(d->testCasesPageWidget, i18nc("@title:tab", "Test Cases"));
             connect(d->testCasesPageWidget, &TestCasesPage::isValid, this, &TemplateClassAssistant::setCurrentPageValid);
             setValid(d->testCasesPage, false);
         }
@@ -390,13 +390,13 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
     }
 
     d->licensePageWidget = new LicensePage(this);
-    d->licensePage = addPage(d->licensePageWidget, i18n("License"));
+    d->licensePage = addPage(d->licensePageWidget, i18nc("@title:tab", "License"));
     d->licensePage->setIcon(QIcon::fromTheme(QStringLiteral("text-x-copying")));
     setValid(d->licensePage, true);
 
     d->outputPageWidget = new OutputPage(this);
     d->outputPageWidget->prepareForm(d->fileTemplate);
-    d->outputPage = addPage(d->outputPageWidget, i18n("Output"));
+    d->outputPage = addPage(d->outputPageWidget, i18nc("@title:tab", "Output"));
     d->outputPage->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
     connect(d->outputPageWidget, &OutputPage::isValid, this, &TemplateClassAssistant::setCurrentPageValid);
     setValid(d->outputPage, false);
@@ -406,7 +406,7 @@ void TemplateClassAssistant::templateChosen(const QString& templateDescription)
         qCDebug(PLUGIN_FILETEMPLATES) << "Class generator has custom options";
         d->templateOptionsPageWidget = new TemplateOptionsPage(this);
         d->templateOptionsPage = insertPage(d->outputPage, d->templateOptionsPageWidget,
-                                            i18n("Template Options"));
+                                            i18nc("@title:tab", "Template Options"));
     }
 
     setCurrentPage(d->templateSelectionPage);
@@ -489,7 +489,7 @@ void TemplateClassAssistant::next()
     else if (currentPage() == d->overridesPage)
     {
         d->overridesPageWidget->clear();
-        d->overridesPageWidget->addCustomDeclarations(i18n("Default"),
+        d->overridesPageWidget->addCustomDeclarations(i18nc("@item default declarations", "Default"),
             d->helper->defaultMethods(d->generator->name()));
         d->overridesPageWidget->addBaseClasses(d->generator->directBaseClasses(),
                                                d->generator->allBaseClasses());
@@ -537,11 +537,11 @@ void TemplateClassAssistant::back()
 
         if (d->baseUrl.isValid())
         {
-            setWindowTitle(xi18n("Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString(QUrl::PreferLocalFile)));
+            setWindowTitle(xi18nc("@title:window", "Create Files from Template in <filename>%1</filename>", d->baseUrl.toDisplayString(QUrl::PreferLocalFile)));
         }
         else
         {
-            setWindowTitle(i18n("Create Files from Template"));
+            setWindowTitle(i18nc("@title:window", "Create Files from Template"));
         }
         d->dummyPage = addPage(new QWidget(this), QStringLiteral("Dummy Page"));
     }

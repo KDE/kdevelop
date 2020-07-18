@@ -41,7 +41,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>License type:</string>
+            <string comment="@label:listbox">License type:</string>
            </property>
           </widget>
          </item>
@@ -61,10 +61,10 @@
             <bool>false</bool>
            </property>
            <property name="toolTip">
-            <string>Click here if you want to save this license for future use</string>
+            <string comment="@info:tooltip">Enable if you want to save this license for future use</string>
            </property>
            <property name="text">
-            <string>Save license</string>
+            <string comment="@option:check">Save license</string>
            </property>
            <property name="checkable">
             <bool>true</bool>

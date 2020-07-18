@@ -39,17 +39,17 @@
         </property>
         <column>
          <property name="text">
-          <string>Superclass -&gt; Function</string>
+          <string comment="@title:column">Superclass -&gt; Function</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>Access</string>
+          <string comment="@title:column">Access</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>Properties</string>
+          <string comment="@title:column">Properties</string>
          </property>
         </column>
        </widget>
@@ -59,14 +59,14 @@
         <item>
          <widget class="QPushButton" name="selectAllPushButton">
           <property name="text">
-           <string>Select &amp;All</string>
+           <string comment="@action:button">Select &amp;All</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="deselectAllPushButton">
           <property name="text">
-           <string>&amp;Deselect All</string>
+           <string comment="@action:button">&amp;Deselect All</string>
           </property>
          </widget>
         </item>

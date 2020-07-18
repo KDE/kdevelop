@@ -46,11 +46,11 @@ static QString accessPolicyToString(Declaration::AccessPolicy accessPolicy)
     switch (accessPolicy) {
     case Declaration::DefaultAccess:
     case Declaration::Public:
-        return i18n("Public");
+        return i18nc("@item access policy", "Public");
     case Declaration::Protected:
-        return i18n("Protected");
+        return i18nc("@item access policy", "Protected");
     case Declaration::Private:
-        return i18n("Private");
+        return i18nc("@item access policy", "Private");
     }
     Q_UNREACHABLE();
 }
@@ -60,15 +60,15 @@ static QString functionPropertiesToString(ClassFunctionDeclaration* decl)
     Q_ASSERT(decl);
     QStringList properties;
     if (decl->isConstructor()) {
-        properties << i18n("Constructor");
+        properties << i18nc("@item function property", "Constructor");
     } else if (decl->isDestructor()) {
-        properties << i18n("Destructor");
+        properties << i18nc("@item function property", "Destructor");
     } else if (decl->isSignal()) {
-        properties << i18n("Signal");
+        properties << i18nc("@item function property", "Signal");
     } else if (decl->isSlot()) {
-        properties << i18n("Slot");
+        properties << i18nc("@item function property", "Slot");
     } else if (decl->isAbstract()) {
-        properties << i18n("Abstract function");
+        properties << i18nc("@item function property", "Abstract function");
     }
     return properties.join(QLatin1String(", "));
 }

@@ -32,7 +32,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="identifierLabel">
         <property name="text">
-         <string>&amp;Identifier:</string>
+         <string comment="@label:textbox">&amp;Identifier:</string>
         </property>
         <property name="buddy">
          <cstring>identifierLineEdit</cstring>
@@ -45,7 +45,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="inheritanceLabel">
         <property name="text">
-         <string>In&amp;heritance:</string>
+         <string comment="@label:listbox">In&amp;heritance:</string>
         </property>
        </widget>
       </item>
