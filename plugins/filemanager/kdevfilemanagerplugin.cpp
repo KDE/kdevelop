@@ -76,7 +76,7 @@ KDevFileManagerPlugin::KDevFileManagerPlugin(QObject *parent, const QVariantList
 void KDevFileManagerPlugin::init()
 {
     m_factory = new KDevFileManagerViewFactory(this);
-    core()->uiController()->addToolView(i18n("Filesystem"), m_factory);
+    core()->uiController()->addToolView(i18nc("@title:window", "File System"), m_factory);
 }
 
 KDevFileManagerPlugin::~KDevFileManagerPlugin()
