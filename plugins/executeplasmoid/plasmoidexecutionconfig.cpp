@@ -128,7 +128,7 @@ void PlasmoidExecutionConfig::loadFromConfiguration(const KConfigGroup& cfg, KDe
 
 QString PlasmoidExecutionConfig::title() const
 {
-    return i18n("Configure Plasmoid Execution");
+    return i18nc("@title:tab", "Configure Plasmoid Execution");
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory* > PlasmoidLauncher::configPages() const
@@ -308,7 +308,7 @@ QMenu* PlasmoidExecutionConfigType::launcherSuggestions()
 
     QMenu *m = nullptr;
     if(!found.isEmpty()) {
-        m = new QMenu(i18n("Plasmoids"));
+        m = new QMenu(i18nc("@title:menu", "Plasmoids"));
         m->addActions(found);
     }
     return m;

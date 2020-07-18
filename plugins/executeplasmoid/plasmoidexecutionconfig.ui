@@ -26,13 +26,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Plasmoid</string>
+      <string comment="@title:group">Plasmoid</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Path or name:</string>
+         <string comment="@label:listbox">Path or name:</string>
         </property>
         <property name="buddy">
          <cstring>identifier</cstring>
@@ -64,13 +64,13 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Behavior</string>
+      <string comment="@title:group">Behavior</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Form factor:</string>
+         <string comment="@label:listbox">Form factor:</string>
         </property>
         <property name="buddy">
          <cstring>formFactor</cstring>
@@ -81,22 +81,22 @@
        <widget class="QComboBox" name="formFactor">
         <item>
          <property name="text">
-          <string>planar</string>
+          <string notr="true">planar</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>horizontal</string>
+          <string notr="true">horizontal</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>vertical</string>
+          <string notr="true">vertical</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>mediacenter</string>
+          <string notr="true">mediacenter</string>
          </property>
         </item>
        </widget>
@@ -104,7 +104,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Theme:</string>
+         <string comment="@label:listbox">Theme:</string>
         </property>
         <property name="buddy">
          <cstring>themes</cstring>
@@ -120,7 +120,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Dependencies</string>
+      <string comment="@title:group">Dependencies</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <property name="fieldGrowthPolicy">
@@ -129,7 +129,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>&amp;Targets:</string>
+         <string comment="@label:chooser">&amp;Targets:</string>
         </property>
         <property name="buddy">
          <cstring>dependencies</cstring>
