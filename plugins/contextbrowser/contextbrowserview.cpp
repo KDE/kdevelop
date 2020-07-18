@@ -184,24 +184,24 @@ ContextBrowserView::ContextBrowserView(ContextBrowserPlugin* plugin, QWidget* pa
     , m_navigationWidget(new QTextBrowser())
     , m_autoLocked(false)
 {
-    setWindowTitle(i18n("Code Browser"));
+    setWindowTitle(i18nc("@title:window", "Code Browser"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("code-context"), windowIcon()));
 
     m_allowLockedUpdate = false;
 
     m_declarationMenuAction = new QAction(QIcon::fromTheme(QStringLiteral("code-class")), QString(), this);
-    m_declarationMenuAction->setToolTip(i18n("Show declaration menu"));
+    m_declarationMenuAction->setToolTip(i18nc("@info:tooltip", "Show declaration menu"));
     // expose the declaration menu via the context menu; allows hiding the toolbar to save some space
     // (this will not make it behave like a submenu though)
-    m_declarationMenuAction->setText(i18n("Declaration Menu"));
+    m_declarationMenuAction->setText(i18nc("@action", "Declaration Menu"));
     connect(m_declarationMenuAction, &QAction::triggered, this, &ContextBrowserView::declarationMenu);
     addAction(m_declarationMenuAction);
-    m_lockAction = new KToggleAction(QIcon::fromTheme(QStringLiteral("object-unlocked")), i18n(
-                                         "Lock Current View"), this);
-    m_lockAction->setToolTip(i18n("Lock current view"));
-    m_lockAction->setCheckedState(KGuiItem(i18n("Unlock Current View"),
+    m_lockAction = new KToggleAction(QIcon::fromTheme(QStringLiteral("object-unlocked")),
+                                     i18nc("@action", "Lock Current View"), this);
+    m_lockAction->setToolTip(i18nc("@info:tooltip", "Lock current view"));
+    m_lockAction->setCheckedState(KGuiItem(i18nc("@action", "Unlock Current View"),
                                            QIcon::fromTheme(QStringLiteral("object-locked")),
-                                           i18n("Unlock current view")));
+                                           i18nc("@info:tooltip", "Unlock current view")));
     m_lockAction->setChecked(false);
     addAction(m_lockAction);
 

@@ -174,7 +174,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow(Sublime::MainWindow*
         &ContextBrowserPlugin::documentJumpPerformed);
 
     m_previousButton = new QToolButton();
-    m_previousButton->setToolTip(i18n("Go back in context history"));
+    m_previousButton->setToolTip(i18nc("@info:tooltip", "Go back in context history"));
     m_previousButton->setAutoRaise(true);
     m_previousButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_previousButton->setIcon(QIcon::fromTheme(QStringLiteral("go-previous")));
@@ -186,7 +186,7 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow(Sublime::MainWindow*
     connect(m_previousMenu.data(), &QMenu::aboutToShow, this, &ContextBrowserPlugin::previousMenuAboutToShow);
 
     m_nextButton = new QToolButton();
-    m_nextButton->setToolTip(i18n("Go forward in context history"));
+    m_nextButton->setToolTip(i18nc("@info:tooltip", "Go forward in context history"));
     m_nextButton->setAutoRaise(true);
     m_nextButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_nextButton->setIcon(QIcon::fromTheme(QStringLiteral("go-next")));
@@ -202,10 +202,9 @@ KXMLGUIClient* ContextBrowserPlugin::createGUIForMainWindow(Sublime::MainWindow*
                                                                                         "org.kdevelop.IQuickOpen"));
 
     if (quickOpen) {
-        m_outlineLine = quickOpen->createQuickOpenLine(QStringList(), QStringList() << i18n(
-                                                           "Outline"), IQuickOpen::Outline);
-        m_outlineLine->setPlaceholderText(i18n("Outline..."));
-        m_outlineLine->setToolTip(i18n("Navigate outline of active document, click to browse."));
+        m_outlineLine = quickOpen->createQuickOpenLine(QStringList(), QStringList(i18nc("item quick open item type", "Outline")), IQuickOpen::Outline);
+        m_outlineLine->setPlaceholderText(i18nc("@info:placeholder", "Outline"));
+        m_outlineLine->setToolTip(i18nc("@info:tooltip", "Navigate outline of active document, click to browse"));
     }
 
     connect(m_browseManager, &BrowseManager::startDelayedBrowsing,
@@ -246,37 +245,37 @@ void ContextBrowserPlugin::createActionsForMainWindow(Sublime::MainWindow* windo
     xmlFile = QStringLiteral("kdevcontextbrowser.rc");
 
     QAction* sourceBrowseMode = actions.addAction(QStringLiteral("source_browse_mode"));
-    sourceBrowseMode->setText(i18n("Source &Browse Mode"));
+    sourceBrowseMode->setText(i18nc("@action", "Source &Browse Mode"));
     sourceBrowseMode->setIcon(QIcon::fromTheme(QStringLiteral("arrow-up")));
     sourceBrowseMode->setCheckable(true);
     connect(sourceBrowseMode, &QAction::triggered, m_browseManager, &BrowseManager::setBrowsing);
 
     QAction* previousContext = actions.addAction(QStringLiteral("previous_context"));
-    previousContext->setText(i18n("&Previous Visited Context"));
+    previousContext->setText(i18nc("@action", "&Previous Visited Context"));
     previousContext->setIcon(QIcon::fromTheme(QStringLiteral("go-previous-context")));
     actions.setDefaultShortcut(previousContext, Qt::META | Qt::Key_Left);
     QObject::connect(previousContext, &QAction::triggered, this, &ContextBrowserPlugin::previousContextShortcut);
 
     QAction* nextContext = actions.addAction(QStringLiteral("next_context"));
-    nextContext->setText(i18n("&Next Visited Context"));
+    nextContext->setText(i18nc("@action", "&Next Visited Context"));
     nextContext->setIcon(QIcon::fromTheme(QStringLiteral("go-next-context")));
     actions.setDefaultShortcut(nextContext, Qt::META | Qt::Key_Right);
     QObject::connect(nextContext, &QAction::triggered, this, &ContextBrowserPlugin::nextContextShortcut);
 
     QAction* previousUse = actions.addAction(QStringLiteral("previous_use"));
-    previousUse->setText(i18n("&Previous Use"));
+    previousUse->setText(i18nc("@action", "&Previous Use"));
     previousUse->setIcon(QIcon::fromTheme(QStringLiteral("go-previous-use")));
     actions.setDefaultShortcut(previousUse, Qt::META | Qt::SHIFT |  Qt::Key_Left);
     QObject::connect(previousUse, &QAction::triggered, this, &ContextBrowserPlugin::previousUseShortcut);
 
     QAction* nextUse = actions.addAction(QStringLiteral("next_use"));
-    nextUse->setText(i18n("&Next Use"));
+    nextUse->setText(i18nc("@action", "&Next Use"));
     nextUse->setIcon(QIcon::fromTheme(QStringLiteral("go-next-use")));
     actions.setDefaultShortcut(nextUse, Qt::META | Qt::SHIFT | Qt::Key_Right);
     QObject::connect(nextUse, &QAction::triggered, this, &ContextBrowserPlugin::nextUseShortcut);
 
     auto* outline = new QWidgetAction(this);
-    outline->setText(i18n("Context Browser"));
+    outline->setText(i18nc("@action", "Context Browser"));
     QWidget* w = toolbarWidgetForMainWindow(window);
     w->setHidden(false);
     outline->setDefaultWidget(w);
@@ -307,7 +306,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject* parent, const QVariantList&)
 {
     qRegisterMetaType<KDevelop::IndexedDeclaration>("KDevelop::IndexedDeclaration");
 
-    core()->uiController()->addToolView(i18n("Code Browser"), m_viewFactory);
+    core()->uiController()->addToolView(i18nc("@title:window", "Code Browser"), m_viewFactory);
 
     connect(
         core()->documentController(), &IDocumentController::textDocumentCreated, this,
@@ -323,7 +322,7 @@ ContextBrowserPlugin::ContextBrowserPlugin(QObject* parent, const QVariantList&)
     connect(m_updateTimer, &QTimer::timeout, this, &ContextBrowserPlugin::updateViews);
 
     //Needed global action for the context-menu extensions
-    m_findUses = new QAction(i18n("Find Uses"), this);
+    m_findUses = new QAction(i18nc("@action", "Find Uses"), this);
     connect(m_findUses, &QAction::triggered, this, &ContextBrowserPlugin::findUses);
 
     const auto documents = core()->documentController()->openDocuments();
@@ -387,8 +386,7 @@ void ContextBrowserPlugin::showUsesDelayed(const DeclarationPointer& declaration
     if (!decl) {
         return;
     }
-    QWidget* toolView = ICore::self()->uiController()->findToolView(i18n(
-                                                                        "Code Browser"), m_viewFactory,
+    QWidget* toolView = ICore::self()->uiController()->findToolView(i18nc("@title:window", "Code Browser"), m_viewFactory,
                                                                     KDevelop::IUiController::CreateAndRaise);
     if (!toolView) {
         return;
