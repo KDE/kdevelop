@@ -51,12 +51,12 @@ CMakeBuilderPreferences::~CMakeBuilderPreferences()
 
 QString CMakeBuilderPreferences::name() const
 {
-    return i18n("CMake");
+    return i18nc("@title:tab", "CMake");
 }
 
 QString CMakeBuilderPreferences::fullName() const
 {
-    return i18n("Configure Global CMake Settings");
+    return i18nc("@title:tab", "Configure Global CMake Settings");
 }
 
 QIcon CMakeBuilderPreferences::icon() const

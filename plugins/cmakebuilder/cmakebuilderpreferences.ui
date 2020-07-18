@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label1">
      <property name="text">
-      <string>Default CMake executable:</string>
+      <string comment="@label:chooser">Default CMake executable:</string>
      </property>
     </widget>
    </item>
@@ -34,7 +34,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label2">
      <property name="text">
-      <string>Default generator:</string>
+      <string comment="@label:listbox">Default generator:</string>
      </property>
     </widget>
    </item>
