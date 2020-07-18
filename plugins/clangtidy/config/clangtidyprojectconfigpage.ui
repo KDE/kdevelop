@@ -26,7 +26,7 @@
    <item>
     <widget class="QCheckBox" name="kcfg_useConfigFile">
      <property name="text">
-      <string>&amp;Use .clang-tidy file(s)</string>
+      <string comment="@option:check">&amp;Use .clang-tidy file(s)</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -40,7 +40,7 @@
      </property>
      <widget class="QWidget" name="checksTab">
       <attribute name="title">
-       <string>Checks</string>
+       <string comment="@title:tab">Checks</string>
       </attribute>
       <property name="enabled">
        <bool>false</bool>
@@ -70,13 +70,13 @@
      </widget>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
-       <string>Includes</string>
+       <string comment="@title:tab">Includes</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout_2">
        <item row="0" column="0">
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>&amp;Check system headers:</string>
+          <string comment="@option:check">&amp;Check system headers:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_checkSystemHeaders</cstring>
@@ -89,7 +89,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="headerFilterLabel">
          <property name="text">
-          <string>Header fi&amp;lter:</string>
+          <string comment="@label:textbox">Header fi&amp;lter:</string>
          </property>
          <property name="enabled">
           <bool>false</bool>
@@ -102,7 +102,7 @@
        <item row="1" column="1">
         <widget class="QLineEdit" name="kcfg_headerFilter">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Regular expression matching the names of the headers to output diagnostics from. Diagnostics from the main file of each translation unit are always displayed. Can be used together with -line-filter.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string comment="@info:tooltip">Regular expression matching the names of the headers to output diagnostics from. Diagnostics from the main file of each translation unit are always displayed. Can be used together with -line-filter.</string>
          </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
@@ -116,13 +116,13 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Extra Parameters</string>
+       <string comment="@title:tab">Extra Parameters</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout">
        <item row="0" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>E&amp;xtra parameters:</string>
+          <string comment="@label.textbox">E&amp;xtra parameters:</string>
          </property>
          <property name="buddy">
           <cstring>kcfg_additionalParameters</cstring>
@@ -132,7 +132,7 @@
        <item row="0" column="1">
         <widget class="QLineEdit" name="kcfg_additionalParameters">
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Additional command line options to pass to clang-tidy.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string comment="@info:tooltip">Additional command line options to pass to Clang-Tidy.</string>
          </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>

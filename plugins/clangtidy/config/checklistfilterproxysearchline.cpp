@@ -35,7 +35,7 @@ CheckListFilterProxySearchLine::CheckListFilterProxySearchLine(QWidget *parent)
     , m_delayTimer(new QTimer(this))
 {
     setClearButtonEnabled(true);
-    setPlaceholderText(i18n("Search"));
+    setPlaceholderText(i18nc("@info:placeholder", "Search..."));
 
     m_delayTimer->setSingleShot(true);
     m_delayTimer->setInterval(300);

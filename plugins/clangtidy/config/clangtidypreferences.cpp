@@ -74,12 +74,12 @@ ConfigPage::ConfigPageType ClangTidyPreferences::configPageType() const
 
 QString ClangTidyPreferences::name() const
 {
-    return i18n("Clang-Tidy");
+    return i18nc("@title:tab", "Clang-Tidy");
 }
 
 QString ClangTidyPreferences::fullName() const
 {
-    return i18n("Configure Clang-Tidy Settings");
+    return i18nc("@title:tab", "Configure Clang-Tidy Settings");
 }
 
 QIcon ClangTidyPreferences::icon() const

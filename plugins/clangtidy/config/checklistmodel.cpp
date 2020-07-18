@@ -77,7 +77,7 @@ QVariant CheckListModel::data(const QModelIndex& index, int role) const
         } else {
             if (index.column() == NameColumnId) {
                 if (role == Qt::DisplayRole) {
-                    return i18n("All checks");
+                    return i18nc("@item", "All checks");
                 } else
                 if (role == Qt::CheckStateRole) {
                     return checkState(m_rootCheckGroup->groupEnabledState());

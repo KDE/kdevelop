@@ -159,19 +159,19 @@ void Job::childProcessError(QProcess::ProcessError processError)
     }
 
     case QProcess::Crashed:
-        messageText = i18n("Clang-tidy crashed.");
+        messageText = i18n("Clang-Tidy crashed.");
         break;
 
     case QProcess::Timedout:
-        messageText = i18n("Clang-tidy process timed out.");
+        messageText = i18n("Clang-Tidy process timed out.");
         break;
 
     case QProcess::WriteError:
-        messageText = i18n("Write to Clang-tidy process failed.");
+        messageText = i18n("Write to Clang-Tidy process failed.");
         break;
 
     case QProcess::ReadError:
-        messageText = i18n("Read from Clang-tidy process failed.");
+        messageText = i18n("Read from Clang-Tidy process failed.");
         break;
 
     case QProcess::UnknownError:

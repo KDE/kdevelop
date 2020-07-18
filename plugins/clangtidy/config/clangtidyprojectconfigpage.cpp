@@ -67,7 +67,7 @@ KDevelop::ConfigPage::ConfigPageType ProjectConfigPage::configPageType() const
 
 QString ProjectConfigPage::name() const
 {
-    return i18n("Clang-Tidy");
+    return i18nc("@title:tab", "Clang-Tidy");
 }
 
 QIcon ProjectConfigPage::icon() const

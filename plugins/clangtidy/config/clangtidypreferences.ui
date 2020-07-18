@@ -26,7 +26,7 @@
    <item>
     <widget class="QGroupBox" name="pathsGroupBox">
      <property name="title">
-      <string>Paths</string>
+      <string comment="@title:group">Paths</string>
      </property>
      <layout class="QHBoxLayout" name="pathsGroupBoxLayout">
       <item>
@@ -34,7 +34,7 @@
         <item>
          <widget class="QLabel" name="clangtidyLabel">
           <property name="text">
-           <string>Clang-&amp;tidy executable:</string>
+           <string comment="@label:chooser">Clang-&amp;Tidy executable:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -51,7 +51,7 @@
         <item>
          <widget class="KUrlRequester" name="kcfg_clangtidyPath">
           <property name="toolTip">
-           <string>The full path to the clang-tidy executable</string>
+           <string comment="@info:tooltip">The full path to the Clang-Tidy executable</string>
           </property>
          </widget>
         </item>
@@ -63,13 +63,13 @@
    <item>
     <widget class="QGroupBox" name="jobsBox">
      <property name="title">
-      <string/>
+      <string notr="true"/>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QCheckBox" name="kcfg_parallelJobsEnabled">
         <property name="text">
-         <string>Run analysis jobs in parallel</string>
+         <string comment="@option:check">Run analysis jobs in parallel</string>
         </property>
        </widget>
       </item>
@@ -78,7 +78,7 @@
         <item>
          <widget class="QCheckBox" name="kcfg_parallelJobsAutoCount">
           <property name="text">
-           <string>Use all CPU cores</string>
+           <string comment="@option:check">Use all CPU cores</string>
           </property>
          </widget>
         </item>
@@ -98,7 +98,7 @@
         <item>
          <widget class="QLabel" name="parallelJobsFixedCountLabel">
           <property name="text">
-           <string>Maximum number of threads:</string>
+           <string comment="@label:spinbox">Maximum number of threads:</string>
           </property>
          </widget>
         </item>
