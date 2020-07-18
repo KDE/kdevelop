@@ -59,7 +59,7 @@ public:
     }
 };
 
-QuickOpenWidget::QuickOpenWidget(const QString& title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField)
+QuickOpenWidget::QuickOpenWidget(QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField)
     : m_model(model)
     , m_expandedTemporary(false)
     , m_hadNoCommandSinceAlt(true)
@@ -67,7 +67,6 @@ QuickOpenWidget::QuickOpenWidget(const QString& title, QuickOpenModel* model, co
     m_filterTimer.setSingleShot(true);
     connect(&m_filterTimer, &QTimer::timeout, this, &QuickOpenWidget::applyFilter);
 
-    Q_UNUSED(title);
     ui.setupUi(this);
     ui.list->header()->hide();
     ui.list->setRootIsDecorated(false);
@@ -257,7 +256,7 @@ QuickOpenWidget::~QuickOpenWidget()
 
 QuickOpenWidgetDialog::QuickOpenWidgetDialog(const QString& title, QuickOpenModel* model, const QStringList& initialItems, const QStringList& initialScopes, bool listOnly, bool noSearchField)
 {
-    m_widget = new QuickOpenWidget(title, model, initialItems, initialScopes, listOnly, noSearchField);
+    m_widget = new QuickOpenWidget(model, initialItems, initialScopes, listOnly, noSearchField);
     // the QMenu might close on esc and we want to close the whole dialog then
     connect(m_widget, &QuickOpenWidget::aboutToHide, this, &QuickOpenWidgetDialog::deleteLater);
 

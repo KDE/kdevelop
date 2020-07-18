@@ -115,7 +115,7 @@ public:
             useScopes = QuickOpenPlugin::self()->lastUsedScopes;
         }
 
-        return new QuickOpenWidget(i18n("Quick Open"), QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, useScopes, false, true);
+        return new QuickOpenWidget(QuickOpenPlugin::self()->m_model, QuickOpenPlugin::self()->lastUsedItems, useScopes, false, true);
     }
 
     QStringList m_items;
