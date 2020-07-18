@@ -122,6 +122,12 @@
          <property name="popupMode">
           <enum>QToolButton::InstantPopup</enum>
          </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="icon">
+          <iconset theme="document-share"/>
+         </property>
         </widget>
        </item>
        <item>
