@@ -39,12 +39,12 @@ KDevelop::ConfigPage::ConfigPageType GlobalConfigPage::configPageType() const
 
 QString GlobalConfigPage::name() const
 {
-    return i18n("Heaptrack");
+    return i18nc("@title:tab", "Heaptrack");
 }
 
 QString GlobalConfigPage::fullName() const
 {
-    return i18n("Configure Heaptrack Settings");
+    return i18nc("@title:tab", "Configure Heaptrack Settings");
 }
 
 QIcon GlobalConfigPage::icon() const

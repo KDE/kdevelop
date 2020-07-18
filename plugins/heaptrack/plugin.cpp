@@ -60,7 +60,7 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
 
     m_launchAction = new QAction(
         QIcon::fromTheme(QStringLiteral("office-chart-area")),
-        i18n("Run Heaptrack Analysis"),
+        i18nc("@action", "Run Heaptrack Analysis"),
         this);
 
     connect(m_launchAction, &QAction::triggered, this, &Plugin::launchHeaptrack);
@@ -69,7 +69,7 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
 #if HAVE_KSYSGUARD
     m_attachAction = new QAction(
         QIcon::fromTheme(QStringLiteral("office-chart-area")),
-        i18n("Attach to Process with Heaptrack"),
+        i18nc("@action", "Attach to Process with Heaptrack"),
         this);
 
     connect(m_attachAction, &QAction::triggered, this, &Plugin::attachHeaptrack);

@@ -26,13 +26,13 @@
    <item>
     <widget class="QGroupBox" name="pathsGroupBox">
      <property name="title">
-      <string>Executables</string>
+      <string comment="@title:group">Executables</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="heaptrackExecutableLabel">
         <property name="text">
-         <string>Heaptrack:</string>
+         <string comment="@label:chooser">Heaptrack:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -48,7 +48,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="heaptrackGuiExecutableLabel">
         <property name="text">
-         <string>Visualizer:</string>
+         <string comment="@label:chooser">Visualizer:</string>
         </property>
        </widget>
       </item>
