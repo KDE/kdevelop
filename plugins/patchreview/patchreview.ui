@@ -73,9 +73,12 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="updateButton">
+        <widget class="QToolButton" name="updateButton">
          <property name="text">
           <string>Update</string>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="icon">
           <iconset theme="view-refresh">
@@ -84,9 +87,12 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="testsButton">
+        <widget class="QToolButton" name="testsButton">
          <property name="text">
           <string>Run Tests</string>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="icon">
           <iconset theme="preflight-verifier">
@@ -131,9 +137,12 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="cancelReview">
+        <widget class="QToolButton" name="cancelReview">
          <property name="text">
           <string>Cancel Review</string>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="icon">
           <iconset theme="dialog-cancel">

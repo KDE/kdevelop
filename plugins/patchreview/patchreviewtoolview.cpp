@@ -249,14 +249,14 @@ void PatchReviewToolView::showEditDialog() {
     connect( m_editPatch.nextFile, &QToolButton::clicked, this, &PatchReviewToolView::nextFile );
     connect( m_editPatch.filesList, &QTreeView::activated , this, &PatchReviewToolView::fileDoubleClicked );
 
-    connect( m_editPatch.cancelReview, &QPushButton::clicked, m_plugin, &PatchReviewPlugin::cancelReview );
+    connect( m_editPatch.cancelReview, &QToolButton::clicked, m_plugin, &PatchReviewPlugin::cancelReview );
     //connect( m_editPatch.cancelButton, SIGNAL(pressed()), this, SLOT(slotEditCancel()) );
 
     //connect( this, SIGNAL(finished(int)), this, SLOT(slotEditDialogFinished(int)) );
 
-    connect( m_editPatch.updateButton, &QPushButton::clicked, m_plugin, &PatchReviewPlugin::forceUpdate );
+    connect( m_editPatch.updateButton, &QToolButton::clicked, m_plugin, &PatchReviewPlugin::forceUpdate );
 
-    connect( m_editPatch.testsButton, &QPushButton::clicked, this, &PatchReviewToolView::runTests );
+    connect( m_editPatch.testsButton, &QToolButton::clicked, this, &PatchReviewToolView::runTests );
 
     m_selectAllAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-select-all")), i18n("Select All"), this );
     connect( m_selectAllAction, &QAction::triggered, this, &PatchReviewToolView::selectAll );
