@@ -55,7 +55,10 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
              this, &ProjectSelectionPage::nameChanged );
 
     ui->listView->setLevels(2);
-    ui->listView->setHeaderLabels(QStringList{i18n("Category"), i18n("Project Type")});
+    ui->listView->setHeaderLabels(QStringList{
+        i18nc("@title:column", "Category"),
+        i18nc("@title:column", "Project Type")
+    });
     ui->listView->setModel(templatesModel);
     ui->listView->setLastLevelViewMode(MultiLevelListView::DirectChildren);
     connect (ui->listView, &MultiLevelListView::currentIndexChanged, this, &ProjectSelectionPage::typeChanged);
@@ -64,14 +67,14 @@ ProjectSelectionPage::ProjectSelectionPage(ProjectTemplatesModel *templatesModel
     connect( ui->templateType, QOverload<int>::of(&QComboBox::currentIndexChanged),
              this, &ProjectSelectionPage::templateChanged );
 
-    auto* getMoreButton = new QPushButton(i18n("Get More Templates"), ui->listView);
+    auto* getMoreButton = new QPushButton(i18nc("@action:button", "Get More Templates"), ui->listView);
     getMoreButton->setIcon(QIcon::fromTheme(QStringLiteral("get-hot-new-stuff")));
     connect (getMoreButton, &QPushButton::clicked,
              this, &ProjectSelectionPage::moreTemplatesClicked);
     ui->listView->addWidget(0, getMoreButton);
 
     auto* loadButton = new QPushButton(ui->listView);
-    loadButton->setText(i18n("Load Template From File"));
+    loadButton->setText(i18nc("@action:button", "Load Template from File"));
     loadButton->setIcon(QIcon::fromTheme(QStringLiteral("application-x-archive")));
     connect (loadButton, &QPushButton::clicked, this, &ProjectSelectionPage::loadFileClicked);
     ui->listView->addWidget(0, loadButton);
@@ -303,7 +306,7 @@ void ProjectSelectionPage::loadFileClicked()
         QStringLiteral("application/x-bzip-compressed-tar"),
         QStringLiteral("application/zip")
     };
-    ScopedDialog<QFileDialog> fileDialog(this, i18n("Load Template From File"));
+    ScopedDialog<QFileDialog> fileDialog(this, i18nc("@title:window", "Load Template from File"));
     fileDialog->setMimeTypeFilters(supportedMimeTypes);
     fileDialog->setFileMode(QFileDialog::ExistingFiles);
 

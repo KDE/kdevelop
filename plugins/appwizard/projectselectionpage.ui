@@ -35,13 +35,13 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Properties</string>
+      <string comment="@title:group">Properties</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="projectNameLabel">
         <property name="text">
-         <string>Project name:</string>
+         <string comment="@label:textbox">Project name:</string>
         </property>
        </widget>
       </item>
@@ -51,7 +51,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="locationLabel">
         <property name="text">
-         <string>Location:</string>
+         <string comment="@label:textbox">Location:</string>
         </property>
        </widget>
       </item>
@@ -131,7 +131,7 @@
          <item>
           <widget class="QLabel" name="icon">
            <property name="text">
-            <string/>
+            <string notr="true"/>
            </property>
            <property name="alignment">
             <set>Qt::AlignHCenter|Qt::AlignTop</set>

@@ -69,10 +69,10 @@ AppWizardPlugin::AppWizardPlugin(QObject *parent, const QVariantList &)
 
     m_newFromTemplate = actionCollection()->addAction(QStringLiteral("project_new"));
     m_newFromTemplate->setIcon(QIcon::fromTheme(QStringLiteral("project-development-new-template")));
-    m_newFromTemplate->setText(i18n("New From Template..."));
+    m_newFromTemplate->setText(i18nc("@action", "New from Template..."));
     connect(m_newFromTemplate, &QAction::triggered, this, &AppWizardPlugin::slotNewProject);
-    m_newFromTemplate->setToolTip( i18n("Generate a new project from a template") );
-    m_newFromTemplate->setWhatsThis( i18n("This starts KDevelop's application wizard. "
+    m_newFromTemplate->setToolTip( i18nc("@info:tooltip", "Generate a new project from a template") );
+    m_newFromTemplate->setWhatsThis( i18nc("@info:whatsthis", "This starts KDevelop's application wizard. "
                                           "It helps you to generate a skeleton for your "
                                           "application from a set of templates.") );
 }
@@ -139,7 +139,7 @@ void vcsError(const QString &errorMsg, QTemporaryDir &tmpdir, const QUrl &dest, 
     {
         displayDetails = i18n("Please see the Version Control tool view.");
     }
-    KMessageBox::detailedError(nullptr, errorMsg, displayDetails, i18n("Version Control System Error"));
+    KMessageBox::detailedError(nullptr, errorMsg, displayDetails, i18nc("@title:window", "Version Control System Error"));
     KIO::del(dest, KIO::HideProgressInfo)->exec();
     tmpdir.remove();
 }

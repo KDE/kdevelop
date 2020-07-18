@@ -23,7 +23,7 @@
 AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, ProjectTemplatesModel* templatesModel, QWidget *parent)
     : KAssistantDialog(parent)
 {
-    setWindowTitle(i18n("Create New Project"));
+    setWindowTitle(i18nc("@title:window", "Create New Project"));
 
     // KAssistantDialog creates a help button by default, no option to prevent that
     QPushButton *helpButton = button(QDialogButtonBox::Help);
@@ -37,9 +37,9 @@ AppWizardDialog::AppWizardDialog(KDevelop::IPluginController* pluginController, 
     m_vcsPage->setSourceLocation( m_selectionPage->location() );
     connect( m_selectionPage, &ProjectSelectionPage::locationChanged,
              m_vcsPage, &ProjectVcsPage::setSourceLocation );
-    m_pageItems[m_selectionPage] = addPage(m_selectionPage, i18nc("Page for general configuration options", "General"));
+    m_pageItems[m_selectionPage] = addPage(m_selectionPage, i18nc("@title:tab Page for general configuration options", "General"));
 
-    m_pageItems[m_vcsPage] = addPage(m_vcsPage, i18nc("Page for version control options", "Version Control") );
+    m_pageItems[m_vcsPage] = addPage(m_vcsPage, i18nc("@title:tab Page for version control options", "Version Control") );
 
     setValid( m_pageItems[m_selectionPage], false );
 
