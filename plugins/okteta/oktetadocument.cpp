@@ -138,7 +138,7 @@ bool OktetaDocument::close( IDocument::DocumentSaveMode mode )
                 int code = KMessageBox::warningYesNoCancel(
                     qApp->activeWindow(),
                     i18n("The document \"%1\" has unsaved changes. Would you like to save them?", url().toLocalFile()),
-                    i18n("Close Document"));
+                    i18nc("@title:window", "Close Document"));
 
                 if (code == KMessageBox::Yes) {
                     if (!save(mode))

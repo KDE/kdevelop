@@ -110,7 +110,7 @@ ContextMenuExtension OktetaPlugin::contextMenuExtension(Context* context, QWidge
 
     if( openWithContext && !openWithContext->mimeType().inherits(QStringLiteral("inode/directory")))
     {
-        auto* openAction = new QAction(i18n("Hex Editor"), parent);
+        auto* openAction = new QAction(i18nc("@item:inmenu", "Hex Editor"), parent);
         openAction->setIcon( QIcon::fromTheme(QStringLiteral("document-open")) );
         openAction->setData( QVariant::fromValue(openWithContext->urls()) );
         connect( openAction, &QAction::triggered, this, &OktetaPlugin::onOpenTriggered );
