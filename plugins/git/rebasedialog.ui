@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Rebase</string>
+   <string comment="@title:window">Rebase</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Base branch:</string>
+      <string comment="@label:listbox">Base branch:</string>
      </property>
      <property name="buddy">
       <cstring>branches</cstring>
@@ -37,7 +37,7 @@
    <item row="0" column="2">
     <widget class="QPushButton" name="rebaseButton">
      <property name="text">
-      <string>Rebase</string>
+      <string comment="@action:button">Rebase</string>
      </property>
     </widget>
    </item>
@@ -57,7 +57,7 @@
    <item row="2" column="2">
     <widget class="QPushButton" name="pushButton_2">
      <property name="text">
-      <string>Cancel</string>
+      <string comment="@action:button">Cancel</string>
      </property>
     </widget>
    </item>

@@ -39,7 +39,7 @@ using namespace KDevelop;
 StashManagerDialog::StashManagerDialog(const QDir& stashed, GitPlugin* plugin, QWidget* parent)
     : QDialog(parent), m_plugin(plugin), m_dir(stashed)
 {
-    setWindowTitle(i18n("Stash Manager"));
+    setWindowTitle(i18nc("@title:window", "Stash Manager"));
 
     m_mainWidget = new QWidget(this);
     m_ui = new Ui::StashManager;
@@ -119,7 +119,7 @@ void StashManagerDialog::dropClicked()
 
 void StashManagerDialog::branchClicked()
 {
-    QString branchName = QInputDialog::getText(this, i18n("KDevelop - Git Stash"), i18n("Select a name for the new branch:"));
+    QString branchName = QInputDialog::getText(this, i18nc("@title:window", "Git Stash"), i18nc("@label:textbox", "Name for the new branch:"));
 
     if(!branchName.isEmpty())
         runStash(QStringList{QStringLiteral("branch"), branchName, selection()});

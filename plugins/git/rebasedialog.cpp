@@ -36,7 +36,7 @@ using namespace KDevelop;
 RebaseDialog::RebaseDialog(GitPlugin* plugin, const QUrl &repository, QWidget* parent)
     : QDialog(parent), m_plugin(plugin), m_repository(repository)
 {
-    setWindowTitle(i18n("Branch selection"));
+    setWindowTitle(i18nc("@title:window", "Branch Selection"));
 
     m_ui = new Ui::RebaseDialog();
     m_ui->setupUi(this);

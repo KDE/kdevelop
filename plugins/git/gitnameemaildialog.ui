@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Configure Name and Email for Git</string>
+   <string comment="@title:window">Configure Name and Email for Git</string>
   </property>
   <layout class="QVBoxLayout" name="_2">
    <item>
@@ -32,7 +32,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>&amp;Name:</string>
+        <string comment="@label:textbox">&amp;Name:</string>
        </property>
        <property name="buddy">
         <cstring>nameEdit</cstring>
@@ -45,7 +45,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Emai&amp;l:</string>
+        <string comment="@label:textbox">Emai&amp;l:</string>
        </property>
        <property name="buddy">
         <cstring>emailEdit</cstring>
@@ -75,7 +75,7 @@
      <item>
       <widget class="QCheckBox" name="globalCheckBox">
        <property name="text">
-        <string>Write to global config</string>
+        <string comment="@option:check">Write to global config</string>
        </property>
       </widget>
      </item>

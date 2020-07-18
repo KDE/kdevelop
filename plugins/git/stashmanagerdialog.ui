@@ -13,31 +13,31 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="1">
     <widget class="QPushButton" name="apply">
-     <property name="whatsThis">
-      <string>Applies stash's patch</string>
+     <property name="toolTip">
+      <string comment="@info:tooltip">Apply stash's patch</string>
      </property>
      <property name="text">
-      <string>Apply</string>
+      <string comment="@action:button">Apply</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
     <widget class="QPushButton" name="pop">
-     <property name="whatsThis">
-      <string>Applies stash's patch and drops the stash</string>
+     <property name="toolTip">
+      <string comment="@info:tooltip">Apply stash's patch and drop the stash</string>
      </property>
      <property name="text">
-      <string>Pop</string>
+      <string comment="@action:button">Pop</string>
      </property>
     </widget>
    </item>
    <item row="3" column="1">
     <widget class="QPushButton" name="branch">
-     <property name="whatsThis">
-      <string>Creates a new branch and applies the stash there, then it drops the stash.</string>
+     <property name="toolTip">
+      <string comment="@info:tooltip">Create a new branch and apply the stash there, then drop the stash</string>
      </property>
      <property name="text">
-      <string>Branch</string>
+      <string comment="@action:button">Branch</string>
      </property>
     </widget>
    </item>
@@ -56,21 +56,21 @@
    </item>
    <item row="5" column="1">
     <widget class="QPushButton" name="drop">
-     <property name="whatsThis">
-      <string>Removes the selected branch</string>
+     <property name="toolTip">
+      <string comment="@info:tooltip">Remove the selected branch</string>
      </property>
      <property name="text">
-      <string>Drop</string>
+      <string comment="@action:button">Drop</string>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
     <widget class="QPushButton" name="show">
-     <property name="whatsThis">
-      <string>Show the contents of the stash</string>
+     <property name="toolTip">
+      <string comment="@info:tooltip">Show the content of the stash</string>
      </property>
      <property name="text">
-      <string>Show</string>
+      <string comment="@action:button">Show</string>
      </property>
     </widget>
    </item>
