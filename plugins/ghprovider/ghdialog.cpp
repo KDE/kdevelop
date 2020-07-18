@@ -68,13 +68,13 @@ Dialog::Dialog(QWidget *parent, Account *account)
                                  m_account->name(), tokenLinkStatementText()), this);
 
         auto logOutButton = new QPushButton;
-        logOutButton->setText(i18n("Log Out"));
+        logOutButton->setText(i18nc("@action:button", "Log Out"));
         logOutButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-cancel")));
         buttonBox->addButton(logOutButton, QDialogButtonBox::ActionRole);
         connect(logOutButton, &QPushButton::clicked, this, &Dialog::revokeAccess);
 
         auto forceSyncButton = new QPushButton;
-        forceSyncButton->setText(i18n("Force Sync"));
+        forceSyncButton->setText(i18nc("@action:button", "Force Sync"));
         forceSyncButton->setIcon(QIcon::fromTheme(QStringLiteral("view-refresh")));
         buttonBox->addButton(forceSyncButton, QDialogButtonBox::ActionRole);
         connect(forceSyncButton, &QPushButton::clicked, this, &Dialog::syncUser);
@@ -88,7 +88,7 @@ Dialog::Dialog(QWidget *parent, Account *account)
 
         auto authorizeButton = new QPushButton;
         buttonBox->addButton(authorizeButton, QDialogButtonBox::ActionRole);
-        authorizeButton->setText(i18n("Authorize"));
+        authorizeButton->setText(i18nc("@action:button", "Authorize"));
         authorizeButton->setIcon(QIcon::fromTheme(QStringLiteral("dialog-ok")));
         connect(authorizeButton, &QPushButton::clicked, this, &Dialog::authorizeClicked);
     }
@@ -102,7 +102,7 @@ Dialog::Dialog(QWidget *parent, Account *account)
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-    setWindowTitle(i18n("GitHub Account"));
+    setWindowTitle(i18nc("@title:window", "GitHub Account"));
 }
 
 void Dialog::authorizeClicked()
@@ -139,14 +139,14 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token, co
         KMessageBox::sorry(this, i18n("Authentication failed. Please try again.\n\n"
                                       "Could not create token: \"%1\"\n%2", tokenName,
                                       tokenLinkStatementText()),
-                                 i18n("GitHub Authorization Failed"));
+                                 i18nc("@title:window", "GitHub Authorization Failed"));
         return;
     }
     else{
         KMessageBox::information(this, i18n("Authentication succeeded.\n\n"
                                             "Created token: \"%1\"\n%2", tokenName,
                                             tokenLinkStatementText()),
-                                       i18n("GitHub Account Authorized"));
+                                       i18nc("@title:window", "GitHub Account Authorized"));
     }
     m_account->saveToken(id, token);
     syncUser();
@@ -154,7 +154,7 @@ void Dialog::authorizeResponse(const QByteArray &id, const QByteArray &token, co
 
 void Dialog::twoFactorResponse(const QString &transferHeader)
 {
-    auto code = QInputDialog::getText(this, i18n("Authentication Code"), i18n("OTP Code"));
+    auto code = QInputDialog::getText(this, i18nc("@title:window", "Authentication Code"), i18nc("@label:textbox", "OTP Code:"));
     Resource* rs = m_account->resource();
     disconnect(rs, &Resource::twoFactorAuthRequested,
                this, &Dialog::twoFactorResponse);
