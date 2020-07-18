@@ -41,7 +41,7 @@ EditExternalScript::EditExternalScript(ExternalScriptItem* item, QWidget* parent
     shortcutWidget->layout()->setContentsMargins(0, 0, 0, 0);
 
     //BEGIN setup tooltips
-    QString tooltip = i18n(
+    QString tooltip = i18nc("@info:tooltip",
         "<p>Defines the command that should be executed when this script is run. Basic shell features of your platform should be available.</p>\n"
         "<p>There are a few placeholders you can use in the command:</p>\n"
         "<dl>\n"
@@ -67,19 +67,19 @@ EditExternalScript::EditExternalScript(ExternalScriptItem* item, QWidget* parent
     commandEdit->setToolTip(tooltip);
     commandLabel->setToolTip(tooltip);
 
-    tooltip = i18n(
+    tooltip = i18nc("@info:tooltip",
         "<p>Defines what the external script should get as input (via <code>STDIN</code>).</p>"
               );
     stdinCombo->setToolTip(tooltip);
     stdinLabel->setToolTip(tooltip);
 
-    tooltip = i18n(
+    tooltip = i18nc("@info:tooltip",
         "<p>Defines what should be done with the output (i.e. <code>STDOUT</code>) of the script.</p>"
               );
     stdoutCombo->setToolTip(tooltip);
     stdoutLabel->setToolTip(tooltip);
 
-    tooltip = i18n(
+    tooltip = i18nc("@info:tooltip",
         "<p>Defines what should be done with the errors (i.e. <code>STDERR</code>) of the script.</p>"
         "<p>Note: if the action is the same as that chosen for the output, the channels will be merged "
         "and handled together.</p>"
@@ -87,29 +87,29 @@ EditExternalScript::EditExternalScript(ExternalScriptItem* item, QWidget* parent
     stderrCombo->setToolTip(tooltip);
     stderrLabel->setToolTip(tooltip);
 
-    tooltip = i18n(
+    tooltip = i18nc("@info:tooltip",
         "<p>Defines the name of the script. Just for displaying purposes.</p>"
               );
     nameEdit->setToolTip(tooltip);
     nameLabel->setToolTip(tooltip);
 
-    tooltip = i18n(
+    tooltip = i18nc("@info:tooltip",
         "<p>Defines the shortcut(s) you can use to execute this external script.</p>"
               );
     shortcutLabel->setToolTip(tooltip);
     shortcutWidget->setToolTip(tooltip);
 
-    tooltip = i18n(
+    tooltip = i18nc("@info:tooltip",
         "<p>Defines whether documents should be saved before the script gets executed.</p>"
               );
     saveLabel->setToolTip(tooltip);
     saveCombo->setToolTip(tooltip);
 
-    tooltip = i18n(
+    tooltip = i18nc("@info:tooltip",
         "<p>Defines whether the output of the script should be shown in a tool view.</p>"
               );
     showOutputBox->setToolTip(tooltip);
-    tooltip = i18n(
+    tooltip = i18nc("@info:tooltip",
         "<p>Defines what type of filtering should be applied to the output. E.g. to indicate errors by red text.</p>"
               );
     outputFilterLabel->setToolTip(tooltip);
@@ -118,9 +118,9 @@ EditExternalScript::EditExternalScript(ExternalScriptItem* item, QWidget* parent
 
     //BEGIN item to UI copying
     if (item->text().isEmpty()) {
-        setWindowTitle(i18n("Create new external script"));
+        setWindowTitle(i18nc("@title:window", "Create New External Script"));
     } else {
-        setWindowTitle(i18n("Edit external script '%1'", item->text()));
+        setWindowTitle(i18nc("@title:window", "Edit External Script '%1'", item->text()));
     }
     nameEdit->setText(item->text());
     commandEdit->setText(item->command());

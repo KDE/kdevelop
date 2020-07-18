@@ -16,7 +16,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="nameLabel">
        <property name="text">
-        <string>&amp;Name:</string>
+        <string comment="@label:textbox">&amp;Name:</string>
        </property>
        <property name="buddy">
         <cstring>nameEdit</cstring>
@@ -26,21 +26,15 @@
      <item row="0" column="1">
       <widget class="QLineEdit" name="nameEdit">
        <property name="toolTip">
-        <string>&lt;p&gt;The name will also be used as the identifier during code completion.&lt;/p&gt;
+        <string comment="@info:tooltip">&lt;p&gt;The name will also be used as the identifier during code completion.&lt;/p&gt;
   &lt;p&gt;&lt;b&gt;Note:&lt;/b&gt; No spaces allowed.&lt;/p&gt;</string>
-       </property>
-       <property name="placeholderText">
-        <string>please insert a name</string>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="commandLabel">
-       <property name="toolTip">
-        <string/>
-       </property>
        <property name="text">
-        <string>&amp;Command:</string>
+        <string comment="@label:textbox">&amp;Command:</string>
        </property>
        <property name="buddy">
         <cstring>commandEdit</cstring>
@@ -49,18 +43,12 @@
      </item>
      <item row="1" column="1">
       <widget class="QLineEdit" name="commandEdit">
-       <property name="placeholderText">
-        <string>please insert a command to execute</string>
-       </property>
       </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="stdinLabel">
-       <property name="toolTip">
-        <string/>
-       </property>
        <property name="text">
-        <string>&amp;Input:</string>
+        <string comment="@label:listbox">&amp;Input:</string>
        </property>
        <property name="buddy">
         <cstring>stdinCombo</cstring>
@@ -71,33 +59,30 @@
       <widget class="QComboBox" name="stdinCombo">
        <item>
         <property name="text">
-         <string>nothing</string>
+         <string comment="@item:inlistbox input source">Nothing</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>selection in current file or nothing</string>
+         <string comment="@item:inlistbox input source">Selection in Current File or Nothing</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>selection in current file or whole file</string>
+         <string comment="@item:inlistbox input source">Selection in Current File or Whole File</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>contents of current file</string>
+         <string comment="@item:inlistbox input source">Contents of Current File</string>
         </property>
        </item>
       </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="stdoutLabel">
-       <property name="toolTip">
-        <string/>
-       </property>
        <property name="text">
-        <string>&amp;Output:</string>
+        <string comment="@label:listbox">&amp;Output:</string>
        </property>
        <property name="buddy">
         <cstring>stdoutCombo</cstring>
@@ -108,32 +93,32 @@
       <widget class="QComboBox" name="stdoutCombo">
        <item>
         <property name="text">
-         <string>ignore</string>
+         <string comment="@item:inlistbox handle output">Ignore</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>insert at cursor position of current file</string>
+         <string comment="@item:inlistbox handle output">Insert at Cursor Position of Current File</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>replace selection of current file or insert at cursor position</string>
+         <string comment="@item:inlistbox handle output">Replace Selection of Current File or Insert at Cursor Position</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>replace selection of current file or whole file</string>
+         <string comment="@item:inlistbox handle output">Replace Selection of Current File or Whole File</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>replace contents of current file</string>
+         <string comment="@item:inlistbox handle output">Replace Contents of Current File</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>create new file</string>
+         <string comment="@item:inlistbox handle output">Create New File</string>
         </property>
        </item>
       </widget>
@@ -141,7 +126,7 @@
      <item row="4" column="0">
       <widget class="QLabel" name="stderrLabel">
        <property name="text">
-        <string>Errors:</string>
+        <string comment="@label:listbox">Errors:</string>
        </property>
        <property name="buddy">
         <cstring>stderrCombo</cstring>
@@ -152,37 +137,37 @@
       <widget class="QComboBox" name="stderrCombo">
        <item>
         <property name="text">
-         <string>ignore</string>
+         <string comment="@item:inlistbox handle errors">Ignore</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>merge with normal output</string>
+         <string comment="@item:inlistbox handle errors">Merge with Normal Output</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>insert at cursor position of current file</string>
+         <string comment="@item:inlistbox handle errors">Insert at Cursor Position of Current File</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>replace selection of current file or insert at cursor position</string>
+         <string comment="@item:inlistbox handle errors">Replace Selection of Current File or Insert at Cursor Position</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>replace selection of current file or whole file</string>
+         <string comment="@item:inlistbox handle errors">Replace Selection of Current File or Whole File</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>replace contents of current file</string>
+         <string comment="@item:inlistbox handle errors">Replace Contents of Current File</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>create new file</string>
+         <string comment="@item:inlistbox handle errors">Create New File</string>
         </property>
        </item>
       </widget>
@@ -190,7 +175,7 @@
      <item row="5" column="0">
       <widget class="QLabel" name="saveLabel">
        <property name="text">
-        <string>Save &amp;mode:</string>
+        <string comment="@label:listbox">Save &amp;mode:</string>
        </property>
        <property name="buddy">
         <cstring>saveCombo</cstring>
@@ -201,17 +186,17 @@
       <widget class="QComboBox" name="saveCombo">
        <item>
         <property name="text">
-         <string>save nothing</string>
+         <string comment="@item:inlistbox save mode">Save Nothing</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>save active document</string>
+         <string comment="@item:inlistbox save mode">Save Active Document</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>save all open documents</string>
+         <string comment="@item:inlistbox save mode">Save All Open Documents</string>
         </property>
        </item>
       </widget>
@@ -219,7 +204,7 @@
      <item row="6" column="0">
       <widget class="QLabel">
        <property name="text">
-        <string>Show out&amp;put:</string>
+        <string comment="@option:check">Show out&amp;put:</string>
        </property>
        <property name="buddy">
         <cstring>showOutputBox</cstring>
@@ -236,7 +221,7 @@
      <item row="7" column="0">
       <widget class="QLabel" name="outputFilterLabel">
        <property name="text">
-        <string>Output filter:</string>
+        <string comment="@label:listbox">Output filter:</string>
        </property>
        <property name="buddy">
         <cstring>outputFilterCombo</cstring>
@@ -247,22 +232,22 @@
       <widget class="QComboBox" name="outputFilterCombo">
        <item>
         <property name="text">
-         <string>no filter</string>
+         <string comment="@item:inlistbox output filter">No Filter</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>compiler filter</string>
+         <string comment="@item:inlistbox output filter">Compiler Filter</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>script error filter</string>
+         <string comment="@item:inlistbox output filter">Script Error Filter</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>static analysis error filter</string>
+         <string comment="@item:inlistbox output filter">Static Analysis Filter</string>
         </property>
        </item>
       </widget>
@@ -270,10 +255,10 @@
      <item row="8" column="0">
       <widget class="QLabel" name="shortcutLabel">
        <property name="toolTip">
-        <string>&lt;p&gt;Defines shortcuts you can use to execute this script.&lt;/p&gt;</string>
+        <string comment="@info:tooltip">Defines shortcuts you can use to execute this script.</string>
        </property>
        <property name="text">
-        <string>Shortcut:</string>
+        <string comment="@label:chooser">Shortcut:</string>
        </property>
       </widget>
      </item>

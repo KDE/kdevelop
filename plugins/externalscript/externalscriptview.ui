@@ -31,11 +31,8 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="toolTip">
-        <string>Define filter here</string>
-       </property>
        <property name="placeholderText">
-        <string>Filter...</string>
+        <string comment="@info:placeholder">Filter...</string>
        </property>
        <property name="clearButtonEnabled">
         <bool>true</bool>

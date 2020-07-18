@@ -250,7 +250,7 @@ KDevelop::ContextMenuExtension ExternalScriptPlugin::contextMenuExtension(KDevel
             }
 
             if (!menu) {
-                menu = new QMenu(i18n("External Scripts"), parent);
+                menu = new QMenu(i18nc("@title:menu", "External Scripts"), parent);
             }
 
             auto* scriptAction = new QAction(item->text(), menu);

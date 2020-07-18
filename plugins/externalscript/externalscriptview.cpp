@@ -41,7 +41,7 @@ ExternalScriptView::ExternalScriptView(ExternalScriptPlugin* plugin, QWidget* pa
     Ui::ExternalScriptViewBase::setupUi(this);
     setFocusProxy(filterText);
 
-    setWindowTitle(i18n("External Scripts"));
+    setWindowTitle(i18nc("@title:window", "External Scripts"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("dialog-scripts"), windowIcon()));
 
     m_model = new QSortFilterProxyModel(this);
@@ -59,16 +59,16 @@ ExternalScriptView::ExternalScriptView(ExternalScriptPlugin* plugin, QWidget* pa
             this, &ExternalScriptView::contextMenu);
 
     m_addScriptAction =
-        new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18n("Add External Script"), this);
+        new QAction(QIcon::fromTheme(QStringLiteral("document-new")), i18nc("@action", "Add External Script"), this);
     connect(m_addScriptAction, &QAction::triggered, this, &ExternalScriptView::addScript);
     addAction(m_addScriptAction);
 
-    m_editScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-edit")), i18n(
+    m_editScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-edit")), i18nc("@action",
                                          "Edit External Script"), this);
     connect(m_editScriptAction, &QAction::triggered, this, &ExternalScriptView::editScript);
     addAction(m_editScriptAction);
 
-    m_removeScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-close")), i18n(
+    m_removeScriptAction = new QAction(QIcon::fromTheme(QStringLiteral("document-close")), i18nc("@action",
                                            "Remove External Script"), this);
     connect(m_removeScriptAction, &QAction::triggered, this, &ExternalScriptView::removeScript);
     addAction(m_removeScriptAction);
@@ -159,7 +159,7 @@ void ExternalScriptView::removeScript()
                                              "<p>Do you really want to remove the external script configuration for <i>%1</i>?</p>"
                                              "<p><i>Note:</i> The script itself will not be removed.</p>",
                                              item->text()),
-                                         i18n("Confirm External Script Removal")
+                                         i18nc("@title:window", "Confirm External Script Removal")
               );
     if (ret == KMessageBox::Yes) {
         m_plugin->model()->removeRow(
