@@ -49,7 +49,7 @@ MesonNewBuildDir::MesonNewBuildDir(IProject* project, QWidget* parent)
     Q_ASSERT(mgr); // This dialog only works with the MesonManager
 
     setWindowTitle(
-        i18n("Configure a build directory - %1", ICore::self()->runtimeController()->currentRuntime()->name()));
+        i18nc("@title:window", "Configure a Build Directory - %1", ICore::self()->runtimeController()->currentRuntime()->name()));
 
     m_ui = new Ui::MesonNewBuildDir;
     m_ui->setupUi(this);

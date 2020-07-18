@@ -26,14 +26,14 @@
    <item>
     <widget class="QPushButton" name="b_showAdvanced">
      <property name="text">
-      <string>Show advanced configuration</string>
+      <string comment="@action:button">Show Advanced Configuration</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="container">
      <property name="title">
-      <string>Advanced configuration</string>
+      <string comment="@title:group">Advanced Configuration</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
@@ -41,7 +41,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="l_mesonArgs">
           <property name="text">
-           <string>Extra Meson arguments:</string>
+           <string comment="@label:textbox">Extra Meson arguments:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -54,7 +54,7 @@
            <enum>Qt::LeftToRight</enum>
           </property>
           <property name="text">
-           <string>Meson backend:</string>
+           <string comment="@label:listbox">Meson backend:</string>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
@@ -67,7 +67,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="l_mesonExe">
           <property name="text">
-           <string>Meson executable:</string>
+           <string comment="@label:chooser">Meson executable:</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -77,10 +77,7 @@
         <item row="0" column="1">
          <widget class="KLineEdit" name="i_mesonArgs">
           <property name="toolTip">
-           <string>Changing this will reset the build options</string>
-          </property>
-          <property name="placeholderText">
-           <string>Extra meson configuration arguments</string>
+           <string comment="@info:tooltip">Changing this will reset the build options.</string>
           </property>
           <property name="showClearButton" stdset="0">
            <bool>true</bool>
@@ -93,7 +90,7 @@
         <item row="2" column="1">
          <widget class="KUrlRequester" name="i_mesonExe">
           <property name="placeholderText">
-           <string>Path to the meson executable</string>
+           <string comment="@info:placeholder">/path/to/mesonexecutable</string>
           </property>
          </widget>
         </item>
@@ -102,7 +99,7 @@
       <item>
        <widget class="QPushButton" name="b_hideAdvanced">
         <property name="text">
-         <string>Hide advanced configuration</string>
+         <string comment="@action:button">Hide Advanced Configuration</string>
         </property>
        </widget>
       </item>

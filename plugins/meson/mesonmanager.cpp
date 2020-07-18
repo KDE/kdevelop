@@ -74,7 +74,7 @@ public:
 
     void start() override
     {
-        QMessageBox::critical(nullptr, i18n("Importing project failed"), m_error);
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Project Import Failed"), m_error);
 
         setError(KJob::UserDefinedError + 1); // Indicate that there was an error
         setErrorText(m_error);

@@ -416,8 +416,8 @@ void MesonRewriterPage::newOption()
 
     dialog.setOption(QInputDialog::UseListViewForComboBoxItems, true);
     dialog.setInputMode(QInputDialog::TextInput);
-    dialog.setWindowTitle(i18n("Select meson option to add"));
-    dialog.setLabelText(i18n("Select one new meson option to add"));
+    dialog.setWindowTitle(i18nc("@title:window", "Select Additional Meson Option"));
+    dialog.setLabelText(i18nc("@label:listbox", "Meson option to add:"));
     dialog.setComboBoxItems(total);
 
     if (dialog.exec() != QDialog::Accepted) {
@@ -448,12 +448,12 @@ void MesonRewriterPage::emitChanged()
 
 QString MesonRewriterPage::name() const
 {
-    return i18n("Project");
+    return i18nc("@title:tab", "Project");
 }
 
 QString MesonRewriterPage::fullName() const
 {
-    return i18n("Meson project settings");
+    return i18nc("@title:tab", "Meson Project Settings");
 }
 
 QIcon MesonRewriterPage::icon() const

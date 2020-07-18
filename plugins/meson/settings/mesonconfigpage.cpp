@@ -342,12 +342,12 @@ void MesonConfigPage::emitChanged()
 
 QString MesonConfigPage::name() const
 {
-    return i18n("Meson");
+    return i18nc("@title:tab", "Meson");
 }
 
 QString MesonConfigPage::fullName() const
 {
-    return i18n("Meson project configuration");
+    return i18nc("@title:tab", "Meson Project Configuration");
 }
 
 QIcon MesonConfigPage::icon() const
