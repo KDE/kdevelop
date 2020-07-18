@@ -71,19 +71,19 @@ DocumentSwitcherPlugin::DocumentSwitcherPlugin(QObject *parent, const QVariantLi
 #endif
 
     forwardAction = actionCollection()->addAction ( QStringLiteral( "last_used_views_forward" ) );
-    forwardAction->setText( i18n( "Last Used Views" ) );
+    forwardAction->setText(i18nc("@action", "Last Used Views"));
     forwardAction->setIcon( QIcon::fromTheme( QStringLiteral( "go-next-view-page") ) );
     actionCollection()->setDefaultShortcut( forwardAction, shortcutAccelerator | Qt::Key_Tab );
-    forwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views." ) );
-    forwardAction->setToolTip( i18n( "Walk through the list of last used views" ) );
+    forwardAction->setWhatsThis(i18nc("@info:whatsthis", "Opens a list to walk through the list of last used views."));
+    forwardAction->setToolTip( i18nc("@info:tooltip", "Walk through the list of last used views"));
     connect( forwardAction, &QAction::triggered, this, &DocumentSwitcherPlugin::walkForward );
 
     backwardAction = actionCollection()->addAction ( QStringLiteral( "last_used_views_backward" ) );
-    backwardAction->setText( i18n( "Last Used Views (Reverse)" ) );
+    backwardAction->setText(i18nc("@action", "Last Used Views (Reverse)"));
     backwardAction->setIcon( QIcon::fromTheme( QStringLiteral( "go-previous-view-page") ) );
     actionCollection()->setDefaultShortcut( backwardAction, shortcutAccelerator | Qt::SHIFT | Qt::Key_Tab );
-    backwardAction->setWhatsThis( i18n( "Opens a list to walk through the list of last used views in reverse." ) );
-    backwardAction->setToolTip( i18n( "Walk through the list of last used views" ) );
+    backwardAction->setWhatsThis(i18nc("@info:whatsthis", "Opens a list to walk through the list of last used views in reverse."));
+    backwardAction->setToolTip(i18nc("@info:tooltip", "Walk through the list of last used views"));
     connect( backwardAction, &QAction::triggered, this, &DocumentSwitcherPlugin::walkBackward );
 
     view = new DocumentSwitcherTreeView( this );
