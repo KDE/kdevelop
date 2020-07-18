@@ -14,14 +14,14 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Icon:</string>
+      <string comment="@label:chooser">Icon:</string>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
     <widget class="KIconButton" name="qchIcon">
      <property name="toolTip">
-      <string>Select an icon</string>
+      <string comment="@info:tooltip">Select an icon</string>
      </property>
      <property name="iconSize">
       <number>16</number>
@@ -34,24 +34,24 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Name:</string>
+      <string comment="@label:textbox">Name:</string>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
     <widget class="QLineEdit" name="qchName">
      <property name="toolTip">
-      <string>Enter a name</string>
+      <string comment="@info:tooltip">Enter a name</string>
      </property>
      <property name="placeholderText">
-      <string>Select a name</string>
+      <string comment="@info:placeholder">Select a name...</string>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Path:</string>
+      <string comment="@label:textbox">Path:</string>
      </property>
     </widget>
    </item>
@@ -64,13 +64,13 @@
       </sizepolicy>
      </property>
      <property name="toolTip">
-      <string>Select a QtHelp file...</string>
+      <string comment="@info:tooltip">Select a Qt Help file...</string>
      </property>
      <property name="filter">
       <string notr="true">*.qch|Qt Compressed Help (.qch)</string>
      </property>
      <property name="placeholderText">
-      <string>Select a QtHelp file...</string>
+      <string comment="@info:placeholder">Select a Qt Help file...</string>
      </property>
     </widget>
    </item>

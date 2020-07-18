@@ -20,13 +20,13 @@
    <item>
     <widget class="QGroupBox" name="boxAutoLoad">
      <property name="title">
-      <string>Load QtHelp Documentation from System Locations</string>
+      <string comment="@title:group">Load Qt Help Documentation from System Locations</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="labelLoadQtApiDocs">
         <property name="text">
-         <string>&amp;Load Qt API documentation:</string>
+         <string comment="@option:check">&amp;Load Qt API documentation:</string>
         </property>
         <property name="buddy">
          <cstring>loadQtDocsCheckBox</cstring>
@@ -43,7 +43,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="labelLoadFromDirectory">
         <property name="text">
-         <string>Load QtHelp files from directory:</string>
+         <string comment="@label:textbox">Load Qt Help files from directory:</string>
         </property>
        </widget>
       </item>
@@ -66,7 +66,7 @@
    <item>
     <widget class="QGroupBox" name="boxQchManage">
      <property name="title">
-      <string>Install Additional Documentation Files</string>
+      <string comment="@title:group">Install Additional Documentation Files</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
@@ -101,12 +101,12 @@
             </attribute>
             <column>
              <property name="text">
-              <string>Name</string>
+              <string comment="@title:column">Name</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Path</string>
+              <string comment="@title:column">Path</string>
              </property>
             </column>
             <column>
@@ -131,7 +131,7 @@
             <item>
              <widget class="QPushButton" name="addButton">
               <property name="text">
-               <string>Add</string>
+               <string comment="@action:button">Add</string>
               </property>
              </widget>
             </item>

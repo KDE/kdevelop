@@ -58,9 +58,9 @@ public:
         setupUi(this);
 
         if (modifiedItem) {
-            setWindowTitle(i18n("Modify Entry"));
+            setWindowTitle(i18nc("@title:window", "Modify Entry"));
         } else {
-            setWindowTitle(i18n("Add New Entry"));
+            setWindowTitle(i18nc("@title:window", "Add New Entry"));
         }
         qchIcon->setIcon(QStringLiteral("qtlogo"));
     }
@@ -112,7 +112,7 @@ QtHelpConfig::QtHelpConfig(QtHelpPlugin* plugin, QWidget *parent)
     m_configWidget->qchTable->header()->setSectionResizeMode(ConfigColumn, QHeaderView::Fixed);
 
     // Add GHNS button
-    auto* knsButton = new KNS3::Button(i18nc("Allow user to get some API documentation with GHNS", "Get New Documentation"), QStringLiteral("kdevelop-qthelp.knsrc"), m_configWidget->boxQchManage);
+    auto* knsButton = new KNS3::Button(i18nc("@action:button Allow user to get some API documentation with GHNS", "Get New Documentation"), QStringLiteral("kdevelop-qthelp.knsrc"), m_configWidget->boxQchManage);
     m_configWidget->tableCtrlLayout->insertWidget(1, knsButton);
     connect(knsButton, &KNS3::Button::dialogFinished, this, &QtHelpConfig::knsUpdate);
     connect(m_configWidget->loadQtDocsCheckBox, &QCheckBox::toggled,
@@ -302,12 +302,12 @@ void QtHelpConfig::knsUpdate(const KNS3::Entry::List& list)
 
 QString QtHelpConfig::name() const
 {
-    return i18n("Qt Help");
+    return i18nc("@title:tab", "Qt Help");
 }
 
 QString QtHelpConfig::fullName() const
 {
-    return i18n("Configure Qt Help Settings");
+    return i18nc("@title:tab", "Configure Qt Help Settings");
 }
 
 QIcon QtHelpConfig::icon() const
@@ -332,19 +332,19 @@ QTreeWidgetItem * QtHelpConfig::addTableItem(const QString &icon, const QString 
 
     auto *modifyBtn = new QToolButton(item->treeWidget());
     modifyBtn->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
-    modifyBtn->setToolTip(i18n("Modify"));
+    modifyBtn->setToolTip(i18nc("@info:tooltip", "Modify"));
     connect(modifyBtn, &QPushButton::clicked, this, [=](){
         modify(item);
     });
     auto *removeBtn = new QToolButton(item->treeWidget());
     removeBtn->setIcon(QIcon::fromTheme(QStringLiteral("entry-delete")));
-    removeBtn->setToolTip(i18n("Delete"));
+    removeBtn->setToolTip(i18nc("@info:tooltip", "Delete"));
     if (item->text(GhnsColumn) != QLatin1String("0")) {
         // KNS3 currently does not provide API to uninstall entries
         // just removing the files results in wrong installed states in the KNS3 dialog
         // TODO: add API to KNS to remove files without UI interaction
         removeBtn->setEnabled(false);
-        removeBtn->setToolTip(i18n("Please uninstall this via GHNS"));
+        removeBtn->setToolTip(i18nc("@info:tooltip", "Please uninstall this via GHNS."));
     } else {
         connect(removeBtn, &QPushButton::clicked, this, [=](){
             remove(item);
