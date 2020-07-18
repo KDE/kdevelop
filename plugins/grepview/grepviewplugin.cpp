@@ -77,11 +77,12 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
         this, QDBusConnection::ExportScriptableSlots );
 
     QAction*action = actionCollection()->addAction(QStringLiteral("edit_grep"));
-    action->setText(i18n("Find/Replace in Fi&les..."));
+    action->setText(i18nc("@action", "Find/Replace in Fi&les..."));
     actionCollection()->setDefaultShortcut( action, QKeySequence(QStringLiteral("Ctrl+Alt+F")) );
     connect(action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromMenu);
-    action->setToolTip( i18n("Search for expressions over several files") );
-    action->setWhatsThis( i18n("Opens the 'Find/Replace in files' dialog. There you "
+    action->setToolTip( i18nc("@info:tooltip", "Search for expressions over several files") );
+    action->setWhatsThis( i18nc("@info:whatsthis",
+                               "Opens the 'Find/Replace in Files' dialog. There you "
                                "can enter a regular expression which is then "
                                "searched for within all files in the directories "
                                "you specify. Matches will be displayed, you "
@@ -91,7 +92,7 @@ GrepViewPlugin::GrepViewPlugin( QObject *parent, const QVariantList & )
     // instantiate delegate, it's supposed to be deleted via QObject inheritance
     new GrepOutputDelegate(this);
     m_factory = new GrepOutputViewFactory(this);
-    core()->uiController()->addToolView(i18n("Find/Replace in Files"), m_factory);
+    core()->uiController()->addToolView(i18nc("@title:window", "Find/Replace in Files"), m_factory);
 }
 
 GrepOutputViewFactory* GrepViewPlugin::toolViewFactory() const
@@ -129,7 +130,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         QList<KDevelop::ProjectBaseItem*> items = ctx->items();
         // verify if there is only one folder selected
         if ((items.count() == 1) && (items.first()->folder())) {
-            auto* action = new QAction(i18n("Find/Replace in This Folder..."), parent);
+            auto* action = new QAction(i18nc("@action:inmenu", "Find/Replace in This Folder..."), parent);
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-find")));
             m_contextMenuDirectory = items.at(0)->folder()->path().toLocalFile();
             connect( action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromProject);
@@ -140,7 +141,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
     if ( context->type() == KDevelop::Context::EditorContext ) {
         auto* econtext = static_cast<KDevelop::EditorContext*>(context);
         if ( econtext->view()->selection() ) {
-            auto* action = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18n("&Find/Replace in Files..."), parent);
+            auto* action = new QAction(QIcon::fromTheme(QStringLiteral("edit-find")), i18nc("@action:inmenu", "&Find/Replace in Files..."), parent);
             connect(action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromMenu);
             extension.addAction(KDevelop::ContextMenuExtension::ExtensionGroup, action);
         }
@@ -152,7 +153,7 @@ KDevelop::ContextMenuExtension GrepViewPlugin::contextMenuExtension(KDevelop::Co
         QMimeType mimetype = QMimeDatabase().mimeTypeForUrl(fcontext->urls().at(0));
         static const QMimeType directoryMime = QMimeDatabase().mimeTypeForName(QStringLiteral("inode/directory"));
         if (mimetype == directoryMime) {
-            auto* action = new QAction(i18n("Find/Replace in This Folder..."), parent);
+            auto* action = new QAction(i18nc("@action:inmenu", "Find/Replace in This Folder..."), parent);
             action->setIcon(QIcon::fromTheme(QStringLiteral("edit-find")));
             m_contextMenuDirectory = fcontext->urls().at(0).toLocalFile();
             connect( action, &QAction::triggered, this, &GrepViewPlugin::showDialogFromProject);

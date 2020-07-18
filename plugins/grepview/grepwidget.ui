@@ -32,10 +32,10 @@
       </sizepolicy>
      </property>
      <property name="toolTip">
-      <string>Enter the regular expression you want to search for here.</string>
+      <string comment="@info:tooltip">Enter the regular expression you want to search for</string>
      </property>
      <property name="whatsThis">
-      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+      <string comment="@info:whatsthis">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
@@ -66,7 +66,7 @@ p, li { white-space: pre-wrap; }
    <item row="1" column="0">
     <widget class="QLabel" name="label_9">
      <property name="text">
-      <string>Template:</string>
+      <string comment="@label:listbox">Template:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -79,27 +79,27 @@ p, li { white-space: pre-wrap; }
    <item row="1" column="1" colspan="3">
     <widget class="KComboBox" name="templateEdit">
      <property name="toolTip">
-      <string>This is the regular expression template.</string>
+      <string comment="@info:tooltip">This is the regular expression template.</string>
      </property>
      <property name="whatsThis">
-      <string>This is the regular expression template. &lt;i&gt;%s&lt;/i&gt; will be replaced by the pattern, while &lt;i&gt;%%&lt;/i&gt; will be replaced by &lt;i&gt;%&lt;/i&gt;.</string>
+      <string comment="@info:whatsthis">This is the regular expression template. &lt;i&gt;%s&lt;/i&gt; will be replaced by the pattern, while &lt;i&gt;%%&lt;/i&gt; will be replaced by &lt;i&gt;%&lt;/i&gt;.</string>
      </property>
     </widget>
    </item>
    <item row="5" column="5">
     <widget class="QPushButton" name="syncButton">
      <property name="toolTip">
-      <string>Quickly select location from a set of directories</string>
+      <string comment="@info:tooltip">Quickly select location from a set of directories</string>
      </property>
      <property name="text">
-      <string>Quick Select</string>
+      <string comment="@action:button">Quick Select</string>
      </property>
     </widget>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="depthLabel">
      <property name="text">
-      <string>Depth:</string>
+      <string comment="@label:spinbox">Depth:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -115,7 +115,7 @@ p, li { white-space: pre-wrap; }
       <string extracomment="Maximum level of recursion. For folder-based searches, that means the level of subfolders. Choose 0 to look only in files inside the current folder, or Full to search also on the subfoldersâ€™s files, theirs subfoldersâ€™ files, and so on."/>
      </property>
      <property name="specialValueText">
-      <string extracomment="Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.">Full</string>
+      <string comment="@item full recursion" extracomment="Full recursion will be used. For folder-based searches, that means searching in the target folder and all the subfolders, their subfolders, and so on.">Full</string>
      </property>
      <property name="minimum">
       <number>-1</number>
@@ -128,7 +128,7 @@ p, li { white-space: pre-wrap; }
    <item row="0" column="0">
     <widget class="QLabel" name="label_8">
      <property name="text">
-      <string>Pattern:</string>
+      <string comment="@label:listbox">Pattern:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -141,7 +141,7 @@ p, li { white-space: pre-wrap; }
    <item row="7" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Files:</string>
+      <string comment="@label:listbox">Files:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -154,7 +154,7 @@ p, li { white-space: pre-wrap; }
    <item row="3" column="2">
     <widget class="QLabel" name="label_11">
      <property name="text">
-      <string>Case sensitive:</string>
+      <string comment="@option:check">Case sensitive:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -173,7 +173,7 @@ p, li { white-space: pre-wrap; }
       </sizepolicy>
      </property>
      <property name="toolTip">
-      <string>Case-sensitive searching.</string>
+      <string comment="@info:tooltip">Case-sensitive searching.</string>
      </property>
      <property name="text">
       <string/>
@@ -186,7 +186,7 @@ p, li { white-space: pre-wrap; }
    <item row="5" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Location(s):</string>
+      <string comment="@label:listbox">Location(s):</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -199,10 +199,10 @@ p, li { white-space: pre-wrap; }
    <item row="7" column="1" colspan="5">
     <widget class="KComboBox" name="filesCombo">
      <property name="toolTip">
-      <string>Files filter.</string>
+      <string comment="@info:tooltip">Files filter</string>
      </property>
      <property name="whatsThis">
-      <string>Enter the file name pattern of the files to search here. You may give several patterns separated by commas or spaces.</string>
+      <string comment="@info:whatsthis">Enter the file name pattern of the files to search here. You may give several patterns separated by commas or spaces.</string>
      </property>
      <property name="editable">
       <bool>true</bool>
@@ -215,7 +215,7 @@ p, li { white-space: pre-wrap; }
    <item row="8" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Exclude:</string>
+      <string comment="@label:listbox">Exclude:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -228,10 +228,10 @@ p, li { white-space: pre-wrap; }
    <item row="8" column="1" colspan="5">
     <widget class="KComboBox" name="excludeCombo">
      <property name="toolTip">
-      <string>Files pattern to exclude</string>
+      <string comment="@info:tooltip">Files pattern to exclude</string>
      </property>
      <property name="whatsThis">
-      <string>Enter the file name pattern of the files to exclude from the search here. You may give several patterns separated by commas or spaces.&lt;p&gt;Every pattern is internally surrounded by asterisks, so that each pattern can match parts of the file paths.&lt;/p&gt;</string>
+      <string comment="@info:whatsthis">Enter the file name pattern of the files to exclude from the search here. You may give several patterns separated by commas or spaces.&lt;p&gt;Every pattern is internally surrounded by asterisks, so that each pattern can match parts of the file paths.&lt;/p&gt;</string>
      </property>
      <property name="editable">
       <bool>true</bool>
@@ -311,7 +311,7 @@ p, li { white-space: pre-wrap; }
    <item row="3" column="0">
     <widget class="QLabel" name="label_10">
      <property name="text">
-      <string>Regular expression:</string>
+      <string comment="@option:check">Regular expression:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -324,7 +324,7 @@ p, li { white-space: pre-wrap; }
    <item row="3" column="1">
     <widget class="QCheckBox" name="regexCheck">
      <property name="toolTip">
-      <string>Enable or disable regular expression.</string>
+      <string comment="@info:tooltip">Enable or disable regular expression.</string>
      </property>
      <property name="text">
       <string/>
@@ -337,7 +337,7 @@ p, li { white-space: pre-wrap; }
    <item row="6" column="2">
     <widget class="QLabel" name="limitToProjectLabel">
      <property name="text">
-      <string>Limit to project files:</string>
+      <string comment="@option:check">Limit to project files:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -366,14 +366,14 @@ p, li { white-space: pre-wrap; }
    <item row="2" column="1" colspan="3">
     <widget class="KComboBox" name="replacementTemplateEdit">
      <property name="toolTip">
-      <string>Enter the replacement template.</string>
+      <string comment="@info:tooltip">Enter the replacement template</string>
      </property>
     </widget>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Replacement template:</string>
+      <string comment="@label:textbox">Replacement template:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -386,7 +386,7 @@ p, li { white-space: pre-wrap; }
    <item row="5" column="1" colspan="3">
     <widget class="KComboBox" name="searchPaths">
      <property name="toolTip">
-      <string>Select the location where you want to search. It can be a directory, a file, or a semicolon separated (without spaces) list of directories/files.</string>
+      <string comment="@info:tooltip">Select the location where you want to search. It can be a directory, a file, or a semicolon separated (without spaces) list of directories/files.</string>
      </property>
      <property name="editable">
       <bool>true</bool>
@@ -411,7 +411,7 @@ p, li { white-space: pre-wrap; }
       </size>
      </property>
      <property name="toolTip">
-      <string>Select a directory to search in.</string>
+      <string comment="@info:tooltip">Select a directory to search in</string>
      </property>
      <property name="text">
       <string/>

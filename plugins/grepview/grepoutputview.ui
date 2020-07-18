@@ -38,7 +38,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Replacement &amp;text:</string>
+           <string comment="@label:listbox">Replacement &amp;text:</string>
           </property>
           <property name="buddy">
            <cstring>replacementCombo</cstring>
@@ -54,7 +54,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string>Enter the replacement pattern.</string>
+           <string comment="@info:tooltip">Enter the replacement pattern</string>
           </property>
           <property name="editable">
            <bool>true</bool>
@@ -73,10 +73,10 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string>Apply replacement on selected items.</string>
+           <string comment="@info:tooltip">Apply replacement on selected items</string>
           </property>
           <property name="text">
-           <string>&amp;Replace</string>
+           <string comment="@action:button">&amp;Replace</string>
           </property>
          </widget>
         </item>

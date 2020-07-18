@@ -53,8 +53,8 @@ using namespace KDevelop;
 
 namespace {
 
-inline QString allOpenFilesString() { return i18n("All Open Files"); }
-inline QString allOpenProjectsString() { return i18n("All Open Projects"); }
+inline QString allOpenFilesString() { return i18nc("@item:inlistbox", "All Open Files"); }
+inline QString allOpenProjectsString() { return i18nc("@item:inlistbox", "All Open Projects"); }
 
 inline QStringList template_desc()
 {
@@ -182,7 +182,7 @@ GrepDialog::GrepDialog(GrepViewPlugin *plugin, QWidget *parent, bool show)
         return;
     }
 
-    setWindowTitle( i18n("Find/Replace in Files") );
+    setWindowTitle(i18nc("@title:window", "Find/Replace in Files"));
 
     setupUi(this);
     patternCombo->lineEdit()->setClearButtonEnabled(true);
@@ -262,7 +262,7 @@ GrepDialog::GrepDialog(GrepViewPlugin *plugin, QWidget *parent, bool show)
 void GrepDialog::selectDirectoryDialog()
 {
     const QString dirName = QFileDialog::getExistingDirectory(
-        this, i18nc("@title:window", "Select directory to search in"),
+        this, i18nc("@title:window", "Select Directory to Search in"),
         searchPaths->lineEdit()->text());
     if (!dirName.isEmpty()) {
         setSearchLocations(dirName);
@@ -526,17 +526,17 @@ void GrepDialog::startSearch()
 
     GrepOutputView *toolView =
         static_cast<GrepOutputView*>(ICore::self()->uiController()->findToolView(
-            i18n("Find/Replace in Files"), m_plugin->toolViewFactory(),
+            i18nc("@title:window", "Find/Replace in Files"), m_plugin->toolViewFactory(),
             m_settings.fromHistory ? IUiController::Create : IUiController::CreateAndRaise));
 
     if (m_settings.fromHistory) {
         // when restored from history, only display the parameters
-        toolView->renewModel(m_settings, i18n("Search \"%1\" in %2", m_settings.pattern, description));
+        toolView->renewModel(m_settings, i18nc("@item search result", "Search \"%1\" in %2", m_settings.pattern, description));
         emit m_plugin->grepJobFinished(true);
     } else {
         GrepOutputModel* outputModel =
             toolView->renewModel(m_settings,
-                                i18n("Search \"%1\" in %2 (at time %3)", m_settings.pattern, description,
+                                i18nc("@item search result", "Search \"%1\" in %2 (at time %3)", m_settings.pattern, description,
                                     QTime::currentTime().toString(QStringLiteral("hh:mm"))));
 
         GrepJob* job = m_plugin->newGrepJob();
