@@ -71,7 +71,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Cache Values</string>
+      <string comment="@title:group">Cache Values</string>
      </property>
      <layout class="QVBoxLayout">
       <item>
@@ -86,7 +86,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Comment:</string>
+         <string comment="@label">Comment:</string>
         </property>
        </widget>
       </item>
@@ -103,7 +103,7 @@
    <item>
     <widget class="QPushButton" name="showAdvanced">
      <property name="text">
-      <string>Show Advanced</string>
+      <string comment="@action:button">Show Advanced</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -122,7 +122,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Advanced</string>
+      <string comment="@title:group">Advanced</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
@@ -131,7 +131,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="installationPrefixLabel">
         <property name="text">
-         <string>Installation prefix:</string>
+         <string comment="@label:chooser">Installation prefix:</string>
         </property>
        </widget>
       </item>
@@ -141,7 +141,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="buildTypeLabel">
         <property name="text">
-         <string>Build type:</string>
+         <string comment="@label:listbox">Build type:</string>
         </property>
        </widget>
       </item>
@@ -175,7 +175,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="extraArgumentsLabel">
         <property name="text">
-         <string>Extra arguments:</string>
+         <string comment="@label:listbox">Extra arguments:</string>
         </property>
        </widget>
       </item>
@@ -195,7 +195,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Configure environment:</string>
+         <string comment="@label:chooser">Configure environment:</string>
         </property>
        </widget>
       </item>
@@ -210,7 +210,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string>Select an environment to be used</string>
+           <string comment="@info:tooltip">Select an environment to be used</string>
           </property>
          </widget>
         </item>
@@ -222,7 +222,7 @@
       <item row="5" column="1">
        <widget class="QCheckBox" name="showInternal">
         <property name="text">
-         <string>Show advanced values</string>
+         <string comment="@option:check">Show advanced values</string>
         </property>
        </widget>
       </item>
@@ -232,7 +232,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>CMake executable:</string>
+         <string comment="@label:chooser">CMake executable:</string>
         </property>
        </widget>
       </item>

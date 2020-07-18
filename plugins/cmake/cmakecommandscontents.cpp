@@ -40,11 +40,11 @@ static const std::array<QString, 6> args = {
     QString(),
 };
 static const std::array<QString, 5> modules = {
-    i18n("Commands"),
-    i18n("Variables"),
-    i18n("Modules"),
-    i18n("Properties"),
-    i18n("Policies"),
+    i18nc("@item cmake", "Commands"),
+    i18nc("@item cmake", "Variables"),
+    i18nc("@item cmake", "Modules"),
+    i18nc("@item cmake", "Properties"),
+    i18nc("@item cmake", "Policies"),
 };
 
 CMakeCommandsContents::CMakeCommandsContents(QObject* parent)
@@ -113,7 +113,7 @@ QString CMakeCommandsContents::descriptionForIdentifier(const QString& id, CMake
         const QString rst2html = QStandardPaths::findExecutable(QStringLiteral("rst2html"));
         if (rst2html.isEmpty()) {
             desc = (QLatin1String("<html><body style='background:#fff'><pre><code>") + desc.toHtmlEscaped() + QLatin1String("</code></pre>")
-                + i18n("<p>For better cmake documentation rendering, install rst2html</p>")
+                + i18n("<p>For better CMake documentation rendering, install rst2html.</p>")
                 + QLatin1String("</body></html>"));
         } else {
             QProcess p;

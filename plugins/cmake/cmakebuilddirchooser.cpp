@@ -40,7 +40,7 @@ using namespace KDevelop;
 CMakeBuildDirChooser::CMakeBuildDirChooser(QWidget* parent)
     : QDialog(parent)
 {
-    setWindowTitle(i18n("Configure a build directory - %1", ICore::self()->runtimeController()->currentRuntime()->name()));
+    setWindowTitle(i18nc("@title:window", "Configure a Build Directory - %1", ICore::self()->runtimeController()->currentRuntime()->name()));
 
     m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     m_buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
@@ -98,7 +98,7 @@ void CMakeBuildDirChooser::setProject( IProject* project )
     m_srcFolder = folder;
 
     m_chooserUi->buildFolder->setUrl(KDevelop::proposedBuildFolder(m_srcFolder).toUrl());
-    setWindowTitle(i18n("Configure a build directory for %1", project->name()));
+    setWindowTitle(i18nc("@title:window", "Configure a Build Directory for %1", project->name()));
     update();
 }
 

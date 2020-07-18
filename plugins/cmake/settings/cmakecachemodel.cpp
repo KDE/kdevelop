@@ -47,12 +47,12 @@ void CMakeCacheModel::read()
 {
     // Set headers
     const QStringList labels{
-        i18n("Name"),
-        i18n("Type"),
-        i18n("Value"),
-        i18n("Comment"),
-        i18n("Advanced"),
-        i18n("Strings"),
+        i18nc("@title:column", "Name"),
+        i18nc("@title:column", "Type"),
+        i18nc("@title:column", "Value"),
+        i18nc("@title:column", "Comment"),
+        i18nc("@title:column", "Advanced"),
+        i18nc("@title:column", "Strings"),
     };
     setHorizontalHeaderLabels(labels);
 

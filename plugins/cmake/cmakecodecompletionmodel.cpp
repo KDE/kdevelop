@@ -208,11 +208,11 @@ QVariant CMakeCodeCompletionModel::data (const QModelIndex & index, int role) co
     {
         switch(type)
         {
-            case Command:   return i18n("Command");
-            case Variable:  return i18n("Variable");
-            case Macro:     return i18n("Macro");
-            case Path:      return i18n("Path");
-            case Target:      return i18n("Target");
+            case Command:   return i18nc("@item", "Command");
+            case Variable:  return i18nc("@item", "Variable");
+            case Macro:     return i18nc("@item", "Macro");
+            case Path:      return i18nc("@item", "Path");
+            case Target:    return i18nc("@item", "Target");
         }
     }
     else if(role==Qt::DecorationRole && index.column()==CodeCompletionModel::Icon)

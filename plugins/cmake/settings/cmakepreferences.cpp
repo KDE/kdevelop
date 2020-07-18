@@ -389,12 +389,12 @@ void CMakePreferences::showAdvanced(bool v)
 
 QString CMakePreferences::name() const
 {
-    return i18n("CMake");
+    return i18nc("@title:tab", "CMake");
 }
 
 QString CMakePreferences::fullName() const
 {
-    return i18n("Configure CMake settings");
+    return i18nc("@title:tab", "Configure CMake Settings");
 }
 
 QIcon CMakePreferences::icon() const
