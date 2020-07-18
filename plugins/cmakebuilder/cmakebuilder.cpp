@@ -206,7 +206,7 @@ KJob* CMakeBuilder::checkConfigureJob(KDevelop::IProject* project, bool& valid)
     }
     else if( CMake::currentBuildDir(project).isEmpty() )
     {
-        return new ErrorJob(this, i18n("No Build Directory configured, cannot install"));
+        return new ErrorJob(this, i18n("No build directory configured, cannot install"));
     }
     valid = true;
     return configure;
@@ -216,7 +216,7 @@ KJob* CMakeBuilder::configure( KDevelop::IProject* project )
 {
     if( CMake::currentBuildDir( project ).isEmpty() )
     {
-        return new ErrorJob(this, i18n("No Build Directory configured, cannot configure"));
+        return new ErrorJob(this, i18n("No build directory configured, cannot configure"));
     }
     auto* job = new CMakeJob(this);
     job->setProject(project);
