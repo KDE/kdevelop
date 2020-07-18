@@ -187,7 +187,7 @@ void ProjectPathsWidget::clear()
 void ProjectPathsWidget::addProjectPath()
 {
     const QUrl directory = pathsModel->data(pathsModel->index(0, 0), ProjectPathsModel::FullUrlDataRole).toUrl();
-    QPointer<QFileDialog> dlg = new QFileDialog(this, i18n("Select Project Path"), directory.toLocalFile());
+    QPointer<QFileDialog> dlg = new QFileDialog(this, i18nc("@title:window", "Select Project Path"), directory.toLocalFile());
     dlg->setFileMode(QFileDialog::Directory);
     dlg->setOption(QFileDialog::ShowDirsOnly);
     if (dlg->exec()) {
@@ -237,7 +237,7 @@ void ProjectPathsWidget::batchEdit()
         auto includes = pathsModel->data(midx, ProjectPathsModel::IncludesDataRole).toStringList();
         be.textEdit->setPlainText(includes.join(QLatin1Char('\n')));
 
-        dialog->setWindowTitle(i18n("Edit include directories/files"));
+        dialog->setWindowTitle(i18nc("@title:window", "Edit Include Directories/Files"));
     } else {
         auto defines = pathsModel->data(midx, ProjectPathsModel::DefinesDataRole).value<Defines>();
 
@@ -245,7 +245,7 @@ void ProjectPathsWidget::batchEdit()
             be.textEdit->appendPlainText(it.key() + QLatin1Char('=') + it.value());
         }
 
-        dialog->setWindowTitle(i18n("Edit defined macros"));
+        dialog->setWindowTitle(i18nc("@title:window", "Edit Defined Macros"));
     }
 
     if (dialog->exec() != QDialog::Accepted) {

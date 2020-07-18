@@ -26,10 +26,10 @@
      <item>
       <widget class="QCheckBox" name="kcfg_reparse">
        <property name="toolTip">
-        <string>Check this if you want the project to be reparsed to apply the changes.</string>
+        <string comment="@info:tooltip">Check this if you want the project to be reparsed to apply the changes.</string>
        </property>
        <property name="text">
-        <string>Reparse the project</string>
+        <string comment="@option:check">Reparse the project</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -67,17 +67,17 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler that will be used to retrieve standard include directories and defined macros.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler that will be used to retrieve standard include directories and defined macros.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>Compiler for path:</string>
+           <string comment="@label:listbox">Compiler for path:</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QComboBox" name="compiler">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler that will be used to retrieve standard include directories and defined macros.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Select compiler that will be used to retrieve standard include directories and defined macros.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
@@ -87,10 +87,10 @@
      <item>
       <widget class="QPushButton" name="batchEdit">
        <property name="toolTip">
-        <string>Edit multiply includes/defines at the same time.</string>
+        <string comment="@info:tooltip">Edit multiple includes/defines at the same time.</string>
        </property>
        <property name="text">
-        <string>&amp;Batch Edit...</string>
+        <string comment="@action:button">&amp;Batch Edit...</string>
        </property>
        <property name="icon">
         <iconset theme="format-list-unordered"/>
@@ -116,7 +116,7 @@
        <item>
         <widget class="QPushButton" name="addPath">
          <property name="toolTip">
-          <string>Add a new sub-project path entry.</string>
+          <string comment="@info:tooltip">Add a new sub-project path entry.</string>
          </property>
          <property name="text">
           <string/>
@@ -132,7 +132,7 @@
           <bool>false</bool>
          </property>
          <property name="toolTip">
-          <string>Delete current sub-project path entry.</string>
+          <string comment="@info:tooltip">Delete current sub-project path entry.</string>
          </property>
          <property name="text">
           <string/>
@@ -162,7 +162,7 @@
      </property>
      <widget class="QWidget" name="includePathsPage">
       <attribute name="title">
-       <string>Includes/Imports</string>
+       <string comment="@title:tab">Includes/Imports</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
@@ -179,7 +179,7 @@
      </widget>
      <widget class="QWidget" name="definesPage">
       <attribute name="title">
-       <string>Defines</string>
+       <string comment="@title:tab">Defines</string>
       </attribute>
       <layout class="QVBoxLayout" name="gridLayout_2">
        <item>
@@ -196,7 +196,7 @@
      </widget>
      <widget class="QWidget" name="parserPage">
       <attribute name="title">
-       <string>C/C++ Parser</string>
+       <string comment="@title:tab">C/C++ Parser</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">

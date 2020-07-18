@@ -22,7 +22,7 @@
      <item>
       <widget class="QPushButton" name="addButton">
        <property name="text">
-        <string>&amp;Add</string>
+        <string comment="@action:button">&amp;Add</string>
        </property>
        <property name="icon">
         <iconset theme="list-add"/>
@@ -32,7 +32,7 @@
      <item>
       <widget class="QPushButton" name="removeButton">
        <property name="text">
-        <string>&amp;Remove</string>
+        <string comment="@action:button">&amp;Remove</string>
        </property>
        <property name="icon">
         <iconset theme="edit-delete"/>
@@ -57,13 +57,13 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string/>
+      <string notr="true"/>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Name:</string>
+         <string comment="@label:textbox">Name:</string>
         </property>
        </widget>
       </item>
@@ -73,7 +73,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Compiler executable:</string>
+         <string comment="@label:chooser">Compiler executable:</string>
         </property>
        </widget>
       </item>

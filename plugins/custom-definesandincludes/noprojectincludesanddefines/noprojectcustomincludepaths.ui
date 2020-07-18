@@ -14,7 +14,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Storage Directory:</string>
+      <string comment="@title:group">Storage Directory:</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
@@ -22,7 +22,7 @@
         <item>
          <widget class="KUrlRequester" name="storageDirectory">
           <property name="toolTip">
-           <string>The custom include-path will be stored in a special file called &quot;.kdev_include_paths&quot; stored within a source directory.</string>
+           <string comment="@info:tooltip">The custom include-path will be stored in a special file called &quot;.kdev_include_paths&quot; stored within a source directory.</string>
           </property>
          </widget>
         </item>
@@ -34,7 +34,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Custom include paths or #define's</string>
+      <string comment="@title:group">Custom include paths or #define's</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
@@ -42,7 +42,7 @@
         <item>
          <widget class="QPlainTextEdit" name="customIncludePaths">
          <property name="toolTip">
-         <string>The plain list of include paths. You may also define custom macros here by adding "#define NAME VALUE" lines.</string>
+         <string comment="@info:tooltip">The plain list of include paths. You may also define custom macros here by adding "#define NAME VALUE" lines.</string>
          </property>
          </widget>
         </item>
@@ -63,10 +63,10 @@
              </size>
             </property>
             <property name="toolTip">
-             <string>Select a directory to include.</string>
+             <string comment="@info:tooltip">Select a directory to include.</string>
             </property>
             <property name="text">
-             <string>...</string>
+             <string comment="@action:button">...</string>
             </property>
            </widget>
           </item>

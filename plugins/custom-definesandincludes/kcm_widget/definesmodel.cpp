@@ -76,9 +76,9 @@ QVariant DefinesModel::headerData(int section, Qt::Orientation orientation, int 
     if( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
         switch( section ) {
         case 0:
-            return i18n("Define");
+            return i18nc("@title:column", "Define");
         case 1:
-            return i18n("Value");
+            return i18nc("@title:column", "Value");
         default:
             Q_ASSERT_X( 0, "DefinesModel::headerData", "Invalid column requested" );
             break;

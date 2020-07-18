@@ -36,7 +36,7 @@ NoProjectCustomIncludePaths::NoProjectCustomIncludePaths(QWidget* parent)
     m_ui->setupUi(this);
     m_ui->storageDirectory->setMode(KFile::Directory);
 
-    setWindowTitle(i18n("Setup Custom Include Paths"));
+    setWindowTitle(i18nc("@title:window", "Setup Custom Include Paths"));
 
     connect(m_ui->directorySelector, &QPushButton::clicked, this, &NoProjectCustomIncludePaths::openAddIncludeDirectoryDialog);
 }
@@ -74,7 +74,7 @@ void NoProjectCustomIncludePaths::setCustomIncludePaths(const QStringList& paths
 
 void NoProjectCustomIncludePaths::openAddIncludeDirectoryDialog()
 {
-    const QString dirName = QFileDialog::getExistingDirectory(this, i18n("Select directory to include"));
+    const QString dirName = QFileDialog::getExistingDirectory(this, i18nc("@title:window", "Select Directory to Include"));
     if (dirName.isEmpty())
         return;
 

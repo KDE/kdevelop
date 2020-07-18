@@ -64,7 +64,7 @@ CompilersWidget::CompilersWidget(QWidget* parent)
 
     connect(m_ui->removeButton, &QPushButton::clicked, this, &CompilersWidget::deleteCompiler);
 
-    auto delAction = new QAction( i18n("Delete compiler"), this );
+    auto delAction = new QAction(i18nc("@action", "Delete Compiler"), this);
     delAction->setShortcut( QKeySequence( QStringLiteral("Del") ) );
     delAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     m_ui->compilers->addAction( delAction );
@@ -229,12 +229,12 @@ void CompilersWidget::defaults()
 
 QString CompilersWidget::name() const
 {
-    return i18n("C/C++ Compilers");
+    return i18nc("@title:tab", "C/C++ Compilers");
 }
 
 QString CompilersWidget::fullName() const
 {
-    return i18n("Configure C/C++ Compilers");
+    return i18nc("@title:tab", "Configure C/C++ Compilers");
 }
 
 QIcon CompilersWidget::icon() const

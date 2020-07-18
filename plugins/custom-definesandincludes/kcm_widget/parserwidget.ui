@@ -17,23 +17,23 @@
    <item row="1" column="0">
     <widget class="QCheckBox" name="parseHeadersInPlainC">
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check this if you want &lt;code&gt;*.h&lt;/code&gt; headers to be parsed in plain C mode. By default they are parsed as C++ headers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Check this if you want &lt;code&gt;*.h&lt;/code&gt; headers to be parsed in plain C mode. By default they are parsed as C++ headers.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
-      <string>Parse *.h headers in plain C</string>
+      <string comment="@option:check">Parse *.h headers in plain C</string>
      </property>
     </widget>
    </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string/>
+      <string notr="true"/>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>C++ Profi&amp;le:</string>
+         <string comment="@label:listbox">C++ profi&amp;le:</string>
         </property>
         <property name="buddy">
          <cstring>languageStandardsCpp</cstring>
@@ -49,41 +49,41 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <item>
          <property name="text">
-          <string>Custom</string>
+          <string comment="@item:inlistbox language standard">Custom</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++98</string>
+          <string notr="true">c++98</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++03</string>
+          <string notr="true">c++03</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++11</string>
+          <string notr="true">c++11</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++14</string>
+          <string notr="true">c++14</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++17</string>
+          <string notr="true">c++17</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++2a</string>
+          <string notr="true">c++2a</string>
          </property>
         </item>
        </widget>
@@ -91,7 +91,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="argumentsLabel">
         <property name="text">
-         <string>C++ co&amp;mmand-line arguments:</string>
+         <string comment="@label:textbox">C++ co&amp;mmand-line arguments:</string>
         </property>
         <property name="buddy">
          <cstring>parserOptionsCpp</cstring>
@@ -117,7 +117,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>C Profi&amp;le:</string>
+         <string comment="@label:listbox">C profi&amp;le:</string>
         </property>
         <property name="buddy">
          <cstring>languageStandardsC</cstring>
@@ -133,41 +133,41 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <item>
          <property name="text">
-          <string>Custom</string>
+          <string comment="@item:inlistbox language standard">Custom</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c89</string>
+          <string notr="true">c89</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>gnu89</string>
+          <string notr="true">gnu89</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c99</string>
+          <string notr="true">c99</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>gnu99</string>
+          <string notr="true">gnu99</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c11</string>
+          <string notr="true">c11</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>gnu11</string>
+          <string notr="true">gnu11</string>
          </property>
         </item>
        </widget>
@@ -175,7 +175,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="argumentsLabel_2">
         <property name="text">
-         <string>C co&amp;mmand-line arguments:</string>
+         <string comment="@label:textbox">C co&amp;mmand-line arguments:</string>
         </property>
         <property name="buddy">
          <cstring>parserOptionsC</cstring>
@@ -201,7 +201,7 @@
       <item row="6" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>OpenCL C &amp;Profile:</string>
+         <string comment="@label:listbox">OpenCL C &amp;profile:</string>
         </property>
         <property name="buddy">
          <cstring>languageStandardsOpenCl</cstring>
@@ -217,26 +217,26 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <item>
          <property name="text">
-          <string>Custom</string>
+          <string comment="@item:inlistbox language standard">Custom</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>CL1.1</string>
+          <string notr="true">CL1.1</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>CL1.2</string>
+          <string notr="true">CL1.2</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>CL2.0</string>
+          <string notr="true">CL2.0</string>
          </property>
         </item>
        </widget>
@@ -244,7 +244,7 @@
       <item row="7" column="0">
        <widget class="QLabel" name="argumentsLabel_3">
         <property name="text">
-         <string>OpenCL C comma&amp;nd-line arguments:</string>
+         <string comment="@label:textbox">OpenCL C comma&amp;nd-line arguments:</string>
         </property>
         <property name="buddy">
          <cstring>parserOptionsOpenCl</cstring>
@@ -270,7 +270,7 @@
       <item row="9" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>CUDA C P&amp;rofile:</string>
+         <string comment="@label:listbox">CUDA C P&amp;rofile:</string>
         </property>
         <property name="buddy">
          <cstring>languageStandardsCuda</cstring>
@@ -286,31 +286,31 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose language profile. &lt;/p&gt;&lt;p&gt;Use &amp;quot;Custom&amp;quot; profile to modify parser command-line arguments&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <item>
          <property name="text">
-          <string>Custom</string>
+          <string comment="@item:inlistbox language standard">Custom</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++03</string>
+          <string notr="true">c++03</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++11</string>
+          <string notr="true">c++11</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c++14</string>
+          <string notr="true">c++14</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>c99</string>
+          <string notr="true">c99</string>
          </property>
         </item>
        </widget>
@@ -318,7 +318,7 @@
       <item row="10" column="0">
        <widget class="QLabel" name="argumentsLabel_4">
         <property name="text">
-         <string>CUDA C comman&amp;d-line arguments:</string>
+         <string comment="@label:textbox">CUDA C comman&amp;d-line arguments:</string>
         </property>
         <property name="buddy">
          <cstring>parserOptionsCuda</cstring>

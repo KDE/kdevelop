@@ -79,12 +79,12 @@ void DefinesAndIncludesConfigPage::apply()
 
 QString DefinesAndIncludesConfigPage::name() const
 {
-    return i18n("Language Support");
+    return i18nc("@title:tab", "Language Support");
 }
 
 QString DefinesAndIncludesConfigPage::fullName() const
 {
-    return i18n("Configure Language Support");
+    return i18nc("@title:tab", "Configure Language Support");
 }
 
 QIcon DefinesAndIncludesConfigPage::icon() const

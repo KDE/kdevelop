@@ -38,7 +38,7 @@ DefinesWidget::DefinesWidget( QWidget* parent )
     connect(definesModel, &DefinesModel::rowsInserted, this, QOverload<>::of(&DefinesWidget::definesChanged));
     connect(definesModel, &DefinesModel::rowsRemoved, this, QOverload<>::of(&DefinesWidget::definesChanged));
 
-    auto* delDefAction = new QAction( i18n("Delete Define"), this );
+    auto* delDefAction = new QAction(i18nc("@action", "Delete Define"), this);
     delDefAction->setShortcut( QKeySequence(Qt::Key_Delete) );
     delDefAction->setShortcutContext( Qt::WidgetWithChildrenShortcut );
     delDefAction->setIcon( QIcon::fromTheme(QStringLiteral("edit-delete")) );
