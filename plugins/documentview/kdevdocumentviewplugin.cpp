@@ -89,7 +89,7 @@ KDevDocumentViewPlugin::KDevDocumentViewPlugin( QObject *parent, const QVariantL
 
     factory = new KDevDocumentViewPluginFactory( this );
 
-    core()->uiController()->addToolView( i18n("Documents"), factory );
+    core()->uiController()->addToolView(i18nc("@title:window", "Documents"), factory);
 
     setXMLFile( QStringLiteral( "kdevdocumentview.rc" ) );
 }
