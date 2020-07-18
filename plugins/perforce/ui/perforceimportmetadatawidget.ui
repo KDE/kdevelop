@@ -26,7 +26,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="labelUrl">
      <property name="text">
-      <string>Source directory:</string>
+      <string comment="@label:textbox">Source directory:</string>
      </property>
     </widget>
    </item>
@@ -36,7 +36,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="labelExec">
      <property name="text">
-      <string>P4 executable:</string>
+      <string comment="@label:textbox">P4 executable:</string>
      </property>
     </widget>
    </item>
@@ -65,7 +65,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>The format of P4PORT for Perforce applications is protocol:host:port, or port by itself if both the Perforce application and versioning service are running on the same host. Port numbers must be in the range 1024 through 32767</string>
+      <string comment="@info:tooltip">The format of P4PORT for Perforce applications is protocol:host:port, or port by itself if both the Perforce application and versioning service are running on the same host. Port numbers must be in the range 1024 through 32767</string>
      </property>
      <property name="text">
       <string/>
@@ -94,7 +94,7 @@
    <item row="6" column="1">
     <widget class="QLineEdit" name="p4userEdit">
      <property name="toolTip">
-      <string>Current Perforce user name. By default, the Perforce username is the same as the OS username</string>
+      <string comment="@info:tooltip">Current Perforce user name. By default, the Perforce username is the same as the OS username</string>
      </property>
     </widget>
    </item>
@@ -108,7 +108,7 @@
    <item row="7" column="1">
     <widget class="KComboBox" name="p4clientEdit">
      <property name="toolTip">
-      <string>Name of current client workspace on the Perforce server</string>
+      <string comment="@info:tooltip">Name of current client workspace on the Perforce server</string>
      </property>
     </widget>
    </item>
@@ -125,7 +125,7 @@
       <bool>false</bool>
      </property>
      <property name="toolTip">
-      <string>Contains a file name without a path. The specified file is used to store other Perforce environment variables </string>
+      <string comment="@info:tooltip">Contains a file name without a path. The specified file is used to store other Perforce environment variables </string>
      </property>
     </widget>
    </item>
@@ -138,7 +138,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Test</string>
+      <string comment="@action:button">Test</string>
      </property>
     </widget>
    </item>
@@ -194,7 +194,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Config File</string>
+       <string comment="@option:radio">Config File</string>
       </property>
       <property name="checked">
        <bool>true</bool>
@@ -210,7 +210,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>User/Port Config</string>
+       <string comment="@option:radio">User/Port Config</string>
       </property>
      </widget>
     </widget>

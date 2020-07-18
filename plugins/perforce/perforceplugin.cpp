@@ -474,7 +474,7 @@ KDevelop::ContextMenuExtension PerforcePlugin::contextMenuExtension(KDevelop::Co
 
     perforceMenu->addSeparator();
     if (!m_edit_action) {
-         m_edit_action = new QAction(i18n("Edit"), this);
+         m_edit_action = new QAction(i18nc("@action::inmenu", "Edit"), this);
          connect(m_edit_action, &QAction::triggered, this, & PerforcePlugin::ctxEdit);
      }
      perforceMenu->addAction(m_edit_action);
