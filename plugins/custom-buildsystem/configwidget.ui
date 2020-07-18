@@ -16,18 +16,18 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Build Directory:</string>
+        <string comment="@label:chooser">Build directory:</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="KUrlRequester" name="buildDir" native="true">
        <property name="toolTip">
-        <string>Select the directory where the tools are being executed in.
+        <string comment="@info:tooltip">Select the directory where the tools are being executed in.
 If this is the same as the source directory you can leave it empty.</string>
        </property>
        <property name="placeholderText" stdset="0">
-        <string>The directory where the tools are executed</string>
+        <string comment="@info:placeholder">The directory where the tools are executed in</string>
        </property>
        <property name="text" stdset="0">
         <string/>
@@ -39,13 +39,13 @@ If this is the same as the source directory you can leave it empty.</string>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Build Tools</string>
+      <string comment="@title:group">Build Tools</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Action:</string>
+         <string comment="@label:listbox">Action:</string>
         </property>
        </widget>
       </item>
@@ -55,7 +55,7 @@ If this is the same as the source directory you can leave it empty.</string>
       <item row="1" column="0">
        <widget class="QLabel" name="label_10">
         <property name="text">
-         <string>Enable:</string>
+         <string comment="@option:check">Enable:</string>
         </property>
        </widget>
       </item>
@@ -72,7 +72,7 @@ If this is the same as the source directory you can leave it empty.</string>
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Executable:</string>
+         <string comment="@label:chooser">Executable:</string>
         </property>
        </widget>
       </item>
@@ -82,7 +82,7 @@ If this is the same as the source directory you can leave it empty.</string>
          <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>This is the executable that should be executed when selecting the action from the Project menu</string>
+         <string comment="@info:tooltip">This is the executable that should be executed when selecting the action from the Project menu</string>
         </property>
        </widget>
       </item>
@@ -92,7 +92,7 @@ If this is the same as the source directory you can leave it empty.</string>
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Arguments:</string>
+         <string comment="@label:textbox">Arguments:</string>
         </property>
        </widget>
       </item>
@@ -102,7 +102,7 @@ If this is the same as the source directory you can leave it empty.</string>
          <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>The arguments that the tool needs to execute properly.</string>
+         <string comment="@info:tooltip">The arguments that the tool needs to execute properly.</string>
         </property>
        </widget>
       </item>
@@ -112,7 +112,7 @@ If this is the same as the source directory you can leave it empty.</string>
          <bool>false</bool>
         </property>
         <property name="text">
-         <string>Environment:</string>
+         <string comment="@label:chooser">Environment:</string>
         </property>
        </widget>
       </item>
@@ -122,7 +122,7 @@ If this is the same as the source directory you can leave it empty.</string>
          <bool>false</bool>
         </property>
         <property name="toolTip">
-         <string>Choose a pre-configured environment for your tool</string>
+         <string comment="@info:tooltip">Choose a pre-configured environment for your tool</string>
         </property>
        </widget>
       </item>

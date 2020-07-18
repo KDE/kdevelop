@@ -24,11 +24,11 @@
 QString CustomBuildSystemTool::toolName(CustomBuildSystemTool::ActionType type)
 {
     switch (type) {
-    case Build: return i18nc("Custom build tool", "build");
-    case Configure: return i18nc("Custom build tool", "configure");
-    case Install: return i18nc("Custom build tool", "install");
-    case Clean: return i18nc("Custom build tool", "clean");
-    case Prune: return i18nc("Custom build tool", "prune");
-    default: return i18n("unknown");
+        case Build:     return i18nc("@item:intext custom 'build' tool", "build");
+        case Configure: return i18nc("@item:intext custom 'configure' tool", "configure");
+        case Install:   return i18nc("@item:intext custom 'install' tool", "install");
+        case Clean:     return i18nc("@item:intext custom 'clean' tool", "clean");
+        case Prune:     return i18nc("@item:intext custom 'prune' tool", "prune");
+        default:        return i18nc("@item:intext custom 'unknown' tool", "unknown");
     }
 }

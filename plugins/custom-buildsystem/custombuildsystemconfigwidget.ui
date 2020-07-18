@@ -28,7 +28,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Build configuration:</string>
+        <string comment="@label:listbox">Build configuration:</string>
        </property>
       </widget>
      </item>
@@ -51,7 +51,7 @@
      <item>
       <widget class="QPushButton" name="addConfig">
        <property name="text">
-        <string>Add</string>
+        <string comment="@action:button">Add</string>
        </property>
        <property name="icon">
         <iconset theme="list-add"/>
@@ -61,7 +61,7 @@
      <item>
       <widget class="QPushButton" name="removeConfig">
        <property name="text">
-        <string>Remove</string>
+        <string comment="@action:button">Remove</string>
        </property>
        <property name="icon">
         <iconset theme="edit-delete"/>

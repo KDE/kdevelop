@@ -35,11 +35,11 @@ ConfigWidget::ConfigWidget( QWidget* parent )
 
     ui->buildDir->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
-    ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18n("Build"), QVariant() );
-    ui->buildAction->insertItem( CustomBuildSystemTool::Configure, i18n("Configure"), QVariant() );
-    ui->buildAction->insertItem( CustomBuildSystemTool::Install, i18n("Install"), QVariant() );
-    ui->buildAction->insertItem( CustomBuildSystemTool::Clean, i18n("Clean"), QVariant() );
-    ui->buildAction->insertItem( CustomBuildSystemTool::Prune, i18n("Prune"), QVariant() );
+    ui->buildAction->insertItem( CustomBuildSystemTool::Build, i18nc("@item:inlistbox build action", "Build"), QVariant() );
+    ui->buildAction->insertItem( CustomBuildSystemTool::Configure, i18nc("@item:inlistbox build action", "Configure"), QVariant() );
+    ui->buildAction->insertItem( CustomBuildSystemTool::Install, i18nc("@item:inlistbox build action", "Install"), QVariant() );
+    ui->buildAction->insertItem( CustomBuildSystemTool::Clean, i18nc("@item:inlistbox build action", "Clean"), QVariant() );
+    ui->buildAction->insertItem( CustomBuildSystemTool::Prune, i18nc("@item:inlistbox build action", "Prune"), QVariant() );
 
     connect( ui->buildAction, QOverload<int>::of(&KComboBox::activated), this, &ConfigWidget::changeAction );
 

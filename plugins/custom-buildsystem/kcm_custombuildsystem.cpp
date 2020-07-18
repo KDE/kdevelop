@@ -63,7 +63,7 @@ void CustomBuildSystemKCModule::defaults()
 
 QString CustomBuildSystemKCModule::name() const
 {
-    return i18n("Custom Build System");
+    return i18nc("@title:tab", "Custom Build System");
 }
 
 QString CustomBuildSystemKCModule::fullName() const
