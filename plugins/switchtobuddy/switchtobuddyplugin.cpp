@@ -125,7 +125,7 @@ ContextMenuExtension SwitchToBuddyPlugin::contextMenuExtension(Context* context,
             continue;
         }
 
-        auto* action = new QAction(i18n("Switch to '%1'", url.fileName()), parent);
+        auto* action = new QAction(i18nc("@action:inmenu", "Switch to '%1'", url.fileName()), parent);
         const QString surl = url.toLocalFile();
         connect(action, &QAction::triggered, this, [this, surl](){ switchToBuddy(surl); }, Qt::QueuedConnection);
         extension.addAction(ContextMenuExtension::NavigationGroup, action);
@@ -139,12 +139,12 @@ void SwitchToBuddyPlugin::createActionsForMainWindow(Sublime::MainWindow* /*wind
     xmlFile = this->xmlFile();
 
     QAction* switchDefinitionDeclaration = actions.addAction(QStringLiteral("switch_definition_declaration"));
-    switchDefinitionDeclaration->setText(i18n("&Switch Definition/Declaration"));
+    switchDefinitionDeclaration->setText(i18nc("@action", "&Switch Definition/Declaration"));
     actions.setDefaultShortcut(switchDefinitionDeclaration, Qt::CTRL | Qt::SHIFT | Qt::Key_C);
     connect(switchDefinitionDeclaration, &QAction::triggered, this, &SwitchToBuddyPlugin::switchDefinitionDeclaration);
 
     QAction* switchHeaderSource = actions.addAction(QStringLiteral("switch_header_source"));
-    switchHeaderSource->setText(i18n("Switch Header/Source"));
+    switchHeaderSource->setText(i18nc("@action", "Switch Header/Source"));
     actions.setDefaultShortcut(switchHeaderSource, Qt::CTRL | Qt::Key_Slash);
     connect(switchHeaderSource, &QAction::triggered, this, &SwitchToBuddyPlugin::switchHeaderSource);
 }
