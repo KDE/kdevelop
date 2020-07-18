@@ -28,7 +28,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Check set:</string>
+        <string comment="@label:listbox">Check set:</string>
        </property>
       </widget>
      </item>
@@ -45,7 +45,7 @@
      <item>
       <widget class="QPushButton" name="addCheckSetSelectionButton">
        <property name="toolTip">
-        <string>Add check set...</string>
+        <string comment="@info:tooltip">Add check set</string>
        </property>
        <property name="icon">
         <iconset theme="list-add"/>
@@ -55,7 +55,7 @@
      <item>
       <widget class="QPushButton" name="cloneCheckSetSelectionButton">
        <property name="toolTip">
-        <string>Clone check set...</string>
+        <string comment="@info:tooltip">Clone check set</string>
        </property>
        <property name="icon">
         <iconset theme="edit-clone"/>
@@ -65,7 +65,7 @@
      <item>
       <widget class="QPushButton" name="removeCheckSetSelectionButton">
        <property name="toolTip">
-        <string>Remove check set</string>
+        <string comment="@info:tooltip">Remove check set</string>
        </property>
        <property name="icon">
         <iconset theme="edit-delete"/>
@@ -75,7 +75,7 @@
      <item>
       <widget class="QPushButton" name="setAsDefaultCheckSetSelectionButton">
        <property name="toolTip">
-        <string>Set as default</string>
+        <string comment="@info:tooltip">Set as default</string>
        </property>
        <property name="icon">
         <iconset theme="starred-symbolic"/>
@@ -85,7 +85,7 @@
      <item>
       <widget class="QPushButton" name="editCheckSetSelectionNameButton">
        <property name="toolTip">
-        <string>Edit name of check set</string>
+        <string comment="@info:tooltip">Edit name of check set</string>
        </property>
        <property name="icon">
         <iconset theme="edit-rename"/>

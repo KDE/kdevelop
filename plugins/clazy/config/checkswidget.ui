@@ -28,7 +28,7 @@
      <item>
       <widget class="QPushButton" name="resetButton">
        <property name="text">
-        <string>Reset checks</string>
+        <string comment="@action:button">Reset Checks</string>
        </property>
       </widget>
      </item>

@@ -117,7 +117,7 @@ QIcon ProjectConfigPage::icon() const
 
 QString ProjectConfigPage::name() const
 {
-    return i18n("Clazy");
+    return i18nc("@title:tab", "Clazy");
 }
 
 void ProjectConfigPage::updateCommandLine()

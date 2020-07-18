@@ -90,12 +90,12 @@ KDevelop::ConfigPage::ConfigPageType GlobalConfigPage::configPageType() const
 
 QString GlobalConfigPage::name() const
 {
-    return i18n("Clazy");
+    return i18nc("@title:tab", "Clazy");
 }
 
 QString GlobalConfigPage::fullName() const
 {
-    return i18n("Configure Clazy Settings");
+    return i18nc("@title:tab", "Configure Clazy Settings");
 }
 
 QIcon GlobalConfigPage::icon() const

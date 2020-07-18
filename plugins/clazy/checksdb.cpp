@@ -39,11 +39,11 @@ ChecksDB::ChecksDB(const QUrl& docsPath)
     };
 
     static const QHash<QString, QString> levelDisplayName = {
-        { QStringLiteral("level0"), i18n("Level 0") },
-        { QStringLiteral("level1"), i18n("Level 1") },
-        { QStringLiteral("level2"), i18n("Level 2") },
-        { QStringLiteral("level3"), i18n("Level 3") },
-        { QStringLiteral("manual"), i18n("Manual Level") }
+        { QStringLiteral("level0"), i18nc("@item level of checks", "Level 0") },
+        { QStringLiteral("level1"), i18nc("@item level of checks", "Level 1") },
+        { QStringLiteral("level2"), i18nc("@item level of checks", "Level 2") },
+        { QStringLiteral("level3"), i18nc("@item level of checks", "Level 3") },
+        { QStringLiteral("manual"), i18nc("@item level of checks", "Manual Level") }
     };
 
     static const QHash<QString, QString> levelDescription = {

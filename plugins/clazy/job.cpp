@@ -240,7 +240,7 @@ void Job::childProcessError(QProcess::ProcessError e)
     }
 
     if (!message.isEmpty()) {
-        QMessageBox::critical(nullptr, i18n("Clazy Error"), message);
+        QMessageBox::critical(nullptr, i18nc("@title:window", "Clazy Error"), message);
     }
 
     KDevelop::CompileAnalyzeJob::childProcessError(e);

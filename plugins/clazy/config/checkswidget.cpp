@@ -48,7 +48,7 @@ ChecksWidget::ChecksWidget(QWidget* parent)
     m_ui->setupUi(this);
 
     m_ui->filterEdit->addTreeWidget(m_ui->checksTree);
-    m_ui->filterEdit->setPlaceholderText(i18n("Search checks..."));
+    m_ui->filterEdit->setPlaceholderText(i18nc("@info:placeholder", "Search checks..."));
     connect(m_ui->filterEdit, &KTreeWidgetSearchLine::searchUpdated, this, &ChecksWidget::searchUpdated);
 }
 

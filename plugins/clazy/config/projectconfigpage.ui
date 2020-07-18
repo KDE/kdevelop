@@ -36,7 +36,7 @@
      </property>
      <widget class="QWidget" name="checksTab">
       <attribute name="title">
-       <string>Checks</string>
+       <string comment="@title:tab">Checks</string>
       </attribute>
       <layout class="QVBoxLayout">
        <item>
@@ -63,53 +63,53 @@
      </widget>
      <widget class="QWidget" name="optionsTab">
       <attribute name="title">
-       <string>Options</string>
+       <string comment="@title:tab">Options</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QGroupBox" name="commonBox">
          <property name="title">
-          <string/>
+          <string notr="true"/>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
            <widget class="QCheckBox" name="kcfg_onlyQt">
             <property name="toolTip">
-             <string>Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB is missing.</string>
+             <string comment="@info:tooltip">Do not emit warnings for non-Qt files, or in other words, if -DQT_CORE_LIB is missing.</string>
             </property>
             <property name="text">
-             <string>Only Qt</string>
+             <string comment="@option:check">Only Qt</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
            <widget class="QCheckBox" name="kcfg_qt4Compat">
             <property name="toolTip">
-             <string>Disable checks not compatible with Qt 4.</string>
+             <string comment="@info:tooltip">Disable checks not compatible with Qt 4.</string>
             </property>
             <property name="text">
-             <string>Qt4 compatible</string>
+             <string comment="@option:check">Qt4 compatible</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
            <widget class="QCheckBox" name="kcfg_qtDeveloper">
             <property name="toolTip">
-             <string>For running clazy on Qt itself, optional, but honors specific guidelines.</string>
+             <string comment="@info:tooltip">For running clazy on Qt itself, optional, but honors specific guidelines.</string>
             </property>
             <property name="text">
-             <string>Qt developer</string>
+             <string comment="@option:check">Qt developer</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
            <widget class="QCheckBox" name="kcfg_visitImplicitCode">
             <property name="toolTip">
-             <string>For visiting implicit code like compiler generated constructors.
+             <string comment="@info:tooltip">For visiting implicit code like compiler generated constructors.
 None of the built-in checks benefit from this, but can be useful for custom checks.</string>
             </property>
             <property name="text">
-             <string>Visit implicit code</string>
+             <string comment="@option:check">Visit implicit code</string>
             </property>
            </widget>
           </item>
@@ -119,17 +119,17 @@ None of the built-in checks benefit from this, but can be useful for custom chec
        <item>
         <widget class="QGroupBox" name="headersBox">
          <property name="title">
-          <string/>
+          <string notr="true"/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QCheckBox" name="kcfg_ignoreIncludedFiles">
             <property name="toolTip">
-             <string>Only emit warnings for the current file being compiled and ignore any includes.
+             <string comment="@info:tooltip">Only emit warnings for the current file being compiled and ignore any includes.
 Useful for performance reasons.</string>
             </property>
             <property name="text">
-             <string>Ignore included files</string>
+             <string comment="@option:check">Ignore included files</string>
             </property>
            </widget>
           </item>
@@ -138,14 +138,14 @@ Useful for performance reasons.</string>
             <item>
              <widget class="QLabel" name="headerFilterLabel">
               <property name="text">
-               <string>Header filter:</string>
+               <string comment="@label:textbox">Header filter:</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLineEdit" name="kcfg_headerFilter">
               <property name="toolTip">
-               <string>Regular expression matching the names of the headers to output diagnostics from.
+               <string comment="@info:tooltip">Regular expression matching the names of the headers to output diagnostics from.
 Diagnostics from the main file of each translation unit are always displayed.</string>
               </property>
               <property name="clearButtonEnabled">
@@ -161,7 +161,7 @@ Diagnostics from the main file of each translation unit are always displayed.</s
        <item>
         <widget class="QGroupBox" name="fixitsBox">
          <property name="title">
-          <string/>
+          <string notr="true"/>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
@@ -169,17 +169,17 @@ Diagnostics from the main file of each translation unit are always displayed.</s
             <item>
              <widget class="QCheckBox" name="kcfg_enableAllFixits">
               <property name="text">
-               <string>Enable all fixits</string>
+               <string comment="@option:check">Enable all fix-its</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="kcfg_noInplaceFixits">
               <property name="toolTip">
-               <string>Fixits will be applied to a separate file (for unit-test use only).</string>
+               <string comment="@info:tooltip">Fix-its will be applied to a separate file (for unit-test use only).</string>
               </property>
               <property name="text">
-               <string>No-inplace fixits</string>
+               <string comment="@option:check">No-inplace fix-its</string>
               </property>
              </widget>
             </item>
@@ -188,8 +188,8 @@ Diagnostics from the main file of each translation unit are always displayed.</s
           <item>
            <widget class="KMessageWidget" name="kmessagewidget">
             <property name="text">
-             <string>Please backup your code before fixits applying. For better results also disable 
-parallel checking, which can lead to multiple fixit applying for header files.</string>
+             <string>Please backup your code before fix-its applying. For better results also disable 
+parallel checking, which can lead to multiple fix-it applying for header files.</string>
             </property>
             <property name="closeButtonVisible">
              <bool>false</bool>
@@ -206,20 +206,20 @@ parallel checking, which can lead to multiple fixit applying for header files.</
      </widget>
      <widget class="QWidget" name="extraTab">
       <attribute name="title">
-       <string>Extra Parameters</string>
+       <string comment="@title:tab">Extra Parameters</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout">
        <item row="0" column="0">
         <widget class="QLabel" name="extraAppendLabel">
          <property name="text">
-          <string>Compiler append:</string>
+          <string comment="@label:textbox">Compiler append:</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
         <widget class="QLineEdit" name="kcfg_extraAppend">
          <property name="toolTip">
-          <string>Additional parameters to append to the compiler command line.</string>
+          <string comment="@info:tooltip">Additional parameters to append to the compiler command line.</string>
          </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
@@ -229,14 +229,14 @@ parallel checking, which can lead to multiple fixit applying for header files.</
        <item row="2" column="0">
         <widget class="QLabel" name="extraPrependLabel">
          <property name="text">
-          <string>Compiler prepend:</string>
+          <string comment="@label:textbox">Compiler prepend:</string>
          </property>
         </widget>
        </item>
        <item row="2" column="1">
         <widget class="QLineEdit" name="kcfg_extraPrepend">
          <property name="toolTip">
-          <string>Additional parameters to prepend to the compiler command line.</string>
+          <string comment="@info:tooltip">Additional parameters to prepend to the compiler command line.</string>
          </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
@@ -246,7 +246,7 @@ parallel checking, which can lead to multiple fixit applying for header files.</
        <item row="4" column="1">
         <widget class="QLineEdit" name="kcfg_extraClazy">
          <property name="toolTip">
-          <string>Additional parameters to clazy-standalone.</string>
+          <string comment="@info:tooltip">Additional parameters to clazy-standalone.</string>
          </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
@@ -256,7 +256,7 @@ parallel checking, which can lead to multiple fixit applying for header files.</
        <item row="4" column="0">
         <widget class="QLabel" name="extraClazyLabel">
          <property name="text">
-          <string>Extra parameters:</string>
+          <string comment="@label:textbox">Extra parameters:</string>
          </property>
         </widget>
        </item>

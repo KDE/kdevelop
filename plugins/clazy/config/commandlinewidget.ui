@@ -26,7 +26,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Command Line</string>
+      <string comment="@title:group">Command Line</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -34,7 +34,7 @@
         <item>
          <widget class="QLineEdit" name="cmdFilter">
           <property name="placeholderText">
-           <string>Search</string>
+           <string comment="@info:placeholder">Search...</string>
           </property>
           <property name="clearButtonEnabled">
            <bool>true</bool>
@@ -44,7 +44,7 @@
         <item>
          <widget class="QCheckBox" name="cmdBreak">
           <property name="text">
-           <string>Break lines</string>
+           <string comment="@option:check">Break lines</string>
           </property>
          </widget>
         </item>

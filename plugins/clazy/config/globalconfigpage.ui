@@ -26,20 +26,20 @@
    <item>
     <widget class="QGroupBox" name="pathBox">
      <property name="title">
-      <string>Paths</string>
+      <string comment="@title:group">Paths</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="executableLabel">
         <property name="text">
-         <string>clazy-standalone:</string>
+         <string comment="@label:chooser">clazy-standalone:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="KUrlRequester" name="kcfg_executablePath">
         <property name="toolTip">
-         <string>Path to clazy-standalone executable.</string>
+         <string comment="@info:tooltip">Path to clazy-standalone executable.</string>
         </property>
         <property name="mode">
          <set>KFile::ExistingOnly|KFile::File|KFile::LocalOnly</set>
@@ -49,14 +49,14 @@
       <item row="1" column="0">
        <widget class="QLabel" name="docsLabel">
         <property name="text">
-         <string>Documentation:</string>
+         <string comment="@label:chooser">Documentation:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="KUrlRequester" name="kcfg_docsPath">
         <property name="toolTip">
-         <string>Path to clazy documentation directory.</string>
+         <string comment="@info:tooltip">Path to clazy documentation directory.</string>
         </property>
         <property name="mode">
          <set>KFile::Directory|KFile::ExistingOnly|KFile::LocalOnly</set>
@@ -76,13 +76,13 @@
    <item>
     <widget class="QGroupBox" name="jobsBox">
      <property name="title">
-      <string/>
+      <string notr="true"/>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QCheckBox" name="kcfg_parallelJobsEnabled">
         <property name="text">
-         <string>Run analysis jobs in parallel</string>
+         <string comment="@option:check">Run analysis jobs in parallel</string>
         </property>
        </widget>
       </item>
@@ -91,7 +91,7 @@
         <item>
          <widget class="QCheckBox" name="kcfg_parallelJobsAutoCount">
           <property name="text">
-           <string>Use all CPU cores</string>
+           <string comment="@option:check">Use all CPU cores</string>
           </property>
          </widget>
         </item>
@@ -111,7 +111,7 @@
         <item>
          <widget class="QLabel" name="parallelJobsFixedCountLabel">
           <property name="text">
-           <string>Maximum number of threads:</string>
+           <string comment="@label:spinbox">Maximum number of threads:</string>
           </property>
          </widget>
         </item>
@@ -130,20 +130,20 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Output</string>
+      <string comment="@title:group">Output</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QCheckBox" name="kcfg_hideOutputView">
         <property name="text">
-         <string>Hide output view during check</string>
+         <string comment="@option:check">Hide output view during check</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="kcfg_verboseOutput">
         <property name="text">
-         <string>Verbose output</string>
+         <string comment="@option:check">Verbose output</string>
         </property>
        </widget>
       </item>
