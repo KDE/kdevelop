@@ -75,7 +75,7 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
 #endif
 {
     setWindowIcon(QIcon::fromTheme(QStringLiteral("preflight-verifier"), windowIcon()));
-    setWindowTitle(i18n("Unit Tests"));
+    setWindowTitle(i18nc("@title:window", "Unit Tests"));
 
     auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -99,19 +99,19 @@ TestView::TestView(TestViewPlugin* plugin, QWidget* parent)
     m_filter->setSourceModel(m_model);
     m_tree->setModel(m_filter);
 
-    auto* showSource = new QAction( QIcon::fromTheme(QStringLiteral("code-context")), i18n("Show Source"), this );
+    auto* showSource = new QAction( QIcon::fromTheme(QStringLiteral("code-context")), i18nc("@action:inmenu", "Show Source"), this );
     connect (showSource, &QAction::triggered, this, &TestView::showSource);
     m_contextMenuActions << showSource;
 
     addAction(plugin->actionCollection()->action(QStringLiteral("run_all_tests")));
     addAction(plugin->actionCollection()->action(QStringLiteral("stop_running_tests")));
 
-    auto* runSelected = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18n("Run Selected Tests"), this );
+    auto* runSelected = new QAction( QIcon::fromTheme(QStringLiteral("system-run")), i18nc("@action", "Run Selected Tests"), this );
     connect (runSelected, &QAction::triggered, this, &TestView::runSelectedTests);
     addAction(runSelected);
 
     auto* edit = new QLineEdit(parent);
-    edit->setPlaceholderText(i18n("Filter..."));
+    edit->setPlaceholderText(i18nc("@info:placeholder", "Filter..."));
     edit->setClearButtonEnabled(true);
     auto* widgetAction = new QWidgetAction(this);
     widgetAction->setDefaultWidget(edit);
