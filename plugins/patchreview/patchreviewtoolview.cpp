@@ -258,9 +258,9 @@ void PatchReviewToolView::showEditDialog() {
 
     connect( m_editPatch.testsButton, &QToolButton::clicked, this, &PatchReviewToolView::runTests );
 
-    m_selectAllAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-select-all")), i18n("Select All"), this );
+    m_selectAllAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-select-all")), i18nc("@action", "Select All"), this );
     connect( m_selectAllAction, &QAction::triggered, this, &PatchReviewToolView::selectAll );
-    m_deselectAllAction = new QAction( i18n("Deselect All"), this );
+    m_deselectAllAction = new QAction( i18nc("@action", "Deselect All"), this );
     connect( m_deselectAllAction, &QAction::triggered, this, &PatchReviewToolView::deselectAll );
 }
 

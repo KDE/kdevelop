@@ -415,18 +415,18 @@ void PatchHighlighter::documentReloaded(KTextEditor::Document* doc)
     QImage tintedChange = QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize).toImage();
     KIconEffect::colorize( tintedChange, scheme.foreground( KColorScheme::NegativeText ).color(), 1.0 );
 
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType22, i18n( "Insertion" ) );
+    markIface->setMarkDescription( KTextEditor::MarkInterface::markType22, i18nc("@item", "Insertion") );
     markIface->setMarkPixmap( KTextEditor::MarkInterface::markType22, QPixmap::fromImage( tintedInsertion ) );
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType23, i18n( "Removal" ) );
+    markIface->setMarkDescription( KTextEditor::MarkInterface::markType23, i18nc("@item", "Removal") );
     markIface->setMarkPixmap( KTextEditor::MarkInterface::markType23, QPixmap::fromImage( tintedRemoval ) );
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType24, i18n( "Change" ) );
+    markIface->setMarkDescription( KTextEditor::MarkInterface::markType24, i18nc("@item", "Change") );
     markIface->setMarkPixmap( KTextEditor::MarkInterface::markType24, QPixmap::fromImage( tintedChange ) );
 
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType25, i18n( "Insertion" ) );
+    markIface->setMarkDescription( KTextEditor::MarkInterface::markType25, i18nc("@item", "Insertion" ) );
     markIface->setMarkPixmap(KTextEditor::MarkInterface::markType25, QIcon::fromTheme(QStringLiteral("insert-text")).pixmap(markPixmapSize, markPixmapSize));
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType26, i18n( "Removal" ) );
+    markIface->setMarkDescription( KTextEditor::MarkInterface::markType26, i18nc("@item", "Removal") );
     markIface->setMarkPixmap(KTextEditor::MarkInterface::markType26, QIcon::fromTheme(QStringLiteral("edit-delete")).pixmap(markPixmapSize, markPixmapSize));
-    markIface->setMarkDescription( KTextEditor::MarkInterface::markType27, i18n( "Change" ) );
+    markIface->setMarkDescription( KTextEditor::MarkInterface::markType27, i18nc("@item", "Change") );
     markIface->setMarkPixmap(KTextEditor::MarkInterface::markType27, QIcon::fromTheme(QStringLiteral("text-field")).pixmap(markPixmapSize, markPixmapSize));
 
     for (Diff2::Difference* diff : qAsConst(*m_model->differences())) {

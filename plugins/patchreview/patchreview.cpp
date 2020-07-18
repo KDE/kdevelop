@@ -301,9 +301,9 @@ void PatchReviewPlugin::updateKompareModel() {
 
         return;
     } catch ( const QString & str ) {
-        KMessageBox::error( nullptr, str, i18n( "Kompare Model Update" ) );
+        KMessageBox::error(nullptr, str, i18nc("@title:window", "Kompare Model Update"));
     } catch ( const char * str ) {
-        KMessageBox::error( nullptr, QLatin1String(str), i18n( "Kompare Model Update" ) );
+        KMessageBox::error(nullptr, QLatin1String(str), i18nc("@title:window", "Kompare Model Update"));
     }
     removeHighlighting();
     m_modelList.reset( nullptr );
@@ -451,13 +451,13 @@ void PatchReviewPlugin::updateReview()
     }
 
     futureActiveDoc->textDocument()->setReadWrite( false );
-    futureActiveDoc->setPrettyName( i18n( "Overview" ) );
+    futureActiveDoc->setPrettyName(i18nc("@title complete patch", "Overview"));
     auto* modif = qobject_cast<KTextEditor::ModificationInterface*>(futureActiveDoc->textDocument());
     modif->setModifiedOnDiskWarning( false );
 
     docController->activateDocument( futureActiveDoc );
 
-    auto* toolView = qobject_cast<PatchReviewToolView*>(ICore::self()->uiController()->findToolView( i18n( "Patch Review" ), m_factory ));
+    auto* toolView = qobject_cast<PatchReviewToolView*>(ICore::self()->uiController()->findToolView(i18nc("@title:window", "Patch Review"), m_factory));
     Q_ASSERT( toolView );
 
     //Open all relates files
@@ -500,7 +500,7 @@ void PatchReviewPlugin::setPatch( IPatchSource* patch ) {
 
         connect( m_patch.data(), &IPatchSource::patchChanged, this, &PatchReviewPlugin::notifyPatchChanged );
     }
-    QString finishText = i18n( "Finish Review" );
+    QString finishText = i18nc("@action", "Finish Review");
     if( m_patch && !m_patch->finishReviewCustomText().isEmpty() )
       finishText = m_patch->finishReviewCustomText();
     m_finishReview->setText( finishText );
@@ -526,7 +526,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
     m_updateKompareTimer->setInterval(500);
     connect( m_updateKompareTimer, &QTimer::timeout, this, &PatchReviewPlugin::updateKompareModel );
 
-    m_finishReview = new QAction(i18n("Finish Review"), this);
+    m_finishReview = new QAction(i18nc("@action", "Finish Review"), this);
     m_finishReview->setIcon( QIcon::fromTheme( QStringLiteral("dialog-ok") ) );
     actionCollection()->setDefaultShortcut( m_finishReview, Qt::CTRL|Qt::Key_Return );
     actionCollection()->addAction(QStringLiteral("commit_or_finish_review"), m_finishReview);
@@ -537,7 +537,7 @@ PatchReviewPlugin::PatchReviewPlugin( QObject *parent, const QVariantList & )
             area->addAction(m_finishReview);
     }
 
-    core()->uiController()->addToolView( i18n( "Patch Review" ), m_factory, IUiController::None );
+    core()->uiController()->addToolView(i18nc("@title:window", "Patch Review"), m_factory, IUiController::None);
 
     areaChanged(ICore::self()->uiController()->activeArea());
 }
@@ -601,7 +601,7 @@ KDevelop::ContextMenuExtension PatchReviewPlugin::contextMenuExtension(KDevelop:
 
     if (urls.size() == 1) {
         auto* reviewAction = new QAction(QIcon::fromTheme(QStringLiteral("text-x-patch")),
-                                         i18n("Review Patch"), parent);
+                                         i18nc("@action:inmenu", "Review Patch"), parent);
         reviewAction->setData(QVariant(urls[0]));
         connect( reviewAction, &QAction::triggered, this, &PatchReviewPlugin::executeFileReviewAction );
         ContextMenuExtension cm;
