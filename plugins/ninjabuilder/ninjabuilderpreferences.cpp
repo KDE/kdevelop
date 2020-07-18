@@ -46,12 +46,12 @@ NinjaBuilderPreferences::~NinjaBuilderPreferences()
 
 QString NinjaBuilderPreferences::name() const
 {
-    return i18n("Ninja");
+    return i18nc("@title:tab", "Ninja");
 }
 
 QString NinjaBuilderPreferences::fullName() const
 {
-    return i18n("Configure Ninja settings");
+    return i18nc("@title:tab", "Configure Ninja settings");
 }
 
 QIcon NinjaBuilderPreferences::icon() const
