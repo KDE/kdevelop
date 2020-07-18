@@ -47,7 +47,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
     , m_filterTimer(new QTimer(this))
 {
     setObjectName(QStringLiteral("Class Browser Tree"));
-    setWindowTitle(i18n("Classes"));
+    setWindowTitle(i18nc("@title:window", "Classes"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("code-class"), windowIcon()));
 
     // Set tree in the plugin
@@ -84,7 +84,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
         m_filterTimer->start();
     });
 
-    auto* searchLabel = new QLabel(i18n("S&earch:"), this);
+    auto* searchLabel = new QLabel(i18nc("@label:textbox", "S&earch:"), this);
     searchLabel->setBuddy(m_searchLine);
 
     auto* layout = new QHBoxLayout();
@@ -101,7 +101,7 @@ ClassWidget::ClassWidget(QWidget* parent, ClassBrowserPlugin* plugin)
     vbox->addWidget(m_tree);
     setLayout(vbox);
 
-    setWhatsThis(i18n("Class Browser"));
+    setWhatsThis(i18nc("@info:whatsthis", "Class Browser"));
 }
 
 ClassWidget::~ClassWidget()
