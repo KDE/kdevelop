@@ -130,8 +130,8 @@ KDevelop::ContextMenuExtension DockerPlugin::contextMenuExtension(KDevelop::Cont
             connect(action, &QAction::triggered, this, [this, file]() {
                 const auto dir = file.parent();
                 const QString name = QInputDialog::getText(
-                    ICore::self()->uiController()->activeMainWindow(), i18n("Choose tag name..."),
-                    i18n("Tag name for '%1'", file.path()),
+                    ICore::self()->uiController()->activeMainWindow(), i18nc("@title:window", "Choose Tag Name"),
+                    i18nc("@label:textbox", "Tag name for '%1':", file.path()),
                     QLineEdit::Normal, dir.lastPathSegment()
                 );
 
