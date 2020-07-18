@@ -85,8 +85,6 @@ using namespace KDevelop;
 
 K_PLUGIN_FACTORY_WITH_JSON(CMakeSupportFactory, "kdevcmakemanager.json", registerPlugin<CMakeManager>(); )
 
-const QString DIALOG_CAPTION = i18n("KDevelop - CMake Support");
-
 CMakeManager::CMakeManager( QObject* parent, const QVariantList& )
     : KDevelop::AbstractFileManagerPlugin( QStringLiteral("kdevcmakemanager"), parent )
     , m_filter( new ProjectFilterManager( this ) )
