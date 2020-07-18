@@ -86,11 +86,11 @@ QVariant FilterModel::headerData(int section, Qt::Orientation orientation, int r
     Q_ASSERT(section >= 0 && section < NUM_COLUMNS);
 
     if (section == Pattern) {
-        return i18n("Pattern");
+        return i18nc("@title:column", "Pattern");
     } else if (section == Targets) {
-        return i18n("Targets");
+        return i18nc("@title:column", "Targets");
     } else if (section == Inclusive) {
-        return i18n("Action");
+        return i18nc("@title:column", "Action");
     }
 
     return QVariant();
@@ -137,17 +137,17 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
             if (role == Qt::DecorationRole) {
                 return QIcon::fromTheme(QStringLiteral("document-open"));
             }
-            return i18n("Files and Folders");
+            return i18nc("@item", "Files and Folders");
         } else if (filter.targets & Filter::Folders) {
             if (role == Qt::DecorationRole) {
                 return QIcon::fromTheme(QStringLiteral("folder"));
             }
-            return i18n("Folders");
+            return i18nc("@item", "Folders");
         } else {
             if (role == Qt::DecorationRole) {
                 return QIcon::fromTheme(QStringLiteral("text-plain"));
             }
-            return i18n("Files");
+            return i18nc("@item", "Files");
         }
     } else if (column == Inclusive) {
         if (role == Qt::EditRole) {
@@ -159,12 +159,12 @@ QVariant FilterModel::data(const QModelIndex& index, int role) const
             if (role == Qt::DecorationRole) {
                 return QIcon::fromTheme(QStringLiteral("list-add"));
             }
-            return i18n("Include");
+            return i18nc("@item", "Include");
         } else {
             if (role == Qt::DecorationRole) {
                 return QIcon::fromTheme(QStringLiteral("list-remove"));
             }
-            return i18n("Exclude");
+            return i18nc("@item", "Exclude");
         }
     }
 

@@ -53,14 +53,14 @@ ProjectFilterConfigPage::ProjectFilterConfigPage(ProjectFilterProvider* provider
     m_ui->filters->header()->setSectionResizeMode(FilterModel::Inclusive, QHeaderView::ResizeToContents);
     m_ui->filters->setItemDelegateForColumn(FilterModel::Targets,
         new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>{
-                {i18n("Files"),             static_cast<int>(Filter::Files)},
-                {i18n("Folders"),           static_cast<int>(Filter::Folders)},
-                {i18n("Files and Folders"), static_cast<int>(Filter::Folders | Filter::Files)}}
+                {i18nc("@item", "Files"),             static_cast<int>(Filter::Files)},
+                {i18nc("@item", "Folders"),           static_cast<int>(Filter::Folders)},
+                {i18nc("@item", "Files and Folders"), static_cast<int>(Filter::Folders | Filter::Files)}}
             , this));
     m_ui->filters->setItemDelegateForColumn(FilterModel::Inclusive,
         new ComboBoxDelegate(QVector<ComboBoxDelegate::Item>{
-                {i18n("Exclude"), false},
-                {i18n("Include"), true}}
+                {i18nc("@item", "Exclude"), false},
+                {i18nc("@item", "Include"), true}}
             , this));
     m_ui->filters->installEventFilter(this);
     m_ui->filters->setDragEnabled(true);
@@ -200,7 +200,7 @@ void ProjectFilterConfigPage::emitChanged()
 
 QString ProjectFilterConfigPage::fullName() const
 {
-    return i18n("Configure Project Filter");
+    return i18nc("@title:tab", "Configure Project Filter");
 }
 
 QIcon ProjectFilterConfigPage::icon() const
@@ -210,5 +210,5 @@ QIcon ProjectFilterConfigPage::icon() const
 
 QString ProjectFilterConfigPage::name() const
 {
-    return i18n("Project Filter");
+    return i18nc("@title:tab", "Project Filter");
 }

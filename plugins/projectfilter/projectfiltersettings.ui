@@ -31,7 +31,7 @@
        <item>
         <widget class="QPushButton" name="add">
          <property name="text">
-          <string>Add</string>
+          <string comment="@action:button">Add</string>
          </property>
          <property name="icon">
           <iconset theme="list-add">
@@ -46,7 +46,7 @@
        <item>
         <widget class="QPushButton" name="remove">
          <property name="text">
-          <string>Remove</string>
+          <string comment="@action:button">Remove</string>
          </property>
          <property name="icon">
           <iconset theme="edit-delete">
@@ -58,7 +58,7 @@
        <item>
         <widget class="QPushButton" name="moveUp">
          <property name="text">
-          <string>Move Up</string>
+          <string comment="@action:button">Move Up</string>
          </property>
          <property name="icon">
           <iconset theme="arrow-up">
@@ -70,7 +70,7 @@
        <item>
         <widget class="QPushButton" name="moveDown">
          <property name="text">
-          <string>Move Down</string>
+          <string comment="@action:button">Move Down</string>
          </property>
          <property name="icon">
           <iconset theme="arrow-down">

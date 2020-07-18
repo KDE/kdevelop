@@ -88,8 +88,8 @@ ContextMenuExtension ProjectFilterProvider::contextMenuExtension(Context* contex
     }
 
     auto* action = new QAction(QIcon::fromTheme(QStringLiteral("view-filter")),
-                               i18np("Exclude Item From Project",
-                                     "Exclude Items From Project",
+                               i18ncp("@action:inmenu", "Exclude Item from Project",
+                                     "Exclude Items from Project",
                                      items.size()), parent);
     action->setData(QVariant::fromValue(items));
     connect(action, &QAction::triggered, this, &ProjectFilterProvider::addFilterFromContextMenu);
@@ -129,7 +129,7 @@ void ProjectFilterProvider::addFilterFromContextMenu()
     KMessageBox::information(ICore::self()->uiController()->activeMainWindow(),
                              i18np("A filter for the item was added. To undo, use the project filter settings.",
                                    "A filter for the items was added. To undo, use the project filter settings.",
-                                   items.size()), i18n("Project Filter Added"), QStringLiteral("projectfilter-addfromctxmenu"));
+                                   items.size()), i18nc("@title:window", "Project Filter Added"), QStringLiteral("projectfilter-addfromctxmenu"));
 }
 
 void ProjectFilterProvider::updateProjectFilters(IProject* project)
