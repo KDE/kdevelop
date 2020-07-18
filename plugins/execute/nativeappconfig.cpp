@@ -109,9 +109,9 @@ NativeAppConfigPage::NativeAppConfigPage( QWidget* parent )
     dependencyAction->setItemData(2, QStringLiteral("Install"));
     dependencyAction->setItemData(3, QStringLiteral("SudoInstall"));
 
-    killBeforeStartingAgain->addItem(i18n("Ask If Running"), QMessageBox::Cancel);
-    killBeforeStartingAgain->addItem(i18n("Kill All Instances"), QMessageBox::No);
-    killBeforeStartingAgain->addItem(i18n("Start Another"), QMessageBox::Yes);
+    killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Ask If Running"), QMessageBox::Cancel);
+    killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Kill All Instances"), QMessageBox::No);
+    killBeforeStartingAgain->addItem(i18nc("@item:inlistbox", "Start Another"), QMessageBox::Yes);
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -161,7 +161,7 @@ void NativeAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
 
 QString NativeAppConfigPage::title() const
 {
-    return i18n("Configure Native Application");
+    return i18nc("@title:tab", "Configure Native Application");
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory* > NativeAppLauncher::configPages() const
@@ -322,7 +322,7 @@ bool menuLess(QMenu* a, QMenu* b)
 
 QMenu* NativeAppConfigType::launcherSuggestions()
 {
-    auto* ret = new QMenu(i18n("Project Executables"));
+    auto* ret = new QMenu(i18nc("@title:menu", "Project Executables"));
 
     KDevelop::ProjectModel* model = KDevelop::ICore::self()->projectController()->projectModel();
     const QList<KDevelop::IProject*> projects = KDevelop::ICore::self()->projectController()->projects();

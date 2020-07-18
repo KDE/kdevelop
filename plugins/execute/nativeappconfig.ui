@@ -32,13 +32,13 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Executable</string>
+      <string comment="@title:group">Executable</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Project &amp;target:</string>
+         <string comment="@label:chooser">Project &amp;target:</string>
         </property>
         <property name="buddy">
          <cstring>projectTargetRadio</cstring>
@@ -78,7 +78,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>E&amp;xecutable:</string>
+         <string comment="@label:chooser">E&amp;xecutable:</string>
         </property>
         <property name="buddy">
          <cstring>executableRadio</cstring>
@@ -103,7 +103,10 @@
            <bool>false</bool>
           </property>
           <property name="placeholderText">
-           <string>Enter the executable name or absolute path to an executable file</string>
+           <string comment="@info:placeholder">executable or /path/to/executable</string>
+          </property>
+          <property name="toolTip">
+           <string comment="@info:tooltip">Enter the executable name or the absolute path to the executable file</string>
           </property>
          </widget>
         </item>
@@ -115,13 +118,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Behavior</string>
+      <string comment="@title:group">Behavior</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Ar&amp;guments:</string>
+         <string comment="@label:textbox">Ar&amp;guments:</string>
         </property>
         <property name="buddy">
          <cstring>arguments</cstring>
@@ -131,17 +134,14 @@
       <item row="0" column="1">
        <widget class="QLineEdit" name="arguments">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter arguments to give to the executable.&lt;br/&gt;You can pass arguments containing space characters by putting them in double-quotes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
-        <property name="placeholderText">
-         <string>Enter arguments to give to the executable</string>
+         <string comment="@info:tooltip">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter arguments to give to the executable.&lt;br/&gt;You can pass arguments containing space characters by putting them in double-quotes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Working &amp;directory:</string>
+         <string comment="@label:chooser">Working &amp;directory:</string>
         </property>
         <property name="buddy">
          <cstring>workingDirectory</cstring>
@@ -151,17 +151,14 @@
       <item row="1" column="1">
        <widget class="KUrlRequester" name="workingDirectory">
         <property name="toolTip">
-         <string>Select a working directory for the executable</string>
-        </property>
-        <property name="placeholderText">
-         <string>Select a working directory for the executable</string>
+         <string comment="@info:tooltip">Select a working directory for the executable</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>E&amp;nvironment:</string>
+         <string comment="@label:chooser">E&amp;nvironment:</string>
         </property>
         <property name="buddy">
          <cstring>environment</cstring>
@@ -179,7 +176,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string>Select an environment to be used</string>
+           <string comment="@info:tooltip">Select an environment to be used</string>
           </property>
          </widget>
         </item>
@@ -206,10 +203,10 @@
         <item>
          <widget class="QCheckBox" name="runInTerminal">
           <property name="toolTip">
-           <string>&lt;p&gt;By default applications will be run in the background and only their output will be displayed in a tool view. This makes it impossible to interact with applications requiring user input from a terminal emulator. To run such applications, you should use an external terminal.&lt;/p&gt;</string>
+           <string comment="@info:tooltip">&lt;p&gt;By default applications will be run in the background and only their output will be displayed in a tool view. This makes it impossible to interact with applications requiring user input from a terminal emulator. To run such applications, you should use an external terminal.&lt;/p&gt;</string>
           </property>
           <property name="text">
-           <string>Use external terminal:</string>
+           <string comment="@option:check">Use external terminal:</string>
           </property>
          </widget>
         </item>
@@ -227,7 +224,7 @@
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>&lt;p&gt;Defines the command to execute the external terminal emulator. Use the following placeholders:&lt;/p&gt;
+         <string comment="@info:tooltip">&lt;p&gt;Defines the command to execute the external terminal emulator. Use the following placeholders:&lt;/p&gt;
 &lt;dl&gt;
 &lt;dt&gt;&lt;code&gt;%exe&lt;/code&gt;&lt;/dt&gt;
 &lt;dd&gt;The path to the executable selected above.&lt;/dd&gt;
@@ -259,7 +256,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Restart</string>
+         <string comment="@label:listbox">Restart</string>
         </property>
        </widget>
       </item>
@@ -272,13 +269,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
-      <string>Dependencies</string>
+      <string comment="@title:group">Dependencies</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <item row="0" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Act&amp;ion:</string>
+         <string comment="@label:listbox">Act&amp;ion:</string>
         </property>
         <property name="buddy">
          <cstring>dependencyAction</cstring>
@@ -288,27 +285,27 @@
       <item row="0" column="1">
        <widget class="KComboBox" name="dependencyAction">
         <property name="toolTip">
-         <string>Specifies the action to take for the dependencies before starting the executable.</string>
+         <string comment="@info:tooltip">Specifies the action to take for the dependencies before starting the executable.</string>
         </property>
         <property name="whatsThis">
-         <string>The selected action will be run before the executable is started.  This allows there to be parts of a project, upon which the executable does not directly depend, to be built and/or installed before running the application.</string>
+         <string comment="@info:whatsthis">The selected action will be run before the executable is started.  This allows there to be parts of a project, upon which the executable does not directly depend, to be built and/or installed before running the application.</string>
         </property>
         <property name="frame">
          <bool>true</bool>
         </property>
         <item>
          <property name="text">
-          <string>Do Nothing</string>
+          <string comment="@item:inlistbox dependency action">Do Nothing</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string comment="@action">Build</string>
+          <string comment="@item:inlistbox dependency action">Build</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string comment="@action">Build and Install</string>
+          <string comment="@item:inlistbox dependency action">Build and Install</string>
          </property>
         </item>
        </widget>
@@ -316,7 +313,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Targets:</string>
+         <string comment="@label:chooser">Targets:</string>
         </property>
        </widget>
       </item>

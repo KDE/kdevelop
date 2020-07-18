@@ -150,14 +150,14 @@ void NativeAppJob::start()
         int killAllInstances = m_killBeforeExecutingAgain;
         if (killAllInstances == QMessageBox::Cancel) {
             QMessageBox msgBox(QMessageBox::Question,
-                        i18n("Job already running"),
+                        i18nc("@title:window", "Job Already Running"),
                         i18n("'%1' is already being executed.", m_name),
                         QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-            msgBox.button(QMessageBox::No)->setText(i18n("Kill All Instances"));
-            msgBox.button(QMessageBox::Yes)->setText(i18n("Start Another"));
+            msgBox.button(QMessageBox::No)->setText(i18nc("@action:button", "Kill All Instances"));
+            msgBox.button(QMessageBox::Yes)->setText(i18nc("@action:button", "Start Another"));
             msgBox.setDefaultButton(QMessageBox::Cancel);
 
-            QCheckBox* remember = new QCheckBox(i18n("Remember choice"));
+            QCheckBox* remember = new QCheckBox(i18nc("@option:check", "Remember choice"));
             msgBox.setCheckBox(remember);
 
             killAllInstances = msgBox.exec();
