@@ -91,7 +91,7 @@ void QMakeBuilderPreferences::reset()
 
 QString QMakeBuilderPreferences::name() const
 {
-    return i18n("QMake");
+    return i18nc("@title:tab", "QMake");
 }
 
 void QMakeBuilderPreferences::apply()

@@ -43,7 +43,7 @@ QMakeJob::QMakeJob(QObject* parent)
     setCapabilities(Killable);
     setFilteringStrategy(OutputModel::CompilerFilter);
     setProperties(NeedWorkingDirectory | PortableMessages | DisplayStderr | IsBuilderHint);
-    setToolTitle(i18n("QMake"));
+    setToolTitle(i18nc("@title:window", "QMake"));
     setStandardToolView(IOutputView::BuildView);
     setBehaviours(IOutputView::AllowUserClose | IOutputView::AutoScroll );
 }
