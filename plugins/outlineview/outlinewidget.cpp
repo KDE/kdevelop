@@ -51,8 +51,7 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     , m_filter(new QLineEdit(this))
 {
     setObjectName(QStringLiteral("Outline View"));
-    setWindowTitle(i18n("Outline"));
-    setWhatsThis(i18n("Outline View"));
+    setWindowTitle(i18nc("@title:window", "Outline"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("code-class"), windowIcon())); //TODO: better icon?
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
@@ -68,8 +67,8 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
 
     // sort action
     m_sortAlphabeticallyAction = new QAction(QIcon::fromTheme(QStringLiteral("view-sort-ascending")),
-                                             i18n("Sort Alphabetically"), this);
-    m_sortAlphabeticallyAction->setToolTip(i18n("Sort items alphabetically"));
+                                             i18nc("@action", "Sort Alphabetically"), this);
+    m_sortAlphabeticallyAction->setToolTip(i18nc("@info:tooltip", "Sort items alphabetically"));
     m_sortAlphabeticallyAction->setCheckable(true);
     connect(m_sortAlphabeticallyAction, &QAction::triggered, this, [this](bool sort) {
         // calling sort with -1 will restore the original order
@@ -81,7 +80,7 @@ OutlineWidget::OutlineWidget(QWidget* parent, OutlineViewPlugin* plugin)
     // filter
     connect(m_filter, &QLineEdit::textChanged, m_proxy, &QSortFilterProxyModel::setFilterFixedString);
     connect(m_tree, &QTreeView::activated, this, &OutlineWidget::activated);
-    m_filter->setPlaceholderText(i18n("Filter..."));
+    m_filter->setPlaceholderText(i18nc("@info:placeholder", "Filter..."));
     auto filterAction = new QWidgetAction(this);
     filterAction->setDefaultWidget(m_filter);
     addAction(filterAction);
