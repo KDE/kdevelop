@@ -42,12 +42,12 @@ KDevelop::ConfigPage::ConfigPageType GlobalConfigPage::configPageType() const
 
 QString GlobalConfigPage::name() const
 {
-    return i18n("Cppcheck");
+    return i18nc("@title:tab", "Cppcheck");
 }
 
 QString GlobalConfigPage::fullName() const
 {
-    return i18n("Configure Cppcheck Settings");
+    return i18nc("@title:tab", "Configure Cppcheck Settings");
 }
 
 QIcon GlobalConfigPage::icon() const

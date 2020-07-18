@@ -17,13 +17,13 @@
    <item>
     <widget class="QGroupBox" name="pathsGroupBox">
      <property name="title">
-      <string>Paths</string>
+      <string comment="@title:group">Paths</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="cppcheckLabel">
         <property name="text">
-         <string>Cppchec&amp;k executable:</string>
+         <string comment="@label:chooser">Cppchec&amp;k executable:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -42,20 +42,20 @@
    <item>
     <widget class="QGroupBox" name="outputGroupBox">
      <property name="title">
-      <string>Output</string>
+      <string comment="@title:group">Output</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QCheckBox" name="kcfg_hideOutputView">
         <property name="text">
-         <string>Hide output view during check</string>
+         <string comment="@option:check">Hide output view during check</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="kcfg_showXmlOutput">
         <property name="text">
-         <string>Show cppcheck XML output in the output view</string>
+         <string comment="@option:check">Show Cppcheck XML output in the output view</string>
         </property>
        </widget>
       </item>

@@ -61,29 +61,29 @@ Plugin::Plugin(QObject* parent, const QVariantList&)
 
     QIcon cppcheckIcon = QIcon::fromTheme(QStringLiteral("cppcheck"));
 
-    m_menuActionFile = new QAction(cppcheckIcon, i18n("Analyze Current File with Cppcheck"), this);
+    m_menuActionFile = new QAction(cppcheckIcon, i18nc("@action", "Analyze Current File with Cppcheck"), this);
     connect(m_menuActionFile, &QAction::triggered, this, [this](){
         runCppcheck(false);
     });
     actionCollection()->addAction(QStringLiteral("cppcheck_file"), m_menuActionFile);
 
-    m_contextActionFile = new QAction(cppcheckIcon, i18n("Cppcheck"), this);
+    m_contextActionFile = new QAction(cppcheckIcon, i18nc("@item:inmenu", "Cppcheck"), this);
     connect(m_contextActionFile, &QAction::triggered, this, [this]() {
         runCppcheck(false);
     });
 
-    m_menuActionProject = new QAction(cppcheckIcon, i18n("Analyze Current Project with Cppcheck"), this);
+    m_menuActionProject = new QAction(cppcheckIcon, i18nc("@action", "Analyze Current Project with Cppcheck"), this);
     connect(m_menuActionProject, &QAction::triggered, this, [this](){
         runCppcheck(true);
     });
     actionCollection()->addAction(QStringLiteral("cppcheck_project"), m_menuActionProject);
 
-    m_contextActionProject = new QAction(cppcheckIcon, i18n("Cppcheck"), this);
+    m_contextActionProject = new QAction(cppcheckIcon, i18nc("@item:inmenu", "Cppcheck"), this);
     connect(m_contextActionProject, &QAction::triggered, this, [this]() {
         runCppcheck(true);
     });
 
-    m_contextActionProjectItem = new QAction(cppcheckIcon, i18n("Cppcheck"), this);
+    m_contextActionProjectItem = new QAction(cppcheckIcon, i18nc("@item:inmenu", "Cppcheck"), this);
 
     connect(core()->documentController(), &KDevelop::IDocumentController::documentClosed,
             this, &Plugin::updateActions);

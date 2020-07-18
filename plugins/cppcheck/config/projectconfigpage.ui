@@ -36,7 +36,7 @@
      </property>
      <widget class="QWidget" name="tabChecks">
       <attribute name="title">
-       <string>Checks</string>
+       <string comment="@title:tab">Checks</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
@@ -44,10 +44,10 @@
          <item row="2" column="0">
           <widget class="QCheckBox" name="kcfg_checkUnusedFunction">
            <property name="toolTip">
-            <string>Check for unused functions. It is recommend to only enable this when the whole program is scanned</string>
+            <string comment="@info:tooltip">Check for unused functions. It is recommend to only enable this when the whole program is scanned</string>
            </property>
            <property name="text">
-            <string>Unused function</string>
+            <string comment="@option:check">Unused function</string>
            </property>
            <property name="checked">
             <bool>false</bool>
@@ -57,20 +57,20 @@
          <item row="3" column="0">
           <widget class="QCheckBox" name="kcfg_inconclusiveAnalysis">
            <property name="toolTip">
-            <string>Allow that Cppcheck reports even though the analysis is inconclusive. There are false positives with this option. Each result must be carefully investigated before you know if it is good or bad.</string>
+            <string comment="@info:tooltip">Allow that Cppcheck reports even though the analysis is inconclusive. There are false positives with this option. Each result must be carefully investigated before you know if it is good or bad.</string>
            </property>
            <property name="text">
-            <string>Inconclusive analysis</string>
+            <string comment="@option:check">Inconclusive analysis</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
           <widget class="QCheckBox" name="kcfg_checkInformation">
            <property name="toolTip">
-            <string>Enable information messages</string>
+            <string comment="@info:tooltip">Enable information messages</string>
            </property>
            <property name="text">
-            <string>Information</string>
+            <string comment="@option:check">Information</string>
            </property>
            <property name="checked">
             <bool>false</bool>
@@ -80,10 +80,10 @@
          <item row="2" column="1">
           <widget class="QCheckBox" name="kcfg_checkMissingInclude">
            <property name="toolTip">
-            <string>Warn if there are missing includes. For detailed information use 'check-config'</string>
+            <string comment="@info:tooltip">Warn if there are missing includes. For detailed information use 'check-config'</string>
            </property>
            <property name="text">
-            <string>Missing include</string>
+            <string comment="@option:check">Missing include</string>
            </property>
            <property name="checked">
             <bool>false</bool>
@@ -93,10 +93,10 @@
          <item row="0" column="1">
           <widget class="QCheckBox" name="kcfg_checkPerformance">
            <property name="toolTip">
-            <string>Enable performance messages</string>
+            <string comment="@info:tooltip">Enable performance messages</string>
            </property>
            <property name="text">
-            <string>Performance</string>
+            <string comment="@option:check">Performance</string>
            </property>
            <property name="checked">
             <bool>false</bool>
@@ -106,20 +106,20 @@
          <item row="3" column="1">
           <widget class="QCheckBox" name="kcfg_forceCheck">
            <property name="toolTip">
-            <string>&lt;p&gt;Force checking of files that have a lot of configurations. Error is printed if such a file is found so there is no reason to use this by default. If used together with '--max-configs=', the last option is the one that is effective.&lt;br/&gt;&lt;br/&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;</string>
+            <string comment="@info:tooltip">&lt;p&gt;Force checking of files that have a lot of configurations. Error is printed if such a file is found so there is no reason to use this by default. If used together with '--max-configs=', the last option is the one that is effective.&lt;br/&gt;&lt;br/&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;</string>
            </property>
            <property name="text">
-            <string>Force checking</string>
+            <string comment="@option:check">Force checking</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
           <widget class="QCheckBox" name="kcfg_checkPortability">
            <property name="toolTip">
-            <string>Enable portability messages</string>
+            <string comment="@info:tooltip">Enable portability messages</string>
            </property>
            <property name="text">
-            <string>Portability</string>
+            <string comment="@option:check">Portability</string>
            </property>
            <property name="checked">
             <bool>false</bool>
@@ -129,10 +129,10 @@
          <item row="0" column="0">
           <widget class="QCheckBox" name="kcfg_checkStyle">
            <property name="toolTip">
-            <string>Enable all coding style checks. All messages with the severities 'style', 'performance' and 'portability' are enabled.</string>
+            <string comment="@info:tooltip">Enable all coding style checks. All messages with the severities 'style', 'performance' and 'portability' are enabled.</string>
            </property>
            <property name="text">
-            <string>Style</string>
+            <string comment="@option:check">Style</string>
            </property>
            <property name="checked">
             <bool>false</bool>
@@ -142,10 +142,10 @@
          <item row="4" column="0">
           <widget class="QCheckBox" name="kcfg_checkConfig">
            <property name="toolTip">
-            <string>Check Cppcheck configuration. The normal code analysis is disabled by this flag.</string>
+            <string comment="@info:tooltip">Check Cppcheck configuration. The normal code analysis is disabled by this flag.</string>
            </property>
            <property name="text">
-            <string>Check config</string>
+            <string comment="@option:check">Check config</string>
            </property>
           </widget>
          </item>
@@ -155,16 +155,16 @@
      </widget>
      <widget class="QWidget" name="tabIncludes">
       <attribute name="title">
-       <string>Include Directories</string>
+       <string comment="@title:tab">Include Directories</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QCheckBox" name="kcfg_useProjectIncludes">
          <property name="toolTip">
-          <string>Add 'project' include directories to cppcheck arguments. This option adds only paths related with project's root and build directories.</string>
+          <string comment="@info:tooltip">Add 'project' include directories to Cppcheck arguments. This option adds only paths related with project's root and build directories.</string>
          </property>
          <property name="text">
-          <string>Use 'project' include dirs</string>
+          <string comment="@option:check">Use 'project' include dirs</string>
          </property>
          <property name="checked">
           <bool>false</bool>
@@ -177,10 +177,10 @@
           <bool>false</bool>
          </property>
          <property name="toolTip">
-          <string>&lt;p&gt;Add other, 'system' include directories to cppcheck arguments.&lt;br/&gt;&lt;br/&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;</string>
+          <string comment="@info:tooltip">&lt;p&gt;Add other, 'system' include directories to Cppcheck arguments.&lt;br/&gt;&lt;br/&gt;Be careful with using this option - it can dramatically slow checking.&lt;/p&gt;</string>
          </property>
          <property name="text">
-          <string>Use 'system' include dirs</string>
+          <string comment="@option:check">Use 'system' include dirs</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -195,7 +195,7 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>&amp;Ignored includes:</string>
+            <string comment="@label:textbox">&amp;Ignored includes:</string>
            </property>
            <property name="buddy">
             <cstring>kcfg_ignoredIncludes</cstring>
@@ -205,7 +205,7 @@
          <item>
           <widget class="QLineEdit" name="kcfg_ignoredIncludes">
            <property name="toolTip">
-            <string>&lt;html&gt;
+            <string comment="@info:tooltip">&lt;html&gt;
 
 &lt;p&gt;Defines semicolon-separated list of ignored include directories.&lt;/p&gt;
 
@@ -238,7 +238,7 @@
      </widget>
      <widget class="QWidget" name="tabExtra">
       <attribute name="title">
-       <string>Extra Parameters</string>
+       <string comment="@title:tab">Extra Parameters</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
@@ -251,7 +251,7 @@
            <item>
             <widget class="QLabel" name="extraLabel">
              <property name="text">
-              <string>Ex&amp;tra parameters:</string>
+              <string comment="@label:textbox">Ex&amp;tra parameters:</string>
              </property>
              <property name="buddy">
               <cstring>kcfg_extraParameters</cstring>
@@ -261,7 +261,7 @@
            <item>
             <widget class="QLineEdit" name="kcfg_extraParameters">
              <property name="toolTip">
-              <string>&lt;html&gt;
+              <string comment="@info:tooltip">&lt;html&gt;
 
 &lt;p&gt;Defines additional parameters for cppcheck (see documentation).&lt;/p&gt;
 
@@ -305,7 +305,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Command Line</string>
+      <string comment="@title:group">Command Line</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -313,7 +313,7 @@
         <item>
          <widget class="QLineEdit" name="commandLineFilter">
           <property name="placeholderText">
-           <string>Search</string>
+           <string comment="@info:placeholder">Search...</string>
           </property>
           <property name="clearButtonEnabled">
            <bool>true</bool>
@@ -323,7 +323,7 @@
         <item>
          <widget class="QCheckBox" name="commandLineBreaks">
           <property name="text">
-           <string>Break lines</string>
+           <string comment="@option:check">Break lines</string>
           </property>
           <property name="checked">
            <bool>true</bool>

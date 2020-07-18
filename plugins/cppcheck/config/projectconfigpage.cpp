@@ -70,7 +70,7 @@ void ProjectConfigPage::reset()
 
 QString ProjectConfigPage::name() const
 {
-    return i18n("Cppcheck");
+    return i18nc("@title:tab", "Cppcheck");
 }
 
 void ProjectConfigPage::updateCommandLine()
