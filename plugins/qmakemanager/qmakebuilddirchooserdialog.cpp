@@ -33,7 +33,7 @@
 QMakeBuildDirChooserDialog::QMakeBuildDirChooserDialog(KDevelop::IProject* project, QWidget* parent)
     : QDialog(parent)
 {
-    setWindowTitle(i18n("Configure a build directory"));
+    setWindowTitle(i18nc("@title:window", "Configure a Build Directory"));
 
     auto mainWidget = new QWidget(this);
     auto mainLayout = new QVBoxLayout;

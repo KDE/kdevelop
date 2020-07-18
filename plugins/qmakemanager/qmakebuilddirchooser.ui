@@ -20,7 +20,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>QMake &amp;executable:</string>
+      <string comment="@label:textbox">QMake &amp;executable:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -43,7 +43,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>&amp;Build directory:</string>
+      <string comment="@label:textbox">&amp;Build directory:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -59,7 +59,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>&amp;Install to (target.path):</string>
+      <string comment="@label:textbox">&amp;Install to (target.path):</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -82,7 +82,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Build &amp;type:</string>
+      <string comment="@labal:listbox">Build &amp;type:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -112,7 +112,7 @@
      </item>
      <item>
       <property name="text">
-       <string>(Use default from .pro file)</string>
+       <string comment="@item:inlistbox">(Use default from .pro file)</string>
       </property>
      </item>
     </widget>
@@ -120,7 +120,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>Extra arguments:</string>
+      <string comment="@label:textbox">Extra arguments:</string>
      </property>
     </widget>
    </item>

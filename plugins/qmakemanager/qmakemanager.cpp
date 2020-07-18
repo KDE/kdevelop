@@ -86,7 +86,7 @@ QMakeProjectManager::QMakeProjectManager(QObject* parent, const QVariantList&)
     connect(this, SIGNAL(folderAdded(KDevelop::ProjectFolderItem*)), this,
             SLOT(slotFolderAdded(KDevelop::ProjectFolderItem*)));
 
-    m_runQMake = new QAction(QIcon::fromTheme(QStringLiteral("qtlogo")), i18n("Run QMake"), this);
+    m_runQMake = new QAction(QIcon::fromTheme(QStringLiteral("qtlogo")), i18nc("@action", "Run QMake"), this);
     connect(m_runQMake, &QAction::triggered, this, &QMakeProjectManager::slotRunQMake);
 }
 
