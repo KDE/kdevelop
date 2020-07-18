@@ -26,33 +26,33 @@
    <item>
     <widget class="QCheckBox" name="kcfg_useDefault">
      <property name="text">
-      <string>&amp;Use default</string>
+      <string comment="@option:check">&amp;Use default</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="generalGroupBox">
      <property name="title">
-      <string>General</string>
+      <string comment="@title:group">General</string>
      </property>
      <layout class="QVBoxLayout">
       <item>
        <widget class="QCheckBox" name="kcfg_overrideKateIndentation">
         <property name="toolTip">
-         <string>Override the editor indentation mode according to the formatting style for documents without Kate modeline.</string>
+         <string comment="@info:tooltip">Override the editor indentation mode according to the formatting style for documents without a Kate modeline.</string>
         </property>
         <property name="text">
-         <string>Override Kate Indentation Mode</string>
+         <string comment="@option:check">Override editor indentation mode</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="kcfg_modelinesEnabled">
         <property name="toolTip">
-         <string>Add a Kate modeline according to the formatting style to formatted documents.</string>
+         <string comment="@info:tooltip">Add a Kate modeline according to the formatting style to formatted documents.</string>
         </property>
         <property name="text">
-         <string>Add Kate Modeline</string>
+         <string comment="@option:check">Add Kate modeline</string>
         </property>
        </widget>
       </item>
@@ -62,7 +62,7 @@
    <item>
     <widget class="QGroupBox" name="formattinStylesGroupBox">
      <property name="title">
-      <string>Formatting Styles</string>
+      <string comment="@title:group">Formatting Styles</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>

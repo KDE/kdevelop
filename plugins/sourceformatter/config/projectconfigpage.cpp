@@ -54,12 +54,12 @@ ProjectConfigPage::~ProjectConfigPage() = default;
 
 QString ProjectConfigPage::name() const
 {
-    return i18n("Source Formatter");
+    return i18nc("@title:tab", "Source Formatter");
 }
 
 QString ProjectConfigPage::fullName() const
 {
-    return i18n("Configure Source Formatter");
+    return i18nc("@title:tab", "Configure Source Formatter");
 }
 
 QIcon ProjectConfigPage::icon() const
