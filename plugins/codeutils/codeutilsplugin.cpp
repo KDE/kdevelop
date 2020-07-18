@@ -60,12 +60,13 @@ CodeUtilsPlugin::CodeUtilsPlugin ( QObject* parent, const QVariantList& )
 
     QAction* action = actionCollection()->addAction( QStringLiteral("document_declaration") );
     // i18n: action name; 'Document' is a verb
-    action->setText( i18n( "Document Declaration" ) );
-    actionCollection()->setDefaultShortcut(action, i18n( "Alt+Shift+d" ));
+    action->setText(i18nc("@action", "Document Declaration"));
+    actionCollection()->setDefaultShortcut(action, i18nc("default shortcut for \"Document Declaration\"", "Alt+Shift+d"));
     connect( action, &QAction::triggered, this, &CodeUtilsPlugin::documentDeclaration );
-    action->setToolTip( i18n( "Add Doxygen skeleton for declaration under cursor." ) );
+    action->setToolTip(i18nc("@info:tooltip", "Add Doxygen skeleton for declaration under cursor."));
     // i18n: translate title same as the action name
-    action->setWhatsThis( i18n( "Adds a basic Doxygen comment skeleton in front of "
+    action->setWhatsThis(i18nc("@info:whatthis",
+                                "Adds a basic Doxygen comment skeleton in front of "
                                 "the declaration under the cursor, e.g. with all the "
                                 "parameter of a function." ) );
     action->setIcon( QIcon::fromTheme( QStringLiteral("documentinfo") ) );
