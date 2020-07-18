@@ -148,7 +148,7 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     }
 
     {
-        auto other = new QAction(i18n("Other..."), parent);
+        auto other = new QAction(i18nc("@item:menu", "Other..."), parent);
         connect(other, &QAction::triggered, this, [this] {
             auto dialog = new KOpenWithDialog(m_urls, ICore::self()->uiController()->activeMainWindow());
             if (dialog->exec() == QDialog::Accepted && dialog->service()) {
@@ -159,23 +159,23 @@ KDevelop::ContextMenuExtension OpenWithPlugin::contextMenuExtension(KDevelop::Co
     }
 
     // Now setup a menu with actions for each part and app
-    auto* menu = new QMenu(i18n("Open With"), parent);
+    auto* menu = new QMenu(i18nc("@title:menu", "Open With"), parent);
     auto documentOpenIcon = QIcon::fromTheme( QStringLiteral("document-open") );
     menu->setIcon( documentOpenIcon );
 
     if (!partActions.isEmpty()) {
-        menu->addSection(i18n("Embedded Editors"));
+        menu->addSection(i18nc("@title:menu", "Embedded Editors"));
         menu->addActions( partActions );
     }
     if (!appActions.isEmpty()) {
-        menu->addSection(i18n("External Applications"));
+        menu->addSection(i18nc("@title:menu", "External Applications"));
         menu->addActions( appActions );
     }
 
     KDevelop::ContextMenuExtension ext;
 
     if (canOpenDefault(m_mimeType)) {
-        auto* openAction = new QAction(i18n("Open"), parent);
+        auto* openAction = new QAction(i18nc("@action:inmenu", "Open"), parent);
         openAction->setIcon( documentOpenIcon );
         connect( openAction, &QAction::triggered, this, &OpenWithPlugin::openDefault );
         ext.addAction( KDevelop::ContextMenuExtension::FileGroup, openAction );
@@ -195,7 +195,7 @@ QList<QAction*> OpenWithPlugin::actionsForServiceType(const QString& serviceType
     QAction* standardAction = nullptr;
     const QString defaultId = defaultForMimeType(m_mimeType);
     for (auto& svc : list) {
-        auto* act = new QAction(isTextEditor(svc) ? i18n("Default Editor") : svc->name(), parent);
+        auto* act = new QAction(isTextEditor(svc) ? i18nc("@item:inmenu", "Default Editor") : svc->name(), parent);
         act->setIcon( QIcon::fromTheme( svc->icon() ) );
         if (svc->storageId() == defaultId || (defaultId.isEmpty() && isTextEditor(svc))) {
             QFont font = act->font();
@@ -283,7 +283,7 @@ void OpenWithPlugin::openService(const KService::Ptr& service)
             qApp->activeWindow(),
             i18nc("%1: mime type name, %2: app/part name", "Do you want to open all '%1' files by default with %2?",
                  m_mimeType, service->name() ),
-            i18n("Set as default?"),
+            i18nc("@title:window", "Set as Default?"),
             KStandardGuiItem::yes(), KStandardGuiItem::no(),
             QStringLiteral("OpenWith-%1").arg(m_mimeType)
         );
