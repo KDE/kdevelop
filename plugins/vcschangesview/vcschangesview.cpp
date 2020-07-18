@@ -95,7 +95,7 @@ void VcsChangesView::popupContextMenu( const QPoint &pos )
     }
 
     QPointer<QMenu> menu = new QMenu(this);
-    QAction* refreshAction = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18n("Refresh"));
+    QAction* refreshAction = menu->addAction(QIcon::fromTheme(QStringLiteral("view-refresh")), i18nc("@action:inmenu", "Refresh"));
     QList<ContextMenuExtension> extensions;
     if(!urls.isEmpty()) {
         KDevelop::FileContext context(urls);
