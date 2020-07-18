@@ -98,7 +98,7 @@ ScratchpadView::ScratchpadView(QWidget* parent, Scratchpad* scratchpad)
 
     setupActions();
 
-    setWindowTitle(i18n("Scratchpad"));
+    setWindowTitle(i18nc("@title:window", "Scratchpad"));
     setWindowIcon(QIcon::fromTheme(QStringLiteral("note")));
 
     auto* const modelProxy = new QSortFilterProxyModel(this);
@@ -125,7 +125,7 @@ ScratchpadView::ScratchpadView(QWidget* parent, Scratchpad* scratchpad)
     connect(commandWidget, &QLineEdit::returnPressed, this, [this] {
         m_scratchpad->setCommand(proxyModel()->mapToSource(currentIndex()), commandWidget->text());
     });
-    commandWidget->setToolTip(i18n("Command to run this scratch. $f will expand to the scratch path"));
+    commandWidget->setToolTip(i18nc("@info:tooltip", "Command to run this scratch. '$f' will expand to the scratch path."));
     commandWidget->setPlaceholderText(commandWidget->toolTip());
 
     // change active scratch when changing document
@@ -148,11 +148,11 @@ ScratchpadView::ScratchpadView(QWidget* parent, Scratchpad* scratchpad)
 
 void ScratchpadView::setupActions()
 {
-    auto* action = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18n("New Scratch"), this);
+    auto* action = new QAction(QIcon::fromTheme(QStringLiteral("list-add")), i18nc("@action", "New Scratch"), this);
     connect(action, &QAction::triggered, this, &ScratchpadView::createScratch);
     addAction(action);
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18n("Remove Scratch"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("edit-delete")), i18nc("@action", "Remove Scratch"), this);
     connect(action, &QAction::triggered, this, [this] {
         m_scratchpad->removeScratch(proxyModel()->mapToSource(currentIndex()));
         validateItemActions();
@@ -160,7 +160,7 @@ void ScratchpadView::setupActions()
     addAction(action);
     m_itemActions.push_back(action);
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("edit-rename")), i18n("Rename Scratch"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("edit-rename")), i18nc("@action", "Rename Scratch"), this);
     connect(action, &QAction::triggered, this, [this] {
         scratchView->edit(scratchView->currentIndex());
     });
@@ -169,13 +169,13 @@ void ScratchpadView::setupActions()
 
     action = m_scratchpad->runAction();
     action->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
-    action->setText(i18n("Run Scratch"));
+    action->setText(i18nc("@action", "Run Scratch"));
     connect(action, &QAction::triggered, this, &ScratchpadView::runSelectedScratch);
     addAction(action);
     m_itemActions.push_back(action);
 
     m_filter = new QLineEdit(this);
-    m_filter->setPlaceholderText(i18n("Filter..."));
+    m_filter->setPlaceholderText(i18nc("@info:placeholder", "Filter..."));
     auto filterAction = new QWidgetAction(this);
     filterAction->setDefaultWidget(m_filter);
     addAction(filterAction);
@@ -215,8 +215,8 @@ void ScratchpadView::scratchActivated(const QModelIndex& index)
 
 void ScratchpadView::createScratch()
 {
-    QString name = QInputDialog::getText(this, i18n("Create New Scratch"),
-                                         i18n("Enter name for scratch file:"),
+    QString name = QInputDialog::getText(this, i18nc("@title:window", "Create New Scratch"),
+                                         i18nc("@label:textbox", "Name for scratch file:"),
                                          QLineEdit::Normal,
                                          QStringLiteral("example.cpp"));
     if (!name.isEmpty()) {

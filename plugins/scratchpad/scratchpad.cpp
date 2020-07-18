@@ -115,7 +115,7 @@ Scratchpad::Scratchpad(QObject* parent, const QVariantList& args)
 
     qCDebug(PLUGIN_SCRATCHPAD) << "Scratchpad plugin is loaded!";
 
-    core()->uiController()->addToolView(i18n("Scratchpad"), m_factory);
+    core()->uiController()->addToolView(i18nc("@title:window", "Scratchpad"), m_factory);
 
     const QDir dataDir(dataDirectory());
     if (!dataDir.exists()) {
