@@ -93,7 +93,7 @@ ScriptAppConfigPage::ScriptAppConfigPage( QWidget* parent )
     : LaunchConfigurationPage( parent )
 {
     setupUi(this);
-    interpreter->lineEdit()->setPlaceholderText(i18n("Type or select an interpreter"));
+    interpreter->lineEdit()->setPlaceholderText(i18nc("@info:placeholder", "Type or select an interpreter..."));
 
     //Set workingdirectory widget to ask for directories rather than files
     workingDirectory->setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
@@ -128,7 +128,7 @@ void ScriptAppConfigPage::saveToConfiguration( KConfigGroup cfg, KDevelop::IProj
 
 QString ScriptAppConfigPage::title() const
 {
-    return i18n("Configure Script Application");
+    return i18nc("@title:tab", "Configure Script Application");
 }
 
 QList< KDevelop::LaunchConfigurationPageFactory* > ScriptAppLauncher::configPages() const

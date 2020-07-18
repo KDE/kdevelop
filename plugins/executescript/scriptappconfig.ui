@@ -26,7 +26,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Interpreter</string>
+      <string comment="@title:group">Interpreter</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <property name="fieldGrowthPolicy">
@@ -41,7 +41,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Script interpreter:</string>
+         <string comment="@label:listbox">Script interpreter:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -66,22 +66,22 @@
         </item>
         <item>
          <property name="text">
-          <string>python</string>
+          <string notr="true">python</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>ruby</string>
+          <string notr="true">ruby</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>bash</string>
+          <string notr="true">bash</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>php</string>
+          <string notr="true">php</string>
          </property>
         </item>
        </widget>
@@ -92,13 +92,13 @@
    <item>
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
-      <string>Script file</string>
+      <string comment="@title:group">Script file</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QRadioButton" name="runCurrentFile">
         <property name="text">
-         <string>Run the file currently open in the editor</string>
+         <string comment="@option:radio">Run the file currently open in the editor</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -108,7 +108,7 @@
       <item>
        <widget class="QRadioButton" name="runFixedFile">
         <property name="text">
-         <string>Always run the same file</string>
+         <string comment="@option:radio">Always run the same file</string>
         </property>
        </widget>
       </item>
@@ -120,7 +120,7 @@
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Script file:</string>
+           <string comment="@label:chooser">Script file:</string>
           </property>
          </widget>
         </item>
@@ -129,8 +129,11 @@
           <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="placeholderText" stdset="0">
-           <string>Enter the absolute path to the script to run</string>
+          <property name="toolTip">
+           <string comment="@info:tooltip">Enter the absolute path to the script to run</string>
+          </property>
+          <property name="placeholderText">
+           <string comment="@info:placeholder">/path/to/script</string>
           </property>
          </widget>
         </item>
@@ -142,7 +145,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Behavior</string>
+      <string comment="@title:group">Behavior</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
@@ -154,7 +157,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Arguments:</string>
+         <string comment="@label:textbox">Arguments:</string>
         </property>
         <property name="buddy">
          <cstring>arguments</cstring>
@@ -164,20 +167,14 @@
       <item row="0" column="1">
        <widget class="QLineEdit" name="arguments">
         <property name="toolTip">
-         <string>Enter arguments to give to the executable</string>
-        </property>
-        <property name="placeholderText">
-         <string/>
-        </property>
-        <property name="placeholderText" stdset="0">
-         <string>Enter arguments to give to the executable</string>
+         <string comment="@info:tooltip">Enter arguments to give to the executable</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Working directory:</string>
+         <string comment="@label:chooser">Working directory:</string>
         </property>
         <property name="buddy">
          <cstring>workingDirectory</cstring>
@@ -187,17 +184,14 @@
       <item row="1" column="1">
        <widget class="KUrlRequester" name="workingDirectory">
         <property name="toolTip">
-         <string>Select a working directory for the executable</string>
-        </property>
-        <property name="placeholderText" stdset="0">
-         <string>Select a working directory for the executable</string>
+         <string comment="@info:tooltip">Select a working directory for the executable</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Environment:</string>
+         <string comment="@label:chooser">Environment:</string>
         </property>
         <property name="buddy">
          <cstring>environment</cstring>
@@ -215,7 +209,7 @@
            </sizepolicy>
           </property>
           <property name="toolTip">
-           <string>Select an environment to be used</string>
+           <string comment="@info:tooltip">Select an environment to be used</string>
           </property>
          </widget>
         </item>
@@ -227,33 +221,33 @@
       <item row="3" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Output filter:</string>
+         <string comment="@label:listbox">Output filter:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
        <widget class="QComboBox" name="outputFilteringMode">
         <property name="toolTip">
-         <string>Select the filter to applied to the output. E.g. to mark errors with red text</string>
+         <string comment="@info:tooltip">Select the filter to applied to the output. E.g. to mark errors with red text</string>
         </property>
         <item>
          <property name="text">
-          <string>No Filter</string>
+          <string comment="@item:inlistbox output filter">No Filter</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Compiler Filter</string>
+          <string comment="@item:inlistbox output filter">Compiler Filter</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Script Error Filter</string>
+          <string comment="@item:inlistbox output filter">Script Error Filter</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Static Analysis Filter</string>
+          <string comment="@item:inlistbox output filter">Static Analysis Filter</string>
          </property>
         </item>
        </widget>
@@ -270,13 +264,13 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Execute on Host</string>
+      <string comment="@title:group">Execute on Host</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="QCheckBox" name="remoteHostCheckbox">
         <property name="text">
-         <string>Execute on remote host</string>
+         <string comment="@option:check">Execute on remote host</string>
         </property>
        </widget>
       </item>
@@ -288,7 +282,7 @@
            <bool>false</bool>
           </property>
           <property name="text">
-           <string>Remote host (ssh):</string>
+           <string comment="@label:textbox">Remote host (ssh):</string>
           </property>
           <property name="buddy">
            <cstring>remoteHost</cstring>
@@ -300,8 +294,11 @@
           <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="placeholderText" stdset="0">
-           <string>Enter a remote host (user@example.com)</string>
+          <property name="placeholderText">
+           <string comment="@info:placeholder">user@host</string>
+          </property>
+          <property name="toolTip">
+           <string comment="@info:tooltip">Enter a remote host (user@host)</string>
           </property>
          </widget>
         </item>
