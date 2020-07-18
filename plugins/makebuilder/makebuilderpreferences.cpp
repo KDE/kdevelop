@@ -81,12 +81,12 @@ QString MakeBuilderPreferences::standardMakeExecutable()
 
 QString MakeBuilderPreferences::name() const
 {
-    return i18n("Make");
+    return i18nc("@title:tab", "Make");
 }
 
 QString MakeBuilderPreferences::fullName() const
 {
-    return i18n("Configure Make settings");
+    return i18nc("@title:tab", "Configure Make Settings");
 }
 
 QIcon MakeBuilderPreferences::icon() const

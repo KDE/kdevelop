@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label_8">
      <property name="text">
-      <string>&amp;Abort on first error:</string>
+      <string comment="@option:check">&amp;Abort on first error:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -49,7 +49,7 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label_7">
      <property name="text">
-      <string>&amp;Display commands but do not execute them:</string>
+      <string comment="@option:check">&amp;Display commands but do not execute them:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -69,7 +69,7 @@
    <item row="2" column="0">
     <widget class="QLabel" name="label_31">
      <property name="text">
-      <string>Insta&amp;ll as root:</string>
+      <string comment="@option:check">Insta&amp;ll as root:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -92,7 +92,7 @@
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>Root installation &amp;command:</string>
+      <string comment="@label:listbox">Root installation &amp;command:</string>
      </property>
      <property name="buddy">
       <cstring>kcfg_suCommand</cstring>
@@ -109,17 +109,17 @@
      </property>
      <item>
       <property name="text">
-       <string>kdesu</string>
+       <string notr="true">kdesu</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>kdesudo</string>
+       <string notr="true">kdesudo</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>gksu</string>
+       <string notr="true">gksu</string>
       </property>
      </item>
     </widget>
@@ -130,7 +130,7 @@
       <bool>false</bool>
      </property>
      <property name="text">
-      <string>&amp;Number of simultaneous jobs:</string>
+      <string comment="@label:spinbox">&amp;Number of simultaneous jobs:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -153,7 +153,7 @@
    <item row="6" column="0">
     <widget class="QLabel" name="label_4">
      <property name="text">
-      <string>&amp;Make executable:</string>
+      <string comment="@label:chooser">&amp;Make executable:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -176,7 +176,7 @@
    <item row="7" column="0">
     <widget class="QLabel" name="label_6">
      <property name="text">
-      <string>Default make &amp;target:</string>
+      <string comment="@label:textbox">Default make &amp;target:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -196,7 +196,7 @@
    <item row="8" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Additional ma&amp;ke options:</string>
+      <string comment="@label:textbox">Additional ma&amp;ke options:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -216,7 +216,7 @@
    <item row="10" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Active environment &amp;profile:</string>
+      <string comment="@label:chooser">Active environment &amp;profile:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -260,7 +260,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Override number of &amp;jobs:</string>
+      <string comment="@option:check">Override number of &amp;jobs:</string>
      </property>
      <property name="buddy">
       <cstring>kcfg_overrideNumberOfJobs</cstring>
