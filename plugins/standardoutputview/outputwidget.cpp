@@ -66,7 +66,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     , m_filterInput(nullptr)
     , m_filterAction(nullptr)
 {
-    setWindowTitle(i18n("Output View"));
+    setWindowTitle(i18nc("@title:window", "Output View"));
     setWindowIcon(tvdata->icon);
     auto* layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -77,13 +77,13 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         m_closeButton = new QToolButton( this );
         connect( m_closeButton, &QToolButton::clicked, this, &OutputWidget::closeActiveView );
         m_closeButton->setIcon( QIcon::fromTheme( QStringLiteral( "tab-close") ) );
-        m_closeButton->setToolTip( i18n( "Close the currently active output view") );
+        m_closeButton->setToolTip(i18nc("@info:tooltip", "Close the currently active output view"));
         m_closeButton->setAutoRaise(true);
 
         m_closeOthersAction = new QAction( this );
         connect(m_closeOthersAction, &QAction::triggered, this, &OutputWidget::closeOtherViews);
         m_closeOthersAction->setIcon(QIcon::fromTheme(QStringLiteral("tab-close-other")));
-        m_closeOthersAction->setToolTip( i18n( "Close all other output views" ) );
+        m_closeOthersAction->setToolTip(i18nc("@info:tooltip", "Close all other output views"));
         m_closeOthersAction->setText( m_closeOthersAction->toolTip() );
         addAction(m_closeOthersAction);
 
@@ -94,17 +94,17 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         m_stackwidget = new QStackedWidget( this );
         layout->addWidget( m_stackwidget );
 
-        m_previousAction = new QAction( QIcon::fromTheme( QStringLiteral( "arrow-left" ) ), i18n("Previous Output"), this );
+        m_previousAction = new QAction(QIcon::fromTheme(QStringLiteral("arrow-left")), i18nc("@action", "Previous Output"), this);
         connect(m_previousAction, &QAction::triggered, this, &OutputWidget::previousOutput);
         addAction(m_previousAction);
-        m_nextAction = new QAction( QIcon::fromTheme( QStringLiteral( "arrow-right" ) ), i18n("Next Output"), this );
+        m_nextAction = new QAction(QIcon::fromTheme(QStringLiteral("arrow-right")), i18nc("@action", "Next Output"), this);
         connect(m_nextAction, &QAction::triggered, this, &OutputWidget::nextOutput);
         addAction(m_nextAction);
     }
 
-    m_activateOnSelect = new KToggleAction( QIcon(), i18n("Select activated Item"), this );
+    m_activateOnSelect = new KToggleAction( QIcon(), i18nc("@action", "Select Activated Item"), this );
     m_activateOnSelect->setChecked( true );
-    m_focusOnSelect = new KToggleAction( QIcon(), i18n("Focus when selecting Item"), this );
+    m_focusOnSelect = new KToggleAction( QIcon(), i18nc("@action", "Focus when Selecting Item"), this );
     m_focusOnSelect->setChecked( false );
     if( data->option & KDevelop::IOutputView::ShowItemsButton )
     {
@@ -118,19 +118,19 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
 
     QAction* action;
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("go-first")), i18n("First Item"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-first")), i18nc("@action", "First Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectFirstItem);
     addAction(action);
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18n("Previous Item"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-previous")), i18nc("@action", "Previous Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectPreviousItem);
     addAction(action);
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18n("Next Item"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-next")), i18nc("@action", "Next Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectNextItem);
     addAction(action);
 
-    action = new QAction(QIcon::fromTheme(QStringLiteral("go-last")), i18n("Last Item"), this);
+    action = new QAction(QIcon::fromTheme(QStringLiteral("go-last")), i18nc("@action", "Last Item"), this);
     connect(action, &QAction::triggered, this, &OutputWidget::selectLastItem);
     addAction(action);
 
@@ -143,7 +143,7 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
     copyAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     addAction(copyAction);
 
-    auto* clearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18n("Clear"), this);
+    auto* clearAction = new QAction(QIcon::fromTheme(QStringLiteral("edit-clear-list")), i18nc("@action", "Clear"), this);
     connect(clearAction, &QAction::triggered, this, &OutputWidget::clearModel);
     addAction(clearAction);
 
@@ -154,9 +154,9 @@ OutputWidget::OutputWidget(QWidget* parent, const ToolViewData* tvdata)
         addAction(separator);
 
         m_filterInput = new KExpandableLineEdit(this);
-        m_filterInput->setPlaceholderText(i18n("Search..."));
+        m_filterInput->setPlaceholderText(i18nc("@info:placeholder", "Search..."));
         m_filterInput->setClearButtonEnabled(true);
-        m_filterInput->setToolTip(i18n("Enter a wild card string to filter the output view"));
+        m_filterInput->setToolTip(i18nc("@info:tooltip", "Enter a wild card string to filter the output view"));
         m_filterAction = new QWidgetAction(this);
         m_filterAction->setText(m_filterInput->placeholderText());
         connect(m_filterAction, &QAction::triggered, this, [this]() {m_filterInput->setFocus();});
