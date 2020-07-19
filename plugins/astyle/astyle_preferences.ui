@@ -30,7 +30,7 @@
      </property>
      <widget class="QWidget" name="tabIndentqtion">
       <attribute name="title">
-       <string>Indentation</string>
+       <string comment="@title:tab">Indentation</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -45,17 +45,17 @@
            </property>
            <item>
             <property name="text">
-             <string comment="Indentation type">Tabs</string>
+             <string comment="@item:inlistbox Indentation type">Tabs</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string comment="Indentation type">Force tabs</string>
+             <string comment="@item:inlistbox Indentation type">Force tabs</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string comment="Indentation type">Spaces</string>
+             <string comment="@item:inlistbox Indentation type">Spaces</string>
             </property>
            </item>
           </widget>
@@ -82,7 +82,7 @@
             <bool>true</bool>
            </property>
            <property name="toolTip">
-            <string>Number of spaces that will be converted to a tab.
+            <string comment="@info:tooltip">Number of spaces that will be converted to a tab.
 The number of spaces per tab is controlled by the editor.</string>
            </property>
            <property name="minimum">
@@ -101,20 +101,20 @@ The number of spaces per tab is controlled by the editor.</string>
           <bool>true</bool>
          </property>
          <property name="toolTip">
-          <string>Convert tabs to spaces.</string>
+          <string comment="@info:tooltip">Convert tabs to spaces.</string>
          </property>
          <property name="text">
-          <string>Con&amp;vert tabs into spaces</string>
+          <string comment="@option:check">Con&amp;vert tabs into spaces</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="chkFillEmptyLines">
          <property name="toolTip">
-          <string>Fill empty lines with the white space of their previous lines.</string>
+          <string comment="@info:tooltip">Fill empty lines with the white space of their previous lines.</string>
          </property>
          <property name="text">
-          <string>Fill empt&amp;y lines</string>
+          <string comment="@option:check">Fill empt&amp;y lines</string>
          </property>
         </widget>
        </item>
@@ -136,7 +136,7 @@ The number of spaces per tab is controlled by the editor.</string>
          <item row="0" column="0">
           <widget class="QLabel" name="lblIndentObjects">
            <property name="text">
-            <string>Indent:</string>
+            <string comment="@label:listbox">Indent:</string>
            </property>
           </widget>
          </item>
@@ -150,42 +150,42 @@ The number of spaces per tab is controlled by the editor.</string>
            </property>
            <item>
             <property name="text">
-             <string>Blocks</string>
+             <string comment="@item:inlistbox">Blocks</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Brackets</string>
+             <string comment="@item:inlistbox">Brackets</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Cases</string>
+             <string comment="@item:inlistbox">Cases</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Class</string>
+             <string comment="@item:inlistbox">Class</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Labels</string>
+             <string comment="@item:inlistbox">Labels</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Namespaces</string>
+             <string comment="@item:inlistbox">Namespaces</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Preprocessor directives</string>
+             <string comment="@item:inlistbox">Preprocessor directives</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Switches</string>
+             <string comment="@item:inlistbox">Switches</string>
             </property>
            </item>
           </widget>
@@ -197,7 +197,7 @@ The number of spaces per tab is controlled by the editor.</string>
          <item row="0" column="1">
           <widget class="QSpinBox" name="inpMaxStatement">
            <property name="toolTip">
-            <string>Indent a maximal # spaces in a continuous statement,
+            <string comment="@info:tooltip">Indent a maximal # spaces in a continuous statement,
 relative to the previous line.</string>
            </property>
            <property name="value">
@@ -208,11 +208,11 @@ relative to the previous line.</string>
          <item row="1" column="0">
           <widget class="QLabel" name="TextLabel3_2">
            <property name="toolTip">
-            <string>Indent a minimal # spaces in a continuous conditional
+            <string comment="@info:tooltip">Indent a minimal # spaces in a continuous conditional
 belonging to a conditional header.</string>
            </property>
            <property name="text">
-            <string>Minimum in conditional:</string>
+            <string comment="@label:spinbox">Minimum in conditional:</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
@@ -222,11 +222,11 @@ belonging to a conditional header.</string>
          <item row="1" column="1">
           <widget class="QSpinBox" name="inpMinConditional">
            <property name="toolTip">
-            <string>Indent a minimal # spaces in a continuous conditional
+            <string comment="@info:tooltip">Indent a minimal # spaces in a continuous conditional
 belonging to a conditional header.</string>
            </property>
            <property name="specialValueText">
-            <string>Twice current</string>
+            <string comment="@item">Twice current</string>
            </property>
            <property name="minimum">
             <number>-1</number>
@@ -239,11 +239,11 @@ belonging to a conditional header.</string>
          <item row="0" column="0">
           <widget class="QLabel" name="TextLabel2_2">
            <property name="toolTip">
-            <string>Indent a maximal # spaces in a continuous statement,
+            <string comment="@info:tooltip">Indent a maximal # spaces in a continuous statement,
 relative to the previous line.</string>
            </property>
            <property name="text">
-            <string>Maximum in statement:</string>
+            <string comment="@label:spinbox">Maximum in statement:</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
@@ -253,7 +253,7 @@ relative to the previous line.</string>
          <item row="2" column="1">
           <widget class="QSpinBox" name="inpContinuation">
            <property name="toolTip">
-            <string>Number of indents</string>
+            <string comment="@info:tooltip">Number of indents</string>
            </property>
            <property name="maximum">
             <number>4</number>
@@ -266,10 +266,10 @@ relative to the previous line.</string>
          <item row="2" column="0">
           <widget class="QCheckBox" name="chkAfterParens">
            <property name="toolTip">
-            <string>Indent, instead of align, continuation lines following lines that contain an opening paren '(' or an assignment '='.</string>
+            <string comment="@info:tooltip">Indent, instead of align, continuation lines following lines that contain an opening paren '(' or an assignment '='.</string>
            </property>
            <property name="text">
-            <string>Continuation lines:</string>
+            <string comment="@option:check">Continuation lines:</string>
            </property>
           </widget>
          </item>
@@ -292,13 +292,13 @@ relative to the previous line.</string>
      </widget>
      <widget class="QWidget" name="tabOther">
       <attribute name="title">
-       <string>Other</string>
+       <string comment="@title:tab">Other</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
         <widget class="QGroupBox" name="gpBrackets">
          <property name="title">
-          <string>Brackets</string>
+          <string comment="@title:group">Brackets</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
@@ -312,7 +312,7 @@ relative to the previous line.</string>
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Type:</string>
+               <string comment="@label:listbox">Type:</string>
               </property>
              </widget>
             </item>
@@ -322,11 +322,11 @@ relative to the previous line.</string>
                <bool>true</bool>
               </property>
               <property name="toolTip">
-               <string>Break brackets before closing headers (e.g. 'else', 'catch', ...)
+               <string comment="@info:tooltip">Break brackets before closing headers (e.g. 'else', 'catch', ...)
 from their immediately preceding closing brackets.</string>
               </property>
               <property name="text">
-               <string>Brea&amp;k closing headers</string>
+               <string comment="@option:check">Brea&amp;k closing headers</string>
               </property>
              </widget>
             </item>
@@ -340,27 +340,27 @@ from their immediately preceding closing brackets.</string>
               </property>
               <item>
                <property name="text">
-                <string>No change</string>
+                <string comment="@item:inlistbox brackets style">No change</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Attach</string>
+                <string comment="@item:inlistbox brackets style">Attach</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Break</string>
+                <string comment="@item:inlistbox brackets style">Break</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Linux</string>
+                <string comment="@item:inlistbox brackets style">Linux</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Run-In</string>
+                <string comment="@item:inlistbox brackets style">Run-In</string>
                </property>
               </item>
              </widget>
@@ -373,13 +373,13 @@ from their immediately preceding closing brackets.</string>
        <item>
         <widget class="QGroupBox" name="gpBlocks">
          <property name="title">
-          <string>Blocks</string>
+          <string comment="@title:group">Blocks</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
            <widget class="QCheckBox" name="chkBlockBreak">
             <property name="toolTip">
-             <string>Insert empty lines around unrelated blocks, labels, classes,...
+             <string comment="@info:tooltip">Insert empty lines around unrelated blocks, labels, classes,...
 Known problems:
 
 1. If a statement is NOT part of a block, 
@@ -391,14 +391,14 @@ correctly.
 </string>
             </property>
             <property name="text">
-             <string comment="Means break unrelated blocks by a newline">&amp;Break blocks</string>
+             <string comment="@option:check break unrelated blocks by a newline">&amp;Break blocks</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="chkBlockBreakAll">
             <property name="toolTip">
-             <string>Like --break-blocks, except also insert empty lines 
+             <string comment="@info:tooltip">Like --break-blocks, except also insert empty lines 
 around closing headers (e.g. 'else', 'catch', ...).
 
 Known problems:
@@ -412,17 +412,17 @@ correctly.
 </string>
             </property>
             <property name="text">
-             <string comment="Means break all blocks with a newline">Break all bl&amp;ocks</string>
+             <string comment="@option:check break all blocks with a newline">Break all bl&amp;ocks</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="chkBlockIfElse">
             <property name="toolTip">
-             <string>Break 'else if()' statements into two different lines.</string>
+             <string comment="@info:tooltip">Break 'else if()' statements into two different lines.</string>
             </property>
             <property name="text">
-             <string comment="Means break else if() into separate lines">Break i&amp;f-else</string>
+             <string comment="@option:check break else if() into separate lines">Break i&amp;f-else</string>
             </property>
            </widget>
           </item>
@@ -432,7 +432,7 @@ correctly.
        <item>
         <widget class="QGroupBox" name="gpPadding">
          <property name="title">
-          <string>Padding</string>
+          <string comment="@title:group">Padding</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
@@ -447,27 +447,27 @@ correctly.
               </property>
               <item>
                <property name="text">
-                <string>No change</string>
+                <string comment="@item:inlistbox parenthesis padding">No change</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Unpad</string>
+                <string comment="@item:inlistbox parenthesis padding">Unpad</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Inside only</string>
+                <string comment="@item:inlistbox parenthesis padding">Inside only</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Outside only</string>
+                <string comment="@item:inlistbox parenthesis padding">Outside only</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Inside and outside</string>
+                <string comment="@item:inlistbox parenthesis padding">Inside and outside</string>
                </property>
               </item>
              </widget>
@@ -475,29 +475,29 @@ correctly.
             <item row="2" column="0" colspan="2">
              <widget class="QCheckBox" name="chkPadOperators">
               <property name="toolTip">
-               <string>Insert space padding around operators.
+               <string comment="@info:tooltip">Insert space padding around operators.
 Once padded, operators stay padded.
 There is no unpad operator option.</string>
               </property>
               <property name="text">
-               <string>&amp;Add spaces around operators</string>
+               <string comment="@option:check">&amp;Add spaces around operators</string>
               </property>
              </widget>
             </item>
             <item row="0" column="0">
              <widget class="QLabel" name="lblParenthesis">
               <property name="text">
-               <string>Pad parenthesis:</string>
+               <string comment="@label:listbox">Pad parenthesis:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0" colspan="2">
              <widget class="QCheckBox" name="chkPadParenthesisHeader">
               <property name="toolTip">
-               <string>Insert space padding after parenthesis headers (e.g. 'if', 'for', 'while', ...)</string>
+               <string comment="@info:tooltip">Insert space padding after parenthesis headers (e.g. 'if', 'for', 'while', ...)</string>
               </property>
               <property name="text">
-               <string>Add spaces after parenthesis &amp;headers</string>
+               <string comment="@option:check">Add spaces after parenthesis &amp;headers</string>
               </property>
              </widget>
             </item>
@@ -509,27 +509,27 @@ There is no unpad operator option.</string>
        <item>
         <widget class="QGroupBox" name="gpOneLiners">
          <property name="title">
-          <string>One liners</string>
+          <string comment="@title:group">One Liners</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
            <widget class="QCheckBox" name="chkKeepStatements">
             <property name="toolTip">
-             <string>Do not break lines containing multiple statements into
+             <string comment="@info:tooltip">Do not break lines containing multiple statements into
 multiple single-statement lines.</string>
             </property>
             <property name="text">
-             <string>&amp;Keep one-line statements</string>
+             <string comment="@option:check">&amp;Keep one-line statements</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="chkKeepBlocks">
             <property name="toolTip">
-             <string>Do not break blocks residing completely on one line.</string>
+             <string comment="@info:tooltip">Do not break blocks residing completely on one line.</string>
             </property>
             <property name="text">
-             <string>Keep o&amp;ne-line blocks</string>
+             <string comment="@option:check">Keep o&amp;ne-line blocks</string>
             </property>
            </widget>
           </item>
@@ -539,13 +539,13 @@ multiple single-statement lines.</string>
        <item>
         <widget class="QGroupBox" name="gpOther">
          <property name="title">
-          <string>Other</string>
+          <string comment="@title:group">Other</string>
          </property>
          <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
           <item row="0" column="0">
            <widget class="QLabel" name="lblPointerAlign">
             <property name="text">
-             <string>Pointer Alignment:</string>
+             <string comment="@label:listbox">Pointer Alignment:</string>
             </property>
            </widget>
           </item>
@@ -553,22 +553,22 @@ multiple single-statement lines.</string>
            <widget class="QComboBox" name="cbPointerAlign">
             <item>
              <property name="text">
-              <string>No change</string>
+              <string comment="@item:inlistbox pointer alignment">No change</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Name</string>
+              <string comment="@item:inlistbox pointer alignment">Name</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Middle</string>
+              <string comment="@item:inlistbox pointer alignment">Middle</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Type</string>
+              <string comment="@item:inlistbox pointer alignment">Type</string>
              </property>
             </item>
            </widget>
