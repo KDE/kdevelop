@@ -30,7 +30,7 @@ SelectCoreDialog::SelectCoreDialog(QWidget* parent)
 {
     m_ui.setupUi(this);
 
-    setWindowTitle(i18n("Select Core File"));
+    setWindowTitle(i18nc("@title:window", "Select Core File"));
 }
 
 QUrl SelectCoreDialog::executableFile() const

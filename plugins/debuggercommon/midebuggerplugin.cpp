@@ -122,8 +122,9 @@ void MIDebuggerPlugin::setupActions()
 
     auto * action = new QAction(this);
     action->setIcon(QIcon::fromTheme(QStringLiteral("core")));
-    action->setText(i18n("Examine Core File with %1", m_displayName));
-    action->setWhatsThis(i18n("<b>Examine core file</b>"
+    action->setText(i18nc("@action", "Examine Core File with %1", m_displayName));
+    action->setWhatsThis(i18nc("@info:whatsthis",
+                              "<b>Examine core file</b>"
                               "<p>This loads a core file, which is typically created "
                               "after the application has crashed, e.g. with a "
                               "segmentation fault. The core file contains an "
@@ -135,8 +136,9 @@ void MIDebuggerPlugin::setupActions()
 #if HAVE_KSYSGUARD
     action = new QAction(this);
     action->setIcon(QIcon::fromTheme(QStringLiteral("connect_creating")));
-    action->setText(i18n("Attach to Process with %1", m_displayName));
-    action->setWhatsThis(i18n("<b>Attach to process</b>"
+    action->setText(i18nc("@action", "Attach to Process with %1", m_displayName));
+    action->setWhatsThis(i18nc("@info:whatsthis",
+                              "<b>Attach to process</b>"
                               "<p>Attaches the debugger to a running process.</p>"));
     connect(action, &QAction::triggered, this, &MIDebuggerPlugin::slotAttachProcess);
     ac->addAction(QStringLiteral("debug_attach"), action);
@@ -221,8 +223,9 @@ ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QW
         QString squeezed = KStringHandler::csqueeze(contextIdent, 30);
 
         auto* action = new QAction(parent);
-        action->setText(i18n("Evaluate: %1", squeezed));
-        action->setWhatsThis(i18n("<b>Evaluate expression</b>"
+        action->setText(i18nc("@action:inmenu", "Evaluate: %1", squeezed));
+        action->setWhatsThis(i18nc("@info:whatsthis",
+                                  "<b>Evaluate expression</b>"
                                   "<p>Shows the value of the expression under the cursor.</p>"));
         connect(action, &QAction::triggered, this, [this, contextIdent](){
             emit addWatchVariable(contextIdent);
@@ -230,8 +233,9 @@ ContextMenuExtension MIDebuggerPlugin::contextMenuExtension(Context* context, QW
         menuExt.addAction(ContextMenuExtension::DebugGroup, action);
 
         action = new QAction(parent);
-        action->setText(i18n("Watch: %1", squeezed));
-        action->setWhatsThis(i18n("<b>Watch expression</b>"
+        action->setText(i18nc("@action:inmenu", "Watch: %1", squeezed));
+        action->setWhatsThis(i18nc("@info:whatsthis",
+                                  "<b>Watch expression</b>"
                                   "<p>Adds the expression under the cursor to the Variables/Watch list.</p>"));
         connect(action, &QAction::triggered, this, [this, contextIdent](){
             emit evaluateExpression(contextIdent);

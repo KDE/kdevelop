@@ -56,7 +56,7 @@ SelectAddressDialog::SelectAddressDialog(QWidget* parent)
     : QDialog(parent)
 {
     m_ui.setupUi(this);
-    setWindowTitle(i18n("Address Selector"));
+    setWindowTitle(i18nc("@title:window", "Address Selector"));
 
     connect(m_ui.comboBox, &KHistoryComboBox::editTextChanged,
             this, &SelectAddressDialog::validateInput);
@@ -100,25 +100,25 @@ DisassembleWindow::DisassembleWindow(QWidget *parent, DisassembleWidget* widget)
     : QTreeWidget(parent)
 {
     /*context menu commands */{
-    m_selectAddrAction = new QAction(i18n("Change &address"), this);
+    m_selectAddrAction = new QAction(i18nc("@action", "Change &Address"), this);
     m_selectAddrAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     connect(m_selectAddrAction, &QAction::triggered, widget, &DisassembleWidget::slotChangeAddress);
 
-    m_jumpToLocation = new QAction(QIcon::fromTheme(QStringLiteral("debug-execute-to-cursor")), i18n("&Jump to Cursor"), this);
-    m_jumpToLocation->setWhatsThis(i18n("Sets the execution pointer to the current cursor position."));
+    m_jumpToLocation = new QAction(QIcon::fromTheme(QStringLiteral("debug-execute-to-cursor")), i18nc("@action", "&Jump to Cursor"), this);
+    m_jumpToLocation->setWhatsThis(i18nc("@info:whatsthis", "Sets the execution pointer to the current cursor position."));
     connect(m_jumpToLocation,&QAction::triggered, widget, &DisassembleWidget::jumpToCursor);
 
-    m_runUntilCursor = new QAction(QIcon::fromTheme(QStringLiteral("debug-run-cursor")), i18n("&Run to Cursor"), this);
-    m_runUntilCursor->setWhatsThis(i18n("Continues execution until the cursor position is reached."));
+    m_runUntilCursor = new QAction(QIcon::fromTheme(QStringLiteral("debug-run-cursor")), i18nc("@action", "&Run to Cursor"), this);
+    m_runUntilCursor->setWhatsThis(i18nc("@info:whatsthis", "Continues execution until the cursor position is reached."));
     connect(m_runUntilCursor,&QAction::triggered, widget, &DisassembleWidget::runToCursor);
 
-    m_disassemblyFlavorAtt = new QAction(i18n("&AT&&T"), this);
-    m_disassemblyFlavorAtt->setToolTip(i18n("GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."));
+    m_disassemblyFlavorAtt = new QAction(i18nc("@option:check", "&AT&&T"), this);
+    m_disassemblyFlavorAtt->setToolTip(i18nc("@info:tooltip", "GDB will use the AT&T disassembly flavor (e.g. mov 0xc(%ebp),%eax)."));
     m_disassemblyFlavorAtt->setData(DisassemblyFlavorATT);
     m_disassemblyFlavorAtt->setCheckable(true);
 
-    m_disassemblyFlavorIntel = new QAction(i18n("&Intel"), this);
-    m_disassemblyFlavorIntel->setToolTip(i18n("GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp+0xc])."));
+    m_disassemblyFlavorIntel = new QAction(i18nc("@option:check", "&Intel"), this);
+    m_disassemblyFlavorIntel->setToolTip(i18nc("@info:tooltip", "GDB will use the Intel disassembly flavor (e.g. mov eax, DWORD PTR [ebp+0xc])."));
     m_disassemblyFlavorIntel->setData(DisassemblyFlavorIntel);
     m_disassemblyFlavorIntel->setCheckable(true);
 
@@ -155,7 +155,7 @@ void DisassembleWindow::contextMenuEvent(QContextMenuEvent *e)
         popup.addAction(m_selectAddrAction);
         popup.addAction(m_jumpToLocation);
         popup.addAction(m_runUntilCursor);
-        QMenu* disassemblyFlavorMenu = popup.addMenu(i18n("Disassembly flavor"));
+        QMenu* disassemblyFlavorMenu = popup.addMenu(i18nc("@title:menu", "Disassembly Flavor"));
         disassemblyFlavorMenu->addAction(m_disassemblyFlavorAtt);
         disassemblyFlavorMenu->addAction(m_disassemblyFlavorIntel);
         popup.exec(e->globalPos());
@@ -186,7 +186,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
 
         m_disassembleWindow = new DisassembleWindow(m_splitter, this);
 
-        m_disassembleWindow->setWhatsThis(i18n("<b>Machine code display</b><p>"
+        m_disassembleWindow->setWhatsThis(i18nc("@info:whatsthis", "<b>Machine code display</b><p>"
                         "A machine code view into your running "
                         "executable with the current instruction "
                         "highlighted. You can step instruction by "
@@ -200,7 +200,12 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
         m_disassembleWindow->setUniformRowHeights(true);
         m_disassembleWindow->setRootIsDecorated(false);
 
-        m_disassembleWindow->setHeaderLabels(QStringList{QString(), i18n("Address"), i18n("Function"), i18n("Instruction")});
+        m_disassembleWindow->setHeaderLabels(QStringList{
+            QString(),
+            i18nc("@title:column", "Address"),
+            i18nc("@title:column", "Function"),
+            i18nc("@title:column", "Instruction")
+        });
 
         m_splitter->setStretchFactor(0, 1);
         m_splitter->setContentsMargins(0, 0, 0, 0);
@@ -219,7 +224,7 @@ DisassembleWidget::DisassembleWidget(MIDebuggerPlugin* plugin, QWidget *parent)
     setLayout(topLayout);
 
     setWindowIcon( QIcon::fromTheme(QStringLiteral("system-run"), windowIcon()) );
-    setWindowTitle(i18n("Disassemble/Registers View"));
+    setWindowTitle(i18nc("@title:window", "Disassemble/Registers View"));
 
     KDevelop::IDebugController* pDC=KDevelop::ICore::self()->debugController();
     Q_ASSERT(pDC);

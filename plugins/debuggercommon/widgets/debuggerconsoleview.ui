@@ -11,19 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Debugger Console</string>
+   <string comment="@title:window">Debugger Console</string>
   </property>
   <property name="windowIcon">
    <iconset theme="dialog-scripts"/>
   </property>
-  <property name="whatsThis">
-   <string/>
-  </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
    <property name="movable">
     <bool>false</bool>
    </property>
@@ -56,10 +50,10 @@
     <iconset theme="media-playback-pause"/>
    </property>
    <property name="text">
-    <string>Interrupt</string>
+    <string comment="@action">Interrupt</string>
    </property>
    <property name="toolTip">
-    <string>Pause execution of the app to enter gdb commands</string>
+    <string comment="@info:tooltip">Pause execution of the app to enter debugger commands</string>
    </property>
   </action>
   <action name="actRepeat">
@@ -73,10 +67,10 @@
     <iconset theme="edit-redo"/>
    </property>
    <property name="text">
-    <string>Repeat</string>
+    <string comment="@action">Repeat</string>
    </property>
    <property name="toolTip">
-    <string>Repeat last sent command when hit &lt;Return&gt;</string>
+    <string comment="@info:tooltip">Repeat last sent command when hit &lt;Return&gt;</string>
    </property>
   </action>
  </widget>

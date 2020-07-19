@@ -11,16 +11,16 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Address Selector</string>
+   <string comment="@title:window">Address Selector</string>
   </property>
   <property name="toolTip">
-   <string>Select the address to disassemble around</string>
+   <string comment="@info:tooltip">Select the address to disassemble around</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Select address to disassemble around</string>
+      <string comment="@label:listbox">Address to disassemble around:</string>
      </property>
     </widget>
    </item>

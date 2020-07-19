@@ -61,32 +61,35 @@ DebuggerConsoleView::DebuggerConsoleView(MIDebuggerPlugin *plugin, QWidget *pare
     , m_maxLines(5000)
 {
     setWindowIcon(QIcon::fromTheme(QStringLiteral("dialog-scripts")));
-    setWindowTitle(i18n("Debugger Console"));
-    setWhatsThis(i18n("<b>Debugger Console</b><p>"
+    setWindowTitle(i18nc("@title:window", "Debugger Console"));
+    setWhatsThis(i18nc("@info:whatsthis",
+                      "<b>Debugger Console</b><p>"
                       "Shows all debugger commands being executed. "
                       "You can also issue any other debugger command while debugging.</p>"));
 
     setupUi();
 
     m_actRepeat = new QAction(QIcon::fromTheme(QStringLiteral("edit-redo")),
-                              i18n("Repeat last command when hit Return"),
+                              QString(),
                               this);
+    m_actRepeat->setToolTip(i18nc("@info:tooltip", "Repeat last command when hit Return"));
     m_actRepeat->setCheckable(true);
     m_actRepeat->setChecked(m_repeatLastCommand);
     connect(m_actRepeat, &QAction::toggled, this, &DebuggerConsoleView::toggleRepeat);
     m_toolBar->insertAction(m_actCmdEditor, m_actRepeat);
 
     m_actInterrupt = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-pause")),
-                                 i18n("Pause execution of the app to enter gdb commands"),
+                                 QString(),
                                  this);
+    m_actInterrupt->setToolTip(i18nc("@info:tooltip", "Pause execution of the app to enter debugger commands"));
     connect(m_actInterrupt, &QAction::triggered, this, &DebuggerConsoleView::interruptDebugger);
     m_toolBar->insertAction(m_actCmdEditor, m_actInterrupt);
     setShowInterrupt(true);
 
-    m_actShowInternal = new QAction(i18n("Show Internal Commands"), this);
+    m_actShowInternal = new QAction(i18nc("@action", "Show Internal Commands"), this);
     m_actShowInternal->setCheckable(true);
     m_actShowInternal->setChecked(m_showInternalCommands);
-    m_actShowInternal->setWhatsThis(i18n(
+    m_actShowInternal->setWhatsThis(i18nc("@info:whatsthis",
         "Controls if commands issued internally by KDevelop "
         "will be shown or not.<br>"
         "This option will affect only future commands, it will not "
@@ -148,7 +151,7 @@ void DebuggerConsoleView::setupUi()
     connect(m_cmdEditor, QOverload<const QString&>::of(&KHistoryComboBox::returnPressed),
             this, &DebuggerConsoleView::trySendCommand);
 
-    auto label = new QLabel(i18n("&Command:"), this);
+    auto label = new QLabel(i18nc("@label:listbox", "&Command:"), this);
     label->setBuddy(m_cmdEditor);
 
     auto hbox = new QHBoxLayout;
@@ -170,7 +173,7 @@ void DebuggerConsoleView::setupToolBar()
     m_toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_toolBar->setFloatable(false);
     m_toolBar->setMovable(false);
-    m_toolBar->setWindowTitle(i18n("%1 Command Bar", windowTitle()));
+    m_toolBar->setWindowTitle(i18nc("@title:window", "%1 Command Bar", windowTitle()));
     m_toolBar->setContextMenuPolicy(Qt::PreventContextMenu);
 
     // remove margins, to make command editor nicely aligned with the output

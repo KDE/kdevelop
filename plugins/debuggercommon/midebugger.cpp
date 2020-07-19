@@ -327,7 +327,7 @@ void MIDebugger::processLine(const QByteArray& line)
             i18n("The exception is: %1\n"
                 "The MI response is: %2", QString::fromUtf8(e.what()),
                 QString::fromLatin1(line)),
-            i18n("Internal debugger error"));
+            i18nc("@title:window", "Internal Debugger Error"));
         emit exited(true, QString::fromUtf8(e.what()));
     }
     #endif
@@ -366,7 +366,7 @@ void MIDebugger::processErrored(QProcess::ProcessError error)
                  "Because of that the debug session has to be ended.<br>"
                  "Try to reproduce the crash without KDevelop and report a bug.<br>",
                  m_debuggerExecutable),
-            i18n("Debugger crashed"));
+            i18nc("@title:window", "Debugger Crashed"));
 
         emit userCommandOutput(QStringLiteral("Process crashed\n"));
         emit exited(true, i18n("Process crashed"));

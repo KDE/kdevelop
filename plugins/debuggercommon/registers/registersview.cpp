@@ -62,7 +62,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
 
     const QVector<Format> formats = m_modelsManager->formats(group);
     if (formats.size() > 1) {
-        QMenu* m = m_menu->addMenu(i18n("Format"));
+        QMenu* m = m_menu->addMenu(i18nc("@title:menu", "Format"));
         for (Format fmt : formats) {
             m->addAction(findAction(Converters::formatToString(fmt)));
         }
@@ -71,7 +71,7 @@ void RegistersView::contextMenuEvent(QContextMenuEvent* e)
 
     const QVector<Mode> modes = m_modelsManager->modes(group);
     if (modes.size() > 1) {
-        QMenu* m = m_menu->addMenu(i18n("Mode"));
+        QMenu* m = m_menu->addMenu(i18nc("@title:menu", "Mode"));
         for (Mode mode : modes) {
             m->addAction(findAction(Converters::modeToString(mode)));
         }
@@ -206,7 +206,7 @@ void RegistersView::setupActions()
     auto* updateAction = new QAction(this);
     updateAction->setShortcut(Qt::Key_U);
     updateAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
-    updateAction->setText(i18n("Update"));
+    updateAction->setText(i18nc("@action:inmenu", "Update"));
     connect(updateAction, &QAction::triggered, this, &RegistersView::updateRegisters);
     addAction(updateAction);
     m_menu->addAction(updateAction);

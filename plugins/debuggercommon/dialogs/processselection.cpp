@@ -39,7 +39,7 @@ using namespace KDevMI;
 ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     : QDialog(parent)
 {
-    setWindowTitle(i18n("Attach to a Process"));
+    setWindowTitle(i18nc("@title:window", "Attach to a Process"));
     m_processList = new KSysGuardProcessList(this);
     auto* mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
@@ -59,7 +59,7 @@ ProcessSelectionDialog::ProcessSelectionDialog(QWidget *parent)
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     m_attachButton = buttonBox->button(QDialogButtonBox::Ok);
     m_attachButton->setDefault(true);
-    m_attachButton->setText(i18n("Attach"));
+    m_attachButton->setText(i18nc("@action:button", "Attach"));
     m_attachButton->setShortcut(Qt::CTRL | Qt::Key_Return);
     m_attachButton->setEnabled(false);
 
