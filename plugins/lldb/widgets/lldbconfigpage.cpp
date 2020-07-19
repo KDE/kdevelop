@@ -80,7 +80,7 @@ QIcon LldbConfigPage::icon() const
 
 QString LldbConfigPage::title() const
 {
-    return i18n("LLDB Configuration");
+    return i18nc("@title:tab", "LLDB Configuration");
 }
 
 void LldbConfigPage::loadFromConfiguration(const KConfigGroup& cfg, KDevelop::IProject *)

@@ -106,11 +106,11 @@ void LldbDebuggerPlugin::setupToolViews()
 {
     m_consoleFactory = new DebuggerToolFactory<NonInterruptDebuggerConsoleView>(this,
                             QStringLiteral("org.kdevelop.debugger.LldbConsole"), Qt::BottomDockWidgetArea);
-    core()->uiController()->addToolView(i18n("LLDB Console"), m_consoleFactory);
+    core()->uiController()->addToolView(i18nc("@title:window", "LLDB Console"), m_consoleFactory);
     /*
     m_disassembleFactory = new DebuggerToolFactory<DisassembleWidget>(this,
                             "org.kdevelop.debugger.LldbDisassemble", Qt::BottomDockWidgetArea);
-    core()->uiController()->addToolView(i18n("LLDB Disassemble/Register"), m_disassembleFactory);
+    core()->uiController()->addToolView(i18nc("@title:window", "LLDB Disassemble/Register"), m_disassembleFactory);
     */
 }
 

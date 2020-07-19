@@ -26,41 +26,38 @@
    <item>
     <widget class="QGroupBox" name="groupDebugger">
      <property name="title">
-      <string>Debugger</string>
+      <string comment="@title:group">Debugger</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Debugger executable:</string>
+         <string comment="@label:chooser">Debugger executable:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="KUrlRequester" name="lineDebuggerExec" native="true">
         <property name="placeholderText" stdset="0">
-         <string>Override path to lldb-mi executable</string>
+         <string comment="@info:placeholder">Override path to lldb-mi executable...</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Additional arguments:</string>
+         <string comment="@label:textbox">Additional arguments:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="lineDebuggerArgs">
-        <property name="placeholderText">
-         <string/>
-        </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Environment:</string>
+         <string comment="@label:chooser">Environment:</string>
         </property>
        </widget>
       </item>
@@ -78,9 +75,6 @@
         </item>
         <item>
          <widget class="KDevelop::EnvironmentConfigureButton" name="btnEditEnv">
-          <property name="text">
-           <string/>
-          </property>
          </widget>
         </item>
        </layout>
@@ -88,7 +82,7 @@
       <item row="4" column="1">
        <widget class="QCheckBox" name="checkInheritSystem">
         <property name="text">
-         <string>Inherit system environment</string>
+         <string comment="@option:check">Inherit system environment</string>
         </property>
        </widget>
       </item>
@@ -98,27 +92,27 @@
    <item>
     <widget class="QGroupBox" name="groupOptions">
      <property name="title">
-      <string>Options</string>
+      <string comment="@title:group">Options</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Config script:</string>
+         <string comment="@label:chooser">Config script:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="KUrlRequester" name="lineConfigScript" native="true">
         <property name="placeholderText" stdset="0">
-         <string>/path/to/lldb/config/script</string>
+         <string comment="@info:placeholder">/path/to/lldb/config/script</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Start debugger with:</string>
+         <string comment="@label:listbox">Start debugger with:</string>
         </property>
        </widget>
       </item>
@@ -126,17 +120,17 @@
        <widget class="QComboBox" name="comboStartWith">
         <item>
          <property name="text">
-          <string>Application Output</string>
+          <string comment="@item:inlistbox start debugger with">Application Output</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>LLDB Console</string>
+          <string comment="@item:inlistbox start debugger with">LLDB Console</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Frame Stack</string>
+          <string comment="@item:inlistbox start debugger with">Frame Stack</string>
          </property>
         </item>
        </widget>
@@ -144,7 +138,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Break on start:</string>
+         <string comment="@option:check">Break on start:</string>
         </property>
        </widget>
       </item>
@@ -161,7 +155,7 @@
    <item>
     <widget class="QGroupBox" name="groupRemote">
      <property name="title">
-      <string>Remo&amp;te Debugging</string>
+      <string comment="@title:group">Remo&amp;te Debugging</string>
      </property>
      <property name="checkable">
       <bool>true</bool>
@@ -170,28 +164,28 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Remote server:</string>
+         <string comment="@label:textbox">Remote server:</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="QLineEdit" name="lineRemoteServer">
         <property name="placeholderText">
-         <string>host:port</string>
+         <string comment="@info:placeholder">host:port</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string>Remote work path:</string>
+         <string comment="@label:textbox">Remote work path:</string>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
        <widget class="QLineEdit" name="lineOnDevPath">
         <property name="placeholderText">
-         <string>/path/to/a/on-device/writable/directory</string>
+         <string comment="@info:placeholder">/path/to/a/on-device/writable/directory</string>
         </property>
        </widget>
       </item>
